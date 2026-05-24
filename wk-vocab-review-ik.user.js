@@ -1,7 +1,7 @@
 // ==UserScript==
 // @name         WK Vocab Review — ImmersionKit Examples
 // @namespace    https://github.com/jbrelly/wk-ik-examples
-// @version      0.16.1
+// @version      0.17.0
 // @description  Shows one ImmersionKit example sentence (with IK / Google TTS audio + IK / DDG image) during WaniKani vocab reviews.
 // @author       jbrelly
 // @match        https://www.wanikani.com/*
@@ -21,7 +21,7 @@
 
     const SCRIPT_ID = 'wk-ik-examples';
     const SCRIPT_TITLE = 'WK Vocab Review — ImmersionKit';
-    const SCRIPT_VERSION = '0.16.1';
+    const SCRIPT_VERSION = '0.17.0';
 
     // Bump this when on-disk cache shape or sourcing logic changes in a way that
     // makes stale entries actively wrong (vs. just suboptimal). Boot will clear
@@ -496,6 +496,19 @@
     opacity: 0.85;
     line-height: 1;
     text-shadow: 0 1px 1px rgba(0,0,0,0.35);
+}
+/* When the showFurigana setting is on, the sentence renderer always emits
+   <ruby><rt> for every kanji — even before the reading is graded — so the
+   kanji line reserves vertical space for the rt characters. Until the
+   .wk-ik-show-furigana class is added on reveal, the rt text stays invisible
+   via visibility:hidden (keeps the box, hides the glyphs) so the kanji line
+   doesn't jump when furigana fades in. visibility:hidden vs display:none is
+   the whole point here — display:none would defeat the layout reservation. */
+.${CARD_CLASS} .${CSS_PREFIX}-sentence rt {
+    visibility: hidden;
+}
+.${CARD_CLASS} .${CSS_PREFIX}-sentence.${CSS_PREFIX}-show-furigana rt {
+    visibility: visible;
 }
 /* Belt-and-braces: even if the renderer ever emits an <rt> inside the target
    mark (it shouldn't — kanji segments inside the mark are emitted without
@@ -1781,13 +1794,7 @@
         const sentenceEl = document.createElement('div');
         sentenceEl.className = `${CSS_PREFIX}-sentence`;
         sentenceEl.setAttribute('lang', 'ja');
-        renderSentence(
-            sentenceEl,
-            example.sentence,
-            example.sentence_with_furigana,
-            target,
-            !!(state.furiganaVisible && state.readingAnswered)
-        );
+        applyFuriganaState(sentenceEl, example);
         leftPanel.appendChild(sentenceEl);
 
         const leftControls = document.createElement('div');
@@ -1799,7 +1806,12 @@
         // to the browser's built-in Web Speech (Kyoko on macOS) so audio always works.
         if (example.sentence) {
             const audio = document.createElement('audio');
-            audio.preload = 'none';
+            // preload='auto' so once the blob URL is attached the audio element
+            // decodes immediately — eliminates the ~tens-of-ms decode delay on
+            // play() when the user answers quickly. The actual network fetch
+            // for IK / TTS audio is already kicked off below (via
+            // resolveAudioBlobUrl), so this only affects the decode step.
+            audio.preload = 'auto';
             audio.style.display = 'none';
             card.appendChild(audio);
 
@@ -1847,9 +1859,12 @@
 
         // ふ furigana toggle. Only attached when the example actually has parseable
         // furigana data (no point showing a perpetually-disabled button otherwise).
-        // The button stays disabled until the reading question for this subject is
-        // graded — revealAll flips disabled=false and re-renders. Click handler
-        // toggles state.furiganaVisible and re-renders the sentence in place.
+        // The button stays disabled until the reading question for this subject
+        // is graded — revealAll flips disabled=false and calls applyFuriganaState.
+        // Click handler toggles state.furiganaVisible and hands off to
+        // applyFuriganaState, which usually just flips a CSS class (no re-render)
+        // because the ruby DOM is already in place. See that function's header
+        // for why the DOM is pre-rendered.
         const hasFurigana = !!parseFurigana(example.sentence_with_furigana);
         if (hasFurigana) {
             const furiganaBtn = document.createElement('button');
@@ -1870,14 +1885,14 @@
                 state.furiganaVisible = !state.furiganaVisible;
                 furiganaBtn.setAttribute('aria-pressed', String(state.furiganaVisible));
                 furiganaBtn.title = state.furiganaVisible ? 'Hide furigana' : 'Show furigana';
-                rerenderSentence(card, card._example);
+                applyFuriganaState(card.querySelector(`.${CSS_PREFIX}-sentence`), card._example);
             });
             leftControls.appendChild(furiganaBtn);
             card._furiganaBtn = furiganaBtn;
         }
 
-        // Stash the example on the card so revealAll / rerenderSentence can pick
-        // it up later without needing to thread it through state.
+        // Stash the example on the card so revealAll / applyFuriganaState can
+        // pick it up later without needing to thread it through state.
         card._example = example;
 
         const sentenceRefreshBtn = document.createElement('button');
@@ -1920,7 +1935,13 @@
             fig.hidden = true;
             const img = document.createElement('img');
             img.alt = '';
-            img.loading = 'lazy';
+            // Deliberately NOT loading="lazy" — the figure is hidden until
+            // reveal, and with lazy loading the browser would skip the network
+            // request entirely until the figure becomes visible, producing a
+            // ~hundreds-of-ms delay between answer and image showing up.
+            // Eager (the default) ensures the image is downloading the moment
+            // src is set, so by reveal time it's already in cache.
+            img.decoding = 'async';
             fig.appendChild(img);
 
             const imageRefreshBtn = document.createElement('button');
@@ -2103,21 +2124,50 @@
         });
     }
 
-    // Replace the sentence content of an existing card in place, used by the
-    // ふ toggle button and the reading-reveal handler. Reads state.furiganaVisible
-    // and state.readingAnswered — furigana only renders when BOTH are true.
-    function rerenderSentence(card, example) {
-        if (!card || !example) return;
-        const sentenceEl = card.querySelector(`.${CSS_PREFIX}-sentence`);
-        if (!sentenceEl) return;
-        const withFurigana = !!(state.furiganaVisible && state.readingAnswered);
-        renderSentence(
-            sentenceEl,
-            example.sentence,
-            example.sentence_with_furigana,
-            state.currentCharacters || '',
-            withFurigana
-        );
+    // Render the sentence into `sentenceEl` AND synchronize the ふ-visibility
+    // state. Called from renderCard (initial draw), revealAll (reading branch),
+    // and the ふ button click handler — one entry point so the gating logic
+    // lives in one place.
+    //
+    // Two modes depending on the showFurigana setting:
+    //
+    //   * Setting ON  → always emit <ruby><rt> for every kanji, regardless of
+    //     whether the reading has been graded. The rt characters stay invisible
+    //     via CSS (visibility:hidden on rt) until the .wk-ik-show-furigana
+    //     class is added on reveal. Result: the kanji line reserves its full
+    //     final height from the moment the card renders, so revealing the
+    //     furigana doesn't bump the sentence. Toggling ふ on/off after reveal
+    //     is also a pure class flip — no DOM rebuild, no jump.
+    //
+    //   * Setting OFF → emit plain text by default. If the user explicitly
+    //     toggles ふ on for this card (and the reading is graded) we re-render
+    //     with ruby DOM, which DOES cause a one-time layout shift. Accepted
+    //     tradeoff: not reserving the rt space on every card preserves the
+    //     minimal look for users who opted out.
+    //
+    // To avoid wasted DOM churn in the common "setting on, ふ toggle pressed"
+    // path (where emitRuby doesn't actually change), we stash the previous
+    // emitRuby state on the element and skip the renderSentence call when it
+    // matches — turning the visible work into just a classList.toggle.
+    function applyFuriganaState(sentenceEl, example) {
+        if (!sentenceEl || !example) return;
+        const hasFurigana = !!parseFurigana(example.sentence_with_furigana);
+        const settingOn = !!settings().showFurigana;
+        const showNow = !!(state.furiganaVisible && state.readingAnswered);
+        const emitRuby = hasFurigana && (settingOn || showNow);
+
+        const prevEmit = sentenceEl.dataset.wkIkEmitRuby === 'true';
+        if (prevEmit !== emitRuby || !sentenceEl.firstChild) {
+            renderSentence(
+                sentenceEl,
+                example.sentence,
+                example.sentence_with_furigana,
+                state.currentCharacters || '',
+                emitRuby
+            );
+            sentenceEl.dataset.wkIkEmitRuby = String(emitRuby);
+        }
+        sentenceEl.classList.toggle(`${CSS_PREFIX}-show-furigana`, emitRuby && showNow);
     }
 
     function renderEmptyCard() {
@@ -2248,7 +2298,7 @@
                     ? 'Hide furigana'
                     : 'Show furigana';
             }
-            rerenderSentence(card, card._example);
+            applyFuriganaState(card.querySelector(`.${CSS_PREFIX}-sentence`), card._example);
         }
 
         // Reveal once the subject is complete in this session — both questions
