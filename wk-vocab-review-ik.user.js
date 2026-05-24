@@ -1,7 +1,7 @@
 // ==UserScript==
 // @name         WK Vocab Review — ImmersionKit Examples
 // @namespace    https://github.com/jbrelly/wk-ik-examples
-// @version      0.18.0
+// @version      0.19.0
 // @description  Shows one ImmersionKit example sentence (with IK / Google TTS audio + IK / DDG image) during WaniKani vocab reviews.
 // @author       jbrelly
 // @match        https://www.wanikani.com/*
@@ -21,7 +21,7 @@
 
     const SCRIPT_ID = 'wk-ik-examples';
     const SCRIPT_TITLE = 'WK Vocab Review — ImmersionKit';
-    const SCRIPT_VERSION = '0.18.0';
+    const SCRIPT_VERSION = '0.19.0';
 
     // Bump this when on-disk cache shape or sourcing logic changes in a way that
     // makes stale entries actively wrong (vs. just suboptimal). Boot will clear
@@ -233,6 +233,100 @@
         }
     }
 
+    // Scan wkof.file_cache.dir (the in-memory index of cached keys) and group
+    // entries by our four prefixes + the singleton keys. Read-only — purely
+    // informational for the settings dialog's "Cache" section. Returns the
+    // raw counts and a sorted list of cached vocab words so the user can see
+    // what's accumulated.
+    //
+    // The IK audio prefix bucket lumps positive (real MP3 ArrayBuffer) and
+    // negative (failure marker) cache entries together — we'd have to load
+    // each entry to distinguish, which would defeat the "just curious" intent.
+    function buildCacheSummary() {
+        const dir = (wkof.file_cache && wkof.file_cache.dir) || {};
+        const summary = {
+            examples: 0,
+            imageUrlLists: 0,
+            ikAudio: 0,
+            ttsAudio: 0,
+            words: [],
+            indexMetaCached: false,
+            selections: Object.keys(state.selections || {}).length,
+        };
+        for (const key of Object.keys(dir)) {
+            if (key.startsWith(CACHE_PREFIX)) {
+                summary.examples++;
+                try {
+                    summary.words.push(decodeURIComponent(key.slice(CACHE_PREFIX.length)));
+                } catch (_) { /* corrupt key — count but don't list */ }
+            } else if (key.startsWith(IMG_CACHE_PREFIX)) {
+                summary.imageUrlLists++;
+            } else if (key.startsWith(IK_AUDIO_CACHE_PREFIX)) {
+                summary.ikAudio++;
+            } else if (key.startsWith(AUDIO_CACHE_PREFIX)) {
+                summary.ttsAudio++;
+            } else if (key === INDEX_META_CACHE_KEY) {
+                summary.indexMetaCached = true;
+            }
+        }
+        summary.words.sort();
+        return summary;
+    }
+
+    // Populate the cache-info div with a freshly-computed summary. Called
+    // after dialog.open() (the html-type content is in the DOM by then) and
+    // again after clearCache so the numbers reflect the empty state.
+    function populateCacheInfo() {
+        const el = document.getElementById(`${SCRIPT_ID}-cache-info`);
+        if (!el) return;
+        const s = buildCacheSummary();
+        const wordsList = s.words.length
+            ? s.words.join(', ')
+            : '(no vocab cached yet — they\'ll appear here as you review)';
+        const indexMetaState = s.indexMetaCached
+            ? `cached (${indexMeta ? Object.keys(indexMeta).length + ' decks' : 'not yet loaded into memory'})`
+            : 'not cached';
+        // textContent on the inner detail div so we don't have to escape word
+        // chars; the structural HTML is fixed and safe.
+        el.innerHTML = '';
+        const lines = [
+            ['Example sentences', `${s.examples} word(s)`],
+            ['Image URL lists', `${s.imageUrlLists} word(s)`],
+            ['IK audio clips', `${s.ikAudio} entry(s) (positive + negative)`],
+            ['Google TTS clips', `${s.ttsAudio} sentence(s)`],
+            ['Refresh-button selections', `${s.selections} word(s)`],
+            ['IK index_meta', indexMetaState],
+        ];
+        for (const [k, v] of lines) {
+            const row = document.createElement('div');
+            const label = document.createElement('strong');
+            label.textContent = k + ': ';
+            row.appendChild(label);
+            row.appendChild(document.createTextNode(v));
+            el.appendChild(row);
+        }
+        if (s.examples > 0) {
+            const details = document.createElement('details');
+            details.style.marginTop = '0.5em';
+            details.style.paddingTop = '0.4em';
+            details.style.borderTop = '1px solid rgba(0,0,0,0.1)';
+            const summaryEl = document.createElement('summary');
+            summaryEl.style.cursor = 'pointer';
+            summaryEl.textContent = `Cached words (${s.examples})`;
+            details.appendChild(summaryEl);
+            const wordsBox = document.createElement('div');
+            wordsBox.style.marginTop = '0.4em';
+            wordsBox.style.fontSize = '0.95em';
+            wordsBox.style.opacity = '0.85';
+            wordsBox.style.maxHeight = '180px';
+            wordsBox.style.overflowY = 'auto';
+            wordsBox.style.lang = 'ja';
+            wordsBox.textContent = wordsList;
+            details.appendChild(wordsBox);
+            el.appendChild(details);
+        }
+    }
+
     function openSettings() {
         const dialog = new wkof.Settings({
             script_id: SCRIPT_ID,
@@ -319,6 +413,14 @@
                             type: 'section',
                             label: 'Maintenance',
                         },
+                        cacheInfo: {
+                            type: 'html',
+                            html:
+                                `<div id="${SCRIPT_ID}-cache-info" ` +
+                                `style="font-size: 0.85em; line-height: 1.55; ` +
+                                `padding: 0.5em 0.7em; background: rgba(0,0,0,0.04); ` +
+                                `border-radius: 4px;">Loading cache info…</div>`,
+                        },
                         clearCache: {
                             type: 'button',
                             label: 'Cached examples + images + audio',
@@ -330,6 +432,10 @@
             },
         });
         dialog.open();
+        // The cacheInfo html-type field is in the DOM now; populate it with a
+        // freshly-computed summary. setTimeout(0) defers past any final WKOF
+        // dialog-construction work in the same task.
+        setTimeout(populateCacheInfo, 0);
     }
 
     function settings() {
@@ -375,6 +481,10 @@
         ])
             .then(() => {
                 state.selections = {};
+                // If the settings dialog is open, refresh the cache-info section
+                // so the user sees the zeroed counts. No-op when the dialog is
+                // closed (the element won't exist).
+                populateCacheInfo();
                 alert(`${SCRIPT_TITLE}: cache cleared (examples + images + audio + selections + index meta).`);
             })
             .catch((err) => {
@@ -613,34 +723,61 @@
 }
 .${CARD_CLASS} .${CSS_PREFIX}-image[hidden] { display: none; }
 .${CARD_CLASS} .${CSS_PREFIX}-image {
-    /* Size to the image's natural aspect ratio. Height is capped by the
-       header's vertical budget (280px host minus ~13px card padding top/bottom
-       leaves ~254px); width is capped by the right panel's max-width above so
-       a runaway-wide grab cannot crowd the centered vocab character.
-       Note: no fixed dimensions, so there is a brief layout shift when the
-       image finishes loading — acceptable because the figure has [hidden]
-       until reveal, by which time the img is usually loaded.
-       pointer-events: none on the figure (and img) is the fix for WK's
-       top-right stats (like/check/inbox) being unclickable — at 240px tall
-       the figure's bounding box overlaps the corner where WK pins those.
-       The refresh-image button re-enables pointer-events: auto on itself
-       so it still catches clicks. */
+    /* Default to 140px — small enough to clear the WK stats (like / check /
+       inbox / percent) pinned at the top-right of .character-header. Grows
+       back to 240px on hover (which briefly overlaps the stats; acceptable
+       because the user has to deliberately point at the image, and moving
+       the cursor up to click a stat shrinks it back). Click opens a full-
+       screen modal — see showImageModal.
+
+       pointer-events: auto on the figure (was 'none') so the image catches
+       clicks for the modal. The refresh-image button still has its own
+       pointer-events: auto and absolute position; it stops propagation in
+       its click handler so refresh doesn't also trigger the modal. */
     position: relative;
     display: inline-block;
     margin: 0;
-    max-height: 240px;
+    max-height: 140px;
     max-width: 100%;
-    pointer-events: none;
+    pointer-events: auto;
+    transition: max-height 0.18s ease;
+}
+.${CARD_CLASS} .${CSS_PREFIX}-image:hover {
+    max-height: 240px;
 }
 .${CARD_CLASS} .${CSS_PREFIX}-image img {
     display: block;
-    max-height: 240px;
+    max-height: 140px;
     max-width: 100%;
     width: auto;
     height: auto;
     border-radius: 4px;
     box-shadow: 0 2px 6px rgba(0,0,0,0.35);
-    pointer-events: none;
+    cursor: zoom-in;
+    transition: max-height 0.18s ease;
+}
+.${CARD_CLASS} .${CSS_PREFIX}-image:hover img {
+    max-height: 240px;
+}
+/* Fullscreen image modal opened by clicking the card image. Click anywhere
+   or press Escape to close. z-index sits above WK's own UI (its dialogs
+   live around z-index 1000-2000). */
+.${CSS_PREFIX}-modal {
+    position: fixed;
+    inset: 0;
+    background: rgba(0, 0, 0, 0.92);
+    z-index: 99999;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    cursor: zoom-out;
+}
+.${CSS_PREFIX}-modal img {
+    max-width: 95vw;
+    max-height: 95vh;
+    object-fit: contain;
+    border-radius: 4px;
+    box-shadow: 0 6px 30px rgba(0, 0, 0, 0.6);
 }
 .${CARD_CLASS} .${CSS_PREFIX}-refresh-image {
     position: absolute;
@@ -2140,6 +2277,12 @@
             // Eager (the default) ensures the image is downloading the moment
             // src is set, so by reveal time it's already in cache.
             img.decoding = 'async';
+            // Click anywhere on the image to open it in a fullscreen modal.
+            // The refresh button overlays the image but stops propagation so
+            // ⟳ doesn't also pop the modal.
+            img.addEventListener('click', () => {
+                if (img.src) showImageModal(img.src);
+            });
             fig.appendChild(img);
 
             const imageRefreshBtn = document.createElement('button');
@@ -2156,7 +2299,12 @@
             const iCounter = document.createElement('span');
             iCounter.className = `${CSS_PREFIX}-counter`;
             imageRefreshBtn.appendChild(iCounter);
-            imageRefreshBtn.addEventListener('click', refreshImage);
+            imageRefreshBtn.addEventListener('click', (e) => {
+                // Don't bubble — the parent figure has a click handler that
+                // pops the fullscreen modal; refresh shouldn't also do that.
+                e.stopPropagation();
+                refreshImage();
+            });
             fig.appendChild(imageRefreshBtn);
 
             rightPanel.appendChild(fig);
@@ -2376,6 +2524,39 @@
             sentenceEl.dataset.wkIkEmitRuby = String(emitRuby);
         }
         sentenceEl.classList.toggle(`${CSS_PREFIX}-show-furigana`, emitRuby && showNow);
+    }
+
+    // Open the given image URL in a fullscreen overlay. Click the backdrop
+    // (anywhere) or press Escape to close. Only one modal at a time — if one
+    // is already open we replace it (rapid clicks shouldn't stack overlays).
+    function showImageModal(src) {
+        const existing = document.querySelector('.' + `${CSS_PREFIX}-modal`);
+        if (existing) existing.remove();
+
+        const modal = document.createElement('div');
+        modal.className = `${CSS_PREFIX}-modal`;
+        const img = document.createElement('img');
+        img.src = src;
+        img.alt = '';
+        modal.appendChild(img);
+
+        const close = () => {
+            modal.remove();
+            document.removeEventListener('keydown', onKey, true);
+        };
+        const onKey = (e) => {
+            if (e.key === 'Escape') {
+                // Capture phase + preventDefault so WK's own input handlers
+                // (which may also react to Escape) don't see the keystroke.
+                e.preventDefault();
+                e.stopPropagation();
+                close();
+            }
+        };
+        modal.addEventListener('click', close);
+        document.addEventListener('keydown', onKey, true);
+
+        document.body.appendChild(modal);
     }
 
     // Placeholder card shown between subject change and IK fetch completion.
