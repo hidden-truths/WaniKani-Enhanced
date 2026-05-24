@@ -1,7 +1,7 @@
 // ==UserScript==
 // @name         WK Vocab Review — ImmersionKit Examples
 // @namespace    https://github.com/jbrelly/wk-ik-examples
-// @version      0.12.3
+// @version      0.16.1
 // @description  Shows one ImmersionKit example sentence (with IK / Google TTS audio + IK / DDG image) during WaniKani vocab reviews.
 // @author       jbrelly
 // @match        https://www.wanikani.com/*
@@ -21,7 +21,7 @@
 
     const SCRIPT_ID = 'wk-ik-examples';
     const SCRIPT_TITLE = 'WK Vocab Review — ImmersionKit';
-    const SCRIPT_VERSION = '0.12.3';
+    const SCRIPT_VERSION = '0.16.1';
 
     // Bump this when on-disk cache shape or sourcing logic changes in a way that
     // makes stale entries actively wrong (vs. just suboptimal). Boot will clear
@@ -32,6 +32,17 @@
     const WKOF_VERSION_NEEDED = '1.0.52';
 
     const IK_API_BASE = 'https://apiv2.immersionkit.com/search';
+    // Canonical encoded-title → { title, category, tags } map for every deck IK
+    // serves. Their snake_case-with-special-chars encoding ("kanon__2006_") is
+    // lossy — multiple original strings collapse to the same encoded form, so
+    // any reverse heuristic can only ever be a best guess. This endpoint gives
+    // us the source of truth in one ~12KB JSON payload.
+    const IK_INDEX_META_URL = 'https://apiv2.immersionkit.com/index_meta';
+    const INDEX_META_CACHE_KEY = 'wk-ik-examples.index_meta';
+    // 7 days — IK adds new decks occasionally but the map is stable enough that
+    // weekly is plenty. On fetch failure we fall back to the underscore-decoding
+    // heuristic, so a stale or missing map is degraded-but-functional.
+    const INDEX_META_TTL_MS = 7 * 24 * 60 * 60 * 1000;
     // IK's direct media bucket (us-southeast-1.linodeobjects.com) has been offline
     // since Aug 2025 — those URLs still 403. However the API server exposes a
     // /download_media proxy that serves the same files; that's what we use for the
@@ -65,6 +76,8 @@
     const DEFAULTS = {
         autoPlayAudio: false,
         showImage: true,
+        showFurigana: true,
+        playHotkey: 'p',
         sentencePreference: 'shortest',
         requireAudio: true,
     };
@@ -101,6 +114,12 @@
         return;
     }
 
+    // Canonical encoded-title map from IK's /index_meta endpoint. Populated by
+    // loadIndexMeta() during boot. Null while uninitialized; an object even when
+    // the fetch fails (just empty), so lookup code can treat null as "still
+    // loading" and a present-but-missing key as "fall back to heuristic".
+    let indexMeta = null;
+
     // ---------- Module-scoped state ----------
 
     const state = {
@@ -122,10 +141,43 @@
         // Track which type the user is currently on so we can reset `answered`
         // when the question switches mid-subject (no new subject = same card).
         currentQuestionType: null,    // 'meaning' | 'reading' | null
-        // Once translation/image are revealed (on meaning submit), keep them
-        // visible for the rest of the subject. Reset on new subject.
-        translationRevealed: false,
+        // meaningAnswered / readingAnswered are convenience mirrors of the
+        // CURRENT subject's entry in subjectProgress below. We keep them as
+        // top-level fields so the half-dozen read sites (furigana logic, button
+        // titles, reveal check) stay terse. Refreshed from subjectProgress on
+        // every subject change in handleDomChange; written through on every
+        // submission in revealAll.
+        meaningAnswered: false,
+        readingAnswered: false,
+        // Per-subject progress map for this session. Lets the reveal trigger
+        // ("both questions submitted") fire correctly even when WK interleaves
+        // other subjects between the two questions of one subject — common in
+        // shuffled-mode reviews where you might answer meaning for A, then see
+        // B, C, D, and come back to A for reading much later. Without this,
+        // the comeback's readingAnswered=true would happen on top of a fresh
+        // meaningAnswered=false (since the flags would have been wiped during
+        // the B/C/D detour) and the reveal would never fire.
+        // Shape: { <subjectId>: { meaningAnswered: bool, readingAnswered: bool } }
+        // In-memory only; cleared on teardown. No cross-session persistence —
+        // WK removes subjects from the queue once both questions are correct,
+        // so a subject seen across sessions is starting fresh anyway.
+        subjectProgress: {},
+        // Per-card UI state for the ふ toggle button: true = furigana rendered when
+        // gating allows. Initialized from settings().showFurigana on new subject;
+        // user toggles flip it without touching the persistent setting.
+        furiganaVisible: false,
     };
+
+    // Lazily get-or-create the per-subject progress entry. Callers should treat
+    // the returned object as live — mutating its fields persists across subject
+    // transitions for the rest of the session.
+    function getSubjectProgress(subjectId) {
+        if (!subjectId) return { meaningAnswered: false, readingAnswered: false };
+        if (!state.subjectProgress[subjectId]) {
+            state.subjectProgress[subjectId] = { meaningAnswered: false, readingAnswered: false };
+        }
+        return state.subjectProgress[subjectId];
+    }
 
     // ---------- Boot chain ----------
 
@@ -143,13 +195,15 @@
         .then(injectStyles)
         .then(loadSelections) // restore per-word refresh-button selections
         .then(maybeUpgradeCache) // wipe stale caches if CACHE_SCHEMA_VERSION bumped
+        .then(loadIndexMeta) // canonical encoded-title → pretty-title map from IK
         .then(registerListeners)
         .then(() => {
             // Expose console-callable helpers in the page context.
             PAGE_WIN.openWkIkSettings = openSettings;
             PAGE_WIN.debugWkIk = debugWkIk;
+            PAGE_WIN.debugWkIkTitle = debugWkIkTitle;
             console.log(
-                `[${SCRIPT_ID}] boot OK. Console: openWkIkSettings() | debugWkIk()`
+                `[${SCRIPT_ID}] boot OK. Console: openWkIkSettings() | debugWkIk() | debugWkIkTitle('<encoded_title>')`
             );
         })
         .catch((err) => {
@@ -208,6 +262,21 @@
                             default: DEFAULTS.showImage,
                             hover_tip:
                                 'When on, search DuckDuckGo for an illustration of the vocab word and display it after you answer. Cached for 30 days per word.',
+                        },
+                        showFurigana: {
+                            type: 'checkbox',
+                            label: 'Show furigana on the example sentence',
+                            default: DEFAULTS.showFurigana,
+                            hover_tip:
+                                'When on, render furigana (small kana above kanji) on the example sentence after you submit the reading question. Furigana is always hidden before the reading is graded so it doesn\'t spoil the answer. The target vocab word\'s own reading is never shown. Per-card ふ button toggles it on/off without changing this default.',
+                        },
+                        playHotkey: {
+                            type: 'text',
+                            label: 'Hotkey to replay audio',
+                            default: DEFAULTS.playHotkey,
+                            placeholder: 'p',
+                            hover_tip:
+                                'Single key to press for replaying the example-sentence audio (case-insensitive, no modifier keys — Ctrl/Cmd combos are ignored so browser shortcuts still work). Leave blank to disable. Ignored while you\'re still typing your answer; works after submit even with the input focused.',
                         },
                         selection: {
                             type: 'section',
@@ -278,17 +347,19 @@
     }
 
     function clearCache() {
-        // Clear IK examples, DDG images, IK + TTS audio, and per-word selections.
+        // Clear IK examples, DDG images, IK + TTS audio, per-word selections,
+        // and the IK index_meta map. The map will be re-fetched on next boot.
         Promise.all([
             wkof.file_cache.delete(new RegExp('^' + escapeRegExp(CACHE_PREFIX))),
             wkof.file_cache.delete(new RegExp('^' + escapeRegExp(IMG_CACHE_PREFIX))),
             wkof.file_cache.delete(new RegExp('^' + escapeRegExp(AUDIO_CACHE_PREFIX))),
             wkof.file_cache.delete(new RegExp('^' + escapeRegExp(IK_AUDIO_CACHE_PREFIX))),
             wkof.file_cache.delete(SELECTIONS_CACHE_KEY),
+            wkof.file_cache.delete(INDEX_META_CACHE_KEY),
         ])
             .then(() => {
                 state.selections = {};
-                alert(`${SCRIPT_TITLE}: cache cleared (examples + images + audio + selections).`);
+                alert(`${SCRIPT_TITLE}: cache cleared (examples + images + audio + selections + index meta).`);
             })
             .catch((err) => {
                 console.error(`[${SCRIPT_ID}] clearCache failed:`, err);
@@ -335,6 +406,13 @@
     justify-content: center !important;
     margin: 0 !important;
     padding: 0 !important;
+    /* Bounding box covers the entire header now (inset:0), so without this
+       it intercepts clicks across the whole header — including the corners
+       where WK pins home/gear (top-left) and like/check/inbox (top-right).
+       The character glyph itself is purely visual / non-interactive; the
+       only thing we'd lose by disabling pointer events is drag-selecting
+       the glyph, which nobody does. */
+    pointer-events: none !important;
 }
 .${CARD_CLASS} {
     position: absolute;
@@ -363,6 +441,13 @@
     display: flex;
     flex-direction: column;
     gap: 0.4em;
+}
+/* Right panel needs more width budget than the left because anime/drama
+   screenshots are almost always landscape — at our 240px image height a 16:9
+   grab is ~427px wide. Keep the cap below 50% so the centered vocab character
+   (positioned absolutely inside .character-header) stays visually dominant. */
+.${CARD_CLASS} .${CSS_PREFIX}-right {
+    max-width: 44%;
 }
 .${CARD_CLASS} .${CSS_PREFIX}-left {
     align-items: flex-start;
@@ -403,6 +488,20 @@
     border-radius: 2px;
     text-shadow: none;
 }
+/* Ruby/rt: keep furigana small enough that turning it on doesn't bump line
+   height noticeably. Slightly translucent so the kanji body remains the
+   visual anchor. */
+.${CARD_CLASS} ruby rt {
+    font-size: 0.55em;
+    opacity: 0.85;
+    line-height: 1;
+    text-shadow: 0 1px 1px rgba(0,0,0,0.35);
+}
+/* Belt-and-braces: even if the renderer ever emits an <rt> inside the target
+   mark (it shouldn't — kanji segments inside the mark are emitted without
+   <rt> by renderSentence), CSS hides it so the reading is never visible
+   above the very word being tested. */
+.${CARD_CLASS} mark.${CSS_PREFIX}-target ruby rt { display: none; }
 .${CARD_CLASS} .${CSS_PREFIX}-left-controls {
     display: flex;
     align-items: center;
@@ -427,7 +526,8 @@
     background: rgba(255,255,255,0.1);
     cursor: not-allowed;
 }
-.${CARD_CLASS} .${CSS_PREFIX}-refresh-sentence {
+.${CARD_CLASS} .${CSS_PREFIX}-refresh-sentence,
+.${CARD_CLASS} .${CSS_PREFIX}-furigana-toggle {
     width: 1.8em;
     height: 1.8em;
     line-height: 1.5em;
@@ -441,27 +541,49 @@
     padding: 0;
     flex-shrink: 0;
 }
-.${CARD_CLASS} .${CSS_PREFIX}-refresh-sentence:hover {
+.${CARD_CLASS} .${CSS_PREFIX}-refresh-sentence:hover,
+.${CARD_CLASS} .${CSS_PREFIX}-furigana-toggle:not([disabled]):hover {
     background: rgba(255,255,255,0.35);
+}
+.${CARD_CLASS} .${CSS_PREFIX}-furigana-toggle[disabled] {
+    opacity: 0.4;
+    cursor: not-allowed;
+}
+.${CARD_CLASS} .${CSS_PREFIX}-furigana-toggle[aria-pressed="true"] {
+    background: rgba(255,255,255,0.55);
+    color: #2a004a;
+    border-color: rgba(255,255,255,0.85);
 }
 .${CARD_CLASS} .${CSS_PREFIX}-image[hidden] { display: none; }
 .${CARD_CLASS} .${CSS_PREFIX}-image {
-    /* Reserve a fixed 180x180 slot so loading the image doesn't reflow sibling
-       layout. The actual image data is fit inside via object-fit: contain so
-       portraits and landscapes both display correctly without stretching. */
+    /* Size to the image's natural aspect ratio. Height is capped by the
+       header's vertical budget (280px host minus ~13px card padding top/bottom
+       leaves ~254px); width is capped by the right panel's max-width above so
+       a runaway-wide grab cannot crowd the centered vocab character.
+       Note: no fixed dimensions, so there is a brief layout shift when the
+       image finishes loading — acceptable because the figure has [hidden]
+       until reveal, by which time the img is usually loaded.
+       pointer-events: none on the figure (and img) is the fix for WK's
+       top-right stats (like/check/inbox) being unclickable — at 240px tall
+       the figure's bounding box overlaps the corner where WK pins those.
+       The refresh-image button re-enables pointer-events: auto on itself
+       so it still catches clicks. */
     position: relative;
     display: inline-block;
-    width: 180px;
-    height: 180px;
     margin: 0;
+    max-height: 240px;
+    max-width: 100%;
+    pointer-events: none;
 }
 .${CARD_CLASS} .${CSS_PREFIX}-image img {
     display: block;
-    width: 100%;
-    height: 100%;
-    object-fit: contain;
+    max-height: 240px;
+    max-width: 100%;
+    width: auto;
+    height: auto;
     border-radius: 4px;
     box-shadow: 0 2px 6px rgba(0,0,0,0.35);
+    pointer-events: none;
 }
 .${CARD_CLASS} .${CSS_PREFIX}-refresh-image {
     position: absolute;
@@ -479,6 +601,9 @@
     font-size: 0.85em;
     padding: 0;
     box-shadow: 0 1px 3px rgba(0,0,0,0.25);
+    /* Re-enable click capture — the parent figure has pointer-events: none
+       so it doesn't block WK's top-right stats. */
+    pointer-events: auto;
 }
 .${CARD_CLASS} .${CSS_PREFIX}-refresh-image:hover {
     background: #fff;
@@ -528,6 +653,32 @@
                 teardown();
             }
         });
+
+        // Replay-audio hotkey. Bound once at boot — handler no-ops when there's
+        // no active card. Skipped when the user is mid-answer (typing in an
+        // input before submitting) to avoid hijacking keystrokes; once the
+        // answer is graded the hotkey works even with input focus.
+        document.addEventListener('keydown', onPlayHotkey);
+    }
+
+    function onPlayHotkey(e) {
+        if (e.ctrlKey || e.metaKey || e.altKey) return;
+        const key = (settings().playHotkey || '').trim().toLowerCase();
+        if (!key) return;
+        if ((e.key || '').toLowerCase() !== key) return;
+
+        const t = e.target;
+        const inEditable = t && (
+            t.tagName === 'INPUT' ||
+            t.tagName === 'TEXTAREA' ||
+            t.isContentEditable
+        );
+        if (inEditable && !state.answered) return;
+
+        const card = state.cardEl;
+        if (!card || typeof card._play !== 'function') return;
+        e.preventDefault();
+        card._play();
     }
 
     function isOnReviewPage() {
@@ -565,7 +716,10 @@
         state.currentCharacters = null;
         state.answered = false;
         state.currentQuestionType = null;
-        state.translationRevealed = false;
+        state.meaningAnswered = false;
+        state.readingAnswered = false;
+        state.furiganaVisible = false;
+        state.subjectProgress = {};
         state.currentFetchToken += 1;
     }
 
@@ -589,7 +743,9 @@
             state.currentCharacters = null;
             state.answered = false;
             state.currentQuestionType = null;
-            state.translationRevealed = false;
+            state.meaningAnswered = false;
+            state.readingAnswered = false;
+            state.furiganaVisible = false;
             return;
         }
 
@@ -600,7 +756,12 @@
             state.currentCharacters = subject.characters;
             state.answered = false;
             state.currentQuestionType = null;     // picked up on next mutation tick
-            state.translationRevealed = false;    // reset per subject
+            // Pull cached per-subject progress so a revisit after WK interleaves
+            // other subjects doesn't lose the earlier submission's flag.
+            const progress = getSubjectProgress(subject.id);
+            state.meaningAnswered = progress.meaningAnswered;
+            state.readingAnswered = progress.readingAnswered;
+            state.furiganaVisible = !!settings().showFurigana; // default visibility for the new card
             // Restore the user's last-chosen sentence/image indices for this word, or
             // default to 0 if none saved. This survives page refreshes via wkof.file_cache.
             applySavedSelection(subject.characters);
@@ -909,6 +1070,44 @@
         }
     }
 
+    // Inspect the encoded-title → folder lookup for a given title. Use this
+    // when a specific word's audio or image fails to load and you want to
+    // know whether the problem is on our side (lookup miss → using broken
+    // heuristic) or upstream (IK doesn't have the asset). Pass the
+    // lowercased+underscored title string from the boot-time "raw IK example"
+    // log (e.g. debugWkIkTitle('kanon__2006_')). Logs:
+    //   1. whether indexMeta is loaded at all,
+    //   2. whether the encoded title is present in the map (MAP HIT vs MISS),
+    //   3. heuristic fallback's guess at the folder name,
+    //   4. fully-built sample audio + image URLs you can paste into a new tab
+    //      to verify reachability.
+    function debugWkIkTitle(encodedTitle) {
+        const tag = `--- debugWkIkTitle(${JSON.stringify(encodedTitle)}) ---`;
+        console.log(tag);
+        if (!encodedTitle) { console.log('(empty input)'); return; }
+        if (!indexMeta) {
+            console.log('indexMeta is null — boot may still be in progress. Try again in a moment.');
+            return;
+        }
+        const total = Object.keys(indexMeta).length;
+        const fromMap = indexMeta[encodedTitle];
+        if (fromMap) {
+            console.log(`MAP HIT (${total} entries loaded):`, fromMap);
+        } else {
+            console.log(`MAP MISS (${total} entries loaded). Encoded title is not in IK's /index_meta — either a new deck IK added after our 7d cache, or the title field doesn't match. Nearest first-char matches:`,
+                Object.keys(indexMeta).filter((k) => k[0] === encodedTitle[0]).slice(0, 8));
+            console.log('Heuristic-fallback folder name would be:', JSON.stringify(ikTitleToFolder(encodedTitle)));
+        }
+        // Build sample URLs with placeholder file names so the resolver runs
+        // through resolveIkFolderAndCategory the same way it does for a real
+        // example. Replace SAMPLE.mp3 / SAMPLE.jpg with the real `sound` /
+        // `image` field from the failing example to get a real URL.
+        const fakeExample = { title: encodedTitle, id: 'anime_xxx', sound: 'SAMPLE.mp3', image: 'SAMPLE.jpg' };
+        console.log('Sample audio URL (with placeholder filename):', buildIkAudioUrl(fakeExample));
+        console.log('Sample image URL (with placeholder filename):', buildIkImageUrl(fakeExample));
+        console.log('To check the real file, replace SAMPLE.mp3/SAMPLE.jpg with the `sound`/`image` field from the failing example (visible in the boot log\'s "raw IK example" dump) and paste into a new browser tab.');
+    }
+
     function readText(el) {
         if (!el) return null;
         const t = (el.textContent || '').trim();
@@ -972,6 +1171,62 @@
     }
 
     // ---------- Per-word selection persistence ----------
+
+    // Fetch IK's /index_meta and stash the canonical encoded → {title, category}
+    // map. Cached in wkof.file_cache for INDEX_META_TTL_MS. On any failure we
+    // fall through to an empty map — URL builders then use the regex heuristic,
+    // which is correct for simple titles (kill_la_kill, fate_zero) and wrong-
+    // but-non-fatal for the trickier ones (durarara__, kanon__2006_, etc.).
+    function loadIndexMeta() {
+        return wkof.file_cache
+            .load(INDEX_META_CACHE_KEY)
+            .then((entry) => {
+                if (entry && entry.byEncoded && typeof entry.fetchedAt === 'number' &&
+                    Date.now() - entry.fetchedAt < INDEX_META_TTL_MS) {
+                    indexMeta = entry.byEncoded;
+                    console.log(
+                        `[${SCRIPT_ID}] index_meta loaded from cache (${Object.keys(indexMeta).length} entries)`
+                    );
+                    return;
+                }
+                throw new Error('index_meta_cache_stale');
+            })
+            .catch(() => fetchAndCacheIndexMeta());
+    }
+
+    function fetchAndCacheIndexMeta() {
+        return fetch(IK_INDEX_META_URL, { credentials: 'omit' })
+            .then((res) => {
+                if (!res.ok) throw new Error(`index_meta HTTP ${res.status}`);
+                return res.json();
+            })
+            .then((json) => {
+                const src = (json && json.data) || {};
+                const byEncoded = {};
+                for (const enc of Object.keys(src)) {
+                    const v = src[enc];
+                    if (v && v.title) {
+                        byEncoded[enc] = { title: v.title, category: v.category || null };
+                    }
+                }
+                indexMeta = byEncoded;
+                wkof.file_cache
+                    .save(INDEX_META_CACHE_KEY, {
+                        byEncoded,
+                        fetchedAt: Date.now(),
+                        lastUpdatedTimestamp: json && json.lastUpdatedTimestamp || null,
+                    })
+                    .catch((err) => console.warn(`[${SCRIPT_ID}] index_meta cache save failed:`, err));
+                console.log(`[${SCRIPT_ID}] index_meta fetched (${Object.keys(byEncoded).length} entries)`);
+            })
+            .catch((err) => {
+                console.warn(
+                    `[${SCRIPT_ID}] index_meta fetch failed; falling back to heuristic title decoding:`,
+                    err
+                );
+                indexMeta = {}; // empty map — lookups miss → heuristic
+            });
+    }
 
     // Load the persisted selection map from wkof.file_cache. Called once during boot.
     // Non-blocking on failure — selections just default to 0,0 if absent.
@@ -1050,34 +1305,123 @@
 
     // ---------- Audio (IK proxy → Google Translate TTS) + Image (DDG) ----------
 
+    // ============================================================
+    // IK title-encoding workaround (READ THIS BEFORE TOUCHING URL CODE)
+    // ============================================================
+    //
+    // The PROBLEM:
+    // IK's example.title field uses a lossy encoding — lowercase the title,
+    // then map every non-alphanumeric char to "_" one-for-one. That means
+    // "Kanon (2006)", "Kanon  2006-", and "kanon-(2006(" all collapse to the
+    // same string "kanon__2006_". The number of underscores is preserved but
+    // their original identity (space vs paren vs apostrophe vs hyphen vs ...)
+    // is destroyed. So we CANNOT locally invert the encoding to rebuild the
+    // proper folder name on IK's media proxy, which DOES need the real chars.
+    //
+    // Concrete examples of titles whose encoding cannot be reversed by any
+    // local heuristic (verified against /index_meta):
+    //   "durarara__"                            → "Durarara!!"
+    //   "god_s_blessing_on_this_wonderful_world_" → "God's Blessing on this Wonderful World!"
+    //   "re_zero___starting_life_in_another_world" → "Re Zero − Starting Life in Another World"
+    //   "demon_slayer___kimetsu_no_yaiba"       → "Demon Slayer - Kimetsu no Yaiba"
+    //   "frieren_beyond_journey_s_end"          → "Frieren Beyond Journey's End"
+    //
+    // The FIX:
+    // IK exposes GET /index_meta — see loadIndexMeta() below — which returns
+    // the canonical encoded → {title, category, tags} map for every deck they
+    // serve (~96 entries, ~12KB JSON). We fetch this once on boot, cache it
+    // for 7 days, and use it as the source of truth for the folder name.
+    //
+    // The FALLBACK:
+    // When the map is unavailable (boot still in flight, /index_meta returns
+    // 5xx, brand-new deck not yet in our cached map), we degrade to the
+    // ikTitleToFolder + decodeIkTitle regex heuristic. The heuristic is
+    // correct for the easy cases (kill_la_kill → "Kill la Kill", fate_zero →
+    // "Fate Zero") and silently wrong on hard cases. Wrong-but-non-fatal: the
+    // proxy returns an empty body, our < 1KB check trips, we negative-cache
+    // and fall through to Google TTS / DDG illustrations.
+    //
+    // The DIAGNOSTIC TOOL:
+    // Call debugWkIkTitle('<encoded_title>') from devtools to inspect the
+    // map state and the URL we would build for a given title. See the
+    // function below near the existing debugWkIk() helper.
+    //
+    // If audio or images stop loading for a specific title, the playbook is
+    // (1) check the boot log for "index_meta fetched/loaded (N entries)"
+    // (2) call debugWkIkTitle() for the failing title
+    // (3) if MAP MISS but the deck plainly exists on IK, clear the cache via
+    //     the settings dialog (forces /index_meta refetch on next boot)
+    // (4) if MAP HIT but the URL still 404s, the file genuinely isn't on the
+    //     proxy bucket — let it fall through to TTS / DDG.
+    // ============================================================
+
+    // Resolve { folder, category } for an IK example. Prefers the canonical
+    // /index_meta mapping (loaded once at boot) and falls back to the regex
+    // heuristic when the map is unavailable or the title isn't yet listed.
+    function resolveIkFolderAndCategory(e) {
+        if (!e || !e.title) return null;
+        const fromMap = indexMeta && indexMeta[e.title];
+        const folder = fromMap ? fromMap.title : ikTitleToFolder(e.title);
+        let category = fromMap && fromMap.category;
+        if (!category) {
+            // Heuristic fallback: id is shaped "<category>_<encoded_title>_..."
+            category = e.id ? String(e.id).split('_')[0] : null;
+        }
+        if (!folder || !category) return null;
+        return { folder, category };
+    }
+
     // Build an audio URL using the IK API's /download_media proxy. The site itself
     // serves audio from URLs like:
     //   https://apiv2.immersionkit.com/download_media?path=media/anime/Fate%20Zero/media/<sound>
     // The path components are derived from fields in the example object:
-    //   <category> = first underscore-separated token of `id` (e.g. "anime", "games")
-    //   <folder>   = `title` with underscores→spaces, lone "x" tokens→"×",
-    //                other tokens capitalized (e.g. "hunter_x_hunter" → "Hunter × Hunter")
-    //   <sound>    = `sound` field verbatim
+    //   <category> + <folder> = resolveIkFolderAndCategory(e) (index_meta lookup)
+    //   <sound>               = `sound` field verbatim
     // Returns null if any required field is missing.
     function buildIkAudioUrl(e) {
-        if (!e || !e.sound || !e.title || !e.id) return null;
-        const category = String(e.id).split('_')[0];
-        if (!category) return null;
-        const folder = ikTitleToFolder(e.title);
-        if (!folder) return null;
+        if (!e || !e.sound) return null;
+        const fc = resolveIkFolderAndCategory(e);
+        if (!fc) return null;
         // Encode each path segment individually so spaces, "×", etc. get percent-
         // encoded while the slashes between segments stay literal (matching the
         // exact format the IK website uses).
-        const segments = ['media', category, folder, 'media', e.sound];
+        const segments = ['media', fc.category, fc.folder, 'media', e.sound];
         const path = segments.map(encodeURIComponent).join('/');
         return `${IK_DOWNLOAD_MEDIA_BASE}?path=${path}`;
     }
 
+    // Decode IK's underscored title into a flat token array. IK collapses each
+    // special character (space, paren, etc.) to a single "_", which is mostly
+    // unambiguous on its way back to spaces — except for the trailing
+    // "__YYYY_" disambiguator pattern that encodes " (YYYY)". We undo that
+    // pattern explicitly before treating remaining underscores as spaces.
+    // Empty tokens (collapsed double/trailing underscores from non-year cases
+    // we can't reverse) are dropped — the resulting folder name will miss
+    // those special chars, which is acceptable degradation.
+    function decodeIkTitle(title) {
+        let s = String(title);
+        s = s.replace(/__(\d+)_$/, ' ($1)');
+        s = s.replace(/_/g, ' ');
+        return s.split(' ').filter(Boolean);
+    }
+
+    // Map IK's encoded title to its actual folder name on the proxy.
+    //   "kill_la_kill"   → "Kill la Kill"
+    //   "kanon__2006_"   → "Kanon (2006)"
+    //   "hunter_x_hunter"→ "Hunter × Hunter"
+    // IK uses title-case convention: capitalize each token EXCEPT short ASCII
+    // function words (la, of, on, the, and, etc.) which stay lowercase — but
+    // the FIRST token is always capitalized even if short ("The Walking Dead").
+    // The lone "x" token is the IK convention for "×".
     function ikTitleToFolder(title) {
-        return String(title)
-            .split('_')
-            .filter(Boolean)
-            .map((tok) => (tok === 'x' ? '×' : tok[0].toUpperCase() + tok.slice(1)))
+        const tokens = decodeIkTitle(title);
+        return tokens
+            .map((tok, i) => {
+                if (tok === 'x') return '×';
+                if (i > 0 && tok.length <= 3 && /^[a-z]+$/.test(tok)) return tok;
+                if (!/^[a-z]/i.test(tok)) return tok;
+                return tok[0].toUpperCase() + tok.slice(1);
+            })
             .join(' ');
     }
 
@@ -1085,12 +1429,10 @@
     // from the source anime/drama/game frame). Returns null if `image` is missing
     // (e.g. text-only literature examples like Skyrim quest text).
     function buildIkImageUrl(e) {
-        if (!e || !e.image || !e.title || !e.id) return null;
-        const category = String(e.id).split('_')[0];
-        if (!category) return null;
-        const folder = ikTitleToFolder(e.title);
-        if (!folder) return null;
-        const segments = ['media', category, folder, 'media', e.image];
+        if (!e || !e.image) return null;
+        const fc = resolveIkFolderAndCategory(e);
+        if (!fc) return null;
+        const segments = ['media', fc.category, fc.folder, 'media', e.image];
         const path = segments.map(encodeURIComponent).join('/');
         return `${IK_DOWNLOAD_MEDIA_BASE}?path=${path}`;
     }
@@ -1353,17 +1695,24 @@
         return (e && (e.title || e.deck_name)) || '';
     }
 
-    // Turn IK's snake-case title (e.g. "hunter_x_hunter", "fate_zero") into something
-    // pleasant for display ("Hunter Hunter", "Fate Zero"). Drops the standalone "x"
-    // separator that IK uses for titles like Hunter × Hunter, replaces underscores
-    // with spaces, and capitalizes only tokens longer than 3 chars (so English
-    // function words like "of"/"the" stay lowercase, mimicking title case).
+    // Display form of IK's encoded title for the source-attribution line.
+    // Prefers the canonical /index_meta mapping (e.g. "Durarara!!" preserves
+    // the exclamation, "God's Blessing on this Wonderful World!" keeps the
+    // apostrophe). Heuristic fallback handles cases where the map is missing
+    // the title or hasn't loaded yet — same convention as ikTitleToFolder,
+    // except the lone "x" Hunter × Hunter separator is dropped rather than
+    // rendered as "×" so attribution lines read naturally.
     function prettifyTitle(title) {
         if (!title) return '';
-        return String(title)
-            .split('_')
-            .filter((tok) => tok && tok !== 'x')
-            .map((tok) => tok.length > 3 ? tok[0].toUpperCase() + tok.slice(1) : tok)
+        const fromMap = indexMeta && indexMeta[title];
+        if (fromMap && fromMap.title) return fromMap.title;
+        const tokens = decodeIkTitle(title).filter((tok) => tok !== 'x');
+        return tokens
+            .map((tok, i) => {
+                if (i > 0 && tok.length <= 3 && /^[a-z]+$/.test(tok)) return tok;
+                if (!/^[a-z]/i.test(tok)) return tok;
+                return tok[0].toUpperCase() + tok.slice(1);
+            })
             .join(' ');
     }
     // `requireAudio` is now a sentence-source filter: we treat IK examples that came
@@ -1432,7 +1781,13 @@
         const sentenceEl = document.createElement('div');
         sentenceEl.className = `${CSS_PREFIX}-sentence`;
         sentenceEl.setAttribute('lang', 'ja');
-        renderSentence(sentenceEl, example.sentence, target);
+        renderSentence(
+            sentenceEl,
+            example.sentence,
+            example.sentence_with_furigana,
+            target,
+            !!(state.furiganaVisible && state.readingAnswered)
+        );
         leftPanel.appendChild(sentenceEl);
 
         const leftControls = document.createElement('div');
@@ -1489,6 +1844,41 @@
             // Store hook for autoplay on reveal.
             card._play = playSentence;
         }
+
+        // ふ furigana toggle. Only attached when the example actually has parseable
+        // furigana data (no point showing a perpetually-disabled button otherwise).
+        // The button stays disabled until the reading question for this subject is
+        // graded — revealAll flips disabled=false and re-renders. Click handler
+        // toggles state.furiganaVisible and re-renders the sentence in place.
+        const hasFurigana = !!parseFurigana(example.sentence_with_furigana);
+        if (hasFurigana) {
+            const furiganaBtn = document.createElement('button');
+            furiganaBtn.className = `${CSS_PREFIX}-furigana-toggle`;
+            furiganaBtn.type = 'button';
+            furiganaBtn.textContent = 'ふ';
+            furiganaBtn.disabled = !state.readingAnswered;
+            furiganaBtn.setAttribute('aria-pressed', String(!!state.furiganaVisible));
+            furiganaBtn.setAttribute(
+                'aria-label',
+                state.readingAnswered ? 'Toggle furigana' : 'Furigana (unlocks after reading is graded)'
+            );
+            furiganaBtn.title = state.readingAnswered
+                ? (state.furiganaVisible ? 'Hide furigana' : 'Show furigana')
+                : 'Furigana unlocks after you submit the reading';
+            furiganaBtn.addEventListener('click', () => {
+                if (!state.readingAnswered) return;
+                state.furiganaVisible = !state.furiganaVisible;
+                furiganaBtn.setAttribute('aria-pressed', String(state.furiganaVisible));
+                furiganaBtn.title = state.furiganaVisible ? 'Hide furigana' : 'Show furigana';
+                rerenderSentence(card, card._example);
+            });
+            leftControls.appendChild(furiganaBtn);
+            card._furiganaBtn = furiganaBtn;
+        }
+
+        // Stash the example on the card so revealAll / rerenderSentence can pick
+        // it up later without needing to thread it through state.
+        card._example = example;
 
         const sentenceRefreshBtn = document.createElement('button');
         sentenceRefreshBtn.className = `${CSS_PREFIX}-refresh-sentence`;
@@ -1577,8 +1967,126 @@
         state.cardEl = card;
     }
 
-    function renderSentence(container, sentence, target) {
+    // Parse IK's bracket-format furigana string (e.g. "今日[きょう]は晴[は]れて")
+    // into a flat segment array: [{kanji, reading} | {text}, ...]. The base string
+    // (kanji + text concatenated, no readings) must equal the plain `sentence`
+    // field — callers rely on that to align with target-word marking.
+    //
+    // Returns null when the input is empty or contains no bracket pairs — caller
+    // should fall back to plain text rendering in that case.
+    function parseFurigana(str) {
+        if (!str || typeof str !== 'string') return null;
+        // CJK Unified Ideographs + Ext A + 々 (iteration) + ヶ (counter-context kanji surrogate).
+        // Avoid \p{Script=Han} for Tampermonkey/older-engine safety.
+        const re = /([一-鿿㐀-䶿々ヶ]+)\[([^\]]+)\]/g;
+        const segments = [];
+        let lastIndex = 0;
+        let match;
+        while ((match = re.exec(str)) !== null) {
+            if (match.index > lastIndex) {
+                segments.push({ text: str.slice(lastIndex, match.index) });
+            }
+            segments.push({ kanji: match[1], reading: match[2] });
+            lastIndex = match.index + match[0].length;
+        }
+        if (lastIndex < str.length) {
+            segments.push({ text: str.slice(lastIndex) });
+        }
+        if (!segments.some((s) => 'kanji' in s)) return null;
+        return segments;
+    }
+
+    // Render the example sentence into `container`, optionally with furigana
+    // (ruby/rt) markup and with the target vocab word wrapped in <mark>. Furigana
+    // is suppressed inside the mark — even after reveal we never display the
+    // reading of the actual word being tested.
+    //
+    // Falls back to the plain-text branch when:
+    //   * caller asked for no furigana (gating logic in revealAll / settings),
+    //   * the IK example has no sentence_with_furigana field, or
+    //   * the parser found no kanji-bracket pairs.
+    function renderSentence(container, sentence, sentenceWithFurigana, target, withFurigana) {
         container.textContent = ''; // clear
+        const segments = withFurigana ? parseFurigana(sentenceWithFurigana) : null;
+        if (!segments) {
+            renderSentencePlain(container, sentence, target);
+            return;
+        }
+
+        // Locate the target word in the plain-text concatenation of segments.
+        // If the segment base doesn't exactly reconstruct `sentence` we still
+        // proceed — we just match against the base string we actually have.
+        const baseChars = segments.map((s) => 'kanji' in s ? s.kanji : s.text).join('');
+        const markStart = (target && baseChars.includes(target)) ? baseChars.indexOf(target) : -1;
+        const markEnd = markStart === -1 ? -1 : markStart + target.length;
+
+        let offset = 0;
+        let markEl = null;
+        const closeMark = () => {
+            if (markEl) {
+                container.appendChild(markEl);
+                markEl = null;
+            }
+        };
+
+        for (const seg of segments) {
+            const segLen = ('kanji' in seg) ? seg.kanji.length : seg.text.length;
+            const segStart = offset;
+            const segEnd = offset + segLen;
+            offset = segEnd;
+
+            const insideMark = markStart !== -1 && segStart < markEnd && segEnd > markStart;
+
+            if ('kanji' in seg) {
+                // Kanji segments are atomic — splitting them would break the
+                // kanji-reading pairing. If any part of the segment falls inside
+                // the mark range we include the whole segment in the mark, with
+                // its <rt> suppressed.
+                const node = document.createElement('ruby');
+                node.appendChild(document.createTextNode(seg.kanji));
+                if (!insideMark) {
+                    const rt = document.createElement('rt');
+                    rt.textContent = seg.reading;
+                    node.appendChild(rt);
+                }
+                appendToTarget(node, insideMark);
+            } else {
+                // Text segments are plain — safe to split at the mark boundaries
+                // so the highlight aligns precisely with target_word characters.
+                const text = seg.text;
+                if (markStart === -1 || segEnd <= markStart || segStart >= markEnd) {
+                    appendToTarget(document.createTextNode(text), false);
+                } else {
+                    // Segment overlaps the mark range. Split into up-to-three pieces.
+                    const localMarkStart = Math.max(markStart - segStart, 0);
+                    const localMarkEnd = Math.min(markEnd - segStart, text.length);
+                    if (localMarkStart > 0) {
+                        appendToTarget(document.createTextNode(text.slice(0, localMarkStart)), false);
+                    }
+                    appendToTarget(document.createTextNode(text.slice(localMarkStart, localMarkEnd)), true);
+                    if (localMarkEnd < text.length) {
+                        appendToTarget(document.createTextNode(text.slice(localMarkEnd)), false);
+                    }
+                }
+            }
+        }
+        closeMark();
+
+        function appendToTarget(node, intoMark) {
+            if (intoMark) {
+                if (!markEl) {
+                    markEl = document.createElement('mark');
+                    markEl.className = `${CSS_PREFIX}-target`;
+                }
+                markEl.appendChild(node);
+            } else {
+                closeMark();
+                container.appendChild(node);
+            }
+        }
+    }
+
+    function renderSentencePlain(container, sentence, target) {
         if (!target || !sentence.includes(target)) {
             container.textContent = sentence;
             return;
@@ -1593,6 +2101,23 @@
                 container.appendChild(mark);
             }
         });
+    }
+
+    // Replace the sentence content of an existing card in place, used by the
+    // ふ toggle button and the reading-reveal handler. Reads state.furiganaVisible
+    // and state.readingAnswered — furigana only renders when BOTH are true.
+    function rerenderSentence(card, example) {
+        if (!card || !example) return;
+        const sentenceEl = card.querySelector(`.${CSS_PREFIX}-sentence`);
+        if (!sentenceEl) return;
+        const withFurigana = !!(state.furiganaVisible && state.readingAnswered);
+        renderSentence(
+            sentenceEl,
+            example.sentence,
+            example.sentence_with_furigana,
+            state.currentCharacters || '',
+            withFurigana
+        );
     }
 
     function renderEmptyCard() {
@@ -1682,26 +2207,54 @@
         }
     }
 
-    // Question-type-aware reveal:
-    //   * Meaning submit → uncover translation + image (sticky for the subject),
-    //                      and play audio if the autoPlayAudio setting is on.
-    //   * Reading submit → always autoplay the sentence audio (after WK's vocab
-    //                      audio finishes), do NOT uncover translation/image
-    //                      (those would spoil the meaning question if it's
-    //                      coming next in the queue).
-    // If translation/image were already uncovered earlier this subject (meaning
-    // came first), they stay visible — state.translationRevealed is sticky for
-    // the subject so reading-after-meaning doesn't re-hide them.
+    // Question-type-aware reveal. WK doesn't expose a "subject complete" hook,
+    // so we derive it: the user is considered "done" with a subject once they've
+    // been graded on BOTH meaning AND reading in this session (order and
+    // correctness don't matter — submission is the trigger). Until then, the
+    // supplementary content stays hidden so it can't spoil the other question.
+    //
+    //   * Meaning submit → set meaningAnswered. Reveal translation + image
+    //                      ONLY if readingAnswered is also true. Otherwise
+    //                      we're still waiting on the reading question to be
+    //                      tested. Plays audio if autoPlayAudio is on.
+    //   * Reading submit → set readingAnswered, unlock the ふ furigana toggle,
+    //                      re-render the sentence so furigana can render now
+    //                      that the reading is no longer a secret. Reveal
+    //                      translation + image ONLY if meaningAnswered is also
+    //                      true. Always autoplays the sentence audio (queued
+    //                      after WK's vocab pronunciation so they don't overlap).
+    //
+    // This symmetric gating gives identical timing regardless of question
+    // order: whichever question is answered second is the one that reveals.
     function revealAll() {
         const card = state.cardEl;
         if (!card) return;
         const qtype = state.currentQuestionType || currentQuestionType() || 'meaning';
+        const progress = getSubjectProgress(state.currentSubjectId);
 
         if (qtype === 'meaning') {
-            state.translationRevealed = true;
+            state.meaningAnswered = true;
+            progress.meaningAnswered = true;
+        } else if (qtype === 'reading') {
+            // Reading just got graded — furigana is now safe to show without
+            // spoiling. Enable the toggle button and re-render the sentence
+            // so it picks up the current furiganaVisible state.
+            state.readingAnswered = true;
+            progress.readingAnswered = true;
+            if (card._furiganaBtn) {
+                card._furiganaBtn.disabled = false;
+                card._furiganaBtn.setAttribute('aria-label', 'Toggle furigana');
+                card._furiganaBtn.title = state.furiganaVisible
+                    ? 'Hide furigana'
+                    : 'Show furigana';
+            }
+            rerenderSentence(card, card._example);
         }
 
-        if (state.translationRevealed) {
+        // Reveal once the subject is complete in this session — both questions
+        // submitted. Sticky for the rest of the subject (no re-hiding if the
+        // second question's reveal triggers more mutations).
+        if (state.meaningAnswered && state.readingAnswered) {
             card.setAttribute('data-revealed', 'true');
             const translation = card.querySelector(`.${CSS_PREFIX}-translation`);
             if (translation) translation.hidden = false;
