@@ -8,23 +8,25 @@ During every vocabulary review, the big purple character header is augmented in 
 
 - **Japanese example sentence** from [ImmersionKit](https://immersionkit.com) appears on the **left** of the vocab character — drawn from anime, drama, games, literature, and news, with the target word highlighted.
 - **▶ Play button** for the sentence audio (see [How content is sourced](#how-content-is-sourced) for the full chain).
-- **Scene screenshot or illustration** appears on the **right** of the vocab character (revealed on meaning submit).
-- **English translation** of the sentence below the play button (also revealed on meaning submit).
+- **ふ furigana toggle** next to the play button — small kana above kanji. Hidden until you answer the reading; layout space is reserved from the start so revealing doesn't bump the sentence line.
+- **Scene screenshot or illustration** appears on the **right** of the vocab character (revealed on meaning submit). Hover to grow it; click to open fullscreen.
+- **English translation** of the sentence below the controls (also revealed on meaning submit).
 - **Source attribution** (e.g. `— Fate Zero`, `— Skyrim`) under the controls.
 
 ### Behavior per question type
 
-WaniKani asks meaning and reading as two separate questions per vocab. The card reacts differently to each:
+WaniKani asks meaning and reading as two separate questions per vocab. Each supplementary element is gated on the specific question that would spoil it:
 
-- **Reading submit** → autoplays the sentence audio, queued *after* WaniKani's own vocab pronunciation so they don't overlap. Translation and image stay hidden so the meaning isn't spoiled.
-- **Meaning submit** → reveals the translation + image. Sentence audio autoplays if you've turned that setting on. If you got meaning before reading this subject, the translation/image stay visible through the reading question that follows.
+- **Reading submit** → uncovers furigana on the sentence (the reading IS what's being tested). Autoplays the sentence audio, queued *after* WaniKani's own vocab pronunciation so they don't overlap.
+- **Meaning submit** → uncovers translation + image (English-side spoilers — they don't expose the reading). Autoplays the sentence audio if you've turned that setting on.
+- Order doesn't matter. Whichever you answer second, the previously-revealed elements stay visible.
 
 The reveal trigger is the input bar turning green or red — there's nothing to click, just answer.
 
 ### Refresh buttons
 
-- **⟳ next to the sentence** — pick a different IK example for this word (cycles through up to 10). Also resets the image to the new sentence's IK screenshot.
-- **⟳ overlaid on the image** — cycle through the combined pool `[IK screenshot, ...DuckDuckGo illustrations]`. Useful when an anime grab is too dark, too cluttered, or unhelpful — swap it for a clean illustration.
+- **⟳ next to the sentence** — pick a different IK example for this word. Shows a visible `N/M` counter so you can see how far you are through the pool. Also resets the image to the new sentence's IK screenshot.
+- **⟳ overlaid on the image** — cycle through the combined pool `[IK screenshot, ...DuckDuckGo illustrations]`, with its own `N/M` counter. Useful when an anime grab is too dark, too cluttered, or unhelpful — swap it for a clean illustration.
 
 Your per-word selections persist in IndexedDB and survive page refreshes.
 
@@ -41,7 +43,7 @@ Your per-word selections persist in IndexedDB and survive page refreshes.
 3. In Tampermonkey → Dashboard → Utilities → Create a new script. Paste the contents of [wk-vocab-review-ik.user.js](wk-vocab-review-ik.user.js), save (⌘S / Ctrl+S).
 4. Make sure WKOF is listed **above** this script in the Tampermonkey dashboard (drag to reorder; first-listed runs first).
 5. When prompted, approve cross-origin connections to `apiv2.immersionkit.com`, `translate.googleapis.com`, and `duckduckgo.com`.
-6. Reload any open WaniKani tab. Sanity check: DevTools console should show `[wk-ik-examples] booting v0.12.x on /...`.
+6. Reload any open WaniKani tab. Sanity check: DevTools console should show `[wk-ik-examples] booting v0.20.x on /...`.
 
 ## Settings
 
@@ -51,8 +53,12 @@ Open your WaniKani avatar dropdown (top right) → **Scripts** → **Settings** 
 | --- | --- | --- |
 | Auto-play audio on meaning reveal | off | When you submit a meaning answer, auto-play the sentence audio. Reading submits always auto-play (queued after WaniKani's own vocab pronunciation), independent of this setting. |
 | Show image for the vocab word | on | Toggle the right-side image (IK screenshot or DDG illustration). |
+| Show furigana on the example sentence | on | When on, the example sentence is rendered with furigana DOM from the start (layout-reserved, characters invisible) and the kana characters become visible after you submit the reading. The per-card ふ button toggles visibility without changing this default. |
+| Hotkey to replay audio | `p` | Single key (no modifiers) to replay the example-sentence audio. Skipped while you're typing your answer; works after submit even with the input focused. Leave blank to disable. |
+| Audio playback speed | 1x | Dropdown 0.5x / 0.75x / 1x / 1.25x. Applies to all audio sources; takes effect on the next card render. |
 | Which example to pick | Shortest | Sort order for the first sentence shown. Refresh button cycles through all candidates regardless. |
 | Prefer examples from spoken media (anime/drama/games) | on | When on, IK examples that came with original audio are preferred over text-only literature lines (which would need TTS fallback). |
+| Cache contents | — | Live read-only view of what's currently cached (examples, image URL lists, audio clips, per-word selections, the IK index_meta map). Refreshes after Clear cache. |
 | Clear cache | — | Wipes locally cached examples, images, audio, and per-word selections. |
 
 If you don't see the script under the Scripts menu, paste `openWkIkSettings()` into the browser console — it opens the settings dialog directly.
