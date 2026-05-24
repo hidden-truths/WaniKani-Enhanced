@@ -10,18 +10,6 @@ See also [CLAUDE.md](CLAUDE.md) for architecture notes and dead-ends already exp
 
 ## Learning features
 
-### Playback rate slider
-**What**: 0.5x / 0.75x / 1x / 1.25x speed control for the IK sentence audio.
-
-**Why**: native voice-actor audio is often too fast for N3-level listening. Slowing to 0.75x lets you parse the morphology before rebuilding to full speed.
-
-**How**:
-- New setting `playbackRate` (default 1.0, dropdown 0.5 / 0.75 / 1.0 / 1.25).
-- Apply `audio.playbackRate = settings().playbackRate` after `audio.src` is set in `renderCard`'s audio block.
-- The `<audio>` element supports this natively; no re-decode needed.
-
-**Considerations**: Google TTS fallback audio sounds bad at <1x — could either accept that or skip the rate for TTS specifically. A per-card slider (in addition to the global setting) would be nice polish but not needed for v1.
-
 ### Click-to-lookup on sentence words
 **What**: clicking a word in the IK sentence opens jisho.org (or similar) in a new tab.
 
@@ -63,18 +51,6 @@ See also [CLAUDE.md](CLAUDE.md) for architecture notes and dead-ends already exp
 
 ## UX polish
 
-### Loading spinner during IK fetch
-**What**: subtle CSS spinner / placeholder while the IK API call is in flight.
-
-**Why**: between subject-change and the IK response (~100–500ms), the card area is empty header space. Mild but noticeable jank.
-
-**How**:
-- Render a placeholder card immediately on subject change (alongside `applyHostStyling()` in the `isNewSubject` branch).
-- Replace with the real card in `getExamples(...).then(...)`.
-- CSS-only spinner; no image / asset.
-
-**Considerations**: keep it subtle — purple background, small / single-element. Don't compete with the vocab character for attention.
-
 ### Sentence picker (see all candidates)
 **What**: a way to see all 10 cached IK sentences at once instead of cycling through them blindly with ⟳.
 
@@ -86,15 +62,6 @@ See also [CLAUDE.md](CLAUDE.md) for architecture notes and dead-ends already exp
 - `persistCurrentSelection()` already handles persistence — no new storage code needed.
 
 **Considerations**: pocket-sized overlay fits within the 280px header, or pop out below. Beware z-index against WK's own UI.
-
-### Visible position counter on refresh buttons
-**What**: visible "1/10" badge inline next to the ⟳ icons (currently only in the hover tooltip).
-
-**Why**: the tooltip-only counter requires hovering to see; visible counter tells you at a glance whether you've cycled through everything yet.
-
-**How**: small text badge ("1/10") rendered below or next to the ⟳, ~0.65em font.
-
-**Considerations**: cramped real estate next to play / ふ / refresh-sentence in the left-controls row. Trade visibility for noise.
 
 ---
 
@@ -133,18 +100,6 @@ See also [CLAUDE.md](CLAUDE.md) for architecture notes and dead-ends already exp
 ---
 
 ## Robustness & perf
-
-### Prefetch next-subjects in background
-**What**: peek at WK's review queue and prefetch IK examples (+ images) for the next 1–2 subjects.
-
-**Why**: every new subject currently has a visible empty-card moment while we fetch. Prefetching eliminates that for common cases.
-
-**How**:
-- `wkof.ItemData.get_items({ ... })` exposes the user's review queue.
-- After current card renders, fire `getExamples(nextSlug)` for the next 1–2 slugs in the queue.
-- Don't prefetch audio — too much bandwidth for marginal benefit.
-
-**Considerations**: WK shuffles the queue, so "next" isn't guaranteed. Prefetch the next ~5 to cover shuffle uncertainty. Cache pressure isn't an issue — entries are small.
 
 ### Persist sentence selection by content hash, not index
 **What**: when the user refreshes to sentence #3 for word X, persist by sentence-text hash instead of index.

@@ -1,7 +1,7 @@
 // ==UserScript==
 // @name         WK Vocab Review — ImmersionKit Examples
 // @namespace    https://github.com/jbrelly/wk-ik-examples
-// @version      0.17.0
+// @version      0.18.0
 // @description  Shows one ImmersionKit example sentence (with IK / Google TTS audio + IK / DDG image) during WaniKani vocab reviews.
 // @author       jbrelly
 // @match        https://www.wanikani.com/*
@@ -21,7 +21,7 @@
 
     const SCRIPT_ID = 'wk-ik-examples';
     const SCRIPT_TITLE = 'WK Vocab Review — ImmersionKit';
-    const SCRIPT_VERSION = '0.17.0';
+    const SCRIPT_VERSION = '0.18.0';
 
     // Bump this when on-disk cache shape or sourcing logic changes in a way that
     // makes stale entries actively wrong (vs. just suboptimal). Boot will clear
@@ -78,6 +78,9 @@
         showImage: true,
         showFurigana: true,
         playHotkey: 'p',
+        // String key (matches dropdown content keys); parsed to float at apply
+        // time. '1' = native speed, which is also the audio element default.
+        playbackRate: '1',
         sentencePreference: 'shortest',
         requireAudio: true,
     };
@@ -277,6 +280,19 @@
                             placeholder: 'p',
                             hover_tip:
                                 'Single key to press for replaying the example-sentence audio (case-insensitive, no modifier keys — Ctrl/Cmd combos are ignored so browser shortcuts still work). Leave blank to disable. Ignored while you\'re still typing your answer; works after submit even with the input focused.',
+                        },
+                        playbackRate: {
+                            type: 'dropdown',
+                            label: 'Audio playback speed',
+                            default: DEFAULTS.playbackRate,
+                            content: {
+                                '0.5': '0.5x (slowest)',
+                                '0.75': '0.75x',
+                                '1': '1x (normal)',
+                                '1.25': '1.25x',
+                            },
+                            hover_tip:
+                                'Playback speed for the example sentence audio. Native voice-actor audio (anime/drama) is often too fast for intermediate listening — try 0.75x to parse morphology, then rebuild to 1x. Affects all audio sources (IK proxy, Google TTS fallback); takes effect on the next card render.',
                         },
                         selection: {
                             type: 'section',
@@ -539,7 +555,6 @@
     background: rgba(255,255,255,0.1);
     cursor: not-allowed;
 }
-.${CARD_CLASS} .${CSS_PREFIX}-refresh-sentence,
 .${CARD_CLASS} .${CSS_PREFIX}-furigana-toggle {
     width: 1.8em;
     height: 1.8em;
@@ -554,9 +569,38 @@
     padding: 0;
     flex-shrink: 0;
 }
+/* Sentence refresh is a pill (not a circle) so it can fit the visible "N/M"
+   counter next to the ⟳ icon — saves the user from hovering to see how many
+   sentences are in the pool and where they are in it. */
+.${CARD_CLASS} .${CSS_PREFIX}-refresh-sentence {
+    min-width: 1.8em;
+    height: 1.8em;
+    line-height: 1;
+    background: rgba(255,255,255,0.2);
+    border: 1px solid rgba(255,255,255,0.5);
+    border-radius: 0.9em;
+    color: #fff;
+    cursor: pointer;
+    font-size: 0.9em;
+    padding: 0 0.55em;
+    flex-shrink: 0;
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    gap: 0.3em;
+}
 .${CARD_CLASS} .${CSS_PREFIX}-refresh-sentence:hover,
 .${CARD_CLASS} .${CSS_PREFIX}-furigana-toggle:not([disabled]):hover {
     background: rgba(255,255,255,0.35);
+}
+.${CARD_CLASS} .${CSS_PREFIX}-counter {
+    /* "N/M" badge inside the refresh buttons. tabular-nums keeps the digits
+       monospaced so the badge doesn't visibly shift width as the user cycles
+       past single → double digits (e.g. 9/10 → 10/10). */
+    font-size: 0.72em;
+    opacity: 0.85;
+    font-variant-numeric: tabular-nums;
+    line-height: 1;
 }
 .${CARD_CLASS} .${CSS_PREFIX}-furigana-toggle[disabled] {
     opacity: 0.4;
@@ -602,18 +646,22 @@
     position: absolute;
     top: 4px;
     right: 4px;
-    width: 1.8em;
+    min-width: 1.8em;
     height: 1.8em;
-    line-height: 1.5em;
-    text-align: center;
+    line-height: 1;
     background: rgba(255, 255, 255, 0.9);
     border: 1px solid #bbb;
-    border-radius: 50%;
+    /* Pill instead of circle to fit the "N/M" counter alongside ⟳. */
+    border-radius: 0.9em;
     color: #444;
     cursor: pointer;
     font-size: 0.85em;
-    padding: 0;
+    padding: 0 0.5em;
     box-shadow: 0 1px 3px rgba(0,0,0,0.25);
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    gap: 0.25em;
     /* Re-enable click capture — the parent figure has pointer-events: none
        so it doesn't block WK's top-right stats. */
     pointer-events: auto;
@@ -630,6 +678,26 @@
     align-items: flex-end;
     padding: 0.5em 1em;
     opacity: 0.85;
+}
+/* Loading placeholder shown between subject change and IK fetch completion.
+   Tucked into the bottom-left like the empty-card message so it doesn't
+   compete with the centered vocab character. Subtle white-on-purple spinner;
+   the goal is "something is happening" not "look at me". */
+.${CARD_CLASS}.${CSS_PREFIX}-loading {
+    justify-content: flex-start;
+    align-items: flex-end;
+    padding: 0.5em 1em;
+}
+.${CARD_CLASS} .${CSS_PREFIX}-spinner {
+    width: 1.2em;
+    height: 1.2em;
+    border: 2px solid rgba(255, 255, 255, 0.25);
+    border-top-color: rgba(255, 255, 255, 0.85);
+    border-radius: 50%;
+    animation: ${CSS_PREFIX}-spin 0.8s linear infinite;
+}
+@keyframes ${CSS_PREFIX}-spin {
+    to { transform: rotate(360deg); }
 }
 `;
         const style = document.createElement('style');
@@ -786,13 +854,22 @@
             // returns and renderCard re-applies via attachCardToDom, producing
             // a visible collapse → expand on every new vocab.
             applyHostStyling();
-            removeCard();
+            // Loading placeholder shown for the duration of the IK fetch.
+            // Replaced in place by renderCard / renderEmptyCard when the
+            // promise resolves. Safe to render even on cache hits — getExamples
+            // resolves via microtask before the next paint, so the spinner
+            // never actually flashes when the answer is already in cache.
+            renderLoadingCard();
             getExamples(subject.characters)
                 .then((cached) => {
                     if (fetchToken !== state.currentFetchToken) return; // Stale
                     const chosen = pickFromCached(cached, state.sentenceIdx);
                     if (!chosen) renderEmptyCard();
                     else renderCard(chosen);
+                    // Warm the cache for the next few subjects in WK's queue.
+                    // Runs after the current card is on-screen so we don't
+                    // compete with its audio/image fetches for socket budget.
+                    prefetchUpcomingExamples(5);
                 })
                 .catch((err) => {
                     console.error(`[${SCRIPT_ID}] fetch failed:`, err);
@@ -817,6 +894,90 @@
                 console.log(`[${SCRIPT_ID}] reveal triggered by: ${trigger} (qtype=${state.currentQuestionType || 'unknown'})`);
                 revealAll();
             }
+        }
+    }
+
+    // ---------- Upcoming-subject prefetch ----------
+    //
+    // Warm the IK examples cache for subjects WK is about to show so the next
+    // card-render skips the IK fetch entirely (no spinner, no fetch latency).
+    //
+    // WK doesn't publish an "upcoming items" API surface, so we read it out of
+    // the live quiz-queue Stimulus controller's DOM. WK's Stimulus controllers
+    // typically expose state via `data-<controller>-<name>-value` attributes
+    // containing JSON — for the quiz queue we look for any value attribute
+    // that parses as an array whose entries have a `characters` field.
+    //
+    // The whole thing is best-effort: if WK's queue isn't exposed in a shape
+    // we recognize, we log once and skip — no harm done, just no prefetch
+    // benefit. Call debugWkIk() to dump the queue DOM if you want to
+    // investigate what WK is actually exposing.
+    //
+    // We only prefetch IK examples (not audio/image) per NEW_FEATURES.md
+    // guidance — bandwidth cost would be high relative to the marginal win
+    // (audio fetch already starts at render time of the upcoming card).
+    function getUpcomingCharacters(maxCount) {
+        const found = [];
+        const tryAdd = (str) => {
+            if (typeof str !== 'string') return;
+            const trimmed = str.trim();
+            if (!trimmed) return;
+            if (trimmed === state.currentCharacters) return;
+            if (found.includes(trimmed)) return;
+            found.push(trimmed);
+        };
+
+        const queueRoots = document.querySelectorAll('[data-controller~="quiz-queue"]');
+        for (const root of queueRoots) {
+            for (const attr of root.attributes) {
+                if (!attr.name.startsWith('data-quiz-queue-')) continue;
+                if (!attr.name.endsWith('-value')) continue;
+                let parsed;
+                try {
+                    parsed = JSON.parse(attr.value);
+                } catch (_) {
+                    continue;
+                }
+                if (!Array.isArray(parsed)) continue;
+                for (const item of parsed) {
+                    if (!item || typeof item !== 'object') continue;
+                    tryAdd(item.characters || item.slug || (item.data && item.data.characters));
+                    if (found.length >= maxCount) break;
+                }
+                if (found.length >= maxCount) break;
+            }
+            if (found.length >= maxCount) break;
+        }
+
+        return found.slice(0, maxCount);
+    }
+
+    function prefetchUpcomingExamples(maxCount) {
+        let chars;
+        try {
+            chars = getUpcomingCharacters(maxCount || 5);
+        } catch (err) {
+            console.warn(`[${SCRIPT_ID}] prefetch: queue scrape threw:`, err);
+            return;
+        }
+        if (!chars.length) {
+            // One-shot log so we know whether the queue DOM is readable on
+            // this WK build without spamming on every card.
+            if (!state._prefetchNoneLogged) {
+                state._prefetchNoneLogged = true;
+                console.log(
+                    `[${SCRIPT_ID}] prefetch: no upcoming-subject characters found in WK DOM ` +
+                    `(call debugWkIk() to investigate the quiz-queue surface)`
+                );
+            }
+            return;
+        }
+        console.log(`[${SCRIPT_ID}] prefetch: warming ${chars.length} upcoming example(s): ${chars.join(', ')}`);
+        for (const c of chars) {
+            // getExamples is cache-aware — already-fresh entries resolve via
+            // microtask without hitting the network. Errors are swallowed:
+            // prefetch failures shouldn't surface to the user.
+            getExamples(c).catch(() => {});
         }
     }
 
@@ -1057,6 +1218,30 @@
             }
         } else {
             console.log('user-response input: (not found)');
+        }
+        // Dump every [data-controller~="quiz-queue"] element with its full
+        // attribute list. Used to discover where WK exposes the upcoming-items
+        // list so prefetchUpcomingExamples can find it. If you see a JSON-
+        // looking *-value attribute whose array entries have a `characters`
+        // field, the prefetcher should pick it up automatically; if entries
+        // use a different field name, add it to getUpcomingCharacters' tryAdd
+        // probe list.
+        const queueRoots = document.querySelectorAll('[data-controller~="quiz-queue"]');
+        if (queueRoots.length) {
+            console.log('--- quiz-queue Stimulus roots (for prefetch tuning) ---');
+            queueRoots.forEach((root, i) => {
+                const cls = Array.from(root.classList).join(' ');
+                console.log(`  root[${i}] <${root.tagName.toLowerCase()}.${cls}>`);
+                for (const attr of root.attributes) {
+                    if (!attr.name.startsWith('data-')) continue;
+                    const truncVal = attr.value.length > 200
+                        ? attr.value.slice(0, 200) + `… (+${attr.value.length - 200} chars)`
+                        : attr.value;
+                    console.log(`    ${attr.name} = ${truncVal}`);
+                }
+            });
+        } else {
+            console.log('quiz-queue Stimulus root: (none found — prefetch will no-op)');
         }
         // Dump the .character-header DOM tree with bounding boxes + computed
         // position/display, so we can diagnose vocab-character positioning
@@ -1812,6 +1997,13 @@
             // for IK / TTS audio is already kicked off below (via
             // resolveAudioBlobUrl), so this only affects the decode step.
             audio.preload = 'auto';
+            // User-configurable playback speed (0.5x — 1.25x). Set on the
+            // element before src so the rate is already in place by the time
+            // the blob URL attaches; the rate persists across .play() calls
+            // and isn't reset on currentTime=0 (verified in HTMLMediaElement
+            // spec). Re-reading settings() on every render means changing the
+            // setting takes effect on the next card.
+            audio.playbackRate = parseFloat(settings().playbackRate) || 1.0;
             audio.style.display = 'none';
             card.appendChild(audio);
 
@@ -1902,7 +2094,13 @@
         const sIdx = ((state.sentenceIdx || 0) % total) + 1;
         sentenceRefreshBtn.title = `Get a different sentence (${sIdx}/${total})`;
         sentenceRefreshBtn.setAttribute('aria-label', 'Get a different sentence');
-        sentenceRefreshBtn.textContent = '⟳';
+        const sIcon = document.createElement('span');
+        sIcon.textContent = '⟳';
+        sentenceRefreshBtn.appendChild(sIcon);
+        const sCounter = document.createElement('span');
+        sCounter.className = `${CSS_PREFIX}-counter`;
+        sCounter.textContent = `${sIdx}/${total}`;
+        sentenceRefreshBtn.appendChild(sCounter);
         sentenceRefreshBtn.addEventListener('click', refreshSentence);
         leftControls.appendChild(sentenceRefreshBtn);
 
@@ -1948,7 +2146,16 @@
             imageRefreshBtn.className = `${CSS_PREFIX}-refresh-image`;
             imageRefreshBtn.type = 'button';
             imageRefreshBtn.setAttribute('aria-label', 'Get a different image');
-            imageRefreshBtn.textContent = '⟳';
+            const iIcon = document.createElement('span');
+            iIcon.textContent = '⟳';
+            imageRefreshBtn.appendChild(iIcon);
+            // Pool size isn't known until DDG returns — populated in the
+            // tryLoadAt callback once we have it. Empty until then; the pill
+            // button's min-width keeps it from visibly shrinking when the
+            // counter text appears.
+            const iCounter = document.createElement('span');
+            iCounter.className = `${CSS_PREFIX}-counter`;
+            imageRefreshBtn.appendChild(iCounter);
             imageRefreshBtn.addEventListener('click', refreshImage);
             fig.appendChild(imageRefreshBtn);
 
@@ -1969,6 +2176,7 @@
                         img.src = url;
                         const iIdx = (idx % poolSize) + 1;
                         imageRefreshBtn.title = `Get a different image (${iIdx}/${poolSize})`;
+                        iCounter.textContent = `${iIdx}/${poolSize}`;
                         img.onerror = () => {
                             if (poolSize <= 1) {
                                 fig.remove();
@@ -2168,6 +2376,22 @@
             sentenceEl.dataset.wkIkEmitRuby = String(emitRuby);
         }
         sentenceEl.classList.toggle(`${CSS_PREFIX}-show-furigana`, emitRuby && showNow);
+    }
+
+    // Placeholder card shown between subject change and IK fetch completion.
+    // Replaced in place by renderCard / renderEmptyCard once getExamples
+    // resolves — both call removeCard at the top, so this is just a "something
+    // is loading" hint that fills the otherwise-empty card area for ~100-500ms.
+    function renderLoadingCard() {
+        removeCard();
+        const card = document.createElement('aside');
+        card.className = `${CARD_CLASS} ${CSS_PREFIX}-loading`;
+        const spinner = document.createElement('div');
+        spinner.className = `${CSS_PREFIX}-spinner`;
+        spinner.setAttribute('aria-label', 'Loading example sentence');
+        card.appendChild(spinner);
+        attachCardToDom(card);
+        state.cardEl = card;
     }
 
     function renderEmptyCard() {
