@@ -1,7 +1,7 @@
 // ==UserScript==
 // @name         WK Vocab Review — ImmersionKit Examples
 // @namespace    https://github.com/jbrelly/wk-ik-examples
-// @version      0.19.0
+// @version      0.20.0
 // @description  Shows one ImmersionKit example sentence (with IK / Google TTS audio + IK / DDG image) during WaniKani vocab reviews.
 // @author       jbrelly
 // @match        https://www.wanikani.com/*
@@ -21,7 +21,7 @@
 
     const SCRIPT_ID = 'wk-ik-examples';
     const SCRIPT_TITLE = 'WK Vocab Review — ImmersionKit';
-    const SCRIPT_VERSION = '0.19.0';
+    const SCRIPT_VERSION = '0.20.0';
 
     // Bump this when on-disk cache shape or sourcing logic changes in a way that
     // makes stale entries actively wrong (vs. just suboptimal). Boot will clear
@@ -2106,7 +2106,11 @@
 
         const card = document.createElement('aside');
         card.className = CARD_CLASS;
-        card.setAttribute('data-revealed', 'false');
+        // Initialize as already-revealed when we're rendering for a subject
+        // whose meaning question the user has already answered in this session
+        // (shuffled mode can interleave other subjects between the two
+        // questions of one subject — see state.subjectProgress).
+        card.setAttribute('data-revealed', state.meaningAnswered ? 'true' : 'false');
 
         // LEFT panel: sentence (always visible) + play/refresh controls + translation
         // (revealed) + source attribution. Sits to the left of the vocab character.
@@ -2246,7 +2250,10 @@
         const translationEl = document.createElement('div');
         translationEl.className = `${CSS_PREFIX}-translation`;
         translationEl.textContent = example.translation || '';
-        translationEl.hidden = true;
+        // Hidden until the meaning question is answered (the translation IS
+        // the answer to that question — would spoil otherwise). Pre-revealed
+        // when re-rendering a subject whose meaning has already been graded.
+        translationEl.hidden = !state.meaningAnswered;
         leftPanel.appendChild(translationEl);
 
         if (example.title) {
@@ -2267,7 +2274,11 @@
 
             const fig = document.createElement('figure');
             fig.className = `${CSS_PREFIX}-image`;
-            fig.hidden = true;
+            // Hidden until the meaning question is answered (same gating as
+            // the translation — they're both English-side spoilers). Pre-
+            // revealed when re-rendering a subject whose meaning has already
+            // been graded earlier in this session.
+            fig.hidden = !state.meaningAnswered;
             const img = document.createElement('img');
             img.alt = '';
             // Deliberately NOT loading="lazy" — the figure is hidden until
@@ -2662,25 +2673,27 @@
         }
     }
 
-    // Question-type-aware reveal. WK doesn't expose a "subject complete" hook,
-    // so we derive it: the user is considered "done" with a subject once they've
-    // been graded on BOTH meaning AND reading in this session (order and
-    // correctness don't matter — submission is the trigger). Until then, the
-    // supplementary content stays hidden so it can't spoil the other question.
+    // Question-type-aware reveal. Each supplementary element is gated on the
+    // specific question that it would spoil — symmetric per-feature gating,
+    // not per-subject completion. WK asks meaning and reading as two separate
+    // questions per vocab, in either order:
     //
     //   * Meaning submit → set meaningAnswered. Reveal translation + image
-    //                      ONLY if readingAnswered is also true. Otherwise
-    //                      we're still waiting on the reading question to be
-    //                      tested. Plays audio if autoPlayAudio is on.
+    //                      immediately (they don't spoil the reading question
+    //                      — the kana reading isn't visible in either). Plays
+    //                      audio if autoPlayAudio is on.
     //   * Reading submit → set readingAnswered, unlock the ふ furigana toggle,
-    //                      re-render the sentence so furigana can render now
-    //                      that the reading is no longer a secret. Reveal
-    //                      translation + image ONLY if meaningAnswered is also
-    //                      true. Always autoplays the sentence audio (queued
-    //                      after WK's vocab pronunciation so they don't overlap).
+    //                      re-render the sentence so furigana characters
+    //                      become visible (gated here because furigana WOULD
+    //                      spoil the reading). Always autoplays the sentence
+    //                      audio (queued after WK's vocab pronunciation so
+    //                      they don't overlap).
     //
-    // This symmetric gating gives identical timing regardless of question
-    // order: whichever question is answered second is the one that reveals.
+    // If the same subject is revisited later in a shuffled session (WK can
+    // interleave other subjects between this card's two questions), the
+    // per-subject progress map restores meaning/reading flags so the card
+    // renders in the correct revealed state from the start — see renderCard's
+    // use of state.meaningAnswered to initialize fig.hidden / translation.hidden.
     function revealAll() {
         const card = state.cardEl;
         if (!card) return;
@@ -2706,10 +2719,10 @@
             applyFuriganaState(card.querySelector(`.${CSS_PREFIX}-sentence`), card._example);
         }
 
-        // Reveal once the subject is complete in this session — both questions
-        // submitted. Sticky for the rest of the subject (no re-hiding if the
-        // second question's reveal triggers more mutations).
-        if (state.meaningAnswered && state.readingAnswered) {
+        // Image + translation reveal as soon as meaning is answered (no
+        // dependency on reading). Sticky for the rest of the card so any
+        // post-reveal mutations don't re-hide.
+        if (state.meaningAnswered) {
             card.setAttribute('data-revealed', 'true');
             const translation = card.querySelector(`.${CSS_PREFIX}-translation`);
             if (translation) translation.hidden = false;
