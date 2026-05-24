@@ -1,7 +1,7 @@
 // ==UserScript==
 // @name         WK Vocab Review — ImmersionKit Examples
 // @namespace    https://github.com/jbrelly/wk-ik-examples
-// @version      0.22.0
+// @version      0.25.0
 // @description  Shows one ImmersionKit example sentence (with IK / Google TTS audio + IK / DDG image) during WaniKani vocab reviews.
 // @author       jbrelly
 // @match        https://www.wanikani.com/*
@@ -21,13 +21,13 @@
 
     const SCRIPT_ID = 'wk-ik-examples';
     const SCRIPT_TITLE = 'WK Vocab Review — ImmersionKit';
-    const SCRIPT_VERSION = '0.22.0';
+    const SCRIPT_VERSION = '0.25.0';
 
     // Bump this when on-disk cache shape or sourcing logic changes in a way that
     // makes stale entries actively wrong (vs. just suboptimal). Boot will clear
     // examples/images/audio caches once when this differs from the stored value.
     // Selections (the per-word refresh-button state) are NOT cleared.
-    const CACHE_SCHEMA_VERSION = 3;
+    const CACHE_SCHEMA_VERSION = 5;
     const SCHEMA_VERSION_KEY = 'wk-ik-examples.schema-version';
     const WKOF_VERSION_NEEDED = '1.0.52';
 
@@ -87,6 +87,13 @@
         // hardest surrounding word (excluding the target itself) is at or
         // below the chosen JLPT level. Falls back to unfiltered when empty.
         jlptCeiling: 'any',
+        // 'any' disables the preference. 'n5'..'n1' biases default ordering
+        // toward sentences whose hardest word is *exactly* at the preferred
+        // level — they come first in the pool (still inside the ceiling
+        // filter), and the picker opens with "Preferred JLPT first" as the
+        // initial sort. Independent of jlptCeiling so the user can e.g. let
+        // anything through (ceiling=any) while still preferring N3 by default.
+        jlptPreferred: 'any',
     };
 
     // ---------- WKOF presence + version check ----------
@@ -289,9 +296,78 @@
         return summary;
     }
 
+    // Estimate the on-disk size of a single cache entry, in UTF-8 bytes.
+    // Audio entries stash an ArrayBuffer directly (`{buffer, type}`), so we
+    // can use the buffer's byteLength + a few bytes for the type string.
+    // Everything else is a plain JSON object; we measure via Blob to get the
+    // real UTF-8 length (JSON.stringify().length only counts UTF-16 code
+    // units, which underestimates Japanese characters by a factor of ~3).
+    // Negative-cache entries ({failedAt}) hit the JSON branch and are tiny.
+    function estimateEntrySize(entry) {
+        if (!entry || typeof entry !== 'object') return 0;
+        if (entry.buffer instanceof ArrayBuffer) {
+            return entry.buffer.byteLength + (typeof entry.type === 'string' ? entry.type.length : 0);
+        }
+        try {
+            return new Blob([JSON.stringify(entry)]).size;
+        } catch (_) {
+            return 0;
+        }
+    }
+
+    function formatBytes(n) {
+        if (!n) return '0 B';
+        if (n < 1024) return `${n} B`;
+        if (n < 1024 * 1024) return `${(n / 1024).toFixed(1)} KB`;
+        return `${(n / (1024 * 1024)).toFixed(2)} MB`;
+    }
+
+    // Walk every cache entry we own and sum byte-estimates per category.
+    // Async because each load is an IndexedDB read; runs in parallel to
+    // minimize wall-clock time. Returns a buckets object + total. Safe to
+    // call on an empty cache (returns all zeros). Never rejects — entries
+    // that fail to load contribute 0.
+    function measureCacheSizes() {
+        const dir = (wkof.file_cache && wkof.file_cache.dir) || {};
+        const keys = Object.keys(dir);
+        const buckets = {
+            examples: 0,
+            imageUrlLists: 0,
+            ikAudio: 0,
+            ttsAudio: 0,
+            selections: 0,
+            indexMeta: 0,
+            other: 0,
+        };
+        const tasks = keys.map((key) =>
+            wkof.file_cache.load(key)
+                .then((entry) => ({ key, size: estimateEntrySize(entry) }))
+                .catch(() => ({ key, size: 0 }))
+        );
+        return Promise.all(tasks).then((results) => {
+            for (const { key, size } of results) {
+                if (key.startsWith(CACHE_PREFIX)) buckets.examples += size;
+                else if (key.startsWith(IMG_CACHE_PREFIX)) buckets.imageUrlLists += size;
+                else if (key.startsWith(IK_AUDIO_CACHE_PREFIX)) buckets.ikAudio += size;
+                else if (key.startsWith(AUDIO_CACHE_PREFIX)) buckets.ttsAudio += size;
+                else if (key === SELECTIONS_CACHE_KEY) buckets.selections += size;
+                else if (key === INDEX_META_CACHE_KEY) buckets.indexMeta += size;
+                else buckets.other += size; // schema-version pin etc.
+            }
+            buckets.total = Object.values(buckets).reduce((a, b) => a + b, 0);
+            return buckets;
+        });
+    }
+
     // Populate the cache-info div with a freshly-computed summary. Called
     // after dialog.open() (the html-type content is in the DOM by then) and
     // again after clearCache so the numbers reflect the empty state.
+    //
+    // Sizes are filled in asynchronously: counts render immediately, then
+    // each row's size span is replaced as measureCacheSizes() resolves. A
+    // few hundred IndexedDB reads in parallel completes in ~1s on typical
+    // hardware, so this avoids blocking the dialog open while still
+    // surfacing real disk usage instead of requiring a button click.
     function populateCacheInfo() {
         const el = document.getElementById(`${SCRIPT_ID}-cache-info`);
         if (!el) return;
@@ -302,25 +378,57 @@
         const indexMetaState = s.indexMetaCached
             ? `cached (${indexMeta ? Object.keys(indexMeta).length + ' decks' : 'not yet loaded into memory'})`
             : 'not cached';
-        // textContent on the inner detail div so we don't have to escape word
-        // chars; the structural HTML is fixed and safe.
         el.innerHTML = '';
-        const lines = [
-            ['Example sentences', `${s.examples} word(s)`],
-            ['Image URL lists', `${s.imageUrlLists} word(s)`],
-            ['IK audio clips', `${s.ikAudio} entry(s) (positive + negative)`],
-            ['Google TTS clips', `${s.ttsAudio} sentence(s)`],
-            ['Refresh-button selections', `${s.selections} word(s)`],
-            ['IK index_meta', indexMetaState],
+        const bucketRows = [
+            { key: 'examples', label: 'Example sentences', count: `${s.examples} word(s)` },
+            { key: 'imageUrlLists', label: 'Image URL lists', count: `${s.imageUrlLists} word(s)` },
+            { key: 'ikAudio', label: 'IK audio clips', count: `${s.ikAudio} entry(s) (positive + negative)` },
+            { key: 'ttsAudio', label: 'Google TTS clips', count: `${s.ttsAudio} sentence(s)` },
+            { key: 'selections', label: 'Refresh-button selections', count: `${s.selections} word(s)` },
+            { key: 'indexMeta', label: 'IK index_meta', count: indexMetaState },
         ];
-        for (const [k, v] of lines) {
+        const sizeSpans = {};
+        for (const b of bucketRows) {
             const row = document.createElement('div');
             const label = document.createElement('strong');
-            label.textContent = k + ': ';
+            label.textContent = `${b.label}: `;
             row.appendChild(label);
-            row.appendChild(document.createTextNode(v));
+            row.appendChild(document.createTextNode(b.count));
+            row.appendChild(document.createTextNode(' · '));
+            const sizeSpan = document.createElement('span');
+            sizeSpan.style.opacity = '0.7';
+            sizeSpan.textContent = '…';
+            sizeSpans[b.key] = sizeSpan;
+            row.appendChild(sizeSpan);
             el.appendChild(row);
         }
+        const totalRow = document.createElement('div');
+        totalRow.style.marginTop = '0.4em';
+        totalRow.style.paddingTop = '0.4em';
+        totalRow.style.borderTop = '1px solid rgba(0, 0, 0, 0.08)';
+        const totalLabel = document.createElement('strong');
+        totalLabel.textContent = 'Total on disk: ';
+        totalRow.appendChild(totalLabel);
+        const totalSpan = document.createElement('span');
+        totalSpan.textContent = 'measuring…';
+        sizeSpans.total = totalSpan;
+        totalRow.appendChild(totalSpan);
+        el.appendChild(totalRow);
+
+        // Kick off the measurement; results stream into the size spans when
+        // the promise resolves. Errors fall back to "unavailable" rather
+        // than leaving the spinners stuck.
+        measureCacheSizes()
+            .then((sizes) => {
+                for (const k of Object.keys(sizeSpans)) {
+                    if (typeof sizes[k] === 'number') sizeSpans[k].textContent = formatBytes(sizes[k]);
+                }
+            })
+            .catch((err) => {
+                console.warn(`[${SCRIPT_ID}] cache size measurement failed:`, err);
+                for (const span of Object.values(sizeSpans)) span.textContent = 'unavailable';
+            });
+
         if (s.examples > 0) {
             const details = document.createElement('details');
             details.style.marginTop = '0.5em';
@@ -438,7 +546,22 @@
                                 n1: 'N1 or easier',
                             },
                             hover_tip:
-                                'Prefer example sentences whose hardest surrounding word (excluding the target vocab itself) is at or below this JLPT level. Useful for keeping comprehension exercises within range during study. Falls back to showing some sentence when no candidate qualifies. Scoring uses a bundled JLPT vocab list; conjugated verbs and proper nouns are treated as unknown and don\'t block a sentence (fail-open).',
+                                'Hard filter — absolutely no sentences whose hardest surrounding word is above this level will be selected. Falls back to showing some sentence when no candidate qualifies. Scoring uses a bundled JLPT vocab list; conjugated verbs and proper nouns are treated as unknown and don\'t block a sentence (fail-open).',
+                        },
+                        jlptPreferred: {
+                            type: 'dropdown',
+                            label: 'Preferred JLPT level',
+                            default: DEFAULTS.jlptPreferred,
+                            content: {
+                                any: 'No preference',
+                                n5: 'N5',
+                                n4: 'N4',
+                                n3: 'N3',
+                                n2: 'N2',
+                                n1: 'N1',
+                            },
+                            hover_tip:
+                                'Soft preference — within whatever the ceiling allows, sentences at this exact level come first in the ⟳ cycle, and the sentence picker opens with "Preferred JLPT first" as the initial sort. Independent of the ceiling: you can set ceiling=Any and still prefer N3 sentences as your default.',
                         },
                         maintenance: {
                             type: 'section',
@@ -710,9 +833,6 @@
     padding: 0;
     flex-shrink: 0;
 }
-/* Sentence refresh is a pill (not a circle) so it can fit the visible "N/M"
-   counter next to the ⟳ icon — saves the user from hovering to see how many
-   sentences are in the pool and where they are in it. */
 .${CARD_CLASS} .${CSS_PREFIX}-refresh-sentence {
     min-width: 1.8em;
     height: 1.8em;
@@ -728,20 +848,10 @@
     display: inline-flex;
     align-items: center;
     justify-content: center;
-    gap: 0.3em;
 }
 .${CARD_CLASS} .${CSS_PREFIX}-refresh-sentence:hover,
 .${CARD_CLASS} .${CSS_PREFIX}-furigana-toggle:not([disabled]):hover {
     background: rgba(255,255,255,0.35);
-}
-.${CARD_CLASS} .${CSS_PREFIX}-counter {
-    /* "N/M" badge inside the refresh buttons. tabular-nums keeps the digits
-       monospaced so the badge doesn't visibly shift width as the user cycles
-       past single → double digits (e.g. 9/10 → 10/10). */
-    font-size: 0.72em;
-    opacity: 0.85;
-    font-variant-numeric: tabular-nums;
-    line-height: 1;
 }
 .${CARD_CLASS} .${CSS_PREFIX}-furigana-toggle[disabled] {
     opacity: 0.4;
@@ -840,15 +950,70 @@
 .${CSS_PREFIX}-picker-header {
     padding: 0.7em 1em 0.5em;
     border-bottom: 1px solid rgba(0, 0, 0, 0.1);
+    flex: 0 0 auto;
+}
+.${CSS_PREFIX}-picker-title-row {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    gap: 0.8em;
+    flex-wrap: wrap;
 }
 .${CSS_PREFIX}-picker-title {
     font-size: 1em;
     font-weight: 600;
 }
+.${CSS_PREFIX}-picker-sort-wrap {
+    display: inline-flex;
+    align-items: center;
+    gap: 0.3em;
+    font-size: 0.85em;
+    opacity: 0.85;
+}
+.${CSS_PREFIX}-picker-sort {
+    font: inherit;
+    padding: 0.15em 0.3em;
+    border: 1px solid rgba(0, 0, 0, 0.2);
+    border-radius: 3px;
+    background: #fff;
+    color: inherit;
+    cursor: pointer;
+}
 .${CSS_PREFIX}-picker-note {
     font-size: 0.8em;
     opacity: 0.7;
-    margin-top: 0.25em;
+    margin-top: 0.4em;
+}
+.${CSS_PREFIX}-picker-footer {
+    flex: 0 0 auto;
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    gap: 0.8em;
+    padding: 0.5em 1em;
+    border-top: 1px solid rgba(0, 0, 0, 0.1);
+    background: rgba(0, 0, 0, 0.02);
+}
+.${CSS_PREFIX}-picker-page-btn {
+    font: inherit;
+    padding: 0.3em 0.7em;
+    border: 1px solid rgba(0, 0, 0, 0.25);
+    border-radius: 4px;
+    background: #fff;
+    color: inherit;
+    cursor: pointer;
+}
+.${CSS_PREFIX}-picker-page-btn:hover:not(:disabled) {
+    background: rgba(0, 0, 0, 0.04);
+}
+.${CSS_PREFIX}-picker-page-btn:disabled {
+    opacity: 0.4;
+    cursor: not-allowed;
+}
+.${CSS_PREFIX}-picker-page-label {
+    font-size: 0.85em;
+    opacity: 0.75;
+    font-variant-numeric: tabular-nums;
 }
 .${CSS_PREFIX}-picker-list {
     overflow-y: auto;
@@ -856,10 +1021,10 @@
 }
 .${CSS_PREFIX}-picker-row {
     display: flex;
-    align-items: baseline;
-    gap: 0.5em;
+    align-items: flex-start;
+    gap: 0.6em;
     width: 100%;
-    padding: 0.55em 1em;
+    padding: 0.6em 1em;
     background: transparent;
     border: none;
     border-left: 3px solid transparent;
@@ -886,22 +1051,78 @@
     font-size: 0.85em;
     opacity: 0.55;
     min-width: 1.6em;
+    padding-top: 0.1em;
+}
+.${CSS_PREFIX}-picker-main {
+    flex: 1 1 auto;
+    display: flex;
+    flex-direction: column;
+    gap: 0.2em;
+    min-width: 0; /* allow children to shrink + wrap */
 }
 .${CSS_PREFIX}-picker-text {
-    flex: 1 1 auto;
     font-size: 1em;
     line-height: 1.35;
     word-break: break-word;
 }
-.${CSS_PREFIX}-picker-source {
+.${CSS_PREFIX}-picker-translation {
+    font-size: 0.82em;
+    line-height: 1.3;
+    opacity: 0.65;
+    font-style: italic;
+}
+.${CSS_PREFIX}-picker-meta {
     flex: 0 0 auto;
-    font-size: 0.78em;
+    display: flex;
+    flex-direction: column;
+    align-items: flex-end;
+    gap: 0.3em;
+    padding-top: 0.05em;
+}
+.${CSS_PREFIX}-picker-badge {
+    display: inline-block;
+    font-size: 0.72em;
+    font-weight: 600;
+    line-height: 1;
+    padding: 0.25em 0.45em;
+    border-radius: 0.5em;
+    color: #fff;
+    background: #888;
+    letter-spacing: 0.02em;
+}
+/* JLPT-level colors: green (easy) → red (hard). The unknown badge is neutral
+   grey with reduced opacity so it doesn't compete with the real-level chips. */
+.${CSS_PREFIX}-picker-badge.lvl-n5 { background: #2e7d32; }
+.${CSS_PREFIX}-picker-badge.lvl-n4 { background: #558b2f; }
+.${CSS_PREFIX}-picker-badge.lvl-n3 { background: #ef6c00; }
+.${CSS_PREFIX}-picker-badge.lvl-n2 { background: #c62828; }
+.${CSS_PREFIX}-picker-badge.lvl-n1 { background: #6a1b9a; }
+.${CSS_PREFIX}-picker-badge.lvl-unknown {
+    background: #bbb;
+    color: #555;
+}
+.${CSS_PREFIX}-picker-source {
+    font-size: 0.75em;
     opacity: 0.55;
     white-space: nowrap;
     max-width: 12em;
     overflow: hidden;
     text-overflow: ellipsis;
 }
+
+/* WKOF Settings dialog scrolling. WKOF wraps our content in a div whose id is
+   wkofs_<script_id>; jQuery UI's surrounding .ui-dialog sizes to fit its
+   content by default, so a tall settings form can extend past the viewport
+   and become unreachable. Capping our content's max-height + enabling
+   overflow-y makes the form scroll within a sane window without touching
+   WKOF's own outer chrome. !important is needed to outrank WKOF/jQuery UI's
+   inline styles. */
+#wkofs_${SCRIPT_ID} {
+    max-height: 70vh !important;
+    overflow-y: auto !important;
+    overflow-x: hidden !important;
+}
+
 .${CARD_CLASS} .${CSS_PREFIX}-refresh-image {
     position: absolute;
     top: 4px;
@@ -1755,7 +1976,11 @@
                 // pickExample's jlptCeiling filter. Done at cache-write time
                 // so renders stay cheap. Bump CACHE_SCHEMA_VERSION whenever
                 // scoreJlpt's semantics change so stale entries get re-scored.
-                const raw = examples.slice(0, 10).map((e) => {
+                //
+                // No slice cap: the sentence picker offers pagination + sort
+                // over the full set, so trimming here would silently hide
+                // candidates. IK responses top out around 500 per word.
+                const raw = examples.map((e) => {
                     e._jlptMax = scoreJlpt(e, slug);
                     return e;
                 });
@@ -1773,7 +1998,13 @@
         const params = new URLSearchParams({
             q: slug,
             exactMatch: 'true',
-            limit: '10',
+            // Pull everything IK has for this word. The picker offers
+            // pagination + sort over the full result, so capping early would
+            // silently hide candidates from the user. Common words top out
+            // around 500; rarer words return a few dozen. IK's server-side
+            // cap appears to be ~500, so any large number here is effectively
+            // "give me all you have."
+            limit: '1000',
         });
         if (prefs.sentencePreference === 'shortest') {
             params.set('sort', 'sentence_length:asc');
@@ -2203,10 +2434,12 @@
     }
 
     // Score an IK example by the hardest JLPT level among its identifiable
-    // surrounding tokens. Lower number = harder (5 = N5 easiest, 1 = N1
-    // hardest). Returns 5 when no token can be identified — fail-open so a
-    // sentence with only conjugated verbs (which our dictionary-form
-    // JLPT_VOCAB can't resolve) doesn't get spuriously flagged as too hard.
+    // surrounding tokens. Returns 1–5 (5 = N5 easiest, 1 = N1 hardest), or
+    // **0** as the "unknown" sentinel when no token could be classified —
+    // typical for sentences of only conjugated verbs / particles that our
+    // dictionary-form JLPT_VOCAB can't resolve. Consumers must distinguish
+    // 0 from real scores: buildPool treats it as fail-open (passes any
+    // ceiling) and the picker renders "?" instead of a misleading "N5".
     //
     // The target vocab word is excluded from scoring: every cached example
     // contains the target, so including it would make every sentence bottle-
@@ -2224,7 +2457,7 @@
             anyKnown = true;
             if (lvl < hardest) hardest = lvl;
         }
-        return anyKnown ? hardest : 5;
+        return anyKnown ? hardest : 0;
     }
 
     // Map setting value ('any' | 'n5' | … | 'n1') to a ceiling number (0 means
@@ -2237,17 +2470,18 @@
 
     // Build the candidate pool for `pickExample` (and the sentence picker UI).
     // Applies the requireAudio filter, optionally the JLPT-ceiling filter, and
-    // the sort. Returns the filtered + sorted array (same reference type as
-    // input entries — IK API objects, not the formatted shape pickExample
-    // returns). Each filter step "falls back" to the unfiltered pool if it
-    // would empty the pool: better to show some sentence than none.
+    // optionally the sentencePreference sort. Returns the filtered (and maybe
+    // sorted) array — same IK-API object references as input. Each filter
+    // step "falls back" to the unfiltered pool if it would empty the pool:
+    // better to show some sentence than none.
     //
-    // The sentence picker calls this with applyCeiling=false to show all
-    // candidates regardless of JLPT setting (above-ceiling rows are rendered
-    // faded so the user can still pick them). pickExample defaults
-    // applyCeiling to !state.bypassCeilingForCurrentSubject so per-card "I
-    // want to see beyond ceiling" overrides take effect for both the visible
-    // card and the ⟳ cycle.
+    // Options:
+    //   applyCeiling (default true) — skip with false to include all entries
+    //     regardless of jlptCeiling. The picker passes false so above-ceiling
+    //     rows render faded but still clickable.
+    //   skipSort (default false) — set true to leave entries in input order.
+    //     The picker passes true so it can apply its own user-selected sort
+    //     without buildPool's length sort fighting it.
     function buildPool(examples, prefs, options) {
         if (!examples || !examples.length) return [];
         let pool = examples.slice();
@@ -2260,16 +2494,40 @@
             const ceiling = jlptCeilingNumber(prefs.jlptCeiling);
             if (ceiling > 0) {
                 const atOrBelow = pool.filter((e) => {
-                    const lvl = typeof e._jlptMax === 'number' ? e._jlptMax : 5;
-                    return lvl >= ceiling;
+                    const lvl = typeof e._jlptMax === 'number' ? e._jlptMax : 0;
+                    // 0 = unknown (no identifiable tokens) → fail-open, keep
+                    // it in the pool. Without this a sentence of only
+                    // conjugated verbs scores 0 and would be silently dropped.
+                    return lvl === 0 || lvl >= ceiling;
                 });
                 if (atOrBelow.length) pool = atOrBelow;
             }
         }
-        if (prefs.sentencePreference === 'shortest') {
-            pool.sort((a, b) => (a.sentence || '').length - (b.sentence || '').length);
-        } else if (prefs.sentencePreference === 'longest') {
-            pool.sort((a, b) => (b.sentence || '').length - (a.sentence || '').length);
+        const skipSort = !!(options && options.skipSort);
+        if (!skipSort) {
+            // Compound sort: jlptPreferred matches first (when set), then
+            // sentencePreference within each group. Stable JS sort means
+            // ties preserve IK's original order. When neither preference is
+            // set (preferred='any' and sentencePreference='first') we leave
+            // the pool in IK's incoming order.
+            const preferredLevel = jlptCeilingNumber(prefs.jlptPreferred);
+            const lengthMode = prefs.sentencePreference;
+            if (preferredLevel > 0 || lengthMode === 'shortest' || lengthMode === 'longest') {
+                pool.sort((a, b) => {
+                    if (preferredLevel > 0) {
+                        const aMatch = a._jlptMax === preferredLevel;
+                        const bMatch = b._jlptMax === preferredLevel;
+                        if (aMatch !== bMatch) return aMatch ? -1 : 1;
+                    }
+                    if (lengthMode === 'shortest') {
+                        return (a.sentence || '').length - (b.sentence || '').length;
+                    }
+                    if (lengthMode === 'longest') {
+                        return (b.sentence || '').length - (a.sentence || '').length;
+                    }
+                    return 0;
+                });
+            }
         }
         return pool;
     }
@@ -2446,17 +2704,11 @@
         const sentenceRefreshBtn = document.createElement('button');
         sentenceRefreshBtn.className = `${CSS_PREFIX}-refresh-sentence`;
         sentenceRefreshBtn.type = 'button';
-        const total = example.poolSize || 1;
-        const sIdx = ((state.sentenceIdx || 0) % total) + 1;
-        sentenceRefreshBtn.title = `Get a different sentence (${sIdx}/${total}). Right-click or long-press to pick from list.`;
+        sentenceRefreshBtn.title = 'Get a different sentence. Right-click or long-press to pick from list.';
         sentenceRefreshBtn.setAttribute('aria-label', 'Get a different sentence');
         const sIcon = document.createElement('span');
         sIcon.textContent = '⟳';
         sentenceRefreshBtn.appendChild(sIcon);
-        const sCounter = document.createElement('span');
-        sCounter.className = `${CSS_PREFIX}-counter`;
-        sCounter.textContent = `${sIdx}/${total}`;
-        sentenceRefreshBtn.appendChild(sCounter);
         // Click cycles to the next sentence. Right-click or long-press (≥400ms)
         // opens the sentence picker overlay. After a long-press fires, any
         // click within the next ~500ms is suppressed so the pointer-release
@@ -2558,17 +2810,11 @@
             const imageRefreshBtn = document.createElement('button');
             imageRefreshBtn.className = `${CSS_PREFIX}-refresh-image`;
             imageRefreshBtn.type = 'button';
+            imageRefreshBtn.title = 'Get a different image';
             imageRefreshBtn.setAttribute('aria-label', 'Get a different image');
             const iIcon = document.createElement('span');
             iIcon.textContent = '⟳';
             imageRefreshBtn.appendChild(iIcon);
-            // Pool size isn't known until DDG returns — populated in the
-            // tryLoadAt callback once we have it. Empty until then; the pill
-            // button's min-width keeps it from visibly shrinking when the
-            // counter text appears.
-            const iCounter = document.createElement('span');
-            iCounter.className = `${CSS_PREFIX}-counter`;
-            imageRefreshBtn.appendChild(iCounter);
             imageRefreshBtn.addEventListener('click', (e) => {
                 // Don't bubble — the parent figure has a click handler that
                 // pops the fullscreen modal; refresh shouldn't also do that.
@@ -2592,9 +2838,6 @@
                     idx,
                     (url, poolSize) => {
                         img.src = url;
-                        const iIdx = (idx % poolSize) + 1;
-                        imageRefreshBtn.title = `Get a different image (${iIdx}/${poolSize})`;
-                        iCounter.textContent = `${iIdx}/${poolSize}`;
                         img.onerror = () => {
                             if (poolSize <= 1) {
                                 fig.remove();
@@ -2814,17 +3057,81 @@
         });
     }
 
+    // Page size for the paginated picker. With ~70vh dialog cap and ~70px per
+    // row this gives one full page on most laptops without inner scrolling;
+    // larger pools surface via the prev/next buttons.
+    const PICKER_PAGE_SIZE = 25;
+
+    // Sort options offered by the picker dropdown. `cmp` is null for "leave
+    // in pool order" — the picker calls buildPool with skipSort: true, so
+    // "default" means IK's original order, not the buildPool compound sort.
+    // jlptSortKey treats 0 (unknown) as "infinity hard" so easy-first sorts
+    // don't pull unknown rows to the top — those go to the bottom instead.
+    //
+    // Returned as a function (not a const) so the "Preferred JLPT (NX) first"
+    // entry can carry a dynamic label and comparator bound to the user's
+    // current jlptPreferred setting. When jlptPreferred='any' the entry is
+    // omitted entirely.
+    function getPickerSorts(prefs) {
+        const preferredLevel = jlptCeilingNumber(prefs.jlptPreferred);
+        const sorts = {
+            default: { label: 'Default order', cmp: null },
+        };
+        if (preferredLevel > 0) {
+            sorts.preferred = {
+                label: `Preferred JLPT (N${preferredLevel}) first`,
+                cmp: (a, b) => {
+                    const aMatch = a._jlptMax === preferredLevel;
+                    const bMatch = b._jlptMax === preferredLevel;
+                    if (aMatch !== bMatch) return aMatch ? -1 : 1;
+                    return 0;
+                },
+            };
+        }
+        sorts.shortest = {
+            label: 'Sentence length (short → long)',
+            cmp: (a, b) => (a.sentence || '').length - (b.sentence || '').length,
+        };
+        sorts.longest = {
+            label: 'Sentence length (long → short)',
+            cmp: (a, b) => (b.sentence || '').length - (a.sentence || '').length,
+        };
+        sorts.jlpt_easy = {
+            label: 'JLPT level (easy → hard)',
+            cmp: (a, b) => jlptSortKey(b) - jlptSortKey(a),
+        };
+        sorts.jlpt_hard = {
+            label: 'JLPT level (hard → easy)',
+            cmp: (a, b) => jlptSortKey(a) - jlptSortKey(b),
+        };
+        sorts.source = {
+            label: 'Source name (A → Z)',
+            cmp: (a, b) => (prettifyTitle(getTitle(a)) || '').localeCompare(prettifyTitle(getTitle(b)) || ''),
+        };
+        return sorts;
+    }
+
+    function jlptSortKey(e) {
+        const lvl = typeof e._jlptMax === 'number' ? e._jlptMax : 0;
+        // For easy-first sorts: known levels rank by their number (5=easy
+        // first, 1=hard last); unknown (0) sinks to the very bottom so we
+        // don't misrepresent unscored sentences as easy.
+        return lvl === 0 ? -1 : lvl;
+    }
+
     function renderSentencePickerOverlay(raw, word) {
         closeSentencePicker(); // tear down any existing overlay first
         const prefs = settings();
         const ceiling = jlptCeilingNumber(prefs.jlptCeiling);
 
-        // Display pool ignores the JLPT ceiling so the user can see every
-        // candidate and pick one explicitly. Above-ceiling rows render faded.
-        const displayPool = buildPool(raw, prefs, { applyCeiling: false });
-        // Active pool reflects what's currently rendered on the card (bypass
-        // flag taken into account). Used only to compute the "current" row
-        // for highlight.
+        // Full unfiltered pool: every candidate IK has, with audio filter
+        // applied but no JLPT filter and no buildPool sort (the picker
+        // controls its own sort below). Above-ceiling rows still render here
+        // — they're faded but clickable.
+        const fullPool = buildPool(raw, prefs, { applyCeiling: false, skipSort: true });
+        // Active pool reflects what the card is currently rendering (bypass
+        // flag taken into account) — used only to compute the "current"
+        // entry for highlighting in the picker list.
         const activePool = buildPool(raw, prefs, {
             applyCeiling: !state.bypassCeilingForCurrentSubject,
         });
@@ -2832,21 +3139,61 @@
             ? activePool[((state.sentenceIdx || 0) % activePool.length + activePool.length) % activePool.length]
             : null;
 
+        // Sort options available in this dropdown depend on whether the
+        // user has set jlptPreferred — when set, the menu includes a
+        // "Preferred JLPT (NX) first" entry that's also the initial sort.
+        const sortOptions = getPickerSorts(prefs);
+        const preferredLevel = jlptCeilingNumber(prefs.jlptPreferred);
+        const initialSortKey = preferredLevel > 0 ? 'preferred' : 'default';
+
+        // Local picker state. Resets every time the picker opens; sort and
+        // page do not persist across opens.
+        const pickerState = {
+            sortKey: initialSortKey,
+            sortedPool: (() => {
+                const cmp = sortOptions[initialSortKey] && sortOptions[initialSortKey].cmp;
+                return cmp ? fullPool.slice().sort(cmp) : fullPool.slice();
+            })(),
+            page: 0,
+        };
+
         const overlay = document.createElement('div');
         overlay.className = `${CSS_PREFIX}-picker`;
 
         const panel = document.createElement('div');
         panel.className = `${CSS_PREFIX}-picker-panel`;
-        // Stop click propagation from the panel so a click inside doesn't
-        // hit the backdrop's close handler.
         panel.addEventListener('click', (ev) => ev.stopPropagation());
 
         const header = document.createElement('div');
         header.className = `${CSS_PREFIX}-picker-header`;
+
+        const titleRow = document.createElement('div');
+        titleRow.className = `${CSS_PREFIX}-picker-title-row`;
+
         const title = document.createElement('div');
         title.className = `${CSS_PREFIX}-picker-title`;
-        title.textContent = `Pick a sentence for ${word}`;
-        header.appendChild(title);
+        title.textContent = `Pick a sentence for ${word} · ${fullPool.length} candidate${fullPool.length === 1 ? '' : 's'}`;
+        titleRow.appendChild(title);
+
+        const sortWrap = document.createElement('label');
+        sortWrap.className = `${CSS_PREFIX}-picker-sort-wrap`;
+        const sortLabel = document.createElement('span');
+        sortLabel.textContent = 'Sort: ';
+        sortWrap.appendChild(sortLabel);
+        const sortSelect = document.createElement('select');
+        sortSelect.className = `${CSS_PREFIX}-picker-sort`;
+        for (const [k, v] of Object.entries(sortOptions)) {
+            const opt = document.createElement('option');
+            opt.value = k;
+            opt.textContent = v.label;
+            if (k === initialSortKey) opt.selected = true;
+            sortSelect.appendChild(opt);
+        }
+        sortWrap.appendChild(sortSelect);
+        titleRow.appendChild(sortWrap);
+
+        header.appendChild(titleRow);
+
         if (ceiling > 0) {
             const note = document.createElement('div');
             note.className = `${CSS_PREFIX}-picker-note`;
@@ -2857,46 +3204,75 @@
 
         const list = document.createElement('div');
         list.className = `${CSS_PREFIX}-picker-list`;
-
-        displayPool.forEach((e, i) => {
-            const row = document.createElement('button');
-            row.type = 'button';
-            row.className = `${CSS_PREFIX}-picker-row`;
-            if (e === currentExample) row.classList.add('current');
-
-            const lvl = typeof e._jlptMax === 'number' ? e._jlptMax : 5;
-            const exceedsCeiling = ceiling > 0 && lvl < ceiling;
-            if (exceedsCeiling) {
-                row.classList.add('above-ceiling');
-                row.title = `Hardest known word ≈ N${lvl}, above your N${ceiling} ceiling.`;
-            }
-
-            const num = document.createElement('span');
-            num.className = `${CSS_PREFIX}-picker-num`;
-            num.textContent = `${i + 1}.`;
-            row.appendChild(num);
-
-            const text = document.createElement('span');
-            text.className = `${CSS_PREFIX}-picker-text`;
-            text.setAttribute('lang', 'ja');
-            text.textContent = e.sentence || '';
-            row.appendChild(text);
-
-            const src = document.createElement('span');
-            src.className = `${CSS_PREFIX}-picker-source`;
-            const srcText = prettifyTitle(getTitle(e));
-            if (srcText) src.textContent = `— ${srcText}`;
-            row.appendChild(src);
-
-            row.addEventListener('click', () => onPickerEntryClick(e, raw, prefs));
-            list.appendChild(row);
-        });
-
         panel.appendChild(list);
+
+        const footer = document.createElement('div');
+        footer.className = `${CSS_PREFIX}-picker-footer`;
+
+        const prevBtn = document.createElement('button');
+        prevBtn.type = 'button';
+        prevBtn.className = `${CSS_PREFIX}-picker-page-btn`;
+        prevBtn.textContent = '← Prev';
+
+        const pageLabel = document.createElement('span');
+        pageLabel.className = `${CSS_PREFIX}-picker-page-label`;
+
+        const nextBtn = document.createElement('button');
+        nextBtn.type = 'button';
+        nextBtn.className = `${CSS_PREFIX}-picker-page-btn`;
+        nextBtn.textContent = 'Next →';
+
+        footer.appendChild(prevBtn);
+        footer.appendChild(pageLabel);
+        footer.appendChild(nextBtn);
+        panel.appendChild(footer);
+
         overlay.appendChild(panel);
 
-        // Backdrop click closes the picker; clicks inside the panel are
-        // stopped above so they don't bubble here.
+        function renderList() {
+            list.innerHTML = '';
+            const total = pickerState.sortedPool.length;
+            const totalPages = Math.max(1, Math.ceil(total / PICKER_PAGE_SIZE));
+            pickerState.page = Math.max(0, Math.min(pickerState.page, totalPages - 1));
+            const start = pickerState.page * PICKER_PAGE_SIZE;
+            const end = Math.min(start + PICKER_PAGE_SIZE, total);
+
+            for (let i = start; i < end; i++) {
+                const e = pickerState.sortedPool[i];
+                list.appendChild(buildPickerRow(e, i, currentExample, ceiling, raw, prefs));
+            }
+
+            prevBtn.disabled = pickerState.page === 0;
+            nextBtn.disabled = pickerState.page >= totalPages - 1;
+            pageLabel.textContent = total
+                ? `${start + 1}–${end} of ${total}   ·   Page ${pickerState.page + 1} / ${totalPages}`
+                : 'No candidates';
+            list.scrollTop = 0;
+        }
+
+        function applySort(key) {
+            const cmp = sortOptions[key] && sortOptions[key].cmp;
+            pickerState.sortKey = key;
+            pickerState.sortedPool = cmp ? fullPool.slice().sort(cmp) : fullPool.slice();
+            pickerState.page = 0;
+            renderList();
+        }
+
+        sortSelect.addEventListener('change', () => applySort(sortSelect.value));
+        prevBtn.addEventListener('click', () => {
+            if (pickerState.page > 0) {
+                pickerState.page--;
+                renderList();
+            }
+        });
+        nextBtn.addEventListener('click', () => {
+            const totalPages = Math.ceil(pickerState.sortedPool.length / PICKER_PAGE_SIZE);
+            if (pickerState.page < totalPages - 1) {
+                pickerState.page++;
+                renderList();
+            }
+        });
+
         overlay.addEventListener('click', () => closeSentencePicker());
 
         const onKey = (ev) => {
@@ -2912,6 +3288,75 @@
         state.pickerKeyHandler = onKey;
 
         document.body.appendChild(overlay);
+        renderList();
+    }
+
+    // Build a single row in the picker list. Factored out so renderList can
+    // call it inside its slice loop without 80 lines of inline DOM.
+    function buildPickerRow(e, absoluteIdx, currentExample, ceiling, raw, prefs) {
+        const row = document.createElement('button');
+        row.type = 'button';
+        row.className = `${CSS_PREFIX}-picker-row`;
+        if (e === currentExample) row.classList.add('current');
+
+        const lvl = typeof e._jlptMax === 'number' ? e._jlptMax : 0;
+        const exceedsCeiling = ceiling > 0 && lvl > 0 && lvl < ceiling;
+        if (exceedsCeiling) {
+            row.classList.add('above-ceiling');
+            row.title = `Hardest known word ≈ N${lvl}, above your N${ceiling} ceiling.`;
+        }
+
+        const num = document.createElement('span');
+        num.className = `${CSS_PREFIX}-picker-num`;
+        // 1-based number across the whole sorted pool, not page-local — so
+        // the user sees stable positions regardless of pagination.
+        num.textContent = `${absoluteIdx + 1}.`;
+        row.appendChild(num);
+
+        const main = document.createElement('span');
+        main.className = `${CSS_PREFIX}-picker-main`;
+
+        const text = document.createElement('span');
+        text.className = `${CSS_PREFIX}-picker-text`;
+        text.setAttribute('lang', 'ja');
+        text.textContent = e.sentence || '';
+        main.appendChild(text);
+
+        if (e.translation) {
+            const tr = document.createElement('span');
+            tr.className = `${CSS_PREFIX}-picker-translation`;
+            tr.textContent = e.translation;
+            main.appendChild(tr);
+        }
+        row.appendChild(main);
+
+        const meta = document.createElement('span');
+        meta.className = `${CSS_PREFIX}-picker-meta`;
+
+        const badge = document.createElement('span');
+        badge.className = `${CSS_PREFIX}-picker-badge`;
+        if (lvl >= 1 && lvl <= 5) {
+            badge.classList.add(`lvl-n${lvl}`);
+            badge.textContent = `N${lvl}`;
+            badge.title = `Hardest identifiable word in this sentence is JLPT N${lvl}`;
+        } else {
+            badge.classList.add('lvl-unknown');
+            badge.textContent = '?';
+            badge.title = 'No tokens in this sentence are in our JLPT lookup (mostly inflected verbs / proper nouns) — actual difficulty unknown';
+        }
+        meta.appendChild(badge);
+
+        const srcText = prettifyTitle(getTitle(e));
+        if (srcText) {
+            const src = document.createElement('span');
+            src.className = `${CSS_PREFIX}-picker-source`;
+            src.textContent = srcText;
+            meta.appendChild(src);
+        }
+        row.appendChild(meta);
+
+        row.addEventListener('click', () => onPickerEntryClick(e, raw, prefs));
+        return row;
     }
 
     function onPickerEntryClick(entry, raw, prefs) {

@@ -25,15 +25,20 @@ The reveal trigger is the input bar turning green or red — there's nothing to 
 
 ### Refresh buttons
 
-- **⟳ next to the sentence** — pick a different IK example for this word. Shows a visible `N/M` counter so you can see how far you are through the pool. Also resets the image to the new sentence's IK screenshot.
-  - **Right-click or long-press the ⟳** to open the sentence picker: a modal overlay listing every IK candidate (up to 10) with its source title. Click any row to jump to it directly instead of cycling blindly. Sentences above your JLPT ceiling are faded but still clickable.
-- **⟳ overlaid on the image** — cycle through the combined pool `[IK screenshot, ...DuckDuckGo illustrations]`, with its own `N/M` counter. Useful when an anime grab is too dark, too cluttered, or unhelpful — swap it for a clean illustration.
+- **⟳ next to the sentence** — pick a different IK example for this word. Also resets the image to the new sentence's IK screenshot.
+  - **Right-click or long-press the ⟳** to open the sentence picker: a modal listing every IK candidate for this word (commonly tens to hundreds), paginated 25 per page. A sort dropdown lets you order by sentence length (short→long or long→short), JLPT level (easy→hard or hard→easy), or source name. Each row shows the Japanese sentence, English translation, a colored JLPT badge, and the source title. Sentences above your JLPT ceiling are faded but still clickable.
+- **⟳ overlaid on the image** — cycle through the combined pool `[IK screenshot, ...DuckDuckGo illustrations]`. Useful when an anime grab is too dark, too cluttered, or unhelpful — swap it for a clean illustration.
 
 Your per-word selections persist in IndexedDB and survive page refreshes.
 
-### JLPT difficulty ceiling
+### JLPT difficulty ceiling + preferred level
 
-You can constrain example sentences to a chosen JLPT level (Settings → "JLPT difficulty ceiling"). When set, the script prefers sentences whose hardest known surrounding word stays at or below your ceiling — useful for keeping comprehension exercises within range while studying for a specific level. Falls back to showing some sentence when no candidate qualifies, so you're never stuck staring at an empty card. Scoring uses a bundled JLPT vocab list (~7600 words from N5 to N1); conjugated verbs and proper nouns are treated as unknown rather than blocking (fail-open), which means the filter is strict on identifiable nouns/adjectives and permissive on inflected verbs.
+Two independent JLPT settings let you tune sentence selection:
+
+- **JLPT difficulty ceiling** — *hard filter.* Sentences whose hardest known surrounding word is above this level are removed from selection entirely. Falls back to showing some sentence when no candidate qualifies, so you're never stuck staring at an empty card.
+- **Preferred JLPT level** — *soft preference.* Within whatever the ceiling allows, sentences at this exact level come first in the ⟳ cycle and the sentence picker opens with "Preferred JLPT (NX) first" as the initial sort. Set ceiling=Any and preferred=N3 to see anything but default to N3.
+
+Scoring uses a bundled JLPT vocab list (~7600 words from N5 to N1); conjugated verbs and proper nouns are treated as unknown rather than blocking (fail-open), which means the filter is strict on identifiable nouns/adjectives and permissive on inflected verbs.
 
 ## Requirements
 
@@ -48,7 +53,7 @@ You can constrain example sentences to a chosen JLPT level (Settings → "JLPT d
 3. In Tampermonkey → Dashboard → Utilities → Create a new script. Paste the contents of [wk-vocab-review-ik.user.js](wk-vocab-review-ik.user.js), save (⌘S / Ctrl+S).
 4. Make sure WKOF is listed **above** this script in the Tampermonkey dashboard (drag to reorder; first-listed runs first).
 5. When prompted, approve cross-origin connections to `apiv2.immersionkit.com`, `translate.googleapis.com`, and `duckduckgo.com`.
-6. Reload any open WaniKani tab. Sanity check: DevTools console should show `[wk-ik-examples] booting v0.22.x on /...`.
+6. Reload any open WaniKani tab. Sanity check: DevTools console should show `[wk-ik-examples] booting v0.25.x on /...`.
 
 ## Settings
 
@@ -61,9 +66,10 @@ Open your WaniKani avatar dropdown (top right) → **Scripts** → **Settings** 
 | Show furigana on the example sentence | on | When on, the example sentence is rendered with furigana DOM from the start (layout-reserved, characters invisible) and the kana characters become visible after you submit the reading. The per-card ふ button toggles visibility without changing this default. |
 | Hotkey to replay audio | `p` | Single key (no modifiers) to replay the example-sentence audio. Skipped while you're typing your answer; works after submit even with the input focused. Leave blank to disable. |
 | Audio playback speed | 1x | Dropdown 0.5x / 0.75x / 1x / 1.25x. Applies to all audio sources; takes effect on the next card render. |
-| Which example to pick | Shortest | Sort order for the first sentence shown. Refresh button cycles through all candidates regardless. |
+| Which example to pick | Shortest | Sort order for the first sentence shown. ⟳ cycles through candidates regardless; the picker has its own sort dropdown. |
 | Prefer examples from spoken media (anime/drama/games) | on | When on, IK examples that came with original audio are preferred over text-only literature lines (which would need TTS fallback). |
-| JLPT difficulty ceiling | Any | Filter sentences to those whose hardest known surrounding word is at or below the chosen level (N5–N1). The sentence picker still shows above-ceiling candidates (faded) so you can override per card. |
+| JLPT difficulty ceiling | Any | Hard filter — sentences whose hardest known surrounding word is above this level are removed from selection entirely. The sentence picker still shows above-ceiling candidates (faded) so you can override per card. |
+| Preferred JLPT level | No preference | Soft preference — within whatever the ceiling allows, sentences at this exact level come first in the ⟳ cycle, and the picker opens with "Preferred JLPT (NX) first" as the initial sort. Independent of the ceiling: you can set ceiling=Any and still default to N3 sentences. |
 | Cache contents | — | Live read-only view of what's currently cached (examples, image URL lists, audio clips, per-word selections, the IK index_meta map). Refreshes after Clear cache. |
 | Clear cache | — | Wipes locally cached examples, images, audio, and per-word selections. |
 

@@ -13,15 +13,28 @@ See also [CLAUDE.md](CLAUDE.md) for architecture notes and dead-ends already exp
 ### Click-to-lookup on sentence words
 **What**: clicking a word in the IK sentence opens jisho.org (or similar) in a new tab.
 
-**Why**: when an example sentence uses vocab above your level, you currently have to copy-paste the kanji into another tab. Removing that friction makes the IK example much more useful as a "vocab discovery" surface.
+**Why**: when an example sentence uses vocab above your level, you currently have to copy-paste the kanji into another tab. Removing that friction makes the IK example much more useful as a "vocab discovery" surface — especially now that the picker exposes 100s of sentences instead of the original 10.
 
 **How**:
 - IK already returns `e.word_list` — a pre-segmented array of tokens for the sentence. No client-side tokenizer needed.
 - Wrap each `word_list` token in a `<span>` inside `renderSentence` / `renderSentencePlain`. Click handler opens `https://jisho.org/search/<encodeURIComponent(word)>` in a new tab.
 - Skip wrapping the target vocab word (already highlighted by the `<mark>`).
 - Filter out single-particles (は, の, が, etc.) — clicking those isn't useful. Threshold: kanji-containing OR length ≥ 2.
+- Apply the same treatment to picker rows so users can preview vocab without committing to a sentence.
 
 **Considerations**: `e.word_list` segmentation quality varies. For sentences where it's clearly wrong, the spans still work, just with weird boundaries. Acceptable degradation.
+
+### Show JLPT badge on the review card itself
+**What**: the picker rows display a small colored JLPT chip per sentence (N5 green → N1 purple, "?" grey for unknown). Show the same chip on the actual review card next to the sentence.
+
+**Why**: lets the user see the difficulty rating of the currently-shown sentence without opening the picker. Useful feedback that the preferred-level filter is doing the right thing.
+
+**How**:
+- The `formatExample` shape returned by `pickExample` doesn't currently carry `_jlptMax` — extend it to include the level number.
+- Add a small `<span class="wk-ik-card-badge lvl-nX">` next to the sentence text in `renderCard`. Reuse the picker badge CSS for color consistency.
+- Position: inline-end of the sentence row, vertically centered with the play / refresh / furigana controls. Or stacked above the play button.
+
+**Considerations**: minor visual real estate change in the already-tight 280px header. Test that it doesn't push the controls onto a second line at narrow viewports.
 
 ### Pitch accent for the target word
 **What**: show pitch-accent notation (e.g. `せいしゅん⓪` or a contour line) under the highlighted target word.
@@ -35,33 +48,56 @@ See also [CLAUDE.md](CLAUDE.md) for architecture notes and dead-ends already exp
 
 **Considerations**: heaviest feature in the backlog. Punt until the simpler ones are done. Licensing on bundled pitch data needs checking.
 
-### JLPT-level filter for sentences
-**What**: prefer (or hard-filter to) IK sentences whose vocabulary stays at-or-below a chosen JLPT level.
-
-**Why**: a sentence about 青春 from Death Note that uses N1 grammar in surrounding clauses is less useful as a comprehension exercise than one from Doraemon that stays in N3 territory.
-
-**How**:
-- Need a JLPT vocab list (tanos.co.uk or jlpt-vocab-api). Bundle as a JSON map `{ word → minLevel }`.
-- For each cached IK example, compute `maxJlptLevel(e.word_list)` once at cache-write time. Persist on the cached entry.
-- New setting `jlptCeiling` (N5 / N4 / N3 / N2 / N1 / Any). In `pickExample`, filter pool to entries with max level ≤ ceiling. Fall back to unfiltered when empty (better to show *some* sentence than none).
-
-**Considerations**: another external data dependency. Big payoff for N3 study though.
-
 ---
 
-## UX polish
+## Picker / UX polish
 
-### Sentence picker (see all candidates)
-**What**: a way to see all 10 cached IK sentences at once instead of cycling through them blindly with ⟳.
+### Filter input inside the picker
+**What**: a text input at the top of the picker that narrows the visible rows to matching sentences/translations as the user types.
 
-**Why**: refreshing past a bad sentence and not finding a better one is frustrating; seeing them at-a-glance lets you pick the best.
+**Why**: with the picker now showing up to ~500 sentences for common words, pagination alone gets tedious for "find a sentence that mentions X." A find-as-you-type filter cuts that to a few keystrokes.
 
 **How**:
-- Long-press or right-click the ⟳ button → small overlay panel listing each sentence's preview text + source.
-- Click an entry sets `state.sentenceIdx` directly (instead of incrementing).
-- `persistCurrentSelection()` already handles persistence — no new storage code needed.
+- Add `<input type="text" placeholder="Filter…">` in the picker header. Bind `input` event.
+- Filter applies on top of the current sort: `sortedPool.filter(e => sentence.includes(query) || translation.includes(query))`.
+- Reset pagination to page 0 on each query change.
+- Hint: case-insensitive English match (`.toLowerCase()`), exact-substring for Japanese.
 
-**Considerations**: pocket-sized overlay fits within the 280px header, or pop out below. Beware z-index against WK's own UI.
+**Considerations**: small new state field (`pickerState.filter`). Don't auto-focus the input — focus would steal keyboard navigation from WK's answer input if the picker were ever opened mid-review with input still focused. Manual focus only.
+
+### Persist picker sort across opens
+**What**: remember which sort the user last selected (per-session in memory, optionally per-user via settings).
+
+**Why**: a user who always sorts by "source A→Z" has to re-select it every time. Trivial QoL.
+
+**How**:
+- Module-level `state.lastPickerSort = null`.
+- `applySort()` writes to it; `renderSentencePickerOverlay()` reads it as the initial sort, falling back to `'preferred'` (if jlptPreferred is set) or `'default'`.
+- No persistence to disk — session-scoped is enough.
+
+**Considerations**: when jlptPreferred changes mid-session, the saved sort might no longer be valid (e.g., user picked `preferred` last time, then unset jlptPreferred). Detect and fall back to `default`.
+
+### Long-press the sentence text to open the picker
+**What**: an additional picker trigger — long-press on the sentence text itself, not just the ⟳ button.
+
+**Why**: more discoverable than the small ⟳ button. The sentence is the largest UI element on the card; long-press feels natural.
+
+**How**:
+- Mirror the existing long-press handler from `sentenceRefreshBtn` onto `sentenceEl`. Reuse the same `lastLongPressAt` debounce mechanism scoped per-card.
+- Note: contextmenu on the sentence text might fight with browser text-selection menus. Skip the contextmenu trigger here; keep just long-press.
+
+**Considerations**: feature-flag-worthy — could surprise users who expect to long-press for text selection. Maybe pair with the click-to-lookup feature so single-tap = lookup, long-press = picker, and there's a consistent gesture language.
+
+### Settings dialog tabs
+**What**: split the settings form across multiple WKOF tabs (Behavior / Selection / Cache) instead of one long scrolling form.
+
+**Why**: as the settings list grows, scrolling within a dialog feels clunky. WKOF supports `tabs: {…}` natively.
+
+**How**:
+- Restructure the `content:` object in `openSettings()` from one `page` to a top-level `tabs: { behavior: {…}, selection: {…}, cache: {…} }`.
+- Move dropdowns/checkboxes into their respective tabs.
+
+**Considerations**: the existing scroll-cap CSS becomes mostly redundant once tabs split the height — but leave it as defense-in-depth (some tabs may still be tall).
 
 ---
 
@@ -102,15 +138,16 @@ See also [CLAUDE.md](CLAUDE.md) for architecture notes and dead-ends already exp
 ## Robustness & perf
 
 ### Persist sentence selection by content hash, not index
-**What**: when the user refreshes to sentence #3 for word X, persist by sentence-text hash instead of index.
+**What**: when the user picks sentence #37 for word X via the picker, persist by sentence-text hash instead of index.
 
-**Why**: if IK adds/removes sentences for a word between sessions, index #3 might point to a different sentence than the one the user picked. Hash-based pinning survives.
+**Why**: **more pressing than it was.** With the v0.24.0 bump from 10 → 1000 sentences cached per word, the pool is much larger and the sort changed (preferred-first compound). An `s: 37` saved from one version can point to a completely different sentence after a settings change or schema bump. Hash-based pinning survives all of that.
 
 **How**:
-- `state.selections[<word>]` becomes `{ sentenceHash: '<hash>', imageIdx: N }`.
+- `state.selections[<word>]` becomes `{ sentenceHash: '<hash>', imageIdx: N, b: bool }`.
 - On load, search `cached.raw` for an entry whose `sentence` hashes to the saved value; fall back to index 0 if none found.
+- `applySavedSelection` also needs to convert hash → index against the current pool so the rest of the code (which uses `state.sentenceIdx`) doesn't need to change.
 
-**Considerations**: existing selections are index-based and would need migration. Bump `CACHE_SCHEMA_VERSION` so old selections wipe — accept that as a one-time UX cost.
+**Considerations**: existing selections are index-based and would need migration. Bump `CACHE_SCHEMA_VERSION` so old selections wipe — accept that as a one-time UX cost. Alternative: write both fields during a transition window, prefer hash on read.
 
 ### IK outage circuit-breaker
 **What**: when `/index_meta` or `/search` has failed N times recently, stop calling them for a cooldown and serve fallbacks immediately.
@@ -125,6 +162,18 @@ See also [CLAUDE.md](CLAUDE.md) for architecture notes and dead-ends already exp
 
 **Considerations**: should be invisible — no user-visible setting. Log to console on circuit-break activation so we can see it during debugging.
 
+### Storage cap / LRU eviction for the sentence cache
+**What**: cap total sentence-cache size (e.g. 50MB) and evict least-recently-used entries when over.
+
+**Why**: with 1000 sentences cached per word and ~500 sentences for common words, a heavy user could accumulate 100MB+. IndexedDB doesn't have hard limits but browser quotas (and patience) do.
+
+**How**:
+- Track `lastAccessedAt` on each `wk-ik-examples.ik.<word>` entry (write-through on every read).
+- Periodically (on settings open, or on every Nth review) run a sweep: if `measureCacheSizes().examples > THRESHOLD`, delete the LRU entries until under threshold.
+- Surface in the settings cache section: "Auto-evicted N entries at limit Y MB."
+
+**Considerations**: only matters for prolific users. The "Clear cache" button is already there for the nuclear option. Defer until someone complains.
+
 ---
 
 ## Speculative / parking lot
@@ -134,8 +183,9 @@ Stuff that came up but isn't a clear win yet. Don't pick these up without first 
 - **Multiple sentences per card** — show 2 alongside instead of 1. Real estate is tight in the 280px header band.
 - **Translation-language switcher** — IK returns German / French / Spanish translations alongside English. Useful for non-English natives but the maintainer is English-native.
 - **Source-attribution blocklist** — skip examples from specific anime / categories. Easy if you ever hit a deck you really dislike; otherwise low-value.
-- **Per-card image-source label** — "From The Girl Who Leapt Through Time" overlay on the IK screenshot. Helps you decide whether to refresh.
-- **Sentence-listened-to tracking** — heatmap-style record of which sentences you've encountered, to bias picks toward novel ones.
+- **Per-card image-source label on the card itself** — "From The Girl Who Leapt Through Time" overlay on the IK screenshot. Picker already shows it; the card doesn't.
+- **Sentence-listened-to tracking** — heatmap-style record of which sentences you've encountered, to bias picks toward novel ones. More valuable now that the per-word pool is huge.
 - **Export starred sentences to Anki** — `.apkg` builder. Would need a sentence-starring UI first.
 - **Dark-mode adaptation** — if WK ever ships a true dark theme, our white-on-purple shadow tuning won't translate. Punt until WK changes.
 - **Configurable hotkey for "next sentence"** — like `P` for play, but for ⟳. Add only if the user actually wants it.
+- **Per-card JLPT-ceiling override toggle on the card** — a small button next to the source attribution that flips `bypassCeilingForCurrentSubject` without opening the picker. Could be useful for "I want to see harder sentences for this one word" without committing through the picker.
