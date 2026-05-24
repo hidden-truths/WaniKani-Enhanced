@@ -26,9 +26,14 @@ The reveal trigger is the input bar turning green or red — there's nothing to 
 ### Refresh buttons
 
 - **⟳ next to the sentence** — pick a different IK example for this word. Shows a visible `N/M` counter so you can see how far you are through the pool. Also resets the image to the new sentence's IK screenshot.
+  - **Right-click or long-press the ⟳** to open the sentence picker: a modal overlay listing every IK candidate (up to 10) with its source title. Click any row to jump to it directly instead of cycling blindly. Sentences above your JLPT ceiling are faded but still clickable.
 - **⟳ overlaid on the image** — cycle through the combined pool `[IK screenshot, ...DuckDuckGo illustrations]`, with its own `N/M` counter. Useful when an anime grab is too dark, too cluttered, or unhelpful — swap it for a clean illustration.
 
 Your per-word selections persist in IndexedDB and survive page refreshes.
+
+### JLPT difficulty ceiling
+
+You can constrain example sentences to a chosen JLPT level (Settings → "JLPT difficulty ceiling"). When set, the script prefers sentences whose hardest known surrounding word stays at or below your ceiling — useful for keeping comprehension exercises within range while studying for a specific level. Falls back to showing some sentence when no candidate qualifies, so you're never stuck staring at an empty card. Scoring uses a bundled JLPT vocab list (~7600 words from N5 to N1); conjugated verbs and proper nouns are treated as unknown rather than blocking (fail-open), which means the filter is strict on identifiable nouns/adjectives and permissive on inflected verbs.
 
 ## Requirements
 
@@ -43,7 +48,7 @@ Your per-word selections persist in IndexedDB and survive page refreshes.
 3. In Tampermonkey → Dashboard → Utilities → Create a new script. Paste the contents of [wk-vocab-review-ik.user.js](wk-vocab-review-ik.user.js), save (⌘S / Ctrl+S).
 4. Make sure WKOF is listed **above** this script in the Tampermonkey dashboard (drag to reorder; first-listed runs first).
 5. When prompted, approve cross-origin connections to `apiv2.immersionkit.com`, `translate.googleapis.com`, and `duckduckgo.com`.
-6. Reload any open WaniKani tab. Sanity check: DevTools console should show `[wk-ik-examples] booting v0.20.x on /...`.
+6. Reload any open WaniKani tab. Sanity check: DevTools console should show `[wk-ik-examples] booting v0.22.x on /...`.
 
 ## Settings
 
@@ -58,6 +63,7 @@ Open your WaniKani avatar dropdown (top right) → **Scripts** → **Settings** 
 | Audio playback speed | 1x | Dropdown 0.5x / 0.75x / 1x / 1.25x. Applies to all audio sources; takes effect on the next card render. |
 | Which example to pick | Shortest | Sort order for the first sentence shown. Refresh button cycles through all candidates regardless. |
 | Prefer examples from spoken media (anime/drama/games) | on | When on, IK examples that came with original audio are preferred over text-only literature lines (which would need TTS fallback). |
+| JLPT difficulty ceiling | Any | Filter sentences to those whose hardest known surrounding word is at or below the chosen level (N5–N1). The sentence picker still shows above-ceiling candidates (faded) so you can override per card. |
 | Cache contents | — | Live read-only view of what's currently cached (examples, image URL lists, audio clips, per-word selections, the IK index_meta map). Refreshes after Clear cache. |
 | Clear cache | — | Wipes locally cached examples, images, audio, and per-word selections. |
 
@@ -106,3 +112,4 @@ See [CLAUDE.md](CLAUDE.md) for architecture notes and dead-end warnings if you'r
 - [acwool](https://community.wanikani.com/u/acwool) — WaniKani Open Framework (WKOF).
 - [awoo](https://greasyfork.org/en/users/awoo) — [JPDB Immersion Kit Examples](https://greasyfork.org/en/scripts/507408-jpdb-immersion-kit-examples) script, whose URL-construction approach informed earlier iterations of this script.
 - [ImmersionKit](https://immersionkit.com) — sentence corpus and the `download_media` proxy that makes all of this possible.
+- [jamsinclair/open-anki-jlpt-decks](https://github.com/jamsinclair/open-anki-jlpt-decks) — JLPT vocabulary word lists (MIT) bundled into the script for the JLPT difficulty ceiling.
