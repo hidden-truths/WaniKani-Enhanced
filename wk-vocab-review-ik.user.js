@@ -25,6 +25,14 @@
     const SCRIPT_TITLE = 'WK Vocab Review — ImmersionKit';
     const SCRIPT_VERSION = '1.1.0';
 
+    // API server endpoints. Single source of truth for prod / dev URLs; lift
+    // here when changing the deployed domain. Note: changing PROD_API_BASE
+    // also requires updating the `@connect` directive in the metadata block
+    // at the top of this file (Tampermonkey re-prompts the user when the
+    // metadata changes).
+    const PROD_API_BASE = 'https://api.wkenhanced.dev';
+    const DEV_API_BASE = 'http://localhost:3000';
+
     // Bump this when on-disk cache shape or sourcing logic changes in a way that
     // makes stale entries actively wrong (vs. just suboptimal). Boot will clear
     // examples/images/audio caches once when this differs from the stored value.
@@ -130,10 +138,10 @@
         // unreachable.
         useApiServer: true,
         // Base URL of the wk-vocab-api server. Empty disables the API path
-        // (forces direct mode). Production: 'https://api.wkenhanced.dev'.
-        // Local dev: 'http://localhost:3000'. Trailing slash is stripped at
+        // (forces direct mode). Defaults to PROD_API_BASE; for local dev,
+        // set to DEV_API_BASE in settings. Trailing slash is stripped at
         // use time.
-        apiServerUrl: 'https://api.wkenhanced.dev',
+        apiServerUrl: PROD_API_BASE,
         // When useApiServer is on, on review-session entry prefetch the next
         // N upcoming subjects via POST /v1/vocab/batch. 0 disables; default 10.
         prefetchCount: 10,
@@ -571,9 +579,9 @@
                             type: 'text',
                             label: 'API server URL',
                             default: DEFAULTS.apiServerUrl,
-                            placeholder: 'http://localhost:3000',
+                            placeholder: DEV_API_BASE,
                             hover_tip:
-                                'Base URL of the wk-vocab-api server. For local dev: http://localhost:3000. Trailing slash is stripped. Leave blank to disable the API path even when the checkbox above is on.',
+                                `Base URL of the wk-vocab-api server. For local dev: ${DEV_API_BASE}. Trailing slash is stripped. Leave blank to disable the API path even when the checkbox above is on.`,
                         },
                         prefetchCount: {
                             type: 'number',
