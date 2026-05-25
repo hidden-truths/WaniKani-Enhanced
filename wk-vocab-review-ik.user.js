@@ -1520,10 +1520,24 @@
             // resolves via microtask before the next paint, so the spinner
             // never actually flashes when the answer is already in cache.
             renderLoadingCard();
+            const renderT0 = Date.now();
+            console.log(`[${SCRIPT_ID}] subject.start`, {
+                word: subject.characters,
+                subjectId: subject.id,
+                mode: serverPathEnabled() ? 'server' : 'direct',
+                sentenceIdx: state.sentenceIdx,
+                imageIdx: state.imageIdx,
+            });
             getExamples(subject.characters)
                 .then((cached) => {
                     if (fetchToken !== state.currentFetchToken) return; // Stale
                     const chosen = pickFromCached(cached, state.sentenceIdx);
+                    console.log(`[${SCRIPT_ID}] subject.ready`, {
+                        word: subject.characters,
+                        ms: Date.now() - renderT0,
+                        poolSize: cached && Array.isArray(cached.raw) ? cached.raw.length : 0,
+                        rendered: !!chosen,
+                    });
                     if (!chosen) renderEmptyCard();
                     else renderCard(chosen);
                     // Warm the cache for the next few subjects in WK's queue.
@@ -2367,8 +2381,24 @@
             .catch(() => null)
             .then((entry) => {
                 if (entry && isServerCacheFresh(entry)) {
+                    const ttlMs = entry.payload && entry.payload.incomplete
+                        ? SERVER_INCOMPLETE_TTL_MS : SERVER_CACHE_TTL_MS;
+                    console.log(`[${SCRIPT_ID}] server.cache hit`, {
+                        word,
+                        ageMs: Date.now() - entry.savedAt,
+                        ttlMs,
+                        examples: Array.isArray(entry.payload && entry.payload.examples)
+                            ? entry.payload.examples.length : 0,
+                        incomplete: !!(entry.payload && entry.payload.incomplete),
+                        etag: entry.etag || null,
+                    });
                     return serverPayloadToCacheEntry(entry.payload);
                 }
+                console.log(`[${SCRIPT_ID}] server.cache miss`, {
+                    word,
+                    reason: !entry ? 'no_entry' : 'stale',
+                    ...(entry ? { ageMs: Date.now() - entry.savedAt, hasEtag: !!entry.etag } : {}),
+                });
                 return fetchVocab(word, entry).then((payload) => {
                     if (!payload) return { fetchedAt: Date.now(), raw: [], chosen: null };
                     return serverPayloadToCacheEntry(payload);
@@ -2394,10 +2424,15 @@
         }
         const ctrl = new AbortController();
         const timer = setTimeout(() => ctrl.abort(), SERVER_GET_TIMEOUT_MS);
+        const t0 = Date.now();
+        const ifNoneMatch = cachedEntryHint && cachedEntryHint.etag ? cachedEntryHint.etag : null;
+        console.log(`[${SCRIPT_ID}] server.get start`, { word, ifNoneMatch });
         return fetch(url, { headers, credentials: 'omit', mode: 'cors', signal: ctrl.signal })
             .finally(() => clearTimeout(timer))
             .then((res) => {
+                const ms = Date.now() - t0;
                 if (res.status === 304) {
+                    console.log(`[${SCRIPT_ID}] server.get 304 (not modified)`, { word, ms, etag: ifNoneMatch });
                     // ETag matched — refresh the savedAt so TTL math sees this
                     // as a recently-verified entry, but keep the same payload.
                     if (cachedEntryHint && cachedEntryHint.payload) {
@@ -2412,22 +2447,38 @@
                     return null;
                 }
                 if (res.status === 404) {
-                    console.log(`[${SCRIPT_ID}] server: 404 for "${word}" (no examples)`);
+                    console.log(`[${SCRIPT_ID}] server.get 404 (no examples)`, { word, ms });
                     return null;
                 }
                 if (!res.ok) {
-                    console.warn(`[${SCRIPT_ID}] server: HTTP ${res.status} for "${word}"`);
+                    console.warn(`[${SCRIPT_ID}] server.get error`, { word, ms, status: res.status });
                     return null;
                 }
                 const etag = res.headers.get('ETag') || res.headers.get('etag') || null;
                 return res.json().then((payload) => {
+                    console.log(`[${SCRIPT_ID}] server.get 200`, {
+                        word,
+                        ms,
+                        examples: Array.isArray(payload && payload.examples) ? payload.examples.length : 0,
+                        fallbackImages: Array.isArray(payload && payload.fallbackImages) ? payload.fallbackImages.length : 0,
+                        incomplete: !!(payload && payload.incomplete),
+                        etag,
+                    });
                     const entry = { payload, etag, savedAt: Date.now() };
                     wkof.file_cache.save(serverCacheKey(word), entry).catch(() => {});
                     return payload;
                 });
             })
             .catch((err) => {
-                console.warn(`[${SCRIPT_ID}] server: fetchVocab failed for "${word}":`, err);
+                const ms = Date.now() - t0;
+                const aborted = err && err.name === 'AbortError';
+                console.warn(`[${SCRIPT_ID}] server.get failed`, {
+                    word,
+                    ms,
+                    reason: aborted ? 'timeout' : 'network',
+                    err: err && err.message,
+                    fallback: cachedEntryHint && cachedEntryHint.payload ? 'stale_cache' : 'none',
+                });
                 // Fall back to whatever stale cached payload we have, if any —
                 // better than rendering an empty card just because the server
                 // was momentarily unreachable.
@@ -2452,9 +2503,12 @@
         for (let i = 0; i < words.length; i += SERVER_BATCH_MAX) {
             chunks.push(words.slice(i, i + SERVER_BATCH_MAX));
         }
-        return Promise.all(chunks.map((chunk) => {
+        const t0 = Date.now();
+        console.log(`[${SCRIPT_ID}] server.batch start`, { requested: words.length, chunks: chunks.length });
+        return Promise.all(chunks.map((chunk, chunkIdx) => {
             const ctrl = new AbortController();
             const timer = setTimeout(() => ctrl.abort(), SERVER_BATCH_TIMEOUT_MS);
+            const chunkT0 = Date.now();
             return fetch(`${base}/v1/vocab/batch`, {
                 method: 'POST',
                 headers: { 'Content-Type': 'application/json' },
@@ -2465,14 +2519,32 @@
             })
                 .finally(() => clearTimeout(timer))
                 .then((res) => {
+                    const ms = Date.now() - chunkT0;
                     if (!res.ok) {
-                        console.warn(`[${SCRIPT_ID}] server: batch HTTP ${res.status}`);
+                        console.warn(`[${SCRIPT_ID}] server.batch chunk error`, {
+                            chunkIdx, size: chunk.length, ms, status: res.status,
+                        });
                         return { found: {}, missing: chunk };
                     }
-                    return res.json();
+                    return res.json().then((body) => {
+                        console.log(`[${SCRIPT_ID}] server.batch chunk 200`, {
+                            chunkIdx,
+                            size: chunk.length,
+                            ms,
+                            found: body && body.found ? Object.keys(body.found).length : 0,
+                            missing: Array.isArray(body && body.missing) ? body.missing.length : 0,
+                        });
+                        return body;
+                    });
                 })
                 .catch((err) => {
-                    console.warn(`[${SCRIPT_ID}] server: batch failed:`, err);
+                    const ms = Date.now() - chunkT0;
+                    const aborted = err && err.name === 'AbortError';
+                    console.warn(`[${SCRIPT_ID}] server.batch chunk failed`, {
+                        chunkIdx, size: chunk.length, ms,
+                        reason: aborted ? 'timeout' : 'network',
+                        err: err && err.message,
+                    });
                     return { found: {}, missing: chunk };
                 });
         })).then((results) => {
@@ -2490,6 +2562,13 @@
                 const entry = { payload: merged.found[word], etag: null, savedAt: Date.now() };
                 wkof.file_cache.save(serverCacheKey(word), entry).catch(() => {});
             }
+            console.log(`[${SCRIPT_ID}] server.batch done`, {
+                requested: words.length,
+                found: Object.keys(merged.found).length,
+                missing: merged.missing.length,
+                chunks: chunks.length,
+                ms: Date.now() - t0,
+            });
             return merged;
         });
     }
@@ -2761,24 +2840,41 @@
     //
     // Returns a URL the <audio> element can play.
     function resolveAudioBlobUrl(example) {
+        const sentencePreview = (example && example.sentence || '').slice(0, 30);
         if (example && example._serverAudio && example.ikAudioUrl) {
+            console.log(`[${SCRIPT_ID}] audio.source server-cdn`, {
+                sentence: sentencePreview,
+                url: example.ikAudioUrl,
+            });
             return Promise.resolve(example.ikAudioUrl);
         }
         const ikUrl = example && example.ikAudioUrl;
         if (ikUrl) {
             return fetchIkAudioBlobUrl(ikUrl)
                 .then((url) => {
-                    console.log(`[${SCRIPT_ID}] using IK proxy audio`);
+                    console.log(`[${SCRIPT_ID}] audio.source ik-proxy`, {
+                        sentence: sentencePreview,
+                        ikUrl,
+                    });
                     return url;
                 })
                 .catch((err) => {
-                    console.warn(
-                        `[${SCRIPT_ID}] IK audio failed (${err && err.message}); falling back to Google TTS`
-                    );
-                    return fetchTtsBlobUrl(example.sentence);
+                    console.warn(`[${SCRIPT_ID}] audio.source ik-proxy failed → tts`, {
+                        sentence: sentencePreview,
+                        err: err && err.message,
+                    });
+                    return fetchTtsBlobUrl(example.sentence).then((url) => {
+                        console.log(`[${SCRIPT_ID}] audio.source tts (ik-proxy fallback)`, {
+                            sentence: sentencePreview,
+                        });
+                        return url;
+                    });
                 });
         }
-        return fetchTtsBlobUrl(example.sentence);
+        return fetchTtsBlobUrl(example.sentence).then((url) => {
+            console.log(`[${SCRIPT_ID}] audio.source tts (no ik url)`, { sentence: sentencePreview });
+            return url;
+        });
     }
 
     // Google Translate TTS — unofficial but widely used. Returns MP3 of the input
@@ -2941,16 +3037,29 @@
     // Calls onSuccess(url, poolSize) or onError().
     function loadImageAt(word, ikImageUrl, index, onSuccess, onError, serverFallbacks) {
         const idx = Math.max(0, index | 0);
-        const fallbackPromise = Array.isArray(serverFallbacks)
+        const fallbacksFromServer = Array.isArray(serverFallbacks);
+        const fallbackPromise = fallbacksFromServer
             ? Promise.resolve(serverFallbacks)
             : fetchDdgImagesCached(word);
         fallbackPromise.then((fallbackUrls) => {
             const pool = ikImageUrl ? [ikImageUrl, ...fallbackUrls] : fallbackUrls;
             if (pool.length === 0) {
+                console.warn(`[${SCRIPT_ID}] image.pool empty`, { word, hasIk: !!ikImageUrl, fallbacksFrom: fallbacksFromServer ? 'server' : 'ddg' });
                 onError && onError();
                 return;
             }
             const wrappedIdx = idx % pool.length;
+            const chosenIsIk = !!ikImageUrl && wrappedIdx === 0;
+            console.log(`[${SCRIPT_ID}] image.pool`, {
+                word,
+                hasIk: !!ikImageUrl,
+                fallbacks: fallbackUrls.length,
+                fallbacksFrom: fallbacksFromServer ? 'server-cdn' : 'ddg',
+                poolSize: pool.length,
+                requestedIdx: index,
+                wrappedIdx,
+                chosen: chosenIsIk ? 'ik' : (fallbacksFromServer ? 'server-cdn' : 'ddg'),
+            });
             onSuccess(pool[wrappedIdx], pool.length);
         });
     }
