@@ -14,6 +14,7 @@ A handful of decisions changed during the build (logged here so the rest of the 
 - **`@hono/zod-openapi` for routes + auto-generated OpenAPI spec + Scalar docs UI at `/docs`.** The original doc didn't specify a docs story; this slotted in cleanly as a FastAPI-equivalent.
 - **`ETag` + `If-None-Match` on `GET /v1/vocab/{word}`**, **`POST /v1/vocab/batch`** for prefetching, **`?nowarm=true`** query for cache-probing, **`GET /v1/admin/jobs`** for warm-history audit. Refinements added during the API-shape pass.
 - **Error-code taxonomy** (`validation_error`, `unauthorized`, `not_found`, `upstream_failure`, `service_unavailable`, `internal_error`) on every non-2xx response — clients switch on `code`, not the human-readable `error` string.
+- **IK rate limit dropped from 500ms → 50ms** (~2 req/sec → ~20 req/sec). The original 500ms made interactive lazy-fills feel sluggish: a cold word triggers ~15 IK calls (1 search + per-example media), and a 500ms floor between every call adds 7–8s of pure throttle wait on top of actual network round-trips. Bulk warm is still bounded primarily by IK's own response latency, not our throttle. Revisit upward if IK pushes back.
 
 The rest of this doc — endpoints, schemas, storage layout, deploy story — is still accurate in shape, with the database/dev-storage swap above being the main delta.
 

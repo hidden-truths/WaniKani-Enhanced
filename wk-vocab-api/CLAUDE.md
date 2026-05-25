@@ -50,7 +50,7 @@ src/
 │   ├── indexMeta.ts
 │   └── admin.ts              # POST /v1/admin/warm + GET /v1/admin/jobs (bearer-gated)
 ├── services/
-│   ├── ik.ts                 # /search, /index_meta, /download_media — built-in 500ms rate limit
+│   ├── ik.ts                 # /search, /index_meta, /download_media — built-in 50ms rate limit
 │   ├── ddg.ts                # two-step vqd HTML scrape → i.js JSON
 │   ├── tts.ts                # Google Translate TTS (client=gtx, Referer spoof)
 │   ├── wk.ts                 # WK v2 API for vocab corpus enumeration; needs WK_API_TOKEN
@@ -100,13 +100,13 @@ Per word, in order:
 
 Idempotency: re-running the warm overwrites in place. Object keys are stable across runs (based on `exampleId` from IK or a content hash if IK gives us no id). Skipped if `fetched_at` is within `WARM_REFRESH_DAYS` (default 30) unless `force: true`.
 
-Concurrency model: per-word work runs sequentially in `warmAll`. Per-example media downloads inside one word run in parallel (4-wide). IK has a global 500ms rate limit (`lastIkCallAt` shared module state in `services/ik.ts`) — so bulk warming is multi-hour. Acceptable for monthly cron, not interactive.
+Concurrency model: per-word work runs sequentially in `warmAll`. Per-example media downloads inside one word run in parallel (4-wide). IK has a global **50ms** rate limit (`lastIkCallAt` shared module state in `services/ik.ts`) — previously 500ms, but that made interactive lazy-fills feel sluggish (a single cold word triggers ~15 IK calls × 500ms floor = 7–8s of pure throttle wait, even before counting network). 50ms keeps us a polite client without making the userscript feel broken; revisit upward if IK pushes back (429s, IP blocks).
 
 Lazy fill (`GET /v1/vocab/{word}` on a cold word) calls `warmWord()` synchronously. The client blocks for 10–30s but every subsequent client hits the cached payload instantly. Use `?nowarm=true` to skip this for prefetch flows.
 
 ## External services
 
-- **`apiv2.immersionkit.com/search`** — sentence + translation source. Built-in 500ms rate limit. Normalizes `examples` shape across IK API versions.
+- **`apiv2.immersionkit.com/search`** — sentence + translation source. Built-in 50ms rate limit. Normalizes `examples` shape across IK API versions.
 - **`apiv2.immersionkit.com/index_meta`** — canonical encoded-title → `{title, category}` map. Cached 7d. **This is the only reliable way to map IK's lossy encoding** (e.g. `kanon__2006_` → `"Kanon (2006)"`); the heuristic is fallback-only.
 - **`apiv2.immersionkit.com/download_media`** — proxy for audio + image binaries. Requires `Referer: https://www.immersionkit.com/`. Bodies <1KB are treated as miss (proxy returns near-empty for missing files).
 - **`translate.googleapis.com/translate_tts`** — Google TTS fallback when IK has no `sound`. Spoofed `Referer: https://translate.google.com/`, `client=gtx`. Truncates input to 200 chars.
@@ -143,7 +143,7 @@ These have been investigated; don't re-explore.
 
 - **SQLite is the DB even in production.** The original SERVER_DESIGN.md said Postgres; we deviated. The data model is K-V with JSON payloads, the corpus is bounded (~6500 rows), and a single droplet doesn't need a network DB. The repo functions in [src/db/client.ts](src/db/client.ts) hide all the SQL so migrating to Postgres later is mechanical if scale demands it. **Don't pre-emptively add Postgres** "to be safe" — the SQLite story is deliberate.
 
-- **Bulk warm is multi-hour and that's fine.** ~6500 words × ~50 examples × per-example media downloads × 500ms IK rate limit = several hours. It's a monthly cron job; nobody is waiting on it. **Don't add aggressive concurrency to "speed it up"** — IK is a free, community-supported service; we want to be a polite client.
+- **Bulk warm is still well over an hour.** ~6500 words × ~50 examples × per-example media downloads, even at the relaxed 50ms IK rate limit, runs roughly an hour+ end-to-end (most of the cost is IK's own response time, not our throttle). It's a monthly cron job; nobody is waiting on it. **Don't add aggressive concurrency to "speed it up"** beyond the existing per-word 4-wide media batching — IK is a free, community-supported service and we want to stay a polite client. If IK ever 429s us, the right knob is `MIN_GAP_MS` in `services/ik.ts`, not more parallelism.
 
 - **Storage `keys.ddg` does NOT pre-encode the word.** Earlier versions did, which caused double-encoding (`%25E9` in URLs). The storage layer (`LocalStorage.publicUrl` / `S3Storage.publicUrl`) owns all URL encoding. The on-disk filename for `食べる`'s DDG pool is literally `dev-data/media/ddg/食べる/0.jpg` (UTF-8 on disk), which serves as `/media/ddg/%E9%A3%9F%E3%81%B9%E3%82%8B/0.jpg`. Don't add encoding to the keys layer.
 

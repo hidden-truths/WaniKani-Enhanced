@@ -44,8 +44,14 @@ export interface IkIndexMetaEntry {
 }
 
 // Polite rate limit. IK is free + community-supported; don't hammer.
+// 50ms = ~20 req/sec ceiling. The original 500ms (~2 req/sec) made cold
+// lazy-fill feel sluggish in the userscript (16 IK calls per word × 500ms
+// floor = ~8s of pure throttle wait). Dropped to 50ms so interactive
+// lazy-fills come back in ~1s instead of 5–6s; bulk warm is still bounded
+// by IK's actual response time and our 4-wide per-word concurrency.
+// Revisit upward if IK ever pushes back (429s, IP blocks).
 let lastIkCallAt = 0;
-const MIN_GAP_MS = 500; // 2 req/sec ceiling
+const MIN_GAP_MS = 50;
 
 async function rateLimit() {
     const gap = Date.now() - lastIkCallAt;
