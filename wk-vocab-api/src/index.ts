@@ -31,6 +31,12 @@ app.use('*', async (c, next) => {
     c.header('Access-Control-Allow-Origin', '*');
     c.header('Access-Control-Allow-Methods', 'GET, POST, OPTIONS');
     c.header('Access-Control-Allow-Headers', 'Content-Type, Authorization');
+    // ETag is not a CORS-safelisted response header, so without this exposure
+    // declaration the userscript's `res.headers.get('ETag')` returns null
+    // even when the server sends one — defeating the conditional-revalidation
+    // path (no etag stored client-side → no If-None-Match sent → no 304s,
+    // every revisit re-downloads the full ~40KB payload).
+    c.header('Access-Control-Expose-Headers', 'ETag');
     if (c.req.method === 'OPTIONS') {
         return c.body(null, 204);
     }
