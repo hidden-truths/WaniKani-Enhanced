@@ -1936,7 +1936,7 @@
         console.log('To check the real file, replace SAMPLE.mp3/SAMPLE.jpg with the `sound`/`image` field from the failing example (visible in the boot log\'s "raw IK example" dump) and paste into a new browser tab.');
     }
 
-    // Diagnostic helper for the Phase-1 API-server path. Mirrors debugWkIk():
+    // Diagnostic helper for the API-server path. Mirrors debugWkIk():
     // - reports current toggle / URL configuration
     // - hits /v1/health and dumps the result
     // - runs a sample fetchVocab for the given word (default '食べる')
@@ -2012,13 +2012,16 @@
         return `${CACHE_PREFIX}${encodeURIComponent(slug)}`;
     }
 
-    // Top-level entry point for the data layer. Switches between the direct
-    // IK/DDG/Google path (default) and the wk-vocab-api server path based on
-    // user settings. Both paths return the same shape: { fetchedAt, raw, chosen }
-    // — the server path uses an adapter (serverPayloadToCacheEntry) to reshape
-    // the server's payload into IK-raw-lookalike entries so downstream code
-    // (pickExample, buildPool, renderCard, picker) is untouched. The Phase-3
-    // cleanup will drop the direct path entirely.
+    // Top-level entry point for the data layer. Routes to the wk-vocab-api
+    // server path by default; falls through to the direct IK/DDG/Google path
+    // when `useApiServer` is off or `apiServerUrl` is empty. Both paths
+    // return the same shape: { fetchedAt, raw, chosen } — the server path
+    // uses an adapter (serverPayloadToCacheEntry) to reshape the server's
+    // payload into IK-raw-lookalike entries so downstream code (pickExample,
+    // buildPool, renderCard, picker) is untouched. The direct path will be
+    // spun out to a separate legacy/ snapshot in a future release; we keep
+    // it inline for now so users can opt out without installing a second
+    // userscript.
     function getExamples(slug) {
         if (serverPathEnabled()) {
             return getExamplesViaServer(slug);
