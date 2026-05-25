@@ -62,6 +62,13 @@ export const VocabPayloadSchema = z
                 description:
                     "DDG illustration pool. Used when an example's imageUrl is null or the client cycles ⟳.",
             }),
+        incomplete: z.boolean().optional().openapi({
+            description:
+                'true on payloads where the DDG fallback pool is still warming in the background ' +
+                '(returned this way on cold lazy-fill to keep response latency low). Clients should ' +
+                'cache short and re-fetch within seconds to pick up the full version. Absent or false ' +
+                'on payloads from completed warms.',
+        }),
     })
     .openapi('VocabPayload');
 

@@ -1,7 +1,7 @@
 // ==UserScript==
 // @name         WK Vocab Review — ImmersionKit Examples
 // @namespace    https://github.com/jbrelly/wk-ik-examples
-// @version      1.0.0-rc1
+// @version      1.0.0-rc2
 // @description  Shows one ImmersionKit example sentence (with IK / Google TTS audio + IK / DDG image) during WaniKani vocab reviews. v1.0 adds an opt-in API server path (default off).
 // @author       jbrelly
 // @match        https://www.wanikani.com/*
@@ -22,7 +22,7 @@
 
     const SCRIPT_ID = 'wk-ik-examples';
     const SCRIPT_TITLE = 'WK Vocab Review — ImmersionKit';
-    const SCRIPT_VERSION = '1.0.0-rc1';
+    const SCRIPT_VERSION = '1.0.0-rc2';
 
     // Bump this when on-disk cache shape or sourcing logic changes in a way that
     // makes stale entries actively wrong (vs. just suboptimal). Boot will clear
@@ -89,6 +89,11 @@
     // backstop for "server has been unreachable for a long time, eventually
     // give up and try fresh."
     const SERVER_CACHE_TTL_MS = 7 * 24 * 60 * 60 * 1000;
+    // Short TTL applied when the server marks a payload `incomplete: true`
+    // (DDG fallback pool still warming in background). The next request within
+    // ~60s re-fetches and picks up the completed payload — usually a 304 if
+    // the background warm hasn't finished yet, or a fresh 200 if it has.
+    const SERVER_INCOMPLETE_TTL_MS = 60 * 1000;
     // Batch endpoint max body size (mirrors server's BatchRequestSchema cap).
     // Prefetch chunks larger batches into multiple requests.
     const SERVER_BATCH_MAX = 50;
@@ -2224,7 +2229,12 @@
 
     function isServerCacheFresh(entry) {
         if (!entry || !entry.payload || typeof entry.savedAt !== 'number') return false;
-        return Date.now() - entry.savedAt < SERVER_CACHE_TTL_MS;
+        // Incomplete payloads (DDG still warming server-side) get a much
+        // shorter TTL so the next visit re-fetches and picks up the full
+        // version. Without this, a 7-day cache would pin the partial
+        // payload until manual clear.
+        const ttl = entry.payload.incomplete ? SERVER_INCOMPLETE_TTL_MS : SERVER_CACHE_TTL_MS;
+        return Date.now() - entry.savedAt < ttl;
     }
 
     // Cache-aware variant of getExamples for the server path. Mirrors

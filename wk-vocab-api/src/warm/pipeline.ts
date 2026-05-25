@@ -62,7 +62,19 @@ export interface VocabPayload {
     fetchedAt: number;
     examples: WarmedExample[];
     fallbackImages: string[];
+    // `incomplete: true` means the warm returned before all media work was
+    // done (specifically: DDG fallbacks were deferred to a background task
+    // for lazy-fill responsiveness). Clients should treat the payload as
+    // short-TTL and re-fetch within seconds to pick up the full version.
+    // Absent (or false) on payloads from completed warms.
+    incomplete?: boolean;
 }
+
+// Words with an active background DDG warm. Prevents a re-warm or a second
+// lazy-fill from kicking off a duplicate DDG fetch while one's already in
+// flight. Module-scoped (process-singleton); fine for a single-droplet
+// deployment, would need Redis-or-similar in a multi-process world.
+const ddgInFlight = new Set<string>();
 
 // Stable, deterministic example id even when IK gives us no `id` (rare but
 // happens with some test data). Combines encoded title + a content hash to
@@ -150,38 +162,30 @@ export async function warmWord(word: string, options?: { force?: boolean }): Pro
     const examples = warmed.filter((w) => w.example !== null).map((w) => w.example) as WarmedExample[];
     const allStats = warmed.map((w) => w.stats);
 
-    // 5. DDG fallback pool for the word. Best-effort — if DDG fails, we still
-    // serve the word, just without illustrations. Track how many of the pool
-    // URLs we actually had to fetch from DDG (vs already-uploaded ones if any).
-    let fallbackImages: string[] = [];
-    let ddgUrlsFound = 0;
-    let ddgFetched = 0;
-    let ddgFailed = 0;
-    try {
-        const urls = await ddgSearchImages(word);
-        ddgUrlsFound = urls.length;
-        const indexed = urls.map((url, idx) => ({ url, idx }));
-        const uploaded = await batched(indexed, 3, async ({ url, idx }) => {
-            const img = await ddgFetchImage(url);
-            if (!img) {
-                ddgFailed++;
-                return null;
-            }
-            ddgFetched++;
-            const key = keys.ddg(word, idx);
-            return storage.put(key, img.buffer, img.contentType);
-        });
-        fallbackImages = uploaded.filter((u): u is string => u !== null);
-    } catch (err) {
-        log.warn('warm.ddg_failed', { word, err: (err as Error).message });
-    }
+    // 5. DDG fallback pool is DEFERRED to a background task. DDG accounts for
+    // ~1.5s of the cold-fill latency (1 vqd fetch + 10 image downloads, only
+    // 3-wide concurrency) and is purely a fallback — most examples already
+    // have an IK image, and the userscript falls back to "no image" gracefully
+    // when fallbackImages is empty. So we ship the payload now with empty
+    // fallbacks, mark it `incomplete: true` so the userscript re-fetches
+    // shortly, and complete the DDG work behind the response.
+    //
+    // Reuse the existing payload if a prior warm already populated it (e.g.,
+    // re-warm after a partial). This preserves DDG state across re-warms even
+    // before the new background DDG completes.
+    const priorFallbacks: string[] = Array.isArray(existing?.payload?.fallbackImages)
+        ? (existing!.payload.fallbackImages as string[])
+        : [];
 
-    // 6. Compose + persist payload.
+    // 6. Compose + persist initial payload. incomplete=true tells clients to
+    // re-check soon; the background task drops this flag when it upserts
+    // again with the real fallbackImages.
     const payload: VocabPayload = {
         word,
         fetchedAt: Date.now(),
         examples,
-        fallbackImages,
+        fallbackImages: priorFallbacks,
+        incomplete: true,
     };
     db.upsertVocab(word, payload, examples.length);
 
@@ -211,9 +215,83 @@ export async function warmWord(word: string, options?: { force?: boolean }): Pro
         audioStorage,
         image,
         imageStorage,
-        ddg: { urls: ddgUrlsFound, fetched: ddgFetched, failed: ddgFailed, fallbackImages: fallbackImages.length },
+        ddg: { deferred: true, priorFallbackImages: priorFallbacks.length },
     });
+
+    // Kick off DDG completion in the background. Fire-and-forget; the lazy-
+    // fill request returns immediately. completeDdgInBackground handles its
+    // own logging and the in-flight dedupe.
+    void completeDdgInBackground(word);
+
     return payload;
+}
+
+// Background task: fetch DDG illustration pool, upload, and re-upsert the
+// vocab row with the full fallbackImages array and incomplete=false.
+// Deduped by `ddgInFlight` so a concurrent re-warm doesn't trigger a duplicate.
+//
+// Idempotency: this runs after warmWord has already upserted the row. We
+// re-read the row right before the final upsert so any concurrent change
+// (e.g., a re-warm completing first) doesn't get clobbered. If the DDG fetch
+// itself fails, we still upsert to clear the `incomplete` flag — better to
+// serve a stable payload with empty fallbackImages than to leave clients
+// re-fetching forever waiting for DDG to come back.
+async function completeDdgInBackground(word: string): Promise<void> {
+    if (ddgInFlight.has(word)) {
+        log.debug('warm.ddg.background.skip_inflight', { word });
+        return;
+    }
+    ddgInFlight.add(word);
+    const t0 = Date.now();
+    const storage = getStorage();
+    let urls = 0;
+    let fetched = 0;
+    let failed = 0;
+    let fallbackImages: string[] = [];
+    try {
+        const ddgUrls = await ddgSearchImages(word);
+        urls = ddgUrls.length;
+        const indexed = ddgUrls.map((url, idx) => ({ url, idx }));
+        const uploaded = await batched(indexed, 3, async ({ url, idx }) => {
+            const img = await ddgFetchImage(url);
+            if (!img) {
+                failed++;
+                return null;
+            }
+            fetched++;
+            const key = keys.ddg(word, idx);
+            return storage.put(key, img.buffer, img.contentType);
+        });
+        fallbackImages = uploaded.filter((u): u is string => u !== null);
+    } catch (err) {
+        log.warn('warm.ddg.background.failed', { word, err: (err as Error).message });
+    }
+
+    // Re-read the row so we layer on top of whatever the latest payload is.
+    // If the row vanished (cache evicted between warm and now — shouldn't
+    // happen in practice), bail without writing.
+    const row = db.getVocab(word);
+    if (!row) {
+        log.warn('warm.ddg.background.row_missing', { word });
+        ddgInFlight.delete(word);
+        return;
+    }
+    const fullPayload: VocabPayload = {
+        ...(row.payload as VocabPayload),
+        fallbackImages,
+        incomplete: false,
+    };
+    db.upsertVocab(word, fullPayload, fullPayload.examples?.length || 0);
+    ddgInFlight.delete(word);
+
+    log.info('warm.ddg.background.done', {
+        word,
+        ms: Date.now() - t0,
+        urls,
+        fetched,
+        failed,
+        fallbackImages: fallbackImages.length,
+    });
 }
 
 async function warmOneExample(

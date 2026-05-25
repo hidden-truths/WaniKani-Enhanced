@@ -95,14 +95,16 @@ Per word, in order:
 2. **JLPT-score** each example via `scoreJlpt(word_list, targetWord)` — same fail-open semantics as the userscript: unknown tokens silently skipped, 0 returned when the entire `word_list` is unknown. See [src/lib/jlpt.ts](src/lib/jlpt.ts) + [src/lib/jlpt.test.ts](src/lib/jlpt.test.ts).
 3. **Resolve title + category** from cached `/index_meta`. Falls back to the regex heuristic in [src/lib/ikTitles.ts](src/lib/ikTitles.ts) on misses — same dead-ends as the userscript (see warnings below).
 4. **Per example, in parallel batches of 4**: try IK `/download_media` proxy for audio (`Referer: immersionkit.com` spoof, treat <1KB body as miss). On miss, fall back to Google TTS (`client=gtx`, `Referer: translate.google.com` spoof, 200-char truncation). Upload to storage at the audio key. Same shape for image (no TTS fallback — image misses just leave `imageUrl: null` and clients fall back to the DDG pool).
-5. **Fetch DDG fallback pool** for the word — two-step (HTML page for `vqd` token, then JSON `/i.js`). Up to 10 images per word, uploaded to `ddg/<word>/N.jpg`. Best-effort: if DDG breaks, the word still serves, just without fallback illustrations.
-6. **Compose payload + upsert** to `vocab_examples`. `serve_count` is **preserved** across re-warms (so usage stats survive monthly refresh).
+5. **Compose payload + upsert** with `incomplete: true` and `fallbackImages: []` (or the prior payload's fallbacks if this is a re-warm). Return to caller. `serve_count` is **preserved** across re-warms (so usage stats survive monthly refresh).
+6. **Background: DDG fallback pool.** Fire-and-forget — `completeDdgInBackground(word)` runs after `warmWord` returns. Two-step DDG fetch (HTML page for `vqd` token, then JSON `/i.js`), up to 10 images uploaded to `ddg/<word>/N.jpg`. On completion (or failure — best-effort), re-upserts the row with the full `fallbackImages` and drops the `incomplete` flag. A `ddgInFlight: Set<string>` dedupes overlapping background tasks per word.
 
-Idempotency: re-running the warm overwrites in place. Object keys are stable across runs (based on `exampleId` from IK or a content hash if IK gives us no id). Skipped if `fetched_at` is within `WARM_REFRESH_DAYS` (default 30) unless `force: true`.
+Why DDG is deferred: it accounts for ~1.5s of cold lazy-fill latency (1 vqd + 10 image fetches at 3-wide concurrency) and is the lowest-stakes work in the pipeline — most examples already have an IK image, and the userscript shows "no image" gracefully when `fallbackImages` is empty. Userscript handles the `incomplete: true` signal by using a short (60s) local cache TTL instead of the usual 7-day TTL, so the next visit picks up the fully-populated payload via ETag round-trip.
+
+Idempotency: re-running the warm overwrites in place. Object keys are stable across runs (based on `exampleId` from IK or a content hash if IK gives us no id). Skipped if `fetched_at` is within `WARM_REFRESH_DAYS` (default 30) unless `force: true`. Background DDG completion re-reads the latest row before its final upsert so a concurrent re-warm doesn't get clobbered.
 
 Concurrency model: per-word work runs sequentially in `warmAll`. Per-example media downloads inside one word run in parallel (4-wide). IK has a global **50ms** rate limit (`lastIkCallAt` shared module state in `services/ik.ts`) — previously 500ms, but that made interactive lazy-fills feel sluggish (a single cold word triggers ~15 IK calls × 500ms floor = 7–8s of pure throttle wait, even before counting network). 50ms keeps us a polite client without making the userscript feel broken; revisit upward if IK pushes back (429s, IP blocks).
 
-Lazy fill (`GET /v1/vocab/{word}` on a cold word) calls `warmWord()` synchronously. The client blocks for 10–30s but every subsequent client hits the cached payload instantly. Use `?nowarm=true` to skip this for prefetch flows.
+Lazy fill (`GET /v1/vocab/{word}` on a cold word) calls `warmWord()` synchronously. With DDG deferred, the client typically blocks for 1–3s on a fresh-everything cold word and gets `incomplete: true` in the payload; the next visit (typically the userscript's next render or prefetch ~seconds later) hits the now-complete cached row. Use `?nowarm=true` to skip lazy fill entirely for prefetch flows.
 
 ## External services
 
@@ -187,7 +189,9 @@ Per request, the `http` middleware emits a single line that route handlers can e
 | `vocab.batch` | requested, deduped, found, missing, ms | Per `POST /v1/vocab/batch`. |
 | `vocab.cold_miss` | word | Cold-word lazy-warm trigger. |
 | `vocab.lazy_warm_failed` | word, warmMs, err | Lazy warm threw. |
-| `warm.word.start` / `warm.word.done` | word, examples, audio{ik,tts,none}, audioStorage{cache,fetched,failed,skipped}, image{ik_present,ik_missing}, imageStorage{...}, ddg{urls,fetched,failed,fallbackImages}, ms | Per-word warm; the `*.done` line is the operator dashboard for "what did this warm actually do." High `audioStorage.cache` = re-warm fast, no external calls; high `audioStorage.fetched` = lots of fresh IK / TTS work. |
+| `warm.word.start` / `warm.word.done` | word, examples, audio{ik,tts,none}, audioStorage{cache,fetched,failed,skipped}, image{ik_present,ik_missing}, imageStorage{...}, ddg{deferred:true,priorFallbackImages}, ms | Per-word warm; the `*.done` line is the operator dashboard for "what did this warm actually do." High `audioStorage.cache` = re-warm fast, no external calls; high `audioStorage.fetched` = lots of fresh IK / TTS work. **DDG is deferred** — see the next line for the actual DDG result. |
+| `warm.ddg.background.done` | word, ms, urls, fetched, failed, fallbackImages | Background DDG fetch completed and re-upserted the row (now `incomplete: false`). Latency-decoupled from the lazy-fill response; usually fires 1–2s after `warm.word.done`. |
+| `warm.ddg.background.skip_inflight` | word | Suppressed log (debug level): a duplicate background-DDG task tried to start while one was already running for the same word. |
 | `warm.all.start` / `warm.all.done` / `warm.all.word_failed` | count, processed, failed, jobId | Bulk warm progress. |
 
 The `cacheStatus` enum on `vocab.serve` and on the http log line:
