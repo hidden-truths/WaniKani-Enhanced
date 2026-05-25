@@ -190,11 +190,20 @@
         return;
     }
 
-    // Canonical encoded-title map from IK's /index_meta endpoint. Populated by
-    // loadIndexMeta() during boot. Null while uninitialized; an object even when
-    // the fetch fails (just empty), so lookup code can treat null as "still
-    // loading" and a present-but-missing key as "fall back to heuristic".
+    // Canonical encoded-title map from IK's /index_meta endpoint. Populated
+    // by loadIndexMeta() — only needed by the direct path's URL builders
+    // and by prettifyTitle when no server-resolved title is available.
+    // Server-path examples carry pre-resolved titles + URLs in the payload,
+    // so on the server path indexMeta stays null and that's fine.
+    //
+    // Null while uninitialized; an object even when the fetch fails (just
+    // empty), so lookup code treats null as "not yet loaded" and a
+    // present-but-missing key as "fall back to heuristic".
     let indexMeta = null;
+
+    // Fire-once-only guard for ensureIndexMeta(). Callers can fire it
+    // freely; the actual network fetch happens at most once per session.
+    let indexMetaPromise = null;
 
     // ---------- Module-scoped state ----------
 
@@ -283,7 +292,16 @@
         .then(injectStyles)
         .then(loadSelections) // restore per-word refresh-button selections
         .then(maybeUpgradeCache) // wipe stale caches if CACHE_SCHEMA_VERSION bumped
-        .then(loadIndexMeta) // canonical encoded-title → pretty-title map from IK
+        .then(() => {
+            // index_meta is only consumed by the direct path's URL builders
+            // and by prettifyTitle's fallback. Server-path examples carry
+            // pre-resolved titles, so paying the ~12KB fetch + ~100ms boot
+            // delay on the server path is wasted work for the vast majority
+            // of users. Kick it off non-blocking on direct mode; defer
+            // entirely on server mode (ensureIndexMeta in the direct-path
+            // consumers triggers it on first need if the user flips back).
+            if (!serverPathEnabled()) ensureIndexMeta();
+        })
         .then(registerListeners)
         .then(() => {
             // Expose console-callable helpers in the page context.
@@ -1925,7 +1943,8 @@
         console.log(tag);
         if (!encodedTitle) { console.log('(empty input)'); return; }
         if (!indexMeta) {
-            console.log('indexMeta is null — boot may still be in progress. Try again in a moment.');
+            console.log('indexMeta is null — kicking off lazy load (server-path users skip the boot-time fetch). Re-run debugWkIkTitle in a second or two.');
+            ensureIndexMeta();
             return;
         }
         const total = Object.keys(indexMeta).length;
@@ -2097,6 +2116,9 @@
     // fall through to an empty map — URL builders then use the regex heuristic,
     // which is correct for simple titles (kill_la_kill, fate_zero) and wrong-
     // but-non-fatal for the trickier ones (durarara__, kanon__2006_, etc.).
+    //
+    // Prefer ensureIndexMeta() below over calling this directly — that
+    // wrapper is fire-once-only and safe to call from sync code paths.
     function loadIndexMeta() {
         return wkof.file_cache
             .load(INDEX_META_CACHE_KEY)
@@ -2112,6 +2134,18 @@
                 throw new Error('index_meta_cache_stale');
             })
             .catch(() => fetchAndCacheIndexMeta());
+    }
+
+    // Fire-once-only wrapper for loadIndexMeta. Safe to call from any code
+    // path that *might* need the map; subsequent calls return the in-flight
+    // (or completed) promise. Callers shouldn't await the result if they
+    // can tolerate a null indexMeta — the underlying lookups all fall back
+    // to the regex heuristic. This is the kick-off pattern: trigger the
+    // load now, render-with-fallback this call, render-with-map next call.
+    function ensureIndexMeta() {
+        if (indexMetaPromise) return indexMetaPromise;
+        indexMetaPromise = loadIndexMeta();
+        return indexMetaPromise;
     }
 
     function fetchAndCacheIndexMeta() {
@@ -2530,10 +2564,14 @@
     // ============================================================
 
     // Resolve { folder, category } for an IK example. Prefers the canonical
-    // /index_meta mapping (loaded once at boot) and falls back to the regex
-    // heuristic when the map is unavailable or the title isn't yet listed.
+    // /index_meta mapping and falls back to the regex heuristic when the
+    // map is unavailable or the title isn't yet listed. Kicks off a lazy
+    // load of indexMeta on first call (no-op if already loaded or in flight)
+    // so users who flip from server to direct mode mid-session don't sit
+    // on heuristic-only resolution forever.
     function resolveIkFolderAndCategory(e) {
         if (!e || !e.title) return null;
+        if (indexMeta === null) ensureIndexMeta();
         const fromMap = indexMeta && indexMeta[e.title];
         const folder = fromMap ? fromMap.title : ikTitleToFolder(e.title);
         let category = fromMap && fromMap.category;
@@ -2905,6 +2943,7 @@
     // rendered as "×" so attribution lines read naturally.
     function prettifyTitle(title) {
         if (!title) return '';
+        if (indexMeta === null) ensureIndexMeta();
         const fromMap = indexMeta && indexMeta[title];
         if (fromMap && fromMap.title) return fromMap.title;
         const tokens = decodeIkTitle(title).filter((tok) => tok !== 'x');
