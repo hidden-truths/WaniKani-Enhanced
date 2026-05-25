@@ -226,6 +226,8 @@ Live external calls (IK / DDG / Google TTS) are deliberately not tested — they
 
 Not exercised yet — the userscript today is wired to talk to the server, but the server itself only runs on a developer's laptop. The deploy story below is the next concrete chunk of work. Order matters; later steps assume earlier ones.
 
+> **Paste-ready templates live in [deploy/](deploy/).** The systemd unit, monthly-rewarm timer, and env-file template are concrete artifacts that target the DO + Spaces + Cloudflare setup described below. [deploy/README.md](deploy/README.md) has the install-on-droplet command sequence (`useradd`, `install -m 644 …`, `systemctl enable --now`, …). The walkthrough below is the conceptual version; the templates are the executable version.
+
 ### Prerequisites
 
 1. **Pick a domain.** Working name `wk-vocab-api.<something-you-own>`. Subdomain of an existing domain is fine.
