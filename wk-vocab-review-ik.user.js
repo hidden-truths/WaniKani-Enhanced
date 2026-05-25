@@ -556,10 +556,21 @@
     }
 
     function openSettings() {
+        // Snapshot useApiServer at dialog-open time so on_save can detect a
+        // flip and wipe the now-unused side's cache. Without this, toggling
+        // server↔direct leaves stale entries sitting in IndexedDB until
+        // their TTL expires (30 days for direct-mode IK examples, 7 for
+        // server payloads) — a real disk-usage issue for users who
+        // experiment with the toggle.
+        const prevUseApiServer = !!(settings().useApiServer);
         const dialog = new wkof.Settings({
             script_id: SCRIPT_ID,
             title: SCRIPT_TITLE,
             on_save: () => {
+                const nowUseApiServer = !!settings().useApiServer;
+                if (prevUseApiServer !== nowUseApiServer) {
+                    wipeAbandonedCachePrefixes(nowUseApiServer);
+                }
                 // Re-render current card if one is showing, in case user toggled settings mid-review.
                 if (state.cardEl && state.currentCharacters) {
                     refreshCardForCurrentSubject();
@@ -753,6 +764,33 @@
                     .then(() => wkof.file_cache.save(SCHEMA_VERSION_KEY, { version: CACHE_SCHEMA_VERSION }))
                     .catch((err) => console.warn(`[${SCRIPT_ID}] cache upgrade failed:`, err));
             });
+    }
+
+    // Called from the settings dialog's on_save when useApiServer flipped.
+    // Wipes the cache prefix(es) for the path the user just abandoned, so
+    // stale entries don't sit in IndexedDB until their TTL expires (30d for
+    // direct-mode IK examples, 7d for server payloads). The index_meta map
+    // is preserved either way — it's tiny, useful to both paths under
+    // certain failure modes (server-side title-resolution gaps), and
+    // re-fetched lazily anyway.
+    function wipeAbandonedCachePrefixes(useApiServerNow) {
+        const prefixes = useApiServerNow
+            // Server is now active → direct-mode caches are dead weight.
+            ? [CACHE_PREFIX, IMG_CACHE_PREFIX, AUDIO_CACHE_PREFIX, IK_AUDIO_CACHE_PREFIX]
+            // Direct is now active → server payload cache is dead weight.
+            : [SERVER_CACHE_PREFIX];
+        const tasks = prefixes.map((p) =>
+            wkof.file_cache.delete(new RegExp('^' + escapeRegExp(p))).catch(() => 0)
+        );
+        Promise.all(tasks).then((counts) => {
+            const total = counts.reduce((a, b) => a + (typeof b === 'number' ? b : 0), 0);
+            console.log(
+                `[${SCRIPT_ID}] useApiServer flipped to ${useApiServerNow}; wiped ${total} ` +
+                `entries from ${prefixes.length} abandoned cache prefix(es).`
+            );
+            // If the settings dialog is still on screen, refresh the cache widget.
+            populateCacheInfo();
+        });
     }
 
     function clearCache() {
