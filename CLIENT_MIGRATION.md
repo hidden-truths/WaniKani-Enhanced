@@ -1,6 +1,6 @@
 # CLIENT_MIGRATION.md
 
-Plan for migrating [wk-vocab-review-ik.user.js](wk-vocab-review-ik.user.js) (the Tampermonkey userscript) to call [wk-vocab-api/](wk-vocab-api/) (the server we just built) instead of hitting ImmersionKit / DuckDuckGo / Google TTS directly. **Status (2026-05-25): Phase 1 shipped (v1.0.0-rc2). Server deployed to `https://api.wkenhanced.dev`. Phase 2 default-on flip is queued, gated on the post-deploy bulk warm completing cleanly.** Phase 3 is intentionally deferred — see [SERVER_DESIGN.md](SERVER_DESIGN.md) and conversation notes; the user wants Phase 2 to soak for ~2 weeks before deleting the direct code path, and the deletion plan now includes preserving a snapshot in `legacy/` as a fallback.
+Plan for migrating [wk-vocab-review-ik.user.js](wk-vocab-review-ik.user.js) (the Tampermonkey userscript) to call [wk-vocab-api/](wk-vocab-api/) (the server we just built) instead of hitting ImmersionKit / DuckDuckGo / Google TTS directly. **Status (2026-05-25): Phase 1 + Phase 2 both shipped. Userscript v1.1.1 default-on; server at `https://api.wkenhanced.dev` with the four deploy-day fixes baked in (Bun `idleTimeout`, fetch `cache: 'no-cache'`, CORS `Access-Control-Expose-Headers: ETag`, weak-ETag tolerance — see DEAD-END WARNINGS in [CLAUDE.md](CLAUDE.md) + [wk-vocab-api/CLAUDE.md](wk-vocab-api/CLAUDE.md)).** Phase 3 is intentionally deferred — see [SERVER_DESIGN.md](SERVER_DESIGN.md) and conversation notes; the user wants Phase 2 to soak for ~2 weeks before deleting the direct code path, and the deletion plan now includes preserving a snapshot in `legacy/` as a fallback.
 
 This is the **biggest planned single change** to the userscript since v0.1 — it deletes roughly half the data-layer code and rebuilds it as a thin client of our API. Worth doing in clear phases with a fallback toggle so we can verify before fully cutting over.
 
@@ -118,10 +118,8 @@ Ship a userscript version where:
 - Server-side structured logging: `vocab.serve` / `vocab.batch` per-request events with a `cacheStatus` enum (`hit` / `not_modified` / `cold_warm` / `nowarm_miss` / `empty` / `error` / `batch`); `warm.word.done` line aggregates per-warm media stats (audio source breakdown, storage-cache hit ratio, DDG counts) so the operator can tell at a glance whether a request hit the cache or did fresh upstream work.
 
 **What's NOT yet done (next steps):**
-- Server deployment per [wk-vocab-api/README.md](wk-vocab-api/README.md) → "Going to production." Required for Phase 2.
-- After deploy: bump `DEFAULTS.apiServerUrl` to the prod URL + add `@connect <prod-domain>` (and consider removing `@connect localhost` for the public release).
-- Phase 2 default-on flip + forum post.
-- Phase 3 cleanup of the direct path (delete IK/DDG/TTS fetch code, JLPT_VOCAB, etc.).
+- Forum post announcing v1.1.1 default-on Phase 2 — maintainer is drafting separately.
+- Phase 3: legacy-snapshot the direct code path (preserve in `legacy/`, slim main userscript to server-only). Deferred at least 2 weeks of Phase 2 soak time. See the Phase 3 section near the bottom of this file.
 
 Test plan for Phase 1:
 1. Run server locally; set `apiServerUrl = http://localhost:3000`; flip toggle on.
@@ -134,14 +132,18 @@ Test plan for Phase 1:
 
 When all green: flip a few trusted users to the API path, gather feedback, watch the server logs.
 
-### Phase 2: Default-on
+### Phase 2: Default-on — IMPLEMENTED 2026-05-25 (shipped as v1.1.1)
 
-Flip `useApiServer: true` by default. Existing users with the setting explicitly toggled keep their preference. New installs get the API path.
+Flipped `useApiServer: true` and `apiServerUrl: 'https://api.wkenhanced.dev'` in `DEFAULTS`, added `// @connect api.wkenhanced.dev`, bumped `@version` + `SCRIPT_VERSION`. Single commit `afb02b2` ("Userscript v1.1.0: API server default-on (Phase 2)"). Existing users who had `useApiServer` explicitly toggled keep their preference; new installs get the API path.
 
-Bump userscript version (e.g. `v1.1.0`). Forum-post announcing the change with:
-- What changed (faster, more reliable, server-side processing unlocks future features).
-- How to opt out if it's broken (toggle off in settings).
-- Where to report issues.
+**The smoke-test on flip day surfaced four bugs that the rc2 opt-in path didn't exercise** — all fixed before declaring Phase 2 done, version bumped to v1.1.1 to capture them. Each one is documented as a DEAD-END WARNING in [CLAUDE.md](CLAUDE.md) or [wk-vocab-api/CLAUDE.md](wk-vocab-api/CLAUDE.md); summarized here for the migration record:
+
+1. **Bun `idleTimeout` reset cold-fill responses** (`9be345c`). Bun's default 10s idle timeout killed responses for words whose lazy-warm took >10s. Server-side warm still completed, but the client got a TCP reset. Fix: `idleTimeout: 60` on the serve export.
+2. **Chrome HTTP cache held stale empty payloads under `max-age=86400`** (`9e1ff1c`). Words hit during the bulk warm got an empty payload, Chrome cached it for 24h, userscript re-served the empty cache copy even after server-side re-warm. Fix: `cache: 'no-cache'` on the three server-bound `fetch()` calls forces conditional revalidation (`If-None-Match` round-trip → cheap 304s on unchanged, fresh 200s on changed).
+3. **CORS hid the `ETag` header from JS** (`bf3e153`). `res.headers.get('ETag')` returned `null` cross-origin even though the server emitted the header — ETag is not CORS-safelisted. Fix: `Access-Control-Expose-Headers: ETag` on the CORS middleware. Without it, no etag stored client-side → no `If-None-Match` sent → no 304s ever.
+4. **Cloudflare weakened strong ETags via `W/` prefix** (`7539a26`). Cloudflare downgrades strong ETags to weak on compressed responses; userscript stored and re-sent `W/"<tag>"`, but the origin's strict-equality comparison missed it. Fix: `normalizeEtag` helper strips an optional leading `W/` before the equality check, matching the weak-comparison semantics that RFC 7232 §2.3.2 prescribes for `If-None-Match`.
+
+Forum post announcing the change has not been drafted yet — maintainer is drafting separately. Until then, the only people on v1.1.1 are users who hard-refresh their Tampermonkey paste.
 
 Watch the server for traffic + error spikes. Stay at Phase 2 for at least 2 weeks of real review sessions before Phase 3.
 
