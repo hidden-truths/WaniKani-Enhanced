@@ -33,6 +33,21 @@ export function publicUrlFor(publicBase: string, key: string): string {
     return `${publicBase}/${key.split('/').map(encodeURIComponent).join('/')}`;
 }
 
+// Cache-Control we want on every served media object. Object keys are
+// content-addressed (each example's MP3/JPG is keyed by its IK exampleId,
+// stable forever; DDG fallbacks are keyed by sentence index in a fixed
+// pool), so the bytes for any given URL never change once written. That
+// makes `immutable` correct: the browser HTTP cache holds for a year
+// without ever revalidating. Saves a round-trip per audio playback /
+// image render after the first one.
+//
+// Used in two places:
+//   - S3Storage.put sets it as object metadata on upload so DO Spaces'
+//     CDN returns it on every response.
+//   - The dev-mode /media/* static route in src/index.ts returns it
+//     directly. Both paths read this same constant so they can't drift.
+export const MEDIA_CACHE_CONTROL = 'public, max-age=31536000, immutable';
+
 class LocalStorage implements Storage {
     constructor(private readonly rootDir: string, private readonly publicBase: string) {}
 
@@ -93,7 +108,17 @@ class S3Storage implements Storage {
         // Solution: use a Full Access Spaces key (single-tenant droplet =
         // marginal risk delta vs Limited Access), keep the inline ACL.
         // The `acl: 'public-read'` param works fine with Full Access.
-        await file.write(body, { type: contentType, acl: 'public-read' });
+        //
+        // cacheControl is stored as S3 object metadata and returned by
+        // the DO Spaces CDN as the Cache-Control response header. The
+        // userscript loads media via plain <audio>/<img> src= so the
+        // browser HTTP cache picks it up automatically — no IndexedDB
+        // layer needed on the server path.
+        await file.write(body, {
+            type: contentType,
+            acl: 'public-read',
+            cacheControl: MEDIA_CACHE_CONTROL,
+        });
         return this.publicUrl(key);
     }
 

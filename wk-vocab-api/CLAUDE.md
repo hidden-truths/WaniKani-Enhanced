@@ -38,6 +38,7 @@ Single scannable reference for every knob that differs between local dev and the
 | `STORAGE_DRIVER` | `local` | `s3` | Validated at boot in [config.ts](src/config.ts) — `s3` requires the four S3_* vars below. |
 | `LOCAL_MEDIA_DIR` | `./dev-data/media` | unused | Served via the `/media/*` static route in `index.ts`. |
 | `MEDIA_PUBLIC_BASE` | `http://localhost:3000/media` | `https://wk-enhanced-api-media.sfo3.cdn.digitaloceanspaces.com` | Goes into payload `audioUrl` / `imageUrl` / `fallbackImages` verbatim. Always no trailing slash (config strips). |
+| Media Cache-Control | `public, max-age=31536000, immutable` set on the `/media/*` route | Same string written as S3 object metadata on upload; DO Spaces CDN returns it as the response header | Single source of truth: `MEDIA_CACHE_CONTROL` const in `services/storage.ts`. Object keys are content-addressed so `immutable` is correct — the bytes for any URL never change after first write. |
 | `DATABASE_FILE` | `./dev-data/wk-vocab.sqlite` | `/var/lib/wk-enhanced-api/wk-enhanced-api.sqlite` | Prod path is under `/var/lib` so it survives `git pull` in `/opt/wk-enhanced-api`. |
 | `S3_*` vars | unused / blank | required (endpoint, region, bucket, full-access key + secret) | See `deploy/env.production.template`. Full-access key, not Limited — see ACL dead-end below. |
 | `S3_FORCE_PATH_STYLE` | n/a | `true` | Mandatory for DO Spaces + `Bun.S3Client`; see dead-end below. |

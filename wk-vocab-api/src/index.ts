@@ -20,6 +20,7 @@ import { healthRouter } from './routes/health.ts';
 import { vocabRouter } from './routes/vocab.ts';
 import { indexMetaRouter } from './routes/indexMeta.ts';
 import { adminRouter } from './routes/admin.ts';
+import { MEDIA_CACHE_CONTROL } from './services/storage.ts';
 
 const app = new OpenAPIHono({ defaultHook: zodHook });
 
@@ -109,8 +110,20 @@ if (config.storage.driver === 'local') {
         }
         const file = Bun.file(target);
         if (!(await file.exists())) return c.text('not found', 404);
-        c.header('Cache-Control', 'public, max-age=31536000, immutable');
-        return new Response(file);
+        // Construct Response directly with explicit headers. We can't use
+        // c.header() here because returning a fresh Response object
+        // bypasses Hono's response pipeline — c.header() calls would be
+        // silently dropped, including the CORS middleware's headers
+        // (verified empirically: pre-fix, /media/* returned no
+        // Access-Control-* and no Cache-Control). Set both explicitly.
+        return new Response(file, {
+            headers: {
+                'Content-Type': file.type || 'application/octet-stream',
+                'Cache-Control': MEDIA_CACHE_CONTROL,
+                'Access-Control-Allow-Origin': '*',
+                'Access-Control-Allow-Methods': 'GET, OPTIONS',
+            },
+        });
     });
     log.info('media.static_route_enabled', { root });
 }
