@@ -2870,9 +2870,10 @@
         return [];
     }
 
-    // We no longer build IK media URLs — the legacy bucket is offline (Aug 2025) and the
-    // V2 API gives us filenames that no longer resolve. Audio is synthesized via the
-    // Web Speech API; the source title is shown for attribution.
+    // Returns the encoded title for an IK example. `title` is the modern
+    // field; `deck_name` is the legacy alias still emitted by some
+    // versions of the IK API. Used as a lookup key for indexMeta and as
+    // input to ikTitleToFolder / prettifyTitle.
     function getTitle(e) {
         return (e && (e.title || e.deck_name)) || '';
     }
