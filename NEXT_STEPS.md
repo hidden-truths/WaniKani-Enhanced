@@ -4,13 +4,13 @@ Living document for the WKEnhanced project. Use this as the entry point for any 
 
 Owns the *what-to-do-next* state of the project. Architecture, design rationale, and dead-end warnings live in [CLAUDE.md](CLAUDE.md), [wk-enhanced-api/CLAUDE.md](wk-enhanced-api/CLAUDE.md), [SERVER_DESIGN.md](SERVER_DESIGN.md), and [CLIENT_MIGRATION.md](CLIENT_MIGRATION.md). The feature backlog (everything that isn't time-critical) is in [NEW_FEATURES.md](NEW_FEATURES.md).
 
-**Last updated**: 2026-05-25, evening — Phase 3 shipped (rename + slim main userscript to server-only + legacy/ snapshot).
+**Last updated**: 2026-05-25, late evening — Phase 3 shipped (rename + slim main userscript to server-only + legacy/ snapshot) and smoke-tested in the browser. Follow-up commit `874f1f3` scrubbed v1.x leftovers from comments + dropped a vestigial `_blobUrl` revocation path. Branch is 6 commits ahead of `origin/main`; nothing has been pushed.
 
 ---
 
 ## Current state of the world
 
-- **Userscript**: [wkenhanced.user.js](wkenhanced.user.js) **v2.0.0**. Server-only — every vocab lookup goes through `https://api.wkenhanced.dev`. The IK / DDG / Google TTS direct path is gone from this file; the v1.1.1 snapshot lives at [legacy/wk-vocab-review-ik-direct.user.js](legacy/wk-vocab-review-ik-direct.user.js) as a frozen fallback for "API server is down for an extended period." Source tree only — no build pipeline.
+- **Userscript**: [wkenhanced.user.js](wkenhanced.user.js) **v2.0.0**. Server-only — every vocab lookup goes through `https://api.wkenhanced.dev`. The IK / DDG / Google TTS direct path is gone from this file; the v1.1.1 snapshot lives at [legacy/wk-vocab-review-ik-direct.user.js](legacy/wk-vocab-review-ik-direct.user.js) as a frozen fallback for "API server is down for an extended period." Source tree only — no build pipeline. **Manually verified working** by the maintainer pasting into Tampermonkey post-ship; cards render, audio plays, picker + refresh + image cycle all behave correctly.
 - **Server**: [wk-enhanced-api/](wk-enhanced-api/) in production at `https://api.wkenhanced.dev` (DO droplet in SFO3, Spaces bucket, Cloudflare Tunnel). Renamed in source from `wk-vocab-api/` on 2026-05-25 to match the deployment. Nine cumulative deploy-period fixes are in the codebase (five on initial deploy day, four on Phase 2 smoke-test day — see [CLIENT_MIGRATION.md](CLIENT_MIGRATION.md) Phase 2 section + DEAD-END WARNINGS in [wk-enhanced-api/CLAUDE.md](wk-enhanced-api/CLAUDE.md)).
 - **Bulk warm coverage (post-Phase-2-flip)**: ~4859 / ~6500 words populated (~75%). 552 of those are legitimately empty (obscure WK vocab IK doesn't index). ~1641 words have no row at all — the warm's IK calls 429ed without retry. **Not a Phase 2 blocker**: the idleTimeout fix means cold-fill on a missing word now succeeds (~15-30s) and populates the row organically as users encounter them. Fixing this properly requires implementing 429-with-backoff in `services/ik.ts:fetchJson` (see backlog item).
 
