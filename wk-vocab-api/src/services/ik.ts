@@ -44,14 +44,28 @@ export interface IkIndexMetaEntry {
 }
 
 // Polite rate limit. IK is free + community-supported; don't hammer.
-// 50ms = ~20 req/sec ceiling. The original 500ms (~2 req/sec) made cold
-// lazy-fill feel sluggish in the userscript (16 IK calls per word × 500ms
-// floor = ~8s of pure throttle wait). Dropped to 50ms so interactive
-// lazy-fills come back in ~1s instead of 5–6s; bulk warm is still bounded
-// by IK's actual response time and our 4-wide per-word concurrency.
-// Revisit upward if IK ever pushes back (429s, IP blocks).
+//
+// History:
+//   - v0.x: 500ms (~2 req/sec). Safe but made cold lazy-fill feel sluggish
+//     in the userscript (~16 IK calls per word × 500ms floor = ~8s of pure
+//     throttle wait).
+//   - rc2 (2026-05): dropped to 50ms (~20 req/sec) to fix lazy-fill latency.
+//   - 2026-05-25, first production bulk warm: IK began returning 429 Too
+//     Many Requests across the board after ~5 minutes of sustained 50ms-
+//     gated traffic. The whole 6500-word warm completed in 19 minutes with
+//     ~100% empty payloads (every ikSearch failed). Even single-word lookups
+//     from a *different* curl on the same droplet got 429s for a while.
+//   - Current: 500ms again. The DDG-deferred-to-background change (rc2) and
+//     the per-word 4-wide media concurrency mean cold lazy-fill is still
+//     ~2–4s at 500ms, which is fine. Bulk warm becomes ~1h+ (the README's
+//     original projection) but the data isn't garbage.
+//
+// If we ever need to push back below 500ms, do it carefully: monitor
+// `warm.ik_search_failed` counts during a small-scope warm before going
+// full-corpus, and add proper 429-with-exponential-backoff handling in
+// fetchJson before lowering the floor.
 let lastIkCallAt = 0;
-const MIN_GAP_MS = 50;
+const MIN_GAP_MS = 500;
 
 async function rateLimit() {
     const gap = Date.now() - lastIkCallAt;
