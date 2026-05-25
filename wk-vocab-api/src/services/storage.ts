@@ -24,6 +24,15 @@ export interface Storage {
     publicUrl(key: string): string;
 }
 
+// Shared URL builder for both drivers. Hoisted to a free function so the two
+// drivers can't drift in URL-encoding behavior. publicBase is expected to
+// have no trailing slash (config.ts strips it). Each path segment is
+// percent-encoded individually so slashes between segments stay literal
+// while Japanese / spaces / parens in a single segment get encoded.
+export function publicUrlFor(publicBase: string, key: string): string {
+    return `${publicBase}/${key.split('/').map(encodeURIComponent).join('/')}`;
+}
+
 class LocalStorage implements Storage {
     constructor(private readonly rootDir: string, private readonly publicBase: string) {}
 
@@ -44,7 +53,7 @@ class LocalStorage implements Storage {
     }
 
     publicUrl(key: string): string {
-        return `${this.publicBase}/${key.split('/').map(encodeURIComponent).join('/')}`;
+        return publicUrlFor(this.publicBase, key);
     }
 }
 
@@ -98,7 +107,7 @@ class S3Storage implements Storage {
     }
 
     publicUrl(key: string): string {
-        return `${this.publicBase}/${key.split('/').map(encodeURIComponent).join('/')}`;
+        return publicUrlFor(this.publicBase, key);
     }
 }
 
