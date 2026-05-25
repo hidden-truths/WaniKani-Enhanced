@@ -3,8 +3,11 @@
 // "Kanon  2006-" → "kanon__2006_"). The canonical reverse map comes from
 // /index_meta; this module is the fallback heuristic for misses.
 //
-// Behavior matches wk-vocab-review-ik.user.js: ikTitleToFolder + decodeIkTitle
-// + prettifyTitle. Keep this in sync if the userscript ever diverges.
+// This is the only home for IK title decoding now — the v1.x userscript had
+// a parallel implementation; the v2 userscript trusts the server's resolved
+// title and no longer carries this logic. The frozen v1.1.1-legacy snapshot
+// at legacy/wk-vocab-review-ik-direct.user.js still has its own copy if
+// you need a reference.
 
 function decodeIkTitle(title: string): string[] {
     let s = String(title);
