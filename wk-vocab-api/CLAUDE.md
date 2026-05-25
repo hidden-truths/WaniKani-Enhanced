@@ -28,6 +28,28 @@ When you change code:
 3. **Add a test** for any new pure function. Service-layer / route changes can defer testing until they stabilize, but pure logic (URL builders, JLPT scoring, title decoding) should always have tests — these are the things future refactors break silently.
 4. **One commit per logical change.** Same convention as the userscript repo. Don't batch unrelated work.
 
+## Dev ↔ prod parity
+
+Single scannable reference for every knob that differs between local dev and the deployed droplet. Update this table whenever you add a config var or a service that varies by environment — keeps drift bugs visible at review time instead of letting them ship.
+
+| Surface | Dev (`STORAGE_DRIVER=local`) | Prod (`STORAGE_DRIVER=s3`) | Notes |
+|---|---|---|---|
+| Bind host / port | `http://localhost:3000` | `http://127.0.0.1:3000` behind Cloudflare Tunnel → `https://api.wkenhanced.dev` | Bun listens locally either way; prod has cloudflared between the world and us. |
+| `STORAGE_DRIVER` | `local` | `s3` | Validated at boot in [config.ts](src/config.ts) — `s3` requires the four S3_* vars below. |
+| `LOCAL_MEDIA_DIR` | `./dev-data/media` | unused | Served via the `/media/*` static route in `index.ts`. |
+| `MEDIA_PUBLIC_BASE` | `http://localhost:3000/media` | `https://wk-enhanced-api-media.sfo3.cdn.digitaloceanspaces.com` | Goes into payload `audioUrl` / `imageUrl` / `fallbackImages` verbatim. Always no trailing slash (config strips). |
+| `DATABASE_FILE` | `./dev-data/wk-vocab.sqlite` | `/var/lib/wk-enhanced-api/wk-enhanced-api.sqlite` | Prod path is under `/var/lib` so it survives `git pull` in `/opt/wk-enhanced-api`. |
+| `S3_*` vars | unused / blank | required (endpoint, region, bucket, full-access key + secret) | See `deploy/env.production.template`. Full-access key, not Limited — see ACL dead-end below. |
+| `S3_FORCE_PATH_STYLE` | n/a | `true` | Mandatory for DO Spaces + `Bun.S3Client`; see dead-end below. |
+| `ADMIN_TOKEN` | `dev-admin-token` | `openssl rand -hex 32` value | Used by `/v1/admin/*` bearer auth. |
+| `WK_API_TOKEN` | usually blank (skip `scope:all` warms) | required for monthly bulk warm | Personal token from your WK settings. |
+| Env file location | `wk-vocab-api/.env` | `/etc/wk-enhanced-api/env` (chmod 600 root) | Prod uses systemd `EnvironmentFile=`; Bun's `.env` auto-load is for dev only. |
+| Process supervisor | `bun dev` (your terminal) | `systemctl ... wk-enhanced-api.service` | Service unit lives in `deploy/`. |
+| Userscript base URL | `http://localhost:3000` (set in WKOF settings) | `https://api.wkenhanced.dev` (DEFAULTS.apiServerUrl + @connect) | Single source of truth: `PROD_API_BASE` + `DEV_API_BASE` constants at the top of the userscript IIFE. |
+| Bun binary location | Wherever you installed it | `/usr/local/bin/bun` | systemd's `ProtectHome=true` blocks `/root/.bun/bin/bun`; see dead-end. |
+
+If you're adding something that doesn't fit a row above — a new external service, a new auth token, a new on-disk path — the test for "does it belong here" is: *would forgetting to update the prod side cause a runtime failure?* If yes, add a row.
+
 ## Architecture
 
 ```
@@ -50,7 +72,7 @@ src/
 │   ├── indexMeta.ts
 │   └── admin.ts              # POST /v1/admin/warm + GET /v1/admin/jobs (bearer-gated)
 ├── services/
-│   ├── ik.ts                 # /search, /index_meta, /download_media — built-in 50ms rate limit
+│   ├── ik.ts                 # /search, /index_meta, /download_media — built-in 500ms rate limit
 │   ├── ddg.ts                # two-step vqd HTML scrape → i.js JSON
 │   ├── tts.ts                # Google Translate TTS (client=gtx, Referer spoof)
 │   ├── wk.ts                 # WK v2 API for vocab corpus enumeration; needs WK_API_TOKEN
