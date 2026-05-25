@@ -136,11 +136,26 @@ export async function warmWord(word: string, options?: { force?: boolean }): Pro
     const storage = getStorage();
 
     // 1. Fetch IK examples.
-    let rawExamples: IkExample[] = [];
+    //
+    // Critical: re-throw on failure rather than swallowing. The old behavior
+    // (set rawExamples = [] and continue) meant we'd upsert an empty payload
+    // with a fresh fetched_at — and the next warm would see it as `fresh`
+    // and skip. During the first production bulk warm, IK's 429 storm caused
+    // 100% of rows to be poisoned this way. Throwing here means the outer
+    // caller (warmAll's try/catch or warmSingle's try/catch) logs +
+    // increments `failed` without persisting anything, so the row stays
+    // missing and the next warm retries cleanly.
+    //
+    // Distinction worth preserving: an empty *successful* IK response
+    // (`ikSearch` returns []) is still a legitimate "no examples for this
+    // word" answer and DOES get upserted as an empty payload — that's
+    // factual, not a failure. Only thrown exceptions skip the upsert.
+    let rawExamples: IkExample[];
     try {
         rawExamples = await ikSearch(word);
     } catch (err) {
         log.warn('warm.ik_search_failed', { word, err: (err as Error).message });
+        throw err;
     }
     // Cap. Prefer those with audio (sound field) — they get the IK voice-actor
     // recording, which is much better than TTS. Within "has-audio", IK already
