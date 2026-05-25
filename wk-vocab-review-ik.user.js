@@ -106,6 +106,17 @@
     // Batch endpoint max body size (mirrors server's BatchRequestSchema cap).
     // Prefetch chunks larger batches into multiple requests.
     const SERVER_BATCH_MAX = 50;
+    // Single-word GET timeout. Has to absorb a server-side cold lazy-warm
+    // (IK call + media downloads behind a 500ms rate-limit gate); the worst
+    // observed cold case is ~25s, so 30s is "well-padded ceiling, abort
+    // anything beyond." On abort the existing .catch falls back to the
+    // stale cached payload (if any) or empty-card render.
+    const SERVER_GET_TIMEOUT_MS = 30000;
+    // Batch endpoint never warms — server returns whatever's cached in
+    // sub-second time. A long wait here always means the server or
+    // cloudflared is hung; abort fast so prefetch doesn't sit on a dead
+    // socket while we render the current card.
+    const SERVER_BATCH_TIMEOUT_MS = 10000;
 
     const CSS_PREFIX = 'wk-ik';
     const CARD_CLASS = `${CSS_PREFIX}-card`;
@@ -2309,7 +2320,10 @@
         if (cachedEntryHint && cachedEntryHint.etag) {
             headers['If-None-Match'] = cachedEntryHint.etag;
         }
-        return fetch(url, { headers, credentials: 'omit', mode: 'cors' })
+        const ctrl = new AbortController();
+        const timer = setTimeout(() => ctrl.abort(), SERVER_GET_TIMEOUT_MS);
+        return fetch(url, { headers, credentials: 'omit', mode: 'cors', signal: ctrl.signal })
+            .finally(() => clearTimeout(timer))
             .then((res) => {
                 if (res.status === 304) {
                     // ETag matched — refresh the savedAt so TTL math sees this
@@ -2367,13 +2381,17 @@
             chunks.push(words.slice(i, i + SERVER_BATCH_MAX));
         }
         return Promise.all(chunks.map((chunk) => {
+            const ctrl = new AbortController();
+            const timer = setTimeout(() => ctrl.abort(), SERVER_BATCH_TIMEOUT_MS);
             return fetch(`${base}/v1/vocab/batch`, {
                 method: 'POST',
                 headers: { 'Content-Type': 'application/json' },
                 credentials: 'omit',
                 mode: 'cors',
+                signal: ctrl.signal,
                 body: JSON.stringify({ words: chunk }),
             })
+                .finally(() => clearTimeout(timer))
                 .then((res) => {
                     if (!res.ok) {
                         console.warn(`[${SCRIPT_ID}] server: batch HTTP ${res.status}`);
