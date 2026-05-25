@@ -611,7 +611,7 @@
                             label: 'Prefer examples from spoken media (anime/drama/games)',
                             default: DEFAULTS.requireAudio,
                             hover_tip:
-                                'When on, only use IK examples that came with original audio (i.e. sourced from anime/drama/games rather than text-only literature). The audio you hear is Google TTS regardless.',
+                                'When on, prefer IK examples that came with original voice-actor audio (anime/drama/games) over text-only literature. Voice-actor audio is the primary source — you only hear Google TTS when IK has no recording for that line or the audio fetch fails.',
                         },
                         jlptCeiling: {
                             type: 'dropdown',
