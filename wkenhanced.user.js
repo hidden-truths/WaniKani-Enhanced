@@ -464,7 +464,7 @@
                             label: 'Show image for the vocab word',
                             default: DEFAULTS.showImage,
                             hover_tip:
-                                'When on, display an illustration of the vocab word after you answer the meaning question. Image pool comes from the API server (IK screenshot when available, plus DuckDuckGo fallback illustrations) — cycle through it with the refresh button.',
+                                'When on, display an illustration of the vocab word after you answer the meaning question. The image pool comes from the API server — a scene screenshot when one is available for that sentence, plus DuckDuckGo illustrations as fallbacks. Cycle through them with the refresh button.',
                         },
                         showFurigana: {
                             type: 'checkbox',
@@ -492,7 +492,7 @@
                                 '1.25': '1.25x',
                             },
                             hover_tip:
-                                'Playback speed for the example sentence audio. Native voice-actor audio (anime/drama) is often too fast for intermediate listening — try 0.75x to parse morphology, then rebuild to 1x. Affects all audio sources (IK proxy, Google TTS fallback); takes effect on the next card render.',
+                                'Playback speed for the example sentence audio. Native voice-actor audio (anime/drama) is often too fast for intermediate listening — try 0.75x to parse morphology, then rebuild to 1x. Affects all audio sources; takes effect on the next card render.',
                         },
                         apiServer: {
                             type: 'section',
@@ -900,9 +900,10 @@
 }
 
 /* Sentence picker overlay opened by right-click / long-press on the ⟳ button.
-   Modal-style backdrop with a centered panel listing all IK candidates for
-   the current word. Faded rows are above the JLPT ceiling but still clickable
-   — picking one flips the per-card bypass flag so they stay reachable via ⟳. */
+   Modal-style backdrop with a centered panel listing all candidate sentences
+   the server returned for the current word. Faded rows are above the JLPT
+   ceiling but still clickable — picking one flips the per-card bypass flag so
+   they stay reachable via ⟳. */
 .${CSS_PREFIX}-picker {
     position: fixed;
     inset: 0;
@@ -1138,10 +1139,10 @@
     padding: 0.5em 1em;
     opacity: 0.85;
 }
-/* Loading placeholder shown between subject change and IK fetch completion.
-   Tucked into the bottom-left like the empty-card message so it doesn't
-   compete with the centered vocab character. Subtle white-on-purple spinner;
-   the goal is "something is happening" not "look at me". */
+/* Loading placeholder shown between subject change and server-fetch
+   completion. Tucked into the bottom-left like the empty-card message so it
+   doesn't compete with the centered vocab character. Subtle white-on-purple
+   spinner; the goal is "something is happening" not "look at me". */
 .${CARD_CLASS}.${CSS_PREFIX}-loading {
     justify-content: flex-start;
     align-items: flex-end;
@@ -1320,7 +1321,7 @@
             // returns and renderCard re-applies via attachCardToDom, producing
             // a visible collapse → expand on every new vocab.
             applyHostStyling();
-            // Loading placeholder shown for the duration of the IK fetch.
+            // Loading placeholder shown for the duration of the server fetch.
             // Replaced in place by renderCard / renderEmptyCard when the
             // promise resolves. Safe to render even on cache hits — getExamples
             // resolves via microtask before the next paint, so the spinner
@@ -1384,8 +1385,11 @@
 
     // ---------- Upcoming-subject prefetch ----------
     //
-    // Warm the IK examples cache for subjects WK is about to show so the next
-    // card-render skips the IK fetch entirely (no spinner, no fetch latency).
+    // Warm the local payload cache for subjects WK is about to show, so the
+    // next card render skips the server round-trip (no spinner, no fetch
+    // latency). One POST /v1/vocab/batch covers up to SERVER_BATCH_MAX
+    // upcoming words; batch-missing words fall back to individual GETs
+    // (which lazy-warm server-side).
     //
     // WK doesn't publish an "upcoming items" API surface, so we read it out of
     // the live quiz-queue Stimulus controller's DOM. WK's Stimulus controllers
@@ -1397,10 +1401,6 @@
     // we recognize, we log once and skip — no harm done, just no prefetch
     // benefit. Call debugWkEnhanced() to dump the queue DOM if you want to
     // investigate what WK is actually exposing.
-    //
-    // We only prefetch IK examples (not audio/image) per NEW_FEATURES.md
-    // guidance — bandwidth cost would be high relative to the marginal win
-    // (audio fetch already starts at render time of the upcoming card).
     function getUpcomingCharacters(maxCount) {
         const found = [];
         const tryAdd = (str) => {
@@ -1845,10 +1845,10 @@
     // Refresh-button handlers: advance one index at a time and re-render the card.
     // Both indices wrap on overflow via modulo inside pickExample/loadImageAt.
     //
-    // Sentence refresh ALSO resets imageIdx → the new sentence comes with its own
-    // IK screenshot, and that should become the default. If the user wants a
-    // different image they can press the image-refresh button (which cycles
-    // through the server-provided fallback pool).
+    // Sentence refresh ALSO resets imageIdx → the new sentence comes with its
+    // own source screenshot, and that should become the default. If the user
+    // wants a different image they can press the image-refresh button (which
+    // cycles through the server-provided fallback pool).
     function refreshSentence() {
         state.sentenceIdx = (state.sentenceIdx || 0) + 1;
         state.imageIdx = 0;
@@ -2467,35 +2467,31 @@
         // fallback if the CDN URL fails to load.
         if (example.sentence) {
             const audio = document.createElement('audio');
-            // preload='auto' so once the blob URL is attached the audio element
-            // decodes immediately — eliminates the ~tens-of-ms decode delay on
-            // play() when the user answers quickly. The actual network fetch
-            // for IK / TTS audio is already kicked off below (via
-            // resolveAudioBlobUrl), so this only affects the decode step.
+            // preload='auto' so the audio element starts decoding the server-
+            // resolved CDN URL immediately — eliminates the ~tens-of-ms decode
+            // delay on play() when the user answers quickly.
             audio.preload = 'auto';
             // User-configurable playback speed (0.5x — 1.25x). Set on the
             // element before src so the rate is already in place by the time
-            // the blob URL attaches; the rate persists across .play() calls
-            // and isn't reset on currentTime=0 (verified in HTMLMediaElement
+            // the URL attaches; the rate persists across .play() calls and
+            // isn't reset on currentTime=0 (verified in HTMLMediaElement
             // spec). Re-reading settings() on every render means changing the
             // setting takes effect on the next card.
             audio.playbackRate = parseFloat(settings().playbackRate) || 1.0;
             audio.style.display = 'none';
             card.appendChild(audio);
 
-            // Kick off the audio fetch right away. Tries IK proxy first (real human
-            // audio when available), falls back to Google TTS, with Web Speech as the
-            // last-resort fallback if both blob fetches fail. The blob URL will be
-            // ready by the time the user clicks Play (or revealAll auto-plays).
+            // Resolve the server-provided audio URL. Always synchronous —
+            // resolveAudioBlobUrl just forwards example.ikAudioUrl or rejects
+            // when the server's payload had none for this example. Web Speech
+            // is the last-resort fallback if the CDN URL fails to load.
             const audioPromise = resolveAudioBlobUrl(example)
-                .then((blobUrl) => {
-                    audio.src = blobUrl;
-                    // Revoke the blob URL when the card is replaced (in removeCard).
-                    card._blobUrl = blobUrl;
+                .then((url) => {
+                    audio.src = url;
                     return true;
                 })
                 .catch((err) => {
-                    console.warn(`[${SCRIPT_ID}] all blob audio sources failed, will use Web Speech:`, err);
+                    console.warn(`[${SCRIPT_ID}] audio URL unavailable, will use Web Speech:`, err);
                     return false;
                 });
 
@@ -2688,10 +2684,11 @@
             rightPanel.appendChild(fig);
             card.appendChild(rightPanel);
 
-            // Auto-fallback: if the resolved URL itself 404s/empties out (typical
-            // failure mode for the IK proxy when a sentence has no screenshot
-            // server-side), silently advance through the pool. Bounded by attempts
-            // so we don't spin forever when every URL is broken.
+            // Auto-fallback: if the resolved CDN URL itself 404s/empties out
+            // (typically when the server's warm couldn't fetch a screenshot
+            // for that example — sentence had no upstream image), silently
+            // advance through the pool. Bounded by attempts so we don't spin
+            // forever when every URL is broken.
             const tryLoadAt = (idx, attemptsLeft) => {
                 if (attemptsLeft <= 0) { fig.remove(); return; }
                 loadImageAt(
@@ -2904,10 +2901,11 @@
 
     // ---------- Sentence picker ----------
 
-    // Open the picker overlay listing all IK candidates for the current word.
-    // Triggered by right-click or long-press on the ⟳ sentence button. Cache
-    // is already hot by the time the user can interact (renderCard requires
-    // cached examples), so getExamples here is a synchronous-feeling read.
+    // Open the picker overlay listing every candidate sentence the server
+    // returned for the current word. Triggered by right-click or long-press
+    // on the ⟳ sentence button. The local payload cache is already hot by
+    // the time the user can interact (renderCard requires cached examples),
+    // so getExamples here is a synchronous-feeling read.
     function showSentencePicker() {
         const word = state.currentCharacters;
         if (!word) return;
@@ -2927,7 +2925,8 @@
 
     // Sort options offered by the picker dropdown. `cmp` is null for "leave
     // in pool order" — the picker calls buildPool with skipSort: true, so
-    // "default" means IK's original order, not the buildPool compound sort.
+    // "default" means the server's incoming order, not the buildPool compound
+    // sort.
     // jlptSortKey treats 0 (unknown) as "infinity hard" so easy-first sorts
     // don't pull unknown rows to the top — those go to the bottom instead.
     //
@@ -2987,9 +2986,9 @@
         const prefs = settings();
         const ceiling = jlptCeilingNumber(prefs.jlptCeiling);
 
-        // Full unfiltered pool: every candidate IK has, with audio filter
-        // applied but no JLPT filter and no buildPool sort (the picker
-        // controls its own sort below). Above-ceiling rows still render here
+        // Full unfiltered pool: every candidate the server returned, with
+        // audio filter applied but no JLPT filter and no buildPool sort (the
+        // picker controls its own sort below). Above-ceiling rows still render here
         // — they're faded but clickable.
         const fullPool = buildPool(raw, prefs, { applyCeiling: false, skipSort: true });
         // Active pool reflects what the card is currently rendering (bypass
@@ -3236,8 +3235,8 @@
         const nextPool = buildPool(raw, prefs, { applyCeiling: !exceedsCeiling });
         const newIdx = nextPool.indexOf(entry);
         state.sentenceIdx = Math.max(0, newIdx);
-        // New sentence → reset image cycle so its IK screenshot becomes the
-        // default (same rule as the ⟳ refresh button).
+        // New sentence → reset image cycle so its source screenshot becomes
+        // the default (same rule as the ⟳ refresh button).
         state.imageIdx = 0;
         persistCurrentSelection();
         closeSentencePicker();
@@ -3288,10 +3287,11 @@
         document.body.appendChild(modal);
     }
 
-    // Placeholder card shown between subject change and IK fetch completion.
-    // Replaced in place by renderCard / renderEmptyCard once getExamples
-    // resolves — both call removeCard at the top, so this is just a "something
-    // is loading" hint that fills the otherwise-empty card area for ~100-500ms.
+    // Placeholder card shown between subject change and server-fetch
+    // completion. Replaced in place by renderCard / renderEmptyCard once
+    // getExamples resolves — both call removeCard at the top, so this is just
+    // a "something is loading" hint that fills the otherwise-empty card area
+    // for ~100-500ms.
     function renderLoadingCard() {
         removeCard();
         const card = document.createElement('aside');
@@ -3321,7 +3321,7 @@
     // Apply / clear the host styling (min-height + position:relative + character
     // centering) to .character-header. These are decoupled from card lifecycle:
     // we call applyHostStyling() the moment we identify a vocab subject (BEFORE
-    // the IK fetch completes) so the header doesn't visibly collapse and
+    // the server fetch completes) so the header doesn't visibly collapse and
     // re-expand on every new word. clearHostStyling() runs on non-vocab subjects
     // and on teardown. Idempotent — safe to call repeatedly.
     function applyHostStyling() {
@@ -3500,24 +3500,15 @@
             clearTimeout(state.emptyTimer);
             state.emptyTimer = null;
         }
-        if (state.cardEl) {
-            // Free any blob URL we allocated for direct-path audio (IK proxy
-            // or Google TTS). Server-path audio uses real CDN URLs, not
-            // blob URLs — revokeObjectURL on a non-blob URL is a no-op, and
-            // the try/catch covers any browser that disagrees.
-            if (state.cardEl._blobUrl) {
-                try { URL.revokeObjectURL(state.cardEl._blobUrl); } catch (_) {}
-            }
-            if (state.cardEl.parentNode) {
-                state.cardEl.parentNode.removeChild(state.cardEl);
-            }
+        if (state.cardEl && state.cardEl.parentNode) {
+            state.cardEl.parentNode.removeChild(state.cardEl);
         }
         state.cardEl = null;
         // NOTE: we deliberately do NOT clear host styling here. Host lifecycle
         // is governed by subject type (vocab vs not) in handleDomChange — see
         // applyHostStyling/clearHostStyling. Keeping the host expanded across
         // vocab-to-vocab transitions avoids the visible header collapse/expand
-        // during the IK fetch window.
+        // during the server-fetch window.
     }
 
     // ---------- Utilities ----------
