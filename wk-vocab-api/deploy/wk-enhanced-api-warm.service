@@ -2,21 +2,21 @@
 # against the local server, which returns 202 immediately and runs the
 # actual warm in the background.
 #
-# Install at: /etc/systemd/system/wk-vocab-api-warm.service
-# Paired with: wk-vocab-api-warm.timer (the schedule).
-# Manual run:  systemctl start wk-vocab-api-warm
+# Install at: /etc/systemd/system/wk-enhanced-api-warm.service
+# Paired with: wk-enhanced-api-warm.timer (the schedule).
+# Manual run:  systemctl start wk-enhanced-api-warm
 #
 # Reads ADMIN_TOKEN from the same env file as the main service.
 
 [Unit]
-Description=Monthly bulk warm of wk-vocab-api against ImmersionKit
+Description=Monthly bulk warm of wk-enhanced-api against ImmersionKit
 Documentation=https://github.com/<your-user-or-org>/WaniKani/blob/main/wk-vocab-api/README.md
-Requires=wk-vocab-api.service
-After=wk-vocab-api.service
+Requires=wk-enhanced-api.service
+After=wk-enhanced-api.service
 
 [Service]
 Type=oneshot
-EnvironmentFile=/etc/wk-vocab-api/env
+EnvironmentFile=/etc/wk-enhanced-api/env
 
 # -f: fail on HTTP >= 400 (treats e.g. expired ADMIN_TOKEN as a unit failure
 #     so we get an alert via journalctl/`systemctl list-units --failed`).

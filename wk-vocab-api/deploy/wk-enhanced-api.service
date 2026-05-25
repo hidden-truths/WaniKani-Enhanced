@@ -1,31 +1,35 @@
-# systemd unit for wk-vocab-api.
+# systemd unit for the wk-enhanced-api deployment.
 #
-# Install at: /etc/systemd/system/wk-vocab-api.service
-# Then:       systemctl daemon-reload && systemctl enable --now wk-vocab-api
-# Watch:      journalctl -fu wk-vocab-api
+# Install at: /etc/systemd/system/wk-enhanced-api.service
+# Then:       systemctl daemon-reload && systemctl enable --now wk-enhanced-api
+# Watch:      journalctl -fu wk-enhanced-api
 #
-# Runs as a dedicated unprivileged `wkvocab` user. Create with:
-#   useradd --system --no-create-home --shell /usr/sbin/nologin wkvocab
-#   install -d -o wkvocab -g wkvocab /var/lib/wk-vocab-api
-#   chown -R wkvocab:wkvocab /opt/wk-vocab-api
+# Runs as a dedicated unprivileged `wkenhanced` user. Create with:
+#   useradd --system --no-create-home --shell /usr/sbin/nologin wkenhanced
+#   install -d -o wkenhanced -g wkenhanced /var/lib/wk-enhanced-api
+#   chown -R wkenhanced:wkenhanced /opt/wk-enhanced-api
 #
 # The unit invokes `bun run start` from package.json (which runs
 # `bun run src/index.ts`). Going through the script rather than calling the
 # entrypoint directly means an entrypoint rename in the future doesn't break
 # the unit.
+#
+# Note: this serves the source tree at wk-vocab-api/ inside the cloned repo
+# (the code wasn't renamed when the deployment was). WorkingDirectory points
+# at /opt/wk-enhanced-api/wk-vocab-api accordingly.
 
 [Unit]
-Description=wk-vocab-api — backing API for the WK Vocab Review ImmersionKit userscript
+Description=wk-enhanced-api — backing API for the WK Vocab Review ImmersionKit userscript
 Documentation=https://github.com/<your-user-or-org>/WaniKani/blob/main/wk-vocab-api/README.md
 After=network-online.target
 Wants=network-online.target
 
 [Service]
 Type=simple
-User=wkvocab
-Group=wkvocab
-WorkingDirectory=/opt/wk-vocab-api/wk-vocab-api
-EnvironmentFile=/etc/wk-vocab-api/env
+User=wkenhanced
+Group=wkenhanced
+WorkingDirectory=/opt/wk-enhanced-api/wk-vocab-api
+EnvironmentFile=/etc/wk-enhanced-api/env
 
 # /root/.bun/bin/bun is the install location when you run the official
 # installer as root. If you installed Bun as a non-root user, adjust to
@@ -36,18 +40,18 @@ Restart=always
 RestartSec=5
 
 # Logging: journald captures stdout/stderr; structured JSON lines stay
-# greppable via `journalctl -fu wk-vocab-api`.
+# greppable via `journalctl -fu wk-enhanced-api`.
 StandardOutput=journal
 StandardError=journal
 
 # Hardening: the service only needs outbound HTTPS, the SQLite file under
-# /var/lib/wk-vocab-api, and read access to /opt/wk-vocab-api. Lock down
-# everything else.
+# /var/lib/wk-enhanced-api, and read access to /opt/wk-enhanced-api. Lock
+# down everything else.
 NoNewPrivileges=true
 PrivateTmp=true
 ProtectSystem=strict
 ProtectHome=true
-ReadWritePaths=/var/lib/wk-vocab-api
+ReadWritePaths=/var/lib/wk-enhanced-api
 ProtectKernelTunables=true
 ProtectKernelModules=true
 ProtectControlGroups=true
