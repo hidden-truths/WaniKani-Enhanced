@@ -180,6 +180,40 @@ See also [CLAUDE.md](CLAUDE.md) for architecture notes and dead-ends already exp
 
 These are ideas for the [wk-vocab-api](wk-vocab-api/) server. Most exist *because* there's a server now — they're things the userscript can't do well or at all on its own (heavy preprocessing, large datasets, cross-user pooling of data fetches). See [wk-vocab-api/CLAUDE.md](wk-vocab-api/CLAUDE.md) for the current architecture.
 
+### Deploy the server publicly (Phase 2 prerequisite)
+
+**What**: actually ship the server to a public host, then flip the userscript's `useApiServer` default to `true`.
+
+**Why**: Phase 1 (the opt-in coexistence path shipped in userscript v1.0.0-rc2) is functional and stable — but as long as the server only runs on the maintainer's laptop, nobody else can benefit from it. Phase 2 in [CLIENT_MIGRATION.md](CLIENT_MIGRATION.md) is gated on this.
+
+**How**: detailed step-by-step in [wk-vocab-api/README.md](wk-vocab-api/README.md) under "Going to production." TL;DR: DO Droplet ($6/mo) + optional Spaces ($5/mo) + Cloudflare in front (free) + systemd unit + initial `POST /v1/admin/warm {"scope":"all"}` + cron the monthly re-warm. Then bump `DEFAULTS.apiServerUrl` in the userscript, add a `@connect <prod-domain>` line, ship as v1.1.0.
+
+**Considerations**: the initial warm takes ~1+ hour at the current pace; run overnight. Until that's done, every "cold" word a user encounters is a slow first hit (1–3s) for that one user; the eventual steady state is sub-10ms cache hits. Cloudflare CORS / preflight needs verification — easy to miss in dev because `*` allows everything but Cloudflare can interpose.
+
+### Two-phase lazy-fill (warm example[0] sync, defer the rest)
+
+**What**: on cold lazy-fill, warm only the *first* IK example's media synchronously and return immediately with a partial payload (`incomplete: true`); kick off a background task to warm the remaining 40+ examples + DDG. Drops cold lazy-fill from ~1–3s to ~500ms–1s.
+
+**Why**: the current pipeline (post-rc2) defers only DDG to the background, which gets us most of the way there. The per-example IK-media work for ~40 examples still runs synchronously and accounts for ~1–2s of remaining latency. If forum users complain about cold latency once deployed, this is the next lever.
+
+**How**:
+- Split `warmWord` into `warmWordPriority(word)` and `warmWordComplete(word)`.
+- Priority: fetch IK `/search`, warm only `examples[0]` (or first with `sound` — matches userscript's default `requireAudio=true`), upsert with `incomplete: true` and other examples having `audioUrl: null` / `imageUrl: null`, return.
+- Complete: warm remaining examples + DDG, re-upsert with full payload + `incomplete: false`. The existing `ddgInFlight` Set generalizes to a `warmInFlight` Set keyed by word.
+- Userscript: handle null `audioUrl` / `imageUrl` on later examples gracefully (audio button disabled, no image). Already handles `incomplete: true` for short local TTL — the same flag covers both cases.
+
+**Considerations**: meaningful added complexity vs. the post-rc2 baseline. Don't do this until you're sure 1–3s isn't good enough. The big difference vs. the DDG-only deferral: now the user can cycle to a sentence whose media isn't warmed yet, and they see "no audio/image" until the background completes. With DDG-only deferral, cycling stays fully functional because all per-example IK media is already warmed.
+
+### Per-example media-warm endpoint
+
+**What**: a route like `POST /v1/vocab/{word}/warm-example` that warms a specific example's media on demand. Useful if "Two-phase lazy-fill" above ships and the user cycles to an un-warmed example — the userscript could call this endpoint, get back a fresh `audioUrl`/`imageUrl`, and re-render.
+
+**Why**: paired with two-phase lazy-fill, this gives "instant first card, on-demand cycle" UX. Without it, cycling into an un-warmed example degrades silently.
+
+**How**: takes `{ exampleId }` in the body, looks up the IK example from the cached payload, runs the per-example warm path, updates the DB row, returns the warmed example. Idempotent (storage.exists short-circuits if already warmed).
+
+**Considerations**: only worth building if we ship two-phase lazy-fill and the silent-cycling-degradation actually annoys users.
+
 ### Morphological analysis for JLPT scoring
 
 **What**: integrate a real Japanese morphological analyzer (kuromoji.js or MeCab via a Bun-friendly binding) into the warm pipeline so JLPT scoring lemmatizes conjugated verbs / adjectives before dictionary lookup.

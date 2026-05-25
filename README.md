@@ -5,7 +5,7 @@ A [Tampermonkey](https://www.tampermonkey.net/) userscript that augments WaniKan
 This repo contains two components:
 
 - **The userscript** (`wk-vocab-review-ik.user.js`) — what you install in Tampermonkey. This README covers it.
-- **A backing API server** (`wk-vocab-api/`) — Bun + Hono + SQLite. Pre-warms ImmersionKit, Google TTS, and DuckDuckGo data so every userscript user doesn't have to hit those services individually. **Not yet wired up to the userscript**; in active development. See [wk-vocab-api/README.md](wk-vocab-api/README.md) and [SERVER_DESIGN.md](SERVER_DESIGN.md).
+- **A backing API server** (`wk-vocab-api/`) — Bun + Hono + SQLite. Pre-warms ImmersionKit, Google TTS, and DuckDuckGo data so every userscript user doesn't have to hit those services individually. **As of v1.0.0-rc2, the userscript can opt into using the server via a settings toggle** (default off). The server itself is functional but not yet publicly deployed; for now it's "run locally and point the userscript at localhost." See [wk-vocab-api/README.md](wk-vocab-api/README.md), [CLIENT_MIGRATION.md](CLIENT_MIGRATION.md), and [SERVER_DESIGN.md](SERVER_DESIGN.md).
 
 ## What it does
 
@@ -57,8 +57,8 @@ Scoring uses a bundled JLPT vocab list (~7600 words from N5 to N1); conjugated v
 2. Install [WKOF](https://greasyfork.org/en/scripts/38582-wanikani-open-framework) from greasyfork.
 3. In Tampermonkey → Dashboard → Utilities → Create a new script. Paste the contents of [wk-vocab-review-ik.user.js](wk-vocab-review-ik.user.js), save (⌘S / Ctrl+S).
 4. Make sure WKOF is listed **above** this script in the Tampermonkey dashboard (drag to reorder; first-listed runs first).
-5. When prompted, approve cross-origin connections to `apiv2.immersionkit.com`, `translate.googleapis.com`, and `duckduckgo.com`.
-6. Reload any open WaniKani tab. Sanity check: DevTools console should show `[wk-ik-examples] booting v0.25.x on /...`.
+5. When prompted, approve cross-origin connections to `apiv2.immersionkit.com`, `translate.googleapis.com`, `duckduckgo.com`, and `localhost` (the last is only needed if you opt into the API-server path; see below).
+6. Reload any open WaniKani tab. Sanity check: DevTools console should show `[wk-ik-examples] booting v1.0.0-rc2 on /...`.
 
 ## Settings
 
@@ -75,10 +75,15 @@ Open your WaniKani avatar dropdown (top right) → **Scripts** → **Settings** 
 | Prefer examples from spoken media (anime/drama/games) | on | When on, IK examples that came with original audio are preferred over text-only literature lines (which would need TTS fallback). |
 | JLPT difficulty ceiling | Any | Hard filter — sentences whose hardest known surrounding word is above this level are removed from selection entirely. The sentence picker still shows above-ceiling candidates (faded) so you can override per card. |
 | Preferred JLPT level | No preference | Soft preference — within whatever the ceiling allows, sentences at this exact level come first in the ⟳ cycle, and the picker opens with "Preferred JLPT (NX) first" as the initial sort. Independent of the ceiling: you can set ceiling=Any and still default to N3 sentences. |
+| Use API server (experimental) | off | When on, route every vocab lookup through the wk-vocab-api server below instead of calling IK / DDG / Google directly from the browser. Off by default during the Phase 1 coexistence window — flip on if you're running the server locally (or once a public deployment exists). |
+| API server URL | empty | Base URL of the wk-vocab-api server. For local dev: `http://localhost:3000`. Leave blank to disable the API path even if the checkbox above is on. |
+| Prefetch upcoming subjects | 10 | When the API server is in use, batch-fetch this many upcoming review subjects on session entry so subsequent cards render instantly from local cache. Capped at 50. |
 | Cache contents | — | Live read-only view of what's currently cached (examples, image URL lists, audio clips, per-word selections, the IK index_meta map). Refreshes after Clear cache. |
-| Clear cache | — | Wipes locally cached examples, images, audio, and per-word selections. |
+| Clear cache | — | Wipes locally cached examples, images, audio, per-word selections, and the API-server payload cache. |
 
 If you don't see the script under the Scripts menu, paste `openWkIkSettings()` into the browser console — it opens the settings dialog directly.
+
+Two extra console helpers exist for diagnostics: `debugWkIk()` (general DOM + reveal-state dump) and `debugWkIkApi('<word>')` (probes the configured API server's `/v1/health`, runs a sample fetch, dumps the local cache for that word). Both are no-ops until the page has fully booted; see the console for `boot OK` first.
 
 ## How content is sourced
 

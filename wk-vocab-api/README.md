@@ -22,23 +22,26 @@ That's it. No Docker, no Postgres, no MinIO. SQLite + local filesystem.
 Then in another terminal — or open **http://localhost:3000/docs** in a browser for the interactive Scalar docs UI:
 
 ```bash
-# Warm a single word (synchronous, ~15-30s for cold word)
+# Warm a single word (synchronous, ~1-3s for cold word — DDG runs in
+# the background after this returns)
 curl -X POST http://localhost:3000/v1/admin/warm \
   -H "Authorization: Bearer dev-admin-token" \
   -H "Content-Type: application/json" \
   -d '{"scope":"word","word":"食べる"}'
 
-# Read the warmed payload (instant)
+# Read the warmed payload (DB hit, <10ms)
 curl http://localhost:3000/v1/vocab/食べる
 
 # Listen to a sentence (the audioUrl from the response above)
 curl -o sample.mp3 http://localhost:3000/media/audio/anime/...
 ```
 
+Tail `bun dev`'s output to watch the warm pipeline + per-request `cacheStatus` in real time.
+
 ## Requirements
 
 - [Bun](https://bun.sh) 1.1.6+ (uses `bun:sqlite` and the built-in S3 client for prod). Install: `curl -fsSL https://bun.sh/install | bash`.
-- Nothing else for local dev. For prod: a server, an S3-compatible bucket, optionally a managed Postgres (deferred — currently SQLite is the only DB).
+- Nothing else for local dev. For prod: a server, optionally an S3-compatible bucket (otherwise the local filesystem driver works fine on a single droplet). Postgres was in the original design but we stuck with SQLite — see [SERVER_DESIGN.md](../SERVER_DESIGN.md) for the deviation rationale.
 
 ## Endpoints
 
@@ -95,9 +98,22 @@ The `code` enum is stable: `validation_error`, `unauthorized`, `not_found`, `ups
   ],
   "fallbackImages": [                // DDG illustrations, used when imageUrl is null or by the ⟳ cycle
     "...", "..."                     // up to 10
-  ]
+  ],
+  "incomplete": true                 // optional; present only on lazy-fill cold responses where DDG is still warming in the background. Clients should treat the payload as short-TTL (the userscript uses 60s instead of its usual 7d) and re-fetch shortly. Absent or false once the background DDG completes.
 }
 ```
+
+### Logs cheat-sheet
+
+Server emits structured-JSON logs (one event per line). Useful ones when watching `bun dev`:
+
+- `vocab.serve` — every `GET /v1/vocab/{word}`. `cacheStatus` ∈ `hit` / `not_modified` / `cold_warm` / `nowarm_miss` / `empty` / `error`. Includes `examples`, `ageMs`, `serveCount`, optional `warmMs`.
+- `vocab.batch` — every batch request. `requested`, `deduped`, `found`, `missing`, `ms`.
+- `warm.word.done` — per-warm summary with `audio{ik,tts,none}`, `audioStorage{cache,fetched,...}`, `image{ik_present,ik_missing}`, `imageStorage{...}`, `ddg{deferred:true,...}`, `ms`. The cache-vs-fetched ratios tell you whether a re-warm was cheap or expensive.
+- `warm.ddg.background.done` — DDG completion, 1–2s after `warm.word.done` for cold fills.
+- The per-request `http` line carries the same `cacheStatus` + `warmMs` fields merged from the route handler, so a single grep on `http` gives you the headline view.
+
+Full table in [CLAUDE.md](CLAUDE.md) under "Reading the logs."
 
 ### `POST /v1/admin/warm` payloads
 
@@ -206,22 +222,59 @@ Test files live next to the source as `*.test.ts`. Current coverage:
 
 Live external calls (IK / DDG / Google TTS) are deliberately not tested — they're flaky, slow, and rate-limited. Integration verification is via manual curl against a running server.
 
-## Going to production (DigitalOcean, future)
+## Going to production
 
-Not built yet, but the shape:
+Not exercised yet — the userscript today is wired to talk to the server, but the server itself only runs on a developer's laptop. The deploy story below is the next concrete chunk of work. Order matters; later steps assume earlier ones.
 
-1. DO Droplet ($6/mo basic). Install Bun, clone repo, `bun install --production`.
-2. DO Managed Postgres ($15/mo) — *deferred*. The SQLite file works in a single-droplet setup; only migrate when concurrent writes or backups become a real issue.
-3. DO Spaces ($5/mo) for media. Set `STORAGE_DRIVER=s3`, fill the `S3_*` vars, set `MEDIA_PUBLIC_BASE` to the Spaces CDN endpoint.
-4. systemd unit: `bun run src/index.ts` with env vars from `/etc/wk-vocab-api/env`.
-5. Cloudflare in front for TLS + rate limiting + edge caching of `/v1/vocab/:word`.
-6. Cron the monthly warm: `0 4 1 * * curl -X POST .../v1/admin/warm -H "Authorization: Bearer $ADMIN_TOKEN" -d '{"scope":"all"}'`.
+### Prerequisites
 
-See [SERVER_DESIGN.md](../SERVER_DESIGN.md) for the full plan.
+1. **Pick a domain.** Working name `wk-vocab-api.<something-you-own>`. Subdomain of an existing domain is fine.
+2. **Provision a host.** DigitalOcean Droplet (basic, $6/mo, Ubuntu LTS, region near your users — Singapore or NYC). Install Bun: `curl -fsSL https://bun.sh/install | bash`.
+3. **Pick a storage driver.**
+   - **`STORAGE_DRIVER=local`** (default) — media goes on the droplet's filesystem at `LOCAL_MEDIA_DIR`. Simplest; cost = 0. Works fine for the expected traffic. Disadvantage: the `/media/*` route serves through Bun rather than a CDN, and a droplet disk-failure loses the cache (rewarmable but ~hours).
+   - **`STORAGE_DRIVER=s3`** — uploads to DO Spaces ($5/mo for 250GB + 1TB egress) or any S3-compatible bucket. Set the `S3_*` env vars + `MEDIA_PUBLIC_BASE` to the CDN endpoint. Better for survivability + edge-cache; +1 thing to maintain.
+4. **TLS.** Either Cloudflare in front of the droplet (free; also gives rate limiting + edge cache for `/v1/vocab/:word`) or Caddy on the droplet (auto-TLS from Let's Encrypt). The userscript runs on `https://www.wanikani.com` so the server MUST be HTTPS — browsers block mixed content.
+5. **DNS.** Point the subdomain at the droplet (via Cloudflare proxy ideally).
+
+### Deploy
+
+1. `git clone` the repo onto the droplet.
+2. `cd wk-vocab-api && bun install --production`.
+3. Create `/etc/wk-vocab-api/env` with the env vars from `.env.example`. **At minimum**: set `ADMIN_TOKEN` to a long random value (`openssl rand -hex 32`), `WK_API_TOKEN` to your personal WK token (only needed for bulk warm), `MEDIA_PUBLIC_BASE` to the public URL prefix (e.g. `https://wk-vocab-api.example.com/media`).
+4. systemd unit at `/etc/systemd/system/wk-vocab-api.service`:
+   ```ini
+   [Service]
+   ExecStart=/root/.bun/bin/bun run /opt/wk-vocab-api/src/index.ts
+   EnvironmentFile=/etc/wk-vocab-api/env
+   Restart=always
+   StandardOutput=journal
+   StandardError=journal
+   ```
+   `systemctl enable --now wk-vocab-api`.
+5. Verify: `curl https://wk-vocab-api.example.com/v1/health` returns `{ "status": "ok", ... }`.
+6. **Run the initial warm.** `curl -X POST https://.../v1/admin/warm -H "Authorization: Bearer $ADMIN_TOKEN" -d '{"scope":"all"}'`. Returns 202 immediately; the actual work runs in the background and takes ~1+ hour (~6500 WK vocab words at our current pace). Watch `journalctl -fu wk-vocab-api | grep -E 'warm\.(word|all)'` for progress.
+
+### After the initial warm
+
+7. **Cron the monthly re-warm.** systemd timer or DO scheduled job:
+   ```cron
+   0 4 1 * * curl -fsS -X POST https://wk-vocab-api.example.com/v1/admin/warm \
+                -H "Authorization: Bearer $ADMIN_TOKEN" \
+                -d '{"scope":"all"}'
+   ```
+8. **Smoke-test from your reviewer's machine.** Set `apiServerUrl` in the userscript settings to the production URL, flip `useApiServer` on, hard-refresh a WK review page. Browser DevTools network tab should show requests going to your domain. Run `debugWkIkApi('食べる')` in the console for a self-check.
+9. **Update userscript defaults.** Once you're confident the deployment is stable: bump `DEFAULTS.apiServerUrl` in [wk-vocab-review-ik.user.js](../wk-vocab-review-ik.user.js) to the production URL, and add a `@connect <prod-domain>` line to the metadata block. This is the **Phase 2 default-on flip** described in [CLIENT_MIGRATION.md](../CLIENT_MIGRATION.md). New installs will then route through your server by default.
+10. **Watch the logs for a couple weeks.** `journalctl -fu wk-vocab-api` should show mostly `cacheStatus=hit` lines after the warm completes. `cold_warm` lines mean either a brand-new vocab word IK added since the last warm, or a word the warm missed — track failure events (`warm.word.failed`, `warm.ik_search_failed`) and decide if any need follow-up.
+
+### Operational gotchas
+
+- **Cloudflare CORS.** The CORS middleware allows `*` — verify in DevTools that there's no preflight failure from `wanikani.com`. If preflights fail, set Cloudflare's "Always Use HTTPS" + Browser Cache TTL to "Respect existing headers."
+- **Rate limit at the edge.** Configure Cloudflare's free-tier rate-limit rule: 100 req/min per IP across `/v1/*`. Sufficient for any legit review pace, blocks scraping.
+- **Backups.** SQLite file at `DATABASE_FILE` holds everything not in object storage. Even though re-warming would rebuild it, that's a multi-hour cost. Daily `sqlite3 wk-vocab.sqlite ".backup snapshot.sqlite"` → upload to Spaces (~$0.005/mo amortized) is cheap insurance. Not built; tracked in NEW_FEATURES.md.
 
 ## Known limitations / open questions
 
 - **IK title encoding is best-effort on misses.** When `/index_meta` doesn't have a deck, the heuristic in `src/lib/ikTitles.ts` produces a likely-wrong folder name. Concrete consequence: IK's media proxy returns an empty body, our `<1KB` check trips, we fall through to Google TTS for audio (no fallback for images). Same dead-end as the userscript — don't try to make the heuristic smarter.
-- **Bulk warming is sequential and slow.** With per-word IK rate-limiting at 500ms gaps and ~50 examples per word each needing audio + image, the full ~6500-word warm is multi-hour. Acceptable for monthly cron; not interactive.
+- **Bulk warming is still over an hour.** With the per-word IK rate-limit at 50ms gaps (relaxed from 500ms in v0.1) and ~50 examples per word each needing audio + image, full ~6500-word warm is bounded by IK's own response latency more than our throttle. Acceptable for monthly cron; not interactive.
+- **Lazy cold-fill is ~1–3s.** Per-example IK media is warmed synchronously; DDG fallback pool is deferred to a background task (see "DDG deferred" in `warm.word.done` logs and the `incomplete: true` payload flag). If this still feels slow once deployed, the next lever is to defer per-example media too — see [NEW_FEATURES.md](../NEW_FEATURES.md) "Two-phase lazy-fill" entry.
 - **No content negotiation.** All endpoints return JSON only. No HTML or Accept-header branching planned.
-- **No tests.** Manual smoke testing via curl. Worth adding `bun test` coverage for `scoreJlpt` and `ikTitleToFolder` since those are pure functions with edge cases.

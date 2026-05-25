@@ -1,6 +1,6 @@
 # CLIENT_MIGRATION.md
 
-Plan for migrating [wk-vocab-review-ik.user.js](wk-vocab-review-ik.user.js) (the Tampermonkey userscript) to call [wk-vocab-api/](wk-vocab-api/) (the server we just built) instead of hitting ImmersionKit / DuckDuckGo / Google TTS directly. **Status: Phase 1 implemented** (userscript v1.0.0-rc1; coexistence toggle, default off; server not yet deployed). Phases 2 and 3 not started.
+Plan for migrating [wk-vocab-review-ik.user.js](wk-vocab-review-ik.user.js) (the Tampermonkey userscript) to call [wk-vocab-api/](wk-vocab-api/) (the server we just built) instead of hitting ImmersionKit / DuckDuckGo / Google TTS directly. **Status: Phase 1 implemented and stable locally** (userscript v1.0.0-rc2; coexistence toggle, default off; server not yet deployed). Phases 2 and 3 not started — Phase 2 requires deployment first.
 
 This is the **biggest planned single change** to the userscript since v0.1 — it deletes roughly half the data-layer code and rebuilds it as a thin client of our API. Worth doing in clear phases with a fallback toggle so we can verify before fully cutting over.
 
@@ -20,18 +20,21 @@ For server architecture see [wk-vocab-api/CLAUDE.md](wk-vocab-api/CLAUDE.md). Fo
 - No accounts, no per-user keys on the server side. Inherits the design constraints from SERVER_DESIGN.md.
 - No deletion of the old code path until Phase 3, after the new path has been stable for at least a couple weeks of real review sessions.
 
-## Prerequisites (must happen before the userscript can flip)
+## Prerequisites (must happen before Phase 2 / default-on flip)
 
-The migration assumes the server is **deployed somewhere the userscript can reach**. Today the server only runs locally. Order of operations:
+Phase 1 (current state) doesn't require deployment — the toggle is opt-in and dev users point at `http://localhost:3000`. Phase 2 (flipping `useApiServer: true` by default) DOES require the server to be reachable from `www.wanikani.com`.
 
-1. **Deploy the server to DigitalOcean.** A `$6/mo` droplet, SQLite + local FS or Spaces (see SERVER_DESIGN.md for cost shape).
-2. **Set up TLS** — Cloudflare in front, or Caddy on the droplet. The userscript runs on `https://www.wanikani.com`, so the server must be HTTPS or browsers will block it for mixed content.
-3. **Pick a domain.** Working name `wk-vocab-api.example.com`. Set up DNS pointing at the droplet (via Cloudflare proxy ideally).
-4. **Run a full warm pass once** (`POST /v1/admin/warm {"scope":"all"}`) so the first wave of users gets cached responses, not lazy fills. Needs the `WK_API_TOKEN` env var; takes hours.
-5. **Cron the monthly re-warm.** systemd timer or DO scheduled task.
-6. **Smoke-test the deployed server** with `curl` from the same machine you'll run Tampermonkey on, including CORS preflight.
+The canonical deploy checklist now lives in [wk-vocab-api/README.md](wk-vocab-api/README.md) under **"Going to production"** — see that for the actual step-by-step (host provisioning, env vars, systemd unit, initial warm, monthly cron, etc.). The short version:
 
-Only after all six does it make sense to ship a userscript version that points at it.
+1. Pick a domain + provision a droplet + decide local-FS vs S3 storage.
+2. TLS in front (Cloudflare or Caddy) — userscript runs on HTTPS so mixed content is blocked.
+3. Deploy, configure env, start systemd unit, verify `/v1/health`.
+4. Run the initial `POST /v1/admin/warm {"scope":"all"}`. Takes ~1+ hour.
+5. Cron the monthly re-warm.
+6. Smoke-test from your reviewing browser with the userscript pointed at the deployed URL.
+7. Update userscript defaults (`DEFAULTS.apiServerUrl`, `@connect <prod-domain>`) and ship as v1.1.0 (Phase 2).
+
+Then and only then does the Phase 2 default-on flip make sense for new userscript installs.
 
 ## What changes in the userscript
 
@@ -109,10 +112,16 @@ Ship a userscript version where:
 - New cache prefix `wk-vocab-cache.payload.<word>` with ETag round-trip (`If-None-Match` on revisit; 304 keeps cached payload + refreshes savedAt). 7-day local TTL.
 - `@connect localhost` added; existing IK/DDG/Google `@connect` directives kept so the direct path still works with the toggle off.
 
+**Tuning shipped post-rc1 (now in rc2):**
+- IK rate limit relaxed from 500ms → 50ms (~2 → ~20 req/sec). With ~15 IK calls per cold lazy-fill, the original 500ms floor stacked into 7–8s of throttle wait; 50ms drops cold lazy-fill latency by roughly that amount while remaining a polite client. Revisit upward if IK pushes back.
+- DDG fetch deferred to background. Cold lazy-fill returns with `incomplete: true` in the payload + empty `fallbackImages` (or the prior fallbacks on re-warm). The userscript honors `incomplete: true` by applying a 60-second local TTL instead of the usual 7 days so the next request picks up the completed payload. Server's `ddgInFlight: Set<string>` dedupes overlapping background tasks for the same word. Net: a fresh cold word that previously took 5s now takes 1–3s; the user sees the sentence + IK media immediately, and DDG illustrations populate within a couple seconds.
+- Server-side structured logging: `vocab.serve` / `vocab.batch` per-request events with a `cacheStatus` enum (`hit` / `not_modified` / `cold_warm` / `nowarm_miss` / `empty` / `error` / `batch`); `warm.word.done` line aggregates per-warm media stats (audio source breakdown, storage-cache hit ratio, DDG counts) so the operator can tell at a glance whether a request hit the cache or did fresh upstream work.
+
 **What's NOT yet done (next steps):**
-- Prerequisites 1–6 above (deploy server, TLS, DNS, full warm, cron, CORS smoke-test).
-- After deploy: bump `DEFAULTS.apiServerUrl` to the prod URL + add `@connect <prod-domain>` (and remove `@connect localhost` for the public release if desired).
-- Phase 2 default-on flip, forum post, then Phase 3 cleanup.
+- Server deployment per [wk-vocab-api/README.md](wk-vocab-api/README.md) → "Going to production." Required for Phase 2.
+- After deploy: bump `DEFAULTS.apiServerUrl` to the prod URL + add `@connect <prod-domain>` (and consider removing `@connect localhost` for the public release).
+- Phase 2 default-on flip + forum post.
+- Phase 3 cleanup of the direct path (delete IK/DDG/TTS fetch code, JLPT_VOCAB, etc.).
 
 Test plan for Phase 1:
 1. Run server locally; set `apiServerUrl = http://localhost:3000`; flip toggle on.
