@@ -72,7 +72,15 @@ class S3Storage implements Storage {
 
     async put(key: string, body: ArrayBuffer | Uint8Array, contentType: string): Promise<string> {
         const file = this.client.file(key);
-        await file.write(body, { type: contentType, acl: 'public-read' });
+        // Intentionally no `acl: 'public-read'` here. Setting per-object ACLs
+        // requires `s3:PutObjectAcl`, which DO Spaces "Limited Access" keys
+        // don't grant — even with Read/Write/Delete scope. Attempting it
+        // returns AccessDenied (discovered during the first production deploy
+        // in 2026-05). Public-read is instead achieved via a bucket policy
+        // that allows anonymous `s3:GetObject` on the whole bucket; see
+        // deploy/bucket-policy.json + deploy/README.md "Bucket policy" for
+        // the one-time setup. Local-storage driver isn't affected.
+        await file.write(body, { type: contentType });
         return this.publicUrl(key);
     }
 

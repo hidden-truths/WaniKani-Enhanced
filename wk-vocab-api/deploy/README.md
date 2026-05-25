@@ -81,6 +81,39 @@ systemctl restart wk-enhanced-api
 
 If any of the files in this directory changed, re-copy them (`install -m 644 ... /etc/systemd/system/...`) and `systemctl daemon-reload` before restart.
 
+## Bucket policy (one-time, DO Spaces only)
+
+The `s3` storage driver in `src/services/storage.ts` uploads objects *without* a per-object `acl: 'public-read'`. DO Spaces "Limited Access" keys — even with Read/Write/Delete — don't grant `s3:PutObjectAcl`, so setting ACLs per-upload would fail with `AccessDenied`. Instead, we make the *whole bucket* public-read for `GetObject` via the bucket policy in [bucket-policy.json](bucket-policy.json). Apply once per bucket; survives across deploys.
+
+```bash
+# s3cmd is in the Ubuntu apt repo. Older versions don't accept --no-config,
+# so use a one-shot config file. NOTE: applying a bucket policy requires
+# `s3:PutBucketPolicy`, which Limited Access keys don't grant — temporarily
+# promote the key to Full Access for this one call, then downgrade back.
+apt install -y s3cmd
+
+cat > /tmp/s3cfg <<EOF
+[default]
+access_key = ${S3_ACCESS_KEY_ID}
+secret_key = ${S3_SECRET_ACCESS_KEY}
+host_base = sfo3.digitaloceanspaces.com
+host_bucket = %(bucket)s.sfo3.digitaloceanspaces.com
+use_https = True
+EOF
+chmod 600 /tmp/s3cfg
+
+s3cmd -c /tmp/s3cfg setpolicy \
+    /opt/wk-enhanced-api/wk-vocab-api/deploy/bucket-policy.json \
+    s3://wk-enhanced-api-media
+
+# Verify
+s3cmd -c /tmp/s3cfg info s3://wk-enhanced-api-media | grep -A20 'Policy:'
+
+rm /tmp/s3cfg
+```
+
+If your bucket name differs from `wk-enhanced-api-media`, edit the `Resource` line in `bucket-policy.json` before applying.
+
 ## Things to remember
 
 - **Bun path** in `wk-enhanced-api.service`'s `ExecStart` is `/usr/local/bin/bun`. The official installer drops the binary in `/root/.bun/bin/bun`, but `wkenhanced` can't read that (root's home is mode 700) and the systemd unit's `ProtectHome=true` would block it even if perms allowed. Step 2 above copies it to `/usr/local/bin/bun` to bridge the gap.
