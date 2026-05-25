@@ -1,6 +1,6 @@
 # CLIENT_MIGRATION.md
 
-Plan for migrating [wk-vocab-review-ik.user.js](wk-vocab-review-ik.user.js) (the Tampermonkey userscript) to call [wk-vocab-api/](wk-vocab-api/) (the server we just built) instead of hitting ImmersionKit / DuckDuckGo / Google TTS directly. **Status: Phase 1 implemented and stable locally** (userscript v1.0.0-rc2; coexistence toggle, default off; server not yet deployed). Phases 2 and 3 not started — Phase 2 requires deployment first.
+Plan for migrating [wk-vocab-review-ik.user.js](wk-vocab-review-ik.user.js) (the Tampermonkey userscript) to call [wk-vocab-api/](wk-vocab-api/) (the server we just built) instead of hitting ImmersionKit / DuckDuckGo / Google TTS directly. **Status (2026-05-25): Phase 1 shipped (v1.0.0-rc2). Server deployed to `https://api.wkenhanced.dev`. Phase 2 default-on flip is queued, gated on the post-deploy bulk warm completing cleanly.** Phase 3 is intentionally deferred — see [SERVER_DESIGN.md](SERVER_DESIGN.md) and conversation notes; the user wants Phase 2 to soak for ~2 weeks before deleting the direct code path, and the deletion plan now includes preserving a snapshot in `legacy/` as a fallback.
 
 This is the **biggest planned single change** to the userscript since v0.1 — it deletes roughly half the data-layer code and rebuilds it as a thin client of our API. Worth doing in clear phases with a fallback toggle so we can verify before fully cutting over.
 
