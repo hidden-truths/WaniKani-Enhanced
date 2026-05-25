@@ -1,9 +1,8 @@
 import { OpenAPIHono, createRoute } from '@hono/zod-openapi';
 import * as db from '../db/client.ts';
+import { config } from '../config.ts';
 import { HealthSchema } from '../schemas.ts';
 import { zodHook } from '../lib/zodHook.ts';
-
-const SCRIPT_VERSION = '0.1.0';
 
 export const healthRouter = new OpenAPIHono({ defaultHook: zodHook });
 
@@ -28,7 +27,7 @@ healthRouter.openapi(healthRoute, (c) => {
     return c.json(
         {
             status: 'ok' as const,
-            version: SCRIPT_VERSION,
+            version: config.version,
             warmedWords: db.countVocabRows(),
             lastWarm: lastJob && {
                 id: lastJob.id,

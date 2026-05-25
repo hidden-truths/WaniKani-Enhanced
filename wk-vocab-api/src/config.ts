@@ -1,6 +1,8 @@
 // Env-var loading + validation. Bun auto-loads .env; we just normalize and
 // surface a typed shape so the rest of the code doesn't read process.env.
 
+import pkg from '../package.json' with { type: 'json' };
+
 function required(name: string): string {
     const v = process.env[name];
     if (!v) throw new Error(`Missing required env var: ${name}`);
@@ -27,6 +29,10 @@ if (driver !== 'local' && driver !== 's3') {
 }
 
 export const config = {
+    // Single source of truth for the server version: package.json. Routes
+    // and OpenAPI docs read this; bumping the package.json version
+    // propagates everywhere automatically.
+    version: pkg.version,
     port: num('PORT', 3000),
     adminToken: required('ADMIN_TOKEN'),
     databaseFile: process.env.DATABASE_FILE || './dev-data/wk-vocab.sqlite',

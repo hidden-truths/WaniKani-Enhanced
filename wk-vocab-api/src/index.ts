@@ -72,7 +72,7 @@ app.doc31('/openapi.json', (c) => {
         openapi: '3.1.0',
         info: {
             title: 'wk-vocab-api',
-            version: '0.1.0',
+            version: config.version,
             description:
                 'Backing API for the WK Vocab Review — ImmersionKit Examples userscript. ' +
                 'Coalesces ImmersionKit, DuckDuckGo, and Google Translate TTS behind a single ' +
@@ -118,7 +118,7 @@ if (config.storage.driver === 'local') {
 app.get('/', (c) =>
     c.json({
         name: 'wk-vocab-api',
-        version: '0.1.0',
+        version: config.version,
         docs: '/docs',
         openapi: '/openapi.json',
         endpoints: [
