@@ -1,0 +1,60 @@
+# systemd unit for wk-vocab-api.
+#
+# Install at: /etc/systemd/system/wk-vocab-api.service
+# Then:       systemctl daemon-reload && systemctl enable --now wk-vocab-api
+# Watch:      journalctl -fu wk-vocab-api
+#
+# Runs as a dedicated unprivileged `wkvocab` user. Create with:
+#   useradd --system --no-create-home --shell /usr/sbin/nologin wkvocab
+#   install -d -o wkvocab -g wkvocab /var/lib/wk-vocab-api
+#   chown -R wkvocab:wkvocab /opt/wk-vocab-api
+#
+# The unit invokes `bun run start` from package.json (which runs
+# `bun run src/index.ts`). Going through the script rather than calling the
+# entrypoint directly means an entrypoint rename in the future doesn't break
+# the unit.
+
+[Unit]
+Description=wk-vocab-api — backing API for the WK Vocab Review ImmersionKit userscript
+Documentation=https://github.com/<your-user-or-org>/WaniKani/blob/main/wk-vocab-api/README.md
+After=network-online.target
+Wants=network-online.target
+
+[Service]
+Type=simple
+User=wkvocab
+Group=wkvocab
+WorkingDirectory=/opt/wk-vocab-api/wk-vocab-api
+EnvironmentFile=/etc/wk-vocab-api/env
+
+# /root/.bun/bin/bun is the install location when you run the official
+# installer as root. If you installed Bun as a non-root user, adjust to
+# /home/<user>/.bun/bin/bun. `which bun` after install tells you the path.
+ExecStart=/root/.bun/bin/bun run start
+
+Restart=always
+RestartSec=5
+
+# Logging: journald captures stdout/stderr; structured JSON lines stay
+# greppable via `journalctl -fu wk-vocab-api`.
+StandardOutput=journal
+StandardError=journal
+
+# Hardening: the service only needs outbound HTTPS, the SQLite file under
+# /var/lib/wk-vocab-api, and read access to /opt/wk-vocab-api. Lock down
+# everything else.
+NoNewPrivileges=true
+PrivateTmp=true
+ProtectSystem=strict
+ProtectHome=true
+ReadWritePaths=/var/lib/wk-vocab-api
+ProtectKernelTunables=true
+ProtectKernelModules=true
+ProtectControlGroups=true
+RestrictAddressFamilies=AF_INET AF_INET6 AF_UNIX
+RestrictNamespaces=true
+LockPersonality=true
+MemoryDenyWriteExecute=false  # Bun's JIT needs W+X memory.
+
+[Install]
+WantedBy=multi-user.target

@@ -1,0 +1,30 @@
+# Monthly bulk-warm trigger. Fires `POST /v1/admin/warm {"scope":"all"}`
+# against the local server, which returns 202 immediately and runs the
+# actual warm in the background.
+#
+# Install at: /etc/systemd/system/wk-vocab-api-warm.service
+# Paired with: wk-vocab-api-warm.timer (the schedule).
+# Manual run:  systemctl start wk-vocab-api-warm
+#
+# Reads ADMIN_TOKEN from the same env file as the main service.
+
+[Unit]
+Description=Monthly bulk warm of wk-vocab-api against ImmersionKit
+Documentation=https://github.com/<your-user-or-org>/WaniKani/blob/main/wk-vocab-api/README.md
+Requires=wk-vocab-api.service
+After=wk-vocab-api.service
+
+[Service]
+Type=oneshot
+EnvironmentFile=/etc/wk-vocab-api/env
+
+# -f: fail on HTTP >= 400 (treats e.g. expired ADMIN_TOKEN as a unit failure
+#     so we get an alert via journalctl/`systemctl list-units --failed`).
+# -sS: quiet, but show errors.
+# --max-time 30: the endpoint returns 202 in milliseconds; if it's hung past
+#                30s something is wrong with the service itself.
+ExecStart=/usr/bin/curl -fsS --max-time 30 \
+    -X POST http://127.0.0.1:3000/v1/admin/warm \
+    -H "Authorization: Bearer ${ADMIN_TOKEN}" \
+    -H "Content-Type: application/json" \
+    -d '{"scope":"all"}'

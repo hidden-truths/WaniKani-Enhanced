@@ -1,0 +1,22 @@
+# Schedule for the monthly bulk-warm trigger.
+#
+# Install at: /etc/systemd/system/wk-vocab-api-warm.timer
+# Then:       systemctl daemon-reload && systemctl enable --now wk-vocab-api-warm.timer
+# Verify:     systemctl list-timers wk-vocab-api-warm.timer
+#
+# Fires on the 1st of each month at 04:00 server-local time. The actual warm
+# takes ~1h+; running at 04:00 keeps it off peak-traffic hours regardless of
+# the user's timezone. `Persistent=true` means a missed trigger (droplet was
+# off) fires on next boot.
+
+[Unit]
+Description=Monthly bulk-warm trigger for wk-vocab-api
+Requires=wk-vocab-api-warm.service
+
+[Timer]
+OnCalendar=*-*-01 04:00:00
+Persistent=true
+Unit=wk-vocab-api-warm.service
+
+[Install]
+WantedBy=timers.target
