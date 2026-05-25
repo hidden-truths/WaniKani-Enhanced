@@ -180,15 +180,75 @@ See also [CLAUDE.md](CLAUDE.md) for architecture notes and dead-ends already exp
 
 These are ideas for the [wk-vocab-api](wk-vocab-api/) server. Most exist *because* there's a server now — they're things the userscript can't do well or at all on its own (heavy preprocessing, large datasets, cross-user pooling of data fetches). See [wk-vocab-api/CLAUDE.md](wk-vocab-api/CLAUDE.md) for the current architecture.
 
-### Deploy the server publicly (Phase 2 prerequisite)
+### ~~Deploy the server publicly~~ — DONE (2026-05-25)
 
-**What**: actually ship the server to a public host, then flip the userscript's `useApiServer` default to `true`.
+The first production deploy landed at `https://api.wkenhanced.dev` on DO (SFO3, $7/mo Premium AMD droplet + Spaces) with Cloudflare Tunnel in front. See [wk-vocab-api/deploy/README.md](wk-vocab-api/deploy/README.md) for the install recipe (updated post-deploy to capture every workaround). The first bulk warm hit IK rate-limit lockout and is being redone with the 500ms floor; once it completes, Phase 2 (`useApiServer: true` default + v1.1.0 userscript bump) is the next concrete step.
 
-**Why**: Phase 1 (the opt-in coexistence path shipped in userscript v1.0.0-rc2) is functional and stable — but as long as the server only runs on the maintainer's laptop, nobody else can benefit from it. Phase 2 in [CLIENT_MIGRATION.md](CLIENT_MIGRATION.md) is gated on this.
+### Dockerize the server
 
-**How**: detailed step-by-step in [wk-vocab-api/README.md](wk-vocab-api/README.md) under "Going to production." TL;DR: DO Droplet ($6/mo) + optional Spaces ($5/mo) + Cloudflare in front (free) + systemd unit + initial `POST /v1/admin/warm {"scope":"all"}` + cron the monthly re-warm. Then bump `DEFAULTS.apiServerUrl` in the userscript, add a `@connect <prod-domain>` line, ship as v1.1.0.
+**What**: ship a `Dockerfile` + `docker-compose.yml` so the server runs as a container on the droplet, not as a host-installed Bun binary. Optionally publish images to GitHub Container Registry on every commit.
 
-**Considerations**: the initial warm takes ~1+ hour at the current pace; run overnight. Until that's done, every "cold" word a user encounters is a slow first hit (1–3s) for that one user; the eventual steady state is sub-10ms cache hits. Cloudflare CORS / preflight needs verification — easy to miss in dev because `*` allows everything but Cloudflare can interpose.
+**Why**: today's deploy chains together a half-dozen host-level concerns (Bun installer, `useradd wkenhanced`, `chown`, systemd unit, `chmod 600` on env file, copy bun to `/usr/local`). A container collapses all of that to "pull image + docker compose up." Future deploys to a new droplet drop from ~30 minutes to ~5 minutes. Also gives us:
+- **Reproducibility**: Bun version pinned in the image instead of "whatever the installer pulled."
+- **Rollback**: `docker compose down && docker pull <previous> && docker compose up` beats `git checkout && bun install`.
+- **Dev/prod parity**: contributors run an identical container locally.
+- **Cleaner secret handling**: Docker secrets / Compose env files instead of `/etc/wk-enhanced-api/env`.
+
+**How**:
+- `Dockerfile`: `FROM oven/bun:1.3` (official image), `COPY package.json bun.lockb ./`, `bun install --production`, `COPY src/ src/`, `COPY data/ data/`, `CMD ["bun", "run", "start"]`. Multi-stage build to drop dev deps from the final image.
+- `docker-compose.yml`: one service, mount `/var/lib/wk-enhanced-api` (SQLite + media-if-local) and `/etc/wk-enhanced-api/env` (env), expose `3000` to localhost only (Cloudflare Tunnel reaches it the same as today).
+- CI: GitHub Actions builds + publishes on tag, droplet pulls latest. Optional but tightens the loop.
+
+**Considerations**: SQLite needs a writable bind-mount; that's straightforward but worth testing under WAL concurrency. `Bun.S3Client` is bundled in Bun; no separate AWS SDK to install. The systemd unit becomes a thin wrapper that runs `docker compose up`. Cloudflare Tunnel stays host-side (no need to containerize it). **Don't migrate to DO App Platform** — its filesystem is ephemeral, which would force a Postgres switch (= +$15/mo). The point of containerizing is operational hygiene, not platform migration.
+
+**Effort**: half a day, including the Compose file + deploy README rewrite + verifying the SQLite + Spaces paths still work under the bind-mount.
+
+### DOKS / Kubernetes — explicitly rejected for v1, document the analysis
+
+**What**: write a short ADR-style note explaining why we're NOT using DigitalOcean Kubernetes (DOKS) or any container-orchestration platform for this workload.
+
+**Why**: the question comes up ("why aren't you using K8s?"). Recording the analysis avoids re-running the conversation every time a contributor wonders.
+
+**The analysis**:
+- **DOKS minimum cost** = $12/mo control plane + $12/mo for one worker node = $24/mo, **4× our current cost** for the same workload.
+- **K8s shines** with multiple services, autoscaling, rolling deploys across many instances, cross-cluster failover. **We have one service**, bounded traffic (low thousands of users), monthly bulk warm + on-demand lazy fill — none of K8s's strengths apply.
+- **Stateful workloads on K8s are awkward**. Our SQLite + Spaces design is dead simple on a droplet; on K8s we'd need a PersistentVolumeClaim for the DB (which forces us to manage storage explicitly), and HostPath mounts are discouraged.
+- **K8s pods get evicted routinely** by the scheduler (node maintenance, version upgrades, resource pressure). For a stateful service, droplet stability is genuinely better than pod stability.
+- **Operationally**: K8s adds Ingress, Services, ConfigMaps, Secrets, Deployments, PVCs, HPA — ~10 manifest types we'd need to understand. None of that earns its keep at our scale.
+
+The right time to revisit K8s is if we grow to multiple services, want zero-downtime rolling deploys, or need autoscaling beyond what a single droplet provides. Until then, **Dockerized-on-a-droplet** is the sweet spot.
+
+**How**: a `docs/decisions/ADR-001-no-kubernetes.md` (or similar) capturing the above + linking from `wk-vocab-api/CLAUDE.md`. ~30 minutes to write properly.
+
+**Considerations**: keep it short and decision-focused, not a K8s tutorial. The point is to document the trade-off once so we stop relitigating it.
+
+### Per-endpoint IK rate limits (separate gates for /search vs /download_media)
+
+**What**: split the global `MIN_GAP_MS=500` rate limit in `services/ik.ts` into per-endpoint floors. `/search` stays conservative (500ms+); `/download_media` can be more permissive (~100ms) since it's serving cached media off a different IK infrastructure layer.
+
+**Why**: bulk warm spends ~100 calls per word on `/download_media` for ~one `/search`. Tightening just the media gate could cut bulk warm time from ~6-10 hours to ~2-3 hours. The IK 429 storm from rc2's 50ms global rate limit appeared to be triggered by sustained `/search` traffic specifically — single curls to `/search` while we were locked out also failed, but `/download_media` URLs we'd built may still have worked. (Untested; verify before lowering.)
+
+**How**:
+- Add `MIN_GAP_SEARCH_MS` and `MIN_GAP_MEDIA_MS` constants in `services/ik.ts`, defaulting to 500ms and 100ms respectively.
+- Keep two separate `lastCallAt` timestamps + two gate functions.
+- `ikSearch` calls the search gate; `ikDownloadMedia` calls the media gate.
+- Update the comment block above the gates to reflect the rationale.
+
+**Considerations**: this is purely speed-vs-politeness tuning. **Don't lower without 429-backoff first** (next entry) — once IK starts pushing back, we have no graceful recovery. The right rollout is: ship backoff first, then this, then run a small-scope warm (~100 words) to confirm no 429s before triggering a full bulk warm.
+
+### 429 retry-with-exponential-backoff in IK service
+
+**What**: when `services/ik.ts` gets a 429 (or 5xx) response, sleep `min(2^retries * 500ms, 30s) + jitter` and retry up to N times before giving up.
+
+**Why**: our first prod bulk warm at 50ms triggered a global IK lockout where every request returned 429 for ~30 minutes. With backoff, the first 429 would trigger a 500ms sleep, the next a 1s sleep, etc., and we'd ride out the cooldown without spamming. Crucially, **the warm pipeline now throws on `ikSearch` failure** (commit e7f8224), so without backoff a single 429 means "give up on this word, retry next monthly warm" — backoff lets a transient hiccup recover within seconds.
+
+**How**:
+- In `services/ik.ts:fetchJson` and `ikDownloadMedia`, wrap the `fetch()` in a retry loop.
+- On 429 / 502 / 503 / 504: sleep `min(500 * 2^attempt, 30000) + random(0..250)` ms, retry. Max 5 attempts.
+- On 4xx (other than 429): don't retry — those are client errors that retry won't fix.
+- Log each retry at `debug` level so we can see backoff happening without spamming `info`.
+
+**Considerations**: backoff must respect the rate-limit gate (don't bypass `MIN_GAP_MS` during retries). Pair with the per-endpoint rate-limit work — backoff makes lower floors safe, lower floors make backoff actually pay off. Coordinate the order: backoff first, then lower floors.
 
 ### Two-phase lazy-fill (warm example[0] sync, defer the rest)
 
