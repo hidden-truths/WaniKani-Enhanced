@@ -2993,9 +2993,11 @@
             })
             .join(' ');
     }
-    // `requireAudio` is now a sentence-source filter: we treat IK examples that came
-    // with an audio file in the original API response (i.e. anime/drama/games scenes)
-    // as preferred over text-only literature. The audio itself is always TTS.
+    // `requireAudio` is a sentence-source filter: we prefer IK examples that
+    // came with original voice-actor audio (anime/drama/games scenes) over
+    // text-only literature. When the example has audio, the player uses
+    // the real recording (via IK proxy or pre-rendered server CDN URL);
+    // when it doesn't, the player falls back to Google TTS.
     function hasOriginalAudio(e) {
         return !!(e && (e.sound || e.sound_url));
     }
