@@ -80,12 +80,12 @@
     const CACHE_TTL_MS = 30 * 24 * 60 * 60 * 1000; // 30 days
     const NEG_CACHE_TTL_MS = 7 * 24 * 60 * 60 * 1000; // 7 days
 
-    // ---------- API server (Phase 1 coexistence) ----------
+    // ---------- API server ----------
     //
     // When `useApiServer` is on and `apiServerUrl` is non-empty, the userscript
     // routes vocab lookups through our backing server (wk-vocab-api) instead of
-    // calling IK / DDG / Google directly. The direct code path remains intact
-    // and is the default during the coexistence phase.
+    // calling IK / DDG / Google directly. The direct code path remains as an
+    // opt-out fallback; the server path is the default.
     //
     // Cache: payloads are stored under SERVER_CACHE_PREFIX keyed by the raw
     // (un-encoded) word — separate namespace from the direct-path caches so
@@ -2211,15 +2211,15 @@
         return `${IK_API_BASE}?${params.toString()}`;
     }
 
-    // ---------- API server path (Phase 1 coexistence) ----------
+    // ---------- API server path ----------
     //
-    // These functions are the parallel data-layer path used when the user has
-    // flipped on `useApiServer` and configured a non-empty `apiServerUrl`. They
-    // produce the same { fetchedAt, raw, chosen } cache-entry shape as the
-    // direct path so downstream code is identical. The adapter
-    // (serverPayloadToCacheEntry) does the heavy lifting: it reshapes the
-    // server's payload (camelCase, nested source, pre-resolved jlptMax + media
-    // URLs) into IK-raw-lookalike entries.
+    // These functions are the default data-layer path (the direct IK / DDG /
+    // Google path is the opt-out fallback). They produce the same
+    // { fetchedAt, raw, chosen } cache-entry shape as the direct path so
+    // downstream code is identical. The adapter (serverPayloadToCacheEntry)
+    // does the heavy lifting: it reshapes the server's payload (camelCase,
+    // nested source, pre-resolved jlptMax + media URLs) into IK-raw-lookalike
+    // entries.
 
     function serverPathEnabled() {
         const prefs = settings();
