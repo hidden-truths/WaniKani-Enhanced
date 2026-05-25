@@ -4,7 +4,7 @@
 
 Backing API server for the [WK Vocab Review — ImmersionKit Examples](../wk-vocab-review-ik.user.js) userscript. Coalesces three external services (ImmersionKit, DuckDuckGo, Google Translate TTS) behind one pre-warmed endpoint so every userscript user doesn't hit those services individually.
 
-**Status**: first-pass implementation done. Boots, warms, serves end-to-end against live IK / DDG / Google. Not yet deployed; userscript not yet migrated to call it. The userscript still calls the external services directly — the migration is the next planned chunk of work.
+**Status**: deployed to production at `https://api.wkenhanced.dev` (DO droplet in SFO3 + DO Spaces, Cloudflare Tunnel for TLS/edge). Userscript routes through it by default as of v1.1.0. The direct-path code is retained in the userscript as an opt-out fallback (settings → API server checkbox off) and will be spun out to a separate `legacy/` snapshot in a later phase. See [../CLIENT_MIGRATION.md](../CLIENT_MIGRATION.md) for the migration history.
 
 For the broader design rationale (cost model, why this exists, deploy story), see [../SERVER_DESIGN.md](../SERVER_DESIGN.md). The "Implementation deviations" section at the top of that doc is the most important part — it lists what changed during the build.
 
@@ -102,13 +102,13 @@ Why DDG is deferred: it accounts for ~1.5s of cold lazy-fill latency (1 vqd + 10
 
 Idempotency: re-running the warm overwrites in place. Object keys are stable across runs (based on `exampleId` from IK or a content hash if IK gives us no id). Skipped if `fetched_at` is within `WARM_REFRESH_DAYS` (default 30) unless `force: true`. Background DDG completion re-reads the latest row before its final upsert so a concurrent re-warm doesn't get clobbered.
 
-Concurrency model: per-word work runs sequentially in `warmAll`. Per-example media downloads inside one word run in parallel (4-wide). IK has a global **50ms** rate limit (`lastIkCallAt` shared module state in `services/ik.ts`) — previously 500ms, but that made interactive lazy-fills feel sluggish (a single cold word triggers ~15 IK calls × 500ms floor = 7–8s of pure throttle wait, even before counting network). 50ms keeps us a polite client without making the userscript feel broken; revisit upward if IK pushes back (429s, IP blocks).
+Concurrency model: per-word work runs sequentially in `warmAll`. Per-example media downloads inside one word run in parallel (4-wide). IK has a global **500ms** rate limit (`lastIkCallAt` shared module state in `services/ik.ts`). This makes a single cold lazy-fill (~15 IK calls) take ~7–8s of pure throttle wait, which is the price of staying a polite client; the userscript hides this behind `?nowarm=true` prefetch. **Do not lower below 500ms** — the rc2 deploy briefly tried 50ms and triggered a global 429 lockout across the droplet for ~30 min (see dead-end warning below). Lowering safely requires implementing 429-with-exponential-backoff in `services/ik.ts:fetchJson` first.
 
 Lazy fill (`GET /v1/vocab/{word}` on a cold word) calls `warmWord()` synchronously. With DDG deferred, the client typically blocks for 1–3s on a fresh-everything cold word and gets `incomplete: true` in the payload; the next visit (typically the userscript's next render or prefetch ~seconds later) hits the now-complete cached row. Use `?nowarm=true` to skip lazy fill entirely for prefetch flows.
 
 ## External services
 
-- **`apiv2.immersionkit.com/search`** — sentence + translation source. Built-in 50ms rate limit. Normalizes `examples` shape across IK API versions.
+- **`apiv2.immersionkit.com/search`** — sentence + translation source. Built-in 500ms rate limit (see concurrency notes above; don't lower without 429-backoff). Normalizes `examples` shape across IK API versions.
 - **`apiv2.immersionkit.com/index_meta`** — canonical encoded-title → `{title, category}` map. Cached 7d. **This is the only reliable way to map IK's lossy encoding** (e.g. `kanon__2006_` → `"Kanon (2006)"`); the heuristic is fallback-only.
 - **`apiv2.immersionkit.com/download_media`** — proxy for audio + image binaries. Requires `Referer: https://www.immersionkit.com/`. Bodies <1KB are treated as miss (proxy returns near-empty for missing files).
 - **`translate.googleapis.com/translate_tts`** — Google TTS fallback when IK has no `sound`. Spoofed `Referer: https://translate.google.com/`, `client=gtx`. Truncates input to 200 chars.
@@ -241,9 +241,9 @@ Use these when writing new tests; they're verified in [src/lib/jlpt.test.ts](src
 - **DB tests use `openDb(':memory:')` + `_useDbForTesting(mem)`** in `beforeEach` for isolation. See [src/db/client.test.ts](src/db/client.test.ts). The `_useDbForTesting` export is test-only — don't call it from app code.
 - **Dead-end cases are pinned to the wrong output**, not skipped. Example: `ikTitleToFolder('durarara__', null)` is asserted to be `'Durarara'` (intentionally wrong; the comment explains why). If a future agent tries to "fix" the heuristic they'll trip the test and find the pointer to the real solution (use the map).
 
-## Cost & deploy (not yet built)
+## Cost & deploy
 
-Target: DO Droplet ($6/mo) + DO Spaces ($5/mo) + Cloudflare in front (free) ≈ **$11/mo** steady state. SQLite means no managed-DB cost. Deploy story sketched in [../SERVER_DESIGN.md](../SERVER_DESIGN.md); not exercised yet.
+DO Droplet ($6/mo, SFO3) + DO Spaces ($5/mo) + Cloudflare Tunnel (free) ≈ **$11/mo** steady state. SQLite means no managed-DB cost. Deploy units live in [deploy/](deploy/) — systemd service, cloudflared config, deploy notes in [deploy/README.md](deploy/README.md). Original design rationale: [../SERVER_DESIGN.md](../SERVER_DESIGN.md); see its "Implementation deviations" header for what changed during the build.
 
 ## What's deliberately NOT in v1
 
