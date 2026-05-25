@@ -1,7 +1,7 @@
 // ==UserScript==
 // @name         WK Vocab Review — ImmersionKit Examples
 // @namespace    https://github.com/jbrelly/wk-ik-examples
-// @version      1.1.0
+// @version      1.1.1
 // @description  ImmersionKit example sentences (audio + image) inlaid into WaniKani vocab reviews.
 // @author       jbrelly
 // @match        https://www.wanikani.com/*
@@ -23,7 +23,7 @@
 
     const SCRIPT_ID = 'wk-ik-examples';
     const SCRIPT_TITLE = 'WK Vocab Review — ImmersionKit';
-    const SCRIPT_VERSION = '1.1.0';
+    const SCRIPT_VERSION = '1.1.1';
 
     // API server endpoints. Single source of truth for prod / dev URLs; lift
     // here when changing the deployed domain. Note: changing PROD_API_BASE
@@ -2044,14 +2044,14 @@
         }
         const probeWord = word || '食べる';
         // Health probe.
-        fetch(`${base}/v1/health`, { credentials: 'omit', mode: 'cors' })
+        fetch(`${base}/v1/health`, { credentials: 'omit', mode: 'cors', cache: 'no-cache' })
             .then((r) => r.json().then((j) => ({ status: r.status, body: j })))
             .then((r) => console.log('GET /v1/health →', r))
             .catch((err) => console.warn('GET /v1/health failed:', err));
         // Sample fetch (raw, no adapter — show what the wire sees).
         const probeUrl = `${base}/v1/vocab/${encodeURIComponent(probeWord)}`;
         console.log(`GET ${probeUrl} ...`);
-        fetch(probeUrl, { credentials: 'omit', mode: 'cors' })
+        fetch(probeUrl, { credentials: 'omit', mode: 'cors', cache: 'no-cache' })
             .then((r) => r.json().then((j) => ({ status: r.status, etag: r.headers.get('ETag'), body: j })))
             .then((r) => {
                 console.log('Server response:', {
@@ -2427,7 +2427,17 @@
         const t0 = Date.now();
         const ifNoneMatch = cachedEntryHint && cachedEntryHint.etag ? cachedEntryHint.etag : null;
         console.log(`[${SCRIPT_ID}] server.get start`, { word, ifNoneMatch });
-        return fetch(url, { headers, credentials: 'omit', mode: 'cors', signal: ctrl.signal })
+        // cache: 'no-cache' forces conditional revalidation against the
+        // server's ETag on every request, instead of letting Chrome's HTTP
+        // cache silently serve the response for the full `max-age=86400`
+        // window the server advertises. With If-None-Match the revalidation
+        // collapses to a 304, so this is cheap; without it, the alternative
+        // is stale empty payloads (observed: a 2026-05-25 review session
+        // that hit a word during the bulk warm got an empty response,
+        // Chrome cached it under max-age=86400, and the userscript kept
+        // re-serving the empty payload from cache even after the warm
+        // re-populated the row server-side).
+        return fetch(url, { headers, credentials: 'omit', mode: 'cors', cache: 'no-cache', signal: ctrl.signal })
             .finally(() => clearTimeout(timer))
             .then((res) => {
                 const ms = Date.now() - t0;
