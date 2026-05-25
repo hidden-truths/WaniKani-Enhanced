@@ -31,10 +31,13 @@ Group=wkenhanced
 WorkingDirectory=/opt/wk-enhanced-api/wk-vocab-api
 EnvironmentFile=/etc/wk-enhanced-api/env
 
-# /root/.bun/bin/bun is the install location when you run the official
-# installer as root. If you installed Bun as a non-root user, adjust to
-# /home/<user>/.bun/bin/bun. `which bun` after install tells you the path.
-ExecStart=/root/.bun/bin/bun run start
+# /usr/local/bin/bun, NOT /root/.bun/bin/bun. The service runs as the
+# unprivileged `wkenhanced` user, and our `ProtectHome=true` hardening below
+# blocks reads of /root anyway — so Bun must live somewhere world-readable
+# outside /home and /root. The deploy README's install step copies the
+# official-installer-placed binary from /root/.bun/bin/bun into
+# /usr/local/bin/bun for this reason.
+ExecStart=/usr/local/bin/bun run start
 
 Restart=always
 RestartSec=5

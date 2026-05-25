@@ -26,8 +26,13 @@ Assumes you've already done the human-side prerequisites from the main README (d
 useradd --system --no-create-home --shell /usr/sbin/nologin wkenhanced
 install -d -o wkenhanced -g wkenhanced /var/lib/wk-enhanced-api
 
-# 2. Install Bun.
+# 2. Install Bun. Two-step: the official installer drops it in /root/.bun/bin
+#    (only readable by root), so we then copy it to /usr/local/bin/bun where
+#    the unprivileged `wkenhanced` user — and systemd's ProtectHome=true
+#    sandbox — can actually execute it.
 curl -fsSL https://bun.sh/install | bash    # as root → /root/.bun/bin/bun
+install -m 755 /root/.bun/bin/bun /usr/local/bin/bun
+/usr/local/bin/bun --version    # sanity
 
 # 3. Pull the repo + install prod deps.
 git clone https://github.com/<your-user-or-org>/WaniKani /opt/wk-enhanced-api
@@ -78,7 +83,7 @@ If any of the files in this directory changed, re-copy them (`install -m 644 ...
 
 ## Things to remember
 
-- **Bun path** in `wk-enhanced-api.service`'s `ExecStart` assumes `/root/.bun/bin/bun` (the official installer's location when run as root). If you installed Bun as a non-root user, edit that line.
+- **Bun path** in `wk-enhanced-api.service`'s `ExecStart` is `/usr/local/bin/bun`. The official installer drops the binary in `/root/.bun/bin/bun`, but `wkenhanced` can't read that (root's home is mode 700) and the systemd unit's `ProtectHome=true` would block it even if perms allowed. Step 2 above copies it to `/usr/local/bin/bun` to bridge the gap.
 - **DATABASE_FILE** lives at `/var/lib/wk-enhanced-api/wk-enhanced-api.sqlite` so it survives `git pull` in `/opt/wk-enhanced-api`. The `wkenhanced` user must own this directory.
 - **The warm timer's `OnCalendar`** uses server-local time. If you didn't `timedatectl set-timezone`, that's UTC, which is fine — just know it.
 - **Backups**: not automated yet. `sqlite3 /var/lib/wk-enhanced-api/wk-enhanced-api.sqlite ".backup /tmp/snap.sqlite"` + `s3cmd put` to Spaces is the documented recipe in the main README; see NEW_FEATURES.md for the tracked work.
