@@ -12,6 +12,7 @@ import { OpenAPIHono } from '@hono/zod-openapi';
 import { zodHook } from '../lib/zodHook.ts';
 import { vocabRouter } from './vocab.ts';
 import { healthRouter } from './health.ts';
+import { indexMetaRouter } from './indexMeta.ts';
 import { openDb, _useDbForTesting } from '../db/client.ts';
 import * as db from '../db/client.ts';
 
@@ -24,6 +25,7 @@ beforeEach(() => {
     app = new OpenAPIHono({ defaultHook: zodHook });
     app.route('/v1/vocab', vocabRouter);
     app.route('/v1/health', healthRouter);
+    app.route('/v1/index_meta', indexMetaRouter);
 });
 
 afterEach(() => {
@@ -173,5 +175,61 @@ describe('POST /v1/vocab/batch', () => {
         expect(res.status).toBe(400);
         const body = (await res.json()) as { code: string };
         expect(body.code).toBe('validation_error');
+    });
+});
+
+describe('GET /v1/index_meta', () => {
+    test('seeded row → 200 with ETag + Cache-Control + body', async () => {
+        db.upsertIndexMeta({ test_anime_2024: { title: 'Test Anime (2024)', category: 'anime' } });
+        const res = await app.fetch(new Request('http://test.local/v1/index_meta'));
+        expect(res.status).toBe(200);
+        expect(res.headers.get('etag')).toBeTruthy();
+        expect(res.headers.get('cache-control')).toContain('max-age=604800');
+        const body = (await res.json()) as { fetchedAt: number; decks: Record<string, unknown> };
+        expect(body.decks.test_anime_2024).toEqual({ title: 'Test Anime (2024)', category: 'anime' });
+    });
+
+    test('ETag round-trip: matching If-None-Match returns 304 with no body', async () => {
+        db.upsertIndexMeta({ a: { title: 'A', category: 'anime' } });
+        const first = await app.fetch(new Request('http://test.local/v1/index_meta'));
+        expect(first.status).toBe(200);
+        const etag = first.headers.get('etag');
+        expect(etag).toBeTruthy();
+
+        const second = await app.fetch(
+            new Request('http://test.local/v1/index_meta', {
+                headers: { 'If-None-Match': etag! },
+            }),
+        );
+        expect(second.status).toBe(304);
+        // 304 must echo the same ETag + Cache-Control so caches can re-pin them.
+        expect(second.headers.get('etag')).toBe(etag);
+        expect(second.headers.get('cache-control')).toContain('max-age=604800');
+    });
+
+    test('weak-prefixed If-None-Match (Cloudflare downgrade) also matches', async () => {
+        // Cloudflare rewrites strong ETags to weak (W/"...") on compressed
+        // responses. The userscript stores and re-sends the weak form; we
+        // strip W/ before comparison so the 304 path still fires.
+        db.upsertIndexMeta({ a: { title: 'A', category: 'anime' } });
+        const first = await app.fetch(new Request('http://test.local/v1/index_meta'));
+        const etag = first.headers.get('etag')!;
+        const second = await app.fetch(
+            new Request('http://test.local/v1/index_meta', {
+                headers: { 'If-None-Match': `W/${etag}` },
+            }),
+        );
+        expect(second.status).toBe(304);
+    });
+
+    test('non-matching If-None-Match returns 200 + current ETag', async () => {
+        db.upsertIndexMeta({ a: { title: 'A', category: 'anime' } });
+        const res = await app.fetch(
+            new Request('http://test.local/v1/index_meta', {
+                headers: { 'If-None-Match': '"stale"' },
+            }),
+        );
+        expect(res.status).toBe(200);
+        expect(res.headers.get('etag')).not.toBe('"stale"');
     });
 });

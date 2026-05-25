@@ -1,5 +1,5 @@
 import { describe, test, expect } from 'bun:test';
-import { etagFor, normalizeEtag } from './vocab.ts';
+import { etagFor, normalizeEtag } from './etag.ts';
 
 describe('etagFor', () => {
     test('wraps a base36-encoded fetchedAt in double quotes', () => {

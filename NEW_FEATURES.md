@@ -356,15 +356,11 @@ The right time to revisit K8s is if we grow to multiple services, want zero-down
 
 **Considerations**: invest in this only after we see real "audio missing for word X" reports tracing to title mis-resolution. Probably less than a dozen titles matter.
 
-### ETag on /v1/index_meta and /v1/admin/jobs
+### ETag on /v1/index_meta — **shipped 2026-05-25**
 
-**What**: extend the conditional-GET pattern from `/v1/vocab/{word}` to other endpoints that change infrequently.
+`/v1/index_meta` now supports `If-None-Match`. Same conditional-GET pattern as `/v1/vocab/{word}`: strong ETag derived from `row.fetchedAt`, weak-prefix tolerance for Cloudflare-downgraded validators, 304 path that echoes the same `Cache-Control` + `ETag` headers as 200. The helper pair (`etagFor`, `normalizeEtag`) moved out of `routes/vocab.ts` into `src/lib/etag.ts` so both routes share one definition; unit tests followed the helpers to `src/lib/etag.test.ts`, and four new integration tests cover the round-trip (200 → 304, weak-prefix tolerance, stale-tag 200 path).
 
-**Why**: `/v1/index_meta` refreshes weekly — every userscript fetch in between sees the same response. With an ETag (derived from `fetched_at`), the client sends `If-None-Match` and we 304. Same logic, ~12KB saved per request.
-
-**How**: identical pattern — `etagFor(fetchedAt)`, check the header, return 304 with same Cache-Control. The `etagFor` helper in `routes/vocab.ts` is already exported; extract to a shared module if more endpoints adopt this.
-
-**Considerations**: `/v1/admin/jobs` changes on every warm and probably isn't worth ETag-ing — the win is for endpoints clients hit repeatedly with stable responses.
+`/v1/admin/jobs` is still not ETag-gated — it changes on every warm and only the maintainer hits it, so the win doesn't materialize. Leave alone unless an operator-facing dashboard ever polls it heavily.
 
 ### Bulk endpoint with opt-in warming
 
