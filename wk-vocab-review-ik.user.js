@@ -2,7 +2,7 @@
 // @name         WK Vocab Review — ImmersionKit Examples
 // @namespace    https://github.com/jbrelly/wk-ik-examples
 // @version      1.1.0
-// @description  Shows one ImmersionKit example sentence (with audio + image) during WaniKani vocab reviews, served through the wk-vocab-api backing server with a direct-mode fallback.
+// @description  ImmersionKit example sentences (audio + image) inlaid into WaniKani vocab reviews.
 // @author       jbrelly
 // @match        https://www.wanikani.com/*
 // @match        https://preview.wanikani.com/*
