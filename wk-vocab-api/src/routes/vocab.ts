@@ -74,25 +74,34 @@ vocabRouter.openapi(getVocabRoute, async (c) => {
     // it composed or decomposed.
     const word = c.req.valid('param').word.normalize('NFC');
     const nowarm = c.req.valid('query').nowarm === 'true';
+    const ifNoneMatch = c.req.header('If-None-Match');
 
     let row = db.getVocab(word);
+    let warmMs: number | undefined;
+
     if (!row) {
         if (nowarm) {
+            c.set('logCtx', { cacheStatus: 'nowarm_miss', word });
+            log.info('vocab.serve', { word, cacheStatus: 'nowarm_miss' });
             return c.json(
                 { code: 'not_found' as const, error: 'word not cached', detail: `${word} is not in the warm cache` },
                 404,
             );
         }
         log.info('vocab.cold_miss', { word });
+        const warmT0 = Date.now();
         try {
             await warmWord(word);
         } catch (err) {
-            log.warn('vocab.lazy_warm_failed', { word, err: (err as Error).message });
+            warmMs = Date.now() - warmT0;
+            c.set('logCtx', { cacheStatus: 'error', word, warmMs });
+            log.warn('vocab.lazy_warm_failed', { word, warmMs, err: (err as Error).message });
             return c.json(
                 { code: 'upstream_failure' as const, error: 'warm failed', detail: (err as Error).message },
                 502,
             );
         }
+        warmMs = Date.now() - warmT0;
         row = db.getVocab(word);
         if (!row) {
             // Warm succeeded but IK has no sentences for this word. Return
@@ -100,23 +109,56 @@ vocabRouter.openapi(getVocabRoute, async (c) => {
             // found" without treating this as an error.
             const empty = { word, fetchedAt: Date.now(), examples: [], fallbackImages: [] };
             c.header('Cache-Control', 'public, max-age=3600, stale-while-revalidate=86400');
+            c.set('logCtx', { cacheStatus: 'empty', word, warmMs });
+            log.info('vocab.serve', { word, cacheStatus: 'empty', warmMs, examples: 0 });
             return c.json(empty, 200);
         }
+        // Cold warm succeeded — fall through to the serve path with
+        // cacheStatus='cold_warm' set after the etag check below.
     }
 
     // ETag short-circuit.
     const etag = etagFor(row.fetchedAt);
-    const ifNoneMatch = c.req.header('If-None-Match');
     if (ifNoneMatch && ifNoneMatch === etag) {
         // 304 must include the same Cache-Control + ETag headers as a 200 would.
         c.header('Cache-Control', 'public, max-age=86400, stale-while-revalidate=2592000');
         c.header('ETag', etag);
+        c.set('logCtx', { cacheStatus: 'not_modified', word, ifNoneMatch: true });
+        log.info('vocab.serve', {
+            word,
+            cacheStatus: 'not_modified',
+            etag,
+            ageMs: Date.now() - row.fetchedAt,
+        });
         return c.body(null, 304);
     }
 
     db.recordVocabServe(word);
     c.header('Cache-Control', 'public, max-age=86400, stale-while-revalidate=2592000');
     c.header('ETag', etag);
+    const examples = Array.isArray(row.payload?.examples) ? row.payload.examples.length : 0;
+    const fallbackImages = Array.isArray(row.payload?.fallbackImages) ? row.payload.fallbackImages.length : 0;
+    // cacheStatus = cold_warm when we just lazy-filled, otherwise hit (DB
+    // row was already there). The serve_count on the row is post-increment
+    // (recordVocabServe ran above).
+    const cacheStatus = warmMs !== undefined ? 'cold_warm' : 'hit';
+    c.set('logCtx', {
+        cacheStatus,
+        word,
+        examples,
+        ...(warmMs !== undefined ? { warmMs } : {}),
+        ...(ifNoneMatch ? { ifNoneMatch: true } : {}),
+    });
+    log.info('vocab.serve', {
+        word,
+        cacheStatus,
+        etag,
+        examples,
+        fallbackImages,
+        ageMs: Date.now() - row.fetchedAt,
+        serveCount: row.serveCount,
+        ...(warmMs !== undefined ? { warmMs } : {}),
+    });
     return c.json(row.payload, 200);
 });
 
@@ -147,6 +189,7 @@ const batchRoute = createRoute({
 });
 
 vocabRouter.openapi(batchRoute, (c) => {
+    const t0 = Date.now();
     const body = c.req.valid('json');
     // Dedupe + NFC-normalize before hitting the DB. Preserves first-seen
     // order in `missing` for client convenience.
@@ -174,6 +217,22 @@ vocabRouter.openapi(batchRoute, (c) => {
             missing.push(w);
         }
     }
+
+    const ms = Date.now() - t0;
+    c.set('logCtx', {
+        cacheStatus: 'batch',
+        requested: body.words.length,
+        deduped: normalized.length,
+        found: Object.keys(found).length,
+        missing: missing.length,
+    });
+    log.info('vocab.batch', {
+        requested: body.words.length,
+        deduped: normalized.length,
+        found: Object.keys(found).length,
+        missing: missing.length,
+        ms,
+    });
 
     // Batch responses are too volatile to cache aggressively (different
     // client requests have different word sets). Don't set Cache-Control.

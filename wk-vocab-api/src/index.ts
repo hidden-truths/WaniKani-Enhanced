@@ -36,15 +36,26 @@ app.use('*', async (c, next) => {
     await next();
 });
 
-// Request logging — one line per request, post-hoc.
+// Request logging — one line per request, post-hoc. Route handlers can
+// attach additional context (cache status, warm timing, etc.) by calling
+// `c.set('logCtx', { ... })`; those fields are merged into the http log
+// line so a single entry tells the whole story of a request. Common fields
+// to set:
+//   - cacheStatus: 'hit' | 'not_modified' | 'cold_warm' | 'nowarm_miss' |
+//                  'empty' | 'error' | 'batch'
+//   - warmMs:      number — how long lazy-fill took (only for cold_warm paths)
+//   - ifNoneMatch: boolean — did the client send a conditional GET header
+//   - word, found, missing, etc.: route-specific.
 app.use('*', async (c, next) => {
     const t0 = Date.now();
     await next();
+    const ctx = (c.get('logCtx') as Record<string, unknown>) || {};
     log.info('http', {
         method: c.req.method,
         path: c.req.path,
         status: c.res.status,
         ms: Date.now() - t0,
+        ...ctx,
     });
 });
 

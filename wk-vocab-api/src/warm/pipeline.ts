@@ -46,6 +46,17 @@ export interface WarmedExample {
     imageUrl: string | null;
 }
 
+// Per-example media stats collected during warmOneExample. Aggregated into
+// the warm.word.done log line so the operator can see at a glance how much
+// of a warm was satisfied by the storage-cache vs how much required fresh
+// IK / TTS / DDG calls. Internal — not part of the public payload.
+interface MediaStats {
+    audioSource: 'ik' | 'tts' | 'none';
+    audioStorage: 'cache' | 'fetched' | 'failed' | 'skipped';
+    imageSource: 'ik' | 'none';
+    imageStorage: 'cache' | 'fetched' | 'failed' | 'skipped';
+}
+
 export interface VocabPayload {
     word: string;
     fetchedAt: number;
@@ -130,21 +141,33 @@ export async function warmWord(word: string, options?: { force?: boolean }): Pro
     const trimmed = rawExamples.slice(0, MAX_EXAMPLES_PER_WORD);
 
     // 2-4. Resolve titles, score JLPT, fetch + upload media. Per-example work
-    // runs in concurrent batches.
+    // runs in concurrent batches. Each call returns the warmed example plus
+    // a MediaStats record describing what we actually had to fetch vs what
+    // we served from the storage cache.
     const warmed = await batched(trimmed, MEDIA_CONCURRENCY, (e) =>
         warmOneExample(word, e, indexMeta, storage),
     );
-    const examples = warmed.filter(Boolean) as WarmedExample[];
+    const examples = warmed.filter((w) => w.example !== null).map((w) => w.example) as WarmedExample[];
+    const allStats = warmed.map((w) => w.stats);
 
     // 5. DDG fallback pool for the word. Best-effort — if DDG fails, we still
-    // serve the word, just without illustrations.
+    // serve the word, just without illustrations. Track how many of the pool
+    // URLs we actually had to fetch from DDG (vs already-uploaded ones if any).
     let fallbackImages: string[] = [];
+    let ddgUrlsFound = 0;
+    let ddgFetched = 0;
+    let ddgFailed = 0;
     try {
         const urls = await ddgSearchImages(word);
+        ddgUrlsFound = urls.length;
         const indexed = urls.map((url, idx) => ({ url, idx }));
         const uploaded = await batched(indexed, 3, async ({ url, idx }) => {
             const img = await ddgFetchImage(url);
-            if (!img) return null;
+            if (!img) {
+                ddgFailed++;
+                return null;
+            }
+            ddgFetched++;
             const key = keys.ddg(word, idx);
             return storage.put(key, img.buffer, img.contentType);
         });
@@ -162,11 +185,33 @@ export async function warmWord(word: string, options?: { force?: boolean }): Pro
     };
     db.upsertVocab(word, payload, examples.length);
 
+    // Aggregate per-example stats. `audio.ik + audio.tts + audio.none` always
+    // sums to examples.length. `audioStorage.cache` counts examples where the
+    // audio file was already in storage from a prior warm (no IK / TTS call
+    // needed this run); `audioStorage.fetched` counts fresh downloads. The
+    // ratio between these is the most useful operational signal — high cache
+    // hit = re-warm finished fast; high fetched = lots of new media work.
+    const audio = { ik: 0, tts: 0, none: 0 };
+    const audioStorage = { cache: 0, fetched: 0, failed: 0, skipped: 0 };
+    const image = { ik_present: 0, ik_missing: 0 };
+    const imageStorage = { cache: 0, fetched: 0, failed: 0, skipped: 0 };
+    for (const s of allStats) {
+        audio[s.audioSource]++;
+        audioStorage[s.audioStorage]++;
+        if (s.imageSource === 'ik') image.ik_present++;
+        else image.ik_missing++;
+        imageStorage[s.imageStorage]++;
+    }
+
     log.info('warm.word.done', {
         word,
-        examples: examples.length,
-        fallbackImages: fallbackImages.length,
         ms: Date.now() - t0,
+        examples: examples.length,
+        audio,
+        audioStorage,
+        image,
+        imageStorage,
+        ddg: { urls: ddgUrlsFound, fetched: ddgFetched, failed: ddgFailed, fallbackImages: fallbackImages.length },
     });
     return payload;
 }
@@ -176,11 +221,15 @@ async function warmOneExample(
     e: IkExample,
     indexMeta: IndexMeta,
     storage: ReturnType<typeof getStorage>,
-): Promise<WarmedExample | null> {
+): Promise<{ example: WarmedExample | null; stats: MediaStats }> {
     const encodedTitle = (e.title || e.deck_name || '') as string;
     if (!encodedTitle) {
-        // No source attribution is useless — skip.
-        return null;
+        // No source attribution is useless — skip. Stats default to all-skipped
+        // so the aggregator math still adds up.
+        return {
+            example: null,
+            stats: { audioSource: 'none', audioStorage: 'skipped', imageSource: 'none', imageStorage: 'skipped' },
+        };
     }
     const folder = ikTitleToFolder(encodedTitle, indexMeta);
     const category = resolveCategory(encodedTitle, e.id, indexMeta);
@@ -189,17 +238,23 @@ async function warmOneExample(
     // ---- Audio ----
     let audioUrl: string | null = null;
     let hasOriginalAudio = false;
+    let audioSource: MediaStats['audioSource'] = 'none';
+    let audioStorage: MediaStats['audioStorage'] = 'skipped';
     if (e.sound) {
         const audioKey = keys.audio(category, encodedTitle, id);
         if (await storage.exists(audioKey)) {
             audioUrl = storage.publicUrl(audioKey);
             hasOriginalAudio = true;
+            audioSource = 'ik';
+            audioStorage = 'cache';
         } else {
             const url = buildDownloadMediaUrl(category, folder, e.sound);
             const r = await ikDownloadMedia(url);
             if (r.ok && r.buffer) {
                 audioUrl = await storage.put(audioKey, r.buffer, r.contentType || 'audio/mpeg');
                 hasOriginalAudio = true;
+                audioSource = 'ik';
+                audioStorage = 'fetched';
             } else {
                 log.debug('warm.ik_audio_miss', { word, id, err: r.error });
             }
@@ -212,46 +267,62 @@ async function warmOneExample(
         const audioKey = keys.audio(category, encodedTitle, id);
         if (await storage.exists(audioKey)) {
             audioUrl = storage.publicUrl(audioKey);
+            audioSource = 'tts';
+            audioStorage = 'cache';
         } else {
             const tts = await googleTts(e.sentence);
             if (tts) {
                 audioUrl = await storage.put(audioKey, tts.buffer, tts.contentType);
+                audioSource = 'tts';
+                audioStorage = 'fetched';
+            } else {
+                audioStorage = 'failed';
             }
         }
     }
 
     // ---- Image ----
     let imageUrl: string | null = null;
+    let imageSource: MediaStats['imageSource'] = 'none';
+    let imageStorage: MediaStats['imageStorage'] = 'skipped';
     if (e.image) {
         const imageKey = keys.image(category, encodedTitle, id);
         if (await storage.exists(imageKey)) {
             imageUrl = storage.publicUrl(imageKey);
+            imageSource = 'ik';
+            imageStorage = 'cache';
         } else {
             const url = buildDownloadMediaUrl(category, folder, e.image);
             const r = await ikDownloadMedia(url);
             if (r.ok && r.buffer) {
                 imageUrl = await storage.put(imageKey, r.buffer, r.contentType || 'image/jpeg');
+                imageSource = 'ik';
+                imageStorage = 'fetched';
             } else {
+                imageStorage = 'failed';
                 log.debug('warm.ik_image_miss', { word, id, err: r.error });
             }
         }
     }
 
     return {
-        id,
-        sentence: e.sentence || '',
-        sentenceFurigana: e.sentence_with_furigana || '',
-        translation: e.translation || '',
-        wordList: Array.isArray(e.word_list) ? e.word_list : [],
-        source: {
-            title: prettifyTitle(encodedTitle, indexMeta),
-            category,
-            encodedTitle,
+        example: {
+            id,
+            sentence: e.sentence || '',
+            sentenceFurigana: e.sentence_with_furigana || '',
+            translation: e.translation || '',
+            wordList: Array.isArray(e.word_list) ? e.word_list : [],
+            source: {
+                title: prettifyTitle(encodedTitle, indexMeta),
+                category,
+                encodedTitle,
+            },
+            jlptMax: scoreJlpt(e.word_list, word),
+            hasOriginalAudio,
+            audioUrl,
+            imageUrl,
         },
-        jlptMax: scoreJlpt(e.word_list, word),
-        hasOriginalAudio,
-        audioUrl,
-        imageUrl,
+        stats: { audioSource, audioStorage, imageSource, imageStorage },
     };
 }
 

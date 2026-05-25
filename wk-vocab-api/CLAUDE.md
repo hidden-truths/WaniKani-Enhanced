@@ -176,6 +176,32 @@ Cold warm of one word against live IK takes ~15–30s. Subsequent reads are <10m
 2. If audio misses but TTS succeeds, that's normal for text-only literature sources.
 3. If IK examples are returned but all media misses, suspect the **title encoding problem** — check `resolveIkFolderAndCategory()` against the live IK URL by hand-building one. The fix is usually that the word's deck isn't in our cached `/index_meta` map (refresh via `POST /v1/admin/warm {"scope":"index_meta"}`).
 
+**Reading the logs (structured JSON; one line per event):**
+
+Per request, the `http` middleware emits a single line that route handlers can enrich via `c.set('logCtx', { ... })`. Common keys to look for:
+
+| Event | Fields | When |
+|---|---|---|
+| `http` | method, path, status, ms, +logCtx fields | Every request, post-hoc. |
+| `vocab.serve` | word, cacheStatus, etag, examples, ageMs, serveCount, warmMs? | Per `GET /v1/vocab/{word}`. |
+| `vocab.batch` | requested, deduped, found, missing, ms | Per `POST /v1/vocab/batch`. |
+| `vocab.cold_miss` | word | Cold-word lazy-warm trigger. |
+| `vocab.lazy_warm_failed` | word, warmMs, err | Lazy warm threw. |
+| `warm.word.start` / `warm.word.done` | word, examples, audio{ik,tts,none}, audioStorage{cache,fetched,failed,skipped}, image{ik_present,ik_missing}, imageStorage{...}, ddg{urls,fetched,failed,fallbackImages}, ms | Per-word warm; the `*.done` line is the operator dashboard for "what did this warm actually do." High `audioStorage.cache` = re-warm fast, no external calls; high `audioStorage.fetched` = lots of fresh IK / TTS work. |
+| `warm.all.start` / `warm.all.done` / `warm.all.word_failed` | count, processed, failed, jobId | Bulk warm progress. |
+
+The `cacheStatus` enum on `vocab.serve` and on the http log line:
+
+| Status | Meaning |
+|---|---|
+| `hit` | DB row served directly. No upstream calls. Sub-10ms. |
+| `not_modified` | ETag matched client's `If-None-Match`; returned 304. Even cheaper than `hit`. |
+| `cold_warm` | DB row was missing; we ran `warmWord` synchronously and then served. `warmMs` shows how long the warm took (typically 10–30s for a cold word). |
+| `empty` | Warm succeeded but IK had no examples for this word — returned an empty payload (200, not 404, so the client renders a "no example" card). |
+| `nowarm_miss` | Client passed `?nowarm=true` and the row was missing; returned 404 without warming. Expected for prefetch flows. |
+| `error` | Lazy warm threw; returned 502. |
+| `batch` | `POST /v1/vocab/batch` (always serves whatever's cached, never warms). |
+
 **When you change the schema:**
 
 1. Update or add a Zod schema in [src/schemas.ts](src/schemas.ts).
