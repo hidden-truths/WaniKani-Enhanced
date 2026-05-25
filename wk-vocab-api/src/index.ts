@@ -1,0 +1,150 @@
+// wk-vocab-api server entry.
+//
+// Routes:
+//   GET    /v1/health
+//   GET    /v1/vocab/:word
+//   GET    /v1/index_meta
+//   POST   /v1/admin/warm     (Authorization: Bearer <ADMIN_TOKEN>)
+//   GET    /media/*           (only when STORAGE_DRIVER=local)
+//   GET    /docs              (Scalar UI)
+//   GET    /openapi.json      (OpenAPI 3.1 spec, auto-generated from Zod schemas)
+
+import { OpenAPIHono } from '@hono/zod-openapi';
+import { Scalar } from '@scalar/hono-api-reference';
+import { zodHook } from './lib/zodHook.ts';
+import { resolve, join, normalize } from 'node:path';
+import { config } from './config.ts';
+import { log } from './lib/log.ts';
+import { getDb } from './db/client.ts';
+import { healthRouter } from './routes/health.ts';
+import { vocabRouter } from './routes/vocab.ts';
+import { indexMetaRouter } from './routes/indexMeta.ts';
+import { adminRouter } from './routes/admin.ts';
+
+const app = new OpenAPIHono({ defaultHook: zodHook });
+
+// Simple permissive CORS — the userscript may run on www.wanikani.com OR
+// preview.wanikani.com OR (in dev) the same localhost. No credentials, no
+// cookies, no per-user data → blanket allow is safe.
+app.use('*', async (c, next) => {
+    c.header('Access-Control-Allow-Origin', '*');
+    c.header('Access-Control-Allow-Methods', 'GET, POST, OPTIONS');
+    c.header('Access-Control-Allow-Headers', 'Content-Type, Authorization');
+    if (c.req.method === 'OPTIONS') {
+        return c.body(null, 204);
+    }
+    await next();
+});
+
+// Request logging — one line per request, post-hoc.
+app.use('*', async (c, next) => {
+    const t0 = Date.now();
+    await next();
+    log.info('http', {
+        method: c.req.method,
+        path: c.req.path,
+        status: c.res.status,
+        ms: Date.now() - t0,
+    });
+});
+
+app.route('/v1/health', healthRouter);
+app.route('/v1/vocab', vocabRouter);
+app.route('/v1/index_meta', indexMetaRouter);
+app.route('/v1/admin', adminRouter);
+
+// OpenAPI 3.1 spec, auto-generated from each route's Zod schema. .doc31() is
+// the 3.1 variant; .doc() emits 3.0 which lacks some types we use.
+app.doc31('/openapi.json', (c) => {
+    const url = new URL(c.req.url);
+    return {
+        openapi: '3.1.0',
+        info: {
+            title: 'wk-vocab-api',
+            version: '0.1.0',
+            description:
+                'Backing API for the WK Vocab Review — ImmersionKit Examples userscript. ' +
+                'Coalesces ImmersionKit, DuckDuckGo, and Google Translate TTS behind a single ' +
+                'pre-warmed endpoint. See SERVER_DESIGN.md for the broader rationale.',
+        },
+        servers: [{ url: `${url.protocol}//${url.host}`, description: 'This server' }],
+        tags: [
+            { name: 'Read', description: 'Client-facing endpoints. Safe to expose publicly. Edge-cacheable.' },
+            { name: 'Admin', description: 'Operational endpoints. Bearer-token gated; not for end users.' },
+        ],
+    };
+});
+
+app.get(
+    '/docs',
+    Scalar({
+        url: '/openapi.json',
+        theme: 'purple',
+        pageTitle: 'wk-vocab-api docs',
+    }),
+);
+
+// Local-mode static media route. Serves /media/<key> from LOCAL_MEDIA_DIR.
+if (config.storage.driver === 'local') {
+    const root = resolve(config.storage.localDir);
+    app.get('/media/*', async (c) => {
+        const rel = c.req.path.replace(/^\/media\//, '');
+        // Decode + normalize, then guard against path traversal by checking
+        // the resolved path is still inside `root`.
+        const decoded = rel.split('/').map((s) => decodeURIComponent(s)).join('/');
+        const target = normalize(join(root, decoded));
+        if (!target.startsWith(root)) {
+            return c.text('forbidden', 403);
+        }
+        const file = Bun.file(target);
+        if (!(await file.exists())) return c.text('not found', 404);
+        c.header('Cache-Control', 'public, max-age=31536000, immutable');
+        return new Response(file);
+    });
+    log.info('media.static_route_enabled', { root });
+}
+
+app.get('/', (c) =>
+    c.json({
+        name: 'wk-vocab-api',
+        version: '0.1.0',
+        docs: '/docs',
+        openapi: '/openapi.json',
+        endpoints: [
+            'GET  /v1/health',
+            'GET  /v1/vocab/:word',
+            'GET  /v1/index_meta',
+            'POST /v1/admin/warm  (bearer auth)',
+        ],
+    }),
+);
+
+app.notFound((c) =>
+    c.json(
+        { code: 'not_found' as const, error: 'not found', detail: `no route matches ${c.req.method} ${c.req.path}` },
+        404,
+    ),
+);
+
+app.onError((err, c) => {
+    log.error('http.unhandled', { err: err.message, stack: err.stack });
+    return c.json(
+        { code: 'internal_error' as const, error: 'internal error', detail: err.message },
+        500,
+    );
+});
+
+// Eagerly open the DB so any schema/path error surfaces at boot, not on the
+// first request.
+getDb();
+
+log.info('boot', {
+    port: config.port,
+    storageDriver: config.storage.driver,
+    databaseFile: config.databaseFile,
+});
+
+export default {
+    port: config.port,
+    fetch: app.fetch,
+};

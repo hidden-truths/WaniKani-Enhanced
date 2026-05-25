@@ -4,7 +4,7 @@ Backlog of features discussed in conversation but not yet shipped. Track the des
 
 Loosely ordered by value within each section. Anything urgent should move to a real issue / commit branch — this is the parking lot.
 
-See also [CLAUDE.md](CLAUDE.md) for architecture notes and dead-ends already explored, and [README.md](README.md) for the user-facing description of what's shipped today.
+See also [CLAUDE.md](CLAUDE.md) for architecture notes and dead-ends already explored, [README.md](README.md) for the user-facing description of what's shipped today, [SERVER_DESIGN.md](SERVER_DESIGN.md) and [wk-vocab-api/CLAUDE.md](wk-vocab-api/CLAUDE.md) for the server, and [CLIENT_MIGRATION.md](CLIENT_MIGRATION.md) for the plan to wire the userscript up to the server.
 
 ---
 
@@ -173,6 +173,184 @@ See also [CLAUDE.md](CLAUDE.md) for architecture notes and dead-ends already exp
 - Surface in the settings cache section: "Auto-evicted N entries at limit Y MB."
 
 **Considerations**: only matters for prolific users. The "Clear cache" button is already there for the nuclear option. Defer until someone complains.
+
+---
+
+## Server-side improvements
+
+These are ideas for the [wk-vocab-api](wk-vocab-api/) server. Most exist *because* there's a server now — they're things the userscript can't do well or at all on its own (heavy preprocessing, large datasets, cross-user pooling of data fetches). See [wk-vocab-api/CLAUDE.md](wk-vocab-api/CLAUDE.md) for the current architecture.
+
+### Morphological analysis for JLPT scoring
+
+**What**: integrate a real Japanese morphological analyzer (kuromoji.js or MeCab via a Bun-friendly binding) into the warm pipeline so JLPT scoring lemmatizes conjugated verbs / adjectives before dictionary lookup.
+
+**Why**: the current `scoreJlpt` is fail-open on conjugated forms — IK gives us `食べた`, our dict has `食べる`, the token gets skipped, and sentences whose entire word_list is conjugated verbs score 0 (= "unknown, don't filter"). Result: the JLPT ceiling filter is strict on identifiable nouns/adjectives and permissive on verb-heavy sentences. Real morphological analysis closes that gap and makes the ceiling do what users expect.
+
+**How**:
+- Add `kuromoji` as a dep (~50MB dictionary; bundle as a separate downloadable + cache at first warm, or vendor into Docker image / DO Spaces).
+- In the warm pipeline: for each example, run `word_list` (or the raw sentence) through kuromoji → get dictionary forms → look those up in `JLPT_VOCAB`.
+- Score the same hardest-wins way. Drop the fail-open sentinel if known-token rate goes high enough that fail-open becomes a no-op.
+- Bump cache schema version (everything re-warms).
+
+**Considerations**: payload size unchanged (only `jlptMax` changes per-example); pipeline gets slower by maybe 5-10ms per example. Bundled dict is the size concern — eats most of the storage budget on a basic droplet unless we host it on Spaces. Alternative: a smaller stem-mapping table built from the JLPT dict + common conjugation suffixes; less accurate but no new dep.
+
+### Better DDG image search alternative
+
+**What**: replace DuckDuckGo image scraping with a more stable image source.
+
+**Why**: DDG's image endpoint rotates its HTML format every few months. Each break means broken fallback images until the regex gets updated. The current scrape works but is fragile.
+
+**How**: options ranked by stability vs effort:
+1. **Bing Image Search API** — paid but stable, has a free tier. Requires API key (env var, not per-user).
+2. **Open-source image dataset** — bundle a hand-curated set of "concept illustrations" mapped to common JLPT words. ~100MB on Spaces. Highest stability, lowest coverage.
+3. **Multiple-source fallback** — try DDG first, then Google Images (also scrape-fragile), then Bing. Smear the breakage risk.
+
+**Considerations**: keep DDG as one of the sources even if we add another; redundancy beats single-source. The image-refresh button on the card already cycles through the pool, so users can self-heal a bad image.
+
+### LRU eviction for media storage
+
+**What**: cap total media storage (e.g. 50GB on Spaces) and evict least-recently-served entries when over.
+
+**Why**: even with a 50-example cap per word, a forum-bump-driven traffic spike could pull in cold corners of the WK vocab list that don't get re-served. Storage cost on DO Spaces is $0.02/GB over the 250GB base; with no cap, that grows unbounded if we don't refresh-and-purge.
+
+**How**:
+- The `last_served_at` and `serve_count` columns on `vocab_examples` are already populated — they exist for exactly this.
+- Periodic sweep (cron, or every Nth `/v1/admin/warm` call): if `measureMediaSize() > THRESHOLD`, find words with the lowest `last_served_at + N * log(serve_count)` (LRU-ish with mild popularity weighting), delete their media objects, and reset their `payload.audioUrl` / `imageUrl` to null. The next request lazy-warms them.
+- Track evicted-bytes in `/v1/health` so we can see when it's firing.
+
+**Considerations**: don't evict the DB row, only the media. The example metadata is tiny; keeping it means the next serve gets a faster lazy-warm (skip IK search, just re-fetch media). The "Clear cache" button on the userscript should NOT trigger server-side eviction — that's an account-action and we have no accounts.
+
+### Schema version pin for cached payloads
+
+**What**: add a `payload_schema_version` column to `vocab_examples` and bump it whenever the response shape changes. On boot, scan for rows with mismatched version and trigger re-warm (or wipe + lazy-fill).
+
+**Why**: the userscript has `CACHE_SCHEMA_VERSION` for exactly this; the server doesn't. Today, a payload shape change (e.g. renaming `hasOriginalAudio` to `audioSource`) would mean stale rows serve broken data to clients until they happen to be re-warmed. With a version pin, mismatched rows get cleared on boot or refreshed on next serve.
+
+**How**:
+- Add `payload_schema_version INTEGER NOT NULL DEFAULT 1` to the schema.
+- `PAYLOAD_SCHEMA_VERSION = 2` constant in code; bump on shape changes.
+- `upsertVocab` writes the current version; `getVocab` returns null (or triggers re-warm) on mismatch.
+- Migration: on boot, count rows with stale version; log + optionally background-refresh.
+
+**Considerations**: SQLite `ALTER TABLE ADD COLUMN` is the boring migration. Couple bumps with userscript schema bumps — keep the two version numbers in sync where they share concerns (e.g. if we add `pitchAccent` to examples).
+
+### Circuit-breaker for IK outages
+
+**What**: when IK requests have failed N times in the last M minutes, stop calling IK for a cooldown window and serve fallbacks immediately (TTS for audio, no image, DDG-only for image pool).
+
+**Why**: during an IK outage every cold warm hits the IK 15s timeout before falling back. UX gets terrible for any user encountering a cold word during an outage. With a breaker, we recognize "IK is down" after ~3 failed requests and skip the doomed calls entirely.
+
+**How**:
+- Module-state counter + last-failed-at timestamp in `services/ik.ts`.
+- On request failure, increment + timestamp.
+- If count > 3 within last 5 minutes, return a stub failure for the next 10 minutes; the warm pipeline already handles "no examples" gracefully (lazy fill returns an empty payload, 200).
+- Auto-recover by zeroing the counter after the cooldown.
+- Log circuit-break entry/exit so we can see it from journalctl.
+
+**Considerations**: tune thresholds against real outage data once we have any. Should NOT trip during normal "deck has no audio" misses — those return a body, just a small one; only count actual transport-layer failures (timeout, 5xx, network error).
+
+### Manual override map for IK title decoding
+
+**What**: a small static map (file or DB table) of `encoded_title → {title, category}` that we maintain by hand, layered on top of IK's `/index_meta`. Used when IK's own data is wrong or missing.
+
+**Why**: the dead-end warnings in [wk-vocab-api/CLAUDE.md](wk-vocab-api/CLAUDE.md) describe cases where IK's `/index_meta` doesn't have an entry, and the heuristic fallback is wrong (`durarara__` → "Durarara" instead of "Durarara!!"). For high-volume titles where this matters, a hand-maintained override is the cleanest fix.
+
+**How**:
+- New file `src/data/title-overrides.json`: `{ "durarara__": { "title": "Durarara!!", "category": "anime" } }`.
+- `resolveIkFolderAndCategory` checks overrides first, then IK index_meta, then heuristic.
+- Bundle in the repo; ten entries is plenty for the worst offenders.
+
+**Considerations**: invest in this only after we see real "audio missing for word X" reports tracing to title mis-resolution. Probably less than a dozen titles matter.
+
+### ETag on /v1/index_meta and /v1/admin/jobs
+
+**What**: extend the conditional-GET pattern from `/v1/vocab/{word}` to other endpoints that change infrequently.
+
+**Why**: `/v1/index_meta` refreshes weekly — every userscript fetch in between sees the same response. With an ETag (derived from `fetched_at`), the client sends `If-None-Match` and we 304. Same logic, ~12KB saved per request.
+
+**How**: identical pattern — `etagFor(fetchedAt)`, check the header, return 304 with same Cache-Control. The `etagFor` helper in `routes/vocab.ts` is already exported; extract to a shared module if more endpoints adopt this.
+
+**Considerations**: `/v1/admin/jobs` changes on every warm and probably isn't worth ETag-ing — the win is for endpoints clients hit repeatedly with stable responses.
+
+### Bulk endpoint with opt-in warming
+
+**What**: add a `?warm=true` mode to `POST /v1/vocab/batch` that lazy-warms missing words instead of returning them in the `missing` array.
+
+**Why**: clients that *want* warming for everything they request would prefer one slow batch call to a fast batch + N individual GETs. Current shape is right for prefetching (fast + composable), but workflows like "force-warm these 10 words" are more natural as one call.
+
+**How**:
+- Add `warm: boolean` field to `BatchRequestSchema`.
+- When `true`: still return `{found, missing: []}`, but kick off `warmWord` for each miss with concurrency 4, wait for all to finish, then return the full found map.
+- Cap warming-mode at smaller batch sizes (~10) since the wall-clock cost is N × cold-warm time.
+
+**Considerations**: only worth it if we end up needing it. The prefetch flow (batch → individual GETs for misses) is fine for the userscript's actual use case.
+
+### Translation-language switcher
+
+**What**: serve translations in user-chosen language (German / French / Spanish) from IK's multi-language data, instead of hardcoded English.
+
+**Why**: IK's `/search` returns multiple translation fields per example. Currently we throw away everything but English. For non-English-native users (a noticeable slice of WK users), German or Spanish would be more useful.
+
+**How**:
+- IK's response shape varies but typically includes `translation_de`, `translation_es`, etc. on each example.
+- Server stores all available translations in the payload (small bytes).
+- Client picks one based on a setting (or its browser language).
+- New optional `?lang=de` query on `/v1/vocab/{word}` could let the server pre-select to save bytes, but full-payload-all-langs is simpler and lets the userscript switch on the fly.
+
+**Considerations**: low priority while the maintainer is English-native. Bundle into a larger "internationalization" pass when there's demand.
+
+### Pitch accent for the target word
+
+**What**: include pitch-accent data in the response payload so the userscript can render it next to the highlighted target word.
+
+**Why**: pitch accent is a known WK gap. The CLAUDE.md mentions it as N2+ listening/production gap. Server-side is the right place to host the data — bundle once, every client gets it.
+
+**How**:
+- Source: [kanjium pitch-accent data](https://github.com/mifunetoshiro/kanjium) (CC-licensed). ~3000 entries for common N5-N3 vocab; ~200KB.
+- Bundle in `src/data/pitch-accent.json` or fetch from a community-hosted JSON.
+- `warmWord` attaches a `pitchAccent` field to the payload (e.g. `{ pattern: "atamadaka", drop_at: 1 }` or just the contour string `"⓪"`).
+- Bump payload schema version.
+
+**Considerations**: licensing check on the source. Coverage is sparse for less-common vocab. Could be a no-op for many words (field is `null`) — that's fine.
+
+### Health metrics expansion
+
+**What**: add 24h serve counts, cache hit rate, and storage byte totals to `/v1/health`.
+
+**Why**: capacity planning + cost monitoring without Prometheus. Once deployed, the maintainer wants to know "are we at 50GB?" and "did the forum-bump traffic die down?" without SSHing in.
+
+**How**:
+- `serve_count` column already tracks per-word; aggregate over `last_served_at > now - 24h`.
+- Cache hit rate = `(total /v1/vocab/{word} requests - cold misses) / total`; need to record the denominator (add a `vocab_requests` counter row in a new `metrics` table, or just parse logs offline).
+- Storage size: walk the storage driver's files (cheap on filesystem; one S3 `ListObjects` call in prod). Cache for 5 minutes to avoid hammering Spaces on health checks.
+
+**Considerations**: don't turn health into a slow endpoint — keep the heavy lifting (storage size) cached. Add a separate `/v1/admin/stats` endpoint if it grows.
+
+### SQLite backup story
+
+**What**: scheduled backup of the SQLite DB to DO Spaces.
+
+**Why**: the DB file holds everything not in object storage — warmed payloads, index_meta cache, job audit. Losing it isn't catastrophic (everything re-warms eventually) but it'd kill a few hours of accumulated lazy-fill state. Backups are cheap; restoring beats re-warming.
+
+**How**:
+- Cron job (or in-process scheduler): `sqlite3 wk-vocab.sqlite ".backup wk-vocab-snapshot.sqlite"` (atomic + safe even with concurrent reads/writes thanks to WAL).
+- Upload the snapshot to `s3://bucket/backups/wk-vocab-YYYYMMDD.sqlite`.
+- Keep last N (7 daily + 4 weekly + 12 monthly is typical).
+
+**Considerations**: SQLite's `.backup` is the right tool — don't `cp` the live file. The Bun built-in S3 client handles upload; ~30 lines of script total. Wire into systemd timer alongside the monthly warm.
+
+### Keyed external services (DeepL, OpenAI, Forvo, jpdb)
+
+**What**: support user-provided API keys for services that gate behind authentication.
+
+**Why**: enrichment features (better translations via DeepL, grammar notes via OpenAI, native pronunciation via Forvo, definition fallbacks via jpdb) all want API keys. We've committed to "no maintainer-paid keys for users" — but a user with their own DeepL key should be able to opt in.
+
+**How**:
+- New endpoints: `POST /v1/translate` (passes through to DeepL with the user's key), `POST /v1/grammar/{word}` (OpenAI), etc.
+- Auth: `X-DeepL-Key: <key>` header (or whatever per-service header is natural). Server treats the key as opaque, never logs it, never persists.
+- Server CAN cache the *response* (the translation of "私は学生です" doesn't depend on whose key paid for it) — but keyed by hash of (key, request) so we don't accidentally serve user A's response to user B without their key.
+
+**Considerations**: the "never cache under a key the requester can't reach" rule is load-bearing — that's what keeps us on the right side of "don't data-mine user accounts." Get a security review (even informal) before shipping any keyed endpoint.
 
 ---
 

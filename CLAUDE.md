@@ -2,11 +2,21 @@
 
 ## What this project is
 
-A single-file Tampermonkey userscript at [wk-vocab-review-ik.user.js](wk-vocab-review-ik.user.js) that augments WaniKani vocab reviews with example sentences (ImmersionKit), audio (IK `download_media` proxy → Google Translate TTS fallback), and images (IK source screenshot → DuckDuckGo illustration fallback).
+A **two-part** project augmenting WaniKani vocab reviews:
 
-**The codebase is one file.** No build step, no tests, no package manager. Read the whole file to see everything — there is no other source.
+1. **Tampermonkey userscript** at [wk-vocab-review-ik.user.js](wk-vocab-review-ik.user.js) — runs in-browser on WaniKani, injects example sentences (ImmersionKit), audio (IK `download_media` proxy → Google Translate TTS fallback), and images (IK source screenshot → DuckDuckGo illustration fallback) into the vocab-review header.
+2. **Backing API server** at [wk-vocab-api/](wk-vocab-api/) — Bun + Hono + SQLite. Coalesces IK / DDG / Google TTS behind a single pre-warmed endpoint so every client doesn't hit three external services individually. Has its own [CLAUDE.md](wk-vocab-api/CLAUDE.md) and [README.md](wk-vocab-api/README.md) — treat those as authoritative for anything inside `wk-vocab-api/`.
 
-For features that have been discussed but not yet shipped, see [NEW_FEATURES.md](NEW_FEATURES.md) — pick from there when looking for the next thing to build.
+The server is **partially built / not yet deployed**. The userscript today still calls IK / DDG / Google directly; migrating it to the server is the next planned chunk of work. This file covers the userscript. For server work, jump to [wk-vocab-api/CLAUDE.md](wk-vocab-api/CLAUDE.md).
+
+**Reading order for a cold start:**
+1. This file — userscript architecture + dead-ends.
+2. [SERVER_DESIGN.md](SERVER_DESIGN.md) — design rationale for the server (with implementation deviations noted at the top).
+3. [wk-vocab-api/CLAUDE.md](wk-vocab-api/CLAUDE.md) — server architecture + dead-ends.
+4. [CLIENT_MIGRATION.md](CLIENT_MIGRATION.md) — plan for the next big chunk: switching the userscript over to call the server. Read before starting that work.
+5. [NEW_FEATURES.md](NEW_FEATURES.md) — backlog of features discussed but not yet shipped (now includes a Server-side improvements section).
+
+**The userscript is a single file.** No build step, no tests, no package manager — read the whole file to see everything. The server is a separate codebase that happens to live in the same git repo (`package.json`, test suite, type-check, the works).
 
 ## Why it exists
 

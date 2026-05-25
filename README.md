@@ -2,6 +2,11 @@
 
 A [Tampermonkey](https://www.tampermonkey.net/) userscript that augments WaniKani vocab reviews with a real example sentence, voice-actor audio, and a scene image — inlaid directly into the big purple character header so you read, hear, and see the word in context the moment you finish answering.
 
+This repo contains two components:
+
+- **The userscript** (`wk-vocab-review-ik.user.js`) — what you install in Tampermonkey. This README covers it.
+- **A backing API server** (`wk-vocab-api/`) — Bun + Hono + SQLite. Pre-warms ImmersionKit, Google TTS, and DuckDuckGo data so every userscript user doesn't have to hit those services individually. **Not yet wired up to the userscript**; in active development. See [wk-vocab-api/README.md](wk-vocab-api/README.md) and [SERVER_DESIGN.md](SERVER_DESIGN.md).
+
 ## What it does
 
 During every vocabulary review, the big purple character header is augmented in place:
