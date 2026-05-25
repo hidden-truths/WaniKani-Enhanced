@@ -1,14 +1,15 @@
 // ==UserScript==
 // @name         WK Vocab Review — ImmersionKit Examples
 // @namespace    https://github.com/jbrelly/wk-ik-examples
-// @version      1.0.0-rc2
-// @description  Shows one ImmersionKit example sentence (with IK / Google TTS audio + IK / DDG image) during WaniKani vocab reviews. v1.0 adds an opt-in API server path (default off).
+// @version      1.1.0
+// @description  Shows one ImmersionKit example sentence (with audio + image) during WaniKani vocab reviews, served through the wk-vocab-api backing server with a direct-mode fallback.
 // @author       jbrelly
 // @match        https://www.wanikani.com/*
 // @match        https://preview.wanikani.com/*
 // @connect      apiv2.immersionkit.com
 // @connect      duckduckgo.com
 // @connect      translate.googleapis.com
+// @connect      api.wkenhanced.dev
 // @connect      localhost
 // @grant        GM_xmlhttpRequest
 // @grant        unsafeWindow
@@ -22,7 +23,7 @@
 
     const SCRIPT_ID = 'wk-ik-examples';
     const SCRIPT_TITLE = 'WK Vocab Review — ImmersionKit';
-    const SCRIPT_VERSION = '1.0.0-rc2';
+    const SCRIPT_VERSION = '1.1.0';
 
     // Bump this when on-disk cache shape or sourcing logic changes in a way that
     // makes stale entries actively wrong (vs. just suboptimal). Boot will clear
@@ -122,16 +123,17 @@
         // initial sort. Independent of jlptCeiling so the user can e.g. let
         // anything through (ceiling=any) while still preferring N3 by default.
         jlptPreferred: 'any',
-        // ---- API server (Phase 1 coexistence) ----
+        // ---- API server ----
         // When true AND apiServerUrl is non-empty, route all vocab fetches
-        // through our backing server instead of IK / DDG / Google. Off by
-        // default during Phase 1; flipped on by users opting in to test.
-        useApiServer: false,
+        // through our backing server instead of IK / DDG / Google directly.
+        // Default on; flip off to force direct mode if the server is
+        // unreachable.
+        useApiServer: true,
         // Base URL of the wk-vocab-api server. Empty disables the API path
-        // (forces direct mode). For local dev: 'http://localhost:3000'. For
-        // the eventual public deployment: 'https://<prod-domain>'. Trailing
-        // slash is stripped at use time.
-        apiServerUrl: '',
+        // (forces direct mode). Production: 'https://api.wkenhanced.dev'.
+        // Local dev: 'http://localhost:3000'. Trailing slash is stripped at
+        // use time.
+        apiServerUrl: 'https://api.wkenhanced.dev',
         // When useApiServer is on, on review-session entry prefetch the next
         // N upcoming subjects via POST /v1/vocab/batch. 0 disables; default 10.
         prefetchCount: 10,
@@ -556,14 +558,14 @@
                         },
                         apiServer: {
                             type: 'section',
-                            label: 'API server (experimental)',
+                            label: 'API server',
                         },
                         useApiServer: {
                             type: 'checkbox',
                             label: 'Use API server (instead of direct IK/DDG/Google)',
                             default: DEFAULTS.useApiServer,
                             hover_tip:
-                                'Phase 1 coexistence toggle. When on, every vocab lookup goes through the configured API server URL below; the direct code path is skipped. Off by default — flip on after setting a URL and (for local dev) starting `bun dev` in wk-vocab-api/. Falls back to the empty-card state if the server is unreachable; flip off to restore the direct path.',
+                                'When on, every vocab lookup goes through the configured API server URL below; the direct code path is skipped. Default on. Falls back to the empty-card state if the server is unreachable; flip off to restore the direct path. For local dev, point the URL at your `bun dev` server in wk-vocab-api/.',
                         },
                         apiServerUrl: {
                             type: 'text',
