@@ -171,4 +171,13 @@ log.info('boot', {
 export default {
     port: config.port,
     fetch: app.fetch,
+    // Bun's default idleTimeout is 10s, which kills cold-fill responses
+    // mid-flight: `warmWord` for an uncached word takes 10–30s (one ikSearch
+    // + ~100 media downloads through the 500ms IK rate-limit floor), during
+    // which the handler hasn't written any bytes — Bun considers the
+    // connection idle and resets it. The server-side warm still finishes
+    // and populates the row, but the client sees a connection drop.
+    // 60s comfortably covers the worst observed cold warm (~30s) and stays
+    // well under Cloudflare's 100s free-tier edge timeout.
+    idleTimeout: 60,
 };
