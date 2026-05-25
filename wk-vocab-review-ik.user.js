@@ -321,10 +321,12 @@
         const dir = (wkof.file_cache && wkof.file_cache.dir) || {};
         const summary = {
             examples: 0,
+            serverPayloads: 0,
             imageUrlLists: 0,
             ikAudio: 0,
             ttsAudio: 0,
             words: [],
+            serverWords: [],
             indexMetaCached: false,
             selections: Object.keys(state.selections || {}).length,
         };
@@ -333,6 +335,11 @@
                 summary.examples++;
                 try {
                     summary.words.push(decodeURIComponent(key.slice(CACHE_PREFIX.length)));
+                } catch (_) { /* corrupt key — count but don't list */ }
+            } else if (key.startsWith(SERVER_CACHE_PREFIX)) {
+                summary.serverPayloads++;
+                try {
+                    summary.serverWords.push(decodeURIComponent(key.slice(SERVER_CACHE_PREFIX.length)));
                 } catch (_) { /* corrupt key — count but don't list */ }
             } else if (key.startsWith(IMG_CACHE_PREFIX)) {
                 summary.imageUrlLists++;
@@ -345,6 +352,7 @@
             }
         }
         summary.words.sort();
+        summary.serverWords.sort();
         return summary;
     }
 
@@ -384,6 +392,7 @@
         const keys = Object.keys(dir);
         const buckets = {
             examples: 0,
+            serverPayloads: 0,
             imageUrlLists: 0,
             ikAudio: 0,
             ttsAudio: 0,
@@ -399,6 +408,7 @@
         return Promise.all(tasks).then((results) => {
             for (const { key, size } of results) {
                 if (key.startsWith(CACHE_PREFIX)) buckets.examples += size;
+                else if (key.startsWith(SERVER_CACHE_PREFIX)) buckets.serverPayloads += size;
                 else if (key.startsWith(IMG_CACHE_PREFIX)) buckets.imageUrlLists += size;
                 else if (key.startsWith(IK_AUDIO_CACHE_PREFIX)) buckets.ikAudio += size;
                 else if (key.startsWith(AUDIO_CACHE_PREFIX)) buckets.ttsAudio += size;
@@ -424,18 +434,16 @@
         const el = document.getElementById(`${SCRIPT_ID}-cache-info`);
         if (!el) return;
         const s = buildCacheSummary();
-        const wordsList = s.words.length
-            ? s.words.join(', ')
-            : '(no vocab cached yet — they\'ll appear here as you review)';
         const indexMetaState = s.indexMetaCached
             ? `cached (${indexMeta ? Object.keys(indexMeta).length + ' decks' : 'not yet loaded into memory'})`
             : 'not cached';
         el.innerHTML = '';
         const bucketRows = [
-            { key: 'examples', label: 'Example sentences', count: `${s.examples} word(s)` },
-            { key: 'imageUrlLists', label: 'Image URL lists', count: `${s.imageUrlLists} word(s)` },
-            { key: 'ikAudio', label: 'IK audio clips', count: `${s.ikAudio} entry(s) (positive + negative)` },
-            { key: 'ttsAudio', label: 'Google TTS clips', count: `${s.ttsAudio} sentence(s)` },
+            { key: 'serverPayloads', label: 'API server payloads', count: `${s.serverPayloads} word(s)` },
+            { key: 'examples', label: 'Direct-mode IK examples', count: `${s.examples} word(s)` },
+            { key: 'imageUrlLists', label: 'Direct-mode DDG image lists', count: `${s.imageUrlLists} word(s)` },
+            { key: 'ikAudio', label: 'Direct-mode IK audio clips', count: `${s.ikAudio} entry(s) (positive + negative)` },
+            { key: 'ttsAudio', label: 'Direct-mode Google TTS clips', count: `${s.ttsAudio} sentence(s)` },
             { key: 'selections', label: 'Refresh-button selections', count: `${s.selections} word(s)` },
             { key: 'indexMeta', label: 'IK index_meta', count: indexMetaState },
         ];
@@ -481,14 +489,19 @@
                 for (const span of Object.values(sizeSpans)) span.textContent = 'unavailable';
             });
 
-        if (s.examples > 0) {
+        // Collapsible word lists, one per cache prefix that has entries.
+        // Server payloads + direct-mode IK examples are different namespaces
+        // (a user can have both if they've flipped the toggle around);
+        // showing them separately makes it obvious which path produced what.
+        const addWordList = (label, words) => {
+            if (!words || !words.length) return;
             const details = document.createElement('details');
             details.style.marginTop = '0.5em';
             details.style.paddingTop = '0.4em';
             details.style.borderTop = '1px solid rgba(0,0,0,0.1)';
             const summaryEl = document.createElement('summary');
             summaryEl.style.cursor = 'pointer';
-            summaryEl.textContent = `Cached words (${s.examples})`;
+            summaryEl.textContent = `${label} (${words.length})`;
             details.appendChild(summaryEl);
             const wordsBox = document.createElement('div');
             wordsBox.style.marginTop = '0.4em';
@@ -497,9 +510,19 @@
             wordsBox.style.maxHeight = '180px';
             wordsBox.style.overflowY = 'auto';
             wordsBox.style.lang = 'ja';
-            wordsBox.textContent = wordsList;
+            wordsBox.textContent = words.join(', ');
             details.appendChild(wordsBox);
             el.appendChild(details);
+        };
+        addWordList('Cached words (server)', s.serverWords);
+        addWordList('Cached words (direct mode)', s.words);
+        if (!s.serverWords.length && !s.words.length) {
+            const hint = document.createElement('div');
+            hint.style.marginTop = '0.5em';
+            hint.style.fontSize = '0.95em';
+            hint.style.opacity = '0.7';
+            hint.textContent = '(no vocab cached yet — words will appear here as you review)';
+            el.appendChild(hint);
         }
     }
 
