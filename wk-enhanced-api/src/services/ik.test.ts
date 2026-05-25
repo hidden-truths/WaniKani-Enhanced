@@ -7,6 +7,7 @@ import {
     buildDownloadMediaUrl,
     parseRetryAfter,
     ikSearch,
+    ikDownloadMedia,
     _ikFetchConfig,
 } from './ik.ts';
 
@@ -179,6 +180,53 @@ describe('fetchJson 429 retry behavior (via ikSearch)', () => {
         // The gap between attempt 1 and attempt 2 must reflect the
         // Retry-After value, not the (much smaller) exponential base.
         expect(waits[0]).toBeGreaterThanOrEqual(25);
+    });
+
+    test('ikDownloadMedia: 429 then 200-with-valid-body → 1 retry, ok:true', async () => {
+        // Build a 2KB buffer (over the 1024-byte MIN_VALID_MEDIA_BYTES floor).
+        const payload = new Uint8Array(2048).fill(0xAB);
+        const calls = mockFetch((n) =>
+            n === 1
+                ? new Response('rate limited', { status: 429 })
+                : new Response(payload, {
+                      status: 200,
+                      headers: { 'content-type': 'audio/mpeg' },
+                  }),
+        );
+        const r = await ikDownloadMedia('https://example.test/foo.mp3');
+        expect(calls()).toBe(2);
+        expect(r.ok).toBe(true);
+        expect(r.contentType).toBe('audio/mpeg');
+        expect(r.buffer!.byteLength).toBe(2048);
+    });
+
+    test('ikDownloadMedia: 429 every time → returns failure (does NOT throw)', async () => {
+        const calls = mockFetch(() => new Response('rate limited', { status: 429 }));
+        const r = await ikDownloadMedia('https://example.test/foo.mp3');
+        expect(calls()).toBe(_ikFetchConfig.maxRetries + 1);
+        expect(r.ok).toBe(false);
+        expect(r.error).toMatch(/429/);
+    });
+
+    test('ikDownloadMedia: 5xx → no retry, returns failure', async () => {
+        const calls = mockFetch(() => new Response('boom', { status: 500 }));
+        const r = await ikDownloadMedia('https://example.test/foo.mp3');
+        expect(calls()).toBe(1);
+        expect(r.ok).toBe(false);
+        expect(r.error).toMatch(/500/);
+    });
+
+    test('ikDownloadMedia: 200 with body under 1KB → no retry, returns failure (proxy miss)', async () => {
+        // IK's /download_media returns a near-empty body when the underlying
+        // file is missing — a small body is a structural miss, not a transient
+        // failure, so we deliberately don't retry it.
+        const calls = mockFetch(() =>
+            new Response(new Uint8Array(100), { status: 200, headers: { 'content-type': 'audio/mpeg' } }),
+        );
+        const r = await ikDownloadMedia('https://example.test/foo.mp3');
+        expect(calls()).toBe(1);
+        expect(r.ok).toBe(false);
+        expect(r.error).toMatch(/body too small/);
     });
 
     test('Retry-After is capped at maxBackoffMs', async () => {

@@ -61,11 +61,13 @@ export interface IkIndexMetaEntry {
 //     ~2–4s at 500ms, which is fine. Bulk warm becomes ~1h+ (the README's
 //     original projection) but the data isn't garbage.
 //
-// 429-backoff (added 2026-05-25): fetchJson now retries 429s with
-// exponential backoff (base 1s, factor 2, cap 30s, 3 retries) and honors
-// Retry-After when present. A transient 429 wave during a bulk warm now
-// recovers within tens of seconds instead of poisoning the rest of the run.
-// We deliberately do NOT retry 5xx — that's a different failure mode
+// 429-backoff (added 2026-05-25): every IK call goes through fetchWithRetry,
+// which retries 429s with exponential backoff (base 1s, factor 2, cap 30s,
+// 3 retries) and honors Retry-After when present. Both fetchJson (search,
+// index_meta) and ikDownloadMedia (audio + image proxy) share the same
+// retry budget per call. A transient 429 wave during a bulk warm now
+// recovers within tens of seconds instead of poisoning the rest of the
+// run. We deliberately do NOT retry 5xx — that's a different failure mode
 // (server bug, not rate limit) and retrying it here would muddy the
 // `warm.ik_search_failed` signal. If we ever need 5xx retry, it's a
 // separate change.
@@ -116,19 +118,23 @@ export function parseRetryAfter(header: string | null): number | null {
     return null;
 }
 
-async function fetchJson<T>(url: string, init?: RequestInit): Promise<T> {
-    // Retry 429s with exponential backoff. Other failures throw immediately.
-    // Don't reset lastIkCallAt during backoff — the post-backoff rateLimit()
-    // call naturally re-applies the minGapMs gate, and the backoff sleep is
-    // almost always longer than the gate, so we don't pay double.
+// Shared fetch wrapper for every IK call. Applies the minGapMs gate and
+// retries 429s with exponential backoff. Returns the final Response — the
+// caller decides how to consume the body and how to interpret a non-2xx
+// status. Throws only on network/transport errors that `fetch()` itself
+// surfaces (DNS, refused connection, AbortSignal trip, etc.); HTTP error
+// statuses come back as a Response with res.ok=false.
+//
+// Don't reset lastIkCallAt during backoff — the post-backoff rateLimit()
+// call naturally re-applies the minGapMs gate, and the backoff sleep is
+// almost always longer than the gate so we don't pay double.
+async function fetchWithRetry(url: string, init?: RequestInit): Promise<Response> {
     const { maxRetries, baseBackoffMs, maxBackoffMs } = _ikFetchConfig;
     for (let attempt = 0; ; attempt++) {
         await rateLimit();
         const res = await fetch(url, init);
-        if (res.ok) return res.json() as Promise<T>;
-        if (res.status !== 429 || attempt >= maxRetries) {
-            throw new Error(`IK fetch ${url} failed: ${res.status} ${res.statusText}`);
-        }
+        if (res.ok) return res;
+        if (res.status !== 429 || attempt >= maxRetries) return res;
         const retryAfterMs = parseRetryAfter(res.headers.get('Retry-After'));
         const expoMs = baseBackoffMs * Math.pow(2, attempt);
         const waitMs = Math.min(retryAfterMs ?? expoMs, maxBackoffMs);
@@ -140,6 +146,14 @@ async function fetchJson<T>(url: string, init?: RequestInit): Promise<T> {
         });
         await sleep(waitMs);
     }
+}
+
+async function fetchJson<T>(url: string, init?: RequestInit): Promise<T> {
+    const res = await fetchWithRetry(url, init);
+    if (!res.ok) {
+        throw new Error(`IK fetch ${url} failed: ${res.status} ${res.statusText}`);
+    }
+    return res.json() as Promise<T>;
 }
 
 export async function ikSearch(word: string): Promise<IkExample[]> {
@@ -194,9 +208,15 @@ export function buildDownloadMediaUrl(category: string, folder: string, filename
 }
 
 export async function ikDownloadMedia(url: string): Promise<MediaFetchResult> {
-    await rateLimit();
+    // 429-with-backoff applies here too — most IK traffic in a bulk warm
+    // is /download_media, so retrying transient rate-limits here is what
+    // closes the loop on most missed media. The 15s AbortSignal is a hard
+    // ceiling for the *whole* call (retries cut into the same budget); if
+    // backoff would push past 15s the signal trips and we return failure.
+    // That's acceptable — media failures leave audioUrl/imageUrl null and
+    // the warm completes anyway with the incomplete-payload signal.
     try {
-        const res = await fetch(url, {
+        const res = await fetchWithRetry(url, {
             headers: { Referer: 'https://www.immersionkit.com/' },
             signal: AbortSignal.timeout(15_000),
         });
