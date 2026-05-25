@@ -28,6 +28,28 @@ if (driver !== 'local' && driver !== 's3') {
     throw new Error(`STORAGE_DRIVER must be "local" or "s3", got: ${driver}`);
 }
 
+// Driver-specific env validation. Run at boot rather than lazily inside
+// the Storage constructor so misconfigured prod envs kill the service
+// at startup instead of on the first warm — typically hours after
+// deploy. S3Storage still has its own constructor check as
+// belt-and-suspenders. Exported for unit testing.
+export function validateStorageEnv(
+    driver: 'local' | 's3',
+    env: Record<string, string | undefined>,
+): void {
+    if (driver !== 's3') return;
+    const required = ['S3_ENDPOINT', 'S3_BUCKET', 'S3_ACCESS_KEY_ID', 'S3_SECRET_ACCESS_KEY'] as const;
+    const missing = required.filter((k) => !env[k]);
+    if (missing.length) {
+        throw new Error(
+            `STORAGE_DRIVER=s3 requires the following env vars: ${missing.join(', ')}. ` +
+                `See .env.example for the full set.`,
+        );
+    }
+}
+
+validateStorageEnv(driver, process.env);
+
 export const config = {
     // Single source of truth for the server version: package.json. Routes
     // and OpenAPI docs read this; bumping the package.json version
