@@ -203,24 +203,9 @@ The first production deploy landed at `https://api.wkenhanced.dev` on DO (SFO3, 
 
 **Effort**: half a day, including the Compose file + deploy README rewrite + verifying the SQLite + Spaces paths still work under the bind-mount.
 
-### DOKS / Kubernetes — explicitly rejected for v1, document the analysis
+### DOKS / Kubernetes — **ADR shipped 2026-05-25**
 
-**What**: write a short ADR-style note explaining why we're NOT using DigitalOcean Kubernetes (DOKS) or any container-orchestration platform for this workload.
-
-**Why**: the question comes up ("why aren't you using K8s?"). Recording the analysis avoids re-running the conversation every time a contributor wonders.
-
-**The analysis**:
-- **DOKS minimum cost** = $12/mo control plane + $12/mo for one worker node = $24/mo, **4× our current cost** for the same workload.
-- **K8s shines** with multiple services, autoscaling, rolling deploys across many instances, cross-cluster failover. **We have one service**, bounded traffic (low thousands of users), monthly bulk warm + on-demand lazy fill — none of K8s's strengths apply.
-- **Stateful workloads on K8s are awkward**. Our SQLite + Spaces design is dead simple on a droplet; on K8s we'd need a PersistentVolumeClaim for the DB (which forces us to manage storage explicitly), and HostPath mounts are discouraged.
-- **K8s pods get evicted routinely** by the scheduler (node maintenance, version upgrades, resource pressure). For a stateful service, droplet stability is genuinely better than pod stability.
-- **Operationally**: K8s adds Ingress, Services, ConfigMaps, Secrets, Deployments, PVCs, HPA — ~10 manifest types we'd need to understand. None of that earns its keep at our scale.
-
-The right time to revisit K8s is if we grow to multiple services, want zero-downtime rolling deploys, or need autoscaling beyond what a single droplet provides. Until then, **Dockerized-on-a-droplet** is the sweet spot.
-
-**How**: a `docs/decisions/ADR-001-no-kubernetes.md` (or similar) capturing the above + linking from `wk-enhanced-api/CLAUDE.md`. ~30 minutes to write properly.
-
-**Considerations**: keep it short and decision-focused, not a K8s tutorial. The point is to document the trade-off once so we stop relitigating it.
+Written up as [wk-enhanced-api/docs/decisions/ADR-001-no-kubernetes.md](wk-enhanced-api/docs/decisions/ADR-001-no-kubernetes.md) — captures the cost analysis ($24/mo control plane + node vs our current $11/mo all-in), the workload-shape mismatch (one service, bounded traffic, stateful filesystem), the pod-eviction hazard for stateful services, and the operational complexity (~10 manifest types vs five files of systemd). Linked from `wk-enhanced-api/CLAUDE.md` next to the SQLite-not-Postgres dead-end so the two coupled decisions read together. Includes a "when to revisit this" section pinning the trip-wires (more than one service, zero-downtime requirement, multi-region, past vertical-scaling headroom).
 
 ### Per-endpoint IK rate limits (separate gates for /search vs /download_media)
 
