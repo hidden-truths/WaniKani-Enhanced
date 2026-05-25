@@ -43,9 +43,10 @@ export interface IkIndexMetaEntry {
     category: string;
 }
 
-// Polite rate limit. IK is free + community-supported; don't hammer.
+// Polite rate limit + 429-with-exponential-backoff. IK is free +
+// community-supported; don't hammer.
 //
-// History:
+// History (minGapMs):
 //   - v0.x: 500ms (~2 req/sec). Safe but made cold lazy-fill feel sluggish
 //     in the userscript (~16 IK calls per word × 500ms floor = ~8s of pure
 //     throttle wait).
@@ -60,26 +61,85 @@ export interface IkIndexMetaEntry {
 //     ~2–4s at 500ms, which is fine. Bulk warm becomes ~1h+ (the README's
 //     original projection) but the data isn't garbage.
 //
-// If we ever need to push back below 500ms, do it carefully: monitor
-// `warm.ik_search_failed` counts during a small-scope warm before going
-// full-corpus, and add proper 429-with-exponential-backoff handling in
-// fetchJson before lowering the floor.
+// 429-backoff (added 2026-05-25): fetchJson now retries 429s with
+// exponential backoff (base 1s, factor 2, cap 30s, 3 retries) and honors
+// Retry-After when present. A transient 429 wave during a bulk warm now
+// recovers within tens of seconds instead of poisoning the rest of the run.
+// We deliberately do NOT retry 5xx — that's a different failure mode
+// (server bug, not rate limit) and retrying it here would muddy the
+// `warm.ik_search_failed` signal. If we ever need 5xx retry, it's a
+// separate change.
+//
+// Lowering minGapMs below 500ms is still gated on more than just having
+// backoff — the rc2 lockout suggested IK has a per-IP soft ceiling that
+// kicks in even after backoff recovery. Backoff means a retry burst is
+// survivable; it does not mean a sustained higher request rate is.
+//
+// Test-only knob. Production code MUST NOT mutate this; tests use it to
+// shorten retry waits so the suite stays fast. Mirrors the
+// `_useDbForTesting` pattern used by db/client.ts.
+export const _ikFetchConfig = {
+    minGapMs: 500,
+    maxRetries: 3,
+    baseBackoffMs: 1000,
+    maxBackoffMs: 30_000,
+};
+
 let lastIkCallAt = 0;
-const MIN_GAP_MS = 500;
 
 async function rateLimit() {
     const gap = Date.now() - lastIkCallAt;
-    if (gap < MIN_GAP_MS) await sleep(MIN_GAP_MS - gap);
+    if (gap < _ikFetchConfig.minGapMs) await sleep(_ikFetchConfig.minGapMs - gap);
     lastIkCallAt = Date.now();
 }
 
-async function fetchJson<T>(url: string, init?: RequestInit): Promise<T> {
-    await rateLimit();
-    const res = await fetch(url, init);
-    if (!res.ok) {
-        throw new Error(`IK fetch ${url} failed: ${res.status} ${res.statusText}`);
+// Parse a Retry-After header value. RFC 7231 §7.1.3 allows either an integer
+// number of seconds (e.g. "120") or an HTTP-date (e.g. "Wed, 21 Oct 2015
+// 07:28:00 GMT"). Returns the wait in ms, or null if the header is absent
+// or unparseable. Capping to maxBackoffMs is the caller's job.
+export function parseRetryAfter(header: string | null): number | null {
+    if (!header) return null;
+    const trimmed = header.trim();
+    if (!trimmed) return null;
+    // The two RFC forms are mutually exclusive. If the value looks numeric
+    // (digits + optional sign/decimal), parse it as seconds and don't fall
+    // through to Date.parse — Bun's date parser is lax enough that "-5"
+    // resolves to a real (past) date, which would surprise callers.
+    if (/^[+-]?(\d+\.?\d*|\.\d+)$/.test(trimmed)) {
+        const seconds = Number(trimmed);
+        return Number.isFinite(seconds) && seconds >= 0 ? Math.round(seconds * 1000) : null;
     }
-    return res.json() as Promise<T>;
+    const target = Date.parse(trimmed);
+    if (Number.isFinite(target)) {
+        return Math.max(0, target - Date.now());
+    }
+    return null;
+}
+
+async function fetchJson<T>(url: string, init?: RequestInit): Promise<T> {
+    // Retry 429s with exponential backoff. Other failures throw immediately.
+    // Don't reset lastIkCallAt during backoff — the post-backoff rateLimit()
+    // call naturally re-applies the minGapMs gate, and the backoff sleep is
+    // almost always longer than the gate, so we don't pay double.
+    const { maxRetries, baseBackoffMs, maxBackoffMs } = _ikFetchConfig;
+    for (let attempt = 0; ; attempt++) {
+        await rateLimit();
+        const res = await fetch(url, init);
+        if (res.ok) return res.json() as Promise<T>;
+        if (res.status !== 429 || attempt >= maxRetries) {
+            throw new Error(`IK fetch ${url} failed: ${res.status} ${res.statusText}`);
+        }
+        const retryAfterMs = parseRetryAfter(res.headers.get('Retry-After'));
+        const expoMs = baseBackoffMs * Math.pow(2, attempt);
+        const waitMs = Math.min(retryAfterMs ?? expoMs, maxBackoffMs);
+        log.warn('ik.fetch.429_backoff', {
+            url,
+            attempt: attempt + 1,
+            waitMs,
+            retryAfter: retryAfterMs,
+        });
+        await sleep(waitMs);
+    }
 }
 
 export async function ikSearch(word: string): Promise<IkExample[]> {
