@@ -1,7 +1,7 @@
 {
-  "name": "wk-vocab-api",
+  "name": "wk-enhanced-api",
   "version": "0.1.0",
-  "description": "Backing API for wk-vocab-review-ik userscript — coalesces ImmersionKit, DuckDuckGo, and Google TTS behind a single pre-warmed endpoint.",
+  "description": "Backing API for the WKEnhanced userscript — coalesces ImmersionKit, DuckDuckGo, and Google TTS behind a single pre-warmed endpoint.",
   "private": true,
   "type": "module",
   "scripts": {

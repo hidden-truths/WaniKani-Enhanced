@@ -1,4 +1,4 @@
--- Schema for wk-vocab-api. SQLite via bun:sqlite.
+-- Schema for wk-enhanced-api. SQLite via bun:sqlite.
 --
 -- Three tables:
 --   vocab_examples  — pre-warmed payload per word (one row per word)

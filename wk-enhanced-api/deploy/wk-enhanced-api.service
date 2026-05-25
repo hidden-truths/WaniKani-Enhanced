@@ -14,13 +14,15 @@
 # entrypoint directly means an entrypoint rename in the future doesn't break
 # the unit.
 #
-# Note: this serves the source tree at wk-vocab-api/ inside the cloned repo
-# (the code wasn't renamed when the deployment was). WorkingDirectory points
-# at /opt/wk-enhanced-api/wk-vocab-api accordingly.
+# Note: serves the source tree at wk-enhanced-api/ inside the cloned repo.
+# WorkingDirectory points at /opt/wk-enhanced-api/wk-enhanced-api accordingly.
+# (Production deployments that predate the 2026-05-25 rename had this at
+# /opt/wk-enhanced-api/wk-vocab-api — `mv` that directory before
+# `systemctl daemon-reload && systemctl restart wk-enhanced-api`.)
 
 [Unit]
-Description=wk-enhanced-api — backing API for the WK Vocab Review ImmersionKit userscript
-Documentation=https://github.com/<your-user-or-org>/WaniKani/blob/main/wk-vocab-api/README.md
+Description=wk-enhanced-api — backing API for the WKEnhanced userscript
+Documentation=https://github.com/<your-user-or-org>/WaniKani/blob/main/wk-enhanced-api/README.md
 After=network-online.target
 Wants=network-online.target
 
@@ -28,7 +30,7 @@ Wants=network-online.target
 Type=simple
 User=wkenhanced
 Group=wkenhanced
-WorkingDirectory=/opt/wk-enhanced-api/wk-vocab-api
+WorkingDirectory=/opt/wk-enhanced-api/wk-enhanced-api
 EnvironmentFile=/etc/wk-enhanced-api/env
 
 # /usr/local/bin/bun, NOT /root/.bun/bin/bun. The service runs as the

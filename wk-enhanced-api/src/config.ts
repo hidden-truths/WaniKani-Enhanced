@@ -57,7 +57,7 @@ export const config = {
     version: pkg.version,
     port: num('PORT', 3000),
     adminToken: required('ADMIN_TOKEN'),
-    databaseFile: process.env.DATABASE_FILE || './dev-data/wk-vocab.sqlite',
+    databaseFile: process.env.DATABASE_FILE || './dev-data/wk-enhanced-api.sqlite',
     wkApiToken: process.env.WK_API_TOKEN || '',
     warmRefreshDays: num('WARM_REFRESH_DAYS', 30),
     indexMetaRefreshDays: num('INDEX_META_REFRESH_DAYS', 7),

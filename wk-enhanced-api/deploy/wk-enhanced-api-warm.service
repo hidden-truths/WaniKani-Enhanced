@@ -10,7 +10,7 @@
 
 [Unit]
 Description=Monthly bulk warm of wk-enhanced-api against ImmersionKit
-Documentation=https://github.com/<your-user-or-org>/WaniKani/blob/main/wk-vocab-api/README.md
+Documentation=https://github.com/<your-user-or-org>/WaniKani/blob/main/wk-enhanced-api/README.md
 Requires=wk-enhanced-api.service
 After=wk-enhanced-api.service
 

@@ -1,4 +1,4 @@
-// wk-vocab-api server entry.
+// wk-enhanced-api server entry.
 //
 // Routes:
 //   GET    /v1/health
@@ -78,10 +78,10 @@ app.doc31('/openapi.json', (c) => {
     return {
         openapi: '3.1.0',
         info: {
-            title: 'wk-vocab-api',
+            title: 'wk-enhanced-api',
             version: config.version,
             description:
-                'Backing API for the WK Vocab Review — ImmersionKit Examples userscript. ' +
+                'Backing API for the WKEnhanced userscript. ' +
                 'Coalesces ImmersionKit, DuckDuckGo, and Google Translate TTS behind a single ' +
                 'pre-warmed endpoint. See SERVER_DESIGN.md for the broader rationale.',
         },
@@ -98,7 +98,7 @@ app.get(
     Scalar({
         url: '/openapi.json',
         theme: 'purple',
-        pageTitle: 'wk-vocab-api docs',
+        pageTitle: 'wk-enhanced-api docs',
     }),
 );
 
@@ -136,7 +136,7 @@ if (config.storage.driver === 'local') {
 
 app.get('/', (c) =>
     c.json({
-        name: 'wk-vocab-api',
+        name: 'wk-enhanced-api',
         version: config.version,
         docs: '/docs',
         openapi: '/openapi.json',
