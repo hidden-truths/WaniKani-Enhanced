@@ -1,11 +1,13 @@
-# WK Vocab Review — ImmersionKit Examples
+# WKEnhanced
 
 A [Tampermonkey](https://www.tampermonkey.net/) userscript that augments WaniKani vocab reviews with a real example sentence, voice-actor audio, and a scene image — inlaid directly into the big purple character header so you read, hear, and see the word in context the moment you finish answering.
 
 This repo contains two components:
 
-- **The userscript** (`wk-vocab-review-ik.user.js`) — what you install in Tampermonkey. This README covers it.
-- **A backing API server** (`wk-vocab-api/`) — Bun + Hono + SQLite. Pre-warms ImmersionKit, Google TTS, and DuckDuckGo data so every userscript user doesn't have to hit those services individually. **As of v1.0.0-rc2, the userscript can opt into using the server via a settings toggle** (default off). The server itself is functional but not yet publicly deployed; for now it's "run locally and point the userscript at localhost." See [wk-vocab-api/README.md](wk-vocab-api/README.md), [CLIENT_MIGRATION.md](CLIENT_MIGRATION.md), and [SERVER_DESIGN.md](SERVER_DESIGN.md).
+- **The userscript** ([`wkenhanced.user.js`](wkenhanced.user.js)) — what you install in Tampermonkey. This README covers it.
+- **A backing API server** ([`wk-enhanced-api/`](wk-enhanced-api/)) — Bun + Hono + SQLite, deployed at `https://api.wkenhanced.dev`. Pre-warms ImmersionKit, Google TTS, and DuckDuckGo data so every userscript user doesn't have to hit those services individually. The userscript talks to this server exclusively as of v2.0.0. See [wk-enhanced-api/README.md](wk-enhanced-api/README.md), [CLIENT_MIGRATION.md](CLIENT_MIGRATION.md), and [SERVER_DESIGN.md](SERVER_DESIGN.md).
+
+A frozen direct-path snapshot of the v1.1.1 userscript (which talks to ImmersionKit, DuckDuckGo, and Google Translate TTS from your browser instead of going through the API server) lives at [legacy/wk-vocab-review-ik-direct.user.js](legacy/wk-vocab-review-ik-direct.user.js). Install that only if you need a fallback for an extended API-server outage; see [legacy/README.md](legacy/README.md) for the trade-offs.
 
 ## What it does
 
@@ -43,26 +45,26 @@ Two independent JLPT settings let you tune sentence selection:
 - **JLPT difficulty ceiling** — *hard filter.* Sentences whose hardest known surrounding word is above this level are removed from selection entirely. Falls back to showing some sentence when no candidate qualifies, so you're never stuck staring at an empty card.
 - **Preferred JLPT level** — *soft preference.* Within whatever the ceiling allows, sentences at this exact level come first in the ⟳ cycle and the sentence picker opens with "Preferred JLPT (NX) first" as the initial sort. Set ceiling=Any and preferred=N3 to see anything but default to N3.
 
-Scoring uses a bundled JLPT vocab list (~7600 words from N5 to N1); conjugated verbs and proper nouns are treated as unknown rather than blocking (fail-open), which means the filter is strict on identifiable nouns/adjectives and permissive on inflected verbs.
+Scoring is computed server-side and arrives with every example payload. Conjugated verbs and proper nouns are treated as unknown rather than blocking (fail-open), which means the filter is strict on identifiable nouns/adjectives and permissive on inflected verbs.
 
 ## Requirements
 
 - A [WaniKani](https://www.wanikani.com/) account.
-- [Tampermonkey](https://www.tampermonkey.net/) (or a compatible userscript manager that supports `@grant GM_xmlhttpRequest`).
+- [Tampermonkey](https://www.tampermonkey.net/) (or a compatible userscript manager).
 - [WaniKani Open Framework (WKOF)](https://greasyfork.org/en/scripts/38582-wanikani-open-framework) — installed separately, must load before this script.
 
 ## Installation
 
 1. Install Tampermonkey in your browser.
 2. Install [WKOF](https://greasyfork.org/en/scripts/38582-wanikani-open-framework) from greasyfork.
-3. In Tampermonkey → Dashboard → Utilities → Create a new script. Paste the contents of [wk-vocab-review-ik.user.js](wk-vocab-review-ik.user.js), save (⌘S / Ctrl+S).
+3. In Tampermonkey → Dashboard → Utilities → Create a new script. Paste the contents of [wkenhanced.user.js](wkenhanced.user.js), save (⌘S / Ctrl+S).
 4. Make sure WKOF is listed **above** this script in the Tampermonkey dashboard (drag to reorder; first-listed runs first).
-5. When prompted, approve cross-origin connections to `apiv2.immersionkit.com`, `translate.googleapis.com`, `duckduckgo.com`, and `localhost` (the last is only needed if you opt into the API-server path; see below).
-6. Reload any open WaniKani tab. Sanity check: DevTools console should show `[wk-ik-examples] booting v1.0.0-rc2 on /...`.
+5. When prompted, approve the cross-origin connection to `api.wkenhanced.dev` (and `localhost` if you're running the server locally for dev).
+6. Reload any open WaniKani tab. Sanity check: DevTools console should show `[wkenhanced] booting v2.0.0 on /...`.
 
 ## Settings
 
-Open your WaniKani avatar dropdown (top right) → **Scripts** → **Settings** → **WK Vocab Review — ImmersionKit**.
+Open your WaniKani avatar dropdown (top right) → **Scripts** → **Settings** → **WKEnhanced**.
 
 | Setting | Default | What it does |
 | --- | --- | --- |
@@ -72,60 +74,63 @@ Open your WaniKani avatar dropdown (top right) → **Scripts** → **Settings** 
 | Hotkey to replay audio | `p` | Single key (no modifiers) to replay the example-sentence audio. Skipped while you're typing your answer; works after submit even with the input focused. Leave blank to disable. |
 | Audio playback speed | 1x | Dropdown 0.5x / 0.75x / 1x / 1.25x. Applies to all audio sources; takes effect on the next card render. |
 | Which example to pick | Shortest | Sort order for the first sentence shown. ⟳ cycles through candidates regardless; the picker has its own sort dropdown. |
-| Prefer examples from spoken media (anime/drama/games) | on | When on, IK examples that came with original audio are preferred over text-only literature lines (which would need TTS fallback). |
+| Prefer examples from spoken media (anime/drama/games) | on | When on, examples that came with original voice-actor audio are preferred over text-only literature lines (which would need TTS fallback). |
 | JLPT difficulty ceiling | Any | Hard filter — sentences whose hardest known surrounding word is above this level are removed from selection entirely. The sentence picker still shows above-ceiling candidates (faded) so you can override per card. |
 | Preferred JLPT level | No preference | Soft preference — within whatever the ceiling allows, sentences at this exact level come first in the ⟳ cycle, and the picker opens with "Preferred JLPT (NX) first" as the initial sort. Independent of the ceiling: you can set ceiling=Any and still default to N3 sentences. |
-| Use API server (experimental) | off | When on, route every vocab lookup through the wk-vocab-api server below instead of calling IK / DDG / Google directly from the browser. Off by default during the Phase 1 coexistence window — flip on if you're running the server locally (or once a public deployment exists). |
-| API server URL | empty | Base URL of the wk-vocab-api server. For local dev: `http://localhost:3000`. Leave blank to disable the API path even if the checkbox above is on. |
-| Prefetch upcoming subjects | 10 | When the API server is in use, batch-fetch this many upcoming review subjects on session entry so subsequent cards render instantly from local cache. Capped at 50. |
-| Cache contents | — | Live read-only view of what's currently cached (examples, image URL lists, audio clips, per-word selections, the IK index_meta map). Refreshes after Clear cache. |
-| Clear cache | — | Wipes locally cached examples, images, audio, per-word selections, and the API-server payload cache. |
+| API server URL | `https://api.wkenhanced.dev` | Base URL of the wk-enhanced-api server. For local dev, set to `http://localhost:3000`. Leave blank only if you want cards to render empty (e.g. you're testing the UI shell without server data). |
+| Prefetch upcoming subjects | 10 | On review-session entry, batch-fetch this many upcoming subjects via `POST /v1/vocab/batch` so subsequent cards render instantly from local cache. Capped at 50. |
+| Cache contents | — | Live read-only view of what's currently cached (API-server payloads + per-word selections). Refreshes after Clear cache. |
+| Clear cache | — | Wipes the local payload cache, per-word selections, and any leftover entries from v1.x (the `wk-ik-examples.*` and `wk-vocab-cache.*` prefixes from the pre-rename era). |
 
-If you don't see the script under the Scripts menu, paste `openWkIkSettings()` into the browser console — it opens the settings dialog directly.
+If you don't see the script under the Scripts menu, paste `openWkEnhancedSettings()` into the browser console — it opens the settings dialog directly.
 
-Two extra console helpers exist for diagnostics: `debugWkIk()` (general DOM + reveal-state dump) and `debugWkIkApi('<word>')` (probes the configured API server's `/v1/health`, runs a sample fetch, dumps the local cache for that word). Both are no-ops until the page has fully booted; see the console for `boot OK` first.
+Two extra console helpers exist for diagnostics: `debugWkEnhanced()` (general DOM + reveal-state dump) and `debugWkEnhancedApi('<word>')` (probes the configured API server's `/v1/health`, runs a sample fetch, dumps the local cache for that word). Both are no-ops until the page has fully booted; see the console for `boot OK` first.
 
 ## How content is sourced
 
-Four pipelines, with primary → fallback layering for audio and image:
+The userscript talks only to `api.wkenhanced.dev`. The server does all the upstream coordination — these are the sources it draws from:
 
 - **Sentences and translations**: [ImmersionKit v2 API](https://apiv2.immersionkit.com) `/search` — real lines from anime, drama, games, literature, and news.
 - **Audio (primary)**: ImmersionKit's `/download_media` proxy — the actual voice-actor recording from the source media. Available when the sentence's IK example has a `sound` field (i.e., came from anime/drama/games rather than text-only literature).
-- **Audio (fallback)**: [Google Translate TTS](https://translate.googleapis.com/translate_tts) when IK has no audio for the sentence or the proxy fetch fails. If even TTS fails, the script falls back to your browser's built-in Japanese voice (Kyoko on macOS Chrome).
+- **Audio (fallback)**: [Google Translate TTS](https://translate.googleapis.com/translate_tts) when IK has no audio for the sentence or the proxy fetch fails. If the resolved CDN URL still fails to play in your browser, the userscript falls back to your browser's built-in Japanese voice (Kyoko on macOS Chrome).
 - **Image (primary)**: ImmersionKit's `/download_media` proxy for the scene screenshot — same URL shape as audio, different file extension.
 - **Image (fallback)**: DuckDuckGo image search for `<word> イラスト` (illustration) when IK has no screenshot. The image-refresh button cycles through DDG results even when an IK screenshot exists, so you can swap a bad anime grab for a clean illustration.
+
+All of this is fetched, cached, and served by the API server. The userscript receives pre-resolved CDN URLs and renders them directly — no third-party network calls happen from your browser. See [wk-enhanced-api/README.md](wk-enhanced-api/README.md) for the server architecture.
 
 ## Privacy
 
 - No API keys, no accounts.
 - No analytics, no telemetry.
-- All caching is local (IndexedDB via WKOF's `file_cache`).
-- The script makes requests on your behalf to `apiv2.immersionkit.com`, `translate.googleapis.com`, and `duckduckgo.com`. These are declared in the `@connect` directives in the script header.
+- The userscript talks only to `api.wkenhanced.dev` (declared in the `@connect` directive) and your WKOF-managed IndexedDB.
+- The API server logs structured request events (word, cache status, latency) but doesn't tie them to user identity.
 
 ## Known limitations
 
-- **Sentence coverage**: ImmersionKit doesn't have sentences for every vocab word. For uncommon ones, "No example found" stays in the bottom-left corner of the header until you move to the next subject.
+- **Sentence coverage**: ImmersionKit doesn't have sentences for every vocab word. For uncommon ones, "No example found" stays in the bottom-left corner of the header until you move to the next subject. (~85% coverage of the WK corpus as of the last bulk warm.)
 - **Image quality varies**: DuckDuckGo image search is good for concrete nouns and verbs, hit-or-miss for abstract concepts. The IK screenshot is usually better for concrete scenes but can be cluttered. Cycle with ⟳ to taste.
-- **Google TTS rate limits**: Heavy review pace can trigger a temporary block. The script falls back to browser TTS automatically.
-- **TTS sentence length**: Google's endpoint caps inputs at ~200 characters; the script truncates longer sentences. Almost no IK sentence is close to this limit.
+- **Cold-fill latency**: A word the server hasn't seen before triggers a server-side warm (typically 1–3 seconds with the DDG fallback deferred to a background task). Most words will already be cached from the monthly bulk warm.
 
 ## Troubleshooting
 
-- **No card appears on reviews** → Check the DevTools console for `[wk-ik-examples] ...` lines. The most useful is the `boot OK` line — if it's missing, the boot chain failed somewhere upstream (most often WKOF isn't loaded). Make sure WKOF is enabled and listed before this script in the Tampermonkey dashboard.
-- **Translation/image doesn't reveal on answer submit** → Look for `reveal triggered by:` in the console. The expected match is `bg:red(...)` or `bg:green(...)` — meaning the script saw WaniKani paint the input bar. If you only see `…visible(fallback)`, the bg-color check missed and we fell through to the Item-Info-coupled fallback; run `debugWkIk()` right after submitting and paste the output into an issue.
-- **Card looks misaligned (vocab character not centered, content overlapping, etc.)** → Run `debugWkIk()` and paste the `--- .character-header DOM tree ---` section. That output is what lets us identify positioning-context traps inside WaniKani's CSS.
+- **No card appears on reviews** → Check the DevTools console for `[wkenhanced] ...` lines. The most useful is the `boot OK` line — if it's missing, the boot chain failed somewhere upstream (most often WKOF isn't loaded). Make sure WKOF is enabled and listed before this script in the Tampermonkey dashboard.
+- **Cards render empty for every word** → Most likely the API server is unreachable. Run `debugWkEnhancedApi()` in the console; it probes `/v1/health` and dumps the resolved URL. If `api.wkenhanced.dev` is genuinely down, consider installing the legacy/ snapshot as a temporary fallback.
+- **Translation/image doesn't reveal on answer submit** → Look for `reveal triggered by:` in the console. The expected match is `bg:red(...)` or `bg:green(...)` — meaning the script saw WaniKani paint the input bar. If you only see `…visible(fallback)`, the bg-color check missed and we fell through to the Item-Info-coupled fallback; run `debugWkEnhanced()` right after submitting and paste the output into an issue.
+- **Card looks misaligned (vocab character not centered, content overlapping, etc.)** → Run `debugWkEnhanced()` and paste the `--- .character-header DOM tree ---` section. That output is what lets us identify positioning-context traps inside WaniKani's CSS.
 - **Audio plays twice or overlaps WaniKani's pronunciation** → On a reading submit, the script waits for any non-its-own `<audio>` element to finish before playing. If WaniKani is using Web Audio API (no DOM `<audio>`), the script falls back to a fixed 2.5s delay; in rare cases that delay might be too short for a long pronunciation.
 - **Duplicate cards or stale behavior after editing the script** → You may have two copies installed in Tampermonkey. The boot log shows the version; if you see two boot lines, delete one copy.
 
 ## Development
 
-This is a single-file project. The whole script is in [wk-vocab-review-ik.user.js](wk-vocab-review-ik.user.js); there's no build step or test suite. Edit the file, bump both the `@version` line and the `SCRIPT_VERSION` constant, run `node --check wk-vocab-review-ik.user.js`, then paste the contents into the Tampermonkey editor to test. Hard-refresh the WaniKani review page after each save.
+The userscript is a single file with no build step or test suite. The whole script is in [wkenhanced.user.js](wkenhanced.user.js); edit the file, bump both the `@version` line and the `SCRIPT_VERSION` constant, run `node --check wkenhanced.user.js`, then paste the contents into the Tampermonkey editor to test. Hard-refresh the WaniKani review page after each save.
 
-See [CLAUDE.md](CLAUDE.md) for architecture notes and dead-end warnings if you're using an AI coding agent on this project.
+The API server is a separate Bun + Hono + SQLite codebase in [wk-enhanced-api/](wk-enhanced-api/) with its own README + tests + typecheck. See [wk-enhanced-api/CLAUDE.md](wk-enhanced-api/CLAUDE.md) for architecture notes.
+
+See [CLAUDE.md](CLAUDE.md) for project-wide architecture notes and dead-end warnings if you're using an AI coding agent on this project.
 
 ## Credits
 
 - [acwool](https://community.wanikani.com/u/acwool) — WaniKani Open Framework (WKOF).
-- [awoo](https://greasyfork.org/en/users/awoo) — [JPDB Immersion Kit Examples](https://greasyfork.org/en/scripts/507408-jpdb-immersion-kit-examples) script, whose URL-construction approach informed earlier iterations of this script.
+- [awoo](https://greasyfork.org/en/users/awoo) — [JPDB Immersion Kit Examples](https://greasyfork.org/en/scripts/507408-jpdb-immersion-kit-examples) script, whose URL-construction approach informed earlier iterations.
 - [ImmersionKit](https://immersionkit.com) — sentence corpus and the `download_media` proxy that makes all of this possible.
-- [jamsinclair/open-anki-jlpt-decks](https://github.com/jamsinclair/open-anki-jlpt-decks) — JLPT vocabulary word lists (MIT) bundled into the script for the JLPT difficulty ceiling.
+- [jamsinclair/open-anki-jlpt-decks](https://github.com/jamsinclair/open-anki-jlpt-decks) — JLPT vocabulary word lists (MIT) bundled into the API server.

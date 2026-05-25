@@ -4,7 +4,7 @@ Backlog of features discussed in conversation but not yet shipped. Track the des
 
 Loosely ordered by value within each section. Anything urgent should move to a real issue / commit branch — this is the parking lot.
 
-See also [CLAUDE.md](CLAUDE.md) for architecture notes and dead-ends already explored, [README.md](README.md) for the user-facing description of what's shipped today, [SERVER_DESIGN.md](SERVER_DESIGN.md) and [wk-vocab-api/CLAUDE.md](wk-vocab-api/CLAUDE.md) for the server, and [CLIENT_MIGRATION.md](CLIENT_MIGRATION.md) for the plan to wire the userscript up to the server.
+See also [CLAUDE.md](CLAUDE.md) for architecture notes and dead-ends already explored, [README.md](README.md) for the user-facing description of what's shipped today, [SERVER_DESIGN.md](SERVER_DESIGN.md) and [wk-enhanced-api/CLAUDE.md](wk-enhanced-api/CLAUDE.md) for the server, and [CLIENT_MIGRATION.md](CLIENT_MIGRATION.md) for the plan to wire the userscript up to the server.
 
 ---
 
@@ -178,11 +178,11 @@ See also [CLAUDE.md](CLAUDE.md) for architecture notes and dead-ends already exp
 
 ## Server-side improvements
 
-These are ideas for the [wk-vocab-api](wk-vocab-api/) server. Most exist *because* there's a server now — they're things the userscript can't do well or at all on its own (heavy preprocessing, large datasets, cross-user pooling of data fetches). See [wk-vocab-api/CLAUDE.md](wk-vocab-api/CLAUDE.md) for the current architecture.
+These are ideas for the [wk-enhanced-api](wk-enhanced-api/) server. Most exist *because* there's a server now — they're things the userscript can't do well or at all on its own (heavy preprocessing, large datasets, cross-user pooling of data fetches). See [wk-enhanced-api/CLAUDE.md](wk-enhanced-api/CLAUDE.md) for the current architecture.
 
 ### ~~Deploy the server publicly~~ — DONE (2026-05-25)
 
-The first production deploy landed at `https://api.wkenhanced.dev` on DO (SFO3, $7/mo Premium AMD droplet + Spaces) with Cloudflare Tunnel in front. See [wk-vocab-api/deploy/README.md](wk-vocab-api/deploy/README.md) for the install recipe (updated post-deploy to capture every workaround). The first bulk warm hit IK rate-limit lockout and is being redone with the 500ms floor; once it completes, Phase 2 (`useApiServer: true` default + v1.1.0 userscript bump) is the next concrete step.
+The first production deploy landed at `https://api.wkenhanced.dev` on DO (SFO3, $7/mo Premium AMD droplet + Spaces) with Cloudflare Tunnel in front. See [wk-enhanced-api/deploy/README.md](wk-enhanced-api/deploy/README.md) for the install recipe (updated post-deploy to capture every workaround). Phase 2 (default-on) shipped as userscript v1.1.1; Phase 3 (server-only + legacy snapshot + rename) shipped as v2.0.0 (see [CLIENT_MIGRATION.md](CLIENT_MIGRATION.md)).
 
 ### Dockerize the server
 
@@ -218,7 +218,7 @@ The first production deploy landed at `https://api.wkenhanced.dev` on DO (SFO3, 
 
 The right time to revisit K8s is if we grow to multiple services, want zero-downtime rolling deploys, or need autoscaling beyond what a single droplet provides. Until then, **Dockerized-on-a-droplet** is the sweet spot.
 
-**How**: a `docs/decisions/ADR-001-no-kubernetes.md` (or similar) capturing the above + linking from `wk-vocab-api/CLAUDE.md`. ~30 minutes to write properly.
+**How**: a `docs/decisions/ADR-001-no-kubernetes.md` (or similar) capturing the above + linking from `wk-enhanced-api/CLAUDE.md`. ~30 minutes to write properly.
 
 **Considerations**: keep it short and decision-focused, not a K8s tutorial. The point is to document the trade-off once so we stop relitigating it.
 
@@ -347,7 +347,7 @@ The right time to revisit K8s is if we grow to multiple services, want zero-down
 
 **What**: a small static map (file or DB table) of `encoded_title → {title, category}` that we maintain by hand, layered on top of IK's `/index_meta`. Used when IK's own data is wrong or missing.
 
-**Why**: the dead-end warnings in [wk-vocab-api/CLAUDE.md](wk-vocab-api/CLAUDE.md) describe cases where IK's `/index_meta` doesn't have an entry, and the heuristic fallback is wrong (`durarara__` → "Durarara" instead of "Durarara!!"). For high-volume titles where this matters, a hand-maintained override is the cleanest fix.
+**Why**: the dead-end warnings in [wk-enhanced-api/CLAUDE.md](wk-enhanced-api/CLAUDE.md) describe cases where IK's `/index_meta` doesn't have an entry, and the heuristic fallback is wrong (`durarara__` → "Durarara" instead of "Durarara!!"). For high-volume titles where this matters, a hand-maintained override is the cleanest fix.
 
 **How**:
 - New file `src/data/title-overrides.json`: `{ "durarara__": { "title": "Durarara!!", "category": "anime" } }`.

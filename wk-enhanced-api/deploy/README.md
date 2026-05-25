@@ -2,11 +2,11 @@
 
 Paste-ready artifacts for deploying the server to a single DigitalOcean droplet (or any Ubuntu-flavoured Linux host) with DO Spaces for media + Cloudflare in front for TLS / rate-limiting / edge cache.
 
-The deployed thing is called **wk-enhanced-api** in DigitalOcean and at `api.wkenhanced.dev`. The source code that runs on it lives in **`wk-vocab-api/`** in this repo (kept as-is for git history continuity). On the droplet you'll think "wk-enhanced-api"; in the source tree you see "wk-vocab-api". They're the same thing.
+The deployed thing is called **wk-enhanced-api** everywhere — in DigitalOcean, at `api.wkenhanced.dev`, in this repo's source tree. (The directory used to be called `wk-vocab-api/` until the 2026-05-25 rebrand commit `cbfeabf`; if you're updating a production droplet that predates that, see "Updating a pre-rename droplet" below.)
 
 These are templates — not part of the running service. The shipped runtime under [../src/](../src/) is unchanged.
 
-Read the canonical deploy walkthrough in [../README.md](../README.md) under **"Going to production"** before touching these. The files here are what that section's bullet points expand into.
+Read the canonical deploy walkthrough in [../README.md](../README.md) under **"Deployment (live)"** before touching these. The files here are what that section's bullet points expand into.
 
 ## Files
 
@@ -34,25 +34,29 @@ curl -fsSL https://bun.sh/install | bash    # as root → /root/.bun/bin/bun
 install -m 755 /root/.bun/bin/bun /usr/local/bin/bun
 /usr/local/bin/bun --version    # sanity
 
-# 3. Pull the repo + install prod deps.
+# 3. Pull the repo + install prod deps. The clone target is `/opt/wk-enhanced-api`;
+#    the actual server source lives at `/opt/wk-enhanced-api/wk-enhanced-api/`
+#    (the repo contains both the userscript at the top and the server in a
+#    subdirectory of the same name as the cloned directory — both are
+#    wk-enhanced-api now, after the 2026-05-25 rebrand).
 git clone https://github.com/<your-user-or-org>/WaniKani /opt/wk-enhanced-api
-cd /opt/wk-enhanced-api/wk-vocab-api
+cd /opt/wk-enhanced-api/wk-enhanced-api
 bun install --production
 chown -R wkenhanced:wkenhanced /opt/wk-enhanced-api
 
 # 4. Compose the env file. ADMIN_TOKEN: openssl rand -hex 32 (save first).
 install -d -m 700 /etc/wk-enhanced-api
 install -m 600 -o root -g root \
-    /opt/wk-enhanced-api/wk-vocab-api/deploy/env.production.template \
+    /opt/wk-enhanced-api/wk-enhanced-api/deploy/env.production.template \
     /etc/wk-enhanced-api/env
 $EDITOR /etc/wk-enhanced-api/env
 
 # 5. Install + start systemd units.
-install -m 644 /opt/wk-enhanced-api/wk-vocab-api/deploy/wk-enhanced-api.service \
+install -m 644 /opt/wk-enhanced-api/wk-enhanced-api/deploy/wk-enhanced-api.service \
     /etc/systemd/system/wk-enhanced-api.service
-install -m 644 /opt/wk-enhanced-api/wk-vocab-api/deploy/wk-enhanced-api-warm.service \
+install -m 644 /opt/wk-enhanced-api/wk-enhanced-api/deploy/wk-enhanced-api-warm.service \
     /etc/systemd/system/wk-enhanced-api-warm.service
-install -m 644 /opt/wk-enhanced-api/wk-vocab-api/deploy/wk-enhanced-api-warm.timer \
+install -m 644 /opt/wk-enhanced-api/wk-enhanced-api/deploy/wk-enhanced-api-warm.timer \
     /etc/systemd/system/wk-enhanced-api-warm.timer
 systemctl daemon-reload
 systemctl enable --now wk-enhanced-api
@@ -75,11 +79,39 @@ systemctl start wk-enhanced-api-warm
 
 ```bash
 cd /opt/wk-enhanced-api && git pull
-cd wk-vocab-api && bun install --production
+cd wk-enhanced-api && bun install --production
 systemctl restart wk-enhanced-api
 ```
 
 If any of the files in this directory changed, re-copy them (`install -m 644 ... /etc/systemd/system/...`) and `systemctl daemon-reload` before restart.
+
+## Updating a pre-rename droplet
+
+For droplets provisioned before the 2026-05-25 source rebrand (`wk-vocab-api/` → `wk-enhanced-api/`), do this once before the first post-rename `git pull`:
+
+```bash
+# Stop the service so it doesn't fail with "WorkingDirectory not found"
+systemctl stop wk-enhanced-api wk-enhanced-api-warm.timer
+
+# Rename the source directory inside the cloned repo so the new
+# WorkingDirectory in wk-enhanced-api.service matches reality.
+mv /opt/wk-enhanced-api/wk-vocab-api /opt/wk-enhanced-api/wk-enhanced-api
+
+# Pull the renamed source. (git tracks the rename cleanly via -M.)
+cd /opt/wk-enhanced-api && git pull
+cd wk-enhanced-api && bun install --production
+chown -R wkenhanced:wkenhanced /opt/wk-enhanced-api
+
+# Re-install the updated systemd units (WorkingDirectory + Documentation
+# URLs changed) and restart.
+install -m 644 deploy/wk-enhanced-api.service /etc/systemd/system/
+install -m 644 deploy/wk-enhanced-api-warm.service /etc/systemd/system/
+systemctl daemon-reload
+systemctl start wk-enhanced-api wk-enhanced-api-warm.timer
+journalctl -fu wk-enhanced-api
+```
+
+The `DATABASE_FILE` path at `/var/lib/wk-enhanced-api/wk-enhanced-api.sqlite` and the `S3_BUCKET` `wk-enhanced-api-media` were already correctly named at initial deploy; only the source clone path needed adjusting.
 
 ## Spaces key permissions — use Full Access
 

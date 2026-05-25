@@ -1,17 +1,19 @@
-# wk-vocab-api
+# wk-enhanced-api
 
 ## What this is
 
-Backing API server for the [WK Vocab Review — ImmersionKit Examples](../wk-vocab-review-ik.user.js) userscript. Coalesces three external services (ImmersionKit, DuckDuckGo, Google Translate TTS) behind one pre-warmed endpoint so every userscript user doesn't hit those services individually.
+Backing API server for the [WKEnhanced](../wkenhanced.user.js) userscript. Coalesces three external services (ImmersionKit, DuckDuckGo, Google Translate TTS) behind one pre-warmed endpoint so every userscript user doesn't hit those services individually.
 
-**Status**: deployed to production at `https://api.wkenhanced.dev` (DO droplet in SFO3 + DO Spaces, Cloudflare Tunnel for TLS/edge). Userscript routes through it by default as of v1.1.1 (Phase 2 default-on flip + the deploy-day fixes for `idleTimeout`, CORS expose-headers, and weak-ETag tolerance — see DEAD-END WARNINGS below). The direct-path code is retained in the userscript as an opt-out fallback (settings → API server checkbox off) and will be spun out to a separate `legacy/` snapshot in a later phase. See [../CLIENT_MIGRATION.md](../CLIENT_MIGRATION.md) for the migration history.
+**Status**: deployed to production at `https://api.wkenhanced.dev` (DO droplet in SFO3 + DO Spaces, Cloudflare Tunnel for TLS/edge). Userscript v2.0.0 is server-only — every vocab lookup goes through this server. The v1.1.1 direct-path snapshot lives at [../legacy/wk-vocab-review-ik-direct.user.js](../legacy/wk-vocab-review-ik-direct.user.js) as a frozen fallback for users who need an option when the API server is unreachable. See [../CLIENT_MIGRATION.md](../CLIENT_MIGRATION.md) for the migration history.
+
+Source directory was renamed from `wk-vocab-api/` → `wk-enhanced-api/` on 2026-05-25 to match the deployment. Production droplets predating that rename need a one-time `mv` step; see [deploy/README.md](deploy/README.md) "Updating a pre-rename droplet."
 
 For the broader design rationale (cost model, why this exists, deploy story), see [../SERVER_DESIGN.md](../SERVER_DESIGN.md). The "Implementation deviations" section at the top of that doc is the most important part — it lists what changed during the build.
 
 ## How to work on it
 
 ```bash
-cd wk-vocab-api
+cd wk-enhanced-api
 bun install               # one-time setup
 cp .env.example .env      # one-time setup
 bun dev                   # hot-reload via --watch
@@ -39,12 +41,12 @@ Single scannable reference for every knob that differs between local dev and the
 | `LOCAL_MEDIA_DIR` | `./dev-data/media` | unused | Served via the `/media/*` static route in `index.ts`. |
 | `MEDIA_PUBLIC_BASE` | `http://localhost:3000/media` | `https://wk-enhanced-api-media.sfo3.cdn.digitaloceanspaces.com` | Goes into payload `audioUrl` / `imageUrl` / `fallbackImages` verbatim. Always no trailing slash (config strips). |
 | Media Cache-Control | `public, max-age=31536000, immutable` set on the `/media/*` route | Same string written as S3 object metadata on upload; DO Spaces CDN returns it as the response header | Single source of truth: `MEDIA_CACHE_CONTROL` const in `services/storage.ts`. Object keys are content-addressed so `immutable` is correct — the bytes for any URL never change after first write. |
-| `DATABASE_FILE` | `./dev-data/wk-vocab.sqlite` | `/var/lib/wk-enhanced-api/wk-enhanced-api.sqlite` | Prod path is under `/var/lib` so it survives `git pull` in `/opt/wk-enhanced-api`. |
+| `DATABASE_FILE` | `./dev-data/wk-enhanced-api.sqlite` | `/var/lib/wk-enhanced-api/wk-enhanced-api.sqlite` | Prod path is under `/var/lib` so it survives `git pull` in `/opt/wk-enhanced-api`. |
 | `S3_*` vars | unused / blank | required (endpoint, region, bucket, full-access key + secret) | See `deploy/env.production.template`. Full-access key, not Limited — see ACL dead-end below. |
 | `S3_FORCE_PATH_STYLE` | n/a | `true` | Mandatory for DO Spaces + `Bun.S3Client`; see dead-end below. |
 | `ADMIN_TOKEN` | `dev-admin-token` | `openssl rand -hex 32` value | Used by `/v1/admin/*` bearer auth. |
 | `WK_API_TOKEN` | usually blank (skip `scope:all` warms) | required for monthly bulk warm | Personal token from your WK settings. |
-| Env file location | `wk-vocab-api/.env` | `/etc/wk-enhanced-api/env` (chmod 600 root) | Prod uses systemd `EnvironmentFile=`; Bun's `.env` auto-load is for dev only. |
+| Env file location | `wk-enhanced-api/.env` | `/etc/wk-enhanced-api/env` (chmod 600 root) | Prod uses systemd `EnvironmentFile=`; Bun's `.env` auto-load is for dev only. |
 | Process supervisor | `bun dev` (your terminal) | `systemctl ... wk-enhanced-api.service` | Service unit lives in `deploy/`. |
 | Userscript base URL | `http://localhost:3000` (set in WKOF settings) | `https://api.wkenhanced.dev` (DEFAULTS.apiServerUrl + @connect) | Single source of truth: `PROD_API_BASE` + `DEV_API_BASE` constants at the top of the userscript IIFE. |
 | Bun binary location | Wherever you installed it | `/usr/local/bin/bun` | systemd's `ProtectHome=true` blocks `/root/.bun/bin/bun`; see dead-end. |
@@ -176,7 +178,7 @@ These have been investigated; don't re-explore.
 
 - **Bun's default `serve()` `idleTimeout` is 10s — way too short for cold-fill `GET /v1/vocab/{word}` responses.** During lazy-fill of an uncached word, `warmWord` runs synchronously for 10–30s (one IK search + ~100 media downloads at the 500ms IK rate-limit floor). The handler doesn't write any bytes during that wait, so Bun considers the connection idle and resets it — the server-side warm still finishes and populates the row, but the client sees a connection drop with no HTTP status (curl reports `http=000`). Discovered during Phase 2 smoke-test on 2026-05-25 when cold-fills of 本/日本 took 18s server-side but returned `000` to the client at exactly 12s. Fix: `idleTimeout: 60` on the export in [src/index.ts](src/index.ts) — covers our worst observed cold warm and stays under Cloudflare's 100s free-tier edge timeout. See commit 9be345c. **If you ever raise `WARM_REFRESH_DAYS` or add a slow new step to the warm pipeline that pushes per-word latency past 60s, raise `idleTimeout` to match.**
 
-- **Cross-origin `fetch()` cannot read the `ETag` header unless we explicitly expose it.** ETag is not on the CORS-safelisted response header list, so without `Access-Control-Expose-Headers: ETag` on every response, the userscript's `res.headers.get('ETag')` returns null even though the server sends the header on the wire. Discovered during Phase 2 smoke-test: server logs showed strong ETags being emitted (`"mpli0kwq"`), direct curl confirmed the header was present, but `debugWkIkApi` in the browser showed `etag: null`. Without a client-side etag, the userscript can't send `If-None-Match` on revisits, so every cached row re-downloads the full ~40KB payload — functionally correct but bandwidth-wasteful, and especially bad under traffic spikes. Fix: `c.header('Access-Control-Expose-Headers', 'ETag')` in the CORS middleware at [src/index.ts](src/index.ts). See commit bf3e153. **If you ever add another response header that the userscript needs to read in JS, append it to this comma-separated list — every new header is invisible-by-default cross-origin.**
+- **Cross-origin `fetch()` cannot read the `ETag` header unless we explicitly expose it.** ETag is not on the CORS-safelisted response header list, so without `Access-Control-Expose-Headers: ETag` on every response, the userscript's `res.headers.get('ETag')` returns null even though the server sends the header on the wire. Discovered during Phase 2 smoke-test: server logs showed strong ETags being emitted (`"mpli0kwq"`), direct curl confirmed the header was present, but `debugWkIkApi` in the browser showed `etag: null` (the diagnostic helper was renamed to `debugWkEnhancedApi` in v2.0.0). Without a client-side etag, the userscript can't send `If-None-Match` on revisits, so every cached row re-downloads the full ~40KB payload — functionally correct but bandwidth-wasteful, and especially bad under traffic spikes. Fix: `c.header('Access-Control-Expose-Headers', 'ETag')` in the CORS middleware at [src/index.ts](src/index.ts). See commit bf3e153. **If you ever add another response header that the userscript needs to read in JS, append it to this comma-separated list — every new header is invisible-by-default cross-origin.**
 
 - **Cloudflare downgrades strong ETags to weak (`W/"<tag>"`) on every compressed response, so `If-None-Match` comparison MUST tolerate the `W/` prefix.** RFC 7232 §2.3.2 says `If-None-Match` uses weak comparison anyway (same opaque tag, ignoring `W/`), but a naive strict-equality check (`ifNoneMatch === etag`) misses every Cloudflare-mediated revalidation. Discovered during Phase 2 smoke-test: origin emitted `ETag: "mpli0kwq"`, Cloudflare re-emitted `ETag: W/"mpli0kwq"`, userscript stored and re-sent the weak form, origin compared by string equality, mismatch, returned full 200 every time → no 304s ever in production. Fix at [src/routes/vocab.ts](src/routes/vocab.ts): new `normalizeEtag` helper strips an optional leading `W/` from the client-supplied If-None-Match before comparison. Origin still emits a strong ETag (Cloudflare adds the weakening on its way out); same-origin direct curls still 304 cleanly. See commit 7539a26. **Don't try to suppress Cloudflare's weakening upstream** — it's tied to compression and turning that off costs more bandwidth than the wart costs.
 

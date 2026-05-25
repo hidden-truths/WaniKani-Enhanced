@@ -1,6 +1,8 @@
-# wk-vocab-api
+# wk-enhanced-api
 
-Backing API for the [WK Vocab Review — ImmersionKit Examples](../wk-vocab-review-ik.user.js) userscript. Coalesces ImmersionKit, DuckDuckGo, and Google Translate TTS behind a single pre-warmed endpoint so every client doesn't have to hit three external services individually.
+Backing API for the [WKEnhanced](../wkenhanced.user.js) userscript. Coalesces ImmersionKit, DuckDuckGo, and Google Translate TTS behind a single pre-warmed endpoint so every client doesn't have to hit three external services individually.
+
+Deployed at `https://api.wkenhanced.dev` (DigitalOcean droplet in SFO3 + Spaces bucket, Cloudflare Tunnel for TLS/edge). The userscript talks to this server exclusively as of v2.0.0; see [../CLIENT_MIGRATION.md](../CLIENT_MIGRATION.md) for the migration history.
 
 Doc map:
 
@@ -11,7 +13,7 @@ Doc map:
 ## Quick start (local dev)
 
 ```bash
-cd wk-vocab-api
+cd wk-enhanced-api
 bun install
 cp .env.example .env
 bun dev
@@ -153,7 +155,7 @@ Idempotent: re-running the warm pipeline overwrites in place, so the keys are st
 ## Project layout
 
 ```
-wk-vocab-api/
+wk-enhanced-api/
 ├── data/
 │   └── jlpt-vocab.json       # bundled JLPT dict (~93KB), used by JLPT scoring
 ├── src/
@@ -222,57 +224,41 @@ Test files live next to the source as `*.test.ts`. Current coverage:
 
 Live external calls (IK / DDG / Google TTS) are deliberately not tested — they're flaky, slow, and rate-limited. Integration verification is via manual curl against a running server.
 
-## Going to production
+## Deployment (live)
 
-Not exercised yet — the userscript today is wired to talk to the server, but the server itself only runs on a developer's laptop. The deploy story below is the next concrete chunk of work. Order matters; later steps assume earlier ones.
+The server runs in production at `https://api.wkenhanced.dev` — DigitalOcean droplet ($6/mo, SFO3, Ubuntu LTS), DO Spaces bucket for media (`wk-enhanced-api-media`), Cloudflare Tunnel for TLS/edge. Total monthly cost ~$11. The userscript talks to this URL by default since v1.1.1 (Phase 2) and exclusively since v2.0.0 (Phase 3).
 
-> **Paste-ready templates live in [deploy/](deploy/).** The systemd unit, monthly-rewarm timer, and env-file template are concrete artifacts that target the DO + Spaces + Cloudflare setup described below. [deploy/README.md](deploy/README.md) has the install-on-droplet command sequence (`useradd`, `install -m 644 …`, `systemctl enable --now`, …). The walkthrough below is the conceptual version; the templates are the executable version.
+> **Paste-ready templates live in [deploy/](deploy/).** The systemd unit, monthly-rewarm timer, and env-file template are the artifacts that target the DO + Spaces + Cloudflare setup described below. [deploy/README.md](deploy/README.md) is the step-by-step playbook for replicating or rebuilding the deployment (and notes the historical `wk-vocab-api` → `wk-enhanced-api` directory rename that happened post-deploy).
 
-### Prerequisites
+### Architecture summary
 
-1. **Pick a domain.** Working name `wk-vocab-api.<something-you-own>`. Subdomain of an existing domain is fine.
-2. **Provision a host.** DigitalOcean Droplet (basic, $6/mo, Ubuntu LTS, region near your users — Singapore or NYC). Install Bun: `curl -fsSL https://bun.sh/install | bash`.
-3. **Pick a storage driver.**
-   - **`STORAGE_DRIVER=local`** (default) — media goes on the droplet's filesystem at `LOCAL_MEDIA_DIR`. Simplest; cost = 0. Works fine for the expected traffic. Disadvantage: the `/media/*` route serves through Bun rather than a CDN, and a droplet disk-failure loses the cache (rewarmable but ~hours).
-   - **`STORAGE_DRIVER=s3`** — uploads to DO Spaces ($5/mo for 250GB + 1TB egress) or any S3-compatible bucket. Set the `S3_*` env vars + `MEDIA_PUBLIC_BASE` to the CDN endpoint. Better for survivability + edge-cache; +1 thing to maintain.
-4. **TLS.** Either Cloudflare in front of the droplet (free; also gives rate limiting + edge cache for `/v1/vocab/:word`) or Caddy on the droplet (auto-TLS from Let's Encrypt). The userscript runs on `https://www.wanikani.com` so the server MUST be HTTPS — browsers block mixed content.
-5. **DNS.** Point the subdomain at the droplet (via Cloudflare proxy ideally).
+- **Compute**: one `s-1vcpu-1gb` droplet running the systemd-managed Bun service. Logs to journald.
+- **Storage**: SQLite file at `/var/lib/wk-enhanced-api/wk-enhanced-api.sqlite` for payloads + warm-job audit + IK index_meta. Media binaries (audio MP3s, screenshot JPGs, DDG illustrations) live in `wk-enhanced-api-media` DO Spaces bucket, served via Spaces' built-in CDN at `https://wk-enhanced-api-media.sfo3.cdn.digitaloceanspaces.com`.
+- **Edge**: Cloudflare Tunnel terminates TLS at the edge and forwards to `http://127.0.0.1:3000` on the droplet (cloudflared running as a sibling systemd unit). Free-tier rate-limit rule fronts `/v1/*` for traffic-spike protection.
+- **Warm cadence**: monthly bulk re-warm via the `wk-enhanced-api-warm.timer` systemd unit ([deploy/](deploy/)).
 
-### Deploy
+### Replicating the deployment
 
-1. `git clone` the repo onto the droplet.
-2. `cd wk-vocab-api && bun install --production`.
-3. Create `/etc/wk-vocab-api/env` with the env vars from `.env.example`. **At minimum**: set `ADMIN_TOKEN` to a long random value (`openssl rand -hex 32`), `WK_API_TOKEN` to your personal WK token (only needed for bulk warm), `MEDIA_PUBLIC_BASE` to the public URL prefix (e.g. `https://wk-vocab-api.example.com/media`).
-4. systemd unit at `/etc/systemd/system/wk-vocab-api.service`:
-   ```ini
-   [Service]
-   ExecStart=/root/.bun/bin/bun run /opt/wk-vocab-api/src/index.ts
-   EnvironmentFile=/etc/wk-vocab-api/env
-   Restart=always
-   StandardOutput=journal
-   StandardError=journal
-   ```
-   `systemctl enable --now wk-vocab-api`.
-5. Verify: `curl https://wk-vocab-api.example.com/v1/health` returns `{ "status": "ok", ... }`.
-6. **Run the initial warm.** `curl -X POST https://.../v1/admin/warm -H "Authorization: Bearer $ADMIN_TOKEN" -d '{"scope":"all"}'`. Returns 202 immediately; the actual work runs in the background and takes ~1+ hour (~6500 WK vocab words at our current pace). Watch `journalctl -fu wk-vocab-api | grep -E 'warm\.(word|all)'` for progress.
+If you ever need to rebuild from scratch (DR scenario or moving regions), [deploy/README.md](deploy/README.md) has the full command sequence. The short version:
 
-### After the initial warm
+1. **Provision droplet** (Ubuntu LTS, SFO3 or wherever).
+2. **Pick a domain + bucket name.** Update `MEDIA_PUBLIC_BASE` + `S3_BUCKET` accordingly.
+3. **Install Bun**, copy to `/usr/local/bin/bun` (systemd's `ProtectHome=true` blocks `/root/.bun/bin/bun` — see dead-end in [CLAUDE.md](CLAUDE.md)).
+4. **Clone repo** to `/opt/wk-enhanced-api`. `cd /opt/wk-enhanced-api/wk-enhanced-api && bun install --production`.
+5. **Create `/etc/wk-enhanced-api/env`** from `deploy/env.production.template`. Set `ADMIN_TOKEN` (`openssl rand -hex 32`), `WK_API_TOKEN`, all four `S3_*` vars, `MEDIA_PUBLIC_BASE` to the Spaces CDN URL.
+6. **Install systemd units** from `deploy/`. `systemctl daemon-reload && systemctl enable --now wk-enhanced-api wk-enhanced-api-warm.timer`.
+7. **Set up Cloudflare Tunnel** pointing at `http://localhost:3000`. Configure the public hostname (`api.wkenhanced.dev`) in the Cloudflare dashboard.
+8. **Verify**: `curl https://api.wkenhanced.dev/v1/health` returns `{ "status": "ok", ... }`.
+9. **Initial bulk warm**: `curl -X POST https://api.wkenhanced.dev/v1/admin/warm -H "Authorization: Bearer $ADMIN_TOKEN" -d '{"scope":"all"}'`. ~6–10 hours.
 
-7. **Cron the monthly re-warm.** systemd timer or DO scheduled job:
-   ```cron
-   0 4 1 * * curl -fsS -X POST https://wk-vocab-api.example.com/v1/admin/warm \
-                -H "Authorization: Bearer $ADMIN_TOKEN" \
-                -d '{"scope":"all"}'
-   ```
-8. **Smoke-test from your reviewer's machine.** Set `apiServerUrl` in the userscript settings to the production URL, flip `useApiServer` on, hard-refresh a WK review page. Browser DevTools network tab should show requests going to your domain. Run `debugWkIkApi('食べる')` in the console for a self-check.
-9. **Update userscript defaults.** Once you're confident the deployment is stable: bump `DEFAULTS.apiServerUrl` in [wk-vocab-review-ik.user.js](../wk-vocab-review-ik.user.js) to the production URL, and add a `@connect <prod-domain>` line to the metadata block. This is the **Phase 2 default-on flip** described in [CLIENT_MIGRATION.md](../CLIENT_MIGRATION.md). New installs will then route through your server by default.
-10. **Watch the logs for a couple weeks.** `journalctl -fu wk-vocab-api` should show mostly `cacheStatus=hit` lines after the warm completes. `cold_warm` lines mean either a brand-new vocab word IK added since the last warm, or a word the warm missed — track failure events (`warm.word.failed`, `warm.ik_search_failed`) and decide if any need follow-up.
+### Operational gotchas (production-confirmed)
 
-### Operational gotchas
-
-- **Cloudflare CORS.** The CORS middleware allows `*` — verify in DevTools that there's no preflight failure from `wanikani.com`. If preflights fail, set Cloudflare's "Always Use HTTPS" + Browser Cache TTL to "Respect existing headers."
-- **Rate limit at the edge.** Configure Cloudflare's free-tier rate-limit rule: 100 req/min per IP across `/v1/*`. Sufficient for any legit review pace, blocks scraping.
-- **Backups.** SQLite file at `DATABASE_FILE` holds everything not in object storage. Even though re-warming would rebuild it, that's a multi-hour cost. Daily `sqlite3 wk-vocab.sqlite ".backup snapshot.sqlite"` → upload to Spaces (~$0.005/mo amortized) is cheap insurance. Not built; tracked in NEW_FEATURES.md.
+- **Bun's `idleTimeout` must be ≥ longest cold-fill warm.** Currently 60s in `src/index.ts`. Bun's default 10s killed responses mid-flight on the Phase 2 smoke-test. If you ever extend the warm pipeline past 60s per word, raise this.
+- **CORS must expose `ETag`.** The userscript's `If-None-Match` round-trip is dead without `Access-Control-Expose-Headers: ETag` because ETag isn't on the CORS-safelisted response list. See dead-end in [CLAUDE.md](CLAUDE.md).
+- **Cloudflare weakens strong ETags via `W/` prefix on compressed responses.** `If-None-Match` comparison strips the `W/` prefix per RFC 7232 weak-comparison semantics. See dead-end in [CLAUDE.md](CLAUDE.md).
+- **IK rate-limit floor MUST stay ≥ 500ms.** A briefly-tried 50ms triggered a global 429 lockout for ~30 minutes on first prod warm. Future tuning requires implementing 429-with-exponential-backoff first.
+- **DO Spaces `S3_FORCE_PATH_STYLE=true` is mandatory.** Virtual-host style with Bun's `Bun.S3Client` silently corrupts uploads (PutObject decoded as CreateBucket). See dead-end in [CLAUDE.md](CLAUDE.md).
+- **Backups.** SQLite + Spaces are independently durable, but a daily `sqlite3 ".backup snapshot"` → Spaces snapshot would let us roll back ~hours of warm state on accidental data loss. Tracked in [NEW_FEATURES.md](../NEW_FEATURES.md); next-up cheap-insurance task.
 
 ## Known limitations / open questions
 

@@ -1,10 +1,10 @@
 # CLIENT_MIGRATION.md
 
-Plan for migrating [wk-vocab-review-ik.user.js](wk-vocab-review-ik.user.js) (the Tampermonkey userscript) to call [wk-vocab-api/](wk-vocab-api/) (the server we just built) instead of hitting ImmersionKit / DuckDuckGo / Google TTS directly. **Status (2026-05-25): Phase 1 + Phase 2 both shipped. Userscript v1.1.1 default-on; server at `https://api.wkenhanced.dev` with the four deploy-day fixes baked in (Bun `idleTimeout`, fetch `cache: 'no-cache'`, CORS `Access-Control-Expose-Headers: ETag`, weak-ETag tolerance — see DEAD-END WARNINGS in [CLAUDE.md](CLAUDE.md) + [wk-vocab-api/CLAUDE.md](wk-vocab-api/CLAUDE.md)).** Phase 3 is intentionally deferred — see [SERVER_DESIGN.md](SERVER_DESIGN.md) and conversation notes; the user wants Phase 2 to soak for ~2 weeks before deleting the direct code path, and the deletion plan now includes preserving a snapshot in `legacy/` as a fallback.
+Plan for migrating the userscript from talking to ImmersionKit / DuckDuckGo / Google TTS directly in the browser to calling a single backing server ([wk-enhanced-api/](wk-enhanced-api/)). **Status (2026-05-25): All three phases shipped.** Userscript [wkenhanced.user.js](wkenhanced.user.js) v2.0.0 is server-only; the v1.1.1 direct-path snapshot lives at [legacy/wk-vocab-review-ik-direct.user.js](legacy/wk-vocab-review-ik-direct.user.js) as a frozen fallback. Server runs at `https://api.wkenhanced.dev` with the four deploy-day fixes baked in (Bun `idleTimeout`, fetch `cache: 'no-cache'`, CORS `Access-Control-Expose-Headers: ETag`, weak-ETag tolerance — see DEAD-END WARNINGS in [CLAUDE.md](CLAUDE.md) + [wk-enhanced-api/CLAUDE.md](wk-enhanced-api/CLAUDE.md)).
 
-This is the **biggest planned single change** to the userscript since v0.1 — it deletes roughly half the data-layer code and rebuilds it as a thin client of our API. Worth doing in clear phases with a fallback toggle so we can verify before fully cutting over.
+This was the **biggest planned single change** to the userscript since v0.1 — it deleted roughly half the data-layer code and rebuilt it as a thin client of our API. Done in three phases (coexistence opt-in, default-on flip, slim + legacy snapshot) with a fallback toggle between Phases 1 and 2 so we could verify before fully cutting over.
 
-For server architecture see [wk-vocab-api/CLAUDE.md](wk-vocab-api/CLAUDE.md). For the original server design (and what changed from plan to build) see [SERVER_DESIGN.md](SERVER_DESIGN.md).
+For server architecture see [wk-enhanced-api/CLAUDE.md](wk-enhanced-api/CLAUDE.md). For the original server design (and what changed from plan to build) see [SERVER_DESIGN.md](SERVER_DESIGN.md).
 
 ## Goals
 
@@ -24,7 +24,7 @@ For server architecture see [wk-vocab-api/CLAUDE.md](wk-vocab-api/CLAUDE.md). Fo
 
 Phase 1 (current state) doesn't require deployment — the toggle is opt-in and dev users point at `http://localhost:3000`. Phase 2 (flipping `useApiServer: true` by default) DOES require the server to be reachable from `www.wanikani.com`.
 
-The canonical deploy checklist now lives in [wk-vocab-api/README.md](wk-vocab-api/README.md) under **"Going to production"** — see that for the actual step-by-step (host provisioning, env vars, systemd unit, initial warm, monthly cron, etc.). The short version:
+The canonical deploy checklist now lives in [wk-enhanced-api/README.md](wk-enhanced-api/README.md) under **"Deployment (live)"** — see that for the actual step-by-step (host provisioning, env vars, systemd unit, initial warm, monthly cron, etc.). The short version:
 
 1. Pick a domain + provision a droplet + decide local-FS vs S3 storage.
 2. TLS in front (Cloudflare or Caddy) — userscript runs on HTTPS so mixed content is blocked.
@@ -118,8 +118,7 @@ Ship a userscript version where:
 - Server-side structured logging: `vocab.serve` / `vocab.batch` per-request events with a `cacheStatus` enum (`hit` / `not_modified` / `cold_warm` / `nowarm_miss` / `empty` / `error` / `batch`); `warm.word.done` line aggregates per-warm media stats (audio source breakdown, storage-cache hit ratio, DDG counts) so the operator can tell at a glance whether a request hit the cache or did fresh upstream work.
 
 **What's NOT yet done (next steps):**
-- Forum post announcing v1.1.1 default-on Phase 2 — maintainer is drafting separately.
-- Phase 3: legacy-snapshot the direct code path (preserve in `legacy/`, slim main userscript to server-only). Deferred at least 2 weeks of Phase 2 soak time. See the Phase 3 section near the bottom of this file.
+- Forum post announcing v2.0.0 (rename + legacy snapshot + Phase 3 ship) — maintainer is drafting separately.
 
 Test plan for Phase 1:
 1. Run server locally; set `apiServerUrl = http://localhost:3000`; flip toggle on.
@@ -136,24 +135,31 @@ When all green: flip a few trusted users to the API path, gather feedback, watch
 
 Flipped `useApiServer: true` and `apiServerUrl: 'https://api.wkenhanced.dev'` in `DEFAULTS`, added `// @connect api.wkenhanced.dev`, bumped `@version` + `SCRIPT_VERSION`. Single commit `afb02b2` ("Userscript v1.1.0: API server default-on (Phase 2)"). Existing users who had `useApiServer` explicitly toggled keep their preference; new installs get the API path.
 
-**The smoke-test on flip day surfaced four bugs that the rc2 opt-in path didn't exercise** — all fixed before declaring Phase 2 done, version bumped to v1.1.1 to capture them. Each one is documented as a DEAD-END WARNING in [CLAUDE.md](CLAUDE.md) or [wk-vocab-api/CLAUDE.md](wk-vocab-api/CLAUDE.md); summarized here for the migration record:
+**The smoke-test on flip day surfaced four bugs that the rc2 opt-in path didn't exercise** — all fixed before declaring Phase 2 done, version bumped to v1.1.1 to capture them. Each one is documented as a DEAD-END WARNING in [CLAUDE.md](CLAUDE.md) or [wk-enhanced-api/CLAUDE.md](wk-enhanced-api/CLAUDE.md); summarized here for the migration record:
 
 1. **Bun `idleTimeout` reset cold-fill responses** (`9be345c`). Bun's default 10s idle timeout killed responses for words whose lazy-warm took >10s. Server-side warm still completed, but the client got a TCP reset. Fix: `idleTimeout: 60` on the serve export.
 2. **Chrome HTTP cache held stale empty payloads under `max-age=86400`** (`9e1ff1c`). Words hit during the bulk warm got an empty payload, Chrome cached it for 24h, userscript re-served the empty cache copy even after server-side re-warm. Fix: `cache: 'no-cache'` on the three server-bound `fetch()` calls forces conditional revalidation (`If-None-Match` round-trip → cheap 304s on unchanged, fresh 200s on changed).
 3. **CORS hid the `ETag` header from JS** (`bf3e153`). `res.headers.get('ETag')` returned `null` cross-origin even though the server emitted the header — ETag is not CORS-safelisted. Fix: `Access-Control-Expose-Headers: ETag` on the CORS middleware. Without it, no etag stored client-side → no `If-None-Match` sent → no 304s ever.
 4. **Cloudflare weakened strong ETags via `W/` prefix** (`7539a26`). Cloudflare downgrades strong ETags to weak on compressed responses; userscript stored and re-sent `W/"<tag>"`, but the origin's strict-equality comparison missed it. Fix: `normalizeEtag` helper strips an optional leading `W/` before the equality check, matching the weak-comparison semantics that RFC 7232 §2.3.2 prescribes for `If-None-Match`.
 
-Forum post announcing the change has not been drafted yet — maintainer is drafting separately. Until then, the only people on v1.1.1 are users who hard-refresh their Tampermonkey paste.
+Watch the server for traffic + error spikes.
 
-Watch the server for traffic + error spikes. Stay at Phase 2 for at least 2 weeks of real review sessions before Phase 3.
+### Phase 3: Slim + legacy snapshot — IMPLEMENTED 2026-05-25 (shipped as v2.0.0)
 
-### Phase 3: Cleanup
+Pulled forward earlier than the originally-planned 2+ week Phase 2 soak per the maintainer's call (low-risk hygiene work paired with the rename rebrand). Three commits, one logical change:
 
-Delete the old code path. The `useApiServer` toggle becomes a no-op (or gets removed entirely, with the setting silently ignored for backward compat).
+1. `3e495fc` **Legacy: snapshot v1.1.1 direct-path userscript before Phase 3 slimming.** Copied [wk-vocab-review-ik.user.js](legacy/wk-vocab-review-ik-direct.user.js) to `legacy/` with `serverPathEnabled()` hardcoded `false`, `@name` distinguished as "(Legacy Direct)", `@version 1.1.1-legacy`, no `@updateURL`. Plus a [legacy/README.md](legacy/README.md) explaining the trade-offs.
 
-Bump to `v2.0.0` to signal that direct-mode is no longer supported. Documentation update.
+2. `cbfeabf` **Rename wk-vocab-api → wk-enhanced-api in source tree.** Aligned the source directory + package name with the production deployment (which had been running as wk-enhanced-api since the initial deploy). `git mv` + `package.json` `name` + .env defaults + internal log/comment strings; `bun run typecheck && bun test` clean (76 pass). Includes a migration note in `wk-enhanced-api.service` for production droplets that predate the rename — see [wk-enhanced-api/deploy/README.md](wk-enhanced-api/deploy/README.md) "Updating a pre-rename droplet."
 
-This is also when [JLPT_VOCAB] gets deleted from the userscript file — ~93KB savings.
+3. `551e731` **Userscript v2.0.0: rename to wkenhanced.user.js + slim to server-only.** Deleted ~1500 lines: IK URL builders, `fetchAndCache`, IK proxy MP3 fetcher, Google TTS path, DDG two-step scrape, `gmFetch`, IK index_meta fetch + lossy-title heuristic, `scoreJlpt` + bundled `JLPT_VOCAB` (~93KB inline), `maybeUpgradeCache` + `wipeAbandonedCachePrefixes`, `debugWkIkTitle`. Renamed `SCRIPT_ID` to `'wkenhanced'`, settings + cache prefixes to `wkenhanced.*`. Dropped `useApiServer` setting entirely (now no-op). Dropped `@grant GM_xmlhttpRequest`; userscript only talks to `api.wkenhanced.dev` via plain `fetch()`. `CSS_PREFIX` deliberately kept at `'wk-ik'` (internal class namespace, not user-visible — ~140 hardcoded references for zero benefit). Userscript shrank from 4398 → 3529 lines.
+
+Decisions made when pulling Phase 3 forward (documented in [NEXT_STEPS.md](NEXT_STEPS.md) "Phase 3 wrap-up notes"):
+
+- **Direct path preserved, not deleted.** Per maintainer pivot. Legacy/ snapshot is the fallback for "API server is down for an extended period." No auto-update.
+- **`useApiServer` setting removed entirely.** Any stored value silently ignored.
+- **Old cache prefixes orphan in IndexedDB** rather than auto-wipe on first v2.0.0 boot. Clear cache button cleans them up on user demand. Acceptable disk leak (~5–10MB per heavy user) for simpler upgrade-path code.
+- **No settings migration from `wk-ik-examples` → `wkenhanced` SCRIPT_ID.** Existing users see fresh DEFAULTS on first v2.0.0 boot; one-click reconfigure in the WKOF dialog. Breaking change is signaled by the v2.0.0 bump.
 
 ## API consumption patterns
 
@@ -221,7 +227,7 @@ Unchanged. Reads `payload.examples` and renders. No new network.
 Most of the work is already done. The userscript migration shouldn't require new server endpoints. Possible small server changes during migration:
 
 1. **CORS verification** — confirm `Access-Control-Allow-Origin: *` actually works from `www.wanikani.com` for both GET and the POST batch. Currently we set the header blanket; verify in DevTools that there's no preflight issue.
-2. **`@connect` localhost workflow** — for dev, the userscript needs `@connect localhost` AND the server needs to be running on `http://localhost:3000`. Document in [wk-vocab-api/CLAUDE.md](wk-vocab-api/CLAUDE.md) under "Diagnostic helpers".
+2. **`@connect` localhost workflow** — for dev, the userscript needs `@connect localhost` AND the server needs to be running on `http://localhost:3000`. Document in [wk-enhanced-api/CLAUDE.md](wk-enhanced-api/CLAUDE.md) under "Diagnostic helpers".
 3. **Production URL hardening** — once deployed, double-check rate limits at the Cloudflare layer (100 req/min per IP across `/v1/*` is the SERVER_DESIGN.md value).
 4. **Cache-Control on `/media/*` static route** — already `max-age=31536000, immutable`. Verify.
 
@@ -229,13 +235,13 @@ Most of the work is already done. The userscript migration shouldn't require new
 
 These are real decisions for migration time — not deferred forever.
 
-- **What's the production server URL?** Needs to be picked + DNS-registered before Phase 1. Working name `wk-vocab-api.<something>`. The userscript hard-defaults to this URL.
+- **What's the production server URL?** Resolved: `https://api.wkenhanced.dev` (DigitalOcean droplet in SFO3 + Spaces, Cloudflare Tunnel for TLS/edge). Userscript `DEFAULTS.apiServerUrl` points here.
 - **Should we ship the prefetch (batch) endpoint use in Phase 1, or save it for v1.2?** Argument for: full payoff of the API; first impression matters. Argument against: smaller diff = lower migration risk. **Lean toward: ship without prefetch, add in v1.2 once the basic path is stable.**
 - **Should there even be a `useApiServer` toggle, or just hard-cut?** Toggle is safer; users with the old version still work after we deploy the server. But it bloats the codebase with two paths. **Lean toward: keep the toggle through Phase 2, remove in Phase 3.**
 - **What's the strategy for users on old userscript versions after Phase 3?** They'll keep working (still hitting IK directly) until something breaks. We can't force-update. Acceptable; document in the forum post.
 - **Server-side: should we limit the public `apiServerUrl` to one canonical domain** (no user-pointing the userscript at random servers), or allow any URL (developer-friendly, but enables malicious "use this server" instructions)? **Lean toward: allow any URL — power users can self-host the server, and there's no auth so "malicious server" is no worse than "malicious anything else on the page."**
 - **Error fallback: if our server is down, should the userscript fall back to direct IK/DDG/Google calls?** Phase 1: yes (old code path still exists). Phase 3: no (code is gone). Acceptable downtime: if the server goes down for an hour, users see "no example found" cards for that hour — the rest of WK still works. Not great but not catastrophic.
-- **Should we add a server-status indicator to the card?** A tiny dot or text near the source attribution showing "via wk-vocab-api" vs "direct fallback" or "server down". Power-user-y; defer unless someone asks.
+- **Should we add a server-status indicator to the card?** A tiny dot or text near the source attribution showing "via wk-enhanced-api" vs "server down". Power-user-y; defer unless someone asks.
 
 ## Estimated effort
 

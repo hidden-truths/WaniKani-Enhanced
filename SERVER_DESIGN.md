@@ -1,8 +1,8 @@
 # SERVER_DESIGN.md
 
-Design doc for the backing API that fronts ImmersionKit + DuckDuckGo + Google TTS for [wk-vocab-review-ik.user.js](wk-vocab-review-ik.user.js).
+Design doc for the backing API that fronts ImmersionKit + DuckDuckGo + Google TTS for [wkenhanced.user.js](wkenhanced.user.js).
 
-**Status: first-pass implementation done; not yet deployed; userscript not yet migrated.** The code lives at [wk-vocab-api/](wk-vocab-api/). This doc is the original *design rationale* — read [wk-vocab-api/README.md](wk-vocab-api/README.md) and [wk-vocab-api/CLAUDE.md](wk-vocab-api/CLAUDE.md) for the current state of the implementation.
+**Status: deployed at `https://api.wkenhanced.dev`; userscript v2.0.0 is server-only.** The code lives at [wk-enhanced-api/](wk-enhanced-api/) (source path renamed from `wk-vocab-api/` to match the deployment on 2026-05-25). This doc is the original *design rationale* — read [wk-enhanced-api/README.md](wk-enhanced-api/README.md) and [wk-enhanced-api/CLAUDE.md](wk-enhanced-api/CLAUDE.md) for the current state of the implementation.
 
 ## Implementation deviations from this doc
 
@@ -16,9 +16,9 @@ A handful of decisions changed during the build (logged here so the rest of the 
 - **Error-code taxonomy** (`validation_error`, `unauthorized`, `not_found`, `upstream_failure`, `service_unavailable`, `internal_error`) on every non-2xx response — clients switch on `code`, not the human-readable `error` string.
 - **IK rate limit dropped from 500ms → 50ms** (~2 req/sec → ~20 req/sec). The original 500ms made interactive lazy-fills feel sluggish: a cold word triggers ~15 IK calls (1 search + per-example media), and a 500ms floor between every call adds 7–8s of pure throttle wait on top of actual network round-trips. Bulk warm is still bounded primarily by IK's own response latency, not our throttle. Revisit upward if IK pushes back.
 - **DDG fetch deferred to background.** The original pipeline ran the DDG fallback-pool fetch (1 vqd token request + 10 image downloads) synchronously before responding, adding ~1.5s to cold lazy-fill latency. Now `warmWord` returns immediately after IK media is done with `incomplete: true` in the payload and `fallbackImages: []` (or the prior fallbacks on re-warm); a fire-and-forget background task fetches DDG and re-upserts with the full pool + `incomplete: false`. The userscript honors `incomplete: true` by applying a 60s local TTL instead of 7d so the next request picks up the completed payload. Module-scoped `ddgInFlight: Set<string>` dedupes overlapping background tasks for the same word.
-- **Structured per-request + per-warm logging.** Beyond the per-request `http` line, the server now emits `vocab.serve` / `vocab.batch` events with a `cacheStatus` enum (`hit` / `not_modified` / `cold_warm` / `nowarm_miss` / `empty` / `error` / `batch`) and per-warm media stats (`audio{ik,tts,none}`, `audioStorage{cache,fetched,...}`, same for image, plus DDG counts) aggregated into `warm.word.done`. Operator can answer "is this request hitting cache or upstream?" and "did this warm reuse storage or do fresh fetches?" from one log line each. Full table in [wk-vocab-api/CLAUDE.md](wk-vocab-api/CLAUDE.md).
-- **Phase 1 client coexistence shipped** in userscript v1.0.0-rc1/rc2 (see [CLIENT_MIGRATION.md](CLIENT_MIGRATION.md)). The userscript still runs the original IK/DDG/Google paths by default; a `useApiServer` setting opts into the API path.
-- **Server deployed to production** (2026-05-25). Lives at `https://api.wkenhanced.dev` on a DO SFO3 droplet ($7/mo Premium AMD) + DO Spaces ($5/mo, S3 driver, path-style) behind a Cloudflare Tunnel. The deploy turned up six DO Spaces / Bun / IK idiosyncrasies that aren't in any docs; see [wk-vocab-api/CLAUDE.md](wk-vocab-api/CLAUDE.md) DEAD-END WARNINGS for the recoverable ones and [wk-vocab-api/deploy/README.md](wk-vocab-api/deploy/README.md) for the canonical install recipe. Headline deltas vs this doc's original deploy story:
+- **Structured per-request + per-warm logging.** Beyond the per-request `http` line, the server now emits `vocab.serve` / `vocab.batch` events with a `cacheStatus` enum (`hit` / `not_modified` / `cold_warm` / `nowarm_miss` / `empty` / `error` / `batch`) and per-warm media stats (`audio{ik,tts,none}`, `audioStorage{cache,fetched,...}`, same for image, plus DDG counts) aggregated into `warm.word.done`. Operator can answer "is this request hitting cache or upstream?" and "did this warm reuse storage or do fresh fetches?" from one log line each. Full table in [wk-enhanced-api/CLAUDE.md](wk-enhanced-api/CLAUDE.md).
+- **Phase 1 → Phase 2 → Phase 3 all shipped** in the userscript (see [CLIENT_MIGRATION.md](CLIENT_MIGRATION.md)). v1.0.0-rc1 introduced the API path opt-in via a `useApiServer` setting; v1.1.0/v1.1.1 flipped it default-on (Phase 2); v2.0.0 deleted the direct path entirely (Phase 3), renamed the userscript to `wkenhanced.user.js`, and preserved the v1.1.1 direct-path snapshot at `legacy/wk-vocab-review-ik-direct.user.js`.
+- **Server deployed to production** (2026-05-25). Lives at `https://api.wkenhanced.dev` on a DO SFO3 droplet ($7/mo Premium AMD) + DO Spaces ($5/mo, S3 driver, path-style) behind a Cloudflare Tunnel. The deploy turned up six DO Spaces / Bun / IK idiosyncrasies that aren't in any docs; see [wk-enhanced-api/CLAUDE.md](wk-enhanced-api/CLAUDE.md) DEAD-END WARNINGS for the recoverable ones and [wk-enhanced-api/deploy/README.md](wk-enhanced-api/deploy/README.md) for the canonical install recipe. Headline deltas vs this doc's original deploy story:
   - **Storage driver**: `local` was viable for dev, but prod uses `s3` (Spaces) — the local FS on a droplet loses everything if the droplet is destroyed, and re-warming costs ~6–10 hours.
   - **Spaces key**: must be **Full Access**, not Limited. Limited Access doesn't grant `s3:PutObjectAcl`, and DO Spaces doesn't expose `PutBucketPolicy` as a workaround. Single-tenant droplet makes Full Access acceptable.
   - **`S3_FORCE_PATH_STYLE=true`** is required (Bun + DO together break with virtual-hosted style).
@@ -28,11 +28,11 @@ A handful of decisions changed during the build (logged here so the rest of the 
 
 The rest of this doc — endpoints, schemas, storage layout, deploy story — is still accurate in shape, with the database/dev-storage swap above being the main delta.
 
-Working name: **wk-vocab-api** (rename before publishing). The userscript today calls IK / DDG / Google directly from every client; this server moves all of that to one place so it's pre-computed, cached, and not re-done per-user.
+Working name (during this doc's authorship): **wk-vocab-api**. Renamed to **wk-enhanced-api** at deploy time and propagated through the source tree on 2026-05-25. The userscript prior to v2.0.0 called IK / DDG / Google directly from every client; this server moves all of that to one place so it's pre-computed, cached, and not re-done per-user.
 
 ## Goals
 
-- **One domain to call.** Userscript hits `wk-vocab-api.example.com/...`, gets everything it needs per vocab card in a single response.
+- **One domain to call.** Userscript hits `api.wkenhanced.dev/...`, gets everything it needs per vocab card in a single response.
 - **Pre-warm the whole WK vocab corpus monthly.** First-time-encounter latency disappears; IK/DDG/Google see one server instead of N clients.
 - **Self-host the media.** IK audio + IK images + Google TTS MP3s + DDG-sourced images all stored in DO Spaces. The userscript loads from our CDN-fronted bucket, not from third-party origins. Removes the IK `Referer`-spoofing dance and the Google TTS rate-limit risk for end users.
 - **Free to users, no accounts, no keys.** All cost falls on the maintainer; design has to stay inside the budget below.
@@ -109,14 +109,14 @@ The primary endpoint. Returns everything the userscript needs to render a card a
       },
       "jlptMax": 4,                          // 0=unknown, 1=N1 hardest, 5=N5 easiest
       "hasOriginalAudio": true,
-      "audioUrl": "https://cdn.wk-vocab-api.../audio/anime/kill_la_kill/42.mp3",
-      "imageUrl": "https://cdn.wk-vocab-api.../image/anime/kill_la_kill/42.jpg"
+      "audioUrl": "https://cdn.wkenhanced.dev/.../audio/anime/kill_la_kill/42.mp3",
+      "imageUrl": "https://cdn.wkenhanced.dev/.../image/anime/kill_la_kill/42.jpg"
     },
     // ... up to ~500 examples
   ],
   "fallbackImages": [
-    "https://cdn.wk-vocab-api.../ddg/食べる/0.jpg",
-    "https://cdn.wk-vocab-api.../ddg/食べる/1.jpg",
+    "https://cdn.wkenhanced.dev/.../ddg/食べる/0.jpg",
+    "https://cdn.wkenhanced.dev/.../ddg/食べる/1.jpg",
     // ... up to 10
   ]
 }
@@ -228,7 +228,7 @@ That's it. Notably *not* storing:
 
 ## Storage layout (Spaces)
 
-Bucket `wk-vocab-api-media`. Public-read, no listing.
+Bucket `wk-enhanced-api-media`. Public-read, no listing.
 
 ```
 audio/
@@ -357,8 +357,8 @@ Environment variables (all on the droplet, none in the repo):
 ```
 DATABASE_URL=postgres://...
 SPACES_ENDPOINT=https://sgp1.digitaloceanspaces.com
-SPACES_BUCKET=wk-vocab-api-media
-SPACES_CDN_ROOT=https://wk-vocab-api-media.sgp1.cdn.digitaloceanspaces.com
+SPACES_BUCKET=wk-enhanced-api-media
+SPACES_CDN_ROOT=https://wk-enhanced-api-media.sgp1.cdn.digitaloceanspaces.com
 SPACES_ACCESS_KEY_ID=...
 SPACES_SECRET_KEY=...
 WK_API_TOKEN=...              # the maintainer's personal token, for vocab list
@@ -401,7 +401,7 @@ Application-layer (server itself):
 
 ## Observability
 
-- **Logs**: structured JSON to stdout, journaled by systemd. Fields: `ts`, `level`, `event`, `word`, `ms`, `status`. Tail via `journalctl -fu wk-vocab-api`. Rotated by journald.
+- **Logs**: structured JSON to stdout, journaled by systemd. Fields: `ts`, `level`, `event`, `word`, `ms`, `status`. Tail via `journalctl -fu wk-enhanced-api`. Rotated by journald.
 - **Metrics**: bare minimum — `/v1/health` exposes `{warmedWords, lastWarmRunAt, serveCountLast24h}`. We do not need Prometheus / Grafana for this scale.
 - **Cost-watching**: DO billing dashboard + weekly self-emailed digest of Spaces egress (one-line cron script that calls the DO API).
 - **Errors**: log to stdout. If pain becomes real, add Sentry's free tier later. Not v1.
