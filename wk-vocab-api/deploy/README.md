@@ -81,38 +81,14 @@ systemctl restart wk-enhanced-api
 
 If any of the files in this directory changed, re-copy them (`install -m 644 ... /etc/systemd/system/...`) and `systemctl daemon-reload` before restart.
 
-## Bucket policy (one-time, DO Spaces only)
+## Spaces key permissions — use Full Access
 
-The `s3` storage driver in `src/services/storage.ts` uploads objects *without* a per-object `acl: 'public-read'`. DO Spaces "Limited Access" keys — even with Read/Write/Delete — don't grant `s3:PutObjectAcl`, so setting ACLs per-upload would fail with `AccessDenied`. Instead, we make the *whole bucket* public-read for `GetObject` via the bucket policy in [bucket-policy.json](bucket-policy.json). Apply once per bucket; survives across deploys.
+The S3 driver sets `acl: 'public-read'` on every upload so the resulting CDN URL is anonymously readable. **DO Spaces "Limited Access" keys do NOT grant `s3:PutObjectAcl`**, even with Read/Write/Delete scope — every upload fails with `AccessDenied`. Two workarounds were investigated and rejected:
 
-```bash
-# s3cmd is in the Ubuntu apt repo. Older versions don't accept --no-config,
-# so use a one-shot config file. NOTE: applying a bucket policy requires
-# `s3:PutBucketPolicy`, which Limited Access keys don't grant — temporarily
-# promote the key to Full Access for this one call, then downgrade back.
-apt install -y s3cmd
+- **Bucket policy** (`PutBucketPolicy`): not exposed by DO Spaces' S3 API. Returns 403 even with a Full Access key. Don't waste time on `s3cmd setpolicy`.
+- **Two-step PUT then `s3cmd setacl`**: works but requires a post-upload hook in code, adds latency and another failure mode.
 
-cat > /tmp/s3cfg <<EOF
-[default]
-access_key = ${S3_ACCESS_KEY_ID}
-secret_key = ${S3_SECRET_ACCESS_KEY}
-host_base = sfo3.digitaloceanspaces.com
-host_bucket = %(bucket)s.sfo3.digitaloceanspaces.com
-use_https = True
-EOF
-chmod 600 /tmp/s3cfg
-
-s3cmd -c /tmp/s3cfg setpolicy \
-    /opt/wk-enhanced-api/wk-vocab-api/deploy/bucket-policy.json \
-    s3://wk-enhanced-api-media
-
-# Verify
-s3cmd -c /tmp/s3cfg info s3://wk-enhanced-api-media | grep -A20 'Policy:'
-
-rm /tmp/s3cfg
-```
-
-If your bucket name differs from `wk-enhanced-api-media`, edit the `Resource` line in `bucket-policy.json` before applying.
+The clean path is to give the Spaces key **Full Access** in the DO control panel. On a single-tenant production droplet (one bucket, one app, key never leaves `/etc/wk-enhanced-api/env`) the practical risk delta vs Limited Access is marginal. If you need Limited Access for a multi-tenant setup, you'll need to implement the two-step approach.
 
 ## Things to remember
 

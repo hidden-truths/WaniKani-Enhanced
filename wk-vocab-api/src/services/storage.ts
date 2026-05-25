@@ -72,15 +72,19 @@ class S3Storage implements Storage {
 
     async put(key: string, body: ArrayBuffer | Uint8Array, contentType: string): Promise<string> {
         const file = this.client.file(key);
-        // Intentionally no `acl: 'public-read'` here. Setting per-object ACLs
-        // requires `s3:PutObjectAcl`, which DO Spaces "Limited Access" keys
-        // don't grant — even with Read/Write/Delete scope. Attempting it
-        // returns AccessDenied (discovered during the first production deploy
-        // in 2026-05). Public-read is instead achieved via a bucket policy
-        // that allows anonymous `s3:GetObject` on the whole bucket; see
-        // deploy/bucket-policy.json + deploy/README.md "Bucket policy" for
-        // the one-time setup. Local-storage driver isn't affected.
-        await file.write(body, { type: contentType });
+        // Per-object ACL is the canonical "make this public" mechanism on
+        // DO Spaces. We tried two alternatives during the first prod deploy
+        // (2026-05) and both failed:
+        //   1. Limited Access key + inline `acl: 'public-read'` on PUT →
+        //      AccessDenied. Limited Access scope (even R/W/D) doesn't
+        //      grant `s3:PutObjectAcl`.
+        //   2. Bucket policy via `s3cmd setpolicy` → 403 even with a
+        //      Full Access key. DO Spaces appears not to expose
+        //      `PutBucketPolicy` through their S3 API.
+        // Solution: use a Full Access Spaces key (single-tenant droplet =
+        // marginal risk delta vs Limited Access), keep the inline ACL.
+        // The `acl: 'public-read'` param works fine with Full Access.
+        await file.write(body, { type: contentType, acl: 'public-read' });
         return this.publicUrl(key);
     }
 
