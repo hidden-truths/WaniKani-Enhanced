@@ -10,11 +10,12 @@ A **two-part** project augmenting WaniKani vocab reviews:
 The server is **deployed in production** at `https://api.wkenhanced.dev` (DO droplet in SFO3 + Spaces, Cloudflare Tunnel for TLS/edge). As of userscript **v1.0.0-rc2 the Phase 1 coexistence migration is implemented**: a `useApiServer` toggle + `apiServerUrl` setting let the user opt into routing all vocab lookups through the API server. **Default is still OFF** — direct-path users see no change pending Phase 2. Phase 2 default-on flip (userscript v1.1.0) is the next step, gated on the post-deploy bulk warm completing cleanly. Phase 3 cleanup of the direct code path is deferred per maintainer preference until Phase 2 has soaked for a couple of weeks — and per a maintainer pivot, Phase 3 now preserves the direct path as a snapshot in `legacy/` rather than deleting it. This file covers the userscript. For server work, jump to [wk-vocab-api/CLAUDE.md](wk-vocab-api/CLAUDE.md). For the migration plan + Phase 1 deviations + the deploy-day lessons, see [CLIENT_MIGRATION.md](CLIENT_MIGRATION.md) and [wk-vocab-api/deploy/README.md](wk-vocab-api/deploy/README.md).
 
 **Reading order for a cold start:**
-1. This file — userscript architecture + dead-ends.
-2. [SERVER_DESIGN.md](SERVER_DESIGN.md) — design rationale for the server (with implementation deviations noted at the top).
-3. [wk-vocab-api/CLAUDE.md](wk-vocab-api/CLAUDE.md) — server architecture + dead-ends.
-4. [CLIENT_MIGRATION.md](CLIENT_MIGRATION.md) — migration plan (Phase 1 shipped, Phases 2 + 3 pending). Read before working on the API path.
-5. [NEW_FEATURES.md](NEW_FEATURES.md) — backlog of features discussed but not yet shipped (now includes a Server-side improvements section).
+1. [NEXT_STEPS.md](NEXT_STEPS.md) — *what to do next*, in priority order. Read this first if you're picking up a session in progress; everything else is reference material.
+2. This file — userscript architecture + dead-ends.
+3. [SERVER_DESIGN.md](SERVER_DESIGN.md) — design rationale for the server (with implementation deviations noted at the top).
+4. [wk-vocab-api/CLAUDE.md](wk-vocab-api/CLAUDE.md) — server architecture + dead-ends.
+5. [CLIENT_MIGRATION.md](CLIENT_MIGRATION.md) — migration plan (Phase 1 shipped, Phase 2 queued, Phase 3 deferred). Read before working on the API path.
+6. [NEW_FEATURES.md](NEW_FEATURES.md) — backlog of features discussed but not yet shipped (now includes a Server-side improvements section).
 
 **The userscript is a single file.** No build step, no tests, no package manager — read the whole file to see everything. The server is a separate codebase that happens to live in the same git repo (`package.json`, test suite, type-check, the works).
 
