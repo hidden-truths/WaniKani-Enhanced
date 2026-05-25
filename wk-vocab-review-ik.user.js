@@ -1,14 +1,15 @@
 // ==UserScript==
 // @name         WK Vocab Review — ImmersionKit Examples
 // @namespace    https://github.com/jbrelly/wk-ik-examples
-// @version      0.25.0
-// @description  Shows one ImmersionKit example sentence (with IK / Google TTS audio + IK / DDG image) during WaniKani vocab reviews.
+// @version      1.0.0-rc1
+// @description  Shows one ImmersionKit example sentence (with IK / Google TTS audio + IK / DDG image) during WaniKani vocab reviews. v1.0 adds an opt-in API server path (default off).
 // @author       jbrelly
 // @match        https://www.wanikani.com/*
 // @match        https://preview.wanikani.com/*
 // @connect      apiv2.immersionkit.com
 // @connect      duckduckgo.com
 // @connect      translate.googleapis.com
+// @connect      localhost
 // @grant        GM_xmlhttpRequest
 // @grant        unsafeWindow
 // @run-at       document-end
@@ -21,7 +22,7 @@
 
     const SCRIPT_ID = 'wk-ik-examples';
     const SCRIPT_TITLE = 'WK Vocab Review — ImmersionKit';
-    const SCRIPT_VERSION = '0.25.0';
+    const SCRIPT_VERSION = '1.0.0-rc1';
 
     // Bump this when on-disk cache shape or sourcing logic changes in a way that
     // makes stale entries actively wrong (vs. just suboptimal). Boot will clear
@@ -70,6 +71,28 @@
     const CACHE_TTL_MS = 30 * 24 * 60 * 60 * 1000; // 30 days
     const NEG_CACHE_TTL_MS = 7 * 24 * 60 * 60 * 1000; // 7 days
 
+    // ---------- API server (Phase 1 coexistence) ----------
+    //
+    // When `useApiServer` is on and `apiServerUrl` is non-empty, the userscript
+    // routes vocab lookups through our backing server (wk-vocab-api) instead of
+    // calling IK / DDG / Google directly. The direct code path remains intact
+    // and is the default during the coexistence phase.
+    //
+    // Cache: payloads are stored under SERVER_CACHE_PREFIX keyed by the raw
+    // (un-encoded) word — separate namespace from the direct-path caches so
+    // they don't fight, and so toggling the setting doesn't trash either side.
+    // ETag round-trips: we send `If-None-Match` when revisiting a word; the
+    // server 304s when fetchedAt hasn't moved, so revisits are zero-byte.
+    const SERVER_CACHE_PREFIX = 'wk-vocab-cache.payload.';
+    // 7 day local TTL — much shorter than the server's 30-day warm refresh,
+    // because the ETag round-trip is cheap and authoritative. The TTL is a
+    // backstop for "server has been unreachable for a long time, eventually
+    // give up and try fresh."
+    const SERVER_CACHE_TTL_MS = 7 * 24 * 60 * 60 * 1000;
+    // Batch endpoint max body size (mirrors server's BatchRequestSchema cap).
+    // Prefetch chunks larger batches into multiple requests.
+    const SERVER_BATCH_MAX = 50;
+
     const CSS_PREFIX = 'wk-ik';
     const CARD_CLASS = `${CSS_PREFIX}-card`;
 
@@ -94,6 +117,19 @@
         // initial sort. Independent of jlptCeiling so the user can e.g. let
         // anything through (ceiling=any) while still preferring N3 by default.
         jlptPreferred: 'any',
+        // ---- API server (Phase 1 coexistence) ----
+        // When true AND apiServerUrl is non-empty, route all vocab fetches
+        // through our backing server instead of IK / DDG / Google. Off by
+        // default during Phase 1; flipped on by users opting in to test.
+        useApiServer: false,
+        // Base URL of the wk-vocab-api server. Empty disables the API path
+        // (forces direct mode). For local dev: 'http://localhost:3000'. For
+        // the eventual public deployment: 'https://<prod-domain>'. Trailing
+        // slash is stripped at use time.
+        apiServerUrl: '',
+        // When useApiServer is on, on review-session entry prefetch the next
+        // N upcoming subjects via POST /v1/vocab/batch. 0 disables; default 10.
+        prefetchCount: 10,
     };
 
     // ---------- WKOF presence + version check ----------
@@ -228,8 +264,9 @@
             PAGE_WIN.openWkIkSettings = openSettings;
             PAGE_WIN.debugWkIk = debugWkIk;
             PAGE_WIN.debugWkIkTitle = debugWkIkTitle;
+            PAGE_WIN.debugWkIkApi = debugWkIkApi;
             console.log(
-                `[${SCRIPT_ID}] boot OK. Console: openWkIkSettings() | debugWkIk() | debugWkIkTitle('<encoded_title>')`
+                `[${SCRIPT_ID}] boot OK. Console: openWkIkSettings() | debugWkIk() | debugWkIkTitle('<encoded_title>') | debugWkIkApi('<word>')`
             );
         })
         .catch((err) => {
@@ -512,6 +549,34 @@
                             hover_tip:
                                 'Playback speed for the example sentence audio. Native voice-actor audio (anime/drama) is often too fast for intermediate listening — try 0.75x to parse morphology, then rebuild to 1x. Affects all audio sources (IK proxy, Google TTS fallback); takes effect on the next card render.',
                         },
+                        apiServer: {
+                            type: 'section',
+                            label: 'API server (experimental)',
+                        },
+                        useApiServer: {
+                            type: 'checkbox',
+                            label: 'Use API server (instead of direct IK/DDG/Google)',
+                            default: DEFAULTS.useApiServer,
+                            hover_tip:
+                                'Phase 1 coexistence toggle. When on, every vocab lookup goes through the configured API server URL below; the direct code path is skipped. Off by default — flip on after setting a URL and (for local dev) starting `bun dev` in wk-vocab-api/. Falls back to the empty-card state if the server is unreachable; flip off to restore the direct path.',
+                        },
+                        apiServerUrl: {
+                            type: 'text',
+                            label: 'API server URL',
+                            default: DEFAULTS.apiServerUrl,
+                            placeholder: 'http://localhost:3000',
+                            hover_tip:
+                                'Base URL of the wk-vocab-api server. For local dev: http://localhost:3000. Trailing slash is stripped. Leave blank to disable the API path even when the checkbox above is on.',
+                        },
+                        prefetchCount: {
+                            type: 'number',
+                            label: 'Prefetch upcoming subjects (0 = off)',
+                            default: DEFAULTS.prefetchCount,
+                            min: 0,
+                            max: 50,
+                            hover_tip:
+                                'When the API server is in use, batch-fetch this many upcoming review subjects on session entry so subsequent cards render instantly from local cache. Direct mode also prefetches but one-at-a-time. Capped at 50 (the server batch endpoint limit).',
+                        },
                         selection: {
                             type: 'section',
                             label: 'Example selection',
@@ -616,6 +681,7 @@
                     wkof.file_cache.delete(new RegExp('^' + escapeRegExp(IMG_CACHE_PREFIX))),
                     wkof.file_cache.delete(new RegExp('^' + escapeRegExp(AUDIO_CACHE_PREFIX))),
                     wkof.file_cache.delete(new RegExp('^' + escapeRegExp(IK_AUDIO_CACHE_PREFIX))),
+                    wkof.file_cache.delete(new RegExp('^' + escapeRegExp(SERVER_CACHE_PREFIX))),
                 ])
                     .then(() => wkof.file_cache.save(SCHEMA_VERSION_KEY, { version: CACHE_SCHEMA_VERSION }))
                     .catch((err) => console.warn(`[${SCRIPT_ID}] cache upgrade failed:`, err));
@@ -630,6 +696,7 @@
             wkof.file_cache.delete(new RegExp('^' + escapeRegExp(IMG_CACHE_PREFIX))),
             wkof.file_cache.delete(new RegExp('^' + escapeRegExp(AUDIO_CACHE_PREFIX))),
             wkof.file_cache.delete(new RegExp('^' + escapeRegExp(IK_AUDIO_CACHE_PREFIX))),
+            wkof.file_cache.delete(new RegExp('^' + escapeRegExp(SERVER_CACHE_PREFIX))),
             wkof.file_cache.delete(SELECTIONS_CACHE_KEY),
             wkof.file_cache.delete(INDEX_META_CACHE_KEY),
         ])
@@ -1357,7 +1424,14 @@
                     // Warm the cache for the next few subjects in WK's queue.
                     // Runs after the current card is on-screen so we don't
                     // compete with its audio/image fetches for socket budget.
-                    prefetchUpcomingExamples(5);
+                    // When the server path is on, the user-configured
+                    // prefetchCount applies (capped to SERVER_BATCH_MAX);
+                    // direct mode keeps the original conservative 5.
+                    const prefs = settings();
+                    const prefetchN = serverPathEnabled()
+                        ? Math.max(0, Math.min(SERVER_BATCH_MAX, prefs.prefetchCount | 0 || 0))
+                        : 5;
+                    if (prefetchN > 0) prefetchUpcomingExamples(prefetchN);
                 })
                 .catch((err) => {
                     console.error(`[${SCRIPT_ID}] fetch failed:`, err);
@@ -1460,6 +1534,36 @@
             }
             return;
         }
+        // Server path: skip words that already have a fresh local payload,
+        // then bulk-fetch the rest in one round trip. Hits the server's
+        // /v1/vocab/batch endpoint (server doesn't lazy-warm on batch — any
+        // misses come back in `missing` and we fire individual GETs for them,
+        // which DO lazy-warm).
+        if (serverPathEnabled()) {
+            console.log(`[${SCRIPT_ID}] prefetch (server): ${chars.length} upcoming: ${chars.join(', ')}`);
+            Promise.all(chars.map((c) => {
+                return wkof.file_cache.load(serverCacheKey(c))
+                    .then((entry) => isServerCacheFresh(entry) ? c : null)
+                    .catch(() => null);
+            })).then((cachedFlags) => {
+                const toFetch = chars.filter((_, i) => cachedFlags[i] === null);
+                if (!toFetch.length) return;
+                fetchVocabBatch(toFetch).then(({ missing }) => {
+                    // For batch-missing entries (the server has no cached row),
+                    // fire individual GETs so each one lazy-warms. Fire-and-
+                    // forget; even partial success populates the cache for
+                    // subsequent renders.
+                    if (missing && missing.length) {
+                        console.log(`[${SCRIPT_ID}] prefetch: ${missing.length} cold; lazy-warming individually`);
+                        for (const w of missing) {
+                            fetchVocab(w).catch(() => {});
+                        }
+                    }
+                });
+            });
+            return;
+        }
+        // Direct path: same one-at-a-time prefetch as before.
         console.log(`[${SCRIPT_ID}] prefetch: warming ${chars.length} upcoming example(s): ${chars.join(', ')}`);
         for (const c of chars) {
             // getExamples is cache-aware — already-fresh entries resolve via
@@ -1794,6 +1898,70 @@
         console.log('To check the real file, replace SAMPLE.mp3/SAMPLE.jpg with the `sound`/`image` field from the failing example (visible in the boot log\'s "raw IK example" dump) and paste into a new browser tab.');
     }
 
+    // Diagnostic helper for the Phase-1 API-server path. Mirrors debugWkIk():
+    // - reports current toggle / URL configuration
+    // - hits /v1/health and dumps the result
+    // - runs a sample fetchVocab for the given word (default '食べる')
+    // - dumps the local payload-cache size and a sample cached entry
+    //
+    // Exposed on PAGE_WIN so it's callable from devtools as `debugWkIkApi()`
+    // even though the userscript runs in the Tampermonkey sandbox.
+    function debugWkIkApi(word) {
+        const tag = `--- debugWkIkApi(${JSON.stringify(word || '食べる')}) ---`;
+        console.log(tag);
+        const prefs = settings();
+        const base = getApiBase();
+        console.log('settings:', {
+            useApiServer: prefs.useApiServer,
+            apiServerUrl: prefs.apiServerUrl,
+            prefetchCount: prefs.prefetchCount,
+            serverPathEnabled: serverPathEnabled(),
+            resolvedBase: base,
+        });
+        if (!base) {
+            console.log('No apiServerUrl configured — set one in the settings dialog first.');
+            return;
+        }
+        const probeWord = word || '食べる';
+        // Health probe.
+        fetch(`${base}/v1/health`, { credentials: 'omit', mode: 'cors' })
+            .then((r) => r.json().then((j) => ({ status: r.status, body: j })))
+            .then((r) => console.log('GET /v1/health →', r))
+            .catch((err) => console.warn('GET /v1/health failed:', err));
+        // Sample fetch (raw, no adapter — show what the wire sees).
+        const probeUrl = `${base}/v1/vocab/${encodeURIComponent(probeWord)}`;
+        console.log(`GET ${probeUrl} ...`);
+        fetch(probeUrl, { credentials: 'omit', mode: 'cors' })
+            .then((r) => r.json().then((j) => ({ status: r.status, etag: r.headers.get('ETag'), body: j })))
+            .then((r) => {
+                console.log('Server response:', {
+                    status: r.status,
+                    etag: r.etag,
+                    word: r.body && r.body.word,
+                    fetchedAt: r.body && r.body.fetchedAt,
+                    exampleCount: r.body && Array.isArray(r.body.examples) ? r.body.examples.length : null,
+                    fallbackImageCount: r.body && Array.isArray(r.body.fallbackImages) ? r.body.fallbackImages.length : null,
+                    firstExample: r.body && r.body.examples && r.body.examples[0],
+                });
+            })
+            .catch((err) => console.warn('GET /v1/vocab failed:', err));
+        // Local cache snapshot.
+        const dir = wkof.file_cache && wkof.file_cache.dir;
+        const cacheKeys = dir ? Object.keys(dir).filter((k) => k.startsWith(SERVER_CACHE_PREFIX)) : [];
+        console.log(`Local payload cache: ${cacheKeys.length} entr${cacheKeys.length === 1 ? 'y' : 'ies'}${dir ? '' : ' (wkof.file_cache.dir unavailable; entry list unknown)'}`);
+        wkof.file_cache.load(serverCacheKey(probeWord))
+            .then((entry) => {
+                console.log(`Local cache for "${probeWord}":`, entry ? {
+                    etag: entry.etag,
+                    savedAt: entry.savedAt,
+                    ageMs: Date.now() - entry.savedAt,
+                    fresh: isServerCacheFresh(entry),
+                    exampleCount: entry.payload && Array.isArray(entry.payload.examples) ? entry.payload.examples.length : null,
+                } : '(empty)');
+            })
+            .catch(() => console.log(`Local cache for "${probeWord}": (empty)`));
+    }
+
     function readText(el) {
         if (!el) return null;
         const t = (el.textContent || '').trim();
@@ -1806,7 +1974,21 @@
         return `${CACHE_PREFIX}${encodeURIComponent(slug)}`;
     }
 
+    // Top-level entry point for the data layer. Switches between the direct
+    // IK/DDG/Google path (default) and the wk-vocab-api server path based on
+    // user settings. Both paths return the same shape: { fetchedAt, raw, chosen }
+    // — the server path uses an adapter (serverPayloadToCacheEntry) to reshape
+    // the server's payload into IK-raw-lookalike entries so downstream code
+    // (pickExample, buildPool, renderCard, picker) is untouched. The Phase-3
+    // cleanup will drop the direct path entirely.
     function getExamples(slug) {
+        if (serverPathEnabled()) {
+            return getExamplesViaServer(slug);
+        }
+        return getExamplesDirect(slug);
+    }
+
+    function getExamplesDirect(slug) {
         const key = cacheKey(slug);
         return wkof.file_cache
             .load(key)
@@ -2014,6 +2196,223 @@
         return `${IK_API_BASE}?${params.toString()}`;
     }
 
+    // ---------- API server path (Phase 1 coexistence) ----------
+    //
+    // These functions are the parallel data-layer path used when the user has
+    // flipped on `useApiServer` and configured a non-empty `apiServerUrl`. They
+    // produce the same { fetchedAt, raw, chosen } cache-entry shape as the
+    // direct path so downstream code is identical. The adapter
+    // (serverPayloadToCacheEntry) does the heavy lifting: it reshapes the
+    // server's payload (camelCase, nested source, pre-resolved jlptMax + media
+    // URLs) into IK-raw-lookalike entries.
+
+    function serverPathEnabled() {
+        const prefs = settings();
+        return !!(prefs.useApiServer && getApiBase());
+    }
+
+    function getApiBase() {
+        const raw = (settings().apiServerUrl || '').trim();
+        if (!raw) return '';
+        // Strip trailing slash so caller can blindly concatenate `/v1/...`.
+        return raw.replace(/\/+$/, '');
+    }
+
+    function serverCacheKey(word) {
+        return `${SERVER_CACHE_PREFIX}${encodeURIComponent(word)}`;
+    }
+
+    function isServerCacheFresh(entry) {
+        if (!entry || !entry.payload || typeof entry.savedAt !== 'number') return false;
+        return Date.now() - entry.savedAt < SERVER_CACHE_TTL_MS;
+    }
+
+    // Cache-aware variant of getExamples for the server path. Mirrors
+    // getExamplesDirect's flow:
+    //   1. Try local cache. If fresh, adapt and return.
+    //   2. Otherwise call fetchVocab(word) — which itself sends If-None-Match
+    //      and may resolve 304 with cached payload.
+    function getExamplesViaServer(word) {
+        return wkof.file_cache
+            .load(serverCacheKey(word))
+            .catch(() => null)
+            .then((entry) => {
+                if (entry && isServerCacheFresh(entry)) {
+                    return serverPayloadToCacheEntry(entry.payload);
+                }
+                return fetchVocab(word, entry).then((payload) => {
+                    if (!payload) return { fetchedAt: Date.now(), raw: [], chosen: null };
+                    return serverPayloadToCacheEntry(payload);
+                });
+            });
+    }
+
+    // Hit GET /v1/vocab/{word} on the configured server, with ETag round-trip.
+    // Returns the payload object on success (200 or 304), or null on 404 / 5xx /
+    // network error. Updates local cache on 200.
+    //
+    // We use native fetch() (not GM_xmlhttpRequest) because our server returns
+    // permissive CORS. That also dodges the @connect requirement for arbitrary
+    // user-configured prod domains — only the @connect-gated GM_xmlhttpRequest
+    // cares.
+    function fetchVocab(word, cachedEntryHint) {
+        const base = getApiBase();
+        if (!base) return Promise.resolve(null);
+        const url = `${base}/v1/vocab/${encodeURIComponent(word)}`;
+        const headers = {};
+        if (cachedEntryHint && cachedEntryHint.etag) {
+            headers['If-None-Match'] = cachedEntryHint.etag;
+        }
+        return fetch(url, { headers, credentials: 'omit', mode: 'cors' })
+            .then((res) => {
+                if (res.status === 304) {
+                    // ETag matched — refresh the savedAt so TTL math sees this
+                    // as a recently-verified entry, but keep the same payload.
+                    if (cachedEntryHint && cachedEntryHint.payload) {
+                        const refreshed = {
+                            payload: cachedEntryHint.payload,
+                            etag: cachedEntryHint.etag,
+                            savedAt: Date.now(),
+                        };
+                        wkof.file_cache.save(serverCacheKey(word), refreshed).catch(() => {});
+                        return cachedEntryHint.payload;
+                    }
+                    return null;
+                }
+                if (res.status === 404) {
+                    console.log(`[${SCRIPT_ID}] server: 404 for "${word}" (no examples)`);
+                    return null;
+                }
+                if (!res.ok) {
+                    console.warn(`[${SCRIPT_ID}] server: HTTP ${res.status} for "${word}"`);
+                    return null;
+                }
+                const etag = res.headers.get('ETag') || res.headers.get('etag') || null;
+                return res.json().then((payload) => {
+                    const entry = { payload, etag, savedAt: Date.now() };
+                    wkof.file_cache.save(serverCacheKey(word), entry).catch(() => {});
+                    return payload;
+                });
+            })
+            .catch((err) => {
+                console.warn(`[${SCRIPT_ID}] server: fetchVocab failed for "${word}":`, err);
+                // Fall back to whatever stale cached payload we have, if any —
+                // better than rendering an empty card just because the server
+                // was momentarily unreachable.
+                if (cachedEntryHint && cachedEntryHint.payload) {
+                    return cachedEntryHint.payload;
+                }
+                return null;
+            });
+    }
+
+    // Bulk-fetch helper for prefetch. Splits `words` into chunks of
+    // SERVER_BATCH_MAX, POSTs each, writes every found payload to local cache.
+    // Resolves with { found, missing } merged across chunks. Never throws —
+    // prefetch failures shouldn't surface to the user.
+    function fetchVocabBatch(words) {
+        const base = getApiBase();
+        if (!base || !words || !words.length) {
+            return Promise.resolve({ found: {}, missing: [] });
+        }
+        // Chunk and dispatch in parallel.
+        const chunks = [];
+        for (let i = 0; i < words.length; i += SERVER_BATCH_MAX) {
+            chunks.push(words.slice(i, i + SERVER_BATCH_MAX));
+        }
+        return Promise.all(chunks.map((chunk) => {
+            return fetch(`${base}/v1/vocab/batch`, {
+                method: 'POST',
+                headers: { 'Content-Type': 'application/json' },
+                credentials: 'omit',
+                mode: 'cors',
+                body: JSON.stringify({ words: chunk }),
+            })
+                .then((res) => {
+                    if (!res.ok) {
+                        console.warn(`[${SCRIPT_ID}] server: batch HTTP ${res.status}`);
+                        return { found: {}, missing: chunk };
+                    }
+                    return res.json();
+                })
+                .catch((err) => {
+                    console.warn(`[${SCRIPT_ID}] server: batch failed:`, err);
+                    return { found: {}, missing: chunk };
+                });
+        })).then((results) => {
+            const merged = { found: {}, missing: [] };
+            for (const r of results) {
+                if (r && r.found) Object.assign(merged.found, r.found);
+                if (r && Array.isArray(r.missing)) merged.missing.push(...r.missing);
+            }
+            // Persist every found payload to local cache so subsequent
+            // getExamples calls hit instantly. We don't have ETags from
+            // /batch (server doesn't compute them per-row), so on the next
+            // GET /v1/vocab/{word} the cache-fresh check fires and we skip
+            // the network entirely until TTL expiry.
+            for (const word of Object.keys(merged.found)) {
+                const entry = { payload: merged.found[word], etag: null, savedAt: Date.now() };
+                wkof.file_cache.save(serverCacheKey(word), entry).catch(() => {});
+            }
+            return merged;
+        });
+    }
+
+    // Adapter: reshape the server's payload into the cache-entry shape that
+    // downstream code (pickExample, buildPool, renderCard, sentence picker)
+    // expects. The transform per-example:
+    //   - server's camelCase fields → IK's snake_case names that downstream
+    //     reads (sentence_with_furigana, word_list, title)
+    //   - server's pre-resolved jlptMax → _jlptMax (so scoreJlpt is bypassed
+    //     for server-sourced entries; we trust the server's score)
+    //   - server's hasOriginalAudio → a non-empty `sound` sentinel string so
+    //     hasOriginalAudio(e) (which checks e.sound || e.sound_url) returns
+    //     true for the buildPool requireAudio filter
+    //   - server's pretty source title → stashed as _prettyTitle so the
+    //     renderer / picker display it without re-encoding through
+    //     prettifyTitle's heuristic
+    //   - server's pre-built audioUrl / imageUrl → stashed as _serverAudioUrl
+    //     and _serverImageUrl; formatExample prefers these over buildIkAudioUrl
+    //   - payload.fallbackImages → stashed on every entry as
+    //     _serverFallbackImages so loadImageAt can use them in place of DDG
+    function serverPayloadToCacheEntry(payload) {
+        if (!payload || !Array.isArray(payload.examples)) {
+            return { fetchedAt: Date.now(), raw: [], chosen: null };
+        }
+        const fallbacks = Array.isArray(payload.fallbackImages) ? payload.fallbackImages : [];
+        const raw = payload.examples.map((e) => {
+            const src = e.source || {};
+            return {
+                // IK-raw-lookalike fields downstream consumers read directly:
+                sentence: e.sentence || '',
+                sentence_with_furigana: e.sentenceFurigana || '',
+                translation: e.translation || '',
+                word_list: Array.isArray(e.wordList) ? e.wordList : [],
+                title: src.encodedTitle || '',
+                deck_name: src.encodedTitle || '',
+                sound: e.hasOriginalAudio ? '__server_audio__' : '',
+                // JLPT score pre-computed server-side. Same 0..5 semantics as
+                // the client-side scoreJlpt (0 = unknown sentinel, fail-open).
+                _jlptMax: typeof e.jlptMax === 'number' ? e.jlptMax : 0,
+                // Server-path annotations (undefined on direct-path entries):
+                _prettyTitle: src.title || '',
+                _serverAudioUrl: e.audioUrl || null,
+                _serverImageUrl: e.imageUrl || null,
+                _serverFallbackImages: fallbacks,
+                _serverExampleId: e.id || null,
+            };
+        });
+        // Pre-pick `chosen` mirrors the direct path so getExamplesDirect's
+        // isCacheFresh + reselectIfNeeded flow stays parallel. Renderer always
+        // re-picks from `raw` at the current state.sentenceIdx anyway.
+        const chosen = raw.length ? pickExample(raw, settings(), 0) : null;
+        return {
+            fetchedAt: typeof payload.fetchedAt === 'number' ? payload.fetchedAt : Date.now(),
+            chosen,
+            raw,
+        };
+    }
+
     // ---------- Audio (IK proxy → Google Translate TTS) + Image (DDG) ----------
 
     // ============================================================
@@ -2207,8 +2606,19 @@
     }
 
     // Orchestrator: try the IK proxy first (real human audio when available), then
-    // fall back to Google TTS (synthesized but always works). Returns a blob URL.
+    // fall back to Google TTS (synthesized but always works). Returns a URL the
+    // <audio> element can play.
+    //
+    // When the example came from the API server (example._serverAudio === true),
+    // the server has already resolved the audio source (IK voice-actor recording
+    // or pre-rendered TTS) and uploaded it to our CDN. The browser handles
+    // playback directly from that URL — no blob conversion, no Referer spoof,
+    // no negative-cache layer. The server's `Cache-Control: max-age=31536000,
+    // immutable` header lets the browser HTTP cache hold it indefinitely.
     function resolveAudioBlobUrl(example) {
+        if (example && example._serverAudio && example.ikAudioUrl) {
+            return Promise.resolve(example.ikAudioUrl);
+        }
         const ikUrl = example && example.ikAudioUrl;
         if (ikUrl) {
             return fetchIkAudioBlobUrl(ikUrl)
@@ -2372,15 +2782,25 @@
     }
 
     // Resolve image #index from the combined pool:
-    //   pool = [ikImageUrl (if non-null), ...DDG urls]
-    // So index 0 is always the IK screenshot when one exists, with DDG illustrations
-    // filling positions 1..N. When IK has no `image` field (text-only sources),
-    // DDG occupies the whole pool starting at index 0. Index wraps via modulo so
-    // the refresh button cycles forever. Calls onSuccess(url, poolSize) or onError().
-    function loadImageAt(word, ikImageUrl, index, onSuccess, onError) {
+    //   pool = [ikImageUrl (if non-null), ...fallback urls]
+    // So index 0 is always the IK screenshot when one exists, with fallback
+    // illustrations filling positions 1..N. When IK has no `image` field
+    // (text-only sources), fallbacks occupy the whole pool starting at index 0.
+    // Index wraps via modulo so the refresh button cycles forever.
+    //
+    // `serverFallbacks` (when non-null) is the array of CDN URLs the API
+    // server pre-computed for this word — used in place of a DDG fetch so the
+    // server path doesn't trigger any third-party network call. Direct-path
+    // callers pass null and we fall through to fetchDdgImagesCached.
+    //
+    // Calls onSuccess(url, poolSize) or onError().
+    function loadImageAt(word, ikImageUrl, index, onSuccess, onError, serverFallbacks) {
         const idx = Math.max(0, index | 0);
-        fetchDdgImagesCached(word).then((ddgUrls) => {
-            const pool = ikImageUrl ? [ikImageUrl, ...ddgUrls] : ddgUrls;
+        const fallbackPromise = Array.isArray(serverFallbacks)
+            ? Promise.resolve(serverFallbacks)
+            : fetchDdgImagesCached(word);
+        fallbackPromise.then((fallbackUrls) => {
+            const pool = ikImageUrl ? [ikImageUrl, ...fallbackUrls] : fallbackUrls;
             if (pool.length === 0) {
                 onError && onError();
                 return;
@@ -2532,8 +2952,14 @@
         return pool;
     }
 
-    // Format a raw IK example into the shape renderCard consumes.
+    // Format a raw IK example into the shape renderCard consumes. Forwards
+    // the server-path annotations (_prettyTitle, _serverAudioUrl,
+    // _serverImageUrl, _serverFallbackImages) when present; direct-path
+    // entries set them to null and the downstream code paths fall back to
+    // their original behaviors (IK proxy URL build + DDG image fetch).
     function formatExample(e, poolSize) {
+        const serverAudio = e._serverAudioUrl || null;
+        const serverImage = e._serverImageUrl || null;
         return {
             sentence: e.sentence || '',
             sentence_with_furigana: e.sentence_with_furigana || '',
@@ -2543,10 +2969,27 @@
             // resolveAudioBlobUrl uses ikAudioUrl as the primary source, falling back
             // to Google TTS on failure or absence. loadImageAt uses ikImageUrl as
             // image #0 in the pool, with DDG results filling positions 1..N.
-            ikAudioUrl: buildIkAudioUrl(e),
-            ikImageUrl: buildIkImageUrl(e),
+            // When the entry came from the API server, prefer its pre-resolved
+            // CDN URLs over the IK proxy.
+            ikAudioUrl: serverAudio || buildIkAudioUrl(e),
+            ikImageUrl: serverImage || buildIkImageUrl(e),
             poolSize,
+            // Server-path passthroughs:
+            _serverAudio: !!serverAudio,
+            _serverImage: !!serverImage,
+            _serverFallbackImages: e._serverFallbackImages || null,
+            _prettyTitle: e._prettyTitle || '',
         };
+    }
+
+    // Pretty source-name for display. Prefers the server-resolved title when
+    // available (avoids the lossy-encoding heuristic), falls back to the
+    // direct-path prettifyTitle (which itself consults indexMeta + heuristic).
+    function displayTitle(eOrRaw) {
+        if (eOrRaw && eOrRaw._prettyTitle) return eOrRaw._prettyTitle;
+        // `eOrRaw` here can be either a formatExample output (has `title`) or
+        // a raw IK entry (has `title` or `deck_name`). getTitle handles both.
+        return prettifyTitle(getTitle(eOrRaw));
     }
 
     let loggedRawExample = false;
@@ -2767,10 +3210,10 @@
         translationEl.hidden = !state.meaningAnswered;
         leftPanel.appendChild(translationEl);
 
-        if (example.title) {
+        if (example.title || example._prettyTitle) {
             const src = document.createElement('div');
             src.className = `${CSS_PREFIX}-source`;
-            src.textContent = `— ${prettifyTitle(example.title)}`;
+            src.textContent = `— ${displayTitle(example)}`;
             leftPanel.appendChild(src);
         }
 
@@ -2847,7 +3290,8 @@
                             }
                         };
                     },
-                    () => fig.remove()
+                    () => fig.remove(),
+                    example._serverFallbackImages
                 );
             };
             tryLoadAt(state.imageIdx || 0, 3);
@@ -3106,7 +3550,7 @@
         };
         sorts.source = {
             label: 'Source name (A → Z)',
-            cmp: (a, b) => (prettifyTitle(getTitle(a)) || '').localeCompare(prettifyTitle(getTitle(b)) || ''),
+            cmp: (a, b) => (displayTitle(a) || '').localeCompare(displayTitle(b) || ''),
         };
         return sorts;
     }
@@ -3346,7 +3790,7 @@
         }
         meta.appendChild(badge);
 
-        const srcText = prettifyTitle(getTitle(e));
+        const srcText = displayTitle(e);
         if (srcText) {
             const src = document.createElement('span');
             src.className = `${CSS_PREFIX}-picker-source`;

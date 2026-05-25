@@ -1,6 +1,6 @@
 # CLIENT_MIGRATION.md
 
-Plan for migrating [wk-vocab-review-ik.user.js](wk-vocab-review-ik.user.js) (the Tampermonkey userscript) to call [wk-vocab-api/](wk-vocab-api/) (the server we just built) instead of hitting ImmersionKit / DuckDuckGo / Google TTS directly. Status: planning. Not started.
+Plan for migrating [wk-vocab-review-ik.user.js](wk-vocab-review-ik.user.js) (the Tampermonkey userscript) to call [wk-vocab-api/](wk-vocab-api/) (the server we just built) instead of hitting ImmersionKit / DuckDuckGo / Google TTS directly. **Status: Phase 1 implemented** (userscript v1.0.0-rc1; coexistence toggle, default off; server not yet deployed). Phases 2 and 3 not started.
 
 This is the **biggest planned single change** to the userscript since v0.1 — it deletes roughly half the data-layer code and rebuilds it as a thin client of our API. Worth doing in clear phases with a fallback toggle so we can verify before fully cutting over.
 
@@ -91,13 +91,28 @@ We can probably **drop `@grant GM_xmlhttpRequest` entirely** if our server's COR
 
 ## Rollout phases
 
-### Phase 1: Coexistence (shipped opt-in)
+### Phase 1: Coexistence (shipped opt-in) — **IMPLEMENTED in v1.0.0-rc1**
 
 Ship a userscript version where:
 - The new `fetchVocab` code path exists but defaults `useApiServer: false`.
 - `apiServerUrl` defaults to the production URL.
 - A user can flip the setting on, hard-refresh, and start using the API path.
 - Both code paths exist; no behavior changes for default users.
+
+**What actually shipped** (deviations / notes):
+- `apiServerUrl` defaults to `''` (not a production URL — none chosen yet). User sets `http://localhost:3000` for dev. Once a prod domain exists, bump the default and add a `@connect <prod-domain>` line.
+- New settings live under an "API server (experimental)" section in the WKOF dialog: `useApiServer`, `apiServerUrl`, `prefetchCount`.
+- Adapter approach used (per the plan): `serverPayloadToCacheEntry` reshapes the server's payload into IK-raw-lookalike entries so `pickExample` / `buildPool` / `formatExample` / `renderCard` / the sentence picker are untouched. Server-provided `audioUrl`/`imageUrl`/`fallbackImages` are stashed as `_serverAudioUrl`/`_serverImageUrl`/`_serverFallbackImages` on each entry; `formatExample` prefers them.
+- Audio short-circuit: when the entry came from the server, `resolveAudioBlobUrl` returns the CDN URL directly (no blob conversion, no Referer spoof, no negative-cache layer — relies on the server's `Cache-Control: max-age=31536000, immutable` for repeat-play perf).
+- Batch prefetch (originally "Lean toward: defer to v1.2") **was included** in Phase 1. Cache-aware: only batches words missing a fresh local payload; falls through to individual `fetchVocab` (lazy-warm) for batch-misses.
+- Console helper: `debugWkIkApi('<word>')` reports settings, hits `/v1/health`, runs a sample GET, inspects local cache.
+- New cache prefix `wk-vocab-cache.payload.<word>` with ETag round-trip (`If-None-Match` on revisit; 304 keeps cached payload + refreshes savedAt). 7-day local TTL.
+- `@connect localhost` added; existing IK/DDG/Google `@connect` directives kept so the direct path still works with the toggle off.
+
+**What's NOT yet done (next steps):**
+- Prerequisites 1–6 above (deploy server, TLS, DNS, full warm, cron, CORS smoke-test).
+- After deploy: bump `DEFAULTS.apiServerUrl` to the prod URL + add `@connect <prod-domain>` (and remove `@connect localhost` for the public release if desired).
+- Phase 2 default-on flip, forum post, then Phase 3 cleanup.
 
 Test plan for Phase 1:
 1. Run server locally; set `apiServerUrl = http://localhost:3000`; flip toggle on.
