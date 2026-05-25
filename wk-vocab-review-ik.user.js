@@ -2651,16 +2651,21 @@
             });
     }
 
-    // Orchestrator: try the IK proxy first (real human audio when available), then
-    // fall back to Google TTS (synthesized but always works). Returns a URL the
-    // <audio> element can play.
+    // Orchestrator: pick the best available audio source for this example.
     //
-    // When the example came from the API server (example._serverAudio === true),
-    // the server has already resolved the audio source (IK voice-actor recording
-    // or pre-rendered TTS) and uploaded it to our CDN. The browser handles
-    // playback directly from that URL — no blob conversion, no Referer spoof,
-    // no negative-cache layer. The server's `Cache-Control: max-age=31536000,
+    // Server-path examples carry a pre-resolved CDN URL (IK voice-actor
+    // recording or pre-rendered TTS, whichever the server cached) on
+    // example.ikAudioUrl with _serverAudio=true. We hand that straight to
+    // the <audio> element — no blob conversion, no Referer spoof, no
+    // negative-cache layer. The server's `Cache-Control: max-age=31536000,
     // immutable` header lets the browser HTTP cache hold it indefinitely.
+    //
+    // Direct-path examples: fetch the IK proxy URL (real human audio when
+    // available) via gmFetch with Referer spoof, then fall back to Google
+    // TTS (synthesized but always works). Both produce a blob URL that
+    // attaches to the <audio> element.
+    //
+    // Returns a URL the <audio> element can play.
     function resolveAudioBlobUrl(example) {
         if (example && example._serverAudio && example.ikAudioUrl) {
             return Promise.resolve(example.ikAudioUrl);
@@ -4133,7 +4138,10 @@
             state.emptyTimer = null;
         }
         if (state.cardEl) {
-            // Free any blob URL we allocated for TTS audio.
+            // Free any blob URL we allocated for direct-path audio (IK proxy
+            // or Google TTS). Server-path audio uses real CDN URLs, not
+            // blob URLs — revokeObjectURL on a non-blob URL is a no-op, and
+            // the try/catch covers any browser that disagrees.
             if (state.cardEl._blobUrl) {
                 try { URL.revokeObjectURL(state.cardEl._blobUrl); } catch (_) {}
             }
