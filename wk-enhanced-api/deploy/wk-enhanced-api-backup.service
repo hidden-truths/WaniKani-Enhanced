@@ -1,0 +1,50 @@
+# Daily SQLite backup. Runs deploy/backup.ts which VACUUM-INTOs the live DB
+# into /tmp, uploads to the Spaces bucket under backups/YYYY-MM-DD.sqlite,
+# and prunes per the GFS retention policy in deploy/retention.ts.
+#
+# Install at: /etc/systemd/system/wk-enhanced-api-backup.service
+# Paired with: wk-enhanced-api-backup.timer (the schedule).
+# Manual run:  systemctl start wk-enhanced-api-backup
+# Watch:       journalctl -fu wk-enhanced-api-backup
+#
+# Failure surfaces in `systemctl list-units --failed`. The backup script
+# exits non-zero on any error, which makes this oneshot unit fail and
+# stays visible until you run `systemctl reset-failed`.
+
+[Unit]
+Description=Daily SQLite backup of wk-enhanced-api to DO Spaces
+Documentation=https://github.com/<your-user-or-org>/WaniKani/blob/main/wk-enhanced-api/README.md
+Requires=wk-enhanced-api.service
+After=wk-enhanced-api.service
+
+[Service]
+Type=oneshot
+User=wkenhanced
+Group=wkenhanced
+WorkingDirectory=/opt/wk-enhanced-api/wk-enhanced-api
+EnvironmentFile=/etc/wk-enhanced-api/env
+
+ExecStart=/usr/local/bin/bun run /opt/wk-enhanced-api/wk-enhanced-api/deploy/backup.ts
+
+StandardOutput=journal
+StandardError=journal
+
+# Hardening: the script only needs to read the SQLite file under
+# /var/lib/wk-enhanced-api and write a snapshot to its private /tmp.
+# ReadOnlyPaths gives a hard guarantee the script can't damage the
+# live DB even if it has a bug (it opens the DB readonly too, so this
+# is belt-and-suspenders). PrivateTmp=true means the snapshot file is
+# automatically torn down when the unit exits, even if our finally{}
+# unlink fails.
+NoNewPrivileges=true
+PrivateTmp=true
+ProtectSystem=strict
+ProtectHome=true
+ReadOnlyPaths=/var/lib/wk-enhanced-api
+ProtectKernelTunables=true
+ProtectKernelModules=true
+ProtectControlGroups=true
+RestrictAddressFamilies=AF_INET AF_INET6 AF_UNIX
+RestrictNamespaces=true
+LockPersonality=true
+MemoryDenyWriteExecute=false  # Bun's JIT needs W+X memory.

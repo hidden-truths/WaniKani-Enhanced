@@ -16,5 +16,5 @@
     "resolveJsonModule": true,
     "types": ["bun-types"]
   },
-  "include": ["src/**/*.ts"]
+  "include": ["src/**/*.ts", "deploy/**/*.ts"]
 }

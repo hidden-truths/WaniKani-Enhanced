@@ -420,18 +420,11 @@ The right time to revisit K8s is if we grow to multiple services, want zero-down
 
 **Considerations**: don't turn health into a slow endpoint — keep the heavy lifting (storage size) cached. Add a separate `/v1/admin/stats` endpoint if it grows.
 
-### SQLite backup story
+### SQLite backup story — **shipped 2026-05-25**
 
-**What**: scheduled backup of the SQLite DB to DO Spaces.
+Implemented under [wk-enhanced-api/deploy/](wk-enhanced-api/deploy/): `backup.ts` uses `bun:sqlite`'s `VACUUM INTO` for a WAL-safe atomic snapshot, then uploads to `s3://<bucket>/backups/YYYY-MM-DD.sqlite` (private) via `Bun.S3Client`, then prunes older backups per a GFS retention policy (default 7 daily + 4 weekly + 12 monthly, tunable via `BACKUP_RETAIN_{DAILY,WEEKLY,MONTHLY}`). The retention selection is a pure helper in `retention.ts` with 15 unit tests. Wired into systemd as `wk-enhanced-api-backup.service` + `wk-enhanced-api-backup.timer` (daily at 03:00 UTC, `Persistent=true` for missed-trigger replay).
 
-**Why**: the DB file holds everything not in object storage — warmed payloads, index_meta cache, job audit. Losing it isn't catastrophic (everything re-warms eventually) but it'd kill a few hours of accumulated lazy-fill state. Backups are cheap; restoring beats re-warming.
-
-**How**:
-- Cron job (or in-process scheduler): `sqlite3 wk-vocab.sqlite ".backup wk-vocab-snapshot.sqlite"` (atomic + safe even with concurrent reads/writes thanks to WAL).
-- Upload the snapshot to `s3://bucket/backups/wk-vocab-YYYYMMDD.sqlite`.
-- Keep last N (7 daily + 4 weekly + 12 monthly is typical).
-
-**Considerations**: SQLite's `.backup` is the right tool — don't `cp` the live file. The Bun built-in S3 client handles upload; ~30 lines of script total. Wire into systemd timer alongside the monthly warm.
+Deviations from the original design: no `sqlite3` or `s3cmd` host binaries needed — Bun's built-in primitives cover both the snapshot and the S3 operations. GFS retention is implemented in TypeScript with pure-function tests rather than as ad-hoc bash. See [wk-enhanced-api/deploy/README.md](wk-enhanced-api/deploy/README.md) for install + tunables.
 
 ### Keyed external services (DeepL, OpenAI, Forvo, jpdb)
 

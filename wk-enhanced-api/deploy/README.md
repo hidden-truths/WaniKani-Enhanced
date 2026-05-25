@@ -16,6 +16,10 @@ Read the canonical deploy walkthrough in [../README.md](../README.md) under **"D
 | `wk-enhanced-api.service` | `/etc/systemd/system/wk-enhanced-api.service` | Main service unit. Runs `bun run start` as a dedicated unprivileged `wkenhanced` user. Hardened with the usual `Protect*=` flags. |
 | `wk-enhanced-api-warm.service` | `/etc/systemd/system/wk-enhanced-api-warm.service` | One-shot unit that hits the local `POST /v1/admin/warm {"scope":"all"}` endpoint. Reads `ADMIN_TOKEN` from the same env file as the main service. |
 | `wk-enhanced-api-warm.timer` | `/etc/systemd/system/wk-enhanced-api-warm.timer` | Schedule for the one-shot. Fires `*-*-01 04:00:00` (1st of month, 04:00 local). |
+| `wk-enhanced-api-backup.service` | `/etc/systemd/system/wk-enhanced-api-backup.service` | One-shot unit that runs `deploy/backup.ts` — VACUUM-INTO snapshot of the SQLite DB, upload to `s3://<bucket>/backups/YYYY-MM-DD.sqlite`, and prune older backups per the GFS retention in `deploy/retention.ts`. |
+| `wk-enhanced-api-backup.timer` | `/etc/systemd/system/wk-enhanced-api-backup.timer` | Schedule for the backup oneshot. Fires `*-*-* 03:00:00 UTC` (daily, 03:00 UTC — UTC pinned to match the backup-key naming). |
+| `backup.ts` | (lives in the cloned repo; not copied to `/etc/systemd/system/`) | The actual backup script the service unit invokes. Uses Bun's built-in SQLite + S3 clients — no extra host packages required beyond `bun`. |
+| `retention.ts` | (same) | Pure helper that decides which existing backups to keep vs delete given a list of keys. Tested in `retention.test.ts`. |
 
 ## Order of operations
 
@@ -58,9 +62,14 @@ install -m 644 /opt/wk-enhanced-api/wk-enhanced-api/deploy/wk-enhanced-api-warm.
     /etc/systemd/system/wk-enhanced-api-warm.service
 install -m 644 /opt/wk-enhanced-api/wk-enhanced-api/deploy/wk-enhanced-api-warm.timer \
     /etc/systemd/system/wk-enhanced-api-warm.timer
+install -m 644 /opt/wk-enhanced-api/wk-enhanced-api/deploy/wk-enhanced-api-backup.service \
+    /etc/systemd/system/wk-enhanced-api-backup.service
+install -m 644 /opt/wk-enhanced-api/wk-enhanced-api/deploy/wk-enhanced-api-backup.timer \
+    /etc/systemd/system/wk-enhanced-api-backup.timer
 systemctl daemon-reload
 systemctl enable --now wk-enhanced-api
 systemctl enable --now wk-enhanced-api-warm.timer
+systemctl enable --now wk-enhanced-api-backup.timer
 
 # 6. Verify boot.
 journalctl -fu wk-enhanced-api
@@ -127,4 +136,4 @@ The clean path is to give the Spaces key **Full Access** in the DO control panel
 - **Bun path** in `wk-enhanced-api.service`'s `ExecStart` is `/usr/local/bin/bun`. The official installer drops the binary in `/root/.bun/bin/bun`, but `wkenhanced` can't read that (root's home is mode 700) and the systemd unit's `ProtectHome=true` would block it even if perms allowed. Step 2 above copies it to `/usr/local/bin/bun` to bridge the gap.
 - **DATABASE_FILE** lives at `/var/lib/wk-enhanced-api/wk-enhanced-api.sqlite` so it survives `git pull` in `/opt/wk-enhanced-api`. The `wkenhanced` user must own this directory.
 - **The warm timer's `OnCalendar`** uses server-local time. If you didn't `timedatectl set-timezone`, that's UTC, which is fine — just know it.
-- **Backups**: not automated yet. `sqlite3 /var/lib/wk-enhanced-api/wk-enhanced-api.sqlite ".backup /tmp/snap.sqlite"` + `s3cmd put` to Spaces is the documented recipe in the main README; see NEW_FEATURES.md for the tracked work.
+- **Backups**: automated via `wk-enhanced-api-backup.timer` (daily at 03:00 UTC). The script (`deploy/backup.ts`) uses Bun's built-in `bun:sqlite` for `VACUUM INTO` and `Bun.S3Client` for the upload — no `sqlite3` / `s3cmd` host packages required beyond `bun`. Snapshot lands at `s3://<bucket>/backups/YYYY-MM-DD.sqlite` (UTC date, private object). Retention is GFS-style — by default keep 7 daily + 4 weekly + 12 monthly snapshots; override with `BACKUP_RETAIN_{DAILY,WEEKLY,MONTHLY}` in `/etc/wk-enhanced-api/env`. Override the prefix with `BACKUP_PREFIX` if you want backups for multiple environments in the same bucket. Manually run a backup with `systemctl start wk-enhanced-api-backup`; tail it with `journalctl -fu wk-enhanced-api-backup`.

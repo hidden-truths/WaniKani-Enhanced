@@ -4,7 +4,7 @@ Living document for the WKEnhanced project. Use this as the entry point for any 
 
 Owns the *what-to-do-next* state of the project. Architecture, design rationale, and dead-end warnings live in [CLAUDE.md](CLAUDE.md), [wk-enhanced-api/CLAUDE.md](wk-enhanced-api/CLAUDE.md), [SERVER_DESIGN.md](SERVER_DESIGN.md), and [CLIENT_MIGRATION.md](CLIENT_MIGRATION.md). The feature backlog (everything that isn't time-critical) is in [NEW_FEATURES.md](NEW_FEATURES.md).
 
-**Last updated**: 2026-05-25, late evening — Phase 3 shipped (rename + slim main userscript to server-only + legacy/ snapshot) and smoke-tested in the browser. Follow-up commit `874f1f3` scrubbed v1.x leftovers from comments + dropped a vestigial `_blobUrl` revocation path. Branch is 6 commits ahead of `origin/main`; nothing has been pushed.
+**Last updated**: 2026-05-25, late evening — Phase 3 shipped (rename + slim main userscript to server-only + legacy/ snapshot) and smoke-tested in the browser. Follow-up commit `874f1f3` scrubbed v1.x leftovers from comments + dropped a vestigial `_blobUrl` revocation path. Two server-side follow-ups landed in the same session: `983dcb7` adds 429-with-exponential-backoff to `services/ik.ts:fetchJson` (closes the 1641-missing-words gap properly — re-warming at 500ms is now safe), and the SQLite backup units + script + retention policy below. Nothing has been pushed.
 
 ---
 
@@ -36,26 +36,25 @@ Still pending from the post-deploy runway. In the Cloudflare dashboard:
 - **Rules → Rate-limiting rules → Create rule**: 100 req/min per IP across `/v1/*` paths. (Free tier allows 1 rule, which is exactly this.)
 - **Rules → Cache rules → Create rule**: on `/v1/vocab/*` paths, "Respect origin Cache-Control headers." Our server already sets long-cache headers on the payload + `Cache-Control: no-store` on `/v1/health`. **Verify** by hitting the same word twice in quick succession — second hit should show `cf-cache-status: HIT`. As of 2026-05-25 it shows `DYNAMIC`, meaning Cloudflare isn't caching at all; the userscript's `cache: 'no-cache'` + the server's weak-ETag-tolerant `If-None-Match` comparison together ensure correctness even with a CDN cache between us.
 
-### 3. Re-warm the 1641 missing words at a slower rate (~30 min + waiting)
+### 3. Re-warm the 1641 missing words at the current 500ms rate (~30 min + waiting)
 
-Not user-visible — cold-fill handles missing words organically since the idleTimeout fix. But useful before any forum-post-driven traffic spike (avoids users on dial-up paying for 30s warms that we could have done in advance). Two viable paths:
-- **Pragmatic**: bump `MIN_GAP_MS` in [services/ik.ts](wk-enhanced-api/src/services/ik.ts) to 2000ms, re-run `POST /v1/admin/warm {"scope":"all"}` — non-fresh words get retried. Restore 500ms after.
-- **Proper**: implement 429-with-exponential-backoff in `services/ik.ts:fetchJson` first (see backlog item below), then re-warm at the current 500ms rate.
+Not user-visible — cold-fill handles missing words organically since the idleTimeout fix. But useful before any forum-post-driven traffic spike (avoids users on dial-up paying for 30s warms that we could have done in advance). Now that `983dcb7` shipped the 429-with-exponential-backoff in `services/ik.ts:fetchJson`, the "Proper" path is unblocked: keep `MIN_GAP_MS=500`, run `POST /v1/admin/warm {"scope":"all","force":false}`, watch `journalctl -fu wk-enhanced-api` for `ik.fetch.429_backoff` log lines (proves backoff is engaging when needed). The `force:false` flag means only words missing from `vocab_examples` get re-warmed — fresh rows are skipped.
 
-### 4. SQLite backup script (~30 min)
+### 4. SQLite backup script — **shipped 2026-05-25**
 
-Cheap insurance. Per the "SQLite backup story" entry in [NEW_FEATURES.md](NEW_FEATURES.md):
+Implemented in [wk-enhanced-api/deploy/](wk-enhanced-api/deploy/):
+- `backup.ts` — Bun script: `VACUUM INTO` snapshot → upload to `s3://<bucket>/backups/YYYY-MM-DD.sqlite` (private) → prune older backups per the GFS retention helper.
+- `retention.ts` + `retention.test.ts` — pure helper that decides keep vs delete given a list of backup keys. 15 unit tests.
+- `wk-enhanced-api-backup.service` + `wk-enhanced-api-backup.timer` — daily at 03:00 UTC, with `Persistent=true` for missed-trigger replay. Hardened with `ReadOnlyPaths=/var/lib/wk-enhanced-api`.
+- Tunable via env: `BACKUP_RETAIN_DAILY`, `BACKUP_RETAIN_WEEKLY`, `BACKUP_RETAIN_MONTHLY`, `BACKUP_PREFIX`. Defaults are 7 daily + 4 weekly + 12 monthly under `backups/`.
 
-```sh
-# Daily systemd timer fires this:
-sqlite3 /var/lib/wk-enhanced-api/wk-enhanced-api.sqlite \
-    ".backup /tmp/wk-vocab-snapshot.sqlite"
-s3cmd put /tmp/wk-vocab-snapshot.sqlite \
-    s3://wk-enhanced-api-media/backups/wk-vocab-$(date -u +%Y%m%d).sqlite
-rm /tmp/wk-vocab-snapshot.sqlite
+Deploy ([deploy/README.md](wk-enhanced-api/deploy/README.md) is updated):
+```bash
+install -m 644 /opt/wk-enhanced-api/wk-enhanced-api/deploy/wk-enhanced-api-backup.service /etc/systemd/system/
+install -m 644 /opt/wk-enhanced-api/wk-enhanced-api/deploy/wk-enhanced-api-backup.timer   /etc/systemd/system/
+systemctl daemon-reload && systemctl enable --now wk-enhanced-api-backup.timer
+# Optional manual verification: systemctl start wk-enhanced-api-backup && journalctl -u wk-enhanced-api-backup
 ```
-
-Wrap in a shell script at `/opt/wk-enhanced-api/wk-enhanced-api/deploy/backup.sh`, add a systemd `backup.service` + `backup.timer` (daily at 03:00 UTC). Retention: keep last 7 daily + 4 weekly + 12 monthly snapshots. ~$0.005/mo on Spaces.
 
 ---
 

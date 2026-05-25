@@ -1,0 +1,26 @@
+# Schedule for the daily SQLite backup.
+#
+# Install at: /etc/systemd/system/wk-enhanced-api-backup.timer
+# Then:       systemctl daemon-reload && systemctl enable --now wk-enhanced-api-backup.timer
+# Verify:     systemctl list-timers wk-enhanced-api-backup.timer
+#
+# Fires daily at 03:00 UTC. UTC is pinned explicitly here (the warm timer
+# uses server-local time) because backups are keyed by UTC date in the
+# object name — having the trigger time match the date convention removes
+# a class of edge cases around DST and time-zone changes on the droplet.
+#
+# `Persistent=true` means a missed trigger (droplet was off across 03:00)
+# fires on next boot. The backup script is idempotent: overwriting today's
+# key with a fresh snapshot is fine.
+
+[Unit]
+Description=Daily SQLite backup trigger for wk-enhanced-api
+Requires=wk-enhanced-api-backup.service
+
+[Timer]
+OnCalendar=*-*-* 03:00:00 UTC
+Persistent=true
+Unit=wk-enhanced-api-backup.service
+
+[Install]
+WantedBy=timers.target
