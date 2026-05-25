@@ -32,6 +32,21 @@ export function etagFor(fetchedAt: number): string {
     return `"${fetchedAt.toString(36)}"`;
 }
 
+// Strip an optional leading `W/` weak-validator prefix from an ETag value
+// so we can compare opaque tags by string equality. Per RFC 7232 §2.3.2,
+// `If-None-Match` uses weak comparison: `W/"abc"` and `"abc"` are
+// equivalent for the purposes of cache validation. Cloudflare (and any
+// CDN that re-compresses responses) routinely downgrades strong ETags to
+// weak by prepending `W/`, so a client revisit that pipes through
+// Cloudflare sends back `W/"<tag>"` while our origin still holds `"<tag>"`.
+// Without this normalization the strict-equality check below misses
+// every cache validation and we re-serve the full payload on every hit.
+// Exported for unit testing.
+export function normalizeEtag(value: string | undefined): string | undefined {
+    if (!value) return value;
+    return value.startsWith('W/') ? value.slice(2) : value;
+}
+
 const getVocabRoute = createRoute({
     method: 'get',
     path: '/{word}',
@@ -119,7 +134,7 @@ vocabRouter.openapi(getVocabRoute, async (c) => {
 
     // ETag short-circuit.
     const etag = etagFor(row.fetchedAt);
-    if (ifNoneMatch && ifNoneMatch === etag) {
+    if (ifNoneMatch && normalizeEtag(ifNoneMatch) === etag) {
         // 304 must include the same Cache-Control + ETag headers as a 200 would.
         c.header('Cache-Control', 'public, max-age=86400, stale-while-revalidate=2592000');
         c.header('ETag', etag);

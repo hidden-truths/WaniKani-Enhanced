@@ -1,5 +1,5 @@
 import { describe, test, expect } from 'bun:test';
-import { etagFor } from './vocab.ts';
+import { etagFor, normalizeEtag } from './vocab.ts';
 
 describe('etagFor', () => {
     test('wraps a base36-encoded fetchedAt in double quotes', () => {
@@ -18,5 +18,28 @@ describe('etagFor', () => {
 
     test('different fetchedAt values produce different ETags', () => {
         expect(etagFor(1000)).not.toBe(etagFor(1001));
+    });
+});
+
+describe('normalizeEtag', () => {
+    test('passes a strong ETag through unchanged', () => {
+        expect(normalizeEtag('"abc"')).toBe('"abc"');
+    });
+
+    test('strips the W/ prefix from a weak ETag', () => {
+        expect(normalizeEtag('W/"abc"')).toBe('"abc"');
+    });
+
+    test('weak and strong forms of the same opaque tag normalize equal', () => {
+        // This is the practical invariant — once both client-supplied
+        // If-None-Match and our origin ETag pass through this, the
+        // strict-equality comparison in the route handler will short-
+        // circuit a Cloudflare-weakened revalidation back to a 304.
+        expect(normalizeEtag('W/"mpli0kwq"')).toBe(normalizeEtag('"mpli0kwq"'));
+    });
+
+    test('handles empty / undefined inputs without throwing', () => {
+        expect(normalizeEtag(undefined)).toBe(undefined);
+        expect(normalizeEtag('')).toBe('');
     });
 });
