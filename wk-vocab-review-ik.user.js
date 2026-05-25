@@ -3088,10 +3088,15 @@
         const leftControls = document.createElement('div');
         leftControls.className = `${CSS_PREFIX}-left-controls`;
 
-        // Audio: Google Translate TTS, fetched via GM_xmlhttpRequest with a spoofed
-        // Referer (Google rejects requests from wanikani.com origin via direct <audio>).
-        // We convert the response to a blob URL and play that. On failure we fall back
-        // to the browser's built-in Web Speech (Kyoko on macOS) so audio always works.
+        // Audio: layered sources via resolveAudioBlobUrl. On the server path the
+        // example carries a pre-resolved CDN URL (IK voice-actor recording or
+        // pre-rendered TTS) that the browser plays directly. On the direct
+        // path we hit the IK download_media proxy (real human audio when
+        // available) via GM_xmlhttpRequest with a Referer spoof, then fall
+        // through to Google Translate TTS (similar spoof — Google rejects
+        // wanikani.com origin via direct <audio>). Both blob fetches feed an
+        // object-URL into the <audio> element. Web Speech (Kyoko on macOS)
+        // is the last-resort fallback if every blob source fails.
         if (example.sentence) {
             const audio = document.createElement('audio');
             // preload='auto' so once the blob URL is attached the audio element
