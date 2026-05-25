@@ -154,7 +154,7 @@ Lazy fill (`GET /v1/vocab/{word}` on a cold word) calls `warmWord()` synchronous
 | GET | `/docs` | — | Scalar UI. |
 | GET | `/openapi.json` | — | Auto-generated OpenAPI 3.1 spec. |
 
-**Error response contract** — every non-2xx response is `{ code, error, detail? }`. Switch on `code` (stable enum), never on `error` (human-readable, may change). The enum: `validation_error`, `unauthorized`, `not_found`, `upstream_failure`, `service_unavailable`, `internal_error`.
+**Error response contract** — every non-2xx response is `{ code, error, detail? }`. Switch on `code` (stable enum), never on `error` (human-readable, may change). The enum: `validation_error`, `unauthorized`, `not_found`, `conflict`, `upstream_failure`, `service_unavailable`, `internal_error`. (`conflict` is currently only used by `POST /v1/admin/warm {"scope":"all"}` when a warmAll is already in flight — returns 409.)
 
 **Conditional GETs** — `GET /v1/vocab/{word}` returns a strong `ETag` derived from the payload's `fetchedAt`. Clients should cache the ETag and send `If-None-Match` on revisits; we 304 No-Content until the next warm refresh.
 

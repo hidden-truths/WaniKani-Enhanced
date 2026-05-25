@@ -115,6 +115,7 @@ export const ErrorCodeSchema = z
         'validation_error',   // body/params didn't satisfy the Zod schema
         'unauthorized',       // missing or wrong bearer token
         'not_found',          // resource doesn't exist (or ?nowarm=true miss)
+        'conflict',           // request collides with current server state (e.g. warmAll already running)
         'upstream_failure',   // IK / DDG / TTS or warm pipeline failed
         'service_unavailable',// dependency unavailable (e.g. no cached index_meta and live fetch failed)
         'internal_error',     // unhandled exception in our code

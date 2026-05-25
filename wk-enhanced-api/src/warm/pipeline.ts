@@ -76,6 +76,25 @@ export interface VocabPayload {
 // deployment, would need Redis-or-similar in a multi-process world.
 const ddgInFlight = new Set<string>();
 
+// Whether a `warmAll` is currently running. Prevents a manual
+// `POST /v1/admin/warm {"scope":"all"}` from kicking off a second bulk
+// warm while the monthly timer (or a prior manual run) is still in flight
+// — which would double IK call volume and cause the two runs to fight
+// over the same `vocab_examples` rows. Set/cleared inside warmAll's
+// try/finally so an unhandled error still releases the flag.
+let warmAllInFlight = false;
+
+export function isWarmAllInFlight(): boolean {
+    return warmAllInFlight;
+}
+
+// Test-only: directly force the in-flight flag so route tests can exercise
+// the 409 path without spinning up a real warmAll (which would hit live
+// IK + WK API). Mirrors the `_useDbForTesting` pattern in db/client.ts.
+export function _setWarmAllInFlightForTesting(value: boolean): void {
+    warmAllInFlight = value;
+}
+
 // Stable, deterministic example id even when IK gives us no `id` (rare but
 // happens with some test data). Combines encoded title + a content hash to
 // keep media object keys idempotent across re-warms.
@@ -421,7 +440,21 @@ async function warmOneExample(
 
 // Bulk warm: iterate the entire WK vocab corpus. Long-running. Wraps each
 // word in try/catch so one bad word doesn't kill the run.
+//
+// Self-guarded against concurrent invocation: if a warmAll is already
+// running, throws with `err.code === 'warm_all_in_flight'` so the admin
+// route can convert that to a 409 Conflict response. The route also
+// pre-checks `isWarmAllInFlight()` to short-circuit before the fire-and-
+// forget call site, so the throw here is belt-and-suspenders for any
+// future caller (e.g. an in-process scheduler) that might skip the
+// pre-check.
 export async function warmAll(options?: { force?: boolean }): Promise<{ processed: number; failed: number }> {
+    if (warmAllInFlight) {
+        const err = new Error('warm-all already in flight; refusing to start a second one') as Error & { code: string };
+        err.code = 'warm_all_in_flight';
+        throw err;
+    }
+    warmAllInFlight = true;
     const jobId = db.createWarmJob('all', null);
     let processed = 0;
     let failed = 0;
@@ -447,6 +480,7 @@ export async function warmAll(options?: { force?: boolean }): Promise<{ processe
         log.error('warm.all.failed', { err: error, jobId });
     } finally {
         db.finishWarmJob(jobId, processed, failed, error);
+        warmAllInFlight = false;
     }
     return { processed, failed };
 }

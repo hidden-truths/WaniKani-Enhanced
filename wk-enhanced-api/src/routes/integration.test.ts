@@ -13,8 +13,11 @@ import { zodHook } from '../lib/zodHook.ts';
 import { vocabRouter } from './vocab.ts';
 import { healthRouter } from './health.ts';
 import { indexMetaRouter } from './indexMeta.ts';
+import { adminRouter } from './admin.ts';
 import { openDb, _useDbForTesting } from '../db/client.ts';
 import * as db from '../db/client.ts';
+import { _setWarmAllInFlightForTesting } from '../warm/pipeline.ts';
+import { config } from '../config.ts';
 
 let mem: ReturnType<typeof openDb>;
 let app: OpenAPIHono;
@@ -26,6 +29,7 @@ beforeEach(() => {
     app.route('/v1/vocab', vocabRouter);
     app.route('/v1/health', healthRouter);
     app.route('/v1/index_meta', indexMetaRouter);
+    app.route('/v1/admin', adminRouter);
 });
 
 afterEach(() => {
@@ -231,5 +235,43 @@ describe('GET /v1/index_meta', () => {
         );
         expect(res.status).toBe(200);
         expect(res.headers.get('etag')).not.toBe('"stale"');
+    });
+});
+
+describe('POST /v1/admin/warm — concurrency guard', () => {
+    const authHeader = () => ({ Authorization: `Bearer ${config.adminToken}` });
+
+    afterEach(() => {
+        // Clean the flag in case a test forgot to.
+        _setWarmAllInFlightForTesting(false);
+    });
+
+    test('scope:all returns 409 when a warmAll is already in flight', async () => {
+        _setWarmAllInFlightForTesting(true);
+        const res = await app.fetch(
+            new Request('http://test.local/v1/admin/warm', {
+                method: 'POST',
+                headers: { 'Content-Type': 'application/json', ...authHeader() },
+                body: JSON.stringify({ scope: 'all' }),
+            }),
+        );
+        expect(res.status).toBe(409);
+        const body = (await res.json()) as { code: string; error: string };
+        expect(body.code).toBe('conflict');
+        expect(body.error).toMatch(/warm-all already in flight/);
+    });
+
+    test('scope:all returns 401 when the bearer token is missing (auth check runs before in-flight check)', async () => {
+        // Same in-flight state — verifies the auth gate isn't bypassed by
+        // the in-flight short-circuit.
+        _setWarmAllInFlightForTesting(true);
+        const res = await app.fetch(
+            new Request('http://test.local/v1/admin/warm', {
+                method: 'POST',
+                headers: { 'Content-Type': 'application/json' },
+                body: JSON.stringify({ scope: 'all' }),
+            }),
+        );
+        expect(res.status).toBe(401);
     });
 });

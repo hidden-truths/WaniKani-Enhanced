@@ -6,7 +6,7 @@ import { OpenAPIHono, createRoute } from '@hono/zod-openapi';
 import { config } from '../config.ts';
 import { log } from '../lib/log.ts';
 import * as db from '../db/client.ts';
-import { warmAll, warmSingle, ensureIndexMeta } from '../warm/pipeline.ts';
+import { warmAll, warmSingle, ensureIndexMeta, isWarmAllInFlight } from '../warm/pipeline.ts';
 import {
     WarmRequestSchema,
     WarmWordResponseSchema,
@@ -81,6 +81,10 @@ const warmRoute = createRoute({
             description: 'Missing or invalid bearer token.',
             content: { 'application/json': { schema: ErrorSchema } },
         },
+        409: {
+            description: 'A warm-all is already in flight (only for `scope: "all"`). Wait for the current one to finish, observable via /v1/health.',
+            content: { 'application/json': { schema: ErrorSchema } },
+        },
         502: {
             description: 'Warm failed (upstream IK / DDG / TTS error).',
             content: { 'application/json': { schema: ErrorSchema } },
@@ -113,6 +117,22 @@ adminRouter.openapi(warmRoute, async (c) => {
     }
 
     if (body.scope === 'all') {
+        // Refuse to start a second warmAll while one's already running —
+        // would double IK call volume and cause the two runs to fight over
+        // the same `vocab_examples` rows. Pre-check here so the operator
+        // gets a synchronous 409 rather than a 202-then-silent-throw.
+        // warmAll itself also guards the flag (belt-and-suspenders).
+        if (isWarmAllInFlight()) {
+            log.warn('admin.warm.all.rejected_in_flight');
+            return c.json(
+                {
+                    code: 'conflict' as const,
+                    error: 'warm-all already in flight',
+                    detail: 'A bulk warm is already running. Observe progress via /v1/health and /v1/admin/jobs; wait for it to finish before triggering another.',
+                },
+                409,
+            );
+        }
         log.info('admin.warm.all', { force: !!body.force });
         // Fire-and-forget. The job is observable via /v1/health.lastWarm
         // and the new /v1/admin/jobs endpoint.
