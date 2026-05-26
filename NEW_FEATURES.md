@@ -184,7 +184,9 @@ These are ideas for the [wk-enhanced-api](wk-enhanced-api/) server. Most exist *
 
 The first production deploy landed at `https://api.wkenhanced.dev` on DO (SFO3, $7/mo Premium AMD droplet + Spaces) with Cloudflare Tunnel in front. See [wk-enhanced-api/deploy/README.md](wk-enhanced-api/deploy/README.md) for the install recipe (updated post-deploy to capture every workaround). Phase 2 (default-on) shipped as userscript v1.1.1; Phase 3 (server-only + legacy snapshot + rename) shipped as v2.0.0 (see [CLIENT_MIGRATION.md](CLIENT_MIGRATION.md)).
 
-### Dockerize the server
+### Dockerize the server — **active (post-2026-05-25 session)**
+
+This is the project the maintainer is starting now. Pulled out of the backlog into [NEXT_STEPS.md](NEXT_STEPS.md) "Active project" so the spec below stays in one place but it's clear it's no longer queued.
 
 **What**: ship a `Dockerfile` + `docker-compose.yml` so the server runs as a container on the droplet, not as a host-installed Bun binary. Optionally publish images to GitHub Container Registry on every commit.
 
@@ -219,21 +221,15 @@ Written up as [wk-enhanced-api/docs/decisions/ADR-001-no-kubernetes.md](wk-enhan
 - `ikSearch` calls the search gate; `ikDownloadMedia` calls the media gate.
 - Update the comment block above the gates to reflect the rationale.
 
-**Considerations**: this is purely speed-vs-politeness tuning. **Don't lower without 429-backoff first** (next entry) — once IK starts pushing back, we have no graceful recovery. The right rollout is: ship backoff first, then this, then run a small-scope warm (~100 words) to confirm no 429s before triggering a full bulk warm.
+**Considerations**: this is purely speed-vs-politeness tuning. **429-backoff prerequisite shipped 2026-05-25** (see entry below). The remaining gates are: (a) verify the hypothesis that `/download_media` specifically wasn't part of the rc2 lockout — single curls from the same droplet during a small-scope warm would prove or disprove this, and (b) run a ~100-word scope-`word` re-warm with a temporary `MIN_GAP_MEDIA_MS=100` (rolled back if any 429 fires) before flipping it globally. The `ik.fetch.429_backoff` log lines added in `983dcb7` make this observable.
 
-### 429 retry-with-exponential-backoff in IK service
+### 429 retry-with-exponential-backoff in IK service — **shipped 2026-05-25**
 
-**What**: when `services/ik.ts` gets a 429 (or 5xx) response, sleep `min(2^retries * 500ms, 30s) + jitter` and retry up to N times before giving up.
+Landed across two commits:
+- **`983dcb7`** — `fetchJson` (covers `ikSearch` + `ikIndexMeta`). Base 1s × 2^attempt backoff, cap 30s, 3 retries (4 total attempts). Honors `Retry-After` (delta-seconds and HTTP-date forms; numeric-input short-circuit so Bun's lax `Date.parse("-5")` doesn't accidentally produce a valid timestamp). Logs `ik.fetch.429_backoff` per retry. **5xx deliberately not retried** — different failure mode (server bug, not rate limit); easy to add later if needed.
+- **`942175c`** — same retry budget applied to `ikDownloadMedia` via a shared `fetchWithRetry` helper. Most IK traffic in a bulk warm is `/download_media`, so this is where the retry budget pays off most. Small-body proxy-misses (`<1KB` response) are *not* retried — those are structural "file missing on IK" signals, not transient.
 
-**Why**: our first prod bulk warm at 50ms triggered a global IK lockout where every request returned 429 for ~30 minutes. With backoff, the first 429 would trigger a 500ms sleep, the next a 1s sleep, etc., and we'd ride out the cooldown without spamming. Crucially, **the warm pipeline now throws on `ikSearch` failure** (commit e7f8224), so without backoff a single 429 means "give up on this word, retry next monthly warm" — backoff lets a transient hiccup recover within seconds.
-
-**How**:
-- In `services/ik.ts:fetchJson` and `ikDownloadMedia`, wrap the `fetch()` in a retry loop.
-- On 429 / 502 / 503 / 504: sleep `min(500 * 2^attempt, 30000) + random(0..250)` ms, retry. Max 5 attempts.
-- On 4xx (other than 429): don't retry — those are client errors that retry won't fix.
-- Log each retry at `debug` level so we can see backoff happening without spamming `info`.
-
-**Considerations**: backoff must respect the rate-limit gate (don't bypass `MIN_GAP_MS` during retries). Pair with the per-endpoint rate-limit work — backoff makes lower floors safe, lower floors make backoff actually pay off. Coordinate the order: backoff first, then lower floors.
+`lastIkCallAt` is intentionally not reset during backoff — the next `rateLimit()` call re-applies the `MIN_GAP_MS` gate naturally, and the backoff sleep is almost always longer than the gate so we don't pay double. Test-only `_ikFetchConfig` knob lets the suite shrink wait times; mirrors the `_useDbForTesting` pattern in `db/client.ts`. The 15s `AbortSignal.timeout` in `ikDownloadMedia` stays as a hard ceiling for the whole call (retries cut into the same budget) — acceptable because media failures leave `audioUrl`/`imageUrl` null and the warm completes anyway via the incomplete-payload signal.
 
 ### Two-phase lazy-fill (warm example[0] sync, defer the rest)
 
