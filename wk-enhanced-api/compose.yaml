@@ -35,13 +35,17 @@ services:
     ports:
       - "127.0.0.1:3000:3000"
 
-    # All runtime config (S3 creds, ADMIN_TOKEN, etc.) comes from the
-    # host env file. Compose reads it at `up` time and injects vars into
-    # the container env. Same file the pre-Docker systemd unit's
-    # EnvironmentFile= directive used — no env-file rewrite needed when
-    # migrating an existing droplet.
+    # All runtime config (S3 creds, ADMIN_TOKEN, etc.) comes from an env
+    # file injected into the container. Defaults to the repo's `./.env`
+    # (the dev workflow created by `cp .env.example .env`), so a plain
+    # `docker compose up` from a fresh checkout Just Works. Prod overrides
+    # this by setting ENV_FILE=/etc/wk-enhanced-api/env in the systemd
+    # unit's Environment= directive (see deploy/wk-enhanced-api.service);
+    # that file is chmod 600 root-only and the same path the pre-Docker
+    # bare-metal unit's EnvironmentFile= used, so no env-file rewrite is
+    # needed when migrating an existing droplet.
     env_file:
-      - /etc/wk-enhanced-api/env
+      - ${ENV_FILE:-./.env}
 
     # Bind-mount the SQLite directory using the SAME path inside and
     # outside the container so DATABASE_FILE in env.production.template

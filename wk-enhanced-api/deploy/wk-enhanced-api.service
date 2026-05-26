@@ -28,6 +28,12 @@ Type=oneshot
 RemainAfterExit=yes
 WorkingDirectory=/opt/wk-enhanced-api/wk-enhanced-api
 
+# Point compose.yaml's `env_file: - ${ENV_FILE:-./.env}` directive at the
+# prod-only env file. On dev/laptop boxes the same compose.yaml falls
+# back to `./.env` (created via `cp .env.example .env`), so a fresh
+# `docker compose up` from the repo works without needing this override.
+Environment="ENV_FILE=/etc/wk-enhanced-api/env"
+
 # Compose v2 is invoked as a `docker` sub-command (no hyphen). Standard
 # install location varies between distros — `/usr/bin/docker` is the
 # Debian/Ubuntu apt path; on hosts that installed via the official
