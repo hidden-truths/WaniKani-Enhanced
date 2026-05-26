@@ -4,7 +4,7 @@ Living document for the WKEnhanced project. Use this as the entry point for any 
 
 Owns the *what-to-do-next* state of the project. Architecture, design rationale, and dead-end warnings live in [CLAUDE.md](CLAUDE.md), [wk-enhanced-api/CLAUDE.md](wk-enhanced-api/CLAUDE.md), [SERVER_DESIGN.md](SERVER_DESIGN.md), and [CLIENT_MIGRATION.md](CLIENT_MIGRATION.md). The feature backlog (everything that isn't time-critical) is in [NEW_FEATURES.md](NEW_FEATURES.md).
 
-**Last updated**: 2026-05-25, late evening — Phase 3 shipped (rename + slim main userscript to server-only + legacy/ snapshot) and smoke-tested in the browser. Six follow-up server-side commits landed in the same session (see "Shipped this session" below). Dockerize is the next active project. Nothing public has been announced yet.
+**Last updated**: 2026-05-25, late evening — Phase 3 shipped (rename + slim main userscript to server-only + legacy/ snapshot) and smoke-tested in the browser. Seven follow-up server-side commits landed in the same session (see "Shipped this session" below — the last is the Dockerize artifacts). Dockerize is code-complete; the production cut-over is the next maintainer action. Nothing public has been announced yet.
 
 ---
 
@@ -16,9 +16,18 @@ Owns the *what-to-do-next* state of the project. Architecture, design rationale,
 
 ---
 
-## Active project: Dockerize the server
+## Active project: Dockerize the server — code-complete, deploy pending
 
-Pulled out of the "Bigger projects" queue because the maintainer is starting it now (post-2026-05-25 session). See the "Dockerize the server" entry in [NEW_FEATURES.md](NEW_FEATURES.md) for the full design — `Dockerfile` + `docker-compose.yml`, multi-stage build off `oven/bun`, SQLite + env bind-mounted from `/var/lib/wk-enhanced-api` + `/etc/wk-enhanced-api/env`, Cloudflare Tunnel stays host-side, the systemd unit becomes a thin `docker compose up` wrapper. ~half a day of work; deploy README will need rewriting once the Compose flow replaces the current Bun-binary install steps. **Public announcement (forum post) is deferred until the deploy story is stable post-Dockerize.**
+Code-side work landed in the same session. New artifacts:
+- [`wk-enhanced-api/Dockerfile`](wk-enhanced-api/Dockerfile) — multi-stage build off `oven/bun:1.3.8` (pinned to match dev), `deps` stage installs `--frozen-lockfile --production`, `runtime` stage assembles a minimal image (production node_modules + src/ + data/ + `deploy/{backup,retention}.ts`). Runs as the official `bun` user (uid 1000). HEALTHCHECK uses `bun --eval` against `/v1/health` so the image needs no curl dep.
+- [`wk-enhanced-api/compose.yaml`](wk-enhanced-api/compose.yaml) — single `api` service, binds `127.0.0.1:3000` (Cloudflare Tunnel reaches it the same way), mounts `/var/lib/wk-enhanced-api` with the same path inside and outside (so the env file's `DATABASE_FILE` works unchanged across pre- and post-Docker droplets), loads env via `env_file: /etc/wk-enhanced-api/env`, caps log rotation at 30MB.
+- [`wk-enhanced-api/.dockerignore`](wk-enhanced-api/.dockerignore) — excludes node_modules / dev-data / test files / systemd templates / `.env`.
+- Rewritten systemd units in [`wk-enhanced-api/deploy/`](wk-enhanced-api/deploy/): `wk-enhanced-api.service` is now a `Type=oneshot` wrapper that runs `docker compose up -d --remove-orphans` on boot and `docker compose down` on stop; `wk-enhanced-api-backup.service` calls `docker exec wk-enhanced-api bun run /app/deploy/backup.ts`; `wk-enhanced-api-warm.service` is unchanged (curl from the host to 127.0.0.1:3000 reaches the container the same way it reached the bare-metal process).
+- [`wk-enhanced-api/deploy/README.md`](wk-enhanced-api/deploy/README.md) rewritten end-to-end — fresh-install walkthrough (Docker install → chown /var/lib to 1000:1000 → systemd units → first build takes a couple of minutes) and a "Migrating from a pre-Docker droplet" section with the one-shot conversion recipe. [`wk-enhanced-api/CLAUDE.md`](wk-enhanced-api/CLAUDE.md) Dev↔prod parity table gained Docker rows; the obsolete "Bun must live outside `/root`" dead-end is annotated as superseded (kept for archeology).
+
+**What's NOT done yet:** the actual deployment. The maintainer needs to (a) review the artifacts, (b) follow the migration recipe in deploy/README.md against the live droplet, (c) verify `curl https://api.wkenhanced.dev/v1/health` still works post-cut-over. Local Docker wasn't available in the working environment so the build itself hasn't been smoke-tested — verification will happen on the droplet (or any Docker-having machine via `docker compose up --build`). The Dockerfile's HEALTHCHECK command WAS verified end-to-end against a live `bun dev` server: the same `bun --eval` fetch returned exit 0 on success and exit 1 on the failure path.
+
+**Public announcement (forum post) stays deferred** until this deploy lands and the Cloudflare rules item below is done.
 
 ---
 
@@ -56,8 +65,9 @@ In order:
 4. **`7e713b3` — ETag + conditional GET on `/v1/index_meta`.** Same pattern as `/v1/vocab/{word}` (strong ETag from `fetchedAt`, weak-prefix tolerance for Cloudflare-downgraded validators, 304 path mirrors 200's `Cache-Control` + `ETag`). Helper pair moved out of `routes/vocab.ts` into shared `src/lib/etag.ts`; unit tests followed. 109 → 113 tests.
 5. **`0da5169` — ADR-001 records the no-Kubernetes deploy-shape decision.** Captures the cost analysis ($24/mo DOKS minimum vs $11/mo current all-in), workload-shape mismatch (one service, bounded traffic, stateful filesystem), and operational complexity. Linked from `wk-enhanced-api/CLAUDE.md` next to the SQLite-not-Postgres dead-end. Includes a "when to revisit this" section.
 6. **`dc2629c` — `POST /v1/admin/warm {"scope":"all"}` refuses overlap with 409.** Module-scoped `warmAllInFlight` flag prevents the monthly timer + a manual re-warm (or any two concurrent triggers) from doubling IK call volume and racing over `vocab_examples` rows. New `conflict` error code in the enum. Test-only `_setWarmAllInFlightForTesting` setter mirrors the `_useDbForTesting` pattern. 113 → 115 tests.
+7. **Dockerize the server (commit follows this doc).** Dockerfile (multi-stage off `oven/bun:1.3.8`), compose.yaml (single service, 127.0.0.1:3000 bind, /var/lib bind-mount, env_file), .dockerignore, and rewritten systemd units. deploy/README.md gets a fresh-install walkthrough + a pre-Docker droplet migration recipe. Build itself not smoke-tested (no local Docker); HEALTHCHECK command validated end-to-end against `bun dev`. The actual prod cut-over is the maintainer's next step.
 
-All commits are local; branch is 6 ahead of `origin/main` after the session's earlier push that brought up `983dcb7`. `bun run typecheck` clean throughout, `bun test` ends at **115 pass / 0 fail**.
+All commits are local; branch is ahead of `origin/main` (the session's earlier push brought up `983dcb7`; the rest still need to be pushed). `bun run typecheck` clean throughout, `bun test` ends at **115 pass / 0 fail**.
 
 ---
 

@@ -1,0 +1,51 @@
+# Files excluded from the Docker build context. Keep this minimal — anything
+# the Dockerfile doesn't explicitly COPY won't end up in the image regardless,
+# but excluding here speeds up `docker build` by not transferring bytes the
+# build doesn't need.
+
+# Node tooling
+node_modules
+.npm
+
+# Dev-mode data (local SQLite + local-driver media)
+dev-data
+
+# Env files — never bake secrets into images. Real env comes via
+# Compose `env_file:` at runtime, mounting /etc/wk-enhanced-api/env.
+.env
+.env.*
+!.env.example
+
+# Test files: not run inside the runtime image and add noise to layer caching.
+**/*.test.ts
+
+# Deploy-time host artifacts. systemd units, env template, README — all
+# belong on the host, never in the image. backup.ts + retention.ts are
+# the exceptions (used by the host-side backup unit via `docker exec`);
+# Dockerfile COPYs those two files explicitly.
+deploy/*.service
+deploy/*.timer
+deploy/env.production.template
+deploy/README.md
+
+# Auto-generated docs / decision records — not used at runtime.
+docs
+
+# Editor / OS junk
+.DS_Store
+*.swp
+.idea
+.vscode
+
+# Git metadata
+.git
+.gitignore
+.gitattributes
+
+# Docker config itself — meta
+Dockerfile
+.dockerignore
+compose.yaml
+compose.yml
+docker-compose.yaml
+docker-compose.yml

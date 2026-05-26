@@ -19,7 +19,7 @@ cp .env.example .env
 bun dev
 ```
 
-That's it. No Docker, no Postgres, no MinIO. SQLite + local filesystem.
+That's it for dev. No Docker, no Postgres, no MinIO. SQLite + local filesystem. (Docker is the prod deploy path — see [deploy/README.md](deploy/README.md) — but `bun dev` stays the fastest local iteration loop. The Compose stack is opt-in if you want to verify the prod-equivalent container behavior locally.)
 
 Then in another terminal — or open **http://localhost:3000/docs** in a browser for the interactive Scalar docs UI:
 
@@ -71,7 +71,7 @@ All non-2xx responses share the shape:
 }
 ```
 
-The `code` enum is stable: `validation_error`, `unauthorized`, `not_found`, `upstream_failure`, `service_unavailable`, `internal_error`. Client code should branch on `code`, not `error`.
+The `code` enum is stable: `validation_error`, `unauthorized`, `not_found`, `conflict`, `upstream_failure`, `service_unavailable`, `internal_error`. Client code should branch on `code`, not `error`. (`conflict` covers e.g. a second `POST /v1/admin/warm {"scope":"all"}` while one's already in flight — returns 409 instead of silently double-running.)
 
 ### Conditional GETs
 
@@ -232,10 +232,10 @@ The server runs in production at `https://api.wkenhanced.dev` — DigitalOcean d
 
 ### Architecture summary
 
-- **Compute**: one `s-1vcpu-1gb` droplet running the systemd-managed Bun service. Logs to journald.
-- **Storage**: SQLite file at `/var/lib/wk-enhanced-api/wk-enhanced-api.sqlite` for payloads + warm-job audit + IK index_meta. Media binaries (audio MP3s, screenshot JPGs, DDG illustrations) live in `wk-enhanced-api-media` DO Spaces bucket, served via Spaces' built-in CDN at `https://wk-enhanced-api-media.sfo3.cdn.digitaloceanspaces.com`.
-- **Edge**: Cloudflare Tunnel terminates TLS at the edge and forwards to `http://127.0.0.1:3000` on the droplet (cloudflared running as a sibling systemd unit). Free-tier rate-limit rule fronts `/v1/*` for traffic-spike protection.
-- **Warm cadence**: monthly bulk re-warm via the `wk-enhanced-api-warm.timer` systemd unit ([deploy/](deploy/)).
+- **Compute**: one `s-1vcpu-1gb` droplet running the API as a Docker container (`oven/bun:1.3.8` base, image built locally from [Dockerfile](Dockerfile) via [compose.yaml](compose.yaml)). systemd is a thin wrapper that runs `docker compose up -d` on boot. Container logs land in `docker logs`; unit-level start/stop events in journald.
+- **Storage**: SQLite file at `/var/lib/wk-enhanced-api/wk-enhanced-api.sqlite` for payloads + warm-job audit + IK index_meta. Bind-mounted into the container using the same path inside and outside (compose.yaml `volumes:`). Media binaries (audio MP3s, screenshot JPGs, DDG illustrations) live in `wk-enhanced-api-media` DO Spaces bucket, served via Spaces' built-in CDN at `https://wk-enhanced-api-media.sfo3.cdn.digitaloceanspaces.com`.
+- **Edge**: Cloudflare Tunnel terminates TLS at the edge and forwards to `http://127.0.0.1:3000` on the droplet (cloudflared running as a sibling systemd unit, talking to the container's published port). Free-tier rate-limit rule fronts `/v1/*` for traffic-spike protection.
+- **Warm cadence**: monthly bulk re-warm via the `wk-enhanced-api-warm.timer` systemd unit ([deploy/](deploy/)). Daily SQLite backup → DO Spaces via `wk-enhanced-api-backup.timer`.
 
 ### Replicating the deployment
 
@@ -243,22 +243,26 @@ If you ever need to rebuild from scratch (DR scenario or moving regions), [deplo
 
 1. **Provision droplet** (Ubuntu LTS, SFO3 or wherever).
 2. **Pick a domain + bucket name.** Update `MEDIA_PUBLIC_BASE` + `S3_BUCKET` accordingly.
-3. **Install Bun**, copy to `/usr/local/bin/bun` (systemd's `ProtectHome=true` blocks `/root/.bun/bin/bun` — see dead-end in [CLAUDE.md](CLAUDE.md)).
-4. **Clone repo** to `/opt/wk-enhanced-api`. `cd /opt/wk-enhanced-api/wk-enhanced-api && bun install --production`.
+3. **Install Docker Engine + Compose v2** (`curl -fsSL https://get.docker.com | sh`).
+4. **Clone repo** to `/opt/wk-enhanced-api`. `cd /opt/wk-enhanced-api/wk-enhanced-api`.
 5. **Create `/etc/wk-enhanced-api/env`** from `deploy/env.production.template`. Set `ADMIN_TOKEN` (`openssl rand -hex 32`), `WK_API_TOKEN`, all four `S3_*` vars, `MEDIA_PUBLIC_BASE` to the Spaces CDN URL.
-6. **Install systemd units** from `deploy/`. `systemctl daemon-reload && systemctl enable --now wk-enhanced-api wk-enhanced-api-warm.timer`.
-7. **Set up Cloudflare Tunnel** pointing at `http://localhost:3000`. Configure the public hostname (`api.wkenhanced.dev`) in the Cloudflare dashboard.
-8. **Verify**: `curl https://api.wkenhanced.dev/v1/health` returns `{ "status": "ok", ... }`.
-9. **Initial bulk warm**: `curl -X POST https://api.wkenhanced.dev/v1/admin/warm -H "Authorization: Bearer $ADMIN_TOKEN" -d '{"scope":"all"}'`. ~6–10 hours.
+6. **Chown the SQLite dir** to uid:gid 1000:1000 (the container's `bun` user): `install -d -o 1000 -g 1000 /var/lib/wk-enhanced-api`.
+7. **Install systemd units** from `deploy/`. `systemctl daemon-reload && systemctl enable --now wk-enhanced-api wk-enhanced-api-warm.timer wk-enhanced-api-backup.timer`. First start builds the image (a couple of minutes); subsequent restarts are near-instant.
+8. **Set up Cloudflare Tunnel** pointing at `http://localhost:3000`. Configure the public hostname (`api.wkenhanced.dev`) in the Cloudflare dashboard.
+9. **Verify**: `curl https://api.wkenhanced.dev/v1/health` returns `{ "status": "ok", ... }`.
+10. **Initial bulk warm**: `curl -X POST https://api.wkenhanced.dev/v1/admin/warm -H "Authorization: Bearer $ADMIN_TOKEN" -d '{"scope":"all"}'`. ~6–10 hours; a duplicate trigger while running returns 409.
+
+Pre-Docker droplets follow a one-shot migration path (install Docker, chown /var/lib, replace systemd unit files); the full recipe is in [deploy/README.md](deploy/README.md) under "Migrating from a pre-Docker droplet."
 
 ### Operational gotchas (production-confirmed)
 
+- **Container runs as uid:gid 1000:1000** (the official `bun` user). The host `/var/lib/wk-enhanced-api` directory MUST be owned by 1000:1000 or SQLite reads through the bind mount fail with EACCES. Documented in [deploy/README.md](deploy/README.md).
 - **Bun's `idleTimeout` must be ≥ longest cold-fill warm.** Currently 60s in `src/index.ts`. Bun's default 10s killed responses mid-flight on the Phase 2 smoke-test. If you ever extend the warm pipeline past 60s per word, raise this.
 - **CORS must expose `ETag`.** The userscript's `If-None-Match` round-trip is dead without `Access-Control-Expose-Headers: ETag` because ETag isn't on the CORS-safelisted response list. See dead-end in [CLAUDE.md](CLAUDE.md).
 - **Cloudflare weakens strong ETags via `W/` prefix on compressed responses.** `If-None-Match` comparison strips the `W/` prefix per RFC 7232 weak-comparison semantics. See dead-end in [CLAUDE.md](CLAUDE.md).
-- **IK rate-limit floor MUST stay ≥ 500ms.** A briefly-tried 50ms triggered a global 429 lockout for ~30 minutes on first prod warm. Future tuning requires implementing 429-with-exponential-backoff first.
+- **IK rate-limit floor stays at 500ms** for the global `MIN_GAP_MS`. 429-with-exponential-backoff shipped on 2026-05-25 (commits `983dcb7` + `942175c`), making transient 429 storms recoverable, but the per-IP cooldown hypothesis behind the rc2 lockout hasn't been re-tested — lowering below 500ms still requires a small-scope verification warm. See dead-end in [CLAUDE.md](CLAUDE.md).
 - **DO Spaces `S3_FORCE_PATH_STYLE=true` is mandatory.** Virtual-host style with Bun's `Bun.S3Client` silently corrupts uploads (PutObject decoded as CreateBucket). See dead-end in [CLAUDE.md](CLAUDE.md).
-- **Backups.** SQLite + Spaces are independently durable, but a daily `sqlite3 ".backup snapshot"` → Spaces snapshot would let us roll back ~hours of warm state on accidental data loss. Tracked in [NEW_FEATURES.md](../NEW_FEATURES.md); next-up cheap-insurance task.
+- **Backups** run daily at 03:00 UTC via `wk-enhanced-api-backup.timer`. The script runs INSIDE the container via `docker exec`, uses `bun:sqlite`'s `VACUUM INTO` for a WAL-safe snapshot, uploads to `s3://<bucket>/backups/YYYY-MM-DD.sqlite` (private), and prunes per the GFS retention policy (default 7 daily + 4 weekly + 12 monthly). Tunable via `BACKUP_RETAIN_{DAILY,WEEKLY,MONTHLY}` and `BACKUP_PREFIX` env vars.
 
 ## Known limitations / open questions
 

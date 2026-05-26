@@ -184,11 +184,20 @@ These are ideas for the [wk-enhanced-api](wk-enhanced-api/) server. Most exist *
 
 The first production deploy landed at `https://api.wkenhanced.dev` on DO (SFO3, $7/mo Premium AMD droplet + Spaces) with Cloudflare Tunnel in front. See [wk-enhanced-api/deploy/README.md](wk-enhanced-api/deploy/README.md) for the install recipe (updated post-deploy to capture every workaround). Phase 2 (default-on) shipped as userscript v1.1.1; Phase 3 (server-only + legacy snapshot + rename) shipped as v2.0.0 (see [CLIENT_MIGRATION.md](CLIENT_MIGRATION.md)).
 
-### Dockerize the server — **active (post-2026-05-25 session)**
+### Dockerize the server — **code shipped 2026-05-25 (deploy pending)**
 
-This is the project the maintainer is starting now. Pulled out of the backlog into [NEXT_STEPS.md](NEXT_STEPS.md) "Active project" so the spec below stays in one place but it's clear it's no longer queued.
+The artifacts are in the repo as of this session: [Dockerfile](wk-enhanced-api/Dockerfile), [compose.yaml](wk-enhanced-api/compose.yaml), [.dockerignore](wk-enhanced-api/.dockerignore), rewritten systemd units under [deploy/](wk-enhanced-api/deploy/), and a top-to-bottom rewrite of [deploy/README.md](wk-enhanced-api/deploy/README.md). Bun is pinned to `oven/bun:1.3.8` (matching dev); the build is multi-stage so the runtime image carries only production deps. Container runs as the official `bun` user (uid 1000); host `/var/lib/wk-enhanced-api` must be chowned to 1000:1000 so the bind mount is writable. HEALTHCHECK uses `bun --eval` (verified end-to-end against `bun dev`) so the image has zero non-Bun deps.
 
-**What**: ship a `Dockerfile` + `docker-compose.yml` so the server runs as a container on the droplet, not as a host-installed Bun binary. Optionally publish images to GitHub Container Registry on every commit.
+The actual deploy (build the image on the droplet, run the migration recipe, verify `/v1/health`) is the maintainer's next step. Local Docker wasn't available in the working environment, so the build hasn't been smoke-tested — first build is on the droplet. See [NEXT_STEPS.md](NEXT_STEPS.md) "Active project" for the full set of artifacts and verification gaps.
+
+Follow-ups (still queue items, not done):
+
+- **CI publish to GHCR** on tag. Once images are published, the droplet's update flow drops from `docker compose build --pull && systemctl restart` to `docker compose pull && systemctl restart`. Worth doing once we've confirmed the local-build flow is stable in prod.
+- **Dev-mode Compose file** (`compose.dev.yaml`) with `--watch` + a bind-mount of `src/` for hot-reload, for contributors who want Docker-equivalent dev. Not urgent — `bun dev` stays the recommended dev loop.
+
+The original design notes (the *why* — reproducibility, rollback story, secret handling, the "don't migrate to App Platform" caveat) are preserved below for archeology.
+
+**Originally specified**: a `Dockerfile` + `docker-compose.yml` so the server runs as a container on the droplet, not as a host-installed Bun binary. Optionally publish images to GitHub Container Registry on every commit.
 
 **Why**: today's deploy chains together a half-dozen host-level concerns (Bun installer, `useradd wkenhanced`, `chown`, systemd unit, `chmod 600` on env file, copy bun to `/usr/local`). A container collapses all of that to "pull image + docker compose up." Future deploys to a new droplet drop from ~30 minutes to ~5 minutes. Also gives us:
 - **Reproducibility**: Bun version pinned in the image instead of "whatever the installer pulled."

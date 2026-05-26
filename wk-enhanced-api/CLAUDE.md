@@ -21,7 +21,9 @@ bun test                  # bun:test runner; ~50 tests, ~30ms
 bun run typecheck         # tsc --noEmit
 ```
 
-That's it. **No Docker, no Postgres, no MinIO** — Bun has built-in SQLite (`bun:sqlite`) and S3 (`Bun.S3Client`); dev uses SQLite + the local filesystem, prod swaps to an S3-compatible bucket via `STORAGE_DRIVER=s3`. The "Docker + Postgres + MinIO" story in the original SERVER_DESIGN.md was the original plan; we dropped it.
+That's it for dev. **No Postgres, no MinIO** — Bun has built-in SQLite (`bun:sqlite`) and S3 (`Bun.S3Client`); dev uses SQLite + the local filesystem, prod swaps to an S3-compatible bucket via `STORAGE_DRIVER=s3`. The "Postgres + MinIO" story in the original SERVER_DESIGN.md was the original plan; we dropped both.
+
+Docker IS used in prod (as of the Dockerize commit) — single-container deploy via [Dockerfile](Dockerfile) + [compose.yaml](compose.yaml), brought up by a thin systemd wrapper. **Dev does not need Docker** — `bun dev` is still the fastest iteration loop. The Compose stack is opt-in if you want to verify the prod-equivalent container behavior locally (`docker compose up --build`); deploy walkthrough lives in [deploy/README.md](deploy/README.md).
 
 When you change code:
 
@@ -46,10 +48,12 @@ Single scannable reference for every knob that differs between local dev and the
 | `S3_FORCE_PATH_STYLE` | n/a | `true` | Mandatory for DO Spaces + `Bun.S3Client`; see dead-end below. |
 | `ADMIN_TOKEN` | `dev-admin-token` | `openssl rand -hex 32` value | Used by `/v1/admin/*` bearer auth. |
 | `WK_API_TOKEN` | usually blank (skip `scope:all` warms) | required for monthly bulk warm | Personal token from your WK settings. |
-| Env file location | `wk-enhanced-api/.env` | `/etc/wk-enhanced-api/env` (chmod 600 root) | Prod uses systemd `EnvironmentFile=`; Bun's `.env` auto-load is for dev only. |
-| Process supervisor | `bun dev` (your terminal) | `systemctl ... wk-enhanced-api.service` | Service unit lives in `deploy/`. |
+| Env file location | `wk-enhanced-api/.env` | `/etc/wk-enhanced-api/env` (chmod 600 root) | Prod uses Compose `env_file:`; Bun's `.env` auto-load is for dev only. |
+| Process supervisor | `bun dev` (your terminal) | `systemctl ... wk-enhanced-api.service` → `docker compose up -d` | Container runs the bun process inside; systemd just brings the stack up on boot. Unit + compose.yaml live in `deploy/` and the repo root respectively. |
 | Userscript base URL | `http://localhost:3000` (set in WKOF settings) | `https://api.wkenhanced.dev` (DEFAULTS.apiServerUrl + @connect) | Single source of truth: `PROD_API_BASE` + `DEV_API_BASE` constants at the top of the userscript IIFE. |
-| Bun binary location | Wherever you installed it | `/usr/local/bin/bun` | systemd's `ProtectHome=true` blocks `/root/.bun/bin/bun`; see dead-end. |
+| Bun binary location | Wherever you installed it on the host | Inside the `oven/bun:1.3.8` container image only | Pinned to the same point release as dev — bump both in lock-step. Host no longer needs Bun installed for prod (the migration steps in deploy/README.md leave `/usr/local/bin/bun` orphaned but harmless). |
+| Runtime user/uid | Whatever runs `bun dev` (your user) | Container `bun` user, uid 1000 | Host `/var/lib/wk-enhanced-api` MUST be owned by 1000:1000 so the bind mount is writable from inside the container; the deploy README has the `chown` step. |
+| Container image | n/a | Built from `Dockerfile` via `compose.yaml`; multi-stage `oven/bun:1.3.8` → production node_modules + src/ + data/ + the two `deploy/*.ts` backup scripts | First `systemctl start` builds locally; subsequent `restart` is near-instant. CI publishing to GHCR is a follow-up — see [NEW_FEATURES.md](../NEW_FEATURES.md) "Dockerize the server". |
 
 If you're adding something that doesn't fit a row above — a new external service, a new auth token, a new on-disk path — the test for "does it belong here" is: *would forgetting to update the prod side cause a runtime failure?* If yes, add a row.
 
@@ -186,7 +190,7 @@ These have been investigated; don't re-explore.
 
 - **`S3_FORCE_PATH_STYLE=true` is mandatory for DO Spaces + Bun.S3Client.** With `false` (= `virtualHostedStyle: true`), Bun constructs PutObject requests that DO interprets as `CreateBucket` and returns "The bucket already exists" — uploads silently fail to deliver objects (file.write does NOT throw; only the absence in subsequent `exists()` reveals the bug). Path-style addresses (`https://endpoint/bucket/key`) are Bun's default for non-AWS endpoints and what DO expects. The `MEDIA_PUBLIC_BASE` env var, which puts the bucket in the hostname for CDN reads, is independent of upload addressing. See commit 1732275.
 
-- **Bun must live outside `/root` — the systemd unit's `ProtectHome=true` blocks it otherwise.** Bun's official installer drops `bun` in `/root/.bun/bin/bun` when run as root, but our service runs as the unprivileged `wkenhanced` user with `ProtectHome=true` (which masks `/root` regardless of perms). Copy the binary to `/usr/local/bin/bun` after install. See commit 5e4f863 + the `deploy/wk-enhanced-api.service` `ExecStart` comment.
+- **~~Bun must live outside `/root`~~ — obsolete post-Dockerize.** The bare-metal systemd unit used to be hardened with `ProtectHome=true`, which masked `/root/.bun/bin/bun` even from a root-owned ExecStart. Workaround was to `install -m 755 /root/.bun/bin/bun /usr/local/bin/bun` after the official Bun installer ran. **Now superseded**: the production deploy runs Bun inside the `oven/bun:1.3.8` container image, so the host doesn't need any Bun binary at all. The migration recipe in deploy/README.md leaves `/usr/local/bin/bun` orphaned (harmless; remove manually if you want). Original context preserved here in case a future contributor reads commit `5e4f863` and wonders why that bridge step disappeared.
 
 - **Storage `keys.ddg` does NOT pre-encode the word.** Earlier versions did, which caused double-encoding (`%25E9` in URLs). The storage layer (`LocalStorage.publicUrl` / `S3Storage.publicUrl`) owns all URL encoding. The on-disk filename for `食べる`'s DDG pool is literally `dev-data/media/ddg/食べる/0.jpg` (UTF-8 on disk), which serves as `/media/ddg/%E9%A3%9F%E3%81%B9%E3%82%8B/0.jpg`. Don't add encoding to the keys layer.
 

@@ -1,0 +1,61 @@
+# wk-enhanced-api Docker Compose stack.
+#
+# Single-service deployment — Cloudflare Tunnel + DO Spaces stay external
+# (the tunnel lives on the host, talking to 127.0.0.1:3000; Spaces is just
+# an outbound HTTPS dependency the container reaches like any other).
+#
+# Used by the host-side systemd unit `wk-enhanced-api.service` which runs
+# `docker compose up -d --remove-orphans` on boot and `docker compose down`
+# on stop. Day-to-day debugging is `docker compose logs -f api` from the
+# repo checkout at /opt/wk-enhanced-api/wk-enhanced-api.
+#
+# Dev workflow is unchanged — `bun dev` is still the fastest iteration
+# loop. Use this Compose file when you want to verify the prod-equivalent
+# container behavior locally (`docker compose up --build`); otherwise
+# Bun-on-the-host is fine.
+
+services:
+  api:
+    # Built from the Dockerfile in this directory. If a registry-published
+    # image exists locally under this tag (e.g. after `docker compose pull`
+    # once CI is publishing), Compose uses it; otherwise the `build:`
+    # block triggers a local build. Either way `docker compose up` does
+    # the right thing.
+    image: wk-enhanced-api:local
+    build:
+      context: .
+      dockerfile: Dockerfile
+    container_name: wk-enhanced-api
+    restart: unless-stopped
+
+    # Bind to 127.0.0.1 only — public ingress flows through Cloudflare
+    # Tunnel on the host (cloudflared talks to 127.0.0.1:3000, then to
+    # the container via this published port). Exposing 0.0.0.0 would
+    # leak the API past the tunnel.
+    ports:
+      - "127.0.0.1:3000:3000"
+
+    # All runtime config (S3 creds, ADMIN_TOKEN, etc.) comes from the
+    # host env file. Compose reads it at `up` time and injects vars into
+    # the container env. Same file the pre-Docker systemd unit's
+    # EnvironmentFile= directive used — no env-file rewrite needed when
+    # migrating an existing droplet.
+    env_file:
+      - /etc/wk-enhanced-api/env
+
+    # Bind-mount the SQLite directory using the SAME path inside and
+    # outside the container so DATABASE_FILE in env.production.template
+    # works unchanged across pre-Docker and post-Docker droplets.
+    # The host directory MUST be owned by uid 1000 (the `bun` user inside
+    # the container); see deploy/README.md for the chown step.
+    volumes:
+      - /var/lib/wk-enhanced-api:/var/lib/wk-enhanced-api
+
+    # Logging: keep the default json-file driver (journald-compatible via
+    # `docker logs`) but cap rotation so a runaway log doesn't fill the
+    # droplet. 10MB × 3 files = 30MB ceiling per container.
+    logging:
+      driver: json-file
+      options:
+        max-size: "10m"
+        max-file: "3"

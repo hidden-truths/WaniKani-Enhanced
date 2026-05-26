@@ -1,69 +1,51 @@
-# systemd unit for the wk-enhanced-api deployment.
+# systemd unit that brings up the wk-enhanced-api Docker Compose stack on boot.
 #
 # Install at: /etc/systemd/system/wk-enhanced-api.service
 # Then:       systemctl daemon-reload && systemctl enable --now wk-enhanced-api
-# Watch:      journalctl -fu wk-enhanced-api
+# Watch:      docker compose -f /opt/wk-enhanced-api/wk-enhanced-api/compose.yaml logs -f api
+#         or: journalctl -fu wk-enhanced-api    (for unit-level start/stop events)
 #
-# Runs as a dedicated unprivileged `wkenhanced` user. Create with:
-#   useradd --system --no-create-home --shell /usr/sbin/nologin wkenhanced
-#   install -d -o wkenhanced -g wkenhanced /var/lib/wk-enhanced-api
-#   chown -R wkenhanced:wkenhanced /opt/wk-enhanced-api
+# Container-side concerns (the unprivileged `bun` user, sandbox flags,
+# binary location) are handled by the Dockerfile + Docker daemon. This
+# unit's only job is to invoke `docker compose up` once on boot, and
+# `docker compose down` cleanly on shutdown. Container auto-restart is
+# governed by `restart: unless-stopped` in compose.yaml, not by systemd.
 #
-# The unit invokes `bun run start` from package.json (which runs
-# `bun run src/index.ts`). Going through the script rather than calling the
-# entrypoint directly means an entrypoint rename in the future doesn't break
-# the unit.
-#
-# Note: serves the source tree at wk-enhanced-api/ inside the cloned repo.
-# WorkingDirectory points at /opt/wk-enhanced-api/wk-enhanced-api accordingly.
-# (Production deployments that predate the 2026-05-25 rename had this at
-# /opt/wk-enhanced-api/wk-vocab-api — `mv` that directory before
-# `systemctl daemon-reload && systemctl restart wk-enhanced-api`.)
+# Pre-Docker droplets: see deploy/README.md "Migrating from a pre-Docker
+# droplet" for the one-time conversion steps (install Docker, chown
+# /var/lib, etc.). After conversion this same unit file runs and the
+# old bare-metal Bun + chunk of Protect*= hardening goes away.
 
 [Unit]
-Description=wk-enhanced-api — backing API for the WKEnhanced userscript
+Description=wk-enhanced-api — backing API for the WKEnhanced userscript (Docker Compose)
 Documentation=https://github.com/<your-user-or-org>/WaniKani/blob/main/wk-enhanced-api/README.md
-After=network-online.target
+Requires=docker.service
+After=docker.service network-online.target
 Wants=network-online.target
 
 [Service]
-Type=simple
-User=wkenhanced
-Group=wkenhanced
+Type=oneshot
+RemainAfterExit=yes
 WorkingDirectory=/opt/wk-enhanced-api/wk-enhanced-api
-EnvironmentFile=/etc/wk-enhanced-api/env
 
-# /usr/local/bin/bun, NOT /root/.bun/bin/bun. The service runs as the
-# unprivileged `wkenhanced` user, and our `ProtectHome=true` hardening below
-# blocks reads of /root anyway — so Bun must live somewhere world-readable
-# outside /home and /root. The deploy README's install step copies the
-# official-installer-placed binary from /root/.bun/bin/bun into
-# /usr/local/bin/bun for this reason.
-ExecStart=/usr/local/bin/bun run start
+# Compose v2 is invoked as a `docker` sub-command (no hyphen). Standard
+# install location varies between distros — `/usr/bin/docker` is the
+# Debian/Ubuntu apt path; on hosts that installed via the official
+# `get.docker.com` script the binary may live at `/usr/bin/docker` too,
+# but check `which docker` if this path fails on a fresh provision.
+ExecStart=/usr/bin/docker compose up -d --remove-orphans
+ExecStop=/usr/bin/docker compose down
 
-Restart=always
-RestartSec=5
+# Reload sends SIGHUP to the container if it knows how to handle it.
+# Bun's HTTP server doesn't currently react to SIGHUP, so a config
+# change still requires `systemctl restart wk-enhanced-api` (which runs
+# down + up in sequence and gives us a fresh container picking up the
+# updated env file). Documented here so future-us doesn't expect a
+# magic graceful reload.
+ExecReload=/usr/bin/docker compose up -d --force-recreate
 
-# Logging: journald captures stdout/stderr; structured JSON lines stay
-# greppable via `journalctl -fu wk-enhanced-api`.
 StandardOutput=journal
 StandardError=journal
-
-# Hardening: the service only needs outbound HTTPS, the SQLite file under
-# /var/lib/wk-enhanced-api, and read access to /opt/wk-enhanced-api. Lock
-# down everything else.
-NoNewPrivileges=true
-PrivateTmp=true
-ProtectSystem=strict
-ProtectHome=true
-ReadWritePaths=/var/lib/wk-enhanced-api
-ProtectKernelTunables=true
-ProtectKernelModules=true
-ProtectControlGroups=true
-RestrictAddressFamilies=AF_INET AF_INET6 AF_UNIX
-RestrictNamespaces=true
-LockPersonality=true
-MemoryDenyWriteExecute=false  # Bun's JIT needs W+X memory.
 
 [Install]
 WantedBy=multi-user.target

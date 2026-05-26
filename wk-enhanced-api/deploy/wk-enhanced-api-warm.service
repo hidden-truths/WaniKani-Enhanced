@@ -1,12 +1,16 @@
 # Monthly bulk-warm trigger. Fires `POST /v1/admin/warm {"scope":"all"}`
 # against the local server, which returns 202 immediately and runs the
-# actual warm in the background.
+# actual warm in the background. After `dc2629c` (warm-all 409
+# concurrency guard) a second trigger while one's already running returns
+# 409 — curl --fail-with-body will surface that as a unit failure.
 #
 # Install at: /etc/systemd/system/wk-enhanced-api-warm.service
 # Paired with: wk-enhanced-api-warm.timer (the schedule).
 # Manual run:  systemctl start wk-enhanced-api-warm
 #
-# Reads ADMIN_TOKEN from the same env file as the main service.
+# Reads ADMIN_TOKEN from the same env file as the main service. Unchanged
+# by the Docker switch — the container publishes port 3000 to 127.0.0.1
+# so curl from the host reaches the API at the same address either way.
 
 [Unit]
 Description=Monthly bulk warm of wk-enhanced-api against ImmersionKit

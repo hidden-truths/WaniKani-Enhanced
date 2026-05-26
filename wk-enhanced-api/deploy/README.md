@@ -1,105 +1,172 @@
 # wk-enhanced-api deploy templates
 
-Paste-ready artifacts for deploying the server to a single DigitalOcean droplet (or any Ubuntu-flavoured Linux host) with DO Spaces for media + Cloudflare in front for TLS / rate-limiting / edge cache.
+Paste-ready artifacts for deploying the server to a single DigitalOcean droplet (or any Ubuntu-flavoured Linux host) running Docker Engine + Compose v2, with DO Spaces for media and Cloudflare in front for TLS / rate-limiting / edge cache.
 
 The deployed thing is called **wk-enhanced-api** everywhere — in DigitalOcean, at `api.wkenhanced.dev`, in this repo's source tree. (The directory used to be called `wk-vocab-api/` until the 2026-05-25 rebrand commit `cbfeabf`; if you're updating a production droplet that predates that, see "Updating a pre-rename droplet" below.)
 
-These are templates — not part of the running service. The shipped runtime under [../src/](../src/) is unchanged.
+These are templates — not part of the running service. The runtime under [../src/](../src/) is unchanged; the container image is built from the [`../Dockerfile`](../Dockerfile) using [`../compose.yaml`](../compose.yaml).
 
-Read the canonical deploy walkthrough in [../README.md](../README.md) under **"Deployment (live)"** before touching these. The files here are what that section's bullet points expand into.
+Read the broader architecture in [../CLAUDE.md](../CLAUDE.md) before touching these. The deploy decisions — why a single droplet over K8s, why SQLite over Postgres — are captured in [../docs/decisions/ADR-001-no-kubernetes.md](../docs/decisions/ADR-001-no-kubernetes.md) and the CLAUDE.md DEAD-END WARNINGS.
 
 ## Files
 
 | File | Lives at on host | What it does |
 |---|---|---|
-| `env.production.template` | `/etc/wk-enhanced-api/env` | Env file the systemd unit loads. Replace every `<REPLACE_ME_*>` placeholder. `chmod 600`, `chown root:root`. |
-| `wk-enhanced-api.service` | `/etc/systemd/system/wk-enhanced-api.service` | Main service unit. Runs `bun run start` as a dedicated unprivileged `wkenhanced` user. Hardened with the usual `Protect*=` flags. |
-| `wk-enhanced-api-warm.service` | `/etc/systemd/system/wk-enhanced-api-warm.service` | One-shot unit that hits the local `POST /v1/admin/warm {"scope":"all"}` endpoint. Reads `ADMIN_TOKEN` from the same env file as the main service. |
-| `wk-enhanced-api-warm.timer` | `/etc/systemd/system/wk-enhanced-api-warm.timer` | Schedule for the one-shot. Fires `*-*-01 04:00:00` (1st of month, 04:00 local). |
-| `wk-enhanced-api-backup.service` | `/etc/systemd/system/wk-enhanced-api-backup.service` | One-shot unit that runs `deploy/backup.ts` — VACUUM-INTO snapshot of the SQLite DB, upload to `s3://<bucket>/backups/YYYY-MM-DD.sqlite`, and prune older backups per the GFS retention in `deploy/retention.ts`. |
+| `../Dockerfile` | Built into the image, not copied to the host | Multi-stage build off `oven/bun:1.3.8`. `deps` stage installs production dependencies with `--frozen-lockfile`; `runtime` stage copies the production node_modules + src/ + data/ + the two backup scripts. Runs as the official `bun` user (uid 1000). |
+| `../compose.yaml` | (lives in the cloned repo at `/opt/wk-enhanced-api/wk-enhanced-api/compose.yaml`; not copied to /etc) | Compose stack for the single `api` service. Binds 127.0.0.1:3000, mounts `/var/lib/wk-enhanced-api` for SQLite, loads env from `/etc/wk-enhanced-api/env`, caps log rotation at 30MB. |
+| `env.production.template` | `/etc/wk-enhanced-api/env` | Env file Compose loads via `env_file:`. Replace every `<REPLACE_ME_*>` placeholder. `chmod 600`, `chown root:root`. |
+| `wk-enhanced-api.service` | `/etc/systemd/system/wk-enhanced-api.service` | Thin systemd wrapper that runs `docker compose up -d` on boot and `docker compose down` on stop. Container-level concerns (user, sandbox, restart policy) live in the Dockerfile + compose.yaml, not here. |
+| `wk-enhanced-api-warm.service` | `/etc/systemd/system/wk-enhanced-api-warm.service` | One-shot unit that curls `POST /v1/admin/warm {"scope":"all"}` against 127.0.0.1:3000 (i.e. the container's published port). Reads `ADMIN_TOKEN` from the same env file the API uses. After `dc2629c`, a duplicate trigger while a warm is in flight returns 409. |
+| `wk-enhanced-api-warm.timer` | `/etc/systemd/system/wk-enhanced-api-warm.timer` | Schedule for the warm one-shot. Fires `*-*-01 04:00:00` (1st of month, 04:00 local). |
+| `wk-enhanced-api-backup.service` | `/etc/systemd/system/wk-enhanced-api-backup.service` | One-shot unit that runs `docker exec wk-enhanced-api bun run /app/deploy/backup.ts` — VACUUM-INTO snapshot of the SQLite DB, upload to `s3://<bucket>/backups/YYYY-MM-DD.sqlite`, and prune older backups per the GFS retention in `deploy/retention.ts`. |
 | `wk-enhanced-api-backup.timer` | `/etc/systemd/system/wk-enhanced-api-backup.timer` | Schedule for the backup oneshot. Fires `*-*-* 03:00:00 UTC` (daily, 03:00 UTC — UTC pinned to match the backup-key naming). |
-| `backup.ts` | (lives in the cloned repo; not copied to `/etc/systemd/system/`) | The actual backup script the service unit invokes. Uses Bun's built-in SQLite + S3 clients — no extra host packages required beyond `bun`. |
-| `retention.ts` | (same) | Pure helper that decides which existing backups to keep vs delete given a list of keys. Tested in `retention.test.ts`. |
+| `backup.ts`, `retention.ts` | Copied into the container image at `/app/deploy/` | The actual backup script + its pure retention helper. Use Bun's built-in `bun:sqlite` (`VACUUM INTO`) and `Bun.S3Client` — no extra image deps. Retention tested in `retention.test.ts`. |
 
-## Order of operations
+## Order of operations (fresh droplet)
 
-Assumes you've already done the human-side prerequisites from the main README (domain registered, DO account + droplet provisioned in SFO3, Spaces bucket + access keys created, Cloudflare site + DNS + SSL configured, droplet's public IP captured).
+Assumes you've already done the human-side prerequisites from the main README (domain registered, DO account + droplet provisioned in SFO3, Spaces bucket + Full Access keys created, Cloudflare site + DNS + SSL configured, droplet's public IP captured).
 
 ```bash
-# 1. Create the runtime user + state directory.
-useradd --system --no-create-home --shell /usr/sbin/nologin wkenhanced
-install -d -o wkenhanced -g wkenhanced /var/lib/wk-enhanced-api
+# 1. Install Docker Engine + Compose v2 from Docker's official apt repo.
+#    Ubuntu's bundled docker.io is fine for this workload too, but the
+#    upstream repo gets you a current Compose v2 binary alongside.
+curl -fsSL https://get.docker.com | sh
+docker --version            # sanity
+docker compose version      # sanity — needs the "compose" subcommand
 
-# 2. Install Bun. Two-step: the official installer drops it in /root/.bun/bin
-#    (only readable by root), so we then copy it to /usr/local/bin/bun where
-#    the unprivileged `wkenhanced` user — and systemd's ProtectHome=true
-#    sandbox — can actually execute it.
-curl -fsSL https://bun.sh/install | bash    # as root → /root/.bun/bin/bun
-install -m 755 /root/.bun/bin/bun /usr/local/bin/bun
-/usr/local/bin/bun --version    # sanity
+# 2. Create the SQLite directory and chown it to uid:gid 1000:1000 so the
+#    container's `bun` user (uid 1000) can read/write through the bind
+#    mount. You do NOT need to useradd `wkenhanced` on the host — the
+#    container handles its own user. The bare numeric uid:gid keeps this
+#    correct even if the host has no `bun` user of its own.
+install -d -o 1000 -g 1000 /var/lib/wk-enhanced-api
 
-# 3. Pull the repo + install prod deps. The clone target is `/opt/wk-enhanced-api`;
-#    the actual server source lives at `/opt/wk-enhanced-api/wk-enhanced-api/`
-#    (the repo contains both the userscript at the top and the server in a
-#    subdirectory of the same name as the cloned directory — both are
-#    wk-enhanced-api now, after the 2026-05-25 rebrand).
+# 3. Clone the repo at /opt/wk-enhanced-api. Server source lives at the
+#    nested `wk-enhanced-api/` subdirectory (the repo contains both the
+#    userscript at the top and the server one level down — both are
+#    named wk-enhanced-api after the 2026-05-25 rebrand).
 git clone https://github.com/<your-user-or-org>/WaniKani /opt/wk-enhanced-api
 cd /opt/wk-enhanced-api/wk-enhanced-api
-bun install --production
-chown -R wkenhanced:wkenhanced /opt/wk-enhanced-api
 
-# 4. Compose the env file. ADMIN_TOKEN: openssl rand -hex 32 (save first).
+# 4. Compose the env file. ADMIN_TOKEN: openssl rand -hex 32 (save it
+#    somewhere offline first — once it goes into /etc/wk-enhanced-api/env
+#    it's chmod 600 root-only).
 install -d -m 700 /etc/wk-enhanced-api
 install -m 600 -o root -g root \
-    /opt/wk-enhanced-api/wk-enhanced-api/deploy/env.production.template \
+    deploy/env.production.template \
     /etc/wk-enhanced-api/env
 $EDITOR /etc/wk-enhanced-api/env
 
-# 5. Install + start systemd units.
-install -m 644 /opt/wk-enhanced-api/wk-enhanced-api/deploy/wk-enhanced-api.service \
+# 5. Install + start the systemd units. wk-enhanced-api.service brings up
+#    the Compose stack; the two timers schedule the bulk warm + the daily
+#    backup against that running container.
+install -m 644 deploy/wk-enhanced-api.service \
     /etc/systemd/system/wk-enhanced-api.service
-install -m 644 /opt/wk-enhanced-api/wk-enhanced-api/deploy/wk-enhanced-api-warm.service \
+install -m 644 deploy/wk-enhanced-api-warm.service \
     /etc/systemd/system/wk-enhanced-api-warm.service
-install -m 644 /opt/wk-enhanced-api/wk-enhanced-api/deploy/wk-enhanced-api-warm.timer \
+install -m 644 deploy/wk-enhanced-api-warm.timer \
     /etc/systemd/system/wk-enhanced-api-warm.timer
-install -m 644 /opt/wk-enhanced-api/wk-enhanced-api/deploy/wk-enhanced-api-backup.service \
+install -m 644 deploy/wk-enhanced-api-backup.service \
     /etc/systemd/system/wk-enhanced-api-backup.service
-install -m 644 /opt/wk-enhanced-api/wk-enhanced-api/deploy/wk-enhanced-api-backup.timer \
+install -m 644 deploy/wk-enhanced-api-backup.timer \
     /etc/systemd/system/wk-enhanced-api-backup.timer
 systemctl daemon-reload
 systemctl enable --now wk-enhanced-api
 systemctl enable --now wk-enhanced-api-warm.timer
 systemctl enable --now wk-enhanced-api-backup.timer
 
-# 6. Verify boot.
-journalctl -fu wk-enhanced-api
-curl -s http://127.0.0.1:3000/v1/health   # local check; should be {"status":"ok",...}
-curl -s https://api.wkenhanced.dev/v1/health   # public check via Cloudflare
+# 6. Verify boot. First start pulls the base image + runs the multi-stage
+#    build, which takes a couple of minutes; subsequent restarts are
+#    near-instant.
+docker compose -f /opt/wk-enhanced-api/wk-enhanced-api/compose.yaml logs -f api
+# In another shell:
+curl -s http://127.0.0.1:3000/v1/health         # local check; should be {"status":"ok",...}
+curl -s https://api.wkenhanced.dev/v1/health    # public check via Cloudflare
 ```
 
 After this, run the initial bulk warm once manually (the timer's next fire is the 1st of next month, which may be weeks away):
 
 ```bash
 systemctl start wk-enhanced-api-warm
-# Then watch: journalctl -fu wk-enhanced-api | grep -E 'warm\.(word|all)'
+# Then watch:
+docker compose -f /opt/wk-enhanced-api/wk-enhanced-api/compose.yaml logs -f api | grep -E 'warm\.(word|all)'
+```
+
+Optional but recommended: run one immediate backup to verify the S3 path before the daily timer fires:
+
+```bash
+systemctl start wk-enhanced-api-backup
+journalctl -u wk-enhanced-api-backup -n 50
 ```
 
 ## Updating after a `git pull`
 
 ```bash
 cd /opt/wk-enhanced-api && git pull
-cd wk-enhanced-api && bun install --production
+cd wk-enhanced-api
+# Rebuild the image with the new source. --pull keeps the bun base layer current.
+docker compose build --pull
+# Recreate the container with the new image. Compose stops the old one
+# and starts the new one in a few seconds.
 systemctl restart wk-enhanced-api
 ```
 
-If any of the files in this directory changed, re-copy them (`install -m 644 ... /etc/systemd/system/...`) and `systemctl daemon-reload` before restart.
+If any of the files in this directory changed (`*.service`, `*.timer`), re-copy them (`install -m 644 ... /etc/systemd/system/...`) and `systemctl daemon-reload` before restart.
+
+## Migrating from a pre-Docker droplet
+
+Pre-Docker droplets ran Bun directly via `wk-enhanced-api.service` as the unprivileged `wkenhanced` host user. Conversion is one-shot:
+
+```bash
+# 1. Stop the old bare-metal service + timers. Don't disable yet — the
+#    new unit files take the same names.
+systemctl stop wk-enhanced-api wk-enhanced-api-warm.timer wk-enhanced-api-backup.timer
+
+# 2. Install Docker if it's not already on the host.
+curl -fsSL https://get.docker.com | sh
+docker compose version      # sanity
+
+# 3. Pull the new repo state (brings in Dockerfile, compose.yaml, and the
+#    rewritten systemd units in deploy/).
+cd /opt/wk-enhanced-api && git pull
+cd wk-enhanced-api
+
+# 4. Re-chown the SQLite directory to uid 1000 (the container's bun user).
+#    Pre-Docker it was owned by the host `wkenhanced` user; that uid may
+#    or may not be 1000 depending on the install order. Forcing 1000:1000
+#    is what compose.yaml's bind mount needs to work.
+chown -R 1000:1000 /var/lib/wk-enhanced-api
+
+# 5. Replace the systemd unit files (same paths, new contents).
+install -m 644 deploy/wk-enhanced-api.service          /etc/systemd/system/
+install -m 644 deploy/wk-enhanced-api-warm.service     /etc/systemd/system/
+install -m 644 deploy/wk-enhanced-api-warm.timer       /etc/systemd/system/
+install -m 644 deploy/wk-enhanced-api-backup.service   /etc/systemd/system/
+install -m 644 deploy/wk-enhanced-api-backup.timer     /etc/systemd/system/
+systemctl daemon-reload
+
+# 6. First start triggers the build. Subsequent restarts are fast.
+systemctl start wk-enhanced-api
+systemctl start wk-enhanced-api-warm.timer wk-enhanced-api-backup.timer
+docker compose -f /opt/wk-enhanced-api/wk-enhanced-api/compose.yaml logs -f api
+
+# 7. Optional cleanup once you've verified everything works:
+#    - The host `wkenhanced` user is no longer used. Leave it (userdel
+#      risks accidentally removing files we still want); the container
+#      runs as uid 1000 regardless of whether a host user maps to it.
+#    - /usr/local/bin/bun can stay; nothing references it anymore but
+#      it's also harmless. `apt purge bun` if you installed via apt, or
+#      `rm /usr/local/bin/bun` if you used the official installer.
+```
+
+The `DATABASE_FILE` path at `/var/lib/wk-enhanced-api/wk-enhanced-api.sqlite` stays unchanged — the compose bind-mount uses the same path inside and outside the container, so the existing env file works as-is.
 
 ## Updating a pre-rename droplet
 
 For droplets provisioned before the 2026-05-25 source rebrand (`wk-vocab-api/` → `wk-enhanced-api/`), do this once before the first post-rename `git pull`:
 
 ```bash
-# Stop the service so it doesn't fail with "WorkingDirectory not found"
+# Stop the service so it doesn't fail with "WorkingDirectory not found".
 systemctl stop wk-enhanced-api wk-enhanced-api-warm.timer
 
 # Rename the source directory inside the cloned repo so the new
@@ -108,19 +175,9 @@ mv /opt/wk-enhanced-api/wk-vocab-api /opt/wk-enhanced-api/wk-enhanced-api
 
 # Pull the renamed source. (git tracks the rename cleanly via -M.)
 cd /opt/wk-enhanced-api && git pull
-cd wk-enhanced-api && bun install --production
-chown -R wkenhanced:wkenhanced /opt/wk-enhanced-api
-
-# Re-install the updated systemd units (WorkingDirectory + Documentation
-# URLs changed) and restart.
-install -m 644 deploy/wk-enhanced-api.service /etc/systemd/system/
-install -m 644 deploy/wk-enhanced-api-warm.service /etc/systemd/system/
-systemctl daemon-reload
-systemctl start wk-enhanced-api wk-enhanced-api-warm.timer
-journalctl -fu wk-enhanced-api
 ```
 
-The `DATABASE_FILE` path at `/var/lib/wk-enhanced-api/wk-enhanced-api.sqlite` and the `S3_BUCKET` `wk-enhanced-api-media` were already correctly named at initial deploy; only the source clone path needed adjusting.
+Then follow the "Migrating from a pre-Docker droplet" section above — both transitions can land in the same `systemctl restart`.
 
 ## Spaces key permissions — use Full Access
 
@@ -133,7 +190,9 @@ The clean path is to give the Spaces key **Full Access** in the DO control panel
 
 ## Things to remember
 
-- **Bun path** in `wk-enhanced-api.service`'s `ExecStart` is `/usr/local/bin/bun`. The official installer drops the binary in `/root/.bun/bin/bun`, but `wkenhanced` can't read that (root's home is mode 700) and the systemd unit's `ProtectHome=true` would block it even if perms allowed. Step 2 above copies it to `/usr/local/bin/bun` to bridge the gap.
-- **DATABASE_FILE** lives at `/var/lib/wk-enhanced-api/wk-enhanced-api.sqlite` so it survives `git pull` in `/opt/wk-enhanced-api`. The `wkenhanced` user must own this directory.
-- **The warm timer's `OnCalendar`** uses server-local time. If you didn't `timedatectl set-timezone`, that's UTC, which is fine — just know it.
-- **Backups**: automated via `wk-enhanced-api-backup.timer` (daily at 03:00 UTC). The script (`deploy/backup.ts`) uses Bun's built-in `bun:sqlite` for `VACUUM INTO` and `Bun.S3Client` for the upload — no `sqlite3` / `s3cmd` host packages required beyond `bun`. Snapshot lands at `s3://<bucket>/backups/YYYY-MM-DD.sqlite` (UTC date, private object). Retention is GFS-style — by default keep 7 daily + 4 weekly + 12 monthly snapshots; override with `BACKUP_RETAIN_{DAILY,WEEKLY,MONTHLY}` in `/etc/wk-enhanced-api/env`. Override the prefix with `BACKUP_PREFIX` if you want backups for multiple environments in the same bucket. Manually run a backup with `systemctl start wk-enhanced-api-backup`; tail it with `journalctl -fu wk-enhanced-api-backup`.
+- **Container runs as uid:gid 1000:1000** (the `bun` user the official image provides). The host directory `/var/lib/wk-enhanced-api` MUST be owned by 1000:1000 or SQLite reads fail with EACCES. The `install -d -o 1000 -g 1000` step above handles this on fresh installs; pre-Docker droplets need the one-time `chown -R 1000:1000` in the migration section.
+- **DATABASE_FILE** path stays `/var/lib/wk-enhanced-api/wk-enhanced-api.sqlite`. The bind mount uses the same path inside and outside the container precisely so the env file doesn't need to change between the old and new setups.
+- **The warm timer's `OnCalendar`** uses server-local time. If you didn't `timedatectl set-timezone`, that's UTC, which is fine — just know it. The backup timer pins UTC explicitly.
+- **Backups**: automated via `wk-enhanced-api-backup.timer` (daily at 03:00 UTC). The script (`deploy/backup.ts`) runs INSIDE the container via `docker exec` — it uses `bun:sqlite` for `VACUUM INTO` and `Bun.S3Client` for the upload, both of which live in the image. Snapshot lands at `s3://<bucket>/backups/YYYY-MM-DD.sqlite` (UTC date, private object). Retention is GFS-style — by default keep 7 daily + 4 weekly + 12 monthly snapshots; override with `BACKUP_RETAIN_{DAILY,WEEKLY,MONTHLY}` in `/etc/wk-enhanced-api/env`. Override the prefix with `BACKUP_PREFIX` if you want backups for multiple environments in the same bucket. Manually run a backup with `systemctl start wk-enhanced-api-backup`; tail it with `journalctl -fu wk-enhanced-api-backup`.
+- **Logs**: `docker compose logs -f api` is the structured-JSON stream (one event per line). `journalctl -fu wk-enhanced-api` shows the unit-level start/stop events only. Use `docker compose logs` for the real story.
+- **CI publishing the image is not set up yet.** Today's deploy builds the image locally from the cloned repo (`docker compose build`). Once a GHCR publish pipeline lands, the compose.yaml's `image:` tag becomes pullable and `docker compose pull && docker compose up -d` replaces the rebuild step. See NEW_FEATURES.md "Dockerize the server" for the CI-pipeline follow-up.
