@@ -28,11 +28,18 @@ Type=oneshot
 RemainAfterExit=yes
 WorkingDirectory=/opt/wk-enhanced-api/wk-enhanced-api
 
-# Point compose.yaml's `env_file: - ${ENV_FILE:-./.env}` directive at the
-# prod-only env file. On dev/laptop boxes the same compose.yaml falls
-# back to `./.env` (created via `cp .env.example .env`), so a fresh
-# `docker compose up` from the repo works without needing this override.
+# Point compose.yaml's parameterized inputs at their prod-only values.
+# Locally these default to `./.env` and `./.compose-data` respectively,
+# so `docker compose up` from a fresh checkout on a dev machine works
+# without needing this override. On the droplet:
+#   - ENV_FILE   → the chmod-600 root-only env file under /etc.
+#   - DATA_DIR   → the persistent /var/lib path the host bind-mounts
+#                  into the container; matches the container-side path
+#                  so DATABASE_FILE in the env file resolves to the
+#                  same bytes whether read via `docker exec` or off the
+#                  host filesystem directly.
 Environment="ENV_FILE=/etc/wk-enhanced-api/env"
+Environment="DATA_DIR=/var/lib/wk-enhanced-api"
 
 # Compose v2 is invoked as a `docker` sub-command (no hyphen). Standard
 # install location varies between distros — `/usr/bin/docker` is the

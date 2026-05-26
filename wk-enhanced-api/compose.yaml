@@ -47,13 +47,33 @@ services:
     env_file:
       - ${ENV_FILE:-./.env}
 
-    # Bind-mount the SQLite directory using the SAME path inside and
-    # outside the container so DATABASE_FILE in env.production.template
-    # works unchanged across pre-Docker and post-Docker droplets.
-    # The host directory MUST be owned by uid 1000 (the `bun` user inside
-    # the container); see deploy/README.md for the chown step.
+    # Hard-coded paths for the writable state inside the container. These
+    # override whatever the env_file says (Compose applies `environment:`
+    # AFTER `env_file:`) so the SQLite + local-driver media live under the
+    # bind mount regardless of what the host-side .env points at. Without
+    # this, a dev `.env` whose DATABASE_FILE is `./dev-data/...` (relative,
+    # correct for `bun dev`) would resolve inside the container to
+    # `/app/dev-data/...` — a root-owned directory the uid-1000 `bun` user
+    # can't write to.
+    environment:
+      DATABASE_FILE: /var/lib/wk-enhanced-api/wk-enhanced-api.sqlite
+      LOCAL_MEDIA_DIR: /var/lib/wk-enhanced-api/media
+
+    # Bind-mount the writable state. Source defaults to `./.compose-data`
+    # (gitignored, auto-created by Docker Desktop on first `up`) so local
+    # bring-up from a fresh checkout works without any host-side prep;
+    # data is inspectable from Finder under the repo. Prod's systemd unit
+    # overrides DATA_DIR to `/var/lib/wk-enhanced-api` (matching the
+    # container-side path) so DATABASE_FILE addresses the same bytes
+    # whether the operator reads them via `docker exec` or directly off
+    # the droplet's filesystem.
+    #
+    # uid 1000 must be able to write to the source. Docker Desktop on
+    # macOS handles uid translation through osxfs/gRPC-FUSE transparently.
+    # On Linux pre-create with `sudo install -d -o 1000 -g 1000 <path>`
+    # if your shell uid isn't 1000.
     volumes:
-      - /var/lib/wk-enhanced-api:/var/lib/wk-enhanced-api
+      - ${DATA_DIR:-./.compose-data}:/var/lib/wk-enhanced-api
 
     # Logging: keep the default json-file driver (journald-compatible via
     # `docker logs`) but cap rotation so a runaway log doesn't fill the

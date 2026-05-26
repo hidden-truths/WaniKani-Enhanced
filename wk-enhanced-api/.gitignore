@@ -1,6 +1,7 @@
 node_modules/
 .env
 dev-data/
+.compose-data/
 *.log
 .DS_Store
 bun.lockb

@@ -99,22 +99,32 @@ systemctl start wk-enhanced-api-backup
 journalctl -u wk-enhanced-api-backup -n 50
 ```
 
-## Local sanity-check of the Compose stack (optional)
+## Local bring-up of the Compose stack
 
-`bun dev` from the repo is the fastest iteration loop — Compose is only worth bringing up locally when you want to verify a Dockerfile/compose.yaml change before pushing to the droplet. The bring-up:
+`bun dev` from the repo is still the fastest iteration loop, but `docker compose up` from a fresh checkout also works end-to-end with no host-side prep:
 
 ```bash
 cd wk-enhanced-api
-cp .env.example .env       # if you haven't already (creates the file compose's env_file defaults to)
+cp .env.example .env       # if you haven't already
 docker compose up --build
+# In another shell:
+curl http://127.0.0.1:3000/v1/health
 ```
 
-`compose.yaml` uses `env_file: - ${ENV_FILE:-./.env}`, so a plain bring-up uses the repo's local `.env`. The production systemd unit overrides `ENV_FILE=/etc/wk-enhanced-api/env` to pick up the chmod-600 prod file instead — both paths read the same yaml.
+Two `compose.yaml` env-var inputs make this portable between dev and prod:
 
-Two snags to know about for local bring-up:
+| Input | Local default | Prod (set by systemd) |
+|---|---|---|
+| `ENV_FILE` | `./.env` (the file you just `cp`-ed) | `/etc/wk-enhanced-api/env` (chmod-600, root-only) |
+| `DATA_DIR` | `./.compose-data` (gitignored, Docker Desktop auto-creates) | `/var/lib/wk-enhanced-api` (persistent host directory) |
 
-- **Bind mount.** `compose.yaml` mounts `/var/lib/wk-enhanced-api` on the host into the same path in the container, expecting it to be owned by uid 1000. On macOS Docker Desktop creates the directory automatically; on Linux pre-create it with `sudo install -d -o 1000 -g 1000 /var/lib/wk-enhanced-api` (the same command Step 2 above runs for production). The dev `.env` from `.env.example` has `DATABASE_FILE=./dev-data/wk-vocab.sqlite` which is relative to the container's `/app` and won't be writable by uid 1000 — for a working local bring-up, edit `.env` to point at `DATABASE_FILE=/var/lib/wk-enhanced-api/wk-vocab.sqlite` (inside the bind mount) before bringing up. Reset to the relative path when you go back to `bun dev`.
-- **S3 vars stay blank in dev.** `STORAGE_DRIVER=local` is the default; media writes go to `./dev-data/media` which has the same caveat as the SQLite path. For local Docker testing where you only care about boot + HTTP, leaving it like this is fine — image won't write media, just won't serve any.
+Inside the container, `compose.yaml` hard-codes `DATABASE_FILE=/var/lib/wk-enhanced-api/wk-enhanced-api.sqlite` and `LOCAL_MEDIA_DIR=/var/lib/wk-enhanced-api/media` regardless of what's in the env file — those paths live inside the bind mount so both writable state survives container restarts. (The dev `.env`'s `./dev-data/...` paths still apply to `bun dev`, which doesn't read `compose.yaml`.)
+
+Local data lands at `wk-enhanced-api/.compose-data/` — inspect with Finder or `sqlite3`. Wipe with `docker compose down && rm -rf .compose-data`.
+
+**Linux dev note:** on Linux, the bind-mount source needs to be writable by uid 1000 (the container's `bun` user). If your shell uid isn't 1000, pre-create with `sudo install -d -o 1000 -g 1000 .compose-data` once. Docker Desktop on macOS handles uid mapping transparently so no setup needed there.
+
+**S3 vars stay blank in dev** — `STORAGE_DRIVER=local` is the default in `.env.example`, so media writes go under `.compose-data/media`. For local Docker testing where you only care about boot + HTTP, leaving the S3 vars blank is fine.
 
 ## Updating after a `git pull`
 
