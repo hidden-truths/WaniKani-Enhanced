@@ -184,16 +184,22 @@ These are ideas for the [wk-enhanced-api](wk-enhanced-api/) server. Most exist *
 
 The first production deploy landed at `https://api.wkenhanced.dev` on DO (SFO3, $7/mo Premium AMD droplet + Spaces) with Cloudflare Tunnel in front. See [wk-enhanced-api/deploy/README.md](wk-enhanced-api/deploy/README.md) for the install recipe (updated post-deploy to capture every workaround). Phase 2 (default-on) shipped as userscript v1.1.1; Phase 3 (server-only + legacy snapshot + rename) shipped as v2.0.0 (see [CLIENT_MIGRATION.md](CLIENT_MIGRATION.md)).
 
-### Dockerize the server — **code shipped 2026-05-25 (deploy pending)**
+### Dockerize the server — **shipped to prod 2026-05-26**
 
-The artifacts are in the repo as of this session: [Dockerfile](wk-enhanced-api/Dockerfile), [compose.yaml](wk-enhanced-api/compose.yaml), [.dockerignore](wk-enhanced-api/.dockerignore), rewritten systemd units under [deploy/](wk-enhanced-api/deploy/), and a top-to-bottom rewrite of [deploy/README.md](wk-enhanced-api/deploy/README.md). Bun is pinned to `oven/bun:1.3.8` (matching dev); the build is multi-stage so the runtime image carries only production deps. Container runs as the official `bun` user (uid 1000); host `/var/lib/wk-enhanced-api` must be chowned to 1000:1000 so the bind mount is writable. HEALTHCHECK uses `bun --eval` (verified end-to-end against `bun dev`) so the image has zero non-Bun deps.
+The droplet now runs the server as a Docker Compose stack ([Dockerfile](wk-enhanced-api/Dockerfile), [compose.yaml](wk-enhanced-api/compose.yaml), [.dockerignore](wk-enhanced-api/.dockerignore), [deploy/README.md](wk-enhanced-api/deploy/README.md)). Multi-stage build off `oven/bun:1.3.8` (pinned to match dev); production image carries only production deps + src + data + the deploy scripts. Container runs as the official `bun` user (uid 1000); host `/var/lib/wk-enhanced-api` chowned to 1000:1000 for the bind mount. HEALTHCHECK uses `bun --eval` against `/v1/health` so the image has zero non-Bun deps.
 
-The actual deploy (build the image on the droplet, run the migration recipe, verify `/v1/health`) is the maintainer's next step. Local Docker wasn't available in the working environment, so the build hasn't been smoke-tested — first build is on the droplet. See [NEXT_STEPS.md](NEXT_STEPS.md) "Active project" for the full set of artifacts and verification gaps.
+Three systemd units wrap the stack:
+- [`wk-enhanced-api.service`](wk-enhanced-api/deploy/wk-enhanced-api.service) — thin `docker compose up -d` wrapper. Sets `ENV_FILE=/etc/wk-enhanced-api/env` + `DATA_DIR=/var/lib/wk-enhanced-api` so the same compose.yaml works on dev (`./.env` + `./.compose-data/` defaults) and prod (the systemd overrides).
+- [`wk-enhanced-api-warm.service`](wk-enhanced-api/deploy/wk-enhanced-api-warm.service) — curls `POST /v1/admin/warm {"scope":"all"}` against the container's published 127.0.0.1:3000 port (unchanged from pre-Docker — host-side curl reaches container the same way).
+- [`wk-enhanced-api-backup.service`](wk-enhanced-api/deploy/wk-enhanced-api-backup.service) — `docker exec wk-enhanced-api bun run /app/deploy/backup.ts`. Runs the backup script inside the running container (so the script can use `bun:sqlite` + `Bun.S3Client` from the image, no host-side deps).
 
-Follow-ups (still queue items, not done):
+The 2026-05-26 migration was a one-shot conversion following the "Migrating from a pre-Docker droplet" recipe in deploy/README.md. DB preserved through `chown -R 1000:1000` (metadata-only operation); first containerized boot read the existing rows correctly; bulk re-warm against the new container closed the May-25 missing-words gap (see [NEXT_STEPS.md](NEXT_STEPS.md) "Shipped this session"). First daily backup ran end-to-end (1.6s, 114.6 MB DB) before the timer's first scheduled fire.
 
-- **CI publish to GHCR** on tag. Once images are published, the droplet's update flow drops from `docker compose build --pull && systemctl restart` to `docker compose pull && systemctl restart`. Worth doing once we've confirmed the local-build flow is stable in prod.
+Follow-ups (still queue items):
+
+- **CI publish to GHCR** on tag. Today's deploy is `git pull && docker compose build --pull && systemctl restart` on the droplet (rebuilds locally each time, ~1–2 min). Once a GitHub Actions pipeline publishes the image, the droplet flow drops to `docker compose pull && systemctl restart` (seconds). Skip until the local-build flow becomes annoying.
 - **Dev-mode Compose file** (`compose.dev.yaml`) with `--watch` + a bind-mount of `src/` for hot-reload, for contributors who want Docker-equivalent dev. Not urgent — `bun dev` stays the recommended dev loop.
+- **Bundle `sqlite3` CLI in the image** if `docker exec wk-enhanced-api sqlite3 ...` becomes a frequent ad-hoc query pattern. Trade-off is ~5MB of image bloat; today the host has `sqlite3` and the bind mount makes it accessible. Defer until it's actually annoying.
 
 The original design notes (the *why* — reproducibility, rollback story, secret handling, the "don't migrate to App Platform" caveat) are preserved below for archeology.
 

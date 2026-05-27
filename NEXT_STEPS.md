@@ -4,70 +4,82 @@ Living document for the WKEnhanced project. Use this as the entry point for any 
 
 Owns the *what-to-do-next* state of the project. Architecture, design rationale, and dead-end warnings live in [CLAUDE.md](CLAUDE.md), [wk-enhanced-api/CLAUDE.md](wk-enhanced-api/CLAUDE.md), [SERVER_DESIGN.md](SERVER_DESIGN.md), and [CLIENT_MIGRATION.md](CLIENT_MIGRATION.md). The feature backlog (everything that isn't time-critical) is in [NEW_FEATURES.md](NEW_FEATURES.md).
 
-**Last updated**: 2026-05-25, late evening — Phase 3 shipped (rename + slim main userscript to server-only + legacy/ snapshot) and smoke-tested in the browser. Seven follow-up server-side commits landed in the same session (see "Shipped this session" below — the last is the Dockerize artifacts). Dockerize is code-complete; the production cut-over is the next maintainer action. Nothing public has been announced yet.
+**Last updated**: 2026-05-26, evening — Dockerize is **shipped to prod**. Droplet migrated cleanly from bare-metal Bun to Docker Compose; first daily backup ran end-to-end (114.6 MB DB → snapshot → Spaces upload in 1.6s); bulk re-warm of the May-25 missing-words gap completed against the new container with 429-backoff doing its job (1858 cold attempts, ~1603 populated, ~255 IK-empty, near-zero genuine failures). DB now covers all ~6717 WK vocab words. Nothing public has been announced yet.
 
 ---
 
 ## Current state of the world
 
 - **Userscript**: [wkenhanced.user.js](wkenhanced.user.js) **v2.0.0**. Server-only — every vocab lookup goes through `https://api.wkenhanced.dev`. The IK / DDG / Google TTS direct path is gone from this file; the v1.1.1 snapshot lives at [legacy/wk-vocab-review-ik-direct.user.js](legacy/wk-vocab-review-ik-direct.user.js) as a frozen fallback for "API server is down for an extended period." Source tree only — no build pipeline. **Manually verified working** by the maintainer pasting into Tampermonkey post-ship; cards render, audio plays, picker + refresh + image cycle all behave correctly.
-- **Server**: [wk-enhanced-api/](wk-enhanced-api/) in production at `https://api.wkenhanced.dev` (DO droplet in SFO3, Spaces bucket, Cloudflare Tunnel). Renamed in source from `wk-vocab-api/` on 2026-05-25 to match the deployment. Nine cumulative deploy-period fixes are in the codebase (five on initial deploy day, four on Phase 2 smoke-test day — see [CLIENT_MIGRATION.md](CLIENT_MIGRATION.md) Phase 2 section + DEAD-END WARNINGS in [wk-enhanced-api/CLAUDE.md](wk-enhanced-api/CLAUDE.md)).
-- **Bulk warm coverage (post-Phase-2-flip)**: ~4859 / ~6500 words populated (~75%). 552 of those are legitimately empty (obscure WK vocab IK doesn't index). ~1641 words have no row at all — the warm's IK calls 429ed without retry. **Code fix landed this session** (429-with-exponential-backoff in `services/ik.ts`); the actual re-warm to populate those rows hasn't been triggered yet (see runway item below). Until it runs, missing words still cold-fill organically on first request (~15-30s per word, idleTimeout fix keeps the connection alive).
+- **Server**: [wk-enhanced-api/](wk-enhanced-api/) in production at `https://api.wkenhanced.dev` (DO droplet in SFO3, Spaces bucket, Cloudflare Tunnel). **Dockerized** as of 2026-05-26 — runs as a single Compose service via `wk-enhanced-api.service` (a thin `docker compose up -d` wrapper); the backup unit runs via `docker exec wk-enhanced-api bun run /app/deploy/backup.ts`. Two systemd timers: monthly bulk warm (1st of month, 04:00 local) + daily backup (03:00 UTC). Cumulative deploy-day fixes documented in [wk-enhanced-api/CLAUDE.md](wk-enhanced-api/CLAUDE.md) DEAD-END WARNINGS.
+- **Bulk warm coverage (post-rewarm)**: **6717 / ~6717 rows populated.** 5910 with real example data, 807 legitimately IK-empty (genuine "no data for this word" from IK's corpus; correctly stored as empty payloads, not failures). The May-25 1641-missing-row gap is closed — the 429-backoff caught transient rate-limits during the bulk re-warm and recovered.
+- **SQLite backups**: daily at 03:00 UTC via `wk-enhanced-api-backup.timer` → `s3://wk-enhanced-api-media/backups/YYYY-MM-DD.sqlite` (private object). GFS retention via [`deploy/retention.ts`](wk-enhanced-api/deploy/retention.ts) (default 7 daily + 4 weekly + 12 monthly). First prod run on 2026-05-26 completed in 1.6s.
 
 ---
 
-## Active project: Dockerize the server — code-complete, deploy pending
+## Next session's runway (priority order)
 
-Code-side work landed in the same session. New artifacts:
-- [`wk-enhanced-api/Dockerfile`](wk-enhanced-api/Dockerfile) — multi-stage build off `oven/bun:1.3.8` (pinned to match dev), `deps` stage installs `--frozen-lockfile --production`, `runtime` stage assembles a minimal image (production node_modules + src/ + data/ + `deploy/{backup,retention}.ts`). Runs as the official `bun` user (uid 1000). HEALTHCHECK uses `bun --eval` against `/v1/health` so the image needs no curl dep.
-- [`wk-enhanced-api/compose.yaml`](wk-enhanced-api/compose.yaml) — single `api` service, binds `127.0.0.1:3000` (Cloudflare Tunnel reaches it the same way), mounts `/var/lib/wk-enhanced-api` with the same path inside and outside (so the env file's `DATABASE_FILE` works unchanged across pre- and post-Docker droplets), loads env via `env_file: /etc/wk-enhanced-api/env`, caps log rotation at 30MB.
-- [`wk-enhanced-api/.dockerignore`](wk-enhanced-api/.dockerignore) — excludes node_modules / dev-data / test files / systemd templates / `.env`.
-- Rewritten systemd units in [`wk-enhanced-api/deploy/`](wk-enhanced-api/deploy/): `wk-enhanced-api.service` is now a `Type=oneshot` wrapper that runs `docker compose up -d --remove-orphans` on boot and `docker compose down` on stop; `wk-enhanced-api-backup.service` calls `docker exec wk-enhanced-api bun run /app/deploy/backup.ts`; `wk-enhanced-api-warm.service` is unchanged (curl from the host to 127.0.0.1:3000 reaches the container the same way it reached the bare-metal process).
-- [`wk-enhanced-api/deploy/README.md`](wk-enhanced-api/deploy/README.md) rewritten end-to-end — fresh-install walkthrough (Docker install → chown /var/lib to 1000:1000 → systemd units → first build takes a couple of minutes) and a "Migrating from a pre-Docker droplet" section with the one-shot conversion recipe. [`wk-enhanced-api/CLAUDE.md`](wk-enhanced-api/CLAUDE.md) Dev↔prod parity table gained Docker rows; the obsolete "Bun must live outside `/root`" dead-end is annotated as superseded (kept for archeology).
+This list is a menu, not a checklist — pick what matches the time you have. Nothing on the critical path is gated; the server is fully shipped + healthy.
 
-**What's NOT done yet:** the actual deployment. The maintainer needs to (a) review the artifacts, (b) follow the migration recipe in deploy/README.md against the live droplet, (c) verify `curl https://api.wkenhanced.dev/v1/health` still works post-cut-over. Local Docker wasn't available in the working environment so the build itself hasn't been smoke-tested — verification will happen on the droplet (or any Docker-having machine via `docker compose up --build`). The Dockerfile's HEALTHCHECK command WAS verified end-to-end against a live `bun dev` server: the same `bun --eval` fetch returned exit 0 on success and exit 1 on the failure path.
+### 1. Forum-post announcement of v2.0.0 (1–2 hours of polish + posting)
 
-**Public announcement (forum post) stays deferred** until this deploy lands and the Cloudflare rules item below is done.
+Draft is at [FORUM_POST_DRAFT.md](FORUM_POST_DRAFT.md). Replace the `<REPO_URL>` and `<MAINTAINER_HANDLE>` placeholders, polish the tone to the venue, and post. Cover points (already in the draft):
 
----
-
-## Next session's runway (priority order, after Dockerize)
-
-Phase 3 is shipped end-to-end; nothing on the critical path is gated. This list is a menu, not a checklist — pick what matches the time you have.
-
-### 1. Cloudflare rate-limit + cache rules (~10 min UI work)
-
-Still pending from the post-deploy runway. In the Cloudflare dashboard:
-- **Rules → Rate-limiting rules → Create rule**: 100 req/min per IP across `/v1/*` paths. (Free tier allows 1 rule, which is exactly this.)
-- **Rules → Cache rules → Create rule**: on `/v1/vocab/*` paths, "Respect origin Cache-Control headers." Our server already sets long-cache headers on the payload + `Cache-Control: no-store` on `/v1/health`. **Verify** by hitting the same word twice in quick succession — second hit should show `cf-cache-status: HIT`. As of 2026-05-25 it shows `DYNAMIC`, meaning Cloudflare isn't caching at all; the userscript's `cache: 'no-cache'` + the server's weak-ETag-tolerant `If-None-Match` comparison together ensure correctness even with a CDN cache between us.
-
-### 2. Re-warm the 1641 missing words at the current 500ms rate (~30 min + waiting)
-
-Not user-visible — cold-fill handles missing words organically since the idleTimeout fix. But useful before any traffic spike (avoids users on dial-up paying for 30s warms that we could have done in advance). The 429-with-exponential-backoff in `services/ik.ts` shipped this session, so the "proper" path is unblocked: keep `MIN_GAP_MS=500`, run `POST /v1/admin/warm {"scope":"all","force":false}`, watch `journalctl -fu wk-enhanced-api` for `ik.fetch.429_backoff` log lines (proves backoff is engaging when needed). The `force:false` flag means only words missing from `vocab_examples` get re-warmed — fresh rows are skipped. The `warm-all` endpoint now refuses a second concurrent run with 409 (shipped `dc2629c`), so an accidental double-trigger is safe.
-
-### 3. Forum-post announcement — **deferred until we go public**
-
-Not posted yet; the maintainer is keeping the project quiet until the Dockerize work + Cloudflare rules are in place. When the announcement is wanted, the v2.0.0 / WKEnhanced rebrand is the cover story (rename, server-only switch, faster cold loads, IK title-decoding fix, legacy fallback). Rough cover points:
 - What changed: v1.x → v2.0.0, rename to WKEnhanced, all data flows through `api.wkenhanced.dev`.
 - Why: no third-party CORS/sandbox friction, faster cold loads, server owns the title-decoding lossy-encoding workaround.
 - Install: paste [wkenhanced.user.js](wkenhanced.user.js) — bumps `@version`, Tampermonkey re-prompts for `@connect api.wkenhanced.dev`.
 - For users who don't want a server dependency: install [legacy/wk-vocab-review-ik-direct.user.js](legacy/wk-vocab-review-ik-direct.user.js) instead. Different `@name` so they can coexist.
 
+The draft includes a list of likely reply-worthy questions for the maintainer + a "trim to 400 words" recipe for shorter-form venues.
+
+### 2. Cloudflare rate-limit + cache rules (~10 min UI work)
+
+Still pending from the original post-deploy runway. In the Cloudflare dashboard:
+
+- **Rules → Rate-limiting rules → Create rule**: 100 req/min per IP across `/v1/*` paths. (Free tier allows 1 rule, which is exactly this.)
+- **Rules → Cache rules → Create rule**: on `/v1/vocab/*` paths, "Respect origin Cache-Control headers." Our server already sets long-cache headers on the payload + `Cache-Control: no-store` on `/v1/health`. **Verify** by hitting the same word twice in quick succession — second hit should show `cf-cache-status: HIT`. As of 2026-05-25 it showed `DYNAMIC`, meaning Cloudflare isn't caching at all; the userscript's `cache: 'no-cache'` + the server's weak-ETag-tolerant `If-None-Match` comparison together ensure correctness even with a CDN cache between us.
+
+Worth doing before the forum post drives any traffic spike.
+
+### 3. GHCR image publishing on tag (~1 hour of GitHub Actions)
+
+The Dockerize follow-up. Today's deploys are `docker compose build --pull && systemctl restart` on the droplet — each push triggers a fresh local build (~1–2 min). With a CI pipeline that publishes the image to GHCR on tag, the droplet flow drops to `docker compose pull && systemctl restart` (seconds). See [NEW_FEATURES.md](NEW_FEATURES.md) "Dockerize the server" → follow-ups. Skip until the local-build flow becomes annoying.
+
+### 4. From the wider backlog (NEW_FEATURES.md)
+
+Lower priority and not currently blocking anything; jump to [NEW_FEATURES.md](NEW_FEATURES.md) for full design notes.
+
+- **Schema version pin for cached payloads** — defensive infrastructure for future payload shape changes. Add a `payload_schema_version` column, bump constant, force re-warm on mismatch. ~30 min.
+- **Two-phase lazy-fill** — cold-fill latency 1–3s → 500ms–1s. Only worth it if forum users complain.
+- **Morphological JLPT scoring** — bundle kuromoji, lemmatize conjugated verbs. Closes the "fail-open on conjugations" gap. Discuss bundling story first (kuromoji's ~50MB dict).
+- **Click-to-lookup on sentence words** — userscript change, high QoL.
+- **JLPT badge on the card itself** — small userscript UI addition.
+- **Health metrics expansion** (24h serve counts, cache hit rate, storage size) — useful for capacity planning once forum traffic shapes up.
+
 ---
 
-## Shipped this session (2026-05-25, server-side follow-ups)
+## Shipped this session (2026-05-25 → 2026-05-26)
 
-In order:
+Code (in order):
 
 1. **`983dcb7` — 429-with-exponential-backoff in `services/ik.ts:fetchJson`.** Retries 429s with base-1s × 2^attempt backoff (cap 30s, 3 retries), honors `Retry-After` (seconds or HTTP-date), 5xx deliberately not retried. Test-only `_ikFetchConfig` knob lets the suite shrink wait times. 76 → 90 tests.
-2. **`c882dae` — daily SQLite backup → DO Spaces, with GFS retention.** `deploy/backup.ts` does `VACUUM INTO` (readonly source DB → PrivateTmp snapshot) then uploads to `s3://<bucket>/backups/YYYY-MM-DD.sqlite` (private) then prunes per `deploy/retention.ts`. Default policy: 7 daily + 4 weekly + 12 monthly (tunable via `BACKUP_RETAIN_*`). Scheduled `*-*-* 03:00:00 UTC` via `wk-enhanced-api-backup.timer`. **Install steps in [deploy/README.md](wk-enhanced-api/deploy/README.md) — not yet deployed.** No new host-package deps (Bun's `bun:sqlite` provides `VACUUM INTO`, `Bun.S3Client` handles put/list/delete). 90 → 105 tests.
-3. **`942175c` — extended 429-backoff to `ikDownloadMedia`.** Most IK traffic in a bulk warm is `/download_media`, so this is where the retry budget pays off most. Extracted a shared `fetchWithRetry` helper; `fetchJson` is now a thin wrapper that throws on `!ok`, `ikDownloadMedia` keeps its result-object shape (and correctly skips retry on small-body proxy-misses, which are structural failures, not transient). 105 → 109 tests.
-4. **`7e713b3` — ETag + conditional GET on `/v1/index_meta`.** Same pattern as `/v1/vocab/{word}` (strong ETag from `fetchedAt`, weak-prefix tolerance for Cloudflare-downgraded validators, 304 path mirrors 200's `Cache-Control` + `ETag`). Helper pair moved out of `routes/vocab.ts` into shared `src/lib/etag.ts`; unit tests followed. 109 → 113 tests.
-5. **`0da5169` — ADR-001 records the no-Kubernetes deploy-shape decision.** Captures the cost analysis ($24/mo DOKS minimum vs $11/mo current all-in), workload-shape mismatch (one service, bounded traffic, stateful filesystem), and operational complexity. Linked from `wk-enhanced-api/CLAUDE.md` next to the SQLite-not-Postgres dead-end. Includes a "when to revisit this" section.
-6. **`dc2629c` — `POST /v1/admin/warm {"scope":"all"}` refuses overlap with 409.** Module-scoped `warmAllInFlight` flag prevents the monthly timer + a manual re-warm (or any two concurrent triggers) from doubling IK call volume and racing over `vocab_examples` rows. New `conflict` error code in the enum. Test-only `_setWarmAllInFlightForTesting` setter mirrors the `_useDbForTesting` pattern. 113 → 115 tests.
-7. **Dockerize the server (commit follows this doc).** Dockerfile (multi-stage off `oven/bun:1.3.8`), compose.yaml (single service, 127.0.0.1:3000 bind, /var/lib bind-mount, env_file), .dockerignore, and rewritten systemd units. deploy/README.md gets a fresh-install walkthrough + a pre-Docker droplet migration recipe. Build itself not smoke-tested (no local Docker); HEALTHCHECK command validated end-to-end against `bun dev`. The actual prod cut-over is the maintainer's next step.
+2. **`c882dae` — daily SQLite backup → DO Spaces, with GFS retention.** `deploy/backup.ts` does `VACUUM INTO` (readonly source DB → PrivateTmp snapshot) then uploads to `s3://<bucket>/backups/YYYY-MM-DD.sqlite` (private) then prunes per `deploy/retention.ts`. Default policy: 7 daily + 4 weekly + 12 monthly (tunable via `BACKUP_RETAIN_*`). Scheduled `*-*-* 03:00:00 UTC` via `wk-enhanced-api-backup.timer`. No new host-package deps (Bun's `bun:sqlite` provides `VACUUM INTO`, `Bun.S3Client` handles put/list/delete). 90 → 105 tests.
+3. **`ebfae5e` — forum-post draft for v2.0.0 / WKEnhanced rebrand announcement.** Self-contained at [FORUM_POST_DRAFT.md](FORUM_POST_DRAFT.md); needs `<REPO_URL>` + `<MAINTAINER_HANDLE>` substitution before posting.
+4. **`942175c` — extended 429-backoff to `ikDownloadMedia`.** Most IK traffic in a bulk warm is `/download_media`, so this is where the retry budget pays off most. Extracted a shared `fetchWithRetry` helper; `fetchJson` is now a thin wrapper that throws on `!ok`, `ikDownloadMedia` keeps its result-object shape (and correctly skips retry on small-body proxy-misses, which are structural failures, not transient). 105 → 109 tests.
+5. **`7e713b3` — ETag + conditional GET on `/v1/index_meta`.** Same pattern as `/v1/vocab/{word}` (strong ETag from `fetchedAt`, weak-prefix tolerance for Cloudflare-downgraded validators, 304 path mirrors 200's `Cache-Control` + `ETag`). Helper pair moved out of `routes/vocab.ts` into shared `src/lib/etag.ts`; unit tests followed. 109 → 113 tests.
+6. **`0da5169` — ADR-001 records the no-Kubernetes deploy-shape decision.** Captures the cost analysis ($24/mo DOKS minimum vs $11/mo current all-in), workload-shape mismatch (one service, bounded traffic, stateful filesystem), and operational complexity. Linked from `wk-enhanced-api/CLAUDE.md` next to the SQLite-not-Postgres dead-end. Includes a "when to revisit this" section.
+7. **`dc2629c` — `POST /v1/admin/warm {"scope":"all"}` refuses overlap with 409.** Module-scoped `warmAllInFlight` flag prevents the monthly timer + a manual re-warm (or any two concurrent triggers) from doubling IK call volume and racing over `vocab_examples` rows. New `conflict` error code in the enum. Test-only `_setWarmAllInFlightForTesting` setter mirrors the `_useDbForTesting` pattern. 113 → 115 tests.
+8. **`4e6f912` — Dockerize the server.** Dockerfile (multi-stage off `oven/bun:1.3.8`), compose.yaml (single service, 127.0.0.1:3000 bind, /var/lib bind-mount, env_file), .dockerignore, and rewritten systemd units. [deploy/README.md](wk-enhanced-api/deploy/README.md) gets a fresh-install walkthrough + a pre-Docker droplet migration recipe.
+9. **`6e4ee34` — compose.yaml `env_file` defaults to `./.env` (prod overrides via `ENV_FILE`).** Unblocks local `docker compose up` without needing `/etc/wk-enhanced-api/env` to exist on dev boxes.
+10. **`2c2980e` — compose.yaml `DATA_DIR` override makes local bring-up work end-to-end.** Parameterizes the bind-mount source + hard-codes container-internal `DATABASE_FILE` / `LOCAL_MEDIA_DIR` to paths inside the bind mount, so the dev `.env`'s relative paths (correct for `bun dev`) don't have to be edited to bring up the container. `.compose-data/` gitignored.
 
-All commits are local; branch is ahead of `origin/main` (the session's earlier push brought up `983dcb7`; the rest still need to be pushed). `bun run typecheck` clean throughout, `bun test` ends at **115 pass / 0 fail**.
+Operations (2026-05-26):
+
+- **Droplet migration from bare-metal Bun → Docker Compose.** Followed the "Migrating from a pre-Docker droplet" recipe in deploy/README.md. Stop bare-metal → install Docker → `chown -R 1000:1000 /var/lib/wk-enhanced-api` (DB preserved through chown, not touched by data-content) → install new systemd units → `systemctl start wk-enhanced-api` (first build ~1–2 min). Phase 4 verification confirmed `warmedWords` carried through the migration cleanly. No downtime beyond the brief restart.
+- **First daily backup verified end-to-end.** Manually triggered via `systemctl start wk-enhanced-api-backup`. 114.6 MB DB → VACUUM-INTO snapshot → Spaces upload → retention decision (1 kept, 0 removed) → done in 1.6s. Daily timer now active at 03:00 UTC.
+- **Bulk re-warm of the May-25 missing-words gap.** Triggered `POST /v1/admin/warm {"scope":"all","force":false}`. Pre-rewarm: 4859 rows total (4307 populated, 552 empty, ~1858 missing). Post-rewarm: **6717 rows total (5910 populated, 807 empty, ~0 genuinely missing).** Of the ~1858 newly-added rows, ~1603 had real IK data and ~255 were IK-empty — proves the 429-backoff caught transient rate-limits and recovered cleanly.
+
+All commits pushed to `origin/main`. `bun run typecheck` clean throughout, `bun test` ends at **115 pass / 0 fail**.
 
 ---
 
@@ -85,15 +97,19 @@ These were decisions made when pulling Phase 3 forward; recorded here for future
 
 ## Troubleshooting: warm completion / cold-fill failures
 
-Reference for the monthly cron warm (or any ad-hoc re-warm). The most likely culprits + fixes:
+Reference for the monthly cron warm (or any ad-hoc re-warm). On the **Dockerized prod droplet** (post-2026-05-26), the structured-JSON event stream is at `docker compose -f /opt/wk-enhanced-api/wk-enhanced-api/compose.yaml logs api`; `journalctl -u wk-enhanced-api` only shows the unit-level start/stop events of the Compose wrapper.
 
-**`empty` ratio > 30%**: re-check that the IK rate-limit didn't kick back in. `journalctl -u wk-enhanced-api --no-pager --since "12 hours ago" | grep -c 'warm.ik_search_failed'` — if this is > 100, we hit another 429 wave. Force re-warm the empty words: write a quick `sqlite3 ... 'SELECT word FROM vocab_examples WHERE example_count = 0;'` loop calling `POST /v1/admin/warm {"scope":"word","word":"X","force":true}` with a 1-second sleep.
+**Failure count post-warm**: check the audit log first. `GET /v1/admin/jobs?limit=10` returns recent warm jobs with `wordsProcessed` + `wordsFailed`. The most recent `scope:"all"` row is the bulk run; `wordsFailed` should be small (single digits is fine). If it's >50, look for `warm.all.word_failed` events: `docker compose -f /opt/wk-enhanced-api/wk-enhanced-api/compose.yaml logs api | grep '"event":"warm.all.word_failed"'`.
 
-**Common words like 食べる have `example_count = 0`**: this is the warm-pipeline-empty bug we thought we fixed. Reproduce locally with `curl -s 'https://apiv2.immersionkit.com/search?q=食べる&exactMatch=true&limit=10' | head -c 200`; if IK has real data and our server stored empty, look at `journalctl -u wk-enhanced-api | grep -F '食べる'` for the warm event sequence.
+**`empty` ratio is high but no failures**: that's correct behavior. Empty rows = IK genuinely has no data for those words. Spot-check by querying IK directly: `curl -s 'https://apiv2.immersionkit.com/search?q=<WORD>&exactMatch=true&limit=10' | head -c 400`. If `examples: []`, IK is the source of the empty; nothing to fix.
+
+**Common words like 食べる have `example_count = 0`**: distinct from the above — this would be the warm-pipeline-empty bug. Reproduce against IK with the curl above; if IK has real data and our server stored empty, look at `docker compose ... logs api | grep -F '食べる'` for the warm event sequence and find where it diverged.
+
+**Lots of `ik.fetch.429_backoff` events**: backoff IS doing its job, no action needed — that's the success case. Worth monitoring if the count is exploding (suggests sustained IK rate-limiting, in which case look at lowering load or raising `MIN_GAP_MS` rather than the other way around). The post-2026-05-26 baseline is a small handful per bulk re-warm.
 
 **`debugWkEnhancedApi('food')` returns CORS error**: re-verify the CORS middleware in `src/index.ts` is allowing `wanikani.com`. The header should be `Access-Control-Allow-Origin: *` on every response. Check with `curl -i https://api.wkenhanced.dev/v1/health -H "Origin: https://www.wanikani.com" | grep -i 'access-control'`.
 
-**`debugWkEnhancedApi` returns 502**: the server crashed or cloudflared lost the upstream. `systemctl status wk-enhanced-api` to check; `journalctl -u wk-enhanced-api --no-pager -n 50` for crash traces; `systemctl restart wk-enhanced-api` to bring it back.
+**`debugWkEnhancedApi` returns 502**: the container crashed or cloudflared lost the upstream. `systemctl status wk-enhanced-api` shows the unit (it's a `Type=oneshot` so "active (exited)" is healthy); `docker compose ps` from `/opt/wk-enhanced-api/wk-enhanced-api/` shows the container; `docker compose logs api --tail 100` shows recent activity. `systemctl restart wk-enhanced-api` brings the stack back.
 
 ---
 
