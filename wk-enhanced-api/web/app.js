@@ -462,9 +462,20 @@ function wireFacets(selector, c, onChange){
 // ---- Flashcard deck config + its chip bindings ----
 // mode = test direction; type/trans/topic/status/jlpt = AND'd facets; ord = sort;
 // rmin/rmax = rank band. Facet arrays start empty (= no constraint → "All" active).
-let cfg={mode:"meaning",input:"self",audio:"off",type:[],trans:[],topic:[],status:[],ord:"shuffle",jlpt:["all"],rmin:1,rmax:MAXRANK};
+let cfg={mode:"meaning",input:"self",audio:"off",kind:"free",type:[],trans:[],topic:[],status:[],ord:"shuffle",jlpt:["all"],rmin:1,rmax:MAXRANK};
 document.querySelectorAll('.chip.mode').forEach(b=>b.addEventListener('click',()=>{
   document.querySelectorAll('.chip.mode').forEach(x=>x.classList.remove('active'));b.classList.add('active');cfg.mode=b.dataset.mode;updateDeckCount();}));
+// Study type (Free study vs SRS review). SRS restricts the deck to due cards
+// (buildDeck) and is the only kind that reschedules (grade); free leaves dates
+// untouched. Switching repaints the deck count + Start button label.
+document.querySelectorAll('.chip.skind').forEach(b=>b.addEventListener('click',()=>{
+  document.querySelectorAll('.chip.skind').forEach(x=>x.classList.remove('active'));b.classList.add('active');
+  cfg.kind=b.dataset.skind; updateDeckCount(); updateStartLabel();}));
+// Reflect cfg.kind on the Start button so it's clear which session you're about to run.
+function updateStartLabel(){
+  const el=document.getElementById('startBtn'); if(!el)return;
+  el.innerHTML='<svg class="ic" aria-hidden="true"><use href="#i-play"/></svg>'+(cfg.kind==='srs'?'Start SRS review':'Start free study');
+}
 // Input mode (self-graded vs type-the-reading) + audio autoplay. These are now
 // backed by the synced `settings` object (the Settings page edits the same
 // values); the setup chips just mirror + update settings. bindSingle = the
@@ -509,6 +520,7 @@ document.querySelectorAll('.chip.rpreset').forEach(b=>b.addEventListener('click'
 // cards as 100% (??1) so they sort to the back behind genuinely weak cards.
 function buildDeck(){
   let d=DATA.filter(v=>passes(v,cfg));
+  if(cfg.kind==='srs') d=d.filter(v=>isDue(v.rank));   // SRS review = due cards only
   if(cfg.ord==='shuffle'){for(let i=d.length-1;i>0;i--){const j=Math.floor(Math.random()*(i+1));[d[i],d[j]]=[d[j],d[i]];}}
   else if(cfg.ord==='freq'){d.sort((a,b)=>a.rank-b.rank);}
   else if(cfg.ord==='worst'){d.sort((a,b)=>{const ra=rollingAcc(a.rank)??1,rb=rollingAcc(b.rank)??1;return ra-rb;});}
@@ -538,8 +550,8 @@ function paintSummary(id,parts){
 }
 // Live "N cards in deck" readout under the Start button + filter recap.
 function updateDeckCount(){
-  const n=DATA.filter(v=>passes(v,cfg)).length;
-  document.getElementById('deckCount').innerHTML=`<b>${n}</b> cards in deck`;
+  const n=DATA.filter(v=>passes(v,cfg) && (cfg.kind!=='srs'||isDue(v.rank))).length;
+  document.getElementById('deckCount').innerHTML=`<b>${n}</b> ${cfg.kind==='srs'?'due in this deck':'cards in deck'}`;
   paintSummary('deckSummary', filterSummary(cfg));
 }
 // SRS banner: count due cards, and flip to the green "all caught up" state at 0.
@@ -558,15 +570,18 @@ function updateDueBanner(){
 // reflect that in the chip UI before starting. This overrides the user's
 // current picker selection on purpose — it's a dedicated review flow.
 function startDueSession(){
-  cfg.type=[];cfg.trans=[];cfg.topic=[];cfg.status=['due'];cfg.jlpt=['all'];cfg.rmin=1;cfg.rmax=100;cfg.ord='worst';
+  cfg.kind='srs';cfg.type=[];cfg.trans=[];cfg.topic=[];cfg.status=['due'];cfg.jlpt=['all'];cfg.rmin=1;cfg.rmax=100;cfg.ord='worst';
   repaintDeck();
+  document.querySelectorAll('.chip.skind').forEach(x=>x.classList.toggle('active',x.dataset.skind==='srs'));
   document.querySelectorAll('.chip.jlpt').forEach(x=>x.classList.toggle('active',x.dataset.jlpt==='all'));
   document.getElementById('rmin').value=1;document.getElementById('rmax').value=100;
   document.querySelectorAll('.chip.ord').forEach(x=>x.classList.toggle('active',x.dataset.ord==='worst'));
+  updateStartLabel();
   startSession();
 }
 updateDeckCount();
 updateDueBanner();
+updateStartLabel();
 
 /* ============================================================================
    FLASHCARD SESSION
@@ -692,8 +707,8 @@ function romajiToKana(input){
 
 function startSession(){
   const deck=buildDeck();
-  if(!deck.length){alert("No cards in that deck yet.");return;}
-  session={deck,i:0,revealed:false,results:[]};
+  if(!deck.length){alert(cfg.kind==='srs'?"Nothing is due in that deck right now — switch to Free study to practice anyway.":"No cards in that deck yet.");return;}
+  session={deck,i:0,revealed:false,results:[],kind:cfg.kind};
   document.getElementById('fcSetup').style.display='none';
   document.getElementById('fcDone').classList.remove('active');
   document.getElementById('fcStage').classList.add('active');
@@ -806,14 +821,17 @@ function submitTyped(){
   document.getElementById('wrongBtn').classList.toggle('suggested',!correct);
   document.getElementById('rightBtn').classList.toggle('suggested',correct);
 }
-// Record one result: append to attempts, bump right/wrong, update SRS schedule,
-// and persist NOW (mid-session crash safety — this is bug-fix #1). Then advance.
+// Record one result: append to attempts + accuracy counters (BOTH study kinds —
+// free study still feeds accuracy/leech stats), then persist NOW (mid-session
+// crash safety). The SRS SCHEDULE is only touched in an SRS session, and only for
+// a card that's actually due — so a free-study run, or reviewing a card early,
+// never bumps its box/next-review date. Then advance.
 function grade(correct){
   const v=session.deck[session.i];
   const c=cardStat(v.rank);
   c.attempts.push(correct?1:0);
   if(correct)c.right++;else c.wrong++;
-  scheduleCard(c,correct);
+  if(session.kind==='srs' && isDue(v.rank)) scheduleCard(c,correct);
   session.results.push(correct?1:0);
   save();
   session.i++;
@@ -830,20 +848,22 @@ function grade(correct){
 const SESSIONS_LOCAL_CAP=1000;
 // Append a finished session to the durable server log (fire-and-forget; signed-in
 // only). Local + blob already hold it — this just guarantees it's never pruned.
-function logSession(right,tot){
+function logSession(right,tot,kind){
   if(typeof account==='undefined' || !account)return;
-  try{ api('/v1/sessions',{method:'POST',body:{right,total:tot,mode:cfg.mode}}).catch(()=>{}); }catch(e){}
+  // `mode` keeps the test direction (server column); `details.kind` carries the
+  // SRS/free distinction so the durable log can differentiate the two.
+  try{ api('/v1/sessions',{method:'POST',body:{right,total:tot,mode:cfg.mode,details:{kind,direction:cfg.mode}}}).catch(()=>{}); }catch(e){}
 }
 function endSession(){
   if(session && session.results.length){
     const right=session.results.reduce((s,x)=>s+x,0),tot=session.results.length;
-    store.sessions.push({t:Date.now(),right,tot});
+    store.sessions.push({t:Date.now(),right,tot,kind:session.kind});
     if(store.sessions.length>SESSIONS_LOCAL_CAP)store.sessions=store.sessions.slice(-SESSIONS_LOCAL_CAP);
     const day=localDay();
     if(!store.daily[day])store.daily[day]={right:0,tot:0};
     store.daily[day].right+=right;store.daily[day].tot+=tot;
-    save();                       // localStorage + debounced progress-blob push
-    logSession(right,tot);        // durable append-only server log (never pruned)
+    save();                            // localStorage + debounced progress-blob push
+    logSession(right,tot,session.kind); // durable append-only server log (never pruned)
     document.getElementById('doneScore').textContent=Math.round(100*right/tot)+'%';
     document.getElementById('doneDetail').textContent=`${right} of ${tot} correct`;
     if(typeof maybeShowSignup==='function')maybeShowSignup();   // nudge after first real session
@@ -876,7 +896,7 @@ document.getElementById('endBtn').addEventListener('click',endSession);
 document.getElementById('againBtn').addEventListener('click',()=>{
   document.getElementById('fcDone').classList.remove('active');
   document.getElementById('fcSetup').style.display='block';
-  updateDeckCount();updateDueBanner();
+  updateDeckCount();updateDueBanner();updateStartLabel();
 });
 // Keyboard shortcuts (only while a card is on screen, and not while typing in the
 // kana field — Enter-to-submit is bound on the input itself).
@@ -1212,12 +1232,20 @@ function renderStats(){
   let tot=0,right=0,studied=0;
   DATA.forEach(v=>{const c=store.cards[v.rank];if(c&&c.attempts.length){studied++;tot+=c.attempts.length;right+=c.right;}});
   const overall=tot?Math.round(100*right/tot):0;
+  // SRS vs free-study split, summed over logged sessions. Legacy sessions saved
+  // before the two-kind split have no `kind` → counted as SRS (the old behavior
+  // always rescheduled). `acc` is each kind's accuracy, shown as a hover readout.
+  const mix={srs:{rev:0,right:0},free:{rev:0,right:0}};
+  store.sessions.forEach(s=>{const m=mix[s.kind==='free'?'free':'srs'];m.rev+=s.tot;m.right+=s.right;});
+  const acc=m=>m.rev?Math.round(100*m.right/m.rev)+'% correct':'no reviews yet';
   const sg=document.getElementById('statgrid');
   sg.innerHTML=`
     <div class="statbox"><div class="v">${overall}%</div><div class="l">Overall accuracy</div></div>
     <div class="statbox"><div class="v">${tot}</div><div class="l">Total reviews</div></div>
     <div class="statbox"><div class="v">${studied}/${DATA.length}</div><div class="l">Cards drilled</div></div>
     <div class="statbox"><div class="v" style="color:var(--ichidan)">${dueCards().length}</div><div class="l">Due today</div></div>
+    <div class="statbox" title="${acc(mix.srs)}"><div class="v" style="color:var(--ichidan)">${mix.srs.rev}</div><div class="l">SRS reviews</div></div>
+    <div class="statbox" title="${acc(mix.free)}"><div class="v">${mix.free.rev}</div><div class="l">Free-study reviews</div></div>
     <div class="statbox"><div class="v" style="color:var(--leech)">${leeches().length}</div><div class="l">Active leeches</div></div>
     <div class="statbox"><div class="v">${store.sessions.length}</div><div class="l">Sessions</div></div>`;
   // Daily accuracy line: one point per day in store.daily (label = MM-DD).

@@ -287,6 +287,13 @@
         </div>
         <div class="fcast-chart" id="forecastChart"></div>
       </div>
+      <!-- Study type: Free study never touches the SRS schedule (practice any
+           cards); SRS review only serves DUE cards and promotes/demotes them.
+           cfg.kind; wired below. The due banner above is the quick "all due" SRS. -->
+      <div class="frow"><span class="filter-label">Study type</span><div class="chips">
+        <button class="chip skind active" data-skind="free" title="Practice any cards — does not change review dates">Free study</button>
+        <button class="chip skind" data-skind="srs" title="Review only cards that are currently due, and reschedule them"><svg class="ic" aria-hidden="true"><use href="#i-refresh"/></svg>SRS review</button>
+      </div></div>
       <!-- Test direction: which side of the card is the PROMPT vs the ANSWER. -->
       <div class="frow"><span class="filter-label">Test direction</span><div class="chips">
         <button class="chip mode active" data-mode="meaning">JP → meaning + reading</button>

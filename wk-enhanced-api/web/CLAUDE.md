@@ -62,6 +62,12 @@ and the auth modal + sign-up banner.
 
 - **SRS/leech (pure, the core logic):** `cardStat`, `scheduleCard`, `isDue`,
   `dueCards`, `rollingAcc`, `isLeech`, `leeches`. Leitner boxes, not SM-2.
+- **Study type (`cfg.kind` ∈ `free`/`srs`):** the picker's "Study type" toggle.
+  `buildDeck` restricts an SRS deck to due cards; `grade` only calls `scheduleCard`
+  when `session.kind==='srs' && isDue(rank)`. Free study records attempts/accuracy
+  but NEVER touches the box/due. Session kind is captured at `startSession` into
+  `session.kind`, tagged onto `store.sessions[*].kind` + the durable log's
+  `details.kind`, and split out in `renderStats` (the SRS vs Free-study boxes).
 - **Filtering (AND'd facets):** `passes(v,c)` intersects four token facets
   (`type`/`trans`/`topic`/`status`) + JLPT + rank. `facetMatch` = OR-within-one,
   `facetAll` = no-constraint test, `oneGroup` = does a verb match one token.
@@ -276,6 +282,19 @@ Component contracts you must preserve:
   sentence and tiers should escalate N5→N1; keep that if you regenerate. The example
   shows on the ANSWER side only (the sentence reveals the reading via furigana, so
   it would spoil the reading-recall question if shown on the prompt).
+- **Free study deliberately does NOT change the SRS schedule, and reviewing a card
+  early never promotes it.** Two study kinds (`cfg.kind`): *SRS review* serves only
+  due cards (`buildDeck` intersects `isDue`) and reschedules them; *free study* is
+  practice over any deck and leaves box/due untouched. The gate lives in `grade`:
+  `if(session.kind==='srs' && isDue(v.rank)) scheduleCard(...)`. The `isDue` guard is
+  belt-and-suspenders — an SRS deck is already due-only, but it guarantees that even
+  a non-due card can't be bumped up. Both kinds still append to `attempts`/`right`/
+  `wrong` (so accuracy + leech detection cover free study too) — only the schedule
+  is conditional. Don't "simplify" `grade` back to an unconditional `scheduleCard`;
+  that's the exact behavior the two-kind split was added to fix. Legacy sessions
+  saved before the split have no `kind` and are counted as SRS in the stats (the old
+  behavior always rescheduled). The "Review due cards" banner is just a shortcut that
+  sets `cfg.kind='srs'` + `status:['due']`.
 - **The review forecast is front-loaded by design** — Leitner intervals top out at
   16 days (`BOX_DAYS`), so EVERY scheduled card is due within ~16 days. The `month`
   view (the current month's day count, 28–31 slots) therefore captures the whole
@@ -299,6 +318,12 @@ Component contracts you must preserve:
 
 Commits, newest first (all on `main`; touch the split web/ files + `src/` where noted):
 
+1. **SRS vs free study + stats split + forecast slot rework.** New "Study type"
+   picker toggle (`cfg.kind`): free study never changes review dates, SRS review
+   serves due cards only and reschedules; `grade` gates `scheduleCard` on
+   `kind==='srs' && isDue`. Sessions are tagged with `kind` (local + durable
+   `details.kind`); Stats gained SRS-reviews / Free-study-reviews boxes. Forecast
+   now draws every time slot (24/7/28–31/12) with date-aware labels.
 1. **Romaji typed input + visual SRS box indicator + upcoming-review forecast.**
    Typed-reading mode now accepts romaji (`romajiToKana` greedy Hepburn/wāpuro
    converter feeds the `normKana` compare; kana/IME still works unchanged). The

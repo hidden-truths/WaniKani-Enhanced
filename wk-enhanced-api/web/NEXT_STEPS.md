@@ -9,6 +9,12 @@ split, custom-verb sync, and Google TTS — what's left is one genuinely-deferre
 (needs email infra). Add new ideas to "Ideas / not yet scoped" as they come up.
 
 ## Done (most recent first)
+- ~~SRS vs free study~~ — **shipped.** "Study type" picker toggle (`cfg.kind`):
+  free study practices any deck and never changes review dates; SRS review serves
+  only due cards and reschedules them. `grade` only reschedules when
+  `kind==='srs' && isDue` (so an early review can't promote a card). Sessions are
+  tagged with `kind` (local + the durable `details.kind`); Stats shows separate
+  SRS-reviews / Free-study-reviews counts (with per-kind accuracy on hover).
 - ~~Romaji typed input~~ — **shipped.** Typed-reading mode now accepts romaji:
   `romajiToKana` (greedy Hepburn + wāpuro variants, sokuon/ん handling) folds the
   input to hiragana before the `normKana` compare. Kana/IME typists are unaffected
