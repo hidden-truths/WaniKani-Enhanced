@@ -51,11 +51,21 @@ SYNC`. Key functions by area:
 
 - **SRS/leech (pure, the core logic):** `cardStat`, `scheduleCard`, `isDue`,
   `dueCards`, `rollingAcc`, `isLeech`, `leeches`. Leitner boxes, not SM-2.
-- **Filtering:** `passes(v,cfg)` is the predicate; `makeMultiSelect(selector,…)`
-  wires a chip group (OR within a facet, "all" exclusive); `facetAll`.
+- **Filtering (AND'd facets):** `passes(v,c)` intersects four token facets
+  (`type`/`trans`/`topic`/`status`) + JLPT + rank. `facetMatch` = OR-within-one,
+  `facetAll` = no-constraint test, `oneGroup` = does a verb match one token.
+  `wireFacets(selector,c,onChange)` wires the `.deck`/`.bf` chips, deriving each
+  chip's facet from its token via `TOKEN_FACET` (topic is the default); the lone
+  "all" chip clears every facet. `makeMultiSelect` still wires the JLPT segs.
   `cfg` (flashcard deck) and `bcfg` (browse grid) are independent configs.
+  `annotateJlptChips` disables empty JLPT levels.
+- **Data + custom verbs:** `DATA` is a `let` = baked `VERBS` + `loadCustom().verbs`,
+  rebuilt by `rebuildData()`; `MAXRANK` tracks the top rank (rank filter extends
+  past 100). `openVerbModal`/`saveVerb`/`deleteVerb` are the #verbModal CRUD;
+  custom verbs persist in `jpverbs_custom` (`loadCustom`/`saveCustom`), local-only.
 - **Render:** `showCard`/`reveal`/`grade`/`endSession` (session), `renderBrowse`,
-  `renderStats` + `renderCardBars`, `lineChart`/`barChart` (SVG strings).
+  `renderStats` + `renderCardBars`, `lineChart` (axis caption + avg line + value
+  labels + `<title>` hover) / `barChart` (SVG strings).
 - **Typed mode + TTS:** `revealAnswer` (shared show-answer + autoplay) feeds both
   `reveal` (self-graded) and `submitTyped` (typed: `normKana`-compares the kana, sets
   an advisory verdict + `session.suggested`). `speak`/`playReading`/`pickVoice` +
@@ -63,7 +73,8 @@ SYNC`. Key functions by area:
   single-select chips. Prefs persist as `jpverbs_input` / `jpverbs_audio`.
 - **Cloud:** `api`, `scheduleCloudSync`/`pushCloud`/`pullCloud`, `bootAuth`,
   `updateAccountChip`, `openAuth`. Same-origin, httpOnly cookie, debounced
-  full-store PUT.
+  full-store PUT. `maybeShowSignup` (called from `endSession`) shows the sign-up
+  nudge after the first session, not on first paint.
 - **UX helpers (added in the polish pass):** `filterSummary`/`paintSummary`
   (active-filter recap), `setupTopicGroups` (topic disclosure + badge),
   `escapeHtml`.
@@ -106,13 +117,18 @@ Component contracts you must preserve:
 
 ## Things that look like bugs but aren't (DEAD-END WARNINGS)
 
-- **Type / Transitivity / Topic chips share ONE OR'd pool** (all `.deck` in the
-  flashcard panel, all `.bf` in browse). So "Godan + Motion" = `godan OR motion`,
-  not the intersection. The visual tier split (added in the regroup) is *purely
-  cosmetic* — it did not change this semantics. Making them separate AND'd facets
-  is real work (`passes()` + a second selection set); see in-file OUTSTANDING #2.
-- **The single "All" chip clears the whole shared pool** (type+transitivity+topic),
-  not just its own row. There is exactly one per panel; keep it that way.
+- **Type / Transitivity / Topic / Leech chips are FOUR AND'd facets, not one OR'd
+  pool** (this changed — older docs/commits describing a shared pool are stale). A
+  chip's facet is derived from its token via `TOKEN_FACET` (`tokenFacet`), not from
+  markup, so the chips still carry class `.deck`/`.bf` + `data-deck`/`data-filter`.
+  "Godan + Motion" = `godan AND motion` (intersection); tokens within one facet OR.
+  `cfg`/`bcfg` hold `type`/`trans`/`topic`/`status` arrays (empty = no constraint).
+  Don't reintroduce a single shared array — that was the old confusing behavior.
+- **The single "All" chip is a master reset** that clears all four facets at once
+  (not just its own row), and shows active when every facet is empty. Exactly one
+  per panel — keep it that way. `wireFacets` returns a `paint()` fn that deep-links
+  (`startDueSession` → status:['due'], `studyLeeches` → status:['leech']) call to
+  resync the chips after mutating the config directly.
 - **Alignment needs the `.chips` wrapper, not just a fixed label width.** A fixed
   `.filter-label` width alone still lets wrapped chips break to x=0 behind the
   label. The two-track `.frow>.filter-label` + `.frow>.chips` structure is the fix.
@@ -133,6 +149,19 @@ Component contracts you must preserve:
 - **Google Fonts is the only external dependency and degrades gracefully.** Offline
   you get system fonts for the Japanese text; the app still fully works. Don't add
   a hard dependency on it.
+- **Custom verbs are keyed by a monotonic rank, never reused.** New custom verbs
+  get `rank = ++seq` (seq starts at 100, persisted in `jpverbs_custom`), so deleting
+  one never frees its rank for reuse — `store.cards[rank]` progress can't collide
+  with a future verb. Editing keeps the rank (and progress); deleting drops the
+  orphaned card stat. `DATA` is a `let` (not `const`) so `rebuildData()` can swap it
+  in place — don't change it back to `const`, and don't cache `DATA`/`MAXRANK` in a
+  closure that won't see the rebuild. Custom verbs are LOCAL-only (the cloud sync
+  mirrors the progress `store` blob, not the verb dataset) — by design.
+- **Empty JLPT levels are disabled, not hidden** (`annotateJlptChips`, run at boot
+  and on any DATA change). The 100 frequent verbs are almost all N5–N4, so N2/N1
+  start disabled; adding a custom N2 verb re-enables N2. Roving nav recomputes its
+  navigable list each keypress so it skips disabled chips — keep that if you touch
+  `setupRoving`.
 - **Roving tabindex groups by `.chips`/`.topic-inner` container and matches only
   `button.chip`.** `setupRoving` deliberately excludes the Font `<select class="chip">`
   and the rank number inputs (focus on a non-chip returns -1 from `indexOf` →
@@ -171,6 +200,25 @@ Component contracts you must preserve:
 
 Commits, newest first (all on `main`, all touching only `index.html` unless noted):
 
+1. **rate-limit auth (server — touches `src/`, not `index.html`).** Per-IP in-memory
+   limiter on `/v1/auth/{login,register}`; see [../src/lib/rateLimit.ts](../src/lib/rateLimit.ts).
+1. **pure-core test suite (`web/verbs-core.test.ts`).** Extracts the inline script,
+   runs it under a DOM stub, tests passes/scheduleCard/isDue/rollingAcc/isLeech/
+   normKana/filterSummary/facets. Guards the core through a future file split.
+1. **add/edit/delete custom verbs.** "Add verb" modal in Browse; `jpverbs_custom`
+   merged into `DATA` via `rebuildData()`; CUSTOM badge + Edit/Delete; MAXRANK
+   extends the rank filter past 100; local-only.
+1. **disable empty JLPT levels.** `annotateJlptChips` dims/disables zero-count
+   levels (N2/N1) with count tooltips; roving nav skips disabled chips.
+1. **defer sign-up nudge.** `maybeShowSignup` (from `endSession`) replaces the
+   first-paint banner — shows after the first completed session.
+1. **richer Stats line charts.** Axis caption, dashed average line, value labels,
+   area fill, `<title>` hover readouts, theme-aware gridlines; session line indigo.
+1. **AND'd filter facets.** Split the shared OR'd `.deck`/`.bf` pool into four AND'd
+   facets (type/trans/topic/status) via `wireFacets` + `TOKEN_FACET`; `passes()`
+   intersects. "Godan + Motion" now = the intersection.
+1. **typed-reading mode + TTS.** Input toggle auto-grades typed kana
+   (`normKana`/`submitTyped`); Audio toggle + speaker buttons via `speechSynthesis`.
 1. **roving tabindex for chip groups.** `setupRoving` over every `.chips` +
    `.topic-inner`: one tab stop per group, ←/→/↑/↓ + Home/End to move (wrapping),
    the stop follows focus, `role=group` + aria-label per row. Collapsed topic chips

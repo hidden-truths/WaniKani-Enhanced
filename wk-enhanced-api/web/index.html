@@ -16,7 +16,7 @@
 --------------------------------------------------------------------------------
   This started as a personal study aid and the constraint was "I can open it
   anywhere with zero setup." That rules out a bundler, npm, a server, etc. The
-  cost is that this file is ~1000 lines and will keep growing; see OUTSTANDING
+  cost is that this file is ~2300 lines and will keep growing; see OUTSTANDING
   WORK for the planned split once it outgrows a single document.
 
 --------------------------------------------------------------------------------
@@ -119,9 +119,10 @@
   2. [DONE] CATEGORY vs SEMANTIC as separate AND'd facets. The shared OR'd pool is
      split into four AND'd facets (type/trans/topic/status) via wireFacets() +
      TOKEN_FACET; passes() intersects them. Godan + Emotion = the intersection.
-  3. ADD / EDIT VERBS (deferred feature #7): verbs are baked into VERBS[]. A
-     form that writes user-defined verbs into localStorage would make this a
-     living deck. Requires merging user verbs with DATA at load.
+  3. [DONE] ADD / EDIT VERBS. The "Add verb" button in Browse opens #verbModal;
+     custom verbs persist in localStorage (jpverbs_custom) and merge into DATA via
+     rebuildData(), so they join the deck/filters/stats. Each custom card shows a
+     CUSTOM badge + Edit/Delete. See "CUSTOM VERBS" in the script. Local-only.
   4. ACCESSIBILITY. focus-visible rings + toolbar aria-labels, and (DONE) a roving
      tabindex on every chip group (setupRoving): each filter row is one tab stop,
      ←/→/↑/↓ move within it, Home/End jump to the ends, role=group + aria-label per
@@ -129,8 +130,10 @@
      class is still conveyed partly by color (mitigated by the text stamp, not
      eliminated), and the single-select rows are toolbar-semantics, not an ARIA
      radiogroup (arrows move focus; Space/Enter selects) — fine, but not radio.
-  5. JLPT levels are approximate (hand-assigned). N2/N1 filter buttons exist but
-     will be near-empty — the 100 most frequent verbs are almost all N5–N4.
+  5. [DONE] JLPT levels are approximate (hand-assigned), and the 100 frequent verbs
+     are almost all N5–N4. annotateJlptChips() now disables (dims) any level with
+     zero verbs (N2/N1 by default) + tooltips the counts; adding a custom verb at
+     that level re-enables it. Roving nav skips the disabled chips.
   6. [DONE] Cloud sync shipped — email/password accounts mirror progress across
      devices (see CLOUD ACCOUNTS + SYNC). localStorage remains the offline-first
      baseline; Export/Import is still the no-account manual bridge.
@@ -138,9 +141,10 @@
      in one file, separate into verbs.json (data) + app.js + styles.css and add
      a trivial static server. The section banners below are drawn to make that
      split mechanical.
-  8. No tests. Validation has been manual + Playwright smoke checks during dev.
-     A real project wants a small test suite around passes()/scheduleCard()/
-     isLeech() — they hold the core logic and are pure functions, easy to test.
+  8. [DONE] Pure-core tests. web/verbs-core.test.ts (bun:test) extracts this script,
+     evaluates it under a DOM stub, and covers passes()/facets/scheduleCard()/
+     isDue()/rollingAcc()/isLeech()/normKana()/filterSummary(). Run via `bun test`
+     in wk-enhanced-api. This guards the core logic through any future file split.
 
   License/ownership: personal project. Verb data derived from public BCCWJ
   frequency information; mnemonics and code are original.

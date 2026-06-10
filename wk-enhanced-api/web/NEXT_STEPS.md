@@ -4,71 +4,65 @@ What to do next, priority-ordered. Builds on the `OUTSTANDING WORK` block at the
 top of [index.html](index.html); this file supersedes it where they disagree.
 Architecture + dead-ends: [CLAUDE.md](CLAUDE.md). User overview: [README.md](README.md).
 
-## Done since the in-file list was written
-- ~~"localStorage only / no cloud sync" (in-file OUTSTANDING #6)~~ — **shipped.**
-  Email/password accounts + debounced cross-device sync exist (`CLOUD ACCOUNTS +
-  SYNC` section; `/v1/auth/*` + `/v1/progress/verbs`). The in-file comment was
-  updated to match.
-- ~~Filter "wall of text"~~ — regrouped into Type / Transitivity / Topic
-  (collapsible) / Level & rank tiers; segmented JLPT; Leeches pulled out.
-- ~~Misaligned filter rows~~ — fixed via the `.frow`/`.chips` label-column layout.
-- ~~No icons~~ — inline SVG sprite applied site-wide.
-- ~~Endless per-card bar wall~~ — capped to worst-20 with a show-all toggle.
-- ~~Blocking first-visit modal~~ — now a dismissible inline sign-up banner.
-- ~~Typed-reading mode + TTS (in-file #1)~~ — **shipped.** Flashcard "Input" toggle
-  (Self-graded / Type the reading) auto-grades typed kana via `normKana` +
-  `submitTyped`; advisory verdict with 1/2 typo-override. "Audio" toggle +
-  `.speak-btn` (flashcard + every Browse card) play the reading via
-  `speechSynthesis` (`speak`/`playReading`, ja-JP voice). Prefs persist
-  (`jpverbs_input` / `jpverbs_audio`); Audio controls hide when no speechSynthesis.
+As of the mid-2026 push, **the entire original backlog has shipped** — what's left
+is genuinely-deferred work (needs infra) and the eventual file split. Add new ideas
+to the "Ideas / not yet scoped" section as they come up.
+
+## Done (most recent first)
+- ~~Add / edit / delete custom verbs (in-file #3)~~ — **shipped.** "Add verb" in
+  Browse opens a modal; custom verbs persist in `jpverbs_custom` and merge into
+  `DATA` (rebuildData) so they join the deck/filters/stats; CUSTOM badge + Edit/
+  Delete on each. MAXRANK extends the rank filter past 100. Local-only (not synced).
+- ~~A test suite for the pure core (in-file #8)~~ — **shipped.** `web/verbs-core.test.ts`
+  extracts the inline `<script>` and runs it under a DOM stub (bun:test); covers
+  passes/facets/scheduleCard/isDue/rollingAcc/isLeech/normKana/filterSummary.
+- ~~Category vs Semantic as separate AND'd facets (in-file #2)~~ — **shipped.** Four
+  AND'd facets (type/trans/topic/status) via `wireFacets` + `TOKEN_FACET`; "Godan +
+  Motion" now intersects. Single "All" chip clears all facets.
+- ~~Stats line charts too basic~~ — **shipped.** Axis caption, dashed average line,
+  per-point value labels, area fill, `<title>` hover readouts, theme-aware gridlines.
+- ~~Sign-up banner timing~~ — **shipped.** Deferred from first paint to after the
+  first completed session (`maybeShowSignup`).
+- ~~JLPT N2/N1 near-empty filters (in-file #5)~~ — **shipped.** `annotateJlptChips`
+  disables (dims) levels with zero verbs + tooltips counts; roving nav skips them.
+- ~~Rate limiting on `/v1/auth/*`~~ — **shipped (server).** Per-IP in-memory limiter
+  ([../src/lib/rateLimit.ts](../src/lib/rateLimit.ts)): login 20/15min, register
+  8/hr → `429 {code:'rate_limited'}` + Retry-After.
+- ~~Typed-reading mode + TTS (in-file #1)~~ — **shipped.** Input toggle auto-grades
+  typed kana (`normKana`/`submitTyped`, advisory verdict); Audio toggle + speaker
+  buttons play the reading via `speechSynthesis`. Prefs persist.
 - ~~Keyboard navigation for chip groups (in-file #4)~~ — **shipped.** `setupRoving`
-  gives every `.chips` row + each open `.topic-inner` a roving tabindex: one tab
-  stop per group, ←/→/↑/↓ to move, Home/End to the ends, `role=group` + aria-label
-  per row; collapsed topic chips leave the tab order. Toolbar semantics — Space/
-  Enter still selects via the existing click handlers.
+  roving-tabindex per `.chips`/`.topic-inner`; arrows/Home/End, role=group + labels.
+- ~~Accounts + cloud sync (in-file #6)~~ — **shipped.** Email/password + debounced
+  cross-device sync (`/v1/auth/*` + `/v1/progress/verbs`).
+- ~~Filter wall / misaligned rows / no icons / endless bar wall / blocking modal~~ —
+  all shipped (`.frow`/`.chips` layout, SVG sprite, worst-20 cap, inline banner).
 
-## Verification debt (do first — cheap, closes a known gap)
-- **Capture real desktop screenshots of Browse + Stats.** The preview tooling kept
-  reloading to the default tab on capture, so those two panels at desktop width
-  were verified by DOM measurement + parity with the Study panel, not a fresh
-  wide screenshot. Open locally at a wide viewport and eyeball: Browse label
-  alignment + search-icon field; Stats leech-list cards + the worst-20 toggle.
-  Mobile (≤640px) stacks filter labels — sanity-check that too.
+## Deferred (needs infra — intentionally not done)
+- **Password reset / email verification (server).** A forgotten password currently
+  means a new account. Needs an outbound-email provider + secrets, not worth
+  provisioning until the app has real users. Tracked in [../CLAUDE.md](../CLAUDE.md)
+  "What's deliberately NOT in v1."
+- **The split point (in-file #7).** Once `VERBS[]` / the feature set outgrows one
+  file (now ~2200 lines), separate into `verbs.json` + `app.js` + `styles.css` and
+  serve statically. The section banners make this mechanical. **Still not yet** —
+  the single-file constraint (open anywhere, zero setup) is still paying for itself,
+  and `web/verbs-core.test.ts` now guards the core through any future extraction.
 
-## High value
-1. **Category vs Semantic as separate AND'd facets** (in-file #2). The most common
-   point of confusion. Needs a second selection set + a small `passes()` change;
-   the tiered UI rows already exist, so the visual work is done.
+## Ideas / not yet scoped
+- **Conjugation drills.** The dataset has `type` (godan/ichidan/irregular) — enough
+  to quiz て-form / past / negative / potential. A natural next study mode.
+- **Romaji input** for typed-reading mode (currently kana only; `normKana` is
+  deliberately not romaji-aware). Would need a romaji→kana table.
+- **Export/import custom verbs** separately from progress (they're local-only today).
+- **ARIA radiogroup semantics** for the single-select chip rows (mode/input/audio/
+  order) — currently toolbar semantics (arrows move focus, Space/Enter selects).
 
-## Medium
-2. **A test suite for the pure core** (in-file #8). `passes()`, `scheduleCard()`,
-   `isDue()`, `rollingAcc()`, `isLeech()`, `filterSummary()`, and the new `normKana()`
-   are pure and easy to test. This is the logic future refactors break silently.
-   Would need a tiny extraction or a headless harness (keep it dependency-light).
-3. **Add / edit verbs** (in-file #3). Verbs are baked into `VERBS[]`; a form that
-   writes user verbs to localStorage and merges them with `DATA` at load makes
-   this a living deck.
-4. **Auth niceties (server-side).** No password reset / email verification yet — a
-   forgotten password currently means a new account. No origin-side rate limiting
-   on `/v1/auth/*`. Tracked in [../CLAUDE.md](../CLAUDE.md) "What's deliberately
-   NOT in v1."
-
-## Polish / smaller
-- **Stats line charts** are intentionally basic (hand-rolled SVG); axis labels /
-  legends / hover readouts would help. Keep them dependency-free.
-- **Sign-up banner copy / timing** — currently shows on first visit for empty
-  stores; consider deferring to *after* the first session instead.
-- **JLPT N2/N1 filters are near-empty** (in-file #5) — the 100 most frequent verbs
-  are almost all N5–N4. Cosmetic; maybe disable/annotate the empty levels.
-
-## The split point (when the file outgrows one document)
-In-file #7: once `VERBS[]` or the feature set grows past comfort (~1700 lines and
-climbing), separate into `verbs.json` + `app.js` + `styles.css` and serve them
-statically. The in-file section banners are drawn to make this mechanical. Not
-yet — the single-file constraint is still paying for itself.
-
-## Housekeeping
-- **`.claude/launch.json`** (repo root) is currently untracked. It defines the
-  `wk-enhanced-api` preview/run config used to drive the browser during this work.
-  Commit it if you want `/run` + the preview panel to pick the server up
-  automatically; otherwise leave it local.
+## Verification notes
+- Browse + Stats were verified at desktop width (1280) and mobile (390): label
+  alignment, search-icon field, dimmed N2/N1, leech list, enhanced charts, and the
+  ≤640px label-stacking all confirmed via screenshot. The earlier "capture real wide
+  screenshots" debt is closed.
+- Preview tooling reloads the tab on capture (resets in-memory state) — verify
+  transient state (open modal, applied filters, seeded stats) via DOM `eval`, not a
+  follow-up screenshot. See the dead-end note in [CLAUDE.md](CLAUDE.md).
