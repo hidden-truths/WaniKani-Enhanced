@@ -1612,6 +1612,7 @@ function endSession(){
     save();
     document.getElementById('doneScore').textContent=Math.round(100*right/tot)+'%';
     document.getElementById('doneDetail').textContent=`${right} of ${tot} correct`;
+    if(typeof maybeShowSignup==='function')maybeShowSignup();   // nudge after first real session
   }
   document.getElementById('fcStage').classList.remove('active');
   document.getElementById('fcDone').classList.add('active');
@@ -2095,19 +2096,23 @@ async function doLogout(){
   account=null; updateAccountChip(); setSyncStatus('');
 }
 
-// Boot: probe the session, hydrate from cloud if signed in, else gently nudge
-// brand-new visitors with a dismissible inline banner (not a blocking modal —
-// let them try the app first). Dismissal is remembered so we don't nag.
+// Boot: probe the session and hydrate from cloud if signed in. We deliberately do
+// NOT show the sign-up nudge here — a brand-new visitor sees the app first and only
+// gets nudged AFTER finishing their first session (see maybeShowSignup, called from
+// endSession), which converts far better than a cold first-paint banner.
 async function bootAuth(){
   try{ const r=await api('/v1/auth/me'); account=(r&&r.user)?r.user:null; }
   catch(e){ serverReachable=false; account=null; }
   updateAccountChip();
   if(account){ await pullCloud(); return; }
-  if(serverReachable){
-    const empty=!store.cards||Object.keys(store.cards).length===0;
-    const dismissed=localStorage.getItem('jpverbs_signup_dismissed')==='1';
-    if(empty&&!dismissed)document.getElementById('signupBanner').hidden=false;
-  }
+}
+// Show the dismissible sign-up banner once the user has engaged (finished a
+// session): only when signed out, server reachable, and not previously dismissed.
+// Safe to call repeatedly — it no-ops after dismissal or sign-in.
+function maybeShowSignup(){
+  if(account||!serverReachable)return;
+  if(localStorage.getItem('jpverbs_signup_dismissed')==='1')return;
+  document.getElementById('signupBanner').hidden=false;
 }
 // Sign-up banner actions: "Create account" opens the auth modal on demand;
 // dismiss hides it and remembers the choice.
