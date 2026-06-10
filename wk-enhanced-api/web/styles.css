@@ -439,3 +439,72 @@
   .custom-badge{display:inline-block;font-family:"SF Mono",ui-monospace,monospace;font-size:9px;background:var(--ichidan);color:#fff;padding:2px 6px;border-radius:2px;letter-spacing:.1em;margin-top:6px}
   .verb-actions{display:flex;gap:8px;margin-top:10px}
   .verb-actions .chip{font-size:11px;padding:4px 10px}
+
+  /* =========================================================================
+     みんなの日本語 DASHBOARD (#panel-minna)
+     Account-gated Minna no Nihongo lesson view, fetched at runtime + rendered by
+     renderMinna(). Reuses the design tokens + .chip/.frow/.chips/.speak-btn
+     contracts; the rules below are the dashboard-specific layout only. The
+     panel inherits the .panel.active entrance animation for free.
+     ========================================================================= */
+  /* Signed-out gate. */
+  .mn-gate{text-align:center;padding:48px 22px;background:var(--paper-2);border:1px solid var(--line);border-radius:14px;margin-top:20px}
+  .mn-gate .gate-ic{font-size:34px;color:var(--ichidan)}
+  .mn-gate h2{font-family:Georgia;font-size:24px;font-weight:900;margin:12px 0 6px}
+  .mn-gate p{color:var(--muted);max-width:46ch;margin:0 auto 18px}
+  /* Lesson heading + chapter picker. */
+  .mn-head{margin-top:18px}
+  .mn-kicker{font-family:"SF Mono",ui-monospace,monospace;font-size:11px;letter-spacing:.24em;text-transform:uppercase;color:var(--godan);margin-bottom:8px}
+  .mn-title{font-family:Georgia;font-size:clamp(24px,4vw,34px);font-weight:900;line-height:1.05}
+  .mn-theme{color:var(--muted);margin-top:6px;font-size:15px}
+  .mn-loading,.mn-error{padding:30px 4px;color:var(--muted);font-family:"SF Mono",ui-monospace,monospace;font-size:13px}
+  .mn-error{color:var(--godan)}
+  /* Section card + its collapsible header (mirrors the modal <details> pattern). */
+  .mn-section{background:var(--paper-2);border:1px solid var(--line);border-radius:14px;padding:6px 18px 8px;margin-top:16px}
+  .mn-section>summary{cursor:pointer;list-style:none;font-family:"SF Mono",ui-monospace,monospace;font-size:11px;letter-spacing:.18em;text-transform:uppercase;color:var(--godan);display:flex;align-items:center;gap:8px;padding:12px 0}
+  .mn-section>summary::-webkit-details-marker{display:none}
+  .mn-section>summary::after{content:"+";margin-left:auto;color:var(--muted);font-size:16px}
+  .mn-section[open]>summary::after{content:"−"}
+  .mn-section .mn-count{color:var(--muted);font-weight:400;letter-spacing:.1em}
+  .mn-sec-body{padding:2px 0 10px}
+  /* Vocab table. */
+  .mn-vocab{width:100%;border-collapse:collapse}
+  .mn-vocab td{padding:9px 8px;border-top:1px solid var(--line);vertical-align:middle}
+  .mn-vocab tr:first-child td{border-top:none}
+  .mn-vocab .v-audio{width:44px;text-align:center}
+  .mn-kanji{font-size:20px}
+  .mn-kana{color:var(--muted);font-size:13px;margin-top:2px}
+  .mn-ctx{color:var(--muted);font-size:12px;font-family:"SF Mono",ui-monospace,monospace;margin-left:2px}
+  .mn-mean{font-size:14px}
+  .mn-pos{display:inline-block;font-family:"SF Mono",ui-monospace,monospace;font-size:9px;letter-spacing:.1em;color:var(--muted);border:1px solid var(--line);border-radius:2px;padding:1px 5px;margin-left:8px;vertical-align:1px}
+  /* Audio button — reuse .speak-btn look, add a playing state. */
+  .speak-btn.playing{background:var(--ichidan);color:#fff;border-color:var(--ichidan)}
+  /* Grammar cards. */
+  .mn-gram{padding:14px 0;border-top:1px solid var(--line)}
+  .mn-gram:first-child{border-top:none}
+  .mn-pattern{font-size:18px;font-weight:700}
+  .mn-structure{font-family:"SF Mono",ui-monospace,monospace;font-size:12px;color:var(--ink);background:color-mix(in srgb,var(--ink) 6%,transparent);border-radius:6px;padding:7px 10px;margin:8px 0;line-height:1.5}
+  .mn-explain{font-size:14px;line-height:1.6;margin-bottom:8px}
+  .mn-ex{display:flex;flex-direction:column;gap:9px;margin-top:8px}
+  .mn-ex .e-jp{font-size:16px}
+  .mn-ex .e-en{color:var(--muted);font-size:13px;margin-top:1px}
+  /* Conversation. */
+  .mn-conv-audio{display:flex;align-items:center;gap:10px;margin:4px 0 14px;color:var(--muted);font-size:13px}
+  .mn-line{display:flex;gap:10px;padding:9px 0;border-top:1px solid var(--line)}
+  .mn-line:first-child{border-top:none}
+  .mn-role{font-family:"SF Mono",ui-monospace,monospace;font-size:11px;color:var(--ichidan);flex:0 0 64px;padding-top:3px}
+  .mn-line .l-jp{font-size:16px}
+  .mn-line .l-en{color:var(--muted);font-size:13px;margin-top:2px}
+  /* Add-to-deck action + provenance badge. */
+  .mn-actions{display:flex;align-items:center;gap:12px;flex-wrap:wrap;margin:6px 0 2px}
+  .v-in{color:var(--good);font-family:"SF Mono",ui-monospace,monospace;font-size:11px;white-space:nowrap}
+  .minna-badge{display:inline-block;font-family:"SF Mono",ui-monospace,monospace;font-size:9px;background:var(--adjective);color:#fff;padding:2px 6px;border-radius:2px;letter-spacing:.08em;margin-top:6px}
+  /* Notes — the "augment as I study" area (synced under the minna app key). */
+  .mn-notes textarea{width:100%;min-height:120px;background:var(--paper);color:var(--ink);border:1px solid var(--line);border-radius:8px;padding:12px;font-family:Georgia,serif;font-size:14px;line-height:1.6;resize:vertical}
+  .mn-notes textarea:focus{outline:none;border-color:var(--ichidan)}
+  .mn-saved{font-family:"SF Mono",ui-monospace,monospace;font-size:11px;color:var(--muted);margin-top:6px;min-height:14px}
+  @media (max-width:640px){
+    .mn-role{flex-basis:48px;font-size:10px}
+    .mn-kanji{font-size:18px}
+    .mn-vocab td{padding:8px 5px}
+  }

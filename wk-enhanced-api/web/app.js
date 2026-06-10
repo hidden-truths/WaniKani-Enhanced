@@ -266,6 +266,7 @@ document.querySelectorAll('.tab').forEach(t=>t.addEventListener('click',()=>{
   document.getElementById('panel-'+t.dataset.tab).classList.add('active');
   if(t.dataset.tab==='stats')renderStats();
   if(t.dataset.tab==='browse')renderBrowse();
+  if(t.dataset.tab==='minna')renderMinna();
 }));
 
 /* ============================================================================
@@ -1195,7 +1196,7 @@ function openVerbDetail(v){
       <div class="verb-reading">${v.read}${TTS_OK?` <button class="speak-btn sm" id="dSpeak" type="button" aria-label="Play reading" title="Play reading"><svg class="ic" aria-hidden="true"><use href="#i-volume"/></svg></button>`:''}</div>
       <div class="verb-meaning">${v.mean}</div>
       <a class="jisho-link" target="_blank" rel="noopener noreferrer" href="${jishoUrl(v.jp)}"><svg class="ic" aria-hidden="true"><use href="#i-external"/></svg>View on Jisho</a></div>
-      <div style="text-align:right"><div class="stamp ${cardStamp(v).cls}">${cardStamp(v).label}</div><div class="jlpt-pill">${v.jlpt}</div>${v.custom?'<div class="custom-badge">CUSTOM</div>':''}</div></div>
+      <div style="text-align:right"><div class="stamp ${cardStamp(v).cls}">${cardStamp(v).label}</div><div class="jlpt-pill">${v.jlpt}</div>${provenanceBadge(v)}</div></div>
     ${isLeech(v.rank)?'<span class="leech-badge">⚠ LEECH</span>':''}
     <div class="tags">${tags}</div>
     ${detailMemoryLine(v)}
@@ -1244,7 +1245,7 @@ function renderBrowse(){
         <div class="verb-jp jp">${v.jp}</div><div class="verb-reading">${v.read}${TTS_OK?` <button class="speak-btn sm" type="button" aria-label="Play reading" title="Play reading"><svg class="ic" aria-hidden="true"><use href="#i-volume"/></svg></button>`:''}</div>
         <div class="verb-meaning">${v.mean}</div></div>
         <div style="text-align:right"><div class="stamp ${stamp.cls}">${stamp.label}</div>
-        <div class="jlpt-pill">${v.jlpt}</div>${v.custom?'<div class="custom-badge">CUSTOM</div>':''}</div></div>
+        <div class="jlpt-pill">${v.jlpt}</div>${provenanceBadge(v)}</div></div>
       ${leech?'<span class="leech-badge">⚠ LEECH</span>':''}
       <div class="tags">${tiLabel?`<span class="tag" style="color:var(--ichidan)">${tiLabel}</span>`:''}${v.tags.filter(t=>!t.startsWith('top')).map(t=>`<span class="tag">${escapeHtml(t)}</span>`).join('')}</div>`;
     card.addEventListener('click',()=>openVerbDetail(v));
@@ -1545,8 +1546,9 @@ async function pullCloud(){
       await pushCloud();           // new account — seed cloud from local
     }
   }catch(err){ setSyncStatus('⚠ offline'); }
-  await pullCustomCloud();          // custom verbs + settings share the sign-in pull
+  await pullCustomCloud();          // custom verbs + settings + minna share the sign-in pull
   await pullSettingsCloud();
+  await pullMinnaCloud();
   refreshAllViews();
 }
 
@@ -1555,6 +1557,7 @@ function refreshAllViews(){
   updateDeckCount(); updateDueBanner(); renderBrowse();
   if(typeof renderCustomCount==='function')renderCustomCount();
   if(document.getElementById('panel-stats').classList.contains('active'))renderStats();
+  if(document.getElementById('panel-minna').classList.contains('active')&&typeof renderMinna==='function')renderMinna();
 }
 
 // Escape user-supplied text before innerHTML interpolation (e.g. account email).
@@ -1674,8 +1677,12 @@ function rebuildData(){
   annotateJlptChips(); annotateCatChips();
 }
 function renderCustomCount(){
-  const n=loadCustom().verbs.length;
-  document.getElementById('customCount').innerHTML = n?`<b>${n}</b> custom card${n===1?'':'s'}`:'';
+  const all=loadCustom().verbs;
+  const n=all.filter(v=>!v.minna).length, m=all.filter(v=>v.minna).length;
+  const parts=[];
+  if(n)parts.push(`<b>${n}</b> custom card${n===1?'':'s'}`);
+  if(m)parts.push(`<b>${m}</b> みんなの日本語`);
+  document.getElementById('customCount').innerHTML = parts.join(' · ');
 }
 // Per-category option lists for the modal's Type select. Verbs use the
 // conjugation classes; adjectives reuse the field for the い/な split; nouns,
@@ -1791,6 +1798,208 @@ document.getElementById('setFuri').addEventListener('click',e=>{const b=e.target
 document.getElementById('setInput').addEventListener('click',e=>{const b=e.target.closest('.setin');if(!b)return;settings.input=b.dataset.setin;saveSettings();paintPrefChips();renderSettings();});
 document.getElementById('setAudio').addEventListener('click',e=>{const b=e.target.closest('.setau');if(!b)return;settings.audio=b.dataset.setau;saveSettings();paintPrefChips();renderSettings();});
 document.getElementById('setFreeDue').addEventListener('click',e=>{const b=e.target.closest('.setfr');if(!b)return;settings.freeReviewDue=b.dataset.setfr==='on';saveSettings();renderSettings();});
+
+/* ============================================================================
+   みんなの日本語 DASHBOARD
+   ----------------------------------------------------------------------------
+   Account-gated Minna no Nihongo lesson view. Content (vocab/grammar/examples/
+   conversation + native audio) is fetched at runtime from /v1/minna/*, which
+   only answers for signed-in users, so the copyrighted textbook material never
+   ships to anonymous visitors. renderMinna() runs lazily on tab activation.
+
+   Vocab "activation" REUSES the custom-verb system: each word becomes a tagged
+   custom card (loadCustom/saveCustom + seq rank), so it joins the deck / SRS /
+   Browse / Stats and syncs under the existing 'custom-verbs' blob for free —
+   no separate data path, no DATA-merge change. Idempotent via a stable
+   minnaKey. The only NEW synced blob is per-lesson NOTES (app key 'minna') —
+   the "augment as I study" scratchpad. Cards carry minna:true (+ minnaLesson)
+   so Browse shows a みんなの日本語 badge instead of CUSTOM.
+   ========================================================================== */
+const MINNA_APP_KEY='minna';
+const MINNA_KEY='jpverbs_minna';
+const MINNA_DEFAULT={notes:{}, lastLesson:23};
+function loadMinnaStore(){ try{const o=JSON.parse(localStorage.getItem(MINNA_KEY));if(o&&typeof o==='object')return Object.assign({},MINNA_DEFAULT,o,{notes:o.notes||{}});}catch(e){} return Object.assign({},MINNA_DEFAULT,{notes:{}}); }
+let minnaStore=loadMinnaStore();
+function saveMinnaLocal(){ try{localStorage.setItem(MINNA_KEY,JSON.stringify(minnaStore));}catch(e){} }
+function saveMinna(){ saveMinnaLocal(); if(typeof scheduleMinnaSync==='function')scheduleMinnaSync(); }
+
+// --- Notes sync trio (mirrors the custom-verb / settings sync; app key 'minna') ---
+let minnaSyncTimer=null;
+function scheduleMinnaSync(){ if(!account)return; if(minnaSyncTimer)clearTimeout(minnaSyncTimer); minnaSyncTimer=setTimeout(pushMinnaCloud,1200); }
+async function pushMinnaCloud(){ if(!account)return; setSyncStatus('saving…'); try{ await api('/v1/progress/'+MINNA_APP_KEY,{method:'PUT',body:{data:minnaStore}}); setSyncStatus('✓ synced'); }catch(err){ setSyncStatus('⚠ offline'); } }
+async function pullMinnaCloud(){ try{ const r=await api('/v1/progress/'+MINNA_APP_KEY); if(r&&r.data&&typeof r.data==='object'){ minnaStore=Object.assign({},MINNA_DEFAULT,r.data,{notes:r.data.notes||{}}); saveMinnaLocal(); }else if(Object.keys(minnaStore.notes||{}).length){ await pushMinnaCloud(); } }catch(err){/* offline — keep local notes */} }
+
+// --- Native-audio playback. One reused <audio>; same-origin so the session
+//     cookie travels and /v1/minna/audio authorizes. Clicking a playing button
+//     stops it (toggle). The .playing class lights the button. ---
+let mnAudioEl=null, mnPlayingBtn=null;
+function mnPlay(src, btn){
+  if(!mnAudioEl)mnAudioEl=new Audio();
+  if(btn && btn===mnPlayingBtn && !mnAudioEl.paused){ mnAudioEl.pause(); btn.classList.remove('playing'); mnPlayingBtn=null; return; }
+  if(mnPlayingBtn)mnPlayingBtn.classList.remove('playing');
+  mnAudioEl.src='/v1/minna/audio?src='+encodeURIComponent(src);
+  mnPlayingBtn=btn||null; if(btn)btn.classList.add('playing');
+  mnAudioEl.onended=mnAudioEl.onerror=()=>{ if(mnPlayingBtn){mnPlayingBtn.classList.remove('playing');mnPlayingBtn=null;} };
+  mnAudioEl.play().catch(()=>{ if(btn)btn.classList.remove('playing'); mnPlayingBtn=null; });
+}
+const mnAudioBtn=(src)=> src?`<button class="speak-btn" type="button" data-aud="${escapeHtml(src)}" aria-label="Play native audio" title="Play native audio"><svg class="ic" aria-hidden="true"><use href="#i-volume"/></svg></button>`:'';
+
+// --- Vocab → deck activation (via the custom-verb store). ---
+// Build a deck card from a Minna vocab item, using the DICTIONARY form as the
+// headword (the deck is dictionary-form; the textbook ます-form is kept in tip).
+function minnaCard(item, lesson){
+  return {
+    jp: item.dict || item.kanji || item.kana,
+    read: item.dictRead || item.kana,
+    mean: item.mean,
+    cat: item.cat || 'noun',
+    type: item.type || '',
+    jlpt: item.jlpt || 'N4',
+    trans: item.trans || '',
+    tags: ['みんなの日本語','mnn-l'+lesson],
+    mnem: '',
+    tip: 'みんなの日本語 L'+lesson+' · textbook form: '+(item.kanji||item.kana)+(item.context?' '+item.context:''),
+    ex: [],
+    custom:true, minna:true, minnaKey:item.key, minnaLesson:lesson,
+  };
+}
+function minnaInDeck(key){ return loadCustom().verbs.some(v=>v.minnaKey===key); }
+// Add every not-yet-added vocab word for a lesson to the deck. Idempotent
+// (skips words whose minnaKey is already present). Returns the count added.
+function activateMinnaVocab(lesson, vocab){
+  const cs=loadCustom(); let added=0;
+  vocab.forEach(item=>{
+    if(cs.verbs.some(v=>v.minnaKey===item.key))return;
+    const card=minnaCard(item,lesson);
+    cs.seq=(cs.seq||100)+1; card.rank=cs.seq; cs.verbs.push(card); added++;
+  });
+  if(added){ saveCustom(cs); rebuildData(); refreshAfterVerbChange(); }
+  return added;
+}
+
+// --- Render ---
+const minnaLessonCache={};               // n -> lesson JSON (avoids refetch on re-render)
+async function fetchMinnaLesson(n){
+  if(minnaLessonCache[n])return minnaLessonCache[n];
+  const r=await api('/v1/minna/lessons/'+n);
+  minnaLessonCache[n]=r; return r;
+}
+function mnSection(title,count,bodyHtml,open){
+  return `<details class="mn-section"${open?' open':''}><summary>${title}${count!=null?` <span class="mn-count">· ${count}</span>`:''}</summary><div class="mn-sec-body">${bodyHtml}</div></details>`;
+}
+function renderMinnaGate(){
+  document.getElementById('mnHead').innerHTML='';
+  document.getElementById('mnBody').innerHTML='';
+  const g=document.getElementById('mnGate'); g.hidden=false;
+  g.innerHTML=`<svg class="ic gate-ic" aria-hidden="true"><use href="#i-book"/></svg>
+    <h2>みんなの日本語</h2>
+    <p>Your private Minna no Nihongo workbook — vocabulary with native audio, grammar, example sentences and conversation, lesson by lesson. Sign in to open it.</p>
+    <button class="chip primary" id="mnSignin"><svg class="ic" aria-hidden="true"><use href="#i-user"/></svg>Sign in</button>`;
+  const b=document.getElementById('mnSignin'); if(b)b.addEventListener('click',()=>openAuth('login'));
+}
+async function renderMinna(){
+  if(!account){ renderMinnaGate(); return; }
+  document.getElementById('mnGate').hidden=true;
+  const head=document.getElementById('mnHead'), body=document.getElementById('mnBody');
+  let lessons=[];
+  try{ const r=await api('/v1/minna/lessons'); lessons=(r&&r.lessons)||[]; }
+  catch(e){ if(e.status===401){ renderMinnaGate(); return; } body.innerHTML='<div class="mn-error">Could not reach the server.</div>'; return; }
+  if(!lessons.length){ head.innerHTML=''; body.innerHTML='<div class="mn-error">No lessons have been added yet.</div>'; return; }
+  const cur=lessons.includes(minnaStore.lastLesson)?minnaStore.lastLesson:lessons[0];
+  minnaStore.lastLesson=cur;
+  head.innerHTML=`<div class="mn-kicker">みんなの日本語 · Minna no Nihongo</div>
+    <div class="frow"><span class="filter-label">Chapter</span><div class="chips" id="mnChapters" aria-label="Chapter">
+      ${lessons.map(n=>`<button class="chip mnch${n===cur?' active':''}" type="button" data-lesson="${n}">L${n}</button>`).join('')}
+    </div></div>`;
+  head.querySelectorAll('.mnch').forEach(b=>b.addEventListener('click',()=>{ minnaStore.lastLesson=Number(b.dataset.lesson); saveMinna(); renderMinna(); }));
+  await renderMinnaLesson(cur, body);
+}
+async function renderMinnaLesson(n, body){
+  body.innerHTML='<div class="mn-loading">Loading lesson '+n+'…</div>';
+  let L;
+  try{ L=await fetchMinnaLesson(n); }
+  catch(e){ body.innerHTML='<div class="mn-error">Could not load lesson '+n+(e&&e.status?(' ('+e.status+')'):'')+'.</div>'; return; }
+  const inDeck=(L.vocab||[]).filter(v=>minnaInDeck(v.key)).length, tot=(L.vocab||[]).length;
+  const allIn=tot>0&&inDeck===tot;
+  body.innerHTML=`
+    <div class="mn-head" style="margin-top:14px">
+      <div class="mn-title">${escapeHtml(L.title||('Lesson '+n))}</div>
+      ${L.theme?`<div class="mn-theme">${escapeHtml(L.theme)}</div>`:''}
+    </div>
+    <div class="mn-actions">
+      <button class="chip primary" id="mnAddDeck"${allIn?' disabled':''}><svg class="ic" aria-hidden="true"><use href="#i-${allIn?'check':'plus'}"/></svg>${allIn?'All vocab in your deck':'Add all vocab to deck'}</button>
+      <span class="v-in" id="mnDeckCount">${inDeck}/${tot} in your SRS deck</span>
+    </div>
+    ${minnaVocabSection(L)}
+    ${minnaGrammarSection(L)}
+    ${minnaExamplesSection(L)}
+    ${minnaConversationSection(L)}
+    ${minnaNotesSection(n)}`;
+  wireMinnaLesson(n, L, body);
+}
+function minnaVocabSection(L){
+  if(!L.vocab||!L.vocab.length)return '';
+  const rows=L.vocab.map(v=>`<tr>
+      <td class="v-audio">${mnAudioBtn(v.audio)}</td>
+      <td><div class="mn-kanji jp">${escapeHtml(v.kanji||v.kana)}</div><div class="mn-kana jp">${escapeHtml(v.kana)}${v.context?` <span class="mn-ctx">${escapeHtml(v.context)}</span>`:''}</div></td>
+      <td class="mn-mean">${escapeHtml(v.mean)}<span class="mn-pos">${escapeHtml(CAT_LABEL[v.cat]||v.cat||'')}</span></td>
+      <td style="text-align:right">${minnaInDeck(v.key)?'<span class="v-in">✓</span>':''}</td>
+    </tr>`).join('');
+  return mnSection('Vocabulary', L.vocab.length, `<table class="mn-vocab"><tbody>${rows}</tbody></table>`, true);
+}
+function minnaExampleRows(list){
+  return `<div class="mn-ex">${list.map(e=>`<div><div class="e-jp jp">${escapeHtml(e.jp)}</div><div class="e-en">${escapeHtml(e.en)}</div></div>`).join('')}</div>`;
+}
+function minnaGrammarSection(L){
+  if(!L.grammar||!L.grammar.length)return '';
+  const items=L.grammar.map(g=>`<div class="mn-gram">
+      <div class="mn-pattern jp">${escapeHtml(g.pattern)}</div>
+      ${g.structure?`<div class="mn-structure jp">${escapeHtml(g.structure)}</div>`:''}
+      ${g.explain?`<div class="mn-explain">${escapeHtml(g.explain)}</div>`:''}
+      ${g.examples&&g.examples.length?minnaExampleRows(g.examples):''}
+    </div>`).join('');
+  return mnSection('Grammar', L.grammar.length, items, true);
+}
+function minnaExamplesSection(L){
+  if(!L.examples||!L.examples.length)return '';
+  return mnSection('Example sentences', L.examples.length, minnaExampleRows(L.examples), false);
+}
+function minnaConversationSection(L){
+  const c=L.conversation; if(!c||!c.lines||!c.lines.length)return '';
+  const head=c.title?`<div class="mn-theme jp" style="margin:0 0 8px">${escapeHtml(c.title)}</div>`:'';
+  const audio=c.audio?`<div class="mn-conv-audio">${mnAudioBtn(c.audio)}<span>Play the whole conversation</span></div>`:'';
+  const lines=c.lines.map(ln=>`<div class="mn-line"><div class="mn-role">${escapeHtml(ln.role||'')}</div><div><div class="l-jp jp">${escapeHtml(ln.jp)}</div><div class="l-en">${escapeHtml(ln.en)}</div></div></div>`).join('');
+  return mnSection('Conversation', c.lines.length, head+audio+lines, false);
+}
+function minnaNotesSection(n){
+  const val=escapeHtml((minnaStore.notes&&minnaStore.notes[n])||'');
+  return mnSection('My notes', null, `<div class="mn-notes"><textarea id="mnNotes" placeholder="Augment this lesson as you study with your tutor — grammar nuances, mistakes to avoid, anything. Synced to your account.">${val}</textarea><div class="mn-saved" id="mnNotesSaved"></div></div>`, false);
+}
+function wireMinnaLesson(n, L, body){
+  body.querySelectorAll('[data-aud]').forEach(b=>b.addEventListener('click',()=>mnPlay(b.dataset.aud,b)));
+  const add=body.querySelector('#mnAddDeck');
+  if(add)add.addEventListener('click',()=>{
+    const added=activateMinnaVocab(n, L.vocab||[]);
+    renderMinnaLesson(n, body);
+    setSyncStatus(added?('✓ added '+added+' word'+(added===1?'':'s')+' to your deck'):'already in your deck');
+  });
+  const ta=body.querySelector('#mnNotes');
+  if(ta){
+    let t=null;
+    ta.addEventListener('input',()=>{
+      minnaStore.notes=minnaStore.notes||{}; minnaStore.notes[n]=ta.value;
+      const s=body.querySelector('#mnNotesSaved'); if(s)s.textContent='saving…';
+      if(t)clearTimeout(t);
+      t=setTimeout(()=>{ saveMinna(); const e=body.querySelector('#mnNotesSaved'); if(e)e.textContent=account?'saved · synced':'saved on this device'; },500);
+    });
+  }
+}
+// Browse provenance badge: みんなの日本語 cards over the plain CUSTOM badge.
+function provenanceBadge(v){
+  if(v&&v.minna)return `<div class="minna-badge">みんなの日本語${v.minnaLesson?' · L'+v.minnaLesson:''}</div>`;
+  if(v&&v.custom)return '<div class="custom-badge">CUSTOM</div>';
+  return '';
+}
 
 // ---- Initial paint ----
 // The flashcard tab is the default-active panel (its deck count + due banner
