@@ -50,8 +50,9 @@ dead-end warnings.
 ## Architecture (map to the in-file section banners)
 
 Markup: `#panel-study` (flashcard setup → card stage → done), `#panel-browse`
-(filter grid), `#panel-stats` (charts + leeches), plus the header/toolbar, tabs,
-and the auth modal + sign-up banner.
+(filter grid), `#panel-stats` (charts + leeches), `#panel-minna` (the みんなの日本語
+lesson dashboard — near-empty in markup, filled at runtime by `renderMinna`), plus
+the header/toolbar, tabs, and the auth modal + sign-up banner.
 
 `verbs.js` holds the `VERBS` dataset. `app.js` sections (top to bottom): `STORAGE`
 (localStorage + SRS scheduling + leech logic) → `SETTINGS` (DB-synced prefs) →
@@ -154,6 +155,10 @@ Custom verbs (`localStorage["jpverbs_custom"]`, synced as app `custom-verbs`):
 Settings (`localStorage["jpverbs_settings"]`, synced as app `settings`):
 `{ exampleLevel, furigana, input, audio, freeReviewDue }` (the Settings page;
 migrated from the old jpverbs_exlevel/input/audio keys; `freeReviewDue` defaults on).
+Minna notes (`localStorage["jpverbs_minna"]`, synced as app `minna`):
+`{ notes:{<lesson>:string}, lastLesson:<n> }` — the みんなの日本語 dashboard's per-lesson
+scratchpad. Activated Minna *vocab* is NOT here — it lives in `jpverbs_custom` as
+tagged cards (see the みんなの日本語 dead-end).
 Leveled examples (`examples.js`, NOT in localStorage — static data):
 `EXAMPLES[rank] = { N5:[jp,en], …, N1:[jp,en] }`.
 
@@ -384,6 +389,21 @@ Component contracts you must preserve:
   (a specific tab, applied filters, expanded topics, seeded stats), set it up and
   assert via DOM `eval` rather than relying on a follow-up screenshot. Seed stats
   data by mutating `store` + calling `renderStats()` in an eval.
+- **みんなの日本語 tab (`#panel-minna`) is account-gated + fetched at runtime —
+  intentionally NOT offline-first.** Unlike the rest of the app, the Minna dashboard
+  loads content live from `/v1/minna/*` (signed-in only), so the copyrighted textbook
+  material never ships to anonymous visitors. `renderMinna()` (lazy on tab activation)
+  shows a sign-in gate when `!account`, else fetches the lesson and renders
+  vocab/grammar/examples/conversation + native-audio buttons (`/v1/minna/audio`, one
+  reused `<audio>`; same-origin so the session cookie authorizes). **Vocab "activation"
+  REUSES the custom-verb system, not a new data path:** each word becomes a tagged
+  (`みんなの日本語` + `mnn-l<n>`) DICTIONARY-form custom card via `loadCustom`/`saveCustom`
+  +`seq`, so it joins the deck/SRS/Browse/Stats and syncs under `custom-verbs` for free
+  — idempotent via a stable `minnaKey`, marked `minna:true` (Browse shows a みんなの日本語
+  badge over CUSTOM via `provenanceBadge`). The only NEW synced blob is per-lesson NOTES
+  under the `minna` app key (4th sync trio). Content source of truth is the server's
+  `data/minna/lesson-<n>.json` (git-tracked, curated from the `scripts/scrape-minna.ts`
+  draft). Phase 2 — record-your-voice + compare to native audio — is planned (NEXT_STEPS).
 
 ## Change log — UX/design pass (this is the conversation record)
 

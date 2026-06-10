@@ -9,6 +9,15 @@ split, custom-verb sync, and Google TTS — what's left is one genuinely-deferre
 (needs email infra). Add new ideas to "Ideas / not yet scoped" as they come up.
 
 ## Done (most recent first)
+- ~~みんなの日本語 dashboard (Chapter 23)~~ — **shipped.** A 4th, **account-gated** tab:
+  a Minna no Nihongo lesson dashboard (vocab with native audio, grammar, example
+  sentences, conversation) fetched at runtime from `/v1/minna/*` (signed-in only — the
+  copyrighted content never reaches anon visitors). Vocab "activates" into the SRS deck
+  as tagged custom cards (`みんなの日本語` + `mnn-l<n>`, dictionary form); per-lesson notes
+  sync under the new `minna` app key. Content is curated in `data/minna/lesson-23.json`
+  from the `scripts/scrape-minna.ts` extractor. Verified end-to-end (gated 401s, render,
+  audio proxy+cache, deck merge, notes sync) desktop + mobile. See the みんなの日本語
+  dead-end in [CLAUDE.md](CLAUDE.md). **Next: Phase 2** (record-and-compare, below).
 - ~~Multi-category content (de-verb-ify, the UI half)~~ — **shipped.** A `cat` filter
   facet (`verb/adjective/noun/adverb/phrase`) leads both filter panels as a fifth
   AND'd facet; the Type + Transitivity rows are `.verb-only` and hide (`syncVerbRows`)
@@ -124,6 +133,17 @@ split, custom-verb sync, and Google TTS — what's left is one genuinely-deferre
   "What's deliberately NOT in v1."
 
 ## Ideas / not yet scoped
+- **みんなの日本語 record-and-compare (Phase 2 — the marquee feature).** Mic capture
+  (`MediaRecorder`) → server-stored per-user recordings (a `minna_recordings` table +
+  `recording/<user>/<lesson>/<item>/…` storage + auth'd POST/GET/DELETE, following the
+  `study_sessions` template) → a compare player: ▶ example, ▶ you, ▶ example→you,
+  ▶ simultaneous, optional dual waveform (Web Audio `decodeAudioData` → canvas), speed/
+  loop. Target = the native vnjpclub audio already cached same-origin by Phase 1. Add a
+  per-user/per-item cap to bound storage. Deferred from the ch23 build by design.
+- **More Minna lessons + sections.** Run `scripts/scrape-minna.ts` for other lessons +
+  curate; add exercises/listening/kanji sections; a みんなの日本語 source filter chip in
+  Browse (the `mnn-l<n>` tags are already on the cards). Optional: furigana on the
+  example/conversation sentences (plain JP today).
 - **Built-in non-verb content.** The category *capability* shipped (filters, modal,
   per-category stamps/spines), but the 100 baked-in cards are all verbs — users add
   non-verbs themselves. A curated set of common adjectives/nouns/adverbs in `verbs.js`
