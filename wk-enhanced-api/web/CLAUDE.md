@@ -77,7 +77,8 @@ and the auth modal + sign-up banner.
   `cfg` (flashcard deck) and `bcfg` (browse grid) are independent configs.
   `annotateJlptChips` disables empty JLPT levels.
 - **Data + custom verbs:** `DATA` is a `let` = baked `VERBS` + `loadCustom().verbs`,
-  rebuilt by `rebuildData()`; `MAXRANK` tracks the top rank (rank filter extends
+  rebuilt by `rebuildData()`; `attachLevels()` also defaults `v.cat='verb'` on every
+  card (transition groundwork — see the de-verb-ify dead-end); `MAXRANK` tracks the top rank (rank filter extends
   past 100). `openVerbModal`/`saveVerb`/`deleteVerb` are the #verbModal CRUD;
   custom verbs persist in `jpverbs_custom` and SYNC to the cloud — `saveCustom`
   writes localStorage + schedules a push; `saveCustomLocal` is the no-push variant
@@ -283,6 +284,17 @@ Component contracts you must preserve:
   sentence and tiers should escalate N5→N1; keep that if you regenerate. The example
   shows on the ANSWER side only (the sentence reveals the reading via furigana, so
   it would spoil the reading-recall question if shown on the prompt).
+- **The app is mid-transition away from "verbs only" — prefer "word"/"card" in new
+  copy.** It was born a verb trainer (the dataset global is still `VERBS`, the data
+  file is `verbs.js`, and all 100 built-ins ARE verbs), and renaming those internals
+  would be churn for no gain. But the user-facing identity is now generic
+  (日常日本語 / "Japanese Trainer", "The words you keep getting wrong") and every card
+  carries `cat:'verb'` (defaulted in `attachLevels`, set on custom verbs in
+  `saveVerb`) so non-verb content can be added later keyed off `cat`. Don't
+  reintroduce verb-only framing in headers/empty-states. The verb-conjugation bits
+  that ARE genuinely verb-specific (the `type` field, the Godan/Ichidan/… Type
+  filter, the "Add verb" modal) are intentionally still verb-shaped — generalizing
+  those is the actual (not-yet-done) transition work, tracked in NEXT_STEPS.
 - **Free study deliberately does NOT change the SRS schedule, and reviewing a card
   early never promotes it.** Two study kinds (`cfg.kind`): *SRS review* serves only
   due cards (`buildDeck` intersects `isDue`) and reschedules them; *free study* is
@@ -319,6 +331,10 @@ Component contracts you must preserve:
 
 Commits, newest first (all on `main`; touch the split web/ files + `src/` where noted):
 
+1. **De-verb-ify groundwork.** Renamed to 日常日本語 / "Japanese Trainer" (kicker,
+   title, headline, README), neutralized "verb"→"word/card" copy, and defaulted
+   `cat:'verb'` onto every card (`attachLevels` + `saveVerb`) as the model-level
+   start of broadening past verbs. Verb-conjugation UI stays verb-shaped for now.
 1. **SRS vs free study + stats split + forecast slot rework.** New "Study type"
    picker toggle (`cfg.kind`): free study never changes review dates, SRS review
    serves due cards only and reschedules; `grade` gates `scheduleCard` on

@@ -9,6 +9,11 @@ split, custom-verb sync, and Google TTS — what's left is one genuinely-deferre
 (needs email infra). Add new ideas to "Ideas / not yet scoped" as they come up.
 
 ## Done (most recent first)
+- ~~De-verb-ify groundwork~~ — **shipped (partial, by design).** Renamed to
+  日常日本語 / "Japanese Trainer", dropped "verbs-only" framing from the headers/
+  empty-states, and tagged every card with `cat:'verb'` (`attachLevels` default +
+  `saveVerb`). The verb-conjugation UI (Type filter, Add-verb modal, `type` field)
+  is still verb-shaped — finishing that is the "multi-category content" idea below.
 - ~~Jisho dictionary links~~ — **shipped.** Each card links out to
   `https://jisho.org/word/<headword>` (`jishoUrl`): on the flashcard answer side
   and in the Browse detail modal, opening in a new tab. New `i-external` icon.
@@ -90,6 +95,12 @@ split, custom-verb sync, and Google TTS — what's left is one genuinely-deferre
   "What's deliberately NOT in v1."
 
 ## Ideas / not yet scoped
+- **Multi-category content (finish the de-verb-ify transition).** `cat` is now on
+  every card but everything is still `'verb'`. To actually add adjectives / nouns /
+  phrases: a category facet in the filters, conditional verb-only UI (the
+  Godan/Ichidan Type filter + the `type` field + the Add-verb modal's conjugation
+  fields only make sense for `cat:'verb'`), and a category picker in the add/edit
+  modal. Rename the `VERBS`/`verbs.js` internals only if it stops being mostly verbs.
 - **Conjugation drills.** The dataset has `type` (godan/ichidan/irregular) — enough
   to quiz て-form / past / negative / potential. A natural next study mode.
 - **Custom-verb sync conflict handling.** Today it's last-write-wins + server-wins on

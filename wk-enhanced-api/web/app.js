@@ -39,7 +39,13 @@ let MAXRANK=DATA.reduce((m,v)=>Math.max(m,v.rank),0)||100;
 const JLPT_TIERS=['N5','N4','N3','N2','N1'];
 function attachLevels(){
   const E = typeof EXAMPLES!=='undefined' ? EXAMPLES : {};
-  DATA.forEach(v=>{ v.levels = E[v.rank] || null; });
+  DATA.forEach(v=>{
+    v.levels = E[v.rank] || null;
+    // Part-of-speech category. Everything is currently a verb, but tagging it now
+    // is the groundwork for broadening past verbs (adjectives / nouns / phrases):
+    // future filters/labels can key off cat without backfilling the dataset.
+    if(!v.cat) v.cat='verb';
+  });
 }
 attachLevels();
 // Which tiers does this verb actually have a sentence for? (drives the selector).
@@ -1610,7 +1616,7 @@ function saveVerb(e){
   const tags=val('vfTags').split(',').map(s=>s.trim().toLowerCase()).filter(Boolean);
   if(!tags.includes('custom'))tags.push('custom');
   const exJp=val('vfExJp');
-  const verb={ jp, read, mean, type:val('vfType'), jlpt:val('vfJlpt'), trans:val('vfTrans'),
+  const verb={ jp, read, mean, cat:'verb', type:val('vfType'), jlpt:val('vfJlpt'), trans:val('vfTrans'),
     tags, mnem:val('vfMnem'), tip:val('vfTip'), ex: exJp?[[exJp,val('vfExEn')]]:[], custom:true };
   const cs=loadCustom();
   const existing = editingRank!=null ? cs.verbs.findIndex(v=>v.rank===editingRank) : -1;

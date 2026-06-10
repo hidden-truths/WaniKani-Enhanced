@@ -1,11 +1,13 @@
 <!DOCTYPE html>
 <!--
 ================================================================================
-  JAPANESE VERB TRAINER  ·  動詞トレーナー
+  日常日本語  ·  JAPANESE TRAINER
 ================================================================================
-  A no-build, offline-capable flashcard + spaced-repetition study tool for the
-  100 most frequent Japanese verbs (ranked by the BCCWJ corpus), plus any verbs
-  you add yourself.
+  A no-build, offline-capable flashcard + spaced-repetition study tool for
+  everyday Japanese. The built-in content is currently the 100 most frequent
+  verbs (ranked by the BCCWJ corpus, each tagged cat:"verb"), plus any cards you
+  add yourself — but the model is being generalized beyond verbs (see cat below),
+  so prefer "word"/"card" over "verb" in new user-facing copy.
 
   FIVE static files, no bundler / npm / framework (it outgrew the single-file
   era — see HISTORY below):
@@ -67,12 +69,14 @@
 --------------------------------------------------------------------------------
   DATA MODEL
 --------------------------------------------------------------------------------
-  Each verb (see VERBS[]):
+  Each card (see VERBS[]; historically verbs only — being generalized):
     { rank   : 1..100   corpus-frequency rank (BCCWJ; see note on #1 below)
       jp     : kanji/kana headword (e.g. "走る")
       read   : reading in hiragana (e.g. "はしる")
       mean   : English gloss
-      type   : "godan" | "ichidan" | "irregular"   (conjugation class)
+      cat    : part-of-speech category; "verb" for all current entries (defaulted
+               in attachLevels() if absent). Groundwork for adding non-verbs.
+      type   : "godan" | "ichidan" | "irregular"   (verb conjugation class)
       jlpt   : "N5".."N1"   approximate JLPT level
       trans  : "t" | "i"    transitive / intransitive
       tags   : []  semantic + structural groups ("motion","ti-pair","fake",...)
@@ -176,7 +180,7 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>動詞 — Verb Trainer</title>
+<title>日常日本語 — Japanese Trainer</title>
 <!-- The ONLY external dependency. Five Japanese webfaces for the font switcher
      (gothic / mincho / rounded / soft-serif / brush). If this fails to load
      (offline), the app falls back to system Japanese fonts and still works. -->
@@ -221,7 +225,7 @@
        (a styled button is nicer than the raw <input type=file>). Handlers in
        THEME and EXPORT/IMPORT sections. aria-labels added for screen readers. -->
   <div class="topbar">
-    <div class="kicker">日常動詞 · Verb Trainer</div>
+    <div class="kicker">日常日本語 · Japanese Trainer</div>
     <div class="toolbar">
       <span class="acct-status" id="syncStatus"></span>
       <button class="chip" id="accountBtn" aria-label="Account" title="Sign in to sync progress"><svg class="ic" aria-hidden="true"><use href="#i-user"/></svg>Sign in</button>
@@ -232,7 +236,7 @@
       <input type="file" id="importFile" accept="application/json,.json" hidden>
     </div>
   </div>
-  <h1>The verbs you keep getting wrong<span class="s">まちがえやすい動詞 · flashcards + SRS</span></h1>
+  <h1>The words you keep getting wrong<span class="s">まちがえやすい日本語 · flashcards + SRS</span></h1>
 </header>
 
 <!-- Top-level view switcher. data-tab maps to #panel-<tab>; see TAB NAV. -->
@@ -531,7 +535,7 @@
     <div class="row" style="margin:2px 0 0"><button class="chip" id="addVerbBtn"><svg class="ic" aria-hidden="true"><use href="#i-plus"/></svg>Add verb</button><span class="count" id="customCount"></span></div>
     <div class="hint">Tap a card to expand · rank shown bottom-right, accuracy bottom-left once drilled</div>
     <div class="grid" id="grid"></div>
-    <div class="empty" id="empty" style="display:none">No verbs match that filter.</div>
+    <div class="empty" id="empty" style="display:none">No words match that filter.</div>
   </div>
 
   <!-- ===== STATS PANEL ================================================

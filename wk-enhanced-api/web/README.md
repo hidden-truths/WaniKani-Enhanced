@@ -1,12 +1,15 @@
-# Japanese Verb Trainer (web study app)
+# 日常日本語 — Japanese Trainer (web study app)
 
-A no-build, offline-capable flashcard + spaced-repetition study tool for the
-**100 most frequent Japanese verbs** (BCCWJ corpus frequency) plus any verbs you
-add yourself. Flashcards with a Leitner SRS, typed-reading auto-grading, Google
-text-to-speech, **five JLPT-leveled (N5→N1) example sentences per verb**, a
-filterable browse grid, progress stats, light/dark themes, five Japanese fonts,
-JSON export/import, and optional **email/password accounts that sync progress AND
-your custom verbs across devices**.
+A no-build, offline-capable flashcard + spaced-repetition study tool for everyday
+Japanese. The built-in content is currently the **100 most frequent Japanese
+verbs** (BCCWJ corpus frequency, each tagged `cat:"verb"`) plus any cards you add
+yourself — the data model is being generalized beyond verbs. Flashcards with a
+Leitner SRS (separate **SRS review** and **free study** modes), romaji-or-kana
+typed-reading auto-grading, Google text-to-speech, **five JLPT-leveled (N5→N1)
+example sentences per card**, an upcoming-reviews forecast, Jisho dictionary
+links, a filterable browse grid, progress stats, light/dark themes, five Japanese
+fonts, JSON export/import, and optional **email/password accounts that sync
+progress AND your custom cards across devices**.
 
 Five static files — [index.html](index.html) (markup) + [styles.css](styles.css)
 + [verbs.js](verbs.js) (dataset) + [examples.js](examples.js) (leveled sentences)

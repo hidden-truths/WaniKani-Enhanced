@@ -129,6 +129,9 @@ const count = (c: any) => core.DATA.filter((v) => core.passes(v, c)).length;
 test("the dataset loads under the DOM stub", () => {
   expect(core.DATA.length).toBeGreaterThanOrEqual(100);
   expect(core.DATA.every((v) => v.jp && v.read && v.type)).toBe(true);
+  // attachLevels() defaults a part-of-speech category onto every card (transition
+  // groundwork away from verbs-only — all current entries are "verb").
+  expect(core.DATA.every((v) => v.cat === "verb")).toBe(true);
 });
 
 test("every built-in verb has all 5 leveled examples (well-formed)", () => {
