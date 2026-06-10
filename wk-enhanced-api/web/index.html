@@ -125,8 +125,9 @@
      A keyboard roving-tabindex pattern on chip rows is the proper fix.
   5. JLPT levels are approximate (hand-assigned). N2/N1 filter buttons exist but
      will be near-empty — the 100 most frequent verbs are almost all N5–N4.
-  6. localStorage only. No cloud sync; progress is per-browser. Export/Import is
-     the manual bridge. If this goes multi-device, that's a backend.
+  6. [DONE] Cloud sync shipped — email/password accounts mirror progress across
+     devices (see CLOUD ACCOUNTS + SYNC). localStorage remains the offline-first
+     baseline; Export/Import is still the no-account manual bridge.
   7. SCALE: the SPLIT POINT. Once VERBS[] or the feature set grows past comfort
      in one file, separate into verbs.json (data) + app.js + styles.css and add
      a trivial static server. The section banners below are drawn to make that

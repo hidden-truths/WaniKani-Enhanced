@@ -308,6 +308,8 @@ DO Droplet ($6/mo, SFO3) + DO Spaces ($5/mo) + Cloudflare Tunnel (free) ≈ **$1
 
 The server now also hosts the **Japanese verb-trainer study app** at `/` and backs it with **email/password accounts + per-user progress sync**. This is a distinct surface from the vocab/warm API the userscript uses — it has its own auth model and its own routes.
 
+> **The study-app frontend has its own docs** in [web/](web/): [web/README.md](web/README.md) (overview/run), [web/CLAUDE.md](web/CLAUDE.md) (architecture + design-system contracts + dead-ends), [web/NEXT_STEPS.md](web/NEXT_STEPS.md). This section below covers only the **server side** of that app (auth/progress routes + tables).
+
 - **Auth model:** opaque session token in an `httpOnly`, `SameSite=Lax`, `Secure`(prod) cookie named `wk_session`. No JWT, no bearer token, no new dependency — `Bun.password` (argon2id) hashes passwords, `hono/cookie` sets the cookie, `bun:sqlite` stores sessions. See [src/lib/auth.ts](src/lib/auth.ts).
 - **Same-origin only:** the app is served from the same origin as the API, so the cookie travels automatically on `fetch(..., {credentials:'include'})`. The blanket `Access-Control-Allow-Origin: *` CORS does **not** apply to these (same-origin requests skip CORS); a cross-origin caller can't use cookie auth against `*` anyway, which is fine — only the served app needs these endpoints.
 - **Progress is opaque:** `PUT /v1/progress/{app}` stores whatever the client serializes (the verb trainer's `store` blob). The server validates size (≤1 MB) and the `app` enum, nothing else. The client owns its own schema/versioning.
