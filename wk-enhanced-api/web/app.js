@@ -160,22 +160,31 @@ function nextDueLabel(rank){
    not a bug. reviewForecast() is pure (DATA + store in, buckets out); renderForecast()
    draws the hand-rolled vertical-bar SVG (no chart lib, per the no-build contract). */
 const HOUR_MS=3600000;
+const WEEKDAYS=['Sun','Mon','Tue','Wed','Thu','Fri','Sat'];
+const MONTHS=['Jan','Feb','Mar','Apr','May','Jun','Jul','Aug','Sep','Oct','Nov','Dec'];
 let forecastHorizon='week';   // '24h' | 'week' | 'month' | 'year' — view-only, not synced
+// Each window has a FIXED slot count so the breakdown reads cleanly: 24h→24 hourly
+// slots, week→7 days, month→the current month's day count (28–31), year→12 months.
+// `tip` is the per-slot hover/label suffix; `lab(i)` is the (possibly empty) x-axis
+// label — sparse for the dense windows. base is now, used for weekday/month names.
+function forecastWindow(h,base){
+  if(h==='24h')  return {slots:24, idxOf:ms=>Math.floor(ms/HOUR_MS),       lab:i=>i===0?'now':(i%6===0?'+'+i+'h':''),                 tip:i=>i===0?'next hour':'in '+i+'h'};
+  if(h==='week') return {slots:7,  idxOf:ms=>Math.floor(ms/DAY_MS),        lab:i=>i===0?'today':WEEKDAYS[(base.getDay()+i)%7],         tip:i=>i===0?'today':WEEKDAYS[(base.getDay()+i)%7]};
+  if(h==='month'){const dim=new Date(base.getFullYear(),base.getMonth()+1,0).getDate();
+                 return {slots:dim,idxOf:ms=>Math.floor(ms/DAY_MS),        lab:i=>i===0?'today':(i%5===0?'+'+i+'d':''),                tip:i=>i===0?'today':'in '+i+'d'};}
+  return              {slots:12, idxOf:ms=>Math.floor(ms/(30*DAY_MS)),  lab:i=>MONTHS[(base.getMonth()+i)%12],                     tip:i=>i===0?'this month':'in '+i+'mo'};
+}
 function reviewForecast(h){
-  const now=Date.now();
-  let slots,idxOf,labelOf;
-  if(h==='24h'){      slots=24; idxOf=ms=>Math.floor(ms/HOUR_MS);       labelOf=i=>i===0?'now':(i%6===0?'+'+i+'h':''); }
-  else if(h==='week'){slots=7;  idxOf=ms=>Math.floor(ms/DAY_MS);        labelOf=i=>i===0?'today':'+'+i+'d'; }
-  else if(h==='month'){slots=30;idxOf=ms=>Math.floor(ms/DAY_MS);        labelOf=i=>i===0?'today':(i%5===0?'+'+i+'d':''); }
-  else{               slots=12; idxOf=ms=>Math.floor(ms/(30*DAY_MS));   labelOf=i=>i===0?'now':'+'+i+'mo'; }
-  const bars=Array.from({length:slots},(_,i)=>({label:labelOf(i),count:0,now:i===0}));
+  const now=Date.now(), base=new Date(now);
+  const w=forecastWindow(h,base);
+  const bars=Array.from({length:w.slots},(_,i)=>({label:w.lab(i),tip:w.tip(i),count:0,now:i===0}));
   DATA.forEach(v=>{
     const c=store.cards[v.rank];
     if(!c||!c.box)return;                         // new/unseen cards aren't scheduled yet
     const delta=(c.due||0)-now;
-    let idx=delta<=0?0:idxOf(delta);              // overdue / due-now → first slot
+    let idx=delta<=0?0:w.idxOf(delta);            // overdue / due-now → first slot
     if(idx<0)idx=0;
-    if(idx<slots)bars[idx].count++;               // beyond the window → not shown
+    if(idx<w.slots)bars[idx].count++;             // beyond the window → not shown
   });
   return {bars,max:bars.reduce((m,b)=>Math.max(m,b.count),0)};
 }
@@ -184,21 +193,24 @@ function renderForecast(){
   const {bars,max}=reviewForecast(forecastHorizon);
   const total=bars.reduce((s,b)=>s+b.count,0);
   if(!total){ el.innerHTML='<div class="fcast-empty">No reviews scheduled in this window — drill some cards to start the clock.</div>'; return; }
-  const W=720,H=150,pad={l:8,r:8,t:18,b:18};
-  const n=bars.length, iw=W-pad.l-pad.r, ih=H-pad.t-pad.b;
-  const bw=iw/n, gap=Math.min(6,bw*0.2);
-  const yOf=c=>pad.t+ih-(max?c/max:0)*ih;
+  const n=bars.length, W=720, H=156, pad={l:8,r:8,t:18,b:22};
+  const iw=W-pad.l-pad.r, ih=H-pad.t-pad.b, base=pad.t+ih;
+  const bw=iw/n, gap=Math.min(6,bw*0.22);
+  const yOf=c=>base-(max?c/max:0)*ih;
   let g=`<svg viewBox="0 0 ${W} ${H}" role="img" aria-label="Upcoming reviews over the next ${forecastHorizon}; ${total} scheduled">`;
-  g+=`<line x1="${pad.l}" y1="${pad.t+ih}" x2="${W-pad.r}" y2="${pad.t+ih}" stroke="var(--line)" stroke-width="1"/>`;
+  // Every slot gets a faint background box so the full time breakdown is visible
+  // even where nothing is due (24 hours / 7 days / a month of days / 12 months).
   bars.forEach((b,i)=>{
-    const x=pad.l+i*bw, y=yOf(b.count), bh=Math.max(0,pad.t+ih-y), cx=(x+bw/2).toFixed(1);
-    const col=b.now?'var(--godan)':'var(--ichidan)';
+    const x=(pad.l+i*bw+gap/2).toFixed(1), bwid=(bw-gap).toFixed(1), cx=(pad.l+i*bw+bw/2).toFixed(1);
+    g+=`<rect x="${x}" y="${pad.t.toFixed(1)}" width="${bwid}" height="${ih.toFixed(1)}" rx="2" fill="var(--paper-2)" opacity="0.55"/>`;
     if(b.count){
-      g+=`<rect x="${(x+gap/2).toFixed(1)}" y="${y.toFixed(1)}" width="${(bw-gap).toFixed(1)}" height="${bh.toFixed(1)}" rx="2" fill="${col}" opacity="0.9"><title>${b.label||('slot '+i)}: ${b.count} card${b.count===1?'':'s'}</title></rect>`;
+      const y=yOf(b.count), col=b.now?'var(--godan)':'var(--ichidan)';
+      g+=`<rect x="${x}" y="${y.toFixed(1)}" width="${bwid}" height="${(base-y).toFixed(1)}" rx="2" fill="${col}" opacity="0.92"><title>${b.tip}: ${b.count} card${b.count===1?'':'s'}</title></rect>`;
       g+=`<text x="${cx}" y="${(y-4).toFixed(1)}" text-anchor="middle" font-size="9" fill="var(--muted)" font-family="monospace">${b.count}</text>`;
     }
-    if(b.label)g+=`<text x="${cx}" y="${H-6}" text-anchor="middle" font-size="8" fill="var(--muted)" font-family="monospace">${b.label}</text>`;
+    if(b.label)g+=`<text x="${cx}" y="${H-7}" text-anchor="middle" font-size="8" fill="var(--muted)" font-family="monospace">${b.label}</text>`;
   });
+  g+=`<line x1="${pad.l}" y1="${base.toFixed(1)}" x2="${W-pad.r}" y2="${base.toFixed(1)}" stroke="var(--line)" stroke-width="1"/>`;
   g+='</svg>';
   el.innerHTML=g;
 }

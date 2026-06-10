@@ -278,12 +278,16 @@ Component contracts you must preserve:
   it would spoil the reading-recall question if shown on the prompt).
 - **The review forecast is front-loaded by design** — Leitner intervals top out at
   16 days (`BOX_DAYS`), so EVERY scheduled card is due within ~16 days. The `month`
-  view (30 daily slots) therefore captures the whole real schedule; the `year` view
-  (12 monthly slots) collapses everything into slot 0 ("now") until the deck grows
-  long intervals it can't reach. That's accurate, not a bug — don't "fix" it by
-  faking spread. The four windows exist because they were requested; `24h` (hourly)
-  is mostly a single "now" spike for the same reason (nothing comes due sub-daily).
-  New/unseen cards (`box===0`) are excluded — they're not scheduled yet.
+  view (the current month's day count, 28–31 slots) therefore captures the whole
+  real schedule; the `year` view (12 monthly slots) collapses everything into slot 0
+  until the deck grows long intervals it can't reach. That's accurate, not a bug —
+  don't "fix" it by faking spread. `24h` (24 hourly slots) is mostly a single "now"
+  spike for the same reason (nothing comes due sub-daily). EVERY slot is drawn as a
+  faint background box (via `forecastWindow(h,base)`'s fixed `slots` count) so the
+  full breakdown is visible even where nothing is due — that's the point of the
+  "draw all boxes" pass; don't go back to only emitting bars for non-empty buckets.
+  Labels are date-aware (weekday names for week, month names for year). New/unseen
+  cards (`box===0`) are excluded — they're not scheduled yet.
 - **Browser-preview tooling reloads/recreates the tab on capture**, which resets
   in-memory state (active tab defaults back to Flashcards; `cfg`/`bcfg` filter
   selections are lost — only localStorage persists). To verify a *transient* state
