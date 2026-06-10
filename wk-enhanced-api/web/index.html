@@ -430,6 +430,8 @@
   .chart-card{border:1px solid var(--line);border-radius:4px;padding:18px;background:var(--paper);margin-bottom:18px}
   .chart-title{font-family:"SF Mono",ui-monospace,monospace;font-size:11px;letter-spacing:.16em;text-transform:uppercase;color:var(--muted);margin-bottom:12px}
   svg{display:block;width:100%;height:auto}    /* charts scale to container width */
+  /* Line-chart points enlarge on hover (the native <title> shows the readout). */
+  svg circle.pt{transition:r .12s ease} svg circle.pt:hover{r:5.5}
   .empty{text-align:center;padding:50px 20px;color:var(--muted)}
   .danger{font-family:"SF Mono",ui-monospace,monospace;font-size:11px;color:var(--godan);cursor:pointer;background:none;border:none;text-decoration:underline}
 
@@ -1830,23 +1832,35 @@ function renderBrowse(){
    still literal hex (gridlines/axis labels) because they're intentionally the
    light-theme hairline tone; if you want them theme-aware, route through vars.
    ========================================================================== */
-// Simple 0–100% line chart. pts = [{y, label}]. Single-point series is centered.
+// 0–100% line chart. pts = [{y, label}]. Single-point series is centered.
+// opt: {color, aria}. Theme-aware (gridlines/labels via CSS vars). Extras: an axis
+// caption, a dashed average reference line, per-point value labels (when few enough)
+// and a native <title> readout on every point for hover. No chart library.
 function lineChart(el,pts,opt={}){
-  const W=720,H=200,pad={l:34,r:14,t:12,b:28};
+  const W=720,H=212,pad={l:38,r:50,t:18,b:30};
   el.innerHTML='';
   if(pts.length===0){el.innerHTML='<div class="empty" style="padding:24px">No data yet — finish a flashcard session.</div>';return;}
   const iw=W-pad.l-pad.r,ih=H-pad.t-pad.b;
-  const n=pts.length;
+  const n=pts.length, color=opt.color||'var(--godan)';
   const xOf=i=>pad.l+(n===1?iw/2:iw*i/(n-1));   // x position by index
   const yOf=y=>pad.t+ih-(y/100)*ih;              // y position by percentage
-  let g=`<svg viewBox="0 0 ${W} ${H}" role="img">`;
-  // gridlines + y-axis labels at 0/25/50/75/100
-  [0,25,50,75,100].forEach(gy=>{const y=yOf(gy);g+=`<line x1="${pad.l}" y1="${y}" x2="${W-pad.r}" y2="${y}" stroke="#d9d1c0" stroke-width="1"/><text x="${pad.l-6}" y="${y+3}" text-anchor="end" font-size="9" fill="#7a7164" font-family="monospace">${gy}</text>`;});
-  // the data polyline + points; x-axis labels thinned out when many points
-  let dpath=pts.map((p,i)=>`${i?'L':'M'}${xOf(i).toFixed(1)},${yOf(p.y).toFixed(1)}`).join(' ');
-  g+=`<path d="${dpath}" fill="none" stroke="var(--godan)" stroke-width="2"/>`;
-  pts.forEach((p,i)=>{g+=`<circle cx="${xOf(i)}" cy="${yOf(p.y)}" r="3.2" fill="var(--godan)"/>`;
-    if(n<=12||i%Math.ceil(n/8)===0)g+=`<text x="${xOf(i)}" y="${H-10}" text-anchor="middle" font-size="8" fill="#7a7164" font-family="monospace">${p.label}</text>`;});
+  let g=`<svg viewBox="0 0 ${W} ${H}" role="img" aria-label="${opt.aria||'Accuracy over time, percent correct'}">`;
+  // gridlines + y-axis labels at 0/25/50/75/100 (theme-aware tones)
+  [0,25,50,75,100].forEach(gy=>{const y=yOf(gy);g+=`<line x1="${pad.l}" y1="${y}" x2="${W-pad.r}" y2="${y}" stroke="var(--line)" stroke-width="1"/><text x="${pad.l-6}" y="${y+3}" text-anchor="end" font-size="9" fill="var(--muted)" font-family="monospace">${gy}</text>`;});
+  // y-axis caption
+  g+=`<text x="${pad.l-6}" y="${pad.t-6}" text-anchor="end" font-size="8" fill="var(--muted)" font-family="monospace">% correct</text>`;
+  // dashed average reference line + right-margin label
+  const avg=Math.round(pts.reduce((s,p)=>s+p.y,0)/n), ay=yOf(avg);
+  g+=`<line x1="${pad.l}" y1="${ay}" x2="${W-pad.r}" y2="${ay}" stroke="var(--ichidan)" stroke-width="1" stroke-dasharray="3 3" opacity="0.65"/><text x="${W-pad.r+4}" y="${ay+3}" font-size="8.5" fill="var(--ichidan)" font-family="monospace">avg ${avg}%</text>`;
+  // area fill under the line + the line itself
+  const dpath=pts.map((p,i)=>`${i?'L':'M'}${xOf(i).toFixed(1)},${yOf(p.y).toFixed(1)}`).join(' ');
+  g+=`<path d="${dpath} L${xOf(n-1).toFixed(1)},${yOf(0).toFixed(1)} L${xOf(0).toFixed(1)},${yOf(0).toFixed(1)} Z" fill="${color}" opacity="0.08"/>`;
+  g+=`<path d="${dpath}" fill="none" stroke="${color}" stroke-width="2"/>`;
+  // points (with hover readout) + value labels (few points) + thinned x-axis labels
+  pts.forEach((p,i)=>{const x=xOf(i),y=yOf(p.y);
+    g+=`<circle class="pt" cx="${x}" cy="${y}" r="3.2" fill="${color}"><title>${p.label}: ${p.y}%</title></circle>`;
+    if(n<=12)g+=`<text x="${x}" y="${y-7}" text-anchor="middle" font-size="8.5" fill="var(--muted)" font-family="monospace">${p.y}</text>`;
+    if(n<=12||i%Math.ceil(n/8)===0)g+=`<text x="${x}" y="${H-9}" text-anchor="middle" font-size="8" fill="var(--muted)" font-family="monospace">${p.label}</text>`;});
   g+='</svg>';el.innerHTML=g;
 }
 // Horizontal bar list. items = [{label, val(0–100), color}].
@@ -1900,10 +1914,10 @@ function renderStats(){
     <div class="statbox"><div class="v">${store.sessions.length}</div><div class="l">Sessions</div></div>`;
   // Daily accuracy line: one point per day in store.daily (label = MM-DD).
   const days=Object.keys(store.daily).sort();
-  lineChart(document.getElementById('chartDaily'),days.map(d=>({y:Math.round(100*store.daily[d].right/store.daily[d].tot),label:d.slice(5)})));
+  lineChart(document.getElementById('chartDaily'),days.map(d=>({y:Math.round(100*store.daily[d].right/store.daily[d].tot),label:d.slice(5)})),{aria:'Daily accuracy, percent correct per day'});
   // Per-session line: last 20 sessions, labeled by their absolute session number.
   const sess=store.sessions.slice(-20);
-  lineChart(document.getElementById('chartSession'),sess.map((s,i)=>({y:Math.round(100*s.right/s.tot),label:'#'+(store.sessions.length-sess.length+i+1)})));
+  lineChart(document.getElementById('chartSession'),sess.map((s,i)=>({y:Math.round(100*s.right/s.tot),label:'#'+(store.sessions.length-sess.length+i+1)})),{color:'var(--ichidan)',aria:'Per-session accuracy, percent correct per session'});
   // Leech list: the cards isLeech() currently flags, with their rolling accuracy.
   const lz=leeches();const ll=document.getElementById('leechList');
   if(!lz.length){ll.innerHTML='<div class="empty" style="padding:18px">No leeches detected. A leech is any card under 60% over its last 4+ attempts.</div>';}
