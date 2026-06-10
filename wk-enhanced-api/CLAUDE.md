@@ -126,9 +126,10 @@ Six SQLite tables (schema in [src/db/schema.sql](src/db/schema.sql)):
 - `warm_jobs` — append-only audit log. One row per `warmSingle` or `warmAll` invocation. Exposed via `GET /v1/admin/jobs`.
 - `users` — one row per account. `email` (lowercased, UNIQUE) + `password_hash` (`Bun.password`, argon2id). Added for the study-app accounts feature.
 - `sessions` — opaque session tokens (256-bit hex) → user, with `expires_at`. One row per active login; the token is the `wk_session` httpOnly cookie. Pruned lazily on expired-token access + hourly via `deleteExpiredSessions()`. `ON DELETE CASCADE` from `users`.
-- `user_progress` — per-user, per-app JSON progress blob (PK `(user_id, app)`; `app` ∈ {`verbs`, `custom-verbs`} — the progress store and the custom-verb definitions sync as two separate rows). The cloud-synced replacement for the study app's localStorage. The blob is opaque to the server. `ON DELETE CASCADE` from `users`.
+- `user_progress` — per-user, per-app JSON progress blob (PK `(user_id, app)`; `app` ∈ {`verbs`, `custom-verbs`, `settings`} — the progress store, the custom-verb definitions, and the Settings-page preferences each sync as a separate row). The cloud-synced replacement for the study app's localStorage. The blob is opaque to the server. `ON DELETE CASCADE` from `users`.
+- `study_sessions` — append-only, never-pruned log of completed study sessions (one row per finished session: `right_count`/`total_count`/`mode`/optional `details` JSON). The durable history record: the client also keeps a capped copy inside the `verbs` blob for charts, but this table is the source of truth so session history is never lost. Written by `POST /v1/sessions`. `ON DELETE CASCADE` from `users`.
 
-These three account tables are **backed up alongside the rest of the DB** by the existing daily `deploy/backup.ts` snapshot — no separate handling. They carry real user data (hashed passwords + study progress), so the backup is now load-bearing, not just a convenience.
+These account tables are **backed up alongside the rest of the DB** by the existing daily `deploy/backup.ts` snapshot — no separate handling. They carry real user data (hashed passwords + study progress + session history), so the backup is load-bearing, not just a convenience.
 
 Media binaries live in **either** the local filesystem (`STORAGE_DRIVER=local`, dev) **or** S3-compatible storage (`STORAGE_DRIVER=s3`, prod). Object key conventions:
 
@@ -183,8 +184,9 @@ Lazy fill (`GET /v1/vocab/{word}` on a cold word) calls `warmWord()` synchronous
 | POST | `/v1/auth/login` | — | Log in; sets cookie. 401 on bad creds (constant-time, no email enumeration). Rate-limited (20/15min/IP). |
 | POST | `/v1/auth/logout` | Cookie | Clear session (idempotent). |
 | GET | `/v1/auth/me` | — | `{user}` or `{user:null}`. `Cache-Control: no-store`. |
-| GET | `/v1/progress/{app}` | Cookie | Fetch the user's progress blob (`app` ∈ {`verbs`, `custom-verbs`}). 401 if logged out. |
+| GET | `/v1/progress/{app}` | Cookie | Fetch the user's progress blob (`app` ∈ {`verbs`, `custom-verbs`, `settings`}). 401 if logged out. |
 | PUT | `/v1/progress/{app}` | Cookie | Replace the progress blob (≤1 MB). |
+| POST | `/v1/sessions` | Cookie | Append a completed study session to the durable log; returns `{ok,id,count}`. 401 if logged out. |
 | GET | `/docs` | — | Scalar UI. |
 | GET | `/openapi.json` | — | Auto-generated OpenAPI 3.1 spec. |
 | GET | `/_info` | — | Service-info JSON (the old `/` payload, relocated now that `/` serves the app). |
@@ -319,7 +321,8 @@ The server now also hosts the **Japanese verb-trainer study app** at `/` (four s
 
 - **Auth model:** opaque session token in an `httpOnly`, `SameSite=Lax`, `Secure`(prod) cookie named `wk_session`. No JWT, no bearer token, no new dependency — `Bun.password` (argon2id) hashes passwords, `hono/cookie` sets the cookie, `bun:sqlite` stores sessions. See [src/lib/auth.ts](src/lib/auth.ts).
 - **Same-origin only:** the app is served from the same origin as the API, so the cookie travels automatically on `fetch(..., {credentials:'include'})`. The blanket `Access-Control-Allow-Origin: *` CORS does **not** apply to these (same-origin requests skip CORS); a cross-origin caller can't use cookie auth against `*` anyway, which is fine — only the served app needs these endpoints.
-- **Progress is opaque + multi-app:** `PUT /v1/progress/{app}` stores whatever the client serializes. The server validates size (≤1 MB) and the `app` enum (`verbs` = the progress `store`; `custom-verbs` = the user's custom verb definitions), nothing else. The client owns its own schema/versioning. Adding an app key is a one-line enum widen in [src/routes/progress.ts](src/routes/progress.ts) — the DB/schema are already per-`(user,app)` and opaque.
+- **Progress is opaque + multi-app:** `PUT /v1/progress/{app}` stores whatever the client serializes. The server validates size (≤1 MB) and the `app` enum (`verbs` = the progress `store`; `custom-verbs` = custom verb definitions; `settings` = the Settings-page preferences), nothing else. The client owns its own schema/versioning. Adding an app key is a one-line enum widen in [src/routes/progress.ts](src/routes/progress.ts) — the DB/schema are already per-`(user,app)` and opaque.
+- **Durable session history:** `POST /v1/sessions` ([src/routes/sessions.ts](src/routes/sessions.ts)) appends every completed session to the never-pruned `study_sessions` table — independent of the capped `store.sessions` the charts use, so no history is lost even past the cap. The study app fires it from `endSession` (signed-in only, fire-and-forget). A `GET` to list/aggregate is a future add (the data is already being captured).
 - **TTS proxy:** `GET /v1/tts?text=<jp>` calls the existing `googleTts` service (`tl=ja`, 200-char cap) and returns `audio/mpeg`. Responses are cached in-process (bounded) and sent `Cache-Control: immutable`, so Google is hit ≤ once per unique reading per server lifetime. The study app uses this instead of the browser's speechSynthesis (falling back to it only over `file://` or on failure).
 - **Offline-first client:** the app still works with no account (localStorage). Signing in mirrors BOTH the progress store and the custom verbs to the server; on login the server copy wins per app key, and a brand-new account seeds the cloud from local. `save()`/`saveCustom()` → localStorage immediately + a debounced `PUT`.
 - **Deploy:** for the apex `wkenhanced.dev` to reach this server, add a Cloudflare Tunnel ingress rule for it → `http://localhost:3000` (the `api.` subdomain already routes here). `COOKIE_SECURE=true` in prod. Full walkthrough in [deploy/README.md](deploy/README.md) "Serving the study app at wkenhanced.dev".

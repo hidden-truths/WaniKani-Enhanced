@@ -72,3 +72,21 @@ CREATE TABLE IF NOT EXISTS user_progress (
     updated_at        INTEGER NOT NULL,        -- epoch ms
     PRIMARY KEY (user_id, app)
 );
+
+-- Append-only durable log of completed study sessions (the verb trainer). The
+-- client also keeps a capped copy inside the `user_progress('verbs')` blob for
+-- charts, but THIS table is the never-pruned record so session history is never
+-- lost. One row per finished session. `mode` is the test direction
+-- ('meaning'|'reading'); `details` is a small optional JSON sidecar for future
+-- fields (deck filters, duration, …) without a migration.
+CREATE TABLE IF NOT EXISTS study_sessions (
+    id                INTEGER PRIMARY KEY AUTOINCREMENT,
+    user_id           INTEGER NOT NULL REFERENCES users(id) ON DELETE CASCADE,
+    ended_at          INTEGER NOT NULL,        -- epoch ms
+    right_count       INTEGER NOT NULL,
+    total_count       INTEGER NOT NULL,
+    mode              TEXT,                    -- 'meaning' | 'reading' | null
+    details           TEXT                     -- optional JSON sidecar
+);
+
+CREATE INDEX IF NOT EXISTS study_sessions_user_idx ON study_sessions (user_id, ended_at);

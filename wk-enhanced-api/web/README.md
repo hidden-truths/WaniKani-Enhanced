@@ -24,8 +24,9 @@ split once it outgrew a single document.
 
 | View | What's there |
 |---|---|
-| **Flashcards** | A Leitner-box SRS. Pick test direction (JP→meaning/reading or reverse), an input mode (self-graded reveal, or **type the reading** for auto-graded kana), and optional **audio** (play the reading aloud). On the answer side, pick an **example sentence at any JLPT level (N5→N1)** to see the verb used in context. Filter the deck by independent, intersecting facets — type / transitivity / topic / JLPT / frequency rank (e.g. "Godan **and** Motion") — choose an order (shuffle / by frequency / worst-first), and run a session. A due-cards banner is the one-click SRS entry point. Grade with the mouse or keys (space = reveal / enter = check, 1 = wrong, 2 = right). |
-| **Browse** | A filterable grid of all verbs with the same facets plus free-text search and a font picker. Each card has a speaker button to hear the reading. Tap a card to expand its mnemonic, trap/tip, memory status, and **example sentences at every JLPT level**. **Add your own verbs** ("Add verb") — they join the deck, filters, and stats; custom cards can be edited or deleted. |
+| **Flashcards** | A Leitner-box SRS. Pick test direction (JP→meaning/reading or reverse), an input mode (self-graded reveal, or **type the reading** for auto-graded kana), and optional **audio** (play the reading aloud). On the answer side, pick an **example sentence at any JLPT level (N5→N1)** to see the verb used in context. Filter the deck by independent, intersecting facets — type / transitivity / topic / JLPT / frequency rank (e.g. "Godan **and** Motion") — choose an order (shuffle / by frequency / worst-first), and run a session. A due-cards banner is the one-click SRS entry point. Grade with the mouse or keys — reveal with **space/enter**, then **space / enter / 2 = correct**, **x / 1 = wrong**. |
+| **Browse** | A filterable grid of all verbs with the same facets plus free-text search and a font picker. Each card has a speaker button to hear the reading. Click a card to open a **detail view** — mnemonic, trap/tip, memory status, and example sentences are collapsible, with the examples **filtered by JLPT level**. **Add your own verbs** ("Add verb") — they join the deck, filters, and stats; custom cards can be edited or deleted. |
+| **Settings** | A toolbar gear opens preferences (saved on the device, and synced to your account): default example level, show/hide furigana, default answer mode, audio. |
 | **Stats & Leeches** | Overall accuracy, the SRS memory pipeline (Leitner box histogram), daily + per-session accuracy line charts, the leech list, and per-card rolling accuracy (worst-first, capped). All charts are hand-rolled SVG — no chart library. |
 | **Accounts** | Optional. Sign in to mirror **progress + your custom verbs** to the server and sync across devices. Fully usable signed-out (localStorage). |
 
@@ -65,6 +66,8 @@ Same-origin, cookie session (`credentials:'include'`), set by the backing server
 | GET | `/v1/auth/me` | `{user:{id,email}\|null}` |
 | GET/PUT | `/v1/progress/verbs` | `{data:<store>}` — progress blob (debounced push) |
 | GET/PUT | `/v1/progress/custom-verbs` | `{data:{seq,verbs}}` — custom-verb definitions |
+| GET/PUT | `/v1/progress/settings` | `{data:{exampleLevel,furigana,input,audio}}` — preferences |
+| POST | `/v1/sessions` | `{right,total,mode}` — append to the durable session-history log |
 | GET | `/v1/tts?text=<jp>` | Google TTS audio (`audio/mpeg`) for the reading |
 
 Server-side details (auth model, cookie, tables) live in
@@ -78,11 +81,14 @@ Server-side details (auth model, cookie, tables) live in
   keyed by rank: `{N5:[jp,en],…,N1:[jp,en]}` (five JLPT tiers, increasing complexity).
 - **Progress** persists to `localStorage["jpverbs_v3"]`:
   `{ cards:{<rank>:{attempts,right,wrong,box,due}}, sessions:[…], daily:{…} }`.
-  Signed in, the same blob is mirrored to the server (server wins on login).
+  Signed in, the same blob is mirrored to the server (server wins on login). The
+  local `sessions` is capped (for charts) — every finished session is ALSO appended
+  to a durable server log (`POST /v1/sessions`), so full history is never lost.
+- **Settings** persist to `localStorage["jpverbs_settings"]` (`{exampleLevel,
+  furigana, input, audio}`) and sync as their own blob — set them on the Settings page.
 - A few small UI prefs also live in localStorage: `jpverbs_font`,
   `jpverbs_topic_<panel>` (topic-disclosure open state), `jpverbs_signup_dismissed`,
-  `jpverbs_input` (self-graded vs typed), `jpverbs_audio` (TTS autoplay),
-  `jpverbs_exlevel` (last-picked example JLPT level).
+  `jpverbs_theme`.
 - **Custom verbs** live in `jpverbs_custom` (`{seq, verbs:[…]}`), merged into the
   deck at load. Signed in, they sync too (server `app` key `custom-verbs`, separate
   from the progress blob; server wins on login, removals propagate).

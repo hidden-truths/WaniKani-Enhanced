@@ -338,3 +338,21 @@ export const ProgressPutResponseSchema = z
         updatedAt: z.number().int(),
     })
     .openapi('ProgressPutResponse');
+
+// One completed study session, appended to the durable server-side log.
+export const SessionPostRequestSchema = z
+    .object({
+        right: z.number().int().min(0),
+        total: z.number().int().min(1),
+        mode: z.string().max(20).optional(),
+        details: z.any().optional(),
+    })
+    .openapi('SessionPostRequest');
+
+export const SessionPostResponseSchema = z
+    .object({
+        ok: z.boolean(),
+        id: z.number().int(),
+        count: z.number().int().openapi({ description: 'Lifetime session count for this user.' }),
+    })
+    .openapi('SessionPostResponse');

@@ -188,6 +188,20 @@
   .blk-label.warn{color:#b8860b} .blk-body{font-size:14px}
   .ex{font-size:15px;margin-bottom:2px} .ex .en{display:block;font-size:13px;color:var(--muted);font-style:italic}
   rt{font-size:.55em;color:var(--muted)}   /* furigana ruby text sizing */
+  /* Furigana toggle (Settings): hide all readings → ruby renders as bare kanji. */
+  :root[data-furigana="off"] rt{display:none}
+  /* Settings modal rows: label + a segmented control, wrapping on narrow. */
+  .set-row{display:flex;align-items:center;justify-content:space-between;gap:12px;flex-wrap:wrap;margin:14px 0}
+  .set-row>label{font-family:"SF Mono",ui-monospace,monospace;font-size:11px;letter-spacing:.1em;text-transform:uppercase;color:var(--muted)}
+  .set-row .jlptseg .chip{font-size:12px;padding:6px 11px}
+  /* Browse detail modal: memory line + collapsible <details> sections. */
+  .det-memory{font-family:"SF Mono",ui-monospace,monospace;font-size:12px;color:var(--muted);margin:10px 0 4px}
+  .modal details{border-top:1px solid var(--line);padding:10px 0;margin-top:4px}
+  .modal details>summary{cursor:pointer;list-style:none;font-family:"SF Mono",ui-monospace,monospace;font-size:10px;letter-spacing:.18em;text-transform:uppercase;color:var(--godan);display:flex;align-items:center}
+  .modal details>summary::-webkit-details-marker{display:none}
+  .modal details>summary::after{content:"+";margin-left:auto;color:var(--muted);font-size:14px}
+  .modal details[open]>summary::after{content:"−"}
+  .modal details>.det-body{padding-top:8px;font-size:14px;line-height:1.5}
   /* Browse: a small JLPT pill in front of each leveled example sentence. */
   .ex-pill{font-family:"SF Mono",ui-monospace,monospace;font-size:9px;letter-spacing:.06em;color:var(--muted);border:1px solid var(--line);border-radius:2px;padding:1px 5px;margin-right:6px;vertical-align:.08em}
   /* Flashcard: the leveled-example block on the answer side. The N5–N1 selector

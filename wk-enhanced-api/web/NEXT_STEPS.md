@@ -9,6 +9,16 @@ split, custom-verb sync, and Google TTS — what's left is one genuinely-deferre
 (needs email infra). Add new ideas to "Ideas / not yet scoped" as they come up.
 
 ## Done (most recent first)
+- ~~Browse detail modal~~ — **shipped.** Clicking a Browse card opens a modal (not an
+  inline expand); Mnemonic/Trap/Examples are collapsible, examples JLPT-level-filtered.
+- ~~Settings page (DB-backed)~~ — **shipped.** Toolbar gear → modal: default example
+  level, furigana show/hide, default answer mode, audio. Stored in `jpverbs_settings`,
+  synced as app `settings`. Furigana is a global `<html data-furigana>` CSS flip.
+- ~~More grading keys~~ — **shipped.** After reveal: Space/Enter/2 = correct, X/1 = wrong.
+- ~~Durable session history~~ — **shipped.** Append-only `study_sessions` table +
+  `POST /v1/sessions`; `endSession` logs every session so nothing is lost beyond the
+  capped local `store.sessions` (now 1000, charts only). A GET/aggregate view is a
+  future add — the data is already captured.
 - ~~Leveled example sentences~~ — **shipped.** `examples.js` (`EXAMPLES`) holds five
   JLPT tiers (N5→N1) per built-in verb. Answer-side N5–N1 selector (`renderExample`,
   pref `jpverbs_exlevel`) + Browse leveled list; `exampleForLevel`/`availableTiers`

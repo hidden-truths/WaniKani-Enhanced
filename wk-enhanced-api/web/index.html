@@ -43,23 +43,26 @@
       #panel-study  Flashcard session UI (setup screen + card stage + done).
       #panel-browse Filterable grid of all verbs (built-in + custom).
       #panel-stats  Charts, leech list, SRS memory-pipeline, reset.
-      modals        Account (auth) + add/edit-verb.
+      modals        Account (auth), add/edit-verb, Settings, Browse detail.
     verbs.js
       VERBS         The 100-verb dataset (the heart of the app).
     examples.js
       EXAMPLES      Five JLPT-leveled example sentences per verb (by rank).
     app.js
       STORAGE       localStorage persistence + SRS scheduling + leech logic.
+      SETTINGS      DB-synced prefs (example level, furigana, input, audio).
       EXAMPLES wiring  attachLevels/exampleForLevel/renderExample (leveled UI).
-      TAB NAV       View switching.
       FONT/THEME    User-pref toggles, persisted to localStorage.
+      TAB NAV       View switching.
       EXPORT/IMPORT Backup + restore of all progress as JSON.
       DECK BUILDING The filter predicate (AND'd facets) + chip wiring.
       FLASHCARD     Session lifecycle + grading (self/typed) + TTS + keyboard.
-      BROWSE        Grid render with its own independent filter state.
+      BROWSE        Summary grid + the detail modal (collapsible, leveled examples).
       STATS+CHARTS  Hand-rolled SVG line/bar charts (no chart library).
       CUSTOM VERBS  Add/edit/delete user verbs, merged into DATA at load.
-      CLOUD         Accounts + per-user progress & custom-verb sync.
+      CLOUD         Accounts + per-user progress / custom-verb / settings sync;
+                    durable session log (POST /v1/sessions).
+      SETTINGS PAGE The Settings modal wiring.
 
 --------------------------------------------------------------------------------
   DATA MODEL
@@ -207,6 +210,7 @@
   <symbol id="i-target" viewBox="0 0 24 24"><circle cx="12" cy="12" r="8"/><circle cx="12" cy="12" r="3.5"/></symbol>
   <symbol id="i-volume" viewBox="0 0 24 24"><path d="M11 5 6 9H3v6h3l5 4z" fill="currentColor" stroke="none"/><path d="M15.5 8.5a5 5 0 0 1 0 7M18.5 6a8 8 0 0 1 0 12"/></symbol>
   <symbol id="i-plus" viewBox="0 0 24 24"><path d="M12 5v14M5 12h14"/></symbol>
+  <symbol id="i-settings" viewBox="0 0 24 24"><circle cx="12" cy="12" r="3"/><path d="M19.4 15a1.65 1.65 0 0 0 .33 1.82l.06.06a2 2 0 1 1-2.83 2.83l-.06-.06a1.65 1.65 0 0 0-1.82-.33 1.65 1.65 0 0 0-1 1.51V21a2 2 0 0 1-4 0v-.09A1.65 1.65 0 0 0 9 19.4a1.65 1.65 0 0 0-1.82.33l-.06.06a2 2 0 1 1-2.83-2.83l.06-.06a1.65 1.65 0 0 0 .33-1.82 1.65 1.65 0 0 0-1.51-1H3a2 2 0 0 1 0-4h.09A1.65 1.65 0 0 0 4.6 9a1.65 1.65 0 0 0-.33-1.82l-.06-.06a2 2 0 1 1 2.83-2.83l.06.06a1.65 1.65 0 0 0 1.82.33H9a1.65 1.65 0 0 0 1-1.51V3a2 2 0 0 1 4 0v.09a1.65 1.65 0 0 0 1 1.51 1.65 1.65 0 0 0 1.82-.33l.06-.06a2 2 0 1 1 2.83 2.83l-.06.06a1.65 1.65 0 0 0-.33 1.82V9a1.65 1.65 0 0 0 1.51 1H21a2 2 0 0 1 0 4h-.09a1.65 1.65 0 0 0-1.51 1z"/></symbol>
   <symbol id="i-edit" viewBox="0 0 24 24"><path d="M4 20h4L18.5 9.5a2.12 2.12 0 0 0-3-3L5 17v3z"/><path d="M13.5 6.5l3 3"/></symbol>
   <symbol id="i-trash" viewBox="0 0 24 24"><path d="M4 7h16M9 7V4.5h6V7M6.5 7l1 12.5h9l1-12.5"/></symbol>
 </svg>
@@ -219,6 +223,7 @@
     <div class="toolbar">
       <span class="acct-status" id="syncStatus"></span>
       <button class="chip" id="accountBtn" aria-label="Account" title="Sign in to sync progress"><svg class="ic" aria-hidden="true"><use href="#i-user"/></svg>Sign in</button>
+      <button class="chip" id="settingsBtn" aria-label="Settings" title="Settings"><svg class="ic" aria-hidden="true"><use href="#i-settings"/></svg>Settings</button>
       <button class="chip" id="themeToggle" aria-label="Toggle dark mode" title="Toggle light/dark"><svg class="ic" aria-hidden="true"><use href="#i-contrast"/></svg>Theme</button>
       <button class="chip" id="exportBtn" aria-label="Export progress as JSON" title="Download your progress"><svg class="ic" aria-hidden="true"><use href="#i-download"/></svg>Export</button>
       <button class="chip" id="importBtn" aria-label="Import progress from JSON" title="Load progress from a file"><svg class="ic" aria-hidden="true"><use href="#i-upload"/></svg>Import</button>
@@ -397,8 +402,8 @@
         <button class="btn" id="checkBtn" type="button"><svg class="ic" aria-hidden="true"><use href="#i-check"/></svg>Check <span class="kbd">[enter]</span></button>
       </div>
       <div class="fc-buttons" id="gradeRow" style="display:none">
-        <button class="btn wrong" id="wrongBtn"><svg class="ic" aria-hidden="true"><use href="#i-x"/></svg>Got it wrong <span class="kbd">[1]</span></button>
-        <button class="btn right" id="rightBtn"><svg class="ic" aria-hidden="true"><use href="#i-check"/></svg>Got it right <span class="kbd">[2]</span></button>
+        <button class="btn wrong" id="wrongBtn"><svg class="ic" aria-hidden="true"><use href="#i-x"/></svg>Got it wrong <span class="kbd">[1 / x]</span></button>
+        <button class="btn right" id="rightBtn"><svg class="ic" aria-hidden="true"><use href="#i-check"/></svg>Got it right <span class="kbd">[2 / space]</span></button>
       </div>
       <div class="hint"><button class="chip" id="endBtn">End session</button></div>
     </div>
@@ -588,6 +593,50 @@
         <button type="submit" class="btn srs" id="verbSubmit">Save verb</button>
       </div>
     </form>
+  </div>
+</div>
+
+<!-- Settings page (modal). Preferences are saved locally and synced to your
+     account (server app key 'settings') when signed in. renderSettings() paints
+     the controls from `settings`; each control writes settings + saveSettings(). -->
+<div class="modal-overlay" id="settingsModal" role="dialog" aria-modal="true" aria-labelledby="settingsTitle">
+  <div class="modal">
+    <button class="modal-x" id="settingsClose" aria-label="Close">×</button>
+    <h2 id="settingsTitle">Settings</h2>
+    <div class="sub" id="settingsSub">Saved on this device, and synced to your account when you're signed in.</div>
+    <div class="set-row"><label>Default example level</label>
+      <span class="jlptseg" id="setLevel" role="group" aria-label="Default example level">
+        <button class="chip setlv" type="button" data-setlv="N5">N5</button>
+        <button class="chip setlv" type="button" data-setlv="N4">N4</button>
+        <button class="chip setlv" type="button" data-setlv="N3">N3</button>
+        <button class="chip setlv" type="button" data-setlv="N2">N2</button>
+        <button class="chip setlv" type="button" data-setlv="N1">N1</button>
+      </span></div>
+    <div class="set-row"><label>Furigana (readings)</label>
+      <span class="jlptseg" id="setFuri" role="group" aria-label="Show furigana">
+        <button class="chip setfg" type="button" data-setfg="on">Show</button>
+        <button class="chip setfg" type="button" data-setfg="off">Hide</button>
+      </span></div>
+    <div class="set-row"><label>Default answer mode</label>
+      <span class="jlptseg" id="setInput" role="group" aria-label="Default answer mode">
+        <button class="chip setin" type="button" data-setin="self">Self-graded</button>
+        <button class="chip setin" type="button" data-setin="type">Type reading</button>
+      </span></div>
+    <div class="set-row"><label>Audio (reading)</label>
+      <span class="jlptseg" id="setAudio" role="group" aria-label="Audio">
+        <button class="chip setau" type="button" data-setau="off">Off</button>
+        <button class="chip setau" type="button" data-setau="auto">Autoplay</button>
+      </span></div>
+    <div class="modal-foot" id="settingsFoot"></div>
+  </div>
+</div>
+
+<!-- Browse detail modal. Opened by clicking a Browse card (renderVerbDetail fills
+     #detailBody). Mnemonic/Trap/Examples are collapsible; Examples are level-filtered. -->
+<div class="modal-overlay" id="detailModal" role="dialog" aria-modal="true" aria-label="Verb detail">
+  <div class="modal wide">
+    <button class="modal-x" id="detailClose" aria-label="Close">×</button>
+    <div id="detailBody"></div>
   </div>
 </div>
 

@@ -8,6 +8,7 @@
 //   POST   /v1/admin/warm     (Authorization: Bearer <ADMIN_TOKEN>)
 //   POST   /v1/auth/register | /login | /logout,  GET /v1/auth/me
 //   GET/PUT /v1/progress/{app} (session cookie — per-user study progress)
+//   POST   /v1/sessions       (session cookie — append-only study-session log)
 //   GET    /v1/tts            (Google Translate TTS proxy for the study app)
 //   GET    /media/*           (only when STORAGE_DRIVER=local)
 //   GET    /docs              (Scalar UI)
@@ -27,6 +28,7 @@ import { indexMetaRouter } from './routes/indexMeta.ts';
 import { adminRouter } from './routes/admin.ts';
 import { authRouter } from './routes/auth.ts';
 import { progressRouter } from './routes/progress.ts';
+import { sessionsRouter } from './routes/sessions.ts';
 import { MEDIA_CACHE_CONTROL } from './services/storage.ts';
 import { googleTts } from './services/tts.ts';
 
@@ -80,6 +82,7 @@ app.route('/v1/index_meta', indexMetaRouter);
 app.route('/v1/admin', adminRouter);
 app.route('/v1/auth', authRouter);
 app.route('/v1/progress', progressRouter);
+app.route('/v1/sessions', sessionsRouter);
 
 // Google Translate TTS proxy for the study app (replaces the browser's uneven
 // speechSynthesis voices with consistent ja-JP audio). text→audio is stable, so

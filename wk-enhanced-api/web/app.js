@@ -175,6 +175,35 @@ document.querySelectorAll('.tab').forEach(t=>t.addEventListener('click',()=>{
 }));
 
 /* ============================================================================
+   SETTINGS — DB-synced preferences (the Settings page edits these).
+   ----------------------------------------------------------------------------
+   One object in localStorage (jpverbs_settings), synced to the server under app
+   'settings' when signed in (mirrors the progress/custom-verb sync). Holds the
+   cross-cutting study defaults: example sentence level, furigana visibility,
+   default answer mode, default audio. Migrates the older per-key prefs
+   (jpverbs_exlevel/input/audio) on first load. saveSettings() writes localStorage,
+   applies side-effects (furigana), and schedules a cloud push when signed in.
+   (Theme + font keep their own keys — device-ish, not synced.)
+   ========================================================================== */
+const SETTINGS_KEY='jpverbs_settings';
+const DEFAULT_SETTINGS={exampleLevel:'N5', furigana:true, input:'self', audio:'off'};
+function loadSettings(){
+  let s=null; try{ s=JSON.parse(localStorage.getItem(SETTINGS_KEY)); }catch(e){}
+  if(s && typeof s==='object') return Object.assign({}, DEFAULT_SETTINGS, s);
+  return Object.assign({}, DEFAULT_SETTINGS, {          // migrate legacy per-key prefs
+    exampleLevel: localStorage.getItem('jpverbs_exlevel')||DEFAULT_SETTINGS.exampleLevel,
+    input: localStorage.getItem('jpverbs_input')||DEFAULT_SETTINGS.input,
+    audio: localStorage.getItem('jpverbs_audio')||DEFAULT_SETTINGS.audio,
+  });
+}
+let settings=loadSettings();
+// Furigana visibility is a single attribute flip on <html> (CSS hides <rt> when off).
+function applyFurigana(){ document.documentElement.dataset.furigana = settings.furigana ? 'on' : 'off'; }
+function saveSettingsLocal(){ try{ localStorage.setItem(SETTINGS_KEY, JSON.stringify(settings)); }catch(e){} }
+function saveSettings(){ saveSettingsLocal(); applyFurigana(); if(typeof scheduleSettingsSync==='function')scheduleSettingsSync(); }
+applyFurigana();
+
+/* ============================================================================
    FONT SWITCH — swaps --jp-font (only Japanese .jp text is affected). The
    choice is persisted under its own localStorage key, separate from progress.
    ========================================================================== */
@@ -366,20 +395,26 @@ function wireFacets(selector, c, onChange){
 let cfg={mode:"meaning",input:"self",audio:"off",type:[],trans:[],topic:[],status:[],ord:"shuffle",jlpt:["all"],rmin:1,rmax:MAXRANK};
 document.querySelectorAll('.chip.mode').forEach(b=>b.addEventListener('click',()=>{
   document.querySelectorAll('.chip.mode').forEach(x=>x.classList.remove('active'));b.classList.add('active');cfg.mode=b.dataset.mode;updateDeckCount();}));
-// Input mode (self-graded vs type-the-reading) + audio autoplay. Both are study-
-// style PREFERENCES (persisted under their own localStorage keys, not in `store`),
-// restored onto the chips at boot. bindSingle = the single-select chip pattern.
-cfg.input=localStorage.getItem('jpverbs_input')||'self';
-cfg.audio=localStorage.getItem('jpverbs_audio')||'off';
+// Input mode (self-graded vs type-the-reading) + audio autoplay. These are now
+// backed by the synced `settings` object (the Settings page edits the same
+// values); the setup chips just mirror + update settings. bindSingle = the
+// single-select chip pattern. paintPrefChips() repaints the chips from settings
+// (used at boot and when settings change externally — Settings page / cloud pull).
+cfg.input=settings.input;
+cfg.audio=settings.audio;
 function bindSingle(selector,attr,onSet){
   document.querySelectorAll(selector).forEach(b=>b.addEventListener('click',()=>{
     document.querySelectorAll(selector).forEach(x=>x.classList.remove('active'));
     b.classList.add('active');onSet(b.dataset[attr]);}));
 }
-bindSingle('.chip.imode','imode',v=>{cfg.input=v;localStorage.setItem('jpverbs_input',v);});
-bindSingle('.chip.amode','amode',v=>{cfg.audio=v;localStorage.setItem('jpverbs_audio',v);});
-document.querySelectorAll('.chip.imode').forEach(x=>x.classList.toggle('active',x.dataset.imode===cfg.input));
-document.querySelectorAll('.chip.amode').forEach(x=>x.classList.toggle('active',x.dataset.amode===cfg.audio));
+bindSingle('.chip.imode','imode',v=>{cfg.input=v;settings.input=v;saveSettings();});
+bindSingle('.chip.amode','amode',v=>{cfg.audio=v;settings.audio=v;saveSettings();});
+function paintPrefChips(){
+  cfg.input=settings.input; cfg.audio=settings.audio;
+  document.querySelectorAll('.chip.imode').forEach(x=>x.classList.toggle('active',x.dataset.imode===settings.input));
+  document.querySelectorAll('.chip.amode').forEach(x=>x.classList.toggle('active',x.dataset.amode===settings.audio));
+}
+paintPrefChips();
 const repaintDeck=wireFacets('.chip.deck', cfg, updateDeckCount);
 makeMultiSelect('.chip.jlpt', ()=>cfg.jlpt, a=>cfg.jlpt=a, 'jlpt', updateDeckCount);
 document.querySelectorAll('.chip.ord').forEach(b=>b.addEventListener('click',()=>{
@@ -550,11 +585,10 @@ function startSession(){
 // markup); reading/meaning use textContent. The mnemonic+tip always show on
 // the answer side as the "why".
 // ---- Leveled-example UI (answer side) ----
-// The chosen tier persists across cards (jpverbs_exlevel). Disabled tiers (no
-// sentence for this verb) can't be picked; if the saved tier is unavailable we
-// fall back to the verb's own JLPT level, then the easiest available. The whole
-// block hides when the verb has no example at all.
-let exLevel = (typeof localStorage!=='undefined' && localStorage.getItem('jpverbs_exlevel')) || 'N5';
+// The chosen tier is the synced setting `settings.exampleLevel` (also the default
+// for Browse). Disabled tiers (no sentence for this verb) can't be picked; if the
+// saved tier is unavailable we fall back to the verb's own JLPT level, then the
+// easiest available. The whole block hides when the verb has no example at all.
 function renderExample(v){
   const block=document.getElementById('exampleBlock'), seg=document.getElementById('exLevels');
   const tiers=availableTiers(v);
@@ -562,17 +596,17 @@ function renderExample(v){
     seg.style.display='';
     seg.innerHTML=JLPT_TIERS.map(t=>`<button class="chip exlv" type="button" data-exlv="${t}"${tiers.includes(t)?'':' disabled'}>${t}</button>`).join('');
   }else{ seg.style.display='none'; seg.innerHTML=''; }
-  let lvl=exLevel;
+  let lvl=settings.exampleLevel;
   if(tiers.length && !tiers.includes(lvl)) lvl = tiers.includes(v.jlpt)?v.jlpt:tiers[0];
   [...seg.querySelectorAll('.exlv')].forEach(b=>b.classList.toggle('active', b.dataset.exlv===lvl && !b.disabled));
   const ex=exampleForLevel(v,lvl);
   if(ex){ document.getElementById('exJp').innerHTML=ex[0]; document.getElementById('exEn').textContent=ex[1]; block.hidden=false; }
   else block.hidden=true;
 }
-// Pick a tier → remember it → re-render the current card's example.
+// Pick a tier → remember it (synced setting) → re-render the current card's example.
 document.getElementById('exLevels').addEventListener('click',e=>{
   const b=e.target.closest('.exlv'); if(!b||b.disabled)return;
-  exLevel=b.dataset.exlv; try{localStorage.setItem('jpverbs_exlevel',exLevel);}catch(e2){}
+  settings.exampleLevel=b.dataset.exlv; saveSettings();
   if(session) renderExample(session.deck[session.i]);
 });
 
@@ -671,15 +705,26 @@ function grade(correct){
 // totals into today's store.daily bucket (local date). Then show the score.
 // Guarded by results.length so an immediate "End session" with no grades is a
 // no-op for stats. (Per-card stats were already saved in grade().)
+// Local sessions kept for the Stats charts. Capped (the blob is synced whole), but
+// the DURABLE record is the server-side study_sessions log (logSession below) — so
+// even past this cap, no session history is ever lost for a signed-in user.
+const SESSIONS_LOCAL_CAP=1000;
+// Append a finished session to the durable server log (fire-and-forget; signed-in
+// only). Local + blob already hold it — this just guarantees it's never pruned.
+function logSession(right,tot){
+  if(typeof account==='undefined' || !account)return;
+  try{ api('/v1/sessions',{method:'POST',body:{right,total:tot,mode:cfg.mode}}).catch(()=>{}); }catch(e){}
+}
 function endSession(){
   if(session && session.results.length){
     const right=session.results.reduce((s,x)=>s+x,0),tot=session.results.length;
     store.sessions.push({t:Date.now(),right,tot});
-    if(store.sessions.length>200)store.sessions=store.sessions.slice(-200);
+    if(store.sessions.length>SESSIONS_LOCAL_CAP)store.sessions=store.sessions.slice(-SESSIONS_LOCAL_CAP);
     const day=localDay();
     if(!store.daily[day])store.daily[day]={right:0,tot:0};
     store.daily[day].right+=right;store.daily[day].tot+=tot;
-    save();
+    save();                       // localStorage + debounced progress-blob push
+    logSession(right,tot);        // durable append-only server log (never pruned)
     document.getElementById('doneScore').textContent=Math.round(100*right/tot)+'%';
     document.getElementById('doneDetail').textContent=`${right} of ${tot} correct`;
     if(typeof maybeShowSignup==='function')maybeShowSignup();   // nudge after first real session
@@ -707,21 +752,22 @@ document.getElementById('againBtn').addEventListener('click',()=>{
   document.getElementById('fcSetup').style.display='block';
   updateDeckCount();updateDueBanner();
 });
-// Keyboard shortcuts (only while a card is on screen). Self-graded: Space reveals,
-// then 1 = wrong / 2 = right. Typed: Enter submits (handled on the field), then
-// Enter accepts the suggested grade, or 1/2 override. Keys are not hijacked while
-// the kana field is focused so the user can type freely.
+// Keyboard shortcuts (only while a card is on screen, and not while typing in the
+// kana field — Enter-to-submit is bound on the input itself).
+//   Before reveal: Space/Enter flips the card (typed mode: Enter submits instead).
+//   After reveal:  Space / Enter / 2  → CORRECT ;  X / 1  → WRONG.
 document.addEventListener('keydown',e=>{
   if(!document.getElementById('fcStage').classList.contains('active'))return;
-  const inField = e.target===document.getElementById('answerInput');
-  if(e.key==='Enter' && !inField){
-    if(cfg.input==='type' && !session.revealed){e.preventDefault();submitTyped();return;}
-    if(session.revealed && typeof session.suggested==='boolean'){e.preventDefault();grade(session.suggested);return;}
+  if(e.target===document.getElementById('answerInput'))return;   // field owns its keys
+  const k=e.key, isSpace=e.code==='Space', isEnter=k==='Enter';
+  if(!session.revealed){
+    if(cfg.input==='type'){ if(isEnter){e.preventDefault();submitTyped();} }   // typed: Enter submits
+    else if(isSpace||isEnter){ e.preventDefault(); reveal(); }                  // self: flip
+    return;
   }
-  if(inField)return;                                  // let the field own its keys
-  if(e.code==='Space'){e.preventDefault();if(cfg.input!=='type'&&!session.revealed)reveal();}
-  else if(e.key==='1'&&session.revealed)grade(false);
-  else if(e.key==='2'&&session.revealed)grade(true);
+  // Revealed → grade. Space/Enter/2 mark correct; X/1 mark wrong.
+  if(isSpace||isEnter||k==='2'){ e.preventDefault(); grade(true); }
+  else if(k==='1'||k==='x'||k==='X'){ e.preventDefault(); grade(false); }
 });
 
 /* ============================================================================
@@ -854,19 +900,64 @@ function annotateJlptChips(){
 annotateJlptChips();
 document.querySelectorAll('.chips, .topic-inner').forEach(setupRoving);
 
-// Browse detail's example block. Built-in verbs list every available JLPT tier
-// (easy→hard) with a level pill; custom verbs fall back to their single `ex`.
-function exampleListHtml(v){
-  if(v.levels){
-    const rows=JLPT_TIERS.filter(t=>v.levels[t]).map(t=>{
-      const e=v.levels[t];
-      return `<div class="ex jp"><span class="ex-pill">${t}</span>${e[0]}<span class="en">${e[1]}</span></div>`;
-    }).join('');
-    if(rows) return `<div class="blk"><div class="blk-label">Examples by level</div>${rows}</div>`;
-  }
-  if(v.ex&&v.ex.length) return `<div class="blk"><div class="blk-label">Examples</div>${v.ex.map(e=>`<div class="ex jp">${e[0]}<span class="en">${e[1]}</span></div>`).join('')}</div>`;
-  return '';
+/* ---- Browse detail modal ----
+   Clicking a card opens this instead of expanding inline, so the grid stays scannable
+   and we don't dump everything at once. Core identity is always shown; Mnemonic,
+   Trap/tip and Example sentences are collapsible <details> (Mnemonic open by default).
+   The Examples section is JLPT-level-filtered — a selector defaulting to
+   settings.exampleLevel, showing one tier at a time (local view, doesn't change the
+   global default). detailVerb/detailLevel hold the open modal's state. */
+let detailVerb=null, detailLevel=null;
+function detailMemoryLine(v){ const c=store.cards[v.rank]; return c&&c.box?`Box ${c.box} · next review: ${nextDueLabel(v.rank)}`:'New — not yet reviewed'; }
+function renderDetailExample(){
+  const v=detailVerb, seg=document.getElementById('dExLevels'); if(!v||!seg)return;
+  const tiers=availableTiers(v);
+  let lvl=detailLevel||settings.exampleLevel;
+  if(tiers.length){
+    if(!tiers.includes(lvl)) lvl=tiers.includes(v.jlpt)?v.jlpt:tiers[0];
+    seg.style.display='';
+    seg.innerHTML=JLPT_TIERS.map(t=>`<button class="chip exlv" type="button" data-exlv="${t}"${tiers.includes(t)?'':' disabled'}>${t}</button>`).join('');
+  }else{ seg.style.display='none'; seg.innerHTML=''; }
+  detailLevel=lvl;
+  [...seg.querySelectorAll('.exlv')].forEach(b=>b.classList.toggle('active',b.dataset.exlv===lvl&&!b.disabled));
+  const ex=exampleForLevel(v,lvl), jp=document.getElementById('dExJp'), en=document.getElementById('dExEn');
+  if(ex){ jp.innerHTML=ex[0]; en.textContent=ex[1]; } else { jp.textContent='No example yet.'; en.textContent=''; }
 }
+function openVerbDetail(v){
+  detailVerb=v; detailLevel=null;
+  const tiLabel=v.trans==='t'?'transitive':(v.trans==='i'?'intransitive':'');
+  const tags=`${tiLabel?`<span class="tag" style="color:var(--ichidan)">${tiLabel}</span>`:''}${v.tags.filter(t=>!t.startsWith('top')).map(t=>`<span class="tag">${escapeHtml(t)}</span>`).join('')}`;
+  document.getElementById('detailBody').innerHTML=`
+    <div class="card-top"><div>
+      <div class="verb-jp jp" style="font-size:34px">${v.jp}</div>
+      <div class="verb-reading">${v.read}${TTS_OK?` <button class="speak-btn sm" id="dSpeak" type="button" aria-label="Play reading" title="Play reading"><svg class="ic" aria-hidden="true"><use href="#i-volume"/></svg></button>`:''}</div>
+      <div class="verb-meaning">${v.mean}</div></div>
+      <div style="text-align:right"><div class="stamp ${v.type}">${TYPE_LABEL[v.type]}</div><div class="jlpt-pill">${v.jlpt}</div>${v.custom?'<div class="custom-badge">CUSTOM</div>':''}</div></div>
+    ${isLeech(v.rank)?'<span class="leech-badge">⚠ LEECH</span>':''}
+    <div class="tags">${tags}</div>
+    <div class="det-memory">${detailMemoryLine(v)}</div>
+    ${v.mnem?`<details open><summary>Mnemonic</summary><div class="det-body">${v.mnem}</div></details>`:''}
+    ${v.tip?`<details><summary>Trap / tip</summary><div class="det-body">${v.tip}</div></details>`:''}
+    <details><summary>Example sentences</summary><div class="det-body">
+      <span class="jlptseg exseg" id="dExLevels" role="group" aria-label="Example level"></span>
+      <div class="ex-jp jp" id="dExJp" style="margin-top:8px"></div><div class="ex-en" id="dExEn"></div>
+    </div></details>
+    ${v.custom?`<div class="verb-actions"><button class="chip" id="dEdit" type="button"><svg class="ic" aria-hidden="true"><use href="#i-edit"/></svg>Edit</button><button class="chip" id="dDel" type="button" style="border-color:var(--godan);color:var(--godan)"><svg class="ic" aria-hidden="true"><use href="#i-trash"/></svg>Delete</button></div>`:''}`;
+  renderDetailExample();
+  const sp=document.getElementById('dSpeak'); if(sp)sp.addEventListener('click',()=>speak(v.read));
+  const seg=document.getElementById('dExLevels'); if(seg)seg.addEventListener('click',e=>{const b=e.target.closest('.exlv');if(!b||b.disabled)return;detailLevel=b.dataset.exlv;renderDetailExample();});
+  if(v.custom){
+    const eb=document.getElementById('dEdit'), db=document.getElementById('dDel');
+    if(eb)eb.addEventListener('click',()=>{ closeDetail(); openVerbModal(v); });
+    if(db)db.addEventListener('click',()=>{ if(confirm('Delete custom verb '+v.jp+'? Its progress is also removed.')){ closeDetail(); deleteVerb(v.rank); } });
+  }
+  document.getElementById('detailModal').classList.add('show');
+}
+function closeDetail(){ document.getElementById('detailModal').classList.remove('show'); }
+document.getElementById('detailClose').addEventListener('click',closeDetail);
+document.getElementById('detailModal').addEventListener('click',e=>{ if(e.target.id==='detailModal')closeDetail(); });
+document.addEventListener('keydown',e=>{ if(e.key==='Escape'&&document.getElementById('detailModal').classList.contains('show'))closeDetail(); });
+
 // Re-render the whole grid from scratch on any filter/search change. passF =
 // passes the facet+rank filter; passQ = matches the search text. The frequency
 // "topN-M" tags are filtered OUT of the visible tag chips (they'd be noise).
@@ -881,6 +972,7 @@ function renderBrowse(){
     const card=document.createElement('div');
     card.className='card '+v.type+(leech?' leech':'');  // class + leech recolor spine
     const tiLabel=v.trans==='t'?'transitive':(v.trans==='i'?'intransitive':'');
+    // Cards are SUMMARY only now — clicking opens the detail modal (openVerbDetail).
     card.innerHTML=`<div class="rank">#${v.rank}</div>
       ${acc!=null?`<div class="acc">${Math.round(acc*100)}% acc</div>`:''}
       <div class="card-top"><div>
@@ -889,22 +981,10 @@ function renderBrowse(){
         <div style="text-align:right"><div class="stamp ${v.type}">${TYPE_LABEL[v.type]}</div>
         <div class="jlpt-pill">${v.jlpt}</div>${v.custom?'<div class="custom-badge">CUSTOM</div>':''}</div></div>
       ${leech?'<span class="leech-badge">⚠ LEECH</span>':''}
-      <div class="tags">${tiLabel?`<span class="tag" style="color:var(--ichidan)">${tiLabel}</span>`:''}${v.tags.filter(t=>!t.startsWith('top')).map(t=>`<span class="tag">${t}</span>`).join('')}</div>
-      <div class="detail"><div class="detail-inner">
-        <div class="blk"><div class="blk-label">Memory status</div><div class="blk-body" style="font-family:'SF Mono',monospace;font-size:12px">${store.cards[v.rank]&&store.cards[v.rank].box?`Box ${store.cards[v.rank].box} · next review: ${nextDueLabel(v.rank)}`:'New — not yet reviewed'}</div></div>
-        ${v.mnem?`<div class="blk"><div class="blk-label">Mnemonic</div><div class="blk-body">${v.mnem}</div></div>`:''}
-        ${v.tip?`<div class="blk"><div class="blk-label warn">Trap / Tip</div><div class="blk-body">${v.tip}</div></div>`:''}
-        ${exampleListHtml(v)}
-        ${v.custom?'<div class="verb-actions"><button class="chip verb-edit" type="button"><svg class="ic" aria-hidden="true"><use href="#i-edit"/></svg>Edit</button><button class="chip verb-del" type="button" style="border-color:var(--godan);color:var(--godan)"><svg class="ic" aria-hidden="true"><use href="#i-trash"/></svg>Delete</button></div>':''}
-      </div></div>`;
-    card.addEventListener('click',()=>card.classList.toggle('open'));
-    const sb=card.querySelector('.speak-btn');   // play reading without toggling the card
+      <div class="tags">${tiLabel?`<span class="tag" style="color:var(--ichidan)">${tiLabel}</span>`:''}${v.tags.filter(t=>!t.startsWith('top')).map(t=>`<span class="tag">${escapeHtml(t)}</span>`).join('')}</div>`;
+    card.addEventListener('click',()=>openVerbDetail(v));
+    const sb=card.querySelector('.speak-btn');   // play reading without opening the modal
     if(sb)sb.addEventListener('click',e=>{e.stopPropagation();speak(v.read);});
-    if(v.custom){                                // edit/delete custom verbs (don't toggle the card)
-      const eb=card.querySelector('.verb-edit'), db=card.querySelector('.verb-del');
-      if(eb)eb.addEventListener('click',e=>{e.stopPropagation();openVerbModal(v);});
-      if(db)db.addEventListener('click',e=>{e.stopPropagation();if(confirm('Delete custom verb '+v.jp+'? Its progress is also removed.'))deleteVerb(v.rank);});
-    }
     grid.appendChild(card);
   });
   document.getElementById('num').textContent=shown;     // "Showing N of 100"
@@ -1062,19 +1142,25 @@ document.getElementById('resetBtn').addEventListener('click',()=>{
    All requests are same-origin with credentials:'include' — the session lives
    in an httpOnly cookie set by the server, never touched by this JS.
 
-   Two independent synced blobs (separate server `app` namespaces, both server-wins
-   on login, both debounced-push on change):
+   Three independent synced blobs (separate server `app` namespaces, all server-wins
+   on login, all debounced-push on change):
      • 'verbs'        — the progress `store` (cards/sessions/daily). save().
      • 'custom-verbs' — the user's custom verb definitions. saveCustom().
+     • 'settings'     — the Settings-page preferences. saveSettings().
+   Completed sessions are ALSO appended to a durable server log (POST /v1/sessions)
+   so full session history survives the capped in-blob `store.sessions`.
 
    Endpoints (served from this same origin):
      POST /v1/auth/register | /login | /logout      {email,password}
      GET  /v1/auth/me                    → {user:{id,email}|null}
      GET/PUT /v1/progress/verbs          {data:<store>}
      GET/PUT /v1/progress/custom-verbs   {data:{seq,verbs}}
+     GET/PUT /v1/progress/settings       {data:<settings>}
+     POST /v1/sessions                   {right,total,mode}  (append-only history)
    ========================================================================== */
 const APP_KEY='verbs';            // progress namespace on the server
 const CUSTOM_APP_KEY='custom-verbs'; // custom-verb-definitions namespace
+const SETTINGS_APP_KEY='settings'; // synced preferences namespace
 let account=null;                  // {id,email} when signed in, else null
 let authMode='login';              // 'login' | 'register' — current modal mode
 let serverReachable=true;          // false after a failed /me probe (e.g. file://)
@@ -1145,6 +1231,34 @@ async function pullCustomCloud(){
   }catch(err){/* offline — keep local custom verbs */}
 }
 
+// --- Settings sync (separate namespace; same server-wins-on-login model) ---
+let settingsSyncTimer=null;
+function scheduleSettingsSync(){
+  if(!account)return;
+  if(settingsSyncTimer)clearTimeout(settingsSyncTimer);
+  settingsSyncTimer=setTimeout(pushSettingsCloud,1200);
+}
+async function pushSettingsCloud(){
+  if(!account)return;
+  setSyncStatus('saving…');
+  try{ await api('/v1/progress/'+SETTINGS_APP_KEY,{method:'PUT',body:{data:settings}}); setSyncStatus('✓ synced'); }
+  catch(err){ setSyncStatus('⚠ offline'); }
+}
+// Pull settings after sign-in. Server wins; a fresh account seeds from local.
+// Re-applies side-effects (furigana) and repaints the controls that read settings.
+async function pullSettingsCloud(){
+  try{
+    const r=await api('/v1/progress/'+SETTINGS_APP_KEY);
+    if(r&&r.data&&typeof r.data==='object'){
+      settings=Object.assign({}, DEFAULT_SETTINGS, r.data);
+      saveSettingsLocal(); applyFurigana(); paintPrefChips();
+      if(typeof renderSettings==='function')renderSettings();
+    }else{
+      await pushSettingsCloud();    // new account — seed cloud from local settings
+    }
+  }catch(err){/* offline — keep local settings */}
+}
+
 // Pull server progress after sign-in. Server wins when it has data; a fresh
 // account inherits whatever's currently local (one-time migration upward).
 async function pullCloud(){
@@ -1158,7 +1272,8 @@ async function pullCloud(){
       await pushCloud();           // new account — seed cloud from local
     }
   }catch(err){ setSyncStatus('⚠ offline'); }
-  await pullCustomCloud();          // custom verbs share the sign-in pull
+  await pullCustomCloud();          // custom verbs + settings share the sign-in pull
+  await pullSettingsCloud();
   refreshAllViews();
 }
 
@@ -1344,6 +1459,31 @@ document.getElementById('verbModal').addEventListener('click',e=>{ if(e.target.i
 document.addEventListener('keydown',e=>{ if(e.key==='Escape'&&document.getElementById('verbModal').classList.contains('show'))closeVerbModal(); });
 rebuildData();          // sync the rank-range UI to MAXRANK (DATA already merged custom verbs at load)
 renderCustomCount();
+
+/* ============================================================================
+   SETTINGS PAGE (modal). Each control writes `settings` + saveSettings() (which
+   persists, applies furigana, and schedules a cloud push). renderSettings() paints
+   the active chips from `settings` and is also called after a cloud pull.
+   ========================================================================== */
+function renderSettings(){
+  const seg=(sel,attr,val)=>document.querySelectorAll(sel).forEach(b=>b.classList.toggle('active', b.dataset[attr]===val));
+  seg('.setlv','setlv',settings.exampleLevel);
+  seg('.setfg','setfg',settings.furigana?'on':'off');
+  seg('.setin','setin',settings.input);
+  seg('.setau','setau',settings.audio);
+  const foot=document.getElementById('settingsFoot');
+  if(foot) foot.textContent = account ? ('Synced to '+account.email) : 'Sign in to sync these across your devices.';
+}
+function openSettings(){ renderSettings(); document.getElementById('settingsModal').classList.add('show'); }
+function closeSettings(){ document.getElementById('settingsModal').classList.remove('show'); }
+document.getElementById('settingsBtn').addEventListener('click',openSettings);
+document.getElementById('settingsClose').addEventListener('click',closeSettings);
+document.getElementById('settingsModal').addEventListener('click',e=>{ if(e.target.id==='settingsModal')closeSettings(); });
+document.addEventListener('keydown',e=>{ if(e.key==='Escape'&&document.getElementById('settingsModal').classList.contains('show'))closeSettings(); });
+document.getElementById('setLevel').addEventListener('click',e=>{const b=e.target.closest('.setlv');if(!b)return;settings.exampleLevel=b.dataset.setlv;saveSettings();renderSettings();if(session&&document.getElementById('fcStage').classList.contains('active'))renderExample(session.deck[session.i]);});
+document.getElementById('setFuri').addEventListener('click',e=>{const b=e.target.closest('.setfg');if(!b)return;settings.furigana=b.dataset.setfg==='on';saveSettings();renderSettings();});
+document.getElementById('setInput').addEventListener('click',e=>{const b=e.target.closest('.setin');if(!b)return;settings.input=b.dataset.setin;saveSettings();paintPrefChips();renderSettings();});
+document.getElementById('setAudio').addEventListener('click',e=>{const b=e.target.closest('.setau');if(!b)return;settings.audio=b.dataset.setau;saveSettings();paintPrefChips();renderSettings();});
 
 // ---- Initial paint ----
 // The flashcard tab is the default-active panel (its deck count + due banner

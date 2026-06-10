@@ -54,10 +54,11 @@ Markup: `#panel-study` (flashcard setup → card stage → done), `#panel-browse
 and the auth modal + sign-up banner.
 
 `verbs.js` holds the `VERBS` dataset. `app.js` sections (top to bottom): `STORAGE`
-(localStorage + SRS scheduling + leech logic) → `TAB NAV` → `FONT/THEME` →
-`EXPORT/IMPORT` → `DECK BUILDING` (`passes()` + `wireFacets`) → `FLASHCARD`
-(session lifecycle + TTS) → `BROWSE` → `STATS+CHARTS` → `CUSTOM VERBS` (modal CRUD)
-→ `CLOUD ACCOUNTS + SYNC`. Key functions by area:
+(localStorage + SRS scheduling + leech logic) → `SETTINGS` (DB-synced prefs) →
+`FONT/THEME` → `TAB NAV` → `EXPORT/IMPORT` → `DECK BUILDING` (`passes()` +
+`wireFacets`) → `FLASHCARD` (session lifecycle + TTS) → `BROWSE` (+ detail modal) →
+`STATS+CHARTS` → `CUSTOM VERBS` (modal CRUD) → `CLOUD ACCOUNTS + SYNC` →
+`SETTINGS PAGE`. Key functions by area:
 
 - **SRS/leech (pure, the core logic):** `cardStat`, `scheduleCard`, `isDue`,
   `dueCards`, `rollingAcc`, `isLeech`, `leeches`. Leitner boxes, not SM-2.
@@ -82,22 +83,30 @@ and the auth modal + sign-up banner.
 - **Leveled examples:** `attachLevels()` sets `v.levels = EXAMPLES[rank]`
   (built-in only) after each rebuild. `availableTiers(v)` + `exampleForLevel(v,
   level)` (pure, fallback: exact tier → nearest → `ex` → null) drive the answer-side
-  selector (`renderExample`; chosen tier persists as `jpverbs_exlevel`) and the
-  Browse leveled list (`exampleListHtml`). `JLPT_TIERS` is the easy→hard order.
-- **Render:** `showCard`/`reveal`/`grade`/`endSession` (session), `renderBrowse`,
-  `renderStats` + `renderCardBars`, `lineChart` (axis caption + avg line + value
-  labels + `<title>` hover) / `barChart` (SVG strings).
+  selector (`renderExample`, default tier = `settings.exampleLevel`) and the Browse
+  detail modal's level filter. `JLPT_TIERS` is the easy→hard order.
+- **Settings (DB-synced):** `settings` ({exampleLevel, furigana, input, audio}) in
+  `jpverbs_settings`, synced as app `settings`. `loadSettings` (migrates old per-key
+  prefs), `saveSettings` (persist + `applyFurigana` + push), `renderSettings`
+  (Settings-modal controls), `paintPrefChips` (mirror onto the setup chips).
+  `applyFurigana` flips `<html data-furigana>` (CSS hides `<rt>` when off).
+- **Render:** `showCard`/`reveal`/`grade`/`endSession` (session, `endSession` also
+  POSTs to the durable session log), `renderBrowse` (summary cards) +
+  `openVerbDetail`/`renderDetailExample` (the detail modal), `renderStats` +
+  `renderCardBars`, `lineChart`/`barChart` (SVG strings).
 - **Typed mode + audio:** `revealAnswer` (shared show-answer + autoplay) feeds both
   `reveal` (self-graded) and `submitTyped` (typed: `normKana`-compares the kana, sets
   an advisory verdict + `session.suggested`). `bindSingle` wires the Input/Audio
   single-select chips. Prefs persist as `jpverbs_input` / `jpverbs_audio`. (Audio
   playback itself is the TTS bullet above.)
 - **Cloud:** `api`, `bootAuth`, `updateAccountChip`, `openAuth`. Same-origin,
-  httpOnly cookie. TWO debounced synced blobs: progress (`scheduleCloudSync`/
-  `pushCloud`/`pullCloud`, app `verbs`) and custom verbs (`scheduleCustomSync`/
-  `pushCustomCloud`/`pullCustomCloud`, app `custom-verbs`). Server wins on login;
-  a fresh account seeds the cloud from local. `maybeShowSignup` (from `endSession`)
-  shows the sign-up nudge after the first session, not on first paint.
+  httpOnly cookie. THREE debounced synced blobs: progress (app `verbs`), custom
+  verbs (app `custom-verbs`), settings (app `settings`) — each with a
+  `schedule*Sync`/`push*Cloud`/`pull*Cloud` trio; all server-wins on login, fresh
+  account seeds from local (`pullCloud` chains all three). Plus `logSession` →
+  `POST /v1/sessions` (durable append-only history, signed-in only).
+  `maybeShowSignup` (from `endSession`) shows the sign-up nudge after the first
+  session, not on first paint.
 - **UX helpers (added in the polish pass):** `filterSummary`/`paintSummary`
   (active-filter recap), `setupTopicGroups` (topic disclosure + badge),
   `escapeHtml`.
@@ -106,12 +115,16 @@ and the auth modal + sign-up banner.
   `.chips` + `.topic-inner`; collapsed topic chips leave the tab order.
 
 Persisted store (`localStorage["jpverbs_v3"]`, synced as app `verbs`):
-`{ cards:{<rank>:{attempts:[1|0…],right,wrong,box:0..5,due:<epochMs>}}, sessions:[{t,right,tot}…] (cap 200), daily:{"YYYY-MM-DD":{right,tot}} }`.
+`{ cards:{<rank>:{attempts:[1|0…],right,wrong,box:0..5,due:<epochMs>}}, sessions:[{t,right,tot}…] (cap 1000, for charts), daily:{"YYYY-MM-DD":{right,tot}} }`.
+The capped `sessions` is just for the charts — the durable record is the server's
+`study_sessions` table (`POST /v1/sessions` on every session end).
 Custom verbs (`localStorage["jpverbs_custom"]`, synced as app `custom-verbs`):
 `{ seq:<monotonic rank counter>, verbs:[<verb + {rank, custom:true}>…] }`.
+Settings (`localStorage["jpverbs_settings"]`, synced as app `settings`):
+`{ exampleLevel, furigana, input, audio }` (the Settings page; migrated from the
+old jpverbs_exlevel/input/audio keys).
 Leveled examples (`examples.js`, NOT in localStorage — static data):
-`EXAMPLES[rank] = { N5:[jp,en], N4:…, N3:…, N2:…, N1:[jp,en] }`. Plus the UI pref
-`localStorage["jpverbs_exlevel"]` (last-picked tier).
+`EXAMPLES[rank] = { N5:[jp,en], …, N1:[jp,en] }`.
 
 ## Design system
 
@@ -218,10 +231,25 @@ Component contracts you must preserve:
   on Browse cards where the reading is already shown) — never on the flashcard
   prompt. The server endpoint caches text→audio (so don't worry about replays); see
   the server's `/v1/tts` (uses the existing `googleTts` service).
-- **The kana field owns its own keys.** The global flashcard keydown handler bails
-  when `#answerInput` is focused (so typing `1`/`2`/space goes into the field);
-  Enter-to-submit is bound on the input itself, and Enter *after* reveal accepts
-  `session.suggested`. Keep that focus guard if you touch the keyboard handler.
+- **Flashcard grading keys.** Before reveal: Space/Enter flip the card (typed mode:
+  Enter submits instead, bound on the field). After reveal: **Space / Enter / 2 =
+  correct; X / 1 = wrong.** The global keydown handler bails when `#answerInput` is
+  focused so typing isn't hijacked. (This replaced the old "Enter accepts the
+  auto-suggested grade" — Enter now always means correct, per request; the typed-mode
+  suggestion ring is still shown, and X/1 overrides it to wrong.)
+- **Browse cards are SUMMARY only — clicking opens the detail MODAL** (`openVerbDetail`,
+  `#detailModal`), not an inline expand. The old `.detail`/`.open` inline expansion is
+  gone (the `.card.open .detail` CSS is dead but harmless). Inside the modal, Mnemonic/
+  Trap/Examples are collapsible `<details>` (don't dump everything at once); Examples
+  are JLPT-level-filtered via a selector defaulting to `settings.exampleLevel` — that
+  filter is a LOCAL view, it does NOT write the global default (study vs. browse).
+- **Furigana is a global CSS flip** (`<html data-furigana="off">` → `rt{display:none}`),
+  driven by `settings.furigana`/`applyFurigana()`. It affects every `<ruby>` at once
+  (examples, browse modal). Don't gate furigana per-element; toggle the attribute.
+- **`store.sessions` is capped (1000) and is JUST for the charts.** The durable,
+  never-pruned session history is the server's `study_sessions` table — `endSession`
+  POSTs there (signed-in). Don't "fix" the cap by unbounding the synced blob (it'd
+  grow the 1 MB `verbs` PUT); the DB log is the answer for lifetime history.
 - **The leveled example sentences in `examples.js` are MODEL-GENERATED** (fanned out
   across agents, then format-validated: valid JSON, all 5 tiers, balanced `<ruby>`,
   English present; a sample was hand-reviewed for grammar/furigana). They're solid
@@ -241,6 +269,14 @@ Component contracts you must preserve:
 
 Commits, newest first (all on `main`; touch the split web/ files + `src/` where noted):
 
+1. **Browse detail modal + DB-backed settings + grading keys + durable session log.**
+   Browse cards open a modal (collapsible sections; level-filtered examples) instead of
+   expanding. New Settings page (toolbar gear → `#settingsModal`): default example
+   level, furigana, default input/audio — synced as app `settings`; furigana flips a
+   `<html>` attribute. Reveal grading: Space/Enter/2 = correct, X/1 = wrong. Every
+   finished session is appended to a new server `study_sessions` table via
+   `POST /v1/sessions` so history is never lost (server: schema + `insertSession`/
+   `countSessions` + route + tests).
 1. **leveled example sentences.** New `examples.js` (`EXAMPLES`, 5 JLPT tiers/verb,
    model-generated + validated); answer-side N5–N1 selector (`renderExample`,
    `exampleForLevel`/`availableTiers`, pref `jpverbs_exlevel`) + Browse leveled list
