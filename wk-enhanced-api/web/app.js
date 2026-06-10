@@ -11,14 +11,17 @@
    STATS+CHARTS → CUSTOM VERBS → CLOUD ACCOUNTS + SYNC.
    ========================================================================== */
 const TYPE_LABEL={godan:"GODAN",ichidan:"ICHIDAN",irregular:"IRREG"};
-// ---- CUSTOM VERBS storage (user-added) ----
+// ---- CUSTOM VERBS storage (user-added; synced to the cloud when signed in) ----
 // Shape: { seq:<monotonic rank counter, starts at 100>, verbs:[ <verb>, … ] }.
 // Each custom verb has the same fields as a baked one plus custom:true, and a
 // rank assigned from `seq` (101, 102, …) that is never reused — so progress keyed
 // by rank in `store.cards` stays stable across deletes.
+//   saveCustomLocal() = localStorage only (used by cloud-pull to avoid re-pushing).
+//   saveCustom()      = localStorage + a debounced cloud push (the normal path).
 const CUSTOM_KEY='jpverbs_custom';
 function loadCustom(){ try{const o=JSON.parse(localStorage.getItem(CUSTOM_KEY));if(o&&Array.isArray(o.verbs))return o;}catch(e){} return {seq:100,verbs:[]}; }
-function saveCustom(o){ try{localStorage.setItem(CUSTOM_KEY,JSON.stringify(o));}catch(e){} }
+function saveCustomLocal(o){ try{localStorage.setItem(CUSTOM_KEY,JSON.stringify(o));}catch(e){} }
+function saveCustom(o){ saveCustomLocal(o); if(typeof scheduleCustomSync==='function')scheduleCustomSync(); }
 
 // DATA is the live deck: the baked-in VERBS (minus any v.skip) plus the user's
 // own custom verbs. It's a `let` rebuilt by rebuildData() so every reader
@@ -987,17 +990,24 @@ document.getElementById('resetBtn').addEventListener('click',()=>{
    All requests are same-origin with credentials:'include' — the session lives
    in an httpOnly cookie set by the server, never touched by this JS.
 
+   Two independent synced blobs (separate server `app` namespaces, both server-wins
+   on login, both debounced-push on change):
+     • 'verbs'        — the progress `store` (cards/sessions/daily). save().
+     • 'custom-verbs' — the user's custom verb definitions. saveCustom().
+
    Endpoints (served from this same origin):
      POST /v1/auth/register | /login | /logout      {email,password}
-     GET  /v1/auth/me              → {user:{id,email}|null}
-     GET  /v1/progress/verbs       → {data,updatedAt}
-     PUT  /v1/progress/verbs       {data:<store>}
+     GET  /v1/auth/me                    → {user:{id,email}|null}
+     GET/PUT /v1/progress/verbs          {data:<store>}
+     GET/PUT /v1/progress/custom-verbs   {data:{seq,verbs}}
    ========================================================================== */
 const APP_KEY='verbs';            // progress namespace on the server
+const CUSTOM_APP_KEY='custom-verbs'; // custom-verb-definitions namespace
 let account=null;                  // {id,email} when signed in, else null
 let authMode='login';              // 'login' | 'register' — current modal mode
 let serverReachable=true;          // false after a failed /me probe (e.g. file://)
-let syncTimer=null;
+let syncTimer=null;                 // progress-blob debounce
+let customSyncTimer=null;           // custom-verbs debounce (independent)
 
 // Thin JSON fetch wrapper. Throws an Error carrying .status / .code on non-2xx
 // so callers can branch; a network failure throws fetch's own TypeError (no
@@ -1034,6 +1044,35 @@ async function pushCloud(){
   catch(err){ setSyncStatus('⚠ offline'); }   // next save() retries
 }
 
+// --- Custom-verb sync (mirrors the progress sync above, separate namespace) ---
+// Add/edit/delete all go through saveCustom(), which schedules this push, so a
+// removal propagates to the cloud just like an add.
+function scheduleCustomSync(){
+  if(!account)return;
+  if(customSyncTimer)clearTimeout(customSyncTimer);
+  customSyncTimer=setTimeout(pushCustomCloud,1200);
+}
+async function pushCustomCloud(){
+  if(!account)return;
+  setSyncStatus('saving…');
+  try{ await api('/v1/progress/'+CUSTOM_APP_KEY,{method:'PUT',body:{data:loadCustom()}}); setSyncStatus('✓ synced'); }
+  catch(err){ setSyncStatus('⚠ offline'); }
+}
+// Pull custom verbs after sign-in. Server wins when it has any; a fresh account
+// seeds the cloud from whatever custom verbs are currently local. Writes via
+// saveCustomLocal() so hydration doesn't immediately re-push the same bytes.
+async function pullCustomCloud(){
+  try{
+    const r=await api('/v1/progress/'+CUSTOM_APP_KEY);
+    if(r&&r.data&&Array.isArray(r.data.verbs)){
+      saveCustomLocal({seq:r.data.seq||100, verbs:r.data.verbs});
+      rebuildData();
+    }else if(loadCustom().verbs.length){
+      await pushCustomCloud();     // new account — seed cloud from local custom verbs
+    }
+  }catch(err){/* offline — keep local custom verbs */}
+}
+
 // Pull server progress after sign-in. Server wins when it has data; a fresh
 // account inherits whatever's currently local (one-time migration upward).
 async function pullCloud(){
@@ -1047,12 +1086,14 @@ async function pullCloud(){
       await pushCloud();           // new account — seed cloud from local
     }
   }catch(err){ setSyncStatus('⚠ offline'); }
+  await pullCustomCloud();          // custom verbs share the sign-in pull
   refreshAllViews();
 }
 
 // Re-render every store-derived view. Mirrors the import handler's refresh set.
 function refreshAllViews(){
   updateDeckCount(); updateDueBanner(); renderBrowse();
+  if(typeof renderCustomCount==='function')renderCustomCount();
   if(document.getElementById('panel-stats').classList.contains('active'))renderStats();
 }
 

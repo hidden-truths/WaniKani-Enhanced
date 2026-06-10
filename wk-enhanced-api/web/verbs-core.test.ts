@@ -89,10 +89,11 @@ function loadCore(): Core {
     removeItem: (k: string) => { delete ls[k]; },
     clear() { for (const k in ls) delete ls[k]; },
   };
+  const locationStub = { protocol: "http:", reload() {} };
   const windowStub: any = {
     matchMedia: () => ({ matches: false, addEventListener() {} }),
     addEventListener() {},
-    location: { reload() {} },
+    location: locationStub,
   };
   const fetchStub = () => Promise.reject(new Error("no network in tests"));
 
@@ -100,10 +101,10 @@ function loadCore(): Core {
   // appended `return {…}` can hand them back. Browser globals are passed as params
   // (shadowing the absent globalThis equivalents); JSON/Math/Date/etc. resolve to Bun.
   const fn = new Function(
-    "window", "document", "localStorage", "fetch", "navigator", "alert", "confirm",
+    "window", "document", "localStorage", "fetch", "navigator", "alert", "confirm", "location",
     body
   );
-  return fn(windowStub, documentStub, localStorageStub, fetchStub, {}, () => {}, () => true);
+  return fn(windowStub, documentStub, localStorageStub, fetchStub, {}, () => {}, () => true, locationStub);
 }
 
 let core: Core;

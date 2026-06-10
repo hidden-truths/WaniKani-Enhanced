@@ -24,7 +24,9 @@ export const progressRouter = new OpenAPIHono({ defaultHook: zodHook });
 // and gives the client a 400 on a bad path rather than silently writing junk.
 const AppParamSchema = z.object({
     app: z
-        .enum(['verbs'])
+        // 'verbs'        = the study-app progress blob (cards/sessions/daily)
+        // 'custom-verbs' = the user's custom verb definitions (synced separately)
+        .enum(['verbs', 'custom-verbs'])
         .openapi({ param: { name: 'app', in: 'path' }, example: 'verbs' }),
 });
 
