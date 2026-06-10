@@ -18,7 +18,9 @@
   :root, :root[data-theme="light"]{
     --ink:#1a1815; --paper:#f5f1e8; --paper-2:#ebe5d6;
     --godan:#c8442f; --ichidan:#2d4a6b; --irregular:#6b6256;
-    --muted:#7a7164; --line:#d9d1c0; --leech:#9c27b0;
+    /* --muted darkened from #7a7164 (≈4.0:1, failed AA for the many small labels)
+       to ≈5.3:1 on --paper while staying clearly secondary to --ink. */
+    --muted:#675f52; --line:#d9d1c0; --leech:#9c27b0;
     --good:#3a7d44;
     --jp-font:"Noto Sans JP",sans-serif;
   }
@@ -63,7 +65,7 @@
      godan/ichidan color when active (used on the class filter buttons). */
   .controls{padding:18px 0 8px}
   .row{display:flex;flex-wrap:wrap;gap:8px;align-items:center;margin-bottom:8px}
-  .filter-label{font-family:"SF Mono",ui-monospace,monospace;font-size:10px;letter-spacing:.2em;text-transform:uppercase;color:var(--muted);margin-right:4px}
+  .filter-label{font-family:"SF Mono",ui-monospace,monospace;font-size:11px;letter-spacing:.18em;text-transform:uppercase;color:var(--muted);margin-right:4px}
   .chip{font-family:"SF Mono",ui-monospace,monospace;font-size:12px;border:1px solid var(--line);background:transparent;color:var(--ink);padding:6px 13px;border-radius:2px;cursor:pointer;transition:all .15s}
   .chip:hover{border-color:var(--ink)}
   .chip.active{background:var(--ink);color:var(--paper);border-color:var(--ink)}
@@ -320,9 +322,11 @@
   /* Stats view: summary boxes, chart cards, leech list, SRS legend. */
   .statgrid{display:grid;grid-template-columns:repeat(auto-fit,minmax(150px,1fr));gap:14px;margin:18px 0}
   .statbox{border:1px solid var(--line);border-radius:4px;padding:16px;background:var(--paper)}
-  .statbox .v{font-size:34px;font-weight:900} .statbox .l{font-family:"SF Mono",ui-monospace,monospace;font-size:10px;letter-spacing:.16em;text-transform:uppercase;color:var(--muted);margin-top:2px}
+  .statbox .v{font-size:34px;font-weight:900} .statbox .l{font-family:"SF Mono",ui-monospace,monospace;font-size:11px;letter-spacing:.14em;text-transform:uppercase;color:var(--muted);margin-top:2px}
   .chart-card{border:1px solid var(--line);border-radius:4px;padding:18px;background:var(--paper);margin-bottom:18px}
-  .chart-title{font-family:"SF Mono",ui-monospace,monospace;font-size:11px;letter-spacing:.16em;text-transform:uppercase;color:var(--muted);margin-bottom:12px}
+  /* Sentence-case (not uppercased): these are long descriptive sentences, and
+     spaced uppercase is hard to scan at length. Short labels stay uppercase. */
+  .chart-title{font-family:"SF Mono",ui-monospace,monospace;font-size:12px;letter-spacing:.02em;color:var(--muted);margin-bottom:12px}
   svg{display:block;width:100%;height:auto}    /* charts scale to container width */
   /* Line-chart points enlarge on hover (the native <title> shows the readout). */
   svg circle.pt{transition:r .12s ease} svg circle.pt:hover{r:5.5}

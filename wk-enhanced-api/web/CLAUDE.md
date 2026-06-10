@@ -147,6 +147,11 @@ Leveled examples (`examples.js`, NOT in localStorage — static data):
 
 ## Design system
 
+**Type-label rule:** uppercase-mono (the signature) is for SHORT labels only —
+filter/stat/section labels, kickers, tabs. Longer descriptive strings (chart
+titles, helper/hint text) are sentence-case mono so they stay scannable; don't
+add `text-transform:uppercase` to a multi-word sentence.
+
 All theming flows through CSS custom properties (`--ink/--paper/--paper-2`,
 `--godan/--ichidan/--irregular`, `--muted/--line`, `--leech`, `--good`,
 `--jp-font`); light/dark is one `data-theme` flip on `<html>`. Colors are
@@ -344,6 +349,12 @@ Component contracts you must preserve:
 
 Commits, newest first (all on `main`; touch the split web/ files + `src/` where noted):
 
+1. **Design-polish pass — readability/contrast (2/4).** `--muted` darkened
+   (#7a7164 → #675f52, ≈4.0:1 → ≈5.3:1 on paper) so the many small labels pass AA.
+   `.chart-title` is no longer force-uppercased (long descriptive sentences read
+   poorly in spaced caps) — short labels stay uppercase. `.filter-label` /
+   `.statbox .l` bumped 10→11px. Design contract: uppercase-mono for SHORT labels
+   only; sentence case for longer titles/helper text.
 1. **Design-polish pass — responsive + bug fixes (1/4).** Mobile toolbar now
    wraps (`flex-wrap`) instead of overflowing 390px; `.modal-x` is pinned absolute
    (was `float:right`, overlapped the detail-modal stamp) with the detail card-top
