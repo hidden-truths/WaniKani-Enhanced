@@ -92,7 +92,8 @@ and the auth modal + sign-up banner.
   level)` (pure, fallback: exact tier → nearest → `ex` → null) drive the answer-side
   selector (`renderExample`, default tier = `settings.exampleLevel`) and the Browse
   detail modal's level filter. `JLPT_TIERS` is the easy→hard order.
-- **Settings (DB-synced):** `settings` ({exampleLevel, furigana, input, audio}) in
+- **Settings (DB-synced):** `settings` ({exampleLevel, furigana, input, audio,
+  freeReviewDue}) in
   `jpverbs_settings`, synced as app `settings`. `loadSettings` (migrates old per-key
   prefs), `saveSettings` (persist + `applyFurigana` + push), `renderSettings`
   (Settings-modal controls), `paintPrefChips` (mirror onto the setup chips).
@@ -139,8 +140,8 @@ The capped `sessions` is just for the charts — the durable record is the serve
 Custom verbs (`localStorage["jpverbs_custom"]`, synced as app `custom-verbs`):
 `{ seq:<monotonic rank counter>, verbs:[<verb + {rank, custom:true}>…] }`.
 Settings (`localStorage["jpverbs_settings"]`, synced as app `settings`):
-`{ exampleLevel, furigana, input, audio }` (the Settings page; migrated from the
-old jpverbs_exlevel/input/audio keys).
+`{ exampleLevel, furigana, input, audio, freeReviewDue }` (the Settings page;
+migrated from the old jpverbs_exlevel/input/audio keys; `freeReviewDue` defaults on).
 Leveled examples (`examples.js`, NOT in localStorage — static data):
 `EXAMPLES[rank] = { N5:[jp,en], …, N1:[jp,en] }`.
 
@@ -201,6 +202,18 @@ Component contracts you must preserve:
 - **`updateAccountChip` / `updateDueBanner` set `innerHTML`** to embed icons, so
   they no longer use `textContent`. The account email is **`escapeHtml`'d** before
   interpolation — keep that (it's user-controlled → XSS otherwise).
+- **The inline SVG sprite must hide its size via INLINE STYLE, not width/height
+  attributes.** There's a global `svg{display:block;width:100%;height:auto}` rule for
+  the charts. CSS beats presentation attributes, so the old
+  `<svg width="0" height="0" style="position:absolute">` sprite got `width:100%`
+  applied — and since `height:auto` on a viewBox-less SVG resolves to 0 in Chromium
+  but ~150px in Firefox/Safari, the absolutely-positioned sprite became a full-width
+  invisible overlay across the top of the page in those browsers, eating clicks and
+  text selection on the header (reported as "can't select the buttons/text at the
+  top"; invisible in a Chromium preview). Fix: dimensions live in the sprite's inline
+  `style="...width:0;height:0;overflow:hidden;pointer-events:none"` (inline style
+  outranks the type selector). Keep them there; don't move them back to attributes,
+  and don't widen the global `svg{}` rule.
 - **The icon sprite is inline + offline-first.** Don't replace it with Tabler/
   Lucide-via-CDN — icons would break offline, defeating the single-file premise.
   Add new glyphs as `<symbol>`s. (`-filled` style names don't exist here; these
@@ -295,19 +308,19 @@ Component contracts you must preserve:
   that ARE genuinely verb-specific (the `type` field, the Godan/Ichidan/… Type
   filter, the "Add verb" modal) are intentionally still verb-shaped — generalizing
   those is the actual (not-yet-done) transition work, tracked in NEXT_STEPS.
-- **Free study deliberately does NOT change the SRS schedule, and reviewing a card
-  early never promotes it.** Two study kinds (`cfg.kind`): *SRS review* serves only
-  due cards (`buildDeck` intersects `isDue`) and reschedules them; *free study* is
-  practice over any deck and leaves box/due untouched. The gate lives in `grade`:
-  `if(session.kind==='srs' && isDue(v.rank)) scheduleCard(...)`. The `isDue` guard is
-  belt-and-suspenders — an SRS deck is already due-only, but it guarantees that even
-  a non-due card can't be bumped up. Both kinds still append to `attempts`/`right`/
-  `wrong` (so accuracy + leech detection cover free study too) — only the schedule
-  is conditional. Don't "simplify" `grade` back to an unconditional `scheduleCard`;
-  that's the exact behavior the two-kind split was added to fix. Legacy sessions
-  saved before the split have no `kind` and are counted as SRS in the stats (the old
-  behavior always rescheduled). The "Review due cards" banner is just a shortcut that
-  sets `cfg.kind='srs'` + `status:['due']`.
+- **Reviewing a card early never promotes it; free study reschedules only ALREADY-DUE
+  cards, and only when the setting allows.** Two study kinds (`cfg.kind`): *SRS review*
+  serves only due cards (`buildDeck` intersects `isDue`) and reschedules them; *free
+  study* is practice over any deck. The gate lives in `grade`:
+  `if(isDue(v.rank) && (session.kind==='srs' || settings.freeReviewDue)) scheduleCard(...)`.
+  So: a NOT-due card is never rescheduled (the `isDue` guard — reviewing early can't
+  bump a card up); a due card is rescheduled in SRS always, and in free study iff the
+  `freeReviewDue` setting is on (default on — "Free study advances due cards" in
+  Settings). Both kinds always append to `attempts`/`right`/`wrong` (accuracy + leech
+  detection cover free study too) — only the schedule is conditional. Don't
+  "simplify" `grade` back to an unconditional `scheduleCard`. Legacy sessions saved
+  before the kind-split have no `kind` and count as SRS in the stats. The "Review due
+  cards" banner just sets `cfg.kind='srs'` + `status:['due']`.
 - **The review forecast is front-loaded by design** — Leitner intervals top out at
   16 days (`BOX_DAYS`), so EVERY scheduled card is due within ~16 days. The `month`
   view (the current month's day count, 28–31 slots) therefore captures the whole
@@ -331,6 +344,12 @@ Component contracts you must preserve:
 
 Commits, newest first (all on `main`; touch the split web/ files + `src/` where noted):
 
+1. **Free-study-advances-due setting + headline + header-overlay fix.** New
+   `freeReviewDue` setting (default on): in free study, grading an already-due card
+   advances its SRS schedule (not-due cards still never move). Headline → "Everyday
+   Japanese that sticks" / 日常の日本語. Fixed the inline SVG sprite hiding (inline
+   style, not attributes) so the global chart `svg{width:100%}` rule can't turn it
+   into a header-blocking overlay in Firefox/Safari.
 1. **De-verb-ify groundwork.** Renamed to 日常日本語 / "Japanese Trainer" (kicker,
    title, headline, README), neutralized "verb"→"word/card" copy, and defaulted
    `cat:'verb'` onto every card (`attachLevels` + `saveVerb`) as the model-level

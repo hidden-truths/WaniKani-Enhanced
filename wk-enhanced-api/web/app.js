@@ -262,7 +262,11 @@ document.querySelectorAll('.tab').forEach(t=>t.addEventListener('click',()=>{
    (Theme + font keep their own keys — device-ish, not synced.)
    ========================================================================== */
 const SETTINGS_KEY='jpverbs_settings';
-const DEFAULT_SETTINGS={exampleLevel:'N5', furigana:true, input:'self', audio:'off'};
+// freeReviewDue: in FREE study, grading a card that's already DUE still advances its
+// SRS schedule (a due card is fair game to count). Not-due cards are never touched in
+// free study, and SRS-review sessions always reschedule due cards regardless. Default
+// on — it's the behavior most learners expect; toggle off for pure no-stakes practice.
+const DEFAULT_SETTINGS={exampleLevel:'N5', furigana:true, input:'self', audio:'off', freeReviewDue:true};
 function loadSettings(){
   let s=null; try{ s=JSON.parse(localStorage.getItem(SETTINGS_KEY)); }catch(e){}
   if(s && typeof s==='object') return Object.assign({}, DEFAULT_SETTINGS, s);
@@ -834,15 +838,15 @@ function submitTyped(){
 }
 // Record one result: append to attempts + accuracy counters (BOTH study kinds —
 // free study still feeds accuracy/leech stats), then persist NOW (mid-session
-// crash safety). The SRS SCHEDULE is only touched in an SRS session, and only for
-// a card that's actually due — so a free-study run, or reviewing a card early,
-// never bumps its box/next-review date. Then advance.
+// crash safety). The SRS SCHEDULE only advances for a card that's actually DUE,
+// and only in an SRS session OR (in free study) when the freeReviewDue setting is
+// on — so reviewing a NOT-due card early never bumps its box/next-review date.
 function grade(correct){
   const v=session.deck[session.i];
   const c=cardStat(v.rank);
   c.attempts.push(correct?1:0);
   if(correct)c.right++;else c.wrong++;
-  if(session.kind==='srs' && isDue(v.rank)) scheduleCard(c,correct);
+  if(isDue(v.rank) && (session.kind==='srs' || settings.freeReviewDue)) scheduleCard(c,correct);
   session.results.push(correct?1:0);
   save();
   session.i++;
@@ -1652,6 +1656,7 @@ function renderSettings(){
   seg('.setfg','setfg',settings.furigana?'on':'off');
   seg('.setin','setin',settings.input);
   seg('.setau','setau',settings.audio);
+  seg('.setfr','setfr',settings.freeReviewDue?'on':'off');
   const foot=document.getElementById('settingsFoot');
   if(foot) foot.textContent = account ? ('Synced to '+account.email) : 'Sign in to sync these across your devices.';
 }
@@ -1665,6 +1670,7 @@ document.getElementById('setLevel').addEventListener('click',e=>{const b=e.targe
 document.getElementById('setFuri').addEventListener('click',e=>{const b=e.target.closest('.setfg');if(!b)return;settings.furigana=b.dataset.setfg==='on';saveSettings();renderSettings();});
 document.getElementById('setInput').addEventListener('click',e=>{const b=e.target.closest('.setin');if(!b)return;settings.input=b.dataset.setin;saveSettings();paintPrefChips();renderSettings();});
 document.getElementById('setAudio').addEventListener('click',e=>{const b=e.target.closest('.setau');if(!b)return;settings.audio=b.dataset.setau;saveSettings();paintPrefChips();renderSettings();});
+document.getElementById('setFreeDue').addEventListener('click',e=>{const b=e.target.closest('.setfr');if(!b)return;settings.freeReviewDue=b.dataset.setfr==='on';saveSettings();renderSettings();});
 
 // ---- Initial paint ----
 // The flashcard tab is the default-active panel (its deck count + due banner

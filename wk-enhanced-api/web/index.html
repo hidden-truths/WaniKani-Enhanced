@@ -192,8 +192,13 @@
 <body>
 <!-- Inline SVG icon sprite. Self-contained (no CDN/icon-font) so icons work
      offline like the rest of the app; referenced via <svg class="ic"><use href="#i-…"/>.
-     All stroke-based on a 24-grid; color/size inherit via currentColor + 1em in .ic. -->
-<svg width="0" height="0" style="position:absolute" aria-hidden="true" focusable="false" overflow="hidden">
+     All stroke-based on a 24-grid; color/size inherit via currentColor + 1em in .ic.
+     Size + pointer-events are set via INLINE STYLE (not width/height attributes) so
+     the global `svg{width:100%;height:auto}` chart rule can't override them and let
+     this absolutely-positioned sprite balloon into a full-width overlay that eats
+     clicks on the header (browser-dependent — Chromium resolved height:auto to 0,
+     Firefox/Safari to 150px). Inline style beats the type selector. -->
+<svg style="position:absolute;width:0;height:0;overflow:hidden;pointer-events:none" aria-hidden="true" focusable="false">
   <symbol id="i-cards" viewBox="0 0 24 24"><rect x="3" y="6" width="13" height="15" rx="2"/><path d="M8 6V4.5A1.5 1.5 0 0 1 9.5 3H19a2 2 0 0 1 2 2v10.5A1.5 1.5 0 0 1 19.5 17H18"/></symbol>
   <symbol id="i-grid" viewBox="0 0 24 24"><rect x="3" y="3" width="7" height="7" rx="1.5"/><rect x="14" y="3" width="7" height="7" rx="1.5"/><rect x="3" y="14" width="7" height="7" rx="1.5"/><rect x="14" y="14" width="7" height="7" rx="1.5"/></symbol>
   <symbol id="i-chart" viewBox="0 0 24 24"><path d="M4 4v16h16"/><rect x="7" y="11" width="3" height="6" rx="1"/><rect x="12.5" y="7" width="3" height="10" rx="1"/><rect x="18" y="13" width="3" height="4" rx="1"/></symbol>
@@ -236,7 +241,7 @@
       <input type="file" id="importFile" accept="application/json,.json" hidden>
     </div>
   </div>
-  <h1>The words you keep getting wrong<span class="s">まちがえやすい日本語 · flashcards + SRS</span></h1>
+  <h1>Everyday Japanese that sticks<span class="s">日常の日本語 · flashcards + SRS</span></h1>
 </header>
 
 <!-- Top-level view switcher. data-tab maps to #panel-<tab>; see TAB NAV. -->
@@ -657,6 +662,11 @@
       <span class="jlptseg" id="setAudio" role="group" aria-label="Audio">
         <button class="chip setau" type="button" data-setau="off">Off</button>
         <button class="chip setau" type="button" data-setau="auto">Autoplay</button>
+      </span></div>
+    <div class="set-row"><label>Free study advances due cards<span class="set-hint">Grading a card that's already due counts toward its SRS schedule, even in free study.</span></label>
+      <span class="jlptseg" id="setFreeDue" role="group" aria-label="Free study advances due cards">
+        <button class="chip setfr" type="button" data-setfr="on">On</button>
+        <button class="chip setfr" type="button" data-setfr="off">Off</button>
       </span></div>
     <div class="modal-foot" id="settingsFoot"></div>
   </div>

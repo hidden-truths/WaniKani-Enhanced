@@ -9,6 +9,13 @@ split, custom-verb sync, and Google TTS — what's left is one genuinely-deferre
 (needs email infra). Add new ideas to "Ideas / not yet scoped" as they come up.
 
 ## Done (most recent first)
+- ~~Free study advances due cards (setting)~~ — **shipped.** New `freeReviewDue`
+  setting (default on): grading an already-due card in free study advances its SRS
+  schedule; not-due cards are still never touched. Gate in `grade`.
+- ~~Header click/select bug~~ — **fixed.** The inline SVG sprite was hidden via
+  `width="0" height="0"` attributes, which the global `svg{width:100%;height:auto}`
+  chart rule overrode → a full-width invisible overlay over the header in
+  Firefox/Safari (height:auto → ~150px there). Now hidden via inline style.
 - ~~De-verb-ify groundwork~~ — **shipped (partial, by design).** Renamed to
   日常日本語 / "Japanese Trainer", dropped "verbs-only" framing from the headers/
   empty-states, and tagged every card with `cat:'verb'` (`attachLevels` default +
