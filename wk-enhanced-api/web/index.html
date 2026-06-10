@@ -1464,6 +1464,26 @@ function barChart(el,items){
   });
   el.innerHTML=h;
 }
+// Per-card accuracy bars, capped to the worst CARDBARS_CAP by default (the list
+// is sorted worst→best, so the actionable cards lead) with a show-all toggle.
+// Without the cap a fully-drilled 100-card deck renders a ~2600px wall of mostly
+// already-mastered bars — the worst offenders are what you actually came to see.
+const CARDBARS_CAP=20;
+let cardBarsExpanded=false;
+function renderCardBars(){
+  const drilled=DATA.filter(v=>{const c=store.cards[v.rank];return c&&c.attempts.length;})
+    .map(v=>({label:v.jp,val:Math.round(rollingAcc(v.rank)*100),color:isLeech(v.rank)?'var(--leech)':(rollingAcc(v.rank)>=0.8?'var(--good)':'var(--godan)')}))
+    .sort((a,b)=>a.val-b.val);
+  const el=document.getElementById('cardBars');
+  barChart(el, cardBarsExpanded?drilled:drilled.slice(0,CARDBARS_CAP));
+  if(drilled.length>CARDBARS_CAP){
+    const btn=document.createElement('button');
+    btn.className='chip'; btn.style.marginTop='12px';
+    btn.textContent=cardBarsExpanded?`Show worst ${CARDBARS_CAP} only`:`Show all ${drilled.length} cards`;
+    btn.addEventListener('click',()=>{cardBarsExpanded=!cardBarsExpanded;renderCardBars();});
+    el.appendChild(btn);
+  }
+}
 // Rebuild the entire Stats panel from `store`. Called on tab activation and
 // after import/reset. Each block below maps 1:1 to a container in the markup.
 function renderStats(){
@@ -1492,12 +1512,9 @@ function renderStats(){
     <span class="leech-badge">⚠</span><span class="jp" style="font-size:20px;font-weight:700">${v.jp}</span>
     <span style="color:var(--muted);font-size:13px">${v.read} · ${v.mean}</span>
     <span style="margin-left:auto;font-family:monospace;font-size:12px;color:var(--leech)">${Math.round(rollingAcc(v.rank)*100)}%</span></div>`).join('');}
-  // Per-card accuracy bars: only drilled cards, sorted worst→best. Bar color:
-  // purple=leech, green≥80%, else red.
-  const drilled=DATA.filter(v=>{const c=store.cards[v.rank];return c&&c.attempts.length;})
-    .map(v=>({label:v.jp,val:Math.round(rollingAcc(v.rank)*100),color:isLeech(v.rank)?'var(--leech)':(rollingAcc(v.rank)>=0.8?'var(--good)':'var(--godan)')}))
-    .sort((a,b)=>a.val-b.val);
-  barChart(document.getElementById('cardBars'),drilled);
+  // Per-card accuracy bars (worst-first, capped + show-all toggle). Bar color:
+  // purple=leech, green≥80%, else red. See renderCardBars().
+  renderCardBars();
   // SRS memory pipeline: count cards in each Leitner box (0=New … 5). Gives an
   // at-a-glance picture of how much of the deck has "graduated" to long intervals.
   const boxes=[0,0,0,0,0,0]; // index = box 0..5
