@@ -417,6 +417,11 @@
   .verdict.ok{color:var(--good)} .verdict.bad{color:var(--godan)}
   .verdict .ic{font-size:16px}
   .btn.suggested{box-shadow:0 0 0 2px var(--ichidan);font-weight:700}
+  /* Empty filter levels (e.g. N2/N1 — the 100 frequent verbs are almost all
+     N5–N4) are disabled + dimmed by annotateJlptChips() rather than offered as a
+     dead filter. */
+  .chip:disabled{opacity:.38;cursor:default}
+  .chip:disabled:hover{border-color:var(--line);background:transparent}
 
   /* Stats view: summary boxes, chart cards, leech list, SRS legend. */
   .statgrid{display:grid;grid-template-columns:repeat(auto-fit,minmax(150px,1fr));gap:14px;margin:18px 0}
@@ -1732,18 +1737,21 @@ function setupRoving(container){
       :(container.closest('.topic-region')?'Topics':'');
     if(txt)container.setAttribute('aria-label',txt);
   }
-  const active=items.find(el=>el.classList.contains('active'));
-  let stop=active||items[0];
+  // nav() = the currently-enabled chips (disabled levels like empty N2/N1 are
+  // skipped, recomputed each keypress so it tracks dynamic disabled state).
+  const nav=()=>items.filter(b=>!b.disabled);
+  const active=items.find(el=>el.classList.contains('active')&&!el.disabled);
+  let stop=active||nav()[0]||items[0];
   const setStop=el=>{stop=el;items.forEach(x=>x.tabIndex=x===el?0:-1);};
   setStop(stop);
-  function focusAt(i){const n=(i+items.length)%items.length;setStop(items[n]);items[n].focus();}
+  function focusInNav(list,n){const el=list[(n+list.length)%list.length];if(el){setStop(el);el.focus();}}
   container.addEventListener('keydown',e=>{
-    const i=items.indexOf(document.activeElement);
+    const list=nav(), i=list.indexOf(document.activeElement);
     if(i<0)return;                                   // focus on a non-chip (e.g. rank input)
-    if(e.key==='ArrowRight'||e.key==='ArrowDown'){e.preventDefault();focusAt(i+1);}
-    else if(e.key==='ArrowLeft'||e.key==='ArrowUp'){e.preventDefault();focusAt(i-1);}
-    else if(e.key==='Home'){e.preventDefault();focusAt(0);}
-    else if(e.key==='End'){e.preventDefault();focusAt(items.length-1);}
+    if(e.key==='ArrowRight'||e.key==='ArrowDown'){e.preventDefault();focusInNav(list,i+1);}
+    else if(e.key==='ArrowLeft'||e.key==='ArrowUp'){e.preventDefault();focusInNav(list,i-1);}
+    else if(e.key==='Home'){e.preventDefault();focusInNav(list,0);}
+    else if(e.key==='End'){e.preventDefault();focusInNav(list,list.length-1);}
   });
   items.forEach(el=>el.addEventListener('focus',()=>setStop(el)));  // tab stop follows focus
   // Collapsed topic chips must not be focusable. Mirror the region's open state.
@@ -1757,6 +1765,22 @@ function setupRoving(container){
     sync();
   }
 }
+// Disable JLPT level chips with no verbs in the current dataset (the 100 frequent
+// verbs are almost all N5–N4, so N2/N1 are typically empty) rather than offering a
+// dead filter; annotate a count tooltip on the rest. Covers both panels' chips and
+// re-runs when DATA changes (custom verbs may populate a previously-empty level).
+function annotateJlptChips(){
+  const counts={};
+  DATA.forEach(v=>{counts[v.jlpt]=(counts[v.jlpt]||0)+1;});
+  document.querySelectorAll('.chip.jlpt,.chip.bjlpt').forEach(b=>{
+    const lv=b.dataset.jlpt;
+    if(lv==='all'){ b.title='All levels'; return; }
+    const n=counts[lv]||0;
+    b.disabled = n===0;
+    b.title = n===0 ? `No verbs at ${lv} in this deck` : `${n} verb${n===1?'':'s'} at ${lv}`;
+  });
+}
+annotateJlptChips();
 document.querySelectorAll('.chips, .topic-inner').forEach(setupRoving);
 
 // Re-render the whole grid from scratch on any filter/search change. passF =
