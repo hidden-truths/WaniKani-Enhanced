@@ -145,23 +145,28 @@ if (config.storage.driver === 'local') {
 
 // Serve the verb-trainer study app. Both wkenhanced.dev and api.wkenhanced.dev
 // route through the Cloudflare Tunnel to this same server, so the app is
-// reachable at the apex domain's `/` (and `/study`). It's a single self-
-// contained HTML file under web/ — it talks back to /v1/auth/* and
-// /v1/progress/* on this same origin via the session cookie.
-const APP_HTML = new URL('../web/index.html', import.meta.url);
-const serveApp = async (c: Context) => {
-    const file = Bun.file(APP_HTML);
-    if (!(await file.exists())) {
-        return c.text('study app not found (web/index.html missing from this build)', 404);
-    }
-    // no-cache so a redeploy of the single HTML file is picked up immediately;
-    // the file is small and same-origin so revalidation is cheap.
-    return new Response(file, {
-        headers: { 'Content-Type': 'text/html; charset=utf-8', 'Cache-Control': 'no-cache' },
-    });
+// reachable at the apex domain's `/` (and `/study`). It lives under web/ as four
+// static files — index.html + styles.css + verbs.js (dataset) + app.js (logic) —
+// and talks back to /v1/auth/*, /v1/progress/* and /v1/tts on this same origin.
+const serveStatic = (relPath: string, contentType: string) => {
+    const url = new URL('../web/' + relPath, import.meta.url);
+    return async (c: Context) => {
+        const file = Bun.file(url);
+        if (!(await file.exists())) return c.text(`${relPath} missing from this build`, 404);
+        // no-cache so a redeploy is picked up immediately; the files are small and
+        // same-origin, so conditional revalidation is cheap (and avoids stale app.js
+        // / styles.css after a deploy — they MUST stay in lock-step with index.html).
+        return new Response(file, {
+            headers: { 'Content-Type': contentType, 'Cache-Control': 'no-cache' },
+        });
+    };
 };
+const serveApp = serveStatic('index.html', 'text/html; charset=utf-8');
 app.get('/', serveApp);
 app.get('/study', serveApp);
+app.get('/styles.css', serveStatic('styles.css', 'text/css; charset=utf-8'));
+app.get('/verbs.js', serveStatic('verbs.js', 'text/javascript; charset=utf-8'));
+app.get('/app.js', serveStatic('app.js', 'text/javascript; charset=utf-8'));
 
 // Old root service-info JSON, relocated so it stays available for humans/curl
 // now that `/` serves the app.

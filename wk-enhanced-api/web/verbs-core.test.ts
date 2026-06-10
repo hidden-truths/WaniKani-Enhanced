@@ -34,15 +34,14 @@ type Core = {
 };
 
 function loadCore(): Core {
-  const html = readFileSync(join(import.meta.dir, "index.html"), "utf8");
-  // NB: the top-of-file HTML comment also contains the literal text "<script>"
-  // (the architecture map), so take the content after the LAST <script> tag, then
-  // up to its </script>, rather than a lazy regex that would match the comment.
-  const after = html.split("<script>").pop()!;
-  const src = after.split("</script>")[0];
-  if (!src || !src.includes("function passes")) throw new Error("could not extract the app script");
+  // The app is split into verbs.js (the `VERBS` dataset) + app.js (the logic),
+  // both loaded as classic scripts in index.html (so they share one global scope).
+  // Concatenate them in load order and evaluate the result under a DOM stub.
+  const verbs = readFileSync(join(import.meta.dir, "verbs.js"), "utf8");
+  const appSrc = readFileSync(join(import.meta.dir, "app.js"), "utf8");
+  if (!appSrc.includes("function passes")) throw new Error("app.js missing — did the split move it?");
   const body =
-    src +
+    verbs + "\n" + appSrc +
     `\n;return { passes, oneGroup, facetAll, facetMatch, scheduleCard, cardStat,
       isDue, dueCards, rollingAcc, isLeech, leeches, normKana, filterSummary, tokenFacet,
       BOX_DAYS, get DATA(){return DATA}, get store(){return store}, set store(v){store=v} };`;

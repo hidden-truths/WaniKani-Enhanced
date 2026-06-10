@@ -1,0 +1,319 @@
+  /* =========================================================================
+     DESIGN TOKENS
+     All theming flows through these CSS custom properties. Components never
+     hardcode a color — they reference a var — so switching light/dark is just
+     a matter of redefining the vars under a different selector. This is also
+     why the SVG charts use var(--godan) etc. inline.
+
+     Palette intent (functional, not decorative):
+       --ink/--paper/--paper-2 : text / background / raised surface
+       --godan    vermilion  → う-verbs (the most common class)
+       --ichidan  indigo     → る-verbs  + used as the "action/primary" accent
+       --irregular stone     → する/来る/etc.
+       --muted/--line        : secondary text / hairline borders
+       --leech    purple     → chronically-missed cards (see isLeech)
+       --good     green      → high accuracy / "caught up"
+       --jp-font             : swapped at runtime by the font selector
+     ========================================================================= */
+  :root, :root[data-theme="light"]{
+    --ink:#1a1815; --paper:#f5f1e8; --paper-2:#ebe5d6;
+    --godan:#c8442f; --ichidan:#2d4a6b; --irregular:#6b6256;
+    --muted:#7a7164; --line:#d9d1c0; --leech:#9c27b0;
+    --good:#3a7d44;
+    --jp-font:"Noto Sans JP",sans-serif;
+  }
+  /* Dark theme: same token names, remapped. Brighter accent hues so the
+     red/blue class distinction survives on a dark surface. */
+  :root[data-theme="dark"]{
+    --ink:#ece6da; --paper:#1c1a17; --paper-2:#262320;
+    --godan:#e8674f; --ichidan:#7aa6d6; --irregular:#a89e8e;
+    --muted:#9a9182; --line:#3a352e; --leech:#c77dd4;
+    --good:#6bbf78;
+  }
+  /* System-preference fallback: applies dark tokens ONLY when the user hasn't
+     explicitly chosen light (data-theme="light"). The manual toggle writes an
+     explicit data-theme which always wins over this. */
+  @media (prefers-color-scheme: dark){
+    :root:not([data-theme="light"]){
+      --ink:#ece6da; --paper:#1c1a17; --paper-2:#262320;
+      --godan:#e8674f; --ichidan:#7aa6d6; --irregular:#a89e8e;
+      --muted:#9a9182; --line:#3a352e; --leech:#c77dd4;
+      --good:#6bbf78;
+    }
+  }
+  /* Base. Body is a serif for English chrome; Japanese text gets .jp (the
+     swappable --jp-font) so only the JP glyphs change when you pick a font. */
+  *{box-sizing:border-box;margin:0;padding:0}
+  body{background:var(--paper);color:var(--ink);font-family:Georgia,serif;line-height:1.55;-webkit-font-smoothing:antialiased}
+  .jp{font-family:var(--jp-font)}
+  .wrap{max-width:1100px;margin:0 auto;padding:0 20px 80px}
+  header{padding:40px 20px 22px;max-width:1100px;margin:0 auto}
+  .kicker{font-family:"SF Mono",ui-monospace,Menlo,monospace;font-size:11px;letter-spacing:.28em;text-transform:uppercase;color:var(--godan);margin-bottom:10px}
+  h1{font-size:clamp(32px,6vw,60px);font-weight:900;letter-spacing:-.02em;line-height:.96}
+  h1 .s{display:block;font-size:.42em;color:var(--muted);font-weight:400;letter-spacing:.1em;margin-top:6px}
+
+  /* Tabs — the three top-level views. .active is driven by TAB NAV in JS. */
+  .tabs{display:flex;gap:4px;border-bottom:1px solid var(--line);max-width:1100px;margin:18px auto 0;padding:0 20px}
+  .tab{font-family:"SF Mono",ui-monospace,monospace;font-size:12px;letter-spacing:.08em;text-transform:uppercase;background:none;border:none;border-bottom:2px solid transparent;color:var(--muted);padding:10px 14px;cursor:pointer;margin-bottom:-1px}
+  .tab.active{color:var(--ink);border-bottom-color:var(--godan)}
+  .panel{display:none}      /* only one panel visible at a time */
+  .panel.active{display:block}
+
+  /* Controls / filter chips. The .g and .i modifiers tint a chip with the
+     godan/ichidan color when active (used on the class filter buttons). */
+  .controls{padding:18px 0 8px}
+  .row{display:flex;flex-wrap:wrap;gap:8px;align-items:center;margin-bottom:8px}
+  .filter-label{font-family:"SF Mono",ui-monospace,monospace;font-size:10px;letter-spacing:.2em;text-transform:uppercase;color:var(--muted);margin-right:4px}
+  .chip{font-family:"SF Mono",ui-monospace,monospace;font-size:12px;border:1px solid var(--line);background:transparent;color:var(--ink);padding:6px 13px;border-radius:2px;cursor:pointer;transition:all .15s}
+  .chip:hover{border-color:var(--ink)}
+  .chip.active{background:var(--ink);color:var(--paper);border-color:var(--ink)}
+  .chip.g.active{background:var(--godan);border-color:var(--godan)}
+  .chip.i.active{background:var(--ichidan);border-color:var(--ichidan)}
+  .chip.primary{background:var(--godan);color:#fff;border-color:var(--godan);font-weight:700}
+  .chip.primary:hover{filter:brightness(.92)}
+  .search{flex:1;min-width:160px;font-family:Georgia,serif;font-size:14px;border:1px solid var(--line);background:var(--paper);padding:7px 12px;border-radius:2px;color:var(--ink)}
+  .search:focus{outline:none;border-color:var(--ink)}
+  select.chip{appearance:none;padding-right:24px}
+  .rangeinput{width:58px;font-family:"SF Mono",ui-monospace,monospace;font-size:12px;border:1px solid var(--line);background:var(--paper);padding:6px 8px;border-radius:2px;color:var(--ink)}
+  .rangeinput:focus{outline:none;border-color:var(--ink)}
+  .jlpt-pill{font-family:"SF Mono",ui-monospace,monospace;font-size:9px;letter-spacing:.08em;color:var(--muted);border:1px solid var(--line);border-radius:2px;padding:2px 5px;margin-top:5px;display:inline-block}
+
+  /* --- Filter grouping (filter redesign) -----------------------------------
+     Chips are unchanged + still wired by class/data-* selector; this only adds
+     visual STRUCTURE on top: a fixed label column so facet rows align, hairline
+     dividers between tiers (grammar / topic / level), a collapsible Topic region
+     for the long semantic list, and a segmented JLPT control. No JS-visible
+     markup changed — selecting across groups still OR's into one pool as before. */
+  .filter-label{min-width:88px}                              /* align facet rows */
+  .fdiv{width:100%;height:1px;background:var(--line);margin:11px 0;opacity:.7}
+  /* Topic disclosure: dashed = closed, solid + ink = has active selections. */
+  .topic-toggle{font-family:"SF Mono",ui-monospace,monospace;font-size:12px;border:1px dashed var(--line);background:transparent;color:var(--muted);padding:6px 13px;border-radius:2px;cursor:pointer;transition:all .15s;display:inline-flex;align-items:center;gap:7px}
+  .topic-toggle:hover{border-color:var(--ink);color:var(--ink)}
+  .topic-toggle.has-active{border-style:solid;border-color:var(--ink);color:var(--ink)}
+  .topic-toggle .tt-arr{display:inline-block;transition:transform .2s;font-size:9px}
+  .topic-toggle.open .tt-arr{transform:rotate(180deg)}
+  /* max-height collapse (no JS height measurement), mirrors the .detail pattern. */
+  .topic-region{max-height:0;overflow:hidden;transition:max-height .3s ease;width:100%}
+  .topic-region.open{max-height:400px}
+  .topic-inner{display:flex;flex-wrap:wrap;gap:7px;padding-top:10px}
+  .topic-inner .chip{font-size:12px;padding:5px 11px;color:var(--muted)} /* secondary tier */
+  .topic-inner .chip:hover{color:var(--ink)}
+  .topic-inner .chip.active{color:var(--paper)}              /* re-win over the muted rule */
+  /* Segmented JLPT: adjacent chips share borders. Still multi-select (the All
+     chip is exclusive via makeMultiSelect; specific levels OR together). */
+  .jlptseg{display:inline-flex;border:1px solid var(--line);border-radius:2px;overflow:hidden}
+  .jlptseg .chip{border:none;border-left:1px solid var(--line);border-radius:0}
+  .jlptseg .chip:first-child{border-left:none}
+  .jlptseg .chip:not(.active):hover{background:var(--paper-2)}
+
+  /* --- Icons + alignment + polish (site-wide pass) -------------------------- */
+  /* Inline-sprite icon: inherits color (currentColor) + size (1em) from its host. */
+  .ic{width:1em;height:1em;display:inline-block;vertical-align:-0.14em;fill:none;stroke:currentColor;stroke-width:2;stroke-linecap:round;stroke-linejoin:round;flex-shrink:0}
+  /* Chips/buttons/tabs become inline-flex so an optional leading icon sits on the
+     text baseline with a consistent gap (text-only chips are unaffected — one child). */
+  .chip{display:inline-flex;align-items:center;justify-content:center;gap:6px}
+  .btn{display:inline-flex;align-items:center;justify-content:center;gap:8px}
+  .tab{display:inline-flex;align-items:center;gap:7px}
+  .topic-toggle .ic{font-size:13px}
+  /* Filter rows: a fixed label column so every chip group starts at the same x,
+     with chips in their own flex track so wrapped rows align under the first chip
+     (the old single-flex .row let long labels like "Test direction" shove their
+     chips right, which read as misaligned). Stacks label-over-chips on narrow. */
+  .frow{display:flex;align-items:baseline;gap:14px;margin-bottom:9px}
+  .frow>.filter-label{width:124px;flex-shrink:0;margin:0;display:inline-flex;align-items:center;gap:6px}
+  .frow>.chips{display:flex;flex-wrap:wrap;gap:8px;flex:1;min-width:0;align-items:center}
+  .frow>.chips .filter-label{min-width:0}              /* inline sub-labels (e.g. "Rank") */
+  .topic-region .topic-inner{padding-left:138px}        /* align expanded topics to the chips column */
+  @media(max-width:640px){
+    .frow{flex-direction:column;align-items:stretch;gap:5px}
+    .frow>.filter-label{width:auto}
+    .topic-region .topic-inner{padding-left:0}
+  }
+  /* Active-filter recap line: a quiet one-liner summarizing the current query
+     (incl. collapsed topics) so the whole filter state is legible at a glance. */
+  .filter-summary{display:flex;align-items:center;gap:7px;font-family:"SF Mono",ui-monospace,monospace;font-size:11px;color:var(--muted);margin:2px 0 10px;min-height:16px}
+  .filter-summary .ic{font-size:13px;color:var(--godan)}
+  .filter-summary b{color:var(--ink);font-weight:400}
+  .filter-summary:empty{display:none}
+  /* Leech list: rows become carded for a cleaner, scannable look. */
+  .leech-row{display:flex;align-items:center;gap:11px;padding:9px 12px;border:1px solid var(--line);border-left:3px solid var(--leech);border-radius:0 3px 3px 0;background:var(--paper-2);margin-bottom:7px}
+  .leech-row .lr-jp{font-size:20px;font-weight:700;line-height:1.1}
+  .leech-row .lr-meta{color:var(--muted);font-size:13px;font-style:italic}
+  .leech-row .lr-acc{margin-left:auto;font-family:"SF Mono",ui-monospace,monospace;font-size:12px;color:var(--leech);font-weight:700}
+  .leech-row .lr-acc .ic{font-size:13px;vertical-align:-0.15em;margin-right:3px}
+  /* Search field with a leading icon. */
+  .search-wrap{position:relative;flex:1;min-width:180px}
+  .search-wrap>.ic{position:absolute;left:12px;top:50%;transform:translateY(-50%);color:var(--muted);font-size:15px;pointer-events:none}
+  .search-wrap>.search{width:100%;padding-left:36px}
+  /* First-visit sign-up nudge: a dismissible inline banner, not a blocking modal
+     (lets brand-new visitors try the app first). Shown by bootAuth(), remembered
+     dismissed in localStorage. */
+  .signup-banner{display:flex;align-items:center;gap:14px;border:1px solid var(--ichidan);border-left:5px solid var(--ichidan);background:var(--paper-2);border-radius:4px;padding:12px 16px;margin:0 0 20px}
+  .signup-banner[hidden]{display:none}
+  .signup-banner>.ic{font-size:24px;color:var(--ichidan)}
+  .signup-banner .sb-text{flex:1;font-size:14px;line-height:1.45;font-family:Georgia,serif}
+  .signup-banner .sb-text b{font-weight:700}
+  .signup-banner .sb-dismiss{background:none;border:none;color:var(--muted);cursor:pointer;padding:4px;display:inline-flex}
+  .signup-banner .sb-dismiss:hover{color:var(--ink)}
+
+  /* Browse grid cards. The left border (--spine equivalent) encodes the
+     conjugation class at a glance; .leech recolors it purple. Card has extra
+     bottom padding (30px) to clear the absolutely-positioned rank/acc row. */
+  .grid{display:grid;grid-template-columns:repeat(auto-fill,minmax(300px,1fr));gap:14px;margin-top:10px}
+  .card{position:relative;background:var(--paper);border:1px solid var(--line);border-left:5px solid var(--irregular);border-radius:3px;padding:16px 16px 30px 18px;cursor:pointer;transition:transform .15s,box-shadow .15s}
+  .card:hover{transform:translateY(-2px);box-shadow:0 8px 24px rgba(26,24,21,.1)}
+  .card.godan{border-left-color:var(--godan)} .card.ichidan{border-left-color:var(--ichidan)}
+  .card.leech{border-left-color:var(--leech)}
+  .card.selected{box-shadow:0 0 0 2px var(--ink)}
+  .card-top{display:flex;justify-content:space-between;align-items:flex-start;gap:10px}
+  .verb-jp{font-size:28px;font-weight:900;line-height:1.1}
+  .verb-reading{font-size:13px;color:var(--muted);font-family:"SF Mono",ui-monospace,monospace}
+  .verb-meaning{font-size:15px;margin-top:5px;font-style:italic}
+  /* "Hanko" stamp — the rotated class label, like a vermilion seal. */
+  .stamp{flex-shrink:0;font-family:"SF Mono",ui-monospace,monospace;font-size:9px;letter-spacing:.12em;text-transform:uppercase;border:1.5px solid var(--irregular);color:var(--irregular);padding:3px 7px;border-radius:2px;font-weight:700;transform:rotate(2deg)}
+  .stamp.godan{border-color:var(--godan);color:var(--godan)} .stamp.ichidan{border-color:var(--ichidan);color:var(--ichidan)}
+  .leech-badge{display:inline-block;font-family:"SF Mono",ui-monospace,monospace;font-size:9px;background:var(--leech);color:#fff;padding:2px 6px;border-radius:2px;letter-spacing:.1em;margin-top:6px}
+  /* rank pinned bottom-right, accuracy bottom-left — they never collide with
+     the top-right stamp/jlpt-pill (this was a bug we fixed deliberately). */
+  .rank{position:absolute;bottom:12px;right:14px;font-family:"SF Mono",ui-monospace,monospace;font-size:10px;color:var(--muted);letter-spacing:.04em}
+  .acc{position:absolute;bottom:12px;left:18px;font-family:"SF Mono",ui-monospace,monospace;font-size:10px;color:var(--muted)}
+  .tags{display:flex;flex-wrap:wrap;gap:5px;margin-top:10px}
+  .tag{font-family:"SF Mono",ui-monospace,monospace;font-size:10px;color:var(--muted);background:var(--paper-2);padding:2px 7px;border-radius:2px}
+  /* Expand/collapse uses a max-height transition (no JS height measurement).
+     900px is an arbitrary ceiling comfortably taller than any card's content. */
+  .detail{max-height:0;overflow:hidden;transition:max-height .3s ease}
+  .card.open .detail{max-height:900px}
+  .detail-inner{padding-top:12px;margin-top:12px;border-top:1px solid var(--line)}
+  .blk{margin-bottom:10px} .blk-label{font-family:"SF Mono",ui-monospace,monospace;font-size:10px;letter-spacing:.18em;text-transform:uppercase;color:var(--godan);margin-bottom:3px}
+  .blk-label.warn{color:#b8860b} .blk-body{font-size:14px}
+  .ex{font-size:15px;margin-bottom:2px} .ex .en{display:block;font-size:13px;color:var(--muted);font-style:italic}
+  rt{font-size:.55em;color:var(--muted)}   /* furigana ruby text sizing */
+
+  .count{font-family:"SF Mono",ui-monospace,monospace;font-size:11px;color:var(--muted);width:100%}
+  .count b{color:var(--godan)}
+
+  /* Flashcard view. Three stages share #panel-study and are toggled by JS:
+     .fc-setup (deck picker) → .fc-stage#fcStage (the card) → #fcDone (score).
+     The card's left .spine mirrors the browse-card class color. */
+  .fc-setup{padding:20px 0}
+  .fc-stage{display:none;padding:10px 0 40px}
+  .fc-stage.active{display:block}
+  .progress{font-family:"SF Mono",ui-monospace,monospace;font-size:12px;color:var(--muted);text-align:center;margin-bottom:18px}
+  .flashcard{max-width:560px;margin:0 auto;min-height:300px;background:var(--paper);border:1px solid var(--line);border-radius:6px;padding:48px 32px;text-align:center;box-shadow:0 10px 40px rgba(26,24,21,.08);position:relative}
+  .flashcard .spine{position:absolute;left:0;top:0;bottom:0;width:6px;border-radius:6px 0 0 6px;background:var(--irregular)}
+  .flashcard.godan .spine{background:var(--godan)} .flashcard.ichidan .spine{background:var(--ichidan)}
+  .prompt-label{font-family:"SF Mono",ui-monospace,monospace;font-size:10px;letter-spacing:.22em;text-transform:uppercase;color:var(--muted);margin-bottom:20px}
+  .prompt-main{font-size:56px;font-weight:900;line-height:1.05}
+  .prompt-sub{font-size:20px;color:var(--muted);margin-top:8px;font-style:italic}
+  .answer{margin-top:24px;padding-top:20px;border-top:1px dashed var(--line);display:none}
+  .answer.show{display:block}     /* revealed after the user commits an answer */
+  .answer .a-read{font-size:30px;font-weight:700;color:var(--ichidan)}
+  .answer .a-mean{font-size:20px;font-style:italic;margin-top:4px}
+  .answer .a-note{font-size:13px;color:var(--muted);margin-top:10px;line-height:1.5}
+  .fc-buttons{max-width:560px;margin:18px auto 0;display:flex;gap:10px;justify-content:center}
+  .btn{font-family:"SF Mono",ui-monospace,monospace;font-size:13px;padding:12px 28px;border-radius:3px;border:1px solid var(--line);background:var(--paper);cursor:pointer;letter-spacing:.05em}
+  .btn:hover{border-color:var(--ink)}
+  .btn.reveal{background:var(--ink);color:var(--paper);border-color:var(--ink);width:100%;max-width:560px}
+  .btn.wrong{border-color:var(--godan);color:var(--godan)} .btn.wrong:hover{background:var(--godan);color:#fff}
+  .btn.right{border-color:var(--good);color:var(--good)} .btn.right:hover{background:var(--good);color:#fff}
+  .btn.srs{background:var(--ichidan);color:#fff;border-color:var(--ichidan);font-weight:700}     /* "Review due cards" CTA */
+  .btn.srs:hover{filter:brightness(1.08)}
+  .btn.srs:disabled{background:transparent;color:var(--muted);border-color:var(--line);cursor:default;filter:none}   /* shown as "All caught up" */
+  .kbd{font-size:10px;opacity:.6}      /* keyboard-shortcut hints on buttons */
+  /* Due banner — SRS entry point at the top of the flashcard setup.
+     .empty state (0 due) recolors the accent green ("caught up"). */
+  .due-banner{display:flex;align-items:center;justify-content:space-between;gap:16px;
+    border:1px solid var(--ichidan);border-left:5px solid var(--ichidan);border-radius:4px;
+    background:var(--paper-2);padding:16px 20px;margin-bottom:18px;flex-wrap:wrap}
+  .due-banner.empty{border-color:var(--line);border-left-color:var(--good)}
+  .due-count{font-size:38px;font-weight:900;line-height:1;color:var(--ichidan)}
+  .due-banner.empty .due-count{color:var(--good)}
+  .due-label{font-family:"SF Mono",ui-monospace,monospace;font-size:11px;letter-spacing:.1em;text-transform:uppercase;color:var(--muted);margin-top:4px}
+  /* Accessibility: a visible keyboard-focus ring on every interactive element.
+     :focus-visible (not :focus) so it only shows for keyboard nav, not clicks.
+     PARTIAL — see OUTSTANDING #4 (chips still lack roving-tabindex grouping). */
+  a:focus-visible, button:focus-visible, select:focus-visible, input:focus-visible{
+    outline:2px solid var(--ichidan); outline-offset:2px; border-radius:2px;
+  }
+  .chip:focus-visible{outline-offset:1px}
+
+  /* Typed-answer + TTS (production mode). The Input chip swaps the Reveal button
+     for an #inputRow (kana field + Check); on submit a .verdict line reports the
+     auto-grade and the matching grade button gets a .suggested emphasis ring. The
+     .speak-btn (Web Speech API) plays the reading; .sm is the inline Browse-card
+     variant. All hidden gracefully when the browser has no speechSynthesis. */
+  .answer-input{flex:1;min-width:0;font-family:var(--jp-font);font-size:22px;text-align:center;border:1px solid var(--line);background:var(--paper);padding:12px 14px;border-radius:3px;color:var(--ink)}
+  .answer-input:focus{outline:none;border-color:var(--ichidan)}
+  .answer-input:disabled{opacity:.6}
+  #inputRow{align-items:stretch}
+  .a-read-wrap{display:flex;align-items:center;justify-content:center;gap:10px}
+  .speak-btn{background:none;border:1px solid var(--line);color:var(--ichidan);border-radius:50%;width:34px;height:34px;display:inline-flex;align-items:center;justify-content:center;cursor:pointer;flex-shrink:0;transition:all .15s}
+  .speak-btn:hover{border-color:var(--ichidan);background:var(--paper-2)}
+  .speak-btn .ic{font-size:17px}
+  .speak-btn.sm{width:22px;height:22px;border:none;vertical-align:-0.18em;margin-left:5px}
+  .speak-btn.sm .ic{font-size:14px}
+  .verdict{display:flex;align-items:center;justify-content:center;gap:7px;font-family:"SF Mono",ui-monospace,monospace;font-size:13px;letter-spacing:.04em;margin-bottom:14px}
+  .verdict[hidden]{display:none}
+  .verdict.ok{color:var(--good)} .verdict.bad{color:var(--godan)}
+  .verdict .ic{font-size:16px}
+  .btn.suggested{box-shadow:0 0 0 2px var(--ichidan);font-weight:700}
+  /* Empty filter levels (e.g. N2/N1 — the 100 frequent verbs are almost all
+     N5–N4) are disabled + dimmed by annotateJlptChips() rather than offered as a
+     dead filter. */
+  .chip:disabled{opacity:.38;cursor:default}
+  .chip:disabled:hover{border-color:var(--line);background:transparent}
+
+  /* Stats view: summary boxes, chart cards, leech list, SRS legend. */
+  .statgrid{display:grid;grid-template-columns:repeat(auto-fit,minmax(150px,1fr));gap:14px;margin:18px 0}
+  .statbox{border:1px solid var(--line);border-radius:4px;padding:16px;background:var(--paper)}
+  .statbox .v{font-size:34px;font-weight:900} .statbox .l{font-family:"SF Mono",ui-monospace,monospace;font-size:10px;letter-spacing:.16em;text-transform:uppercase;color:var(--muted);margin-top:2px}
+  .chart-card{border:1px solid var(--line);border-radius:4px;padding:18px;background:var(--paper);margin-bottom:18px}
+  .chart-title{font-family:"SF Mono",ui-monospace,monospace;font-size:11px;letter-spacing:.16em;text-transform:uppercase;color:var(--muted);margin-bottom:12px}
+  svg{display:block;width:100%;height:auto}    /* charts scale to container width */
+  /* Line-chart points enlarge on hover (the native <title> shows the readout). */
+  svg circle.pt{transition:r .12s ease} svg circle.pt:hover{r:5.5}
+  .empty{text-align:center;padding:50px 20px;color:var(--muted)}
+  .danger{font-family:"SF Mono",ui-monospace,monospace;font-size:11px;color:var(--godan);cursor:pointer;background:none;border:none;text-decoration:underline}
+
+  .hint{text-align:center;color:var(--muted);font-size:12px;font-family:"SF Mono",ui-monospace,monospace;margin:18px 0 6px}
+  .srs-legend{font-family:"SF Mono",ui-monospace,monospace;font-size:10px;color:var(--muted);margin-top:10px;line-height:1.5}
+  .topbar{display:flex;justify-content:space-between;align-items:center;gap:12px;flex-wrap:wrap}
+  .toolbar{display:flex;gap:6px}
+  /* Respect reduced-motion: kill all transitions for users who ask for it. */
+  @media (prefers-reduced-motion:reduce){*{transition:none!important}}
+
+  /* ---- Account modal + cloud-sync chip ----------------------------------
+     The app works fully offline (localStorage); signing in mirrors progress
+     to the backing API. The chip lives in the toolbar; the modal is a simple
+     email/password form shared by the login + register flows. */
+  .acct-status{font-family:"SF Mono",ui-monospace,monospace;font-size:10px;color:var(--muted);align-self:center}
+  .modal-overlay{position:fixed;inset:0;background:rgba(0,0,0,.5);display:none;align-items:center;justify-content:center;z-index:1000;padding:20px}
+  .modal-overlay.show{display:flex}
+  .modal{background:var(--paper);color:var(--ink);border:1px solid var(--line);border-radius:8px;max-width:400px;width:100%;padding:28px;box-shadow:0 20px 60px rgba(0,0,0,.35)}
+  .modal h2{font-size:24px;font-weight:900;letter-spacing:-.01em}
+  .modal .sub{color:var(--muted);font-size:13px;margin-top:4px;margin-bottom:14px}
+  .modal label{display:block;font-family:"SF Mono",ui-monospace,monospace;font-size:10px;letter-spacing:.16em;text-transform:uppercase;color:var(--muted);margin:12px 0 4px}
+  .modal input{width:100%;font-family:Georgia,serif;font-size:15px;border:1px solid var(--line);background:var(--paper);padding:10px 12px;border-radius:3px;color:var(--ink)}
+  .modal input:focus{outline:none;border-color:var(--ichidan)}
+  .modal-err{color:var(--godan);font-size:13px;margin-top:12px;min-height:18px;line-height:1.4}
+  .modal-actions{margin-top:18px}
+  .modal-actions .btn{width:100%;text-align:center}
+  .modal-foot{text-align:center;margin-top:16px;font-size:12px;color:var(--muted)}
+  .modal-foot a{color:var(--ichidan);cursor:pointer;text-decoration:underline}
+  .modal-x{float:right;cursor:pointer;color:var(--muted);font-size:22px;line-height:.6;background:none;border:none}
+  /* Add/edit-verb modal: a wider form with a two-column field grid + selects. */
+  .modal.wide{max-width:560px}
+  .modal select, .modal textarea{width:100%;font-family:Georgia,serif;font-size:15px;border:1px solid var(--line);background:var(--paper);padding:10px 12px;border-radius:3px;color:var(--ink)}
+  .modal select:focus, .modal textarea:focus{outline:none;border-color:var(--ichidan)}
+  .modal textarea{resize:vertical;min-height:46px;line-height:1.4}
+  .form-grid{display:grid;grid-template-columns:1fr 1fr;gap:0 16px}
+  .form-grid .full{grid-column:1 / -1}
+  @media(max-width:520px){.form-grid{grid-template-columns:1fr}}
+  .modal-actions.split{display:flex;gap:10px}
+  .modal-actions.split .btn{width:auto;flex:1}
+  .btn.danger-btn{border-color:var(--godan);color:var(--godan);flex:0 0 auto}
+  .btn.danger-btn:hover{background:var(--godan);color:#fff}
+  /* Custom-verb affordances in Browse: a badge + edit/delete buttons. */
+  .custom-badge{display:inline-block;font-family:"SF Mono",ui-monospace,monospace;font-size:9px;background:var(--ichidan);color:#fff;padding:2px 6px;border-radius:2px;letter-spacing:.1em;margin-top:6px}
+  .verb-actions{display:flex;gap:8px;margin-top:10px}
+  .verb-actions .chip{font-size:11px;padding:4px 10px}

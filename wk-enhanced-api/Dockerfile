@@ -36,9 +36,11 @@ COPY package.json ./
 COPY src ./src
 COPY data ./data
 
-# The study web app served at `/`. A single self-contained HTML file; src/
-# resolves it via `new URL('../web/index.html', import.meta.url)`, so it must
-# sit as a sibling of src/ inside the image (i.e. /app/web).
+# The study web app served at `/`. Static files (index.html + styles.css +
+# verbs.js + app.js); src/ resolves them via `new URL('../web/<file>',
+# import.meta.url)`, so web/ must sit as a sibling of src/ inside the image
+# (i.e. /app/web). The whole dir is copied, so new assets are picked up
+# automatically (web/*.test.ts is harmless — never imported at runtime).
 COPY web ./web
 
 # Deploy scripts that run inside the container via `docker exec` from
