@@ -1,0 +1,12 @@
+{
+  "version": "0.0.1",
+  "configurations": [
+    {
+      "name": "wk-enhanced-api",
+      "runtimeExecutable": "bun",
+      "runtimeArgs": ["start"],
+      "cwd": "wk-enhanced-api",
+      "port": 3000
+    }
+  ]
+}
