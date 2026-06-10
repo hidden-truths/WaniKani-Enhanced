@@ -21,6 +21,11 @@ Architecture + dead-ends: [CLAUDE.md](CLAUDE.md). User overview: [README.md](REA
   `.speak-btn` (flashcard + every Browse card) play the reading via
   `speechSynthesis` (`speak`/`playReading`, ja-JP voice). Prefs persist
   (`jpverbs_input` / `jpverbs_audio`); Audio controls hide when no speechSynthesis.
+- ~~Keyboard navigation for chip groups (in-file #4)~~ — **shipped.** `setupRoving`
+  gives every `.chips` row + each open `.topic-inner` a roving tabindex: one tab
+  stop per group, ←/→/↑/↓ to move, Home/End to the ends, `role=group` + aria-label
+  per row; collapsed topic chips leave the tab order. Toolbar semantics — Space/
+  Enter still selects via the existing click handlers.
 
 ## Verification debt (do first — cheap, closes a known gap)
 - **Capture real desktop screenshots of Browse + Stats.** The preview tooling kept
@@ -31,23 +36,19 @@ Architecture + dead-ends: [CLAUDE.md](CLAUDE.md). User overview: [README.md](REA
   Mobile (≤640px) stacks filter labels — sanity-check that too.
 
 ## High value
-1. **Keyboard navigation for chip groups** (accessibility, in-file #4). Now that
-   chips live in discrete `.frow > .chips` tracks, a roving-tabindex per group is
-   much more tractable than before. Also: class is still partly conveyed by color
-   (mitigated by the text stamp, not eliminated).
-2. **Category vs Semantic as separate AND'd facets** (in-file #2). The most common
+1. **Category vs Semantic as separate AND'd facets** (in-file #2). The most common
    point of confusion. Needs a second selection set + a small `passes()` change;
    the tiered UI rows already exist, so the visual work is done.
 
 ## Medium
-3. **A test suite for the pure core** (in-file #8). `passes()`, `scheduleCard()`,
+2. **A test suite for the pure core** (in-file #8). `passes()`, `scheduleCard()`,
    `isDue()`, `rollingAcc()`, `isLeech()`, `filterSummary()`, and the new `normKana()`
    are pure and easy to test. This is the logic future refactors break silently.
    Would need a tiny extraction or a headless harness (keep it dependency-light).
-4. **Add / edit verbs** (in-file #3). Verbs are baked into `VERBS[]`; a form that
+3. **Add / edit verbs** (in-file #3). Verbs are baked into `VERBS[]`; a form that
    writes user verbs to localStorage and merges them with `DATA` at load makes
    this a living deck.
-5. **Auth niceties (server-side).** No password reset / email verification yet — a
+4. **Auth niceties (server-side).** No password reset / email verification yet — a
    forgotten password currently means a new account. No origin-side rate limiting
    on `/v1/auth/*`. Tracked in [../CLAUDE.md](../CLAUDE.md) "What's deliberately
    NOT in v1."

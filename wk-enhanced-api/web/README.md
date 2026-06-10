@@ -83,3 +83,5 @@ Server-side details (auth model, cookie, tables) live in
   a colored spine + a hanko-style stamp.
 - **Icons** are an inline SVG sprite (no CDN/icon-font) so they work offline.
 - **SRS** is Leitner boxes (transparent: box N → N-ish days), not SM-2.
+- **Keyboard-navigable filters**: each chip row is a single tab stop — Tab moves
+  between rows, arrow keys (and Home/End) move within a row, Space/Enter selects.

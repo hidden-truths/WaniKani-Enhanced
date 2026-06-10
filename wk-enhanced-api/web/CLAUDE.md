@@ -67,6 +67,9 @@ SYNC`. Key functions by area:
 - **UX helpers (added in the polish pass):** `filterSummary`/`paintSummary`
   (active-filter recap), `setupTopicGroups` (topic disclosure + badge),
   `escapeHtml`.
+- **A11y:** `setupRoving(container)` gives a chip group a roving tabindex (one tab
+  stop, ←/→/↑/↓ + Home/End to move, `role=group` + aria-label). Wired over every
+  `.chips` + `.topic-inner`; collapsed topic chips leave the tab order.
 
 Persisted store (`localStorage["jpverbs_v3"]`):
 `{ cards:{<rank>:{attempts:[1|0…],right,wrong,box:0..5,due:<epochMs>}}, sessions:[{t,right,tot}…] (cap 200), daily:{"YYYY-MM-DD":{right,tot}} }`.
@@ -87,6 +90,9 @@ Component contracts you must preserve:
   filter group's chips starting at the same x **and** wrapped chips aligned under
   the first chip. Stacks label-over-chips at ≤640px. Do not revert to a bare
   `.row` with the label as a sibling of the chips — that's what looked misaligned.
+  `.chips` is ALSO the roving-tabindex group boundary (`setupRoving`) and the
+  source of each group's aria-label (read from the row's `.filter-label`), so keep
+  one logical facet per `.chips` track.
 - **`.chip` is wired by class + `data-*`** (`makeMultiSelect('.chip.deck',…)`,
   `.bf`, `.jlpt`, `.bjlpt`, `.mode`, `.ord`, `.rpreset`). The JS uses flat
   `querySelectorAll` and ignores DOM nesting — so you can regroup/wrap/collapse
@@ -127,6 +133,15 @@ Component contracts you must preserve:
 - **Google Fonts is the only external dependency and degrades gracefully.** Offline
   you get system fonts for the Japanese text; the app still fully works. Don't add
   a hard dependency on it.
+- **Roving tabindex groups by `.chips`/`.topic-inner` container and matches only
+  `button.chip`.** `setupRoving` deliberately excludes the Font `<select class="chip">`
+  and the rank number inputs (focus on a non-chip returns -1 from `indexOf` →
+  arrows fall through to native behavior), so they stay normal tab stops. It's
+  TOOLBAR semantics (arrows move focus; Space/Enter selects via the existing click
+  handler) — NOT an ARIA radiogroup, so don't expect `aria-checked`. Collapsed
+  `.topic-inner` chips are forced to tabindex -1 via a MutationObserver on the
+  region's `open` class; if you change how the topic disclosure toggles (e.g. to
+  `display:none`), re-check that observer still fires.
 - **Typed grading is advisory, and only grades the READING.** `submitTyped`
   `normKana`-compares the typed kana against `v.read` and *suggests* a grade
   (green/red verdict + a `.suggested` ring on the matching button), but the user
@@ -156,13 +171,18 @@ Component contracts you must preserve:
 
 Commits, newest first (all on `main`, all touching only `index.html` unless noted):
 
-1. **typed-reading mode + TTS.** Flashcard "Input" toggle (Self-graded / Type the
+1. **roving tabindex for chip groups.** `setupRoving` over every `.chips` +
+   `.topic-inner`: one tab stop per group, ←/→/↑/↓ + Home/End to move (wrapping),
+   the stop follows focus, `role=group` + aria-label per row. Collapsed topic chips
+   leave the tab order (MutationObserver on the region's `open` class). Font select
+   + rank inputs excluded. Closes in-file OUTSTANDING #4.
+2. **typed-reading mode + TTS.** Flashcard "Input" toggle (Self-graded / Type the
    reading): typed kana is `normKana`-compared to `v.read`, with an advisory verdict
    + a `.suggested` ring (1/2 still override). "Audio" toggle + `.speak-btn`
    (flashcard answer panel + every Browse card) play the reading via the Web Speech
    API (`speak`/`playReading`, ja-JP voice, `TTS_OK`-gated). New `i-volume` icon;
    prefs persist (`jpverbs_input`/`jpverbs_audio`). Closes in-file OUTSTANDING #1.
-2. **`0712d65` align filter rows + site-wide icons + polish.** Filter rows →
+3. **`0712d65` align filter rows + site-wide icons + polish.** Filter rows →
    `.frow`/`.chips` fixed-label-column layout (fixes the misaligned chip
    start-x). Inline SVG icon sprite applied to tabs, toolbar, action buttons,
    topic chevron, Leeches chip, leech list, search field, account chip.
@@ -170,9 +190,9 @@ Commits, newest first (all on `main`, all touching only `index.html` unless note
    inline banner (`#signupBanner`, remembered in localStorage). Added the
    active-filter recap line (`filterSummary`/`paintSummary` → `#deckSummary`,
    `#bSummary`). Carded the leech list (`.leech-row`).
-3. **`5021b84` cap per-card accuracy bars.** Worst-20 default + show-all toggle
+4. **`5021b84` cap per-card accuracy bars.** Worst-20 default + show-all toggle
    (`renderCardBars`).
-4. **`23e627d` regroup verb filters into legible tiers.** Split the 29-chip
+5. **`23e627d` regroup verb filters into legible tiers.** Split the 29-chip
    "Category" wall into Type / Transitivity / Topic(collapsible) / Level & rank;
    moved Leeches out of the category pool; segmented JLPT control.
 
