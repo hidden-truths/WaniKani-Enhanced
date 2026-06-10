@@ -344,6 +344,11 @@ Component contracts you must preserve:
 
 Commits, newest first (all on `main`; touch the split web/ files + `src/` where noted):
 
+1. **Design-polish pass — responsive + bug fixes (1/4).** Mobile toolbar now
+   wraps (`flex-wrap`) instead of overflowing 390px; `.modal-x` is pinned absolute
+   (was `float:right`, overlapped the detail-modal stamp) with the detail card-top
+   reserving right padding; ending a session with zero grades returns to the picker
+   instead of showing an empty "SESSION COMPLETE" card; mobile tap targets ≥40px.
 1. **Free-study-advances-due setting + headline + header-overlay fix.** New
    `freeReviewDue` setting (default on): in free study, grading an already-due card
    advances its SRS schedule (not-due cards still never move). Headline → "Everyday

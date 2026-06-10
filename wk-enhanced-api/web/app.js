@@ -870,20 +870,26 @@ function logSession(right,tot,kind){
   try{ api('/v1/sessions',{method:'POST',body:{right,total:tot,mode:cfg.mode,details:{kind,direction:cfg.mode}}}).catch(()=>{}); }catch(e){}
 }
 function endSession(){
-  if(session && session.results.length){
-    const right=session.results.reduce((s,x)=>s+x,0),tot=session.results.length;
-    store.sessions.push({t:Date.now(),right,tot,kind:session.kind});
-    if(store.sessions.length>SESSIONS_LOCAL_CAP)store.sessions=store.sessions.slice(-SESSIONS_LOCAL_CAP);
-    const day=localDay();
-    if(!store.daily[day])store.daily[day]={right:0,tot:0};
-    store.daily[day].right+=right;store.daily[day].tot+=tot;
-    save();                            // localStorage + debounced progress-blob push
-    logSession(right,tot,session.kind); // durable append-only server log (never pruned)
-    document.getElementById('doneScore').textContent=Math.round(100*right/tot)+'%';
-    document.getElementById('doneDetail').textContent=`${right} of ${tot} correct`;
-    if(typeof maybeShowSignup==='function')maybeShowSignup();   // nudge after first real session
-  }
   document.getElementById('fcStage').classList.remove('active');
+  // Ended with nothing graded (e.g. immediate "End session") → don't show an empty
+  // score card; just return to the picker.
+  if(!session || !session.results.length){
+    document.getElementById('fcDone').classList.remove('active');
+    document.getElementById('fcSetup').style.display='block';
+    updateDeckCount();updateDueBanner();updateStartLabel();
+    return;
+  }
+  const right=session.results.reduce((s,x)=>s+x,0),tot=session.results.length;
+  store.sessions.push({t:Date.now(),right,tot,kind:session.kind});
+  if(store.sessions.length>SESSIONS_LOCAL_CAP)store.sessions=store.sessions.slice(-SESSIONS_LOCAL_CAP);
+  const day=localDay();
+  if(!store.daily[day])store.daily[day]={right:0,tot:0};
+  store.daily[day].right+=right;store.daily[day].tot+=tot;
+  save();                            // localStorage + debounced progress-blob push
+  logSession(right,tot,session.kind); // durable append-only server log (never pruned)
+  document.getElementById('doneScore').textContent=Math.round(100*right/tot)+'%';
+  document.getElementById('doneDetail').textContent=`${right} of ${tot} correct`;
+  if(typeof maybeShowSignup==='function')maybeShowSignup();   // nudge after first real session
   document.getElementById('fcDone').classList.add('active');
 }
 // Button wiring for the session controls.
