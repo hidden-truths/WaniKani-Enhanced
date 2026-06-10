@@ -99,6 +99,43 @@ systemctl start wk-enhanced-api-backup
 journalctl -u wk-enhanced-api-backup -n 50
 ```
 
+## Serving the study app at wkenhanced.dev
+
+The verb-trainer study app is served by this same server at `/` (and `/study`), with accounts + per-user progress under `/v1/auth/*` and `/v1/progress/*`. The userscript API already reaches the droplet via the `api.wkenhanced.dev` Cloudflare Tunnel hostname → `http://localhost:3000`. To make the **apex** `wkenhanced.dev` serve the app, add a second public hostname to the *same* tunnel pointing at the *same* local service — no second server, no second port.
+
+**One env change** — set `COOKIE_SECURE=true` in `/etc/wk-enhanced-api/env` (already in the prod template) so the session cookie carries `Secure`. Then `systemctl restart wk-enhanced-api`.
+
+**Add the tunnel hostname.** Two cases depending on how the tunnel is managed:
+
+- **Dashboard-managed tunnel** (Zero Trust → Networks → Tunnels → your tunnel → Public Hostnames):
+  - Add a public hostname: **Subdomain** = *(blank)*, **Domain** = `wkenhanced.dev`, **Service** = `HTTP` → `localhost:3000`.
+  - (Optional) add another for `www.wkenhanced.dev` the same way.
+  - The dashboard creates the proxied DNS record automatically.
+
+- **Locally-managed tunnel** (`/etc/cloudflared/config.yml` on the droplet): add an ingress rule for the apex above the catch-all, mirroring the existing `api.` rule:
+  ```yaml
+  ingress:
+    - hostname: api.wkenhanced.dev
+      service: http://localhost:3000
+    - hostname: wkenhanced.dev          # <-- add this
+      service: http://localhost:3000
+    - service: http_status:404           # keep the catch-all last
+  ```
+  Then create the DNS route and restart cloudflared:
+  ```bash
+  cloudflared tunnel route dns <TUNNEL-NAME-OR-ID> wkenhanced.dev
+  systemctl restart cloudflared
+  ```
+
+**Verify:**
+```bash
+curl -sI https://wkenhanced.dev/            # 200, Content-Type: text/html
+curl -s  https://wkenhanced.dev/v1/auth/me  # {"user":null}
+```
+Then open `https://wkenhanced.dev/` in a browser, create an account, and confirm the chip in the header shows your email and progress survives a reload + a different browser.
+
+> Apex DNS note: Cloudflare flattens the CNAME at the zone apex automatically, so the proxied `wkenhanced.dev` record Just Works — no A record needed.
+
 ## Local bring-up of the Compose stack
 
 `bun dev` from the repo is still the fastest iteration loop, but `docker compose up` from a fresh checkout also works end-to-end with no host-side prep:

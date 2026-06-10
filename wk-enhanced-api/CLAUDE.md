@@ -47,6 +47,9 @@ Single scannable reference for every knob that differs between local dev and the
 | `S3_*` vars | unused / blank | required (endpoint, region, bucket, full-access key + secret) | See `deploy/env.production.template`. Full-access key, not Limited — see ACL dead-end below. |
 | `S3_FORCE_PATH_STYLE` | n/a | `true` | Mandatory for DO Spaces + `Bun.S3Client`; see dead-end below. |
 | `ADMIN_TOKEN` | `dev-admin-token` | `openssl rand -hex 32` value | Used by `/v1/admin/*` bearer auth. |
+| `COOKIE_SECURE` | `false` | `true` | Session cookie `Secure` flag. MUST be false on `http://localhost` (browser drops Secure cookies on http → login silently fails); true in prod where Cloudflare fronts HTTPS. |
+| `SESSION_TTL_DAYS` | `30` | `30` | Login session lifetime (cookie maxAge + DB `expires_at`). |
+| Study-app hostname | `http://localhost:3000/` | `https://wkenhanced.dev/` (apex) **and** `https://api.wkenhanced.dev/` both serve it | Add a Cloudflare Tunnel ingress for the apex → `http://localhost:3000`; see deploy/README.md. The app uses relative URLs so it's correct under either host. |
 | `WK_API_TOKEN` | usually blank (skip `scope:all` warms) | required for monthly bulk warm | Personal token from your WK settings. |
 | Env file location | `wk-enhanced-api/.env` | `/etc/wk-enhanced-api/env` (chmod 600 root) | Prod uses Compose `env_file:`; Bun's `.env` auto-load is for dev only. |
 | Process supervisor | `bun dev` (your terminal) | `systemctl ... wk-enhanced-api.service` → `docker compose up -d` | Container runs the bun process inside; systemd just brings the stack up on boot. Unit + compose.yaml live in `deploy/` and the repo root respectively. |
@@ -72,12 +75,20 @@ src/
 │   ├── ikTitles.ts           # the lossy-title-encoding workaround (heuristic fallback when /index_meta misses)
 │   ├── log.ts                # structured-JSON logger; one line per event
 │   ├── zodHook.ts            # shared defaultHook → reformats Zod failures into our ErrorSchema shape
+│   ├── auth.ts              # password hashing (Bun.password), session cookie + currentUser() helpers
 │   └── sleep.ts
+web/
+└── index.html               # the verb-trainer study app, served at / (and /study). Single self-
+                             #   contained file; talks to /v1/auth/* + /v1/progress/* on this origin.
+                             #   Derived from ../japanese-study/japanese-verbs.html (the standalone,
+                             #   localStorage-only original) + a cloud-sync layer.
 ├── routes/                   # one file per route group; each is an OpenAPIHono sub-router
 │   ├── health.ts
 │   ├── vocab.ts              # GET /v1/vocab/{word} + POST /v1/vocab/batch
 │   ├── indexMeta.ts
-│   └── admin.ts              # POST /v1/admin/warm + GET /v1/admin/jobs (bearer-gated)
+│   ├── admin.ts              # POST /v1/admin/warm + GET /v1/admin/jobs (bearer-gated)
+│   ├── auth.ts              # POST /v1/auth/{register,login,logout} + GET /v1/auth/me (cookie session)
+│   └── progress.ts          # GET/PUT /v1/progress/{app} — per-user study progress (cookie-gated)
 ├── services/
 │   ├── ik.ts                 # /search, /index_meta, /download_media — built-in 500ms rate limit
 │   ├── ddg.ts                # two-step vqd HTML scrape → i.js JSON
@@ -102,11 +113,16 @@ That's the entire `dependencies` block. Resist adding more without a clear win.
 
 ## Cache keys / data on disk
 
-Three SQLite tables (schema in [src/db/schema.sql](src/db/schema.sql)):
+Six SQLite tables (schema in [src/db/schema.sql](src/db/schema.sql)):
 
 - `vocab_examples` — pre-warmed payload per word. One row per word. `payload` is JSONB-style TEXT (the entire response body). `serve_count` + `last_served_at` track usage (for LRU eviction later if needed).
 - `index_meta` — singleton row (`id=1`) caching IK's `/index_meta` deck map (~96 entries, ~12KB).
 - `warm_jobs` — append-only audit log. One row per `warmSingle` or `warmAll` invocation. Exposed via `GET /v1/admin/jobs`.
+- `users` — one row per account. `email` (lowercased, UNIQUE) + `password_hash` (`Bun.password`, argon2id). Added for the study-app accounts feature.
+- `sessions` — opaque session tokens (256-bit hex) → user, with `expires_at`. One row per active login; the token is the `wk_session` httpOnly cookie. Pruned lazily on expired-token access + hourly via `deleteExpiredSessions()`. `ON DELETE CASCADE` from `users`.
+- `user_progress` — per-user, per-app JSON progress blob (PK `(user_id, app)`; `app='verbs'` today). The cloud-synced replacement for the study app's localStorage. The blob is opaque to the server. `ON DELETE CASCADE` from `users`.
+
+These three account tables are **backed up alongside the rest of the DB** by the existing daily `deploy/backup.ts` snapshot — no separate handling. They carry real user data (hashed passwords + study progress), so the backup is now load-bearing, not just a convenience.
 
 Media binaries live in **either** the local filesystem (`STORAGE_DRIVER=local`, dev) **or** S3-compatible storage (`STORAGE_DRIVER=s3`, prod). Object key conventions:
 
@@ -155,8 +171,16 @@ Lazy fill (`GET /v1/vocab/{word}` on a cold word) calls `warmWord()` synchronous
 | POST | `/v1/admin/warm` | Bearer | Three scopes: `word` (sync), `all` (async), `index_meta`. |
 | GET | `/v1/admin/jobs` | Bearer | Recent warm-job audit records, newest-first. |
 | GET | `/media/*` | — | Static media (LocalStorage driver only). |
+| GET | `/` , `/study` | — | The verb-trainer study app (`web/index.html`). |
+| POST | `/v1/auth/register` | — | Create account; sets `wk_session` httpOnly cookie. 409 if email taken. |
+| POST | `/v1/auth/login` | — | Log in; sets cookie. 401 on bad creds (constant-time, no email enumeration). |
+| POST | `/v1/auth/logout` | Cookie | Clear session (idempotent). |
+| GET | `/v1/auth/me` | — | `{user}` or `{user:null}`. `Cache-Control: no-store`. |
+| GET | `/v1/progress/{app}` | Cookie | Fetch the user's progress blob (`app` ∈ {`verbs`}). 401 if logged out. |
+| PUT | `/v1/progress/{app}` | Cookie | Replace the progress blob (≤1 MB). |
 | GET | `/docs` | — | Scalar UI. |
 | GET | `/openapi.json` | — | Auto-generated OpenAPI 3.1 spec. |
+| GET | `/_info` | — | Service-info JSON (the old `/` payload, relocated now that `/` serves the app). |
 
 **Error response contract** — every non-2xx response is `{ code, error, detail? }`. Switch on `code` (stable enum), never on `error` (human-readable, may change). The enum: `validation_error`, `unauthorized`, `not_found`, `conflict`, `upstream_failure`, `service_unavailable`, `internal_error`. (`conflict` is currently only used by `POST /v1/admin/warm {"scope":"all"}` when a warmAll is already in flight — returns 409.)
 
@@ -280,9 +304,22 @@ Use these when writing new tests; they're verified in [src/lib/jlpt.test.ts](src
 
 DO Droplet ($6/mo, SFO3) + DO Spaces ($5/mo) + Cloudflare Tunnel (free) ≈ **$11/mo** steady state. SQLite means no managed-DB cost. Deploy units live in [deploy/](deploy/) — systemd service, cloudflared config, deploy notes in [deploy/README.md](deploy/README.md). Original design rationale: [../SERVER_DESIGN.md](../SERVER_DESIGN.md); see its "Implementation deviations" header for what changed during the build.
 
+## Accounts + study app (added post-v1)
+
+The server now also hosts the **Japanese verb-trainer study app** at `/` and backs it with **email/password accounts + per-user progress sync**. This is a distinct surface from the vocab/warm API the userscript uses — it has its own auth model and its own routes.
+
+- **Auth model:** opaque session token in an `httpOnly`, `SameSite=Lax`, `Secure`(prod) cookie named `wk_session`. No JWT, no bearer token, no new dependency — `Bun.password` (argon2id) hashes passwords, `hono/cookie` sets the cookie, `bun:sqlite` stores sessions. See [src/lib/auth.ts](src/lib/auth.ts).
+- **Same-origin only:** the app is served from the same origin as the API, so the cookie travels automatically on `fetch(..., {credentials:'include'})`. The blanket `Access-Control-Allow-Origin: *` CORS does **not** apply to these (same-origin requests skip CORS); a cross-origin caller can't use cookie auth against `*` anyway, which is fine — only the served app needs these endpoints.
+- **Progress is opaque:** `PUT /v1/progress/{app}` stores whatever the client serializes (the verb trainer's `store` blob). The server validates size (≤1 MB) and the `app` enum, nothing else. The client owns its own schema/versioning.
+- **Offline-first client:** `web/index.html` still works with no account (localStorage). Signing in mirrors progress to the server; on login the server copy wins, and a brand-new account inherits the current local progress (one-time upward migration). `save()` → localStorage immediately + a debounced `PUT`.
+- **Deploy:** for the apex `wkenhanced.dev` to reach this server, add a Cloudflare Tunnel ingress rule for it → `http://localhost:3000` (the `api.` subdomain already routes here). `COOKIE_SECURE=true` in prod. Full walkthrough in [deploy/README.md](deploy/README.md) "Serving the study app at wkenhanced.dev".
+- **DEAD-END / gotcha:** `COOKIE_SECURE=true` over plain `http://localhost` makes the browser silently drop the session cookie — login appears to "not stick" with no error. Dev MUST use `COOKIE_SECURE=false`. This is the #1 thing to check if local login mysteriously fails.
+
 ## What's deliberately NOT in v1
 
-- No accounts, no auth (except the admin bearer token).
+- ~~No accounts, no auth (except the admin bearer token).~~ **Superseded** — accounts + cookie sessions now exist for the study app (above). The admin bearer token is still separate and unchanged.
+- No password reset / email verification yet. There's no outbound email; a forgotten password currently means a new account. (First real follow-up if the app gets users.)
+- No rate limiting on `/v1/auth/*` beyond Cloudflare's edge. Login is constant-time against email enumeration but not throttled at the origin.
 - No keyed external services (DeepL, OpenAI, Forvo, jpdb). If we add them later, keys live on the client and we proxy without caching under keys the user can't reach.
 - No analytics on what users review (only aggregate serve counts).
 - No real-time / push features.

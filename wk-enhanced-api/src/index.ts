@@ -1,25 +1,31 @@
 // wk-enhanced-api server entry.
 //
 // Routes:
+//   GET    /                  (the verb-trainer study app — web/index.html)
 //   GET    /v1/health
 //   GET    /v1/vocab/:word
 //   GET    /v1/index_meta
 //   POST   /v1/admin/warm     (Authorization: Bearer <ADMIN_TOKEN>)
+//   POST   /v1/auth/register | /login | /logout,  GET /v1/auth/me
+//   GET/PUT /v1/progress/{app} (session cookie — per-user study progress)
 //   GET    /media/*           (only when STORAGE_DRIVER=local)
 //   GET    /docs              (Scalar UI)
 //   GET    /openapi.json      (OpenAPI 3.1 spec, auto-generated from Zod schemas)
 
 import { OpenAPIHono } from '@hono/zod-openapi';
+import type { Context } from 'hono';
 import { Scalar } from '@scalar/hono-api-reference';
 import { zodHook } from './lib/zodHook.ts';
 import { resolve, join, normalize } from 'node:path';
 import { config } from './config.ts';
 import { log } from './lib/log.ts';
-import { getDb } from './db/client.ts';
+import { getDb, deleteExpiredSessions } from './db/client.ts';
 import { healthRouter } from './routes/health.ts';
 import { vocabRouter } from './routes/vocab.ts';
 import { indexMetaRouter } from './routes/indexMeta.ts';
 import { adminRouter } from './routes/admin.ts';
+import { authRouter } from './routes/auth.ts';
+import { progressRouter } from './routes/progress.ts';
 import { MEDIA_CACHE_CONTROL } from './services/storage.ts';
 
 const app = new OpenAPIHono({ defaultHook: zodHook });
@@ -70,6 +76,8 @@ app.route('/v1/health', healthRouter);
 app.route('/v1/vocab', vocabRouter);
 app.route('/v1/index_meta', indexMetaRouter);
 app.route('/v1/admin', adminRouter);
+app.route('/v1/auth', authRouter);
+app.route('/v1/progress', progressRouter);
 
 // OpenAPI 3.1 spec, auto-generated from each route's Zod schema. .doc31() is
 // the 3.1 variant; .doc() emits 3.0 which lacks some types we use.
@@ -89,6 +97,7 @@ app.doc31('/openapi.json', (c) => {
         tags: [
             { name: 'Read', description: 'Client-facing endpoints. Safe to expose publicly. Edge-cacheable.' },
             { name: 'Admin', description: 'Operational endpoints. Bearer-token gated; not for end users.' },
+            { name: 'Accounts', description: 'User accounts + per-user study-app progress. Session-cookie gated.' },
         ],
     };
 });
@@ -134,10 +143,33 @@ if (config.storage.driver === 'local') {
     log.info('media.static_route_enabled', { root });
 }
 
-app.get('/', (c) =>
+// Serve the verb-trainer study app. Both wkenhanced.dev and api.wkenhanced.dev
+// route through the Cloudflare Tunnel to this same server, so the app is
+// reachable at the apex domain's `/` (and `/study`). It's a single self-
+// contained HTML file under web/ — it talks back to /v1/auth/* and
+// /v1/progress/* on this same origin via the session cookie.
+const APP_HTML = new URL('../web/index.html', import.meta.url);
+const serveApp = async (c: Context) => {
+    const file = Bun.file(APP_HTML);
+    if (!(await file.exists())) {
+        return c.text('study app not found (web/index.html missing from this build)', 404);
+    }
+    // no-cache so a redeploy of the single HTML file is picked up immediately;
+    // the file is small and same-origin so revalidation is cheap.
+    return new Response(file, {
+        headers: { 'Content-Type': 'text/html; charset=utf-8', 'Cache-Control': 'no-cache' },
+    });
+};
+app.get('/', serveApp);
+app.get('/study', serveApp);
+
+// Old root service-info JSON, relocated so it stays available for humans/curl
+// now that `/` serves the app.
+app.get('/_info', (c) =>
     c.json({
         name: 'wk-enhanced-api',
         version: config.version,
+        app: '/',
         docs: '/docs',
         openapi: '/openapi.json',
         endpoints: [
@@ -145,6 +177,8 @@ app.get('/', (c) =>
             'GET  /v1/vocab/:word',
             'GET  /v1/index_meta',
             'POST /v1/admin/warm  (bearer auth)',
+            'POST /v1/auth/register | /login | /logout,  GET /v1/auth/me',
+            'GET/PUT /v1/progress/{app}  (session cookie)',
         ],
     }),
 );
@@ -167,6 +201,19 @@ app.onError((err, c) => {
 // Eagerly open the DB so any schema/path error surfaces at boot, not on the
 // first request.
 getDb();
+
+// Periodically sweep expired session rows. Sessions are also pruned lazily
+// when an expired token is presented (db.getValidSession), but accounts that
+// never come back would otherwise leave rows forever. Hourly is plenty.
+const sweep = () => {
+    try {
+        const n = deleteExpiredSessions();
+        if (n > 0) log.info('auth.sessions_swept', { removed: n });
+    } catch (err) {
+        log.error('auth.sessions_sweep_failed', { err: (err as Error).message });
+    }
+};
+setInterval(sweep, 60 * 60 * 1000);
 
 log.info('boot', {
     port: config.port,

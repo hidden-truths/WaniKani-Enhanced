@@ -61,6 +61,16 @@ export const config = {
     wkApiToken: process.env.WK_API_TOKEN || '',
     warmRefreshDays: num('WARM_REFRESH_DAYS', 30),
     indexMetaRefreshDays: num('INDEX_META_REFRESH_DAYS', 7),
+    // Accounts / study-app config.
+    auth: {
+        // How long a login session stays valid. Sliding expiry is not
+        // implemented (kept simple); the cookie + DB row both carry this TTL.
+        sessionTtlDays: num('SESSION_TTL_DAYS', 30),
+        // Set true in prod (HTTPS via Cloudflare) so the session cookie carries
+        // the Secure flag. MUST be false for local http://localhost dev or the
+        // browser silently drops the cookie and login appears to "not stick".
+        cookieSecure: bool('COOKIE_SECURE', false),
+    },
     storage: {
         driver: driver as 'local' | 's3',
         localDir: process.env.LOCAL_MEDIA_DIR || './dev-data/media',

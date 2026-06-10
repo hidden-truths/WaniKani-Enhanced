@@ -271,3 +271,69 @@ export const JobsResponseSchema = z
         jobs: z.array(WarmJobSchema),
     })
     .openapi('JobsResponse');
+
+// ---------- Accounts / auth ----------
+
+export const CredentialsSchema = z
+    .object({
+        email: z.string().email().openapi({ example: 'learner@example.com' }),
+        // 8-char floor; no max so passphrases work. Bun.password handles any
+        // length. We don't impose composition rules (length beats complexity).
+        password: z.string().min(8).max(200).openapi({
+            description: 'At least 8 characters.',
+            example: 'correct horse battery staple',
+        }),
+    })
+    .openapi('Credentials');
+
+export const PublicUserSchema = z
+    .object({
+        id: z.number().int(),
+        email: z.string().email(),
+        createdAt: z.number().int(),
+    })
+    .openapi('PublicUser');
+
+// Returned by register/login/me. `user` is null only on the unauthenticated
+// branch of /v1/auth/me (200 with user:null), which lets the client probe
+// login state without treating "logged out" as an error.
+export const AuthResponseSchema = z
+    .object({
+        user: PublicUserSchema.nullable(),
+    })
+    .openapi('AuthResponse');
+
+export const LogoutResponseSchema = z
+    .object({ ok: z.boolean() })
+    .openapi('LogoutResponse');
+
+// ---------- Study-app progress ----------
+
+// The progress blob is opaque to the server — it's whatever the study app's
+// client-side `store` serializes to. z.any() keeps us decoupled from the
+// app's evolving shape; the app owns its own schema versioning.
+export const ProgressGetResponseSchema = z
+    .object({
+        data: z.any().nullable().openapi({
+            description: 'The stored progress blob, or null if none saved yet.',
+        }),
+        updatedAt: z.number().int().nullable().openapi({
+            description: 'Epoch ms of the last save, or null if none saved yet.',
+        }),
+    })
+    .openapi('ProgressGetResponse');
+
+export const ProgressPutRequestSchema = z
+    .object({
+        data: z.any().openapi({
+            description: 'The full client store to persist. Replaces the prior blob.',
+        }),
+    })
+    .openapi('ProgressPutRequest');
+
+export const ProgressPutResponseSchema = z
+    .object({
+        ok: z.boolean(),
+        updatedAt: z.number().int(),
+    })
+    .openapi('ProgressPutResponse');

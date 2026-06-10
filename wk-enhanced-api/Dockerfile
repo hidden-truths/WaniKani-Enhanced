@@ -36,6 +36,11 @@ COPY package.json ./
 COPY src ./src
 COPY data ./data
 
+# The study web app served at `/`. A single self-contained HTML file; src/
+# resolves it via `new URL('../web/index.html', import.meta.url)`, so it must
+# sit as a sibling of src/ inside the image (i.e. /app/web).
+COPY web ./web
+
 # Deploy scripts that run inside the container via `docker exec` from
 # host-side systemd units (currently just backup.ts + retention.ts). We
 # intentionally copy only the .ts files, NOT the systemd unit templates
