@@ -82,13 +82,13 @@
     than Anki's algorithm; if you want SM-2-style ease factors, that's a
     rewrite of scheduleCard(), not a patch.
 
-  • Filters are MULTI-SELECT and COMPOSED. Within a facet (Category, JLPT) the
-    selections are OR'd; across facets they're AND'd, then intersected with the
-    rank range. "All" is exclusive (picking it clears the rest; emptying a facet
-    falls back to "All"). See makeMultiSelect() + passes().
-    NOTE: Category and Semantic chips share ONE selection pool (both are .deck),
-    so e.g. Godan + Emotion = "godan OR emotion", not the intersection. This is
-    intentional but is the most common point of confusion — see OUTSTANDING #2.
+  • Filters are MULTI-SELECT and COMPOSED. The token chips split into FOUR facets
+    (type / trans / topic / status), derived from each token via TOKEN_FACET so the
+    markup is unchanged. Within a facet the selections are OR'd; across facets (and
+    with JLPT + the rank range) they're AND'd. So Godan + Emotion now = "godan AND
+    emotion" (the intersection), which is what users expect. The single "All" chip
+    is a master reset that clears every facet, and shows active when all are empty.
+    See wireFacets() + passes(). JLPT still uses makeMultiSelect().
 
   • No chart library. The line/bar charts are hand-built SVG strings (lineChart,
     barChart). Keeps the file dependency-free; the tradeoff is they're basic.
@@ -116,9 +116,9 @@
      via the Web Speech API (speechSynthesis, ja-JP voice — free, built-in; the
      whole Audio control hides when the browser has none). Both prefs persist
      (jpverbs_input / jpverbs_audio). See FLASHCARD SESSION.
-  2. CATEGORY vs SEMANTIC as separate AND'd facets. Right now they share one
-     pool (see Filters note). Splitting them needs a second selection set and a
-     small change to passes(); the UI rows already exist.
+  2. [DONE] CATEGORY vs SEMANTIC as separate AND'd facets. The shared OR'd pool is
+     split into four AND'd facets (type/trans/topic/status) via wireFacets() +
+     TOKEN_FACET; passes() intersects them. Godan + Emotion = the intersection.
   3. ADD / EDIT VERBS (deferred feature #7): verbs are baked into VERBS[]. A
      form that writes user-defined verbs into localStorage would make this a
      living deck. Requires merging user verbs with DATA at load.
@@ -1223,18 +1223,24 @@ document.getElementById('importFile').addEventListener('change',(e)=>{
      A verb is shown iff it satisfies ALL of:
         (Category/Semantic facet)  AND  (JLPT facet)  AND  (rank in range)
 
-     Within a single facet, the selected tokens are OR'd. So:
-        deck = ["godan","emotion"]  →  godan OR emotion
-        jlpt = ["N5","N4"]          →  N5 OR N4
-     and the two facets are then AND'd together.
+     Within a single facet, the selected tokens are OR'd; ACROSS facets they're
+     AND'd, then intersected with the rank range. So:
+        type=["godan"]  topic=["emotion"]   →  godan AND emotion (intersection)
+        type=["godan","ichidan"]            →  godan OR ichidan  (within facet)
+        jlpt=["N5","N4"]                    →  N5 OR N4
+     An empty facet array = "no constraint for this facet" (facetMatch/facetAll).
 
-   "all" / empty = "no constraint for this facet" (facetAll()). The chips
-   enforce that "all" is mutually exclusive with specific selections.
-
-   GOTCHA (OUTSTANDING #2): Category and Semantic chips in the UI both carry
-   class "deck", so they feed ONE array (cfg.deck). That means Godan + Emotion
-   is a UNION, not an intersection. If you ever want "godan verbs that are also
-   emotional", you must split them into two facets here and in makeMultiSelect.
+   THE FACETS (formerly one shared OR'd `deck` pool — split per OUTSTANDING #2 so
+   grammar AND semantics now intersect instead of union):
+        type   – conjugation class: godan / ichidan / irregular / suru / fake
+        trans  – transitivity:      trans / intrans / ti-pair
+        topic  – semantic tags:     motion / emotion / … (the long tail)
+        status – computed:          leech / due
+        jlpt   – level (separate, AND'd) + the rank band.
+   Each chip's facet is derived from its TOKEN via TOKEN_FACET (topic is the
+   default), so the markup is unchanged — chips still carry class .deck/.bf +
+   data-deck/data-filter. The single "All" chip clears ALL facets at once
+   (master reset); it shows active when every facet is empty.
 
    Two independent filter states exist:
         cfg   – the flashcard deck picker   (chips: .deck/.jlpt/.ord/.mode)
@@ -1250,22 +1256,27 @@ function oneGroup(v,d){
   if(d==='leech')return isLeech(v.rank);
   if(d==='due')return isDue(v.rank);
   if(['godan','ichidan','irregular'].includes(d))return v.type===d;
+  if(d==='suru'||d==='fake')return v.tags.includes(d);
   if(d==='trans')return v.trans==='t';
   if(d==='intrans')return v.trans==='i';
   return v.tags.includes(d);
 }
 // A facet array imposes no constraint if it's empty or contains 'all'.
 function facetAll(arr){ return !arr || arr.length===0 || arr.includes('all'); }
+// One AND'd facet: no constraint if empty, else the verb must match one token (OR).
+function facetMatch(v,arr){ return !arr || arr.length===0 || arr.some(d=>oneGroup(v,d)); }
 // The single source of truth for "should this verb appear?" (see model above).
-// c = {deck:[], jlpt:[], rmin, rmax}. Pure function — easy to unit-test.
+// c = {type:[],trans:[],topic:[],status:[], jlpt:[], rmin, rmax}. The four token
+// facets AND together; jlpt and rank AND on top. Pure function — easy to unit-test.
 function passes(v,c){
-  if(!facetAll(c.deck) && !c.deck.some(d=>oneGroup(v,d)))return false; // facet OR
+  if(!facetMatch(v,c.type))return false;
+  if(!facetMatch(v,c.trans))return false;
+  if(!facetMatch(v,c.topic))return false;
+  if(!facetMatch(v,c.status))return false;
   if(!facetAll(c.jlpt) && !c.jlpt.includes(v.jlpt))return false;
   if(v.rank<c.rmin || v.rank>c.rmax)return false;                     // rank AND
   return true;
 }
-// Back-compat shim: a few call sites still ask "does v match this one token?".
-function deckMatch(v,d){ return passes(v,{deck:[d],jlpt:cfg.jlpt,rmin:cfg.rmin,rmax:cfg.rmax}); }
 
 /* Generic multi-select chip group. Reused for both cfg and bcfg facets.
      selector – CSS selector for the chip buttons
@@ -1294,9 +1305,40 @@ function makeMultiSelect(selector, getArr, setArr, attr, onChange){
   paint();
 }
 
+// ---- Token→facet routing + the AND'd-facet chip wiring ----
+// Every category/semantic chip carries class .deck (study) / .bf (browse) + its
+// token in data-deck / data-filter. We DERIVE which facet a token belongs to here
+// (topic is the default), so the markup needs no per-chip facet attribute.
+const DECK_FACETS=['type','trans','topic','status'];
+const TOKEN_FACET={godan:'type',ichidan:'type',irregular:'type',suru:'type',fake:'type',
+  trans:'trans',intrans:'trans','ti-pair':'trans',leech:'status',due:'status'};
+const tokenFacet=t=>TOKEN_FACET[t]||'topic';
+const deckEmpty=c=>DECK_FACETS.every(f=>!c[f].length);
+// Wire a chip group (.deck or .bf) to a config's facet arrays. Tokens toggle
+// within their derived facet (OR); the lone "all" token clears every facet
+// (master reset). Returns paint() so deep-links can resync the chips after
+// mutating the config directly. The four facets AND together in passes().
+function wireFacets(selector, c, onChange){
+  const chips=[...document.querySelectorAll(selector)];
+  const tokenOf=b=>b.dataset.deck||b.dataset.filter;
+  function paint(){
+    chips.forEach(b=>{const t=tokenOf(b);
+      b.classList.toggle('active', t==='all'?deckEmpty(c):c[tokenFacet(t)].includes(t));});
+  }
+  chips.forEach(b=>b.addEventListener('click',()=>{
+    const t=tokenOf(b);
+    if(t==='all'){ DECK_FACETS.forEach(f=>c[f]=[]); }
+    else { const arr=c[tokenFacet(t)], i=arr.indexOf(t); if(i>=0)arr.splice(i,1); else arr.push(t); }
+    paint(); onChange();
+  }));
+  paint();
+  return paint;
+}
+
 // ---- Flashcard deck config + its chip bindings ----
-// mode = test direction; deck/jlpt = facets; ord = sort; rmin/rmax = rank band.
-let cfg={mode:"meaning",input:"self",audio:"off",deck:["all"],ord:"shuffle",jlpt:["all"],rmin:1,rmax:100};
+// mode = test direction; type/trans/topic/status/jlpt = AND'd facets; ord = sort;
+// rmin/rmax = rank band. Facet arrays start empty (= no constraint → "All" active).
+let cfg={mode:"meaning",input:"self",audio:"off",type:[],trans:[],topic:[],status:[],ord:"shuffle",jlpt:["all"],rmin:1,rmax:100};
 document.querySelectorAll('.chip.mode').forEach(b=>b.addEventListener('click',()=>{
   document.querySelectorAll('.chip.mode').forEach(x=>x.classList.remove('active'));b.classList.add('active');cfg.mode=b.dataset.mode;updateDeckCount();}));
 // Input mode (self-graded vs type-the-reading) + audio autoplay. Both are study-
@@ -1313,7 +1355,7 @@ bindSingle('.chip.imode','imode',v=>{cfg.input=v;localStorage.setItem('jpverbs_i
 bindSingle('.chip.amode','amode',v=>{cfg.audio=v;localStorage.setItem('jpverbs_audio',v);});
 document.querySelectorAll('.chip.imode').forEach(x=>x.classList.toggle('active',x.dataset.imode===cfg.input));
 document.querySelectorAll('.chip.amode').forEach(x=>x.classList.toggle('active',x.dataset.amode===cfg.audio));
-makeMultiSelect('.chip.deck', ()=>cfg.deck, a=>cfg.deck=a, 'deck', updateDeckCount);
+const repaintDeck=wireFacets('.chip.deck', cfg, updateDeckCount);
 makeMultiSelect('.chip.jlpt', ()=>cfg.jlpt, a=>cfg.jlpt=a, 'jlpt', updateDeckCount);
 document.querySelectorAll('.chip.ord').forEach(b=>b.addEventListener('click',()=>{
   document.querySelectorAll('.chip.ord').forEach(x=>x.classList.remove('active'));b.classList.add('active');cfg.ord=b.dataset.ord;}));
@@ -1344,12 +1386,16 @@ function buildDeck(){
 // Token → human label for the active-filter recap line. Shared by both panels
 // (deck/bf tokens are identical). Drives filterSummary() below.
 const DECK_LABEL={godan:'Godan',ichidan:'Ichidan',irregular:'Irregular',suru:'Suru',fake:'Fake-ichidan',trans:'Transitive',intrans:'Intransitive','ti-pair':'T/I pairs',leech:'Leeches',due:'Due cards',motion:'Motion',transit:'Transit',wearing:'Wearing',speaking:'Speaking',communication:'Communication',giving:'Giving/Recv',emotion:'Emotion',cognition:'Cognition',perception:'Perception',existence:'Existence',change:'Change',ability:'Ability',onoff:'On/Off',daily:'Daily',body:'Body',work:'Work',study:'Study',food:'Food',money:'Money'};
-// Build the active-facet parts for a config (empty array = nothing non-default).
-function filterSummary(deck,jlpt,rmin,rmax){
+// Build the active-facet parts for a config (one part per non-empty facet, so the
+// recap reads as the AND it now is: "Godan · Motion · rank 1–25"). Tokens within a
+// facet join with '/', the parts join with '·' in paintSummary.
+function filterSummary(c){
   const parts=[];
-  if(!facetAll(deck)) parts.push(deck.map(t=>DECK_LABEL[t]||t).join(' / '));
-  if(!facetAll(jlpt)) parts.push(jlpt.join(' / '));
-  if(rmin>1||rmax<100) parts.push('rank '+rmin+'–'+rmax);
+  [c.type,c.trans,c.topic,c.status].forEach(arr=>{
+    if(arr&&arr.length) parts.push(arr.map(t=>DECK_LABEL[t]||t).join('/'));
+  });
+  if(!facetAll(c.jlpt)) parts.push(c.jlpt.join('/'));
+  if(c.rmin>1||c.rmax<100) parts.push('rank '+c.rmin+'–'+c.rmax);
   return parts;
 }
 // Paint the recap into a #id element; hidden (:empty) when nothing is filtered.
@@ -1363,7 +1409,7 @@ function paintSummary(id,parts){
 function updateDeckCount(){
   const n=DATA.filter(v=>passes(v,cfg)).length;
   document.getElementById('deckCount').innerHTML=`<b>${n}</b> cards in deck`;
-  paintSummary('deckSummary', filterSummary(cfg.deck,cfg.jlpt,cfg.rmin,cfg.rmax));
+  paintSummary('deckSummary', filterSummary(cfg));
 }
 // SRS banner: count due cards, and flip to the green "all caught up" state at 0.
 function updateDueBanner(){
@@ -1380,8 +1426,8 @@ function updateDueBanner(){
 // reflect that in the chip UI before starting. This overrides the user's
 // current picker selection on purpose — it's a dedicated review flow.
 function startDueSession(){
-  cfg.deck=['due'];cfg.jlpt=['all'];cfg.rmin=1;cfg.rmax=100;cfg.ord='worst';
-  document.querySelectorAll('.chip.deck').forEach(x=>x.classList.remove('active'));
+  cfg.type=[];cfg.trans=[];cfg.topic=[];cfg.status=['due'];cfg.jlpt=['all'];cfg.rmin=1;cfg.rmax=100;cfg.ord='worst';
+  repaintDeck();
   document.querySelectorAll('.chip.jlpt').forEach(x=>x.classList.toggle('active',x.dataset.jlpt==='all'));
   document.getElementById('rmin').value=1;document.getElementById('rmax').value=100;
   document.querySelectorAll('.chip.ord').forEach(x=>x.classList.toggle('active',x.dataset.ord==='worst'));
@@ -1609,8 +1655,8 @@ document.addEventListener('keydown',e=>{
    100 rows; if the deck grows large, switch to a template/fragment for perf).
    Clicking a card toggles .open to expand the detail (CSS max-height anim).
    ========================================================================== */
-let bcfg={deck:['all'],jlpt:['all'],rmin:1,rmax:100};
-makeMultiSelect('.chip.bf', ()=>bcfg.deck, a=>bcfg.deck=a, 'filter', renderBrowse);
+let bcfg={type:[],trans:[],topic:[],status:[],jlpt:['all'],rmin:1,rmax:100};
+const repaintBrowse=wireFacets('.chip.bf', bcfg, renderBrowse);
 makeMultiSelect('.chip.bjlpt', ()=>bcfg.jlpt, a=>bcfg.jlpt=a, 'jlpt', renderBrowse);
 const brmin=document.getElementById('brmin'),brmax=document.getElementById('brmax');
 // Same clamp+swap behavior as the study-deck range (see syncRange).
@@ -1749,7 +1795,7 @@ function renderBrowse(){
   });
   document.getElementById('num').textContent=shown;     // "Showing N of 100"
   document.getElementById('empty').style.display=shown?'none':'block';
-  paintSummary('bSummary', filterSummary(bcfg.deck,bcfg.jlpt,bcfg.rmin,bcfg.rmax));
+  paintSummary('bSummary', filterSummary(bcfg));
 }
 
 /* ============================================================================
@@ -1862,8 +1908,8 @@ function renderStats(){
 // startDueSession() it overrides the picker and syncs the chip UI to match.
 document.getElementById('studyLeeches').addEventListener('click',()=>{
   document.querySelector('.tab[data-tab="study"]').click();
-  cfg.deck=['leech'];cfg.jlpt=['all'];cfg.rmin=1;cfg.rmax=100;
-  document.querySelectorAll('.chip.deck').forEach(x=>x.classList.toggle('active',x.dataset.deck==='leech'));
+  cfg.type=[];cfg.trans=[];cfg.topic=[];cfg.status=['leech'];cfg.jlpt=['all'];cfg.rmin=1;cfg.rmax=100;
+  repaintDeck();
   document.querySelectorAll('.chip.jlpt').forEach(x=>x.classList.toggle('active',x.dataset.jlpt==='all'));
   document.getElementById('rmin').value=1;document.getElementById('rmax').value=100;
   updateDeckCount();
