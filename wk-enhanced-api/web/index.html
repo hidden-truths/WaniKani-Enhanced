@@ -259,6 +259,56 @@
   .jlptseg .chip:first-child{border-left:none}
   .jlptseg .chip:not(.active):hover{background:var(--paper-2)}
 
+  /* --- Icons + alignment + polish (site-wide pass) -------------------------- */
+  /* Inline-sprite icon: inherits color (currentColor) + size (1em) from its host. */
+  .ic{width:1em;height:1em;display:inline-block;vertical-align:-0.14em;fill:none;stroke:currentColor;stroke-width:2;stroke-linecap:round;stroke-linejoin:round;flex-shrink:0}
+  /* Chips/buttons/tabs become inline-flex so an optional leading icon sits on the
+     text baseline with a consistent gap (text-only chips are unaffected — one child). */
+  .chip{display:inline-flex;align-items:center;justify-content:center;gap:6px}
+  .btn{display:inline-flex;align-items:center;justify-content:center;gap:8px}
+  .tab{display:inline-flex;align-items:center;gap:7px}
+  .topic-toggle .ic{font-size:13px}
+  /* Filter rows: a fixed label column so every chip group starts at the same x,
+     with chips in their own flex track so wrapped rows align under the first chip
+     (the old single-flex .row let long labels like "Test direction" shove their
+     chips right, which read as misaligned). Stacks label-over-chips on narrow. */
+  .frow{display:flex;align-items:baseline;gap:14px;margin-bottom:9px}
+  .frow>.filter-label{width:124px;flex-shrink:0;margin:0;display:inline-flex;align-items:center;gap:6px}
+  .frow>.chips{display:flex;flex-wrap:wrap;gap:8px;flex:1;min-width:0;align-items:center}
+  .frow>.chips .filter-label{min-width:0}              /* inline sub-labels (e.g. "Rank") */
+  .topic-region .topic-inner{padding-left:138px}        /* align expanded topics to the chips column */
+  @media(max-width:640px){
+    .frow{flex-direction:column;align-items:stretch;gap:5px}
+    .frow>.filter-label{width:auto}
+    .topic-region .topic-inner{padding-left:0}
+  }
+  /* Active-filter recap line: a quiet one-liner summarizing the current query
+     (incl. collapsed topics) so the whole filter state is legible at a glance. */
+  .filter-summary{display:flex;align-items:center;gap:7px;font-family:"SF Mono",ui-monospace,monospace;font-size:11px;color:var(--muted);margin:2px 0 10px;min-height:16px}
+  .filter-summary .ic{font-size:13px;color:var(--godan)}
+  .filter-summary b{color:var(--ink);font-weight:400}
+  .filter-summary:empty{display:none}
+  /* Leech list: rows become carded for a cleaner, scannable look. */
+  .leech-row{display:flex;align-items:center;gap:11px;padding:9px 12px;border:1px solid var(--line);border-left:3px solid var(--leech);border-radius:0 3px 3px 0;background:var(--paper-2);margin-bottom:7px}
+  .leech-row .lr-jp{font-size:20px;font-weight:700;line-height:1.1}
+  .leech-row .lr-meta{color:var(--muted);font-size:13px;font-style:italic}
+  .leech-row .lr-acc{margin-left:auto;font-family:"SF Mono",ui-monospace,monospace;font-size:12px;color:var(--leech);font-weight:700}
+  .leech-row .lr-acc .ic{font-size:13px;vertical-align:-0.15em;margin-right:3px}
+  /* Search field with a leading icon. */
+  .search-wrap{position:relative;flex:1;min-width:180px}
+  .search-wrap>.ic{position:absolute;left:12px;top:50%;transform:translateY(-50%);color:var(--muted);font-size:15px;pointer-events:none}
+  .search-wrap>.search{width:100%;padding-left:36px}
+  /* First-visit sign-up nudge: a dismissible inline banner, not a blocking modal
+     (lets brand-new visitors try the app first). Shown by bootAuth(), remembered
+     dismissed in localStorage. */
+  .signup-banner{display:flex;align-items:center;gap:14px;border:1px solid var(--ichidan);border-left:5px solid var(--ichidan);background:var(--paper-2);border-radius:4px;padding:12px 16px;margin:0 0 20px}
+  .signup-banner[hidden]{display:none}
+  .signup-banner>.ic{font-size:24px;color:var(--ichidan)}
+  .signup-banner .sb-text{flex:1;font-size:14px;line-height:1.45;font-family:Georgia,serif}
+  .signup-banner .sb-text b{font-weight:700}
+  .signup-banner .sb-dismiss{background:none;border:none;color:var(--muted);cursor:pointer;padding:4px;display:inline-flex}
+  .signup-banner .sb-dismiss:hover{color:var(--ink)}
+
   /* Browse grid cards. The left border (--spine equivalent) encodes the
      conjugation class at a glance; .leech recolors it purple. Card has extra
      bottom padding (30px) to clear the absolutely-positioned rank/acc row. */
@@ -379,6 +429,29 @@
 </style>
 </head>
 <body>
+<!-- Inline SVG icon sprite. Self-contained (no CDN/icon-font) so icons work
+     offline like the rest of the app; referenced via <svg class="ic"><use href="#i-…"/>.
+     All stroke-based on a 24-grid; color/size inherit via currentColor + 1em in .ic. -->
+<svg width="0" height="0" style="position:absolute" aria-hidden="true" focusable="false" overflow="hidden">
+  <symbol id="i-cards" viewBox="0 0 24 24"><rect x="3" y="6" width="13" height="15" rx="2"/><path d="M8 6V4.5A1.5 1.5 0 0 1 9.5 3H19a2 2 0 0 1 2 2v10.5A1.5 1.5 0 0 1 19.5 17H18"/></symbol>
+  <symbol id="i-grid" viewBox="0 0 24 24"><rect x="3" y="3" width="7" height="7" rx="1.5"/><rect x="14" y="3" width="7" height="7" rx="1.5"/><rect x="3" y="14" width="7" height="7" rx="1.5"/><rect x="14" y="14" width="7" height="7" rx="1.5"/></symbol>
+  <symbol id="i-chart" viewBox="0 0 24 24"><path d="M4 4v16h16"/><rect x="7" y="11" width="3" height="6" rx="1"/><rect x="12.5" y="7" width="3" height="10" rx="1"/><rect x="18" y="13" width="3" height="4" rx="1"/></symbol>
+  <symbol id="i-user" viewBox="0 0 24 24"><circle cx="12" cy="8" r="4"/><path d="M4 21a8 8 0 0 1 16 0"/></symbol>
+  <symbol id="i-cloud-check" viewBox="0 0 24 24"><path d="M7 18a4 4 0 0 1-.5-7.97A6 6 0 0 1 18 9.5 3.5 3.5 0 0 1 17.5 18"/><path d="M9 15.5 11 17.5 15 13"/></symbol>
+  <symbol id="i-contrast" viewBox="0 0 24 24"><circle cx="12" cy="12" r="9"/><path d="M12 3v18a9 9 0 0 0 0-18z" fill="currentColor" stroke="none"/></symbol>
+  <symbol id="i-download" viewBox="0 0 24 24"><path d="M12 4v11M8 11l4 4 4-4"/><path d="M5 19h14"/></symbol>
+  <symbol id="i-upload" viewBox="0 0 24 24"><path d="M12 20V9M8 13l4-4 4 4"/><path d="M5 5h14"/></symbol>
+  <symbol id="i-play" viewBox="0 0 24 24"><path d="M7 5.5v13a1 1 0 0 0 1.5.87l11-6.5a1 1 0 0 0 0-1.74l-11-6.5A1 1 0 0 0 7 5.5z" fill="currentColor" stroke="none"/></symbol>
+  <symbol id="i-check" viewBox="0 0 24 24"><path d="M5 12.5 10 17.5 19 6.5"/></symbol>
+  <symbol id="i-x" viewBox="0 0 24 24"><path d="M6 6l12 12M18 6 6 18"/></symbol>
+  <symbol id="i-alert" viewBox="0 0 24 24"><path d="M12 3.5 22 20H2L12 3.5z"/><path d="M12 10v4M12 17.2v.1"/></symbol>
+  <symbol id="i-chevron" viewBox="0 0 24 24"><path d="M6 9l6 6 6-6"/></symbol>
+  <symbol id="i-search" viewBox="0 0 24 24"><circle cx="11" cy="11" r="7"/><path d="m20 20-3.5-3.5"/></symbol>
+  <symbol id="i-refresh" viewBox="0 0 24 24"><path d="M20 11A8 8 0 0 0 6 6L4 8"/><path d="M4 4v4h4"/><path d="M4 13a8 8 0 0 0 14 5l2-2"/><path d="M20 20v-4h-4"/></symbol>
+  <symbol id="i-filter" viewBox="0 0 24 24"><path d="M3 5h18l-7 8v6l-4 2v-8L3 5z"/></symbol>
+  <symbol id="i-type" viewBox="0 0 24 24"><path d="M4 6h16M7 6v13M9 19H5"/></symbol>
+  <symbol id="i-target" viewBox="0 0 24 24"><circle cx="12" cy="12" r="8"/><circle cx="12" cy="12" r="3.5"/></symbol>
+</svg>
 <header>
   <!-- Toolbar: global controls. The hidden file input is triggered by #importBtn
        (a styled button is nicer than the raw <input type=file>). Handlers in
@@ -387,10 +460,10 @@
     <div class="kicker">日常動詞 · Verb Trainer</div>
     <div class="toolbar">
       <span class="acct-status" id="syncStatus"></span>
-      <button class="chip" id="accountBtn" aria-label="Account" title="Sign in to sync progress">Sign in</button>
-      <button class="chip" id="themeToggle" aria-label="Toggle dark mode" title="Toggle light/dark">◐ Theme</button>
-      <button class="chip" id="exportBtn" aria-label="Export progress as JSON" title="Download your progress">↓ Export</button>
-      <button class="chip" id="importBtn" aria-label="Import progress from JSON" title="Load progress from a file">↑ Import</button>
+      <button class="chip" id="accountBtn" aria-label="Account" title="Sign in to sync progress"><svg class="ic" aria-hidden="true"><use href="#i-user"/></svg>Sign in</button>
+      <button class="chip" id="themeToggle" aria-label="Toggle dark mode" title="Toggle light/dark"><svg class="ic" aria-hidden="true"><use href="#i-contrast"/></svg>Theme</button>
+      <button class="chip" id="exportBtn" aria-label="Export progress as JSON" title="Download your progress"><svg class="ic" aria-hidden="true"><use href="#i-download"/></svg>Export</button>
+      <button class="chip" id="importBtn" aria-label="Import progress from JSON" title="Load progress from a file"><svg class="ic" aria-hidden="true"><use href="#i-upload"/></svg>Import</button>
       <input type="file" id="importFile" accept="application/json,.json" hidden>
     </div>
   </div>
@@ -399,12 +472,21 @@
 
 <!-- Top-level view switcher. data-tab maps to #panel-<tab>; see TAB NAV. -->
 <div class="tabs">
-  <button class="tab active" data-tab="study">Flashcards</button>
-  <button class="tab" data-tab="browse">Browse</button>
-  <button class="tab" data-tab="stats">Stats &amp; Leeches</button>
+  <button class="tab active" data-tab="study"><svg class="ic" aria-hidden="true"><use href="#i-cards"/></svg>Flashcards</button>
+  <button class="tab" data-tab="browse"><svg class="ic" aria-hidden="true"><use href="#i-grid"/></svg>Browse</button>
+  <button class="tab" data-tab="stats"><svg class="ic" aria-hidden="true"><use href="#i-chart"/></svg>Stats &amp; Leeches</button>
 </div>
 
 <div class="wrap">
+
+  <!-- First-visit sign-up nudge (non-blocking). Shown by bootAuth() for brand-new
+       visitors on a reachable server; dismissal is remembered in localStorage. -->
+  <div class="signup-banner" id="signupBanner" hidden>
+    <svg class="ic" aria-hidden="true"><use href="#i-cloud-check"/></svg>
+    <div class="sb-text"><b>Save your progress.</b> Create a free account to sync across devices — or just keep studying offline, no account needed.</div>
+    <button class="chip primary" id="signupCreate"><svg class="ic" aria-hidden="true"><use href="#i-user"/></svg>Create account</button>
+    <button class="sb-dismiss" id="signupDismiss" aria-label="Dismiss" title="Dismiss"><svg class="ic" aria-hidden="true"><use href="#i-x"/></svg></button>
+  </div>
 
   <!-- STUDY -->
   <!-- ===== STUDY PANEL =================================================
@@ -423,35 +505,35 @@
           <div class="due-count" id="dueCount">—</div>
           <div class="due-label">cards due for review (spaced repetition)</div>
         </div>
-        <button class="btn srs" id="dueBtn">▶ Review due cards</button>
+        <button class="btn srs" id="dueBtn"><svg class="ic" aria-hidden="true"><use href="#i-play"/></svg>Review due cards</button>
       </div>
       <!-- Test direction: which side of the card is the PROMPT vs the ANSWER. -->
-      <div class="row"><span class="filter-label">Test direction</span>
+      <div class="frow"><span class="filter-label">Test direction</span><div class="chips">
         <button class="chip mode active" data-mode="meaning">JP → meaning + reading</button>
         <button class="chip mode" data-mode="reading">Meaning → reading + JP</button>
-      </div>
+      </div></div>
       <!-- Type / Transitivity / Topic chips ALL use class "deck" → one shared
            OR'd selection pool (see OUTSTANDING #2). The tier split here is purely
            visual; data-deck is the filter token consumed by makeMultiSelect().
            The single "All" chip clears the whole pool. -->
-      <div class="row"><span class="filter-label">Type</span>
+      <div class="frow"><span class="filter-label">Type</span><div class="chips">
         <button class="chip deck active" data-deck="all">All</button>
         <button class="chip deck g" data-deck="godan">Godan</button>
         <button class="chip deck i" data-deck="ichidan">Ichidan</button>
         <button class="chip deck" data-deck="irregular">Irregular</button>
         <button class="chip deck" data-deck="suru">Suru-verbs</button>
         <button class="chip deck" data-deck="fake">Fake-ichidan</button>
-      </div>
-      <div class="row"><span class="filter-label">Transitivity</span>
+      </div></div>
+      <div class="frow"><span class="filter-label">Transitivity</span><div class="chips">
         <button class="chip deck" data-deck="trans">Transitive</button>
         <button class="chip deck" data-deck="intrans">Intransitive</button>
         <button class="chip deck" data-deck="ti-pair">T/I pairs</button>
-      </div>
+      </div></div>
       <div class="fdiv"></div>
-      <div class="row"><span class="filter-label">Topic</span>
-        <button class="topic-toggle" data-target="sTopic" data-label="Topics" aria-expanded="false" aria-controls="sTopic"><span class="tt-text">Topics</span><span class="tt-arr">▾</span></button>
-        <button class="chip deck" data-deck="leech" style="border-color:var(--leech);color:var(--leech)">⚠ Leeches</button>
-      </div>
+      <div class="frow"><span class="filter-label">Topic</span><div class="chips">
+        <button class="topic-toggle" data-target="sTopic" data-label="Topics" aria-expanded="false" aria-controls="sTopic"><span class="tt-text">Topics</span><svg class="ic tt-arr" aria-hidden="true"><use href="#i-chevron"/></svg></button>
+        <button class="chip deck" data-deck="leech" style="border-color:var(--leech);color:var(--leech)"><svg class="ic" aria-hidden="true"><use href="#i-alert"/></svg>Leeches</button>
+      </div></div>
       <div class="topic-region" id="sTopic"><div class="topic-inner">
         <button class="chip deck" data-deck="motion">Motion</button>
         <button class="chip deck" data-deck="transit">Transit</button>
@@ -474,7 +556,7 @@
         <button class="chip deck" data-deck="money">Money</button>
       </div></div>
       <div class="fdiv"></div>
-      <div class="row"><span class="filter-label">Level &amp; rank</span>
+      <div class="frow"><span class="filter-label">Level &amp; rank</span><div class="chips">
         <span class="jlptseg">
           <button class="chip jlpt active" data-jlpt="all">All</button>
           <button class="chip jlpt" data-jlpt="N5">N5</button>
@@ -483,26 +565,29 @@
           <button class="chip jlpt" data-jlpt="N2">N2</button>
           <button class="chip jlpt" data-jlpt="N1">N1</button>
         </span>
-        <span class="filter-label" style="margin-left:10px;min-width:0">Rank</span>
+        <span class="filter-label" style="margin-left:6px">Rank</span>
         <input type="number" class="rangeinput" id="rmin" min="1" max="100" value="1">
         <span style="color:var(--muted)">–</span>
         <input type="number" class="rangeinput" id="rmax" min="1" max="100" value="100">
-      </div>
-      <div class="row"><span class="filter-label" style="min-width:0">Presets</span>
+      </div></div>
+      <div class="frow"><span class="filter-label">Presets</span><div class="chips">
         <button class="chip rpreset" data-lo="1" data-hi="25">1–25</button>
         <button class="chip rpreset" data-lo="26" data-hi="50">26–50</button>
         <button class="chip rpreset" data-lo="51" data-hi="75">51–75</button>
         <button class="chip rpreset" data-lo="76" data-hi="100">76–100</button>
-      </div>
+      </div></div>
       <!-- Order: shuffle | by corpus rank | worst-first (lowest rollingAcc).
            "Review due cards" forces worst-first so the shakiest cards lead. -->
-      <div class="row"><span class="filter-label">Order</span>
+      <div class="frow"><span class="filter-label">Order</span><div class="chips">
         <button class="chip ord active" data-ord="shuffle">Shuffle</button>
         <button class="chip ord" data-ord="freq">By frequency</button>
         <button class="chip ord" data-ord="worst">Worst-first</button>
-      </div>
-      <div class="row" style="margin-top:6px">
-        <button class="chip primary" id="startBtn">▶ Start session</button>
+      </div></div>
+      <div class="fdiv"></div>
+      <!-- Live recap of the active deck query (incl. collapsed topics); set by updateDeckCount(). -->
+      <div class="filter-summary" id="deckSummary"></div>
+      <div class="row" style="margin-top:2px">
+        <button class="chip primary" id="startBtn"><svg class="ic" aria-hidden="true"><use href="#i-play"/></svg>Start session</button>
         <span class="count" id="deckCount"></span>   <!-- live "N cards in deck" -->
       </div>
     </div>
@@ -524,11 +609,11 @@
       </div>
       <!-- Two button rows, only one visible at a time: reveal → then grade. -->
       <div class="fc-buttons" id="revealRow">
-        <button class="btn reveal" id="revealBtn">Reveal answer <span class="kbd">[space]</span></button>
+        <button class="btn reveal" id="revealBtn"><svg class="ic" aria-hidden="true"><use href="#i-target"/></svg>Reveal answer <span class="kbd">[space]</span></button>
       </div>
       <div class="fc-buttons" id="gradeRow" style="display:none">
-        <button class="btn wrong" id="wrongBtn">✗ Got it wrong <span class="kbd">[1]</span></button>
-        <button class="btn right" id="rightBtn">✓ Got it right <span class="kbd">[2]</span></button>
+        <button class="btn wrong" id="wrongBtn"><svg class="ic" aria-hidden="true"><use href="#i-x"/></svg>Got it wrong <span class="kbd">[1]</span></button>
+        <button class="btn right" id="rightBtn"><svg class="ic" aria-hidden="true"><use href="#i-check"/></svg>Got it right <span class="kbd">[2]</span></button>
       </div>
       <div class="hint"><button class="chip" id="endBtn">End session</button></div>
     </div>
@@ -540,7 +625,7 @@
         <div class="prompt-main" id="doneScore" style="font-family:Georgia"></div>
         <div class="prompt-sub" id="doneDetail"></div>
       </div>
-      <div class="fc-buttons"><button class="chip primary" id="againBtn">Study again</button></div>
+      <div class="fc-buttons"><button class="chip primary" id="againBtn"><svg class="ic" aria-hidden="true"><use href="#i-refresh"/></svg>Study again</button></div>
     </div>
   </div>
 
@@ -551,7 +636,7 @@
        here. Cards are rendered by renderBrowse(). ==================== -->
   <div class="panel" id="panel-browse">
     <div class="controls">
-      <div class="row"><span class="filter-label">Font</span>
+      <div class="frow"><span class="filter-label">Font</span><div class="chips">
         <select class="chip" id="fontSel">
           <option value='"Noto Sans JP",sans-serif'>Noto Sans (gothic)</option>
           <option value='"Noto Serif JP",serif'>Noto Serif (mincho)</option>
@@ -559,29 +644,29 @@
           <option value='"Kaisei Decol",serif'>Kaisei Decol (soft serif)</option>
           <option value='"Yuji Syuku",serif'>Yuji Syuku (brush)</option>
         </select>
-      </div>
+      </div></div>
       <!-- Tier 1: grammar (always visible). TYPE = conjugation class; the lone
            "All" chip clears the whole shared .bf pool (type+transitivity+topic). -->
-      <div class="row"><span class="filter-label">Type</span>
+      <div class="frow"><span class="filter-label">Type</span><div class="chips">
         <button class="chip bf active" data-filter="all">All</button>
         <button class="chip bf g" data-filter="godan">Godan</button>
         <button class="chip bf i" data-filter="ichidan">Ichidan</button>
         <button class="chip bf" data-filter="irregular">Irregular</button>
         <button class="chip bf" data-filter="suru">Suru</button>
         <button class="chip bf" data-filter="fake">Fake-ichidan</button>
-      </div>
-      <div class="row"><span class="filter-label">Transitivity</span>
+      </div></div>
+      <div class="frow"><span class="filter-label">Transitivity</span><div class="chips">
         <button class="chip bf" data-filter="trans">Transitive</button>
         <button class="chip bf" data-filter="intrans">Intransitive</button>
         <button class="chip bf" data-filter="ti-pair">T/I pairs</button>
-      </div>
+      </div></div>
       <div class="fdiv"></div>
       <!-- Tier 2: topic (the long semantic tail) collapsed behind a disclosure;
            Leeches is a status filter, kept always-visible beside the toggle. -->
-      <div class="row"><span class="filter-label">Topic</span>
-        <button class="topic-toggle" data-target="bTopic" data-label="Topics" aria-expanded="false" aria-controls="bTopic"><span class="tt-text">Topics</span><span class="tt-arr">▾</span></button>
-        <button class="chip bf" data-filter="leech" style="border-color:var(--leech);color:var(--leech)">⚠ Leeches</button>
-      </div>
+      <div class="frow"><span class="filter-label">Topic</span><div class="chips">
+        <button class="topic-toggle" data-target="bTopic" data-label="Topics" aria-expanded="false" aria-controls="bTopic"><span class="tt-text">Topics</span><svg class="ic tt-arr" aria-hidden="true"><use href="#i-chevron"/></svg></button>
+        <button class="chip bf" data-filter="leech" style="border-color:var(--leech);color:var(--leech)"><svg class="ic" aria-hidden="true"><use href="#i-alert"/></svg>Leeches</button>
+      </div></div>
       <div class="topic-region" id="bTopic"><div class="topic-inner">
         <button class="chip bf" data-filter="motion">Motion</button>
         <button class="chip bf" data-filter="transit">Transit</button>
@@ -605,7 +690,7 @@
       </div></div>
       <div class="fdiv"></div>
       <!-- Tier 3: level + frequency band on one line. -->
-      <div class="row"><span class="filter-label">Level &amp; rank</span>
+      <div class="frow"><span class="filter-label">Level &amp; rank</span><div class="chips">
         <span class="jlptseg">
           <button class="chip bjlpt active" data-jlpt="all">All</button>
           <button class="chip bjlpt" data-jlpt="N5">N5</button>
@@ -614,14 +699,18 @@
           <button class="chip bjlpt" data-jlpt="N2">N2</button>
           <button class="chip bjlpt" data-jlpt="N1">N1</button>
         </span>
-        <span class="filter-label" style="margin-left:10px;min-width:0">Rank</span>
+        <span class="filter-label" style="margin-left:6px">Rank</span>
         <input type="number" class="rangeinput" id="brmin" min="1" max="100" value="1">
         <span style="color:var(--muted)">–</span>
         <input type="number" class="rangeinput" id="brmax" min="1" max="100" value="100">
-      </div>
-      <div class="row"><input class="search" id="search" placeholder="Search reading, kanji, or meaning…">
-        <span class="count">Showing <b id="num">100</b> of 100</span></div>
+      </div></div>
+      <div class="frow"><span class="filter-label">Search</span><div class="chips">
+        <span class="search-wrap"><svg class="ic" aria-hidden="true"><use href="#i-search"/></svg>
+          <input class="search" id="search" placeholder="Search reading, kanji, or meaning…"></span>
+        <span class="count">Showing <b id="num">100</b> of 100</span></div></div>
     </div>
+    <!-- Live recap of the active grid query (incl. collapsed topics); set by renderBrowse(). -->
+    <div class="filter-summary" id="bSummary"></div>
     <div class="hint">Tap a card to expand · rank shown bottom-right, accuracy bottom-left once drilled</div>
     <div class="grid" id="grid"></div>
     <div class="empty" id="empty" style="display:none">No verbs match that filter.</div>
@@ -641,7 +730,7 @@
     <div class="chart-card"><div class="chart-title">Per-session accuracy — most recent 20 sessions</div><div id="chartSession"></div></div>
     <div class="chart-card"><div class="chart-title">⚠ Leeches — chronically missed (rolling accuracy &lt; 60% over ≥ 4 attempts)</div>
       <div id="leechList"></div>
-      <div class="row" style="margin-top:12px"><button class="chip primary" id="studyLeeches">▶ Study leeches now</button></div>
+      <div class="row" style="margin-top:12px"><button class="chip primary" id="studyLeeches"><svg class="ic" aria-hidden="true"><use href="#i-play"/></svg>Study leeches now</button></div>
     </div>
     <div class="chart-card"><div class="chart-title">Per-card rolling accuracy (last 8 attempts)</div><div id="cardBars"></div></div>
     <div class="row"><button class="danger" id="resetBtn">Reset all stats &amp; history</button></div>
@@ -1188,10 +1277,29 @@ function buildDeck(){
   else if(cfg.ord==='worst'){d.sort((a,b)=>{const ra=rollingAcc(a.rank)??1,rb=rollingAcc(b.rank)??1;return ra-rb;});}
   return d;
 }
-// Live "N cards in deck" readout under the Start button.
+// Token → human label for the active-filter recap line. Shared by both panels
+// (deck/bf tokens are identical). Drives filterSummary() below.
+const DECK_LABEL={godan:'Godan',ichidan:'Ichidan',irregular:'Irregular',suru:'Suru',fake:'Fake-ichidan',trans:'Transitive',intrans:'Intransitive','ti-pair':'T/I pairs',leech:'Leeches',due:'Due cards',motion:'Motion',transit:'Transit',wearing:'Wearing',speaking:'Speaking',communication:'Communication',giving:'Giving/Recv',emotion:'Emotion',cognition:'Cognition',perception:'Perception',existence:'Existence',change:'Change',ability:'Ability',onoff:'On/Off',daily:'Daily',body:'Body',work:'Work',study:'Study',food:'Food',money:'Money'};
+// Build the active-facet parts for a config (empty array = nothing non-default).
+function filterSummary(deck,jlpt,rmin,rmax){
+  const parts=[];
+  if(!facetAll(deck)) parts.push(deck.map(t=>DECK_LABEL[t]||t).join(' / '));
+  if(!facetAll(jlpt)) parts.push(jlpt.join(' / '));
+  if(rmin>1||rmax<100) parts.push('rank '+rmin+'–'+rmax);
+  return parts;
+}
+// Paint the recap into a #id element; hidden (:empty) when nothing is filtered.
+function paintSummary(id,parts){
+  const el=document.getElementById(id); if(!el)return;
+  el.innerHTML = parts.length
+    ? '<svg class="ic" aria-hidden="true"><use href="#i-filter"/></svg>Filtering: '+parts.map(p=>'<b>'+p+'</b>').join(' · ')
+    : '';
+}
+// Live "N cards in deck" readout under the Start button + filter recap.
 function updateDeckCount(){
   const n=DATA.filter(v=>passes(v,cfg)).length;
   document.getElementById('deckCount').innerHTML=`<b>${n}</b> cards in deck`;
+  paintSummary('deckSummary', filterSummary(cfg.deck,cfg.jlpt,cfg.rmin,cfg.rmax));
 }
 // SRS banner: count due cards, and flip to the green "all caught up" state at 0.
 function updateDueBanner(){
@@ -1200,7 +1308,9 @@ function updateDueBanner(){
   const banner=document.getElementById('dueBanner');
   banner.classList.toggle('empty', n===0);
   document.getElementById('dueBtn').disabled = n===0;
-  document.getElementById('dueBtn').textContent = n===0 ? '✓ All caught up' : '▶ Review due cards';
+  document.getElementById('dueBtn').innerHTML = n===0
+    ? '<svg class="ic" aria-hidden="true"><use href="#i-check"/></svg>All caught up'
+    : '<svg class="ic" aria-hidden="true"><use href="#i-play"/></svg>Review due cards';
 }
 // "Review due cards": force the deck to due-only, worst-first, full range, and
 // reflect that in the chip UI before starting. This overrides the user's
@@ -1422,6 +1532,7 @@ function renderBrowse(){
   });
   document.getElementById('num').textContent=shown;     // "Showing N of 100"
   document.getElementById('empty').style.display=shown?'none':'block';
+  paintSummary('bSummary', filterSummary(bcfg.deck,bcfg.jlpt,bcfg.rmin,bcfg.rmax));
 }
 
 /* ============================================================================
@@ -1508,10 +1619,10 @@ function renderStats(){
   // Leech list: the cards isLeech() currently flags, with their rolling accuracy.
   const lz=leeches();const ll=document.getElementById('leechList');
   if(!lz.length){ll.innerHTML='<div class="empty" style="padding:18px">No leeches detected. A leech is any card under 60% over its last 4+ attempts.</div>';}
-  else{ll.innerHTML=lz.map(v=>`<div style="display:flex;align-items:center;gap:10px;padding:6px 0;border-bottom:1px solid var(--line)">
-    <span class="leech-badge">⚠</span><span class="jp" style="font-size:20px;font-weight:700">${v.jp}</span>
-    <span style="color:var(--muted);font-size:13px">${v.read} · ${v.mean}</span>
-    <span style="margin-left:auto;font-family:monospace;font-size:12px;color:var(--leech)">${Math.round(rollingAcc(v.rank)*100)}%</span></div>`).join('');}
+  else{ll.innerHTML=lz.map(v=>`<div class="leech-row">
+    <span class="lr-jp jp">${v.jp}</span>
+    <span class="lr-meta">${v.read} · ${v.mean}</span>
+    <span class="lr-acc"><svg class="ic" aria-hidden="true"><use href="#i-alert"/></svg>${Math.round(rollingAcc(v.rank)*100)}%</span></div>`).join('');}
   // Per-card accuracy bars (worst-first, capped + show-all toggle). Bar color:
   // purple=leech, green≥80%, else red. See renderCardBars().
   renderCardBars();
@@ -1631,10 +1742,12 @@ function refreshAllViews(){
   if(document.getElementById('panel-stats').classList.contains('active'))renderStats();
 }
 
+// Escape user-supplied text before innerHTML interpolation (e.g. account email).
+function escapeHtml(s){return String(s).replace(/[&<>"']/g,c=>({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;'}[c]));}
 function updateAccountChip(){
   const btn=document.getElementById('accountBtn');
-  if(account){ btn.textContent='◉ '+account.email; btn.title='Signed in — click to sign out'; }
-  else { btn.textContent='Sign in'; btn.title='Sign in to sync progress'; setSyncStatus(''); }
+  if(account){ btn.innerHTML='<svg class="ic" aria-hidden="true"><use href="#i-cloud-check"/></svg>'+escapeHtml(account.email); btn.title='Signed in — click to sign out'; }
+  else { btn.innerHTML='<svg class="ic" aria-hidden="true"><use href="#i-user"/></svg>Sign in'; btn.title='Sign in to sync progress'; setSyncStatus(''); }
 }
 
 /* ---- Auth modal wiring ---- */
@@ -1696,7 +1809,8 @@ async function doLogout(){
 }
 
 // Boot: probe the session, hydrate from cloud if signed in, else gently nudge
-// brand-new visitors (no local progress + reachable server) to make an account.
+// brand-new visitors with a dismissible inline banner (not a blocking modal —
+// let them try the app first). Dismissal is remembered so we don't nag.
 async function bootAuth(){
   try{ const r=await api('/v1/auth/me'); account=(r&&r.user)?r.user:null; }
   catch(e){ serverReachable=false; account=null; }
@@ -1704,9 +1818,19 @@ async function bootAuth(){
   if(account){ await pullCloud(); return; }
   if(serverReachable){
     const empty=!store.cards||Object.keys(store.cards).length===0;
-    if(empty)openAuth('register');
+    const dismissed=localStorage.getItem('jpverbs_signup_dismissed')==='1';
+    if(empty&&!dismissed)document.getElementById('signupBanner').hidden=false;
   }
 }
+// Sign-up banner actions: "Create account" opens the auth modal on demand;
+// dismiss hides it and remembers the choice.
+document.getElementById('signupCreate').addEventListener('click',()=>{
+  document.getElementById('signupBanner').hidden=true; openAuth('register');
+});
+document.getElementById('signupDismiss').addEventListener('click',()=>{
+  document.getElementById('signupBanner').hidden=true;
+  localStorage.setItem('jpverbs_signup_dismissed','1');
+});
 
 // ---- Initial paint ----
 // The flashcard tab is the default-active panel (its deck count + due banner
