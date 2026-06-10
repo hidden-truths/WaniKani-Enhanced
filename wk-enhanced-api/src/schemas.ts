@@ -356,3 +356,43 @@ export const SessionPostResponseSchema = z
         count: z.number().int().openapi({ description: 'Lifetime session count for this user.' }),
     })
     .openapi('SessionPostResponse');
+
+// ---------- みんなの日本語 dashboard ----------
+
+export const MinnaLessonsResponseSchema = z
+    .object({
+        lessons: z.array(z.number().int()).openapi({
+            description: 'Lesson numbers that have curated content available on this server.',
+            example: [23],
+        }),
+    })
+    .openapi('MinnaLessonsResponse');
+
+export const MinnaLessonParamsSchema = z.object({
+    n: z
+        .string()
+        .regex(/^\d+$/)
+        .openapi({ param: { name: 'n', in: 'path' }, description: 'Lesson number (1–50).', example: '23' }),
+});
+
+export const MinnaAudioQuerySchema = z.object({
+    src: z.string().openapi({
+        param: { name: 'src', in: 'query' },
+        description: 'vnjpclub audio path, e.g. /Audio/minnamoi/bai23/<id>.mp3 — validated server-side.',
+        example: '/Audio/minnamoi/bai23/00010101011101110.mp3',
+    }),
+});
+
+// The curated lesson payload is served verbatim from data/minna/lesson-<n>.json.
+// Loosely typed — the study-app client owns the shape; this is just for docs.
+export const MinnaLessonSchema = z
+    .object({
+        lesson: z.number().int().openapi({ example: 23 }),
+        title: z.string().optional(),
+        theme: z.string().optional(),
+        vocab: z.array(z.any()).openapi({ description: 'Vocabulary items (kana/kanji/meaning/audio/cat…).' }),
+        grammar: z.array(z.any()).optional(),
+        examples: z.array(z.any()).optional(),
+        conversation: z.any().optional(),
+    })
+    .openapi('MinnaLesson');

@@ -1,0 +1,98 @@
+{
+  "lesson": 23,
+  "title": "Lesson 23",
+  "theme": "Directions & conditions — 〜とき, 〜と, and the passing-through を",
+  "source": {
+    "name": "vnjpclub.com",
+    "vocabUrl": "https://www.vnjpclub.com/en/minna-no-nihongo/lesson-23-vocabulary.html",
+    "grammarUrl": "https://www.vnjpclub.com/en/minna-no-nihongo/lesson-23-grammar.html",
+    "note": "Vocabulary, native-speaker audio, and example sentences aggregated from vnjpclub.com (Minna no Nihongo 第2版). For personal study."
+  },
+  "vocab": [
+    { "key": "mnn:23:0",  "kana": "ききます", "kanji": "聞きます", "context": "先生に〜", "mean": "to ask (a teacher)", "cat": "verb", "type": "godan", "trans": "t", "dict": "聞く", "dictRead": "きく", "audio": "/Audio/minnamoi/bai23/00010101011101110.mp3" },
+    { "key": "mnn:23:1",  "kana": "まわします", "kanji": "回します", "context": "", "mean": "to turn (something), rotate", "cat": "verb", "type": "godan", "trans": "t", "dict": "回す", "dictRead": "まわす", "audio": "/Audio/minnamoi/bai23/00010101011101111.mp3" },
+    { "key": "mnn:23:2",  "kana": "ひきます", "kanji": "引きます", "context": "", "mean": "to play (a stringed or keyboard instrument)", "cat": "verb", "type": "godan", "trans": "t", "dict": "引く", "dictRead": "ひく", "audio": "/Audio/minnamoi/bai23/00010101011110000.mp3" },
+    { "key": "mnn:23:3",  "kana": "かえます", "kanji": "変えます", "context": "", "mean": "to change, exchange", "cat": "verb", "type": "ichidan", "trans": "t", "dict": "変える", "dictRead": "かえる", "audio": "/Audio/minnamoi/bai23/00010101011110001.mp3" },
+    { "key": "mnn:23:4",  "kana": "さわります", "kanji": "触ります", "context": "ドアに〜", "mean": "to touch [a door]", "cat": "verb", "type": "godan", "trans": "i", "dict": "触る", "dictRead": "さわる", "audio": "/Audio/minnamoi/bai23/00010101011110010.mp3" },
+    { "key": "mnn:23:5",  "kana": "でます", "kanji": "出ます", "context": "おつりが〜", "mean": "(change) to come out", "cat": "verb", "type": "ichidan", "trans": "i", "dict": "出る", "dictRead": "でる", "audio": "/Audio/minnamoi/bai23/00010101011110011.mp3" },
+    { "key": "mnn:23:6",  "kana": "あるきます", "kanji": "歩きます", "context": "", "mean": "to walk", "cat": "verb", "type": "godan", "trans": "i", "dict": "歩く", "dictRead": "あるく", "audio": "/Audio/minnamoi/bai23/00010101011110100.mp3" },
+    { "key": "mnn:23:7",  "kana": "わたります", "kanji": "渡ります", "context": "橋を〜", "mean": "to cross [a bridge]", "cat": "verb", "type": "godan", "trans": "i", "dict": "渡る", "dictRead": "わたる", "audio": "/Audio/minnamoi/bai23/00010101011110101.mp3" },
+    { "key": "mnn:23:8",  "kana": "まがります", "kanji": "曲がります", "context": "右へ〜", "mean": "to turn [to the right]", "cat": "verb", "type": "godan", "trans": "i", "dict": "曲がる", "dictRead": "まがる", "audio": "/Audio/minnamoi/bai23/00010101011110110.mp3" },
+    { "key": "mnn:23:9",  "kana": "さびしい", "kanji": "寂しい", "context": "", "mean": "lonely", "cat": "adjective", "type": "i-adj", "trans": "", "dict": "寂しい", "dictRead": "さびしい", "audio": "/Audio/minnamoi/bai23/00010101011110111.mp3" },
+    { "key": "mnn:23:10", "kana": "［お］ゆ", "kanji": "［お］湯", "context": "", "mean": "hot water", "cat": "noun", "type": "", "trans": "", "dict": "お湯", "dictRead": "おゆ", "audio": "/Audio/minnamoi/bai23/00010101011111000.mp3" },
+    { "key": "mnn:23:11", "kana": "おと", "kanji": "音", "context": "", "mean": "sound, noise", "cat": "noun", "type": "", "trans": "", "dict": "音", "dictRead": "おと", "audio": "/Audio/minnamoi/bai23/00010101011111001.mp3" },
+    { "key": "mnn:23:12", "kana": "サイズ", "kanji": "", "context": "", "mean": "size", "cat": "noun", "type": "", "trans": "", "dict": "サイズ", "dictRead": "サイズ", "audio": "/Audio/minnamoi/bai23/00010101011111010.mp3" },
+    { "key": "mnn:23:13", "kana": "こしょう", "kanji": "故障", "context": "〜します", "mean": "breakdown (〜します: to break down)", "cat": "noun", "type": "", "trans": "", "dict": "故障", "dictRead": "こしょう", "audio": "/Audio/minnamoi/bai23/00010101011111011.mp3" },
+    { "key": "mnn:23:14", "kana": "みち", "kanji": "道", "context": "", "mean": "road, way", "cat": "noun", "type": "", "trans": "", "dict": "道", "dictRead": "みち", "audio": "/Audio/minnamoi/bai23/00010101011111100.mp3" },
+    { "key": "mnn:23:15", "kana": "こうさてん", "kanji": "交差点", "context": "", "mean": "intersection, crossroads", "cat": "noun", "type": "", "trans": "", "dict": "交差点", "dictRead": "こうさてん", "audio": "/Audio/minnamoi/bai23/00010101011111101.mp3" },
+    { "key": "mnn:23:16", "kana": "しんごう", "kanji": "信号", "context": "", "mean": "traffic light, signal", "cat": "noun", "type": "", "trans": "", "dict": "信号", "dictRead": "しんごう", "audio": "/Audio/minnamoi/bai23/00010101011111110.mp3" },
+    { "key": "mnn:23:17", "kana": "かど", "kanji": "角", "context": "", "mean": "corner", "cat": "noun", "type": "", "trans": "", "dict": "角", "dictRead": "かど", "audio": "/Audio/minnamoi/bai23/00010101011111111.mp3" },
+    { "key": "mnn:23:18", "kana": "はし", "kanji": "橋", "context": "", "mean": "bridge", "cat": "noun", "type": "", "trans": "", "dict": "橋", "dictRead": "はし", "audio": "/Audio/minnamoi/bai23/00010101100000000.mp3" },
+    { "key": "mnn:23:19", "kana": "ちゅうしゃじょう", "kanji": "駐車場", "context": "", "mean": "parking lot, car park", "cat": "noun", "type": "", "trans": "", "dict": "駐車場", "dictRead": "ちゅうしゃじょう", "audio": "/Audio/minnamoi/bai23/00010101100000001.mp3" },
+    { "key": "mnn:23:20", "kana": "たてもの", "kanji": "建物", "context": "", "mean": "building", "cat": "noun", "type": "", "trans": "", "dict": "建物", "dictRead": "たてもの", "audio": "/Audio/minnamoi/bai23/00010101100000010.mp3" },
+    { "key": "mnn:23:21", "kana": "なんかいも", "kanji": "何回も", "context": "", "mean": "many times, again and again", "cat": "adverb", "type": "", "trans": "", "dict": "何回も", "dictRead": "なんかいも", "audio": "/Audio/minnamoi/bai23/00010101100000011.mp3" },
+    { "key": "mnn:23:22", "kana": "〜め", "kanji": "〜目", "context": "3つ〜", "mean": "the -th (ordinal suffix: 3つ目 = the third)", "cat": "phrase", "type": "", "trans": "", "dict": "〜目", "dictRead": "〜め", "audio": "/Audio/minnamoi/bai23/00010101100000100.mp3" }
+  ],
+  "grammar": [
+    {
+      "pattern": "〜とき (when ~)",
+      "structure": "Vる／Vた・いA(〜い)・なA(〜な)・N の ＋ とき、〜",
+      "explain": "Marks the time or occasion of an action/state. The verb before とき is relative, not absolute: Vる + とき = the main action happens before/at that point (e.g. before leaving); Vた + とき = the first action is already complete (e.g. after leaving). Adjectives and nouns connect as 〜い／〜な／〜の + とき.",
+      "examples": [
+        { "jp": "図書館で 本を 借りる とき、カードが 要ります。", "en": "You need a card when you borrow books at the library." },
+        { "jp": "部屋を 出る とき、電気を 消して ください。", "en": "Turn off the light when you leave the room." },
+        { "jp": "新聞を 読む とき、眼鏡を かけます。", "en": "I put on my glasses when I read the newspaper." },
+        { "jp": "国へ 帰った とき、靴を 買います。", "en": "I buy shoes when I go back to my home country." },
+        { "jp": "暇な とき、うちへ 遊びに 来ませんか。", "en": "When you're free, won't you come over to my place?" },
+        { "jp": "学生の とき、アルバイトを しました。", "en": "I worked part-time when I was a student." }
+      ]
+    },
+    {
+      "pattern": "〜と (whenever / if ~, then [inevitable result])",
+      "structure": "V(辞書形)・いA(〜い)・なA(〜だ)・N(〜だ) ＋ と、〜",
+      "explain": "States that whenever the first thing happens, the second naturally and inevitably follows (natural laws, mechanisms, directions, habits). The clause after と cannot express intention, request, invitation, or a command — use 〜たら/〜ば for those.",
+      "examples": [
+        { "jp": "この ボタンを 押すと、お釣りが 出ます。", "en": "Press this button and your change comes out." },
+        { "jp": "お酒を 飲むと、頭が 痛く なります。", "en": "I get a headache when I drink alcohol." },
+        { "jp": "この つまみを 右へ 回すと、音が 大きく なります。", "en": "Turn this knob to the right and the volume gets louder." },
+        { "jp": "この 道を まっすぐ 行くと、左に 駅が あります。", "en": "Go straight down this road and the station is on your left." },
+        { "jp": "あの 角を 左へ 曲がると、花屋は 右に あります。", "en": "Turn left at that corner and the flower shop is on your right." }
+      ]
+    },
+    {
+      "pattern": "Nを + 移動動詞 (passing through / along ~)",
+      "structure": "N(場所) ＋ を ＋ V(移動: 渡る・歩く・散歩する・通る・走る・飛ぶ…)",
+      "explain": "With verbs of movement, を marks the place that the movement passes through, along, or across — it is not a direct object. Common with 渡る (cross), 歩く / 散歩する (walk), 通る (pass), 曲がる (turn at).",
+      "examples": [
+        { "jp": "公園を 散歩します。", "en": "I take a walk through the park." },
+        { "jp": "道を 渡ります。", "en": "I cross the road." },
+        { "jp": "この 交差点を 右へ 曲がって ください。", "en": "Please turn right at this intersection." },
+        { "jp": "橋を 渡ると、右に 駐車場が あります。", "en": "Cross the bridge and there's a parking lot on the right." }
+      ]
+    }
+  ],
+  "examples": [
+    { "jp": "この ボタンを 押すと、お釣りが 出ます。", "en": "Press this button and the change comes out." },
+    { "jp": "よく テレビを 見ますか。 …野球の 試合が ある とき、見ます。", "en": "Do you watch TV often? …I watch when there's a baseball game on." },
+    { "jp": "冷蔵庫に 何も ない とき、どう しますか。 …近くの レストランへ 食べに 行きます。", "en": "When there's nothing in the fridge, what do you do? …I go eat at a restaurant nearby." },
+    { "jp": "会議室を 出る とき、エアコンを 消しましたか。 …はい、消しました。", "en": "Did you turn off the air conditioner when you left the meeting room? …Yes, I turned it off." },
+    { "jp": "どこで 服や 靴を 買いますか。 …国へ 帰った とき、買います。日本のは 小さいですから。", "en": "Where do you buy clothes and shoes? …I buy them when I go home — sizes in Japan run small." },
+    { "jp": "体の 調子が 悪い とき、この 「元気茶」を 飲みます。", "en": "When I'm not feeling well, I drink this 'Genki tea.'" },
+    { "jp": "お湯が 出ません。 …そこを 押すと 出ますよ。", "en": "The hot water won't come out. …Press there and it'll come out." },
+    { "jp": "市役所は どこですか。 …この 道を まっすぐ 行くと、左に あります。", "en": "Where is the city office? …Go straight down this road and it's on the left." }
+  ],
+  "conversation": {
+    "title": "どうやって 行きますか (How do I get there?)",
+    "audio": "/Audio/minnahonsatsu1/78.mp3",
+    "lines": [
+      { "role": "図書館", "jp": "はい、みどり図書館です。", "en": "Hello, Midori Library speaking." },
+      { "role": "客", "jp": "あのう、そちらまで どうやって 行きますか。", "en": "Um, how do I get to you?" },
+      { "role": "図書館", "jp": "本田駅から 12番の バスに 乗って、図書館前で 降りて ください。3つ目です。", "en": "From Honda Station, take the number-12 bus and get off at Toshokan-mae. It's the third stop." },
+      { "role": "客", "jp": "3つ目ですね。", "en": "The third stop, right?" },
+      { "role": "図書館", "jp": "ええ。降りると、前に 公園が あります。図書館は 公園の 中の 白い 建物です。", "en": "Yes. When you get off, there's a park in front. The library is the white building inside the park." },
+      { "role": "客", "jp": "わかりました。それから、本を 借りる とき、何か 要りますか。", "en": "I see. And do I need anything to borrow books?" },
+      { "role": "図書館", "jp": "お名前と 住所が わかる 物を 持って 来て ください。", "en": "Please bring something that shows your name and address." },
+      { "role": "客", "jp": "はい。どうも ありがとう ございました。", "en": "Okay. Thank you very much." }
+    ]
+  }
+}

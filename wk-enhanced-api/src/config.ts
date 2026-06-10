@@ -71,6 +71,17 @@ export const config = {
         // browser silently drops the cookie and login appears to "not stick".
         cookieSecure: bool('COOKIE_SECURE', false),
     },
+    // みんなの日本語 dashboard access control.
+    minna: {
+        // Comma-separated allowlist of account emails permitted to load the
+        // copyrighted Minna no Nihongo content + native audio. Empty = any
+        // signed-in user. Set this to the owner's email in prod to keep the
+        // material private to them.
+        ownerEmails: (process.env.MINNA_OWNER_EMAILS || '')
+            .split(',')
+            .map((s) => s.trim().toLowerCase())
+            .filter(Boolean),
+    },
     storage: {
         driver: driver as 'local' | 's3',
         localDir: process.env.LOCAL_MEDIA_DIR || './dev-data/media',

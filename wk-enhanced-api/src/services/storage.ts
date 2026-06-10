@@ -9,7 +9,7 @@
 // further round trip through us (except in local mode where the /media route
 // is still our own process).
 
-import { mkdir, writeFile, stat } from 'node:fs/promises';
+import { mkdir, writeFile, stat, readFile } from 'node:fs/promises';
 import { join, dirname } from 'node:path';
 import { config } from '../config.ts';
 import { log } from '../lib/log.ts';
@@ -21,6 +21,9 @@ export interface Storage {
     // True if an object exists. Used by the warmer to skip already-uploaded
     // media without re-downloading from the source.
     exists(key: string): Promise<boolean>;
+    // Read an object's bytes, or null if it doesn't exist. Used by the Minna
+    // audio proxy to serve a cached MP3 without re-fetching from vnjpclub.
+    get(key: string): Promise<ArrayBuffer | null>;
     publicUrl(key: string): string;
 }
 
@@ -64,6 +67,16 @@ class LocalStorage implements Storage {
             return s.isFile();
         } catch {
             return false;
+        }
+    }
+
+    async get(key: string): Promise<ArrayBuffer | null> {
+        try {
+            const buf = await readFile(join(this.rootDir, key));
+            // Copy out of the Node Buffer's (possibly pooled) backing store.
+            return buf.buffer.slice(buf.byteOffset, buf.byteOffset + buf.byteLength);
+        } catch {
+            return null;
         }
     }
 
@@ -131,6 +144,16 @@ class S3Storage implements Storage {
         }
     }
 
+    async get(key: string): Promise<ArrayBuffer | null> {
+        try {
+            const file = this.client.file(key);
+            if (!(await file.exists())) return null;
+            return await file.arrayBuffer();
+        } catch {
+            return null;
+        }
+    }
+
     publicUrl(key: string): string {
         return publicUrlFor(this.publicBase, key);
     }
@@ -158,4 +181,10 @@ export const keys = {
         `image/${category}/${encodedTitle}/${exampleId}.jpg`,
     ddg: (word: string, idx: number) =>
         `ddg/${word}/${idx}.jpg`,
+    // Cache key for a proxied Minna native-audio file. `vnjpPath` is the
+    // vnjpclub path (e.g. /Audio/minnamoi/bai23/<id>.mp3); drop the leading
+    // /Audio/ and namespace under minna/audio/ so the on-disk / Spaces layout
+    // stays tidy and collision-free.
+    minnaAudio: (vnjpPath: string) =>
+        `minna/audio/${vnjpPath.replace(/^\/Audio\//, '')}`,
 };

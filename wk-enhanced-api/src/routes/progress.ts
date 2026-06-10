@@ -27,7 +27,8 @@ const AppParamSchema = z.object({
         // 'verbs'        = the study-app progress blob (cards/sessions/daily)
         // 'custom-verbs' = the user's custom verb definitions (synced separately)
         // 'settings'     = the Settings-page preferences (synced separately)
-        .enum(['verbs', 'custom-verbs', 'settings'])
+        // 'minna'        = みんなの日本語 dashboard state (per-lesson notes / activation)
+        .enum(['verbs', 'custom-verbs', 'settings', 'minna'])
         .openapi({ param: { name: 'app', in: 'path' }, example: 'verbs' }),
 });
 

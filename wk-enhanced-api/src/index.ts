@@ -29,6 +29,7 @@ import { adminRouter } from './routes/admin.ts';
 import { authRouter } from './routes/auth.ts';
 import { progressRouter } from './routes/progress.ts';
 import { sessionsRouter } from './routes/sessions.ts';
+import { minnaRouter } from './routes/minna.ts';
 import { MEDIA_CACHE_CONTROL } from './services/storage.ts';
 import { googleTts } from './services/tts.ts';
 
@@ -83,6 +84,7 @@ app.route('/v1/admin', adminRouter);
 app.route('/v1/auth', authRouter);
 app.route('/v1/progress', progressRouter);
 app.route('/v1/sessions', sessionsRouter);
+app.route('/v1/minna', minnaRouter);
 
 // Google Translate TTS proxy for the study app (replaces the browser's uneven
 // speechSynthesis voices with consistent ja-JP audio). text→audio is stable, so

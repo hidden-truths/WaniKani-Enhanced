@@ -5,3 +5,6 @@ dev-data/
 *.log
 .DS_Store
 bun.lockb
+# Minna scraper drafts — regenerable scratch from scripts/scrape-minna.ts; the
+# curated lesson-<n>.json is what gets committed + served.
+data/minna/*.draft.json
