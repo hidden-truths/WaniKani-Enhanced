@@ -24,8 +24,16 @@ import {
     ErrorSchema,
 } from '../schemas.ts';
 import { zodHook } from '../lib/zodHook.ts';
+import { rateLimit } from '../lib/rateLimit.ts';
 
 export const authRouter = new OpenAPIHono({ defaultHook: zodHook });
+
+// Origin-side per-IP rate limits on the credential endpoints (a backstop behind
+// Cloudflare). Registered before the routes so the middleware runs first. Limits
+// are lenient enough for a human (and dev) but cap automated abuse: login 20 per
+// 15 min, register 8 per hour. /logout and /me are unthrottled.
+authRouter.use('/login', rateLimit({ windowMs: 15 * 60 * 1000, max: 20, name: 'login' }));
+authRouter.use('/register', rateLimit({ windowMs: 60 * 60 * 1000, max: 8, name: 'register' }));
 
 // ---------- POST /register ----------
 
@@ -44,6 +52,7 @@ const registerRoute = createRoute({
         },
         400: { description: 'Invalid email or password.', content: { 'application/json': { schema: ErrorSchema } } },
         409: { description: 'Email already registered.', content: { 'application/json': { schema: ErrorSchema } } },
+        429: { description: 'Too many attempts from this client; see Retry-After.', content: { 'application/json': { schema: ErrorSchema } } },
     },
 });
 
@@ -84,6 +93,7 @@ const loginRoute = createRoute({
         },
         400: { description: 'Malformed request body.', content: { 'application/json': { schema: ErrorSchema } } },
         401: { description: 'Wrong email or password.', content: { 'application/json': { schema: ErrorSchema } } },
+        429: { description: 'Too many attempts from this client; see Retry-After.', content: { 'application/json': { schema: ErrorSchema } } },
     },
 });
 

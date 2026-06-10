@@ -320,8 +320,8 @@ The server now also hosts the **Japanese verb-trainer study app** at `/` and bac
 ## What's deliberately NOT in v1
 
 - ~~No accounts, no auth (except the admin bearer token).~~ **Superseded** — accounts + cookie sessions now exist for the study app (above). The admin bearer token is still separate and unchanged.
-- No password reset / email verification yet. There's no outbound email; a forgotten password currently means a new account. (First real follow-up if the app gets users.)
-- No rate limiting on `/v1/auth/*` beyond Cloudflare's edge. Login is constant-time against email enumeration but not throttled at the origin.
+- No password reset / email verification yet. There's no outbound email; a forgotten password currently means a new account. (First real follow-up if the app gets users — deliberately deferred since it needs an email provider + secrets, which aren't worth provisioning until there's demand.)
+- ~~No rate limiting on `/v1/auth/*`.~~ **Superseded** — `/login` (20 per 15 min) and `/register` (8 per hour) are now throttled per-IP by an in-memory fixed-window limiter ([src/lib/rateLimit.ts](src/lib/rateLimit.ts)), returning `429 {code:'rate_limited'}` + `Retry-After`. State is process-local (resets on restart, not shared across instances) — fine for the single droplet; would need a shared store if we scale out. Login is still constant-time against email enumeration. Cloudflare's edge remains the first line.
 - No keyed external services (DeepL, OpenAI, Forvo, jpdb). If we add them later, keys live on the client and we proxy without caching under keys the user can't reach.
 - No analytics on what users review (only aggregate serve counts).
 - No real-time / push features.

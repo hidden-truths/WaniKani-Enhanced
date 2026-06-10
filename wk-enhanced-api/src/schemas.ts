@@ -118,6 +118,7 @@ export const ErrorCodeSchema = z
         'conflict',           // request collides with current server state (e.g. warmAll already running)
         'upstream_failure',   // IK / DDG / TTS or warm pipeline failed
         'service_unavailable',// dependency unavailable (e.g. no cached index_meta and live fetch failed)
+        'rate_limited',       // too many requests from this client (auth endpoints); see Retry-After
         'internal_error',     // unhandled exception in our code
     ])
     .openapi('ErrorCode');
