@@ -26,6 +26,8 @@ type Core = {
   isLeech: (rank: number) => boolean;
   leeches: () => any[];
   normKana: (s: string) => string;
+  romajiToKana: (s: string) => string;
+  reviewForecast: (h: string) => { bars: { label: string; count: number; now: boolean }[]; max: number };
   filterSummary: (c: any) => string[];
   tokenFacet: (t: string) => string;
   exampleForLevel: (v: any, level: string) => [string, string] | null;
@@ -47,7 +49,7 @@ function loadCore(): Core {
   const body =
     verbs + "\n" + examples + "\n" + appSrc +
     `\n;return { passes, oneGroup, facetAll, facetMatch, scheduleCard, cardStat,
-      isDue, dueCards, rollingAcc, isLeech, leeches, normKana, filterSummary, tokenFacet,
+      isDue, dueCards, rollingAcc, isLeech, leeches, normKana, romajiToKana, reviewForecast, filterSummary, tokenFacet,
       exampleForLevel, availableTiers, JLPT_TIERS,
       BOX_DAYS, get DATA(){return DATA}, get store(){return store}, set store(v){store=v} };`;
 
@@ -175,6 +177,50 @@ test("normKana folds katakana→hiragana, strips spaces, unifies long marks", ()
   expect(core.normKana("タベル")).toBe("たべる");
   expect(core.normKana("はしる")).toBe("はしる");        // already-hiragana unchanged
   expect(core.normKana("ラーメン")).toBe("らーめん");    // chōonpu preserved as ー
+});
+
+test("romajiToKana: Hepburn + wāpuro variants → hiragana", () => {
+  expect(core.romajiToKana("taberu")).toBe("たべる");
+  expect(core.romajiToKana("miru")).toBe("みる");
+  expect(core.romajiToKana("kau")).toBe("かう");
+  expect(core.romajiToKana("matsu")).toBe("まつ");      // tsu trigraph
+  expect(core.romajiToKana("shaberu")).toBe("しゃべる"); // sha digraph
+  expect(core.romajiToKana("hanasu")).toBe("はなす");
+  expect(core.romajiToKana("oyogu")).toBe("およぐ");
+  // wāpuro variants resolve to the same kana as Hepburn
+  expect(core.romajiToKana("hanasi")).toBe(core.romajiToKana("hanashi"));
+  expect(core.romajiToKana("tatu")).toBe("たつ");        // tu → つ
+  expect(core.romajiToKana("huku")).toBe("ふく");        // hu → ふ
+});
+
+test("romajiToKana: sokuon, ん, and kana pass-through", () => {
+  expect(core.romajiToKana("kitte")).toBe("きって");     // doubled consonant → っ
+  expect(core.romajiToKana("matcha")).toBe("まっちゃ");  // tch → っ + ちゃ
+  expect(core.romajiToKana("hon")).toBe("ほん");          // trailing n → ん
+  expect(core.romajiToKana("onna")).toBe("おんな");       // nn → ん then な
+  expect(core.romajiToKana("shin'you")).toBe("しんよう"); // n' boundary
+  expect(core.romajiToKana("たべる")).toBe("たべる");     // already-kana untouched
+});
+
+test("reviewForecast: buckets scheduled cards; overdue folds into slot 0", () => {
+  const r0 = core.DATA[0].rank, r1 = core.DATA[1].rank, r2 = core.DATA[2].rank;
+  const now = Date.now();
+  core.store = {
+    cards: {
+      [r0]: { attempts: [1], right: 1, wrong: 0, box: 2, due: now - core.BOX_DAYS[1] }, // overdue
+      [r1]: { attempts: [1], right: 1, wrong: 0, box: 1, due: now + 1 * 86400000 + 1000 }, // +1 day
+      [r2]: { attempts: [], right: 0, wrong: 0, box: 0, due: 0 }, // new/unseen → not scheduled
+    },
+    sessions: [], daily: {},
+  };
+  const wk = core.reviewForecast("week");
+  expect(wk.bars.length).toBe(7);
+  expect(wk.bars[0].count).toBe(1);  // overdue → today
+  expect(wk.bars[0].now).toBe(true);
+  expect(wk.bars[1].count).toBe(1);  // +1 day
+  expect(wk.bars.reduce((s, b) => s + b.count, 0)).toBe(2); // box-0 card excluded
+  expect(core.reviewForecast("24h").bars.length).toBe(24);
+  expect(core.reviewForecast("year").bars.length).toBe(12);
 });
 
 test("facetAll: empty or ['all'] is no-constraint; specific tokens constrain", () => {

@@ -94,6 +94,16 @@ and the auth modal + sign-up banner.
   POSTs to the durable session log), `renderBrowse` (summary cards) +
   `openVerbDetail`/`renderDetailExample` (the detail modal), `renderStats` +
   `renderCardBars`, `lineChart`/`barChart` (SVG strings).
+- **SRS forecast (study panel):** `reviewForecast(h)` (pure) buckets every
+  scheduled card (`box>0`) into time slots for the chosen window (`forecastHorizon`
+  ∈ `24h`/`week`/`month`/`year`); overdue folds into slot 0, beyond-window drops.
+  `renderForecast` draws the hand-rolled vertical-bar SVG into `#forecastChart` and
+  is called from `updateDueBanner` (so it tracks the schedule). The `#fcHorizons`
+  toggle is view-only state, not synced. Tests in `verbs-core.test.ts`.
+- **Per-card SRS indicator:** `detailMemoryLine(v)` (Browse detail modal) renders a
+  5-segment Leitner track (filled up to the card's box, each lit pip in its
+  `BOX_COLORS` tone) + box number + a "next review" chip that flips red ("due now")
+  once due. `BOX_COLORS` (index 0=New…5) is shared with the Stats box histogram.
 - **Typed mode + audio:** `revealAnswer` (shared show-answer + autoplay) feeds both
   `reveal` (self-graded) and `submitTyped` (typed: `normKana`-compares the kana, sets
   an advisory verdict + `session.suggested`). `bindSingle` wires the Input/Audio
@@ -215,12 +225,20 @@ Component contracts you must preserve:
   region's `open` class; if you change how the topic disclosure toggles (e.g. to
   `display:none`), re-check that observer still fires.
 - **Typed grading is advisory, and only grades the READING.** `submitTyped`
-  `normKana`-compares the typed kana against `v.read` and *suggests* a grade
-  (green/red verdict + a `.suggested` ring on the matching button), but the user
-  still records it via 1/2 or a click — so a typo or an unjudged-meaning recall can
-  be overridden. Don't make it auto-advance on match. `normKana` folds
-  katakana→hiragana, strips spaces/separators, and unifies long-vowel marks; it is
-  deliberately NOT romaji-aware (learners type kana directly or via an IME).
+  compares the typed input against `v.read` and *suggests* a grade (green/red
+  verdict + a `.suggested` ring on the matching button), but the user still records
+  it via 1/2 or a click — so a typo or an unjudged-meaning recall can be overridden.
+  Don't make it auto-advance on match. The compare is
+  `normKana(romajiToKana(input)) === normKana(v.read)`: `romajiToKana` first folds
+  any romaji to hiragana (greedy longest-match Hepburn + wāpuro variants:
+  si/shi, tu/tsu, hu/fu, zi/ji, sya/sha, double-consonant→っ, n'/nn/trailing-n→ん),
+  then `normKana` folds katakana→hiragana, strips spaces/separators, and unifies
+  long-vowel marks. **Romaji support is intentional (per request)** — it relaxes the
+  old "normKana is deliberately NOT romaji-aware" stance. Anything not in the romaji
+  table (including already-kana) passes through `romajiToKana` untouched, so a kana
+  IME and a romaji typist share one code path. It feeds only the advisory grade,
+  never the SRS schedule, so over-permissiveness is harmless. Tests in
+  `verbs-core.test.ts`.
 - **TTS prefers the server's Google proxy, falls back to Web Speech.** `speak()`
   plays `/v1/tts?text=<reading>` via a reused `<audio>` when served over http(s)
   (`HTTP_SERVED`); over `file://` or on play/network failure it falls back to
@@ -258,6 +276,14 @@ Component contracts you must preserve:
   sentence and tiers should escalate N5→N1; keep that if you regenerate. The example
   shows on the ANSWER side only (the sentence reveals the reading via furigana, so
   it would spoil the reading-recall question if shown on the prompt).
+- **The review forecast is front-loaded by design** — Leitner intervals top out at
+  16 days (`BOX_DAYS`), so EVERY scheduled card is due within ~16 days. The `month`
+  view (30 daily slots) therefore captures the whole real schedule; the `year` view
+  (12 monthly slots) collapses everything into slot 0 ("now") until the deck grows
+  long intervals it can't reach. That's accurate, not a bug — don't "fix" it by
+  faking spread. The four windows exist because they were requested; `24h` (hourly)
+  is mostly a single "now" spike for the same reason (nothing comes due sub-daily).
+  New/unseen cards (`box===0`) are excluded — they're not scheduled yet.
 - **Browser-preview tooling reloads/recreates the tab on capture**, which resets
   in-memory state (active tab defaults back to Flashcards; `cfg`/`bcfg` filter
   selections are lost — only localStorage persists). To verify a *transient* state
@@ -269,6 +295,13 @@ Component contracts you must preserve:
 
 Commits, newest first (all on `main`; touch the split web/ files + `src/` where noted):
 
+1. **Romaji typed input + visual SRS box indicator + upcoming-review forecast.**
+   Typed-reading mode now accepts romaji (`romajiToKana` greedy Hepburn/wāpuro
+   converter feeds the `normKana` compare; kana/IME still works unchanged). The
+   Browse detail modal's "Box N · next review" text became a visual 5-segment
+   Leitner track + due chip (`detailMemoryLine`, shared `BOX_COLORS`). New study-panel
+   "Upcoming reviews" card (`reviewForecast`/`renderForecast`, `#forecast`) with a
+   24h/Week/Month/Year horizon toggle. Tests for `romajiToKana` + `reviewForecast`.
 1. **Browse detail modal + DB-backed settings + grading keys + durable session log.**
    Browse cards open a modal (collapsible sections; level-filtered examples) instead of
    expanding. New Settings page (toolbar gear → `#settingsModal`): default example

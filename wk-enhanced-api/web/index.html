@@ -213,6 +213,7 @@
   <symbol id="i-settings" viewBox="0 0 24 24"><circle cx="12" cy="12" r="3"/><path d="M19.4 15a1.65 1.65 0 0 0 .33 1.82l.06.06a2 2 0 1 1-2.83 2.83l-.06-.06a1.65 1.65 0 0 0-1.82-.33 1.65 1.65 0 0 0-1 1.51V21a2 2 0 0 1-4 0v-.09A1.65 1.65 0 0 0 9 19.4a1.65 1.65 0 0 0-1.82.33l-.06.06a2 2 0 1 1-2.83-2.83l.06-.06a1.65 1.65 0 0 0 .33-1.82 1.65 1.65 0 0 0-1.51-1H3a2 2 0 0 1 0-4h.09A1.65 1.65 0 0 0 4.6 9a1.65 1.65 0 0 0-.33-1.82l-.06-.06a2 2 0 1 1 2.83-2.83l.06.06a1.65 1.65 0 0 0 1.82.33H9a1.65 1.65 0 0 0 1-1.51V3a2 2 0 0 1 4 0v.09a1.65 1.65 0 0 0 1 1.51 1.65 1.65 0 0 0 1.82-.33l.06-.06a2 2 0 1 1 2.83 2.83l-.06.06a1.65 1.65 0 0 0-.33 1.82V9a1.65 1.65 0 0 0 1.51 1H21a2 2 0 0 1 0 4h-.09a1.65 1.65 0 0 0-1.51 1z"/></symbol>
   <symbol id="i-edit" viewBox="0 0 24 24"><path d="M4 20h4L18.5 9.5a2.12 2.12 0 0 0-3-3L5 17v3z"/><path d="M13.5 6.5l3 3"/></symbol>
   <symbol id="i-trash" viewBox="0 0 24 24"><path d="M4 7h16M9 7V4.5h6V7M6.5 7l1 12.5h9l1-12.5"/></symbol>
+  <symbol id="i-clock" viewBox="0 0 24 24"><circle cx="12" cy="12" r="9"/><path d="M12 7v5.2l3.6 2.1"/></symbol>
 </svg>
 <header>
   <!-- Toolbar: global controls. The hidden file input is triggered by #importBtn
@@ -269,6 +270,22 @@
           <div class="due-label">cards due for review (spaced repetition)</div>
         </div>
         <button class="btn srs" id="dueBtn"><svg class="ic" aria-hidden="true"><use href="#i-play"/></svg>Review due cards</button>
+      </div>
+      <!-- Upcoming-review forecast: how many scheduled cards come due over the
+           chosen window. The horizon toggle is view-only state (forecastHorizon);
+           bars are rebuilt by renderForecast() whenever the schedule changes
+           (it's called from updateDueBanner). See FLASHCARD / reviewForecast(). -->
+      <div class="fcast" id="forecast">
+        <div class="fcast-head">
+          <span class="fcast-title"><svg class="ic" aria-hidden="true"><use href="#i-chart"/></svg>Upcoming reviews</span>
+          <span class="jlptseg fcast-horizons" id="fcHorizons" role="group" aria-label="Forecast window">
+            <button class="chip fch" type="button" data-h="24h">24h</button>
+            <button class="chip fch active" type="button" data-h="week">Week</button>
+            <button class="chip fch" type="button" data-h="month">Month</button>
+            <button class="chip fch" type="button" data-h="year">Year</button>
+          </span>
+        </div>
+        <div class="fcast-chart" id="forecastChart"></div>
       </div>
       <!-- Test direction: which side of the card is the PROMPT vs the ANSWER. -->
       <div class="frow"><span class="filter-label">Test direction</span><div class="chips">
@@ -398,7 +415,7 @@
         <button class="btn reveal" id="revealBtn"><svg class="ic" aria-hidden="true"><use href="#i-target"/></svg>Reveal answer <span class="kbd">[space]</span></button>
       </div>
       <div class="fc-buttons" id="inputRow" style="display:none">
-        <input type="text" class="answer-input jp" id="answerInput" autocomplete="off" autocapitalize="off" autocorrect="off" spellcheck="false" placeholder="type the reading in kana…" aria-label="Type the reading">
+        <input type="text" class="answer-input jp" id="answerInput" autocomplete="off" autocapitalize="off" autocorrect="off" spellcheck="false" placeholder="type the reading (kana or romaji)…" aria-label="Type the reading in kana or romaji">
         <button class="btn" id="checkBtn" type="button"><svg class="ic" aria-hidden="true"><use href="#i-check"/></svg>Check <span class="kbd">[enter]</span></button>
       </div>
       <div class="fc-buttons" id="gradeRow" style="display:none">

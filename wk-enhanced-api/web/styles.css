@@ -195,7 +195,17 @@
   .set-row>label{font-family:"SF Mono",ui-monospace,monospace;font-size:11px;letter-spacing:.1em;text-transform:uppercase;color:var(--muted)}
   .set-row .jlptseg .chip{font-size:12px;padding:6px 11px}
   /* Browse detail modal: memory line + collapsible <details> sections. */
-  .det-memory{font-family:"SF Mono",ui-monospace,monospace;font-size:12px;color:var(--muted);margin:10px 0 4px}
+  /* Visual SRS status: 5-segment Leitner track + box number + due chip. */
+  .det-memory{display:flex;align-items:center;flex-wrap:wrap;gap:10px;font-family:"SF Mono",ui-monospace,monospace;font-size:12px;color:var(--muted);margin:12px 0 6px}
+  .det-memory.new{gap:7px}
+  .det-memory .ic{font-size:14px}
+  .srs-track{display:inline-flex;gap:3px}
+  .srs-pip{display:inline-block;width:18px;height:7px;border-radius:2px;background:var(--paper-2);border:1px solid var(--line)}
+  .srs-pip.on{border-color:transparent}
+  .srs-boxn{color:var(--ink);font-weight:700;letter-spacing:.02em}
+  .srs-boxn small{color:var(--muted);font-weight:400}
+  .srs-due{display:inline-flex;align-items:center;gap:4px}
+  .srs-due.now{color:var(--godan);font-weight:700}
   .modal details{border-top:1px solid var(--line);padding:10px 0;margin-top:4px}
   .modal details>summary{cursor:pointer;list-style:none;font-family:"SF Mono",ui-monospace,monospace;font-size:10px;letter-spacing:.18em;text-transform:uppercase;color:var(--godan);display:flex;align-items:center}
   .modal details>summary::-webkit-details-marker{display:none}
@@ -255,6 +265,15 @@
   .due-count{font-size:38px;font-weight:900;line-height:1;color:var(--ichidan)}
   .due-banner.empty .due-count{color:var(--good)}
   .due-label{font-family:"SF Mono",ui-monospace,monospace;font-size:11px;letter-spacing:.1em;text-transform:uppercase;color:var(--muted);margin-top:4px}
+  /* Upcoming-review forecast — hand-rolled vertical-bar SVG + horizon toggle. */
+  .fcast{border:1px solid var(--line);border-radius:4px;background:var(--paper);padding:14px 16px 6px;margin-bottom:18px}
+  .fcast-head{display:flex;align-items:center;justify-content:space-between;gap:12px;flex-wrap:wrap}
+  .fcast-title{display:inline-flex;align-items:center;gap:7px;font-family:"SF Mono",ui-monospace,monospace;font-size:11px;letter-spacing:.16em;text-transform:uppercase;color:var(--muted)}
+  .fcast-title .ic{font-size:14px}
+  .fcast-horizons .fch{font-size:11px;padding:5px 10px}
+  .fcast-chart{margin-top:6px}
+  .fcast-chart svg{display:block;width:100%;height:auto}
+  .fcast-empty{padding:16px 4px;text-align:center;color:var(--muted);font-size:13px}
   /* Accessibility: a visible keyboard-focus ring on every interactive element.
      :focus-visible (not :focus) so it only shows for keyboard nav, not clicks.
      PARTIAL — see OUTSTANDING #4 (chips still lack roving-tabindex grouping). */

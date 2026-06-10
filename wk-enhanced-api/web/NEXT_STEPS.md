@@ -9,6 +9,18 @@ split, custom-verb sync, and Google TTS — what's left is one genuinely-deferre
 (needs email infra). Add new ideas to "Ideas / not yet scoped" as they come up.
 
 ## Done (most recent first)
+- ~~Romaji typed input~~ — **shipped.** Typed-reading mode now accepts romaji:
+  `romajiToKana` (greedy Hepburn + wāpuro variants, sokuon/ん handling) folds the
+  input to hiragana before the `normKana` compare. Kana/IME typists are unaffected
+  (non-romaji passes through). Tests in `verbs-core.test.ts`.
+- ~~Visual SRS box indicator~~ — **shipped.** The Browse detail modal's
+  "Box N · next review" text is now a 5-segment Leitner track (lit pips in
+  `BOX_COLORS` maturity tones) + box number + a "next review" chip that flips red
+  ("due now") when due. `detailMemoryLine`.
+- ~~Upcoming-review forecast~~ — **shipped.** Study panel "Upcoming reviews" card:
+  a vertical-bar timeline of how many scheduled cards come due, with a
+  24h/Week/Month/Year horizon toggle (`reviewForecast`/`renderForecast`,
+  refreshed from `updateDueBanner`). Tests for the bucketing.
 - ~~Browse detail modal~~ — **shipped.** Clicking a Browse card opens a modal (not an
   inline expand); Mnemonic/Trap/Examples are collapsible, examples JLPT-level-filtered.
 - ~~Settings page (DB-backed)~~ — **shipped.** Toolbar gear → modal: default example
@@ -71,8 +83,6 @@ split, custom-verb sync, and Google TTS — what's left is one genuinely-deferre
 ## Ideas / not yet scoped
 - **Conjugation drills.** The dataset has `type` (godan/ichidan/irregular) — enough
   to quiz て-form / past / negative / potential. A natural next study mode.
-- **Romaji input** for typed-reading mode (currently kana only; `normKana` is
-  deliberately not romaji-aware). Would need a romaji→kana table.
 - **Custom-verb sync conflict handling.** Today it's last-write-wins + server-wins on
   login (fine for one user); two devices adding verbs offline could collide on a
   `seq`-assigned rank. A UUID-per-verb id would remove the collision if it matters.

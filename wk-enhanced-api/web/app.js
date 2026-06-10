@@ -112,6 +112,11 @@ function localDay(d){
    internal box mechanics except the box histogram in renderStats(). */
 const BOX_DAYS=[0,1,2,4,8,16];   // index = box number; value = days until due
 const DAY_MS=86400000;
+// Box maturity palette, index 0=New … 5=mastered (New→stone, then a
+// red→amber→gold→olive→green gradient as cards graduate to longer intervals).
+// Shared by the Stats box histogram (renderStats) and the per-card SRS indicator
+// in the Browse detail modal (detailMemoryLine) so the colors stay in lock-step.
+const BOX_COLORS=['var(--muted)','var(--godan)','#d98a3d','#c9b037','#7fae54','var(--good)'];
 // Lazily create a card's stat record. Also soft-migrates pre-SRS saves that
 // have attempts/right/wrong but no box/due fields.
 function cardStat(rank){
@@ -143,6 +148,59 @@ function nextDueLabel(rank){
   if(days<=0)return "due now";
   if(days===1)return "1 day";
   return days+" days";
+}
+
+/* ---- Upcoming-review forecast ----
+   Buckets every SCHEDULED card (box>0) into time slots for a chosen window so the
+   learner can see the wave of reviews coming. Overdue + currently-due cards fold
+   into the first ("now"/"today") slot; cards whose next review falls beyond the
+   window aren't shown (it's a forecast of the window, not a full census). Note the
+   Leitner intervals top out at 16 days (BOX_DAYS), so the month view captures the
+   whole real schedule and the year view is mostly front-loaded — that's accurate,
+   not a bug. reviewForecast() is pure (DATA + store in, buckets out); renderForecast()
+   draws the hand-rolled vertical-bar SVG (no chart lib, per the no-build contract). */
+const HOUR_MS=3600000;
+let forecastHorizon='week';   // '24h' | 'week' | 'month' | 'year' — view-only, not synced
+function reviewForecast(h){
+  const now=Date.now();
+  let slots,idxOf,labelOf;
+  if(h==='24h'){      slots=24; idxOf=ms=>Math.floor(ms/HOUR_MS);       labelOf=i=>i===0?'now':(i%6===0?'+'+i+'h':''); }
+  else if(h==='week'){slots=7;  idxOf=ms=>Math.floor(ms/DAY_MS);        labelOf=i=>i===0?'today':'+'+i+'d'; }
+  else if(h==='month'){slots=30;idxOf=ms=>Math.floor(ms/DAY_MS);        labelOf=i=>i===0?'today':(i%5===0?'+'+i+'d':''); }
+  else{               slots=12; idxOf=ms=>Math.floor(ms/(30*DAY_MS));   labelOf=i=>i===0?'now':'+'+i+'mo'; }
+  const bars=Array.from({length:slots},(_,i)=>({label:labelOf(i),count:0,now:i===0}));
+  DATA.forEach(v=>{
+    const c=store.cards[v.rank];
+    if(!c||!c.box)return;                         // new/unseen cards aren't scheduled yet
+    const delta=(c.due||0)-now;
+    let idx=delta<=0?0:idxOf(delta);              // overdue / due-now → first slot
+    if(idx<0)idx=0;
+    if(idx<slots)bars[idx].count++;               // beyond the window → not shown
+  });
+  return {bars,max:bars.reduce((m,b)=>Math.max(m,b.count),0)};
+}
+function renderForecast(){
+  const el=document.getElementById('forecastChart'); if(!el)return;
+  const {bars,max}=reviewForecast(forecastHorizon);
+  const total=bars.reduce((s,b)=>s+b.count,0);
+  if(!total){ el.innerHTML='<div class="fcast-empty">No reviews scheduled in this window — drill some cards to start the clock.</div>'; return; }
+  const W=720,H=150,pad={l:8,r:8,t:18,b:18};
+  const n=bars.length, iw=W-pad.l-pad.r, ih=H-pad.t-pad.b;
+  const bw=iw/n, gap=Math.min(6,bw*0.2);
+  const yOf=c=>pad.t+ih-(max?c/max:0)*ih;
+  let g=`<svg viewBox="0 0 ${W} ${H}" role="img" aria-label="Upcoming reviews over the next ${forecastHorizon}; ${total} scheduled">`;
+  g+=`<line x1="${pad.l}" y1="${pad.t+ih}" x2="${W-pad.r}" y2="${pad.t+ih}" stroke="var(--line)" stroke-width="1"/>`;
+  bars.forEach((b,i)=>{
+    const x=pad.l+i*bw, y=yOf(b.count), bh=Math.max(0,pad.t+ih-y), cx=(x+bw/2).toFixed(1);
+    const col=b.now?'var(--godan)':'var(--ichidan)';
+    if(b.count){
+      g+=`<rect x="${(x+gap/2).toFixed(1)}" y="${y.toFixed(1)}" width="${(bw-gap).toFixed(1)}" height="${bh.toFixed(1)}" rx="2" fill="${col}" opacity="0.9"><title>${b.label||('slot '+i)}: ${b.count} card${b.count===1?'':'s'}</title></rect>`;
+      g+=`<text x="${cx}" y="${(y-4).toFixed(1)}" text-anchor="middle" font-size="9" fill="var(--muted)" font-family="monospace">${b.count}</text>`;
+    }
+    if(b.label)g+=`<text x="${cx}" y="${H-6}" text-anchor="middle" font-size="8" fill="var(--muted)" font-family="monospace">${b.label}</text>`;
+  });
+  g+='</svg>';
+  el.innerHTML=g;
 }
 
 // Rolling accuracy over the last n attempts (default 8). null = never drilled.
@@ -482,6 +540,7 @@ function updateDueBanner(){
   document.getElementById('dueBtn').innerHTML = n===0
     ? '<svg class="ic" aria-hidden="true"><use href="#i-check"/></svg>All caught up'
     : '<svg class="ic" aria-hidden="true"><use href="#i-play"/></svg>Review due cards';
+  renderForecast();   // the due count and the forecast both reflect the schedule — refresh together
 }
 // "Review due cards": force the deck to due-only, worst-first, full range, and
 // reflect that in the chip UI before starting. This overrides the user's
@@ -569,6 +628,54 @@ function normKana(s){
     .replace(/[\s　・･、。.]/g,'')
     .replace(/[ー－―‐-―~～]/g,'ー')
     .toLowerCase();
+}
+// Romaji→hiragana for the typed-reading field, so a learner WITHOUT a Japanese
+// IME can type "taberu" and have it graded against たべる. Greedy longest-match
+// Hepburn with the common wāpuro variants (si/shi, tu/tsu, hu/fu, zi/ji, sya/sha,
+// double-consonant→っ, n'/nn/trailing-n→ん). Anything not in the table — including
+// characters that are ALREADY kana — passes through untouched, so a kana IME and a
+// romaji typist flow through the same code path; submitTyped runs the result back
+// through normKana before comparing. This feeds only the ADVISORY typed grade,
+// never the SRS schedule, so over-permissiveness is harmless. (This relaxes the
+// old "normKana is deliberately not romaji-aware" stance — per request.)
+const ROMAJI={
+  kya:'きゃ',kyu:'きゅ',kyo:'きょ',gya:'ぎゃ',gyu:'ぎゅ',gyo:'ぎょ',
+  sha:'しゃ',shu:'しゅ',sho:'しょ',shi:'し',sya:'しゃ',syu:'しゅ',syo:'しょ',
+  cha:'ちゃ',chu:'ちゅ',cho:'ちょ',chi:'ち',cya:'ちゃ',cyu:'ちゅ',cyo:'ちょ',
+  tya:'ちゃ',tyu:'ちゅ',tyo:'ちょ',tsu:'つ',
+  nya:'にゃ',nyu:'にゅ',nyo:'にょ',hya:'ひゃ',hyu:'ひゅ',hyo:'ひょ',
+  mya:'みゃ',myu:'みゅ',myo:'みょ',rya:'りゃ',ryu:'りゅ',ryo:'りょ',
+  bya:'びゃ',byu:'びゅ',byo:'びょ',pya:'ぴゃ',pyu:'ぴゅ',pyo:'ぴょ',
+  jya:'じゃ',jyu:'じゅ',jyo:'じょ',zya:'じゃ',zyu:'じゅ',zyo:'じょ',
+  dya:'ぢゃ',dyu:'ぢゅ',dyo:'ぢょ',
+  ka:'か',ki:'き',ku:'く',ke:'け',ko:'こ',ga:'が',gi:'ぎ',gu:'ぐ',ge:'げ',go:'ご',
+  sa:'さ',si:'し',su:'す',se:'せ',so:'そ',za:'ざ',zi:'じ',ji:'じ',zu:'ず',ze:'ぜ',zo:'ぞ',
+  ta:'た',ti:'ち',tu:'つ',te:'て',to:'と',da:'だ',di:'ぢ',du:'づ',de:'で',do:'ど',
+  na:'な',ni:'に',nu:'ぬ',ne:'ね',no:'の',ha:'は',hi:'ひ',hu:'ふ',fu:'ふ',he:'へ',ho:'ほ',
+  fa:'ふぁ',fi:'ふぃ',fe:'ふぇ',fo:'ふぉ',
+  ba:'ば',bi:'び',bu:'ぶ',be:'べ',bo:'ぼ',pa:'ぱ',pi:'ぴ',pu:'ぷ',pe:'ぺ',po:'ぽ',
+  ma:'ま',mi:'み',mu:'む',me:'め',mo:'も',ya:'や',yu:'ゆ',yo:'よ',
+  ra:'ら',ri:'り',ru:'る',re:'れ',ro:'ろ',wa:'わ',wo:'を',wi:'うぃ',we:'うぇ',
+  ja:'じゃ',ju:'じゅ',jo:'じょ',
+  a:'あ',i:'い',u:'う',e:'え',o:'お',
+};
+function romajiToKana(input){
+  const s=(input||'').toLowerCase();
+  let out='',i=0;
+  while(i<s.length){
+    const c=s[i],c2=s[i+1];
+    if(c==='n'&&c2==="'"){out+='ん';i+=2;continue;}                       // n' → ん (explicit boundary)
+    if(c==='n'&&c2==='n'){out+='ん';i+=1;continue;}                       // nn → ん, the 2nd n starts the next syllable
+    if(c==='t'&&c2==='c'){out+='っ';i+=1;continue;}                       // tch → っ + ch (matcha → まっちゃ)
+    if(c===c2&&'bcdfghjkmpqrstvwz'.indexOf(c)>=0){out+='っ';i+=1;continue;} // doubled consonant → っ (kitte → きって)
+    const t3=s.substr(i,3),t2=s.substr(i,2),t1=s[i];
+    if(ROMAJI[t3]){out+=ROMAJI[t3];i+=3;}
+    else if(ROMAJI[t2]){out+=ROMAJI[t2];i+=2;}
+    else if(ROMAJI[t1]){out+=ROMAJI[t1];i+=1;}
+    else if(t1==='n'){out+='ん';i+=1;}                                    // bare n (word end / before a consonant)
+    else{out+=t1;i+=1;}                                                   // unknown / already-kana → pass through
+  }
+  return out;
 }
 
 function startSession(){
@@ -672,7 +779,7 @@ function submitTyped(){
   const inp=document.getElementById('answerInput');
   if(inp.disabled)return;                          // guard double-submit
   const v=session.deck[session.i];
-  const correct=normKana(inp.value)===normKana(v.read);
+  const correct=normKana(romajiToKana(inp.value))===normKana(v.read);
   session.suggested=correct;
   inp.disabled=true;
   revealAnswer();
@@ -735,6 +842,13 @@ function endSession(){
 // Button wiring for the session controls.
 document.getElementById('startBtn').addEventListener('click',()=>startSession());
 document.getElementById('dueBtn').addEventListener('click',startDueSession);
+// Forecast horizon toggle (24h/week/month/year): view-only, re-renders the bars.
+document.getElementById('fcHorizons').addEventListener('click',e=>{
+  const b=e.target.closest('.fch'); if(!b)return;
+  forecastHorizon=b.dataset.h;
+  document.querySelectorAll('.fch').forEach(x=>x.classList.toggle('active',x===b));
+  renderForecast();
+});
 document.getElementById('revealBtn').addEventListener('click',reveal);
 document.getElementById('checkBtn').addEventListener('click',submitTyped);
 document.getElementById('speakBtn').addEventListener('click',playReading);
@@ -908,7 +1022,22 @@ document.querySelectorAll('.chips, .topic-inner').forEach(setupRoving);
    settings.exampleLevel, showing one tier at a time (local view, doesn't change the
    global default). detailVerb/detailLevel hold the open modal's state. */
 let detailVerb=null, detailLevel=null;
-function detailMemoryLine(v){ const c=store.cards[v.rank]; return c&&c.box?`Box ${c.box} · next review: ${nextDueLabel(v.rank)}`:'New — not yet reviewed'; }
+// Visual SRS status for the detail modal: a 5-segment Leitner track (filled up to
+// the card's current box, each lit segment in its BOX_COLORS maturity tone) + the
+// box number + a "next review" chip that flips to a red "due now" state when the
+// interval has elapsed. New/unseen cards get a plain new-card line instead.
+function detailMemoryLine(v){
+  const c=store.cards[v.rank];
+  if(!c||!c.box) return '<div class="det-memory new"><svg class="ic" aria-hidden="true"><use href="#i-cards"/></svg>New — not yet reviewed</div>';
+  const box=c.box;
+  const pips=[1,2,3,4,5].map(b=>`<span class="srs-pip${b<=box?' on':''}"${b<=box?` style="background:${BOX_COLORS[b]}"`:''}></span>`).join('');
+  const due=Date.now()>=(c.due||0);
+  return `<div class="det-memory" role="img" aria-label="Spaced-repetition box ${box} of 5, next review ${due?'due now':nextDueLabel(v.rank)}">
+    <span class="srs-track">${pips}</span>
+    <span class="srs-boxn">Box ${box}<small>&#8202;/&#8202;5</small></span>
+    <span class="srs-due${due?' now':''}"><svg class="ic" aria-hidden="true"><use href="#i-clock"/></svg>${due?'due now':nextDueLabel(v.rank)}</span>
+  </div>`;
+}
 function renderDetailExample(){
   const v=detailVerb, seg=document.getElementById('dExLevels'); if(!v||!seg)return;
   const tiers=availableTiers(v);
@@ -935,7 +1064,7 @@ function openVerbDetail(v){
       <div style="text-align:right"><div class="stamp ${v.type}">${TYPE_LABEL[v.type]}</div><div class="jlpt-pill">${v.jlpt}</div>${v.custom?'<div class="custom-badge">CUSTOM</div>':''}</div></div>
     ${isLeech(v.rank)?'<span class="leech-badge">⚠ LEECH</span>':''}
     <div class="tags">${tags}</div>
-    <div class="det-memory">${detailMemoryLine(v)}</div>
+    ${detailMemoryLine(v)}
     ${v.mnem?`<details open><summary>Mnemonic</summary><div class="det-body">${v.mnem}</div></details>`:''}
     ${v.tip?`<details><summary>Trap / tip</summary><div class="det-body">${v.tip}</div></details>`:''}
     <details><summary>Example sentences</summary><div class="det-body">
@@ -1102,7 +1231,7 @@ function renderStats(){
   const total=DATA.length;
   const boxLabels=['New','Box 1','Box 2','Box 3','Box 4','Box 5'];
   // New→stone, then a red→amber→gold→olive→green gradient as cards mature.
-  const boxColors=['var(--muted)','var(--godan)','#d98a3d','#c9b037','#7fae54','var(--good)'];
+  const boxColors=BOX_COLORS;
   const bd=document.getElementById('boxDist');
   bd.innerHTML=boxes.map((n,i)=>`<div style="display:flex;align-items:center;gap:8px;margin-bottom:5px">
     <div style="width:54px;font-family:monospace;font-size:11px;color:var(--muted)">${boxLabels[i]}</div>
