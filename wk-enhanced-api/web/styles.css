@@ -206,6 +206,10 @@
   .srs-boxn small{color:var(--muted);font-weight:400}
   .srs-due{display:inline-flex;align-items:center;gap:4px}
   .srs-due.now{color:var(--godan);font-weight:700}
+  /* Jisho dictionary deep-link (flashcard answer + detail modal). */
+  .jisho-link{display:inline-flex;align-items:center;gap:5px;font-family:"SF Mono",ui-monospace,monospace;font-size:11px;letter-spacing:.08em;text-transform:uppercase;color:var(--ichidan);text-decoration:none;margin-top:8px}
+  .jisho-link:hover{text-decoration:underline}
+  .jisho-link .ic{font-size:13px}
   .modal details{border-top:1px solid var(--line);padding:10px 0;margin-top:4px}
   .modal details>summary{cursor:pointer;list-style:none;font-family:"SF Mono",ui-monospace,monospace;font-size:10px;letter-spacing:.18em;text-transform:uppercase;color:var(--godan);display:flex;align-items:center}
   .modal details>summary::-webkit-details-marker{display:none}

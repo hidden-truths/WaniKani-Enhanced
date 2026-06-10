@@ -9,6 +9,9 @@ split, custom-verb sync, and Google TTS — what's left is one genuinely-deferre
 (needs email infra). Add new ideas to "Ideas / not yet scoped" as they come up.
 
 ## Done (most recent first)
+- ~~Jisho dictionary links~~ — **shipped.** Each card links out to
+  `https://jisho.org/word/<headword>` (`jishoUrl`): on the flashcard answer side
+  and in the Browse detail modal, opening in a new tab. New `i-external` icon.
 - ~~SRS vs free study~~ — **shipped.** "Study type" picker toggle (`cfg.kind`):
   free study practices any deck and never changes review dates; SRS review serves
   only due cards and reschedules them. `grade` only reschedules when

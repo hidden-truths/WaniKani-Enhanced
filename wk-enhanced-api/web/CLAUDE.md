@@ -125,7 +125,8 @@ and the auth modal + sign-up banner.
   session, not on first paint.
 - **UX helpers (added in the polish pass):** `filterSummary`/`paintSummary`
   (active-filter recap), `setupTopicGroups` (topic disclosure + badge),
-  `escapeHtml`.
+  `escapeHtml`, `jishoUrl(jp)` (Jisho.org dictionary deep-link, shown on the
+  flashcard answer side + the Browse detail modal; `target=_blank`).
 - **A11y:** `setupRoving(container)` gives a chip group a roving tabindex (one tab
   stop, ←/→/↑/↓ + Home/End to move, `role=group` + aria-label). Wired over every
   `.chips` + `.topic-inner`; collapsed topic chips leave the tab order.

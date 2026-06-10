@@ -214,6 +214,7 @@
   <symbol id="i-edit" viewBox="0 0 24 24"><path d="M4 20h4L18.5 9.5a2.12 2.12 0 0 0-3-3L5 17v3z"/><path d="M13.5 6.5l3 3"/></symbol>
   <symbol id="i-trash" viewBox="0 0 24 24"><path d="M4 7h16M9 7V4.5h6V7M6.5 7l1 12.5h9l1-12.5"/></symbol>
   <symbol id="i-clock" viewBox="0 0 24 24"><circle cx="12" cy="12" r="9"/><path d="M12 7v5.2l3.6 2.1"/></symbol>
+  <symbol id="i-external" viewBox="0 0 24 24"><path d="M14 5h5v5M19 5l-8 8M18 14v4a1.5 1.5 0 0 1-1.5 1.5h-10A1.5 1.5 0 0 1 5 18V8a1.5 1.5 0 0 1 1.5-1.5H10"/></symbol>
 </svg>
 <header>
   <!-- Toolbar: global controls. The hidden file input is triggered by #importBtn
@@ -407,6 +408,8 @@
             <button class="speak-btn" id="speakBtn" type="button" aria-label="Play reading" title="Play reading"><svg class="ic" aria-hidden="true"><use href="#i-volume"/></svg></button>
           </div>
           <div class="a-mean" id="aMean"></div>
+          <!-- Dictionary deep-link; href set per-card by showCard(). -->
+          <a class="jisho-link" id="jishoLink" target="_blank" rel="noopener noreferrer"><svg class="ic" aria-hidden="true"><use href="#i-external"/></svg>View on Jisho</a>
           <div class="a-note" id="aNote"></div>                 <!-- mnemonic + tip -->
           <!-- Leveled example sentence: pick a JLPT tier; renderExample() fills it. -->
           <div class="example" id="exampleBlock" hidden>

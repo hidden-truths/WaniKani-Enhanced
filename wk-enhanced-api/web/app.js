@@ -744,6 +744,10 @@ document.getElementById('exLevels').addEventListener('click',e=>{
   if(session) renderExample(session.deck[session.i]);
 });
 
+// Jisho.org dictionary deep-link for a headword. Shown on the answer side of the
+// flashcard and in the Browse detail modal. encodeURIComponent keeps kanji/kana
+// valid in the URL path (e.g. 食べる → /word/%E9%A3%9F%E3%81%B9%E3%82%8B).
+function jishoUrl(jp){ return 'https://jisho.org/word/'+encodeURIComponent(jp); }
 function showCard(){
   const v=session.deck[session.i];
   session.revealed=false;
@@ -768,6 +772,7 @@ function showCard(){
     document.getElementById('aMean').textContent='';
   }
   document.getElementById('aNote').innerHTML=v.mnem+(v.tip?'<br><br>'+v.tip:'');
+  document.getElementById('jishoLink').href=jishoUrl(v.jp);   // dictionary deep-link
   renderExample(v);                                   // leveled example (shown once revealed)
   document.getElementById('answer').classList.remove('show');
   // Reset the answer affordances for this card. Typed mode shows the kana input;
@@ -1092,7 +1097,8 @@ function openVerbDetail(v){
     <div class="card-top"><div>
       <div class="verb-jp jp" style="font-size:34px">${v.jp}</div>
       <div class="verb-reading">${v.read}${TTS_OK?` <button class="speak-btn sm" id="dSpeak" type="button" aria-label="Play reading" title="Play reading"><svg class="ic" aria-hidden="true"><use href="#i-volume"/></svg></button>`:''}</div>
-      <div class="verb-meaning">${v.mean}</div></div>
+      <div class="verb-meaning">${v.mean}</div>
+      <a class="jisho-link" target="_blank" rel="noopener noreferrer" href="${jishoUrl(v.jp)}"><svg class="ic" aria-hidden="true"><use href="#i-external"/></svg>View on Jisho</a></div>
       <div style="text-align:right"><div class="stamp ${v.type}">${TYPE_LABEL[v.type]}</div><div class="jlpt-pill">${v.jlpt}</div>${v.custom?'<div class="custom-badge">CUSTOM</div>':''}</div></div>
     ${isLeech(v.rank)?'<span class="leech-badge">⚠ LEECH</span>':''}
     <div class="tags">${tags}</div>
