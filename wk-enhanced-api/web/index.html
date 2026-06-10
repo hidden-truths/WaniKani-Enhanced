@@ -231,6 +231,34 @@
   .rangeinput:focus{outline:none;border-color:var(--ink)}
   .jlpt-pill{font-family:"SF Mono",ui-monospace,monospace;font-size:9px;letter-spacing:.08em;color:var(--muted);border:1px solid var(--line);border-radius:2px;padding:2px 5px;margin-top:5px;display:inline-block}
 
+  /* --- Filter grouping (filter redesign) -----------------------------------
+     Chips are unchanged + still wired by class/data-* selector; this only adds
+     visual STRUCTURE on top: a fixed label column so facet rows align, hairline
+     dividers between tiers (grammar / topic / level), a collapsible Topic region
+     for the long semantic list, and a segmented JLPT control. No JS-visible
+     markup changed — selecting across groups still OR's into one pool as before. */
+  .filter-label{min-width:88px}                              /* align facet rows */
+  .fdiv{width:100%;height:1px;background:var(--line);margin:11px 0;opacity:.7}
+  /* Topic disclosure: dashed = closed, solid + ink = has active selections. */
+  .topic-toggle{font-family:"SF Mono",ui-monospace,monospace;font-size:12px;border:1px dashed var(--line);background:transparent;color:var(--muted);padding:6px 13px;border-radius:2px;cursor:pointer;transition:all .15s;display:inline-flex;align-items:center;gap:7px}
+  .topic-toggle:hover{border-color:var(--ink);color:var(--ink)}
+  .topic-toggle.has-active{border-style:solid;border-color:var(--ink);color:var(--ink)}
+  .topic-toggle .tt-arr{display:inline-block;transition:transform .2s;font-size:9px}
+  .topic-toggle.open .tt-arr{transform:rotate(180deg)}
+  /* max-height collapse (no JS height measurement), mirrors the .detail pattern. */
+  .topic-region{max-height:0;overflow:hidden;transition:max-height .3s ease;width:100%}
+  .topic-region.open{max-height:400px}
+  .topic-inner{display:flex;flex-wrap:wrap;gap:7px;padding-top:10px}
+  .topic-inner .chip{font-size:12px;padding:5px 11px;color:var(--muted)} /* secondary tier */
+  .topic-inner .chip:hover{color:var(--ink)}
+  .topic-inner .chip.active{color:var(--paper)}              /* re-win over the muted rule */
+  /* Segmented JLPT: adjacent chips share borders. Still multi-select (the All
+     chip is exclusive via makeMultiSelect; specific levels OR together). */
+  .jlptseg{display:inline-flex;border:1px solid var(--line);border-radius:2px;overflow:hidden}
+  .jlptseg .chip{border:none;border-left:1px solid var(--line);border-radius:0}
+  .jlptseg .chip:first-child{border-left:none}
+  .jlptseg .chip:not(.active):hover{background:var(--paper-2)}
+
   /* Browse grid cards. The left border (--spine equivalent) encodes the
      conjugation class at a glance; .leech recolors it purple. Card has extra
      bottom padding (30px) to clear the absolutely-positioned rank/acc row. */
@@ -402,21 +430,29 @@
         <button class="chip mode active" data-mode="meaning">JP → meaning + reading</button>
         <button class="chip mode" data-mode="reading">Meaning → reading + JP</button>
       </div>
-      <!-- Category + Semantic chips BOTH use class "deck" → one shared OR'd
-           selection pool (see OUTSTANDING #2). data-deck is the filter token
-           consumed by oneGroup(). -->
-      <div class="row"><span class="filter-label">Category</span>
+      <!-- Type / Transitivity / Topic chips ALL use class "deck" → one shared
+           OR'd selection pool (see OUTSTANDING #2). The tier split here is purely
+           visual; data-deck is the filter token consumed by makeMultiSelect().
+           The single "All" chip clears the whole pool. -->
+      <div class="row"><span class="filter-label">Type</span>
         <button class="chip deck active" data-deck="all">All</button>
         <button class="chip deck g" data-deck="godan">Godan</button>
         <button class="chip deck i" data-deck="ichidan">Ichidan</button>
         <button class="chip deck" data-deck="irregular">Irregular</button>
+        <button class="chip deck" data-deck="suru">Suru-verbs</button>
+        <button class="chip deck" data-deck="fake">Fake-ichidan</button>
+      </div>
+      <div class="row"><span class="filter-label">Transitivity</span>
         <button class="chip deck" data-deck="trans">Transitive</button>
         <button class="chip deck" data-deck="intrans">Intransitive</button>
         <button class="chip deck" data-deck="ti-pair">T/I pairs</button>
-        <button class="chip deck" data-deck="fake">Fake-ichidan</button>
-        <button class="chip deck" data-deck="suru">Suru-verbs</button>
       </div>
-      <div class="row"><span class="filter-label">Semantic</span>
+      <div class="fdiv"></div>
+      <div class="row"><span class="filter-label">Topic</span>
+        <button class="topic-toggle" data-target="sTopic" data-label="Topics" aria-expanded="false" aria-controls="sTopic"><span class="tt-text">Topics</span><span class="tt-arr">▾</span></button>
+        <button class="chip deck" data-deck="leech" style="border-color:var(--leech);color:var(--leech)">⚠ Leeches</button>
+      </div>
+      <div class="topic-region" id="sTopic"><div class="topic-inner">
         <button class="chip deck" data-deck="motion">Motion</button>
         <button class="chip deck" data-deck="transit">Transit</button>
         <button class="chip deck" data-deck="wearing">Wearing</button>
@@ -436,20 +472,23 @@
         <button class="chip deck" data-deck="study">Study</button>
         <button class="chip deck" data-deck="food">Food/Cooking</button>
         <button class="chip deck" data-deck="money">Money</button>
-        <button class="chip deck" data-deck="leech" style="border-color:var(--leech);color:var(--leech)">⚠ Leeches</button>
-      </div>
-      <div class="row"><span class="filter-label">JLPT</span>
-        <button class="chip jlpt active" data-jlpt="all">All</button>
-        <button class="chip jlpt" data-jlpt="N5">N5</button>
-        <button class="chip jlpt" data-jlpt="N4">N4</button>
-        <button class="chip jlpt" data-jlpt="N3">N3</button>
-        <button class="chip jlpt" data-jlpt="N2">N2</button>
-        <button class="chip jlpt" data-jlpt="N1">N1</button>
-      </div>
-      <div class="row"><span class="filter-label">Frequency rank</span>
+      </div></div>
+      <div class="fdiv"></div>
+      <div class="row"><span class="filter-label">Level &amp; rank</span>
+        <span class="jlptseg">
+          <button class="chip jlpt active" data-jlpt="all">All</button>
+          <button class="chip jlpt" data-jlpt="N5">N5</button>
+          <button class="chip jlpt" data-jlpt="N4">N4</button>
+          <button class="chip jlpt" data-jlpt="N3">N3</button>
+          <button class="chip jlpt" data-jlpt="N2">N2</button>
+          <button class="chip jlpt" data-jlpt="N1">N1</button>
+        </span>
+        <span class="filter-label" style="margin-left:10px;min-width:0">Rank</span>
         <input type="number" class="rangeinput" id="rmin" min="1" max="100" value="1">
         <span style="color:var(--muted)">–</span>
         <input type="number" class="rangeinput" id="rmax" min="1" max="100" value="100">
+      </div>
+      <div class="row"><span class="filter-label" style="min-width:0">Presets</span>
         <button class="chip rpreset" data-lo="1" data-hi="25">1–25</button>
         <button class="chip rpreset" data-lo="26" data-hi="50">26–50</button>
         <button class="chip rpreset" data-lo="51" data-hi="75">51–75</button>
@@ -521,16 +560,29 @@
           <option value='"Yuji Syuku",serif'>Yuji Syuku (brush)</option>
         </select>
       </div>
-      <div class="row"><span class="filter-label">Category</span>
+      <!-- Tier 1: grammar (always visible). TYPE = conjugation class; the lone
+           "All" chip clears the whole shared .bf pool (type+transitivity+topic). -->
+      <div class="row"><span class="filter-label">Type</span>
         <button class="chip bf active" data-filter="all">All</button>
         <button class="chip bf g" data-filter="godan">Godan</button>
         <button class="chip bf i" data-filter="ichidan">Ichidan</button>
         <button class="chip bf" data-filter="irregular">Irregular</button>
+        <button class="chip bf" data-filter="suru">Suru</button>
+        <button class="chip bf" data-filter="fake">Fake-ichidan</button>
+      </div>
+      <div class="row"><span class="filter-label">Transitivity</span>
         <button class="chip bf" data-filter="trans">Transitive</button>
         <button class="chip bf" data-filter="intrans">Intransitive</button>
         <button class="chip bf" data-filter="ti-pair">T/I pairs</button>
-        <button class="chip bf" data-filter="fake">Fake-ichidan</button>
-        <button class="chip bf" data-filter="suru">Suru</button>
+      </div>
+      <div class="fdiv"></div>
+      <!-- Tier 2: topic (the long semantic tail) collapsed behind a disclosure;
+           Leeches is a status filter, kept always-visible beside the toggle. -->
+      <div class="row"><span class="filter-label">Topic</span>
+        <button class="topic-toggle" data-target="bTopic" data-label="Topics" aria-expanded="false" aria-controls="bTopic"><span class="tt-text">Topics</span><span class="tt-arr">▾</span></button>
+        <button class="chip bf" data-filter="leech" style="border-color:var(--leech);color:var(--leech)">⚠ Leeches</button>
+      </div>
+      <div class="topic-region" id="bTopic"><div class="topic-inner">
         <button class="chip bf" data-filter="motion">Motion</button>
         <button class="chip bf" data-filter="transit">Transit</button>
         <button class="chip bf" data-filter="wearing">Wearing</button>
@@ -550,16 +602,19 @@
         <button class="chip bf" data-filter="study">Study</button>
         <button class="chip bf" data-filter="food">Food</button>
         <button class="chip bf" data-filter="money">Money</button>
-        <button class="chip bf" data-filter="leech" style="border-color:var(--leech);color:var(--leech)">⚠ Leeches</button>
-      </div>
-      <div class="row"><span class="filter-label">JLPT</span>
-        <button class="chip bjlpt active" data-jlpt="all">All</button>
-        <button class="chip bjlpt" data-jlpt="N5">N5</button>
-        <button class="chip bjlpt" data-jlpt="N4">N4</button>
-        <button class="chip bjlpt" data-jlpt="N3">N3</button>
-        <button class="chip bjlpt" data-jlpt="N2">N2</button>
-        <button class="chip bjlpt" data-jlpt="N1">N1</button>
-        <span class="filter-label" style="margin-left:10px">Rank</span>
+      </div></div>
+      <div class="fdiv"></div>
+      <!-- Tier 3: level + frequency band on one line. -->
+      <div class="row"><span class="filter-label">Level &amp; rank</span>
+        <span class="jlptseg">
+          <button class="chip bjlpt active" data-jlpt="all">All</button>
+          <button class="chip bjlpt" data-jlpt="N5">N5</button>
+          <button class="chip bjlpt" data-jlpt="N4">N4</button>
+          <button class="chip bjlpt" data-jlpt="N3">N3</button>
+          <button class="chip bjlpt" data-jlpt="N2">N2</button>
+          <button class="chip bjlpt" data-jlpt="N1">N1</button>
+        </span>
+        <span class="filter-label" style="margin-left:10px;min-width:0">Rank</span>
         <input type="number" class="rangeinput" id="brmin" min="1" max="100" value="1">
         <span style="color:var(--muted)">–</span>
         <input type="number" class="rangeinput" id="brmax" min="1" max="100" value="100">
@@ -1299,6 +1354,40 @@ function bSyncRange(){
 brmin.addEventListener('change',bSyncRange);
 brmax.addEventListener('change',bSyncRange);
 document.getElementById('search').addEventListener('input',renderBrowse);
+
+/* Collapsible Topic groups (filter redesign). The chips inside stay wired by
+   their .bf / .deck class + data-* attr (makeMultiSelect doesn't care about DOM
+   nesting); this only toggles a max-height region and keeps a live "· N" badge
+   on the toggle so active topics remain visible while collapsed. A MutationObserver
+   on the region's class attrs keeps the badge correct even when selections change
+   programmatically (Reset / Study-leeches / due-session). Open state persists
+   per-panel in localStorage. */
+function setupTopicGroups(){
+  document.querySelectorAll('.topic-toggle').forEach(btn=>{
+    const region=document.getElementById(btn.dataset.target);
+    if(!region)return;
+    const base=btn.dataset.label||'Topics', txt=btn.querySelector('.tt-text');
+    const key='jpverbs_topic_'+btn.dataset.target;
+    function setOpen(open){
+      region.classList.toggle('open',open);
+      btn.classList.toggle('open',open);
+      btn.setAttribute('aria-expanded',open?'true':'false');
+    }
+    function refresh(){
+      const n=region.querySelectorAll('.chip.active').length;
+      txt.textContent = n ? base+' · '+n : base;
+      btn.classList.toggle('has-active', n>0);
+    }
+    btn.addEventListener('click',()=>{
+      const open=!region.classList.contains('open');
+      setOpen(open); localStorage.setItem(key, open?'1':'0');
+    });
+    new MutationObserver(refresh).observe(region,{subtree:true,attributes:true,attributeFilter:['class']});
+    setOpen(localStorage.getItem(key)==='1');
+    refresh();
+  });
+}
+setupTopicGroups();
 // Re-render the whole grid from scratch on any filter/search change. passF =
 // passes the facet+rank filter; passQ = matches the search text. The frequency
 // "topN-M" tags are filtered OUT of the visible tag chips (they'd be noise).
