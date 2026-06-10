@@ -30,6 +30,9 @@ type Core = {
   reviewForecast: (h: string) => { bars: { label: string; count: number; now: boolean }[]; max: number };
   filterSummary: (c: any) => string[];
   tokenFacet: (t: string) => string;
+  cardStamp: (v: any) => { label: string; cls: string };
+  colorClass: (v: any) => string;
+  CATS: string[];
   exampleForLevel: (v: any, level: string) => [string, string] | null;
   availableTiers: (v: any) => string[];
   JLPT_TIERS: string[];
@@ -50,6 +53,7 @@ function loadCore(): Core {
     verbs + "\n" + examples + "\n" + appSrc +
     `\n;return { passes, oneGroup, facetAll, facetMatch, scheduleCard, cardStat,
       isDue, dueCards, rollingAcc, isLeech, leeches, normKana, romajiToKana, reviewForecast, filterSummary, tokenFacet,
+      cardStamp, colorClass, CATS,
       exampleForLevel, availableTiers, JLPT_TIERS,
       BOX_DAYS, get DATA(){return DATA}, get store(){return store}, set store(v){store=v} };`;
 
@@ -123,7 +127,7 @@ beforeEach(() => {
 
 // helper: count deck size for a partial config (fills facet defaults)
 const cfg = (o: Partial<any>) =>
-  ({ type: [], trans: [], topic: [], status: [], jlpt: ["all"], rmin: 1, rmax: 999, ...o });
+  ({ cat: [], type: [], trans: [], topic: [], status: [], jlpt: ["all"], rmin: 1, rmax: 999, ...o });
 const count = (c: any) => core.DATA.filter((v) => core.passes(v, c)).length;
 
 test("the dataset loads under the DOM stub", () => {
@@ -242,6 +246,40 @@ test("tokenFacet routes tokens to the right facet", () => {
   expect(core.tokenFacet("due")).toBe("status");
   expect(core.tokenFacet("motion")).toBe("topic"); // default
   expect(core.tokenFacet("emotion")).toBe("topic");
+  // part-of-speech tokens route to the cat facet
+  expect(core.tokenFacet("verb")).toBe("cat");
+  expect(core.tokenFacet("adjective")).toBe("cat");
+  expect(core.tokenFacet("noun")).toBe("cat");
+});
+
+test("passes: category facet ANDs in (built-ins are all verbs)", () => {
+  // every built-in card is a verb → cat:['verb'] keeps the whole deck, the rest empty it
+  expect(count(cfg({ cat: ["verb"] }))).toBe(core.DATA.length);
+  expect(count(cfg({ cat: ["noun"] }))).toBe(0);
+  expect(count(cfg({ cat: ["adjective", "adverb"] }))).toBe(0);
+  // cat AND type still intersect
+  const godan = core.DATA.filter((v) => v.type === "godan").length;
+  expect(count(cfg({ cat: ["verb"], type: ["godan"] }))).toBe(godan);
+  expect(count(cfg({ cat: ["noun"], type: ["godan"] }))).toBe(0);
+});
+
+test("oneGroup + cardStamp/colorClass cover non-verb categories", () => {
+  expect(core.CATS).toContain("phrase");
+  const noun = { cat: "noun", type: "" };
+  const adj = { cat: "adjective", type: "na-adj" };
+  const verb = core.DATA.find((v) => v.type === "godan")!;
+  // category membership (a missing cat defaults to verb)
+  expect(core.oneGroup(noun, "noun")).toBe(true);
+  expect(core.oneGroup(noun, "verb")).toBe(false);
+  expect(core.oneGroup(verb, "verb")).toBe(true);
+  // stamp: subtype label when present, else the bare category
+  expect(core.cardStamp(verb)).toEqual({ label: "GODAN", cls: "godan" });
+  expect(core.cardStamp(adj)).toEqual({ label: "な-ADJ", cls: "na-adj" });
+  expect(core.cardStamp(noun)).toEqual({ label: "NOUN", cls: "noun" });
+  // color class: subtype, then category
+  expect(core.colorClass(verb)).toBe("godan");
+  expect(core.colorClass(adj)).toBe("na-adj");
+  expect(core.colorClass(noun)).toBe("noun");
 });
 
 test("passes: facets AND across, OR within (the headline behavior)", () => {

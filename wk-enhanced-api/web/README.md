@@ -3,7 +3,8 @@
 A no-build, offline-capable flashcard + spaced-repetition study tool for everyday
 Japanese. The built-in content is currently the **100 most frequent Japanese
 verbs** (BCCWJ corpus frequency, each tagged `cat:"verb"`) plus any cards you add
-yourself — the data model is being generalized beyond verbs. Flashcards with a
+yourself in any part-of-speech category (verb / adjective / noun / adverb / phrase).
+Flashcards with a
 Leitner SRS (separate **SRS review** and **free study** modes), romaji-or-kana
 typed-reading auto-grading, Google text-to-speech, **five JLPT-leveled (N5→N1)
 example sentences per card**, an upcoming-reviews forecast, Jisho dictionary
@@ -28,7 +29,7 @@ split once it outgrew a single document.
 | View | What's there |
 |---|---|
 | **Flashcards** | A Leitner-box SRS. Pick test direction (JP→meaning/reading or reverse), an input mode (self-graded reveal, or **type the reading** for auto-graded kana), and optional **audio** (play the reading aloud). On the answer side, pick an **example sentence at any JLPT level (N5→N1)** to see the verb used in context. Filter the deck by independent, intersecting facets — type / transitivity / topic / JLPT / frequency rank (e.g. "Godan **and** Motion") — choose an order (shuffle / by frequency / worst-first), and run a session. A due-cards banner is the one-click SRS entry point. Grade with the mouse or keys — reveal with **space/enter**, then **space / enter / 2 = correct**, **x / 1 = wrong**. |
-| **Browse** | A filterable grid of all verbs with the same facets plus free-text search and a font picker. Each card has a speaker button to hear the reading. Click a card to open a **detail view** — mnemonic, trap/tip, memory status, and example sentences are collapsible, with the examples **filtered by JLPT level**. **Add your own verbs** ("Add verb") — they join the deck, filters, and stats; custom cards can be edited or deleted. |
+| **Browse** | A filterable grid of all verbs with the same facets plus free-text search and a font picker. Each card has a speaker button to hear the reading. Click a card to open a **detail view** — mnemonic, trap/tip, memory status, and example sentences are collapsible, with the examples **filtered by JLPT level**. **Add your own cards** ("Add card") in any category — verbs, adjectives (い/な), nouns, adverbs, phrases; they join the deck, filters, and stats; custom cards can be edited or deleted. |
 | **Settings** | A toolbar gear opens preferences (saved on the device, and synced to your account): default example level, show/hide furigana, default answer mode, audio. |
 | **Stats & Leeches** | Overall accuracy, the SRS memory pipeline (Leitner box histogram), daily + per-session accuracy line charts, the leech list, and per-card rolling accuracy (worst-first, capped). All charts are hand-rolled SVG — no chart library. |
 | **Accounts** | Optional. Sign in to mirror **progress + your custom verbs** to the server and sync across devices. Fully usable signed-out (localStorage). |

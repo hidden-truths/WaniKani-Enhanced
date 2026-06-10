@@ -10,7 +10,25 @@
    TAB NAV → FONT/THEME → EXPORT/IMPORT → DECK BUILDING → FLASHCARD → BROWSE →
    STATS+CHARTS → CUSTOM VERBS → CLOUD ACCOUNTS + SYNC.
    ========================================================================== */
-const TYPE_LABEL={godan:"GODAN",ichidan:"ICHIDAN",irregular:"IRREG"};
+// Conjugation/word-class subtype labels (the `type` field). Verbs use
+// godan/ichidan/irregular; adjectives reuse `type` for the い/な split. Nouns,
+// adverbs and phrases have no subtype (type:'' → no entry here).
+const TYPE_LABEL={godan:"GODAN",ichidan:"ICHIDAN",irregular:"IRREG","i-adj":"い-ADJ","na-adj":"な-ADJ"};
+// Part-of-speech categories (the `cat` field). 'verb' is the historical default
+// (still all 100 built-ins); the rest are addable via the add-card modal. CATS is
+// the canonical order + the membership test used by the `cat` filter facet.
+const CATS=['verb','adjective','noun','adverb','phrase'];
+const CAT_LABEL={verb:'VERB',adjective:'ADJ',noun:'NOUN',adverb:'ADVERB',phrase:'PHRASE'};
+// The color token a card paints with (spine / hanko stamp): its subtype if it has
+// one (godan, i-adj, …), else its category (noun, adverb, …). Drives the CSS class.
+const colorClass=v=>v.type||v.cat||'';
+// The hanko stamp shown on Browse cards + the detail modal: the subtype label when
+// present (GODAN / い-ADJ), else the bare category (NOUN / PHRASE). `cls` is the
+// matching CSS color class.
+function cardStamp(v){
+  if(v.type&&TYPE_LABEL[v.type]) return {label:TYPE_LABEL[v.type],cls:v.type};
+  return {label:CAT_LABEL[v.cat]||(v.cat||'').toUpperCase(),cls:v.cat||''};
+}
 // ---- CUSTOM VERBS storage (user-added; synced to the cloud when signed in) ----
 // Shape: { seq:<monotonic rank counter, starts at 100>, verbs:[ <verb>, … ] }.
 // Each custom verb has the same fields as a baked one plus custom:true, and a
@@ -389,6 +407,7 @@ function oneGroup(v,d){
   if(d==='all')return true;
   if(d==='leech')return isLeech(v.rank);
   if(d==='due')return isDue(v.rank);
+  if(CATS.includes(d))return (v.cat||'verb')===d;          // part-of-speech facet
   if(['godan','ichidan','irregular'].includes(d))return v.type===d;
   if(d==='suru'||d==='fake')return v.tags.includes(d);
   if(d==='trans')return v.trans==='t';
@@ -399,10 +418,12 @@ function oneGroup(v,d){
 function facetAll(arr){ return !arr || arr.length===0 || arr.includes('all'); }
 // One AND'd facet: no constraint if empty, else the verb must match one token (OR).
 function facetMatch(v,arr){ return !arr || arr.length===0 || arr.some(d=>oneGroup(v,d)); }
-// The single source of truth for "should this verb appear?" (see model above).
-// c = {type:[],trans:[],topic:[],status:[], jlpt:[], rmin, rmax}. The four token
-// facets AND together; jlpt and rank AND on top. Pure function — easy to unit-test.
+// The single source of truth for "should this card appear?" (see model above).
+// c = {cat:[],type:[],trans:[],topic:[],status:[], jlpt:[], rmin, rmax}. The five
+// token facets AND together; jlpt and rank AND on top. Pure function — easy to
+// unit-test. (A missing facet array = no constraint, so older callers still work.)
 function passes(v,c){
+  if(!facetMatch(v,c.cat))return false;
   if(!facetMatch(v,c.type))return false;
   if(!facetMatch(v,c.trans))return false;
   if(!facetMatch(v,c.topic))return false;
@@ -443,8 +464,9 @@ function makeMultiSelect(selector, getArr, setArr, attr, onChange){
 // Every category/semantic chip carries class .deck (study) / .bf (browse) + its
 // token in data-deck / data-filter. We DERIVE which facet a token belongs to here
 // (topic is the default), so the markup needs no per-chip facet attribute.
-const DECK_FACETS=['type','trans','topic','status'];
-const TOKEN_FACET={godan:'type',ichidan:'type',irregular:'type',suru:'type',fake:'type',
+const DECK_FACETS=['cat','type','trans','topic','status'];
+const TOKEN_FACET={verb:'cat',adjective:'cat',noun:'cat',adverb:'cat',phrase:'cat',
+  godan:'type',ichidan:'type',irregular:'type',suru:'type',fake:'type',
   trans:'trans',intrans:'trans','ti-pair':'trans',leech:'status',due:'status'};
 const tokenFacet=t=>TOKEN_FACET[t]||'topic';
 const deckEmpty=c=>DECK_FACETS.every(f=>!c[f].length);
@@ -472,7 +494,7 @@ function wireFacets(selector, c, onChange){
 // ---- Flashcard deck config + its chip bindings ----
 // mode = test direction; type/trans/topic/status/jlpt = AND'd facets; ord = sort;
 // rmin/rmax = rank band. Facet arrays start empty (= no constraint → "All" active).
-let cfg={mode:"meaning",input:"self",audio:"off",kind:"free",type:[],trans:[],topic:[],status:[],ord:"shuffle",jlpt:["all"],rmin:1,rmax:MAXRANK};
+let cfg={mode:"meaning",input:"self",audio:"off",kind:"free",cat:[],type:[],trans:[],topic:[],status:[],ord:"shuffle",jlpt:["all"],rmin:1,rmax:MAXRANK};
 document.querySelectorAll('.chip.mode').forEach(b=>b.addEventListener('click',()=>{
   document.querySelectorAll('.chip.mode').forEach(x=>x.classList.remove('active'));b.classList.add('active');cfg.mode=b.dataset.mode;updateDeckCount();}));
 // Study type (Free study vs SRS review). SRS restricts the deck to due cards
@@ -538,13 +560,13 @@ function buildDeck(){
 }
 // Token → human label for the active-filter recap line. Shared by both panels
 // (deck/bf tokens are identical). Drives filterSummary() below.
-const DECK_LABEL={godan:'Godan',ichidan:'Ichidan',irregular:'Irregular',suru:'Suru',fake:'Fake-ichidan',trans:'Transitive',intrans:'Intransitive','ti-pair':'T/I pairs',leech:'Leeches',due:'Due cards',motion:'Motion',transit:'Transit',wearing:'Wearing',speaking:'Speaking',communication:'Communication',giving:'Giving/Recv',emotion:'Emotion',cognition:'Cognition',perception:'Perception',existence:'Existence',change:'Change',ability:'Ability',onoff:'On/Off',daily:'Daily',body:'Body',work:'Work',study:'Study',food:'Food',money:'Money'};
+const DECK_LABEL={verb:'Verb',adjective:'Adjective',noun:'Noun',adverb:'Adverb',phrase:'Phrase',godan:'Godan',ichidan:'Ichidan',irregular:'Irregular',suru:'Suru',fake:'Fake-ichidan',trans:'Transitive',intrans:'Intransitive','ti-pair':'T/I pairs',leech:'Leeches',due:'Due cards',motion:'Motion',transit:'Transit',wearing:'Wearing',speaking:'Speaking',communication:'Communication',giving:'Giving/Recv',emotion:'Emotion',cognition:'Cognition',perception:'Perception',existence:'Existence',change:'Change',ability:'Ability',onoff:'On/Off',daily:'Daily',body:'Body',work:'Work',study:'Study',food:'Food',money:'Money'};
 // Build the active-facet parts for a config (one part per non-empty facet, so the
 // recap reads as the AND it now is: "Godan · Motion · rank 1–25"). Tokens within a
 // facet join with '/', the parts join with '·' in paintSummary.
 function filterSummary(c){
   const parts=[];
-  [c.type,c.trans,c.topic,c.status].forEach(arr=>{
+  [c.cat,c.type,c.trans,c.topic,c.status].forEach(arr=>{
     if(arr&&arr.length) parts.push(arr.map(t=>DECK_LABEL[t]||t).join('/'));
   });
   if(!facetAll(c.jlpt)) parts.push(c.jlpt.join('/'));
@@ -558,8 +580,19 @@ function paintSummary(id,parts){
     ? '<svg class="ic" aria-hidden="true"><use href="#i-filter"/></svg>Filtering: '+parts.map(p=>'<b>'+p+'</b>').join(' · ')
     : '';
 }
+// Hide the verb-only filter rows (Type / Transitivity — conjugation-class and
+// transitivity are meaningless for nouns/adverbs/phrases) when the Category facet
+// is set to exclude verbs; clear any stranded type/trans tokens so the deck isn't
+// silently empty. Kept per-panel (one config + its repaint fn) so the study path,
+// which runs at boot before bcfg exists, never touches the browse config (TDZ).
+function syncVerbRows(sel,c,repaint){
+  const show=!c.cat.length||c.cat.includes('verb');
+  document.querySelectorAll(sel+' .frow.verb-only').forEach(r=>{r.style.display=show?'':'none';});
+  if(!show&&(c.type.length||c.trans.length)){ c.type=[]; c.trans=[]; repaint(); }
+}
 // Live "N cards in deck" readout under the Start button + filter recap.
 function updateDeckCount(){
+  syncVerbRows('#panel-study',cfg,repaintDeck);
   const n=DATA.filter(v=>passes(v,cfg) && (cfg.kind!=='srs'||isDue(v.rank))).length;
   document.getElementById('deckCount').innerHTML=`<b>${n}</b> ${cfg.kind==='srs'?'due in this deck':'cards in deck'}`;
   paintSummary('deckSummary', filterSummary(cfg));
@@ -763,7 +796,7 @@ function showCard(){
   session.revealed=false;
   document.getElementById('fcProgress').textContent=`Card ${session.i+1} of ${session.deck.length}`;
   const fc=document.getElementById('flashcard');
-  fc.className='flashcard '+v.type;   // sets the colored spine via CSS
+  fc.className='flashcard '+colorClass(v);   // sets the colored spine via CSS
   void fc.offsetWidth; fc.classList.add('card-in');   // restart the card-advance entrance animation
   if(cfg.mode==='meaning'){            // JP shown → recall meaning + reading
     document.getElementById('promptLabel').textContent='Read this — give meaning + reading';
@@ -777,7 +810,7 @@ function showCard(){
     document.getElementById('promptLabel').textContent='Give the reading + kanji';
     document.getElementById('promptMain').className='prompt-main';
     document.getElementById('promptMain').textContent=v.mean;
-    document.getElementById('promptSub').textContent=TYPE_LABEL[v.type];
+    document.getElementById('promptSub').textContent=cardStamp(v).label;
     document.getElementById('aRead').className='a-read jp';
     document.getElementById('aRead').innerHTML=v.read+' &nbsp; '+v.jp;
     document.getElementById('aMean').textContent='';
@@ -945,7 +978,7 @@ document.addEventListener('keydown',e=>{
    100 rows; if the deck grows large, switch to a template/fragment for perf).
    Clicking a card toggles .open to expand the detail (CSS max-height anim).
    ========================================================================== */
-let bcfg={type:[],trans:[],topic:[],status:[],jlpt:['all'],rmin:1,rmax:MAXRANK};
+let bcfg={cat:[],type:[],trans:[],topic:[],status:[],jlpt:['all'],rmin:1,rmax:MAXRANK};
 const repaintBrowse=wireFacets('.chip.bf', bcfg, renderBrowse);
 makeMultiSelect('.chip.bjlpt', ()=>bcfg.jlpt, a=>bcfg.jlpt=a, 'jlpt', renderBrowse);
 const brmin=document.getElementById('brmin'),brmax=document.getElementById('brmax');
@@ -1062,10 +1095,25 @@ function annotateJlptChips(){
     if(lv==='all'){ b.title='All levels'; return; }
     const n=counts[lv]||0;
     b.disabled = n===0;
-    b.title = n===0 ? `No verbs at ${lv} in this deck` : `${n} verb${n===1?'':'s'} at ${lv}`;
+    b.title = n===0 ? `No cards at ${lv} in this deck` : `${n} card${n===1?'':'s'} at ${lv}`;
   });
 }
 annotateJlptChips();
+// Same treatment for the part-of-speech category chips: all 100 built-ins are
+// verbs, so Adjective/Noun/Adverb/Phrase start disabled and light up only once a
+// custom card of that category exists. Roving nav skips disabled chips already.
+function annotateCatChips(){
+  const counts={};
+  DATA.forEach(v=>{const c=v.cat||'verb';counts[c]=(counts[c]||0)+1;});
+  document.querySelectorAll('.chip.deck,.chip.bf').forEach(b=>{
+    const t=b.dataset.deck||b.dataset.filter;
+    if(!CATS.includes(t))return;
+    const n=counts[t]||0;
+    b.disabled = n===0;
+    b.title = n===0 ? `No ${t}s yet — add one in Browse` : `${n} ${t}${n===1?'':'s'}`;
+  });
+}
+annotateCatChips();
 document.querySelectorAll('.chips, .topic-inner').forEach(setupRoving);
 
 /* ---- Browse detail modal ----
@@ -1116,7 +1164,7 @@ function openVerbDetail(v){
       <div class="verb-reading">${v.read}${TTS_OK?` <button class="speak-btn sm" id="dSpeak" type="button" aria-label="Play reading" title="Play reading"><svg class="ic" aria-hidden="true"><use href="#i-volume"/></svg></button>`:''}</div>
       <div class="verb-meaning">${v.mean}</div>
       <a class="jisho-link" target="_blank" rel="noopener noreferrer" href="${jishoUrl(v.jp)}"><svg class="ic" aria-hidden="true"><use href="#i-external"/></svg>View on Jisho</a></div>
-      <div style="text-align:right"><div class="stamp ${v.type}">${TYPE_LABEL[v.type]}</div><div class="jlpt-pill">${v.jlpt}</div>${v.custom?'<div class="custom-badge">CUSTOM</div>':''}</div></div>
+      <div style="text-align:right"><div class="stamp ${cardStamp(v).cls}">${cardStamp(v).label}</div><div class="jlpt-pill">${v.jlpt}</div>${v.custom?'<div class="custom-badge">CUSTOM</div>':''}</div></div>
     ${isLeech(v.rank)?'<span class="leech-badge">⚠ LEECH</span>':''}
     <div class="tags">${tags}</div>
     ${detailMemoryLine(v)}
@@ -1133,7 +1181,7 @@ function openVerbDetail(v){
   if(v.custom){
     const eb=document.getElementById('dEdit'), db=document.getElementById('dDel');
     if(eb)eb.addEventListener('click',()=>{ closeDetail(); openVerbModal(v); });
-    if(db)db.addEventListener('click',()=>{ if(confirm('Delete custom verb '+v.jp+'? Its progress is also removed.')){ closeDetail(); deleteVerb(v.rank); } });
+    if(db)db.addEventListener('click',()=>{ if(confirm('Delete custom card '+v.jp+'? Its progress is also removed.')){ closeDetail(); deleteVerb(v.rank); } });
   }
   document.getElementById('detailModal').classList.add('show');
 }
@@ -1146,6 +1194,7 @@ document.addEventListener('keydown',e=>{ if(e.key==='Escape'&&document.getElemen
 // passes the facet+rank filter; passQ = matches the search text. The frequency
 // "topN-M" tags are filtered OUT of the visible tag chips (they'd be noise).
 function renderBrowse(){
+  syncVerbRows('#panel-browse',bcfg,repaintBrowse);
   const q=document.getElementById('search').value.trim().toLowerCase();
   const grid=document.getElementById('grid');grid.innerHTML='';let shown=0;
   DATA.forEach(v=>{
@@ -1154,15 +1203,16 @@ function renderBrowse(){
     if(!(passF&&passQ))return;shown++;
     const leech=isLeech(v.rank);const acc=rollingAcc(v.rank);
     const card=document.createElement('div');
-    card.className='card '+v.type+(leech?' leech':'');  // class + leech recolor spine
+    card.className='card '+colorClass(v)+(leech?' leech':'');  // class + leech recolor spine
     const tiLabel=v.trans==='t'?'transitive':(v.trans==='i'?'intransitive':'');
+    const stamp=cardStamp(v);
     // Cards are SUMMARY only now — clicking opens the detail modal (openVerbDetail).
     card.innerHTML=`<div class="rank">#${v.rank}</div>
       ${acc!=null?`<div class="acc">${Math.round(acc*100)}% acc</div>`:''}
       <div class="card-top"><div>
         <div class="verb-jp jp">${v.jp}</div><div class="verb-reading">${v.read}${TTS_OK?` <button class="speak-btn sm" type="button" aria-label="Play reading" title="Play reading"><svg class="ic" aria-hidden="true"><use href="#i-volume"/></svg></button>`:''}</div>
         <div class="verb-meaning">${v.mean}</div></div>
-        <div style="text-align:right"><div class="stamp ${v.type}">${TYPE_LABEL[v.type]}</div>
+        <div style="text-align:right"><div class="stamp ${stamp.cls}">${stamp.label}</div>
         <div class="jlpt-pill">${v.jlpt}</div>${v.custom?'<div class="custom-badge">CUSTOM</div>':''}</div></div>
       ${leech?'<span class="leech-badge">⚠ LEECH</span>':''}
       <div class="tags">${tiLabel?`<span class="tag" style="color:var(--ichidan)">${tiLabel}</span>`:''}${v.tags.filter(t=>!t.startsWith('top')).map(t=>`<span class="tag">${escapeHtml(t)}</span>`).join('')}</div>`;
@@ -1590,21 +1640,48 @@ function rebuildData(){
   // freshly-added custom verb is included by default; otherwise respect narrowing.
   if(cfg.rmax>=prevMax){cfg.rmax=MAXRANK;const e=document.getElementById('rmax');if(e)e.value=MAXRANK;}
   if(bcfg.rmax>=prevMax){bcfg.rmax=MAXRANK;const e=document.getElementById('brmax');if(e)e.value=MAXRANK;}
-  annotateJlptChips();
+  annotateJlptChips(); annotateCatChips();
 }
 function renderCustomCount(){
   const n=loadCustom().verbs.length;
-  document.getElementById('customCount').innerHTML = n?`<b>${n}</b> custom verb${n===1?'':'s'}`:'';
+  document.getElementById('customCount').innerHTML = n?`<b>${n}</b> custom card${n===1?'':'s'}`:'';
+}
+// Per-category option lists for the modal's Type select. Verbs use the
+// conjugation classes; adjectives reuse the field for the い/な split; nouns,
+// adverbs and phrases have no subtype (the whole Type cell hides for them).
+const VF_TYPE_OPTS={
+  verb:[['godan','Godan (う-verb)'],['ichidan','Ichidan (る-verb)'],['irregular','Irregular']],
+  adjective:[['i-adj','い-adjective'],['na-adj','な-adjective']]
+};
+// Repopulate #vfType for the chosen category, preserving the current value if it's
+// still a valid option (so reopening an edit keeps the saved subtype selected).
+function setTypeOptions(cat){
+  const sel=document.getElementById('vfType'), cur=sel.value;
+  const opts=VF_TYPE_OPTS[cat]||[];
+  sel.innerHTML=opts.map(([v,l])=>`<option value="${v}">${l}</option>`).join('');
+  if(opts.some(o=>o[0]===cur))sel.value=cur;
+}
+// Show the verb/adjective-only fields (Type, Transitivity) only when they apply:
+// Type for verbs+adjectives, Transitivity for verbs alone. Keeps the add-card form
+// honest — you're never asked for a noun's conjugation class.
+function syncVerbFields(){
+  const cat=document.getElementById('vfCat').value;
+  setTypeOptions(cat);
+  document.getElementById('vfTypeCell').style.display = VF_TYPE_OPTS[cat]?'':'none';
+  document.getElementById('vfTransCell').style.display = cat==='verb'?'':'none';
 }
 function openVerbModal(verb){
   editingRank = verb?verb.rank:null;
-  document.getElementById('verbTitle').textContent = verb?'Edit verb':'Add a verb';
-  document.getElementById('verbSubmit').textContent = verb?'Save changes':'Save verb';
+  document.getElementById('verbTitle').textContent = verb?'Edit card':'Add a card';
+  document.getElementById('verbSubmit').textContent = verb?'Save changes':'Save card';
   document.getElementById('verbDelete').hidden = !verb;
   document.getElementById('verbErr').textContent='';
   const g=id=>document.getElementById(id);
   g('vfJp').value=verb?verb.jp:''; g('vfRead').value=verb?verb.read:''; g('vfMean').value=verb?verb.mean:'';
-  g('vfType').value=verb?verb.type:'godan'; g('vfJlpt').value=verb?verb.jlpt:'N4';
+  g('vfCat').value=verb?(verb.cat||'verb'):'verb';
+  syncVerbFields();                                   // rebuild Type options + show/hide before setting values
+  g('vfType').value=verb&&verb.type?verb.type:(g('vfType').value);
+  g('vfJlpt').value=verb?verb.jlpt:'N4';
   g('vfTrans').value=verb?(verb.trans||''):'';
   g('vfTags').value=verb?(verb.tags||[]).filter(t=>t!=='custom').join(', '):'';
   g('vfMnem').value=verb?(verb.mnem||''):''; g('vfTip').value=verb?(verb.tip||''):'';
@@ -1627,7 +1704,11 @@ function saveVerb(e){
   const tags=val('vfTags').split(',').map(s=>s.trim().toLowerCase()).filter(Boolean);
   if(!tags.includes('custom'))tags.push('custom');
   const exJp=val('vfExJp');
-  const verb={ jp, read, mean, cat:'verb', type:val('vfType'), jlpt:val('vfJlpt'), trans:val('vfTrans'),
+  const cat=val('vfCat');
+  // Only verbs+adjectives carry a `type`; only verbs carry transitivity. Store ''
+  // for the categories where the field is hidden so a stale value can't linger.
+  const verb={ jp, read, mean, cat, type:VF_TYPE_OPTS[cat]?val('vfType'):'', jlpt:val('vfJlpt'),
+    trans:cat==='verb'?val('vfTrans'):'',
     tags, mnem:val('vfMnem'), tip:val('vfTip'), ex: exJp?[[exJp,val('vfExEn')]]:[], custom:true };
   const cs=loadCustom();
   const existing = editingRank!=null ? cs.verbs.findIndex(v=>v.rank===editingRank) : -1;
@@ -1645,8 +1726,9 @@ function deleteVerb(rank){
 }
 document.getElementById('addVerbBtn').addEventListener('click',()=>openVerbModal(null));
 document.getElementById('verbClose').addEventListener('click',closeVerbModal);
+document.getElementById('vfCat').addEventListener('change',syncVerbFields);   // category drives which verb/adjective fields show
 document.getElementById('verbForm').addEventListener('submit',saveVerb);
-document.getElementById('verbDelete').addEventListener('click',()=>{ if(editingRank!=null&&confirm('Delete this custom verb? Its progress is also removed.'))deleteVerb(editingRank); });
+document.getElementById('verbDelete').addEventListener('click',()=>{ if(editingRank!=null&&confirm('Delete this custom card? Its progress is also removed.'))deleteVerb(editingRank); });
 document.getElementById('verbModal').addEventListener('click',e=>{ if(e.target.id==='verbModal')closeVerbModal(); }); // backdrop
 document.addEventListener('keydown',e=>{ if(e.key==='Escape'&&document.getElementById('verbModal').classList.contains('show'))closeVerbModal(); });
 rebuildData();          // sync the rank-range UI to MAXRANK (DATA already merged custom verbs at load)

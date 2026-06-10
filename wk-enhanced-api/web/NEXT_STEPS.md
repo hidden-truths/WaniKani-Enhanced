@@ -9,6 +9,16 @@ split, custom-verb sync, and Google TTS — what's left is one genuinely-deferre
 (needs email infra). Add new ideas to "Ideas / not yet scoped" as they come up.
 
 ## Done (most recent first)
+- ~~Multi-category content (de-verb-ify, the UI half)~~ — **shipped.** A `cat` filter
+  facet (`verb/adjective/noun/adverb/phrase`) leads both filter panels as a fifth
+  AND'd facet; the Type + Transitivity rows are `.verb-only` and hide (`syncVerbRows`)
+  when the category excludes verbs. The add-card modal gained a Category picker —
+  `syncVerbFields` shows Type for verbs+adjectives (い/な = `i-adj`/`na-adj`) and
+  Transitivity for verbs only. `cardStamp`/`colorClass` paint per-category spine +
+  hanko stamp (teal/amber/rose/slate accents); `annotateCatChips` dims empty
+  categories. Tests added. **Remaining transition work** (now the only "Ideas" item
+  with teeth): conjugation drills, and proofed built-in non-verb *content* — the
+  dataset is still 100 verbs; categories are a capability users populate.
 - ~~Design-polish pass (4 commits)~~ — **shipped.** (1) Responsive/bug fixes: mobile
   toolbar wrap, modal-× pin, empty-session → picker, ≥40px tap targets. (2) Readability:
   `--muted` darkened to AA, chart titles de-uppercased (uppercase = short labels only),
@@ -109,12 +119,11 @@ split, custom-verb sync, and Google TTS — what's left is one genuinely-deferre
   "What's deliberately NOT in v1."
 
 ## Ideas / not yet scoped
-- **Multi-category content (finish the de-verb-ify transition).** `cat` is now on
-  every card but everything is still `'verb'`. To actually add adjectives / nouns /
-  phrases: a category facet in the filters, conditional verb-only UI (the
-  Godan/Ichidan Type filter + the `type` field + the Add-verb modal's conjugation
-  fields only make sense for `cat:'verb'`), and a category picker in the add/edit
-  modal. Rename the `VERBS`/`verbs.js` internals only if it stops being mostly verbs.
+- **Built-in non-verb content.** The category *capability* shipped (filters, modal,
+  per-category stamps/spines), but the 100 baked-in cards are all verbs — users add
+  non-verbs themselves. A curated set of common adjectives/nouns/adverbs in `verbs.js`
+  (+ leveled examples in `examples.js`) would make the categories useful out of the
+  box. Rename the `VERBS`/`verbs.js` internals only if/when it stops being mostly verbs.
 - **Conjugation drills.** The dataset has `type` (godan/ichidan/irregular) — enough
   to quiz て-form / past / negative / potential. A natural next study mode.
 - **Custom-verb sync conflict handling.** Today it's last-write-wins + server-wins on

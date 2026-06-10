@@ -74,11 +74,13 @@
       jp     : kanji/kana headword (e.g. "走る")
       read   : reading in hiragana (e.g. "はしる")
       mean   : English gloss
-      cat    : part-of-speech category; "verb" for all current entries (defaulted
-               in attachLevels() if absent). Groundwork for adding non-verbs.
-      type   : "godan" | "ichidan" | "irregular"   (verb conjugation class)
+      cat    : part-of-speech — "verb" | "adjective" | "noun" | "adverb" | "phrase"
+               (all 100 built-ins are "verb"; non-verbs are user-added). Defaulted
+               to "verb" in attachLevels() if absent. The `cat` filter facet.
+      type   : word-class subtype. Verbs: "godan" | "ichidan" | "irregular";
+               adjectives: "i-adj" | "na-adj"; nouns/adverbs/phrases: "" (none).
       jlpt   : "N5".."N1"   approximate JLPT level
-      trans  : "t" | "i"    transitive / intransitive
+      trans  : "t" | "i" | ""   transitive / intransitive (verbs only; "" otherwise)
       tags   : []  semantic + structural groups ("motion","ti-pair","fake",...)
                    plus a frequency-band tag ("top1-25" etc.) used by Browse.
       mnem   : mnemonic (see MNEMONIC POLICY)
@@ -329,19 +331,27 @@
         <button class="chip amode active" data-amode="off">Off</button>
         <button class="chip amode" data-amode="auto"><svg class="ic" aria-hidden="true"><use href="#i-volume"/></svg>Auto-play reading</button>
       </div></div>
-      <!-- Type / Transitivity / Topic chips ALL use class "deck" → one shared
-           OR'd selection pool (see OUTSTANDING #2). The tier split here is purely
-           visual; data-deck is the filter token consumed by makeMultiSelect().
-           The single "All" chip clears the whole pool. -->
-      <div class="frow"><span class="filter-label">Type</span><div class="chips">
+      <!-- Category / Type / Transitivity / Topic chips ALL use class "deck", split
+           into AND'd facets by TOKEN_FACET (NOT a shared pool — see wireFacets).
+           data-deck is the filter token. The single "All" chip is the master reset
+           (clears every facet) and lives here in the first row. Category is the
+           part-of-speech facet; the .verb-only rows below hide for non-verb cats. -->
+      <div class="frow"><span class="filter-label">Category</span><div class="chips">
         <button class="chip deck active" data-deck="all">All</button>
+        <button class="chip deck" data-deck="verb">Verb</button>
+        <button class="chip deck" data-deck="adjective">Adjective</button>
+        <button class="chip deck" data-deck="noun">Noun</button>
+        <button class="chip deck" data-deck="adverb">Adverb</button>
+        <button class="chip deck" data-deck="phrase">Phrase</button>
+      </div></div>
+      <div class="frow verb-only"><span class="filter-label">Type</span><div class="chips">
         <button class="chip deck g" data-deck="godan">Godan</button>
         <button class="chip deck i" data-deck="ichidan">Ichidan</button>
         <button class="chip deck" data-deck="irregular">Irregular</button>
         <button class="chip deck" data-deck="suru">Suru-verbs</button>
         <button class="chip deck" data-deck="fake">Fake-ichidan</button>
       </div></div>
-      <div class="frow"><span class="filter-label">Transitivity</span><div class="chips">
+      <div class="frow verb-only"><span class="filter-label">Transitivity</span><div class="chips">
         <button class="chip deck" data-deck="trans">Transitive</button>
         <button class="chip deck" data-deck="intrans">Intransitive</button>
         <button class="chip deck" data-deck="ti-pair">T/I pairs</button>
@@ -480,17 +490,25 @@
           <option value='"Yuji Syuku",serif'>Yuji Syuku (brush)</option>
         </select>
       </div></div>
-      <!-- Tier 1: grammar (always visible). TYPE = conjugation class; the lone
-           "All" chip clears the whole shared .bf pool (type+transitivity+topic). -->
-      <div class="frow"><span class="filter-label">Type</span><div class="chips">
+      <!-- Tier 1: grammar (always visible). The .bf chips split into AND'd facets
+           by TOKEN_FACET; the lone "All" chip is the master reset (clears every
+           facet) and lives in the Category row. Verb-only rows hide for non-verbs. -->
+      <div class="frow"><span class="filter-label">Category</span><div class="chips">
         <button class="chip bf active" data-filter="all">All</button>
+        <button class="chip bf" data-filter="verb">Verb</button>
+        <button class="chip bf" data-filter="adjective">Adjective</button>
+        <button class="chip bf" data-filter="noun">Noun</button>
+        <button class="chip bf" data-filter="adverb">Adverb</button>
+        <button class="chip bf" data-filter="phrase">Phrase</button>
+      </div></div>
+      <div class="frow verb-only"><span class="filter-label">Type</span><div class="chips">
         <button class="chip bf g" data-filter="godan">Godan</button>
         <button class="chip bf i" data-filter="ichidan">Ichidan</button>
         <button class="chip bf" data-filter="irregular">Irregular</button>
         <button class="chip bf" data-filter="suru">Suru</button>
         <button class="chip bf" data-filter="fake">Fake-ichidan</button>
       </div></div>
-      <div class="frow"><span class="filter-label">Transitivity</span><div class="chips">
+      <div class="frow verb-only"><span class="filter-label">Transitivity</span><div class="chips">
         <button class="chip bf" data-filter="trans">Transitive</button>
         <button class="chip bf" data-filter="intrans">Intransitive</button>
         <button class="chip bf" data-filter="ti-pair">T/I pairs</button>
@@ -546,7 +564,7 @@
     </div>
     <!-- Live recap of the active grid query (incl. collapsed topics); set by renderBrowse(). -->
     <div class="filter-summary" id="bSummary"></div>
-    <div class="row" style="margin:2px 0 0"><button class="chip" id="addVerbBtn"><svg class="ic" aria-hidden="true"><use href="#i-plus"/></svg>Add verb</button><span class="count" id="customCount"></span></div>
+    <div class="row" style="margin:2px 0 0"><button class="chip" id="addVerbBtn"><svg class="ic" aria-hidden="true"><use href="#i-plus"/></svg>Add card</button><span class="count" id="customCount"></span></div>
     <div class="hint">Tap a card to expand · rank shown bottom-right, accuracy bottom-left once drilled</div>
     <div class="grid" id="grid"></div>
     <div class="empty" id="empty" style="display:none">No words match that filter.</div>
@@ -599,20 +617,30 @@
   </div>
 </div>
 
-<!-- Add/edit custom-verb modal. Custom verbs are stored in localStorage (key
+<!-- Add/edit custom-card modal. Custom cards are stored in localStorage (key
      jpverbs_custom) and merged into DATA at load, so they join filters, sessions,
-     and stats exactly like the baked-in 100. See "CUSTOM VERBS" in the script. -->
+     and stats exactly like the baked-in 100. The Category select drives which
+     fields apply: Type shows for verbs (godan/…) + adjectives (い/な), Transitivity
+     for verbs only — syncVerbFields() toggles #vfTypeCell / #vfTransCell + repopulates
+     #vfType. See "CUSTOM VERBS" in the script. -->
 <div class="modal-overlay" id="verbModal" role="dialog" aria-modal="true" aria-labelledby="verbTitle">
   <div class="modal wide">
     <button class="modal-x" id="verbClose" aria-label="Close">×</button>
-    <h2 id="verbTitle">Add a verb</h2>
-    <div class="sub">Your own verbs join the deck, filters, and stats alongside the built-in 100. Saved to this browser, and synced across your devices when you're signed in.</div>
+    <h2 id="verbTitle">Add a card</h2>
+    <div class="sub">Your own cards join the deck, filters, and stats alongside the built-in 100. Saved to this browser, and synced across your devices when you're signed in.</div>
     <form id="verbForm" autocomplete="off">
       <div class="form-grid">
         <div><label for="vfJp">Japanese *</label><input type="text" id="vfJp" class="jp" required placeholder="走る"></div>
         <div><label for="vfRead">Reading (kana) *</label><input type="text" id="vfRead" class="jp" required placeholder="はしる"></div>
         <div class="full"><label for="vfMean">Meaning *</label><input type="text" id="vfMean" required placeholder="to run"></div>
-        <div><label for="vfType">Type *</label><select id="vfType">
+        <div><label for="vfCat">Category *</label><select id="vfCat">
+          <option value="verb">Verb</option>
+          <option value="adjective">Adjective</option>
+          <option value="noun">Noun</option>
+          <option value="adverb">Adverb</option>
+          <option value="phrase">Phrase / expression</option>
+        </select></div>
+        <div id="vfTypeCell"><label for="vfType">Type</label><select id="vfType">
           <option value="godan">Godan (う-verb)</option>
           <option value="ichidan">Ichidan (る-verb)</option>
           <option value="irregular">Irregular</option>
@@ -621,7 +649,7 @@
           <option value="N5">N5</option><option value="N4" selected>N4</option>
           <option value="N3">N3</option><option value="N2">N2</option><option value="N1">N1</option>
         </select></div>
-        <div><label for="vfTrans">Transitivity</label><select id="vfTrans">
+        <div id="vfTransCell"><label for="vfTrans">Transitivity</label><select id="vfTrans">
           <option value="">— (n/a)</option>
           <option value="t">Transitive</option>
           <option value="i">Intransitive</option>

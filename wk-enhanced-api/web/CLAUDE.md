@@ -68,14 +68,22 @@ and the auth modal + sign-up banner.
   but NEVER touches the box/due. Session kind is captured at `startSession` into
   `session.kind`, tagged onto `store.sessions[*].kind` + the durable log's
   `details.kind`, and split out in `renderStats` (the SRS vs Free-study boxes).
-- **Filtering (AND'd facets):** `passes(v,c)` intersects four token facets
-  (`type`/`trans`/`topic`/`status`) + JLPT + rank. `facetMatch` = OR-within-one,
-  `facetAll` = no-constraint test, `oneGroup` = does a verb match one token.
+- **Filtering (AND'd facets):** `passes(v,c)` intersects five token facets
+  (`cat`/`type`/`trans`/`topic`/`status`) + JLPT + rank. `facetMatch` = OR-within-one,
+  `facetAll` = no-constraint test, `oneGroup` = does a card match one token.
   `wireFacets(selector,c,onChange)` wires the `.deck`/`.bf` chips, deriving each
   chip's facet from its token via `TOKEN_FACET` (topic is the default); the lone
   "all" chip clears every facet. `makeMultiSelect` still wires the JLPT segs.
   `cfg` (flashcard deck) and `bcfg` (browse grid) are independent configs.
-  `annotateJlptChips` disables empty JLPT levels.
+  `annotateJlptChips`/`annotateCatChips` disable empty JLPT levels / categories.
+  `syncVerbRows` hides the verb-only Type+Transitivity rows when the `cat` facet
+  excludes verbs (and clears any stranded type/trans tokens).
+- **Categories (`cat` facet):** `CATS` = `verb/adjective/noun/adverb/phrase`; all
+  100 built-ins are `verb`, the rest are user-added. `cardStamp(v)` + `colorClass(v)`
+  pick the hanko-stamp label/CSS class — the word-class subtype (`GODAN`, `い-ADJ`)
+  when present, else the bare category (`NOUN`). The add-card modal's `syncVerbFields`
+  shows Type for verbs+adjectives (repopulating `#vfType` via `VF_TYPE_OPTS`) and
+  Transitivity for verbs alone; `saveVerb` stores `''` for the hidden fields.
 - **Data + custom verbs:** `DATA` is a `let` = baked `VERBS` + `loadCustom().verbs`,
   rebuilt by `rebuildData()`; `attachLevels()` also defaults `v.cat='verb'` on every
   card (transition groundwork — see the de-verb-ify dead-end); `MAXRANK` tracks the top rank (rank filter extends
@@ -153,10 +161,12 @@ titles, helper/hint text) are sentence-case mono so they stay scannable; don't
 add `text-transform:uppercase` to a multi-word sentence.
 
 All theming flows through CSS custom properties (`--ink/--paper/--paper-2`,
-`--godan/--ichidan/--irregular`, `--muted/--line`, `--leech`, `--good`,
-`--jp-font`); light/dark is one `data-theme` flip on `<html>`. Colors are
-**functional, not decorative** (godan=vermilion, ichidan=indigo, irregular=stone,
-leech=purple). Mono labels (`SF Mono`), serif chrome (Georgia), swappable
+`--godan/--ichidan/--irregular`, `--adjective/--noun/--adverb/--phrase`,
+`--muted/--line`, `--leech`, `--good`, `--jp-font`); light/dark is one `data-theme`
+flip on `<html>`. Colors are **functional, not decorative** — verb classes
+(godan=vermilion, ichidan=indigo, irregular=stone) and the non-verb category
+accents (adjective=teal, noun=amber, adverb=rose, phrase=slate) both paint the card
+spine + hanko stamp via `colorClass(v)`; leech=purple. Mono labels (`SF Mono`), serif chrome (Georgia), swappable
 `.jp` font for Japanese text.
 
 Component contracts you must preserve:
@@ -187,13 +197,15 @@ Component contracts you must preserve:
 
 ## Things that look like bugs but aren't (DEAD-END WARNINGS)
 
-- **Type / Transitivity / Topic / Leech chips are FOUR AND'd facets, not one OR'd
-  pool** (this changed — older docs/commits describing a shared pool are stale). A
-  chip's facet is derived from its token via `TOKEN_FACET` (`tokenFacet`), not from
-  markup, so the chips still carry class `.deck`/`.bf` + `data-deck`/`data-filter`.
-  "Godan + Motion" = `godan AND motion` (intersection); tokens within one facet OR.
-  `cfg`/`bcfg` hold `type`/`trans`/`topic`/`status` arrays (empty = no constraint).
-  Don't reintroduce a single shared array — that was the old confusing behavior.
+- **Category / Type / Transitivity / Topic / Leech chips are FIVE AND'd facets, not
+  one OR'd pool** (this changed — older docs/commits describing a shared pool, or
+  four facets, are stale). A chip's facet is derived from its token via `TOKEN_FACET`
+  (`tokenFacet`), not from markup, so the chips still carry class `.deck`/`.bf` +
+  `data-deck`/`data-filter`. "Godan + Motion" = `godan AND motion` (intersection);
+  tokens within one facet OR. `cfg`/`bcfg` hold `cat`/`type`/`trans`/`topic`/`status`
+  arrays (empty = no constraint). Don't reintroduce a single shared array — that was
+  the old confusing behavior. (`passes` treats a *missing* facet array as
+  no-constraint too, so older test cfgs without `cat` still pass.)
 - **The single "All" chip is a master reset** that clears all four facets at once
   (not just its own row), and shows active when every facet is empty. Exactly one
   per panel — keep it that way. `wireFacets` returns a `paint()` fn that deep-links
@@ -307,17 +319,21 @@ Component contracts you must preserve:
   sentence and tiers should escalate N5→N1; keep that if you regenerate. The example
   shows on the ANSWER side only (the sentence reveals the reading via furigana, so
   it would spoil the reading-recall question if shown on the prompt).
-- **The app is mid-transition away from "verbs only" — prefer "word"/"card" in new
-  copy.** It was born a verb trainer (the dataset global is still `VERBS`, the data
-  file is `verbs.js`, and all 100 built-ins ARE verbs), and renaming those internals
-  would be churn for no gain. But the user-facing identity is now generic
-  (日常日本語 / "Japanese Trainer", "The words you keep getting wrong") and every card
-  carries `cat:'verb'` (defaulted in `attachLevels`, set on custom verbs in
-  `saveVerb`) so non-verb content can be added later keyed off `cat`. Don't
-  reintroduce verb-only framing in headers/empty-states. The verb-conjugation bits
-  that ARE genuinely verb-specific (the `type` field, the Godan/Ichidan/… Type
-  filter, the "Add verb" modal) are intentionally still verb-shaped — generalizing
-  those is the actual (not-yet-done) transition work, tracked in NEXT_STEPS.
+- **The app now supports multiple part-of-speech categories — prefer "word"/"card"
+  in new copy.** It was born a verb trainer (the dataset global is still `VERBS`, the
+  data file is `verbs.js`, and all 100 *built-ins* ARE verbs), and renaming those
+  internals would be churn for no gain — keep them. But user-added cards can be any
+  `cat` in `CATS` (`verb/adjective/noun/adverb/phrase`), the user-facing identity is
+  generic (日常日本語 / "Japanese Trainer"), and the verb-specific UI is now
+  conditional: the Type + Transitivity filter rows carry `.verb-only` and hide via
+  `syncVerbRows` when the `cat` facet excludes verbs; the add-card modal's Type/
+  Transitivity fields show only for the categories that have them (`syncVerbFields`).
+  Adjectives reuse the `type` field for the い/な split (`i-adj`/`na-adj`); nouns/
+  adverbs/phrases have no subtype. Don't reintroduce verb-only framing in headers/
+  empty-states, and don't make Type/Transitivity unconditional again. **Still not
+  done** (tracked in NEXT_STEPS): conjugation drills, and proofed built-in non-verb
+  content (the dataset is still 100 verbs — categories are a model/UI capability that
+  users populate).
 - **Reviewing a card early never promotes it; free study reschedules only ALREADY-DUE
   cards, and only when the setting allows.** Two study kinds (`cfg.kind`): *SRS review*
   serves only due cards (`buildDeck` intersects `isDue`) and reschedules them; *free
@@ -354,6 +370,18 @@ Component contracts you must preserve:
 
 Commits, newest first (all on `main`; touch the split web/ files + `src/` where noted):
 
+1. **Multi-category content (finish the de-verb-ify transition).** Added a `cat`
+   filter facet (`verb/adjective/noun/adverb/phrase`, `CATS`) as a fifth AND'd facet
+   in `passes`/`TOKEN_FACET`/`DECK_FACETS`; a Category chip row leads both filter
+   panels (the master "All" reset moved there). The Type + Transitivity rows are now
+   `.verb-only` and hide via `syncVerbRows` when the category excludes verbs (clearing
+   stranded tokens). The add-card modal gained a Category select; `syncVerbFields`
+   shows Type for verbs+adjectives (い/な via `i-adj`/`na-adj`) and Transitivity for
+   verbs only, repopulating `#vfType` from `VF_TYPE_OPTS`; `saveVerb` stores `''` for
+   hidden fields. New `cardStamp`/`colorClass` drive the spine + hanko stamp (subtype
+   label, else category) with `--adjective/--noun/--adverb/--phrase` accent tokens.
+   `annotateCatChips` dims empty categories. Copy genericized verb→card. Tests for the
+   cat facet + cardStamp/colorClass in `verbs-core.test.ts`.
 1. **Design-polish pass — motion (4/4).** Short easing-out entrance animations:
    the card reveal (`answerIn`), card-to-card advance (`cardIn`, re-applied in
    `showCard`), modal+overlay (`modalPop`/`overlayIn`), tab switch (`panelIn`),
