@@ -9,6 +9,13 @@ split, custom-verb sync, and Google TTS — what's left is one genuinely-deferre
 (needs email infra). Add new ideas to "Ideas / not yet scoped" as they come up.
 
 ## Done (most recent first)
+- ~~Design-polish pass (4 commits)~~ — **shipped.** (1) Responsive/bug fixes: mobile
+  toolbar wrap, modal-× pin, empty-session → picker, ≥40px tap targets. (2) Readability:
+  `--muted` darkened to AA, chart titles de-uppercased (uppercase = short labels only),
+  bigger small labels. (3) Chip/picker: tinted (not solid-ink) active chips, secondary
+  rows collapsed behind a "More filters & options" `<details>`. (4) Motion: reveal /
+  card-advance / modal / tab / stats / bar entrance animations + press feedback, all
+  gated by `prefers-reduced-motion` (which now kills `animation` too).
 - ~~Free study advances due cards (setting)~~ — **shipped.** New `freeReviewDue`
   setting (default on): grading an already-due card in free study advances its SRS
   schedule; not-due cards are still never touched. Gate in `grade`.

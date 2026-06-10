@@ -211,7 +211,7 @@ function renderForecast(){
     g+=`<rect x="${x}" y="${pad.t.toFixed(1)}" width="${bwid}" height="${ih.toFixed(1)}" rx="2" fill="var(--paper-2)" opacity="0.55"/>`;
     if(b.count){
       const y=yOf(b.count), col=b.now?'var(--godan)':'var(--ichidan)';
-      g+=`<rect x="${x}" y="${y.toFixed(1)}" width="${bwid}" height="${(base-y).toFixed(1)}" rx="2" fill="${col}" opacity="0.92"><title>${b.tip}: ${b.count} card${b.count===1?'':'s'}</title></rect>`;
+      g+=`<rect class="fbar" x="${x}" y="${y.toFixed(1)}" width="${bwid}" height="${(base-y).toFixed(1)}" rx="2" fill="${col}" opacity="0.92"><title>${b.tip}: ${b.count} card${b.count===1?'':'s'}</title></rect>`;
       g+=`<text x="${cx}" y="${(y-4).toFixed(1)}" text-anchor="middle" font-size="9" fill="var(--muted)" font-family="monospace">${b.count}</text>`;
     }
     if(b.label)g+=`<text x="${cx}" y="${H-7}" text-anchor="middle" font-size="8" fill="var(--muted)" font-family="monospace">${b.label}</text>`;
@@ -764,6 +764,7 @@ function showCard(){
   document.getElementById('fcProgress').textContent=`Card ${session.i+1} of ${session.deck.length}`;
   const fc=document.getElementById('flashcard');
   fc.className='flashcard '+v.type;   // sets the colored spine via CSS
+  void fc.offsetWidth; fc.classList.add('card-in');   // restart the card-advance entrance animation
   if(cfg.mode==='meaning'){            // JP shown → recall meaning + reading
     document.getElementById('promptLabel').textContent='Read this — give meaning + reading';
     document.getElementById('promptMain').className='prompt-main jp';
@@ -1298,7 +1299,7 @@ function renderStats(){
   bd.innerHTML=boxes.map((n,i)=>`<div style="display:flex;align-items:center;gap:8px;margin-bottom:5px">
     <div style="width:54px;font-family:monospace;font-size:11px;color:var(--muted)">${boxLabels[i]}</div>
     <div style="flex:1;background:var(--paper-2);border-radius:2px;height:16px;position:relative">
-      <div style="width:${total?Math.round(100*n/total):0}%;background:${boxColors[i]};height:100%;border-radius:2px;min-width:${n?'3px':'0'}"></div></div>
+      <div class="barx" style="width:${total?Math.round(100*n/total):0}%;background:${boxColors[i]};height:100%;border-radius:2px;min-width:${n?'3px':'0'}"></div></div>
     <div style="width:32px;text-align:right;font-family:monospace;font-size:11px;color:var(--muted)">${n}</div></div>`).join('');
 }
 // "Study leeches now": jump to the flashcard tab with a leech-only deck. Like

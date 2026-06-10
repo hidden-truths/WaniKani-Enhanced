@@ -354,8 +354,37 @@
   /* Wrap the toolbar buttons instead of overflowing the viewport on narrow screens
      (5 buttons exceed ~390px). They wrap right-aligned under the account chip. */
   .toolbar{display:flex;gap:6px;flex-wrap:wrap;justify-content:flex-end}
-  /* Respect reduced-motion: kill all transitions for users who ask for it. */
-  @media (prefers-reduced-motion:reduce){*{transition:none!important}}
+  /* ---- Motion: entrance animations -----------------------------------------
+     Subtle, short, easing-out. Each runs on the state class being (re)applied, so
+     re-renders replay them. ALL are killed by prefers-reduced-motion below (note
+     that rule kills `animation` too — content is always visible without it). */
+  @keyframes answerIn{from{opacity:0;transform:translateY(10px)}to{opacity:1;transform:none}}
+  .answer.show{animation:answerIn .3s cubic-bezier(.2,.7,.3,1) both}      /* the reveal — core interaction */
+  @keyframes cardIn{from{opacity:0;transform:translateY(8px) scale(.992)}to{opacity:1;transform:none}}
+  .flashcard.card-in{animation:cardIn .26s cubic-bezier(.2,.7,.3,1)}      /* card-to-card advance (class re-added in showCard) */
+  @keyframes overlayIn{from{opacity:0}to{opacity:1}}
+  @keyframes modalPop{from{opacity:0;transform:translateY(10px) scale(.985)}to{opacity:1;transform:none}}
+  .modal-overlay.show{animation:overlayIn .18s ease}
+  .modal-overlay.show .modal{animation:modalPop .26s cubic-bezier(.2,.8,.25,1)}
+  @keyframes panelIn{from{opacity:0;transform:translateY(6px)}to{opacity:1;transform:none}}
+  .panel.active{animation:panelIn .24s ease}                              /* tab switch */
+  /* Stats cards rise in with a light stagger; bars grow from their baseline. */
+  @keyframes riseIn{from{opacity:0;transform:translateY(10px)}to{opacity:1;transform:none}}
+  .statgrid .statbox,.chart-card{animation:riseIn .32s ease backwards}
+  .statgrid .statbox:nth-child(2){animation-delay:.03s} .statgrid .statbox:nth-child(3){animation-delay:.06s}
+  .statgrid .statbox:nth-child(4){animation-delay:.09s} .statgrid .statbox:nth-child(5){animation-delay:.12s}
+  .statgrid .statbox:nth-child(6){animation-delay:.15s} .statgrid .statbox:nth-child(7){animation-delay:.18s}
+  .statgrid .statbox:nth-child(8){animation-delay:.21s}
+  @keyframes growX{from{transform:scaleX(0)}to{transform:scaleX(1)}}
+  #boxDist .barx{transform-origin:left;animation:growX .5s cubic-bezier(.2,.7,.3,1) both}
+  @keyframes growY{from{transform:scaleY(0)}to{transform:scaleY(1)}}
+  .fcast-chart svg rect.fbar{transform-box:fill-box;transform-origin:bottom;animation:growY .45s cubic-bezier(.2,.7,.3,1) both}
+  /* Tactile press feedback on buttons/chips. */
+  .btn{transition:transform .12s ease,background .15s ease,color .15s ease,border-color .15s ease}
+  .btn:active,.chip:active{transform:translateY(1px)}
+  /* Respect reduced-motion: kill all transitions AND entrance animations for users
+     who ask for it (content stays visible — the animations are entrances only). */
+  @media (prefers-reduced-motion:reduce){*{transition:none!important;animation:none!important}}
 
   /* ---- Account modal + cloud-sync chip ----------------------------------
      The app works fully offline (localStorage); signing in mirrors progress

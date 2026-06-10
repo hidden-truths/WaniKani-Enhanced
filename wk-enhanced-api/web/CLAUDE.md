@@ -354,6 +354,14 @@ Component contracts you must preserve:
 
 Commits, newest first (all on `main`; touch the split web/ files + `src/` where noted):
 
+1. **Design-polish pass — motion (4/4).** Short easing-out entrance animations:
+   the card reveal (`answerIn`), card-to-card advance (`cardIn`, re-applied in
+   `showCard`), modal+overlay (`modalPop`/`overlayIn`), tab switch (`panelIn`),
+   staggered Stats cards (`riseIn`) + bar grows (`growX` box histogram, `growY`
+   forecast bars), and button/chip press feedback. **The `prefers-reduced-motion`
+   rule now kills `animation` too (not just `transition`)** — so all of these are
+   ENTRANCES only; content must be fully visible/usable with animations disabled.
+   Don't add an animation that hides content in its resting/`from` state.
 1. **Design-polish pass — chip + picker refresh (3/4).** Active chips are now a
    quiet tinted wash + colored border + bold (`color-mix`), not a solid-ink block —
    a picker full of defaults no longer reads as a wall of black rectangles; class
