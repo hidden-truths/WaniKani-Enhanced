@@ -2,37 +2,46 @@
 
 ## What this is
 
-The **verb-trainer study app**: a single self-contained file, [index.html](index.html)
-(HTML + CSS + JS, ~1700 lines, no build step). Served at the apex of the backing
-API server (`/` and `/study`). Derived from the offline-only original at
-[../../japanese-study/japanese-verbs.html](../../japanese-study/japanese-verbs.html)
-plus a cloud-sync layer. User-facing overview: [README.md](README.md). What to do
-next: [NEXT_STEPS.md](NEXT_STEPS.md).
+The **verb-trainer study app**: four no-build static files —
+[index.html](index.html) (markup) + [styles.css](styles.css) + [verbs.js](verbs.js)
+(the `VERBS` dataset) + [app.js](app.js) (all logic). Loaded as classic
+`<link>`/`<script src>` (NOT ES modules), so opening `index.html` over `file://`
+still works. Served at the apex of the backing API server (`/`, `/study`, plus
+`/styles.css` `/verbs.js` `/app.js`). Originally one self-contained HTML file
+(derived from [../../japanese-study/japanese-verbs.html](../../japanese-study/japanese-verbs.html));
+split once it passed ~2300 lines. User-facing overview: [README.md](README.md).
+What to do next: [NEXT_STEPS.md](NEXT_STEPS.md).
 
 This is a **separate surface** from the WaniKani userscript flow — it just shares
 the droplet. Backend (auth, progress storage, cookie model) is the server's:
 [../CLAUDE.md](../CLAUDE.md) "Accounts + study app", [../deploy/README.md](../deploy/README.md).
 
 **The single best source of truth is the top-of-file block comment** in
-`index.html` (architecture map, data model, key design decisions, mnemonic policy,
-OUTSTANDING WORK). Read it first. This file adds the *contributor* layer:
-how-to-work-on-it, the design-system contracts, and the dead-end warnings.
+`index.html` (architecture map, HISTORY of the split, data model, key design
+decisions, mnemonic policy, OUTSTANDING WORK). Read it first. This file adds the
+*contributor* layer: how-to-work-on-it, the design-system contracts, and the
+dead-end warnings.
 
 ## How to work on it
 
-1. **No build, no deps.** Edit `index.html` directly. It's served by the API
-   server — `cd .. && bun dev`, then reload **http://localhost:3000/**. (Pure
-   offline: open the file via `file://`; everything but accounts works.)
+1. **No build, no deps.** Edit the files directly — styles in `styles.css`, the
+   dataset in `verbs.js`, logic in `app.js`, markup in `index.html`. Served by the
+   API server: `cd .. && bun dev`, then reload **http://localhost:3000/**. (Pure
+   offline: open `index.html` via `file://` — works because the assets load as
+   classic `<link>`/`<script src>`, not modules; accounts/sync/TTS need the server.)
 2. **Verify visually.** This is a UI; screenshot the change. Drive it with the
    browser-preview tooling (`.claude/launch.json` has a `wk-enhanced-api` config).
-   See the preview caveat in the dead-ends below.
+   See the preview caveat in the dead-ends below. **Run `bun test` too** — the pure
+   core is covered by `verbs-core.test.ts` (it concatenates verbs.js + app.js).
 3. **Commit conventions** (same as the rest of the repo): one logical change → one
    commit; commit at the end of a feature without being asked; fix stale nearby
    comments in the same commit.
-4. **Stay single-file and offline-first.** Do **not** add a CDN icon font, a
-   chart library, a framework, or a bundler. The whole value prop is "open it
-   anywhere, zero setup, works offline." New icons go in the inline SVG sprite;
-   new charts are hand-rolled SVG like `lineChart`/`barChart`.
+4. **No-build + offline-capable is still the contract.** Do **not** add a CDN icon
+   font, a chart library, a framework, a bundler, or ES modules. Keep the assets as
+   classic scripts so `file://` keeps working. New icons go in the inline SVG
+   sprite; new charts are hand-rolled SVG like `lineChart`/`barChart`. `verbs.js`
+   and `app.js` share one global scope (classic scripts) — `app.js` relies on
+   `verbs.js`'s global `VERBS`, so load order (verbs before app) matters.
 5. **Accounts need `COOKIE_SECURE=false` in dev** — a `Secure` cookie is dropped
    over `http://localhost` and login silently fails. (#1 thing to check if local
    login won't stick. Defaults false.)
@@ -43,11 +52,11 @@ Markup: `#panel-study` (flashcard setup → card stage → done), `#panel-browse
 (filter grid), `#panel-stats` (charts + leeches), plus the header/toolbar, tabs,
 and the auth modal + sign-up banner.
 
-JS sections (top to bottom): `DATA` (the `VERBS[]` dataset) → `STORAGE`
+`verbs.js` holds the `VERBS` dataset. `app.js` sections (top to bottom): `STORAGE`
 (localStorage + SRS scheduling + leech logic) → `TAB NAV` → `FONT/THEME` →
-`EXPORT/IMPORT` → `DECK BUILDING` (the `passes()` predicate + `makeMultiSelect`) →
-`FLASHCARD` (session lifecycle) → `BROWSE` → `STATS+CHARTS` → `CLOUD ACCOUNTS +
-SYNC`. Key functions by area:
+`EXPORT/IMPORT` → `DECK BUILDING` (`passes()` + `wireFacets`) → `FLASHCARD`
+(session lifecycle + TTS) → `BROWSE` → `STATS+CHARTS` → `CUSTOM VERBS` (modal CRUD)
+→ `CLOUD ACCOUNTS + SYNC`. Key functions by area:
 
 - **SRS/leech (pure, the core logic):** `cardStat`, `scheduleCard`, `isDue`,
   `dueCards`, `rollingAcc`, `isLeech`, `leeches`. Leitner boxes, not SM-2.
@@ -62,19 +71,27 @@ SYNC`. Key functions by area:
 - **Data + custom verbs:** `DATA` is a `let` = baked `VERBS` + `loadCustom().verbs`,
   rebuilt by `rebuildData()`; `MAXRANK` tracks the top rank (rank filter extends
   past 100). `openVerbModal`/`saveVerb`/`deleteVerb` are the #verbModal CRUD;
-  custom verbs persist in `jpverbs_custom` (`loadCustom`/`saveCustom`), local-only.
+  custom verbs persist in `jpverbs_custom` and SYNC to the cloud — `saveCustom`
+  writes localStorage + schedules a push; `saveCustomLocal` is the no-push variant
+  for hydration.
+- **TTS:** `speak(text)` plays the server's Google TTS (`/v1/tts`) via a reused
+  `<audio>` when served over http(s) (`HTTP_SERVED`), falling back to
+  `speakSynth` (Web Speech) over `file://` or on failure. `TTS_OK` = either path
+  available (gates the Audio UI). See the TTS dead-end.
 - **Render:** `showCard`/`reveal`/`grade`/`endSession` (session), `renderBrowse`,
   `renderStats` + `renderCardBars`, `lineChart` (axis caption + avg line + value
   labels + `<title>` hover) / `barChart` (SVG strings).
-- **Typed mode + TTS:** `revealAnswer` (shared show-answer + autoplay) feeds both
+- **Typed mode + audio:** `revealAnswer` (shared show-answer + autoplay) feeds both
   `reveal` (self-graded) and `submitTyped` (typed: `normKana`-compares the kana, sets
-  an advisory verdict + `session.suggested`). `speak`/`playReading`/`pickVoice` +
-  the `TTS_OK` flag drive the Web Speech API. `bindSingle` wires the Input/Audio
-  single-select chips. Prefs persist as `jpverbs_input` / `jpverbs_audio`.
-- **Cloud:** `api`, `scheduleCloudSync`/`pushCloud`/`pullCloud`, `bootAuth`,
-  `updateAccountChip`, `openAuth`. Same-origin, httpOnly cookie, debounced
-  full-store PUT. `maybeShowSignup` (called from `endSession`) shows the sign-up
-  nudge after the first session, not on first paint.
+  an advisory verdict + `session.suggested`). `bindSingle` wires the Input/Audio
+  single-select chips. Prefs persist as `jpverbs_input` / `jpverbs_audio`. (Audio
+  playback itself is the TTS bullet above.)
+- **Cloud:** `api`, `bootAuth`, `updateAccountChip`, `openAuth`. Same-origin,
+  httpOnly cookie. TWO debounced synced blobs: progress (`scheduleCloudSync`/
+  `pushCloud`/`pullCloud`, app `verbs`) and custom verbs (`scheduleCustomSync`/
+  `pushCustomCloud`/`pullCustomCloud`, app `custom-verbs`). Server wins on login;
+  a fresh account seeds the cloud from local. `maybeShowSignup` (from `endSession`)
+  shows the sign-up nudge after the first session, not on first paint.
 - **UX helpers (added in the polish pass):** `filterSummary`/`paintSummary`
   (active-filter recap), `setupTopicGroups` (topic disclosure + badge),
   `escapeHtml`.
@@ -82,8 +99,10 @@ SYNC`. Key functions by area:
   stop, ←/→/↑/↓ + Home/End to move, `role=group` + aria-label). Wired over every
   `.chips` + `.topic-inner`; collapsed topic chips leave the tab order.
 
-Persisted store (`localStorage["jpverbs_v3"]`):
+Persisted store (`localStorage["jpverbs_v3"]`, synced as app `verbs`):
 `{ cards:{<rank>:{attempts:[1|0…],right,wrong,box:0..5,due:<epochMs>}}, sessions:[{t,right,tot}…] (cap 200), daily:{"YYYY-MM-DD":{right,tot}} }`.
+Custom verbs (`localStorage["jpverbs_custom"]`, synced as app `custom-verbs`):
+`{ seq:<monotonic rank counter>, verbs:[<verb + {rank, custom:true}>…] }`.
 
 ## Design system
 
@@ -155,8 +174,10 @@ Component contracts you must preserve:
   with a future verb. Editing keeps the rank (and progress); deleting drops the
   orphaned card stat. `DATA` is a `let` (not `const`) so `rebuildData()` can swap it
   in place — don't change it back to `const`, and don't cache `DATA`/`MAXRANK` in a
-  closure that won't see the rebuild. Custom verbs are LOCAL-only (the cloud sync
-  mirrors the progress `store` blob, not the verb dataset) — by design.
+  closure that won't see the rebuild. Custom verbs sync to the cloud under a SEPARATE
+  app key (`custom-verbs`) from the progress blob (`verbs`) — `saveCustom` schedules
+  the push (so add/edit/delete all propagate, including removals); `saveCustomLocal`
+  is the no-push write used by `pullCustomCloud` to avoid a re-push loop.
 - **Empty JLPT levels are disabled, not hidden** (`annotateJlptChips`, run at boot
   and on any DATA change). The 100 frequent verbs are almost all N5–N4, so N2/N1
   start disabled; adding a custom N2 verb re-enables N2. Roving nav recomputes its
@@ -178,13 +199,16 @@ Component contracts you must preserve:
   be overridden. Don't make it auto-advance on match. `normKana` folds
   katakana→hiragana, strips spaces/separators, and unifies long-vowel marks; it is
   deliberately NOT romaji-aware (learners type kana directly or via an IME).
-- **TTS is gated behind `TTS_OK` (`'speechSynthesis' in window`) and reveal.** The
-  reading is the answer in both directions, so the speaker button lives inside the
-  revealed `.answer` panel (and on Browse cards where the reading is already shown)
-  — never on the flashcard prompt. When `TTS_OK` is false the whole Audio chip row
-  + the flashcard speaker hide; `speak()` is a best-effort no-op. Voices can load
-  async, so `pickVoice` re-runs on `voiceschanged`. This stays dependency-free
-  (Web Speech API) — don't swap in a cloud TTS / audio-file dependency.
+- **TTS prefers the server's Google proxy, falls back to Web Speech.** `speak()`
+  plays `/v1/tts?text=<reading>` via a reused `<audio>` when served over http(s)
+  (`HTTP_SERVED`); over `file://` or on play/network failure it falls back to
+  `speakSynth` (Web Speech, `SPEECH_OK`). `TTS_OK = HTTP_SERVED || SPEECH_OK` gates
+  whether the Audio UI shows — so audio is on by default when served, even on
+  browsers with poor/no speechSynthesis voices. The reading is the answer in both
+  directions, so the speaker button lives inside the revealed `.answer` panel (and
+  on Browse cards where the reading is already shown) — never on the flashcard
+  prompt. The server endpoint caches text→audio (so don't worry about replays); see
+  the server's `/v1/tts` (uses the existing `googleTts` service).
 - **The kana field owns its own keys.** The global flashcard keydown handler bails
   when `#answerInput` is focused (so typing `1`/`2`/space goes into the field);
   Enter-to-submit is bound on the input itself, and Enter *after* reveal accepts
@@ -198,8 +222,16 @@ Component contracts you must preserve:
 
 ## Change log — UX/design pass (this is the conversation record)
 
-Commits, newest first (all on `main`, all touching only `index.html` unless noted):
+Commits, newest first (all on `main`; touch the split web/ files + `src/` where noted):
 
+1. **split into index.html + styles.css + verbs.js + app.js.** Classic scripts (not
+   modules) so `file://` still works; server serves the three new assets statically.
+   `verbs-core.test.ts` now concatenates verbs.js + app.js.
+1. **Google TTS (server + web).** `GET /v1/tts` proxies `googleTts` (cached); the app
+   plays it via `<audio>` when served over http, falling back to Web Speech otherwise.
+1. **cloud-sync custom verbs.** Second synced blob under app `custom-verbs`
+   (`scheduleCustomSync`/`pushCustomCloud`/`pullCustomCloud`); add/edit/delete all
+   propagate. Server enum widened to `['verbs','custom-verbs']`.
 1. **rate-limit auth (server — touches `src/`, not `index.html`).** Per-IP in-memory
    limiter on `/v1/auth/{login,register}`; see [../src/lib/rateLimit.ts](../src/lib/rateLimit.ts).
 1. **pure-core test suite (`web/verbs-core.test.ts`).** Extracts the inline script,
@@ -207,7 +239,7 @@ Commits, newest first (all on `main`, all touching only `index.html` unless note
    normKana/filterSummary/facets. Guards the core through a future file split.
 1. **add/edit/delete custom verbs.** "Add verb" modal in Browse; `jpverbs_custom`
    merged into `DATA` via `rebuildData()`; CUSTOM badge + Edit/Delete; MAXRANK
-   extends the rank filter past 100; local-only.
+   extends the rank filter past 100. (Cloud sync added later — see above.)
 1. **disable empty JLPT levels.** `annotateJlptChips` dims/disables zero-count
    levels (N2/N1) with count tooltips; roving nav skips disabled chips.
 1. **defer sign-up nudge.** `maybeShowSignup` (from `endSession`) replaces the
