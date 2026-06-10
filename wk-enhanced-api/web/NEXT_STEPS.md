@@ -9,6 +9,11 @@ split, custom-verb sync, and Google TTS — what's left is one genuinely-deferre
 (needs email infra). Add new ideas to "Ideas / not yet scoped" as they come up.
 
 ## Done (most recent first)
+- ~~Leveled example sentences~~ — **shipped.** `examples.js` (`EXAMPLES`) holds five
+  JLPT tiers (N5→N1) per built-in verb. Answer-side N5–N1 selector (`renderExample`,
+  pref `jpverbs_exlevel`) + Browse leveled list; `exampleForLevel`/`availableTiers`
+  with fallback to `ex`; tests in `verbs-core.test.ts`. Sentences are model-generated
+  + format-validated (see the dead-end in CLAUDE.md) — worth a human proofread pass.
 - ~~The file split (in-file #7)~~ — **shipped.** index.html → index.html + styles.css
   + verbs.js + app.js, classic scripts (not modules) so `file://` still works; the
   server serves the three new assets statically. `verbs-core.test.ts` concatenates

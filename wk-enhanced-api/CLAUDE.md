@@ -81,6 +81,7 @@ web/                         # the verb-trainer study app, served at / (and /stu
 ├── index.html               #   markup; served at / and /study
 ├── styles.css               #   styles            (served at /styles.css)
 ├── verbs.js                 #   the VERBS dataset  (served at /verbs.js)
+├── examples.js              #   leveled example sentences (served at /examples.js)
 ├── app.js                   #   all logic          (served at /app.js)
 └── verbs-core.test.ts       #   bun:test for the pure core (verbs.js + app.js under a DOM stub)
                              #   Classic <script>/<link> (not modules). Talks to /v1/auth/*,
@@ -176,7 +177,7 @@ Lazy fill (`GET /v1/vocab/{word}` on a cold word) calls `warmWord()` synchronous
 | POST | `/v1/admin/warm` | Bearer | Three scopes: `word` (sync), `all` (async), `index_meta`. |
 | GET | `/v1/admin/jobs` | Bearer | Recent warm-job audit records, newest-first. |
 | GET | `/media/*` | — | Static media (LocalStorage driver only). |
-| GET | `/` , `/study` , `/styles.css` , `/verbs.js` , `/app.js` | — | The verb-trainer study app's static files (`web/`). |
+| GET | `/` , `/study` , `/styles.css` , `/verbs.js` , `/examples.js` , `/app.js` | — | The verb-trainer study app's static files (`web/`). |
 | GET | `/v1/tts?text=` | — | Google TTS proxy for the study app → `audio/mpeg`. In-process cache; `Cache-Control: immutable`. 400 missing/over-200-char, 502 upstream. |
 | POST | `/v1/auth/register` | — | Create account; sets `wk_session` httpOnly cookie. 409 if email taken. Rate-limited (8/hr/IP). |
 | POST | `/v1/auth/login` | — | Log in; sets cookie. 401 on bad creds (constant-time, no email enumeration). Rate-limited (20/15min/IP). |

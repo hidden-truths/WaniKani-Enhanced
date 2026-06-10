@@ -172,9 +172,10 @@ if (config.storage.driver === 'local') {
 
 // Serve the verb-trainer study app. Both wkenhanced.dev and api.wkenhanced.dev
 // route through the Cloudflare Tunnel to this same server, so the app is
-// reachable at the apex domain's `/` (and `/study`). It lives under web/ as four
-// static files — index.html + styles.css + verbs.js (dataset) + app.js (logic) —
-// and talks back to /v1/auth/*, /v1/progress/* and /v1/tts on this same origin.
+// reachable at the apex domain's `/` (and `/study`). It lives under web/ as static
+// files — index.html + styles.css + verbs.js (dataset) + examples.js (leveled
+// sentences) + app.js (logic) — talking back to /v1/auth/*, /v1/progress/* and
+// /v1/tts on this same origin.
 const serveStatic = (relPath: string, contentType: string) => {
     const url = new URL('../web/' + relPath, import.meta.url);
     return async (c: Context) => {
@@ -193,6 +194,7 @@ app.get('/', serveApp);
 app.get('/study', serveApp);
 app.get('/styles.css', serveStatic('styles.css', 'text/css; charset=utf-8'));
 app.get('/verbs.js', serveStatic('verbs.js', 'text/javascript; charset=utf-8'));
+app.get('/examples.js', serveStatic('examples.js', 'text/javascript; charset=utf-8'));
 app.get('/app.js', serveStatic('app.js', 'text/javascript; charset=utf-8'));
 
 // Old root service-info JSON, relocated so it stays available for humans/curl

@@ -3,12 +3,14 @@
 A no-build, offline-capable flashcard + spaced-repetition study tool for the
 **100 most frequent Japanese verbs** (BCCWJ corpus frequency) plus any verbs you
 add yourself. Flashcards with a Leitner SRS, typed-reading auto-grading, Google
-text-to-speech, a filterable browse grid, progress stats, light/dark themes, five
-Japanese fonts, JSON export/import, and optional **email/password accounts that
-sync progress AND your custom verbs across devices**.
+text-to-speech, **five JLPT-leveled (N5→N1) example sentences per verb**, a
+filterable browse grid, progress stats, light/dark themes, five Japanese fonts,
+JSON export/import, and optional **email/password accounts that sync progress AND
+your custom verbs across devices**.
 
-Four static files — [index.html](index.html) (markup) + [styles.css](styles.css)
-+ [verbs.js](verbs.js) (dataset) + [app.js](app.js) (logic) — loaded as classic
+Five static files — [index.html](index.html) (markup) + [styles.css](styles.css)
++ [verbs.js](verbs.js) (dataset) + [examples.js](examples.js) (leveled sentences)
++ [app.js](app.js) (logic) — loaded as classic
 `<link>`/`<script src>` (not ES modules), so opening `index.html` directly still
 works. Served at the apex of the backing API server (`https://wkenhanced.dev/` and
 `https://api.wkenhanced.dev/`). Originally one self-contained HTML file (derived
@@ -22,8 +24,8 @@ split once it outgrew a single document.
 
 | View | What's there |
 |---|---|
-| **Flashcards** | A Leitner-box SRS. Pick test direction (JP→meaning/reading or reverse), an input mode (self-graded reveal, or **type the reading** for auto-graded kana), and optional **audio** (play the reading aloud via the browser's built-in text-to-speech). Filter the deck by independent, intersecting facets — type / transitivity / topic / JLPT / frequency rank (e.g. "Godan **and** Motion") — choose an order (shuffle / by frequency / worst-first), and run a session. A due-cards banner is the one-click SRS entry point. Grade with the mouse or keys (space = reveal / enter = check, 1 = wrong, 2 = right). |
-| **Browse** | A filterable grid of all verbs with the same facets plus free-text search and a font picker. Each card has a speaker button to hear the reading. Tap a card to expand its mnemonic, trap/tip, memory status, and examples. **Add your own verbs** ("Add verb") — they join the deck, filters, and stats; custom cards can be edited or deleted. |
+| **Flashcards** | A Leitner-box SRS. Pick test direction (JP→meaning/reading or reverse), an input mode (self-graded reveal, or **type the reading** for auto-graded kana), and optional **audio** (play the reading aloud). On the answer side, pick an **example sentence at any JLPT level (N5→N1)** to see the verb used in context. Filter the deck by independent, intersecting facets — type / transitivity / topic / JLPT / frequency rank (e.g. "Godan **and** Motion") — choose an order (shuffle / by frequency / worst-first), and run a session. A due-cards banner is the one-click SRS entry point. Grade with the mouse or keys (space = reveal / enter = check, 1 = wrong, 2 = right). |
+| **Browse** | A filterable grid of all verbs with the same facets plus free-text search and a font picker. Each card has a speaker button to hear the reading. Tap a card to expand its mnemonic, trap/tip, memory status, and **example sentences at every JLPT level**. **Add your own verbs** ("Add verb") — they join the deck, filters, and stats; custom cards can be edited or deleted. |
 | **Stats & Leeches** | Overall accuracy, the SRS memory pipeline (Leitner box histogram), daily + per-session accuracy line charts, the leech list, and per-card rolling accuracy (worst-first, capped). All charts are hand-rolled SVG — no chart library. |
 | **Accounts** | Optional. Sign in to mirror **progress + your custom verbs** to the server and sync across devices. Fully usable signed-out (localStorage). |
 
@@ -72,21 +74,25 @@ Server-side details (auth model, cookie, tables) live in
 
 - **Verb dataset** lives in `VERBS[]` in [verbs.js](verbs.js) (100 entries; `jp`,
   `read`, `mean`, `type`, `jlpt`, `trans`, `tags`, `mnem`, `tip`, `ex`).
+- **Leveled example sentences** live in `EXAMPLES` in [examples.js](examples.js),
+  keyed by rank: `{N5:[jp,en],…,N1:[jp,en]}` (five JLPT tiers, increasing complexity).
 - **Progress** persists to `localStorage["jpverbs_v3"]`:
   `{ cards:{<rank>:{attempts,right,wrong,box,due}}, sessions:[…], daily:{…} }`.
   Signed in, the same blob is mirrored to the server (server wins on login).
 - A few small UI prefs also live in localStorage: `jpverbs_font`,
   `jpverbs_topic_<panel>` (topic-disclosure open state), `jpverbs_signup_dismissed`,
-  `jpverbs_input` (self-graded vs typed), `jpverbs_audio` (TTS autoplay).
+  `jpverbs_input` (self-graded vs typed), `jpverbs_audio` (TTS autoplay),
+  `jpverbs_exlevel` (last-picked example JLPT level).
 - **Custom verbs** live in `jpverbs_custom` (`{seq, verbs:[…]}`), merged into the
   deck at load. Signed in, they sync too (server `app` key `custom-verbs`, separate
   from the progress blob; server wins on login, removals propagate).
 
 ## Tech notes
 
-- **No build, four files** — `index.html` + `styles.css` + `verbs.js` + `app.js`,
-  loaded as classic `<link>`/`<script src>` (not modules) so `file://` still works.
-  `verbs.js` (global `VERBS`) must load before `app.js`.
+- **No build, five files** — `index.html` + `styles.css` + `verbs.js` +
+  `examples.js` + `app.js`, loaded as classic `<link>`/`<script src>` (not modules)
+  so `file://` still works. `verbs.js`/`examples.js` (globals `VERBS`/`EXAMPLES`)
+  must load before `app.js`.
 - **Functional color**: vermilion = godan, indigo = ichidan, stone = irregular,
   purple = leech. Conjugation class is what learners confuse, so it's encoded as
   a colored spine + a hanko-style stamp.

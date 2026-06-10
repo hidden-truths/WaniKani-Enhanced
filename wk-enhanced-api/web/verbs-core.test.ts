@@ -28,6 +28,9 @@ type Core = {
   normKana: (s: string) => string;
   filterSummary: (c: any) => string[];
   tokenFacet: (t: string) => string;
+  exampleForLevel: (v: any, level: string) => [string, string] | null;
+  availableTiers: (v: any) => string[];
+  JLPT_TIERS: string[];
   BOX_DAYS: number[];
   DATA: any[];
   store: any;
@@ -38,12 +41,14 @@ function loadCore(): Core {
   // both loaded as classic scripts in index.html (so they share one global scope).
   // Concatenate them in load order and evaluate the result under a DOM stub.
   const verbs = readFileSync(join(import.meta.dir, "verbs.js"), "utf8");
+  const examples = readFileSync(join(import.meta.dir, "examples.js"), "utf8");
   const appSrc = readFileSync(join(import.meta.dir, "app.js"), "utf8");
   if (!appSrc.includes("function passes")) throw new Error("app.js missing — did the split move it?");
   const body =
-    verbs + "\n" + appSrc +
+    verbs + "\n" + examples + "\n" + appSrc +
     `\n;return { passes, oneGroup, facetAll, facetMatch, scheduleCard, cardStat,
       isDue, dueCards, rollingAcc, isLeech, leeches, normKana, filterSummary, tokenFacet,
+      exampleForLevel, availableTiers, JLPT_TIERS,
       BOX_DAYS, get DATA(){return DATA}, get store(){return store}, set store(v){store=v} };`;
 
   // --- minimal DOM / browser stubs (only what index.html touches at boot) ---
@@ -122,6 +127,46 @@ const count = (c: any) => core.DATA.filter((v) => core.passes(v, c)).length;
 test("the dataset loads under the DOM stub", () => {
   expect(core.DATA.length).toBeGreaterThanOrEqual(100);
   expect(core.DATA.every((v) => v.jp && v.read && v.type)).toBe(true);
+});
+
+test("every built-in verb has all 5 leveled examples (well-formed)", () => {
+  const builtin = core.DATA.filter((v) => !v.custom);
+  expect(builtin.length).toBe(100);
+  for (const v of builtin) {
+    expect(v.levels).toBeTruthy();
+    for (const t of core.JLPT_TIERS) {
+      const e = v.levels[t];
+      expect(Array.isArray(e) && e.length === 2).toBe(true);
+      expect(typeof e[0] === "string" && e[0].trim().length).toBeTruthy(); // jp
+      expect(typeof e[1] === "string" && e[1].trim().length).toBeTruthy(); // en
+      // ruby tags balanced
+      const ro = (e[0].match(/<ruby>/g) || []).length;
+      const rc = (e[0].match(/<\/ruby>/g) || []).length;
+      expect(ro).toBe(rc);
+    }
+  }
+});
+
+test("exampleForLevel: exact tier, then nearest-tier fallback, then ex, then null", () => {
+  const v = { rank: 1, jlpt: "N5", levels: { N5: ["go5", "e5"], N3: ["go3", "e3"] }, ex: [["EX", "exEN"]] };
+  expect(core.exampleForLevel(v, "N5")).toEqual(["go5", "e5"]);      // exact
+  expect(core.exampleForLevel(v, "N3")).toEqual(["go3", "e3"]);      // exact
+  // N4 missing → nearest tier (N5 and N3 are equidistant; either is acceptable)
+  expect(["go5", "go3"]).toContain(core.exampleForLevel(v, "N4")![0]);
+  // N1 missing → nearest available walking down is N3
+  expect(core.exampleForLevel(v, "N1")).toEqual(["go3", "e3"]);
+  // no levels at all → fall back to ex
+  const c = { rank: 200, levels: null, ex: [["CUSTOM", "customEN"]] };
+  expect(core.exampleForLevel(c, "N5")).toEqual(["CUSTOM", "customEN"]);
+  // nothing at all → null
+  expect(core.exampleForLevel({ rank: 201, levels: null, ex: [] }, "N5")).toBeNull();
+});
+
+test("availableTiers lists only the tiers that have a sentence", () => {
+  expect(core.availableTiers({ levels: { N5: ["a", "b"], N2: ["c", "d"] } })).toEqual(["N5", "N2"]);
+  expect(core.availableTiers({ levels: null })).toEqual([]);
+  // a real built-in verb has all five, in easy→hard order
+  expect(core.availableTiers(core.DATA.find((v) => v.rank === 1))).toEqual(["N5", "N4", "N3", "N2", "N1"]);
 });
 
 test("normKana folds katakana→hiragana, strips spaces, unifies long marks", () => {

@@ -2,9 +2,10 @@
 
 ## What this is
 
-The **verb-trainer study app**: four no-build static files —
+The **verb-trainer study app**: five no-build static files —
 [index.html](index.html) (markup) + [styles.css](styles.css) + [verbs.js](verbs.js)
-(the `VERBS` dataset) + [app.js](app.js) (all logic). Loaded as classic
+(the `VERBS` dataset) + [examples.js](examples.js) (`EXAMPLES` — five JLPT-leveled
+example sentences per verb) + [app.js](app.js) (all logic). Loaded as classic
 `<link>`/`<script src>` (NOT ES modules), so opening `index.html` over `file://`
 still works. Served at the apex of the backing API server (`/`, `/study`, plus
 `/styles.css` `/verbs.js` `/app.js`). Originally one self-contained HTML file
@@ -78,6 +79,11 @@ and the auth modal + sign-up banner.
   `<audio>` when served over http(s) (`HTTP_SERVED`), falling back to
   `speakSynth` (Web Speech) over `file://` or on failure. `TTS_OK` = either path
   available (gates the Audio UI). See the TTS dead-end.
+- **Leveled examples:** `attachLevels()` sets `v.levels = EXAMPLES[rank]`
+  (built-in only) after each rebuild. `availableTiers(v)` + `exampleForLevel(v,
+  level)` (pure, fallback: exact tier → nearest → `ex` → null) drive the answer-side
+  selector (`renderExample`; chosen tier persists as `jpverbs_exlevel`) and the
+  Browse leveled list (`exampleListHtml`). `JLPT_TIERS` is the easy→hard order.
 - **Render:** `showCard`/`reveal`/`grade`/`endSession` (session), `renderBrowse`,
   `renderStats` + `renderCardBars`, `lineChart` (axis caption + avg line + value
   labels + `<title>` hover) / `barChart` (SVG strings).
@@ -103,6 +109,9 @@ Persisted store (`localStorage["jpverbs_v3"]`, synced as app `verbs`):
 `{ cards:{<rank>:{attempts:[1|0…],right,wrong,box:0..5,due:<epochMs>}}, sessions:[{t,right,tot}…] (cap 200), daily:{"YYYY-MM-DD":{right,tot}} }`.
 Custom verbs (`localStorage["jpverbs_custom"]`, synced as app `custom-verbs`):
 `{ seq:<monotonic rank counter>, verbs:[<verb + {rank, custom:true}>…] }`.
+Leveled examples (`examples.js`, NOT in localStorage — static data):
+`EXAMPLES[rank] = { N5:[jp,en], N4:…, N3:…, N2:…, N1:[jp,en] }`. Plus the UI pref
+`localStorage["jpverbs_exlevel"]` (last-picked tier).
 
 ## Design system
 
@@ -213,6 +222,14 @@ Component contracts you must preserve:
   when `#answerInput` is focused (so typing `1`/`2`/space goes into the field);
   Enter-to-submit is bound on the input itself, and Enter *after* reveal accepts
   `session.suggested`. Keep that focus guard if you touch the keyboard handler.
+- **The leveled example sentences in `examples.js` are MODEL-GENERATED** (fanned out
+  across agents, then format-validated: valid JSON, all 5 tiers, balanced `<ruby>`,
+  English present; a sample was hand-reviewed for grammar/furigana). They're solid
+  but not human-proofread end to end — if you spot an error, just fix that
+  `EXAMPLES[rank][tier]` entry (it's plain data). The headword should appear in every
+  sentence and tiers should escalate N5→N1; keep that if you regenerate. The example
+  shows on the ANSWER side only (the sentence reveals the reading via furigana, so
+  it would spoil the reading-recall question if shown on the prompt).
 - **Browser-preview tooling reloads/recreates the tab on capture**, which resets
   in-memory state (active tab defaults back to Flashcards; `cfg`/`bcfg` filter
   selections are lost — only localStorage persists). To verify a *transient* state
@@ -224,6 +241,10 @@ Component contracts you must preserve:
 
 Commits, newest first (all on `main`; touch the split web/ files + `src/` where noted):
 
+1. **leveled example sentences.** New `examples.js` (`EXAMPLES`, 5 JLPT tiers/verb,
+   model-generated + validated); answer-side N5–N1 selector (`renderExample`,
+   `exampleForLevel`/`availableTiers`, pref `jpverbs_exlevel`) + Browse leveled list
+   (`exampleListHtml`). Served as a new static asset; tests in `verbs-core.test.ts`.
 1. **split into index.html + styles.css + verbs.js + app.js.** Classic scripts (not
    modules) so `file://` still works; server serves the three new assets statically.
    `verbs-core.test.ts` now concatenates verbs.js + app.js.

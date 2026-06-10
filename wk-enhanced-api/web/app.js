@@ -31,6 +31,37 @@ function saveCustom(o){ saveCustomLocal(o); if(typeof scheduleCustomSync==='func
 let DATA=VERBS.filter(v=>!v.skip).concat(loadCustom().verbs);
 let MAXRANK=DATA.reduce((m,v)=>Math.max(m,v.rank),0)||100;
 
+// ---- Leveled example sentences ----
+// Each built-in verb gets `v.levels` = EXAMPLES[rank] = {N5:[jp,en],…,N1:[jp,en]}
+// (from examples.js). attachLevels() runs after every DATA rebuild. Custom verbs
+// have no entry (EXAMPLES is 1..100), so they keep `levels:null` and fall back to
+// their single `ex`. JLPT_TIERS is the easy→hard order the UI selector uses.
+const JLPT_TIERS=['N5','N4','N3','N2','N1'];
+function attachLevels(){
+  const E = typeof EXAMPLES!=='undefined' ? EXAMPLES : {};
+  DATA.forEach(v=>{ v.levels = E[v.rank] || null; });
+}
+attachLevels();
+// Which tiers does this verb actually have a sentence for? (drives the selector).
+function availableTiers(v){ return v.levels ? JLPT_TIERS.filter(t=>v.levels[t]) : []; }
+// Pick the [jp,en] example for a verb at a JLPT level, with graceful fallback:
+// exact tier → nearest available tier (search outward) → the verb's single `ex`
+// → null. Pure — unit-tested.
+function exampleForLevel(v, level){
+  const L=v.levels;
+  if(L){
+    if(L[level]) return L[level];
+    const i=JLPT_TIERS.indexOf(level);
+    for(let d=1; d<JLPT_TIERS.length; d++){
+      const lo=i-d>=0?JLPT_TIERS[i-d]:null, hi=i+d<JLPT_TIERS.length?JLPT_TIERS[i+d]:null;
+      if(lo&&L[lo]) return L[lo];
+      if(hi&&L[hi]) return L[hi];
+    }
+  }
+  if(v.ex&&v.ex.length) return v.ex[0];
+  return null;
+}
+
 /* ============================================================================
    STORAGE + SRS
    ----------------------------------------------------------------------------
@@ -518,6 +549,33 @@ function startSession(){
 // the prompt vs the answer. NOTE: prompt JP uses innerHTML (v.jp may carry
 // markup); reading/meaning use textContent. The mnemonic+tip always show on
 // the answer side as the "why".
+// ---- Leveled-example UI (answer side) ----
+// The chosen tier persists across cards (jpverbs_exlevel). Disabled tiers (no
+// sentence for this verb) can't be picked; if the saved tier is unavailable we
+// fall back to the verb's own JLPT level, then the easiest available. The whole
+// block hides when the verb has no example at all.
+let exLevel = (typeof localStorage!=='undefined' && localStorage.getItem('jpverbs_exlevel')) || 'N5';
+function renderExample(v){
+  const block=document.getElementById('exampleBlock'), seg=document.getElementById('exLevels');
+  const tiers=availableTiers(v);
+  if(tiers.length){
+    seg.style.display='';
+    seg.innerHTML=JLPT_TIERS.map(t=>`<button class="chip exlv" type="button" data-exlv="${t}"${tiers.includes(t)?'':' disabled'}>${t}</button>`).join('');
+  }else{ seg.style.display='none'; seg.innerHTML=''; }
+  let lvl=exLevel;
+  if(tiers.length && !tiers.includes(lvl)) lvl = tiers.includes(v.jlpt)?v.jlpt:tiers[0];
+  [...seg.querySelectorAll('.exlv')].forEach(b=>b.classList.toggle('active', b.dataset.exlv===lvl && !b.disabled));
+  const ex=exampleForLevel(v,lvl);
+  if(ex){ document.getElementById('exJp').innerHTML=ex[0]; document.getElementById('exEn').textContent=ex[1]; block.hidden=false; }
+  else block.hidden=true;
+}
+// Pick a tier → remember it → re-render the current card's example.
+document.getElementById('exLevels').addEventListener('click',e=>{
+  const b=e.target.closest('.exlv'); if(!b||b.disabled)return;
+  exLevel=b.dataset.exlv; try{localStorage.setItem('jpverbs_exlevel',exLevel);}catch(e2){}
+  if(session) renderExample(session.deck[session.i]);
+});
+
 function showCard(){
   const v=session.deck[session.i];
   session.revealed=false;
@@ -542,6 +600,7 @@ function showCard(){
     document.getElementById('aMean').textContent='';
   }
   document.getElementById('aNote').innerHTML=v.mnem+(v.tip?'<br><br>'+v.tip:'');
+  renderExample(v);                                   // leveled example (shown once revealed)
   document.getElementById('answer').classList.remove('show');
   // Reset the answer affordances for this card. Typed mode shows the kana input;
   // self-graded shows the Reveal button. Grade buttons (+ any "suggested" ring and
@@ -795,6 +854,19 @@ function annotateJlptChips(){
 annotateJlptChips();
 document.querySelectorAll('.chips, .topic-inner').forEach(setupRoving);
 
+// Browse detail's example block. Built-in verbs list every available JLPT tier
+// (easy→hard) with a level pill; custom verbs fall back to their single `ex`.
+function exampleListHtml(v){
+  if(v.levels){
+    const rows=JLPT_TIERS.filter(t=>v.levels[t]).map(t=>{
+      const e=v.levels[t];
+      return `<div class="ex jp"><span class="ex-pill">${t}</span>${e[0]}<span class="en">${e[1]}</span></div>`;
+    }).join('');
+    if(rows) return `<div class="blk"><div class="blk-label">Examples by level</div>${rows}</div>`;
+  }
+  if(v.ex&&v.ex.length) return `<div class="blk"><div class="blk-label">Examples</div>${v.ex.map(e=>`<div class="ex jp">${e[0]}<span class="en">${e[1]}</span></div>`).join('')}</div>`;
+  return '';
+}
 // Re-render the whole grid from scratch on any filter/search change. passF =
 // passes the facet+rank filter; passQ = matches the search text. The frequency
 // "topN-M" tags are filtered OUT of the visible tag chips (they'd be noise).
@@ -822,7 +894,7 @@ function renderBrowse(){
         <div class="blk"><div class="blk-label">Memory status</div><div class="blk-body" style="font-family:'SF Mono',monospace;font-size:12px">${store.cards[v.rank]&&store.cards[v.rank].box?`Box ${store.cards[v.rank].box} · next review: ${nextDueLabel(v.rank)}`:'New — not yet reviewed'}</div></div>
         ${v.mnem?`<div class="blk"><div class="blk-label">Mnemonic</div><div class="blk-body">${v.mnem}</div></div>`:''}
         ${v.tip?`<div class="blk"><div class="blk-label warn">Trap / Tip</div><div class="blk-body">${v.tip}</div></div>`:''}
-        ${v.ex&&v.ex.length?`<div class="blk"><div class="blk-label">Examples</div>${v.ex.map(e=>`<div class="ex jp">${e[0]}<span class="en">${e[1]}</span></div>`).join('')}</div>`:''}
+        ${exampleListHtml(v)}
         ${v.custom?'<div class="verb-actions"><button class="chip verb-edit" type="button"><svg class="ic" aria-hidden="true"><use href="#i-edit"/></svg>Edit</button><button class="chip verb-del" type="button" style="border-color:var(--godan);color:var(--godan)"><svg class="ic" aria-hidden="true"><use href="#i-trash"/></svg>Delete</button></div>':''}
       </div></div>`;
     card.addEventListener('click',()=>card.classList.toggle('open'));
@@ -1205,6 +1277,7 @@ function rebuildData(){
   const prevMax=MAXRANK;
   DATA=VERBS.filter(v=>!v.skip).concat(loadCustom().verbs);
   MAXRANK=DATA.reduce((m,v)=>Math.max(m,v.rank),0)||100;
+  attachLevels();
   ['rmin','rmax','brmin','brmax'].forEach(id=>{const el=document.getElementById(id);if(el)el.max=MAXRANK;});
   // If a range's max was at the old ceiling ("show everything"), extend it so a
   // freshly-added custom verb is included by default; otherwise respect narrowing.
