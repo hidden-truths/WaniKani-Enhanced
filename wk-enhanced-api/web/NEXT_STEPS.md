@@ -15,6 +15,12 @@ Architecture + dead-ends: [CLAUDE.md](CLAUDE.md). User overview: [README.md](REA
 - ~~No icons~~ — inline SVG sprite applied site-wide.
 - ~~Endless per-card bar wall~~ — capped to worst-20 with a show-all toggle.
 - ~~Blocking first-visit modal~~ — now a dismissible inline sign-up banner.
+- ~~Typed-reading mode + TTS (in-file #1)~~ — **shipped.** Flashcard "Input" toggle
+  (Self-graded / Type the reading) auto-grades typed kana via `normKana` +
+  `submitTyped`; advisory verdict with 1/2 typo-override. "Audio" toggle +
+  `.speak-btn` (flashcard + every Browse card) play the reading via
+  `speechSynthesis` (`speak`/`playReading`, ja-JP voice). Prefs persist
+  (`jpverbs_input` / `jpverbs_audio`); Audio controls hide when no speechSynthesis.
 
 ## Verification debt (do first — cheap, closes a known gap)
 - **Capture real desktop screenshots of Browse + Stats.** The preview tooling kept
@@ -25,26 +31,23 @@ Architecture + dead-ends: [CLAUDE.md](CLAUDE.md). User overview: [README.md](REA
   Mobile (≤640px) stacks filter labels — sanity-check that too.
 
 ## High value
-1. **Production / typed-reading mode + TTS** (in-file #1). A "type the reading"
-   answer mode that auto-grades typed kana, plus `speechSynthesis` (ja-JP voice,
-   free/built-in) playback. Highest-value study upgrade; pairs with the SRS.
-2. **Keyboard navigation for chip groups** (accessibility, in-file #4). Now that
+1. **Keyboard navigation for chip groups** (accessibility, in-file #4). Now that
    chips live in discrete `.frow > .chips` tracks, a roving-tabindex per group is
    much more tractable than before. Also: class is still partly conveyed by color
    (mitigated by the text stamp, not eliminated).
-3. **Category vs Semantic as separate AND'd facets** (in-file #2). The most common
+2. **Category vs Semantic as separate AND'd facets** (in-file #2). The most common
    point of confusion. Needs a second selection set + a small `passes()` change;
    the tiered UI rows already exist, so the visual work is done.
 
 ## Medium
-4. **A test suite for the pure core** (in-file #8). `passes()`, `scheduleCard()`,
-   `isDue()`, `rollingAcc()`, `isLeech()`, and the new `filterSummary()` are pure
-   and easy to test. This is the logic future refactors break silently. Would need
-   a tiny extraction or a headless harness (keep it dependency-light).
-5. **Add / edit verbs** (in-file #3). Verbs are baked into `VERBS[]`; a form that
+3. **A test suite for the pure core** (in-file #8). `passes()`, `scheduleCard()`,
+   `isDue()`, `rollingAcc()`, `isLeech()`, `filterSummary()`, and the new `normKana()`
+   are pure and easy to test. This is the logic future refactors break silently.
+   Would need a tiny extraction or a headless harness (keep it dependency-light).
+4. **Add / edit verbs** (in-file #3). Verbs are baked into `VERBS[]`; a form that
    writes user verbs to localStorage and merges them with `DATA` at load makes
    this a living deck.
-6. **Auth niceties (server-side).** No password reset / email verification yet — a
+5. **Auth niceties (server-side).** No password reset / email verification yet — a
    forgotten password currently means a new account. No origin-side rate limiting
    on `/v1/auth/*`. Tracked in [../CLAUDE.md](../CLAUDE.md) "What's deliberately
    NOT in v1."

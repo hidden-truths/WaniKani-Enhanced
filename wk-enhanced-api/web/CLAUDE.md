@@ -56,6 +56,11 @@ SYNC`. Key functions by area:
   `cfg` (flashcard deck) and `bcfg` (browse grid) are independent configs.
 - **Render:** `showCard`/`reveal`/`grade`/`endSession` (session), `renderBrowse`,
   `renderStats` + `renderCardBars`, `lineChart`/`barChart` (SVG strings).
+- **Typed mode + TTS:** `revealAnswer` (shared show-answer + autoplay) feeds both
+  `reveal` (self-graded) and `submitTyped` (typed: `normKana`-compares the kana, sets
+  an advisory verdict + `session.suggested`). `speak`/`playReading`/`pickVoice` +
+  the `TTS_OK` flag drive the Web Speech API. `bindSingle` wires the Input/Audio
+  single-select chips. Prefs persist as `jpverbs_input` / `jpverbs_audio`.
 - **Cloud:** `api`, `scheduleCloudSync`/`pushCloud`/`pullCloud`, `bootAuth`,
   `updateAccountChip`, `openAuth`. Same-origin, httpOnly cookie, debounced
   full-store PUT.
@@ -122,6 +127,24 @@ Component contracts you must preserve:
 - **Google Fonts is the only external dependency and degrades gracefully.** Offline
   you get system fonts for the Japanese text; the app still fully works. Don't add
   a hard dependency on it.
+- **Typed grading is advisory, and only grades the READING.** `submitTyped`
+  `normKana`-compares the typed kana against `v.read` and *suggests* a grade
+  (green/red verdict + a `.suggested` ring on the matching button), but the user
+  still records it via 1/2 or a click — so a typo or an unjudged-meaning recall can
+  be overridden. Don't make it auto-advance on match. `normKana` folds
+  katakana→hiragana, strips spaces/separators, and unifies long-vowel marks; it is
+  deliberately NOT romaji-aware (learners type kana directly or via an IME).
+- **TTS is gated behind `TTS_OK` (`'speechSynthesis' in window`) and reveal.** The
+  reading is the answer in both directions, so the speaker button lives inside the
+  revealed `.answer` panel (and on Browse cards where the reading is already shown)
+  — never on the flashcard prompt. When `TTS_OK` is false the whole Audio chip row
+  + the flashcard speaker hide; `speak()` is a best-effort no-op. Voices can load
+  async, so `pickVoice` re-runs on `voiceschanged`. This stays dependency-free
+  (Web Speech API) — don't swap in a cloud TTS / audio-file dependency.
+- **The kana field owns its own keys.** The global flashcard keydown handler bails
+  when `#answerInput` is focused (so typing `1`/`2`/space goes into the field);
+  Enter-to-submit is bound on the input itself, and Enter *after* reveal accepts
+  `session.suggested`. Keep that focus guard if you touch the keyboard handler.
 - **Browser-preview tooling reloads/recreates the tab on capture**, which resets
   in-memory state (active tab defaults back to Flashcards; `cfg`/`bcfg` filter
   selections are lost — only localStorage persists). To verify a *transient* state
@@ -133,7 +156,13 @@ Component contracts you must preserve:
 
 Commits, newest first (all on `main`, all touching only `index.html` unless noted):
 
-1. **`0712d65` align filter rows + site-wide icons + polish.** Filter rows →
+1. **typed-reading mode + TTS.** Flashcard "Input" toggle (Self-graded / Type the
+   reading): typed kana is `normKana`-compared to `v.read`, with an advisory verdict
+   + a `.suggested` ring (1/2 still override). "Audio" toggle + `.speak-btn`
+   (flashcard answer panel + every Browse card) play the reading via the Web Speech
+   API (`speak`/`playReading`, ja-JP voice, `TTS_OK`-gated). New `i-volume` icon;
+   prefs persist (`jpverbs_input`/`jpverbs_audio`). Closes in-file OUTSTANDING #1.
+2. **`0712d65` align filter rows + site-wide icons + polish.** Filter rows →
    `.frow`/`.chips` fixed-label-column layout (fixes the misaligned chip
    start-x). Inline SVG icon sprite applied to tabs, toolbar, action buttons,
    topic chevron, Leeches chip, leech list, search field, account chip.
@@ -141,9 +170,9 @@ Commits, newest first (all on `main`, all touching only `index.html` unless note
    inline banner (`#signupBanner`, remembered in localStorage). Added the
    active-filter recap line (`filterSummary`/`paintSummary` → `#deckSummary`,
    `#bSummary`). Carded the leech list (`.leech-row`).
-2. **`5021b84` cap per-card accuracy bars.** Worst-20 default + show-all toggle
+3. **`5021b84` cap per-card accuracy bars.** Worst-20 default + show-all toggle
    (`renderCardBars`).
-3. **`23e627d` regroup verb filters into legible tiers.** Split the 29-chip
+4. **`23e627d` regroup verb filters into legible tiers.** Split the 29-chip
    "Category" wall into Type / Transitivity / Topic(collapsible) / Level & rank;
    moved Leeches out of the category pool; segmented JLPT control.
 

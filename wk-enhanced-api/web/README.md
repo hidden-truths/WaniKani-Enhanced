@@ -19,8 +19,8 @@ plus a cloud-sync layer.
 
 | View | What's there |
 |---|---|
-| **Flashcards** | A Leitner-box SRS. Pick test direction (JP→meaning/reading or reverse), filter the deck (type / transitivity / topic / JLPT / frequency rank), choose an order (shuffle / by frequency / worst-first), and run a session. A due-cards banner is the one-click SRS entry point. Grade with the mouse or keys (space = reveal, 1 = wrong, 2 = right). |
-| **Browse** | A filterable grid of all 100 verbs with the same facets plus free-text search and a font picker. Tap a card to expand its mnemonic, trap/tip, memory status, and example sentences. |
+| **Flashcards** | A Leitner-box SRS. Pick test direction (JP→meaning/reading or reverse), an input mode (self-graded reveal, or **type the reading** for auto-graded kana), and optional **audio** (play the reading aloud via the browser's built-in text-to-speech). Filter the deck (type / transitivity / topic / JLPT / frequency rank), choose an order (shuffle / by frequency / worst-first), and run a session. A due-cards banner is the one-click SRS entry point. Grade with the mouse or keys (space = reveal / enter = check, 1 = wrong, 2 = right). |
+| **Browse** | A filterable grid of all 100 verbs with the same facets plus free-text search and a font picker. Each card has a speaker button to hear the reading. Tap a card to expand its mnemonic, trap/tip, memory status, and example sentences. |
 | **Stats & Leeches** | Overall accuracy, the SRS memory pipeline (Leitner box histogram), daily + per-session accuracy line charts, the leech list, and per-card rolling accuracy (worst-first, capped). All charts are hand-rolled SVG — no chart library. |
 | **Accounts** | Optional. Sign in to mirror progress to the server and sync across devices. Fully usable signed-out (localStorage). |
 
@@ -71,7 +71,8 @@ Server-side details (auth model, cookie, tables) live in
   `{ cards:{<rank>:{attempts,right,wrong,box,due}}, sessions:[…], daily:{…} }`.
   Signed in, the same blob is mirrored to the server (server wins on login).
 - A few small UI prefs also live in localStorage: `jpverbs_font`,
-  `jpverbs_topic_<panel>` (topic-disclosure open state), `jpverbs_signup_dismissed`.
+  `jpverbs_topic_<panel>` (topic-disclosure open state), `jpverbs_signup_dismissed`,
+  `jpverbs_input` (self-graded vs typed), `jpverbs_audio` (TTS autoplay).
 
 ## Tech notes
 
