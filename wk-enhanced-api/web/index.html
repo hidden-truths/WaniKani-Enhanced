@@ -309,6 +309,14 @@
         <button class="chip mode active" data-mode="meaning">JP → meaning + reading</button>
         <button class="chip mode" data-mode="reading">Meaning → reading + JP</button>
       </div></div>
+      <!-- Secondary options + deck filters tucked behind a disclosure so the picker
+           isn't an 11-row wall before you can study. Native <details> handles the
+           arbitrary content height (incl. the nested topic-region) with no max-height
+           math. Chips inside keep their classes/data-* so wireFacets/makeMultiSelect/
+           roving are blind to the wrapper. The live recap (#deckSummary) stays visible
+           below so the collapsed filter state is always legible. -->
+      <details class="more-filters" id="moreFilters">
+        <summary><svg class="ic" aria-hidden="true"><use href="#i-filter"/></svg>More filters &amp; options</summary>
       <!-- Input mode: self-graded reveal (default) or type-the-reading auto-grading.
            Persisted to localStorage (jpverbs_input); see FLASHCARD SESSION. -->
       <div class="frow"><span class="filter-label">Input</span><div class="chips">
@@ -392,6 +400,7 @@
         <button class="chip ord" data-ord="freq">By frequency</button>
         <button class="chip ord" data-ord="worst">Worst-first</button>
       </div></div>
+      </details>
       <div class="fdiv"></div>
       <!-- Live recap of the active deck query (incl. collapsed topics); set by updateDeckCount(). -->
       <div class="filter-summary" id="deckSummary"></div>

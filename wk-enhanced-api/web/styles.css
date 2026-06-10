@@ -68,9 +68,12 @@
   .filter-label{font-family:"SF Mono",ui-monospace,monospace;font-size:11px;letter-spacing:.18em;text-transform:uppercase;color:var(--muted);margin-right:4px}
   .chip{font-family:"SF Mono",ui-monospace,monospace;font-size:12px;border:1px solid var(--line);background:transparent;color:var(--ink);padding:6px 13px;border-radius:2px;cursor:pointer;transition:all .15s}
   .chip:hover{border-color:var(--ink)}
-  .chip.active{background:var(--ink);color:var(--paper);border-color:var(--ink)}
-  .chip.g.active{background:var(--godan);border-color:var(--godan)}
-  .chip.i.active{background:var(--ichidan);border-color:var(--ichidan)}
+  /* Active = a quiet tinted wash + colored border + bold, NOT a solid ink block.
+     The old solid-ink fill made a picker full of defaults read as a wall of black
+     rectangles. Class chips (g/i) tint with their own functional color. */
+  .chip.active{background:color-mix(in srgb,var(--ink) 13%,transparent);color:var(--ink);border-color:var(--ink);font-weight:700}
+  .chip.g.active{background:color-mix(in srgb,var(--godan) 16%,transparent);color:var(--godan);border-color:var(--godan)}
+  .chip.i.active{background:color-mix(in srgb,var(--ichidan) 18%,transparent);color:var(--ichidan);border-color:var(--ichidan)}
   .chip.primary{background:var(--godan);color:#fff;border-color:var(--godan);font-weight:700}
   .chip.primary:hover{filter:brightness(.92)}
   .search{flex:1;min-width:160px;font-family:Georgia,serif;font-size:14px;border:1px solid var(--line);background:var(--paper);padding:7px 12px;border-radius:2px;color:var(--ink)}
@@ -88,6 +91,17 @@
      markup changed — selecting across groups still OR's into one pool as before. */
   .filter-label{min-width:88px}                              /* align facet rows */
   .fdiv{width:100%;height:1px;background:var(--line);margin:11px 0;opacity:.7}
+  /* "More filters & options" disclosure — collapses the secondary picker rows so
+     the study setup leads with Study-type + Test-direction + Start. Native details
+     (arbitrary height; nests the topic-region cleanly). */
+  .more-filters{border-top:1px solid var(--line);border-bottom:1px solid var(--line);margin:6px 0 10px}
+  .more-filters>summary{list-style:none;cursor:pointer;display:flex;align-items:center;gap:8px;padding:13px 2px;font-family:"SF Mono",ui-monospace,monospace;font-size:11px;letter-spacing:.14em;text-transform:uppercase;color:var(--muted)}
+  .more-filters>summary::-webkit-details-marker{display:none}
+  .more-filters>summary .ic{font-size:14px;color:var(--godan)}
+  .more-filters>summary::after{content:"+";margin-left:auto;font-size:16px;line-height:1;color:var(--muted)}
+  .more-filters[open]>summary::after{content:"−"}
+  .more-filters>summary:hover{color:var(--ink)}
+  .more-filters[open]>summary{margin-bottom:10px}
   /* Topic disclosure: dashed = closed, solid + ink = has active selections. */
   .topic-toggle{font-family:"SF Mono",ui-monospace,monospace;font-size:12px;border:1px dashed var(--line);background:transparent;color:var(--muted);padding:6px 13px;border-radius:2px;cursor:pointer;transition:all .15s;display:inline-flex;align-items:center;gap:7px}
   .topic-toggle:hover{border-color:var(--ink);color:var(--ink)}
@@ -100,13 +114,14 @@
   .topic-inner{display:flex;flex-wrap:wrap;gap:7px;padding-top:10px}
   .topic-inner .chip{font-size:12px;padding:5px 11px;color:var(--muted)} /* secondary tier */
   .topic-inner .chip:hover{color:var(--ink)}
-  .topic-inner .chip.active{color:var(--paper)}              /* re-win over the muted rule */
+  .topic-inner .chip.active{color:var(--ink)}                /* re-win over the muted rule (tinted active) */
   /* Segmented JLPT: adjacent chips share borders. Still multi-select (the All
      chip is exclusive via makeMultiSelect; specific levels OR together). */
   .jlptseg{display:inline-flex;border:1px solid var(--line);border-radius:2px;overflow:hidden}
   .jlptseg .chip{border:none;border-left:1px solid var(--line);border-radius:0}
   .jlptseg .chip:first-child{border-left:none}
   .jlptseg .chip:not(.active):hover{background:var(--paper-2)}
+  .jlptseg .chip.active{background:color-mix(in srgb,var(--ink) 18%,transparent)} /* segmented: no border, so a touch stronger */
 
   /* --- Icons + alignment + polish (site-wide pass) -------------------------- */
   /* Inline-sprite icon: inherits color (currentColor) + size (1em) from its host. */

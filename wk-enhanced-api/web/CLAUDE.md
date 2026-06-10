@@ -172,7 +172,12 @@ Component contracts you must preserve:
 - **`.chip` is wired by class + `data-*`** (`makeMultiSelect('.chip.deck',…)`,
   `.bf`, `.jlpt`, `.bjlpt`, `.mode`, `.ord`, `.rpreset`). The JS uses flat
   `querySelectorAll` and ignores DOM nesting — so you can regroup/wrap/collapse
-  chip markup freely **as long as each chip keeps its classes + `data-*`**.
+  chip markup freely **as long as each chip keeps its classes + `data-*`**. The
+  study picker's secondary rows are wrapped in a `<details class="more-filters">`
+  for exactly this reason; the wiring is blind to it. **Active state is a tinted
+  wash + colored border + bold (`.chip.active` via `color-mix`), NOT a solid-ink
+  fill** — don't revert it; the solid fill made a defaults-laden picker a wall of
+  black blocks. `.chip.primary` (Start) and `.btn.srs` stay solid — they're CTAs.
 - **`.jlptseg`** is the segmented JLPT control (adjacent chips share borders);
   still multi-select.
 - **`.topic-region` / `.topic-toggle`** is the collapsible topic disclosure
@@ -349,6 +354,15 @@ Component contracts you must preserve:
 
 Commits, newest first (all on `main`; touch the split web/ files + `src/` where noted):
 
+1. **Design-polish pass — chip + picker refresh (3/4).** Active chips are now a
+   quiet tinted wash + colored border + bold (`color-mix`), not a solid-ink block —
+   a picker full of defaults no longer reads as a wall of black rectangles; class
+   chips (g/i) tint with their functional color. The secondary picker rows (Input,
+   Audio, Type, Transitivity, Topic, Level&rank, Presets, Order) now live behind a
+   `<details class="more-filters">` disclosure, so the study setup leads with
+   Study-type + Test-direction + Start; the `#deckSummary` recap stays visible so
+   collapsed filters are legible. Chip wiring/roving/topic-region are blind to the
+   wrapper (verified: Godan filter 100→58, topic toggle, recap all work collapsed).
 1. **Design-polish pass — readability/contrast (2/4).** `--muted` darkened
    (#7a7164 → #675f52, ≈4.0:1 → ≈5.3:1 on paper) so the many small labels pass AA.
    `.chart-title` is no longer force-uppercased (long descriptive sentences read
