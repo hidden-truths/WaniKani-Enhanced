@@ -151,13 +151,15 @@
      custom verbs persist in localStorage (jpverbs_custom) and merge into DATA via
      rebuildData(), so they join the deck/filters/stats. Each custom card shows a
      CUSTOM badge + Edit/Delete. See "CUSTOM VERBS" in the script. Local-only.
-  4. ACCESSIBILITY. focus-visible rings + toolbar aria-labels, and (DONE) a roving
-     tabindex on every chip group (setupRoving): each filter row is one tab stop,
-     ←/→/↑/↓ move within it, Home/End jump to the ends, role=group + aria-label per
-     row; collapsed topic chips drop out of the tab order. REMAINING: conjugation
-     class is still conveyed partly by color (mitigated by the text stamp, not
-     eliminated), and the single-select rows are toolbar-semantics, not an ARIA
-     radiogroup (arrows move focus; Space/Enter selects) — fine, but not radio.
+  4. ACCESSIBILITY. focus-visible rings + aria-labels, and (DONE) a roving tabindex
+     on every chip group (setupRoving): each filter row is one tab stop, ←/→/↑/↓
+     move within it, Home/End jump to the ends, aria-label per row; collapsed topic
+     chips drop out of the tab order. Multi-select facet rows are role=group
+     toolbars (arrows move focus; Space/Enter toggles); single-select rows (Study
+     type / Test direction / Input / Audio / Order) declare role="radiogroup" and
+     get true radio semantics (role=radio + synced aria-checked, arrows move the
+     selection). REMAINING: conjugation class is still conveyed partly by color
+     (mitigated by the text stamp, not eliminated).
   5. [DONE] JLPT levels are approximate (hand-assigned), and the 100 frequent verbs
      are almost all N5–N4. annotateJlptChips() now disables (dims) any level with
      zero verbs (N2/N1 by default) + tooltips the counts; adding a custom verb at
@@ -302,12 +304,12 @@
       <!-- Study type: Free study never touches the SRS schedule (practice any
            cards); SRS review only serves DUE cards and promotes/demotes them.
            cfg.kind; wired below. The due banner above is the quick "all due" SRS. -->
-      <div class="frow"><span class="filter-label">Study type</span><div class="chips">
+      <div class="frow"><span class="filter-label">Study type</span><div class="chips" role="radiogroup">
         <button class="chip skind active" data-skind="free" title="Practice any cards — does not change review dates">Free study</button>
         <button class="chip skind" data-skind="srs" title="Review only cards that are currently due, and reschedule them"><svg class="ic" aria-hidden="true"><use href="#i-refresh"/></svg>SRS review</button>
       </div></div>
       <!-- Test direction: which side of the card is the PROMPT vs the ANSWER. -->
-      <div class="frow"><span class="filter-label">Test direction</span><div class="chips">
+      <div class="frow"><span class="filter-label">Test direction</span><div class="chips" role="radiogroup">
         <button class="chip mode active" data-mode="meaning">JP → meaning + reading</button>
         <button class="chip mode" data-mode="reading">Meaning → reading + JP</button>
       </div></div>
@@ -321,13 +323,13 @@
         <summary><svg class="ic" aria-hidden="true"><use href="#i-filter"/></svg>More filters &amp; options</summary>
       <!-- Input mode: self-graded reveal (default) or type-the-reading auto-grading.
            Persisted to localStorage (jpverbs_input); see FLASHCARD SESSION. -->
-      <div class="frow"><span class="filter-label">Input</span><div class="chips">
+      <div class="frow"><span class="filter-label">Input</span><div class="chips" role="radiogroup">
         <button class="chip imode active" data-imode="self">Self-graded</button>
         <button class="chip imode" data-imode="type"><svg class="ic" aria-hidden="true"><use href="#i-type"/></svg>Type the reading</button>
       </div></div>
       <!-- TTS playback of the reading via the Web Speech API. Whole row is hidden by
            JS when the browser has no speechSynthesis. Persisted (jpverbs_audio). -->
-      <div class="frow" id="audioRow"><span class="filter-label">Audio</span><div class="chips">
+      <div class="frow" id="audioRow"><span class="filter-label">Audio</span><div class="chips" role="radiogroup">
         <button class="chip amode active" data-amode="off">Off</button>
         <button class="chip amode" data-amode="auto"><svg class="ic" aria-hidden="true"><use href="#i-volume"/></svg>Auto-play reading</button>
       </div></div>
@@ -405,7 +407,7 @@
       </div></div>
       <!-- Order: shuffle | by corpus rank | worst-first (lowest rollingAcc).
            "Review due cards" forces worst-first so the shakiest cards lead. -->
-      <div class="frow"><span class="filter-label">Order</span><div class="chips">
+      <div class="frow"><span class="filter-label">Order</span><div class="chips" role="radiogroup">
         <button class="chip ord active" data-ord="shuffle">Shuffle</button>
         <button class="chip ord" data-ord="freq">By frequency</button>
         <button class="chip ord" data-ord="worst">Worst-first</button>

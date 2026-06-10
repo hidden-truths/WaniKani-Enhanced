@@ -1032,11 +1032,19 @@ setupTopicGroups();
    ----------------------------------------------------------------------------
    Each filter row (every `.chips` track + each open `.topic-inner`) becomes ONE
    tab stop instead of N: only one chip in the group is tabbable (tabindex 0),
-   the rest are tabindex -1. ←/→ (and ↑/↓) move focus within the group, Home/End
-   jump to the ends, and the tab stop follows the last-focused chip so Tab
-   returns where you left off. This is TOOLBAR semantics, not radiogroup: arrows
-   only MOVE focus — Space/Enter still activates a chip through its existing
-   makeMultiSelect click handler, so selection behavior is unchanged.
+   the rest are tabindex -1. ←/→ (and ↑/↓) move within the group, Home/End jump
+   to the ends, and the tab stop follows the selected/last-focused chip so Tab
+   returns where you left off.
+
+   TWO flavours, chosen by the container's role:
+   - MULTI-select facet rows (Category/Type/Transitivity/Topic/Status/JLPT,
+     topics) are role=group TOOLBAR semantics: arrows only MOVE focus — Space/
+     Enter toggles a chip through its existing makeMultiSelect click handler.
+   - SINGLE-select rows opt into role=radiogroup IN THE MARKUP (Study type, Test
+     direction, Input, Audio, Order). There arrows MOVE THE SELECTION the way a
+     native radio group does: each chip is role=radio with aria-checked mirrored
+     from its `.active` class, and the checked chip is the lone tab stop. Arrowing
+     reuses the chip's own click handler so cfg/settings/repaint stay centralized.
 
    `button.chip` only, so the Font `<select>` and the rank number inputs stay
    normal tab stops (focus on them returns -1 from indexOf → arrows fall through
@@ -1047,8 +1055,11 @@ setupTopicGroups();
 function setupRoving(container){
   const items=[...container.querySelectorAll('button.chip')];
   if(!items.length)return;
-  // role=group + a label (from the row's .filter-label) for screen readers.
-  container.setAttribute('role','group');
+  // Single-select rows declare role=radiogroup in the markup; everything else is
+  // a multi-select toolbar group.
+  const isRadio=container.getAttribute('role')==='radiogroup';
+  if(!isRadio)container.setAttribute('role','group');
+  // a label (from the row's .filter-label) for screen readers.
   if(!container.getAttribute('aria-label')){
     const lbl=container.previousElementSibling;
     const txt=lbl&&lbl.classList.contains('filter-label')?lbl.textContent.trim()
@@ -1062,7 +1073,27 @@ function setupRoving(container){
   let stop=active||nav()[0]||items[0];
   const setStop=el=>{stop=el;items.forEach(x=>x.tabIndex=x===el?0:-1);};
   setStop(stop);
-  function focusInNav(list,n){const el=list[(n+list.length)%list.length];if(el){setStop(el);el.focus();}}
+  // Radiogroup: each chip is role=radio; keep aria-checked AND the tab stop synced
+  // to `.active`. reflect() runs SYNCHRONOUSLY on activation — the chip's click
+  // bubbles here AFTER its single-select handler flipped `.active`, so focus always
+  // lands on already-correct state (no microtask lag for the AT to catch) — and via
+  // a class observer for programmatic selection (paintPrefChips / a deep-link that
+  // toggles `.active` without a click).
+  if(isRadio){
+    const reflect=()=>items.forEach(el=>{
+      const on=el.classList.contains('active');
+      el.setAttribute('aria-checked',on?'true':'false');
+      if(on&&!el.disabled)setStop(el);
+    });
+    items.forEach(el=>el.setAttribute('role','radio'));
+    reflect();
+    container.addEventListener('click',reflect);
+    items.forEach(el=>new MutationObserver(reflect).observe(el,{attributes:true,attributeFilter:['class']}));
+  }
+  // In a radiogroup arrow keys also activate the option (radios select on move);
+  // el.click() routes through the chip's existing single-select handler (and the
+  // container click listener above reflects aria-checked synchronously).
+  function focusInNav(list,n){const el=list[(n+list.length)%list.length];if(el){if(isRadio)el.click();setStop(el);el.focus();}}
   container.addEventListener('keydown',e=>{
     const list=nav(), i=list.indexOf(document.activeElement);
     if(i<0)return;                                   // focus on a non-chip (e.g. rank input)

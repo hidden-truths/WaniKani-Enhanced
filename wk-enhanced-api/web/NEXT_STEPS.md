@@ -107,6 +107,11 @@ split, custom-verb sync, and Google TTS — what's left is one genuinely-deferre
   buttons play the reading via `speechSynthesis`. Prefs persist.
 - ~~Keyboard navigation for chip groups (in-file #4)~~ — **shipped.** `setupRoving`
   roving-tabindex per `.chips`/`.topic-inner`; arrows/Home/End, role=group + labels.
+- ~~ARIA radiogroup semantics for single-select chip rows~~ — **shipped.** Study
+  type / Test direction / Input / Audio / Order declare `role="radiogroup"` in the
+  markup; `setupRoving` makes their chips `role=radio` with synced `aria-checked`
+  and arrows move the SELECTION (not just focus). Multi-select facet rows stay
+  `role=group` toolbars. See the roving dead-end in [CLAUDE.md](CLAUDE.md).
 - ~~Accounts + cloud sync (in-file #6)~~ — **shipped.** Email/password + debounced
   cross-device sync (`/v1/auth/*` + `/v1/progress/verbs`).
 - ~~Filter wall / misaligned rows / no icons / endless bar wall / blocking modal~~ —
@@ -129,8 +134,6 @@ split, custom-verb sync, and Google TTS — what's left is one genuinely-deferre
 - **Custom-verb sync conflict handling.** Today it's last-write-wins + server-wins on
   login (fine for one user); two devices adding verbs offline could collide on a
   `seq`-assigned rank. A UUID-per-verb id would remove the collision if it matters.
-- **ARIA radiogroup semantics** for the single-select chip rows (mode/input/audio/
-  order) — currently toolbar semantics (arrows move focus, Space/Enter selects).
 
 ## Verification notes
 - Browse + Stats were verified at desktop width (1280) and mobile (390): label

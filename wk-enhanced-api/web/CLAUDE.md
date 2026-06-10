@@ -138,8 +138,12 @@ and the auth modal + sign-up banner.
   `escapeHtml`, `jishoUrl(jp)` (Jisho.org dictionary deep-link, shown on the
   flashcard answer side + the Browse detail modal; `target=_blank`).
 - **A11y:** `setupRoving(container)` gives a chip group a roving tabindex (one tab
-  stop, ←/→/↑/↓ + Home/End to move, `role=group` + aria-label). Wired over every
-  `.chips` + `.topic-inner`; collapsed topic chips leave the tab order.
+  stop, ←/→/↑/↓ + Home/End to move, aria-label from the row's `.filter-label`).
+  Wired over every `.chips` + `.topic-inner`; collapsed topic chips leave the tab
+  order. Multi-select rows are `role=group` (arrows move focus); single-select rows
+  that declare `role="radiogroup"` in the markup become real radio groups (chips
+  `role=radio` + synced `aria-checked`, arrows move the selection). See the roving
+  dead-end for the radiogroup contract.
 
 Persisted store (`localStorage["jpverbs_v3"]`, synced as app `verbs`):
 `{ cards:{<rank>:{attempts:[1|0…],right,wrong,box:0..5,due:<epochMs>}}, sessions:[{t,right,tot}…] (cap 1000, for charts), daily:{"YYYY-MM-DD":{right,tot}} }`.
@@ -261,11 +265,26 @@ Component contracts you must preserve:
 - **Roving tabindex groups by `.chips`/`.topic-inner` container and matches only
   `button.chip`.** `setupRoving` deliberately excludes the Font `<select class="chip">`
   and the rank number inputs (focus on a non-chip returns -1 from `indexOf` →
-  arrows fall through to native behavior), so they stay normal tab stops. It's
-  TOOLBAR semantics (arrows move focus; Space/Enter selects via the existing click
-  handler) — NOT an ARIA radiogroup, so don't expect `aria-checked`. Collapsed
-  `.topic-inner` chips are forced to tabindex -1 via a MutationObserver on the
-  region's `open` class; if you change how the topic disclosure toggles (e.g. to
+  arrows fall through to native behavior), so they stay normal tab stops. It has
+  **two flavours, chosen by the container's role:**
+  - MULTI-select facet rows (Category/Type/Transitivity/Topic/Status/JLPT, topics)
+    are `role=group` TOOLBAR semantics — arrows MOVE FOCUS only; Space/Enter toggles
+    via the existing click handler. No `aria-checked` here.
+  - SINGLE-select rows (Study type, Test direction, Input, Audio, Order) opt into
+    `role="radiogroup"` IN THE MARKUP (the `<div class="chips" role="radiogroup">`).
+    `setupRoving` then makes each chip `role="radio"`, mirrors `aria-checked` from
+    its `.active` class, makes the checked chip the lone tab stop, and arrows MOVE
+    THE SELECTION (radio behavior) by calling the chip's own `click()`. To add a
+    new single-select row, add `role="radiogroup"` to its `.chips` container — that
+    flag is the ONLY switch; the JS keys off it. Don't add it to a multi-select row.
+    `aria-checked` is kept in sync SYNCHRONOUSLY via a `click` listener on the
+    container (the chip's click bubbles up after its own handler flipped `.active`)
+    plus a class MutationObserver for programmatic selection (`paintPrefChips` /
+    deep-links). Don't reintroduce a per-chip-only observer — its microtask lag let
+    the AT read stale `aria-checked` right after an arrow keypress.
+
+  Collapsed `.topic-inner` chips are forced to tabindex -1 via a MutationObserver on
+  the region's `open` class; if you change how the topic disclosure toggles (e.g. to
   `display:none`), re-check that observer still fires.
 - **Typed grading is advisory, and only grades the READING.** `submitTyped`
   compares the typed input against `v.read` and *suggests* a grade (green/red
@@ -370,6 +389,16 @@ Component contracts you must preserve:
 
 Commits, newest first (all on `main`; touch the split web/ files + `src/` where noted):
 
+1. **ARIA radiogroup semantics for single-select chip rows.** The five mutually-
+   exclusive `.chips` rows (Study type, Test direction, Input, Audio, Order) now
+   declare `role="radiogroup"` in the markup; `setupRoving` branches on that flag to
+   make each chip `role="radio"` with `aria-checked` mirrored from `.active`, the
+   checked chip the lone tab stop, and ←/→/↑/↓/Home/End MOVE THE SELECTION (calling
+   the chip's own click handler) the way a native radio group does. Multi-select
+   facet rows (Category/Type/Transitivity/Topic/Status/JLPT, topics) keep
+   `role=group` toolbar semantics. `aria-checked` syncs synchronously via a `click`
+   listener on the container (+ a class observer for programmatic selection). Markup-
+   only opt-in: add `role="radiogroup"` to a row's `.chips` to make it a radio group.
 1. **Multi-category content (finish the de-verb-ify transition).** Added a `cat`
    filter facet (`verb/adjective/noun/adverb/phrase`, `CATS`) as a fifth AND'd facet
    in `passes`/`TOKEN_FACET`/`DECK_FACETS`; a Category chip row leads both filter
