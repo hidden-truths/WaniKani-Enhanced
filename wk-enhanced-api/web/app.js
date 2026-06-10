@@ -443,20 +443,25 @@ updateDueBanner();
    ========================================================================== */
 let session=null;
 
-// ---- Text-to-speech (Web Speech API: free, built-in, zero dependency). Speaks the
-// hiragana reading with a ja-JP voice. Some browsers populate voices asynchronously,
-// so we re-pick on `voiceschanged`. Everything no-ops (and the Audio controls + the
-// speaker buttons hide) when the browser has no speechSynthesis. ----
-const TTS_OK = typeof window!=='undefined' && 'speechSynthesis' in window;
+// ---- Text-to-speech ----
+// Preferred path: the server's Google Translate TTS proxy (GET /v1/tts), which
+// gives consistent, good ja-JP audio — far better than the browser's uneven
+// speechSynthesis voices. It needs a server, so we only use it when the app is
+// served over http(s); over file:// (or if the request fails) we fall back to
+// speechSynthesis. Audio is available if EITHER path exists.
+const HTTP_SERVED = location.protocol==='http:' || location.protocol==='https:';
+const SPEECH_OK = typeof window!=='undefined' && 'speechSynthesis' in window;
+const TTS_OK = HTTP_SERVED || SPEECH_OK;     // is any audio available? (gates the Audio UI)
 let jaVoice=null;
 function pickVoice(){
-  if(!TTS_OK)return;
+  if(!SPEECH_OK)return;
   const vs=speechSynthesis.getVoices();
   jaVoice = vs.find(v=>v.lang==='ja-JP') || vs.find(v=>v.lang&&v.lang.toLowerCase().startsWith('ja')) || null;
 }
-if(TTS_OK){ pickVoice(); speechSynthesis.addEventListener('voiceschanged',pickVoice); }
-function speak(text){
-  if(!TTS_OK||!text)return;
+if(SPEECH_OK){ pickVoice(); speechSynthesis.addEventListener('voiceschanged',pickVoice); }
+// Browser-synth fallback.
+function speakSynth(text){
+  if(!SPEECH_OK)return;
   try{
     speechSynthesis.cancel();                 // never stack/overlap utterances
     const u=new SpeechSynthesisUtterance(text);
@@ -464,8 +469,24 @@ function speak(text){
     speechSynthesis.speak(u);
   }catch(e){/* speech is best-effort; ignore */}
 }
+// Reused <audio> for the server path so a new play() interrupts the previous one.
+let ttsAudio=null;
+function speak(text){
+  if(!text)return;
+  if(SPEECH_OK)try{speechSynthesis.cancel();}catch(e){}   // stop any in-flight synth
+  if(HTTP_SERVED){
+    try{
+      if(!ttsAudio)ttsAudio=new Audio();
+      ttsAudio.src='/v1/tts?text='+encodeURIComponent(text);
+      const p=ttsAudio.play();
+      if(p&&p.catch)p.catch(()=>speakSynth(text));         // network/format/autoplay fail → synth
+    }catch(e){ speakSynth(text); }
+  }else{
+    speakSynth(text);
+  }
+}
 function playReading(){ if(session)speak(session.deck[session.i].read); }
-// Hide the audio affordances entirely when speech isn't available.
+// Hide the audio affordances entirely only when NO audio path is available.
 if(!TTS_OK){
   const ar=document.getElementById('audioRow'); if(ar)ar.style.display='none';
   const sb=document.getElementById('speakBtn'); if(sb)sb.style.display='none';

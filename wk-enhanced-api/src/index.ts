@@ -8,6 +8,7 @@
 //   POST   /v1/admin/warm     (Authorization: Bearer <ADMIN_TOKEN>)
 //   POST   /v1/auth/register | /login | /logout,  GET /v1/auth/me
 //   GET/PUT /v1/progress/{app} (session cookie — per-user study progress)
+//   GET    /v1/tts            (Google Translate TTS proxy for the study app)
 //   GET    /media/*           (only when STORAGE_DRIVER=local)
 //   GET    /docs              (Scalar UI)
 //   GET    /openapi.json      (OpenAPI 3.1 spec, auto-generated from Zod schemas)
@@ -27,6 +28,7 @@ import { adminRouter } from './routes/admin.ts';
 import { authRouter } from './routes/auth.ts';
 import { progressRouter } from './routes/progress.ts';
 import { MEDIA_CACHE_CONTROL } from './services/storage.ts';
+import { googleTts } from './services/tts.ts';
 
 const app = new OpenAPIHono({ defaultHook: zodHook });
 
@@ -78,6 +80,31 @@ app.route('/v1/index_meta', indexMetaRouter);
 app.route('/v1/admin', adminRouter);
 app.route('/v1/auth', authRouter);
 app.route('/v1/progress', progressRouter);
+
+// Google Translate TTS proxy for the study app (replaces the browser's uneven
+// speechSynthesis voices with consistent ja-JP audio). text→audio is stable, so
+// we cache in-process (bounded LRU-ish) and tell the browser/CDN to cache hard —
+// Google then gets hit at most once per unique reading per server lifetime. The
+// study app falls back to speechSynthesis when this is unreachable (e.g. file://).
+const ttsCache = new Map<string, { buffer: ArrayBuffer; contentType: string }>();
+const TTS_CACHE_MAX = 500;
+app.get('/v1/tts', async (c) => {
+    const text = (c.req.query('text') || '').trim();
+    if (!text) return c.json({ code: 'validation_error' as const, error: 'missing ?text' }, 400);
+    if (text.length > 200) return c.json({ code: 'validation_error' as const, error: 'text too long (max 200 chars)' }, 400);
+    let hit = ttsCache.get(text);
+    if (!hit) {
+        const r = await googleTts(text);
+        if (!r) return c.json({ code: 'upstream_failure' as const, error: 'tts unavailable' }, 502);
+        hit = r;
+        if (ttsCache.size >= TTS_CACHE_MAX) ttsCache.delete(ttsCache.keys().next().value!); // evict oldest
+        ttsCache.set(text, hit);
+    }
+    c.header('Content-Type', hit.contentType || 'audio/mpeg');
+    c.header('Cache-Control', 'public, max-age=604800, immutable'); // text→audio never changes
+    c.set('logCtx', { ttsLen: text.length, ttsCached: ttsCache.has(text) });
+    return c.body(hit.buffer);
+});
 
 // OpenAPI 3.1 spec, auto-generated from each route's Zod schema. .doc31() is
 // the 3.1 variant; .doc() emits 3.0 which lacks some types we use.
