@@ -508,6 +508,23 @@ Component contracts you must preserve:
   the same cookie-gated-audio path as the native-audio button. The **binary upload uses its
   own credentialed `fetch`** (not the JSON-only `api()`); list/delete use `api()`. Retention
   is the `recordingsKeep` setting (default 3, 1–20), sent as `keep` and enforced server-side.
+  **The compare player has ▶ you / native / native→you (seq) / both / loop**; **both** overlays
+  native + take on the two separate `<audio>` elements with a 2-count barrier (one-shot; loop is
+  seq-only). Playback speed is `settings.compareSpeed` (synced, snapped by `clampSpeed` to
+  {0.5,0.75,1}) applied via `applySpeed` (`playbackRate` + `preservesPitch`) on every compare
+  play; the segmented control lives in the speaking bar.
+- **The compare waveforms use a `<canvas>`, the deliberate exception to "charts stay hand-rolled
+  SVG".** `paintCompareWaveforms` (per-render hook from `wireMinnaLesson`; also called by
+  `resetControl` after save/delete) decodes the newest take + the native audio via
+  `fetchAudioBuffer` — a **credentialed** `fetch` (the gated-audio path; plain `fetch` 401s) →
+  `decodeAudioData`, promise-cached per URL — then `waveformPeaks` (pure) → canvas (you=`--godan`,
+  native=`--ichidan`, native sliced to the line's clip). A per-sample waveform is the wrong shape
+  for SVG and the bytes are right there to decode, so canvas is correct here — don't "fix" it to
+  SVG. Decode **fails safe**: offline / Safari-can't-decode-opus (a non-trimmed take) / 404 → the
+  waveform simply doesn't draw, and the `<audio>`-driven compare buttons keep working. A single
+  rAF loop (`tickCursors`) moves an overlay cursor for whichever element is sounding; it reads
+  the clip off the control so the native cursor maps into `[start,end]`. Canvas is sized to fixed
+  `WAVE_W/H` (not `clientWidth`) so it paints correctly even inside a closed `<details>`.
 - **"Speaking mode" keeps ONE mic stream open; the record controls only render while it's
   on.** Acquiring/releasing the mic per take renegotiates the macOS input each time — that
   hitches (and re-triggers the AirPods HFP switch). So `enterSpeakingMode()` opens one

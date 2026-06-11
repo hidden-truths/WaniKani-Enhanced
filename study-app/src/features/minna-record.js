@@ -422,6 +422,7 @@ function compareHtml(lesson, itemKey, ctx) {
   const nativeBtns = canNative
     ? `<button class="cmp-btn" type="button" data-cmp="native"><svg class="ic" aria-hidden="true"><use href="#i-volume"/></svg>native</button>
        <button class="cmp-btn" type="button" data-cmp="seq"><svg class="ic" aria-hidden="true"><use href="#i-play"/></svg>native→you</button>
+       <button class="cmp-btn" type="button" data-cmp="both" title="Play native + your take together"><svg class="ic" aria-hidden="true"><use href="#i-volume"/></svg>both</button>
        <button class="cmp-btn cmp-loop" type="button" data-cmp="loop" aria-pressed="false" title="Loop native→you">loop</button>`
     : (ctx.needsClip ? `<span class="cmp-hint">mark this line's clip to compare</span>` : '');
   return `<div class="rec-compare"><span class="cmp-label">compare</span>
@@ -564,6 +565,18 @@ function handleCompare(control, action, btn) {
     const runOnce = (after) => playNative(ctx.nativeSrc, ctx.clip, () => playTakeOnce(id, after));
     const loopOrStop = () => { if (control.dataset.loop === '1' && btn.classList.contains('playing')) runOnce(loopOrStop); else { clearBtn(btn); stopCursors(); } };
     runOnce(loopOrStop);
+    return;
+  }
+  if (action === 'both') {
+    // Overlay native + your take, started together (separate <audio> elements). A 2-count
+    // barrier clears the button + cursors once BOTH finish (they have different lengths).
+    // One-shot — loop stays seq-only. A second click hits the playing-button stop path above.
+    const id = newestTakeId(control); if (id == null || !nativePlayable(ctx)) return;
+    litBtn(control, btn); startCursors(control);
+    let pending = 2;
+    const join = () => { if (--pending <= 0) { clearBtn(btn); stopCursors(); } };
+    playNative(ctx.nativeSrc, ctx.clip, join);
+    playTakeOnce(id, join);
     return;
   }
 }

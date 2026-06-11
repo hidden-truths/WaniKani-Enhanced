@@ -356,8 +356,21 @@ helpers in [src/core/recordings.js](src/core/recordings.js).
   `GET /v1/minna/recordings/{id}`. `POST` prunes per item to the user's **keep-N** (Settings
   → "Recordings to keep per word", default 3, 1–20). Routes:
   `POST`/`GET`(list)/`GET`(bytes)/`DELETE /v1/minna/recordings`.
-- **Compare player** — per item: **▶ you · ▶ native · ▶ native→you** (sequential) **+ loop**.
-  Take playback is gated (one reused `<audio crossOrigin='use-credentials'>`).
+- **Compare player** — per item: **▶ you · ▶ native · ▶ native→you** (sequential) **· ▶ both**
+  (native + take overlaid, one-shot via a 2-count barrier) **+ loop** (seq only). Take playback
+  is gated (one reused `<audio crossOrigin='use-credentials'>`).
+- **Dual waveform + live cursor** — under each compare row, the newest take (vermilion) is drawn
+  beside the native audio (indigo) so timing/shape are visible. Both are fetched WITH credentials
+  (the gated-audio path) and `decodeAudioData`'d, then `waveformPeaks` (pure) → a **canvas** —
+  the deliberate exception to the app's SVG charts (per-sample data is wrong for SVG; the bytes
+  are right there). Buffers are promise-cached per URL; decode **fails safe** (offline / Safari
+  can't decode an opus take → the waveform just doesn't draw, compare buttons unaffected). A
+  single rAF loop moves an overlay cursor for whichever of you/native is sounding (native mapped
+  into the clip window). `paintCompareWaveforms` is the per-render hook.
+- **Speed control** — a global **0.5/0.75/1×** segmented control in the speaking bar (shown while
+  speaking mode is on). `settings.compareSpeed` (synced, snapped by `clampSpeed`) →
+  `playbackRate` with `preservesPitch` so slowing down to mimic stays clear; applies live to
+  in-flight playback.
 - **Conversation lines have no per-line native audio** (the lesson ships ONE whole-dialogue
   MP3). The fix: an optional per-line **clip range** `[startSec, endSec]` — native compare
   plays just that slice of the cached MP3 via `currentTime` + a `timeupdate` stop. Clips
@@ -376,9 +389,9 @@ helpers in [src/core/recordings.js](src/core/recordings.js).
   still leaks past the sustain gate, or lower it if a genuinely short utterance gets dropped.
   (The trackpad-click case that defeated the original peak/edge detection is what added the
   robust-peak + sustain-gate guards.)
-- **Dual waveform** (Web Audio `decodeAudioData` → canvas), **speed control** (0.5×–1×), and
-  **▶ simultaneous** playback. The comparison target is already cached same-origin, so Web
-  Audio can read its bytes without CORS.
+- ~~**Dual waveform** (Web Audio `decodeAudioData` → canvas), **speed control** (0.5×–1×), and
+  **▶ simultaneous** playback.~~ — **shipped** (see the Compare player / Dual waveform / Speed
+  bullets above).
 - **A `GET` over recordings/sessions** for a per-lesson practice history (the rows are
   already captured; just needs a list/aggregate route + a small UI).
 - **Auto-exit speaking mode on tab/lesson switch.** Today the persistent mic stays open until
