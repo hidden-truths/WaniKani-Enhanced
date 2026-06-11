@@ -760,8 +760,9 @@
   </div>
 </div>
 
-<!-- Single ES-module entry. app.js imports the data modules, the pure core, and
-     styles.css; Vite builds it into hashed assets. (Was three classic <script>s.) -->
-<script type="module" src="/src/app.js"></script>
+<!-- Single ES-module entry. main.js wires the feature modules (features/*) on top of the
+     pure core/*, state.js, persistence/*, settings-store, and config; it imports the data
+     modules + styles.css. Vite builds it into hashed assets. -->
+<script type="module" src="/src/main.js"></script>
 </body>
 </html>
