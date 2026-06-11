@@ -304,6 +304,19 @@ Component contracts you must preserve:
   `style="...width:0;height:0;overflow:hidden;pointer-events:none"` (inline style
   outranks the type selector). Keep them there; don't move them back to attributes,
   and don't widen the global `svg{}` rule.
+- **A "no border" edge in a `border-collapse` table must be `0`-width + `transparent`
+  colour, NOT `border:none`/`hidden` — Safari paints `none`/`hidden` edges anyway.** The
+  みんなの日本語 vocab table (`.mn-vocab`, collapsed borders) separates word groups with a
+  `border-top` on word rows and zeroes the word↔controls edge. With `border-top:none` (and even
+  `hidden`), **WebKit/Safari still painted that edge** using the cell's border *width* +
+  *currentColor* (≈ `--ink`, near-white in dark mode) → a phantom white line under every word
+  that Chromium never drew (so it's invisible in the Chromium preview — verify table-border
+  changes in Safari, or reason from computed `borderTop`). `none`/`hidden` change only the
+  *style*, leaving width+colour to paint. The fix: base every cell edge at
+  `border:0 solid transparent` and re-add ONLY the real separator (`.mn-vocab td` word-row
+  `border-top:1px solid var(--line)`); the first row + `.mn-rec-row` zero their top edge to
+  `0 solid transparent`. Don't "tidy" those back to `none`/`hidden`. (Inline comment in
+  [src/styles.css](src/styles.css) by `.mn-vocab`.)
 - **The icon sprite is inline + offline-first.** Don't replace it with Tabler/
   Lucide-via-CDN — icons would break offline, defeating the single-file premise.
   Add new glyphs as `<symbol>`s. (`-filled` style names don't exist here; these

@@ -158,10 +158,13 @@ This is the priority. The items below are smaller and can follow.
   aspirated onsets like the ひ of 引きます survive; → WAV). Settings: `recordingsKeep` (1–20),
   `trimSilence`. Full feature doc + the remaining backlog: [MINNA.md](MINNA.md) "Roadmap".
   **Since shipped on top** (see MINNA.md): transient-tolerant trim (rejects laptop
-  trackpad-click impulses), and item #2 — **dual waveform + live cursor**, a **0.5/0.75/1×
-  speed control**, and **▶ both** (simultaneous) playback. **Still to do** (deferred, see
-  MINNA.md): per-lesson practice-history `GET` + UI, auto-exit speaking mode on tab switch, and
-  a **real-mic verification of the trim tuning** (the one path not verifiable headlessly).
+  trackpad-click impulses); item #2 — **dual waveform + live cursor**, a **0.5/0.75/1× speed
+  control**, **▶ both** (simultaneous), plus **speech-window alignment** (every compare plays
+  the detected spoken region so ▶ both lines the onsets up despite the native MP3's padding);
+  and **volume tools** — auto-**normalization** (native vs take to ~equal loudness) + a **▶ both
+  balance slider** (you ⟷ native crossfader). **Still to do** (deferred, see MINNA.md):
+  per-lesson practice-history `GET` + UI, auto-exit speaking mode on tab switch, and a **real-mic
+  verification of the trim tuning** (the one path not verifiable headlessly).
 - ~~みんなの日本語: content parity, dedup, pitch accent~~ — **shipped.** Activated Minna
   cards were second-class (no examples/mnemonics, duplicated built-ins, flat TTS pitch).
   Now: (1) words that match a built-in verb **reuse it** via a synced provenance overlay
