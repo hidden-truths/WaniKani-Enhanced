@@ -141,6 +141,10 @@ image via the Dockerfile's `COPY data ./data`). Shape (see
   "dict":  "聞く", "dictRead": "きく",  // DICTIONARY form — what becomes the SRS card
   "mean":  "to ask (a teacher)",
   "cat":   "verb", "type": "godan", "trans": "t",  // feeds the trainer's facets
+  "italki": true,               // OPTIONAL — this word was covered in an iTalki lesson.
+                                //   Adds the `iTalki` tag + `italki:true` flag to the
+                                //   activated card (Source-facet filter + a table badge).
+                                //   Omit / false for words you haven't studied with a tutor.
   "audio": "/Audio/minnamoi/bai23/00010101011101110.mp3"  // → the audio proxy
 }
 ```
@@ -183,16 +187,30 @@ Stats). Key pieces:
 
 "**Add all vocab to deck**" does **not** introduce a new data path. `activateMinnaVocab`
 turns each word into a **dictionary-form custom card** via the existing
-`loadCustom`/`saveCustom` + `seq` machinery, tagged `みんなの日本語` + `mnn-l<n>` and
-marked `{ minna:true, minnaKey, minnaLesson }`. So an activated word:
+`loadCustom`/`saveCustom` + `seq` machinery, tagged `みんなの日本語` + `mnn-l<n>` (plus
+`iTalki` for words flagged `italki:true`) and marked
+`{ minna:true, italki, minnaKey, minnaLesson }`. So an activated word:
 
 - joins the unified `DATA` pool → studyable in Flashcards/SRS, visible in Browse + Stats;
 - **syncs for free** under the existing `custom-verbs` progress key (no new sync path);
-- is **idempotent** — re-activating skips any word whose `minnaKey` is already present
-  (`minnaInDeck`), and the dashboard shows a live `N/M in your SRS deck` count + a ✓ per
-  word;
+- is **idempotent + self-updating** — re-activating doesn't duplicate (`minnaKey` is the
+  key) but it *does* patch the textbook-derived metadata onto an already-added card
+  (preserving its rank → SRS progress), so a card activated before the lesson gained the
+  iTalki flag picks it up by re-clicking. `minnaActivationStatus` previews
+  `{inDeck,toAdd,toUpdate}`; the button reads "Add all vocab", "Update N tags", or the
+  disabled "All vocab in your deck" accordingly. The dashboard shows a live `N/M in your
+  SRS deck` count + a ✓ per word;
 - shows a `みんなの日本語 · L<n>` provenance badge over the plain `CUSTOM` badge in Browse
-  (`provenanceBadge`).
+  (`provenanceBadge`); iTalki words also show a filled `iTalki` badge in the vocab table.
+
+### The Source filter facet
+
+Activated cards are filterable by provenance in both the Study picker and Browse via a
+sixth AND'd facet, **`source`** (`DECK_FACETS`/`TOKEN_FACET`/`oneGroup`): chips for
+`みんなの日本語` (any Minna card), `iTalki` (the tutored subset), and per-lesson `L22/L23/L24`
+(`mnn-l<n>` tags, routed to `source` by a regex in `tokenFacet`). `annotateSourceChips`
+hides the whole row until the deck has Minna cards and dims chips that match nothing.
+So you can study "just my iTalki words" or "just Lesson 24" from the normal deck.
 
 The **only new synced blob** is the per-lesson notes (below).
 
@@ -281,13 +299,15 @@ reason the audio is already proxied + stored same-origin in Phase 1.
 
 - **More chapters** — run [../scripts/scrape-minna.ts](../scripts/scrape-minna.ts) for
   other lessons and curate them into `data/minna/lesson-<n>.json`. The whole UI is
-  already N-lesson aware (chapter chips, `lastLesson`).
+  already N-lesson aware (chapter chips, `lastLesson`). **Shipped so far: L22, L23, L24.**
+  (L23 carries iTalki flags from the maintainer's lesson; L22/L24 don't yet — add
+  `italki:true` per word as those tutoring sessions happen.)
 - **More section types** — exercises/drills (interactive, auto-checked), listening,
   kanji. The lesson JSON can grow new top-level arrays; `renderMinnaLesson` adds a
   section renderer per type.
-- **A みんなの日本語 source filter in Browse** — the activated cards already carry
-  `mnn-l<n>` + `みんなの日本語` tags; expose a Source/lesson facet chip so you can study
-  "just Lesson 23" from the normal flashcard deck.
+- ~~**A みんなの日本語 source filter in Browse**~~ — **shipped.** The `source` facet
+  (みんなの日本語 / iTalki / per-lesson) is wired into both pickers — see
+  [The Source filter facet](#the-source-filter-facet) above.
 
 ### Polish
 

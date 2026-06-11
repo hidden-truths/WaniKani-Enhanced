@@ -69,14 +69,17 @@ the header/toolbar, tabs, and the auth modal + sign-up banner.
   but NEVER touches the box/due. Session kind is captured at `startSession` into
   `session.kind`, tagged onto `store.sessions[*].kind` + the durable log's
   `details.kind`, and split out in `renderStats` (the SRS vs Free-study boxes).
-- **Filtering (AND'd facets):** `passes(v,c)` intersects five token facets
-  (`cat`/`type`/`trans`/`topic`/`status`) + JLPT + rank. `facetMatch` = OR-within-one,
-  `facetAll` = no-constraint test, `oneGroup` = does a card match one token.
-  `wireFacets(selector,c,onChange)` wires the `.deck`/`.bf` chips, deriving each
-  chip's facet from its token via `TOKEN_FACET` (topic is the default); the lone
-  "all" chip clears every facet. `makeMultiSelect` still wires the JLPT segs.
-  `cfg` (flashcard deck) and `bcfg` (browse grid) are independent configs.
-  `annotateJlptChips`/`annotateCatChips` disable empty JLPT levels / categories.
+- **Filtering (AND'd facets):** `passes(v,c)` intersects six token facets
+  (`cat`/`type`/`trans`/`topic`/`status`/`source`) + JLPT + rank. `facetMatch` =
+  OR-within-one, `facetAll` = no-constraint test, `oneGroup` = does a card match one
+  token. `wireFacets(selector,c,onChange)` wires the `.deck`/`.bf` chips, deriving each
+  chip's facet from its token via `TOKEN_FACET` (topic is the default; `mnn-l<n>` →
+  `source` via a regex); the lone "all" chip clears every facet. `makeMultiSelect` still
+  wires the JLPT segs. `cfg` (flashcard deck) and `bcfg` (browse grid) are independent
+  configs. The `source` facet (みんなの日本語 / iTalki / per-lesson) is the Minna-provenance
+  filter — see [MINNA.md](MINNA.md) "The Source filter facet".
+  `annotateJlptChips`/`annotateCatChips`/`annotateSourceChips` disable empty JLPT levels /
+  categories / sources (the Source row also hides entirely until the deck has Minna cards).
   `syncVerbRows` hides the verb-only Type+Transitivity rows when the `cat` facet
   excludes verbs (and clears any stranded type/trans tokens).
 - **Categories (`cat` facet):** `CATS` = `verb/adjective/noun/adverb/phrase`; all
@@ -206,15 +209,17 @@ Component contracts you must preserve:
 
 ## Things that look like bugs but aren't (DEAD-END WARNINGS)
 
-- **Category / Type / Transitivity / Topic / Leech chips are FIVE AND'd facets, not
-  one OR'd pool** (this changed — older docs/commits describing a shared pool, or
-  four facets, are stale). A chip's facet is derived from its token via `TOKEN_FACET`
-  (`tokenFacet`), not from markup, so the chips still carry class `.deck`/`.bf` +
-  `data-deck`/`data-filter`. "Godan + Motion" = `godan AND motion` (intersection);
-  tokens within one facet OR. `cfg`/`bcfg` hold `cat`/`type`/`trans`/`topic`/`status`
-  arrays (empty = no constraint). Don't reintroduce a single shared array — that was
-  the old confusing behavior. (`passes` treats a *missing* facet array as
-  no-constraint too, so older test cfgs without `cat` still pass.)
+- **Category / Type / Transitivity / Topic / Status / Source chips are SIX AND'd
+  facets, not one OR'd pool** (this changed — older docs/commits describing a shared
+  pool, or four/five facets, are stale). A chip's facet is derived from its token via
+  `TOKEN_FACET` (`tokenFacet`), not from markup, so the chips still carry class
+  `.deck`/`.bf` + `data-deck`/`data-filter`. "Godan + Motion" = `godan AND motion`
+  (intersection); tokens within one facet OR. `cfg`/`bcfg` hold
+  `cat`/`type`/`trans`/`topic`/`status`/`source` arrays (empty = no constraint).
+  `source` (added for みんなの日本語 provenance) matches the `minna`/`italki` card flags and
+  `mnn-l<n>` tags. Don't reintroduce a single shared array — that was the old confusing
+  behavior. (`passes` treats a *missing* facet array as no-constraint too, so older test
+  cfgs without `source`/`cat` still pass.)
 - **The single "All" chip is a master reset** that clears all four facets at once
   (not just its own row), and shows active when every facet is empty. Exactly one
   per panel — keep it that way. `wireFacets` returns a `paint()` fn that deep-links
@@ -397,11 +402,15 @@ Component contracts you must preserve:
   vocab/grammar/examples/conversation + native-audio buttons (`/v1/minna/audio`, one
   reused `<audio>`; same-origin so the session cookie authorizes). **Vocab "activation"
   REUSES the custom-verb system, not a new data path:** each word becomes a tagged
-  (`みんなの日本語` + `mnn-l<n>`) DICTIONARY-form custom card via `loadCustom`/`saveCustom`
-  +`seq`, so it joins the deck/SRS/Browse/Stats and syncs under `custom-verbs` for free
-  — idempotent via a stable `minnaKey`, marked `minna:true` (Browse shows a みんなの日本語
-  badge over CUSTOM via `provenanceBadge`). The only NEW synced blob is per-lesson NOTES
-  under the `minna` app key (4th sync trio). Content source of truth is the server's
+  (`みんなの日本語` + `mnn-l<n>`, plus `iTalki` for words flagged `italki:true` in the lesson
+  JSON) DICTIONARY-form custom card via `loadCustom`/`saveCustom` +`seq`, so it joins the
+  deck/SRS/Browse/Stats and syncs under `custom-verbs` for free — idempotent via a stable
+  `minnaKey` AND self-updating (re-activation patches metadata like the iTalki tag onto an
+  existing card without losing its rank — see `minnaActivationStatus`), marked
+  `minna:true`/`italki` (Browse shows a みんなの日本語 badge over CUSTOM via `provenanceBadge`;
+  iTalki words add a table badge). The `source` filter facet (みんなの日本語 / iTalki /
+  per-lesson) studies any of these slices from the normal deck. The only NEW synced blob is
+  per-lesson NOTES under the `minna` app key (4th sync trio). Content source of truth is the server's
   `data/minna/lesson-<n>.json` (git-tracked, curated from the `scripts/scrape-minna.ts`
   draft). Phase 2 — record-your-voice + compare to native audio — is planned.
   **Full feature doc (architecture + data model + roadmap): [MINNA.md](MINNA.md).**
@@ -410,6 +419,18 @@ Component contracts you must preserve:
 
 Commits, newest first (all on `main`; touch the split web/ files + `src/` where noted):
 
+1. **みんなの日本語: iTalki tag + Source facet + lessons 22/24 (4 commits).** (1) An
+   `italki:true` flag in the lesson JSON → activated cards gain an `iTalki` tag/flag +
+   a vocab-table badge; `activateMinnaVocab` now patches metadata onto already-added
+   cards (`minnaActivationStatus` drives an "Update N tags" button) so the tag applies
+   retroactively without losing rank. (2) A sixth AND'd **`source`** facet
+   (みんなの日本語 / iTalki / per-lesson `mnn-l<n>` via a `tokenFacet` regex) in both
+   pickers, with `annotateSourceChips` (hide-until-Minna + dim-empty) and `deckLabel`
+   recap support. (3) Curated `data/minna/lesson-22.json` + `lesson-24.json` from the
+   scraper. (4) Polish: Source chips tinted to the badge colours, Browse cards drop the
+   redundant みんなの日本語/lesson tag chips (the provenance badge covers them). Tests in
+   `verbs-core.test.ts` (tokenFacet/oneGroup/passes/deckLabel for `source`). Full doc:
+   [MINNA.md](MINNA.md).
 1. **ARIA radiogroup semantics for single-select chip rows.** The five mutually-
    exclusive `.chips` rows (Study type, Test direction, Input, Audio, Order) now
    declare `role="radiogroup"` in the markup; `setupRoving` branches on that flag to

@@ -9,6 +9,18 @@ split, custom-verb sync, and Google TTS — what's left is one genuinely-deferre
 (needs email infra). Add new ideas to "Ideas / not yet scoped" as they come up.
 
 ## Done (most recent first)
+- ~~みんなの日本語: iTalki tag + Source filter + lessons 22 & 24~~ — **shipped.** An
+  `italki:true` flag in the lesson JSON marks words covered in the maintainer's iTalki
+  lessons (all of L23, from `~/Downloads/lesson23_vocab.txt`); activated cards gain an
+  `iTalki` tag + flag and a vocab-table badge. A new **`source` filter facet** (a sixth
+  AND'd facet: みんなの日本語 / iTalki / per-lesson `L22·L23·L24`) studies any provenance
+  slice from the normal deck — hidden until the deck has Minna cards, chips tinted to
+  match the badges. Re-activation now PATCHES metadata (the button shows "Update N tags")
+  so already-added cards pick up the iTalki tag without a delete/re-add. Browse cards
+  decluttered (provenance badge replaces the redundant みんなの日本語/lesson tag chips).
+  **Lessons 22 (noun-modifying clauses) and 24 (giving & receiving)** curated from the
+  scraper into `data/minna/lesson-<n>.json`. The Minna roadmap (Phase 2, furigana, …)
+  still lives in [MINNA.md](MINNA.md). Verified live; 25 web-core tests (4 new).
 - ~~みんなの日本語 dashboard (Chapter 23)~~ — **shipped.** A 4th, **account-gated** tab:
   a Minna no Nihongo lesson dashboard (vocab with native audio, grammar, example
   sentences, conversation) fetched at runtime from `/v1/minna/*` (signed-in only — the
