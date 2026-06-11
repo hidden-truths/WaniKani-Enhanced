@@ -481,3 +481,30 @@ export function pruneRecordings(
     for (const r of stale) del.run(r.id);
     return stale.map(rowToRecording);
 }
+
+// Per-lesson practice summary for a user: one row per lesson they've recorded in,
+// with the distinct-item count, total take count, and the most-recent take's time.
+// Powers the みんなの日本語 "Practice history" overview (a cross-lesson aggregate the
+// per-lesson listRecordings can't give without fetching every lesson). Lessons with
+// no takes are absent (so an empty result = the user has never recorded).
+export interface RecordingLessonSummary {
+    lesson: number;
+    items: number; // distinct item_keys recorded in this lesson
+    takes: number; // total takes in this lesson
+    lastCreatedAt: number; // newest take's createdAt (epoch ms)
+}
+
+export function recordingSummary(userId: number): RecordingLessonSummary[] {
+    return getDb()
+        .query(
+            `SELECT lesson,
+                    COUNT(DISTINCT item_key) AS items,
+                    COUNT(*)               AS takes,
+                    MAX(created_at)        AS lastCreatedAt
+             FROM minna_recordings
+             WHERE user_id = ?
+             GROUP BY lesson
+             ORDER BY lesson ASC`,
+        )
+        .all(userId) as RecordingLessonSummary[];
+}

@@ -33,6 +33,7 @@ import {
     MinnaRecordingsListResponseSchema,
     MinnaRecordingIdParamsSchema,
     MinnaRecordingDeleteResponseSchema,
+    MinnaPracticeResponseSchema,
     ErrorSchema,
 } from '../schemas.ts';
 import { zodHook } from '../lib/zodHook.ts';
@@ -282,6 +283,34 @@ minnaRouter.openapi(recListRoute, (c) => {
     c.header('Cache-Control', 'no-store');
     const recordings = db.listRecordings(user.id, Number(lesson)).map(toRecordingDto);
     return c.json({ recordings }, 200);
+});
+
+// ---------- GET /practice (per-lesson practice history) ----------
+//
+// A cross-lesson aggregate the per-lesson list route can't give without fetching
+// every lesson: one row per lesson the user has recorded in, with item + take
+// counts and the last-practiced time. Its own path (not /recordings/...) so it
+// can't be shadowed by the /recordings/{id} param route.
+
+const recPracticeRoute = createRoute({
+    method: 'get',
+    path: '/practice',
+    tags: ['Accounts'],
+    summary: "The current user's per-lesson practice history (recording counts)",
+    responses: {
+        200: { description: 'Practice summary, lessons ascending.', content: { 'application/json': { schema: MinnaPracticeResponseSchema } } },
+        401: { description: 'Not authorized.', content: { 'application/json': { schema: ErrorSchema } } },
+    },
+});
+
+minnaRouter.openapi(recPracticeRoute, (c) => {
+    const user = gate(c);
+    if (!user) return denied(c);
+    c.header('Cache-Control', 'no-store');
+    const lessons = db.recordingSummary(user.id);
+    const totalTakes = lessons.reduce((s, l) => s + l.takes, 0);
+    const totalItems = lessons.reduce((s, l) => s + l.items, 0);
+    return c.json({ lessons, totalItems, totalTakes }, 200);
 });
 
 // ---------- GET /recordings/{id} (serve the audio bytes) ----------

@@ -88,6 +88,7 @@ All three are **signed-in only**, optionally narrowed to an owner allowlist
 | GET | `/v1/minna/recordings?lesson=` | `no-store` | **(Phase 2)** List the user's takes for a lesson, newest first (metadata only). |
 | GET | `/v1/minna/recordings/{id}` | `private, immutable` | **(Phase 2)** Stream one of the **owner's** recordings (404 for a non-owner/missing id). |
 | DELETE | `/v1/minna/recordings/{id}` | — | **(Phase 2)** Delete one of the owner's recordings + its storage object (idempotent). |
+| GET | `/v1/minna/practice` | `no-store` | **(Phase 2)** The user's per-lesson practice history — one row per lesson recorded in, with distinct-item + take counts and the last-practiced time. Own path (not under `/recordings/`) so the `/recordings/{id}` param route can't shadow it. |
 
 Defined in [../wk-enhanced-api/src/routes/minna.ts](../wk-enhanced-api/src/routes/minna.ts); mounted at `/v1/minna` in
 [../wk-enhanced-api/src/index.ts](../wk-enhanced-api/src/index.ts). Schemas in [../wk-enhanced-api/src/schemas.ts](../wk-enhanced-api/src/schemas.ts)
@@ -409,11 +410,16 @@ helpers in [src/core/recordings.js](src/core/recordings.js).
 - ~~**Dual waveform** (Web Audio `decodeAudioData` → canvas), **speed control** (0.5×–1×), and
   **▶ simultaneous** playback.~~ — **shipped** (see the Compare player / Dual waveform / Speed
   bullets above).
-- **A `GET` over recordings/sessions** for a per-lesson practice history (the rows are
-  already captured; just needs a list/aggregate route + a small UI).
-- **Auto-exit speaking mode on tab/lesson switch.** Today the persistent mic stays open until
-  the user toggles it off (the browser's recording indicator makes this obvious). Releasing it
-  when the みんなの日本語 tab is deactivated would need a tab-deactivate hook in `chrome.js`.
+- ~~**A `GET` over recordings/sessions** for a per-lesson practice history~~ — **shipped.**
+  `GET /v1/minna/practice` (DB `recordingSummary` → one row per lesson recorded in: distinct-item
+  count, take count, last-practiced time) feeds a collapsed **"Practice history"** section in the
+  lesson view (`practiceHistorySection` in `minna.js`), current lesson highlighted, hidden until
+  the first recording exists. Fails open (offline → no section). Reflects the server as of each
+  lesson render; a take saved after won't show until the next render/switch.
+- ~~**Auto-exit speaking mode on tab/lesson switch.**~~ — **shipped.** `chrome.js` `initTabs`
+  fires a `leaveMinna` handler when navigating away from the みんなの日本語 tab → `minna.js`
+  `onMinnaHidden()` → `exitSpeakingMode()`; a chapter-chip click also exits before re-render. So
+  the persistent mic is released on any navigation out of the lesson context (idempotent both ways).
 
 ### More lessons & sections
 
@@ -435,8 +441,6 @@ helpers in [src/core/recordings.js](src/core/recordings.js).
   `<html data-furigana>` flip the rest of the app already has.
 - **Per-line conversation audio** if vnjpclub (or another source) exposes it — the line
   model would gain an optional `audio` field; the single-file player stays as a fallback.
-- **A `GET` over recordings/sessions** for a per-lesson practice history once Phase 2
-  lands.
 
 ---
 

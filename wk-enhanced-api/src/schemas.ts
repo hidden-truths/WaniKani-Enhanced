@@ -446,3 +446,21 @@ export const MinnaRecordingIdParamsSchema = z.object({
 export const MinnaRecordingDeleteResponseSchema = z
     .object({ ok: z.boolean() })
     .openapi('MinnaRecordingDeleteResponse');
+
+// GET /v1/minna/practice — the user's per-lesson practice history (recording counts).
+export const MinnaPracticeLessonSchema = z
+    .object({
+        lesson: z.number().int(),
+        items: z.number().int().openapi({ description: 'Distinct items (words / conversation lines) recorded in this lesson.' }),
+        takes: z.number().int().openapi({ description: 'Total takes saved in this lesson.' }),
+        lastCreatedAt: z.number().int().openapi({ description: "Newest take's createdAt (epoch ms)." }),
+    })
+    .openapi('MinnaPracticeLesson');
+
+export const MinnaPracticeResponseSchema = z
+    .object({
+        lessons: z.array(MinnaPracticeLessonSchema),
+        totalItems: z.number().int(),
+        totalTakes: z.number().int(),
+    })
+    .openapi('MinnaPracticeResponse');

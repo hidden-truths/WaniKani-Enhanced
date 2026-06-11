@@ -246,4 +246,26 @@ describe('minna_recordings (record-and-compare)', () => {
         mem.query('DELETE FROM users WHERE id = ?').run(u.id);
         expect(db.listRecordings(u.id, 23)).toHaveLength(0);
     });
+
+    test('recordingSummary aggregates per lesson (distinct items, take counts, last time)', () => {
+        const u = db.createUser('hist@example.com', 'hash');
+        // L23: two items, three takes total; L24: one item, one take.
+        add(u.id, 23, 'mnn:23:0', 1000);
+        add(u.id, 23, 'mnn:23:0', 5000); // same item, newer
+        add(u.id, 23, 'mnn:23:1', 3000);
+        add(u.id, 24, 'mnn:24:0', 2000);
+        const summary = db.recordingSummary(u.id);
+        expect(summary).toEqual([
+            { lesson: 23, items: 2, takes: 3, lastCreatedAt: 5000 },
+            { lesson: 24, items: 1, takes: 1, lastCreatedAt: 2000 },
+        ]);
+    });
+
+    test('recordingSummary is owner-scoped and empty when nothing recorded', () => {
+        const u = db.createUser('empty@example.com', 'hash');
+        const v = db.createUser('other@example.com', 'hash');
+        add(v.id, 23, 'mnn:23:0', 1000); // another user's take must not leak in
+        expect(db.recordingSummary(u.id)).toEqual([]);
+        expect(db.recordingSummary(v.id)).toEqual([{ lesson: 23, items: 1, takes: 1, lastCreatedAt: 1000 }]);
+    });
 });

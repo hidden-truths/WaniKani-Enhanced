@@ -207,6 +207,9 @@ async function renderMinnaLesson(n, body) {
   try { L = await fetchMinnaLesson(n); }
   catch (e) { body.innerHTML = '<div class="mn-error">Could not load lesson ' + n + (e && e.status ? (' (' + e.status + ')') : '') + '.</div>'; return; }
   await loadLessonRecordings(n);   // populate the record-and-compare take cache before render
+  // Cross-lesson practice history (recording counts). Fails open: offline / error → no section.
+  let practice = null;
+  try { practice = await api('/v1/minna/practice'); } catch (e) {}
   const st = minnaActivationStatus(n, L.vocab || []);
   const btn = st.toAdd ? { ic: 'plus', label: 'Add all vocab to deck', dis: '' }
     : st.toUpdate ? { ic: 'refresh', label: 'Update ' + st.toUpdate + ' word' + (st.toUpdate === 1 ? '' : 's'), dis: '' }
@@ -225,6 +228,7 @@ async function renderMinnaLesson(n, body) {
     ${minnaGrammarSection(L)}
     ${minnaExamplesSection(L)}
     ${minnaConversationSection(L)}
+    ${practiceHistorySection(practice, n)}
     ${minnaNotesSection(n)}`;
   wireMinnaLesson(n, L, body);
 }
@@ -332,6 +336,29 @@ function wireMinnaClips(body) {
       renderMinnaLesson(ctx.lesson, body);   // re-render so the rec-control picks up the new clip
     }
   });
+}
+// Short local date for a practice-history "last practiced" cell. Adds the year only when it
+// isn't the current one, so recent practice stays compact ("Jun 10") and older shows the year.
+function fmtPracticeDate(ms) {
+  const d = new Date(ms), opts = { month: 'short', day: 'numeric' };
+  if (d.getFullYear() !== new Date().getFullYear()) opts.year = 'numeric';
+  return d.toLocaleDateString(undefined, opts);
+}
+// "Practice history" overview — a cross-lesson roll-up of the user's saved takes (item + take
+// counts + last-practiced per lesson, current lesson highlighted). Hidden until at least one
+// recording exists. Reflects the server as of THIS render; a take saved afterward won't show
+// until the next lesson render/switch (an upload only re-renders its own control, not the page).
+function practiceHistorySection(practice, current) {
+  if (!practice || !practice.lessons || !practice.lessons.length) return '';
+  const rows = practice.lessons.map(l => `<tr${l.lesson === current ? ' class="mn-ph-cur"' : ''}>
+      <td>L${l.lesson}</td>
+      <td>${l.items} item${l.items === 1 ? '' : 's'}</td>
+      <td>${l.takes} take${l.takes === 1 ? '' : 's'}</td>
+      <td class="mn-ph-when">${escapeHtml(fmtPracticeDate(l.lastCreatedAt))}</td>
+    </tr>`).join('');
+  const total = `<div class="mn-ph-total">${practice.totalTakes} take${practice.totalTakes === 1 ? '' : 's'} · ${practice.totalItems} item${practice.totalItems === 1 ? '' : 's'} across ${practice.lessons.length} lesson${practice.lessons.length === 1 ? '' : 's'}</div>`;
+  const table = `<table class="mn-ph"><thead><tr><th>Lesson</th><th>Items</th><th>Takes</th><th>Last</th></tr></thead><tbody>${rows}</tbody></table>`;
+  return mnSection('Practice history', practice.totalTakes, total + table, false);
 }
 function minnaNotesSection(n) {
   const val = escapeHtml((state.minnaStore.notes && state.minnaStore.notes[n]) || '');

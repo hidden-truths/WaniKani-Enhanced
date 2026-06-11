@@ -531,7 +531,14 @@ Component contracts you must preserve:
   → a `volume` passed through `playRange`. The **▶ both balance slider** (`compareBias`, view-only,
   in the speaking bar) is a `you ⟷ native` crossfader applied ON TOP of the gains, **only** for
   ▶ both (`applyBothVolumes`, live via `bothPlaying`); single playback ignores it. The take-list
-  ▶ resets `volume` to 1 (raw listen, not normalized).
+  ▶ resets `volume` to 1 (raw listen, not normalized). **A cross-lesson "Practice history"
+  overview** (`practiceHistorySection` in `minna.js`, fed by `GET /v1/minna/practice` → DB
+  `recordingSummary`) renders a collapsed section in the lesson view: per-lesson distinct-item +
+  take counts + last-practiced date, current lesson highlighted, hidden until the first recording.
+  It's fetched fresh each lesson render and **fails open** (offline → no section); a take saved
+  after render won't show until the next render/switch (an upload only re-renders its own control).
+  The route has its **own path** (`/practice`, not under `/recordings/`) so the `/recordings/{id}`
+  param route can't shadow it.
 - **Every compare playback plays a SPEECH WINDOW, not the whole file — this is what makes ▶ both
   line up.** The native MP3 has built-in lead/tail silence; overlapping it raw on your
   (already-tight) take would start the native speaker late, so ▶ both wouldn't align. `playRange`
@@ -566,7 +573,14 @@ Component contracts you must preserve:
   **no `getUserMedia` per take**; `onstop` does NOT stop the stream. `minna.js` renders the
   vocab/line rec-controls only `if (isSpeakingMode())`, and the toggle re-renders the lesson.
   Don't revert `startRecording` to per-take `getUserMedia`, and don't render controls outside
-  speaking mode. `exitSpeakingMode()` stops the recorder + releases the stream.
+  speaking mode. `exitSpeakingMode()` stops the recorder + releases the stream. **Navigating out
+  of the lesson context auto-exits speaking mode** so the mic doesn't linger: `chrome.js`
+  `initTabs` tracks the active tab and fires a `leaveMinna` handler when switching AWAY from the
+  みんなの日本語 tab → wired in `main.js` to `minna.js`'s `onMinnaHidden()` → `exitSpeakingMode()`;
+  a chapter-chip click also calls `exitSpeakingMode()` before re-rendering. The stale
+  speaking-mode DOM is never seen because returning to the tab re-renders fresh via `renderMinna()`.
+  Don't move the tab-leave hook into `chrome.js` directly (it'd make chrome import a feature) —
+  keep it a `handlers.leaveMinna` callback like the per-tab renders.
 - **The mic picker pins a `deviceId` ON PURPOSE — it's the fix for AirPods dropping to
   hands-free.** macOS switches AirPods to low-quality HFP the instant any app opens *their*
   mic; the persistent stream is acquired with an explicit non-AirPods
