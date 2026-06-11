@@ -14,6 +14,7 @@ export function renderSettings() {
   seg('.setin', 'setin', settings.input);
   seg('.setau', 'setau', settings.audio);
   seg('.setfr', 'setfr', settings.freeReviewDue ? 'on' : 'off');
+  seg('.settr', 'settr', settings.trimSilence ? 'on' : 'off');
   const keep = document.getElementById('setRecKeep'); if (keep) keep.value = clampKeep(settings.recordingsKeep);
   const foot = document.getElementById('settingsFoot');
   if (foot) foot.textContent = account ? ('Synced to ' + account.email) : 'Sign in to sync these across your devices.';
@@ -33,4 +34,5 @@ export function initSettingsPage() {
   document.getElementById('setFreeDue').addEventListener('click', e => { const b = e.target.closest('.setfr'); if (!b) return; settings.freeReviewDue = b.dataset.setfr === 'on'; saveSettings(); renderSettings(); });
   const keep = document.getElementById('setRecKeep');
   if (keep) keep.addEventListener('change', () => { settings.recordingsKeep = clampKeep(keep.value); saveSettings(); renderSettings(); });
+  document.getElementById('setTrim').addEventListener('click', e => { const b = e.target.closest('.settr'); if (!b) return; settings.trimSilence = b.dataset.settr === 'on'; saveSettings(); renderSettings(); });
 }

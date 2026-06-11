@@ -16,7 +16,7 @@ import {
   pitchHtml, minnaSig, cardStamp, colorClass, CATS, exampleForLevel, availableTiers,
   JLPT_TIERS, BOX_DAYS,
   clampKeep, convItemKey, formatDuration, KEEP_DEFAULT,
-  validClip, resolveClip, clipLabel,
+  validClip, resolveClip, clipLabel, findTrimBounds,
 } from '../src/core/index.js';
 
 beforeEach(() => {
@@ -441,4 +441,24 @@ test('clipLabel formats a clip, empty when invalid', () => {
   expect(clipLabel([65, 70])).toBe('1:05–1:10');
   expect(clipLabel(null)).toBe('');
   expect(clipLabel([5, 5])).toBe('');
+});
+
+test('findTrimBounds tightens to the sound region (silence·sound·silence)', () => {
+  // 1 kHz "sample rate" so a 10 ms window = 10 samples; padMs:0 keeps the math exact.
+  const s = new Float32Array(80);              // [0..29]=silence, [30..49]=loud, [50..79]=silence
+  for (let i = 30; i < 50; i++) s[i] = 0.5;
+  const b = findTrimBounds(s, 1000, { windowMs: 10, padMs: 0, threshold: 0.1 });
+  expect(b).toEqual({ start: 30, end: 50 });
+});
+
+test('findTrimBounds pads around the sound and clamps to the buffer', () => {
+  const s = new Float32Array(80);
+  for (let i = 30; i < 50; i++) s[i] = 0.5;
+  const b = findTrimBounds(s, 1000, { windowMs: 10, padMs: 10, threshold: 0.1 }); // pad = 10 samples
+  expect(b).toEqual({ start: 20, end: 60 });
+});
+
+test('findTrimBounds returns null for all-silence (caller keeps original)', () => {
+  expect(findTrimBounds(new Float32Array(100), 1000, { threshold: 0.1 })).toBeNull();
+  expect(findTrimBounds(new Float32Array(0), 1000)).toBeNull();
 });

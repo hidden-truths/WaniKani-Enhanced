@@ -228,7 +228,9 @@ export const keys = {
     // `token` is a random uuid generated at upload time, so each take has a
     // unique key (no id round-trip). `itemKey` is sanitized to a safe path
     // segment (it contains ':' — 'mnn:23:conv:2'); the authoritative key is
-    // stored in the DB row, so this layout is purely internal.
-    minnaRecording: (userId: number, lesson: number, itemKey: string, token: string) =>
-        `recording/${userId}/${lesson}/${itemKey.replace(/[^A-Za-z0-9_-]+/g, '_')}/${token}.webm`,
+    // stored in the DB row, so this layout is purely internal. `ext` matches the
+    // container the client sent (webm/mp4/ogg/wav) — cosmetic (we serve by the
+    // stored content_type), but keeps the on-disk file honest.
+    minnaRecording: (userId: number, lesson: number, itemKey: string, token: string, ext = 'webm') =>
+        `recording/${userId}/${lesson}/${itemKey.replace(/[^A-Za-z0-9_-]+/g, '_')}/${token}.${ext}`,
 };

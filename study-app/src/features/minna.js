@@ -14,7 +14,7 @@ import { account, api, setSyncStatus } from './cloud-core.js';
 import { openAuth } from './cloud.js';
 import { loadCustom, saveCustom } from '../persistence/custom.js';
 import { rebuildData, refreshAfterVerbChange } from './custom-cards.js';
-import { loadLessonRecordings, recordControlHtml, wireMinnaRecord } from './minna-record.js';
+import { loadLessonRecordings, recordControlHtml, wireMinnaRecord, micSelectorHtml, initMicSelector } from './minna-record.js';
 
 const MINNA_APP_KEY = 'minna';
 const MINNA_KEY = 'jpverbs_minna';
@@ -218,6 +218,7 @@ async function renderMinnaLesson(n, body) {
       <button class="chip primary" id="mnAddDeck"${btn.dis}><svg class="ic" aria-hidden="true"><use href="#i-${btn.ic}"/></svg>${btn.label}</button>
       <span class="v-in" id="mnDeckCount">${st.inDeck}/${st.total} in your SRS deck</span>
     </div>
+    ${micSelectorHtml()}
     ${minnaVocabSection(L)}
     ${minnaGrammarSection(L)}
     ${minnaExamplesSection(L)}
@@ -337,6 +338,7 @@ function wireMinnaLesson(n, L, body) {
   body.querySelectorAll('[data-aud]').forEach(b => b.addEventListener('click', () => mnPlay(b.dataset.aud, b)));
   wireMinnaRecord(body);   // delegated record/play/delete/compare handlers (attach-once)
   wireMinnaClips(body);    // delegated conversation-line clip-marker handlers (attach-once)
+  initMicSelector(body);   // populate + wire the input-device dropdown
   const add = body.querySelector('#mnAddDeck');
   if (add) add.addEventListener('click', () => {
     const { added, updated } = activateMinnaVocab(n, L.vocab || []);

@@ -180,9 +180,17 @@ const MAX_RECORDING_BYTES = 2_000_000; // ~2 MB — a short clip; generous ceili
 const DEFAULT_KEEP = 3;
 const MAX_KEEP = 20;
 // Accepted recording container types. MediaRecorder emits webm/opus on
-// Chromium/Firefox and mp4 (or ogg) elsewhere; we store whatever the client
-// sends and echo it back on serve so playback picks the right decoder.
-const RECORDING_CONTENT_TYPES = new Set(['audio/webm', 'audio/mp4', 'audio/ogg', 'audio/mpeg']);
+// Chromium/Firefox and mp4 (or ogg) elsewhere; the client's silence-trim step
+// re-encodes to wav. We store whatever the client sends and echo it back on
+// serve so playback picks the right decoder.
+const RECORDING_CONTENT_TYPES = new Set(['audio/webm', 'audio/mp4', 'audio/ogg', 'audio/mpeg', 'audio/wav']);
+const EXT_BY_TYPE: Record<string, string> = {
+    'audio/webm': 'webm',
+    'audio/mp4': 'm4a',
+    'audio/ogg': 'ogg',
+    'audio/mpeg': 'mp3',
+    'audio/wav': 'wav',
+};
 
 // Public (client-facing) view of a recording row — drops the internal storage key + owner.
 function toRecordingDto(r: RecordingRow) {
@@ -229,7 +237,7 @@ minnaRouter.openapi(recPostRoute, async (c) => {
     }
 
     const token = crypto.randomUUID();
-    const storageKey = keys.minnaRecording(user.id, lessonNum, itemKey, token);
+    const storageKey = keys.minnaRecording(user.id, lessonNum, itemKey, token, EXT_BY_TYPE[ct] || 'webm');
     try {
         await getStorage().put(storageKey, body, ct, { acl: 'private' });
     } catch {

@@ -508,6 +508,23 @@ Component contracts you must preserve:
   the same cookie-gated-audio path as the native-audio button. The **binary upload uses its
   own credentialed `fetch`** (not the JSON-only `api()`); list/delete use `api()`. Retention
   is the `recordingsKeep` setting (default 3, 1–20), sent as `keep` and enforced server-side.
+- **The mic picker pins a `deviceId` ON PURPOSE — it's the fix for AirPods dropping to
+  hands-free.** macOS switches AirPods to low-quality HFP the instant any app opens *their*
+  mic; recording from an explicit non-AirPods `getUserMedia({audio:{deviceId:{exact}}})`
+  never activates the AirPods input, so they stay in A2DP. The chosen device is
+  **device-local** (`localStorage jpverbs_micDevice`), NOT in the synced `settings` blob — a
+  deviceId is per-browser/machine and meaningless on another device; don't move it into
+  `settings`. Labels are empty until mic permission is granted (browser privacy), so the
+  selector shows "Microphone N" until the first record, then re-enumerates. A stored id that
+  no longer enumerates is dropped → fall back to the system default (with a one-shot
+  `{audio:true}` retry if an `exact` constraint fails mid-record).
+- **Silence trim re-encodes to WAV, and that's deliberate.** `maybeTrim` decodes the take,
+  mixes to mono, finds the sound region (`findTrimBounds`, pure/tested), slices, and encodes
+  16-bit PCM **WAV** — because there is no in-browser opus/webm encoder for an `AudioBuffer`.
+  Clips are short so uncompressed WAV stays well under the 2 MB cap. It's gated by
+  `trimSilence` (default on) and **fails safe**: decode error, all-silence, or a <150 ms
+  result all return the ORIGINAL blob untouched — never a broken/empty take. The server's
+  recording content-type allowlist therefore includes `audio/wav` (+ a `.wav` ext mapping).
 
 ## Change log — UX/design pass (this is the conversation record)
 

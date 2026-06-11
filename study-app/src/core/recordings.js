@@ -57,3 +57,33 @@ export function clipLabel(clip) {
   const v = validClip(clip);
   return v ? formatDuration(v[0] * 1000) + '–' + formatDuration(v[1] * 1000) : '';
 }
+
+// Find the [start, end) sample window of actual sound in a mono PCM buffer, so we can
+// trim leading/trailing (near-)silence off a recording. Windowed RMS: scan in ~windowMs
+// chunks, keep the first and last window whose RMS clears `threshold`, then pad by `padMs`
+// on each side so we don't clip the very onset/tail of speech. Returns null when the whole
+// buffer is below threshold (all silence) — the caller then keeps the original untouched.
+// Pure + DOM-free (operates on a Float32Array), so it's unit-tested directly.
+export function findTrimBounds(samples, sampleRate, opts = {}) {
+  const threshold = opts.threshold ?? 0.01;   // RMS amplitude (~ -40 dBFS)
+  const padMs = opts.padMs ?? 80;
+  const windowMs = opts.windowMs ?? 10;
+  const n = samples.length;
+  if (!n || !sampleRate) return null;
+  const win = Math.max(1, Math.round((windowMs / 1000) * sampleRate));
+  const rmsAt = (from) => {
+    const to = Math.min(n, from + win);
+    let s = 0;
+    for (let i = from; i < to; i++) s += samples[i] * samples[i];
+    return Math.sqrt(s / (to - from));
+  };
+  let first = -1, last = -1;
+  for (let from = 0; from < n; from += win) {
+    if (rmsAt(from) >= threshold) { if (first < 0) first = from; last = from; }
+  }
+  if (first < 0) return null;   // all silence
+  const pad = Math.round((padMs / 1000) * sampleRate);
+  const start = Math.max(0, first - pad);
+  const end = Math.min(n, last + win + pad);
+  return { start, end };
+}

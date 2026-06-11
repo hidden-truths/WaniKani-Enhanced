@@ -15,7 +15,9 @@ const SETTINGS_KEY = 'jpverbs_settings';
 // recordingsKeep: how many voice takes to keep per word/line in the みんなの日本語
 // record-and-compare feature. The server prunes older takes beyond this on each
 // upload (clamped 1–20). Default 3.
-export const DEFAULT_SETTINGS = { exampleLevel: 'N5', furigana: true, input: 'self', audio: 'off', freeReviewDue: true, recordingsKeep: 3 };
+// trimSilence: auto-trim leading/trailing (near-)silence off a new recording before
+// saving, so the take is just the spoken words. Default on.
+export const DEFAULT_SETTINGS = { exampleLevel: 'N5', furigana: true, input: 'self', audio: 'off', freeReviewDue: true, recordingsKeep: 3, trimSilence: true };
 
 export function loadSettings() {
   let s = null; try { s = JSON.parse(localStorage.getItem(SETTINGS_KEY)); } catch (e) {}

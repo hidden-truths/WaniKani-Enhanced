@@ -331,6 +331,18 @@ helpers in [src/core/recordings.js](src/core/recordings.js).
 - **Capture** — `MediaRecorder`(`getUserMedia` audio) → opus/webm (mp4 fallback on Safari),
   with a preview / Save / Re-record / Cancel review step. A record control sits under each
   vocab row and each conversation line. Degrades to a hint when the APIs are unavailable.
+- **Input-device picker** — a **Microphone** dropdown at the top of the lesson
+  (`micSelectorHtml`/`initMicSelector`) pins a specific input via `getUserMedia({audio:{
+  deviceId:{exact}}})`. This stops macOS from flipping AirPods to low-quality hands-free
+  (HFP) mode — we simply never open the AirPods input. The choice is **device-local**
+  (`localStorage jpverbs_micDevice`, not synced — a deviceId is per-machine); labels appear
+  once mic permission is granted, and the list refreshes on `devicechange`.
+- **Auto-trim silence** — after capture, the take is decoded, the sound region is found
+  (`findTrimBounds`, pure/tested: windowed-RMS first/last-above-threshold + padding) and
+  re-encoded to 16-bit PCM **WAV** so the saved clip is just the spoken words. Gated by the
+  `trimSilence` setting (default on); any failure falls back to the untouched original. (WAV
+  because there's no in-browser opus encoder for an `AudioBuffer`; clips are short so size
+  stays under the 2 MB cap. The server accepts `audio/wav`.)
 - **Store** — per-user takes on the server: the `minna_recordings` table + **PRIVATE**
   storage objects (`acl:'private'`), served only through the owner-scoped
   `GET /v1/minna/recordings/{id}`. `POST` prunes per item to the user's **keep-N** (Settings

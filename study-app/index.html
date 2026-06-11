@@ -750,6 +750,11 @@
       </span></div>
     <div class="set-row"><label>Recordings to keep per word<span class="set-hint">みんなの日本語 record-and-compare. Older voice takes beyond this are deleted. 1–20.</span></label>
       <input class="set-num" id="setRecKeep" type="number" min="1" max="20" step="1" inputmode="numeric" aria-label="Recordings to keep per word"></div>
+    <div class="set-row"><label>Trim silence from recordings<span class="set-hint">Automatically cut leading and trailing quiet so a take is just the spoken words.</span></label>
+      <span class="jlptseg" id="setTrim" role="group" aria-label="Trim silence from recordings">
+        <button class="chip settr" type="button" data-settr="on">On</button>
+        <button class="chip settr" type="button" data-settr="off">Off</button>
+      </span></div>
     <div class="modal-foot" id="settingsFoot"></div>
   </div>
 </div>

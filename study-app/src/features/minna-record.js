@@ -10,7 +10,7 @@
 import { API_BASE } from '../config.js';
 import { account, api, setSyncStatus } from './cloud-core.js';
 import { settings } from '../settings-store.js';
-import { escapeHtml, clampKeep, formatDuration, validClip } from '../core/index.js';
+import { escapeHtml, clampKeep, formatDuration, validClip, findTrimBounds } from '../core/index.js';
 
 // Capability gates. Recording needs getUserMedia + MediaRecorder; both are absent over
 // insecure origins / old browsers. When unavailable we degrade to a quiet hint.
@@ -25,6 +25,98 @@ function pickMime() {
     if (MediaRecorder.isTypeSupported(c)) return c;
   }
   return '';
+}
+
+// ---------- input-device (microphone) selection ----------
+// macOS flips AirPods to low-quality hands-free (HFP) mode the moment any app opens THEIR
+// mic. By recording from an explicitly-chosen non-AirPods input (deviceId:{exact}), the
+// AirPods input is never activated, so they stay in high-quality A2DP. The chosen device is
+// DEVICE-LOCAL (a deviceId is per-browser/machine and unstable across them), so it's stored
+// in localStorage, not the synced settings.
+const MIC_KEY = 'jpverbs_micDevice';
+let selectedMicId = (() => { try { return localStorage.getItem(MIC_KEY) || ''; } catch (e) { return ''; } })();
+let micDevices = [];   // cached audioinput list; labels appear once mic permission is granted
+function setSelectedMic(id) { selectedMicId = id || ''; try { id ? localStorage.setItem(MIC_KEY, id) : localStorage.removeItem(MIC_KEY); } catch (e) {} }
+async function enumerateMics() {
+  if (!RECORD_SUPPORTED || !navigator.mediaDevices.enumerateDevices) return [];
+  try {
+    micDevices = (await navigator.mediaDevices.enumerateDevices()).filter(d => d.kind === 'audioinput');
+  } catch (e) { micDevices = []; }
+  // Drop a stored id that no longer exists (device unplugged) so we fall back to default.
+  if (selectedMicId && !micDevices.some(d => d.deviceId === selectedMicId)) setSelectedMic('');
+  return micDevices;
+}
+// The getUserMedia audio constraint for the chosen device (or the system default).
+function micConstraint() {
+  return selectedMicId ? { deviceId: { exact: selectedMicId } } : true;
+}
+
+// ---------- silence trim (Web Audio) ----------
+// After capture, decode → find the sound region (findTrimBounds, pure) → slice → re-encode
+// to 16-bit PCM WAV. WAV because there's no in-browser opus/webm encoder for an AudioBuffer;
+// clips are short so the uncompressed size stays well under the 2 MB cap. Gated by the
+// `trimSilence` setting; any failure (decode unsupported, all-silence, too-short) falls back
+// to the untouched original.
+let _audioCtx = null;
+function audioCtx() { if (!_audioCtx) { const C = window.AudioContext || window.webkitAudioContext; _audioCtx = new C(); } return _audioCtx; }
+function encodeWav(samples, sampleRate) {
+  const len = samples.length, buf = new ArrayBuffer(44 + len * 2), dv = new DataView(buf);
+  const str = (off, s) => { for (let i = 0; i < s.length; i++) dv.setUint8(off + i, s.charCodeAt(i)); };
+  str(0, 'RIFF'); dv.setUint32(4, 36 + len * 2, true); str(8, 'WAVE');
+  str(12, 'fmt '); dv.setUint32(16, 16, true); dv.setUint16(20, 1, true); dv.setUint16(22, 1, true);
+  dv.setUint32(24, sampleRate, true); dv.setUint32(28, sampleRate * 2, true); dv.setUint16(32, 2, true); dv.setUint16(34, 16, true);
+  str(36, 'data'); dv.setUint32(40, len * 2, true);
+  let off = 44;
+  for (let i = 0; i < len; i++) { const s = Math.max(-1, Math.min(1, samples[i])); dv.setInt16(off, s < 0 ? s * 0x8000 : s * 0x7fff, true); off += 2; }
+  return new Blob([buf], { type: 'audio/wav' });
+}
+async function maybeTrim(blob, durationMs) {
+  if (!settings.trimSilence) return { blob, durationMs };
+  try {
+    const ab = await audioCtx().decodeAudioData(await blob.arrayBuffer());
+    const n = ab.length, chs = ab.numberOfChannels;
+    const mono = new Float32Array(n);   // mix down to mono for the trimmed WAV
+    for (let c = 0; c < chs; c++) { const d = ab.getChannelData(c); for (let i = 0; i < n; i++) mono[i] += d[i] / chs; }
+    const b = findTrimBounds(mono, ab.sampleRate);
+    if (!b) return { blob, durationMs };
+    const slice = mono.subarray(b.start, b.end);
+    if (slice.length < ab.sampleRate * 0.15) return { blob, durationMs };   // <150ms left → keep original
+    return { blob: encodeWav(slice, ab.sampleRate), durationMs: Math.round((slice.length / ab.sampleRate) * 1000) };
+  } catch (e) { return { blob, durationMs }; }
+}
+
+// ---------- mic selector UI ----------
+// Rendered once near the top of the Minna lesson; lets the user pin a specific input so
+// macOS doesn't switch AirPods to hands-free mode. Empty string '' = system default.
+export function micSelectorHtml() {
+  if (!RECORD_SUPPORTED) return '';
+  return `<div class="mic-selector" data-mic-selector>
+    <svg class="ic" aria-hidden="true"><use href="#i-mic"/></svg>
+    <label class="mic-lbl" for="micSelect">Microphone</label>
+    <select id="micSelect" class="mic-select" aria-label="Recording microphone">${micOptionsHtml()}</select>
+    <span class="mic-hint">Pick your Mac mic so AirPods stay in high-quality mode.</span>
+  </div>`;
+}
+function micOptionsHtml() {
+  const opts = [`<option value=""${selectedMicId ? '' : ' selected'}>System default</option>`];
+  micDevices.forEach((d, i) => {
+    const label = d.label || ('Microphone ' + (i + 1));
+    opts.push(`<option value="${escapeHtml(d.deviceId)}"${d.deviceId === selectedMicId ? ' selected' : ''}>${escapeHtml(label)}</option>`);
+  });
+  return opts.join('');
+}
+function refreshMicSelectors() { document.querySelectorAll('.mic-select').forEach(sel => { sel.innerHTML = micOptionsHtml(); }); }
+// Wire the selector (per render — the element is recreated) + enumerate. The devicechange
+// listener attaches once globally so AirPods connect/disconnect refresh the list.
+export function initMicSelector(container) {
+  if (!RECORD_SUPPORTED) return;
+  const sel = container.querySelector('.mic-select');
+  if (sel && !sel.dataset.wired) { sel.dataset.wired = '1'; sel.addEventListener('change', () => setSelectedMic(sel.value)); }
+  enumerateMics().then(refreshMicSelectors);
+  if (!initMicSelector._wired && navigator.mediaDevices && navigator.mediaDevices.addEventListener) {
+    initMicSelector._wired = true;
+    navigator.mediaDevices.addEventListener('devicechange', () => enumerateMics().then(refreshMicSelectors));
+  }
 }
 
 // ---------- take cache (per lesson, fetched once) ----------
@@ -185,17 +277,24 @@ function resetControl(control) {
 async function startRecording(control) {
   if (active) stopStream(active);   // never run two at once
   let stream;
-  try { stream = await navigator.mediaDevices.getUserMedia({ audio: true }); }
-  catch (e) { setSyncStatus('⚠ microphone blocked'); return; }
+  try { stream = await navigator.mediaDevices.getUserMedia({ audio: micConstraint() }); }
+  catch (e) {
+    // A stored device may have vanished (unplugged) → retry on the system default once.
+    if (selectedMicId) { try { stream = await navigator.mediaDevices.getUserMedia({ audio: true }); } catch (e2) {} }
+    if (!stream) { setSyncStatus('⚠ microphone blocked'); return; }
+  }
+  // Permission is now granted, so device labels are available — refresh any mic selector.
+  enumerateMics().then(refreshMicSelectors);
   const mime = pickMime();
   const recorder = mime ? new MediaRecorder(stream, { mimeType: mime }) : new MediaRecorder(stream);
   const chunks = [];
   recorder.ondataavailable = e => { if (e.data && e.data.size) chunks.push(e.data); };
-  recorder.onstop = () => {
-    const blob = new Blob(chunks, { type: recorder.mimeType || mime || 'audio/webm' });
-    const durationMs = Date.now() - active.startedAt;
+  recorder.onstop = async () => {
+    const raw = new Blob(chunks, { type: recorder.mimeType || mime || 'audio/webm' });
+    const rawDur = Date.now() - active.startedAt;
     stopStream(active);
     active = null;
+    const { blob, durationMs } = await maybeTrim(raw, rawDur);   // auto-trim leading/trailing silence
     showReview(control, blob, durationMs);
   };
   active = { control, recorder, stream, chunks, mime, startedAt: Date.now() };
