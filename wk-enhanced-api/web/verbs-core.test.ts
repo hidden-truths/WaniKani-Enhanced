@@ -35,6 +35,8 @@ type Core = {
   minnaBuiltinRank: (item: any) => number | null;
   applyMinnaOverlays: (builtins: any[]) => any[];
   minnaStore: any;
+  splitMora: (s: string) => string[];
+  pitchHtml: (reading: string, accent: any) => string;
   cardStamp: (v: any) => { label: string; cls: string };
   colorClass: (v: any) => string;
   CATS: string[];
@@ -58,7 +60,7 @@ function loadCore(): Core {
     verbs + "\n" + examples + "\n" + appSrc +
     `\n;return { passes, oneGroup, facetAll, facetMatch, scheduleCard, cardStat,
       isDue, dueCards, rollingAcc, isLeech, leeches, normKana, romajiToKana, reviewForecast, filterSummary, tokenFacet, deckLabel, ttsText,
-      cardStamp, colorClass, CATS, minnaBuiltinRank, applyMinnaOverlays,
+      cardStamp, colorClass, CATS, minnaBuiltinRank, applyMinnaOverlays, splitMora, pitchHtml,
       exampleForLevel, availableTiers, JLPT_TIERS,
       BOX_DAYS, get DATA(){return DATA}, get store(){return store}, set store(v){store=v},
       get minnaStore(){return minnaStore}, set minnaStore(v){minnaStore=v} };`;
@@ -362,6 +364,32 @@ test("passes: source is an AND'd facet (iTalki ∩ noun intersect)", () => {
   expect(hits({ source: ["mnn-l24"] })).toBe(1); // a single lesson
   expect(hits({ source: ["minna"], cat: ["noun"] })).toBe(2);
   expect(hits({})).toBe(4); // no source constraint = whole synthetic deck
+});
+
+test("splitMora keeps small kana with the preceding mora", () => {
+  expect(core.splitMora("はし")).toEqual(["は", "し"]);
+  expect(core.splitMora("きょう")).toEqual(["きょ", "う"]); // small ょ binds to き
+  expect(core.splitMora("シャイン")).toEqual(["シャ", "イ", "ン"]);
+});
+
+test("pitchHtml marks high morae + the drop (橋[2] ≠ 箸[1]), passthrough when no accent", () => {
+  // odaka 橋[2]: mora 1 low, mora 2 high + drop
+  const hashi2 = core.pitchHtml("はし", 2);
+  expect(hashi2).toContain('class="pitch"');
+  expect(hashi2).toMatch(/<span class="pa">は<\/span>/);            // mora 1 low
+  expect(hashi2).toMatch(/<span class="pa hi drop">し<\/span>/);     // mora 2 high + drop
+  // atamadaka 箸[1]: mora 1 high + drop, mora 2 low
+  const hashi1 = core.pitchHtml("はし", 1);
+  expect(hashi1).toMatch(/<span class="pa hi drop">は<\/span>/);
+  expect(hashi1).toMatch(/<span class="pa">し<\/span>/);
+  // heiban [0]: mora 1 low, mora 2 high, NO drop
+  const heiban = core.pitchHtml("はし", 0);
+  expect(heiban).toMatch(/<span class="pa">は<\/span>/);
+  expect(heiban).toMatch(/<span class="pa hi">し<\/span>/);
+  expect(heiban).not.toContain("drop");
+  // no accent data → plain (escaped) reading, no pitch wrapper
+  expect(core.pitchHtml("はし", null)).toBe("はし");
+  expect(core.pitchHtml("はし", undefined)).toBe("はし");
 });
 
 test("ttsText sends the kanji headword (accent-disambiguating), else the reading", () => {

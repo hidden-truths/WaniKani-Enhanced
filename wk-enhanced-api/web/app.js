@@ -64,7 +64,9 @@ const JLPT_TIERS=['N5','N4','N3','N2','N1'];
 function attachLevels(){
   const E = typeof EXAMPLES!=='undefined' ? EXAMPLES : {};
   DATA.forEach(v=>{
-    v.levels = E[v.rank] || null;
+    // Built-ins index EXAMPLES by rank; Minna custom cards carry their own embedded
+    // `levels` (from the lesson JSON) — keep those rather than nulling them.
+    v.levels = E[v.rank] || v.levels || null;
     // Part-of-speech category. Everything is currently a verb, but tagging it now
     // is the groundwork for broadening past verbs (adjectives / nouns / phrases):
     // future filters/labels can key off cat without backfilling the dataset.
@@ -828,7 +830,7 @@ function showCard(){
     document.getElementById('promptMain').innerHTML=v.jp;
     document.getElementById('promptSub').textContent='';
     document.getElementById('aRead').className='a-read jp';
-    document.getElementById('aRead').textContent=v.read;
+    document.getElementById('aRead').innerHTML=pitchHtml(v.read,v.accent);
     document.getElementById('aMean').textContent=v.mean;
   }else{                               // meaning shown → recall reading + kanji
     document.getElementById('promptLabel').textContent='Give the reading + kanji';
@@ -836,7 +838,7 @@ function showCard(){
     document.getElementById('promptMain').textContent=v.mean;
     document.getElementById('promptSub').textContent=cardStamp(v).label;
     document.getElementById('aRead').className='a-read jp';
-    document.getElementById('aRead').innerHTML=v.read+' &nbsp; '+v.jp;
+    document.getElementById('aRead').innerHTML=pitchHtml(v.read,v.accent)+' &nbsp; '+v.jp;
     document.getElementById('aMean').textContent='';
   }
   document.getElementById('aNote').innerHTML=v.mnem+(v.tip?'<br><br>'+v.tip:'');
@@ -1236,7 +1238,7 @@ function openVerbDetail(v){
   document.getElementById('detailBody').innerHTML=`
     <div class="card-top"><div>
       <div class="verb-jp jp" style="font-size:34px">${v.jp}</div>
-      <div class="verb-reading">${v.read}${TTS_OK?` <button class="speak-btn sm" id="dSpeak" type="button" aria-label="Play reading" title="Play reading"><svg class="ic" aria-hidden="true"><use href="#i-volume"/></svg></button>`:''}</div>
+      <div class="verb-reading">${pitchHtml(v.read,v.accent)}${TTS_OK?` <button class="speak-btn sm" id="dSpeak" type="button" aria-label="Play reading" title="Play reading"><svg class="ic" aria-hidden="true"><use href="#i-volume"/></svg></button>`:''}</div>
       <div class="verb-meaning">${v.mean}</div>
       <a class="jisho-link" target="_blank" rel="noopener noreferrer" href="${jishoUrl(v.jp)}"><svg class="ic" aria-hidden="true"><use href="#i-external"/></svg>View on Jisho</a></div>
       <div style="text-align:right"><div class="stamp ${cardStamp(v).cls}">${cardStamp(v).label}</div><div class="jlpt-pill">${v.jlpt}</div>${provenanceBadge(v)}</div></div>
@@ -1285,7 +1287,7 @@ function renderBrowse(){
     card.innerHTML=`<div class="rank">#${v.rank}</div>
       ${acc!=null?`<div class="acc">${Math.round(acc*100)}% acc</div>`:''}
       <div class="card-top"><div>
-        <div class="verb-jp jp">${v.jp}</div><div class="verb-reading">${v.read}${TTS_OK?` <button class="speak-btn sm" type="button" aria-label="Play reading" title="Play reading"><svg class="ic" aria-hidden="true"><use href="#i-volume"/></svg></button>`:''}</div>
+        <div class="verb-jp jp">${v.jp}</div><div class="verb-reading">${pitchHtml(v.read,v.accent)}${TTS_OK?` <button class="speak-btn sm" type="button" aria-label="Play reading" title="Play reading"><svg class="ic" aria-hidden="true"><use href="#i-volume"/></svg></button>`:''}</div>
         <div class="verb-meaning">${v.mean}</div></div>
         <div style="text-align:right"><div class="stamp ${stamp.cls}">${stamp.label}</div>
         <div class="jlpt-pill">${v.jlpt}</div>${provenanceBadge(v)}</div></div>
@@ -1606,6 +1608,26 @@ function refreshAllViews(){
 
 // Escape user-supplied text before innerHTML interpolation (e.g. account email).
 function escapeHtml(s){return String(s).replace(/[&<>"']/g,c=>({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;'}[c]));}
+// ---- Pitch accent (visual) ----
+// Tokyo-dialect pitch: `accent` is the drop position — 0 = heiban (no drop in the word),
+// 1 = atamadaka (drop after mora 1), k = drop after the kth mora. We render the reading
+// mora-by-mora with an overline over the HIGH morae and a step-down at the drop, so the
+// correct pitch is VISIBLE even though Google's synthesized audio can't reproduce it.
+// No accent data → just the (escaped) reading, unchanged.
+const SMALL_KANA=/[ぁぃぅぇぉゃゅょゎァィゥェォャュョヮ]/;
+function splitMora(s){ const m=[]; for(const ch of (s||'')){ if(m.length&&SMALL_KANA.test(ch))m[m.length-1]+=ch; else m.push(ch); } return m; }
+function pitchHtml(reading, accent){
+  if(accent==null||accent===''||!reading) return escapeHtml(reading||'');
+  const a=+accent, mora=splitMora(reading), n=mora.length;
+  let html='';
+  for(let i=0;i<n;i++){
+    const pos=i+1;
+    const hi = a===0 ? pos!==1 : a===1 ? pos===1 : (pos!==1 && pos<=a);
+    const drop = a>0 && pos===a;            // pitch falls AFTER this mora
+    html+=`<span class="pa${hi?' hi':''}${drop?' drop':''}">${escapeHtml(mora[i])}</span>`;
+  }
+  return `<span class="pitch" title="pitch accent [${a}]">${html}</span>`;
+}
 function updateAccountChip(){
   const btn=document.getElementById('accountBtn');
   if(account){ btn.innerHTML='<svg class="ic" aria-hidden="true"><use href="#i-cloud-check"/></svg>'+escapeHtml(account.email); btn.title='Signed in — click to sign out'; }
@@ -1920,6 +1942,8 @@ function minnaCard(item, lesson){
   // also get the iTalki tag + a boolean flag the Source facet matches on.
   const tags=['みんなの日本語','mnn-l'+lesson];
   if(item.italki)tags.push('iTalki');
+  // Textbook-form provenance note (ます-form + usage frame), kept in the tip.
+  const tb='みんなの日本語 L'+lesson+' · textbook form: '+(item.kanji||item.kana)+(item.context?' '+item.context:'');
   return {
     jp: item.dict || item.kanji || item.kana,
     read: item.dictRead || item.kana,
@@ -1929,8 +1953,13 @@ function minnaCard(item, lesson){
     jlpt: item.jlpt || 'N4',
     trans: item.trans || '',
     tags,
-    mnem: '',
-    tip: 'みんなの日本語 L'+lesson+' · textbook form: '+(item.kanji||item.kana)+(item.context?' '+item.context:''),
+    // Rich content from the (curated/generated) lesson JSON — brings Minna cards to
+    // parity with the built-ins. Empty/null when not yet generated.
+    mnem: item.mnem || '',
+    tip: item.tip ? (item.tip+'<br><br>'+tb) : tb,
+    levels: item.levels || null,   // { N5:[jp,en], …, N1:[jp,en] } leveled examples
+    accent: item.accent,           // pitch-accent number → the visual pitch marks
+    tts: item.tts,                 // optional TTS-text override (ambiguous single kanji)
     ex: [],
     custom:true, minna:true, italki:!!item.italki, minnaKey:item.key, minnaLesson:lesson,
   };

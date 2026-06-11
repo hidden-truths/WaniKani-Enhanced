@@ -283,6 +283,12 @@
   .answer{margin-top:24px;padding-top:20px;border-top:1px dashed var(--line);display:none}
   .answer.show{display:block}     /* revealed after the user commits an answer */
   .answer .a-read{font-size:30px;font-weight:700;color:var(--ichidan)}
+  /* Pitch-accent notation: an overline over the HIGH morae + a step-down at the accent
+     drop (so 橋 [2] reads visibly different from 箸 [1]). Colour follows the text. */
+  .pitch{white-space:nowrap}
+  .pitch .pa{display:inline-block;border-top:2px solid transparent;padding-top:1px}
+  .pitch .pa.hi{border-top-color:currentColor}
+  .pitch .pa.drop{border-right:2px solid currentColor;padding-right:1px;margin-right:1px}
   .answer .a-mean{font-size:20px;font-style:italic;margin-top:4px}
   .answer .a-note{font-size:13px;color:var(--muted);margin-top:10px;line-height:1.5}
   .fc-buttons{max-width:560px;margin:18px auto 0;display:flex;gap:10px;justify-content:center}
