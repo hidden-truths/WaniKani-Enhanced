@@ -60,7 +60,7 @@ for (const p of paths) {
     if (dryRun) { console.log(`  would fetch ${p}`); fetched++; continue; }
     const bytes = await fetchMinnaAudio(p);
     if (!bytes) { failed++; console.warn(`  FAILED ${p}`); continue; }
-    await storage.put(key, bytes, 'audio/mpeg');
+    await storage.put(key, bytes, 'audio/mpeg', { acl: 'private' });   // gated content — never public
     fetched++;
     console.log(`  cached ${p} (${(bytes.byteLength / 1024).toFixed(0)} KB)`);
     if (delayMs > 0) await sleep(delayMs);   // be polite to vnjpclub

@@ -154,7 +154,11 @@ minnaRouter.openapi(audioRoute, async (c) => {
         bytes = await fetchMinnaAudio(src);
         if (!bytes) return c.json({ code: 'upstream_failure' as const, error: 'audio unavailable' }, 502);
         try {
-            await storage.put(key, bytes, 'audio/mpeg');
+            // PRIVATE object: this is account-gated copyrighted content, so the stored
+            // object must not be publicly reachable at its bucket URL either (the key is
+            // guessable). It's served ONLY through this gated route via storage.get();
+            // the publicUrl is never used. Same posture as voice recordings.
+            await storage.put(key, bytes, 'audio/mpeg', { acl: 'private' });
         } catch {
             /* serve the bytes we have even if caching failed */
         }
