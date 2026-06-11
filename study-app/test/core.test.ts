@@ -17,6 +17,7 @@ import {
   JLPT_TIERS, BOX_DAYS,
   clampKeep, convItemKey, formatDuration, KEEP_DEFAULT,
   validClip, resolveClip, clipLabel, findTrimBounds,
+  waveformPeaks, clampSpeed, COMPARE_SPEEDS,
 } from '../src/core/index.js';
 
 beforeEach(() => {
@@ -501,4 +502,39 @@ test('findTrimBounds keeps a soft aspirated onset (below the vowel) via adaptive
   const b = findTrimBounds(s, 1000, { windowMs: 10, leadPadMs: 80, tailPadMs: 40 })!;
   expect(b.start).toBeLessThanOrEqual(150);   // the soft onset is retained
   expect(b.end).toBeGreaterThanOrEqual(400);  // through the end of the body (+ tail pad)
+});
+
+test('waveformPeaks bins max-abs amplitude and normalizes to the clip peak', () => {
+  // 4 quarters: |0.1|, |0.5|, silence, |0.25| → peaks [0.1,0.5,0,0.25] / 0.5 = [0.2,1,0,0.5].
+  const s = new Float32Array(40);
+  for (let i = 0; i < 10; i++) s[i] = -0.1;     // max-abs picks up the negative sign
+  for (let i = 10; i < 20; i++) s[i] = 0.5;
+  for (let i = 30; i < 40; i++) s[i] = 0.25;
+  const p = waveformPeaks(s, 4);
+  expect(p.length).toBe(4);
+  expect(p[0]).toBeCloseTo(0.2, 5);
+  expect(p[1]).toBeCloseTo(1, 5);
+  expect(p[2]).toBe(0);
+  expect(p[3]).toBeCloseTo(0.5, 5);
+});
+
+test('waveformPeaks: edge cases (empty / silent / bins>samples)', () => {
+  expect(waveformPeaks(new Float32Array(0), 8).length).toBe(0);   // no samples
+  expect(waveformPeaks(new Float32Array([0.5]), 0).length).toBe(0); // bins < 1
+  const silent = waveformPeaks(new Float32Array(20), 5);           // flat → all-zero (peak 0, no divide)
+  expect(silent.length).toBe(5);
+  expect(Array.from(silent).every(v => v === 0)).toBe(true);
+  const more = waveformPeaks(new Float32Array([0, 1, 0]), 6);      // bins > samples → ≥1 sample/bin, normalized
+  expect(more.length).toBe(6);
+  expect(Math.max(...more)).toBeCloseTo(1, 5);
+});
+
+test('clampSpeed snaps to the nearest allowed step, default 1×', () => {
+  expect(COMPARE_SPEEDS).toEqual([0.5, 0.75, 1]);
+  expect(clampSpeed(0.75)).toBe(0.75);
+  expect(clampSpeed(0.6)).toBe(0.5);    // nearer 0.5 than 0.75
+  expect(clampSpeed(0.7)).toBe(0.75);
+  expect(clampSpeed(2)).toBe(1);        // above range → nearest (1)
+  expect(clampSpeed('x' as any)).toBe(1);
+  expect(clampSpeed(undefined as any)).toBe(1);
 });

@@ -125,3 +125,41 @@ export function findTrimBounds(samples, sampleRate, opts = {}) {
   const end = Math.min(n, last * win + win + Math.round((tailPadMs / 1000) * sampleRate));
   return { start, end };
 }
+
+// Downsample a mono PCM buffer to `bins` peak amplitudes in [0, 1] for the record-and-compare
+// waveform (drawn to a canvas in features/minna-record.js). Each bin is the MAX ABSOLUTE
+// sample over its slice, then the whole set is NORMALIZED to the clip's own peak — so a quiet
+// take still draws a full-height shape. That's deliberate: the waveform is for comparing
+// SHAPE / TIMING between your take and the native audio, not absolute loudness (the two are
+// recorded at different levels anyway). Pure + DOM-free, so it's unit-tested. Empty input or
+// bins < 1 → an empty array; a flat/silent buffer → all-zero bins (peak 0, left un-normalized).
+export function waveformPeaks(samples, bins) {
+  const b = Math.floor(bins);
+  if (!samples || !samples.length || !(b >= 1)) return new Float32Array(0);
+  const n = samples.length;
+  const out = new Float32Array(b);
+  let peak = 0;
+  for (let i = 0; i < b; i++) {
+    const from = Math.floor((i * n) / b);
+    const to = Math.max(from + 1, Math.floor(((i + 1) * n) / b));   // ≥1 sample even when bins > samples
+    let mx = 0;
+    for (let j = from; j < to && j < n; j++) { const a = Math.abs(samples[j]); if (a > mx) mx = a; }
+    out[i] = mx;
+    if (mx > peak) peak = mx;
+  }
+  if (peak > 0) for (let i = 0; i < b; i++) out[i] /= peak;
+  return out;
+}
+
+// Allowed compare-player playback speeds, slow→normal. Slowing the native audio down (pitch
+// preserved, set in minna-record.js) makes it easier to mimic; 1× is normal.
+export const COMPARE_SPEEDS = [0.5, 0.75, 1];
+// Snap a stored/user speed to the nearest allowed step, defaulting to 1× for anything invalid.
+// Keeps the client from sending the <audio> element a nonsense playbackRate.
+export function clampSpeed(n) {
+  const v = Number(n);
+  if (!Number.isFinite(v)) return 1;
+  let best = 1, bestD = Infinity;
+  for (const s of COMPARE_SPEEDS) { const d = Math.abs(s - v); if (d < bestD) { bestD = d; best = s; } }
+  return best;
+}
