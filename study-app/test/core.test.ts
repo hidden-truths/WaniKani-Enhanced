@@ -12,7 +12,7 @@ import { VERBS } from '../src/data/verbs.js';
 import {
   passes, oneGroup, facetAll, facetMatch, scheduleCard, cardStat, isDue, dueCards,
   rollingAcc, isLeech, leeches, normKana, romajiToKana, reviewForecast, filterSummary,
-  tokenFacet, deckLabel, ttsText, minnaBuiltinRank, applyMinnaOverlays, splitMora,
+  tokenFacet, deckLabel, ttsText, rubyHtml, minnaBuiltinRank, applyMinnaOverlays, splitMora,
   pitchHtml, minnaSig, cardStamp, colorClass, CATS, exampleForLevel, availableTiers,
   JLPT_TIERS, BOX_DAYS,
   clampKeep, convItemKey, formatDuration, KEEP_DEFAULT,
@@ -276,6 +276,19 @@ test('ttsText sends the kanji headword (accent-disambiguating), else the reading
   expect(ttsText({ jp: 'サイズ', read: 'サイズ' })).toBe('サイズ');
   expect(ttsText({ jp: 'ホームステイ', read: 'ホームステイ' })).toBe('ホームステイ');
   expect(ttsText({ jp: '角', read: 'かど', tts: 'かど' })).toBe('かど');
+});
+
+test('rubyHtml passes the ruby tag set through and escapes everything else', () => {
+  // Furigana ruby survives so the data-furigana flip can toggle the <rt>.
+  expect(rubyHtml('<ruby>橋<rt>はし</rt></ruby>を<ruby>渡<rt>わた</rt></ruby>る'))
+    .toBe('<ruby>橋<rt>はし</rt></ruby>を<ruby>渡<rt>わた</rt></ruby>る');
+  // Plain (ruby-less) text round-trips identically to escapeHtml.
+  expect(rubyHtml('道を歩きます。')).toBe('道を歩きます。');
+  // Non-ruby angle brackets / ampersands are escaped — a malformed entry can't inject markup.
+  expect(rubyHtml('a & b <script>x</script>'))
+    .toBe('a &amp; b &lt;script&gt;x&lt;/script&gt;');
+  // Tags are normalized to lowercase; surrounding text still escaped.
+  expect(rubyHtml('<RUBY>音<RT>おと</RT></RUBY> & <b>')).toBe('<ruby>音<rt>おと</rt></ruby> &amp; &lt;b&gt;');
 });
 
 test("minnaSig reflects content (accent/mnem/tip/levels), not just tags", () => {
