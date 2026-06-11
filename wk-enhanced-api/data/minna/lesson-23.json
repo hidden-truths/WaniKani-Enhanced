@@ -9,29 +9,807 @@
     "note": "Vocabulary, native-speaker audio, and example sentences aggregated from vnjpclub.com (Minna no Nihongo 第2版). For personal study."
   },
   "vocab": [
-    { "key": "mnn:23:0", "italki": true,  "kana": "ききます", "kanji": "聞きます", "context": "先生に〜", "mean": "to ask (a teacher)", "cat": "verb", "type": "godan", "trans": "t", "dict": "聞く", "dictRead": "きく", "audio": "/Audio/minnamoi/bai23/00010101011101110.mp3" },
-    { "key": "mnn:23:1", "italki": true,  "kana": "まわします", "kanji": "回します", "context": "", "mean": "to turn (something), rotate", "cat": "verb", "type": "godan", "trans": "t", "dict": "回す", "dictRead": "まわす", "audio": "/Audio/minnamoi/bai23/00010101011101111.mp3" },
-    { "key": "mnn:23:2", "italki": true,  "kana": "ひきます", "kanji": "引きます", "context": "", "mean": "to play (a stringed or keyboard instrument)", "cat": "verb", "type": "godan", "trans": "t", "dict": "引く", "dictRead": "ひく", "audio": "/Audio/minnamoi/bai23/00010101011110000.mp3" },
-    { "key": "mnn:23:3", "italki": true,  "kana": "かえます", "kanji": "変えます", "context": "", "mean": "to change, exchange", "cat": "verb", "type": "ichidan", "trans": "t", "dict": "変える", "dictRead": "かえる", "audio": "/Audio/minnamoi/bai23/00010101011110001.mp3" },
-    { "key": "mnn:23:4", "italki": true,  "kana": "さわります", "kanji": "触ります", "context": "ドアに〜", "mean": "to touch [a door]", "cat": "verb", "type": "godan", "trans": "i", "dict": "触る", "dictRead": "さわる", "audio": "/Audio/minnamoi/bai23/00010101011110010.mp3" },
-    { "key": "mnn:23:5", "italki": true,  "kana": "でます", "kanji": "出ます", "context": "おつりが〜", "mean": "(change) to come out", "cat": "verb", "type": "ichidan", "trans": "i", "dict": "出る", "dictRead": "でる", "audio": "/Audio/minnamoi/bai23/00010101011110011.mp3" },
-    { "key": "mnn:23:6", "italki": true,  "kana": "あるきます", "kanji": "歩きます", "context": "", "mean": "to walk", "cat": "verb", "type": "godan", "trans": "i", "dict": "歩く", "dictRead": "あるく", "audio": "/Audio/minnamoi/bai23/00010101011110100.mp3" },
-    { "key": "mnn:23:7", "italki": true,  "kana": "わたります", "kanji": "渡ります", "context": "橋を〜", "mean": "to cross [a bridge]", "cat": "verb", "type": "godan", "trans": "i", "dict": "渡る", "dictRead": "わたる", "audio": "/Audio/minnamoi/bai23/00010101011110101.mp3" },
-    { "key": "mnn:23:8", "italki": true,  "kana": "まがります", "kanji": "曲がります", "context": "右へ〜", "mean": "to turn [to the right]", "cat": "verb", "type": "godan", "trans": "i", "dict": "曲がる", "dictRead": "まがる", "audio": "/Audio/minnamoi/bai23/00010101011110110.mp3" },
-    { "key": "mnn:23:9", "italki": true,  "kana": "さびしい", "kanji": "寂しい", "context": "", "mean": "lonely", "cat": "adjective", "type": "i-adj", "trans": "", "dict": "寂しい", "dictRead": "さびしい", "audio": "/Audio/minnamoi/bai23/00010101011110111.mp3" },
-    { "key": "mnn:23:10", "italki": true, "kana": "［お］ゆ", "kanji": "［お］湯", "context": "", "mean": "hot water", "cat": "noun", "type": "", "trans": "", "dict": "お湯", "dictRead": "おゆ", "audio": "/Audio/minnamoi/bai23/00010101011111000.mp3" },
-    { "key": "mnn:23:11", "italki": true, "kana": "おと", "kanji": "音", "context": "", "mean": "sound, noise", "cat": "noun", "type": "", "trans": "", "dict": "音", "dictRead": "おと", "audio": "/Audio/minnamoi/bai23/00010101011111001.mp3" },
-    { "key": "mnn:23:12", "italki": true, "kana": "サイズ", "kanji": "", "context": "", "mean": "size", "cat": "noun", "type": "", "trans": "", "dict": "サイズ", "dictRead": "サイズ", "audio": "/Audio/minnamoi/bai23/00010101011111010.mp3" },
-    { "key": "mnn:23:13", "italki": true, "kana": "こしょう", "kanji": "故障", "context": "〜します", "mean": "breakdown (〜します: to break down)", "cat": "noun", "type": "", "trans": "", "dict": "故障", "dictRead": "こしょう", "audio": "/Audio/minnamoi/bai23/00010101011111011.mp3" },
-    { "key": "mnn:23:14", "italki": true, "kana": "みち", "kanji": "道", "context": "", "mean": "road, way", "cat": "noun", "type": "", "trans": "", "dict": "道", "dictRead": "みち", "audio": "/Audio/minnamoi/bai23/00010101011111100.mp3" },
-    { "key": "mnn:23:15", "italki": true, "kana": "こうさてん", "kanji": "交差点", "context": "", "mean": "intersection, crossroads", "cat": "noun", "type": "", "trans": "", "dict": "交差点", "dictRead": "こうさてん", "audio": "/Audio/minnamoi/bai23/00010101011111101.mp3" },
-    { "key": "mnn:23:16", "italki": true, "kana": "しんごう", "kanji": "信号", "context": "", "mean": "traffic light, signal", "cat": "noun", "type": "", "trans": "", "dict": "信号", "dictRead": "しんごう", "audio": "/Audio/minnamoi/bai23/00010101011111110.mp3" },
-    { "key": "mnn:23:17", "italki": true, "kana": "かど", "kanji": "角", "context": "", "mean": "corner", "cat": "noun", "type": "", "trans": "", "dict": "角", "dictRead": "かど", "audio": "/Audio/minnamoi/bai23/00010101011111111.mp3" },
-    { "key": "mnn:23:18", "italki": true, "kana": "はし", "kanji": "橋", "context": "", "mean": "bridge", "cat": "noun", "type": "", "trans": "", "dict": "橋", "dictRead": "はし", "audio": "/Audio/minnamoi/bai23/00010101100000000.mp3" },
-    { "key": "mnn:23:19", "italki": true, "kana": "ちゅうしゃじょう", "kanji": "駐車場", "context": "", "mean": "parking lot, car park", "cat": "noun", "type": "", "trans": "", "dict": "駐車場", "dictRead": "ちゅうしゃじょう", "audio": "/Audio/minnamoi/bai23/00010101100000001.mp3" },
-    { "key": "mnn:23:20", "italki": true, "kana": "たてもの", "kanji": "建物", "context": "", "mean": "building", "cat": "noun", "type": "", "trans": "", "dict": "建物", "dictRead": "たてもの", "audio": "/Audio/minnamoi/bai23/00010101100000010.mp3" },
-    { "key": "mnn:23:21", "italki": true, "kana": "なんかいも", "kanji": "何回も", "context": "", "mean": "many times, again and again", "cat": "adverb", "type": "", "trans": "", "dict": "何回も", "dictRead": "なんかいも", "audio": "/Audio/minnamoi/bai23/00010101100000011.mp3" },
-    { "key": "mnn:23:22", "italki": true, "kana": "〜め", "kanji": "〜目", "context": "3つ〜", "mean": "the -th (ordinal suffix: 3つ目 = the third)", "cat": "phrase", "type": "", "trans": "", "dict": "〜目", "dictRead": "〜め", "audio": "/Audio/minnamoi/bai23/00010101100000100.mp3" }
+    {
+      "key": "mnn:23:0",
+      "italki": true,
+      "kana": "ききます",
+      "kanji": "聞きます",
+      "context": "先生に〜",
+      "mean": "to ask (a teacher)",
+      "cat": "verb",
+      "type": "godan",
+      "trans": "t",
+      "dict": "聞く",
+      "dictRead": "きく",
+      "audio": "/Audio/minnamoi/bai23/00010101011101110.mp3",
+      "accent": 0
+    },
+    {
+      "key": "mnn:23:1",
+      "italki": true,
+      "kana": "まわします",
+      "kanji": "回します",
+      "context": "",
+      "mean": "to turn (something), rotate",
+      "cat": "verb",
+      "type": "godan",
+      "trans": "t",
+      "dict": "回す",
+      "dictRead": "まわす",
+      "audio": "/Audio/minnamoi/bai23/00010101011101111.mp3",
+      "levels": {
+        "N5": [
+          "コマを<ruby>回<rt>まわ</rt></ruby>します。",
+          "I spin the top."
+        ],
+        "N4": [
+          "<ruby>右<rt>みぎ</rt></ruby>に<ruby>回<rt>まわ</rt></ruby>すとき、ゆっくり<ruby>回<rt>まわ</rt></ruby>してください。",
+          "When you turn it to the right, please turn it slowly."
+        ],
+        "N3": [
+          "かぎを<ruby>右<rt>みぎ</rt></ruby>に<ruby>回<rt>まわ</rt></ruby>すと、ドアが<ruby>開<rt>あ</rt></ruby>きます。",
+          "If you turn the key to the right, the door opens."
+        ],
+        "N2": [
+          "この<ruby>機械<rt>きかい</rt></ruby>は<ruby>古<rt>ふる</rt></ruby>いものの、ハンドルを<ruby>回<rt>まわ</rt></ruby>せばちゃんと<ruby>動<rt>うご</rt></ruby>く。",
+          "Although this machine is old, if you turn the handle it still works just fine."
+        ],
+        "N1": [
+          "<ruby>社長<rt>しゃちょう</rt></ruby>は<ruby>裏<rt>うら</rt></ruby>で<ruby>巧<rt>たく</rt></ruby>みに<ruby>資金<rt>しきん</rt></ruby>を<ruby>回<rt>まわ</rt></ruby>し、<ruby>会社<rt>かいしゃ</rt></ruby>を<ruby>立<rt>た</rt></ruby>て<ruby>直<rt>なお</rt></ruby>したと<ruby>言<rt>い</rt></ruby>われている。",
+          "It is said that the president skillfully moved funds around behind the scenes and turned the company around."
+        ]
+      },
+      "mnem": "\"Mom was\" (まわ→す) spinning the merry-go-round to make it turn.",
+      "tip": "Transitive 回す (someone turns something, takes を) pairs with intransitive 回る/まわる (something spins on its own); don't swap them.",
+      "accent": 0
+    },
+    {
+      "key": "mnn:23:2",
+      "italki": true,
+      "kana": "ひきます",
+      "kanji": "引きます",
+      "context": "",
+      "mean": "to play (a stringed or keyboard instrument)",
+      "cat": "verb",
+      "type": "godan",
+      "trans": "t",
+      "dict": "引く",
+      "dictRead": "ひく",
+      "audio": "/Audio/minnamoi/bai23/00010101011110000.mp3",
+      "levels": {
+        "N5": [
+          "<ruby>姉<rt>あね</rt></ruby>は<ruby>毎日<rt>まいにち</rt></ruby>ピアノを<ruby>引<rt>ひ</rt></ruby>きます。",
+          "My older sister plays the piano every day."
+        ],
+        "N4": [
+          "<ruby>子<rt>こ</rt></ruby>どもの<ruby>時<rt>とき</rt></ruby>、ギターを<ruby>引<rt>ひ</rt></ruby>きたかったです。",
+          "When I was a child, I wanted to play the guitar."
+        ],
+        "N3": [
+          "<ruby>毎朝<rt>まいあさ</rt></ruby>バイオリンを<ruby>引<rt>ひ</rt></ruby>くようにしています。",
+          "I make a point of playing the violin every morning."
+        ],
+        "N2": [
+          "<ruby>練習<rt>れんしゅう</rt></ruby>もせずに、<ruby>人前<rt>ひとまえ</rt></ruby>でピアノを<ruby>引<rt>ひ</rt></ruby>けるわけがない。",
+          "There's no way I can play the piano in front of people without even practicing."
+        ],
+        "N1": [
+          "<ruby>祖父<rt>そふ</rt></ruby>が<ruby>遺<rt>のこ</rt></ruby>したこの<ruby>古<rt>ふる</rt></ruby>いギターを、<ruby>誰<rt>だれ</rt></ruby>かが<ruby>引<rt>ひ</rt></ruby>き<ruby>継<rt>つ</rt></ruby>いで<ruby>引<rt>ひ</rt></ruby>いてくれればと<ruby>願<rt>ねが</rt></ruby>ってやまない。",
+          "I can't help wishing that someone would take over and play this old guitar my grandfather left behind."
+        ]
+      },
+      "mnem": "You \"pull\" (引く) the strings or draw the bow across them — the same 引く you use for pulling is the verb for playing strings.",
+      "tip": "Minna writes this as 弾く (ひく); it's a godan verb (引いて/引かない), and don't confuse it with 引く \"to pull/catch a cold\" or はじく \"to flip/repel.\"",
+      "accent": 1
+    },
+    {
+      "key": "mnn:23:3",
+      "italki": true,
+      "kana": "かえます",
+      "kanji": "変えます",
+      "context": "",
+      "mean": "to change, exchange",
+      "cat": "verb",
+      "type": "ichidan",
+      "trans": "t",
+      "dict": "変える",
+      "dictRead": "かえる",
+      "audio": "/Audio/minnamoi/bai23/00010101011110001.mp3",
+      "accent": 0
+    },
+    {
+      "key": "mnn:23:4",
+      "italki": true,
+      "kana": "さわります",
+      "kanji": "触ります",
+      "context": "ドアに〜",
+      "mean": "to touch [a door]",
+      "cat": "verb",
+      "type": "godan",
+      "trans": "i",
+      "dict": "触る",
+      "dictRead": "さわる",
+      "audio": "/Audio/minnamoi/bai23/00010101011110010.mp3",
+      "levels": {
+        "N5": [
+          "この<ruby>赤<rt>あか</rt></ruby>いボタンに<ruby>触<rt>さわ</rt></ruby>らないでください。",
+          "Please do not touch this red button."
+        ],
+        "N4": [
+          "<ruby>絵<rt>え</rt></ruby>を<ruby>見<rt>み</rt></ruby>る<ruby>時<rt>とき</rt></ruby>は、<ruby>手<rt>て</rt></ruby>で<ruby>触<rt>さわ</rt></ruby>らないでください。",
+          "When you look at the paintings, please do not touch them with your hands."
+        ],
+        "N3": [
+          "このドアに<ruby>触<rt>さわ</rt></ruby>ると、ベルが<ruby>鳴<rt>な</rt></ruby>るようになっています。",
+          "If you touch this door, the bell is set to ring."
+        ],
+        "N2": [
+          "<ruby>展示物<rt>てんじぶつ</rt></ruby>に<ruby>触<rt>さわ</rt></ruby>ってはいけないと<ruby>分<rt>わ</rt></ruby>かってはいるものの、つい<ruby>手<rt>て</rt></ruby>を<ruby>伸<rt>の</rt></ruby>ばしてしまった。",
+          "Even though I knew I mustn't touch the exhibits, I ended up reaching out anyway."
+        ],
+        "N1": [
+          "<ruby>文化財<rt>ぶんかざい</rt></ruby>である<ruby>以上<rt>いじょう</rt></ruby>、たとえ<ruby>学術調査<rt>がくじゅつちょうさ</rt></ruby>であれ、<ruby>無断<rt>むだん</rt></ruby>で<ruby>触<rt>さわ</rt></ruby>ることは<ruby>厳<rt>きび</rt></ruby>に<ruby>慎<rt>つつし</rt></ruby>まざるを<ruby>得<rt>え</rt></ruby>ない。",
+          "Given that it is a cultural property, one cannot but strictly refrain from touching it without permission, even for academic research."
+        ]
+      },
+      "mnem": "A curious child wants to \"sa-WA-ru\" — saunter over and WAtch out, their hand reaches to touch the door.",
+      "tip": "Frame is に, not を — you touch a surface: ドアに触る (\"touch the door\"); the near-synonym 触れる (ふれる) is softer/more abstract and can also mean \"to mention (a topic),\" which 触る cannot.",
+      "accent": 0
+    },
+    {
+      "key": "mnn:23:5",
+      "italki": true,
+      "kana": "でます",
+      "kanji": "出ます",
+      "context": "おつりが〜",
+      "mean": "(change) to come out",
+      "cat": "verb",
+      "type": "ichidan",
+      "trans": "i",
+      "dict": "出る",
+      "dictRead": "でる",
+      "audio": "/Audio/minnamoi/bai23/00010101011110011.mp3",
+      "accent": 1
+    },
+    {
+      "key": "mnn:23:6",
+      "italki": true,
+      "kana": "あるきます",
+      "kanji": "歩きます",
+      "context": "",
+      "mean": "to walk",
+      "cat": "verb",
+      "type": "godan",
+      "trans": "i",
+      "dict": "歩く",
+      "dictRead": "あるく",
+      "audio": "/Audio/minnamoi/bai23/00010101011110100.mp3",
+      "accent": 2
+    },
+    {
+      "key": "mnn:23:7",
+      "italki": true,
+      "kana": "わたります",
+      "kanji": "渡ります",
+      "context": "橋を〜",
+      "mean": "to cross [a bridge]",
+      "cat": "verb",
+      "type": "godan",
+      "trans": "i",
+      "dict": "渡る",
+      "dictRead": "わたる",
+      "audio": "/Audio/minnamoi/bai23/00010101011110101.mp3",
+      "levels": {
+        "N5": [
+          "<ruby>橋<rt>はし</rt></ruby>を<ruby>渡<rt>わた</rt></ruby>ります。",
+          "I cross the bridge."
+        ],
+        "N4": [
+          "<ruby>車<rt>くるま</rt></ruby>に<ruby>気<rt>き</rt></ruby>をつけて<ruby>橋<rt>はし</rt></ruby>を<ruby>渡<rt>わた</rt></ruby>ってください。",
+          "Please watch out for cars and cross the bridge."
+        ],
+        "N3": [
+          "<ruby>信号<rt>しんごう</rt></ruby>が<ruby>青<rt>あお</rt></ruby>になったら、<ruby>道<rt>みち</rt></ruby>を<ruby>渡<rt>わた</rt></ruby>るようにしています。",
+          "I make sure to cross the road only once the light turns green."
+        ],
+        "N2": [
+          "この<ruby>橋<rt>はし</rt></ruby>は<ruby>古<rt>ふる</rt></ruby>くて<ruby>危<rt>あぶ</rt></ruby>ないものの、<ruby>向<rt>む</rt></ruby>こう<ruby>岸<rt>ぎし</rt></ruby>へ<ruby>行<rt>い</rt></ruby>くには<ruby>渡<rt>わた</rt></ruby>らざるを<ruby>得<rt>え</rt></ruby>ない。",
+          "This bridge is old and dangerous, but to reach the far bank we have no choice but to cross it."
+        ],
+        "N1": [
+          "<ruby>石橋<rt>いしばし</rt></ruby>を<ruby>叩<rt>たた</rt></ruby>いて<ruby>渡<rt>わた</rt></ruby>るような<ruby>慎重<rt>しんちょう</rt></ruby>さが、<ruby>彼<rt>かれ</rt></ruby>を<ruby>成功<rt>せいこう</rt></ruby>へと<ruby>導<rt>みちび</rt></ruby>いた。",
+          "It was the kind of caution that taps even a stone bridge before crossing that led him to success."
+        ]
+      },
+      "mnem": "Picture \"WAH! TARU!\" — a wanderer shouting as they step onto a rope bridge to cross the gorge: わたる = to go across.",
+      "tip": "渡る is intransitive — the thing crossed takes を as the path passed through (橋を渡る = pass across the bridge); for \"hand something over to someone\" use the transitive pair 渡す (わたす).",
+      "accent": 0
+    },
+    {
+      "key": "mnn:23:8",
+      "italki": true,
+      "kana": "まがります",
+      "kanji": "曲がります",
+      "context": "右へ〜",
+      "mean": "to turn [to the right]",
+      "cat": "verb",
+      "type": "godan",
+      "trans": "i",
+      "dict": "曲がる",
+      "dictRead": "まがる",
+      "audio": "/Audio/minnamoi/bai23/00010101011110110.mp3",
+      "levels": {
+        "N5": [
+          "<ruby>次<rt>つぎ</rt></ruby>の<ruby>角<rt>かど</rt></ruby>を<ruby>右<rt>みぎ</rt></ruby>へ<ruby>曲<rt>ま</rt></ruby>がってください。",
+          "Please turn right at the next corner."
+        ],
+        "N4": [
+          "この<ruby>道<rt>みち</rt></ruby>をまっすぐ<ruby>行<rt>い</rt></ruby>って、<ruby>銀行<rt>ぎんこう</rt></ruby>の<ruby>前<rt>まえ</rt></ruby>を<ruby>右<rt>みぎ</rt></ruby>へ<ruby>曲<rt>ま</rt></ruby>がってから、<ruby>駅<rt>えき</rt></ruby>に<ruby>着<rt>つ</rt></ruby>きます。",
+          "Go straight down this road, turn right in front of the bank, and then you'll reach the station."
+        ],
+        "N3": [
+          "<ruby>交差点<rt>こうさてん</rt></ruby>を<ruby>右<rt>みぎ</rt></ruby>へ<ruby>曲<rt>ま</rt></ruby>がると、すぐに<ruby>海<rt>うみ</rt></ruby>が<ruby>見<rt>み</rt></ruby>えてきます。",
+          "When you turn right at the intersection, the sea immediately comes into view."
+        ],
+        "N2": [
+          "<ruby>道<rt>みち</rt></ruby>に<ruby>迷<rt>まよ</rt></ruby>ったものの、<ruby>結局<rt>けっきょく</rt></ruby>あの<ruby>角<rt>かど</rt></ruby>を<ruby>右<rt>みぎ</rt></ruby>へ<ruby>曲<rt>ま</rt></ruby>がりさえすればよかったというわけだ。",
+          "Although I got lost, it turns out all I had needed to do was simply turn right at that corner."
+        ],
+        "N1": [
+          "<ruby>指示<rt>しじ</rt></ruby>を<ruby>仰<rt>あお</rt></ruby>ぐ<ruby>余裕<rt>よゆう</rt></ruby>もなく、とっさに<ruby>右<rt>みぎ</rt></ruby>へ<ruby>曲<rt>ま</rt></ruby>がらざるを<ruby>得<rt>え</rt></ruby>ない<ruby>状況<rt>じょうきょう</rt></ruby>に<ruby>追<rt>お</rt></ruby>い<ruby>込<rt>こ</rt></ruby>まれた。",
+          "Without even the leeway to seek instructions, I was driven into a situation where I had no choice but to swerve right on the spot."
+        ]
+      },
+      "mnem": "A road that \"ma-ga-ru\" goes maGAru — it bends up and around like the kanji 曲 (a twisting, crooked shape) instead of running straight.",
+      "tip": "曲がる is intransitive (godan) — the road/you turn; to actively turn the wheel or bend something, use transitive 曲げる, and remember the frame 右へ曲がる (\"turn toward the right,\" へ marking direction).",
+      "accent": 0
+    },
+    {
+      "key": "mnn:23:9",
+      "italki": true,
+      "kana": "さびしい",
+      "kanji": "寂しい",
+      "context": "",
+      "mean": "lonely",
+      "cat": "adjective",
+      "type": "i-adj",
+      "trans": "",
+      "dict": "寂しい",
+      "dictRead": "さびしい",
+      "audio": "/Audio/minnamoi/bai23/00010101011110111.mp3",
+      "levels": {
+        "N5": [
+          "<ruby>今<rt>いま</rt></ruby>、<ruby>少<rt>すこ</rt></ruby>し<ruby>寂<rt>さび</rt></ruby>しいです。",
+          "I'm a little lonely right now."
+        ],
+        "N4": [
+          "<ruby>寂<rt>さび</rt></ruby>しいとき、<ruby>家族<rt>かぞく</rt></ruby>に<ruby>電話<rt>でんわ</rt></ruby>をかけます。",
+          "When I'm lonely, I call my family."
+        ],
+        "N3": [
+          "<ruby>友<rt>とも</rt></ruby>だちが<ruby>引<rt>ひ</rt></ruby>っ<ruby>越<rt>こ</rt></ruby>したら、きっと<ruby>寂<rt>さび</rt></ruby>しくなるだろう。",
+          "If my friend moves away, I'll surely get lonely."
+        ],
+        "N2": [
+          "<ruby>一人暮<rt>ひとりぐ</rt></ruby>らしに<ruby>慣<rt>な</rt></ruby>れたものの、<ruby>夜<rt>よる</rt></ruby>はやはり<ruby>寂<rt>さび</rt></ruby>しいものだ。",
+          "Although I've gotten used to living alone, the nights are lonely after all."
+        ],
+        "N1": [
+          "<ruby>故郷<rt>こきょう</rt></ruby>を<ruby>離<rt>はな</rt></ruby>れて<ruby>幾年<rt>いくとせ</rt></ruby>、ふと<ruby>故人<rt>こじん</rt></ruby>を<ruby>偲<rt>しの</rt></ruby>ぶたびに、<ruby>言<rt>い</rt></ruby>いようのない<ruby>寂<rt>さび</rt></ruby>しさが<ruby>胸<rt>むね</rt></ruby>を<ruby>締<rt>し</rt></ruby>めつける。",
+          "It has been many years since I left my hometown, and whenever I suddenly recall the departed, an indescribable loneliness grips my heart."
+        ]
+      },
+      "mnem": "\"Saa-bishii — a SOBbing sigh ('sab') alone in the quiet: lonely.\"",
+      "tip": "\"Don't confuse 寂しい (lonely, emotional emptiness) with 悲しい (kanashii = sad); 寂しい can also describe a deserted, quiet place, e.g. 寂しい道.\"",
+      "accent": 3
+    },
+    {
+      "key": "mnn:23:10",
+      "italki": true,
+      "kana": "［お］ゆ",
+      "kanji": "［お］湯",
+      "context": "",
+      "mean": "hot water",
+      "cat": "noun",
+      "type": "",
+      "trans": "",
+      "dict": "お湯",
+      "dictRead": "おゆ",
+      "audio": "/Audio/minnamoi/bai23/00010101011111000.mp3",
+      "levels": {
+        "N5": [
+          "<ruby>毎朝<rt>まいあさ</rt></ruby>お<ruby>湯<rt>ゆ</rt></ruby>を<ruby>飲<rt>の</rt></ruby>みます。",
+          "I drink hot water every morning."
+        ],
+        "N4": [
+          "<ruby>寒<rt>さむ</rt></ruby>い<ruby>時<rt>とき</rt></ruby>は、あたたかいお<ruby>湯<rt>ゆ</rt></ruby>でお<ruby>茶<rt>ちゃ</rt></ruby>を<ruby>作<rt>つく</rt></ruby>りたいです。",
+          "When it's cold, I want to make tea with warm water."
+        ],
+        "N3": [
+          "お<ruby>湯<rt>ゆ</rt></ruby>がわいたら、<ruby>音<rt>おと</rt></ruby>が<ruby>鳴<rt>な</rt></ruby>るようにしてあります。",
+          "It's set up so that a sound goes off once the water has boiled."
+        ],
+        "N2": [
+          "<ruby>説明書<rt>せつめいしょ</rt></ruby>を<ruby>読<rt>よ</rt></ruby>んだものの、この<ruby>機械<rt>きかい</rt></ruby>でお<ruby>湯<rt>ゆ</rt></ruby>を<ruby>沸<rt>わ</rt></ruby>かす<ruby>方法<rt>ほうほう</rt></ruby>がまだ分からない。",
+          "Even though I read the manual, I still don't understand how to boil water with this machine."
+        ],
+        "N1": [
+          "<ruby>災害時<rt>さいがいじ</rt></ruby>には、お<ruby>湯<rt>ゆ</rt></ruby>さえあれば<ruby>食<rt>た</rt></ruby>べられる<ruby>非常食<rt>ひじょうしょく</rt></ruby>を<ruby>備<rt>そな</rt></ruby>えておくにこしたことはない。",
+          "In a disaster, you can't go wrong keeping a stock of emergency food that's edible as long as you have hot water."
+        ]
+      },
+      "mnem": "お湯 reads \"o-yu\" — picture saying \"Oh, you!\" as you yank your hand back from water that's scalding hot.",
+      "tip": "お湯 is specifically HOT water; plain cold water is お水 (おみず) — don't mix them up, and note お湯 already means hot, so 熱いお湯 just stresses \"very hot.\"",
+      "accent": 0
+    },
+    {
+      "key": "mnn:23:11",
+      "italki": true,
+      "kana": "おと",
+      "kanji": "音",
+      "context": "",
+      "mean": "sound, noise",
+      "cat": "noun",
+      "type": "",
+      "trans": "",
+      "dict": "音",
+      "dictRead": "おと",
+      "audio": "/Audio/minnamoi/bai23/00010101011111001.mp3",
+      "levels": {
+        "N5": [
+          "<ruby>大<rt>おお</rt></ruby>きい<ruby>音<rt>おと</rt></ruby>ですね。",
+          "That's a loud sound, isn't it?"
+        ],
+        "N4": [
+          "<ruby>外<rt>そと</rt></ruby>から<ruby>変<rt>へん</rt></ruby>な<ruby>音<rt>おと</rt></ruby>が<ruby>聞<rt>き</rt></ruby>こえたとき、びっくりしました。",
+          "When I heard a strange sound from outside, I was startled."
+        ],
+        "N3": [
+          "この<ruby>道<rt>みち</rt></ruby>を<ruby>通<rt>とお</rt></ruby>ると、いつも<ruby>電車<rt>でんしゃ</rt></ruby>の<ruby>音<rt>おと</rt></ruby>がうるさく<ruby>感<rt>かん</rt></ruby>じられる。",
+          "Whenever I pass along this road, the sound of the trains always feels noisy."
+        ],
+        "N2": [
+          "<ruby>静<rt>しず</rt></ruby>かにしようと<ruby>思<rt>おも</rt></ruby>ったものの、<ruby>足音<rt>あしおと</rt></ruby>の<ruby>音<rt>おと</rt></ruby>はどうしても<ruby>消<rt>け</rt></ruby>せなかった。",
+          "Although I meant to keep quiet, there was simply no way I could erase the sound of my footsteps."
+        ],
+        "N1": [
+          "<ruby>深夜<rt>しんや</rt></ruby>の<ruby>住宅街<rt>じゅうたくがい</rt></ruby>を<ruby>通<rt>とお</rt></ruby>る<ruby>際<rt>さい</rt></ruby>は、わずかな<ruby>物音<rt>ものおと</rt></ruby>の<ruby>音<rt>おと</rt></ruby>にも<ruby>細心<rt>さいしん</rt></ruby>の<ruby>注意<rt>ちゅうい</rt></ruby>を<ruby>払<rt>はら</rt></ruby>わざるを<ruby>得<rt>え</rt></ruby>ない。",
+          "When passing through a residential district late at night, one cannot help but pay the utmost attention even to the faintest sound."
+        ]
+      },
+      "mnem": "A radio plays \"OH-toh\" — お-と — every SOUND it makes.",
+      "tip": "Don't confuse 音(おと), a concrete sound/noise you hear, with 声(こえ), which is specifically a voice from a living thing.",
+      "accent": 1
+    },
+    {
+      "key": "mnn:23:12",
+      "italki": true,
+      "kana": "サイズ",
+      "kanji": "",
+      "context": "",
+      "mean": "size",
+      "cat": "noun",
+      "type": "",
+      "trans": "",
+      "dict": "サイズ",
+      "dictRead": "サイズ",
+      "audio": "/Audio/minnamoi/bai23/00010101011111010.mp3",
+      "levels": {
+        "N5": [
+          "この<ruby>服<rt>ふく</rt></ruby>のサイズは<ruby>大<rt>おお</rt></ruby>きいです。",
+          "The size of these clothes is big."
+        ],
+        "N4": [
+          "<ruby>靴<rt>くつ</rt></ruby>を<ruby>買<rt>か</rt></ruby>うとき、サイズを<ruby>確<rt>たし</rt></ruby>かめてから<ruby>決<rt>き</rt></ruby>めます。",
+          "When I buy shoes, I check the size before deciding."
+        ],
+        "N3": [
+          "サイズが<ruby>合<rt>あ</rt></ruby>わなかったら、<ruby>店<rt>みせ</rt></ruby>で<ruby>交換<rt>こうかん</rt></ruby>してもらうようにしています。",
+          "If the size doesn't fit, I make sure to have the store exchange it for me."
+        ],
+        "N2": [
+          "デザインは<ruby>気<rt>き</rt></ruby>に<ruby>入<rt>い</rt></ruby>っているものの、サイズが<ruby>少<rt>すこ</rt></ruby>し<ruby>大<rt>おお</rt></ruby>きすぎるわけです。",
+          "I do like the design, but the thing is the size is just a little too big."
+        ],
+        "N1": [
+          "お<ruby>客様<rt>きゃくさま</rt></ruby>のご<ruby>要望<rt>ようぼう</rt></ruby>に<ruby>応<rt>こた</rt></ruby>えるべく、サイズを<ruby>細<rt>こま</rt></ruby>かく<ruby>取<rt>と</rt></ruby>りそろえております。",
+          "In order to meet our customers' requests, we have prepared a fine-grained range of sizes."
+        ]
+      },
+      "mnem": "\"Size\" in English → サイズ (sa-i-zu) in Japanese; the English word is hiding right inside the katakana.",
+      "tip": "Don't confuse サイズ (size/dimensions) with 大きさ (おおきさ, \"bigness/magnitude\") — サイズ is the standard word for clothing/shoe sizing.",
+      "accent": 1
+    },
+    {
+      "key": "mnn:23:13",
+      "italki": true,
+      "kana": "こしょう",
+      "kanji": "故障",
+      "context": "〜します",
+      "mean": "breakdown (〜します: to break down)",
+      "cat": "noun",
+      "type": "",
+      "trans": "",
+      "dict": "故障",
+      "dictRead": "こしょう",
+      "audio": "/Audio/minnamoi/bai23/00010101011111011.mp3",
+      "levels": {
+        "N5": [
+          "<ruby>車<rt>くるま</rt></ruby>が<ruby>故障<rt>こしょう</rt></ruby>しました。",
+          "The car broke down."
+        ],
+        "N4": [
+          "<ruby>家<rt>いえ</rt></ruby>に<ruby>帰<rt>かえ</rt></ruby>るとき、<ruby>車<rt>くるま</rt></ruby>が<ruby>故障<rt>こしょう</rt></ruby>しました。",
+          "On my way home, the car broke down."
+        ],
+        "N3": [
+          "この<ruby>道<rt>みち</rt></ruby>を<ruby>通<rt>とお</rt></ruby>ると、いつも<ruby>信号<rt>しんごう</rt></ruby>が<ruby>故障<rt>こしょう</rt></ruby>しているようです。",
+          "Whenever I go along this road, the traffic light always seems to be broken."
+        ],
+        "N2": [
+          "この<ruby>機械<rt>きかい</rt></ruby>は<ruby>古<rt>ふる</rt></ruby>いものの、まだ<ruby>一度<rt>いちど</rt></ruby>も<ruby>故障<rt>こしょう</rt></ruby>したことがない。",
+          "Although this machine is old, it has never once broken down."
+        ],
+        "N1": [
+          "<ruby>橋<rt>はし</rt></ruby>を<ruby>渡<rt>わた</rt></ruby>っている<ruby>最中<rt>さいちゅう</rt></ruby>にエンジンが<ruby>故障<rt>こしょう</rt></ruby>し、<ruby>立<rt>た</rt></ruby>ち<ruby>往生<rt>おうじょう</rt></ruby>せざるを<ruby>得<rt>え</rt></ruby>なかった。",
+          "Right in the middle of crossing the bridge the engine broke down, and we had no choice but to be stranded."
+        ]
+      },
+      "mnem": "故 (old/cause) + 障 (obstacle): an old cause becomes the obstacle that makes the machine break down.",
+      "tip": "故障する is for machines/devices breaking down — don't use it for people getting sick (use 病気になる); the 〜します frame makes it 故障する (to break down) / 故障している (to be out of order).",
+      "accent": 0
+    },
+    {
+      "key": "mnn:23:14",
+      "italki": true,
+      "kana": "みち",
+      "kanji": "道",
+      "context": "",
+      "mean": "road, way",
+      "cat": "noun",
+      "type": "",
+      "trans": "",
+      "dict": "道",
+      "dictRead": "みち",
+      "audio": "/Audio/minnamoi/bai23/00010101011111100.mp3",
+      "levels": {
+        "N5": [
+          "<ruby>道<rt>みち</rt></ruby>を<ruby>歩<rt>ある</rt></ruby>きます。",
+          "I walk along the road."
+        ],
+        "N4": [
+          "<ruby>道<rt>みち</rt></ruby>が<ruby>分<rt>わ</rt></ruby>からないとき、<ruby>地図<rt>ちず</rt></ruby>を<ruby>見<rt>み</rt></ruby>ます。",
+          "When I don't know the way, I look at a map."
+        ],
+        "N3": [
+          "この<ruby>道<rt>みち</rt></ruby>をまっすぐ<ruby>行<rt>い</rt></ruby>くと、<ruby>右<rt>みぎ</rt></ruby>に<ruby>駅<rt>えき</rt></ruby>が<ruby>見<rt>み</rt></ruby>えます。",
+          "If you go straight along this road, you'll see the station on the right."
+        ],
+        "N2": [
+          "<ruby>道<rt>みち</rt></ruby>が<ruby>込<rt>こ</rt></ruby>んでいたものの、<ruby>約束<rt>やくそく</rt></ruby>の<ruby>時間<rt>じかん</rt></ruby>には<ruby>間<rt>ま</rt></ruby>に<ruby>合<rt>あ</rt></ruby>った。",
+          "Although the road was congested, I made it in time for the appointment."
+        ],
+        "N1": [
+          "<ruby>道<rt>みち</rt></ruby>に<ruby>迷<rt>まよ</rt></ruby>ったときは、<ruby>地元<rt>じもと</rt></ruby>の<ruby>人<rt>ひと</rt></ruby>に<ruby>尋<rt>たず</rt></ruby>ねるに<ruby>越<rt>こ</rt></ruby>したことはない。",
+          "When you lose your way, there's nothing better than asking a local."
+        ]
+      },
+      "mnem": "\"Michi\" sounds like \"meet-chee\" — a road is where two paths meet and chase off into the distance.",
+      "tip": "Don't confuse 道（みち, a physical road/path） with 道路（どうろ, the formal/civil-engineering word for \"roadway\"）; and in Lesson 23 note the passing-through を, as in この道をまっすぐ行く (\"go straight along this road\").",
+      "accent": 0
+    },
+    {
+      "key": "mnn:23:15",
+      "italki": true,
+      "kana": "こうさてん",
+      "kanji": "交差点",
+      "context": "",
+      "mean": "intersection, crossroads",
+      "cat": "noun",
+      "type": "",
+      "trans": "",
+      "dict": "交差点",
+      "dictRead": "こうさてん",
+      "audio": "/Audio/minnamoi/bai23/00010101011111101.mp3",
+      "levels": {
+        "N5": [
+          "<ruby>次<rt>つぎ</rt></ruby>の<ruby>交差点<rt>こうさてん</rt></ruby>を<ruby>右<rt>みぎ</rt></ruby>に<ruby>曲<rt>ま</rt></ruby>がってください。",
+          "Please turn right at the next intersection."
+        ],
+        "N4": [
+          "<ruby>車<rt>くるま</rt></ruby>を<ruby>運転<rt>うんてん</rt></ruby>するとき、<ruby>交差点<rt>こうさてん</rt></ruby>では<ruby>気<rt>き</rt></ruby>をつけます。",
+          "When I drive, I'm careful at intersections."
+        ],
+        "N3": [
+          "まっすぐ<ruby>行<rt>い</rt></ruby>ったら、<ruby>大<rt>おお</rt></ruby>きな<ruby>交差点<rt>こうさてん</rt></ruby>に<ruby>出<rt>で</rt></ruby>ます。",
+          "If you go straight, you'll come out at a big intersection."
+        ],
+        "N2": [
+          "この<ruby>交差点<rt>こうさてん</rt></ruby>は<ruby>信号<rt>しんごう</rt></ruby>があるものの、<ruby>事故<rt>じこ</rt></ruby>がよく<ruby>起<rt>お</rt></ruby>きる。",
+          "Although this intersection has traffic lights, accidents happen here often."
+        ],
+        "N1": [
+          "<ruby>渋滞<rt>じゅうたい</rt></ruby>がひどく、その<ruby>交差点<rt>こうさてん</rt></ruby>を<ruby>迂回<rt>うかい</rt></ruby>せざるを<ruby>得<rt>え</rt></ruby>なかった。",
+          "The congestion was severe, so we had no choice but to detour around that intersection."
+        ]
+      },
+      "mnem": "交差 (こうさ) means \"to cross,\" and 点 (てん) is a \"point\" — the point where roads cross is the crossroads.",
+      "tip": "Don't confuse it with 信号 (しんごう, \"traffic light\"); to say \"go through/cross an intersection\" use the passing-through を: 交差点を渡る・通る.",
+      "accent": 0
+    },
+    {
+      "key": "mnn:23:16",
+      "italki": true,
+      "kana": "しんごう",
+      "kanji": "信号",
+      "context": "",
+      "mean": "traffic light, signal",
+      "cat": "noun",
+      "type": "",
+      "trans": "",
+      "dict": "信号",
+      "dictRead": "しんごう",
+      "audio": "/Audio/minnamoi/bai23/00010101011111110.mp3",
+      "levels": {
+        "N5": [
+          "<ruby>信号<rt>しんごう</rt></ruby>が<ruby>青<rt>あお</rt></ruby>になりました。",
+          "The traffic light turned green."
+        ],
+        "N4": [
+          "<ruby>信号<rt>しんごう</rt></ruby>が<ruby>赤<rt>あか</rt></ruby>のとき、<ruby>道<rt>みち</rt></ruby>を<ruby>渡<rt>わた</rt></ruby>ってはいけません。",
+          "When the traffic light is red, you must not cross the road."
+        ],
+        "N3": [
+          "<ruby>信号<rt>しんごう</rt></ruby>を<ruby>渡<rt>わた</rt></ruby>ると、<ruby>右<rt>みぎ</rt></ruby><ruby>側<rt>がわ</rt></ruby>に<ruby>銀行<rt>ぎんこう</rt></ruby>が<ruby>見<rt>み</rt></ruby>えます。",
+          "If you cross at the traffic light, you'll see the bank on your right."
+        ],
+        "N2": [
+          "<ruby>信号<rt>しんごう</rt></ruby>が<ruby>変<rt>か</rt></ruby>わりかけていたものの、<ruby>車<rt>くるま</rt></ruby>は<ruby>止<rt>と</rt></ruby>まろうとしなかった。",
+          "Although the traffic light was beginning to change, the car showed no sign of stopping."
+        ],
+        "N1": [
+          "<ruby>信号<rt>しんごう</rt></ruby>を<ruby>無視<rt>むし</rt></ruby>して<ruby>交差点<rt>こうさてん</rt></ruby>に<ruby>進入<rt>しんにゅう</rt></ruby>した<ruby>以上<rt>いじょう</rt></ruby>、<ruby>運転手<rt>うんてんしゅ</rt></ruby>は<ruby>責任<rt>せきにん</rt></ruby>を<ruby>免<rt>まぬが</rt></ruby>れ<ruby>得<rt>え</rt></ruby>ない。",
+          "Having entered the intersection in disregard of the traffic light, the driver cannot escape liability."
+        ]
+      },
+      "mnem": "A signal SHINes a GO (しんごう) light at you — green means go.",
+      "tip": "In Lesson 23 you cross an intersection with the passing-through を (信号を渡る = cross at the lights); don't confuse 信号 with 信号機, the physical light fixture/post.",
+      "accent": 0
+    },
+    {
+      "key": "mnn:23:17",
+      "italki": true,
+      "kana": "かど",
+      "kanji": "角",
+      "context": "",
+      "mean": "corner",
+      "cat": "noun",
+      "type": "",
+      "trans": "",
+      "dict": "角",
+      "dictRead": "かど",
+      "audio": "/Audio/minnamoi/bai23/00010101011111111.mp3",
+      "levels": {
+        "N5": [
+          "<ruby>次<rt>つぎ</rt></ruby>の<ruby>角<rt>かど</rt></ruby>を<ruby>右<rt>みぎ</rt></ruby>へ<ruby>曲<rt>ま</rt></ruby>がります。",
+          "Turn right at the next corner."
+        ],
+        "N4": [
+          "この<ruby>角<rt>かど</rt></ruby>を<ruby>曲<rt>ま</rt></ruby>がると、<ruby>銀行<rt>ぎんこう</rt></ruby>がありますから、すぐ<ruby>分<rt>わ</rt></ruby>かりますよ。",
+          "When you turn this corner there's a bank, so you'll find it right away."
+        ],
+        "N3": [
+          "<ruby>道<rt>みち</rt></ruby>に<ruby>迷<rt>まよ</rt></ruby>ったら、<ruby>角<rt>かど</rt></ruby>のコンビニで<ruby>聞<rt>き</rt></ruby>くようにしています。",
+          "If I get lost, I make a point of asking at the convenience store on the corner."
+        ],
+        "N2": [
+          "<ruby>地図<rt>ちず</rt></ruby>を<ruby>見<rt>み</rt></ruby>たものの、どの<ruby>角<rt>かど</rt></ruby>を<ruby>曲<rt>ま</rt></ruby>がればいいのか、まったく<ruby>見当<rt>けんとう</rt></ruby>がつかなかった。",
+          "Even though I looked at the map, I had absolutely no idea which corner I was supposed to turn at."
+        ],
+        "N1": [
+          "<ruby>角<rt>かど</rt></ruby>を<ruby>曲<rt>ま</rt></ruby>がった<ruby>途端<rt>とたん</rt></ruby>、<ruby>懐<rt>なつ</rt></ruby>かしい<ruby>故郷<rt>こきょう</rt></ruby>の<ruby>風景<rt>ふうけい</rt></ruby>が<ruby>目<rt>め</rt></ruby>の<ruby>前<rt>まえ</rt></ruby>に<ruby>広<rt>ひろ</rt></ruby>がっていた。",
+          "The moment I rounded the corner, the nostalgic scenery of my hometown spread out before my eyes."
+        ]
+      },
+      "mnem": "A \"corner\" is where the road KA-n-DO (can-do) a turn — かど is the spot you turn at.",
+      "tip": "Same kanji 角 also reads つの (animal's horn) and かく (angle/-sided); かど is specifically the street/object corner you walk around — and 角を曲がる uses passing-through を, not を for a direct object.",
+      "accent": 1
+    },
+    {
+      "key": "mnn:23:18",
+      "italki": true,
+      "kana": "はし",
+      "kanji": "橋",
+      "context": "",
+      "mean": "bridge",
+      "cat": "noun",
+      "type": "",
+      "trans": "",
+      "dict": "橋",
+      "dictRead": "はし",
+      "audio": "/Audio/minnamoi/bai23/00010101100000000.mp3",
+      "levels": {
+        "N5": [
+          "<ruby>橋<rt>はし</rt></ruby>を<ruby>渡<rt>わた</rt></ruby>ります。",
+          "I cross the bridge."
+        ],
+        "N4": [
+          "<ruby>学校<rt>がっこう</rt></ruby>へ<ruby>行<rt>い</rt></ruby>くとき、<ruby>橋<rt>はし</rt></ruby>を<ruby>渡<rt>わた</rt></ruby>ります。",
+          "When I go to school, I cross the bridge."
+        ],
+        "N3": [
+          "まっすぐ<ruby>行<rt>い</rt></ruby>くと、<ruby>大<rt>おお</rt></ruby>きい<ruby>橋<rt>はし</rt></ruby>が<ruby>見<rt>み</rt></ruby>えます。",
+          "If you go straight, you'll see a big bridge."
+        ],
+        "N2": [
+          "この<ruby>橋<rt>はし</rt></ruby>は<ruby>古<rt>ふる</rt></ruby>いものの、まだ<ruby>使<rt>つか</rt></ruby>うことができます。",
+          "Although this bridge is old, it can still be used."
+        ],
+        "N1": [
+          "<ruby>老朽化<rt>ろうきゅうか</rt></ruby>が<ruby>進<rt>すす</rt></ruby>んだ<ruby>橋<rt>はし</rt></ruby>は、<ruby>架<rt>か</rt></ruby>け<ruby>替<rt>か</rt></ruby>えざるを<ruby>得<rt>え</rt></ruby>ない。",
+          "Given how far its deterioration has progressed, there is no choice but to rebuild the bridge."
+        ]
+      },
+      "mnem": "A bridge lets you cross a river without getting your \"HA-SHI\" (feet) wet — picture stepping across はし stone by stone.",
+      "tip": "Same kana as 箸 \"chopsticks\" (accent 1) and 端 \"edge\" (accent 0) — only pitch tells them apart; note the L-H rise of 橋 makes the drop audible only when を follows.",
+      "accent": 2
+    },
+    {
+      "key": "mnn:23:19",
+      "italki": true,
+      "kana": "ちゅうしゃじょう",
+      "kanji": "駐車場",
+      "context": "",
+      "mean": "parking lot, car park",
+      "cat": "noun",
+      "type": "",
+      "trans": "",
+      "dict": "駐車場",
+      "dictRead": "ちゅうしゃじょう",
+      "audio": "/Audio/minnamoi/bai23/00010101100000001.mp3",
+      "levels": {
+        "N5": [
+          "<ruby>駐車場<rt>ちゅうしゃじょう</rt></ruby>は あそこです。",
+          "The parking lot is over there."
+        ],
+        "N4": [
+          "<ruby>車<rt>くるま</rt></ruby>で <ruby>来<rt>き</rt></ruby>たとき、<ruby>駐車場<rt>ちゅうしゃじょう</rt></ruby>に <ruby>車<rt>くるま</rt></ruby>を とめてください。",
+          "When you come by car, please park in the parking lot."
+        ],
+        "N3": [
+          "この <ruby>道<rt>みち</rt></ruby>を まっすぐ <ruby>行<rt>い</rt></ruby>くと、<ruby>右<rt>みぎ</rt></ruby>に <ruby>大<rt>おお</rt></ruby>きい <ruby>駐車場<rt>ちゅうしゃじょう</rt></ruby>が <ruby>見<rt>み</rt></ruby>えます。",
+          "If you go straight down this road, you'll see a large parking lot on the right."
+        ],
+        "N2": [
+          "<ruby>駅前<rt>えきまえ</rt></ruby>の <ruby>駐車場<rt>ちゅうしゃじょう</rt></ruby>は <ruby>料金<rt>りょうきん</rt></ruby>が <ruby>高<rt>たか</rt></ruby>いものの、いつも <ruby>満車<rt>まんしゃ</rt></ruby>だ。",
+          "Even though the parking lot in front of the station is expensive, it's always full."
+        ],
+        "N1": [
+          "この <ruby>辺<rt>へん</rt></ruby>りは <ruby>駐車場<rt>ちゅうしゃじょう</rt></ruby>が <ruby>慢性的<rt>まんせいてき</rt></ruby>に <ruby>不足<rt>ふそく</rt></ruby>しており、<ruby>路上<rt>ろじょう</rt></ruby><ruby>駐車<rt>ちゅうしゃ</rt></ruby>を <ruby>余儀<rt>よぎ</rt></ruby>なくされる <ruby>住民<rt>じゅうみん</rt></ruby>も <ruby>少<rt>すく</rt></ruby>なくない。",
+          "Parking lots are chronically scarce around here, and not a few residents are forced to park on the street."
+        ]
+      },
+      "mnem": "駐 (park a vehicle) + 車 (car) + 場 (place) literally stacks up to \"a place to park cars\" = parking lot.",
+      "tip": "Don't confuse 駐車場 (the lot/place) with 駐車 (the act of parking) — and to say \"go through/past\" the lot, use を: 駐車場を通る.",
+      "accent": 0
+    },
+    {
+      "key": "mnn:23:20",
+      "italki": true,
+      "kana": "たてもの",
+      "kanji": "建物",
+      "context": "",
+      "mean": "building",
+      "cat": "noun",
+      "type": "",
+      "trans": "",
+      "dict": "建物",
+      "dictRead": "たてもの",
+      "audio": "/Audio/minnamoi/bai23/00010101100000010.mp3",
+      "levels": {
+        "N5": [
+          "あの<ruby>建物<rt>たてもの</rt></ruby>は<ruby>大<rt>おお</rt></ruby>きいです。",
+          "That building is big."
+        ],
+        "N4": [
+          "<ruby>建物<rt>たてもの</rt></ruby>に<ruby>入<rt>はい</rt></ruby>った<ruby>時<rt>とき</rt></ruby>、<ruby>中<rt>なか</rt></ruby>はとても<ruby>寒<rt>さむ</rt></ruby>かったです。",
+          "When I entered the building, it was very cold inside."
+        ],
+        "N3": [
+          "この<ruby>建物<rt>たてもの</rt></ruby>を<ruby>通<rt>とお</rt></ruby>ると、すぐ<ruby>駅<rt>えき</rt></ruby>が<ruby>見<rt>み</rt></ruby>えます。",
+          "If you go through this building, you'll see the station right away."
+        ],
+        "N2": [
+          "さすが<ruby>古<rt>ふる</rt></ruby>い<ruby>建物<rt>たてもの</rt></ruby>だけあって、デザインがとても<ruby>美<rt>うつく</rt></ruby>しい。",
+          "As one would expect of an old building, the design is truly beautiful."
+        ],
+        "N1": [
+          "<ruby>地震<rt>じしん</rt></ruby>の<ruby>影響<rt>えいきょう</rt></ruby>で、その<ruby>建物<rt>たてもの</rt></ruby>は<ruby>取<rt>と</rt></ruby>り<ruby>壊<rt>こわ</rt></ruby>しを<ruby>余儀<rt>よぎ</rt></ruby>なくされた。",
+          "Owing to the earthquake, the building was left with no choice but to be demolished."
+        ]
+      },
+      "mnem": "建 (\"build/construct\") + 物 (\"thing\") = a built thing, i.e. a building.",
+      "tip": "建物 is the physical structure itself; don't confuse it with 建築 (けんちく, the act/art of construction) or ビル (a multi-story office \"building\").",
+      "accent": 3
+    },
+    {
+      "key": "mnn:23:21",
+      "italki": true,
+      "kana": "なんかいも",
+      "kanji": "何回も",
+      "context": "",
+      "mean": "many times, again and again",
+      "cat": "adverb",
+      "type": "",
+      "trans": "",
+      "dict": "何回も",
+      "dictRead": "なんかいも",
+      "audio": "/Audio/minnamoi/bai23/00010101100000011.mp3",
+      "levels": {
+        "N5": [
+          "<ruby>私<rt>わたし</rt></ruby>はこの<ruby>歌<rt>うた</rt></ruby>を<ruby>何回<rt>なんかい</rt></ruby>も<ruby>聞<rt>き</rt></ruby>きました。",
+          "I listened to this song many times."
+        ],
+        "N4": [
+          "<ruby>道<rt>みち</rt></ruby>が<ruby>分<rt>わ</rt></ruby>からなかったから、<ruby>何回<rt>なんかい</rt></ruby>も<ruby>人<rt>ひと</rt></ruby>に<ruby>聞<rt>き</rt></ruby>きました。",
+          "Because I didn't know the way, I asked people many times."
+        ],
+        "N3": [
+          "<ruby>忘<rt>わす</rt></ruby>れないように、<ruby>何回<rt>なんかい</rt></ruby>も<ruby>書<rt>か</rt></ruby>いて<ruby>練習<rt>れんしゅう</rt></ruby>するようにしています。",
+          "So as not to forget, I make a point of writing and practicing it many times."
+        ],
+        "N2": [
+          "<ruby>何回<rt>なんかい</rt></ruby>も<ruby>注意<rt>ちゅうい</rt></ruby>したものの、<ruby>彼<rt>かれ</rt></ruby>は<ruby>同<rt>おな</rt></ruby>じ<ruby>間違<rt>まちが</rt></ruby>いを<ruby>繰<rt>く</rt></ruby>り<ruby>返<rt>かえ</rt></ruby>している。",
+          "Although I warned him many times, he keeps repeating the same mistake."
+        ],
+        "N1": [
+          "この<ruby>橋<rt>はし</rt></ruby>を<ruby>渡<rt>わた</rt></ruby>るたびに、<ruby>幼<rt>おさな</rt></ruby>い<ruby>頃<rt>ころ</rt></ruby>の<ruby>記憶<rt>きおく</rt></ruby>が<ruby>何回<rt>なんかい</rt></ruby>も<ruby>脳裏<rt>のうり</rt></ruby>をよぎった。",
+          "Each time I cross this bridge, memories of my childhood flashed through my mind again and again."
+        ]
+      },
+      "mnem": "何回 (how-many-times) + も (even/also) literally stacks \"how many times\" into \"so many times you lose count\" = again and again.",
+      "tip": "Don't confuse with 何回か (\"a few times, several times\") — the も means \"many/repeatedly,\" whereas か means \"an unspecified small number.\"",
+      "accent": 1
+    },
+    {
+      "key": "mnn:23:22",
+      "italki": true,
+      "kana": "〜め",
+      "kanji": "〜目",
+      "context": "3つ〜",
+      "mean": "the -th (ordinal suffix: 3つ目 = the third)",
+      "cat": "phrase",
+      "type": "",
+      "trans": "",
+      "dict": "〜目",
+      "dictRead": "〜め",
+      "audio": "/Audio/minnamoi/bai23/00010101100000100.mp3",
+      "levels": {
+        "N5": [
+          "<ruby>左<rt>ひだり</rt></ruby>から<ruby>三<rt>さん</rt></ruby>つ<ruby>目<rt>め</rt></ruby>のドアです。",
+          "It's the third door from the left."
+        ],
+        "N4": [
+          "<ruby>道<rt>みち</rt></ruby>を<ruby>渡<rt>わた</rt></ruby>るとき、<ruby>二<rt>ふた</rt></ruby>つ<ruby>目<rt>め</rt></ruby>の<ruby>信号<rt>しんごう</rt></ruby>を<ruby>右<rt>みぎ</rt></ruby>に<ruby>曲<rt>ま</rt></ruby>がってください。",
+          "When you cross the road, please turn right at the second traffic light."
+        ],
+        "N3": [
+          "まっすぐ<ruby>行<rt>い</rt></ruby>くと、<ruby>四<rt>よっ</rt></ruby>つ<ruby>目<rt>め</rt></ruby>の<ruby>角<rt>かど</rt></ruby>に<ruby>駅<rt>えき</rt></ruby>が<ruby>見<rt>み</rt></ruby>えるようにしてあります。",
+          "If you go straight, things are arranged so that the station comes into view at the fourth corner."
+        ],
+        "N2": [
+          "<ruby>地図<rt>ちず</rt></ruby>では<ruby>近<rt>ちか</rt></ruby>く<ruby>見<rt>み</rt></ruby>えるものの、<ruby>橋<rt>はし</rt></ruby>を<ruby>渡<rt>わた</rt></ruby>って<ruby>三<rt>みっ</rt></ruby>つ<ruby>目<rt>め</rt></ruby>の<ruby>交差点<rt>こうさてん</rt></ruby>まではかなり<ruby>遠<rt>とお</rt></ruby>い。",
+          "Although it looks close on the map, it's quite far to the third intersection after you cross the bridge."
+        ],
+        "N1": [
+          "<ruby>係員<rt>かかりいん</rt></ruby>の<ruby>指示<rt>しじ</rt></ruby>どおり、<ruby>突<rt>つ</rt></ruby>き<ruby>当<rt>あ</rt></ruby>たりを<ruby>左折<rt>させつ</rt></ruby>した<ruby>上<rt>うえ</rt></ruby>で、<ruby>五<rt>いつ</rt></ruby>つ<ruby>目<rt>め</rt></ruby>の<ruby>建物<rt>たてもの</rt></ruby>の<ruby>裏手<rt>うらて</rt></ruby>へ<ruby>回<rt>まわ</rt></ruby>らざるを<ruby>得<rt>え</rt></ruby>なかった。",
+          "Following the attendant's instructions, we had no choice but to turn left at the dead end and then go around to the rear of the fifth building."
+        ]
+      },
+      "mnem": "「目」is a counting eye that watches the line file past — its glance lands on item number X, marking it as the X-th.",
+      "tip": "〜目 attaches to a counter, not a bare number: it's 3つ目 / 3番目 / 3回目 (the 3rd one / 3rd in order / 3rd time), so don't drop the counter and say ×3目.",
+      "accent": 0
+    }
   ],
   "grammar": [
     {
@@ -39,12 +817,30 @@
       "structure": "Vる／Vた・いA(〜い)・なA(〜な)・N の ＋ とき、〜",
       "explain": "Marks the time or occasion of an action/state. The verb before とき is relative, not absolute: Vる + とき = the main action happens before/at that point (e.g. before leaving); Vた + とき = the first action is already complete (e.g. after leaving). Adjectives and nouns connect as 〜い／〜な／〜の + とき.",
       "examples": [
-        { "jp": "図書館で 本を 借りる とき、カードが 要ります。", "en": "You need a card when you borrow books at the library." },
-        { "jp": "部屋を 出る とき、電気を 消して ください。", "en": "Turn off the light when you leave the room." },
-        { "jp": "新聞を 読む とき、眼鏡を かけます。", "en": "I put on my glasses when I read the newspaper." },
-        { "jp": "国へ 帰った とき、靴を 買います。", "en": "I buy shoes when I go back to my home country." },
-        { "jp": "暇な とき、うちへ 遊びに 来ませんか。", "en": "When you're free, won't you come over to my place?" },
-        { "jp": "学生の とき、アルバイトを しました。", "en": "I worked part-time when I was a student." }
+        {
+          "jp": "図書館で 本を 借りる とき、カードが 要ります。",
+          "en": "You need a card when you borrow books at the library."
+        },
+        {
+          "jp": "部屋を 出る とき、電気を 消して ください。",
+          "en": "Turn off the light when you leave the room."
+        },
+        {
+          "jp": "新聞を 読む とき、眼鏡を かけます。",
+          "en": "I put on my glasses when I read the newspaper."
+        },
+        {
+          "jp": "国へ 帰った とき、靴を 買います。",
+          "en": "I buy shoes when I go back to my home country."
+        },
+        {
+          "jp": "暇な とき、うちへ 遊びに 来ませんか。",
+          "en": "When you're free, won't you come over to my place?"
+        },
+        {
+          "jp": "学生の とき、アルバイトを しました。",
+          "en": "I worked part-time when I was a student."
+        }
       ]
     },
     {
@@ -52,11 +848,26 @@
       "structure": "V(辞書形)・いA(〜い)・なA(〜だ)・N(〜だ) ＋ と、〜",
       "explain": "States that whenever the first thing happens, the second naturally and inevitably follows (natural laws, mechanisms, directions, habits). The clause after と cannot express intention, request, invitation, or a command — use 〜たら/〜ば for those.",
       "examples": [
-        { "jp": "この ボタンを 押すと、お釣りが 出ます。", "en": "Press this button and your change comes out." },
-        { "jp": "お酒を 飲むと、頭が 痛く なります。", "en": "I get a headache when I drink alcohol." },
-        { "jp": "この つまみを 右へ 回すと、音が 大きく なります。", "en": "Turn this knob to the right and the volume gets louder." },
-        { "jp": "この 道を まっすぐ 行くと、左に 駅が あります。", "en": "Go straight down this road and the station is on your left." },
-        { "jp": "あの 角を 左へ 曲がると、花屋は 右に あります。", "en": "Turn left at that corner and the flower shop is on your right." }
+        {
+          "jp": "この ボタンを 押すと、お釣りが 出ます。",
+          "en": "Press this button and your change comes out."
+        },
+        {
+          "jp": "お酒を 飲むと、頭が 痛く なります。",
+          "en": "I get a headache when I drink alcohol."
+        },
+        {
+          "jp": "この つまみを 右へ 回すと、音が 大きく なります。",
+          "en": "Turn this knob to the right and the volume gets louder."
+        },
+        {
+          "jp": "この 道を まっすぐ 行くと、左に 駅が あります。",
+          "en": "Go straight down this road and the station is on your left."
+        },
+        {
+          "jp": "あの 角を 左へ 曲がると、花屋は 右に あります。",
+          "en": "Turn left at that corner and the flower shop is on your right."
+        }
       ]
     },
     {
@@ -64,35 +875,103 @@
       "structure": "N(場所) ＋ を ＋ V(移動: 渡る・歩く・散歩する・通る・走る・飛ぶ…)",
       "explain": "With verbs of movement, を marks the place that the movement passes through, along, or across — it is not a direct object. Common with 渡る (cross), 歩く / 散歩する (walk), 通る (pass), 曲がる (turn at).",
       "examples": [
-        { "jp": "公園を 散歩します。", "en": "I take a walk through the park." },
-        { "jp": "道を 渡ります。", "en": "I cross the road." },
-        { "jp": "この 交差点を 右へ 曲がって ください。", "en": "Please turn right at this intersection." },
-        { "jp": "橋を 渡ると、右に 駐車場が あります。", "en": "Cross the bridge and there's a parking lot on the right." }
+        {
+          "jp": "公園を 散歩します。",
+          "en": "I take a walk through the park."
+        },
+        {
+          "jp": "道を 渡ります。",
+          "en": "I cross the road."
+        },
+        {
+          "jp": "この 交差点を 右へ 曲がって ください。",
+          "en": "Please turn right at this intersection."
+        },
+        {
+          "jp": "橋を 渡ると、右に 駐車場が あります。",
+          "en": "Cross the bridge and there's a parking lot on the right."
+        }
       ]
     }
   ],
   "examples": [
-    { "jp": "この ボタンを 押すと、お釣りが 出ます。", "en": "Press this button and the change comes out." },
-    { "jp": "よく テレビを 見ますか。 …野球の 試合が ある とき、見ます。", "en": "Do you watch TV often? …I watch when there's a baseball game on." },
-    { "jp": "冷蔵庫に 何も ない とき、どう しますか。 …近くの レストランへ 食べに 行きます。", "en": "When there's nothing in the fridge, what do you do? …I go eat at a restaurant nearby." },
-    { "jp": "会議室を 出る とき、エアコンを 消しましたか。 …はい、消しました。", "en": "Did you turn off the air conditioner when you left the meeting room? …Yes, I turned it off." },
-    { "jp": "どこで 服や 靴を 買いますか。 …国へ 帰った とき、買います。日本のは 小さいですから。", "en": "Where do you buy clothes and shoes? …I buy them when I go home — sizes in Japan run small." },
-    { "jp": "体の 調子が 悪い とき、この 「元気茶」を 飲みます。", "en": "When I'm not feeling well, I drink this 'Genki tea.'" },
-    { "jp": "お湯が 出ません。 …そこを 押すと 出ますよ。", "en": "The hot water won't come out. …Press there and it'll come out." },
-    { "jp": "市役所は どこですか。 …この 道を まっすぐ 行くと、左に あります。", "en": "Where is the city office? …Go straight down this road and it's on the left." }
+    {
+      "jp": "この ボタンを 押すと、お釣りが 出ます。",
+      "en": "Press this button and the change comes out."
+    },
+    {
+      "jp": "よく テレビを 見ますか。 …野球の 試合が ある とき、見ます。",
+      "en": "Do you watch TV often? …I watch when there's a baseball game on."
+    },
+    {
+      "jp": "冷蔵庫に 何も ない とき、どう しますか。 …近くの レストランへ 食べに 行きます。",
+      "en": "When there's nothing in the fridge, what do you do? …I go eat at a restaurant nearby."
+    },
+    {
+      "jp": "会議室を 出る とき、エアコンを 消しましたか。 …はい、消しました。",
+      "en": "Did you turn off the air conditioner when you left the meeting room? …Yes, I turned it off."
+    },
+    {
+      "jp": "どこで 服や 靴を 買いますか。 …国へ 帰った とき、買います。日本のは 小さいですから。",
+      "en": "Where do you buy clothes and shoes? …I buy them when I go home — sizes in Japan run small."
+    },
+    {
+      "jp": "体の 調子が 悪い とき、この 「元気茶」を 飲みます。",
+      "en": "When I'm not feeling well, I drink this 'Genki tea.'"
+    },
+    {
+      "jp": "お湯が 出ません。 …そこを 押すと 出ますよ。",
+      "en": "The hot water won't come out. …Press there and it'll come out."
+    },
+    {
+      "jp": "市役所は どこですか。 …この 道を まっすぐ 行くと、左に あります。",
+      "en": "Where is the city office? …Go straight down this road and it's on the left."
+    }
   ],
   "conversation": {
     "title": "どうやって 行きますか (How do I get there?)",
     "audio": "/Audio/minnahonsatsu1/78.mp3",
     "lines": [
-      { "role": "図書館", "jp": "はい、みどり図書館です。", "en": "Hello, Midori Library speaking." },
-      { "role": "客", "jp": "あのう、そちらまで どうやって 行きますか。", "en": "Um, how do I get to you?" },
-      { "role": "図書館", "jp": "本田駅から 12番の バスに 乗って、図書館前で 降りて ください。3つ目です。", "en": "From Honda Station, take the number-12 bus and get off at Toshokan-mae. It's the third stop." },
-      { "role": "客", "jp": "3つ目ですね。", "en": "The third stop, right?" },
-      { "role": "図書館", "jp": "ええ。降りると、前に 公園が あります。図書館は 公園の 中の 白い 建物です。", "en": "Yes. When you get off, there's a park in front. The library is the white building inside the park." },
-      { "role": "客", "jp": "わかりました。それから、本を 借りる とき、何か 要りますか。", "en": "I see. And do I need anything to borrow books?" },
-      { "role": "図書館", "jp": "お名前と 住所が わかる 物を 持って 来て ください。", "en": "Please bring something that shows your name and address." },
-      { "role": "客", "jp": "はい。どうも ありがとう ございました。", "en": "Okay. Thank you very much." }
+      {
+        "role": "図書館",
+        "jp": "はい、みどり図書館です。",
+        "en": "Hello, Midori Library speaking."
+      },
+      {
+        "role": "客",
+        "jp": "あのう、そちらまで どうやって 行きますか。",
+        "en": "Um, how do I get to you?"
+      },
+      {
+        "role": "図書館",
+        "jp": "本田駅から 12番の バスに 乗って、図書館前で 降りて ください。3つ目です。",
+        "en": "From Honda Station, take the number-12 bus and get off at Toshokan-mae. It's the third stop."
+      },
+      {
+        "role": "客",
+        "jp": "3つ目ですね。",
+        "en": "The third stop, right?"
+      },
+      {
+        "role": "図書館",
+        "jp": "ええ。降りると、前に 公園が あります。図書館は 公園の 中の 白い 建物です。",
+        "en": "Yes. When you get off, there's a park in front. The library is the white building inside the park."
+      },
+      {
+        "role": "客",
+        "jp": "わかりました。それから、本を 借りる とき、何か 要りますか。",
+        "en": "I see. And do I need anything to borrow books?"
+      },
+      {
+        "role": "図書館",
+        "jp": "お名前と 住所が わかる 物を 持って 来て ください。",
+        "en": "Please bring something that shows your name and address."
+      },
+      {
+        "role": "客",
+        "jp": "はい。どうも ありがとう ございました。",
+        "en": "Okay. Thank you very much."
+      }
     ]
   }
 }

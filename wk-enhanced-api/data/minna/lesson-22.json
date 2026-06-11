@@ -9,24 +9,618 @@
     "note": "Vocabulary, native-speaker audio, and example sentences aggregated from vnjpclub.com (Minna no Nihongo 第2版). For personal study."
   },
   "vocab": [
-    { "key": "mnn:22:0",  "kana": "きます", "kanji": "着ます", "context": "服を〜", "mean": "to wear, put on (upper body)", "cat": "verb", "type": "ichidan", "trans": "t", "dict": "着る", "dictRead": "きる", "audio": "/Audio/minnamoi/bai22/00010101011001111.mp3" },
-    { "key": "mnn:22:1",  "kana": "はきます", "kanji": "履きます", "context": "くつ・ズボンを〜", "mean": "to put on, wear (lower body: shoes, trousers)", "cat": "verb", "type": "godan", "trans": "t", "dict": "履く", "dictRead": "はく", "audio": "/Audio/minnamoi/bai22/00010101011010000.mp3" },
-    { "key": "mnn:22:2",  "kana": "かぶります", "kanji": "被ります", "context": "ぼうしを〜", "mean": "to put on, wear (on the head)", "cat": "verb", "type": "godan", "trans": "t", "dict": "被る", "dictRead": "かぶる", "audio": "/Audio/minnamoi/bai22/00010101011010001.mp3" },
-    { "key": "mnn:22:3",  "kana": "かけます", "kanji": "掛けます", "context": "めがねを〜", "mean": "to put on, wear (glasses)", "cat": "verb", "type": "ichidan", "trans": "t", "dict": "掛ける", "dictRead": "かける", "audio": "/Audio/minnamoi/bai22/00010101011010010.mp3" },
-    { "key": "mnn:22:4",  "kana": "します", "kanji": "", "context": "ネクタイを〜", "mean": "to wear (a tie, scarf, etc.); to do", "cat": "verb", "type": "irregular", "trans": "t", "dict": "する", "dictRead": "する", "audio": "/Audio/minnamoi/bai22/00010101011010011.mp3" },
-    { "key": "mnn:22:5",  "kana": "うまれます", "kanji": "生まれます", "context": "", "mean": "to be born", "cat": "verb", "type": "ichidan", "trans": "i", "dict": "生まれる", "dictRead": "うまれる", "audio": "/Audio/minnamoi/bai22/00010101011010100.mp3" },
-    { "key": "mnn:22:6",  "kana": "わたしたち", "kanji": "私達", "context": "", "mean": "we, us", "cat": "noun", "type": "", "trans": "", "dict": "私たち", "dictRead": "わたしたち", "audio": "/Audio/minnamoi/bai22/00010101011010101.mp3" },
-    { "key": "mnn:22:7",  "kana": "コート", "kanji": "", "context": "", "mean": "coat", "cat": "noun", "type": "", "trans": "", "dict": "コート", "dictRead": "コート", "audio": "/Audio/minnamoi/bai22/00010101011010110.mp3" },
-    { "key": "mnn:22:8",  "kana": "セーター", "kanji": "", "context": "", "mean": "sweater", "cat": "noun", "type": "", "trans": "", "dict": "セーター", "dictRead": "セーター", "audio": "/Audio/minnamoi/bai22/00010101011010111.mp3" },
-    { "key": "mnn:22:9",  "kana": "スーツ", "kanji": "", "context": "", "mean": "suit", "cat": "noun", "type": "", "trans": "", "dict": "スーツ", "dictRead": "スーツ", "audio": "/Audio/minnamoi/bai22/00010101011011000.mp3" },
-    { "key": "mnn:22:10", "kana": "ぼうし", "kanji": "帽子", "context": "", "mean": "hat, cap", "cat": "noun", "type": "", "trans": "", "dict": "帽子", "dictRead": "ぼうし", "audio": "/Audio/minnamoi/bai22/00010101011011001.mp3" },
-    { "key": "mnn:22:11", "kana": "めがね", "kanji": "眼鏡", "context": "〜を かけます", "mean": "glasses", "cat": "noun", "type": "", "trans": "", "dict": "眼鏡", "dictRead": "めがね", "audio": "/Audio/minnamoi/bai22/00010101011011010.mp3" },
-    { "key": "mnn:22:12", "kana": "ケーキ", "kanji": "", "context": "", "mean": "cake", "cat": "noun", "type": "", "trans": "", "dict": "ケーキ", "dictRead": "ケーキ", "audio": "/Audio/minnamoi/bai22/00010101011011011.mp3" },
-    { "key": "mnn:22:13", "kana": "［お］べんとう", "kanji": "お弁当", "context": "", "mean": "box lunch, bento", "cat": "noun", "type": "", "trans": "", "dict": "お弁当", "dictRead": "おべんとう", "audio": "/Audio/minnamoi/bai22/00010101011011100.mp3" },
-    { "key": "mnn:22:14", "kana": "ロボット", "kanji": "", "context": "", "mean": "robot", "cat": "noun", "type": "", "trans": "", "dict": "ロボット", "dictRead": "ロボット", "audio": "/Audio/minnamoi/bai22/00010101011011101.mp3" },
-    { "key": "mnn:22:15", "kana": "ユーモア", "kanji": "", "context": "", "mean": "humor", "cat": "noun", "type": "", "trans": "", "dict": "ユーモア", "dictRead": "ユーモア", "audio": "/Audio/minnamoi/bai22/00010101011011110.mp3" },
-    { "key": "mnn:22:16", "kana": "つごう", "kanji": "都合", "context": "〜が いい／わるい", "mean": "convenience (one's situation/availability)", "cat": "noun", "type": "", "trans": "", "dict": "都合", "dictRead": "つごう", "audio": "/Audio/minnamoi/bai22/00010101011011111.mp3" },
-    { "key": "mnn:22:17", "kana": "よく", "kanji": "", "context": "", "mean": "often, well", "cat": "adverb", "type": "", "trans": "", "dict": "よく", "dictRead": "よく", "audio": "/Audio/minnamoi/bai22/00010101011100000.mp3" }
+    {
+      "key": "mnn:22:0",
+      "kana": "きます",
+      "kanji": "着ます",
+      "context": "服を〜",
+      "mean": "to wear, put on (upper body)",
+      "cat": "verb",
+      "type": "ichidan",
+      "trans": "t",
+      "dict": "着る",
+      "dictRead": "きる",
+      "audio": "/Audio/minnamoi/bai22/00010101011001111.mp3",
+      "accent": 0
+    },
+    {
+      "key": "mnn:22:1",
+      "kana": "はきます",
+      "kanji": "履きます",
+      "context": "くつ・ズボンを〜",
+      "mean": "to put on, wear (lower body: shoes, trousers)",
+      "cat": "verb",
+      "type": "godan",
+      "trans": "t",
+      "dict": "履く",
+      "dictRead": "はく",
+      "audio": "/Audio/minnamoi/bai22/00010101011010000.mp3",
+      "accent": 0
+    },
+    {
+      "key": "mnn:22:2",
+      "kana": "かぶります",
+      "kanji": "被ります",
+      "context": "ぼうしを〜",
+      "mean": "to put on, wear (on the head)",
+      "cat": "verb",
+      "type": "godan",
+      "trans": "t",
+      "dict": "被る",
+      "dictRead": "かぶる",
+      "audio": "/Audio/minnamoi/bai22/00010101011010001.mp3",
+      "levels": {
+        "N5": [
+          "<ruby>帽子<rt>ぼうし</rt></ruby>を<ruby>被<rt>かぶ</rt></ruby>ります。",
+          "I put on a hat."
+        ],
+        "N4": [
+          "<ruby>寒<rt>さむ</rt></ruby>いから、<ruby>帽子<rt>ぼうし</rt></ruby>を<ruby>被<rt>かぶ</rt></ruby>って<ruby>出<rt>で</rt></ruby>かけます。",
+          "It's cold, so I'll put on a hat and go out."
+        ],
+        "N3": [
+          "<ruby>日<rt>ひ</rt></ruby>が<ruby>強<rt>つよ</rt></ruby>いので、<ruby>外<rt>そと</rt></ruby>に<ruby>出<rt>で</rt></ruby>るときは<ruby>帽子<rt>ぼうし</rt></ruby>を<ruby>被<rt>かぶ</rt></ruby>るようにしています。",
+          "The sun is strong, so I make a point of wearing a hat whenever I go outside."
+        ],
+        "N2": [
+          "あの<ruby>赤<rt>あか</rt></ruby>い<ruby>帽子<rt>ぼうし</rt></ruby>を<ruby>被<rt>かぶ</rt></ruby>っている<ruby>人<rt>ひと</rt></ruby>こそ、<ruby>私<rt>わたし</rt></ruby>が<ruby>探<rt>さが</rt></ruby>していた<ruby>先生<rt>せんせい</rt></ruby>です。",
+          "That very person wearing the red hat is the teacher I was looking for."
+        ],
+        "N1": [
+          "<ruby>身分<rt>みぶん</rt></ruby>を<ruby>隠<rt>かく</rt></ruby>すために<ruby>深<rt>ふか</rt></ruby>く<ruby>帽子<rt>ぼうし</rt></ruby>を<ruby>被<rt>かぶ</rt></ruby>っていたとはいえ、その<ruby>立<rt>た</rt></ruby>ち<ruby>振<rt>ふ</rt></ruby>る<ruby>舞<rt>ま</rt></ruby>いから<ruby>正体<rt>しょうたい</rt></ruby>はすぐに<ruby>知<rt>し</rt></ruby>れた。",
+          "Although he had pulled his hat down low to conceal his identity, his bearing gave away who he really was at once."
+        ]
+      },
+      "mnem": "かぶる sounds like \"cover\": you cover your head when you put a hat on it.",
+      "tip": "Use 被る only for things worn on the head (帽子を被る); switch to はく for items below the waist (shoes, trousers) and 着る for the torso — and note it's godan, so the て-form is 被って, not 被て.",
+      "accent": 2
+    },
+    {
+      "key": "mnn:22:3",
+      "kana": "かけます",
+      "kanji": "掛けます",
+      "context": "めがねを〜",
+      "mean": "to put on, wear (glasses)",
+      "cat": "verb",
+      "type": "ichidan",
+      "trans": "t",
+      "dict": "掛ける",
+      "dictRead": "かける",
+      "audio": "/Audio/minnamoi/bai22/00010101011010010.mp3",
+      "levels": {
+        "N5": [
+          "<ruby>父<rt>ちち</rt></ruby>はめがねを<ruby>掛<rt>か</rt></ruby>けます。",
+          "My father wears glasses."
+        ],
+        "N4": [
+          "<ruby>本<rt>ほん</rt></ruby>を<ruby>読<rt>よ</rt></ruby>むときは、めがねを<ruby>掛<rt>か</rt></ruby>けてください。",
+          "When you read a book, please put on your glasses."
+        ],
+        "N3": [
+          "<ruby>目<rt>め</rt></ruby>が<ruby>悪<rt>わる</rt></ruby>くなったら、めがねを<ruby>掛<rt>か</rt></ruby>けるようにしています。",
+          "Since my eyesight got worse, I make a point of wearing glasses."
+        ],
+        "N2": [
+          "<ruby>普段<rt>ふだん</rt></ruby>はコンタクトをしているものの、<ruby>疲<rt>つか</rt></ruby>れた<ruby>日<rt>ひ</rt></ruby>はめがねを<ruby>掛<rt>か</rt></ruby>けざるを<ruby>得<rt>え</rt></ruby>ない。",
+          "Although I usually wear contacts, on tiring days I have no choice but to put on my glasses."
+        ],
+        "N1": [
+          "<ruby>彼<rt>かれ</rt></ruby>が<ruby>掛<rt>か</rt></ruby>けている<ruby>眼鏡<rt>めがね</rt></ruby>は、<ruby>祖父<rt>そふ</rt></ruby>の<ruby>代<rt>だい</rt></ruby>から<ruby>受<rt>う</rt></ruby>け<ruby>継<rt>つ</rt></ruby>がれてきた<ruby>由緒<rt>ゆいしょ</rt></ruby>ある<ruby>逸品<rt>いっぴん</rt></ruby>だそうだ。",
+          "The glasses he wears are said to be a venerable, prized item handed down since his grandfather's generation."
+        ]
+      },
+      "mnem": "\"KAH-keru\" — you KA-tch the arms of your glasses and hook them over your ears to put them on.",
+      "tip": "Ichidan verb (かけ+る → かけます/かけて/かけない); for glasses you say めがねを掛ける, never 着る or かぶる, and don't confuse it with 欠ける (かける, \"to be missing/chipped\").",
+      "accent": 2
+    },
+    {
+      "key": "mnn:22:4",
+      "kana": "します",
+      "kanji": "",
+      "context": "ネクタイを〜",
+      "mean": "to wear (a tie, scarf, etc.); to do",
+      "cat": "verb",
+      "type": "irregular",
+      "trans": "t",
+      "dict": "する",
+      "dictRead": "する",
+      "audio": "/Audio/minnamoi/bai22/00010101011010011.mp3",
+      "accent": 0
+    },
+    {
+      "key": "mnn:22:5",
+      "kana": "うまれます",
+      "kanji": "生まれます",
+      "context": "",
+      "mean": "to be born",
+      "cat": "verb",
+      "type": "ichidan",
+      "trans": "i",
+      "dict": "生まれる",
+      "dictRead": "うまれる",
+      "audio": "/Audio/minnamoi/bai22/00010101011010100.mp3",
+      "levels": {
+        "N5": [
+          "<ruby>私<rt>わたし</rt></ruby>は<ruby>東京<rt>とうきょう</rt></ruby>で<ruby>生<rt>う</rt></ruby>まれました。",
+          "I was born in Tokyo."
+        ],
+        "N4": [
+          "<ruby>子犬<rt>こいぬ</rt></ruby>が<ruby>三<rt>さん</rt></ruby><ruby>匹<rt>びき</rt></ruby><ruby>生<rt>う</rt></ruby>まれたから、<ruby>母<rt>はは</rt></ruby>はとてもうれしそうです。",
+          "Three puppies were born, so my mother looks very happy."
+        ],
+        "N3": [
+          "<ruby>赤<rt>あか</rt></ruby>ちゃんが<ruby>無事<rt>ぶじ</rt></ruby>に<ruby>生<rt>う</rt></ruby>まれるように、みんなで<ruby>祈<rt>いの</rt></ruby>っています。",
+          "We are all praying that the baby will be born safely."
+        ],
+        "N2": [
+          "<ruby>彼<rt>かれ</rt></ruby>は<ruby>裕福<rt>ゆうふく</rt></ruby>な<ruby>家<rt>いえ</rt></ruby>に<ruby>生<rt>う</rt></ruby>まれたものの、<ruby>決<rt>けっ</rt></ruby>して<ruby>努力<rt>どりょく</rt></ruby>を<ruby>怠<rt>おこた</rt></ruby>らなかった。",
+          "Although he was born into a wealthy family, he never neglected to put in effort."
+        ],
+        "N1": [
+          "この<ruby>名作<rt>めいさく</rt></ruby>は、<ruby>戦争<rt>せんそう</rt></ruby>で<ruby>全<rt>すべ</rt></ruby>てを<ruby>失<rt>うしな</rt></ruby>った<ruby>絶望<rt>ぜつぼう</rt></ruby>の<ruby>中<rt>なか</rt></ruby>から<ruby>生<rt>う</rt></ruby>まれたと<ruby>言<rt>い</rt></ruby>われている。",
+          "This masterpiece is said to have been born out of the depths of despair, after everything was lost to the war."
+        ]
+      },
+      "mnem": "\"Oo, ma, I'm here!\" — a newborn cries うまれる (u-ma) as it is born.",
+      "tip": "Ichidan and intransitive: people/things 生まれる (are born) on their own — to actively \"give birth to\" use the transitive 産む (うむ).",
+      "accent": 0
+    },
+    {
+      "key": "mnn:22:6",
+      "kana": "わたしたち",
+      "kanji": "私達",
+      "context": "",
+      "mean": "we, us",
+      "cat": "noun",
+      "type": "",
+      "trans": "",
+      "dict": "私たち",
+      "dictRead": "わたしたち",
+      "audio": "/Audio/minnamoi/bai22/00010101011010101.mp3",
+      "levels": {
+        "N5": [
+          "<ruby>私<rt>わたし</rt></ruby>たちは<ruby>学生<rt>がくせい</rt></ruby>です。",
+          "We are students."
+        ],
+        "N4": [
+          "<ruby>私<rt>わたし</rt></ruby>たちは<ruby>友<rt>とも</rt></ruby>だちと<ruby>映画<rt>えいが</rt></ruby>を<ruby>見<rt>み</rt></ruby>てから、ごはんを<ruby>食<rt>た</rt></ruby>べました。",
+          "After we watched a movie with our friends, we ate a meal."
+        ],
+        "N3": [
+          "<ruby>私<rt>わたし</rt></ruby>たちが<ruby>昨日<rt>きのう</rt></ruby><ruby>買<rt>か</rt></ruby>った<ruby>本<rt>ほん</rt></ruby>は、とても<ruby>面白<rt>おもしろ</rt></ruby>そうです。",
+          "The book we bought yesterday looks very interesting."
+        ],
+        "N2": [
+          "<ruby>私<rt>わたし</rt></ruby>たちが<ruby>長年<rt>ながねん</rt></ruby><ruby>続<rt>つづ</rt></ruby>けてきた<ruby>研究<rt>けんきゅう</rt></ruby>である<ruby>以上<rt>いじょう</rt></ruby>、ここで<ruby>諦<rt>あきら</rt></ruby>めるわけにはいかない。",
+          "Given that this is research we have continued for many years, there is no way we can give up here."
+        ],
+        "N1": [
+          "<ruby>私<rt>わたし</rt></ruby>たちが<ruby>築<rt>きず</rt></ruby>き<ruby>上<rt>あ</rt></ruby>げてきた<ruby>信頼<rt>しんらい</rt></ruby><ruby>関係<rt>かんけい</rt></ruby>あってこそ、<ruby>今回<rt>こんかい</rt></ruby>の<ruby>難局<rt>なんきょく</rt></ruby>を<ruby>乗<rt>の</rt></ruby>り<ruby>越<rt>こ</rt></ruby>えられたのだ。",
+          "It is precisely because of the relationship of trust we have built up that we were able to overcome this crisis."
+        ]
+      },
+      "mnem": "私 (わたし, \"I/me\") plus たち (the plural marker, as in 子どもたち) literally stacks \"me\" into \"more than one me\" = we/us.",
+      "tip": "Don't confuse it with 僕たち (boku-tachi, masculine \"we\") or the rougher 俺たち — 私たち is the gender-neutral, polite default safe in any setting.",
+      "accent": 3
+    },
+    {
+      "key": "mnn:22:7",
+      "kana": "コート",
+      "kanji": "",
+      "context": "",
+      "mean": "coat",
+      "cat": "noun",
+      "type": "",
+      "trans": "",
+      "dict": "コート",
+      "dictRead": "コート",
+      "audio": "/Audio/minnamoi/bai22/00010101011010110.mp3",
+      "levels": {
+        "N5": [
+          "<ruby>寒<rt>さむ</rt></ruby>いですから、コートを<ruby>着<rt>き</rt></ruby>ます。",
+          "Because it's cold, I'll wear a coat."
+        ],
+        "N4": [
+          "<ruby>出<rt>で</rt></ruby>かけるとき、いつも<ruby>黒<rt>くろ</rt></ruby>いコートを<ruby>着<rt>き</rt></ruby>ています。",
+          "When I go out, I always wear a black coat."
+        ],
+        "N3": [
+          "<ruby>風邪<rt>かぜ</rt></ruby>をひかないように、<ruby>厚<rt>あつ</rt></ruby>いコートを<ruby>着<rt>き</rt></ruby>るようにしています。",
+          "I make a point of wearing a thick coat so I don't catch a cold."
+        ],
+        "N2": [
+          "<ruby>母<rt>はは</rt></ruby>が<ruby>買<rt>か</rt></ruby>ってくれたコートは、<ruby>高<rt>たか</rt></ruby>かったものの、ほとんど<ruby>着<rt>き</rt></ruby>ていない。",
+          "The coat my mother bought me was expensive, but I've hardly worn it at all."
+        ],
+        "N1": [
+          "<ruby>祖父<rt>そふ</rt></ruby>が<ruby>長年<rt>ながねん</rt></ruby><ruby>愛用<rt>あいよう</rt></ruby>していたコートは、<ruby>今<rt>いま</rt></ruby>もなお<ruby>色<rt>いろ</rt></ruby>あせることなく<ruby>受<rt>う</rt></ruby>け<ruby>継<rt>つ</rt></ruby>がれている。",
+          "The coat my grandfather treasured for many years has been passed down, still without having faded even now."
+        ]
+      },
+      "mnem": "\"Coat\" → コート sounds almost exactly like the English word \"coat,\" so just stretch the vowel: COAT → コー・ト.",
+      "tip": "Don't confuse コート (coat) with コート meaning \"court\" (tennis court) — same spelling and pitch, distinguished only by context; and note a coat is 着る (worn on the upper body), not はく.",
+      "accent": 1
+    },
+    {
+      "key": "mnn:22:8",
+      "kana": "セーター",
+      "kanji": "",
+      "context": "",
+      "mean": "sweater",
+      "cat": "noun",
+      "type": "",
+      "trans": "",
+      "dict": "セーター",
+      "dictRead": "セーター",
+      "audio": "/Audio/minnamoi/bai22/00010101011010111.mp3",
+      "levels": {
+        "N5": [
+          "<ruby>赤<rt>あか</rt></ruby>いセーターを<ruby>着<rt>き</rt></ruby>ます。",
+          "I wear a red sweater."
+        ],
+        "N4": [
+          "<ruby>寒<rt>さむ</rt></ruby>いから、セーターを<ruby>着<rt>き</rt></ruby>て<ruby>出<rt>で</rt></ruby>かけます。",
+          "Because it's cold, I'll put on a sweater and go out."
+        ],
+        "N3": [
+          "<ruby>母<rt>はは</rt></ruby>が<ruby>編<rt>あ</rt></ruby>んでくれたセーターは、とても<ruby>暖<rt>あたた</rt></ruby>かそうです。",
+          "The sweater my mother knitted for me looks very warm."
+        ],
+        "N2": [
+          "せっかく<ruby>買<rt>か</rt></ruby>ったセーターだが、<ruby>大<rt>おお</rt></ruby>きすぎて<ruby>一度<rt>いちど</rt></ruby><ruby>着<rt>き</rt></ruby>たきりだ。",
+          "Although I went to the trouble of buying the sweater, it's too big, so I've worn it only once."
+        ],
+        "N1": [
+          "この<ruby>手編<rt>てあ</rt></ruby>みのセーターには、<ruby>祖母<rt>そぼ</rt></ruby>の<ruby>愛情<rt>あいじょう</rt></ruby>が<ruby>込<rt>こ</rt></ruby>められているとしか<ruby>言<rt>い</rt></ruby>いようがない。",
+          "I can only say that this hand-knitted sweater is imbued with my grandmother's love."
+        ]
+      },
+      "mnem": "\"Sweater\" → セーター sounds almost exactly like the English \"sweater,\" so just say it with a Japanese accent.",
+      "tip": "For wearing a セーター use 着る (kiru, upper-body garments), not はく (legs/feet) or かぶる (head).",
+      "accent": 1
+    },
+    {
+      "key": "mnn:22:9",
+      "kana": "スーツ",
+      "kanji": "",
+      "context": "",
+      "mean": "suit",
+      "cat": "noun",
+      "type": "",
+      "trans": "",
+      "dict": "スーツ",
+      "dictRead": "スーツ",
+      "audio": "/Audio/minnamoi/bai22/00010101011011000.mp3",
+      "levels": {
+        "N5": [
+          "<ruby>明日<rt>あした</rt></ruby>はスーツを<ruby>着<rt>き</rt></ruby>ます。",
+          "Tomorrow I will wear a suit."
+        ],
+        "N4": [
+          "<ruby>大切<rt>たいせつ</rt></ruby>な<ruby>会議<rt>かいぎ</rt></ruby>があるから、<ruby>新<rt>あたら</rt></ruby>しいスーツを<ruby>着<rt>き</rt></ruby>て<ruby>行<rt>い</rt></ruby>きたいです。",
+          "Because I have an important meeting, I want to go wearing a new suit."
+        ],
+        "N3": [
+          "<ruby>面接<rt>めんせつ</rt></ruby>のときは、きちんとしたスーツを<ruby>着<rt>き</rt></ruby>るようにしています。",
+          "When I have an interview, I make sure to wear a proper suit."
+        ],
+        "N2": [
+          "<ruby>彼<rt>かれ</rt></ruby>は<ruby>高<rt>たか</rt></ruby>いスーツを<ruby>買<rt>か</rt></ruby>ったものの、<ruby>一度<rt>いちど</rt></ruby>も<ruby>着<rt>き</rt></ruby>ていないらしい。",
+          "It seems that although he bought an expensive suit, he hasn't worn it even once."
+        ],
+        "N1": [
+          "<ruby>役員<rt>やくいん</rt></ruby>として<ruby>出席<rt>しゅっせき</rt></ruby>する<ruby>以上<rt>いじょう</rt></ruby>、<ruby>相応<rt>そうおう</rt></ruby>のスーツを<ruby>着<rt>き</rt></ruby>こなさざるを<ruby>得<rt>え</rt></ruby>ない。",
+          "Given that I am attending as an executive, I have no choice but to wear a befitting suit with poise."
+        ]
+      },
+      "mnem": "\"Suit\" sounds almost exactly like スーツ (sūtsu) — it's a straight katakana loanword from English \"suits.\"",
+      "tip": "A suit is worn on the torso, so it takes 着る (kiru), not はく (which is for trousers/skirts/shoes) — even though a suit includes pants.",
+      "accent": 1
+    },
+    {
+      "key": "mnn:22:10",
+      "kana": "ぼうし",
+      "kanji": "帽子",
+      "context": "",
+      "mean": "hat, cap",
+      "cat": "noun",
+      "type": "",
+      "trans": "",
+      "dict": "帽子",
+      "dictRead": "ぼうし",
+      "audio": "/Audio/minnamoi/bai22/00010101011011001.mp3",
+      "levels": {
+        "N5": [
+          "<ruby>赤<rt>あか</rt></ruby>い<ruby>帽子<rt>ぼうし</rt></ruby>をかぶります。",
+          "I put on a red hat."
+        ],
+        "N4": [
+          "<ruby>出<rt>で</rt></ruby>かけるとき、いつも<ruby>帽子<rt>ぼうし</rt></ruby>をかぶってから<ruby>家<rt>いえ</rt></ruby>を<ruby>出<rt>で</rt></ruby>ます。",
+          "When I go out, I always put on a hat before leaving the house."
+        ],
+        "N3": [
+          "<ruby>風<rt>かぜ</rt></ruby>が<ruby>強<rt>つよ</rt></ruby>かったら、<ruby>帽子<rt>ぼうし</rt></ruby>が<ruby>飛<rt>と</rt></ruby>ばされてしまいますよ。",
+          "If the wind is strong, your hat will get blown away."
+        ],
+        "N2": [
+          "<ruby>彼<rt>かれ</rt></ruby>は<ruby>帽子<rt>ぼうし</rt></ruby>をかぶっているものの、<ruby>顔<rt>かお</rt></ruby>は<ruby>隠<rt>かく</rt></ruby>れていないので、すぐに<ruby>誰<rt>だれ</rt></ruby>か<ruby>分<rt>わ</rt></ruby>かった。",
+          "Although he was wearing a hat, his face wasn't hidden, so I recognized him right away."
+        ],
+        "N1": [
+          "<ruby>祖父<rt>そふ</rt></ruby>は<ruby>外出<rt>がいしゅつ</rt></ruby>のたびに<ruby>愛用<rt>あいよう</rt></ruby>の<ruby>帽子<rt>ぼうし</rt></ruby>を<ruby>欠<rt>か</rt></ruby>かさず、それはもはや<ruby>彼<rt>かれ</rt></ruby>の<ruby>人柄<rt>ひとがら</rt></ruby>そのものを<ruby>象徴<rt>しょうちょう</rt></ruby>していた。",
+          "My grandfather never went out without his beloved hat; it had come to symbolize his very character."
+        ]
+      },
+      "mnem": "A hat sits at the top (帽) of your head and gives you a \"BOW-she\" look — ぼうし.",
+      "tip": "Hats and glasses take かぶる (帽子をかぶる), not 着る (clothes on the torso) or はく (legs/feet) — pick the wearing verb by body region.",
+      "accent": 0
+    },
+    {
+      "key": "mnn:22:11",
+      "kana": "めがね",
+      "kanji": "眼鏡",
+      "context": "〜を かけます",
+      "mean": "glasses",
+      "cat": "noun",
+      "type": "",
+      "trans": "",
+      "dict": "眼鏡",
+      "dictRead": "めがね",
+      "audio": "/Audio/minnamoi/bai22/00010101011011010.mp3",
+      "levels": {
+        "N5": [
+          "<ruby>私<rt>わたし</rt></ruby>は<ruby>眼鏡<rt>めがね</rt></ruby>を かけます。",
+          "I wear glasses."
+        ],
+        "N4": [
+          "<ruby>本<rt>ほん</rt></ruby>を <ruby>読<rt>よ</rt></ruby>むとき、<ruby>眼鏡<rt>めがね</rt></ruby>を かけます。",
+          "I put on my glasses when I read books."
+        ],
+        "N3": [
+          "<ruby>目<rt>め</rt></ruby>が <ruby>疲<rt>つか</rt></ruby>れないように、<ruby>新<rt>あたら</rt></ruby>しい<ruby>眼鏡<rt>めがね</rt></ruby>を <ruby>作<rt>つく</rt></ruby>りました。",
+          "I had new glasses made so that my eyes wouldn't get tired."
+        ],
+        "N2": [
+          "<ruby>眼鏡<rt>めがね</rt></ruby>を かけているものの、<ruby>細<rt>こま</rt></ruby>かい<ruby>字<rt>じ</rt></ruby>は まだ <ruby>見<rt>み</rt></ruby>えにくい。",
+          "Although I wear glasses, fine print is still hard to read."
+        ],
+        "N1": [
+          "<ruby>祖父<rt>そふ</rt></ruby>は <ruby>愛用<rt>あいよう</rt></ruby>の<ruby>眼鏡<rt>めがね</rt></ruby>を かけずには <ruby>新聞<rt>しんぶん</rt></ruby>に <ruby>目<rt>め</rt></ruby>を <ruby>通<rt>とお</rt></ruby>そうとも しなかった。",
+          "My grandfather wouldn't even attempt to glance through the newspaper without putting on his beloved glasses."
+        ]
+      },
+      "mnem": "眼 (eye) + 鏡 (mirror) = a \"mirror for your eyes\" — glasses; the sound めがね even hides 目 (め, eye).",
+      "tip": "Glasses take かける (眼鏡をかける), not きる/はく/かぶる — and note コンタクト (contacts) uses する, not かける.",
+      "accent": 1
+    },
+    {
+      "key": "mnn:22:12",
+      "kana": "ケーキ",
+      "kanji": "",
+      "context": "",
+      "mean": "cake",
+      "cat": "noun",
+      "type": "",
+      "trans": "",
+      "dict": "ケーキ",
+      "dictRead": "ケーキ",
+      "audio": "/Audio/minnamoi/bai22/00010101011011011.mp3",
+      "levels": {
+        "N5": [
+          "わたしは ケーキが <ruby>大<rt>だい</rt></ruby>すきです。",
+          "I really like cake."
+        ],
+        "N4": [
+          "<ruby>誕<rt>たん</rt></ruby><ruby>生<rt>じょう</rt></ruby><ruby>日<rt>び</rt></ruby>に ケーキを <ruby>食<rt>た</rt></ruby>べたいです。",
+          "I want to eat cake on my birthday."
+        ],
+        "N3": [
+          "<ruby>母<rt>はは</rt></ruby>が <ruby>作<rt>つく</rt></ruby>った ケーキは とても おいしそうです。",
+          "The cake my mother made looks really delicious."
+        ],
+        "N2": [
+          "<ruby>甘<rt>あま</rt></ruby>い ものは <ruby>苦<rt>にが</rt></ruby><ruby>手<rt>て</rt></ruby>な ものの、<ruby>彼<rt>かの</rt></ruby><ruby>女<rt>じょ</rt></ruby>が <ruby>焼<rt>や</rt></ruby>いた ケーキだけは <ruby>別<rt>べつ</rt></ruby>だ。",
+          "Although I'm not good with sweet things, the cake she baked is the one exception."
+        ],
+        "N1": [
+          "せっかく <ruby>用<rt>よう</rt></ruby><ruby>意<rt>い</rt></ruby>してくれた ケーキを、<ruby>食<rt>た</rt></ruby>べないわけにはいかない。",
+          "Since they went to the trouble of preparing a cake, I can't very well not eat it."
+        ]
+      },
+      "mnem": "\"ケーキ\" sounds just like English \"cake\" — it's a direct loanword, so the sound is the meaning.",
+      "tip": "Don't confuse ケーキ (cake) with ケーキ屋 (cake shop/bakery) or the similar-sounding ケース (case) — only ケーキ is the dessert.",
+      "accent": 1
+    },
+    {
+      "key": "mnn:22:13",
+      "kana": "［お］べんとう",
+      "kanji": "お弁当",
+      "context": "",
+      "mean": "box lunch, bento",
+      "cat": "noun",
+      "type": "",
+      "trans": "",
+      "dict": "お弁当",
+      "dictRead": "おべんとう",
+      "audio": "/Audio/minnamoi/bai22/00010101011011100.mp3",
+      "levels": {
+        "N5": [
+          "<ruby>毎日<rt>まいにち</rt></ruby>お<ruby>弁当<rt>べんとう</rt></ruby>を<ruby>食<rt>た</rt></ruby>べます。",
+          "I eat a box lunch every day."
+        ],
+        "N4": [
+          "<ruby>母<rt>はは</rt></ruby>が<ruby>作<rt>つく</rt></ruby>ってくれたお<ruby>弁当<rt>べんとう</rt></ruby>を<ruby>持<rt>も</rt></ruby>って<ruby>学校<rt>がっこう</rt></ruby>へ<ruby>行<rt>い</rt></ruby>きます。",
+          "I take the box lunch my mother made for me to school."
+        ],
+        "N3": [
+          "<ruby>朝<rt>あさ</rt></ruby><ruby>早<rt>はや</rt></ruby>く<ruby>起<rt>お</rt></ruby>きて、<ruby>自分<rt>じぶん</rt></ruby>でお<ruby>弁当<rt>べんとう</rt></ruby>を<ruby>作<rt>つく</rt></ruby>るようにしています。",
+          "I make a point of getting up early in the morning and making my own box lunch."
+        ],
+        "N2": [
+          "<ruby>昨日<rt>きのう</rt></ruby><ruby>買<rt>か</rt></ruby>ったお<ruby>弁当<rt>べんとう</rt></ruby>を<ruby>冷蔵庫<rt>れいぞうこ</rt></ruby>に<ruby>入<rt>い</rt></ruby>れたきり、<ruby>食<rt>た</rt></ruby>べるのを<ruby>忘<rt>わす</rt></ruby>れていた。",
+          "After putting the box lunch I bought yesterday in the fridge, I completely forgot to eat it."
+        ],
+        "N1": [
+          "<ruby>彼<rt>かれ</rt></ruby>が<ruby>心<rt>こころ</rt></ruby>を<ruby>込<rt>こ</rt></ruby>めて<ruby>作<rt>つく</rt></ruby>ってくれたお<ruby>弁当<rt>べんとう</rt></ruby>である<ruby>以上<rt>いじょう</rt></ruby>、<ruby>残<rt>のこ</rt></ruby>さず<ruby>食<rt>た</rt></ruby>べざるを<ruby>得<rt>え</rt></ruby>ない。",
+          "Given that it is a box lunch he made for me with all his heart, I have no choice but to eat every last bite."
+        ]
+      },
+      "mnem": "弁当 = \"BEN sitting in a TOaster\" oven warming up your packed lunch — ben-tō, the box of food you carry.",
+      "tip": "The polite お is near-obligatory in everyday speech (お弁当), much like お茶/お金; dropping it to bare 弁当 sounds blunt — and note the accent flattens to heiban when お is attached, unlike the bare word's drop.",
+      "accent": 0
+    },
+    {
+      "key": "mnn:22:14",
+      "kana": "ロボット",
+      "kanji": "",
+      "context": "",
+      "mean": "robot",
+      "cat": "noun",
+      "type": "",
+      "trans": "",
+      "dict": "ロボット",
+      "dictRead": "ロボット",
+      "audio": "/Audio/minnamoi/bai22/00010101011011101.mp3",
+      "levels": {
+        "N5": [
+          "<ruby>私<rt>わたし</rt></ruby>の<ruby>弟<rt>おとうと</rt></ruby>はロボットが<ruby>好<rt>す</rt></ruby>きです。",
+          "My little brother likes robots."
+        ],
+        "N4": [
+          "<ruby>子供<rt>こども</rt></ruby>のとき、ロボットを<ruby>作<rt>つく</rt></ruby>りたかったです。",
+          "When I was a child, I wanted to build a robot."
+        ],
+        "N3": [
+          "<ruby>友達<rt>ともだち</rt></ruby>が<ruby>作<rt>つく</rt></ruby>ったロボットは、<ruby>本物<rt>ほんもの</rt></ruby>の<ruby>犬<rt>いぬ</rt></ruby>のように<ruby>動<rt>うご</rt></ruby>きます。",
+          "The robot my friend made moves just like a real dog."
+        ],
+        "N2": [
+          "<ruby>掃除<rt>そうじ</rt></ruby>をしてくれるロボットがあるとはいうものの、まだ<ruby>完璧<rt>かんぺき</rt></ruby>ではない。",
+          "Although there are robots that do the cleaning for you, they are not yet perfect."
+        ],
+        "N1": [
+          "<ruby>少子化<rt>しょうしか</rt></ruby>が<ruby>進<rt>すす</rt></ruby>む<ruby>今<rt>いま</rt></ruby>、<ruby>介護<rt>かいご</rt></ruby>ロボットの<ruby>導入<rt>どうにゅう</rt></ruby>に<ruby>頼<rt>たよ</rt></ruby>らざるを<ruby>得<rt>え</rt></ruby>ない。",
+          "With the falling birthrate today, we have no choice but to rely on introducing caregiving robots."
+        ]
+      },
+      "mnem": "\"ロボット\" is just the English \"robot\" borrowed into katakana — say it with a clipped Japanese beat (ro-bot-to) and the meaning is identical.",
+      "tip": "It is a count noun, so for \"the robot that…\" use a plain-form clause directly in front of it (友達が作ったロボット) — Lesson 22's noun-modifying pattern, with no の linking the verb to the noun.",
+      "accent": 1
+    },
+    {
+      "key": "mnn:22:15",
+      "kana": "ユーモア",
+      "kanji": "",
+      "context": "",
+      "mean": "humor",
+      "cat": "noun",
+      "type": "",
+      "trans": "",
+      "dict": "ユーモア",
+      "dictRead": "ユーモア",
+      "audio": "/Audio/minnamoi/bai22/00010101011011110.mp3",
+      "levels": {
+        "N5": [
+          "<ruby>彼<rt>かれ</rt></ruby>はユーモアがあります。",
+          "He has a sense of humor."
+        ],
+        "N4": [
+          "ユーモアがある<ruby>人<rt>ひと</rt></ruby>と<ruby>話<rt>はな</rt></ruby>すのは<ruby>楽<rt>たの</rt></ruby>しいです。",
+          "Talking with people who have a sense of humor is fun."
+        ],
+        "N3": [
+          "<ruby>緊張<rt>きんちょう</rt></ruby>したときは、ユーモアで<ruby>空気<rt>くうき</rt></ruby>を<ruby>和<rt>やわ</rt></ruby>らげるようにしています。",
+          "When things get tense, I try to lighten the mood with humor."
+        ],
+        "N2": [
+          "<ruby>彼<rt>かれ</rt></ruby>の<ruby>話<rt>はなし</rt></ruby>はまじめなものの、どこかにユーモアが<ruby>感<rt>かん</rt></ruby>じられる。",
+          "Although his talk is serious, you can sense humor somewhere in it."
+        ],
+        "N1": [
+          "どんなに<ruby>苦<rt>くる</rt></ruby>しい<ruby>状況<rt>じょうきょう</rt></ruby>にあっても、ユーモアを<ruby>忘<rt>わす</rt></ruby>れない<ruby>彼<rt>かれ</rt></ruby>の<ruby>姿<rt>すがた</rt></ruby>には<ruby>頭<rt>あたま</rt></ruby>が<ruby>下<rt>さ</rt></ruby>がる。",
+          "I have nothing but respect for the way he never loses his sense of humor, no matter how trying the circumstances."
+        ]
+      },
+      "mnem": "From English \"humor\" — the katakana ユーモア is just the loanword spelled out, so hear \"you-moa\" and think \"you (have) humor.\"",
+      "tip": "Pair it with ある (ユーモアがある = \"has humor/is witty\"); don't confuse it with おもしろい, which describes a thing as funny/interesting rather than naming the quality of wit itself.",
+      "accent": 1
+    },
+    {
+      "key": "mnn:22:16",
+      "kana": "つごう",
+      "kanji": "都合",
+      "context": "〜が いい／わるい",
+      "mean": "convenience (one's situation/availability)",
+      "cat": "noun",
+      "type": "",
+      "trans": "",
+      "dict": "都合",
+      "dictRead": "つごう",
+      "audio": "/Audio/minnamoi/bai22/00010101011011111.mp3",
+      "levels": {
+        "N5": [
+          "<ruby>明日<rt>あした</rt></ruby>は<ruby>都合<rt>つごう</rt></ruby>が いいです。",
+          "Tomorrow is convenient for me."
+        ],
+        "N4": [
+          "<ruby>都合<rt>つごう</rt></ruby>が わるいから、<ruby>今日<rt>きょう</rt></ruby>は <ruby>行<rt>い</rt></ruby>けません。",
+          "Because it's a bad time for me, I can't go today."
+        ],
+        "N3": [
+          "みんなの <ruby>都合<rt>つごう</rt></ruby>が いい <ruby>日<rt>ひ</rt></ruby>に <ruby>会<rt>あ</rt></ruby>えるように、<ruby>予定<rt>よてい</rt></ruby>を <ruby>調<rt>しら</rt></ruby>べておきます。",
+          "I'll check the schedule in advance so we can meet on a day that's convenient for everyone."
+        ],
+        "N2": [
+          "<ruby>急<rt>きゅう</rt></ruby>に <ruby>都合<rt>つごう</rt></ruby>が わるくなったわけではないものの、<ruby>会議<rt>かいぎ</rt></ruby>には <ruby>出<rt>で</rt></ruby>られそうにありません。",
+          "It's not as though something suddenly came up, but it doesn't look like I'll be able to attend the meeting."
+        ],
+        "N1": [
+          "<ruby>先方<rt>せんぽう</rt></ruby>の <ruby>都合<rt>つごう</rt></ruby>を <ruby>優先<rt>ゆうせん</rt></ruby>せざるを<ruby>得<rt>え</rt></ruby>ず、<ruby>打<rt>う</rt></ruby>ち<ruby>合<rt>あ</rt></ruby>わせの <ruby>日程<rt>にってい</rt></ruby>は <ruby>全面的<rt>ぜんめんてき</rt></ruby>に <ruby>見直<rt>みなお</rt></ruby>すことになった。",
+          "We had no choice but to prioritize the other party's availability, so the meeting schedule ended up being completely reworked."
+        ]
+      },
+      "mnem": "都 (capital city) + 合 (fit together) — whether things \"fit\" with your situation in the busy capital is a matter of 都合 (convenience).",
+      "tip": "It's about scheduling/availability, not 便利 (べんり, \"handy/useful object\"); the frame 都合がいい／わるい means a time \"works/doesn't work\" for you, not that something is well-made.",
+      "accent": 0
+    },
+    {
+      "key": "mnn:22:17",
+      "kana": "よく",
+      "kanji": "",
+      "context": "",
+      "mean": "often, well",
+      "cat": "adverb",
+      "type": "",
+      "trans": "",
+      "dict": "よく",
+      "dictRead": "よく",
+      "audio": "/Audio/minnamoi/bai22/00010101011100000.mp3",
+      "levels": {
+        "N5": [
+          "<ruby>私<rt>わたし</rt></ruby>は<ruby>毎日<rt>まいにち</rt></ruby>よく<ruby>音楽<rt>おんがく</rt></ruby>を<ruby>聞<rt>き</rt></ruby>きます。",
+          "I often listen to music every day."
+        ],
+        "N4": [
+          "<ruby>図書館<rt>としょかん</rt></ruby>へ<ruby>行<rt>い</rt></ruby>くとき、よく<ruby>友<rt>とも</rt></ruby>だちに<ruby>会<rt>あ</rt></ruby>います。",
+          "When I go to the library, I often run into my friends."
+        ],
+        "N3": [
+          "<ruby>毎朝<rt>まいあさ</rt></ruby>よく<ruby>運動<rt>うんどう</rt></ruby>するようにしたら、<ruby>体<rt>からだ</rt></ruby>の<ruby>調子<rt>ちょうし</rt></ruby>がよくなった。",
+          "After I made a point of exercising well every morning, my physical condition improved."
+        ],
+        "N2": [
+          "<ruby>彼<rt>かれ</rt></ruby>はよく<ruby>勉強<rt>べんきょう</rt></ruby>するものの、テストの<ruby>点<rt>てん</rt></ruby>がなかなか<ruby>上<rt>あ</rt></ruby>がらない。",
+          "Although he studies hard, his test scores just won't go up."
+        ],
+        "N1": [
+          "<ruby>長年<rt>ながねん</rt></ruby>の<ruby>努力<rt>どりょく</rt></ruby>があったからこそ、よくぞここまで<ruby>成<rt>な</rt></ruby>し<ruby>遂<rt>と</rt></ruby>げられたものだと<ruby>感心<rt>かんしん</rt></ruby>せざるを<ruby>得<rt>え</rt></ruby>ない。",
+          "Precisely because of years of effort, I can't help but admire how well he managed to accomplish all this."
+        ]
+      },
+      "mnem": "よく comes from いい/良い (good), so doing something \"well\" (good) and doing it \"often\" both grow from that same root of good.",
+      "tip": "Don't confuse the adverb よく (often/well) with the noun-suffix 翌 in 翌日 (the next day); also note that \"yoku + verb\" can mean either frequency (\"often do\") or manner (\"do well\"), so let context decide.",
+      "accent": 1
+    }
   ],
   "grammar": [
     {
@@ -34,10 +628,22 @@
       "structure": "V(辞書形／た形／ている／ない)・いA(〜い)・なA(〜な)・N(〜の) ＋ N",
       "explain": "A whole plain-form sentence can describe a noun, like an English relative clause — but it comes BEFORE the noun, with its verb/adjective in plain form. The clause's own subject is marked with が (not は). 「わたしが 買った 本」 = the book (that) I bought; 「電話して いる 人」 = the person who is on the phone.",
       "examples": [
-        { "jp": "これは 私が 京都で 撮った 写真です。", "en": "This is a photo I took in Kyoto." },
-        { "jp": "電話して いる 人は ミラーさんです。", "en": "The person on the phone is Mr. Miller." },
-        { "jp": "着物を 着て いる 人は 渡辺さんです。", "en": "The person wearing a kimono is Ms. Watanabe." },
-        { "jp": "これは 母に もらった コートです。", "en": "This is the coat I got from my mother." }
+        {
+          "jp": "これは 私が 京都で 撮った 写真です。",
+          "en": "This is a photo I took in Kyoto."
+        },
+        {
+          "jp": "電話して いる 人は ミラーさんです。",
+          "en": "The person on the phone is Mr. Miller."
+        },
+        {
+          "jp": "着物を 着て いる 人は 渡辺さんです。",
+          "en": "The person wearing a kimono is Ms. Watanabe."
+        },
+        {
+          "jp": "これは 母に もらった コートです。",
+          "en": "This is the coat I got from my mother."
+        }
       ]
     },
     {
@@ -45,9 +651,18 @@
       "structure": "… ［修飾節 ＋ N］ は／が／を …",
       "explain": "A noun plus its modifying clause works as a single noun, so it can sit anywhere in the sentence — subject, object, topic. 「私が 買った 本」 can be the thing your mother is reading, or the thing she likes.",
       "examples": [
-        { "jp": "母は 私が 買った 本を 読んで います。", "en": "My mother is reading the book I bought." },
-        { "jp": "カリナさんが かいた 絵は どれですか。", "en": "Which one is the painting Karina drew?" },
-        { "jp": "きのう 買った 傘を なくしました。", "en": "I lost the umbrella I bought yesterday." }
+        {
+          "jp": "母は 私が 買った 本を 読んで います。",
+          "en": "My mother is reading the book I bought."
+        },
+        {
+          "jp": "カリナさんが かいた 絵は どれですか。",
+          "en": "Which one is the painting Karina drew?"
+        },
+        {
+          "jp": "きのう 買った 傘を なくしました。",
+          "en": "I lost the umbrella I bought yesterday."
+        }
       ]
     },
     {
@@ -55,32 +670,90 @@
       "structure": "V(辞書形) ＋ 時間／約束／用事 ＋ が あります／ありません",
       "explain": "A very common noun modification: a dictionary-form verb modifies a noun like 時間 (time), 約束 (appointment), or 用事 (errand) — 'the time to do X', 'a promise to do X'.",
       "examples": [
-        { "jp": "本を 読む 時間が ありません。", "en": "I don't have time to read books." },
-        { "jp": "日曜日は 友達に 会う 約束が あります。", "en": "On Sunday I have plans to meet a friend." }
+        {
+          "jp": "本を 読む 時間が ありません。",
+          "en": "I don't have time to read books."
+        },
+        {
+          "jp": "日曜日は 友達に 会う 約束が あります。",
+          "en": "On Sunday I have plans to meet a friend."
+        }
       ]
     }
   ],
   "examples": [
-    { "jp": "これは ミラーさんが 作った ケーキです。", "en": "This is the cake Mr. Miller made." },
-    { "jp": "あそこに いる 人は ミラーさんです。", "en": "The person over there is Mr. Miller." },
-    { "jp": "きのう 習った ことばを 忘れました。", "en": "I forgot the words I learned yesterday." },
-    { "jp": "買い物に 行く 時間が ありません。", "en": "I don't have time to go shopping." },
-    { "jp": "カリナさんが かいた 絵は どれですか。 …あの 海の 絵です。", "en": "Which painting did Karina draw? …That one — the painting of the sea." },
-    { "jp": "山田さん、奥さんに 初めて 会った 所は どこですか。 …大阪城です。", "en": "Mr. Yamada, where did you first meet your wife? …At Osaka Castle." },
-    { "jp": "どんな うちが 欲しいですか。 …広い 庭が ある うちが 欲しいです。", "en": "What kind of house do you want? …One with a big garden." },
-    { "jp": "きのう 買った 傘を なくしました。", "en": "I lost the umbrella I bought yesterday." }
+    {
+      "jp": "これは ミラーさんが 作った ケーキです。",
+      "en": "This is the cake Mr. Miller made."
+    },
+    {
+      "jp": "あそこに いる 人は ミラーさんです。",
+      "en": "The person over there is Mr. Miller."
+    },
+    {
+      "jp": "きのう 習った ことばを 忘れました。",
+      "en": "I forgot the words I learned yesterday."
+    },
+    {
+      "jp": "買い物に 行く 時間が ありません。",
+      "en": "I don't have time to go shopping."
+    },
+    {
+      "jp": "カリナさんが かいた 絵は どれですか。 …あの 海の 絵です。",
+      "en": "Which painting did Karina draw? …That one — the painting of the sea."
+    },
+    {
+      "jp": "山田さん、奥さんに 初めて 会った 所は どこですか。 …大阪城です。",
+      "en": "Mr. Yamada, where did you first meet your wife? …At Osaka Castle."
+    },
+    {
+      "jp": "どんな うちが 欲しいですか。 …広い 庭が ある うちが 欲しいです。",
+      "en": "What kind of house do you want? …One with a big garden."
+    },
+    {
+      "jp": "きのう 買った 傘を なくしました。",
+      "en": "I lost the umbrella I bought yesterday."
+    }
   ],
   "conversation": {
     "title": "どんな アパートが いいですか (What kind of apartment would be good?)",
     "audio": "/Audio/minnahonsatsu1/75.mp3",
     "lines": [
-      { "role": "不動産屋", "jp": "どんな 部屋を お探しですか。", "en": "What kind of room are you looking for?" },
-      { "role": "ワン", "jp": "そうですね。家賃は 8万円ぐらいで、駅から 遠くない 所が いいですね。", "en": "Let's see… rent around 80,000 yen, and somewhere not far from the station would be good." },
-      { "role": "不動産屋", "jp": "では、こちらは いかがですか。駅から 10分で、家賃は 83,000円です。ダイニングキッチンと 和室ですね。", "en": "Then how about this one? Ten minutes from the station, rent is 83,000 yen. It has a dining-kitchen and a Japanese-style room." },
-      { "role": "ワン", "jp": "すみません。ここは 何ですか。", "en": "Excuse me — what is this here?" },
-      { "role": "不動産屋", "jp": "押し入れです。布団を 入れる 所ですよ。", "en": "That's the closet — the place where you put away the futon." },
-      { "role": "ワン", "jp": "そうですか。この 部屋、きょう 見る ことが できますか。", "en": "I see. Can I see this room today?" },
-      { "role": "不動産屋", "jp": "ええ。今から 行きましょうか。", "en": "Yes. Shall we go now?" }
+      {
+        "role": "不動産屋",
+        "jp": "どんな 部屋を お探しですか。",
+        "en": "What kind of room are you looking for?"
+      },
+      {
+        "role": "ワン",
+        "jp": "そうですね。家賃は 8万円ぐらいで、駅から 遠くない 所が いいですね。",
+        "en": "Let's see… rent around 80,000 yen, and somewhere not far from the station would be good."
+      },
+      {
+        "role": "不動産屋",
+        "jp": "では、こちらは いかがですか。駅から 10分で、家賃は 83,000円です。ダイニングキッチンと 和室ですね。",
+        "en": "Then how about this one? Ten minutes from the station, rent is 83,000 yen. It has a dining-kitchen and a Japanese-style room."
+      },
+      {
+        "role": "ワン",
+        "jp": "すみません。ここは 何ですか。",
+        "en": "Excuse me — what is this here?"
+      },
+      {
+        "role": "不動産屋",
+        "jp": "押し入れです。布団を 入れる 所ですよ。",
+        "en": "That's the closet — the place where you put away the futon."
+      },
+      {
+        "role": "ワン",
+        "jp": "そうですか。この 部屋、きょう 見る ことが できますか。",
+        "en": "I see. Can I see this room today?"
+      },
+      {
+        "role": "不動産屋",
+        "jp": "ええ。今から 行きましょうか。",
+        "en": "Yes. Shall we go now?"
+      }
     ]
   }
 }

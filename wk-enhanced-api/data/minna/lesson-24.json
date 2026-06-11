@@ -9,22 +9,542 @@
     "note": "Vocabulary, native-speaker audio, and example sentences aggregated from vnjpclub.com (Minna no Nihongo 第2版). For personal study."
   },
   "vocab": [
-    { "key": "mnn:24:0",  "kana": "くれます", "kanji": "", "context": "", "mean": "to give (me / my in-group)", "cat": "verb", "type": "ichidan", "trans": "t", "dict": "くれる", "dictRead": "くれる", "audio": "/Audio/minnamoi/bai24/00010101100001010.mp3" },
-    { "key": "mnn:24:1",  "kana": "なおします", "kanji": "直します", "context": "", "mean": "to repair, fix, correct", "cat": "verb", "type": "godan", "trans": "t", "dict": "直す", "dictRead": "なおす", "audio": "/Audio/minnamoi/bai24/00010101100001011.mp3" },
-    { "key": "mnn:24:2",  "kana": "つれていきます", "kanji": "連れて行きます", "context": "", "mean": "to take (someone) along", "cat": "verb", "type": "godan", "trans": "t", "dict": "連れて行く", "dictRead": "つれていく", "audio": "/Audio/minnamoi/bai24/00010101100001100.mp3" },
-    { "key": "mnn:24:3",  "kana": "つれてきます", "kanji": "連れて来ます", "context": "", "mean": "to bring (someone)", "cat": "verb", "type": "irregular", "trans": "t", "dict": "連れて来る", "dictRead": "つれてくる", "audio": "/Audio/minnamoi/bai24/00010101100001101.mp3" },
-    { "key": "mnn:24:4",  "kana": "おくります", "kanji": "送ります", "context": "人を〜", "mean": "to see (someone) off, escort", "cat": "verb", "type": "godan", "trans": "t", "dict": "送る", "dictRead": "おくる", "audio": "/Audio/minnamoi/bai24/00010101100001110.mp3" },
-    { "key": "mnn:24:5",  "kana": "しょうかいします", "kanji": "紹介します", "context": "", "mean": "to introduce", "cat": "verb", "type": "irregular", "trans": "t", "dict": "紹介する", "dictRead": "しょうかいする", "audio": "/Audio/minnamoi/bai24/00010101100001111.mp3" },
-    { "key": "mnn:24:6",  "kana": "あんないします", "kanji": "案内します", "context": "", "mean": "to show around, show the way", "cat": "verb", "type": "irregular", "trans": "t", "dict": "案内する", "dictRead": "あんないする", "audio": "/Audio/minnamoi/bai24/00010101100010000.mp3" },
-    { "key": "mnn:24:7",  "kana": "せつめいします", "kanji": "説明します", "context": "", "mean": "to explain", "cat": "verb", "type": "irregular", "trans": "t", "dict": "説明する", "dictRead": "せつめいする", "audio": "/Audio/minnamoi/bai24/00010101100010001.mp3" },
-    { "key": "mnn:24:8",  "kana": "おじいさん", "kanji": "", "context": "おじいちゃん", "mean": "grandfather; elderly man", "cat": "noun", "type": "", "trans": "", "dict": "おじいさん", "dictRead": "おじいさん", "audio": "/Audio/minnamoi/bai24/00010101100010010.mp3" },
-    { "key": "mnn:24:9",  "kana": "おばあさん", "kanji": "", "context": "おばあちゃん", "mean": "grandmother; elderly woman", "cat": "noun", "type": "", "trans": "", "dict": "おばあさん", "dictRead": "おばあさん", "audio": "/Audio/minnamoi/bai24/00010101100010011.mp3" },
-    { "key": "mnn:24:10", "kana": "じゅんび", "kanji": "準備", "context": "〜します", "mean": "preparation (〜します: to prepare)", "cat": "noun", "type": "", "trans": "", "dict": "準備", "dictRead": "じゅんび", "audio": "/Audio/minnamoi/bai24/00010101100010100.mp3" },
-    { "key": "mnn:24:11", "kana": "ひっこし", "kanji": "引っ越し", "context": "〜します", "mean": "moving house (〜します: to move)", "cat": "noun", "type": "", "trans": "", "dict": "引っ越し", "dictRead": "ひっこし", "audio": "/Audio/minnamoi/bai24/00010101100010101.mp3" },
-    { "key": "mnn:24:12", "kana": "［お］かし", "kanji": "［お］菓子", "context": "", "mean": "sweets, snacks", "cat": "noun", "type": "", "trans": "", "dict": "お菓子", "dictRead": "おかし", "audio": "/Audio/minnamoi/bai24/00010101100010110.mp3" },
-    { "key": "mnn:24:13", "kana": "ホームステイ", "kanji": "", "context": "", "mean": "homestay", "cat": "noun", "type": "", "trans": "", "dict": "ホームステイ", "dictRead": "ホームステイ", "audio": "/Audio/minnamoi/bai24/00010101100010111.mp3" },
-    { "key": "mnn:24:14", "kana": "ぜんぶ", "kanji": "全部", "context": "", "mean": "all, everything", "cat": "noun", "type": "", "trans": "", "dict": "全部", "dictRead": "ぜんぶ", "audio": "/Audio/minnamoi/bai24/00010101100011000.mp3" },
-    { "key": "mnn:24:15", "kana": "じぶんで", "kanji": "自分で", "context": "", "mean": "by oneself, on one's own", "cat": "adverb", "type": "", "trans": "", "dict": "自分で", "dictRead": "じぶんで", "audio": "/Audio/minnamoi/bai24/00010101100011001.mp3" }
+    {
+      "key": "mnn:24:0",
+      "kana": "くれます",
+      "kanji": "",
+      "context": "",
+      "mean": "to give (me / my in-group)",
+      "cat": "verb",
+      "type": "ichidan",
+      "trans": "t",
+      "dict": "くれる",
+      "dictRead": "くれる",
+      "audio": "/Audio/minnamoi/bai24/00010101100001010.mp3",
+      "accent": 0
+    },
+    {
+      "key": "mnn:24:1",
+      "kana": "なおします",
+      "kanji": "直します",
+      "context": "",
+      "mean": "to repair, fix, correct",
+      "cat": "verb",
+      "type": "godan",
+      "trans": "t",
+      "dict": "直す",
+      "dictRead": "なおす",
+      "audio": "/Audio/minnamoi/bai24/00010101100001011.mp3",
+      "levels": {
+        "N5": [
+          "<ruby>時計<rt>とけい</rt></ruby>を<ruby>直<rt>なお</rt></ruby>します。",
+          "I will fix the clock."
+        ],
+        "N4": [
+          "<ruby>友<rt>とも</rt></ruby>だちが<ruby>自転車<rt>じてんしゃ</rt></ruby>を<ruby>直<rt>なお</rt></ruby>してくれました。",
+          "My friend fixed my bicycle for me."
+        ],
+        "N3": [
+          "<ruby>間違<rt>まちが</rt></ruby>えたところは、すぐに<ruby>直<rt>なお</rt></ruby>すようにしています。",
+          "I make a point of correcting any mistakes right away."
+        ],
+        "N2": [
+          "<ruby>無料<rt>むりょう</rt></ruby>で<ruby>直<rt>なお</rt></ruby>してもらえたとはいえ、<ruby>故障<rt>こしょう</rt></ruby>の<ruby>原因<rt>げんいん</rt></ruby>がわからないわけではない。",
+          "Even though I had it repaired for free, it's not as if I don't know what caused the breakdown."
+        ],
+        "N1": [
+          "<ruby>長年<rt>ながねん</rt></ruby>の<ruby>悪<rt>わる</rt></ruby>い<ruby>癖<rt>くせ</rt></ruby>は、<ruby>本人<rt>ほんにん</rt></ruby>が<ruby>意識<rt>いしき</rt></ruby>しないかぎり、なかなか<ruby>直<rt>なお</rt></ruby>せるものではない。",
+          "A long-standing bad habit is not something one can easily correct unless the person themselves becomes conscious of it."
+        ]
+      },
+      "mnem": "直 (\"direct/straight\") + なおす — you \"set it straight again,\" i.e. repair or correct it.",
+      "tip": "Don't confuse with the homophone 治す (to cure an illness/injury); 直す is for objects and mistakes, and as a godan verb it potential-conjugates to 直せる.",
+      "accent": 2
+    },
+    {
+      "key": "mnn:24:2",
+      "kana": "つれていきます",
+      "kanji": "連れて行きます",
+      "context": "",
+      "mean": "to take (someone) along",
+      "cat": "verb",
+      "type": "godan",
+      "trans": "t",
+      "dict": "連れて行く",
+      "dictRead": "つれていく",
+      "audio": "/Audio/minnamoi/bai24/00010101100001100.mp3",
+      "levels": {
+        "N5": [
+          "<ruby>母<rt>はは</rt></ruby>は<ruby>私<rt>わたし</rt></ruby>を<ruby>動物園<rt>どうぶつえん</rt></ruby>に<ruby>連<rt>つ</rt></ruby>れて<ruby>行<rt>い</rt></ruby>きます。",
+          "My mother takes me to the zoo."
+        ],
+        "N4": [
+          "<ruby>子供<rt>こども</rt></ruby>が<ruby>行<rt>い</rt></ruby>きたいと<ruby>言<rt>い</rt></ruby>うから、<ruby>海<rt>うみ</rt></ruby>に<ruby>連<rt>つ</rt></ruby>れて<ruby>行<rt>い</rt></ruby>ってあげました。",
+          "Because the kids said they wanted to go, I took them to the beach (for them)."
+        ],
+        "N3": [
+          "<ruby>道<rt>みち</rt></ruby>に<ruby>迷<rt>まよ</rt></ruby>ったら、<ruby>駅<rt>えき</rt></ruby>まで<ruby>連<rt>つ</rt></ruby>れて<ruby>行<rt>い</rt></ruby>ってもらえますか。",
+          "If I get lost, could you take me as far as the station?"
+        ],
+        "N2": [
+          "<ruby>友達<rt>ともだち</rt></ruby>に<ruby>無理<rt>むり</rt></ruby>やり<ruby>連<rt>つ</rt></ruby>れて<ruby>行<rt>い</rt></ruby>かれたものの、その<ruby>店<rt>みせ</rt></ruby>は<ruby>思<rt>おも</rt></ruby>ったより<ruby>楽<rt>たの</rt></ruby>しかった。",
+          "Although I was dragged along by my friend, the place was more fun than I expected."
+        ],
+        "N1": [
+          "<ruby>祖父<rt>そふ</rt></ruby>の<ruby>面倒<rt>めんどう</rt></ruby>を<ruby>見<rt>み</rt></ruby>る<ruby>者<rt>もの</rt></ruby>がいない<ruby>以上<rt>いじょう</rt></ruby>、<ruby>遠方<rt>えんぽう</rt></ruby>の<ruby>病院<rt>びょういん</rt></ruby>へ<ruby>連<rt>つ</rt></ruby>れて<ruby>行<rt>い</rt></ruby>かざるを<ruby>得<rt>え</rt></ruby>なかった。",
+          "Since there was no one to look after my grandfather, I had no choice but to take him to the distant hospital."
+        ]
+      },
+      "mnem": "連れる (\"to lead/bring a person along\") + 行く (\"to go\") = you lead someone and go, i.e. take them along.",
+      "tip": "Use 連れて行く for taking a person/animal (に/へ for destination); for an object you take along use 持って行く instead, and note the destination-relative pair 連れて来る (\"bring someone here\").",
+      "accent": 0
+    },
+    {
+      "key": "mnn:24:3",
+      "kana": "つれてきます",
+      "kanji": "連れて来ます",
+      "context": "",
+      "mean": "to bring (someone)",
+      "cat": "verb",
+      "type": "irregular",
+      "trans": "t",
+      "dict": "連れて来る",
+      "dictRead": "つれてくる",
+      "audio": "/Audio/minnamoi/bai24/00010101100001101.mp3",
+      "levels": {
+        "N5": [
+          "<ruby>明日<rt>あした</rt></ruby><ruby>友<rt>とも</rt></ruby>だちを<ruby>連<rt>つ</rt></ruby>れて<ruby>来<rt>き</rt></ruby>ます。",
+          "Tomorrow I will bring a friend."
+        ],
+        "N4": [
+          "<ruby>妹<rt>いもうと</rt></ruby>を<ruby>連<rt>つ</rt></ruby>れて<ruby>来<rt>き</rt></ruby>たいから、<ruby>車<rt>くるま</rt></ruby>で<ruby>行<rt>い</rt></ruby>きます。",
+          "Because I want to bring my little sister, I'll go by car."
+        ],
+        "N3": [
+          "<ruby>友<rt>とも</rt></ruby>だちが<ruby>子<rt>こ</rt></ruby>どもを<ruby>連<rt>つ</rt></ruby>れて<ruby>来<rt>き</rt></ruby>てくれたら、みんなで<ruby>遊<rt>あそ</rt></ruby>べるね。",
+          "If our friend brings their kids (for us), everyone can play together."
+        ],
+        "N2": [
+          "<ruby>誰<rt>だれ</rt></ruby>かに<ruby>連<rt>つ</rt></ruby>れて<ruby>来<rt>き</rt></ruby>てもらわないわけにはいかないものの、<ruby>当日<rt>とうじつ</rt></ruby>は<ruby>道<rt>みち</rt></ruby>が<ruby>複雑<rt>ふくざつ</rt></ruby>だ。",
+          "Although we have no choice but to have someone bring them for us, the roads are complicated on the day."
+        ],
+        "N1": [
+          "<ruby>恩師<rt>おんし</rt></ruby>がわざわざ<ruby>後輩<rt>こうはい</rt></ruby>まで<ruby>連<rt>つ</rt></ruby>れて<ruby>来<rt>き</rt></ruby>てくださったとあっては、<ruby>歓迎<rt>かんげい</rt></ruby>せざるを<ruby>得<rt>え</rt></ruby>ない。",
+          "Given that our former teacher went out of their way to even bring a junior colleague along for us, we cannot but welcome them."
+        ]
+      },
+      "mnem": "連れる (\"lead/accompany\") + 来る (\"come\") = lead someone so they come here = to bring a person.",
+      "tip": "Use 連れて来る for bringing a person/animal but 持って来る for bringing an object; as an irregular ～来る verb it conjugates 来ます／来た／来て／来ない like 来る itself.",
+      "accent": 4
+    },
+    {
+      "key": "mnn:24:4",
+      "kana": "おくります",
+      "kanji": "送ります",
+      "context": "人を〜",
+      "mean": "to see (someone) off, escort",
+      "cat": "verb",
+      "type": "godan",
+      "trans": "t",
+      "dict": "送る",
+      "dictRead": "おくる",
+      "audio": "/Audio/minnamoi/bai24/00010101100001110.mp3",
+      "accent": 0
+    },
+    {
+      "key": "mnn:24:5",
+      "kana": "しょうかいします",
+      "kanji": "紹介します",
+      "context": "",
+      "mean": "to introduce",
+      "cat": "verb",
+      "type": "irregular",
+      "trans": "t",
+      "dict": "紹介する",
+      "dictRead": "しょうかいする",
+      "audio": "/Audio/minnamoi/bai24/00010101100001111.mp3",
+      "levels": {
+        "N5": [
+          "<ruby>友<rt>とも</rt></ruby>だちを<ruby>母<rt>はは</rt></ruby>に<ruby>紹介<rt>しょうかい</rt></ruby>します。",
+          "I will introduce my friend to my mother."
+        ],
+        "N4": [
+          "<ruby>先生<rt>せんせい</rt></ruby>を<ruby>紹介<rt>しょうかい</rt></ruby>してもらいたいから、<ruby>研究室<rt>けんきゅうしつ</rt></ruby>へ<ruby>行<rt>い</rt></ruby>きます。",
+          "I'm going to the lab because I want to have the professor introduced to me."
+        ],
+        "N3": [
+          "<ruby>田中<rt>たなか</rt></ruby>さんが<ruby>会社<rt>かいしゃ</rt></ruby>の<ruby>社長<rt>しゃちょう</rt></ruby>に<ruby>紹介<rt>しょうかい</rt></ruby>してくれたら、すぐに<ruby>仕事<rt>しごと</rt></ruby>が<ruby>決<rt>き</rt></ruby>まりそうです。",
+          "If Tanaka-san introduces me to the company president, the job will probably be decided right away."
+        ],
+        "N2": [
+          "<ruby>彼<rt>かれ</rt></ruby>に<ruby>恩<rt>おん</rt></ruby>があるからこそ、たとえ<ruby>気<rt>き</rt></ruby>が<ruby>進<rt>すす</rt></ruby>まなくても、この<ruby>取引先<rt>とりひきさき</rt></ruby>を<ruby>紹介<rt>しょうかい</rt></ruby>せざるを<ruby>得<rt>え</rt></ruby>ない。",
+          "Precisely because I'm indebted to him, even if I'm reluctant, I have no choice but to introduce this client to him."
+        ],
+        "N1": [
+          "<ruby>恩師<rt>おんし</rt></ruby>に<ruby>紹介<rt>しょうかい</rt></ruby>していただいたご<ruby>縁<rt>えん</rt></ruby>があったればこそ、<ruby>今<rt>いま</rt></ruby>の<ruby>私<rt>わたし</rt></ruby>があるのです。",
+          "It is only thanks to the connection that my mentor kindly introduced me to that I am who I am today."
+        ]
+      },
+      "mnem": "\"Show\" someone off to others — しょう (show) + かい sounds like \"guy\": you SHOW a GUY to people, i.e. introduce them.",
+      "tip": "Don't confuse it with 案内する (to guide/show around a place); 紹介する is presenting a person or thing to someone, and as a サ変 verb it conjugates irregularly (紹介します／した／して／しない).",
+      "accent": 0
+    },
+    {
+      "key": "mnn:24:6",
+      "kana": "あんないします",
+      "kanji": "案内します",
+      "context": "",
+      "mean": "to show around, show the way",
+      "cat": "verb",
+      "type": "irregular",
+      "trans": "t",
+      "dict": "案内する",
+      "dictRead": "あんないする",
+      "audio": "/Audio/minnamoi/bai24/00010101100010000.mp3",
+      "levels": {
+        "N5": [
+          "<ruby>駅<rt>えき</rt></ruby>まで<ruby>道<rt>みち</rt></ruby>を<ruby>案内<rt>あんない</rt></ruby>します。",
+          "I will show you the way to the station."
+        ],
+        "N4": [
+          "<ruby>友<rt>とも</rt></ruby>だちが<ruby>来<rt>き</rt></ruby>たとき、<ruby>町<rt>まち</rt></ruby>を<ruby>案内<rt>あんない</rt></ruby>してあげました。",
+          "When my friend came, I showed them around the town (as a favor)."
+        ],
+        "N3": [
+          "<ruby>道<rt>みち</rt></ruby>に<ruby>迷<rt>まよ</rt></ruby>ったら、<ruby>駅員<rt>えきいん</rt></ruby>さんに<ruby>改札<rt>かいさつ</rt></ruby>まで<ruby>案内<rt>あんない</rt></ruby>された。",
+          "When I got lost, a station attendant showed me the way to the ticket gate."
+        ],
+        "N2": [
+          "<ruby>土地<rt>とち</rt></ruby>に<ruby>慣<rt>な</rt></ruby>れているものの、<ruby>裏道<rt>うらみち</rt></ruby>までは<ruby>案内<rt>あんない</rt></ruby>できない。",
+          "Although I'm used to the area, I can't go so far as to guide you through the back streets."
+        ],
+        "N1": [
+          "<ruby>当日<rt>とうじつ</rt></ruby>は<ruby>私<rt>わたくし</rt></ruby>どもの<ruby>者<rt>もの</rt></ruby>が<ruby>会場<rt>かいじょう</rt></ruby>までご<ruby>案内<rt>あんない</rt></ruby><ruby>申<rt>もう</rt></ruby>し<ruby>上<rt>あ</rt></ruby>げます。",
+          "On the day, our staff will (humbly) escort you to the venue."
+        ]
+      },
+      "mnem": "\"An-eye\" (あんない) looks around with its eye to show a guest the way.",
+      "tip": "Don't confuse with 紹介する (introduce a person/thing); 案内する is physically showing someone around or leading the way — and as a する-verb it conjugates irregularly (案内します／案内して／案内された).",
+      "accent": 0
+    },
+    {
+      "key": "mnn:24:7",
+      "kana": "せつめいします",
+      "kanji": "説明します",
+      "context": "",
+      "mean": "to explain",
+      "cat": "verb",
+      "type": "irregular",
+      "trans": "t",
+      "dict": "説明する",
+      "dictRead": "せつめいする",
+      "audio": "/Audio/minnamoi/bai24/00010101100010001.mp3",
+      "accent": 0
+    },
+    {
+      "key": "mnn:24:8",
+      "kana": "おじいさん",
+      "kanji": "",
+      "context": "おじいちゃん",
+      "mean": "grandfather; elderly man",
+      "cat": "noun",
+      "type": "",
+      "trans": "",
+      "dict": "おじいさん",
+      "dictRead": "おじいさん",
+      "audio": "/Audio/minnamoi/bai24/00010101100010010.mp3",
+      "levels": {
+        "N5": [
+          "わたしは おじいさんに <ruby>本<rt>ほん</rt></ruby>を もらいました。",
+          "I received a book from my grandfather."
+        ],
+        "N4": [
+          "おじいさんが <ruby>来<rt>き</rt></ruby>たとき、わたしは ケーキを <ruby>作<rt>つく</rt></ruby>って あげました。",
+          "When my grandfather came over, I made a cake for him."
+        ],
+        "N3": [
+          "おじいさんに <ruby>頼<rt>たの</rt></ruby>んだら、<ruby>昔<rt>むかし</rt></ruby>の <ruby>話<rt>はなし</rt></ruby>を たくさん して くれた。",
+          "When I asked my grandfather, he told me lots of stories from the old days."
+        ],
+        "N2": [
+          "おじいさんは <ruby>高齢<rt>こうれい</rt></ruby>とは いう ものの、<ruby>毎朝<rt>まいあさ</rt></ruby> <ruby>畑<rt>はたけ</rt></ruby>の <ruby>仕事<rt>しごと</rt></ruby>を <ruby>続<rt>つづ</rt></ruby>けて くれて いる。",
+          "Although my grandfather is elderly, he keeps doing the field work for us every morning."
+        ],
+        "N1": [
+          "<ruby>亡<rt>な</rt></ruby>き おじいさんが <ruby>遺<rt>のこ</rt></ruby>して くださった この <ruby>懐中<rt>かいちゅう</rt></ruby><ruby>時計<rt>どけい</rt></ruby>を、わたしは <ruby>生涯<rt>しょうがい</rt></ruby> <ruby>大切<rt>たいせつ</rt></ruby>に <ruby>守<rt>まも</rt></ruby>って いく <ruby>所存<rt>しょぞん</rt></ruby>です。",
+          "I intend to treasure this pocket watch my late grandfather left for me for the rest of my life."
+        ]
+      },
+      "mnem": "Picture an old man going \"oh-jii-saaan\" (おじいさん) as he slowly creaks up — the long ジー is the long beard of grandpa.",
+      "tip": "Don't confuse おじいさん (grandfather / elderly man, long じい) with おじさん (uncle / middle-aged man, short じ); the casual frame おじいちゃん is what you'd actually call your own grandpa.",
+      "accent": 2
+    },
+    {
+      "key": "mnn:24:9",
+      "kana": "おばあさん",
+      "kanji": "",
+      "context": "おばあちゃん",
+      "mean": "grandmother; elderly woman",
+      "cat": "noun",
+      "type": "",
+      "trans": "",
+      "dict": "おばあさん",
+      "dictRead": "おばあさん",
+      "audio": "/Audio/minnamoi/bai24/00010101100010011.mp3",
+      "levels": {
+        "N5": [
+          "わたしの<ruby>祖母<rt>そぼ</rt></ruby>は<ruby>元気<rt>げんき</rt></ruby>なおばあさんです。",
+          "My grandmother is a healthy old woman."
+        ],
+        "N4": [
+          "おばあさんは<ruby>毎朝<rt>まいあさ</rt></ruby><ruby>公園<rt>こうえん</rt></ruby>を<ruby>散歩<rt>さんぽ</rt></ruby>してから、お<ruby>茶<rt>ちゃ</rt></ruby>を<ruby>飲<rt>の</rt></ruby>みます。",
+          "My grandmother takes a walk in the park every morning and then drinks tea."
+        ],
+        "N3": [
+          "<ruby>道<rt>みち</rt></ruby>に<ruby>迷<rt>まよ</rt></ruby>っていたら、<ruby>親切<rt>しんせつ</rt></ruby>なおばあさんが<ruby>駅<rt>えき</rt></ruby>まで<ruby>案内<rt>あんない</rt></ruby>してくれました。",
+          "When I was lost, a kind old woman showed me the way to the station for me."
+        ],
+        "N2": [
+          "<ruby>祖父<rt>そふ</rt></ruby>が<ruby>亡<rt>な</rt></ruby>くなってからというもの、おばあさんは<ruby>一人<rt>ひとり</rt></ruby>で<ruby>畑<rt>はたけ</rt></ruby>を<ruby>守<rt>まも</rt></ruby>り<ruby>続<rt>つづ</rt></ruby>けている。",
+          "Ever since my grandfather passed away, my grandmother has kept on tending the field all by herself."
+        ],
+        "N1": [
+          "<ruby>幼<rt>おさな</rt></ruby>い<ruby>頃<rt>ころ</rt></ruby>におばあさんから<ruby>授<rt>さず</rt></ruby>けられた<ruby>教<rt>おし</rt></ruby>えは、<ruby>今<rt>いま</rt></ruby>なお<ruby>私<rt>わたし</rt></ruby>の<ruby>生<rt>い</rt></ruby>き<ruby>方<rt>かた</rt></ruby>の<ruby>礎<rt>いしずえ</rt></ruby>となっている。",
+          "The teachings my grandmother imparted to me in my early childhood remain to this day the very foundation of how I live."
+        ]
+      },
+      "mnem": "Hear it as \"oh, BAA-san\" — the drawn-out long \"baa\" (ばあ) is the grandMA; cut it short to \"ba\" (おばさん) and she's only an aunt.",
+      "tip": "Mind the vowel length: おばあさん (long ばあ) = grandmother, but おばさん (short ば) = aunt / middle-aged woman; the casual frame おばあちゃん (\"granny\") is what you'd actually call your own grandmother.",
+      "accent": 2
+    },
+    {
+      "key": "mnn:24:10",
+      "kana": "じゅんび",
+      "kanji": "準備",
+      "context": "〜します",
+      "mean": "preparation (〜します: to prepare)",
+      "cat": "noun",
+      "type": "",
+      "trans": "",
+      "dict": "準備",
+      "dictRead": "じゅんび",
+      "audio": "/Audio/minnamoi/bai24/00010101100010100.mp3",
+      "levels": {
+        "N5": [
+          "<ruby>明日<rt>あした</rt></ruby>の<ruby>準備<rt>じゅんび</rt></ruby>をします。",
+          "I prepare for tomorrow."
+        ],
+        "N4": [
+          "<ruby>旅行<rt>りょこう</rt></ruby>の<ruby>準備<rt>じゅんび</rt></ruby>をしてから、<ruby>寝<rt>ね</rt></ruby>たいです。",
+          "I want to sleep after I finish preparing for the trip."
+        ],
+        "N3": [
+          "<ruby>母<rt>はは</rt></ruby>が<ruby>準備<rt>じゅんび</rt></ruby>してくれたら、すぐに<ruby>出発<rt>しゅっぱつ</rt></ruby>できます。",
+          "If my mother gets it ready for me, we can leave right away."
+        ],
+        "N2": [
+          "<ruby>彼<rt>かれ</rt></ruby>が<ruby>資料<rt>しりょう</rt></ruby>を<ruby>準備<rt>じゅんび</rt></ruby>してくれたものの、<ruby>会議<rt>かいぎ</rt></ruby>は<ruby>中止<rt>ちゅうし</rt></ruby>になった。",
+          "Although he kindly prepared the materials for me, the meeting was cancelled."
+        ],
+        "N1": [
+          "<ruby>恩師<rt>おんし</rt></ruby>が<ruby>整<rt>ととの</rt></ruby>えてくださった<ruby>準備<rt>じゅんび</rt></ruby>のおかげで、<ruby>式典<rt>しきてん</rt></ruby>は<ruby>滞<rt>とどこお</rt></ruby>りなく<ruby>進<rt>すす</rt></ruby>んだ。",
+          "Thanks to the preparations my mentor so graciously arranged for me, the ceremony proceeded without a hitch."
+        ]
+      },
+      "mnem": "準 (\"semi-/quasi-\") + 備 (\"equip, provide\") = getting your equipment ready in advance, i.e. preparation.",
+      "tip": "準備します = to get ready / set things up in advance; don't confuse it with 用意します (more about laying out specific items at hand) — and note 準備 is a noun, so you always need します to make it a verb.",
+      "accent": 1
+    },
+    {
+      "key": "mnn:24:11",
+      "kana": "ひっこし",
+      "kanji": "引っ越し",
+      "context": "〜します",
+      "mean": "moving house (〜します: to move)",
+      "cat": "noun",
+      "type": "",
+      "trans": "",
+      "dict": "引っ越し",
+      "dictRead": "ひっこし",
+      "audio": "/Audio/minnamoi/bai24/00010101100010101.mp3",
+      "levels": {
+        "N5": [
+          "<ruby>来月<rt>らいげつ</rt></ruby><ruby>引<rt>ひ</rt></ruby>っ<ruby>越<rt>こ</rt></ruby>しをします。",
+          "I am moving (house) next month."
+        ],
+        "N4": [
+          "<ruby>引<rt>ひ</rt></ruby>っ<ruby>越<rt>こ</rt></ruby>しのとき、<ruby>友<rt>とも</rt></ruby><ruby>達<rt>だち</rt></ruby>が<ruby>手<rt>て</rt></ruby><ruby>伝<rt>つだ</rt></ruby>いに<ruby>来<rt>き</rt></ruby>てくれました。",
+          "When I moved, my friend came and helped me out."
+        ],
+        "N3": [
+          "<ruby>引<rt>ひ</rt></ruby>っ<ruby>越<rt>こ</rt></ruby>しが<ruby>決<rt>き</rt></ruby>まったら、<ruby>早<rt>はや</rt></ruby>めに<ruby>新<rt>あたら</rt></ruby>しい<ruby>部<rt>へ</rt></ruby><ruby>屋<rt>や</rt></ruby>を<ruby>探<rt>さが</rt></ruby>すようにしています。",
+          "Once my move is decided, I make a point of looking for a new place early."
+        ],
+        "N2": [
+          "<ruby>引<rt>ひ</rt></ruby>っ<ruby>越<rt>こ</rt></ruby>し<ruby>業<rt>ぎょう</rt></ruby><ruby>者<rt>しゃ</rt></ruby>に<ruby>頼<rt>たの</rt></ruby>むと<ruby>高<rt>たか</rt></ruby>いものの、<ruby>全<rt>すべ</rt></ruby>て<ruby>自<rt>じ</rt></ruby><ruby>分<rt>ぶん</rt></ruby>で<ruby>運<rt>はこ</rt></ruby>ぶのは<ruby>難<rt>むずか</rt></ruby>しい。",
+          "Although hiring a moving company is expensive, carrying everything by myself is hard."
+        ],
+        "N1": [
+          "<ruby>引<rt>ひ</rt></ruby>っ<ruby>越<rt>こ</rt></ruby>しに<ruby>伴<rt>ともな</rt></ruby>う<ruby>諸<rt>しょ</rt></ruby><ruby>手<rt>て</rt></ruby><ruby>続<rt>つづ</rt></ruby>きは<ruby>煩<rt>はん</rt></ruby><ruby>雑<rt>ざつ</rt></ruby><ruby>極<rt>きわ</rt></ruby>まり、<ruby>業<rt>ぎょう</rt></ruby><ruby>者<rt>しゃ</rt></ruby>に<ruby>任<rt>まか</rt></ruby>せざるを<ruby>得<rt>え</rt></ruby>なかった。",
+          "The various procedures accompanying the move were utterly tiresome, so I had no choice but to leave them to a contractor."
+        ]
+      },
+      "mnem": "越 means \"to cross over\" — moving house is crossing over (引っ張って=pulling) your whole life to a new place.",
+      "tip": "Don't confuse 引っ越し (changing residence) with 引き出し (drawer) or just 移動 (movement); 引っ越しします means \"to relocate,\" while plain 越します/越えます means \"to cross over.\"",
+      "accent": 0
+    },
+    {
+      "key": "mnn:24:12",
+      "kana": "［お］かし",
+      "kanji": "［お］菓子",
+      "context": "",
+      "mean": "sweets, snacks",
+      "cat": "noun",
+      "type": "",
+      "trans": "",
+      "dict": "お菓子",
+      "dictRead": "おかし",
+      "audio": "/Audio/minnamoi/bai24/00010101100010110.mp3",
+      "levels": {
+        "N5": [
+          "<ruby>私<rt>わたし</rt></ruby>はお<ruby>菓子<rt>かし</rt></ruby>が<ruby>好<rt>す</rt></ruby>きです。",
+          "I like sweets."
+        ],
+        "N4": [
+          "<ruby>友<rt>とも</rt></ruby>だちにお<ruby>菓子<rt>かし</rt></ruby>をもらったから、<ruby>嬉<rt>うれ</rt></ruby>しかったです。",
+          "I got sweets from a friend, so I was happy."
+        ],
+        "N3": [
+          "<ruby>母<rt>はは</rt></ruby>が<ruby>作<rt>つく</rt></ruby>ってくれたお<ruby>菓子<rt>かし</rt></ruby>は、とてもおいしそうだ。",
+          "The sweets my mother made for me look really delicious."
+        ],
+        "N2": [
+          "せっかくお<ruby>菓子<rt>かし</rt></ruby>をたくさん<ruby>買<rt>か</rt></ruby>ったものの、<ruby>誰<rt>だれ</rt></ruby>も<ruby>食<rt>た</rt></ruby>べてくれなかった。",
+          "Although I went to the trouble of buying lots of sweets, no one ate them for me."
+        ],
+        "N1": [
+          "いただいたお<ruby>菓子<rt>かし</rt></ruby>があまりに<ruby>上品<rt>じょうひん</rt></ruby>な<ruby>味<rt>あじ</rt></ruby>で、<ruby>一<rt>ひと</rt></ruby>つ<ruby>口<rt>くち</rt></ruby>にせずにはいられなかった。",
+          "The sweets I received had such an elegant flavor that I simply couldn't help having a bite."
+        ]
+      },
+      "mnem": "The polite お- plus 菓子 (confectionery) = \"honorable sweets,\" the treats you politely offer a guest.",
+      "tip": "Don't confuse お菓子 (sweets/snacks) with お<ruby>金<rt>かね</rt></ruby> (money) — similar shape, totally different meaning; お菓子 covers both candy and savory snacks.",
+      "accent": 2
+    },
+    {
+      "key": "mnn:24:13",
+      "kana": "ホームステイ",
+      "kanji": "",
+      "context": "",
+      "mean": "homestay",
+      "cat": "noun",
+      "type": "",
+      "trans": "",
+      "dict": "ホームステイ",
+      "dictRead": "ホームステイ",
+      "audio": "/Audio/minnamoi/bai24/00010101100010111.mp3",
+      "levels": {
+        "N5": [
+          "<ruby>来年<rt>らいねん</rt></ruby>アメリカでホームステイを します。",
+          "Next year I will do a homestay in America."
+        ],
+        "N4": [
+          "ホームステイの ときは、ホストファミリーに おみやげを あげたいです。",
+          "When I do a homestay, I want to give a souvenir to my host family."
+        ],
+        "N3": [
+          "ホームステイの<ruby>間<rt>あいだ</rt></ruby>は、<ruby>毎日<rt>まいにち</rt></ruby><ruby>日本語<rt>にほんご</rt></ruby>で<ruby>話<rt>はな</rt></ruby>すようにしています。",
+          "While I'm on the homestay, I try to speak Japanese every day."
+        ],
+        "N2": [
+          "ホストファミリーが<ruby>親切<rt>しんせつ</rt></ruby>にしてくれたものの、ホームステイの<ruby>生活<rt>せいかつ</rt></ruby>に<ruby>慣<rt>な</rt></ruby>れるまでは<ruby>時間<rt>じかん</rt></ruby>がかかった。",
+          "Although the host family was kind to me, it took time to get used to homestay life."
+        ],
+        "N1": [
+          "<ruby>世話<rt>せわ</rt></ruby>になったホストファミリーへの<ruby>感謝<rt>かんしゃ</rt></ruby>の<ruby>気持<rt>きも</rt></ruby>ちを<ruby>込<rt>こ</rt></ruby>めて、ホームステイを<ruby>終<rt>お</rt></ruby>えるにあたり<ruby>手紙<rt>てがみ</rt></ruby>を<ruby>書<rt>か</rt></ruby>かずにはいられなかった。",
+          "Out of gratitude to the host family who looked after me, on finishing the homestay I couldn't help but write them a letter."
+        ]
+      },
+      "mnem": "\"Home\" + \"stay\" literally — you stay (ステイ) in someone's home (ホーム), so ホームステイ is exactly living as a guest in a local family's house.",
+      "tip": "Pairs with します (ホームステイをします, \"do a homestay\"), not a verb of its own; don't confuse it with ホテル (hotel) — a homestay means living with a host family, so it's a natural fit for 〜てもらう/〜てくれる favor sentences in L24.",
+      "accent": 5
+    },
+    {
+      "key": "mnn:24:14",
+      "kana": "ぜんぶ",
+      "kanji": "全部",
+      "context": "",
+      "mean": "all, everything",
+      "cat": "noun",
+      "type": "",
+      "trans": "",
+      "dict": "全部",
+      "dictRead": "ぜんぶ",
+      "audio": "/Audio/minnamoi/bai24/00010101100011000.mp3",
+      "levels": {
+        "N5": [
+          "<ruby>全部<rt>ぜんぶ</rt></ruby><ruby>食<rt>た</rt></ruby>べました。",
+          "I ate everything."
+        ],
+        "N4": [
+          "<ruby>友<rt>とも</rt></ruby>だちが<ruby>全部<rt>ぜんぶ</rt></ruby><ruby>手<rt>て</rt></ruby><ruby>伝<rt>つだ</rt></ruby>ってくれたから、<ruby>早<rt>はや</rt></ruby>く<ruby>終<rt>お</rt></ruby>わりました。",
+          "Because my friend helped me with everything, I finished early."
+        ],
+        "N3": [
+          "<ruby>宿<rt>しゅく</rt></ruby><ruby>題<rt>だい</rt></ruby>は<ruby>全部<rt>ぜんぶ</rt></ruby><ruby>自分<rt>じぶん</rt></ruby>でやるようにしています。",
+          "I make a point of doing all of my homework by myself."
+        ],
+        "N2": [
+          "<ruby>彼<rt>かれ</rt></ruby>は<ruby>全部<rt>ぜんぶ</rt></ruby><ruby>知<rt>し</rt></ruby>っているわけではないものの、たいていのことは<ruby>答<rt>こた</rt></ruby>えてくれる。",
+          "It's not that he knows everything, but he'll answer most things for you."
+        ],
+        "N1": [
+          "<ruby>責任<rt>せきにん</rt></ruby><ruby>者<rt>しゃ</rt></ruby>である<ruby>以上<rt>いじょう</rt></ruby>、<ruby>失敗<rt>しっぱい</rt></ruby>の<ruby>責任<rt>せきにん</rt></ruby>は<ruby>全部<rt>ぜんぶ</rt></ruby><ruby>私<rt>わたし</rt></ruby>が<ruby>負<rt>お</rt></ruby>わざるを<ruby>得<rt>え</rt></ruby>ない。",
+          "As the person in charge, I have no choice but to bear all of the blame for the failure."
+        ]
+      },
+      "mnem": "\"ZEN\" sounds like \"ZEN\" garden — a complete, whole, all-of-it space: 全部 = all/everything.",
+      "tip": "Don't confuse 全部 (all of a set, everything) with 全然 (ぜんぜん, \"(not) at all\"); 全部 is a noun/adverb of totality, while 全然 pairs with negatives.",
+      "accent": 1
+    },
+    {
+      "key": "mnn:24:15",
+      "kana": "じぶんで",
+      "kanji": "自分で",
+      "context": "",
+      "mean": "by oneself, on one's own",
+      "cat": "adverb",
+      "type": "",
+      "trans": "",
+      "dict": "自分で",
+      "dictRead": "じぶんで",
+      "audio": "/Audio/minnamoi/bai24/00010101100011001.mp3",
+      "levels": {
+        "N5": [
+          "<ruby>自分<rt>じぶん</rt></ruby>で<ruby>作<rt>つく</rt></ruby>りました。",
+          "I made it by myself."
+        ],
+        "N4": [
+          "プレゼントを<ruby>買<rt>か</rt></ruby>わないで、<ruby>自分<rt>じぶん</rt></ruby>で<ruby>作<rt>つく</rt></ruby>ってあげたいです。",
+          "Instead of buying a present, I want to make one myself and give it to them."
+        ],
+        "N3": [
+          "<ruby>人<rt>ひと</rt></ruby>に<ruby>頼<rt>たよ</rt></ruby>らないで、<ruby>自分<rt>じぶん</rt></ruby>でできるようにしています。",
+          "I'm trying to be able to do it by myself without relying on others."
+        ],
+        "N2": [
+          "<ruby>友達<rt>ともだち</rt></ruby>に<ruby>手伝<rt>てつだ</rt></ruby>ってもらったものの、<ruby>結局<rt>けっきょく</rt></ruby><ruby>自分<rt>じぶん</rt></ruby>で<ruby>全部<rt>ぜんぶ</rt></ruby>やり<ruby>直<rt>なお</rt></ruby>すことになった。",
+          "Although I had a friend help me, in the end I wound up having to redo the whole thing by myself."
+        ],
+        "N1": [
+          "<ruby>誰<rt>だれ</rt></ruby>かに<ruby>与<rt>あた</rt></ruby>えてもらった<ruby>答<rt>こた</rt></ruby>えではなく、<ruby>自分<rt>じぶん</rt></ruby>で<ruby>導<rt>みちび</rt></ruby>き<ruby>出<rt>だ</rt></ruby>した<ruby>結論<rt>けつろん</rt></ruby>でなければ<ruby>意味<rt>いみ</rt></ruby>がない。",
+          "An answer handed to you by someone else is meaningless; it must be a conclusion you arrived at on your own."
+        ]
+      },
+      "mnem": "\"Ji-BUN\" = your own \"portion/share\" (分) of the self (自) — doing it with your own portion of effort, i.e. by yourself.",
+      "tip": "Don't confuse 自分で (by one's own action) with 一人で (alone/without company): you can 自分で do something even in a crowd, and the で here is the particle of means, not the te-form.",
+      "accent": 0
+    }
   ],
   "grammar": [
     {
@@ -32,10 +552,22 @@
       "structure": "giver は receiver に N を あげます ／ receiver は giver に(から) N を もらいます ／ giver は (わたしに) N を くれます",
       "explain": "Three verbs for handing things over, chosen by point of view. あげます = give (away from me / between others). もらいます = receive (from someone). くれます = give to ME or my in-group — you must use くれる, not あげる, when the receiver is the speaker's side. 姉が 本を くれました (my sister gave me a book), but 姉に 本を あげました (I gave my sister a book).",
       "examples": [
-        { "jp": "サントスさんは わたしに コーヒーを くれました。", "en": "Mr. Santos gave me coffee." },
-        { "jp": "わたしは ミラーさんに 花を もらいました。", "en": "I received flowers from Mr. Miller." },
-        { "jp": "母は わたしに セーターを くれました。", "en": "My mother gave me a sweater." },
-        { "jp": "おばあちゃんは いつも お菓子を くれます。", "en": "Grandma always gives me sweets." }
+        {
+          "jp": "サントスさんは わたしに コーヒーを くれました。",
+          "en": "Mr. Santos gave me coffee."
+        },
+        {
+          "jp": "わたしは ミラーさんに 花を もらいました。",
+          "en": "I received flowers from Mr. Miller."
+        },
+        {
+          "jp": "母は わたしに セーターを くれました。",
+          "en": "My mother gave me a sweater."
+        },
+        {
+          "jp": "おばあちゃんは いつも お菓子を くれます。",
+          "en": "Grandma always gives me sweets."
+        }
       ]
     },
     {
@@ -43,38 +575,118 @@
       "structure": "V-て あげます (do for someone) ／ V-て もらいます (have someone do for you) ／ V-て くれます (someone does for me)",
       "explain": "Attach the て-form + a giving/receiving verb to express a FAVOR — an action done for someone, not just an object. 〜てもらいます = you benefit from someone's action; 〜てくれます = someone does something for you (highlights gratitude); 〜てあげます = you do something for someone (can sound condescending toward superiors, so use it carefully).",
       "examples": [
-        { "jp": "わたしは 友達に 本を 貸して あげました。", "en": "I lent my friend a book (as a favor)." },
-        { "jp": "わたしは 山田さんに レポートを 直して もらいました。", "en": "I had Mr. Yamada correct my report." },
-        { "jp": "母は 料理を 作って くれました。", "en": "My mother cooked for me." },
-        { "jp": "山田さんが 車で 送って くれました。", "en": "Mr. Yamada drove me home." }
+        {
+          "jp": "わたしは 友達に 本を 貸して あげました。",
+          "en": "I lent my friend a book (as a favor)."
+        },
+        {
+          "jp": "わたしは 山田さんに レポートを 直して もらいました。",
+          "en": "I had Mr. Yamada correct my report."
+        },
+        {
+          "jp": "母は 料理を 作って くれました。",
+          "en": "My mother cooked for me."
+        },
+        {
+          "jp": "山田さんが 車で 送って くれました。",
+          "en": "Mr. Yamada drove me home."
+        }
       ]
     }
   ],
   "examples": [
-    { "jp": "佐藤さんは わたしに チョコレートを くれました。", "en": "Ms. Sato gave me chocolates." },
-    { "jp": "わたしは 山田さんに レポートを 直して もらいました。", "en": "Mr. Yamada corrected my report for me." },
-    { "jp": "母は わたしに セーターを 送って くれました。", "en": "My mother sent me a sweater." },
-    { "jp": "わたしは 木村さんに 本を 貸して あげました。", "en": "I lent Ms. Kimura a book." },
-    { "jp": "だれに すき焼きを 作って もらいましたか。 …松本さんに 作って もらいました。", "en": "Who made the sukiyaki for you? …Ms. Matsumoto made it for me." },
-    { "jp": "母の 日に お母さんに 何を して あげますか。 …ピアノを 弾いて あげます。", "en": "What will you do for your mother on Mother's Day? …I'll play the piano for her." },
-    { "jp": "パーティーの 料理は 全部 自分で 作りましたか。 …いいえ、ワンさんに 手伝って もらいました。", "en": "Did you make all the party food yourself? …No, Mr. Wang helped me." },
-    { "jp": "電車で 行きましたか。 …いいえ。山田さんが 車で 送って くれました。", "en": "Did you go by train? …No, Mr. Yamada drove me." }
+    {
+      "jp": "佐藤さんは わたしに チョコレートを くれました。",
+      "en": "Ms. Sato gave me chocolates."
+    },
+    {
+      "jp": "わたしは 山田さんに レポートを 直して もらいました。",
+      "en": "Mr. Yamada corrected my report for me."
+    },
+    {
+      "jp": "母は わたしに セーターを 送って くれました。",
+      "en": "My mother sent me a sweater."
+    },
+    {
+      "jp": "わたしは 木村さんに 本を 貸して あげました。",
+      "en": "I lent Ms. Kimura a book."
+    },
+    {
+      "jp": "だれに すき焼きを 作って もらいましたか。 …松本さんに 作って もらいました。",
+      "en": "Who made the sukiyaki for you? …Ms. Matsumoto made it for me."
+    },
+    {
+      "jp": "母の 日に お母さんに 何を して あげますか。 …ピアノを 弾いて あげます。",
+      "en": "What will you do for your mother on Mother's Day? …I'll play the piano for her."
+    },
+    {
+      "jp": "パーティーの 料理は 全部 自分で 作りましたか。 …いいえ、ワンさんに 手伝って もらいました。",
+      "en": "Did you make all the party food yourself? …No, Mr. Wang helped me."
+    },
+    {
+      "jp": "電車で 行きましたか。 …いいえ。山田さんが 車で 送って くれました。",
+      "en": "Did you go by train? …No, Mr. Yamada drove me."
+    }
   ],
   "conversation": {
     "title": "手伝って くれませんか (Could you help me?)",
     "audio": "/Audio/minnahonsatsu1/82.mp3",
     "lines": [
-      { "role": "ミラー", "jp": "ワンさん、日曜日 引っ越しですね。手伝いに 行きましょうか。", "en": "Mr. Wang, you're moving on Sunday, right? Shall I come help?" },
-      { "role": "ワン", "jp": "ありがとう ございます。じゃ、すみませんが、9時ごろ お願いします。", "en": "Thank you. Then, sorry to trouble you — around 9 o'clock, please." },
-      { "role": "ミラー", "jp": "ほかに だれが 手伝いに 行きますか。", "en": "Who else is coming to help?" },
-      { "role": "ワン", "jp": "山田さんと シュミットさんが 来て くれます。", "en": "Mr. Yamada and Mr. Schmidt are coming." },
-      { "role": "ミラー", "jp": "車は？", "en": "What about a car?" },
-      { "role": "ワン", "jp": "山田さんに 貸して もらいます。", "en": "Mr. Yamada is lending me his." },
-      { "role": "ミラー", "jp": "昼ごはんは どう しますか。", "en": "What about lunch?" },
-      { "role": "ワン", "jp": "えーと…。", "en": "Um…" },
-      { "role": "ミラー", "jp": "わたしが お弁当を 持って 行きましょうか。", "en": "Shall I bring boxed lunches?" },
-      { "role": "ワン", "jp": "すみません。お願いします。", "en": "Sorry to trouble you — yes, please." },
-      { "role": "ミラー", "jp": "じゃ、日曜日に。", "en": "Okay, see you Sunday." }
+      {
+        "role": "ミラー",
+        "jp": "ワンさん、日曜日 引っ越しですね。手伝いに 行きましょうか。",
+        "en": "Mr. Wang, you're moving on Sunday, right? Shall I come help?"
+      },
+      {
+        "role": "ワン",
+        "jp": "ありがとう ございます。じゃ、すみませんが、9時ごろ お願いします。",
+        "en": "Thank you. Then, sorry to trouble you — around 9 o'clock, please."
+      },
+      {
+        "role": "ミラー",
+        "jp": "ほかに だれが 手伝いに 行きますか。",
+        "en": "Who else is coming to help?"
+      },
+      {
+        "role": "ワン",
+        "jp": "山田さんと シュミットさんが 来て くれます。",
+        "en": "Mr. Yamada and Mr. Schmidt are coming."
+      },
+      {
+        "role": "ミラー",
+        "jp": "車は？",
+        "en": "What about a car?"
+      },
+      {
+        "role": "ワン",
+        "jp": "山田さんに 貸して もらいます。",
+        "en": "Mr. Yamada is lending me his."
+      },
+      {
+        "role": "ミラー",
+        "jp": "昼ごはんは どう しますか。",
+        "en": "What about lunch?"
+      },
+      {
+        "role": "ワン",
+        "jp": "えーと…。",
+        "en": "Um…"
+      },
+      {
+        "role": "ミラー",
+        "jp": "わたしが お弁当を 持って 行きましょうか。",
+        "en": "Shall I bring boxed lunches?"
+      },
+      {
+        "role": "ワン",
+        "jp": "すみません。お願いします。",
+        "en": "Sorry to trouble you — yes, please."
+      },
+      {
+        "role": "ミラー",
+        "jp": "じゃ、日曜日に。",
+        "en": "Okay, see you Sunday."
+      }
     ]
   }
 }
