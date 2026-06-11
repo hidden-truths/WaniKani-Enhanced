@@ -30,8 +30,8 @@ import { authRouter } from './routes/auth.ts';
 import { progressRouter } from './routes/progress.ts';
 import { sessionsRouter } from './routes/sessions.ts';
 import { minnaRouter } from './routes/minna.ts';
-import { MEDIA_CACHE_CONTROL } from './services/storage.ts';
-import { googleTts } from './services/tts.ts';
+import { MEDIA_CACHE_CONTROL, getStorage } from './services/storage.ts';
+import { googleTts, ttsKey } from './services/tts.ts';
 
 const app = new OpenAPIHono({ defaultHook: zodHook });
 
@@ -103,28 +103,49 @@ app.route('/v1/progress', progressRouter);
 app.route('/v1/sessions', sessionsRouter);
 app.route('/v1/minna', minnaRouter);
 
-// Google Translate TTS proxy for the study app (replaces the browser's uneven
-// speechSynthesis voices with consistent ja-JP audio). text→audio is stable, so
-// we cache in-process (bounded LRU-ish) and tell the browser/CDN to cache hard —
-// Google then gets hit at most once per unique reading per server lifetime. The
-// study app falls back to speechSynthesis when this is unreachable (e.g. file://).
+// TTS for the study app (replaces the browser's uneven speechSynthesis voices with
+// consistent ja-JP audio). text→audio is stable, so it's served through a three-tier
+// cache, cheapest first:
+//   1. in-process map (bounded LRU-ish) — sub-ms, survives only this process;
+//   2. our storage layer (S3 in prod, disk in dev) — survives restarts, and is where
+//      the local pre-generation driver drops higher-quality Apple-voice clips (.m4a,
+//      preferred) so they win over Google;
+//   3. Google Translate TTS (.mp3) — the live fallback, PERSISTED to storage on first
+//      hit so it never gets fetched again.
+// The study app falls back to speechSynthesis when this is unreachable (e.g. file://).
 const ttsCache = new Map<string, { buffer: ArrayBuffer; contentType: string }>();
 const TTS_CACHE_MAX = 500;
+function ttsCachePut(text: string, hit: { buffer: ArrayBuffer; contentType: string }) {
+    if (ttsCache.size >= TTS_CACHE_MAX) ttsCache.delete(ttsCache.keys().next().value!); // evict oldest
+    ttsCache.set(text, hit);
+}
 app.get('/v1/tts', async (c) => {
     const text = (c.req.query('text') || '').trim();
     if (!text) return c.json({ code: 'validation_error' as const, error: 'missing ?text' }, 400);
     if (text.length > 200) return c.json({ code: 'validation_error' as const, error: 'text too long (max 200 chars)' }, 400);
     let hit = ttsCache.get(text);
+    let source = 'memory';
     if (!hit) {
-        const r = await googleTts(text);
-        if (!r) return c.json({ code: 'upstream_failure' as const, error: 'tts unavailable' }, 502);
-        hit = r;
-        if (ttsCache.size >= TTS_CACHE_MAX) ttsCache.delete(ttsCache.keys().next().value!); // evict oldest
-        ttsCache.set(text, hit);
+        const storage = getStorage();
+        const m4a = await storage.get(ttsKey(text, 'm4a'));   // pre-generated Apple voice wins
+        if (m4a) { hit = { buffer: m4a, contentType: 'audio/mp4' }; source = 'storage-m4a'; }
+        else {
+            const mp3 = await storage.get(ttsKey(text, 'mp3'));  // previously-persisted Google clip
+            if (mp3) { hit = { buffer: mp3, contentType: 'audio/mpeg' }; source = 'storage-mp3'; }
+            else {
+                const r = await googleTts(text);
+                if (!r) return c.json({ code: 'upstream_failure' as const, error: 'tts unavailable' }, 502);
+                hit = r; source = 'google';
+                // Persist so future requests (and restarts) skip Google. Fire-and-forget —
+                // don't make the client wait on the upload.
+                void storage.put(ttsKey(text, 'mp3'), r.buffer, r.contentType || 'audio/mpeg').catch(() => {});
+            }
+        }
+        ttsCachePut(text, hit);
     }
     c.header('Content-Type', hit.contentType || 'audio/mpeg');
     c.header('Cache-Control', 'public, max-age=604800, immutable'); // text→audio never changes
-    c.set('logCtx', { ttsLen: text.length, ttsCached: ttsCache.has(text) });
+    c.set('logCtx', { ttsLen: text.length, ttsSource: source });
     return c.body(hit.buffer);
 });
 
