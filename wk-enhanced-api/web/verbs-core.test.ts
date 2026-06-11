@@ -367,6 +367,14 @@ test("passes: source is an AND'd facet (iTalki ∩ noun intersect)", () => {
   expect(hits({})).toBe(4); // no source constraint = whole synthetic deck
 });
 
+test("attachLevels backfills a pitch accent onto every built-in verb (ACCENTS map)", () => {
+  const builtins = core.DATA.filter((v) => v.rank <= 100);
+  expect(builtins.length).toBe(100);
+  // every built-in now carries a numeric accent so pitchHtml renders in reviews/Browse
+  expect(builtins.every((v) => typeof v.accent === "number" && v.accent >= 0 && v.accent <= 12)).toBe(true);
+  expect(typeof core.pitchHtml(builtins[0].read, builtins[0].accent)).toBe("string");
+});
+
 test("splitMora keeps small kana with the preceding mora", () => {
   expect(core.splitMora("はし")).toEqual(["は", "し"]);
   expect(core.splitMora("きょう")).toEqual(["きょ", "う"]); // small ょ binds to き

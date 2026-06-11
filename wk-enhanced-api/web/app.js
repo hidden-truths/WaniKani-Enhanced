@@ -67,6 +67,9 @@ function attachLevels(){
     // Built-ins index EXAMPLES by rank; Minna custom cards carry their own embedded
     // `levels` (from the lesson JSON) — keep those rather than nulling them.
     v.levels = E[v.rank] || v.levels || null;
+    // Pitch accent: a card's own accent (Minna lesson item / overlay) wins; otherwise
+    // backfill the built-in's from the ACCENTS map (keyed by rank, defined in verbs.js).
+    if(v.accent==null && typeof ACCENTS!=='undefined' && ACCENTS[v.rank]!=null) v.accent=ACCENTS[v.rank];
     // Part-of-speech category. Everything is currently a verb, but tagging it now
     // is the groundwork for broadening past verbs (adjectives / nouns / phrases):
     // future filters/labels can key off cat without backfilling the dataset.
