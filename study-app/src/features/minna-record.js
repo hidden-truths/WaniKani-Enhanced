@@ -118,16 +118,18 @@ async function maybeTrim(blob, durationMs) {
 export function speakingBarHtml() {
   if (!RECORD_SUPPORTED) return '';
   const on = speakingMode;
+  // The mic picker + speed/bias controls only render WHILE speaking — off, the bar is just the
+  // toggle (the device/compare controls are meaningless until a stream is open).
   return `<div class="speaking-bar${on ? ' on' : ''}">
     <button class="chip speaking-toggle${on ? ' active' : ''}" type="button" data-speaking-toggle aria-pressed="${on}">
       <svg class="ic" aria-hidden="true"><use href="#i-mic"/></svg>${on ? 'Speaking — tap to stop' : 'Practice speaking'}</button>
-    <span class="mic-pick">
+    ${on ? `<span class="mic-pick">
       <label class="mic-lbl" for="micSelect">Mic</label>
       <select id="micSelect" class="mic-select" aria-label="Recording microphone">${micOptionsHtml()}</select>
-    </span>
+    </span>` : ''}
     ${on ? speedControlHtml() : ''}
     ${on ? biasControlHtml() : ''}
-    <span class="mic-hint">${on ? 'Mic stays on — tap a word’s Record to capture just that take.' : 'Pick your Mac mic (keeps AirPods high-quality), then turn on to record + compare.'}</span>
+    <span class="mic-hint">${on ? 'Mic stays on — tap a word’s Record to capture just that take.' : 'Turn on to record yourself and compare to the native audio.'}</span>
   </div>`;
 }
 // The ▶ both balance crossfader (you ⟷ native). Reads the live compareBias; wired in
