@@ -580,7 +580,12 @@ Component contracts you must preserve:
   a chapter-chip click also calls `exitSpeakingMode()` before re-rendering. The stale
   speaking-mode DOM is never seen because returning to the tab re-renders fresh via `renderMinna()`.
   Don't move the tab-leave hook into `chrome.js` directly (it'd make chrome import a feature) —
-  keep it a `handlers.leaveMinna` callback like the per-tab renders.
+  keep it a `handlers.leaveMinna` callback like the per-tab renders. **Changing the BROWSER tab
+  (or minimizing) also exits** via a `document` `visibilitychange` listener (`handleBrowserTabHidden`,
+  attached once in `initMinna`) — those in-app hooks don't fire on a browser-tab change. That path
+  DOES re-render the lesson itself (`renderMinnaLesson(lastLesson, #mnBody)`), because returning to
+  the browser tab — unlike an in-app tab activation — does NOT re-run `renderMinna()`, so without
+  the re-render the toggle/controls would show a stale "speaking" state after the mic was released.
 - **The mic picker pins a `deviceId` ON PURPOSE — it's the fix for AirPods dropping to
   hands-free.** macOS switches AirPods to low-quality HFP the instant any app opens *their*
   mic; the persistent stream is acquired with an explicit non-AirPods

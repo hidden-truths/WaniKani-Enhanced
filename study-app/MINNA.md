@@ -418,8 +418,10 @@ helpers in [src/core/recordings.js](src/core/recordings.js).
   lesson render; a take saved after won't show until the next render/switch.
 - ~~**Auto-exit speaking mode on tab/lesson switch.**~~ — **shipped.** `chrome.js` `initTabs`
   fires a `leaveMinna` handler when navigating away from the みんなの日本語 tab → `minna.js`
-  `onMinnaHidden()` → `exitSpeakingMode()`; a chapter-chip click also exits before re-render. So
-  the persistent mic is released on any navigation out of the lesson context (idempotent both ways).
+  `onMinnaHidden()` → `exitSpeakingMode()`; a chapter-chip click also exits before re-render.
+  Changing the **browser** tab (or minimizing) exits too, via a `visibilitychange` listener
+  (`handleBrowserTabHidden`, which also re-renders the lesson since a browser-tab return doesn't
+  re-run `renderMinna`). So the persistent mic is released on any navigation out of the lesson.
 
 ### More lessons & sections
 

@@ -407,9 +407,26 @@ function wireMinnaLesson(n, L, body) {
 // returning to the tab triggers renderMinna().
 export function onMinnaHidden() { exitSpeakingMode(); }
 
+// Release the mic when the BROWSER tab is hidden (switching browser tabs / minimizing the
+// window). The in-app tab/lesson switches are covered by onMinnaHidden + the chapter handler,
+// but a browser-tab change fires neither — so we listen for visibilitychange. We also re-render
+// the lesson here because, unlike an in-app tab activation, returning to the browser tab does
+// NOT re-run renderMinna(), so without this the controls + toggle would show a stale "speaking"
+// state while the mic was actually released. Speaking mode is only ever on while the みんなの日本語
+// tab is the active in-app tab (entering it elsewhere is impossible, and leaving exits it), so
+// #mnBody at lastLesson is the right thing to re-render.
+function handleBrowserTabHidden() {
+  if (!document.hidden || !isSpeakingMode()) return;
+  exitSpeakingMode();
+  const body = document.getElementById('mnBody');
+  if (body) renderMinnaLesson(state.minnaStore.lastLesson, body);
+}
+
 // Load the Minna store from localStorage. Called at boot AFTER the first custom-card
 // rebuildData (so that rebuild sees the state.js default empty overlays — preserving the
 // original order; the boot's migrateMinnaDupes + rebuildData then apply the real overlays).
 export function initMinna() {
   state.minnaStore = loadMinnaStore();
+  // One global listener (no-op unless speaking mode is on) — release the mic on browser-tab hide.
+  document.addEventListener('visibilitychange', handleBrowserTabHidden);
 }
