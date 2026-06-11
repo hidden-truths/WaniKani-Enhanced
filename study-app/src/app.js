@@ -29,6 +29,13 @@ const {
   normKana, romajiToKana, splitMora, pitchHtml, escapeHtml, ttsText,
   minnaBuiltinRank, applyMinnaOverlays, minnaSig,
 } = Core;
+
+// The backing API origin. Empty today would keep relative /v1 paths working same-origin;
+// as its own container at wkenhanced.dev the app is cross-ORIGIN from the API, so
+// VITE_API_BASE (baked by Vite) points at https://api.wkenhanced.dev and every fetch +
+// the TTS/Minna <audio> address the API there. The httpOnly session cookie still rides
+// because the two are same-SITE (Domain=.wkenhanced.dev) and api() sends credentials:'include'.
+const API_BASE = import.meta.env.VITE_API_BASE || '';
 // ---- CUSTOM VERBS storage (user-added; synced to the cloud when signed in) ----
 // Shape: { seq:<monotonic rank counter, starts at 100>, verbs:[ <verb>, … ] }.
 // Each custom verb has the same fields as a baked one plus custom:true, and a
@@ -515,7 +522,7 @@ function speak(text){
   if(HTTP_SERVED){
     try{
       if(!ttsAudio)ttsAudio=new Audio();
-      ttsAudio.src='/v1/tts?text='+encodeURIComponent(text);
+      ttsAudio.src=API_BASE+'/v1/tts?text='+encodeURIComponent(text);  // public; no crossorigin attr → cross-origin media loads fine
       const p=ttsAudio.play();
       if(p&&p.catch)p.catch(()=>speakSynth(text));         // network/format/autoplay fail → synth
     }catch(e){ speakSynth(text); }
@@ -1249,12 +1256,12 @@ let customSyncTimer=null;           // custom-verbs debounce (independent)
 // so callers can branch; a network failure throws fetch's own TypeError (no
 // .status), which the UI treats as "server unreachable".
 async function api(path,opts={}){
-  const res=await fetch(path,{
+  const res=await fetch(API_BASE+path,{
     method:opts.method||'GET',
     headers:opts.body!==undefined?{'Content-Type':'application/json'}:undefined,
     body:opts.body!==undefined?JSON.stringify(opts.body):undefined,
     credentials:'include',
-    cache:'no-state.store',
+    cache:'no-store',
   });
   let data=null; try{data=await res.json();}catch(e){}
   if(!res.ok){
@@ -1647,10 +1654,13 @@ async function pullMinnaCloud(){ try{ const r=await api('/v1/progress/'+MINNA_AP
 //     stops it (toggle). The .playing class lights the button. ---
 let mnAudioEl=null, mnPlayingBtn=null;
 function mnPlay(src, btn){
-  if(!mnAudioEl)mnAudioEl=new Audio();
+  // Minna native audio is cookie-gated, so cross-origin it must send credentials —
+  // crossOrigin='use-credentials' makes the <audio> fetch include the cookie AND
+  // require an origin-scoped Allow-Credentials response (never '*'). See the API CORS branch.
+  if(!mnAudioEl){ mnAudioEl=new Audio(); mnAudioEl.crossOrigin='use-credentials'; }
   if(btn && btn===mnPlayingBtn && !mnAudioEl.paused){ mnAudioEl.pause(); btn.classList.remove('playing'); mnPlayingBtn=null; return; }
   if(mnPlayingBtn)mnPlayingBtn.classList.remove('playing');
-  mnAudioEl.src='/v1/minna/audio?src='+encodeURIComponent(src);
+  mnAudioEl.src=API_BASE+'/v1/minna/audio?src='+encodeURIComponent(src);
   mnPlayingBtn=btn||null; if(btn)btn.classList.add('playing');
   mnAudioEl.onended=mnAudioEl.onerror=()=>{ if(mnPlayingBtn){mnPlayingBtn.classList.remove('playing');mnPlayingBtn=null;} };
   mnAudioEl.play().catch(()=>{ if(btn)btn.classList.remove('playing'); mnPlayingBtn=null; });

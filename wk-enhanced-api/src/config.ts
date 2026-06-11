@@ -70,6 +70,24 @@ export const config = {
         // the Secure flag. MUST be false for local http://localhost dev or the
         // browser silently drops the cookie and login appears to "not stick".
         cookieSecure: bool('COOKIE_SECURE', false),
+        // Cookie Domain. Empty (default) = a HOST-ONLY cookie — correct for dev
+        // (localhost) and any same-origin deploy. In the two-container prod topology
+        // (study app at wkenhanced.dev, this API at api.wkenhanced.dev), set
+        // COOKIE_DOMAIN=.wkenhanced.dev so a session minted by the API also reaches
+        // the apex study-app origin (the two are same-site). See the CORS branch in index.ts.
+        cookieDomain: process.env.COOKIE_DOMAIN || '',
+    },
+    // Cross-origin allowlist for the study-app routes. These origins may make
+    // CREDENTIALED (cookie) requests to /v1/auth, /v1/progress, /v1/sessions, /v1/minna.
+    // Cross-origin + credentials requires the server to echo an EXPLICIT origin (the
+    // wildcard '*' is illegal with credentials), so it only does so for origins listed
+    // here. Dev defaults to the Vite dev server; prod set to https://wkenhanced.dev.
+    // Comma-separated. (The userscript's vocab routes stay blanket-'*', no credentials.)
+    studyApp: {
+        allowedOrigins: (process.env.STUDY_APP_ORIGINS || 'http://localhost:5173')
+            .split(',')
+            .map((s) => s.trim())
+            .filter(Boolean),
     },
     // みんなの日本語 dashboard access control.
     minna: {

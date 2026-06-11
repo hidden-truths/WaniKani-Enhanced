@@ -3,3 +3,6 @@ dist/
 .vite/
 *.log
 .DS_Store
+# Personal env overrides (committed: .env.development with the shared localhost default).
+.env.local
+.env.*.local

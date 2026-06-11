@@ -48,6 +48,11 @@ export function startSession(c: Context, userId: number): void {
         secure: config.auth.cookieSecure,
         sameSite: 'Lax',
         path: '/',
+        // Domain scoping. Empty in dev/same-origin (host-only cookie); in the
+        // two-container prod topology it's `.wkenhanced.dev` so the cookie reaches
+        // both api.wkenhanced.dev and the apex study-app origin. `undefined` omits
+        // the Domain attribute entirely (the correct host-only behavior).
+        domain: config.auth.cookieDomain || undefined,
         // maxAge is in seconds.
         maxAge: config.auth.sessionTtlDays * 24 * 60 * 60,
     });
@@ -57,7 +62,8 @@ export function startSession(c: Context, userId: number): void {
 export function endSession(c: Context): void {
     const token = getCookie(c, SESSION_COOKIE);
     if (token) db.deleteSession(token);
-    deleteCookie(c, SESSION_COOKIE, { path: '/' });
+    // Must match the set-time path + domain or the browser won't clear the cookie.
+    deleteCookie(c, SESSION_COOKIE, { path: '/', domain: config.auth.cookieDomain || undefined });
 }
 
 // Resolve the current user from the session cookie, or null if unauthenticated

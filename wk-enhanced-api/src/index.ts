@@ -35,19 +35,36 @@ import { googleTts } from './services/tts.ts';
 
 const app = new OpenAPIHono({ defaultHook: zodHook });
 
-// Simple permissive CORS — the userscript may run on www.wanikani.com OR
-// preview.wanikani.com OR (in dev) the same localhost. No credentials, no
-// cookies, no per-user data → blanket allow is safe.
+// CORS — two policies, because we serve two very different clients:
+//
+//  - USERSCRIPT routes (/v1/vocab, /v1/index_meta, /v1/health, /v1/tts, /media):
+//    blanket `*`, NO credentials. The userscript runs on www/preview.wanikani.com
+//    and carries no cookie; per-user data isn't involved, so wildcard is safe + simple.
+//    ETag is exposed so the userscript can read it for conditional revalidation.
+//
+//  - STUDY-APP routes (/v1/auth, /v1/progress, /v1/sessions, /v1/minna): the study app
+//    is a SEPARATE origin (wkenhanced.dev) from this API (api.wkenhanced.dev) in the
+//    two-container topology, and its requests are CREDENTIALED (the session cookie). The
+//    spec forbids `*` with credentials, so we must echo the EXACT requesting origin +
+//    `Allow-Credentials: true` — but only for origins on the allowlist (config.studyApp).
+//    PUT is included (/v1/progress uses it) and the preflight (OPTIONS) gets the same
+//    headers before the 204. In dev this exercises the real path: Vite :5173 → API :3000
+//    is cross-origin + same-site, exactly like the prod apex ↔ api split.
+const STUDY_ROUTE = /^\/v1\/(auth|progress|sessions|minna)\b/;
 app.use('*', async (c, next) => {
-    c.header('Access-Control-Allow-Origin', '*');
-    c.header('Access-Control-Allow-Methods', 'GET, POST, OPTIONS');
-    c.header('Access-Control-Allow-Headers', 'Content-Type, Authorization');
-    // ETag is not a CORS-safelisted response header, so without this exposure
-    // declaration the userscript's `res.headers.get('ETag')` returns null
-    // even when the server sends one — defeating the conditional-revalidation
-    // path (no etag stored client-side → no If-None-Match sent → no 304s,
-    // every revisit re-downloads the full ~40KB payload).
-    c.header('Access-Control-Expose-Headers', 'ETag');
+    const origin = c.req.header('Origin');
+    if (STUDY_ROUTE.test(c.req.path) && origin && config.studyApp.allowedOrigins.includes(origin)) {
+        c.header('Access-Control-Allow-Origin', origin);
+        c.header('Vary', 'Origin');
+        c.header('Access-Control-Allow-Credentials', 'true');
+        c.header('Access-Control-Allow-Methods', 'GET, POST, PUT, OPTIONS');
+        c.header('Access-Control-Allow-Headers', 'Content-Type');
+    } else {
+        c.header('Access-Control-Allow-Origin', '*');
+        c.header('Access-Control-Allow-Methods', 'GET, POST, OPTIONS');
+        c.header('Access-Control-Allow-Headers', 'Content-Type, Authorization');
+        c.header('Access-Control-Expose-Headers', 'ETag');
+    }
     if (c.req.method === 'OPTIONS') {
         return c.body(null, 204);
     }
