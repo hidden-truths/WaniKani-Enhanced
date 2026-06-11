@@ -319,7 +319,9 @@ DO Droplet ($6/mo, SFO3) + DO Spaces ($5/mo) + Cloudflare Tunnel (free) ≈ **$1
 
 ## Accounts + study app (added post-v1)
 
-The server now also hosts the **Japanese verb-trainer study app** at `/` (four static files in `web/`) and backs it with **email/password accounts + per-user sync**, a **Google TTS proxy** (`/v1/tts`), and **per-IP rate limiting** on the auth endpoints. This is a distinct surface from the vocab/warm API the userscript uses — it has its own auth model and its own routes.
+The server now also hosts the **Japanese verb-trainer study app** at `/` (static files in `web/`) and backs it with **email/password accounts + per-user sync**, a **Google TTS proxy** (`/v1/tts`), and **per-IP rate limiting** on the auth endpoints. This is a distinct surface from the vocab/warm API the userscript uses — it has its own auth model and its own routes.
+
+> **Direction of travel:** the study app is intended to become a **separate application in its own Docker container** (served at `wkenhanced.dev`), with this API as a *separate* container at `api.wkenhanced.dev` — two services on the same droplet. That makes the two **cross-origin**, so the "Same-origin only" note below will need to flip to `Domain=.wkenhanced.dev` cookies + origin-scoped credentialed CORS. The text below is the **current** same-origin arrangement; the target shape + migration live in [web/NEXT_STEPS.md](web/NEXT_STEPS.md) "THE BIG ONE".
 
 > **The study-app frontend has its own docs** in [web/](web/): [web/README.md](web/README.md) (overview/run), [web/CLAUDE.md](web/CLAUDE.md) (architecture + design-system contracts + dead-ends), [web/NEXT_STEPS.md](web/NEXT_STEPS.md). This section below covers only the **server side** of that app (auth/progress routes + tables).
 

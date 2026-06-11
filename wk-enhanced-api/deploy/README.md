@@ -101,7 +101,16 @@ journalctl -u wk-enhanced-api-backup -n 50
 
 ## Serving the study app at wkenhanced.dev
 
-The verb-trainer study app is served by this same server at `/` (and `/study`), with accounts + per-user progress under `/v1/auth/*` and `/v1/progress/*`. The userscript API already reaches the droplet via the `api.wkenhanced.dev` Cloudflare Tunnel hostname → `http://localhost:3000`. To make the **apex** `wkenhanced.dev` serve the app, add a second public hostname to the *same* tunnel pointing at the *same* local service — no second server, no second port.
+> **Planned change (intended end state):** the study app is to become a **separate
+> application in its own Docker container** at `wkenhanced.dev`, with the API as a
+> *separate* container at `api.wkenhanced.dev` — **two services in this `compose.yaml`,
+> co-located on the same droplet** (two Cloudflare Tunnel ingress rules, apex → tool
+> container). At that point the apex stops pointing at `localhost:3000` and the auth cookie
+> goes cross-origin (`Domain=.wkenhanced.dev` + credentialed CORS). The setup **below
+> describes the CURRENT same-origin arrangement** (API serves the app). See
+> [../web/NEXT_STEPS.md](../web/NEXT_STEPS.md) "THE BIG ONE" for the target shape + migration.
+
+The verb-trainer study app is **currently** served by this same server at `/` (and `/study`), with accounts + per-user progress under `/v1/auth/*` and `/v1/progress/*`. The userscript API already reaches the droplet via the `api.wkenhanced.dev` Cloudflare Tunnel hostname → `http://localhost:3000`. To make the **apex** `wkenhanced.dev` serve the app, add a second public hostname to the *same* tunnel pointing at the *same* local service — no second server, no second port.
 
 **One env change** — set `COOKIE_SECURE=true` in `/etc/wk-enhanced-api/env` (already in the prod template) so the session cookie carries `Secure`. Then `systemctl restart wk-enhanced-api`.
 

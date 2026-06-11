@@ -10,7 +10,21 @@ file split, leveled examples, the みんなの日本語 dashboard with content/d
 pitch accent) have all shipped. The app has **outgrown "a few static files on the API
 droplet."** The headline next move is structural, below.
 
-## 🚩 THE BIG ONE — stand the study app up as its own webapp
+## 🚩 THE BIG ONE — split into two apps: the learning tool and the API
+
+**The decided topology (a requirement, not just an option).** Two **separate
+applications**, each in its **own Docker container**, **co-located on the same
+DigitalOcean droplet**:
+
+- **Learning tool** (this study app) — its own project/repo + container — served at the
+  apex **`https://wkenhanced.dev`**.
+- **API server** (`wk-enhanced-api`) — its own container — served at
+  **`https://api.wkenhanced.dev`** (auth, progress, TTS, Minna, vocab/warm).
+
+One droplet, one `docker compose` with **two services**, one Cloudflare Tunnel with two
+ingress rules (apex → tool container, `api.` → API container). The API **stops serving the
+web app**; the learning tool **stops living in `wk-enhanced-api/web/`**. They communicate
+over HTTP across the two hostnames — which makes them cross-origin (see constraints).
 
 **Why now.** This started as a side surface of the API server (`wk-enhanced-api/web/`,
 classic-script files served at the apex) and has become a full product: four tabs,
@@ -28,9 +42,10 @@ build/test setup, and its own deploy.**
   `deck`/facets (`passes`/`wireFacets`), `flashcard`, `browse`, `stats`/charts, `minna`,
   `cloud`/sync, `settings`, plus `verbs`/`examples`/`accents` as data modules and a thin
   entry that wires them.
-- A dev server with HMR and a **build that emits static assets the API still serves**
-  (keep same-origin — see constraints), replacing the `verbs-core.test.ts` concatenation
-  hack with real imports under jsdom/happy-dom.
+- A Vite (or equivalent) dev server with HMR + a build, served from its **own lightweight
+  container** (nginx or a tiny Bun static server) at `wkenhanced.dev` — *not* baked into the
+  API image. Replace the `verbs-core.test.ts` concatenation hack with real module imports
+  under jsdom/happy-dom.
 
 **Constraints that make this non-trivial (decide these first).**
 - **`file://` offline use vs ES modules.** Today `index.html` opens directly over `file://`
@@ -39,11 +54,25 @@ build/test setup, and its own deploy.**
   bundler (Vite) that outputs a single/inlined offline build, **or** stay classic-script and
   only modularize via an IIFE-per-file convention. (Recommend Vite + a `build` that produces
   an offline-capable bundle; the account/TTS/Minna features already need a server anyway.)
-- **The shared backend stays put.** `/v1/auth/*`, `/v1/progress/*`, `/v1/tts`, `/v1/minna/*`,
-  `/v1/sessions` live on the API server and rely on a **same-origin httpOnly cookie**.
-  Keep serving the built app from the API apex (drop the build into the image's web dir) so
-  the cookie keeps working; a *separate* static host would need a CORS + `SameSite=None`
-  + `credentials:'include'` rework — defer that.
+- **Cross-origin auth — the headline consequence of splitting.** The backend stays put
+  (`/v1/auth/*`, `/v1/progress/*`, `/v1/tts`, `/v1/minna/*`, `/v1/sessions` on the API), but
+  `wkenhanced.dev` (tool) and `api.wkenhanced.dev` (API) are **same-site yet cross-ORIGIN**.
+  The httpOnly session cookie works today *only because* the app is served same-origin with
+  the API; once it's a separate container the cookie must be **shared across the subdomains**:
+  - **Cookie**: set `Domain=.wkenhanced.dev` (so it reaches both the apex and `api.`),
+    `SameSite=Lax` (subdomains count as same-site, so the cookie rides cross-origin fetches),
+    `Secure`, `HttpOnly`. Update `lib/auth.ts` (`COOKIE_DOMAIN` config).
+  - **CORS with credentials**: the auth/progress/minna/sessions routes must answer the tool's
+    origin specifically — `Access-Control-Allow-Origin: https://wkenhanced.dev` (an explicit
+    origin, **never `*`** with credentials), `Access-Control-Allow-Credentials: true`, plus
+    preflight handling. This is a **different policy** from the blanket
+    `Access-Control-Allow-Origin: *` the *userscript's* vocab routes use (and `*` is
+    incompatible with credentials), so the server needs an origin-scoped CORS branch for the
+    study-app routes.
+  - **Client**: the tool's `fetch` calls add `credentials:'include'` (they're same-origin
+    today and don't). `COOKIE_SECURE=false` over `http://localhost` still applies in dev.
+  This rework is **required** by the two-container topology — the old "just stay same-origin"
+  escape hatch is off the table by decision.
 - **Preserve the design-system contracts + dead-ends** in [CLAUDE.md](CLAUDE.md) (chip
   wiring by class/`data-*`, roving-tabindex radiogroups, the inline-SVG-sprite trap, the
   six AND'd facets, the `.frow/.chips` layout) and the [CARDS.md](CARDS.md) data model
@@ -53,13 +82,20 @@ build/test setup, and its own deploy.**
   UI complexity genuinely demands it.
 
 **Phased plan (each step shippable, reversible).**
-1. Move `web/` → a dedicated project dir; keep the API serving it byte-for-byte (no behavior
-   change) to establish the boundary.
-2. Introduce the build tool (Vite) with the current files as-is; wire `bun dev`/preview to it.
-3. Split `app.js` into modules incrementally (one section per commit), keeping
-   `verbs-core.test.ts`'s coverage as you go (port to real imports).
-4. Move `verbs`/`examples`/`accents`/Minna data to data modules; type them.
-5. Decide hosting (recommend: stay same-origin via the API image) and cut the deploy over.
+1. Move `web/` → a dedicated project dir/repo (`study-app/`). The API keeps serving it
+   byte-for-byte *for now* (no behavior change) to establish the boundary cheaply.
+2. Introduce the build tool (Vite) with the current files as-is; wire dev/preview to it.
+3. Split `app.js` into modules incrementally (one section per commit); port the
+   `verbs-core.test.ts` coverage to real imports.
+4. Move `verbs`/`examples`/`accents`/Minna data to typed data modules.
+5. **Stand up the learning-tool container** (a static server for the built assets) as a
+   second service in `compose.yaml`; add a Cloudflare Tunnel ingress `wkenhanced.dev → tool
+   container`, remove the apex ingress from the API, and **delete the API's static `web/`
+   routes** (`/`, `/study`, `/styles.css`, …). Now two containers, one droplet.
+6. **Flip auth to cross-origin** (the constraint above): cookie `Domain=.wkenhanced.dev`,
+   origin-scoped credentialed CORS for the study-app routes, `credentials:'include'` in the
+   tool. Verify login + progress/custom/settings/minna sync + the Minna owner-gate all work
+   across the two origins. Update `deploy/README.md` + the dev↔prod parity table.
 
 This is the priority. The items below are smaller and can follow.
 
