@@ -8,3 +8,4 @@ export * from './kana.js';
 export * from './pitch.js';
 export * from './text.js';
 export * from './minna.js';
+export * from './recordings.js';

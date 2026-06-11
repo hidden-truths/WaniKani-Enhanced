@@ -14,6 +14,7 @@ import { account, api, setSyncStatus } from './cloud-core.js';
 import { openAuth } from './cloud.js';
 import { loadCustom, saveCustom } from '../persistence/custom.js';
 import { rebuildData, refreshAfterVerbChange } from './custom-cards.js';
+import { loadLessonRecordings, recordControlHtml, wireMinnaRecord } from './minna-record.js';
 
 const MINNA_APP_KEY = 'minna';
 const MINNA_KEY = 'jpverbs_minna';
@@ -191,6 +192,7 @@ async function renderMinnaLesson(n, body) {
   let L;
   try { L = await fetchMinnaLesson(n); }
   catch (e) { body.innerHTML = '<div class="mn-error">Could not load lesson ' + n + (e && e.status ? (' (' + e.status + ')') : '') + '.</div>'; return; }
+  await loadLessonRecordings(n);   // populate the record-and-compare take cache before render
   const st = minnaActivationStatus(n, L.vocab || []);
   const btn = st.toAdd ? { ic: 'plus', label: 'Add all vocab to deck', dis: '' }
     : st.toUpdate ? { ic: 'refresh', label: 'Update ' + st.toUpdate + ' word' + (st.toUpdate === 1 ? '' : 's'), dis: '' }
@@ -218,7 +220,8 @@ function minnaVocabSection(L) {
       <td><div class="mn-kanji jp">${escapeHtml(v.kanji || v.kana)}</div><div class="mn-kana jp">${escapeHtml(v.kana)}${v.context ? ` <span class="mn-ctx">${escapeHtml(v.context)}</span>` : ''}</div></td>
       <td class="mn-mean">${escapeHtml(v.mean)}<span class="mn-pos">${escapeHtml(CAT_LABEL[v.cat] || v.cat || '')}</span>${v.italki ? '<span class="mn-italki" title="Covered in your iTalki lesson">iTalki</span>' : ''}</td>
       <td style="text-align:right">${minnaInDeck(v.key) ? '<span class="v-in">✓</span>' : ''}</td>
-    </tr>`).join('');
+    </tr>
+    <tr class="mn-rec-row"><td></td><td colspan="3">${recordControlHtml(L.lesson, v.key, v.audio)}</td></tr>`).join('');
   return mnSection('Vocabulary', L.vocab.length, `<table class="mn-vocab"><tbody>${rows}</tbody></table>`, true);
 }
 function minnaExampleRows(list) {
@@ -251,6 +254,7 @@ function minnaNotesSection(n) {
 }
 function wireMinnaLesson(n, L, body) {
   body.querySelectorAll('[data-aud]').forEach(b => b.addEventListener('click', () => mnPlay(b.dataset.aud, b)));
+  wireMinnaRecord(body);   // delegated record/play/delete handlers for the rec-controls
   const add = body.querySelector('#mnAddDeck');
   if (add) add.addEventListener('click', () => {
     const { added, updated } = activateMinnaVocab(n, L.vocab || []);

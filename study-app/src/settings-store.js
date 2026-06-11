@@ -12,7 +12,10 @@ const SETTINGS_KEY = 'jpverbs_settings';
 // schedule (a due card is fair game to count). Not-due cards are never touched in free
 // study, and SRS-review sessions always reschedule due cards regardless. Default on — the
 // behavior most learners expect; toggle off for pure no-stakes practice.
-export const DEFAULT_SETTINGS = { exampleLevel: 'N5', furigana: true, input: 'self', audio: 'off', freeReviewDue: true };
+// recordingsKeep: how many voice takes to keep per word/line in the みんなの日本語
+// record-and-compare feature. The server prunes older takes beyond this on each
+// upload (clamped 1–20). Default 3.
+export const DEFAULT_SETTINGS = { exampleLevel: 'N5', furigana: true, input: 'self', audio: 'off', freeReviewDue: true, recordingsKeep: 3 };
 
 export function loadSettings() {
   let s = null; try { s = JSON.parse(localStorage.getItem(SETTINGS_KEY)); } catch (e) {}

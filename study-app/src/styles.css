@@ -227,6 +227,8 @@
   .set-row>label{font-family:"SF Mono",ui-monospace,monospace;font-size:11px;letter-spacing:.1em;text-transform:uppercase;color:var(--muted)}
   .set-row .jlptseg .chip{font-size:12px;padding:6px 11px}
   .set-hint{display:block;max-width:280px;margin-top:5px;font-family:Georgia,"Times New Roman",serif;font-size:12px;letter-spacing:0;text-transform:none;color:var(--muted);opacity:.85}
+  .set-num{width:64px;background:var(--paper);color:var(--ink);border:1px solid var(--line);border-radius:6px;padding:6px 8px;font-family:"SF Mono",ui-monospace,monospace;font-size:13px;text-align:center}
+  .set-num:focus{outline:none;border-color:var(--ichidan)}
   /* Browse detail modal: memory line + collapsible <details> sections. */
   /* Visual SRS status: 5-segment Leitner track + box number + due chip. */
   .det-memory{display:flex;align-items:center;flex-wrap:wrap;gap:10px;font-family:"SF Mono",ui-monospace,monospace;font-size:12px;color:var(--muted);margin:12px 0 6px}
@@ -512,6 +514,31 @@
   .mn-notes textarea{width:100%;min-height:120px;background:var(--paper);color:var(--ink);border:1px solid var(--line);border-radius:8px;padding:12px;font-family:Georgia,serif;font-size:14px;line-height:1.6;resize:vertical}
   .mn-notes textarea:focus{outline:none;border-color:var(--ichidan)}
   .mn-saved{font-family:"SF Mono",ui-monospace,monospace;font-size:11px;color:var(--muted);margin-top:6px;min-height:14px}
+  /* Record-and-compare (Phase 2). The rec-row is a subtle sub-row under each vocab
+     entry / conversation line; the control holds a mic button + the saved-take list. */
+  .mn-rec-row td{border-top:none;padding-top:0}
+  .rec-control{display:flex;align-items:center;flex-wrap:wrap;gap:8px}
+  .rec-btn{display:inline-flex;align-items:center;gap:6px;background:none;border:1px solid var(--line);color:var(--muted);border-radius:14px;padding:3px 10px 3px 8px;font-family:"SF Mono",ui-monospace,monospace;font-size:11px;letter-spacing:.06em;cursor:pointer;transition:all .15s}
+  .rec-btn:hover{border-color:var(--godan);color:var(--godan)}
+  .rec-btn .ic{font-size:14px}
+  /* Recording: a steady red so it reads as "live"; the reduced-motion rule below
+     keeps the pulse optional. */
+  .rec-btn.recording{border-color:var(--godan);color:#fff;background:var(--godan);animation:recPulse 1.1s ease-in-out infinite}
+  @keyframes recPulse{0%,100%{opacity:1}50%{opacity:.62}}
+  .rec-takes{display:inline-flex;align-items:center;gap:6px;flex-wrap:wrap}
+  .rec-take{display:inline-flex;align-items:center;border:1px solid var(--line);border-radius:13px;overflow:hidden;background:var(--paper-2)}
+  .rec-take-play{display:inline-flex;align-items:center;gap:4px;background:none;border:none;color:var(--good);font-family:"SF Mono",ui-monospace,monospace;font-size:11px;padding:3px 8px;cursor:pointer}
+  .rec-take-play .ic{font-size:12px}
+  .rec-take-play.playing{background:var(--good);color:#fff}
+  .rec-take-del{background:none;border:none;border-left:1px solid var(--line);color:var(--muted);padding:3px 7px;cursor:pointer;display:inline-flex;align-items:center}
+  .rec-take-del:hover{color:var(--leech)}
+  .rec-take-del .ic{font-size:12px}
+  .rec-review{display:flex;align-items:center;flex-wrap:wrap;gap:8px}
+  .rec-review .rec-preview{height:32px;max-width:220px}
+  .rec-review .chip{font-size:11px;padding:4px 10px}
+  .rec-review .rec-save{border-color:var(--good);color:var(--good);font-weight:700}
+  .rec-unsupported{font-family:Georgia,serif;font-size:12px;color:var(--muted);opacity:.85}
+  @media (prefers-reduced-motion:reduce){ .rec-btn.recording{animation:none} }
   @media (max-width:640px){
     .mn-role{flex-basis:48px;font-size:10px}
     .mn-kanji{font-size:18px}

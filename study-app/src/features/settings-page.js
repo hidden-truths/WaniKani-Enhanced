@@ -2,6 +2,7 @@
 // applies furigana, and schedules a cloud push). renderSettings() paints the active chips
 // from `settings` and is also called after a cloud pull.
 import { settings, saveSettings } from '../settings-store.js';
+import { clampKeep } from '../core/index.js';
 import { paintPrefChips } from './deck.js';
 import { session, renderExample } from './flashcard.js';
 import { account } from './cloud-core.js';
@@ -13,6 +14,7 @@ export function renderSettings() {
   seg('.setin', 'setin', settings.input);
   seg('.setau', 'setau', settings.audio);
   seg('.setfr', 'setfr', settings.freeReviewDue ? 'on' : 'off');
+  const keep = document.getElementById('setRecKeep'); if (keep) keep.value = clampKeep(settings.recordingsKeep);
   const foot = document.getElementById('settingsFoot');
   if (foot) foot.textContent = account ? ('Synced to ' + account.email) : 'Sign in to sync these across your devices.';
 }
@@ -29,4 +31,6 @@ export function initSettingsPage() {
   document.getElementById('setInput').addEventListener('click', e => { const b = e.target.closest('.setin'); if (!b) return; settings.input = b.dataset.setin; saveSettings(); paintPrefChips(); renderSettings(); });
   document.getElementById('setAudio').addEventListener('click', e => { const b = e.target.closest('.setau'); if (!b) return; settings.audio = b.dataset.setau; saveSettings(); paintPrefChips(); renderSettings(); });
   document.getElementById('setFreeDue').addEventListener('click', e => { const b = e.target.closest('.setfr'); if (!b) return; settings.freeReviewDue = b.dataset.setfr === 'on'; saveSettings(); renderSettings(); });
+  const keep = document.getElementById('setRecKeep');
+  if (keep) keep.addEventListener('change', () => { settings.recordingsKeep = clampKeep(keep.value); saveSettings(); renderSettings(); });
 }

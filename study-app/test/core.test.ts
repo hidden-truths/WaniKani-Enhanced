@@ -15,6 +15,7 @@ import {
   tokenFacet, deckLabel, ttsText, minnaBuiltinRank, applyMinnaOverlays, splitMora,
   pitchHtml, minnaSig, cardStamp, colorClass, CATS, exampleForLevel, availableTiers,
   JLPT_TIERS, BOX_DAYS,
+  clampKeep, convItemKey, formatDuration, KEEP_DEFAULT,
 } from '../src/core/index.js';
 
 beforeEach(() => {
@@ -393,4 +394,25 @@ test('filterSummary: one part per non-empty facet (the AND\'d recap)', () => {
 test('dueCards / leeches derive from store over the live DATA', () => {
   expect(dueCards().length).toBe(state.DATA.length);
   expect(leeches().length).toBe(0);
+});
+
+test('clampKeep clamps to [1,20] and defaults on garbage', () => {
+  expect(clampKeep(3)).toBe(3);
+  expect(clampKeep(0)).toBe(1);
+  expect(clampKeep(99)).toBe(20);
+  expect(clampKeep(4.7)).toBe(4);
+  expect(clampKeep('abc')).toBe(KEEP_DEFAULT);
+  expect(clampKeep(undefined)).toBe(KEEP_DEFAULT);
+});
+
+test('convItemKey builds a stable per-line key', () => {
+  expect(convItemKey(23, 2)).toBe('mnn:23:conv:2');
+  expect(convItemKey(24, 0)).toBe('mnn:24:conv:0');
+});
+
+test('formatDuration renders M:SS, empty on invalid', () => {
+  expect(formatDuration(1500)).toBe('0:02');
+  expect(formatDuration(65000)).toBe('1:05');
+  expect(formatDuration(null)).toBe('');
+  expect(formatDuration(-5)).toBe('');
 });
