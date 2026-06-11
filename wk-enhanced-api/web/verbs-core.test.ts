@@ -31,6 +31,7 @@ type Core = {
   filterSummary: (c: any) => string[];
   tokenFacet: (t: string) => string;
   deckLabel: (t: string) => string;
+  ttsText: (v: any) => string;
   cardStamp: (v: any) => { label: string; cls: string };
   colorClass: (v: any) => string;
   CATS: string[];
@@ -53,7 +54,7 @@ function loadCore(): Core {
   const body =
     verbs + "\n" + examples + "\n" + appSrc +
     `\n;return { passes, oneGroup, facetAll, facetMatch, scheduleCard, cardStat,
-      isDue, dueCards, rollingAcc, isLeech, leeches, normKana, romajiToKana, reviewForecast, filterSummary, tokenFacet, deckLabel,
+      isDue, dueCards, rollingAcc, isLeech, leeches, normKana, romajiToKana, reviewForecast, filterSummary, tokenFacet, deckLabel, ttsText,
       cardStamp, colorClass, CATS,
       exampleForLevel, availableTiers, JLPT_TIERS,
       BOX_DAYS, get DATA(){return DATA}, get store(){return store}, set store(v){store=v} };`;
@@ -357,6 +358,18 @@ test("passes: source is an AND'd facet (iTalki ∩ noun intersect)", () => {
   expect(hits({ source: ["mnn-l24"] })).toBe(1); // a single lesson
   expect(hits({ source: ["minna"], cat: ["noun"] })).toBe(2);
   expect(hits({})).toBe(4); // no source constraint = whole synthetic deck
+});
+
+test("ttsText sends the kanji headword (accent-disambiguating), else the reading", () => {
+  // homograph: send the kanji so Google applies the right pitch accent
+  expect(core.ttsText({ jp: "橋", read: "はし" })).toBe("橋");
+  // verb with okurigana → kanji form
+  expect(core.ttsText({ jp: "聞く", read: "きく" })).toBe("聞く");
+  // kana-only word → no kanji to send, use the reading
+  expect(core.ttsText({ jp: "サイズ", read: "サイズ" })).toBe("サイズ");
+  expect(core.ttsText({ jp: "ホームステイ", read: "ホームステイ" })).toBe("ホームステイ");
+  // explicit per-card override wins (escape hatch for an ambiguous single kanji)
+  expect(core.ttsText({ jp: "角", read: "かど", tts: "かど" })).toBe("かど");
 });
 
 test("deckLabel + filterSummary surface the source facet (per-lesson → 'L23')", () => {

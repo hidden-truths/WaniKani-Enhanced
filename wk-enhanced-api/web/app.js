@@ -692,7 +692,16 @@ function speak(text){
     speakSynth(text);
   }
 }
-function playReading(){ if(session)speak(session.deck[session.i].read); }
+// What text to hand the TTS for a card. Google TTS derives pitch accent from the
+// WRITTEN form, so a kana-only reading is accent-ambiguous for homographs (橋 "bridge"
+// vs 箸 "chopsticks" are both はし). Sending the kanji headword lets Google apply the
+// dictionary accent. Kana-only words have no kanji to send, so they use the reading.
+// `v.tts` is an optional per-card override (escape hatch for an ambiguous single kanji
+// that Google misreads, e.g. 角 → つの). The visible reading is always v.read regardless.
+const HAS_KANJI=/[一-龯々々〆]/;
+function ttsText(v){ return v.tts || (v.jp && HAS_KANJI.test(v.jp) ? v.jp : v.read); }
+function speakWord(v){ speak(ttsText(v)); }
+function playReading(){ if(session)speakWord(session.deck[session.i]); }
 // Hide the audio affordances entirely only when NO audio path is available.
 if(!TTS_OK){
   const ar=document.getElementById('audioRow'); if(ar)ar.style.display='none';
@@ -1236,7 +1245,7 @@ function openVerbDetail(v){
     </div></details>
     ${v.custom?`<div class="verb-actions"><button class="chip" id="dEdit" type="button"><svg class="ic" aria-hidden="true"><use href="#i-edit"/></svg>Edit</button><button class="chip" id="dDel" type="button" style="border-color:var(--godan);color:var(--godan)"><svg class="ic" aria-hidden="true"><use href="#i-trash"/></svg>Delete</button></div>`:''}`;
   renderDetailExample();
-  const sp=document.getElementById('dSpeak'); if(sp)sp.addEventListener('click',()=>speak(v.read));
+  const sp=document.getElementById('dSpeak'); if(sp)sp.addEventListener('click',()=>speakWord(v));
   const seg=document.getElementById('dExLevels'); if(seg)seg.addEventListener('click',e=>{const b=e.target.closest('.exlv');if(!b||b.disabled)return;detailLevel=b.dataset.exlv;renderDetailExample();});
   if(v.custom){
     const eb=document.getElementById('dEdit'), db=document.getElementById('dDel');
@@ -1278,7 +1287,7 @@ function renderBrowse(){
       <div class="tags">${tiLabel?`<span class="tag" style="color:var(--ichidan)">${tiLabel}</span>`:''}${v.tags.filter(t=>!t.startsWith('top') && t!=='みんなの日本語' && !/^mnn-l\d+$/.test(t)).map(t=>t==='iTalki'?`<span class="tag" style="color:var(--ichidan);border:1px solid var(--ichidan)">iTalki</span>`:`<span class="tag">${escapeHtml(t)}</span>`).join('')}</div>`;
     card.addEventListener('click',()=>openVerbDetail(v));
     const sb=card.querySelector('.speak-btn');   // play reading without opening the modal
-    if(sb)sb.addEventListener('click',e=>{e.stopPropagation();speak(v.read);});
+    if(sb)sb.addEventListener('click',e=>{e.stopPropagation();speakWord(v);});
     grid.appendChild(card);
   });
   document.getElementById('num').textContent=shown;     // "Showing N of 100"
