@@ -29,18 +29,48 @@ func parseArg(_ name: String) -> String? {
     return nil
 }
 
+func hasFlag(_ name: String) -> Bool { CommandLine.arguments.contains(name) }
+func qualityName(_ q: AVSpeechSynthesisVoiceQuality) -> String {
+    switch q { case .premium: return "premium"; case .enhanced: return "enhanced"; default: return "default" }
+}
+
+let jaVoices = AVSpeechSynthesisVoice.speechVoices().filter { $0.language == "ja-JP" }
+
+// `--list` — print every installed ja-JP voice (highest quality first) so you can see
+// which quality tiers are downloaded and pass an explicit --voice / --voice-id.
+// The compact ("default") voices are robotic; enhanced/premium (neural) sound far better
+// but must be downloaded in System Settings → Accessibility → Spoken Content →
+// System Voice → Manage Voices → Japanese.
+if hasFlag("--list") {
+    for v in jaVoices.sorted(by: { $0.quality.rawValue > $1.quality.rawValue }) {
+        print("\(v.name)\t\(qualityName(v.quality))\t\(v.identifier)")
+    }
+    exit(0)
+}
+
 guard let batchPath = parseArg("--batch"),
       let data = FileManager.default.contents(atPath: batchPath),
       let items = try? JSONDecoder().decode([Item].self, from: data) else {
-    FileHandle.standardError.write(Data("jp-tts: --batch <manifest.json> required (array of {text,out})\n".utf8))
+    FileHandle.standardError.write(Data("jp-tts: --batch <manifest.json> required (or --list)\n".utf8))
     exit(2)
 }
 
 let rate = Float(parseArg("--rate") ?? "") ?? AVSpeechUtteranceDefaultSpeechRate
+// Voice selection, best-first: an explicit --voice-id wins; else the requested --voice
+// NAME (default Kyoko), picking the HIGHEST-QUALITY entry with that name (a name like
+// "Kyoko" can have compact + enhanced + premium variants and the compact one sorts first,
+// so naively taking `.first` gave the robotic voice even when a better one was installed);
+// else the highest-quality ja voice of any name. quality: premium > enhanced > default.
+let voiceId = parseArg("--voice-id")
 let voiceName = parseArg("--voice") ?? "Kyoko"
-// Pick the requested ja-JP voice by name; fall back to any Japanese voice.
-let jaVoices = AVSpeechSynthesisVoice.speechVoices().filter { $0.language == "ja-JP" }
-let voice = jaVoices.first(where: { $0.name == voiceName }) ?? jaVoices.first
+let byQuality = { (a: AVSpeechSynthesisVoice, b: AVSpeechSynthesisVoice) in a.quality.rawValue < b.quality.rawValue }
+// Match the base name: the enhanced/premium variants are named "Kyoko (Enhanced)" /
+// "Kyoko (Premium)", so a plain `name == "Kyoko"` would only ever hit the COMPACT voice
+// and we'd synthesize robotic audio even with a better variant installed.
+func matchesName(_ v: AVSpeechSynthesisVoice) -> Bool { v.name == voiceName || v.name.hasPrefix(voiceName + " (") }
+let voice = (voiceId.flatMap { id in jaVoices.first { $0.identifier == id } })
+    ?? jaVoices.filter(matchesName).max(by: byQuality)
+    ?? jaVoices.max(by: byQuality)
 if voice == nil {
     FileHandle.standardError.write(Data("jp-tts: no ja-JP voice installed\n".utf8))
     exit(3)
@@ -100,7 +130,7 @@ for item in items {
     print("{\"out\":\(jsonString(item.out)),\"ok\":\(ok),\"skipped\":false}")
 }
 
-FileHandle.standardError.write(Data("jp-tts: \(okCount) generated, \(skipCount) skipped, \(failCount) failed (voice=\(voice!.name), rate=\(rate))\n".utf8))
+FileHandle.standardError.write(Data("jp-tts: \(okCount) generated, \(skipCount) skipped, \(failCount) failed (voice=\(voice!.name) [\(qualityName(voice!.quality))], rate=\(rate))\n".utf8))
 exit(failCount > 0 ? 1 : 0)
 
 // Minimal JSON string encoder for stdout lines (paths are ASCII-ish but be safe).
