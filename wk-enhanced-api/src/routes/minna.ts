@@ -152,6 +152,10 @@ minnaRouter.openapi(audioRoute, async (c) => {
     }
     c.set('logCtx', { minnaAudio: src, cached });
     c.header('Content-Type', 'audio/mpeg');
-    c.header('Cache-Control', 'public, max-age=31536000, immutable'); // content-addressed → never changes
+    // `private`, NOT `public`: this is account-gated content, so it must never be
+    // stored in a SHARED cache (Cloudflare / any CDN in front of the origin) — that
+    // would serve it to unauthorized users and bypass the gate. The owner's own
+    // browser still caches it for a year (immutable, content-addressed key).
+    c.header('Cache-Control', 'private, max-age=31536000, immutable');
     return c.body(bytes);
 });
