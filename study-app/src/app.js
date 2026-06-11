@@ -20,6 +20,11 @@ import './styles.css';
 import { VERBS } from './data/verbs.js';
 import { state, attachLevels } from './state.js';
 import { API_BASE, localDay } from './config.js';
+import { sync } from './sync-bus.js';
+import { loadCustom, saveCustom, saveCustomLocal } from './persistence/custom.js';
+import { loadStore, save, saveLocal } from './persistence/store.js';
+import { settings, setSettings, DEFAULT_SETTINGS, applyFurigana, saveSettings, saveSettingsLocal } from './settings-store.js';
+import { speakWord, TTS_OK, initTtsUI } from './features/tts.js';
 import * as Core from './core/index.js';
 const {
   TYPE_LABEL, CATS, CAT_LABEL, colorClass, cardStamp,
@@ -31,23 +36,22 @@ const {
   minnaBuiltinRank, applyMinnaOverlays, minnaSig,
 } = Core;
 
+// The persistence layer (store/custom/settings) schedules cloud pushes through the sync
+// bus; cloud + minna still live below in this file, so register their (hoisted) schedulers
+// onto the bus here. When cloud/minna are extracted into their own modules, they'll
+// self-register and these lines go away.
+sync.progress = scheduleCloudSync;
+sync.custom   = scheduleCustomSync;
+sync.settings = scheduleSettingsSync;
+sync.minna    = scheduleMinnaSync;
+
 // The backing API origin. Empty today would keep relative /v1 paths working same-origin;
 // as its own container at wkenhanced.dev the app is cross-ORIGIN from the API, so
 // VITE_API_BASE (baked by Vite) points at https://api.wkenhanced.dev and every fetch +
 // the TTS/Minna <audio> address the API there. The httpOnly session cookie still rides
 // because the two are same-SITE (Domain=.wkenhanced.dev) and api() sends credentials:'include'.
-// API_BASE + localDay now live in config.js (imported above).
-// ---- CUSTOM VERBS storage (user-added; synced to the cloud when signed in) ----
-// Shape: { seq:<monotonic rank counter, starts at 100>, verbs:[ <verb>, … ] }.
-// Each custom verb has the same fields as a baked one plus custom:true, and a
-// rank assigned from `seq` (101, 102, …) that is never reused — so progress keyed
-// by rank in `state.store.cards` stays stable across deletes.
-//   saveCustomLocal() = localStorage only (used by cloud-pull to avoid re-pushing).
-//   saveCustom()      = localStorage + a debounced cloud push (the normal path).
-const CUSTOM_KEY='jpverbs_custom';
-function loadCustom(){ try{const o=JSON.parse(localStorage.getItem(CUSTOM_KEY));if(o&&Array.isArray(o.verbs))return o;}catch(e){} return {seq:100,verbs:[]}; }
-function saveCustomLocal(o){ try{localStorage.setItem(CUSTOM_KEY,JSON.stringify(o));}catch(e){} }
-function saveCustom(o){ saveCustomLocal(o); if(typeof scheduleCustomSync==='function')scheduleCustomSync(); }
+// API_BASE + localDay → config.js; custom-verb storage (loadCustom/saveCustom/
+// saveCustomLocal) → persistence/custom.js (both imported above).
 
 // state.DATA is the live deck: the baked-in VERBS (minus any v.skip) plus the user's
 // own custom verbs. It's a `let` rebuilt by rebuildData() so every reader
@@ -80,21 +84,9 @@ attachLevels();
    incompatibly, bump to _v4 and (ideally) write a migration that reads the old
    key. Right now we do soft per-field migration in cardStat() instead.
    ========================================================================== */
-const KEY="jpverbs_v3";
-// state.store: defaulted in state.js, hydrated from localStorage just below.
-try{ state.store=JSON.parse(localStorage.getItem(KEY))||null; }catch(e){ state.store=null; }
-if(!state.store) state.store={cards:{},sessions:[],daily:{}};
-// Guards: tolerate older/partial saves missing a top-level collection.
-if(!state.store.cards)state.store.cards={};
-if(!state.store.sessions)state.store.sessions=[];
-if(!state.store.daily)state.store.daily={};
-// saveLocal() persists to localStorage only (instant, offline-safe). save()
-// additionally schedules a debounced push to the cloud when signed in — see
-// the CLOUD ACCOUNTS + SYNC section near the bottom of this script. Splitting
-// them lets cloud-hydration write localStorage WITHOUT re-pushing the same
-// bytes back to the server.
-function saveLocal(){ try{localStorage.setItem(KEY,JSON.stringify(state.store));}catch(e){} }
-function save(){ saveLocal(); if(typeof scheduleCloudSync==='function')scheduleCloudSync(); }
+// Progress storage (KEY/loadStore/save/saveLocal) → persistence/store.js. Hydrate
+// state.store from localStorage now (before any reader runs below).
+loadStore();
 
 // localDay now lives in config.js (imported above).
 
@@ -167,26 +159,9 @@ document.querySelectorAll('.tab').forEach(t=>t.addEventListener('click',()=>{
    applies side-effects (furigana), and schedules a cloud push when signed in.
    (Theme + font keep their own keys — device-ish, not synced.)
    ========================================================================== */
-const SETTINGS_KEY='jpverbs_settings';
-// freeReviewDue: in FREE study, grading a card that's already DUE still advances its
-// SRS schedule (a due card is fair game to count). Not-due cards are never touched in
-// free study, and SRS-review sessions always reschedule due cards regardless. Default
-// on — it's the behavior most learners expect; toggle off for pure no-stakes practice.
-const DEFAULT_SETTINGS={exampleLevel:'N5', furigana:true, input:'self', audio:'off', freeReviewDue:true};
-function loadSettings(){
-  let s=null; try{ s=JSON.parse(localStorage.getItem(SETTINGS_KEY)); }catch(e){}
-  if(s && typeof s==='object') return Object.assign({}, DEFAULT_SETTINGS, s);
-  return Object.assign({}, DEFAULT_SETTINGS, {          // migrate legacy per-key prefs
-    exampleLevel: localStorage.getItem('jpverbs_exlevel')||DEFAULT_SETTINGS.exampleLevel,
-    input: localStorage.getItem('jpverbs_input')||DEFAULT_SETTINGS.input,
-    audio: localStorage.getItem('jpverbs_audio')||DEFAULT_SETTINGS.audio,
-  });
-}
-let settings=loadSettings();
-// Furigana visibility is a single attribute flip on <html> (CSS hides <rt> when off).
-function applyFurigana(){ document.documentElement.dataset.furigana = settings.furigana ? 'on' : 'off'; }
-function saveSettingsLocal(){ try{ localStorage.setItem(SETTINGS_KEY, JSON.stringify(settings)); }catch(e){} }
-function saveSettings(){ saveSettingsLocal(); applyFurigana(); if(typeof scheduleSettingsSync==='function')scheduleSettingsSync(); }
+// Settings (SETTINGS_KEY/DEFAULT_SETTINGS/loadSettings/settings/setSettings/applyFurigana/
+// saveSettings/saveSettingsLocal) → settings-store.js (imported above). `settings` was
+// loaded at that module's eval; apply the furigana flip now.
 applyFurigana();
 
 /* ============================================================================
@@ -483,55 +458,11 @@ updateStartLabel();
 let session=null;
 
 // ---- Text-to-speech ----
-// Preferred path: the server's Google Translate TTS proxy (GET /v1/tts), which
-// gives consistent, good ja-JP audio — far better than the browser's uneven
-// speechSynthesis voices. It needs a server, so we only use it when the app is
-// served over http(s); over file:// (or if the request fails) we fall back to
-// speechSynthesis. Audio is available if EITHER path exists.
-const HTTP_SERVED = location.protocol==='http:' || location.protocol==='https:';
-const SPEECH_OK = typeof window!=='undefined' && 'speechSynthesis' in window;
-const TTS_OK = HTTP_SERVED || SPEECH_OK;     // is any audio available? (gates the Audio UI)
-let jaVoice=null;
-function pickVoice(){
-  if(!SPEECH_OK)return;
-  const vs=speechSynthesis.getVoices();
-  jaVoice = vs.find(v=>v.lang==='ja-JP') || vs.find(v=>v.lang&&v.lang.toLowerCase().startsWith('ja')) || null;
-}
-if(SPEECH_OK){ pickVoice(); speechSynthesis.addEventListener('voiceschanged',pickVoice); }
-// Browser-synth fallback.
-function speakSynth(text){
-  if(!SPEECH_OK)return;
-  try{
-    speechSynthesis.cancel();                 // never stack/overlap utterances
-    const u=new SpeechSynthesisUtterance(text);
-    u.lang='ja-JP'; u.rate=0.9; if(jaVoice)u.voice=jaVoice;
-    speechSynthesis.speak(u);
-  }catch(e){/* speech is best-effort; ignore */}
-}
-// Reused <audio> for the server path so a new play() interrupts the previous one.
-let ttsAudio=null;
-function speak(text){
-  if(!text)return;
-  if(SPEECH_OK)try{speechSynthesis.cancel();}catch(e){}   // stop any in-flight synth
-  if(HTTP_SERVED){
-    try{
-      if(!ttsAudio)ttsAudio=new Audio();
-      ttsAudio.src=API_BASE+'/v1/tts?text='+encodeURIComponent(text);  // public; no crossorigin attr → cross-origin media loads fine
-      const p=ttsAudio.play();
-      if(p&&p.catch)p.catch(()=>speakSynth(text));         // network/format/autoplay fail → synth
-    }catch(e){ speakSynth(text); }
-  }else{
-    speakSynth(text);
-  }
-}
-// ttsText (the kanji-for-accent text picker) lives in core/text.js.
-function speakWord(v){ speak(ttsText(v)); }
+// speak/speakSynth/speakWord + TTS_OK/HTTP_SERVED/SPEECH_OK → features/tts.js (imported
+// above). playReading stays here because it reads the flashcard `session`. The audio-UI
+// hide for the no-audio case is initTtsUI() (must run once the DOM exists).
 function playReading(){ if(session)speakWord(session.deck[session.i]); }
-// Hide the audio affordances entirely only when NO audio path is available.
-if(!TTS_OK){
-  const ar=document.getElementById('audioRow'); if(ar)ar.style.display='none';
-  const sb=document.getElementById('speakBtn'); if(sb)sb.style.display='none';
-}
+initTtsUI();
 // normKana + romajiToKana (typed-reading grading) live in core/kana.js.
 
 function startSession(){
@@ -1329,7 +1260,7 @@ async function pullSettingsCloud(){
   try{
     const r=await api('/v1/progress/'+SETTINGS_APP_KEY);
     if(r&&r.data&&typeof r.data==='object'){
-      settings=Object.assign({}, DEFAULT_SETTINGS, r.data);
+      setSettings(Object.assign({}, DEFAULT_SETTINGS, r.data));   // export let — reassign via the setter
       saveSettingsLocal(); applyFurigana(); paintPrefChips();
       if(typeof renderSettings==='function')renderSettings();
     }else{
