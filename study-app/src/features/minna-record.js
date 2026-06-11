@@ -10,7 +10,7 @@
 import { API_BASE } from '../config.js';
 import { account, api, setSyncStatus } from './cloud-core.js';
 import { settings } from '../settings-store.js';
-import { escapeHtml, clampKeep, formatDuration, validClip, findTrimBounds } from '../core/index.js';
+import { escapeHtml, clampKeep, formatDuration, validClip, findTrimBounds, waveformPeaks } from '../core/index.js';
 
 // Capability gates. Recording needs getUserMedia + MediaRecorder; both are absent over
 // insecure origins / old browsers. When unavailable we degrade to a quiet hint.
@@ -223,8 +223,9 @@ function playNative(src, clip, onDone) {
   }
 }
 
-// Stop ALL compare playback (native + take) and clear any lit compare buttons.
+// Stop ALL compare playback (native + take), the cursor loop, and any lit compare buttons.
 function stopCompare(control) {
+  stopCursors();
   stopNative();
   if (takeAudioEl) { try { takeAudioEl.pause(); } catch (e) {} }
   if (takePlayingBtn) { takePlayingBtn.classList.remove('playing'); takePlayingBtn = null; }
@@ -238,6 +239,113 @@ function playTakeOnce(id, onDone) {
   a.src = API_BASE + '/v1/minna/recordings/' + id;
   a.onended = a.onerror = () => { a.onended = a.onerror = null; if (onDone) onDone(); };
   a.play().catch(() => { if (onDone) onDone(); });
+}
+
+// ---------- dual waveform (Web Audio decode → canvas) ----------
+// Draw the newest take ("you") next to the native audio so timing/shape are comparable. Both
+// sources are already cached same-origin and cookie-gated, so we fetch the bytes WITH
+// credentials (mirroring the <audio crossOrigin='use-credentials'> path) and decodeAudioData
+// them. Canvas — not the app's usual hand-rolled SVG charts — because a per-sample waveform is
+// the wrong shape for SVG (heavy DOM) and the bytes are right there to decode. Decode FAILS
+// SAFE: any fetch/decode error (e.g. Safari can't decode an opus take when trimSilence is off,
+// or we're offline) just skips that waveform; the <audio>-driven compare buttons are unaffected.
+const WAVE_W = 140, WAVE_H = 30;
+const bufferCache = new Map();   // url → Promise<AudioBuffer|null> (promise cached so concurrent paints share one decode)
+function fetchAudioBuffer(url) {
+  if (bufferCache.has(url)) return bufferCache.get(url);
+  const p = (async () => {
+    try {
+      const res = await fetch(url, { credentials: 'include', cache: 'no-store' });
+      if (!res.ok) return null;
+      return await audioCtx().decodeAudioData(await res.arrayBuffer());
+    } catch (e) { return null; }
+  })();
+  bufferCache.set(url, p);
+  p.then(buf => { if (!buf) bufferCache.delete(url); });   // drop failures so a later paint can retry
+  return p;
+}
+function bufferToMono(buf) {
+  const n = buf.length, chs = buf.numberOfChannels, m = new Float32Array(n);
+  for (let c = 0; c < chs; c++) { const d = buf.getChannelData(c); for (let i = 0; i < n; i++) m[i] += d[i] / chs; }
+  return m;
+}
+function drawWave(canvas, mono, colorVar) {
+  const dpr = Math.min(window.devicePixelRatio || 1, 2);
+  canvas.width = Math.round(WAVE_W * dpr); canvas.height = Math.round(WAVE_H * dpr);
+  const ctx = canvas.getContext('2d'); if (!ctx) return;
+  ctx.scale(dpr, dpr);
+  ctx.clearRect(0, 0, WAVE_W, WAVE_H);
+  ctx.fillStyle = getComputedStyle(canvas).getPropertyValue(colorVar).trim() || '#888';
+  const bins = Math.max(1, Math.floor(WAVE_W / 2));   // 1px bar + 1px gap
+  const peaks = waveformPeaks(mono, bins);
+  const mid = WAVE_H / 2;
+  for (let i = 0; i < peaks.length; i++) {
+    const h = Math.max(1, peaks[i] * (WAVE_H - 2));   // 1px floor so a silent stretch still shows a baseline
+    ctx.fillRect(i * 2, mid - h / 2, 1, h);
+  }
+}
+// Decode `url` (sliced to `clip` for a conversation line), then paint it onto `canvas` in the
+// theme color `colorVar`. Re-checks isConnected because a re-render may replace the canvas
+// while the decode is in flight.
+async function paintWave(canvas, url, clip, colorVar) {
+  const buf = await fetchAudioBuffer(url);
+  if (!buf || !canvas.isConnected) return;
+  let mono = bufferToMono(buf);
+  const v = validClip(clip);
+  if (v) {
+    const s = Math.max(0, Math.floor(v[0] * buf.sampleRate));
+    const e = Math.min(mono.length, Math.floor(v[1] * buf.sampleRate));
+    if (e > s) mono = mono.subarray(s, e);
+  }
+  drawWave(canvas, mono, colorVar);
+}
+// Paint both waveforms for one control (you = newest take in --godan; native = the cached
+// vnjpclub audio, clip-sliced, in --ichidan). Reads all context off the control/dataset.
+function paintControlWaves(control) {
+  const youCanvas = control.querySelector('canvas.rec-wave[data-wave="you"]');
+  if (youCanvas) { const id = newestTakeId(control); if (id != null) paintWave(youCanvas, API_BASE + '/v1/minna/recordings/' + id, null, '--godan'); }
+  const natCanvas = control.querySelector('canvas.rec-wave[data-wave="native"]');
+  if (natCanvas) { const ctx = controlCtx(control); if (ctx.nativeSrc) paintWave(natCanvas, API_BASE + '/v1/minna/audio?src=' + encodeURIComponent(ctx.nativeSrc), ctx.clip, '--ichidan'); }
+}
+// Per-render hook (called from minna.js wireMinnaLesson after the body re-renders).
+export function paintCompareWaveforms(root) {
+  if (!root) return;
+  root.querySelectorAll('.rec-control').forEach(paintControlWaves);
+}
+
+// ---------- live playback cursor ----------
+// One rAF loop drives the cursor overlay(s) of whichever control is currently playing (only
+// one plays at a time — stopCompare clears the others). `you` tracks takeAudioEl, `native`
+// tracks nativeAudioEl (mapped into the clip window for a conversation line). Just moves an
+// absolutely-positioned div — no canvas redraw per frame.
+let cursorControl = null, cursorRaf = 0;
+function setCursor(control, wave, progress) {
+  const cur = control.querySelector('.rec-wave-wrap[data-wave="' + wave + '"] .rec-wave-cursor');
+  if (!cur) return;
+  if (progress == null) { cur.style.opacity = '0'; return; }
+  cur.style.opacity = '1';
+  cur.style.left = (Math.max(0, Math.min(1, progress)) * 100) + '%';
+}
+function tickCursors() {
+  const control = cursorControl;
+  if (!control) { cursorRaf = 0; return; }
+  if (takeAudioEl && !takeAudioEl.paused && isFinite(takeAudioEl.duration) && takeAudioEl.duration > 0)
+    setCursor(control, 'you', takeAudioEl.currentTime / takeAudioEl.duration);
+  else setCursor(control, 'you', null);
+  if (nativeAudioEl && !nativeAudioEl.paused) {
+    const v = controlCtx(control).clip;
+    let prog = null;
+    if (v) prog = (nativeAudioEl.currentTime - v[0]) / (v[1] - v[0]);
+    else if (isFinite(nativeAudioEl.duration) && nativeAudioEl.duration > 0) prog = nativeAudioEl.currentTime / nativeAudioEl.duration;
+    setCursor(control, 'native', prog);
+  } else setCursor(control, 'native', null);
+  cursorRaf = requestAnimationFrame(tickCursors);
+}
+function startCursors(control) { cursorControl = control; if (!cursorRaf) cursorRaf = requestAnimationFrame(tickCursors); }
+function stopCursors() {
+  if (cursorRaf) { cancelAnimationFrame(cursorRaf); cursorRaf = 0; }
+  if (cursorControl) cursorControl.querySelectorAll('.rec-wave-cursor').forEach(c => { c.style.opacity = '0'; });
+  cursorControl = null;
 }
 
 // ---------- HTML ----------
@@ -296,7 +404,21 @@ function compareHtml(lesson, itemKey, ctx) {
     : (ctx.needsClip ? `<span class="cmp-hint">mark this line's clip to compare</span>` : '');
   return `<div class="rec-compare"><span class="cmp-label">compare</span>
     <button class="cmp-btn" type="button" data-cmp="you"><svg class="ic" aria-hidden="true"><use href="#i-play"/></svg>you</button>
-    ${nativeBtns}</div>`;
+    ${nativeBtns}</div>${waveRowHtml(canNative)}`;
+}
+// The dual-waveform row under the compare buttons: a "you" wave always, a "native" wave when
+// native compare is playable. Canvases are painted (decoded) post-render by paintControlWaves;
+// each wrap holds the absolutely-positioned cursor overlay. width/height match WAVE_W/H so the
+// blank canvas is correctly sized before paint (and inside a closed <details>, where layout is
+// unavailable). The cursor starts hidden (opacity 0).
+function waveWrapHtml(wave, cap) {
+  return `<span class="rec-wave-wrap" data-wave="${wave}">
+      <canvas class="rec-wave" data-wave="${wave}" width="${WAVE_W}" height="${WAVE_H}"></canvas>
+      <span class="rec-wave-cursor" style="opacity:0"></span>
+      <span class="rec-wave-cap">${cap}</span></span>`;
+}
+function waveRowHtml(canNative) {
+  return `<div class="rec-wave-row">${waveWrapHtml('you', 'you')}${canNative ? waveWrapHtml('native', 'native') : ''}</div>`;
 }
 
 // ---------- capture state (one active recording at a time) ----------
@@ -307,6 +429,7 @@ function resetControl(control) {
   const loop = control.dataset.loop === '1';   // preserve the loop toggle across re-renders
   control.innerHTML = recordControlInner(lesson, itemKey, controlCtx(control));
   if (loop) { const lb = control.querySelector('[data-cmp="loop"]'); if (lb) { lb.classList.add('active'); lb.setAttribute('aria-pressed', 'true'); } }
+  paintControlWaves(control);   // (re)decode + draw this control's waveforms after the rebuild
 }
 
 // Records from the PERSISTENT speaking-mode stream — no getUserMedia per take, so there's no
@@ -405,19 +528,19 @@ function handleCompare(control, action, btn) {
   }
   if (action === 'you') {
     const id = newestTakeId(control); if (id == null) return;
-    litBtn(control, btn); playTakeOnce(id, () => clearBtn(btn));
+    litBtn(control, btn); startCursors(control); playTakeOnce(id, () => { clearBtn(btn); stopCursors(); });
     return;
   }
   if (action === 'native') {
     if (!nativePlayable(ctx)) return;
-    litBtn(control, btn); playNative(ctx.nativeSrc, ctx.clip, () => clearBtn(btn));
+    litBtn(control, btn); startCursors(control); playNative(ctx.nativeSrc, ctx.clip, () => { clearBtn(btn); stopCursors(); });
     return;
   }
   if (action === 'seq') {
     const id = newestTakeId(control); if (id == null || !nativePlayable(ctx)) return;
-    litBtn(control, btn);
+    litBtn(control, btn); startCursors(control);
     const runOnce = (after) => playNative(ctx.nativeSrc, ctx.clip, () => playTakeOnce(id, after));
-    const loopOrStop = () => { if (control.dataset.loop === '1' && btn.classList.contains('playing')) runOnce(loopOrStop); else clearBtn(btn); };
+    const loopOrStop = () => { if (control.dataset.loop === '1' && btn.classList.contains('playing')) runOnce(loopOrStop); else { clearBtn(btn); stopCursors(); } };
     runOnce(loopOrStop);
     return;
   }

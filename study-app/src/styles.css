@@ -564,6 +564,12 @@
   .cmp-loop{color:var(--muted)}
   .cmp-loop.active{background:var(--good);color:#fff;border-color:var(--good)}
   .cmp-hint{font-family:Georgia,serif;font-size:12px;color:var(--muted);opacity:.85}
+  /* Dual waveform (you vs native) — canvas painted by paintControlWaves; cursor is an overlay. */
+  .rec-wave-row{display:flex;flex-wrap:wrap;gap:12px;margin-top:7px;flex-basis:100%}
+  .rec-wave-wrap{position:relative;display:inline-block;width:140px;height:30px}
+  canvas.rec-wave{display:block;width:140px;height:30px}
+  .rec-wave-cursor{position:absolute;top:0;bottom:0;left:0;width:2px;background:var(--ink);opacity:0;pointer-events:none;transition:opacity .12s}
+  .rec-wave-cap{position:absolute;top:-2px;right:1px;font-family:"SF Mono",ui-monospace,monospace;font-size:9px;letter-spacing:.1em;text-transform:uppercase;color:var(--muted);opacity:.7;pointer-events:none}
   /* Conversation-line layout + clip marker. */
   .mn-line-body{flex:1;min-width:0}
   .mn-line-rec{display:flex;flex-wrap:wrap;align-items:center;gap:8px;margin-top:7px}

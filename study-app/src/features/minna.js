@@ -14,7 +14,7 @@ import { account, api, setSyncStatus } from './cloud-core.js';
 import { openAuth } from './cloud.js';
 import { loadCustom, saveCustom } from '../persistence/custom.js';
 import { rebuildData, refreshAfterVerbChange } from './custom-cards.js';
-import { loadLessonRecordings, recordControlHtml, wireMinnaRecord, speakingBarHtml, initMicSelector, isSpeakingMode, enterSpeakingMode, exitSpeakingMode } from './minna-record.js';
+import { loadLessonRecordings, recordControlHtml, wireMinnaRecord, paintCompareWaveforms, speakingBarHtml, initMicSelector, isSpeakingMode, enterSpeakingMode, exitSpeakingMode } from './minna-record.js';
 
 const MINNA_APP_KEY = 'minna';
 const MINNA_KEY = 'jpverbs_minna';
@@ -339,6 +339,7 @@ function wireMinnaLesson(n, L, body) {
   body.querySelectorAll('[data-aud]').forEach(b => b.addEventListener('click', () => mnPlay(b.dataset.aud, b)));
   wireMinnaRecord(body);   // delegated record/play/delete/compare handlers (attach-once)
   wireMinnaClips(body);    // delegated conversation-line clip-marker handlers (attach-once)
+  paintCompareWaveforms(body);   // decode + draw the you/native compare waveforms for this render
   // Speaking-mode toggle: enter/leave the persistent-mic state, then re-render so the record
   // controls appear/disappear. The toggle button is recreated each render, so wire per-render.
   const spk = body.querySelector('[data-speaking-toggle]');
