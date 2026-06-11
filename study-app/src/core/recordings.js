@@ -151,6 +151,29 @@ export function waveformPeaks(samples, bins) {
   return out;
 }
 
+// RMS (root-mean-square) amplitude of a PCM buffer, a perceptual loudness proxy. Measured over
+// just the spoken region (the caller passes the windowed samples) and used to normalize the
+// compare clips to ~equal volume. Empty → 0. Pure/DOM-free → unit-tested.
+export function rmsLevel(samples) {
+  if (!samples || !samples.length) return 0;
+  let s = 0;
+  for (let i = 0; i < samples.length; i++) s += samples[i] * samples[i];
+  return Math.sqrt(s / samples.length);
+}
+
+// Per-source playback gains (≤1 — `<audio>.volume` can't boost, only attenuate) that bring the
+// LOUDER of two clips down to match the quieter, so native and your take play at ~equal volume.
+// The quieter source keeps gain 1; the louder gets target/level, floored at `floor` so a
+// wildly-quiet take can't mute the native entirely (~−10 dB cap by default). A missing/silent
+// level (null/0) on either side → {a:1,b:1} (nothing to match against). Returns gains for
+// (a=la, b=lb). Pure → unit-tested.
+export function normGains(la, lb, floor = 0.3) {
+  if (!(la > 0) || !(lb > 0)) return { a: 1, b: 1 };
+  const target = Math.min(la, lb);
+  const g = (l) => Math.max(floor, Math.min(1, target / l));
+  return { a: g(la), b: g(lb) };
+}
+
 // Allowed compare-player playback speeds, slow→normal. Slowing the native audio down (pitch
 // preserved, set in minna-record.js) makes it easier to mimic; 1× is normal.
 export const COMPARE_SPEEDS = [0.5, 0.75, 1];

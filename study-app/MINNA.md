@@ -367,6 +367,10 @@ helpers in [src/core/recordings.js](src/core/recordings.js).
   draws, so what you see is what plays, and the cursor sweeps that region. Windows are computed
   from the decoded buffers and memoized; before a buffer decodes, playback falls back to the
   clip / whole file.
+- **Volume normalization** — native and your take are measured (`rmsLevel` over each spoken
+  window) and the louder is attenuated down to the quieter (`normGains`, ≤1 since `<audio>.volume`
+  can't boost; floored so a quiet take can't mute the native), so ▶ you / native / both all play
+  at ~equal volume — a fair A/B.
 - **Dual waveform + live cursor** — under each compare row, the newest take (vermilion) is drawn
   beside the native audio (indigo), each cropped to its spoken window, so timing/shape are
   visible and aligned. Both are fetched WITH credentials (the gated-audio path) and

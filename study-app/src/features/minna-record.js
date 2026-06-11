@@ -10,7 +10,7 @@
 import { API_BASE } from '../config.js';
 import { account, api, setSyncStatus } from './cloud-core.js';
 import { settings, saveSettings } from '../settings-store.js';
-import { escapeHtml, clampKeep, formatDuration, validClip, findTrimBounds, waveformPeaks, clampSpeed, COMPARE_SPEEDS } from '../core/index.js';
+import { escapeHtml, clampKeep, formatDuration, validClip, findTrimBounds, waveformPeaks, clampSpeed, COMPARE_SPEEDS, rmsLevel, normGains } from '../core/index.js';
 
 // Capability gates. Recording needs getUserMedia + MediaRecorder; both are absent over
 // insecure origins / old browsers. When unavailable we degrade to a quiet hint.
@@ -186,6 +186,7 @@ function setTakes(lesson, itemKey, takes) {
   recCache[lesson] = others.concat(takes).sort((a, b) => b.createdAt - a.createdAt);
 }
 
+const clamp01 = (v) => Math.max(0, Math.min(1, v));
 // Apply the compare-player speed to an <audio> element before play. preservesPitch keeps the
 // pronunciation clear when slowed (the whole point — mimic, don't chipmunk). Vendor-prefixed
 // for older Safari/Firefox.
@@ -204,7 +205,7 @@ function applySpeed(a) {
 // listener (Media-Fragments #t= is unreliable on <audio>). `window` null → play the whole file.
 // Returns a stop() that tears down WITHOUT firing onDone (for external stops); onDone fires once
 // on natural end / window end / error so the sequence + barrier players can chain.
-function playRange(a, window, onDone) {
+function playRange(a, window, volume, onDone) {
   let done = false;
   const tu = window ? () => { if (a.currentTime >= window.end) finish(); } : null;
   function finish() {
@@ -217,6 +218,7 @@ function playRange(a, window, onDone) {
   a.onended = finish; a.onerror = finish;
   if (tu) a.addEventListener('timeupdate', tu);
   applySpeed(a);
+  a.volume = clamp01(volume == null ? 1 : volume);   // normalization / bias gain
   const start = window ? window.start : 0;
   const go = () => { if (done) return; try { a.currentTime = start; } catch (e) {} a.play().catch(finish); };
   if (a.readyState >= 1) go(); else a.addEventListener('loadedmetadata', go, { once: true });
@@ -233,6 +235,7 @@ function playTake(id, btn) {
   if (takeStop) { takeStop(); takeStop = null; }
   if (btn && btn === takePlayingBtn && !takeAudioEl.paused) { takeAudioEl.pause(); btn.classList.remove('playing'); takePlayingBtn = null; return; }
   if (takePlayingBtn) takePlayingBtn.classList.remove('playing');
+  takeAudioEl.volume = 1;   // raw listen — full volume (compare playback may have left it normalized)
   takeAudioEl.src = API_BASE + '/v1/minna/recordings/' + id;
   takePlayingBtn = btn || null; if (btn) btn.classList.add('playing');
   takeAudioEl.onended = takeAudioEl.onerror = () => { if (takePlayingBtn) { takePlayingBtn.classList.remove('playing'); takePlayingBtn = null; } };
@@ -249,11 +252,11 @@ function ensureNativeAudio() {
   return nativeAudioEl;
 }
 function stopNative() { if (nativeStop) { nativeStop(); nativeStop = null; } if (nativeAudioEl) { try { nativeAudioEl.pause(); } catch (e) {} } }
-function playNative(src, window, onDone) {
+function playNative(src, window, volume, onDone) {
   const a = ensureNativeAudio();
   stopNative();
   a.src = API_BASE + '/v1/minna/audio?src=' + encodeURIComponent(src);
-  nativeStop = playRange(a, window, () => { nativeStop = null; if (onDone) onDone(); });
+  nativeStop = playRange(a, window, volume, () => { nativeStop = null; if (onDone) onDone(); });
 }
 
 // Stop ALL compare playback (native + take), the cursor loop, and any lit compare buttons.
@@ -266,11 +269,11 @@ function stopCompare(control) {
 }
 
 // Play a take by id over its play window (used by the compare player; no take-list button).
-function playTakeOnce(id, window, onDone) {
+function playTakeOnce(id, window, volume, onDone) {
   const a = ensureTakeAudio();
   stopTake();
   a.src = API_BASE + '/v1/minna/recordings/' + id;
-  takeStop = playRange(a, window, () => { takeStop = null; if (onDone) onDone(); });
+  takeStop = playRange(a, window, volume, () => { takeStop = null; if (onDone) onDone(); });
 }
 
 // ---------- dual waveform (Web Audio decode → canvas) ----------
@@ -334,6 +337,23 @@ function windowFor(url, clip) {
   const w = speechWindow(buf, clip);
   if (buf) windowCache.set(key, w);   // only memoize once a real buffer backed it
   return w;
+}
+// RMS loudness of a source over its spoken window — the level used to normalize native vs take
+// to ~equal volume. null until the buffer decodes (caller treats that as "don't normalize yet").
+const levelCache = new Map();
+function levelFor(url, clip) {
+  const v = validClip(clip);
+  const key = url + '|' + (v ? v[0] + ',' + v[1] : '');
+  if (levelCache.has(key)) return levelCache.get(key);
+  const buf = resolvedBuffers.get(url) || null;
+  if (!buf) return null;   // not decoded yet
+  const sr = buf.sampleRate;
+  const w = windowFor(url, clip) || { start: 0, end: buf.length / sr };
+  const mono = bufferToMono(buf);
+  const s = Math.max(0, Math.floor(w.start * sr)), e = Math.min(mono.length, Math.floor(w.end * sr));
+  const lvl = rmsLevel(e > s ? mono.subarray(s, e) : mono);
+  levelCache.set(key, lvl);
+  return lvl;
 }
 function drawWave(canvas, mono, colorVar) {
   const dpr = Math.min(window.devicePixelRatio || 1, 2);
@@ -579,6 +599,17 @@ function newestTakeId(control) {
 function litBtn(control, btn) { stopCompare(control); if (btn) btn.classList.add('playing'); }
 function clearBtn(btn) { if (btn) btn.classList.remove('playing'); }
 
+// Normalization gains for the currently-played native/take pair (≤1, attenuate-only): bring the
+// louder clip down so the two play at ~equal volume. Computed from each source's RMS over its
+// spoken window; gain 1 when a level isn't known yet (buffer still decoding) or there's no pair.
+let activeNativeGain = 1, activeTakeGain = 1;
+function setActiveGains(ctx, id) {
+  if (nativePlayable(ctx) && id != null) {
+    const g = normGains(levelFor(nativeUrl(ctx.nativeSrc), ctx.clip), levelFor(takeUrl(id), null));
+    activeNativeGain = g.a; activeTakeGain = g.b;
+  } else { activeNativeGain = 1; activeTakeGain = 1; }
+}
+
 function handleCompare(control, action, btn) {
   const ctx = controlCtx(control);
   // A second click on a lit button stops everything.
@@ -592,24 +623,27 @@ function handleCompare(control, action, btn) {
   if (action === 'you') {
     const id = newestTakeId(control); if (id == null) return;
     const tw = windowFor(takeUrl(id), null);
+    setActiveGains(ctx, id);
     litBtn(control, btn); activeTakeWindow = tw; activeNativeWindow = null; startCursors(control);
-    playTakeOnce(id, tw, () => { clearBtn(btn); stopCursors(); });
+    playTakeOnce(id, tw, activeTakeGain, () => { clearBtn(btn); stopCursors(); });
     return;
   }
   if (action === 'native') {
     if (!nativePlayable(ctx)) return;
     const nw = windowFor(nativeUrl(ctx.nativeSrc), ctx.clip);
+    setActiveGains(ctx, newestTakeId(control));
     litBtn(control, btn); activeNativeWindow = nw; activeTakeWindow = null; startCursors(control);
-    playNative(ctx.nativeSrc, nw, () => { clearBtn(btn); stopCursors(); });
+    playNative(ctx.nativeSrc, nw, activeNativeGain, () => { clearBtn(btn); stopCursors(); });
     return;
   }
   if (action === 'seq') {
     const id = newestTakeId(control); if (id == null || !nativePlayable(ctx)) return;
     const nw = windowFor(nativeUrl(ctx.nativeSrc), ctx.clip), tw = windowFor(takeUrl(id), null);
+    setActiveGains(ctx, id);
     litBtn(control, btn); startCursors(control);
     const runOnce = (after) => {
       activeNativeWindow = nw; activeTakeWindow = null;
-      playNative(ctx.nativeSrc, nw, () => { activeNativeWindow = null; activeTakeWindow = tw; playTakeOnce(id, tw, after); });
+      playNative(ctx.nativeSrc, nw, activeNativeGain, () => { activeNativeWindow = null; activeTakeWindow = tw; playTakeOnce(id, tw, activeTakeGain, after); });
     };
     const loopOrStop = () => { if (control.dataset.loop === '1' && btn.classList.contains('playing')) runOnce(loopOrStop); else { clearBtn(btn); stopCursors(); } };
     runOnce(loopOrStop);
@@ -617,16 +651,18 @@ function handleCompare(control, action, btn) {
   }
   if (action === 'both') {
     // Overlay native + your take, started together (separate <audio> elements) — each on its
-    // own SPOKEN WINDOW so the two onsets coincide despite the native's built-in padding. A
-    // 2-count barrier clears the button + cursors once BOTH finish (they differ in length).
-    // One-shot — loop stays seq-only. A second click hits the playing-button stop path above.
+    // own SPOKEN WINDOW so the two onsets coincide despite the native's built-in padding, and
+    // at NORMALIZED volume so neither drowns the other. A 2-count barrier clears the button +
+    // cursors once BOTH finish (they differ in length). One-shot — loop stays seq-only. A second
+    // click hits the playing-button stop path above.
     const id = newestTakeId(control); if (id == null || !nativePlayable(ctx)) return;
     const nw = windowFor(nativeUrl(ctx.nativeSrc), ctx.clip), tw = windowFor(takeUrl(id), null);
+    setActiveGains(ctx, id);
     litBtn(control, btn); activeNativeWindow = nw; activeTakeWindow = tw; startCursors(control);
     let pending = 2;
     const join = () => { if (--pending <= 0) { clearBtn(btn); stopCursors(); } };
-    playNative(ctx.nativeSrc, nw, join);
-    playTakeOnce(id, tw, join);
+    playNative(ctx.nativeSrc, nw, activeNativeGain, join);
+    playTakeOnce(id, tw, activeTakeGain, join);
     return;
   }
 }

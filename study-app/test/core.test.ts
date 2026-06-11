@@ -17,7 +17,7 @@ import {
   JLPT_TIERS, BOX_DAYS,
   clampKeep, convItemKey, formatDuration, KEEP_DEFAULT,
   validClip, resolveClip, clipLabel, findTrimBounds,
-  waveformPeaks, clampSpeed, COMPARE_SPEEDS,
+  waveformPeaks, clampSpeed, COMPARE_SPEEDS, rmsLevel, normGains,
 } from '../src/core/index.js';
 
 beforeEach(() => {
@@ -527,6 +527,22 @@ test('waveformPeaks: edge cases (empty / silent / bins>samples)', () => {
   const more = waveformPeaks(new Float32Array([0, 1, 0]), 6);      // bins > samples → ≥1 sample/bin, normalized
   expect(more.length).toBe(6);
   expect(Math.max(...more)).toBeCloseTo(1, 5);
+});
+
+test('rmsLevel is the root-mean-square amplitude (0 for empty)', () => {
+  expect(rmsLevel(new Float32Array(0))).toBe(0);
+  expect(rmsLevel(new Float32Array(100).fill(0.5))).toBeCloseTo(0.5, 6);   // constant 0.5
+  expect(rmsLevel(new Float32Array([1, -1, 1, -1]))).toBeCloseTo(1, 6);    // sign-independent
+});
+
+test('normGains brings the louder clip down to the quieter, attenuate-only + floored', () => {
+  expect(normGains(0.4, 0.2)).toEqual({ a: 0.5, b: 1 });   // a louder → 0.2/0.4; b quieter → 1
+  expect(normGains(0.2, 0.4)).toEqual({ a: 1, b: 0.5 });
+  expect(normGains(0.3, 0.3)).toEqual({ a: 1, b: 1 });
+  const g = normGains(1.0, 0.01);                          // wild gap floored at 0.3 (no full mute)
+  expect(g).toEqual({ a: 0.3, b: 1 });
+  expect(normGains(0, 0.5)).toEqual({ a: 1, b: 1 });       // silent/missing side → no-op
+  expect(normGains(0.5, null as any)).toEqual({ a: 1, b: 1 });
 });
 
 test('clampSpeed snaps to the nearest allowed step, default 1×', () => {
