@@ -1,0 +1,80 @@
+{
+  "lesson": 24,
+  "title": "Lesson 24",
+  "theme": "Giving & receiving — あげます・もらいます・くれます and the favor forms 〜てあげます／〜てもらいます／〜てくれます",
+  "source": {
+    "name": "vnjpclub.com",
+    "vocabUrl": "https://www.vnjpclub.com/en/minna-no-nihongo/lesson-24-vocabulary.html",
+    "grammarUrl": "https://www.vnjpclub.com/en/minna-no-nihongo/lesson-24-grammar.html",
+    "note": "Vocabulary, native-speaker audio, and example sentences aggregated from vnjpclub.com (Minna no Nihongo 第2版). For personal study."
+  },
+  "vocab": [
+    { "key": "mnn:24:0",  "kana": "くれます", "kanji": "", "context": "", "mean": "to give (me / my in-group)", "cat": "verb", "type": "ichidan", "trans": "t", "dict": "くれる", "dictRead": "くれる", "audio": "/Audio/minnamoi/bai24/00010101100001010.mp3" },
+    { "key": "mnn:24:1",  "kana": "なおします", "kanji": "直します", "context": "", "mean": "to repair, fix, correct", "cat": "verb", "type": "godan", "trans": "t", "dict": "直す", "dictRead": "なおす", "audio": "/Audio/minnamoi/bai24/00010101100001011.mp3" },
+    { "key": "mnn:24:2",  "kana": "つれていきます", "kanji": "連れて行きます", "context": "", "mean": "to take (someone) along", "cat": "verb", "type": "godan", "trans": "t", "dict": "連れて行く", "dictRead": "つれていく", "audio": "/Audio/minnamoi/bai24/00010101100001100.mp3" },
+    { "key": "mnn:24:3",  "kana": "つれてきます", "kanji": "連れて来ます", "context": "", "mean": "to bring (someone)", "cat": "verb", "type": "irregular", "trans": "t", "dict": "連れて来る", "dictRead": "つれてくる", "audio": "/Audio/minnamoi/bai24/00010101100001101.mp3" },
+    { "key": "mnn:24:4",  "kana": "おくります", "kanji": "送ります", "context": "人を〜", "mean": "to see (someone) off, escort", "cat": "verb", "type": "godan", "trans": "t", "dict": "送る", "dictRead": "おくる", "audio": "/Audio/minnamoi/bai24/00010101100001110.mp3" },
+    { "key": "mnn:24:5",  "kana": "しょうかいします", "kanji": "紹介します", "context": "", "mean": "to introduce", "cat": "verb", "type": "irregular", "trans": "t", "dict": "紹介する", "dictRead": "しょうかいする", "audio": "/Audio/minnamoi/bai24/00010101100001111.mp3" },
+    { "key": "mnn:24:6",  "kana": "あんないします", "kanji": "案内します", "context": "", "mean": "to show around, show the way", "cat": "verb", "type": "irregular", "trans": "t", "dict": "案内する", "dictRead": "あんないする", "audio": "/Audio/minnamoi/bai24/00010101100010000.mp3" },
+    { "key": "mnn:24:7",  "kana": "せつめいします", "kanji": "説明します", "context": "", "mean": "to explain", "cat": "verb", "type": "irregular", "trans": "t", "dict": "説明する", "dictRead": "せつめいする", "audio": "/Audio/minnamoi/bai24/00010101100010001.mp3" },
+    { "key": "mnn:24:8",  "kana": "おじいさん", "kanji": "", "context": "おじいちゃん", "mean": "grandfather; elderly man", "cat": "noun", "type": "", "trans": "", "dict": "おじいさん", "dictRead": "おじいさん", "audio": "/Audio/minnamoi/bai24/00010101100010010.mp3" },
+    { "key": "mnn:24:9",  "kana": "おばあさん", "kanji": "", "context": "おばあちゃん", "mean": "grandmother; elderly woman", "cat": "noun", "type": "", "trans": "", "dict": "おばあさん", "dictRead": "おばあさん", "audio": "/Audio/minnamoi/bai24/00010101100010011.mp3" },
+    { "key": "mnn:24:10", "kana": "じゅんび", "kanji": "準備", "context": "〜します", "mean": "preparation (〜します: to prepare)", "cat": "noun", "type": "", "trans": "", "dict": "準備", "dictRead": "じゅんび", "audio": "/Audio/minnamoi/bai24/00010101100010100.mp3" },
+    { "key": "mnn:24:11", "kana": "ひっこし", "kanji": "引っ越し", "context": "〜します", "mean": "moving house (〜します: to move)", "cat": "noun", "type": "", "trans": "", "dict": "引っ越し", "dictRead": "ひっこし", "audio": "/Audio/minnamoi/bai24/00010101100010101.mp3" },
+    { "key": "mnn:24:12", "kana": "［お］かし", "kanji": "［お］菓子", "context": "", "mean": "sweets, snacks", "cat": "noun", "type": "", "trans": "", "dict": "お菓子", "dictRead": "おかし", "audio": "/Audio/minnamoi/bai24/00010101100010110.mp3" },
+    { "key": "mnn:24:13", "kana": "ホームステイ", "kanji": "", "context": "", "mean": "homestay", "cat": "noun", "type": "", "trans": "", "dict": "ホームステイ", "dictRead": "ホームステイ", "audio": "/Audio/minnamoi/bai24/00010101100010111.mp3" },
+    { "key": "mnn:24:14", "kana": "ぜんぶ", "kanji": "全部", "context": "", "mean": "all, everything", "cat": "noun", "type": "", "trans": "", "dict": "全部", "dictRead": "ぜんぶ", "audio": "/Audio/minnamoi/bai24/00010101100011000.mp3" },
+    { "key": "mnn:24:15", "kana": "じぶんで", "kanji": "自分で", "context": "", "mean": "by oneself, on one's own", "cat": "adverb", "type": "", "trans": "", "dict": "自分で", "dictRead": "じぶんで", "audio": "/Audio/minnamoi/bai24/00010101100011001.mp3" }
+  ],
+  "grammar": [
+    {
+      "pattern": "あげます／もらいます／くれます (give / receive / give-to-me)",
+      "structure": "giver は receiver に N を あげます ／ receiver は giver に(から) N を もらいます ／ giver は (わたしに) N を くれます",
+      "explain": "Three verbs for handing things over, chosen by point of view. あげます = give (away from me / between others). もらいます = receive (from someone). くれます = give to ME or my in-group — you must use くれる, not あげる, when the receiver is the speaker's side. 姉が 本を くれました (my sister gave me a book), but 姉に 本を あげました (I gave my sister a book).",
+      "examples": [
+        { "jp": "サントスさんは わたしに コーヒーを くれました。", "en": "Mr. Santos gave me coffee." },
+        { "jp": "わたしは ミラーさんに 花を もらいました。", "en": "I received flowers from Mr. Miller." },
+        { "jp": "母は わたしに セーターを くれました。", "en": "My mother gave me a sweater." },
+        { "jp": "おばあちゃんは いつも お菓子を くれます。", "en": "Grandma always gives me sweets." }
+      ]
+    },
+    {
+      "pattern": "V-て あげます／もらいます／くれます (doing a favor)",
+      "structure": "V-て あげます (do for someone) ／ V-て もらいます (have someone do for you) ／ V-て くれます (someone does for me)",
+      "explain": "Attach the て-form + a giving/receiving verb to express a FAVOR — an action done for someone, not just an object. 〜てもらいます = you benefit from someone's action; 〜てくれます = someone does something for you (highlights gratitude); 〜てあげます = you do something for someone (can sound condescending toward superiors, so use it carefully).",
+      "examples": [
+        { "jp": "わたしは 友達に 本を 貸して あげました。", "en": "I lent my friend a book (as a favor)." },
+        { "jp": "わたしは 山田さんに レポートを 直して もらいました。", "en": "I had Mr. Yamada correct my report." },
+        { "jp": "母は 料理を 作って くれました。", "en": "My mother cooked for me." },
+        { "jp": "山田さんが 車で 送って くれました。", "en": "Mr. Yamada drove me home." }
+      ]
+    }
+  ],
+  "examples": [
+    { "jp": "佐藤さんは わたしに チョコレートを くれました。", "en": "Ms. Sato gave me chocolates." },
+    { "jp": "わたしは 山田さんに レポートを 直して もらいました。", "en": "Mr. Yamada corrected my report for me." },
+    { "jp": "母は わたしに セーターを 送って くれました。", "en": "My mother sent me a sweater." },
+    { "jp": "わたしは 木村さんに 本を 貸して あげました。", "en": "I lent Ms. Kimura a book." },
+    { "jp": "だれに すき焼きを 作って もらいましたか。 …松本さんに 作って もらいました。", "en": "Who made the sukiyaki for you? …Ms. Matsumoto made it for me." },
+    { "jp": "母の 日に お母さんに 何を して あげますか。 …ピアノを 弾いて あげます。", "en": "What will you do for your mother on Mother's Day? …I'll play the piano for her." },
+    { "jp": "パーティーの 料理は 全部 自分で 作りましたか。 …いいえ、ワンさんに 手伝って もらいました。", "en": "Did you make all the party food yourself? …No, Mr. Wang helped me." },
+    { "jp": "電車で 行きましたか。 …いいえ。山田さんが 車で 送って くれました。", "en": "Did you go by train? …No, Mr. Yamada drove me." }
+  ],
+  "conversation": {
+    "title": "手伝って くれませんか (Could you help me?)",
+    "audio": "/Audio/minnahonsatsu1/82.mp3",
+    "lines": [
+      { "role": "ミラー", "jp": "ワンさん、日曜日 引っ越しですね。手伝いに 行きましょうか。", "en": "Mr. Wang, you're moving on Sunday, right? Shall I come help?" },
+      { "role": "ワン", "jp": "ありがとう ございます。じゃ、すみませんが、9時ごろ お願いします。", "en": "Thank you. Then, sorry to trouble you — around 9 o'clock, please." },
+      { "role": "ミラー", "jp": "ほかに だれが 手伝いに 行きますか。", "en": "Who else is coming to help?" },
+      { "role": "ワン", "jp": "山田さんと シュミットさんが 来て くれます。", "en": "Mr. Yamada and Mr. Schmidt are coming." },
+      { "role": "ミラー", "jp": "車は？", "en": "What about a car?" },
+      { "role": "ワン", "jp": "山田さんに 貸して もらいます。", "en": "Mr. Yamada is lending me his." },
+      { "role": "ミラー", "jp": "昼ごはんは どう しますか。", "en": "What about lunch?" },
+      { "role": "ワン", "jp": "えーと…。", "en": "Um…" },
+      { "role": "ミラー", "jp": "わたしが お弁当を 持って 行きましょうか。", "en": "Shall I bring boxed lunches?" },
+      { "role": "ワン", "jp": "すみません。お願いします。", "en": "Sorry to trouble you — yes, please." },
+      { "role": "ミラー", "jp": "じゃ、日曜日に。", "en": "Okay, see you Sunday." }
+    ]
+  }
+}

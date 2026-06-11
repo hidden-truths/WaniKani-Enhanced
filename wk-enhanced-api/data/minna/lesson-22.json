@@ -1,0 +1,86 @@
+{
+  "lesson": 22,
+  "title": "Lesson 22",
+  "theme": "Noun-modifying clauses — describing a noun with a plain-form sentence (the book I bought…), plus 着る・はく・かぶる wearing verbs",
+  "source": {
+    "name": "vnjpclub.com",
+    "vocabUrl": "https://www.vnjpclub.com/en/minna-no-nihongo/lesson-22-vocabulary.html",
+    "grammarUrl": "https://www.vnjpclub.com/en/minna-no-nihongo/lesson-22-grammar.html",
+    "note": "Vocabulary, native-speaker audio, and example sentences aggregated from vnjpclub.com (Minna no Nihongo 第2版). For personal study."
+  },
+  "vocab": [
+    { "key": "mnn:22:0",  "kana": "きます", "kanji": "着ます", "context": "服を〜", "mean": "to wear, put on (upper body)", "cat": "verb", "type": "ichidan", "trans": "t", "dict": "着る", "dictRead": "きる", "audio": "/Audio/minnamoi/bai22/00010101011001111.mp3" },
+    { "key": "mnn:22:1",  "kana": "はきます", "kanji": "履きます", "context": "くつ・ズボンを〜", "mean": "to put on, wear (lower body: shoes, trousers)", "cat": "verb", "type": "godan", "trans": "t", "dict": "履く", "dictRead": "はく", "audio": "/Audio/minnamoi/bai22/00010101011010000.mp3" },
+    { "key": "mnn:22:2",  "kana": "かぶります", "kanji": "被ります", "context": "ぼうしを〜", "mean": "to put on, wear (on the head)", "cat": "verb", "type": "godan", "trans": "t", "dict": "被る", "dictRead": "かぶる", "audio": "/Audio/minnamoi/bai22/00010101011010001.mp3" },
+    { "key": "mnn:22:3",  "kana": "かけます", "kanji": "掛けます", "context": "めがねを〜", "mean": "to put on, wear (glasses)", "cat": "verb", "type": "ichidan", "trans": "t", "dict": "掛ける", "dictRead": "かける", "audio": "/Audio/minnamoi/bai22/00010101011010010.mp3" },
+    { "key": "mnn:22:4",  "kana": "します", "kanji": "", "context": "ネクタイを〜", "mean": "to wear (a tie, scarf, etc.); to do", "cat": "verb", "type": "irregular", "trans": "t", "dict": "する", "dictRead": "する", "audio": "/Audio/minnamoi/bai22/00010101011010011.mp3" },
+    { "key": "mnn:22:5",  "kana": "うまれます", "kanji": "生まれます", "context": "", "mean": "to be born", "cat": "verb", "type": "ichidan", "trans": "i", "dict": "生まれる", "dictRead": "うまれる", "audio": "/Audio/minnamoi/bai22/00010101011010100.mp3" },
+    { "key": "mnn:22:6",  "kana": "わたしたち", "kanji": "私達", "context": "", "mean": "we, us", "cat": "noun", "type": "", "trans": "", "dict": "私たち", "dictRead": "わたしたち", "audio": "/Audio/minnamoi/bai22/00010101011010101.mp3" },
+    { "key": "mnn:22:7",  "kana": "コート", "kanji": "", "context": "", "mean": "coat", "cat": "noun", "type": "", "trans": "", "dict": "コート", "dictRead": "コート", "audio": "/Audio/minnamoi/bai22/00010101011010110.mp3" },
+    { "key": "mnn:22:8",  "kana": "セーター", "kanji": "", "context": "", "mean": "sweater", "cat": "noun", "type": "", "trans": "", "dict": "セーター", "dictRead": "セーター", "audio": "/Audio/minnamoi/bai22/00010101011010111.mp3" },
+    { "key": "mnn:22:9",  "kana": "スーツ", "kanji": "", "context": "", "mean": "suit", "cat": "noun", "type": "", "trans": "", "dict": "スーツ", "dictRead": "スーツ", "audio": "/Audio/minnamoi/bai22/00010101011011000.mp3" },
+    { "key": "mnn:22:10", "kana": "ぼうし", "kanji": "帽子", "context": "", "mean": "hat, cap", "cat": "noun", "type": "", "trans": "", "dict": "帽子", "dictRead": "ぼうし", "audio": "/Audio/minnamoi/bai22/00010101011011001.mp3" },
+    { "key": "mnn:22:11", "kana": "めがね", "kanji": "眼鏡", "context": "〜を かけます", "mean": "glasses", "cat": "noun", "type": "", "trans": "", "dict": "眼鏡", "dictRead": "めがね", "audio": "/Audio/minnamoi/bai22/00010101011011010.mp3" },
+    { "key": "mnn:22:12", "kana": "ケーキ", "kanji": "", "context": "", "mean": "cake", "cat": "noun", "type": "", "trans": "", "dict": "ケーキ", "dictRead": "ケーキ", "audio": "/Audio/minnamoi/bai22/00010101011011011.mp3" },
+    { "key": "mnn:22:13", "kana": "［お］べんとう", "kanji": "お弁当", "context": "", "mean": "box lunch, bento", "cat": "noun", "type": "", "trans": "", "dict": "お弁当", "dictRead": "おべんとう", "audio": "/Audio/minnamoi/bai22/00010101011011100.mp3" },
+    { "key": "mnn:22:14", "kana": "ロボット", "kanji": "", "context": "", "mean": "robot", "cat": "noun", "type": "", "trans": "", "dict": "ロボット", "dictRead": "ロボット", "audio": "/Audio/minnamoi/bai22/00010101011011101.mp3" },
+    { "key": "mnn:22:15", "kana": "ユーモア", "kanji": "", "context": "", "mean": "humor", "cat": "noun", "type": "", "trans": "", "dict": "ユーモア", "dictRead": "ユーモア", "audio": "/Audio/minnamoi/bai22/00010101011011110.mp3" },
+    { "key": "mnn:22:16", "kana": "つごう", "kanji": "都合", "context": "〜が いい／わるい", "mean": "convenience (one's situation/availability)", "cat": "noun", "type": "", "trans": "", "dict": "都合", "dictRead": "つごう", "audio": "/Audio/minnamoi/bai22/00010101011011111.mp3" },
+    { "key": "mnn:22:17", "kana": "よく", "kanji": "", "context": "", "mean": "often, well", "cat": "adverb", "type": "", "trans": "", "dict": "よく", "dictRead": "よく", "audio": "/Audio/minnamoi/bai22/00010101011100000.mp3" }
+  ],
+  "grammar": [
+    {
+      "pattern": "[plain-form clause] + N (noun modification)",
+      "structure": "V(辞書形／た形／ている／ない)・いA(〜い)・なA(〜な)・N(〜の) ＋ N",
+      "explain": "A whole plain-form sentence can describe a noun, like an English relative clause — but it comes BEFORE the noun, with its verb/adjective in plain form. The clause's own subject is marked with が (not は). 「わたしが 買った 本」 = the book (that) I bought; 「電話して いる 人」 = the person who is on the phone.",
+      "examples": [
+        { "jp": "これは 私が 京都で 撮った 写真です。", "en": "This is a photo I took in Kyoto." },
+        { "jp": "電話して いる 人は ミラーさんです。", "en": "The person on the phone is Mr. Miller." },
+        { "jp": "着物を 着て いる 人は 渡辺さんです。", "en": "The person wearing a kimono is Ms. Watanabe." },
+        { "jp": "これは 母に もらった コートです。", "en": "This is the coat I got from my mother." }
+      ]
+    },
+    {
+      "pattern": "[modifying clause + N] as subject / object",
+      "structure": "… ［修飾節 ＋ N］ は／が／を …",
+      "explain": "A noun plus its modifying clause works as a single noun, so it can sit anywhere in the sentence — subject, object, topic. 「私が 買った 本」 can be the thing your mother is reading, or the thing she likes.",
+      "examples": [
+        { "jp": "母は 私が 買った 本を 読んで います。", "en": "My mother is reading the book I bought." },
+        { "jp": "カリナさんが かいた 絵は どれですか。", "en": "Which one is the painting Karina drew?" },
+        { "jp": "きのう 買った 傘を なくしました。", "en": "I lost the umbrella I bought yesterday." }
+      ]
+    },
+    {
+      "pattern": "V(辞書形) + 時間／約束／用事 (the time/promise to do ~)",
+      "structure": "V(辞書形) ＋ 時間／約束／用事 ＋ が あります／ありません",
+      "explain": "A very common noun modification: a dictionary-form verb modifies a noun like 時間 (time), 約束 (appointment), or 用事 (errand) — 'the time to do X', 'a promise to do X'.",
+      "examples": [
+        { "jp": "本を 読む 時間が ありません。", "en": "I don't have time to read books." },
+        { "jp": "日曜日は 友達に 会う 約束が あります。", "en": "On Sunday I have plans to meet a friend." }
+      ]
+    }
+  ],
+  "examples": [
+    { "jp": "これは ミラーさんが 作った ケーキです。", "en": "This is the cake Mr. Miller made." },
+    { "jp": "あそこに いる 人は ミラーさんです。", "en": "The person over there is Mr. Miller." },
+    { "jp": "きのう 習った ことばを 忘れました。", "en": "I forgot the words I learned yesterday." },
+    { "jp": "買い物に 行く 時間が ありません。", "en": "I don't have time to go shopping." },
+    { "jp": "カリナさんが かいた 絵は どれですか。 …あの 海の 絵です。", "en": "Which painting did Karina draw? …That one — the painting of the sea." },
+    { "jp": "山田さん、奥さんに 初めて 会った 所は どこですか。 …大阪城です。", "en": "Mr. Yamada, where did you first meet your wife? …At Osaka Castle." },
+    { "jp": "どんな うちが 欲しいですか。 …広い 庭が ある うちが 欲しいです。", "en": "What kind of house do you want? …One with a big garden." },
+    { "jp": "きのう 買った 傘を なくしました。", "en": "I lost the umbrella I bought yesterday." }
+  ],
+  "conversation": {
+    "title": "どんな アパートが いいですか (What kind of apartment would be good?)",
+    "audio": "/Audio/minnahonsatsu1/75.mp3",
+    "lines": [
+      { "role": "不動産屋", "jp": "どんな 部屋を お探しですか。", "en": "What kind of room are you looking for?" },
+      { "role": "ワン", "jp": "そうですね。家賃は 8万円ぐらいで、駅から 遠くない 所が いいですね。", "en": "Let's see… rent around 80,000 yen, and somewhere not far from the station would be good." },
+      { "role": "不動産屋", "jp": "では、こちらは いかがですか。駅から 10分で、家賃は 83,000円です。ダイニングキッチンと 和室ですね。", "en": "Then how about this one? Ten minutes from the station, rent is 83,000 yen. It has a dining-kitchen and a Japanese-style room." },
+      { "role": "ワン", "jp": "すみません。ここは 何ですか。", "en": "Excuse me — what is this here?" },
+      { "role": "不動産屋", "jp": "押し入れです。布団を 入れる 所ですよ。", "en": "That's the closet — the place where you put away the futon." },
+      { "role": "ワン", "jp": "そうですか。この 部屋、きょう 見る ことが できますか。", "en": "I see. Can I see this room today?" },
+      { "role": "不動産屋", "jp": "ええ。今から 行きましょうか。", "en": "Yes. Shall we go now?" }
+    ]
+  }
+}
