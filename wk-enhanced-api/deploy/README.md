@@ -116,11 +116,16 @@ COOKIE_DOMAIN=.wkenhanced.dev             # the cookie now spans apex + api.
 STUDY_APP_ORIGINS=https://wkenhanced.dev  # the credentialed-CORS allowlist
 ```
 
-**2. Bring up both containers.** The systemd unit's `docker compose up -d` now starts `api`
-+ `web`; the `web` image bakes `VITE_API_BASE=https://api.wkenhanced.dev` at build time
-(override via `STUDY_API_BASE`):
+**2. Bring up both containers.** The `web` image bakes `VITE_API_BASE=https://api.wkenhanced.dev`
+at build time (override via `STUDY_API_BASE`). **Run compose with the same `ENV_FILE` +
+`DATA_DIR` the systemd unit injects** — a bare `docker compose up` defaults `env_file` to a
+non-existent `./.env` and aborts, and (worse) an unset `DATA_DIR` bind-mounts an empty
+`./.compose-data` instead of the real SQLite under `/var/lib/wk-enhanced-api`, so the API
+boots against an empty DB (accounts/progress *look* gone). Or run `docker compose build` then
+`systemctl restart wk-enhanced-api` to let the unit supply both:
 ```bash
 cd /opt/wk-enhanced-api/wk-enhanced-api
+export ENV_FILE=/etc/wk-enhanced-api/env DATA_DIR=/var/lib/wk-enhanced-api  # what the systemd unit sets
 docker compose up -d --build               # builds study-app (vite→nginx) + api
 docker compose ps                           # wk-enhanced-api + wk-study-app both Up
 curl -sI http://127.0.0.1:8080/             # 200 text/html (the tool)
@@ -132,9 +137,15 @@ decommission commit in step 5), so the apex keeps working regardless of ingress 
 **3. Repoint the Cloudflare apex ingress** from the API (`:3000`) to the tool (`:8080`).
 `api.wkenhanced.dev` stays on `:3000`.
 
-- **Dashboard-managed** (Zero Trust → Networks → Tunnels → your tunnel → Public Hostnames):
-  edit the `wkenhanced.dev` hostname's Service from `HTTP localhost:3000` → `HTTP
-  localhost:8080` (add the hostname pointing at `:8080` if it didn't exist).
+- **Dashboard / token-managed tunnel** (Zero Trust → Networks → Tunnels → your tunnel →
+  Public Hostnames): edit the `wkenhanced.dev` hostname's Service from `HTTP localhost:3000`
+  → `HTTP localhost:8080` (add the hostname pointing at `:8080` if it didn't exist).
+  **At the zone apex this is not sufficient by itself** — adding a Public Hostname does *not*
+  auto-create the apex DNS record the way it does for sub-domains. Add it by hand under
+  **DNS → Records**: type `CNAME`, name `@`, target `<tunnel-uuid>.cfargotunnel.com`,
+  **Proxied** (orange). Skip it and `dig wkenhanced.dev` is empty / browsers show
+  `DNS_PROBE_FINISHED_NXDOMAIN` while `1.1.1.1` and the droplet resolve fine. The
+  `<tunnel-uuid>` is the `t` field of the `--token` (decode the base64) or the tunnel URL.
 - **Locally-managed** (`/etc/cloudflared/config.yml`):
   ```yaml
   ingress:
@@ -162,9 +173,18 @@ progress survives a reload + a second browser. Native みんなの日本語 audi
 **5. Decommission the API fallback** — once step 4 is confirmed, deploy the decommission
 commit (removes the API's static `web/` routes + `COPY web`) and `docker compose up -d
 --build`. `api.wkenhanced.dev/app.js` then 404s and `/` returns service-info JSON — the tool
-container is the only thing serving the app. Revert that one commit if anything regresses.
+container is the only thing serving the app.
 
-> Apex DNS note: Cloudflare flattens the CNAME at the zone apex automatically, so the proxied `wkenhanced.dev` record Just Works — no A record needed.
+**Rollback.** Repoint the apex ingress back to `:3000` and restore the pre-cut-over API image
+(the old image still serves `web/` at `/`). Heads-up: `docker compose up --build` on a
+**containerd** image store prunes the old *untagged* image, so there's no instant `docker tag`
+retag unless you pre-tagged it. Two paths: (a) pre-built tagged snapshot — `docker build -t
+wk-enhanced-api:rollback-<sha> .` from a `git worktree` at the old sha (tagged images survive
+the prune), then `docker tag wk-enhanced-api:rollback-<sha> wk-enhanced-api:local && docker
+compose up -d --no-build api && docker compose stop web`; (b) rebuild from source — `git
+checkout <old-sha> && ENV_FILE=… DATA_DIR=… docker compose up -d --build --remove-orphans`.
+
+> Apex DNS note: Cloudflare CNAME-flattens the apex, so a **manually-added** proxied `CNAME @ → <tunnel-uuid>.cfargotunnel.com` resolves with no A record needed — but for a token/dashboard-managed tunnel you must add that record yourself (the Public Hostname UI won't create it at the apex). See step 3.
 
 ## Local bring-up of the Compose stack
 
