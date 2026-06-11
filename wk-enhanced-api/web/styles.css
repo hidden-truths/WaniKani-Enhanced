@@ -477,6 +477,9 @@
   .mn-ctx{color:var(--muted);font-size:12px;font-family:"SF Mono",ui-monospace,monospace;margin-left:2px}
   .mn-mean{font-size:14px}
   .mn-pos{display:inline-block;font-family:"SF Mono",ui-monospace,monospace;font-size:9px;letter-spacing:.1em;color:var(--muted);border:1px solid var(--line);border-radius:2px;padding:1px 5px;margin-left:8px;vertical-align:1px}
+  /* iTalki marker — words covered in the maintainer's iTalki lessons (the `italki`
+     flag in the lesson JSON). A filled indigo chip so they pop in the vocab table. */
+  .mn-italki{display:inline-block;font-family:"SF Mono",ui-monospace,monospace;font-size:9px;letter-spacing:.06em;background:var(--ichidan);color:#fff;border-radius:3px;padding:1px 5px;margin-left:6px;vertical-align:1px}
   /* Audio button — reuse .speak-btn look, add a playing state. */
   .speak-btn.playing{background:var(--ichidan);color:#fff;border-color:var(--ichidan)}
   /* Grammar cards. */

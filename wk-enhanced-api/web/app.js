@@ -1848,6 +1848,12 @@ const mnAudioBtn=(src)=> src?`<button class="speak-btn" type="button" data-aud="
 // Build a deck card from a Minna vocab item, using the DICTIONARY form as the
 // headword (the deck is dictionary-form; the textbook ます-form is kept in tip).
 function minnaCard(item, lesson){
+  // Tags drive both the Browse tag chips and the Source filter facet. Every Minna
+  // card carries みんなの日本語 + its lesson; words flagged `italki:true` in the
+  // lesson JSON (the subset actually covered in the maintainer's iTalki lessons)
+  // also get the iTalki tag + a boolean flag the Source facet matches on.
+  const tags=['みんなの日本語','mnn-l'+lesson];
+  if(item.italki)tags.push('iTalki');
   return {
     jp: item.dict || item.kanji || item.kana,
     read: item.dictRead || item.kana,
@@ -1856,25 +1862,36 @@ function minnaCard(item, lesson){
     type: item.type || '',
     jlpt: item.jlpt || 'N4',
     trans: item.trans || '',
-    tags: ['みんなの日本語','mnn-l'+lesson],
+    tags,
     mnem: '',
     tip: 'みんなの日本語 L'+lesson+' · textbook form: '+(item.kanji||item.kana)+(item.context?' '+item.context:''),
     ex: [],
-    custom:true, minna:true, minnaKey:item.key, minnaLesson:lesson,
+    custom:true, minna:true, italki:!!item.italki, minnaKey:item.key, minnaLesson:lesson,
   };
 }
 function minnaInDeck(key){ return loadCustom().verbs.some(v=>v.minnaKey===key); }
 // Add every not-yet-added vocab word for a lesson to the deck. Idempotent
 // (skips words whose minnaKey is already present). Returns the count added.
 function activateMinnaVocab(lesson, vocab){
-  const cs=loadCustom(); let added=0;
+  const cs=loadCustom(); let added=0, updated=0;
+  // Signature of the metadata the user cares about seeing change (tags + iTalki).
+  const sig=v=>(v.tags||[]).join('|')+'·'+(v.italki?'1':'0');
   vocab.forEach(item=>{
-    if(cs.verbs.some(v=>v.minnaKey===item.key))return;
-    const card=minnaCard(item,lesson);
-    cs.seq=(cs.seq||100)+1; card.rank=cs.seq; cs.verbs.push(card); added++;
+    const fresh=minnaCard(item,lesson);
+    const existing=cs.verbs.find(v=>v.minnaKey===item.key);
+    if(existing){
+      // Re-activation patches the textbook-derived metadata onto an already-added
+      // card so it picks up new info (notably the iTalki tag) WITHOUT losing its
+      // rank — the card's SRS progress is keyed by rank, so we preserve it.
+      const changed=sig(existing)!==sig(fresh);
+      Object.assign(existing,{tags:fresh.tags,italki:fresh.italki,mean:fresh.mean,cat:fresh.cat,type:fresh.type,trans:fresh.trans,tip:fresh.tip});
+      if(changed)updated++;
+      return;
+    }
+    cs.seq=(cs.seq||100)+1; fresh.rank=cs.seq; cs.verbs.push(fresh); added++;
   });
-  if(added){ saveCustom(cs); rebuildData(); refreshAfterVerbChange(); }
-  return added;
+  if(added||updated){ saveCustom(cs); rebuildData(); refreshAfterVerbChange(); }
+  return {added, updated};
 }
 
 // --- Render ---
@@ -1942,7 +1959,7 @@ function minnaVocabSection(L){
   const rows=L.vocab.map(v=>`<tr>
       <td class="v-audio">${mnAudioBtn(v.audio)}</td>
       <td><div class="mn-kanji jp">${escapeHtml(v.kanji||v.kana)}</div><div class="mn-kana jp">${escapeHtml(v.kana)}${v.context?` <span class="mn-ctx">${escapeHtml(v.context)}</span>`:''}</div></td>
-      <td class="mn-mean">${escapeHtml(v.mean)}<span class="mn-pos">${escapeHtml(CAT_LABEL[v.cat]||v.cat||'')}</span></td>
+      <td class="mn-mean">${escapeHtml(v.mean)}<span class="mn-pos">${escapeHtml(CAT_LABEL[v.cat]||v.cat||'')}</span>${v.italki?'<span class="mn-italki" title="Covered in your iTalki lesson">iTalki</span>':''}</td>
       <td style="text-align:right">${minnaInDeck(v.key)?'<span class="v-in">✓</span>':''}</td>
     </tr>`).join('');
   return mnSection('Vocabulary', L.vocab.length, `<table class="mn-vocab"><tbody>${rows}</tbody></table>`, true);
@@ -1979,9 +1996,12 @@ function wireMinnaLesson(n, L, body){
   body.querySelectorAll('[data-aud]').forEach(b=>b.addEventListener('click',()=>mnPlay(b.dataset.aud,b)));
   const add=body.querySelector('#mnAddDeck');
   if(add)add.addEventListener('click',()=>{
-    const added=activateMinnaVocab(n, L.vocab||[]);
+    const {added,updated}=activateMinnaVocab(n, L.vocab||[]);
     renderMinnaLesson(n, body);
-    setSyncStatus(added?('✓ added '+added+' word'+(added===1?'':'s')+' to your deck'):'already in your deck');
+    const msg=added ? '✓ added '+added+' word'+(added===1?'':'s')+' to your deck'
+      : updated ? '✓ updated '+updated+' word'+(updated===1?'':'s')
+      : 'already in your deck';
+    setSyncStatus(msg);
   });
   const ta=body.querySelector('#mnNotes');
   if(ta){
