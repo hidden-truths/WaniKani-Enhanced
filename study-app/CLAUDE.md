@@ -3,17 +3,37 @@
 ## What this is
 
 The **日常日本語 study app**: a standalone **Vite** project (ES modules, no framework).
-[index.html](index.html) loads one entry — [src/app.js](src/app.js), the DOM/render/
-feature glue — which imports:
+[index.html](index.html) loads one entry — [src/main.js](src/main.js), a thin boot file
+that owns NO feature logic: it builds the initial deck and calls each module's `initX()` in
+order. The actual DOM/render/feature glue is split into **`src/features/*`** modules:
 
+- **`src/features/`** — one module per surface/concern: `chrome` (tabs/font/theme), `io`
+  (export/import), `deck` (filter model + picker + forecast + due banner; owns `cfg`),
+  `flashcard` (session lifecycle; owns `session`), `browse` (grid + detail modal + topic
+  groups; owns `bcfg`), `stats` (charts), `custom-cards` (rebuildData + #verbModal CRUD),
+  `settings-page`, `minna` (the みんなの日本語 dashboard), `a11y` (roving tabindex + chip
+  annotations), `tts`, `render-helpers` (shared `jishoUrl`/`provenanceBadge`), and the cloud
+  pair `cloud-core` (`api`/`account`/`setSyncStatus`) + `cloud` (sync trios + auth + bootAuth).
 - **`src/core/`** — the PURE, unit-tested core (DOM-free): `srs`, `forecast`, `facets`,
   `examples`, `kana`, `pitch`, `text`, `minna`, behind a barrel `core/index.js`.
 - **`src/state.js`** — the ONE shared mutable hub: `state.store` (progress), `state.DATA`
   (the live deck), `state.minnaStore`, `state.MAXRANK`, `state.BUILTIN_RANK_BY_JP`, plus
   `attachLevels()`. An object whose **properties are mutated** (not `export let` — importers
   can't reassign those, and the test does `state.store = {...}`).
+- **`src/persistence/`** (localStorage: `store`/`custom`), **`src/settings-store.js`**
+  (synced prefs + `setSettings`), **`src/config.js`** (`API_BASE`/`localDay`), and
+  **`src/sync-bus.js`** — the seam where persistence schedules cloud pushes (`sync.progress`/
+  `custom`/`settings`) that `cloud.js` registers, replacing the old `typeof` forward-refs.
 - **`src/data/`** — `verbs.js` (`export const VERBS`/`ACCENTS`) + `examples.js`
   (`export const EXAMPLES`).
+
+**Module wiring.** Cross-feature calls use direct imports (live bindings — safe even when
+circular, e.g. cloud⇄minna, because every call fires at event/runtime, not module-eval). A
+few callback seams in `main.js` break would-be eval-time cycles: `registerStartSession`
+(deck→flashcard), `registerCardActions` (browse→custom-cards), `registerSessionHooks`
+(flashcard←cloud's logSession/maybeShowSignup). Single-writer mutable singletons are plain
+`export let`/`const` in their owner module (`cfg`/`bcfg`/`session`/`account`); `settings` is
+the one two-writer case, reassigned via `setSettings()`.
 
 Built + content-hashed by Vite, served by its **own nginx container** at the apex
 `https://wkenhanced.dev` — **separate** from the API container at `api.wkenhanced.dev`
@@ -36,7 +56,8 @@ Backend (auth, progress, cookie, the cross-origin CORS) is the server's:
    `bun dev` in `../wk-enhanced-api` (→ :3000) for accounts/TTS/Minna. `bun run build`
    → `dist/`; `bun run preview` serves the built bundle. Edit modules under `src/`:
    pure logic in `src/core/*`, shared state in `src/state.js`, DOM/feature glue in
-   `src/app.js`, markup in `index.html`, styles in `src/styles.css` (imported by app.js).
+   `src/features/*` (boot order in `src/main.js`), markup in `index.html`, styles in
+   `src/styles.css` (imported by `main.js`).
 2. **Verify visually.** This is a UI; screenshot the change. Drive it with the
    browser-preview tooling (`.claude/launch.json` has both `study-app` and
    `wk-enhanced-api` configs). See the preview caveat in the dead-ends below. **Run
@@ -65,12 +86,13 @@ Markup: `#panel-study` (flashcard setup → card stage → done), `#panel-browse
 lesson dashboard — near-empty in markup, filled at runtime by `renderMinna`), plus
 the header/toolbar, tabs, and the auth modal + sign-up banner.
 
-`verbs.js` holds the `VERBS` dataset. `app.js` sections (top to bottom): `STORAGE`
-(localStorage + SRS scheduling + leech logic) → `SETTINGS` (DB-synced prefs) →
-`FONT/THEME` → `TAB NAV` → `EXPORT/IMPORT` → `DECK BUILDING` (`passes()` +
-`wireFacets`) → `FLASHCARD` (session lifecycle + TTS) → `BROWSE` (+ detail modal) →
-`STATS+CHARTS` → `CUSTOM VERBS` (modal CRUD) → `CLOUD ACCOUNTS + SYNC` →
-`SETTINGS PAGE`. Key functions by area:
+`data/verbs.js` holds the `VERBS` dataset. The old single-file `app.js` sections are now
+one module each under `src/features/*` (the section names map 1:1 to filenames): persistence
+(`persistence/store`+`custom`) + SRS (`core/srs`) → `settings-store` → `chrome`
+(font/theme/tabs) → `io` (export/import) → `deck` (`passes()` + `wireFacets`, owns `cfg`) →
+`flashcard` (session lifecycle, owns `session`) → `browse` (+ detail modal, owns `bcfg`) →
+`stats` → `custom-cards` (modal CRUD + `rebuildData`) → `cloud-core`+`cloud` → `settings-page`
+→ `minna`. `main.js` calls their `initX()` in that order. Key functions by area:
 
 - **SRS/leech (pure, the core logic):** `cardStat`, `scheduleCard`, `isDue`,
   `dueCards`, `rollingAcc`, `isLeech`, `leeches`. Leitner boxes, not SM-2.
@@ -472,6 +494,21 @@ Component contracts you must preserve:
 
 Commits, newest first (all on `main`; touch the split web/ files + `src/` where noted):
 
+1. **`app.js` → `features/*` + a thin `main.js` (10 commits).** Peeled the 1934-line
+   single-module `src/app.js` into one feature module per section (`chrome`/`io`/`deck`/
+   `flashcard`/`browse`/`stats`/`custom-cards`/`settings-page`/`minna`/`a11y`/`tts`/
+   `cloud-core`+`cloud`/`render-helpers`), plus `config.js`, `persistence/*`,
+   `settings-store.js`, and `sync-bus.js`. `main.js` is now the entry and owns no feature
+   logic — it builds the initial deck and calls each module's `initX()` in boot order;
+   `index.html` points at it. The old `typeof X==='function'` forward-ref guards became real
+   imports; the few would-be eval-time cycles are broken by callback seams
+   (`registerStartSession`/`registerCardActions`/`registerSessionHooks`) and by the
+   `sync-bus` (persistence schedules pushes; `cloud` registers the real ones). Mutable
+   singletons stay single-writer `export let` in their owner (`cfg`/`bcfg`/`session`/
+   `account`), except `settings` (two writers → `setSettings`). Behavior unchanged; the
+   33-test core suite + `bun run build` gate each step, and the full flow (sessions, browse,
+   stats, custom CRUD, cross-origin sign-in + all four sync blobs + session log) was
+   preview-verified against the dev API. No new features — pure structure.
 1. **みんなの日本語: content parity + dedup + pitch accent (4 commits).** Fixes for
    second-class activated cards. (1) **TTS** sends the kanji headword (`ttsText`/
    `speakWord`) so Google applies the right pitch for homographs (橋≠箸). (2) **Dedup**:

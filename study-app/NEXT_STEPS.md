@@ -32,10 +32,14 @@ This app was extracted from `wk-enhanced-api/web/` into its own standalone **Vit
 - **Deploy (manual — the only non-code work):** the Cloudflare apex-ingress repoint + the
   droplet env (`COOKIE_DOMAIN`, `STUDY_APP_ORIGINS`). The ordered, zero-downtime runbook is
   in [../wk-enhanced-api/deploy/README.md](../wk-enhanced-api/deploy/README.md).
-- **Optional follow-up:** `src/app.js` is still one (large) module — the DOM/feature glue.
-  Peeling it further into `features/*` modules (flashcard, browse, stats, minna, cloud, …)
-  with callback registration in a thin `main.js` is the natural next refinement, but the
-  high-value win (a tested pure core, real modules, Vite) already landed.
+- ~~**Optional follow-up:** peel `src/app.js` into `features/*` modules~~ — **shipped.**
+  The 1934-line `app.js` is now one module per section under `src/features/*` (chrome, io,
+  deck, flashcard, browse, stats, custom-cards, settings-page, minna, a11y, tts, cloud-core
+  + cloud, render-helpers), plus `config`/`persistence/*`/`settings-store`/`sync-bus`. A thin
+  `src/main.js` is the entry — it owns no feature logic, just builds the initial deck and
+  calls each module's `initX()` in boot order. Forward-ref `typeof` guards became real
+  imports; eval-time cycles are broken by callback seams + the sync-bus. Behavior unchanged,
+  verified end-to-end against the dev API. See the CLAUDE.md change-log entry.
 
 The original plan + constraints are kept below as the historical record.
 

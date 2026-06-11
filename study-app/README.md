@@ -14,7 +14,8 @@ fonts, JSON export/import, and optional **email/password accounts that sync
 progress AND your custom cards across devices**.
 
 A **Vite** app (ES modules, no framework). [index.html](index.html) loads one entry
-([src/app.js](src/app.js) — the DOM/feature glue) which imports the pure, unit-tested core
+([src/main.js](src/main.js) — a thin boot file that wires the feature modules) on top of the
+DOM/feature glue in [src/features/](src/features), the pure, unit-tested core
 ([src/core/](src/core)), the shared mutable state hub ([src/state.js](src/state.js)), and
 the data modules ([src/data/](src/data) — the `VERBS` dataset + `EXAMPLES` leveled
 sentences). It's a **standalone project** served by its own static (nginx) container at the
@@ -113,8 +114,9 @@ Server-side details (auth model, cookie, tables) live in
 
 ## Tech notes
 
-- **Vite + ES modules** — one entry (`src/app.js`) imports the pure core
-  (`src/core/*`), the state hub (`src/state.js`), and the data modules (`src/data/*`,
+- **Vite + ES modules** — one entry (`src/main.js`) wires the feature modules
+  (`src/features/*`) on top of the pure core (`src/core/*`), the state hub
+  (`src/state.js`), and the data modules (`src/data/*`,
   `export const VERBS`/`EXAMPLES`). Built + content-hashed by Vite, served by an nginx
   container. See [CLAUDE.md](CLAUDE.md) for the full module map.
 - **Functional color**: vermilion = godan, indigo = ichidan, stone = irregular,
