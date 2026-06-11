@@ -84,8 +84,8 @@ function refreshAllViews() {
 function updateAccountChip() {
   const btn = document.getElementById('accountBtn');
   // The account email is escapeHtml'd before interpolation (user-controlled → XSS otherwise).
-  if (account) { btn.innerHTML = '<svg class="ic" aria-hidden="true"><use href="#i-cloud-check"/></svg>' + escapeHtml(account.email); btn.title = 'Signed in — click to sign out'; }
-  else { btn.innerHTML = '<svg class="ic" aria-hidden="true"><use href="#i-user"/></svg>Sign in'; btn.title = 'Sign in to sync progress'; setSyncStatus(''); }
+  if (account) { btn.innerHTML = '<svg class="ic" aria-hidden="true"><use href="#i-cloud-check"/></svg><span class="nav-acct-name">' + escapeHtml(account.email) + '</span>'; btn.title = 'Signed in — click to sign out'; }
+  else { btn.innerHTML = '<svg class="ic" aria-hidden="true"><use href="#i-user"/></svg><span class="nav-acct-name">Sign in</span>'; btn.title = 'Sign in to sync progress'; setSyncStatus(''); }
 }
 
 /* ---- Auth modal ---- */

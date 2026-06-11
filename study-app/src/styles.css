@@ -54,10 +54,25 @@
   body{background:var(--paper);color:var(--ink);font-family:Georgia,serif;line-height:1.55;-webkit-font-smoothing:antialiased}
   .jp{font-family:var(--jp-font)}
   .wrap{max-width:1100px;margin:0 auto;padding:0 20px 80px}
-  header{padding:40px 20px 22px;max-width:1100px;margin:0 auto}
-  .kicker{font-family:"SF Mono",ui-monospace,Menlo,monospace;font-size:11px;letter-spacing:.28em;text-transform:uppercase;color:var(--godan);margin-bottom:10px}
-  h1{font-size:clamp(32px,6vw,60px);font-weight:900;letter-spacing:-.02em;line-height:.96}
-  h1 .s{display:block;font-size:.42em;color:var(--muted);font-weight:400;letter-spacing:.1em;margin-top:6px}
+
+  /* ---- Sticky top navbar ----------------------------------------------------
+     Anchored to the top: app title (left), a #navExtra slot where context controls
+     dock (the みんなの日本語 speaking/compare controls — see minna.js), and the global
+     action buttons (right). Stays put while the page scrolls, so docked controls
+     float at the top. */
+  .navbar{position:sticky;top:0;z-index:50;background:var(--paper);border-bottom:1px solid var(--line)}
+  .nav-inner{max-width:1100px;margin:0 auto;padding:9px 20px;display:flex;align-items:center;gap:14px}
+  .nav-title{font-family:"SF Mono",ui-monospace,Menlo,monospace;font-weight:700;font-size:16px;letter-spacing:.02em;color:var(--ink);white-space:nowrap;display:inline-flex;align-items:baseline;gap:9px}
+  .nav-title .nav-sub{font-size:9px;letter-spacing:.22em;text-transform:uppercase;color:var(--godan);font-weight:400}
+  .nav-extra{flex:1;display:flex;justify-content:center;min-width:0}   /* docked context controls */
+  .nav-extra:empty{flex:1}
+  .nav-actions{display:flex;align-items:center;gap:6px;margin-left:auto}
+  .nav-btn{display:inline-flex;align-items:center;gap:6px;font-family:"SF Mono",ui-monospace,monospace;font-size:12px;border:1px solid var(--line);background:transparent;color:var(--ink);padding:6px 11px;border-radius:2px;cursor:pointer;transition:all .15s}
+  .nav-btn:hover{border-color:var(--godan);color:var(--godan)}
+  .nav-btn .ic{font-size:15px}
+  .nav-btn.icon-only{padding:6px 8px}
+  .nav-btn.icon-only .ic{font-size:16px}
+  .nav-acct-name{max-width:190px;overflow:hidden;text-overflow:ellipsis;white-space:nowrap}
 
   /* Tabs — the three top-level views. .active is driven by TAB NAV in JS. */
   .tabs{display:flex;gap:4px;border-bottom:1px solid var(--line);max-width:1100px;margin:18px auto 0;padding:0 20px}
@@ -154,6 +169,12 @@
     .chip,.topic-toggle{min-height:40px}
     .tab{min-height:44px}
     .speak-btn{width:40px;height:40px}
+    /* Navbar wraps on narrow screens: title + actions on the first row, the docked
+       context controls (#navExtra) drop to a full-width second row. */
+    .nav-inner{flex-wrap:wrap;gap:8px 10px}
+    .nav-extra{order:3;flex-basis:100%;justify-content:flex-start}
+    .nav-extra:empty{display:none}
+    .nav-acct-name{max-width:120px}
   }
   /* Active-filter recap line: a quiet one-liner summarizing the current query
      (incl. collapsed topics) so the whole filter state is legible at a glance. */
@@ -371,10 +392,7 @@
 
   .hint{text-align:center;color:var(--muted);font-size:12px;font-family:"SF Mono",ui-monospace,monospace;margin:18px 0 6px}
   .srs-legend{font-family:"SF Mono",ui-monospace,monospace;font-size:10px;color:var(--muted);margin-top:10px;line-height:1.5}
-  .topbar{display:flex;justify-content:space-between;align-items:center;gap:12px;flex-wrap:wrap}
-  /* Wrap the toolbar buttons instead of overflowing the viewport on narrow screens
-     (5 buttons exceed ~390px). They wrap right-aligned under the account chip. */
-  .toolbar{display:flex;gap:6px;flex-wrap:wrap;justify-content:flex-end}
+  .set-actions{display:inline-flex;gap:6px}   /* Settings "Backup" row: Export / Import buttons */
   /* ---- Motion: entrance animations -----------------------------------------
      Subtle, short, easing-out. Each runs on the state class being (re)applied, so
      re-renders replay them. ALL are killed by prefers-reduced-motion below (note
@@ -409,9 +427,11 @@
 
   /* ---- Account modal + cloud-sync chip ----------------------------------
      The app works fully offline (localStorage); signing in mirrors progress
-     to the backing API. The chip lives in the toolbar; the modal is a simple
-     email/password form shared by the login + register flows. */
-  .acct-status{font-family:"SF Mono",ui-monospace,monospace;font-size:10px;color:var(--muted);align-self:center}
+     to the backing API. The account button lives in the navbar; the modal is a
+     simple email/password form shared by the login + register flows. */
+  /* Transient sync/feedback pill in the navbar (auto-cleared by setSyncStatus). Empty → no gap. */
+  .acct-status{font-family:"SF Mono",ui-monospace,monospace;font-size:10px;color:var(--muted);white-space:nowrap}
+  .acct-status:empty{display:none}
   .modal-overlay{position:fixed;inset:0;background:rgba(0,0,0,.5);display:none;align-items:center;justify-content:center;z-index:1000;padding:20px}
   .modal-overlay.show{display:flex}
   .modal{position:relative;background:var(--paper);color:var(--ink);border:1px solid var(--line);border-radius:8px;max-width:400px;width:100%;padding:28px;box-shadow:0 20px 60px rgba(0,0,0,.35)}

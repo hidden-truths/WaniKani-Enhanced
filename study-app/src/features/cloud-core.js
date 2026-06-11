@@ -34,4 +34,14 @@ export async function api(path, opts = {}) {
   return data;
 }
 
-export function setSyncStatus(t) { const el = document.getElementById('syncStatus'); if (el) el.textContent = t; }
+// Sync/feedback messages ("saving…", "✓ synced", "✓ recording saved", "⚠ offline", …) are
+// TRANSIENT — shown as a brief pill in the navbar and auto-cleared after a few seconds, so the
+// account button's cloud icon carries the persistent "signed-in/synced" state without a lingering
+// "✓ synced" label beside it. Passing a falsy value clears immediately.
+let syncClearTimer = null;
+export function setSyncStatus(t) {
+  const el = document.getElementById('syncStatus'); if (!el) return;
+  el.textContent = t || '';
+  if (syncClearTimer) { clearTimeout(syncClearTimer); syncClearTimer = null; }
+  if (t) syncClearTimer = setTimeout(() => { el.textContent = ''; syncClearTimer = null; }, 2600);
+}

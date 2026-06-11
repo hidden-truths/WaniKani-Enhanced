@@ -238,24 +238,24 @@
   <symbol id="i-external" viewBox="0 0 24 24"><path d="M14 5h5v5M19 5l-8 8M18 14v4a1.5 1.5 0 0 1-1.5 1.5h-10A1.5 1.5 0 0 1 5 18V8a1.5 1.5 0 0 1 1.5-1.5H10"/></symbol>
   <symbol id="i-book" viewBox="0 0 24 24"><path d="M12 6.5C10.5 5 8 4.5 4 5v13c4-.5 6.5 0 8 1.5 1.5-1.5 4-2 8-1.5V5c-4-.5-6.5 0-8 1.5z"/><path d="M12 6.5v13"/></symbol>
 </svg>
-<header>
-  <!-- Toolbar: global controls. The hidden file input is triggered by #importBtn
-       (a styled button is nicer than the raw <input type=file>). Handlers in
-       THEME and EXPORT/IMPORT sections. aria-labels added for screen readers. -->
-  <div class="topbar">
-    <div class="kicker">日常日本語 · Japanese Trainer</div>
-    <div class="toolbar">
-      <span class="acct-status" id="syncStatus"></span>
-      <button class="chip" id="accountBtn" aria-label="Account" title="Sign in to sync progress"><svg class="ic" aria-hidden="true"><use href="#i-user"/></svg>Sign in</button>
-      <button class="chip" id="settingsBtn" aria-label="Settings" title="Settings"><svg class="ic" aria-hidden="true"><use href="#i-settings"/></svg>Settings</button>
-      <button class="chip" id="themeToggle" aria-label="Toggle dark mode" title="Toggle light/dark"><svg class="ic" aria-hidden="true"><use href="#i-contrast"/></svg>Theme</button>
-      <button class="chip" id="exportBtn" aria-label="Export progress as JSON" title="Download your progress"><svg class="ic" aria-hidden="true"><use href="#i-download"/></svg>Export</button>
-      <button class="chip" id="importBtn" aria-label="Import progress from JSON" title="Load progress from a file"><svg class="ic" aria-hidden="true"><use href="#i-upload"/></svg>Import</button>
-      <input type="file" id="importFile" accept="application/json,.json" hidden>
+<!-- Sticky top navbar: app title on the left, a slot (#navExtra) where context controls dock
+     (the みんなの日本語 speaking/compare controls render here — see minna.js), and the global
+     action buttons on the right (theme + settings are icon-only; the account button shows the
+     synced email). Sync feedback is a brief auto-clearing pill (#syncStatus). Import/Export and
+     the hidden file input moved into the Settings modal. Handlers: THEME (chrome.js), account
+     (cloud.js), Settings (settings-page.js), Export/Import (io.js). -->
+<nav class="navbar">
+  <div class="nav-inner">
+    <div class="nav-title">日常日本語<span class="nav-sub">Japanese Trainer</span></div>
+    <div class="nav-extra" id="navExtra"></div>
+    <div class="nav-actions">
+      <span class="acct-status" id="syncStatus" role="status" aria-live="polite"></span>
+      <button class="nav-btn icon-only" id="themeToggle" aria-label="Toggle light/dark" title="Toggle light/dark"><svg class="ic" aria-hidden="true"><use href="#i-contrast"/></svg></button>
+      <button class="nav-btn icon-only" id="settingsBtn" aria-label="Settings" title="Settings"><svg class="ic" aria-hidden="true"><use href="#i-settings"/></svg></button>
+      <button class="nav-btn" id="accountBtn" aria-label="Account" title="Sign in to sync progress"><svg class="ic" aria-hidden="true"><use href="#i-user"/></svg><span class="nav-acct-name">Sign in</span></button>
     </div>
   </div>
-  <h1>Everyday Japanese that sticks<span class="s">日常の日本語 · flashcards + SRS</span></h1>
-</header>
+</nav>
 
 <!-- Top-level view switcher. data-tab maps to #panel-<tab>; see TAB NAV. -->
 <div class="tabs">
@@ -754,6 +754,12 @@
       <span class="jlptseg" id="setTrim" role="group" aria-label="Trim silence from recordings">
         <button class="chip settr" type="button" data-settr="on">On</button>
         <button class="chip settr" type="button" data-settr="off">Off</button>
+      </span></div>
+    <div class="set-row"><label>Backup<span class="set-hint">Export your progress to a JSON file, or import a previous backup. Signing in syncs automatically.</span></label>
+      <span class="set-actions">
+        <button class="chip" id="exportBtn" type="button" aria-label="Export progress as JSON" title="Download your progress"><svg class="ic" aria-hidden="true"><use href="#i-download"/></svg>Export</button>
+        <button class="chip" id="importBtn" type="button" aria-label="Import progress from JSON" title="Load progress from a file"><svg class="ic" aria-hidden="true"><use href="#i-upload"/></svg>Import</button>
+        <input type="file" id="importFile" accept="application/json,.json" hidden>
       </span></div>
     <div class="modal-foot" id="settingsFoot"></div>
   </div>
