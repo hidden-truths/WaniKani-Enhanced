@@ -36,9 +36,9 @@ it outgrew "a few static files on the API droplet."
 |---|---|
 | **Flashcards** | A Leitner-box SRS. Pick test direction (JP→meaning/reading or reverse), an input mode (self-graded reveal, or **type the reading** for auto-graded kana), and optional **audio** (play the reading aloud). On the answer side, pick an **example sentence at any JLPT level (N5→N1)** to see the verb used in context. Filter the deck by independent, intersecting facets — type / transitivity / topic / JLPT / frequency rank (e.g. "Godan **and** Motion") — choose an order (shuffle / by frequency / worst-first), and run a session. A due-cards banner is the one-click SRS entry point. Grade with the mouse or keys — reveal with **space/enter**, then **space / enter / 2 = correct**, **x / 1 = wrong**. |
 | **Browse** | A filterable grid of all verbs with the same facets plus free-text search and a font picker. Each card has a speaker button to hear the reading. Click a card to open a **detail view** — mnemonic, trap/tip, memory status, and example sentences are collapsible, with the examples **filtered by JLPT level**. **Add your own cards** ("Add card") in any category — verbs, adjectives (い/な), nouns, adverbs, phrases; they join the deck, filters, and stats; custom cards can be edited or deleted. |
-| **Settings** | A toolbar gear opens preferences (saved on the device, and synced to your account): default example level, show/hide furigana, default answer mode, audio. |
+| **Settings** | A gear (icon) in the navbar opens preferences (saved on the device, and synced to your account): default example level, show/hide furigana, default answer mode, audio, free-study-advances-due, and the みんなの日本語 record-and-compare options (recordings to keep per word, silence trim). It also holds **Backup** — JSON export/import of your progress. |
 | **Stats & Leeches** | Overall accuracy, the SRS memory pipeline (Leitner box histogram), daily + per-session accuracy line charts, the leech list, and per-card rolling accuracy (worst-first, capped). All charts are hand-rolled SVG — no chart library. |
-| **みんなの日本語** | A private, **account-gated** Minna no Nihongo lesson workbook (a 4th tab): pick a chapter and study its vocabulary with **native-speaker audio**, grammar points, example sentences, and the model conversation, keeping **per-lesson notes** synced to your account. "Add all vocab to deck" sends a chapter's words into the SRS deck as tagged cards. Owner-gated, so the copyrighted textbook material isn't public. Full doc: [MINNA.md](MINNA.md). |
+| **みんなの日本語** | A private, **account-gated** Minna no Nihongo lesson workbook (a 4th tab): pick a chapter and study its vocabulary with **native-speaker audio**, grammar points, example sentences, and the model conversation, keeping **per-lesson notes** synced to your account. "Add all vocab to deck" sends a chapter's words into the SRS deck as tagged cards. **Record-and-compare** (Phase 2): turn on speaking mode (controls dock in the navbar) to record your own voice per word / conversation line and **compare it to the native audio** — dual waveforms, 0.5–1× speed, you / native / both playback, and a per-lesson practice history. Owner-gated, so the copyrighted textbook material isn't public. Full doc: [MINNA.md](MINNA.md). |
 | **Accounts** | Optional. Sign in to mirror **progress + your custom verbs** to the server and sync across devices. Fully usable signed-out (localStorage). |
 
 ## Run it locally
@@ -88,6 +88,7 @@ session (`credentials:'include'`), set by the backing server:
 | GET/PUT | `/v1/progress/settings` | `{data:{exampleLevel,furigana,input,audio}}` — preferences |
 | POST | `/v1/sessions` | `{right,total,mode}` — append to the durable session-history log |
 | GET | `/v1/tts?text=<jp>` | Google TTS audio (`audio/mpeg`) for the reading |
+| `/v1/minna/*` | (account/owner-gated) | みんなの日本語 lessons, native audio, record-and-compare recordings + `/v1/minna/practice` history — see [MINNA.md](MINNA.md) |
 
 Server-side details (auth model, cookie, tables) live in
 [../CLAUDE.md](../CLAUDE.md) under "Accounts + study app."
@@ -104,10 +105,12 @@ Server-side details (auth model, cookie, tables) live in
   local `sessions` is capped (for charts) — every finished session is ALSO appended
   to a durable server log (`POST /v1/sessions`), so full history is never lost.
 - **Settings** persist to `localStorage["jpverbs_settings"]` (`{exampleLevel,
-  furigana, input, audio}`) and sync as their own blob — set them on the Settings page.
+  furigana, input, audio, freeReviewDue, recordingsKeep, trimSilence, compareSpeed}`) and
+  sync as their own blob — set them on the Settings page.
 - A few small UI prefs also live in localStorage: `jpverbs_font`,
   `jpverbs_topic_<panel>` (topic-disclosure open state), `jpverbs_signup_dismissed`,
-  `jpverbs_theme`.
+  `jpverbs_theme`, and `jpverbs_micDevice` (the みんなの日本語 record-and-compare mic pick —
+  device-local, not synced).
 - **Custom verbs** live in `jpverbs_custom` (`{seq, verbs:[…]}`), merged into the
   deck at load. Signed in, they sync too (server `app` key `custom-verbs`, separate
   from the progress blob; server wins on login, removals propagate).

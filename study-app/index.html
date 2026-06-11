@@ -47,11 +47,14 @@
                    done entirely through CSS custom properties so light/dark is
                    a single attribute flip on <html>.
     index.html <body>
-      header       Title + toolbar (theme toggle, export, import).
-      tabs          Three views: Flashcards / Browse / Stats.
+      navbar       Sticky top bar: title (left) + a #navExtra slot where the
+                   みんなの日本語 speaking controls dock + global actions (theme +
+                   settings icon-only, account). Export/Import live in Settings.
+      tabs          Four views: Flashcards / Browse / Stats / みんなの日本語.
       #panel-study  Flashcard session UI (setup screen + card stage + done).
       #panel-browse Filterable grid of all verbs (built-in + custom).
       #panel-stats  Charts, leech list, SRS memory-pipeline, reset.
+      #panel-minna  みんなの日本語 lesson workbook (account-gated, fetched live).
       modals        Account (auth), add/edit-verb, Settings, Browse detail.
     verbs.js
       VERBS         The 100-verb dataset (the heart of the app).
@@ -63,7 +66,7 @@
       EXAMPLES wiring  attachLevels/exampleForLevel/renderExample (leveled UI).
       FONT/THEME    User-pref toggles, persisted to localStorage.
       TAB NAV       View switching.
-      EXPORT/IMPORT Backup + restore of all progress as JSON.
+      EXPORT/IMPORT Backup + restore of all progress as JSON (in the Settings modal).
       DECK BUILDING The filter predicate (AND'd facets) + chip wiring.
       FLASHCARD     Session lifecycle + grading (self/typed) + TTS + keyboard.
       BROWSE        Summary grid + the detail modal (collapsible, leveled examples).

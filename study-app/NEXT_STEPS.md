@@ -143,6 +143,16 @@ build/test setup, and its own deploy.**
 This is the priority. The items below are smaller and can follow.
 
 ## Done (most recent first)
+- ~~UI chrome: sticky navbar + record-and-compare follow-ups~~ — **shipped** (on
+  `minna-phase2-record-compare`). Replaced the old header (kicker + big headline + button
+  toolbar) with a **sticky top navbar**: title (left); theme + settings as **icon-only** buttons;
+  the account button (cloud icon + email; sync feedback is now a brief auto-clearing pill, no
+  persistent "✓ synced"). **Import/Export moved into the Settings "Backup" row**; the "Everyday
+  Japanese that sticks" headline removed. The みんなの日本語 **speaking/compare controls dock in the
+  navbar** (`#navExtra` slot) so they float at the top while studying (the mic picker shows only
+  while speaking). Plus the deferred Phase-2 items: a **per-lesson practice-history** overview
+  (`GET /v1/minna/practice` → `recordingSummary`) and **auto-exit speaking mode** on in-app
+  tab/lesson switch AND browser-tab change. See [MINNA.md](MINNA.md) + [CLAUDE.md](CLAUDE.md).
 - ~~みんなの日本語 Phase 2 — record & compare (MVP)~~ — **shipped** (6 commits on
   `minna-phase2-record-compare`). Record your voice per vocab word / conversation line, save
   it to your account, and compare to the cached native audio. Server: a `minna_recordings`
