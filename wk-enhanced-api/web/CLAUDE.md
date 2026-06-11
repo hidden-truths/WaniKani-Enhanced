@@ -403,7 +403,8 @@ Component contracts you must preserve:
   badge over CUSTOM via `provenanceBadge`). The only NEW synced blob is per-lesson NOTES
   under the `minna` app key (4th sync trio). Content source of truth is the server's
   `data/minna/lesson-<n>.json` (git-tracked, curated from the `scripts/scrape-minna.ts`
-  draft). Phase 2 — record-your-voice + compare to native audio — is planned (NEXT_STEPS).
+  draft). Phase 2 — record-your-voice + compare to native audio — is planned.
+  **Full feature doc (architecture + data model + roadmap): [MINNA.md](MINNA.md).**
 
 ## Change log — UX/design pass (this is the conversation record)
 

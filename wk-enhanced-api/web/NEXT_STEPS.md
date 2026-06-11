@@ -133,17 +133,9 @@ split, custom-verb sync, and Google TTS — what's left is one genuinely-deferre
   "What's deliberately NOT in v1."
 
 ## Ideas / not yet scoped
-- **みんなの日本語 record-and-compare (Phase 2 — the marquee feature).** Mic capture
-  (`MediaRecorder`) → server-stored per-user recordings (a `minna_recordings` table +
-  `recording/<user>/<lesson>/<item>/…` storage + auth'd POST/GET/DELETE, following the
-  `study_sessions` template) → a compare player: ▶ example, ▶ you, ▶ example→you,
-  ▶ simultaneous, optional dual waveform (Web Audio `decodeAudioData` → canvas), speed/
-  loop. Target = the native vnjpclub audio already cached same-origin by Phase 1. Add a
-  per-user/per-item cap to bound storage. Deferred from the ch23 build by design.
-- **More Minna lessons + sections.** Run `scripts/scrape-minna.ts` for other lessons +
-  curate; add exercises/listening/kanji sections; a みんなの日本語 source filter chip in
-  Browse (the `mnn-l<n>` tags are already on the cards). Optional: furigana on the
-  example/conversation sentences (plain JP today).
+- **みんなの日本語 (Minna no Nihongo) dashboard.** Its full roadmap — Phase 2
+  (record-and-compare), more lessons/sections, a Browse source filter, furigana — lives
+  in its own dedicated doc: [MINNA.md](MINNA.md) "Roadmap / next steps".
 - **Built-in non-verb content.** The category *capability* shipped (filters, modal,
   per-category stamps/spines), but the 100 baked-in cards are all verbs — users add
   non-verbs themselves. A curated set of common adjectives/nouns/adverbs in `verbs.js`
