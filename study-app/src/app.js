@@ -36,6 +36,7 @@ import {
 import { session, startSession, renderExample, initFlashcardUI, registerSessionHooks } from './features/flashcard.js';
 import { bcfg, renderBrowse, initBrowseUI, registerCardActions } from './features/browse.js';
 import { renderStats, initStatsUI } from './features/stats.js';
+import { rebuildData, renderCustomCount, openVerbModal, deleteVerb, refreshAfterVerbChange, initCustomUI } from './features/custom-cards.js';
 import * as Core from './core/index.js';
 const {
   TYPE_LABEL, CATS, CAT_LABEL, colorClass, cardStamp,
@@ -464,129 +465,11 @@ document.getElementById('signupDismiss').addEventListener('click',()=>{
   localStorage.setItem('jpverbs_signup_dismissed','1');
 });
 
-/* ============================================================================
-   CUSTOM VERBS — add / edit / delete (the modal CRUD layer).
-   ----------------------------------------------------------------------------
-   The state.store + state.DATA merge live up in the STORAGE area (loadCustom/saveCustom and
-   the state.DATA concat). Here we wire the #verbModal form. A custom verb gets a rank
-   from a monotonic `seq` (never reused, so progress in state.store.cards is stable
-   across deletes) and custom:true. rebuildData() rebuilds state.DATA, extends state.MAXRANK +
-   the rank-range UI, and re-runs the JLPT annotation; callers then re-render.
-   ========================================================================== */
-let editingRank=null;   // null = adding a new verb; otherwise the rank being edited
-// Merge Minna provenance onto matching built-ins (the dedup path). A Minna word that
-// already exists as a baked-in verb is NOT re-added as a bare card — its built-in rank
-// gets an entry in state.minnaStore.overlays, and here we merge that onto a COPY of the
-// built-in: it keeps its examples / mnemonic / rank / SRS progress but gains the
-// みんなの日本語 + iTalki tags, flags, and (if present) pitch accent. Copies — not
-// mutation of the shared VERBS objects — so removing an overlay reverts cleanly.
-// applyMinnaOverlays lives in core/minna.js (reads state.minnaStore.overlays).
-function rebuildData(){
-  const prevMax=state.MAXRANK;
-  state.DATA=applyMinnaOverlays(VERBS.filter(v=>!v.skip)).concat(loadCustom().verbs);
-  state.MAXRANK=state.DATA.reduce((m,v)=>Math.max(m,v.rank),0)||100;
-  attachLevels();
-  ['rmin','rmax','brmin','brmax'].forEach(id=>{const el=document.getElementById(id);if(el)el.max=state.MAXRANK;});
-  // If a range's max was at the old ceiling ("show everything"), extend it so a
-  // freshly-added custom verb is included by default; otherwise respect narrowing.
-  if(cfg.rmax>=prevMax){cfg.rmax=state.MAXRANK;const e=document.getElementById('rmax');if(e)e.value=state.MAXRANK;}
-  if(bcfg.rmax>=prevMax){bcfg.rmax=state.MAXRANK;const e=document.getElementById('brmax');if(e)e.value=state.MAXRANK;}
-  annotateJlptChips(); annotateCatChips(); annotateSourceChips();
-}
-function renderCustomCount(){
-  const all=loadCustom().verbs;
-  const n=all.filter(v=>!v.minna).length, m=all.filter(v=>v.minna).length;
-  const parts=[];
-  if(n)parts.push(`<b>${n}</b> custom card${n===1?'':'s'}`);
-  if(m)parts.push(`<b>${m}</b> みんなの日本語`);
-  document.getElementById('customCount').innerHTML = parts.join(' · ');
-}
-// Per-category option lists for the modal's Type select. Verbs use the
-// conjugation classes; adjectives reuse the field for the い/な split; nouns,
-// adverbs and phrases have no subtype (the whole Type cell hides for them).
-const VF_TYPE_OPTS={
-  verb:[['godan','Godan (う-verb)'],['ichidan','Ichidan (る-verb)'],['irregular','Irregular']],
-  adjective:[['i-adj','い-adjective'],['na-adj','な-adjective']]
-};
-// Repopulate #vfType for the chosen category, preserving the current value if it's
-// still a valid option (so reopening an edit keeps the saved subtype selected).
-function setTypeOptions(cat){
-  const sel=document.getElementById('vfType'), cur=sel.value;
-  const opts=VF_TYPE_OPTS[cat]||[];
-  sel.innerHTML=opts.map(([v,l])=>`<option value="${v}">${l}</option>`).join('');
-  if(opts.some(o=>o[0]===cur))sel.value=cur;
-}
-// Show the verb/adjective-only fields (Type, Transitivity) only when they apply:
-// Type for verbs+adjectives, Transitivity for verbs alone. Keeps the add-card form
-// honest — you're never asked for a noun's conjugation class.
-function syncVerbFields(){
-  const cat=document.getElementById('vfCat').value;
-  setTypeOptions(cat);
-  document.getElementById('vfTypeCell').style.display = VF_TYPE_OPTS[cat]?'':'none';
-  document.getElementById('vfTransCell').style.display = cat==='verb'?'':'none';
-}
-function openVerbModal(verb){
-  editingRank = verb?verb.rank:null;
-  document.getElementById('verbTitle').textContent = verb?'Edit card':'Add a card';
-  document.getElementById('verbSubmit').textContent = verb?'Save changes':'Save card';
-  document.getElementById('verbDelete').hidden = !verb;
-  document.getElementById('verbErr').textContent='';
-  const g=id=>document.getElementById(id);
-  g('vfJp').value=verb?verb.jp:''; g('vfRead').value=verb?verb.read:''; g('vfMean').value=verb?verb.mean:'';
-  g('vfCat').value=verb?(verb.cat||'verb'):'verb';
-  syncVerbFields();                                   // rebuild Type options + show/hide before setting values
-  g('vfType').value=verb&&verb.type?verb.type:(g('vfType').value);
-  g('vfJlpt').value=verb?verb.jlpt:'N4';
-  g('vfTrans').value=verb?(verb.trans||''):'';
-  g('vfTags').value=verb?(verb.tags||[]).filter(t=>t!=='custom').join(', '):'';
-  g('vfMnem').value=verb?(verb.mnem||''):''; g('vfTip').value=verb?(verb.tip||''):'';
-  g('vfExJp').value=verb&&verb.ex&&verb.ex[0]?verb.ex[0][0]:'';
-  g('vfExEn').value=verb&&verb.ex&&verb.ex[0]?verb.ex[0][1]:'';
-  document.getElementById('verbModal').classList.add('show');
-  setTimeout(()=>g('vfJp').focus(),0);
-}
-function closeVerbModal(){ document.getElementById('verbModal').classList.remove('show'); }
-// Re-render every derived view after a custom-verb change.
-function refreshAfterVerbChange(){
-  renderCustomCount(); renderBrowse(); updateDeckCount(); updateDueBanner();
-  if(document.getElementById('panel-stats').classList.contains('active'))renderStats();
-}
-function saveVerb(e){
-  e.preventDefault();
-  const val=id=>document.getElementById(id).value.trim();
-  const jp=val('vfJp'),read=val('vfRead'),mean=val('vfMean');
-  if(!jp||!read||!mean){ document.getElementById('verbErr').textContent='Japanese, reading, and meaning are all required.'; return; }
-  const tags=val('vfTags').split(',').map(s=>s.trim().toLowerCase()).filter(Boolean);
-  if(!tags.includes('custom'))tags.push('custom');
-  const exJp=val('vfExJp');
-  const cat=val('vfCat');
-  // Only verbs+adjectives carry a `type`; only verbs carry transitivity. Store ''
-  // for the categories where the field is hidden so a stale value can't linger.
-  const verb={ jp, read, mean, cat, type:VF_TYPE_OPTS[cat]?val('vfType'):'', jlpt:val('vfJlpt'),
-    trans:cat==='verb'?val('vfTrans'):'',
-    tags, mnem:val('vfMnem'), tip:val('vfTip'), ex: exJp?[[exJp,val('vfExEn')]]:[], custom:true };
-  const cs=loadCustom();
-  const existing = editingRank!=null ? cs.verbs.findIndex(v=>v.rank===editingRank) : -1;
-  if(existing>=0){ verb.rank=editingRank; cs.verbs[existing]=verb; }      // edit in place (keep rank → keep progress)
-  else { cs.seq=(cs.seq||100)+1; verb.rank=cs.seq; cs.verbs.push(verb); } // new monotonic rank
-  saveCustom(cs);
-  rebuildData(); closeVerbModal(); refreshAfterVerbChange();
-}
-function deleteVerb(rank){
-  const cs=loadCustom();
-  cs.verbs=cs.verbs.filter(v=>v.rank!==rank);
-  saveCustom(cs);
-  if(state.store.cards[rank]){ delete state.store.cards[rank]; save(); }   // drop the orphaned progress
-  rebuildData(); closeVerbModal(); refreshAfterVerbChange();
-}
-document.getElementById('addVerbBtn').addEventListener('click',()=>openVerbModal(null));
-document.getElementById('verbClose').addEventListener('click',closeVerbModal);
-document.getElementById('vfCat').addEventListener('change',syncVerbFields);   // category drives which verb/adjective fields show
-document.getElementById('verbForm').addEventListener('submit',saveVerb);
-document.getElementById('verbDelete').addEventListener('click',()=>{ if(editingRank!=null&&confirm('Delete this custom card? Its progress is also removed.'))deleteVerb(editingRank); });
-document.getElementById('verbModal').addEventListener('click',e=>{ if(e.target.id==='verbModal')closeVerbModal(); }); // backdrop
-document.addEventListener('keydown',e=>{ if(e.key==='Escape'&&document.getElementById('verbModal').classList.contains('show'))closeVerbModal(); });
-rebuildData();          // sync the rank-range UI to state.MAXRANK (state.DATA already merged custom verbs at load)
+// CUSTOM CARDS (rebuildData + renderCustomCount + the #verbModal CRUD) →
+// features/custom-cards.js (imported above). Wire the modal, then do the initial deck
+// rebuild + count (state.DATA already merged custom cards at load).
+initCustomUI();
+rebuildData();
 renderCustomCount();
 
 /* ============================================================================
