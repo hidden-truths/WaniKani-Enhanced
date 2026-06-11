@@ -10,8 +10,8 @@ This feature spans **both** halves of the codebase. This doc is the one place th
 ties them together; the layer-specific docs carry quick local references that point
 back here:
 
-- **Frontend** (the tab itself): [index.html](index.html) `#panel-minna` + the
-  `MINNA` section of [app.js](app.js) + Minna styles in [styles.css](styles.css).
+- **Frontend** (the tab itself): [index.html](index.html) `#panel-minna` +
+  [src/features/minna.js](src/features/minna.js) + Minna styles in [src/styles.css](src/styles.css).
   Contributor notes: the みんなの日本語 dead-end in [CLAUDE.md](CLAUDE.md).
 - **Server** (content + audio + gating): [../wk-enhanced-api/src/routes/minna.ts](../wk-enhanced-api/src/routes/minna.ts),
   [../wk-enhanced-api/src/services/minnaAudio.ts](../wk-enhanced-api/src/services/minnaAudio.ts),
@@ -42,7 +42,7 @@ words flowing straight into the SRS deck so they're never studied just once.
 ## How it works (end to end)
 
 ```
- Tab click ─► renderMinna()                         [app.js]
+ Tab click ─► renderMinna()                         [features/minna.js]
               │  no account?  → renderMinnaGate()  (sign-in wall)
               │  GET /v1/minna/lessons              → chapter chips  L23 …
               ▼
@@ -186,9 +186,9 @@ only `accent`.
 
 ## Frontend
 
-`#panel-minna` is near-empty in [index.html](index.html); the `MINNA` section of
-[app.js](app.js) fills it on tab activation (`renderMinna()`, lazy — same pattern as
-Stats). Key pieces:
+`#panel-minna` is near-empty in [index.html](index.html);
+[src/features/minna.js](src/features/minna.js) fills it on tab activation (`renderMinna()`,
+lazy — same pattern as Stats). Key pieces:
 
 - **`renderMinna()` / `renderMinnaLesson(n)`** — gate wall when `!account`, else chapter
   chips + the active lesson. Sections are collapsible `<details>` (`mnSection`):
