@@ -5,6 +5,16 @@ top of [index.html](index.html); this file supersedes it where they disagree.
 Architecture + dead-ends: [CLAUDE.md](CLAUDE.md). User overview: [README.md](README.md).
 Card schema + authoring: [CARDS.md](CARDS.md).
 
+> ⚠️ **DO NOT take down the running preview / dev servers.** The maintainer keeps a
+> Vite dev server (study-app on **:5173**) and the API (`bun dev` on **:3000**,
+> `COOKIE_SECURE=false`) running and tests in their own browser against them. **Do not
+> `preview_stop`, `pkill`, or kill the process on :5173 or :3000** — you'll break the
+> maintainer's live test tab. If you need to verify in *your* (headless) browser, drive the
+> already-running preview rather than restarting it; only restart a server if it's actually
+> down (`curl -s localhost:5173` / `localhost:3000/v1/health`). Minna is owner-gated, so the
+> API must run with `MINNA_OWNER_EMAILS` including the signed-in account (dev `.env` already
+> sets the maintainer's email).
+
 The original backlog plus a large second wave (accounts + sync, SRS vs free study, the
 file split, leveled examples, the みんなの日本語 dashboard with content/dedup/pitch, deck-wide
 pitch accent) have all shipped — **and so has THE BIG ONE: the split into two apps.**
@@ -133,6 +143,23 @@ build/test setup, and its own deploy.**
 This is the priority. The items below are smaller and can follow.
 
 ## Done (most recent first)
+- ~~みんなの日本語 Phase 2 — record & compare (MVP)~~ — **shipped** (6 commits on
+  `minna-phase2-record-compare`). Record your voice per vocab word / conversation line, save
+  it to your account, and compare to the cached native audio. Server: a `minna_recordings`
+  table + **private** storage objects served only via the owner-gated
+  `POST/GET/DELETE /v1/minna/recordings`, pruned per item to a keep-N. Client (new
+  `features/minna-record.js` + `core/recordings.js`): MediaRecorder capture with
+  preview/re-record; a compare player (▶ you / ▶ native / ▶ native→you + loop); conversation
+  lines slice the one whole-dialogue MP3 via per-line **clip** ranges (`line.clip` ∪ the
+  synced in-app marker). Plus three UX refinements from testing: a **speaking-mode toggle**
+  that holds ONE persistent mic stream (no `getUserMedia` per take → no hitching; controls
+  only render while on), an **input-device picker** (`deviceId:{exact}` so AirPods stay
+  high-quality), and **auto-trim silence** (adaptive threshold + generous lead pad so
+  aspirated onsets like the ひ of 引きます survive; → WAV). Settings: `recordingsKeep` (1–20),
+  `trimSilence`. Full feature doc + the remaining backlog: [MINNA.md](MINNA.md) "Roadmap".
+  **Still to do** (deferred from the MVP, see MINNA.md): dual waveform, speed control, ▶
+  simultaneous playback, per-lesson practice-history `GET`, and a **real-mic verification of
+  the trim tuning** (the only path not verifiable headlessly).
 - ~~みんなの日本語: content parity, dedup, pitch accent~~ — **shipped.** Activated Minna
   cards were second-class (no examples/mnemonics, duplicated built-ins, flat TTS pitch).
   Now: (1) words that match a built-in verb **reuse it** via a synced provenance overlay
@@ -289,9 +316,10 @@ This is the priority. The items below are smaller and can follow.
   pitch; **user custom cards don't** (no field, and `ACCENTS` is keyed by built-in rank).
   The accents are model-generated and want a **proofread pass** (esp. the nakadaka/odaka
   calls); wiring an authoritative source (OJAD/NHK data) would beat regeneration.
-- **みんなの日本語 (Minna no Nihongo) dashboard.** Its full roadmap — Phase 2
-  (record-and-compare), more lessons/sections, furigana on lesson sentences — lives
-  in its own dedicated doc: [MINNA.md](MINNA.md) "Roadmap / next steps".
+- **みんなの日本語 (Minna no Nihongo) dashboard.** Phase 2 (record-and-compare) has
+  **shipped** (see Done above). The remaining roadmap — record-and-compare polish (dual
+  waveform, speed, simultaneous, practice-history `GET`), more lessons/sections, furigana on
+  lesson sentences — lives in its own dedicated doc: [MINNA.md](MINNA.md) "Roadmap / next steps".
 - **Built-in non-verb content.** The category *capability* shipped (filters, modal,
   per-category stamps/spines), but the 100 baked-in cards are all verbs — users add
   non-verbs themselves. A curated set of common adjectives/nouns/adverbs in `verbs.js`

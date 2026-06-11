@@ -364,10 +364,20 @@ helpers in [src/core/recordings.js](src/core/recordings.js).
   only its *native* compare is gated until a clip is marked. See the record-and-compare
   dead-end in [CLAUDE.md](CLAUDE.md).
 
-**Deferred from the MVP** (intentionally): the **dual waveform** (Web Audio
-`decodeAudioData` → canvas), **speed control**, and **▶ simultaneous** playback. The
-comparison target is already cached same-origin, so Web Audio can read its bytes without
-CORS whenever these are picked up.
+**Deferred from the MVP** (intentionally), roughly in priority order:
+- **Real-mic verification of the trim tuning.** The adaptive-threshold + lead-pad trim was
+  verified by unit tests + a synthetic decode (no real mic is available headlessly). Record a
+  few words with leading/trailing silence — especially aspirated onsets (引きます, 吹きます) —
+  and confirm nothing's clipped; nudge `ratio` / `leadPadMs` in
+  [src/core/recordings.js](src/core/recordings.js) if it's too tight or too loose.
+- **Dual waveform** (Web Audio `decodeAudioData` → canvas), **speed control** (0.5×–1×), and
+  **▶ simultaneous** playback. The comparison target is already cached same-origin, so Web
+  Audio can read its bytes without CORS.
+- **A `GET` over recordings/sessions** for a per-lesson practice history (the rows are
+  already captured; just needs a list/aggregate route + a small UI).
+- **Auto-exit speaking mode on tab/lesson switch.** Today the persistent mic stays open until
+  the user toggles it off (the browser's recording indicator makes this obvious). Releasing it
+  when the みんなの日本語 tab is deactivated would need a tab-deactivate hook in `chrome.js`.
 
 ### More lessons & sections
 
