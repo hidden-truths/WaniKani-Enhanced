@@ -386,6 +386,16 @@
         <button class="chip deck" data-deck="food">Food/Cooking</button>
         <button class="chip deck" data-deck="money">Money</button>
       </div></div>
+      <!-- Source facet: Minna no Nihongo provenance — all みんなの日本語 cards, the
+           iTalki subset, or a single lesson. The whole row is hidden by
+           annotateSourceChips() until the deck has Minna cards; empty chips dim. -->
+      <div class="frow source-row"><span class="filter-label">Source</span><div class="chips">
+        <button class="chip deck" data-deck="minna">みんなの日本語</button>
+        <button class="chip deck" data-deck="italki">iTalki</button>
+        <button class="chip deck" data-deck="mnn-l22">L22</button>
+        <button class="chip deck" data-deck="mnn-l23">L23</button>
+        <button class="chip deck" data-deck="mnn-l24">L24</button>
+      </div></div>
       <div class="fdiv"></div>
       <div class="frow"><span class="filter-label">Level &amp; rank</span><div class="chips">
         <span class="jlptseg">
@@ -544,6 +554,14 @@
         <button class="chip bf" data-filter="study">Study</button>
         <button class="chip bf" data-filter="food">Food</button>
         <button class="chip bf" data-filter="money">Money</button>
+      </div></div>
+      <!-- Source facet (Minna provenance) — hidden until the deck has Minna cards. -->
+      <div class="frow source-row"><span class="filter-label">Source</span><div class="chips">
+        <button class="chip bf" data-filter="minna">みんなの日本語</button>
+        <button class="chip bf" data-filter="italki">iTalki</button>
+        <button class="chip bf" data-filter="mnn-l22">L22</button>
+        <button class="chip bf" data-filter="mnn-l23">L23</button>
+        <button class="chip bf" data-filter="mnn-l24">L24</button>
       </div></div>
       <div class="fdiv"></div>
       <!-- Tier 3: level + frequency band on one line. -->

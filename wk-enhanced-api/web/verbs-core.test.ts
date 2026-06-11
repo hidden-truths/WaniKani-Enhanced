@@ -30,6 +30,7 @@ type Core = {
   reviewForecast: (h: string) => { bars: { label: string; count: number; now: boolean }[]; max: number };
   filterSummary: (c: any) => string[];
   tokenFacet: (t: string) => string;
+  deckLabel: (t: string) => string;
   cardStamp: (v: any) => { label: string; cls: string };
   colorClass: (v: any) => string;
   CATS: string[];
@@ -52,7 +53,7 @@ function loadCore(): Core {
   const body =
     verbs + "\n" + examples + "\n" + appSrc +
     `\n;return { passes, oneGroup, facetAll, facetMatch, scheduleCard, cardStat,
-      isDue, dueCards, rollingAcc, isLeech, leeches, normKana, romajiToKana, reviewForecast, filterSummary, tokenFacet,
+      isDue, dueCards, rollingAcc, isLeech, leeches, normKana, romajiToKana, reviewForecast, filterSummary, tokenFacet, deckLabel,
       cardStamp, colorClass, CATS,
       exampleForLevel, availableTiers, JLPT_TIERS,
       BOX_DAYS, get DATA(){return DATA}, get store(){return store}, set store(v){store=v} };`;
@@ -316,6 +317,56 @@ test("oneGroup: transitivity, class, and tag tokens", () => {
   const g = core.DATA.find((v) => v.type === "godan")!;
   expect(core.oneGroup(g, "godan")).toBe(true);
   expect(core.oneGroup(g, "ichidan")).toBe(false);
+});
+
+// --- Source facet (Minna no Nihongo provenance: みんなの日本語 / iTalki / per-lesson) ---
+test("tokenFacet routes Minna source tokens to the source facet", () => {
+  expect(core.tokenFacet("minna")).toBe("source");
+  expect(core.tokenFacet("italki")).toBe("source");
+  expect(core.tokenFacet("mnn-l23")).toBe("source"); // per-lesson, via the regex
+  expect(core.tokenFacet("mnn-l7")).toBe("source");
+  expect(core.tokenFacet("money")).toBe("topic"); // an unrelated tag still defaults to topic
+});
+
+test("oneGroup: source tokens match the minna/italki flags + per-lesson tag", () => {
+  const both = { minna: true, italki: true, tags: ["みんなの日本語", "mnn-l23", "iTalki"] };
+  const minnaOnly = { minna: true, italki: false, tags: ["みんなの日本語", "mnn-l24"] };
+  const plain = { tags: [] };
+  expect(core.oneGroup(both, "minna")).toBe(true);
+  expect(core.oneGroup(both, "italki")).toBe(true);
+  expect(core.oneGroup(both, "mnn-l23")).toBe(true);
+  expect(core.oneGroup(minnaOnly, "minna")).toBe(true);
+  expect(core.oneGroup(minnaOnly, "italki")).toBe(false); // not covered in an iTalki lesson
+  expect(core.oneGroup(minnaOnly, "mnn-l23")).toBe(false); // a different lesson
+  expect(core.oneGroup(minnaOnly, "mnn-l24")).toBe(true);
+  expect(core.oneGroup(plain, "minna")).toBe(false);
+  expect(core.oneGroup(plain, "italki")).toBe(false);
+});
+
+test("passes: source is an AND'd facet (iTalki ∩ noun intersect)", () => {
+  const deck = [
+    { jlpt: "N4", rank: 101, cat: "verb", type: "godan", trans: "t", minna: true, italki: true,  tags: ["みんなの日本語", "mnn-l23", "iTalki"] },
+    { jlpt: "N4", rank: 102, cat: "noun", type: "",      trans: "",  minna: true, italki: true,  tags: ["みんなの日本語", "mnn-l23", "iTalki"] },
+    { jlpt: "N4", rank: 103, cat: "noun", type: "",      trans: "",  minna: true, italki: false, tags: ["みんなの日本語", "mnn-l24"] },
+    { jlpt: "N5", rank: 5,   cat: "verb", type: "godan", trans: "t", tags: ["motion"] }, // a normal, non-Minna card
+  ];
+  const hits = (o: any) => deck.filter((v) => core.passes(v, cfg(o))).length;
+  expect(hits({ source: ["minna"] })).toBe(3); // all three Minna cards
+  expect(hits({ source: ["italki"] })).toBe(2); // only the iTalki subset
+  expect(hits({ source: ["italki"], cat: ["noun"] })).toBe(1); // AND across facets
+  expect(hits({ source: ["mnn-l24"] })).toBe(1); // a single lesson
+  expect(hits({ source: ["minna"], cat: ["noun"] })).toBe(2);
+  expect(hits({})).toBe(4); // no source constraint = whole synthetic deck
+});
+
+test("deckLabel + filterSummary surface the source facet (per-lesson → 'L23')", () => {
+  expect(core.deckLabel("italki")).toBe("iTalki");
+  expect(core.deckLabel("minna")).toBe("みんなの日本語");
+  expect(core.deckLabel("mnn-l23")).toBe("L23");
+  expect(core.deckLabel("mnn-l7")).toBe("L7");
+  const parts = core.filterSummary({ cat: ["noun"], source: ["italki", "mnn-l23"] });
+  expect(parts).toContain("Noun");
+  expect(parts).toContain("iTalki/L23");
 });
 
 test("scheduleCard: Leitner promote on correct (cap 5), reset to box 1 on miss", () => {

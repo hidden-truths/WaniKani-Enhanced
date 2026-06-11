@@ -408,6 +408,8 @@ function oneGroup(v,d){
   if(d==='all')return true;
   if(d==='leech')return isLeech(v.rank);
   if(d==='due')return isDue(v.rank);
+  if(d==='minna')return !!v.minna;                         // source facet: any みんなの日本語 card
+  if(d==='italki')return !!v.italki;                       // source facet: covered in an iTalki lesson
   if(CATS.includes(d))return (v.cat||'verb')===d;          // part-of-speech facet
   if(['godan','ichidan','irregular'].includes(d))return v.type===d;
   if(d==='suru'||d==='fake')return v.tags.includes(d);
@@ -429,6 +431,7 @@ function passes(v,c){
   if(!facetMatch(v,c.trans))return false;
   if(!facetMatch(v,c.topic))return false;
   if(!facetMatch(v,c.status))return false;
+  if(!facetMatch(v,c.source))return false;
   if(!facetAll(c.jlpt) && !c.jlpt.includes(v.jlpt))return false;
   if(v.rank<c.rmin || v.rank>c.rmax)return false;                     // rank AND
   return true;
@@ -465,11 +468,14 @@ function makeMultiSelect(selector, getArr, setArr, attr, onChange){
 // Every category/semantic chip carries class .deck (study) / .bf (browse) + its
 // token in data-deck / data-filter. We DERIVE which facet a token belongs to here
 // (topic is the default), so the markup needs no per-chip facet attribute.
-const DECK_FACETS=['cat','type','trans','topic','status'];
+const DECK_FACETS=['cat','type','trans','topic','status','source'];
 const TOKEN_FACET={verb:'cat',adjective:'cat',noun:'cat',adverb:'cat',phrase:'cat',
   godan:'type',ichidan:'type',irregular:'type',suru:'type',fake:'type',
-  trans:'trans',intrans:'trans','ti-pair':'trans',leech:'status',due:'status'};
-const tokenFacet=t=>TOKEN_FACET[t]||'topic';
+  trans:'trans',intrans:'trans','ti-pair':'trans',leech:'status',due:'status',
+  minna:'source',italki:'source'};
+// Per-lesson source tokens (mnn-l23 …) route to the source facet too, without
+// having to enumerate every lesson number here.
+const tokenFacet=t=>TOKEN_FACET[t]||(/^mnn-l\d+$/.test(t)?'source':'topic');
 const deckEmpty=c=>DECK_FACETS.every(f=>!c[f].length);
 // Wire a chip group (.deck or .bf) to a config's facet arrays. Tokens toggle
 // within their derived facet (OR); the lone "all" token clears every facet
@@ -495,7 +501,7 @@ function wireFacets(selector, c, onChange){
 // ---- Flashcard deck config + its chip bindings ----
 // mode = test direction; type/trans/topic/status/jlpt = AND'd facets; ord = sort;
 // rmin/rmax = rank band. Facet arrays start empty (= no constraint → "All" active).
-let cfg={mode:"meaning",input:"self",audio:"off",kind:"free",cat:[],type:[],trans:[],topic:[],status:[],ord:"shuffle",jlpt:["all"],rmin:1,rmax:MAXRANK};
+let cfg={mode:"meaning",input:"self",audio:"off",kind:"free",cat:[],type:[],trans:[],topic:[],status:[],source:[],ord:"shuffle",jlpt:["all"],rmin:1,rmax:MAXRANK};
 document.querySelectorAll('.chip.mode').forEach(b=>b.addEventListener('click',()=>{
   document.querySelectorAll('.chip.mode').forEach(x=>x.classList.remove('active'));b.classList.add('active');cfg.mode=b.dataset.mode;updateDeckCount();}));
 // Study type (Free study vs SRS review). SRS restricts the deck to due cards
@@ -561,14 +567,16 @@ function buildDeck(){
 }
 // Token → human label for the active-filter recap line. Shared by both panels
 // (deck/bf tokens are identical). Drives filterSummary() below.
-const DECK_LABEL={verb:'Verb',adjective:'Adjective',noun:'Noun',adverb:'Adverb',phrase:'Phrase',godan:'Godan',ichidan:'Ichidan',irregular:'Irregular',suru:'Suru',fake:'Fake-ichidan',trans:'Transitive',intrans:'Intransitive','ti-pair':'T/I pairs',leech:'Leeches',due:'Due cards',motion:'Motion',transit:'Transit',wearing:'Wearing',speaking:'Speaking',communication:'Communication',giving:'Giving/Recv',emotion:'Emotion',cognition:'Cognition',perception:'Perception',existence:'Existence',change:'Change',ability:'Ability',onoff:'On/Off',daily:'Daily',body:'Body',work:'Work',study:'Study',food:'Food',money:'Money'};
+const DECK_LABEL={verb:'Verb',adjective:'Adjective',noun:'Noun',adverb:'Adverb',phrase:'Phrase',godan:'Godan',ichidan:'Ichidan',irregular:'Irregular',suru:'Suru',fake:'Fake-ichidan',trans:'Transitive',intrans:'Intransitive','ti-pair':'T/I pairs',leech:'Leeches',due:'Due cards',motion:'Motion',transit:'Transit',wearing:'Wearing',speaking:'Speaking',communication:'Communication',giving:'Giving/Recv',emotion:'Emotion',cognition:'Cognition',perception:'Perception',existence:'Existence',change:'Change',ability:'Ability',onoff:'On/Off',daily:'Daily',body:'Body',work:'Work',study:'Study',food:'Food',money:'Money',minna:'みんなの日本語',italki:'iTalki'};
+// Token → recap label. Per-lesson source tokens (mnn-l23) render as "L23".
+function deckLabel(t){ const m=/^mnn-l(\d+)$/.exec(t); return m?('L'+m[1]):(DECK_LABEL[t]||t); }
 // Build the active-facet parts for a config (one part per non-empty facet, so the
 // recap reads as the AND it now is: "Godan · Motion · rank 1–25"). Tokens within a
 // facet join with '/', the parts join with '·' in paintSummary.
 function filterSummary(c){
   const parts=[];
-  [c.cat,c.type,c.trans,c.topic,c.status].forEach(arr=>{
-    if(arr&&arr.length) parts.push(arr.map(t=>DECK_LABEL[t]||t).join('/'));
+  [c.cat,c.type,c.trans,c.topic,c.status,c.source].forEach(arr=>{
+    if(arr&&arr.length) parts.push(arr.map(deckLabel).join('/'));
   });
   if(!facetAll(c.jlpt)) parts.push(c.jlpt.join('/'));
   if(c.rmin>1||c.rmax<100) parts.push('rank '+c.rmin+'–'+c.rmax);
@@ -614,7 +622,7 @@ function updateDueBanner(){
 // reflect that in the chip UI before starting. This overrides the user's
 // current picker selection on purpose — it's a dedicated review flow.
 function startDueSession(){
-  cfg.kind='srs';cfg.type=[];cfg.trans=[];cfg.topic=[];cfg.status=['due'];cfg.jlpt=['all'];cfg.rmin=1;cfg.rmax=100;cfg.ord='worst';
+  cfg.kind='srs';cfg.type=[];cfg.trans=[];cfg.topic=[];cfg.status=['due'];cfg.source=[];cfg.jlpt=['all'];cfg.rmin=1;cfg.rmax=100;cfg.ord='worst';
   repaintDeck();
   document.querySelectorAll('.chip.skind').forEach(x=>x.classList.toggle('active',x.dataset.skind==='srs'));
   document.querySelectorAll('.chip.jlpt').forEach(x=>x.classList.toggle('active',x.dataset.jlpt==='all'));
@@ -979,7 +987,7 @@ document.addEventListener('keydown',e=>{
    100 rows; if the deck grows large, switch to a template/fragment for perf).
    Clicking a card toggles .open to expand the detail (CSS max-height anim).
    ========================================================================== */
-let bcfg={cat:[],type:[],trans:[],topic:[],status:[],jlpt:['all'],rmin:1,rmax:MAXRANK};
+let bcfg={cat:[],type:[],trans:[],topic:[],status:[],source:[],jlpt:['all'],rmin:1,rmax:MAXRANK};
 const repaintBrowse=wireFacets('.chip.bf', bcfg, renderBrowse);
 makeMultiSelect('.chip.bjlpt', ()=>bcfg.jlpt, a=>bcfg.jlpt=a, 'jlpt', renderBrowse);
 const brmin=document.getElementById('brmin'),brmax=document.getElementById('brmax');
@@ -1146,6 +1154,26 @@ function annotateCatChips(){
   });
 }
 annotateCatChips();
+// Source facet (みんなの日本語 / iTalki / per-lesson) only applies once Minna vocab
+// has been activated. Hide the whole Source row when the deck has no Minna cards;
+// otherwise dim individual source chips that currently match nothing. Same shape
+// as annotateCatChips; runs at boot and on every DATA change.
+function annotateSourceChips(){
+  const hasMinna=DATA.some(v=>v.minna);
+  document.querySelectorAll('.frow.source-row').forEach(r=>{r.style.display=hasMinna?'':'none';});
+  if(!hasMinna)return;
+  const counts={minna:0,italki:0};
+  DATA.forEach(v=>{ if(v.minna)counts.minna++; if(v.italki)counts.italki++;
+    (v.tags||[]).forEach(t=>{ if(/^mnn-l\d+$/.test(t))counts[t]=(counts[t]||0)+1; }); });
+  document.querySelectorAll('.chip.deck,.chip.bf').forEach(b=>{
+    const t=b.dataset.deck||b.dataset.filter;
+    if(t!=='minna'&&t!=='italki'&&!/^mnn-l\d+$/.test(t))return;
+    const n=counts[t]||0;
+    b.disabled=n===0;
+    b.title=n===0?'No cards with this source yet':`${n} card${n===1?'':'s'}`;
+  });
+}
+annotateSourceChips();
 document.querySelectorAll('.chips, .topic-inner').forEach(setupRoving);
 
 /* ---- Browse detail modal ----
@@ -1388,7 +1416,7 @@ function renderStats(){
 // startDueSession() it overrides the picker and syncs the chip UI to match.
 document.getElementById('studyLeeches').addEventListener('click',()=>{
   document.querySelector('.tab[data-tab="study"]').click();
-  cfg.type=[];cfg.trans=[];cfg.topic=[];cfg.status=['leech'];cfg.jlpt=['all'];cfg.rmin=1;cfg.rmax=100;
+  cfg.type=[];cfg.trans=[];cfg.topic=[];cfg.status=['leech'];cfg.source=[];cfg.jlpt=['all'];cfg.rmin=1;cfg.rmax=100;
   repaintDeck();
   document.querySelectorAll('.chip.jlpt').forEach(x=>x.classList.toggle('active',x.dataset.jlpt==='all'));
   document.getElementById('rmin').value=1;document.getElementById('rmax').value=100;
@@ -1674,7 +1702,7 @@ function rebuildData(){
   // freshly-added custom verb is included by default; otherwise respect narrowing.
   if(cfg.rmax>=prevMax){cfg.rmax=MAXRANK;const e=document.getElementById('rmax');if(e)e.value=MAXRANK;}
   if(bcfg.rmax>=prevMax){bcfg.rmax=MAXRANK;const e=document.getElementById('brmax');if(e)e.value=MAXRANK;}
-  annotateJlptChips(); annotateCatChips();
+  annotateJlptChips(); annotateCatChips(); annotateSourceChips();
 }
 function renderCustomCount(){
   const all=loadCustom().verbs;
@@ -1870,12 +1898,26 @@ function minnaCard(item, lesson){
   };
 }
 function minnaInDeck(key){ return loadCustom().verbs.some(v=>v.minnaKey===key); }
+// Signature of the metadata a re-activation can change (tags + iTalki flag), so we
+// can tell "already in deck, up to date" from "in deck but missing new info".
+const minnaSig=v=>(v.tags||[]).join('|')+'·'+(v.italki?'1':'0');
+// Non-mutating preview of what "Add all vocab to deck" would do: how many words are
+// in the deck, how many are new (toAdd), and how many already-added cards carry stale
+// metadata (toUpdate) — e.g. cards activated before the lesson gained its iTalki flag.
+function minnaActivationStatus(lesson, vocab){
+  const cs=loadCustom(); let inDeck=0, toAdd=0, toUpdate=0;
+  vocab.forEach(item=>{
+    const existing=cs.verbs.find(v=>v.minnaKey===item.key);
+    if(!existing){ toAdd++; return; }
+    inDeck++;
+    if(minnaSig(existing)!==minnaSig(minnaCard(item,lesson))) toUpdate++;
+  });
+  return {inDeck, total:vocab.length, toAdd, toUpdate};
+}
 // Add every not-yet-added vocab word for a lesson to the deck. Idempotent
 // (skips words whose minnaKey is already present). Returns the count added.
 function activateMinnaVocab(lesson, vocab){
   const cs=loadCustom(); let added=0, updated=0;
-  // Signature of the metadata the user cares about seeing change (tags + iTalki).
-  const sig=v=>(v.tags||[]).join('|')+'·'+(v.italki?'1':'0');
   vocab.forEach(item=>{
     const fresh=minnaCard(item,lesson);
     const existing=cs.verbs.find(v=>v.minnaKey===item.key);
@@ -1883,7 +1925,7 @@ function activateMinnaVocab(lesson, vocab){
       // Re-activation patches the textbook-derived metadata onto an already-added
       // card so it picks up new info (notably the iTalki tag) WITHOUT losing its
       // rank — the card's SRS progress is keyed by rank, so we preserve it.
-      const changed=sig(existing)!==sig(fresh);
+      const changed=minnaSig(existing)!==minnaSig(fresh);
       Object.assign(existing,{tags:fresh.tags,italki:fresh.italki,mean:fresh.mean,cat:fresh.cat,type:fresh.type,trans:fresh.trans,tip:fresh.tip});
       if(changed)updated++;
       return;
@@ -1936,16 +1978,22 @@ async function renderMinnaLesson(n, body){
   let L;
   try{ L=await fetchMinnaLesson(n); }
   catch(e){ body.innerHTML='<div class="mn-error">Could not load lesson '+n+(e&&e.status?(' ('+e.status+')'):'')+'.</div>'; return; }
-  const inDeck=(L.vocab||[]).filter(v=>minnaInDeck(v.key)).length, tot=(L.vocab||[]).length;
-  const allIn=tot>0&&inDeck===tot;
+  // Three button states: words still to add → "Add"; all in deck but some carry
+  // stale metadata (e.g. a pre-iTalki activation) → "Update N tags" (so the
+  // retroactive patch is reachable even when nothing is left to add); all current
+  // → disabled "All vocab in your deck".
+  const st=minnaActivationStatus(n, L.vocab||[]);
+  const btn = st.toAdd ? {ic:'plus',   label:'Add all vocab to deck', dis:''}
+    : st.toUpdate     ? {ic:'refresh', label:'Update '+st.toUpdate+' vocab tag'+(st.toUpdate===1?'':'s'), dis:''}
+    :                   {ic:'check',   label:'All vocab in your deck', dis:' disabled'};
   body.innerHTML=`
     <div class="mn-head" style="margin-top:14px">
       <div class="mn-title">${escapeHtml(L.title||('Lesson '+n))}</div>
       ${L.theme?`<div class="mn-theme">${escapeHtml(L.theme)}</div>`:''}
     </div>
     <div class="mn-actions">
-      <button class="chip primary" id="mnAddDeck"${allIn?' disabled':''}><svg class="ic" aria-hidden="true"><use href="#i-${allIn?'check':'plus'}"/></svg>${allIn?'All vocab in your deck':'Add all vocab to deck'}</button>
-      <span class="v-in" id="mnDeckCount">${inDeck}/${tot} in your SRS deck</span>
+      <button class="chip primary" id="mnAddDeck"${btn.dis}><svg class="ic" aria-hidden="true"><use href="#i-${btn.ic}"/></svg>${btn.label}</button>
+      <span class="v-in" id="mnDeckCount">${st.inDeck}/${st.total} in your SRS deck</span>
     </div>
     ${minnaVocabSection(L)}
     ${minnaGrammarSection(L)}
