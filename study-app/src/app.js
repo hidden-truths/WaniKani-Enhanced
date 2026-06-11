@@ -19,6 +19,7 @@
 import './styles.css';
 import { VERBS } from './data/verbs.js';
 import { state, attachLevels } from './state.js';
+import { API_BASE, localDay } from './config.js';
 import * as Core from './core/index.js';
 const {
   TYPE_LABEL, CATS, CAT_LABEL, colorClass, cardStamp,
@@ -35,7 +36,7 @@ const {
 // VITE_API_BASE (baked by Vite) points at https://api.wkenhanced.dev and every fetch +
 // the TTS/Minna <audio> address the API there. The httpOnly session cookie still rides
 // because the two are same-SITE (Domain=.wkenhanced.dev) and api() sends credentials:'include'.
-const API_BASE = import.meta.env.VITE_API_BASE || '';
+// API_BASE + localDay now live in config.js (imported above).
 // ---- CUSTOM VERBS storage (user-added; synced to the cloud when signed in) ----
 // Shape: { seq:<monotonic rank counter, starts at 100>, verbs:[ <verb>, … ] }.
 // Each custom verb has the same fields as a baked one plus custom:true, and a
@@ -95,14 +96,7 @@ if(!state.store.daily)state.store.daily={};
 function saveLocal(){ try{localStorage.setItem(KEY,JSON.stringify(state.store));}catch(e){} }
 function save(){ saveLocal(); if(typeof scheduleCloudSync==='function')scheduleCloudSync(); }
 
-// Local-time YYYY-MM-DD. We deliberately AVOID toISOString() alone because it's
-// UTC — an evening study session in a western timezone would otherwise count
-// toward the next calendar day. Shifting by the tz offset fixes the bucket.
-function localDay(d){
-  d=d||new Date();
-  const tz=d.getTimezoneOffset()*60000;
-  return new Date(d-tz).toISOString().slice(0,10);
-}
+// localDay now lives in config.js (imported above).
 
 // Leitner SRS (BOX_DAYS / cardStat / scheduleCard / isDue / dueCards /
 // nextDueLabel) lives in core/srs.js; the forecast helpers in core/forecast.js;
