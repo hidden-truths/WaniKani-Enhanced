@@ -1275,7 +1275,7 @@ function renderBrowse(){
         <div style="text-align:right"><div class="stamp ${stamp.cls}">${stamp.label}</div>
         <div class="jlpt-pill">${v.jlpt}</div>${provenanceBadge(v)}</div></div>
       ${leech?'<span class="leech-badge">⚠ LEECH</span>':''}
-      <div class="tags">${tiLabel?`<span class="tag" style="color:var(--ichidan)">${tiLabel}</span>`:''}${v.tags.filter(t=>!t.startsWith('top')).map(t=>`<span class="tag">${escapeHtml(t)}</span>`).join('')}</div>`;
+      <div class="tags">${tiLabel?`<span class="tag" style="color:var(--ichidan)">${tiLabel}</span>`:''}${v.tags.filter(t=>!t.startsWith('top') && t!=='みんなの日本語' && !/^mnn-l\d+$/.test(t)).map(t=>t==='iTalki'?`<span class="tag" style="color:var(--ichidan);border:1px solid var(--ichidan)">iTalki</span>`:`<span class="tag">${escapeHtml(t)}</span>`).join('')}</div>`;
     card.addEventListener('click',()=>openVerbDetail(v));
     const sb=card.querySelector('.speak-btn');   // play reading without opening the modal
     if(sb)sb.addEventListener('click',e=>{e.stopPropagation();speak(v.read);});
