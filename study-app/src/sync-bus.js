@@ -9,9 +9,10 @@
 // the indirection lives here. cloud's own schedulers still self-gate on `account`, so a
 // signed-out save() routes here, fires the registered scheduler, and that scheduler
 // no-ops — same behavior as before.
+// (The `minna` blob isn't here: saveMinna is minna-internal, so minna.js calls its own
+// scheduleMinnaSync directly rather than routing through the bus.)
 export const sync = {
   progress: () => {},   // the `verbs` blob (state.store) — save()
   custom: () => {},     // the `custom-verbs` blob — saveCustom()
   settings: () => {},   // the `settings` blob — saveSettings()
-  minna: () => {},      // the `minna` blob (notes + overlays) — saveMinna()
 };
