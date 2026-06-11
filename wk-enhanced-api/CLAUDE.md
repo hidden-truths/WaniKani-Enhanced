@@ -48,9 +48,11 @@ Single scannable reference for every knob that differs between local dev and the
 | `S3_FORCE_PATH_STYLE` | n/a | `true` | Mandatory for DO Spaces + `Bun.S3Client`; see dead-end below. |
 | `ADMIN_TOKEN` | `dev-admin-token` | `openssl rand -hex 32` value | Used by `/v1/admin/*` bearer auth. |
 | `COOKIE_SECURE` | `false` | `true` | Session cookie `Secure` flag. MUST be false on `http://localhost` (browser drops Secure cookies on http → login silently fails); true in prod where Cloudflare fronts HTTPS. |
+| `COOKIE_DOMAIN` | blank (host-only) | `.wkenhanced.dev` | Session-cookie `Domain`. Blank = host-only (correct for dev + any same-origin deploy). Prod sets the dotted apex so the cookie set by `api.` also reaches the apex study-app origin. `lib/auth.ts` set + delete both honor it. |
+| `STUDY_APP_ORIGINS` | `http://localhost:5173` (the Vite default) | `https://wkenhanced.dev` | Comma-sep cross-origin allowlist for the study-app routes' credentialed CORS (`config.studyApp.allowedOrigins`). Only these origins get the echoed-origin + `Allow-Credentials` branch. |
 | `MINNA_OWNER_EMAILS` | usually blank (any signed-in user) | owner email(s) | Comma-sep allowlist gating the みんなの日本語 dashboard + audio (`/v1/minna/*`). Empty = any signed-in account; set to your email in prod to keep the copyrighted Minna content private. |
 | `SESSION_TTL_DAYS` | `30` | `30` | Login session lifetime (cookie maxAge + DB `expires_at`). |
-| Study-app hostname | `http://localhost:3000/` | `https://wkenhanced.dev/` (apex) **and** `https://api.wkenhanced.dev/` both serve it | Add a Cloudflare Tunnel ingress for the apex → `http://localhost:3000`; see deploy/README.md. The app uses relative URLs so it's correct under either host. |
+| Study-app serving | own `vite dev` process on `http://localhost:5173` | own **nginx container** (`web:` service); apex `https://wkenhanced.dev` → `127.0.0.1:8080` | SEPARATE container now — this API serves NO study-app assets (`/`, `/study`, `/app.js`, … are gone; `/` returns service-info JSON). Apex Tunnel ingress → `:8080`, `api.` → `:3000`. See deploy/README.md "two-container cut-over". |
 | `WK_API_TOKEN` | usually blank (skip `scope:all` warms) | required for monthly bulk warm | Personal token from your WK settings. |
 | Env file location | `wk-enhanced-api/.env` | `/etc/wk-enhanced-api/env` (chmod 600 root) | Prod uses Compose `env_file:`; Bun's `.env` auto-load is for dev only. |
 | Process supervisor | `bun dev` (your terminal) | `systemctl ... wk-enhanced-api.service` → `docker compose up -d` | Container runs the bun process inside; systemd just brings the stack up on boot. Unit + compose.yaml live in `deploy/` and the repo root respectively. |
@@ -78,17 +80,11 @@ src/
 │   ├── zodHook.ts            # shared defaultHook → reformats Zod failures into our ErrorSchema shape
 │   ├── auth.ts              # password hashing (Bun.password), session cookie + currentUser() helpers
 │   └── sleep.ts
-web/                         # the verb-trainer study app, served at / (and /study).
-├── index.html               #   markup; served at / and /study
-├── styles.css               #   styles            (served at /styles.css)
-├── verbs.js                 #   the VERBS dataset  (served at /verbs.js)
-├── examples.js              #   leveled example sentences (served at /examples.js)
-├── app.js                   #   all logic          (served at /app.js)
-└── verbs-core.test.ts       #   bun:test for the pure core (verbs.js + app.js under a DOM stub)
-                             #   Classic <script>/<link> (not modules). Talks to /v1/auth/*,
-                             #   /v1/progress/* and /v1/tts on this origin. Was one self-contained
-                             #   HTML file (from ../japanese-study/japanese-verbs.html); split when
-                             #   it outgrew a single document. See web/CLAUDE.md.
+                             # (The study app used to live here as web/ and be served at /.
+                             #  It's now its OWN Vite project + nginx container — ../study-app/ —
+                             #  served at the apex wkenhanced.dev, talking to this API CROSS-origin.
+                             #  This API no longer serves any static study-app assets. See
+                             #  ../study-app/CLAUDE.md + the cross-origin CORS in index.ts.)
 ├── routes/                   # one file per route group; each is an OpenAPIHono sub-router
 │   ├── health.ts
 │   ├── vocab.ts              # GET /v1/vocab/{word} + POST /v1/vocab/batch
@@ -179,7 +175,7 @@ Lazy fill (`GET /v1/vocab/{word}` on a cold word) calls `warmWord()` synchronous
 | POST | `/v1/admin/warm` | Bearer | Three scopes: `word` (sync), `all` (async), `index_meta`. |
 | GET | `/v1/admin/jobs` | Bearer | Recent warm-job audit records, newest-first. |
 | GET | `/media/*` | — | Static media (LocalStorage driver only). |
-| GET | `/` , `/study` , `/styles.css` , `/verbs.js` , `/examples.js` , `/app.js` | — | The verb-trainer study app's static files (`web/`). |
+| GET | `/` , `/_info` | — | Service-info JSON (`app: https://wkenhanced.dev`). The study app is its own container now — this API serves no static study-app assets. |
 | GET | `/v1/tts?text=` | — | Google TTS proxy for the study app → `audio/mpeg`. In-process cache; `Cache-Control: immutable`. 400 missing/over-200-char, 502 upstream. |
 | POST | `/v1/auth/register` | — | Create account; sets `wk_session` httpOnly cookie. 409 if email taken. Rate-limited (8/hr/IP). |
 | POST | `/v1/auth/login` | — | Log in; sets cookie. 401 on bad creds (constant-time, no email enumeration). Rate-limited (20/15min/IP). |
@@ -321,12 +317,20 @@ DO Droplet ($6/mo, SFO3) + DO Spaces ($5/mo) + Cloudflare Tunnel (free) ≈ **$1
 
 The server now also hosts the **Japanese verb-trainer study app** at `/` (static files in `web/`) and backs it with **email/password accounts + per-user sync**, a **Google TTS proxy** (`/v1/tts`), and **per-IP rate limiting** on the auth endpoints. This is a distinct surface from the vocab/warm API the userscript uses — it has its own auth model and its own routes.
 
-> **Direction of travel:** the study app is intended to become a **separate application in its own Docker container** (served at `wkenhanced.dev`), with this API as a *separate* container at `api.wkenhanced.dev` — two services on the same droplet. That makes the two **cross-origin**, so the "Same-origin only" note below will need to flip to `Domain=.wkenhanced.dev` cookies + origin-scoped credentialed CORS. The text below is the **current** same-origin arrangement; the target shape + migration live in [web/NEXT_STEPS.md](web/NEXT_STEPS.md) "THE BIG ONE".
+> **DONE — the two-container split shipped.** The study app is now a **separate application
+> in its own Docker container** ([../study-app/](../study-app), Vite→nginx) served at the apex
+> `wkenhanced.dev`; this API is a *separate* container at `api.wkenhanced.dev` (two services in
+> [compose.yaml](compose.yaml)). They're same-site but **cross-origin**, so the cookie uses
+> `Domain=.wkenhanced.dev` + an origin-scoped credentialed-CORS branch (see [index.ts](src/index.ts)
+> `STUDY_ROUTE` + `lib/auth.ts`). The bullets below are updated to that arrangement. Cut-over
+> runbook: [deploy/README.md](deploy/README.md) "Serving the study app at wkenhanced.dev".
 
-> **The study-app frontend has its own docs** in [web/](web/): [web/README.md](web/README.md) (overview/run), [web/CLAUDE.md](web/CLAUDE.md) (architecture + design-system contracts + dead-ends), [web/NEXT_STEPS.md](web/NEXT_STEPS.md). This section below covers only the **server side** of that app (auth/progress routes + tables).
+> **The study-app frontend has its own docs** in [../study-app/](../study-app): README (overview/run),
+> CLAUDE.md (module map + design-system contracts + dead-ends), NEXT_STEPS, CARDS, MINNA. This
+> section below covers only the **server side** of that app (auth/progress routes + tables).
 
 - **Auth model:** opaque session token in an `httpOnly`, `SameSite=Lax`, `Secure`(prod) cookie named `wk_session`. No JWT, no bearer token, no new dependency — `Bun.password` (argon2id) hashes passwords, `hono/cookie` sets the cookie, `bun:sqlite` stores sessions. See [src/lib/auth.ts](src/lib/auth.ts).
-- **Same-origin only:** the app is served from the same origin as the API, so the cookie travels automatically on `fetch(..., {credentials:'include'})`. The blanket `Access-Control-Allow-Origin: *` CORS does **not** apply to these (same-origin requests skip CORS); a cross-origin caller can't use cookie auth against `*` anyway, which is fine — only the served app needs these endpoints.
+- **Cross-origin, credentialed:** the app (wkenhanced.dev) and this API (api.wkenhanced.dev) are same-site but different ORIGINS, so the blanket `Access-Control-Allow-Origin: *` is illegal for these cookie-bearing requests. The CORS middleware in [index.ts](src/index.ts) has a second branch: for the study-app routes (`STUDY_ROUTE` = `/v1/(auth|progress|sessions|minna)`) from an allowlisted origin (`config.studyApp.allowedOrigins`, env `STUDY_APP_ORIGINS`) it echoes the **exact** origin + `Access-Control-Allow-Credentials: true` + `Vary: Origin` + `PUT`; everything else keeps blanket `*`. The cookie reaches both subdomains via `Domain=.wkenhanced.dev` (env `COOKIE_DOMAIN`, set in `lib/auth.ts`). A non-allowlisted origin falls to `*`, which the browser refuses to use with credentials — so cross-site cookie auth is locked to the study app. Minna native audio (`/v1/minna/audio`) is fetched by an `<audio crossOrigin="use-credentials">`, which is why it needs the credentialed branch too.
 - **Progress is opaque + multi-app:** `PUT /v1/progress/{app}` stores whatever the client serializes. The server validates size (≤1 MB) and the `app` enum (`verbs` = the progress `store`; `custom-verbs` = custom verb definitions; `settings` = the Settings-page preferences), nothing else. The client owns its own schema/versioning. Adding an app key is a one-line enum widen in [src/routes/progress.ts](src/routes/progress.ts) — the DB/schema are already per-`(user,app)` and opaque.
 - **Durable session history:** `POST /v1/sessions` ([src/routes/sessions.ts](src/routes/sessions.ts)) appends every completed session to the never-pruned `study_sessions` table — independent of the capped `store.sessions` the charts use, so no history is lost even past the cap. The study app fires it from `endSession` (signed-in only, fire-and-forget). A `GET` to list/aggregate is a future add (the data is already being captured).
 - **TTS proxy:** `GET /v1/tts?text=<jp>` calls the existing `googleTts` service (`tl=ja`, 200-char cap) and returns `audio/mpeg`. Responses are cached in-process (bounded) and sent `Cache-Control: immutable`, so Google is hit ≤ once per unique reading per server lifetime. The study app uses this instead of the browser's speechSynthesis (falling back to it only over `file://` or on failure).

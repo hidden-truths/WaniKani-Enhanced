@@ -1,52 +1,62 @@
-# web/ — Japanese Verb Trainer study app
+# study-app — 日常日本語 Japanese Trainer
 
 ## What this is
 
-The **verb-trainer study app**: five no-build static files —
-[index.html](index.html) (markup) + [styles.css](styles.css) + [verbs.js](verbs.js)
-(the `VERBS` dataset) + [examples.js](examples.js) (`EXAMPLES` — five JLPT-leveled
-example sentences per verb) + [app.js](app.js) (all logic). Loaded as classic
-`<link>`/`<script src>` (NOT ES modules), so opening `index.html` over `file://`
-still works. Served at the apex of the backing API server (`/`, `/study`, plus
-`/styles.css` `/verbs.js` `/app.js`). Originally one self-contained HTML file
-(derived from [../../japanese-study/japanese-verbs.html](../../japanese-study/japanese-verbs.html));
-split once it passed ~2300 lines. User-facing overview: [README.md](README.md).
-What to do next: [NEXT_STEPS.md](NEXT_STEPS.md). **Card data model + how to author a
-complete vocab card (all fields, formats, recipes): [CARDS.md](CARDS.md).**
+The **日常日本語 study app**: a standalone **Vite** project (ES modules, no framework).
+[index.html](index.html) loads one entry — [src/app.js](src/app.js), the DOM/render/
+feature glue — which imports:
 
-This is a **separate surface** from the WaniKani userscript flow — it just shares
-the droplet. Backend (auth, progress storage, cookie model) is the server's:
-[../CLAUDE.md](../CLAUDE.md) "Accounts + study app", [../deploy/README.md](../deploy/README.md).
+- **`src/core/`** — the PURE, unit-tested core (DOM-free): `srs`, `forecast`, `facets`,
+  `examples`, `kana`, `pitch`, `text`, `minna`, behind a barrel `core/index.js`.
+- **`src/state.js`** — the ONE shared mutable hub: `state.store` (progress), `state.DATA`
+  (the live deck), `state.minnaStore`, `state.MAXRANK`, `state.BUILTIN_RANK_BY_JP`, plus
+  `attachLevels()`. An object whose **properties are mutated** (not `export let` — importers
+  can't reassign those, and the test does `state.store = {...}`).
+- **`src/data/`** — `verbs.js` (`export const VERBS`/`ACCENTS`) + `examples.js`
+  (`export const EXAMPLES`).
 
-**The single best source of truth is the top-of-file block comment** in
-`index.html` (architecture map, HISTORY of the split, data model, key design
-decisions, mnemonic policy, OUTSTANDING WORK). Read it first. This file adds the
-*contributor* layer: how-to-work-on-it, the design-system contracts, and the
-dead-end warnings.
+Built + content-hashed by Vite, served by its **own nginx container** at the apex
+`https://wkenhanced.dev` — **separate** from the API container at `api.wkenhanced.dev`
+(two containers, one droplet). The app talks to the API over HTTP **cross-origin**
+(same-site): every `/v1/*` call is rebased onto `API_BASE` (`import.meta.env.VITE_API_BASE`).
+Originally one self-contained HTML file (derived from
+[../japanese-study/japanese-verbs.html](../japanese-study/japanese-verbs.html)); grew into
+classic-script files served by the API, then extracted here as its own Vite project.
+
+User-facing overview: [README.md](README.md). What to do next: [NEXT_STEPS.md](NEXT_STEPS.md).
+**Card data model + authoring: [CARDS.md](CARDS.md).** みんなの日本語: [MINNA.md](MINNA.md).
+Backend (auth, progress, cookie, the cross-origin CORS) is the server's:
+[../wk-enhanced-api/CLAUDE.md](../wk-enhanced-api/CLAUDE.md) "Accounts + study app",
+[../wk-enhanced-api/deploy/README.md](../wk-enhanced-api/deploy/README.md). This file adds the
+*contributor* layer: how-to-work-on-it, the design-system contracts, and the dead-end warnings.
 
 ## How to work on it
 
-1. **No build, no deps.** Edit the files directly — styles in `styles.css`, the
-   dataset in `verbs.js`, logic in `app.js`, markup in `index.html`. Served by the
-   API server: `cd .. && bun dev`, then reload **http://localhost:3000/**. (Pure
-   offline: open `index.html` via `file://` — works because the assets load as
-   classic `<link>`/`<script src>`, not modules; accounts/sync/TTS need the server.)
+1. **Vite.** `bun install` once, then `bun run dev` (→ http://localhost:5173) with
+   `bun dev` in `../wk-enhanced-api` (→ :3000) for accounts/TTS/Minna. `bun run build`
+   → `dist/`; `bun run preview` serves the built bundle. Edit modules under `src/`:
+   pure logic in `src/core/*`, shared state in `src/state.js`, DOM/feature glue in
+   `src/app.js`, markup in `index.html`, styles in `src/styles.css` (imported by app.js).
 2. **Verify visually.** This is a UI; screenshot the change. Drive it with the
-   browser-preview tooling (`.claude/launch.json` has a `wk-enhanced-api` config).
-   See the preview caveat in the dead-ends below. **Run `bun test` too** — the pure
-   core is covered by `verbs-core.test.ts` (it concatenates verbs.js + app.js).
+   browser-preview tooling (`.claude/launch.json` has both `study-app` and
+   `wk-enhanced-api` configs). See the preview caveat in the dead-ends below. **Run
+   `bun run test` too** — `test/core.test.ts` (Vitest + happy-dom) imports the real
+   `src/core/*` modules, so a broken export/import fails it loudly.
 3. **Commit conventions** (same as the rest of the repo): one logical change → one
    commit; commit at the end of a feature without being asked; fix stale nearby
    comments in the same commit.
-4. **No-build + offline-capable is still the contract.** Do **not** add a CDN icon
-   font, a chart library, a framework, a bundler, or ES modules. Keep the assets as
-   classic scripts so `file://` keeps working. New icons go in the inline SVG
-   sprite; new charts are hand-rolled SVG like `lineChart`/`barChart`. `verbs.js`
-   and `app.js` share one global scope (classic scripts) — `app.js` relies on
-   `verbs.js`'s global `VERBS`, so load order (verbs before app) matters.
-5. **Accounts need `COOKIE_SECURE=false` in dev** — a `Secure` cookie is dropped
-   over `http://localhost` and login silently fails. (#1 thing to check if local
-   login won't stick. Defaults false.)
+4. **The no-framework / offline-friendly ethos still holds — but modules + a bundler
+   are now IN** (that's the whole point of the extraction). Do **not** add a framework,
+   a CDN icon font, or a chart library: icons stay an inline SVG `<symbol>` sprite, charts
+   stay hand-rolled SVG (`lineChart`/`barChart`). Keep `src/core/*` **DOM-free** (the test
+   imports them under happy-dom) and **parameterize** anything that reads app state via the
+   `state` object — don't make core import DOM. The old `file://` double-click is gone by
+   decision (server-only); runtime offline-degradation against localStorage stays.
+5. **Cross-origin auth (dev mirrors prod).** Vite :5173 → API :3000 is cross-origin +
+   same-site. Keep `COOKIE_SECURE=false` (a `Secure` cookie is dropped over
+   `http://localhost`) and the API's `STUDY_APP_ORIGINS` allowlisting the Vite origin
+   (defaults to `http://localhost:5173`). #1 thing to check if local login won't stick.
+   See the cross-origin dead-end below + [../wk-enhanced-api/CLAUDE.md](../wk-enhanced-api/CLAUDE.md).
 
 ## Architecture (map to the in-file section banners)
 
@@ -130,8 +140,9 @@ the header/toolbar, tabs, and the auth modal + sign-up banner.
   an advisory verdict + `session.suggested`). `bindSingle` wires the Input/Audio
   single-select chips. Prefs persist as `jpverbs_input` / `jpverbs_audio`. (Audio
   playback itself is the TTS bullet above.)
-- **Cloud:** `api`, `bootAuth`, `updateAccountChip`, `openAuth`. Same-origin,
-  httpOnly cookie. THREE debounced synced blobs: progress (app `verbs`), custom
+- **Cloud:** `api`, `bootAuth`, `updateAccountChip`, `openAuth`. **Cross-origin**
+  (`api()` rebases every path onto `API_BASE` + sends `credentials:'include'`), the
+  session lives in a `.wkenhanced.dev` httpOnly cookie. THREE debounced synced blobs: progress (app `verbs`), custom
   verbs (app `custom-verbs`), settings (app `settings`) — each with a
   `schedule*Sync`/`push*Cloud`/`pull*Cloud` trio; all server-wins on login, fresh
   account seeds from local (`pullCloud` chains all three). Plus `logSession` →
@@ -214,6 +225,20 @@ Component contracts you must preserve:
 
 ## Things that look like bugs but aren't (DEAD-END WARNINGS)
 
+- **The API is CROSS-ORIGIN — every call must go through `API_BASE`, not a relative
+  `/v1`.** The app is its own container at `wkenhanced.dev`; the API is at
+  `api.wkenhanced.dev`. `const API_BASE = import.meta.env.VITE_API_BASE` (dev
+  `http://localhost:3000`, prod `https://api.wkenhanced.dev`, baked by the Dockerfile arg);
+  `api()` fetches `API_BASE+path` with `credentials:'include'`, and the TTS + Minna
+  `<audio>` srcs prepend it too. The session cookie rides because the two are **same-site**
+  (`Domain=.wkenhanced.dev`, `SameSite=Lax`). **Minna native audio is cookie-gated**, so its
+  `<audio>` sets `crossOrigin='use-credentials'` — without it the cookie isn't sent and the
+  audio 401s; the server answers `/v1/minna/audio` with an origin-scoped
+  `Allow-Credentials` (never `*`). **Gotcha that bit us once:** the `store`→`state.store`
+  module-split rename also rewrote the string `cache:'no-store'` → `'no-state.store'` (the
+  hyphen is a word boundary), making every `api()` fetch throw an invalid-`RequestCache`
+  TypeError that surfaced only signed-in. Server side of all this: the credentialed-CORS
+  branch + cookie `Domain` in [../wk-enhanced-api/CLAUDE.md](../wk-enhanced-api/CLAUDE.md).
 - **Category / Type / Transitivity / Topic / Status / Source chips are SIX AND'd
   facets, not one OR'd pool** (this changed — older docs/commits describing a shared
   pool, or four/five facets, are stale). A chip's facet is derived from its token via
@@ -421,7 +446,8 @@ Component contracts you must preserve:
   material never ships to anonymous visitors. `renderMinna()` (lazy on tab activation)
   shows a sign-in gate when `!account`, else fetches the lesson and renders
   vocab/grammar/examples/conversation + native-audio buttons (`/v1/minna/audio`, one
-  reused `<audio>`; same-origin so the session cookie authorizes). **Vocab "activation"
+  reused `<audio>` with `crossOrigin='use-credentials'` so the session cookie authorizes
+  it cross-origin — see the cross-origin dead-end above). **Vocab "activation"
   REUSES the custom-verb system, not a new data path:** each word becomes a tagged
   (`みんなの日本語` + `mnn-l<n>`, plus `iTalki` for words flagged `italki:true` in the lesson
   JSON) DICTIONARY-form custom card via `loadCustom`/`saveCustom` +`seq`, so it joins the

@@ -13,10 +13,10 @@ back here:
 - **Frontend** (the tab itself): [index.html](index.html) `#panel-minna` + the
   `MINNA` section of [app.js](app.js) + Minna styles in [styles.css](styles.css).
   Contributor notes: the みんなの日本語 dead-end in [CLAUDE.md](CLAUDE.md).
-- **Server** (content + audio + gating): [../src/routes/minna.ts](../src/routes/minna.ts),
-  [../src/services/minnaAudio.ts](../src/services/minnaAudio.ts),
-  [../data/minna/](../data/minna/). API rows + the `MINNA_OWNER_EMAILS` parity row
-  live in [../CLAUDE.md](../CLAUDE.md).
+- **Server** (content + audio + gating): [../wk-enhanced-api/src/routes/minna.ts](../wk-enhanced-api/src/routes/minna.ts),
+  [../wk-enhanced-api/src/services/minnaAudio.ts](../wk-enhanced-api/src/services/minnaAudio.ts),
+  [../wk-enhanced-api/data/minna/](../wk-enhanced-api/data/minna/). API rows + the `MINNA_OWNER_EMAILS` parity row
+  live in [../wk-enhanced-api/CLAUDE.md](../wk-enhanced-api/CLAUDE.md).
 - **Roadmap**: the [Next steps](#roadmap--next-steps) section below is the Minna-specific
   backlog (Phase 2 = record-and-compare). The general [NEXT_STEPS.md](NEXT_STEPS.md)
   points here for anything Minna.
@@ -85,13 +85,13 @@ All three are **signed-in only**, optionally narrowed to an owner allowlist
 | GET | `/v1/minna/lessons/{n}` | `no-store` | The curated lesson JSON, served verbatim from `data/minna/lesson-<n>.json`. `404` if absent. |
 | GET | `/v1/minna/audio?src=…` | `private, immutable` | A native-audio MP3, proxied from vnjpclub once and cached in storage thereafter. |
 
-Defined in [../src/routes/minna.ts](../src/routes/minna.ts); mounted at `/v1/minna` in
-[../src/index.ts](../src/index.ts). Schemas in [../src/schemas.ts](../src/schemas.ts)
+Defined in [../wk-enhanced-api/src/routes/minna.ts](../wk-enhanced-api/src/routes/minna.ts); mounted at `/v1/minna` in
+[../wk-enhanced-api/src/index.ts](../wk-enhanced-api/src/index.ts). Schemas in [../wk-enhanced-api/src/schemas.ts](../wk-enhanced-api/src/schemas.ts)
 (`MinnaLessons…`, `MinnaLesson`, `MinnaAudioQuery`).
 
 ### The audio proxy (and its SSRF guard)
 
-[../src/services/minnaAudio.ts](../src/services/minnaAudio.ts) is the only thing that
+[../wk-enhanced-api/src/services/minnaAudio.ts](../wk-enhanced-api/src/services/minnaAudio.ts) is the only thing that
 talks to vnjpclub. It is deliberately narrow:
 
 - **Host is hard-coded** (`https://www.vnjpclub.com`); the caller supplies only a
@@ -102,7 +102,7 @@ talks to vnjpclub. It is deliberately narrow:
   miss (that's vnjpclub's "file not found" response).
 - **Cached in our storage layer** via `keys.minnaAudio(path)` →
   `minna/audio/<path-minus-/Audio/>` (the new `storage.get()` method in
-  [../src/services/storage.ts](../src/services/storage.ts) makes get-or-fetch possible).
+  [../wk-enhanced-api/src/services/storage.ts](../wk-enhanced-api/src/services/storage.ts) makes get-or-fetch possible).
   So vnjpclub is hit **at most once per file, ever**; every later play is served
   same-origin from us. In prod that cache is the DO Spaces bucket; in dev it's
   `dev-data/media/minna/audio/…`.
@@ -123,7 +123,7 @@ while forbidding any shared/CDN cache from holding it.
 
 Curated lessons live at **`data/minna/lesson-<n>.json`** (git-tracked, in the container
 image via the Dockerfile's `COPY data ./data`). Shape (see
-[../data/minna/lesson-23.json](../data/minna/lesson-23.json)):
+[../wk-enhanced-api/data/minna/lesson-23.json](../wk-enhanced-api/data/minna/lesson-23.json)):
 
 | Field | Type | Notes |
 |---|---|---|
@@ -170,7 +170,7 @@ only `accent`.
 ### The content pipeline (adding a lesson)
 
 1. **Draft** with the extractor:
-   [../scripts/scrape-minna.ts](../scripts/scrape-minna.ts) pulls the vnjpclub
+   [../wk-enhanced-api/scripts/scrape-minna.ts](../wk-enhanced-api/scripts/scrape-minna.ts) pulls the vnjpclub
    vocabulary + grammar pages for a lesson and emits a `*.draft.json`. It's a *draft* —
    the grammar/conversation HTML is messy and needs a human pass.
 2. **Curate** by hand into `data/minna/lesson-<n>.json` — fix readings, add dictionary
@@ -180,7 +180,7 @@ only `accent`.
 3. **Audio just works** — the `audio` paths point at vnjpclub; the proxy fetches +
    caches on first play. Nothing to pre-download.
 4. **Ship**: it's static data in the image, so a lesson add is a normal redeploy
-   (`docker compose build` — see [../deploy/README.md](../deploy/README.md)).
+   (`docker compose build` — see [../wk-enhanced-api/deploy/README.md](../wk-enhanced-api/deploy/README.md)).
 
 ---
 
@@ -261,7 +261,7 @@ The **only new synced blob** is the per-lesson notes (below).
 | server `data/minna/lesson-<n>.json` | — | Lesson content — server-owned, git-tracked, never in localStorage. |
 
 The `minna` progress key is a one-line widen of the `app` enum in
-[../src/routes/progress.ts](../src/routes/progress.ts); the table is already opaque +
+[../wk-enhanced-api/src/routes/progress.ts](../wk-enhanced-api/src/routes/progress.ts); the table is already opaque +
 per-`(user, app)`.
 
 ---
@@ -273,9 +273,9 @@ The dashboard rehosts vnjpclub's aggregated Minna no Nihongo content + native au
 tab is **account-gated to an owner allowlist** to keep that material out of public view.
 
 - **`MINNA_OWNER_EMAILS`** — comma-separated allowlist, parsed in
-  [../src/config.ts](../src/config.ts) (`config.minna.ownerEmails`, lowercased).
+  [../wk-enhanced-api/src/config.ts](../wk-enhanced-api/src/config.ts) (`config.minna.ownerEmails`, lowercased).
   **Blank = any signed-in account**; set = only those emails. Set to the owner's email
-  in prod ([../deploy/env.production.template](../deploy/env.production.template)).
+  in prod ([../wk-enhanced-api/deploy/env.production.template](../wk-enhanced-api/deploy/env.production.template)).
 - Gating is enforced at the **origin** on every request (the `gate()` in
   `routes/minna.ts`), and the audio's `private` cache stops a shared cache from serving
   around it. Client-side rendering is just UX — the data never leaves the server without
@@ -283,7 +283,7 @@ tab is **account-gated to an owner allowlist** to keep that material out of publ
 - **Prod note:** the live droplet's `/etc/wk-enhanced-api/env` must carry
   `MINNA_OWNER_EMAILS` (it's not updated by `git pull`); without it a rebuilt server
   serves the tab to any signed-in account. See the redeploy steps in
-  [../deploy/README.md](../deploy/README.md).
+  [../wk-enhanced-api/deploy/README.md](../wk-enhanced-api/deploy/README.md).
 
 ---
 
@@ -335,7 +335,7 @@ reason the audio is already proxied + stored same-origin in Phase 1.
 
 ### More lessons & sections
 
-- **More chapters** — run [../scripts/scrape-minna.ts](../scripts/scrape-minna.ts) for
+- **More chapters** — run [../wk-enhanced-api/scripts/scrape-minna.ts](../wk-enhanced-api/scripts/scrape-minna.ts) for
   other lessons and curate them into `data/minna/lesson-<n>.json`. The whole UI is
   already N-lesson aware (chapter chips, `lastLesson`). **Shipped so far: L22, L23, L24.**
   (L23 carries iTalki flags from the maintainer's lesson; L22/L24 don't yet — add

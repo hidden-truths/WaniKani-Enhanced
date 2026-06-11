@@ -7,10 +7,39 @@ Card schema + authoring: [CARDS.md](CARDS.md).
 
 The original backlog plus a large second wave (accounts + sync, SRS vs free study, the
 file split, leveled examples, the みんなの日本語 dashboard with content/dedup/pitch, deck-wide
-pitch accent) have all shipped. The app has **outgrown "a few static files on the API
-droplet."** The headline next move is structural, below.
+pitch accent) have all shipped — **and so has THE BIG ONE: the split into two apps.**
 
-## 🚩 THE BIG ONE — split into two apps: the learning tool and the API
+## ✅ SHIPPED — split into two apps (the learning tool + the API)
+
+This app was extracted from `wk-enhanced-api/web/` into its own standalone **Vite** project
+(`study-app/`) + its own **nginx container**, served at the apex `wkenhanced.dev`; the API
+(`api.wkenhanced.dev`) stopped serving it. Done in six reviewable commits:
+
+1. **Scaffold** the Vite project alongside the still-live `web/`.
+2. **Module split** — `app.js` (2208 lines, one global scope) → `src/core/*` (pure,
+   unit-tested), `src/state.js` (the shared `store`/`DATA`/`minnaStore` hub), `src/data/*`;
+   `verbs-core.test.ts` ported to Vitest + happy-dom against the real import graph.
+3. **Container** — `study-app/Dockerfile` (vite build → nginx) + a 2nd `web:` service in
+   the API's `compose.yaml` (127.0.0.1:8080).
+4. **Cross-origin cut-over** — `API_BASE`/`VITE_API_BASE` rebasing + Minna `crossOrigin`;
+   server cookie `Domain=.wkenhanced.dev` + an origin-scoped credentialed-CORS branch.
+   Verified in-browser: cross-origin login + all four sync blobs + Minna audio.
+5. **Decommission** — removed the API's static `web/` routes + `COPY web` + the dir.
+6. **Docs** — this file + the others, and the cut-over runbook in
+   [../wk-enhanced-api/deploy/README.md](../wk-enhanced-api/deploy/README.md).
+
+**What's left = operator + optional polish:**
+- **Deploy (manual — the only non-code work):** the Cloudflare apex-ingress repoint + the
+  droplet env (`COOKIE_DOMAIN`, `STUDY_APP_ORIGINS`). The ordered, zero-downtime runbook is
+  in [../wk-enhanced-api/deploy/README.md](../wk-enhanced-api/deploy/README.md).
+- **Optional follow-up:** `src/app.js` is still one (large) module — the DOM/feature glue.
+  Peeling it further into `features/*` modules (flashcard, browse, stats, minna, cloud, …)
+  with callback registration in a thin `main.js` is the natural next refinement, but the
+  high-value win (a tested pure core, real modules, Vite) already landed.
+
+The original plan + constraints are kept below as the historical record.
+
+## 🚩 THE BIG ONE — split into two apps: the learning tool and the API (original plan)
 
 **The decided topology (a requirement, not just an option).** Two **separate
 applications**, each in its **own Docker container**, **co-located on the same

@@ -99,49 +99,70 @@ systemctl start wk-enhanced-api-backup
 journalctl -u wk-enhanced-api-backup -n 50
 ```
 
-## Serving the study app at wkenhanced.dev
+## Serving the study app at wkenhanced.dev (two-container cut-over)
 
-> **Planned change (intended end state):** the study app is to become a **separate
-> application in its own Docker container** at `wkenhanced.dev`, with the API as a
-> *separate* container at `api.wkenhanced.dev` — **two services in this `compose.yaml`,
-> co-located on the same droplet** (two Cloudflare Tunnel ingress rules, apex → tool
-> container). At that point the apex stops pointing at `localhost:3000` and the auth cookie
-> goes cross-origin (`Domain=.wkenhanced.dev` + credentialed CORS). The setup **below
-> describes the CURRENT same-origin arrangement** (API serves the app). See
-> [../web/NEXT_STEPS.md](../web/NEXT_STEPS.md) "THE BIG ONE" for the target shape + migration.
+The study app is now its **own container** — `web:` in [compose.yaml](../compose.yaml), built
+from the sibling [study-app/](../../study-app) (Vite build → nginx on `127.0.0.1:8080`) —
+**separate** from the API (`api:` on `:3000`). The apex `wkenhanced.dev` serves the tool;
+`api.wkenhanced.dev` serves the API. They're same-site but **cross-origin**, so the session
+cookie spans them via `Domain=.wkenhanced.dev` + an origin-scoped credentialed-CORS branch
+(all in code). The steps below are the operator's **one-time cut-over**, ordered for zero
+apex downtime.
 
-The verb-trainer study app is **currently** served by this same server at `/` (and `/study`), with accounts + per-user progress under `/v1/auth/*` and `/v1/progress/*`. The userscript API already reaches the droplet via the `api.wkenhanced.dev` Cloudflare Tunnel hostname → `http://localhost:3000`. To make the **apex** `wkenhanced.dev` serve the app, add a second public hostname to the *same* tunnel pointing at the *same* local service — no second server, no second port.
+**1. Droplet env** (`/etc/wk-enhanced-api/env`) — three lines:
+```
+COOKIE_SECURE=true                        # already in the prod template
+COOKIE_DOMAIN=.wkenhanced.dev             # the cookie now spans apex + api.
+STUDY_APP_ORIGINS=https://wkenhanced.dev  # the credentialed-CORS allowlist
+```
 
-**One env change** — set `COOKIE_SECURE=true` in `/etc/wk-enhanced-api/env` (already in the prod template) so the session cookie carries `Secure`. Then `systemctl restart wk-enhanced-api`.
+**2. Bring up both containers.** The systemd unit's `docker compose up -d` now starts `api`
++ `web`; the `web` image bakes `VITE_API_BASE=https://api.wkenhanced.dev` at build time
+(override via `STUDY_API_BASE`):
+```bash
+cd /opt/wk-enhanced-api/wk-enhanced-api
+docker compose up -d --build               # builds study-app (vite→nginx) + api
+docker compose ps                           # wk-enhanced-api + wk-study-app both Up
+curl -sI http://127.0.0.1:8080/             # 200 text/html (the tool)
+curl -s  http://127.0.0.1:3000/v1/health    # API still healthy
+```
+The API still has its `web/` fallback routes at this stage (until you deploy the
+decommission commit in step 5), so the apex keeps working regardless of ingress state.
 
-**Add the tunnel hostname.** Two cases depending on how the tunnel is managed:
+**3. Repoint the Cloudflare apex ingress** from the API (`:3000`) to the tool (`:8080`).
+`api.wkenhanced.dev` stays on `:3000`.
 
-- **Dashboard-managed tunnel** (Zero Trust → Networks → Tunnels → your tunnel → Public Hostnames):
-  - Add a public hostname: **Subdomain** = *(blank)*, **Domain** = `wkenhanced.dev`, **Service** = `HTTP` → `localhost:3000`.
-  - (Optional) add another for `www.wkenhanced.dev` the same way.
-  - The dashboard creates the proxied DNS record automatically.
-
-- **Locally-managed tunnel** (`/etc/cloudflared/config.yml` on the droplet): add an ingress rule for the apex above the catch-all, mirroring the existing `api.` rule:
+- **Dashboard-managed** (Zero Trust → Networks → Tunnels → your tunnel → Public Hostnames):
+  edit the `wkenhanced.dev` hostname's Service from `HTTP localhost:3000` → `HTTP
+  localhost:8080` (add the hostname pointing at `:8080` if it didn't exist).
+- **Locally-managed** (`/etc/cloudflared/config.yml`):
   ```yaml
   ingress:
     - hostname: api.wkenhanced.dev
       service: http://localhost:3000
-    - hostname: wkenhanced.dev          # <-- add this
-      service: http://localhost:3000
-    - service: http_status:404           # keep the catch-all last
+    - hostname: wkenhanced.dev
+      service: http://localhost:8080       # <-- was :3000
+    - service: http_status:404
   ```
-  Then create the DNS route and restart cloudflared:
-  ```bash
-  cloudflared tunnel route dns <TUNNEL-NAME-OR-ID> wkenhanced.dev
-  systemctl restart cloudflared
-  ```
+  `systemctl restart cloudflared`.
 
-**Verify:**
+**4. Verify the live cross-origin app:**
 ```bash
-curl -sI https://wkenhanced.dev/            # 200, Content-Type: text/html
-curl -s  https://wkenhanced.dev/v1/auth/me  # {"user":null}
+curl -sI https://wkenhanced.dev/                   # 200 text/html (the tool container)
+curl -s  https://api.wkenhanced.dev/ | head -c 90  # service-info JSON, app: https://wkenhanced.dev
+# the preflight must echo the apex origin + credentials:
+curl -sI -X OPTIONS https://api.wkenhanced.dev/v1/auth/login \
+  -H 'Origin: https://wkenhanced.dev' -H 'Access-Control-Request-Method: POST' \
+  | grep -i 'access-control-allow-\(origin\|credentials\)'
 ```
-Then open `https://wkenhanced.dev/` in a browser, create an account, and confirm the chip in the header shows your email and progress survives a reload + a different browser.
+Then open `https://wkenhanced.dev/`, sign in, and confirm the chip shows your email and
+progress survives a reload + a second browser. Native みんなの日本語 audio should play (its
+`<audio>` sends the cookie via `crossOrigin='use-credentials'`).
+
+**5. Decommission the API fallback** — once step 4 is confirmed, deploy the decommission
+commit (removes the API's static `web/` routes + `COPY web`) and `docker compose up -d
+--build`. `api.wkenhanced.dev/app.js` then 404s and `/` returns service-info JSON — the tool
+container is the only thing serving the app. Revert that one commit if anything regresses.
 
 > Apex DNS note: Cloudflare flattens the CNAME at the zone apex automatically, so the proxied `wkenhanced.dev` record Just Works — no A record needed.
 

@@ -3,6 +3,13 @@
 ================================================================================
   日常日本語  ·  JAPANESE TRAINER
 ================================================================================
+  ⚠ ARCHITECTURE NOTE — this is now a **Vite ES-module** project: one entry
+  (src/app.js) imports src/core/* (pure, tested) + src/state.js + src/data/*, built
+  + hashed by Vite and served by its own nginx container at wkenhanced.dev, talking
+  to api.wkenhanced.dev CROSS-ORIGIN. The "FIVE static files / no bundler / file://"
+  description below is the HISTORICAL classic-script era, kept for context. The
+  current map lives in study-app/CLAUDE.md — read that first.
+  ------------------------------------------------------------------------------
   A no-build, offline-capable flashcard + spaced-repetition study tool for
   everyday Japanese. The built-in content is currently the 100 most frequent
   verbs (ranked by the BCCWJ corpus, each tagged cat:"verb"), plus any cards you

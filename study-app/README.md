@@ -13,14 +13,16 @@ links, a filterable browse grid, progress stats, light/dark themes, five Japanes
 fonts, JSON export/import, and optional **email/password accounts that sync
 progress AND your custom cards across devices**.
 
-Five static files — [index.html](index.html) (markup) + [styles.css](styles.css)
-+ [verbs.js](verbs.js) (dataset) + [examples.js](examples.js) (leveled sentences)
-+ [app.js](app.js) (logic) — loaded as classic
-`<link>`/`<script src>` (not ES modules), so opening `index.html` directly still
-works. Served at the apex of the backing API server (`https://wkenhanced.dev/` and
-`https://api.wkenhanced.dev/`). Originally one self-contained HTML file (derived
-from [../../japanese-study/japanese-verbs.html](../../japanese-study/japanese-verbs.html));
-split once it outgrew a single document.
+A **Vite** app (ES modules, no framework). [index.html](index.html) loads one entry
+([src/app.js](src/app.js) — the DOM/feature glue) which imports the pure, unit-tested core
+([src/core/](src/core)), the shared mutable state hub ([src/state.js](src/state.js)), and
+the data modules ([src/data/](src/data) — the `VERBS` dataset + `EXAMPLES` leveled
+sentences). It's a **standalone project** served by its own static (nginx) container at the
+apex `https://wkenhanced.dev`, talking over HTTP to the API at `https://api.wkenhanced.dev`
+(cross-origin, same-site). Originally one self-contained HTML file (derived from
+[../japanese-study/japanese-verbs.html](../japanese-study/japanese-verbs.html)); grew into
+classic-script files served by the API, then was extracted here as its own Vite project once
+it outgrew "a few static files on the API droplet."
 
 > New to the codebase? Read [CLAUDE.md](CLAUDE.md) for architecture + the
 > dead-end warnings, and [NEXT_STEPS.md](NEXT_STEPS.md) for what to do next.
@@ -40,33 +42,41 @@ split once it outgrew a single document.
 
 ## Run it locally
 
-It's served by the API server in the parent directory:
+Two processes — the Vite dev server (this app) and the backing API:
 
 ```bash
-cd ..                # into wk-enhanced-api/
+# 1. the app (this dir)
 bun install          # one-time
-cp .env.example .env # one-time
-bun dev              # http://localhost:3000  → the study app is at /
+bun run dev          # → http://localhost:5173
+
+# 2. the API (separate terminal)
+cd ../wk-enhanced-api
+bun install && cp .env.example .env   # one-time
+bun dev                                # → http://localhost:3000
 ```
 
-Then open **http://localhost:3000/**.
+Then open **http://localhost:5173/**. Vite (:5173) and the API (:3000) are genuinely
+cross-origin but same-site — exactly the prod `wkenhanced.dev` ↔ `api.wkenhanced.dev`
+split — so the credentialed-CORS + cookie path is exercised locally rather than first in
+prod. `VITE_API_BASE` (in [.env.development](.env.development)) points the app at the API;
+the prod value is baked by the Dockerfile build arg.
 
-- **Accounts/sync + TTS need the server.** Keep `COOKIE_SECURE=false` in `.env` for
-  local dev — a `Secure` cookie is silently dropped over plain `http://localhost`,
-  so login would appear to "not stick." (Defaults to `false` if unset.) See the
-  server [README](../README.md) / [deploy notes](../deploy/README.md).
-- **Offline:** you can also just open `index.html` directly in a browser
-  (`file://`) — the assets load as classic scripts, so it runs. Accounts/sync are
-  off (the `/v1/auth/*` probe fails gracefully → localStorage mode), and audio
-  falls back from the server's Google TTS to the browser's built-in speech.
-
-No build step, no bundler, no npm install for the app itself — plain HTML/CSS/JS.
-The only always-on network dependency is Google Fonts, which degrades gracefully
-(system fonts) when offline.
+- **Accounts/sync + TTS + みんなの日本語 need the API.** Keep `COOKIE_SECURE=false` and the
+  default `STUDY_APP_ORIGINS=http://localhost:5173` in the API's `.env` — a `Secure` cookie
+  is dropped over `http://localhost`, and the app's origin must be on the CORS allowlist.
+  See the server [deploy notes](../wk-enhanced-api/deploy/README.md).
+- **Build / preview the production bundle:** `bun run build` (→ `dist/`) + `bun run preview`.
+- **Tests:** `bun run test` runs the pure-core suite (Vitest + happy-dom) against the real
+  module graph — a broken export/import fails it loudly.
+- Runtime **offline degradation** still works (no account / API unreachable → localStorage
+  mode + Web Speech instead of Google TTS); the old `file://` double-click is gone by
+  decision (server-only). Google Fonts remains the one always-on dep and degrades to system
+  fonts offline.
 
 ## Server endpoints it uses
 
-Same-origin, cookie session (`credentials:'include'`), set by the backing server:
+Cross-origin (the app rebases every call onto `VITE_API_BASE`), credentialed cookie
+session (`credentials:'include'`), set by the backing server:
 
 | Method | Path | Purpose |
 |---|---|---|
@@ -103,10 +113,10 @@ Server-side details (auth model, cookie, tables) live in
 
 ## Tech notes
 
-- **No build, five files** — `index.html` + `styles.css` + `verbs.js` +
-  `examples.js` + `app.js`, loaded as classic `<link>`/`<script src>` (not modules)
-  so `file://` still works. `verbs.js`/`examples.js` (globals `VERBS`/`EXAMPLES`)
-  must load before `app.js`.
+- **Vite + ES modules** — one entry (`src/app.js`) imports the pure core
+  (`src/core/*`), the state hub (`src/state.js`), and the data modules (`src/data/*`,
+  `export const VERBS`/`EXAMPLES`). Built + content-hashed by Vite, served by an nginx
+  container. See [CLAUDE.md](CLAUDE.md) for the full module map.
 - **Functional color**: vermilion = godan, indigo = ichidan, stone = irregular,
   purple = leech. Conjugation class is what learners confuse, so it's encoded as
   a colored spine + a hanko-style stamp.
