@@ -3,10 +3,65 @@
 What to do next, priority-ordered. Builds on the `OUTSTANDING WORK` block at the
 top of [index.html](index.html); this file supersedes it where they disagree.
 Architecture + dead-ends: [CLAUDE.md](CLAUDE.md). User overview: [README.md](README.md).
+Card schema + authoring: [CARDS.md](CARDS.md).
 
-As of the mid-2026 push, **the entire original backlog has shipped** plus the file
-split, custom-verb sync, and Google TTS — what's left is one genuinely-deferred item
-(needs email infra). Add new ideas to "Ideas / not yet scoped" as they come up.
+The original backlog plus a large second wave (accounts + sync, SRS vs free study, the
+file split, leveled examples, the みんなの日本語 dashboard with content/dedup/pitch, deck-wide
+pitch accent) have all shipped. The app has **outgrown "a few static files on the API
+droplet."** The headline next move is structural, below.
+
+## 🚩 THE BIG ONE — stand the study app up as its own webapp
+
+**Why now.** This started as a side surface of the API server (`wk-enhanced-api/web/`,
+classic-script files served at the apex) and has become a full product: four tabs,
+email/password accounts + cross-device sync, a Leitner SRS, the みんなの日本語 workbook,
+pitch accent, ~2,300 lines of `app.js` in a **single global scope**, plus growing data
+modules (`verbs.js`/`examples.js`/`ACCENTS`/`data/minna/*`). It's conceptually independent
+of the userscript+API — it just shares the droplet. The no-build / one-giant-file model is
+now the main thing slowing changes. Give it its **own project, a real module structure, a
+build/test setup, and its own deploy.**
+
+**Target shape.**
+- Its own top-level project (a repo, or a workspace package under this repo) — e.g.
+  `study-app/` — instead of `wk-enhanced-api/web/`.
+- `app.js` split into **ES modules along the existing section banners**: `storage`+SRS,
+  `deck`/facets (`passes`/`wireFacets`), `flashcard`, `browse`, `stats`/charts, `minna`,
+  `cloud`/sync, `settings`, plus `verbs`/`examples`/`accents` as data modules and a thin
+  entry that wires them.
+- A dev server with HMR and a **build that emits static assets the API still serves**
+  (keep same-origin — see constraints), replacing the `verbs-core.test.ts` concatenation
+  hack with real imports under jsdom/happy-dom.
+
+**Constraints that make this non-trivial (decide these first).**
+- **`file://` offline use vs ES modules.** Today `index.html` opens directly over `file://`
+  because everything is classic `<script src>` — browsers **won't** load ES modules over
+  `file://`. So "modules" and "double-click the file" are in tension. Decision: adopt a
+  bundler (Vite) that outputs a single/inlined offline build, **or** stay classic-script and
+  only modularize via an IIFE-per-file convention. (Recommend Vite + a `build` that produces
+  an offline-capable bundle; the account/TTS/Minna features already need a server anyway.)
+- **The shared backend stays put.** `/v1/auth/*`, `/v1/progress/*`, `/v1/tts`, `/v1/minna/*`,
+  `/v1/sessions` live on the API server and rely on a **same-origin httpOnly cookie**.
+  Keep serving the built app from the API apex (drop the build into the image's web dir) so
+  the cookie keeps working; a *separate* static host would need a CORS + `SameSite=None`
+  + `credentials:'include'` rework — defer that.
+- **Preserve the design-system contracts + dead-ends** in [CLAUDE.md](CLAUDE.md) (chip
+  wiring by class/`data-*`, roving-tabindex radiogroups, the inline-SVG-sprite trap, the
+  six AND'd facets, the `.frow/.chips` layout) and the [CARDS.md](CARDS.md) data model
+  through the refactor — they're load-bearing.
+- **Don't reflexively adopt a framework.** The hand-rolled SVG charts + no-dependency ethos
+  are a feature; a module split + Vite likely suffices. Reach for a framework only if the
+  UI complexity genuinely demands it.
+
+**Phased plan (each step shippable, reversible).**
+1. Move `web/` → a dedicated project dir; keep the API serving it byte-for-byte (no behavior
+   change) to establish the boundary.
+2. Introduce the build tool (Vite) with the current files as-is; wire `bun dev`/preview to it.
+3. Split `app.js` into modules incrementally (one section per commit), keeping
+   `verbs-core.test.ts`'s coverage as you go (port to real imports).
+4. Move `verbs`/`examples`/`accents`/Minna data to data modules; type them.
+5. Decide hosting (recommend: stay same-origin via the API image) and cut the deploy over.
+
+This is the priority. The items below are smaller and can follow.
 
 ## Done (most recent first)
 - ~~みんなの日本語: content parity, dedup, pitch accent~~ — **shipped.** Activated Minna
@@ -155,8 +210,18 @@ split, custom-verb sync, and Google TTS — what's left is one genuinely-deferre
   "What's deliberately NOT in v1."
 
 ## Ideas / not yet scoped
+- **Close the custom-card completeness gap.** The "Add card" modal sets every field
+  EXCEPT `levels` (the 5 N5→N1 tiers) and `accent` (pitch), so a UI-created card isn't a
+  *complete* card (see [CARDS.md](CARDS.md) "the custom-card gap"). Add a leveled-example
+  editor + an accent field to `#verbModal` (and/or a "generate with AI" button that calls a
+  small server endpoint), so users can author full-value cards without hand-editing the
+  exported JSON. Built-ins/Minna are already complete; this is the user-content parity piece.
+- **Pitch accent for the rest.** Built-ins (`ACCENTS` in `verbs.js`) + Minna words have
+  pitch; **user custom cards don't** (no field, and `ACCENTS` is keyed by built-in rank).
+  The accents are model-generated and want a **proofread pass** (esp. the nakadaka/odaka
+  calls); wiring an authoritative source (OJAD/NHK data) would beat regeneration.
 - **みんなの日本語 (Minna no Nihongo) dashboard.** Its full roadmap — Phase 2
-  (record-and-compare), more lessons/sections, a Browse source filter, furigana — lives
+  (record-and-compare), more lessons/sections, furigana on lesson sentences — lives
   in its own dedicated doc: [MINNA.md](MINNA.md) "Roadmap / next steps".
 - **Built-in non-verb content.** The category *capability* shipped (filters, modal,
   per-category stamps/spines), but the 100 baked-in cards are all verbs — users add
