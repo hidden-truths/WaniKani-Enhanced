@@ -11,7 +11,8 @@ still works. Served at the apex of the backing API server (`/`, `/study`, plus
 `/styles.css` `/verbs.js` `/app.js`). Originally one self-contained HTML file
 (derived from [../../japanese-study/japanese-verbs.html](../../japanese-study/japanese-verbs.html));
 split once it passed ~2300 lines. User-facing overview: [README.md](README.md).
-What to do next: [NEXT_STEPS.md](NEXT_STEPS.md).
+What to do next: [NEXT_STEPS.md](NEXT_STEPS.md). **Card data model + how to author a
+complete vocab card (all fields, formats, recipes): [CARDS.md](CARDS.md).**
 
 This is a **separate surface** from the WaniKani userscript flow — it just shares
 the droplet. Backend (auth, progress storage, cookie model) is the server's:

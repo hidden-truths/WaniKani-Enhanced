@@ -7,7 +7,8 @@ yourself in any part-of-speech category (verb / adjective / noun / adverb / phra
 Flashcards with a
 Leitner SRS (separate **SRS review** and **free study** modes), romaji-or-kana
 typed-reading auto-grading, Google text-to-speech, **five JLPT-leveled (N5→N1)
-example sentences per card**, an upcoming-reviews forecast, Jisho dictionary
+example sentences per card**, **visual pitch-accent marks**, an upcoming-reviews
+forecast, Jisho dictionary
 links, a filterable browse grid, progress stats, light/dark themes, five Japanese
 fonts, JSON export/import, and optional **email/password accounts that sync
 progress AND your custom cards across devices**.
@@ -23,6 +24,8 @@ split once it outgrew a single document.
 
 > New to the codebase? Read [CLAUDE.md](CLAUDE.md) for architecture + the
 > dead-end warnings, and [NEXT_STEPS.md](NEXT_STEPS.md) for what to do next.
+> Adding content? [CARDS.md](CARDS.md) is the card data model + how to author a
+> complete vocab card (every field, the furigana/pitch formats, and recipes).
 
 ## What it does
 

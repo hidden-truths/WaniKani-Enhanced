@@ -117,6 +117,10 @@ while forbidding any shared/CDN cache from holding it.
 
 ## Content / data model
 
+> The vocab fields below become a study **card** — for the full card schema, the
+> furigana/pitch formats, and how to author a *complete* card, see [CARDS.md](CARDS.md).
+> This section covers the lesson-JSON wrapper around them.
+
 Curated lessons live at **`data/minna/lesson-<n>.json`** (git-tracked, in the container
 image via the Dockerfile's `COPY data ./data`). Shape (see
 [../data/minna/lesson-23.json](../data/minna/lesson-23.json)):
