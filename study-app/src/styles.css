@@ -515,12 +515,11 @@
   .mn-notes textarea:focus{outline:none;border-color:var(--ichidan)}
   .mn-saved{font-family:"SF Mono",ui-monospace,monospace;font-size:11px;color:var(--muted);margin-top:6px;min-height:14px}
   /* Record-and-compare (Phase 2). The rec-row is a subtle sub-row under each vocab
-     entry; the control holds a mic button + take list + compare player. In speaking mode
-     the word + its controls are ONE unit: no rule between them, and the per-row separator
-     lines are dropped in favor of whitespace so a word and its controls don't look split.
-     (The plain word list keeps its separator lines when not speaking.) */
+     entry; the control holds a mic button + take list + compare player. A word and its OWN
+     controls are one unit — no rule between them (.mn-rec-row td has no border-top). But the
+     NEXT word keeps its normal separator line (styles.css .mn-vocab td border-top) so the
+     controls visually belong to the word ABOVE them, not the one below. */
   .mn-rec-row td{border-top:none;padding-top:2px;padding-bottom:16px}
-  .mn-rec-row + tr td{border-top:none}   /* next word: separated by the rec-row's gap, not a line */
   .rec-control{display:flex;align-items:center;flex-wrap:wrap;gap:8px}
   .rec-btn{display:inline-flex;align-items:center;gap:6px;background:none;border:1px solid var(--line);color:var(--muted);border-radius:14px;padding:3px 10px 3px 8px;font-family:"SF Mono",ui-monospace,monospace;font-size:11px;letter-spacing:.06em;cursor:pointer;transition:all .15s}
   .rec-btn:hover{border-color:var(--godan);color:var(--godan)}
