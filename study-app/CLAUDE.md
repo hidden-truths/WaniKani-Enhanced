@@ -526,17 +526,23 @@ Component contracts you must preserve:
   the picker shows "Microphone N" until the first stream, then re-enumerates. A vanished
   stored id is dropped → system default (one-shot `{audio:true}` retry if `exact` fails).
 - **Silence trim is DELIBERATELY forgiving — clipping real speech is worse than leaving a
-  little dead air.** `findTrimBounds` (pure/tested) uses an **adaptive** threshold
-  (`max(floor, peakRMS·ratio)`, not a fixed absolute one) so it tracks the speaker's level,
-  and a **generous asymmetric lead pad** (~160 ms vs ~140 ms tail) so voiceless/aspirated
+  little dead air.** `findTrimBounds` (pure/tested) uses four guards: an **adaptive** threshold
+  (`max(floor, peakRMS·ratio)`, not a fixed absolute one) so it tracks the speaker's level; a
+  **robust peak** (the 95th-percentile window RMS, `peakPct`, NOT the raw max) so one
+  impossibly-loud window can't inflate the threshold; a **sustain gate** (`minRunMs`, ~30 ms)
+  so an edge only counts as speech when energy stays up for a real syllable's worth, not a
+  click; and a **generous asymmetric lead pad** (~160 ms vs ~140 ms tail) so voiceless/aspirated
   onsets — ひ [çi], ふ [ɸɯ], the breathy start of 引きます — survive even though they sit BELOW
-  the vowel's RMS (the window scan starts at the vowel; the lead pad reaches back over the
-  consonant). Don't "tighten" it back to a fixed threshold or symmetric pad — that's the bug
-  that ate 引きます's ひ. `maybeTrim` mixes to mono and re-encodes 16-bit PCM **WAV** (no
-  in-browser opus encoder for an `AudioBuffer`; short clips stay under the 2 MB cap). Gated by
-  `trimSilence` (default on) and **fails safe**: decode error / all-silence / <150 ms result
-  all return the ORIGINAL blob. The server's recording content-type allowlist includes
-  `audio/wav` (+ a `.wav` ext mapping).
+  the vowel's RMS (the sustained run starts at the vowel; the lead pad reaches back over the
+  consonant). Don't "tighten" it back to a fixed threshold, a raw-max peak, or a symmetric
+  pad — the asymmetric pad fixed the bug that ate 引きます's ひ, and the robust-peak + sustain
+  gate fixed a **laptop trackpad-click** recording (a mechanical click impulse at the very
+  start/end was inflating the threshold AND anchoring the edges, so nothing trimmed and quiet
+  onsets clipped). `maybeTrim` mixes to mono and re-encodes 16-bit PCM **WAV** (no in-browser
+  opus encoder for an `AudioBuffer`; short clips stay under the 2 MB cap). Gated by
+  `trimSilence` (default on) and **fails safe**: decode error / no sustained run above
+  threshold / <150 ms result all return the ORIGINAL blob. The server's recording
+  content-type allowlist includes `audio/wav` (+ a `.wav` ext mapping).
 
 ## Change log — UX/design pass (this is the conversation record)
 

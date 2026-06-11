@@ -60,18 +60,28 @@ export function clipLabel(clip) {
 
 // Find the [start, end) sample window of actual sound in a mono PCM buffer, so we can trim
 // leading/trailing (near-)silence off a recording. Windowed RMS: scan in ~windowMs chunks,
-// keep the first and last window whose RMS clears the threshold, then pad generously on each
-// side. Two reasons it's forgiving by design — clipping real speech is far worse than
+// find the first and last window of a SUSTAINED run above threshold, then pad generously on
+// each side. Four reasons it's forgiving by design — clipping real speech is far worse than
 // leaving a little dead air:
 //   1. ADAPTIVE threshold = max(floor, peakRMS * ratio). A fixed absolute threshold trims
 //      quiet recordings to nothing and, worse, eats low-energy consonants. Scaling to the
 //      clip's own peak tracks the speaker's level.
-//   2. ASYMMETRIC, generous padding (leadPad > tailPad). Voiceless/aspirated onsets — ひ
+//   2. ROBUST peak = a high percentile (peakPct) of the window RMS, NOT the raw max. A single
+//      impossibly-loud window — a trackpad/keyboard click picked up by a laptop mic — would
+//      otherwise inflate the adaptive threshold and clip quiet speech (and the breathy onsets
+//      in #4). The percentile ignores such isolated impulses so the threshold tracks speech.
+//   3. SUSTAIN gate (minRunMs). An edge only counts as speech if energy stays above threshold
+//      for a run of ≥ minRunMs. A mechanical click is a 1–5 ms impulse, so it can't ANCHOR the
+//      start/end — without this the click sits at sample 0 / the last sample and nothing gets
+//      trimmed (the bug a laptop trackpad-click recording exposed). Real syllables (≥~100 ms)
+//      clear the gate easily.
+//   4. ASYMMETRIC, generous padding (leadPad > tailPad). Voiceless/aspirated onsets — ひ
 //      [çi], ふ [ɸɯ], the breathy start of 引きます — are broadband noise BELOW the vowel's
-//      RMS, so the window scan starts at the vowel and would clip the consonant. A wide lead
+//      RMS, so the sustained run starts at the vowel and would clip the consonant. A wide lead
 //      pad (~160 ms) restores that onset even though detection started later.
-// Returns null when the whole buffer is below threshold (all silence) — the caller keeps the
-// original untouched. Pure + DOM-free (operates on a Float32Array), so it's unit-tested.
+// Returns null when no sustained run clears threshold (all silence / only transients) — the
+// caller keeps the original untouched. Pure + DOM-free (operates on a Float32Array), so it's
+// unit-tested.
 export function findTrimBounds(samples, sampleRate, opts = {}) {
   const floor = opts.floor ?? 0.004;          // absolute RMS floor (~ -48 dBFS)
   const ratio = opts.ratio ?? 0.04;           // …or this fraction of the clip's peak, whichever is higher
@@ -79,6 +89,8 @@ export function findTrimBounds(samples, sampleRate, opts = {}) {
   // `padMs` is a symmetric fallback; leadPadMs/tailPadMs override per side.
   const leadPadMs = opts.leadPadMs ?? opts.padMs ?? 160;
   const tailPadMs = opts.tailPadMs ?? opts.padMs ?? 140;
+  const minRunMs = opts.minRunMs ?? 30;       // a run must last this long to anchor an edge (kills click impulses); 0 disables
+  const peakPct = opts.peakPct ?? 0.95;       // adaptive-threshold peak = this percentile of window RMS, not the raw max
   const n = samples.length;
   if (!n || !sampleRate) return null;
   const win = Math.max(1, Math.round((windowMs / 1000) * sampleRate));
@@ -89,16 +101,26 @@ export function findTrimBounds(samples, sampleRate, opts = {}) {
     return Math.sqrt(s / (to - from));
   };
   const wins = [];
-  let peak = 0;
-  for (let from = 0; from < n; from += win) { const r = rmsAt(from); wins.push(r); if (r > peak) peak = r; }
-  if (peak <= 0) return null;
-  // An explicit `threshold` (used by tests) overrides the adaptive one.
-  const threshold = opts.threshold ?? Math.max(floor, peak * ratio);
-  let first = -1, last = -1;
-  for (let w = 0; w < wins.length; w++) {
-    if (wins[w] >= threshold) { if (first < 0) first = w; last = w; }
+  for (let from = 0; from < n; from += win) wins.push(rmsAt(from));
+  // An explicit `threshold` (used by tests) overrides the adaptive one and skips the peak calc.
+  let threshold = opts.threshold;
+  if (threshold == null) {
+    const sorted = [...wins].sort((a, b) => a - b);
+    const peak = sorted[Math.min(sorted.length - 1, Math.round(peakPct * (sorted.length - 1)))];
+    if (!(peak > 0)) return null;             // (near-)silent once isolated impulses are discounted
+    threshold = Math.max(floor, peak * ratio);
   }
-  if (first < 0) return null;   // all below threshold
+  // First / last window of a SUSTAINED run (≥ minRun windows) above threshold. A lone window
+  // above threshold (a click) never updates first/last, so it can't anchor the trim.
+  const minRun = Math.max(1, Math.round(minRunMs / windowMs));
+  let first = -1, last = -1, runStart = -1, runLen = 0;
+  for (let w = 0; w < wins.length; w++) {
+    if (wins[w] >= threshold) {
+      if (runStart < 0) { runStart = w; runLen = 1; } else runLen++;
+      if (runLen >= minRun) { if (first < 0) first = runStart; last = w; }
+    } else { runStart = -1; runLen = 0; }
+  }
+  if (first < 0) return null;   // no sustained run above threshold
   const start = Math.max(0, first * win - Math.round((leadPadMs / 1000) * sampleRate));
   const end = Math.min(n, last * win + win + Math.round((tailPadMs / 1000) * sampleRate));
   return { start, end };

@@ -343,12 +343,14 @@ helpers in [src/core/recordings.js](src/core/recordings.js).
 - **Auto-trim silence** — after capture, the take is decoded, the sound region found
   (`findTrimBounds`, pure/tested) and re-encoded to 16-bit PCM **WAV** so the saved clip is
   just the spoken words. The detector is deliberately **forgiving** — an **adaptive** threshold
-  (`max(floor, peakRMS·ratio)`) plus a **generous, asymmetric lead pad** (~160 ms) so quiet
-  aspirated onsets (ひ, ふ — the breathy start of 引きます) survive even though they sit below
-  the vowel's energy. Gated by the `trimSilence` setting (default on); any failure / all-silence
-  / too-short falls back to the untouched original. (WAV because there's no in-browser opus
-  encoder for an `AudioBuffer`; clips are short so size stays under the 2 MB cap; server accepts
-  `audio/wav`.)
+  (`max(floor, peakRMS·ratio)`) off a **robust peak** (95th-percentile window RMS, not the raw
+  max), a **sustain gate** (~30 ms — an edge must hold above threshold for a real syllable, so a
+  laptop **trackpad-click** impulse at the start/end can't anchor the trim or inflate the
+  threshold), and a **generous, asymmetric lead pad** (~160 ms) so quiet aspirated onsets (ひ,
+  ふ — the breathy start of 引きます) survive even though they sit below the vowel's energy.
+  Gated by the `trimSilence` setting (default on); any failure / no sustained sound / too-short
+  falls back to the untouched original. (WAV because there's no in-browser opus encoder for an
+  `AudioBuffer`; clips are short so size stays under the 2 MB cap; server accepts `audio/wav`.)
 - **Store** — per-user takes on the server: the `minna_recordings` table + **PRIVATE**
   storage objects (`acl:'private'`), served only through the owner-scoped
   `GET /v1/minna/recordings/{id}`. `POST` prunes per item to the user's **keep-N** (Settings
@@ -365,11 +367,15 @@ helpers in [src/core/recordings.js](src/core/recordings.js).
   dead-end in [CLAUDE.md](CLAUDE.md).
 
 **Deferred from the MVP** (intentionally), roughly in priority order:
-- **Real-mic verification of the trim tuning.** The adaptive-threshold + lead-pad trim was
-  verified by unit tests + a synthetic decode (no real mic is available headlessly). Record a
-  few words with leading/trailing silence — especially aspirated onsets (引きます, 吹きます) —
-  and confirm nothing's clipped; nudge `ratio` / `leadPadMs` in
-  [src/core/recordings.js](src/core/recordings.js) if it's too tight or too loose.
+- **Real-mic verification of the trim tuning.** The trim (adaptive threshold off a robust peak
+  + sustain gate + lead pad) is verified by unit tests + a synthetic decode (no real mic is
+  available headlessly). Record a few words with leading/trailing silence — especially aspirated
+  onsets (引きます, 吹きます) — and confirm nothing's clipped. Knobs in
+  [src/core/recordings.js](src/core/recordings.js): nudge `leadPadMs` / `ratio` if an onset
+  clips or there's dead air; bump `minRunMs` if a mechanical click (laptop trackpad start/stop)
+  still leaks past the sustain gate, or lower it if a genuinely short utterance gets dropped.
+  (The trackpad-click case that defeated the original peak/edge detection is what added the
+  robust-peak + sustain-gate guards.)
 - **Dual waveform** (Web Audio `decodeAudioData` → canvas), **speed control** (0.5×–1×), and
   **▶ simultaneous** playback. The comparison target is already cached same-origin, so Web
   Audio can read its bytes without CORS.

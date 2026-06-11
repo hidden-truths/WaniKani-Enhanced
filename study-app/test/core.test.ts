@@ -445,17 +445,44 @@ test('clipLabel formats a clip, empty when invalid', () => {
 
 test('findTrimBounds tightens to the sound region (silence·sound·silence)', () => {
   // 1 kHz "sample rate" so a 10 ms window = 10 samples; padMs:0 keeps the math exact.
+  // minRunMs:0 disables the sustain gate so this 2-window blip exercises just the tighten math.
   const s = new Float32Array(80);              // [0..29]=silence, [30..49]=loud, [50..79]=silence
   for (let i = 30; i < 50; i++) s[i] = 0.5;
-  const b = findTrimBounds(s, 1000, { windowMs: 10, padMs: 0, threshold: 0.1 });
+  const b = findTrimBounds(s, 1000, { windowMs: 10, padMs: 0, threshold: 0.1, minRunMs: 0 });
   expect(b).toEqual({ start: 30, end: 50 });
 });
 
 test('findTrimBounds pads around the sound and clamps to the buffer', () => {
   const s = new Float32Array(80);
   for (let i = 30; i < 50; i++) s[i] = 0.5;
-  const b = findTrimBounds(s, 1000, { windowMs: 10, padMs: 10, threshold: 0.1 }); // pad = 10 samples
+  const b = findTrimBounds(s, 1000, { windowMs: 10, padMs: 10, threshold: 0.1, minRunMs: 0 }); // pad = 10 samples
   expect(b).toEqual({ start: 20, end: 60 });
+});
+
+test('findTrimBounds rejects edge click impulses (sustain gate) — only sustained speech anchors', () => {
+  // A laptop trackpad click: a lone super-loud window at the very start AND end, with sustained
+  // speech in the middle. Without the sustain gate the clicks anchor the edges and nothing
+  // trims; with it, only the 20-window speech run counts, so both clicks fall outside [start,end).
+  const s = new Float32Array(1000);
+  s[5] = 0.9;                                   // click impulse, window 0 (samples 0–9)
+  for (let i = 400; i < 600; i++) s[i] = 0.3;   // speech: windows 40–59
+  s[995] = 0.9;                                 // click impulse, window 99 (samples 990–999)
+  const b = findTrimBounds(s, 1000, { windowMs: 10, leadPadMs: 50, tailPadMs: 50 })!;
+  expect(b.start).toBe(350);                    // speech onset 400 − 50 ms lead pad (NOT 0 — leading click ignored)
+  expect(b.end).toBe(650);                      // speech offset 600 + 50 ms tail pad (NOT 1000 — trailing click ignored)
+});
+
+test('findTrimBounds robust peak: a lone loud click does not raise the threshold enough to clip quiet speech', () => {
+  // A full loud click window at the start would, with a raw-max peak, push the adaptive
+  // threshold (peak·ratio) above quiet speech and drop the whole take to null. The 95th-
+  // percentile peak ignores the isolated click, so the quiet sustained speech is still found.
+  const s = new Float32Array(1000);
+  for (let i = 0; i < 10; i++) s[i] = 0.9;      // loud click burst, window 0
+  for (let i = 300; i < 700; i++) s[i] = 0.03;  // quiet sustained speech: windows 30–69
+  const b = findTrimBounds(s, 1000, { windowMs: 10, leadPadMs: 0, tailPadMs: 0 });
+  expect(b).not.toBeNull();
+  expect(b!.start).toBeGreaterThanOrEqual(300); // anchored on the quiet speech, click discounted
+  expect(b!.end).toBe(700);
 });
 
 test('findTrimBounds returns null for all-silence (caller keeps original)', () => {
