@@ -9,7 +9,7 @@
 // per-lesson NOTES + the overlays (app key 'minna').
 import { state } from '../state.js';
 import { API_BASE } from '../config.js';
-import { escapeHtml, CAT_LABEL, minnaBuiltinRank, minnaSig } from '../core/index.js';
+import { escapeHtml, CAT_LABEL, minnaBuiltinRank, minnaSig, convItemKey, resolveClip, clipLabel, validClip } from '../core/index.js';
 import { account, api, setSyncStatus } from './cloud-core.js';
 import { openAuth } from './cloud.js';
 import { loadCustom, saveCustom } from '../persistence/custom.js';
@@ -20,8 +20,10 @@ const MINNA_APP_KEY = 'minna';
 const MINNA_KEY = 'jpverbs_minna';
 // `overlays` = { <built-in rank>: {tags,italki,minnaLesson,minnaKey,accent?,tts?} } — the
 // dedup record: Minna words that map onto a baked-in verb live here, not as custom cards.
-const MINNA_DEFAULT = { notes: {}, lastLesson: 23, overlays: {} };
-function loadMinnaStore() { try { const o = JSON.parse(localStorage.getItem(MINNA_KEY)); if (o && typeof o === 'object') return Object.assign({}, MINNA_DEFAULT, o, { notes: o.notes || {}, overlays: o.overlays || {} }); } catch (e) {} return Object.assign({}, MINNA_DEFAULT, { notes: {}, overlays: {} }); }
+// `clips` = { <lesson>: { <lineIdx>: [startSec, endSec] } } — per-user conversation-line
+// clip ranges set via the in-app marker (record-and-compare). Synced under the same key.
+const MINNA_DEFAULT = { notes: {}, lastLesson: 23, overlays: {}, clips: {} };
+function loadMinnaStore() { try { const o = JSON.parse(localStorage.getItem(MINNA_KEY)); if (o && typeof o === 'object') return Object.assign({}, MINNA_DEFAULT, o, { notes: o.notes || {}, overlays: o.overlays || {}, clips: o.clips || {} }); } catch (e) {} return Object.assign({}, MINNA_DEFAULT, { notes: {}, overlays: {}, clips: {} }); }
 function saveMinnaLocal() { try { localStorage.setItem(MINNA_KEY, JSON.stringify(state.minnaStore)); } catch (e) {} }
 function saveMinna() { saveMinnaLocal(); scheduleMinnaSync(); }
 
@@ -29,7 +31,17 @@ function saveMinna() { saveMinnaLocal(); scheduleMinnaSync(); }
 let minnaSyncTimer = null;
 function scheduleMinnaSync() { if (!account) return; if (minnaSyncTimer) clearTimeout(minnaSyncTimer); minnaSyncTimer = setTimeout(pushMinnaCloud, 1200); }
 async function pushMinnaCloud() { if (!account) return; setSyncStatus('saving…'); try { await api('/v1/progress/' + MINNA_APP_KEY, { method: 'PUT', body: { data: state.minnaStore } }); setSyncStatus('✓ synced'); } catch (err) { setSyncStatus('⚠ offline'); } }
-export async function pullMinnaCloud() { try { const r = await api('/v1/progress/' + MINNA_APP_KEY); if (r && r.data && typeof r.data === 'object') { state.minnaStore = Object.assign({}, MINNA_DEFAULT, r.data, { notes: r.data.notes || {}, overlays: r.data.overlays || {} }); saveMinnaLocal(); } else if (Object.keys(state.minnaStore.notes || {}).length || Object.keys(state.minnaStore.overlays || {}).length) { await pushMinnaCloud(); } } catch (err) {/* offline — keep local notes */} }
+export async function pullMinnaCloud() { try { const r = await api('/v1/progress/' + MINNA_APP_KEY); if (r && r.data && typeof r.data === 'object') { state.minnaStore = Object.assign({}, MINNA_DEFAULT, r.data, { notes: r.data.notes || {}, overlays: r.data.overlays || {}, clips: r.data.clips || {} }); saveMinnaLocal(); } else if (Object.keys(state.minnaStore.notes || {}).length || Object.keys(state.minnaStore.overlays || {}).length || Object.keys(state.minnaStore.clips || {}).length) { await pushMinnaCloud(); } } catch (err) {/* offline — keep local notes */} }
+
+// Conversation-line clip ranges (per-user, synced). Read by the compare player to
+// slice the whole-conversation MP3 to one line; written by the in-app clip marker.
+export function getLineClip(lesson, idx) { const c = state.minnaStore.clips; return (c && c[lesson] && c[lesson][idx]) || null; }
+export function setLineClip(lesson, idx, clip) {
+  const clips = state.minnaStore.clips = state.minnaStore.clips || {};
+  const forLesson = clips[lesson] = clips[lesson] || {};
+  if (clip) forLesson[idx] = clip; else delete forLesson[idx];
+  saveMinna();
+}
 
 // --- Native-audio playback. One reused <audio> with crossOrigin='use-credentials' so the
 //     session cookie travels and /v1/minna/audio authorizes cross-origin. Clicking a
@@ -245,8 +257,77 @@ function minnaConversationSection(L) {
   const c = L.conversation; if (!c || !c.lines || !c.lines.length) return '';
   const head = c.title ? `<div class="mn-theme jp" style="margin:0 0 8px">${escapeHtml(c.title)}</div>` : '';
   const audio = c.audio ? `<div class="mn-conv-audio">${mnAudioBtn(c.audio)}<span>Play the whole conversation</span></div>` : '';
-  const lines = c.lines.map(ln => `<div class="mn-line"><div class="mn-role">${escapeHtml(ln.role || '')}</div><div><div class="l-jp jp">${escapeHtml(ln.jp)}</div><div class="l-en">${escapeHtml(ln.en)}</div></div></div>`).join('');
+  const lines = c.lines.map((ln, idx) => {
+    // Each line is recordable; its native-compare target is a CLIP of the one whole-
+    // conversation MP3 (c.audio). The clip comes from line.clip ∪ the synced store.
+    const clip = c.audio ? resolveClip(ln.clip, getLineClip(L.lesson, idx)) : null;
+    const rec = c.audio
+      ? `<div class="mn-line-rec">${recordControlHtml(L.lesson, convItemKey(L.lesson, idx), c.audio, clip, true)}${clipAffordanceHtml(idx, clip)}</div>`
+      : '';
+    return `<div class="mn-line"><div class="mn-role">${escapeHtml(ln.role || '')}</div><div class="mn-line-body"><div class="l-jp jp">${escapeHtml(ln.jp)}</div><div class="l-en">${escapeHtml(ln.en)}</div>${rec}</div></div>`;
+  }).join('');
   return mnSection('Conversation', c.lines.length, head + audio + lines, false);
+}
+// The clip affordance per conversation line: a current-clip readout + a Set/Edit button
+// that opens the in-app marker (wired in wireMinnaClips). `idx` is the line index.
+function clipAffordanceHtml(idx, clip) {
+  return `<div class="clip-zone" data-cidx="${idx}">${clipZoneInner(idx, clip)}</div>`;
+}
+function clipZoneInner(idx, clip) {
+  const label = clipLabel(clip);
+  return `${label ? `<span class="clip-current" title="Native clip for this line">clip ${escapeHtml(label)}</span>` : ''}
+    <button class="clip-edit" type="button" data-clip-edit="${idx}">${label ? 'Edit clip' : 'Set clip'}</button>`;
+}
+// The marker panel — a scrubbable native-audio player + Set start / Set end / Save. Writes
+// to the synced clip store (setLineClip), so the same slice rides across devices. We use a
+// real <audio controls crossorigin="use-credentials"> so the browser gives us scrubbing +
+// currentTime for free (the cookie authorizes the gated cross-origin audio).
+function markerHtml(idx, audioSrc, clip) {
+  const v = validClip(clip);
+  const fmt = t => (v == null && t == null) ? '–' : Number(t).toFixed(1) + 's';
+  return `<div class="clip-marker" data-cidx="${idx}" data-start="${v ? v[0] : ''}" data-end="${v ? v[1] : ''}">
+    <audio class="clip-audio" controls crossorigin="use-credentials" preload="metadata" src="${API_BASE}/v1/minna/audio?src=${encodeURIComponent(audioSrc)}"></audio>
+    <div class="clip-marker-row">
+      <button class="chip" type="button" data-clip-setstart>Set start</button>
+      <button class="chip" type="button" data-clip-setend>Set end</button>
+      <span class="clip-readout">start <b class="cm-start">${v ? fmt(v[0]) : '–'}</b> · end <b class="cm-end">${v ? fmt(v[1]) : '–'}</b></span>
+      <button class="chip clip-save" type="button" data-clip-save>Save</button>
+      <button class="chip" type="button" data-clip-cancel>Cancel</button>
+    </div>
+    <div class="clip-tip">Play the conversation, then mark where this line starts and ends.</div>
+  </div>`;
+}
+// Delegated wiring for the per-line clip marker. Attach-once (body persists across
+// re-renders); all context — the lesson number and the conversation audio src — is read
+// off the line's sibling rec-control dataset, so the handler needs no closure over L/n.
+function wireMinnaClips(body) {
+  if (body.dataset.clipWired) return;
+  body.dataset.clipWired = '1';
+  const lessonOf = el => { const rc = el.closest('.mn-line-rec') && el.closest('.mn-line-rec').querySelector('.rec-control'); return rc ? { lesson: Number(rc.dataset.lesson), audioSrc: rc.dataset.native } : null; };
+  body.addEventListener('click', e => {
+    const edit = e.target.closest('[data-clip-edit]');
+    if (edit) {
+      const ctx = lessonOf(edit); if (!ctx || !ctx.audioSrc) return;
+      const idx = Number(edit.dataset.clipEdit);
+      edit.closest('.clip-zone').innerHTML = markerHtml(idx, ctx.audioSrc, getLineClip(ctx.lesson, idx));
+      return;
+    }
+    const marker = e.target.closest('.clip-marker');
+    if (!marker) return;
+    const ctx = lessonOf(marker); if (!ctx) return;
+    const idx = Number(marker.dataset.cidx);
+    const a = marker.querySelector('.clip-audio');
+    if (e.target.closest('[data-clip-setstart]')) { marker.dataset.start = a.currentTime; marker.querySelector('.cm-start').textContent = a.currentTime.toFixed(1) + 's'; return; }
+    if (e.target.closest('[data-clip-setend]')) { marker.dataset.end = a.currentTime; marker.querySelector('.cm-end').textContent = a.currentTime.toFixed(1) + 's'; return; }
+    if (e.target.closest('[data-clip-cancel]')) { marker.closest('.clip-zone').innerHTML = clipZoneInner(idx, getLineClip(ctx.lesson, idx)); return; }
+    if (e.target.closest('[data-clip-save]')) {
+      const clip = validClip([Number(marker.dataset.start), Number(marker.dataset.end)]);
+      if (!clip) { marker.querySelector('.clip-tip').textContent = 'Set a start, then an end after it, before saving.'; return; }
+      setLineClip(ctx.lesson, idx, clip);
+      setSyncStatus('✓ clip saved');
+      renderMinnaLesson(ctx.lesson, body);   // re-render so the rec-control picks up the new clip
+    }
+  });
 }
 function minnaNotesSection(n) {
   const val = escapeHtml((state.minnaStore.notes && state.minnaStore.notes[n]) || '');
@@ -254,7 +335,8 @@ function minnaNotesSection(n) {
 }
 function wireMinnaLesson(n, L, body) {
   body.querySelectorAll('[data-aud]').forEach(b => b.addEventListener('click', () => mnPlay(b.dataset.aud, b)));
-  wireMinnaRecord(body);   // delegated record/play/delete handlers for the rec-controls
+  wireMinnaRecord(body);   // delegated record/play/delete/compare handlers (attach-once)
+  wireMinnaClips(body);    // delegated conversation-line clip-marker handlers (attach-once)
   const add = body.querySelector('#mnAddDeck');
   if (add) add.addEventListener('click', () => {
     const { added, updated } = activateMinnaVocab(n, L.vocab || []);

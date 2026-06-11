@@ -16,6 +16,7 @@ import {
   pitchHtml, minnaSig, cardStamp, colorClass, CATS, exampleForLevel, availableTiers,
   JLPT_TIERS, BOX_DAYS,
   clampKeep, convItemKey, formatDuration, KEEP_DEFAULT,
+  validClip, resolveClip, clipLabel,
 } from '../src/core/index.js';
 
 beforeEach(() => {
@@ -415,4 +416,29 @@ test('formatDuration renders M:SS, empty on invalid', () => {
   expect(formatDuration(65000)).toBe('1:05');
   expect(formatDuration(null)).toBe('');
   expect(formatDuration(-5)).toBe('');
+});
+
+test('validClip accepts [start<end] non-negative, rejects the rest', () => {
+  expect(validClip([3, 7])).toEqual([3, 7]);
+  expect(validClip([0, 2.5])).toEqual([0, 2.5]);
+  expect(validClip([7, 3])).toBeNull();   // reversed
+  expect(validClip([5, 5])).toBeNull();   // zero-length
+  expect(validClip([-1, 3])).toBeNull();  // negative
+  expect(validClip([3])).toBeNull();      // wrong arity
+  expect(validClip(null)).toBeNull();
+  expect(validClip(['a', 'b'] as any)).toBeNull();
+});
+
+test('resolveClip: synced store wins over the lesson-JSON clip', () => {
+  expect(resolveClip([1, 2], [5, 8])).toEqual([5, 8]);   // store wins
+  expect(resolveClip([1, 2], null)).toEqual([1, 2]);     // fall back to lesson JSON
+  expect(resolveClip([1, 2], [9, 4])).toEqual([1, 2]);   // invalid store → lesson JSON
+  expect(resolveClip(null, null)).toBeNull();
+});
+
+test('clipLabel formats a clip, empty when invalid', () => {
+  expect(clipLabel([3, 7])).toBe('0:03–0:07');
+  expect(clipLabel([65, 70])).toBe('1:05–1:10');
+  expect(clipLabel(null)).toBe('');
+  expect(clipLabel([5, 5])).toBe('');
 });

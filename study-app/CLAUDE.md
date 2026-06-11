@@ -11,7 +11,9 @@ order. The actual DOM/render/feature glue is split into **`src/features/*`** mod
   (export/import), `deck` (filter model + picker + forecast + due banner; owns `cfg`),
   `flashcard` (session lifecycle; owns `session`), `browse` (grid + detail modal + topic
   groups; owns `bcfg`), `stats` (charts), `custom-cards` (rebuildData + #verbModal CRUD),
-  `settings-page`, `minna` (the みんなの日本語 dashboard), `a11y` (roving tabindex + chip
+  `settings-page`, `minna` (the みんなの日本語 dashboard), `minna-record` (Phase 2
+  record-and-compare: MediaRecorder capture + take list + the native/you/sequence compare
+  player), `a11y` (roving tabindex + chip
   annotations), `tts`, `render-helpers` (shared `jishoUrl`/`provenanceBadge`), and the cloud
   pair `cloud-core` (`api`/`account`/`setSyncStatus`) + `cloud` (sync trios + auth + bootAuth).
 - **`src/core/`** — the PURE, unit-tested core (DOM-free): `srs`, `forecast`, `facets`,
@@ -485,10 +487,27 @@ Component contracts you must preserve:
   converts pre-dedup twins on boot. Genuinely-new words become custom cards carrying
   generated `levels`/`mnem`/`tip`/`accent` from the lesson JSON (so they reach parity with
   built-ins — same `renderExample`/`pitchHtml` paths). The only NEW synced blob is
-  per-lesson NOTES + the overlays under the `minna` app key (4th sync trio). Content source of truth is the server's
+  per-lesson NOTES + the overlays + the Phase-2 conversation **clips** under the `minna` app
+  key (4th sync trio). Content source of truth is the server's
   `data/minna/lesson-<n>.json` (git-tracked, curated from the `scripts/scrape-minna.ts`
-  draft). Phase 2 — record-your-voice + compare to native audio — is planned.
+  draft). **Phase 2 — record-your-voice + compare to native audio — has SHIPPED (MVP).**
   **Full feature doc (architecture + data model + roadmap): [MINNA.md](MINNA.md).**
+- **Record-and-compare (`minna-record.js`): the conversation has ONE whole-dialogue MP3, so
+  per-line native compare slices it — it does NOT have per-line audio.** A line's native
+  compare plays `[startSec,endSec]` of the cached conversation MP3 via `currentTime` + a
+  `timeupdate` stop (Media-Fragments `#t=` is unreliable on `<audio>` — don't switch to it).
+  Clips resolve `line.clip` (lesson JSON) ∪ `state.minnaStore.clips[lesson][lineIdx]` (synced,
+  set by the in-app marker) — **store wins** (`resolveClip`). A line with no clip still
+  records; only its native compare is gated (a hint shows). **The record/compare/clip
+  delegated handlers attach ONCE to the persistent `#mnBody`** (`body.dataset.recWired` /
+  `clipWired` guards) because `renderMinnaLesson` re-renders `body.innerHTML` on
+  activation/clip-save — re-attaching per render would stack listeners and double-fire. The
+  handlers read all context (lesson, itemKey, native src, clip) off the rec-control's
+  `data-*`, so they need no closure over the lesson. **Recordings are PRIVATE on the server**
+  and played via one reused `<audio crossOrigin='use-credentials'>` (gated, cross-origin) —
+  the same cookie-gated-audio path as the native-audio button. The **binary upload uses its
+  own credentialed `fetch`** (not the JSON-only `api()`); list/delete use `api()`. Retention
+  is the `recordingsKeep` setting (default 3, 1–20), sent as `keep` and enforced server-side.
 
 ## Change log — UX/design pass (this is the conversation record)
 

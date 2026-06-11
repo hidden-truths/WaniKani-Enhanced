@@ -538,6 +538,31 @@
   .rec-review .chip{font-size:11px;padding:4px 10px}
   .rec-review .rec-save{border-color:var(--good);color:var(--good);font-weight:700}
   .rec-unsupported{font-family:Georgia,serif;font-size:12px;color:var(--muted);opacity:.85}
+  /* Compare player — ▶ you / ▶ native / ▶ native→you + loop. Shows once a take exists. */
+  .rec-compare{display:inline-flex;align-items:center;flex-wrap:wrap;gap:6px;margin-left:2px}
+  .cmp-label{font-family:"SF Mono",ui-monospace,monospace;font-size:9px;letter-spacing:.12em;text-transform:uppercase;color:var(--muted)}
+  .cmp-btn{display:inline-flex;align-items:center;gap:4px;background:none;border:1px solid var(--line);color:var(--ichidan);border-radius:13px;padding:3px 9px;font-family:"SF Mono",ui-monospace,monospace;font-size:11px;cursor:pointer;transition:all .15s}
+  .cmp-btn:hover{border-color:var(--ichidan);background:var(--paper-2)}
+  .cmp-btn .ic{font-size:12px}
+  .cmp-btn.playing{background:var(--ichidan);color:#fff;border-color:var(--ichidan)}
+  .cmp-loop{color:var(--muted)}
+  .cmp-loop.active{background:var(--good);color:#fff;border-color:var(--good)}
+  .cmp-hint{font-family:Georgia,serif;font-size:12px;color:var(--muted);opacity:.85}
+  /* Conversation-line layout + clip marker. */
+  .mn-line-body{flex:1;min-width:0}
+  .mn-line-rec{display:flex;flex-wrap:wrap;align-items:center;gap:8px;margin-top:7px}
+  .clip-zone{display:inline-flex;align-items:center;gap:7px}
+  .clip-current{font-family:"SF Mono",ui-monospace,monospace;font-size:10px;color:var(--good);border:1px solid color-mix(in srgb,var(--good) 45%,var(--line));border-radius:10px;padding:1px 7px}
+  .clip-edit{background:none;border:1px dashed var(--line);color:var(--muted);border-radius:11px;padding:2px 9px;font-family:"SF Mono",ui-monospace,monospace;font-size:10px;letter-spacing:.04em;cursor:pointer}
+  .clip-edit:hover{border-color:var(--ichidan);color:var(--ichidan)}
+  .clip-marker{flex-basis:100%;border:1px solid var(--line);border-radius:8px;padding:10px;background:var(--paper-2);margin-top:4px}
+  .clip-audio{width:100%;height:34px;margin-bottom:8px}
+  .clip-marker-row{display:flex;flex-wrap:wrap;align-items:center;gap:7px}
+  .clip-marker-row .chip{font-size:11px;padding:4px 10px}
+  .clip-marker-row .clip-save{border-color:var(--good);color:var(--good);font-weight:700}
+  .clip-readout{font-family:"SF Mono",ui-monospace,monospace;font-size:11px;color:var(--muted)}
+  .clip-readout b{color:var(--ink)}
+  .clip-tip{font-family:Georgia,serif;font-size:12px;color:var(--muted);opacity:.85;margin-top:7px}
   @media (prefers-reduced-motion:reduce){ .rec-btn.recording{animation:none} }
   @media (max-width:640px){
     .mn-role{flex-basis:48px;font-size:10px}

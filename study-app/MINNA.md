@@ -260,7 +260,7 @@ The **only new synced blob** is the per-lesson notes (below).
 
 | Where | Key | Shape |
 |---|---|---|
-| localStorage + synced app `minna` | `jpverbs_minna` | `{ notes:{ "<lesson>": "<text>" }, lastLesson:<n> }` — the notes scratchpad + last-open chapter. The **4th** sync trio (`scheduleMinnaSync`/`pushMinnaCloud`/`pullMinnaCloud`), mirroring custom-verbs/settings; chained into `pullCloud` on sign-in. |
+| localStorage + synced app `minna` | `jpverbs_minna` | `{ notes:{ "<lesson>": "<text>" }, lastLesson:<n>, overlays:{…}, clips:{ "<lesson>": { "<lineIdx>": [startSec,endSec] } } }` — the notes scratchpad + last-open chapter + dedup overlays + **per-line conversation clip ranges** (record-and-compare). The **4th** sync trio (`scheduleMinnaSync`/`pushMinnaCloud`/`pullMinnaCloud`), mirroring custom-verbs/settings; chained into `pullCloud` on sign-in. |
 | localStorage + synced app `custom-verbs` | `jpverbs_custom` | Activated vocab lives **here** as tagged cards — *not* in `jpverbs_minna`. |
 | server `data/minna/lesson-<n>.json` | — | Lesson content — server-owned, git-tracked, never in localStorage. |
 
@@ -320,22 +320,36 @@ tab is **account-gated to an owner allowlist** to keep that material out of publ
 Minna-specific backlog (the general study-app roadmap in [NEXT_STEPS.md](NEXT_STEPS.md)
 points here). Roughly priority-ordered.
 
-### Phase 2 — record & compare  *(the marquee feature)*
+### ✅ Phase 2 — record & compare — SHIPPED (MVP)
 
-Record your own voice and compare it to the cached native audio. This is the headline
-reason the audio is already proxied + stored same-origin in Phase 1.
+Record your own voice and compare it to the cached native audio — the marquee feature, and
+the headline reason the audio is proxied + stored same-origin in Phase 1. Frontend lives in
+[src/features/minna-record.js](src/features/minna-record.js) (capture/upload/compare/playback)
++ the conversation-line clip glue in [src/features/minna.js](src/features/minna.js); pure
+helpers in [src/core/recordings.js](src/core/recordings.js).
 
-- **Capture** — `MediaRecorder` (`getUserMedia` audio) → an opus/webm blob, with
-  preview + re-record before saving.
-- **Store** — per-user recordings on the server: a `minna_recordings` table
-  (`user_id, lesson, item_key, storage_key, duration_ms, created_at`, following the
-  `study_sessions` template) + `recording/<user>/<lesson>/<item>/<id>.webm` via the
-  storage layer + authed `POST`/`GET`/`DELETE /v1/minna/recordings`. Add a per-user (or
-  per-item "keep last N") cap so storage stays bounded.
-- **Compare player** — for a given word/line: ▶ example, ▶ you, ▶ example→you (sequential),
-  ▶ simultaneous; optional **dual waveform** (Web Audio `decodeAudioData` → canvas) and
-  speed/loop controls. The comparison target is the native vnjpclub audio Phase 1 already
-  caches same-origin (so Web Audio can read its bytes without CORS).
+- **Capture** — `MediaRecorder`(`getUserMedia` audio) → opus/webm (mp4 fallback on Safari),
+  with a preview / Save / Re-record / Cancel review step. A record control sits under each
+  vocab row and each conversation line. Degrades to a hint when the APIs are unavailable.
+- **Store** — per-user takes on the server: the `minna_recordings` table + **PRIVATE**
+  storage objects (`acl:'private'`), served only through the owner-scoped
+  `GET /v1/minna/recordings/{id}`. `POST` prunes per item to the user's **keep-N** (Settings
+  → "Recordings to keep per word", default 3, 1–20). Routes:
+  `POST`/`GET`(list)/`GET`(bytes)/`DELETE /v1/minna/recordings`.
+- **Compare player** — per item: **▶ you · ▶ native · ▶ native→you** (sequential) **+ loop**.
+  Take playback is gated (one reused `<audio crossOrigin='use-credentials'>`).
+- **Conversation lines have no per-line native audio** (the lesson ships ONE whole-dialogue
+  MP3). The fix: an optional per-line **clip range** `[startSec, endSec]` — native compare
+  plays just that slice of the cached MP3 via `currentTime` + a `timeupdate` stop. Clips
+  resolve from `line.clip` (lesson JSON) ∪ the synced `minnaStore.clips` (in-app **clip
+  marker**: play the conversation, mark start/end, Save). A line with no clip still records;
+  only its *native* compare is gated until a clip is marked. See the record-and-compare
+  dead-end in [CLAUDE.md](CLAUDE.md).
+
+**Deferred from the MVP** (intentionally): the **dual waveform** (Web Audio
+`decodeAudioData` → canvas), **speed control**, and **▶ simultaneous** playback. The
+comparison target is already cached same-origin, so Web Audio can read its bytes without
+CORS whenever these are picked up.
 
 ### More lessons & sections
 

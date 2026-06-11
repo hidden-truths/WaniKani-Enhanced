@@ -33,3 +33,27 @@ export function formatDuration(ms) {
   const s = totalSec % 60;
   return m + ':' + String(s).padStart(2, '0');
 }
+
+// A valid clip is [startSec, endSec] with finite, non-negative numbers and
+// start < end. Returns the normalized pair or null. Used to slice the cached
+// whole-conversation MP3 to a single line for the native compare.
+export function validClip(clip) {
+  if (!Array.isArray(clip) || clip.length !== 2) return null;
+  const a = Number(clip[0]), b = Number(clip[1]);
+  if (!Number.isFinite(a) || !Number.isFinite(b)) return null;
+  if (a < 0 || b <= a) return null;
+  return [a, b];
+}
+
+// Resolve a conversation line's clip from its two sources — the per-user synced
+// store (set via the in-app marker) wins over the curated lesson-JSON `line.clip`.
+// Returns a valid [start,end] or null (→ native compare disabled for that line).
+export function resolveClip(lineClip, storeClip) {
+  return validClip(storeClip) || validClip(lineClip);
+}
+
+// "0:03–0:07" label for a clip; '' when there's no valid clip.
+export function clipLabel(clip) {
+  const v = validClip(clip);
+  return v ? formatDuration(v[0] * 1000) + '–' + formatDuration(v[1] * 1000) : '';
+}
