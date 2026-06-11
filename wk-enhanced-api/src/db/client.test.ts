@@ -174,3 +174,76 @@ describe('study_sessions append-only log', () => {
         expect(db.countSessions(u.id)).toBe(0);
     });
 });
+
+describe('minna_recordings (record-and-compare)', () => {
+    // Insert a take with an explicit createdAt so ordering tests are deterministic.
+    const add = (userId: number, lesson: number, itemKey: string, createdAt: number) =>
+        db.insertRecording(userId, lesson, itemKey, `rec/${userId}/${itemKey}/${createdAt}.webm`, 'audio/webm', 1500, createdAt);
+
+    test('insert + list returns a lesson’s takes newest-first', () => {
+        const u = db.createUser('r@example.com', 'hash');
+        add(u.id, 23, 'mnn:23:0', 1000);
+        add(u.id, 23, 'mnn:23:0', 3000);
+        add(u.id, 23, 'mnn:23:1', 2000);
+        const list = db.listRecordings(u.id, 23);
+        expect(list.map((r) => r.createdAt)).toEqual([3000, 2000, 1000]);
+        expect(list[0]!.contentType).toBe('audio/webm');
+    });
+
+    test('list is scoped per (user, lesson)', () => {
+        const u = db.createUser('a@example.com', 'hash');
+        const v = db.createUser('b@example.com', 'hash');
+        add(u.id, 23, 'mnn:23:0', 1000);
+        add(u.id, 24, 'mnn:24:0', 1000);
+        add(v.id, 23, 'mnn:23:0', 1000);
+        expect(db.listRecordings(u.id, 23)).toHaveLength(1);
+        expect(db.listRecordings(u.id, 24)).toHaveLength(1);
+        expect(db.listRecordings(v.id, 23)).toHaveLength(1);
+    });
+
+    test('getRecording is owner-scoped (a guessed id from another account 404s)', () => {
+        const u = db.createUser('o@example.com', 'hash');
+        const v = db.createUser('p@example.com', 'hash');
+        const id = add(u.id, 23, 'mnn:23:0', 1000);
+        expect(db.getRecording(u.id, id)).not.toBeNull();
+        expect(db.getRecording(v.id, id)).toBeNull();
+    });
+
+    test('deleteRecording removes only the owner’s row and returns it', () => {
+        const u = db.createUser('d@example.com', 'hash');
+        const v = db.createUser('e@example.com', 'hash');
+        const id = add(u.id, 23, 'mnn:23:0', 1000);
+        expect(db.deleteRecording(v.id, id)).toBeNull(); // not the owner → no-op
+        const row = db.deleteRecording(u.id, id);
+        expect(row).not.toBeNull();
+        expect(row!.storageKey).toContain('mnn:23:0');
+        expect(db.getRecording(u.id, id)).toBeNull();
+    });
+
+    test('pruneRecordings keeps the newest N of an item and returns the dropped rows', () => {
+        const u = db.createUser('k@example.com', 'hash');
+        for (const t of [1000, 2000, 3000, 4000, 5000]) add(u.id, 23, 'mnn:23:0', t);
+        add(u.id, 23, 'mnn:23:1', 9000); // a different item — must be untouched
+        const dropped = db.pruneRecordings(u.id, 23, 'mnn:23:0', 3);
+        expect(dropped.map((r) => r.createdAt).sort()).toEqual([1000, 2000]);
+        const remaining = db.listRecordings(u.id, 23).filter((r) => r.itemKey === 'mnn:23:0');
+        expect(remaining.map((r) => r.createdAt)).toEqual([5000, 4000, 3000]);
+        // the other item is left alone
+        expect(db.listRecordings(u.id, 23).filter((r) => r.itemKey === 'mnn:23:1')).toHaveLength(1);
+    });
+
+    test('pruneRecordings is a no-op when under the cap', () => {
+        const u = db.createUser('n@example.com', 'hash');
+        add(u.id, 23, 'mnn:23:0', 1000);
+        add(u.id, 23, 'mnn:23:0', 2000);
+        expect(db.pruneRecordings(u.id, 23, 'mnn:23:0', 3)).toEqual([]);
+        expect(db.listRecordings(u.id, 23)).toHaveLength(2);
+    });
+
+    test('recordings cascade-delete with the user', () => {
+        const u = db.createUser('cascade@example.com', 'hash');
+        add(u.id, 23, 'mnn:23:0', 1000);
+        mem.query('DELETE FROM users WHERE id = ?').run(u.id);
+        expect(db.listRecordings(u.id, 23)).toHaveLength(0);
+    });
+});

@@ -57,7 +57,7 @@ app.use('*', async (c, next) => {
         c.header('Access-Control-Allow-Origin', origin);
         c.header('Vary', 'Origin');
         c.header('Access-Control-Allow-Credentials', 'true');
-        c.header('Access-Control-Allow-Methods', 'GET, POST, PUT, OPTIONS');
+        c.header('Access-Control-Allow-Methods', 'GET, POST, PUT, DELETE, OPTIONS');
         c.header('Access-Control-Allow-Headers', 'Content-Type');
     } else {
         c.header('Access-Control-Allow-Origin', '*');

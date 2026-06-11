@@ -367,3 +367,117 @@ export function countSessions(userId: number): number {
         .get(userId) as { n: number };
     return row.n;
 }
+
+// ---------- minna_recordings (record-and-compare voice takes) ----------
+
+export interface RecordingRow {
+    id: number;
+    userId: number;
+    lesson: number;
+    itemKey: string;
+    storageKey: string;
+    contentType: string;
+    durationMs: number | null;
+    createdAt: number;
+}
+
+type RawRecordingRow = {
+    id: number;
+    user_id: number;
+    lesson: number;
+    item_key: string;
+    storage_key: string;
+    content_type: string;
+    duration_ms: number | null;
+    created_at: number;
+};
+
+function rowToRecording(r: RawRecordingRow): RecordingRow {
+    return {
+        id: r.id,
+        userId: r.user_id,
+        lesson: r.lesson,
+        itemKey: r.item_key,
+        storageKey: r.storage_key,
+        contentType: r.content_type,
+        durationMs: r.duration_ms,
+        createdAt: r.created_at,
+    };
+}
+
+const RECORDING_COLS =
+    'id, user_id, lesson, item_key, storage_key, content_type, duration_ms, created_at';
+
+// Append one voice take. Returns the new row id. The storage object is written
+// separately by the route (its key is generated before insert, so no update dance).
+export function insertRecording(
+    userId: number,
+    lesson: number,
+    itemKey: string,
+    storageKey: string,
+    contentType: string,
+    durationMs: number | null,
+    createdAt: number,
+): number {
+    const r = getDb()
+        .query(
+            `INSERT INTO minna_recordings (user_id, lesson, item_key, storage_key, content_type, duration_ms, created_at)
+             VALUES (?, ?, ?, ?, ?, ?, ?)`,
+        )
+        .run(userId, lesson, itemKey, storageKey, contentType, durationMs, createdAt);
+    return Number(r.lastInsertRowid);
+}
+
+// All of a user's takes for one lesson, newest first. The client groups these by
+// item_key to render per-word/per-line take lists.
+export function listRecordings(userId: number, lesson: number): RecordingRow[] {
+    const rows = getDb()
+        .query(
+            `SELECT ${RECORDING_COLS} FROM minna_recordings
+             WHERE user_id = ? AND lesson = ? ORDER BY created_at DESC, id DESC`,
+        )
+        .all(userId, lesson) as RawRecordingRow[];
+    return rows.map(rowToRecording);
+}
+
+// One take by id, scoped to the owner (so a guessed id from another account
+// 404s rather than leaking). Used to serve bytes and to authorize delete.
+export function getRecording(userId: number, id: number): RecordingRow | null {
+    const row = getDb()
+        .query(`SELECT ${RECORDING_COLS} FROM minna_recordings WHERE id = ? AND user_id = ?`)
+        .get(id, userId) as RawRecordingRow | null;
+    return row ? rowToRecording(row) : null;
+}
+
+// Delete one take (owner-scoped). Returns the deleted row so the caller can also
+// drop its storage object; null if it didn't exist / wasn't the owner's.
+export function deleteRecording(userId: number, id: number): RecordingRow | null {
+    const row = getRecording(userId, id);
+    if (!row) return null;
+    getDb().query('DELETE FROM minna_recordings WHERE id = ? AND user_id = ?').run(id, userId);
+    return row;
+}
+
+// Prune a (user, lesson, item_key) group down to the newest `keep` takes. Returns
+// the deleted rows so the caller can drop their storage objects. `keep` is clamped
+// to >= 1 here as a backstop; the route clamps to the [1, 20] policy range.
+export function pruneRecordings(
+    userId: number,
+    lesson: number,
+    itemKey: string,
+    keep: number,
+): RecordingRow[] {
+    const k = Math.max(1, Math.floor(keep));
+    const stale = getDb()
+        .query(
+            `SELECT ${RECORDING_COLS} FROM minna_recordings
+             WHERE user_id = ? AND lesson = ? AND item_key = ?
+             ORDER BY created_at DESC, id DESC
+             LIMIT -1 OFFSET ?`,
+        )
+        .all(userId, lesson, itemKey, k) as RawRecordingRow[];
+    if (!stale.length) return [];
+    const del = getDb().query('DELETE FROM minna_recordings WHERE id = ?');
+    for (const r of stale) del.run(r.id);
+    return stale.map(rowToRecording);
+}

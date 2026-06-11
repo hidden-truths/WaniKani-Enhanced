@@ -396,3 +396,53 @@ export const MinnaLessonSchema = z
         conversation: z.any().optional(),
     })
     .openapi('MinnaLesson');
+
+// ---------- みんなの日本語 record-and-compare (Phase 2) ----------
+
+// One saved voice take, as returned to the client (the storage key + owner are
+// internal and never serialized).
+export const MinnaRecordingSchema = z
+    .object({
+        id: z.number().int(),
+        lesson: z.number().int(),
+        itemKey: z.string().openapi({ description: "What the take is of, e.g. 'mnn:23:0' or 'mnn:23:conv:2'." }),
+        durationMs: z.number().int().nullable(),
+        createdAt: z.number().int(),
+    })
+    .openapi('MinnaRecording');
+
+// POST /v1/minna/recordings — the audio bytes are the raw request body; the
+// metadata rides in the query string.
+export const MinnaRecordingPostQuerySchema = z.object({
+    lesson: z.string().regex(/^\d+$/).openapi({ param: { name: 'lesson', in: 'query' }, example: '23' }),
+    itemKey: z.string().min(1).max(80).openapi({ param: { name: 'itemKey', in: 'query' }, example: 'mnn:23:0' }),
+    durationMs: z.string().regex(/^\d+$/).optional().openapi({ param: { name: 'durationMs', in: 'query' }, example: '1800' }),
+    // Keep-the-newest-N per item; clamped to [1, 20] server-side.
+    keep: z.string().regex(/^\d+$/).optional().openapi({ param: { name: 'keep', in: 'query' }, example: '3' }),
+});
+
+export const MinnaRecordingPostResponseSchema = z
+    .object({
+        ok: z.boolean(),
+        recording: MinnaRecordingSchema,
+        // The item's current take list (newest first) after insert + prune, so the
+        // client can re-render without a follow-up GET.
+        takes: z.array(MinnaRecordingSchema),
+    })
+    .openapi('MinnaRecordingPostResponse');
+
+export const MinnaRecordingsListQuerySchema = z.object({
+    lesson: z.string().regex(/^\d+$/).openapi({ param: { name: 'lesson', in: 'query' }, example: '23' }),
+});
+
+export const MinnaRecordingsListResponseSchema = z
+    .object({ recordings: z.array(MinnaRecordingSchema) })
+    .openapi('MinnaRecordingsListResponse');
+
+export const MinnaRecordingIdParamsSchema = z.object({
+    id: z.string().regex(/^\d+$/).openapi({ param: { name: 'id', in: 'path' }, example: '42' }),
+});
+
+export const MinnaRecordingDeleteResponseSchema = z
+    .object({ ok: z.boolean() })
+    .openapi('MinnaRecordingDeleteResponse');

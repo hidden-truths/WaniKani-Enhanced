@@ -9,21 +9,32 @@
 // further round trip through us (except in local mode where the /media route
 // is still our own process).
 
-import { mkdir, writeFile, stat, readFile } from 'node:fs/promises';
+import { mkdir, writeFile, stat, readFile, unlink } from 'node:fs/promises';
 import { join, dirname } from 'node:path';
 import { config } from '../config.ts';
 import { log } from '../lib/log.ts';
 
+// Per-object write options. `acl` defaults to 'public-read' so every existing
+// caller (the warm pipeline's media, the Minna native-audio cache) is unchanged.
+// 'private' is for personal data — user voice recordings — that must NOT get a
+// public URL: the object is served only through an auth-gated route via get().
+export interface PutOptions {
+    acl?: 'public-read' | 'private';
+}
+
 export interface Storage {
     // Idempotent: writing the same key twice is fine; latest write wins.
     // Returns the public URL the client should fetch.
-    put(key: string, body: ArrayBuffer | Uint8Array, contentType: string): Promise<string>;
+    put(key: string, body: ArrayBuffer | Uint8Array, contentType: string, opts?: PutOptions): Promise<string>;
     // True if an object exists. Used by the warmer to skip already-uploaded
     // media without re-downloading from the source.
     exists(key: string): Promise<boolean>;
     // Read an object's bytes, or null if it doesn't exist. Used by the Minna
     // audio proxy to serve a cached MP3 without re-fetching from vnjpclub.
     get(key: string): Promise<ArrayBuffer | null>;
+    // Remove an object. Idempotent — deleting a missing key is a no-op, not an
+    // error. Used to drop pruned/deleted voice recordings so storage stays bounded.
+    delete(key: string): Promise<void>;
     publicUrl(key: string): string;
 }
 
@@ -54,7 +65,11 @@ export const MEDIA_CACHE_CONTROL = 'public, max-age=31536000, immutable';
 class LocalStorage implements Storage {
     constructor(private readonly rootDir: string, private readonly publicBase: string) {}
 
-    async put(key: string, body: ArrayBuffer | Uint8Array, _contentType: string): Promise<string> {
+    async put(key: string, body: ArrayBuffer | Uint8Array, _contentType: string, _opts?: PutOptions): Promise<string> {
+        // ACL is a no-op for the local driver: the dev /media/* route is the only
+        // way out and it's localhost-only, so there's no public-bucket exposure to
+        // gate. Recordings are served via the auth-gated /v1/minna/recordings route
+        // (storage.get), never via their publicUrl, in every driver.
         const path = join(this.rootDir, key);
         await mkdir(dirname(path), { recursive: true });
         await writeFile(path, body instanceof ArrayBuffer ? new Uint8Array(body) : body);
@@ -77,6 +92,14 @@ class LocalStorage implements Storage {
             return buf.buffer.slice(buf.byteOffset, buf.byteOffset + buf.byteLength);
         } catch {
             return null;
+        }
+    }
+
+    async delete(key: string): Promise<void> {
+        try {
+            await unlink(join(this.rootDir, key));
+        } catch {
+            /* already gone — idempotent */
         }
     }
 
@@ -107,8 +130,9 @@ class S3Storage implements Storage {
         });
     }
 
-    async put(key: string, body: ArrayBuffer | Uint8Array, contentType: string): Promise<string> {
+    async put(key: string, body: ArrayBuffer | Uint8Array, contentType: string, opts?: PutOptions): Promise<string> {
         const file = this.client.file(key);
+        const acl = opts?.acl ?? 'public-read';
         // Per-object ACL is the canonical "make this public" mechanism on
         // DO Spaces. We tried two alternatives during the first prod deploy
         // (2026-05) and both failed:
@@ -129,8 +153,12 @@ class S3Storage implements Storage {
         // layer needed on the server path.
         await file.write(body, {
             type: contentType,
-            acl: 'public-read',
-            cacheControl: MEDIA_CACHE_CONTROL,
+            // 'private' for personal data (voice recordings): no public ACL, and a
+            // private Cache-Control so no shared/CDN cache can hold it. The bytes are
+            // served only via the auth-gated route reading get(). Default stays
+            // 'public-read' + immutable for content-addressed media.
+            acl,
+            cacheControl: acl === 'private' ? 'private, max-age=31536000, immutable' : MEDIA_CACHE_CONTROL,
         });
         return this.publicUrl(key);
     }
@@ -151,6 +179,14 @@ class S3Storage implements Storage {
             return await file.arrayBuffer();
         } catch {
             return null;
+        }
+    }
+
+    async delete(key: string): Promise<void> {
+        try {
+            await this.client.file(key).delete();
+        } catch {
+            /* already gone / transient — idempotent best-effort */
         }
     }
 
@@ -187,4 +223,12 @@ export const keys = {
     // stays tidy and collision-free.
     minnaAudio: (vnjpPath: string) =>
         `minna/audio/${vnjpPath.replace(/^\/Audio\//, '')}`,
+    // Per-user voice recording (Phase 2 record-and-compare). PRIVATE object —
+    // written with acl:'private' and served only through the auth-gated route.
+    // `token` is a random uuid generated at upload time, so each take has a
+    // unique key (no id round-trip). `itemKey` is sanitized to a safe path
+    // segment (it contains ':' — 'mnn:23:conv:2'); the authoritative key is
+    // stored in the DB row, so this layout is purely internal.
+    minnaRecording: (userId: number, lesson: number, itemKey: string, token: string) =>
+        `recording/${userId}/${lesson}/${itemKey.replace(/[^A-Za-z0-9_-]+/g, '_')}/${token}.webm`,
 };

@@ -90,3 +90,26 @@ CREATE TABLE IF NOT EXISTS study_sessions (
 );
 
 CREATE INDEX IF NOT EXISTS study_sessions_user_idx ON study_sessions (user_id, ended_at);
+
+-- Per-user voice recordings for the みんなの日本語 record-and-compare feature
+-- (Phase 2): the learner records themselves saying a vocab word or conversation
+-- line and compares it to the cached native audio. The audio bytes live in the
+-- storage layer (PRIVATE objects — personal voice data, never a public URL);
+-- this table is the metadata index. `item_key` identifies what the recording is
+-- of ('mnn:23:0' for a vocab word, 'mnn:23:conv:2' for a conversation line). Old
+-- takes are pruned per (user, lesson, item_key) to the user's keep-N setting, so
+-- this table stays small. `ON DELETE CASCADE` from users (storage objects are
+-- dropped by the route, not the DB).
+CREATE TABLE IF NOT EXISTS minna_recordings (
+    id                INTEGER PRIMARY KEY AUTOINCREMENT,
+    user_id           INTEGER NOT NULL REFERENCES users(id) ON DELETE CASCADE,
+    lesson            INTEGER NOT NULL,
+    item_key          TEXT NOT NULL,           -- 'mnn:23:0' (vocab) | 'mnn:23:conv:2' (line)
+    storage_key       TEXT NOT NULL,           -- object key in the storage layer
+    content_type      TEXT NOT NULL,           -- 'audio/webm' | 'audio/mp4' (Safari)
+    duration_ms       INTEGER,                 -- recording length, for the UI
+    created_at        INTEGER NOT NULL         -- epoch ms
+);
+
+CREATE INDEX IF NOT EXISTS minna_recordings_item_idx
+    ON minna_recordings (user_id, lesson, item_key, created_at);
