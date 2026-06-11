@@ -7,6 +7,13 @@
       "runtimeArgs": ["start"],
       "cwd": "wk-enhanced-api",
       "port": 3000
+    },
+    {
+      "name": "study-app",
+      "runtimeExecutable": "bun",
+      "runtimeArgs": ["run", "dev", "--", "--port", "5173", "--strictPort"],
+      "cwd": "study-app",
+      "port": 5173
     }
   ]
 }

@@ -1,0 +1,760 @@
+<!DOCTYPE html>
+<!--
+================================================================================
+  日常日本語  ·  JAPANESE TRAINER
+================================================================================
+  A no-build, offline-capable flashcard + spaced-repetition study tool for
+  everyday Japanese. The built-in content is currently the 100 most frequent
+  verbs (ranked by the BCCWJ corpus, each tagged cat:"verb"), plus any cards you
+  add yourself — but the model is being generalized beyond verbs (see cat below),
+  so prefer "word"/"card" over "verb" in new user-facing copy.
+
+  FIVE static files, no bundler / npm / framework (it outgrew the single-file
+  era — see HISTORY below):
+    index.html   this file — markup + the architecture map you're reading.
+    styles.css   design tokens (CSS vars) + all component styles.
+    verbs.js     the VERBS dataset (a classic <script>, defines global `VERBS`).
+    examples.js  EXAMPLES — five JLPT-leveled example sentences per verb.
+    app.js       all the logic (a classic <script>, runs after verbs/examples).
+  They're loaded as plain <link>/<script src> (NOT ES modules), so the app still
+  runs by opening index.html directly over file:// — relative <script>/<link>
+  loads work there; only fetch()/modules would have broken it. The one network
+  dependency is Google Fonts, which degrades gracefully (system fonts offline).
+  When served by the API server, TTS (/v1/tts) and accounts/sync are also live.
+
+--------------------------------------------------------------------------------
+  HISTORY — why it was single-file, and why it isn't anymore
+--------------------------------------------------------------------------------
+  This started as a personal study aid whose constraint was "open it anywhere
+  with zero setup." That kept it one file for a long time. Once it passed ~2300
+  lines (accounts, AND'd facets, custom verbs, TTS, …) the single file stopped
+  paying for itself, so it was split into the four files above — the section
+  banners had been drawn to make exactly that split mechanical. Plain classic
+  scripts (not modules) preserve the open-over-file:// property. The pure core is
+  guarded by web/verbs-core.test.ts through the split.
+
+--------------------------------------------------------------------------------
+  ARCHITECTURE (top to bottom)
+--------------------------------------------------------------------------------
+    styles.css     Design tokens (CSS vars) + all component styles. Theming is
+                   done entirely through CSS custom properties so light/dark is
+                   a single attribute flip on <html>.
+    index.html <body>
+      header       Title + toolbar (theme toggle, export, import).
+      tabs          Three views: Flashcards / Browse / Stats.
+      #panel-study  Flashcard session UI (setup screen + card stage + done).
+      #panel-browse Filterable grid of all verbs (built-in + custom).
+      #panel-stats  Charts, leech list, SRS memory-pipeline, reset.
+      modals        Account (auth), add/edit-verb, Settings, Browse detail.
+    verbs.js
+      VERBS         The 100-verb dataset (the heart of the app).
+    examples.js
+      EXAMPLES      Five JLPT-leveled example sentences per verb (by rank).
+    app.js
+      STORAGE       localStorage persistence + SRS scheduling + leech logic.
+      SETTINGS      DB-synced prefs (example level, furigana, input, audio).
+      EXAMPLES wiring  attachLevels/exampleForLevel/renderExample (leveled UI).
+      FONT/THEME    User-pref toggles, persisted to localStorage.
+      TAB NAV       View switching.
+      EXPORT/IMPORT Backup + restore of all progress as JSON.
+      DECK BUILDING The filter predicate (AND'd facets) + chip wiring.
+      FLASHCARD     Session lifecycle + grading (self/typed) + TTS + keyboard.
+      BROWSE        Summary grid + the detail modal (collapsible, leveled examples).
+      STATS+CHARTS  Hand-rolled SVG line/bar charts (no chart library).
+      CUSTOM VERBS  Add/edit/delete user verbs, merged into DATA at load.
+      CLOUD         Accounts + per-user progress / custom-verb / settings sync;
+                    durable session log (POST /v1/sessions).
+      SETTINGS PAGE The Settings modal wiring.
+
+--------------------------------------------------------------------------------
+  DATA MODEL
+--------------------------------------------------------------------------------
+  Each card (see VERBS[]; historically verbs only — being generalized):
+    { rank   : 1..100   corpus-frequency rank (BCCWJ; see note on #1 below)
+      jp     : kanji/kana headword (e.g. "走る")
+      read   : reading in hiragana (e.g. "はしる")
+      mean   : English gloss
+      cat    : part-of-speech — "verb" | "adjective" | "noun" | "adverb" | "phrase"
+               (all 100 built-ins are "verb"; non-verbs are user-added). Defaulted
+               to "verb" in attachLevels() if absent. The `cat` filter facet.
+      type   : word-class subtype. Verbs: "godan" | "ichidan" | "irregular";
+               adjectives: "i-adj" | "na-adj"; nouns/adverbs/phrases: "" (none).
+      jlpt   : "N5".."N1"   approximate JLPT level
+      trans  : "t" | "i" | ""   transitive / intransitive (verbs only; "" otherwise)
+      tags   : []  semantic + structural groups ("motion","ti-pair","fake",...)
+                   plus a frequency-band tag ("top1-25" etc.) used by Browse.
+      mnem   : mnemonic (see MNEMONIC POLICY)
+      tip    : usage / trap note
+      ex     : [[jp_sentence_with_<ruby>, english], ...] }
+
+  Persisted progress (localStorage key "jpverbs_v3", see STORAGE):
+    store = {
+      cards: { <rank>: { attempts:[1|0,...], right:N, wrong:N,
+                         box:0..5, due:<epoch ms> } },
+      sessions: [ { t:<epoch>, right:N, tot:N }, ... ],   // capped at 200
+      daily:    { "YYYY-MM-DD": { right:N, tot:N } }       // local date
+    }
+
+--------------------------------------------------------------------------------
+  KEY DESIGN DECISIONS
+--------------------------------------------------------------------------------
+  • Ranking source: BCCWJ corpus frequency. する vs 言う for #1 is genuinely
+    ambiguous — it depends on whether 〜する compounds are counted as する or
+    split out as separate lemmas. We put する #1 (the count a learner feels,
+    since you meet it constantly via compounds) and note the near-tie on both
+    cards. Don't "fix" this without reading the tip text first.
+
+  • SRS = Leitner boxes, NOT SM-2. Chosen for transparency: a learner can see
+    exactly why a card is due (box N → N days). Boxes/intervals in BOX_DAYS.
+    Promote on correct, reset to box 1 on miss. This is deliberately simpler
+    than Anki's algorithm; if you want SM-2-style ease factors, that's a
+    rewrite of scheduleCard(), not a patch.
+
+  • Filters are MULTI-SELECT and COMPOSED. The token chips split into FOUR facets
+    (type / trans / topic / status), derived from each token via TOKEN_FACET so the
+    markup is unchanged. Within a facet the selections are OR'd; across facets (and
+    with JLPT + the rank range) they're AND'd. So Godan + Emotion now = "godan AND
+    emotion" (the intersection), which is what users expect. The single "All" chip
+    is a master reset that clears every facet, and shows active when all are empty.
+    See wireFacets() + passes(). JLPT still uses makeMultiSelect().
+
+  • No chart library. The line/bar charts are hand-built SVG strings (lineChart,
+    barChart). Keeps the file dependency-free; the tradeoff is they're basic.
+
+  • Colors are functional, not decorative: vermilion = godan, indigo = ichidan,
+    stone = irregular, purple = leech. The conjugation class is the thing
+    learners confuse, so it's encoded as a color spine + a hanko-style stamp.
+
+--------------------------------------------------------------------------------
+  MNEMONIC POLICY
+--------------------------------------------------------------------------------
+  Mnemonics aim to be SOUND-ACCURATE first (the English hook should actually
+  resemble the Japanese reading), falling back to a kanji-based hook only when
+  no honest sound link exists (e.g. 待つ→松 pine). A fake sound-pun is worse
+  than an honest "this is just the kanji." If you add verbs, hold to this — a
+  mnemonic the reader can't trust is anti-useful.
+
+--------------------------------------------------------------------------------
+  OUTSTANDING WORK / KNOWN LIMITATIONS  (roughly priority-ordered)
+--------------------------------------------------------------------------------
+  1. [DONE] PRODUCTION + AUDIO. The flashcard "Input" toggle adds a "type the
+     reading" mode that auto-grades typed kana (normKana folds katakana→hiragana,
+     strips spaces, unifies long-vowel marks; the verdict is advisory — 1/2 still
+     override for typos). The "Audio" toggle + the speaker buttons play the reading
+     via the Web Speech API (speechSynthesis, ja-JP voice — free, built-in; the
+     whole Audio control hides when the browser has none). Both prefs persist
+     (jpverbs_input / jpverbs_audio). See FLASHCARD SESSION.
+  2. [DONE] CATEGORY vs SEMANTIC as separate AND'd facets. The shared OR'd pool is
+     split into four AND'd facets (type/trans/topic/status) via wireFacets() +
+     TOKEN_FACET; passes() intersects them. Godan + Emotion = the intersection.
+  3. [DONE] ADD / EDIT VERBS. The "Add verb" button in Browse opens #verbModal;
+     custom verbs persist in localStorage (jpverbs_custom) and merge into DATA via
+     rebuildData(), so they join the deck/filters/stats. Each custom card shows a
+     CUSTOM badge + Edit/Delete. See "CUSTOM VERBS" in the script. Local-only.
+  4. ACCESSIBILITY. focus-visible rings + aria-labels, and (DONE) a roving tabindex
+     on every chip group (setupRoving): each filter row is one tab stop, ←/→/↑/↓
+     move within it, Home/End jump to the ends, aria-label per row; collapsed topic
+     chips drop out of the tab order. Multi-select facet rows are role=group
+     toolbars (arrows move focus; Space/Enter toggles); single-select rows (Study
+     type / Test direction / Input / Audio / Order) declare role="radiogroup" and
+     get true radio semantics (role=radio + synced aria-checked, arrows move the
+     selection). REMAINING: conjugation class is still conveyed partly by color
+     (mitigated by the text stamp, not eliminated).
+  5. [DONE] JLPT levels are approximate (hand-assigned), and the 100 frequent verbs
+     are almost all N5–N4. annotateJlptChips() now disables (dims) any level with
+     zero verbs (N2/N1 by default) + tooltips the counts; adding a custom verb at
+     that level re-enables it. Roving nav skips the disabled chips.
+  6. [DONE] Cloud sync shipped — email/password accounts mirror progress across
+     devices (see CLOUD ACCOUNTS + SYNC). localStorage remains the offline-first
+     baseline; Export/Import is still the no-account manual bridge.
+  7. [DONE] SCALE: the SPLIT POINT. Done — separated into index.html + styles.css +
+     verbs.js + app.js (see HISTORY + ARCHITECTURE up top). Kept as classic <script>/
+     <link> (not ES modules) so opening index.html over file:// still works. The
+     server serves the three new assets statically (Bun.file + Content-Type).
+  8. [DONE] Pure-core tests. web/verbs-core.test.ts (bun:test) concatenates verbs.js +
+     app.js, evaluates them under a DOM stub, and covers passes()/facets/scheduleCard()/
+     isDue()/rollingAcc()/isLeech()/normKana()/filterSummary(). Run via `bun test`
+     in wk-enhanced-api. This guarded the core logic through the file split.
+
+  License/ownership: personal project. Verb data derived from public BCCWJ
+  frequency information; mnemonics and code are original.
+================================================================================
+-->
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>日常日本語 — Japanese Trainer</title>
+<!-- The ONLY external dependency. Five Japanese webfaces for the font switcher
+     (gothic / mincho / rounded / soft-serif / brush). If this fails to load
+     (offline), the app falls back to system Japanese fonts and still works. -->
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Noto+Sans+JP:wght@400;700;900&family=Noto+Serif+JP:wght@400;700;900&family=Zen+Maru+Gothic:wght@500;700&family=Kaisei+Decol:wght@400;700&family=Yuji+Syuku&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="/styles.css">
+</head>
+<body>
+<!-- Inline SVG icon sprite. Self-contained (no CDN/icon-font) so icons work
+     offline like the rest of the app; referenced via <svg class="ic"><use href="#i-…"/>.
+     All stroke-based on a 24-grid; color/size inherit via currentColor + 1em in .ic.
+     Size + pointer-events are set via INLINE STYLE (not width/height attributes) so
+     the global `svg{width:100%;height:auto}` chart rule can't override them and let
+     this absolutely-positioned sprite balloon into a full-width overlay that eats
+     clicks on the header (browser-dependent — Chromium resolved height:auto to 0,
+     Firefox/Safari to 150px). Inline style beats the type selector. -->
+<svg style="position:absolute;width:0;height:0;overflow:hidden;pointer-events:none" aria-hidden="true" focusable="false">
+  <symbol id="i-cards" viewBox="0 0 24 24"><rect x="3" y="6" width="13" height="15" rx="2"/><path d="M8 6V4.5A1.5 1.5 0 0 1 9.5 3H19a2 2 0 0 1 2 2v10.5A1.5 1.5 0 0 1 19.5 17H18"/></symbol>
+  <symbol id="i-grid" viewBox="0 0 24 24"><rect x="3" y="3" width="7" height="7" rx="1.5"/><rect x="14" y="3" width="7" height="7" rx="1.5"/><rect x="3" y="14" width="7" height="7" rx="1.5"/><rect x="14" y="14" width="7" height="7" rx="1.5"/></symbol>
+  <symbol id="i-chart" viewBox="0 0 24 24"><path d="M4 4v16h16"/><rect x="7" y="11" width="3" height="6" rx="1"/><rect x="12.5" y="7" width="3" height="10" rx="1"/><rect x="18" y="13" width="3" height="4" rx="1"/></symbol>
+  <symbol id="i-user" viewBox="0 0 24 24"><circle cx="12" cy="8" r="4"/><path d="M4 21a8 8 0 0 1 16 0"/></symbol>
+  <symbol id="i-cloud-check" viewBox="0 0 24 24"><path d="M7 18a4 4 0 0 1-.5-7.97A6 6 0 0 1 18 9.5 3.5 3.5 0 0 1 17.5 18"/><path d="M9 15.5 11 17.5 15 13"/></symbol>
+  <symbol id="i-contrast" viewBox="0 0 24 24"><circle cx="12" cy="12" r="9"/><path d="M12 3v18a9 9 0 0 0 0-18z" fill="currentColor" stroke="none"/></symbol>
+  <symbol id="i-download" viewBox="0 0 24 24"><path d="M12 4v11M8 11l4 4 4-4"/><path d="M5 19h14"/></symbol>
+  <symbol id="i-upload" viewBox="0 0 24 24"><path d="M12 20V9M8 13l4-4 4 4"/><path d="M5 5h14"/></symbol>
+  <symbol id="i-play" viewBox="0 0 24 24"><path d="M7 5.5v13a1 1 0 0 0 1.5.87l11-6.5a1 1 0 0 0 0-1.74l-11-6.5A1 1 0 0 0 7 5.5z" fill="currentColor" stroke="none"/></symbol>
+  <symbol id="i-check" viewBox="0 0 24 24"><path d="M5 12.5 10 17.5 19 6.5"/></symbol>
+  <symbol id="i-x" viewBox="0 0 24 24"><path d="M6 6l12 12M18 6 6 18"/></symbol>
+  <symbol id="i-alert" viewBox="0 0 24 24"><path d="M12 3.5 22 20H2L12 3.5z"/><path d="M12 10v4M12 17.2v.1"/></symbol>
+  <symbol id="i-chevron" viewBox="0 0 24 24"><path d="M6 9l6 6 6-6"/></symbol>
+  <symbol id="i-search" viewBox="0 0 24 24"><circle cx="11" cy="11" r="7"/><path d="m20 20-3.5-3.5"/></symbol>
+  <symbol id="i-refresh" viewBox="0 0 24 24"><path d="M20 11A8 8 0 0 0 6 6L4 8"/><path d="M4 4v4h4"/><path d="M4 13a8 8 0 0 0 14 5l2-2"/><path d="M20 20v-4h-4"/></symbol>
+  <symbol id="i-filter" viewBox="0 0 24 24"><path d="M3 5h18l-7 8v6l-4 2v-8L3 5z"/></symbol>
+  <symbol id="i-type" viewBox="0 0 24 24"><path d="M4 6h16M7 6v13M9 19H5"/></symbol>
+  <symbol id="i-target" viewBox="0 0 24 24"><circle cx="12" cy="12" r="8"/><circle cx="12" cy="12" r="3.5"/></symbol>
+  <symbol id="i-volume" viewBox="0 0 24 24"><path d="M11 5 6 9H3v6h3l5 4z" fill="currentColor" stroke="none"/><path d="M15.5 8.5a5 5 0 0 1 0 7M18.5 6a8 8 0 0 1 0 12"/></symbol>
+  <symbol id="i-plus" viewBox="0 0 24 24"><path d="M12 5v14M5 12h14"/></symbol>
+  <symbol id="i-settings" viewBox="0 0 24 24"><circle cx="12" cy="12" r="3"/><path d="M19.4 15a1.65 1.65 0 0 0 .33 1.82l.06.06a2 2 0 1 1-2.83 2.83l-.06-.06a1.65 1.65 0 0 0-1.82-.33 1.65 1.65 0 0 0-1 1.51V21a2 2 0 0 1-4 0v-.09A1.65 1.65 0 0 0 9 19.4a1.65 1.65 0 0 0-1.82.33l-.06.06a2 2 0 1 1-2.83-2.83l.06-.06a1.65 1.65 0 0 0 .33-1.82 1.65 1.65 0 0 0-1.51-1H3a2 2 0 0 1 0-4h.09A1.65 1.65 0 0 0 4.6 9a1.65 1.65 0 0 0-.33-1.82l-.06-.06a2 2 0 1 1 2.83-2.83l.06.06a1.65 1.65 0 0 0 1.82.33H9a1.65 1.65 0 0 0 1-1.51V3a2 2 0 0 1 4 0v.09a1.65 1.65 0 0 0 1 1.51 1.65 1.65 0 0 0 1.82-.33l.06-.06a2 2 0 1 1 2.83 2.83l-.06.06a1.65 1.65 0 0 0-.33 1.82V9a1.65 1.65 0 0 0 1.51 1H21a2 2 0 0 1 0 4h-.09a1.65 1.65 0 0 0-1.51 1z"/></symbol>
+  <symbol id="i-edit" viewBox="0 0 24 24"><path d="M4 20h4L18.5 9.5a2.12 2.12 0 0 0-3-3L5 17v3z"/><path d="M13.5 6.5l3 3"/></symbol>
+  <symbol id="i-trash" viewBox="0 0 24 24"><path d="M4 7h16M9 7V4.5h6V7M6.5 7l1 12.5h9l1-12.5"/></symbol>
+  <symbol id="i-clock" viewBox="0 0 24 24"><circle cx="12" cy="12" r="9"/><path d="M12 7v5.2l3.6 2.1"/></symbol>
+  <symbol id="i-external" viewBox="0 0 24 24"><path d="M14 5h5v5M19 5l-8 8M18 14v4a1.5 1.5 0 0 1-1.5 1.5h-10A1.5 1.5 0 0 1 5 18V8a1.5 1.5 0 0 1 1.5-1.5H10"/></symbol>
+  <symbol id="i-book" viewBox="0 0 24 24"><path d="M12 6.5C10.5 5 8 4.5 4 5v13c4-.5 6.5 0 8 1.5 1.5-1.5 4-2 8-1.5V5c-4-.5-6.5 0-8 1.5z"/><path d="M12 6.5v13"/></symbol>
+</svg>
+<header>
+  <!-- Toolbar: global controls. The hidden file input is triggered by #importBtn
+       (a styled button is nicer than the raw <input type=file>). Handlers in
+       THEME and EXPORT/IMPORT sections. aria-labels added for screen readers. -->
+  <div class="topbar">
+    <div class="kicker">日常日本語 · Japanese Trainer</div>
+    <div class="toolbar">
+      <span class="acct-status" id="syncStatus"></span>
+      <button class="chip" id="accountBtn" aria-label="Account" title="Sign in to sync progress"><svg class="ic" aria-hidden="true"><use href="#i-user"/></svg>Sign in</button>
+      <button class="chip" id="settingsBtn" aria-label="Settings" title="Settings"><svg class="ic" aria-hidden="true"><use href="#i-settings"/></svg>Settings</button>
+      <button class="chip" id="themeToggle" aria-label="Toggle dark mode" title="Toggle light/dark"><svg class="ic" aria-hidden="true"><use href="#i-contrast"/></svg>Theme</button>
+      <button class="chip" id="exportBtn" aria-label="Export progress as JSON" title="Download your progress"><svg class="ic" aria-hidden="true"><use href="#i-download"/></svg>Export</button>
+      <button class="chip" id="importBtn" aria-label="Import progress from JSON" title="Load progress from a file"><svg class="ic" aria-hidden="true"><use href="#i-upload"/></svg>Import</button>
+      <input type="file" id="importFile" accept="application/json,.json" hidden>
+    </div>
+  </div>
+  <h1>Everyday Japanese that sticks<span class="s">日常の日本語 · flashcards + SRS</span></h1>
+</header>
+
+<!-- Top-level view switcher. data-tab maps to #panel-<tab>; see TAB NAV. -->
+<div class="tabs">
+  <button class="tab active" data-tab="study"><svg class="ic" aria-hidden="true"><use href="#i-cards"/></svg>Flashcards</button>
+  <button class="tab" data-tab="browse"><svg class="ic" aria-hidden="true"><use href="#i-grid"/></svg>Browse</button>
+  <button class="tab" data-tab="stats"><svg class="ic" aria-hidden="true"><use href="#i-chart"/></svg>Stats &amp; Leeches</button>
+  <button class="tab" data-tab="minna"><svg class="ic" aria-hidden="true"><use href="#i-book"/></svg>みんなの日本語</button>
+</div>
+
+<div class="wrap">
+
+  <!-- First-visit sign-up nudge (non-blocking). Shown by bootAuth() for brand-new
+       visitors on a reachable server; dismissal is remembered in localStorage. -->
+  <div class="signup-banner" id="signupBanner" hidden>
+    <svg class="ic" aria-hidden="true"><use href="#i-cloud-check"/></svg>
+    <div class="sb-text"><b>Save your progress.</b> Create a free account to sync across devices — or just keep studying offline, no account needed.</div>
+    <button class="chip primary" id="signupCreate"><svg class="ic" aria-hidden="true"><use href="#i-user"/></svg>Create account</button>
+    <button class="sb-dismiss" id="signupDismiss" aria-label="Dismiss" title="Dismiss"><svg class="ic" aria-hidden="true"><use href="#i-x"/></svg></button>
+  </div>
+
+  <!-- STUDY -->
+  <!-- ===== STUDY PANEL =================================================
+       Flashcard view. One panel, three visually-exclusive stages toggled by JS:
+         #fcSetup  – deck/direction/order picker (shown first)
+         #fcStage  – the active card (hidden until a session starts)
+         #fcDone   – end-of-session score (hidden until session ends)
+       Filter chips here share their state with DECK BUILDING via the .deck /
+       .jlpt / .ord / .mode classes + data-* attributes (no inline handlers;
+       JS binds them by selector). ==================================== -->
+  <div class="panel active" id="panel-study">
+    <div class="fc-setup" id="fcSetup">
+      <!-- SRS entry point. #dueCount + disabled state are set by updateDueBanner(). -->
+      <div class="due-banner" id="dueBanner">
+        <div>
+          <div class="due-count" id="dueCount">—</div>
+          <div class="due-label">cards due for review (spaced repetition)</div>
+        </div>
+        <button class="btn srs" id="dueBtn"><svg class="ic" aria-hidden="true"><use href="#i-play"/></svg>Review due cards</button>
+      </div>
+      <!-- Upcoming-review forecast: how many scheduled cards come due over the
+           chosen window. The horizon toggle is view-only state (forecastHorizon);
+           bars are rebuilt by renderForecast() whenever the schedule changes
+           (it's called from updateDueBanner). See FLASHCARD / reviewForecast(). -->
+      <div class="fcast" id="forecast">
+        <div class="fcast-head">
+          <span class="fcast-title"><svg class="ic" aria-hidden="true"><use href="#i-chart"/></svg>Upcoming reviews</span>
+          <span class="jlptseg fcast-horizons" id="fcHorizons" role="group" aria-label="Forecast window">
+            <button class="chip fch" type="button" data-h="24h">24h</button>
+            <button class="chip fch active" type="button" data-h="week">Week</button>
+            <button class="chip fch" type="button" data-h="month">Month</button>
+            <button class="chip fch" type="button" data-h="year">Year</button>
+          </span>
+        </div>
+        <div class="fcast-chart" id="forecastChart"></div>
+      </div>
+      <!-- Study type: Free study never touches the SRS schedule (practice any
+           cards); SRS review only serves DUE cards and promotes/demotes them.
+           cfg.kind; wired below. The due banner above is the quick "all due" SRS. -->
+      <div class="frow"><span class="filter-label">Study type</span><div class="chips" role="radiogroup">
+        <button class="chip skind active" data-skind="free" title="Practice any cards — does not change review dates">Free study</button>
+        <button class="chip skind" data-skind="srs" title="Review only cards that are currently due, and reschedule them"><svg class="ic" aria-hidden="true"><use href="#i-refresh"/></svg>SRS review</button>
+      </div></div>
+      <!-- Test direction: which side of the card is the PROMPT vs the ANSWER. -->
+      <div class="frow"><span class="filter-label">Test direction</span><div class="chips" role="radiogroup">
+        <button class="chip mode active" data-mode="meaning">JP → meaning + reading</button>
+        <button class="chip mode" data-mode="reading">Meaning → reading + JP</button>
+      </div></div>
+      <!-- Secondary options + deck filters tucked behind a disclosure so the picker
+           isn't an 11-row wall before you can study. Native <details> handles the
+           arbitrary content height (incl. the nested topic-region) with no max-height
+           math. Chips inside keep their classes/data-* so wireFacets/makeMultiSelect/
+           roving are blind to the wrapper. The live recap (#deckSummary) stays visible
+           below so the collapsed filter state is always legible. -->
+      <details class="more-filters" id="moreFilters">
+        <summary><svg class="ic" aria-hidden="true"><use href="#i-filter"/></svg>More filters &amp; options</summary>
+      <!-- Input mode: self-graded reveal (default) or type-the-reading auto-grading.
+           Persisted to localStorage (jpverbs_input); see FLASHCARD SESSION. -->
+      <div class="frow"><span class="filter-label">Input</span><div class="chips" role="radiogroup">
+        <button class="chip imode active" data-imode="self">Self-graded</button>
+        <button class="chip imode" data-imode="type"><svg class="ic" aria-hidden="true"><use href="#i-type"/></svg>Type the reading</button>
+      </div></div>
+      <!-- TTS playback of the reading via the Web Speech API. Whole row is hidden by
+           JS when the browser has no speechSynthesis. Persisted (jpverbs_audio). -->
+      <div class="frow" id="audioRow"><span class="filter-label">Audio</span><div class="chips" role="radiogroup">
+        <button class="chip amode active" data-amode="off">Off</button>
+        <button class="chip amode" data-amode="auto"><svg class="ic" aria-hidden="true"><use href="#i-volume"/></svg>Auto-play reading</button>
+      </div></div>
+      <!-- Category / Type / Transitivity / Topic chips ALL use class "deck", split
+           into AND'd facets by TOKEN_FACET (NOT a shared pool — see wireFacets).
+           data-deck is the filter token. The single "All" chip is the master reset
+           (clears every facet) and lives here in the first row. Category is the
+           part-of-speech facet; the .verb-only rows below hide for non-verb cats. -->
+      <div class="frow"><span class="filter-label">Category</span><div class="chips">
+        <button class="chip deck active" data-deck="all">All</button>
+        <button class="chip deck" data-deck="verb">Verb</button>
+        <button class="chip deck" data-deck="adjective">Adjective</button>
+        <button class="chip deck" data-deck="noun">Noun</button>
+        <button class="chip deck" data-deck="adverb">Adverb</button>
+        <button class="chip deck" data-deck="phrase">Phrase</button>
+      </div></div>
+      <div class="frow verb-only"><span class="filter-label">Type</span><div class="chips">
+        <button class="chip deck g" data-deck="godan">Godan</button>
+        <button class="chip deck i" data-deck="ichidan">Ichidan</button>
+        <button class="chip deck" data-deck="irregular">Irregular</button>
+        <button class="chip deck" data-deck="suru">Suru-verbs</button>
+        <button class="chip deck" data-deck="fake">Fake-ichidan</button>
+      </div></div>
+      <div class="frow verb-only"><span class="filter-label">Transitivity</span><div class="chips">
+        <button class="chip deck" data-deck="trans">Transitive</button>
+        <button class="chip deck" data-deck="intrans">Intransitive</button>
+        <button class="chip deck" data-deck="ti-pair">T/I pairs</button>
+      </div></div>
+      <div class="fdiv"></div>
+      <div class="frow"><span class="filter-label">Topic</span><div class="chips">
+        <button class="topic-toggle" data-target="sTopic" data-label="Topics" aria-expanded="false" aria-controls="sTopic"><span class="tt-text">Topics</span><svg class="ic tt-arr" aria-hidden="true"><use href="#i-chevron"/></svg></button>
+        <button class="chip deck" data-deck="leech" style="border-color:var(--leech);color:var(--leech)"><svg class="ic" aria-hidden="true"><use href="#i-alert"/></svg>Leeches</button>
+      </div></div>
+      <div class="topic-region" id="sTopic"><div class="topic-inner">
+        <button class="chip deck" data-deck="motion">Motion</button>
+        <button class="chip deck" data-deck="transit">Transit</button>
+        <button class="chip deck" data-deck="wearing">Wearing</button>
+        <button class="chip deck" data-deck="speaking">Speaking</button>
+        <button class="chip deck" data-deck="communication">Communication</button>
+        <button class="chip deck" data-deck="giving">Giving/Receiving</button>
+        <button class="chip deck" data-deck="emotion">Emotion</button>
+        <button class="chip deck" data-deck="cognition">Cognition</button>
+        <button class="chip deck" data-deck="perception">Perception</button>
+        <button class="chip deck" data-deck="existence">Existence</button>
+        <button class="chip deck" data-deck="change">Change of state</button>
+        <button class="chip deck" data-deck="ability">Ability/Potential</button>
+        <button class="chip deck" data-deck="onoff">On/Off</button>
+        <button class="chip deck" data-deck="daily">Daily routine</button>
+        <button class="chip deck" data-deck="body">Body/Health</button>
+        <button class="chip deck" data-deck="work">Work/Study</button>
+        <button class="chip deck" data-deck="study">Study</button>
+        <button class="chip deck" data-deck="food">Food/Cooking</button>
+        <button class="chip deck" data-deck="money">Money</button>
+      </div></div>
+      <!-- Source facet: Minna no Nihongo provenance — all みんなの日本語 cards, the
+           iTalki subset, or a single lesson. The whole row is hidden by
+           annotateSourceChips() until the deck has Minna cards; empty chips dim. -->
+      <div class="frow source-row"><span class="filter-label">Source</span><div class="chips">
+        <button class="chip deck" data-deck="minna" style="border-color:var(--adjective);color:var(--adjective)">みんなの日本語</button>
+        <button class="chip deck" data-deck="italki" style="border-color:var(--ichidan);color:var(--ichidan)">iTalki</button>
+        <button class="chip deck" data-deck="mnn-l22">L22</button>
+        <button class="chip deck" data-deck="mnn-l23">L23</button>
+        <button class="chip deck" data-deck="mnn-l24">L24</button>
+      </div></div>
+      <div class="fdiv"></div>
+      <div class="frow"><span class="filter-label">Level &amp; rank</span><div class="chips">
+        <span class="jlptseg">
+          <button class="chip jlpt active" data-jlpt="all">All</button>
+          <button class="chip jlpt" data-jlpt="N5">N5</button>
+          <button class="chip jlpt" data-jlpt="N4">N4</button>
+          <button class="chip jlpt" data-jlpt="N3">N3</button>
+          <button class="chip jlpt" data-jlpt="N2">N2</button>
+          <button class="chip jlpt" data-jlpt="N1">N1</button>
+        </span>
+        <span class="filter-label" style="margin-left:6px">Rank</span>
+        <input type="number" class="rangeinput" id="rmin" min="1" max="100" value="1">
+        <span style="color:var(--muted)">–</span>
+        <input type="number" class="rangeinput" id="rmax" min="1" max="100" value="100">
+      </div></div>
+      <div class="frow"><span class="filter-label">Presets</span><div class="chips">
+        <button class="chip rpreset" data-lo="1" data-hi="25">1–25</button>
+        <button class="chip rpreset" data-lo="26" data-hi="50">26–50</button>
+        <button class="chip rpreset" data-lo="51" data-hi="75">51–75</button>
+        <button class="chip rpreset" data-lo="76" data-hi="100">76–100</button>
+      </div></div>
+      <!-- Order: shuffle | by corpus rank | worst-first (lowest rollingAcc).
+           "Review due cards" forces worst-first so the shakiest cards lead. -->
+      <div class="frow"><span class="filter-label">Order</span><div class="chips" role="radiogroup">
+        <button class="chip ord active" data-ord="shuffle">Shuffle</button>
+        <button class="chip ord" data-ord="freq">By frequency</button>
+        <button class="chip ord" data-ord="worst">Worst-first</button>
+      </div></div>
+      </details>
+      <div class="fdiv"></div>
+      <!-- Live recap of the active deck query (incl. collapsed topics); set by updateDeckCount(). -->
+      <div class="filter-summary" id="deckSummary"></div>
+      <div class="row" style="margin-top:2px">
+        <button class="chip primary" id="startBtn"><svg class="ic" aria-hidden="true"><use href="#i-play"/></svg>Start session</button>
+        <span class="count" id="deckCount"></span>   <!-- live "N cards in deck" -->
+      </div>
+    </div>
+
+    <!-- ACTIVE CARD. All text nodes are filled by showCard(); .answer is hidden
+         until reveal(). The grade buttons map to keys 1 (wrong) / 2 (right). -->
+    <div class="fc-stage" id="fcStage">
+      <div class="progress" id="fcProgress"></div>
+      <div class="flashcard" id="flashcard">
+        <div class="spine"></div>
+        <div class="prompt-label" id="promptLabel"></div>
+        <div class="prompt-main jp" id="promptMain"></div>     <!-- prompt side -->
+        <div class="prompt-sub" id="promptSub"></div>
+        <div class="answer" id="answer">                        <!-- revealed side -->
+          <div class="verdict" id="typedVerdict" hidden></div>  <!-- typed-mode auto-grade -->
+          <div class="a-read-wrap">
+            <span class="a-read jp" id="aRead"></span>
+            <button class="speak-btn" id="speakBtn" type="button" aria-label="Play reading" title="Play reading"><svg class="ic" aria-hidden="true"><use href="#i-volume"/></svg></button>
+          </div>
+          <div class="a-mean" id="aMean"></div>
+          <!-- Dictionary deep-link; href set per-card by showCard(). -->
+          <a class="jisho-link" id="jishoLink" target="_blank" rel="noopener noreferrer"><svg class="ic" aria-hidden="true"><use href="#i-external"/></svg>View on Jisho</a>
+          <div class="a-note" id="aNote"></div>                 <!-- mnemonic + tip -->
+          <!-- Leveled example sentence: pick a JLPT tier; renderExample() fills it. -->
+          <div class="example" id="exampleBlock" hidden>
+            <div class="ex-head"><span class="ex-label">Example</span><span class="jlptseg exseg" id="exLevels" role="group" aria-label="Example difficulty"></span></div>
+            <div class="ex-jp jp" id="exJp"></div>
+            <div class="ex-en" id="exEn"></div>
+          </div>
+        </div>
+      </div>
+      <!-- Three button rows, one visible at a time. Self-graded: revealRow → grade.
+           Typed: inputRow (kana field + Check) → grade. See showCard(). -->
+      <div class="fc-buttons" id="revealRow">
+        <button class="btn reveal" id="revealBtn"><svg class="ic" aria-hidden="true"><use href="#i-target"/></svg>Reveal answer <span class="kbd">[space]</span></button>
+      </div>
+      <div class="fc-buttons" id="inputRow" style="display:none">
+        <input type="text" class="answer-input jp" id="answerInput" autocomplete="off" autocapitalize="off" autocorrect="off" spellcheck="false" placeholder="type the reading (kana or romaji)…" aria-label="Type the reading in kana or romaji">
+        <button class="btn" id="checkBtn" type="button"><svg class="ic" aria-hidden="true"><use href="#i-check"/></svg>Check <span class="kbd">[enter]</span></button>
+      </div>
+      <div class="fc-buttons" id="gradeRow" style="display:none">
+        <button class="btn wrong" id="wrongBtn"><svg class="ic" aria-hidden="true"><use href="#i-x"/></svg>Got it wrong <span class="kbd">[1 / x]</span></button>
+        <button class="btn right" id="rightBtn"><svg class="ic" aria-hidden="true"><use href="#i-check"/></svg>Got it right <span class="kbd">[2 / space]</span></button>
+      </div>
+      <div class="hint"><button class="chip" id="endBtn">End session</button></div>
+    </div>
+
+    <!-- END-OF-SESSION score card. Populated by endSession(). -->
+    <div class="fc-stage" id="fcDone">
+      <div class="flashcard"><div class="spine"></div>
+        <div class="prompt-label">Session complete</div>
+        <div class="prompt-main" id="doneScore" style="font-family:Georgia"></div>
+        <div class="prompt-sub" id="doneDetail"></div>
+      </div>
+      <div class="fc-buttons"><button class="chip primary" id="againBtn"><svg class="ic" aria-hidden="true"><use href="#i-refresh"/></svg>Study again</button></div>
+    </div>
+  </div>
+
+  <!-- ===== BROWSE PANEL ================================================
+       Filterable grid of all 100 verbs. IMPORTANT: Browse keeps its OWN filter
+       state (bcfg) independent from the flashcard deck (cfg) — chips here use
+       .bf / .bjlpt classes, not .deck / .jlpt. The font selector also lives
+       here. Cards are rendered by renderBrowse(). ==================== -->
+  <div class="panel" id="panel-browse">
+    <div class="controls">
+      <div class="frow"><span class="filter-label">Font</span><div class="chips">
+        <select class="chip" id="fontSel">
+          <option value='"Noto Sans JP",sans-serif'>Noto Sans (gothic)</option>
+          <option value='"Noto Serif JP",serif'>Noto Serif (mincho)</option>
+          <option value='"Zen Maru Gothic",sans-serif'>Zen Maru (rounded)</option>
+          <option value='"Kaisei Decol",serif'>Kaisei Decol (soft serif)</option>
+          <option value='"Yuji Syuku",serif'>Yuji Syuku (brush)</option>
+        </select>
+      </div></div>
+      <!-- Tier 1: grammar (always visible). The .bf chips split into AND'd facets
+           by TOKEN_FACET; the lone "All" chip is the master reset (clears every
+           facet) and lives in the Category row. Verb-only rows hide for non-verbs. -->
+      <div class="frow"><span class="filter-label">Category</span><div class="chips">
+        <button class="chip bf active" data-filter="all">All</button>
+        <button class="chip bf" data-filter="verb">Verb</button>
+        <button class="chip bf" data-filter="adjective">Adjective</button>
+        <button class="chip bf" data-filter="noun">Noun</button>
+        <button class="chip bf" data-filter="adverb">Adverb</button>
+        <button class="chip bf" data-filter="phrase">Phrase</button>
+      </div></div>
+      <div class="frow verb-only"><span class="filter-label">Type</span><div class="chips">
+        <button class="chip bf g" data-filter="godan">Godan</button>
+        <button class="chip bf i" data-filter="ichidan">Ichidan</button>
+        <button class="chip bf" data-filter="irregular">Irregular</button>
+        <button class="chip bf" data-filter="suru">Suru</button>
+        <button class="chip bf" data-filter="fake">Fake-ichidan</button>
+      </div></div>
+      <div class="frow verb-only"><span class="filter-label">Transitivity</span><div class="chips">
+        <button class="chip bf" data-filter="trans">Transitive</button>
+        <button class="chip bf" data-filter="intrans">Intransitive</button>
+        <button class="chip bf" data-filter="ti-pair">T/I pairs</button>
+      </div></div>
+      <div class="fdiv"></div>
+      <!-- Tier 2: topic (the long semantic tail) collapsed behind a disclosure;
+           Leeches is a status filter, kept always-visible beside the toggle. -->
+      <div class="frow"><span class="filter-label">Topic</span><div class="chips">
+        <button class="topic-toggle" data-target="bTopic" data-label="Topics" aria-expanded="false" aria-controls="bTopic"><span class="tt-text">Topics</span><svg class="ic tt-arr" aria-hidden="true"><use href="#i-chevron"/></svg></button>
+        <button class="chip bf" data-filter="leech" style="border-color:var(--leech);color:var(--leech)"><svg class="ic" aria-hidden="true"><use href="#i-alert"/></svg>Leeches</button>
+      </div></div>
+      <div class="topic-region" id="bTopic"><div class="topic-inner">
+        <button class="chip bf" data-filter="motion">Motion</button>
+        <button class="chip bf" data-filter="transit">Transit</button>
+        <button class="chip bf" data-filter="wearing">Wearing</button>
+        <button class="chip bf" data-filter="speaking">Speaking</button>
+        <button class="chip bf" data-filter="communication">Communication</button>
+        <button class="chip bf" data-filter="giving">Giving/Recv</button>
+        <button class="chip bf" data-filter="emotion">Emotion</button>
+        <button class="chip bf" data-filter="cognition">Cognition</button>
+        <button class="chip bf" data-filter="perception">Perception</button>
+        <button class="chip bf" data-filter="existence">Existence</button>
+        <button class="chip bf" data-filter="change">Change</button>
+        <button class="chip bf" data-filter="ability">Ability</button>
+        <button class="chip bf" data-filter="onoff">On/Off</button>
+        <button class="chip bf" data-filter="daily">Daily</button>
+        <button class="chip bf" data-filter="body">Body</button>
+        <button class="chip bf" data-filter="work">Work</button>
+        <button class="chip bf" data-filter="study">Study</button>
+        <button class="chip bf" data-filter="food">Food</button>
+        <button class="chip bf" data-filter="money">Money</button>
+      </div></div>
+      <!-- Source facet (Minna provenance) — hidden until the deck has Minna cards. -->
+      <div class="frow source-row"><span class="filter-label">Source</span><div class="chips">
+        <button class="chip bf" data-filter="minna" style="border-color:var(--adjective);color:var(--adjective)">みんなの日本語</button>
+        <button class="chip bf" data-filter="italki" style="border-color:var(--ichidan);color:var(--ichidan)">iTalki</button>
+        <button class="chip bf" data-filter="mnn-l22">L22</button>
+        <button class="chip bf" data-filter="mnn-l23">L23</button>
+        <button class="chip bf" data-filter="mnn-l24">L24</button>
+      </div></div>
+      <div class="fdiv"></div>
+      <!-- Tier 3: level + frequency band on one line. -->
+      <div class="frow"><span class="filter-label">Level &amp; rank</span><div class="chips">
+        <span class="jlptseg">
+          <button class="chip bjlpt active" data-jlpt="all">All</button>
+          <button class="chip bjlpt" data-jlpt="N5">N5</button>
+          <button class="chip bjlpt" data-jlpt="N4">N4</button>
+          <button class="chip bjlpt" data-jlpt="N3">N3</button>
+          <button class="chip bjlpt" data-jlpt="N2">N2</button>
+          <button class="chip bjlpt" data-jlpt="N1">N1</button>
+        </span>
+        <span class="filter-label" style="margin-left:6px">Rank</span>
+        <input type="number" class="rangeinput" id="brmin" min="1" max="100" value="1">
+        <span style="color:var(--muted)">–</span>
+        <input type="number" class="rangeinput" id="brmax" min="1" max="100" value="100">
+      </div></div>
+      <div class="frow"><span class="filter-label">Search</span><div class="chips">
+        <span class="search-wrap"><svg class="ic" aria-hidden="true"><use href="#i-search"/></svg>
+          <input class="search" id="search" placeholder="Search reading, kanji, or meaning…"></span>
+        <span class="count">Showing <b id="num">100</b> of 100</span></div></div>
+    </div>
+    <!-- Live recap of the active grid query (incl. collapsed topics); set by renderBrowse(). -->
+    <div class="filter-summary" id="bSummary"></div>
+    <div class="row" style="margin:2px 0 0"><button class="chip" id="addVerbBtn"><svg class="ic" aria-hidden="true"><use href="#i-plus"/></svg>Add card</button><span class="count" id="customCount"></span></div>
+    <div class="hint">Tap a card to expand · rank shown bottom-right, accuracy bottom-left once drilled</div>
+    <div class="grid" id="grid"></div>
+    <div class="empty" id="empty" style="display:none">No words match that filter.</div>
+  </div>
+
+  <!-- ===== STATS PANEL ================================================
+       All containers below are EMPTY in markup and filled by renderStats()
+       (called on tab activation). Charts are hand-built SVG/HTML strings —
+       no chart library. Reset wipes the store after a confirm(). ====== -->
+  <div class="panel" id="panel-stats">
+    <div class="statgrid" id="statgrid"></div>                <!-- summary boxes -->
+    <div class="chart-card"><div class="chart-title">Memory pipeline — Leitner boxes (higher box = longer interval = better learned)</div>
+      <div id="boxDist"></div>                                <!-- SRS box histogram -->
+      <div class="srs-legend">New → Box 1 (1d) → 2 (2d) → 3 (4d) → 4 (8d) → 5 (16d). A correct answer promotes a card; a wrong answer drops it to Box 1.</div>
+    </div>
+    <div class="chart-card"><div class="chart-title">Daily accuracy — one point per day studied</div><div id="chartDaily"></div></div>
+    <div class="chart-card"><div class="chart-title">Per-session accuracy — most recent 20 sessions</div><div id="chartSession"></div></div>
+    <div class="chart-card"><div class="chart-title">⚠ Leeches — chronically missed (rolling accuracy &lt; 60% over ≥ 4 attempts)</div>
+      <div id="leechList"></div>
+      <div class="row" style="margin-top:12px"><button class="chip primary" id="studyLeeches"><svg class="ic" aria-hidden="true"><use href="#i-play"/></svg>Study leeches now</button></div>
+    </div>
+    <div class="chart-card"><div class="chart-title">Per-card rolling accuracy (last 8 attempts)</div><div id="cardBars"></div></div>
+    <div class="row"><button class="danger" id="resetBtn">Reset all stats &amp; history</button></div>
+  </div>
+
+  <!-- ===== みんなの日本語 PANEL =========================================
+       Account-gated Minna no Nihongo lesson dashboard. Every piece of content
+       (vocab, grammar, examples, conversation, native audio) is fetched at
+       runtime from the signed-in-only /v1/minna/* endpoints and rendered by
+       renderMinna() on tab activation — so this panel is near-empty in markup.
+       #mnGate shows the sign-in prompt when signed out; #mnHead holds the
+       chapter picker + lesson heading; #mnBody holds the rendered lesson. === -->
+  <div class="panel" id="panel-minna">
+    <div id="mnGate" class="mn-gate" hidden></div>
+    <div id="mnHead" class="mn-head"></div>
+    <div id="mnBody" class="mn-body"></div>
+  </div>
+
+</div><!-- /.wrap -->
+
+<!-- Account modal. Shared by the login + register flows (text swaps via JS).
+     Hidden until #accountBtn (or the first-visit nudge) opens it. The app is
+     fully usable offline without ever opening this. -->
+<div class="modal-overlay" id="authModal" role="dialog" aria-modal="true" aria-labelledby="authTitle">
+  <div class="modal">
+    <button class="modal-x" id="authClose" aria-label="Close">×</button>
+    <h2 id="authTitle">Sign in</h2>
+    <div class="sub" id="authSub">Save your progress to the cloud and study from any device.</div>
+    <form id="authForm" autocomplete="on">
+      <label for="authEmail">Email</label>
+      <input type="email" id="authEmail" autocomplete="username" required>
+      <label for="authPass">Password</label>
+      <input type="password" id="authPass" autocomplete="current-password" required minlength="8">
+      <div class="modal-err" id="authErr" aria-live="polite"></div>
+      <div class="modal-actions">
+        <button type="submit" class="btn srs" id="authSubmit">Sign in</button>
+      </div>
+    </form>
+    <div class="modal-foot">
+      <span id="authToggleText">New here?</span> <a id="authToggle" tabindex="0">Create an account</a>
+      <div style="margin-top:10px"><a id="authOffline" tabindex="0">Continue offline</a></div>
+    </div>
+  </div>
+</div>
+
+<!-- Add/edit custom-card modal. Custom cards are stored in localStorage (key
+     jpverbs_custom) and merged into DATA at load, so they join filters, sessions,
+     and stats exactly like the baked-in 100. The Category select drives which
+     fields apply: Type shows for verbs (godan/…) + adjectives (い/な), Transitivity
+     for verbs only — syncVerbFields() toggles #vfTypeCell / #vfTransCell + repopulates
+     #vfType. See "CUSTOM VERBS" in the script. -->
+<div class="modal-overlay" id="verbModal" role="dialog" aria-modal="true" aria-labelledby="verbTitle">
+  <div class="modal wide">
+    <button class="modal-x" id="verbClose" aria-label="Close">×</button>
+    <h2 id="verbTitle">Add a card</h2>
+    <div class="sub">Your own cards join the deck, filters, and stats alongside the built-in 100. Saved to this browser, and synced across your devices when you're signed in.</div>
+    <form id="verbForm" autocomplete="off">
+      <div class="form-grid">
+        <div><label for="vfJp">Japanese *</label><input type="text" id="vfJp" class="jp" required placeholder="走る"></div>
+        <div><label for="vfRead">Reading (kana) *</label><input type="text" id="vfRead" class="jp" required placeholder="はしる"></div>
+        <div class="full"><label for="vfMean">Meaning *</label><input type="text" id="vfMean" required placeholder="to run"></div>
+        <div><label for="vfCat">Category *</label><select id="vfCat">
+          <option value="verb">Verb</option>
+          <option value="adjective">Adjective</option>
+          <option value="noun">Noun</option>
+          <option value="adverb">Adverb</option>
+          <option value="phrase">Phrase / expression</option>
+        </select></div>
+        <div id="vfTypeCell"><label for="vfType">Type</label><select id="vfType">
+          <option value="godan">Godan (う-verb)</option>
+          <option value="ichidan">Ichidan (る-verb)</option>
+          <option value="irregular">Irregular</option>
+        </select></div>
+        <div><label for="vfJlpt">JLPT</label><select id="vfJlpt">
+          <option value="N5">N5</option><option value="N4" selected>N4</option>
+          <option value="N3">N3</option><option value="N2">N2</option><option value="N1">N1</option>
+        </select></div>
+        <div id="vfTransCell"><label for="vfTrans">Transitivity</label><select id="vfTrans">
+          <option value="">— (n/a)</option>
+          <option value="t">Transitive</option>
+          <option value="i">Intransitive</option>
+        </select></div>
+        <div><label for="vfTags">Tags (comma-sep)</label><input type="text" id="vfTags" placeholder="motion, daily"></div>
+        <div class="full"><label for="vfMnem">Mnemonic</label><textarea id="vfMnem" placeholder="optional memory hook"></textarea></div>
+        <div class="full"><label for="vfTip">Trap / tip</label><textarea id="vfTip" placeholder="optional usage note"></textarea></div>
+        <div><label for="vfExJp">Example (JP)</label><input type="text" id="vfExJp" class="jp" placeholder="毎朝走る。"></div>
+        <div><label for="vfExEn">Example (EN)</label><input type="text" id="vfExEn" placeholder="I run every morning."></div>
+      </div>
+      <div class="modal-err" id="verbErr" aria-live="polite"></div>
+      <div class="modal-actions split">
+        <button type="button" class="btn danger-btn" id="verbDelete" hidden><svg class="ic" aria-hidden="true"><use href="#i-trash"/></svg>Delete</button>
+        <button type="submit" class="btn srs" id="verbSubmit">Save verb</button>
+      </div>
+    </form>
+  </div>
+</div>
+
+<!-- Settings page (modal). Preferences are saved locally and synced to your
+     account (server app key 'settings') when signed in. renderSettings() paints
+     the controls from `settings`; each control writes settings + saveSettings(). -->
+<div class="modal-overlay" id="settingsModal" role="dialog" aria-modal="true" aria-labelledby="settingsTitle">
+  <div class="modal">
+    <button class="modal-x" id="settingsClose" aria-label="Close">×</button>
+    <h2 id="settingsTitle">Settings</h2>
+    <div class="sub" id="settingsSub">Saved on this device, and synced to your account when you're signed in.</div>
+    <div class="set-row"><label>Default example level</label>
+      <span class="jlptseg" id="setLevel" role="group" aria-label="Default example level">
+        <button class="chip setlv" type="button" data-setlv="N5">N5</button>
+        <button class="chip setlv" type="button" data-setlv="N4">N4</button>
+        <button class="chip setlv" type="button" data-setlv="N3">N3</button>
+        <button class="chip setlv" type="button" data-setlv="N2">N2</button>
+        <button class="chip setlv" type="button" data-setlv="N1">N1</button>
+      </span></div>
+    <div class="set-row"><label>Furigana (readings)</label>
+      <span class="jlptseg" id="setFuri" role="group" aria-label="Show furigana">
+        <button class="chip setfg" type="button" data-setfg="on">Show</button>
+        <button class="chip setfg" type="button" data-setfg="off">Hide</button>
+      </span></div>
+    <div class="set-row"><label>Default answer mode</label>
+      <span class="jlptseg" id="setInput" role="group" aria-label="Default answer mode">
+        <button class="chip setin" type="button" data-setin="self">Self-graded</button>
+        <button class="chip setin" type="button" data-setin="type">Type reading</button>
+      </span></div>
+    <div class="set-row"><label>Audio (reading)</label>
+      <span class="jlptseg" id="setAudio" role="group" aria-label="Audio">
+        <button class="chip setau" type="button" data-setau="off">Off</button>
+        <button class="chip setau" type="button" data-setau="auto">Autoplay</button>
+      </span></div>
+    <div class="set-row"><label>Free study advances due cards<span class="set-hint">Grading a card that's already due counts toward its SRS schedule, even in free study.</span></label>
+      <span class="jlptseg" id="setFreeDue" role="group" aria-label="Free study advances due cards">
+        <button class="chip setfr" type="button" data-setfr="on">On</button>
+        <button class="chip setfr" type="button" data-setfr="off">Off</button>
+      </span></div>
+    <div class="modal-foot" id="settingsFoot"></div>
+  </div>
+</div>
+
+<!-- Browse detail modal. Opened by clicking a Browse card (renderVerbDetail fills
+     #detailBody). Mnemonic/Trap/Examples are collapsible; Examples are level-filtered. -->
+<div class="modal-overlay" id="detailModal" role="dialog" aria-modal="true" aria-label="Verb detail">
+  <div class="modal wide">
+    <button class="modal-x" id="detailClose" aria-label="Close">×</button>
+    <div id="detailBody"></div>
+  </div>
+</div>
+
+<script src="/verbs.js"></script>
+<script src="/examples.js"></script>
+<script src="/app.js"></script>
+</body>
+</html>
