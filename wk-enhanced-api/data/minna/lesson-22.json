@@ -629,19 +629,19 @@
       "explain": "A whole plain-form sentence can describe a noun, like an English relative clause — but it comes BEFORE the noun, with its verb/adjective in plain form. The clause's own subject is marked with が (not は). 「わたしが 買った 本」 = the book (that) I bought; 「電話して いる 人」 = the person who is on the phone.",
       "examples": [
         {
-          "jp": "これは 私が 京都で 撮った 写真です。",
+          "jp": "これは <ruby>私<rt>わたし</rt></ruby>が <ruby>京都<rt>きょうと</rt></ruby>で <ruby>撮<rt>と</rt></ruby>った <ruby>写真<rt>しゃしん</rt></ruby>です。",
           "en": "This is a photo I took in Kyoto."
         },
         {
-          "jp": "電話して いる 人は ミラーさんです。",
+          "jp": "<ruby>電話<rt>でんわ</rt></ruby>して いる <ruby>人<rt>ひと</rt></ruby>は ミラーさんです。",
           "en": "The person on the phone is Mr. Miller."
         },
         {
-          "jp": "着物を 着て いる 人は 渡辺さんです。",
+          "jp": "<ruby>着物<rt>きもの</rt></ruby>を <ruby>着<rt>き</rt></ruby>て いる <ruby>人<rt>ひと</rt></ruby>は <ruby>渡辺<rt>わたなべ</rt></ruby>さんです。",
           "en": "The person wearing a kimono is Ms. Watanabe."
         },
         {
-          "jp": "これは 母に もらった コートです。",
+          "jp": "これは <ruby>母<rt>はは</rt></ruby>に もらった コートです。",
           "en": "This is the coat I got from my mother."
         }
       ]
@@ -652,15 +652,15 @@
       "explain": "A noun plus its modifying clause works as a single noun, so it can sit anywhere in the sentence — subject, object, topic. 「私が 買った 本」 can be the thing your mother is reading, or the thing she likes.",
       "examples": [
         {
-          "jp": "母は 私が 買った 本を 読んで います。",
+          "jp": "<ruby>母<rt>はは</rt></ruby>は <ruby>私<rt>わたし</rt></ruby>が <ruby>買<rt>か</rt></ruby>った <ruby>本<rt>ほん</rt></ruby>を <ruby>読<rt>よ</rt></ruby>んで います。",
           "en": "My mother is reading the book I bought."
         },
         {
-          "jp": "カリナさんが かいた 絵は どれですか。",
+          "jp": "カリナさんが かいた <ruby>絵<rt>え</rt></ruby>は どれですか。",
           "en": "Which one is the painting Karina drew?"
         },
         {
-          "jp": "きのう 買った 傘を なくしました。",
+          "jp": "きのう <ruby>買<rt>か</rt></ruby>った <ruby>傘<rt>かさ</rt></ruby>を なくしました。",
           "en": "I lost the umbrella I bought yesterday."
         }
       ]
@@ -671,11 +671,11 @@
       "explain": "A very common noun modification: a dictionary-form verb modifies a noun like 時間 (time), 約束 (appointment), or 用事 (errand) — 'the time to do X', 'a promise to do X'.",
       "examples": [
         {
-          "jp": "本を 読む 時間が ありません。",
+          "jp": "<ruby>本<rt>ほん</rt></ruby>を <ruby>読<rt>よ</rt></ruby>む <ruby>時間<rt>じかん</rt></ruby>が ありません。",
           "en": "I don't have time to read books."
         },
         {
-          "jp": "日曜日は 友達に 会う 約束が あります。",
+          "jp": "<ruby>日曜日<rt>にちようび</rt></ruby>は <ruby>友達<rt>ともだち</rt></ruby>に <ruby>会<rt>あ</rt></ruby>う <ruby>約束<rt>やくそく</rt></ruby>が あります。",
           "en": "On Sunday I have plans to meet a friend."
         }
       ]
@@ -683,35 +683,35 @@
   ],
   "examples": [
     {
-      "jp": "これは ミラーさんが 作った ケーキです。",
+      "jp": "これは ミラーさんが <ruby>作<rt>つく</rt></ruby>った ケーキです。",
       "en": "This is the cake Mr. Miller made."
     },
     {
-      "jp": "あそこに いる 人は ミラーさんです。",
+      "jp": "あそこに いる <ruby>人<rt>ひと</rt></ruby>は ミラーさんです。",
       "en": "The person over there is Mr. Miller."
     },
     {
-      "jp": "きのう 習った ことばを 忘れました。",
+      "jp": "きのう <ruby>習<rt>なら</rt></ruby>った ことばを <ruby>忘<rt>わす</rt></ruby>れました。",
       "en": "I forgot the words I learned yesterday."
     },
     {
-      "jp": "買い物に 行く 時間が ありません。",
+      "jp": "<ruby>買<rt>か</rt></ruby>い<ruby>物<rt>もの</rt></ruby>に <ruby>行<rt>い</rt></ruby>く <ruby>時間<rt>じかん</rt></ruby>が ありません。",
       "en": "I don't have time to go shopping."
     },
     {
-      "jp": "カリナさんが かいた 絵は どれですか。 …あの 海の 絵です。",
+      "jp": "カリナさんが かいた <ruby>絵<rt>え</rt></ruby>は どれですか。 …あの <ruby>海<rt>うみ</rt></ruby>の <ruby>絵<rt>え</rt></ruby>です。",
       "en": "Which painting did Karina draw? …That one — the painting of the sea."
     },
     {
-      "jp": "山田さん、奥さんに 初めて 会った 所は どこですか。 …大阪城です。",
+      "jp": "<ruby>山田<rt>やまだ</rt></ruby>さん、<ruby>奥<rt>おく</rt></ruby>さんに <ruby>初<rt>はじ</rt></ruby>めて <ruby>会<rt>あ</rt></ruby>った <ruby>所<rt>ところ</rt></ruby>は どこですか。 …<ruby>大阪城<rt>おおさかじょう</rt></ruby>です。",
       "en": "Mr. Yamada, where did you first meet your wife? …At Osaka Castle."
     },
     {
-      "jp": "どんな うちが 欲しいですか。 …広い 庭が ある うちが 欲しいです。",
+      "jp": "どんな うちが <ruby>欲<rt>ほ</rt></ruby>しいですか。 …<ruby>広<rt>ひろ</rt></ruby>い <ruby>庭<rt>にわ</rt></ruby>が ある うちが <ruby>欲<rt>ほ</rt></ruby>しいです。",
       "en": "What kind of house do you want? …One with a big garden."
     },
     {
-      "jp": "きのう 買った 傘を なくしました。",
+      "jp": "きのう <ruby>買<rt>か</rt></ruby>った <ruby>傘<rt>かさ</rt></ruby>を なくしました。",
       "en": "I lost the umbrella I bought yesterday."
     }
   ],
@@ -721,37 +721,37 @@
     "lines": [
       {
         "role": "不動産屋",
-        "jp": "どんな 部屋を お探しですか。",
+        "jp": "どんな <ruby>部屋<rt>へや</rt></ruby>を お<ruby>探<rt>さが</rt></ruby>しですか。",
         "en": "What kind of room are you looking for?"
       },
       {
         "role": "ワン",
-        "jp": "そうですね。家賃は 8万円ぐらいで、駅から 遠くない 所が いいですね。",
+        "jp": "そうですね。<ruby>家賃<rt>やちん</rt></ruby>は 8<ruby>万円<rt>まんえん</rt></ruby>ぐらいで、<ruby>駅<rt>えき</rt></ruby>から <ruby>遠<rt>とお</rt></ruby>くない <ruby>所<rt>ところ</rt></ruby>が いいですね。",
         "en": "Let's see… rent around 80,000 yen, and somewhere not far from the station would be good."
       },
       {
         "role": "不動産屋",
-        "jp": "では、こちらは いかがですか。駅から 10分で、家賃は 83,000円です。ダイニングキッチンと 和室ですね。",
+        "jp": "では、こちらは いかがですか。<ruby>駅<rt>えき</rt></ruby>から 10<ruby>分<rt>ぷん</rt></ruby>で、<ruby>家賃<rt>やちん</rt></ruby>は 83,000<ruby>円<rt>えん</rt></ruby>です。ダイニングキッチンと <ruby>和室<rt>わしつ</rt></ruby>ですね。",
         "en": "Then how about this one? Ten minutes from the station, rent is 83,000 yen. It has a dining-kitchen and a Japanese-style room."
       },
       {
         "role": "ワン",
-        "jp": "すみません。ここは 何ですか。",
+        "jp": "すみません。ここは <ruby>何<rt>なん</rt></ruby>ですか。",
         "en": "Excuse me — what is this here?"
       },
       {
         "role": "不動産屋",
-        "jp": "押し入れです。布団を 入れる 所ですよ。",
+        "jp": "<ruby>押<rt>お</rt></ruby>し<ruby>入<rt>い</rt></ruby>れです。<ruby>布団<rt>ふとん</rt></ruby>を <ruby>入<rt>い</rt></ruby>れる <ruby>所<rt>ところ</rt></ruby>ですよ。",
         "en": "That's the closet — the place where you put away the futon."
       },
       {
         "role": "ワン",
-        "jp": "そうですか。この 部屋、きょう 見る ことが できますか。",
+        "jp": "そうですか。この <ruby>部屋<rt>へや</rt></ruby>、きょう <ruby>見<rt>み</rt></ruby>る ことが できますか。",
         "en": "I see. Can I see this room today?"
       },
       {
         "role": "不動産屋",
-        "jp": "ええ。今から 行きましょうか。",
+        "jp": "ええ。<ruby>今<rt>いま</rt></ruby>から <ruby>行<rt>い</rt></ruby>きましょうか。",
         "en": "Yes. Shall we go now?"
       }
     ]

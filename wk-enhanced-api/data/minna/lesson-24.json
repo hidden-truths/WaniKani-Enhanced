@@ -557,15 +557,15 @@
           "en": "Mr. Santos gave me coffee."
         },
         {
-          "jp": "わたしは ミラーさんに 花を もらいました。",
+          "jp": "わたしは ミラーさんに <ruby>花<rt>はな</rt></ruby>を もらいました。",
           "en": "I received flowers from Mr. Miller."
         },
         {
-          "jp": "母は わたしに セーターを くれました。",
+          "jp": "<ruby>母<rt>はは</rt></ruby>は わたしに セーターを くれました。",
           "en": "My mother gave me a sweater."
         },
         {
-          "jp": "おばあちゃんは いつも お菓子を くれます。",
+          "jp": "おばあちゃんは いつも お<ruby>菓子<rt>かし</rt></ruby>を くれます。",
           "en": "Grandma always gives me sweets."
         }
       ]
@@ -576,19 +576,19 @@
       "explain": "Attach the て-form + a giving/receiving verb to express a FAVOR — an action done for someone, not just an object. 〜てもらいます = you benefit from someone's action; 〜てくれます = someone does something for you (highlights gratitude); 〜てあげます = you do something for someone (can sound condescending toward superiors, so use it carefully).",
       "examples": [
         {
-          "jp": "わたしは 友達に 本を 貸して あげました。",
+          "jp": "わたしは <ruby>友達<rt>ともだち</rt></ruby>に <ruby>本<rt>ほん</rt></ruby>を <ruby>貸<rt>か</rt></ruby>して あげました。",
           "en": "I lent my friend a book (as a favor)."
         },
         {
-          "jp": "わたしは 山田さんに レポートを 直して もらいました。",
+          "jp": "わたしは <ruby>山田<rt>やまだ</rt></ruby>さんに レポートを <ruby>直<rt>なお</rt></ruby>して もらいました。",
           "en": "I had Mr. Yamada correct my report."
         },
         {
-          "jp": "母は 料理を 作って くれました。",
+          "jp": "<ruby>母<rt>はは</rt></ruby>は <ruby>料理<rt>りょうり</rt></ruby>を <ruby>作<rt>つく</rt></ruby>って くれました。",
           "en": "My mother cooked for me."
         },
         {
-          "jp": "山田さんが 車で 送って くれました。",
+          "jp": "<ruby>山田<rt>やまだ</rt></ruby>さんが <ruby>車<rt>くるま</rt></ruby>で <ruby>送<rt>おく</rt></ruby>って くれました。",
           "en": "Mr. Yamada drove me home."
         }
       ]
@@ -596,35 +596,35 @@
   ],
   "examples": [
     {
-      "jp": "佐藤さんは わたしに チョコレートを くれました。",
+      "jp": "<ruby>佐藤<rt>さとう</rt></ruby>さんは わたしに チョコレートを くれました。",
       "en": "Ms. Sato gave me chocolates."
     },
     {
-      "jp": "わたしは 山田さんに レポートを 直して もらいました。",
+      "jp": "わたしは <ruby>山田<rt>やまだ</rt></ruby>さんに レポートを <ruby>直<rt>なお</rt></ruby>して もらいました。",
       "en": "Mr. Yamada corrected my report for me."
     },
     {
-      "jp": "母は わたしに セーターを 送って くれました。",
+      "jp": "<ruby>母<rt>はは</rt></ruby>は わたしに セーターを <ruby>送<rt>おく</rt></ruby>って くれました。",
       "en": "My mother sent me a sweater."
     },
     {
-      "jp": "わたしは 木村さんに 本を 貸して あげました。",
+      "jp": "わたしは <ruby>木村<rt>きむら</rt></ruby>さんに <ruby>本<rt>ほん</rt></ruby>を <ruby>貸<rt>か</rt></ruby>して あげました。",
       "en": "I lent Ms. Kimura a book."
     },
     {
-      "jp": "だれに すき焼きを 作って もらいましたか。 …松本さんに 作って もらいました。",
+      "jp": "だれに すき<ruby>焼<rt>や</rt></ruby>きを <ruby>作<rt>つく</rt></ruby>って もらいましたか。 …<ruby>松本<rt>まつもと</rt></ruby>さんに <ruby>作<rt>つく</rt></ruby>って もらいました。",
       "en": "Who made the sukiyaki for you? …Ms. Matsumoto made it for me."
     },
     {
-      "jp": "母の 日に お母さんに 何を して あげますか。 …ピアノを 弾いて あげます。",
+      "jp": "<ruby>母<rt>はは</rt></ruby>の <ruby>日<rt>ひ</rt></ruby>に お<ruby>母<rt>かあ</rt></ruby>さんに <ruby>何<rt>なに</rt></ruby>を して あげますか。 …ピアノを <ruby>弾<rt>ひ</rt></ruby>いて あげます。",
       "en": "What will you do for your mother on Mother's Day? …I'll play the piano for her."
     },
     {
-      "jp": "パーティーの 料理は 全部 自分で 作りましたか。 …いいえ、ワンさんに 手伝って もらいました。",
+      "jp": "パーティーの <ruby>料理<rt>りょうり</rt></ruby>は <ruby>全部<rt>ぜんぶ</rt></ruby> <ruby>自分<rt>じぶん</rt></ruby>で <ruby>作<rt>つく</rt></ruby>りましたか。 …いいえ、ワンさんに <ruby>手伝<rt>てつだ</rt></ruby>って もらいました。",
       "en": "Did you make all the party food yourself? …No, Mr. Wang helped me."
     },
     {
-      "jp": "電車で 行きましたか。 …いいえ。山田さんが 車で 送って くれました。",
+      "jp": "<ruby>電車<rt>でんしゃ</rt></ruby>で <ruby>行<rt>い</rt></ruby>きましたか。 …いいえ。<ruby>山田<rt>やまだ</rt></ruby>さんが <ruby>車<rt>くるま</rt></ruby>で <ruby>送<rt>おく</rt></ruby>って くれました。",
       "en": "Did you go by train? …No, Mr. Yamada drove me."
     }
   ],
@@ -634,37 +634,37 @@
     "lines": [
       {
         "role": "ミラー",
-        "jp": "ワンさん、日曜日 引っ越しですね。手伝いに 行きましょうか。",
+        "jp": "ワンさん、<ruby>日曜日<rt>にちようび</rt></ruby> <ruby>引<rt>ひ</rt></ruby>っ<ruby>越<rt>こ</rt></ruby>しですね。<ruby>手伝<rt>てつだ</rt></ruby>いに <ruby>行<rt>い</rt></ruby>きましょうか。",
         "en": "Mr. Wang, you're moving on Sunday, right? Shall I come help?"
       },
       {
         "role": "ワン",
-        "jp": "ありがとう ございます。じゃ、すみませんが、9時ごろ お願いします。",
+        "jp": "ありがとう ございます。じゃ、すみませんが、9<ruby>時<rt>じ</rt></ruby>ごろ お<ruby>願<rt>ねが</rt></ruby>いします。",
         "en": "Thank you. Then, sorry to trouble you — around 9 o'clock, please."
       },
       {
         "role": "ミラー",
-        "jp": "ほかに だれが 手伝いに 行きますか。",
+        "jp": "ほかに だれが <ruby>手伝<rt>てつだ</rt></ruby>いに <ruby>行<rt>い</rt></ruby>きますか。",
         "en": "Who else is coming to help?"
       },
       {
         "role": "ワン",
-        "jp": "山田さんと シュミットさんが 来て くれます。",
+        "jp": "<ruby>山田<rt>やまだ</rt></ruby>さんと シュミットさんが <ruby>来<rt>き</rt></ruby>て くれます。",
         "en": "Mr. Yamada and Mr. Schmidt are coming."
       },
       {
         "role": "ミラー",
-        "jp": "車は？",
+        "jp": "<ruby>車<rt>くるま</rt></ruby>は？",
         "en": "What about a car?"
       },
       {
         "role": "ワン",
-        "jp": "山田さんに 貸して もらいます。",
+        "jp": "<ruby>山田<rt>やまだ</rt></ruby>さんに <ruby>貸<rt>か</rt></ruby>して もらいます。",
         "en": "Mr. Yamada is lending me his."
       },
       {
         "role": "ミラー",
-        "jp": "昼ごはんは どう しますか。",
+        "jp": "<ruby>昼<rt>ひる</rt></ruby>ごはんは どう しますか。",
         "en": "What about lunch?"
       },
       {
@@ -674,17 +674,17 @@
       },
       {
         "role": "ミラー",
-        "jp": "わたしが お弁当を 持って 行きましょうか。",
+        "jp": "わたしが お<ruby>弁当<rt>べんとう</rt></ruby>を <ruby>持<rt>も</rt></ruby>って <ruby>行<rt>い</rt></ruby>きましょうか。",
         "en": "Shall I bring boxed lunches?"
       },
       {
         "role": "ワン",
-        "jp": "すみません。お願いします。",
+        "jp": "すみません。お<ruby>願<rt>ねが</rt></ruby>いします。",
         "en": "Sorry to trouble you — yes, please."
       },
       {
         "role": "ミラー",
-        "jp": "じゃ、日曜日に。",
+        "jp": "じゃ、<ruby>日曜日<rt>にちようび</rt></ruby>に。",
         "en": "Okay, see you Sunday."
       }
     ]
