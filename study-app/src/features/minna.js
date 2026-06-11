@@ -9,7 +9,8 @@
 // per-lesson NOTES + the overlays (app key 'minna').
 import { state } from '../state.js';
 import { API_BASE } from '../config.js';
-import { escapeHtml, rubyHtml, CAT_LABEL, minnaBuiltinRank, minnaSig, convItemKey, resolveClip, clipLabel, validClip } from '../core/index.js';
+import { escapeHtml, rubyHtml, plainText, CAT_LABEL, minnaBuiltinRank, minnaSig, convItemKey, resolveClip, clipLabel, validClip } from '../core/index.js';
+import { speak, TTS_OK } from './tts.js';
 import { account, api, setSyncStatus } from './cloud-core.js';
 import { openAuth } from './cloud.js';
 import { loadCustom, saveCustom } from '../persistence/custom.js';
@@ -244,10 +245,16 @@ function minnaVocabSection(L) {
     <tr class="mn-rec-row"><td></td><td colspan="3">${recordControlHtml(L.lesson, v.key, v.audio)}</td></tr>` : ''}`).join('');
   return mnSection('Vocabulary', L.vocab.length, `<table class="mn-vocab"><tbody>${rows}</tbody></table>`, true);
 }
+// A small inline TTS button for a sentence that has no native audio (grammar / lesson
+// examples). Carries the ruby-stripped plain text in data-tts (the exact string /v1/tts
+// wants); wired delegated-per-render in wireMinnaLesson. Gated on TTS_OK.
+const ttsSentenceBtn = (jp) => TTS_OK
+  ? ` <button class="speak-btn sm" type="button" data-tts="${escapeHtml(plainText(jp))}" aria-label="Play sentence" title="Play sentence"><svg class="ic" aria-hidden="true"><use href="#i-volume"/></svg></button>`
+  : '';
 function minnaExampleRows(list) {
   // JP via rubyHtml so curated furigana (<ruby>/<rt>) renders and the data-furigana flip
   // toggles it; EN stays fully escaped. Plain (ruby-less) sentences round-trip unchanged.
-  return `<div class="mn-ex">${list.map(e => `<div><div class="e-jp jp">${rubyHtml(e.jp)}</div><div class="e-en">${escapeHtml(e.en)}</div></div>`).join('')}</div>`;
+  return `<div class="mn-ex">${list.map(e => `<div><div class="e-jp jp">${rubyHtml(e.jp)}${ttsSentenceBtn(e.jp)}</div><div class="e-en">${escapeHtml(e.en)}</div></div>`).join('')}</div>`;
 }
 function minnaGrammarSection(L) {
   if (!L.grammar || !L.grammar.length) return '';
@@ -391,6 +398,7 @@ function renderNavSpeaking(n, body) {
 function clearNavSpeaking() { const nav = document.getElementById('navExtra'); if (nav) nav.innerHTML = ''; }
 function wireMinnaLesson(n, L, body) {
   body.querySelectorAll('[data-aud]').forEach(b => b.addEventListener('click', () => mnPlay(b.dataset.aud, b)));
+  body.querySelectorAll('[data-tts]').forEach(b => b.addEventListener('click', () => speak(b.dataset.tts)));
   wireMinnaRecord(body);   // delegated record/play/delete/compare handlers (attach-once)
   wireMinnaClips(body);    // delegated conversation-line clip-marker handlers (attach-once)
   paintCompareWaveforms(body);   // decode + draw the you/native compare waveforms for this render

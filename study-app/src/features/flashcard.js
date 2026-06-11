@@ -9,11 +9,11 @@ import { state } from '../state.js';
 import { localDay } from '../config.js';
 import {
   availableTiers, exampleForLevel, JLPT_TIERS, colorClass, cardStamp, pitchHtml,
-  normKana, romajiToKana, escapeHtml, cardStat, scheduleCard, isDue,
+  normKana, romajiToKana, escapeHtml, plainText, cardStat, scheduleCard, isDue,
 } from '../core/index.js';
 import { settings, saveSettings } from '../settings-store.js';
 import { save } from '../persistence/store.js';
-import { speakWord } from './tts.js';
+import { speakWord, speak, TTS_OK } from './tts.js';
 import { jishoUrl } from './render-helpers.js';
 import { cfg, buildDeck, updateDeckCount, updateDueBanner, updateStartLabel, startDueSession } from './deck.js';
 
@@ -58,8 +58,11 @@ export function renderExample(v) {
   if (tiers.length && !tiers.includes(lvl)) lvl = tiers.includes(v.jlpt) ? v.jlpt : tiers[0];
   [...seg.querySelectorAll('.exlv')].forEach(b => b.classList.toggle('active', b.dataset.exlv === lvl && !b.disabled));
   const ex = exampleForLevel(v, lvl);
-  if (ex) { document.getElementById('exJp').innerHTML = ex[0]; document.getElementById('exEn').textContent = ex[1]; block.hidden = false; }
-  else block.hidden = true;
+  const speakBtn = document.getElementById('exSpeak');
+  if (ex) {
+    document.getElementById('exJp').innerHTML = ex[0]; document.getElementById('exEn').textContent = ex[1]; block.hidden = false;
+    if (speakBtn) speakBtn.hidden = !TTS_OK;   // plays the currently-shown tier (read at click time)
+  } else { block.hidden = true; if (speakBtn) speakBtn.hidden = true; }
 }
 
 // Render session.deck[session.i]. The two test directions swap prompt vs answer fields.
@@ -192,6 +195,10 @@ export function initFlashcardUI() {
   document.getElementById('revealBtn').addEventListener('click', reveal);
   document.getElementById('checkBtn').addEventListener('click', submitTyped);
   document.getElementById('speakBtn').addEventListener('click', playReading);
+  // Play the example sentence — read the rendered JP at click time (so it follows the
+  // chosen tier) and strip ruby to the plain text /v1/tts wants.
+  const exSpeak = document.getElementById('exSpeak');
+  if (exSpeak) exSpeak.addEventListener('click', () => speak(plainText(document.getElementById('exJp').innerHTML)));
   // Pick a tier → remember it (synced setting) → re-render the current card's example.
   document.getElementById('exLevels').addEventListener('click', e => {
     const b = e.target.closest('.exlv'); if (!b || b.disabled) return;
