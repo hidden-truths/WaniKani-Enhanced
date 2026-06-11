@@ -513,18 +513,33 @@ Component contracts you must preserve:
   seq-only). Playback speed is `settings.compareSpeed` (synced, snapped by `clampSpeed` to
   {0.5,0.75,1}) applied via `applySpeed` (`playbackRate` + `preservesPitch`) on every compare
   play; the segmented control lives in the speaking bar.
+- **Every compare playback plays a SPEECH WINDOW, not the whole file — this is what makes ▶ both
+  line up.** The native MP3 has built-in lead/tail silence; overlapping it raw on your
+  (already-tight) take would start the native speaker late, so ▶ both wouldn't align. `playRange`
+  (a generic windowed `<audio>` player: seek to `start`, stop at `end` via a `timeupdate`
+  listener — Media-Fragments `#t=` is unreliable) plays `[start,end]` from `windowFor(url, clip)`
+  → `speechWindow`, which runs **the same `findTrimBounds`** as the save-time trim over the
+  decoded buffer (clip-sliced first for a conversation line) with a **small EQUAL lead pad on
+  both sources** (`COMPARE_TRIM`) so the spoken onsets coincide. Windows are computed off the
+  decoded buffers (`resolvedBuffers`) and memoized (`windowCache`); before a buffer decodes,
+  playback falls back to the clip / whole file. Don't revert native/take playback to raw
+  whole-file or raw-clip — the windowing is the alignment. The take-list ▶ (`playTake`) still
+  plays the WHOLE take (a quick listen, not a compare) and tears down any windowed `takeStop`
+  first.
 - **The compare waveforms use a `<canvas>`, the deliberate exception to "charts stay hand-rolled
   SVG".** `paintCompareWaveforms` (per-render hook from `wireMinnaLesson`; also called by
   `resetControl` after save/delete) decodes the newest take + the native audio via
   `fetchAudioBuffer` — a **credentialed** `fetch` (the gated-audio path; plain `fetch` 401s) →
-  `decodeAudioData`, promise-cached per URL — then `waveformPeaks` (pure) → canvas (you=`--godan`,
-  native=`--ichidan`, native sliced to the line's clip). A per-sample waveform is the wrong shape
-  for SVG and the bytes are right there to decode, so canvas is correct here — don't "fix" it to
-  SVG. Decode **fails safe**: offline / Safari-can't-decode-opus (a non-trimmed take) / 404 → the
+  `decodeAudioData`, promise-cached per URL — then crops each to its `windowFor` SPEECH WINDOW
+  (the same region playback uses, so what's drawn is what plays) and `waveformPeaks` (pure) →
+  canvas (you=`--godan`, native=`--ichidan`). A per-sample waveform is the wrong shape for SVG
+  and the bytes are right there to decode, so canvas is correct here — don't "fix" it to SVG.
+  Decode **fails safe**: offline / Safari-can't-decode-opus (a non-trimmed take) / 404 → the
   waveform simply doesn't draw, and the `<audio>`-driven compare buttons keep working. A single
-  rAF loop (`tickCursors`) moves an overlay cursor for whichever element is sounding; it reads
-  the clip off the control so the native cursor maps into `[start,end]`. Canvas is sized to fixed
-  `WAVE_W/H` (not `clientWidth`) so it paints correctly even inside a closed `<details>`.
+  rAF loop (`tickCursors`) moves an overlay cursor for whichever element is sounding, mapping its
+  `currentTime` over the **active play window** (`activeNativeWindow`/`activeTakeWindow`). Canvas
+  is sized to fixed `WAVE_W/H` (not `clientWidth`) so it paints correctly even inside a closed
+  `<details>`.
 - **"Speaking mode" keeps ONE mic stream open; the record controls only render while it's
   on.** Acquiring/releasing the mic per take renegotiates the macOS input each time — that
   hitches (and re-triggers the AirPods HFP switch). So `enterSpeakingMode()` opens one

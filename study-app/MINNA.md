@@ -359,14 +359,23 @@ helpers in [src/core/recordings.js](src/core/recordings.js).
 - **Compare player** — per item: **▶ you · ▶ native · ▶ native→you** (sequential) **· ▶ both**
   (native + take overlaid, one-shot via a 2-count barrier) **+ loop** (seq only). Take playback
   is gated (one reused `<audio crossOrigin='use-credentials'>`).
+- **Speech-window alignment (so ▶ both lines up).** The native MP3 has built-in lead/tail
+  silence, so naïvely overlapping it on your (already-tight) take would start the native speaker
+  late. Every compare playback instead plays a **play window** `[start,end]` = the detected
+  spoken region (`windowFor` → `speechWindow`, reusing `findTrimBounds` with a small **equal**
+  lead pad on both sources so the onsets coincide). The window is the SAME region the waveform
+  draws, so what you see is what plays, and the cursor sweeps that region. Windows are computed
+  from the decoded buffers and memoized; before a buffer decodes, playback falls back to the
+  clip / whole file.
 - **Dual waveform + live cursor** — under each compare row, the newest take (vermilion) is drawn
-  beside the native audio (indigo) so timing/shape are visible. Both are fetched WITH credentials
-  (the gated-audio path) and `decodeAudioData`'d, then `waveformPeaks` (pure) → a **canvas** —
-  the deliberate exception to the app's SVG charts (per-sample data is wrong for SVG; the bytes
-  are right there). Buffers are promise-cached per URL; decode **fails safe** (offline / Safari
-  can't decode an opus take → the waveform just doesn't draw, compare buttons unaffected). A
-  single rAF loop moves an overlay cursor for whichever of you/native is sounding (native mapped
-  into the clip window). `paintCompareWaveforms` is the per-render hook.
+  beside the native audio (indigo), each cropped to its spoken window, so timing/shape are
+  visible and aligned. Both are fetched WITH credentials (the gated-audio path) and
+  `decodeAudioData`'d, then `waveformPeaks` (pure) → a **canvas** — the deliberate exception to
+  the app's SVG charts (per-sample data is wrong for SVG; the bytes are right there). Buffers are
+  promise-cached per URL; decode **fails safe** (offline / Safari can't decode an opus take → the
+  waveform just doesn't draw, compare buttons unaffected). A single rAF loop moves an overlay
+  cursor for whichever of you/native is sounding, mapped over its active play window.
+  `paintCompareWaveforms` is the per-render hook.
 - **Speed control** — a global **0.5/0.75/1×** segmented control in the speaking bar (shown while
   speaking mode is on). `settings.compareSpeed` (synced, snapped by `clampSpeed`) →
   `playbackRate` with `preservesPitch` so slowing down to mimic stays clear; applies live to

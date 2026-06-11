@@ -194,11 +194,43 @@ function applySpeed(a) {
   a.preservesPitch = a.mozPreservesPitch = a.webkitPreservesPitch = true;
 }
 
+// ---------- windowed <audio> playback ----------
+// Every compare playback plays a PLAY WINDOW [startSec, endSec] of its source — the detected
+// spoken region (see windowFor) — rather than the whole file. This is what makes ▶ both line
+// up: the native MP3 has built-in lead/tail silence, so without windowing its speaker would
+// start well after your (already-tight) take. Windowing both to the same kind of region (same
+// trim, same lead pad) makes the spoken onsets coincide, and the window is the SAME region the
+// waveform draws, so what you see is what plays. We seek to start + stop at end via a timeupdate
+// listener (Media-Fragments #t= is unreliable on <audio>). `window` null → play the whole file.
+// Returns a stop() that tears down WITHOUT firing onDone (for external stops); onDone fires once
+// on natural end / window end / error so the sequence + barrier players can chain.
+function playRange(a, window, onDone) {
+  let done = false;
+  const tu = window ? () => { if (a.currentTime >= window.end) finish(); } : null;
+  function finish() {
+    if (done) return; done = true;
+    if (tu) a.removeEventListener('timeupdate', tu);
+    a.onended = a.onerror = null;
+    try { a.pause(); } catch (e) {}
+    if (onDone) onDone();
+  }
+  a.onended = finish; a.onerror = finish;
+  if (tu) a.addEventListener('timeupdate', tu);
+  applySpeed(a);
+  const start = window ? window.start : 0;
+  const go = () => { if (done) return; try { a.currentTime = start; } catch (e) {} a.play().catch(finish); };
+  if (a.readyState >= 1) go(); else a.addEventListener('loadedmetadata', go, { once: true });
+  return () => { if (done) return; done = true; if (tu) a.removeEventListener('timeupdate', tu); a.onended = a.onerror = null; try { a.pause(); } catch (e) {} };
+}
+
 // ---------- gated playback of a saved take ----------
-let takeAudioEl = null, takePlayingBtn = null;
+let takeAudioEl = null, takePlayingBtn = null, takeStop = null;
 function ensureTakeAudio() { if (!takeAudioEl) { takeAudioEl = new Audio(); takeAudioEl.crossOrigin = 'use-credentials'; } return takeAudioEl; }
+// Take-list ▶ — plays the WHOLE saved take (a quick listen, not a compare). Tears down any
+// windowed compare playback first so its timeupdate stop can't cut this short.
 function playTake(id, btn) {
   ensureTakeAudio();
+  if (takeStop) { takeStop(); takeStop = null; }
   if (btn && btn === takePlayingBtn && !takeAudioEl.paused) { takeAudioEl.pause(); btn.classList.remove('playing'); takePlayingBtn = null; return; }
   if (takePlayingBtn) takePlayingBtn.classList.remove('playing');
   takeAudioEl.src = API_BASE + '/v1/minna/recordings/' + id;
@@ -206,61 +238,39 @@ function playTake(id, btn) {
   takeAudioEl.onended = takeAudioEl.onerror = () => { if (takePlayingBtn) { takePlayingBtn.classList.remove('playing'); takePlayingBtn = null; } };
   takeAudioEl.play().catch(() => { if (btn) btn.classList.remove('playing'); takePlayingBtn = null; });
 }
+function stopTake() { if (takeStop) { takeStop(); takeStop = null; } if (takeAudioEl) { try { takeAudioEl.pause(); } catch (e) {} } }
 
-// ---------- native-audio playback (with optional clip slicing) ----------
-// The compare player plays the cached native vnjpclub audio. For a conversation LINE it
-// plays only a [start,end] slice of the one whole-dialogue MP3, via currentTime + a
-// timeupdate stop (Media-Fragments #t= is unreliable on <audio>). `onDone` fires once when
-// playback finishes (natural end OR clip end OR error), so the sequence player can chain.
-let nativeAudioEl = null, nativeClipStop = null;
+// ---------- native-audio playback ----------
+// Plays the cached native vnjpclub audio over its play window. `onDone` fires once when
+// playback finishes (window end / natural end / error), so the sequence player can chain.
+let nativeAudioEl = null, nativeStop = null;
 function ensureNativeAudio() {
   if (!nativeAudioEl) { nativeAudioEl = new Audio(); nativeAudioEl.crossOrigin = 'use-credentials'; }
   return nativeAudioEl;
 }
-function stopNative() {
-  if (!nativeAudioEl) return;
-  if (nativeClipStop) { nativeAudioEl.removeEventListener('timeupdate', nativeClipStop); nativeClipStop = null; }
-  nativeAudioEl.onended = nativeAudioEl.onerror = null;
-  try { nativeAudioEl.pause(); } catch (e) {}
-}
-function playNative(src, clip, onDone) {
+function stopNative() { if (nativeStop) { nativeStop(); nativeStop = null; } if (nativeAudioEl) { try { nativeAudioEl.pause(); } catch (e) {} } }
+function playNative(src, window, onDone) {
   const a = ensureNativeAudio();
   stopNative();
-  const done = () => { stopNative(); if (onDone) onDone(); };
   a.src = API_BASE + '/v1/minna/audio?src=' + encodeURIComponent(src);
-  applySpeed(a);
-  const v = validClip(clip);
-  a.onerror = done;
-  if (v) {
-    const [start, end] = v;
-    nativeClipStop = () => { if (a.currentTime >= end) done(); };
-    a.addEventListener('timeupdate', nativeClipStop);
-    a.onended = done;   // safety: if end is past the file length
-    const seekAndPlay = () => { try { a.currentTime = start; } catch (e) {} a.play().catch(done); };
-    if (a.readyState >= 1) seekAndPlay(); else a.addEventListener('loadedmetadata', seekAndPlay, { once: true });
-  } else {
-    a.onended = done;
-    a.play().catch(done);
-  }
+  nativeStop = playRange(a, window, () => { nativeStop = null; if (onDone) onDone(); });
 }
 
 // Stop ALL compare playback (native + take), the cursor loop, and any lit compare buttons.
 function stopCompare(control) {
   stopCursors();
   stopNative();
-  if (takeAudioEl) { try { takeAudioEl.pause(); } catch (e) {} }
+  stopTake();
   if (takePlayingBtn) { takePlayingBtn.classList.remove('playing'); takePlayingBtn = null; }
   if (control) control.querySelectorAll('.cmp-btn.playing').forEach(b => b.classList.remove('playing'));
 }
 
-// Play a take by id without toggling a take-list button (used by the compare player).
-function playTakeOnce(id, onDone) {
+// Play a take by id over its play window (used by the compare player; no take-list button).
+function playTakeOnce(id, window, onDone) {
   const a = ensureTakeAudio();
-  try { a.pause(); } catch (e) {}
+  stopTake();
   a.src = API_BASE + '/v1/minna/recordings/' + id;
-  applySpeed(a);
-  a.onended = a.onerror = () => { a.onended = a.onerror = null; if (onDone) onDone(); };
-  a.play().catch(() => { if (onDone) onDone(); });
+  takeStop = playRange(a, window, () => { takeStop = null; if (onDone) onDone(); });
 }
 
 // ---------- dual waveform (Web Audio decode → canvas) ----------
@@ -272,7 +282,16 @@ function playTakeOnce(id, onDone) {
 // SAFE: any fetch/decode error (e.g. Safari can't decode an opus take when trimSilence is off,
 // or we're offline) just skips that waveform; the <audio>-driven compare buttons are unaffected.
 const WAVE_W = 140, WAVE_H = 30;
-const bufferCache = new Map();   // url → Promise<AudioBuffer|null> (promise cached so concurrent paints share one decode)
+// The play/draw window keeps a SMALL, EQUAL lead pad on both sources so the spoken onsets line
+// up under ▶ both (the save-time trim uses a bigger 160 ms pad to protect onsets on disk; here
+// alignment matters more than a few ms of breath). Same pad on native + take → same offset
+// before the vowel → aligned.
+const COMPARE_TRIM = { leadPadMs: 60, tailPadMs: 120 };
+const bufferCache = new Map();      // url → Promise<AudioBuffer|null> (promise cached so concurrent paints share one decode)
+const resolvedBuffers = new Map();  // url → AudioBuffer (the resolved value, for synchronous window/onset lookups)
+const windowCache = new Map();      // "url|clip" → {start,end} speech window (memoized once the buffer decodes)
+function nativeUrl(src) { return API_BASE + '/v1/minna/audio?src=' + encodeURIComponent(src); }
+function takeUrl(id) { return API_BASE + '/v1/minna/recordings/' + id; }
 function fetchAudioBuffer(url) {
   if (bufferCache.has(url)) return bufferCache.get(url);
   const p = (async () => {
@@ -283,13 +302,38 @@ function fetchAudioBuffer(url) {
     } catch (e) { return null; }
   })();
   bufferCache.set(url, p);
-  p.then(buf => { if (!buf) bufferCache.delete(url); });   // drop failures so a later paint can retry
+  p.then(buf => { if (buf) resolvedBuffers.set(url, buf); else bufferCache.delete(url); });   // cache success; drop failures so a later paint can retry
   return p;
 }
 function bufferToMono(buf) {
   const n = buf.length, chs = buf.numberOfChannels, m = new Float32Array(n);
   for (let c = 0; c < chs; c++) { const d = buf.getChannelData(c); for (let i = 0; i < n; i++) m[i] += d[i] / chs; }
   return m;
+}
+// The spoken region of a decoded buffer, in seconds, optionally restricted to a conversation
+// line's clip first. Reuses findTrimBounds (the same detector as the save-time trim) so the
+// "what plays" region matches the "what's drawn" region. Falls back to the clip / whole file
+// when the buffer isn't decoded yet or no speech is found.
+function speechWindow(buf, clip) {
+  const v = validClip(clip);
+  if (!buf) return v ? { start: v[0], end: v[1] } : null;
+  const sr = buf.sampleRate;
+  let mono = bufferToMono(buf), off = 0;
+  if (v) { const s = Math.max(0, Math.floor(v[0] * sr)), e = Math.min(mono.length, Math.floor(v[1] * sr)); if (e > s) { mono = mono.subarray(s, e); off = s; } }
+  const b = findTrimBounds(mono, sr, COMPARE_TRIM);
+  if (!b) return v ? { start: v[0], end: v[1] } : { start: 0, end: buf.length / sr };
+  return { start: (off + b.start) / sr, end: (off + b.end) / sr };
+}
+// Memoized speech window for a url (+optional clip). Returns a fallback (clip / null) until the
+// buffer decodes, then the real spoken window thereafter — so playback and the waveform agree.
+function windowFor(url, clip) {
+  const v = validClip(clip);
+  const key = url + '|' + (v ? v[0] + ',' + v[1] : '');
+  if (windowCache.has(key)) return windowCache.get(key);
+  const buf = resolvedBuffers.get(url) || null;
+  const w = speechWindow(buf, clip);
+  if (buf) windowCache.set(key, w);   // only memoize once a real buffer backed it
+  return w;
 }
 function drawWave(canvas, mono, colorVar) {
   const dpr = Math.min(window.devicePixelRatio || 1, 2);
@@ -306,28 +350,26 @@ function drawWave(canvas, mono, colorVar) {
     ctx.fillRect(i * 2, mid - h / 2, 1, h);
   }
 }
-// Decode `url` (sliced to `clip` for a conversation line), then paint it onto `canvas` in the
-// theme color `colorVar`. Re-checks isConnected because a re-render may replace the canvas
+// Decode `url`, then draw its SPEECH WINDOW (the same region playback uses) onto `canvas` in
+// the theme color `colorVar`. Re-checks isConnected because a re-render may replace the canvas
 // while the decode is in flight.
 async function paintWave(canvas, url, clip, colorVar) {
   const buf = await fetchAudioBuffer(url);
   if (!buf || !canvas.isConnected) return;
+  const sr = buf.sampleRate;
+  const w = windowFor(url, clip) || { start: 0, end: buf.length / sr };
   let mono = bufferToMono(buf);
-  const v = validClip(clip);
-  if (v) {
-    const s = Math.max(0, Math.floor(v[0] * buf.sampleRate));
-    const e = Math.min(mono.length, Math.floor(v[1] * buf.sampleRate));
-    if (e > s) mono = mono.subarray(s, e);
-  }
+  const s = Math.max(0, Math.floor(w.start * sr)), e = Math.min(mono.length, Math.floor(w.end * sr));
+  if (e > s) mono = mono.subarray(s, e);
   drawWave(canvas, mono, colorVar);
 }
 // Paint both waveforms for one control (you = newest take in --godan; native = the cached
-// vnjpclub audio, clip-sliced, in --ichidan). Reads all context off the control/dataset.
+// vnjpclub audio in --ichidan), each cropped to its spoken window. Reads context off the control.
 function paintControlWaves(control) {
   const youCanvas = control.querySelector('canvas.rec-wave[data-wave="you"]');
-  if (youCanvas) { const id = newestTakeId(control); if (id != null) paintWave(youCanvas, API_BASE + '/v1/minna/recordings/' + id, null, '--godan'); }
+  if (youCanvas) { const id = newestTakeId(control); if (id != null) paintWave(youCanvas, takeUrl(id), null, '--godan'); }
   const natCanvas = control.querySelector('canvas.rec-wave[data-wave="native"]');
-  if (natCanvas) { const ctx = controlCtx(control); if (ctx.nativeSrc) paintWave(natCanvas, API_BASE + '/v1/minna/audio?src=' + encodeURIComponent(ctx.nativeSrc), ctx.clip, '--ichidan'); }
+  if (natCanvas) { const ctx = controlCtx(control); if (ctx.nativeSrc) paintWave(natCanvas, nativeUrl(ctx.nativeSrc), ctx.clip, '--ichidan'); }
 }
 // Per-render hook (called from minna.js wireMinnaLesson after the body re-renders).
 export function paintCompareWaveforms(root) {
@@ -337,10 +379,10 @@ export function paintCompareWaveforms(root) {
 
 // ---------- live playback cursor ----------
 // One rAF loop drives the cursor overlay(s) of whichever control is currently playing (only
-// one plays at a time — stopCompare clears the others). `you` tracks takeAudioEl, `native`
-// tracks nativeAudioEl (mapped into the clip window for a conversation line). Just moves an
-// absolutely-positioned div — no canvas redraw per frame.
-let cursorControl = null, cursorRaf = 0;
+// one plays at a time — stopCompare clears the others). Each cursor maps its element's
+// currentTime over that element's ACTIVE PLAY WINDOW (so it sweeps the drawn region, not the
+// whole file). Just moves an absolutely-positioned div — no canvas redraw per frame.
+let cursorControl = null, cursorRaf = 0, activeNativeWindow = null, activeTakeWindow = null;
 function setCursor(control, wave, progress) {
   const cur = control.querySelector('.rec-wave-wrap[data-wave="' + wave + '"] .rec-wave-cursor');
   if (!cur) return;
@@ -348,26 +390,24 @@ function setCursor(control, wave, progress) {
   cur.style.opacity = '1';
   cur.style.left = (Math.max(0, Math.min(1, progress)) * 100) + '%';
 }
+function progressIn(a, w) {
+  if (!a || a.paused) return null;
+  if (w && w.end > w.start) return (a.currentTime - w.start) / (w.end - w.start);
+  if (isFinite(a.duration) && a.duration > 0) return a.currentTime / a.duration;
+  return null;
+}
 function tickCursors() {
   const control = cursorControl;
   if (!control) { cursorRaf = 0; return; }
-  if (takeAudioEl && !takeAudioEl.paused && isFinite(takeAudioEl.duration) && takeAudioEl.duration > 0)
-    setCursor(control, 'you', takeAudioEl.currentTime / takeAudioEl.duration);
-  else setCursor(control, 'you', null);
-  if (nativeAudioEl && !nativeAudioEl.paused) {
-    const v = controlCtx(control).clip;
-    let prog = null;
-    if (v) prog = (nativeAudioEl.currentTime - v[0]) / (v[1] - v[0]);
-    else if (isFinite(nativeAudioEl.duration) && nativeAudioEl.duration > 0) prog = nativeAudioEl.currentTime / nativeAudioEl.duration;
-    setCursor(control, 'native', prog);
-  } else setCursor(control, 'native', null);
+  setCursor(control, 'you', progressIn(takeAudioEl, activeTakeWindow));
+  setCursor(control, 'native', progressIn(nativeAudioEl, activeNativeWindow));
   cursorRaf = requestAnimationFrame(tickCursors);
 }
 function startCursors(control) { cursorControl = control; if (!cursorRaf) cursorRaf = requestAnimationFrame(tickCursors); }
 function stopCursors() {
   if (cursorRaf) { cancelAnimationFrame(cursorRaf); cursorRaf = 0; }
   if (cursorControl) cursorControl.querySelectorAll('.rec-wave-cursor').forEach(c => { c.style.opacity = '0'; });
-  cursorControl = null;
+  cursorControl = null; activeNativeWindow = null; activeTakeWindow = null;
 }
 
 // ---------- HTML ----------
@@ -551,32 +591,42 @@ function handleCompare(control, action, btn) {
   }
   if (action === 'you') {
     const id = newestTakeId(control); if (id == null) return;
-    litBtn(control, btn); startCursors(control); playTakeOnce(id, () => { clearBtn(btn); stopCursors(); });
+    const tw = windowFor(takeUrl(id), null);
+    litBtn(control, btn); activeTakeWindow = tw; activeNativeWindow = null; startCursors(control);
+    playTakeOnce(id, tw, () => { clearBtn(btn); stopCursors(); });
     return;
   }
   if (action === 'native') {
     if (!nativePlayable(ctx)) return;
-    litBtn(control, btn); startCursors(control); playNative(ctx.nativeSrc, ctx.clip, () => { clearBtn(btn); stopCursors(); });
+    const nw = windowFor(nativeUrl(ctx.nativeSrc), ctx.clip);
+    litBtn(control, btn); activeNativeWindow = nw; activeTakeWindow = null; startCursors(control);
+    playNative(ctx.nativeSrc, nw, () => { clearBtn(btn); stopCursors(); });
     return;
   }
   if (action === 'seq') {
     const id = newestTakeId(control); if (id == null || !nativePlayable(ctx)) return;
+    const nw = windowFor(nativeUrl(ctx.nativeSrc), ctx.clip), tw = windowFor(takeUrl(id), null);
     litBtn(control, btn); startCursors(control);
-    const runOnce = (after) => playNative(ctx.nativeSrc, ctx.clip, () => playTakeOnce(id, after));
+    const runOnce = (after) => {
+      activeNativeWindow = nw; activeTakeWindow = null;
+      playNative(ctx.nativeSrc, nw, () => { activeNativeWindow = null; activeTakeWindow = tw; playTakeOnce(id, tw, after); });
+    };
     const loopOrStop = () => { if (control.dataset.loop === '1' && btn.classList.contains('playing')) runOnce(loopOrStop); else { clearBtn(btn); stopCursors(); } };
     runOnce(loopOrStop);
     return;
   }
   if (action === 'both') {
-    // Overlay native + your take, started together (separate <audio> elements). A 2-count
-    // barrier clears the button + cursors once BOTH finish (they have different lengths).
+    // Overlay native + your take, started together (separate <audio> elements) — each on its
+    // own SPOKEN WINDOW so the two onsets coincide despite the native's built-in padding. A
+    // 2-count barrier clears the button + cursors once BOTH finish (they differ in length).
     // One-shot — loop stays seq-only. A second click hits the playing-button stop path above.
     const id = newestTakeId(control); if (id == null || !nativePlayable(ctx)) return;
-    litBtn(control, btn); startCursors(control);
+    const nw = windowFor(nativeUrl(ctx.nativeSrc), ctx.clip), tw = windowFor(takeUrl(id), null);
+    litBtn(control, btn); activeNativeWindow = nw; activeTakeWindow = tw; startCursors(control);
     let pending = 2;
     const join = () => { if (--pending <= 0) { clearBtn(btn); stopCursors(); } };
-    playNative(ctx.nativeSrc, ctx.clip, join);
-    playTakeOnce(id, join);
+    playNative(ctx.nativeSrc, nw, join);
+    playTakeOnce(id, tw, join);
     return;
   }
 }
