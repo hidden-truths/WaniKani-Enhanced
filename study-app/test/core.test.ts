@@ -12,7 +12,7 @@ import { VERBS } from '../src/data/verbs.js';
 import {
   passes, oneGroup, facetAll, facetMatch, scheduleCard, cardStat, isDue, dueCards,
   rollingAcc, isLeech, leeches, normKana, romajiToKana, reviewForecast, filterSummary,
-  tokenFacet, deckLabel, ttsText, rubyHtml, minnaBuiltinRank, applyMinnaOverlays, splitMora,
+  tokenFacet, deckLabel, ttsText, rubyHtml, plainText, minnaBuiltinRank, applyMinnaOverlays, splitMora,
   pitchHtml, minnaSig, cardStamp, colorClass, CATS, exampleForLevel, availableTiers,
   JLPT_TIERS, BOX_DAYS,
   clampKeep, convItemKey, formatDuration, KEEP_DEFAULT,
@@ -289,6 +289,14 @@ test('rubyHtml passes the ruby tag set through and escapes everything else', () 
     .toBe('a &amp; b &lt;script&gt;x&lt;/script&gt;');
   // Tags are normalized to lowercase; surrounding text still escaped.
   expect(rubyHtml('<RUBY>音<RT>おと</RT></RUBY> & <b>')).toBe('<ruby>音<rt>おと</rt></ruby> &amp; &lt;b&gt;');
+});
+
+test('plainText strips ruby back to the base sentence (TTS / key sync)', () => {
+  expect(plainText('<ruby>橋<rt>はし</rt></ruby>を<ruby>渡<rt>わた</rt></ruby>ります。')).toBe('橋を渡ります。');
+  expect(plainText('道を歩きます。')).toBe('道を歩きます。');
+  // The inverse of rubyHtml's pass-through: rubyHtml then plainText returns the original.
+  const s = '<ruby>音<rt>おと</rt></ruby>が 出ます。';
+  expect(plainText(rubyHtml(s))).toBe('音が 出ます。');
 });
 
 test("minnaSig reflects content (accent/mnem/tip/levels), not just tags", () => {

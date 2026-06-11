@@ -28,3 +28,11 @@ export function rubyHtml(s) {
 // optional per-card override. The visible reading is always v.read regardless.
 const HAS_KANJI = /[一-龯々々〆]/;
 export function ttsText(v) { return v.tts || (v.jp && HAS_KANJI.test(v.jp) ? v.jp : v.read); }
+
+// Strip furigana ruby back to the base sentence — drop the <rt> readings and the <ruby>
+// wrappers: "<ruby>橋<rt>はし</rt></ruby>を渡る" → "橋を渡る". Used to get the plain text to
+// hand a sentence to TTS, and to keep the pre-generation driver's /v1/tts key in sync
+// with what the client requests (both call this, so they agree byte-for-byte).
+export function plainText(s) {
+  return String(s).replace(/<rt>.*?<\/rt>/g, '').replace(/<\/?ruby>/g, '');
+}

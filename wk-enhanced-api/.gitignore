@@ -8,3 +8,6 @@ bun.lockb
 # Minna scraper drafts — regenerable scratch from scripts/scrape-minna.ts; the
 # curated lesson-<n>.json is what gets committed + served.
 data/minna/*.draft.json
+
+# Compiled macOS TTS helper (build from scripts/jp-tts.swift; arch-specific, not committed)
+scripts/jp-tts
