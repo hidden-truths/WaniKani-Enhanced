@@ -14,7 +14,7 @@ import { account, api, setSyncStatus } from './cloud-core.js';
 import { openAuth } from './cloud.js';
 import { loadCustom, saveCustom } from '../persistence/custom.js';
 import { rebuildData, refreshAfterVerbChange } from './custom-cards.js';
-import { loadLessonRecordings, recordControlHtml, wireMinnaRecord, micSelectorHtml, initMicSelector } from './minna-record.js';
+import { loadLessonRecordings, recordControlHtml, wireMinnaRecord, speakingBarHtml, initMicSelector, isSpeakingMode, enterSpeakingMode, exitSpeakingMode } from './minna-record.js';
 
 const MINNA_APP_KEY = 'minna';
 const MINNA_KEY = 'jpverbs_minna';
@@ -218,7 +218,7 @@ async function renderMinnaLesson(n, body) {
       <button class="chip primary" id="mnAddDeck"${btn.dis}><svg class="ic" aria-hidden="true"><use href="#i-${btn.ic}"/></svg>${btn.label}</button>
       <span class="v-in" id="mnDeckCount">${st.inDeck}/${st.total} in your SRS deck</span>
     </div>
-    ${micSelectorHtml()}
+    ${speakingBarHtml()}
     ${minnaVocabSection(L)}
     ${minnaGrammarSection(L)}
     ${minnaExamplesSection(L)}
@@ -228,13 +228,14 @@ async function renderMinnaLesson(n, body) {
 }
 function minnaVocabSection(L) {
   if (!L.vocab || !L.vocab.length) return '';
+  const speaking = isSpeakingMode();
   const rows = L.vocab.map(v => `<tr>
       <td class="v-audio">${mnAudioBtn(v.audio)}</td>
       <td><div class="mn-kanji jp">${escapeHtml(v.kanji || v.kana)}</div><div class="mn-kana jp">${escapeHtml(v.kana)}${v.context ? ` <span class="mn-ctx">${escapeHtml(v.context)}</span>` : ''}</div></td>
       <td class="mn-mean">${escapeHtml(v.mean)}<span class="mn-pos">${escapeHtml(CAT_LABEL[v.cat] || v.cat || '')}</span>${v.italki ? '<span class="mn-italki" title="Covered in your iTalki lesson">iTalki</span>' : ''}</td>
       <td style="text-align:right">${minnaInDeck(v.key) ? '<span class="v-in">✓</span>' : ''}</td>
-    </tr>
-    <tr class="mn-rec-row"><td></td><td colspan="3">${recordControlHtml(L.lesson, v.key, v.audio)}</td></tr>`).join('');
+    </tr>${speaking ? `
+    <tr class="mn-rec-row"><td></td><td colspan="3">${recordControlHtml(L.lesson, v.key, v.audio)}</td></tr>` : ''}`).join('');
   return mnSection('Vocabulary', L.vocab.length, `<table class="mn-vocab"><tbody>${rows}</tbody></table>`, true);
 }
 function minnaExampleRows(list) {
@@ -262,7 +263,7 @@ function minnaConversationSection(L) {
     // Each line is recordable; its native-compare target is a CLIP of the one whole-
     // conversation MP3 (c.audio). The clip comes from line.clip ∪ the synced store.
     const clip = c.audio ? resolveClip(ln.clip, getLineClip(L.lesson, idx)) : null;
-    const rec = c.audio
+    const rec = (c.audio && isSpeakingMode())
       ? `<div class="mn-line-rec">${recordControlHtml(L.lesson, convItemKey(L.lesson, idx), c.audio, clip, true)}${clipAffordanceHtml(idx, clip)}</div>`
       : '';
     return `<div class="mn-line"><div class="mn-role">${escapeHtml(ln.role || '')}</div><div class="mn-line-body"><div class="l-jp jp">${escapeHtml(ln.jp)}</div><div class="l-en">${escapeHtml(ln.en)}</div>${rec}</div></div>`;
@@ -338,7 +339,16 @@ function wireMinnaLesson(n, L, body) {
   body.querySelectorAll('[data-aud]').forEach(b => b.addEventListener('click', () => mnPlay(b.dataset.aud, b)));
   wireMinnaRecord(body);   // delegated record/play/delete/compare handlers (attach-once)
   wireMinnaClips(body);    // delegated conversation-line clip-marker handlers (attach-once)
-  initMicSelector(body);   // populate + wire the input-device dropdown
+  // Speaking-mode toggle: enter/leave the persistent-mic state, then re-render so the record
+  // controls appear/disappear. The toggle button is recreated each render, so wire per-render.
+  const spk = body.querySelector('[data-speaking-toggle]');
+  if (spk) spk.addEventListener('click', async () => {
+    if (isSpeakingMode()) exitSpeakingMode();
+    else if (!(await enterSpeakingMode())) return;
+    renderMinnaLesson(n, body);
+  });
+  // Mic picker: changing the device re-acquires the live stream if we're already speaking.
+  initMicSelector(body, () => { if (isSpeakingMode()) enterSpeakingMode(); });
   const add = body.querySelector('#mnAddDeck');
   if (add) add.addEventListener('click', () => {
     const { added, updated } = activateMinnaVocab(n, L.vocab || []);

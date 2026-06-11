@@ -515,8 +515,12 @@
   .mn-notes textarea:focus{outline:none;border-color:var(--ichidan)}
   .mn-saved{font-family:"SF Mono",ui-monospace,monospace;font-size:11px;color:var(--muted);margin-top:6px;min-height:14px}
   /* Record-and-compare (Phase 2). The rec-row is a subtle sub-row under each vocab
-     entry / conversation line; the control holds a mic button + the saved-take list. */
-  .mn-rec-row td{border-top:none;padding-top:0}
+     entry; the control holds a mic button + take list + compare player. In speaking mode
+     the word + its controls are ONE unit: no rule between them, and the per-row separator
+     lines are dropped in favor of whitespace so a word and its controls don't look split.
+     (The plain word list keeps its separator lines when not speaking.) */
+  .mn-rec-row td{border-top:none;padding-top:2px;padding-bottom:16px}
+  .mn-rec-row + tr td{border-top:none}   /* next word: separated by the rec-row's gap, not a line */
   .rec-control{display:flex;align-items:center;flex-wrap:wrap;gap:8px}
   .rec-btn{display:inline-flex;align-items:center;gap:6px;background:none;border:1px solid var(--line);color:var(--muted);border-radius:14px;padding:3px 10px 3px 8px;font-family:"SF Mono",ui-monospace,monospace;font-size:11px;letter-spacing:.06em;cursor:pointer;transition:all .15s}
   .rec-btn:hover{border-color:var(--godan);color:var(--godan)}
@@ -538,11 +542,16 @@
   .rec-review .chip{font-size:11px;padding:4px 10px}
   .rec-review .rec-save{border-color:var(--good);color:var(--good);font-weight:700}
   .rec-unsupported{font-family:Georgia,serif;font-size:12px;color:var(--muted);opacity:.85}
-  /* Input-device (microphone) selector — pin a mic so AirPods stay high-quality. */
-  .mic-selector{display:flex;align-items:center;flex-wrap:wrap;gap:8px;margin:8px 0 14px;padding:9px 12px;border:1px solid var(--line);border-radius:8px;background:var(--paper-2)}
-  .mic-selector>.ic{font-size:16px;color:var(--ichidan)}
+  /* Speaking-mode bar — a toggle that opens a persistent mic stream + the device picker.
+     Record controls only render while it's on. */
+  .speaking-bar{display:flex;align-items:center;flex-wrap:wrap;gap:10px;margin:10px 0 16px;padding:10px 12px;border:1px solid var(--line);border-radius:8px;background:var(--paper-2)}
+  .speaking-bar.on{border-color:var(--godan);background:color-mix(in srgb,var(--godan) 7%,var(--paper-2))}
+  .speaking-toggle{display:inline-flex;align-items:center;gap:6px}
+  .speaking-toggle.active{background:var(--godan);color:#fff;border-color:var(--godan)}
+  .speaking-toggle .ic{font-size:14px}
+  .mic-pick{display:inline-flex;align-items:center;gap:6px}
   .mic-lbl{font-family:"SF Mono",ui-monospace,monospace;font-size:10px;letter-spacing:.1em;text-transform:uppercase;color:var(--muted)}
-  .mic-select{background:var(--paper);color:var(--ink);border:1px solid var(--line);border-radius:6px;padding:5px 8px;font-family:"SF Mono",ui-monospace,monospace;font-size:12px;max-width:230px}
+  .mic-select{background:var(--paper);color:var(--ink);border:1px solid var(--line);border-radius:6px;padding:5px 8px;font-family:"SF Mono",ui-monospace,monospace;font-size:12px;max-width:220px}
   .mic-select:focus{outline:none;border-color:var(--ichidan)}
   .mic-hint{font-family:Georgia,serif;font-size:12px;color:var(--muted);opacity:.85;flex-basis:100%}
   /* Compare player — ▶ you / ▶ native / ▶ native→you + loop. Shows once a take exists. */

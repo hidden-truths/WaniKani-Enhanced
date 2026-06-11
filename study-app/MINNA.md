@@ -331,18 +331,24 @@ helpers in [src/core/recordings.js](src/core/recordings.js).
 - **Capture** — `MediaRecorder`(`getUserMedia` audio) → opus/webm (mp4 fallback on Safari),
   with a preview / Save / Re-record / Cancel review step. A record control sits under each
   vocab row and each conversation line. Degrades to a hint when the APIs are unavailable.
-- **Input-device picker** — a **Microphone** dropdown at the top of the lesson
-  (`micSelectorHtml`/`initMicSelector`) pins a specific input via `getUserMedia({audio:{
-  deviceId:{exact}}})`. This stops macOS from flipping AirPods to low-quality hands-free
-  (HFP) mode — we simply never open the AirPods input. The choice is **device-local**
-  (`localStorage jpverbs_micDevice`, not synced — a deviceId is per-machine); labels appear
-  once mic permission is granted, and the list refreshes on `devicechange`.
-- **Auto-trim silence** — after capture, the take is decoded, the sound region is found
-  (`findTrimBounds`, pure/tested: windowed-RMS first/last-above-threshold + padding) and
-  re-encoded to 16-bit PCM **WAV** so the saved clip is just the spoken words. Gated by the
-  `trimSilence` setting (default on); any failure falls back to the untouched original. (WAV
-  because there's no in-browser opus encoder for an `AudioBuffer`; clips are short so size
-  stays under the 2 MB cap. The server accepts `audio/wav`.)
+- **Speaking mode (persistent mic) + device picker** — a **Practice speaking** toggle at the
+  top of the lesson (`speakingBarHtml`) opens ONE persistent mic stream and keeps it; the
+  per-word record controls only render while it's on (gated by `isSpeakingMode()`). Each take
+  spins a `MediaRecorder` on that live stream — **no `getUserMedia` per take**, which was
+  hitching the mic (and re-triggering the AirPods switch). The **Microphone** dropdown beside
+  it pins a specific input via `deviceId:{exact}` so macOS never opens the AirPods mic (keeps
+  them in high-quality A2DP). The device is **device-local** (`localStorage jpverbs_micDevice`,
+  not synced); labels appear once permission is granted, and the list refreshes on
+  `devicechange`. Changing the device while speaking re-acquires the stream.
+- **Auto-trim silence** — after capture, the take is decoded, the sound region found
+  (`findTrimBounds`, pure/tested) and re-encoded to 16-bit PCM **WAV** so the saved clip is
+  just the spoken words. The detector is deliberately **forgiving** — an **adaptive** threshold
+  (`max(floor, peakRMS·ratio)`) plus a **generous, asymmetric lead pad** (~160 ms) so quiet
+  aspirated onsets (ひ, ふ — the breathy start of 引きます) survive even though they sit below
+  the vowel's energy. Gated by the `trimSilence` setting (default on); any failure / all-silence
+  / too-short falls back to the untouched original. (WAV because there's no in-browser opus
+  encoder for an `AudioBuffer`; clips are short so size stays under the 2 MB cap; server accepts
+  `audio/wav`.)
 - **Store** — per-user takes on the server: the `minna_recordings` table + **PRIVATE**
   storage objects (`acl:'private'`), served only through the owner-scoped
   `GET /v1/minna/recordings/{id}`. `POST` prunes per item to the user's **keep-N** (Settings

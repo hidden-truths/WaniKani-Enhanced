@@ -508,23 +508,35 @@ Component contracts you must preserve:
   the same cookie-gated-audio path as the native-audio button. The **binary upload uses its
   own credentialed `fetch`** (not the JSON-only `api()`); list/delete use `api()`. Retention
   is the `recordingsKeep` setting (default 3, 1–20), sent as `keep` and enforced server-side.
+- **"Speaking mode" keeps ONE mic stream open; the record controls only render while it's
+  on.** Acquiring/releasing the mic per take renegotiates the macOS input each time — that
+  hitches (and re-triggers the AirPods HFP switch). So `enterSpeakingMode()` opens one
+  persistent `liveStream` and keeps it; `startRecording` spins a `MediaRecorder` on it with
+  **no `getUserMedia` per take**; `onstop` does NOT stop the stream. `minna.js` renders the
+  vocab/line rec-controls only `if (isSpeakingMode())`, and the toggle re-renders the lesson.
+  Don't revert `startRecording` to per-take `getUserMedia`, and don't render controls outside
+  speaking mode. `exitSpeakingMode()` stops the recorder + releases the stream.
 - **The mic picker pins a `deviceId` ON PURPOSE — it's the fix for AirPods dropping to
   hands-free.** macOS switches AirPods to low-quality HFP the instant any app opens *their*
-  mic; recording from an explicit non-AirPods `getUserMedia({audio:{deviceId:{exact}}})`
-  never activates the AirPods input, so they stay in A2DP. The chosen device is
-  **device-local** (`localStorage jpverbs_micDevice`), NOT in the synced `settings` blob — a
-  deviceId is per-browser/machine and meaningless on another device; don't move it into
-  `settings`. Labels are empty until mic permission is granted (browser privacy), so the
-  selector shows "Microphone N" until the first record, then re-enumerates. A stored id that
-  no longer enumerates is dropped → fall back to the system default (with a one-shot
-  `{audio:true}` retry if an `exact` constraint fails mid-record).
-- **Silence trim re-encodes to WAV, and that's deliberate.** `maybeTrim` decodes the take,
-  mixes to mono, finds the sound region (`findTrimBounds`, pure/tested), slices, and encodes
-  16-bit PCM **WAV** — because there is no in-browser opus/webm encoder for an `AudioBuffer`.
-  Clips are short so uncompressed WAV stays well under the 2 MB cap. It's gated by
-  `trimSilence` (default on) and **fails safe**: decode error, all-silence, or a <150 ms
-  result all return the ORIGINAL blob untouched — never a broken/empty take. The server's
-  recording content-type allowlist therefore includes `audio/wav` (+ a `.wav` ext mapping).
+  mic; the persistent stream is acquired with an explicit non-AirPods
+  `getUserMedia({audio:{deviceId:{exact}}})`, so the AirPods input is never activated. The
+  chosen device is **device-local** (`localStorage jpverbs_micDevice`), NOT in the synced
+  `settings` blob — a deviceId is per-browser/machine and meaningless on another device; don't
+  move it into `settings`. Labels are empty until permission is granted (browser privacy), so
+  the picker shows "Microphone N" until the first stream, then re-enumerates. A vanished
+  stored id is dropped → system default (one-shot `{audio:true}` retry if `exact` fails).
+- **Silence trim is DELIBERATELY forgiving — clipping real speech is worse than leaving a
+  little dead air.** `findTrimBounds` (pure/tested) uses an **adaptive** threshold
+  (`max(floor, peakRMS·ratio)`, not a fixed absolute one) so it tracks the speaker's level,
+  and a **generous asymmetric lead pad** (~160 ms vs ~140 ms tail) so voiceless/aspirated
+  onsets — ひ [çi], ふ [ɸɯ], the breathy start of 引きます — survive even though they sit BELOW
+  the vowel's RMS (the window scan starts at the vowel; the lead pad reaches back over the
+  consonant). Don't "tighten" it back to a fixed threshold or symmetric pad — that's the bug
+  that ate 引きます's ひ. `maybeTrim` mixes to mono and re-encodes 16-bit PCM **WAV** (no
+  in-browser opus encoder for an `AudioBuffer`; short clips stay under the 2 MB cap). Gated by
+  `trimSilence` (default on) and **fails safe**: decode error / all-silence / <150 ms result
+  all return the ORIGINAL blob. The server's recording content-type allowlist includes
+  `audio/wav` (+ a `.wav` ext mapping).
 
 ## Change log — UX/design pass (this is the conversation record)
 

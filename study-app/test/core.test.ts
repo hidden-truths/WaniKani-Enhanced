@@ -462,3 +462,16 @@ test('findTrimBounds returns null for all-silence (caller keeps original)', () =
   expect(findTrimBounds(new Float32Array(100), 1000, { threshold: 0.1 })).toBeNull();
   expect(findTrimBounds(new Float32Array(0), 1000)).toBeNull();
 });
+
+test('findTrimBounds keeps a soft aspirated onset (below the vowel) via adaptive threshold + lead pad', () => {
+  // sampleRate 1000 → 1 ms/sample. A breathy onset (0.02) at 150–199 precedes the loud
+  // vowel body (0.5) at 200–399 — like the ひ of 引きます. The adaptive threshold keys on the
+  // loud body, but an 80 ms lead pad (200-80=120) must reach back past the 150 onset so it
+  // isn't clipped.
+  const s = new Float32Array(600);
+  for (let i = 150; i < 200; i++) s[i] = 0.02;
+  for (let i = 200; i < 400; i++) s[i] = 0.5;
+  const b = findTrimBounds(s, 1000, { windowMs: 10, leadPadMs: 80, tailPadMs: 40 })!;
+  expect(b.start).toBeLessThanOrEqual(150);   // the soft onset is retained
+  expect(b.end).toBeGreaterThanOrEqual(400);  // through the end of the body (+ tail pad)
+});

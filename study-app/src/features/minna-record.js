@@ -51,6 +51,31 @@ function micConstraint() {
   return selectedMicId ? { deviceId: { exact: selectedMicId } } : true;
 }
 
+// ---------- speaking mode (persistent mic stream) ----------
+// Acquiring + releasing the mic per take makes macOS re-negotiate the input each time, which
+// hitches (and re-triggers the AirPods HFP switch). Instead the user enters "speaking mode"
+// once: we open ONE persistent MediaStream and keep it; each take just spins a MediaRecorder
+// on that live stream (no getUserMedia per take). The record controls only render while in
+// speaking mode. Exiting releases the stream.
+let speakingMode = false, liveStream = null;
+export function isSpeakingMode() { return speakingMode; }
+function stopLiveStream() { if (liveStream) { try { liveStream.getTracks().forEach(t => t.stop()); } catch (e) {} liveStream = null; } }
+// Acquire (or re-acquire, e.g. after a device change) the persistent stream. Returns true on
+// success. Mirrors the per-take fallback: if an exact deviceId fails, retry the default once.
+export async function enterSpeakingMode() {
+  if (!RECORD_SUPPORTED) return false;
+  stopLiveStream();
+  try { liveStream = await navigator.mediaDevices.getUserMedia({ audio: micConstraint() }); }
+  catch (e) {
+    if (selectedMicId) { try { liveStream = await navigator.mediaDevices.getUserMedia({ audio: true }); } catch (e2) {} }
+    if (!liveStream) { speakingMode = false; setSyncStatus('⚠ microphone blocked'); return false; }
+  }
+  speakingMode = true;
+  enumerateMics().then(refreshMicSelectors);   // labels are available now that permission's granted
+  return true;
+}
+export function exitSpeakingMode() { stopRecording(); stopLiveStream(); speakingMode = false; }
+
 // ---------- silence trim (Web Audio) ----------
 // After capture, decode → find the sound region (findTrimBounds, pure) → slice → re-encode
 // to 16-bit PCM WAV. WAV because there's no in-browser opus/webm encoder for an AudioBuffer;
@@ -85,16 +110,22 @@ async function maybeTrim(blob, durationMs) {
   } catch (e) { return { blob, durationMs }; }
 }
 
-// ---------- mic selector UI ----------
-// Rendered once near the top of the Minna lesson; lets the user pin a specific input so
-// macOS doesn't switch AirPods to hands-free mode. Empty string '' = system default.
-export function micSelectorHtml() {
+// ---------- speaking-mode bar (toggle + mic picker) ----------
+// Rendered at the top of the Minna lesson. The toggle enters/leaves speaking mode; the mic
+// picker pins a specific input so macOS doesn't flip AirPods to hands-free mode. Empty
+// deviceId '' = system default. The record controls below only appear while speaking mode is
+// on (gated in minna.js via isSpeakingMode()).
+export function speakingBarHtml() {
   if (!RECORD_SUPPORTED) return '';
-  return `<div class="mic-selector" data-mic-selector>
-    <svg class="ic" aria-hidden="true"><use href="#i-mic"/></svg>
-    <label class="mic-lbl" for="micSelect">Microphone</label>
-    <select id="micSelect" class="mic-select" aria-label="Recording microphone">${micOptionsHtml()}</select>
-    <span class="mic-hint">Pick your Mac mic so AirPods stay in high-quality mode.</span>
+  const on = speakingMode;
+  return `<div class="speaking-bar${on ? ' on' : ''}">
+    <button class="chip speaking-toggle${on ? ' active' : ''}" type="button" data-speaking-toggle aria-pressed="${on}">
+      <svg class="ic" aria-hidden="true"><use href="#i-mic"/></svg>${on ? 'Speaking — tap to stop' : 'Practice speaking'}</button>
+    <span class="mic-pick">
+      <label class="mic-lbl" for="micSelect">Mic</label>
+      <select id="micSelect" class="mic-select" aria-label="Recording microphone">${micOptionsHtml()}</select>
+    </span>
+    <span class="mic-hint">${on ? 'Mic stays on — tap a word’s Record to capture just that take.' : 'Pick your Mac mic (keeps AirPods high-quality), then turn on to record + compare.'}</span>
   </div>`;
 }
 function micOptionsHtml() {
@@ -106,12 +137,16 @@ function micOptionsHtml() {
   return opts.join('');
 }
 function refreshMicSelectors() { document.querySelectorAll('.mic-select').forEach(sel => { sel.innerHTML = micOptionsHtml(); }); }
-// Wire the selector (per render — the element is recreated) + enumerate. The devicechange
-// listener attaches once globally so AirPods connect/disconnect refresh the list.
-export function initMicSelector(container) {
+// Wire the mic <select> (per render — the element is recreated) + enumerate. `onChange` fires
+// after the device changes so the caller can re-acquire the live stream if speaking. The
+// devicechange listener attaches once globally so AirPods connect/disconnect refresh the list.
+export function initMicSelector(container, onChange) {
   if (!RECORD_SUPPORTED) return;
   const sel = container.querySelector('.mic-select');
-  if (sel && !sel.dataset.wired) { sel.dataset.wired = '1'; sel.addEventListener('change', () => setSelectedMic(sel.value)); }
+  if (sel && !sel.dataset.wired) {
+    sel.dataset.wired = '1';
+    sel.addEventListener('change', () => { setSelectedMic(sel.value); if (onChange) onChange(); });
+  }
   enumerateMics().then(refreshMicSelectors);
   if (!initMicSelector._wired && navigator.mediaDevices && navigator.mediaDevices.addEventListener) {
     initMicSelector._wired = true;
@@ -265,7 +300,7 @@ function compareHtml(lesson, itemKey, ctx) {
 }
 
 // ---------- capture state (one active recording at a time) ----------
-let active = null;   // { control, recorder, stream, chunks, mime, startedAt }
+let active = null;   // { control, recorder, chunks, mime, startedAt }
 
 function resetControl(control) {
   const lesson = Number(control.dataset.lesson), itemKey = control.dataset.itemkey;
@@ -274,37 +309,29 @@ function resetControl(control) {
   if (loop) { const lb = control.querySelector('[data-cmp="loop"]'); if (lb) { lb.classList.add('active'); lb.setAttribute('aria-pressed', 'true'); } }
 }
 
-async function startRecording(control) {
-  if (active) stopStream(active);   // never run two at once
-  let stream;
-  try { stream = await navigator.mediaDevices.getUserMedia({ audio: micConstraint() }); }
-  catch (e) {
-    // A stored device may have vanished (unplugged) → retry on the system default once.
-    if (selectedMicId) { try { stream = await navigator.mediaDevices.getUserMedia({ audio: true }); } catch (e2) {} }
-    if (!stream) { setSyncStatus('⚠ microphone blocked'); return; }
-  }
-  // Permission is now granted, so device labels are available — refresh any mic selector.
-  enumerateMics().then(refreshMicSelectors);
+// Records from the PERSISTENT speaking-mode stream — no getUserMedia per take, so there's no
+// per-take device renegotiation hitch. Only callable while speaking mode holds the stream.
+function startRecording(control) {
+  if (!liveStream) return;          // controls only render in speaking mode, but guard anyway
+  if (active) stopRecording();      // never run two at once
   const mime = pickMime();
-  const recorder = mime ? new MediaRecorder(stream, { mimeType: mime }) : new MediaRecorder(stream);
+  const recorder = mime ? new MediaRecorder(liveStream, { mimeType: mime }) : new MediaRecorder(liveStream);
   const chunks = [];
   recorder.ondataavailable = e => { if (e.data && e.data.size) chunks.push(e.data); };
   recorder.onstop = async () => {
     const raw = new Blob(chunks, { type: recorder.mimeType || mime || 'audio/webm' });
     const rawDur = Date.now() - active.startedAt;
-    stopStream(active);
-    active = null;
+    active = null;                  // keep liveStream open for the next take
     const { blob, durationMs } = await maybeTrim(raw, rawDur);   // auto-trim leading/trailing silence
     showReview(control, blob, durationMs);
   };
-  active = { control, recorder, stream, chunks, mime, startedAt: Date.now() };
+  active = { control, recorder, chunks, mime, startedAt: Date.now() };
   recorder.start();
   // Recording UI: button turns into a stop, label counts is implicit (kept simple).
   const btn = control.querySelector('[data-rec-toggle]');
   if (btn) { btn.classList.add('recording'); const lab = btn.querySelector('.rec-label'); if (lab) lab.textContent = 'Stop'; }
 }
 function stopRecording() { if (active && active.recorder.state !== 'inactive') active.recorder.stop(); }
-function stopStream(a) { try { a.stream.getTracks().forEach(t => t.stop()); } catch (e) {} }
 
 // Review panel: preview your take, then Save / Re-record / Cancel (per the plan's
 // "preview + re-record before saving"). Uses a local object URL — nothing is uploaded
