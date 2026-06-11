@@ -332,15 +332,18 @@ helpers in [src/core/recordings.js](src/core/recordings.js).
 - **Capture** — `MediaRecorder`(`getUserMedia` audio) → opus/webm (mp4 fallback on Safari),
   with a preview / Save / Re-record / Cancel review step. A record control sits under each
   vocab row and each conversation line. Degrades to a hint when the APIs are unavailable.
-- **Speaking mode (persistent mic) + device picker** — a **Practice speaking** toggle at the
-  top of the lesson (`speakingBarHtml`) opens ONE persistent mic stream and keeps it; the
-  per-word record controls only render while it's on (gated by `isSpeakingMode()`). Each take
-  spins a `MediaRecorder` on that live stream — **no `getUserMedia` per take**, which was
-  hitching the mic (and re-triggering the AirPods switch). The **Microphone** dropdown beside
-  it pins a specific input via `deviceId:{exact}` so macOS never opens the AirPods mic (keeps
-  them in high-quality A2DP). The device is **device-local** (`localStorage jpverbs_micDevice`,
-  not synced); labels appear once permission is granted, and the list refreshes on
-  `devicechange`. Changing the device while speaking re-acquires the stream.
+- **Speaking mode (persistent mic) + device picker** — a **Practice speaking** toggle
+  (`speakingBarHtml`) opens ONE persistent mic stream and keeps it; the per-word record controls
+  only render while it's on (gated by `isSpeakingMode()`). The whole speaking bar (toggle + mic
+  picker + speed + bias) is **docked in the sticky navbar** (`#navExtra`, via `renderNavSpeaking`)
+  so it floats at the top while you scroll the lesson; it's emptied (`clearNavSpeaking`) when you
+  leave the みんなの日本語 tab. The **mic picker + speed/bias only show while speaking**; off, the
+  bar is just the toggle. Each take spins a `MediaRecorder` on that live stream — **no
+  `getUserMedia` per take**, which was hitching the mic (and re-triggering the AirPods switch).
+  The **Microphone** dropdown pins a specific input via `deviceId:{exact}` so macOS never opens
+  the AirPods mic (keeps them in high-quality A2DP). The device is **device-local**
+  (`localStorage jpverbs_micDevice`, not synced); labels appear once permission is granted, and
+  the list refreshes on `devicechange`. Changing the device while speaking re-acquires the stream.
 - **Auto-trim silence** — after capture, the take is decoded, the sound region found
   (`findTrimBounds`, pure/tested) and re-encoded to 16-bit PCM **WAV** so the saved clip is
   just the spoken words. The detector is deliberately **forgiving** — an **adaptive** threshold

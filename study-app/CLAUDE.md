@@ -246,6 +246,13 @@ Component contracts you must preserve:
   (max-height transition; a `· N` badge counts active chips inside).
 - **Icons:** `<svg class="ic"><use href="#i-NAME"/></svg>` referencing the inline
   `<symbol>` sprite at the top of `<body>`. `.ic` inherits `currentColor` + `1em`.
+- **Sticky navbar (`.navbar` / `.nav-inner`)** is the anchored top bar: title (left), the
+  `#navExtra` slot (a context-controls dock — `minna.js` fills it with the speaking/compare bar,
+  empties it on tab-leave), and `.nav-actions` (right) — theme + settings are `.nav-btn.icon-only`
+  (icon, no text label; keep their `aria-label`/`title`), the account button is a `.nav-btn` with
+  the cloud icon + email. Transient sync/feedback is the auto-clearing `#syncStatus` pill (set via
+  `setSyncStatus`), NOT a persistent label. Import/Export live in the Settings modal's "Backup"
+  row (`io.js` still finds them by id). There is no `<header>`/`<h1>` headline anymore.
 
 ## Things that look like bugs but aren't (DEAD-END WARNINGS)
 
@@ -516,7 +523,14 @@ Component contracts you must preserve:
   `clipWired` guards) because `renderMinnaLesson` re-renders `body.innerHTML` on
   activation/clip-save — re-attaching per render would stack listeners and double-fire. The
   handlers read all context (lesson, itemKey, native src, clip) off the rec-control's
-  `data-*`, so they need no closure over the lesson. **Recordings are PRIVATE on the server**
+  `data-*`, so they need no closure over the lesson. **The per-item rec-controls live in
+  `#mnBody`, but the GLOBAL speaking bar (toggle + mic picker + speed + bias) is docked in the
+  navbar `#navExtra` slot** (`renderNavSpeaking` fills it; `clearNavSpeaking` empties it on
+  tab-leave/gate) so it floats at the top while you scroll the lesson. Its delegate
+  (`wireSpeakingControls`, speed chips + bias slider) attaches once to `#navExtra` —
+  SEPARATE from `wireMinnaRecord`'s `#mnBody` delegate; don't move the speed/bias handlers back
+  onto `#mnBody` (the controls aren't there anymore). The toggle + mic picker are wired
+  per-render in `renderNavSpeaking` (the slot's innerHTML is replaced each lesson render). **Recordings are PRIVATE on the server**
   and played via one reused `<audio crossOrigin='use-credentials'>` (gated, cross-origin) —
   the same cookie-gated-audio path as the native-audio button. The **binary upload uses its
   own credentialed `fetch`** (not the JSON-only `api()`); list/delete use `api()`. Retention
@@ -525,7 +539,7 @@ Component contracts you must preserve:
   native + take on the two separate `<audio>` elements with a 2-count barrier (one-shot; loop is
   seq-only). Playback speed is `settings.compareSpeed` (synced, snapped by `clampSpeed` to
   {0.5,0.75,1}) applied via `applySpeed` (`playbackRate` + `preservesPitch`) on every compare
-  play; the segmented control lives in the speaking bar. **Volume is normalized** so native + take
+  play; the segmented control lives in the navbar-docked speaking bar. **Volume is normalized** so native + take
   play at ~equal loudness: `levelFor` (RMS over each spoken window) → `normGains` (attenuate-only,
   since `<audio>.volume` can't boost — the louder is brought down to the quieter, floored at 0.3)
   → a `volume` passed through `playRange`. The **▶ both balance slider** (`compareBias`, view-only,
@@ -571,9 +585,11 @@ Component contracts you must preserve:
   hitches (and re-triggers the AirPods HFP switch). So `enterSpeakingMode()` opens one
   persistent `liveStream` and keeps it; `startRecording` spins a `MediaRecorder` on it with
   **no `getUserMedia` per take**; `onstop` does NOT stop the stream. `minna.js` renders the
-  vocab/line rec-controls only `if (isSpeakingMode())`, and the toggle re-renders the lesson.
-  Don't revert `startRecording` to per-take `getUserMedia`, and don't render controls outside
-  speaking mode. `exitSpeakingMode()` stops the recorder + releases the stream. **Navigating out
+  vocab/line rec-controls only `if (isSpeakingMode())`; the **toggle button lives in the
+  navbar-docked speaking bar** (`#navExtra`, `renderNavSpeaking`) and re-renders the lesson on
+  click (which repaints both the body rec-controls and the navbar bar). Don't revert
+  `startRecording` to per-take `getUserMedia`, and don't render controls outside speaking mode.
+  `exitSpeakingMode()` stops the recorder + releases the stream. **Navigating out
   of the lesson context auto-exits speaking mode** so the mic doesn't linger: `chrome.js`
   `initTabs` tracks the active tab and fires a `leaveMinna` handler when switching AWAY from the
   みんなの日本語 tab → wired in `main.js` to `minna.js`'s `onMinnaHidden()` → `exitSpeakingMode()`;

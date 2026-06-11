@@ -14,7 +14,7 @@ import { account, api, setSyncStatus } from './cloud-core.js';
 import { openAuth } from './cloud.js';
 import { loadCustom, saveCustom } from '../persistence/custom.js';
 import { rebuildData, refreshAfterVerbChange } from './custom-cards.js';
-import { loadLessonRecordings, recordControlHtml, wireMinnaRecord, paintCompareWaveforms, speakingBarHtml, initMicSelector, isSpeakingMode, enterSpeakingMode, exitSpeakingMode } from './minna-record.js';
+import { loadLessonRecordings, recordControlHtml, wireMinnaRecord, paintCompareWaveforms, speakingBarHtml, wireSpeakingControls, initMicSelector, isSpeakingMode, enterSpeakingMode, exitSpeakingMode } from './minna-record.js';
 
 const MINNA_APP_KEY = 'minna';
 const MINNA_KEY = 'jpverbs_minna';
@@ -173,6 +173,7 @@ function mnSection(title, count, bodyHtml, open) {
   return `<details class="mn-section"${open ? ' open' : ''}><summary>${title}${count != null ? ` <span class="mn-count">· ${count}</span>` : ''}</summary><div class="mn-sec-body">${bodyHtml}</div></details>`;
 }
 function renderMinnaGate() {
+  clearNavSpeaking();   // no speaking controls when signed out
   document.getElementById('mnHead').innerHTML = '';
   document.getElementById('mnBody').innerHTML = '';
   const g = document.getElementById('mnGate'); g.hidden = false;
@@ -223,7 +224,6 @@ async function renderMinnaLesson(n, body) {
       <button class="chip primary" id="mnAddDeck"${btn.dis}><svg class="ic" aria-hidden="true"><use href="#i-${btn.ic}"/></svg>${btn.label}</button>
       <span class="v-in" id="mnDeckCount">${st.inDeck}/${st.total} in your SRS deck</span>
     </div>
-    ${speakingBarHtml()}
     ${minnaVocabSection(L)}
     ${minnaGrammarSection(L)}
     ${minnaExamplesSection(L)}
@@ -364,21 +364,35 @@ function minnaNotesSection(n) {
   const val = escapeHtml((state.minnaStore.notes && state.minnaStore.notes[n]) || '');
   return mnSection('My notes', null, `<div class="mn-notes"><textarea id="mnNotes" placeholder="Augment this lesson as you study with your tutor — grammar nuances, mistakes to avoid, anything. Synced to your account.">${val}</textarea><div class="mn-saved" id="mnNotesSaved"></div></div>`, false);
 }
-function wireMinnaLesson(n, L, body) {
-  body.querySelectorAll('[data-aud]').forEach(b => b.addEventListener('click', () => mnPlay(b.dataset.aud, b)));
-  wireMinnaRecord(body);   // delegated record/play/delete/compare handlers (attach-once)
-  wireMinnaClips(body);    // delegated conversation-line clip-marker handlers (attach-once)
-  paintCompareWaveforms(body);   // decode + draw the you/native compare waveforms for this render
-  // Speaking-mode toggle: enter/leave the persistent-mic state, then re-render so the record
-  // controls appear/disappear. The toggle button is recreated each render, so wire per-render.
-  const spk = body.querySelector('[data-speaking-toggle]');
+// Fill the navbar #navExtra slot with the speaking/compare controls and wire them. The slot is
+// a stable element in the navbar (so the controls float at the top while studying); minna.js
+// re-fills it per lesson render. The speed/bias delegate attaches once (wireSpeakingControls);
+// the toggle + mic picker are recreated each render, so they're wired per-render here.
+function renderNavSpeaking(n, body) {
+  const nav = document.getElementById('navExtra');
+  if (!nav) return;
+  nav.innerHTML = speakingBarHtml();
+  wireSpeakingControls(nav);   // speed chips + bias slider (attach-once on the slot)
+  // Toggle: enter/leave the persistent-mic state, then re-render the lesson — that repaints the
+  // body's record controls AND this navbar bar (so the mic/speed/bias controls appear/disappear).
+  const spk = nav.querySelector('[data-speaking-toggle]');
   if (spk) spk.addEventListener('click', async () => {
     if (isSpeakingMode()) exitSpeakingMode();
     else if (!(await enterSpeakingMode())) return;
     renderMinnaLesson(n, body);
   });
   // Mic picker: changing the device re-acquires the live stream if we're already speaking.
-  initMicSelector(body, () => { if (isSpeakingMode()) enterSpeakingMode(); });
+  initMicSelector(nav, () => { if (isSpeakingMode()) enterSpeakingMode(); });
+}
+// Empty the navbar speaking slot — used when leaving the みんなの日本語 tab / showing the gate so
+// the speaking controls don't appear on other tabs. (The attach-once delegate stays on the slot.)
+function clearNavSpeaking() { const nav = document.getElementById('navExtra'); if (nav) nav.innerHTML = ''; }
+function wireMinnaLesson(n, L, body) {
+  body.querySelectorAll('[data-aud]').forEach(b => b.addEventListener('click', () => mnPlay(b.dataset.aud, b)));
+  wireMinnaRecord(body);   // delegated record/play/delete/compare handlers (attach-once)
+  wireMinnaClips(body);    // delegated conversation-line clip-marker handlers (attach-once)
+  paintCompareWaveforms(body);   // decode + draw the you/native compare waveforms for this render
+  renderNavSpeaking(n, body);    // dock the speaking/compare controls into the navbar
   const add = body.querySelector('#mnAddDeck');
   if (add) add.addEventListener('click', () => {
     const { added, updated } = activateMinnaVocab(n, L.vocab || []);
@@ -405,7 +419,7 @@ function wireMinnaLesson(n, L, body) {
 // user is on another tab; coming back re-renders fresh (speaking-off). Safe to call when not
 // speaking (exitSpeakingMode is idempotent). The stale speaking-mode DOM is never seen because
 // returning to the tab triggers renderMinna().
-export function onMinnaHidden() { exitSpeakingMode(); }
+export function onMinnaHidden() { exitSpeakingMode(); clearNavSpeaking(); }
 
 // Release the mic when the BROWSER tab is hidden (switching browser tabs / minimizing the
 // window). The in-app tab/lesson switches are covered by onMinnaHidden + the chapter handler,

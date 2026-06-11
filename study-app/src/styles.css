@@ -73,6 +73,13 @@
   .nav-btn.icon-only{padding:6px 8px}
   .nav-btn.icon-only .ic{font-size:16px}
   .nav-acct-name{max-width:190px;overflow:hidden;text-overflow:ellipsis;white-space:nowrap}
+  /* The みんなの日本語 speaking bar, docked in #navExtra: strip its block chrome (border/bg/
+     margin/padding) so it reads as part of the navbar rather than a card. Keeps the base
+     flex-wrap so a narrow viewport drops controls to a second line instead of clipping; the
+     device select is trimmed since long mic names would otherwise dominate the row. */
+  .nav-extra .speaking-bar{margin:0;padding:0;border:0;background:none;gap:8px;justify-content:center}
+  .nav-extra .speaking-bar.on{background:none;border:0}
+  .nav-extra .mic-select{max-width:150px}
 
   /* Tabs — the three top-level views. .active is driven by TAB NAV in JS. */
   .tabs{display:flex;gap:4px;border-bottom:1px solid var(--line);max-width:1100px;margin:18px auto 0;padding:0 20px}
@@ -594,7 +601,6 @@
   .speed-chip{padding:3px 9px;font-size:11px}
   .cmp-bias{display:inline-flex;align-items:center;gap:6px}
   .bias-slider{width:96px;accent-color:var(--ichidan);cursor:pointer}
-  .mic-hint{font-family:Georgia,serif;font-size:12px;color:var(--muted);opacity:.85;flex-basis:100%}
   /* Compare player — ▶ you / ▶ native / ▶ native→you + loop. Shows once a take exists. */
   .rec-compare{display:inline-flex;align-items:center;flex-wrap:wrap;gap:6px;margin-left:2px}
   .cmp-label{font-family:"SF Mono",ui-monospace,monospace;font-size:9px;letter-spacing:.12em;text-transform:uppercase;color:var(--muted)}

@@ -118,8 +118,10 @@ async function maybeTrim(blob, durationMs) {
 export function speakingBarHtml() {
   if (!RECORD_SUPPORTED) return '';
   const on = speakingMode;
-  // The mic picker + speed/bias controls only render WHILE speaking — off, the bar is just the
-  // toggle (the device/compare controls are meaningless until a stream is open).
+  // Docked in the navbar (#navExtra) so it floats at the top while studying. The mic picker +
+  // speed/bias controls only render WHILE speaking — off, the bar is just the toggle (the
+  // device/compare controls are meaningless until a stream is open). No verbose hint: the bar is
+  // compact in the navbar, and the toggle label is self-explanatory.
   return `<div class="speaking-bar${on ? ' on' : ''}">
     <button class="chip speaking-toggle${on ? ' active' : ''}" type="button" data-speaking-toggle aria-pressed="${on}">
       <svg class="ic" aria-hidden="true"><use href="#i-mic"/></svg>${on ? 'Speaking — tap to stop' : 'Practice speaking'}</button>
@@ -129,7 +131,6 @@ export function speakingBarHtml() {
     </span>` : ''}
     ${on ? speedControlHtml() : ''}
     ${on ? biasControlHtml() : ''}
-    <span class="mic-hint">${on ? 'Mic stays on — tap a word’s Record to capture just that take.' : 'Turn on to record yourself and compare to the native audio.'}</span>
   </div>`;
 }
 // The ▶ both balance crossfader (you ⟷ native). Reads the live compareBias; wired in
@@ -695,11 +696,12 @@ function handleCompare(control, action, btn) {
 }
 
 // Set the global compare speed from a speed-chip click: persist + sync, repaint the chip
-// active states in place (no re-render), and update any in-flight playback live.
-function setCompareSpeed(v, body) {
+// active states in place (no re-render), and update any in-flight playback live. `container` is
+// the element holding the speed chips (the navbar #navExtra slot).
+function setCompareSpeed(v, container) {
   settings.compareSpeed = clampSpeed(v);
   saveSettings();
-  body.querySelectorAll('.speed-chip').forEach(b => {
+  container.querySelectorAll('.speed-chip').forEach(b => {
     const on = Number(b.dataset.speed) === settings.compareSpeed;
     b.classList.toggle('active', on); b.setAttribute('aria-pressed', String(on));
   });
@@ -708,16 +710,26 @@ function setCompareSpeed(v, body) {
 }
 
 // ---------- wiring (delegated; attach-once, since renderMinnaLesson re-renders body) ----------
-export function wireMinnaRecord(body) {
-  if (body.dataset.recWired) return;   // body persists across re-renders — attach the delegate once
-  body.dataset.recWired = '1';
-  body.addEventListener('input', e => {
+// The speaking bar (speed chips + bias slider) lives in the navbar #navExtra slot, NOT in the
+// lesson body — so its delegate attaches there (the slot persists; minna.js re-fills it per
+// render). The toggle + mic picker are wired by minna.js (they re-render the lesson). Attach-once
+// via the spkWired guard on the slot element.
+export function wireSpeakingControls(navEl) {
+  if (navEl.dataset.spkWired) return;
+  navEl.dataset.spkWired = '1';
+  navEl.addEventListener('input', e => {
     const slider = e.target.closest('.bias-slider');
     if (slider) setCompareBias(Number(slider.value) / 100);
   });
-  body.addEventListener('click', e => {
+  navEl.addEventListener('click', e => {
     const speed = e.target.closest('[data-speed]');
-    if (speed) { setCompareSpeed(Number(speed.dataset.speed), body); return; }
+    if (speed) setCompareSpeed(Number(speed.dataset.speed), navEl);
+  });
+}
+export function wireMinnaRecord(body) {
+  if (body.dataset.recWired) return;   // body persists across re-renders — attach the delegate once
+  body.dataset.recWired = '1';
+  body.addEventListener('click', e => {
     const control = e.target.closest('.rec-control'); if (!control) return;
     if (e.target.closest('[data-rec-toggle]')) {
       const btn = e.target.closest('[data-rec-toggle]');
