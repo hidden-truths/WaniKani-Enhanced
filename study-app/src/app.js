@@ -25,7 +25,7 @@ import { loadCustom, saveCustom, saveCustomLocal } from './persistence/custom.js
 import { loadStore, save, saveLocal } from './persistence/store.js';
 import { settings, setSettings, DEFAULT_SETTINGS, applyFurigana, saveSettings, saveSettingsLocal } from './settings-store.js';
 import { speakWord, TTS_OK, initTtsUI } from './features/tts.js';
-import { provenanceBadge } from './features/render-helpers.js';
+import { provenanceBadge, jishoUrl } from './features/render-helpers.js';
 import { annotateJlptChips, annotateCatChips, annotateSourceChips, initA11y } from './features/a11y.js';
 import { initTabs, initFontSwitch, initTheme } from './features/chrome.js';
 import {
@@ -33,6 +33,7 @@ import {
   startDueSession, makeMultiSelect, wireFacets, paintSummary, syncVerbRows, paintPrefChips,
   registerStartSession, initDeckUI,
 } from './features/deck.js';
+import { session, startSession, renderExample, initFlashcardUI, registerSessionHooks } from './features/flashcard.js';
 import * as Core from './core/index.js';
 const {
   TYPE_LABEL, CATS, CAT_LABEL, colorClass, cardStamp,
@@ -176,250 +177,23 @@ updateDueBanner();
 updateStartLabel();
 
 /* ============================================================================
-   FLASHCARD SESSION
+   FLASHCARD SESSION → features/flashcard.js.
    ----------------------------------------------------------------------------
-   Lifecycle: startSession() builds a deck and shows the first card →
-   showCard() renders the current card (prompt only) → reveal() exposes the
-   answer → grade() records the result (updates stats + SRS + persists) and
-   advances → at the end, endSession() logs the session/daily totals and shows
-   the score screen.
-
-   `session` holds only ephemeral run state (the deck, the index, whether the
-   answer is shown, and a results array for the end-screen %). Durable data
-   goes straight into `state.store` via cardStat()/scheduleCard().
+   logSession stays here: it talks to the cloud api() + reads account (both still inline
+   below), and reads cfg.mode (deck). It's injected into flashcard via registerSessionHooks
+   so endSession can call it; maybeShowSignup (cloud, inline) is injected the same way.
+   When cloud is extracted, logSession moves with it.
    ========================================================================== */
-let session=null;
-
-// ---- Text-to-speech ----
-// speak/speakSynth/speakWord + TTS_OK/HTTP_SERVED/SPEECH_OK → features/tts.js (imported
-// above). playReading stays here because it reads the flashcard `session`. The audio-UI
-// hide for the no-audio case is initTtsUI() (must run once the DOM exists).
-function playReading(){ if(session)speakWord(session.deck[session.i]); }
 initTtsUI();
-// normKana + romajiToKana (typed-reading grading) live in core/kana.js.
-
-function startSession(){
-  const deck=buildDeck();
-  if(!deck.length){alert(cfg.kind==='srs'?"Nothing is due in that deck right now — switch to Free study to practice anyway.":"No cards in that deck yet.");return;}
-  session={deck,i:0,revealed:false,results:[],kind:cfg.kind};
-  document.getElementById('fcSetup').style.display='none';
-  document.getElementById('fcDone').classList.remove('active');
-  document.getElementById('fcStage').classList.add('active');
-  showCard();
-}
-// Render session.deck[session.i]. The two test directions swap which fields are
-// the prompt vs the answer. NOTE: prompt JP uses innerHTML (v.jp may carry
-// markup); reading/meaning use textContent. The mnemonic+tip always show on
-// the answer side as the "why".
-// ---- Leveled-example UI (answer side) ----
-// The chosen tier is the synced setting `settings.exampleLevel` (also the default
-// for Browse). Disabled tiers (no sentence for this verb) can't be picked; if the
-// saved tier is unavailable we fall back to the verb's own JLPT level, then the
-// easiest available. The whole block hides when the verb has no example at all.
-function renderExample(v){
-  const block=document.getElementById('exampleBlock'), seg=document.getElementById('exLevels');
-  const tiers=availableTiers(v);
-  if(tiers.length){
-    seg.style.display='';
-    seg.innerHTML=JLPT_TIERS.map(t=>`<button class="chip exlv" type="button" data-exlv="${t}"${tiers.includes(t)?'':' disabled'}>${t}</button>`).join('');
-  }else{ seg.style.display='none'; seg.innerHTML=''; }
-  let lvl=settings.exampleLevel;
-  if(tiers.length && !tiers.includes(lvl)) lvl = tiers.includes(v.jlpt)?v.jlpt:tiers[0];
-  [...seg.querySelectorAll('.exlv')].forEach(b=>b.classList.toggle('active', b.dataset.exlv===lvl && !b.disabled));
-  const ex=exampleForLevel(v,lvl);
-  if(ex){ document.getElementById('exJp').innerHTML=ex[0]; document.getElementById('exEn').textContent=ex[1]; block.hidden=false; }
-  else block.hidden=true;
-}
-// Pick a tier → remember it (synced setting) → re-render the current card's example.
-document.getElementById('exLevels').addEventListener('click',e=>{
-  const b=e.target.closest('.exlv'); if(!b||b.disabled)return;
-  settings.exampleLevel=b.dataset.exlv; saveSettings();
-  if(session) renderExample(session.deck[session.i]);
-});
-
-// Jisho.org dictionary deep-link for a headword. Shown on the answer side of the
-// flashcard and in the Browse detail modal. encodeURIComponent keeps kanji/kana
-// valid in the URL path (e.g. 食べる → /word/%E9%A3%9F%E3%81%B9%E3%82%8B).
-function jishoUrl(jp){ return 'https://jisho.org/word/'+encodeURIComponent(jp); }
-function showCard(){
-  const v=session.deck[session.i];
-  session.revealed=false;
-  document.getElementById('fcProgress').textContent=`Card ${session.i+1} of ${session.deck.length}`;
-  const fc=document.getElementById('flashcard');
-  fc.className='flashcard '+colorClass(v);   // sets the colored spine via CSS
-  void fc.offsetWidth; fc.classList.add('card-in');   // restart the card-advance entrance animation
-  if(cfg.mode==='meaning'){            // JP shown → recall meaning + reading
-    document.getElementById('promptLabel').textContent='Read this — give meaning + reading';
-    document.getElementById('promptMain').className='prompt-main jp';
-    document.getElementById('promptMain').innerHTML=v.jp;
-    document.getElementById('promptSub').textContent='';
-    document.getElementById('aRead').className='a-read jp';
-    document.getElementById('aRead').innerHTML=pitchHtml(v.read,v.accent);
-    document.getElementById('aMean').textContent=v.mean;
-  }else{                               // meaning shown → recall reading + kanji
-    document.getElementById('promptLabel').textContent='Give the reading + kanji';
-    document.getElementById('promptMain').className='prompt-main';
-    document.getElementById('promptMain').textContent=v.mean;
-    document.getElementById('promptSub').textContent=cardStamp(v).label;
-    document.getElementById('aRead').className='a-read jp';
-    document.getElementById('aRead').innerHTML=pitchHtml(v.read,v.accent)+' &nbsp; '+v.jp;
-    document.getElementById('aMean').textContent='';
-  }
-  document.getElementById('aNote').innerHTML=v.mnem+(v.tip?'<br><br>'+v.tip:'');
-  document.getElementById('jishoLink').href=jishoUrl(v.jp);   // dictionary deep-link
-  renderExample(v);                                   // leveled example (shown once revealed)
-  document.getElementById('answer').classList.remove('show');
-  // Reset the answer affordances for this card. Typed mode shows the kana input;
-  // self-graded shows the Reveal button. Grade buttons (+ any "suggested" ring and
-  // the typed verdict) start hidden; session.suggested clears so Enter won't grade.
-  const typed=cfg.input==='type';
-  document.getElementById('revealRow').style.display=typed?'none':'flex';
-  document.getElementById('inputRow').style.display=typed?'flex':'none';
-  document.getElementById('gradeRow').style.display='none';
-  document.getElementById('wrongBtn').classList.remove('suggested');
-  document.getElementById('rightBtn').classList.remove('suggested');
-  document.getElementById('typedVerdict').hidden=true;
-  session.suggested=undefined;
-  const inp=document.getElementById('answerInput');
-  inp.value=''; inp.disabled=false;
-  if(typed) setTimeout(()=>inp.focus(),0);
-}
-// Show the answer side (shared by self-graded Reveal and typed Check). Autoplays
-// the reading when Audio=Auto. Sets session.revealed so grading is permitted.
-function revealAnswer(){
-  session.revealed=true;
-  document.getElementById('answer').classList.add('show');
-  if(cfg.audio==='auto') playReading();
-}
-// Self-graded path: reveal, then flip to the two grade buttons.
-function reveal(){
-  revealAnswer();
-  document.getElementById('revealRow').style.display='none';
-  document.getElementById('gradeRow').style.display='flex';
-}
-// Typed path: grade the typed kana against v.read, reveal the answer + a verdict,
-// then surface the grade buttons with the auto-judged one emphasized. The verdict
-// is ADVISORY — the user can still override (typo forgiveness) via 1/2 or a click;
-// pressing Enter again accepts the suggested grade. session.suggested drives that.
-function submitTyped(){
-  const inp=document.getElementById('answerInput');
-  if(inp.disabled)return;                          // guard double-submit
-  const v=session.deck[session.i];
-  const correct=normKana(romajiToKana(inp.value))===normKana(v.read);
-  session.suggested=correct;
-  inp.disabled=true;
-  revealAnswer();
-  const verdict=document.getElementById('typedVerdict');
-  verdict.hidden=false;
-  verdict.className='verdict '+(correct?'ok':'bad');
-  verdict.innerHTML = correct
-    ? '<svg class="ic" aria-hidden="true"><use href="#i-check"/></svg>Correct'
-    : '<svg class="ic" aria-hidden="true"><use href="#i-x"/></svg>You typed “'+escapeHtml(inp.value.trim()||'—')+'”';
-  document.getElementById('inputRow').style.display='none';
-  document.getElementById('gradeRow').style.display='flex';
-  document.getElementById('wrongBtn').classList.toggle('suggested',!correct);
-  document.getElementById('rightBtn').classList.toggle('suggested',correct);
-}
-// Record one result: append to attempts + accuracy counters (BOTH study kinds —
-// free study still feeds accuracy/leech stats), then persist NOW (mid-session
-// crash safety). The SRS SCHEDULE only advances for a card that's actually DUE,
-// and only in an SRS session OR (in free study) when the freeReviewDue setting is
-// on — so reviewing a NOT-due card early never bumps its box/next-review date.
-function grade(correct){
-  const v=session.deck[session.i];
-  const c=cardStat(v.rank);
-  c.attempts.push(correct?1:0);
-  if(correct)c.right++;else c.wrong++;
-  if(isDue(v.rank) && (session.kind==='srs' || settings.freeReviewDue)) scheduleCard(c,correct);
-  session.results.push(correct?1:0);
-  save();
-  session.i++;
-  if(session.i>=session.deck.length){endSession();}
-  else{showCard();}
-}
-// Log the finished session into state.store.sessions (capped at 200) and roll its
-// totals into today's state.store.daily bucket (local date). Then show the score.
-// Guarded by results.length so an immediate "End session" with no grades is a
-// no-op for stats. (Per-card stats were already saved in grade().)
-// Local sessions kept for the Stats charts. Capped (the blob is synced whole), but
-// the DURABLE record is the server-side study_sessions log (logSession below) — so
-// even past this cap, no session history is ever lost for a signed-in user.
-const SESSIONS_LOCAL_CAP=1000;
-// Append a finished session to the durable server log (fire-and-forget; signed-in
-// only). Local + blob already hold it — this just guarantees it's never pruned.
+// Append a finished session to the durable server log (fire-and-forget; signed-in only).
+// Local + blob already hold it — this just guarantees it's never pruned. `mode` keeps the
+// test direction; `details.kind` carries the SRS/free distinction.
 function logSession(right,tot,kind){
-  if(typeof account==='undefined' || !account)return;
-  // `mode` keeps the test direction (server column); `details.kind` carries the
-  // SRS/free distinction so the durable log can differentiate the two.
+  if(!account)return;
   try{ api('/v1/sessions',{method:'POST',body:{right,total:tot,mode:cfg.mode,details:{kind,direction:cfg.mode}}}).catch(()=>{}); }catch(e){}
 }
-function endSession(){
-  document.getElementById('fcStage').classList.remove('active');
-  // Ended with nothing graded (e.g. immediate "End session") → don't show an empty
-  // score card; just return to the picker.
-  if(!session || !session.results.length){
-    document.getElementById('fcDone').classList.remove('active');
-    document.getElementById('fcSetup').style.display='block';
-    updateDeckCount();updateDueBanner();updateStartLabel();
-    return;
-  }
-  const right=session.results.reduce((s,x)=>s+x,0),tot=session.results.length;
-  state.store.sessions.push({t:Date.now(),right,tot,kind:session.kind});
-  if(state.store.sessions.length>SESSIONS_LOCAL_CAP)state.store.sessions=state.store.sessions.slice(-SESSIONS_LOCAL_CAP);
-  const day=localDay();
-  if(!state.store.daily[day])state.store.daily[day]={right:0,tot:0};
-  state.store.daily[day].right+=right;state.store.daily[day].tot+=tot;
-  save();                            // localStorage + debounced progress-blob push
-  logSession(right,tot,session.kind); // durable append-only server log (never pruned)
-  document.getElementById('doneScore').textContent=Math.round(100*right/tot)+'%';
-  document.getElementById('doneDetail').textContent=`${right} of ${tot} correct`;
-  if(typeof maybeShowSignup==='function')maybeShowSignup();   // nudge after first real session
-  document.getElementById('fcDone').classList.add('active');
-}
-// Button wiring for the session controls.
-document.getElementById('startBtn').addEventListener('click',()=>startSession());
-document.getElementById('dueBtn').addEventListener('click',startDueSession);
-// Forecast horizon toggle (24h/week/month/year): view-only, re-renders the bars.
-document.getElementById('fcHorizons').addEventListener('click',e=>{
-  const b=e.target.closest('.fch'); if(!b)return;
-  forecastHorizon=b.dataset.h;
-  document.querySelectorAll('.fch').forEach(x=>x.classList.toggle('active',x===b));
-  renderForecast();
-});
-document.getElementById('revealBtn').addEventListener('click',reveal);
-document.getElementById('checkBtn').addEventListener('click',submitTyped);
-document.getElementById('speakBtn').addEventListener('click',playReading);
-// Enter inside the kana field submits the typed answer (the global handler skips
-// keys while the field is focused, so this is the one place Enter→submit lives).
-document.getElementById('answerInput').addEventListener('keydown',e=>{
-  if(e.key==='Enter'){e.preventDefault();submitTyped();}
-});
-document.getElementById('wrongBtn').addEventListener('click',()=>grade(false));
-document.getElementById('rightBtn').addEventListener('click',()=>grade(true));
-document.getElementById('endBtn').addEventListener('click',endSession);
-// "Study again" returns to the picker and refreshes the live counts/banner.
-document.getElementById('againBtn').addEventListener('click',()=>{
-  document.getElementById('fcDone').classList.remove('active');
-  document.getElementById('fcSetup').style.display='block';
-  updateDeckCount();updateDueBanner();updateStartLabel();
-});
-// Keyboard shortcuts (only while a card is on screen, and not while typing in the
-// kana field — Enter-to-submit is bound on the input itself).
-//   Before reveal: Space/Enter flips the card (typed mode: Enter submits instead).
-//   After reveal:  Space / Enter / 2  → CORRECT ;  X / 1  → WRONG.
-document.addEventListener('keydown',e=>{
-  if(!document.getElementById('fcStage').classList.contains('active'))return;
-  if(e.target===document.getElementById('answerInput'))return;   // field owns its keys
-  const k=e.key, isSpace=e.code==='Space', isEnter=k==='Enter';
-  if(!session.revealed){
-    if(cfg.input==='type'){ if(isEnter){e.preventDefault();submitTyped();} }   // typed: Enter submits
-    else if(isSpace||isEnter){ e.preventDefault(); reveal(); }                  // self: flip
-    return;
-  }
-  // Revealed → grade. Space/Enter/2 mark correct; X/1 mark wrong.
-  if(isSpace||isEnter||k==='2'){ e.preventDefault(); grade(true); }
-  else if(k==='1'||k==='x'||k==='X'){ e.preventDefault(); grade(false); }
-});
+registerSessionHooks({ logSession, maybeShowSignup });
+initFlashcardUI();
 
 /* ============================================================================
    BROWSE — the reference grid. Independent filter state (bcfg) from the study
