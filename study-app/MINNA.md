@@ -442,8 +442,24 @@ helpers in [src/core/recordings.js](src/core/recordings.js).
 
 ### Polish
 
-- **Furigana** on the example/conversation sentences (plain JP today) — reuse the global
-  `<html data-furigana>` flip the rest of the app already has.
+- ~~**Furigana** on the example/conversation sentences~~ — **shipped.** The grammar examples,
+  lesson example sentences, and conversation lines (L22–24, 79 sentences) now carry `<ruby>`
+  furigana, rendered via a `rubyHtml()` sanitizer (escapes everything except the ruby tag set)
+  instead of `escapeHtml`, so the global `<html data-furigana>` flip toggles their readings —
+  the same toggle the rest of the app uses. Readings are model-generated (validated by
+  `wk-enhanced-api/scripts/apply-furigana.ts`, which enforces that stripping the ruby reproduces
+  the original sentence byte-for-byte) → worth a proofread.
+- ~~**Audio for the example sentences**~~ — **shipped (local TTS pre-generation).** The grammar/
+  lesson example rows (and the answer-side flashcard example) gained a `.speak-btn` that plays
+  `speak(plainText(jp))` → `/v1/tts`. The server's `/v1/tts` is now storage-backed and prefers a
+  locally pre-generated **Apple-voice** clip (Kyoko, `.m4a`) over Google: build the macOS CLI
+  (`swiftc -O wk-enhanced-api/scripts/jp-tts.swift -o …/jp-tts`) then run
+  `bun scripts/generate-tts.ts` to voice every reading + example sentence and upload to storage.
+  See the TTS dead-end in [CLAUDE.md](CLAUDE.md).
+- ~~**Native audio served from our storage, not vnjpclub**~~ — **shipped.** `/v1/minna/audio`
+  always cached on first play; `wk-enhanced-api/scripts/prefetch-minna-audio.ts` now downloads
+  the whole lesson catalogue's audio up front so we never round-trip to vnjpclub at play time
+  (run with the prod S3 env to seed prod).
 - **Per-line conversation audio** if vnjpclub (or another source) exposes it — the line
   model would gain an optional `audio` field; the single-file player stays as a fallback.
 

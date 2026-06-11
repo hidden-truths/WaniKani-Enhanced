@@ -400,6 +400,15 @@ Component contracts you must preserve:
   "chopsticks" are both はし). `ttsText` sends the **kanji headword** (`v.jp`) when it has
   kanji so Google applies the dictionary accent; `v.tts` overrides an ambiguous single
   kanji (e.g. 角→つの). The visible reading is always `v.read`. `speakWord(v)` wraps it.
+  **`/v1/tts` is storage-backed + Apple-voice-preferred (server side).** The server now serves
+  `/v1/tts` from a three-tier cache (in-process → our storage → Google), persisting the Google
+  clip on first hit and preferring a **locally pre-generated Apple-voice `.m4a`** (Kyoko) when
+  one exists — so the same `speak()` call gets the nicer on-device voice for any text we've
+  pre-generated (`wk-enhanced-api/scripts/jp-tts.swift` + `generate-tts.ts`). **Example
+  sentences are now spoken too:** the answer-side example (`#exSpeak` in `flashcard.js`) and the
+  みんなの日本語 grammar/lesson example rows (`ttsSentenceBtn` in `minna.js`) carry a `.speak-btn.sm`
+  that plays `speak(plainText(jp))` — `plainText` (core/text.js) strips ruby to the base sentence,
+  the exact string `/v1/tts` keys on, so the client request and the pre-gen driver agree.
 - **Pitch accent is shown VISUALLY (`pitchHtml`), because the TTS audio can't be pitch-
   controlled.** A card's `accent` number (0=heiban, 1=atamadaka, k=drop after mora k) →
   `pitchHtml(reading, accent)` splits the reading into morae (`splitMora`) and draws an

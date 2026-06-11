@@ -143,6 +143,19 @@ build/test setup, and its own deploy.**
 This is the priority. The items below are smaller and can follow.
 
 ## Done (most recent first)
+- ~~Minna furigana + local TTS pre-generation + native-audio prefetch~~ — **shipped** (6 commits
+  on `minna-phase2-record-compare`). (1) **Furigana** on the Minna grammar/lesson/conversation
+  sentences (L22–24, 79 sentences): a `rubyHtml()` sanitizer renders curated `<ruby>` while
+  escaping everything else, so the existing `data-furigana` flip toggles them; content is
+  model-generated and gated by `apply-furigana.ts` (round-trip-preserving validator). (2) **Local
+  macOS TTS**: `/v1/tts` is now a three-tier storage-backed cache that **prefers a pre-generated
+  Apple-voice `.m4a`** (Kyoko) over Google and persists Google clips; `jp-tts.swift`
+  (`AVSpeechSynthesizer`→AAC) + `generate-tts.ts` voice every reading + example sentence and
+  upload to storage. (3) **Example sentences are now spoken** (answer-side flashcard example +
+  Minna example rows, `speak(plainText(jp))`). (4) **Minna native audio** is prefetched into our
+  storage (`prefetch-minna-audio.ts`) so we never round-trip to vnjpclub at play time. The
+  Apple-voice readings/sentences still want a real-ear proofread, and the furigana wants a
+  reading-accuracy proofread. See [MINNA.md](MINNA.md) + the TTS dead-end in [CLAUDE.md](CLAUDE.md).
 - ~~UI chrome: sticky navbar + record-and-compare follow-ups~~ — **shipped** (on
   `minna-phase2-record-compare`). Replaced the old header (kicker + big headline + button
   toolbar) with a **sticky top navbar**: title (left); theme + settings as **icon-only** buttons;
