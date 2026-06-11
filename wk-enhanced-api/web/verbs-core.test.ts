@@ -37,6 +37,7 @@ type Core = {
   minnaStore: any;
   splitMora: (s: string) => string[];
   pitchHtml: (reading: string, accent: any) => string;
+  minnaSig: (v: any) => string;
   cardStamp: (v: any) => { label: string; cls: string };
   colorClass: (v: any) => string;
   CATS: string[];
@@ -60,7 +61,7 @@ function loadCore(): Core {
     verbs + "\n" + examples + "\n" + appSrc +
     `\n;return { passes, oneGroup, facetAll, facetMatch, scheduleCard, cardStat,
       isDue, dueCards, rollingAcc, isLeech, leeches, normKana, romajiToKana, reviewForecast, filterSummary, tokenFacet, deckLabel, ttsText,
-      cardStamp, colorClass, CATS, minnaBuiltinRank, applyMinnaOverlays, splitMora, pitchHtml,
+      cardStamp, colorClass, CATS, minnaBuiltinRank, applyMinnaOverlays, splitMora, pitchHtml, minnaSig,
       exampleForLevel, availableTiers, JLPT_TIERS,
       BOX_DAYS, get DATA(){return DATA}, get store(){return store}, set store(v){store=v},
       get minnaStore(){return minnaStore}, set minnaStore(v){minnaStore=v} };`;
@@ -402,6 +403,20 @@ test("ttsText sends the kanji headword (accent-disambiguating), else the reading
   expect(core.ttsText({ jp: "ホームステイ", read: "ホームステイ" })).toBe("ホームステイ");
   // explicit per-card override wins (escape hatch for an ambiguous single kanji)
   expect(core.ttsText({ jp: "角", read: "かど", tts: "かど" })).toBe("かど");
+});
+
+test("minnaSig reflects content (accent/mnem/tip/levels), not just tags — so 'Update N words' fires", () => {
+  const base = { tags: ["みんなの日本語", "mnn-l23", "iTalki"], italki: true };
+  const bare = { ...base }; // activated before content existed
+  const withContent = { ...base, accent: 2, mnem: "hook", tip: "trap", levels: { N5: ["a", "b"] } };
+  // same tags+italki, but content differs → signatures must differ (else the button greys out)
+  expect(core.minnaSig(bare)).not.toBe(core.minnaSig(withContent));
+  // changing any one content field changes the sig
+  expect(core.minnaSig(withContent)).not.toBe(core.minnaSig({ ...withContent, accent: 1 }));
+  expect(core.minnaSig(withContent)).not.toBe(core.minnaSig({ ...withContent, mnem: "other" }));
+  expect(core.minnaSig(withContent)).not.toBe(core.minnaSig({ ...withContent, levels: { N5: ["a", "c"] } }));
+  // identical content → identical sig (stable once updated → button re-greys)
+  expect(core.minnaSig(withContent)).toBe(core.minnaSig({ ...withContent }));
 });
 
 test("minnaBuiltinRank detects when a Minna word already exists as a built-in verb", () => {

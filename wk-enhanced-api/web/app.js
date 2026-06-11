@@ -1974,7 +1974,8 @@ function minnaOverlay(item, lesson){
   if(item.accent!=null)o.accent=item.accent; if(item.tts)o.tts=item.tts;
   return o;
 }
-const overlaySig=o=>(o.tags||[]).join('|')+'·'+(o.italki?'1':'0');
+// Overlap words: the only Minna-controlled data on the built-in is tags/italki + accent.
+const overlaySig=o=>(o.tags||[]).join('|')+'·i'+(o.italki?1:0)+'·a'+(o.accent??'');
 // A word is in the deck if it's a custom card OR an overlay on a built-in.
 function minnaInDeck(key){
   if(loadCustom().verbs.some(v=>v.minnaKey===key))return true;
@@ -1983,7 +1984,10 @@ function minnaInDeck(key){
 }
 // Signature of the metadata a re-activation can change (tags + iTalki flag), so we
 // can tell "already in deck, up to date" from "in deck but missing new info".
-const minnaSig=v=>(v.tags||[]).join('|')+'·'+(v.italki?'1':'0');
+// Signature of everything a re-activation can change — tags + iTalki flag AND the
+// generated content (accent / mnemonic / tip / leveled examples). Including content is
+// what lets "Update N words" appear when a card predates content added to the lesson.
+const minnaSig=v=>(v.tags||[]).join('|')+'·i'+(v.italki?1:0)+'·a'+(v.accent??'')+'·m'+(v.mnem||'')+'·t'+(v.tip||'')+'·L'+(v.levels?JSON.stringify(v.levels):'');
 // Non-mutating preview of what "Add all vocab to deck" would do: how many words are in
 // the deck, new (toAdd), or already-added but carrying stale metadata (toUpdate). Words
 // that match a built-in are tracked via the overlay map; the rest via custom cards.
@@ -2106,7 +2110,7 @@ async function renderMinnaLesson(n, body){
   // → disabled "All vocab in your deck".
   const st=minnaActivationStatus(n, L.vocab||[]);
   const btn = st.toAdd ? {ic:'plus',   label:'Add all vocab to deck', dis:''}
-    : st.toUpdate     ? {ic:'refresh', label:'Update '+st.toUpdate+' vocab tag'+(st.toUpdate===1?'':'s'), dis:''}
+    : st.toUpdate     ? {ic:'refresh', label:'Update '+st.toUpdate+' word'+(st.toUpdate===1?'':'s'), dis:''}
     :                   {ic:'check',   label:'All vocab in your deck', dis:' disabled'};
   body.innerHTML=`
     <div class="mn-head" style="margin-top:14px">
