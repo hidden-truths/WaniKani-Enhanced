@@ -6,34 +6,34 @@
    global scope. No bundler, no modules — see the architecture map + data model +
    design decisions in the top-of-file comment of index.html (the source of truth).
 
-   Section banners below mirror the original single-file layout: DATA/STORAGE/SRS →
+   Section banners below mirror the original single-file layout: state.DATA/STORAGE/SRS →
    TAB NAV → FONT/THEME → EXPORT/IMPORT → DECK BUILDING → FLASHCARD → BROWSE →
    STATS+CHARTS → CUSTOM VERBS → CLOUD ACCOUNTS + SYNC.
    ========================================================================== */
-// Conjugation/word-class subtype labels (the `type` field). Verbs use
-// godan/ichidan/irregular; adjectives reuse `type` for the い/な split. Nouns,
-// adverbs and phrases have no subtype (type:'' → no entry here).
-const TYPE_LABEL={godan:"GODAN",ichidan:"ICHIDAN",irregular:"IRREG","i-adj":"い-ADJ","na-adj":"な-ADJ"};
-// Part-of-speech categories (the `cat` field). 'verb' is the historical default
-// (still all 100 built-ins); the rest are addable via the add-card modal. CATS is
-// the canonical order + the membership test used by the `cat` filter facet.
-const CATS=['verb','adjective','noun','adverb','phrase'];
-const CAT_LABEL={verb:'VERB',adjective:'ADJ',noun:'NOUN',adverb:'ADVERB',phrase:'PHRASE'};
-// The color token a card paints with (spine / hanko stamp): its subtype if it has
-// one (godan, i-adj, …), else its category (noun, adverb, …). Drives the CSS class.
-const colorClass=v=>v.type||v.cat||'';
-// The hanko stamp shown on Browse cards + the detail modal: the subtype label when
-// present (GODAN / い-ADJ), else the bare category (NOUN / PHRASE). `cls` is the
-// matching CSS color class.
-function cardStamp(v){
-  if(v.type&&TYPE_LABEL[v.type]) return {label:TYPE_LABEL[v.type],cls:v.type};
-  return {label:CAT_LABEL[v.cat]||(v.cat||'').toUpperCase(),cls:v.cat||''};
-}
+// ---------------------------------------------------------------------------
+// ES-module imports. The dataset + leveled examples are data modules; the pure,
+// unit-tested core (SRS, facets, forecast, kana, pitch, examples, text, minna)
+// lives under core/; the shared mutable deck/progress lives in state.js. We pull
+// the core names into local bindings so the call sites below read exactly as they
+// did when this was one classic script.
+import './styles.css';
+import { VERBS } from './data/verbs.js';
+import { state, attachLevels } from './state.js';
+import * as Core from './core/index.js';
+const {
+  TYPE_LABEL, CATS, CAT_LABEL, colorClass, cardStamp,
+  BOX_DAYS, BOX_COLORS, cardStat, scheduleCard, isDue, dueCards, nextDueLabel, rollingAcc, isLeech, leeches,
+  forecastWindow, reviewForecast,
+  oneGroup, facetAll, facetMatch, passes, DECK_FACETS, TOKEN_FACET, tokenFacet, DECK_LABEL, deckLabel, filterSummary,
+  JLPT_TIERS, availableTiers, exampleForLevel,
+  normKana, romajiToKana, splitMora, pitchHtml, escapeHtml, ttsText,
+  minnaBuiltinRank, applyMinnaOverlays, minnaSig,
+} = Core;
 // ---- CUSTOM VERBS storage (user-added; synced to the cloud when signed in) ----
 // Shape: { seq:<monotonic rank counter, starts at 100>, verbs:[ <verb>, … ] }.
 // Each custom verb has the same fields as a baked one plus custom:true, and a
 // rank assigned from `seq` (101, 102, …) that is never reused — so progress keyed
-// by rank in `store.cards` stays stable across deletes.
+// by rank in `state.store.cards` stays stable across deletes.
 //   saveCustomLocal() = localStorage only (used by cloud-pull to avoid re-pushing).
 //   saveCustom()      = localStorage + a debounced cloud push (the normal path).
 const CUSTOM_KEY='jpverbs_custom';
@@ -41,92 +41,51 @@ function loadCustom(){ try{const o=JSON.parse(localStorage.getItem(CUSTOM_KEY));
 function saveCustomLocal(o){ try{localStorage.setItem(CUSTOM_KEY,JSON.stringify(o));}catch(e){} }
 function saveCustom(o){ saveCustomLocal(o); if(typeof scheduleCustomSync==='function')scheduleCustomSync(); }
 
-// DATA is the live deck: the baked-in VERBS (minus any v.skip) plus the user's
+// state.DATA is the live deck: the baked-in VERBS (minus any v.skip) plus the user's
 // own custom verbs. It's a `let` rebuilt by rebuildData() so every reader
 // (buildDeck/dueCards/leeches/renderBrowse/renderStats) picks up added/edited/
-// deleted custom verbs without re-binding. MAXRANK tracks the highest rank present
+// deleted custom verbs without re-binding. state.MAXRANK tracks the highest rank present
 // so the rank-range filter can extend past 100 to include custom verbs.
-let DATA=VERBS.filter(v=>!v.skip).concat(loadCustom().verbs);
-let MAXRANK=DATA.reduce((m,v)=>Math.max(m,v.rank),0)||100;
+// Initial deck build (built-ins + custom). state.DATA/state.MAXRANK live in state.js;
+// boot's rebuildData() re-applies Minna overlays. attachLevels() runs just below.
+state.DATA=VERBS.filter(v=>!v.skip).concat(loadCustom().verbs);
+state.MAXRANK=state.DATA.reduce((m,v)=>Math.max(m,v.rank),0)||100;
 
-// Built-in headword (jp) → rank. Lets Minna activation detect when a word already
-// exists as a baked-in verb, so it reuses that rich card (examples + mnemonic) via an
-// overlay instead of adding a bare duplicate. See applyMinnaOverlays / activateMinnaVocab.
-const BUILTIN_RANK_BY_JP={};
-VERBS.filter(v=>!v.skip).forEach(v=>{ if(!(v.jp in BUILTIN_RANK_BY_JP))BUILTIN_RANK_BY_JP[v.jp]=v.rank; });
-
-// ---- Leveled example sentences ----
-// Each built-in verb gets `v.levels` = EXAMPLES[rank] = {N5:[jp,en],…,N1:[jp,en]}
-// (from examples.js). attachLevels() runs after every DATA rebuild. Custom verbs
-// have no entry (EXAMPLES is 1..100), so they keep `levels:null` and fall back to
-// their single `ex`. JLPT_TIERS is the easy→hard order the UI selector uses.
-const JLPT_TIERS=['N5','N4','N3','N2','N1'];
-function attachLevels(){
-  const E = typeof EXAMPLES!=='undefined' ? EXAMPLES : {};
-  DATA.forEach(v=>{
-    // Built-ins index EXAMPLES by rank; Minna custom cards carry their own embedded
-    // `levels` (from the lesson JSON) — keep those rather than nulling them.
-    v.levels = E[v.rank] || v.levels || null;
-    // Pitch accent: a card's own accent (Minna lesson item / overlay) wins; otherwise
-    // backfill the built-in's from the ACCENTS map (keyed by rank, defined in verbs.js).
-    if(v.accent==null && typeof ACCENTS!=='undefined' && ACCENTS[v.rank]!=null) v.accent=ACCENTS[v.rank];
-    // Part-of-speech category. Everything is currently a verb, but tagging it now
-    // is the groundwork for broadening past verbs (adjectives / nouns / phrases):
-    // future filters/labels can key off cat without backfilling the dataset.
-    if(!v.cat) v.cat='verb';
-  });
-}
+// state.BUILTIN_RANK_BY_JP + attachLevels live in state.js; the tier/pick helpers
+// (availableTiers/exampleForLevel) in core/examples.js. attachLevels() is called
+// after the initial state.DATA build below and after every rebuildData().
 attachLevels();
-// Which tiers does this verb actually have a sentence for? (drives the selector).
-function availableTiers(v){ return v.levels ? JLPT_TIERS.filter(t=>v.levels[t]) : []; }
-// Pick the [jp,en] example for a verb at a JLPT level, with graceful fallback:
-// exact tier → nearest available tier (search outward) → the verb's single `ex`
-// → null. Pure — unit-tested.
-function exampleForLevel(v, level){
-  const L=v.levels;
-  if(L){
-    if(L[level]) return L[level];
-    const i=JLPT_TIERS.indexOf(level);
-    for(let d=1; d<JLPT_TIERS.length; d++){
-      const lo=i-d>=0?JLPT_TIERS[i-d]:null, hi=i+d<JLPT_TIERS.length?JLPT_TIERS[i+d]:null;
-      if(lo&&L[lo]) return L[lo];
-      if(hi&&L[hi]) return L[hi];
-    }
-  }
-  if(v.ex&&v.ex.length) return v.ex[0];
-  return null;
-}
 
 /* ============================================================================
    STORAGE + SRS
    ----------------------------------------------------------------------------
    All progress lives in ONE localStorage key as a single JSON blob (see the
-   `store` shape in the file header). Persistence model:
-     • Mutations happen in memory on the `store` object.
+   `state.store` shape in the file header). Persistence model:
+     • Mutations happen in memory on the `state.store` object.
      • save() is called after every grade (so a tab-close mid-session doesn't
        lose progress) and after import/reset.
    save() and the initial read are wrapped in try/catch because localStorage
    can throw (private mode, quota, disabled). Failure degrades to in-memory-
    only — the app still runs, it just won't persist.
 
-   SCHEMA VERSIONING: the key is suffixed "_v3". If the store shape changes
+   SCHEMA VERSIONING: the key is suffixed "_v3". If the state.store shape changes
    incompatibly, bump to _v4 and (ideally) write a migration that reads the old
    key. Right now we do soft per-field migration in cardStat() instead.
    ========================================================================== */
 const KEY="jpverbs_v3";
-let store;
-try{ store=JSON.parse(localStorage.getItem(KEY))||null; }catch(e){ store=null; }
-if(!store) store={cards:{},sessions:[],daily:{}};
+// state.store: defaulted in state.js, hydrated from localStorage just below.
+try{ state.store=JSON.parse(localStorage.getItem(KEY))||null; }catch(e){ state.store=null; }
+if(!state.store) state.store={cards:{},sessions:[],daily:{}};
 // Guards: tolerate older/partial saves missing a top-level collection.
-if(!store.cards)store.cards={};
-if(!store.sessions)store.sessions=[];
-if(!store.daily)store.daily={};
+if(!state.store.cards)state.store.cards={};
+if(!state.store.sessions)state.store.sessions=[];
+if(!state.store.daily)state.store.daily={};
 // saveLocal() persists to localStorage only (instant, offline-safe). save()
 // additionally schedules a debounced push to the cloud when signed in — see
 // the CLOUD ACCOUNTS + SYNC section near the bottom of this script. Splitting
 // them lets cloud-hydration write localStorage WITHOUT re-pushing the same
 // bytes back to the server.
-function saveLocal(){ try{localStorage.setItem(KEY,JSON.stringify(store));}catch(e){} }
+function saveLocal(){ try{localStorage.setItem(KEY,JSON.stringify(state.store));}catch(e){} }
 function save(){ saveLocal(); if(typeof scheduleCloudSync==='function')scheduleCloudSync(); }
 
 // Local-time YYYY-MM-DD. We deliberately AVOID toISOString() alone because it's
@@ -138,52 +97,9 @@ function localDay(d){
   return new Date(d-tz).toISOString().slice(0,10);
 }
 
-/* ---- Leitner spaced repetition ----
-   Chosen over SM-2 for transparency: the interval is a pure function of the
-   box, so a learner can see exactly why a card is due. box 0 = new/unseen;
-   boxes 1..5 map to the day intervals below. Promote one box on a correct
-   answer (capped at 5), reset to box 1 on a miss. To switch to ease-factor
-   scheduling (SM-2), rewrite scheduleCard() — nothing else depends on the
-   internal box mechanics except the box histogram in renderStats(). */
-const BOX_DAYS=[0,1,2,4,8,16];   // index = box number; value = days until due
-const DAY_MS=86400000;
-// Box maturity palette, index 0=New … 5=mastered (New→stone, then a
-// red→amber→gold→olive→green gradient as cards graduate to longer intervals).
-// Shared by the Stats box histogram (renderStats) and the per-card SRS indicator
-// in the Browse detail modal (detailMemoryLine) so the colors stay in lock-step.
-const BOX_COLORS=['var(--muted)','var(--godan)','#d98a3d','#c9b037','#7fae54','var(--good)'];
-// Lazily create a card's stat record. Also soft-migrates pre-SRS saves that
-// have attempts/right/wrong but no box/due fields.
-function cardStat(rank){
-  if(!store.cards[rank]) store.cards[rank]={attempts:[],right:0,wrong:0,box:0,due:0};
-  const c=store.cards[rank];
-  if(c.box===undefined)c.box=0;
-  if(c.due===undefined)c.due=0;
-  return c;
-}
-// Apply one review result to a card's schedule. Caller persists via save().
-function scheduleCard(c,correct){
-  if(correct){ c.box=Math.min(5,(c.box||0)+1); }
-  else { c.box=1; } // lapse → box 1 (back to a 1-day interval, not box 0)
-  c.due=Date.now()+BOX_DAYS[c.box]*DAY_MS;
-}
-// A card is "due" if never seen, still new (box 0), or its due time has passed.
-function isDue(rank){
-  const c=store.cards[rank];
-  if(!c)return true;
-  if(!c.box)return true;
-  return (c.due||0)<=Date.now();
-}
-function dueCards(){ return DATA.filter(v=>isDue(v.rank)); }
-// Human-readable "next review" string for the Browse card detail.
-function nextDueLabel(rank){
-  const c=store.cards[rank];
-  if(!c||!c.box)return "new";
-  const days=Math.ceil(((c.due||0)-Date.now())/DAY_MS);
-  if(days<=0)return "due now";
-  if(days===1)return "1 day";
-  return days+" days";
-}
+// Leitner SRS (BOX_DAYS / cardStat / scheduleCard / isDue / dueCards /
+// nextDueLabel) lives in core/srs.js; the forecast helpers in core/forecast.js;
+// rollingAcc / isLeech / leeches there too. All read the shared state.store / state.DATA.
 
 /* ---- Upcoming-review forecast ----
    Buckets every SCHEDULED card (box>0) into time slots for a chosen window so the
@@ -192,37 +108,11 @@ function nextDueLabel(rank){
    window aren't shown (it's a forecast of the window, not a full census). Note the
    Leitner intervals top out at 16 days (BOX_DAYS), so the month view captures the
    whole real schedule and the year view is mostly front-loaded — that's accurate,
-   not a bug. reviewForecast() is pure (DATA + store in, buckets out); renderForecast()
+   not a bug. reviewForecast() is pure (state.DATA + state.store in, buckets out); renderForecast()
    draws the hand-rolled vertical-bar SVG (no chart lib, per the no-build contract). */
-const HOUR_MS=3600000;
-const WEEKDAYS=['Sun','Mon','Tue','Wed','Thu','Fri','Sat'];
-const MONTHS=['Jan','Feb','Mar','Apr','May','Jun','Jul','Aug','Sep','Oct','Nov','Dec'];
 let forecastHorizon='week';   // '24h' | 'week' | 'month' | 'year' — view-only, not synced
-// Each window has a FIXED slot count so the breakdown reads cleanly: 24h→24 hourly
-// slots, week→7 days, month→the current month's day count (28–31), year→12 months.
-// `tip` is the per-slot hover/label suffix; `lab(i)` is the (possibly empty) x-axis
-// label — sparse for the dense windows. base is now, used for weekday/month names.
-function forecastWindow(h,base){
-  if(h==='24h')  return {slots:24, idxOf:ms=>Math.floor(ms/HOUR_MS),       lab:i=>i===0?'now':(i%6===0?'+'+i+'h':''),                 tip:i=>i===0?'next hour':'in '+i+'h'};
-  if(h==='week') return {slots:7,  idxOf:ms=>Math.floor(ms/DAY_MS),        lab:i=>i===0?'today':WEEKDAYS[(base.getDay()+i)%7],         tip:i=>i===0?'today':WEEKDAYS[(base.getDay()+i)%7]};
-  if(h==='month'){const dim=new Date(base.getFullYear(),base.getMonth()+1,0).getDate();
-                 return {slots:dim,idxOf:ms=>Math.floor(ms/DAY_MS),        lab:i=>i===0?'today':(i%5===0?'+'+i+'d':''),                tip:i=>i===0?'today':'in '+i+'d'};}
-  return              {slots:12, idxOf:ms=>Math.floor(ms/(30*DAY_MS)),  lab:i=>MONTHS[(base.getMonth()+i)%12],                     tip:i=>i===0?'this month':'in '+i+'mo'};
-}
-function reviewForecast(h){
-  const now=Date.now(), base=new Date(now);
-  const w=forecastWindow(h,base);
-  const bars=Array.from({length:w.slots},(_,i)=>({label:w.lab(i),tip:w.tip(i),count:0,now:i===0}));
-  DATA.forEach(v=>{
-    const c=store.cards[v.rank];
-    if(!c||!c.box)return;                         // new/unseen cards aren't scheduled yet
-    const delta=(c.due||0)-now;
-    let idx=delta<=0?0:w.idxOf(delta);            // overdue / due-now → first slot
-    if(idx<0)idx=0;
-    if(idx<w.slots)bars[idx].count++;             // beyond the window → not shown
-  });
-  return {bars,max:bars.reduce((m,b)=>Math.max(m,b.count),0)};
-}
+// forecastWindow + reviewForecast (pure bucketing) live in core/forecast.js;
+// renderForecast (the SVG draw) stays below.
 function renderForecast(){
   const el=document.getElementById('forecastChart'); if(!el)return;
   const {bars,max}=reviewForecast(forecastHorizon);
@@ -250,25 +140,10 @@ function renderForecast(){
   el.innerHTML=g;
 }
 
-// Rolling accuracy over the last n attempts (default 8). null = never drilled.
-// Used for the worst-first sort, the per-card bars, and leech detection.
-function rollingAcc(rank,n=8){
-  const c=store.cards[rank]; if(!c||!c.attempts.length)return null;
-  const a=c.attempts.slice(-n); return a.reduce((s,x)=>s+x,0)/a.length;
-}
-// LEECH = a card you keep failing. Definition: over its last 8 attempts, at
-// least 4 attempts AND under 60% correct. The "≥4" floor avoids flagging a
-// card as a leech off one or two early misses. Tune the 0.6 / 4 / 8 here.
-function isLeech(rank){
-  const c=store.cards[rank]; if(!c)return false;
-  const a=c.attempts.slice(-8);
-  return a.length>=4 && (a.reduce((s,x)=>s+x,0)/a.length)<0.6;
-}
-function leeches(){ return DATA.filter(v=>isLeech(v.rank)); }
 
 /* ============================================================================
    TAB NAV — show one panel, hide the rest. Stats/Browse re-render on show so
-   they always reflect the latest store.
+   they always reflect the latest state.store.
    ========================================================================== */
 document.querySelectorAll('.tab').forEach(t=>t.addEventListener('click',()=>{
   document.querySelectorAll('.tab').forEach(x=>x.classList.remove('active'));
@@ -345,14 +220,14 @@ document.getElementById('themeToggle').addEventListener('click',()=>{
 
 /* ============================================================================
    EXPORT / IMPORT — the only way to move progress between browsers/devices
-   (there's no backend). Export downloads the whole `store` as pretty JSON via
+   (there's no backend). Export downloads the whole `state.store` as pretty JSON via
    a temporary object-URL anchor. Import validates loosely (must be an object
    with a `cards` key), confirms before overwriting, then rebuilds derived UI.
    The file input is reset in `finally` so re-importing the same file re-fires
    the change event.
    ========================================================================== */
 document.getElementById('exportBtn').addEventListener('click',()=>{
-  const blob=new Blob([JSON.stringify(store,null,2)],{type:'application/json'});
+  const blob=new Blob([JSON.stringify(state.store,null,2)],{type:'application/json'});
   const url=URL.createObjectURL(blob);
   const a=document.createElement('a');
   a.href=url; a.download='japanese-verbs-progress-'+localDay()+'.json';
@@ -368,7 +243,7 @@ document.getElementById('importFile').addEventListener('change',(e)=>{
       const data=JSON.parse(reader.result);
       if(typeof data!=='object'||!data.cards){throw new Error('Not a valid progress file');}
       if(!confirm('Replace your current progress with the imported data? This overwrites existing stats.'))return;
-      store={cards:data.cards||{},sessions:data.sessions||[],daily:data.daily||{}};
+      state.store={cards:data.cards||{},sessions:data.sessions||[],daily:data.daily||{}};
       save();
       updateDeckCount();updateDueBanner();renderBrowse();
       if(document.getElementById('panel-stats').classList.contains('active'))renderStats();
@@ -413,40 +288,9 @@ document.getElementById('importFile').addEventListener('change',(e)=>{
    intentional: browsing shouldn't disturb your queued study deck.
    ========================================================================== */
 
-// Does verb v match a single group token d? ('all' matches everything;
-// 'leech'/'due' are computed, not tags; class/trans are fields; else it's a tag.)
-function oneGroup(v,d){
-  if(d==='all')return true;
-  if(d==='leech')return isLeech(v.rank);
-  if(d==='due')return isDue(v.rank);
-  if(d==='minna')return !!v.minna;                         // source facet: any みんなの日本語 card
-  if(d==='italki')return !!v.italki;                       // source facet: covered in an iTalki lesson
-  if(CATS.includes(d))return (v.cat||'verb')===d;          // part-of-speech facet
-  if(['godan','ichidan','irregular'].includes(d))return v.type===d;
-  if(d==='suru'||d==='fake')return v.tags.includes(d);
-  if(d==='trans')return v.trans==='t';
-  if(d==='intrans')return v.trans==='i';
-  return v.tags.includes(d);
-}
-// A facet array imposes no constraint if it's empty or contains 'all'.
-function facetAll(arr){ return !arr || arr.length===0 || arr.includes('all'); }
-// One AND'd facet: no constraint if empty, else the verb must match one token (OR).
-function facetMatch(v,arr){ return !arr || arr.length===0 || arr.some(d=>oneGroup(v,d)); }
-// The single source of truth for "should this card appear?" (see model above).
-// c = {cat:[],type:[],trans:[],topic:[],status:[], jlpt:[], rmin, rmax}. The five
-// token facets AND together; jlpt and rank AND on top. Pure function — easy to
-// unit-test. (A missing facet array = no constraint, so older callers still work.)
-function passes(v,c){
-  if(!facetMatch(v,c.cat))return false;
-  if(!facetMatch(v,c.type))return false;
-  if(!facetMatch(v,c.trans))return false;
-  if(!facetMatch(v,c.topic))return false;
-  if(!facetMatch(v,c.status))return false;
-  if(!facetMatch(v,c.source))return false;
-  if(!facetAll(c.jlpt) && !c.jlpt.includes(v.jlpt))return false;
-  if(v.rank<c.rmin || v.rank>c.rmax)return false;                     // rank AND
-  return true;
-}
+// oneGroup / facetAll / facetMatch / passes (the AND'd-facet predicate) live in
+// core/facets.js, along with the cardStamp/colorClass/DECK_LABEL/deckLabel/
+// filterSummary helpers. The status tokens (leech/due) consult core/srs.js.
 
 /* Generic multi-select chip group. Reused for both cfg and bcfg facets.
      selector – CSS selector for the chip buttons
@@ -475,18 +319,10 @@ function makeMultiSelect(selector, getArr, setArr, attr, onChange){
   paint();
 }
 
-// ---- Token→facet routing + the AND'd-facet chip wiring ----
-// Every category/semantic chip carries class .deck (study) / .bf (browse) + its
-// token in data-deck / data-filter. We DERIVE which facet a token belongs to here
-// (topic is the default), so the markup needs no per-chip facet attribute.
-const DECK_FACETS=['cat','type','trans','topic','status','source'];
-const TOKEN_FACET={verb:'cat',adjective:'cat',noun:'cat',adverb:'cat',phrase:'cat',
-  godan:'type',ichidan:'type',irregular:'type',suru:'type',fake:'type',
-  trans:'trans',intrans:'trans','ti-pair':'trans',leech:'status',due:'status',
-  minna:'source',italki:'source'};
-// Per-lesson source tokens (mnn-l23 …) route to the source facet too, without
-// having to enumerate every lesson number here.
-const tokenFacet=t=>TOKEN_FACET[t]||(/^mnn-l\d+$/.test(t)?'source':'topic');
+// ---- AND'd-facet chip wiring ----
+// DECK_FACETS / TOKEN_FACET / tokenFacet (token→facet routing) are imported from
+// core/facets.js. Chips carry class .deck (study) / .bf (browse) + their token in
+// data-deck / data-filter; the facet is derived from the token, not the markup.
 const deckEmpty=c=>DECK_FACETS.every(f=>!c[f].length);
 // Wire a chip group (.deck or .bf) to a config's facet arrays. Tokens toggle
 // within their derived facet (OR); the lone "all" token clears every facet
@@ -512,7 +348,7 @@ function wireFacets(selector, c, onChange){
 // ---- Flashcard deck config + its chip bindings ----
 // mode = test direction; type/trans/topic/status/jlpt = AND'd facets; ord = sort;
 // rmin/rmax = rank band. Facet arrays start empty (= no constraint → "All" active).
-let cfg={mode:"meaning",input:"self",audio:"off",kind:"free",cat:[],type:[],trans:[],topic:[],status:[],source:[],ord:"shuffle",jlpt:["all"],rmin:1,rmax:MAXRANK};
+let cfg={mode:"meaning",input:"self",audio:"off",kind:"free",cat:[],type:[],trans:[],topic:[],status:[],source:[],ord:"shuffle",jlpt:["all"],rmin:1,rmax:state.MAXRANK};
 document.querySelectorAll('.chip.mode').forEach(b=>b.addEventListener('click',()=>{
   document.querySelectorAll('.chip.mode').forEach(x=>x.classList.remove('active'));b.classList.add('active');cfg.mode=b.dataset.mode;updateDeckCount();}));
 // Study type (Free study vs SRS review). SRS restricts the deck to due cards
@@ -550,13 +386,13 @@ const repaintDeck=wireFacets('.chip.deck', cfg, updateDeckCount);
 makeMultiSelect('.chip.jlpt', ()=>cfg.jlpt, a=>cfg.jlpt=a, 'jlpt', updateDeckCount);
 document.querySelectorAll('.chip.ord').forEach(b=>b.addEventListener('click',()=>{
   document.querySelectorAll('.chip.ord').forEach(x=>x.classList.remove('active'));b.classList.add('active');cfg.ord=b.dataset.ord;}));
-// Rank-range inputs. syncRange() clamps to 1..MAXRANK (MAXRANK extends past 100
+// Rank-range inputs. syncRange() clamps to 1..state.MAXRANK (state.MAXRANK extends past 100
 // when custom verbs exist) and auto-swaps if lo>hi, so the user can type the
 // bounds in either order. Presets just set both inputs.
 const rminEl=document.getElementById('rmin'),rmaxEl=document.getElementById('rmax');
 function syncRange(){
-  let lo=parseInt(rminEl.value)||1, hi=parseInt(rmaxEl.value)||MAXRANK;
-  lo=Math.max(1,Math.min(MAXRANK,lo)); hi=Math.max(1,Math.min(MAXRANK,hi));
+  let lo=parseInt(rminEl.value)||1, hi=parseInt(rmaxEl.value)||state.MAXRANK;
+  lo=Math.max(1,Math.min(state.MAXRANK,lo)); hi=Math.max(1,Math.min(state.MAXRANK,hi));
   if(lo>hi){const t=lo;lo=hi;hi=t;}
   cfg.rmin=lo;cfg.rmax=hi;updateDeckCount();
 }
@@ -569,30 +405,14 @@ document.querySelectorAll('.chip.rpreset').forEach(b=>b.addEventListener('click'
 // Note: shuffle is in-place Fisher–Yates; worst-first treats never-drilled
 // cards as 100% (??1) so they sort to the back behind genuinely weak cards.
 function buildDeck(){
-  let d=DATA.filter(v=>passes(v,cfg));
+  let d=state.DATA.filter(v=>passes(v,cfg));
   if(cfg.kind==='srs') d=d.filter(v=>isDue(v.rank));   // SRS review = due cards only
   if(cfg.ord==='shuffle'){for(let i=d.length-1;i>0;i--){const j=Math.floor(Math.random()*(i+1));[d[i],d[j]]=[d[j],d[i]];}}
   else if(cfg.ord==='freq'){d.sort((a,b)=>a.rank-b.rank);}
   else if(cfg.ord==='worst'){d.sort((a,b)=>{const ra=rollingAcc(a.rank)??1,rb=rollingAcc(b.rank)??1;return ra-rb;});}
   return d;
 }
-// Token → human label for the active-filter recap line. Shared by both panels
-// (deck/bf tokens are identical). Drives filterSummary() below.
-const DECK_LABEL={verb:'Verb',adjective:'Adjective',noun:'Noun',adverb:'Adverb',phrase:'Phrase',godan:'Godan',ichidan:'Ichidan',irregular:'Irregular',suru:'Suru',fake:'Fake-ichidan',trans:'Transitive',intrans:'Intransitive','ti-pair':'T/I pairs',leech:'Leeches',due:'Due cards',motion:'Motion',transit:'Transit',wearing:'Wearing',speaking:'Speaking',communication:'Communication',giving:'Giving/Recv',emotion:'Emotion',cognition:'Cognition',perception:'Perception',existence:'Existence',change:'Change',ability:'Ability',onoff:'On/Off',daily:'Daily',body:'Body',work:'Work',study:'Study',food:'Food',money:'Money',minna:'みんなの日本語',italki:'iTalki'};
-// Token → recap label. Per-lesson source tokens (mnn-l23) render as "L23".
-function deckLabel(t){ const m=/^mnn-l(\d+)$/.exec(t); return m?('L'+m[1]):(DECK_LABEL[t]||t); }
-// Build the active-facet parts for a config (one part per non-empty facet, so the
-// recap reads as the AND it now is: "Godan · Motion · rank 1–25"). Tokens within a
-// facet join with '/', the parts join with '·' in paintSummary.
-function filterSummary(c){
-  const parts=[];
-  [c.cat,c.type,c.trans,c.topic,c.status,c.source].forEach(arr=>{
-    if(arr&&arr.length) parts.push(arr.map(deckLabel).join('/'));
-  });
-  if(!facetAll(c.jlpt)) parts.push(c.jlpt.join('/'));
-  if(c.rmin>1||c.rmax<100) parts.push('rank '+c.rmin+'–'+c.rmax);
-  return parts;
-}
+// DECK_LABEL / deckLabel / filterSummary are imported from core/facets.js.
 // Paint the recap into a #id element; hidden (:empty) when nothing is filtered.
 function paintSummary(id,parts){
   const el=document.getElementById(id); if(!el)return;
@@ -613,7 +433,7 @@ function syncVerbRows(sel,c,repaint){
 // Live "N cards in deck" readout under the Start button + filter recap.
 function updateDeckCount(){
   syncVerbRows('#panel-study',cfg,repaintDeck);
-  const n=DATA.filter(v=>passes(v,cfg) && (cfg.kind!=='srs'||isDue(v.rank))).length;
+  const n=state.DATA.filter(v=>passes(v,cfg) && (cfg.kind!=='srs'||isDue(v.rank))).length;
   document.getElementById('deckCount').innerHTML=`<b>${n}</b> ${cfg.kind==='srs'?'due in this deck':'cards in deck'}`;
   paintSummary('deckSummary', filterSummary(cfg));
 }
@@ -657,7 +477,7 @@ updateStartLabel();
 
    `session` holds only ephemeral run state (the deck, the index, whether the
    answer is shown, and a results array for the end-screen %). Durable data
-   goes straight into `store` via cardStat()/scheduleCard().
+   goes straight into `state.store` via cardStat()/scheduleCard().
    ========================================================================== */
 let session=null;
 
@@ -703,14 +523,7 @@ function speak(text){
     speakSynth(text);
   }
 }
-// What text to hand the TTS for a card. Google TTS derives pitch accent from the
-// WRITTEN form, so a kana-only reading is accent-ambiguous for homographs (橋 "bridge"
-// vs 箸 "chopsticks" are both はし). Sending the kanji headword lets Google apply the
-// dictionary accent. Kana-only words have no kanji to send, so they use the reading.
-// `v.tts` is an optional per-card override (escape hatch for an ambiguous single kanji
-// that Google misreads, e.g. 角 → つの). The visible reading is always v.read regardless.
-const HAS_KANJI=/[一-龯々々〆]/;
-function ttsText(v){ return v.tts || (v.jp && HAS_KANJI.test(v.jp) ? v.jp : v.read); }
+// ttsText (the kanji-for-accent text picker) lives in core/text.js.
 function speakWord(v){ speak(ttsText(v)); }
 function playReading(){ if(session)speakWord(session.deck[session.i]); }
 // Hide the audio affordances entirely only when NO audio path is available.
@@ -718,64 +531,7 @@ if(!TTS_OK){
   const ar=document.getElementById('audioRow'); if(ar)ar.style.display='none';
   const sb=document.getElementById('speakBtn'); if(sb)sb.style.display='none';
 }
-// Normalize kana for typed grading: fold katakana→hiragana, drop spaces/separators,
-// unify long-vowel marks. v.read is already hiragana, so this forgives a katakana
-// IME, stray whitespace, and ASCII/full-width chōonpu variants.
-function normKana(s){
-  return (s||'').trim()
-    .replace(/[ァ-ヶ]/g,c=>String.fromCharCode(c.charCodeAt(0)-0x60))
-    .replace(/[\s　・･、。.]/g,'')
-    .replace(/[ー－―‐-―~～]/g,'ー')
-    .toLowerCase();
-}
-// Romaji→hiragana for the typed-reading field, so a learner WITHOUT a Japanese
-// IME can type "taberu" and have it graded against たべる. Greedy longest-match
-// Hepburn with the common wāpuro variants (si/shi, tu/tsu, hu/fu, zi/ji, sya/sha,
-// double-consonant→っ, n'/nn/trailing-n→ん). Anything not in the table — including
-// characters that are ALREADY kana — passes through untouched, so a kana IME and a
-// romaji typist flow through the same code path; submitTyped runs the result back
-// through normKana before comparing. This feeds only the ADVISORY typed grade,
-// never the SRS schedule, so over-permissiveness is harmless. (This relaxes the
-// old "normKana is deliberately not romaji-aware" stance — per request.)
-const ROMAJI={
-  kya:'きゃ',kyu:'きゅ',kyo:'きょ',gya:'ぎゃ',gyu:'ぎゅ',gyo:'ぎょ',
-  sha:'しゃ',shu:'しゅ',sho:'しょ',shi:'し',sya:'しゃ',syu:'しゅ',syo:'しょ',
-  cha:'ちゃ',chu:'ちゅ',cho:'ちょ',chi:'ち',cya:'ちゃ',cyu:'ちゅ',cyo:'ちょ',
-  tya:'ちゃ',tyu:'ちゅ',tyo:'ちょ',tsu:'つ',
-  nya:'にゃ',nyu:'にゅ',nyo:'にょ',hya:'ひゃ',hyu:'ひゅ',hyo:'ひょ',
-  mya:'みゃ',myu:'みゅ',myo:'みょ',rya:'りゃ',ryu:'りゅ',ryo:'りょ',
-  bya:'びゃ',byu:'びゅ',byo:'びょ',pya:'ぴゃ',pyu:'ぴゅ',pyo:'ぴょ',
-  jya:'じゃ',jyu:'じゅ',jyo:'じょ',zya:'じゃ',zyu:'じゅ',zyo:'じょ',
-  dya:'ぢゃ',dyu:'ぢゅ',dyo:'ぢょ',
-  ka:'か',ki:'き',ku:'く',ke:'け',ko:'こ',ga:'が',gi:'ぎ',gu:'ぐ',ge:'げ',go:'ご',
-  sa:'さ',si:'し',su:'す',se:'せ',so:'そ',za:'ざ',zi:'じ',ji:'じ',zu:'ず',ze:'ぜ',zo:'ぞ',
-  ta:'た',ti:'ち',tu:'つ',te:'て',to:'と',da:'だ',di:'ぢ',du:'づ',de:'で',do:'ど',
-  na:'な',ni:'に',nu:'ぬ',ne:'ね',no:'の',ha:'は',hi:'ひ',hu:'ふ',fu:'ふ',he:'へ',ho:'ほ',
-  fa:'ふぁ',fi:'ふぃ',fe:'ふぇ',fo:'ふぉ',
-  ba:'ば',bi:'び',bu:'ぶ',be:'べ',bo:'ぼ',pa:'ぱ',pi:'ぴ',pu:'ぷ',pe:'ぺ',po:'ぽ',
-  ma:'ま',mi:'み',mu:'む',me:'め',mo:'も',ya:'や',yu:'ゆ',yo:'よ',
-  ra:'ら',ri:'り',ru:'る',re:'れ',ro:'ろ',wa:'わ',wo:'を',wi:'うぃ',we:'うぇ',
-  ja:'じゃ',ju:'じゅ',jo:'じょ',
-  a:'あ',i:'い',u:'う',e:'え',o:'お',
-};
-function romajiToKana(input){
-  const s=(input||'').toLowerCase();
-  let out='',i=0;
-  while(i<s.length){
-    const c=s[i],c2=s[i+1];
-    if(c==='n'&&c2==="'"){out+='ん';i+=2;continue;}                       // n' → ん (explicit boundary)
-    if(c==='n'&&c2==='n'){out+='ん';i+=1;continue;}                       // nn → ん, the 2nd n starts the next syllable
-    if(c==='t'&&c2==='c'){out+='っ';i+=1;continue;}                       // tch → っ + ch (matcha → まっちゃ)
-    if(c===c2&&'bcdfghjkmpqrstvwz'.indexOf(c)>=0){out+='っ';i+=1;continue;} // doubled consonant → っ (kitte → きって)
-    const t3=s.substr(i,3),t2=s.substr(i,2),t1=s[i];
-    if(ROMAJI[t3]){out+=ROMAJI[t3];i+=3;}
-    else if(ROMAJI[t2]){out+=ROMAJI[t2];i+=2;}
-    else if(ROMAJI[t1]){out+=ROMAJI[t1];i+=1;}
-    else if(t1==='n'){out+='ん';i+=1;}                                    // bare n (word end / before a consonant)
-    else{out+=t1;i+=1;}                                                   // unknown / already-kana → pass through
-  }
-  return out;
-}
+// normKana + romajiToKana (typed-reading grading) live in core/kana.js.
 
 function startSession(){
   const deck=buildDeck();
@@ -916,8 +672,8 @@ function grade(correct){
   if(session.i>=session.deck.length){endSession();}
   else{showCard();}
 }
-// Log the finished session into store.sessions (capped at 200) and roll its
-// totals into today's store.daily bucket (local date). Then show the score.
+// Log the finished session into state.store.sessions (capped at 200) and roll its
+// totals into today's state.store.daily bucket (local date). Then show the score.
 // Guarded by results.length so an immediate "End session" with no grades is a
 // no-op for stats. (Per-card stats were already saved in grade().)
 // Local sessions kept for the Stats charts. Capped (the blob is synced whole), but
@@ -943,11 +699,11 @@ function endSession(){
     return;
   }
   const right=session.results.reduce((s,x)=>s+x,0),tot=session.results.length;
-  store.sessions.push({t:Date.now(),right,tot,kind:session.kind});
-  if(store.sessions.length>SESSIONS_LOCAL_CAP)store.sessions=store.sessions.slice(-SESSIONS_LOCAL_CAP);
+  state.store.sessions.push({t:Date.now(),right,tot,kind:session.kind});
+  if(state.store.sessions.length>SESSIONS_LOCAL_CAP)state.store.sessions=state.store.sessions.slice(-SESSIONS_LOCAL_CAP);
   const day=localDay();
-  if(!store.daily[day])store.daily[day]={right:0,tot:0};
-  store.daily[day].right+=right;store.daily[day].tot+=tot;
+  if(!state.store.daily[day])state.store.daily[day]={right:0,tot:0};
+  state.store.daily[day].right+=right;state.store.daily[day].tot+=tot;
   save();                            // localStorage + debounced progress-blob push
   logSession(right,tot,session.kind); // durable append-only server log (never pruned)
   document.getElementById('doneScore').textContent=Math.round(100*right/tot)+'%';
@@ -1007,14 +763,14 @@ document.addEventListener('keydown',e=>{
    100 rows; if the deck grows large, switch to a template/fragment for perf).
    Clicking a card toggles .open to expand the detail (CSS max-height anim).
    ========================================================================== */
-let bcfg={cat:[],type:[],trans:[],topic:[],status:[],source:[],jlpt:['all'],rmin:1,rmax:MAXRANK};
+let bcfg={cat:[],type:[],trans:[],topic:[],status:[],source:[],jlpt:['all'],rmin:1,rmax:state.MAXRANK};
 const repaintBrowse=wireFacets('.chip.bf', bcfg, renderBrowse);
 makeMultiSelect('.chip.bjlpt', ()=>bcfg.jlpt, a=>bcfg.jlpt=a, 'jlpt', renderBrowse);
 const brmin=document.getElementById('brmin'),brmax=document.getElementById('brmax');
 // Same clamp+swap behavior as the study-deck range (see syncRange).
 function bSyncRange(){
-  let lo=parseInt(brmin.value)||1,hi=parseInt(brmax.value)||MAXRANK;
-  lo=Math.max(1,Math.min(MAXRANK,lo));hi=Math.max(1,Math.min(MAXRANK,hi));
+  let lo=parseInt(brmin.value)||1,hi=parseInt(brmax.value)||state.MAXRANK;
+  lo=Math.max(1,Math.min(state.MAXRANK,lo));hi=Math.max(1,Math.min(state.MAXRANK,hi));
   if(lo>hi){const t=lo;lo=hi;hi=t;}
   bcfg.rmin=lo;bcfg.rmax=hi;renderBrowse();
 }
@@ -1146,10 +902,10 @@ function setupRoving(container){
 // Disable JLPT level chips with no verbs in the current dataset (the 100 frequent
 // verbs are almost all N5–N4, so N2/N1 are typically empty) rather than offering a
 // dead filter; annotate a count tooltip on the rest. Covers both panels' chips and
-// re-runs when DATA changes (custom verbs may populate a previously-empty level).
+// re-runs when state.DATA changes (custom verbs may populate a previously-empty level).
 function annotateJlptChips(){
   const counts={};
-  DATA.forEach(v=>{counts[v.jlpt]=(counts[v.jlpt]||0)+1;});
+  state.DATA.forEach(v=>{counts[v.jlpt]=(counts[v.jlpt]||0)+1;});
   document.querySelectorAll('.chip.jlpt,.chip.bjlpt').forEach(b=>{
     const lv=b.dataset.jlpt;
     if(lv==='all'){ b.title='All levels'; return; }
@@ -1164,7 +920,7 @@ annotateJlptChips();
 // custom card of that category exists. Roving nav skips disabled chips already.
 function annotateCatChips(){
   const counts={};
-  DATA.forEach(v=>{const c=v.cat||'verb';counts[c]=(counts[c]||0)+1;});
+  state.DATA.forEach(v=>{const c=v.cat||'verb';counts[c]=(counts[c]||0)+1;});
   document.querySelectorAll('.chip.deck,.chip.bf').forEach(b=>{
     const t=b.dataset.deck||b.dataset.filter;
     if(!CATS.includes(t))return;
@@ -1177,13 +933,13 @@ annotateCatChips();
 // Source facet (みんなの日本語 / iTalki / per-lesson) only applies once Minna vocab
 // has been activated. Hide the whole Source row when the deck has no Minna cards;
 // otherwise dim individual source chips that currently match nothing. Same shape
-// as annotateCatChips; runs at boot and on every DATA change.
+// as annotateCatChips; runs at boot and on every state.DATA change.
 function annotateSourceChips(){
-  const hasMinna=DATA.some(v=>v.minna);
+  const hasMinna=state.DATA.some(v=>v.minna);
   document.querySelectorAll('.frow.source-row').forEach(r=>{r.style.display=hasMinna?'':'none';});
   if(!hasMinna)return;
   const counts={minna:0,italki:0};
-  DATA.forEach(v=>{ if(v.minna)counts.minna++; if(v.italki)counts.italki++;
+  state.DATA.forEach(v=>{ if(v.minna)counts.minna++; if(v.italki)counts.italki++;
     (v.tags||[]).forEach(t=>{ if(/^mnn-l\d+$/.test(t))counts[t]=(counts[t]||0)+1; }); });
   document.querySelectorAll('.chip.deck,.chip.bf').forEach(b=>{
     const t=b.dataset.deck||b.dataset.filter;
@@ -1209,7 +965,7 @@ let detailVerb=null, detailLevel=null;
 // box number + a "next review" chip that flips to a red "due now" state when the
 // interval has elapsed. New/unseen cards get a plain new-card line instead.
 function detailMemoryLine(v){
-  const c=store.cards[v.rank];
+  const c=state.store.cards[v.rank];
   if(!c||!c.box) return '<div class="det-memory new"><svg class="ic" aria-hidden="true"><use href="#i-cards"/></svg>New — not yet reviewed</div>';
   const box=c.box;
   const pips=[1,2,3,4,5].map(b=>`<span class="srs-pip${b<=box?' on':''}"${b<=box?` style="background:${BOX_COLORS[b]}"`:''}></span>`).join('');
@@ -1277,7 +1033,7 @@ function renderBrowse(){
   syncVerbRows('#panel-browse',bcfg,repaintBrowse);
   const q=document.getElementById('search').value.trim().toLowerCase();
   const grid=document.getElementById('grid');grid.innerHTML='';let shown=0;
-  DATA.forEach(v=>{
+  state.DATA.forEach(v=>{
     const passF=passes(v,bcfg);
     const passQ=!q||v.read.includes(q)||v.jp.includes(q)||v.mean.toLowerCase().includes(q);
     if(!(passF&&passQ))return;shown++;
@@ -1365,7 +1121,7 @@ function barChart(el,items){
 const CARDBARS_CAP=20;
 let cardBarsExpanded=false;
 function renderCardBars(){
-  const drilled=DATA.filter(v=>{const c=store.cards[v.rank];return c&&c.attempts.length;})
+  const drilled=state.DATA.filter(v=>{const c=state.store.cards[v.rank];return c&&c.attempts.length;})
     .map(v=>({label:v.jp,val:Math.round(rollingAcc(v.rank)*100),color:isLeech(v.rank)?'var(--leech)':(rollingAcc(v.rank)>=0.8?'var(--good)':'var(--godan)')}))
     .sort((a,b)=>a.val-b.val);
   const el=document.getElementById('cardBars');
@@ -1378,35 +1134,35 @@ function renderCardBars(){
     el.appendChild(btn);
   }
 }
-// Rebuild the entire Stats panel from `store`. Called on tab activation and
+// Rebuild the entire Stats panel from `state.store`. Called on tab activation and
 // after import/reset. Each block below maps 1:1 to a container in the markup.
 function renderStats(){
   // Summary boxes: overall accuracy + counts. "studied" = cards with ≥1 attempt.
   let tot=0,right=0,studied=0;
-  DATA.forEach(v=>{const c=store.cards[v.rank];if(c&&c.attempts.length){studied++;tot+=c.attempts.length;right+=c.right;}});
+  state.DATA.forEach(v=>{const c=state.store.cards[v.rank];if(c&&c.attempts.length){studied++;tot+=c.attempts.length;right+=c.right;}});
   const overall=tot?Math.round(100*right/tot):0;
   // SRS vs free-study split, summed over logged sessions. Legacy sessions saved
   // before the two-kind split have no `kind` → counted as SRS (the old behavior
   // always rescheduled). `acc` is each kind's accuracy, shown as a hover readout.
   const mix={srs:{rev:0,right:0},free:{rev:0,right:0}};
-  store.sessions.forEach(s=>{const m=mix[s.kind==='free'?'free':'srs'];m.rev+=s.tot;m.right+=s.right;});
+  state.store.sessions.forEach(s=>{const m=mix[s.kind==='free'?'free':'srs'];m.rev+=s.tot;m.right+=s.right;});
   const acc=m=>m.rev?Math.round(100*m.right/m.rev)+'% correct':'no reviews yet';
   const sg=document.getElementById('statgrid');
   sg.innerHTML=`
     <div class="statbox"><div class="v">${overall}%</div><div class="l">Overall accuracy</div></div>
     <div class="statbox"><div class="v">${tot}</div><div class="l">Total reviews</div></div>
-    <div class="statbox"><div class="v">${studied}/${DATA.length}</div><div class="l">Cards drilled</div></div>
+    <div class="statbox"><div class="v">${studied}/${state.DATA.length}</div><div class="l">Cards drilled</div></div>
     <div class="statbox"><div class="v" style="color:var(--ichidan)">${dueCards().length}</div><div class="l">Due today</div></div>
     <div class="statbox" title="${acc(mix.srs)}"><div class="v" style="color:var(--ichidan)">${mix.srs.rev}</div><div class="l">SRS reviews</div></div>
     <div class="statbox" title="${acc(mix.free)}"><div class="v">${mix.free.rev}</div><div class="l">Free-study reviews</div></div>
     <div class="statbox"><div class="v" style="color:var(--leech)">${leeches().length}</div><div class="l">Active leeches</div></div>
-    <div class="statbox"><div class="v">${store.sessions.length}</div><div class="l">Sessions</div></div>`;
-  // Daily accuracy line: one point per day in store.daily (label = MM-DD).
-  const days=Object.keys(store.daily).sort();
-  lineChart(document.getElementById('chartDaily'),days.map(d=>({y:Math.round(100*store.daily[d].right/store.daily[d].tot),label:d.slice(5)})),{aria:'Daily accuracy, percent correct per day'});
+    <div class="statbox"><div class="v">${state.store.sessions.length}</div><div class="l">Sessions</div></div>`;
+  // Daily accuracy line: one point per day in state.store.daily (label = MM-DD).
+  const days=Object.keys(state.store.daily).sort();
+  lineChart(document.getElementById('chartDaily'),days.map(d=>({y:Math.round(100*state.store.daily[d].right/state.store.daily[d].tot),label:d.slice(5)})),{aria:'Daily accuracy, percent correct per day'});
   // Per-session line: last 20 sessions, labeled by their absolute session number.
-  const sess=store.sessions.slice(-20);
-  lineChart(document.getElementById('chartSession'),sess.map((s,i)=>({y:Math.round(100*s.right/s.tot),label:'#'+(store.sessions.length-sess.length+i+1)})),{color:'var(--ichidan)',aria:'Per-session accuracy, percent correct per session'});
+  const sess=state.store.sessions.slice(-20);
+  lineChart(document.getElementById('chartSession'),sess.map((s,i)=>({y:Math.round(100*s.right/s.tot),label:'#'+(state.store.sessions.length-sess.length+i+1)})),{color:'var(--ichidan)',aria:'Per-session accuracy, percent correct per session'});
   // Leech list: the cards isLeech() currently flags, with their rolling accuracy.
   const lz=leeches();const ll=document.getElementById('leechList');
   if(!lz.length){ll.innerHTML='<div class="empty" style="padding:18px">No leeches detected. A leech is any card under 60% over its last 4+ attempts.</div>';}
@@ -1420,8 +1176,8 @@ function renderStats(){
   // SRS memory pipeline: count cards in each Leitner box (0=New … 5). Gives an
   // at-a-glance picture of how much of the deck has "graduated" to long intervals.
   const boxes=[0,0,0,0,0,0]; // index = box 0..5
-  DATA.forEach(v=>{const c=store.cards[v.rank];const b=c&&c.box?c.box:0;boxes[b]++;});
-  const total=DATA.length;
+  state.DATA.forEach(v=>{const c=state.store.cards[v.rank];const b=c&&c.box?c.box:0;boxes[b]++;});
+  const total=state.DATA.length;
   const boxLabels=['New','Box 1','Box 2','Box 3','Box 4','Box 5'];
   // New→stone, then a red→amber→gold→olive→green gradient as cards mature.
   const boxColors=BOX_COLORS;
@@ -1446,7 +1202,7 @@ document.getElementById('studyLeeches').addEventListener('click',()=>{
 // Hard reset: wipe ALL progress (after a confirm) and re-render derived views.
 document.getElementById('resetBtn').addEventListener('click',()=>{
   if(confirm("Erase all stats, session history, and leech data? This can't be undone.")){
-    store={cards:{},sessions:[],daily:{}};save();renderStats();renderBrowse();updateDeckCount();
+    state.store={cards:{},sessions:[],daily:{}};save();renderStats();renderBrowse();updateDeckCount();
   }
 });
 
@@ -1457,25 +1213,25 @@ document.getElementById('resetBtn').addEventListener('click',()=>{
    the user signs in, progress is mirrored to the backing API so it follows
    them across devices. Model:
      • save() writes localStorage immediately, then (if signed in) schedules a
-       debounced PUT of the whole `store` to the server.
+       debounced PUT of the whole `state.store` to the server.
      • On boot we probe /v1/auth/me. If signed in, we pull the server copy
        (server wins) and re-render; a brand-new account with no server data
-       gets its current local store pushed up as the baseline.
+       gets its current local state.store pushed up as the baseline.
    All requests are same-origin with credentials:'include' — the session lives
    in an httpOnly cookie set by the server, never touched by this JS.
 
    Three independent synced blobs (separate server `app` namespaces, all server-wins
    on login, all debounced-push on change):
-     • 'verbs'        — the progress `store` (cards/sessions/daily). save().
+     • 'verbs'        — the progress `state.store` (cards/sessions/daily). save().
      • 'custom-verbs' — the user's custom verb definitions. saveCustom().
      • 'settings'     — the Settings-page preferences. saveSettings().
    Completed sessions are ALSO appended to a durable server log (POST /v1/sessions)
-   so full session history survives the capped in-blob `store.sessions`.
+   so full session history survives the capped in-blob `state.store.sessions`.
 
    Endpoints (served from this same origin):
      POST /v1/auth/register | /login | /logout      {email,password}
      GET  /v1/auth/me                    → {user:{id,email}|null}
-     GET/PUT /v1/progress/verbs          {data:<store>}
+     GET/PUT /v1/progress/verbs          {data:<state.store>}
      GET/PUT /v1/progress/custom-verbs   {data:{seq,verbs}}
      GET/PUT /v1/progress/settings       {data:<settings>}
      POST /v1/sessions                   {right,total,mode}  (append-only history)
@@ -1498,7 +1254,7 @@ async function api(path,opts={}){
     headers:opts.body!==undefined?{'Content-Type':'application/json'}:undefined,
     body:opts.body!==undefined?JSON.stringify(opts.body):undefined,
     credentials:'include',
-    cache:'no-store',
+    cache:'no-state.store',
   });
   let data=null; try{data=await res.json();}catch(e){}
   if(!res.ok){
@@ -1510,7 +1266,7 @@ async function api(path,opts={}){
 
 function setSyncStatus(t){const el=document.getElementById('syncStatus');if(el)el.textContent=t;}
 
-// Debounced push of the whole store (only when signed in). Coalesces the rapid
+// Debounced push of the whole state.store (only when signed in). Coalesces the rapid
 // save() calls during a session into one PUT shortly after activity settles.
 function scheduleCloudSync(){
   if(!account)return;
@@ -1520,7 +1276,7 @@ function scheduleCloudSync(){
 async function pushCloud(){
   if(!account)return;
   setSyncStatus('saving…');
-  try{ await api('/v1/progress/'+APP_KEY,{method:'PUT',body:{data:store}}); setSyncStatus('✓ synced'); }
+  try{ await api('/v1/progress/'+APP_KEY,{method:'PUT',body:{data:state.store}}); setSyncStatus('✓ synced'); }
   catch(err){ setSyncStatus('⚠ offline'); }   // next save() retries
 }
 
@@ -1587,7 +1343,7 @@ async function pullCloud(){
   try{
     const r=await api('/v1/progress/'+APP_KEY);
     if(r&&r.data&&r.data.cards){
-      store={cards:r.data.cards||{},sessions:r.data.sessions||[],daily:r.data.daily||{}};
+      state.store={cards:r.data.cards||{},sessions:r.data.sessions||[],daily:r.data.daily||{}};
       saveLocal();                 // mirror to localStorage WITHOUT re-pushing
       setSyncStatus('✓ synced');
     }else{
@@ -1601,7 +1357,7 @@ async function pullCloud(){
   refreshAllViews();
 }
 
-// Re-render every store-derived view. Mirrors the import handler's refresh set.
+// Re-render every state.store-derived view. Mirrors the import handler's refresh set.
 function refreshAllViews(){
   updateDeckCount(); updateDueBanner(); renderBrowse();
   if(typeof renderCustomCount==='function')renderCustomCount();
@@ -1609,28 +1365,7 @@ function refreshAllViews(){
   if(document.getElementById('panel-minna').classList.contains('active')&&typeof renderMinna==='function')renderMinna();
 }
 
-// Escape user-supplied text before innerHTML interpolation (e.g. account email).
-function escapeHtml(s){return String(s).replace(/[&<>"']/g,c=>({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;'}[c]));}
-// ---- Pitch accent (visual) ----
-// Tokyo-dialect pitch: `accent` is the drop position — 0 = heiban (no drop in the word),
-// 1 = atamadaka (drop after mora 1), k = drop after the kth mora. We render the reading
-// mora-by-mora with an overline over the HIGH morae and a step-down at the drop, so the
-// correct pitch is VISIBLE even though Google's synthesized audio can't reproduce it.
-// No accent data → just the (escaped) reading, unchanged.
-const SMALL_KANA=/[ぁぃぅぇぉゃゅょゎァィゥェォャュョヮ]/;
-function splitMora(s){ const m=[]; for(const ch of (s||'')){ if(m.length&&SMALL_KANA.test(ch))m[m.length-1]+=ch; else m.push(ch); } return m; }
-function pitchHtml(reading, accent){
-  if(accent==null||accent===''||!reading) return escapeHtml(reading||'');
-  const a=+accent, mora=splitMora(reading), n=mora.length;
-  let html='';
-  for(let i=0;i<n;i++){
-    const pos=i+1;
-    const hi = a===0 ? pos!==1 : a===1 ? pos===1 : (pos!==1 && pos<=a);
-    const drop = a>0 && pos===a;            // pitch falls AFTER this mora
-    html+=`<span class="pa${hi?' hi':''}${drop?' drop':''}">${escapeHtml(mora[i])}</span>`;
-  }
-  return `<span class="pitch" title="pitch accent [${a}]">${html}</span>`;
-}
+// escapeHtml lives in core/text.js; splitMora + pitchHtml (visual pitch accent) in core/pitch.js.
 function updateAccountChip(){
   const btn=document.getElementById('accountBtn');
   if(account){ btn.innerHTML='<svg class="ic" aria-hidden="true"><use href="#i-cloud-check"/></svg>'+escapeHtml(account.email); btn.title='Signed in — click to sign out'; }
@@ -1726,43 +1461,30 @@ document.getElementById('signupDismiss').addEventListener('click',()=>{
 /* ============================================================================
    CUSTOM VERBS — add / edit / delete (the modal CRUD layer).
    ----------------------------------------------------------------------------
-   The store + DATA merge live up in the STORAGE area (loadCustom/saveCustom and
-   the DATA concat). Here we wire the #verbModal form. A custom verb gets a rank
-   from a monotonic `seq` (never reused, so progress in store.cards is stable
-   across deletes) and custom:true. rebuildData() rebuilds DATA, extends MAXRANK +
+   The state.store + state.DATA merge live up in the STORAGE area (loadCustom/saveCustom and
+   the state.DATA concat). Here we wire the #verbModal form. A custom verb gets a rank
+   from a monotonic `seq` (never reused, so progress in state.store.cards is stable
+   across deletes) and custom:true. rebuildData() rebuilds state.DATA, extends state.MAXRANK +
    the rank-range UI, and re-runs the JLPT annotation; callers then re-render.
    ========================================================================== */
 let editingRank=null;   // null = adding a new verb; otherwise the rank being edited
 // Merge Minna provenance onto matching built-ins (the dedup path). A Minna word that
 // already exists as a baked-in verb is NOT re-added as a bare card — its built-in rank
-// gets an entry in minnaStore.overlays, and here we merge that onto a COPY of the
+// gets an entry in state.minnaStore.overlays, and here we merge that onto a COPY of the
 // built-in: it keeps its examples / mnemonic / rank / SRS progress but gains the
 // みんなの日本語 + iTalki tags, flags, and (if present) pitch accent. Copies — not
 // mutation of the shared VERBS objects — so removing an overlay reverts cleanly.
-function applyMinnaOverlays(builtins){
-  let ov;
-  // minnaStore is a `let` declared further down; an early-boot rebuildData() (the
-  // rank-range sync) runs before it initializes. Treat that as "no overlays yet" —
-  // the post-minna-init boot rebuild applies them once the store exists.
-  try{ ov=(minnaStore&&minnaStore.overlays)||{}; }catch(e){ return builtins; }
-  if(!Object.keys(ov).length)return builtins;
-  return builtins.map(v=>{
-    const o=ov[v.rank]; if(!o)return v;
-    const tags=[...(v.tags||[])]; (o.tags||[]).forEach(t=>{ if(!tags.includes(t))tags.push(t); });
-    return Object.assign({},v,{tags,minna:true,italki:!!o.italki,minnaKey:o.minnaKey,minnaLesson:o.minnaLesson},
-      o.accent!=null?{accent:o.accent}:{}, o.tts?{tts:o.tts}:{});
-  });
-}
+// applyMinnaOverlays lives in core/minna.js (reads state.minnaStore.overlays).
 function rebuildData(){
-  const prevMax=MAXRANK;
-  DATA=applyMinnaOverlays(VERBS.filter(v=>!v.skip)).concat(loadCustom().verbs);
-  MAXRANK=DATA.reduce((m,v)=>Math.max(m,v.rank),0)||100;
+  const prevMax=state.MAXRANK;
+  state.DATA=applyMinnaOverlays(VERBS.filter(v=>!v.skip)).concat(loadCustom().verbs);
+  state.MAXRANK=state.DATA.reduce((m,v)=>Math.max(m,v.rank),0)||100;
   attachLevels();
-  ['rmin','rmax','brmin','brmax'].forEach(id=>{const el=document.getElementById(id);if(el)el.max=MAXRANK;});
+  ['rmin','rmax','brmin','brmax'].forEach(id=>{const el=document.getElementById(id);if(el)el.max=state.MAXRANK;});
   // If a range's max was at the old ceiling ("show everything"), extend it so a
   // freshly-added custom verb is included by default; otherwise respect narrowing.
-  if(cfg.rmax>=prevMax){cfg.rmax=MAXRANK;const e=document.getElementById('rmax');if(e)e.value=MAXRANK;}
-  if(bcfg.rmax>=prevMax){bcfg.rmax=MAXRANK;const e=document.getElementById('brmax');if(e)e.value=MAXRANK;}
+  if(cfg.rmax>=prevMax){cfg.rmax=state.MAXRANK;const e=document.getElementById('rmax');if(e)e.value=state.MAXRANK;}
+  if(bcfg.rmax>=prevMax){bcfg.rmax=state.MAXRANK;const e=document.getElementById('brmax');if(e)e.value=state.MAXRANK;}
   annotateJlptChips(); annotateCatChips(); annotateSourceChips();
 }
 function renderCustomCount(){
@@ -1848,7 +1570,7 @@ function deleteVerb(rank){
   const cs=loadCustom();
   cs.verbs=cs.verbs.filter(v=>v.rank!==rank);
   saveCustom(cs);
-  if(store.cards[rank]){ delete store.cards[rank]; save(); }   // drop the orphaned progress
+  if(state.store.cards[rank]){ delete state.store.cards[rank]; save(); }   // drop the orphaned progress
   rebuildData(); closeVerbModal(); refreshAfterVerbChange();
 }
 document.getElementById('addVerbBtn').addEventListener('click',()=>openVerbModal(null));
@@ -1858,7 +1580,7 @@ document.getElementById('verbForm').addEventListener('submit',saveVerb);
 document.getElementById('verbDelete').addEventListener('click',()=>{ if(editingRank!=null&&confirm('Delete this custom card? Its progress is also removed.'))deleteVerb(editingRank); });
 document.getElementById('verbModal').addEventListener('click',e=>{ if(e.target.id==='verbModal')closeVerbModal(); }); // backdrop
 document.addEventListener('keydown',e=>{ if(e.key==='Escape'&&document.getElementById('verbModal').classList.contains('show'))closeVerbModal(); });
-rebuildData();          // sync the rank-range UI to MAXRANK (DATA already merged custom verbs at load)
+rebuildData();          // sync the rank-range UI to state.MAXRANK (state.DATA already merged custom verbs at load)
 renderCustomCount();
 
 /* ============================================================================
@@ -1899,7 +1621,7 @@ document.getElementById('setFreeDue').addEventListener('click',e=>{const b=e.tar
    Vocab "activation" REUSES the custom-verb system: each word becomes a tagged
    custom card (loadCustom/saveCustom + seq rank), so it joins the deck / SRS /
    Browse / Stats and syncs under the existing 'custom-verbs' blob for free —
-   no separate data path, no DATA-merge change. Idempotent via a stable
+   no separate data path, no state.DATA-merge change. Idempotent via a stable
    minnaKey. The only NEW synced blob is per-lesson NOTES (app key 'minna') —
    the "augment as I study" scratchpad. Cards carry minna:true (+ minnaLesson)
    so Browse shows a みんなの日本語 badge instead of CUSTOM.
@@ -1910,15 +1632,15 @@ const MINNA_KEY='jpverbs_minna';
 // dedup record: Minna words that map onto a baked-in verb live here, not as custom cards.
 const MINNA_DEFAULT={notes:{}, lastLesson:23, overlays:{}};
 function loadMinnaStore(){ try{const o=JSON.parse(localStorage.getItem(MINNA_KEY));if(o&&typeof o==='object')return Object.assign({},MINNA_DEFAULT,o,{notes:o.notes||{}, overlays:o.overlays||{}});}catch(e){} return Object.assign({},MINNA_DEFAULT,{notes:{}, overlays:{}}); }
-let minnaStore=loadMinnaStore();
-function saveMinnaLocal(){ try{localStorage.setItem(MINNA_KEY,JSON.stringify(minnaStore));}catch(e){} }
+state.minnaStore=loadMinnaStore();
+function saveMinnaLocal(){ try{localStorage.setItem(MINNA_KEY,JSON.stringify(state.minnaStore));}catch(e){} }
 function saveMinna(){ saveMinnaLocal(); if(typeof scheduleMinnaSync==='function')scheduleMinnaSync(); }
 
 // --- Notes sync trio (mirrors the custom-verb / settings sync; app key 'minna') ---
 let minnaSyncTimer=null;
 function scheduleMinnaSync(){ if(!account)return; if(minnaSyncTimer)clearTimeout(minnaSyncTimer); minnaSyncTimer=setTimeout(pushMinnaCloud,1200); }
-async function pushMinnaCloud(){ if(!account)return; setSyncStatus('saving…'); try{ await api('/v1/progress/'+MINNA_APP_KEY,{method:'PUT',body:{data:minnaStore}}); setSyncStatus('✓ synced'); }catch(err){ setSyncStatus('⚠ offline'); } }
-async function pullMinnaCloud(){ try{ const r=await api('/v1/progress/'+MINNA_APP_KEY); if(r&&r.data&&typeof r.data==='object'){ minnaStore=Object.assign({},MINNA_DEFAULT,r.data,{notes:r.data.notes||{}, overlays:r.data.overlays||{}}); saveMinnaLocal(); }else if(Object.keys(minnaStore.notes||{}).length||Object.keys(minnaStore.overlays||{}).length){ await pushMinnaCloud(); } }catch(err){/* offline — keep local notes */} }
+async function pushMinnaCloud(){ if(!account)return; setSyncStatus('saving…'); try{ await api('/v1/progress/'+MINNA_APP_KEY,{method:'PUT',body:{data:state.minnaStore}}); setSyncStatus('✓ synced'); }catch(err){ setSyncStatus('⚠ offline'); } }
+async function pullMinnaCloud(){ try{ const r=await api('/v1/progress/'+MINNA_APP_KEY); if(r&&r.data&&typeof r.data==='object'){ state.minnaStore=Object.assign({},MINNA_DEFAULT,r.data,{notes:r.data.notes||{}, overlays:r.data.overlays||{}}); saveMinnaLocal(); }else if(Object.keys(state.minnaStore.notes||{}).length||Object.keys(state.minnaStore.overlays||{}).length){ await pushMinnaCloud(); } }catch(err){/* offline — keep local notes */} }
 
 // --- Native-audio playback. One reused <audio>; same-origin so the session
 //     cookie travels and /v1/minna/audio authorizes. Clicking a playing button
@@ -1935,7 +1657,7 @@ function mnPlay(src, btn){
 }
 const mnAudioBtn=(src)=> src?`<button class="speak-btn" type="button" data-aud="${escapeHtml(src)}" aria-label="Play native audio" title="Play native audio"><svg class="ic" aria-hidden="true"><use href="#i-volume"/></svg></button>`:'';
 
-// --- Vocab → deck activation (via the custom-verb store). ---
+// --- Vocab → deck activation (via the custom-verb state.store). ---
 // Build a deck card from a Minna vocab item, using the DICTIONARY form as the
 // headword (the deck is dictionary-form; the textbook ます-form is kept in tip).
 function minnaCard(item, lesson){
@@ -1967,8 +1689,7 @@ function minnaCard(item, lesson){
     custom:true, minna:true, italki:!!item.italki, minnaKey:item.key, minnaLesson:lesson,
   };
 }
-// Does this Minna word already exist as a baked-in verb? → its built-in rank, else null.
-function minnaBuiltinRank(item){ return BUILTIN_RANK_BY_JP[item.dict||item.kanji||item.kana]||null; }
+// minnaBuiltinRank lives in core/minna.js (reads state.BUILTIN_RANK_BY_JP).
 // The overlay payload for a built-in match: provenance only (the built-in keeps its own
 // content). Mirrors the tag set minnaCard builds.
 function minnaOverlay(item, lesson){
@@ -1982,20 +1703,15 @@ const overlaySig=o=>(o.tags||[]).join('|')+'·i'+(o.italki?1:0)+'·a'+(o.accent?
 // A word is in the deck if it's a custom card OR an overlay on a built-in.
 function minnaInDeck(key){
   if(loadCustom().verbs.some(v=>v.minnaKey===key))return true;
-  const ov=(minnaStore&&minnaStore.overlays)||{};
+  const ov=(state.minnaStore&&state.minnaStore.overlays)||{};
   return Object.keys(ov).some(r=>ov[r].minnaKey===key);
 }
-// Signature of the metadata a re-activation can change (tags + iTalki flag), so we
-// can tell "already in deck, up to date" from "in deck but missing new info".
-// Signature of everything a re-activation can change — tags + iTalki flag AND the
-// generated content (accent / mnemonic / tip / leveled examples). Including content is
-// what lets "Update N words" appear when a card predates content added to the lesson.
-const minnaSig=v=>(v.tags||[]).join('|')+'·i'+(v.italki?1:0)+'·a'+(v.accent??'')+'·m'+(v.mnem||'')+'·t'+(v.tip||'')+'·L'+(v.levels?JSON.stringify(v.levels):'');
+// minnaSig (re-activation content signature) lives in core/minna.js.
 // Non-mutating preview of what "Add all vocab to deck" would do: how many words are in
 // the deck, new (toAdd), or already-added but carrying stale metadata (toUpdate). Words
 // that match a built-in are tracked via the overlay map; the rest via custom cards.
 function minnaActivationStatus(lesson, vocab){
-  const cs=loadCustom(); const ov=(minnaStore&&minnaStore.overlays)||{};
+  const cs=loadCustom(); const ov=(state.minnaStore&&state.minnaStore.overlays)||{};
   let inDeck=0, toAdd=0, toUpdate=0;
   vocab.forEach(item=>{
     const br=minnaBuiltinRank(item);
@@ -2019,7 +1735,7 @@ function minnaActivationStatus(lesson, vocab){
 // (preserving rank → SRS progress) so the iTalki tag etc. apply retroactively. Returns
 // {added, updated}.
 function activateMinnaVocab(lesson, vocab){
-  const cs=loadCustom(); const ov=minnaStore.overlays=minnaStore.overlays||{};
+  const cs=loadCustom(); const ov=state.minnaStore.overlays=state.minnaStore.overlays||{};
   let added=0, updated=0, custChanged=false, ovChanged=false;
   vocab.forEach(item=>{
     const br=minnaBuiltinRank(item);
@@ -2052,11 +1768,11 @@ function activateMinnaVocab(lesson, vocab){
 // built-in becomes an overlay (so the rich built-in represents the word) and the bare
 // card is dropped. Idempotent; runs on boot + after a cloud pull, syncs only on change.
 function migrateMinnaDupes(){
-  const cs=loadCustom(); const ov=minnaStore.overlays=minnaStore.overlays||{};
+  const cs=loadCustom(); const ov=state.minnaStore.overlays=state.minnaStore.overlays||{};
   let cChanged=false, oChanged=false;
   for(let i=cs.verbs.length-1;i>=0;i--){
     const v=cs.verbs[i]; if(!v.minna)continue;
-    const br=BUILTIN_RANK_BY_JP[v.jp]; if(!br)continue;
+    const br=state.BUILTIN_RANK_BY_JP[v.jp]; if(!br)continue;
     if(!ov[br]){ ov[br]={tags:[...(v.tags||[])], italki:!!v.italki, minnaLesson:v.minnaLesson, minnaKey:v.minnaKey}; if(v.accent!=null)ov[br].accent=v.accent; oChanged=true; }
     cs.verbs.splice(i,1); cChanged=true;
   }
@@ -2093,13 +1809,13 @@ async function renderMinna(){
   try{ const r=await api('/v1/minna/lessons'); lessons=(r&&r.lessons)||[]; }
   catch(e){ if(e.status===401){ renderMinnaGate(); return; } body.innerHTML='<div class="mn-error">Could not reach the server.</div>'; return; }
   if(!lessons.length){ head.innerHTML=''; body.innerHTML='<div class="mn-error">No lessons have been added yet.</div>'; return; }
-  const cur=lessons.includes(minnaStore.lastLesson)?minnaStore.lastLesson:lessons[0];
-  minnaStore.lastLesson=cur;
+  const cur=lessons.includes(state.minnaStore.lastLesson)?state.minnaStore.lastLesson:lessons[0];
+  state.minnaStore.lastLesson=cur;
   head.innerHTML=`<div class="mn-kicker">みんなの日本語 · Minna no Nihongo</div>
     <div class="frow"><span class="filter-label">Chapter</span><div class="chips" id="mnChapters" aria-label="Chapter">
       ${lessons.map(n=>`<button class="chip mnch${n===cur?' active':''}" type="button" data-lesson="${n}">L${n}</button>`).join('')}
     </div></div>`;
-  head.querySelectorAll('.mnch').forEach(b=>b.addEventListener('click',()=>{ minnaStore.lastLesson=Number(b.dataset.lesson); saveMinna(); renderMinna(); }));
+  head.querySelectorAll('.mnch').forEach(b=>b.addEventListener('click',()=>{ state.minnaStore.lastLesson=Number(b.dataset.lesson); saveMinna(); renderMinna(); }));
   await renderMinnaLesson(cur, body);
 }
 async function renderMinnaLesson(n, body){
@@ -2166,7 +1882,7 @@ function minnaConversationSection(L){
   return mnSection('Conversation', c.lines.length, head+audio+lines, false);
 }
 function minnaNotesSection(n){
-  const val=escapeHtml((minnaStore.notes&&minnaStore.notes[n])||'');
+  const val=escapeHtml((state.minnaStore.notes&&state.minnaStore.notes[n])||'');
   return mnSection('My notes', null, `<div class="mn-notes"><textarea id="mnNotes" placeholder="Augment this lesson as you study with your tutor — grammar nuances, mistakes to avoid, anything. Synced to your account.">${val}</textarea><div class="mn-saved" id="mnNotesSaved"></div></div>`, false);
 }
 function wireMinnaLesson(n, L, body){
@@ -2184,7 +1900,7 @@ function wireMinnaLesson(n, L, body){
   if(ta){
     let t=null;
     ta.addEventListener('input',()=>{
-      minnaStore.notes=minnaStore.notes||{}; minnaStore.notes[n]=ta.value;
+      state.minnaStore.notes=state.minnaStore.notes||{}; state.minnaStore.notes[n]=ta.value;
       const s=body.querySelector('#mnNotesSaved'); if(s)s.textContent='saving…';
       if(t)clearTimeout(t);
       t=setTimeout(()=>{ saveMinna(); const e=body.querySelector('#mnNotesSaved'); if(e)e.textContent=account?'saved · synced':'saved on this device'; },500);

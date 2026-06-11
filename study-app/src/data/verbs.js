@@ -18,7 +18,7 @@
    To grow past 100, this array is the first thing to extract into verbs.json
    (see OUTSTANDING #7).
    ========================================================================== */
-const VERBS=[
+export const VERBS=[
 {rank:1,jp:"する",read:"する",mean:"to do",type:"irregular",jlpt:"N5",trans:"t",tags:["suru","top1-25"],
  mnem:'する → "soo-roo." Sounds like "<b>sue</b>-roo" — you take action, you <b>sue</b>. (or just: the all-purpose "do" verb)',tip:"Turns nouns into verbs: 勉強する. One of only 2 irregulars. #1 by raw token frequency (counting all 〜する compounds); near-tie with 言う.",ex:[["宿題を<ruby>する</ruby>。","Do homework."]]},
 {rank:2,jp:"言う",read:"いう",mean:"to say",type:"godan",jlpt:"N5",trans:"t",tags:["speaking","communication","top1-25"],
@@ -224,4 +224,4 @@ const VERBS=[
 // Pitch-accent number per built-in verb (rank -> Tokyo-dialect accent: 0=heiban,
 // 1=atamadaka, k=drop after the kth mora). Model-generated -> proofread. attachLevels()
 // backfills v.accent from this map and pitchHtml() renders the visual marks.
-const ACCENTS={1:0,2:0,3:1,4:1,5:2,6:0,7:1,8:1,9:0,10:0,11:2,12:1,13:1,14:4,15:1,16:0,17:0,18:2,19:1,20:2,21:0,22:2,23:0,24:1,25:0,26:1,27:1,28:0,29:2,30:1,31:1,32:0,33:2,34:2,35:0,36:2,37:1,38:1,39:0,40:1,41:0,42:0,43:0,44:0,45:1,46:4,47:2,48:0,49:3,50:0,51:0,52:2,53:0,54:2,55:2,56:0,57:1,58:0,59:0,60:0,61:2,62:2,63:2,64:0,65:2,66:0,67:2,68:0,69:0,70:0,71:5,72:0,73:0,74:0,75:0,76:0,77:1,78:0,79:2,80:0,81:0,82:0,83:0,84:0,85:2,86:4,87:0,88:2,89:0,90:0,91:2,92:0,93:0,94:0,95:0,96:0,97:0,98:4,99:0,100:3};
+export const ACCENTS={1:0,2:0,3:1,4:1,5:2,6:0,7:1,8:1,9:0,10:0,11:2,12:1,13:1,14:4,15:1,16:0,17:0,18:2,19:1,20:2,21:0,22:2,23:0,24:1,25:0,26:1,27:1,28:0,29:2,30:1,31:1,32:0,33:2,34:2,35:0,36:2,37:1,38:1,39:0,40:1,41:0,42:0,43:0,44:0,45:1,46:4,47:2,48:0,49:3,50:0,51:0,52:2,53:0,54:2,55:2,56:0,57:1,58:0,59:0,60:0,61:2,62:2,63:2,64:0,65:2,66:0,67:2,68:0,69:0,70:0,71:5,72:0,73:0,74:0,75:0,76:0,77:1,78:0,79:2,80:0,81:0,82:0,83:0,84:0,85:2,86:4,87:0,88:2,89:0,90:0,91:2,92:0,93:0,94:0,95:0,96:0,97:0,98:4,99:0,100:3};

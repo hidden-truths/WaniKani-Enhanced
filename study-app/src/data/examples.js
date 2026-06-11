@@ -7,7 +7,7 @@
 // Built-in verbs only - custom verbs fall back to their single `ex`. app.js
 // attaches EXAMPLES[rank] to each verb as `v.levels` and picks a tier with
 // exampleForLevel() (graceful fallback to the nearest tier / `ex`).
-const EXAMPLES = {
+export const EXAMPLES = {
 1: {
   N5: ["<ruby>毎日<rt>まいにち</rt></ruby><ruby>日本語<rt>にほんご</rt></ruby>を<ruby>勉強<rt>べんきょう</rt></ruby>する。","I study Japanese every day."],
   N4: ["<ruby>宿題<rt>しゅくだい</rt></ruby>をしてから、テレビを<ruby>見<rt>み</rt></ruby>ます。","I watch TV after I do my homework."],
