@@ -625,8 +625,10 @@ function setActiveGains(ctx, id) {
 // comparison aid that resets to centre on reload. Only affects ▶ both (single playback ignores
 // it); live while both are sounding (bothPlaying).
 let compareBias = 0, bothPlaying = false;
-const biasNative = (b) => (b <= 0 ? 1 : 1 - b);   // bias toward you fades native out
-const biasTake = (b) => (b >= 0 ? 1 : 1 + b);     // bias toward native fades you out
+// b = +1 is the NATIVE (right) end, b = −1 the YOU (left) end. Biasing toward one side fades the
+// OTHER out: at +1 you hear native (take→0), at −1 you hear yourself (native→0).
+const biasNative = (b) => (b >= 0 ? 1 : 1 + b);   // fade native out as you slide toward "you"
+const biasTake = (b) => (b <= 0 ? 1 : 1 - b);     // fade you out as you slide toward "native"
 function applyBothVolumes() {
   if (nativeAudioEl) nativeAudioEl.volume = clamp01(activeNativeGain * biasNative(compareBias));
   if (takeAudioEl) takeAudioEl.volume = clamp01(activeTakeGain * biasTake(compareBias));
