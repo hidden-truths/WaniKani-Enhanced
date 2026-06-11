@@ -166,6 +166,8 @@ that map onto a built-in verb). Activated *new* Minna vocab is NOT here — it l
 みんなの日本語 dead-end).
 Leveled examples (`examples.js`, NOT in localStorage — static data):
 `EXAMPLES[rank] = { N5:[jp,en], …, N1:[jp,en] }`.
+Pitch accents (`verbs.js`, static): `ACCENTS[rank] = <Tokyo accent number>` — backfilled
+onto built-in cards' `v.accent` by `attachLevels` (Minna cards carry their own).
 
 ## Design system
 
@@ -333,8 +335,12 @@ Component contracts you must preserve:
   `pitchHtml(reading, accent)` splits the reading into morae (`splitMora`) and draws an
   overline over the high morae + a step-down at the drop, on the flashcard answer, Browse
   card, and detail modal. No accent → plain reading. This is the source of truth for pitch;
-  the kanji-to-TTS trick above only nudges the audio. Minna cards carry `accent` from the
-  lesson JSON; built-ins don't have accent data (yet).
+  the kanji-to-TTS trick above only nudges the audio. **Where `accent` comes from:** Minna
+  cards carry it from the lesson JSON item / dedup overlay; the 100 built-ins get it from
+  the `ACCENTS` map (rank → number) in `verbs.js`, backfilled by `attachLevels`
+  (`if(v.accent==null) v.accent=ACCENTS[v.rank]` — a card's own accent wins). Both sets are
+  model-generated → proofread; a fix is a one-number edit. Custom verbs have no accent
+  unless the user sets one.
 - **Flashcard grading keys.** Before reveal: Space/Enter flip the card (typed mode:
   Enter submits instead, bound on the field). After reveal: **Space / Enter / 2 =
   correct; X / 1 = wrong.** The global keydown handler bails when `#answerInput` is
