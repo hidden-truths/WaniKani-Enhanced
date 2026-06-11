@@ -36,12 +36,8 @@ COPY package.json ./
 COPY src ./src
 COPY data ./data
 
-# The study web app served at `/`. Static files (index.html + styles.css +
-# verbs.js + app.js); src/ resolves them via `new URL('../web/<file>',
-# import.meta.url)`, so web/ must sit as a sibling of src/ inside the image
-# (i.e. /app/web). The whole dir is copied, so new assets are picked up
-# automatically (web/*.test.ts is harmless — never imported at runtime).
-COPY web ./web
+# (The study app used to be COPY'd here as web/ and served at `/`; it's now its own
+# container — study-app/ — served at the apex. This image no longer carries it.)
 
 # Deploy scripts that run inside the container via `docker exec` from
 # host-side systemd units (currently just backup.ts + retention.ts). We

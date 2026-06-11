@@ -192,40 +192,15 @@ if (config.storage.driver === 'local') {
     log.info('media.static_route_enabled', { root });
 }
 
-// Serve the verb-trainer study app. Both wkenhanced.dev and api.wkenhanced.dev
-// route through the Cloudflare Tunnel to this same server, so the app is
-// reachable at the apex domain's `/` (and `/study`). It lives under web/ as static
-// files — index.html + styles.css + verbs.js (dataset) + examples.js (leveled
-// sentences) + app.js (logic) — talking back to /v1/auth/*, /v1/progress/* and
-// /v1/tts on this same origin.
-const serveStatic = (relPath: string, contentType: string) => {
-    const url = new URL('../web/' + relPath, import.meta.url);
-    return async (c: Context) => {
-        const file = Bun.file(url);
-        if (!(await file.exists())) return c.text(`${relPath} missing from this build`, 404);
-        // no-cache so a redeploy is picked up immediately; the files are small and
-        // same-origin, so conditional revalidation is cheap (and avoids stale app.js
-        // / styles.css after a deploy — they MUST stay in lock-step with index.html).
-        return new Response(file, {
-            headers: { 'Content-Type': contentType, 'Cache-Control': 'no-cache' },
-        });
-    };
-};
-const serveApp = serveStatic('index.html', 'text/html; charset=utf-8');
-app.get('/', serveApp);
-app.get('/study', serveApp);
-app.get('/styles.css', serveStatic('styles.css', 'text/css; charset=utf-8'));
-app.get('/verbs.js', serveStatic('verbs.js', 'text/javascript; charset=utf-8'));
-app.get('/examples.js', serveStatic('examples.js', 'text/javascript; charset=utf-8'));
-app.get('/app.js', serveStatic('app.js', 'text/javascript; charset=utf-8'));
-
-// Old root service-info JSON, relocated so it stays available for humans/curl
-// now that `/` serves the app.
-app.get('/_info', (c) =>
+// The study app is now a SEPARATE container served at the apex (https://wkenhanced.dev);
+// this API no longer serves any static study-app assets (no `/`, `/study`, `/styles.css`,
+// `/verbs.js`, `/examples.js`, `/app.js`). `/` returns service-info JSON for humans/curl
+// hitting api.wkenhanced.dev directly; `/_info` stays as an alias for anything bookmarked.
+const serviceInfo = (c: Context) =>
     c.json({
         name: 'wk-enhanced-api',
         version: config.version,
-        app: '/',
+        app: 'https://wkenhanced.dev',
         docs: '/docs',
         openapi: '/openapi.json',
         endpoints: [
@@ -236,8 +211,9 @@ app.get('/_info', (c) =>
             'POST /v1/auth/register | /login | /logout,  GET /v1/auth/me',
             'GET/PUT /v1/progress/{app}  (session cookie)',
         ],
-    }),
-);
+    });
+app.get('/', serviceInfo);
+app.get('/_info', serviceInfo);
 
 app.notFound((c) =>
     c.json(
