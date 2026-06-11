@@ -158,10 +158,12 @@ Custom verbs (`localStorage["jpverbs_custom"]`, synced as app `custom-verbs`):
 Settings (`localStorage["jpverbs_settings"]`, synced as app `settings`):
 `{ exampleLevel, furigana, input, audio, freeReviewDue }` (the Settings page;
 migrated from the old jpverbs_exlevel/input/audio keys; `freeReviewDue` defaults on).
-Minna notes (`localStorage["jpverbs_minna"]`, synced as app `minna`):
-`{ notes:{<lesson>:string}, lastLesson:<n> }` — the みんなの日本語 dashboard's per-lesson
-scratchpad. Activated Minna *vocab* is NOT here — it lives in `jpverbs_custom` as
-tagged cards (see the みんなの日本語 dead-end).
+Minna state (`localStorage["jpverbs_minna"]`, synced as app `minna`):
+`{ notes:{<lesson>:string}, lastLesson:<n>, overlays:{<builtinRank>:{tags,italki,minnaLesson,minnaKey,accent?,tts?}} }`
+— the みんなの日本語 dashboard's per-lesson scratchpad PLUS the dedup overlays (Minna words
+that map onto a built-in verb). Activated *new* Minna vocab is NOT here — it lives in
+`jpverbs_custom` as tagged cards; only built-in-overlap words live here (see the
+みんなの日本語 dead-end).
 Leveled examples (`examples.js`, NOT in localStorage — static data):
 `EXAMPLES[rank] = { N5:[jp,en], …, N1:[jp,en] }`.
 
@@ -320,7 +322,19 @@ Component contracts you must preserve:
   directions, so the speaker button lives inside the revealed `.answer` panel (and
   on Browse cards where the reading is already shown) — never on the flashcard
   prompt. The server endpoint caches text→audio (so don't worry about replays); see
-  the server's `/v1/tts` (uses the existing `googleTts` service).
+  the server's `/v1/tts` (uses the existing `googleTts` service). **What we SEND to TTS
+  is `ttsText(v)`, not the raw reading:** Google derives pitch accent from the written
+  form, so a bare kana reading is accent-ambiguous for homographs (橋 "bridge" vs 箸
+  "chopsticks" are both はし). `ttsText` sends the **kanji headword** (`v.jp`) when it has
+  kanji so Google applies the dictionary accent; `v.tts` overrides an ambiguous single
+  kanji (e.g. 角→つの). The visible reading is always `v.read`. `speakWord(v)` wraps it.
+- **Pitch accent is shown VISUALLY (`pitchHtml`), because the TTS audio can't be pitch-
+  controlled.** A card's `accent` number (0=heiban, 1=atamadaka, k=drop after mora k) →
+  `pitchHtml(reading, accent)` splits the reading into morae (`splitMora`) and draws an
+  overline over the high morae + a step-down at the drop, on the flashcard answer, Browse
+  card, and detail modal. No accent → plain reading. This is the source of truth for pitch;
+  the kanji-to-TTS trick above only nudges the audio. Minna cards carry `accent` from the
+  lesson JSON; built-ins don't have accent data (yet).
 - **Flashcard grading keys.** Before reveal: Space/Enter flip the card (typed mode:
   Enter submits instead, bound on the field). After reveal: **Space / Enter / 2 =
   correct; X / 1 = wrong.** The global keydown handler bails when `#answerInput` is
@@ -409,8 +423,14 @@ Component contracts you must preserve:
   existing card without losing its rank — see `minnaActivationStatus`), marked
   `minna:true`/`italki` (Browse shows a みんなの日本語 badge over CUSTOM via `provenanceBadge`;
   iTalki words add a table badge). The `source` filter facet (みんなの日本語 / iTalki /
-  per-lesson) studies any of these slices from the normal deck. The only NEW synced blob is
-  per-lesson NOTES under the `minna` app key (4th sync trio). Content source of truth is the server's
+  per-lesson) studies any of these slices from the normal deck. **A word that already exists
+  as a built-in verb is NOT duplicated** — activation writes a provenance *overlay*
+  (`minnaStore.overlays`, keyed by built-in rank) that `applyMinnaOverlays` merges onto a
+  copy of the built-in (keeping its examples/mnemonic/progress), and `migrateMinnaDupes`
+  converts pre-dedup twins on boot. Genuinely-new words become custom cards carrying
+  generated `levels`/`mnem`/`tip`/`accent` from the lesson JSON (so they reach parity with
+  built-ins — same `renderExample`/`pitchHtml` paths). The only NEW synced blob is
+  per-lesson NOTES + the overlays under the `minna` app key (4th sync trio). Content source of truth is the server's
   `data/minna/lesson-<n>.json` (git-tracked, curated from the `scripts/scrape-minna.ts`
   draft). Phase 2 — record-your-voice + compare to native audio — is planned.
   **Full feature doc (architecture + data model + roadmap): [MINNA.md](MINNA.md).**
@@ -419,6 +439,17 @@ Component contracts you must preserve:
 
 Commits, newest first (all on `main`; touch the split web/ files + `src/` where noted):
 
+1. **みんなの日本語: content parity + dedup + pitch accent (4 commits).** Fixes for
+   second-class activated cards. (1) **TTS** sends the kanji headword (`ttsText`/
+   `speakWord`) so Google applies the right pitch for homographs (橋≠箸). (2) **Dedup**:
+   words that already exist as built-in verbs reuse them via a provenance overlay
+   (`minnaStore.overlays`/`applyMinnaOverlays`/`migrateMinnaDupes`) instead of a bare
+   duplicate — they inherit the built-in's examples/mnemonic. (3) **Content plumbing +
+   visual pitch**: `minnaCard` carries `levels`/`mnem`/`tip`/`accent`; `attachLevels`
+   keeps embedded levels; `pitchHtml`/`splitMora` draw overline+drop notation on the
+   reading. (4) **Generated content**: N5–N1 examples + mnemonic + tip + accent for the 47
+   new words (workflow, validated). Tests: ttsText/pitchHtml/splitMora/minnaBuiltinRank/
+   applyMinnaOverlays. Full doc: [MINNA.md](MINNA.md).
 1. **みんなの日本語: iTalki tag + Source facet + lessons 22/24 (4 commits).** (1) An
    `italki:true` flag in the lesson JSON → activated cards gain an `iTalki` tag/flag +
    a vocab-table badge; `activateMinnaVocab` now patches metadata onto already-added

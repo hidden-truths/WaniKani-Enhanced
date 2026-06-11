@@ -145,9 +145,23 @@ image via the Dockerfile's `COPY data ./data`). Shape (see
                                 //   Adds the `iTalki` tag + `italki:true` flag to the
                                 //   activated card (Source-facet filter + a table badge).
                                 //   Omit / false for words you haven't studied with a tutor.
+  "accent": 0,                  // OPTIONAL — Tokyo pitch-accent number (0=heiban, 1=atama-
+                                //   daka, k=drop after mora k). Drives the visual pitch marks.
+  "levels": {                   // OPTIONAL — five JLPT-tiered example sentences (N5→N1),
+    "N5": ["…<ruby>聞<rt>き</rt></ruby>く…", "…english…"]   //   each [jp_with_ruby, en], headword in every one.
+  },                            //   Same shape/role as the built-ins' examples.js.
+  "mnem": "…",                  // OPTIONAL — mnemonic. "tip": "…" — a trap/usage note.
+  "tts":  "かど",                // OPTIONAL — TTS-text override for an ambiguous single kanji
+                                //   (e.g. 角, which Google may read つの). Defaults to the kanji.
   "audio": "/Audio/minnamoi/bai23/00010101011101110.mp3"  // → the audio proxy
 }
 ```
+
+`accent`/`levels`/`mnem`/`tip` are **generated** (a per-word agent workflow, validated for
+ruby balance + headword presence; see the `scripts/scrape-minna.ts` companion approach) and
+are worth a human proofread — same status as `examples.js`. Words that already exist as a
+baked-in verb don't carry `levels`/`mnem` (they reuse the built-in's — see [dedup](#vocab-activation-reuses-the-custom-card-system)),
+only `accent`.
 
 ### The content pipeline (adding a lesson)
 
@@ -202,6 +216,26 @@ turns each word into a **dictionary-form custom card** via the existing
   SRS deck` count + a ✓ per word;
 - shows a `みんなの日本語 · L<n>` provenance badge over the plain `CUSTOM` badge in Browse
   (`provenanceBadge`); iTalki words also show a filled `iTalki` badge in the vocab table.
+
+**Dedup — words that already exist as a built-in verb REUSE it** (no bare duplicate).
+~10 Minna words (聞く, 出る, 着る, くれる…) are already among the 100 baked-in verbs, which
+*have* leveled examples + a mnemonic. For those, activation writes a **provenance overlay**
+(`minnaStore.overlays`, keyed by built-in rank, synced under the `minna` key) instead of a
+custom card; `applyMinnaOverlays` merges it onto a *copy* of the built-in at DATA-build
+time, so the card keeps its examples/mnemonic/rank/SRS-progress but gains the
+みんなの日本語/iTalki tags + flags + `accent`. `migrateMinnaDupes` converts any pre-dedup
+duplicate to an overlay on boot/cloud-pull. So a Minna word is EITHER a custom card (with
+generated `levels`/`mnem`) OR an overlay on a built-in — never both, never a bare twin.
+
+### Pitch accent
+
+Each card's `accent` drives `pitchHtml(reading, accent)` — Tokyo-dialect notation (an
+overline over the high morae + a step-down at the drop) shown on the flashcard answer,
+Browse card, and detail modal. It's the **visible** source of truth for pitch because
+Google TTS (the audio) can't be pitch-controlled through `/v1/tts`; as a partial audio fix,
+`ttsText(v)` sends the **kanji** headword (not the kana reading) so Google applies the
+dictionary accent — disambiguating homographs like 橋/箸 (`v.tts` overrides an ambiguous
+single kanji). See the TTS + pitch dead-ends in [CLAUDE.md](CLAUDE.md).
 
 ### The Source filter facet
 

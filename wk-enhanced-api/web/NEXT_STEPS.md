@@ -9,6 +9,16 @@ split, custom-verb sync, and Google TTS — what's left is one genuinely-deferre
 (needs email infra). Add new ideas to "Ideas / not yet scoped" as they come up.
 
 ## Done (most recent first)
+- ~~みんなの日本語: content parity, dedup, pitch accent~~ — **shipped.** Activated Minna
+  cards were second-class (no examples/mnemonics, duplicated built-ins, flat TTS pitch).
+  Now: (1) words that match a built-in verb **reuse it** via a synced provenance overlay
+  (`minnaStore.overlays`) — no duplicates, they inherit the built-in's examples+mnemonic;
+  (2) the 47 genuinely-new words got **generated** N5–N1 examples (ruby furigana) +
+  mnemonic + trap/tip (a 48-agent workflow, validated) so they reach parity; (3) **pitch
+  accent** is shown visually (`pitchHtml` overline+drop notation, per-word `accent`) since
+  Google TTS can't be pitch-controlled — and TTS now sends the **kanji** headword so the
+  audio accent improves for homographs (橋≠箸). Model-generated content — worth a proofread.
+  Re-activate a lesson ("Update N tags") to pull the content onto already-added cards.
 - ~~みんなの日本語: iTalki tag + Source filter + lessons 22 & 24~~ — **shipped.** An
   `italki:true` flag in the lesson JSON marks words covered in the maintainer's iTalki
   lessons (all of L23, from `~/Downloads/lesson23_vocab.txt`); activated cards gain an
