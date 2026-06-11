@@ -126,8 +126,17 @@ export function speakingBarHtml() {
       <select id="micSelect" class="mic-select" aria-label="Recording microphone">${micOptionsHtml()}</select>
     </span>
     ${on ? speedControlHtml() : ''}
+    ${on ? biasControlHtml() : ''}
     <span class="mic-hint">${on ? 'Mic stays on — tap a word’s Record to capture just that take.' : 'Pick your Mac mic (keeps AirPods high-quality), then turn on to record + compare.'}</span>
   </div>`;
+}
+// The ▶ both balance crossfader (you ⟷ native). Reads the live compareBias; wired in
+// wireMinnaRecord via an input listener.
+function biasControlHtml() {
+  return `<span class="cmp-bias" title="Balance you vs native in ▶ both">
+      <span class="mic-lbl">You</span>
+      <input type="range" class="bias-slider" min="-100" max="100" value="${Math.round(compareBias * 100)}" aria-label="▶ both balance: you vs native">
+      <span class="mic-lbl">Native</span></span>`;
 }
 // The compare playback-speed segmented control (0.5/0.75/1×). Global — one rate for every
 // compare on the lesson — shown only while speaking mode is on (the only time compares exist).
@@ -427,7 +436,7 @@ function startCursors(control) { cursorControl = control; if (!cursorRaf) cursor
 function stopCursors() {
   if (cursorRaf) { cancelAnimationFrame(cursorRaf); cursorRaf = 0; }
   if (cursorControl) cursorControl.querySelectorAll('.rec-wave-cursor').forEach(c => { c.style.opacity = '0'; });
-  cursorControl = null; activeNativeWindow = null; activeTakeWindow = null;
+  cursorControl = null; activeNativeWindow = null; activeTakeWindow = null; bothPlaying = false;
 }
 
 // ---------- HTML ----------
@@ -610,6 +619,20 @@ function setActiveGains(ctx, id) {
   } else { activeNativeGain = 1; activeTakeGain = 1; }
 }
 
+// Compare BALANCE for ▶ both: a crossfader in [-1, 1] (−1 = all you, 0 = balanced, +1 = all
+// native) that scales each side ON TOP of the normalization gains, so it's easy to lean the
+// simultaneous overlay toward one voice while A/B-ing. View-only (not synced) — a momentary
+// comparison aid that resets to centre on reload. Only affects ▶ both (single playback ignores
+// it); live while both are sounding (bothPlaying).
+let compareBias = 0, bothPlaying = false;
+const biasNative = (b) => (b <= 0 ? 1 : 1 - b);   // bias toward you fades native out
+const biasTake = (b) => (b >= 0 ? 1 : 1 + b);     // bias toward native fades you out
+function applyBothVolumes() {
+  if (nativeAudioEl) nativeAudioEl.volume = clamp01(activeNativeGain * biasNative(compareBias));
+  if (takeAudioEl) takeAudioEl.volume = clamp01(activeTakeGain * biasTake(compareBias));
+}
+function setCompareBias(v) { compareBias = Math.max(-1, Math.min(1, v)); if (bothPlaying) applyBothVolumes(); }
+
 function handleCompare(control, action, btn) {
   const ctx = controlCtx(control);
   // A second click on a lit button stops everything.
@@ -658,11 +681,11 @@ function handleCompare(control, action, btn) {
     const id = newestTakeId(control); if (id == null || !nativePlayable(ctx)) return;
     const nw = windowFor(nativeUrl(ctx.nativeSrc), ctx.clip), tw = windowFor(takeUrl(id), null);
     setActiveGains(ctx, id);
-    litBtn(control, btn); activeNativeWindow = nw; activeTakeWindow = tw; startCursors(control);
+    litBtn(control, btn); activeNativeWindow = nw; activeTakeWindow = tw; bothPlaying = true; startCursors(control);
     let pending = 2;
     const join = () => { if (--pending <= 0) { clearBtn(btn); stopCursors(); } };
-    playNative(ctx.nativeSrc, nw, activeNativeGain, join);
-    playTakeOnce(id, tw, activeTakeGain, join);
+    playNative(ctx.nativeSrc, nw, activeNativeGain * biasNative(compareBias), join);
+    playTakeOnce(id, tw, activeTakeGain * biasTake(compareBias), join);
     return;
   }
 }
@@ -684,6 +707,10 @@ function setCompareSpeed(v, body) {
 export function wireMinnaRecord(body) {
   if (body.dataset.recWired) return;   // body persists across re-renders — attach the delegate once
   body.dataset.recWired = '1';
+  body.addEventListener('input', e => {
+    const slider = e.target.closest('.bias-slider');
+    if (slider) setCompareBias(Number(slider.value) / 100);
+  });
   body.addEventListener('click', e => {
     const speed = e.target.closest('[data-speed]');
     if (speed) { setCompareSpeed(Number(speed.dataset.speed), body); return; }

@@ -512,7 +512,13 @@ Component contracts you must preserve:
   native + take on the two separate `<audio>` elements with a 2-count barrier (one-shot; loop is
   seq-only). Playback speed is `settings.compareSpeed` (synced, snapped by `clampSpeed` to
   {0.5,0.75,1}) applied via `applySpeed` (`playbackRate` + `preservesPitch`) on every compare
-  play; the segmented control lives in the speaking bar.
+  play; the segmented control lives in the speaking bar. **Volume is normalized** so native + take
+  play at ~equal loudness: `levelFor` (RMS over each spoken window) → `normGains` (attenuate-only,
+  since `<audio>.volume` can't boost — the louder is brought down to the quieter, floored at 0.3)
+  → a `volume` passed through `playRange`. The **▶ both balance slider** (`compareBias`, view-only,
+  in the speaking bar) is a `you ⟷ native` crossfader applied ON TOP of the gains, **only** for
+  ▶ both (`applyBothVolumes`, live via `bothPlaying`); single playback ignores it. The take-list
+  ▶ resets `volume` to 1 (raw listen, not normalized).
 - **Every compare playback plays a SPEECH WINDOW, not the whole file — this is what makes ▶ both
   line up.** The native MP3 has built-in lead/tail silence; overlapping it raw on your
   (already-tight) take would start the native speaker late, so ▶ both wouldn't align. `playRange`

@@ -554,6 +554,8 @@
   .mic-select:focus{outline:none;border-color:var(--ichidan)}
   .cmp-speed{display:inline-flex;align-items:center;gap:5px}
   .speed-chip{padding:3px 9px;font-size:11px}
+  .cmp-bias{display:inline-flex;align-items:center;gap:6px}
+  .bias-slider{width:96px;accent-color:var(--ichidan);cursor:pointer}
   .mic-hint{font-family:Georgia,serif;font-size:12px;color:var(--muted);opacity:.85;flex-basis:100%}
   /* Compare player — ▶ you / ▶ native / ▶ native→you + loop. Shows once a take exists. */
   .rec-compare{display:inline-flex;align-items:center;flex-wrap:wrap;gap:6px;margin-left:2px}
