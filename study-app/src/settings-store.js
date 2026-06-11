@@ -17,7 +17,9 @@ const SETTINGS_KEY = 'jpverbs_settings';
 // upload (clamped 1–20). Default 3.
 // trimSilence: auto-trim leading/trailing (near-)silence off a new recording before
 // saving, so the take is just the spoken words. Default on.
-export const DEFAULT_SETTINGS = { exampleLevel: 'N5', furigana: true, input: 'self', audio: 'off', freeReviewDue: true, recordingsKeep: 3, trimSilence: true };
+// compareSpeed: playback rate (0.5/0.75/1×) for the record-and-compare player — slow the
+// native audio down (pitch preserved) to mimic it more easily. Default 1×.
+export const DEFAULT_SETTINGS = { exampleLevel: 'N5', furigana: true, input: 'self', audio: 'off', freeReviewDue: true, recordingsKeep: 3, trimSilence: true, compareSpeed: 1 };
 
 export function loadSettings() {
   let s = null; try { s = JSON.parse(localStorage.getItem(SETTINGS_KEY)); } catch (e) {}

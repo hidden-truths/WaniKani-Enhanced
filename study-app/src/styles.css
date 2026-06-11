@@ -553,6 +553,8 @@
   .mic-lbl{font-family:"SF Mono",ui-monospace,monospace;font-size:10px;letter-spacing:.1em;text-transform:uppercase;color:var(--muted)}
   .mic-select{background:var(--paper);color:var(--ink);border:1px solid var(--line);border-radius:6px;padding:5px 8px;font-family:"SF Mono",ui-monospace,monospace;font-size:12px;max-width:220px}
   .mic-select:focus{outline:none;border-color:var(--ichidan)}
+  .cmp-speed{display:inline-flex;align-items:center;gap:5px}
+  .speed-chip{padding:3px 9px;font-size:11px}
   .mic-hint{font-family:Georgia,serif;font-size:12px;color:var(--muted);opacity:.85;flex-basis:100%}
   /* Compare player — ▶ you / ▶ native / ▶ native→you + loop. Shows once a take exists. */
   .rec-compare{display:inline-flex;align-items:center;flex-wrap:wrap;gap:6px;margin-left:2px}

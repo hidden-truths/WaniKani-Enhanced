@@ -9,8 +9,8 @@
 // <audio crossOrigin='use-credentials'> so the session cookie authorizes it cross-origin.
 import { API_BASE } from '../config.js';
 import { account, api, setSyncStatus } from './cloud-core.js';
-import { settings } from '../settings-store.js';
-import { escapeHtml, clampKeep, formatDuration, validClip, findTrimBounds, waveformPeaks } from '../core/index.js';
+import { settings, saveSettings } from '../settings-store.js';
+import { escapeHtml, clampKeep, formatDuration, validClip, findTrimBounds, waveformPeaks, clampSpeed, COMPARE_SPEEDS } from '../core/index.js';
 
 // Capability gates. Recording needs getUserMedia + MediaRecorder; both are absent over
 // insecure origins / old browsers. When unavailable we degrade to a quiet hint.
@@ -125,8 +125,20 @@ export function speakingBarHtml() {
       <label class="mic-lbl" for="micSelect">Mic</label>
       <select id="micSelect" class="mic-select" aria-label="Recording microphone">${micOptionsHtml()}</select>
     </span>
+    ${on ? speedControlHtml() : ''}
     <span class="mic-hint">${on ? 'Mic stays on — tap a word’s Record to capture just that take.' : 'Pick your Mac mic (keeps AirPods high-quality), then turn on to record + compare.'}</span>
   </div>`;
+}
+// The compare playback-speed segmented control (0.5/0.75/1×). Global — one rate for every
+// compare on the lesson — shown only while speaking mode is on (the only time compares exist).
+// Reads the current rate from settings.compareSpeed (synced); wired in wireMinnaRecord.
+function speedControlHtml() {
+  const cur = clampSpeed(settings.compareSpeed);
+  const chips = COMPARE_SPEEDS.map(s => {
+    const on = s === cur;
+    return `<button class="chip speed-chip${on ? ' active' : ''}" type="button" data-speed="${s}" aria-pressed="${on}">${s}×</button>`;
+  }).join('');
+  return `<span class="cmp-speed" role="group" aria-label="Compare playback speed"><span class="mic-lbl">Speed</span>${chips}</span>`;
 }
 function micOptionsHtml() {
   const opts = [`<option value=""${selectedMicId ? '' : ' selected'}>System default</option>`];
@@ -174,6 +186,14 @@ function setTakes(lesson, itemKey, takes) {
   recCache[lesson] = others.concat(takes).sort((a, b) => b.createdAt - a.createdAt);
 }
 
+// Apply the compare-player speed to an <audio> element before play. preservesPitch keeps the
+// pronunciation clear when slowed (the whole point — mimic, don't chipmunk). Vendor-prefixed
+// for older Safari/Firefox.
+function applySpeed(a) {
+  a.playbackRate = clampSpeed(settings.compareSpeed);
+  a.preservesPitch = a.mozPreservesPitch = a.webkitPreservesPitch = true;
+}
+
 // ---------- gated playback of a saved take ----------
 let takeAudioEl = null, takePlayingBtn = null;
 function ensureTakeAudio() { if (!takeAudioEl) { takeAudioEl = new Audio(); takeAudioEl.crossOrigin = 'use-credentials'; } return takeAudioEl; }
@@ -208,6 +228,7 @@ function playNative(src, clip, onDone) {
   stopNative();
   const done = () => { stopNative(); if (onDone) onDone(); };
   a.src = API_BASE + '/v1/minna/audio?src=' + encodeURIComponent(src);
+  applySpeed(a);
   const v = validClip(clip);
   a.onerror = done;
   if (v) {
@@ -237,6 +258,7 @@ function playTakeOnce(id, onDone) {
   const a = ensureTakeAudio();
   try { a.pause(); } catch (e) {}
   a.src = API_BASE + '/v1/minna/recordings/' + id;
+  applySpeed(a);
   a.onended = a.onerror = () => { a.onended = a.onerror = null; if (onDone) onDone(); };
   a.play().catch(() => { if (onDone) onDone(); });
 }
@@ -546,11 +568,26 @@ function handleCompare(control, action, btn) {
   }
 }
 
+// Set the global compare speed from a speed-chip click: persist + sync, repaint the chip
+// active states in place (no re-render), and update any in-flight playback live.
+function setCompareSpeed(v, body) {
+  settings.compareSpeed = clampSpeed(v);
+  saveSettings();
+  body.querySelectorAll('.speed-chip').forEach(b => {
+    const on = Number(b.dataset.speed) === settings.compareSpeed;
+    b.classList.toggle('active', on); b.setAttribute('aria-pressed', String(on));
+  });
+  if (nativeAudioEl) applySpeed(nativeAudioEl);
+  if (takeAudioEl) applySpeed(takeAudioEl);
+}
+
 // ---------- wiring (delegated; attach-once, since renderMinnaLesson re-renders body) ----------
 export function wireMinnaRecord(body) {
   if (body.dataset.recWired) return;   // body persists across re-renders — attach the delegate once
   body.dataset.recWired = '1';
   body.addEventListener('click', e => {
+    const speed = e.target.closest('[data-speed]');
+    if (speed) { setCompareSpeed(Number(speed.dataset.speed), body); return; }
     const control = e.target.closest('.rec-control'); if (!control) return;
     if (e.target.closest('[data-rec-toggle]')) {
       const btn = e.target.closest('[data-rec-toggle]');
