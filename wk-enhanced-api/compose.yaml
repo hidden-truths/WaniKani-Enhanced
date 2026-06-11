@@ -83,3 +83,35 @@ services:
       options:
         max-size: "10m"
         max-file: "3"
+
+  # The 日常日本語 study app — a SEPARATE container from the API, co-located on the
+  # same droplet (the two-container topology). Built from the sibling study-app/
+  # project (nginx serves the Vite build). The Cloudflare Tunnel routes the apex
+  # `wkenhanced.dev` → 127.0.0.1:8080 (this), while `api.wkenhanced.dev` →
+  # 127.0.0.1:3000 (the api service above). The two are same-site, cross-ORIGIN.
+  web:
+    # Built from study-app/Dockerfile; if a registry image exists under this tag
+    # Compose uses it, else the build: block builds locally (same as the api service).
+    image: wk-study-app:local
+    build:
+      context: ../study-app
+      dockerfile: Dockerfile
+      # VITE_API_BASE is baked into the static bundle at build time (Vite has no
+      # runtime env). Prod points the app at the API's own origin so its fetches
+      # cross from wkenhanced.dev → api.wkenhanced.dev. Override via STUDY_API_BASE.
+      args:
+        VITE_API_BASE: ${STUDY_API_BASE:-https://api.wkenhanced.dev}
+    container_name: wk-study-app
+    restart: unless-stopped
+
+    # Bind to 127.0.0.1 only — public ingress flows through the Cloudflare Tunnel
+    # on the host (cloudflared → 127.0.0.1:8080 → this container's nginx on :80).
+    # Exposing 0.0.0.0 would leak the app past the tunnel.
+    ports:
+      - "127.0.0.1:8080:80"
+
+    logging:
+      driver: json-file
+      options:
+        max-size: "10m"
+        max-file: "3"
