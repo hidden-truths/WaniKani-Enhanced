@@ -32,6 +32,9 @@ type Core = {
   tokenFacet: (t: string) => string;
   deckLabel: (t: string) => string;
   ttsText: (v: any) => string;
+  minnaBuiltinRank: (item: any) => number | null;
+  applyMinnaOverlays: (builtins: any[]) => any[];
+  minnaStore: any;
   cardStamp: (v: any) => { label: string; cls: string };
   colorClass: (v: any) => string;
   CATS: string[];
@@ -55,9 +58,10 @@ function loadCore(): Core {
     verbs + "\n" + examples + "\n" + appSrc +
     `\n;return { passes, oneGroup, facetAll, facetMatch, scheduleCard, cardStat,
       isDue, dueCards, rollingAcc, isLeech, leeches, normKana, romajiToKana, reviewForecast, filterSummary, tokenFacet, deckLabel, ttsText,
-      cardStamp, colorClass, CATS,
+      cardStamp, colorClass, CATS, minnaBuiltinRank, applyMinnaOverlays,
       exampleForLevel, availableTiers, JLPT_TIERS,
-      BOX_DAYS, get DATA(){return DATA}, get store(){return store}, set store(v){store=v} };`;
+      BOX_DAYS, get DATA(){return DATA}, get store(){return store}, set store(v){store=v},
+      get minnaStore(){return minnaStore}, set minnaStore(v){minnaStore=v} };`;
 
   // --- minimal DOM / browser stubs (only what index.html touches at boot) ---
   const METHODS = new Set([
@@ -370,6 +374,36 @@ test("ttsText sends the kanji headword (accent-disambiguating), else the reading
   expect(core.ttsText({ jp: "ホームステイ", read: "ホームステイ" })).toBe("ホームステイ");
   // explicit per-card override wins (escape hatch for an ambiguous single kanji)
   expect(core.ttsText({ jp: "角", read: "かど", tts: "かど" })).toBe("かど");
+});
+
+test("minnaBuiltinRank detects when a Minna word already exists as a built-in verb", () => {
+  // 聞く / 出る are built-in verbs (the dedup target); サイズ / こうさてん are not.
+  const kiku = core.DATA.find((v) => v.jp === "聞く");
+  expect(kiku).toBeTruthy();
+  expect(core.minnaBuiltinRank({ dict: "聞く" })).toBe(kiku!.rank);
+  expect(core.minnaBuiltinRank({ dict: "出る" })).toBeGreaterThan(0);
+  expect(core.minnaBuiltinRank({ dict: "サイズ" })).toBe(null); // genuinely new → stays a custom card
+  expect(core.minnaBuiltinRank({ dict: "交差点" })).toBe(null);
+});
+
+test("applyMinnaOverlays merges Minna provenance onto the matching built-in (no duplicate)", () => {
+  const kiku = core.DATA.find((v) => v.jp === "聞く")!;
+  core.minnaStore = { notes: {}, lastLesson: 23, overlays: {
+    [kiku.rank]: { tags: ["みんなの日本語", "mnn-l23", "iTalki"], italki: true, minnaLesson: 23, minnaKey: "mnn:23:0", accent: 0 },
+  } };
+  const builtins = core.DATA.filter((v) => v.rank <= 100);
+  const merged = core.applyMinnaOverlays(builtins);
+  const k = merged.find((v) => v.jp === "聞く")!;
+  expect(k.minna).toBe(true);
+  expect(k.italki).toBe(true);
+  expect(k.minnaKey).toBe("mnn:23:0");
+  expect(k.accent).toBe(0);
+  expect(k.tags).toContain("みんなの日本語"); // overlay tag added
+  expect(k.tags).toContain("speaking");       // original built-in tag preserved
+  expect(merged.filter((v) => v.jp === "聞く").length).toBe(1); // still one card, not two
+  // a non-overlapped built-in is passed through untouched (same object reference)
+  const other = core.DATA.find((v) => v.rank <= 100 && v.jp !== "聞く")!;
+  expect(merged.find((v) => v.jp === other.jp)).toBe(other);
 });
 
 test("deckLabel + filterSummary surface the source facet (per-lesson → 'L23')", () => {

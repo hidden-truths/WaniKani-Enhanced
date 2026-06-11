@@ -49,6 +49,12 @@ function saveCustom(o){ saveCustomLocal(o); if(typeof scheduleCustomSync==='func
 let DATA=VERBS.filter(v=>!v.skip).concat(loadCustom().verbs);
 let MAXRANK=DATA.reduce((m,v)=>Math.max(m,v.rank),0)||100;
 
+// Built-in headword (jp) → rank. Lets Minna activation detect when a word already
+// exists as a baked-in verb, so it reuses that rich card (examples + mnemonic) via an
+// overlay instead of adding a bare duplicate. See applyMinnaOverlays / activateMinnaVocab.
+const BUILTIN_RANK_BY_JP={};
+VERBS.filter(v=>!v.skip).forEach(v=>{ if(!(v.jp in BUILTIN_RANK_BY_JP))BUILTIN_RANK_BY_JP[v.jp]=v.rank; });
+
 // ---- Leveled example sentences ----
 // Each built-in verb gets `v.levels` = EXAMPLES[rank] = {N5:[jp,en],…,N1:[jp,en]}
 // (from examples.js). attachLevels() runs after every DATA rebuild. Custom verbs
@@ -1586,6 +1592,7 @@ async function pullCloud(){
   await pullCustomCloud();          // custom verbs + settings + minna share the sign-in pull
   await pullSettingsCloud();
   await pullMinnaCloud();
+  migrateMinnaDupes(); rebuildData();   // apply pulled Minna overlays + clean any dupes
   refreshAllViews();
 }
 
@@ -1701,9 +1708,29 @@ document.getElementById('signupDismiss').addEventListener('click',()=>{
    the rank-range UI, and re-runs the JLPT annotation; callers then re-render.
    ========================================================================== */
 let editingRank=null;   // null = adding a new verb; otherwise the rank being edited
+// Merge Minna provenance onto matching built-ins (the dedup path). A Minna word that
+// already exists as a baked-in verb is NOT re-added as a bare card — its built-in rank
+// gets an entry in minnaStore.overlays, and here we merge that onto a COPY of the
+// built-in: it keeps its examples / mnemonic / rank / SRS progress but gains the
+// みんなの日本語 + iTalki tags, flags, and (if present) pitch accent. Copies — not
+// mutation of the shared VERBS objects — so removing an overlay reverts cleanly.
+function applyMinnaOverlays(builtins){
+  let ov;
+  // minnaStore is a `let` declared further down; an early-boot rebuildData() (the
+  // rank-range sync) runs before it initializes. Treat that as "no overlays yet" —
+  // the post-minna-init boot rebuild applies them once the store exists.
+  try{ ov=(minnaStore&&minnaStore.overlays)||{}; }catch(e){ return builtins; }
+  if(!Object.keys(ov).length)return builtins;
+  return builtins.map(v=>{
+    const o=ov[v.rank]; if(!o)return v;
+    const tags=[...(v.tags||[])]; (o.tags||[]).forEach(t=>{ if(!tags.includes(t))tags.push(t); });
+    return Object.assign({},v,{tags,minna:true,italki:!!o.italki,minnaKey:o.minnaKey,minnaLesson:o.minnaLesson},
+      o.accent!=null?{accent:o.accent}:{}, o.tts?{tts:o.tts}:{});
+  });
+}
 function rebuildData(){
   const prevMax=MAXRANK;
-  DATA=VERBS.filter(v=>!v.skip).concat(loadCustom().verbs);
+  DATA=applyMinnaOverlays(VERBS.filter(v=>!v.skip)).concat(loadCustom().verbs);
   MAXRANK=DATA.reduce((m,v)=>Math.max(m,v.rank),0)||100;
   attachLevels();
   ['rmin','rmax','brmin','brmax'].forEach(id=>{const el=document.getElementById(id);if(el)el.max=MAXRANK;});
@@ -1854,8 +1881,10 @@ document.getElementById('setFreeDue').addEventListener('click',e=>{const b=e.tar
    ========================================================================== */
 const MINNA_APP_KEY='minna';
 const MINNA_KEY='jpverbs_minna';
-const MINNA_DEFAULT={notes:{}, lastLesson:23};
-function loadMinnaStore(){ try{const o=JSON.parse(localStorage.getItem(MINNA_KEY));if(o&&typeof o==='object')return Object.assign({},MINNA_DEFAULT,o,{notes:o.notes||{}});}catch(e){} return Object.assign({},MINNA_DEFAULT,{notes:{}}); }
+// `overlays` = { <built-in rank>: {tags,italki,minnaLesson,minnaKey,accent?,tts?} } — the
+// dedup record: Minna words that map onto a baked-in verb live here, not as custom cards.
+const MINNA_DEFAULT={notes:{}, lastLesson:23, overlays:{}};
+function loadMinnaStore(){ try{const o=JSON.parse(localStorage.getItem(MINNA_KEY));if(o&&typeof o==='object')return Object.assign({},MINNA_DEFAULT,o,{notes:o.notes||{}, overlays:o.overlays||{}});}catch(e){} return Object.assign({},MINNA_DEFAULT,{notes:{}, overlays:{}}); }
 let minnaStore=loadMinnaStore();
 function saveMinnaLocal(){ try{localStorage.setItem(MINNA_KEY,JSON.stringify(minnaStore));}catch(e){} }
 function saveMinna(){ saveMinnaLocal(); if(typeof scheduleMinnaSync==='function')scheduleMinnaSync(); }
@@ -1864,7 +1893,7 @@ function saveMinna(){ saveMinnaLocal(); if(typeof scheduleMinnaSync==='function'
 let minnaSyncTimer=null;
 function scheduleMinnaSync(){ if(!account)return; if(minnaSyncTimer)clearTimeout(minnaSyncTimer); minnaSyncTimer=setTimeout(pushMinnaCloud,1200); }
 async function pushMinnaCloud(){ if(!account)return; setSyncStatus('saving…'); try{ await api('/v1/progress/'+MINNA_APP_KEY,{method:'PUT',body:{data:minnaStore}}); setSyncStatus('✓ synced'); }catch(err){ setSyncStatus('⚠ offline'); } }
-async function pullMinnaCloud(){ try{ const r=await api('/v1/progress/'+MINNA_APP_KEY); if(r&&r.data&&typeof r.data==='object'){ minnaStore=Object.assign({},MINNA_DEFAULT,r.data,{notes:r.data.notes||{}}); saveMinnaLocal(); }else if(Object.keys(minnaStore.notes||{}).length){ await pushMinnaCloud(); } }catch(err){/* offline — keep local notes */} }
+async function pullMinnaCloud(){ try{ const r=await api('/v1/progress/'+MINNA_APP_KEY); if(r&&r.data&&typeof r.data==='object'){ minnaStore=Object.assign({},MINNA_DEFAULT,r.data,{notes:r.data.notes||{}, overlays:r.data.overlays||{}}); saveMinnaLocal(); }else if(Object.keys(minnaStore.notes||{}).length||Object.keys(minnaStore.overlays||{}).length){ await pushMinnaCloud(); } }catch(err){/* offline — keep local notes */} }
 
 // --- Native-audio playback. One reused <audio>; same-origin so the session
 //     cookie travels and /v1/minna/audio authorizes. Clicking a playing button
@@ -1906,43 +1935,98 @@ function minnaCard(item, lesson){
     custom:true, minna:true, italki:!!item.italki, minnaKey:item.key, minnaLesson:lesson,
   };
 }
-function minnaInDeck(key){ return loadCustom().verbs.some(v=>v.minnaKey===key); }
+// Does this Minna word already exist as a baked-in verb? → its built-in rank, else null.
+function minnaBuiltinRank(item){ return BUILTIN_RANK_BY_JP[item.dict||item.kanji||item.kana]||null; }
+// The overlay payload for a built-in match: provenance only (the built-in keeps its own
+// content). Mirrors the tag set minnaCard builds.
+function minnaOverlay(item, lesson){
+  const tags=['みんなの日本語','mnn-l'+lesson]; if(item.italki)tags.push('iTalki');
+  const o={tags, italki:!!item.italki, minnaLesson:lesson, minnaKey:item.key};
+  if(item.accent!=null)o.accent=item.accent; if(item.tts)o.tts=item.tts;
+  return o;
+}
+const overlaySig=o=>(o.tags||[]).join('|')+'·'+(o.italki?'1':'0');
+// A word is in the deck if it's a custom card OR an overlay on a built-in.
+function minnaInDeck(key){
+  if(loadCustom().verbs.some(v=>v.minnaKey===key))return true;
+  const ov=(minnaStore&&minnaStore.overlays)||{};
+  return Object.keys(ov).some(r=>ov[r].minnaKey===key);
+}
 // Signature of the metadata a re-activation can change (tags + iTalki flag), so we
 // can tell "already in deck, up to date" from "in deck but missing new info".
 const minnaSig=v=>(v.tags||[]).join('|')+'·'+(v.italki?'1':'0');
-// Non-mutating preview of what "Add all vocab to deck" would do: how many words are
-// in the deck, how many are new (toAdd), and how many already-added cards carry stale
-// metadata (toUpdate) — e.g. cards activated before the lesson gained its iTalki flag.
+// Non-mutating preview of what "Add all vocab to deck" would do: how many words are in
+// the deck, new (toAdd), or already-added but carrying stale metadata (toUpdate). Words
+// that match a built-in are tracked via the overlay map; the rest via custom cards.
 function minnaActivationStatus(lesson, vocab){
-  const cs=loadCustom(); let inDeck=0, toAdd=0, toUpdate=0;
+  const cs=loadCustom(); const ov=(minnaStore&&minnaStore.overlays)||{};
+  let inDeck=0, toAdd=0, toUpdate=0;
   vocab.forEach(item=>{
+    const br=minnaBuiltinRank(item);
+    if(br){
+      const cur=ov[br];
+      if(!cur){ toAdd++; return; }
+      inDeck++;
+      if(overlaySig(cur)!==overlaySig(minnaOverlay(item,lesson)))toUpdate++;
+      return;
+    }
     const existing=cs.verbs.find(v=>v.minnaKey===item.key);
     if(!existing){ toAdd++; return; }
     inDeck++;
-    if(minnaSig(existing)!==minnaSig(minnaCard(item,lesson))) toUpdate++;
+    if(minnaSig(existing)!==minnaSig(minnaCard(item,lesson)))toUpdate++;
   });
   return {inDeck, total:vocab.length, toAdd, toUpdate};
 }
-// Add every not-yet-added vocab word for a lesson to the deck. Idempotent
-// (skips words whose minnaKey is already present). Returns the count added.
+// Activate a lesson's vocab into the deck. Words that match a built-in verb REUSE it
+// (an overlay tags the built-in — no bare duplicate; it keeps its examples + mnemonic);
+// genuinely-new words become custom cards. Re-activation patches metadata in place
+// (preserving rank → SRS progress) so the iTalki tag etc. apply retroactively. Returns
+// {added, updated}.
 function activateMinnaVocab(lesson, vocab){
-  const cs=loadCustom(); let added=0, updated=0;
+  const cs=loadCustom(); const ov=minnaStore.overlays=minnaStore.overlays||{};
+  let added=0, updated=0, custChanged=false, ovChanged=false;
   vocab.forEach(item=>{
+    const br=minnaBuiltinRank(item);
+    if(br){
+      // Reuse the built-in via an overlay; drop any bare duplicate a pre-dedup
+      // activation may have created for this word.
+      const fresh=minnaOverlay(item,lesson), cur=ov[br];
+      if(!cur){ ov[br]=fresh; added++; ovChanged=true; }
+      else if(overlaySig(cur)!==overlaySig(fresh)){ ov[br]=Object.assign({},cur,fresh); updated++; ovChanged=true; }
+      const di=cs.verbs.findIndex(v=>v.minnaKey===item.key);
+      if(di>=0){ cs.verbs.splice(di,1); custChanged=true; }
+      return;
+    }
     const fresh=minnaCard(item,lesson);
     const existing=cs.verbs.find(v=>v.minnaKey===item.key);
     if(existing){
-      // Re-activation patches the textbook-derived metadata onto an already-added
-      // card so it picks up new info (notably the iTalki tag) WITHOUT losing its
-      // rank — the card's SRS progress is keyed by rank, so we preserve it.
       const changed=minnaSig(existing)!==minnaSig(fresh);
-      Object.assign(existing,{tags:fresh.tags,italki:fresh.italki,mean:fresh.mean,cat:fresh.cat,type:fresh.type,trans:fresh.trans,tip:fresh.tip});
-      if(changed)updated++;
+      Object.assign(existing,{tags:fresh.tags,italki:fresh.italki,mean:fresh.mean,cat:fresh.cat,type:fresh.type,trans:fresh.trans,tip:fresh.tip,levels:fresh.levels,mnem:fresh.mnem,accent:fresh.accent});
+      if(changed)updated++; custChanged=true;
       return;
     }
-    cs.seq=(cs.seq||100)+1; fresh.rank=cs.seq; cs.verbs.push(fresh); added++;
+    cs.seq=(cs.seq||100)+1; fresh.rank=cs.seq; cs.verbs.push(fresh); added++; custChanged=true;
   });
-  if(added||updated){ saveCustom(cs); rebuildData(); refreshAfterVerbChange(); }
+  if(custChanged)saveCustom(cs);
+  if(ovChanged)saveMinna();
+  if(custChanged||ovChanged){ rebuildData(); refreshAfterVerbChange(); }
   return {added, updated};
+}
+// One-time cleanup of pre-dedup duplicates: any Minna custom card that duplicates a
+// built-in becomes an overlay (so the rich built-in represents the word) and the bare
+// card is dropped. Idempotent; runs on boot + after a cloud pull, syncs only on change.
+function migrateMinnaDupes(){
+  const cs=loadCustom(); const ov=minnaStore.overlays=minnaStore.overlays||{};
+  let cChanged=false, oChanged=false;
+  for(let i=cs.verbs.length-1;i>=0;i--){
+    const v=cs.verbs[i]; if(!v.minna)continue;
+    const br=BUILTIN_RANK_BY_JP[v.jp]; if(!br)continue;
+    if(!ov[br]){ ov[br]={tags:[...(v.tags||[])], italki:!!v.italki, minnaLesson:v.minnaLesson, minnaKey:v.minnaKey}; if(v.accent!=null)ov[br].accent=v.accent; oChanged=true; }
+    cs.verbs.splice(i,1); cChanged=true;
+  }
+  if(cChanged)saveCustom(cs);
+  if(oChanged)saveMinna();
+  return cChanged||oChanged;
 }
 
 // --- Render ---
@@ -2082,6 +2166,7 @@ function provenanceBadge(v){
 // The flashcard tab is the default-active panel (its deck count + due banner
 // were already computed above). Stats renders lazily on tab-open. Browse needs
 // one render now so it's ready the moment the user switches to it.
+migrateMinnaDupes(); rebuildData();   // apply local Minna overlays + clean pre-dedup dupes
 renderBrowse();
 // Kick off the session probe / cloud hydration once everything above is wired.
 bootAuth();
