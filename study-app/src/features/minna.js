@@ -196,7 +196,9 @@ export async function renderMinna() {
     <div class="frow"><span class="filter-label">Chapter</span><div class="chips" id="mnChapters" aria-label="Chapter">
       ${lessons.map(n => `<button class="chip mnch${n === cur ? ' active' : ''}" type="button" data-lesson="${n}">L${n}</button>`).join('')}
     </div></div>`;
-  head.querySelectorAll('.mnch').forEach(b => b.addEventListener('click', () => { state.minnaStore.lastLesson = Number(b.dataset.lesson); saveMinna(); renderMinna(); }));
+  // Switching chapters leaves the current speaking context — release the persistent mic so it
+  // doesn't stay open across the navigation (the next lesson re-renders speaking-off).
+  head.querySelectorAll('.mnch').forEach(b => b.addEventListener('click', () => { exitSpeakingMode(); state.minnaStore.lastLesson = Number(b.dataset.lesson); saveMinna(); renderMinna(); }));
   await renderMinnaLesson(cur, body);
 }
 async function renderMinnaLesson(n, body) {
@@ -370,6 +372,13 @@ function wireMinnaLesson(n, L, body) {
     });
   }
 }
+
+// Called when the みんなの日本語 tab is deactivated (wired through chrome's initTabs). Releases
+// the persistent speaking-mode mic stream so the recording indicator doesn't linger while the
+// user is on another tab; coming back re-renders fresh (speaking-off). Safe to call when not
+// speaking (exitSpeakingMode is idempotent). The stale speaking-mode DOM is never seen because
+// returning to the tab triggers renderMinna().
+export function onMinnaHidden() { exitSpeakingMode(); }
 
 // Load the Minna store from localStorage. Called at boot AFTER the first custom-card
 // rebuildData (so that rebuild sees the state.js default empty overlays — preserving the

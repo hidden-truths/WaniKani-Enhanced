@@ -4,16 +4,22 @@
 
 // TAB NAV — show one panel, hide the rest. Stats/Browse/Minna re-render on show so they
 // always reflect the latest state.store. The per-tab render is passed in as handlers so
-// this module doesn't import the feature render fns (keeps chrome a leaf).
+// this module doesn't import the feature render fns (keeps chrome a leaf). `handlers.leaveMinna`
+// fires when navigating AWAY from みんなの日本語 (so minna can release its persistent mic stream —
+// see the speaking-mode dead-end); we track the active tab to know when we're leaving it.
 export function initTabs(handlers = {}) {
+  let activeTab = document.querySelector('.tab.active')?.dataset.tab || null;
   document.querySelectorAll('.tab').forEach(t => t.addEventListener('click', () => {
+    const next = t.dataset.tab;
+    if (activeTab === 'minna' && next !== 'minna') handlers.leaveMinna && handlers.leaveMinna();
+    activeTab = next;
     document.querySelectorAll('.tab').forEach(x => x.classList.remove('active'));
     document.querySelectorAll('.panel').forEach(x => x.classList.remove('active'));
     t.classList.add('active');
-    document.getElementById('panel-' + t.dataset.tab).classList.add('active');
-    if (t.dataset.tab === 'stats') handlers.stats && handlers.stats();
-    if (t.dataset.tab === 'browse') handlers.browse && handlers.browse();
-    if (t.dataset.tab === 'minna') handlers.minna && handlers.minna();
+    document.getElementById('panel-' + next).classList.add('active');
+    if (next === 'stats') handlers.stats && handlers.stats();
+    if (next === 'browse') handlers.browse && handlers.browse();
+    if (next === 'minna') handlers.minna && handlers.minna();
   }));
 }
 

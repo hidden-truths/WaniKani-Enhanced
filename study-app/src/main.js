@@ -36,7 +36,7 @@ import { renderBrowse, initBrowseUI, registerCardActions } from './features/brow
 import { renderStats, initStatsUI } from './features/stats.js';
 import { rebuildData, renderCustomCount, openVerbModal, deleteVerb, initCustomUI } from './features/custom-cards.js';
 import { initSettingsPage } from './features/settings-page.js';
-import { initMinna, migrateMinnaDupes, renderMinna } from './features/minna.js';
+import { initMinna, migrateMinnaDupes, renderMinna, onMinnaHidden } from './features/minna.js';
 import { initCloud, bootAuth } from './features/cloud.js';
 
 // Initial deck build (built-ins + custom) so deck/browse readers have state.DATA before the
@@ -50,7 +50,7 @@ loadStore();
 applyFurigana();
 
 // Chrome: tabs (per-tab render passed as handlers so chrome stays a leaf), font, theme, I/O.
-initTabs({ stats: () => renderStats(), browse: () => renderBrowse(), minna: () => renderMinna() });
+initTabs({ stats: () => renderStats(), browse: () => renderBrowse(), minna: () => renderMinna(), leaveMinna: () => onMinnaHidden() });
 initFontSwitch();
 initTheme();
 initExportImport();
