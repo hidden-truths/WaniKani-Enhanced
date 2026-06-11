@@ -477,8 +477,14 @@
   .mn-sec-body{padding:2px 0 10px}
   /* Vocab table. */
   .mn-vocab{width:100%;border-collapse:collapse}
-  .mn-vocab td{padding:9px 8px;border-top:1px solid var(--line);vertical-align:middle}
-  .mn-vocab tr:first-child td{border-top:none}
+  /* WebKit/Safari border-collapse quirk: a `border-top:none`/`hidden` cell edge still gets
+     PAINTED by Safari using the cell's border WIDTH + default colour (currentColor ≈ --ink,
+     near-WHITE in dark mode) — a phantom white line under each word that Chrome doesn't draw.
+     `none`/`hidden` don't kill it; only an explicit 0 WIDTH + transparent COLOUR leaves nothing
+     to paint. So the base is `border:0 solid transparent` and ONLY the real separator (word-row
+     top) gets a visible 1px --line. Don't go back to `none` on the borderless edges. */
+  .mn-vocab td{padding:9px 8px;border:0 solid transparent;border-top:1px solid var(--line);vertical-align:middle}
+  .mn-vocab tr:first-child td{border-top:0 solid transparent}
   .mn-vocab .v-audio{width:44px;text-align:center}
   .mn-kanji{font-size:20px}
   .mn-kana{color:var(--muted);font-size:13px;margin-top:2px}
@@ -516,10 +522,11 @@
   .mn-saved{font-family:"SF Mono",ui-monospace,monospace;font-size:11px;color:var(--muted);margin-top:6px;min-height:14px}
   /* Record-and-compare (Phase 2). The rec-row is a subtle sub-row under each vocab
      entry; the control holds a mic button + take list + compare player. A word and its OWN
-     controls are one unit — no rule between them (.mn-rec-row td has no border-top). But the
-     NEXT word keeps its normal separator line (styles.css .mn-vocab td border-top) so the
+     controls are one unit — no rule between them (.mn-rec-row td zeroes its top edge to
+     0-width transparent — see the WebKit note above; `none`/`hidden` paint a phantom white line
+     in Safari). The NEXT word keeps its normal separator line (.mn-vocab td border-top) so the
      controls visually belong to the word ABOVE them, not the one below. */
-  .mn-rec-row td{border-top:none;padding-top:2px;padding-bottom:16px}
+  .mn-rec-row td{border-top:0 solid transparent;padding-top:2px;padding-bottom:16px}
   .rec-control{display:flex;align-items:center;flex-wrap:wrap;gap:8px}
   .rec-btn{display:inline-flex;align-items:center;gap:6px;background:none;border:1px solid var(--line);color:var(--muted);border-radius:14px;padding:3px 10px 3px 8px;font-family:"SF Mono",ui-monospace,monospace;font-size:11px;letter-spacing:.06em;cursor:pointer;transition:all .15s}
   .rec-btn:hover{border-color:var(--godan);color:var(--godan)}
