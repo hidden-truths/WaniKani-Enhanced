@@ -12,11 +12,11 @@
 // features/record-compare.js (Self-Talk feeds it a reserved numeric SCOPE + synth-only references).
 import { state } from '../state.js';
 import { localDay } from '../config.js';
-import { escapeHtml, rubyHtml, plainText, groupByScene, grammarTokens, todaysSet, applyPractice, practiceStreak, donePhraseIds } from '../core/index.js';
-import { SELFTALK, SELFTALK_SCENES, SELFTALK_GRAMMAR } from '../data/selftalk.js';
+import { escapeHtml, rubyHtml, plainText, groupByScene, grammarTokens, todaysSet, applyPractice, practiceStreak, donePhraseIds, sentenceToPhrase } from '../core/index.js';
+import { SELFTALK_SCENES, SELFTALK_GRAMMAR } from '../data/selftalk.js';
 import { playItem, cycleMod } from './audio.js';
 import { loadSelftalk, saveSelftalk } from '../persistence/selftalk.js';
-import { account } from './cloud-core.js';
+import { account, api } from './cloud-core.js';
 import {
   RECORD_SUPPORTED, enterSpeakingMode, exitSpeakingMode, isSpeakingMode,
   speakingBarHtml, initMicSelector, wireSpeakingControls,
@@ -33,6 +33,36 @@ let stGrammar = [];            // selected grammar tokens; empty = all
 let stTodayOnly = false;       // narrow to today's rotating set
 let recordingsLoaded = false;  // whether the take cache has been fetched this session
 
+// Phrases now come from the unified sentence store (GET /v1/sentences?ownerType=selftalk):
+// built-in public rows for everyone, plus the signed-in user's own private rows. We keep the
+// last good fetch in localStorage as a READ-THROUGH cache so the tab still renders if the
+// fetch fails (offline / server down). The bundled SELFTALK constant in data/selftalk.js is no
+// longer read at runtime — it's the seed source for scripts/seed-sentences.ts.
+const STORE_CACHE_KEY = 'jpverbs_selftalk_cache';
+let storePhrases = [];         // the live phrase set (built-ins + own), from the fetch or the cache
+
+function loadCachedPhrases() {
+  try { const o = JSON.parse(localStorage.getItem(STORE_CACHE_KEY)); if (Array.isArray(o)) return o; } catch (e) {}
+  return [];
+}
+function cachePhrases(phrases) {
+  try { localStorage.setItem(STORE_CACHE_KEY, JSON.stringify(phrases)); } catch (e) {}
+}
+
+// Refresh storePhrases from the store + update the cache. Degrades to the cache on failure so
+// the tab never goes blank from a network hiccup. Returns true on a successful network refresh.
+export async function refreshPhrases() {
+  try {
+    const r = await api('/v1/sentences?ownerType=selftalk');
+    storePhrases = ((r && r.sentences) || []).map(sentenceToPhrase);
+    cachePhrases(storePhrases);
+    return true;
+  } catch (e) {
+    if (!storePhrases.length) storePhrases = loadCachedPhrases();   // offline first load → fall back to cache
+    return false;
+  }
+}
+
 const elHead = () => document.getElementById('stHead');
 const elBody = () => document.getElementById('stBody');
 const $ = (id) => document.getElementById(id);
@@ -41,10 +71,15 @@ const grammarLabel = (id) => (SELFTALK_GRAMMAR.find((g) => g.id === id) || {}).l
 const sceneLabel = (id) => (SELFTALK_SCENES.find((s) => s.id === id) || {}).label || id;
 const SCENE_IDS = SELFTALK_SCENES.map((s) => s.id);
 
-// Built-in starter phrases + the user's own authored lines.
+// The phrase set to render: the store fetch/cache (built-ins + the user's own private rows).
+// Until the legacy migration runs (on sign-in), any phrases still in the local `selftalk` blob
+// are concatenated so a user's existing authored lines don't vanish — de-duped by id (the store
+// wins), so a migrated phrase that appears in both is shown once.
 function allPhrases() {
-  const custom = (state.selftalkStore && state.selftalkStore.phrases) || [];
-  return SELFTALK.concat(custom);
+  const legacy = (state.selftalkStore && state.selftalkStore.phrases) || [];
+  if (!legacy.length) return storePhrases;
+  const have = new Set(storePhrases.map((p) => p.id));
+  return storePhrases.concat(legacy.filter((p) => !have.has(p.id)));
 }
 // Phrases passing the current filters: grammar (ANY selected token), then optionally today's set.
 function visiblePhrases() {
@@ -59,6 +94,16 @@ export function renderSelftalk() {
   renderHead();
   renderBody();
   renderNavSpeaking();
+}
+
+// Tab-activation entry: paint from what we have (cache / last fetch) for an instant frame, refresh
+// from the store, then repaint if the network set changed. Wired in main.js as the 独り言 tab's
+// render handler (renderSelftalk stays the render-only fn used by the internal re-renders).
+export async function showSelftalk() {
+  const hadCache = storePhrases.length > 0;
+  if (hadCache) renderSelftalk();
+  const changed = await refreshPhrases();
+  if (changed || !hadCache) renderSelftalk();
 }
 
 function streakRowHtml() {
@@ -252,6 +297,12 @@ function handleBrowserTabHidden() {
 
 export function initSelftalk() {
   loadSelftalk();
+  storePhrases = loadCachedPhrases();   // warm from the last good fetch so the first paint isn't blank
+  // Background refresh at boot so the cache is fresh; re-render if the tab is already showing.
+  refreshPhrases().then((changed) => {
+    const panel = document.getElementById('panel-selftalk');
+    if (changed && panel && panel.classList.contains('active')) renderSelftalk();
+  });
   // Record a practice mark when a Self-Talk take is saved (engine host hook; ignores Minna takes).
   setOnTakeSaved((scope, itemKey) => { if (scope === SELFTALK_SCOPE) { markPracticed(itemKey); reflectPracticed(itemKey); } });
   document.addEventListener('visibilitychange', handleBrowserTabHidden);

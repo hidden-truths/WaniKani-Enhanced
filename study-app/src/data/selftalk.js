@@ -15,8 +15,14 @@
 // meaningless over a whole sentence — so phrases rely on the furigana + the synth audio's prosody.
 //
 // MODEL-GENERATED → proofread grammar/furigana before trusting (same caveat as examples.js/Minna).
-// The user also authors their own lines at runtime (synced under the 'selftalk' app key); those
-// live in state.selftalkStore.phrases, not here.
+// The user also authors their own lines at runtime; those are first-class PRIVATE rows in the
+// server sentence store (written via POST /v1/sentences), not here.
+//
+// SEED SOURCE, NOT A RUNTIME READER: as of the unified sentence store, the Self-Talk tab fetches
+// these built-ins from GET /v1/sentences (seeded as public rows by wk-enhanced-api's
+// scripts/seed-sentences.ts). This SELFTALK constant is the git-tracked curator authoring source
+// the seed reads — features/selftalk.js no longer reads it at runtime. Edit a phrase here, then
+// re-run the seed to push it to the store.
 
 // Scenes, in display order (the running arc of a day). `jp` is a short label kicker.
 export const SELFTALK_SCENES = [

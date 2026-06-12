@@ -22,7 +22,7 @@ import {
   resolveVariant, parseAudioToken, contextPrefs, isSynthVoice, voiceProvider,
   DEFAULT_AUDIO_PREFS, AUDIO_VOICES, variantOrder, variantIndex, isKnownAudioToken, pruneAudioPrefs,
   hashStr, groupByScene, grammarTokens, todaysSet, emptyPractice, dayDiff, applyPractice,
-  practiceStreak, donePhraseIds,
+  practiceStreak, donePhraseIds, sentenceToPhrase,
 } from '../src/core/index.js';
 import { SELFTALK, SELFTALK_SCENES, SELFTALK_GRAMMAR } from '../src/data/selftalk.js';
 
@@ -798,6 +798,33 @@ test('applyPractice: first practice, same-day add (dedup), consecutive day, gap 
   // skip a day → reset to 1
   const p4 = applyPractice(p3, 'st-meals-1', '2026-06-15');
   expect(p4.streak).toBe(1);
+});
+
+test('sentenceToPhrase maps a store sentence to the UI phrase shape', () => {
+  const s = {
+    id: 'st-morning-1',
+    text: '歯を磨いている。',
+    furigana: [{ t: '歯', r: 'は' }, { t: 'を' }, { t: '磨', r: 'みが' }, { t: 'いている。' }],
+    translations: { en: "I'm brushing my teeth." },
+    tags: { scene: 'morning', grammar: ['te-iru'] },
+    link: { owner_type: 'selftalk' },
+    custom: false,
+  };
+  expect(sentenceToPhrase(s)).toEqual({
+    id: 'st-morning-1',
+    jp: '<ruby>歯<rt>は</rt></ruby>を<ruby>磨<rt>みが</rt></ruby>いている。',
+    read: 'はをみがいている。',
+    mean: "I'm brushing my teeth.",
+    scene: 'morning',
+    grammar: ['te-iru'],
+    custom: false,
+  });
+});
+
+test('sentenceToPhrase tolerates missing translation/tags/furigana', () => {
+  expect(sentenceToPhrase({ id: 'usr-x', furigana: null, translations: {}, tags: {}, custom: true })).toEqual({
+    id: 'usr-x', jp: '', read: '', mean: '', scene: '', grammar: [], custom: true,
+  });
 });
 
 test('practiceStreak: alive today/yesterday, broken after a gap; donePhraseIds today-only', () => {

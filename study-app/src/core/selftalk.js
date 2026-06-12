@@ -5,6 +5,27 @@
 // Self-Talk is OUTPUT reps, not recognition — there's no SRS box/schedule here. The only persisted
 // signal is a lightweight day streak + which phrases were said today (the `practice` record below).
 
+import { segmentsToRuby, segmentsToReading } from './text.js';
+
+// Adapt a store sentence (from GET /v1/sentences) to the phrase shape the Self-Talk UI renders.
+// The store keeps furigana as structured segments; the UI wants the `<ruby>` jp + the derived
+// kana `read`. `custom` marks a user-authored (private) row → the "yours" badge + edit control.
+// Pure (DOM-free) so the render code downstream is unchanged.
+export function sentenceToPhrase(s) {
+  const fur = (s && s.furigana) || [];
+  const tags = (s && s.tags) || {};
+  const grammar = Array.isArray(tags.grammar) ? tags.grammar : tags.grammar ? [tags.grammar] : [];
+  return {
+    id: s && s.id,
+    jp: segmentsToRuby(fur),
+    read: segmentsToReading(fur),
+    mean: (s && s.translations && s.translations.en) || '',
+    scene: tags.scene || '',
+    grammar,
+    custom: !!(s && s.custom),
+  };
+}
+
 // A small deterministic string hash (FNV-1a, 32-bit). Seeds the daily rotation so "today's set" is
 // stable within a day and rotates across days, with no Date.now()/Math.random() (both unavailable
 // here and non-deterministic for the test).

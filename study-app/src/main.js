@@ -37,7 +37,7 @@ import { renderStats, initStatsUI } from './features/stats.js';
 import { rebuildData, renderCustomCount, openVerbModal, deleteVerb, initCustomUI } from './features/custom-cards.js';
 import { initSettingsPage } from './features/settings-page.js';
 import { initMinna, migrateMinnaDupes, renderMinna, onMinnaHidden } from './features/minna.js';
-import { initSelftalk, renderSelftalk, onSelftalkHidden } from './features/selftalk.js';
+import { initSelftalk, showSelftalk, onSelftalkHidden } from './features/selftalk.js';
 import { initCloud, bootAuth } from './features/cloud.js';
 
 // Initial deck build (built-ins + custom) so deck/browse readers have state.DATA before the
@@ -51,7 +51,7 @@ loadStore();
 applyFurigana();
 
 // Chrome: tabs (per-tab render passed as handlers so chrome stays a leaf), font, theme, I/O.
-initTabs({ stats: () => renderStats(), browse: () => renderBrowse(), minna: () => renderMinna(), leaveMinna: () => onMinnaHidden(), selftalk: () => renderSelftalk(), leaveSelftalk: () => onSelftalkHidden() });
+initTabs({ stats: () => renderStats(), browse: () => renderBrowse(), minna: () => renderMinna(), leaveMinna: () => onMinnaHidden(), selftalk: () => showSelftalk(), leaveSelftalk: () => onSelftalkHidden() });
 initFontSwitch();
 initTheme();
 initExportImport();
