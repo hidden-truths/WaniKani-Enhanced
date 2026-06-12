@@ -1,6 +1,6 @@
 // Pure helpers for the みんなの日本語 record-and-compare feature (Phase 2). DOM-free
 // so the test imports them directly. The DOM/MediaRecorder glue lives in
-// features/minna-record.js.
+// features/record-compare.js.
 
 export const KEEP_MIN = 1;
 export const KEEP_MAX = 20;
@@ -127,7 +127,7 @@ export function findTrimBounds(samples, sampleRate, opts = {}) {
 }
 
 // Downsample a mono PCM buffer to `bins` peak amplitudes in [0, 1] for the record-and-compare
-// waveform (drawn to a canvas in features/minna-record.js). Each bin is the MAX ABSOLUTE
+// waveform (drawn to a canvas in features/record-compare.js). Each bin is the MAX ABSOLUTE
 // sample over its slice, then the whole set is NORMALIZED to the clip's own peak — so a quiet
 // take still draws a full-height shape. That's deliberate: the waveform is for comparing
 // SHAPE / TIMING between your take and the native audio, not absolute loudness (the two are
@@ -175,7 +175,7 @@ export function normGains(la, lb, floor = 0.3) {
 }
 
 // Allowed compare-player playback speeds, slow→normal. Slowing the native audio down (pitch
-// preserved, set in minna-record.js) makes it easier to mimic; 1× is normal.
+// preserved, set in record-compare.js) makes it easier to mimic; 1× is normal.
 export const COMPARE_SPEEDS = [0.5, 0.75, 1];
 // Snap a stored/user speed to the nearest allowed step, defaulting to 1× for anything invalid.
 // Keeps the client from sending the <audio> element a nonsense playbackRate.

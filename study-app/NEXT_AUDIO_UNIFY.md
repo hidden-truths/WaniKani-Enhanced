@@ -39,7 +39,7 @@ conversation line) resolves to MULTIPLE tagged voice VARIANTS the user can pick 
 > reference URL is just native-clip-or-synth-`/v1/audio/tts`, played on the same credentialed element
 > (the public TTS endpoint is under the study-app CORS allowlist). `seq`/`both`/`loop` compare against
 > the selected reference; a word/line carries its synth `text` so even a clipless line can compare
-> against Siri. `referenceVariants`/`currentRef`/`refUrl` in `features/minna-record.js`.
+> against Siri. `referenceVariants`/`currentRef`/`refUrl` in `features/record-compare.js`.
 >
 > **Follow-ups (branch `audio-followups`):** the ①–⑦ list lives in
 > [NEXT_STEPS.md](NEXT_STEPS.md) "Audio-unify — follow-ups & ideas". Done so far: **② Preview
@@ -76,7 +76,7 @@ Each has its own route, key scheme, and client play path:
 |---|---|---|---|---|
 | Synth TTS | `GET /v1/tts?text=` | `tts/<sha256(text)>.{m4a,mp3}` | `speak()` in `features/tts.js` | 3-tier: in-proc → storage → Google `gtx`. `.m4a` (Siri, from `say`) preferred over `.mp3`. Key = `ttsKey(text,ext)` in `services/tts.ts`. PUBLIC. |
 | Minna native | `GET /v1/minna/audio?src=` | `keys.minnaAudio(path)` | `mnPlay()` in `features/minna.js` | Proxied+cached from vnjpclub. **PRIVATE**, gated. Prefetched by `scripts/prefetch-minna-audio.ts`. |
-| User takes | `…/minna/recordings/*` | per-user, `minna_recordings` table | `features/minna-record.js` compare player | **PRIVATE**, per-user. |
+| User takes | `…/audio/recordings/*` | per-user, `minna_recordings` table | `features/record-compare.js` compare player | **PRIVATE**, per-user. |
 
 **Pre-generation:** `scripts/generate-tts.ts` (`--engine say` [default, system voice = Siri] |
 `jp-tts` [Kyoko/Otoya Enhanced]) renders + uploads to the `tts/` keys. **Siri voices are ONLY

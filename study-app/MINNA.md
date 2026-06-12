@@ -325,7 +325,7 @@ points here). Roughly priority-ordered.
 
 Record your own voice and compare it to the cached native audio — the marquee feature, and
 the headline reason the audio is proxied + stored same-origin in Phase 1. Frontend lives in
-[src/features/minna-record.js](src/features/minna-record.js) (capture/upload/compare/playback)
+[src/features/record-compare.js](src/features/record-compare.js) (capture/upload/compare/playback)
 + the conversation-line clip glue in [src/features/minna.js](src/features/minna.js); pure
 helpers in [src/core/recordings.js](src/core/recordings.js).
 

@@ -17,7 +17,7 @@ import { account, api, setSyncStatus } from './cloud-core.js';
 import { openAuth } from './cloud.js';
 import { loadCustom, saveCustom } from '../persistence/custom.js';
 import { rebuildData, refreshAfterVerbChange } from './custom-cards.js';
-import { loadLessonRecordings, recordControlHtml, wireMinnaRecord, paintCompareWaveforms, speakingBarHtml, wireSpeakingControls, initMicSelector, isSpeakingMode, enterSpeakingMode, exitSpeakingMode, newestTakeIdForItem } from './minna-record.js';
+import { loadRecordings, recordControlHtml, wireRecordCompare, paintCompareWaveforms, speakingBarHtml, wireSpeakingControls, initMicSelector, isSpeakingMode, enterSpeakingMode, exitSpeakingMode, newestTakeIdForItem } from './record-compare.js';
 
 const MINNA_APP_KEY = 'minna';
 const MINNA_KEY = 'jpverbs_minna';
@@ -214,7 +214,7 @@ async function renderMinnaLesson(n, body) {
   let L;
   try { L = await fetchMinnaLesson(n); }
   catch (e) { body.innerHTML = '<div class="mn-error">Could not load lesson ' + n + (e && e.status ? (' (' + e.status + ')') : '') + '.</div>'; return; }
-  await loadLessonRecordings(n);   // populate the record-and-compare take cache before render
+  await loadRecordings(n);   // populate the record-and-compare take cache before render
   // Cross-lesson practice history (recording counts). Fails open: offline / error → no section.
   let practice = null;
   try { practice = await api('/v1/minna/practice'); } catch (e) {}
@@ -414,7 +414,7 @@ function wireMinnaLesson(n, L, body) {
   body.querySelectorAll('[data-tts]').forEach(b => b.addEventListener('click', (e) => speak(b.dataset.tts, 'minna', b, { cycle: cycleMod(e) })));
   // Copy an example sentence (plain text) to the clipboard for dictionary lookup.
   body.querySelectorAll('[data-copy]').forEach(b => b.addEventListener('click', () => copyText(b.dataset.copy, b)));
-  wireMinnaRecord(body);   // delegated record/play/delete/compare handlers (attach-once)
+  wireRecordCompare(body);   // delegated record/play/delete/compare handlers (attach-once)
   wireMinnaClips(body);    // delegated conversation-line clip-marker handlers (attach-once)
   paintCompareWaveforms(body);   // decode + draw the you/native compare waveforms for this render
   renderNavSpeaking(n, body);    // dock the speaking/compare controls into the navbar

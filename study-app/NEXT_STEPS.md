@@ -191,7 +191,7 @@ This is the priority. The items below are smaller and can follow.
   it to your account, and compare to the cached native audio. Server: a `minna_recordings`
   table + **private** storage objects served only via the owner-gated
   `POST/GET/DELETE /v1/minna/recordings`, pruned per item to a keep-N. Client (new
-  `features/minna-record.js` + `core/recordings.js`): MediaRecorder capture with
+  `features/record-compare.js` + `core/recordings.js`): MediaRecorder capture with
   preview/re-record; a compare player (▶ you / ▶ native / ▶ native→you + loop); conversation
   lines slice the one whole-dialogue MP3 via per-line **clip** ranges (`line.clip` ∪ the
   synced in-app marker). Plus three UX refinements from testing: a **speaking-mode toggle**
@@ -396,7 +396,7 @@ This is the priority. The items below are smaller and can follow.
   `loop` compare against the selected reference; each control now carries its synth `text` so even a
   clipless conversation line can compare against Siri, and a word without native audio gains a synth
   reference. `referenceVariants`/`currentRef`/`refUrl`/`playReference` in
-  [src/features/minna-record.js](src/features/minna-record.js). (Detail in [NEXT_AUDIO_UNIFY.md](NEXT_AUDIO_UNIFY.md).)
+  [src/features/record-compare.js](src/features/record-compare.js). (Detail in [NEXT_AUDIO_UNIFY.md](NEXT_AUDIO_UNIFY.md).)
 - ~~**⑦ Token hygiene.**~~ **Shipped.** `settings.audioPrefs` is now pruned of unknown tokens on load
   AND on cloud-pull (`normalizeSettings` → `pruneAudioPrefs` in [settings-store.js](src/settings-store.js)),
   dropping any token a future/foreign palette wouldn't understand and dropping a context that empties

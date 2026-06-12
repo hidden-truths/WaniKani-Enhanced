@@ -1,11 +1,19 @@
-// みんなの日本語 RECORD-AND-COMPARE (Phase 2). The learner records themselves saying a
-// vocab word / conversation line and compares it to the cached native audio. This module
-// owns the MediaRecorder capture flow, upload, the per-item take list, and gated playback
-// of a take. The native-audio compare player + conversation-line clips are layered on in a
-// later commit; this commit ships capture + your-own-take playback.
+// RECORD-AND-COMPARE engine (audio-unify). The learner records themselves saying an item
+// (a Minna vocab word / conversation line, or a Self-Talk phrase) and compares it to a chosen
+// REFERENCE voice — the native clip if the item has one, else a synth voice (Siri/Google)
+// rendered from the item's text. This module owns the MediaRecorder capture flow, upload, the
+// per-item take list, gated take playback, the windowed compare player (you / reference / seq /
+// both / loop), volume normalization, and the dual waveform.
+//
+// It is feature-agnostic: every bit of context (the partition `scope`, the per-item `itemKey`,
+// the native src, the conversation clip, the synth `text`, and the audio CONTEXT used to resolve
+// the default reference voice) rides on each control's `data-*`, so Minna and Self-Talk both feed
+// it the same primitives — Minna glue lives in minna.js, Self-Talk glue in selftalk.js. `scope`
+// is an opaque numeric partition: Minna passes a lesson number (1–50), Self-Talk a reserved id.
+// It maps to the server's `lesson` query param + recordings column (kept as the wire name).
 //
 // Recordings are PRIVATE on the server (served only via the owner-gated
-// /v1/minna/recordings/{id}); like the native audio, take playback uses one reused
+// /v1/audio/recordings/{id}); like the native audio, take playback uses one reused
 // <audio crossOrigin='use-credentials'> so the session cookie authorizes it cross-origin.
 import { API_BASE } from '../config.js';
 import { account, api, setSyncStatus } from './cloud-core.js';
@@ -58,7 +66,9 @@ function micConstraint() {
 // hitches (and re-triggers the AirPods HFP switch). Instead the user enters "speaking mode"
 // once: we open ONE persistent MediaStream and keep it; each take just spins a MediaRecorder
 // on that live stream (no getUserMedia per take). The record controls only render while in
-// speaking mode. Exiting releases the stream.
+// speaking mode. Exiting releases the stream. The flag is a module singleton shared by every
+// consumer (Minna, Self-Talk) — only one tab is active at a time, and each tab's leave hook
+// calls exitSpeakingMode(), so it never lingers.
 let speakingMode = false, liveStream = null;
 export function isSpeakingMode() { return speakingMode; }
 function stopLiveStream() { if (liveStream) { try { liveStream.getTracks().forEach(t => t.stop()); } catch (e) {} liveStream = null; } }
@@ -113,10 +123,10 @@ async function maybeTrim(blob, durationMs) {
 }
 
 // ---------- speaking-mode bar (toggle + mic picker) ----------
-// Rendered at the top of the Minna lesson. The toggle enters/leaves speaking mode; the mic
-// picker pins a specific input so macOS doesn't flip AirPods to hands-free mode. Empty
-// deviceId '' = system default. The record controls below only appear while speaking mode is
-// on (gated in minna.js via isSpeakingMode()).
+// Rendered at the top of the lesson / practice view (Minna or Self-Talk). The toggle enters/
+// leaves speaking mode; the mic picker pins a specific input so macOS doesn't flip AirPods to
+// hands-free mode. Empty deviceId '' = system default. The record controls below only appear
+// while speaking mode is on (gated by the caller via isSpeakingMode()).
 export function speakingBarHtml() {
   if (!RECORD_SUPPORTED) return '';
   const on = speakingMode;
@@ -135,17 +145,17 @@ export function speakingBarHtml() {
     ${on ? biasControlHtml() : ''}
   </div>`;
 }
-// The ▶ both balance crossfader (you ⟷ native). Reads the live compareBias; wired in
-// wireMinnaRecord via an input listener.
+// The ▶ both balance crossfader (you ⟷ reference). Reads the live compareBias; wired in
+// wireSpeakingControls via an input listener.
 function biasControlHtml() {
-  return `<span class="cmp-bias" title="Balance you vs native in ▶ both">
+  return `<span class="cmp-bias" title="Balance you vs reference in ▶ both">
       <span class="mic-lbl">You</span>
-      <input type="range" class="bias-slider" min="-100" max="100" value="${Math.round(compareBias * 100)}" aria-label="▶ both balance: you vs native">
-      <span class="mic-lbl">Native</span></span>`;
+      <input type="range" class="bias-slider" min="-100" max="100" value="${Math.round(compareBias * 100)}" aria-label="▶ both balance: you vs reference">
+      <span class="mic-lbl">Ref</span></span>`;
 }
 // The compare playback-speed segmented control (0.5/0.75/1×). Global — one rate for every
-// compare on the lesson — shown only while speaking mode is on (the only time compares exist).
-// Reads the current rate from settings.compareSpeed (synced); wired in wireMinnaRecord.
+// compare on the view — shown only while speaking mode is on (the only time compares exist).
+// Reads the current rate from settings.compareSpeed (synced); wired in wireSpeakingControls.
 function speedControlHtml() {
   const cur = clampSpeed(settings.compareSpeed);
   const chips = COMPARE_SPEEDS.map(s => {
@@ -180,31 +190,31 @@ export function initMicSelector(container, onChange) {
   }
 }
 
-// ---------- take cache (per lesson, fetched once) ----------
-// recCache[lesson] = array of takes {id,lesson,itemKey,durationMs,createdAt} newest-first.
+// ---------- take cache (per scope, fetched once) ----------
+// recCache[scope] = array of takes {id,lesson,itemKey,durationMs,createdAt} newest-first.
 const recCache = {};
-export async function loadLessonRecordings(lesson) {
-  if (!account) { recCache[lesson] = []; return []; }
+export async function loadRecordings(scope) {
+  if (!account) { recCache[scope] = []; return []; }
   try {
-    const r = await api('/v1/minna/recordings?lesson=' + lesson);
-    recCache[lesson] = (r && r.recordings) || [];
-  } catch (e) { recCache[lesson] = recCache[lesson] || []; }
-  return recCache[lesson];
+    const r = await api('/v1/audio/recordings?lesson=' + scope);   // server param name is `lesson` (opaque partition)
+    recCache[scope] = (r && r.recordings) || [];
+  } catch (e) { recCache[scope] = recCache[scope] || []; }
+  return recCache[scope];
 }
-function takesFor(lesson, itemKey) {
-  return (recCache[lesson] || []).filter(t => t.itemKey === itemKey);
+function takesFor(scope, itemKey) {
+  return (recCache[scope] || []).filter(t => t.itemKey === itemKey);
 }
-// Newest take id for an item (or null) — used by minna.js to let the unified word play button
-// offer the user's own recording as a 'user'-kind variant. Reads the per-lesson take cache that
-// loadLessonRecordings already populated on lesson render.
-export function newestTakeIdForItem(lesson, itemKey) {
-  const takes = takesFor(lesson, itemKey);
+// Newest take id for an item (or null) — used by the caller to let a unified play button offer
+// the user's own recording as a 'user'-kind variant. Reads the per-scope take cache that
+// loadRecordings already populated on render.
+export function newestTakeIdForItem(scope, itemKey) {
+  const takes = takesFor(scope, itemKey);
   return takes.length ? takes[0].id : null;
 }
 // Replace one item's takes in the cache (after upload/delete) without a refetch.
-function setTakes(lesson, itemKey, takes) {
-  const others = (recCache[lesson] || []).filter(t => t.itemKey !== itemKey);
-  recCache[lesson] = others.concat(takes).sort((a, b) => b.createdAt - a.createdAt);
+function setTakes(scope, itemKey, takes) {
+  const others = (recCache[scope] || []).filter(t => t.itemKey !== itemKey);
+  recCache[scope] = others.concat(takes).sort((a, b) => b.createdAt - a.createdAt);
 }
 
 const clamp01 = (v) => Math.max(0, Math.min(1, v));
@@ -257,7 +267,7 @@ function playTake(id, btn) {
   if (btn && btn === takePlayingBtn && !takeAudioEl.paused) { takeAudioEl.pause(); btn.classList.remove('playing'); takePlayingBtn = null; return; }
   if (takePlayingBtn) takePlayingBtn.classList.remove('playing');
   takeAudioEl.volume = 1;   // raw listen — full volume (compare playback may have left it normalized)
-  takeAudioEl.src = API_BASE + '/v1/minna/recordings/' + id;
+  takeAudioEl.src = API_BASE + '/v1/audio/recordings/' + id;
   takePlayingBtn = btn || null; if (btn) btn.classList.add('playing');
   takeAudioEl.onended = takeAudioEl.onerror = () => { if (takePlayingBtn) { takePlayingBtn.classList.remove('playing'); takePlayingBtn = null; } };
   takeAudioEl.play().catch(() => { if (btn) btn.classList.remove('playing'); takePlayingBtn = null; });
@@ -283,7 +293,7 @@ function playReference(ctx, v, window, volume, onDone) {
   nativeStop = playRange(a, window, volume, () => { nativeStop = null; if (onDone) onDone(); });
 }
 
-// Stop ALL compare playback (native + take), the cursor loop, and any lit compare buttons.
+// Stop ALL compare playback (reference + take), the cursor loop, and any lit compare buttons.
 function stopCompare(control) {
   stopCursors();
   stopNative();
@@ -296,12 +306,12 @@ function stopCompare(control) {
 function playTakeOnce(id, window, volume, onDone) {
   const a = ensureTakeAudio();
   stopTake();
-  a.src = API_BASE + '/v1/minna/recordings/' + id;
+  a.src = API_BASE + '/v1/audio/recordings/' + id;
   takeStop = playRange(a, window, volume, () => { takeStop = null; if (onDone) onDone(); });
 }
 
 // ---------- dual waveform (Web Audio decode → canvas) ----------
-// Draw the newest take ("you") next to the native audio so timing/shape are comparable. Both
+// Draw the newest take ("you") next to the reference audio so timing/shape are comparable. Both
 // sources are already cached same-origin and cookie-gated, so we fetch the bytes WITH
 // credentials (mirroring the <audio crossOrigin='use-credentials'> path) and decodeAudioData
 // them. Canvas — not the app's usual hand-rolled SVG charts — because a per-sample waveform is
@@ -311,14 +321,14 @@ function playTakeOnce(id, window, volume, onDone) {
 const WAVE_W = 140, WAVE_H = 30;
 // The play/draw window keeps a SMALL, EQUAL lead pad on both sources so the spoken onsets line
 // up under ▶ both (the save-time trim uses a bigger 160 ms pad to protect onsets on disk; here
-// alignment matters more than a few ms of breath). Same pad on native + take → same offset
+// alignment matters more than a few ms of breath). Same pad on reference + take → same offset
 // before the vowel → aligned.
 const COMPARE_TRIM = { leadPadMs: 60, tailPadMs: 120 };
 const bufferCache = new Map();      // url → Promise<AudioBuffer|null> (promise cached so concurrent paints share one decode)
 const resolvedBuffers = new Map();  // url → AudioBuffer (the resolved value, for synchronous window/onset lookups)
 const windowCache = new Map();      // "url|clip" → {start,end} speech window (memoized once the buffer decodes)
-function nativeUrl(src) { return API_BASE + '/v1/minna/audio?src=' + encodeURIComponent(src); }
-function takeUrl(id) { return API_BASE + '/v1/minna/recordings/' + id; }
+function nativeUrl(src) { return API_BASE + '/v1/audio/native?src=' + encodeURIComponent(src); }
+function takeUrl(id) { return API_BASE + '/v1/audio/recordings/' + id; }
 function fetchAudioBuffer(url) {
   if (bufferCache.has(url)) return bufferCache.get(url);
   const p = (async () => {
@@ -362,7 +372,7 @@ function windowFor(url, clip) {
   if (buf) windowCache.set(key, w);   // only memoize once a real buffer backed it
   return w;
 }
-// RMS loudness of a source over its spoken window — the level used to normalize native vs take
+// RMS loudness of a source over its spoken window — the level used to normalize reference vs take
 // to ~equal volume. null until the buffer decodes (caller treats that as "don't normalize yet").
 const levelCache = new Map();
 function levelFor(url, clip) {
@@ -407,8 +417,8 @@ async function paintWave(canvas, url, clip, colorVar) {
   if (e > s) mono = mono.subarray(s, e);
   drawWave(canvas, mono, colorVar);
 }
-// Paint both waveforms for one control (you = newest take in --godan; native = the cached
-// vnjpclub audio in --ichidan), each cropped to its spoken window. Reads context off the control.
+// Paint both waveforms for one control (you = newest take in --godan; reference = native clip or
+// synth voice in --ichidan), each cropped to its spoken window. Reads context off the control.
 function paintControlWaves(control) {
   const youCanvas = control.querySelector('canvas.rec-wave[data-wave="you"]');
   if (youCanvas) { const id = newestTakeId(control); if (id != null) paintWave(youCanvas, takeUrl(id), null, '--godan'); }
@@ -423,7 +433,7 @@ function setRefCaption(control, v) {
   const cap = control.querySelector('.rec-wave-wrap[data-wave="native"] .rec-wave-cap');
   if (cap) cap.textContent = refShortLabel(v);
 }
-// Per-render hook (called from minna.js wireMinnaLesson after the body re-renders).
+// Per-render hook (called from the caller's wire step after the body re-renders).
 export function paintCompareWaveforms(root) {
   if (!root) return;
   root.querySelectorAll('.rec-control').forEach(paintControlWaves);
@@ -463,30 +473,34 @@ function stopCursors() {
 }
 
 // ---------- HTML ----------
-// One control per recordable item (a vocab word or a conversation line). `nativeSrc` is the
-// item's native-audio vnjpclub path; `clip` is the resolved [start,end] for a conversation
-// line (null for a whole-file vocab word); `needsClip` marks a conversation line whose native
-// compare is only available once a clip exists. The control re-renders its own innerHTML
-// after capture/delete; lesson/itemKey/native/clip/needsClip all live on the dataset so the
-// delegated handlers + resetControl can rebuild without re-threading args.
-export function recordControlHtml(lesson, itemKey, nativeSrc, clip, needsClip, text) {
+// One control per recordable item (a vocab word, a conversation line, or a Self-Talk phrase).
+// `nativeSrc` is the item's native-audio path (empty for items with no native clip, e.g. a
+// Self-Talk phrase); `clip` is the resolved [start,end] for a conversation line (null for a
+// whole-file item); `needsClip` marks a conversation line whose native compare needs a clip
+// first; `text` is the synth text (enables a synth reference voice); `audioCtx` is the per-context
+// audio key the resolver uses to pick the DEFAULT reference voice (Minna='minna', Self-Talk=
+// 'selftalk'; defaults to 'minna'). All ride on the dataset so the delegated handlers +
+// resetControl can rebuild without re-threading args.
+export function recordControlHtml(scope, itemKey, nativeSrc, clip, needsClip, text, audioCtx) {
   const v = validClip(clip);
   const attrs = [
-    `data-lesson="${lesson}"`,
+    `data-scope="${scope}"`,
     `data-itemkey="${escapeHtml(itemKey)}"`,
     nativeSrc ? `data-native="${escapeHtml(nativeSrc)}"` : '',
     v ? `data-clip="${v[0]},${v[1]}"` : '',
     needsClip ? `data-needsclip="1"` : '',
     text ? `data-text="${escapeHtml(text)}"` : '',
+    audioCtx ? `data-audioctx="${escapeHtml(audioCtx)}"` : '',
   ].filter(Boolean).join(' ');
-  return `<div class="rec-control" ${attrs}>${recordControlInner(lesson, itemKey, { nativeSrc, clip: v, needsClip, text: text || '' })}</div>`;
+  return `<div class="rec-control" ${attrs}>${recordControlInner(scope, itemKey, { nativeSrc, clip: v, needsClip, text: text || '', audioCtx: audioCtx || 'minna' })}</div>`;
 }
 // Read the compare context back off a control's dataset (so resetControl can rebuild). `text` is the
-// item's synth text (a word's ttsText / a line's plain sentence) — enables a synth reference voice.
+// item's synth text (a word's ttsText / a line or phrase's plain sentence) — enables a synth
+// reference voice. `audioCtx` picks the per-context default reference voice from the resolver.
 function controlCtx(control) {
   const clipAttr = control.dataset.clip;
   const clip = clipAttr ? validClip(clipAttr.split(',').map(Number)) : null;
-  return { nativeSrc: control.dataset.native || '', clip, needsClip: control.dataset.needsclip === '1', text: control.dataset.text || '' };
+  return { nativeSrc: control.dataset.native || '', clip, needsClip: control.dataset.needsclip === '1', text: control.dataset.text || '', audioCtx: control.dataset.audioctx || 'minna' };
 }
 // Native compare is playable when there's a native source AND (it's a whole-file item OR a
 // conversation line that has a clip).
@@ -497,10 +511,10 @@ function nativePlayable(ctx) { return !!(ctx.nativeSrc && (!ctx.needsClip || ctx
 // Phase 3 / ⑤): native (the cached vnjpclub clip) OR a synth voice (Siri/Google, rendered from the
 // item's text). The USER's own take is the "you" side, never a reference. Which voices are offered +
 // which is the default both come from the SAME machinery the play buttons use — variantOrder for the
-// cycle list, resolveVariant('minna', …) for the default — so the per-context priority drives it.
+// cycle list, resolveVariant(ctx.audioCtx, …) for the default — so the per-context priority drives it.
 function refAvailable(ctx) { return { native: nativePlayable(ctx), tts: !!(ctx.text && HTTP_SERVED), user: false }; }
 function referenceVariants(ctx) { return variantOrder(refAvailable(ctx)); }
-function defaultRef(ctx) { return resolveVariant('minna', refAvailable(ctx), settings.audioPrefs); }
+function defaultRef(ctx) { return resolveVariant(ctx.audioCtx || 'minna', refAvailable(ctx), settings.audioPrefs); }
 function refVariantId(v) { return v ? (v.kind === 'native' ? 'native' : v.voice) : ''; }
 function refVariantById(ctx, id) { return referenceVariants(ctx).find((v) => refVariantId(v) === id) || null; }
 // The control's currently-selected reference: its saved data-ref if still available, else the default.
@@ -513,8 +527,8 @@ function refShortLabel(v) {
   if (v.kind === 'native') return 'native';
   return { 'siri:female': 'Siri F', 'siri:male': 'Siri M', google: 'Google' }[v.voice] || v.voice;
 }
-// Playback URL + clip for a reference variant: native is the gated vnjpclub proxy (sliced by the
-// line clip); a synth voice is the public tagged-TTS endpoint (no clip — windowFor trims its silence).
+// Playback URL + clip for a reference variant: native is the gated proxy (sliced by the line
+// clip); a synth voice is the public tagged-TTS endpoint (no clip — windowFor trims its silence).
 function refUrl(ctx, v) {
   if (!v) return '';
   if (v.kind === 'native') return nativeUrl(ctx.nativeSrc);
@@ -522,14 +536,14 @@ function refUrl(ctx, v) {
 }
 function refClip(ctx, v) { return v && v.kind === 'native' ? ctx.clip : null; }
 
-function recordControlInner(lesson, itemKey, ctx) {
+function recordControlInner(scope, itemKey, ctx) {
   if (!RECORD_SUPPORTED) return `<span class="rec-unsupported">Recording needs a modern browser + microphone.</span>`;
   return `<button class="rec-btn" type="button" data-rec-toggle aria-label="Record yourself"><svg class="ic" aria-hidden="true"><use href="#i-mic"/></svg><span class="rec-label">Record</span></button>
-    <div class="rec-takes">${takesHtml(lesson, itemKey)}</div>
-    ${compareHtml(lesson, itemKey, ctx)}`;
+    <div class="rec-takes">${takesHtml(scope, itemKey)}</div>
+    ${compareHtml(scope, itemKey, ctx)}`;
 }
-function takesHtml(lesson, itemKey) {
-  const takes = takesFor(lesson, itemKey);
+function takesHtml(scope, itemKey) {
+  const takes = takesFor(scope, itemKey);
   if (!takes.length) return '';
   return takes.map(t => `<span class="rec-take">
       <button class="rec-take-play" type="button" data-take-play="${t.id}" aria-label="Play your recording"><svg class="ic" aria-hidden="true"><use href="#i-play"/></svg>${escapeHtml(formatDuration(t.durationMs)) || 'take'}</button>
@@ -541,8 +555,8 @@ function takesHtml(lesson, itemKey) {
 // native clip OR a synth voice from the item's text (so a conversation line without a clip yet can
 // still compare against Siri/Google). The ▶ reference button names the current voice; Alt/Shift-
 // click it to cycle the available voices (③-style). A truly-referenceless item gets only ▶ you.
-function compareHtml(lesson, itemKey, ctx) {
-  const takes = takesFor(lesson, itemKey);
+function compareHtml(scope, itemKey, ctx) {
+  const takes = takesFor(scope, itemKey);
   if (!takes.length) return '';
   const refs = referenceVariants(ctx);
   const canRef = refs.length > 0;
@@ -558,8 +572,8 @@ function compareHtml(lesson, itemKey, ctx) {
     <button class="cmp-btn" type="button" data-cmp="you"><svg class="ic" aria-hidden="true"><use href="#i-play"/></svg>you</button>
     ${refBtns}</div>${waveRowHtml(canRef, refShortLabel(ref))}`;
 }
-// The dual-waveform row under the compare buttons: a "you" wave always, a "native" wave when
-// native compare is playable. Canvases are painted (decoded) post-render by paintControlWaves;
+// The dual-waveform row under the compare buttons: a "you" wave always, a "native" wave when a
+// reference is available. Canvases are painted (decoded) post-render by paintControlWaves;
 // each wrap holds the absolutely-positioned cursor overlay. width/height match WAVE_W/H so the
 // blank canvas is correctly sized before paint (and inside a closed <details>, where layout is
 // unavailable). The cursor starts hidden (opacity 0).
@@ -577,9 +591,9 @@ function waveRowHtml(canRef, refLabel) {
 let active = null;   // { control, recorder, chunks, mime, startedAt }
 
 function resetControl(control) {
-  const lesson = Number(control.dataset.lesson), itemKey = control.dataset.itemkey;
+  const scope = Number(control.dataset.scope), itemKey = control.dataset.itemkey;
   const loop = control.dataset.loop === '1';   // preserve the loop toggle across re-renders
-  control.innerHTML = recordControlInner(lesson, itemKey, controlCtx(control));
+  control.innerHTML = recordControlInner(scope, itemKey, controlCtx(control));
   if (loop) { const lb = control.querySelector('[data-cmp="loop"]'); if (lb) { lb.classList.add('active'); lb.setAttribute('aria-pressed', 'true'); } }
   refreshRefUi(control);        // restore the selected reference voice's label (compareHtml rendered the default)
   paintControlWaves(control);   // (re)decode + draw this control's waveforms after the rebuild
@@ -641,20 +655,21 @@ function showReview(control, blob, durationMs) {
 }
 
 async function uploadTake(control, blob, durationMs) {
-  const lesson = Number(control.dataset.lesson), itemKey = control.dataset.itemkey;
+  const scope = Number(control.dataset.scope), itemKey = control.dataset.itemkey;
   const keep = clampKeep(settings.recordingsKeep);
   const ct = blob.type || 'audio/webm';
   setSyncStatus('saving…');
   try {
-    const qs = `?lesson=${lesson}&itemKey=${encodeURIComponent(itemKey)}&durationMs=${Math.round(durationMs)}&keep=${keep}`;
-    const res = await fetch(API_BASE + '/v1/minna/recordings' + qs, {
+    const qs = `?lesson=${scope}&itemKey=${encodeURIComponent(itemKey)}&durationMs=${Math.round(durationMs)}&keep=${keep}`;
+    const res = await fetch(API_BASE + '/v1/audio/recordings' + qs, {
       method: 'POST', credentials: 'include', cache: 'no-store',
       headers: { 'Content-Type': ct }, body: blob,
     });
     if (!res.ok) throw new Error('HTTP ' + res.status);
     const data = await res.json();
-    setTakes(lesson, itemKey, (data && data.takes) || []);
+    setTakes(scope, itemKey, (data && data.takes) || []);
     setSyncStatus('✓ recording saved');
+    if (onTakeSaved) { try { onTakeSaved(scope, itemKey); } catch (e) {} }   // notify the host (e.g. Self-Talk practice signal)
   } catch (e) {
     setSyncStatus('⚠ could not save recording');
   }
@@ -662,21 +677,26 @@ async function uploadTake(control, blob, durationMs) {
 }
 
 async function deleteTake(control, id) {
-  const lesson = Number(control.dataset.lesson), itemKey = control.dataset.itemkey;
-  try { await api('/v1/minna/recordings/' + id, { method: 'DELETE' }); } catch (e) {}
-  setTakes(lesson, itemKey, takesFor(lesson, itemKey).filter(t => t.id !== id));
+  const scope = Number(control.dataset.scope), itemKey = control.dataset.itemkey;
+  try { await api('/v1/audio/recordings/' + id, { method: 'DELETE' }); } catch (e) {}
+  setTakes(scope, itemKey, takesFor(scope, itemKey).filter(t => t.id !== id));
   resetControl(control);
 }
 
+// Optional host hook fired after a take is successfully saved (scope, itemKey) — lets a consumer
+// record a practice signal (Self-Talk's "practiced today"/streak) without coupling this engine to it.
+let onTakeSaved = null;
+export function setOnTakeSaved(fn) { onTakeSaved = fn || null; }
+
 // ---------- compare player ----------
 function newestTakeId(control) {
-  const takes = takesFor(Number(control.dataset.lesson), control.dataset.itemkey);
+  const takes = takesFor(Number(control.dataset.scope), control.dataset.itemkey);
   return takes.length ? takes[0].id : null;
 }
 function litBtn(control, btn) { stopCompare(control); if (btn) btn.classList.add('playing'); }
 function clearBtn(btn) { if (btn) btn.classList.remove('playing'); }
 
-// Normalization gains for the currently-played native/take pair (≤1, attenuate-only): bring the
+// Normalization gains for the currently-played reference/take pair (≤1, attenuate-only): bring the
 // louder clip down so the two play at ~equal volume. Computed from each source's RMS over its
 // spoken window; gain 1 when a level isn't known yet (buffer still decoding) or there's no pair.
 let activeNativeGain = 1, activeTakeGain = 1;
@@ -688,15 +708,15 @@ function setActiveGains(ctx, id, refV) {
 }
 
 // Compare BALANCE for ▶ both: a crossfader in [-1, 1] (−1 = all you, 0 = balanced, +1 = all
-// native) that scales each side ON TOP of the normalization gains, so it's easy to lean the
+// reference) that scales each side ON TOP of the normalization gains, so it's easy to lean the
 // simultaneous overlay toward one voice while A/B-ing. View-only (not synced) — a momentary
 // comparison aid that resets to centre on reload. Only affects ▶ both (single playback ignores
 // it); live while both are sounding (bothPlaying).
 let compareBias = 0, bothPlaying = false;
-// b = +1 is the NATIVE (right) end, b = −1 the YOU (left) end. Biasing toward one side fades the
-// OTHER out: at +1 you hear native (take→0), at −1 you hear yourself (native→0).
-const biasNative = (b) => (b >= 0 ? 1 : 1 + b);   // fade native out as you slide toward "you"
-const biasTake = (b) => (b <= 0 ? 1 : 1 - b);     // fade you out as you slide toward "native"
+// b = +1 is the REFERENCE (right) end, b = −1 the YOU (left) end. Biasing toward one side fades the
+// OTHER out: at +1 you hear the reference (take→0), at −1 you hear yourself (reference→0).
+const biasNative = (b) => (b >= 0 ? 1 : 1 + b);   // fade reference out as you slide toward "you"
+const biasTake = (b) => (b <= 0 ? 1 : 1 - b);     // fade you out as you slide toward "reference"
 function applyBothVolumes() {
   if (nativeAudioEl) nativeAudioEl.volume = clamp01(activeNativeGain * biasNative(compareBias));
   if (takeAudioEl) takeAudioEl.volume = clamp01(activeTakeGain * biasTake(compareBias));
@@ -796,10 +816,10 @@ function setCompareSpeed(v, container) {
   if (takeAudioEl) applySpeed(takeAudioEl);
 }
 
-// ---------- wiring (delegated; attach-once, since renderMinnaLesson re-renders body) ----------
+// ---------- wiring (delegated; attach-once, since the host re-renders body) ----------
 // The speaking bar (speed chips + bias slider) lives in the navbar #navExtra slot, NOT in the
-// lesson body — so its delegate attaches there (the slot persists; minna.js re-fills it per
-// render). The toggle + mic picker are wired by minna.js (they re-render the lesson). Attach-once
+// view body — so its delegate attaches there (the slot persists; the host re-fills it per
+// render). The toggle + mic picker are wired by the host (they re-render the view). Attach-once
 // via the spkWired guard on the slot element.
 export function wireSpeakingControls(navEl) {
   if (navEl.dataset.spkWired) return;
@@ -813,7 +833,7 @@ export function wireSpeakingControls(navEl) {
     if (speed) setCompareSpeed(Number(speed.dataset.speed), navEl);
   });
 }
-export function wireMinnaRecord(body) {
+export function wireRecordCompare(body) {
   if (body.dataset.recWired) return;   // body persists across re-renders — attach the delegate once
   body.dataset.recWired = '1';
   body.addEventListener('click', e => {

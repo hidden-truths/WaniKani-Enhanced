@@ -11,9 +11,9 @@ order. The actual DOM/render/feature glue is split into **`src/features/*`** mod
   (export/import), `deck` (filter model + picker + forecast + due banner; owns `cfg`),
   `flashcard` (session lifecycle; owns `session`), `browse` (grid + detail modal + topic
   groups; owns `bcfg`), `stats` (charts), `custom-cards` (rebuildData + #verbModal CRUD),
-  `settings-page`, `minna` (the みんなの日本語 dashboard), `minna-record` (Phase 2
-  record-and-compare: MediaRecorder capture + take list + the native/you/sequence compare
-  player), `a11y` (roving tabindex + chip
+  `settings-page`, `minna` (the みんなの日本語 dashboard), `record-compare` (the generic
+  record-and-compare engine: MediaRecorder capture + take list + the reference/you/sequence/both
+  compare player — fed by Minna AND Self-Talk), `a11y` (roving tabindex + chip
   annotations), `tts`, `audio` (the shared `playItem(item,context)` player — resolves an item to a
   tagged voice variant + routes public-vs-credentialed `<audio>` by `gated`), `render-helpers`
   (shared `jishoUrl`/`provenanceBadge`), and the cloud
@@ -574,7 +574,8 @@ Component contracts you must preserve:
   `data/minna/lesson-<n>.json` (git-tracked, curated from the `scripts/scrape-minna.ts`
   draft). **Phase 2 — record-your-voice + compare to native audio — has SHIPPED (MVP).**
   **Full feature doc (architecture + data model + roadmap): [MINNA.md](MINNA.md).**
-- **Record-and-compare (`minna-record.js`): the conversation has ONE whole-dialogue MP3, so
+- **Record-and-compare (`record-compare.js`, the generic engine; Minna + Self-Talk glue feed it):
+  the conversation has ONE whole-dialogue MP3, so
   per-line native compare slices it — it does NOT have per-line audio.** A line's native
   compare plays `[startSec,endSec]` of the cached conversation MP3 via `currentTime` + a
   `timeupdate` stop (Media-Fragments `#t=` is unreliable on `<audio>` — don't switch to it).
@@ -590,7 +591,7 @@ Component contracts you must preserve:
   navbar `#navExtra` slot** (`renderNavSpeaking` fills it; `clearNavSpeaking` empties it on
   tab-leave/gate) so it floats at the top while you scroll the lesson. Its delegate
   (`wireSpeakingControls`, speed chips + bias slider) attaches once to `#navExtra` —
-  SEPARATE from `wireMinnaRecord`'s `#mnBody` delegate; don't move the speed/bias handlers back
+  SEPARATE from `wireRecordCompare`'s `#mnBody` delegate; don't move the speed/bias handlers back
   onto `#mnBody` (the controls aren't there anymore). The toggle + mic picker are wired
   per-render in `renderNavSpeaking` (the slot's innerHTML is replaced each lesson render). **Recordings are PRIVATE on the server**
   and played via one reused `<audio crossOrigin='use-credentials'>` (gated, cross-origin) —
