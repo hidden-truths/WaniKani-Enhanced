@@ -227,6 +227,35 @@ systemctl restart wk-enhanced-api
 
 If any of the files in this directory changed (`*.service`, `*.timer`), re-copy them (`install -m 644 ... /etc/systemd/system/...`) and `systemctl daemon-reload` before restart.
 
+**Schema changes apply automatically on restart** — `openDb()` runs the whole `schema.sql` with
+`CREATE … IF NOT EXISTS` at boot, so new tables/indexes/views appear the moment the new container
+starts. No migration step.
+
+**One-time DATA seeds must be run explicitly, though.** A deploy that ships a new seedable dataset
+needs its seed script run once against the prod DB after the restart. As of the **unified sentence
+store (Phase 1)** that means seeding the built-in 独り言 Self-Talk phrases — without it the live
+独り言 tab fetches an empty store and renders nothing:
+
+```bash
+# Run on the droplet, in the compose dir, AFTER `systemctl restart wk-enhanced-api`.
+cd /opt/wk-enhanced-api/wk-enhanced-api
+# Reuses the `api` service's env_file + DB bind-mount (so DATABASE_FILE already points at the
+# prod sqlite), but runs the script from the HOST repo checkout mounted at /repo — the runtime
+# image deliberately ships only src/+data/, NOT scripts/ or study-app/, which the seed needs.
+# DATA_DIR MUST be set the same way the systemd unit sets it (the compose DATA_DIR gotcha) or the
+# bind mount falls back to ./.compose-data and you'd seed the wrong file.
+DATA_DIR=/var/lib/wk-enhanced-api docker compose run --rm --no-deps \
+  -v /opt/wk-enhanced-api:/repo -w /repo/wk-enhanced-api \
+  api bun scripts/seed-sentences.ts
+# → "seeded 44 Self-Talk built-in phrases into the sentence store". Idempotent: safe to re-run.
+```
+
+The seed's import chain is pure (relative + Bun/Node builtins only — no third-party deps), so it
+runs in the bare `oven/bun` image with the repo mounted; no `bun install` needed. It writes through
+WAL alongside the live server safely. Verify after: `curl https://api.wkenhanced.dev/v1/sentences?ownerType=selftalk`
+should return the built-ins (and the apex study-app's 独り言 tab should populate, with the credentialed
+CORS header echoing the apex origin).
+
 ## Migrating from a pre-Docker droplet
 
 Pre-Docker droplets ran Bun directly via `wk-enhanced-api.service` as the unprivileged `wkenhanced` host user. Conversion is one-shot:
