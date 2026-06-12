@@ -22,7 +22,7 @@ import {
   resolveVariant, parseAudioToken, contextPrefs, isSynthVoice, voiceProvider,
   DEFAULT_AUDIO_PREFS, AUDIO_VOICES, variantOrder, variantIndex, isKnownAudioToken, pruneAudioPrefs,
   hashStr, groupByScene, grammarTokens, todaysSet, emptyPractice, dayDiff, applyPractice,
-  practiceStreak, donePhraseIds, sentenceToPhrase,
+  practiceStreak, donePhraseIds, sentenceToPhrase, phraseToSentence,
 } from '../src/core/index.js';
 import { SELFTALK, SELFTALK_SCENES, SELFTALK_GRAMMAR } from '../src/data/selftalk.js';
 
@@ -824,6 +824,29 @@ test('sentenceToPhrase maps a store sentence to the UI phrase shape', () => {
 test('sentenceToPhrase tolerates missing translation/tags/furigana', () => {
   expect(sentenceToPhrase({ id: 'usr-x', furigana: null, translations: {}, tags: {}, custom: true })).toEqual({
     id: 'usr-x', jp: '', read: '', mean: '', scene: '', grammar: [], custom: true,
+  });
+});
+
+test('phraseToSentence builds a store body from a ruby UI phrase', () => {
+  const p = { id: 'usr-1', jp: '<ruby>歯<rt>は</rt></ruby>を<ruby>磨<rt>みが</rt></ruby>く。', read: 'はをみがく。', mean: 'brush', scene: 'morning', grammar: ['te-iru'] };
+  expect(phraseToSentence(p)).toEqual({
+    id: 'usr-1', text: '歯を磨く。',
+    furigana: [{ t: '歯', r: 'は' }, { t: 'を' }, { t: '磨', r: 'みが' }, { t: 'く。' }],
+    translations: { en: 'brush' }, tags: { scene: 'morning', grammar: ['te-iru'] }, link: { owner_type: 'selftalk' },
+  });
+});
+
+test('phraseToSentence encodes a no-ruby line + read as one ruby segment so the kana survives', () => {
+  const body = phraseToSentence({ id: 'usr-2', jp: '歯を磨く。', read: 'はをみがく。', mean: 'brush', scene: 'morning', grammar: [] });
+  expect(body.text).toBe('歯を磨く。');
+  expect(body.furigana).toEqual([{ t: '歯を磨く。', r: 'はをみがく。' }]);
+  expect(sentenceToPhrase({ ...body, custom: true }).read).toBe('はをみがく。'); // derived reading survives
+});
+
+test('phraseToSentence ↔ sentenceToPhrase round-trips a fully-ruby phrase', () => {
+  const p = { id: 'usr-3', jp: '<ruby>歯<rt>は</rt></ruby>を<ruby>磨<rt>みが</rt></ruby>く。', read: 'はをみがく。', mean: 'brush', scene: 'morning', grammar: ['te-iru'] };
+  expect(sentenceToPhrase({ ...phraseToSentence(p), custom: true })).toEqual({
+    id: 'usr-3', jp: '<ruby>歯<rt>は</rt></ruby>を<ruby>磨<rt>みが</rt></ruby>く。', read: 'はをみがく。', mean: 'brush', scene: 'morning', grammar: ['te-iru'], custom: true,
   });
 });
 

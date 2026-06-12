@@ -5,12 +5,13 @@
 // POST /v1/sessions log. The persistence layer schedules pushes via the sync bus, which this
 // module's initCloud() wires up.
 import { state } from '../state.js';
-import { escapeHtml } from '../core/index.js';
+import { escapeHtml, phraseToSentence } from '../core/index.js';
 import { sync } from '../sync-bus.js';
 import { account, setAccount, api, setSyncStatus, serverReachable, setServerReachable } from './cloud-core.js';
 import { saveLocal } from '../persistence/store.js';
 import { loadCustom, saveCustomLocal } from '../persistence/custom.js';
-import { normalizeSelftalk, saveSelftalkLocal, hasLocalSelftalk } from '../persistence/selftalk.js';
+import { normalizeSelftalk, saveSelftalkLocal } from '../persistence/selftalk.js';
+import { refreshPhrases as refreshSelftalkPhrases, renderSelftalk } from './selftalk.js';
 import { settings, setSettings, DEFAULT_SETTINGS, saveSettingsLocal, applyFurigana } from '../settings-store.js';
 import { cfg, updateDeckCount, updateDueBanner, paintPrefChips } from './deck.js';
 import { renderBrowse } from './browse.js';
@@ -58,19 +59,55 @@ async function pullSettingsCloud() {
   } catch (err) {/* offline — keep local settings */}
 }
 
-// --- Self-Talk sync (separate namespace; user-authored phrases + the practice/streak signal). ---
+// --- Self-Talk sync (the 'selftalk' blob now carries ONLY the practice/streak signal; user phrases
+//     are first-class private rows in the sentence store, synced via /v1/sentences, not here). ---
 function scheduleSelftalkSync() { if (!account) return; if (selftalkSyncTimer) clearTimeout(selftalkSyncTimer); selftalkSyncTimer = setTimeout(pushSelftalkCloud, 1200); }
-async function pushSelftalkCloud() { if (!account) return; setSyncStatus('saving…'); try { await api('/v1/progress/' + SELFTALK_APP_KEY, { method: 'PUT', body: { data: state.selftalkStore } }); setSyncStatus('✓ synced'); } catch (err) { setSyncStatus('⚠ offline'); } }
-// Pull Self-Talk after sign-in. Server wins when it has data; a fresh account seeds from local.
-// Writes via saveSelftalkLocal() so hydration doesn't immediately re-push. The panel re-renders
-// on its next tab activation (renderSelftalk is lazy), so no view refresh is needed here.
+async function pushSelftalkCloud() { if (!account) return; setSyncStatus('saving…'); try { await api('/v1/progress/' + SELFTALK_APP_KEY, { method: 'PUT', body: { data: { practice: state.selftalkStore.practice } } }); setSyncStatus('✓ synced'); } catch (err) { setSyncStatus('⚠ offline'); } }
+
+// POST each legacy phrase to the sentence store as a private row; returns the ones that FAILED so
+// they stay in the blob for a later retry. POST is idempotent by ext_id (the usr-<uuid> ids), so a
+// replay (re-sign-in / another device) is a no-op. Empty input → no-op.
+async function migrateSelftalkPhrases(localPhrases, cloudPhrases) {
+  const byId = new Map();
+  for (const p of cloudPhrases) if (p && p.id) byId.set(p.id, p);
+  for (const p of localPhrases) if (p && p.id) byId.set(p.id, p);   // local wins on a dup id
+  if (!byId.size) return [];
+  const failed = [];
+  for (const p of byId.values()) {
+    try { await api('/v1/sentences', { method: 'POST', body: phraseToSentence(p) }); }
+    catch (err) { failed.push(p); }
+  }
+  if (byId.size > failed.length) setSyncStatus('✓ phrases migrated');
+  return failed;
+}
+
+// Pull Self-Talk after sign-in. The blob carries only the practice/streak signal now; any phrases it
+// still holds (authored before the store existed, locally and/or in a legacy cloud blob) are
+// MIGRATED once into the sentence store as private rows, then dropped from the blob. Server-wins for
+// the practice signal; a fresh account seeds practice from local via the push below.
 async function pullSelftalkCloud() {
+  // Capture local legacy phrases BEFORE the server's practice overwrites state.selftalkStore.
+  const localPhrases = (state.selftalkStore && state.selftalkStore.phrases) || [];
+  let cloudPhrases = [];
   try {
     const r = await api('/v1/progress/' + SELFTALK_APP_KEY);
-    if (r && r.data && typeof r.data === 'object' && (Array.isArray(r.data.phrases) || r.data.practice)) {
-      state.selftalkStore = normalizeSelftalk(r.data); saveSelftalkLocal();
-    } else if (hasLocalSelftalk()) { await pushSelftalkCloud(); }   // new account — seed from local
-  } catch (err) {/* offline — keep local Self-Talk */}
+    if (r && r.data && typeof r.data === 'object') {
+      if (Array.isArray(r.data.phrases)) cloudPhrases = r.data.phrases;
+      if (r.data.practice) state.selftalkStore = normalizeSelftalk({ practice: r.data.practice }); // server-wins
+      // else: keep the locally-loaded practice (seeded to the cloud by the push below)
+    }
+  } catch (err) { return; /* offline — keep local Self-Talk */ }
+
+  const failed = await migrateSelftalkPhrases(localPhrases, cloudPhrases);
+  state.selftalkStore.phrases = failed;   // keep only un-migrated (retried next pull); [] when all done
+  saveSelftalkLocal();
+  await pushSelftalkCloud();               // the blob now syncs {practice} only
+
+  // Repaint the tab with the migrated rows (refreshSelftalkPhrases re-reads GET /v1/sentences).
+  if (await refreshSelftalkPhrases()) {
+    const panel = document.getElementById('panel-selftalk');
+    if (panel && panel.classList.contains('active')) renderSelftalk();
+  }
 }
 
 // Pull server progress after sign-in. Server wins when it has data; a fresh account inherits

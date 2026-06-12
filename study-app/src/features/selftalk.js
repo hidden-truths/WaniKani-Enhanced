@@ -12,11 +12,11 @@
 // features/record-compare.js (Self-Talk feeds it a reserved numeric SCOPE + synth-only references).
 import { state } from '../state.js';
 import { localDay } from '../config.js';
-import { escapeHtml, rubyHtml, plainText, groupByScene, grammarTokens, todaysSet, applyPractice, practiceStreak, donePhraseIds, sentenceToPhrase } from '../core/index.js';
+import { escapeHtml, rubyHtml, plainText, groupByScene, grammarTokens, todaysSet, applyPractice, practiceStreak, donePhraseIds, sentenceToPhrase, phraseToSentence } from '../core/index.js';
 import { SELFTALK_SCENES, SELFTALK_GRAMMAR } from '../data/selftalk.js';
 import { playItem, cycleMod } from './audio.js';
 import { loadSelftalk, saveSelftalk } from '../persistence/selftalk.js';
-import { account, api } from './cloud-core.js';
+import { account, api, setSyncStatus } from './cloud-core.js';
 import {
   RECORD_SUPPORTED, enterSpeakingMode, exitSpeakingMode, isSpeakingMode,
   speakingBarHtml, initMicSelector, wireSpeakingControls,
@@ -61,6 +61,19 @@ export async function refreshPhrases() {
     if (!storePhrases.length) storePhrases = loadCachedPhrases();   // offline first load → fall back to cache
     return false;
   }
+}
+
+// Optimistic local-set mutators: authoring updates storePhrases + the cache immediately so the UI
+// reflects the change before the API write confirms (the usr-<uuid> id is final from birth, so
+// there's no temp-id reconciliation).
+function upsertLocalPhrase(phrase) {
+  const i = storePhrases.findIndex((p) => p.id === phrase.id);
+  if (i >= 0) storePhrases[i] = phrase; else storePhrases.push(phrase);
+  cachePhrases(storePhrases);
+}
+function removeLocalPhrase(id) {
+  storePhrases = storePhrases.filter((p) => p.id !== id);
+  cachePhrases(storePhrases);
 }
 
 const elHead = () => document.getElementById('stHead');
@@ -117,6 +130,14 @@ function streakRowHtml() {
   return `<div class="st-streak-row"><span class="st-streak-hint">Say a phrase out loud, then mark it — start a daily streak.</span></div>`;
 }
 
+// Authoring now writes PRIVATE server rows, so it requires an account; anon gets a sign-in nudge
+// (reading stays anon). Mirrors how the record controls gate on `account`.
+function addAffordanceHtml() {
+  return account
+    ? `<button class="chip primary" type="button" data-stadd><svg class="ic" aria-hidden="true"><use href="#i-plus"/></svg>Add your own phrase</button>`
+    : `<button class="chip" type="button" data-stsignin><svg class="ic" aria-hidden="true"><use href="#i-user"/></svg>Sign in to add your own phrases</button>`;
+}
+
 function renderHead() {
   const head = elHead(); if (!head) return;
   const toks = grammarTokens(allPhrases(), SELFTALK_GRAMMAR.map((g) => g.id));
@@ -129,7 +150,7 @@ function renderHead() {
       <p class="st-kicker">独り言 · Self-Talk</p>
       <p class="st-lede">Narrate your day out loud. Tap ▶ to hear a phrase, then say it yourself — ⌥/⇧-click ▶ to try another voice.</p>
       ${streakRowHtml()}
-      <div class="st-actions"><button class="chip primary" type="button" data-stadd><svg class="ic" aria-hidden="true"><use href="#i-plus"/></svg>Add your own phrase</button></div>
+      <div class="st-actions">${addAffordanceHtml()}</div>
     </div>
     <div class="frow"><span class="filter-label">Grammar</span>
       <div class="chips" role="group" aria-label="Grammar filter">${gramChip('all', 'All', allActive)}${chips}</div></div>
@@ -231,7 +252,7 @@ let editingId = null;
 
 function openPhraseModal(id) {
   editingId = id || null;
-  const existing = id ? (state.selftalkStore.phrases || []).find((p) => p.id === id) : null;
+  const existing = id ? allPhrases().find((p) => p.id === id) : null;
   $('stPhScene').innerHTML = SELFTALK_SCENES.map((s) => `<option value="${escapeHtml(s.id)}">${escapeHtml(s.label)}</option>`).join('');
   const sel = new Set(existing ? (existing.grammar || []) : []);
   $('stPhGram').innerHTML = SELFTALK_GRAMMAR.map((g) =>
@@ -253,31 +274,41 @@ function newPhraseId() {
   return 'usr-' + (typeof crypto !== 'undefined' && crypto.randomUUID ? crypto.randomUUID() : Date.now().toString(36) + Math.floor(performance.now()).toString(36));
 }
 
-function savePhrase(e) {
+// Authoring writes PRIVATE rows to the sentence store via the API, OPTIMISTICALLY: the local set +
+// cache update and the UI re-renders immediately, then the write confirms in the background (the
+// usr-<uuid> id is final from birth → no reconciliation). A failed write surfaces "⚠ offline" but
+// keeps the optimistic local copy. Requires an account (the Add affordance is account-gated).
+async function savePhrase(e) {
   e.preventDefault();
+  if (!account) { $('stPhErr').textContent = 'Sign in to save your own phrases.'; return; }
   const jp = $('stPhJp').value.trim(), mean = $('stPhMean').value.trim();
   if (!jp || !mean) { $('stPhErr').textContent = 'Japanese and English are required.'; return; }
-  const phrase = {
-    id: editingId || newPhraseId(),
-    jp, mean,
-    read: $('stPhRead').value.trim(),
+  const editing = editingId;
+  const body = phraseToSentence({
+    id: editing || newPhraseId(),
+    jp, read: $('stPhRead').value.trim(), mean,
     scene: $('stPhScene').value || SELFTALK_SCENES[0].id,
     grammar: [...document.querySelectorAll('#stPhGram input:checked')].map((c) => c.value),
-    custom: true,
-  };
-  const phrases = state.selftalkStore.phrases = state.selftalkStore.phrases || [];
-  const i = phrases.findIndex((p) => p.id === phrase.id);
-  if (i >= 0) phrases[i] = phrase; else phrases.push(phrase);
-  saveSelftalk();
+  });
+  upsertLocalPhrase(sentenceToPhrase({ ...body, custom: true }));   // optimistic
   closePhraseModal();
   renderSelftalk();
+  try {
+    if (editing) await api('/v1/sentences/' + encodeURIComponent(body.id), { method: 'PUT', body: omitId(body) });
+    else await api('/v1/sentences', { method: 'POST', body });
+    setSyncStatus('✓ saved');
+  } catch (err) { setSyncStatus('⚠ offline'); }
 }
-function deletePhrase() {
+function omitId({ id, ...rest }) { return rest; }   // PUT carries the id in the path, not the body
+
+async function deletePhrase() {
   if (!editingId) return;
-  state.selftalkStore.phrases = (state.selftalkStore.phrases || []).filter((p) => p.id !== editingId);
-  saveSelftalk();
+  const id = editingId;
+  removeLocalPhrase(id);   // optimistic
   closePhraseModal();
   renderSelftalk();
+  try { await api('/v1/sentences/' + encodeURIComponent(id), { method: 'DELETE' }); setSyncStatus('✓ deleted'); }
+  catch (err) { setSyncStatus('⚠ offline'); }
 }
 
 // ---- lifecycle ----
@@ -319,6 +350,8 @@ export function initSelftalk() {
       if (ed) { const card = ed.closest('.st-phrase'); if (card) openPhraseModal(card.dataset.id); return; }
       const add = e.target.closest('[data-stadd]');
       if (add) { openPhraseModal(null); return; }
+      const signin = e.target.closest('[data-stsignin]');
+      if (signin) { document.getElementById('accountBtn').click(); return; }   // anon → open the sign-in modal
       const gram = e.target.closest('[data-stgram]');
       if (gram) { toggleGrammar(gram.dataset.stgram); return; }
       const today = e.target.closest('[data-sttoday]');

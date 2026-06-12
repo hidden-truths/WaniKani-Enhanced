@@ -5,7 +5,30 @@
 // Self-Talk is OUTPUT reps, not recognition — there's no SRS box/schedule here. The only persisted
 // signal is a lightweight day streak + which phrases were said today (the `practice` record below).
 
-import { segmentsToRuby, segmentsToReading } from './text.js';
+import { plainText, rubyToSegments, segmentsToRuby, segmentsToReading } from './text.js';
+
+// Convert a UI phrase ({id, jp, read?, mean, scene, grammar}) into the sentence-store create/update
+// body ({id, text, furigana, translations, tags, link}). text + furigana come from `jp`; when `jp`
+// carries no ruby (the derived reading would just echo the kanji) but a `read` is supplied, the whole
+// line is encoded as ONE ruby segment so the store can still derive the kana back. Pure — shared by
+// the authoring write and the one-time legacy-blob → store migration so they build identical bodies.
+export function phraseToSentence(phrase) {
+  const jp = (phrase && phrase.jp) || '';
+  const text = plainText(jp);
+  let furigana = rubyToSegments(jp);
+  const read = phrase && phrase.read ? String(phrase.read).trim() : '';
+  if (read && segmentsToReading(furigana) === text && read !== text) {
+    furigana = [{ t: text, r: read }];
+  }
+  return {
+    id: phrase && phrase.id,
+    text,
+    furigana,
+    translations: { en: (phrase && phrase.mean) || '' },
+    tags: { scene: (phrase && phrase.scene) || '', grammar: Array.isArray(phrase && phrase.grammar) ? phrase.grammar : [] },
+    link: { owner_type: 'selftalk' },
+  };
+}
 
 // Adapt a store sentence (from GET /v1/sentences) to the phrase shape the Self-Talk UI renders.
 // The store keeps furigana as structured segments; the UI wants the `<ruby>` jp + the derived
