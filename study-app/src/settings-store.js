@@ -19,7 +19,11 @@ const SETTINGS_KEY = 'jpverbs_settings';
 // saving, so the take is just the spoken words. Default on.
 // compareSpeed: playback rate (0.5/0.75/1×) for the record-and-compare player — slow the
 // native audio down (pitch preserved) to mimic it more easily. Default 1×.
-export const DEFAULT_SETTINGS = { exampleLevel: 'N5', furigana: true, input: 'self', audio: 'off', freeReviewDue: true, recordingsKeep: 3, trimSilence: true, compareSpeed: 1 };
+// audioPrefs: per-context voice-priority lists for the audio-unify voice picker (audio-unify
+// Phase 2). Keyed by context ('reviews'/'browse'/'minna'); each value is an ordered array of
+// priority tokens — a specific voice id ('siri:female') or a kind ('kind:native'/'kind:tts'/
+// 'kind:user'). Empty/missing context → core/audio.js DEFAULT_AUDIO_PREFS. Synced.
+export const DEFAULT_SETTINGS = { exampleLevel: 'N5', furigana: true, input: 'self', audio: 'off', freeReviewDue: true, recordingsKeep: 3, trimSilence: true, compareSpeed: 1, audioPrefs: {} };
 
 export function loadSettings() {
   let s = null; try { s = JSON.parse(localStorage.getItem(SETTINGS_KEY)); } catch (e) {}

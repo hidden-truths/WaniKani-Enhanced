@@ -18,6 +18,8 @@ import {
   clampKeep, convItemKey, formatDuration, KEEP_DEFAULT,
   validClip, resolveClip, clipLabel, findTrimBounds,
   waveformPeaks, clampSpeed, COMPARE_SPEEDS, rmsLevel, normGains,
+  resolveVariant, parseAudioToken, contextPrefs, isSynthVoice, voiceProvider,
+  DEFAULT_AUDIO_PREFS, AUDIO_VOICES,
 } from '../src/core/index.js';
 
 beforeEach(() => {
@@ -574,4 +576,71 @@ test('clampSpeed snaps to the nearest allowed step, default 1×', () => {
   expect(clampSpeed(2)).toBe(1);        // above range → nearest (1)
   expect(clampSpeed('x' as any)).toBe(1);
   expect(clampSpeed(undefined as any)).toBe(1);
+});
+
+// ---------- audio-unify: per-context voice-priority resolver ----------
+
+test('parseAudioToken distinguishes kinds from specific voices', () => {
+  expect(parseAudioToken('kind:native')).toEqual({ type: 'kind', kind: 'native' });
+  expect(parseAudioToken('native')).toEqual({ type: 'kind', kind: 'native' });     // bare alias
+  expect(parseAudioToken('user')).toEqual({ type: 'kind', kind: 'user' });
+  expect(parseAudioToken('tts')).toEqual({ type: 'kind', kind: 'tts' });
+  expect(parseAudioToken('siri:female')).toEqual({ type: 'voice', voice: 'siri:female' });
+  expect(parseAudioToken('google')).toEqual({ type: 'voice', voice: 'google' });
+  expect(parseAudioToken('')).toBeNull();
+});
+
+test('isSynthVoice / voiceProvider classify providers', () => {
+  expect(voiceProvider('siri:female')).toBe('siri');
+  expect(isSynthVoice('siri:male')).toBe(true);
+  expect(isSynthVoice('google')).toBe(true);
+  expect(isSynthVoice('native')).toBe(false);
+  expect(isSynthVoice('user')).toBe(false);
+});
+
+test('contextPrefs falls back to the per-context default when missing/empty', () => {
+  expect(contextPrefs({}, 'minna')).toEqual(DEFAULT_AUDIO_PREFS.minna);
+  expect(contextPrefs({ minna: [] }, 'minna')).toEqual(DEFAULT_AUDIO_PREFS.minna);
+  expect(contextPrefs({ minna: ['google'] }, 'minna')).toEqual(['google']);
+  expect(contextPrefs(null as any, 'reviews')).toEqual(DEFAULT_AUDIO_PREFS.reviews);
+});
+
+test('resolveVariant: a specific synth voice wins when tts is available', () => {
+  // default reviews = ['siri:female','kind:tts'] → siri:female (server falls through if not generated)
+  expect(resolveVariant('reviews', { tts: true, native: false, user: false }, {}))
+    .toEqual({ kind: 'tts', voice: 'siri:female' });
+});
+
+test('resolveVariant: textbook defaults to native, else cascades to synth', () => {
+  const av = (o: any) => ({ tts: true, native: false, user: false, ...o });
+  // native present → native first (default minna = ['kind:native','siri:female',…])
+  expect(resolveVariant('minna', av({ native: true }), {})).toEqual({ kind: 'native' });
+  // no native → next default token is siri:female
+  expect(resolveVariant('minna', av({ native: false }), {})).toEqual({ kind: 'tts', voice: 'siri:female' });
+});
+
+test('resolveVariant honors a user-ordered list (specific OR kind tokens)', () => {
+  const prefs = { minna: ['kind:user', 'siri:male', 'kind:native'] };
+  const av = { tts: true, native: true, user: true };
+  expect(resolveVariant('minna', av, prefs)).toEqual({ kind: 'user' });          // user first
+  expect(resolveVariant('minna', { ...av, user: false }, prefs)).toEqual({ kind: 'tts', voice: 'siri:male' });
+  expect(resolveVariant('minna', { tts: false, native: true, user: false }, prefs)).toEqual({ kind: 'native' });
+});
+
+test('resolveVariant: kind:tts uses the first listed synth voice, else google', () => {
+  expect(resolveVariant('minna', { tts: true, native: false, user: false }, { minna: ['kind:tts'] }))
+    .toEqual({ kind: 'tts', voice: 'google' });
+  expect(resolveVariant('minna', { tts: true, native: false, user: false }, { minna: ['kind:native', 'kind:tts', 'siri:male'] }))
+    .toEqual({ kind: 'tts', voice: 'siri:male' });   // native unavailable → kind:tts → first listed synth (siri:male)
+});
+
+test('resolveVariant falls back to anything available, then null', () => {
+  // prefs name only unavailable kinds → fall back to the one available kind
+  expect(resolveVariant('minna', { tts: false, native: true, user: false }, { minna: ['kind:user'] }))
+    .toEqual({ kind: 'native' });
+  expect(resolveVariant('reviews', { tts: false, native: false, user: false }, {})).toBeNull();
+});
+
+test('AUDIO_VOICES palette includes both Siri genders + Google', () => {
+  expect(AUDIO_VOICES.map((v) => v.id)).toEqual(['siri:female', 'siri:male', 'google']);
 });
