@@ -5,6 +5,7 @@
 import { describe, test, expect, beforeEach, afterEach } from 'bun:test';
 import { openDb, _useDbForTesting } from './client.ts';
 import * as db from './client.ts';
+import { ttsTextHash } from '../services/tts.ts';
 
 let mem: ReturnType<typeof openDb>;
 
@@ -296,5 +297,103 @@ describe('audio_variants (tagged voice-clip manifest)', () => {
     test('gender defaults to empty string for a no-gender provider', () => {
         db.insertAudioVariant('h2', 'siri', '', 'm4a');
         expect(db.listAudioVariants('h2')[0]!.gender).toBe('');
+    });
+});
+
+// The privacy filter (getSentences) is the single gate the whole Self-Talk feature's
+// privacy rests on; these are BREACH-PREVENTION pins (à la the ikTitles dead-end pins),
+// not nice-to-haves. If one breaks, a private user sentence is about to leak — do not
+// "fix" the test, fix the leak.
+describe('sentence store privacy + ownership pins', () => {
+    // Trivial all-kana furigana (one segment) for texts with no kanji — keeps the
+    // concat(seg.t) === text invariant satisfied without hand-writing ruby per test.
+    const seg = (text: string) => [{ t: text }];
+
+    test('getSentences({viewer:null}) returns only public rows; private rows are hidden', () => {
+        const a = db.createUser('a@x.com', 'h');
+        db.upsertPublicSentence({ extId: 'st-1', text: 'おはよう。', furigana: seg('おはよう。'), source: 'selftalk', translations: { en: 'morning' }, tags: { scene: 'morning', grammar: ['te-iru'] }, link: { owner_type: 'selftalk' } });
+        db.createSentence({ extId: 'usr-a1', text: 'わたしのぶん。', furigana: seg('わたしのぶん。'), source: 'selftalk', createdBy: a.id, translations: { en: 'mine' }, tags: { scene: 'work', grammar: ['tai'] }, link: { owner_type: 'selftalk' } });
+        const anon = db.getSentences({ ownerType: 'selftalk', viewer: null });
+        expect(anon.map((s) => s.id)).toEqual(['st-1']);
+        expect(anon.every((s) => s.custom === false)).toBe(true);
+    });
+
+    test('a private row is visible to its owner, invisible to another user and to anon', () => {
+        const a = db.createUser('a@x.com', 'h');
+        const b = db.createUser('b@x.com', 'h');
+        db.createSentence({ extId: 'usr-a1', text: 'ひみつ。', furigana: seg('ひみつ。'), source: 'selftalk', createdBy: a.id, translations: { en: 'secret' }, tags: { scene: 'work', grammar: ['tai'] }, link: { owner_type: 'selftalk' } });
+        expect(db.getSentences({ ownerType: 'selftalk', viewer: a.id }).map((s) => s.id)).toEqual(['usr-a1']);
+        expect(db.getSentences({ ownerType: 'selftalk', viewer: b.id })).toEqual([]);
+        expect(db.getSentences({ ownerType: 'selftalk', viewer: null })).toEqual([]);
+    });
+
+    test('a viewer sees public + own private together (custom flag distinguishes them)', () => {
+        const a = db.createUser('a@x.com', 'h');
+        db.upsertPublicSentence({ extId: 'st-1', text: 'こんにちは。', furigana: seg('こんにちは。'), source: 'selftalk', translations: { en: 'hi' }, tags: { scene: 'morning', grammar: ['te-iru'] }, link: { owner_type: 'selftalk' } });
+        db.createSentence({ extId: 'usr-a1', text: 'じぶんの。', furigana: seg('じぶんの。'), source: 'selftalk', createdBy: a.id, translations: { en: 'own' }, tags: { scene: 'work', grammar: ['tai'] }, link: { owner_type: 'selftalk' } });
+        const seen = db.getSentences({ ownerType: 'selftalk', viewer: a.id });
+        expect(seen.map((s) => s.id).sort()).toEqual(['st-1', 'usr-a1']);
+        expect(new Map(seen.map((s) => [s.id, s.custom]))).toEqual(new Map([['st-1', false], ['usr-a1', true]]));
+    });
+
+    test('the public_sentence VIEW excludes a private row and a gated (public=0) row', () => {
+        const a = db.createUser('a@x.com', 'h');
+        db.upsertPublicSentence({ extId: 'st-1', text: 'おはよう。', furigana: seg('おはよう。'), source: 'selftalk', translations: { en: 'm' }, tags: {}, link: { owner_type: 'selftalk' } });
+        db.createSentence({ extId: 'usr-a1', text: 'ひみつ。', furigana: seg('ひみつ。'), source: 'selftalk', createdBy: a.id, translations: {}, tags: {}, link: { owner_type: 'selftalk' } });
+        // A gated row: public=0 but visibility='public' (the Minna copyright slice). No repo fn
+        // creates one, so insert raw to prove the VIEW still excludes it (anon/export read this VIEW).
+        mem.query(`INSERT INTO sentence (ext_id, hash, text, source, public, visibility, created_at) VALUES ('gated', 'h', 'x', 'minna', 0, 'public', 1)`).run();
+        const view = (mem.query('SELECT ext_id FROM public_sentence ORDER BY ext_id').all() as { ext_id: string }[]).map((r) => r.ext_id);
+        expect(view).toEqual(['st-1']);
+    });
+
+    test('upsertPublicSentence is idempotent — re-seed does not duplicate rows/links/tags', () => {
+        const payload = { extId: 'st-1', text: 'おはよう。', furigana: seg('おはよう。'), source: 'selftalk', translations: { en: 'morning' }, tags: { scene: 'morning', grammar: ['te-iru', 'tai'] }, link: { owner_type: 'selftalk' } };
+        db.upsertPublicSentence(payload);
+        db.upsertPublicSentence(payload); // second run must not grow anything
+        const n = (sql: string) => (mem.query(sql).get() as { n: number }).n;
+        expect(n('SELECT COUNT(*) AS n FROM sentence')).toBe(1);
+        expect(n('SELECT COUNT(*) AS n FROM translation')).toBe(1);
+        expect(n('SELECT COUNT(*) AS n FROM sentence_tag')).toBe(3);
+        expect(n('SELECT COUNT(*) AS n FROM sentence_link')).toBe(1);
+        const got = db.getSentences({ ownerType: 'selftalk', viewer: null });
+        expect(got[0]!.tags).toEqual({ scene: 'morning', grammar: ['tai', 'te-iru'] }); // grammar comes back value-sorted (no ordinal column)
+        expect(got[0]!.translations).toEqual({ en: 'morning' });
+    });
+
+    test('update/delete by a non-owner affects 0 rows; the owner can mutate', () => {
+        const a = db.createUser('a@x.com', 'h');
+        const b = db.createUser('b@x.com', 'h');
+        db.createSentence({ extId: 'usr-a1', text: 'もとの。', furigana: seg('もとの。'), source: 'selftalk', createdBy: a.id, translations: { en: 'orig' }, tags: { scene: 'work', grammar: ['tai'] }, link: { owner_type: 'selftalk' } });
+        // B cannot touch A's row.
+        expect(db.updateUserSentence({ extId: 'usr-a1', viewer: b.id, text: 'のっとり。', furigana: seg('のっとり。'), translations: { en: 'hijack' }, tags: { scene: 'work', grammar: ['tai'] }, link: { owner_type: 'selftalk' } })).toBeNull();
+        expect(db.deleteUserSentence({ extId: 'usr-a1', viewer: b.id })).toBe(false);
+        expect(db.getSentences({ ownerType: 'selftalk', viewer: a.id })[0]!.text).toBe('もとの。');
+        // A can.
+        const upd = db.updateUserSentence({ extId: 'usr-a1', viewer: a.id, text: 'あたらしい。', furigana: seg('あたらしい。'), translations: { en: 'new' }, tags: { scene: 'meals', grammar: ['sou'] }, link: { owner_type: 'selftalk' } });
+        expect(upd!.text).toBe('あたらしい。');
+        expect(upd!.tags).toEqual({ scene: 'meals', grammar: ['sou'] });
+        expect(db.deleteUserSentence({ extId: 'usr-a1', viewer: a.id })).toBe(true);
+        expect(db.getSentences({ ownerType: 'selftalk', viewer: a.id })).toEqual([]);
+    });
+
+    test('write rejects furigana that does not reconstruct text', () => {
+        const a = db.createUser('a@x.com', 'h');
+        expect(() => db.createSentence({ extId: 'usr-bad', text: 'ほんとう。', furigana: [{ t: 'ちがう' }], source: 'selftalk', createdBy: a.id, translations: { en: 'x' }, tags: {}, link: { owner_type: 'selftalk' } })).toThrow();
+    });
+
+    test('stored hash equals ttsTextHash(text) — the audio-layer key, computed server-side', () => {
+        const a = db.createUser('a@x.com', 'h');
+        db.createSentence({ extId: 'usr-a1', text: 'はをみがく。', furigana: [{ t: 'は' }, { t: 'を' }, { t: 'みがく。' }], source: 'selftalk', createdBy: a.id, translations: { en: 'brush' }, tags: {}, link: { owner_type: 'selftalk' } });
+        const row = mem.query('SELECT hash FROM sentence WHERE ext_id = ?').get('usr-a1') as { hash: string };
+        expect(row.hash).toBe(ttsTextHash('はをみがく。'));
+    });
+
+    test('a private row may share a hash with a public row (no global UNIQUE(hash))', () => {
+        const a = db.createUser('a@x.com', 'h');
+        db.upsertPublicSentence({ extId: 'st-dup', text: 'おはよう。', furigana: seg('おはよう。'), source: 'selftalk', translations: {}, tags: {}, link: { owner_type: 'selftalk' } });
+        // Same text → same hash, but a private row is allowed to collide (partial unique only
+        // covers public+public-visibility). This must NOT throw.
+        expect(() => db.createSentence({ extId: 'usr-dup', text: 'おはよう。', furigana: seg('おはよう。'), source: 'selftalk', createdBy: a.id, translations: {}, tags: {}, link: { owner_type: 'selftalk' } })).not.toThrow();
     });
 });

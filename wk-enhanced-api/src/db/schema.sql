@@ -131,3 +131,84 @@ CREATE TABLE IF NOT EXISTS audio_variants (
     created_at  INTEGER NOT NULL,        -- epoch ms
     PRIMARY KEY (text_hash, provider, gender)
 );
+
+-- ---------- Unified sentence store (Phase 1: 独り言 Self-Talk slice) ----------
+--
+-- One canonical row per Japanese sentence that every surface REFERENCES by id
+-- instead of embedding inline (foundation for de-dup / cross-surface reuse /
+-- later NLP). Phase 1 wires only Self-Talk: built-in phrases seed as PUBLIC rows;
+-- user phrases are first-class PRIVATE rows. The DB is the runtime source of
+-- truth; curator content is seeded from the git-tracked study-app bundle
+-- (scripts/seed-sentences.ts), user content is written via /v1/sentences.
+--
+-- Load-bearing invariants:
+--   • `text` == plainText(jp) byte-for-byte, `hash` == services/tts.ts
+--     ttsTextHash(text) — this is the audio-layer key; the server computes the
+--     hash on insert, the client never does.
+--   • `furigana` is structured JSON [{t, r?}] with concat(seg.t) === text. The
+--     full kana reading is DERIVED (seg.r ?? seg.t), never stored.
+--   • Privacy choke-point: ALL reads go through db.getSentences, which always
+--     ANDs (public=1 OR created_by=:viewer); anon/export read the
+--     public_sentence VIEW. No cross-user de-dup — only the public+public-vis
+--     slice is unique-by-hash (partial index below).
+CREATE TABLE IF NOT EXISTS sentence (
+    id          INTEGER PRIMARY KEY AUTOINCREMENT,
+    ext_id      TEXT NOT NULL UNIQUE,           -- stable external id: builtin slug or user UUID
+    hash        TEXT NOT NULL,                  -- ttsTextHash(text); audio key + dedup key
+    text        TEXT NOT NULL,                  -- plainText canonical (byte-for-byte)
+    furigana    TEXT,                           -- JSON [{t,r?}]; concat(t) === text
+    lang        TEXT NOT NULL DEFAULT 'ja',
+    source      TEXT NOT NULL,                  -- 'builtin' | 'minna' | 'selftalk' | 'user'
+    public      INTEGER NOT NULL DEFAULT 0,     -- 1 = export/anon eligible
+    visibility  TEXT NOT NULL DEFAULT 'public', -- 'public' | 'private'
+    created_by  INTEGER REFERENCES users(id) ON DELETE CASCADE,  -- NULL = curator
+    created_at  INTEGER NOT NULL                -- epoch ms
+);
+CREATE UNIQUE INDEX IF NOT EXISTS ux_sentence_public_hash
+    ON sentence(hash) WHERE public = 1 AND visibility = 'public';
+CREATE INDEX IF NOT EXISTS ix_sentence_created_by ON sentence(created_by);
+
+CREATE TABLE IF NOT EXISTS translation (
+    sentence_id INTEGER NOT NULL REFERENCES sentence(id) ON DELETE CASCADE,
+    lang        TEXT NOT NULL,
+    text        TEXT NOT NULL,
+    ordinal     INTEGER NOT NULL DEFAULT 0,
+    PRIMARY KEY (sentence_id, lang, ordinal)
+);
+
+-- Polymorphic ownership, designed up front so card / grammar / conversation /
+-- lesson owners can be wired in later phases without a migration. Self-Talk uses
+-- owner_type='selftalk' (owner_id NULL).
+CREATE TABLE IF NOT EXISTS sentence_link (
+    id            INTEGER PRIMARY KEY AUTOINCREMENT,
+    sentence_id   INTEGER NOT NULL REFERENCES sentence(id) ON DELETE CASCADE,
+    owner_type    TEXT NOT NULL,   -- 'card'|'grammar_point'|'conversation'|'lesson'|'selftalk'
+    owner_id      TEXT,            -- NULL for selftalk; card rank / lesson no / etc. later
+    tier          TEXT,            -- 'N5'..'N1' for card examples
+    role          TEXT,            -- conversation speaker
+    ordinal       INTEGER NOT NULL DEFAULT 0,
+    clip_start_ms INTEGER,
+    clip_end_ms   INTEGER
+);
+CREATE INDEX IF NOT EXISTS ix_link_owner    ON sentence_link(owner_type, owner_id);
+CREATE INDEX IF NOT EXISTS ix_link_sentence ON sentence_link(sentence_id);
+
+CREATE TABLE IF NOT EXISTS sentence_tag (
+    sentence_id INTEGER NOT NULL REFERENCES sentence(id) ON DELETE CASCADE,
+    kind        TEXT NOT NULL,     -- 'scene' | 'grammar' | 'topic'
+    value       TEXT NOT NULL,
+    PRIMARY KEY (sentence_id, kind, value)
+);
+
+-- Designed now, populated in the later NLP phase. Token offsets index into sentence.text.
+CREATE TABLE IF NOT EXISTS sentence_annotation (
+    sentence_id INTEGER PRIMARY KEY REFERENCES sentence(id) ON DELETE CASCADE,
+    tokens      TEXT,   -- JSON [{i,start,end,surface,lemma,pos,tag,reading,dep,head}]
+    bunsetsu    TEXT,   -- JSON [{start,end}]
+    parser      TEXT,
+    parsed_at   INTEGER
+);
+
+-- Anon reads and any export read ONLY this view — cannot see private/gated rows.
+CREATE VIEW IF NOT EXISTS public_sentence AS
+    SELECT * FROM sentence WHERE public = 1 AND visibility = 'public';

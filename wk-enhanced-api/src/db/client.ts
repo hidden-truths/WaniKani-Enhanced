@@ -9,6 +9,7 @@ import { readFileSync, mkdirSync } from 'node:fs';
 import { dirname, resolve } from 'node:path';
 import { config } from '../config.ts';
 import { log } from '../lib/log.ts';
+import { ttsTextHash } from '../services/tts.ts';
 import type { IkIndexMetaEntry } from '../services/ik.ts';
 
 let _db: Database | null = null;
@@ -545,4 +546,308 @@ export function listAudioVariants(textHash: string): AudioVariantRow[] {
         )
         .all(textHash) as RawAudioVariantRow[];
     return rows.map((r) => ({ textHash: r.text_hash, provider: r.provider, gender: r.gender, ext: r.ext, createdAt: r.created_at }));
+}
+
+// ---------- sentence store (unified sentence entity; Phase 1: 独り言 Self-Talk) ----------
+//
+// One canonical row per sentence that surfaces REFERENCE by id. ALL reads go through
+// getSentences (the privacy choke-point); anon/export touch the public_sentence VIEW.
+// `text` is plainText(jp) byte-for-byte and `hash` is ttsTextHash(text) — computed HERE,
+// never on the client — so the existing audio layer keeps resolving. `furigana` is
+// structured [{t,r?}] with concat(t) === text (enforced on write). See schema.sql.
+
+// A furigana segment: base text `t`, optional reading `r` (kana over a kanji run). The
+// derived full-kana reading is `seg.r ?? seg.t` joined — never stored.
+export interface FuriganaSeg {
+    t: string;
+    r?: string;
+}
+
+// The link between a sentence and whatever owns/illustrates it. Self-Talk uses
+// `{ owner_type: 'selftalk' }`; card/grammar/conversation owners arrive in later phases.
+export interface SentenceLink {
+    owner_type: string;
+    owner_id?: string | null;
+    tier?: string | null;
+    role?: string | null;
+    ordinal?: number;
+    clip_start_ms?: number | null;
+    clip_end_ms?: number | null;
+}
+
+// The assembled sentence the API serves (composed from sentence + translation + tag + link).
+// `id` is the stable ext_id (builtin slug / user UUID); `custom` = "authored by a user"
+// (created_by is non-NULL), which the client uses to show the "yours" badge + edit affordance.
+export interface AssembledSentence {
+    id: string;
+    text: string;
+    furigana: FuriganaSeg[] | null;
+    translations: Record<string, string>;
+    tags: Record<string, string | string[]>;
+    link: SentenceLink;
+    custom: boolean;
+}
+
+type SentenceRow = {
+    id: number;
+    ext_id: string;
+    hash: string;
+    text: string;
+    furigana: string | null;
+    lang: string;
+    source: string;
+    public: number;
+    visibility: string;
+    created_by: number | null;
+    created_at: number;
+};
+
+// Tag kinds that carry a LIST of values (grammar tokens); everything else is scalar (last wins).
+const ARRAY_TAG_KINDS = new Set(['grammar']);
+
+const SENTENCE_ROW_COLS =
+    'id, ext_id, hash, text, furigana, lang, source, public, visibility, created_by, created_at';
+
+// Throw unless the furigana segments reconstruct `text` exactly (concat(seg.t) === text).
+// This is the structural-furigana invariant — a mismatch means the stored ruby would drift
+// from the audio-keyed plain text. NULL furigana is allowed (no ruby).
+function assertFuriganaMatches(furigana: FuriganaSeg[] | null, text: string): void {
+    if (furigana == null) return;
+    if (!Array.isArray(furigana)) throw new Error('furigana must be an array of {t,r?} segments');
+    const concat = furigana.map((s) => (s && typeof s.t === 'string' ? s.t : '')).join('');
+    if (concat !== text) {
+        throw new Error(`furigana segments do not reconstruct text: ${JSON.stringify(concat)} !== ${JSON.stringify(text)}`);
+    }
+}
+
+function getSentenceRowById(id: number): SentenceRow | null {
+    return getDb()
+        .query(`SELECT ${SENTENCE_ROW_COLS} FROM sentence WHERE id = ?`)
+        .get(id) as SentenceRow | null;
+}
+
+// Trim a raw link row down to a compact object (omit NULL optional fields).
+function compactLink(r: {
+    owner_type: string; owner_id: string | null; tier: string | null; role: string | null;
+    ordinal: number; clip_start_ms: number | null; clip_end_ms: number | null;
+}): SentenceLink {
+    const link: SentenceLink = { owner_type: r.owner_type };
+    if (r.owner_id != null) link.owner_id = r.owner_id;
+    if (r.tier != null) link.tier = r.tier;
+    if (r.role != null) link.role = r.role;
+    if (r.ordinal) link.ordinal = r.ordinal;
+    if (r.clip_start_ms != null) link.clip_start_ms = r.clip_start_ms;
+    if (r.clip_end_ms != null) link.clip_end_ms = r.clip_end_ms;
+    return link;
+}
+
+// Compose the full sentence object from its child tables. Used by every read path so the
+// shape never diverges between getSentences and the create/update return values.
+function assembleSentenceRow(row: SentenceRow): AssembledSentence {
+    const db = getDb();
+    const trs = db
+        .query('SELECT lang, text, ordinal FROM translation WHERE sentence_id = ? ORDER BY lang, ordinal')
+        .all(row.id) as { lang: string; text: string; ordinal: number }[];
+    const translations: Record<string, string> = {};
+    for (const t of trs) if (!(t.lang in translations)) translations[t.lang] = t.text; // ordinal-0 / first per lang
+
+    // Ordered (kind, value) for a deterministic result — sentence_tag has no ordinal column,
+    // so a tag LIST (grammar tokens) comes back value-sorted, not in authored order. That's
+    // fine: grammar is a membership filter and the filter chips derive their own display order
+    // (grammarTokens), so per-phrase tag order is cosmetic only.
+    const tagRows = db
+        .query('SELECT kind, value FROM sentence_tag WHERE sentence_id = ? ORDER BY kind, value')
+        .all(row.id) as { kind: string; value: string }[];
+    const tags: Record<string, string | string[]> = {};
+    for (const tg of tagRows) {
+        if (ARRAY_TAG_KINDS.has(tg.kind)) ((tags[tg.kind] ??= []) as string[]).push(tg.value);
+        else tags[tg.kind] = tg.value;
+    }
+
+    const linkRow = db
+        .query(
+            'SELECT owner_type, owner_id, tier, role, ordinal, clip_start_ms, clip_end_ms FROM sentence_link WHERE sentence_id = ? ORDER BY id LIMIT 1',
+        )
+        .get(row.id) as Parameters<typeof compactLink>[0] | null;
+
+    return {
+        id: row.ext_id,
+        text: row.text,
+        furigana: row.furigana ? (JSON.parse(row.furigana) as FuriganaSeg[]) : null,
+        translations,
+        tags,
+        link: linkRow ? compactLink(linkRow) : { owner_type: '' },
+        custom: row.created_by != null,
+    };
+}
+
+// Insert a sentence's child rows (translations / tags / link). Shared by create + upsert;
+// callers DELETE the existing children first when replacing.
+function insertSentenceChildren(
+    sentenceId: number,
+    translations: Record<string, string> | undefined,
+    tags: Record<string, string | string[]> | undefined,
+    link: SentenceLink | undefined,
+): void {
+    const db = getDb();
+    if (translations) {
+        const ins = db.query('INSERT INTO translation (sentence_id, lang, text, ordinal) VALUES (?, ?, ?, 0)');
+        for (const [lang, text] of Object.entries(translations)) if (text != null) ins.run(sentenceId, lang, text);
+    }
+    if (tags) {
+        const ins = db.query('INSERT OR IGNORE INTO sentence_tag (sentence_id, kind, value) VALUES (?, ?, ?)');
+        for (const [kind, val] of Object.entries(tags)) {
+            const vals = Array.isArray(val) ? val : val == null ? [] : [val];
+            for (const v of vals) ins.run(sentenceId, kind, String(v));
+        }
+    }
+    if (link) {
+        db.query(
+            `INSERT INTO sentence_link (sentence_id, owner_type, owner_id, tier, role, ordinal, clip_start_ms, clip_end_ms)
+             VALUES (?, ?, ?, ?, ?, ?, ?, ?)`,
+        ).run(
+            sentenceId,
+            link.owner_type,
+            link.owner_id ?? null,
+            link.tier ?? null,
+            link.role ?? null,
+            link.ordinal ?? 0,
+            link.clip_start_ms ?? null,
+            link.clip_end_ms ?? null,
+        );
+    }
+}
+
+// THE choke-point read. Joins sentence_link → sentence for `ownerType`, and ALWAYS ANDs
+// `(s.public = 1 OR s.created_by = :viewer)`. `viewer` defaults to null → public rows only
+// (SQL `created_by = NULL` is never true, so a null viewer can't reach any private row).
+// This single gate is what the whole feature's privacy rests on — keep the AND unconditional.
+export function getSentences(opts: { ownerType: string; viewer?: number | null }): AssembledSentence[] {
+    const viewer = opts.viewer ?? null;
+    const rows = getDb()
+        .query(
+            `SELECT DISTINCT s.id, s.ext_id, s.hash, s.text, s.furigana, s.lang, s.source,
+                    s.public, s.visibility, s.created_by, s.created_at
+             FROM sentence_link l JOIN sentence s ON s.id = l.sentence_id
+             WHERE l.owner_type = ? AND (s.public = 1 OR s.created_by = ?)
+             ORDER BY s.id`,
+        )
+        .all(opts.ownerType, viewer) as SentenceRow[];
+    return rows.map(assembleSentenceRow);
+}
+
+// Create a PRIVATE user-authored sentence (public=0, visibility='private'). `hash` is
+// computed here from `text`; furigana is validated against `text` before insert.
+export function createSentence(input: {
+    extId: string;
+    text: string;
+    furigana?: FuriganaSeg[] | null;
+    source: string;
+    createdBy: number;
+    translations?: Record<string, string>;
+    tags?: Record<string, string | string[]>;
+    link: SentenceLink;
+}): AssembledSentence {
+    const furigana = input.furigana ?? null;
+    assertFuriganaMatches(furigana, input.text);
+    const db = getDb();
+    const now = Date.now();
+    const r = db
+        .query(
+            `INSERT INTO sentence (ext_id, hash, text, furigana, lang, source, public, visibility, created_by, created_at)
+             VALUES (?, ?, ?, ?, 'ja', ?, 0, 'private', ?, ?) RETURNING id`,
+        )
+        .get(
+            input.extId,
+            ttsTextHash(input.text),
+            input.text,
+            furigana ? JSON.stringify(furigana) : null,
+            input.source,
+            input.createdBy,
+            now,
+        ) as { id: number };
+    insertSentenceChildren(r.id, input.translations, input.tags, input.link);
+    return assembleSentenceRow(getSentenceRowById(r.id)!);
+}
+
+// Replace a user's own sentence (full overwrite of text + children). Ownership is enforced
+// IN SQL (`WHERE ext_id = ? AND created_by = ?`): a non-owner (or unknown ext_id) matches 0
+// rows and returns null (the route maps that to 404).
+export function updateUserSentence(input: {
+    extId: string;
+    viewer: number;
+    text: string;
+    furigana?: FuriganaSeg[] | null;
+    translations?: Record<string, string>;
+    tags?: Record<string, string | string[]>;
+    link?: SentenceLink;
+}): AssembledSentence | null {
+    const db = getDb();
+    const row = db
+        .query('SELECT id FROM sentence WHERE ext_id = ? AND created_by = ?')
+        .get(input.extId, input.viewer) as { id: number } | null;
+    if (!row) return null;
+    const id = row.id;
+    const furigana = input.furigana ?? null;
+    assertFuriganaMatches(furigana, input.text);
+    db.query('UPDATE sentence SET text = ?, hash = ?, furigana = ? WHERE id = ?').run(
+        input.text,
+        ttsTextHash(input.text),
+        furigana ? JSON.stringify(furigana) : null,
+        id,
+    );
+    db.query('DELETE FROM translation WHERE sentence_id = ?').run(id);
+    db.query('DELETE FROM sentence_tag WHERE sentence_id = ?').run(id);
+    db.query('DELETE FROM sentence_link WHERE sentence_id = ?').run(id);
+    insertSentenceChildren(id, input.translations, input.tags, input.link ?? { owner_type: 'selftalk' });
+    return assembleSentenceRow(getSentenceRowById(id)!);
+}
+
+// Delete a user's own sentence (owner-scoped). Child rows cascade via the FK. Returns true
+// when a row was removed; a non-owner / unknown ext_id is a no-op returning false.
+export function deleteUserSentence(input: { extId: string; viewer: number }): boolean {
+    const r = getDb()
+        .query('DELETE FROM sentence WHERE ext_id = ? AND created_by = ?')
+        .run(input.extId, input.viewer);
+    return r.changes > 0;
+}
+
+// Seed/refresh a PUBLIC curator sentence (public=1, visibility='public', created_by=NULL).
+// Idempotent by ext_id: re-running replaces the sentence + all child rows wholesale, so the
+// seed script is a safe no-growth no-op on re-run. created_at is preserved across re-seeds.
+export function upsertPublicSentence(input: {
+    extId: string;
+    text: string;
+    furigana?: FuriganaSeg[] | null;
+    source: string;
+    translations?: Record<string, string>;
+    tags?: Record<string, string | string[]>;
+    link: SentenceLink;
+}): AssembledSentence {
+    const furigana = input.furigana ?? null;
+    assertFuriganaMatches(furigana, input.text);
+    const db = getDb();
+    const now = Date.now();
+    const r = db
+        .query(
+            `INSERT INTO sentence (ext_id, hash, text, furigana, lang, source, public, visibility, created_by, created_at)
+             VALUES (?, ?, ?, ?, 'ja', ?, 1, 'public', NULL, ?)
+             ON CONFLICT(ext_id) DO UPDATE SET
+                 hash = excluded.hash, text = excluded.text, furigana = excluded.furigana,
+                 source = excluded.source, public = 1, visibility = 'public', created_by = NULL
+             RETURNING id`,
+        )
+        .get(
+            input.extId,
+            ttsTextHash(input.text),
+            input.text,
+            furigana ? JSON.stringify(furigana) : null,
+            input.source,
+            now,
+        ) as { id: number };
+    db.query('DELETE FROM translation WHERE sentence_id = ?').run(r.id);
+    db.query('DELETE FROM sentence_tag WHERE sentence_id = ?').run(r.id);
+    db.query('DELETE FROM sentence_link WHERE sentence_id = ?').run(r.id);
+    insertSentenceChildren(r.id, input.translations, input.tags, input.link);
+    return assembleSentenceRow(getSentenceRowById(r.id)!);
 }
