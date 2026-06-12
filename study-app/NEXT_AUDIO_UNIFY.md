@@ -4,7 +4,7 @@ A self-contained brief for a fresh session. The goal: **unify all voice-audio so
 behind one tagged audio API**, so a given item (word reading / example sentence /
 conversation line) resolves to MULTIPLE tagged voice VARIANTS the user can pick or cycle.
 
-> ## STATUS — Phase 1 (backend foundation) SHIPPED (branch `minna-audio-unify`)
+> ## STATUS — Phases 1 + 2 SHIPPED (branch `minna-audio-unify`); Phase 3 remains
 >
 > **Decisions locked** with the maintainer: **Google** = one neutral `gtx` variant (no paid
 > Cloud TTS — gender diversity comes from Siri). Picker is **per-context** (reviews / browsing /
@@ -25,13 +25,17 @@ conversation line) resolves to MULTIPLE tagged voice VARIANTS the user can pick 
 > - `generate-tts.ts --variant <provider:gender>` for dual-gender Siri pre-gen (two passes,
 >   flipping the macOS System Voice).
 >
-> **Phase 2 (NEXT — client):** `core/audio.js` (variant descriptors + `provider→kind` map +
-> `resolveVariant(context, available, prefs)` + per-context default priorities, all pure/tested);
-> a shared `playItem(item, context)` player routing public-vs-credentialed by the variant's
-> `gated` flag; refactor `speak()`/`speakWord()`/`mnPlay()` to call it; a per-context priority
-> editor in Settings persisted as `settings.audioPrefs` (synced); wire flashcards (`reviews`),
-> Browse (`browse`), Minna (`minna`). **Phase 3:** generalize the compare player's "▶ native" into
-> "▶ reference" against any chosen voice.
+> **Phase 2 done (client):** `core/audio.js` (`resolveVariant(context, available, prefs)` +
+> per-context `DEFAULT_AUDIO_PREFS`, pure + tested); a shared `playItem(item, context, btn)` player
+> (`features/audio.js`) routing public-vs-credentialed by the variant's `gated` flag; `speak()`/
+> `speakWord()`/Minna's word + conversation buttons all go through it (the old native-only `mnPlay`
+> is gone); a per-context Voice-priority editor in Settings persisted as `settings.audioPrefs`
+> (synced); flashcards (`reviews`), Browse (`browse`), Minna (`minna`) wired.
+>
+> **Phase 3 (NEXT):** generalize the record-and-compare player's "▶ native" into "▶ reference"
+> against any chosen voice variant (Siri/Google/native) via the same resolver, reusing the existing
+> windowing/normalization machinery in `features/minna-record.js`. Optional polish: have the picker
+> query `/v1/audio/variants` to gray out specific synth voices that aren't pre-generated yet.
 >
 > The variant-descriptor shape, key schema, preference model, and verification steps are in the
 > approved plan; the sections below are the original brief, kept for reference.

@@ -19,12 +19,13 @@ The original backlog plus a large second wave (accounts + sync, SRS vs free stud
 file split, leveled examples, the みんなの日本語 dashboard with content/dedup/pitch, deck-wide
 pitch accent) have all shipped — **and so has THE BIG ONE: the split into two apps.**
 
-> **In flight — audio-unify (branch `minna-audio-unify`):** Phase 1 (server-only backend
-> foundation) is SHIPPED — a unified `/v1/audio` route group + tagged voice-variant key scheme +
-> `audio_variants` catalog + dual-gender Siri pre-gen, with the legacy `/v1/tts` + `/v1/minna/*`
-> audio paths kept as aliases so nothing breaks. **Phase 2 (next) is the CLIENT side:** a
-> `core/audio.js` resolver, a shared player, and a per-context voice-priority picker (reviews /
-> browsing / textbook, ordering specific voices OR kinds). Full status + plan:
+> **In flight — audio-unify (branch `minna-audio-unify`):** Phases 1 + 2 SHIPPED. Phase 1
+> (server) = a unified `/v1/audio` route group + tagged voice-variant key scheme + `audio_variants`
+> catalog + dual-gender Siri pre-gen (legacy `/v1/tts` + `/v1/minna/*` audio paths kept as aliases).
+> Phase 2 (client) = `core/audio.js` resolver + the shared `playItem` player + a per-context
+> Voice-priority picker in Settings (reviews / browsing / textbook, ordering specific voices OR
+> kinds), with flashcards/Browse/Minna all routed through it. **Phase 3 (next):** generalize the
+> record-and-compare "▶ native" into "▶ reference" against any chosen voice. Full status:
 > [NEXT_AUDIO_UNIFY.md](NEXT_AUDIO_UNIFY.md).
 
 ## ✅ SHIPPED — split into two apps (the learning tool + the API)

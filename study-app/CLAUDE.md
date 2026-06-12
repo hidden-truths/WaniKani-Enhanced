@@ -14,10 +14,13 @@ order. The actual DOM/render/feature glue is split into **`src/features/*`** mod
   `settings-page`, `minna` (the みんなの日本語 dashboard), `minna-record` (Phase 2
   record-and-compare: MediaRecorder capture + take list + the native/you/sequence compare
   player), `a11y` (roving tabindex + chip
-  annotations), `tts`, `render-helpers` (shared `jishoUrl`/`provenanceBadge`), and the cloud
+  annotations), `tts`, `audio` (the shared `playItem(item,context)` player — resolves an item to a
+  tagged voice variant + routes public-vs-credentialed `<audio>` by `gated`), `render-helpers`
+  (shared `jishoUrl`/`provenanceBadge`), and the cloud
   pair `cloud-core` (`api`/`account`/`setSyncStatus`) + `cloud` (sync trios + auth + bootAuth).
 - **`src/core/`** — the PURE, unit-tested core (DOM-free): `srs`, `forecast`, `facets`,
-  `examples`, `kana`, `pitch`, `text`, `minna`, behind a barrel `core/index.js`.
+  `examples`, `kana`, `pitch`, `text`, `minna`, `audio` (the per-context voice-priority
+  `resolveVariant`), behind a barrel `core/index.js`.
 - **`src/state.js`** — the ONE shared mutable hub: `state.store` (progress), `state.DATA`
   (the live deck), `state.minnaStore`, `state.MAXRANK`, `state.BUILTIN_RANK_BY_JP`, plus
   `attachLevels()`. An object whose **properties are mutated** (not `export let` — importers
@@ -192,8 +195,12 @@ The capped `sessions` is just for the charts — the durable record is the serve
 Custom verbs (`localStorage["jpverbs_custom"]`, synced as app `custom-verbs`):
 `{ seq:<monotonic rank counter>, verbs:[<verb + {rank, custom:true}>…] }`.
 Settings (`localStorage["jpverbs_settings"]`, synced as app `settings`):
-`{ exampleLevel, furigana, input, audio, freeReviewDue }` (the Settings page;
-migrated from the old jpverbs_exlevel/input/audio keys; `freeReviewDue` defaults on).
+`{ exampleLevel, furigana, input, audio, freeReviewDue, recordingsKeep, trimSilence, compareSpeed,
+audioPrefs:{<context>:[<token>…]} }` (the Settings page; migrated from the old
+jpverbs_exlevel/input/audio keys; `freeReviewDue` defaults on). `audioPrefs` is the audio-unify
+per-context voice priority — keyed by `reviews`/`browse`/`minna`, each an ordered list of tokens
+(a specific voice `siri:female` or a kind `kind:native`/`kind:tts`/`kind:user`); a missing/empty
+context falls back to `core/audio.js` `DEFAULT_AUDIO_PREFS`.
 Minna state (`localStorage["jpverbs_minna"]`, synced as app `minna`):
 `{ notes:{<lesson>:string}, lastLesson:<n>, overlays:{<builtinRank>:{tags,italki,minnaLesson,minnaKey,accent?,tts?}} }`
 — the みんなの日本語 dashboard's per-lesson scratchpad PLUS the dedup overlays (Minna words
@@ -385,8 +392,23 @@ Component contracts you must preserve:
   IME and a romaji typist share one code path. It feeds only the advisory grade,
   never the SRS schedule, so over-permissiveness is harmless. Tests in
   `verbs-core.test.ts`.
-- **TTS prefers the server's Google proxy, falls back to Web Speech.** `speak()`
-  plays `/v1/tts?text=<reading>` via a reused `<audio>` when served over http(s)
+- **Audio is unified behind one player + a per-context voice picker (audio-unify Phase 2).**
+  `speak(text, context)`/`speakWord(v, context)` are thin wrappers over `playItem(item, context, btn)`
+  ([features/audio.js](src/features/audio.js)): it builds the item's available variants (synth from
+  the text; `native` from a vnjpclub path; `user` from the newest take), resolves which to play via
+  `resolveVariant(context, available, settings.audioPrefs)` ([core/audio.js](src/core/audio.js)), and
+  plays synth on a PUBLIC `<audio>` (`/v1/audio/tts?voice=`) but native/take on a CREDENTIALED
+  `<audio crossOrigin='use-credentials'>` (`/v1/audio/native`, `/v1/audio/recordings`). Contexts:
+  `reviews` (flashcards), `browse`, `minna`. The user orders voices per context in Settings → Voice
+  priority (specific voices or kinds); the server falls through to the default clip when a chosen
+  voice isn't pre-generated, so naming `siri:female` is always safe. Errors cascade (gated → synth →
+  speechSynthesis). In Minna the vocab word button offers the full native/synth/your-take catalog;
+  the conversation button is native-only. **Phase 3 (not yet done):** generalize the record-compare
+  "▶ native" into "▶ reference" against any chosen voice. See [NEXT_AUDIO_UNIFY.md](NEXT_AUDIO_UNIFY.md).
+- **TTS prefers the server's Google proxy, falls back to Web Speech.** The synth tier of the player
+  above: `speak()` ultimately
+  plays `/v1/audio/tts?text=<reading>&voice=<chosen>` (legacy `/v1/tts` still works) via a reused
+  `<audio>` when served over http(s)
   (`HTTP_SERVED`); over `file://` or on play/network failure it falls back to
   `speakSynth` (Web Speech, `SPEECH_OK`). `TTS_OK = HTTP_SERVED || SPEECH_OK` gates
   whether the Audio UI shows — so audio is on by default when served, even on
