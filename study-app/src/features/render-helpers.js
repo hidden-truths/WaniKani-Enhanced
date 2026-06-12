@@ -13,3 +13,39 @@ export function provenanceBadge(v) {
   if (v && v.custom) return '<div class="custom-badge">CUSTOM</div>';
   return '';
 }
+
+// Inline "copy" button markup for an example sentence (next to the ▶ speak button). Carries the
+// plain (ruby-stripped) text on data-copy so a delegated/direct handler can copy it to the
+// clipboard for easy lookup in a dictionary/translator. `id` is optional (static buttons that get
+// wired by id); inline lists (Minna) omit it and rely on a delegated [data-copy] handler.
+export function copyBtnHtml(text, id) {
+  const t = String(text == null ? '' : text).replace(/"/g, '&quot;');
+  return `<button class="speak-btn sm copy-btn"${id ? ` id="${id}"` : ''} type="button" data-copy="${t}" aria-label="Copy sentence" title="Copy sentence"><svg class="ic" aria-hidden="true"><use href="#i-copy"/></svg></button>`;
+}
+
+// Copy `text` to the clipboard, with a brief ✓ confirmation on `btn` (swaps its icon to a check
+// for ~1s + a .copied class). Uses the async Clipboard API where available, with an execCommand
+// fallback for insecure contexts (e.g. plain http) where navigator.clipboard is absent.
+export function copyText(text, btn) {
+  const confirm = () => {
+    if (!btn) return;
+    const use = btn.querySelector('use');
+    const orig = use && use.getAttribute('href');
+    if (use) use.setAttribute('href', '#i-check');
+    btn.classList.add('copied');
+    setTimeout(() => { if (use && orig) use.setAttribute('href', orig); btn.classList.remove('copied'); }, 1100);
+  };
+  const fallback = () => {
+    try {
+      const ta = document.createElement('textarea');
+      ta.value = text; ta.style.position = 'fixed'; ta.style.opacity = '0';
+      document.body.appendChild(ta); ta.select(); document.execCommand('copy'); ta.remove();
+      confirm();
+    } catch (e) {/* clipboard unavailable — give up silently */}
+  };
+  if (navigator.clipboard && navigator.clipboard.writeText) {
+    navigator.clipboard.writeText(text).then(confirm).catch(fallback);
+  } else {
+    fallback();
+  }
+}

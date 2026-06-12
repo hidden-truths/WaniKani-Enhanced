@@ -12,6 +12,7 @@ import { API_BASE } from '../config.js';
 import { escapeHtml, rubyHtml, plainText, ttsText, CAT_LABEL, minnaBuiltinRank, minnaSig, convItemKey, resolveClip, clipLabel, validClip } from '../core/index.js';
 import { speak, TTS_OK } from './tts.js';
 import { playItem } from './audio.js';
+import { copyBtnHtml, copyText } from './render-helpers.js';
 import { account, api, setSyncStatus } from './cloud-core.js';
 import { openAuth } from './cloud.js';
 import { loadCustom, saveCustom } from '../persistence/custom.js';
@@ -258,8 +259,9 @@ const ttsSentenceBtn = (jp) => TTS_OK
   : '';
 function minnaExampleRows(list) {
   // JP via rubyHtml so curated furigana (<ruby>/<rt>) renders and the data-furigana flip
-  // toggles it; EN stays fully escaped. Plain (ruby-less) sentences round-trip unchanged.
-  return `<div class="mn-ex">${list.map(e => `<div><div class="e-jp jp">${rubyHtml(e.jp)}${ttsSentenceBtn(e.jp)}</div><div class="e-en">${escapeHtml(e.en)}</div></div>`).join('')}</div>`;
+  // toggles it; EN stays fully escaped. Plain (ruby-less) sentences round-trip unchanged. A
+  // copy button (always shown) puts the plain sentence on the clipboard for dictionary lookup.
+  return `<div class="mn-ex">${list.map(e => `<div><div class="e-jp jp">${rubyHtml(e.jp)}${ttsSentenceBtn(e.jp)}${copyBtnHtml(plainText(e.jp))}</div><div class="e-en">${escapeHtml(e.en)}</div></div>`).join('')}</div>`;
 }
 function minnaGrammarSection(L) {
   if (!L.grammar || !L.grammar.length) return '';
@@ -410,6 +412,8 @@ function wireMinnaLesson(n, L, body) {
   }));
   // Grammar / example SENTENCES are synth-only (no native clip) — synth in the 'minna' context.
   body.querySelectorAll('[data-tts]').forEach(b => b.addEventListener('click', () => speak(b.dataset.tts, 'minna', b)));
+  // Copy an example sentence (plain text) to the clipboard for dictionary lookup.
+  body.querySelectorAll('[data-copy]').forEach(b => b.addEventListener('click', () => copyText(b.dataset.copy, b)));
   wireMinnaRecord(body);   // delegated record/play/delete/compare handlers (attach-once)
   wireMinnaClips(body);    // delegated conversation-line clip-marker handlers (attach-once)
   paintCompareWaveforms(body);   // decode + draw the you/native compare waveforms for this render

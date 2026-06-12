@@ -14,7 +14,7 @@ import {
 import { settings, saveSettings } from '../settings-store.js';
 import { save } from '../persistence/store.js';
 import { speakWord, speak, TTS_OK } from './tts.js';
-import { jishoUrl } from './render-helpers.js';
+import { jishoUrl, copyText } from './render-helpers.js';
 import { cfg, buildDeck, updateDeckCount, updateDueBanner, updateStartLabel, startDueSession } from './deck.js';
 
 // `export let` — only this module reassigns it (session=null / session={...}); the settings
@@ -58,11 +58,12 @@ export function renderExample(v) {
   if (tiers.length && !tiers.includes(lvl)) lvl = tiers.includes(v.jlpt) ? v.jlpt : tiers[0];
   [...seg.querySelectorAll('.exlv')].forEach(b => b.classList.toggle('active', b.dataset.exlv === lvl && !b.disabled));
   const ex = exampleForLevel(v, lvl);
-  const speakBtn = document.getElementById('exSpeak');
+  const speakBtn = document.getElementById('exSpeak'), copyBtn = document.getElementById('exCopy');
   if (ex) {
     document.getElementById('exJp').innerHTML = ex[0]; document.getElementById('exEn').textContent = ex[1]; block.hidden = false;
     if (speakBtn) speakBtn.hidden = !TTS_OK;   // plays the currently-shown tier (read at click time)
-  } else { block.hidden = true; if (speakBtn) speakBtn.hidden = true; }
+    if (copyBtn) copyBtn.hidden = false;       // copy works regardless of audio availability
+  } else { block.hidden = true; if (speakBtn) speakBtn.hidden = true; if (copyBtn) copyBtn.hidden = true; }
 }
 
 // Render session.deck[session.i]. The two test directions swap prompt vs answer fields.
@@ -199,6 +200,8 @@ export function initFlashcardUI() {
   // chosen tier) and strip ruby to the plain text /v1/tts wants.
   const exSpeak = document.getElementById('exSpeak');
   if (exSpeak) exSpeak.addEventListener('click', () => speak(plainText(document.getElementById('exJp').innerHTML), 'reviews'));
+  const exCopy = document.getElementById('exCopy');
+  if (exCopy) exCopy.addEventListener('click', () => copyText(plainText(document.getElementById('exJp').innerHTML), exCopy));
   // Pick a tier → remember it (synced setting) → re-render the current card's example.
   document.getElementById('exLevels').addEventListener('click', e => {
     const b = e.target.closest('.exlv'); if (!b || b.disabled) return;
