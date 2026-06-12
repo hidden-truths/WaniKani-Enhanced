@@ -113,3 +113,21 @@ CREATE TABLE IF NOT EXISTS minna_recordings (
 
 CREATE INDEX IF NOT EXISTS minna_recordings_item_idx
     ON minna_recordings (user_id, lesson, item_key, created_at);
+
+-- Manifest of pre-generated TAGGED voice clips (audio-unify work). One row per
+-- (text, provider, voice) we've rendered into the storage layer's
+-- `audio/<provider>/<gender|'default'>/<hash>.<ext>` keys, so the catalog endpoint
+-- (`GET /v1/audio/variants?text=`) can list which specific voices exist for a text in a
+-- single indexed query instead of N storage probes. Only SPECIFIC voices are recorded
+-- here (currently Siri male/female); the `google` (lazy gtx) + legacy `default` tts voices
+-- are implicit/always-available and carry no row. `text_hash` matches services/tts.ts
+-- ttsTextHash(). `gender` is '' for a voice with no gender axis (kept NOT NULL so it can sit
+-- in the PK without SQLite's NULL-in-primary-key quirk). Populated by scripts/generate-tts.ts.
+CREATE TABLE IF NOT EXISTS audio_variants (
+    text_hash   TEXT NOT NULL,           -- sha256(text) 40-char slice (ttsTextHash)
+    provider    TEXT NOT NULL,           -- 'siri' (google/default are implicit)
+    gender      TEXT NOT NULL DEFAULT '', -- 'male' | 'female' | ''
+    ext         TEXT NOT NULL,           -- 'm4a'
+    created_at  INTEGER NOT NULL,        -- epoch ms
+    PRIMARY KEY (text_hash, provider, gender)
+);

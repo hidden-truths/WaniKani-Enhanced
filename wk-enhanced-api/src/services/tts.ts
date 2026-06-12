@@ -7,15 +7,30 @@ import { createHash } from 'node:crypto';
 const TTS_URL = 'https://translate.googleapis.com/translate_tts';
 const MAX_TEXT_LEN = 200;
 
-// Storage object key for a TTS clip, content-addressed by the EXACT text the client
-// requests — so the study app's `/v1/tts?text=…` lookup and the local pre-generation
-// driver (scripts/generate-tts.ts → jp-tts) agree on where a clip lives. Two extensions
-// coexist under the same hash: `.m4a` is an Apple-voice clip pre-generated on macOS,
-// `.mp3` is the Google-TTS fallback persisted on first request. `/v1/tts` prefers the
-// `.m4a` so the higher-quality local voice wins when we've pre-generated it.
+// Content-address a TTS clip by the EXACT text the client requests, so the study app's
+// lookup and the local pre-generation driver (scripts/generate-tts.ts) agree on where a
+// clip lives. Single source of truth for the hash so the legacy `tts/` key and the tagged
+// `audio/<provider>/<voice>/` keys can't drift.
+export function ttsTextHash(text: string): string {
+    return createHash('sha256').update(text, 'utf8').digest('hex').slice(0, 40);
+}
+
+// LEGACY (still authoritative for the "default" tts voice — the ~960 pre-generated clips):
+// `tts/<hash>.{m4a,mp3}`. Two extensions coexist under the same hash: `.m4a` is an Apple-voice
+// clip pre-generated on macOS, `.mp3` is the Google-TTS fallback persisted on first request.
+// `/v1/tts` (and `/v1/audio/tts` with the default voice) prefers the `.m4a` so the
+// higher-quality local voice wins when we've pre-generated it.
 export function ttsKey(text: string, ext: 'm4a' | 'mp3'): string {
-    const hash = createHash('sha256').update(text, 'utf8').digest('hex').slice(0, 40);
-    return `tts/${hash}.${ext}`;
+    return `tts/${ttsTextHash(text)}.${ext}`;
+}
+
+// TAGGED key for a SPECIFIC voice variant (Phase 1 of the audio-unify work):
+// `audio/<provider>/<gender|'default'>/<hash>.<ext>`. Lets multiple voices for the same text
+// coexist (e.g. Siri male + Siri female), each discoverable via the `audio_variants` manifest.
+// `provider` is e.g. 'siri'; `gender` is 'male'|'female'|'' (→ 'default'). The legacy `tts/`
+// keys above are untouched — this is an additive namespace, so existing playback keeps working.
+export function ttsVariantKey(text: string, provider: string, gender: string, ext: string): string {
+    return `audio/${provider}/${gender || 'default'}/${ttsTextHash(text)}.${ext}`;
 }
 
 export async function googleTts(text: string): Promise<{ buffer: ArrayBuffer; contentType: string } | null> {

@@ -269,3 +269,32 @@ describe('minna_recordings (record-and-compare)', () => {
         expect(db.recordingSummary(v.id)).toEqual([{ lesson: 23, items: 1, takes: 1, lastCreatedAt: 1000 }]);
     });
 });
+
+describe('audio_variants (tagged voice-clip manifest)', () => {
+    test('insert + list returns a text’s variants', () => {
+        db.insertAudioVariant('hash1', 'siri', 'female', 'm4a');
+        db.insertAudioVariant('hash1', 'siri', 'male', 'm4a');
+        const list = db.listAudioVariants('hash1');
+        expect(list.map((r) => `${r.provider}:${r.gender}`).sort()).toEqual(['siri:female', 'siri:male']);
+        expect(list[0]!.ext).toBe('m4a');
+    });
+
+    test('list is scoped per text_hash', () => {
+        db.insertAudioVariant('hashA', 'siri', 'female', 'm4a');
+        db.insertAudioVariant('hashB', 'siri', 'male', 'm4a');
+        expect(db.listAudioVariants('hashA')).toHaveLength(1);
+        expect(db.listAudioVariants('hashB')).toHaveLength(1);
+        expect(db.listAudioVariants('missing')).toEqual([]);
+    });
+
+    test('re-inserting the same (text, provider, gender) is idempotent (no duplicate)', () => {
+        db.insertAudioVariant('h', 'siri', 'female', 'm4a');
+        db.insertAudioVariant('h', 'siri', 'female', 'm4a'); // same voice again
+        expect(db.listAudioVariants('h')).toHaveLength(1);
+    });
+
+    test('gender defaults to empty string for a no-gender provider', () => {
+        db.insertAudioVariant('h2', 'siri', '', 'm4a');
+        expect(db.listAudioVariants('h2')[0]!.gender).toBe('');
+    });
+});
