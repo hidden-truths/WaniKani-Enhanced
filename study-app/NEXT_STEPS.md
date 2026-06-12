@@ -336,6 +336,10 @@ This is the priority. The items below are smaller and can follow.
   "What's deliberately NOT in v1."
 
 ## Ideas / not yet scoped
+- **Unify voice-audio sourcing behind one tagged API** (planned next — full brief +
+  design questions in [NEXT_AUDIO_UNIFY.md](NEXT_AUDIO_UNIFY.md)). One catalog of tagged
+  voice variants per item (Siri male/female, Google, the user's own takes, Minna native),
+  collapsing today's three separate audio paths (`/v1/tts`, `/v1/minna/audio`, recordings).
 - **Close the custom-card completeness gap.** The "Add card" modal sets every field
   EXCEPT `levels` (the 5 N5→N1 tiers) and `accent` (pitch), so a UI-created card isn't a
   *complete* card (see [CARDS.md](CARDS.md) "the custom-card gap"). Add a leveled-example
