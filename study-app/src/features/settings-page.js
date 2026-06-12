@@ -2,10 +2,75 @@
 // applies furigana, and schedules a cloud push). renderSettings() paints the active chips
 // from `settings` and is also called after a cloud pull.
 import { settings, saveSettings } from '../settings-store.js';
-import { clampKeep } from '../core/index.js';
+import { clampKeep, escapeHtml, AUDIO_CONTEXTS, AUDIO_CONTEXT_LABELS, AUDIO_KIND_LABELS, DEFAULT_AUDIO_PREFS, parseAudioToken, voiceLabel } from '../core/index.js';
 import { paintPrefChips } from './deck.js';
 import { session, renderExample } from './flashcard.js';
 import { account } from './cloud-core.js';
+
+// ---------- per-context voice-priority editor (audio-unify Phase 2) ----------
+// For each context (Reviews / Browsing / Textbook) the user orders the voices to try; the shared
+// player (features/audio.js) picks the first one available per item. Tokens are specific voices
+// or kinds (see core/audio.js). Stored in settings.audioPrefs[context]; a context with no saved
+// list shows (and edits from) its DEFAULT_AUDIO_PREFS.
+const VOICE_TOKENS = ['kind:native', 'siri:female', 'siri:male', 'google', 'kind:tts', 'kind:user'];
+function tokenLabel(token) {
+  const t = parseAudioToken(token);
+  if (!t) return token;
+  return t.type === 'kind' ? (AUDIO_KIND_LABELS[t.kind] || t.kind) : voiceLabel(t.voice);
+}
+function listFor(ctx) { const p = settings.audioPrefs && settings.audioPrefs[ctx]; return Array.isArray(p) && p.length ? p.slice() : DEFAULT_AUDIO_PREFS[ctx].slice(); }
+function setList(ctx, list) { settings.audioPrefs = settings.audioPrefs || {}; settings.audioPrefs[ctx] = list; saveSettings(); }
+function resetCtx(ctx) { if (settings.audioPrefs) delete settings.audioPrefs[ctx]; saveSettings(); }
+
+function renderVoicePrefs() {
+  const root = document.getElementById('setVoices');
+  if (!root) return;
+  root.innerHTML = AUDIO_CONTEXTS.map((ctx) => {
+    const list = listFor(ctx);
+    const custom = !!(settings.audioPrefs && settings.audioPrefs[ctx]);
+    const items = list.map((tok, i) => `<li class="voice-item">
+        <span class="voice-tok">${escapeHtml(tokenLabel(tok))}</span>
+        <span class="voice-ops">
+          <button class="voice-op" type="button" data-op="up" data-ctx="${ctx}" data-i="${i}" aria-label="Move up"${i === 0 ? ' disabled' : ''}>▲</button>
+          <button class="voice-op" type="button" data-op="down" data-ctx="${ctx}" data-i="${i}" aria-label="Move down"${i === list.length - 1 ? ' disabled' : ''}>▼</button>
+          <button class="voice-op voice-del" type="button" data-op="del" data-ctx="${ctx}" data-i="${i}" aria-label="Remove">×</button>
+        </span></li>`).join('');
+    const remaining = VOICE_TOKENS.filter((t) => !list.includes(t));
+    const addSel = remaining.length ? `<select class="voice-add" data-ctx="${ctx}" aria-label="Add a voice to ${AUDIO_CONTEXT_LABELS[ctx]}">
+        <option value="">+ add a voice…</option>
+        ${remaining.map((t) => `<option value="${t}">${escapeHtml(tokenLabel(t))}</option>`).join('')}
+      </select>` : '';
+    return `<div class="voice-ctx" data-ctx="${ctx}">
+        <div class="voice-ctx-head"><span class="voice-ctx-name">${escapeHtml(AUDIO_CONTEXT_LABELS[ctx])}</span>${custom ? `<button class="voice-reset" type="button" data-reset="${ctx}">Reset</button>` : ''}</div>
+        <ol class="voice-list">${items}</ol>${addSel}</div>`;
+  }).join('');
+}
+
+function applyVoiceOp(ctx, op, i) {
+  const list = listFor(ctx);
+  if (op === 'up' && i > 0) { const t = list[i - 1]; list[i - 1] = list[i]; list[i] = t; }
+  else if (op === 'down' && i < list.length - 1) { const t = list[i + 1]; list[i + 1] = list[i]; list[i] = t; }
+  else if (op === 'del') { list.splice(i, 1); }
+  else return;
+  if (!list.length) resetCtx(ctx); else setList(ctx, list);   // emptied → fall back to the default
+  renderVoicePrefs();
+}
+
+function wireVoicePrefs() {
+  const root = document.getElementById('setVoices');
+  if (!root || root.dataset.wired) return;
+  root.dataset.wired = '1';
+  root.addEventListener('click', (e) => {
+    const op = e.target.closest('.voice-op');
+    if (op) { applyVoiceOp(op.dataset.ctx, op.dataset.op, Number(op.dataset.i)); return; }
+    const reset = e.target.closest('[data-reset]');
+    if (reset) { resetCtx(reset.dataset.reset); renderVoicePrefs(); }
+  });
+  root.addEventListener('change', (e) => {
+    const add = e.target.closest('.voice-add');
+    if (add && add.value) { const ctx = add.dataset.ctx; const list = listFor(ctx); list.push(add.value); setList(ctx, list); renderVoicePrefs(); }
+  });
+}
 
 export function renderSettings() {
   const seg = (sel, attr, val) => document.querySelectorAll(sel).forEach(b => b.classList.toggle('active', b.dataset[attr] === val));
@@ -16,6 +81,7 @@ export function renderSettings() {
   seg('.setfr', 'setfr', settings.freeReviewDue ? 'on' : 'off');
   seg('.settr', 'settr', settings.trimSilence ? 'on' : 'off');
   const keep = document.getElementById('setRecKeep'); if (keep) keep.value = clampKeep(settings.recordingsKeep);
+  renderVoicePrefs();
   const foot = document.getElementById('settingsFoot');
   if (foot) foot.textContent = account ? ('Synced to ' + account.email) : 'Sign in to sync these across your devices.';
 }
@@ -35,4 +101,5 @@ export function initSettingsPage() {
   const keep = document.getElementById('setRecKeep');
   if (keep) keep.addEventListener('change', () => { settings.recordingsKeep = clampKeep(keep.value); saveSettings(); renderSettings(); });
   document.getElementById('setTrim').addEventListener('click', e => { const b = e.target.closest('.settr'); if (!b) return; settings.trimSilence = b.dataset.settr === 'on'; saveSettings(); renderSettings(); });
+  wireVoicePrefs();
 }
