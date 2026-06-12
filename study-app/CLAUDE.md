@@ -213,10 +213,12 @@ that map onto a built-in verb). Activated *new* Minna vocab is NOT here — it l
 `jpverbs_custom` as tagged cards; only built-in-overlap words live here (see the
 みんなの日本語 dead-end).
 Self-Talk state (`localStorage["jpverbs_selftalk"]`, synced as app `selftalk`):
-`{ phrases:[{id,jp,read,mean,scene,grammar,custom}…], practice:{lastDay,streak,doneToday} }`
-— the 独り言 tab's user-authored phrases (built-ins ship in `data/selftalk.js`, NOT here) + the
-practice/streak signal (output reps, not SRS). Separate from `custom-verbs` so non-card lines
-never enter the deck. See [SELFTALK.md](SELFTALK.md).
+`{ practice:{lastDay,streak,doneToday} }` — the practice/streak signal ONLY (output reps, not SRS).
+**Phrases moved to the server sentence store** (Phase 1 of the unified store): built-ins are public
+rows, user-authored phrases are private rows, fetched from `GET /v1/sentences?ownerType=selftalk`
+and cached in `localStorage["jpverbs_selftalk_cache"]` (read-through). `data/selftalk.js` is the
+seed source, not read at runtime. A pre-store blob's `phrases` are migrated into the store once on
+sign-in. See [SELFTALK.md](SELFTALK.md).
 Leveled examples (`examples.js`, NOT in localStorage — static data):
 `EXAMPLES[rank] = { N5:[jp,en], …, N1:[jp,en] }`.
 Pitch accents (`verbs.js`, static): `ACCENTS[rank] = <Tokyo accent number>` — backfilled
@@ -580,9 +582,16 @@ Component contracts you must preserve:
   `data/minna/lesson-<n>.json` (git-tracked, curated from the `scripts/scrape-minna.ts`
   draft). **Phase 2 — record-your-voice + compare to native audio — has SHIPPED (MVP).**
   **Full feature doc (architecture + data model + roadmap): [MINNA.md](MINNA.md).**
-- **独り言 Self-Talk (`selftalk.js`) is the OPPOSITE of Minna on gating, and reuses the
-  record-compare engine via a reserved partition.** It's **offline-first + anonymous** (built-in
-  phrases ship in the bundle; only *recording* needs an account) — don't add a Minna-style gate.
+- **独り言 Self-Talk (`selftalk.js`) is anon-READABLE but account-gated for AUTHORING, and reuses the
+  record-compare engine via a reserved partition.** Reading is open to anon (built-in phrases are
+  public rows in the server **sentence store**, fetched via `GET /v1/sentences?ownerType=selftalk`
+  with a `jpverbs_selftalk_cache` read-through — NOT shipped in the bundle at runtime; `data/selftalk.js`
+  is the seed source). **Authoring requires an account** (your phrases are PRIVATE store rows written
+  via `POST/PUT/DELETE /v1/sentences`; the "Add phrase" affordance gates on `account` and anon sees a
+  sign-in nudge) — so does *recording*. This is NOT the old Minna copyright gate (reading stays anon);
+  don't gate reading. A pre-store `selftalk` blob's `phrases` migrate into the store once on sign-in;
+  the blob now carries only `{practice}`. The phrase `id` is the store `ext_id` (`st-*`/`usr-<uuid>`),
+  preserved verbatim — it's the record-compare itemKey + practice key.
   Recordings reuse the generic engine with a **reserved `SELFTALK_SCOPE = 90000`** (the engine's
   `scope` → the server's opaque numeric `lesson` param; Minna uses 1–50) + a **synth-only reference**
   (no native clip → ▶ reference is a Siri/Google voice from the phrase text, resolved with the

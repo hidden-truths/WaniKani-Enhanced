@@ -11,10 +11,14 @@ Layer docs: module map + dead-ends in [CLAUDE.md](CLAUDE.md); card/furigana mode
 
 ## What it is (and how it differs from Minna)
 
-- **Offline-first + anonymous.** Unlike みんなの日本語 (account-gated, copyrighted, fetched live),
-  the built-in starter phrases are **original + model-authored** (no copyright), so they ship in the
-  bundle and play/practice with no account. Only **recording** needs an account (takes are private/
-  per-user, like Minna's), and **syncing** your own phrases/streak needs one.
+- **Anon-readable, account-gated authoring** (as of the unified sentence store, Phase 1). Phrases
+  live in the server **sentence store** and are fetched from `GET /v1/sentences?ownerType=selftalk`
+  (with a localStorage read-through cache) — built-in phrases are **public** rows everyone (incl.
+  anon) can read; a signed-in user also gets their own **private** rows. Unlike みんなの日本語
+  (copyright-gated), Self-Talk built-ins are original + model-authored, so anon read is fine.
+  **Authoring now requires an account** (your phrases are private store rows, written via
+  `POST/PUT/DELETE /v1/sentences`); so does recording (private per-user takes). The bundled
+  `data/selftalk.js` is the **seed source** (→ `scripts/seed-sentences.ts`), not read at runtime.
 - **Not SRS-graded.** Output reps aren't recognition — there's no Leitner box/schedule. The only
   persisted signal is a lightweight **day streak + "said today"** set.
 
@@ -24,8 +28,10 @@ Layer docs: module map + dead-ends in [CLAUDE.md](CLAUDE.md); card/furigana mode
 |---|---|
 | Tab glue (render/playback/record/authoring/lifecycle) | [src/features/selftalk.js](src/features/selftalk.js) |
 | Pure logic (rotation, grouping, streak) | [src/core/selftalk.js](src/core/selftalk.js) |
-| Built-in starter content + scene/grammar metadata | [src/data/selftalk.js](src/data/selftalk.js) |
-| Synced storage (phrases + practice) | [src/persistence/selftalk.js](src/persistence/selftalk.js) |
+| Built-in starter content (SEED SOURCE for the store, not read at runtime) | [src/data/selftalk.js](src/data/selftalk.js) |
+| Phrase store: server sentence rows + repo (`getSentences`/`createSentence`/…) | [../wk-enhanced-api/src/db/client.ts](../wk-enhanced-api/src/db/client.ts), [routes/sentences.ts](../wk-enhanced-api/src/routes/sentences.ts) |
+| Seed built-ins → public rows | [../wk-enhanced-api/scripts/seed-sentences.ts](../wk-enhanced-api/scripts/seed-sentences.ts) |
+| Synced storage (practice/streak signal ONLY — phrases moved to the store) | [src/persistence/selftalk.js](src/persistence/selftalk.js) |
 | Markup (nav tab, `#panel-selftalk`, `#stPhraseModal`) | [index.html](index.html) |
 | Record-and-compare ENGINE (shared with Minna) | [src/features/record-compare.js](src/features/record-compare.js) |
 
@@ -38,13 +44,21 @@ A **phrase** is `{ id, jp, read, mean, scene, grammar:[…], custom? }`:
   rely on the furigana + the synth audio's prosody.
 - `scene` ∈ `SELFTALK_SCENES` (morning/commute/meals/chores/work/feelings/evening);
   `grammar` ⊂ `SELFTALK_GRAMMAR` (`te-iru`/`nakya`/`tai`/`volitional`/`te-oku`/`sou`).
-- Built-ins live in `data/selftalk.js`; **user-authored** phrases (`custom:true`) live in
-  `state.selftalkStore.phrases` and sync.
+- Phrases now live in the **sentence store**: built-ins are public rows (seeded from
+  `data/selftalk.js`), **user-authored** phrases (`custom:true`) are private rows
+  (`created_by`, `visibility='private'`). The store keeps furigana as structured `[{t,r?}]`
+  segments; the client converts via `rubyToSegments`/`segmentsToRuby`/`segmentsToReading`
+  (`core/text.js`) and adapts a store sentence → the phrase shape with `sentenceToPhrase`
+  (`core/selftalk.js`). The fetched set is cached in `localStorage["jpverbs_selftalk_cache"]`
+  (read-through; degrade-don't-break offline). **Invariant:** the phrase `id` is the store's
+  `ext_id` (`st-<slug>` / `usr-<uuid>`), preserved verbatim — it's the record-compare itemKey +
+  practice key.
 
 **Synced blob** (`localStorage["jpverbs_selftalk"]`, app key `selftalk` — the 5th sync trio):
-`{ phrases:[…userAuthored], practice:{ lastDay:'YYYY-MM-DD'|null, streak, doneToday:[id…] } }`.
-Kept SEPARATE from `custom-verbs` so non-SRS lines never pollute the deck/Browse/Stats. Server enum
-widened in [../wk-enhanced-api/src/routes/progress.ts](../wk-enhanced-api/src/routes/progress.ts).
+`{ practice:{ lastDay:'YYYY-MM-DD'|null, streak, doneToday:[id…] } }` — the practice/streak signal
+ONLY (per "blobs = per-user signals; store = sentence text"). Pre-store phrases in an old blob are
+migrated into the store once on sign-in, then dropped from the blob. Server enum already includes
+`selftalk` ([../wk-enhanced-api/src/routes/progress.ts](../wk-enhanced-api/src/routes/progress.ts)).
 
 ## Structure (three organizers)
 
