@@ -49,7 +49,8 @@ conversation line) resolves to MULTIPLE tagged voice VARIANTS the user can pick 
 > [src/core/audio.js](src/core/audio.js); `cycleMod` + the cursor in `features/audio.js`);
 > **④ Availability hinting** — the editor queries `/v1/audio/variants` and dims synth voices that
 > aren't pre-generated yet (`fetchAvailableVoices`), so ① is visible in the UI; **⑤ Phase 3** —
-> ▶ reference (see above). Remaining: ① (operator pre-gen the Siri clips) + ⑥/⑦ (stretch).
+> ▶ reference (see above). ① (operator pre-gen of the Siri clips) is **done**; ⑦ shipped. The whole
+> ①–⑦ list is now complete (⑥ Forvo was dropped — not wanted).
 >
 > The variant-descriptor shape, key schema, preference model, and verification steps are in the
 > approved plan; the sections below are the original brief, kept for reference.

@@ -362,13 +362,12 @@ This is the priority. The items below are smaller and can follow.
   Follow-ups + my suggestions below.
 
 ### Audio-unify — follow-ups & ideas (priority-ordered)
-- **① Actually generate the Siri voices (operator step — do this first).** The picker offers
-  Siri male/female, but until the clips exist every "tts" request falls through to the default/
-  Google voice, so the picker is functionally Google-only. Run the two-pass workflow on the Mac:
-  set System Voice → a Japanese Siri **male** voice, `bun scripts/generate-tts.ts --variant siri:male`;
-  flip to **female**, `--variant siri:female`. Then re-seed prod (S3 env **and** prod `DATABASE_FILE`
-  so the `audio_variants` rows land where prod reads them). This is the highest-leverage next action —
-  it's what makes the whole feature audible.
+- ~~**① Generate the Siri voices (operator step).**~~ **Done (local).** The two-pass macOS workflow
+  ran — System Voice → Japanese Siri **male**, `bun scripts/generate-tts.ts --variant siri:male`;
+  flip to **female**, `--variant siri:female` — so siri:* now resolve to real clips locally (the
+  picker's ④ dimming clears + ② previews play the Siri voice). **Still TODO: re-seed prod** — run the
+  same two passes with the prod `S3_*` env **and** prod `DATABASE_FILE` so the `audio/siri/*` objects
+  + `audio_variants` rows land where prod's `/v1/audio/variants` reads them.
 - ~~**② "Preview voice" in the Settings picker.**~~ **Shipped.** Every row in the Voice-priority
   editor has a ▶ that auditions the sample word 食べる: a specific synth voice previews itself, a
   `kind:tts` row previews the synth voice that context actually resolves to, and `kind:native`/
@@ -398,10 +397,6 @@ This is the priority. The items below are smaller and can follow.
   clipless conversation line can compare against Siri, and a word without native audio gains a synth
   reference. `referenceVariants`/`currentRef`/`refUrl`/`playReference` in
   [src/features/minna-record.js](src/features/minna-record.js). (Detail in [NEXT_AUDIO_UNIFY.md](NEXT_AUDIO_UNIFY.md).)
-- **⑥ Add a real human-pronunciation provider.** The variant model is now extensible — a new
-  provider (e.g. **Forvo** native-speaker clips, keyed per word) is mostly a server resolver +
-  a descriptor + a `provider→kind` entry, no client re-architecture. Would give a `native`-quality
-  voice for the frequency/built-in decks that have no Minna recording.
 - ~~**⑦ Token hygiene.**~~ **Shipped.** `settings.audioPrefs` is now pruned of unknown tokens on load
   AND on cloud-pull (`normalizeSettings` → `pruneAudioPrefs` in [settings-store.js](src/settings-store.js)),
   dropping any token a future/foreign palette wouldn't understand and dropping a context that empties
