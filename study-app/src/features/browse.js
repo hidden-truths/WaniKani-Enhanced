@@ -3,11 +3,11 @@
 // meaning. Clicking a card opens the detail MODAL (openVerbDetail), not an inline expand.
 import { state } from '../state.js';
 import {
-  passes, isLeech, rollingAcc, colorClass, cardStamp, pitchHtml, escapeHtml,
+  passes, isLeech, rollingAcc, colorClass, cardStamp, pitchHtml, escapeHtml, plainText,
   availableTiers, exampleForLevel, JLPT_TIERS, BOX_COLORS, nextDueLabel, filterSummary,
 } from '../core/index.js';
 import { settings } from '../settings-store.js';
-import { speakWord, TTS_OK } from './tts.js';
+import { speakWord, speak, TTS_OK } from './tts.js';
 import { jishoUrl, provenanceBadge } from './render-helpers.js';
 import { makeMultiSelect, wireFacets, paintSummary, syncVerbRows } from './deck.js';
 
@@ -85,6 +85,7 @@ function renderDetailExample() {
   [...seg.querySelectorAll('.exlv')].forEach(b => b.classList.toggle('active', b.dataset.exlv === lvl && !b.disabled));
   const ex = exampleForLevel(v, lvl), jp = document.getElementById('dExJp'), en = document.getElementById('dExEn');
   if (ex) { jp.innerHTML = ex[0]; en.textContent = ex[1]; } else { jp.textContent = 'No example yet.'; en.textContent = ''; }
+  const sp = document.getElementById('dExSpeak'); if (sp) sp.hidden = !ex;   // play the shown tier
 }
 export function openVerbDetail(v) {
   detailVerb = v; detailLevel = null;
@@ -103,12 +104,13 @@ export function openVerbDetail(v) {
     ${v.mnem ? `<details open><summary>Mnemonic</summary><div class="det-body">${v.mnem}</div></details>` : ''}
     ${v.tip ? `<details><summary>Trap / tip</summary><div class="det-body">${v.tip}</div></details>` : ''}
     <details><summary>Example sentences</summary><div class="det-body">
-      <span class="jlptseg exseg" id="dExLevels" role="group" aria-label="Example level"></span>
+      <span class="jlptseg exseg" id="dExLevels" role="group" aria-label="Example level"></span>${TTS_OK ? `<button class="speak-btn sm" id="dExSpeak" type="button" aria-label="Play example sentence" title="Play example sentence" hidden><svg class="ic" aria-hidden="true"><use href="#i-volume"/></svg></button>` : ''}
       <div class="ex-jp jp" id="dExJp" style="margin-top:8px"></div><div class="ex-en" id="dExEn"></div>
     </div></details>
     ${v.custom ? `<div class="verb-actions"><button class="chip" id="dEdit" type="button"><svg class="ic" aria-hidden="true"><use href="#i-edit"/></svg>Edit</button><button class="chip" id="dDel" type="button" style="border-color:var(--godan);color:var(--godan)"><svg class="ic" aria-hidden="true"><use href="#i-trash"/></svg>Delete</button></div>` : ''}`;
   renderDetailExample();
   const sp = document.getElementById('dSpeak'); if (sp) sp.addEventListener('click', () => speakWord(v));
+  const exsp = document.getElementById('dExSpeak'); if (exsp) exsp.addEventListener('click', () => speak(plainText(document.getElementById('dExJp').innerHTML)));
   const seg = document.getElementById('dExLevels'); if (seg) seg.addEventListener('click', e => { const b = e.target.closest('.exlv'); if (!b || b.disabled) return; detailLevel = b.dataset.exlv; renderDetailExample(); });
   if (v.custom) {
     const eb = document.getElementById('dEdit'), db = document.getElementById('dDel');
