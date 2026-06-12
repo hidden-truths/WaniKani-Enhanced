@@ -10,19 +10,28 @@
 //     stripped to plain text (plainText), which is exactly what the client's sentence
 //     play button requests — so the keys line up.
 //
-// Pipeline: collect text → skip what's already in storage → jp-tts (one batch, one synth
-// process) renders .m4a into a temp dir → upload each to storage at ttsKey(text,'m4a').
+// Pipeline: collect text → skip what's already in storage → render .m4a into a temp dir →
+// upload each to storage at ttsKey(text,'m4a').
+//
+// Renderer (--engine, default `say`):
+//   • say    — macOS `say` with the SYSTEM voice. This is the only way to reach a SIRI
+//              voice (highest quality): set System Settings → Accessibility → Spoken
+//              Content → System Voice to a Japanese Siri voice, then bare `say` uses it.
+//              (AVSpeechSynthesizer's voice list does NOT expose Siri voices.)
+//   • jp-tts — the Swift CLI, a specific installed voice (Kyoko/Otoya Enhanced), system-
+//              voice-independent and deterministic. Build it: swiftc -O scripts/jp-tts.swift
+//              -o scripts/jp-tts. Pick the voice with --voice / its own --list.
 //
 // Run from wk-enhanced-api/ (loads .env → storage driver). To seed PROD, run with the
-// prod S3_* env so getStorage() targets the real bucket. jp-tts must be built first:
-//   swiftc -O scripts/jp-tts.swift -o scripts/jp-tts
-//   bun scripts/generate-tts.ts [--voice Kyoko] [--rate 0.5] [--force] [--limit N] [--filter <substr>]
+// prod S3_* env so getStorage() targets the real bucket.
+//   bun scripts/generate-tts.ts [--engine say|jp-tts] [--say-voice <name>] [--voice Kyoko]
+//                               [--force] [--limit N] [--filter <substr>]
 //     --force    re-generate + re-upload even if the clip is already in storage
 //     --limit N  cap the number of clips generated this run (for a quick test)
 //     --filter S only items whose label contains S (e.g. "reading", "mnn", "ex:")
 import { existsSync, mkdirSync, readFileSync, readdirSync, writeFileSync } from 'node:fs';
 import { fileURLToPath } from 'node:url';
-import { join } from 'node:path';
+import { join, dirname } from 'node:path';
 // Cross-project imports into the study app — fine here: scripts/ is excluded from the
 // server's tsconfig, and these modules are pure data / DOM-free helpers.
 import { VERBS } from '../../study-app/src/data/verbs.js';
@@ -37,8 +46,10 @@ const arg = (name: string): string | undefined => {
 };
 const has = (name: string) => process.argv.includes(name);
 
-const voice = arg('--voice') || 'Kyoko';
-const rate = arg('--rate');
+const engine = arg('--engine') || 'say';   // 'say' (system voice — can be Siri) | 'jp-tts' (specific installed voice)
+const sayVoice = arg('--say-voice');        // say engine: force a `say -v` voice; default = system voice
+const voice = arg('--voice') || 'Kyoko';    // jp-tts engine: voice name
+const rate = arg('--rate');                 // jp-tts engine: speech rate
 const force = has('--force');
 const limit = arg('--limit') ? Number(arg('--limit')) : Infinity;
 const filter = arg('--filter');
@@ -93,18 +104,38 @@ for (const item of pool) {
 console.log(`${todo.length} to generate` + (force ? ' (--force: ignoring storage)' : `; ${pool.length - todo.length} skipped (already in storage${Number.isFinite(limit) ? ' or beyond --limit' : ''})`));
 if (!todo.length) { console.log('nothing to do.'); process.exit(0); }
 
-// --- Render with jp-tts (one batch → one synth process). ---
-const bin = fileURLToPath(new URL('./jp-tts', import.meta.url));
-if (!existsSync(bin)) {
-    console.error(`jp-tts not built. Run:\n  swiftc -O scripts/jp-tts.swift -o scripts/jp-tts`);
-    process.exit(2);
+// --- Render the clips → .m4a at each todo.out. ---
+if (engine === 'say') {
+    // macOS `say` renders with the SYSTEM default voice — which, unlike the voices in
+    // AVSpeechSynthesizer.speechVoices(), CAN be a Siri voice (the highest quality). Set
+    // System Settings → Accessibility → Spoken Content → System Voice to a Japanese Siri
+    // voice; bare `say` (no -v) then uses it. --say-voice forces a specific `say -v` voice.
+    console.log(`engine=say → ${sayVoice ? `--voice ${sayVoice}` : 'system voice (set it to a Japanese Siri voice for best quality)'}`);
+    const CONC = 4;
+    let idx = 0;
+    const worker = async () => {
+        while (idx < todo.length) {
+            const t = todo[idx++];
+            mkdirSync(dirname(t.out), { recursive: true });
+            const sayArgs = ['--file-format=m4af', '--data-format=aac', '-o', t.out, ...(sayVoice ? ['-v', sayVoice] : []), t.item.text];
+            await Bun.spawn(['say', ...sayArgs], { stdout: 'ignore', stderr: 'ignore' }).exited;
+        }
+    };
+    await Promise.all(Array.from({ length: Math.min(CONC, todo.length) }, worker));
+} else {
+    // jp-tts (Swift / AVSpeechSynthesizer) — a specific installed voice, deterministic and
+    // independent of the system voice (e.g. Kyoko/Otoya Enhanced). One batch, one process.
+    const bin = fileURLToPath(new URL('./jp-tts', import.meta.url));
+    if (!existsSync(bin)) {
+        console.error(`jp-tts not built. Run:\n  swiftc -O scripts/jp-tts.swift -o scripts/jp-tts`);
+        process.exit(2);
+    }
+    const manifestPath = join(tmpDir, 'manifest.json');
+    writeFileSync(manifestPath, JSON.stringify(todo.map(t => ({ text: t.item.text, out: t.out }))));
+    const jpArgs = ['--batch', manifestPath, '--voice', voice, ...(rate ? ['--rate', rate] : [])];
+    console.log(`engine=jp-tts ${jpArgs.join(' ')}`);
+    await Bun.spawn([bin, ...jpArgs], { stdout: 'inherit', stderr: 'inherit' }).exited;
 }
-const manifestPath = join(tmpDir, 'manifest.json');
-writeFileSync(manifestPath, JSON.stringify(todo.map(t => ({ text: t.item.text, out: t.out }))));
-const jpArgs = ['--batch', manifestPath, '--voice', voice, ...(rate ? ['--rate', rate] : [])];
-console.log(`jp-tts ${jpArgs.join(' ')}`);
-const proc = Bun.spawn([bin, ...jpArgs], { stdout: 'inherit', stderr: 'inherit' });
-await proc.exited;
 
 // --- Upload the rendered clips to storage. ---
 let uploaded = 0, missing = 0;

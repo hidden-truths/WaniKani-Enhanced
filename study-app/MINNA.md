@@ -452,10 +452,11 @@ helpers in [src/core/recordings.js](src/core/recordings.js).
 - ~~**Audio for the example sentences**~~ — **shipped (local TTS pre-generation).** The grammar/
   lesson example rows (and the answer-side flashcard example) gained a `.speak-btn` that plays
   `speak(plainText(jp))` → `/v1/tts`. The server's `/v1/tts` is now storage-backed and prefers a
-  locally pre-generated **Apple-voice** clip (Kyoko, `.m4a`) over Google: build the macOS CLI
-  (`swiftc -O wk-enhanced-api/scripts/jp-tts.swift -o …/jp-tts`) then run
-  `bun scripts/generate-tts.ts` to voice every reading + example sentence and upload to storage.
-  See the TTS dead-end in [CLAUDE.md](CLAUDE.md).
+  locally pre-generated `.m4a` over Google: `bun wk-enhanced-api/scripts/generate-tts.ts` voices
+  every reading + example sentence and uploads to storage. Default renderer is macOS `say` with a
+  Japanese **Siri** system voice (best quality — Siri voices aren't reachable any other way); the
+  `jp-tts` Swift CLI (Kyoko/Otoya Enhanced) is the alternative. See the TTS dead-end in
+  [CLAUDE.md](CLAUDE.md).
 - ~~**Native audio served from our storage, not vnjpclub**~~ — **shipped.** `/v1/minna/audio`
   always cached on first play; `wk-enhanced-api/scripts/prefetch-minna-audio.ts` now downloads
   the whole lesson catalogue's audio up front so we never round-trip to vnjpclub at play time
