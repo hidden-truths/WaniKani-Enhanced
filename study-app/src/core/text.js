@@ -36,3 +36,42 @@ export function ttsText(v) { return v.tts || (v.jp && HAS_KANJI.test(v.jp) ? v.j
 export function plainText(s) {
   return String(s).replace(/<rt>.*?<\/rt>/g, '').replace(/<\/?ruby>/g, '');
 }
+
+// ---- structured furigana: <ruby> markup ↔ [{t, r?}] segments ----
+// The unified sentence store keeps furigana as structured segments (base text `t`, optional
+// reading `r`) rather than embedded markup, so it's the source of truth and the full kana
+// reading is DERIVED. These helpers convert between the curated `<ruby>漢字<rt>かな</rt></ruby>`
+// form the data ships in and that segment shape. Invariant: rubyToSegments(jp) maps each
+// `<ruby>X<rt>Y</rt></ruby>` to {t:X, r:Y} and each run of non-ruby text to {t:'…'}, so
+// segments.map(s => s.t).join('') === plainText(jp) byte-for-byte (the audio key).
+
+const RUBY_BLOCK = /<ruby>(.*?)<rt>(.*?)<\/rt><\/ruby>/g;
+
+// Parse curated ruby markup into [{t, r?}] segments. Pure.
+export function rubyToSegments(jp) {
+  const s = String(jp);
+  const segs = [];
+  let last = 0, m;
+  RUBY_BLOCK.lastIndex = 0;
+  while ((m = RUBY_BLOCK.exec(s))) {
+    if (m.index > last) segs.push({ t: s.slice(last, m.index) }); // plain run before this ruby block
+    segs.push(m[2] ? { t: m[1], r: m[2] } : { t: m[1] });
+    last = m.index + m[0].length;
+  }
+  if (last < s.length) segs.push({ t: s.slice(last) }); // trailing plain run
+  return segs;
+}
+
+// Rebuild the `<ruby>…</ruby>` HTML from segments. Round-trips well-formed input:
+// segmentsToRuby(rubyToSegments(jp)) === jp. Pure.
+export function segmentsToRuby(segs) {
+  return (segs || [])
+    .map((s) => (s && s.r ? `<ruby>${s.t}<rt>${s.r}</rt></ruby>` : s ? s.t : ''))
+    .join('');
+}
+
+// The derived full-kana reading: each segment contributes its reading `r`, or its base `t`
+// when it has none (plain kana). Pure — this is what `read` used to be stored as.
+export function segmentsToReading(segs) {
+  return (segs || []).map((s) => (s ? (s.r ?? s.t ?? '') : '')).join('');
+}

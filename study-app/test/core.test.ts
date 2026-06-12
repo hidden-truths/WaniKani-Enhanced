@@ -12,7 +12,8 @@ import { VERBS } from '../src/data/verbs.js';
 import {
   passes, oneGroup, facetAll, facetMatch, scheduleCard, cardStat, isDue, dueCards,
   rollingAcc, isLeech, leeches, normKana, romajiToKana, reviewForecast, filterSummary,
-  tokenFacet, deckLabel, ttsText, rubyHtml, plainText, minnaBuiltinRank, applyMinnaOverlays, splitMora,
+  tokenFacet, deckLabel, ttsText, rubyHtml, plainText, rubyToSegments, segmentsToRuby, segmentsToReading,
+  minnaBuiltinRank, applyMinnaOverlays, splitMora,
   pitchHtml, minnaSig, cardStamp, colorClass, CATS, exampleForLevel, availableTiers,
   JLPT_TIERS, BOX_DAYS,
   clampKeep, convItemKey, formatDuration, KEEP_DEFAULT,
@@ -708,6 +709,40 @@ test('SELFTALK dataset is well-formed (ids unique, scenes/grammar known, ruby ba
     expect(n(p.jp, /<rt>/g)).toBe(n(p.jp, /<\/rt>/g));
     expect(n(p.jp, /<ruby>/g)).toBe(n(p.jp, /<rt>/g));
   }
+});
+
+// ---------- structured furigana (sentence store) ----------
+
+test('rubyToSegments ↔ segmentsToRuby round-trips + reconstructs reading over ALL built-ins', () => {
+  // This is the data-integrity gate the seed relies on: every built-in phrase must convert to
+  // segments whose `t` rebuilds plainText(jp) byte-for-byte, whose ruby rebuilds jp exactly, and
+  // whose derived reading equals the authored `read` (catches furigana drift in the data).
+  for (const p of SELFTALK as any[]) {
+    const segs = rubyToSegments(p.jp);
+    expect(segs.map((s: any) => s.t).join('')).toBe(plainText(p.jp));
+    expect(segmentsToRuby(segs)).toBe(p.jp);
+    expect(segmentsToReading(segs)).toBe(p.read);
+  }
+});
+
+test('rubyToSegments parses a mixed kanji/kana line into {t,r?} segments', () => {
+  const jp = '<ruby>歯<rt>は</rt></ruby>を<ruby>磨<rt>みが</rt></ruby>いている。';
+  expect(rubyToSegments(jp)).toEqual([{ t: '歯', r: 'は' }, { t: 'を' }, { t: '磨', r: 'みが' }, { t: 'いている。' }]);
+  expect(segmentsToReading(rubyToSegments(jp))).toBe('はをみがいている。');
+  expect(segmentsToRuby(rubyToSegments(jp))).toBe(jp);
+});
+
+test('rubyToSegments handles a no-kanji line as a single plain segment', () => {
+  const jp = 'もっとリラックスしたい。';
+  expect(rubyToSegments(jp)).toEqual([{ t: 'もっとリラックスしたい。' }]);
+  expect(segmentsToReading(rubyToSegments(jp))).toBe('もっとリラックスしたい。');
+  expect(segmentsToRuby(rubyToSegments(jp))).toBe(jp);
+});
+
+test('rubyToSegments on empty input is empty + round-trips', () => {
+  expect(rubyToSegments('')).toEqual([]);
+  expect(segmentsToRuby([])).toBe('');
+  expect(segmentsToReading([])).toBe('');
 });
 
 test('hashStr is deterministic + varies by input', () => {
