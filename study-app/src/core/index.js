@@ -10,3 +10,4 @@ export * from './text.js';
 export * from './minna.js';
 export * from './recordings.js';
 export * from './audio.js';
+export * from './selftalk.js';

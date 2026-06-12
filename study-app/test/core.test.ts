@@ -20,7 +20,10 @@ import {
   waveformPeaks, clampSpeed, COMPARE_SPEEDS, rmsLevel, normGains,
   resolveVariant, parseAudioToken, contextPrefs, isSynthVoice, voiceProvider,
   DEFAULT_AUDIO_PREFS, AUDIO_VOICES, variantOrder, variantIndex, isKnownAudioToken, pruneAudioPrefs,
+  hashStr, groupByScene, grammarTokens, todaysSet, emptyPractice, dayDiff, applyPractice,
+  practiceStreak, donePhraseIds,
 } from '../src/core/index.js';
+import { SELFTALK, SELFTALK_SCENES, SELFTALK_GRAMMAR } from '../src/data/selftalk.js';
 
 beforeEach(() => {
   // Rebuild the live deck like the app's rebuildData() does (built-in path: no custom
@@ -684,4 +687,92 @@ test('pruneAudioPrefs drops unknown tokens and empties, keeps known order', () =
   })).toEqual({ reviews: ['siri:female', 'kind:tts'], minna: ['kind:native', 'google'] });
   expect(pruneAudioPrefs({})).toEqual({});
   expect(pruneAudioPrefs(null as any)).toBe(null);
+});
+
+// ----- Self-Talk (独り言) -----
+
+test('SELFTALK dataset is well-formed (ids unique, scenes/grammar known, ruby balanced)', () => {
+  expect(SELFTALK.length).toBeGreaterThan(20);
+  const sceneIds = new Set(SELFTALK_SCENES.map((s: any) => s.id));
+  const grammarIds = new Set(SELFTALK_GRAMMAR.map((g: any) => g.id));
+  const ids = new Set<string>();
+  for (const p of SELFTALK as any[]) {
+    expect(p.id && p.jp && p.read && p.mean && p.scene).toBeTruthy();
+    expect(ids.has(p.id)).toBe(false); ids.add(p.id);
+    expect(sceneIds.has(p.scene)).toBe(true);
+    expect(Array.isArray(p.grammar) && p.grammar.length).toBeTruthy();
+    for (const g of p.grammar) expect(grammarIds.has(g)).toBe(true);
+    // balanced ruby: one <rt>…</rt> per <ruby>…</ruby>
+    const n = (s: string, re: RegExp) => (p.jp.match(re) || []).length;
+    expect(n(p.jp, /<ruby>/g)).toBe(n(p.jp, /<\/ruby>/g));
+    expect(n(p.jp, /<rt>/g)).toBe(n(p.jp, /<\/rt>/g));
+    expect(n(p.jp, /<ruby>/g)).toBe(n(p.jp, /<rt>/g));
+  }
+});
+
+test('hashStr is deterministic + varies by input', () => {
+  expect(hashStr('a')).toBe(hashStr('a'));
+  expect(hashStr('a')).not.toBe(hashStr('b'));
+  expect(typeof hashStr('x')).toBe('number');
+});
+
+test('groupByScene orders by sceneOrder + skips empty scenes', () => {
+  const ph = [
+    { id: '1', scene: 'meals', grammar: ['tai'] },
+    { id: '2', scene: 'morning', grammar: ['nakya'] },
+    { id: '3', scene: 'morning', grammar: ['te-iru'] },
+  ];
+  const g = groupByScene(ph, ['morning', 'commute', 'meals']);
+  expect(g.map((x: any) => x.scene)).toEqual(['morning', 'meals']);   // 'commute' empty → skipped
+  expect(g[0].items.map((x: any) => x.id)).toEqual(['2', '3']);
+  // no order → first-seen
+  expect(groupByScene(ph).map((x: any) => x.scene)).toEqual(['meals', 'morning']);
+});
+
+test('grammarTokens returns present tokens in grammarOrder, extras after', () => {
+  const ph = [{ grammar: ['sou', 'zzz'] }, { grammar: ['te-iru'] }];
+  expect(grammarTokens(ph, ['te-iru', 'nakya', 'sou'])).toEqual(['te-iru', 'sou', 'zzz']);
+});
+
+test('todaysSet is deterministic per day, rotates across days, bounded + subset', () => {
+  const ph = SELFTALK as any[];
+  const a = todaysSet(ph, '2026-06-12', 8);
+  expect(a).toEqual(todaysSet(ph, '2026-06-12', 8));   // stable within a day
+  expect(a.length).toBe(8);
+  const allIds = new Set(ph.map((p) => p.id));
+  expect(a.every((id: string) => allIds.has(id))).toBe(true);
+  // a different day (almost certainly) yields a different lead set
+  expect(todaysSet(ph, '2026-06-13', 8)).not.toEqual(a);
+  // n omitted → all ids
+  expect(todaysSet(ph, '2026-06-12').length).toBe(ph.length);
+});
+
+test('applyPractice: first practice, same-day add (dedup), consecutive day, gap reset', () => {
+  const p0 = emptyPractice();
+  const p1 = applyPractice(p0, 'st-morning-1', '2026-06-12');
+  expect(p1).toEqual({ lastDay: '2026-06-12', streak: 1, doneToday: ['st-morning-1'] });
+  // same day, new phrase → added; streak unchanged
+  const p2 = applyPractice(p1, 'st-morning-2', '2026-06-12');
+  expect(p2.doneToday).toEqual(['st-morning-1', 'st-morning-2']);
+  expect(p2.streak).toBe(1);
+  // same day, repeat phrase → no duplicate
+  expect(applyPractice(p2, 'st-morning-1', '2026-06-12').doneToday).toEqual(['st-morning-1', 'st-morning-2']);
+  // next calendar day → streak +1, doneToday reset
+  const p3 = applyPractice(p2, 'st-meals-1', '2026-06-13');
+  expect(p3).toEqual({ lastDay: '2026-06-13', streak: 2, doneToday: ['st-meals-1'] });
+  // skip a day → reset to 1
+  const p4 = applyPractice(p3, 'st-meals-1', '2026-06-15');
+  expect(p4.streak).toBe(1);
+});
+
+test('practiceStreak: alive today/yesterday, broken after a gap; donePhraseIds today-only', () => {
+  const p = { lastDay: '2026-06-12', streak: 5, doneToday: ['a', 'b'] };
+  expect(practiceStreak(p, '2026-06-12')).toBe(5);   // today
+  expect(practiceStreak(p, '2026-06-13')).toBe(5);   // yesterday → still alive (today not yet done)
+  expect(practiceStreak(p, '2026-06-14')).toBe(0);   // a day missed → broken
+  expect(practiceStreak(emptyPractice(), '2026-06-12')).toBe(0);
+  expect([...donePhraseIds(p, '2026-06-12')]).toEqual(['a', 'b']);
+  expect([...donePhraseIds(p, '2026-06-13')]).toEqual([]);   // not today → none
+  expect(dayDiff('2026-06-12', '2026-06-13')).toBe(1);
+  expect(dayDiff(null, '2026-06-13')).toBe(null);
 });
