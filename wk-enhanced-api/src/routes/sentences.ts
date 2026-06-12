@@ -1,6 +1,6 @@
-// Unified sentence store API (Phase 1: 独り言 Self-Talk slice).
+// Unified sentence store API (Phase 1: 独り言 Self-Talk; Phase 2: built-in card examples).
 //
-//   GET    /v1/sentences?ownerType=selftalk   — public (anon) + own private rows
+//   GET    /v1/sentences?ownerType=selftalk|card[&ownerId=]  — public (anon) + own private rows
 //   POST   /v1/sentences                       — create a private user sentence (cookie)
 //   PUT    /v1/sentences/{id}                   — replace own sentence (cookie)
 //   DELETE /v1/sentences/{id}                   — delete own sentence (cookie)
@@ -59,10 +59,10 @@ const listRoute = createRoute({
 
 sentencesRouter.openapi(listRoute, (c) => {
     const user = currentUser(c); // null = anon → public rows only
-    const { ownerType } = c.req.valid('query');
+    const { ownerType, ownerId } = c.req.valid('query');
     c.header('Cache-Control', 'no-store');
-    const sentences = db.getSentences({ ownerType, viewer: user?.id ?? null });
-    c.set('logCtx', { ownerType, viewer: user?.id ?? null, count: sentences.length });
+    const sentences = db.getSentences({ ownerType, ownerId: ownerId ?? null, viewer: user?.id ?? null });
+    c.set('logCtx', { ownerType, ownerId: ownerId ?? null, viewer: user?.id ?? null, count: sentences.length });
     return c.json({ sentences }, 200);
 });
 

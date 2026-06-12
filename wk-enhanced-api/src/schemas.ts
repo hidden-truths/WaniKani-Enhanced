@@ -545,12 +545,18 @@ export const SentenceListResponseSchema = z
     .object({ sentences: z.array(SentenceSchema) })
     .openapi('SentenceListResponse');
 
-// GET /v1/sentences?ownerType= — Phase 1 only serves the Self-Talk slice; the enum widens
-// as later phases wire card/grammar/conversation owners.
+// GET /v1/sentences?ownerType=[&ownerId=] — 'selftalk' (Phase 1) + 'card' (Phase 2, built-in
+// vocab example sentences). The enum widens as later phases wire grammar/conversation owners.
+// ownerId narrows a 'card' read to one rank; omitted = the whole owner surface (the deck's
+// boot batch). Returns one entry per link (a reused sentence reports every owner_id/tier).
 export const SentenceListQuerySchema = z.object({
     ownerType: z
-        .enum(['selftalk'])
-        .openapi({ param: { name: 'ownerType', in: 'query' }, description: 'Which owner surface to read.', example: 'selftalk' }),
+        .enum(['selftalk', 'card'])
+        .openapi({ param: { name: 'ownerType', in: 'query' }, description: 'Which owner surface to read.', example: 'card' }),
+    ownerId: z
+        .string()
+        .optional()
+        .openapi({ param: { name: 'ownerId', in: 'query' }, description: 'Optional: narrow to one owner (e.g. a card rank).', example: '1' }),
 });
 
 // POST body — carries the CLIENT-generated id (ext_id). text/furigana/tags/translations/link
