@@ -9,13 +9,14 @@
 // per-lesson NOTES + the overlays (app key 'minna').
 import { state } from '../state.js';
 import { API_BASE } from '../config.js';
-import { escapeHtml, rubyHtml, plainText, CAT_LABEL, minnaBuiltinRank, minnaSig, convItemKey, resolveClip, clipLabel, validClip } from '../core/index.js';
+import { escapeHtml, rubyHtml, plainText, ttsText, CAT_LABEL, minnaBuiltinRank, minnaSig, convItemKey, resolveClip, clipLabel, validClip } from '../core/index.js';
 import { speak, TTS_OK } from './tts.js';
+import { playItem } from './audio.js';
 import { account, api, setSyncStatus } from './cloud-core.js';
 import { openAuth } from './cloud.js';
 import { loadCustom, saveCustom } from '../persistence/custom.js';
 import { rebuildData, refreshAfterVerbChange } from './custom-cards.js';
-import { loadLessonRecordings, recordControlHtml, wireMinnaRecord, paintCompareWaveforms, speakingBarHtml, wireSpeakingControls, initMicSelector, isSpeakingMode, enterSpeakingMode, exitSpeakingMode } from './minna-record.js';
+import { loadLessonRecordings, recordControlHtml, wireMinnaRecord, paintCompareWaveforms, speakingBarHtml, wireSpeakingControls, initMicSelector, isSpeakingMode, enterSpeakingMode, exitSpeakingMode, newestTakeIdForItem } from './minna-record.js';
 
 const MINNA_APP_KEY = 'minna';
 const MINNA_KEY = 'jpverbs_minna';
@@ -44,20 +45,24 @@ export function setLineClip(lesson, idx, clip) {
   saveMinna();
 }
 
-// --- Native-audio playback. One reused <audio> with crossOrigin='use-credentials' so the
-//     session cookie travels and /v1/minna/audio authorizes cross-origin. Clicking a
-//     playing button stops it (toggle). The .playing class lights the button. ---
-let mnAudioEl = null, mnPlayingBtn = null;
-function mnPlay(src, btn) {
-  if (!mnAudioEl) { mnAudioEl = new Audio(); mnAudioEl.crossOrigin = 'use-credentials'; }
-  if (btn && btn === mnPlayingBtn && !mnAudioEl.paused) { mnAudioEl.pause(); btn.classList.remove('playing'); mnPlayingBtn = null; return; }
-  if (mnPlayingBtn) mnPlayingBtn.classList.remove('playing');
-  mnAudioEl.src = API_BASE + '/v1/minna/audio?src=' + encodeURIComponent(src);
-  mnPlayingBtn = btn || null; if (btn) btn.classList.add('playing');
-  mnAudioEl.onended = mnAudioEl.onerror = () => { if (mnPlayingBtn) { mnPlayingBtn.classList.remove('playing'); mnPlayingBtn = null; } };
-  mnAudioEl.play().catch(() => { if (btn) btn.classList.remove('playing'); mnPlayingBtn = null; });
-}
-const mnAudioBtn = (src) => src ? `<button class="speak-btn" type="button" data-aud="${escapeHtml(src)}" aria-label="Play native audio" title="Play native audio"><svg class="ic" aria-hidden="true"><use href="#i-volume"/></svg></button>` : '';
+// --- Audio playback now goes through the shared player (features/audio.js playItem), which
+//     resolves each item to a tagged voice VARIANT per the user's 'minna' priority and routes
+//     gated native/take bytes through a credentialed <audio> while synth uses the public one. A
+//     button carries its item on data-* (data-native / data-text / data-itemkey); the unified
+//     handler in wireMinnaLesson reads them. The .playing class lights the active button (toggle).
+//
+// The CONVERSATION whole-dialogue audio is native-only (no synth equivalent for a whole
+// conversation): data-native alone → resolves to the native recording.
+const mnAudioBtn = (src) => src ? `<button class="speak-btn" type="button" data-audio-item data-native="${escapeHtml(src)}" aria-label="Play native audio" title="Play native audio"><svg class="ic" aria-hidden="true"><use href="#i-volume"/></svg></button>` : '';
+// A VOCAB WORD button offers the full catalog: the native recording (if any), a synthesized voice
+// (ttsText → the same kanji-for-accent text the deck uses), and the user's own newest take. Which
+// one plays is the user's 'minna' priority (default: native first). Rendered whenever any audio
+// path exists; itemKey ties it to the take cache.
+const mnWordAudioBtn = (v) => {
+  if (!TTS_OK && !v.audio) return '';
+  const text = ttsText({ jp: v.dict || v.kanji || v.kana, read: v.dictRead || v.kana, tts: v.tts });
+  return `<button class="speak-btn" type="button" data-audio-item data-text="${escapeHtml(text)}"${v.audio ? ` data-native="${escapeHtml(v.audio)}"` : ''} data-itemkey="${escapeHtml(v.key)}" aria-label="Play" title="Play"><svg class="ic" aria-hidden="true"><use href="#i-volume"/></svg></button>`;
+};
 
 // --- Vocab → deck activation (via the custom-card store). ---
 // Build a deck card from a Minna vocab item, using the DICTIONARY form as the headword.
@@ -237,7 +242,7 @@ function minnaVocabSection(L) {
   if (!L.vocab || !L.vocab.length) return '';
   const speaking = isSpeakingMode();
   const rows = L.vocab.map(v => `<tr>
-      <td class="v-audio">${mnAudioBtn(v.audio)}</td>
+      <td class="v-audio">${mnWordAudioBtn(v)}</td>
       <td><div class="mn-kanji jp">${escapeHtml(v.kanji || v.kana)}</div><div class="mn-kana jp">${escapeHtml(v.kana)}${v.context ? ` <span class="mn-ctx">${escapeHtml(v.context)}</span>` : ''}</div></td>
       <td class="mn-mean">${escapeHtml(v.mean)}<span class="mn-pos">${escapeHtml(CAT_LABEL[v.cat] || v.cat || '')}</span>${v.italki ? '<span class="mn-italki" title="Covered in your iTalki lesson">iTalki</span>' : ''}</td>
       <td style="text-align:right">${minnaInDeck(v.key) ? '<span class="v-in">✓</span>' : ''}</td>
@@ -397,8 +402,14 @@ function renderNavSpeaking(n, body) {
 // the speaking controls don't appear on other tabs. (The attach-once delegate stays on the slot.)
 function clearNavSpeaking() { const nav = document.getElementById('navExtra'); if (nav) nav.innerHTML = ''; }
 function wireMinnaLesson(n, L, body) {
-  body.querySelectorAll('[data-aud]').forEach(b => b.addEventListener('click', () => mnPlay(b.dataset.aud, b)));
-  body.querySelectorAll('[data-tts]').forEach(b => b.addEventListener('click', () => speak(b.dataset.tts)));
+  // Unified audio buttons (vocab words + conversation): resolve native/synth/take per the 'minna'
+  // voice priority. The newest user take (if any) makes the 'user' kind available for that item.
+  body.querySelectorAll('[data-audio-item]').forEach(b => b.addEventListener('click', () => {
+    const takeId = b.dataset.itemkey ? newestTakeIdForItem(n, b.dataset.itemkey) : null;
+    playItem({ text: b.dataset.text || '', native: b.dataset.native || null, takeId }, 'minna', b);
+  }));
+  // Grammar / example SENTENCES are synth-only (no native clip) — synth in the 'minna' context.
+  body.querySelectorAll('[data-tts]').forEach(b => b.addEventListener('click', () => speak(b.dataset.tts, 'minna', b)));
   wireMinnaRecord(body);   // delegated record/play/delete/compare handlers (attach-once)
   wireMinnaClips(body);    // delegated conversation-line clip-marker handlers (attach-once)
   paintCompareWaveforms(body);   // decode + draw the you/native compare waveforms for this render

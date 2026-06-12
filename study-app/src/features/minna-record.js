@@ -192,6 +192,13 @@ export async function loadLessonRecordings(lesson) {
 function takesFor(lesson, itemKey) {
   return (recCache[lesson] || []).filter(t => t.itemKey === itemKey);
 }
+// Newest take id for an item (or null) — used by minna.js to let the unified word play button
+// offer the user's own recording as a 'user'-kind variant. Reads the per-lesson take cache that
+// loadLessonRecordings already populated on lesson render.
+export function newestTakeIdForItem(lesson, itemKey) {
+  const takes = takesFor(lesson, itemKey);
+  return takes.length ? takes[0].id : null;
+}
 // Replace one item's takes in the cache (after upload/delete) without a refetch.
 function setTakes(lesson, itemKey, takes) {
   const others = (recCache[lesson] || []).filter(t => t.itemKey !== itemKey);
