@@ -1,4 +1,4 @@
-// Decouples the PERSISTENCE layer (store / custom / settings / minna) from the CLOUD
+// Decouples the PERSISTENCE layer (store / custom / settings / selftalk) from the CLOUD
 // sync layer. Each save*() calls the matching sync.<blob>() to schedule a debounced
 // push; cloud.js registers the real schedulers at init. Until registered — and when
 // signed out or offline — they're no-ops, so calling them is always safe.
@@ -15,4 +15,5 @@ export const sync = {
   progress: () => {},   // the `verbs` blob (state.store) — save()
   custom: () => {},     // the `custom-verbs` blob — saveCustom()
   settings: () => {},   // the `settings` blob — saveSettings()
+  selftalk: () => {},   // the `selftalk` blob (state.selftalkStore) — saveSelftalk()
 };

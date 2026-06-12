@@ -10,6 +10,7 @@ import { sync } from '../sync-bus.js';
 import { account, setAccount, api, setSyncStatus, serverReachable, setServerReachable } from './cloud-core.js';
 import { saveLocal } from '../persistence/store.js';
 import { loadCustom, saveCustomLocal } from '../persistence/custom.js';
+import { normalizeSelftalk, saveSelftalkLocal, hasLocalSelftalk } from '../persistence/selftalk.js';
 import { settings, setSettings, DEFAULT_SETTINGS, saveSettingsLocal, applyFurigana } from '../settings-store.js';
 import { cfg, updateDeckCount, updateDueBanner, paintPrefChips } from './deck.js';
 import { renderBrowse } from './browse.js';
@@ -22,8 +23,9 @@ import { renderSettings } from './settings-page.js';
 const APP_KEY = 'verbs';            // progress namespace on the server
 const CUSTOM_APP_KEY = 'custom-verbs'; // custom-card-definitions namespace
 const SETTINGS_APP_KEY = 'settings'; // synced preferences namespace
+const SELFTALK_APP_KEY = 'selftalk'; // 独り言 phrases + practice/streak namespace
 let authMode = 'login';             // 'login' | 'register' — current modal mode
-let syncTimer = null, customSyncTimer = null, settingsSyncTimer = null;
+let syncTimer = null, customSyncTimer = null, settingsSyncTimer = null, selftalkSyncTimer = null;
 
 // --- Progress sync (the `verbs` blob = state.store). Debounced; coalesces the rapid save()
 //     calls during a session into one PUT. ---
@@ -56,6 +58,21 @@ async function pullSettingsCloud() {
   } catch (err) {/* offline — keep local settings */}
 }
 
+// --- Self-Talk sync (separate namespace; user-authored phrases + the practice/streak signal). ---
+function scheduleSelftalkSync() { if (!account) return; if (selftalkSyncTimer) clearTimeout(selftalkSyncTimer); selftalkSyncTimer = setTimeout(pushSelftalkCloud, 1200); }
+async function pushSelftalkCloud() { if (!account) return; setSyncStatus('saving…'); try { await api('/v1/progress/' + SELFTALK_APP_KEY, { method: 'PUT', body: { data: state.selftalkStore } }); setSyncStatus('✓ synced'); } catch (err) { setSyncStatus('⚠ offline'); } }
+// Pull Self-Talk after sign-in. Server wins when it has data; a fresh account seeds from local.
+// Writes via saveSelftalkLocal() so hydration doesn't immediately re-push. The panel re-renders
+// on its next tab activation (renderSelftalk is lazy), so no view refresh is needed here.
+async function pullSelftalkCloud() {
+  try {
+    const r = await api('/v1/progress/' + SELFTALK_APP_KEY);
+    if (r && r.data && typeof r.data === 'object' && (Array.isArray(r.data.phrases) || r.data.practice)) {
+      state.selftalkStore = normalizeSelftalk(r.data); saveSelftalkLocal();
+    } else if (hasLocalSelftalk()) { await pushSelftalkCloud(); }   // new account — seed from local
+  } catch (err) {/* offline — keep local Self-Talk */}
+}
+
 // Pull server progress after sign-in. Server wins when it has data; a fresh account inherits
 // whatever's local (one-time migration upward). Then chain the other blobs.
 async function pullCloud() {
@@ -67,9 +84,10 @@ async function pullCloud() {
       setSyncStatus('✓ synced');
     } else { await pushCloud(); }   // new account — seed from local
   } catch (err) { setSyncStatus('⚠ offline'); }
-  await pullCustomCloud();          // custom cards + settings + minna share the sign-in pull
+  await pullCustomCloud();          // custom cards + settings + minna + selftalk share the sign-in pull
   await pullSettingsCloud();
   await pullMinnaCloud();
+  await pullSelftalkCloud();
   migrateMinnaDupes(); rebuildData();   // apply pulled Minna overlays + clean any dupes
   refreshAllViews();
 }
@@ -149,6 +167,7 @@ export function initCloud() {
   sync.progress = scheduleCloudSync;
   sync.custom = scheduleCustomSync;
   sync.settings = scheduleSettingsSync;
+  sync.selftalk = scheduleSelftalkSync;
   registerSessionHooks({ logSession, maybeShowSignup });
 
   const authModal = document.getElementById('authModal');

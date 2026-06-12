@@ -17,6 +17,8 @@ export const state = {
   MAXRANK: 100,
   // みんなの日本語 dashboard scratchpad + the dedup overlays; replaced at boot.
   minnaStore: { notes: {}, lastLesson: null, overlays: {} },
+  // 独り言 Self-Talk: user-authored phrases + the practice/streak signal; replaced at boot.
+  selftalkStore: { phrases: [], practice: { lastDay: null, streak: 0, doneToday: [] } },
   // Built-in headword (jp) → rank, for Minna activation's dedup-onto-a-built-in path.
   BUILTIN_RANK_BY_JP: {},
 };

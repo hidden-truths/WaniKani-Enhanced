@@ -4,8 +4,9 @@
 //   GET /v1/progress/{app}   — fetch the saved blob (or null)
 //   PUT /v1/progress/{app}   — replace the saved blob
 //
-// `{app}` namespaces progress per study tool; today the only value is 'verbs'.
-// The stored blob is opaque to the server (z.any()); the client owns its shape.
+// `{app}` namespaces progress per surface (verbs / custom-verbs / settings / minna /
+// selftalk — see the enum below). The stored blob is opaque to the server (z.any());
+// the client owns its shape.
 
 import { OpenAPIHono, createRoute, z } from '@hono/zod-openapi';
 import * as db from '../db/client.ts';
@@ -28,7 +29,8 @@ const AppParamSchema = z.object({
         // 'custom-verbs' = the user's custom verb definitions (synced separately)
         // 'settings'     = the Settings-page preferences (synced separately)
         // 'minna'        = みんなの日本語 dashboard state (per-lesson notes / activation)
-        .enum(['verbs', 'custom-verbs', 'settings', 'minna'])
+        // 'selftalk'     = 独り言 Self-Talk: user-authored phrases + the practice/streak signal
+        .enum(['verbs', 'custom-verbs', 'settings', 'minna', 'selftalk'])
         .openapi({ param: { name: 'app', in: 'path' }, example: 'verbs' }),
 });
 
