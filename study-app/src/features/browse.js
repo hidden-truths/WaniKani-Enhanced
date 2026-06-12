@@ -109,8 +109,8 @@ export function openVerbDetail(v) {
     </div></details>
     ${v.custom ? `<div class="verb-actions"><button class="chip" id="dEdit" type="button"><svg class="ic" aria-hidden="true"><use href="#i-edit"/></svg>Edit</button><button class="chip" id="dDel" type="button" style="border-color:var(--godan);color:var(--godan)"><svg class="ic" aria-hidden="true"><use href="#i-trash"/></svg>Delete</button></div>` : ''}`;
   renderDetailExample();
-  const sp = document.getElementById('dSpeak'); if (sp) sp.addEventListener('click', () => speakWord(v));
-  const exsp = document.getElementById('dExSpeak'); if (exsp) exsp.addEventListener('click', () => speak(plainText(document.getElementById('dExJp').innerHTML)));
+  const sp = document.getElementById('dSpeak'); if (sp) sp.addEventListener('click', () => speakWord(v, 'browse'));
+  const exsp = document.getElementById('dExSpeak'); if (exsp) exsp.addEventListener('click', () => speak(plainText(document.getElementById('dExJp').innerHTML), 'browse'));
   const seg = document.getElementById('dExLevels'); if (seg) seg.addEventListener('click', e => { const b = e.target.closest('.exlv'); if (!b || b.disabled) return; detailLevel = b.dataset.exlv; renderDetailExample(); });
   if (v.custom) {
     const eb = document.getElementById('dEdit'), db = document.getElementById('dDel');
@@ -148,7 +148,7 @@ export function renderBrowse() {
       <div class="tags">${tiLabel ? `<span class="tag" style="color:var(--ichidan)">${tiLabel}</span>` : ''}${v.tags.filter(t => !t.startsWith('top') && t !== 'みんなの日本語' && !/^mnn-l\d+$/.test(t)).map(t => t === 'iTalki' ? `<span class="tag" style="color:var(--ichidan);border:1px solid var(--ichidan)">iTalki</span>` : `<span class="tag">${escapeHtml(t)}</span>`).join('')}</div>`;
     card.addEventListener('click', () => openVerbDetail(v));
     const sb = card.querySelector('.speak-btn');   // play reading without opening the modal
-    if (sb) sb.addEventListener('click', e => { e.stopPropagation(); speakWord(v); });
+    if (sb) sb.addEventListener('click', e => { e.stopPropagation(); speakWord(v, 'browse'); });
     grid.appendChild(card);
   });
   document.getElementById('num').textContent = shown;     // "Showing N of 100"

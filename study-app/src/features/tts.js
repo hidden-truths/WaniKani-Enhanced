@@ -3,8 +3,8 @@
 // speechSynthesis voices. It needs a server, so we only use it when the app is served over
 // http(s); over file:// (or if the request fails) we fall back to speechSynthesis. Audio is
 // available if EITHER path exists (TTS_OK gates the Audio UI).
-import { API_BASE } from '../config.js';
 import { ttsText } from '../core/index.js';
+import { playItem } from './audio.js';
 
 export const HTTP_SERVED = location.protocol === 'http:' || location.protocol === 'https:';
 export const SPEECH_OK = typeof window !== 'undefined' && 'speechSynthesis' in window;
@@ -30,24 +30,17 @@ export function speakSynth(text) {
     speechSynthesis.speak(u);
   } catch (e) {/* speech is best-effort; ignore */}
 }
-// Reused <audio> for the server path so a new play() interrupts the previous one.
-let ttsAudio = null;
-export function speak(text) {
+// speak()/speakWord() are now thin wrappers over the shared player (features/audio.js), which
+// resolves the text to a tagged voice VARIANT per the caller's CONTEXT (reviews/browse/minna) and
+// the user's per-context voice priority. The default context is 'browse' (the most generic). The
+// player owns the <audio> element + the synth fallback; over file:// (no HTTP_SERVED) it degrades
+// to speechSynthesis just like before.
+export function speak(text, context = 'browse', btn) {
   if (!text) return;
-  if (SPEECH_OK) try { speechSynthesis.cancel(); } catch (e) {}   // stop any in-flight synth
-  if (HTTP_SERVED) {
-    try {
-      if (!ttsAudio) ttsAudio = new Audio();
-      ttsAudio.src = API_BASE + '/v1/tts?text=' + encodeURIComponent(text);  // public; no crossorigin attr → cross-origin media loads fine
-      const p = ttsAudio.play();
-      if (p && p.catch) p.catch(() => speakSynth(text));         // network/format/autoplay fail → synth
-    } catch (e) { speakSynth(text); }
-  } else {
-    speakSynth(text);
-  }
+  playItem({ text }, context, btn);
 }
 // ttsText (the kanji-for-accent text picker) lives in core/text.js.
-export function speakWord(v) { speak(ttsText(v)); }
+export function speakWord(v, context = 'reviews', btn) { speak(ttsText(v), context, btn); }
 
 // Hide the audio affordances entirely only when NO audio path is available. DOM-touching,
 // so it's an init step (the elements must exist) rather than an import-time side effect.

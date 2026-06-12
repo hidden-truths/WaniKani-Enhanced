@@ -32,7 +32,7 @@ export function registerSessionHooks(h) {
 }
 
 // playReading reads the current card's reading aloud (server TTS via speakWord).
-function playReading() { if (session) speakWord(session.deck[session.i]); }
+function playReading() { if (session) speakWord(session.deck[session.i], 'reviews'); }
 
 export function startSession() {
   const deck = buildDeck();
@@ -198,7 +198,7 @@ export function initFlashcardUI() {
   // Play the example sentence — read the rendered JP at click time (so it follows the
   // chosen tier) and strip ruby to the plain text /v1/tts wants.
   const exSpeak = document.getElementById('exSpeak');
-  if (exSpeak) exSpeak.addEventListener('click', () => speak(plainText(document.getElementById('exJp').innerHTML)));
+  if (exSpeak) exSpeak.addEventListener('click', () => speak(plainText(document.getElementById('exJp').innerHTML), 'reviews'));
   // Pick a tier → remember it (synced setting) → re-render the current card's example.
   document.getElementById('exLevels').addEventListener('click', e => {
     const b = e.target.closest('.exlv'); if (!b || b.disabled) return;
