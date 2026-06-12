@@ -402,9 +402,12 @@ This is the priority. The items below are smaller and can follow.
   provider (e.g. **Forvo** native-speaker clips, keyed per word) is mostly a server resolver +
   a descriptor + a `provider→kind` entry, no client re-architecture. Would give a `native`-quality
   voice for the frequency/built-in decks that have no Minna recording.
-- **⑦ Token hygiene.** `settings.audioPrefs` stores raw tokens; if the token vocabulary ever changes,
-  prune unknown tokens on load so a stale synced blob can't wedge the resolver. (Not a problem today —
-  `resolveVariant` ignores unknown tokens — but worth a line when the palette grows.)
+- ~~**⑦ Token hygiene.**~~ **Shipped.** `settings.audioPrefs` is now pruned of unknown tokens on load
+  AND on cloud-pull (`normalizeSettings` → `pruneAudioPrefs` in [settings-store.js](src/settings-store.js)),
+  dropping any token a future/foreign palette wouldn't understand and dropping a context that empties
+  out (→ falls back to the default). Pure core fns `isKnownAudioToken`/`pruneAudioPrefs` in
+  [core/audio.js](src/core/audio.js), tested. (`resolveVariant` already ignored unknowns at play time;
+  this keeps the saved list + the Settings editor clean too.)
 - **Copy button polish (just shipped).** Optional extensions: a copy on conversation lines + vocab
   words too, and a modifier/long-press to copy the kana reading or the JP+EN pair. Today it copies
   the plain (kanji, ruby-stripped) sentence for dictionary lookup.

@@ -6,6 +6,7 @@
 // side-effects (furigana), and schedules a cloud push when signed in (via the sync bus).
 // (Theme + font keep their own keys — device-ish, not synced.)
 import { sync } from './sync-bus.js';
+import { pruneAudioPrefs } from './core/index.js';
 
 const SETTINGS_KEY = 'jpverbs_settings';
 // freeReviewDue: in FREE study, grading a card that's already DUE still advances its SRS
@@ -25,9 +26,16 @@ const SETTINGS_KEY = 'jpverbs_settings';
 // 'kind:user'). Empty/missing context → core/audio.js DEFAULT_AUDIO_PREFS. Synced.
 export const DEFAULT_SETTINGS = { exampleLevel: 'N5', furigana: true, input: 'self', audio: 'off', freeReviewDue: true, recordingsKeep: 3, trimSilence: true, compareSpeed: 1, audioPrefs: {} };
 
+// Drop unknown audioPrefs tokens (a stale/foreign synced blob) so they can't sit in the saved list
+// or the Settings editor. Mutates + returns the settings object.
+function normalizeSettings(s) {
+  if (s && typeof s === 'object') s.audioPrefs = pruneAudioPrefs(s.audioPrefs || {});
+  return s;
+}
+
 export function loadSettings() {
   let s = null; try { s = JSON.parse(localStorage.getItem(SETTINGS_KEY)); } catch (e) {}
-  if (s && typeof s === 'object') return Object.assign({}, DEFAULT_SETTINGS, s);
+  if (s && typeof s === 'object') return normalizeSettings(Object.assign({}, DEFAULT_SETTINGS, s));
   return Object.assign({}, DEFAULT_SETTINGS, {          // migrate legacy per-key prefs
     exampleLevel: localStorage.getItem('jpverbs_exlevel') || DEFAULT_SETTINGS.exampleLevel,
     input: localStorage.getItem('jpverbs_input') || DEFAULT_SETTINGS.input,
@@ -43,7 +51,7 @@ export let settings = loadSettings();
 // Wholesale replace — used by cloud's pullSettingsCloud (server-wins on login), the one
 // caller that needs to swap the object identity (to drop stale keys). Importers can read a
 // reassigned `export let` but never write it, so this setter is the cross-module hook.
-export function setSettings(next) { settings = next; }
+export function setSettings(next) { settings = normalizeSettings(next); }
 
 // Furigana visibility is a single attribute flip on <html> (CSS hides <rt> when off).
 export function applyFurigana() { document.documentElement.dataset.furigana = settings.furigana ? 'on' : 'off'; }

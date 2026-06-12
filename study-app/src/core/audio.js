@@ -42,6 +42,28 @@ export function parseAudioToken(token) {
   return { type: 'voice', voice: token };
 }
 
+// Is `token` a token the current palette understands — a known kind alias or a listed voice id?
+// resolveVariant already ignores unknowns at play time; this is for pruning a stale synced prefs
+// blob (token hygiene, follow-up ⑦) so an old/foreign token can't linger in the saved list + editor.
+export function isKnownAudioToken(token) {
+  const t = parseAudioToken(token);
+  if (!t) return false;
+  if (t.type === 'kind') return AUDIO_KINDS.includes(t.kind);
+  return AUDIO_VOICES.some((v) => v.id === t.voice);
+}
+// Prune unknown tokens from a per-context audioPrefs map: drops unknown tokens, and drops a context
+// that empties out (so it falls back to DEFAULT_AUDIO_PREFS). Pure — returns a new object; passes a
+// non-object through untouched.
+export function pruneAudioPrefs(prefs) {
+  if (!prefs || typeof prefs !== 'object') return prefs;
+  const out = {};
+  for (const ctx of Object.keys(prefs)) {
+    const list = Array.isArray(prefs[ctx]) ? prefs[ctx].filter(isKnownAudioToken) : [];
+    if (list.length) out[ctx] = list;
+  }
+  return out;
+}
+
 // Default priority per context (used until the user customizes a context). Reviews/browse lead with
 // a Siri voice then any synth; textbook leads with the native recording, then Siri, then any synth,
 // then the user's own take.

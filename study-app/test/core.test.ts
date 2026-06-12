@@ -19,7 +19,7 @@ import {
   validClip, resolveClip, clipLabel, findTrimBounds,
   waveformPeaks, clampSpeed, COMPARE_SPEEDS, rmsLevel, normGains,
   resolveVariant, parseAudioToken, contextPrefs, isSynthVoice, voiceProvider,
-  DEFAULT_AUDIO_PREFS, AUDIO_VOICES, variantOrder, variantIndex,
+  DEFAULT_AUDIO_PREFS, AUDIO_VOICES, variantOrder, variantIndex, isKnownAudioToken, pruneAudioPrefs,
 } from '../src/core/index.js';
 
 beforeEach(() => {
@@ -666,4 +666,22 @@ test('variantIndex finds a resolved variant by voice (synth) or kind (native/use
   expect(variantIndex(list, { kind: 'user' })).toBe(4);
   expect(variantIndex(list, { kind: 'tts', voice: 'nope' })).toBe(-1);
   expect(variantIndex(list, null)).toBe(-1);
+});
+
+// ---------- audio-unify ⑦: token hygiene ----------
+
+test('isKnownAudioToken accepts kinds + palette voices, rejects unknowns', () => {
+  ['kind:native', 'kind:tts', 'kind:user', 'native', 'user', 'siri:female', 'siri:male', 'google']
+    .forEach((t) => expect(isKnownAudioToken(t)).toBe(true));
+  ['forvo', 'kind:robot', 'siri:robot', '', null as any].forEach((t) => expect(isKnownAudioToken(t)).toBe(false));
+});
+
+test('pruneAudioPrefs drops unknown tokens and empties, keeps known order', () => {
+  expect(pruneAudioPrefs({
+    reviews: ['siri:female', 'forvo', 'kind:tts'],   // drop the unknown, keep order
+    browse: ['nope', 'kind:robot'],                  // empties out → context dropped
+    minna: ['kind:native', 'google'],
+  })).toEqual({ reviews: ['siri:female', 'kind:tts'], minna: ['kind:native', 'google'] });
+  expect(pruneAudioPrefs({})).toEqual({});
+  expect(pruneAudioPrefs(null as any)).toBe(null);
 });

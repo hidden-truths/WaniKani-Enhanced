@@ -202,7 +202,9 @@ audioPrefs:{<context>:[<token>…]} }` (the Settings page; migrated from the old
 jpverbs_exlevel/input/audio keys; `freeReviewDue` defaults on). `audioPrefs` is the audio-unify
 per-context voice priority — keyed by `reviews`/`browse`/`minna`, each an ordered list of tokens
 (a specific voice `siri:female` or a kind `kind:native`/`kind:tts`/`kind:user`); a missing/empty
-context falls back to `core/audio.js` `DEFAULT_AUDIO_PREFS`.
+context falls back to `core/audio.js` `DEFAULT_AUDIO_PREFS`. Unknown tokens are pruned on load +
+cloud-pull (`settings-store.js` `normalizeSettings` → `core/audio.js` `pruneAudioPrefs`) so a stale
+synced blob can't carry a foreign token into the editor/resolver.
 Minna state (`localStorage["jpverbs_minna"]`, synced as app `minna`):
 `{ notes:{<lesson>:string}, lastLesson:<n>, overlays:{<builtinRank>:{tags,italki,minnaLesson,minnaKey,accent?,tts?}} }`
 — the みんなの日本語 dashboard's per-lesson scratchpad PLUS the dedup overlays (Minna words
