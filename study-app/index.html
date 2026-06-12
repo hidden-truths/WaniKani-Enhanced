@@ -267,6 +267,7 @@
   <button class="tab" data-tab="browse"><svg class="ic" aria-hidden="true"><use href="#i-grid"/></svg>Browse</button>
   <button class="tab" data-tab="stats"><svg class="ic" aria-hidden="true"><use href="#i-chart"/></svg>Stats &amp; Leeches</button>
   <button class="tab" data-tab="minna"><svg class="ic" aria-hidden="true"><use href="#i-book"/></svg>みんなの日本語</button>
+  <button class="tab" data-tab="selftalk"><svg class="ic" aria-hidden="true"><use href="#i-mic"/></svg>独り言</button>
 </div>
 
 <div class="wrap">
@@ -635,6 +636,14 @@
     <div id="mnGate" class="mn-gate" hidden></div>
     <div id="mnHead" class="mn-head"></div>
     <div id="mnBody" class="mn-body"></div>
+  </div>
+
+  <!-- 独り言 Self-Talk: output/speaking practice. Offline-first (built-in phrases ship in
+       the bundle); #stHead holds the intro + grammar filter, #stBody the scene groups +
+       today's set, all rendered at runtime by renderSelftalk(). === -->
+  <div class="panel" id="panel-selftalk">
+    <div id="stHead" class="st-head"></div>
+    <div id="stBody" class="st-body"></div>
   </div>
 
 </div><!-- /.wrap -->

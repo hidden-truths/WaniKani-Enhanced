@@ -672,3 +672,29 @@
     .mn-kanji{font-size:18px}
     .mn-vocab td{padding:8px 5px}
   }
+
+  /* ---- 独り言 Self-Talk ---- */
+  .st-intro{margin:2px 0 16px}
+  .st-kicker{font-family:"SF Mono",ui-monospace,monospace;font-size:11px;letter-spacing:.14em;text-transform:uppercase;color:var(--godan);margin:0 0 4px}
+  .st-lede{font-family:Georgia,serif;font-size:14px;color:var(--muted);margin:0;max-width:60ch}
+  .st-section{border-top:1px solid var(--line)}
+  .st-section>summary{list-style:none;cursor:pointer;display:flex;align-items:center;gap:9px;padding:13px 2px;font-family:"SF Mono",ui-monospace,monospace;font-size:12px;letter-spacing:.08em;color:var(--ink)}
+  .st-section>summary::-webkit-details-marker{display:none}
+  .st-section>summary::after{content:"+";margin-left:auto;font-size:16px;line-height:1;color:var(--muted)}
+  .st-section[open]>summary::after{content:"−"}
+  .st-section>summary:hover{color:var(--godan)}
+  .st-count{font-size:11px;color:var(--muted);font-weight:normal}
+  .st-list{display:flex;flex-direction:column;gap:9px;padding:2px 0 14px}
+  .st-phrase{display:flex;gap:12px;align-items:flex-start;padding:11px 13px;border:1px solid var(--line);border-radius:10px;background:var(--paper-2)}
+  .st-play{margin-top:1px}
+  .st-phrase-text{flex:1;min-width:0}
+  .st-jp{font-size:19px;line-height:1.55}
+  .st-read{font-size:12px;color:var(--muted);margin-top:3px;font-family:var(--jp-font)}
+  .st-en{font-size:13.5px;color:var(--ink);opacity:.82;margin-top:4px;font-family:Georgia,serif}
+  .st-phrase-meta{display:flex;gap:6px;flex-wrap:wrap;align-items:center;margin-top:8px}
+  .st-tag{font-family:"SF Mono",ui-monospace,monospace;font-size:10px;letter-spacing:.04em;color:var(--muted);border:1px solid var(--line);border-radius:5px;padding:2px 6px}
+  .st-badge{font-family:"SF Mono",ui-monospace,monospace;font-size:10px;letter-spacing:.06em;text-transform:uppercase;color:var(--godan);border:1px solid color-mix(in srgb,var(--godan) 45%,transparent);border-radius:5px;padding:2px 6px}
+  .st-empty{font-family:Georgia,serif;color:var(--muted);padding:20px 2px}
+  @media (max-width:640px){
+    .st-jp{font-size:18px}
+  }
