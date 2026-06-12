@@ -11,7 +11,8 @@ order. The actual DOM/render/feature glue is split into **`src/features/*`** mod
   (export/import), `deck` (filter model + picker + forecast + due banner; owns `cfg`),
   `flashcard` (session lifecycle; owns `session`), `browse` (grid + detail modal + topic
   groups; owns `bcfg`), `stats` (charts), `custom-cards` (rebuildData + #verbModal CRUD),
-  `settings-page`, `minna` (the みんなの日本語 dashboard), `record-compare` (the generic
+  `settings-page`, `minna` (the みんなの日本語 dashboard), `selftalk` (the 独り言 Self-Talk
+  output/speaking-practice tab — see [SELFTALK.md](SELFTALK.md)), `record-compare` (the generic
   record-and-compare engine: MediaRecorder capture + take list + the reference/you/sequence/both
   compare player — fed by Minna AND Self-Talk), `a11y` (roving tabindex + chip
   annotations), `tts`, `audio` (the shared `playItem(item,context)` player — resolves an item to a
@@ -211,6 +212,11 @@ Minna state (`localStorage["jpverbs_minna"]`, synced as app `minna`):
 that map onto a built-in verb). Activated *new* Minna vocab is NOT here — it lives in
 `jpverbs_custom` as tagged cards; only built-in-overlap words live here (see the
 みんなの日本語 dead-end).
+Self-Talk state (`localStorage["jpverbs_selftalk"]`, synced as app `selftalk`):
+`{ phrases:[{id,jp,read,mean,scene,grammar,custom}…], practice:{lastDay,streak,doneToday} }`
+— the 独り言 tab's user-authored phrases (built-ins ship in `data/selftalk.js`, NOT here) + the
+practice/streak signal (output reps, not SRS). Separate from `custom-verbs` so non-card lines
+never enter the deck. See [SELFTALK.md](SELFTALK.md).
 Leveled examples (`examples.js`, NOT in localStorage — static data):
 `EXAMPLES[rank] = { N5:[jp,en], …, N1:[jp,en] }`.
 Pitch accents (`verbs.js`, static): `ACCENTS[rank] = <Tokyo accent number>` — backfilled
@@ -574,6 +580,22 @@ Component contracts you must preserve:
   `data/minna/lesson-<n>.json` (git-tracked, curated from the `scripts/scrape-minna.ts`
   draft). **Phase 2 — record-your-voice + compare to native audio — has SHIPPED (MVP).**
   **Full feature doc (architecture + data model + roadmap): [MINNA.md](MINNA.md).**
+- **独り言 Self-Talk (`selftalk.js`) is the OPPOSITE of Minna on gating, and reuses the
+  record-compare engine via a reserved partition.** It's **offline-first + anonymous** (built-in
+  phrases ship in the bundle; only *recording* needs an account) — don't add a Minna-style gate.
+  Recordings reuse the generic engine with a **reserved `SELFTALK_SCOPE = 90000`** (the engine's
+  `scope` → the server's opaque numeric `lesson` param; Minna uses 1–50) + a **synth-only reference**
+  (no native clip → ▶ reference is a Siri/Google voice from the phrase text, resolved with the
+  `selftalk` audio context). Don't reuse `90000` for a Minna lesson. **"Today's focus" is a FILTER,
+  not a duplicated section** — rendering today's set as its own group on top of the scene groups
+  would double each phrase's `.rec-control` for the same `(scope,itemKey)`; keep it a toggle that
+  narrows `visiblePhrases()`. The **speaking-mode singletons + `setOnTakeSaved` hook are shared
+  module-global** with Minna: only one tab is active at a time, both leave-hooks call the idempotent
+  `exitSpeakingMode`, the `visibilitychange` handler is **guarded on `#panel-selftalk` being active**
+  (so it doesn't fight Minna's), and the take-saved hook is **filtered to `SELFTALK_SCOPE`** (so a
+  Minna take can't mark Self-Talk practice). Phrases carry **no `accent`** — sentence-level pitch is
+  meaningless (`pitchHtml` is per-word); the furigana + synth prosody carry the reading. Full doc:
+  [SELFTALK.md](SELFTALK.md).
 - **Record-and-compare (`record-compare.js`, the generic engine; Minna + Self-Talk glue feed it):
   the conversation has ONE whole-dialogue MP3, so
   per-line native compare slices it — it does NOT have per-line audio.** A line's native

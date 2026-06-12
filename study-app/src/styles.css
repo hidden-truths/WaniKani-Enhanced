@@ -701,6 +701,16 @@
   .st-edit .ic{font-size:16px}
   .st-gram-checks{display:flex;flex-wrap:wrap;gap:8px 14px;margin-top:4px}
   .st-gram-check{display:inline-flex;align-items:center;gap:6px;font-family:Georgia,serif;font-size:13px;color:var(--ink);cursor:pointer}
+  .st-streak-row{margin-top:11px;display:flex;align-items:center;gap:12px;flex-wrap:wrap}
+  .st-streak{display:inline-flex;align-items:center;gap:6px;font-family:"SF Mono",ui-monospace,monospace;font-size:12px;letter-spacing:.04em;color:var(--good);border:1px solid color-mix(in srgb,var(--good) 40%,transparent);border-radius:6px;padding:3px 9px}
+  .st-streak .ic{font-size:14px}
+  .st-today-count,.st-streak-hint{font-family:Georgia,serif;font-size:13px;color:var(--muted)}
+  .st-bottom{display:flex;flex-direction:column;align-items:flex-start;gap:9px;margin-top:9px}
+  .st-mark{background:none;border:1px solid var(--line);border-radius:7px;font-family:"SF Mono",ui-monospace,monospace;font-size:11px;color:var(--muted);padding:4px 9px;cursor:pointer;transition:all .15s}
+  .st-mark:hover{color:var(--good);border-color:color-mix(in srgb,var(--good) 45%,transparent)}
+  .st-done{display:inline-flex;align-items:center;gap:5px;font-family:"SF Mono",ui-monospace,monospace;font-size:11px;color:var(--good)}
+  .st-done .ic{font-size:13px}
+  .st-phrase.practiced{border-color:color-mix(in srgb,var(--good) 35%,var(--line))}
   @media (max-width:640px){
     .st-jp{font-size:18px}
   }

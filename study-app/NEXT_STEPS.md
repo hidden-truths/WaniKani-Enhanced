@@ -152,6 +152,19 @@ build/test setup, and its own deploy.**
 This is the priority. The items below are smaller and can follow.
 
 ## Done (most recent first)
+- ~~独り言 Self-Talk tab (output/speaking practice)~~ — **shipped** (`self-talk`, 7 commits). A 5th
+  tab for narrating your day out loud. Built-in, **offline-first** starter phrases (7 scenes ×
+  ~6–7 lines, model-authored → proofread) + **author-your-own** lines that sync under a new
+  `selftalk` app key. Each phrase: ruby furigana, English, grammar tags, a ▶ play (unified player,
+  new **`selftalk`** voice-priority context), and — in speaking mode — **record + compare against a
+  reference voice** by reusing the now-generic record-and-compare engine (`minna-record.js` →
+  `record-compare.js`, `lesson`→`scope`, parameterized audio-context) with a reserved
+  `SELFTALK_SCOPE` partition + synth-only references. Structure: scene groups + a `localDay()`-keyed
+  "Today's focus" filter + a grammar-tier filter. A lightweight **streak + "said today"** signal
+  (pure `core/selftalk.js`), marked by a ✓ button or by saving a take. Mic auto-releases on tab
+  switch + browser-tab hide. Full doc: [SELFTALK.md](SELFTALK.md). 7 new core tests (72 total).
+  **TODO (optional):** add the phrases to the `generate-tts.ts` pre-gen corpus so the Siri reference
+  is instant (first play Google-synths + caches regardless).
 - ~~Audio-unify Phases 1 + 2 + UI fixes~~ — **shipped** (`minna-audio-unify`, ~13 commits).
   **Phase 1 (server):** a unified `/v1/audio` route group (`tts`/`native`/`recordings`/`variants`)
   with the legacy `/v1/tts` + `/v1/minna/*` audio paths kept as same-handler aliases; a tagged
