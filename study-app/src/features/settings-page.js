@@ -3,7 +3,7 @@
 // from `settings` and is also called after a cloud pull.
 import { settings, saveSettings } from '../settings-store.js';
 import { clampKeep, escapeHtml, AUDIO_CONTEXTS, AUDIO_CONTEXT_LABELS, AUDIO_KIND_LABELS, DEFAULT_AUDIO_PREFS, parseAudioToken, voiceLabel, isSynthVoice, resolveVariant } from '../core/index.js';
-import { previewVoice, PREVIEW_SAMPLE } from './audio.js';
+import { previewVoice, PREVIEW_SAMPLE, fetchAvailableVoices } from './audio.js';
 import { paintPrefChips } from './deck.js';
 import { session, renderExample } from './flashcard.js';
 import { account } from './cloud-core.js';
@@ -20,6 +20,21 @@ function tokenLabel(token) {
   return t.type === 'kind' ? (AUDIO_KIND_LABELS[t.kind] || t.kind) : voiceLabel(t.voice);
 }
 function listFor(ctx) { const p = settings.audioPrefs && settings.audioPrefs[ctx]; return Array.isArray(p) && p.length ? p.slice() : DEFAULT_AUDIO_PREFS[ctx].slice(); }
+// Availability hinting (④): the set of synth voice ids the server has pre-generated, loaded once and
+// cached. null = not loaded / unknown (fail open: no dimming). A specific synth voice token absent
+// from the set is annotated "not generated yet" — it would fall through to the Google clip.
+let availVoices = null, availTried = false;
+function ensureAvailVoices() {
+  if (availTried) return;
+  availTried = true;
+  fetchAvailableVoices().then((set) => { if (set) { availVoices = set; renderVoicePrefs(); } });
+}
+// True when `token` names a specific synth voice that the server hasn't pre-generated yet.
+function isUngenerated(token) {
+  if (!availVoices) return false;   // unknown → don't dim
+  const t = parseAudioToken(token);
+  return !!(t && t.type === 'voice' && isSynthVoice(t.voice) && !availVoices.has(t.voice));
+}
 // Which concrete synth voice a row's ▶ should audition, or null when the row has no sample (native /
 // user — those depend on a specific recorded word, not the sample). A specific synth voice previews
 // itself; 'kind:tts' (Synthesized-any) previews the synth voice this context actually resolves to.
@@ -36,6 +51,7 @@ function resetCtx(ctx) { if (settings.audioPrefs) delete settings.audioPrefs[ctx
 function renderVoicePrefs() {
   const root = document.getElementById('setVoices');
   if (!root) return;
+  ensureAvailVoices();
   root.innerHTML = AUDIO_CONTEXTS.map((ctx) => {
     const list = listFor(ctx);
     const custom = !!(settings.audioPrefs && settings.audioPrefs[ctx]);
@@ -44,8 +60,10 @@ function renderVoicePrefs() {
       const preview = pv
         ? `<button class="voice-op voice-preview" type="button" data-prev="${pv}" aria-label="Preview ${escapeHtml(tokenLabel(tok))}" title="Preview ${escapeHtml(tokenLabel(tok))} (${escapeHtml(PREVIEW_SAMPLE)})">▶</button>`
         : `<button class="voice-op voice-preview" type="button" disabled aria-label="No sample to preview" title="No sample for this kind — it depends on the specific word">▶</button>`;
-      return `<li class="voice-item">
-        <span class="voice-left">${preview}<span class="voice-tok">${escapeHtml(tokenLabel(tok))}</span></span>
+      const ungen = isUngenerated(tok);
+      const note = ungen ? `<span class="voice-note" title="Not pre-generated yet — plays the Google fallback until generated">· not generated</span>` : '';
+      return `<li class="voice-item${ungen ? ' voice-ungen' : ''}">
+        <span class="voice-left">${preview}<span class="voice-tok">${escapeHtml(tokenLabel(tok))}</span>${note}</span>
         <span class="voice-ops">
           <button class="voice-op" type="button" data-op="up" data-ctx="${ctx}" data-i="${i}" aria-label="Move up"${i === 0 ? ' disabled' : ''}>▲</button>
           <button class="voice-op" type="button" data-op="down" data-ctx="${ctx}" data-i="${i}" aria-label="Move down"${i === list.length - 1 ? ' disabled' : ''}>▼</button>
@@ -55,7 +73,7 @@ function renderVoicePrefs() {
     const remaining = VOICE_TOKENS.filter((t) => !list.includes(t));
     const addSel = remaining.length ? `<select class="voice-add" data-ctx="${ctx}" aria-label="Add a voice to ${AUDIO_CONTEXT_LABELS[ctx]}">
         <option value="">+ add a voice…</option>
-        ${remaining.map((t) => `<option value="${t}">${escapeHtml(tokenLabel(t))}</option>`).join('')}
+        ${remaining.map((t) => `<option value="${t}">${escapeHtml(tokenLabel(t))}${isUngenerated(t) ? ' — not generated' : ''}</option>`).join('')}
       </select>` : '';
     return `<div class="voice-ctx" data-ctx="${ctx}">
         <div class="voice-ctx-head"><span class="voice-ctx-name">${escapeHtml(AUDIO_CONTEXT_LABELS[ctx])}</span>${custom ? `<button class="voice-reset" type="button" data-reset="${ctx}">Reset</button>` : ''}</div>
@@ -104,7 +122,7 @@ export function renderSettings() {
   const foot = document.getElementById('settingsFoot');
   if (foot) foot.textContent = account ? ('Synced to ' + account.email) : 'Sign in to sync these across your devices.';
 }
-function openSettings() { renderSettings(); document.getElementById('settingsModal').classList.add('show'); }
+function openSettings() { availTried = false; renderSettings(); document.getElementById('settingsModal').classList.add('show'); }
 function closeSettings() { document.getElementById('settingsModal').classList.remove('show'); }
 
 export function initSettingsPage() {

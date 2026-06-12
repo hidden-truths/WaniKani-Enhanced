@@ -417,7 +417,9 @@ Component contracts you must preserve:
   passed by every play handler) walks that item's `variantOrder(available)` (pure, core/audio.js:
   native → each synth voice → user) via a module-level per-item cursor seeded at the resolver's
   default, so the click steps to the *next* voice and the button `title` names it. Preview + cycle are
-  the two places playback bypasses `resolveVariant`'s default pick. **Phase 3 (not yet done):** generalize the
+  the two places playback bypasses `resolveVariant`'s default pick. The editor also dims synth voices
+  the server hasn't pre-generated (④): `fetchAvailableVoices` (features/audio.js) reads
+  `/v1/audio/variants` once per modal-open and the picker annotates "· not generated" (fails open). **Phase 3 (not yet done):** generalize the
   record-compare "▶ native" into "▶ reference" against any chosen voice. Follow-ups (preview, per-item
   cycle, availability hinting, Phase 3) are tracked in [NEXT_STEPS.md](NEXT_STEPS.md). See
   [NEXT_AUDIO_UNIFY.md](NEXT_AUDIO_UNIFY.md).

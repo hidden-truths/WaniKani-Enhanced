@@ -62,6 +62,20 @@ function fallback(chosen, item) {
 // A sample word for auditioning a voice in Settings (the Voice-priority editor's ▶ buttons).
 export const PREVIEW_SAMPLE = '食べる';
 
+// Which SPECIFIC synth voices the server has actually pre-generated, as a Set of voice ids (for the
+// picker's availability hinting, follow-up ④). The /v1/audio/variants catalog lists the manifest's
+// real clips (Siri male/female once generated) + an always-available `google`; a palette voice
+// absent here isn't generated yet (it would fall through to the Google clip). Public endpoint, no
+// credentials. Returns null on any failure so the caller FAILS OPEN (no dimming when we can't tell).
+export async function fetchAvailableVoices(text = PREVIEW_SAMPLE) {
+  try {
+    const r = await fetch(API_BASE + '/v1/audio/variants?text=' + encodeURIComponent(text));
+    if (!r.ok) return null;
+    const j = await r.json();
+    return new Set((j.variants || []).filter((v) => v.available !== false).map((v) => v.id));
+  } catch (e) { return null; }
+}
+
 // Audition a SPECIFIC synth voice on the sample word, bypassing the resolver — the Settings
 // voice-priority editor uses this so the user can hear exactly the voice they're ordering. (Native /
 // user kinds have no sample for an arbitrary word, so the editor only calls this for synth voices.)

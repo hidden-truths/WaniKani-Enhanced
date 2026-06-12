@@ -42,7 +42,9 @@ conversation line) resolves to MULTIPLE tagged voice VARIANTS the user can pick 
 > voice** — each Voice-priority row has a ▶ auditioning 食べる through that exact variant
 > (`previewVoice` in [src/features/audio.js](src/features/audio.js)); **③ Per-item voice cycle** —
 > Alt/Shift-click any play button cycles that item's voices (`variantOrder`/`variantIndex` in
-> [src/core/audio.js](src/core/audio.js); `cycleMod` + the cursor in `features/audio.js`).
+> [src/core/audio.js](src/core/audio.js); `cycleMod` + the cursor in `features/audio.js`);
+> **④ Availability hinting** — the editor queries `/v1/audio/variants` and dims synth voices that
+> aren't pre-generated yet (`fetchAvailableVoices`), so ① is visible in the UI.
 >
 > The variant-descriptor shape, key schema, preference model, and verification steps are in the
 > approved plan; the sections below are the original brief, kept for reference.

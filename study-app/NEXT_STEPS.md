@@ -383,9 +383,13 @@ This is the priority. The items below are smaller and can follow.
   `variantOrder`/`variantIndex`; `features/audio.js` holds the per-item cursor + `cycleMod(e)`; the
   button's `title` surfaces the current voice + the hint. (Modifier-click chosen over a separate ⟳
   button to avoid cluttering dense surfaces.)
-- **④ Picker availability hinting.** Have the picker query `GET /v1/audio/variants` and dim/annotate
-  specific synth voices that aren't pre-generated yet (today the list is static and relies on the
-  server's silent fall-through). Makes ① visible in the UI.
+- ~~**④ Picker availability hinting.**~~ **Shipped.** The Voice-priority editor queries
+  `GET /v1/audio/variants?text=食べる` once per modal-open and dims + annotates ("· not generated")
+  any specific synth voice the server hasn't pre-generated (today both siri:* until ① runs; google
+  is always available). Fails open — no dimming when the catalog can't be reached. `fetchAvailableVoices`
+  in [src/features/audio.js](src/features/audio.js); the hinting + add-dropdown annotation in
+  settings-page.js. Makes ① visible: after the operator generates the Siri clips, reopen Settings and
+  the dimming clears.
 - **⑤ Phase 3 — compare against any voice.** Generalize the record-and-compare "▶ native" into
   "▶ reference" (Siri/Google/native) via the same resolver, reusing the existing windowing/
   normalization in `minna-record.js`. (Tracked in [NEXT_AUDIO_UNIFY.md](NEXT_AUDIO_UNIFY.md).)
