@@ -19,11 +19,12 @@ export function applyMinnaOverlays(builtins) {
     const o = ov[v.rank]; if (!o) return v;
     const tags = [...(v.tags || [])]; (o.tags || []).forEach(t => { if (!tags.includes(t)) tags.push(t); });
     return Object.assign({}, v, { tags, minna: true, italki: !!o.italki, minnaKey: o.minnaKey, minnaLesson: o.minnaLesson },
-      o.accent != null ? { accent: o.accent } : {}, o.tts ? { tts: o.tts } : {});
+      o.accent != null ? { accent: o.accent } : {}, o.tts ? { tts: o.tts } : {}, o.audio ? { audio: o.audio } : {});
   });
 }
 
 // Signature of everything a re-activation can change — tags + iTalki flag AND the generated
-// content (accent / mnemonic / tip / leveled examples). Including content is what lets
-// "Update N words" appear when a card predates content added to the lesson.
-export const minnaSig = v => (v.tags || []).join('|') + '·i' + (v.italki ? 1 : 0) + '·a' + (v.accent ?? '') + '·m' + (v.mnem || '') + '·t' + (v.tip || '') + '·L' + (v.levels ? JSON.stringify(v.levels) : '');
+// content (accent / mnemonic / tip / leveled examples / native-audio src). Including content is what
+// lets "Update N words" appear when a card predates content added to the lesson (e.g. the native
+// audio src, which older activated cards lack until re-activated).
+export const minnaSig = v => (v.tags || []).join('|') + '·i' + (v.italki ? 1 : 0) + '·a' + (v.accent ?? '') + '·m' + (v.mnem || '') + '·t' + (v.tip || '') + '·L' + (v.levels ? JSON.stringify(v.levels) : '') + '·au' + (v.audio || '');

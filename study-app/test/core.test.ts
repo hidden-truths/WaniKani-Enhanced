@@ -308,11 +308,15 @@ test('plainText strips ruby back to the base sentence (TTS / key sync)', () => {
 test("minnaSig reflects content (accent/mnem/tip/levels), not just tags", () => {
   const base = { tags: ['みんなの日本語', 'mnn-l23', 'iTalki'], italki: true };
   const bare = { ...base };
-  const withContent = { ...base, accent: 2, mnem: 'hook', tip: 'trap', levels: { N5: ['a', 'b'] } };
+  const withContent = { ...base, accent: 2, mnem: 'hook', tip: 'trap', levels: { N5: ['a', 'b'] }, audio: '/Audio/x.mp3' };
   expect(minnaSig(bare)).not.toBe(minnaSig(withContent));
   expect(minnaSig(withContent)).not.toBe(minnaSig({ ...withContent, accent: 1 }));
   expect(minnaSig(withContent)).not.toBe(minnaSig({ ...withContent, mnem: 'other' }));
   expect(minnaSig(withContent)).not.toBe(minnaSig({ ...withContent, levels: { N5: ['a', 'c'] } }));
+  // The native-audio src is part of the signature, so a card gaining/losing it reads as "updated"
+  // (older activated cards lack `audio` until re-activated → they surface in "Update N words").
+  expect(minnaSig(withContent)).not.toBe(minnaSig({ ...withContent, audio: '/Audio/other.mp3' }));
+  expect(minnaSig(withContent)).not.toBe(minnaSig({ ...withContent, audio: '' }));
   expect(minnaSig(withContent)).toBe(minnaSig({ ...withContent }));
 });
 
@@ -328,7 +332,7 @@ test('minnaBuiltinRank detects when a Minna word already exists as a built-in ve
 test('applyMinnaOverlays merges Minna provenance onto the matching built-in (no duplicate)', () => {
   const kiku = state.DATA.find((v: any) => v.jp === '聞く')!;
   state.minnaStore = { notes: {}, lastLesson: 23, overlays: {
-    [kiku.rank]: { tags: ['みんなの日本語', 'mnn-l23', 'iTalki'], italki: true, minnaLesson: 23, minnaKey: 'mnn:23:0', accent: 0 },
+    [kiku.rank]: { tags: ['みんなの日本語', 'mnn-l23', 'iTalki'], italki: true, minnaLesson: 23, minnaKey: 'mnn:23:0', accent: 0, audio: '/Audio/kiku.mp3' },
   } };
   const builtins = state.DATA.filter((v: any) => v.rank <= 100);
   const merged = applyMinnaOverlays(builtins);
@@ -337,6 +341,7 @@ test('applyMinnaOverlays merges Minna provenance onto the matching built-in (no 
   expect(k.italki).toBe(true);
   expect(k.minnaKey).toBe('mnn:23:0');
   expect(k.accent).toBe(0);
+  expect(k.audio).toBe('/Audio/kiku.mp3');   // native src merged → 'native' variant in Browse/reviews
   expect(k.tags).toContain('みんなの日本語');
   expect(k.tags).toContain('speaking');
   expect(merged.filter((v: any) => v.jp === '聞く').length).toBe(1);
@@ -643,6 +648,16 @@ test('resolveVariant falls back to anything available, then null', () => {
   expect(resolveVariant('minna', { tts: false, native: true, user: false }, { minna: ['kind:user'] }))
     .toEqual({ kind: 'native' });
   expect(resolveVariant('reviews', { tts: false, native: false, user: false }, {})).toBeNull();
+});
+
+test('resolveVariant: Browse "native first" plays native for a Minna card, synth when no native', () => {
+  // The reported bug: setting Browse → native first did nothing for Minna cards (e.g. 交差点)
+  // because the card offered no `native` variant outside the みんなの日本語 tab. With the deck card
+  // now carrying its native src (speakWord passes { text, native }), a Minna card resolves to
+  // native; a plain built-in (no native src) still falls through to the synth voice.
+  const prefs = { browse: ['kind:native', 'kind:tts'] };
+  expect(resolveVariant('browse', { tts: true, native: true, user: false }, prefs)).toEqual({ kind: 'native' });
+  expect(resolveVariant('browse', { tts: true, native: false, user: false }, prefs)).toEqual({ kind: 'tts', voice: 'google' });
 });
 
 test('AUDIO_VOICES palette includes both Siri genders + Google', () => {
