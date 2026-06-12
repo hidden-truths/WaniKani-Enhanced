@@ -152,6 +152,17 @@ build/test setup, and its own deploy.**
 This is the priority. The items below are smaller and can follow.
 
 ## Done (most recent first)
+- ~~Audio-unify Phases 1 + 2 + UI fixes~~ — **shipped** (`minna-audio-unify`, ~13 commits).
+  **Phase 1 (server):** a unified `/v1/audio` route group (`tts`/`native`/`recordings`/`variants`)
+  with the legacy `/v1/tts` + `/v1/minna/*` audio paths kept as same-handler aliases; a tagged
+  voice-clip key scheme (`audio/<provider>/<gender>/<hash>`) + `audio_variants` manifest; the
+  3-tier TTS resolver factored into `resolveTts(text, voice?)`; `generate-tts.ts --variant` for
+  dual-gender Siri pre-gen. **Phase 2 (client):** pure `core/audio.js` `resolveVariant` (per-context
+  priority of specific-voice-or-kind) + the shared `playItem(item, context)` player (public synth vs
+  credentialed native/take by a `gated` flag) + a per-context Voice-priority editor in Settings;
+  flashcards/Browse/Minna all routed through it. **UI fixes:** Settings modal now bounds + scrolls
+  (sticky ×); a copy-sentence button beside each example's ▶ play. Full status + remaining Phase 3 /
+  ideas: [NEXT_AUDIO_UNIFY.md](NEXT_AUDIO_UNIFY.md) + the Ideas section below.
 - ~~Minna furigana + local TTS pre-generation + native-audio prefetch~~ — **shipped** (6 commits
   on `minna-phase2-record-compare`). (1) **Furigana** on the Minna grammar/lesson/conversation
   sentences (L22–24, 79 sentences): a `rubyHtml()` sanitizer renders curated `<ruby>` while
@@ -345,10 +356,43 @@ This is the priority. The items below are smaller and can follow.
   "What's deliberately NOT in v1."
 
 ## Ideas / not yet scoped
-- **Unify voice-audio sourcing behind one tagged API** (planned next — full brief +
-  design questions in [NEXT_AUDIO_UNIFY.md](NEXT_AUDIO_UNIFY.md)). One catalog of tagged
-  voice variants per item (Siri male/female, Google, the user's own takes, Minna native),
-  collapsing today's three separate audio paths (`/v1/tts`, `/v1/minna/audio`, recordings).
+- **Unify voice-audio sourcing behind one tagged API** — **Phases 1 + 2 SHIPPED** (see Done /
+  [NEXT_AUDIO_UNIFY.md](NEXT_AUDIO_UNIFY.md)): a unified `/v1/audio` surface, a tagged-variant
+  catalog, the `core/audio.js` resolver + shared `playItem` player, and a per-context voice picker.
+  Follow-ups + my suggestions below.
+
+### Audio-unify — follow-ups & ideas (priority-ordered)
+- **① Actually generate the Siri voices (operator step — do this first).** The picker offers
+  Siri male/female, but until the clips exist every "tts" request falls through to the default/
+  Google voice, so the picker is functionally Google-only. Run the two-pass workflow on the Mac:
+  set System Voice → a Japanese Siri **male** voice, `bun scripts/generate-tts.ts --variant siri:male`;
+  flip to **female**, `--variant siri:female`. Then re-seed prod (S3 env **and** prod `DATABASE_FILE`
+  so the `audio_variants` rows land where prod reads them). This is the highest-leverage next action —
+  it's what makes the whole feature audible.
+- **② "Preview voice" in the Settings picker.** Each token/voice row should have a ▶ that plays a
+  sample word (e.g. 食べる) through that exact variant, so users can *hear* what they're ordering
+  instead of guessing. Small change (reuse `playItem` with a one-off item + a forced voice), big
+  usability win — and it doubles as a quick "is this Siri voice generated yet?" check.
+- **③ Per-item voice cycle/override.** The original brief wanted per-item override on top of the
+  global per-context default — a tiny "try another voice" affordance next to a play button that
+  cycles the item's available variants for that one playback. Not yet built (we shipped the global
+  per-context priority only).
+- **④ Picker availability hinting.** Have the picker query `GET /v1/audio/variants` and dim/annotate
+  specific synth voices that aren't pre-generated yet (today the list is static and relies on the
+  server's silent fall-through). Makes ① visible in the UI.
+- **⑤ Phase 3 — compare against any voice.** Generalize the record-and-compare "▶ native" into
+  "▶ reference" (Siri/Google/native) via the same resolver, reusing the existing windowing/
+  normalization in `minna-record.js`. (Tracked in [NEXT_AUDIO_UNIFY.md](NEXT_AUDIO_UNIFY.md).)
+- **⑥ Add a real human-pronunciation provider.** The variant model is now extensible — a new
+  provider (e.g. **Forvo** native-speaker clips, keyed per word) is mostly a server resolver +
+  a descriptor + a `provider→kind` entry, no client re-architecture. Would give a `native`-quality
+  voice for the frequency/built-in decks that have no Minna recording.
+- **⑦ Token hygiene.** `settings.audioPrefs` stores raw tokens; if the token vocabulary ever changes,
+  prune unknown tokens on load so a stale synced blob can't wedge the resolver. (Not a problem today —
+  `resolveVariant` ignores unknown tokens — but worth a line when the palette grows.)
+- **Copy button polish (just shipped).** Optional extensions: a copy on conversation lines + vocab
+  words too, and a modifier/long-press to copy the kana reading or the JP+EN pair. Today it copies
+  the plain (kanji, ruby-stripped) sentence for dictionary lookup.
 - **Close the custom-card completeness gap.** The "Add card" modal sets every field
   EXCEPT `levels` (the 5 N5→N1 tiers) and `accent` (pitch), so a UI-created card isn't a
   *complete* card (see [CARDS.md](CARDS.md) "the custom-card gap"). Add a leveled-example

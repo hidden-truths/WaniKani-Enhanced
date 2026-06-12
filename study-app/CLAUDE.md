@@ -18,6 +18,8 @@ order. The actual DOM/render/feature glue is split into **`src/features/*`** mod
   tagged voice variant + routes public-vs-credentialed `<audio>` by `gated`), `render-helpers`
   (shared `jishoUrl`/`provenanceBadge`), and the cloud
   pair `cloud-core` (`api`/`account`/`setSyncStatus`) + `cloud` (sync trios + auth + bootAuth).
+  `render-helpers` also owns `copyBtnHtml`/`copyText` — the "copy sentence to clipboard" button
+  beside each example's ▶ play (flashcard answer, Browse detail, Minna example rows).
 - **`src/core/`** — the PURE, unit-tested core (DOM-free): `srs`, `forecast`, `facets`,
   `examples`, `kana`, `pitch`, `text`, `minna`, `audio` (the per-context voice-priority
   `resolveVariant`), behind a barrel `core/index.js`.
@@ -253,6 +255,11 @@ Component contracts you must preserve:
   (max-height transition; a `· N` badge counts active chips inside).
 - **Icons:** `<svg class="ic"><use href="#i-NAME"/></svg>` referencing the inline
   `<symbol>` sprite at the top of `<body>`. `.ic` inherits `currentColor` + `1em`.
+- **Modals scroll, they don't overflow the viewport.** `.modal` caps at `calc(100vh - 40px)` with
+  `overflow-y:auto` (the overlay's 20px×2 padding); its `.modal-x` close button is `position:sticky`
+  + `float:right` so it stays pinned top-right while the body scrolls (don't revert it to plain
+  `absolute` — a tall modal like Settings would scroll the × out of reach). Add long modal content
+  freely; it just scrolls.
 - **Sticky navbar (`.navbar` / `.nav-inner`)** is the anchored top bar: title (left), the
   `#navExtra` slot (a context-controls dock — `minna.js` fills it with the speaking/compare bar,
   empties it on tab-leave), and `.nav-actions` (right) — theme + settings are `.nav-btn.icon-only`
