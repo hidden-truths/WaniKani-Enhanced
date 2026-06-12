@@ -242,9 +242,12 @@ cd /opt/wk-enhanced-api/wk-enhanced-api
 # Reuses the `api` service's env_file + DB bind-mount (so DATABASE_FILE already points at the
 # prod sqlite), but runs the script from the HOST repo checkout mounted at /repo — the runtime
 # image deliberately ships only src/+data/, NOT scripts/ or study-app/, which the seed needs.
-# DATA_DIR MUST be set the same way the systemd unit sets it (the compose DATA_DIR gotcha) or the
-# bind mount falls back to ./.compose-data and you'd seed the wrong file.
-DATA_DIR=/var/lib/wk-enhanced-api docker compose run --rm --no-deps \
+# BOTH ENV_FILE and DATA_DIR MUST be set the same way the systemd unit's Environment= directives
+# set them (the compose ENV_FILE/DATA_DIR gotcha) — a manual `docker compose` invocation doesn't
+# inherit them, so env_file falls back to ./.env (which doesn't exist on prod → "env file … not
+# found") and the bind mount falls back to ./.compose-data (you'd seed the wrong file).
+ENV_FILE=/etc/wk-enhanced-api/env DATA_DIR=/var/lib/wk-enhanced-api \
+  docker compose run --rm --no-deps \
   -v /opt/wk-enhanced-api:/repo -w /repo/wk-enhanced-api \
   api bun scripts/seed-sentences.ts
 # → "seeded 44 Self-Talk built-in phrases into the sentence store". Idempotent: safe to re-run.
