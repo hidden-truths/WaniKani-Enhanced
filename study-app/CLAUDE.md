@@ -410,8 +410,13 @@ Component contracts you must preserve:
   priority (specific voices or kinds); the server falls through to the default clip when a chosen
   voice isn't pre-generated, so naming `siri:female` is always safe. Errors cascade (gated → synth →
   speechSynthesis). In Minna the vocab word button offers the full native/synth/your-take catalog;
-  the conversation button is native-only. **Phase 3 (not yet done):** generalize the record-compare
-  "▶ native" into "▶ reference" against any chosen voice. See [NEXT_AUDIO_UNIFY.md](NEXT_AUDIO_UNIFY.md).
+  the conversation button is native-only. The Settings Voice-priority editor's per-row ▶ auditions a
+  voice via `previewVoice(voiceId, btn)` (also [features/audio.js](src/features/audio.js)), which
+  forces a specific synth voice on the sample word (`PREVIEW_SAMPLE`, 食べる) PAST the resolver — the
+  one place playback bypasses `resolveVariant`. **Phase 3 (not yet done):** generalize the
+  record-compare "▶ native" into "▶ reference" against any chosen voice. Follow-ups (preview, per-item
+  cycle, availability hinting, Phase 3) are tracked in [NEXT_STEPS.md](NEXT_STEPS.md). See
+  [NEXT_AUDIO_UNIFY.md](NEXT_AUDIO_UNIFY.md).
 - **TTS prefers the server's Google proxy, falls back to Web Speech.** The synth tier of the player
   above: `speak()` ultimately
   plays `/v1/audio/tts?text=<reading>&voice=<chosen>` (legacy `/v1/tts` still works) via a reused

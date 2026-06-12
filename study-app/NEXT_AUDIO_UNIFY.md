@@ -37,6 +37,11 @@ conversation line) resolves to MULTIPLE tagged voice VARIANTS the user can pick 
 > windowing/normalization machinery in `features/minna-record.js`. Optional polish: have the picker
 > query `/v1/audio/variants` to gray out specific synth voices that aren't pre-generated yet.
 >
+> **Follow-ups (branch `audio-followups`):** the ①–⑦ list lives in
+> [NEXT_STEPS.md](NEXT_STEPS.md) "Audio-unify — follow-ups & ideas". Done so far: **② Preview
+> voice** — each Voice-priority row has a ▶ auditioning 食べる through that exact variant
+> (`previewVoice` in [src/features/audio.js](src/features/audio.js)).
+>
 > The variant-descriptor shape, key schema, preference model, and verification steps are in the
 > approved plan; the sections below are the original brief, kept for reference.
 

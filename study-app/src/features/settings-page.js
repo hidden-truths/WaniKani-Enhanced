@@ -2,7 +2,8 @@
 // applies furigana, and schedules a cloud push). renderSettings() paints the active chips
 // from `settings` and is also called after a cloud pull.
 import { settings, saveSettings } from '../settings-store.js';
-import { clampKeep, escapeHtml, AUDIO_CONTEXTS, AUDIO_CONTEXT_LABELS, AUDIO_KIND_LABELS, DEFAULT_AUDIO_PREFS, parseAudioToken, voiceLabel } from '../core/index.js';
+import { clampKeep, escapeHtml, AUDIO_CONTEXTS, AUDIO_CONTEXT_LABELS, AUDIO_KIND_LABELS, DEFAULT_AUDIO_PREFS, parseAudioToken, voiceLabel, isSynthVoice, resolveVariant } from '../core/index.js';
+import { previewVoice, PREVIEW_SAMPLE } from './audio.js';
 import { paintPrefChips } from './deck.js';
 import { session, renderExample } from './flashcard.js';
 import { account } from './cloud-core.js';
@@ -19,6 +20,16 @@ function tokenLabel(token) {
   return t.type === 'kind' ? (AUDIO_KIND_LABELS[t.kind] || t.kind) : voiceLabel(t.voice);
 }
 function listFor(ctx) { const p = settings.audioPrefs && settings.audioPrefs[ctx]; return Array.isArray(p) && p.length ? p.slice() : DEFAULT_AUDIO_PREFS[ctx].slice(); }
+// Which concrete synth voice a row's ▶ should audition, or null when the row has no sample (native /
+// user — those depend on a specific recorded word, not the sample). A specific synth voice previews
+// itself; 'kind:tts' (Synthesized-any) previews the synth voice this context actually resolves to.
+function previewVoiceFor(ctx, token) {
+  const t = parseAudioToken(token);
+  if (!t) return null;
+  if (t.type === 'voice') return isSynthVoice(t.voice) ? t.voice : null;
+  if (t.kind === 'tts') { const r = resolveVariant(ctx, { tts: true }, settings.audioPrefs); return (r && r.voice) || 'google'; }
+  return null;
+}
 function setList(ctx, list) { settings.audioPrefs = settings.audioPrefs || {}; settings.audioPrefs[ctx] = list; saveSettings(); }
 function resetCtx(ctx) { if (settings.audioPrefs) delete settings.audioPrefs[ctx]; saveSettings(); }
 
@@ -28,13 +39,19 @@ function renderVoicePrefs() {
   root.innerHTML = AUDIO_CONTEXTS.map((ctx) => {
     const list = listFor(ctx);
     const custom = !!(settings.audioPrefs && settings.audioPrefs[ctx]);
-    const items = list.map((tok, i) => `<li class="voice-item">
-        <span class="voice-tok">${escapeHtml(tokenLabel(tok))}</span>
+    const items = list.map((tok, i) => {
+      const pv = previewVoiceFor(ctx, tok);
+      const preview = pv
+        ? `<button class="voice-op voice-preview" type="button" data-prev="${pv}" aria-label="Preview ${escapeHtml(tokenLabel(tok))}" title="Preview ${escapeHtml(tokenLabel(tok))} (${escapeHtml(PREVIEW_SAMPLE)})">▶</button>`
+        : `<button class="voice-op voice-preview" type="button" disabled aria-label="No sample to preview" title="No sample for this kind — it depends on the specific word">▶</button>`;
+      return `<li class="voice-item">
+        <span class="voice-left">${preview}<span class="voice-tok">${escapeHtml(tokenLabel(tok))}</span></span>
         <span class="voice-ops">
           <button class="voice-op" type="button" data-op="up" data-ctx="${ctx}" data-i="${i}" aria-label="Move up"${i === 0 ? ' disabled' : ''}>▲</button>
           <button class="voice-op" type="button" data-op="down" data-ctx="${ctx}" data-i="${i}" aria-label="Move down"${i === list.length - 1 ? ' disabled' : ''}>▼</button>
           <button class="voice-op voice-del" type="button" data-op="del" data-ctx="${ctx}" data-i="${i}" aria-label="Remove">×</button>
-        </span></li>`).join('');
+        </span></li>`;
+    }).join('');
     const remaining = VOICE_TOKENS.filter((t) => !list.includes(t));
     const addSel = remaining.length ? `<select class="voice-add" data-ctx="${ctx}" aria-label="Add a voice to ${AUDIO_CONTEXT_LABELS[ctx]}">
         <option value="">+ add a voice…</option>
@@ -61,6 +78,8 @@ function wireVoicePrefs() {
   if (!root || root.dataset.wired) return;
   root.dataset.wired = '1';
   root.addEventListener('click', (e) => {
+    const prev = e.target.closest('.voice-preview');
+    if (prev) { if (prev.dataset.prev) previewVoice(prev.dataset.prev, prev); return; }
     const op = e.target.closest('.voice-op');
     if (op) { applyVoiceOp(op.dataset.ctx, op.dataset.op, Number(op.dataset.i)); return; }
     const reset = e.target.closest('[data-reset]');

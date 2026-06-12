@@ -369,10 +369,12 @@ This is the priority. The items below are smaller and can follow.
   flip to **female**, `--variant siri:female`. Then re-seed prod (S3 env **and** prod `DATABASE_FILE`
   so the `audio_variants` rows land where prod reads them). This is the highest-leverage next action —
   it's what makes the whole feature audible.
-- **② "Preview voice" in the Settings picker.** Each token/voice row should have a ▶ that plays a
-  sample word (e.g. 食べる) through that exact variant, so users can *hear* what they're ordering
-  instead of guessing. Small change (reuse `playItem` with a one-off item + a forced voice), big
-  usability win — and it doubles as a quick "is this Siri voice generated yet?" check.
+- ~~**② "Preview voice" in the Settings picker.**~~ **Shipped.** Every row in the Voice-priority
+  editor has a ▶ that auditions the sample word 食べる: a specific synth voice previews itself, a
+  `kind:tts` row previews the synth voice that context actually resolves to, and `kind:native`/
+  `kind:user` rows show a disabled ▶ (no sample for an arbitrary word). `features/audio.js`
+  exports `previewVoice(voiceId, btn)` (+ `PREVIEW_SAMPLE`), forcing a specific voice past the
+  resolver. Until ① is done, siri:* previews sound like the Google fallback.
 - **③ Per-item voice cycle/override.** The original brief wanted per-item override on top of the
   global per-context default — a tiny "try another voice" affordance next to a play button that
   cycles the item's available variants for that one playback. Not yet built (we shipped the global

@@ -52,6 +52,23 @@ function fallback(chosen, item) {
   if (item.text) speakSynth(item.text);
 }
 
+// A sample word for auditioning a voice in Settings (the Voice-priority editor's ▶ buttons).
+export const PREVIEW_SAMPLE = '食べる';
+
+// Audition a SPECIFIC synth voice on the sample word, bypassing the resolver — the Settings
+// voice-priority editor uses this so the user can hear exactly the voice they're ordering. (Native /
+// user kinds have no sample for an arbitrary word, so the editor only calls this for synth voices.)
+// Same toggle + `.playing` semantics as playItem; on a non-HTTP page it falls back to speechSynthesis.
+export function previewVoice(voiceId, btn) {
+  const item = { text: PREVIEW_SAMPLE };
+  const wasPlayingThis = btn && btn === curBtn;
+  stopEls();
+  clearBtn();
+  if (wasPlayingThis) return;   // toggle-off
+  if (!HTTP_SERVED) { speakSynth(item.text); return; }
+  startVariant({ kind: 'tts', voice: voiceId }, item, null, btn);
+}
+
 // Play `item` for a UI `context` ('reviews'|'browse'|'minna'). `item` declares what voices it can
 // offer: { text? } (synth), { native? } (a vnjpclub path), { takeId? } (a recording id) — any subset.
 // `btn` (optional) is the play button: it gets a `.playing` class while sounding, and clicking the
