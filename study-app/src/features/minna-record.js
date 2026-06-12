@@ -10,7 +10,9 @@
 import { API_BASE } from '../config.js';
 import { account, api, setSyncStatus } from './cloud-core.js';
 import { settings, saveSettings } from '../settings-store.js';
-import { escapeHtml, clampKeep, formatDuration, validClip, findTrimBounds, waveformPeaks, clampSpeed, COMPARE_SPEEDS, rmsLevel, normGains } from '../core/index.js';
+import { escapeHtml, clampKeep, formatDuration, validClip, findTrimBounds, waveformPeaks, clampSpeed, COMPARE_SPEEDS, rmsLevel, normGains, resolveVariant, variantOrder } from '../core/index.js';
+import { HTTP_SERVED } from './tts.js';
+import { cycleMod } from './audio.js';
 
 // Capability gates. Recording needs getUserMedia + MediaRecorder; both are absent over
 // insecure origins / old browsers. When unavailable we degrade to a quiet hint.
@@ -262,19 +264,22 @@ function playTake(id, btn) {
 }
 function stopTake() { if (takeStop) { takeStop(); takeStop = null; } if (takeAudioEl) { try { takeAudioEl.pause(); } catch (e) {} } }
 
-// ---------- native-audio playback ----------
-// Plays the cached native vnjpclub audio over its play window. `onDone` fires once when
-// playback finishes (window end / natural end / error), so the sequence player can chain.
+// ---------- reference-audio playback ----------
+// Plays the chosen reference voice (native vnjpclub clip OR a synth voice) over its play window.
+// `onDone` fires once when playback finishes (window end / natural end / error), so the sequence
+// player can chain. ONE reused credentialed element serves both: native is gated, and the public
+// synth endpoint tolerates the credentialed cross-origin request (it's under the study-app CORS
+// allowlist), so `crossOrigin='use-credentials'` is safe for either source.
 let nativeAudioEl = null, nativeStop = null;
 function ensureNativeAudio() {
   if (!nativeAudioEl) { nativeAudioEl = new Audio(); nativeAudioEl.crossOrigin = 'use-credentials'; }
   return nativeAudioEl;
 }
 function stopNative() { if (nativeStop) { nativeStop(); nativeStop = null; } if (nativeAudioEl) { try { nativeAudioEl.pause(); } catch (e) {} } }
-function playNative(src, window, volume, onDone) {
+function playReference(ctx, v, window, volume, onDone) {
   const a = ensureNativeAudio();
   stopNative();
-  a.src = API_BASE + '/v1/minna/audio?src=' + encodeURIComponent(src);
+  a.src = refUrl(ctx, v);
   nativeStop = playRange(a, window, volume, () => { nativeStop = null; if (onDone) onDone(); });
 }
 
@@ -408,7 +413,15 @@ function paintControlWaves(control) {
   const youCanvas = control.querySelector('canvas.rec-wave[data-wave="you"]');
   if (youCanvas) { const id = newestTakeId(control); if (id != null) paintWave(youCanvas, takeUrl(id), null, '--godan'); }
   const natCanvas = control.querySelector('canvas.rec-wave[data-wave="native"]');
-  if (natCanvas) { const ctx = controlCtx(control); if (ctx.nativeSrc) paintWave(natCanvas, nativeUrl(ctx.nativeSrc), ctx.clip, '--ichidan'); }
+  if (natCanvas) {
+    const ctx = controlCtx(control), v = currentRef(control, ctx);
+    if (v) { paintWave(natCanvas, refUrl(ctx, v), refClip(ctx, v), '--ichidan'); setRefCaption(control, v); }
+  }
+}
+// Keep the reference waveform's caption in sync with the selected reference voice.
+function setRefCaption(control, v) {
+  const cap = control.querySelector('.rec-wave-wrap[data-wave="native"] .rec-wave-cap');
+  if (cap) cap.textContent = refShortLabel(v);
 }
 // Per-render hook (called from minna.js wireMinnaLesson after the body re-renders).
 export function paintCompareWaveforms(root) {
@@ -456,7 +469,7 @@ function stopCursors() {
 // compare is only available once a clip exists. The control re-renders its own innerHTML
 // after capture/delete; lesson/itemKey/native/clip/needsClip all live on the dataset so the
 // delegated handlers + resetControl can rebuild without re-threading args.
-export function recordControlHtml(lesson, itemKey, nativeSrc, clip, needsClip) {
+export function recordControlHtml(lesson, itemKey, nativeSrc, clip, needsClip, text) {
   const v = validClip(clip);
   const attrs = [
     `data-lesson="${lesson}"`,
@@ -464,18 +477,50 @@ export function recordControlHtml(lesson, itemKey, nativeSrc, clip, needsClip) {
     nativeSrc ? `data-native="${escapeHtml(nativeSrc)}"` : '',
     v ? `data-clip="${v[0]},${v[1]}"` : '',
     needsClip ? `data-needsclip="1"` : '',
+    text ? `data-text="${escapeHtml(text)}"` : '',
   ].filter(Boolean).join(' ');
-  return `<div class="rec-control" ${attrs}>${recordControlInner(lesson, itemKey, { nativeSrc, clip: v, needsClip })}</div>`;
+  return `<div class="rec-control" ${attrs}>${recordControlInner(lesson, itemKey, { nativeSrc, clip: v, needsClip, text: text || '' })}</div>`;
 }
-// Read the compare context back off a control's dataset (so resetControl can rebuild).
+// Read the compare context back off a control's dataset (so resetControl can rebuild). `text` is the
+// item's synth text (a word's ttsText / a line's plain sentence) — enables a synth reference voice.
 function controlCtx(control) {
   const clipAttr = control.dataset.clip;
   const clip = clipAttr ? validClip(clipAttr.split(',').map(Number)) : null;
-  return { nativeSrc: control.dataset.native || '', clip, needsClip: control.dataset.needsclip === '1' };
+  return { nativeSrc: control.dataset.native || '', clip, needsClip: control.dataset.needsclip === '1', text: control.dataset.text || '' };
 }
 // Native compare is playable when there's a native source AND (it's a whole-file item OR a
 // conversation line that has a clip).
 function nativePlayable(ctx) { return !!(ctx.nativeSrc && (!ctx.needsClip || ctx.clip)); }
+
+// ---------- reference (compare-target) variants: native + synth voices, via the resolver ----------
+// The compare player's "reference" generalizes the old native-only target to ANY voice (audio-unify
+// Phase 3 / ⑤): native (the cached vnjpclub clip) OR a synth voice (Siri/Google, rendered from the
+// item's text). The USER's own take is the "you" side, never a reference. Which voices are offered +
+// which is the default both come from the SAME machinery the play buttons use — variantOrder for the
+// cycle list, resolveVariant('minna', …) for the default — so the per-context priority drives it.
+function refAvailable(ctx) { return { native: nativePlayable(ctx), tts: !!(ctx.text && HTTP_SERVED), user: false }; }
+function referenceVariants(ctx) { return variantOrder(refAvailable(ctx)); }
+function defaultRef(ctx) { return resolveVariant('minna', refAvailable(ctx), settings.audioPrefs); }
+function refVariantId(v) { return v ? (v.kind === 'native' ? 'native' : v.voice) : ''; }
+function refVariantById(ctx, id) { return referenceVariants(ctx).find((v) => refVariantId(v) === id) || null; }
+// The control's currently-selected reference: its saved data-ref if still available, else the default.
+function currentRef(control, ctx) {
+  const saved = control.dataset.ref ? refVariantById(ctx, control.dataset.ref) : null;
+  return saved || defaultRef(ctx);
+}
+function refShortLabel(v) {
+  if (!v) return 'ref';
+  if (v.kind === 'native') return 'native';
+  return { 'siri:female': 'Siri F', 'siri:male': 'Siri M', google: 'Google' }[v.voice] || v.voice;
+}
+// Playback URL + clip for a reference variant: native is the gated vnjpclub proxy (sliced by the
+// line clip); a synth voice is the public tagged-TTS endpoint (no clip — windowFor trims its silence).
+function refUrl(ctx, v) {
+  if (!v) return '';
+  if (v.kind === 'native') return nativeUrl(ctx.nativeSrc);
+  return API_BASE + '/v1/audio/tts?text=' + encodeURIComponent(ctx.text) + '&voice=' + encodeURIComponent(v.voice);
+}
+function refClip(ctx, v) { return v && v.kind === 'native' ? ctx.clip : null; }
 
 function recordControlInner(lesson, itemKey, ctx) {
   if (!RECORD_SUPPORTED) return `<span class="rec-unsupported">Recording needs a modern browser + microphone.</span>`;
@@ -491,22 +536,27 @@ function takesHtml(lesson, itemKey) {
       <button class="rec-take-del" type="button" data-take-del="${t.id}" aria-label="Delete this recording"><svg class="ic" aria-hidden="true"><use href="#i-trash"/></svg></button>
     </span>`).join('');
 }
-// The compare player: ▶ native / ▶ you / ▶ native→you + loop. Shows only once at least one
-// take exists. The native buttons appear only when native compare is playable (so a
-// conversation line without a clip yet still gets ▶ you, plus a hint to mark a clip).
+// The compare player: ▶ <reference> / ▶ you / ▶ reference→you + both + loop. Shows only once at
+// least one take exists. The reference buttons appear when ANY reference voice is available — a
+// native clip OR a synth voice from the item's text (so a conversation line without a clip yet can
+// still compare against Siri/Google). The ▶ reference button names the current voice; Alt/Shift-
+// click it to cycle the available voices (③-style). A truly-referenceless item gets only ▶ you.
 function compareHtml(lesson, itemKey, ctx) {
   const takes = takesFor(lesson, itemKey);
   if (!takes.length) return '';
-  const canNative = nativePlayable(ctx);
-  const nativeBtns = canNative
-    ? `<button class="cmp-btn" type="button" data-cmp="native"><svg class="ic" aria-hidden="true"><use href="#i-volume"/></svg>native</button>
-       <button class="cmp-btn" type="button" data-cmp="seq"><svg class="ic" aria-hidden="true"><use href="#i-play"/></svg>native→you</button>
-       <button class="cmp-btn" type="button" data-cmp="both" title="Play native + your take together"><svg class="ic" aria-hidden="true"><use href="#i-volume"/></svg>both</button>
-       <button class="cmp-btn cmp-loop" type="button" data-cmp="loop" aria-pressed="false" title="Loop native→you">loop</button>`
-    : (ctx.needsClip ? `<span class="cmp-hint">mark this line's clip to compare</span>` : '');
+  const refs = referenceVariants(ctx);
+  const canRef = refs.length > 0;
+  const ref = canRef ? defaultRef(ctx) : null;
+  const refTitle = `Reference voice — ${escapeHtml(refShortLabel(ref))}${refs.length > 1 ? ` (⌥/⇧-click to switch, ${refs.length} voices)` : ''}`;
+  const refBtns = canRef
+    ? `<button class="cmp-btn cmp-ref" type="button" data-cmp="ref" title="${refTitle}"><svg class="ic" aria-hidden="true"><use href="#i-volume"/></svg><span class="cmp-ref-lbl">${escapeHtml(refShortLabel(ref))}</span></button>
+       <button class="cmp-btn" type="button" data-cmp="seq" title="Reference, then you"><svg class="ic" aria-hidden="true"><use href="#i-play"/></svg>→you</button>
+       <button class="cmp-btn" type="button" data-cmp="both" title="Play reference + your take together"><svg class="ic" aria-hidden="true"><use href="#i-volume"/></svg>both</button>
+       <button class="cmp-btn cmp-loop" type="button" data-cmp="loop" aria-pressed="false" title="Loop reference→you">loop</button>`
+    : '';
   return `<div class="rec-compare"><span class="cmp-label">compare</span>
     <button class="cmp-btn" type="button" data-cmp="you"><svg class="ic" aria-hidden="true"><use href="#i-play"/></svg>you</button>
-    ${nativeBtns}</div>${waveRowHtml(canNative)}`;
+    ${refBtns}</div>${waveRowHtml(canRef, refShortLabel(ref))}`;
 }
 // The dual-waveform row under the compare buttons: a "you" wave always, a "native" wave when
 // native compare is playable. Canvases are painted (decoded) post-render by paintControlWaves;
@@ -519,8 +569,8 @@ function waveWrapHtml(wave, cap) {
       <span class="rec-wave-cursor" style="opacity:0"></span>
       <span class="rec-wave-cap">${cap}</span></span>`;
 }
-function waveRowHtml(canNative) {
-  return `<div class="rec-wave-row">${waveWrapHtml('you', 'you')}${canNative ? waveWrapHtml('native', 'native') : ''}</div>`;
+function waveRowHtml(canRef, refLabel) {
+  return `<div class="rec-wave-row">${waveWrapHtml('you', 'you')}${canRef ? waveWrapHtml('native', refLabel || 'ref') : ''}</div>`;
 }
 
 // ---------- capture state (one active recording at a time) ----------
@@ -531,7 +581,15 @@ function resetControl(control) {
   const loop = control.dataset.loop === '1';   // preserve the loop toggle across re-renders
   control.innerHTML = recordControlInner(lesson, itemKey, controlCtx(control));
   if (loop) { const lb = control.querySelector('[data-cmp="loop"]'); if (lb) { lb.classList.add('active'); lb.setAttribute('aria-pressed', 'true'); } }
+  refreshRefUi(control);        // restore the selected reference voice's label (compareHtml rendered the default)
   paintControlWaves(control);   // (re)decode + draw this control's waveforms after the rebuild
+}
+// Sync the ▶ reference button label + the reference waveform caption to the control's selected
+// voice (data-ref, falling back to the resolver default) — called after a re-render or a cycle.
+function refreshRefUi(control) {
+  const v = currentRef(control, controlCtx(control));
+  const lbl = control.querySelector('.cmp-ref-lbl'); if (lbl) lbl.textContent = refShortLabel(v);
+  setRefCaption(control, v);
 }
 
 // Records from the PERSISTENT speaking-mode stream — no getUserMedia per take, so there's no
@@ -622,9 +680,9 @@ function clearBtn(btn) { if (btn) btn.classList.remove('playing'); }
 // louder clip down so the two play at ~equal volume. Computed from each source's RMS over its
 // spoken window; gain 1 when a level isn't known yet (buffer still decoding) or there's no pair.
 let activeNativeGain = 1, activeTakeGain = 1;
-function setActiveGains(ctx, id) {
-  if (nativePlayable(ctx) && id != null) {
-    const g = normGains(levelFor(nativeUrl(ctx.nativeSrc), ctx.clip), levelFor(takeUrl(id), null));
+function setActiveGains(ctx, id, refV) {
+  if (refV && id != null) {
+    const g = normGains(levelFor(refUrl(ctx, refV), refClip(ctx, refV)), levelFor(takeUrl(id), null));
     activeNativeGain = g.a; activeTakeGain = g.b;
   } else { activeNativeGain = 1; activeTakeGain = 1; }
 }
@@ -645,8 +703,30 @@ function applyBothVolumes() {
 }
 function setCompareBias(v) { compareBias = Math.max(-1, Math.min(1, v)); if (bothPlaying) applyBothVolumes(); }
 
-function handleCompare(control, action, btn) {
+// Advance the control's reference voice to the next available one (Alt/Shift-click on ▶ reference),
+// persisting the choice on data-ref so it survives re-render; updates the button label + waveform.
+function cycleReference(control, ctx) {
+  const list = referenceVariants(ctx);
+  if (list.length < 2) return currentRef(control, ctx);
+  const cur = currentRef(control, ctx);
+  let i = list.findIndex((v) => refVariantId(v) === refVariantId(cur));
+  const next = list[(i + 1 + (i < 0 ? 1 : 0)) % list.length];
+  control.dataset.ref = refVariantId(next);
+  refreshRefUi(control);
+  paintControlWaves(control);   // repaint the reference waveform for the new voice
+  return next;
+}
+
+function handleCompare(control, action, btn, e) {
   const ctx = controlCtx(control);
+  // ▶ reference: Alt/Shift-click switches voice (and plays the new one); a plain click on the lit
+  // button stops; otherwise play the current reference.
+  if (action === 'ref') {
+    if (cycleMod(e)) { const v = cycleReference(control, ctx); playRef(control, ctx, btn, v); return; }
+    if (btn && btn.classList.contains('playing')) { stopCompare(control); return; }
+    playRef(control, ctx, btn, currentRef(control, ctx));
+    return;
+  }
   // A second click on a lit button stops everything.
   if (btn && btn.classList.contains('playing')) { stopCompare(control); return; }
   if (action === 'loop') {
@@ -658,48 +738,48 @@ function handleCompare(control, action, btn) {
   if (action === 'you') {
     const id = newestTakeId(control); if (id == null) return;
     const tw = windowFor(takeUrl(id), null);
-    setActiveGains(ctx, id);
+    setActiveGains(ctx, id, currentRef(control, ctx));
     litBtn(control, btn); activeTakeWindow = tw; activeNativeWindow = null; startCursors(control);
     playTakeOnce(id, tw, activeTakeGain, () => { clearBtn(btn); stopCursors(); });
     return;
   }
-  if (action === 'native') {
-    if (!nativePlayable(ctx)) return;
-    const nw = windowFor(nativeUrl(ctx.nativeSrc), ctx.clip);
-    setActiveGains(ctx, newestTakeId(control));
-    litBtn(control, btn); activeNativeWindow = nw; activeTakeWindow = null; startCursors(control);
-    playNative(ctx.nativeSrc, nw, activeNativeGain, () => { clearBtn(btn); stopCursors(); });
-    return;
-  }
   if (action === 'seq') {
-    const id = newestTakeId(control); if (id == null || !nativePlayable(ctx)) return;
-    const nw = windowFor(nativeUrl(ctx.nativeSrc), ctx.clip), tw = windowFor(takeUrl(id), null);
-    setActiveGains(ctx, id);
+    const id = newestTakeId(control), v = currentRef(control, ctx); if (id == null || !v) return;
+    const nw = windowFor(refUrl(ctx, v), refClip(ctx, v)), tw = windowFor(takeUrl(id), null);
+    setActiveGains(ctx, id, v);
     litBtn(control, btn); startCursors(control);
     const runOnce = (after) => {
       activeNativeWindow = nw; activeTakeWindow = null;
-      playNative(ctx.nativeSrc, nw, activeNativeGain, () => { activeNativeWindow = null; activeTakeWindow = tw; playTakeOnce(id, tw, activeTakeGain, after); });
+      playReference(ctx, v, nw, activeNativeGain, () => { activeNativeWindow = null; activeTakeWindow = tw; playTakeOnce(id, tw, activeTakeGain, after); });
     };
     const loopOrStop = () => { if (control.dataset.loop === '1' && btn.classList.contains('playing')) runOnce(loopOrStop); else { clearBtn(btn); stopCursors(); } };
     runOnce(loopOrStop);
     return;
   }
   if (action === 'both') {
-    // Overlay native + your take, started together (separate <audio> elements) — each on its
+    // Overlay the reference + your take, started together (separate <audio> elements) — each on its
     // own SPOKEN WINDOW so the two onsets coincide despite the native's built-in padding, and
     // at NORMALIZED volume so neither drowns the other. A 2-count barrier clears the button +
     // cursors once BOTH finish (they differ in length). One-shot — loop stays seq-only. A second
     // click hits the playing-button stop path above.
-    const id = newestTakeId(control); if (id == null || !nativePlayable(ctx)) return;
-    const nw = windowFor(nativeUrl(ctx.nativeSrc), ctx.clip), tw = windowFor(takeUrl(id), null);
-    setActiveGains(ctx, id);
+    const id = newestTakeId(control), v = currentRef(control, ctx); if (id == null || !v) return;
+    const nw = windowFor(refUrl(ctx, v), refClip(ctx, v)), tw = windowFor(takeUrl(id), null);
+    setActiveGains(ctx, id, v);
     litBtn(control, btn); activeNativeWindow = nw; activeTakeWindow = tw; bothPlaying = true; startCursors(control);
     let pending = 2;
     const join = () => { if (--pending <= 0) { clearBtn(btn); stopCursors(); } };
-    playNative(ctx.nativeSrc, nw, activeNativeGain * biasNative(compareBias), join);
+    playReference(ctx, v, nw, activeNativeGain * biasNative(compareBias), join);
     playTakeOnce(id, tw, activeTakeGain * biasTake(compareBias), join);
     return;
   }
+}
+// ▶ reference single playback (its own play window, normalized against the newest take).
+function playRef(control, ctx, btn, v) {
+  if (!v) return;
+  const nw = windowFor(refUrl(ctx, v), refClip(ctx, v));
+  setActiveGains(ctx, newestTakeId(control), v);
+  litBtn(control, btn); activeNativeWindow = nw; activeTakeWindow = null; startCursors(control);
+  playReference(ctx, v, nw, activeNativeGain, () => { clearBtn(btn); stopCursors(); });
 }
 
 // Set the global compare speed from a speed-chip click: persist + sync, repaint the chip
@@ -748,6 +828,6 @@ export function wireMinnaRecord(body) {
     const del = e.target.closest('[data-take-del]');
     if (del) { deleteTake(control, Number(del.dataset.takeDel)); return; }
     const cmp = e.target.closest('[data-cmp]');
-    if (cmp) { handleCompare(control, cmp.dataset.cmp, cmp); return; }
+    if (cmp) { handleCompare(control, cmp.dataset.cmp, cmp, e); return; }
   });
 }

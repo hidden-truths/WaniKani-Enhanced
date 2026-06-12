@@ -360,9 +360,14 @@ helpers in [src/core/recordings.js](src/core/recordings.js).
   `GET /v1/minna/recordings/{id}`. `POST` prunes per item to the user's **keep-N** (Settings
   → "Recordings to keep per word", default 3, 1–20). Routes:
   `POST`/`GET`(list)/`GET`(bytes)/`DELETE /v1/minna/recordings`.
-- **Compare player** — per item: **▶ you · ▶ native · ▶ native→you** (sequential) **· ▶ both**
-  (native + take overlaid, one-shot via a 2-count barrier) **+ loop** (seq only). Take playback
-  is gated (one reused `<audio crossOrigin='use-credentials'>`).
+- **Compare player** — per item: **▶ you · ▶ reference · ▶ →you** (sequential) **· ▶ both**
+  (reference + take overlaid, one-shot via a 2-count barrier) **+ loop** (seq only). Take playback
+  is gated (one reused `<audio crossOrigin='use-credentials'>`). **The "reference" is any voice**
+  (audio-unify Phase 3): the compare target resolves via `resolveVariant('minna', …)` — native if
+  the item has a clip, else a synth voice from its text — and **Alt/Shift-click** the ▶ reference
+  button cycles the available voices (native → Siri F/M → Google). So you can A/B your take against
+  the textbook native OR Siri/Google, and a native-less word / clipless line still gets a synth
+  reference. The same window/normalization/waveform machinery drives it regardless of voice.
 - **Speech-window alignment (so ▶ both lines up).** The native MP3 has built-in lead/tail
   silence, so naïvely overlapping it on your (already-tight) take would start the native speaker
   late. Every compare playback instead plays a **play window** `[start,end]` = the detected

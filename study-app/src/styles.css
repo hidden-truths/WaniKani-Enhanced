@@ -643,8 +643,9 @@
   .cmp-btn.playing{background:var(--ichidan);color:#fff;border-color:var(--ichidan)}
   .cmp-loop{color:var(--muted)}
   .cmp-loop.active{background:var(--good);color:#fff;border-color:var(--good)}
-  .cmp-hint{font-family:Georgia,serif;font-size:12px;color:var(--muted);opacity:.85}
-  /* Dual waveform (you vs native) — canvas painted by paintControlWaves; cursor is an overlay. */
+  /* ▶ reference button names the current compare voice (native / Siri F/M / Google). */
+  .cmp-ref .cmp-ref-lbl{font-family:"SF Mono",ui-monospace,monospace;font-size:10px;letter-spacing:.02em}
+  /* Dual waveform (you vs reference) — canvas painted by paintControlWaves; cursor is an overlay. */
   .rec-wave-row{display:flex;flex-wrap:wrap;gap:12px;margin-top:7px;flex-basis:100%}
   .rec-wave-wrap{position:relative;display:inline-block;width:140px;height:30px}
   canvas.rec-wave{display:block;width:140px;height:30px}

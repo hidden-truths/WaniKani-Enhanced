@@ -390,9 +390,14 @@ This is the priority. The items below are smaller and can follow.
   in [src/features/audio.js](src/features/audio.js); the hinting + add-dropdown annotation in
   settings-page.js. Makes ① visible: after the operator generates the Siri clips, reopen Settings and
   the dimming clears.
-- **⑤ Phase 3 — compare against any voice.** Generalize the record-and-compare "▶ native" into
-  "▶ reference" (Siri/Google/native) via the same resolver, reusing the existing windowing/
-  normalization in `minna-record.js`. (Tracked in [NEXT_AUDIO_UNIFY.md](NEXT_AUDIO_UNIFY.md).)
+- ~~**⑤ Phase 3 — compare against any voice.**~~ **Shipped.** The record-and-compare "▶ native" is
+  now "▶ reference": the compare target resolves via `resolveVariant('minna', …)` (per-context
+  priority picks the default) and **Alt/Shift-click** the ▶ reference button cycles the item's voices
+  (native → Siri F/M → Google), reusing the windowing/normalization/waveform machinery. `seq`/`both`/
+  `loop` compare against the selected reference; each control now carries its synth `text` so even a
+  clipless conversation line can compare against Siri, and a word without native audio gains a synth
+  reference. `referenceVariants`/`currentRef`/`refUrl`/`playReference` in
+  [src/features/minna-record.js](src/features/minna-record.js). (Detail in [NEXT_AUDIO_UNIFY.md](NEXT_AUDIO_UNIFY.md).)
 - **⑥ Add a real human-pronunciation provider.** The variant model is now extensible — a new
   provider (e.g. **Forvo** native-speaker clips, keyed per word) is mostly a server resolver +
   a descriptor + a `provider→kind` entry, no client re-architecture. Would give a `native`-quality

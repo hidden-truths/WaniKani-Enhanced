@@ -248,7 +248,7 @@ function minnaVocabSection(L) {
       <td class="mn-mean">${escapeHtml(v.mean)}<span class="mn-pos">${escapeHtml(CAT_LABEL[v.cat] || v.cat || '')}</span>${v.italki ? '<span class="mn-italki" title="Covered in your iTalki lesson">iTalki</span>' : ''}</td>
       <td style="text-align:right">${minnaInDeck(v.key) ? '<span class="v-in">✓</span>' : ''}</td>
     </tr>${speaking ? `
-    <tr class="mn-rec-row"><td></td><td colspan="3">${recordControlHtml(L.lesson, v.key, v.audio)}</td></tr>` : ''}`).join('');
+    <tr class="mn-rec-row"><td></td><td colspan="3">${recordControlHtml(L.lesson, v.key, v.audio, null, false, ttsText({ jp: v.dict || v.kanji || v.kana, read: v.dictRead || v.kana, tts: v.tts }))}</td></tr>` : ''}`).join('');
   return mnSection('Vocabulary', L.vocab.length, `<table class="mn-vocab"><tbody>${rows}</tbody></table>`, true);
 }
 // A small inline TTS button for a sentence that has no native audio (grammar / lesson
@@ -286,7 +286,7 @@ function minnaConversationSection(L) {
     // conversation MP3 (c.audio). The clip comes from line.clip ∪ the synced store.
     const clip = c.audio ? resolveClip(ln.clip, getLineClip(L.lesson, idx)) : null;
     const rec = (c.audio && isSpeakingMode())
-      ? `<div class="mn-line-rec">${recordControlHtml(L.lesson, convItemKey(L.lesson, idx), c.audio, clip, true)}${clipAffordanceHtml(idx, clip)}</div>`
+      ? `<div class="mn-line-rec">${recordControlHtml(L.lesson, convItemKey(L.lesson, idx), c.audio, clip, true, plainText(ln.jp))}${clipAffordanceHtml(idx, clip)}</div>`
       : '';
     return `<div class="mn-line"><div class="mn-role">${escapeHtml(ln.role || '')}</div><div class="mn-line-body"><div class="l-jp jp">${rubyHtml(ln.jp)}</div><div class="l-en">${escapeHtml(ln.en)}</div>${rec}</div></div>`;
   }).join('');

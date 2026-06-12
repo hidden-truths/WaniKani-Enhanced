@@ -4,7 +4,7 @@ A self-contained brief for a fresh session. The goal: **unify all voice-audio so
 behind one tagged audio API**, so a given item (word reading / example sentence /
 conversation line) resolves to MULTIPLE tagged voice VARIANTS the user can pick or cycle.
 
-> ## STATUS — Phases 1 + 2 SHIPPED (branch `minna-audio-unify`); Phase 3 remains
+> ## STATUS — Phases 1 + 2 SHIPPED (`minna-audio-unify`); Phase 3 + follow-ups ②③④⑤ on `audio-followups`
 >
 > **Decisions locked** with the maintainer: **Google** = one neutral `gtx` variant (no paid
 > Cloud TTS — gender diversity comes from Siri). Picker is **per-context** (reviews / browsing /
@@ -32,10 +32,14 @@ conversation line) resolves to MULTIPLE tagged voice VARIANTS the user can pick 
 > is gone); a per-context Voice-priority editor in Settings persisted as `settings.audioPrefs`
 > (synced); flashcards (`reviews`), Browse (`browse`), Minna (`minna`) wired.
 >
-> **Phase 3 (NEXT):** generalize the record-and-compare player's "▶ native" into "▶ reference"
-> against any chosen voice variant (Siri/Google/native) via the same resolver, reusing the existing
-> windowing/normalization machinery in `features/minna-record.js`. Optional polish: have the picker
-> query `/v1/audio/variants` to gray out specific synth voices that aren't pre-generated yet.
+> **Phase 3 done (⑤):** the record-and-compare player's "▶ native" is now "▶ reference" against any
+> voice. The reference variant resolves via `resolveVariant('minna', …)` (so the per-context priority
+> picks the default), and Alt/Shift-click the ▶ reference button cycles the item's voices
+> (native → Siri F/M → Google), reusing the existing windowing/normalization/waveform machinery — the
+> reference URL is just native-clip-or-synth-`/v1/audio/tts`, played on the same credentialed element
+> (the public TTS endpoint is under the study-app CORS allowlist). `seq`/`both`/`loop` compare against
+> the selected reference; a word/line carries its synth `text` so even a clipless line can compare
+> against Siri. `referenceVariants`/`currentRef`/`refUrl` in `features/minna-record.js`.
 >
 > **Follow-ups (branch `audio-followups`):** the ①–⑦ list lives in
 > [NEXT_STEPS.md](NEXT_STEPS.md) "Audio-unify — follow-ups & ideas". Done so far: **② Preview
@@ -44,7 +48,8 @@ conversation line) resolves to MULTIPLE tagged voice VARIANTS the user can pick 
 > Alt/Shift-click any play button cycles that item's voices (`variantOrder`/`variantIndex` in
 > [src/core/audio.js](src/core/audio.js); `cycleMod` + the cursor in `features/audio.js`);
 > **④ Availability hinting** — the editor queries `/v1/audio/variants` and dims synth voices that
-> aren't pre-generated yet (`fetchAvailableVoices`), so ① is visible in the UI.
+> aren't pre-generated yet (`fetchAvailableVoices`), so ① is visible in the UI; **⑤ Phase 3** —
+> ▶ reference (see above). Remaining: ① (operator pre-gen the Siri clips) + ⑥/⑦ (stretch).
 >
 > The variant-descriptor shape, key schema, preference model, and verification steps are in the
 > approved plan; the sections below are the original brief, kept for reference.

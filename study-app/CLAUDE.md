@@ -595,8 +595,16 @@ Component contracts you must preserve:
   the same cookie-gated-audio path as the native-audio button. The **binary upload uses its
   own credentialed `fetch`** (not the JSON-only `api()`); list/delete use `api()`. Retention
   is the `recordingsKeep` setting (default 3, 1–20), sent as `keep` and enforced server-side.
-  **The compare player has ▶ you / native / native→you (seq) / both / loop**; **both** overlays
-  native + take on the two separate `<audio>` elements with a 2-count barrier (one-shot; loop is
+  **The compare player has ▶ you / reference / →you (seq) / both / loop** (audio-unify Phase 3 / ⑤):
+  the **reference** generalizes the old native-only target to ANY voice — it resolves via
+  `resolveVariant('minna', refAvailable(ctx), prefs)` (per-context priority picks the default), and
+  **Alt/Shift-click** the ▶ reference button cycles the item's voices (native → Siri F/M → Google,
+  `referenceVariants`/`cycleReference`, persisted on the control's `data-ref`). `refUrl` maps a variant
+  to the gated native clip OR the public `/v1/audio/tts?voice=` (both play on the one reused
+  credentialed `<audio>` — the public TTS endpoint is under the study-app CORS allowlist); each
+  rec-control carries the item's synth `text` (`data-text`) so a clipless line / native-less word can
+  still compare against synth. `seq`/`both`/`loop` compare against the selected reference; **both**
+  overlays reference + take on the two separate `<audio>` elements with a 2-count barrier (one-shot; loop is
   seq-only). Playback speed is `settings.compareSpeed` (synced, snapped by `clampSpeed` to
   {0.5,0.75,1}) applied via `applySpeed` (`playbackRate` + `preservesPitch`) on every compare
   play; the segmented control lives in the navbar-docked speaking bar. **Volume is normalized** so native + take
