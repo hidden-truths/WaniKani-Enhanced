@@ -14,7 +14,7 @@ import {
   rollingAcc, isLeech, leeches, normKana, romajiToKana, reviewForecast, filterSummary,
   tokenFacet, deckLabel, ttsText, rubyHtml, plainText, rubyToSegments, segmentsToRuby, segmentsToReading,
   minnaBuiltinRank, applyMinnaOverlays, splitMora,
-  pitchHtml, minnaSig, cardStamp, colorClass, CATS, exampleForLevel, availableTiers,
+  pitchHtml, minnaSig, cardStamp, colorClass, CATS, exampleForLevel, availableTiers, sentencesToLevels,
   JLPT_TIERS, BOX_DAYS,
   clampKeep, convItemKey, formatDuration, KEEP_DEFAULT,
   validClip, resolveClip, clipLabel, findTrimBounds,
@@ -25,6 +25,7 @@ import {
   practiceStreak, donePhraseIds, sentenceToPhrase, phraseToSentence,
 } from '../src/core/index.js';
 import { SELFTALK, SELFTALK_SCENES, SELFTALK_GRAMMAR } from '../src/data/selftalk.js';
+import { EXAMPLES } from '../src/data/examples.js';
 
 beforeEach(() => {
   // Rebuild the live deck like the app's rebuildData() does (built-in path: no custom
@@ -48,13 +49,16 @@ test('the dataset loads via real module imports', () => {
   expect(state.DATA.every((v: any) => v.cat === 'verb')).toBe(true);
 });
 
-test('every built-in verb has all 5 leveled examples (well-formed)', () => {
-  const builtin = state.DATA.filter((v: any) => !v.custom);
-  expect(builtin.length).toBe(100);
-  for (const v of builtin) {
-    expect(v.levels).toBeTruthy();
+// The example sentences are now seeded into the server sentence store from this bundle, so the
+// bundle is the SEED SOURCE — assert its integrity directly (not via attachLevels/v.levels, which
+// after Phase 2 come from the store/cache, not the bundle).
+test('the examples bundle has all 5 leveled examples per card (well-formed)', () => {
+  const ranks = Object.keys(EXAMPLES);
+  expect(ranks.length).toBe(100);
+  for (const rank of ranks) {
+    const tiers = (EXAMPLES as any)[rank];
     for (const t of JLPT_TIERS) {
-      const e = v.levels[t];
+      const e = tiers[t];
       expect(Array.isArray(e) && e.length === 2).toBe(true);
       expect(typeof e[0] === 'string' && e[0].trim().length).toBeTruthy(); // jp
       expect(typeof e[1] === 'string' && e[1].trim().length).toBeTruthy(); // en
@@ -62,6 +66,54 @@ test('every built-in verb has all 5 leveled examples (well-formed)', () => {
       const rc = (e[0].match(/<\/ruby>/g) || []).length;
       expect(ro).toBe(rc);
     }
+  }
+});
+
+test('sentencesToLevels groups store sentences by owner_id + tier, reconstructing [jp,en]', () => {
+  const sentences = [
+    { furigana: rubyToSegments('<ruby>本<rt>ほん</rt></ruby>を<ruby>読<rt>よ</rt></ruby>む。'), translations: { en: 'read a book' }, link: { owner_type: 'card', owner_id: '1', tier: 'N5' } },
+    { furigana: rubyToSegments('むずかしい。'), translations: { en: 'difficult' }, link: { owner_type: 'card', owner_id: '1', tier: 'N3' } },
+    { furigana: rubyToSegments('いぬ。'), translations: { en: 'a dog' }, link: { owner_type: 'card', owner_id: '2', tier: 'N5' } },
+  ];
+  const levels = sentencesToLevels(sentences);
+  expect(levels['1']).toEqual({ N5: ['<ruby>本<rt>ほん</rt></ruby>を<ruby>読<rt>よ</rt></ruby>む。', 'read a book'], N3: ['むずかしい。', 'difficult'] });
+  expect(levels['2']).toEqual({ N5: ['いぬ。', 'a dog'] });
+});
+
+test('sentencesToLevels: a reused sentence (multiple links) lands under each rank/tier', () => {
+  // The store returns one entry PER LINK, so a reused sentence arrives as two entries.
+  const sentences = [
+    { furigana: rubyToSegments('はしる。'), translations: { en: 'run' }, link: { owner_type: 'card', owner_id: '1', tier: 'N5' } },
+    { furigana: rubyToSegments('はしる。'), translations: { en: 'run' }, link: { owner_type: 'card', owner_id: '2', tier: 'N3' } },
+  ];
+  const levels = sentencesToLevels(sentences);
+  expect(levels['1']).toEqual({ N5: ['はしる。', 'run'] });
+  expect(levels['2']).toEqual({ N3: ['はしる。', 'run'] });
+});
+
+test('sentencesToLevels skips entries missing owner_id / tier / furigana', () => {
+  const sentences = [
+    { furigana: rubyToSegments('いぬ。'), translations: { en: 'dog' }, link: { owner_type: 'selftalk' } },          // no owner_id/tier
+    { furigana: null, translations: { en: 'x' }, link: { owner_type: 'card', owner_id: '3', tier: 'N5' } },          // no furigana
+    { furigana: rubyToSegments('ねこ。'), translations: { en: 'cat' }, link: { owner_type: 'card', owner_id: '3', tier: 'N4' } },
+  ];
+  expect(sentencesToLevels(sentences)).toEqual({ '3': { N4: ['ねこ。', 'cat'] } });
+});
+
+// The strong test: round-trip the real bundle through the seed → store → adapter shape and assert
+// it reconstructs EXAMPLES byte-for-byte. The seed stores text=plainText(jp) + furigana segments;
+// the adapter rebuilds jp via segmentsToRuby. This pins the whole seed/read loop against live data.
+test('seed round-trip: sentencesToLevels reconstructs the EXAMPLES bundle byte-for-byte', () => {
+  const storeSentences: any[] = [];
+  for (const [rank, tiers] of Object.entries(EXAMPLES as any)) {
+    for (const [tier, pair] of Object.entries(tiers as Record<string, [string, string]>)) {
+      const [jp, en] = pair;
+      storeSentences.push({ furigana: rubyToSegments(jp), translations: { en }, link: { owner_type: 'card', owner_id: rank, tier } });
+    }
+  }
+  const levels = sentencesToLevels(storeSentences);
+  for (const [rank, tiers] of Object.entries(EXAMPLES as any)) {
+    expect(levels[rank]).toEqual(tiers);
   }
 });
 
