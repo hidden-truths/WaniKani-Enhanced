@@ -13,7 +13,7 @@ import { localDay } from '../config.js';
 import { escapeHtml, rubyHtml, plainText, groupByScene, grammarTokens, todaysSet } from '../core/index.js';
 import { SELFTALK, SELFTALK_SCENES, SELFTALK_GRAMMAR } from '../data/selftalk.js';
 import { playItem, cycleMod } from './audio.js';
-import { loadSelftalk } from '../persistence/selftalk.js';
+import { loadSelftalk, saveSelftalk } from '../persistence/selftalk.js';
 
 const TODAY_N = 8;   // how many phrases land in the rotating "Today's set"
 
@@ -56,6 +56,7 @@ function renderHead() {
     <div class="st-intro">
       <p class="st-kicker">独り言 · Self-Talk</p>
       <p class="st-lede">Narrate your day out loud. Tap ▶ to hear a phrase, then say it yourself — ⌥/⇧-click ▶ to try another voice.</p>
+      <div class="st-actions"><button class="chip primary" type="button" data-stadd><svg class="ic" aria-hidden="true"><use href="#i-plus"/></svg>Add your own phrase</button></div>
     </div>
     <div class="frow"><span class="filter-label">Grammar</span>
       <div class="chips" role="group" aria-label="Grammar filter">
@@ -67,6 +68,7 @@ function phraseCardHtml(p) {
   const text = plainText(p.jp);
   const grams = (p.grammar || []).map((g) => `<span class="st-tag">${escapeHtml(grammarLabel(g))}</span>`).join('');
   const yours = p.custom ? '<span class="st-badge">yours</span>' : '';
+  const edit = p.custom ? `<button class="st-edit" type="button" data-stedit aria-label="Edit phrase" title="Edit"><svg class="ic" aria-hidden="true"><use href="#i-edit"/></svg></button>` : '';
   return `<div class="st-phrase" data-id="${escapeHtml(p.id)}">
     <button class="speak-btn st-play" type="button" data-play data-text="${escapeHtml(text)}" aria-label="Play phrase" title="Play — ⌥/⇧-click to try another voice"><svg class="ic" aria-hidden="true"><use href="#i-volume"/></svg></button>
     <div class="st-phrase-text">
@@ -75,6 +77,7 @@ function phraseCardHtml(p) {
       <div class="st-en">${escapeHtml(p.mean)}</div>
       <div class="st-phrase-meta">${yours}${grams}</div>
     </div>
+    ${edit}
   </div>`;
 }
 
@@ -106,6 +109,64 @@ function toggleGrammar(tok) {
   renderSelftalk();
 }
 
+// ---- authoring (your own phrases) ----
+// The user's lines live in state.selftalkStore.phrases (synced under the 'selftalk' key). Only
+// these custom phrases are editable/deletable; built-ins are read-only. The modal lives in
+// index.html (#stPhraseModal); scene + grammar options are populated at open so they can't drift.
+let editingId = null;
+const $ = (id) => document.getElementById(id);
+
+function openPhraseModal(id) {
+  editingId = id || null;
+  const existing = id ? (state.selftalkStore.phrases || []).find((p) => p.id === id) : null;
+  $('stPhScene').innerHTML = SELFTALK_SCENES.map((s) => `<option value="${escapeHtml(s.id)}">${escapeHtml(s.label)}</option>`).join('');
+  const sel = new Set(existing ? (existing.grammar || []) : []);
+  $('stPhGram').innerHTML = SELFTALK_GRAMMAR.map((g) =>
+    `<label class="st-gram-check"><input type="checkbox" value="${escapeHtml(g.id)}"${sel.has(g.id) ? ' checked' : ''}> ${escapeHtml(g.label)}</label>`).join('');
+  $('stPhJp').value = existing ? existing.jp : '';
+  $('stPhRead').value = existing ? (existing.read || '') : '';
+  $('stPhMean').value = existing ? existing.mean : '';
+  if (existing) $('stPhScene').value = existing.scene;
+  $('stPhTitle').textContent = existing ? 'Edit phrase' : 'Add a phrase';
+  $('stPhSubmit').textContent = existing ? 'Save changes' : 'Save phrase';
+  $('stPhDelete').hidden = !existing;
+  $('stPhErr').textContent = '';
+  $('stPhraseModal').classList.add('show');
+  $('stPhJp').focus();
+}
+function closePhraseModal() { $('stPhraseModal').classList.remove('show'); editingId = null; }
+
+function newPhraseId() {
+  return 'usr-' + (typeof crypto !== 'undefined' && crypto.randomUUID ? crypto.randomUUID() : Date.now().toString(36) + Math.floor(performance.now()).toString(36));
+}
+
+function savePhrase(e) {
+  e.preventDefault();
+  const jp = $('stPhJp').value.trim(), mean = $('stPhMean').value.trim();
+  if (!jp || !mean) { $('stPhErr').textContent = 'Japanese and English are required.'; return; }
+  const phrase = {
+    id: editingId || newPhraseId(),
+    jp, mean,
+    read: $('stPhRead').value.trim(),
+    scene: $('stPhScene').value || SELFTALK_SCENES[0].id,
+    grammar: [...document.querySelectorAll('#stPhGram input:checked')].map((c) => c.value),
+    custom: true,
+  };
+  const phrases = state.selftalkStore.phrases = state.selftalkStore.phrases || [];
+  const i = phrases.findIndex((p) => p.id === phrase.id);
+  if (i >= 0) phrases[i] = phrase; else phrases.push(phrase);
+  saveSelftalk();
+  closePhraseModal();
+  renderSelftalk();
+}
+function deletePhrase() {
+  if (!editingId) return;
+  state.selftalkStore.phrases = (state.selftalkStore.phrases || []).filter((p) => p.id !== editingId);
+  saveSelftalk();
+  closePhraseModal();
+  renderSelftalk();
+}
+
 // ---- lifecycle ----
 // Auto-exit hook fired when navigating away from the tab. The mic/speaking-mode teardown is wired
 // in the record-and-compare commit; today there's nothing holding a stream, so it's a no-op.
@@ -121,8 +182,22 @@ export function initSelftalk() {
     panel.addEventListener('click', (e) => {
       const play = e.target.closest('[data-play]');
       if (play) { playItem({ text: play.dataset.text || '' }, 'selftalk', play, { cycle: cycleMod(e) }); return; }
+      const ed = e.target.closest('[data-stedit]');
+      if (ed) { const card = ed.closest('.st-phrase'); if (card) openPhraseModal(card.dataset.id); return; }
+      const add = e.target.closest('[data-stadd]');
+      if (add) { openPhraseModal(null); return; }
       const gram = e.target.closest('[data-stgram]');
       if (gram) { toggleGrammar(gram.dataset.stgram); return; }
     });
+  }
+  // Authoring modal (#stPhraseModal): close / backdrop / Escape / submit / delete — wired once.
+  const modal = document.getElementById('stPhraseModal');
+  if (modal && !modal.dataset.stWired) {
+    modal.dataset.stWired = '1';
+    document.getElementById('stPhClose').addEventListener('click', closePhraseModal);
+    modal.addEventListener('click', (e) => { if (e.target === modal) closePhraseModal(); });
+    document.getElementById('stPhForm').addEventListener('submit', savePhrase);
+    document.getElementById('stPhDelete').addEventListener('click', deletePhrase);
+    document.addEventListener('keydown', (e) => { if (e.key === 'Escape' && modal.classList.contains('show')) closePhraseModal(); });
   }
 }

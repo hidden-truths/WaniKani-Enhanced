@@ -725,6 +725,30 @@
   </div>
 </div>
 
+<!-- 独り言 Self-Talk: add / edit one of your own phrases. Saved to this browser + synced
+     under the 'selftalk' app key when signed in. Scene + grammar options are filled at open. -->
+<div class="modal-overlay" id="stPhraseModal" role="dialog" aria-modal="true" aria-labelledby="stPhTitle">
+  <div class="modal">
+    <button class="modal-x" id="stPhClose" aria-label="Close">×</button>
+    <h2 id="stPhTitle">Add a phrase</h2>
+    <div class="sub">Your own 独り言 lines join the tab, synced across your devices when signed in. Add furigana with <code>&lt;ruby&gt;漢字&lt;rt&gt;かな&lt;/rt&gt;&lt;/ruby&gt;</code> if you like.</div>
+    <form id="stPhForm" autocomplete="off">
+      <div class="form-grid">
+        <div class="full"><label for="stPhJp">Japanese *</label><input type="text" id="stPhJp" class="jp" required placeholder="歯を磨いている。"></div>
+        <div class="full"><label for="stPhRead">Reading (kana)</label><input type="text" id="stPhRead" class="jp" placeholder="はをみがいている。"></div>
+        <div class="full"><label for="stPhMean">English *</label><input type="text" id="stPhMean" required placeholder="I'm brushing my teeth."></div>
+        <div><label for="stPhScene">Scene</label><select id="stPhScene"></select></div>
+        <div class="full"><label>Grammar</label><div class="st-gram-checks" id="stPhGram"></div></div>
+      </div>
+      <div class="modal-err" id="stPhErr" aria-live="polite"></div>
+      <div class="modal-actions split">
+        <button type="button" class="btn danger-btn" id="stPhDelete" hidden><svg class="ic" aria-hidden="true"><use href="#i-trash"/></svg>Delete</button>
+        <button type="submit" class="btn srs" id="stPhSubmit">Save phrase</button>
+      </div>
+    </form>
+  </div>
+</div>
+
 <!-- Settings page (modal). Preferences are saved locally and synced to your
      account (server app key 'settings') when signed in. renderSettings() paints
      the controls from `settings`; each control writes settings + saveSettings(). -->

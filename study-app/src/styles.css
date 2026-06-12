@@ -695,6 +695,12 @@
   .st-tag{font-family:"SF Mono",ui-monospace,monospace;font-size:10px;letter-spacing:.04em;color:var(--muted);border:1px solid var(--line);border-radius:5px;padding:2px 6px}
   .st-badge{font-family:"SF Mono",ui-monospace,monospace;font-size:10px;letter-spacing:.06em;text-transform:uppercase;color:var(--godan);border:1px solid color-mix(in srgb,var(--godan) 45%,transparent);border-radius:5px;padding:2px 6px}
   .st-empty{font-family:Georgia,serif;color:var(--muted);padding:20px 2px}
+  .st-actions{margin-top:13px}
+  .st-edit{background:none;border:none;color:var(--muted);cursor:pointer;padding:4px;border-radius:6px;flex-shrink:0;align-self:flex-start;transition:color .15s}
+  .st-edit:hover{color:var(--godan)}
+  .st-edit .ic{font-size:16px}
+  .st-gram-checks{display:flex;flex-wrap:wrap;gap:8px 14px;margin-top:4px}
+  .st-gram-check{display:inline-flex;align-items:center;gap:6px;font-family:Georgia,serif;font-size:13px;color:var(--ink);cursor:pointer}
   @media (max-width:640px){
     .st-jp{font-size:18px}
   }
