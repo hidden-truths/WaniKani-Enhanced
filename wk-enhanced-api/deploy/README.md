@@ -233,8 +233,9 @@ starts. No migration step.
 
 **One-time DATA seeds must be run explicitly, though.** A deploy that ships a new seedable dataset
 needs its seed script run once against the prod DB after the restart. As of the **unified sentence
-store (Phase 1)** that means seeding the built-in 独り言 Self-Talk phrases — without it the live
-独り言 tab fetches an empty store and renders nothing:
+store (Phase 1 + Phase 2)** `seed-sentences.ts` seeds BOTH the built-in 独り言 Self-Talk phrases AND
+the built-in vocab example sentences (Phase 2 — public rows linked to cards) in one run — without it
+the live 独り言 tab AND the flashcard/Browse example sentences fetch an empty store and render nothing:
 
 ```bash
 # Run on the droplet, in the compose dir, AFTER `systemctl restart wk-enhanced-api`.
@@ -250,14 +251,17 @@ ENV_FILE=/etc/wk-enhanced-api/env DATA_DIR=/var/lib/wk-enhanced-api \
   docker compose run --rm --no-deps \
   -v /opt/wk-enhanced-api:/repo -w /repo/wk-enhanced-api \
   api bun scripts/seed-sentences.ts
-# → "seeded 44 Self-Talk built-in phrases into the sentence store". Idempotent: safe to re-run.
+# → "seeded 44 Self-Talk built-in phrases…" + "seeded 500 example sentences (500 links across 100
+#   cards)…". Idempotent: safe to re-run (reuse-by-hash + link-replace → no growth).
 ```
 
 The seed's import chain is pure (relative + Bun/Node builtins only — no third-party deps), so it
 runs in the bare `oven/bun` image with the repo mounted; no `bun install` needed. It writes through
-WAL alongside the live server safely. Verify after: `curl https://api.wkenhanced.dev/v1/sentences?ownerType=selftalk`
-should return the built-ins (and the apex study-app's 独り言 tab should populate, with the credentialed
-CORS header echoing the apex origin).
+WAL alongside the live server safely. Verify after:
+`curl https://api.wkenhanced.dev/v1/sentences?ownerType=selftalk` returns the Self-Talk built-ins and
+`…?ownerType=card` returns the example sentences (one entry per card/tier) — and the apex study-app's
+独り言 tab + the flashcard/Browse example sentences should populate, with the credentialed CORS header
+echoing the apex origin.
 
 ## Migrating from a pre-Docker droplet
 

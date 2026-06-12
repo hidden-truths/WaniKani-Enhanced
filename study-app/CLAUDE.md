@@ -33,7 +33,8 @@ order. The actual DOM/render/feature glue is split into **`src/features/*`** mod
   **`src/sync-bus.js`** — the seam where persistence schedules cloud pushes (`sync.progress`/
   `custom`/`settings`) that `cloud.js` registers, replacing the old `typeof` forward-refs.
 - **`src/data/`** — `verbs.js` (`export const VERBS`/`ACCENTS`) + `examples.js`
-  (`export const EXAMPLES`).
+  (`export const EXAMPLES` — now the SEED SOURCE for the sentence store, not read at runtime;
+  the deck fetches examples from the server store).
 
 **Module wiring.** Cross-feature calls use direct imports (live bindings — safe even when
 circular, e.g. cloud⇄minna, because every call fires at event/runtime, not module-eval). A
@@ -140,11 +141,16 @@ one module each under `src/features/*` (the section names map 1:1 to filenames):
   `<audio>` when served over http(s) (`HTTP_SERVED`), falling back to
   `speakSynth` (Web Speech) over `file://` or on failure. `TTS_OK` = either path
   available (gates the Audio UI). See the TTS dead-end.
-- **Leveled examples:** `attachLevels()` sets `v.levels = EXAMPLES[rank]`
-  (built-in only) after each rebuild. `availableTiers(v)` + `exampleForLevel(v,
-  level)` (pure, fallback: exact tier → nearest → `ex` → null) drive the answer-side
-  selector (`renderExample`, default tier = `settings.exampleLevel`) and the Browse
-  detail modal's level filter. `JLPT_TIERS` is the easy→hard order.
+- **Leveled examples:** `attachLevels()` sets `v.levels = state.exampleLevels[rank]`
+  (built-in only) after each rebuild. `state.exampleLevels` is the `{[rank]:{N5:[jp,en],…}}`
+  model **fetched from the server sentence store** (Phase 2 — `GET /v1/sentences?ownerType=card`
+  via `features/examples.js` `initExamples()`), cache-hydrated from `jpverbs_examples_cache` at
+  boot and rebuilt from the fetch by the pure `sentencesToLevels` adapter (`core/examples.js`);
+  degrades to the cache offline. `data/examples.js` is the **seed source** for
+  `seed-sentences.ts`, no longer read at runtime (it tree-shakes out of the app bundle).
+  `availableTiers(v)` + `exampleForLevel(v, level)` (pure, fallback: exact tier → nearest → `ex`
+  → null) drive the answer-side selector (`renderExample`, default tier = `settings.exampleLevel`)
+  and the Browse detail modal's level filter. `JLPT_TIERS` is the easy→hard order.
 - **Settings (DB-synced):** `settings` ({exampleLevel, furigana, input, audio,
   freeReviewDue}) in
   `jpverbs_settings`, synced as app `settings`. `loadSettings` (migrates old per-key
@@ -219,8 +225,10 @@ rows, user-authored phrases are private rows, fetched from `GET /v1/sentences?ow
 and cached in `localStorage["jpverbs_selftalk_cache"]` (read-through). `data/selftalk.js` is the
 seed source, not read at runtime. A pre-store blob's `phrases` are migrated into the store once on
 sign-in. See [SELFTALK.md](SELFTALK.md).
-Leveled examples (`examples.js`, NOT in localStorage — static data):
-`EXAMPLES[rank] = { N5:[jp,en], …, N1:[jp,en] }`.
+Leveled examples (server sentence store; `localStorage["jpverbs_examples_cache"]` read-through):
+the `{[rank]:{N5:[jp,en],…}}` model in `state.exampleLevels`, fetched from
+`GET /v1/sentences?ownerType=card` on boot and cached. `data/examples.js`
+(`EXAMPLES[rank]={N5:[jp,en],…}`) is the **seed source** only — not read at runtime.
 Pitch accents (`verbs.js`, static): `ACCENTS[rank] = <Tokyo accent number>` — backfilled
 onto built-in cards' `v.accent` by `attachLevels` (Minna cards carry their own).
 
@@ -503,11 +511,15 @@ Component contracts you must preserve:
 - **The leveled example sentences in `examples.js` are MODEL-GENERATED** (fanned out
   across agents, then format-validated: valid JSON, all 5 tiers, balanced `<ruby>`,
   English present; a sample was hand-reviewed for grammar/furigana). They're solid
-  but not human-proofread end to end — if you spot an error, just fix that
-  `EXAMPLES[rank][tier]` entry (it's plain data). The headword should appear in every
-  sentence and tiers should escalate N5→N1; keep that if you regenerate. The example
-  shows on the ANSWER side only (the sentence reveals the reading via furigana, so
-  it would spoil the reading-recall question if shown on the prompt).
+  but not human-proofread end to end — if you spot an error, fix that
+  `EXAMPLES[rank][tier]` entry (it's plain data). **`examples.js` is now the SEED SOURCE
+  for the server sentence store, not read at runtime** — so a fix only reaches the app
+  after re-running `wk-enhanced-api/scripts/seed-sentences.ts` (idempotent; re-seed
+  refreshes the changed row's furigana/translation in place). The deck fetches examples
+  from `GET /v1/sentences?ownerType=card` and caches them (`jpverbs_examples_cache`).
+  The headword should appear in every sentence and tiers should escalate N5→N1; keep
+  that if you regenerate. The example shows on the ANSWER side only (the sentence reveals
+  the reading via furigana, so it would spoil the reading-recall question if shown on the prompt).
 - **The app now supports multiple part-of-speech categories — prefer "word"/"card"
   in new copy.** It was born a verb trainer (the dataset global is still `VERBS`, the
   data file is `verbs.js`, and all 100 *built-ins* ARE verbs), and renaming those
