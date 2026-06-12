@@ -643,7 +643,12 @@ function compactLink(r: {
 
 // Compose the full sentence object from its child tables. Used by every read path so the
 // shape never diverges between getSentences and the create/update return values.
-function assembleSentenceRow(row: SentenceRow): AssembledSentence {
+//
+// `linkOverride` carries the SPECIFIC link this entry is for (passed by getSentences, which
+// returns one entry PER LINK so a sentence reused by several card/tiers reports every link).
+// When omitted (the single-link create/update/upsert/seed return values), the first link is
+// re-queried — Self-Talk has exactly one link per sentence, so that path is unchanged.
+function assembleSentenceRow(row: SentenceRow, linkOverride?: SentenceLink): AssembledSentence {
     const db = getDb();
     const trs = db
         .query('SELECT lang, text, ordinal FROM translation WHERE sentence_id = ? ORDER BY lang, ordinal')
@@ -664,11 +669,17 @@ function assembleSentenceRow(row: SentenceRow): AssembledSentence {
         else tags[tg.kind] = tg.value;
     }
 
-    const linkRow = db
-        .query(
-            'SELECT owner_type, owner_id, tier, role, ordinal, clip_start_ms, clip_end_ms FROM sentence_link WHERE sentence_id = ? ORDER BY id LIMIT 1',
-        )
-        .get(row.id) as Parameters<typeof compactLink>[0] | null;
+    let link: SentenceLink;
+    if (linkOverride) {
+        link = linkOverride;
+    } else {
+        const linkRow = db
+            .query(
+                'SELECT owner_type, owner_id, tier, role, ordinal, clip_start_ms, clip_end_ms FROM sentence_link WHERE sentence_id = ? ORDER BY id LIMIT 1',
+            )
+            .get(row.id) as Parameters<typeof compactLink>[0] | null;
+        link = linkRow ? compactLink(linkRow) : { owner_type: '' };
+    }
 
     return {
         id: row.ext_id,
@@ -676,7 +687,7 @@ function assembleSentenceRow(row: SentenceRow): AssembledSentence {
         furigana: row.furigana ? (JSON.parse(row.furigana) as FuriganaSeg[]) : null,
         translations,
         tags,
-        link: linkRow ? compactLink(linkRow) : { owner_type: '' },
+        link,
         custom: row.created_by != null,
     };
 }
@@ -718,22 +729,52 @@ function insertSentenceChildren(
     }
 }
 
-// THE choke-point read. Joins sentence_link → sentence for `ownerType`, and ALWAYS ANDs
-// `(s.public = 1 OR s.created_by = :viewer)`. `viewer` defaults to null → public rows only
-// (SQL `created_by = NULL` is never true, so a null viewer can't reach any private row).
-// This single gate is what the whole feature's privacy rests on — keep the AND unconditional.
-export function getSentences(opts: { ownerType: string; viewer?: number | null }): AssembledSentence[] {
+// THE choke-point read. Joins sentence_link → sentence for `ownerType` (optionally narrowed to
+// one `ownerId`), and ALWAYS ANDs `(s.public = 1 OR s.created_by = :viewer)`. `viewer` defaults
+// to null → public rows only (SQL `created_by = NULL` is never true, so a null viewer can't reach
+// any private row). This single gate is what the whole feature's privacy rests on — keep the AND
+// unconditional.
+//
+// Returns one entry PER LINK (not per sentence): a sentence reused by several cards/tiers comes
+// back once per link, each carrying its own link, so the deck can rebuild v.levels keyed by
+// owner_id + tier. Self-Talk is unaffected — its sentences have exactly one selftalk link each.
+export function getSentences(opts: { ownerType: string; ownerId?: string | null; viewer?: number | null }): AssembledSentence[] {
     const viewer = opts.viewer ?? null;
+    const ownerId = opts.ownerId ?? null;
     const rows = getDb()
         .query(
-            `SELECT DISTINCT s.id, s.ext_id, s.hash, s.text, s.furigana, s.lang, s.source,
-                    s.public, s.visibility, s.created_by, s.created_at
+            `SELECT s.id, s.ext_id, s.hash, s.text, s.furigana, s.lang, s.source,
+                    s.public, s.visibility, s.created_by, s.created_at,
+                    l.owner_type AS l_owner_type, l.owner_id AS l_owner_id, l.tier AS l_tier,
+                    l.role AS l_role, l.ordinal AS l_ordinal,
+                    l.clip_start_ms AS l_clip_start_ms, l.clip_end_ms AS l_clip_end_ms
              FROM sentence_link l JOIN sentence s ON s.id = l.sentence_id
-             WHERE l.owner_type = ? AND (s.public = 1 OR s.created_by = ?)
-             ORDER BY s.id`,
+             WHERE l.owner_type = ? AND (? IS NULL OR l.owner_id = ?) AND (s.public = 1 OR s.created_by = ?)
+             ORDER BY s.id, l.id`,
         )
-        .all(opts.ownerType, viewer) as SentenceRow[];
-    return rows.map(assembleSentenceRow);
+        .all(opts.ownerType, ownerId, ownerId, viewer) as (SentenceRow & {
+        l_owner_type: string;
+        l_owner_id: string | null;
+        l_tier: string | null;
+        l_role: string | null;
+        l_ordinal: number;
+        l_clip_start_ms: number | null;
+        l_clip_end_ms: number | null;
+    })[];
+    return rows.map((r) =>
+        assembleSentenceRow(
+            r,
+            compactLink({
+                owner_type: r.l_owner_type,
+                owner_id: r.l_owner_id,
+                tier: r.l_tier,
+                role: r.l_role,
+                ordinal: r.l_ordinal,
+                clip_start_ms: r.l_clip_start_ms,
+                clip_end_ms: r.l_clip_end_ms,
+            }),
+        ),
+    );
 }
 
 // Count a user's own (private) sentences — backs the per-user authoring cap in the route.
@@ -866,4 +907,68 @@ export function upsertPublicSentence(input: {
     db.query('DELETE FROM sentence_link WHERE sentence_id = ?').run(r.id);
     insertSentenceChildren(r.id, input.translations, input.tags, input.link);
     return assembleSentenceRow(getSentenceRowById(r.id)!);
+}
+
+// The PUBLIC sentence with this hash, or null. The partial unique index
+// `(hash) WHERE public=1 AND visibility='public'` guarantees at most one — so this is the
+// reuse key: an identical-text sentence already in the public slice (regardless of its ext_id
+// namespace, e.g. a Self-Talk 'st-*' row) must be REUSED, not duplicated, or the second insert
+// would violate that index.
+export function getPublicSentenceByHash(hash: string): SentenceRow | null {
+    return getDb()
+        .query(`SELECT ${SENTENCE_ROW_COLS} FROM sentence WHERE hash = ? AND public = 1 AND visibility = 'public'`)
+        .get(hash) as SentenceRow | null;
+}
+
+// Seed/refresh a PUBLIC built-in EXAMPLE sentence (Phase 2) and (re)set its card links. The seed
+// passes the FULL card-link set for one text in a single call (it groups EXAMPLES by text first),
+// so this REPLACES the sentence's owner_type='card' links wholesale — idempotent on re-seed (same
+// hash → same row → same link set → no growth).
+//
+// Reuse-by-hash (D3): resolve the public row by hash, not ext_id. If absent, create it
+// (ext_id='ex-'+hash, source='example'). If present and ours (source='example'), refresh
+// furigana + translations so a bundle fix propagates; if present but FOREIGN (e.g. a Self-Talk
+// 'selftalk' row with identical text), leave its sentence fields + translations untouched and just
+// attach the card links. Non-card links on a shared row are preserved (only card links are wiped).
+export function seedExampleSentence(input: {
+    text: string;
+    furigana?: FuriganaSeg[] | null;
+    translations?: Record<string, string>;
+    cardLinks: SentenceLink[];
+}): AssembledSentence {
+    const furigana = input.furigana ?? null;
+    assertFuriganaMatches(furigana, input.text);
+    const db = getDb();
+    const hash = ttsTextHash(input.text);
+    const existing = getPublicSentenceByHash(hash);
+
+    let id: number;
+    if (existing) {
+        id = existing.id;
+        if (existing.source === 'example') {
+            // Our own example row — refresh content so bundle edits propagate (text/hash unchanged,
+            // they ARE the reuse key). Replace translations.
+            db.query('UPDATE sentence SET furigana = ? WHERE id = ?').run(
+                furigana ? JSON.stringify(furigana) : null,
+                id,
+            );
+            db.query('DELETE FROM translation WHERE sentence_id = ?').run(id);
+            insertSentenceChildren(id, input.translations, undefined, undefined);
+        }
+        // else: foreign public row (e.g. selftalk) with identical text — leave it alone, just link.
+    } else {
+        const r = db
+            .query(
+                `INSERT INTO sentence (ext_id, hash, text, furigana, lang, source, public, visibility, created_by, created_at)
+                 VALUES (?, ?, ?, ?, 'ja', 'example', 1, 'public', NULL, ?) RETURNING id`,
+            )
+            .get(`ex-${hash}`, hash, input.text, furigana ? JSON.stringify(furigana) : null, Date.now()) as { id: number };
+        id = r.id;
+        insertSentenceChildren(id, input.translations, undefined, undefined);
+    }
+
+    // Replace ONLY this sentence's card links (preserve any selftalk/other link on a shared row).
+    db.query("DELETE FROM sentence_link WHERE sentence_id = ? AND owner_type = 'card'").run(id);
+    for (const link of input.cardLinks) insertSentenceChildren(id, undefined, undefined, link);
+    return assembleSentenceRow(getSentenceRowById(id)!);
 }

@@ -397,3 +397,86 @@ describe('sentence store privacy + ownership pins', () => {
         expect(() => db.createSentence({ extId: 'usr-dup', text: 'おはよう。', furigana: seg('おはよう。'), source: 'selftalk', createdBy: a.id, translations: {}, tags: {}, link: { owner_type: 'selftalk' } })).not.toThrow();
     });
 });
+
+// Phase 2: built-in vocab EXAMPLE sentences are PUBLIC rows linked to cards (owner_type='card',
+// owner_id=<rank>, tier='N5'..'N1'). The read returns one entry PER LINK so a reused sentence
+// reports every (card, tier) it covers; the seed reuses by hash so identical text is one row +
+// many links (never a duplicate that would violate the partial unique hash index).
+describe('sentence store — card examples (per-link read + reuse)', () => {
+    const seg = (text: string) => [{ t: text }];
+    const n = (sql: string) => (mem.query(sql).get() as { n: number }).n;
+
+    test('getSentences({ownerType:card}) returns one entry PER LINK with owner_id + tier', () => {
+        db.seedExampleSentence({ text: 'いぬ。', furigana: seg('いぬ。'), translations: { en: 'a dog' }, cardLinks: [{ owner_type: 'card', owner_id: '1', tier: 'N5' }] });
+        db.seedExampleSentence({ text: 'ねこ。', furigana: seg('ねこ。'), translations: { en: 'a cat' }, cardLinks: [{ owner_type: 'card', owner_id: '1', tier: 'N4' }] });
+        const anon = db.getSentences({ ownerType: 'card', viewer: null });
+        expect(anon.map((s) => [s.link.owner_id, s.link.tier, s.text])).toEqual([
+            ['1', 'N5', 'いぬ。'],
+            ['1', 'N4', 'ねこ。'],
+        ]);
+        expect(anon.every((s) => s.custom === false)).toBe(true);
+    });
+
+    test('ownerId narrows the read to one card', () => {
+        db.seedExampleSentence({ text: 'いぬ。', furigana: seg('いぬ。'), translations: { en: 'dog' }, cardLinks: [{ owner_type: 'card', owner_id: '1', tier: 'N5' }] });
+        db.seedExampleSentence({ text: 'とり。', furigana: seg('とり。'), translations: { en: 'bird' }, cardLinks: [{ owner_type: 'card', owner_id: '2', tier: 'N5' }] });
+        const r1 = db.getSentences({ ownerType: 'card', ownerId: '1', viewer: null });
+        expect(r1.map((s) => s.link.owner_id)).toEqual(['1']);
+    });
+
+    test('reuse (example↔example): identical text shared by two cards/tiers = ONE row + TWO links', () => {
+        db.seedExampleSentence({
+            text: 'はしる。',
+            furigana: seg('はしる。'),
+            translations: { en: 'run' },
+            cardLinks: [
+                { owner_type: 'card', owner_id: '1', tier: 'N5' },
+                { owner_type: 'card', owner_id: '2', tier: 'N3' },
+            ],
+        });
+        expect(n('SELECT COUNT(*) AS n FROM sentence')).toBe(1);
+        expect(n("SELECT COUNT(*) AS n FROM sentence_link WHERE owner_type='card'")).toBe(2);
+        const read = db.getSentences({ ownerType: 'card', viewer: null });
+        expect(read.map((s) => [s.link.owner_id, s.link.tier])).toEqual([
+            ['1', 'N5'],
+            ['2', 'N3'],
+        ]);
+    });
+
+    test('reuse (example↔selftalk): an example matching a Self-Talk public row reuses it, untouched', () => {
+        // A Self-Talk public row exists first; an example with identical text must NOT insert a
+        // second public row (it would violate ux_sentence_public_hash) — it reuses the row.
+        db.upsertPublicSentence({ extId: 'st-1', text: 'おはよう。', furigana: seg('おはよう。'), source: 'selftalk', translations: { en: 'good morning' }, tags: { scene: 'morning' }, link: { owner_type: 'selftalk' } });
+        db.seedExampleSentence({ text: 'おはよう。', furigana: seg('おはよう。'), translations: { en: 'IGNORED for a foreign row' }, cardLinks: [{ owner_type: 'card', owner_id: '5', tier: 'N5' }] });
+        expect(n('SELECT COUNT(*) AS n FROM sentence')).toBe(1);
+        // The selftalk read still sees it once (its selftalk link), translations untouched.
+        const st = db.getSentences({ ownerType: 'selftalk', viewer: null });
+        expect(st.map((s) => [s.id, s.translations.en])).toEqual([['st-1', 'good morning']]);
+        // The card read sees it once (its card link).
+        const card = db.getSentences({ ownerType: 'card', viewer: null });
+        expect(card.map((s) => [s.id, s.link.owner_id, s.link.tier])).toEqual([['st-1', '5', 'N5']]);
+    });
+
+    test('seedExampleSentence is idempotent — re-seed does not grow rows/links/translations', () => {
+        const payload = { text: 'はしる。', furigana: seg('はしる。'), translations: { en: 'run' }, cardLinks: [{ owner_type: 'card', owner_id: '1', tier: 'N5' }, { owner_type: 'card', owner_id: '2', tier: 'N3' }] };
+        db.seedExampleSentence(payload);
+        db.seedExampleSentence(payload);
+        expect(n('SELECT COUNT(*) AS n FROM sentence')).toBe(1);
+        expect(n("SELECT COUNT(*) AS n FROM sentence_link WHERE owner_type='card'")).toBe(2);
+        expect(n('SELECT COUNT(*) AS n FROM translation')).toBe(1);
+        // A re-seed of OUR example row refreshes its translation (bundle fix propagates).
+        db.seedExampleSentence({ ...payload, translations: { en: 'to run (fixed)' } });
+        expect(db.getSentences({ ownerType: 'card', ownerId: '1', viewer: null })[0]!.translations).toEqual({ en: 'to run (fixed)' });
+        expect(n('SELECT COUNT(*) AS n FROM translation')).toBe(1);
+    });
+
+    test('privacy still holds: a gated (public=0) card-linked row is invisible to anon + the VIEW', () => {
+        // No repo fn creates a gated card row; insert one raw to prove the mechanism (per-link read
+        // still ANDs the public/owner gate, and the export VIEW excludes it).
+        mem.query(`INSERT INTO sentence (ext_id, hash, text, source, public, visibility, created_at) VALUES ('ex-gated', 'h', 'x', 'example', 0, 'public', 1)`).run();
+        const gid = (mem.query("SELECT id FROM sentence WHERE ext_id='ex-gated'").get() as { id: number }).id;
+        mem.query(`INSERT INTO sentence_link (sentence_id, owner_type, owner_id, tier, ordinal) VALUES (?, 'card', '9', 'N5', 0)`).run(gid);
+        expect(db.getSentences({ ownerType: 'card', viewer: null })).toEqual([]);
+        expect(n('SELECT COUNT(*) AS n FROM public_sentence')).toBe(0);
+    });
+});

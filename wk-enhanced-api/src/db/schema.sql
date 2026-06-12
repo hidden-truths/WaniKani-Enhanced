@@ -158,7 +158,7 @@ CREATE TABLE IF NOT EXISTS sentence (
     text        TEXT NOT NULL,                  -- plainText canonical (byte-for-byte)
     furigana    TEXT,                           -- JSON [{t,r?}]; concat(t) === text
     lang        TEXT NOT NULL DEFAULT 'ja',
-    source      TEXT NOT NULL,                  -- 'builtin' | 'minna' | 'selftalk' | 'user'
+    source      TEXT NOT NULL,                  -- 'builtin' | 'minna' | 'selftalk' | 'example' | 'user'
     public      INTEGER NOT NULL DEFAULT 0,     -- 1 = export/anon eligible
     visibility  TEXT NOT NULL DEFAULT 'public', -- 'public' | 'private'
     created_by  INTEGER REFERENCES users(id) ON DELETE CASCADE,  -- NULL = curator
@@ -178,7 +178,9 @@ CREATE TABLE IF NOT EXISTS translation (
 
 -- Polymorphic ownership, designed up front so card / grammar / conversation /
 -- lesson owners can be wired in later phases without a migration. Self-Talk uses
--- owner_type='selftalk' (owner_id NULL).
+-- owner_type='selftalk' (owner_id NULL); built-in vocab EXAMPLE sentences (Phase 2)
+-- use owner_type='card' (owner_id=<rank>, tier='N5'..'N1'). A sentence reused by
+-- several cards/tiers has ONE sentence row + one link per (card, tier).
 CREATE TABLE IF NOT EXISTS sentence_link (
     id            INTEGER PRIMARY KEY AUTOINCREMENT,
     sentence_id   INTEGER NOT NULL REFERENCES sentence(id) ON DELETE CASCADE,
