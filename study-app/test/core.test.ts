@@ -19,7 +19,7 @@ import {
   validClip, resolveClip, clipLabel, findTrimBounds,
   waveformPeaks, clampSpeed, COMPARE_SPEEDS, rmsLevel, normGains,
   resolveVariant, parseAudioToken, contextPrefs, isSynthVoice, voiceProvider,
-  DEFAULT_AUDIO_PREFS, AUDIO_VOICES,
+  DEFAULT_AUDIO_PREFS, AUDIO_VOICES, variantOrder, variantIndex,
 } from '../src/core/index.js';
 
 beforeEach(() => {
@@ -643,4 +643,27 @@ test('resolveVariant falls back to anything available, then null', () => {
 
 test('AUDIO_VOICES palette includes both Siri genders + Google', () => {
   expect(AUDIO_VOICES.map((v) => v.id)).toEqual(['siri:female', 'siri:male', 'google']);
+});
+
+// ---------- audio-unify ③: per-item voice cycle order ----------
+
+test('variantOrder lists native, then each synth voice, then user — filtered by availability', () => {
+  expect(variantOrder({ tts: true, native: true, user: true }).map((x) => x.kind === 'tts' ? x.voice : x.kind))
+    .toEqual(['native', 'siri:female', 'siri:male', 'google', 'user']);
+  // tts-only (a plain flashcard) still cycles the three synth voices
+  expect(variantOrder({ tts: true, native: false, user: false }).map((x) => x.voice))
+    .toEqual(['siri:female', 'siri:male', 'google']);
+  // nothing available → empty (nothing to cycle)
+  expect(variantOrder({ tts: false, native: false, user: false })).toEqual([]);
+  // every entry carries a human label for the play-button hint
+  expect(variantOrder({ tts: true }).every((x) => typeof x.label === 'string' && x.label)).toBe(true);
+});
+
+test('variantIndex finds a resolved variant by voice (synth) or kind (native/user), else -1', () => {
+  const list = variantOrder({ tts: true, native: true, user: true });
+  expect(variantIndex(list, { kind: 'tts', voice: 'siri:male' })).toBe(2);
+  expect(variantIndex(list, { kind: 'native' })).toBe(0);
+  expect(variantIndex(list, { kind: 'user' })).toBe(4);
+  expect(variantIndex(list, { kind: 'tts', voice: 'nope' })).toBe(-1);
+  expect(variantIndex(list, null)).toBe(-1);
 });

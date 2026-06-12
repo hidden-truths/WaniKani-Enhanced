@@ -375,10 +375,14 @@ This is the priority. The items below are smaller and can follow.
   `kind:user` rows show a disabled ▶ (no sample for an arbitrary word). `features/audio.js`
   exports `previewVoice(voiceId, btn)` (+ `PREVIEW_SAMPLE`), forcing a specific voice past the
   resolver. Until ① is done, siri:* previews sound like the Google fallback.
-- **③ Per-item voice cycle/override.** The original brief wanted per-item override on top of the
-  global per-context default — a tiny "try another voice" affordance next to a play button that
-  cycles the item's available variants for that one playback. Not yet built (we shipped the global
-  per-context priority only).
+- ~~**③ Per-item voice cycle/override.**~~ **Shipped.** **Alt/Shift-click** (⌥/⇧) any play button
+  cycles that item's available voices for that one playback, on top of the global per-context
+  default — no new markup, uniform everywhere (flashcard, Browse cards + detail, Minna words +
+  example rows). Order: native → Siri F → Siri M → Google → your take, filtered to what the item
+  offers (a plain tts-only card still cycles the three synth voices). `core/audio.js` adds the pure
+  `variantOrder`/`variantIndex`; `features/audio.js` holds the per-item cursor + `cycleMod(e)`; the
+  button's `title` surfaces the current voice + the hint. (Modifier-click chosen over a separate ⟳
+  button to avoid cluttering dense surfaces.)
 - **④ Picker availability hinting.** Have the picker query `GET /v1/audio/variants` and dim/annotate
   specific synth voices that aren't pre-generated yet (today the list is static and relies on the
   server's silent fall-through). Makes ① visible in the UI.

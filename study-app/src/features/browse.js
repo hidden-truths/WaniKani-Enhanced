@@ -8,6 +8,7 @@ import {
 } from '../core/index.js';
 import { settings } from '../settings-store.js';
 import { speakWord, speak, TTS_OK } from './tts.js';
+import { cycleMod } from './audio.js';
 import { jishoUrl, provenanceBadge, copyText } from './render-helpers.js';
 import { makeMultiSelect, wireFacets, paintSummary, syncVerbRows } from './deck.js';
 
@@ -110,8 +111,8 @@ export function openVerbDetail(v) {
     </div></details>
     ${v.custom ? `<div class="verb-actions"><button class="chip" id="dEdit" type="button"><svg class="ic" aria-hidden="true"><use href="#i-edit"/></svg>Edit</button><button class="chip" id="dDel" type="button" style="border-color:var(--godan);color:var(--godan)"><svg class="ic" aria-hidden="true"><use href="#i-trash"/></svg>Delete</button></div>` : ''}`;
   renderDetailExample();
-  const sp = document.getElementById('dSpeak'); if (sp) sp.addEventListener('click', () => speakWord(v, 'browse'));
-  const exsp = document.getElementById('dExSpeak'); if (exsp) exsp.addEventListener('click', () => speak(plainText(document.getElementById('dExJp').innerHTML), 'browse'));
+  const sp = document.getElementById('dSpeak'); if (sp) sp.addEventListener('click', (e) => speakWord(v, 'browse', sp, { cycle: cycleMod(e) }));
+  const exsp = document.getElementById('dExSpeak'); if (exsp) exsp.addEventListener('click', (e) => speak(plainText(document.getElementById('dExJp').innerHTML), 'browse', exsp, { cycle: cycleMod(e) }));
   const excp = document.getElementById('dExCopy'); if (excp) excp.addEventListener('click', () => copyText(plainText(document.getElementById('dExJp').innerHTML), excp));
   const seg = document.getElementById('dExLevels'); if (seg) seg.addEventListener('click', e => { const b = e.target.closest('.exlv'); if (!b || b.disabled) return; detailLevel = b.dataset.exlv; renderDetailExample(); });
   if (v.custom) {
@@ -150,7 +151,7 @@ export function renderBrowse() {
       <div class="tags">${tiLabel ? `<span class="tag" style="color:var(--ichidan)">${tiLabel}</span>` : ''}${v.tags.filter(t => !t.startsWith('top') && t !== 'みんなの日本語' && !/^mnn-l\d+$/.test(t)).map(t => t === 'iTalki' ? `<span class="tag" style="color:var(--ichidan);border:1px solid var(--ichidan)">iTalki</span>` : `<span class="tag">${escapeHtml(t)}</span>`).join('')}</div>`;
     card.addEventListener('click', () => openVerbDetail(v));
     const sb = card.querySelector('.speak-btn');   // play reading without opening the modal
-    if (sb) sb.addEventListener('click', e => { e.stopPropagation(); speakWord(v, 'browse'); });
+    if (sb) sb.addEventListener('click', e => { e.stopPropagation(); speakWord(v, 'browse', sb, { cycle: cycleMod(e) }); });
     grid.appendChild(card);
   });
   document.getElementById('num').textContent = shown;     // "Showing N of 100"

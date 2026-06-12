@@ -40,7 +40,9 @@ conversation line) resolves to MULTIPLE tagged voice VARIANTS the user can pick 
 > **Follow-ups (branch `audio-followups`):** the ①–⑦ list lives in
 > [NEXT_STEPS.md](NEXT_STEPS.md) "Audio-unify — follow-ups & ideas". Done so far: **② Preview
 > voice** — each Voice-priority row has a ▶ auditioning 食べる through that exact variant
-> (`previewVoice` in [src/features/audio.js](src/features/audio.js)).
+> (`previewVoice` in [src/features/audio.js](src/features/audio.js)); **③ Per-item voice cycle** —
+> Alt/Shift-click any play button cycles that item's voices (`variantOrder`/`variantIndex` in
+> [src/core/audio.js](src/core/audio.js); `cycleMod` + the cursor in `features/audio.js`).
 >
 > The variant-descriptor shape, key schema, preference model, and verification steps are in the
 > approved plan; the sections below are the original brief, kept for reference.

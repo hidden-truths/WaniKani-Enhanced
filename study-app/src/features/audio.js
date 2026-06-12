@@ -11,7 +11,7 @@
 // best-effort and a missing variant never leaves the user with nothing.
 import { API_BASE } from '../config.js';
 import { settings } from '../settings-store.js';
-import { resolveVariant } from '../core/index.js';
+import { resolveVariant, variantOrder, variantIndex } from '../core/index.js';
 import { speakSynth, HTTP_SERVED, SPEECH_OK } from './tts.js';
 
 // Two reused elements: one public (synth), one credentialed (gated native/user). Reused so a new
@@ -21,6 +21,13 @@ function pub() { if (!pubAudio) pubAudio = new Audio(); return pubAudio; }
 function gated() { if (!gatedAudio) { gatedAudio = new Audio(); gatedAudio.crossOrigin = 'use-credentials'; } return gatedAudio; }
 
 let curBtn = null;
+// Per-item "try another voice" cursor (follow-up ③). A modifier-click advances through the item's
+// variantOrder(); a plain play resets the cursor to wherever the default landed, so cycling always
+// steps AWAY from the current default. Keyed by item identity so switching items restarts the walk.
+let cycleKey = null, cycleIdx = -1;
+function itemKey(item) { return [item.text || '', item.native || '', item.takeId == null ? '' : item.takeId].join('|'); }
+// True when the click asked to cycle (Alt/Option- or Shift-click). Exported so call sites stay terse.
+export function cycleMod(e) { return !!(e && (e.altKey || e.shiftKey)); }
 function stopEls() {
   [pubAudio, gatedAudio].forEach((a) => { if (a) { try { a.pause(); } catch (e) {} a.onended = a.onerror = null; } });
   if (SPEECH_OK) { try { speechSynthesis.cancel(); } catch (e) {} }   // stop any in-flight synth fallback
@@ -73,17 +80,35 @@ export function previewVoice(voiceId, btn) {
 // offer: { text? } (synth), { native? } (a vnjpclub path), { takeId? } (a recording id) — any subset.
 // `btn` (optional) is the play button: it gets a `.playing` class while sounding, and clicking the
 // same lit button again toggles playback off.
-export function playItem(item, context, btn) {
+export function playItem(item, context, btn, opts) {
   if (!item) return;
+  const cycle = !!(opts && opts.cycle);
   const wasPlayingThis = btn && btn === curBtn;
   stopEls();
   clearBtn();
-  if (wasPlayingThis) return;   // toggle-off
+  if (wasPlayingThis && !cycle) return;   // plain re-click on the lit button → toggle off (cycle advances instead)
 
   const text = item.text || '';
   const available = { tts: HTTP_SERVED && !!text, native: !!item.native, user: item.takeId != null };
   if (!available.tts && !available.native && !available.user) { if (text) speakSynth(text); return; }
-  const chosen = resolveVariant(context, available, settings.audioPrefs);
-  if (!chosen) { if (text) speakSynth(text); return; }
-  startVariant(chosen, item, context, btn);
+  const def = resolveVariant(context, available, settings.audioPrefs);
+  if (!def) { if (text) speakSynth(text); return; }
+
+  const key = itemKey(item);
+  const list = variantOrder(available);
+  if (cycle && list.length > 1) {
+    // Advance from wherever the cursor is — seeded at the default for a fresh item — to the next voice.
+    if (cycleKey !== key) cycleIdx = variantIndex(list, def);
+    cycleIdx = (cycleIdx + 1) % list.length;
+    cycleKey = key;
+    const chosen = list[cycleIdx];
+    if (btn) btn.title = 'Voice: ' + chosen.label + ' — ⌥/⇧-click to try another';
+    startVariant(chosen, item, context, btn);
+    return;
+  }
+  // Plain play (or nothing to cycle): play the default, and remember its slot so a following
+  // modifier-click steps off it. Surface the cycle hint on a button that has alternatives.
+  cycleKey = key; cycleIdx = variantIndex(list, def);
+  if (btn && list.length > 1) btn.title = 'Play — ⌥/⇧-click to try another voice';
+  startVariant(def, item, context, btn);
 }

@@ -11,7 +11,7 @@ import { state } from '../state.js';
 import { API_BASE } from '../config.js';
 import { escapeHtml, rubyHtml, plainText, ttsText, CAT_LABEL, minnaBuiltinRank, minnaSig, convItemKey, resolveClip, clipLabel, validClip } from '../core/index.js';
 import { speak, TTS_OK } from './tts.js';
-import { playItem } from './audio.js';
+import { playItem, cycleMod } from './audio.js';
 import { copyBtnHtml, copyText } from './render-helpers.js';
 import { account, api, setSyncStatus } from './cloud-core.js';
 import { openAuth } from './cloud.js';
@@ -406,12 +406,12 @@ function clearNavSpeaking() { const nav = document.getElementById('navExtra'); i
 function wireMinnaLesson(n, L, body) {
   // Unified audio buttons (vocab words + conversation): resolve native/synth/take per the 'minna'
   // voice priority. The newest user take (if any) makes the 'user' kind available for that item.
-  body.querySelectorAll('[data-audio-item]').forEach(b => b.addEventListener('click', () => {
+  body.querySelectorAll('[data-audio-item]').forEach(b => b.addEventListener('click', (e) => {
     const takeId = b.dataset.itemkey ? newestTakeIdForItem(n, b.dataset.itemkey) : null;
-    playItem({ text: b.dataset.text || '', native: b.dataset.native || null, takeId }, 'minna', b);
+    playItem({ text: b.dataset.text || '', native: b.dataset.native || null, takeId }, 'minna', b, { cycle: cycleMod(e) });
   }));
   // Grammar / example SENTENCES are synth-only (no native clip) — synth in the 'minna' context.
-  body.querySelectorAll('[data-tts]').forEach(b => b.addEventListener('click', () => speak(b.dataset.tts, 'minna', b)));
+  body.querySelectorAll('[data-tts]').forEach(b => b.addEventListener('click', (e) => speak(b.dataset.tts, 'minna', b, { cycle: cycleMod(e) })));
   // Copy an example sentence (plain text) to the clipboard for dictionary lookup.
   body.querySelectorAll('[data-copy]').forEach(b => b.addEventListener('click', () => copyText(b.dataset.copy, b)));
   wireMinnaRecord(body);   // delegated record/play/delete/compare handlers (attach-once)

@@ -14,6 +14,7 @@ import {
 import { settings, saveSettings } from '../settings-store.js';
 import { save } from '../persistence/store.js';
 import { speakWord, speak, TTS_OK } from './tts.js';
+import { cycleMod } from './audio.js';
 import { jishoUrl, copyText } from './render-helpers.js';
 import { cfg, buildDeck, updateDeckCount, updateDueBanner, updateStartLabel, startDueSession } from './deck.js';
 
@@ -31,8 +32,9 @@ export function registerSessionHooks(h) {
   if (h.maybeShowSignup) maybeShowSignup = h.maybeShowSignup;
 }
 
-// playReading reads the current card's reading aloud (server TTS via speakWord).
-function playReading() { if (session) speakWord(session.deck[session.i], 'reviews'); }
+// playReading reads the current card's reading aloud (server TTS via speakWord). `e` is the click
+// event when triggered by the speaker button — Alt/Shift-click cycles voices (③); auto-play passes none.
+function playReading(e) { if (session) speakWord(session.deck[session.i], 'reviews', document.getElementById('speakBtn'), { cycle: cycleMod(e) }); }
 
 export function startSession() {
   const deck = buildDeck();
@@ -199,7 +201,7 @@ export function initFlashcardUI() {
   // Play the example sentence — read the rendered JP at click time (so it follows the
   // chosen tier) and strip ruby to the plain text /v1/tts wants.
   const exSpeak = document.getElementById('exSpeak');
-  if (exSpeak) exSpeak.addEventListener('click', () => speak(plainText(document.getElementById('exJp').innerHTML), 'reviews'));
+  if (exSpeak) exSpeak.addEventListener('click', (e) => speak(plainText(document.getElementById('exJp').innerHTML), 'reviews', exSpeak, { cycle: cycleMod(e) }));
   const exCopy = document.getElementById('exCopy');
   if (exCopy) exCopy.addEventListener('click', () => copyText(plainText(document.getElementById('exJp').innerHTML), exCopy));
   // Pick a tier → remember it (synced setting) → re-render the current card's example.

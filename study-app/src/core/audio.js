@@ -57,6 +57,27 @@ export function contextPrefs(prefs, context) {
   return Array.isArray(p) && p.length ? p : (DEFAULT_AUDIO_PREFS[context] || DEFAULT_AUDIO_PREFS.reviews);
 }
 
+// The ordered list of CONCRETE variants an item can play, for the per-item "try another voice"
+// cycle (modifier-click on a play button, audio-unify follow-up ③). Native first, then each
+// specific synth voice (Siri female/male, Google), then the user's take — filtered to what the item
+// actually offers via `available` ({ tts, native, user } booleans). Each entry is { kind, voice?,
+// label }. Pure: the player (features/audio.js) walks this with a per-item cursor.
+export function variantOrder(available) {
+  const av = available || {};
+  const out = [];
+  if (av.native) out.push({ kind: 'native', label: AUDIO_KIND_LABELS.native });
+  if (av.tts) for (const v of AUDIO_VOICES) out.push({ kind: 'tts', voice: v.id, label: v.label });
+  if (av.user) out.push({ kind: 'user', label: AUDIO_KIND_LABELS.user });
+  return out;
+}
+
+// Index of a resolved { kind, voice } within a variantOrder() list, or -1. Synth matches on the
+// specific voice id; native/user match on kind alone. Used to seed the cycle cursor at the default.
+export function variantIndex(list, chosen) {
+  if (!chosen || !Array.isArray(list)) return -1;
+  return list.findIndex((x) => x.kind === chosen.kind && (x.kind !== 'tts' || x.voice === chosen.voice));
+}
+
 // Resolve which variant to play for an item in a context. `available` declares what the item can
 // actually offer: { tts:boolean, native:boolean, user:boolean }. Returns { kind, voice } — `voice`
 // is the specific synth voice id for kind 'tts' — or null when nothing is available.
