@@ -407,10 +407,19 @@ Component contracts you must preserve:
   `wk-enhanced-api/scripts/generate-tts.ts` (default `--engine say` = macOS `say` with a
   Japanese **Siri** system voice, the highest quality; or the `jp-tts` Swift CLI for a specific
   installed voice). **Example
-  sentences are now spoken too:** the answer-side example (`#exSpeak` in `flashcard.js`) and the
-  みんなの日本語 grammar/lesson example rows (`ttsSentenceBtn` in `minna.js`) carry a `.speak-btn.sm`
-  that plays `speak(plainText(jp))` — `plainText` (core/text.js) strips ruby to the base sentence,
-  the exact string `/v1/tts` keys on, so the client request and the pre-gen driver agree.
+  sentences are now spoken too:** the answer-side example (`#exSpeak` in `flashcard.js`), the
+  Browse detail modal (`#dExSpeak` in `browse.js`), and the みんなの日本語 grammar/lesson example rows
+  (`ttsSentenceBtn` in `minna.js`) carry a `.speak-btn.sm` that plays `speak(plainText(jp))` —
+  `plainText` (core/text.js) strips ruby to the base sentence, the exact string `/v1/tts` keys on,
+  so the client request and the pre-gen driver agree.
+  **Audio pitch is approximate by design — don't "fix" it by sending kana.** Reading audio sends
+  the KANJI headword (`ttsText`), never the kana (verified: a homograph like 橋 sends `橋`, not `はし`).
+  But an isolated word still can't realize a 尾高 (odaka) accent — the drop lands on a *following*
+  particle that isn't there — and no TTS engine (Siri/Google) can be *told* an accent; it predicts
+  one, badly for isolated homographs (橋/箸/端). So the AUDIO accent is approximate and the visual
+  `pitchHtml` overline/drop is the source of truth. The lever, if audio accent ever needs to
+  improve, is a carrier particle (e.g. speak `橋が`, not `橋`) — a coordinated `ttsText`/driver change
+  + full regen, deliberately NOT done. In sentences the accent is already contextually correct.
 - **Pitch accent is shown VISUALLY (`pitchHtml`), because the TTS audio can't be pitch-
   controlled.** A card's `accent` number (0=heiban, 1=atamadaka, k=drop after mora k) →
   `pitchHtml(reading, accent)` splits the reading into morae (`splitMora`) and draws an

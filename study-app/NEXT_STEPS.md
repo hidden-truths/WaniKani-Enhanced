@@ -151,8 +151,8 @@ This is the priority. The items below are smaller and can follow.
   macOS TTS**: `/v1/tts` is now a three-tier storage-backed cache that **prefers a pre-generated
   Apple-voice `.m4a`** (Kyoko) over Google and persists Google clips; `jp-tts.swift`
   (`AVSpeechSynthesizer`→AAC) + `generate-tts.ts` voice every reading + example sentence and
-  upload to storage. (3) **Example sentences are now spoken** (answer-side flashcard example +
-  Minna example rows, `speak(plainText(jp))`). (4) **Minna native audio** is prefetched into our
+  upload to storage. (3) **Example sentences are now spoken** (answer-side flashcard example,
+  Browse detail modal, + Minna example rows, `speak(plainText(jp))`). (4) **Minna native audio** is prefetched into our
   storage (`prefetch-minna-audio.ts`) so we never round-trip to vnjpclub at play time. The
   Apple-voice readings/sentences still want a real-ear proofread, and the furigana wants a
   reading-accuracy proofread. See [MINNA.md](MINNA.md) + the TTS dead-end in [CLAUDE.md](CLAUDE.md).
