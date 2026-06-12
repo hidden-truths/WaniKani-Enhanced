@@ -4,6 +4,38 @@ A self-contained brief for a fresh session. The goal: **unify all voice-audio so
 behind one tagged audio API**, so a given item (word reading / example sentence /
 conversation line) resolves to MULTIPLE tagged voice VARIANTS the user can pick or cycle.
 
+> ## STATUS — Phase 1 (backend foundation) SHIPPED (branch `minna-audio-unify`)
+>
+> **Decisions locked** with the maintainer: **Google** = one neutral `gtx` variant (no paid
+> Cloud TTS — gender diversity comes from Siri). Picker is **per-context** (reviews / browsing /
+> textbook) where each context is an ordered priority of **specific voices OR kinds** (native /
+> tts / user). Delivery is **phased**.
+>
+> **Phase 1 done (server-only, no UX change, existing playback intact):**
+> - Tagged key scheme `audio/<provider>/<gender|'default'>/<sha256(text)>.<ext>` +
+>   `ttsVariantKey`/`ttsTextHash` (`services/tts.ts`); the legacy `tts/<hash>` keys + ~960 clips
+>   are untouched.
+> - `audio_variants` manifest table (`db/`) — which specific voices exist for a text.
+> - `resolveTts(text, voice?)` (the 3-tier cache, factored out of the inline `/v1/tts`).
+> - **One `/v1/audio` route group**: `GET /variants?text=` (synth catalog), `GET /tts?text=&voice=`,
+>   `GET /native?src=` (gated), `POST/GET/DELETE /recordings*` (gated). The native + recordings
+>   handlers are shared functions ALSO mounted at the legacy `/v1/minna/{audio,recordings*}` +
+>   `/v1/tts` paths, so the current client keeps working. `audio` added to the `STUDY_ROUTE`
+>   credentialed-CORS allowlist.
+> - `generate-tts.ts --variant <provider:gender>` for dual-gender Siri pre-gen (two passes,
+>   flipping the macOS System Voice).
+>
+> **Phase 2 (NEXT — client):** `core/audio.js` (variant descriptors + `provider→kind` map +
+> `resolveVariant(context, available, prefs)` + per-context default priorities, all pure/tested);
+> a shared `playItem(item, context)` player routing public-vs-credentialed by the variant's
+> `gated` flag; refactor `speak()`/`speakWord()`/`mnPlay()` to call it; a per-context priority
+> editor in Settings persisted as `settings.audioPrefs` (synced); wire flashcards (`reviews`),
+> Browse (`browse`), Minna (`minna`). **Phase 3:** generalize the compare player's "▶ native" into
+> "▶ reference" against any chosen voice.
+>
+> The variant-descriptor shape, key schema, preference model, and verification steps are in the
+> approved plan; the sections below are the original brief, kept for reference.
+
 > ⚠️ **TEST ENV — DO NOT take down the running servers.** Vite dev on **:5173** and the API
 > on **:3000** (started with `COOKIE_SECURE=false bun dev`); the maintainer tests in their own
 > browser against them. No `preview_stop` / `pkill` / killing :5173 or :3000. Only (re)start if

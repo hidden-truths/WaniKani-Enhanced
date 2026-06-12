@@ -83,11 +83,11 @@ All three are **signed-in only**, optionally narrowed to an owner allowlist
 |---|---|---|---|
 | GET | `/v1/minna/lessons` | `no-store` | Lesson numbers that have curated content (reads `data/minna/`; ignores `*.draft.json`). |
 | GET | `/v1/minna/lessons/{n}` | `no-store` | The curated lesson JSON, served verbatim from `data/minna/lesson-<n>.json`. `404` if absent. |
-| GET | `/v1/minna/audio?src=…` | `private, immutable` | A native-audio MP3, proxied from vnjpclub once and cached in storage thereafter. |
-| POST | `/v1/minna/recordings?lesson&itemKey&durationMs&keep` | — | **(Phase 2)** Save a voice take (raw `audio/webm`/`mp4` body, ≤2 MB) as a **private** storage object; prune the item to `keep` (≤20). Returns the new take + the item's take list. |
-| GET | `/v1/minna/recordings?lesson=` | `no-store` | **(Phase 2)** List the user's takes for a lesson, newest first (metadata only). |
-| GET | `/v1/minna/recordings/{id}` | `private, immutable` | **(Phase 2)** Stream one of the **owner's** recordings (404 for a non-owner/missing id). |
-| DELETE | `/v1/minna/recordings/{id}` | — | **(Phase 2)** Delete one of the owner's recordings + its storage object (idempotent). |
+| GET | `/v1/audio/native?src=…` | `private, immutable` | A native-audio MP3, proxied from vnjpclub once and cached in storage thereafter. (Legacy alias: `/v1/minna/audio?src=…` — same handler.) |
+| POST | `/v1/audio/recordings?lesson&itemKey&durationMs&keep` | — | **(Phase 2)** Save a voice take (raw `audio/webm`/`mp4` body, ≤2 MB) as a **private** storage object; prune the item to `keep` (≤20). Returns the new take + the item's take list. (Legacy alias: `/v1/minna/recordings`.) |
+| GET | `/v1/audio/recordings?lesson=` | `no-store` | **(Phase 2)** List the user's takes for a lesson, newest first (metadata only). |
+| GET | `/v1/audio/recordings/{id}` | `private, immutable` | **(Phase 2)** Stream one of the **owner's** recordings (404 for a non-owner/missing id). |
+| DELETE | `/v1/audio/recordings/{id}` | — | **(Phase 2)** Delete one of the owner's recordings + its storage object (idempotent). |
 | GET | `/v1/minna/practice` | `no-store` | **(Phase 2)** The user's per-lesson practice history — one row per lesson recorded in, with distinct-item + take counts and the last-practiced time. Own path (not under `/recordings/`) so the `/recordings/{id}` param route can't shadow it. |
 
 Defined in [../wk-enhanced-api/src/routes/minna.ts](../wk-enhanced-api/src/routes/minna.ts); mounted at `/v1/minna` in
