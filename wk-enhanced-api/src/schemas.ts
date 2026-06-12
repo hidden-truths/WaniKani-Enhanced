@@ -499,3 +499,92 @@ export const AudioTtsQuerySchema = z.object({
     text: z.string().min(1).max(200).openapi({ param: { name: 'text', in: 'query' }, example: '食べる' }),
     voice: z.string().max(40).optional().openapi({ param: { name: 'voice', in: 'query' }, example: 'siri:female' }),
 });
+
+// ---------- unified sentence store (/v1/sentences) ----------
+
+// A furigana segment: base `t`, optional reading `r`. concat(seg.t) MUST equal the
+// sentence's plain text (enforced server-side on write); the kana reading is derived
+// client-side (seg.r ?? seg.t), never stored.
+export const FuriganaSegSchema = z
+    .object({
+        t: z.string().openapi({ description: 'Base text (a kanji run or plain kana).', example: '歯' }),
+        r: z.string().optional().openapi({ description: 'Kana reading over `t`; omitted for plain text.', example: 'は' }),
+    })
+    .openapi('FuriganaSeg');
+
+// The link between a sentence and what owns/illustrates it. Self-Talk uses
+// `{ owner_type: 'selftalk' }`; card/grammar/conversation owners arrive in later phases.
+export const SentenceLinkSchema = z
+    .object({
+        owner_type: z.string().openapi({ example: 'selftalk' }),
+        owner_id: z.string().nullable().optional(),
+        tier: z.string().nullable().optional(),
+        role: z.string().nullable().optional(),
+        ordinal: z.number().int().optional(),
+        clip_start_ms: z.number().int().nullable().optional(),
+        clip_end_ms: z.number().int().nullable().optional(),
+    })
+    .openapi('SentenceLink');
+
+// The assembled sentence the API serves (composed from sentence + translation + tag + link).
+export const SentenceSchema = z
+    .object({
+        id: z.string().openapi({ description: 'Stable external id (builtin slug or user UUID).', example: 'st-morning-1' }),
+        text: z.string().openapi({ description: 'plainText canonical (the audio key).', example: '歯を磨いている。' }),
+        furigana: z.array(FuriganaSegSchema).nullable().openapi({ description: 'Structured ruby; concat(t) === text.' }),
+        translations: z.record(z.string(), z.string()).openapi({ description: 'Lang → translation, e.g. { en: "…" }.' }),
+        tags: z
+            .record(z.string(), z.union([z.string(), z.array(z.string())]))
+            .openapi({ description: 'e.g. { scene: "morning", grammar: ["te-iru"] }.' }),
+        link: SentenceLinkSchema,
+        custom: z.boolean().openapi({ description: 'true = user-authored (private); false = curator/public.' }),
+    })
+    .openapi('Sentence');
+
+export const SentenceListResponseSchema = z
+    .object({ sentences: z.array(SentenceSchema) })
+    .openapi('SentenceListResponse');
+
+// GET /v1/sentences?ownerType= — Phase 1 only serves the Self-Talk slice; the enum widens
+// as later phases wire card/grammar/conversation owners.
+export const SentenceListQuerySchema = z.object({
+    ownerType: z
+        .enum(['selftalk'])
+        .openapi({ param: { name: 'ownerType', in: 'query' }, description: 'Which owner surface to read.', example: 'selftalk' }),
+});
+
+// POST body — carries the CLIENT-generated id (ext_id). text/furigana/tags/translations/link
+// describe the sentence; the server computes the hash + stamps it private.
+export const SentenceCreateRequestSchema = z
+    .object({
+        id: z.string().min(1).max(200).openapi({ example: 'usr-7b1c…' }),
+        text: z.string().min(1).max(1000),
+        furigana: z.array(FuriganaSegSchema).nullish(),
+        translations: z.record(z.string(), z.string()).optional(),
+        tags: z.record(z.string(), z.union([z.string(), z.array(z.string())])).optional(),
+        link: SentenceLinkSchema,
+    })
+    .openapi('SentenceCreateRequest');
+
+// PUT body — same as create minus `id` (the id rides in the path). Full replace.
+export const SentenceUpdateRequestSchema = z
+    .object({
+        text: z.string().min(1).max(1000),
+        furigana: z.array(FuriganaSegSchema).nullish(),
+        translations: z.record(z.string(), z.string()).optional(),
+        tags: z.record(z.string(), z.union([z.string(), z.array(z.string())])).optional(),
+        link: SentenceLinkSchema.optional(),
+    })
+    .openapi('SentenceUpdateRequest');
+
+export const SentenceIdParamsSchema = z.object({
+    id: z.string().min(1).max(200).openapi({ param: { name: 'id', in: 'path' }, description: 'The sentence ext_id.', example: 'usr-7b1c…' }),
+});
+
+export const SentenceMutateResponseSchema = z
+    .object({ sentence: SentenceSchema })
+    .openapi('SentenceMutateResponse');
+
+export const SentenceDeleteResponseSchema = z
+    .object({ ok: z.boolean() })
+    .openapi('SentenceDeleteResponse');

@@ -31,6 +31,7 @@ import { progressRouter } from './routes/progress.ts';
 import { sessionsRouter } from './routes/sessions.ts';
 import { minnaRouter } from './routes/minna.ts';
 import { audioRouter } from './routes/audio.ts';
+import { sentencesRouter } from './routes/sentences.ts';
 import { MEDIA_CACHE_CONTROL } from './services/storage.ts';
 import { resolveTts } from './services/tts.ts';
 
@@ -43,18 +44,20 @@ const app = new OpenAPIHono({ defaultHook: zodHook });
 //    and carries no cookie; per-user data isn't involved, so wildcard is safe + simple.
 //    ETag is exposed so the userscript can read it for conditional revalidation.
 //
-//  - STUDY-APP routes (/v1/auth, /v1/progress, /v1/sessions, /v1/minna, /v1/audio): the
-//    study app is a SEPARATE origin (wkenhanced.dev) from this API (api.wkenhanced.dev) in
-//    the two-container topology, and its requests are CREDENTIALED (the session cookie). The
-//    spec forbids `*` with credentials, so we must echo the EXACT requesting origin +
-//    `Allow-Credentials: true` — but only for origins on the allowlist (config.studyApp).
-//    PUT is included (/v1/progress uses it) and the preflight (OPTIONS) gets the same
-//    headers before the 204. In dev this exercises the real path: Vite :5173 → API :3000
-//    is cross-origin + same-site, exactly like the prod apex ↔ api split. `/v1/audio` is here
-//    because its gated native + recordings sub-paths are credentialed (cookie-authorized,
-//    crossOrigin='use-credentials'); the public /v1/audio/tts + /variants tolerate the
-//    echoed-origin branch fine (the study app is the only caller, and it's allowlisted).
-const STUDY_ROUTE = /^\/v1\/(auth|progress|sessions|minna|audio)\b/;
+//  - STUDY-APP routes (/v1/auth, /v1/progress, /v1/sessions, /v1/minna, /v1/audio,
+//    /v1/sentences): the study app is a SEPARATE origin (wkenhanced.dev) from this API
+//    (api.wkenhanced.dev) in the two-container topology, and its requests are CREDENTIALED
+//    (the session cookie). The spec forbids `*` with credentials, so we must echo the EXACT
+//    requesting origin + `Allow-Credentials: true` — but only for origins on the allowlist
+//    (config.studyApp). PUT is included (/v1/progress + /v1/sentences use it) and the preflight
+//    (OPTIONS) gets the same headers before the 204. In dev this exercises the real path: Vite
+//    :5173 → API :3000 is cross-origin + same-site, exactly like the prod apex ↔ api split.
+//    `/v1/audio` is here because its gated native + recordings sub-paths are credentialed
+//    (cookie-authorized, crossOrigin='use-credentials'); the public /v1/audio/tts + /variants
+//    tolerate the echoed-origin branch fine. `/v1/sentences` belongs here even though its GET is
+//    "public" (anon-readable): the study app's api() always sends credentials:'include', so even
+//    the anon read is a credentialed request and a wildcard origin would be browser-rejected.
+const STUDY_ROUTE = /^\/v1\/(auth|progress|sessions|minna|audio|sentences)\b/;
 app.use('*', async (c, next) => {
     const origin = c.req.header('Origin');
     if (STUDY_ROUTE.test(c.req.path) && origin && config.studyApp.allowedOrigins.includes(origin)) {
@@ -107,6 +110,7 @@ app.route('/v1/progress', progressRouter);
 app.route('/v1/sessions', sessionsRouter);
 app.route('/v1/minna', minnaRouter);
 app.route('/v1/audio', audioRouter);
+app.route('/v1/sentences', sentencesRouter);
 
 // TTS for the study app (replaces the browser's uneven speechSynthesis voices with
 // consistent ja-JP audio). The three-tier cache (in-process → storage → Google) + the

@@ -736,6 +736,22 @@ export function getSentences(opts: { ownerType: string; viewer?: number | null }
     return rows.map(assembleSentenceRow);
 }
 
+// Count a user's own (private) sentences — backs the per-user authoring cap in the route.
+export function countUserSentences(viewer: number): number {
+    const row = getDb().query('SELECT COUNT(*) AS n FROM sentence WHERE created_by = ?').get(viewer) as { n: number };
+    return row.n;
+}
+
+// Fetch a user's OWN sentence by ext_id (assembled), or null if it doesn't exist or isn't
+// theirs. Lets the create route stay idempotent on a re-POST of the same ext_id (the legacy
+// Self-Talk migration replays the user's existing usr-<uuid> ids).
+export function getUserSentence(opts: { extId: string; viewer: number }): AssembledSentence | null {
+    const row = getDb()
+        .query(`SELECT ${SENTENCE_ROW_COLS} FROM sentence WHERE ext_id = ? AND created_by = ?`)
+        .get(opts.extId, opts.viewer) as SentenceRow | null;
+    return row ? assembleSentenceRow(row) : null;
+}
+
 // Create a PRIVATE user-authored sentence (public=0, visibility='private'). `hash` is
 // computed here from `text`; furigana is validated against `text` before insert.
 export function createSentence(input: {
