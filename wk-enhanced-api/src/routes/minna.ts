@@ -1,27 +1,26 @@
-// みんなの日本語 (Minna no Nihongo) lesson dashboard — content + native audio.
+// みんなの日本語 (Minna no Nihongo) lesson dashboard — curated content + practice history.
 //
-// Account-gated: only signed-in users (optionally narrowed to an owner
-// allowlist via MINNA_OWNER_EMAILS) can read the copyrighted textbook material,
-// so it never ships to anonymous visitors. See config.minna + the "Visibility"
-// decision in the plan.
+// Account-gated (lib/minnaGate.ts): only signed-in users (optionally narrowed to an owner
+// allowlist via MINNA_OWNER_EMAILS) can read the copyrighted textbook material.
 //
 //   GET /v1/minna/lessons        — which lessons have curated content
 //   GET /v1/minna/lessons/{n}    — the curated lesson JSON
-//   GET /v1/minna/audio?src=...  — proxy + cache a native-audio MP3 from vnjpclub
+//   GET /v1/minna/practice       — the user's per-lesson practice history
 //
-// Content lives in data/minna/lesson-<n>.json (git-tracked, curated by hand from
-// the scrape-minna.ts draft). Audio is fetched from vnjpclub once and cached in
-// our storage layer thereafter, so the upstream is hit at most once per file.
+// The AUDIO routes (native MP3 + per-user voice recordings) now live in routes/audio.ts under
+// the unified /v1/audio surface. They're ALSO mounted HERE at the legacy
+// /v1/minna/{audio,recordings…} paths — the SAME path-agnostic handler functions — so existing
+// clients keep working during the audio-unify transition (Phase 1). When nothing references the
+// legacy paths anymore, these alias mounts can be removed.
+//
+// Content lives in data/minna/lesson-<n>.json (git-tracked, curated by hand from the
+// scrape-minna.ts draft).
 
 import { OpenAPIHono, createRoute, z } from '@hono/zod-openapi';
 import { readdir } from 'node:fs/promises';
-import type { Context } from 'hono';
-import { config } from '../config.ts';
-import { currentUser } from '../lib/auth.ts';
-import { getStorage, keys } from '../services/storage.ts';
-import { fetchMinnaAudio, isValidMinnaAudioPath } from '../services/minnaAudio.ts';
+import { gate, denied } from '../lib/minnaGate.ts';
 import * as db from '../db/client.ts';
-import type { RecordingRow } from '../db/client.ts';
+import { serveNativeAudio, postRecording, listRecordings, getRecordingBytes, deleteRecording } from './audio.ts';
 import {
     MinnaLessonsResponseSchema,
     MinnaLessonSchema,
@@ -43,22 +42,6 @@ export const minnaRouter = new OpenAPIHono({ defaultHook: zodHook });
 // data/minna/ relative to this module (src/routes/) — robust to cwd, same idiom
 // as the static web serve in index.ts.
 const DATA_DIR = new URL('../../data/minna/', import.meta.url);
-
-// Auth + owner gate. Returns the user, or null when the caller must be denied
-// (not signed in, OR signed in but not on a non-empty owner allowlist). We use
-// one 401 for both so a non-owner can't even probe what content exists.
-function gate(c: Context) {
-    const user = currentUser(c);
-    if (!user) return null;
-    const allow = config.minna.ownerEmails;
-    if (allow.length && !allow.includes(user.email.toLowerCase())) return null;
-    return user;
-}
-const denied = (c: Context) =>
-    c.json(
-        { code: 'unauthorized' as const, error: 'not authorized', detail: 'Sign in to access みんなの日本語.' },
-        401,
-    );
 
 // ---------- GET /lessons ----------
 
@@ -123,13 +106,13 @@ minnaRouter.openapi(getRoute, async (c) => {
     return c.json(await file.json(), 200);
 });
 
-// ---------- GET /audio ----------
+// ---------- Legacy audio aliases (handlers shared with /v1/audio — see routes/audio.ts) ----------
 
 const audioRoute = createRoute({
     method: 'get',
     path: '/audio',
     tags: ['Accounts'],
-    summary: 'Proxy + cache a native-audio MP3 (signed-in only)',
+    summary: 'Proxy + cache a native-audio MP3 (legacy alias of /v1/audio/native)',
     request: { query: MinnaAudioQuerySchema },
     responses: {
         200: { description: 'MP3 audio.', content: { 'audio/mpeg': { schema: z.any() } } },
@@ -138,77 +121,13 @@ const audioRoute = createRoute({
         502: { description: 'Upstream fetch failed.', content: { 'application/json': { schema: ErrorSchema } } },
     },
 });
-
-minnaRouter.openapi(audioRoute, async (c) => {
-    if (!gate(c)) return denied(c);
-    const { src } = c.req.valid('query');
-    if (!isValidMinnaAudioPath(src)) {
-        return c.json({ code: 'validation_error' as const, error: 'bad audio path' }, 400);
-    }
-    const storage = getStorage();
-    const key = keys.minnaAudio(src);
-    let bytes = await storage.get(key);
-    let cached = true;
-    if (!bytes) {
-        cached = false;
-        bytes = await fetchMinnaAudio(src);
-        if (!bytes) return c.json({ code: 'upstream_failure' as const, error: 'audio unavailable' }, 502);
-        try {
-            // PRIVATE object: this is account-gated copyrighted content, so the stored
-            // object must not be publicly reachable at its bucket URL either (the key is
-            // guessable). It's served ONLY through this gated route via storage.get();
-            // the publicUrl is never used. Same posture as voice recordings.
-            await storage.put(key, bytes, 'audio/mpeg', { acl: 'private' });
-        } catch {
-            /* serve the bytes we have even if caching failed */
-        }
-    }
-    c.set('logCtx', { minnaAudio: src, cached });
-    c.header('Content-Type', 'audio/mpeg');
-    // `private`, NOT `public`: this is account-gated content, so it must never be
-    // stored in a SHARED cache (Cloudflare / any CDN in front of the origin) — that
-    // would serve it to unauthorized users and bypass the gate. The owner's own
-    // browser still caches it for a year (immutable, content-addressed key).
-    c.header('Cache-Control', 'private, max-age=31536000, immutable');
-    return c.body(bytes);
-});
-
-// ---------- Record-and-compare (Phase 2): per-user voice recordings ----------
-//
-// The learner records themselves saying a vocab word / conversation line and
-// compares it to the cached native audio. Recordings are PRIVATE storage objects
-// (acl:'private') and are served only through GET /recordings/{id} below, scoped
-// to the owner — never via a public URL. Old takes are pruned per item to the
-// user's keep-N setting so storage stays bounded.
-
-const MAX_RECORDING_BYTES = 2_000_000; // ~2 MB — a short clip; generous ceiling.
-const DEFAULT_KEEP = 3;
-const MAX_KEEP = 20;
-// Accepted recording container types. MediaRecorder emits webm/opus on
-// Chromium/Firefox and mp4 (or ogg) elsewhere; the client's silence-trim step
-// re-encodes to wav. We store whatever the client sends and echo it back on
-// serve so playback picks the right decoder.
-const RECORDING_CONTENT_TYPES = new Set(['audio/webm', 'audio/mp4', 'audio/ogg', 'audio/mpeg', 'audio/wav']);
-const EXT_BY_TYPE: Record<string, string> = {
-    'audio/webm': 'webm',
-    'audio/mp4': 'm4a',
-    'audio/ogg': 'ogg',
-    'audio/mpeg': 'mp3',
-    'audio/wav': 'wav',
-};
-
-// Public (client-facing) view of a recording row — drops the internal storage key + owner.
-function toRecordingDto(r: RecordingRow) {
-    return { id: r.id, lesson: r.lesson, itemKey: r.itemKey, durationMs: r.durationMs, createdAt: r.createdAt };
-}
-
-// ---------- POST /recordings ----------
+minnaRouter.openapi(audioRoute, serveNativeAudio);
 
 const recPostRoute = createRoute({
     method: 'post',
     path: '/recordings',
     tags: ['Accounts'],
-    summary: 'Save a voice recording for a vocab word or conversation line',
+    summary: 'Save a voice recording (legacy alias of /v1/audio/recordings)',
     request: {
         query: MinnaRecordingPostQuerySchema,
         body: { required: true, content: { 'audio/webm': { schema: z.any() } } },
@@ -219,82 +138,25 @@ const recPostRoute = createRoute({
         401: { description: 'Not authorized.', content: { 'application/json': { schema: ErrorSchema } } },
     },
 });
-
-minnaRouter.openapi(recPostRoute, async (c) => {
-    const user = gate(c);
-    if (!user) return denied(c);
-    const { lesson, itemKey, durationMs, keep } = c.req.valid('query');
-    const lessonNum = Number(lesson);
-
-    const ct = (c.req.header('content-type') || 'audio/webm').split(';')[0]!.trim();
-    if (!RECORDING_CONTENT_TYPES.has(ct)) {
-        return c.json({ code: 'validation_error' as const, error: 'unsupported audio type', detail: ct }, 400);
-    }
-    const body = await c.req.arrayBuffer();
-    if (!body.byteLength) {
-        return c.json({ code: 'validation_error' as const, error: 'empty recording' }, 400);
-    }
-    if (body.byteLength > MAX_RECORDING_BYTES) {
-        return c.json(
-            { code: 'validation_error' as const, error: 'recording too large', detail: `${body.byteLength} bytes; max ${MAX_RECORDING_BYTES}.` },
-            400,
-        );
-    }
-
-    const token = crypto.randomUUID();
-    const storageKey = keys.minnaRecording(user.id, lessonNum, itemKey, token, EXT_BY_TYPE[ct] || 'webm');
-    try {
-        await getStorage().put(storageKey, body, ct, { acl: 'private' });
-    } catch {
-        return c.json({ code: 'internal_error' as const, error: 'could not store recording' }, 400);
-    }
-
-    const dur = durationMs ? Number(durationMs) : null;
-    const id = db.insertRecording(user.id, lessonNum, itemKey, storageKey, ct, dur, Date.now());
-
-    // Prune to the user's keep-N (clamped), deleting older takes' storage objects too.
-    const keepN = Math.min(MAX_KEEP, Math.max(1, keep ? Number(keep) : DEFAULT_KEEP));
-    const pruned = db.pruneRecordings(user.id, lessonNum, itemKey, keepN);
-    if (pruned.length) {
-        const storage = getStorage();
-        await Promise.all(pruned.map((p) => storage.delete(p.storageKey).catch(() => {})));
-    }
-
-    const created = db.getRecording(user.id, id)!;
-    const takes = db.listRecordings(user.id, lessonNum).filter((r) => r.itemKey === itemKey);
-    c.set('logCtx', { minnaRec: 'save', itemKey, bytes: body.byteLength, pruned: pruned.length });
-    return c.json({ ok: true, recording: toRecordingDto(created), takes: takes.map(toRecordingDto) }, 200);
-});
-
-// ---------- GET /recordings (list a lesson's takes) ----------
+minnaRouter.openapi(recPostRoute, postRecording);
 
 const recListRoute = createRoute({
     method: 'get',
     path: '/recordings',
     tags: ['Accounts'],
-    summary: "List the current user's recordings for a lesson",
+    summary: "List the current user's recordings for a lesson (legacy alias)",
     request: { query: MinnaRecordingsListQuerySchema },
     responses: {
         200: { description: 'Recordings, newest first.', content: { 'application/json': { schema: MinnaRecordingsListResponseSchema } } },
         401: { description: 'Not authorized.', content: { 'application/json': { schema: ErrorSchema } } },
     },
 });
-
-minnaRouter.openapi(recListRoute, (c) => {
-    const user = gate(c);
-    if (!user) return denied(c);
-    const { lesson } = c.req.valid('query');
-    c.header('Cache-Control', 'no-store');
-    const recordings = db.listRecordings(user.id, Number(lesson)).map(toRecordingDto);
-    return c.json({ recordings }, 200);
-});
+minnaRouter.openapi(recListRoute, listRecordings);
 
 // ---------- GET /practice (per-lesson practice history) ----------
 //
-// A cross-lesson aggregate the per-lesson list route can't give without fetching
-// every lesson: one row per lesson the user has recorded in, with item + take
-// counts and the last-practiced time. Its own path (not /recordings/...) so it
-// can't be shadowed by the /recordings/{id} param route.
+// One row per lesson the user has recorded in, with item + take counts and the last-practiced
+// time. Its own path (not /recordings/...) so it can't be shadowed by /recordings/{id}.
 
 const recPracticeRoute = createRoute({
     method: 'get',
@@ -317,13 +179,11 @@ minnaRouter.openapi(recPracticeRoute, (c) => {
     return c.json({ lessons, totalItems, totalTakes }, 200);
 });
 
-// ---------- GET /recordings/{id} (serve the audio bytes) ----------
-
 const recGetRoute = createRoute({
     method: 'get',
     path: '/recordings/{id}',
     tags: ['Accounts'],
-    summary: 'Stream one of the current user’s recordings',
+    summary: 'Stream one of the current user’s recordings (legacy alias)',
     request: { params: MinnaRecordingIdParamsSchema },
     responses: {
         200: { description: 'Audio bytes.', content: { 'audio/webm': { schema: z.any() } } },
@@ -331,41 +191,17 @@ const recGetRoute = createRoute({
         404: { description: 'No such recording.', content: { 'application/json': { schema: ErrorSchema } } },
     },
 });
-
-minnaRouter.openapi(recGetRoute, async (c) => {
-    const user = gate(c);
-    if (!user) return denied(c);
-    const { id } = c.req.valid('param');
-    const row = db.getRecording(user.id, Number(id));
-    if (!row) return c.json({ code: 'not_found' as const, error: 'no such recording' }, 404);
-    const bytes = await getStorage().get(row.storageKey);
-    if (!bytes) return c.json({ code: 'not_found' as const, error: 'recording bytes missing' }, 404);
-    c.header('Content-Type', row.contentType);
-    // Private + immutable: the bytes for a given id never change; deletion just 404s
-    // a fresh fetch. Must never sit in a shared cache (personal voice data).
-    c.header('Cache-Control', 'private, max-age=31536000, immutable');
-    return c.body(bytes);
-});
-
-// ---------- DELETE /recordings/{id} ----------
+minnaRouter.openapi(recGetRoute, getRecordingBytes);
 
 const recDeleteRoute = createRoute({
     method: 'delete',
     path: '/recordings/{id}',
     tags: ['Accounts'],
-    summary: 'Delete one of the current user’s recordings',
+    summary: 'Delete one of the current user’s recordings (legacy alias)',
     request: { params: MinnaRecordingIdParamsSchema },
     responses: {
         200: { description: 'Deleted (idempotent).', content: { 'application/json': { schema: MinnaRecordingDeleteResponseSchema } } },
         401: { description: 'Not authorized.', content: { 'application/json': { schema: ErrorSchema } } },
     },
 });
-
-minnaRouter.openapi(recDeleteRoute, async (c) => {
-    const user = gate(c);
-    if (!user) return denied(c);
-    const { id } = c.req.valid('param');
-    const row = db.deleteRecording(user.id, Number(id));
-    if (row) await getStorage().delete(row.storageKey).catch(() => {});
-    return c.json({ ok: true }, 200);
-});
+minnaRouter.openapi(recDeleteRoute, deleteRecording);
