@@ -30,6 +30,9 @@ import { EXAMPLES } from '../src/data/examples.js';
 beforeEach(() => {
   // Rebuild the live deck like the app's rebuildData() does (built-in path: no custom
   // cards, empty overlays), then attach leveled examples + pitch accent + default cat.
+  // attachLevels() reads state.exampleLevels (Phase 2: hydrated from the store/cache at runtime);
+  // seed it from the bundle here so the built-in cards get their levels, as in production.
+  state.exampleLevels = EXAMPLES;
   state.minnaStore = { notes: {}, lastLesson: null, overlays: {} };
   state.DATA = applyMinnaOverlays(VERBS.filter((v: any) => !v.skip));
   attachLevels();

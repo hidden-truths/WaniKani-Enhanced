@@ -38,6 +38,7 @@ import { rebuildData, renderCustomCount, openVerbModal, deleteVerb, initCustomUI
 import { initSettingsPage } from './features/settings-page.js';
 import { initMinna, migrateMinnaDupes, renderMinna, onMinnaHidden } from './features/minna.js';
 import { initSelftalk, showSelftalk, onSelftalkHidden } from './features/selftalk.js';
+import { initExamples } from './features/examples.js';
 import { initCloud, bootAuth } from './features/cloud.js';
 
 // Initial deck build (built-ins + custom) so deck/browse readers have state.DATA before the
@@ -97,4 +98,7 @@ initSelftalk();
 // tab-open; Browse needs one render now so it's ready on switch.
 migrateMinnaDupes(); rebuildData();   // apply local Minna overlays + clean pre-dedup dupes
 renderBrowse();
+// Refresh built-in example sentences from the server store (Phase 2). state.exampleLevels is
+// already cache-hydrated (state.js), so the deck paints instantly; this freshens it + re-renders.
+initExamples();   // fire-and-forget
 bootAuth();   // session probe + cloud hydration; fire-and-forget, must be last
