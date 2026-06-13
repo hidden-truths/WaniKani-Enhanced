@@ -43,9 +43,15 @@ A **phrase** is `{ id, jp, read, mean, topic, grammar:[…], custom? }`:
   pitch is a per-WORD property and a single drop number is meaningless over a sentence, so phrases
   rely on the furigana + the synth audio's prosody.
 - `topic` is one of `SELFTALK_TAXONOMY`'s topic ids; its CATEGORY is **derived** from that registry
-  (category → topics — e.g. Daily life → morning/commute/meals/chores/work/feelings/evening). Stored
-  as `sentence_tag(kind='topic')`, with a legacy `scene`-tag read-fallback for pre-grid rows.
-  `grammar` ⊂ `SELFTALK_GRAMMAR` (`te-iru`/`nakya`/`tai`/`volitional`/`te-oku`/`sou`).
+  (category → topics). The categories so far: **Daily life** (the 7 time-of-day topics), **Gaming**
+  (Minecraft / incremental / The Sims), and **Conversations by register** (with a coworker / friend /
+  boyfriend — each topic carries a `register` ∈ `plain`|`polite`|`intimate`, surfaced as a badge in
+  the topic view; conversation lines are written *in* that register). Stored as
+  `sentence_tag(kind='topic')`, with a legacy `scene`-tag read-fallback for pre-grid rows.
+- `grammar` ⊂ `SELFTALK_GRAMMAR` (`te-iru`/`nakya`/`tai`/`volitional`/`te-oku`/`sou`). **Every phrase
+  carries ≥1 of these 6 teaching tags** (pinned by the dataset test) — that's the point of Self-Talk,
+  so new content is authored to feature one. The furigana↔`read` consistency of every built-in is
+  also test-gated (the round-trip over ALL of `SELFTALK`), which catches reading typos on new lines.
 - Phrases now live in the **sentence store**: built-ins are public rows (seeded from
   `data/selftalk.js`), **user-authored** phrases (`custom:true`) are private rows
   (`created_by`, `visibility='private'`). The store keeps furigana as structured `[{t,r?}]`
@@ -120,7 +126,11 @@ fine, since only one tab is active at a time.
 ## Proofread caveat
 
 The built-in phrases + furigana are **model-generated** → worth a grammar/furigana proofread (same
-status as `examples.js`/Minna). Fixes are plain-data edits in `data/selftalk.js`.
+status as `examples.js`/Minna). Fixes are plain-data edits in `data/selftalk.js`. The round-trip
+test guarantees furigana↔`read` consistency, but NOT naturalness or register-appropriateness — the
+**Gaming** + **Conversations-by-register** content (the P2 starter set) especially wants a native
+eye on phrasing and on whether each conversation line sits at the right politeness level. After any
+edit, re-run `seed-sentences.ts` to push it to the store (and the NLP re-parse for tap-to-lookup).
 
 ## Backlog / ideas
 

@@ -49,6 +49,25 @@ export const SELFTALK_TAXONOMY = [
       { id: 'evening', label: 'Evening', jp: '夜' },
     ],
   },
+  {
+    id: 'gaming', label: 'Gaming', jp: 'ゲーム', icon: 'i-gamepad',
+    topics: [
+      { id: 'minecraft', label: 'Minecraft', jp: 'マイクラ' },
+      { id: 'incremental', label: 'Incremental games', jp: '放置ゲー' },
+      { id: 'sims', label: 'The Sims', jp: 'シムズ' },
+    ],
+  },
+  {
+    // Conversations grouped by REGISTER — each topic carries the politeness level it drills (`register`
+    // ∈ plain | polite | intimate), surfaced as a badge in the topic view. Lines are addressed
+    // utterances (output practice for real conversations), not 独り言, so they're written in-register.
+    id: 'conversations', label: 'Conversations by register', jp: '会話', icon: 'i-chat',
+    topics: [
+      { id: 'coworker', label: 'With a coworker', jp: '同僚', register: 'polite' },
+      { id: 'friend', label: 'With a friend', jp: '友達', register: 'plain' },
+      { id: 'boyfriend', label: 'With my boyfriend', jp: '彼氏', register: 'intimate' },
+    ],
+  },
 ];
 
 // Flat views derived from the taxonomy (the registry above stays the single source of truth):
@@ -122,4 +141,48 @@ export const SELFTALK = [
   { id: 'st-evening-5', jp: '<ruby>歯<rt>は</rt></ruby>を<ruby>磨<rt>みが</rt></ruby>いてから<ruby>寝<rt>ね</rt></ruby>よう。', read: 'はをみがいてからねよう。', mean: 'Let me brush my teeth and then go to sleep.', topic: 'evening', grammar: ['volitional'] },
   { id: 'st-evening-6', jp: '<ruby>今日<rt>きょう</rt></ruby>も<ruby>一日<rt>いちにち</rt></ruby><ruby>終<rt>お</rt></ruby>わりそう。', read: 'きょうもいちにちおわりそう。', mean: 'Looks like another day is coming to an end.', topic: 'evening', grammar: ['sou'] },
   { id: 'st-evening-7', jp: '<ruby>電気<rt>でんき</rt></ruby>を<ruby>消<rt>け</rt></ruby>しておこう。', read: 'でんきをけしておこう。', mean: 'Let me turn off the lights.', topic: 'evening', grammar: ['te-oku', 'volitional'] },
+
+  // ==== Gaming ====
+  // ---- Minecraft ----
+  { id: 'st-minecraft-1', jp: '<ruby>鉄<rt>てつ</rt></ruby>が<ruby>足<rt>た</rt></ruby>りないから、もっと<ruby>掘<rt>ほ</rt></ruby>らないと。', read: 'てつがたりないから、もっとほらないと。', mean: "I don't have enough iron — I need to mine more.", topic: 'minecraft', grammar: ['nakya'] },
+  { id: 'st-minecraft-2', jp: '<ruby>夜<rt>よる</rt></ruby>になる<ruby>前<rt>まえ</rt></ruby>に<ruby>家<rt>いえ</rt></ruby>を<ruby>建<rt>た</rt></ruby>てておこう。', read: 'よるになるまえにいえをたてておこう。', mean: 'Let me build a house before it gets dark.', topic: 'minecraft', grammar: ['te-oku', 'volitional'] },
+  { id: 'st-minecraft-3', jp: 'クリーパーが<ruby>近<rt>ちか</rt></ruby>づいてきている。', read: 'クリーパーがちかづいてきている。', mean: 'A creeper is coming this way.', topic: 'minecraft', grammar: ['te-iru'] },
+  { id: 'st-minecraft-4', jp: 'ダイヤモンドが<ruby>見<rt>み</rt></ruby>つかりそう。', read: 'ダイヤモンドがみつかりそう。', mean: "Looks like I'm about to find a diamond.", topic: 'minecraft', grammar: ['sou'] },
+  { id: 'st-minecraft-5', jp: '<ruby>新<rt>あたら</rt></ruby>しい<ruby>村<rt>むら</rt></ruby>を<ruby>探<rt>さが</rt></ruby>しに<ruby>行<rt>い</rt></ruby>きたい。', read: 'あたらしいむらをさがしにいきたい。', mean: 'I want to go look for a new village.', topic: 'minecraft', grammar: ['tai'] },
+
+  // ---- Incremental games ----
+  { id: 'st-incremental-1', jp: '<ruby>放置<rt>ほうち</rt></ruby>している<ruby>間<rt>あいだ</rt></ruby>にポイントが<ruby>貯<rt>た</rt></ruby>まっている。', read: 'ほうちしているあいだにポイントがたまっている。', mean: 'Points are piling up while I leave it idle.', topic: 'incremental', grammar: ['te-iru'] },
+  { id: 'st-incremental-2', jp: '<ruby>次<rt>つぎ</rt></ruby>のアップグレードまで<ruby>貯<rt>た</rt></ruby>めておこう。', read: 'つぎのアップグレードまでためておこう。', mean: 'Let me save up until the next upgrade.', topic: 'incremental', grammar: ['te-oku', 'volitional'] },
+  { id: 'st-incremental-3', jp: 'もう<ruby>一回<rt>いっかい</rt></ruby>だけリセットしたい。', read: 'もういっかいだけリセットしたい。', mean: 'I want to reset just one more time.', topic: 'incremental', grammar: ['tai'] },
+  { id: 'st-incremental-4', jp: 'そろそろ<ruby>上限<rt>じょうげん</rt></ruby>に<ruby>達<rt>たっ</rt></ruby>しそう。', read: 'そろそろじょうげんにたっしそう。', mean: "I'm about to hit the cap soon.", topic: 'incremental', grammar: ['sou'] },
+  { id: 'st-incremental-5', jp: '<ruby>課金<rt>かきん</rt></ruby>しないように<ruby>我慢<rt>がまん</rt></ruby>しないと。', read: 'かきんしないようにがまんしないと。', mean: "I have to hold back so I don't spend money.", topic: 'incremental', grammar: ['nakya'] },
+
+  // ---- The Sims ----
+  { id: 'st-sims-1', jp: 'シムがお<ruby>腹<rt>なか</rt></ruby>を<ruby>空<rt>す</rt></ruby>かせている。', read: 'シムがおなかをすかせている。', mean: 'My Sim is getting hungry.', topic: 'sims', grammar: ['te-iru'] },
+  { id: 'st-sims-2', jp: '<ruby>新<rt>あたら</rt></ruby>しい<ruby>部屋<rt>へや</rt></ruby>を<ruby>作<rt>つく</rt></ruby>りたい。', read: 'あたらしいへやをつくりたい。', mean: 'I want to build a new room.', topic: 'sims', grammar: ['tai'] },
+  { id: 'st-sims-3', jp: '<ruby>仕事<rt>しごと</rt></ruby>に<ruby>行<rt>い</rt></ruby>く<ruby>前<rt>まえ</rt></ruby>にトイレに<ruby>行<rt>い</rt></ruby>かせておこう。', read: 'しごとにいくまえにトイレにいかせておこう。', mean: 'Let me send them to the bathroom before work.', topic: 'sims', grammar: ['te-oku', 'volitional'] },
+  { id: 'st-sims-4', jp: 'このシム、そろそろ<ruby>昇進<rt>しょうしん</rt></ruby>しそう。', read: 'このシム、そろそろしょうしんしそう。', mean: 'This Sim looks about to get promoted.', topic: 'sims', grammar: ['sou'] },
+  { id: 'st-sims-5', jp: '<ruby>家<rt>いえ</rt></ruby>を<ruby>片付<rt>かたづ</rt></ruby>けさせないと。', read: 'いえをかたづけさせないと。', mean: 'I need to make them clean the house.', topic: 'sims', grammar: ['nakya'] },
+
+  // ==== Conversations by register ====
+  // ---- With a coworker (pol/ です・ます) ----
+  { id: 'st-coworker-1', jp: '<ruby>今<rt>いま</rt></ruby>、<ruby>資料<rt>しりょう</rt></ruby>を<ruby>確認<rt>かくにん</rt></ruby>しています。', read: 'いま、しりょうをかくにんしています。', mean: "I'm checking the documents right now.", topic: 'coworker', grammar: ['te-iru'] },
+  { id: 'st-coworker-2', jp: '<ruby>会議<rt>かいぎ</rt></ruby>の<ruby>前<rt>まえ</rt></ruby>に<ruby>準備<rt>じゅんび</rt></ruby>しておきます。', read: 'かいぎのまえにじゅんびしておきます。', mean: "I'll get things ready before the meeting.", topic: 'coworker', grammar: ['te-oku'] },
+  { id: 'st-coworker-3', jp: '<ruby>少<rt>すこ</rt></ruby>し<ruby>休憩<rt>きゅうけい</rt></ruby>したいです。', read: 'すこしきゅうけいしたいです。', mean: "I'd like to take a short break.", topic: 'coworker', grammar: ['tai'] },
+  { id: 'st-coworker-4', jp: 'そろそろ<ruby>始<rt>はじ</rt></ruby>めましょう。', read: 'そろそろはじめましょう。', mean: "Let's get started soon.", topic: 'coworker', grammar: ['volitional'] },
+  { id: 'st-coworker-5', jp: '<ruby>締<rt>し</rt></ruby>め<ruby>切<rt>き</rt></ruby>りに<ruby>間<rt>ま</rt></ruby>に<ruby>合<rt>あ</rt></ruby>わせないといけません。', read: 'しめきりにまにあわせないといけません。', mean: 'We have to make the deadline.', topic: 'coworker', grammar: ['nakya'] },
+
+  // ---- With a friend (plain) ----
+  { id: 'st-friend-1', jp: '<ruby>今度<rt>こんど</rt></ruby><ruby>一緒<rt>いっしょ</rt></ruby>に<ruby>遊<rt>あそ</rt></ruby>びに<ruby>行<rt>い</rt></ruby>きたい。', read: 'こんどいっしょにあそびにいきたい。', mean: 'I want to go hang out together sometime.', topic: 'friend', grammar: ['tai'] },
+  { id: 'st-friend-2', jp: '<ruby>週末<rt>しゅうまつ</rt></ruby>、<ruby>暇<rt>ひま</rt></ruby>してる？', read: 'しゅうまつ、ひましてる？', mean: 'Are you free this weekend?', topic: 'friend', grammar: ['te-iru'] },
+  { id: 'st-friend-3', jp: '<ruby>今度<rt>こんど</rt></ruby>カラオケ<ruby>行<rt>い</rt></ruby>こうよ。', read: 'こんどカラオケいこうよ。', mean: "Let's go to karaoke sometime!", topic: 'friend', grammar: ['volitional'] },
+  { id: 'st-friend-4', jp: 'その<ruby>映画<rt>えいが</rt></ruby>、<ruby>面白<rt>おもしろ</rt></ruby>そうだね。', read: 'そのえいが、おもしろそうだね。', mean: 'That movie looks fun, huh.', topic: 'friend', grammar: ['sou'] },
+  { id: 'st-friend-5', jp: 'そろそろ<ruby>帰<rt>かえ</rt></ruby>らないと。', read: 'そろそろかえらないと。', mean: 'I should get going soon.', topic: 'friend', grammar: ['nakya'] },
+
+  // ---- With my boyfriend (intimate) ----
+  { id: 'st-boyfriend-1', jp: '<ruby>早<rt>はや</rt></ruby>く<ruby>会<rt>あ</rt></ruby>いたいな。', read: 'はやくあいたいな。', mean: 'I want to see you soon.', topic: 'boyfriend', grammar: ['tai'] },
+  { id: 'st-boyfriend-2', jp: '<ruby>今<rt>いま</rt></ruby>、<ruby>何<rt>なに</rt></ruby>してるの？', read: 'いま、なにしてるの？', mean: 'What are you up to right now?', topic: 'boyfriend', grammar: ['te-iru'] },
+  { id: 'st-boyfriend-3', jp: '<ruby>週末<rt>しゅうまつ</rt></ruby>どこか<ruby>行<rt>い</rt></ruby>こうよ。', read: 'しゅうまつどこかいこうよ。', mean: "Let's go somewhere this weekend.", topic: 'boyfriend', grammar: ['volitional'] },
+  { id: 'st-boyfriend-4', jp: '<ruby>晩<rt>ばん</rt></ruby>ご<ruby>飯<rt>はん</rt></ruby>、<ruby>作<rt>つく</rt></ruby>っておくね。', read: 'ばんごはん、つくっておくね。', mean: "I'll make dinner for us.", topic: 'boyfriend', grammar: ['te-oku'] },
+  { id: 'st-boyfriend-5', jp: 'そろそろ<ruby>寝<rt>ね</rt></ruby>ないと。', read: 'そろそろねないと。', mean: 'We should get to sleep soon.', topic: 'boyfriend', grammar: ['nakya'] },
 ];
