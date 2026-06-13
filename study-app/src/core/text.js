@@ -33,8 +33,11 @@ export function ttsText(v) { return v.tts || (v.jp && HAS_KANJI.test(v.jp) ? v.j
 // wrappers: "<ruby>橋<rt>はし</rt></ruby>を渡る" → "橋を渡る". Used to get the plain text to
 // hand a sentence to TTS, and to keep the pre-generation driver's /v1/tts key in sync
 // with what the client requests (both call this, so they agree byte-for-byte).
+// Also drops the Phase-4 tap-overlay `<span class="extok">` wrappers (core/annotate.js) so reading
+// plainText off a span-wrapped rendered sentence still yields the bare text — span-free curated
+// input (the pre-gen driver's) is unaffected, so the TTS key stays aligned.
 export function plainText(s) {
-  return String(s).replace(/<rt>.*?<\/rt>/g, '').replace(/<\/?ruby>/g, '');
+  return String(s).replace(/<rt>.*?<\/rt>/g, '').replace(/<\/?ruby>/g, '').replace(/<\/?span[^>]*>/g, '');
 }
 
 // ---- structured furigana: <ruby> markup ↔ [{t, r?}] segments ----

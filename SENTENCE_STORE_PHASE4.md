@@ -24,9 +24,10 @@ commit-3 UI lands.
   study-app's existing `SELFTALK_GRAMMAR` ids so auto-detected and hand-authored grammar tags search
   one vocabulary. Every detector is pinned with positives + confusable negatives.
 - **Commit 3 (in progress):** surface it in the study-app. **3a (server, ✅ shipped):** annotations
-  serve on `GET /v1/sentences?annotate=1` via `getSentences({includeAnnotations})` — see §7a. **3b/3c
-  (client, NEXT):** tap-a-word → lemma/POS/reading → card-or-Jisho lookup, and a grammar-search filter.
-  3b/3c are the user-visible payoff; they touch the **frontend**, so they're browser-verified and bigger.
+  serve on `GET /v1/sentences?annotate=1` via `getSentences({includeAnnotations})` — see §7a. **3b
+  (client, ✅ shipped):** tap-a-word → lemma/POS/reading → card-or-Jisho lookup (pure `overlayTokens`
+  span-wrap over the ruby + a stateless popover) — see §7b. **3c (client, NEXT):** the grammar-search
+  filter. The client slices touch the **frontend**, so they're browser-verified and bigger.
 - **Grammar is ALREADY being served** (it rides `tags.grammar` on the existing `getSentences` read —
   see §5.4). Only the token **annotation** needed the new serving flag (3a). The client just doesn't
   *use* either yet (3b/3c).
@@ -385,26 +386,30 @@ open decisions settled with the user first (same collaborative pattern as commit
   without the flag, and a visible-but-unparsed row carries none (no existence leak). `bun test` 186 pass,
   `typecheck` clean; curl-verified on dev (`毎日…` → 6 tokens w/ UTF-16 offsets; no flag → no field).
 
-### 7b. Tap-to-lookup UI (study-app)
-- **Fetch:** the deck examples come via `GET /v1/sentences?ownerType=card` (`features/examples.js`
-  `initExamples()` → pure `sentencesToLevels` → `state.exampleLevels = {[rank]:{N5:[jp,en]}}`). Today
-  the adapter keeps only `[jp,en]` and **drops tags/annotation** — extend it (and `state.exampleLevels`
-  shape, and the `jpverbs_examples_cache` read-through) to carry the annotation + grammar. Self-Talk
-  fetch (`ownerType=selftalk`) similarly.
-- **THE hard part — rendering tappable spans over furigana.** The annotation offsets index the *plain*
-  `text`; the sentence renders as **furigana ruby** (`rubyHtml` / `core/text.js`). Tokens and furigana
-  segments are on *different* boundaries. A pure helper must overlay tappable `<span>`s keyed by token
-  char-offset onto the ruby render (wrap each token's text range — including its ruby — in a tappable
-  span). This is the main design problem of commit 3; decide the approach with the user (span-wrapping
-  vs click-position→offset). Keep the helper **pure + unit-tested** (`src/core/*`, happy-dom).
-- **Interaction:** tap a token → a small popover showing `lemma` / POS / `reading`, with an action:
-  resolve `lemma` against the deck (`state.BUILTIN_RANK_BY_JP` + custom cards) → open the card detail
-  (`openVerbDetail`); else `jishoUrl(lemma)` in a new tab (`render-helpers`). Reuse existing furigana;
-  the annotation is an overlay keyed by char offset.
-- **Where it renders:** flashcard answer example, Browse detail modal, Self-Talk phrases (Minna later).
-  The example shows on the **answer side only** (furigana spoils the reading question).
-- Verify in the browser (preview tooling): screenshot the popover, confirm a tap opens the right card /
-  Jisho link, confirm offsets line up visually on a kanji-heavy sentence.
+### 7b. Tap-to-lookup UI (study-app) — ✅ SHIPPED
+- **Fetch:** `features/examples.js` + Self-Talk now request `?annotate=1`. The adapters carry the new
+  data: `sentencesToLevels` ([core/examples.js](study-app/src/core/examples.js)) puts a THIRD tuple
+  element `meta = { furigana, tokens?, grammar? }` on `state.exampleLevels[rank][tier] = [jp, en, meta]`
+  (old `[0]/[1]` readers + a stale `jpverbs_examples_cache` are unaffected → plain ruby fallback;
+  Decision 4, no key bump); `sentenceToPhrase` ([core/selftalk.js](study-app/src/core/selftalk.js))
+  adds `furigana` + `tokens`.
+- **The hard part — span-wrap over ruby (Decision 2).** Pure `overlayTokens(furiganaSegments, tokens)`
+  ([core/annotate.js](study-app/src/core/annotate.js)): a `<span class="extok" data-lemma data-pos
+  data-reading>` per tappable token, ruby kept WHOLE inside the token covering its start (readings are
+  indivisible), plain runs sliced only at token boundaries (valid UTF-16 boundaries → 𠮟 never torn),
+  everything escaped (safe on the user-authored Self-Talk path), punctuation left bare. Pinned in
+  `test/core.test.ts`: ruby-inside-token, non-BMP, gap, empty, escaping, and a strip-spans round-trip.
+- **Interaction:** `wireWordTaps` ([features/word-lookup.js](study-app/src/features/word-lookup.js)) —
+  a stateless delegated tap on a stable container reads lemma/POS/reading off the span and shows a
+  popover; resolves the LEMMA against `state.BUILTIN_RANK_BY_JP` + `state.DATA` → `openVerbDetail`,
+  else `jishoUrl(lemma)`. `plainText` extended to strip the spans so `#exSpeak`/`#exCopy` still read
+  the bare sentence (TTS key from span-free curated text unchanged).
+- **Renders on:** flashcard answer side, Browse detail modal, Self-Talk built-ins (user-authored
+  private phrases aren't parsed offline → plain ruby). The example stays answer-side only.
+- **Verified:** `bun run test` 93 pass; production build clean (the browse⇄word-lookup runtime cycle
+  resolves); browser-checked via preview (injected a real annotated example through the live module
+  graph) — overlay renders 5 aligned spans with ruby + 。 unwrapped, popover shows 日本語/にほんご/Noun →
+  Jisho, する/Verb → "Open card →" opens the する card. See the study-app/CLAUDE.md dead-end.
 
 ### 7c. Grammar-search filter (study-app)
 - Grammar tags already arrive on each sentence (`tags.grammar`). Build a **grammar facet** — but

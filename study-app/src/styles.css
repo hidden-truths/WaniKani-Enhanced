@@ -714,3 +714,18 @@
   @media (max-width:640px){
     .st-jp{font-size:18px}
   }
+
+  /* Tap-a-word lookup (Phase-4): tappable example-sentence words + the lemma/POS popover.
+     Words are quiet at rest so the sentence stays clean; a faint wash + pointer on hover/focus
+     signals "look me up". The popover reuses the design tokens (paper-2 card, line border, mono label). */
+  .extok{cursor:pointer;border-radius:4px;transition:background-color .12s ease}
+  .extok:hover{background:color-mix(in srgb,var(--ink) 10%,transparent)}
+  .extok:focus-visible{outline:none;background:color-mix(in srgb,var(--ink) 10%,transparent);box-shadow:0 0 0 2px color-mix(in srgb,var(--godan) 55%,transparent)}
+  .word-pop{position:absolute;z-index:1000;min-width:140px;max-width:280px;background:var(--paper-2);border:1px solid var(--line);border-radius:10px;box-shadow:0 8px 24px rgba(0,0,0,.18);padding:10px 12px;font-family:Georgia,"Times New Roman",serif;animation:modalPop .14s ease}
+  .word-pop .wl-head{display:flex;align-items:baseline;gap:8px;flex-wrap:wrap}
+  .word-pop .wl-surface{font-size:20px;color:var(--ink)}
+  .word-pop .wl-read{color:var(--muted);font-size:14px}
+  .word-pop .wl-lemma{font-size:13px;color:var(--muted);margin-top:2px}
+  .word-pop .wl-pos{font-family:"SF Mono",ui-monospace,monospace;font-size:10px;text-transform:uppercase;letter-spacing:.06em;color:var(--muted);margin:5px 0 9px}
+  .word-pop .wl-act{display:inline-block;font-family:"SF Mono",ui-monospace,monospace;font-size:12px;padding:5px 11px;border-radius:8px;border:1px solid var(--line);background:var(--paper);color:var(--ink);cursor:pointer;text-decoration:none}
+  .word-pop .wl-act:hover{background:color-mix(in srgb,var(--ink) 8%,transparent)}

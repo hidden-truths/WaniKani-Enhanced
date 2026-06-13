@@ -33,7 +33,9 @@ export function phraseToSentence(phrase) {
 // Adapt a store sentence (from GET /v1/sentences) to the phrase shape the Self-Talk UI renders.
 // The store keeps furigana as structured segments; the UI wants the `<ruby>` jp + the derived
 // kana `read`. `custom` marks a user-authored (private) row → the "yours" badge + edit control.
-// Pure (DOM-free) so the render code downstream is unchanged.
+// `furigana` (the raw segments) + `tokens` (GiNZA, only when fetched with ?annotate=1; null on
+// user-authored rows the offline batch never parsed) ride along for the Phase-4 tap-to-lookup
+// overlay; the render falls back to plain ruby when tokens are absent. Pure (DOM-free).
 export function sentenceToPhrase(s) {
   const fur = (s && s.furigana) || [];
   const tags = (s && s.tags) || {};
@@ -46,6 +48,8 @@ export function sentenceToPhrase(s) {
     scene: tags.scene || '',
     grammar,
     custom: !!(s && s.custom),
+    furigana: Array.isArray(fur) ? fur : [],
+    tokens: s && s.annotation && Array.isArray(s.annotation.tokens) ? s.annotation.tokens : null,
   };
 }
 

@@ -13,6 +13,7 @@ import {
   passes, oneGroup, facetAll, facetMatch, scheduleCard, cardStat, isDue, dueCards,
   rollingAcc, isLeech, leeches, normKana, romajiToKana, reviewForecast, filterSummary,
   tokenFacet, deckLabel, ttsText, rubyHtml, plainText, rubyToSegments, segmentsToRuby, segmentsToReading,
+  overlayTokens,
   minnaBuiltinRank, applyMinnaOverlays, splitMora,
   pitchHtml, minnaSig, cardStamp, colorClass, CATS, exampleForLevel, availableTiers, sentencesToLevels,
   JLPT_TIERS, BOX_DAYS,
@@ -79,8 +80,21 @@ test('sentencesToLevels groups store sentences by owner_id + tier, reconstructin
     { furigana: rubyToSegments('いぬ。'), translations: { en: 'a dog' }, link: { owner_type: 'card', owner_id: '2', tier: 'N5' } },
   ];
   const levels = sentencesToLevels(sentences);
-  expect(levels['1']).toEqual({ N5: ['<ruby>本<rt>ほん</rt></ruby>を<ruby>読<rt>よ</rt></ruby>む。', 'read a book'], N3: ['むずかしい。', 'difficult'] });
-  expect(levels['2']).toEqual({ N5: ['いぬ。', 'a dog'] });
+  // [jp, en, meta] — meta.furigana carries the structured segments (tokens/grammar absent here).
+  expect(levels['1']).toEqual({
+    N5: ['<ruby>本<rt>ほん</rt></ruby>を<ruby>読<rt>よ</rt></ruby>む。', 'read a book', { furigana: rubyToSegments('<ruby>本<rt>ほん</rt></ruby>を<ruby>読<rt>よ</rt></ruby>む。') }],
+    N3: ['むずかしい。', 'difficult', { furigana: rubyToSegments('むずかしい。') }],
+  });
+  expect(levels['2']).toEqual({ N5: ['いぬ。', 'a dog', { furigana: rubyToSegments('いぬ。') }] });
+});
+
+test('sentencesToLevels carries annotation tokens + grammar into meta when present', () => {
+  const fur = rubyToSegments('<ruby>本<rt>ほん</rt></ruby>を<ruby>読<rt>よ</rt></ruby>む。');
+  const tokens = [{ i: 0, start: 0, end: 1, surface: '本', lemma: '本', pos: 'NOUN', tag: '', reading: 'ホン', dep: '', head: 1 }];
+  const levels = sentencesToLevels([
+    { furigana: fur, translations: { en: 'read a book' }, tags: { grammar: ['te-iru'] }, annotation: { tokens, bunsetsu: [], parser: 'p', parsedAt: 1 }, link: { owner_type: 'card', owner_id: '1', tier: 'N5' } },
+  ]);
+  expect(levels['1'].N5[2]).toEqual({ furigana: fur, tokens, grammar: ['te-iru'] });
 });
 
 test('sentencesToLevels: a reused sentence (multiple links) lands under each rank/tier', () => {
@@ -90,8 +104,8 @@ test('sentencesToLevels: a reused sentence (multiple links) lands under each ran
     { furigana: rubyToSegments('はしる。'), translations: { en: 'run' }, link: { owner_type: 'card', owner_id: '2', tier: 'N3' } },
   ];
   const levels = sentencesToLevels(sentences);
-  expect(levels['1']).toEqual({ N5: ['はしる。', 'run'] });
-  expect(levels['2']).toEqual({ N3: ['はしる。', 'run'] });
+  expect(levels['1']).toEqual({ N5: ['はしる。', 'run', { furigana: rubyToSegments('はしる。') }] });
+  expect(levels['2']).toEqual({ N3: ['はしる。', 'run', { furigana: rubyToSegments('はしる。') }] });
 });
 
 test('sentencesToLevels skips entries missing owner_id / tier / furigana', () => {
@@ -100,7 +114,7 @@ test('sentencesToLevels skips entries missing owner_id / tier / furigana', () =>
     { furigana: null, translations: { en: 'x' }, link: { owner_type: 'card', owner_id: '3', tier: 'N5' } },          // no furigana
     { furigana: rubyToSegments('ねこ。'), translations: { en: 'cat' }, link: { owner_type: 'card', owner_id: '3', tier: 'N4' } },
   ];
-  expect(sentencesToLevels(sentences)).toEqual({ '3': { N4: ['ねこ。', 'cat'] } });
+  expect(sentencesToLevels(sentences)).toEqual({ '3': { N4: ['ねこ。', 'cat', { furigana: rubyToSegments('ねこ。') }] } });
 });
 
 // The strong test: round-trip the real bundle through the seed → store → adapter shape and assert
@@ -116,7 +130,10 @@ test('seed round-trip: sentencesToLevels reconstructs the EXAMPLES bundle byte-f
   }
   const levels = sentencesToLevels(storeSentences);
   for (const [rank, tiers] of Object.entries(EXAMPLES as any)) {
-    expect(levels[rank]).toEqual(tiers);
+    for (const [tier, pair] of Object.entries(tiers as Record<string, [string, string]>)) {
+      // The [jp, en] reconstruction is what's pinned byte-for-byte; meta[2] is the additive overlay data.
+      expect(levels[rank][tier].slice(0, 2)).toEqual(pair);
+    }
   }
 });
 
@@ -358,6 +375,14 @@ test('plainText strips ruby back to the base sentence (TTS / key sync)', () => {
   // The inverse of rubyHtml's pass-through: rubyHtml then plainText returns the original.
   const s = '<ruby>音<rt>おと</rt></ruby>が 出ます。';
   expect(plainText(rubyHtml(s))).toBe('音が 出ます。');
+  // Also strips the Phase-4 tap-overlay spans so speak/copy off a span-wrapped node stays the bare
+  // sentence (the TTS key derived from span-free curated input is therefore unchanged).
+  expect(plainText(overlayTokens(
+    [{ t: '歯', r: 'は' }, { t: 'を' }, { t: '磨', r: 'みが' }, { t: 'く。' }],
+    [{ i: 0, start: 0, end: 1, surface: '歯', lemma: '歯', pos: 'NOUN', tag: '', reading: '', dep: '', head: 0 },
+     { i: 1, start: 1, end: 2, surface: 'を', lemma: 'を', pos: 'ADP', tag: '', reading: '', dep: '', head: 0 },
+     { i: 2, start: 2, end: 4, surface: '磨く', lemma: '磨く', pos: 'VERB', tag: '', reading: '', dep: '', head: 0 }],
+  ))).toBe('歯を磨く。');
 });
 
 test("minnaSig reflects content (accent/mnem/tip/levels), not just tags", () => {
@@ -899,12 +924,23 @@ test('sentenceToPhrase maps a store sentence to the UI phrase shape', () => {
     scene: 'morning',
     grammar: ['te-iru'],
     custom: false,
+    furigana: s.furigana,   // segments ride along for the tap overlay
+    tokens: null,           // no annotation on this row
   });
+});
+
+test('sentenceToPhrase carries annotation tokens when present (tap overlay)', () => {
+  const tokens = [{ i: 0, start: 0, end: 1, surface: '歯', lemma: '歯', pos: 'NOUN', tag: '', reading: 'ハ', dep: '', head: 1 }];
+  const p = sentenceToPhrase({
+    id: 'st-1', furigana: [{ t: '歯', r: 'は' }, { t: 'を' }], translations: { en: 'x' },
+    tags: { grammar: ['te-iru'] }, annotation: { tokens, bunsetsu: [], parser: 'p', parsedAt: 1 }, custom: false,
+  });
+  expect(p.tokens).toEqual(tokens);
 });
 
 test('sentenceToPhrase tolerates missing translation/tags/furigana', () => {
   expect(sentenceToPhrase({ id: 'usr-x', furigana: null, translations: {}, tags: {}, custom: true })).toEqual({
-    id: 'usr-x', jp: '', read: '', mean: '', scene: '', grammar: [], custom: true,
+    id: 'usr-x', jp: '', read: '', mean: '', scene: '', grammar: [], custom: true, furigana: [], tokens: null,
   });
 });
 
@@ -926,8 +962,11 @@ test('phraseToSentence encodes a no-ruby line + read as one ruby segment so the 
 
 test('phraseToSentence ↔ sentenceToPhrase round-trips a fully-ruby phrase', () => {
   const p = { id: 'usr-3', jp: '<ruby>歯<rt>は</rt></ruby>を<ruby>磨<rt>みが</rt></ruby>く。', read: 'はをみがく。', mean: 'brush', scene: 'morning', grammar: ['te-iru'] };
-  expect(sentenceToPhrase({ ...phraseToSentence(p), custom: true })).toEqual({
+  const body = phraseToSentence(p);
+  // furigana segments ride along for the tap overlay; tokens are null (no annotation on this body).
+  expect(sentenceToPhrase({ ...body, custom: true })).toEqual({
     id: 'usr-3', jp: '<ruby>歯<rt>は</rt></ruby>を<ruby>磨<rt>みが</rt></ruby>く。', read: 'はをみがく。', mean: 'brush', scene: 'morning', grammar: ['te-iru'], custom: true,
+    furigana: body.furigana, tokens: null,
   });
 });
 
@@ -941,4 +980,71 @@ test('practiceStreak: alive today/yesterday, broken after a gap; donePhraseIds t
   expect([...donePhraseIds(p, '2026-06-13')]).toEqual([]);   // not today → none
   expect(dayDiff('2026-06-12', '2026-06-13')).toBe(1);
   expect(dayDiff(null, '2026-06-13')).toBe(null);
+});
+
+// --- overlayTokens: tappable word spans over furigana ruby (Phase-4 commit 3b) ---
+// Strip just the <span> tags to recover the underlying ruby render (spans are purely additive);
+// for Japanese (no &<>"') escapeHtml is identity so this equals segmentsToRuby(segs).
+const stripSpans = (h: string) => h.replace(/<span[^>]*>/g, '').replace(/<\/span>/g, '');
+const plainOf = (h: string) => plainText(stripSpans(h));
+const tok = (o: any) => ({ i: 0, surface: '', lemma: '', pos: 'NOUN', tag: '', reading: '', dep: '', head: 0, ...o });
+
+test('overlayTokens wraps tappable tokens, keeps ruby inside a multi-char token, round-trips', () => {
+  // 歯を磨く。  segs put ruby on each kanji; tokens are morphemes — 磨く spans the 磨 ruby + the kana く.
+  const segs = [{ t: '歯', r: 'は' }, { t: 'を' }, { t: '磨', r: 'みが' }, { t: 'く。' }];
+  const toks = [
+    tok({ i: 0, start: 0, end: 1, surface: '歯', lemma: '歯', pos: 'NOUN', reading: 'ハ' }),
+    tok({ i: 1, start: 1, end: 2, surface: 'を', lemma: 'を', pos: 'ADP', reading: 'ヲ' }),
+    tok({ i: 2, start: 2, end: 4, surface: '磨く', lemma: '磨く', pos: 'VERB', reading: 'ミガク' }),
+    tok({ i: 3, start: 4, end: 5, surface: '。', lemma: '。', pos: 'PUNCT' }),
+  ];
+  const out = overlayTokens(segs, toks);
+  // spans are additive over the ruby: stripping them recovers the exact ruby render.
+  expect(stripSpans(out)).toBe(segmentsToRuby(segs));
+  // visible text round-trips to the plain canonical.
+  expect(plainOf(out)).toBe('歯を磨く。');
+  // three tappable tokens (。is PUNCT → skipped, rendered bare).
+  expect((out.match(/class="extok"/g) || []).length).toBe(3);
+  expect(out).not.toContain('data-surface="。"');
+  expect(out).toContain('<span class="extok" data-i="2" data-lemma="磨く"');
+  // the 磨く span contains BOTH the 磨 ruby and the trailing kana く.
+  const m = out.match(/data-lemma="磨く"[^>]*>(.*?)<\/span>/s);
+  expect(m && m[1]).toBe('<ruby>磨<rt>みが</rt></ruby>く');
+});
+
+test('overlayTokens is surrogate-safe across a non-BMP kanji (𠮟, U+20B9F)', () => {
+  // 𠮟 is a surrogate pair: "𠮟".length === 2, so the token/segment offsets span 2 units.
+  const segs = [{ t: '𠮟', r: 'しか' }, { t: 'る' }];
+  const toks = [
+    tok({ i: 0, start: 0, end: 2, surface: '𠮟', lemma: '𠮟る', pos: 'VERB', reading: 'シカ' }),
+    tok({ i: 1, start: 2, end: 3, surface: 'る', lemma: 'る', pos: 'AUX' }),
+  ];
+  const out = overlayTokens(segs, toks);
+  expect(stripSpans(out)).toBe(segmentsToRuby(segs));
+  expect(plainOf(out)).toBe('𠮟る');           // 𠮟 intact (length 3 total), never torn mid-pair
+  expect(out).toContain('<ruby>𠮟<rt>しか</rt></ruby>');
+});
+
+test('overlayTokens: empty tokens → plain escaped ruby (no spans); a gap stays bare', () => {
+  const segs = [{ t: '歯', r: 'は' }, { t: 'をみがく。' }];
+  const noTok = overlayTokens(segs, []);
+  expect(noTok).not.toContain('extok');
+  expect(plainOf(noTok)).toBe('歯をみがく。');
+  // a dropped-whitespace gap (offset 1 covered by no token) is emitted bare, between spans.
+  const gapSegs = [{ t: 'A B' }];
+  const gapToks = [
+    tok({ i: 0, start: 0, end: 1, surface: 'A', lemma: 'A' }),
+    tok({ i: 1, start: 2, end: 3, surface: 'B', lemma: 'B' }),
+  ];
+  const gapOut = overlayTokens(gapSegs, gapToks);
+  expect((gapOut.match(/class="extok"/g) || []).length).toBe(2);
+  expect(plainOf(gapOut)).toBe('A B');         // the space round-trips, no infinite loop
+});
+
+test('overlayTokens escapes content + attributes (safe on the user-authored path)', () => {
+  const segs = [{ t: 'a<b' }];
+  const toks = [tok({ i: 0, start: 0, end: 3, surface: 'a<b', lemma: 'a<b', pos: 'NOUN' })];
+  const out = overlayTokens(segs, toks);
+  expect(out).toContain('a&lt;b');             // escaped in both the data-lemma attr and the content
+  expect(out).not.toContain('a<b');            // no raw, unescaped angle bracket from the data
 });

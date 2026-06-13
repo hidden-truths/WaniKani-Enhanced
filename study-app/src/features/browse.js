@@ -4,12 +4,13 @@
 import { state } from '../state.js';
 import {
   passes, isLeech, rollingAcc, colorClass, cardStamp, pitchHtml, escapeHtml, plainText,
-  availableTiers, exampleForLevel, JLPT_TIERS, BOX_COLORS, nextDueLabel, filterSummary,
+  availableTiers, exampleForLevel, JLPT_TIERS, BOX_COLORS, nextDueLabel, filterSummary, overlayTokens,
 } from '../core/index.js';
 import { settings } from '../settings-store.js';
 import { speakWord, speak, TTS_OK } from './tts.js';
 import { cycleMod } from './audio.js';
 import { jishoUrl, provenanceBadge, copyText } from './render-helpers.js';
+import { wireWordTaps } from './word-lookup.js';
 import { makeMultiSelect, wireFacets, paintSummary, syncVerbRows } from './deck.js';
 
 // Browse grid filter — OWNED here. Same facet shape as cfg; mutated in place, never
@@ -85,7 +86,13 @@ function renderDetailExample() {
   detailLevel = lvl;
   [...seg.querySelectorAll('.exlv')].forEach(b => b.classList.toggle('active', b.dataset.exlv === lvl && !b.disabled));
   const ex = exampleForLevel(v, lvl), jp = document.getElementById('dExJp'), en = document.getElementById('dExEn');
-  if (ex) { jp.innerHTML = ex[0]; en.textContent = ex[1]; } else { jp.textContent = 'No example yet.'; en.textContent = ''; }
+  if (ex) {
+    // Tappable word overlay when the example carries a GiNZA annotation (ex[2].tokens), else plain ruby.
+    const meta = ex[2];
+    jp.innerHTML = meta && meta.tokens && meta.furigana ? overlayTokens(meta.furigana, meta.tokens) : ex[0];
+    wireWordTaps(jp);
+    en.textContent = ex[1];
+  } else { jp.textContent = 'No example yet.'; en.textContent = ''; }
   const sp = document.getElementById('dExSpeak'); if (sp) sp.hidden = !ex;   // play the shown tier
   const cp = document.getElementById('dExCopy'); if (cp) cp.hidden = !ex;    // copy the shown tier
 }

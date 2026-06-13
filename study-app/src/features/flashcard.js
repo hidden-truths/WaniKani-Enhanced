@@ -9,13 +9,14 @@ import { state } from '../state.js';
 import { localDay } from '../config.js';
 import {
   availableTiers, exampleForLevel, JLPT_TIERS, colorClass, cardStamp, pitchHtml,
-  normKana, romajiToKana, escapeHtml, plainText, cardStat, scheduleCard, isDue,
+  normKana, romajiToKana, escapeHtml, plainText, cardStat, scheduleCard, isDue, overlayTokens,
 } from '../core/index.js';
 import { settings, saveSettings } from '../settings-store.js';
 import { save } from '../persistence/store.js';
 import { speakWord, speak, TTS_OK } from './tts.js';
 import { cycleMod } from './audio.js';
 import { jishoUrl, copyText } from './render-helpers.js';
+import { wireWordTaps } from './word-lookup.js';
 import { cfg, buildDeck, updateDeckCount, updateDueBanner, updateStartLabel, startDueSession } from './deck.js';
 
 // `export let` — only this module reassigns it (session=null / session={...}); the settings
@@ -62,7 +63,14 @@ export function renderExample(v) {
   const ex = exampleForLevel(v, lvl);
   const speakBtn = document.getElementById('exSpeak'), copyBtn = document.getElementById('exCopy');
   if (ex) {
-    document.getElementById('exJp').innerHTML = ex[0]; document.getElementById('exEn').textContent = ex[1]; block.hidden = false;
+    // Overlay tappable word spans when the example carries a GiNZA annotation (ex[2].tokens, from
+    // ?annotate=1); otherwise the plain ruby (ex[0]). #exSpeak/#exCopy read plainText off this node,
+    // and plainText strips spans+ruby alike, so they keep working either way.
+    const meta = ex[2];
+    const exJp = document.getElementById('exJp');
+    exJp.innerHTML = meta && meta.tokens && meta.furigana ? overlayTokens(meta.furigana, meta.tokens) : ex[0];
+    wireWordTaps(exJp);
+    document.getElementById('exEn').textContent = ex[1]; block.hidden = false;
     if (speakBtn) speakBtn.hidden = !TTS_OK;   // plays the currently-shown tier (read at click time)
     if (copyBtn) copyBtn.hidden = false;       // copy works regardless of audio availability
   } else { block.hidden = true; if (speakBtn) speakBtn.hidden = true; if (copyBtn) copyBtn.hidden = true; }

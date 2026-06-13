@@ -12,9 +12,10 @@
 // features/record-compare.js (Self-Talk feeds it a reserved numeric SCOPE + synth-only references).
 import { state } from '../state.js';
 import { localDay } from '../config.js';
-import { escapeHtml, rubyHtml, plainText, groupByScene, grammarTokens, todaysSet, applyPractice, practiceStreak, donePhraseIds, sentenceToPhrase, phraseToSentence } from '../core/index.js';
+import { escapeHtml, rubyHtml, plainText, overlayTokens, groupByScene, grammarTokens, todaysSet, applyPractice, practiceStreak, donePhraseIds, sentenceToPhrase, phraseToSentence } from '../core/index.js';
 import { SELFTALK_SCENES, SELFTALK_GRAMMAR } from '../data/selftalk.js';
 import { playItem, cycleMod } from './audio.js';
+import { wireWordTaps } from './word-lookup.js';
 import { loadSelftalk, saveSelftalk } from '../persistence/selftalk.js';
 import { account, api, setSyncStatus } from './cloud-core.js';
 import {
@@ -53,7 +54,7 @@ function cachePhrases(phrases) {
 // the tab never goes blank from a network hiccup. Returns true on a successful network refresh.
 export async function refreshPhrases() {
   try {
-    const r = await api('/v1/sentences?ownerType=selftalk');
+    const r = await api('/v1/sentences?ownerType=selftalk&annotate=1');
     storePhrases = ((r && r.sentences) || []).map(sentenceToPhrase);
     cachePhrases(storePhrases);
     return true;
@@ -176,7 +177,7 @@ function phraseCardHtml(p, speaking, done) {
   return `<div class="st-phrase${done ? ' practiced' : ''}" data-id="${escapeHtml(p.id)}">
     <button class="speak-btn st-play" type="button" data-play data-text="${escapeHtml(text)}" aria-label="Play phrase" title="Play — ⌥/⇧-click to try another voice"><svg class="ic" aria-hidden="true"><use href="#i-volume"/></svg></button>
     <div class="st-phrase-text">
-      <div class="jp st-jp">${rubyHtml(p.jp)}</div>
+      <div class="jp st-jp">${p.tokens && p.furigana ? overlayTokens(p.furigana, p.tokens) : rubyHtml(p.jp)}</div>
       <div class="st-read">${escapeHtml(p.read || '')}</div>
       <div class="st-en">${escapeHtml(p.mean)}</div>
       <div class="st-phrase-meta">${yours}${grams}</div>
@@ -188,6 +189,7 @@ function phraseCardHtml(p, speaking, done) {
 
 function renderBody() {
   const body = elBody(); if (!body) return;
+  wireWordTaps(body); // delegated tap-to-lookup on the built-in phrases' word spans (idempotent)
   const vis = visiblePhrases();
   if (!vis.length) { body.innerHTML = `<div class="st-empty">No phrases match this filter.</div>`; return; }
   const today = localDay();

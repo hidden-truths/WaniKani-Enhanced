@@ -24,12 +24,16 @@ export function exampleForLevel(v, level) {
   return null;
 }
 
-// Build the `v.levels` model — { [rank]: { N5:[jp,en], …, N1:[jp,en] } } — from a flat list of
-// store sentences (GET /v1/sentences?ownerType=card). The store returns ONE entry per LINK, so a
-// sentence reused across cards/tiers appears once per (owner_id, tier); we group by those. `jp` is
-// reconstructed from the structured furigana (segmentsToRuby), `en` is translations.en — the same
-// [jp, en] shape the old bundled EXAMPLES[rank][tier] carried. Pure (DOM-free), tested. Analogous
-// to core/selftalk.js sentenceToPhrase. Entries missing owner_id/tier/furigana are skipped.
+// Build the `v.levels` model — { [rank]: { N5:[jp,en,meta], …, N1:[jp,en,meta] } } — from a flat
+// list of store sentences (GET /v1/sentences?ownerType=card). The store returns ONE entry per LINK,
+// so a sentence reused across cards/tiers appears once per (owner_id, tier); we group by those. `jp`
+// is reconstructed from the structured furigana (segmentsToRuby), `en` is translations.en — the
+// original [jp, en] shape the old bundled EXAMPLES[rank][tier] carried, kept positional for
+// back-compat. `meta` (3rd element, Phase-4 tap-to-lookup) carries the structured `furigana` segments
+// + the GiNZA `tokens` (only when fetched with ?annotate=1) + the sentence's `grammar` ids; the
+// overlay/grammar-filter read it and older code that only reads [0]/[1] is unaffected (and a stale
+// cache lacking meta degrades to plain ruby). Pure (DOM-free), tested. Analogous to sentenceToPhrase.
+// Entries missing owner_id/tier/furigana are skipped.
 export function sentencesToLevels(sentences) {
   const out = {};
   for (const s of sentences || []) {
@@ -37,7 +41,11 @@ export function sentencesToLevels(sentences) {
     const rank = link.owner_id, tier = link.tier;
     if (rank == null || !tier || !Array.isArray(s.furigana)) continue;
     const en = (s.translations && s.translations.en) || '';
-    (out[rank] ??= {})[tier] = [segmentsToRuby(s.furigana), en];
+    const meta = { furigana: s.furigana };
+    if (s.annotation && Array.isArray(s.annotation.tokens)) meta.tokens = s.annotation.tokens;
+    const g = s.tags && s.tags.grammar;
+    if (g) meta.grammar = Array.isArray(g) ? g : [g];
+    (out[rank] ??= {})[tier] = [segmentsToRuby(s.furigana), en, meta];
   }
   return out;
 }

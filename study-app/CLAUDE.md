@@ -504,6 +504,25 @@ Component contracts you must preserve:
 - **Furigana is a global CSS flip** (`<html data-furigana="off">` → `rt{display:none}`),
   driven by `settings.furigana`/`applyFurigana()`. It affects every `<ruby>` at once
   (examples, browse modal). Don't gate furigana per-element; toggle the attribute.
+- **Tap-a-word lookup overlays spans on the ruby from GiNZA token offsets — the offsets index the
+  PLAIN text, the render is ruby, so the two are reconciled by a PURE helper, not by parsing HTML.**
+  `overlayTokens(furiganaSegments, tokens)` ([core/annotate.js](src/core/annotate.js)) emits a
+  `<span class="extok" data-lemma data-pos data-reading>` per (tappable) token, keeping each ruby
+  segment WHOLE inside the token covering its start (a reading can't be split) and slicing plain runs
+  only at token boundaries (which are valid UTF-16 boundaries per the server's offset contract, so a
+  non-BMP kanji 𠮟 is never torn). Tokens arrive via `?annotate=1` on the sentence fetch and ride a
+  THIRD element on the example tuple — `state.exampleLevels[rank][tier] = [jp, en, {furigana, tokens,
+  grammar}]` (`sentencesToLevels`) — and `phrase.tokens`/`.furigana` for Self-Talk (`sentenceToPhrase`).
+  Old code reads `[0]`/`[1]` unchanged; a stale cache lacking `meta`/`tokens` falls back to plain ruby
+  (no key bump — Decision 4). The tap is a stateless delegated handler on a STABLE container
+  (`wireWordTaps`, [features/word-lookup.js](src/features/word-lookup.js)) reading lemma/POS/reading
+  off the span, so per-card/per-render `innerHTML` swaps don't break it; it resolves the LEMMA against
+  `state.BUILTIN_RANK_BY_JP` + `state.DATA` → `openVerbDetail`, else `jishoUrl(lemma)`. **`plainText`
+  now also strips these spans** so `#exSpeak`/`#exCopy` reading the rendered `innerHTML` still get the
+  bare sentence (and the TTS key, derived from span-free curated text, is unchanged). word-lookup
+  imports `openVerbDetail` from browse and browse imports `wireWordTaps` — a runtime-only (event-time)
+  cycle, fine like cloud⇄minna. Renders on the flashcard answer side, Browse detail, and Self-Talk
+  built-ins (user-authored private phrases aren't parsed offline → no tokens → plain ruby).
 - **`store.sessions` is capped (1000) and is JUST for the charts.** The durable,
   never-pruned session history is the server's `study_sessions` table — `endSession`
   POSTs there (signed-in). Don't "fix" the cap by unbounding the synced blob (it'd

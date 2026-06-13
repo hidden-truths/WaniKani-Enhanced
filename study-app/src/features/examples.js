@@ -18,7 +18,7 @@ import { session, renderExample } from './flashcard.js';
 // Fire-and-forget from main.js (not awaited). Returns true on a successful network refresh.
 export async function initExamples() {
   try {
-    const r = await api('/v1/sentences?ownerType=card');
+    const r = await api('/v1/sentences?ownerType=card&annotate=1');
     const levels = sentencesToLevels((r && r.sentences) || []);
     // Guard against a transient empty fetch wiping a good cache: only adopt a non-empty set.
     if (Object.keys(levels).length) {
