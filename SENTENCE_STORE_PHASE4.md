@@ -446,7 +446,34 @@ open decisions settled with the user first (same collaborative pattern as commit
 
 ---
 
-## 8. Deferred / future (not commit 3)
+## 8. Deferred / future
+
+### 8.0 ⭐ MAJOR NEXT STEP — tokenization granularity (the tap units don't match "a word")
+**Status: the headline follow-up; the maintainer flagged the current parse as not behaving as wanted.**
+The tap-to-lookup units come straight from GiNZA's morphemes (split mode C). C was chosen so a token's
+lemma sits near a dictionary headword (good for tap→card) — but "longest *morpheme*" still fragments the
+units a learner thinks of as ONE word, so tapping a word often selects the wrong span:
+- **サ変 する-verbs split:** 勉強する → `勉強`(NOUN) + `する`(VERB). Tapping the compound gets the bare
+  noun or the generic する, never 勉強する. (The canonical complaint.)
+- **Conjugations fragment:** an inflected form becomes stem + an auxiliary chain — 食べさせられた →
+  `食べ`+`させ`+`られ`+`た`. The stem resolves the lemma, but the inflection is several tiny aux tap-
+  targets and the visible word isn't one unit.
+- **て-form + aux split:** 読んでいる → `読ん`+`で`+`いる`. We DETECT 〜ている as grammar, but the *tap*
+  units are still split.
+
+**The rework (a `parse.py` change → re-parse → re-seed; offsets self-consistent by construction):** add a
+post-tokenization **merge pass** that coalesces a content word + its trailing function morphemes into one
+tap unit — merge サ変名詞+する → one `勉強する` token; merge a verb/adj stem + its inflectional aux chain
+into one token spanning the whole conjugated surface (lemma = dictionary form); optionally merge the
+て-form + auxiliary (coordinated with the grammar detectors). We **already store `bunsetsu` spans**
+(currently unconsumed) — a bunsetsu (content word + its particles/aux) is close to the learner's "word/
+phrase" unit and is a natural basis for the merge, or a coarser *alternative* tap layer. The offset
+contract still holds (a merged token's surface is the contiguous concat of its parts → `slice===surface`),
+and the UTF-16 self-check + the seed re-assert carry over unchanged.
+**Interaction:** merging changes lemmas (`勉強する` vs `勉強`), which feeds tap→card resolution — tune the
+lemma→card matching alongside it, but tokenization is the lead. Re-run is the full hash-keyed loop in §6.2.
+
+### 8.x Other deferred (not commit 3)
 - **Tier-2 grammar** (detectable, lower priority, omitted from the N5/N4 set): `causative-passive`,
   `tagaru`, `nasai`, `imperative`, `te-aru`/`te-iku`/`te-kuru`/`te-hoshii`, benefactives
   (`te-ageru`/`kureru`/`morau` + bare `ageru`/`kureru`/`morau`), `yotei`, `mitai`, `darou`, `temo`,

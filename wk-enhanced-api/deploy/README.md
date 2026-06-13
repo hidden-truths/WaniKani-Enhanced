@@ -263,6 +263,28 @@ WAL alongside the live server safely. Verify after:
 独り言 tab + the flashcard/Browse example sentences should populate, with the credentialed CORS header
 echoing the apex origin.
 
+**Phase 4 — NLP annotations + grammar tags (`seed-annotations.ts`).** Loads the committed
+`data/annotations.json` (parsed OFFLINE — no Python on the droplet) into `sentence_annotation` and writes
+the detected grammar ids to `sentence_tag(kind='grammar')`. Without it the study-app's tap-a-word lookup
+silently falls back to plain ruby (the client code is live but `?annotate=1` returns no tokens). **Run it
+AFTER `seed-sentences.ts`** (it resolves rows by content hash, so the sentence rows must exist first), same
+mounted-repo invocation + the same `ENV_FILE`/`DATA_DIR` gotcha:
+
+```bash
+cd /opt/wk-enhanced-api/wk-enhanced-api
+ENV_FILE=/etc/wk-enhanced-api/env DATA_DIR=/var/lib/wk-enhanced-api \
+  docker compose run --rm --no-deps \
+  -v /opt/wk-enhanced-api:/repo -w /repo/wk-enhanced-api \
+  api bun scripts/seed-annotations.ts
+```
+
+The upsert re-asserts the UTF-16 offset contract, so a stale/mismatched artifact ABORTS the seed rather
+than landing bad offsets. Idempotent. Verify:
+`curl -s 'https://api.wkenhanced.dev/v1/sentences?ownerType=card&annotate=1' | grep -o '"annotation"' | head -1`
+returns `"annotation"`, and the apex study-app's Browse example sentences become tappable + the Grammar
+filter row appears. (The grammar-filter LABELS ride in the study-app's own `web` image build — `grammar.json`
+is committed + Vite-bundled — so no separate seed for those.)
+
 **Seeding / re-voicing the Siri TTS voices (`siri:male` / `siri:female`).** Unlike the seed above, the
 tagged voice clips can't be (re)generated on the droplet — rendering a Siri voice needs a Mac with the
 right **System Voice** (see `scripts/generate-tts.ts`). Once you've rendered them locally there's no

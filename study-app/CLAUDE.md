@@ -523,6 +523,11 @@ Component contracts you must preserve:
   imports `openVerbDetail` from browse and browse imports `wireWordTaps` — a runtime-only (event-time)
   cycle, fine like cloud⇄minna. Renders on the flashcard answer side, Browse detail, and Self-Talk
   built-ins (user-authored private phrases aren't parsed offline → no tokens → plain ruby).
+  **Known limitation (a PARSER issue, not a wiring bug — don't "fix" it here):** the tap UNITS are
+  GiNZA's raw morphemes, so a する-verb splits (勉強 + する) and a conjugation fragments into stem +
+  aux (食べ+させ+られ+た) — tapping doesn't always select "a word." The fix is a merge pass in
+  `sentence-nlp/parse.py` + a re-parse (the ⭐ next rework — see SENTENCE_STORE_PHASE4.md §8.0); the
+  client overlay just renders whatever tokens it's served.
 - **The grammar-filter labels come from a GENERATED catalog, not a hand-kept list — don't add a
   parallel one.** [src/data/grammar.json](src/data/grammar.json) (`[{id,label,jlpt}]`×38) is dumped by
   `sentence-nlp/patterns.py` (`python3 patterns.py`) — the SAME catalog whose detectors write

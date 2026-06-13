@@ -170,8 +170,16 @@ CREATE TABLE sentence_annotation (
    Bunpro-grounded, reusing the `SELFTALK_GRAMMAR` ids), detected in the Python parse and written to
    `sentence_tag(kind='grammar')` via `db.setGrammarTags` for `source='example'` rows (Self-Talk keeps
    its hand tags). Every detector pinned in `test_patterns.py` (positives + confusable negatives).
-4. 🔜 **NEXT** — commit 3: the serving flag on `/v1/sentences` (annotation + grammar ride `getSentences`'s
-   gated rows) + the study-app tap-to-lookup UI + the grammar-search filter.
+4. ✅ **SHIPPED** — commit 3: the `?annotate=1` serving flag on `/v1/sentences` (3a) + the study-app
+   tap-to-lookup UI (3b, pure `overlayTokens` span-wrap over the ruby + a lemma→card/Jisho popover) +
+   the Browse grammar-search filter (3c, card facet + a `patterns.py`-dumped label registry). **Phase 4
+   is complete** — full as-built in [SENTENCE_STORE_PHASE4.md](SENTENCE_STORE_PHASE4.md).
+5. ⭐ **NEXT REWORK — tokenization granularity.** The shipped tap units are GiNZA's raw morphemes
+   (split mode C), which fragment する-verbs (勉強 + する) and conjugations (食べ+させ+られ+た), so a
+   tapped span doesn't match "a word." The fix is a post-tokenization MERGE pass in `parse.py`
+   (content word + trailing function morphemes → one token; the unconsumed `bunsetsu` spans are a natural
+   basis), then a full re-parse + re-seed. Details in [SENTENCE_STORE_PHASE4.md](SENTENCE_STORE_PHASE4.md) §8.0
+   + [sentence-nlp/README.md](sentence-nlp/README.md).
 
 Keep each step shippable and behavior-preserving; nothing here changes existing playback or rendering
 until the tap-to-lookup UI lands.

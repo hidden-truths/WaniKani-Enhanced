@@ -41,7 +41,8 @@ work.
   `ginza` + model versions are recorded in the artifact's `parser` field and land in
   `sentence_annotation.parser` — the provenance a re-parse decision keys on.
 - **Split mode C** (longest units) — token boundaries closest to dictionary headwords, so a
-  tapped token matches the deck's card lemmas.
+  tapped token matches the deck's card lemmas. **(But see "Known limitation" below — split mode C
+  is still per-MORPHEME, which fragments する-verbs and conjugations.)**
 - **Re-parse strategy: full, hash-keyed.** The corpus is tiny (~544 sentences), so we re-parse
   the whole exported corpus rather than diffing. Each annotation is keyed by
   `hash = ttsTextHash(text)`, which is environment-independent — so an artifact parsed offline
@@ -49,6 +50,26 @@ work.
   the parser parses the exact text it read from `public_sentence`, offsets are self-consistent
   with the row by construction; a re-parse can only ever change *quality*, never offset
   correctness.
+
+## ⭐ Known limitation → next rework: tokenization granularity
+
+**The headline follow-up.** The tap-to-lookup units are GiNZA's raw morphemes, and split mode C is
+"longest *morpheme*", not "the word a learner would look up" — so tapping often selects the wrong span:
+
+- **サ変 する-verbs split:** 勉強する → `勉強`(NOUN) + `する`(VERB) — the compound isn't one tap unit.
+- **Conjugations fragment:** 食べさせられた → `食べ`+`させ`+`られ`+`た` (stem resolves the lemma, but the
+  inflection is several tiny aux tap-targets).
+- **て-form + aux split:** 読んでいる → `読ん`+`で`+`いる` (we *detect* 〜ている as grammar, but the tap
+  units stay split).
+
+**The fix is a post-tokenization MERGE pass in `parse.py`** (then re-parse → re-seed, the usual full
+hash-keyed loop): coalesce a content word + its trailing function morphemes into one token — サ変名詞+する
+→ `勉強する`; verb/adj stem + inflectional aux chain → one token spanning the conjugated surface (lemma =
+dictionary form); optionally te-form + auxiliary. The **`bunsetsu` spans we already emit** (content word +
+its particles/aux, currently unconsumed in the client) are a natural merge basis or a coarser alternative
+tap layer. The offset contract is preserved automatically — a merged token's surface is the contiguous
+concat of its parts, so `text.slice(start,end) === surface` still holds and the UTF-16 self-check + seed
+re-assert carry over. (Merging also changes lemmas — `勉強する` vs `勉強` — so tune tap→card matching with it.)
 
 ## Grammar tags (`patterns.py`)
 
