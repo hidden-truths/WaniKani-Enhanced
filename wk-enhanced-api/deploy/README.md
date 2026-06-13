@@ -278,14 +278,29 @@ STORAGE_DRIVER=s3 \
   bun scripts/push-tts-variants.ts --dry-run            # then re-run with --force
 ```
 
-Bytes only — it does NOT seed the `audio_variants` manifest (the Settings-picker catalog): those rows
-already exist on prod from the original `generate-tts.ts --variant` run and the hashes are unchanged, and
-a Mac invocation can't reach the droplet's sqlite regardless. Seeding a manifest is the `--seed-manifest`
-opt-in, only when `DATABASE_FILE` points at the target DB. After the push, the new `/v1/audio/tts` cache
-headers (ETag + `public, no-cache`) make any client holding the old wrong-voice clip revalidate and pick
-up the corrected bytes on next play — no cache-bust needed. Verify by playing `siri:male` in the study
-app, or `curl -s "https://api.wkenhanced.dev/v1/audio/tts?text=…&voice=siri:male" -o /tmp/m.m4a` and
-listening.
+That push moves BYTES only. The Settings voice picker is driven by the `audio_variants` MANIFEST, which
+`GET /v1/audio/variants` reads from the sqlite — NOT from storage — so until those rows exist in the prod
+DB the picker shows the voice as "not generated" even though the clips are in the bucket. The manifest rows
+can't be written from the Mac (it can't reach the droplet's sqlite), so seed them **on the droplet** with
+`seed-audio-variants.ts`, via the same mounted-repo `docker compose run` as the sentence seed above:
+
+```bash
+cd /opt/wk-enhanced-api/wk-enhanced-api
+# Reuses the api service's env_file (→ prod DATABASE_FILE + S3_* for the bucket existence checks) and
+# the repo mount at /repo. Re-derives the text set + records a manifest row only for clips actually in
+# the bucket — self-correcting + idempotent. Same ENV_FILE/DATA_DIR gotcha as the sentence seed.
+ENV_FILE=/etc/wk-enhanced-api/env DATA_DIR=/var/lib/wk-enhanced-api \
+  docker compose run --rm --no-deps \
+  -v /opt/wk-enhanced-api:/repo -w /repo/wk-enhanced-api \
+  api bun scripts/seed-audio-variants.ts
+# → "siri:male → recorded 960 present" + "siri:female → recorded 960 present".
+```
+
+After the push + seed, the new `/v1/audio/tts` cache headers (ETag + `public, no-cache`) make any client
+holding the old wrong-voice clip revalidate and pick up the corrected bytes on next play — no cache-bust
+needed. Verify: `curl -s "https://api.wkenhanced.dev/v1/audio/variants?text=%E9%A3%9F%E3%81%B9%E3%82%8B"`
+now lists `siri:male`/`siri:female` (not just `google`), the study app's Settings picker offers them, and
+`curl -s "https://api.wkenhanced.dev/v1/audio/tts?text=…&voice=siri:male" -o /tmp/m.m4a` plays the male voice.
 
 ## Migrating from a pre-Docker droplet
 

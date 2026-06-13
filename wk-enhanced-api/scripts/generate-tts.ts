@@ -44,14 +44,10 @@
 //     --force    re-generate + re-upload even if the clip is already in storage
 //     --limit N  cap the number of clips generated this run (for a quick test)
 //     --filter S only items whose label contains S (e.g. "reading", "mnn", "ex:")
-import { existsSync, mkdirSync, readFileSync, readdirSync, writeFileSync } from 'node:fs';
+import { existsSync, mkdirSync, readFileSync, writeFileSync } from 'node:fs';
 import { fileURLToPath } from 'node:url';
 import { join, dirname } from 'node:path';
-// Cross-project imports into the study app — fine here: scripts/ is excluded from the
-// server's tsconfig, and these modules are pure data / DOM-free helpers.
-import { VERBS } from '../../study-app/src/data/verbs.js';
-import { EXAMPLES } from '../../study-app/src/data/examples.js';
-import { ttsText, plainText } from '../../study-app/src/core/text.js';
+import { collectTtsTexts, type TtsItem } from './collectTtsTexts.ts'; // shared enumeration (see that file)
 import { ttsKey, ttsVariantKey, ttsTextHash } from '../src/services/tts.ts';
 import { getStorage } from '../src/services/storage.ts';
 import * as db from '../src/db/client.ts';
@@ -77,45 +73,15 @@ const variant = arg('--variant');
 const [vProvider, vGender = ''] = variant ? variant.split(':') : ['', ''];
 const keyFor = (text: string) => (variant ? ttsVariantKey(text, vProvider!, vGender, 'm4a') : ttsKey(text, 'm4a'));
 
-// --- Collect the text to voice (deduped; the /v1/tts route rejects text > 200 chars,
-//     so a clip longer than that could never be played — skip it). ---
-type Item = { text: string; label: string };
-const items: Item[] = [];
-const seen = new Set<string>();
-let skippedLong = 0;
-function add(text: string, label: string) {
-    text = (text || '').trim();
-    if (!text) return;
-    if (text.length > 200) { skippedLong++; return; }
-    if (seen.has(text)) return;
-    seen.add(text);
-    items.push({ text, label });
-}
-
-for (const v of VERBS as any[]) add(ttsText(v), `reading:builtin:${v.jp}`);
-for (const rank of Object.keys(EXAMPLES as any)) {
-    const tiers = (EXAMPLES as any)[rank];
-    for (const tier of Object.keys(tiers)) add(plainText(tiers[tier][0]), `ex:builtin:${rank}:${tier}`);
-}
-
-const minnaDir = fileURLToPath(new URL('../data/minna/', import.meta.url));
-for (const f of readdirSync(minnaDir).filter(f => /^lesson-\d+\.json$/.test(f))) {
-    const L = JSON.parse(readFileSync(join(minnaDir, f), 'utf8'));
-    for (const v of L.vocab || []) {
-        add(ttsText({ jp: v.dict || v.kanji || v.kana, read: v.dictRead || v.kana, tts: v.tts }), `reading:mnn:${v.key}`);
-        if (v.levels) for (const tier of Object.keys(v.levels)) add(plainText(v.levels[tier][0]), `ex:mnn:${v.key}:${tier}`);
-    }
-    for (const g of L.grammar || []) for (const e of g.examples || []) add(plainText(e.jp), `gram:${f}`);
-    for (const e of L.examples || []) add(plainText(e.jp), `ex:${f}`);
-    for (const ln of (L.conversation?.lines || [])) add(plainText(ln.jp), `conv:${f}`);
-}
+// --- Collect the text to voice (shared with seed-audio-variants.ts so renders + manifest agree). ---
+const { items, skippedLong } = collectTtsTexts();
 
 let pool = filter ? items.filter(i => i.label.includes(filter)) : items;
 console.log(`collected ${items.length} unique clip(s) (${skippedLong} skipped as >200 chars)` + (filter ? `; ${pool.length} match --filter ${filter}` : ''));
 
 // --- Skip what's already in storage (unless --force). ---
 const storage = getStorage();
-const todo: { item: Item; key: string; out: string }[] = [];
+const todo: { item: TtsItem; key: string; out: string }[] = [];
 const tmpDir = '/tmp/tts-gen';
 mkdirSync(tmpDir, { recursive: true });
 for (const item of pool) {

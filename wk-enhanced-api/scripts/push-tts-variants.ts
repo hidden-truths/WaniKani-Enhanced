@@ -22,13 +22,10 @@
 //   • The .m4a BYTES are the thing that's usually wrong (a clip rendered with the wrong System
 //     Voice). They live on THIS machine and go to S3 (reachable from anywhere). That's the default.
 //   • The audio_variants MANIFEST row (what makes a voice show up in the Settings picker via
-//     /v1/audio/variants) lives in the TARGET env's sqlite. For a RE-VOICE of an existing voice the
-//     prod manifest rows already exist (the original generate-tts.ts --variant run wrote them) — the
-//     hashes are identical, only the audio differs — so re-seeding them is unnecessary. And a push
-//     run from your Mac CANNOT reach the droplet's sqlite anyway (DATABASE_FILE would just hit your
-//     LOCAL dev DB). So manifest writes are OPT-IN via --seed-manifest, and only make sense when
-//     you're seeding a FRESH environment AND DATABASE_FILE actually points at that env's DB (e.g.
-//     run on the droplet — though the droplet has no source bytes, so that's rare).
+//     /v1/audio/variants) lives in the TARGET env's sqlite — which a push run from your Mac CANNOT
+//     reach (DATABASE_FILE would just hit your LOCAL dev DB). So this script does NOT touch the
+//     manifest at all; seeding it is seed-audio-variants.ts's job, run ON THE DROPLET against the
+//     prod DB (see that script + deploy/README.md). Push the bytes here, seed the manifest there.
 //
 // Usage — run from wk-enhanced-api/, typically on the Mac that rendered the clips. SOURCE is always
 // the LOCAL media dir; DESTINATION is whatever getStorage() resolves, so point STORAGE_DRIVER + S3_*
@@ -47,15 +44,12 @@
 //     --provider P      provider dir to scan under audio/     (default: siri)
 //     --variant V       only this '<provider>:<gender>' slice (e.g. siri:male); overrides --provider
 //     --force           overwrite a key that already exists in the destination (REQUIRED to re-voice)
-//     --seed-manifest   ALSO upsert audio_variants rows into DATABASE_FILE (only when it points at
-//                       the target env's DB — see the BYTES vs MANIFEST note above)
 //     --limit N         cap clips pushed this run (for a quick test)
-//     --dry-run         report what would push; no uploads, no DB writes
+//     --dry-run         report what would push; no uploads
 import { existsSync, readdirSync, readFileSync, statSync } from 'node:fs';
 import { join } from 'node:path';
 import { config } from '../src/config.ts';
 import { getStorage } from '../src/services/storage.ts';
-import * as db from '../src/db/client.ts';
 
 const arg = (name: string): string | undefined => {
     const i = process.argv.indexOf(name);
@@ -69,14 +63,13 @@ const [vProvider, vGender] = variant ? variant.split(':') : [undefined, undefine
 const provider = vProvider || arg('--provider') || 'siri';
 const force = has('--force');
 const dryRun = has('--dry-run');
-const seedManifest = has('--seed-manifest'); // also upsert audio_variants rows (see header note)
 const limit = arg('--limit') ? Number(arg('--limit')) : Infinity;
 
 // Map an on-disk gender dir to the manifest's gender value ('default' dir → '' the schema default).
 const genderOf = (dir: string) => (dir === 'default' ? '' : dir);
 
 // --- Collect the tagged .m4a clips under <src>/audio/<provider>/<gender>/. ---
-type Clip = { key: string; path: string; hash: string; gender: string };
+type Clip = { key: string; path: string; gender: string };
 const clips: Clip[] = [];
 const providerRoot = join(srcDir, 'audio', provider);
 if (!existsSync(providerRoot)) {
@@ -94,7 +87,6 @@ for (const gdir of genderDirs) {
         clips.push({
             key: `audio/${provider}/${gdir}/${f}`, // mirrors ttsVariantKey() byte-for-byte
             path: join(dir, f),
-            hash: f.slice(0, -'.m4a'.length),
             gender: genderOf(gdir),
         });
     }
@@ -118,9 +110,8 @@ for (const c of clips) {
     }
     const bytes = readFileSync(c.path);
     await storage.put(c.key, bytes.buffer.slice(bytes.byteOffset, bytes.byteOffset + bytes.byteLength), 'audio/mp4');
-    if (seedManifest) db.insertAudioVariant(c.hash, provider, c.gender, 'm4a'); // idempotent upsert (ON CONFLICT)
     pushed++;
 }
 const verb = dryRun ? 'would push' : 'pushed';
-console.log(`${verb} ${pushed} clip(s)` + (seedManifest && !dryRun ? ' (+ audio_variants rows)' : '') + (skipped ? `; ${skipped} skipped (already in destination — pass --force to overwrite)` : '') + (dryRun ? ' [DRY RUN — no writes]' : ''));
+console.log(`${verb} ${pushed} clip(s)` + (skipped ? `; ${skipped} skipped (already in destination — pass --force to overwrite)` : '') + (dryRun ? ' [DRY RUN — no writes]' : ''));
 process.exit(0);
