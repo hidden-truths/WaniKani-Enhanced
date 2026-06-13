@@ -1,8 +1,14 @@
-// 独り言 SELF-TALK — slot-swap sentence TEMPLATES (P3). CLIENT-ONLY today, not seeded to the sentence
-// store: a template has no single fixed text/hash/furigana, so it doesn't fit a `sentence` row.
+// 独り言 SELF-TALK — slot-swap sentence TEMPLATES (P3). This file is the git-tracked AUTHORING +
+// SEED SOURCE: as of Slice 1 the template STRUCTURE lives in the server `sentence_template` table
+// (curator-seeded from here via scripts/seed-sentences.ts, served by GET /v1/templates) and the
+// client FETCHES it instead of importing this bundle at runtime. A template has no single fixed
+// text/hash/furigana, so it isn't a `sentence` row — hence its own table. After editing a template
+// here, re-run scripts/seed-sentences.ts to push it to the store.
 //
-// PLANNED (decided, not yet built): this file becomes the SEED SOURCE for a `sentence_template` table,
-// with realizations lazily materialized as `sentence` rows. Design + plan: ../../../SENTENCE_STORE_TEMPLATES.md.
+// PLANNED (Slice 2, not yet built): realizations get lazily materialized as `sentence` rows on first
+// request so the store tooling (NLP/TTS/grammar/export) covers the combos people use. Until then a
+// realization is still derived client-side (below) + renders plain ruby. Design + plan + status:
+// ../../../SENTENCE_STORE_TEMPLATES.md.
 //
 // A template is a JP skeleton string with `{slot}` markers + a `slots` array of fillers. Picking a
 // filler per slot REALIZES a concrete sentence (core/selftalk.js `realizeTemplate`) whose reading /

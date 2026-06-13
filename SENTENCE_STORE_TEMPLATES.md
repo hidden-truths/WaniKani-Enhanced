@@ -1,12 +1,13 @@
 # Templates → Sentence Store (design + plan)
 
-**Status:** DECIDED, not yet built. This is the authoritative context doc for the next session. The
-slot-swap TEMPLATE feature currently lives as a **client-only JS bundle**; we're moving it into the
-server sentence store. Read this first, then the linked files.
+**Status:** **Slice 1 SHIPPED** (template *structure* in the DB); **Slice 2 pending** (lazy
+materialization of realizations + tooling). This is the authoritative context doc. The slot-swap
+TEMPLATE feature's structure now lives in the server `sentence_template` table (served by
+`GET /v1/templates`, fetched by the client); realizations are still derived client-side until
+Slice 2. Read this first, then the linked files.
 
-**Where the code is:** the template feature shipped on branch **`selftalk-grid`** (8 commits ahead of
-`main`, not yet merged — confirm with the maintainer whether to branch this work from `selftalk-grid`
-or from `main` after a merge).
+**Where the code is:** `selftalk-grid` was **fast-forward-merged into `main`** (the 9 template
+commits), and Slice 1 was built on branch **`templates-sentence-store`** off the updated `main`.
 
 ---
 
@@ -145,12 +146,22 @@ offline NLP cycle** — that's inherent to the no-Python-on-prod constraint, not
 
 ## Phasing (maintainer chose: structure first, then tooling)
 
-- **Slice 1 — structure in DB.** `sentence_template` table + privacy gate (+ `public_template` view +
-  breach test) + a seed pass + `GET /v1/templates` + the client fetch/cache replacing the JS import. The
-  slot-swap UI is unchanged, just DB-sourced. **Content leaves JavaScript.** Verify the UI still works.
+- **Slice 1 — structure in DB. ✅ SHIPPED.** `sentence_template` table + `TEMPLATE_VIEWER_VISIBLE`
+  gate (+ `public_template` view + a pinned breach test in `client.test.ts`) + `db.getTemplates` /
+  `db.upsertPublicTemplate` + `seed-sentences.ts` Pass 3 + `GET /v1/templates[?source=]` +
+  `routes/templates.ts` (in the `STUDY_ROUTE` CORS allowlist) + the client fetch/read-through cache
+  (`jpverbs_selftalk_templates_cache`) replacing the JS import in `features/selftalk.js`. The
+  slot-swap UI + `realizeTemplate` are unchanged, just DB-sourced. **Content left JavaScript.**
+  Verified: 18 templates served byte-for-byte from the bundle, grid tally + slot-swap cycle/repaint
+  work in-browser, 191 API + 104 study-app tests green. **Settled this slice:** route = dedicated
+  `GET /v1/templates` (open Q #3); authoring = **curator-only** seed, the gate + breach test ship now,
+  user-authored templates deferred (open Q #5); `slots`/`grammar` stored as opaque JSON columns parsed
+  server-side so the route returns the exact UI shape (no client adapter; `id` = the skeleton ext_id).
 - **Slice 2 — lazy materialization + tooling.** `POST /v1/templates/{id}/realize` + `sentence_link`
   `owner_type='template'` + the client requesting materialization at the right moment + the grammar-tag
   copy + the offline NLP picking up materialized combos. Tools light up (with the NLP lag above).
+  Open questions #1 (furigana source), #2 (materialization trigger), #4 (grammar copy), #6 (`source`
+  value) are Slice-2 calls.
 
 Settle each slice's open questions WITH the maintainer first (propose-with-a-recommendation → pick →
 build in slices), the same pattern used throughout this feature.
@@ -176,11 +187,13 @@ build in slices), the same pattern used throughout this feature.
 2. **Materialization trigger:** on first ▶ play / tap-to-lookup / record, or proactively for the default
    combo? (Cheapest: trigger when the client first needs a canonical sentence — i.e., on tap-to-lookup or
    record — and otherwise keep playing via the lazy TTS path.)
-3. **Route shape:** dedicated `GET /v1/templates` (recommended) vs. overloading `/v1/sentences`.
+3. **Route shape:** ✅ RESOLVED (Slice 1) — dedicated `GET /v1/templates`.
 4. **Grammar at materialization:** copy the template's curated `grammar` tag onto the combo row so grammar
    search works pre-NLP (recommended).
-5. **User-authored templates (private):** defer to a later slice, or build the private path now? (Curator-
-   only first mirrors how phrases shipped.)
+5. **User-authored templates (private):** ✅ RESOLVED (Slice 1) — **curator-only**; the private columns
+   + the mirrored read gate + breach test ship now (proven via a raw-SQL synthetic private row), but
+   the authoring WRITE path (POST/PUT/DELETE + a template editor) is deferred to a later slice, mirroring
+   how phrases shipped read-first.
 6. **`source` value** for materialized combo rows (`'template'`?) and whether they should appear in the
    Self-Talk `GET /v1/sentences?ownerType=selftalk` set or only via the template owner link.
 

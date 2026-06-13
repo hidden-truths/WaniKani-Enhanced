@@ -611,3 +611,68 @@ describe('sentence_annotation (NLP enrichment) — offset contract + privacy', (
         expect(tagsOf()).toEqual({ scene: 'morning' });
     });
 });
+
+// Slot-swap TEMPLATES (sentence_template) carry their own privacy gate — db.getTemplates is the
+// literal mirror of getSentences' VIEWER_VISIBLE predicate. These are BREACH-PREVENTION pins, same
+// as the sentence ones: if one breaks, a private template is about to leak. This slice is curator-
+// only (only upsertPublicTemplate writes), so a private row is inserted via raw SQL to prove the
+// gate holds the day user-authoring is added. Don't "fix" the test — fix the leak.
+describe('sentence_template privacy + ownership pins', () => {
+    const tpl = (extId: string) => ({
+        extId, source: 'selftalk', topic: 'minecraft', thought: 'resources', grammar: ['volitional'],
+        en: 'go {x}', jp: '{x}に<ruby>行<rt>い</rt></ruby>こう。',
+        slots: [{ id: 'x', label: 'where', fillers: [{ jp: '<ruby>家<rt>いえ</rt></ruby>', en: 'home' }] }],
+    });
+    const n = (sql: string) => (mem.query(sql).get() as { n: number }).n;
+    // A raw private template (no repo fn creates one in this curator-only slice).
+    const insertPrivate = (extId: string, createdBy: number) =>
+        mem.query(`INSERT INTO sentence_template (ext_id, source, topic, grammar, en, jp, slots, public, visibility, created_by, created_at)
+                   VALUES (?, 'selftalk', 'minecraft', '[]', 'x', 'x', '[]', 0, 'private', ?, 1)`).run(extId, createdBy);
+
+    test('getTemplates({viewer:null}) returns only public rows; private rows are hidden', () => {
+        const a = db.createUser('a@x.com', 'h');
+        db.upsertPublicTemplate(tpl('tpl-1'));
+        insertPrivate('tpl-priv', a.id);
+        const anon = db.getTemplates({ viewer: null });
+        expect(anon.map((t) => t.id)).toEqual(['tpl-1']);
+        expect(anon.every((t) => t.custom === false)).toBe(true);
+    });
+
+    test('a private template is visible to its owner, invisible to another user and to anon', () => {
+        const a = db.createUser('a@x.com', 'h');
+        const b = db.createUser('b@x.com', 'h');
+        insertPrivate('tpl-priv', a.id);
+        expect(db.getTemplates({ viewer: a.id }).map((t) => t.id)).toEqual(['tpl-priv']);
+        expect(db.getTemplates({ viewer: b.id })).toEqual([]);
+        expect(db.getTemplates({ viewer: null })).toEqual([]);
+        expect(db.getTemplates({})).toEqual([]); // fail-closed default (no viewer)
+    });
+
+    test('the public_template VIEW excludes a private row and a gated (public=0) row', () => {
+        db.upsertPublicTemplate(tpl('tpl-1'));
+        // gated: public=0 but visibility='public' — the VIEW must still exclude it.
+        mem.query(`INSERT INTO sentence_template (ext_id, source, grammar, en, jp, slots, public, visibility, created_at)
+                   VALUES ('tpl-gated', 'selftalk', '[]', 'x', 'x', '[]', 0, 'public', 1)`).run();
+        const view = (mem.query('SELECT ext_id FROM public_template ORDER BY ext_id').all() as { ext_id: string }[]).map((r) => r.ext_id);
+        expect(view).toEqual(['tpl-1']);
+    });
+
+    test('upsertPublicTemplate is idempotent + round-trips the structure (grammar/slots JSON)', () => {
+        db.upsertPublicTemplate(tpl('tpl-1'));
+        db.upsertPublicTemplate(tpl('tpl-1')); // second run must not grow anything
+        expect(n('SELECT COUNT(*) AS n FROM sentence_template')).toBe(1);
+        const got = db.getTemplates({ viewer: null });
+        expect(got).toHaveLength(1);
+        expect(got[0]!).toMatchObject({
+            id: 'tpl-1', source: 'selftalk', topic: 'minecraft', thought: 'resources',
+            grammar: ['volitional'], custom: false,
+        });
+        expect(got[0]!.slots[0]!.fillers[0]).toEqual({ jp: '<ruby>家<rt>いえ</rt></ruby>', en: 'home' });
+    });
+
+    test('source filter narrows the read', () => {
+        db.upsertPublicTemplate(tpl('tpl-1'));
+        expect(db.getTemplates({ source: 'selftalk', viewer: null }).map((t) => t.id)).toEqual(['tpl-1']);
+        expect(db.getTemplates({ source: 'nope', viewer: null })).toEqual([]);
+    });
+});

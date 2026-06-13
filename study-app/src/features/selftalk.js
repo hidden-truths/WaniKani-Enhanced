@@ -17,7 +17,6 @@ import { state } from '../state.js';
 import { localDay } from '../config.js';
 import { escapeHtml, rubyHtml, plainText, overlayTokens, topicGrid, groupByThought, grammarTokens, todaysSet, applyPractice, practiceStreak, donePhraseIds, sentenceToPhrase, phraseToSentence, realizeTemplate, cyclePick, templatePickIndex } from '../core/index.js';
 import { SELFTALK_TAXONOMY, SELFTALK_TOPICS, SELFTALK_GRAMMAR } from '../data/selftalk.js';
-import { SELFTALK_TEMPLATES, templatesForTopic } from '../data/selftalk-templates.js';
 import { playItem, cycleMod } from './audio.js';
 import { wireWordTaps } from './word-lookup.js';
 import { loadSelftalk, saveSelftalk } from '../persistence/selftalk.js';
@@ -90,6 +89,43 @@ function removeLocalPhrase(id) {
   cachePhrases(storePhrases);
 }
 
+// Slot-swap TEMPLATES now come from the store too (GET /v1/templates), not the JS bundle — same
+// read-through-cache pattern as phrases (degrade to cache offline). The bundled SELFTALK_TEMPLATES
+// (data/selftalk-templates.js) is the seed source for scripts/seed-sentences.ts, no longer imported
+// at runtime. The realize/render code is unchanged — it operates on this same
+// { id, topic, thought?, grammar, en, jp, slots } structure, and `id` stays the SKELETON ext_id the
+// record-compare keys on.
+const TPL_CACHE_KEY = 'jpverbs_selftalk_templates_cache';
+let storeTemplates = [];       // the live template set, from the fetch or the cache
+
+function loadCachedTemplates() {
+  try { const o = JSON.parse(localStorage.getItem(TPL_CACHE_KEY)); if (Array.isArray(o)) return o; } catch (e) {}
+  return [];
+}
+function cacheTemplates(t) {
+  try { localStorage.setItem(TPL_CACHE_KEY, JSON.stringify(t)); } catch (e) {}
+}
+
+// Refresh storeTemplates from the store + update the cache. Degrades to the cache on failure so the
+// slot-swap cards never vanish from a network hiccup. Returns true on a successful network refresh.
+export async function refreshTemplates() {
+  try {
+    const r = await api('/v1/templates?source=selftalk');
+    storeTemplates = (r && r.templates) || [];
+    cacheTemplates(storeTemplates);
+    return true;
+  } catch (e) {
+    if (!storeTemplates.length) storeTemplates = loadCachedTemplates();   // offline first load → fall back to cache
+    return false;
+  }
+}
+
+// Templates for one topic id (the curated set is small, so a linear scan is fine). Replaces the
+// import-time helper of the same name from the bundle.
+function templatesForTopic(topicId) {
+  return storeTemplates.filter((t) => t.topic === topicId);
+}
+
 const elHead = () => document.getElementById('stHead');
 const elBody = () => document.getElementById('stBody');
 const $ = (id) => document.getElementById(id);
@@ -115,7 +151,7 @@ function filteredPhrases() {
 // The slot-swap templates passing the grammar filter (each carries `topic`/`thought`/`id`, so they
 // count + group exactly like phrases). Used both for the grid tally and the drilled-in topic merge.
 function filteredTemplates() {
-  return stGrammar.length ? SELFTALK_TEMPLATES.filter((t) => (t.grammar || []).some((g) => stGrammar.includes(g))) : SELFTALK_TEMPLATES;
+  return stGrammar.length ? storeTemplates.filter((t) => (t.grammar || []).some((g) => stGrammar.includes(g))) : storeTemplates;
 }
 
 // ---- render ----
@@ -129,10 +165,11 @@ export function renderSelftalk() {
 // from the store, then repaint if the network set changed. Wired in main.js as the 独り言 tab's
 // render handler (renderSelftalk stays the render-only fn used by the internal re-renders).
 export async function showSelftalk() {
+  if (!storeTemplates.length) storeTemplates = loadCachedTemplates();   // instant frame from cache (templates)
   const hadCache = storePhrases.length > 0;
   if (hadCache) renderSelftalk();
-  const changed = await refreshPhrases();
-  if (changed || !hadCache) renderSelftalk();
+  const [phrasesChanged, templatesChanged] = await Promise.all([refreshPhrases(), refreshTemplates()]);
+  if (phrasesChanged || templatesChanged || !hadCache) renderSelftalk();
 }
 
 function streakRowHtml() {
@@ -240,7 +277,7 @@ function templateCardHtml(tpl, speaking, done) {
 // ▶ play + record-control data-text, WITHOUT tearing down the record control (which would drop an
 // in-flight take / its waveform). The delegated handlers read data-text fresh at click time.
 function repaintTemplateCard(card) {
-  const tpl = SELFTALK_TEMPLATES.find((t) => t.id === card.dataset.id);
+  const tpl = storeTemplates.find((t) => t.id === card.dataset.id);
   if (!tpl) return;
   const picks = tplPicks[tpl.id] || {};
   const r = realizeTemplate(tpl, picks);
@@ -518,7 +555,7 @@ export function initSelftalk() {
       if (slot) {
         if (lpFired) { lpFired = false; return; }          // long-press already opened the menu
         const card = slot.closest('.st-template'); if (!card) return;
-        const tpl = SELFTALK_TEMPLATES.find((t) => t.id === card.dataset.id); if (!tpl) return;
+        const tpl = storeTemplates.find((t) => t.id === card.dataset.id); if (!tpl) return;
         if (cycleMod(e)) { openSlotMenu(slot); return; }   // ⌥/⇧-click → all options
         tplPicks[tpl.id] = cyclePick(tpl, tplPicks[tpl.id] || {}, slot.dataset.stSlot);
         closeSlotMenus(card); repaintTemplateCard(card); return;
@@ -526,7 +563,7 @@ export function initSelftalk() {
       const shuffle = e.target.closest('[data-st-shuffle]');
       if (shuffle) {
         const card = shuffle.closest('.st-template'); if (!card) return;
-        const tpl = SELFTALK_TEMPLATES.find((t) => t.id === card.dataset.id); if (!tpl) return;
+        const tpl = storeTemplates.find((t) => t.id === card.dataset.id); if (!tpl) return;
         const next = {};
         for (const s of tpl.slots || []) next[s.id] = Math.floor(Math.random() * ((s.fillers || []).length || 1));
         tplPicks[tpl.id] = next; closeSlotMenus(card); repaintTemplateCard(card); return;

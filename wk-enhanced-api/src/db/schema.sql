@@ -219,3 +219,43 @@ CREATE TABLE IF NOT EXISTS sentence_annotation (
 -- Anon reads and any export read ONLY this view — cannot see private/gated rows.
 CREATE VIEW IF NOT EXISTS public_sentence AS
     SELECT * FROM sentence WHERE public = 1 AND visibility = 'public';
+
+-- ---------- Sentence templates (slot-swap generators; 独り言 Self-Talk) ----------
+--
+-- A TEMPLATE is a sentence GENERATOR, not a sentence: a skeleton `jp`/`en` with `{slot}` markers
+-- plus a `slots` array of fillers. It has NO single fixed text/hash/furigana, so it can't be a
+-- `sentence` row — it lives here, curator-seeded from the study-app bundle
+-- (data/selftalk-templates.js → scripts/seed-sentences.ts), served via GET /v1/templates, and
+-- rendered client-side (the slot-swap UI). Picking a filler per slot REALIZES a concrete sentence;
+-- those realizations become `sentence` rows (linked via sentence_link owner_type='template'),
+-- lazily materialized on first request in a LATER slice — Slice 1 stores structure only.
+-- Full design + phasing: ../../SENTENCE_STORE_TEMPLATES.md.
+--
+-- Privacy MIRRORS the sentence store: ALL reads go through db.getTemplates, which always ANDs
+-- (public=1 OR created_by=:viewer), fail-closed; anon/export read the public_template VIEW. This
+-- slice is curator-only (only upsertPublicTemplate writes rows); the private columns + the gate +
+-- a pinned breach test ship now so user-authored templates can be added later without a migration.
+--   • `ext_id` is the stable SKELETON id (e.g. 'tpl-minecraft-gather') — the record-compare itemKey
+--     on the client, preserved verbatim + immutable.
+--   • `grammar` + `slots` are JSON the server treats as OPAQUE (parsed only to re-emit the
+--     client-render shape); `topic`/`thought` mirror the sentence_tag taxonomy for grouping.
+CREATE TABLE IF NOT EXISTS sentence_template (
+    id          INTEGER PRIMARY KEY AUTOINCREMENT,
+    ext_id      TEXT NOT NULL UNIQUE,           -- stable skeleton id, e.g. 'tpl-minecraft-gather'
+    source      TEXT NOT NULL,                  -- 'selftalk'
+    topic       TEXT,                           -- taxonomy topic id (SELFTALK_TAXONOMY)
+    thought     TEXT,                           -- optional sentence-thought sub-cluster id
+    grammar     TEXT,                           -- JSON string[] of teaching-grammar ids
+    en          TEXT,                           -- English skeleton with {slot} markers
+    jp          TEXT,                           -- JP skeleton with {slot} markers (ruby on fixed kanji)
+    slots       TEXT,                           -- JSON [{id,label,fillers:[{jp,en}]}]
+    public      INTEGER NOT NULL DEFAULT 0,     -- 1 = export/anon eligible
+    visibility  TEXT NOT NULL DEFAULT 'public', -- 'public' | 'private'
+    created_by  INTEGER REFERENCES users(id) ON DELETE CASCADE,  -- NULL = curator
+    created_at  INTEGER NOT NULL                -- epoch ms
+);
+CREATE INDEX IF NOT EXISTS ix_template_created_by ON sentence_template(created_by);
+
+-- Anon reads and any export read ONLY this view — cannot see private/gated template rows.
+CREATE VIEW IF NOT EXISTS public_template AS
+    SELECT * FROM sentence_template WHERE public = 1 AND visibility = 'public';

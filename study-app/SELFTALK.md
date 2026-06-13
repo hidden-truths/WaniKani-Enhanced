@@ -29,7 +29,7 @@ Layer docs: module map + dead-ends in [CLAUDE.md](CLAUDE.md); card/furigana mode
 | Tab glue (render/playback/record/authoring/lifecycle) | [src/features/selftalk.js](src/features/selftalk.js) |
 | Pure logic (rotation, grouping, streak, template realization) | [src/core/selftalk.js](src/core/selftalk.js) |
 | Built-in starter content (SEED SOURCE for the store, not read at runtime) | [src/data/selftalk.js](src/data/selftalk.js) |
-| Slot-swap TEMPLATES — CLIENT-ONLY bundle (never seeded; no `sentence` row) | [src/data/selftalk-templates.js](src/data/selftalk-templates.js) |
+| Slot-swap TEMPLATES — SEED SOURCE for `sentence_template` (served via `GET /v1/templates`; no `sentence` row yet) | [src/data/selftalk-templates.js](src/data/selftalk-templates.js) |
 | Phrase store: server sentence rows + repo (`getSentences`/`createSentence`/…) | [../wk-enhanced-api/src/db/client.ts](../wk-enhanced-api/src/db/client.ts), [routes/sentences.ts](../wk-enhanced-api/src/routes/sentences.ts) |
 | Seed built-ins → public rows | [../wk-enhanced-api/scripts/seed-sentences.ts](../wk-enhanced-api/scripts/seed-sentences.ts) |
 | Synced storage (practice/streak signal ONLY — phrases moved to the store) | [src/persistence/selftalk.js](src/persistence/selftalk.js) |
@@ -106,16 +106,19 @@ migrated into the store once on sign-in, then dropped from the blob. Server enum
 ## Templates (slot-swap)
 
 A **template** is a curated sentence skeleton with swappable slots, so one card generates many
-sentences ("I'm almost out of [wood], let me go [chop] some" → swap the fillers). They live TODAY in a
-**CLIENT-ONLY bundle** ([src/data/selftalk-templates.js](src/data/selftalk-templates.js)), **not in
-the sentence store** — a template has no single fixed text/hash/furigana, so it doesn't fit a
-`sentence` row.
+sentences ("I'm almost out of [wood], let me go [chop] some" → swap the fillers).
 
-> **PLANNED (decided, not yet built): templates move into the DB.** A `sentence_template` table holds
-> the structure (curator-seeded + served), and realizations are **lazily materialized** as `sentence`
-> rows on first request so the store tooling covers them. Full design + plan + open questions:
+> **Slice 1 (SHIPPED): the template STRUCTURE moved into the DB.** A `sentence_template` table holds
+> the skeleton + slots + fillers (curator-seeded from the bundle via `scripts/seed-sentences.ts`,
+> its own `public_template` view + a read path mirroring the `getSentences` privacy gate + a pinned
+> breach test), served by **`GET /v1/templates`**. The client **fetches** it (read-through cache
+> `jpverbs_selftalk_templates_cache`) instead of importing the bundle — `data/selftalk-templates.js`
+> is now the **seed source**, not read at runtime. The slot-swap UI + realize code are unchanged.
+> **Slice 2 (not yet built): realizations** get **lazily materialized** as `sentence` rows on first
+> request so the store tooling (NLP/TTS/grammar/export) covers the combos people use; until then a
+> realization is derived client-side + renders plain ruby. Full design + phasing + status:
 > [../SENTENCE_STORE_TEMPLATES.md](../SENTENCE_STORE_TEMPLATES.md). The bullets below describe the
-> current client-only implementation.
+> render/realize behavior (still client-side).
 
 - **Shape:** `{ id, topic, thought?, grammar, en, jp, slots:[{id,label,fillers:[{jp,en}]}] }`. `jp` is
   the skeleton with `{slotId}` markers + ruby on every fixed kanji; each filler's `jp` carries ruby too.
@@ -133,11 +136,12 @@ the sentence store** — a template has no single fixed text/hash/furigana, so i
 - **Record-compare keys on the SKELETON id** (one practiceable item; the ✓/streak + takes accumulate
   there), while the reference text tracks the current realization. Picks (`tplPicks`) are per-session
   view state, not synced.
-- Templates render **plain ruby** (no GiNZA tap-to-lookup over the combos — same degradation as
-  user-authored phrases). Curated-only; **MODEL-GENERATED → proofread**, especially that each filler
-  stays grammatical in the skeleton's tail. The DB-integration that fixes the no-tap-lookup /
-  not-in-store limitations is the decided next phase — see
-  [../SENTENCE_STORE_TEMPLATES.md](../SENTENCE_STORE_TEMPLATES.md).
+- The structure is now **DB-sourced** (fetched from `GET /v1/templates`), but realizations still
+  render **plain ruby** (no GiNZA tap-to-lookup over the combos — same degradation as user-authored
+  phrases) because they aren't `sentence` rows yet. Curated-only; **MODEL-GENERATED → proofread**,
+  especially that each filler stays grammatical in the skeleton's tail. Lazy materialization (which
+  lights up tap-to-lookup after the next offline NLP cycle, plus TTS pre-gen / grammar search /
+  export) is Slice 2 — see [../SENTENCE_STORE_TEMPLATES.md](../SENTENCE_STORE_TEMPLATES.md).
 
 ## Audio + record-and-compare (reuses the shared engine)
 
@@ -181,8 +185,8 @@ eye on phrasing and on whether each conversation line sits at the right politene
 edit, re-run `seed-sentences.ts` to push it to the store (and the NLP re-parse for tap-to-lookup).
 The **templates** (`data/selftalk-templates.js`) are model-generated too — the dataset test checks
 every realization's furigana, but a native eye should confirm each filler reads naturally in the
-skeleton (esp. verb-stem agreement). Templates are CLIENT-ONLY, so a fix needs **no re-seed** — just
-edit the bundle.
+skeleton (esp. verb-stem agreement). The structure is now DB-sourced, so after editing a template
+**re-run `seed-sentences.ts`** to push it to the store (same as phrases).
 
 ## Backlog / ideas
 

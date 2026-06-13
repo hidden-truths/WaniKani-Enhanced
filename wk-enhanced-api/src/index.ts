@@ -32,6 +32,7 @@ import { sessionsRouter } from './routes/sessions.ts';
 import { minnaRouter } from './routes/minna.ts';
 import { audioRouter } from './routes/audio.ts';
 import { sentencesRouter } from './routes/sentences.ts';
+import { templatesRouter } from './routes/templates.ts';
 import { MEDIA_CACHE_CONTROL } from './services/storage.ts';
 import { resolveTts, ttsEtag } from './services/tts.ts';
 
@@ -57,7 +58,7 @@ const app = new OpenAPIHono({ defaultHook: zodHook });
 //    tolerate the echoed-origin branch fine. `/v1/sentences` belongs here even though its GET is
 //    "public" (anon-readable): the study app's api() always sends credentials:'include', so even
 //    the anon read is a credentialed request and a wildcard origin would be browser-rejected.
-const STUDY_ROUTE = /^\/v1\/(auth|progress|sessions|minna|audio|sentences)\b/;
+const STUDY_ROUTE = /^\/v1\/(auth|progress|sessions|minna|audio|sentences|templates)\b/;
 app.use('*', async (c, next) => {
     const origin = c.req.header('Origin');
     if (STUDY_ROUTE.test(c.req.path) && origin && config.studyApp.allowedOrigins.includes(origin)) {
@@ -111,6 +112,7 @@ app.route('/v1/sessions', sessionsRouter);
 app.route('/v1/minna', minnaRouter);
 app.route('/v1/audio', audioRouter);
 app.route('/v1/sentences', sentencesRouter);
+app.route('/v1/templates', templatesRouter);
 
 // TTS for the study app (replaces the browser's uneven speechSynthesis voices with
 // consistent ja-JP audio). The three-tier cache (in-process → storage → Google) + the

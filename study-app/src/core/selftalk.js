@@ -132,9 +132,11 @@ export function groupByThought(phrases, thoughtsOrder) {
 
 // ---- slot-swap templates (P3) — pure realization ----
 // A template is a JP skeleton string with `{slot}` markers + a `slots:[{id,fillers:[{jp,en}]}]`
-// array; it has NO single fixed text, so it lives client-side (data/selftalk-templates.js), never in
-// the sentence store. Realizing it for a set of picks reuses the SAME furigana helpers a phrase does,
-// so a realized template is shaped exactly like one.
+// array. The STRUCTURE lives in the server `sentence_template` table (fetched via GET /v1/templates;
+// seed source is data/selftalk-templates.js) — a template has no single fixed text, so it's not a
+// `sentence` row. These PURE helpers realize a set of picks CLIENT-SIDE, reusing the SAME furigana
+// helpers a phrase does, so a realized template is shaped exactly like one. (Server-side
+// materialization of realizations into `sentence` rows is Slice 2 — see SENTENCE_STORE_TEMPLATES.md.)
 
 // The (clamped, default-0) filler index chosen for a slot.
 export function templatePickIndex(slot, picks) {

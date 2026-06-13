@@ -636,3 +636,49 @@ export const SentenceMutateResponseSchema = z
 export const SentenceDeleteResponseSchema = z
     .object({ ok: z.boolean() })
     .openapi('SentenceDeleteResponse');
+
+// ---------- Sentence templates (slot-swap generators; GET /v1/templates) ----------
+// A template is a sentence GENERATOR (skeleton + slots + fillers), served from sentence_template
+// (not a `sentence` row). The shape below IS what the client slot-swap UI renders.
+
+export const TemplateFillerSchema = z
+    .object({
+        jp: z.string().openapi({ description: 'Ruby JP substituted into the {slot} marker.', example: '<ruby>木<rt>き</rt></ruby>' }),
+        en: z.string().openapi({ example: 'wood' }),
+    })
+    .openapi('TemplateFiller');
+
+export const TemplateSlotSchema = z
+    .object({
+        id: z.string().openapi({ description: 'Matches a {id} marker in jp/en.', example: 'material' }),
+        label: z.string().openapi({ example: 'material' }),
+        fillers: z.array(TemplateFillerSchema),
+    })
+    .openapi('TemplateSlot');
+
+export const TemplateSchema = z
+    .object({
+        id: z.string().openapi({ description: 'Stable skeleton ext_id (the record-compare key).', example: 'tpl-minecraft-gather' }),
+        source: z.string().openapi({ example: 'selftalk' }),
+        topic: z.string().nullable().openapi({ description: 'Taxonomy topic id.', example: 'minecraft' }),
+        thought: z.string().optional().openapi({ description: 'Optional sentence-thought sub-cluster.', example: 'resources' }),
+        grammar: z.array(z.string()).openapi({ description: 'Teaching-grammar ids.', example: ['volitional'] }),
+        en: z.string().openapi({ description: 'English skeleton with {slot} markers.', example: "I'm running low on {material} — let me go {action}." }),
+        jp: z.string().openapi({ description: 'JP skeleton with {slot} markers (ruby on fixed kanji).' }),
+        slots: z.array(TemplateSlotSchema),
+        custom: z.boolean().openapi({ description: 'true = user-authored (private); false = curator/public.' }),
+    })
+    .openapi('Template');
+
+export const TemplateListResponseSchema = z
+    .object({ templates: z.array(TemplateSchema) })
+    .openapi('TemplateListResponse');
+
+// GET /v1/templates[?source=] — public (anon) + the caller's own private templates through the
+// db.getTemplates privacy gate. `source` optionally narrows to one surface ('selftalk' today).
+export const TemplateListQuerySchema = z.object({
+    source: z
+        .string()
+        .optional()
+        .openapi({ param: { name: 'source', in: 'query' }, description: 'Optional: narrow to one surface (e.g. "selftalk").', example: 'selftalk' }),
+});

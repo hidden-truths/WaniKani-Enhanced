@@ -1124,3 +1124,145 @@ export function setGrammarTags(sentenceId: number, values: string[]): void {
     const ins = db.query("INSERT OR IGNORE INTO sentence_tag (sentence_id, kind, value) VALUES (?, 'grammar', ?)");
     for (const v of values) ins.run(sentenceId, v);
 }
+
+// ---------- sentence_template (slot-swap generators; 独り言 Self-Talk) ----------
+//
+// A template is a sentence GENERATOR (skeleton + slots + fillers), NOT a sentence row — see
+// schema.sql. Curator rows are seeded from the study-app bundle (upsertPublicTemplate); user-
+// authored templates + realization materialization arrive in a later slice. Reads go through
+// getTemplates, which MIRRORS getSentences' privacy gate (public OR created_by=viewer), fail-
+// closed. Pinned by a breach test in client.test.ts — keep it green. `grammar`/`slots` are stored
+// as JSON the server treats as opaque (parsed only to re-emit the client-render shape).
+
+// One slot filler: the ruby `jp` substituted into a {slot} marker + its English gloss.
+export interface TemplateFiller {
+    jp: string;
+    en: string;
+}
+// One swappable slot: stable `id` (matches a {id} marker in jp/en), a short `label`, its fillers.
+export interface TemplateSlot {
+    id: string;
+    label: string;
+    fillers: TemplateFiller[];
+}
+// The assembled template the API serves — the exact shape the client slot-swap UI renders. `id`
+// is the stable ext_id (the SKELETON id record-compare keys on); `custom` = user-authored (a
+// non-NULL created_by) — always false in this curator-only slice.
+export interface AssembledTemplate {
+    id: string;
+    source: string;
+    topic: string | null;
+    thought?: string;
+    grammar: string[];
+    en: string;
+    jp: string;
+    slots: TemplateSlot[];
+    custom: boolean;
+}
+
+type TemplateRow = {
+    id: number;
+    ext_id: string;
+    source: string;
+    topic: string | null;
+    thought: string | null;
+    grammar: string | null;
+    en: string | null;
+    jp: string | null;
+    slots: string | null;
+    public: number;
+    visibility: string;
+    created_by: number | null;
+    created_at: number;
+};
+
+const TEMPLATE_ROW_COLS =
+    'id, ext_id, source, topic, thought, grammar, en, jp, slots, public, visibility, created_by, created_at';
+
+// THE template privacy gate — the literal mirror of VIEWER_VISIBLE, aliasing sentence_template as
+// `t`. Binds ONE param (the viewer id; null → public only, since `t.created_by = NULL` is never
+// true → fail-closed). getTemplates ANDs this in; the pinned breach test covers it. Keep it
+// unconditional.
+const TEMPLATE_VIEWER_VISIBLE = '(t.public = 1 OR t.created_by = ?)';
+
+function getTemplateRowById(id: number): TemplateRow | null {
+    return getDb()
+        .query(`SELECT ${TEMPLATE_ROW_COLS} FROM sentence_template WHERE id = ?`)
+        .get(id) as TemplateRow | null;
+}
+
+// Parse the opaque JSON columns back into the structured client shape. A malformed/absent column
+// degrades to an empty array / blank string rather than throwing (the seed writes valid JSON; this
+// is just defensive against a hand-edited row).
+function assembleTemplateRow(row: TemplateRow): AssembledTemplate {
+    let grammar: unknown = [];
+    let slots: unknown = [];
+    try { grammar = row.grammar ? JSON.parse(row.grammar) : []; } catch { grammar = []; }
+    try { slots = row.slots ? JSON.parse(row.slots) : []; } catch { slots = []; }
+    const out: AssembledTemplate = {
+        id: row.ext_id,
+        source: row.source,
+        topic: row.topic,
+        grammar: Array.isArray(grammar) ? (grammar as string[]) : [],
+        en: row.en ?? '',
+        jp: row.jp ?? '',
+        slots: Array.isArray(slots) ? (slots as TemplateSlot[]) : [],
+        custom: row.created_by != null,
+    };
+    if (row.thought) out.thought = row.thought;
+    return out;
+}
+
+// THE choke-point read for templates. Mirrors getSentences: ALWAYS ANDs (t.public=1 OR
+// t.created_by=:viewer); `viewer` null → public rows only (fail-closed). Optional `source` narrows
+// to one surface ('selftalk'); omitted = all visible templates. Ordered by id (seed/insert order).
+export function getTemplates(opts: { source?: string | null; viewer?: number | null }): AssembledTemplate[] {
+    const viewer = opts.viewer ?? null;
+    const source = opts.source ?? null;
+    const rows = getDb()
+        .query(
+            `SELECT ${TEMPLATE_ROW_COLS} FROM sentence_template t
+             WHERE (? IS NULL OR t.source = ?) AND ${TEMPLATE_VIEWER_VISIBLE}
+             ORDER BY t.id`,
+        )
+        .all(source, source, viewer) as TemplateRow[];
+    return rows.map(assembleTemplateRow);
+}
+
+// Seed/refresh a PUBLIC curator template (public=1, visibility='public', created_by=NULL).
+// Idempotent by ext_id: re-running overwrites the row in place, so the seed script is a safe
+// no-growth no-op on re-run (created_at preserved). The template analogue of upsertPublicSentence.
+export function upsertPublicTemplate(input: {
+    extId: string;
+    source: string;
+    topic?: string | null;
+    thought?: string | null;
+    grammar?: string[];
+    en: string;
+    jp: string;
+    slots: TemplateSlot[];
+}): AssembledTemplate {
+    const now = Date.now();
+    const r = getDb()
+        .query(
+            `INSERT INTO sentence_template (ext_id, source, topic, thought, grammar, en, jp, slots, public, visibility, created_by, created_at)
+             VALUES (?, ?, ?, ?, ?, ?, ?, ?, 1, 'public', NULL, ?)
+             ON CONFLICT(ext_id) DO UPDATE SET
+                 source = excluded.source, topic = excluded.topic, thought = excluded.thought,
+                 grammar = excluded.grammar, en = excluded.en, jp = excluded.jp, slots = excluded.slots,
+                 public = 1, visibility = 'public', created_by = NULL
+             RETURNING id`,
+        )
+        .get(
+            input.extId,
+            input.source,
+            input.topic ?? null,
+            input.thought ?? null,
+            JSON.stringify(input.grammar ?? []),
+            input.en,
+            input.jp,
+            JSON.stringify(input.slots ?? []),
+            now,
+        ) as { id: number };
+    return assembleTemplateRow(getTemplateRowById(r.id)!);
+}

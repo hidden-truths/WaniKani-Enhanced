@@ -1,12 +1,17 @@
-// seed-sentences — seed the built-in curator sentences into the unified sentence store as PUBLIC
-// rows (public=1, visibility='public', created_by=NULL). Two passes:
-//   1. 独り言 Self-Talk phrases (Phase 1) — one row each, idempotent by ext_id
+// seed-sentences — seed the built-in curator content into the store as PUBLIC rows
+// (public=1, visibility='public', created_by=NULL). Three passes:
+//   1. 独り言 Self-Talk phrases (Phase 1) — one `sentence` row each, idempotent by ext_id
 //      (db.upsertPublicSentence).
-//   2. Built-in vocab EXAMPLE sentences (Phase 2) — leveled sentences linked to cards
+//   2. Built-in vocab EXAMPLE sentences (Phase 2) — leveled `sentence` rows linked to cards
 //      (owner_type='card', owner_id=<rank>, tier='N5'..'N1'), idempotent by hash + card link
 //      (db.seedExampleSentence). Identical text shared by several cards/tiers is ONE row + many
 //      links (reuse, not duplication).
-// User-authored phrases/examples are NOT seeded here — those are written live via /v1/sentences.
+//   3. 独り言 Self-Talk slot-swap TEMPLATES — the generator STRUCTURE into the separate
+//      `sentence_template` table (db.upsertPublicTemplate, idempotent by ext_id). A template has
+//      no single fixed text/hash, so it isn't a `sentence` row; its realizations become sentence
+//      rows lazily in a later slice. See ../../SENTENCE_STORE_TEMPLATES.md.
+// User-authored content is NOT seeded here — those are written live via /v1/sentences (templates
+// have no authoring path yet — curator-only).
 //
 // This is the seed→DB step that makes the store the runtime source of truth while keeping the
 // git-tracked study-app bundles (data/selftalk.js, data/examples.js) as the curator authoring
@@ -19,6 +24,7 @@
 //   bun scripts/seed-sentences.ts
 import { SELFTALK } from '../../study-app/src/data/selftalk.js';
 import { EXAMPLES } from '../../study-app/src/data/examples.js';
+import { SELFTALK_TEMPLATES } from '../../study-app/src/data/selftalk-templates.js';
 import { plainText, rubyToSegments } from '../../study-app/src/core/text.js';
 import * as db from '../src/db/client.ts';
 
@@ -78,3 +84,23 @@ for (const g of byText.values()) {
     db.seedExampleSentence({ text: g.text, furigana: g.furigana, translations: { en: g.en }, cardLinks: g.links });
 }
 console.log(`seeded ${byText.size} example sentences (${links} links across ${Object.keys(EXAMPLES).length} cards) into the sentence store`);
+
+// ---- Pass 3: 独り言 Self-Talk slot-swap TEMPLATES → public sentence_template rows ----
+// The generator STRUCTURE only (skeleton + slots + fillers), idempotent by ext_id. Each filler-
+// combo's furigana integrity is guarded by the study-app dataset test (test/core.test.ts), and
+// realizations are materialized as sentence rows lazily in a later slice — neither happens here.
+let templates = 0;
+for (const t of SELFTALK_TEMPLATES) {
+    db.upsertPublicTemplate({
+        extId: t.id,
+        source: 'selftalk',
+        topic: t.topic,
+        thought: t.thought ?? null,
+        grammar: t.grammar || [],
+        en: t.en,
+        jp: t.jp,
+        slots: t.slots,
+    });
+    templates++;
+}
+console.log(`seeded ${templates} Self-Talk slot-swap templates into the sentence_template table`);

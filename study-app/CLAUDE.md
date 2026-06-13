@@ -659,17 +659,22 @@ Component contracts you must preserve:
   (so it doesn't fight Minna's), and the take-saved hook is **filtered to `SELFTALK_SCOPE`** (so a
   Minna take can't mark Self-Talk practice). Phrases carry **no `accent`** — sentence-level pitch is
   meaningless (`pitchHtml` is per-word); the furigana + synth prosody carry the reading.
-  **Slot-swap TEMPLATES are a CLIENT-ONLY bundle** ([data/selftalk-templates.js](src/data/selftalk-templates.js)),
-  deliberately NOT in the sentence store: a template (skeleton `jp` with `{slot}` markers + `slots`/
-  `fillers`) has no single fixed text/hash/furigana, so it can't be a `sentence` row. `realizeTemplate`
-  (pure) substitutes a picked filler per slot, then DERIVES reading/plainText from the now-fully-ruby
-  string — so a realized template plays via the same synth path (`/v1/audio/tts` on plainText, lazily
-  cached) and **record-compares keyed on the SKELETON id** (one practiceable item; the reference text
-  tracks the current realization, patched onto the control's `data-text` on each swap). Templates render
-  PLAIN ruby (no tap-to-lookup over the combo space). **This is changing:** a decided (not-yet-built) plan
-  moves templates into a `sentence_template` table + lazily materializes realizations as `sentence` rows —
-  see [../SENTENCE_STORE_TEMPLATES.md](../SENTENCE_STORE_TEMPLATES.md). Until that lands, don't seed them or
-  give them GiNZA annotations. Full doc: [SELFTALK.md](SELFTALK.md).
+  **Slot-swap TEMPLATES: structure is DB-sourced (Slice 1), realizations are still client-side.** The
+  template STRUCTURE (skeleton `jp` with `{slot}` markers + `slots`/`fillers`) lives in the server
+  `sentence_template` table, FETCHED via `GET /v1/templates` (read-through cache
+  `jpverbs_selftalk_templates_cache`); [data/selftalk-templates.js](src/data/selftalk-templates.js) is
+  now the **seed source** (scripts/seed-sentences.ts Pass 3), no longer imported at runtime. A template
+  has no single fixed text/hash/furigana, so it's NOT a `sentence` row — hence its own table (with its
+  own `public_template` view + a read path mirroring the `getSentences` privacy gate + a pinned breach
+  test). `realizeTemplate` (pure) still substitutes a picked filler per slot CLIENT-SIDE, then DERIVES
+  reading/plainText from the now-fully-ruby string — so a realized template plays via the same synth
+  path (`/v1/audio/tts` on plainText, lazily cached) and **record-compares keyed on the SKELETON id /
+  template ext_id** (one practiceable item; the reference text tracks the current realization, patched
+  onto the control's `data-text` on each swap). Realizations render PLAIN ruby (no tap-to-lookup over
+  the combo space) because they aren't `sentence` rows yet. **Slice 2 (not yet built):** lazily
+  materialize realizations as `sentence` rows (`sentence_link owner_type='template'`) so NLP/TTS/grammar/
+  export cover them — until then, don't expect GiNZA annotations on a realized combo. Full doc:
+  [SELFTALK.md](SELFTALK.md); design + phasing: [../SENTENCE_STORE_TEMPLATES.md](../SENTENCE_STORE_TEMPLATES.md).
 - **Record-and-compare (`record-compare.js`, the generic engine; Minna + Self-Talk glue feed it):
   the conversation has ONE whole-dialogue MP3, so
   per-line native compare slices it — it does NOT have per-line audio.** A line's native
