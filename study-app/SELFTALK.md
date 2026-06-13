@@ -27,8 +27,9 @@ Layer docs: module map + dead-ends in [CLAUDE.md](CLAUDE.md); card/furigana mode
 | Concern | File |
 |---|---|
 | Tab glue (render/playback/record/authoring/lifecycle) | [src/features/selftalk.js](src/features/selftalk.js) |
-| Pure logic (rotation, grouping, streak) | [src/core/selftalk.js](src/core/selftalk.js) |
+| Pure logic (rotation, grouping, streak, template realization) | [src/core/selftalk.js](src/core/selftalk.js) |
 | Built-in starter content (SEED SOURCE for the store, not read at runtime) | [src/data/selftalk.js](src/data/selftalk.js) |
+| Slot-swap TEMPLATES — CLIENT-ONLY bundle (never seeded; no `sentence` row) | [src/data/selftalk-templates.js](src/data/selftalk-templates.js) |
 | Phrase store: server sentence rows + repo (`getSentences`/`createSentence`/…) | [../wk-enhanced-api/src/db/client.ts](../wk-enhanced-api/src/db/client.ts), [routes/sentences.ts](../wk-enhanced-api/src/routes/sentences.ts) |
 | Seed built-ins → public rows | [../wk-enhanced-api/scripts/seed-sentences.ts](../wk-enhanced-api/scripts/seed-sentences.ts) |
 | Synced storage (practice/streak signal ONLY — phrases moved to the store) | [src/persistence/selftalk.js](src/persistence/selftalk.js) |
@@ -97,6 +98,37 @@ migrated into the store once on sign-in, then dropped from the blob. Server enum
 - **Grammar-tier filter** — a cross-cutting chip row (in `#stHead`) over the present grammar tokens;
   a phrase matches if it carries ANY selected token (empty = all). Applies in BOTH views — it narrows
   the grid cells + their counts, and the drilled topic's phrases. View-only (not synced).
+- **Templates** (slot-swap) render INLINE in their topic's thought cluster, after the fixed phrases —
+  see the next section.
+
+## Templates (slot-swap)
+
+A **template** is a curated sentence skeleton with swappable slots, so one card generates many
+sentences ("I'm almost out of [wood], let me go [chop] some" → swap the fillers). They live in a
+**CLIENT-ONLY bundle** ([src/data/selftalk-templates.js](src/data/selftalk-templates.js)), **never in
+the sentence store** — a template has no single fixed text/hash/furigana, so it doesn't fit a
+`sentence` row, and parsing/seeding an unbounded combo space buys nothing.
+
+- **Shape:** `{ id, topic, thought?, grammar, en, jp, slots:[{id,label,fillers:[{jp,en}]}] }`. `jp` is
+  the skeleton with `{slotId}` markers + ruby on every fixed kanji; each filler's `jp` carries ruby too.
+- **Realize** (`realizeTemplate`, pure in `core/selftalk.js`) substitutes the picked filler per slot,
+  then DERIVES the reading + plainText from the now-fully-ruby string with the SAME helpers a phrase
+  uses — so a realized template renders + plays exactly like a phrase. `text` (plainText) is the
+  `/v1/audio/tts` key (synth-only, lazily cached — no pre-gen possible) AND the record-compare
+  reference text.
+- **Swap UX:** each slot is a tinted chip in the sentence; a tap **cycles** the filler (`cyclePick`),
+  an **⌥-click / long-press** opens a filler menu for a direct pick, and a 🔀 shuffles all slots. Every
+  swap repaints the card IN PLACE (`repaintTemplateCard`) — sentence/reading/English + the ▶ play and
+  record-control `data-text` — WITHOUT tearing down an in-flight record control. *(Gotcha: the filler
+  menu's `display:flex` defeats the bare `[hidden]` attribute, so the CSS needs an explicit
+  `.st-slot-menu[hidden]{display:none}` — without it every menu renders open.)*
+- **Record-compare keys on the SKELETON id** (one practiceable item; the ✓/streak + takes accumulate
+  there), while the reference text tracks the current realization. Picks (`tplPicks`) are per-session
+  view state, not synced.
+- Templates render **plain ruby** (no GiNZA tap-to-lookup over the combos — same degradation as
+  user-authored phrases). Curated-only; **MODEL-GENERATED → proofread**, especially that each filler
+  stays grammatical in the skeleton's tail. Upgrade path if templates ever need authoring/NLP: a real
+  `sentence_template` table (deliberately NOT built for the curated MVP).
 
 ## Audio + record-and-compare (reuses the shared engine)
 
@@ -138,6 +170,10 @@ test guarantees furigana↔`read` consistency, but NOT naturalness or register-a
 **Gaming** + **Conversations-by-register** content (the P2 starter set) especially wants a native
 eye on phrasing and on whether each conversation line sits at the right politeness level. After any
 edit, re-run `seed-sentences.ts` to push it to the store (and the NLP re-parse for tap-to-lookup).
+The **templates** (`data/selftalk-templates.js`) are model-generated too — the dataset test checks
+every realization's furigana, but a native eye should confirm each filler reads naturally in the
+skeleton (esp. verb-stem agreement). Templates are CLIENT-ONLY, so a fix needs **no re-seed** — just
+edit the bundle.
 
 ## Backlog / ideas
 

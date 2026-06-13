@@ -658,8 +658,16 @@ Component contracts you must preserve:
   `exitSpeakingMode`, the `visibilitychange` handler is **guarded on `#panel-selftalk` being active**
   (so it doesn't fight Minna's), and the take-saved hook is **filtered to `SELFTALK_SCOPE`** (so a
   Minna take can't mark Self-Talk practice). Phrases carry **no `accent`** — sentence-level pitch is
-  meaningless (`pitchHtml` is per-word); the furigana + synth prosody carry the reading. Full doc:
-  [SELFTALK.md](SELFTALK.md).
+  meaningless (`pitchHtml` is per-word); the furigana + synth prosody carry the reading.
+  **Slot-swap TEMPLATES are a CLIENT-ONLY bundle** ([data/selftalk-templates.js](src/data/selftalk-templates.js)),
+  deliberately NOT in the sentence store: a template (skeleton `jp` with `{slot}` markers + `slots`/
+  `fillers`) has no single fixed text/hash/furigana, so it can't be a `sentence` row. `realizeTemplate`
+  (pure) substitutes a picked filler per slot, then DERIVES reading/plainText from the now-fully-ruby
+  string — so a realized template plays via the same synth path (`/v1/audio/tts` on plainText, lazily
+  cached) and **record-compares keyed on the SKELETON id** (one practiceable item; the reference text
+  tracks the current realization, patched onto the control's `data-text` on each swap). Templates render
+  PLAIN ruby (no tap-to-lookup over the combo space). Don't try to seed them or give them GiNZA
+  annotations. Full doc: [SELFTALK.md](SELFTALK.md).
 - **Record-and-compare (`record-compare.js`, the generic engine; Minna + Self-Talk glue feed it):
   the conversation has ONE whole-dialogue MP3, so
   per-line native compare slices it — it does NOT have per-line audio.** A line's native

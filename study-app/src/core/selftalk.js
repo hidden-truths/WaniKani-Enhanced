@@ -130,6 +130,43 @@ export function groupByThought(phrases, thoughtsOrder) {
   return groups;
 }
 
+// ---- slot-swap templates (P3) — pure realization ----
+// A template is a JP skeleton string with `{slot}` markers + a `slots:[{id,fillers:[{jp,en}]}]`
+// array; it has NO single fixed text, so it lives client-side (data/selftalk-templates.js), never in
+// the sentence store. Realizing it for a set of picks reuses the SAME furigana helpers a phrase does,
+// so a realized template is shaped exactly like one.
+
+// The (clamped, default-0) filler index chosen for a slot.
+export function templatePickIndex(slot, picks) {
+  const n = ((slot && slot.fillers) || []).length;
+  const i = (picks && picks[slot && slot.id]) || 0;
+  return n ? Math.max(0, Math.min(n - 1, i)) : 0;
+}
+
+// Realize a template for `picks` (slotId → filler index; missing/out-of-range → 0): substitute each
+// {slotId} marker in the skeleton `jp`/`en` with the chosen filler, then DERIVE reading + plainText
+// from the now-fully-ruby jp. `text` (the plainText) is the /v1/audio/tts key AND the record-compare
+// reference text. Returns { jp, read, mean, text }. Pure.
+export function realizeTemplate(tpl, picks) {
+  const slots = (tpl && tpl.slots) || [];
+  const fill = (id, get) => {
+    const s = slots.find((x) => x.id === id);
+    if (!s) return '';
+    return get((s.fillers || [])[templatePickIndex(s, picks)] || {}) || '';
+  };
+  const jp = String((tpl && tpl.jp) || '').replace(/\{(\w+)\}/g, (_, id) => fill(id, (f) => f.jp));
+  const mean = String((tpl && tpl.en) || '').replace(/\{(\w+)\}/g, (_, id) => fill(id, (f) => f.en));
+  const segs = rubyToSegments(jp);
+  return { jp, read: segmentsToReading(segs), mean, text: plainText(jp) };
+}
+
+// Advance one slot to its next filler (wrapping). Returns a NEW picks object. Pure.
+export function cyclePick(tpl, picks, slotId) {
+  const slot = ((tpl && tpl.slots) || []).find((s) => s.id === slotId);
+  if (!slot || !(slot.fillers || []).length) return { ...(picks || {}) };
+  return { ...(picks || {}), [slotId]: (templatePickIndex(slot, picks) + 1) % slot.fillers.length };
+}
+
 // The distinct grammar tokens present across `phrases`, in `grammarOrder` first, then any extras
 // alphabetically. Drives the grammar-tier filter chips. Pure.
 export function grammarTokens(phrases, grammarOrder) {

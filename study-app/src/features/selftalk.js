@@ -15,8 +15,9 @@
 // features/record-compare.js (Self-Talk feeds it a reserved numeric SCOPE + synth-only references).
 import { state } from '../state.js';
 import { localDay } from '../config.js';
-import { escapeHtml, rubyHtml, plainText, overlayTokens, topicGrid, groupByThought, grammarTokens, todaysSet, applyPractice, practiceStreak, donePhraseIds, sentenceToPhrase, phraseToSentence } from '../core/index.js';
+import { escapeHtml, rubyHtml, plainText, overlayTokens, topicGrid, groupByThought, grammarTokens, todaysSet, applyPractice, practiceStreak, donePhraseIds, sentenceToPhrase, phraseToSentence, realizeTemplate, cyclePick, templatePickIndex } from '../core/index.js';
 import { SELFTALK_TAXONOMY, SELFTALK_TOPICS, SELFTALK_GRAMMAR } from '../data/selftalk.js';
+import { SELFTALK_TEMPLATES, templatesForTopic } from '../data/selftalk-templates.js';
 import { playItem, cycleMod } from './audio.js';
 import { wireWordTaps } from './word-lookup.js';
 import { loadSelftalk, saveSelftalk } from '../persistence/selftalk.js';
@@ -42,6 +43,8 @@ const REGISTER_LABELS = { plain: 'plain form', polite: 'です・ます', intima
 const registerLabel = (r) => REGISTER_LABELS[r] || r;
 let stGrammar = [];            // selected grammar tokens; empty = all
 let stTopic = null;            // null = grid; topic id / TODAY_TOPIC = drilled-in topic view
+const tplPicks = {};           // templateId → { slotId: fillerIndex } (current slot-swap selection)
+let lpFired = false;           // a long-press just opened a slot menu → suppress the ensuing cycle-click
 let recordingsLoaded = false;  // whether the take cache has been fetched this session
 
 // Phrases now come from the unified sentence store (GET /v1/sentences?ownerType=selftalk):
@@ -190,6 +193,64 @@ function phraseCardHtml(p, speaking, done) {
   </div>`;
 }
 
+// ---- slot-swap template cards (P3) ----
+// The realized sentence: each {slot} is a swappable chip (current filler in ruby) + a hidden filler
+// menu (⌥-click / long-press opens it); fixed parts render as plain ruby (no tap-to-lookup over the
+// unbounded combo space). Reuses rubyHtml so the global furigana flip applies.
+function templateSentenceHtml(tpl, picks) {
+  return String(tpl.jp || '').split(/(\{\w+\})/).map((part) => {
+    const m = part.match(/^\{(\w+)\}$/);
+    if (!m) return rubyHtml(part);
+    const slot = (tpl.slots || []).find((s) => s.id === m[1]);
+    if (!slot) return '';
+    const idx = templatePickIndex(slot, picks);
+    const fillers = slot.fillers || [];
+    const menu = fillers.map((f, i) =>
+      `<button class="st-fill${i === idx ? ' active' : ''}" type="button" data-st-pick="${escapeHtml(slot.id)}" data-fill="${i}">${rubyHtml(f.jp || '')}<span class="st-fill-en">${escapeHtml(f.en || '')}</span></button>`).join('');
+    return `<span class="st-slot-wrap"><button class="st-slot" type="button" data-st-slot="${escapeHtml(slot.id)}" aria-label="Swap ${escapeHtml(slot.label || slot.id)}" title="Tap to swap · ⌥-click or long-press for all options">${rubyHtml((fillers[idx] || {}).jp || '')}</button><span class="st-slot-menu" hidden>${menu}</span></span>`;
+  }).join('');
+}
+
+// A template renders the SAME card chrome as a phrase (.st-phrase → done/streak + record controls
+// just work via data-id), plus a "template" badge + a shuffle button. The record control keys on the
+// SKELETON id; its data-text (+ the ▶ play's) is the CURRENT realization, re-patched on each swap.
+function templateCardHtml(tpl, speaking, done) {
+  const picks = tplPicks[tpl.id] || {};
+  const r = realizeTemplate(tpl, picks);
+  const grams = (tpl.grammar || []).map((g) => `<span class="st-tag">${escapeHtml(grammarLabel(g))}</span>`).join('');
+  const rec = speaking && account ? recordControlHtml(SELFTALK_SCOPE, tpl.id, '', null, false, r.text, 'selftalk') : '';
+  return `<div class="st-phrase st-template${done ? ' practiced' : ''}" data-id="${escapeHtml(tpl.id)}">
+    <button class="speak-btn st-play" type="button" data-play data-text="${escapeHtml(r.text)}" aria-label="Play sentence" title="Play — ⌥/⇧-click to try another voice"><svg class="ic" aria-hidden="true"><use href="#i-volume"/></svg></button>
+    <div class="st-phrase-text">
+      <div class="jp st-jp st-template-jp">${templateSentenceHtml(tpl, picks)}</div>
+      <div class="st-read">${escapeHtml(r.read)}</div>
+      <div class="st-en">${escapeHtml(r.mean)}</div>
+      <div class="st-phrase-meta"><span class="st-badge st-badge-tpl">template</span>${grams}<button class="st-shuffle" type="button" data-st-shuffle aria-label="Shuffle the slots" title="Shuffle"><svg class="ic" aria-hidden="true"><use href="#i-refresh"/></svg></button></div>
+      <div class="st-bottom"><span class="st-done-slot">${doneSlotHtml(done)}</span>${rec}</div>
+    </div>
+  </div>`;
+}
+
+// Patch a template card IN PLACE after a slot swap — re-render the sentence/reading/English and the
+// ▶ play + record-control data-text, WITHOUT tearing down the record control (which would drop an
+// in-flight take / its waveform). The delegated handlers read data-text fresh at click time.
+function repaintTemplateCard(card) {
+  const tpl = SELFTALK_TEMPLATES.find((t) => t.id === card.dataset.id);
+  if (!tpl) return;
+  const picks = tplPicks[tpl.id] || {};
+  const r = realizeTemplate(tpl, picks);
+  const set = (sel, fn) => { const el = card.querySelector(sel); if (el) fn(el); };
+  set('.st-template-jp', (el) => { el.innerHTML = templateSentenceHtml(tpl, picks); });
+  set('.st-read', (el) => { el.textContent = r.read; });
+  set('.st-en', (el) => { el.textContent = r.mean; });
+  set('.st-play', (el) => { el.dataset.text = r.text; });
+  set('.rec-control', (el) => { el.dataset.text = r.text; });
+}
+
+// Slot filler menu (⌥-click / long-press): only one open at a time.
+function closeSlotMenus(root) { (root || document).querySelectorAll('.st-slot-menu:not([hidden])').forEach((m) => { m.hidden = true; }); }
+function openSlotMenu(chip) { const menu = chip.parentElement && chip.parentElement.querySelector('.st-slot-menu'); if (!menu) return; closeSlotMenus(document); menu.hidden = false; }
+
 function renderBody() {
   const body = elBody(); if (!body) return;
   if (stTopic === null) renderGrid(body); else renderTopic(body, stTopic);
@@ -241,15 +302,23 @@ function renderTopic(body, topicId) {
   const isToday = topicId === TODAY_TOPIC;
   let items = filteredPhrases();
   if (isToday) { const ids = new Set(todaysSet(items, today, TODAY_N)); items = items.filter((p) => ids.has(p.id)); }
-  else items = items.filter((p) => p.topic === topicId);
+  else {
+    items = items.filter((p) => p.topic === topicId);
+    // merge this topic's slot-swap templates (grammar-filtered like phrases), AFTER the phrases so a
+    // thought cluster reads "practice these lines, then build your own."
+    const tpls = templatesForTopic(topicId).filter((t) => !stGrammar.length || (t.grammar || []).some((g) => stGrammar.includes(g)));
+    items = items.concat(tpls);
+  }
   const meta = isToday ? null : SELFTALK_TOPICS.find((t) => t.id === topicId);
   const title = isToday ? "Today's focus" : (meta ? meta.label : topicId);
   const jp = isToday ? '' : (meta && meta.jp) || '';
   const register = meta && meta.register ? `<span class="st-register">${escapeHtml(registerLabel(meta.register))}</span>` : '';
   const head = `<button class="st-back" type="button" data-st-back><svg class="ic" aria-hidden="true"><use href="#i-chevron"/></svg>All topics</button>
     <div class="st-topic-head"><span class="st-topic-title">${escapeHtml(title)}</span>${jp ? `<span class="st-topic-jp">${escapeHtml(jp)}</span>` : ''}${register}</div>`;
-  const listHtml = (phrases) => `<div class="st-list">${phrases.map((p) => phraseCardHtml(p, speaking, doneSet.has(p.id))).join('')}</div>`;
-  // Sub-group a real topic's phrases into "sentence thoughts" (labeled clusters); today's set + flat
+  // a template (carries `slots`) renders the slot-swap card; a phrase renders the fixed card.
+  const itemHtml = (it) => (it.slots ? templateCardHtml(it, speaking, doneSet.has(it.id)) : phraseCardHtml(it, speaking, doneSet.has(it.id)));
+  const listHtml = (its) => `<div class="st-list">${its.map(itemHtml).join('')}</div>`;
+  // Sub-group a real topic's items into "sentence thoughts" (labeled clusters); today's set + flat
   // topics render as a single ungrouped list. A loose group that coexists with labeled ones gets a
   // muted "More" heading so it doesn't read as part of the last cluster.
   let list;
@@ -423,6 +492,47 @@ export function initSelftalk() {
       if (topicCell) { drillTopic(topicCell.dataset.stTopic); return; }
       const back = e.target.closest('[data-st-back]');
       if (back) { drillTopic(null); return; }
+      // ---- slot-swap templates: pick from the menu / cycle / open menu / shuffle ----
+      const pick = e.target.closest('[data-st-pick]');
+      if (pick) {
+        const card = pick.closest('.st-template'); if (!card) return;
+        tplPicks[card.dataset.id] = { ...(tplPicks[card.dataset.id] || {}), [pick.dataset.stPick]: Number(pick.dataset.fill) || 0 };
+        closeSlotMenus(card); repaintTemplateCard(card); return;
+      }
+      const slot = e.target.closest('[data-st-slot]');
+      if (slot) {
+        if (lpFired) { lpFired = false; return; }          // long-press already opened the menu
+        const card = slot.closest('.st-template'); if (!card) return;
+        const tpl = SELFTALK_TEMPLATES.find((t) => t.id === card.dataset.id); if (!tpl) return;
+        if (cycleMod(e)) { openSlotMenu(slot); return; }   // ⌥/⇧-click → all options
+        tplPicks[tpl.id] = cyclePick(tpl, tplPicks[tpl.id] || {}, slot.dataset.stSlot);
+        closeSlotMenus(card); repaintTemplateCard(card); return;
+      }
+      const shuffle = e.target.closest('[data-st-shuffle]');
+      if (shuffle) {
+        const card = shuffle.closest('.st-template'); if (!card) return;
+        const tpl = SELFTALK_TEMPLATES.find((t) => t.id === card.dataset.id); if (!tpl) return;
+        const next = {};
+        for (const s of tpl.slots || []) next[s.id] = Math.floor(Math.random() * ((s.fillers || []).length || 1));
+        tplPicks[tpl.id] = next; closeSlotMenus(card); repaintTemplateCard(card); return;
+      }
+    });
+    // Long-press a slot chip = the touch equivalent of ⌥-click (opens its filler menu); the ensuing
+    // click is suppressed via lpFired so it doesn't also cycle.
+    let lpTimer = null;
+    const clearLp = () => { if (lpTimer) { clearTimeout(lpTimer); lpTimer = null; } };
+    panel.addEventListener('pointerdown', (e) => {
+      const chip = e.target.closest('.st-slot'); if (!chip) return;
+      lpFired = false;
+      lpTimer = setTimeout(() => { lpFired = true; openSlotMenu(chip); }, 450);
+    });
+    panel.addEventListener('pointerup', clearLp);
+    panel.addEventListener('pointercancel', clearLp);
+    panel.addEventListener('pointerleave', clearLp);
+    // Click outside an open filler menu (and not on a chip) closes it.
+    document.addEventListener('mousedown', (e) => {
+      if (e.target.closest('.st-slot-menu') || e.target.closest('.st-slot')) return;
+      closeSlotMenus(document);
     });
   }
   // Authoring modal (#stPhraseModal): close / backdrop / Escape / submit / delete — wired once.

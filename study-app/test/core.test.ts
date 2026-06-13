@@ -23,10 +23,11 @@ import {
   waveformPeaks, clampSpeed, COMPARE_SPEEDS, rmsLevel, normGains,
   resolveVariant, parseAudioToken, contextPrefs, isSynthVoice, voiceProvider,
   DEFAULT_AUDIO_PREFS, AUDIO_VOICES, variantOrder, variantIndex, isKnownAudioToken, pruneAudioPrefs,
-  hashStr, groupByTopic, topicGrid, groupByThought, grammarTokens, todaysSet, emptyPractice, dayDiff, applyPractice,
+  hashStr, groupByTopic, topicGrid, groupByThought, realizeTemplate, cyclePick, grammarTokens, todaysSet, emptyPractice, dayDiff, applyPractice,
   practiceStreak, donePhraseIds, sentenceToPhrase, phraseToSentence,
 } from '../src/core/index.js';
 import { SELFTALK, SELFTALK_TAXONOMY, SELFTALK_TOPICS, SELFTALK_TOPIC_IDS, SELFTALK_GRAMMAR } from '../src/data/selftalk.js';
+import { SELFTALK_TEMPLATES } from '../src/data/selftalk-templates.js';
 import { EXAMPLES } from '../src/data/examples.js';
 import { GRAMMAR_CATALOG, grammarLabel, grammarJlpt, orderGrammar } from '../src/data/grammar.js';
 
@@ -966,6 +967,51 @@ test('SELFTALK thought tags are all declared on their topic (no orphan sub-clust
     expect(ids.has(p.thought)).toBe(true);
   }
   expect(byTopic.minecraft.thoughts.map((x: any) => x.id)).toEqual(['resources', 'night']);   // demo topic
+});
+
+test('realizeTemplate substitutes fillers + derives reading/plainText; cyclePick wraps', () => {
+  const tpl = {
+    id: 't',
+    jp: 'もうすぐ{mat}が<ruby>足<rt>た</rt></ruby>りない、{act}に<ruby>行<rt>い</rt></ruby>こう。',
+    en: 'Running low on {mat} — let me go {act}.',
+    slots: [
+      { id: 'mat', fillers: [{ jp: '<ruby>木<rt>き</rt></ruby>', en: 'wood' }, { jp: '<ruby>鉄<rt>てつ</rt></ruby>', en: 'iron' }] },
+      { id: 'act', fillers: [{ jp: '<ruby>掘<rt>ほ</rt></ruby>り', en: 'mine' }, { jp: '<ruby>集<rt>あつ</rt></ruby>め', en: 'gather' }] },
+    ],
+  };
+  const r0 = realizeTemplate(tpl, {});                                  // defaults → index 0
+  expect(r0.text).toBe('もうすぐ木が足りない、掘りに行こう。');
+  expect(r0.read).toBe('もうすぐきがたりない、ほりにいこう。');
+  expect(r0.mean).toBe('Running low on wood — let me go mine.');
+  const r1 = realizeTemplate(tpl, { mat: 1, act: 1 });
+  expect(r1.text).toBe('もうすぐ鉄が足りない、集めに行こう。');
+  expect(r1.mean).toBe('Running low on iron — let me go gather.');
+  expect(realizeTemplate(tpl, { mat: 99 }).text).toBe(r1.text.replace('集め', '掘り'));   // out-of-range clamps to last
+  expect(cyclePick(tpl, { mat: 1 }, 'mat')).toEqual({ mat: 0 });        // wraps past the end
+  expect(cyclePick(tpl, {}, 'act')).toEqual({ act: 1 });
+});
+
+test('SELFTALK_TEMPLATES are well-formed: topics/grammar registered, every realization ruby-consistent', () => {
+  const topicIds = new Set(SELFTALK_TOPIC_IDS);
+  const grammarIds = new Set(SELFTALK_GRAMMAR.map((g: any) => g.id));
+  for (const t of SELFTALK_TEMPLATES as any[]) {
+    expect(topicIds.has(t.topic)).toBe(true);
+    for (const g of t.grammar || []) expect(grammarIds.has(g)).toBe(true);
+    expect((t.slots || []).length).toBeGreaterThan(0);
+    // default + each non-default filler (others default): every combo must rebuild cleanly — ruby
+    // round-trips, the derived reading is stable (i.e. every kanji in fixed parts AND fillers is ruby'd),
+    // and no {slot} marker leaks into the realized JP/English.
+    const combos: any[] = [{}];
+    for (const s of t.slots) for (let i = 1; i < s.fillers.length; i++) combos.push({ [s.id]: i });
+    for (const picks of combos) {
+      const r = realizeTemplate(t, picks);
+      const segs = rubyToSegments(r.jp);
+      expect(segmentsToRuby(segs)).toBe(r.jp);
+      expect(segmentsToReading(segs)).toBe(r.read);
+      expect(r.jp.includes('{')).toBe(false);
+      expect(r.mean.includes('{')).toBe(false);
+    }
+  }
 });
 
 test('grammarTokens returns present tokens in grammarOrder, extras after', () => {
