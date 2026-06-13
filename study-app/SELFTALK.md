@@ -62,16 +62,28 @@ ONLY (per "blobs = per-user signals; store = sentence text"). Pre-store phrases 
 migrated into the store once on sign-in, then dropped from the blob. Server enum already includes
 `selftalk` ([../wk-enhanced-api/src/routes/progress.ts](../wk-enhanced-api/src/routes/progress.ts)).
 
-## Structure (three organizers)
+## Structure (a grid + drill-in)
 
-- **Topic groups** — collapsible `<details>` per topic (Daily life's are the time-of-day arc). First
-  topic open, rest collapsed. *(Being reworked into a category→topic grid + drill-in — P1b.)*
-- **Today's focus** — a `<button data-sttoday>` toggle that narrows the visible phrases to a
-  deterministic daily rotation (`todaysSet`, seeded by `localDay()` via an FNV-1a hash — stable
-  within a day, rotates across days). It's a **filter, not a duplicated section**, so each phrase
-  (and its record control) renders exactly once.
-- **Grammar-tier filter** — a chip row over the present grammar tokens; a phrase matches if it
-  carries ANY selected token (empty = all). View-only (not synced).
+`#stBody` is a **two-level browse**, not a flat list:
+
+- **Category→topic grid** (`renderGrid`) — the default view. `SELFTALK_TAXONOMY` (`data/selftalk.js`)
+  defines categories, each with ordered topics; the pure `topicGrid` (`core/selftalk.js`) buckets the
+  live phrases into per-category cells carrying a phrase count + today's said-count, drops empty
+  topics/categories, and folds any unregistered `topic` into a trailing **"Other"** cell so content
+  can't silently vanish. Clicking a cell drills in.
+- **Topic view** (`renderTopic`) — clicking a cell **swaps `#stBody` in place** (it stays the stable
+  attach-once record-compare container — drill-in, NOT a modal or stacked accordions): a back button,
+  the topic head (+ a `register` badge for the conversation-register topics), then the phrase list
+  with the full ▶ / record-and-compare rig. `stTopic` (view-only; `null` = grid) holds the drill
+  state and resets to the grid on tab-leave.
+- **Today's focus** — a pinned grid **cell** (no longer a toggle) that drills into a deterministic
+  daily rotation (`todaysSet`, seeded by `localDay()` via an FNV-1a hash — stable within a day,
+  rotates across days). Because only ONE view renders at a time, each phrase (and its record control)
+  still renders exactly once per `(scope,itemKey)` — the **"filter, not a duplicated section"**
+  invariant, now preserved by *drilling* rather than stacking sections.
+- **Grammar-tier filter** — a cross-cutting chip row (in `#stHead`) over the present grammar tokens;
+  a phrase matches if it carries ANY selected token (empty = all). Applies in BOTH views — it narrows
+  the grid cells + their counts, and the drilled topic's phrases. View-only (not synced).
 
 ## Audio + record-and-compare (reuses the shared engine)
 

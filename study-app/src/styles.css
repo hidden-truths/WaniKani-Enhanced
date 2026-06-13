@@ -711,8 +711,37 @@
   .st-done{display:inline-flex;align-items:center;gap:5px;font-family:"SF Mono",ui-monospace,monospace;font-size:11px;color:var(--good)}
   .st-done .ic{font-size:13px}
   .st-phrase.practiced{border-color:color-mix(in srgb,var(--good) 35%,var(--line))}
+  /* category→topic grid + drill-in (P1b). The grid is #stBody's top level; clicking a cell swaps
+     #stBody to that topic's phrase list (renderTopic), keeping #stBody the stable record-compare
+     container. Cells are functional (label + jp kicker + a phrase/said tally), not decorative. */
+  .st-cat{margin-top:20px}
+  .st-cat:first-child{margin-top:6px}
+  .st-cat-head{display:flex;align-items:center;gap:8px;margin:0 0 10px;font-family:"SF Mono",ui-monospace,monospace;font-size:11px;letter-spacing:.12em;text-transform:uppercase;color:var(--muted)}
+  .st-cat-head .ic{font-size:14px;color:var(--godan)}
+  .st-cat-jp{font-family:var(--jp-font);letter-spacing:normal;text-transform:none;color:var(--muted);opacity:.7}
+  .st-grid{display:grid;grid-template-columns:repeat(auto-fill,minmax(158px,1fr));gap:10px}
+  .st-today-grid{margin-bottom:4px}
+  .st-cell{display:flex;flex-direction:column;align-items:flex-start;gap:5px;text-align:left;padding:13px 14px;min-height:76px;border:1px solid var(--line);border-radius:11px;background:var(--paper-2);cursor:pointer;transition:border-color .15s,transform .05s}
+  .st-cell:hover{border-color:color-mix(in srgb,var(--godan) 45%,var(--line))}
+  .st-cell:active{transform:translateY(1px)}
+  .st-cell-label{font-family:Georgia,serif;font-size:15px;color:var(--ink);line-height:1.3}
+  .st-cell-jp{font-family:var(--jp-font);font-size:12px;color:var(--muted)}
+  .st-cell-count{margin-top:auto;font-family:"SF Mono",ui-monospace,monospace;font-size:10.5px;letter-spacing:.03em;color:var(--muted)}
+  .st-cell-count .done{color:var(--good)}
+  .st-today-cell{border-color:color-mix(in srgb,var(--good) 42%,var(--line));background:color-mix(in srgb,var(--good) 7%,var(--paper-2))}
+  .st-today-cell .ic{font-size:15px;color:var(--good)}
+  .st-today-row{display:flex;align-items:center;gap:7px}
+  .st-today-cell .st-cell-label{font-family:"SF Mono",ui-monospace,monospace;font-size:12px;letter-spacing:.06em;text-transform:uppercase}
+  .st-back{display:inline-flex;align-items:center;gap:5px;background:none;border:none;cursor:pointer;font-family:"SF Mono",ui-monospace,monospace;font-size:11px;letter-spacing:.06em;color:var(--muted);padding:4px 2px;margin-bottom:4px;transition:color .15s}
+  .st-back:hover{color:var(--godan)}
+  .st-back .ic{font-size:13px;transform:rotate(90deg)}
+  .st-topic-head{display:flex;align-items:baseline;gap:10px;flex-wrap:wrap;margin:2px 0 13px;padding-bottom:11px;border-bottom:1px solid var(--line)}
+  .st-topic-title{font-family:Georgia,serif;font-size:20px;color:var(--ink)}
+  .st-topic-jp{font-family:var(--jp-font);font-size:14px;color:var(--muted)}
+  .st-register{font-family:"SF Mono",ui-monospace,monospace;font-size:10px;letter-spacing:.05em;color:var(--ichidan);border:1px solid color-mix(in srgb,var(--ichidan) 40%,transparent);border-radius:5px;padding:2px 7px}
   @media (max-width:640px){
     .st-jp{font-size:18px}
+    .st-grid{grid-template-columns:repeat(auto-fill,minmax(140px,1fr));gap:8px}
   }
 
   /* Tap-a-word lookup (Phase-4): tappable example-sentence words + the lemma/POS popover.

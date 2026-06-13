@@ -38,7 +38,7 @@ import { grammarLabel } from './grammar.js';
 // view. Daily life's 7 topics are the original time-of-day "scenes", re-homed under one category.
 export const SELFTALK_TAXONOMY = [
   {
-    id: 'daily-life', label: 'Daily life', jp: '日常', icon: 'i-sun',
+    id: 'daily-life', label: 'Daily life', jp: '日常', icon: 'i-clock',
     topics: [
       { id: 'morning', label: 'Morning routine', jp: '朝' },
       { id: 'commute', label: 'Commute', jp: '通勤' },

@@ -643,9 +643,10 @@
     <div id="mnBody" class="mn-body"></div>
   </div>
 
-  <!-- 独り言 Self-Talk: output/speaking practice. Offline-first (built-in phrases ship in
-       the bundle); #stHead holds the intro + grammar filter, #stBody the scene groups +
-       today's set, all rendered at runtime by renderSelftalk(). === -->
+  <!-- 独り言 Self-Talk: output/speaking practice. Anon-readable (built-in phrases come from the
+       sentence store, cached locally); #stHead holds the intro + streak + grammar filter, #stBody
+       the category→topic grid that drills into a single topic's phrases (renderSelftalk → renderGrid
+       / renderTopic). === -->
   <div class="panel" id="panel-selftalk">
     <div id="stHead" class="st-head"></div>
     <div id="stBody" class="st-body"></div>
@@ -742,7 +743,7 @@
         <div class="full"><label for="stPhJp">Japanese *</label><input type="text" id="stPhJp" class="jp" required placeholder="歯を磨いている。"></div>
         <div class="full"><label for="stPhRead">Reading (kana)</label><input type="text" id="stPhRead" class="jp" placeholder="はをみがいている。"></div>
         <div class="full"><label for="stPhMean">English *</label><input type="text" id="stPhMean" required placeholder="I'm brushing my teeth."></div>
-        <div><label for="stPhScene">Scene</label><select id="stPhScene"></select></div>
+        <div><label for="stPhScene">Topic</label><select id="stPhScene"></select></div>
         <div class="full"><label>Grammar</label><div class="st-gram-checks" id="stPhGram"></div></div>
       </div>
       <div class="modal-err" id="stPhErr" aria-live="polite"></div>

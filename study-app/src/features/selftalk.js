@@ -1,5 +1,8 @@
-// 独り言 SELF-TALK tab — output/speaking practice. Narrate your day out loud: topic-grouped
-// everyday phrases you read aloud, play through the unified audio player (per-context voice
+// 独り言 SELF-TALK tab — output/speaking practice. Narrate your day out loud. #stBody is a two-level
+// browse: a category→topic GRID (renderGrid) whose cells drill into a single topic's phrase list
+// (renderTopic) — clicking a cell swaps #stBody in place, keeping it the stable attach-once
+// record-compare container; a pinned "Today's focus" cell drills into the rotating daily set. In a
+// topic you read each phrase aloud, play it through the unified audio player (per-context voice
 // priority), record yourself, and A/B against a chosen REFERENCE voice (Siri/Google) via the
 // shared record-and-compare engine. Unlike みんなの日本語 this is OFFLINE-FIRST + anonymous: the
 // built-in starter phrases (data/selftalk.js) ship in the bundle and play/practice without an
@@ -12,8 +15,8 @@
 // features/record-compare.js (Self-Talk feeds it a reserved numeric SCOPE + synth-only references).
 import { state } from '../state.js';
 import { localDay } from '../config.js';
-import { escapeHtml, rubyHtml, plainText, overlayTokens, groupByTopic, grammarTokens, todaysSet, applyPractice, practiceStreak, donePhraseIds, sentenceToPhrase, phraseToSentence } from '../core/index.js';
-import { SELFTALK_TOPICS, SELFTALK_GRAMMAR } from '../data/selftalk.js';
+import { escapeHtml, rubyHtml, plainText, overlayTokens, topicGrid, grammarTokens, todaysSet, applyPractice, practiceStreak, donePhraseIds, sentenceToPhrase, phraseToSentence } from '../core/index.js';
+import { SELFTALK_TAXONOMY, SELFTALK_TOPICS, SELFTALK_GRAMMAR } from '../data/selftalk.js';
 import { playItem, cycleMod } from './audio.js';
 import { wireWordTaps } from './word-lookup.js';
 import { loadSelftalk, saveSelftalk } from '../persistence/selftalk.js';
@@ -29,9 +32,16 @@ const TODAY_N = 8;             // how many phrases land in the rotating "Today's
 // `lesson` param). Minna uses lesson numbers 1–50; this sits far above them so they never collide.
 const SELFTALK_SCOPE = 90000;
 
-// View-only filter state (not synced).
+// View-only state (not synced). stTopic drives the drill-in: null = the grid; a topic id = that
+// topic's phrase list; TODAY_TOPIC = the rotating daily set. The grammar filter is cross-cutting
+// (applies in both views). Only ONE view renders at a time, so a phrase's record control never
+// double-renders for the same (scope,itemKey) — the "Today's focus is a filter, not a duplicate
+// section" invariant, preserved by drilling rather than stacking.
+const TODAY_TOPIC = '__today__';
+const REGISTER_LABELS = { plain: 'plain form', polite: 'です・ます', intimate: 'casual / intimate' };
+const registerLabel = (r) => REGISTER_LABELS[r] || r;
 let stGrammar = [];            // selected grammar tokens; empty = all
-let stTodayOnly = false;       // narrow to today's rotating set
+let stTopic = null;            // null = grid; topic id / TODAY_TOPIC = drilled-in topic view
 let recordingsLoaded = false;  // whether the take cache has been fetched this session
 
 // Phrases now come from the unified sentence store (GET /v1/sentences?ownerType=selftalk):
@@ -82,8 +92,6 @@ const elBody = () => document.getElementById('stBody');
 const $ = (id) => document.getElementById(id);
 
 const grammarLabel = (id) => (SELFTALK_GRAMMAR.find((g) => g.id === id) || {}).label || id;
-const topicLabel = (id) => (SELFTALK_TOPICS.find((t) => t.id === id) || {}).label || id;
-const TOPIC_IDS = SELFTALK_TOPICS.map((t) => t.id);
 
 // The phrase set to render: the store fetch/cache (built-ins + the user's own private rows).
 // Until the legacy migration runs (on sign-in), any phrases still in the local `selftalk` blob
@@ -95,12 +103,11 @@ function allPhrases() {
   const have = new Set(storePhrases.map((p) => p.id));
   return storePhrases.concat(legacy.filter((p) => !have.has(p.id)));
 }
-// Phrases passing the current filters: grammar (ANY selected token), then optionally today's set.
-function visiblePhrases() {
-  let list = allPhrases();
-  if (stGrammar.length) list = list.filter((p) => (p.grammar || []).some((g) => stGrammar.includes(g)));
-  if (stTodayOnly) { const ids = new Set(todaysSet(list, localDay(), TODAY_N)); list = list.filter((p) => ids.has(p.id)); }
-  return list;
+// The phrase set after the cross-cutting grammar filter (ANY selected token; empty = all). Both the
+// grid and the drilled-in topic view start here; the today/topic narrowing happens per-view.
+function filteredPhrases() {
+  const list = allPhrases();
+  return stGrammar.length ? list.filter((p) => (p.grammar || []).some((g) => stGrammar.includes(g))) : list;
 }
 
 // ---- render ----
@@ -154,11 +161,7 @@ function renderHead() {
       <div class="st-actions">${addAffordanceHtml()}</div>
     </div>
     <div class="frow"><span class="filter-label">Grammar</span>
-      <div class="chips" role="group" aria-label="Grammar filter">${gramChip('all', 'All', allActive)}${chips}</div></div>
-    <div class="frow"><span class="filter-label">Show</span>
-      <div class="chips" role="group" aria-label="View">
-        <button class="chip${stTodayOnly ? ' active' : ''}" type="button" data-sttoday aria-pressed="${stTodayOnly}">Today's focus</button>
-      </div></div>`;
+      <div class="chips" role="group" aria-label="Grammar filter">${gramChip('all', 'All', allActive)}${chips}</div></div>`;
 }
 
 function doneSlotHtml(done) {
@@ -189,19 +192,68 @@ function phraseCardHtml(p, speaking, done) {
 
 function renderBody() {
   const body = elBody(); if (!body) return;
-  wireWordTaps(body); // delegated tap-to-lookup on the built-in phrases' word spans (idempotent)
-  const vis = visiblePhrases();
-  if (!vis.length) { body.innerHTML = `<div class="st-empty">No phrases match this filter.</div>`; return; }
+  if (stTopic === null) renderGrid(body); else renderTopic(body, stTopic);
+}
+
+// Drill in/out: swap #stBody to a topic (or back to the grid). The head + nav bar don't change, so
+// only #stBody re-renders. Returning to the grid leaves any speaking mode intact (the nav toggle).
+function drillTopic(id) { stTopic = id; renderBody(); }
+
+// The grid: a pinned "Today's focus" cell over category sections of topic cells. Each cell carries a
+// phrase tally + today's said-count; clicking drills in. No phrases render here, so there are no
+// record controls — only the topic view has them.
+function renderGrid(body) {
+  const phrases = filteredPhrases();
+  if (!phrases.length) { body.innerHTML = `<div class="st-empty">No phrases match this filter.</div>`; return; }
+  const today = localDay();
+  const doneSet = donePhraseIds(state.selftalkStore.practice, today);
+  const todayIds = new Set(todaysSet(phrases, today, TODAY_N));
+  const todayDone = [...todayIds].filter((id) => doneSet.has(id)).length;
+  const grid = topicGrid(phrases, SELFTALK_TAXONOMY, doneSet);
+  const tally = (count, done) =>
+    `<span class="st-cell-count">${done ? `<span class="done">${done} said</span> · ` : ''}${count} phrase${count === 1 ? '' : 's'}</span>`;
+  const cell = (t) =>
+    `<button class="st-cell" type="button" data-st-topic="${escapeHtml(t.id)}">
+       <span class="st-cell-label">${escapeHtml(t.label)}</span>
+       ${t.jp ? `<span class="st-cell-jp">${escapeHtml(t.jp)}</span>` : ''}
+       ${tally(t.count, t.done)}
+     </button>`;
+  const catSection = (c) =>
+    `<div class="st-cat"><p class="st-cat-head">${c.icon ? `<svg class="ic" aria-hidden="true"><use href="#${escapeHtml(c.icon)}"/></svg>` : ''}${escapeHtml(c.label)}${c.jp ? ` <span class="st-cat-jp">${escapeHtml(c.jp)}</span>` : ''}</p>
+       <div class="st-grid">${c.topics.map(cell).join('')}</div></div>`;
+  const todayCell = todayIds.size
+    ? `<div class="st-grid st-today-grid"><button class="st-cell st-today-cell" type="button" data-st-topic="${TODAY_TOPIC}">
+         <span class="st-today-row"><svg class="ic" aria-hidden="true"><use href="#i-target"/></svg><span class="st-cell-label">Today's focus</span></span>
+         ${tally(todayIds.size, todayDone)}
+       </button></div>`
+    : '';
+  body.innerHTML = todayCell + grid.map(catSection).join('');
+  wireWordTaps(body);   // harmless on the grid (no word spans); keeps the attach-once delegate live
+}
+
+// A drilled-in topic (or the rotating "today" set): a back button, the topic head (+ register
+// badge), then the phrase list with the full record-and-compare rig. This is the only view that
+// renders phrases, so wireRecordCompare / paintCompareWaveforms run here.
+function renderTopic(body, topicId) {
   const today = localDay();
   const doneSet = donePhraseIds(state.selftalkStore.practice, today);
   const speaking = isSpeakingMode();
-  const groups = groupByTopic(vis, TOPIC_IDS);
-  const section = (title, items, open) => items.length
-    ? `<details class="st-section"${open ? ' open' : ''}><summary>${escapeHtml(title)} <span class="st-count">${items.length}</span></summary><div class="st-list">${items.map((p) => phraseCardHtml(p, speaking, doneSet.has(p.id))).join('')}</div></details>`
-    : '';
-  // Open the first topic (or everything when narrowed to today's focus); collapse the rest.
-  body.innerHTML = groups.map((g, i) => section(topicLabel(g.topic), g.items, i === 0 || stTodayOnly)).join('');
-  wireRecordCompare(body);             // delegated record/play/delete/compare handlers (attach-once)
+  const isToday = topicId === TODAY_TOPIC;
+  let items = filteredPhrases();
+  if (isToday) { const ids = new Set(todaysSet(items, today, TODAY_N)); items = items.filter((p) => ids.has(p.id)); }
+  else items = items.filter((p) => p.topic === topicId);
+  const meta = isToday ? null : SELFTALK_TOPICS.find((t) => t.id === topicId);
+  const title = isToday ? "Today's focus" : (meta ? meta.label : topicId);
+  const jp = isToday ? '' : (meta && meta.jp) || '';
+  const register = meta && meta.register ? `<span class="st-register">${escapeHtml(registerLabel(meta.register))}</span>` : '';
+  const head = `<button class="st-back" type="button" data-st-back><svg class="ic" aria-hidden="true"><use href="#i-chevron"/></svg>All topics</button>
+    <div class="st-topic-head"><span class="st-topic-title">${escapeHtml(title)}</span>${jp ? `<span class="st-topic-jp">${escapeHtml(jp)}</span>` : ''}${register}</div>`;
+  const list = items.length
+    ? `<div class="st-list">${items.map((p) => phraseCardHtml(p, speaking, doneSet.has(p.id))).join('')}</div>`
+    : `<div class="st-empty">No phrases match this filter.</div>`;
+  body.innerHTML = head + list;
+  wireWordTaps(body);                          // delegated tap-to-lookup on the phrases' word spans
+  wireRecordCompare(body);                     // delegated record/play/delete/compare (attach-once)
   if (speaking) paintCompareWaveforms(body);   // decode + draw take/reference waveforms
 }
 
@@ -255,7 +307,8 @@ let editingId = null;
 function openPhraseModal(id) {
   editingId = id || null;
   const existing = id ? allPhrases().find((p) => p.id === id) : null;
-  $('stPhScene').innerHTML = SELFTALK_TOPICS.map((t) => `<option value="${escapeHtml(t.id)}">${escapeHtml(t.label)}</option>`).join('');
+  $('stPhScene').innerHTML = SELFTALK_TAXONOMY.map((c) =>
+    `<optgroup label="${escapeHtml(c.label)}">${c.topics.map((t) => `<option value="${escapeHtml(t.id)}">${escapeHtml(t.label)}</option>`).join('')}</optgroup>`).join('');
   const sel = new Set(existing ? (existing.grammar || []) : []);
   $('stPhGram').innerHTML = SELFTALK_GRAMMAR.map((g) =>
     `<label class="st-gram-check"><input type="checkbox" value="${escapeHtml(g.id)}"${sel.has(g.id) ? ' checked' : ''}> ${escapeHtml(g.label)}</label>`).join('');
@@ -316,7 +369,7 @@ async function deletePhrase() {
 // ---- lifecycle ----
 // Auto-exit when navigating away from the tab (chrome.js leaveSelftalk → main.js), so the mic
 // never lingers. Mirrors minna.js onMinnaHidden.
-export function onSelftalkHidden() { exitSpeakingMode(); clearNavSpeaking(); }
+export function onSelftalkHidden() { exitSpeakingMode(); clearNavSpeaking(); stTopic = null; }
 
 // Release the mic when the BROWSER tab is hidden while speaking — but only if Self-Talk is the
 // active panel (don't fight Minna's own visibilitychange handler; exitSpeakingMode is idempotent).
@@ -356,8 +409,10 @@ export function initSelftalk() {
       if (signin) { document.getElementById('accountBtn').click(); return; }   // anon → open the sign-in modal
       const gram = e.target.closest('[data-stgram]');
       if (gram) { toggleGrammar(gram.dataset.stgram); return; }
-      const today = e.target.closest('[data-sttoday]');
-      if (today) { stTodayOnly = !stTodayOnly; renderSelftalk(); return; }
+      const topicCell = e.target.closest('[data-st-topic]');
+      if (topicCell) { drillTopic(topicCell.dataset.stTopic); return; }
+      const back = e.target.closest('[data-st-back]');
+      if (back) { drillTopic(null); return; }
     });
   }
   // Authoring modal (#stPhraseModal): close / backdrop / Escape / submit / delete — wired once.

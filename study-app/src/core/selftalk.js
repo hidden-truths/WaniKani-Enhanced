@@ -79,6 +79,39 @@ export function groupByTopic(phrases, topicOrder) {
     .filter((g) => g.items.length);
 }
 
+// Build the category→topic grid model the Self-Talk grid renders. For each registered category,
+// keep its topics that have ≥1 phrase, each annotated with { count, done } (done = how many of that
+// topic's phrases are in `doneSet`, today's practiced ids); drop empty topics, then empty categories.
+// Any phrase whose `topic` isn't registered anywhere is folded into a trailing { id:'__other__' }
+// category (one cell per stray topic value) so content can never silently vanish. `taxonomy` is
+// passed in (= SELFTALK_TAXONOMY) to keep this DOM-free + data-free. Pure (read-only).
+export function topicGrid(phrases, taxonomy, doneSet) {
+  const done = doneSet instanceof Set ? doneSet : new Set(doneSet || []);
+  const tally = new Map();   // topicId -> { count, done }
+  for (const p of phrases || []) {
+    const t = tally.get(p.topic) || { count: 0, done: 0 };
+    t.count++; if (done.has(p.id)) t.done++;
+    tally.set(p.topic, t);
+  }
+  const seen = new Set();
+  const cats = (taxonomy || []).map((c) => {
+    const topics = (c.topics || []).map((t) => {
+      seen.add(t.id);
+      const v = tally.get(t.id);
+      return v ? { ...t, count: v.count, done: v.done } : null;
+    }).filter(Boolean);
+    return topics.length ? { id: c.id, label: c.label, jp: c.jp, icon: c.icon, topics } : null;
+  }).filter(Boolean);
+  const orphans = [...tally.keys()].filter((id) => !seen.has(id));
+  if (orphans.length) {
+    cats.push({
+      id: '__other__', label: 'Other', jp: '', icon: null,
+      topics: orphans.map((id) => ({ id, label: id || '—', jp: '', count: tally.get(id).count, done: tally.get(id).done })),
+    });
+  }
+  return cats;
+}
+
 // The distinct grammar tokens present across `phrases`, in `grammarOrder` first, then any extras
 // alphabetically. Drives the grammar-tier filter chips. Pure.
 export function grammarTokens(phrases, grammarOrder) {

@@ -23,7 +23,7 @@ import {
   waveformPeaks, clampSpeed, COMPARE_SPEEDS, rmsLevel, normGains,
   resolveVariant, parseAudioToken, contextPrefs, isSynthVoice, voiceProvider,
   DEFAULT_AUDIO_PREFS, AUDIO_VOICES, variantOrder, variantIndex, isKnownAudioToken, pruneAudioPrefs,
-  hashStr, groupByTopic, grammarTokens, todaysSet, emptyPractice, dayDiff, applyPractice,
+  hashStr, groupByTopic, topicGrid, grammarTokens, todaysSet, emptyPractice, dayDiff, applyPractice,
   practiceStreak, donePhraseIds, sentenceToPhrase, phraseToSentence,
 } from '../src/core/index.js';
 import { SELFTALK, SELFTALK_TAXONOMY, SELFTALK_TOPICS, SELFTALK_TOPIC_IDS, SELFTALK_GRAMMAR } from '../src/data/selftalk.js';
@@ -907,6 +907,25 @@ test('groupByTopic orders by topicOrder + skips empty topics', () => {
   expect(g[0].items.map((x: any) => x.id)).toEqual(['2', '3']);
   // no order → first-seen
   expect(groupByTopic(ph).map((x: any) => x.topic)).toEqual(['meals', 'morning']);
+});
+
+test('topicGrid: counts per topic, drops empty topics/categories, buckets orphans into Other', () => {
+  const taxonomy = [
+    { id: 'daily-life', label: 'Daily life', jp: '日常', icon: 'i-clock', topics: [
+      { id: 'morning', label: 'Morning', jp: '朝' },
+      { id: 'evening', label: 'Evening', jp: '夜' },
+    ] },
+    { id: 'gaming', label: 'Gaming', topics: [{ id: 'minecraft', label: 'Minecraft' }] },   // no phrases → dropped
+  ];
+  const phrases = [
+    { id: 'a', topic: 'morning' }, { id: 'b', topic: 'morning' }, { id: 'c', topic: 'evening' },
+    { id: 'z', topic: 'mystery' },   // unregistered topic → folded into Other so it can't vanish
+  ];
+  const grid = topicGrid(phrases, taxonomy, new Set(['a']));
+  expect(grid.map((c: any) => c.id)).toEqual(['daily-life', '__other__']);                  // empty 'gaming' dropped
+  expect(grid[0].icon).toBe('i-clock');
+  expect(grid[0].topics.map((t: any) => [t.id, t.count, t.done])).toEqual([['morning', 2, 1], ['evening', 1, 0]]);
+  expect(grid[1].topics.map((t: any) => [t.id, t.count])).toEqual([['mystery', 1]]);
 });
 
 test('grammarTokens returns present tokens in grammarOrder, extras after', () => {

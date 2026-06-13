@@ -644,10 +644,16 @@ Component contracts you must preserve:
   Recordings reuse the generic engine with a **reserved `SELFTALK_SCOPE = 90000`** (the engine's
   `scope` → the server's opaque numeric `lesson` param; Minna uses 1–50) + a **synth-only reference**
   (no native clip → ▶ reference is a Siri/Google voice from the phrase text, resolved with the
-  `selftalk` audio context). Don't reuse `90000` for a Minna lesson. **"Today's focus" is a FILTER,
-  not a duplicated section** — rendering today's set as its own group on top of the scene groups
-  would double each phrase's `.rec-control` for the same `(scope,itemKey)`; keep it a toggle that
-  narrows `visiblePhrases()`. The **speaking-mode singletons + `setOnTakeSaved` hook are shared
+  `selftalk` audio context). Don't reuse `90000` for a Minna lesson. **`#stBody` is a category→topic
+  GRID that drills into ONE topic at a time** (`renderGrid`/`renderTopic`, `stTopic` view state);
+  clicking a cell swaps `#stBody` in place so it stays the stable attach-once record-compare
+  container — drill-in, NOT a modal or stacked accordions. **The single-render invariant still holds**:
+  because only one view (the grid, one topic, or the "Today's focus" cell's rotation) renders at a
+  time, a phrase's `.rec-control` never double-renders for the same `(scope,itemKey)` — "Today's
+  focus" is therefore a pinned **grid cell** that drills into `todaysSet`, not a toggle stacked over
+  the other sections (the old trap). Topic = a `sentence_tag(kind='topic')` (legacy `scene`-tag
+  read-fallback); CATEGORY is derived from the `SELFTALK_TAXONOMY` registry, never stored.
+  The **speaking-mode singletons + `setOnTakeSaved` hook are shared
   module-global** with Minna: only one tab is active at a time, both leave-hooks call the idempotent
   `exitSpeakingMode`, the `visibilitychange` handler is **guarded on `#panel-selftalk` being active**
   (so it doesn't fight Minna's), and the take-saved hook is **filtered to `SELFTALK_SCOPE`** (so a
