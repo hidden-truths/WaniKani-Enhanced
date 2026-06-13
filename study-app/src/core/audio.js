@@ -110,11 +110,14 @@ export function variantIndex(list, chosen) {
 export function resolveVariant(context, available, prefs) {
   const av = available || {};
   const tokens = contextPrefs(prefs, context);
-  // A 'kind:tts' token resolves to the first SPECIFIC synth voice the user listed for this context,
-  // else Google (the universal synth fallback).
+  // A 'kind:tts' ("any synth") token resolves to the first SPECIFIC synth voice the user listed for
+  // this context, else the DEFAULT voice ('default' → the server's smart Apple-first cascade). NOT
+  // 'google': picking "Synthesized (any)" is not an explicit Google choice, so it must not force the
+  // gtx voice — only an explicitly-listed 'google' voice does that (handled by the t.type==='voice'
+  // branch below). This keeps explicit picks authoritative while the generic default stays smart.
   const synthVoiceFor = () => {
     for (const tk of tokens) { const t = parseAudioToken(tk); if (t && t.type === 'voice' && isSynthVoice(t.voice)) return t.voice; }
-    return 'google';
+    return 'default';
   };
   for (const tk of tokens) {
     const t = parseAudioToken(tk);

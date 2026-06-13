@@ -691,11 +691,22 @@ test('resolveVariant honors a user-ordered list (specific OR kind tokens)', () =
   expect(resolveVariant('minna', { tts: false, native: true, user: false }, prefs)).toEqual({ kind: 'native' });
 });
 
-test('resolveVariant: kind:tts uses the first listed synth voice, else google', () => {
+test('resolveVariant: kind:tts uses the first listed synth voice, else the default voice', () => {
+  // "any synth" with no specific voice listed resolves to the DEFAULT voice ('default' → server's
+  // smart Apple-first cascade), NOT an explicit 'google' pick (which would force the gtx voice).
   expect(resolveVariant('minna', { tts: true, native: false, user: false }, { minna: ['kind:tts'] }))
-    .toEqual({ kind: 'tts', voice: 'google' });
+    .toEqual({ kind: 'tts', voice: 'default' });
   expect(resolveVariant('minna', { tts: true, native: false, user: false }, { minna: ['kind:native', 'kind:tts', 'siri:male'] }))
     .toEqual({ kind: 'tts', voice: 'siri:male' });   // native unavailable → kind:tts → first listed synth (siri:male)
+});
+
+test('resolveVariant: an explicitly-listed Google voice stays google (authoritative pick)', () => {
+  // Explicit 'google' in the list must resolve to google (→ the server plays gtx), distinct from the
+  // "any synth" default above. This is what makes the Settings "Google" voice actually play Google.
+  expect(resolveVariant('browse', { tts: true, native: false, user: false }, { browse: ['google'] }))
+    .toEqual({ kind: 'tts', voice: 'google' });
+  expect(resolveVariant('browse', { tts: true, native: false, user: false }, { browse: ['siri:male', 'google'] }))
+    .toEqual({ kind: 'tts', voice: 'siri:male' });   // first listed wins; google is honored only when reached
 });
 
 test('resolveVariant falls back to anything available, then null', () => {
@@ -712,7 +723,7 @@ test('resolveVariant: Browse "native first" plays native for a Minna card, synth
   // native; a plain built-in (no native src) still falls through to the synth voice.
   const prefs = { browse: ['kind:native', 'kind:tts'] };
   expect(resolveVariant('browse', { tts: true, native: true, user: false }, prefs)).toEqual({ kind: 'native' });
-  expect(resolveVariant('browse', { tts: true, native: false, user: false }, prefs)).toEqual({ kind: 'tts', voice: 'google' });
+  expect(resolveVariant('browse', { tts: true, native: false, user: false }, prefs)).toEqual({ kind: 'tts', voice: 'default' });
 });
 
 test('AUDIO_VOICES palette includes both Siri genders + Google', () => {

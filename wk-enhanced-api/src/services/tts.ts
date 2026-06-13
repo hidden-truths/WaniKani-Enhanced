@@ -58,41 +58,52 @@ function ttsCachePut(key: string, hit: TtsHit): void {
     ttsCache.set(key, hit);
 }
 
-// Resolve audio for `text` in the requested `voice`. `voice` is a "<provider>:<gender>" tag
-// (e.g. 'siri:female'); 'default'/'google'/undefined mean the default voice. A tagged voice
-// tries its pre-generated `.m4a` first, then FALLS THROUGH to the default 3-tier (legacy
-// `tts/<hash>.m4a` → `.mp3` → live Google, persisted on first hit) — so a missing tagged clip
-// still plays something. Returns null only when even Google fails.
+// Resolve audio for `text` in the requested `voice`. An EXPLICIT voice is honored exactly — we
+// never substitute a different pre-generated voice's clip for it:
+//   • voice omitted / 'default'           → the DEFAULT voice: a smart 3-tier cascade (pre-generated
+//     Apple `.m4a` → persisted Google `.mp3` → live Google). The ONLY "be smart" path — used when
+//     the caller expressed no specific preference.
+//   • voice === 'google'                  → the Google (gtx) voice, explicitly. Never an Apple clip.
+//   • voice === '<provider>:<gender>'     → that voice's OWN pre-generated clip (e.g. siri:male); if
+//     it isn't generated, falls back to live Google (an honest GENERIC), never the default Apple
+//     clip — which would be a DIFFERENT voice than the one the user picked.
+// Returns null only when even Google fails.
 export async function resolveTts(text: string, voice?: string): Promise<TtsHit | null> {
-    const v = !voice || voice === 'google' ? 'default' : voice;
+    const v = !voice || voice === 'default' ? 'default' : voice;
     const key = cacheKey(text, v);
     const cached = ttsCache.get(key);
     if (cached) return cached;
 
     const storage = getStorage();
-    // A specific tagged voice (e.g. siri:female): prefer its own pre-generated clip.
-    if (v !== 'default') {
+
+    // The Google (gtx) voice: a previously-persisted `.mp3`, else live, persisted on first hit. This
+    // is the honest fallback for any EXPLICIT voice we can't serve from its own clip — generic, not a
+    // stand-in for a different specific voice.
+    const googleHit = async (): Promise<TtsHit | null> => {
+        const mp3 = await storage.get(ttsKey(text, 'mp3'));
+        if (mp3) return { buffer: mp3, contentType: 'audio/mpeg', source: 'storage-mp3' };
+        const r = await googleTts(text);
+        if (!r) return null;
+        void storage.put(ttsKey(text, 'mp3'), r.buffer, r.contentType || 'audio/mpeg').catch(() => {}); // fire-and-forget
+        return { buffer: r.buffer, contentType: r.contentType, source: 'google' };
+    };
+
+    let hit: TtsHit | null;
+    if (v === 'google') {
+        // EXPLICIT Google → the gtx voice, never the default Apple `.m4a` clip.
+        hit = await googleHit();
+    } else if (v !== 'default') {
+        // EXPLICIT tagged voice (e.g. siri:male) → ONLY its own clip; if not pre-generated, fall back
+        // to live Google (honest generic), NOT the default Apple clip (a different voice).
         const [provider, gender = ''] = v.split(':');
         const tagged = await storage.get(ttsVariantKey(text, provider!, gender, 'm4a'));
-        if (tagged) { const hit = { buffer: tagged, contentType: 'audio/mp4', source: `storage-${v}` }; ttsCachePut(key, hit); return hit; }
-        // not pre-generated → fall through to the default voice below.
+        hit = tagged ? { buffer: tagged, contentType: 'audio/mp4', source: `storage-${v}` } : await googleHit();
+    } else {
+        // DEFAULT voice (no explicit choice) → the smart 3-tier: Apple `.m4a` → persisted `.mp3` → live.
+        const m4a = await storage.get(ttsKey(text, 'm4a'));
+        hit = m4a ? { buffer: m4a, contentType: 'audio/mp4', source: 'storage-m4a' } : await googleHit();
     }
-
-    // Default 3-tier: pre-generated Apple `.m4a` wins, then a previously-persisted Google `.mp3`,
-    // then live Google (persisted so future requests + restarts skip it).
-    let hit: TtsHit;
-    const m4a = await storage.get(ttsKey(text, 'm4a'));
-    if (m4a) hit = { buffer: m4a, contentType: 'audio/mp4', source: 'storage-m4a' };
-    else {
-        const mp3 = await storage.get(ttsKey(text, 'mp3'));
-        if (mp3) hit = { buffer: mp3, contentType: 'audio/mpeg', source: 'storage-mp3' };
-        else {
-            const r = await googleTts(text);
-            if (!r) return null;
-            hit = { buffer: r.buffer, contentType: r.contentType, source: 'google' };
-            void storage.put(ttsKey(text, 'mp3'), r.buffer, r.contentType || 'audio/mpeg').catch(() => {}); // fire-and-forget
-        }
-    }
+    if (!hit) return null;
     ttsCachePut(key, hit);
     return hit;
 }
