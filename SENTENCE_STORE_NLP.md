@@ -5,7 +5,9 @@ enrichment phase** — the next stage. This is the entry doc for picking that wo
 
 **Reading order:** this file (overview + NLP plan) → [SENTENCE_STORE_VISION.md](SENTENCE_STORE_VISION.md)
 (original rationale + the open questions, mostly resolved) → [SENTENCE_STORE_PHASE1.md](SENTENCE_STORE_PHASE1.md)
-/ [SENTENCE_STORE_PHASE2.md](SENTENCE_STORE_PHASE2.md) (the shipped phase plans). The authoritative
+/ [SENTENCE_STORE_PHASE2.md](SENTENCE_STORE_PHASE2.md) (the shipped phase plans) → **[SENTENCE_STORE_PHASE4.md](SENTENCE_STORE_PHASE4.md)
+(the Phase-4 as-built record + commit-3 plan — the detailed companion to this brief; READ IT if you're
+picking up Phase 4)**. The authoritative
 schema is [wk-enhanced-api/src/db/schema.sql](wk-enhanced-api/src/db/schema.sql) "Unified sentence
 store"; the server contract is in [wk-enhanced-api/CLAUDE.md](wk-enhanced-api/CLAUDE.md) "Cache keys /
 data on disk" → Sentence store; the converged design decisions live in the `sentence-store-rearchitecture`

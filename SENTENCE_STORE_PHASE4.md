@@ -1,0 +1,465 @@
+# Sentence Store — Phase 4 (NLP Enrichment): Status & Handoff
+
+The detailed as-built record for **Phase 4** of the unified sentence store, plus the full plan
+for **commit 3** (the remaining work). Companion to the overview/brief
+[SENTENCE_STORE_NLP.md](SENTENCE_STORE_NLP.md); same family as the shipped
+[SENTENCE_STORE_PHASE1.md](SENTENCE_STORE_PHASE1.md) / [SENTENCE_STORE_PHASE2.md](SENTENCE_STORE_PHASE2.md)
+plans. If you are picking this work up cold, read the brief first, then this.
+
+**Branch:** `sentence-store-phase4` · **Commits so far:** `f1e4f60` (commit 1), `75f7972` (commit 2).
+Both behavior-preserving and additive — nothing here changes existing playback/rendering until the
+commit-3 UI lands.
+
+---
+
+## 0. TL;DR — where we are right now
+
+- **Commit 1 (shipped):** an OFFLINE GiNZA parser project ([sentence-nlp/](sentence-nlp/)) parses the
+  public sentence corpus and emits a committed JSON artifact of per-token structure (lemma / POS /
+  reading / dependency) + bunsetsu spans, keyed by content hash. A Bun seed step loads it into the
+  `sentence_annotation` table. The **token character offsets are UTF-16 code units** (not codepoints)
+  so they line up with JS string slicing — verified empirically and gated on write.
+- **Commit 2 (shipped):** a curated **~38-point N5/N4 grammar catalog** (Bunpro-grounded) is detected
+  during the same parse and written to `sentence_tag(kind='grammar')` for example rows, reusing the
+  study-app's existing `SELFTALK_GRAMMAR` ids so auto-detected and hand-authored grammar tags search
+  one vocabulary. Every detector is pinned with positives + confusable negatives.
+- **Commit 3 (NEXT, not started):** surface it in the study-app — serve the annotations on
+  `/v1/sentences`, build tap-a-word → lemma/POS/reading → card-or-Jisho lookup, and a grammar-search
+  filter. This is the payoff and the only user-visible part. It touches the **frontend**, so it's
+  browser-verified and bigger.
+- **Grammar is ALREADY being served** (it rides `tags.grammar` on the existing `getSentences` read —
+  see §5.4). Only the token **annotation** needs a new serving flag. The client just doesn't *use*
+  either yet.
+
+The server (the $6 prod droplet) **only ever reads** this data. All parsing is an offline batch on a
+maintainer machine, loaded at deploy time exactly like `seed-sentences.ts`. There is no Python in prod.
+
+---
+
+## 1. What this is & where it fits
+
+The unified sentence store keeps one canonical `sentence` row per Japanese sentence; every surface
+references it by id. Phase 4 layers GiNZA-derived structure on top so a user can **tap a word** in any
+sentence and get its lemma / POS / a link to the matching card-or-Jisho, plus **grammar search**
+("find every sentence using 〜ておく").
+
+Phase map (full version in the brief):
+
+| Phase | Scope | Status |
+|---|---|---|
+| 1 | Self-Talk phrases → store | ✅ shipped + deployed |
+| 2 | Built-in vocab `examples.js` → store (public, linked to cards) | ✅ shipped + deployed |
+| 2.5 | Custom-card `ex` → private rows | ⏳ deferred |
+| 3 (Minna) | Minna sentences → store (`public=0`) | ⏳ deferred |
+| **4 — NLP** | **GiNZA enrichment: `sentence_annotation` + grammar tags + tap UI** | **🔜 commits 1–2 done, commit 3 next** |
+
+The NLP target is the **public corpus** (Phase 1 + 2 rows: built-in example sentences + Self-Talk
+built-ins) — a bounded, curator-owned set we can parse once and re-parse on content change. Private
+user sentences are out of scope for batch NLP (no offline access; live parsing needs the Python
+service we ruled out).
+
+---
+
+## 2. Commit 1 — offline parser + `sentence_annotation` load path (`f1e4f60`)
+
+### 2.1 The offline parser project — `sentence-nlp/`
+
+A **standalone Python project at the repo root**, deliberately NOT inside `wk-enhanced-api/` (so it
+stays out of `bun test` / `tsc` / the Docker image). It lives in the same git monorepo so it's
+versioned alongside the store it feeds.
+
+| File | Role |
+|---|---|
+| [sentence-nlp/parse.py](sentence-nlp/parse.py) | The parser. Reads the `public_sentence` view, parses each sentence with `ja_ginza_electra`, emits the artifact. `--verify` mode proves the offset contract on a sample; `--limit N` parses a subset. |
+| [sentence-nlp/patterns.py](sentence-nlp/patterns.py) | (commit 2) the grammar catalog + detectors. |
+| [sentence-nlp/test_patterns.py](sentence-nlp/test_patterns.py) | (commit 2) the detector validation battery. |
+| [sentence-nlp/requirements.txt](sentence-nlp/requirements.txt) | Pinned deps: `ginza==5.2.0`, `ja-ginza-electra==5.2.0`, `click>=8.1`. |
+| [sentence-nlp/README.md](sentence-nlp/README.md) | The project's own docs (offset contract, model rationale, grammar tags, usage). |
+| `sentence-nlp/.venv/` | The virtualenv (gitignored — heavy: torch + the electra model). |
+| `sentence-nlp/out/` | Scratch (gitignored, e.g. `out/install.log`). |
+
+**Model decision: `ja_ginza_electra`, split mode C.** Both `ja_ginza` and `ja_ginza_electra` tokenize
+with SudachiPy and pull lemma + reading from the same Sudachi dictionary — identical for the headline
+tap-to-lookup feature. ELECTRA only adds a better dependency parse, which the grammar phase leans on;
+offline we can afford the transformer. Split mode C (longest units) gives token boundaries closest to
+dictionary headwords, so a tapped token matches the deck's card lemmas. The exact versions are recorded
+in the artifact's `parser` field: **`ja_ginza_electra/5.2.0 ginza/5.2.0 splitC`**.
+
+> The ELECTRA transformer weights are fetched from the HuggingFace hub on the first
+> `spacy.load('ja_ginza_electra')` and cached under `~/.cache/huggingface` — so the first run needs
+> network; later runs are offline.
+
+### 2.2 THE load-bearing thing: the offset contract
+
+`sentence_annotation.tokens[].{start,end}` are character offsets into `sentence.text` (the audio-keyed
+canonical plain text). The study-app maps a tap/highlight back to a token by **slicing `text` in
+JavaScript**. JS slices by **UTF-16 code unit**; spaCy/GiNZA's `token.idx` is a **Unicode codepoint**
+offset. They are equal for every BMP character — all kana, kana punctuation, and 常用漢字 — but diverge
+by **+1 per non-BMP codepoint** (rare CJK-Ext-B kanji like 𠮟 U+20B9F, a surrogate pair in JS).
+
+A BMP-only spot check passes and hides the bug. We verified empirically: `母は毎日料理します。` has JS
+`.length` == codepoints (10 == 10), but **`𠮟られた。` is JS length 6 vs 5 codepoints** — and raw
+codepoint offsets would place `。` at 4, so `text.slice(4,5)` in JS returns `た`, not `。`. A real,
+silent corruption that only bites on rare kanji.
+
+**Resolution — three independent checks on the one contract:**
+1. `parse.py` emits **UTF-16 offsets** (converts via the UTF-16-LE byte length of the prefix), and
+   self-checks every token by slicing the UTF-16-LE bytes (an exact emulation of JS `String.slice`)
+   and asserting it reconstructs the token surface. The artifact cannot be written if any token fails.
+2. The seed loader's `db.upsertAnnotation` **re-asserts `text.slice(start,end) === surface`** against
+   the real V8 engine on every write — a malformed artifact throws and aborts the seed (and deploy).
+3. A non-BMP **pin test** in `client.test.ts` asserts that the codepoint offsets a naive parser *would*
+   emit are REJECTED.
+
+This is recorded as a DEAD-END in [wk-enhanced-api/CLAUDE.md](wk-enhanced-api/CLAUDE.md): *"do not
+'simplify' the parser to emit `token.idx`."*
+
+### 2.3 The artifact — `wk-enhanced-api/data/annotations.json`
+
+Produced offline, **committed to git**, ships in the server's Docker image (like
+`data/minna/lesson-*.json`). One annotation per line (compact internals, so a content change is a
+one-line diff). Shape:
+
+```jsonc
+{
+  "parser": "ja_ginza_electra/5.2.0 ginza/5.2.0 splitC",
+  "annotations": [
+    {
+      "hash":  "<40-char ttsTextHash(text) — the env-independent resolution key>",
+      "ext_id":"ex-<hash> | st-* | usr-*",
+      "text":  "母は毎日料理します。",   // echoed so the seed can guard against a stale artifact
+      "tokens":[ {"i":0,"start":0,"end":1,"surface":"母","lemma":"母","pos":"NOUN",
+                  "tag":"名詞-普通名詞-一般","reading":"ハハ","dep":"nsubj","head":3}, … ],
+      "bunsetsu":[ {"start":0,"end":2}, {"start":2,"end":4}, {"start":4,"end":10} ],
+      "grammar":[ "te-iru", … ]        // commit 2; [] when no Tier-1 grammar matched
+    }, …
+  ]
+}
+```
+
+- `start`/`end` are **UTF-16 offsets**. `lemma` (dictionary form, 食べた→食べる) drives the card/Jisho
+  link; `reading` is GiNZA's (the *visible* reading still comes from the stored `furigana`). `tag` is
+  the rich UniDic POS; `dep`/`head` are the dependency parse (used by the commit-2 grammar detectors).
+- `bunsetsu` = phrase-chunk spans (also UTF-16 offsets), stored now, **not yet consumed** (future
+  phrase-level highlighting / pattern matching).
+- Whitespace tokens are dropped (`is_space`) — never a tap target. GiNZA represents inter-word spaces
+  as `token.whitespace_` metadata, not separate tokens, so offsets stay gap-correct.
+
+Current artifact: **544 annotations, 8177 tokens.**
+
+### 2.4 DB plumbing — [wk-enhanced-api/src/db/client.ts](wk-enhanced-api/src/db/client.ts)
+
+- **`VIEWER_VISIBLE`** — the privacy predicate `(s.public = 1 OR s.created_by = ?)` extracted into ONE
+  SQL fragment, now shared by `getSentences` AND `getAnnotation` so the gate can't drift. Binds one
+  param (the viewer id; null → public only, fail-closed). This is the literal realization of the
+  choke-point requirement.
+- **`AnnotationToken` / `AnnotationBunsetsu` / `SentenceAnnotation`** — exported types.
+- **`assertAnnotationOffsets(tokens, text)`** — the offset gate (throws on any `slice !== surface`).
+- **`upsertAnnotation({sentenceId, tokens, bunsetsu, parser})`** — seed-side write by numeric id;
+  validates offsets against the sentence's stored text before writing; idempotent (ON CONFLICT).
+  No privacy gate on the *write* (the offline batch only annotates public rows; the gate is on reads).
+- **`getAnnotation({extId, viewer})`** — gated read applying `VIEWER_VISIBLE`. Returns a private row's
+  annotation only to its owner; null for anon/other-user OR for a visible-but-unparsed sentence (the
+  two are indistinguishable → no existence leak).
+
+### 2.5 The seed — [wk-enhanced-api/scripts/seed-annotations.ts](wk-enhanced-api/scripts/seed-annotations.ts)
+
+Mirrors `seed-sentences.ts`. Reads the committed artifact, resolves each annotation to its sentence
+**by content `hash`** (`getPublicSentenceByHash`) — which is environment-independent, so a Mac-parsed
+artifact seeds **prod** correctly (same text → same hash → resolves the prod row). Guards against a
+stale artifact (DB text must equal the artifact's echoed text). `upsertAnnotation` re-asserts the
+offset contract, so a bad artifact aborts. **Must run as a deploy step AFTER `seed-sentences.ts`**
+(the sentence rows must exist first).
+
+### 2.6 Tests (commit 1)
+
+In [wk-enhanced-api/src/db/client.test.ts](wk-enhanced-api/src/db/client.test.ts), describe block
+*"sentence_annotation (NLP enrichment) — offset contract + privacy"*:
+- offset-integrity (slice === surface enforced on write),
+- **non-BMP contract pin** (codepoint offsets across 𠮟 are REJECTED; UTF-16 accepted),
+- **privacy pin** (a private row's annotation is owner-only, never anon/other-user),
+- idempotency + round-trip, null cases, FK cascade.
+
+---
+
+## 3. Commit 2 — N5/N4 grammar-tag catalog (`75f7972`)
+
+### 3.1 The catalog — [sentence-nlp/patterns.py](sentence-nlp/patterns.py)
+
+A curated **38-point N5/N4 catalog**, grounded in Bunpro's
+[N5](https://bunpro.jp/decks/nn10ai/Bunpro-N5-Grammar) /
+[N4](https://bunpro.jp/decks/m7omkx/bunpro-n4-grammar) decks, **N5/N4-weighted** per the maintainer's
+priority. Each entry = `{id, label, jlpt, detect(doc)->bool}`. The `id`s **reuse the study-app's
+existing `SELFTALK_GRAMMAR` ids** (`te-iru` / `te-oku` / `tai` / `volitional` / `sou` / `nakya`) so
+GiNZA-detected example tags and hand-authored Self-Talk tags search through one vocabulary.
+
+Detection is a **conservative pattern list matched off the parse** (lemma / POS / UniDic tag /
+inflection), NOT raw POS n-grams. The Python parse owns it because it has full Doc/morph access (e.g.
+the fused godan volitional 行こう needs the inflection feature).
+
+The 38 ids (catalog/display order), with form and JLPT:
+
+| Group | ids (`〜form`, JLPT) |
+|---|---|
+| て-compounds | `te-iru`(〜ている N5) `te-oku`(〜ておく N4) `te-shimau`(〜てしまう N4) `te-miru`(〜てみる N4) `te-kudasai`(〜てください N5) `te-mo-ii`(〜てもいい N5) `te-wa-ikenai`(〜てはいけない N5) |
+| voice / aux | `passive`(〜れる・られる N4) `causative`(〜せる・させる N4) `potential`(可能 N4) `tai`(〜たい N5) `volitional`(〜よう N4) `sugiru`(〜すぎる N5) |
+| desire / obligation / ability | `hoshii`(〜がほしい N4) `nakya`(〜なきゃ/なければ N4) `hou-ga-ii`(〜ほうがいい N5) `ta-koto-ga-aru`(〜たことがある N5) `koto-ga-dekiru`(〜ことができる N4) `tsumori`(〜つもり N5) |
+| conditionals | `cond-ba`(〜ば N4) `cond-tara`(〜たら N4) `cond-to`(〜と N4) `cond-nara`(〜なら N4) |
+| evidential / modal | `sou`(〜そう N4) `you-da`(〜ようだ N4) `rashii`(〜らしい N4) `hazu`(〜はずだ N4) `kamoshirenai`(〜かもしれない N4) `to-omou`(〜と思う N4) |
+| connectives / scope | `kara-reason`(〜から理由 N5) `node`(〜ので N5) `noni`(〜のに N4) `nagara`(〜ながら N4) `tari`(〜たり N5) `shi`(〜し N4) `counter`(数+助数詞 N5) `shika-nai`(〜しか〜ない N4) `dake`(〜だけ N5) |
+
+`sou` is kept **unified** (not split into 様態/伝聞) to match the existing id. `detect_grammar(doc)`
+returns the matched ids in catalog order.
+
+### 3.2 Detection learnings / dead-ends (validated against the live model + real corpus)
+
+These are the non-obvious traps. **Don't re-derive them — they're encoded in `test_patterns.py`
+negatives.**
+
+- **passive vs potential can't be split.** れる/られる are ONE morpheme in GiNZA (no passive/potential
+  distinction in UniDic; the difference is syntactic/semantic). Decision: `passive` tags れる/られる
+  (most textbook uses ARE passive); `potential` tags only the unambiguous periphrastic forms
+  (ことができる / 見える / 聞こえる / できる). A ことができる sentence gets both `potential` and
+  `koto-ga-dekiru` (correct — it is a potential expressed via ことができる).
+- **Particle senses split on the UniDic tag, not the lemma.** から reason vs source, と conditional vs
+  case, が contrastive vs subject — all share a lemma but differ by tag (`助詞-接続助詞` vs
+  `助詞-格助詞`). Confirmed on the corpus: から reason 45 / source 44; と cond 43 / case 97.
+- **The voiced te-form connective is で〔接続助詞〕, not て** (読ん**で**いる). `_is_te` accepts て OR で
+  with the 接続助詞 tag — distinct from で〔格助詞〕(at/in/by) and the で in ので.
+- **〜すぎる fuses under split mode C** (食べ過ぎ → one token, lemma `食べ過ぎる`, tag 非自立可能). Match
+  a lemma *ending* in 過ぎる/すぎる with 非自立可能 (which excludes the standalone 過ぎる "to pass").
+- **The volitional morph path must EXCLUDE the presumptive copula.** 行こう is a single godan verb in
+  意志推量形 (the morph win), but だろう/でしょう share that form / the う AUX and are NOT volitional
+  (lemma だ/です). Excluding them dropped the count 75 → 68.
+- **ようだ must exclude ように / ような.** The に in ように and the な in ような are BOTH the copula だ's
+  連用形 / 連体形 (lemma `だ`!), so a naive `lemma in {だ,です}` check mis-fires on ようにする/ようになる.
+  Excluding orth `に` + `な` dropped the count **44 → 1** (the survivor is a legit ようでは). This was
+  the most important catch.
+- **ので / のに = `の〔準体助詞〕` + で/に**, not 接続助詞. **たり/だり = `副助詞`** (voiced だり after
+  ん-stems). **たら/なら** tokenize as single tokens (surface たら lemma た; surface なら lemma だ).
+
+### 3.3 Validation — [sentence-nlp/test_patterns.py](sentence-nlp/test_patterns.py)
+
+A self-contained battery (no pytest dep; loads the model once, exits non-zero on any miss): **one+
+positive sentence per id** (the slug MUST fire) + **10 confusable negatives** (source-から ≠ reason;
+case-と ≠ cond; てほしい ≠ hoshii; なければ ≠ cond-ba; らしい接尾辞 ≠ 推量; だろう/でしょう ≠
+volitional; ような/ように ≠ you-da). All 38 detectors + 10 negatives green.
+
+### 3.4 Wiring — `setGrammarTags` + the no-clobber scope
+
+- **`db.setGrammarTags(sentenceId, values)`** ([client.ts](wk-enhanced-api/src/db/client.ts)) — replaces
+  ONLY `kind='grammar'` rows for a sentence (scene/topic preserved), idempotent (delete-then-insert).
+- `parse.py` emits `grammar:[ids]` per sentence; `seed-annotations.ts` writes them via `setGrammarTags`
+  **for `source='example'` rows only**. Self-Talk rows keep their curated **hand-authored** grammar
+  tags (the artifact computes grammar for them too, but the seed skips writing it — no provenance
+  column, so we don't clobber curator intent).
+- Token annotations (`upsertAnnotation`) are written for **all** public rows (tap-to-lookup should work
+  on Self-Talk sentences too); only the grammar *sentence_tag* write is scoped to examples.
+
+### 3.5 Corpus results (current dev DB)
+
+- 544 sentences parsed → **409/544 tagged** with ≥1 grammar id, **656 total tags**, 35/38 ids present
+  in this corpus.
+- Seeded to DB: **597 grammar tags on 366 example rows** (source='example'); Self-Talk's 44 rows / 53
+  hand tags untouched.
+- 3 ids (`rashii`, `kamoshirenai`, `shi`) are **validated but absent in this corpus** — they'll fire on
+  appropriate content (Self-Talk, future Minna). Not a gap.
+- Top ids: passive 81, te-iru 74, volitional 68, te-shimau 47, kara-reason 45, you-da 1(post-fix),
+  cond-to 43, node 43, cond-ba 36, tai 28, …
+
+---
+
+## 4. Architecture / data flow
+
+```
+                          OFFLINE (maintainer Mac, Python 3.10 venv)        |   PROD ($6 droplet, Bun only)
+                                                                            |
+ public_sentence view ──read──► parse.py (ja_ginza_electra, split C)        |
+   (id, ext_id, hash, text)        │  per sentence:                         |
+                                   │   • tokens[] (UTF-16 offsets, self-checked)
+                                   │   • bunsetsu[]                          |
+                                   │   • grammar[]  (patterns.py)            |
+                                   ▼                                         |
+                       data/annotations.json  ──commit to git──►  ships in Docker image
+                       (keyed by content hash)                              │
+                                                                            ▼
+                                                          seed-annotations.ts (deploy step, after seed-sentences.ts)
+                                                            • resolve row by hash (getPublicSentenceByHash)
+                                                            • upsertAnnotation  → sentence_annotation  (offset gate re-asserts)
+                                                            • setGrammarTags    → sentence_tag(kind='grammar')  [example rows]
+                                                                            │
+                                                                            ▼
+                                            server READS only:  getSentences (tags.grammar rides along)
+                                                                getAnnotation (VIEWER_VISIBLE gate)
+                                                                            │
+                                                                            ▼
+                                                         study-app  ──(commit 3: tap UI + grammar filter)──►  user
+```
+
+---
+
+## 5. Invariants & contracts (any future change must preserve)
+
+1. **Offset contract.** `tokens[].{start,end}` are UTF-16 offsets into `sentence.text`; every token
+   reconstructs its surface under JS slicing. Enforced at parse time + on every DB write. Never emit
+   raw codepoint `token.idx`.
+2. **Privacy choke-point.** Every annotation/sentence read shares the `VIEWER_VISIBLE` predicate
+   (`public=1 OR created_by=:viewer`, fail-closed). The pinned breach tests in `client.test.ts` must
+   stay green. Any commit-3 serving path must ride this gate.
+3. **Hash-keyed seeding.** Annotations resolve to rows by `hash = ttsTextHash(text)`, environment-
+   independent. `text` must stay `plainText(jp)` byte-for-byte and `hash` server-computed, or audio +
+   annotation linkage forks.
+4. **Re-parse = full + hash-keyed.** On any content change, re-run `parse.py` over the whole exported
+   corpus (it's ~544 sentences). Because the parser parses the exact exported text, offsets are self-
+   consistent with the row by construction — a re-parse only ever changes *quality*.
+5. **No-clobber.** Grammar `sentence_tag` is written for `source='example'` rows only; Self-Talk keeps
+   its hand-authored tags.
+6. **Grammar already rides `getSentences`.** `assembleSentenceRow` reads `sentence_tag`, and
+   `ARRAY_TAG_KINDS` includes `'grammar'`, so every `getSentences` result already carries
+   `tags.grammar: string[]`. The example fetch (`GET /v1/sentences?ownerType=card`) therefore *already*
+   returns grammar to the client — commit 3's grammar filter is a *client*-side feature; no new server
+   read is needed for grammar (only for the token annotation).
+
+---
+
+## 6. Operational runbook
+
+### 6.1 Environment specifics (this machine)
+- **Python:** `/opt/homebrew/bin/python3.10` (3.10.x). The system `python3` is 3.14 — too new for the
+  spaCy/torch wheels; **use 3.10 for the venv.**
+- **venv:** `sentence-nlp/.venv` (already created, gitignored). Recreate from `requirements.txt` if
+  missing. Note `click>=8.1` is pinned explicitly (typer 0.26.x doesn't pull it but spaCy imports it).
+- **Dev DB:** `wk-enhanced-api/dev-data/wk-vocab.sqlite` (NOT the `wk-enhanced-api.sqlite` the parity
+  table names — the actual `DATABASE_FILE` in `.env` is `wk-vocab.sqlite`). 544 public_sentence rows.
+- **Running servers:** dev API on `:3000` and Vite on `:5173` are usually already up. **Don't kill
+  them.** The seed scripts use SQLite WAL (concurrent-safe with the running server).
+- **Gotcha:** the Bash tool's cwd persists between calls — always `cd` explicitly before
+  `.venv/bin/python …` (in `sentence-nlp/`) vs `bun …` (in `wk-enhanced-api/`).
+
+### 6.2 Re-parse + re-seed (after any catalog or corpus change)
+```bash
+# 1) (re)parse offline → regenerate the committed artifact
+cd sentence-nlp
+.venv/bin/python test_patterns.py     # gate: all detectors green (only if patterns changed)
+.venv/bin/python parse.py             # → ../wk-enhanced-api/data/annotations.json
+
+# 2) load into the DB (dev: the running server's sqlite; prod: a deploy step)
+cd ../wk-enhanced-api
+bun scripts/seed-annotations.ts       # writes sentence_annotation + sentence_tag(grammar) for examples
+```
+`parse.py --verify` proves the offset contract on a built-in sample without touching the DB.
+
+### 6.3 Deploy (prod)
+Same pattern as `seed-sentences.ts` (see [wk-enhanced-api/deploy/README.md](wk-enhanced-api/deploy/README.md)):
+the artifact ships in the image; on deploy run `seed-sentences.ts` THEN `seed-annotations.ts` against
+the prod sqlite (`docker compose run -v /opt/wk-enhanced-api:/repo …`). No Python needed on the droplet.
+
+### 6.4 Gates before any commit (in `wk-enhanced-api/`)
+```bash
+bun test           # currently 185 pass
+bun run typecheck  # tsc --noEmit, clean
+```
+One logical change → one commit. Commit at the end of a feature without being asked. Fix stale nearby
+comments in the same commit.
+
+---
+
+## 7. Commit 3 — serve + study-app UI (NEXT, not started)
+
+The remaining, user-visible work. Bigger than 1–2 because it touches the **study-app frontend** and is
+browser-verified. Recommend splitting into **3a (server) → 3b (tap UI) → 3c (grammar filter)** with the
+open decisions settled with the user first (same collaborative pattern as commits 1–2).
+
+### 7a. Serving the token annotation (server-only, easy to verify)
+- **Extend `getSentences`** with an opt-in `includeAnnotations` (LEFT JOIN `sentence_annotation`,
+  attach `annotation?: SentenceAnnotation` to each `AssembledSentence`). This rides the existing
+  `VIEWER_VISIBLE`-gated query — the literal route-through the choke-point. Grammar already rides
+  `tags.grammar`; this adds the tokens.
+- **Route** [routes/sentences.ts](wk-enhanced-api/src/routes/sentences.ts): add an opt-in query flag
+  (e.g. `?annotate=1`) so existing callers/payloads are unaffected.
+- **Schema** [schemas.ts](wk-enhanced-api/src/schemas.ts): add the optional `annotation` field to the
+  sentence response schema.
+- Test: a pin that `?annotate=1` returns tokens for a public row and never leaks a private row's
+  annotation to anon (the choke-point still holds through the join). Verify with `curl`.
+
+### 7b. Tap-to-lookup UI (study-app)
+- **Fetch:** the deck examples come via `GET /v1/sentences?ownerType=card` (`features/examples.js`
+  `initExamples()` → pure `sentencesToLevels` → `state.exampleLevels = {[rank]:{N5:[jp,en]}}`). Today
+  the adapter keeps only `[jp,en]` and **drops tags/annotation** — extend it (and `state.exampleLevels`
+  shape, and the `jpverbs_examples_cache` read-through) to carry the annotation + grammar. Self-Talk
+  fetch (`ownerType=selftalk`) similarly.
+- **THE hard part — rendering tappable spans over furigana.** The annotation offsets index the *plain*
+  `text`; the sentence renders as **furigana ruby** (`rubyHtml` / `core/text.js`). Tokens and furigana
+  segments are on *different* boundaries. A pure helper must overlay tappable `<span>`s keyed by token
+  char-offset onto the ruby render (wrap each token's text range — including its ruby — in a tappable
+  span). This is the main design problem of commit 3; decide the approach with the user (span-wrapping
+  vs click-position→offset). Keep the helper **pure + unit-tested** (`src/core/*`, happy-dom).
+- **Interaction:** tap a token → a small popover showing `lemma` / POS / `reading`, with an action:
+  resolve `lemma` against the deck (`state.BUILTIN_RANK_BY_JP` + custom cards) → open the card detail
+  (`openVerbDetail`); else `jishoUrl(lemma)` in a new tab (`render-helpers`). Reuse existing furigana;
+  the annotation is an overlay keyed by char offset.
+- **Where it renders:** flashcard answer example, Browse detail modal, Self-Talk phrases (Minna later).
+  The example shows on the **answer side only** (furigana spoils the reading question).
+- Verify in the browser (preview tooling): screenshot the popover, confirm a tap opens the right card /
+  Jisho link, confirm offsets line up visually on a kanji-heavy sentence.
+
+### 7c. Grammar-search filter (study-app)
+- Grammar tags already arrive on each sentence (`tags.grammar`). Build a **grammar facet** — but
+  grammar is a property of *sentences*, not cards, so decide the surface: (a) a sentence-level search
+  ("show every sentence using 〜ておく", e.g. in Browse or a small new view), or (b) a card filter
+  ("cards whose example sentences use X"). The brief framed it as a *sentence* query.
+- **id→label registry:** the labels live in `patterns.py` `CATALOG` ({id,label,jlpt}). The client needs
+  the same mapping for filter chips (grouped by JLPT). Decide: extend the existing `SELFTALK_GRAMMAR`
+  list (study-app `src/data/selftalk.js`) into a shared grammar registry, vs. a committed catalog JSON
+  the Python dumps and the client imports, vs. a server endpoint returning distinct grammar values.
+  Avoid a hand-maintained parallel list that can drift from `patterns.py`.
+- Reuse the existing chip/facet machinery (`makeMultiSelect`, `.chips`, roving tabindex — see the
+  study-app design-system contracts).
+
+### 7d. Open decisions to settle with the user first
+1. **Serving flag shape** — `includeAnnotations` on `getSentences` + `?annotate=1` (recommended) vs a
+   separate annotation endpoint.
+2. **Tap-render approach** — span-wrap each token over the ruby (recommended) vs click-position→offset.
+3. **Grammar-filter surface** — sentence-level search (matches the brief) vs card-level filter; and the
+   id→label registry source (shared `SELFTALK_GRAMMAR` extension vs dumped catalog JSON).
+4. **Cache busting** — the example/selftalk read-through caches (`jpverbs_examples_cache`,
+   `jpverbs_selftalk_cache`) must learn the new annotation/grammar shape; confirm the cache version
+   bump / migration.
+
+---
+
+## 8. Deferred / future (not commit 3)
+- **Tier-2 grammar** (detectable, lower priority, omitted from the N5/N4 set): `causative-passive`,
+  `tagaru`, `nasai`, `imperative`, `te-aru`/`te-iku`/`te-kuru`/`te-hoshii`, benefactives
+  (`te-ageru`/`kureru`/`morau` + bare `ageru`/`kureru`/`morau`), `yotei`, `mitai`, `darou`, `temo`,
+  `kedo`, `toki`, `mae-ni`, `ato-de`, `you-ni-naru`, `you-ni-suru`, keigo
+  (`keigo-sonkei`/`kenjou`/`teinei`). A natural commit-2.x expansion.
+- **Self-Talk grammar enrichment** — currently Self-Talk keeps hand tags only. Merging GiNZA tags would
+  need a provenance strategy (no column today).
+- **bunsetsu consumption** — phrase-level highlighting / grammar-pattern matching over bunsetsu spans.
+- **`ja_ginza` vs electra revisit** — provenance is recorded; swapping models is a re-run.
+- Independent of NLP: **Phase 2.5** (custom-card `ex` → private rows), **Phase 3** (Minna → store). When
+  Minna lands as public-ish rows, it can be added to the parse corpus (note its bunsetsu spaces in
+  `text`).
+
+---
+
+## 9. Key file index
+
+| Path | What |
+|---|---|
+| [SENTENCE_STORE_NLP.md](SENTENCE_STORE_NLP.md) | Overview/brief (read first) |
+| **SENTENCE_STORE_PHASE4.md** | **this file — Phase 4 as-built + commit-3 plan** |
+| [sentence-nlp/parse.py](sentence-nlp/parse.py) | offline parser (`--verify`, `--limit`) |
+| [sentence-nlp/patterns.py](sentence-nlp/patterns.py) | grammar catalog + detectors (38 ids) |
+| [sentence-nlp/test_patterns.py](sentence-nlp/test_patterns.py) | detector validation battery |
+| [sentence-nlp/README.md](sentence-nlp/README.md) | parser project docs |
+| [wk-enhanced-api/data/annotations.json](wk-enhanced-api/data/annotations.json) | committed artifact (544) |
+| [wk-enhanced-api/scripts/seed-annotations.ts](wk-enhanced-api/scripts/seed-annotations.ts) | deploy-time loader |
+| [wk-enhanced-api/src/db/client.ts](wk-enhanced-api/src/db/client.ts) | `VIEWER_VISIBLE`, `upsertAnnotation`, `getAnnotation`, `setGrammarTags` |
+| [wk-enhanced-api/src/db/client.test.ts](wk-enhanced-api/src/db/client.test.ts) | annotation + grammar tests/pins |
+| [wk-enhanced-api/src/db/schema.sql](wk-enhanced-api/src/db/schema.sql) | `sentence_annotation` table |
+| [wk-enhanced-api/CLAUDE.md](wk-enhanced-api/CLAUDE.md) | server docs + the offset-contract dead-end |
+| [study-app/CLAUDE.md](study-app/CLAUDE.md) | frontend module map / design system (commit 3 lands here) |
+
+Project memory `sentence-store-rearchitecture` carries the converged decisions + commit 1–2 status.
