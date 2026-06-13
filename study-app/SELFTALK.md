@@ -80,9 +80,11 @@ migrated into the store once on sign-in, then dropped from the blob. Server enum
 
 - **Category→topic grid** (`renderGrid`) — the default view. `SELFTALK_TAXONOMY` (`data/selftalk.js`)
   defines categories, each with ordered topics; the pure `topicGrid` (`core/selftalk.js`) buckets the
-  live phrases into per-category cells carrying a phrase count + today's said-count, drops empty
+  live items into per-category cells carrying a count + today's said-count, drops empty
   topics/categories, and folds any unregistered `topic` into a trailing **"Other"** cell so content
-  can't silently vanish. Clicking a cell drills in.
+  can't silently vanish. `renderGrid` feeds it **phrases + the topic's templates**, so a cell tallies
+  both and reads them out honestly ("6 phrases · 5 templates"); "Today's focus" stays a phrase-only
+  rotation. Clicking a cell drills in.
 - **Topic view** (`renderTopic`) — clicking a cell **swaps `#stBody` in place** (it stays the stable
   attach-once record-compare container — drill-in, NOT a modal or stacked accordions): a back button,
   the topic head (+ a `register` badge for the conversation-register topics), then the phrase list

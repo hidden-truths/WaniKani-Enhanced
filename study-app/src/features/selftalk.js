@@ -112,6 +112,11 @@ function filteredPhrases() {
   const list = allPhrases();
   return stGrammar.length ? list.filter((p) => (p.grammar || []).some((g) => stGrammar.includes(g))) : list;
 }
+// The slot-swap templates passing the grammar filter (each carries `topic`/`thought`/`id`, so they
+// count + group exactly like phrases). Used both for the grid tally and the drilled-in topic merge.
+function filteredTemplates() {
+  return stGrammar.length ? SELFTALK_TEMPLATES.filter((t) => (t.grammar || []).some((g) => stGrammar.includes(g))) : SELFTALK_TEMPLATES;
+}
 
 // ---- render ----
 export function renderSelftalk() {
@@ -265,19 +270,29 @@ function drillTopic(id) { stTopic = id; renderBody(); }
 // record controls — only the topic view has them.
 function renderGrid(body) {
   const phrases = filteredPhrases();
-  if (!phrases.length) { body.innerHTML = `<div class="st-empty">No phrases match this filter.</div>`; return; }
+  const templates = filteredTemplates();
+  const items = phrases.concat(templates);
+  if (!items.length) { body.innerHTML = `<div class="st-empty">No phrases match this filter.</div>`; return; }
   const today = localDay();
   const doneSet = donePhraseIds(state.selftalkStore.practice, today);
-  const todayIds = new Set(todaysSet(phrases, today, TODAY_N));
+  const todayIds = new Set(todaysSet(phrases, today, TODAY_N));   // "today" is the daily PHRASE rotation
   const todayDone = [...todayIds].filter((id) => doneSet.has(id)).length;
-  const grid = topicGrid(phrases, SELFTALK_TAXONOMY, doneSet);
-  const tally = (count, done) =>
-    `<span class="st-cell-count">${done ? `<span class="done">${done} said</span> · ` : ''}${count} phrase${count === 1 ? '' : 's'}</span>`;
+  const grid = topicGrid(items, SELFTALK_TAXONOMY, doneSet);      // count phrases AND templates per cell
+  const tplByTopic = {};
+  for (const t of templates) tplByTopic[t.topic] = (tplByTopic[t.topic] || 0) + 1;
+  // `count` is the total; split the templates back out so the cell reads honestly ("6 phrases · 5 templates").
+  const tally = (count, done, tpls) => {
+    const phr = count - (tpls || 0);
+    const parts = [];
+    if (phr > 0) parts.push(`${phr} phrase${phr === 1 ? '' : 's'}`);
+    if (tpls) parts.push(`${tpls} template${tpls === 1 ? '' : 's'}`);
+    return `<span class="st-cell-count">${done ? `<span class="done">${done} said</span> · ` : ''}${parts.join(' · ')}</span>`;
+  };
   const cell = (t) =>
     `<button class="st-cell" type="button" data-st-topic="${escapeHtml(t.id)}">
        <span class="st-cell-label">${escapeHtml(t.label)}</span>
        ${t.jp ? `<span class="st-cell-jp">${escapeHtml(t.jp)}</span>` : ''}
-       ${tally(t.count, t.done)}
+       ${tally(t.count, t.done, tplByTopic[t.id])}
      </button>`;
   const catSection = (c) =>
     `<div class="st-cat"><p class="st-cat-head">${c.icon ? `<svg class="ic" aria-hidden="true"><use href="#${escapeHtml(c.icon)}"/></svg>` : ''}${escapeHtml(c.label)}${c.jp ? ` <span class="st-cat-jp">${escapeHtml(c.jp)}</span>` : ''}</p>
@@ -285,7 +300,7 @@ function renderGrid(body) {
   const todayCell = todayIds.size
     ? `<div class="st-grid st-today-grid"><button class="st-cell st-today-cell" type="button" data-st-topic="${TODAY_TOPIC}">
          <span class="st-today-row"><svg class="ic" aria-hidden="true"><use href="#i-target"/></svg><span class="st-cell-label">Today's focus</span></span>
-         ${tally(todayIds.size, todayDone)}
+         ${tally(todayIds.size, todayDone, 0)}
        </button></div>`
     : '';
   body.innerHTML = todayCell + grid.map(catSection).join('');
