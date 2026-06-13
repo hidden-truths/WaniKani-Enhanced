@@ -27,7 +27,7 @@ export function phraseToSentence(phrase) {
     text,
     furigana,
     translations: { en: (phrase && phrase.mean) || '' },
-    tags: { topic: (phrase && (phrase.topic ?? phrase.scene)) || '', grammar: Array.isArray(phrase && phrase.grammar) ? phrase.grammar : [] },
+    tags: { topic: (phrase && (phrase.topic ?? phrase.scene)) || '', grammar: Array.isArray(phrase && phrase.grammar) ? phrase.grammar : [], ...(phrase && phrase.thought ? { thought: phrase.thought } : {}) },
     link: { owner_type: 'selftalk' },
   };
 }
@@ -50,6 +50,7 @@ export function sentenceToPhrase(s) {
     read: segmentsToReading(fur),
     mean: (s && s.translations && s.translations.en) || '',
     topic: (tags.topic ?? tags.scene) || '',
+    ...(tags.thought ? { thought: tags.thought } : {}),   // optional sub-cluster within the topic
     grammar,
     custom: !!(s && s.custom),
     furigana: Array.isArray(fur) ? fur : [],
@@ -110,6 +111,23 @@ export function topicGrid(phrases, taxonomy, doneSet) {
     });
   }
   return cats;
+}
+
+// Group a topic's phrases into "sentence thoughts" — labeled sub-clusters within the topic — using
+// the topic's `thoughts` registry ([{id,label}]). Clusters come in registry order; any phrase with
+// no registered thought collects into a trailing LABEL-LESS group (id/label null), so grouped and
+// loose lines coexist. A topic with no thoughts → a single label-less group, i.e. the topic view
+// renders flat (backward-compatible with every flat topic). Pure (read-only).
+export function groupByThought(phrases, thoughtsOrder) {
+  const list = phrases || [];
+  const order = Array.isArray(thoughtsOrder) ? thoughtsOrder : [];
+  const groups = order
+    .map((t) => ({ id: t.id, label: t.label, items: list.filter((p) => p.thought === t.id) }))
+    .filter((g) => g.items.length);
+  const claimed = new Set(order.map((t) => t.id));
+  const loose = list.filter((p) => !p.thought || !claimed.has(p.thought));
+  if (loose.length) groups.push({ id: null, label: null, items: loose });
+  return groups;
 }
 
 // The distinct grammar tokens present across `phrases`, in `grammarOrder` first, then any extras

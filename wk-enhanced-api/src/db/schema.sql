@@ -197,7 +197,7 @@ CREATE INDEX IF NOT EXISTS ix_link_sentence ON sentence_link(sentence_id);
 
 CREATE TABLE IF NOT EXISTS sentence_tag (
     sentence_id INTEGER NOT NULL REFERENCES sentence(id) ON DELETE CASCADE,
-    kind        TEXT NOT NULL,     -- 'scene' | 'grammar' | 'topic'
+    kind        TEXT NOT NULL,     -- 'topic' (Self-Talk; 'scene' is the legacy alias) | 'thought' (sub-cluster) | 'grammar'
     value       TEXT NOT NULL,
     PRIMARY KEY (sentence_id, kind, value)
 );

@@ -15,7 +15,7 @@
 // features/record-compare.js (Self-Talk feeds it a reserved numeric SCOPE + synth-only references).
 import { state } from '../state.js';
 import { localDay } from '../config.js';
-import { escapeHtml, rubyHtml, plainText, overlayTokens, topicGrid, grammarTokens, todaysSet, applyPractice, practiceStreak, donePhraseIds, sentenceToPhrase, phraseToSentence } from '../core/index.js';
+import { escapeHtml, rubyHtml, plainText, overlayTokens, topicGrid, groupByThought, grammarTokens, todaysSet, applyPractice, practiceStreak, donePhraseIds, sentenceToPhrase, phraseToSentence } from '../core/index.js';
 import { SELFTALK_TAXONOMY, SELFTALK_TOPICS, SELFTALK_GRAMMAR } from '../data/selftalk.js';
 import { playItem, cycleMod } from './audio.js';
 import { wireWordTaps } from './word-lookup.js';
@@ -248,9 +248,19 @@ function renderTopic(body, topicId) {
   const register = meta && meta.register ? `<span class="st-register">${escapeHtml(registerLabel(meta.register))}</span>` : '';
   const head = `<button class="st-back" type="button" data-st-back><svg class="ic" aria-hidden="true"><use href="#i-chevron"/></svg>All topics</button>
     <div class="st-topic-head"><span class="st-topic-title">${escapeHtml(title)}</span>${jp ? `<span class="st-topic-jp">${escapeHtml(jp)}</span>` : ''}${register}</div>`;
-  const list = items.length
-    ? `<div class="st-list">${items.map((p) => phraseCardHtml(p, speaking, doneSet.has(p.id))).join('')}</div>`
-    : `<div class="st-empty">No phrases match this filter.</div>`;
+  const listHtml = (phrases) => `<div class="st-list">${phrases.map((p) => phraseCardHtml(p, speaking, doneSet.has(p.id))).join('')}</div>`;
+  // Sub-group a real topic's phrases into "sentence thoughts" (labeled clusters); today's set + flat
+  // topics render as a single ungrouped list. A loose group that coexists with labeled ones gets a
+  // muted "More" heading so it doesn't read as part of the last cluster.
+  let list;
+  if (!items.length) list = `<div class="st-empty">No phrases match this filter.</div>`;
+  else if (isToday) list = listHtml(items);
+  else {
+    const groups = groupByThought(items, meta && meta.thoughts);
+    list = groups.some((g) => g.label)
+      ? groups.map((g) => `<p class="st-thought">${escapeHtml(g.label || 'More')} <span class="st-count">${g.items.length}</span></p>${listHtml(g.items)}`).join('')
+      : listHtml(items);
+  }
   body.innerHTML = head + list;
   wireWordTaps(body);                          // delegated tap-to-lookup on the phrases' word spans
   wireRecordCompare(body);                     // delegated record/play/delete/compare (attach-once)

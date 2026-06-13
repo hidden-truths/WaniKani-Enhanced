@@ -52,7 +52,10 @@ export const SELFTALK_TAXONOMY = [
   {
     id: 'gaming', label: 'Gaming', jp: 'ゲーム', icon: 'i-gamepad',
     topics: [
-      { id: 'minecraft', label: 'Minecraft', jp: 'マイクラ' },
+      { id: 'minecraft', label: 'Minecraft', jp: 'マイクラ', thoughts: [
+        { id: 'resources', label: 'Gathering resources' },
+        { id: 'night', label: 'Surviving the night' },
+      ] },
       { id: 'incremental', label: 'Incremental games', jp: '放置ゲー' },
       { id: 'sims', label: 'The Sims', jp: 'シムズ' },
     ],
@@ -144,10 +147,11 @@ export const SELFTALK = [
 
   // ==== Gaming ====
   // ---- Minecraft ----
-  { id: 'st-minecraft-1', jp: '<ruby>鉄<rt>てつ</rt></ruby>が<ruby>足<rt>た</rt></ruby>りないから、もっと<ruby>掘<rt>ほ</rt></ruby>らないと。', read: 'てつがたりないから、もっとほらないと。', mean: "I don't have enough iron — I need to mine more.", topic: 'minecraft', grammar: ['nakya'] },
-  { id: 'st-minecraft-2', jp: '<ruby>夜<rt>よる</rt></ruby>になる<ruby>前<rt>まえ</rt></ruby>に<ruby>家<rt>いえ</rt></ruby>を<ruby>建<rt>た</rt></ruby>てておこう。', read: 'よるになるまえにいえをたてておこう。', mean: 'Let me build a house before it gets dark.', topic: 'minecraft', grammar: ['te-oku', 'volitional'] },
-  { id: 'st-minecraft-3', jp: 'クリーパーが<ruby>近<rt>ちか</rt></ruby>づいてきている。', read: 'クリーパーがちかづいてきている。', mean: 'A creeper is coming this way.', topic: 'minecraft', grammar: ['te-iru'] },
-  { id: 'st-minecraft-4', jp: 'ダイヤモンドが<ruby>見<rt>み</rt></ruby>つかりそう。', read: 'ダイヤモンドがみつかりそう。', mean: "Looks like I'm about to find a diamond.", topic: 'minecraft', grammar: ['sou'] },
+  { id: 'st-minecraft-1', jp: '<ruby>鉄<rt>てつ</rt></ruby>が<ruby>足<rt>た</rt></ruby>りないから、もっと<ruby>掘<rt>ほ</rt></ruby>らないと。', read: 'てつがたりないから、もっとほらないと。', mean: "I don't have enough iron — I need to mine more.", topic: 'minecraft', thought: 'resources', grammar: ['nakya'] },
+  { id: 'st-minecraft-4', jp: 'ダイヤモンドが<ruby>見<rt>み</rt></ruby>つかりそう。', read: 'ダイヤモンドがみつかりそう。', mean: "Looks like I'm about to find a diamond.", topic: 'minecraft', thought: 'resources', grammar: ['sou'] },
+  { id: 'st-minecraft-6', jp: '<ruby>木<rt>き</rt></ruby>を<ruby>切<rt>き</rt></ruby>っておこう、あとで<ruby>必要<rt>ひつよう</rt></ruby>になるから。', read: 'きをきっておこう、あとでひつようになるから。', mean: "Let me chop some wood — I'll need it later.", topic: 'minecraft', thought: 'resources', grammar: ['te-oku', 'volitional'] },
+  { id: 'st-minecraft-2', jp: '<ruby>夜<rt>よる</rt></ruby>になる<ruby>前<rt>まえ</rt></ruby>に<ruby>家<rt>いえ</rt></ruby>を<ruby>建<rt>た</rt></ruby>てておこう。', read: 'よるになるまえにいえをたてておこう。', mean: 'Let me build a house before it gets dark.', topic: 'minecraft', thought: 'night', grammar: ['te-oku', 'volitional'] },
+  { id: 'st-minecraft-3', jp: 'クリーパーが<ruby>近<rt>ちか</rt></ruby>づいてきている。', read: 'クリーパーがちかづいてきている。', mean: 'A creeper is coming this way.', topic: 'minecraft', thought: 'night', grammar: ['te-iru'] },
   { id: 'st-minecraft-5', jp: '<ruby>新<rt>あたら</rt></ruby>しい<ruby>村<rt>むら</rt></ruby>を<ruby>探<rt>さが</rt></ruby>しに<ruby>行<rt>い</rt></ruby>きたい。', read: 'あたらしいむらをさがしにいきたい。', mean: 'I want to go look for a new village.', topic: 'minecraft', grammar: ['tai'] },
 
   // ---- Incremental games ----

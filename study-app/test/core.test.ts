@@ -23,7 +23,7 @@ import {
   waveformPeaks, clampSpeed, COMPARE_SPEEDS, rmsLevel, normGains,
   resolveVariant, parseAudioToken, contextPrefs, isSynthVoice, voiceProvider,
   DEFAULT_AUDIO_PREFS, AUDIO_VOICES, variantOrder, variantIndex, isKnownAudioToken, pruneAudioPrefs,
-  hashStr, groupByTopic, topicGrid, grammarTokens, todaysSet, emptyPractice, dayDiff, applyPractice,
+  hashStr, groupByTopic, topicGrid, groupByThought, grammarTokens, todaysSet, emptyPractice, dayDiff, applyPractice,
   practiceStreak, donePhraseIds, sentenceToPhrase, phraseToSentence,
 } from '../src/core/index.js';
 import { SELFTALK, SELFTALK_TAXONOMY, SELFTALK_TOPICS, SELFTALK_TOPIC_IDS, SELFTALK_GRAMMAR } from '../src/data/selftalk.js';
@@ -926,6 +926,46 @@ test('topicGrid: counts per topic, drops empty topics/categories, buckets orphan
   expect(grid[0].icon).toBe('i-clock');
   expect(grid[0].topics.map((t: any) => [t.id, t.count, t.done])).toEqual([['morning', 2, 1], ['evening', 1, 0]]);
   expect(grid[1].topics.map((t: any) => [t.id, t.count])).toEqual([['mystery', 1]]);
+});
+
+test('groupByThought: clusters in registry order, loose phrases trail label-less, no thoughts → flat', () => {
+  const phrases = [
+    { id: 'a', thought: 'r' }, { id: 'b', thought: 'n' }, { id: 'c', thought: 'r' },
+    { id: 'd' },                  // no thought → loose
+    { id: 'e', thought: 'gone' }, // thought not in the registry → loose
+  ];
+  const thoughts = [{ id: 'r', label: 'Resources' }, { id: 'n', label: 'Night' }];
+  expect(groupByThought(phrases, thoughts).map((x: any) => [x.id, x.label, x.items.map((p: any) => p.id)])).toEqual([
+    ['r', 'Resources', ['a', 'c']],
+    ['n', 'Night', ['b']],
+    [null, null, ['d', 'e']],     // loose group trails, label-less
+  ]);
+  // no thoughts registry → a single label-less group (the topic view renders flat)
+  const flat = groupByThought(phrases, undefined);
+  expect(flat.length).toBe(1);
+  expect(flat[0].label).toBe(null);
+  expect(flat[0].items.length).toBe(5);
+});
+
+test('sentenceToPhrase/phraseToSentence carry an optional thought tag (absent → no key)', () => {
+  const p = sentenceToPhrase({ id: 'st-x', furigana: [{ t: 'あ。' }], translations: { en: 'a' }, tags: { topic: 'minecraft', thought: 'resources', grammar: [] }, custom: false });
+  expect(p.thought).toBe('resources');
+  const body = phraseToSentence({ id: 'usr-x', jp: 'あ。', mean: 'a', topic: 'minecraft', thought: 'resources', grammar: [] });
+  expect(body.tags).toEqual({ topic: 'minecraft', grammar: [], thought: 'resources' });
+  // absent thought → no `thought` key leaks onto either shape
+  expect('thought' in sentenceToPhrase({ id: 'st-y', furigana: [{ t: 'い。' }], translations: {}, tags: { topic: 'morning', grammar: [] }, custom: false })).toBe(false);
+  expect('thought' in phraseToSentence({ id: 'u', jp: 'い。', mean: 'b', topic: 'morning', grammar: [] }).tags).toBe(false);
+});
+
+test('SELFTALK thought tags are all declared on their topic (no orphan sub-clusters)', () => {
+  const byTopic: Record<string, any> = {};
+  for (const c of SELFTALK_TAXONOMY as any[]) for (const t of c.topics) byTopic[t.id] = t;
+  for (const p of SELFTALK as any[]) {
+    if (!p.thought) continue;
+    const ids = new Set(((byTopic[p.topic].thoughts) || []).map((x: any) => x.id));
+    expect(ids.has(p.thought)).toBe(true);
+  }
+  expect(byTopic.minecraft.thoughts.map((x: any) => x.id)).toEqual(['resources', 'night']);   // demo topic
 });
 
 test('grammarTokens returns present tokens in grammarOrder, extras after', () => {

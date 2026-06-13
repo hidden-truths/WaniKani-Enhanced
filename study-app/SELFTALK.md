@@ -37,7 +37,7 @@ Layer docs: module map + dead-ends in [CLAUDE.md](CLAUDE.md); card/furigana mode
 
 ## Data model
 
-A **phrase** is `{ id, jp, read, mean, topic, grammar:[…], custom? }`:
+A **phrase** is `{ id, jp, read, mean, topic, thought?, grammar:[…], custom? }`:
 - `jp` carries `<ruby>漢字<rt>かな</rt></ruby>` furigana (CARDS.md format; the global `data-furigana`
   flip toggles `<rt>`). `read` is the full kana reading (furigana-off display). **No `accent`** —
   pitch is a per-WORD property and a single drop number is meaningless over a sentence, so phrases
@@ -48,6 +48,11 @@ A **phrase** is `{ id, jp, read, mean, topic, grammar:[…], custom? }`:
   boyfriend — each topic carries a `register` ∈ `plain`|`polite`|`intimate`, surfaced as a badge in
   the topic view; conversation lines are written *in* that register). Stored as
   `sentence_tag(kind='topic')`, with a legacy `scene`-tag read-fallback for pre-grid rows.
+- `thought` (optional) is a **sentence-thought** — a labeled sub-cluster of related lines *within* a
+  topic (e.g. Minecraft → "Gathering resources" / "Surviving the night"). The slug is declared in the
+  topic's `thoughts: [{id,label}]` registry entry; phrases carrying it cluster under that label in the
+  topic view, and any phrase *without* a thought trails under a muted "More" heading. Stored as
+  `sentence_tag(kind='thought')`; omitted entirely on flat topics (which render as a single list).
 - `grammar` ⊂ `SELFTALK_GRAMMAR` (`te-iru`/`nakya`/`tai`/`volitional`/`te-oku`/`sou`). **Every phrase
   carries ≥1 of these 6 teaching tags** (pinned by the dataset test) — that's the point of Self-Talk,
   so new content is authored to feature one. The furigana↔`read` consistency of every built-in is
@@ -80,8 +85,10 @@ migrated into the store once on sign-in, then dropped from the blob. Server enum
 - **Topic view** (`renderTopic`) — clicking a cell **swaps `#stBody` in place** (it stays the stable
   attach-once record-compare container — drill-in, NOT a modal or stacked accordions): a back button,
   the topic head (+ a `register` badge for the conversation-register topics), then the phrase list
-  with the full ▶ / record-and-compare rig. `stTopic` (view-only; `null` = grid) holds the drill
-  state and resets to the grid on tab-leave.
+  with the full ▶ / record-and-compare rig. If the topic declares `thoughts`, the pure `groupByThought`
+  splits the list into **sentence-thought** sub-clusters (each under a mono heading, loose lines under
+  "More"); a flat topic renders one ungrouped list. The today set always renders flat. `stTopic`
+  (view-only; `null` = grid) holds the drill state and resets to the grid on tab-leave.
 - **Today's focus** — a pinned grid **cell** (no longer a toggle) that drills into a deterministic
   daily rotation (`todaysSet`, seeded by `localDay()` via an FNV-1a hash — stable within a day,
   rotates across days). Because only ONE view renders at a time, each phrase (and its record control)
