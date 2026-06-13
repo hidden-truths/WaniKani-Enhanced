@@ -263,6 +263,30 @@ WAL alongside the live server safely. Verify after:
 独り言 tab + the flashcard/Browse example sentences should populate, with the credentialed CORS header
 echoing the apex origin.
 
+**Seeding / re-voicing the Siri TTS voices (`siri:male` / `siri:female`).** Unlike the seed above, the
+tagged voice clips can't be (re)generated on the droplet — rendering a Siri voice needs a Mac with the
+right **System Voice** (see `scripts/generate-tts.ts`). Once you've rendered them locally there's no
+reason to render a second time for prod; ship the same bytes with `scripts/push-tts-variants.ts`, run
+**from the Mac** (it has the `.m4a`s; S3 is reachable from anywhere) against the prod bucket:
+
+```bash
+# From wk-enhanced-api/ on the Mac. Dry-run first to see the count, then --force to OVERWRITE
+# (required to RE-VOICE clips that were originally seeded with the wrong System Voice).
+cd wk-enhanced-api
+STORAGE_DRIVER=s3 \
+  S3_ENDPOINT=… S3_REGION=… S3_BUCKET=… S3_ACCESS_KEY_ID=… S3_SECRET_ACCESS_KEY=… S3_FORCE_PATH_STYLE=true \
+  bun scripts/push-tts-variants.ts --dry-run            # then re-run with --force
+```
+
+Bytes only — it does NOT seed the `audio_variants` manifest (the Settings-picker catalog): those rows
+already exist on prod from the original `generate-tts.ts --variant` run and the hashes are unchanged, and
+a Mac invocation can't reach the droplet's sqlite regardless. Seeding a manifest is the `--seed-manifest`
+opt-in, only when `DATABASE_FILE` points at the target DB. After the push, the new `/v1/audio/tts` cache
+headers (ETag + `public, no-cache`) make any client holding the old wrong-voice clip revalidate and pick
+up the corrected bytes on next play — no cache-bust needed. Verify by playing `siri:male` in the study
+app, or `curl -s "https://api.wkenhanced.dev/v1/audio/tts?text=…&voice=siri:male" -o /tmp/m.m4a` and
+listening.
+
 ## Migrating from a pre-Docker droplet
 
 Pre-Docker droplets ran Bun directly via `wk-enhanced-api.service` as the unprivileged `wkenhanced` host user. Conversion is one-shot:
