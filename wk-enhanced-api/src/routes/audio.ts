@@ -18,7 +18,7 @@ import type { Context } from 'hono';
 import { gate, denied } from '../lib/minnaGate.ts';
 import { getStorage, keys } from '../services/storage.ts';
 import { fetchMinnaAudio, isValidMinnaAudioPath } from '../services/minnaAudio.ts';
-import { resolveTts, ttsTextHash } from '../services/tts.ts';
+import { resolveTts, ttsTextHash, ttsEtag } from '../services/tts.ts';
 import * as db from '../db/client.ts';
 import type { RecordingRow } from '../db/client.ts';
 import {
@@ -234,8 +234,17 @@ audioRouter.openapi(ttsRoute, async (c) => {
     const { text, voice } = c.req.valid('query');
     const hit = await resolveTts(text.trim(), voice);
     if (!hit) return c.json({ code: 'upstream_failure' as const, error: 'tts unavailable' }, 502);
+    // A clip can be re-rendered (generate-tts.ts --force), so a (text, voice) URL is NOT immutable:
+    // send a byte-derived ETag + revalidate, so a regenerated voice propagates instead of being
+    // replayed stale from a browser/CDN cache. Tolerate Cloudflare's weak (W/) prefix.
+    const etag = ttsEtag(hit.buffer);
+    c.header('ETag', etag);
+    c.header('Cache-Control', 'public, no-cache');
+    if ((c.req.header('If-None-Match') || '').replace(/^W\//, '') === etag) {
+        c.set('logCtx', { ttsLen: text.length, ttsVoice: voice || 'default', ttsSource: 'not_modified' });
+        return c.body(null, 304);
+    }
     c.header('Content-Type', hit.contentType || 'audio/mpeg');
-    c.header('Cache-Control', 'public, max-age=604800, immutable');
     c.set('logCtx', { ttsLen: text.length, ttsVoice: voice || 'default', ttsSource: hit.source });
     return c.body(hit.buffer);
 });

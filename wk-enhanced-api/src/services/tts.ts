@@ -45,18 +45,22 @@ export function ttsVariantKey(text: string, provider: string, gender: string, ex
 export interface TtsHit {
     buffer: ArrayBuffer;
     contentType: string;
-    source: string; // for logging: 'memory' | 'storage-<voice>' | 'storage-m4a' | 'storage-mp3' | 'google'
+    source: string; // for logging: 'storage-<voice>' | 'storage-m4a' | 'storage-mp3' | 'google'
 }
 
-// Bounded in-process cache, keyed by voice+text (a tagged voice and the default voice for the
-// same text are distinct clips). Survives only this process; the storage tier survives restarts.
-const ttsCache = new Map<string, TtsHit>();
-const TTS_CACHE_MAX = 500;
-function cacheKey(text: string, voice: string): string { return `${voice}\n${text}`; }
-function ttsCachePut(key: string, hit: TtsHit): void {
-    if (ttsCache.size >= TTS_CACHE_MAX) ttsCache.delete(ttsCache.keys().next().value!); // evict oldest
-    ttsCache.set(key, hit);
+// A strong ETag for a served clip — a hash of the BYTES, not the text. A clip is NOT immutable for a
+// given (text, voice) URL: an operator can re-render a voice (generate-tts.ts --force), and the same
+// URL then returns different bytes. So the routes must NOT send `immutable`; they send this ETag and
+// revalidate, and a regenerated clip gets a new tag → clients refetch instead of replaying the stale
+// one. (This is the cache-correctness bug behind "I regenerated siri:male but still hear the old voice".)
+export function ttsEtag(buffer: ArrayBuffer): string {
+    return `"${new Bun.CryptoHasher('sha1').update(buffer).digest('hex').slice(0, 20)}"`;
 }
+
+// NOTE: there is intentionally NO in-process buffer cache here. Storage is the single source of truth
+// so a regenerated clip is served immediately (no server restart needed); repeat upstream Google calls
+// are already avoided because a live gtx render is persisted to storage on first hit. The HTTP layer
+// (ETag + revalidation, below) is the real caching tier.
 
 // Resolve audio for `text` in the requested `voice`. An EXPLICIT voice is honored exactly — we
 // never substitute a different pre-generated voice's clip for it:
@@ -70,10 +74,6 @@ function ttsCachePut(key: string, hit: TtsHit): void {
 // Returns null only when even Google fails.
 export async function resolveTts(text: string, voice?: string): Promise<TtsHit | null> {
     const v = !voice || voice === 'default' ? 'default' : voice;
-    const key = cacheKey(text, v);
-    const cached = ttsCache.get(key);
-    if (cached) return cached;
-
     const storage = getStorage();
 
     // The Google (gtx) voice: a previously-persisted `.mp3`, else live, persisted on first hit. This
@@ -103,9 +103,7 @@ export async function resolveTts(text: string, voice?: string): Promise<TtsHit |
         const m4a = await storage.get(ttsKey(text, 'm4a'));
         hit = m4a ? { buffer: m4a, contentType: 'audio/mp4', source: 'storage-m4a' } : await googleHit();
     }
-    if (!hit) return null;
-    ttsCachePut(key, hit);
-    return hit;
+    return hit ?? null;
 }
 
 export async function googleTts(text: string): Promise<{ buffer: ArrayBuffer; contentType: string } | null> {

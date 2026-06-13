@@ -33,7 +33,7 @@ import { minnaRouter } from './routes/minna.ts';
 import { audioRouter } from './routes/audio.ts';
 import { sentencesRouter } from './routes/sentences.ts';
 import { MEDIA_CACHE_CONTROL } from './services/storage.ts';
-import { resolveTts } from './services/tts.ts';
+import { resolveTts, ttsEtag } from './services/tts.ts';
 
 const app = new OpenAPIHono({ defaultHook: zodHook });
 
@@ -124,8 +124,16 @@ app.get('/v1/tts', async (c) => {
     if (text.length > 200) return c.json({ code: 'validation_error' as const, error: 'text too long (max 200 chars)' }, 400);
     const hit = await resolveTts(text);
     if (!hit) return c.json({ code: 'upstream_failure' as const, error: 'tts unavailable' }, 502);
+    // NOT immutable: the default clip can be re-rendered (generate-tts.ts --force). Byte-ETag +
+    // revalidate so a regenerated clip propagates instead of being replayed stale (W/ tolerated).
+    const etag = ttsEtag(hit.buffer);
+    c.header('ETag', etag);
+    c.header('Cache-Control', 'public, no-cache');
+    if ((c.req.header('If-None-Match') || '').replace(/^W\//, '') === etag) {
+        c.set('logCtx', { ttsLen: text.length, ttsSource: 'not_modified' });
+        return c.body(null, 304);
+    }
     c.header('Content-Type', hit.contentType || 'audio/mpeg');
-    c.header('Cache-Control', 'public, max-age=604800, immutable'); // text→audio never changes
     c.set('logCtx', { ttsLen: text.length, ttsSource: hit.source });
     return c.body(hit.buffer);
 });
