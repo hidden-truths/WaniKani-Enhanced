@@ -729,3 +729,6 @@
   .word-pop .wl-pos{font-family:"SF Mono",ui-monospace,monospace;font-size:10px;text-transform:uppercase;letter-spacing:.06em;color:var(--muted);margin:5px 0 9px}
   .word-pop .wl-act{display:inline-block;font-family:"SF Mono",ui-monospace,monospace;font-size:12px;padding:5px 11px;border-radius:8px;border:1px solid var(--line);background:var(--paper);color:var(--ink);cursor:pointer;text-decoration:none}
   .word-pop .wl-act:hover{background:color-mix(in srgb,var(--ink) 8%,transparent)}
+  /* Grammar points on a detail-modal example (read-only) — surfaces what the Browse grammar filter matches. */
+  .ex-grammar{margin-top:6px;display:flex;flex-wrap:wrap;gap:5px;align-items:center;font-family:"SF Mono",ui-monospace,monospace;font-size:10px;text-transform:uppercase;letter-spacing:.05em;color:var(--muted)}
+  .ex-gram-chip{font-family:var(--jp-font),sans-serif;text-transform:none;letter-spacing:0;font-size:12px;color:var(--ink);background:color-mix(in srgb,var(--ink) 7%,transparent);border:1px solid var(--line);border-radius:6px;padding:1px 7px}

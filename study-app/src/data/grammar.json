@@ -1,0 +1,192 @@
+[
+  {
+    "id": "te-iru",
+    "label": "〜ている",
+    "jlpt": "N5"
+  },
+  {
+    "id": "te-oku",
+    "label": "〜ておく",
+    "jlpt": "N4"
+  },
+  {
+    "id": "te-shimau",
+    "label": "〜てしまう",
+    "jlpt": "N4"
+  },
+  {
+    "id": "te-miru",
+    "label": "〜てみる",
+    "jlpt": "N4"
+  },
+  {
+    "id": "te-kudasai",
+    "label": "〜てください",
+    "jlpt": "N5"
+  },
+  {
+    "id": "te-mo-ii",
+    "label": "〜てもいい",
+    "jlpt": "N5"
+  },
+  {
+    "id": "te-wa-ikenai",
+    "label": "〜てはいけない",
+    "jlpt": "N5"
+  },
+  {
+    "id": "passive",
+    "label": "〜れる・られる",
+    "jlpt": "N4"
+  },
+  {
+    "id": "causative",
+    "label": "〜せる・させる",
+    "jlpt": "N4"
+  },
+  {
+    "id": "potential",
+    "label": "可能 (できる・見える)",
+    "jlpt": "N4"
+  },
+  {
+    "id": "tai",
+    "label": "〜たい",
+    "jlpt": "N5"
+  },
+  {
+    "id": "volitional",
+    "label": "volitional 〜よう",
+    "jlpt": "N4"
+  },
+  {
+    "id": "sugiru",
+    "label": "〜すぎる",
+    "jlpt": "N5"
+  },
+  {
+    "id": "hoshii",
+    "label": "〜がほしい",
+    "jlpt": "N4"
+  },
+  {
+    "id": "nakya",
+    "label": "〜なきゃ / なければ",
+    "jlpt": "N4"
+  },
+  {
+    "id": "hou-ga-ii",
+    "label": "〜ほうがいい",
+    "jlpt": "N5"
+  },
+  {
+    "id": "ta-koto-ga-aru",
+    "label": "〜たことがある",
+    "jlpt": "N5"
+  },
+  {
+    "id": "koto-ga-dekiru",
+    "label": "〜ことができる",
+    "jlpt": "N4"
+  },
+  {
+    "id": "tsumori",
+    "label": "〜つもり",
+    "jlpt": "N5"
+  },
+  {
+    "id": "cond-ba",
+    "label": "〜ば",
+    "jlpt": "N4"
+  },
+  {
+    "id": "cond-tara",
+    "label": "〜たら",
+    "jlpt": "N4"
+  },
+  {
+    "id": "cond-to",
+    "label": "〜と (conditional)",
+    "jlpt": "N4"
+  },
+  {
+    "id": "cond-nara",
+    "label": "〜なら",
+    "jlpt": "N4"
+  },
+  {
+    "id": "sou",
+    "label": "〜そう",
+    "jlpt": "N4"
+  },
+  {
+    "id": "you-da",
+    "label": "〜ようだ",
+    "jlpt": "N4"
+  },
+  {
+    "id": "rashii",
+    "label": "〜らしい",
+    "jlpt": "N4"
+  },
+  {
+    "id": "hazu",
+    "label": "〜はずだ",
+    "jlpt": "N4"
+  },
+  {
+    "id": "kamoshirenai",
+    "label": "〜かもしれない",
+    "jlpt": "N4"
+  },
+  {
+    "id": "to-omou",
+    "label": "〜と思う",
+    "jlpt": "N4"
+  },
+  {
+    "id": "kara-reason",
+    "label": "〜から (reason)",
+    "jlpt": "N5"
+  },
+  {
+    "id": "node",
+    "label": "〜ので",
+    "jlpt": "N5"
+  },
+  {
+    "id": "noni",
+    "label": "〜のに",
+    "jlpt": "N4"
+  },
+  {
+    "id": "nagara",
+    "label": "〜ながら",
+    "jlpt": "N4"
+  },
+  {
+    "id": "tari",
+    "label": "〜たり",
+    "jlpt": "N5"
+  },
+  {
+    "id": "shi",
+    "label": "〜し",
+    "jlpt": "N4"
+  },
+  {
+    "id": "counter",
+    "label": "数 + 助数詞",
+    "jlpt": "N5"
+  },
+  {
+    "id": "shika-nai",
+    "label": "〜しか〜ない",
+    "jlpt": "N4"
+  },
+  {
+    "id": "dake",
+    "label": "〜だけ",
+    "jlpt": "N5"
+  }
+]

@@ -5,12 +5,14 @@ import { state } from '../state.js';
 import {
   passes, isLeech, rollingAcc, colorClass, cardStamp, pitchHtml, escapeHtml, plainText,
   availableTiers, exampleForLevel, JLPT_TIERS, BOX_COLORS, nextDueLabel, filterSummary, overlayTokens,
+  cardGrammar, cardMatchesGrammar,
 } from '../core/index.js';
 import { settings } from '../settings-store.js';
 import { speakWord, speak, TTS_OK } from './tts.js';
 import { cycleMod } from './audio.js';
 import { jishoUrl, provenanceBadge, copyText } from './render-helpers.js';
 import { wireWordTaps } from './word-lookup.js';
+import { grammarLabel, grammarJlpt, orderGrammar } from '../data/grammar.js';
 import { makeMultiSelect, wireFacets, paintSummary, syncVerbRows } from './deck.js';
 
 // Browse grid filter — OWNED here. Same facet shape as cfg; mutated in place, never
@@ -85,14 +87,17 @@ function renderDetailExample() {
   } else { seg.style.display = 'none'; seg.innerHTML = ''; }
   detailLevel = lvl;
   [...seg.querySelectorAll('.exlv')].forEach(b => b.classList.toggle('active', b.dataset.exlv === lvl && !b.disabled));
-  const ex = exampleForLevel(v, lvl), jp = document.getElementById('dExJp'), en = document.getElementById('dExEn');
+  const ex = exampleForLevel(v, lvl), jp = document.getElementById('dExJp'), en = document.getElementById('dExEn'), gram = document.getElementById('dExGram');
   if (ex) {
     // Tappable word overlay when the example carries a GiNZA annotation (ex[2].tokens), else plain ruby.
     const meta = ex[2];
     jp.innerHTML = meta && meta.tokens && meta.furigana ? overlayTokens(meta.furigana, meta.tokens) : ex[0];
     wireWordTaps(jp);
     en.textContent = ex[1];
-  } else { jp.textContent = 'No example yet.'; en.textContent = ''; }
+    // Surface this sentence's grammar points (read-only chips) — discoverability for the Browse filter.
+    const gs = (meta && meta.grammar) || [];
+    if (gram) gram.innerHTML = gs.length ? `Grammar: ${gs.map((g) => `<span class="ex-gram-chip" title="${escapeHtml(grammarJlpt(g))} grammar">${escapeHtml(grammarLabel(g))}</span>`).join('')}` : '';
+  } else { jp.textContent = 'No example yet.'; en.textContent = ''; if (gram) gram.innerHTML = ''; }
   const sp = document.getElementById('dExSpeak'); if (sp) sp.hidden = !ex;   // play the shown tier
   const cp = document.getElementById('dExCopy'); if (cp) cp.hidden = !ex;    // copy the shown tier
 }
@@ -114,7 +119,7 @@ export function openVerbDetail(v) {
     ${v.tip ? `<details><summary>Trap / tip</summary><div class="det-body">${v.tip}</div></details>` : ''}
     <details><summary>Example sentences</summary><div class="det-body">
       <span class="jlptseg exseg" id="dExLevels" role="group" aria-label="Example level"></span>${TTS_OK ? `<button class="speak-btn sm" id="dExSpeak" type="button" aria-label="Play example sentence" title="Play example sentence" hidden><svg class="ic" aria-hidden="true"><use href="#i-volume"/></svg></button>` : ''}<button class="speak-btn sm copy-btn" id="dExCopy" type="button" aria-label="Copy sentence" title="Copy sentence" hidden><svg class="ic" aria-hidden="true"><use href="#i-copy"/></svg></button>
-      <div class="ex-jp jp" id="dExJp" style="margin-top:8px"></div><div class="ex-en" id="dExEn"></div>
+      <div class="ex-jp jp" id="dExJp" style="margin-top:8px"></div><div class="ex-en" id="dExEn"></div><div class="ex-grammar" id="dExGram"></div>
     </div></details>
     ${v.custom ? `<div class="verb-actions"><button class="chip" id="dEdit" type="button"><svg class="ic" aria-hidden="true"><use href="#i-edit"/></svg>Edit</button><button class="chip" id="dDel" type="button" style="border-color:var(--godan);color:var(--godan)"><svg class="ic" aria-hidden="true"><use href="#i-trash"/></svg>Delete</button></div>` : ''}`;
   renderDetailExample();
@@ -131,14 +136,46 @@ export function openVerbDetail(v) {
 }
 function closeDetail() { document.getElementById('detailModal').classList.remove('show'); }
 
+// ---- grammar facet (Phase-4): narrow the grid to cards whose EXAMPLE sentences use a grammar point ----
+let bGrammar = [];          // selected grammar ids (OR within the facet); empty = no constraint
+let lastGrammarKey = null;  // signature of the present-id set, so chips rebuild only when it changes
+
+// Render the grammar chips from the ids actually present across the deck's examples (ordered N5-first),
+// reflecting the selection. Rebuilds the chip DOM only when the present set changes (a search keystroke
+// won't churn it / steal focus); the whole row hides when no example carries grammar. Selections that
+// vanish from the deck are pruned. Roving is handled by the boot-time .chips pass (a11y.js).
+function renderGrammarChips() {
+  const row = document.getElementById('bGrammarRow'), box = document.getElementById('bGrammarChips');
+  if (!row || !box) return;
+  const present = new Set();
+  for (const v of state.DATA) for (const g of cardGrammar(v)) present.add(g);
+  if (bGrammar.length) bGrammar = bGrammar.filter((g) => present.has(g));
+  const ids = orderGrammar(present);
+  row.style.display = ids.length ? '' : 'none';
+  const key = ids.join(',');
+  if (key === lastGrammarKey) {  // same chips → just re-sync active state, keep the DOM + focus
+    box.querySelectorAll('.bg-gram').forEach((b) => {
+      const on = bGrammar.includes(b.dataset.grammar);
+      b.classList.toggle('active', on); b.setAttribute('aria-pressed', String(on));
+    });
+    return;
+  }
+  lastGrammarKey = key;
+  box.innerHTML = ids.map((id) => {
+    const on = bGrammar.includes(id);
+    return `<button class="chip bg-gram${on ? ' active' : ''}" type="button" data-grammar="${escapeHtml(id)}" aria-pressed="${on}" title="${escapeHtml(grammarJlpt(id))} grammar">${escapeHtml(grammarLabel(id))}</button>`;
+  }).join('');
+}
+
 // Re-render the whole grid on any filter/search change. passF = facet+rank filter; passQ =
 // search text. The frequency "topN-M" tags are filtered OUT of the visible tag chips.
 export function renderBrowse() {
   syncVerbRows('#panel-browse', bcfg, repaintBrowse);
+  renderGrammarChips();   // (re)build the grammar facet from the deck's example tags (guarded)
   const q = document.getElementById('search').value.trim().toLowerCase();
   const grid = document.getElementById('grid'); grid.innerHTML = ''; let shown = 0;
   state.DATA.forEach(v => {
-    const passF = passes(v, bcfg);
+    const passF = passes(v, bcfg) && cardMatchesGrammar(v, bGrammar);
     const passQ = !q || v.read.includes(q) || v.jp.includes(q) || v.mean.toLowerCase().includes(q);
     if (!(passF && passQ)) return; shown++;
     const leech = isLeech(v.rank); const acc = rollingAcc(v.rank);
@@ -163,7 +200,9 @@ export function renderBrowse() {
   });
   document.getElementById('num').textContent = shown;     // "Showing N of 100"
   document.getElementById('empty').style.display = shown ? 'none' : 'block';
-  paintSummary('bSummary', filterSummary(bcfg));
+  const parts = [...filterSummary(bcfg)];   // filterSummary returns an array of recap parts
+  if (bGrammar.length) parts.push('grammar: ' + bGrammar.map(grammarLabel).join(', '));
+  paintSummary('bSummary', parts);
 }
 
 // Wire the browse facets, range inputs, search, topic groups, and detail-modal controls.
@@ -181,6 +220,14 @@ export function initBrowseUI() {
   brmin.addEventListener('change', bSyncRange);
   brmax.addEventListener('change', bSyncRange);
   document.getElementById('search').addEventListener('input', renderBrowse);
+  // Grammar facet: toggle a chip (OR within the facet) and re-render. Delegated on the stable
+  // container so it survives the chip rebuilds renderGrammarChips does when the deck's set changes.
+  document.getElementById('bGrammarChips').addEventListener('click', (e) => {
+    const b = e.target.closest('.bg-gram'); if (!b) return;
+    const id = b.dataset.grammar;
+    bGrammar = bGrammar.includes(id) ? bGrammar.filter((g) => g !== id) : bGrammar.concat(id);
+    renderBrowse();
+  });
   setupTopicGroups();
   document.getElementById('detailClose').addEventListener('click', closeDetail);
   document.getElementById('detailModal').addEventListener('click', e => { if (e.target.id === 'detailModal') closeDetail(); });

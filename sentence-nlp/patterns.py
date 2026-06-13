@@ -21,7 +21,9 @@ Ambiguities handled per the design decisions:
     on the UniDic tag (接続助詞 vs 格助詞) — confirmed reliable on the corpus.
   • そう is kept UNIFIED (matches the existing `sou` id); 様態/伝聞 are not split.
 """
-import ginza
+# `ginza` is imported LAZILY inside _inflection (its only user) so this module can be imported for
+# its CATALOG metadata — e.g. the `--dump` catalog export at the bottom — WITHOUT the heavy
+# spaCy/GiNZA venv. Real parses still get ginza on first detector use.
 
 
 # ---- token helpers over the Doc ----
@@ -29,6 +31,7 @@ import ginza
 def _inflection(tok) -> str:
     """GiNZA conjugation string, e.g. '五段-カ行,意志推量形' (empty when unavailable)."""
     try:
+        import ginza
         return ginza.inflection(tok) or ""
     except Exception:
         return ""
@@ -313,3 +316,28 @@ assert len({e["id"] for e in CATALOG}) == len(CATALOG), "duplicate grammar id in
 def detect_grammar(doc) -> list[str]:
     """All grammar ids that match this Doc, in catalog (display) order."""
     return [e["id"] for e in CATALOG if e["fn"](doc)]
+
+
+# ---- catalog export (the study-app's grammar registry) ----
+# The id→label→jlpt metadata (NO detectors) is the single source of truth for the study-app's
+# grammar-filter labels — committed as study-app/src/data/grammar.json so the client list can't drift
+# from the detectors here. Regenerate after any CATALOG change: `python3 patterns.py` (no venv needed).
+
+def dump_catalog(path) -> list[dict]:
+    import json
+    import os
+    data = [{"id": e["id"], "label": e["label"], "jlpt": e["jlpt"]} for e in CATALOG]
+    os.makedirs(os.path.dirname(path), exist_ok=True)
+    with open(path, "w", encoding="utf-8") as f:
+        json.dump(data, f, ensure_ascii=False, indent=2)
+        f.write("\n")
+    return data
+
+
+if __name__ == "__main__":
+    import sys
+    from pathlib import Path
+    default = Path(__file__).resolve().parent.parent / "study-app" / "src" / "data" / "grammar.json"
+    out = Path(sys.argv[1]) if len(sys.argv) > 1 else default
+    written = dump_catalog(str(out))
+    print(f"wrote {len(written)} grammar points → {out}")

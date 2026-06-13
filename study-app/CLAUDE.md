@@ -523,6 +523,19 @@ Component contracts you must preserve:
   imports `openVerbDetail` from browse and browse imports `wireWordTaps` — a runtime-only (event-time)
   cycle, fine like cloud⇄minna. Renders on the flashcard answer side, Browse detail, and Self-Talk
   built-ins (user-authored private phrases aren't parsed offline → no tokens → plain ruby).
+- **The grammar-filter labels come from a GENERATED catalog, not a hand-kept list — don't add a
+  parallel one.** [src/data/grammar.json](src/data/grammar.json) (`[{id,label,jlpt}]`×38) is dumped by
+  `sentence-nlp/patterns.py` (`python3 patterns.py`) — the SAME catalog whose detectors write
+  `sentence_tag(kind='grammar')` — so the client labels can't drift from the server tags. Regenerate it
+  after any catalog change; never hand-edit grammar.json. [src/data/grammar.js](src/data/grammar.js)
+  wraps it (`grammarLabel`/`grammarJlpt`/`orderGrammar`/`GRAMMAR_CATALOG`), and `SELFTALK_GRAMMAR` is now
+  the 6 teaching ids deriving labels from it (one vocabulary). The Browse **Grammar** facet is a
+  CARD-level filter even though grammar is a sentence property: `cardGrammar(v)` unions a card's
+  per-tier `meta.grammar`, `cardMatchesGrammar` ORs the selection, and `renderBrowse` ANDs it with
+  `passes(v, bcfg)`. The chip row (`#bGrammarChips`) renders only ids present in the deck (N5-first),
+  hides when none, and is NOT a `.bf` facet chip (no `data-filter`) so `wireFacets` ignores it — it has
+  its own delegated handler + `bGrammar` state. Note `paintSummary` takes an ARRAY of recap parts (not
+  a string) — `filterSummary(bcfg)` returns that array; push extra parts onto it.
 - **`store.sessions` is capped (1000) and is JUST for the charts.** The durable,
   never-pruned session history is the server's `study_sessions` table — `endSession`
   POSTs there (signed-in). Don't "fix" the cap by unbounding the synced blob (it'd

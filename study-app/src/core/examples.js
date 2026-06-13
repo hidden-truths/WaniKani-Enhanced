@@ -49,3 +49,24 @@ export function sentencesToLevels(sentences) {
   }
   return out;
 }
+
+// The distinct grammar ids across a card's example tiers (meta.grammar on each [jp,en,meta]). Powers
+// the Browse grammar filter — a card "uses 〜ておく" iff one of its example sentences was tagged with
+// it. Returns a Set (empty when no tier carries grammar, e.g. a pre-annotate cache). Pure.
+export function cardGrammar(v) {
+  const set = new Set();
+  const L = v && v.levels;
+  if (L) for (const tier of Object.keys(L)) {
+    const meta = L[tier] && L[tier][2];
+    if (meta && Array.isArray(meta.grammar)) for (const g of meta.grammar) set.add(g);
+  }
+  return set;
+}
+
+// True if the card has an example using ANY selected grammar id (OR within the facet). Empty/missing
+// selection = no constraint (passes). Pure — the Browse grid ANDs this with passes(v, bcfg).
+export function cardMatchesGrammar(v, selectedIds) {
+  if (!selectedIds || !selectedIds.length) return true;
+  const have = cardGrammar(v);
+  return selectedIds.some((id) => have.has(id));
+}

@@ -6,9 +6,9 @@ for **commit 3** (the remaining work). Companion to the overview/brief
 [SENTENCE_STORE_PHASE1.md](SENTENCE_STORE_PHASE1.md) / [SENTENCE_STORE_PHASE2.md](SENTENCE_STORE_PHASE2.md)
 plans. If you are picking this work up cold, read the brief first, then this.
 
-**Branch:** `sentence-store-phase4` · **Commits so far:** `f1e4f60` (commit 1), `75f7972` (commit 2).
-Both behavior-preserving and additive — nothing here changes existing playback/rendering until the
-commit-3 UI lands.
+**Branch:** `sentence-store-phase4` · **Commits:** `f1e4f60` (1), `75f7972` (2), `8a20db6` (3a),
+`24558f9` (3b), 3c. Commits 1/2/3a were behavior-preserving + additive; 3b/3c are the user-visible
+study-app payoff (tap-a-word lookup + grammar filter). **Phase 4 is complete.**
 
 ---
 
@@ -26,8 +26,9 @@ commit-3 UI lands.
 - **Commit 3 (in progress):** surface it in the study-app. **3a (server, ✅ shipped):** annotations
   serve on `GET /v1/sentences?annotate=1` via `getSentences({includeAnnotations})` — see §7a. **3b
   (client, ✅ shipped):** tap-a-word → lemma/POS/reading → card-or-Jisho lookup (pure `overlayTokens`
-  span-wrap over the ruby + a stateless popover) — see §7b. **3c (client, NEXT):** the grammar-search
-  filter. The client slices touch the **frontend**, so they're browser-verified and bigger.
+  span-wrap over the ruby + a stateless popover) — see §7b. **3c (client, ✅ shipped):** a grammar
+  filter in Browse (card facet over the example tags) + a `patterns.py`-dumped label registry — §7c.
+  **All of commit 3 is done; Phase 4 is complete.**
 - **Grammar is ALREADY being served** (it rides `tags.grammar` on the existing `getSentences` read —
   see §5.4). Only the token **annotation** needed the new serving flag (3a). The client just doesn't
   *use* either yet (3b/3c).
@@ -343,6 +344,9 @@ volitional; ような/ように ≠ you-da). All 38 detectors + 10 negatives gre
 cd sentence-nlp
 .venv/bin/python test_patterns.py     # gate: all detectors green (only if patterns changed)
 .venv/bin/python parse.py             # → ../wk-enhanced-api/data/annotations.json
+python3 patterns.py                   # → ../study-app/src/data/grammar.json (id→label catalog; no venv
+                                      #    needed — ginza is lazy). Re-run after ANY CATALOG change so
+                                      #    the study-app's grammar-filter labels can't drift.
 
 # 2) load into the DB (dev: the running server's sqlite; prod: a deploy step)
 cd ../wk-enhanced-api
@@ -411,28 +415,34 @@ open decisions settled with the user first (same collaborative pattern as commit
   graph) — overlay renders 5 aligned spans with ruby + 。 unwrapped, popover shows 日本語/にほんご/Noun →
   Jisho, する/Verb → "Open card →" opens the する card. See the study-app/CLAUDE.md dead-end.
 
-### 7c. Grammar-search filter (study-app)
-- Grammar tags already arrive on each sentence (`tags.grammar`). Build a **grammar facet** — but
-  grammar is a property of *sentences*, not cards, so decide the surface: (a) a sentence-level search
-  ("show every sentence using 〜ておく", e.g. in Browse or a small new view), or (b) a card filter
-  ("cards whose example sentences use X"). The brief framed it as a *sentence* query.
-- **id→label registry:** the labels live in `patterns.py` `CATALOG` ({id,label,jlpt}). The client needs
-  the same mapping for filter chips (grouped by JLPT). Decide: extend the existing `SELFTALK_GRAMMAR`
-  list (study-app `src/data/selftalk.js`) into a shared grammar registry, vs. a committed catalog JSON
-  the Python dumps and the client imports, vs. a server endpoint returning distinct grammar values.
-  Avoid a hand-maintained parallel list that can drift from `patterns.py`.
-- Reuse the existing chip/facet machinery (`makeMultiSelect`, `.chips`, roving tabindex — see the
-  study-app design-system contracts).
+### 7c. Grammar-search filter (study-app) — ✅ SHIPPED
+- **Surface (Decision 3 → card facet in Browse).** A `Grammar` chip row in Browse
+  ([browse.js](study-app/src/features/browse.js) `renderGrammarChips`) narrows the grid to cards whose
+  EXAMPLE sentences use the selected point(s) — `cardGrammar(v)` / `cardMatchesGrammar(v, ids)` (pure,
+  core/examples.js) union a card's per-tier `meta.grammar` and OR the selection; the grid filter ANDs
+  it with `passes(v, bcfg)`. Chips render only the ids present in the deck (ordered N5-first), the row
+  hides when none, and the recap line gains a `grammar: …` part. Detail-modal examples also show their
+  grammar points as read-only chips (`#dExGram`) for discoverability. Reuses `.chip`/roving (the boot
+  `.chips` pass covers the row); a delegated click on the stable container survives chip rebuilds.
+- **id→label registry (committed catalog JSON, the chosen no-drift option).** `patterns.py` gained a
+  `dump_catalog()` + a `__main__` so `python3 patterns.py` writes
+  [study-app/src/data/grammar.json](study-app/src/data/grammar.json) (`[{id,label,jlpt}]`×38) — `ginza`
+  is now lazy-imported so the dump needs NO venv. [data/grammar.js](study-app/src/data/grammar.js)
+  imports it (`grammarLabel`/`grammarJlpt`/`orderGrammar`/`GRAMMAR_CATALOG`), and `SELFTALK_GRAMMAR` is
+  re-expressed as the 6 teaching ids deriving their labels from the catalog — so Self-Talk chips,
+  auto-detected example tags, and the Browse filter are ONE vocabulary that can't drift from the detectors.
+- **Verified:** `bun run test` 95 pass; build clean; browser-checked via preview — the row shows
+  〜ている/〜ておく/volitional, picking 〜ておく narrows the grid to the tagged card + recap reads
+  "Filtering: grammar: 〜ておく", detail chips render. (A real bug surfaced here: `filterSummary` returns
+  an array of parts, not a string — fixed.)
 
-### 7d. Open decisions to settle with the user first
-1. **Serving flag shape** — `includeAnnotations` on `getSentences` + `?annotate=1` (recommended) vs a
-   separate annotation endpoint.
-2. **Tap-render approach** — span-wrap each token over the ruby (recommended) vs click-position→offset.
-3. **Grammar-filter surface** — sentence-level search (matches the brief) vs card-level filter; and the
-   id→label registry source (shared `SELFTALK_GRAMMAR` extension vs dumped catalog JSON).
-4. **Cache busting** — the example/selftalk read-through caches (`jpverbs_examples_cache`,
-   `jpverbs_selftalk_cache`) must learn the new annotation/grammar shape; confirm the cache version
-   bump / migration.
+### 7d. Open decisions — ALL SETTLED (with the user, 2026-06-13)
+1. **Serving flag shape** → `includeAnnotations` on `getSentences` + `?annotate=1` (3a).
+2. **Tap-render approach** → span-wrap each token over the ruby (3b).
+3. **Grammar-filter surface** → card facet in Browse; **registry** → committed catalog JSON dumped by
+   `patterns.py` (3c).
+4. **Cache busting** → tolerant readers, NO key bump — the new data is optional (`meta`/`tokens`), old
+   `[jp,en]` / cached phrases stay valid and the next online boot repopulates the enriched shape (3b).
 
 ---
 
@@ -459,10 +469,13 @@ open decisions settled with the user first (same collaborative pattern as commit
 | [SENTENCE_STORE_NLP.md](SENTENCE_STORE_NLP.md) | Overview/brief (read first) |
 | **SENTENCE_STORE_PHASE4.md** | **this file — Phase 4 as-built + commit-3 plan** |
 | [sentence-nlp/parse.py](sentence-nlp/parse.py) | offline parser (`--verify`, `--limit`) |
-| [sentence-nlp/patterns.py](sentence-nlp/patterns.py) | grammar catalog + detectors (38 ids) |
+| [sentence-nlp/patterns.py](sentence-nlp/patterns.py) | grammar catalog + detectors (38 ids); `python3 patterns.py` dumps the label registry |
 | [sentence-nlp/test_patterns.py](sentence-nlp/test_patterns.py) | detector validation battery |
 | [sentence-nlp/README.md](sentence-nlp/README.md) | parser project docs |
 | [wk-enhanced-api/data/annotations.json](wk-enhanced-api/data/annotations.json) | committed artifact (544) |
+| [study-app/src/data/grammar.json](study-app/src/data/grammar.json) | generated id→label→jlpt catalog (38) — the client grammar registry |
+| [study-app/src/core/annotate.js](study-app/src/core/annotate.js) | `overlayTokens` — tappable spans over ruby (3b) |
+| [study-app/src/features/word-lookup.js](study-app/src/features/word-lookup.js) | tap popover + lemma→card/Jisho (3b) |
 | [wk-enhanced-api/scripts/seed-annotations.ts](wk-enhanced-api/scripts/seed-annotations.ts) | deploy-time loader |
 | [wk-enhanced-api/src/db/client.ts](wk-enhanced-api/src/db/client.ts) | `VIEWER_VISIBLE`, `upsertAnnotation`, `getAnnotation`, `setGrammarTags` |
 | [wk-enhanced-api/src/db/client.test.ts](wk-enhanced-api/src/db/client.test.ts) | annotation + grammar tests/pins |

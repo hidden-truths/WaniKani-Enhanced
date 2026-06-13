@@ -15,6 +15,7 @@ import {
   tokenFacet, deckLabel, ttsText, rubyHtml, plainText, rubyToSegments, segmentsToRuby, segmentsToReading,
   overlayTokens,
   minnaBuiltinRank, applyMinnaOverlays, splitMora,
+  cardGrammar, cardMatchesGrammar,
   pitchHtml, minnaSig, cardStamp, colorClass, CATS, exampleForLevel, availableTiers, sentencesToLevels,
   JLPT_TIERS, BOX_DAYS,
   clampKeep, convItemKey, formatDuration, KEEP_DEFAULT,
@@ -27,6 +28,7 @@ import {
 } from '../src/core/index.js';
 import { SELFTALK, SELFTALK_SCENES, SELFTALK_GRAMMAR } from '../src/data/selftalk.js';
 import { EXAMPLES } from '../src/data/examples.js';
+import { GRAMMAR_CATALOG, grammarLabel, grammarJlpt, orderGrammar } from '../src/data/grammar.js';
 
 beforeEach(() => {
   // Rebuild the live deck like the app's rebuildData() does (built-in path: no custom
@@ -95,6 +97,33 @@ test('sentencesToLevels carries annotation tokens + grammar into meta when prese
     { furigana: fur, translations: { en: 'read a book' }, tags: { grammar: ['te-iru'] }, annotation: { tokens, bunsetsu: [], parser: 'p', parsedAt: 1 }, link: { owner_type: 'card', owner_id: '1', tier: 'N5' } },
   ]);
   expect(levels['1'].N5[2]).toEqual({ furigana: fur, tokens, grammar: ['te-iru'] });
+});
+
+test('cardGrammar unions a card\'s example-tier grammar; cardMatchesGrammar ORs the selection', () => {
+  const v = { levels: {
+    N5: ['x', 'x', { grammar: ['te-iru', 'volitional'] }],
+    N4: ['y', 'y', { grammar: ['te-oku'] }],
+    N3: ['z', 'z'],   // no meta → contributes nothing
+  } };
+  expect([...cardGrammar(v)].sort()).toEqual(['te-iru', 'te-oku', 'volitional']);
+  expect(cardGrammar({}).size).toBe(0);                          // no levels → empty
+  expect(cardMatchesGrammar(v, [])).toBe(true);                  // empty selection = no constraint
+  expect(cardMatchesGrammar(v, ['te-oku'])).toBe(true);
+  expect(cardMatchesGrammar(v, ['nakya'])).toBe(false);
+  expect(cardMatchesGrammar(v, ['nakya', 'te-iru'])).toBe(true); // OR within the facet
+});
+
+test('grammar registry: catalog is the source of truth; SELFTALK_GRAMMAR labels derive from it', () => {
+  expect(GRAMMAR_CATALOG.length).toBe(38);
+  expect(grammarLabel('te-oku')).toBe('〜ておく');
+  expect(grammarJlpt('te-oku')).toBe('N4');
+  expect(grammarLabel('not-a-real-id')).toBe('not-a-real-id'); // unknown id falls back to itself
+  // orderGrammar groups N5 before N4 (then catalog order within a level).
+  expect(orderGrammar(['te-oku', 'te-iru'])).toEqual(['te-iru', 'te-oku']); // te-iru N5, te-oku N4
+  // SELFTALK_GRAMMAR (the 6 teaching ids) now pulls its labels from the shared catalog — no drift.
+  const byId = Object.fromEntries(SELFTALK_GRAMMAR.map((g: any) => [g.id, g.label]));
+  expect(byId['te-oku']).toBe(grammarLabel('te-oku'));
+  expect(byId['sou']).toBe(grammarLabel('sou'));
 });
 
 test('sentencesToLevels: a reused sentence (multiple links) lands under each rank/tier', () => {

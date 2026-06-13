@@ -24,6 +24,8 @@
 // the seed reads — features/selftalk.js no longer reads it at runtime. Edit a phrase here, then
 // re-run the seed to push it to the store.
 
+import { grammarLabel } from './grammar.js';
+
 // Scenes, in display order (the running arc of a day). `jp` is a short label kicker.
 export const SELFTALK_SCENES = [
   { id: 'morning', label: 'Morning routine', jp: '朝' },
@@ -35,15 +37,12 @@ export const SELFTALK_SCENES = [
   { id: 'evening', label: 'Evening', jp: '夜' },
 ];
 
-// Target grammar tokens, in teaching order, with a label for the filter chips.
-export const SELFTALK_GRAMMAR = [
-  { id: 'te-iru', label: '〜ている' },
-  { id: 'nakya', label: '〜なきゃ / 〜ないと' },
-  { id: 'tai', label: '〜たい' },
-  { id: 'volitional', label: 'volitional 〜よう' },
-  { id: 'te-oku', label: '〜ておく' },
-  { id: 'sou', label: '〜そう' },
-];
+// Target grammar points for Self-Talk, in teaching order. Labels come from the shared grammar
+// registry (data/grammar.js ← patterns.py) so the Self-Talk chips, the auto-detected example tags,
+// and the Browse grammar filter are ONE vocabulary and can't drift. Same {id,label} shape the
+// chips/filters expect, so the feature code is unchanged.
+export const SELFTALK_GRAMMAR = ['te-iru', 'nakya', 'tai', 'volitional', 'te-oku', 'sou']
+  .map((id) => ({ id, label: grammarLabel(id) }));
 
 export const SELFTALK = [
   // ---- morning ----
