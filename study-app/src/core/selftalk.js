@@ -7,11 +7,13 @@
 
 import { plainText, rubyToSegments, segmentsToRuby, segmentsToReading } from './text.js';
 
-// Convert a UI phrase ({id, jp, read?, mean, scene, grammar}) into the sentence-store create/update
+// Convert a UI phrase ({id, jp, read?, mean, topic, grammar}) into the sentence-store create/update
 // body ({id, text, furigana, translations, tags, link}). text + furigana come from `jp`; when `jp`
 // carries no ruby (the derived reading would just echo the kanji) but a `read` is supplied, the whole
-// line is encoded as ONE ruby segment so the store can still derive the kana back. Pure — shared by
-// the authoring write and the one-time legacy-blob → store migration so they build identical bodies.
+// line is encoded as ONE ruby segment so the store can still derive the kana back. The topic is
+// written as a sentence_tag(kind='topic'); a legacy-blob phrase still carrying `.scene` is read as a
+// fallback so the one-time migration tags it correctly. Pure — shared by the authoring write and
+// that legacy-blob → store migration so they build identical bodies.
 export function phraseToSentence(phrase) {
   const jp = (phrase && phrase.jp) || '';
   const text = plainText(jp);
@@ -25,7 +27,7 @@ export function phraseToSentence(phrase) {
     text,
     furigana,
     translations: { en: (phrase && phrase.mean) || '' },
-    tags: { scene: (phrase && phrase.scene) || '', grammar: Array.isArray(phrase && phrase.grammar) ? phrase.grammar : [] },
+    tags: { topic: (phrase && (phrase.topic ?? phrase.scene)) || '', grammar: Array.isArray(phrase && phrase.grammar) ? phrase.grammar : [] },
     link: { owner_type: 'selftalk' },
   };
 }
@@ -35,7 +37,9 @@ export function phraseToSentence(phrase) {
 // kana `read`. `custom` marks a user-authored (private) row → the "yours" badge + edit control.
 // `furigana` (the raw segments) + `tokens` (GiNZA, only when fetched with ?annotate=1; null on
 // user-authored rows the offline batch never parsed) ride along for the Phase-4 tap-to-lookup
-// overlay; the render falls back to plain ruby when tokens are absent. Pure (DOM-free).
+// overlay; the render falls back to plain ruby when tokens are absent. `topic` reads the
+// sentence_tag(kind='topic'), falling back to the legacy `scene` tag so rows authored before the
+// grid (and not yet re-seeded/re-saved) still land under their topic. Pure (DOM-free).
 export function sentenceToPhrase(s) {
   const fur = (s && s.furigana) || [];
   const tags = (s && s.tags) || {};
@@ -45,7 +49,7 @@ export function sentenceToPhrase(s) {
     jp: segmentsToRuby(fur),
     read: segmentsToReading(fur),
     mean: (s && s.translations && s.translations.en) || '',
-    scene: tags.scene || '',
+    topic: (tags.topic ?? tags.scene) || '',
     grammar,
     custom: !!(s && s.custom),
     furigana: Array.isArray(fur) ? fur : [],
@@ -63,15 +67,15 @@ export function hashStr(s) {
   return h >>> 0;
 }
 
-// Group phrases by scene in the given scene order (skipping scenes with no phrases). Returns
-// [{ scene, items }]. With no/empty sceneOrder, falls back to first-seen order. Pure (read-only).
-export function groupByScene(phrases, sceneOrder) {
+// Group phrases by topic in the given topic order (skipping topics with no phrases). Returns
+// [{ topic, items }]. With no/empty topicOrder, falls back to first-seen order. Pure (read-only).
+export function groupByTopic(phrases, topicOrder) {
   const list = phrases || [];
-  const order = Array.isArray(sceneOrder) && sceneOrder.length
-    ? sceneOrder
-    : [...new Set(list.map((p) => p.scene))];
+  const order = Array.isArray(topicOrder) && topicOrder.length
+    ? topicOrder
+    : [...new Set(list.map((p) => p.topic))];
   return order
-    .map((scene) => ({ scene, items: list.filter((p) => p.scene === scene) }))
+    .map((topic) => ({ topic, items: list.filter((p) => p.topic === topic) }))
     .filter((g) => g.items.length);
 }
 

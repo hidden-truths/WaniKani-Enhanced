@@ -568,7 +568,7 @@ export const SentenceSchema = z
         translations: z.record(z.string(), z.string()).openapi({ description: 'Lang → translation, e.g. { en: "…" }.' }),
         tags: z
             .record(z.string(), z.union([z.string(), z.array(z.string())]))
-            .openapi({ description: 'e.g. { scene: "morning", grammar: ["te-iru"] }.' }),
+            .openapi({ description: 'e.g. { topic: "morning", grammar: ["te-iru"] }.' }),
         link: SentenceLinkSchema,
         custom: z.boolean().openapi({ description: 'true = user-authored (private); false = curator/public.' }),
         annotation: SentenceAnnotationSchema.optional().openapi({

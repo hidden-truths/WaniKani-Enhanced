@@ -1,4 +1,4 @@
-// 独り言 SELF-TALK tab — output/speaking practice. Narrate your day out loud: scene-grouped
+// 独り言 SELF-TALK tab — output/speaking practice. Narrate your day out loud: topic-grouped
 // everyday phrases you read aloud, play through the unified audio player (per-context voice
 // priority), record yourself, and A/B against a chosen REFERENCE voice (Siri/Google) via the
 // shared record-and-compare engine. Unlike みんなの日本語 this is OFFLINE-FIRST + anonymous: the
@@ -12,8 +12,8 @@
 // features/record-compare.js (Self-Talk feeds it a reserved numeric SCOPE + synth-only references).
 import { state } from '../state.js';
 import { localDay } from '../config.js';
-import { escapeHtml, rubyHtml, plainText, overlayTokens, groupByScene, grammarTokens, todaysSet, applyPractice, practiceStreak, donePhraseIds, sentenceToPhrase, phraseToSentence } from '../core/index.js';
-import { SELFTALK_SCENES, SELFTALK_GRAMMAR } from '../data/selftalk.js';
+import { escapeHtml, rubyHtml, plainText, overlayTokens, groupByTopic, grammarTokens, todaysSet, applyPractice, practiceStreak, donePhraseIds, sentenceToPhrase, phraseToSentence } from '../core/index.js';
+import { SELFTALK_TOPICS, SELFTALK_GRAMMAR } from '../data/selftalk.js';
 import { playItem, cycleMod } from './audio.js';
 import { wireWordTaps } from './word-lookup.js';
 import { loadSelftalk, saveSelftalk } from '../persistence/selftalk.js';
@@ -82,8 +82,8 @@ const elBody = () => document.getElementById('stBody');
 const $ = (id) => document.getElementById(id);
 
 const grammarLabel = (id) => (SELFTALK_GRAMMAR.find((g) => g.id === id) || {}).label || id;
-const sceneLabel = (id) => (SELFTALK_SCENES.find((s) => s.id === id) || {}).label || id;
-const SCENE_IDS = SELFTALK_SCENES.map((s) => s.id);
+const topicLabel = (id) => (SELFTALK_TOPICS.find((t) => t.id === id) || {}).label || id;
+const TOPIC_IDS = SELFTALK_TOPICS.map((t) => t.id);
 
 // The phrase set to render: the store fetch/cache (built-ins + the user's own private rows).
 // Until the legacy migration runs (on sign-in), any phrases still in the local `selftalk` blob
@@ -195,12 +195,12 @@ function renderBody() {
   const today = localDay();
   const doneSet = donePhraseIds(state.selftalkStore.practice, today);
   const speaking = isSpeakingMode();
-  const groups = groupByScene(vis, SCENE_IDS);
+  const groups = groupByTopic(vis, TOPIC_IDS);
   const section = (title, items, open) => items.length
     ? `<details class="st-section"${open ? ' open' : ''}><summary>${escapeHtml(title)} <span class="st-count">${items.length}</span></summary><div class="st-list">${items.map((p) => phraseCardHtml(p, speaking, doneSet.has(p.id))).join('')}</div></details>`
     : '';
-  // Open the first scene (or everything when narrowed to today's focus); collapse the rest.
-  body.innerHTML = groups.map((g, i) => section(sceneLabel(g.scene), g.items, i === 0 || stTodayOnly)).join('');
+  // Open the first topic (or everything when narrowed to today's focus); collapse the rest.
+  body.innerHTML = groups.map((g, i) => section(topicLabel(g.topic), g.items, i === 0 || stTodayOnly)).join('');
   wireRecordCompare(body);             // delegated record/play/delete/compare handlers (attach-once)
   if (speaking) paintCompareWaveforms(body);   // decode + draw take/reference waveforms
 }
@@ -255,14 +255,14 @@ let editingId = null;
 function openPhraseModal(id) {
   editingId = id || null;
   const existing = id ? allPhrases().find((p) => p.id === id) : null;
-  $('stPhScene').innerHTML = SELFTALK_SCENES.map((s) => `<option value="${escapeHtml(s.id)}">${escapeHtml(s.label)}</option>`).join('');
+  $('stPhScene').innerHTML = SELFTALK_TOPICS.map((t) => `<option value="${escapeHtml(t.id)}">${escapeHtml(t.label)}</option>`).join('');
   const sel = new Set(existing ? (existing.grammar || []) : []);
   $('stPhGram').innerHTML = SELFTALK_GRAMMAR.map((g) =>
     `<label class="st-gram-check"><input type="checkbox" value="${escapeHtml(g.id)}"${sel.has(g.id) ? ' checked' : ''}> ${escapeHtml(g.label)}</label>`).join('');
   $('stPhJp').value = existing ? existing.jp : '';
   $('stPhRead').value = existing ? (existing.read || '') : '';
   $('stPhMean').value = existing ? existing.mean : '';
-  if (existing) $('stPhScene').value = existing.scene;
+  if (existing) $('stPhScene').value = existing.topic;
   $('stPhTitle').textContent = existing ? 'Edit phrase' : 'Add a phrase';
   $('stPhSubmit').textContent = existing ? 'Save changes' : 'Save phrase';
   $('stPhDelete').hidden = !existing;
@@ -289,7 +289,7 @@ async function savePhrase(e) {
   const body = phraseToSentence({
     id: editing || newPhraseId(),
     jp, read: $('stPhRead').value.trim(), mean,
-    scene: $('stPhScene').value || SELFTALK_SCENES[0].id,
+    topic: $('stPhScene').value || SELFTALK_TOPICS[0].id,
     grammar: [...document.querySelectorAll('#stPhGram input:checked')].map((c) => c.value),
   });
   upsertLocalPhrase(sentenceToPhrase({ ...body, custom: true }));   // optimistic

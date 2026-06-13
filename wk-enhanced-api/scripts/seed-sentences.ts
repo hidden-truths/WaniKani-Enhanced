@@ -44,7 +44,7 @@ for (const p of SELFTALK) {
         furigana: furiganaFor(p.jp, p.id),
         source: 'selftalk',
         translations: { en: p.mean },
-        tags: { scene: p.scene, grammar: p.grammar || [] },
+        tags: { topic: p.topic, grammar: p.grammar || [] },
         link: { owner_type: 'selftalk' },
     });
     phrases++;

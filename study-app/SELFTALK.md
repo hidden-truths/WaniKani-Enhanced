@@ -37,12 +37,14 @@ Layer docs: module map + dead-ends in [CLAUDE.md](CLAUDE.md); card/furigana mode
 
 ## Data model
 
-A **phrase** is `{ id, jp, read, mean, scene, grammar:[…], custom? }`:
+A **phrase** is `{ id, jp, read, mean, topic, grammar:[…], custom? }`:
 - `jp` carries `<ruby>漢字<rt>かな</rt></ruby>` furigana (CARDS.md format; the global `data-furigana`
   flip toggles `<rt>`). `read` is the full kana reading (furigana-off display). **No `accent`** —
   pitch is a per-WORD property and a single drop number is meaningless over a sentence, so phrases
   rely on the furigana + the synth audio's prosody.
-- `scene` ∈ `SELFTALK_SCENES` (morning/commute/meals/chores/work/feelings/evening);
+- `topic` is one of `SELFTALK_TAXONOMY`'s topic ids; its CATEGORY is **derived** from that registry
+  (category → topics — e.g. Daily life → morning/commute/meals/chores/work/feelings/evening). Stored
+  as `sentence_tag(kind='topic')`, with a legacy `scene`-tag read-fallback for pre-grid rows.
   `grammar` ⊂ `SELFTALK_GRAMMAR` (`te-iru`/`nakya`/`tai`/`volitional`/`te-oku`/`sou`).
 - Phrases now live in the **sentence store**: built-ins are public rows (seeded from
   `data/selftalk.js`), **user-authored** phrases (`custom:true`) are private rows
@@ -62,8 +64,8 @@ migrated into the store once on sign-in, then dropped from the blob. Server enum
 
 ## Structure (three organizers)
 
-- **Scene groups** — collapsible `<details>` per time-of-day (the arc of a day). First scene open,
-  rest collapsed.
+- **Topic groups** — collapsible `<details>` per topic (Daily life's are the time-of-day arc). First
+  topic open, rest collapsed. *(Being reworked into a category→topic grid + drill-in — P1b.)*
 - **Today's focus** — a `<button data-sttoday>` toggle that narrows the visible phrases to a
   deterministic daily rotation (`todaysSet`, seeded by `localDay()` via an FNV-1a hash — stable
   within a day, rotates across days). It's a **filter, not a duplicated section**, so each phrase

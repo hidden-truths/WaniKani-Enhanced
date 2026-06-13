@@ -23,10 +23,10 @@ import {
   waveformPeaks, clampSpeed, COMPARE_SPEEDS, rmsLevel, normGains,
   resolveVariant, parseAudioToken, contextPrefs, isSynthVoice, voiceProvider,
   DEFAULT_AUDIO_PREFS, AUDIO_VOICES, variantOrder, variantIndex, isKnownAudioToken, pruneAudioPrefs,
-  hashStr, groupByScene, grammarTokens, todaysSet, emptyPractice, dayDiff, applyPractice,
+  hashStr, groupByTopic, grammarTokens, todaysSet, emptyPractice, dayDiff, applyPractice,
   practiceStreak, donePhraseIds, sentenceToPhrase, phraseToSentence,
 } from '../src/core/index.js';
-import { SELFTALK, SELFTALK_SCENES, SELFTALK_GRAMMAR } from '../src/data/selftalk.js';
+import { SELFTALK, SELFTALK_TAXONOMY, SELFTALK_TOPICS, SELFTALK_TOPIC_IDS, SELFTALK_GRAMMAR } from '../src/data/selftalk.js';
 import { EXAMPLES } from '../src/data/examples.js';
 import { GRAMMAR_CATALOG, grammarLabel, grammarJlpt, orderGrammar } from '../src/data/grammar.js';
 
@@ -827,15 +827,15 @@ test('pruneAudioPrefs drops unknown tokens and empties, keeps known order', () =
 
 // ----- Self-Talk (独り言) -----
 
-test('SELFTALK dataset is well-formed (ids unique, scenes/grammar known, ruby balanced)', () => {
+test('SELFTALK dataset is well-formed (ids unique, topics/grammar known, ruby balanced)', () => {
   expect(SELFTALK.length).toBeGreaterThan(20);
-  const sceneIds = new Set(SELFTALK_SCENES.map((s: any) => s.id));
+  const topicIds = new Set(SELFTALK_TOPICS.map((t: any) => t.id));
   const grammarIds = new Set(SELFTALK_GRAMMAR.map((g: any) => g.id));
   const ids = new Set<string>();
   for (const p of SELFTALK as any[]) {
-    expect(p.id && p.jp && p.read && p.mean && p.scene).toBeTruthy();
+    expect(p.id && p.jp && p.read && p.mean && p.topic).toBeTruthy();
     expect(ids.has(p.id)).toBe(false); ids.add(p.id);
-    expect(sceneIds.has(p.scene)).toBe(true);
+    expect(topicIds.has(p.topic)).toBe(true);
     expect(Array.isArray(p.grammar) && p.grammar.length).toBeTruthy();
     for (const g of p.grammar) expect(grammarIds.has(g)).toBe(true);
     // balanced ruby: one <rt>…</rt> per <ruby>…</ruby>
@@ -844,6 +844,16 @@ test('SELFTALK dataset is well-formed (ids unique, scenes/grammar known, ruby ba
     expect(n(p.jp, /<rt>/g)).toBe(n(p.jp, /<\/rt>/g));
     expect(n(p.jp, /<ruby>/g)).toBe(n(p.jp, /<rt>/g));
   }
+});
+
+test('SELFTALK_TAXONOMY derives flat topics + ids; every phrase topic is registered', () => {
+  expect(SELFTALK_TAXONOMY.length).toBeGreaterThan(0);
+  const flat = SELFTALK_TAXONOMY.flatMap((c: any) => c.topics.map((t: any) => t.id));
+  expect(SELFTALK_TOPIC_IDS).toEqual(flat);                                    // flat list = taxonomy order
+  expect(new Set(SELFTALK_TOPIC_IDS).size).toBe(SELFTALK_TOPIC_IDS.length);    // ids unique across categories
+  expect(SELFTALK_TOPICS.every((t: any) => t.category)).toBe(true);           // each topic carries its category
+  const known = new Set(SELFTALK_TOPIC_IDS);                                   // no orphan built-in content
+  for (const p of SELFTALK as any[]) expect(known.has(p.topic)).toBe(true);
 });
 
 // ---------- structured furigana (sentence store) ----------
@@ -886,17 +896,17 @@ test('hashStr is deterministic + varies by input', () => {
   expect(typeof hashStr('x')).toBe('number');
 });
 
-test('groupByScene orders by sceneOrder + skips empty scenes', () => {
+test('groupByTopic orders by topicOrder + skips empty topics', () => {
   const ph = [
-    { id: '1', scene: 'meals', grammar: ['tai'] },
-    { id: '2', scene: 'morning', grammar: ['nakya'] },
-    { id: '3', scene: 'morning', grammar: ['te-iru'] },
+    { id: '1', topic: 'meals', grammar: ['tai'] },
+    { id: '2', topic: 'morning', grammar: ['nakya'] },
+    { id: '3', topic: 'morning', grammar: ['te-iru'] },
   ];
-  const g = groupByScene(ph, ['morning', 'commute', 'meals']);
-  expect(g.map((x: any) => x.scene)).toEqual(['morning', 'meals']);   // 'commute' empty → skipped
+  const g = groupByTopic(ph, ['morning', 'commute', 'meals']);
+  expect(g.map((x: any) => x.topic)).toEqual(['morning', 'meals']);   // 'commute' empty → skipped
   expect(g[0].items.map((x: any) => x.id)).toEqual(['2', '3']);
   // no order → first-seen
-  expect(groupByScene(ph).map((x: any) => x.scene)).toEqual(['meals', 'morning']);
+  expect(groupByTopic(ph).map((x: any) => x.topic)).toEqual(['meals', 'morning']);
 });
 
 test('grammarTokens returns present tokens in grammarOrder, extras after', () => {
@@ -941,7 +951,7 @@ test('sentenceToPhrase maps a store sentence to the UI phrase shape', () => {
     text: '歯を磨いている。',
     furigana: [{ t: '歯', r: 'は' }, { t: 'を' }, { t: '磨', r: 'みが' }, { t: 'いている。' }],
     translations: { en: "I'm brushing my teeth." },
-    tags: { scene: 'morning', grammar: ['te-iru'] },
+    tags: { topic: 'morning', grammar: ['te-iru'] },
     link: { owner_type: 'selftalk' },
     custom: false,
   };
@@ -950,12 +960,22 @@ test('sentenceToPhrase maps a store sentence to the UI phrase shape', () => {
     jp: '<ruby>歯<rt>は</rt></ruby>を<ruby>磨<rt>みが</rt></ruby>いている。',
     read: 'はをみがいている。',
     mean: "I'm brushing my teeth.",
-    scene: 'morning',
+    topic: 'morning',
     grammar: ['te-iru'],
     custom: false,
     furigana: s.furigana,   // segments ride along for the tap overlay
     tokens: null,           // no annotation on this row
   });
+});
+
+test('sentenceToPhrase falls back to a legacy `scene` tag when no `topic` tag is present', () => {
+  // Migration safety: rows seeded/authored before the grid carry kind='scene'; they must still
+  // land under their topic until a re-seed (built-ins) or the next edit (private rows) rewrites them.
+  const p = sentenceToPhrase({
+    id: 'st-evening-1', furigana: [{ t: 'ね。' }], translations: { en: 'sleep' },
+    tags: { scene: 'evening', grammar: [] }, custom: false,
+  });
+  expect(p.topic).toBe('evening');
 });
 
 test('sentenceToPhrase carries annotation tokens when present (tap overlay)', () => {
@@ -969,32 +989,32 @@ test('sentenceToPhrase carries annotation tokens when present (tap overlay)', ()
 
 test('sentenceToPhrase tolerates missing translation/tags/furigana', () => {
   expect(sentenceToPhrase({ id: 'usr-x', furigana: null, translations: {}, tags: {}, custom: true })).toEqual({
-    id: 'usr-x', jp: '', read: '', mean: '', scene: '', grammar: [], custom: true, furigana: [], tokens: null,
+    id: 'usr-x', jp: '', read: '', mean: '', topic: '', grammar: [], custom: true, furigana: [], tokens: null,
   });
 });
 
 test('phraseToSentence builds a store body from a ruby UI phrase', () => {
-  const p = { id: 'usr-1', jp: '<ruby>歯<rt>は</rt></ruby>を<ruby>磨<rt>みが</rt></ruby>く。', read: 'はをみがく。', mean: 'brush', scene: 'morning', grammar: ['te-iru'] };
+  const p = { id: 'usr-1', jp: '<ruby>歯<rt>は</rt></ruby>を<ruby>磨<rt>みが</rt></ruby>く。', read: 'はをみがく。', mean: 'brush', topic: 'morning', grammar: ['te-iru'] };
   expect(phraseToSentence(p)).toEqual({
     id: 'usr-1', text: '歯を磨く。',
     furigana: [{ t: '歯', r: 'は' }, { t: 'を' }, { t: '磨', r: 'みが' }, { t: 'く。' }],
-    translations: { en: 'brush' }, tags: { scene: 'morning', grammar: ['te-iru'] }, link: { owner_type: 'selftalk' },
+    translations: { en: 'brush' }, tags: { topic: 'morning', grammar: ['te-iru'] }, link: { owner_type: 'selftalk' },
   });
 });
 
 test('phraseToSentence encodes a no-ruby line + read as one ruby segment so the kana survives', () => {
-  const body = phraseToSentence({ id: 'usr-2', jp: '歯を磨く。', read: 'はをみがく。', mean: 'brush', scene: 'morning', grammar: [] });
+  const body = phraseToSentence({ id: 'usr-2', jp: '歯を磨く。', read: 'はをみがく。', mean: 'brush', topic: 'morning', grammar: [] });
   expect(body.text).toBe('歯を磨く。');
   expect(body.furigana).toEqual([{ t: '歯を磨く。', r: 'はをみがく。' }]);
   expect(sentenceToPhrase({ ...body, custom: true }).read).toBe('はをみがく。'); // derived reading survives
 });
 
 test('phraseToSentence ↔ sentenceToPhrase round-trips a fully-ruby phrase', () => {
-  const p = { id: 'usr-3', jp: '<ruby>歯<rt>は</rt></ruby>を<ruby>磨<rt>みが</rt></ruby>く。', read: 'はをみがく。', mean: 'brush', scene: 'morning', grammar: ['te-iru'] };
+  const p = { id: 'usr-3', jp: '<ruby>歯<rt>は</rt></ruby>を<ruby>磨<rt>みが</rt></ruby>く。', read: 'はをみがく。', mean: 'brush', topic: 'morning', grammar: ['te-iru'] };
   const body = phraseToSentence(p);
   // furigana segments ride along for the tap overlay; tokens are null (no annotation on this body).
   expect(sentenceToPhrase({ ...body, custom: true })).toEqual({
-    id: 'usr-3', jp: '<ruby>歯<rt>は</rt></ruby>を<ruby>磨<rt>みが</rt></ruby>く。', read: 'はをみがく。', mean: 'brush', scene: 'morning', grammar: ['te-iru'], custom: true,
+    id: 'usr-3', jp: '<ruby>歯<rt>は</rt></ruby>を<ruby>磨<rt>みが</rt></ruby>く。', read: 'はをみがく。', mean: 'brush', topic: 'morning', grammar: ['te-iru'], custom: true,
     furigana: body.furigana, tokens: null,
   });
 });
