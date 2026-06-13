@@ -202,13 +202,18 @@ CREATE TABLE IF NOT EXISTS sentence_tag (
     PRIMARY KEY (sentence_id, kind, value)
 );
 
--- Designed now, populated in the later NLP phase. Token offsets index into sentence.text.
+-- NLP enrichment (Phase 4). Populated by an OFFLINE GiNZA batch (../../sentence-nlp/) +
+-- scripts/seed-annotations.ts — the server only ever READS this (no Python on the prod droplet).
+-- One row per sentence. token start/end are UTF-16 CODE-UNIT offsets into sentence.text (NOT
+-- codepoint — the client slices `text` in JS, which is UTF-16-indexed; the two diverge at non-BMP
+-- kanji). db.upsertAnnotation re-asserts text.slice(start,end)===surface on write, so a bad offset
+-- can't land. Reads go through db.getAnnotation (the same privacy gate as getSentences).
 CREATE TABLE IF NOT EXISTS sentence_annotation (
     sentence_id INTEGER PRIMARY KEY REFERENCES sentence(id) ON DELETE CASCADE,
-    tokens      TEXT,   -- JSON [{i,start,end,surface,lemma,pos,tag,reading,dep,head}]
-    bunsetsu    TEXT,   -- JSON [{start,end}]
-    parser      TEXT,
-    parsed_at   INTEGER
+    tokens      TEXT,   -- JSON [{i,start,end,surface,lemma,pos,tag,reading,dep,head}] (UTF-16 offsets)
+    bunsetsu    TEXT,   -- JSON [{start,end}] (UTF-16 offsets)
+    parser      TEXT,   -- provenance, e.g. 'ja_ginza_electra/5.2.0 ginza/5.2.0 splitC'
+    parsed_at   INTEGER -- epoch ms
 );
 
 -- Anon reads and any export read ONLY this view — cannot see private/gated rows.

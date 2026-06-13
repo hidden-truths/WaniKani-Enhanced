@@ -608,6 +608,12 @@ const ARRAY_TAG_KINDS = new Set(['grammar']);
 const SENTENCE_ROW_COLS =
     'id, ext_id, hash, text, furigana, lang, source, public, visibility, created_by, created_at';
 
+// THE privacy gate, as one SQL fragment so every read shares the exact same predicate and they
+// can't drift. Aliases the sentence table as `s` and binds ONE param: the viewer id (null →
+// public only, since `s.created_by = NULL` is never true → fail-closed). getSentences AND
+// getAnnotation both AND this in; the pinned breach tests cover both. Keep it unconditional.
+const VIEWER_VISIBLE = '(s.public = 1 OR s.created_by = ?)';
+
 // Throw unless the furigana segments reconstruct `text` exactly (concat(seg.t) === text).
 // This is the structural-furigana invariant — a mismatch means the stored ruby would drift
 // from the audio-keyed plain text. NULL furigana is allowed (no ruby).
@@ -749,7 +755,7 @@ export function getSentences(opts: { ownerType: string; ownerId?: string | null;
                     l.role AS l_role, l.ordinal AS l_ordinal,
                     l.clip_start_ms AS l_clip_start_ms, l.clip_end_ms AS l_clip_end_ms
              FROM sentence_link l JOIN sentence s ON s.id = l.sentence_id
-             WHERE l.owner_type = ? AND (? IS NULL OR l.owner_id = ?) AND (s.public = 1 OR s.created_by = ?)
+             WHERE l.owner_type = ? AND (? IS NULL OR l.owner_id = ?) AND ${VIEWER_VISIBLE}
              ORDER BY s.id, l.id`,
         )
         .all(opts.ownerType, ownerId, ownerId, viewer) as (SentenceRow & {
@@ -971,4 +977,104 @@ export function seedExampleSentence(input: {
     db.query("DELETE FROM sentence_link WHERE sentence_id = ? AND owner_type = 'card'").run(id);
     for (const link of input.cardLinks) insertSentenceChildren(id, undefined, undefined, link);
     return assembleSentenceRow(getSentenceRowById(id)!);
+}
+
+// ---------- sentence_annotation (NLP enrichment, Phase 4) ----------
+//
+// GiNZA-derived structure layered onto the PUBLIC corpus by an OFFLINE batch (../sentence-nlp/)
+// + the seed-annotations.ts deploy step — the server only ever READS this. One row per sentence,
+// 1:1 by sentence_id. See SENTENCE_STORE_NLP.md.
+
+// One morpheme. `start`/`end` are UTF-16 CODE-UNIT offsets into sentence.text (NOT codepoint —
+// the client maps a tap by slicing `text` in JS, which is UTF-16-indexed; they diverge from
+// codepoint offsets at non-BMP kanji). `lemma` (dictionary form) drives the card/Jisho link;
+// `reading` is GiNZA's (the VISIBLE reading still comes from the stored furigana).
+export interface AnnotationToken {
+    i: number;
+    start: number;
+    end: number;
+    surface: string;
+    lemma: string;
+    pos: string;
+    tag: string;
+    reading: string;
+    dep: string;
+    head: number;
+}
+
+// A phrase chunk (also UTF-16 offsets into text), for phrase-level highlight / grammar matching.
+export interface AnnotationBunsetsu {
+    start: number;
+    end: number;
+}
+
+export interface SentenceAnnotation {
+    tokens: AnnotationToken[];
+    bunsetsu: AnnotationBunsetsu[];
+    parser: string;
+    parsedAt: number;
+}
+
+// THE offset-integrity gate. Every token's [start,end) MUST reconstruct its surface under JS
+// string slicing — this is the contract the tap-to-lookup UI relies on, and the parser already
+// guarantees it (emitting UTF-16 offsets + self-checking). Re-asserting here against the real V8
+// engine means a malformed artifact can NEVER land in the DB: a bad offset throws on write.
+function assertAnnotationOffsets(tokens: AnnotationToken[], text: string): void {
+    for (const t of tokens) {
+        const slice = text.slice(t.start, t.end);
+        if (slice !== t.surface) {
+            throw new Error(
+                `annotation offset mismatch: text.slice(${t.start},${t.end})=${JSON.stringify(slice)} !== surface ${JSON.stringify(t.surface)} (i=${t.i})`,
+            );
+        }
+    }
+}
+
+// Upsert a sentence's annotation (seed-side; idempotent by sentence_id). Validates token offsets
+// against the sentence's stored text BEFORE writing — throws on any mismatch (the offset gate).
+// `sentenceId` is the internal numeric id; the seed resolves it from the artifact's content hash
+// via getPublicSentenceByHash. No privacy gate on the WRITE — the gate is on the READ (the offline
+// batch only ever annotates public rows anyway).
+export function upsertAnnotation(input: {
+    sentenceId: number;
+    tokens: AnnotationToken[];
+    bunsetsu: AnnotationBunsetsu[];
+    parser: string;
+}): void {
+    const row = getSentenceRowById(input.sentenceId);
+    if (!row) throw new Error(`upsertAnnotation: no sentence with id=${input.sentenceId}`);
+    assertAnnotationOffsets(input.tokens, row.text);
+    const now = Date.now();
+    getDb()
+        .query(
+            `INSERT INTO sentence_annotation (sentence_id, tokens, bunsetsu, parser, parsed_at)
+             VALUES (?, ?, ?, ?, ?)
+             ON CONFLICT(sentence_id) DO UPDATE SET
+                 tokens = excluded.tokens, bunsetsu = excluded.bunsetsu,
+                 parser = excluded.parser, parsed_at = excluded.parsed_at`,
+        )
+        .run(input.sentenceId, JSON.stringify(input.tokens), JSON.stringify(input.bunsetsu), input.parser, now);
+}
+
+// Read one sentence's annotation BY ext_id, THROUGH the privacy gate: shares the exact
+// VIEWER_VISIBLE predicate with getSentences, so a private sentence's annotation is returned only
+// to its owner and never to anon (null viewer → public only). Returns null when the sentence isn't
+// visible to the viewer OR has no annotation yet — the two are indistinguishable to the caller, so
+// no existence is leaked. Pinned by a breach-prevention test in client.test.ts.
+export function getAnnotation(opts: { extId: string; viewer?: number | null }): SentenceAnnotation | null {
+    const viewer = opts.viewer ?? null;
+    const row = getDb()
+        .query(
+            `SELECT a.tokens, a.bunsetsu, a.parser, a.parsed_at
+             FROM sentence s JOIN sentence_annotation a ON a.sentence_id = s.id
+             WHERE s.ext_id = ? AND ${VIEWER_VISIBLE}`,
+        )
+        .get(opts.extId, viewer) as { tokens: string; bunsetsu: string; parser: string; parsed_at: number } | null;
+    if (!row) return null;
+    return {
+        tokens: JSON.parse(row.tokens) as AnnotationToken[],
+        bunsetsu: JSON.parse(row.bunsetsu) as AnnotationBunsetsu[],
+        parser: row.parser,
+        parsedAt: row.parsed_at,
+    };
 }

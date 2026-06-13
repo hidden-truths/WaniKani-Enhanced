@@ -1,0 +1,8 @@
+# Python virtualenv — recreate from requirements.txt (heavy: torch + the electra model)
+.venv/
+__pycache__/
+*.pyc
+
+# Scratch parse output kept out of git; the committed artifact lives in
+# ../wk-enhanced-api/data/annotations.json (written via parse.py --out).
+out/

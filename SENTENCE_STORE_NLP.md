@@ -137,30 +137,35 @@ CREATE TABLE sentence_annotation (
    the card detail, else `jishoUrl(lemma)`. Reuse the existing furigana rendering; the annotation is an
    overlay keyed by char offset.
 
-### Open questions to settle first
+### Open questions — DECIDED (2026-06-12)
 
-- **GiNZA model + version pin.** `ja_ginza` (lighter) vs `ja_ginza_electra` (better, heavier) for the
-  OFFLINE parse — offline we can afford electra; pick one and record it in `parser` for re-parse
-  decisions. Confirm the tokenizer's offsets are codepoint offsets that line up with JS string indexing
-  over `sentence.text` (normalization/width gotchas — verify on a kanji+kana+punctuation sample).
-- **Grammar-tag taxonomy.** What `value`s does `sentence_tag(kind='grammar')` use? A curated pattern
-  list (〜ておく, 〜てしまう, potential, passive, …) matched off the dependency parse, vs. raw POS
-  n-grams. Start small + curated; it's the searchable vocabulary.
-- **Re-parse triggers.** When a curator edits `examples.js` and re-seeds, the sentence row changes →
-  its annotation is stale. Decide: re-run the whole batch on any content change (simple, the corpus is
-  small), or diff by `hash`.
-- **Furigana ↔ tokens reconciliation.** Both decompose the same `text` but on different boundaries
-  (reading segments vs morphemes). They don't need to align; the tap-target uses tokens, the visible
-  ruby uses furigana. Confirm we don't try to unify them.
+- **GiNZA model + version pin → `ja_ginza_electra`** (offline we can afford the transformer; tokenization
+  + lemma + reading come from SudachiPy either way, electra adds the better dependency parse the grammar
+  phase leans on). Split mode **C**. Recorded in `parser` as `ja_ginza_electra/5.2.0 ginza/5.2.0 splitC`.
+  **Offset gotcha resolved (load-bearing):** GiNZA's `token.idx` is a *codepoint* offset; JS slicing is
+  UTF-16. They diverge at non-BMP kanji (𠮟 U+20B9F). So we emit **UTF-16 offsets** and triple-check them
+  (parser self-check → seed `slice===surface` re-assert → a non-BMP pin test). Verified empirically.
+- **Grammar-tag taxonomy → curated hyphenated-romaji slug catalog** (`te-iru`/`te-oku`/`potential`/… ~30,
+  matched over lemma/pos/tag/dep/morph — NOT raw n-grams), aligned to the existing `te-iru`/`tai`/`sou`
+  slug style. **Deferred to commit 2** (commit 1 is tokens/offsets/plumbing only); the parser already
+  emits `dep`/`head`/`tag` so commit 2 needs no re-parse.
+- **Re-parse triggers → full, hash-keyed.** Re-parse the whole exported corpus (it's ~544 sentences);
+  annotations key by `hash`, and because the parser parses the exact exported `text`, offsets are
+  self-consistent with the row by construction — a re-parse only ever changes *quality*. Optional
+  `--changed-only` skip later if ever needed.
+- **Furigana ↔ tokens reconciliation → not unified** (confirmed). Both decompose the same `text` on
+  different boundaries; the tap-target uses tokens, the visible ruby uses furigana.
 
 ### First concrete steps (a good Phase-4 commit-1)
 
-1. Stand up the offline parser project (Python + GiNZA) separate from the Bun repo; parse a handful of
-   public sentences; eyeball that `tokens[].start/end` line up with `sentence.text` in JS.
-2. Write `scripts/seed-annotations.ts` + a small `db.upsertAnnotation` / `db.getAnnotation` pair (the
-   latter through the choke-point), with unit tests (offset-integrity + a privacy pin that a private
-   row's annotation never leaks to an anon viewer).
-3. THEN the serving flag + the study-app tap-to-lookup UI.
+1. ✅ **SHIPPED** — offline parser project [../sentence-nlp/](sentence-nlp/) (`ja_ginza_electra`, separate
+   from the Bun repo); parses the public corpus → committed `wk-enhanced-api/data/annotations.json`.
+   Offset contract verified (BMP *and* non-BMP) and self-checked at parse time.
+2. ✅ **SHIPPED** — `scripts/seed-annotations.ts` + `db.upsertAnnotation` (offset gate on write) /
+   `db.getAnnotation` (through the shared `VIEWER_VISIBLE` gate), with unit tests: offset-integrity, a
+   non-BMP contract pin, and a privacy pin that a private row's annotation never leaks to anon.
+3. 🔜 **NEXT** — commit 2: the curated grammar-tag catalog → `sentence_tag(kind='grammar')`. THEN commit
+   3: the serving flag on `/v1/sentences` + the study-app tap-to-lookup UI.
 
 Keep each step shippable and behavior-preserving; nothing here changes existing playback or rendering
 until the tap-to-lookup UI lands.

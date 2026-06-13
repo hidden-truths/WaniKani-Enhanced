@@ -1,0 +1,15 @@
+# Offline GiNZA parser deps. Heavy by design (the electra model pulls torch + a
+# transformer) — this never runs on the prod droplet, only on a maintainer machine.
+#
+# Pinned to the versions verified for the offset contract (see README). Installing
+# these transitively pulls spacy 3.8.x, spacy-transformers, torch, transformers,
+# SudachiPy + SudachiDict-core, etc. The ELECTRA weights themselves are fetched from
+# the HuggingFace hub on first `spacy.load('ja_ginza_electra')` and cached under
+# ~/.cache/huggingface — so first run needs network; later runs are offline.
+#
+# `click` is pinned explicitly: typer 0.26.x no longer hard-depends on it, but spaCy's
+# CLI imports `click` directly, so the resolver leaves it out and spacy fails to import.
+
+ginza==5.2.0
+ja-ginza-electra==5.2.0
+click>=8.1
