@@ -561,4 +561,20 @@ describe('sentence_annotation (NLP enrichment) — offset contract + privacy', (
         db.deleteUserSentence({ extId: 'usr-c1', viewer: a.id });
         expect(n('SELECT COUNT(*) AS n FROM sentence_annotation')).toBe(0);
     });
+
+    test('setGrammarTags replaces only grammar tags (preserves scene); idempotent; empty clears', () => {
+        db.upsertPublicSentence({ extId: 'st-g', text: 'おはよう。', furigana: seg('おはよう。'), source: 'selftalk', translations: {}, tags: { scene: 'morning', grammar: ['old'] }, link: { owner_type: 'selftalk' } });
+        const id = idOf('st-g');
+        const tagsOf = () => db.getSentences({ ownerType: 'selftalk', viewer: null })[0]!.tags;
+
+        db.setGrammarTags(id, ['te-iru', 'tai']);
+        expect(tagsOf()).toEqual({ scene: 'morning', grammar: ['tai', 'te-iru'] }); // grammar value-sorted; scene preserved
+        // replace wholesale (the 'old' + previous ids are gone, not merged)
+        db.setGrammarTags(id, ['sou']);
+        expect(tagsOf()).toEqual({ scene: 'morning', grammar: ['sou'] });
+        expect(n("SELECT COUNT(*) AS n FROM sentence_tag WHERE kind='grammar'")).toBe(1);
+        // empty clears grammar but leaves scene
+        db.setGrammarTags(id, []);
+        expect(tagsOf()).toEqual({ scene: 'morning' });
+    });
 });

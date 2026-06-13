@@ -29,6 +29,7 @@ interface Artifact {
         text: string;
         tokens: db.AnnotationToken[];
         bunsetsu: db.AnnotationBunsetsu[];
+        grammar: string[];
     }[];
 }
 
@@ -38,6 +39,8 @@ const artifact = JSON.parse(readFileSync(artifactPath, 'utf8')) as Artifact;
 let seeded = 0;
 let missing = 0;
 let stale = 0;
+let grammarRows = 0;
+let grammarTags = 0;
 for (const a of artifact.annotations) {
     const row = db.getPublicSentenceByHash(a.hash);
     if (!row) {
@@ -61,9 +64,17 @@ for (const a of artifact.annotations) {
         console.error(`offset gate FAILED for ${a.ext_id} (hash ${a.hash.slice(0, 12)})`);
         throw err;
     }
+    // Grammar tags go onto EXAMPLE rows only (source='example'). Self-Talk rows keep their
+    // hand-authored grammar tags (curated, intentional) — we don't clobber them with GiNZA's.
+    if (row.source === 'example') {
+        db.setGrammarTags(row.id, a.grammar);
+        if (a.grammar.length) grammarRows++;
+        grammarTags += a.grammar.length;
+    }
     seeded++;
 }
 
 console.log(
-    `seeded ${seeded} annotations (${missing} sentence(s) not in store, ${stale} stale) — parser ${artifact.parser}`,
+    `seeded ${seeded} annotations (${missing} not in store, ${stale} stale); ` +
+        `${grammarTags} grammar tags on ${grammarRows} example rows — parser ${artifact.parser}`,
 );

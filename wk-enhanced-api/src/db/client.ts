@@ -1078,3 +1078,16 @@ export function getAnnotation(opts: { extId: string; viewer?: number | null }): 
         parsedAt: row.parsed_at,
     };
 }
+
+// Replace a sentence's grammar tags (sentence_tag kind='grammar') wholesale — the NLP grammar
+// substrate. Touches ONLY kind='grammar', so scene/topic tags on the same sentence are preserved;
+// idempotent (delete-then-insert). Populated by seed-annotations.ts from the offline parse's
+// detected grammar ids (e.g. 'te-oku', 'passive') — the same id vocabulary the hand-authored
+// Self-Talk tags use, so auto-detected + curated grammar search through one set.
+export function setGrammarTags(sentenceId: number, values: string[]): void {
+    const db = getDb();
+    db.query("DELETE FROM sentence_tag WHERE sentence_id = ? AND kind = 'grammar'").run(sentenceId);
+    if (!values.length) return;
+    const ins = db.query("INSERT OR IGNORE INTO sentence_tag (sentence_id, kind, value) VALUES (?, 'grammar', ?)");
+    for (const v of values) ins.run(sentenceId, v);
+}

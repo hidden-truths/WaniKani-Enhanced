@@ -50,6 +50,28 @@ work.
   with the row by construction; a re-parse can only ever change *quality*, never offset
   correctness.
 
+## Grammar tags (`patterns.py`)
+
+`parse.py` also runs a **curated N5/N4 grammar-point catalog** ([patterns.py](patterns.py)) over each
+Doc and emits the matched ids as `grammar:[…]` per sentence. These are the searchable vocabulary
+written to `sentence_tag(kind='grammar')` — `te-oku`, `passive`, `cond-tara`, `counter`, … (~37
+points). The ids **reuse the study-app's existing `SELFTALK_GRAMMAR` ids** (`te-iru` / `te-oku` /
+`tai` / `volitional` / `sou` / `nakya`) so GiNZA-detected tags on example sentences and hand-authored
+Self-Talk tags search through one vocabulary.
+
+Detection is a conservative pattern list matched off the parse (lemma / POS / UniDic tag /
+inflection), **not** raw POS n-grams. Every detector is pinned in [test_patterns.py](test_patterns.py)
+with hand-written positives + confusable negatives (e.g. source-から ≠ reason-から; ように ≠ ようだ
+since に is the copula's 連用形; だろう ≠ volitional). Run it after any catalog edit:
+
+```bash
+.venv/bin/python test_patterns.py   # all detectors fire on positives, resist negatives
+```
+
+The Python parse owns the catalog (full Doc / morph access — e.g. the fused godan volitional 行こう
+needs the inflection feature). `seed-annotations.ts` writes the ids to `sentence_tag` for **example**
+rows only; Self-Talk keeps its hand-authored grammar tags.
+
 ## Usage
 
 ```bash

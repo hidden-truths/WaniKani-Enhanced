@@ -26,6 +26,8 @@ from importlib.metadata import version as pkg_version
 import spacy
 import ginza
 
+from patterns import detect_grammar
+
 
 # ---- UTF-16 offset helpers (the contract) ----
 
@@ -69,8 +71,9 @@ def parser_provenance(nlp) -> str:
 
 
 def annotate(nlp, text: str):
-    """Return (tokens, bunsetsu, problems) for one sentence. `problems` is a list of
-    offset-contract violations (empty == clean); callers MUST treat non-empty as fatal."""
+    """Return (tokens, bunsetsu, grammar, problems) for one sentence. `grammar` is the list of
+    curated grammar-point ids detected (patterns.py). `problems` is a list of offset-contract
+    violations (empty == clean); callers MUST treat non-empty as fatal."""
     doc = nlp(text)
     tokens = []
     problems = []
@@ -105,7 +108,8 @@ def annotate(nlp, text: str):
             })
     except Exception as e:  # pragma: no cover
         print(f"warning: bunsetu_spans failed for {text!r}: {e}", file=sys.stderr)
-    return tokens, bunsetsu, problems
+    grammar = detect_grammar(doc)
+    return tokens, bunsetsu, grammar, problems
 
 
 # ---- --verify: prove the contract on a hand-picked sample, no DB ----
@@ -123,7 +127,7 @@ def cmd_verify(nlp) -> int:
     print(f"parser: {parser_provenance(nlp)}\n")
     failed = 0
     for text in VERIFY_SAMPLES:
-        tokens, bunsetsu, problems = annotate(nlp, text)
+        tokens, bunsetsu, grammar, problems = annotate(nlp, text)
         js_len = utf16_len(text)
         print(f"text = {text!r}   (JS .length = {js_len}, codepoints = {len(text)})")
         print(f"  {'i':>2} {'start':>5} {'end':>3}  {'js_slice':<10} {'surface':<10} "
@@ -137,6 +141,7 @@ def cmd_verify(nlp) -> int:
         bun = ", ".join(f"[{b['start']},{b['end']})={js_slice(text, b['start'], b['end'])!r}"
                         for b in bunsetsu)
         print(f"  bunsetsu: {bun}")
+        print(f"  grammar:  {grammar}")
         if problems:
             failed += 1
             for p in problems:
@@ -166,7 +171,7 @@ def cmd_parse(nlp, db_path: str, out_path: str, limit: int | None) -> int:
     whitespace_hits = 0
     for r in rows:
         text = r["text"]
-        tokens, bunsetsu, problems = annotate(nlp, text)
+        tokens, bunsetsu, grammar, problems = annotate(nlp, text)
         if problems:
             total_problems += len(problems)
             print(f"OFFSET PROBLEM in id={r['id']} hash={r['hash'][:12]} text={text!r}:",
@@ -181,6 +186,7 @@ def cmd_parse(nlp, db_path: str, out_path: str, limit: int | None) -> int:
             "text": text,  # echoed so the seed loader can guard against a stale artifact
             "tokens": tokens,
             "bunsetsu": bunsetsu,
+            "grammar": grammar,
         })
 
     if total_problems:
