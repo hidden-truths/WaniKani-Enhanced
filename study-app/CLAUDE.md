@@ -666,8 +666,10 @@ Component contracts you must preserve:
   string — so a realized template plays via the same synth path (`/v1/audio/tts` on plainText, lazily
   cached) and **record-compares keyed on the SKELETON id** (one practiceable item; the reference text
   tracks the current realization, patched onto the control's `data-text` on each swap). Templates render
-  PLAIN ruby (no tap-to-lookup over the combo space). Don't try to seed them or give them GiNZA
-  annotations. Full doc: [SELFTALK.md](SELFTALK.md).
+  PLAIN ruby (no tap-to-lookup over the combo space). **This is changing:** a decided (not-yet-built) plan
+  moves templates into a `sentence_template` table + lazily materializes realizations as `sentence` rows —
+  see [../SENTENCE_STORE_TEMPLATES.md](../SENTENCE_STORE_TEMPLATES.md). Until that lands, don't seed them or
+  give them GiNZA annotations. Full doc: [SELFTALK.md](SELFTALK.md).
 - **Record-and-compare (`record-compare.js`, the generic engine; Minna + Self-Talk glue feed it):
   the conversation has ONE whole-dialogue MP3, so
   per-line native compare slices it — it does NOT have per-line audio.** A line's native

@@ -106,10 +106,16 @@ migrated into the store once on sign-in, then dropped from the blob. Server enum
 ## Templates (slot-swap)
 
 A **template** is a curated sentence skeleton with swappable slots, so one card generates many
-sentences ("I'm almost out of [wood], let me go [chop] some" → swap the fillers). They live in a
-**CLIENT-ONLY bundle** ([src/data/selftalk-templates.js](src/data/selftalk-templates.js)), **never in
+sentences ("I'm almost out of [wood], let me go [chop] some" → swap the fillers). They live TODAY in a
+**CLIENT-ONLY bundle** ([src/data/selftalk-templates.js](src/data/selftalk-templates.js)), **not in
 the sentence store** — a template has no single fixed text/hash/furigana, so it doesn't fit a
-`sentence` row, and parsing/seeding an unbounded combo space buys nothing.
+`sentence` row.
+
+> **PLANNED (decided, not yet built): templates move into the DB.** A `sentence_template` table holds
+> the structure (curator-seeded + served), and realizations are **lazily materialized** as `sentence`
+> rows on first request so the store tooling covers them. Full design + plan + open questions:
+> [../SENTENCE_STORE_TEMPLATES.md](../SENTENCE_STORE_TEMPLATES.md). The bullets below describe the
+> current client-only implementation.
 
 - **Shape:** `{ id, topic, thought?, grammar, en, jp, slots:[{id,label,fillers:[{jp,en}]}] }`. `jp` is
   the skeleton with `{slotId}` markers + ruby on every fixed kanji; each filler's `jp` carries ruby too.
@@ -129,8 +135,9 @@ the sentence store** — a template has no single fixed text/hash/furigana, so i
   view state, not synced.
 - Templates render **plain ruby** (no GiNZA tap-to-lookup over the combos — same degradation as
   user-authored phrases). Curated-only; **MODEL-GENERATED → proofread**, especially that each filler
-  stays grammatical in the skeleton's tail. Upgrade path if templates ever need authoring/NLP: a real
-  `sentence_template` table (deliberately NOT built for the curated MVP).
+  stays grammatical in the skeleton's tail. The DB-integration that fixes the no-tap-lookup /
+  not-in-store limitations is the decided next phase — see
+  [../SENTENCE_STORE_TEMPLATES.md](../SENTENCE_STORE_TEMPLATES.md).
 
 ## Audio + record-and-compare (reuses the shared engine)
 

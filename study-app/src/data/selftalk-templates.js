@@ -1,5 +1,8 @@
-// 独り言 SELF-TALK — slot-swap sentence TEMPLATES (P3). CLIENT-ONLY, not seeded to the sentence
+// 独り言 SELF-TALK — slot-swap sentence TEMPLATES (P3). CLIENT-ONLY today, not seeded to the sentence
 // store: a template has no single fixed text/hash/furigana, so it doesn't fit a `sentence` row.
+//
+// PLANNED (decided, not yet built): this file becomes the SEED SOURCE for a `sentence_template` table,
+// with realizations lazily materialized as `sentence` rows. Design + plan: ../../../SENTENCE_STORE_TEMPLATES.md.
 //
 // A template is a JP skeleton string with `{slot}` markers + a `slots` array of fillers. Picking a
 // filler per slot REALIZES a concrete sentence (core/selftalk.js `realizeTemplate`) whose reading /

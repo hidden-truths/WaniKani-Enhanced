@@ -198,6 +198,13 @@ until the tap-to-lookup UI lands.
   stable owner ids; `sentence_link.role`/`clip_*` already model speaker + per-line clip ranges. This is
   the largest content migration and the one that most exercises the polymorphic link model.
 
+- **Templates → store (DECIDED, not yet built).** The 独り言 Self-Talk slot-swap TEMPLATES are currently a
+  client-only JS bundle. A `sentence_template` table will hold the generator structure (curator-seeded +
+  served), and realizations get **lazily materialized** as `sentence` rows on first request (linked via
+  `sentence_link(owner_type='template')`) so this NLP pipeline + the other store tooling cover the combos
+  people actually use — tap-lookup tokens lag until the next offline re-parse. Full design + plan:
+  [SENTENCE_STORE_TEMPLATES.md](SENTENCE_STORE_TEMPLATES.md).
+
 ## Invariants any phase must preserve
 
 - `text` == `plainText(jp)` byte-for-byte; `hash` == `ttsTextHash(text)`, server-computed. Break either
