@@ -39,8 +39,15 @@ export function speak(text, context = 'browse', btn, opts) {
   if (!text) return;
   playItem({ text }, context, btn, opts);
 }
-// ttsText (the kanji-for-accent text picker) lives in core/text.js.
-export function speakWord(v, context = 'reviews', btn, opts) { speak(ttsText(v), context, btn, opts); }
+// ttsText (the kanji-for-accent text picker) lives in core/text.js. A card that carries a native
+// recording src (`v.audio`, set on Minna-activated cards) offers a `native` variant too, so the
+// player can honor a "native first" voice priority in the reviews/browse contexts — not just inside
+// the みんなの日本語 tab. Built-in cards have no `v.audio`, so they stay synth-only as before.
+export function speakWord(v, context = 'reviews', btn, opts) {
+  const text = ttsText(v);
+  if (!text && !(v && v.audio)) return;
+  playItem({ text, native: (v && v.audio) || null }, context, btn, opts);
+}
 
 // Hide the audio affordances entirely only when NO audio path is available. DOM-touching,
 // so it's an init step (the elements must exist) rather than an import-time side effect.

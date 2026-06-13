@@ -85,6 +85,7 @@ function minnaCard(item, lesson) {
     levels: item.levels || null,   // { N5:[jp,en], …, N1:[jp,en] } leveled examples
     accent: item.accent,           // pitch-accent number → the visual pitch marks
     tts: item.tts,                 // optional TTS-text override (ambiguous single kanji)
+    audio: item.audio || null,     // native vnjpclub src → a 'native' audio variant in Browse/reviews
     ex: [],
     custom: true, minna: true, italki: !!item.italki, minnaKey: item.key, minnaLesson: lesson,
   };
@@ -94,9 +95,10 @@ function minnaOverlay(item, lesson) {
   const tags = ['みんなの日本語', 'mnn-l' + lesson]; if (item.italki) tags.push('iTalki');
   const o = { tags, italki: !!item.italki, minnaLesson: lesson, minnaKey: item.key };
   if (item.accent != null) o.accent = item.accent; if (item.tts) o.tts = item.tts;
+  if (item.audio) o.audio = item.audio;   // native src → merged onto the built-in by applyMinnaOverlays
   return o;
 }
-const overlaySig = o => (o.tags || []).join('|') + '·i' + (o.italki ? 1 : 0) + '·a' + (o.accent ?? '');
+const overlaySig = o => (o.tags || []).join('|') + '·i' + (o.italki ? 1 : 0) + '·a' + (o.accent ?? '') + '·au' + (o.audio || '');
 // A word is in the deck if it's a custom card OR an overlay on a built-in.
 function minnaInDeck(key) {
   if (loadCustom().verbs.some(v => v.minnaKey === key)) return true;
@@ -142,7 +144,7 @@ function activateMinnaVocab(lesson, vocab) {
     const existing = cs.verbs.find(v => v.minnaKey === item.key);
     if (existing) {
       const changed = minnaSig(existing) !== minnaSig(fresh);
-      Object.assign(existing, { tags: fresh.tags, italki: fresh.italki, mean: fresh.mean, cat: fresh.cat, type: fresh.type, trans: fresh.trans, tip: fresh.tip, levels: fresh.levels, mnem: fresh.mnem, accent: fresh.accent });
+      Object.assign(existing, { tags: fresh.tags, italki: fresh.italki, mean: fresh.mean, cat: fresh.cat, type: fresh.type, trans: fresh.trans, tip: fresh.tip, levels: fresh.levels, mnem: fresh.mnem, accent: fresh.accent, audio: fresh.audio });
       if (changed) updated++; custChanged = true;
       return;
     }
