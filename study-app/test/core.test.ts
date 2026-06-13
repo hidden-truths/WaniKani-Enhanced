@@ -1014,6 +1014,15 @@ test('SELFTALK_TEMPLATES are well-formed: topics/grammar registered, every reali
   }
 });
 
+test('SELFTALK_TEMPLATES coverage: each game ≥5 templates; every thought cluster has ≥1', () => {
+  const byTopic: Record<string, number> = {};
+  for (const t of SELFTALK_TEMPLATES as any[]) byTopic[t.topic] = (byTopic[t.topic] || 0) + 1;
+  for (const game of ['minecraft', 'incremental', 'sims']) expect(byTopic[game] || 0).toBeGreaterThanOrEqual(5);
+  const covered = new Set(SELFTALK_TEMPLATES.map((t: any) => `${t.topic}:${t.thought || ''}`));
+  for (const c of SELFTALK_TAXONOMY as any[]) for (const t of c.topics) for (const th of (t.thoughts || []))
+    expect(covered.has(`${t.id}:${th.id}`)).toBe(true);   // each declared cluster has a template
+});
+
 test('grammarTokens returns present tokens in grammarOrder, extras after', () => {
   const ph = [{ grammar: ['sou', 'zzz'] }, { grammar: ['te-iru'] }];
   expect(grammarTokens(ph, ['te-iru', 'nakya', 'sou'])).toEqual(['te-iru', 'sou', 'zzz']);
