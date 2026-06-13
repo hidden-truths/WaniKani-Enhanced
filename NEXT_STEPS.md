@@ -4,7 +4,7 @@ Living document for the WKEnhanced project. Use this as the entry point for any 
 
 Owns the *what-to-do-next* state of the project. Architecture, design rationale, and dead-end warnings live in [CLAUDE.md](CLAUDE.md), [wk-enhanced-api/CLAUDE.md](wk-enhanced-api/CLAUDE.md), [SERVER_DESIGN.md](SERVER_DESIGN.md), and [CLIENT_MIGRATION.md](CLIENT_MIGRATION.md). The feature backlog (everything that isn't time-critical) is in [NEW_FEATURES.md](NEW_FEATURES.md).
 
-**Last updated**: 2026-06-12 — the **study app's audio-unify epic is fully shipped AND deployed to prod**. This session: the unified sentence store Phase 2 (built-in examples), native audio for Minna cards in Browse/Reviews, explicit-voice authority + TTS ETag/revalidate fixes, and the prod Siri-voice rollout (clips pushed to Spaces via `push-tts-variants.ts` + manifest seeded on the droplet via `seed-audio-variants.ts`) all landed. Prod verified serving Phase 2 card sentences + the new `no-cache`/ETag TTS headers + the `siri:male`/`siri:female` voice picker. **Nothing public has been announced yet** — the v2.0.0 forum post is still the top un-started item.
+**Last updated**: 2026-06-12 — the **study app's audio-unify epic is fully shipped AND deployed to prod**. This session: the unified sentence store Phase 2 (built-in examples), native audio for Minna cards in Browse/Reviews, explicit-voice authority + TTS ETag/revalidate fixes, and the prod Siri-voice rollout (clips pushed to Spaces via `push-tts-variants.ts` + manifest seeded on the droplet via `seed-audio-variants.ts`) all landed. Prod verified serving Phase 2 card sentences + the new `no-cache`/ETag TTS headers + the `siri:male`/`siri:female` voice picker. **The site is private — not published or announced anywhere** — so there is no public-launch work on the runway; the next stages are the sentence-store NLP phase + content/app polish.
 
 ---
 
@@ -24,16 +24,11 @@ Three surfaces now, not two. The userscript + API are stable; most active develo
 
 This list is a menu, not a checklist — pick what matches the time you have. Nothing is on a critical path; everything shipped so far is healthy in prod. App-specific feature work has its own priority list in [study-app/NEXT_STEPS.md](study-app/NEXT_STEPS.md); this section owns the cross-cutting / userscript-server / ops items.
 
-### 1. Forum-post announcement of v2.0.0 (1–2 hours of polish + posting)
+> **The project is private.** The study app + userscript are not published or announced anywhere, so there is no public-launch / announcement work — the runway is feature + infra polish only.
 
-Draft is at [FORUM_POST_DRAFT.md](FORUM_POST_DRAFT.md). Replace the `<REPO_URL>` and `<MAINTAINER_HANDLE>` placeholders, polish the tone to the venue, and post. Cover points (already in the draft):
+### 1. Sentence-store NLP phase (the headline next stage)
 
-- What changed: v1.x → v2.0.0, rename to WKEnhanced, all data flows through `api.wkenhanced.dev`.
-- Why: no third-party CORS/sandbox friction, faster cold loads, server owns the title-decoding lossy-encoding workaround.
-- Install: paste [wkenhanced.user.js](wkenhanced.user.js) — bumps `@version`, Tampermonkey re-prompts for `@connect api.wkenhanced.dev`.
-- For users who don't want a server dependency: install [legacy/wk-vocab-review-ik-direct.user.js](legacy/wk-vocab-review-ik-direct.user.js) instead. Different `@name` so they can coexist.
-
-The draft includes a list of likely reply-worthy questions for the maintainer + a "trim to 400 words" recipe for shorter-form venues.
+The unified sentence store is DB-authoritative and deployed (Phases 1 + 2). The next stage layers **GiNZA NLP enrichment** on top: highlight a span in a sentence → lemma / part-of-speech / link to a card-or-Jisho; plus grammar search ("find 〜ておく"). General overview + the concrete plan + constraints: **[SENTENCE_STORE_NLP.md](SENTENCE_STORE_NLP.md)**. Design rationale: [SENTENCE_STORE_VISION.md](SENTENCE_STORE_VISION.md) + the shipped phase plans [SENTENCE_STORE_PHASE1.md](SENTENCE_STORE_PHASE1.md)/[SENTENCE_STORE_PHASE2.md](SENTENCE_STORE_PHASE2.md).
 
 ### 2. Cloudflare rate-limit + cache rules (~10 min UI work)
 
@@ -42,7 +37,7 @@ Still pending from the original post-deploy runway. In the Cloudflare dashboard:
 - **Rules → Rate-limiting rules → Create rule**: 100 req/min per IP across `/v1/*` paths. (Free tier allows 1 rule, which is exactly this.)
 - **Rules → Cache rules → Create rule**: on `/v1/vocab/*` paths, "Respect origin Cache-Control headers." Our server already sets long-cache headers on the payload + `Cache-Control: no-store` on `/v1/health`. **Verify** by hitting the same word twice in quick succession — second hit should show `cf-cache-status: HIT`. As of 2026-05-25 it showed `DYNAMIC`, meaning Cloudflare isn't caching at all; the userscript's `cache: 'no-cache'` + the server's weak-ETag-tolerant `If-None-Match` comparison together ensure correctness even with a CDN cache between us.
 
-Worth doing before the forum post drives any traffic spike.
+A sensible hardening step regardless of traffic.
 
 ### 3. GHCR image publishing on tag (~1 hour of GitHub Actions)
 
@@ -53,17 +48,17 @@ The Dockerize follow-up. Today's deploys are `docker compose build --pull && sys
 Lower priority and not currently blocking anything; jump to [NEW_FEATURES.md](NEW_FEATURES.md) for full design notes.
 
 - **Schema version pin for cached payloads** — defensive infrastructure for future payload shape changes. Add a `payload_schema_version` column, bump constant, force re-warm on mismatch. ~30 min.
-- **Two-phase lazy-fill** — cold-fill latency 1–3s → 500ms–1s. Only worth it if forum users complain.
+- **Two-phase lazy-fill** — cold-fill latency 1–3s → 500ms–1s. Only worth it if cold-load latency becomes a real complaint.
 - **Morphological JLPT scoring** — bundle kuromoji, lemmatize conjugated verbs. Closes the "fail-open on conjugations" gap. Discuss bundling story first (kuromoji's ~50MB dict).
 - **Click-to-lookup on sentence words** — userscript change, high QoL.
 - **JLPT badge on the card itself** — small userscript UI addition.
-- **Health metrics expansion** (24h serve counts, cache hit rate, storage size) — useful for capacity planning once forum traffic shapes up.
+- **Health metrics expansion** (24h serve counts, cache hit rate, storage size) — useful for capacity planning as usage grows.
 
-### 5. Study-app + sentence-store next stages
+### 5. Study-app feature next-stages
 
-The active product surface. Full priority list + design notes in [study-app/NEXT_STEPS.md](study-app/NEXT_STEPS.md); the headline forward-looking threads:
+The active product surface (beyond the sentence-store NLP phase in item 1). Full priority list + design notes in [study-app/NEXT_STEPS.md](study-app/NEXT_STEPS.md); the headline threads:
 
-- **Sentence store — NLP phase.** Phases 1 (Self-Talk) + 2 (built-in examples) are DB-authoritative + deployed. The schema already has the empty `sentence_annotation` table reserved for GiNZA tokens/bunsetsu by char-offset; populating it (offline-only GiNZA, structured furigana) is the next phase. Design + sequencing recorded in the `sentence-store-rearchitecture` memory; the convergence was **store first, NLP later** — so this is "later." Minna sentences moving into the store is the other deferred phase.
+- **Other sentence-store phases.** Beyond NLP (item 1): **Phase 2.5** = custom-card `ex` → private store rows (currently still rendered from the `custom-verbs` blob); **Phase 3** = Minna sentences → store (`public=0`). Both deferred, both behavior-preserving. See [SENTENCE_STORE_NLP.md](SENTENCE_STORE_NLP.md) "Remaining phases".
 - **Content proofread passes (model-generated → human-verified).** Several datasets shipped model-generated and want a real human pass: the leveled example sentences (`data/examples.js` → re-run `seed-sentences.ts` after edits), the 47 generated Minna words' examples/mnemonics, pitch accents (`ACCENTS` + Minna), and the Apple/Siri-voice readings (a real-ear listen — note the local male clips were just pushed to prod; spot-check they actually sound male). None are blocking; they're quality polish.
 - **Custom-card completeness gap.** The "Add card" modal sets every field except `levels` (the 5 N5→N1 tiers) + `accent`, so a UI-authored card isn't full-value. A leveled-example + accent editor (or an "AI-generate" button) closes the user-content parity gap. See [study-app/CARDS.md](study-app/CARDS.md) "the custom-card gap".
 - **Self-Talk pre-gen.** The 独り言 phrases aren't in the `generate-tts.ts`/`collectTtsTexts.ts` corpus yet, so their Siri reference is Google-synthed-on-first-play instead of a pre-generated `.m4a`. Add them to `collectTtsTexts()` and re-run the generate + push + seed flow.
@@ -76,14 +71,13 @@ Code (in order):
 
 1. **`983dcb7` — 429-with-exponential-backoff in `services/ik.ts:fetchJson`.** Retries 429s with base-1s × 2^attempt backoff (cap 30s, 3 retries), honors `Retry-After` (seconds or HTTP-date), 5xx deliberately not retried. Test-only `_ikFetchConfig` knob lets the suite shrink wait times. 76 → 90 tests.
 2. **`c882dae` — daily SQLite backup → DO Spaces, with GFS retention.** `deploy/backup.ts` does `VACUUM INTO` (readonly source DB → PrivateTmp snapshot) then uploads to `s3://<bucket>/backups/YYYY-MM-DD.sqlite` (private) then prunes per `deploy/retention.ts`. Default policy: 7 daily + 4 weekly + 12 monthly (tunable via `BACKUP_RETAIN_*`). Scheduled `*-*-* 03:00:00 UTC` via `wk-enhanced-api-backup.timer`. No new host-package deps (Bun's `bun:sqlite` provides `VACUUM INTO`, `Bun.S3Client` handles put/list/delete). 90 → 105 tests.
-3. **`ebfae5e` — forum-post draft for v2.0.0 / WKEnhanced rebrand announcement.** Self-contained at [FORUM_POST_DRAFT.md](FORUM_POST_DRAFT.md); needs `<REPO_URL>` + `<MAINTAINER_HANDLE>` substitution before posting.
-4. **`942175c` — extended 429-backoff to `ikDownloadMedia`.** Most IK traffic in a bulk warm is `/download_media`, so this is where the retry budget pays off most. Extracted a shared `fetchWithRetry` helper; `fetchJson` is now a thin wrapper that throws on `!ok`, `ikDownloadMedia` keeps its result-object shape (and correctly skips retry on small-body proxy-misses, which are structural failures, not transient). 105 → 109 tests.
-5. **`7e713b3` — ETag + conditional GET on `/v1/index_meta`.** Same pattern as `/v1/vocab/{word}` (strong ETag from `fetchedAt`, weak-prefix tolerance for Cloudflare-downgraded validators, 304 path mirrors 200's `Cache-Control` + `ETag`). Helper pair moved out of `routes/vocab.ts` into shared `src/lib/etag.ts`; unit tests followed. 109 → 113 tests.
-6. **`0da5169` — ADR-001 records the no-Kubernetes deploy-shape decision.** Captures the cost analysis ($24/mo DOKS minimum vs $11/mo current all-in), workload-shape mismatch (one service, bounded traffic, stateful filesystem), and operational complexity. Linked from `wk-enhanced-api/CLAUDE.md` next to the SQLite-not-Postgres dead-end. Includes a "when to revisit this" section.
-7. **`dc2629c` — `POST /v1/admin/warm {"scope":"all"}` refuses overlap with 409.** Module-scoped `warmAllInFlight` flag prevents the monthly timer + a manual re-warm (or any two concurrent triggers) from doubling IK call volume and racing over `vocab_examples` rows. New `conflict` error code in the enum. Test-only `_setWarmAllInFlightForTesting` setter mirrors the `_useDbForTesting` pattern. 113 → 115 tests.
-8. **`4e6f912` — Dockerize the server.** Dockerfile (multi-stage off `oven/bun:1.3.8`), compose.yaml (single service, 127.0.0.1:3000 bind, /var/lib bind-mount, env_file), .dockerignore, and rewritten systemd units. [deploy/README.md](wk-enhanced-api/deploy/README.md) gets a fresh-install walkthrough + a pre-Docker droplet migration recipe.
-9. **`6e4ee34` — compose.yaml `env_file` defaults to `./.env` (prod overrides via `ENV_FILE`).** Unblocks local `docker compose up` without needing `/etc/wk-enhanced-api/env` to exist on dev boxes.
-10. **`2c2980e` — compose.yaml `DATA_DIR` override makes local bring-up work end-to-end.** Parameterizes the bind-mount source + hard-codes container-internal `DATABASE_FILE` / `LOCAL_MEDIA_DIR` to paths inside the bind mount, so the dev `.env`'s relative paths (correct for `bun dev`) don't have to be edited to bring up the container. `.compose-data/` gitignored.
+3. **`942175c` — extended 429-backoff to `ikDownloadMedia`.** Most IK traffic in a bulk warm is `/download_media`, so this is where the retry budget pays off most. Extracted a shared `fetchWithRetry` helper; `fetchJson` is now a thin wrapper that throws on `!ok`, `ikDownloadMedia` keeps its result-object shape (and correctly skips retry on small-body proxy-misses, which are structural failures, not transient). 105 → 109 tests.
+4. **`7e713b3` — ETag + conditional GET on `/v1/index_meta`.** Same pattern as `/v1/vocab/{word}` (strong ETag from `fetchedAt`, weak-prefix tolerance for Cloudflare-downgraded validators, 304 path mirrors 200's `Cache-Control` + `ETag`). Helper pair moved out of `routes/vocab.ts` into shared `src/lib/etag.ts`; unit tests followed. 109 → 113 tests.
+5. **`0da5169` — ADR-001 records the no-Kubernetes deploy-shape decision.** Captures the cost analysis ($24/mo DOKS minimum vs $11/mo current all-in), workload-shape mismatch (one service, bounded traffic, stateful filesystem), and operational complexity. Linked from `wk-enhanced-api/CLAUDE.md` next to the SQLite-not-Postgres dead-end. Includes a "when to revisit this" section.
+6. **`dc2629c` — `POST /v1/admin/warm {"scope":"all"}` refuses overlap with 409.** Module-scoped `warmAllInFlight` flag prevents the monthly timer + a manual re-warm (or any two concurrent triggers) from doubling IK call volume and racing over `vocab_examples` rows. New `conflict` error code in the enum. Test-only `_setWarmAllInFlightForTesting` setter mirrors the `_useDbForTesting` pattern. 113 → 115 tests.
+7. **`4e6f912` — Dockerize the server.** Dockerfile (multi-stage off `oven/bun:1.3.8`), compose.yaml (single service, 127.0.0.1:3000 bind, /var/lib bind-mount, env_file), .dockerignore, and rewritten systemd units. [deploy/README.md](wk-enhanced-api/deploy/README.md) gets a fresh-install walkthrough + a pre-Docker droplet migration recipe.
+8. **`6e4ee34` — compose.yaml `env_file` defaults to `./.env` (prod overrides via `ENV_FILE`).** Unblocks local `docker compose up` without needing `/etc/wk-enhanced-api/env` to exist on dev boxes.
+9. **`2c2980e` — compose.yaml `DATA_DIR` override makes local bring-up work end-to-end.** Parameterizes the bind-mount source + hard-codes container-internal `DATABASE_FILE` / `LOCAL_MEDIA_DIR` to paths inside the bind mount, so the dev `.env`'s relative paths (correct for `bun dev`) don't have to be edited to bring up the container. `.compose-data/` gitignored.
 
 Operations (2026-05-26):
 

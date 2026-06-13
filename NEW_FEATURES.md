@@ -250,7 +250,7 @@ Landed across two commits:
 
 **What**: on cold lazy-fill, warm only the *first* IK example's media synchronously and return immediately with a partial payload (`incomplete: true`); kick off a background task to warm the remaining 40+ examples + DDG. Drops cold lazy-fill from ~1–3s to ~500ms–1s.
 
-**Why**: the current pipeline (post-rc2) defers only DDG to the background, which gets us most of the way there. The per-example IK-media work for ~40 examples still runs synchronously and accounts for ~1–2s of remaining latency. If forum users complain about cold latency once deployed, this is the next lever.
+**Why**: the current pipeline (post-rc2) defers only DDG to the background, which gets us most of the way there. The per-example IK-media work for ~40 examples still runs synchronously and accounts for ~1–2s of remaining latency. If cold latency ever becomes a real complaint, this is the next lever.
 
 **How**:
 - Split `warmWord` into `warmWordPriority(word)` and `warmWordComplete(word)`.
@@ -301,7 +301,7 @@ Landed across two commits:
 
 **What**: cap total media storage (e.g. 50GB on Spaces) and evict least-recently-served entries when over.
 
-**Why**: even with a 50-example cap per word, a forum-bump-driven traffic spike could pull in cold corners of the WK vocab list that don't get re-served. Storage cost on DO Spaces is $0.02/GB over the 250GB base; with no cap, that grows unbounded if we don't refresh-and-purge.
+**Why**: even with a 50-example cap per word, a traffic spike could pull in cold corners of the WK vocab list that don't get re-served. Storage cost on DO Spaces is $0.02/GB over the 250GB base; with no cap, that grows unbounded if we don't refresh-and-purge.
 
 **How**:
 - The `last_served_at` and `serve_count` columns on `vocab_examples` are already populated — they exist for exactly this.
@@ -403,7 +403,7 @@ Landed across two commits:
 
 **What**: add 24h serve counts, cache hit rate, and storage byte totals to `/v1/health`.
 
-**Why**: capacity planning + cost monitoring without Prometheus. Once deployed, the maintainer wants to know "are we at 50GB?" and "did the forum-bump traffic die down?" without SSHing in.
+**Why**: capacity planning + cost monitoring without Prometheus. The maintainer wants to know "are we at 50GB?" and "did the traffic spike die down?" without SSHing in.
 
 **How**:
 - `serve_count` column already tracks per-word; aggregate over `last_served_at > now - 24h`.

@@ -46,7 +46,7 @@ Working name (during this doc's authorship): **wk-vocab-api**. Renamed to **wk-e
 
 ## Audience & scale assumptions
 
-- Public service announced on WK forums. Realistic active-user ceiling: low thousands, peaking a few times a day in the user's local-evening review windows.
+- Private project today (not published anywhere). The original design assumed it might one day be shared publicly; if so, a realistic active-user ceiling is low thousands, peaking a few times a day in local-evening review windows.
 - WK has ~6500 vocab subjects. The pre-warmed corpus is fixed-size, not user-driven.
 - Per-vocab response payload (compressed): typically 30–80KB JSON, occasionally up to ~150KB for very common words with hundreds of sentences. Audio + image fetches are separate HTTP requests against signed Spaces URLs.
 
@@ -78,7 +78,7 @@ Working name (during this doc's authorship): **wk-vocab-api**. Renamed to **wk-e
 
 ### Why this shape
 
-- **Cloudflare in front** is free and handles two things we'd otherwise have to build: TLS, and absorbing the spike when a forum post links us. Their edge cache can fully serve `GET /v1/vocab/:word` responses with a long `Cache-Control: public, max-age=86400, stale-while-revalidate=2592000`. On a popular thread, the origin sees maybe one request per word per day.
+- **Cloudflare in front** is free and handles two things we'd otherwise have to build: TLS, and absorbing a traffic spike if the service is ever linked publicly. Their edge cache can fully serve `GET /v1/vocab/:word` responses with a long `Cache-Control: public, max-age=86400, stale-while-revalidate=2592000`. Under such a spike, the origin sees maybe one request per word per day.
 - **Single droplet** is enough. Workload is bounded by the WK vocab corpus, not user growth. Vertical scale to a $12 or $24 droplet if needed.
 - **Managed Postgres**: $15/mo isn't free but is much cheaper than 4 hours of debugging a self-managed Postgres at 2am after a kernel update. Skip if budget pressure later forces it; the droplet has enough headroom to run Postgres locally.
 - **Spaces for media**: $5/mo gets 250GB storage + 1TB egress. We expect ~30GB at rest and ~100–300GB/mo egress. Comfortable margin. Spaces is S3-API-compatible so MinIO can stand in for local dev.
@@ -282,7 +282,7 @@ For each word in the WK vocab corpus (~6500):
 
 ### Caps & limits
 
-- **Max 50 examples per word** kept in the payload. The userscript today fetches up to 1000 but in practice surfaces maybe 25 in the picker before the user gives up scrolling. The full 1000 inflates payload size 20x for marginal UX gain. Keep the first 50 after applying `requireAudio`-soft-prefer + JLPT-quality sort, dropping the tail. (Reassess if forum feedback complains.)
+- **Max 50 examples per word** kept in the payload. The userscript today fetches up to 1000 but in practice surfaces maybe 25 in the picker before the user gives up scrolling. The full 1000 inflates payload size 20x for marginal UX gain. Keep the first 50 after applying `requireAudio`-soft-prefer + JLPT-quality sort, dropping the tail. (Reassess if users complain.)
 - **Max 10 DDG fallback images per word.** Matches userscript today.
 - **No max on per-word audio/image media count beyond the 50-example cap** — bounded by that.
 
@@ -383,7 +383,7 @@ Optional reductions:
 - Self-hosted Postgres on the droplet: -$15. Trade is occasional ops pain.
 - Drop Cloudflare and serve TLS directly: $0 saved (already free); -1 layer of cache, +1 hour to debug DDoS if it ever happens. Not worth it.
 
-Egress is the main variable cost. If audience grows past forum-readership and we blow through 1TB/mo, Spaces overage is $0.01/GB after 1TB. A 5TB month is +$40 — that's the surge ceiling worth knowing about.
+Egress is the main variable cost. If the audience ever grows large enough to blow through 1TB/mo, Spaces overage is $0.01/GB after 1TB. A 5TB month is +$40 — that's the surge ceiling worth knowing about.
 
 ## Rate limiting & abuse
 
@@ -419,7 +419,7 @@ Application-layer (server itself):
 - **What if IK goes down or changes their API?** The cached payloads in Postgres + media in Spaces keep serving stale-but-functional content forever. We'd lose new-vocab warming until we fixed the IK integration. Acceptable.
 - **What if a user wants to share a sentence selection?** Not in v1. Could later add `GET /v1/vocab/:word?at=<exampleId>` that returns a single example, and the userscript could deep-link to it.
 - **What if the bundled JLPT_VOCAB is wrong for a specific word?** Same story as today — fail-open. If a community member submits a better source, swap the bundled JSON.
-- **Should we offer an opt-in telemetry channel?** Forum users sometimes want to share that they've reviewed N cards. Could add `POST /v1/telemetry/anonymous` with rate-limited counters. Punted to a "we'll see if anyone asks" bucket.
+- **Should we offer an opt-in telemetry channel?** Users sometimes want to share that they've reviewed N cards. Could add `POST /v1/telemetry/anonymous` with rate-limited counters. Punted to a "we'll see if anyone asks" bucket.
 - **What about TLS for direct droplet access (no Cloudflare)?** Caddy auto-TLS in front of the Bun process. Standard setup. Doc when we actually deploy.
 - **DDG scraping fragility**: DDG occasionally rotates the `vqd` HTML structure. When it breaks, the warm pipeline logs an error per word but the existing fallback_images stay served. Fix detection: weekly assertion in the warm run that DDG returned at least N results for a sentinel word like `犬`.
 

@@ -118,7 +118,7 @@ Ship a userscript version where:
 - Server-side structured logging: `vocab.serve` / `vocab.batch` per-request events with a `cacheStatus` enum (`hit` / `not_modified` / `cold_warm` / `nowarm_miss` / `empty` / `error` / `batch`); `warm.word.done` line aggregates per-warm media stats (audio source breakdown, storage-cache hit ratio, DDG counts) so the operator can tell at a glance whether a request hit the cache or did fresh upstream work.
 
 **What's NOT yet done (next steps):**
-- Forum post announcing v2.0.0 (rename + legacy snapshot + Phase 3 ship) — maintainer is drafting separately.
+- (No public announcement is planned — the project is private, not published anywhere.)
 
 Test plan for Phase 1:
 1. Run server locally; set `apiServerUrl = http://localhost:3000`; flip toggle on.
@@ -238,7 +238,7 @@ These are real decisions for migration time — not deferred forever.
 - **What's the production server URL?** Resolved: `https://api.wkenhanced.dev` (DigitalOcean droplet in SFO3 + Spaces, Cloudflare Tunnel for TLS/edge). Userscript `DEFAULTS.apiServerUrl` points here.
 - **Should we ship the prefetch (batch) endpoint use in Phase 1, or save it for v1.2?** Argument for: full payoff of the API; first impression matters. Argument against: smaller diff = lower migration risk. **Lean toward: ship without prefetch, add in v1.2 once the basic path is stable.**
 - **Should there even be a `useApiServer` toggle, or just hard-cut?** Toggle is safer; users with the old version still work after we deploy the server. But it bloats the codebase with two paths. **Lean toward: keep the toggle through Phase 2, remove in Phase 3.**
-- **What's the strategy for users on old userscript versions after Phase 3?** They'll keep working (still hitting IK directly) until something breaks. We can't force-update. Acceptable; document in the forum post.
+- **What's the strategy for users on old userscript versions after Phase 3?** They'll keep working (still hitting IK directly) until something breaks. We can't force-update. Acceptable.
 - **Server-side: should we limit the public `apiServerUrl` to one canonical domain** (no user-pointing the userscript at random servers), or allow any URL (developer-friendly, but enables malicious "use this server" instructions)? **Lean toward: allow any URL — power users can self-host the server, and there's no auth so "malicious server" is no worse than "malicious anything else on the page."**
 - **Error fallback: if our server is down, should the userscript fall back to direct IK/DDG/Google calls?** Phase 1: yes (old code path still exists). Phase 3: no (code is gone). Acceptable downtime: if the server goes down for an hour, users see "no example found" cards for that hour — the rest of WK still works. Not great but not catastrophic.
 - **Should we add a server-status indicator to the card?** A tiny dot or text near the source attribution showing "via wk-enhanced-api" vs "server down". Power-user-y; defer unless someone asks.
@@ -247,7 +247,7 @@ These are real decisions for migration time — not deferred forever.
 
 - **Phase 1 (coexistence ship)**: ~half a day of focused work. The new code is small (~300 lines added: fetchVocab, cache layer, settings field, init wiring). The big-net-of-deletion happens at Phase 3.
 - **Phase 1 verification**: a couple hours of manual testing across ~50 review words.
-- **Phase 2 (default-on)**: 5 minutes of code change (flip default) + write the forum post.
+- **Phase 2 (default-on)**: 5 minutes of code change (flip default).
 - **Phase 3 (cleanup)**: a few hours to delete the old paths cleanly + bump to v2.0.
 
 Total: 1-2 days of work spread across a few weeks of validation time.
