@@ -4,22 +4,25 @@ Living document for the WKEnhanced project. Use this as the entry point for any 
 
 Owns the *what-to-do-next* state of the project. Architecture, design rationale, and dead-end warnings live in [CLAUDE.md](CLAUDE.md), [wk-enhanced-api/CLAUDE.md](wk-enhanced-api/CLAUDE.md), [SERVER_DESIGN.md](SERVER_DESIGN.md), and [CLIENT_MIGRATION.md](CLIENT_MIGRATION.md). The feature backlog (everything that isn't time-critical) is in [NEW_FEATURES.md](NEW_FEATURES.md).
 
-**Last updated**: 2026-05-26, evening — Dockerize is **shipped to prod**. Droplet migrated cleanly from bare-metal Bun to Docker Compose; first daily backup ran end-to-end (114.6 MB DB → snapshot → Spaces upload in 1.6s); bulk re-warm of the May-25 missing-words gap completed against the new container with 429-backoff doing its job (1858 cold attempts, ~1603 populated, ~255 IK-empty, near-zero genuine failures). DB now covers all ~6717 WK vocab words. Nothing public has been announced yet.
+**Last updated**: 2026-06-12 — the **study app's audio-unify epic is fully shipped AND deployed to prod**. This session: the unified sentence store Phase 2 (built-in examples), native audio for Minna cards in Browse/Reviews, explicit-voice authority + TTS ETag/revalidate fixes, and the prod Siri-voice rollout (clips pushed to Spaces via `push-tts-variants.ts` + manifest seeded on the droplet via `seed-audio-variants.ts`) all landed. Prod verified serving Phase 2 card sentences + the new `no-cache`/ETag TTS headers + the `siri:male`/`siri:female` voice picker. **Nothing public has been announced yet** — the v2.0.0 forum post is still the top un-started item.
 
 ---
 
 ## Current state of the world
 
-- **Userscript**: [wkenhanced.user.js](wkenhanced.user.js) **v2.0.0**. Server-only — every vocab lookup goes through `https://api.wkenhanced.dev`. The IK / DDG / Google TTS direct path is gone from this file; the v1.1.1 snapshot lives at [legacy/wk-vocab-review-ik-direct.user.js](legacy/wk-vocab-review-ik-direct.user.js) as a frozen fallback for "API server is down for an extended period." Source tree only — no build pipeline. **Manually verified working** by the maintainer pasting into Tampermonkey post-ship; cards render, audio plays, picker + refresh + image cycle all behave correctly.
-- **Server**: [wk-enhanced-api/](wk-enhanced-api/) in production at `https://api.wkenhanced.dev` (DO droplet in SFO3, Spaces bucket, Cloudflare Tunnel). **Dockerized** as of 2026-05-26 — runs as a single Compose service via `wk-enhanced-api.service` (a thin `docker compose up -d` wrapper); the backup unit runs via `docker exec wk-enhanced-api bun run /app/deploy/backup.ts`. Two systemd timers: monthly bulk warm (1st of month, 04:00 local) + daily backup (03:00 UTC). Cumulative deploy-day fixes documented in [wk-enhanced-api/CLAUDE.md](wk-enhanced-api/CLAUDE.md) DEAD-END WARNINGS.
-- **Bulk warm coverage (post-rewarm)**: **6717 / ~6717 rows populated.** 5910 with real example data, 807 legitimately IK-empty (genuine "no data for this word" from IK's corpus; correctly stored as empty payloads, not failures). The May-25 1641-missing-row gap is closed — the 429-backoff caught transient rate-limits during the bulk re-warm and recovered.
-- **SQLite backups**: daily at 03:00 UTC via `wk-enhanced-api-backup.timer` → `s3://wk-enhanced-api-media/backups/YYYY-MM-DD.sqlite` (private object). GFS retention via [`deploy/retention.ts`](wk-enhanced-api/deploy/retention.ts) (default 7 daily + 4 weekly + 12 monthly). First prod run on 2026-05-26 completed in 1.6s.
+Three surfaces now, not two. The userscript + API are stable; most active development is in the **study app**.
+
+- **Userscript**: [wkenhanced.user.js](wkenhanced.user.js) **v2.0.0**. Server-only — every vocab lookup goes through `https://api.wkenhanced.dev`. The IK / DDG / Google TTS direct path is gone; the v1.1.1 snapshot lives at [legacy/wk-vocab-review-ik-direct.user.js](legacy/wk-vocab-review-ik-direct.user.js) as a frozen "API down" fallback. Source tree only — no build pipeline. Manually verified working in Tampermonkey.
+- **Server**: [wk-enhanced-api/](wk-enhanced-api/) in production at `https://api.wkenhanced.dev` (DO droplet in SFO3, Spaces bucket, Cloudflare Tunnel). **Dockerized** — single Compose service via `wk-enhanced-api.service`; backup via `docker exec`. Two systemd timers: monthly bulk warm + daily backup (03:00 UTC). It now ALSO backs the study app: accounts (cookie sessions), per-user progress/settings/custom-cards/minna sync, the durable `study_sessions` log, the みんなの日本語 routes, the unified `/v1/audio/*` surface (tagged voice variants + manifest), and the **unified sentence store** (Self-Talk + built-in examples). Deploy-day fixes: [wk-enhanced-api/CLAUDE.md](wk-enhanced-api/CLAUDE.md) DEAD-END WARNINGS.
+- **Study app**: [study-app/](study-app/) — its OWN Vite project + nginx container at the apex `https://wkenhanced.dev`, cross-origin to `api.`. The big stuff has shipped: the two-container split, the `app.js` → `features/*` module refactor, accounts + sync, SRS-vs-free study, the みんなの日本語 dashboard (incl. Phase 2 record-and-compare), 独り言 Self-Talk, the **audio-unify epic (Phases 1–3 + follow-ups ①–⑦, complete)**, and the sentence store (Phase 1 Self-Talk + Phase 2 examples). Its own priority list: [study-app/NEXT_STEPS.md](study-app/NEXT_STEPS.md).
+- **Bulk warm coverage**: ~6717 / ~6717 rows populated (real data + legitimately-IK-empty). DB ~115 MB.
+- **SQLite backups**: daily 03:00 UTC → `s3://…/backups/YYYY-MM-DD.sqlite` (private), GFS retention via [`deploy/retention.ts`](wk-enhanced-api/deploy/retention.ts). Covers all the user-data tables (accounts/progress/sessions/sentences) — load-bearing now, not just convenience.
 
 ---
 
 ## Next session's runway (priority order)
 
-This list is a menu, not a checklist — pick what matches the time you have. Nothing on the critical path is gated; the server is fully shipped + healthy.
+This list is a menu, not a checklist — pick what matches the time you have. Nothing is on a critical path; everything shipped so far is healthy in prod. App-specific feature work has its own priority list in [study-app/NEXT_STEPS.md](study-app/NEXT_STEPS.md); this section owns the cross-cutting / userscript-server / ops items.
 
 ### 1. Forum-post announcement of v2.0.0 (1–2 hours of polish + posting)
 
@@ -55,6 +58,15 @@ Lower priority and not currently blocking anything; jump to [NEW_FEATURES.md](NE
 - **Click-to-lookup on sentence words** — userscript change, high QoL.
 - **JLPT badge on the card itself** — small userscript UI addition.
 - **Health metrics expansion** (24h serve counts, cache hit rate, storage size) — useful for capacity planning once forum traffic shapes up.
+
+### 5. Study-app + sentence-store next stages
+
+The active product surface. Full priority list + design notes in [study-app/NEXT_STEPS.md](study-app/NEXT_STEPS.md); the headline forward-looking threads:
+
+- **Sentence store — NLP phase.** Phases 1 (Self-Talk) + 2 (built-in examples) are DB-authoritative + deployed. The schema already has the empty `sentence_annotation` table reserved for GiNZA tokens/bunsetsu by char-offset; populating it (offline-only GiNZA, structured furigana) is the next phase. Design + sequencing recorded in the `sentence-store-rearchitecture` memory; the convergence was **store first, NLP later** — so this is "later." Minna sentences moving into the store is the other deferred phase.
+- **Content proofread passes (model-generated → human-verified).** Several datasets shipped model-generated and want a real human pass: the leveled example sentences (`data/examples.js` → re-run `seed-sentences.ts` after edits), the 47 generated Minna words' examples/mnemonics, pitch accents (`ACCENTS` + Minna), and the Apple/Siri-voice readings (a real-ear listen — note the local male clips were just pushed to prod; spot-check they actually sound male). None are blocking; they're quality polish.
+- **Custom-card completeness gap.** The "Add card" modal sets every field except `levels` (the 5 N5→N1 tiers) + `accent`, so a UI-authored card isn't full-value. A leveled-example + accent editor (or an "AI-generate" button) closes the user-content parity gap. See [study-app/CARDS.md](study-app/CARDS.md) "the custom-card gap".
+- **Self-Talk pre-gen.** The 独り言 phrases aren't in the `generate-tts.ts`/`collectTtsTexts.ts` corpus yet, so their Siri reference is Google-synthed-on-first-play instead of a pre-generated `.m4a`. Add them to `collectTtsTexts()` and re-run the generate + push + seed flow.
 
 ---
 
@@ -115,8 +127,7 @@ Reference for the monthly cron warm (or any ad-hoc re-warm). On the **Dockerized
 
 ## What's NOT in scope without a separate conversation
 
-- Adding accounts / user data of any kind
-- Keyed external services (DeepL, OpenAI, Forvo, jpdb) — see SERVER_DESIGN.md "Non-goals"
+- Keyed external services (DeepL, OpenAI, Forvo, jpdb) — see SERVER_DESIGN.md "Non-goals". (Note: accounts + per-user data are NO LONGER out of scope — they shipped for the study app. The remaining account gaps are password reset / email verification, deferred for lack of an email provider; see [study-app/NEXT_STEPS.md](study-app/NEXT_STEPS.md) "Deferred".)
 - Migrating from SQLite to Postgres (the SQLite story is deliberate; see wk-enhanced-api/CLAUDE.md DEAD-END WARNINGS)
 - Migrating to DOKS or any Kubernetes setup (see "DOKS / Kubernetes — explicitly rejected" in NEW_FEATURES.md)
 - Per-user analytics / telemetry

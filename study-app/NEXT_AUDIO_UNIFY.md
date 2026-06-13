@@ -4,7 +4,14 @@ A self-contained brief for a fresh session. The goal: **unify all voice-audio so
 behind one tagged audio API**, so a given item (word reading / example sentence /
 conversation line) resolves to MULTIPLE tagged voice VARIANTS the user can pick or cycle.
 
-> ## STATUS — Phases 1 + 2 SHIPPED (`minna-audio-unify`); Phase 3 + follow-ups ②③④⑤ on `audio-followups`
+> ## STATUS — ✅ COMPLETE + DEPLOYED TO PROD (2026-06-12). Phases 1–3 + follow-ups ①–⑦ all shipped.
+>
+> Nothing left in this epic. Phases 1+2 shipped on `minna-audio-unify`; Phase 3 + follow-ups on
+> `audio-followups`; the prod Siri-voice rollout (① ) closed 2026-06-12 — clips pushed to the prod
+> Spaces bucket (`wk-enhanced-api/scripts/push-tts-variants.ts`) + `audio_variants` manifest seeded on
+> the droplet (`seed-audio-variants.ts`), and the `/v1/audio/tts` ETag + `no-cache` headers (so a
+> re-voiced clip propagates instead of being replayed `immutable`) are live. This doc is now an
+> archival record — forward-looking items live in [NEXT_STEPS.md](NEXT_STEPS.md).
 >
 > **Decisions locked** with the maintainer: **Google** = one neutral `gtx` variant (no paid
 > Cloud TTS — gender diversity comes from Siri). Picker is **per-context** (reviews / browsing /
@@ -49,8 +56,9 @@ conversation line) resolves to MULTIPLE tagged voice VARIANTS the user can pick 
 > [src/core/audio.js](src/core/audio.js); `cycleMod` + the cursor in `features/audio.js`);
 > **④ Availability hinting** — the editor queries `/v1/audio/variants` and dims synth voices that
 > aren't pre-generated yet (`fetchAvailableVoices`), so ① is visible in the UI; **⑤ Phase 3** —
-> ▶ reference (see above). ① (operator pre-gen of the Siri clips) is **done**; ⑦ shipped. The whole
-> ①–⑦ list is now complete (⑥ Forvo was dropped — not wanted).
+> ▶ reference (see above). **① (operator pre-gen of the Siri clips) is done — locally AND on prod**
+> (the prod clips were copied from the local renders, not re-rendered; see the STATUS block + the
+> deploy runbook); ⑦ shipped. The whole ①–⑦ list is complete (⑥ Forvo was dropped — not wanted).
 >
 > The variant-descriptor shape, key schema, preference model, and verification steps are in the
 > approved plan; the sections below are the original brief, kept for reference.

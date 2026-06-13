@@ -19,14 +19,17 @@ The original backlog plus a large second wave (accounts + sync, SRS vs free stud
 file split, leveled examples, the みんなの日本語 dashboard with content/dedup/pitch, deck-wide
 pitch accent) have all shipped — **and so has THE BIG ONE: the split into two apps.**
 
-> **In flight — audio-unify (branch `minna-audio-unify`):** Phases 1 + 2 SHIPPED. Phase 1
-> (server) = a unified `/v1/audio` route group + tagged voice-variant key scheme + `audio_variants`
-> catalog + dual-gender Siri pre-gen (legacy `/v1/tts` + `/v1/minna/*` audio paths kept as aliases).
-> Phase 2 (client) = `core/audio.js` resolver + the shared `playItem` player + a per-context
-> Voice-priority picker in Settings (reviews / browsing / textbook, ordering specific voices OR
-> kinds), with flashcards/Browse/Minna all routed through it. **Phase 3 (next):** generalize the
-> record-and-compare "▶ native" into "▶ reference" against any chosen voice. Full status:
-> [NEXT_AUDIO_UNIFY.md](NEXT_AUDIO_UNIFY.md).
+> **✅ DONE + DEPLOYED — audio-unify (was `minna-audio-unify` / `audio-followups`):** the whole
+> epic shipped (Phases 1–3) AND the follow-up list ①–⑦ is complete. Phase 1 (server) = a unified
+> `/v1/audio` route group + tagged voice-variant key scheme + `audio_variants` catalog + dual-gender
+> Siri pre-gen (legacy `/v1/tts` + `/v1/minna/*` aliases kept). Phase 2 (client) = `core/audio.js`
+> resolver + the shared `playItem` player + a per-context Voice-priority picker in Settings, with
+> flashcards/Browse/Minna routed through it. Phase 3 = the record-and-compare "▶ native" generalized
+> to "▶ reference" against any chosen voice. **Prod rollout closed 2026-06-12:** the Siri `siri:male`/
+> `siri:female` clips were pushed to the prod Spaces bucket (`push-tts-variants.ts`) and the
+> `audio_variants` manifest seeded on the droplet (`seed-audio-variants.ts`), so the picker offers
+> the real voices in prod; the `/v1/audio/tts` ETag + `no-cache` headers (so a re-voiced clip
+> propagates) are also live. Full status: [NEXT_AUDIO_UNIFY.md](NEXT_AUDIO_UNIFY.md).
 
 ## ✅ SHIPPED — split into two apps (the learning tool + the API)
 
@@ -375,12 +378,18 @@ This is the priority. The items below are smaller and can follow.
   Follow-ups + my suggestions below.
 
 ### Audio-unify — follow-ups & ideas (priority-ordered)
-- ~~**① Generate the Siri voices (operator step).**~~ **Done (local).** The two-pass macOS workflow
-  ran — System Voice → Japanese Siri **male**, `bun scripts/generate-tts.ts --variant siri:male`;
-  flip to **female**, `--variant siri:female` — so siri:* now resolve to real clips locally (the
-  picker's ④ dimming clears + ② previews play the Siri voice). **Still TODO: re-seed prod** — run the
-  same two passes with the prod `S3_*` env **and** prod `DATABASE_FILE` so the `audio/siri/*` objects
-  + `audio_variants` rows land where prod's `/v1/audio/variants` reads them.
+- ~~**① Generate the Siri voices (operator step).**~~ **DONE — local + prod (2026-06-12).** The
+  two-pass macOS workflow ran locally — System Voice → Japanese Siri **male**,
+  `bun scripts/generate-tts.ts --variant siri:male`; flip to **female**, `--variant siri:female` — so
+  siri:* resolve to real clips locally. **Prod was then seeded by COPYING those local clips, not
+  re-rendering** (you can only render a Siri voice on a Mac with the right System Voice): the bytes
+  went to the prod Spaces bucket via `wk-enhanced-api/scripts/push-tts-variants.ts` (run on the Mac
+  with the prod `S3_*` env), and the `audio_variants` manifest rows were written on the droplet via
+  `seed-audio-variants.ts` (the picker reads the manifest, NOT storage, so the rows are what make the
+  voices appear). The two-half split (bytes from the Mac, manifest on the droplet) + the runbook are
+  in [../wk-enhanced-api/deploy/README.md](../wk-enhanced-api/deploy/README.md). Verified live: the
+  prod picker offers siri:male/female and they play the right voice. **Optional follow-up:** a
+  real-ear listen that the male clips actually sound male (they ship whatever the System Voice was).
 - ~~**② "Preview voice" in the Settings picker.**~~ **Shipped.** Every row in the Voice-priority
   editor has a ▶ that auditions the sample word 食べる: a specific synth voice previews itself, a
   `kind:tts` row previews the synth voice that context actually resolves to, and `kind:native`/
