@@ -23,13 +23,13 @@ commit-3 UI lands.
   during the same parse and written to `sentence_tag(kind='grammar')` for example rows, reusing the
   study-app's existing `SELFTALK_GRAMMAR` ids so auto-detected and hand-authored grammar tags search
   one vocabulary. Every detector is pinned with positives + confusable negatives.
-- **Commit 3 (NEXT, not started):** surface it in the study-app — serve the annotations on
-  `/v1/sentences`, build tap-a-word → lemma/POS/reading → card-or-Jisho lookup, and a grammar-search
-  filter. This is the payoff and the only user-visible part. It touches the **frontend**, so it's
-  browser-verified and bigger.
+- **Commit 3 (in progress):** surface it in the study-app. **3a (server, ✅ shipped):** annotations
+  serve on `GET /v1/sentences?annotate=1` via `getSentences({includeAnnotations})` — see §7a. **3b/3c
+  (client, NEXT):** tap-a-word → lemma/POS/reading → card-or-Jisho lookup, and a grammar-search filter.
+  3b/3c are the user-visible payoff; they touch the **frontend**, so they're browser-verified and bigger.
 - **Grammar is ALREADY being served** (it rides `tags.grammar` on the existing `getSentences` read —
-  see §5.4). Only the token **annotation** needs a new serving flag. The client just doesn't *use*
-  either yet.
+  see §5.4). Only the token **annotation** needed the new serving flag (3a). The client just doesn't
+  *use* either yet (3b/3c).
 
 The server (the $6 prod droplet) **only ever reads** this data. All parsing is an offline batch on a
 maintainer machine, loaded at deploy time exactly like `seed-sentences.ts`. There is no Python in prod.
@@ -370,17 +370,20 @@ The remaining, user-visible work. Bigger than 1–2 because it touches the **stu
 browser-verified. Recommend splitting into **3a (server) → 3b (tap UI) → 3c (grammar filter)** with the
 open decisions settled with the user first (same collaborative pattern as commits 1–2).
 
-### 7a. Serving the token annotation (server-only, easy to verify)
-- **Extend `getSentences`** with an opt-in `includeAnnotations` (LEFT JOIN `sentence_annotation`,
-  attach `annotation?: SentenceAnnotation` to each `AssembledSentence`). This rides the existing
-  `VIEWER_VISIBLE`-gated query — the literal route-through the choke-point. Grammar already rides
-  `tags.grammar`; this adds the tokens.
-- **Route** [routes/sentences.ts](wk-enhanced-api/src/routes/sentences.ts): add an opt-in query flag
-  (e.g. `?annotate=1`) so existing callers/payloads are unaffected.
-- **Schema** [schemas.ts](wk-enhanced-api/src/schemas.ts): add the optional `annotation` field to the
-  sentence response schema.
-- Test: a pin that `?annotate=1` returns tokens for a public row and never leaks a private row's
-  annotation to anon (the choke-point still holds through the join). Verify with `curl`.
+### 7a. Serving the token annotation (server-only) — ✅ SHIPPED
+- **`getSentences`** gained an opt-in `includeAnnotations` ([client.ts](wk-enhanced-api/src/db/client.ts)):
+  it `LEFT JOIN sentence_annotation a ON a.sentence_id = s.id` **inside** the existing
+  `VIEWER_VISIBLE`-gated query (the literal route-through the choke-point) and attaches `annotation?`
+  to each `AssembledSentence` only when the row is parsed. Off by default → existing payloads byte-identical.
+  Grammar needed no work — it already rides `tags.grammar`.
+- **Route** [routes/sentences.ts](wk-enhanced-api/src/routes/sentences.ts): `GET /v1/sentences?annotate=1`
+  (a plain optional string → `=== '1'`, so any other value is just "off", never a 400).
+- **Schema** [schemas.ts](wk-enhanced-api/src/schemas.ts): `AnnotationToken`/`AnnotationBunsetsu`/
+  `SentenceAnnotation` schemas + an optional `annotation` field on `SentenceSchema`.
+- **Test** ([client.test.ts](wk-enhanced-api/src/db/client.test.ts)): a breach pin — the join never leaks
+  a private row's annotation to anon/another-user, the owner sees their own, no `annotation` field
+  without the flag, and a visible-but-unparsed row carries none (no existence leak). `bun test` 186 pass,
+  `typecheck` clean; curl-verified on dev (`毎日…` → 6 tokens w/ UTF-16 offsets; no flag → no field).
 
 ### 7b. Tap-to-lookup UI (study-app)
 - **Fetch:** the deck examples come via `GET /v1/sentences?ownerType=card` (`features/examples.js`

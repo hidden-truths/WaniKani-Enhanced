@@ -586,6 +586,10 @@ export interface AssembledSentence {
     tags: Record<string, string | string[]>;
     link: SentenceLink;
     custom: boolean;
+    // Opt-in (getSentences `includeAnnotations`): GiNZA token/bunsetsu structure for tap-to-lookup.
+    // Rides the SAME VIEWER_VISIBLE gate via the LEFT JOIN, so a private row's annotation only ever
+    // reaches its owner. Absent when not requested OR when the sentence has no annotation yet.
+    annotation?: SentenceAnnotation;
 }
 
 type SentenceRow = {
@@ -744,17 +748,31 @@ function insertSentenceChildren(
 // Returns one entry PER LINK (not per sentence): a sentence reused by several cards/tiers comes
 // back once per link, each carrying its own link, so the deck can rebuild v.levels keyed by
 // owner_id + tier. Self-Talk is unaffected — its sentences have exactly one selftalk link each.
-export function getSentences(opts: { ownerType: string; ownerId?: string | null; viewer?: number | null }): AssembledSentence[] {
+export function getSentences(opts: {
+    ownerType: string;
+    ownerId?: string | null;
+    viewer?: number | null;
+    includeAnnotations?: boolean;
+}): AssembledSentence[] {
     const viewer = opts.viewer ?? null;
     const ownerId = opts.ownerId ?? null;
+    // Opt-in token annotations (tap-to-lookup): LEFT JOIN sentence_annotation INSIDE the same
+    // VIEWER_VISIBLE-gated query, so an annotation can only come back for a row the viewer already
+    // passes the gate on — a private row's annotation can never ride the join to anon / another
+    // user (pinned in client.test.ts). Off by default → existing callers' payloads are unchanged.
+    const annotate = opts.includeAnnotations ?? false;
+    const annCols = annotate
+        ? ', a.tokens AS a_tokens, a.bunsetsu AS a_bunsetsu, a.parser AS a_parser, a.parsed_at AS a_parsed_at'
+        : '';
+    const annJoin = annotate ? ' LEFT JOIN sentence_annotation a ON a.sentence_id = s.id' : '';
     const rows = getDb()
         .query(
             `SELECT s.id, s.ext_id, s.hash, s.text, s.furigana, s.lang, s.source,
                     s.public, s.visibility, s.created_by, s.created_at,
                     l.owner_type AS l_owner_type, l.owner_id AS l_owner_id, l.tier AS l_tier,
                     l.role AS l_role, l.ordinal AS l_ordinal,
-                    l.clip_start_ms AS l_clip_start_ms, l.clip_end_ms AS l_clip_end_ms
-             FROM sentence_link l JOIN sentence s ON s.id = l.sentence_id
+                    l.clip_start_ms AS l_clip_start_ms, l.clip_end_ms AS l_clip_end_ms${annCols}
+             FROM sentence_link l JOIN sentence s ON s.id = l.sentence_id${annJoin}
              WHERE l.owner_type = ? AND (? IS NULL OR l.owner_id = ?) AND ${VIEWER_VISIBLE}
              ORDER BY s.id, l.id`,
         )
@@ -766,9 +784,13 @@ export function getSentences(opts: { ownerType: string; ownerId?: string | null;
         l_ordinal: number;
         l_clip_start_ms: number | null;
         l_clip_end_ms: number | null;
+        a_tokens?: string | null;
+        a_bunsetsu?: string | null;
+        a_parser?: string | null;
+        a_parsed_at?: number | null;
     })[];
-    return rows.map((r) =>
-        assembleSentenceRow(
+    return rows.map((r) => {
+        const out = assembleSentenceRow(
             r,
             compactLink({
                 owner_type: r.l_owner_type,
@@ -779,8 +801,19 @@ export function getSentences(opts: { ownerType: string; ownerId?: string | null;
                 clip_start_ms: r.l_clip_start_ms,
                 clip_end_ms: r.l_clip_end_ms,
             }),
-        ),
-    );
+        );
+        // Attach only when requested AND the row actually has an annotation (LEFT JOIN → NULLs for
+        // an unparsed sentence, which then simply carries no `annotation` field).
+        if (annotate && r.a_tokens != null) {
+            out.annotation = {
+                tokens: JSON.parse(r.a_tokens) as AnnotationToken[],
+                bunsetsu: JSON.parse(r.a_bunsetsu!) as AnnotationBunsetsu[],
+                parser: r.a_parser!,
+                parsedAt: r.a_parsed_at!,
+            };
+        }
+        return out;
+    });
 }
 
 // Count a user's own (private) sentences — backs the per-user authoring cap in the route.

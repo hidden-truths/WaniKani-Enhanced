@@ -526,6 +526,39 @@ export const SentenceLinkSchema = z
     })
     .openapi('SentenceLink');
 
+// GiNZA-derived structure (Phase 4 NLP enrichment), served only when ?annotate=1. A token is one
+// morpheme; `start`/`end` are UTF-16 code-unit offsets into `text` (see the offset-contract
+// dead-end in wk-enhanced-api/CLAUDE.md), so the client maps a tap by slicing `text` in JS. `lemma`
+// (dictionary form) drives the card/Jisho link; `reading` is GiNZA's (visible reading is furigana).
+export const AnnotationTokenSchema = z
+    .object({
+        i: z.number().int(),
+        start: z.number().int(),
+        end: z.number().int(),
+        surface: z.string(),
+        lemma: z.string(),
+        pos: z.string(),
+        tag: z.string(),
+        reading: z.string(),
+        dep: z.string(),
+        head: z.number().int(),
+    })
+    .openapi('AnnotationToken');
+
+// A phrase chunk (also UTF-16 offsets into text), for phrase-level highlight / grammar matching.
+export const AnnotationBunsetsuSchema = z
+    .object({ start: z.number().int(), end: z.number().int() })
+    .openapi('AnnotationBunsetsu');
+
+export const SentenceAnnotationSchema = z
+    .object({
+        tokens: z.array(AnnotationTokenSchema),
+        bunsetsu: z.array(AnnotationBunsetsuSchema),
+        parser: z.string().openapi({ example: 'ja_ginza_electra/5.2.0 ginza/5.2.0 splitC' }),
+        parsedAt: z.number().int().openapi({ description: 'Epoch ms the parse was loaded.' }),
+    })
+    .openapi('SentenceAnnotation');
+
 // The assembled sentence the API serves (composed from sentence + translation + tag + link).
 export const SentenceSchema = z
     .object({
@@ -538,6 +571,9 @@ export const SentenceSchema = z
             .openapi({ description: 'e.g. { scene: "morning", grammar: ["te-iru"] }.' }),
         link: SentenceLinkSchema,
         custom: z.boolean().openapi({ description: 'true = user-authored (private); false = curator/public.' }),
+        annotation: SentenceAnnotationSchema.optional().openapi({
+            description: 'GiNZA tokens/bunsetsu. Present only when ?annotate=1 AND the sentence is parsed (public rows + the viewer’s own private rows).',
+        }),
     })
     .openapi('Sentence');
 
@@ -557,6 +593,12 @@ export const SentenceListQuerySchema = z.object({
         .string()
         .optional()
         .openapi({ param: { name: 'ownerId', in: 'query' }, description: 'Optional: narrow to one owner (e.g. a card rank).', example: '1' }),
+    // Opt-in: '1' attaches each sentence's GiNZA token annotation (tap-to-lookup). A plain string so
+    // any other/absent value is simply off — never a validation 400. Off keeps the payload unchanged.
+    annotate: z
+        .string()
+        .optional()
+        .openapi({ param: { name: 'annotate', in: 'query' }, description: 'Set to "1" to include token annotations per sentence.', example: '1' }),
 });
 
 // POST body — carries the CLIENT-generated id (ext_id). text/furigana/tags/translations/link

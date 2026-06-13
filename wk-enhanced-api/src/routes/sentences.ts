@@ -59,10 +59,11 @@ const listRoute = createRoute({
 
 sentencesRouter.openapi(listRoute, (c) => {
     const user = currentUser(c); // null = anon → public rows only
-    const { ownerType, ownerId } = c.req.valid('query');
+    const { ownerType, ownerId, annotate } = c.req.valid('query');
+    const includeAnnotations = annotate === '1';
     c.header('Cache-Control', 'no-store');
-    const sentences = db.getSentences({ ownerType, ownerId: ownerId ?? null, viewer: user?.id ?? null });
-    c.set('logCtx', { ownerType, ownerId: ownerId ?? null, viewer: user?.id ?? null, count: sentences.length });
+    const sentences = db.getSentences({ ownerType, ownerId: ownerId ?? null, viewer: user?.id ?? null, includeAnnotations });
+    c.set('logCtx', { ownerType, ownerId: ownerId ?? null, viewer: user?.id ?? null, annotate: includeAnnotations, count: sentences.length });
     return c.json({ sentences }, 200);
 });
 

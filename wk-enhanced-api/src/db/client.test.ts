@@ -534,6 +534,39 @@ describe('sentence_annotation (NLP enrichment) — offset contract + privacy', (
         expect(db.getAnnotation({ extId: 'usr-a1' })).toBeNull();
     });
 
+    // The SERVING path (commit 3a): getSentences({includeAnnotations}) LEFT JOINs sentence_annotation
+    // inside the VIEWER_VISIBLE gate. This pins that the join can't widen the gate — a private row's
+    // annotation must never reach anon / another user — and that the flag is opt-in (no field without it).
+    test('PRIVACY PIN: includeAnnotations join never leaks a private row’s annotation; opt-in only', () => {
+        const a = db.createUser('a@x.com', 'h');
+        const b = db.createUser('b@x.com', 'h');
+        pub('st-pub', 'おはよう。'); // public selftalk + annotation
+        db.upsertAnnotation({ sentenceId: idOf('st-pub'), tokens: [tok({ start: 0, end: 5, surface: 'おはよう。' })], bunsetsu: [], parser: 't' });
+        db.createSentence({ extId: 'usr-a1', text: 'ひみつ。', furigana: seg('ひみつ。'), source: 'selftalk', createdBy: a.id, translations: {}, tags: {}, link: { owner_type: 'selftalk' } });
+        db.upsertAnnotation({ sentenceId: idOf('usr-a1'), tokens: [tok({ start: 0, end: 4, surface: 'ひみつ。' })], bunsetsu: [], parser: 't' });
+
+        // anon: only the public row, WITH its annotation; the private row is absent entirely
+        const anon = db.getSentences({ ownerType: 'selftalk', viewer: null, includeAnnotations: true });
+        expect(anon.map((s) => s.id)).toEqual(['st-pub']);
+        expect(anon[0]!.annotation!.tokens.map((t) => t.surface)).toEqual(['おはよう。']);
+
+        // owner A: both rows, each carrying its own annotation
+        const owner = db.getSentences({ ownerType: 'selftalk', viewer: a.id, includeAnnotations: true });
+        expect(owner.map((s) => s.id).sort()).toEqual(['st-pub', 'usr-a1']);
+        expect(owner.find((s) => s.id === 'usr-a1')!.annotation!.tokens.map((t) => t.surface)).toEqual(['ひみつ。']);
+
+        // another user B: A's private row + its annotation never appear (the breach we guard)
+        expect(db.getSentences({ ownerType: 'selftalk', viewer: b.id, includeAnnotations: true }).map((s) => s.id)).toEqual(['st-pub']);
+
+        // opt-in: without the flag, NO annotation field rides along even for a parsed row
+        expect(db.getSentences({ ownerType: 'selftalk', viewer: a.id }).every((s) => s.annotation === undefined)).toBe(true);
+
+        // a visible-but-unparsed row simply has no annotation field even WITH the flag (no existence leak)
+        pub('st-bare', 'やあ。');
+        const bare = db.getSentences({ ownerType: 'selftalk', viewer: null, includeAnnotations: true }).find((s) => s.id === 'st-bare')!;
+        expect(bare.annotation).toBeUndefined();
+    });
+
     test('upsertAnnotation is idempotent; getAnnotation round-trips tokens/bunsetsu/parser', () => {
         db.upsertPublicSentence({ extId: 'st-2', text: '母は。', furigana: [{ t: '母' }, { t: 'は。' }], source: 'selftalk', translations: {}, tags: {}, link: { owner_type: 'selftalk' } });
         const id = idOf('st-2');
