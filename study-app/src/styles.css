@@ -499,6 +499,11 @@
   .form-grid{display:grid;grid-template-columns:1fr 1fr;gap:0 16px}
   .form-grid .full{grid-column:1 / -1}
   @media(max-width:520px){.form-grid{grid-template-columns:1fr}}
+  /* Add-card "Pitch & leveled examples" disclosure: inline hints + a live pitch-accent preview
+     box sized to line up with the adjacent number input. */
+  .modal .field-hint{color:var(--muted);font-size:12px;line-height:1.55;margin:8px 0}
+  .modal .field-hint code{font-family:"SF Mono",ui-monospace,monospace;font-size:11px;background:var(--paper-2);padding:1px 4px;border-radius:3px}
+  .modal .acc-preview{min-height:41px;display:flex;align-items:center;font-family:var(--jp-font);font-size:20px;color:var(--ink)}
   .modal-actions.split{display:flex;gap:10px}
   .modal-actions.split .btn{width:auto;flex:1}
   .btn.danger-btn{border-color:var(--godan);color:var(--godan);flex:0 0 auto}

@@ -5,6 +5,18 @@
 // reproduce it. No accent data → just the (escaped) reading, unchanged.
 import { escapeHtml } from './text.js';
 
+// Parse the Add-card pitch-accent input. Blank → {ok:true, value:null} (no accent, renders plain).
+// A whole number in [0,12] → {ok:true, value:n}. Anything else → {ok:false}. The [0,12] range mirrors
+// CARDS.md + the built-in-accent invariant the test pins (drop position is mora-bounded; 12 is a safe
+// ceiling for a single headword). Pure — feeds whether `accent` is stored on a custom card.
+export function parseAccent(raw) {
+  const s = String(raw == null ? '' : raw).trim();
+  if (!s) return { ok: true, value: null };
+  if (!/^\d+$/.test(s)) return { ok: false, value: null };
+  const n = +s;
+  return n <= 12 ? { ok: true, value: n } : { ok: false, value: null };
+}
+
 const SMALL_KANA = /[ぁぃぅぇぉゃゅょゎァィゥェォャュョヮ]/;
 export function splitMora(s) {
   const m = [];

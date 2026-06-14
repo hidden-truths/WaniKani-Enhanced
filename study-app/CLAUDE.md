@@ -136,7 +136,15 @@ one module each under `src/features/*` (the section names map 1:1 to filenames):
   past 100). `openVerbModal`/`saveVerb`/`deleteVerb` are the #verbModal CRUD;
   custom verbs persist in `jpverbs_custom` and SYNC to the cloud — `saveCustom`
   writes localStorage + schedules a push; `saveCustomLocal` is the no-push variant
-  for hydration.
+  for hydration. The modal also authors the two **completeness** fields — `accent`
+  (with a live `pitchHtml` preview, `updateAccentPreview`) and the five `levels` tiers —
+  behind a "Pitch accent & leveled examples" `<details id="vfMore">`; `saveVerb` validates
+  them with the pure `parseAccent`/`buildLevels`/`isCleanRuby` (each tier's JP must be
+  CLEAN RUBY since `renderExample`/Browse-detail `innerHTML` it as `exampleForLevel(v)[0]`)
+  and stores them ON the card object, where `attachLevels`'s `|| v.levels` + `accent`-wins
+  fallback preserves them through every rebuild (a custom rank >100 has no `exampleLevels`
+  store entry to override). So a UI-authored card now reaches built-in parity — see
+  [CARDS.md](CARDS.md) Recipe C.
 - **TTS:** `speak(text)` plays the server's Google TTS (`/v1/tts`) via a reused
   `<audio>` when served over http(s) (`HTTP_SERVED`), falling back to
   `speakSynth` (Web Speech) over `file://` or on failure. `TTS_OK` = either path

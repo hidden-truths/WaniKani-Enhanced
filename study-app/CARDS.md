@@ -14,7 +14,7 @@ how much of it is filled in.
 |---|---|---|---|
 | **Built-in** (the 100 frequent verbs) | `verbs.js` (`VERBS` + `ACCENTS`) + `examples.js` (`EXAMPLES`) | edit the static data files | **complete** |
 | **みんなの日本語** lesson vocab | `../data/minna/lesson-<n>.json` (server) → `minnaCard()` | scrape → curate → content workflow | **complete** |
-| **User custom** | `localStorage["jpverbs_custom"]` (synced) | the "Add card" modal | **partial** — no `levels`/`accent` (see [the gap](#the-custom-card-gap)) |
+| **User custom** | `localStorage["jpverbs_custom"]` (synced) | the "Add card" modal | **complete** — the modal authors `levels`+`accent` too ([Recipe C](#c-a-user-custom-card-the-add-card-modal)) |
 
 `DATA = VERBS (minus skip) ⊕ overlays ⊕ loadCustom().verbs`, rebuilt by `rebuildData()`;
 `attachLevels()` then backfills `levels` (from `EXAMPLES[rank]`) and `accent` (from
@@ -122,17 +122,24 @@ green (it asserts every built-in has 5 well-formed tiers + a numeric accent).
 
 ### C. A user custom card (the "Add card" modal)
 
-Browse → **Add card** sets `jp`, `read`, `mean`, `cat`, `type`, `jlpt`, `trans`, `tags`,
-`mnem`, `tip`, and a single `ex` pair. The card syncs under `custom-verbs`. This is the
-only path that doesn't make a *complete* card:
+Browse → **Add card** authors a **complete** card from the UI — `jp`, `read`, `mean`, `cat`,
+`type`, `jlpt`, `trans`, `tags`, `mnem`, `tip`, a single `ex` pair, **and** (behind the
+"Pitch accent & leveled examples" disclosure) the `accent` pitch number + the five JLPT-tiered
+`levels` sentences. The card syncs under `custom-verbs`.
 
-#### The custom-card gap
+- **Pitch accent** is one whole number (0–12); a live preview renders the overline/drop notation
+  (`pitchHtml`) as you type, so the value is verifiable. Blank = no pitch marks.
+- **Leveled examples** are optional and per-tier — fill any subset of N5→N1 (the deck's nearest-tier
+  fallback covers gaps), each JP carrying `<ruby>漢字<rt>かな</rt></ruby>` furigana. When present they
+  take precedence over the single `ex`. Each tier's JP is validated as **clean ruby** (`isCleanRuby`)
+  before saving — it's `innerHTML`-rendered, so any non-ruby markup is rejected (no broken furigana,
+  no injection). The save-time validators are the pure `parseAccent` / `buildLevels` / `isCleanRuby`,
+  and `attachLevels` preserves the stored `levels`/`accent` through every rebuild (custom ranks have
+  no server-store entry to override them — the `|| v.levels` / `accent`-wins fallback).
 
-The modal has **no `levels` and no `accent` fields**, so a UI-created card has one example
-(not 5 tiers) and no pitch marks. To complete a custom card today you'd edit the synced blob
-by hand (Export → edit JSON → Import). Closing this gap — adding a 5-tier example editor +
-an accent field (or a "generate with AI" button) to the modal — is a tracked enhancement;
-see [NEXT_STEPS.md](NEXT_STEPS.md).
+So a UI-authored card now reaches the same completeness as a built-in. Furigana is still hand-typed as
+ruby markup; an "AI-generate" button that drafts the tiers + accent server-side is a possible future
+add — see [NEXT_STEPS.md](NEXT_STEPS.md).
 
 ## Validation (run before shipping generated content)
 

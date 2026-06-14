@@ -724,6 +724,32 @@
         <div><label for="vfExJp">Example (JP)</label><input type="text" id="vfExJp" class="jp" placeholder="毎朝走る。"></div>
         <div><label for="vfExEn">Example (EN)</label><input type="text" id="vfExEn" placeholder="I run every morning."></div>
       </div>
+      <!-- The two fields a built-in card has that the quick form doesn't: pitch accent + the five
+           JLPT-leveled example sentences. Tucked behind a disclosure so the common quick-add stays
+           compact; openVerbModal opens it when editing a card that already has either. -->
+      <details id="vfMore">
+        <summary>Pitch accent &amp; leveled examples</summary>
+        <div class="det-body">
+          <div class="form-grid">
+            <div><label for="vfAccent">Pitch accent</label><input type="text" inputmode="numeric" id="vfAccent" class="jp" placeholder="0"></div>
+            <div><label for="vfAccentPreview">Preview</label><div class="acc-preview" id="vfAccentPreview" aria-live="polite"></div></div>
+          </div>
+          <p class="field-hint"><b>Pitch</b> — drop position: <b>0</b> flat (heiban), <b>1</b> drop after the 1st mora, <b>k</b> drop after the kth. Use a pitch dictionary (OJAD / NHK) when you can.</p>
+          <p class="field-hint"><b>Leveled examples</b> (N5→N1) — optional; when present they replace the single example above. Furigana on every kanji as <code>&lt;ruby&gt;漢字&lt;rt&gt;かな&lt;/rt&gt;&lt;/ruby&gt;</code>, with the headword in each sentence.</p>
+          <div class="form-grid">
+            <div><label for="vfLvN5jp">N5 (Japanese)</label><input type="text" id="vfLvN5jp" class="jp" placeholder="<ruby>毎朝<rt>まいあさ</rt></ruby><ruby>走<rt>はし</rt></ruby>る。"></div>
+            <div><label for="vfLvN5en">N5 (English)</label><input type="text" id="vfLvN5en" placeholder="I run every morning."></div>
+            <div><label for="vfLvN4jp">N4 (Japanese)</label><input type="text" id="vfLvN4jp" class="jp"></div>
+            <div><label for="vfLvN4en">N4 (English)</label><input type="text" id="vfLvN4en"></div>
+            <div><label for="vfLvN3jp">N3 (Japanese)</label><input type="text" id="vfLvN3jp" class="jp"></div>
+            <div><label for="vfLvN3en">N3 (English)</label><input type="text" id="vfLvN3en"></div>
+            <div><label for="vfLvN2jp">N2 (Japanese)</label><input type="text" id="vfLvN2jp" class="jp"></div>
+            <div><label for="vfLvN2en">N2 (English)</label><input type="text" id="vfLvN2en"></div>
+            <div><label for="vfLvN1jp">N1 (Japanese)</label><input type="text" id="vfLvN1jp" class="jp"></div>
+            <div><label for="vfLvN1en">N1 (English)</label><input type="text" id="vfLvN1en"></div>
+          </div>
+        </div>
+      </details>
       <div class="modal-err" id="verbErr" aria-live="polite"></div>
       <div class="modal-actions split">
         <button type="button" class="btn danger-btn" id="verbDelete" hidden><svg class="ic" aria-hidden="true"><use href="#i-trash"/></svg>Delete</button>

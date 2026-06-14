@@ -21,6 +21,16 @@ export function rubyHtml(s) {
   return out + escapeHtml(s.slice(last));
 }
 
+// True if `s` is plain text plus ONLY well-formed <ruby>base<rt>reading</rt></ruby> furigana — no
+// other tags. The save-time guard for USER-authored example sentences (the Add-card leveled editor):
+// the flashcard / Browse-detail render path innerHTML's the example JP directly (exampleForLevel(v)[0]),
+// so a custom card must satisfy the same clean-ruby contract the built-in/Minna `levels` already do —
+// this both blocks markup injection and rejects broken ruby. Empty / plain text is clean. Pure.
+const RUBY_BLOCK_STRIP = /<ruby>[^<>]*<rt>[^<>]*<\/rt><\/ruby>/g;
+export function isCleanRuby(s) {
+  return !/[<>]/.test(String(s).replace(RUBY_BLOCK_STRIP, ''));
+}
+
 // What text to hand the TTS for a card. Google TTS derives pitch accent from the WRITTEN
 // form, so a kana-only reading is accent-ambiguous for homographs (橋 "bridge" vs 箸
 // "chopsticks" are both はし). Sending the kanji headword lets Google apply the dictionary

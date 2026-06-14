@@ -12,11 +12,11 @@ import { VERBS } from '../src/data/verbs.js';
 import {
   passes, oneGroup, facetAll, facetMatch, scheduleCard, cardStat, isDue, dueCards,
   rollingAcc, isLeech, leeches, normKana, romajiToKana, reviewForecast, filterSummary,
-  tokenFacet, deckLabel, ttsText, rubyHtml, plainText, rubyToSegments, segmentsToRuby, segmentsToReading,
+  tokenFacet, deckLabel, ttsText, rubyHtml, plainText, isCleanRuby, rubyToSegments, segmentsToRuby, segmentsToReading,
   overlayTokens,
-  minnaBuiltinRank, applyMinnaOverlays, splitMora,
+  minnaBuiltinRank, applyMinnaOverlays, splitMora, parseAccent,
   cardGrammar, cardMatchesGrammar,
-  pitchHtml, minnaSig, cardStamp, colorClass, CATS, exampleForLevel, availableTiers, sentencesToLevels,
+  pitchHtml, minnaSig, cardStamp, colorClass, CATS, exampleForLevel, availableTiers, buildLevels, sentencesToLevels,
   JLPT_TIERS, BOX_DAYS,
   clampKeep, convItemKey, formatDuration, KEEP_DEFAULT,
   validClip, resolveClip, clipLabel, findTrimBounds,
@@ -182,6 +182,47 @@ test('availableTiers lists only the tiers that have a sentence', () => {
   expect(availableTiers({ levels: { N5: ['a', 'b'], N2: ['c', 'd'] } })).toEqual(['N5', 'N2']);
   expect(availableTiers({ levels: null })).toEqual([]);
   expect(availableTiers(state.DATA.find((v: any) => v.rank === 1))).toEqual(['N5', 'N4', 'N3', 'N2', 'N1']);
+});
+
+// ---- Add-card completeness: pitch accent + leveled examples authored in the modal ----
+
+test('isCleanRuby: plain text + well-formed ruby pass; other tags / broken ruby fail', () => {
+  expect(isCleanRuby('走る')).toBe(true);                                   // plain text
+  expect(isCleanRuby('')).toBe(true);                                       // empty
+  expect(isCleanRuby('<ruby>走<rt>はし</rt></ruby>る。')).toBe(true);        // one ruby block + kana
+  expect(isCleanRuby('<ruby>毎朝<rt>まいあさ</rt></ruby><ruby>走<rt>はし</rt></ruby>る。')).toBe(true); // two blocks
+  expect(isCleanRuby('<script>alert(1)</script>')).toBe(false);             // disallowed tag (XSS)
+  expect(isCleanRuby('<b>走</b>る')).toBe(false);                           // disallowed tag
+  expect(isCleanRuby('<ruby>走<rt>はし</rt>る')).toBe(false);               // unbalanced (no </ruby>)
+  expect(isCleanRuby('<ruby class=x>走<rt>はし</rt></ruby>')).toBe(false);  // ruby with attributes ≠ curated form
+  expect(isCleanRuby('a < b')).toBe(false);                                 // bare angle bracket
+});
+
+test('parseAccent: blank → null; whole number 0–12 ok; anything else rejected', () => {
+  expect(parseAccent('')).toEqual({ ok: true, value: null });
+  expect(parseAccent('  ')).toEqual({ ok: true, value: null });
+  expect(parseAccent('0')).toEqual({ ok: true, value: 0 });                 // heiban is a real value, not "blank"
+  expect(parseAccent('3')).toEqual({ ok: true, value: 3 });
+  expect(parseAccent('12')).toEqual({ ok: true, value: 12 });
+  expect(parseAccent('13').ok).toBe(false);                                 // above the ceiling
+  expect(parseAccent('-1').ok).toBe(false);
+  expect(parseAccent('1.5').ok).toBe(false);                                // not a whole number
+  expect(parseAccent('x').ok).toBe(false);
+});
+
+test('buildLevels: drops blank tiers, trims, validates ruby, null when empty', () => {
+  // Partial set: only the tiers with JP survive; EN is optional; both halves trimmed.
+  expect(buildLevels({ N5: ['  はしる。 ', ' run '], N3: ['<ruby>走<rt>はし</rt></ruby>る。', ''] })).toEqual({
+    levels: { N5: ['はしる。', 'run'], N3: ['<ruby>走<rt>はし</rt></ruby>る。', ''] },
+    invalidTier: null,
+  });
+  // No tier has JP → null levels (the "no leveled examples" card shape, not an empty object).
+  expect(buildLevels({ N5: ['', 'orphan en'], N4: ['', ''] })).toEqual({ levels: null, invalidTier: null });
+  expect(buildLevels({})).toEqual({ levels: null, invalidTier: null });
+  // First tier whose JP isn't clean ruby is reported; levels withheld.
+  const bad = buildLevels({ N5: ['ok。', 'a'], N4: ['<b>no</b>', 'b'] });
+  expect(bad.invalidTier).toBe('N4');
+  expect(bad.levels).toBeNull();
 });
 
 test('normKana folds katakana→hiragana, strips spaces, unifies long marks', () => {

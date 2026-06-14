@@ -3,9 +3,27 @@
 // single `ex` → null). The data attach (v.levels = state.exampleLevels[rank]) lives in state.js;
 // the level set is built from the sentence store by sentencesToLevels (below).
 
-import { segmentsToRuby } from './text.js';
+import { segmentsToRuby, isCleanRuby } from './text.js';
 
 export const JLPT_TIERS = ['N5', 'N4', 'N3', 'N2', 'N1'];   // easy → hard
+
+// Build a custom card's `levels` from the Add-card leveled editor's raw per-tier [jp, en] inputs.
+// Drops any tier whose JP is blank (partial sets are fine — exampleForLevel's nearest-tier fallback
+// covers gaps), trims both halves, and validates each JP is clean ruby (innerHTML-rendered, so it
+// must be — see isCleanRuby). Returns { levels, invalidTier }: `levels` is the object (null when no
+// tier has JP, matching the "no levels" card shape), `invalidTier` names the first tier whose JP
+// isn't clean ruby (caller surfaces the error + aborts) or null. Pure, tested.
+export function buildLevels(pairs) {
+  const out = {};
+  for (const tier of JLPT_TIERS) {
+    const pair = (pairs && pairs[tier]) || [];
+    const jp = pair[0] ? String(pair[0]).trim() : '';
+    if (!jp) continue;
+    if (!isCleanRuby(jp)) return { levels: null, invalidTier: tier };
+    out[tier] = [jp, pair[1] ? String(pair[1]).trim() : ''];
+  }
+  return { levels: Object.keys(out).length ? out : null, invalidTier: null };
+}
 
 export function availableTiers(v) { return v.levels ? JLPT_TIERS.filter(t => v.levels[t]) : []; }
 

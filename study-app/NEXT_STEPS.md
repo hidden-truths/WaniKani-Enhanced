@@ -155,6 +155,17 @@ build/test setup, and its own deploy.**
 This is the priority. The items below are smaller and can follow.
 
 ## Done (most recent first)
+- ~~Custom-card completeness (leveled examples + pitch accent in the Add-card modal)~~ —
+  **shipped** (`custom-card-completeness`). The #verbModal gained a "Pitch accent & leveled
+  examples" disclosure: a pitch-accent number with a live `pitchHtml` preview + a 5-tier
+  (N5→N1) JP/EN editor. `saveVerb` validates via the new pure `parseAccent` / `buildLevels` /
+  `isCleanRuby` (each tier's JP must be clean ruby — it's `innerHTML`-rendered) and stores
+  `accent`+`levels` ON the card, which `attachLevels` preserves through rebuilds (a custom
+  rank has no `exampleLevels` store entry to override). So a UI-authored card reaches built-in
+  parity — same `renderExample`/`pitchHtml`/Browse-detail paths. 3 new core tests (107 total);
+  browser-verified end-to-end (save → render, edit re-populate, both rejection paths). Closes
+  the CARDS.md "custom-card gap". **Remaining nicety:** an optional "AI-generate" button to
+  draft the tiers/accent server-side (deferred).
 - ~~独り言 Self-Talk tab (output/speaking practice)~~ — **shipped** (`self-talk`, 7 commits). A 5th
   tab for narrating your day out loud. Built-in, **offline-first** starter phrases (7 scenes ×
   ~6–7 lines, model-authored → proofread) + **author-your-own** lines that sync under a new
@@ -428,12 +439,6 @@ This is the priority. The items below are smaller and can follow.
 - **Copy button polish (just shipped).** Optional extensions: a copy on conversation lines + vocab
   words too, and a modifier/long-press to copy the kana reading or the JP+EN pair. Today it copies
   the plain (kanji, ruby-stripped) sentence for dictionary lookup.
-- **Close the custom-card completeness gap.** The "Add card" modal sets every field
-  EXCEPT `levels` (the 5 N5→N1 tiers) and `accent` (pitch), so a UI-created card isn't a
-  *complete* card (see [CARDS.md](CARDS.md) "the custom-card gap"). Add a leveled-example
-  editor + an accent field to `#verbModal` (and/or a "generate with AI" button that calls a
-  small server endpoint), so users can author full-value cards without hand-editing the
-  exported JSON. Built-ins/Minna are already complete; this is the user-content parity piece.
 - **Pitch accent for the rest.** Built-ins (`ACCENTS` in `verbs.js`) + Minna words have
   pitch; **user custom cards don't** (no field, and `ACCENTS` is keyed by built-in rank).
   The accents are model-generated and want a **proofread pass** (esp. the nakadaka/odaka
