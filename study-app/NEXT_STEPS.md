@@ -155,6 +155,18 @@ build/test setup, and its own deploy.**
 This is the priority. The items below are smaller and can follow.
 
 ## Done (most recent first)
+- ~~Sentence-store Phase 2.5 — custom-card examples → private store rows (render-from-store)~~ —
+  **shipped** (`sentence-store-phase2.5`). A custom card's whole example set (single `ex` + N5→N1
+  `levels`) is dual-written to the server store as PRIVATE rows in one atomic call (`pushCardExamples`
+  → `PUT /v1/sentences/card/{rank}` → `db.replaceUserCardExamples`, the per-user analog of
+  `seedExampleSentence`'s wholesale replace, scoped to `created_by`); `deleteCardExamples` on delete; a
+  one-time `migrateCardExamples` backfill on sign-in. **No new render path** — `attachLevels` already
+  prefers `state.exampleLevels[rank]` and `GET ?ownerType=card` already returns own private rows, so a
+  signed-in card renders FROM the store like a built-in (blob = offline/anon fallback). Pure builder
+  `cardExamplesPayload`. Decision (maintainer): offline rendering is no longer a constraint → full
+  render-unification, not a write-only mirror. Caveat: the public-only tooling (NLP/export/de-dup/
+  TTS-pre-gen) doesn't cover private rows. 6 new tests (5 server + 1 client); curl + signed-in browser
+  E2E (dual-write → store-wins render) verified.
 - ~~Custom-card completeness (leveled examples + pitch accent in the Add-card modal)~~ —
   **shipped** (`custom-card-completeness`). The #verbModal gained a "Pitch accent & leveled
   examples" disclosure: a pitch-accent number with a live `pitchHtml` preview + a 5-tier

@@ -141,6 +141,13 @@ So a UI-authored card now reaches the same completeness as a built-in. Furigana 
 ruby markup; an "AI-generate" button that drafts the tiers + accent server-side is a possible future
 add — see [NEXT_STEPS.md](NEXT_STEPS.md).
 
+**Storage (Phase 2.5).** The example text (the single `ex` + the `levels` tiers) is **dual-written to the
+server sentence store** as PRIVATE rows when you're signed in (`PUT /v1/sentences/card/{rank}` →
+`db.replaceUserCardExamples`), so a signed-in card renders its examples **from the store** like a built-in
+(`attachLevels` prefers `state.exampleLevels[rank]`; the localStorage `custom-verbs` blob is the
+offline/anon fallback). The card DEFINITION (every other field) still lives in the synced `custom-verbs`
+blob. See the sentence-store phases in [../SENTENCE_STORE_NLP.md](../SENTENCE_STORE_NLP.md).
+
 ## Validation (run before shipping generated content)
 
 For any authored `levels`, assert: **balanced `<ruby>`/`<rt>` tags**; the **headword's kanji

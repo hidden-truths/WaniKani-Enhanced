@@ -481,6 +481,74 @@ describe('sentence store — card examples (per-link read + reuse)', () => {
     });
 });
 
+// Phase 2.5: a custom card's examples (single `ex` + JLPT `levels` tiers) become PRIVATE store
+// rows via a wholesale replace, so they render like built-in examples (GET ownerType=card returns
+// the caller's own private rows) but stay owner-scoped. The replace is scoped to created_by=viewer,
+// so it can NEVER delete a public built-in example — a breach-prevention pin, not a nice-to-have.
+describe('replaceUserCardExamples (custom-card examples → private store)', () => {
+    const seg = (text: string) => [{ t: text }];
+    const n = (sql: string) => (mem.query(sql).get() as { n: number }).n;
+
+    test('writes private card rows the owner reads; hidden from anon + other users', () => {
+        const a = db.createUser('a@x.com', 'h');
+        const b = db.createUser('b@x.com', 'h');
+        db.replaceUserCardExamples({ rank: '101', viewer: a.id, examples: [
+            { slot: 'ex', text: 'はしる。', furigana: seg('はしる。'), en: 'run' },
+            { slot: 'N5', text: 'まいあさはしる。', furigana: seg('まいあさはしる。'), en: 'run every morning' },
+        ] });
+        const own = db.getSentences({ ownerType: 'card', ownerId: '101', viewer: a.id });
+        expect(own.map((s) => [s.link.owner_id, s.link.tier ?? null, s.text, s.translations.en, s.custom])).toEqual([
+            ['101', null, 'はしる。', 'run', true],                          // 'ex' → untiered (tier omitted)
+            ['101', 'N5', 'まいあさはしる。', 'run every morning', true],
+        ]);
+        expect(db.getSentences({ ownerType: 'card', ownerId: '101', viewer: b.id })).toEqual([]); // not B's
+        expect(db.getSentences({ ownerType: 'card', ownerId: '101', viewer: null })).toEqual([]); // not anon's
+        expect(n('SELECT COUNT(*) AS n FROM public_sentence')).toBe(0);                            // never public
+    });
+
+    test('replace is wholesale — a removed tier drops its row; empty clears the card', () => {
+        const a = db.createUser('a@x.com', 'h');
+        db.replaceUserCardExamples({ rank: '101', viewer: a.id, examples: [
+            { slot: 'N5', text: 'あ。', furigana: seg('あ。') },
+            { slot: 'N4', text: 'い。', furigana: seg('い。') },
+        ] });
+        // Re-replace with only N5 → the N4 row is gone (no orphan).
+        db.replaceUserCardExamples({ rank: '101', viewer: a.id, examples: [{ slot: 'N5', text: 'あ2。', furigana: seg('あ2。') }] });
+        expect(db.getSentences({ ownerType: 'card', ownerId: '101', viewer: a.id }).map((s) => [s.link.tier, s.text])).toEqual([['N5', 'あ2。']]);
+        // Empty clears it entirely (used on card delete); children cascade, no orphans.
+        db.replaceUserCardExamples({ rank: '101', viewer: a.id, examples: [] });
+        expect(db.getSentences({ ownerType: 'card', ownerId: '101', viewer: a.id })).toEqual([]);
+        expect(n('SELECT COUNT(*) AS n FROM sentence')).toBe(0);
+    });
+
+    test('scoped to created_by=viewer — a replace never deletes a PUBLIC example at the same owner_id', () => {
+        const a = db.createUser('a@x.com', 'h');
+        db.seedExampleSentence({ text: 'こうかい。', furigana: seg('こうかい。'), translations: { en: 'public' }, cardLinks: [{ owner_type: 'card', owner_id: '101', tier: 'N5' }] });
+        db.replaceUserCardExamples({ rank: '101', viewer: a.id, examples: [{ slot: 'N5', text: 'しよう。', furigana: seg('しよう。') }] });
+        expect(db.getSentences({ ownerType: 'card', ownerId: '101', viewer: null }).map((s) => s.text)).toEqual(['こうかい。']); // public survives
+        expect(db.getSentences({ ownerType: 'card', ownerId: '101', viewer: a.id }).map((s) => s.text).sort()).toEqual(['こうかい。', 'しよう。']);
+    });
+
+    test('ext_id is user-scoped — two accounts with the same rank do not collide', () => {
+        const a = db.createUser('a@x.com', 'h');
+        const b = db.createUser('b@x.com', 'h');
+        db.replaceUserCardExamples({ rank: '101', viewer: a.id, examples: [{ slot: 'N5', text: 'えー。', furigana: seg('えー。') }] });
+        expect(() => db.replaceUserCardExamples({ rank: '101', viewer: b.id, examples: [{ slot: 'N5', text: 'びー。', furigana: seg('びー。') }] })).not.toThrow();
+        expect(db.getSentences({ ownerType: 'card', ownerId: '101', viewer: a.id }).map((s) => s.text)).toEqual(['えー。']);
+        expect(db.getSentences({ ownerType: 'card', ownerId: '101', viewer: b.id }).map((s) => s.text)).toEqual(['びー。']);
+    });
+
+    test('a bad-furigana slot aborts the whole replace (pre-validated, no partial write)', () => {
+        const a = db.createUser('a@x.com', 'h');
+        db.replaceUserCardExamples({ rank: '101', viewer: a.id, examples: [{ slot: 'N5', text: 'ある。', furigana: seg('ある。') }] });
+        expect(() => db.replaceUserCardExamples({ rank: '101', viewer: a.id, examples: [
+            { slot: 'N5', text: 'よい。', furigana: seg('よい。') },
+            { slot: 'N4', text: 'だめ。', furigana: [{ t: 'ちがう' }] }, // furigana ≠ text → throws before any mutation
+        ] })).toThrow();
+        expect(db.getSentences({ ownerType: 'card', ownerId: '101', viewer: a.id }).map((s) => s.text)).toEqual(['ある。']); // prior set intact
+    });
+});
+
 // Phase 4 (NLP): sentence_annotation carries GiNZA tokens/bunsetsu keyed by char offset into
 // sentence.text. Two load-bearing properties: (1) the offset contract — every token's [start,end)
 // reconstructs its surface under JS (UTF-16) slicing, enforced on write; (2) the READ rides the

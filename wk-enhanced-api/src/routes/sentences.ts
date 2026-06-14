@@ -26,6 +26,8 @@ import {
     SentenceIdParamsSchema,
     SentenceMutateResponseSchema,
     SentenceDeleteResponseSchema,
+    CardExamplesRequestSchema,
+    CardRankParamsSchema,
     ErrorSchema,
 } from '../schemas.ts';
 import { zodHook } from '../lib/zodHook.ts';
@@ -194,4 +196,48 @@ sentencesRouter.openapi(deleteRoute, (c) => {
     if (!ok) return notFound(c);
     log.info('sentence.delete', { userId: user.id, extId: id });
     return c.json({ ok: true }, 200);
+});
+
+// ---------- PUT /card/{rank} (replace a custom card's example set — Phase 2.5) ----------
+//
+// The study app dual-writes a custom card's examples (single `ex` + the JLPT `levels` tiers) into
+// the store as PRIVATE rows in ONE atomic call, so they render from the store like built-in
+// examples (GET /v1/sentences?ownerType=card already returns the caller's own private rows). The
+// repo replace is scoped to created_by=viewer, so it can never touch a public built-in example.
+// Two path segments (/card/{rank}) so it never shadows PUT /{id}.
+
+const cardExamplesRoute = createRoute({
+    method: 'put',
+    path: '/card/{rank}',
+    tags: ['Accounts'],
+    summary: "Replace a custom card's example sentences (private, owner_type='card')",
+    request: {
+        params: CardRankParamsSchema,
+        body: { required: true, content: { 'application/json': { schema: CardExamplesRequestSchema } } },
+    },
+    responses: {
+        200: { description: 'The replaced example rows.', content: { 'application/json': { schema: SentenceListResponseSchema } } },
+        400: { description: 'Malformed body or furigana mismatch.', content: { 'application/json': { schema: ErrorSchema } } },
+        401: { description: 'Not logged in.', content: { 'application/json': { schema: ErrorSchema } } },
+    },
+});
+
+sentencesRouter.openapi(cardExamplesRoute, (c) => {
+    const user = currentUser(c);
+    if (!user) return unauthorized(c); // writes private rows → account-gated
+    const { rank } = c.req.valid('param');
+    const { examples } = c.req.valid('json');
+    if (JSON.stringify(examples).length > MAX_SENTENCE_BYTES * 6) {
+        return c.json({ code: 'validation_error' as const, error: 'examples too large', detail: `max ${MAX_SENTENCE_BYTES * 6} bytes` }, 400);
+    }
+    try {
+        const sentences = db.replaceUserCardExamples({ rank, viewer: user.id, examples });
+        c.header('Cache-Control', 'no-store');
+        log.info('sentence.card_examples.replace', { userId: user.id, rank, count: sentences.length });
+        return c.json({ sentences }, 200);
+    } catch (err) {
+        // The expected throw is the furigana invariant (malformed ruby) → 400, not 500.
+        const msg = err instanceof Error ? err.message : String(err);
+        return c.json({ code: 'validation_error' as const, error: 'invalid examples', detail: msg }, 400);
+    }
 });

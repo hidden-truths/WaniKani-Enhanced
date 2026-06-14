@@ -633,6 +633,31 @@ export const SentenceMutateResponseSchema = z
     .object({ sentence: SentenceSchema })
     .openapi('SentenceMutateResponse');
 
+// PUT /v1/sentences/card/{rank} — replace a custom card's whole example set in one call (Phase 2.5:
+// custom-card examples → private store rows). Each slot is 'ex' (the untiered single example) or a
+// JLPT tier; text/furigana are the same client-derived-then-server-validated shape as a private
+// Self-Talk sentence. The array is bounded to the 6 possible slots.
+export const CardExampleSlotSchema = z
+    .object({
+        slot: z.enum(['ex', 'N5', 'N4', 'N3', 'N2', 'N1']),
+        text: z.string().min(1).max(1000),
+        furigana: z.array(FuriganaSegSchema).nullish(),
+        en: z.string().max(1000).optional(),
+    })
+    .openapi('CardExampleSlot');
+
+export const CardExamplesRequestSchema = z
+    .object({ examples: z.array(CardExampleSlotSchema).max(6) })
+    .openapi('CardExamplesRequest');
+
+export const CardRankParamsSchema = z.object({
+    rank: z
+        .string()
+        .min(1)
+        .max(32)
+        .openapi({ param: { name: 'rank', in: 'path' }, description: 'The custom card rank (owner_id).', example: '101' }),
+});
+
 export const SentenceDeleteResponseSchema = z
     .object({ ok: z.boolean() })
     .openapi('SentenceDeleteResponse');

@@ -141,17 +141,25 @@ one module each under `src/features/*` (the section names map 1:1 to filenames):
   behind a "Pitch accent & leveled examples" `<details id="vfMore">`; `saveVerb` validates
   them with the pure `parseAccent`/`buildLevels`/`isCleanRuby` (each tier's JP must be
   CLEAN RUBY since `renderExample`/Browse-detail `innerHTML` it as `exampleForLevel(v)[0]`)
-  and stores them ON the card object, where `attachLevels`'s `|| v.levels` + `accent`-wins
-  fallback preserves them through every rebuild (a custom rank >100 has no `exampleLevels`
-  store entry to override). So a UI-authored card now reaches built-in parity — see
-  [CARDS.md](CARDS.md) Recipe C.
+  and stores them ON the card object (the `custom-verbs` blob). **Phase 2.5: the example text is
+  also DUAL-WRITTEN to the sentence store as PRIVATE rows when signed in** — `pushCardExamples`
+  (saveVerb) / `deleteCardExamples` (deleteVerb) → `PUT /v1/sentences/card/{rank}`, plus a one-time
+  `migrateCardExamples` backfill on sign-in (cloud.js) — so a signed-in card renders its examples
+  FROM the store like a built-in (`attachLevels` prefers `state.exampleLevels[rank]`, now populated
+  for custom ranks too; the blob's `v.levels` is the offline/anon + pre-write fallback). `accent`
+  stays a blob field (`accent`-wins in `attachLevels`). So a UI-authored card reaches built-in
+  parity in completeness AND storage — see [CARDS.md](CARDS.md) Recipe C + the leveled-examples
+  bullet below.
 - **TTS:** `speak(text)` plays the server's Google TTS (`/v1/tts`) via a reused
   `<audio>` when served over http(s) (`HTTP_SERVED`), falling back to
   `speakSynth` (Web Speech) over `file://` or on failure. `TTS_OK` = either path
   available (gates the Audio UI). See the TTS dead-end.
-- **Leveled examples:** `attachLevels()` sets `v.levels = state.exampleLevels[rank]`
-  (built-in only) after each rebuild. `state.exampleLevels` is the `{[rank]:{N5:[jp,en],…}}`
-  model **fetched from the server sentence store** (Phase 2 — `GET /v1/sentences?ownerType=card`
+- **Leveled examples:** `attachLevels()` sets `v.levels = state.exampleLevels[rank]` (built-ins;
+  custom cards too when signed in — Phase 2.5) after each rebuild, falling back to the card's own
+  embedded `v.levels` when the store has no entry (offline/anon/built-in-less-deploy).
+  `state.exampleLevels` is the `{[rank]:{N5:[jp,en],…}}`
+  model **fetched from the server sentence store** (Phase 2 built-in examples + Phase 2.5 the viewer's
+  own private custom-card rows — `GET /v1/sentences?ownerType=card`
   via `features/examples.js` `initExamples()`), cache-hydrated from `jpverbs_examples_cache` at
   boot and rebuilt from the fetch by the pure `sentencesToLevels` adapter (`core/examples.js`);
   degrades to the cache offline. `data/examples.js` is the **seed source** for

@@ -908,6 +908,56 @@ export function deleteUserSentence(input: { extId: string; viewer: number }): bo
     return r.changes > 0;
 }
 
+// Replace the signed-in user's PRIVATE example sentences for one custom card (rank), wholesale —
+// the per-user analog of seedExampleSentence's public replace, so the study app dual-writes a
+// custom card's whole example set in ONE call (no client-side per-slot diffing / orphan rows).
+// Deletes the caller's OWN (created_by = viewer) owner_type='card', owner_id=rank rows — scoped to
+// created_by=viewer in SQL so it can NEVER touch a public built-in example (those are created_by
+// NULL) — then inserts the given set as private rows (source='custom', public=0). ext_id is
+// deterministic + user-scoped (usr-<viewer>-cardex-<rank>-<slot>) so it's stable across re-runs and
+// can't collide with another account's same-ranked custom card. `slot` is 'ex' (untiered fallback)
+// or a JLPT tier ('N5'..'N1'); the tier rides the link. An empty `examples` just clears the card's
+// rows (used on card delete). All furigana invariants are checked BEFORE any mutation, so a bad
+// slot aborts the whole replace rather than leaving a partial set.
+export function replaceUserCardExamples(input: {
+    rank: string;
+    viewer: number;
+    examples: Array<{ slot: string; text: string; furigana?: FuriganaSeg[] | null; en?: string }>;
+}): AssembledSentence[] {
+    for (const ex of input.examples) assertFuriganaMatches(ex.furigana ?? null, ex.text);
+    const db = getDb();
+    db.query(
+        `DELETE FROM sentence WHERE id IN (
+             SELECT s.id FROM sentence s JOIN sentence_link l ON l.sentence_id = s.id
+             WHERE l.owner_type = 'card' AND l.owner_id = ? AND s.created_by = ?
+         )`,
+    ).run(input.rank, input.viewer); // children cascade via FK
+    const now = Date.now();
+    const ins = db.query(
+        `INSERT INTO sentence (ext_id, hash, text, furigana, lang, source, public, visibility, created_by, created_at)
+         VALUES (?, ?, ?, ?, 'ja', 'custom', 0, 'private', ?, ?) RETURNING id`,
+    );
+    const out: AssembledSentence[] = [];
+    for (const ex of input.examples) {
+        const tier = ex.slot === 'ex' ? null : ex.slot;
+        const r = ins.get(
+            `usr-${input.viewer}-cardex-${input.rank}-${ex.slot}`,
+            ttsTextHash(ex.text),
+            ex.text,
+            ex.furigana ? JSON.stringify(ex.furigana) : null,
+            input.viewer,
+            now,
+        ) as { id: number };
+        insertSentenceChildren(r.id, ex.en ? { en: ex.en } : undefined, undefined, {
+            owner_type: 'card',
+            owner_id: input.rank,
+            tier,
+        });
+        out.push(assembleSentenceRow(getSentenceRowById(r.id)!));
+    }
+    return out;
+}
+
 // Seed/refresh a PUBLIC curator sentence (public=1, visibility='public', created_by=NULL).
 // Idempotent by ext_id: re-running replaces the sentence + all child rows wholesale, so the
 // seed script is a safe no-growth no-op on re-run. created_at is preserved across re-seeds.

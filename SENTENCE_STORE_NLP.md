@@ -31,7 +31,7 @@ comes second — that ordering was a deliberate decision.
 |---|---|---|
 | **1** | Self-Talk phrases → store (built-ins public, user phrases private) | ✅ shipped + deployed |
 | **2** | Built-in vocab `examples.js` → store as public rows linked to cards (`owner_type='card'`) | ✅ shipped + deployed |
-| **2.5** | Custom-card `ex` → private store rows (+ blob migration) | ⏳ deferred |
+| **2.5** | Custom-card `ex`+`levels` → private store rows (render-from-store) | ✅ shipped |
 | **3** | Minna sentences (grammar/conversation/lesson) → store (`public=0`) | ⏳ deferred |
 | **4 — NLP** | GiNZA enrichment: populate `sentence_annotation`; interactive spans + grammar search | 🔜 **this doc** |
 
@@ -188,11 +188,21 @@ until the tap-to-lookup UI lands.
 
 ## The other deferred phases (not NLP, for completeness)
 
-- **Phase 2.5 — custom-card `ex` → private store rows.** Today user custom cards still render examples
-  from the `custom-verbs` blob via `exampleForLevel`'s `v.ex` fallback. Moving them into private
-  `sentence` rows (+ a one-time blob migration on sign-in, mirroring Self-Talk Phase 1) makes the store
-  the single source for ALL example text. User-confirmed deferral; built-ins were the clean public slice
-  to ship first.
+- **Phase 2.5 — custom-card examples → private store rows. ✅ SHIPPED.** A custom card's whole example
+  set (the single `ex` + the N5→N1 `levels` tiers) is dual-written to the store as PRIVATE rows
+  (`source='custom'`, `owner_type='card'`, `owner_id=<rank>`, `tier`, `public=0`) in ONE atomic call:
+  `PUT /v1/sentences/card/{rank}` → `db.replaceUserCardExamples`, the per-user analog of
+  `seedExampleSentence`'s wholesale replace, scoped to `created_by=viewer` so it can never touch a public
+  built-in. Client: `pushCardExamples` on save (signed-in, fire-and-forget), `deleteCardExamples` (empty
+  replace) on delete, a one-time-per-device `migrateCardExamples` backfill on sign-in. **Render needs NO
+  new path** — `attachLevels` already prefers `state.exampleLevels[rank]` and `GET ?ownerType=card`
+  already returns the caller's own private rows, so a signed-in user's custom cards render FROM the store
+  like built-ins (the localStorage blob stays the offline/anon fallback). Decision: offline rendering is
+  no longer a constraint (the app requires a server), so this is full render-unification — "the store is
+  the single source for ALL example text" — not a write-only mirror. **Caveat (inherent to privacy):** the
+  public-only tooling (NLP tap-to-lookup, export, de-dup, TTS pre-gen all read `public_sentence`) does NOT
+  cover these private rows. Tests: 5 server (privacy/wholesale/scoping/user-scoped-id/furigana-abort) + 1
+  client builder; curl + signed-in browser E2E (dual-write → render-from-store, store-wins) verified.
 - **Phase 3 — Minna → store.** Grammar-point + conversation + lesson sentences become `sentence` rows
   with `public=0` (copyright-gated, same as the Minna route gate). Grammar-points and conversations get
   stable owner ids; `sentence_link.role`/`clip_*` already model speaker + per-line clip ranges. This is

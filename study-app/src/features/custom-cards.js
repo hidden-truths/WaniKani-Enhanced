@@ -4,7 +4,8 @@
 // state.DATA, extends state.MAXRANK + the rank-range UI, and re-runs the chip annotations.
 import { state, attachLevels } from '../state.js';
 import { VERBS } from '../data/verbs.js';
-import { applyMinnaOverlays, JLPT_TIERS, pitchHtml, parseAccent, buildLevels } from '../core/index.js';
+import { applyMinnaOverlays, JLPT_TIERS, pitchHtml, parseAccent, buildLevels, cardExamplesPayload } from '../core/index.js';
+import { api, account } from './cloud-core.js';
 import { loadCustom, saveCustom } from '../persistence/custom.js';
 import { save } from '../persistence/store.js';
 import { annotateJlptChips, annotateCatChips, annotateSourceChips } from './a11y.js';
@@ -99,6 +100,21 @@ export function refreshAfterVerbChange() {
   renderCustomCount(); renderBrowse(); updateDeckCount(); updateDueBanner();
   if (document.getElementById('panel-stats').classList.contains('active')) renderStats();
 }
+// Phase 2.5: dual-write a custom card's examples (single `ex` + the `levels` tiers) to the sentence
+// store as PRIVATE rows in ONE atomic PUT, so they render from the store like built-in examples
+// (GET ownerType=card returns the caller's own private rows; attachLevels already prefers them over
+// the embedded copy). Signed-in only + fire-and-forget — the localStorage blob stays the card's
+// safety-net fallback, so a failed/absent write just means the card renders from the blob until the
+// next successful sync. A no-op for anon (the corpus write is account-gated).
+export function pushCardExamples(verb) {
+  if (!account || !verb || verb.rank == null) return;
+  api('/v1/sentences/card/' + encodeURIComponent(verb.rank), { method: 'PUT', body: cardExamplesPayload(verb) }).catch(() => {});
+}
+// Clear a card's store rows (an empty replace) — used when a custom card is deleted.
+function deleteCardExamples(rank) {
+  if (!account || rank == null) return;
+  api('/v1/sentences/card/' + encodeURIComponent(rank), { method: 'PUT', body: { examples: [] } }).catch(() => {});
+}
 function saveVerb(e) {
   e.preventDefault();
   const val = id => document.getElementById(id).value.trim();
@@ -128,6 +144,7 @@ function saveVerb(e) {
   else { cs.seq = (cs.seq || 100) + 1; verb.rank = cs.seq; cs.verbs.push(verb); } // new monotonic rank
   saveCustom(cs);
   rebuildData(); closeVerbModal(); refreshAfterVerbChange();
+  pushCardExamples(verb);                                   // dual-write examples → private store rows (signed-in)
 }
 export function deleteVerb(rank) {
   const cs = loadCustom();
@@ -135,6 +152,7 @@ export function deleteVerb(rank) {
   saveCustom(cs);
   if (state.store.cards[rank]) { delete state.store.cards[rank]; save(); }   // drop the orphaned progress
   rebuildData(); closeVerbModal(); refreshAfterVerbChange();
+  deleteCardExamples(rank);                                 // clear the card's store rows (signed-in)
 }
 export function initCustomUI() {
   document.getElementById('addVerbBtn').addEventListener('click', () => openVerbModal(null));

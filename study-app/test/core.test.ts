@@ -16,7 +16,7 @@ import {
   overlayTokens,
   minnaBuiltinRank, applyMinnaOverlays, splitMora, parseAccent,
   cardGrammar, cardMatchesGrammar,
-  pitchHtml, minnaSig, cardStamp, colorClass, CATS, exampleForLevel, availableTiers, buildLevels, sentencesToLevels,
+  pitchHtml, minnaSig, cardStamp, colorClass, CATS, exampleForLevel, availableTiers, buildLevels, cardExamplesPayload, sentencesToLevels,
   JLPT_TIERS, BOX_DAYS,
   clampKeep, convItemKey, formatDuration, KEEP_DEFAULT,
   validClip, resolveClip, clipLabel, findTrimBounds,
@@ -223,6 +223,26 @@ test('buildLevels: drops blank tiers, trims, validates ruby, null when empty', (
   const bad = buildLevels({ N5: ['ok。', 'a'], N4: ['<b>no</b>', 'b'] });
   expect(bad.invalidTier).toBe('N4');
   expect(bad.levels).toBeNull();
+});
+
+test('cardExamplesPayload: ex + present tiers → {slot,text,furigana,en}; blanks dropped (Phase 2.5)', () => {
+  const verb = {
+    rank: 101,
+    ex: [['<ruby>走<rt>はし</rt></ruby>る。', 'to run']],
+    levels: {
+      N5: ['まいあさ<ruby>走<rt>はし</rt></ruby>る。', 'run every morning'],
+      N3: ['', 'orphan en — no JP, dropped'],   // no JP → not emitted
+    },
+  };
+  // text = plainText(jp) (the audio key), furigana = rubyToSegments(jp) (concat(seg.t) === text — the
+  // server write invariant); 'ex' first, then tiers in JLPT order.
+  expect(cardExamplesPayload(verb)).toEqual({ examples: [
+    { slot: 'ex', text: '走る。', furigana: rubyToSegments('<ruby>走<rt>はし</rt></ruby>る。'), en: 'to run' },
+    { slot: 'N5', text: 'まいあさ走る。', furigana: rubyToSegments('まいあさ<ruby>走<rt>はし</rt></ruby>る。'), en: 'run every morning' },
+  ] });
+  // No example content → empty replace (also the card-delete clear).
+  expect(cardExamplesPayload({ rank: 102 })).toEqual({ examples: [] });
+  expect(cardExamplesPayload({ rank: 103, ex: [], levels: {} })).toEqual({ examples: [] });
 });
 
 test('normKana folds katakana→hiragana, strips spaces, unifies long marks', () => {

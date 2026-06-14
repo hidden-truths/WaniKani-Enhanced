@@ -3,9 +3,28 @@
 // single `ex` → null). The data attach (v.levels = state.exampleLevels[rank]) lives in state.js;
 // the level set is built from the sentence store by sentencesToLevels (below).
 
-import { segmentsToRuby, isCleanRuby } from './text.js';
+import { segmentsToRuby, isCleanRuby, plainText, rubyToSegments } from './text.js';
 
 export const JLPT_TIERS = ['N5', 'N4', 'N3', 'N2', 'N1'];   // easy → hard
+
+// Build the PUT /v1/sentences/card/{rank} body from a custom card's example fields (Phase 2.5 —
+// custom-card examples become PRIVATE store rows so they render from the store like built-ins). One
+// slot per present example: 'ex' (the single untiered fallback) + each present JLPT `levels` tier.
+// text = plainText(jp), furigana = the structured segments (concat(seg.t) === text, the server's
+// write invariant), en = the pair's English. Pure — the dual-write mirrors exactly what the deck
+// renders, so the row's text is the same /v1/audio/tts key.
+export function cardExamplesPayload(verb) {
+  const examples = [];
+  const add = (slot, pair) => {
+    const jp = pair && pair[0] ? String(pair[0]) : '';
+    if (!jp) return;
+    examples.push({ slot, text: plainText(jp), furigana: rubyToSegments(jp), en: pair && pair[1] ? String(pair[1]) : '' });
+  };
+  if (verb && verb.ex && verb.ex[0]) add('ex', verb.ex[0]);
+  const L = verb && verb.levels;
+  if (L) for (const tier of JLPT_TIERS) if (L[tier]) add(tier, L[tier]);
+  return { examples };
+}
 
 // Build a custom card's `levels` from the Add-card leveled editor's raw per-tier [jp, en] inputs.
 // Drops any tier whose JP is blank (partial sets are fine — exampleForLevel's nearest-tier fallback

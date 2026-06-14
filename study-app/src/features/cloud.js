@@ -5,7 +5,7 @@
 // POST /v1/sessions log. The persistence layer schedules pushes via the sync bus, which this
 // module's initCloud() wires up.
 import { state } from '../state.js';
-import { escapeHtml, phraseToSentence } from '../core/index.js';
+import { escapeHtml, phraseToSentence, cardExamplesPayload } from '../core/index.js';
 import { sync } from '../sync-bus.js';
 import { account, setAccount, api, setSyncStatus, serverReachable, setServerReachable } from './cloud-core.js';
 import { saveLocal } from '../persistence/store.js';
@@ -110,6 +110,22 @@ async function pullSelftalkCloud() {
   }
 }
 
+// One-time-per-device backfill: push every existing custom card's examples into the store so it
+// becomes the source for ALL example text (Phase 2.5). pushCardExamples keeps them current on every
+// save; this catches cards authored before Phase 2.5 / on another device. Flag-gated so it doesn't
+// re-run each sign-in; a partial run is harmless (the localStorage blob still renders any card not
+// yet migrated) and retried next sign-in until all succeed. Idempotent — the PUT replaces wholesale.
+async function migrateCardExamples() {
+  if (!account) return;
+  if (localStorage.getItem('jpverbs_cardex_migrated')) return;
+  const verbs = (loadCustom().verbs || []).filter(v => (v.ex && v.ex.length) || (v.levels && Object.keys(v.levels).length));
+  if (!verbs.length) { localStorage.setItem('jpverbs_cardex_migrated', '1'); return; }
+  const results = await Promise.allSettled(
+    verbs.map(v => api('/v1/sentences/card/' + encodeURIComponent(v.rank), { method: 'PUT', body: cardExamplesPayload(v) })),
+  );
+  if (results.every(r => r.status === 'fulfilled')) localStorage.setItem('jpverbs_cardex_migrated', '1');
+}
+
 // Pull server progress after sign-in. Server wins when it has data; a fresh account inherits
 // whatever's local (one-time migration upward). Then chain the other blobs.
 async function pullCloud() {
@@ -126,6 +142,7 @@ async function pullCloud() {
   await pullMinnaCloud();
   await pullSelftalkCloud();
   migrateMinnaDupes(); rebuildData();   // apply pulled Minna overlays + clean any dupes
+  await migrateCardExamples();          // backfill custom-card examples → private store rows (one-time/device)
   refreshAllViews();
 }
 
