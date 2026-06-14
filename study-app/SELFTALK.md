@@ -128,8 +128,9 @@ sentences ("I'm almost out of [wood], let me go [chop] some" → swap the filler
 - **Realize** (`realizeTemplate`, pure in `core/selftalk.js`) substitutes the picked filler per slot,
   then DERIVES the reading + plainText from the now-fully-ruby string with the SAME helpers a phrase
   uses — so a realized template renders + plays exactly like a phrase. `text` (plainText) is the
-  `/v1/audio/tts` key (synth-only, lazily cached — no pre-gen possible) AND the record-compare
-  reference text.
+  `/v1/audio/tts` key (synth, lazily cached at play time; ALSO pre-renderable — the API's
+  `collectTtsTexts.ts` enumerates every combo so `generate-tts.ts` can voice them with a Siri clip)
+  AND the record-compare reference text.
 - **Swap UX:** each slot is a tinted chip in the sentence; a tap **cycles** the filler (`cyclePick`),
   an **⌥-click / long-press** opens a filler menu for a direct pick, and a 🔀 shuffles all slots. Every
   swap repaints the card IN PLACE (`repaintTemplateCard`) — sentence/reading/English + the ▶ play and

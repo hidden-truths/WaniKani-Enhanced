@@ -149,7 +149,7 @@ vocab lazy-warm pattern.
 | De-dup / export (`public_sentence`) | ✅ immediately (it's a public sentence row) |
 | Grammar search | ✅ immediately — we copy the template's curated grammar tag onto the row at materialization (decision #4) |
 | TTS playback (lazy synth) | ✅ already works on any text; materialization gives it a canonical key |
-| TTS pre-gen (`generate-tts.ts`) | ⚠️ extend it to enumerate template combos (or the materialized set) — text-addressed, optional |
+| TTS pre-gen (`generate-tts.ts`) | ✅ `collectTtsTexts.ts` enumerates ALL template combos (the full per-template cartesian product via `realizeTemplate`) + the Self-Talk phrases, so `generate-tts.ts` + `seed-audio-variants.ts` pre-render them locally |
 | **NLP tap-to-lookup tokens** | ⏳ **LAGS** — NLP is an OFFLINE batch (no Python on prod). A freshly-materialized combo has no tokens until the next `parse.py` → `seed-annotations.ts` re-parse over the (now-larger) public corpus. Until then it **degrades to plain ruby** (the existing fallback). The offline batch *will* pick the combos up because they're public rows. |
 
 So lazy materialization lights up most tooling promptly; **tap-to-lookup specifically lags behind the
