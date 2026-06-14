@@ -6,8 +6,9 @@ TEMPLATE feature's structure now lives in the server `sentence_template` table (
 `GET /v1/templates`, fetched by the client); realizations are still derived client-side until
 Slice 2. Read this first, then the linked files.
 
-**Where the code is:** `selftalk-grid` was **fast-forward-merged into `main`** (the 9 template
-commits), and Slice 1 was built on branch **`templates-sentence-store`** off the updated `main`.
+**Where the code is:** `selftalk-grid` (the 9 template-UI commits) **and** Slice 1
+(`templates-sentence-store`, the structure-in-DB commit `be2ee94`) are both **merged to `main` and
+pushed to `origin`**. Branch Slice 2 fresh from `main`.
 
 ---
 
