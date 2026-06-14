@@ -682,3 +682,27 @@ export const TemplateListQuerySchema = z.object({
         .optional()
         .openapi({ param: { name: 'source', in: 'query' }, description: 'Optional: narrow to one surface (e.g. "selftalk").', example: 'selftalk' }),
 });
+
+// POST /v1/templates/{extId}/realize — lazily materialize ONE filler combo into a public `sentence`
+// row (Slice 2). The body carries ONLY the picks: the server RECONSTRUCTS the realized
+// text/furigana/English from the stored skeleton (authoritative; the client can't send wrong text)
+// and reads the curated grammar off the template. Returns the assembled sentence (SentenceSchema,
+// reusing SentenceMutateResponseSchema).
+export const TemplateRealizeParamsSchema = z.object({
+    extId: z
+        .string()
+        .min(1)
+        .max(200)
+        .openapi({ param: { name: 'extId', in: 'path' }, description: 'The template ext_id (the skeleton / record-compare id).', example: 'tpl-minecraft-gather' }),
+});
+
+export const TemplateRealizeRequestSchema = z
+    .object({
+        picks: z
+            .record(z.string(), z.number().int().min(0))
+            .openapi({
+                description: 'slotId → chosen filler index. Missing/out-of-range clamps to the nearest valid index server-side; an empty object realizes the all-defaults combo.',
+                example: { material: 0, action: 1 },
+            }),
+    })
+    .openapi('TemplateRealizeRequest');

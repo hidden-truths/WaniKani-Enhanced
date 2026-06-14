@@ -1,14 +1,16 @@
 # Templates → Sentence Store (design + plan)
 
-**Status:** **Slice 1 SHIPPED** (template *structure* in the DB); **Slice 2 pending** (lazy
-materialization of realizations + tooling). This is the authoritative context doc. The slot-swap
-TEMPLATE feature's structure now lives in the server `sentence_template` table (served by
-`GET /v1/templates`, fetched by the client); realizations are still derived client-side until
-Slice 2. Read this first, then the linked files.
+**Status:** **Slices 1 + 2 SHIPPED.** Slice 1 = template *structure* in the DB. Slice 2 = lazy,
+on-demand materialization of realizations into PUBLIC `sentence` rows so the store tooling covers the
+combos people actually use. This is the authoritative context doc. The slot-swap TEMPLATE feature's
+structure lives in the server `sentence_template` table (served by `GET /v1/templates`, fetched by
+the client); a used combo is materialized via `POST /v1/templates/{extId}/realize`. Read this first,
+then the linked files.
 
 **Where the code is:** `selftalk-grid` (the 9 template-UI commits) **and** Slice 1
-(`templates-sentence-store`, the structure-in-DB commit `be2ee94`) are both **merged to `main` and
-pushed to `origin`**. Branch Slice 2 fresh from `main`.
+(`templates-sentence-store`, `be2ee94`) are merged to `main`. Slice 2 is on branch
+`templates-materialize` (`db.materializeTemplateRealization` + `db.getTemplate` + `lib/realize.ts` +
+`POST /v1/templates/{extId}/realize` + the client `maybeMaterialize` trigger).
 
 ---
 
@@ -112,30 +114,40 @@ CREATE TABLE IF NOT EXISTS sentence_template (
 ### Part 2 — lazy, on-demand materialization of realizations
 
 Realizations are **NOT pre-generated** (avoids the combinatorial blow-up — a richly-slotted template
-could be hundreds of combos). Instead: **the first time a user actually requests a given config (filler
-combo), the server materializes that realization as a real `sentence` row, then serves it.** Same shape
-as the vocab lazy-warm pattern.
+could be hundreds of combos). Instead: **the first time a signed-in user plays/records a given config
+(filler combo), the server materializes that realization as a real `sentence` row.** Same shape as the
+vocab lazy-warm pattern.
 
-- **Endpoint sketch:** `POST /v1/templates/{extId}/realize` with the picks (and, simplest, the realized
-  `jp` + `furigana` the client already derives via `realizeTemplate`). The server:
-  - validates `concat(seg.t) === plainText(jp)` (the furigana invariant),
-  - computes `hash = ttsTextHash(text)` server-side,
-  - inserts a PUBLIC `sentence` row (`source='template'`), idempotent by hash (re-request → existing
-    row), linked via `sentence_link(owner_type='template', owner_id=<template ext_id>, role=<combo key>)`,
-  - copies the template's curated `grammar` onto the row as `sentence_tag(kind='grammar')` so grammar
+- **Endpoint (SHIPPED):** `POST /v1/templates/{extId}/realize`. The body carries **ONLY the picks**
+  (`{ picks: { slotId: index } }`) — decision #1 is server-RECONSTRUCTS, so the server is authoritative
+  and a client can never materialize a public row whose text doesn't match the curated template. The
+  server (`routes/templates.ts` + `lib/realize.ts` + `db.materializeTemplateRealization`):
+  - looks up the template through the gate (`db.getTemplate`, 404 if not visible) and reads its curated
+    `grammar` **server-side** (never client-trusted),
+  - reconstructs the realization from the stored skeleton + picks (`lib/realize.ts` — a byte-for-byte
+    port of the study-app's `realizeTemplate`/`plainText`/`rubyToSegments`, since the runtime image
+    carries no `study-app/`): `text`, `furigana`, English, and a canonical `role` (`slotId:idx,…` over
+    every slot),
+  - re-asserts `concat(seg.t) === text` (the furigana invariant) + computes `hash = ttsTextHash(text)`,
+  - upserts a PUBLIC `sentence` row (`source='template'`, `created_by=NULL` → `custom:false`), idempotent
+    by hash (mirrors `seedExampleSentence`'s reuse-by-hash; a foreign example/selftalk row with identical
+    text is reused untouched), linked via `sentence_link(owner_type='template', owner_id=<template
+    ext_id>, role=<combo key>)` attached idempotently,
+  - copies the template's curated `grammar` onto rows we own as `sentence_tag(kind='grammar')` so grammar
     search includes it **immediately** (before any NLP),
-  - returns the assembled sentence (id, hash, furigana, `annotation` if one already exists).
-- **When to trigger materialization** is an open question (on first ▶ play? on tap-to-lookup? on record?
-  proactively for the default combo?) — see Open Questions.
+  - returns the assembled sentence carrying the template link.
+- **Trigger (SHIPPED — decision #2):** the client's `maybeMaterialize(id)` fires from the ▶ play handler
+  AND the take-saved hook — signed-in only (it writes the PUBLIC corpus; anon keeps playing via lazy
+  TTS), deduped per session by the canonical combo key, fire-and-forget. A no-op for plain phrases.
 - **Record-compare / practice keeps keying on the SKELETON id**, NOT the materialized combo's sentence
-  id — so takes + the ✓/streak stay coherent across swaps. Don't switch the itemKey to the combo.
+  id — so takes + the ✓/streak stay coherent across swaps. Materialization does not touch the itemKey.
 
 ### What tooling works *when* (set expectations — important)
 
 | Tool | After lazy materialization of a combo |
 |---|---|
 | De-dup / export (`public_sentence`) | ✅ immediately (it's a public sentence row) |
-| Grammar search | ✅ immediately, **if** we copy the template's grammar tag onto the row at materialization |
+| Grammar search | ✅ immediately — we copy the template's curated grammar tag onto the row at materialization (decision #4) |
 | TTS playback (lazy synth) | ✅ already works on any text; materialization gives it a canonical key |
 | TTS pre-gen (`generate-tts.ts`) | ⚠️ extend it to enumerate template combos (or the materialized set) — text-addressed, optional |
 | **NLP tap-to-lookup tokens** | ⏳ **LAGS** — NLP is an OFFLINE batch (no Python on prod). A freshly-materialized combo has no tokens until the next `parse.py` → `seed-annotations.ts` re-parse over the (now-larger) public corpus. Until then it **degrades to plain ruby** (the existing fallback). The offline batch *will* pick the combos up because they're public rows. |
@@ -158,14 +170,22 @@ offline NLP cycle** — that's inherent to the no-Python-on-prod constraint, not
   `GET /v1/templates` (open Q #3); authoring = **curator-only** seed, the gate + breach test ship now,
   user-authored templates deferred (open Q #5); `slots`/`grammar` stored as opaque JSON columns parsed
   server-side so the route returns the exact UI shape (no client adapter; `id` = the skeleton ext_id).
-- **Slice 2 — lazy materialization + tooling.** `POST /v1/templates/{id}/realize` + `sentence_link`
-  `owner_type='template'` + the client requesting materialization at the right moment + the grammar-tag
-  copy + the offline NLP picking up materialized combos. Tools light up (with the NLP lag above).
-  Open questions #1 (furigana source), #2 (materialization trigger), #4 (grammar copy), #6 (`source`
-  value) are Slice-2 calls.
+- **Slice 2 — lazy materialization + tooling. ✅ SHIPPED.** `lib/realize.ts` (the ported pure
+  realization) + `db.getTemplate` (gated single-fetch) + `db.materializeTemplateRealization`
+  (reuse-by-hash, mirrors `seedExampleSentence`) + `POST /v1/templates/{extId}/realize`
+  (`routes/templates.ts`, account-gated, in the `STUDY_ROUTE` allowlist) + `sentence_link`
+  `owner_type='template'` + the grammar-tag copy + the client `maybeMaterialize` trigger
+  (`features/selftalk.js`, fired from ▶ play + the take-saved hook). The offline NLP picks up the
+  now-public combo rows on its next cycle (the tap-to-lookup lag above). **Settled this slice:** #1
+  server-reconstructs (authoritative); #2 trigger on **play AND record** (signed-in, deduped per
+  session); #4 **copy** the curated grammar (server-read); #6 `source='template'`, **template-link
+  only** (NOT in the `ownerType=selftalk` read, so a combo never renders as a duplicate phrase card).
+  Verified: 208 API + 104 study-app tests green, `bun run build` clean, and an end-to-end curl pass of
+  the realize route (anon→401, materialize→200 with the reconstructed sentence + grammar + template
+  link, idempotent re-POST, a distinct combo, unknown→404, and no leak into the Self-Talk read).
 
-Settle each slice's open questions WITH the maintainer first (propose-with-a-recommendation → pick →
-build in slices), the same pattern used throughout this feature.
+Each slice's open questions were settled WITH the maintainer first (propose-with-a-recommendation →
+pick → build), the pattern used throughout this feature.
 
 ## Invariants to preserve
 
@@ -180,23 +200,34 @@ build in slices), the same pattern used throughout this feature.
 - Design system (no framework, inline SVG `<symbol>` icons, `.frow`/`.chips`/roving, modals scroll);
   `core/*` stays DOM-free + unit-tested.
 
-## Open questions to settle next session
+## Open questions — all RESOLVED
 
-1. **Furigana for materialized combos:** client-sends-`{jp,furigana}`-and-server-validates (recommended —
-   reuses `realizeTemplate`'s output) vs. server-reconstructs-from-structure+picks (needs `core/text.js`
-   server-side; the seed already imports it).
-2. **Materialization trigger:** on first ▶ play / tap-to-lookup / record, or proactively for the default
-   combo? (Cheapest: trigger when the client first needs a canonical sentence — i.e., on tap-to-lookup or
-   record — and otherwise keep playing via the lazy TTS path.)
-3. **Route shape:** ✅ RESOLVED (Slice 1) — dedicated `GET /v1/templates`.
-4. **Grammar at materialization:** copy the template's curated `grammar` tag onto the combo row so grammar
-   search works pre-NLP (recommended).
+1. **Furigana for materialized combos:** ✅ RESOLVED (Slice 2) — **server reconstructs** from the stored
+   skeleton + picks (`lib/realize.ts`, a byte-for-byte port of `realizeTemplate`/`plainText`/
+   `rubyToSegments` — ported, not imported, because the runtime image carries no `study-app/`). The
+   client sends ONLY the picks, so the server is authoritative; the furigana invariant + server-computed
+   hash are re-asserted at the DB write.
+2. **Materialization trigger:** ✅ RESOLVED (Slice 2) — on **▶ play AND record** (`maybeMaterialize`,
+   fired from the play handler + the take-saved hook), signed-in only, deduped per session,
+   fire-and-forget. Play is the dominant use signal; record adds high-intent combos. Anon stays on the
+   lazy TTS path (no write). Tap-to-lookup was not a viable trigger (nothing to tap until the offline NLP
+   annotates the combo).
+3. **Route shape:** ✅ RESOLVED (Slice 1) — dedicated `GET /v1/templates`; realize is
+   `POST /v1/templates/{extId}/realize` under the same router.
+4. **Grammar at materialization:** ✅ RESOLVED (Slice 2) — **copy** the template's curated `grammar` onto
+   the combo row (`sentence_tag(kind='grammar')`), read server-side from the template (never
+   client-trusted), so grammar search includes the combo pre-NLP. It survives later re-parses because the
+   offline grammar detector only rewrites `source='example'` rows.
 5. **User-authored templates (private):** ✅ RESOLVED (Slice 1) — **curator-only**; the private columns
    + the mirrored read gate + breach test ship now (proven via a raw-SQL synthetic private row), but
    the authoring WRITE path (POST/PUT/DELETE + a template editor) is deferred to a later slice, mirroring
    how phrases shipped read-first.
-6. **`source` value** for materialized combo rows (`'template'`?) and whether they should appear in the
-   Self-Talk `GET /v1/sentences?ownerType=selftalk` set or only via the template owner link.
+6. **`source` value:** ✅ RESOLVED (Slice 2) — `source='template'`, linked **only** via
+   `owner_type='template'` (no selftalk link). Combo rows are public (`created_by=NULL`, `custom:false`)
+   so export/de-dup/NLP cover them, but they are **NOT** returned by `GET /v1/sentences?ownerType=selftalk`
+   — so a combo never renders as a duplicate phrase card and record-compare's skeleton-keying is safe.
+   `source='template'` also keeps the copied curator grammar (the offline grammar detector skips
+   non-`example` rows).
 
 ## Key files
 

@@ -29,7 +29,7 @@ Layer docs: module map + dead-ends in [CLAUDE.md](CLAUDE.md); card/furigana mode
 | Tab glue (render/playback/record/authoring/lifecycle) | [src/features/selftalk.js](src/features/selftalk.js) |
 | Pure logic (rotation, grouping, streak, template realization) | [src/core/selftalk.js](src/core/selftalk.js) |
 | Built-in starter content (SEED SOURCE for the store, not read at runtime) | [src/data/selftalk.js](src/data/selftalk.js) |
-| Slot-swap TEMPLATES — SEED SOURCE for `sentence_template` (served via `GET /v1/templates`; no `sentence` row yet) | [src/data/selftalk-templates.js](src/data/selftalk-templates.js) |
+| Slot-swap TEMPLATES — SEED SOURCE for `sentence_template` (served via `GET /v1/templates`; combos lazily materialize via `POST /v1/templates/{id}/realize`) | [src/data/selftalk-templates.js](src/data/selftalk-templates.js) |
 | Phrase store: server sentence rows + repo (`getSentences`/`createSentence`/…) | [../wk-enhanced-api/src/db/client.ts](../wk-enhanced-api/src/db/client.ts), [routes/sentences.ts](../wk-enhanced-api/src/routes/sentences.ts) |
 | Seed built-ins → public rows | [../wk-enhanced-api/scripts/seed-sentences.ts](../wk-enhanced-api/scripts/seed-sentences.ts) |
 | Synced storage (practice/streak signal ONLY — phrases moved to the store) | [src/persistence/selftalk.js](src/persistence/selftalk.js) |
@@ -114,11 +114,14 @@ sentences ("I'm almost out of [wood], let me go [chop] some" → swap the filler
 > breach test), served by **`GET /v1/templates`**. The client **fetches** it (read-through cache
 > `jpverbs_selftalk_templates_cache`) instead of importing the bundle — `data/selftalk-templates.js`
 > is now the **seed source**, not read at runtime. The slot-swap UI + realize code are unchanged.
-> **Slice 2 (not yet built): realizations** get **lazily materialized** as `sentence` rows on first
-> request so the store tooling (NLP/TTS/grammar/export) covers the combos people use; until then a
-> realization is derived client-side + renders plain ruby. Full design + phasing + status:
-> [../SENTENCE_STORE_TEMPLATES.md](../SENTENCE_STORE_TEMPLATES.md). The bullets below describe the
-> render/realize behavior (still client-side).
+> **Slice 2 (SHIPPED): realizations are lazily materialized.** The first time a signed-in user PLAYS
+> or RECORDS a combo, the client POSTs ONLY the picks to **`POST /v1/templates/{id}/realize`**; the
+> server RECONSTRUCTS the realized text/furigana/English from the stored skeleton (authoritative) and
+> upserts a PUBLIC `sentence` row (`source='template'`, idempotent by hash) linked via
+> `owner_type='template'`, copying the template's curated grammar — so de-dup / export / grammar
+> search / TTS pre-gen cover the combos people use. Tap-to-lookup tokens still LAG until the next
+> offline NLP parse (no Python on prod), so a fresh combo renders plain ruby until then. Full design +
+> phasing + status: [../SENTENCE_STORE_TEMPLATES.md](../SENTENCE_STORE_TEMPLATES.md).
 
 - **Shape:** `{ id, topic, thought?, grammar, en, jp, slots:[{id,label,fillers:[{jp,en}]}] }`. `jp` is
   the skeleton with `{slotId}` markers + ruby on every fixed kanji; each filler's `jp` carries ruby too.
@@ -135,13 +138,19 @@ sentences ("I'm almost out of [wood], let me go [chop] some" → swap the filler
   `.st-slot-menu[hidden]{display:none}` — without it every menu renders open.)*
 - **Record-compare keys on the SKELETON id** (one practiceable item; the ✓/streak + takes accumulate
   there), while the reference text tracks the current realization. Picks (`tplPicks`) are per-session
-  view state, not synced.
-- The structure is now **DB-sourced** (fetched from `GET /v1/templates`), but realizations still
-  render **plain ruby** (no GiNZA tap-to-lookup over the combos — same degradation as user-authored
-  phrases) because they aren't `sentence` rows yet. Curated-only; **MODEL-GENERATED → proofread**,
-  especially that each filler stays grammatical in the skeleton's tail. Lazy materialization (which
-  lights up tap-to-lookup after the next offline NLP cycle, plus TTS pre-gen / grammar search /
-  export) is Slice 2 — see [../SENTENCE_STORE_TEMPLATES.md](../SENTENCE_STORE_TEMPLATES.md).
+  view state, not synced. Materialization (below) does **not** change this — the combo's `sentence`
+  row is for tooling, never the practice key.
+- **Materialize on use (Slice 2):** `maybeMaterialize(id)` fires from the ▶ play handler and the
+  take-saved hook. Signed-in only (it writes the PUBLIC corpus; anon keeps playing via lazy TTS),
+  deduped per session by the canonical combo key (`comboKey` — the same `slotId:idx,…` string the
+  server uses for the link role), fire-and-forget. It sends ONLY `{picks}` — the server reconstructs
+  the rest. A no-op for plain phrases (only `storeTemplates` ids match).
+- The structure is **DB-sourced** (`GET /v1/templates`) and used combos become PUBLIC `sentence` rows;
+  but a realization still renders **plain ruby** (no GiNZA tap-to-lookup over the combos — same
+  degradation as user-authored phrases) until the **next offline NLP parse** picks up the now-public
+  combo rows (no Python on prod → the lag is by design). Curated-only; **MODEL-GENERATED → proofread**,
+  especially that each filler stays grammatical in the skeleton's tail. Full design + the settled
+  open questions: [../SENTENCE_STORE_TEMPLATES.md](../SENTENCE_STORE_TEMPLATES.md).
 
 ## Audio + record-and-compare (reuses the shared engine)
 

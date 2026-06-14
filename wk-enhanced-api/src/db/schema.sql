@@ -180,14 +180,16 @@ CREATE TABLE IF NOT EXISTS translation (
 -- lesson owners can be wired in later phases without a migration. Self-Talk uses
 -- owner_type='selftalk' (owner_id NULL); built-in vocab EXAMPLE sentences (Phase 2)
 -- use owner_type='card' (owner_id=<rank>, tier='N5'..'N1'). A sentence reused by
--- several cards/tiers has ONE sentence row + one link per (card, tier).
+-- several cards/tiers has ONE sentence row + one link per (card, tier). Slot-swap
+-- TEMPLATE realizations (Slice 2) use owner_type='template' (owner_id=<template
+-- ext_id>, role=<canonical combo key>) — see sentence_template below.
 CREATE TABLE IF NOT EXISTS sentence_link (
     id            INTEGER PRIMARY KEY AUTOINCREMENT,
     sentence_id   INTEGER NOT NULL REFERENCES sentence(id) ON DELETE CASCADE,
-    owner_type    TEXT NOT NULL,   -- 'card'|'grammar_point'|'conversation'|'lesson'|'selftalk'
-    owner_id      TEXT,            -- NULL for selftalk; card rank / lesson no / etc. later
+    owner_type    TEXT NOT NULL,   -- 'card'|'grammar_point'|'conversation'|'lesson'|'selftalk'|'template'
+    owner_id      TEXT,            -- NULL for selftalk; card rank / template ext_id / lesson no / etc.
     tier          TEXT,            -- 'N5'..'N1' for card examples
-    role          TEXT,            -- conversation speaker
+    role          TEXT,            -- conversation speaker; template combo key ('slotId:idx,…')
     ordinal       INTEGER NOT NULL DEFAULT 0,
     clip_start_ms INTEGER,
     clip_end_ms   INTEGER
@@ -227,9 +229,10 @@ CREATE VIEW IF NOT EXISTS public_sentence AS
 -- `sentence` row — it lives here, curator-seeded from the study-app bundle
 -- (data/selftalk-templates.js → scripts/seed-sentences.ts), served via GET /v1/templates, and
 -- rendered client-side (the slot-swap UI). Picking a filler per slot REALIZES a concrete sentence;
--- those realizations become `sentence` rows (linked via sentence_link owner_type='template'),
--- lazily materialized on first request in a LATER slice — Slice 1 stores structure only.
--- Full design + phasing: ../../SENTENCE_STORE_TEMPLATES.md.
+-- those realizations become PUBLIC `sentence` rows (source='template', linked via sentence_link
+-- owner_type='template'), lazily materialized on first play/record (Slice 2 — SHIPPED) by
+-- db.materializeTemplateRealization (reuse-by-hash, idempotent), so de-dup/export/grammar/NLP/TTS
+-- cover the combos people use. Full design + phasing: ../../SENTENCE_STORE_TEMPLATES.md.
 --
 -- Privacy MIRRORS the sentence store: ALL reads go through db.getTemplates, which always ANDs
 -- (public=1 OR created_by=:viewer), fail-closed; anon/export read the public_template VIEW. This

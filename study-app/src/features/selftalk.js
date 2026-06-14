@@ -126,6 +126,34 @@ function templatesForTopic(topicId) {
   return storeTemplates.filter((t) => t.topic === topicId);
 }
 
+// ---- lazy materialization of template combos (Slice 2) ----
+// First time a signed-in user PLAYS or RECORDS a template combo, materialize it as a public
+// `sentence` row server-side so the store tooling (NLP tap-to-lookup, TTS pre-gen, grammar search,
+// export, de-dup) covers the combos people actually use. We send ONLY the picks — the server
+// reconstructs the realized text/furigana/English from the stored skeleton (it's authoritative; the
+// client can't materialize a row whose text doesn't match the curated template). Fire-and-forget,
+// account-gated (it writes the PUBLIC corpus; anon just keeps playing via the lazy TTS path).
+// Record-compare still keys on the SKELETON id — this never touches practice/takes. Deduped per
+// session by the canonical combo key so cycling/replaying a combo POSTs at most once.
+const materializedCombos = new Set();
+
+// The canonical combo key over ALL of a template's slots (skeleton order, each clamped index) — the
+// SAME string the server derives for the sentence_link role, so our dedup matches its idempotency.
+function comboKey(tpl, picks) {
+  return (tpl.slots || []).map((s) => `${s.id}:${templatePickIndex(s, picks)}`).join(',');
+}
+
+function maybeMaterialize(id) {
+  if (!account) return;                                   // public-corpus write → signed-in only
+  const tpl = storeTemplates.find((t) => t.id === id);
+  if (!tpl) return;                                       // a phrase, not a template — nothing to do
+  const key = id + '|' + comboKey(tpl, tplPicks[id] || {});
+  if (materializedCombos.has(key)) return;               // already sent this combo this session
+  materializedCombos.add(key);
+  api('/v1/templates/' + encodeURIComponent(id) + '/realize', { method: 'POST', body: { picks: tplPicks[id] || {} } })
+    .catch(() => materializedCombos.delete(key));         // failed write → let it retry next time
+}
+
 const elHead = () => document.getElementById('stHead');
 const elBody = () => document.getElementById('stBody');
 const $ = (id) => document.getElementById(id);
@@ -521,7 +549,9 @@ export function initSelftalk() {
     if (changed && panel && panel.classList.contains('active')) renderSelftalk();
   });
   // Record a practice mark when a Self-Talk take is saved (engine host hook; ignores Minna takes).
-  setOnTakeSaved((scope, itemKey) => { if (scope === SELFTALK_SCOPE) { markPracticed(itemKey); reflectPracticed(itemKey); } });
+  // Also materialize the recorded template combo (no-op for a plain phrase) — recording is the
+  // strongest "I used this combo" signal, and it's already account-gated.
+  setOnTakeSaved((scope, itemKey) => { if (scope === SELFTALK_SCOPE) { markPracticed(itemKey); reflectPracticed(itemKey); maybeMaterialize(itemKey); } });
   document.addEventListener('visibilitychange', handleBrowserTabHidden);
 
   const panel = document.getElementById('panel-selftalk');
@@ -529,7 +559,12 @@ export function initSelftalk() {
     panel.dataset.stWired = '1';
     panel.addEventListener('click', (e) => {
       const play = e.target.closest('[data-play]');
-      if (play) { playItem({ text: play.dataset.text || '' }, 'selftalk', play, { cycle: cycleMod(e) }); return; }
+      if (play) {
+        playItem({ text: play.dataset.text || '' }, 'selftalk', play, { cycle: cycleMod(e) });
+        const card = play.closest('.st-phrase');
+        if (card) maybeMaterialize(card.dataset.id);   // template combo → materialize on first play (no-op for phrases)
+        return;
+      }
       const mark = e.target.closest('[data-stdone]');
       if (mark) { const card = mark.closest('.st-phrase'); if (card) { markPracticed(card.dataset.id); reflectPracticed(card.dataset.id); } return; }
       const ed = e.target.closest('[data-stedit]');
