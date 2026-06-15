@@ -27,6 +27,7 @@ import {
   practiceStreak, donePhraseIds, sentenceToPhrase, phraseToSentence,
   sentenceGrammar, sentenceTokens, sentenceEn,
   mergeProgress, mergeCustomVerbs, mergeMinna, mergeSelftalkPractice,
+  parseYouTubeId, songWords, knownHeadwords, coverage, bucketByJlpt, wordStatus, songLevel, lineTimingState, songLineKey, songGrammar, JLPT_ORDER,
 } from '../src/core/index.js';
 import { SELFTALK, SELFTALK_TAXONOMY, SELFTALK_TOPICS, SELFTALK_TOPIC_IDS, SELFTALK_GRAMMAR } from '../src/data/selftalk.js';
 import { SELFTALK_TEMPLATES } from '../src/data/selftalk-templates.js';
@@ -1453,4 +1454,81 @@ test('mergeSelftalkPractice: max streak, later day, union doneToday only on the 
     { practice: { lastDay: '2026-06-15', streak: 2, doneToday: ['y'] } },
   )).toEqual({ practice: { lastDay: '2026-06-15', streak: 9, doneToday: ['y'] } });   // later day's doneToday, max streak
   expect(mergeSelftalkPractice(null, null)).toEqual({ practice: { lastDay: null, streak: 0, doneToday: [] } });
+});
+
+// ---- 歌 / Songs (core/songs.js) ----
+
+// A NORMALIZED song line (features/songs.js flattens the server's AssembledSentence into this shape
+// on load: text + furigana + en + grammar ids + tokens + clipStartMs + ordinal).
+const sgLine = (text: string, opts: any = {}) => ({
+  text,
+  furigana: opts.furigana ?? null,
+  en: opts.en ?? '',
+  grammar: opts.grammar ?? [],
+  ordinal: opts.ordinal ?? 0,
+  ...(opts.clip != null ? { clipStartMs: opts.clip } : {}),
+  tokens: opts.tokens || [],
+});
+const sgTok = (lemma: string, pos: string, jlpt?: string, gloss?: string) => ({ lemma, surface: lemma, reading: lemma, pos, ...(jlpt ? { jlpt } : {}), ...(gloss ? { gloss } : {}) });
+
+test('parseYouTubeId handles watch / youtu.be / embed / shorts and rejects non-YouTube', () => {
+  expect(parseYouTubeId('https://www.youtube.com/watch?v=oRdxUFDoQe0')).toBe('oRdxUFDoQe0');
+  expect(parseYouTubeId('https://youtu.be/oRdxUFDoQe0?t=12')).toBe('oRdxUFDoQe0');
+  expect(parseYouTubeId('https://www.youtube.com/embed/oRdxUFDoQe0')).toBe('oRdxUFDoQe0');
+  expect(parseYouTubeId('https://youtube.com/shorts/oRdxUFDoQe0')).toBe('oRdxUFDoQe0');
+  expect(parseYouTubeId('https://example.com/watch?v=abc')).toBeNull();
+  expect(parseYouTubeId('not a url')).toBeNull();
+});
+
+test('songWords: distinct content words by lemma; particles/aux excluded; jlpt+gloss carried', () => {
+  const lines = [
+    sgLine('歌を歌う', { tokens: [sgTok('歌', 'NOUN', 'N5', 'song'), sgTok('を', 'ADP'), sgTok('歌う', 'VERB', 'N5', 'to sing')] }),
+    sgLine('また歌う', { tokens: [sgTok('歌う', 'VERB', 'N5')] }), // repeat lemma → counted once
+  ];
+  const w = songWords(lines);
+  expect(w.map((x) => x.lemma).sort()).toEqual(['歌', '歌う']);
+  expect(w.find((x) => x.lemma === '歌')).toMatchObject({ jlpt: 'N5', gloss: 'song' });
+  expect(w.some((x) => x.lemma === 'を')).toBe(false); // ADP not a content word
+});
+
+test('knownHeadwords: a deck card in a box (box>0) is known by jp + read; box 0 is not', () => {
+  const DATA = [{ rank: 1, jp: '歌う', read: 'うたう' }, { rank: 2, jp: '声', read: 'こえ' }];
+  const cards = { 1: { box: 2 }, 2: { box: 0 } };
+  const known = knownHeadwords(cards, DATA);
+  expect(known.has('歌う')).toBe(true);
+  expect(known.has('うたう')).toBe(true);
+  expect(known.has('声')).toBe(false); // box 0 → not known
+});
+
+test('coverage + wordStatus over a known set', () => {
+  const known = new Set(['歌う']);
+  const words = [{ lemma: '歌う' }, { lemma: '声' }, { lemma: '朝日' }];
+  expect(coverage(words, known)).toEqual({ known: 1, total: 3, pct: 33 });
+  expect(wordStatus({ lemma: '歌う' }, known)).toBe('known');
+  expect(wordStatus({ lemma: '声' }, known)).toBe('new');
+  expect(coverage([], known)).toEqual({ known: 0, total: 0, pct: 0 });
+});
+
+test('bucketByJlpt: ordered N5→N1 then "?", empties dropped, known/added/new status', () => {
+  const known = new Set(['歌う']);            // in a Leitner box
+  const inDeck = new Set(['歌う', '声']);       // 声 is in the deck but unstudied → 'added'
+  const words = [
+    { lemma: '歌う', jlpt: 'N5' }, { lemma: '声', jlpt: 'N5' }, { lemma: '名残', jlpt: 'N3' }, { lemma: 'なぞ', jlpt: null as any },
+  ];
+  const b = bucketByJlpt(words, known, inDeck);
+  expect(b.map((x) => x.level)).toEqual(['N5', 'N3', '?']); // N4/N2/N1 empty → dropped, '?' last
+  expect(b[0]!.words.find((w) => w.lemma === '歌う')!.status).toBe('known');
+  expect(b[0]!.words.find((w) => w.lemma === '声')!.status).toBe('added'); // in deck, box 0
+  expect(b[1]!.words.find((w) => w.lemma === '名残')!.status).toBe('new');  // not in deck
+  expect(wordStatus({ lemma: '声' }, known, inDeck)).toBe('added');
+});
+
+test('songLevel: fallback wins; else the hardest word level; songLineKey; lineTimingState; songGrammar', () => {
+  expect(songLevel([{ jlpt: 'N5' }], 'N3')).toBe('N3'); // stored level wins
+  expect(songLevel([{ jlpt: 'N5' }, { jlpt: 'N2' }, { jlpt: null as any }], null)).toBe('N2'); // hardest
+  expect(songLevel([], null)).toBeNull();
+  expect(songLineKey('usr-abc', 4)).toBe('usr-abc:4');
+  expect(lineTimingState([sgLine('a', { clip: 0 }), sgLine('b', { clip: 8000 }), sgLine('c')])).toEqual({ timed: 2, total: 3 });
+  expect(songGrammar([sgLine('a', { grammar: ['tai', 'nagara'] }), sgLine('b', { grammar: ['tai'] })]))
+    .toEqual([{ id: 'tai', count: 2 }, { id: 'nagara', count: 1 }]); // most-used first
 });

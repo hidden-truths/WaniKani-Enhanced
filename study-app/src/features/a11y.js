@@ -119,15 +119,17 @@ export function annotateCatChips(){
 // otherwise dim individual source chips that currently match nothing. Same shape
 // as annotateCatChips; runs at boot and on every state.DATA change.
 export function annotateSourceChips(){
-  const hasMinna=state.DATA.some(v=>v.minna);
-  document.querySelectorAll('.frow.source-row').forEach(r=>{r.style.display=hasMinna?'':'none';});
-  if(!hasMinna)return;
-  const counts={minna:0,italki:0};
-  state.DATA.forEach(v=>{ if(v.minna)counts.minna++; if(v.italki)counts.italki++;
-    (v.tags||[]).forEach(t=>{ if(/^mnn-l\d+$/.test(t))counts[t]=(counts[t]||0)+1; }); });
+  // Show the Source row once the deck has ANY provenance-tagged cards — みんなの日本語 OR a 歌/song
+  // word (both populate the source facet); otherwise hide it entirely.
+  const hasSource=state.DATA.some(v=>v.minna||v.song);
+  document.querySelectorAll('.frow.source-row').forEach(r=>{r.style.display=hasSource?'':'none';});
+  if(!hasSource)return;
+  const counts={minna:0,italki:0,song:0};
+  state.DATA.forEach(v=>{ if(v.minna)counts.minna++; if(v.italki)counts.italki++; if(v.song)counts.song++;
+    (v.tags||[]).forEach(t=>{ if(/^mnn-l\d+$/.test(t)||/^song-/.test(t))counts[t]=(counts[t]||0)+1; }); });
   document.querySelectorAll('.chip.deck,.chip.bf').forEach(b=>{
     const t=b.dataset.deck||b.dataset.filter;
-    if(t!=='minna'&&t!=='italki'&&!/^mnn-l\d+$/.test(t))return;
+    if(t!=='minna'&&t!=='italki'&&t!=='song'&&!/^mnn-l\d+$/.test(t)&&!/^song-/.test(t))return;
     const n=counts[t]||0;
     b.disabled=n===0;
     b.title=n===0?'No cards with this source yet':`${n} card${n===1?'':'s'}`;

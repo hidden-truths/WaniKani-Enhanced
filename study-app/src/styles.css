@@ -774,3 +774,111 @@
   /* Grammar points on a detail-modal example (read-only) — surfaces what the Browse grammar filter matches. */
   .ex-grammar{margin-top:6px;display:flex;flex-wrap:wrap;gap:5px;align-items:center;font-family:"SF Mono",ui-monospace,monospace;font-size:10px;text-transform:uppercase;letter-spacing:.05em;color:var(--muted)}
   .ex-gram-chip{font-family:var(--jp-font),sans-serif;text-transform:none;letter-spacing:0;font-size:12px;color:var(--ink);background:color-mix(in srgb,var(--ink) 7%,transparent);border:1px solid var(--line);border-radius:6px;padding:1px 7px}
+
+/* ============================ 歌 / Songs tab ============================
+   Ported + adapted from study-app/mockups/songs/mock.css. Reuses the existing tokens +
+   .chip/.frow/.speak-btn/.ex-gram-chip/.word-pop/.signup-banner/.st-kicker/.st-back primitives;
+   only the song-specific components live here. Listen/Shadow styles arrive with those phases. */
+.sg-intro{margin:18px 0 14px}
+.sg-toolbar{display:flex;align-items:center;gap:10px;flex-wrap:wrap;margin:6px 0 4px}
+.sg-empty{font-family:Georgia,serif;color:var(--muted);margin:24px 0}
+.sg-err{color:var(--godan)}
+.sg-gate{margin:16px 0;align-items:center}
+.lv{font-family:"SF Mono",ui-monospace,monospace;font-size:9px;letter-spacing:.06em;border-radius:2px;padding:2px 6px;border:1px solid var(--muted);color:var(--muted)}
+.lv-n5{color:var(--good);border-color:var(--good)} .lv-n4{color:var(--ichidan);border-color:var(--ichidan)}
+.lv-n3{color:var(--noun);border-color:var(--noun)} .lv-n2{color:var(--adverb);border-color:var(--adverb)} .lv-n1{color:var(--leech);border-color:var(--leech)}
+
+/* ---- Library ---- */
+.song-grid{display:grid;grid-template-columns:repeat(auto-fill,minmax(300px,1fr));gap:14px;margin-top:14px}
+.song-card{display:block;width:100%;text-align:left;position:relative;background:var(--paper);border:1px solid var(--line);border-left:5px solid var(--ichidan);border-radius:3px;padding:15px 16px;cursor:pointer;font:inherit;color:var(--ink)}
+.song-card:hover{background:color-mix(in srgb,var(--ink) 3%,transparent)}
+.song-card.starter{border-left-color:var(--adjective)}
+.sc-row{display:flex;justify-content:space-between;align-items:flex-start;gap:10px}
+.sc-title{display:block;font-size:22px;font-weight:900;line-height:1.1}
+.sc-artist{display:block;font-size:13px;color:var(--muted);font-style:italic;margin-top:3px}
+.ring{position:relative;display:inline-block;width:40px;height:40px;border-radius:50%;flex-shrink:0;background:conic-gradient(var(--ichidan) var(--p),var(--paper-2) 0)}
+.ring>span{position:absolute;inset:5px;border-radius:50%;background:var(--paper);display:flex;align-items:center;justify-content:center;font-family:"SF Mono",ui-monospace,monospace;font-size:11px;font-weight:700;color:var(--ink)}
+.sc-cov{display:block;margin-top:13px}
+.sc-cov-top{display:flex;justify-content:space-between;font-family:"SF Mono",ui-monospace,monospace;font-size:11px;color:var(--muted);margin-bottom:4px}
+.sc-cov-top b{color:var(--good);font-weight:700}
+.cov-bar{display:block;height:6px;border-radius:3px;background:var(--paper-2);border:1px solid var(--line);overflow:hidden}
+.cov-fill{display:block;height:100%;background:var(--good)}
+.sc-meta{display:flex;align-items:center;gap:8px;margin-top:12px;flex-wrap:wrap}
+.src-badge{font-family:"SF Mono",ui-monospace,monospace;font-size:9px;padding:2px 6px;border-radius:2px;letter-spacing:.08em;color:#fff}
+.src-mine{background:var(--ichidan)} .src-starter{background:var(--adjective)}
+.sc-dot{font-family:"SF Mono",ui-monospace,monospace;font-size:10px;color:var(--muted);margin-left:auto}
+.sc-warn{color:var(--noun)}
+
+/* ---- Add a song ---- */
+.steps{display:flex;gap:18px;margin:14px 0 16px;flex-wrap:wrap}
+.step{font-family:"SF Mono",ui-monospace,monospace;font-size:12px;color:var(--muted);display:inline-flex;align-items:center;gap:7px}
+.step .sn{display:inline-flex;align-items:center;justify-content:center;width:20px;height:20px;border-radius:50%;border:1px solid var(--line);font-size:10px}
+.step.on{color:var(--ichidan)} .step.on .sn{border-color:var(--ichidan);background:color-mix(in srgb,var(--ichidan) 12%,transparent);font-weight:700}
+.step.done{color:var(--good)} .step.done .sn{border-color:var(--good);color:var(--good)}
+.field-lbl{font-family:"SF Mono",ui-monospace,monospace;font-size:10px;letter-spacing:.16em;text-transform:uppercase;color:var(--muted);margin:14px 0 6px;display:block}
+.ta{width:100%;min-height:200px;font-family:var(--jp-font);font-size:16px;line-height:1.9;border:1px solid var(--line);background:var(--paper);padding:12px 14px;border-radius:6px;color:var(--ink)}
+.inp{width:100%;font-family:Georgia,serif;font-size:14px;border:1px solid var(--line);background:var(--paper);padding:10px 12px;border-radius:6px;color:var(--ink)}
+.add-note{font-family:"SF Mono",ui-monospace,monospace;font-size:11px;color:var(--muted);display:inline-flex;align-items:center;gap:6px;margin-top:8px}
+.add-foot{display:flex;align-items:center;justify-content:space-between;gap:12px;margin-top:14px;flex-wrap:wrap}
+.profile-chips{display:flex;flex-wrap:wrap;gap:8px;align-items:center;margin:6px 0}
+.pchip{display:inline-flex;align-items:center;gap:5px;font-family:"SF Mono",ui-monospace,monospace;font-size:12px;padding:3px 9px;border-radius:3px}
+.pchip.info{background:color-mix(in srgb,var(--ichidan) 14%,transparent);color:var(--ichidan)}
+.pchip.plain{border:1px solid var(--line);color:var(--muted)}
+.rev{border:1px solid var(--line);border-radius:8px;overflow:hidden;background:var(--paper);margin-top:6px}
+.rev-line{display:flex;justify-content:space-between;align-items:flex-start;gap:12px;padding:11px 14px;border-bottom:1px solid var(--line)}
+.rev-line:last-child{border-bottom:none}
+.rev-line.flag{background:color-mix(in srgb,var(--noun) 12%,transparent)}
+.rev-jp{font-size:21px;line-height:2.1}
+.rev-en{font-size:13px;color:var(--muted);font-style:italic;margin-top:1px}
+.rev-warn{font-family:"SF Mono",ui-monospace,monospace;font-size:11px;color:var(--noun);margin-top:5px;display:flex;align-items:center;gap:5px}
+
+/* ---- Song view (shared + Read) ---- */
+.song-head{display:flex;align-items:flex-start;justify-content:space-between;gap:12px;margin:10px 0 12px;flex-wrap:wrap}
+.song-h-title{font-size:22px;font-weight:900}
+.song-h-sub{font-size:13px;color:var(--muted);font-style:italic}
+.mode-switch{display:inline-flex;gap:3px;background:var(--paper-2);border:1px solid var(--line);border-radius:6px;padding:3px;flex-wrap:wrap}
+.mode-sw{font-family:"SF Mono",ui-monospace,monospace;font-size:11px;letter-spacing:.06em;text-transform:uppercase;border:none;background:none;color:var(--muted);padding:7px 13px;border-radius:4px;cursor:pointer;display:inline-flex;align-items:center;gap:6px}
+.mode-sw:disabled{opacity:.45;cursor:default}
+.mode-sw.on{background:var(--paper);color:var(--ink);font-weight:700;box-shadow:0 1px 2px rgba(0,0,0,.08)}
+.mode-sw.on .g{color:var(--godan)}
+.sg-yt{max-width:480px;margin:0 0 12px}
+.sg-yt>div,.sg-yt iframe{width:100%;aspect-ratio:16/9;border:0;border-radius:8px;background:#161616;display:block}
+.ttoolbar{display:flex;gap:8px;margin-bottom:12px;flex-wrap:wrap}
+.tgl{display:inline-flex;align-items:center;gap:6px;font-family:"SF Mono",ui-monospace,monospace;font-size:12px;color:var(--muted);background:transparent;border:1px solid var(--line);padding:5px 10px;border-radius:3px;cursor:pointer}
+.tgl.on{color:var(--ichidan);border-color:var(--ichidan)}
+.lyrics .jp{font-family:var(--jp-font)}
+.lyrics.furi-off rt{display:none}
+.lyric{padding:8px 12px;border-radius:6px}
+.lyric.cur{background:color-mix(in srgb,var(--ichidan) 9%,transparent);border-left:3px solid var(--ichidan);border-radius:0 6px 6px 0}
+.lyric.past{opacity:.5}
+.l-top{display:flex;justify-content:space-between;align-items:flex-start;gap:10px}
+.l-jp{font-size:23px;line-height:2.35}
+.l-en{font-size:13.5px;color:var(--muted);font-style:italic;margin-top:1px}
+.l-en.hidden{font-family:"SF Mono",ui-monospace,monospace;font-style:normal;font-size:12px;color:color-mix(in srgb,var(--muted) 80%,transparent);display:inline-flex;align-items:center;gap:5px;cursor:pointer}
+.l-ctl{display:flex;gap:6px;flex-shrink:0}
+.gram-row{margin-top:6px;display:flex;flex-wrap:wrap;gap:6px;align-items:center}
+.ex-gram-chip[data-act]{cursor:pointer}
+
+/* ---- Mine (vocab & grammar) ---- */
+.vg{display:grid;grid-template-columns:1.4fr 1fr;gap:18px;margin-top:14px}
+.vg-card{background:var(--paper-2);border:1px solid var(--line);border-radius:12px;padding:14px 16px}
+.vg-h{font-family:"SF Mono",ui-monospace,monospace;font-size:11px;letter-spacing:.14em;text-transform:uppercase;color:var(--godan);margin-bottom:6px;display:flex;align-items:center;gap:8px}
+.vg-sub{font-family:"SF Mono",ui-monospace,monospace;font-size:11px;color:var(--muted);margin-bottom:8px}
+.lvl-head{font-family:"SF Mono",ui-monospace,monospace;font-size:10px;letter-spacing:.1em;color:var(--muted);margin:12px 0 2px}
+.wrow{display:flex;align-items:center;gap:10px;padding:7px 0;border-top:1px solid var(--line)}
+.wj{font-size:17px;min-width:74px} .wr{font-size:12px;color:var(--muted);font-family:var(--jp-font)} .wm{font-size:13px;color:var(--ink);flex:1}
+.kn{font-family:"SF Mono",ui-monospace,monospace;font-size:9px;padding:2px 6px;border-radius:2px}
+.kn.known{color:var(--good);border:1px solid var(--good)} .kn.new{color:var(--ichidan);border:1px solid var(--ichidan)} .kn.added{color:var(--muted);border:1px solid var(--line)}
+.addw{font-family:"SF Mono",ui-monospace,monospace;font-size:11px;border:1px solid var(--line);background:none;color:var(--ichidan);border-radius:11px;padding:2px 9px;cursor:pointer}
+.grow{display:flex;align-items:center;gap:10px;padding:9px 0;border-top:1px solid var(--line);cursor:pointer}
+.gp{font-size:15px} .gcount{margin-left:auto;font-family:"SF Mono",ui-monospace,monospace;font-size:11px;color:var(--muted)}
+
+/* ---- Grammar reference ---- */
+.gref{max-width:560px;background:var(--paper-2);border:1px solid var(--line);border-radius:12px;padding:18px 20px;margin:14px 0}
+.gref-pat{font-size:20px;font-weight:700}
+.gref-h{font-family:"SF Mono",ui-monospace,monospace;font-size:10px;letter-spacing:.14em;text-transform:uppercase;color:var(--muted);margin:14px 0 6px}
+.gref-line{font-size:16px;padding:8px 0;border-top:1px solid var(--line)}
+.gref-line .gl-en{font-size:12px;color:var(--muted);font-style:italic}
+.xlink{display:inline-flex;align-items:center;gap:6px;font-family:"SF Mono",ui-monospace,monospace;font-size:12px;color:var(--ichidan);border:1px solid var(--line);border-radius:8px;padding:6px 11px;margin:4px 8px 0 0;cursor:pointer;background:none}
+
+@media(max-width:760px){.vg{grid-template-columns:1fr}}

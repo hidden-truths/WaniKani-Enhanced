@@ -14,6 +14,7 @@ export function initTabs(handlers = {}) {
     const next = t.dataset.tab;
     if (activeTab === 'minna' && next !== 'minna') handlers.leaveMinna && handlers.leaveMinna();
     if (activeTab === 'selftalk' && next !== 'selftalk') handlers.leaveSelftalk && handlers.leaveSelftalk();
+    if (activeTab === 'songs' && next !== 'songs') handlers.leaveSongs && handlers.leaveSongs();
     activeTab = next;
     document.querySelectorAll('.tab').forEach(x => x.classList.remove('active'));
     document.querySelectorAll('.panel').forEach(x => x.classList.remove('active'));
@@ -23,6 +24,7 @@ export function initTabs(handlers = {}) {
     if (next === 'browse') handlers.browse && handlers.browse();
     if (next === 'minna') handlers.minna && handlers.minna();
     if (next === 'selftalk') handlers.selftalk && handlers.selftalk();
+    if (next === 'songs') handlers.songs && handlers.songs();
   }));
 }
 

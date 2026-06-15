@@ -433,17 +433,18 @@ as work lands. `[ ]` = todo, `[x]` = done, `[~]` = in progress.
 - [x] 7 unit tests for the pure `assembleAnalysis` (offset computation, furigana validation, flagging, grammar filter) — mock-free per the service-layer test convention; the live Claude call is integration-only. Full suite green (269), typecheck clean, routes smoke-tested (anon 401 / 503 paths, `/{id}` not shadowed).
 - Decision: model returns linguistics, **server does the offset bookkeeping** — never trust an LLM to count UTF-16 code units. Live analyze verifies once `ANTHROPIC_API_KEY` is provisioned (the Add flow shows a "not available yet" state until then).
 
-### Phase 3 — Client: Library + Add + Read + Mine (foundation)
-- [ ] Tab + `#panel-songs` + sprite glyphs in `index.html`.
-- [ ] `core/songs.js` pure helpers + tests.
-- [ ] `features/songs.js`: Library grid; Add flow (paste→analyze→review/edit→save); Read viewer; Mine panel.
-- [ ] `features/songs-youtube.js`: IFrame loader + player wrapper (embed; sync arrives with timing).
-- [ ] Source facet `歌`/`song-<id>` routing (`core/facets.js`) + `annotateSourceChips` extension (`a11y.js`).
-- [ ] `songs` synced blob (`state.js`, `persistence/songs.js`, `cloud.js`, `sync-bus.js`, pullCloud, flushQueue).
-- [ ] `'songs'` audio context (`core/audio.js`).
-- [ ] Port song CSS from `mockups/songs/mock.css` into `styles.css`.
-- [ ] `main.js` boot + `initTabs` `songs`/`leaveSongs` wiring.
-- [ ] `bun run test` + `bun run build` green; preview screenshots vs mockups.
+### Phase 3 — Client: Library + Add + Read + Mine (foundation) ✅
+- [x] Tab (`歌`/`#i-music`) + `#panel-songs` (`#sgHead`/`#sgBody`) + 6 new sprite glyphs (music/eye/eyeoff/headphones/back/tag) in `index.html`.
+- [x] `core/songs.js` pure helpers (parseYouTubeId, songWords, knownHeadwords, coverage, bucketByJlpt, wordStatus[known/added/new], songLevel, lineTimingState, songGrammar, songLineKey) + 12 tests.
+- [x] `features/songs.js`: Library grid (filters, coverage ring, source/level badges); Add flow (paste + YouTube → analyze → review w/ flags → save, oEmbed title/artist auto-fill, graceful 503); Read viewer (furigana flip, reveal-on-tap EN, tap-a-word via overlayTokens+wireWordTaps, grammar chips → reference panel, per-line replay = synth or YouTube slice); Mine (vocab by JLPT known/added/new + per-word/bulk add under Source:歌, grammar points + counts, grammar reference + save-line-as-shadow-phrase).
+- [x] `features/songs-youtube.js`: lazy IFrame loader + player wrapper (embed + synced-highlight poll + playSlice).
+- [x] Source facet `song`/`song-<id>` routing (`core/facets.js` tokenFacet/TOKEN_FACET/oneGroup/DECK_LABEL) + `annotateSourceChips` extension (`a11y.js`, hide-until-Minna **or**-songs) + a `歌` chip in both pickers.
+- [x] `'songs'` audio context (`core/audio.js`).
+- [x] Song CSS ported from `mock.css` into `styles.css` (reusing existing chip/frow/word-pop/ex-gram-chip/speak-btn primitives).
+- [x] `main.js` boot + `chrome.js`/`initTabs` `songs`/`leaveSongs` wiring.
+- [x] 204 core tests + `bun run build` green; **verified live in the preview** (Library, Read furigana+reveal+tap-word, Mine word-rows+activation→ADDED, Source `歌` chip, Add→Analyze→503 graceful). Screenshots captured.
+- DEVIATION: the **`songs` synced blob is deferred to the Shadow phase** (Phase 5), where stars + shadowed-lines actually accrue. The foundation needs none — song content is server-authoritative and coverage is computed live; mined vocab syncs under `custom-verbs`. Library/Read/Mine all work without it.
+- DEFERRED to follow-ups: inline edit in the Add-review screen (flags guide a re-analyze for now); per-song `song-<id>` chips in the picker (the master `歌` chip + the per-song tags ship; dynamic chip injection is later); the grammar-reference cross-link COUNTS (save-line-as-phrase + a Browse deep-link ship).
 
 ### Phase 4 — Listen (dictation) — follow-up
 - [ ] Cloze ⇄ full-line toggle; advisory grading (`normKana`/`romajiToKana`); reveal self-check; per-session count; line replay (slice/by-ear/synth).

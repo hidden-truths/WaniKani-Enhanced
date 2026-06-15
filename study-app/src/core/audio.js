@@ -14,12 +14,12 @@
 // The contexts a play button can belong to. 'reviews' = the flashcard deck; 'browse' = the
 // Browse grid/modal; 'minna' = the みんなの日本語 textbook view; 'selftalk' = the 独り言 Self-Talk
 // speaking-practice tab.
-export const AUDIO_CONTEXTS = ['reviews', 'browse', 'minna', 'selftalk'];
+export const AUDIO_CONTEXTS = ['reviews', 'browse', 'minna', 'selftalk', 'songs'];
 
 // The KIND axis users can prioritize without naming a specific voice.
 export const AUDIO_KINDS = ['native', 'tts', 'user'];
 export const AUDIO_KIND_LABELS = { native: 'Native recording', tts: 'Synthesized (any)', user: 'My voice' };
-export const AUDIO_CONTEXT_LABELS = { reviews: 'Reviews', browse: 'Browsing', minna: 'Textbook study', selftalk: 'Self-talk' };
+export const AUDIO_CONTEXT_LABELS = { reviews: 'Reviews', browse: 'Browsing', minna: 'Textbook study', selftalk: 'Self-talk', songs: 'Songs' };
 
 // Specific synth voices offered in the picker palette. (Native + user are offered as KIND tokens —
 // there's no per-source identity to name.) Server-side, an un-generated voice falls through to the
@@ -75,6 +75,9 @@ export const DEFAULT_AUDIO_PREFS = {
   // Self-talk phrases have no native recording (model-authored); lead with a synth voice as the
   // reference, then any synth, then your own take as a self-compare.
   selftalk: ['siri:female', 'kind:tts', 'kind:user'],
+  // Song lines have no per-line native clip (the master is the embedded YouTube video, which can't
+  // be decoded); a synth voice is the per-line reference + Shadow target, then your own take.
+  songs: ['siri:female', 'kind:tts', 'kind:user'],
 };
 
 // The ordered token list for a context — the user's saved list if non-empty, else the default.

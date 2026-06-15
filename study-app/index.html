@@ -62,6 +62,12 @@
   <symbol id="i-external" viewBox="0 0 24 24"><path d="M14 5h5v5M19 5l-8 8M18 14v4a1.5 1.5 0 0 1-1.5 1.5h-10A1.5 1.5 0 0 1 5 18V8a1.5 1.5 0 0 1 1.5-1.5H10"/></symbol>
   <symbol id="i-copy" viewBox="0 0 24 24"><rect x="9" y="9" width="11" height="11" rx="2"/><path d="M5 15H4a1 1 0 0 1-1-1V4a1 1 0 0 1 1-1h10a1 1 0 0 1 1 1v1"/></symbol>
   <symbol id="i-book" viewBox="0 0 24 24"><path d="M12 6.5C10.5 5 8 4.5 4 5v13c4-.5 6.5 0 8 1.5 1.5-1.5 4-2 8-1.5V5c-4-.5-6.5 0-8 1.5z"/><path d="M12 6.5v13"/></symbol>
+  <symbol id="i-music" viewBox="0 0 24 24"><path d="M9 18V5l11-2v13"/><circle cx="6" cy="18" r="3"/><circle cx="17" cy="16" r="3"/></symbol>
+  <symbol id="i-eye" viewBox="0 0 24 24"><path d="M2 12s3.5-7 10-7 10 7 10 7-3.5 7-10 7-10-7-10-7z"/><circle cx="12" cy="12" r="3"/></symbol>
+  <symbol id="i-eyeoff" viewBox="0 0 24 24"><path d="M2 12s3.5-7 10-7c1.6 0 3 .3 4.3.9M22 12s-3.5 7-10 7c-1.6 0-3-.3-4.3-.9"/><path d="M4 4l16 16"/></symbol>
+  <symbol id="i-headphones" viewBox="0 0 24 24"><path d="M4 14v-2a8 8 0 0 1 16 0v2"/><rect x="3" y="13" width="4" height="7" rx="1.5"/><rect x="17" y="13" width="4" height="7" rx="1.5"/></symbol>
+  <symbol id="i-back" viewBox="0 0 24 24"><path d="M19 12H5M11 6l-6 6 6 6"/></symbol>
+  <symbol id="i-tag" viewBox="0 0 24 24"><path d="M3 11l8-8 9 1 1 9-8 8a2 2 0 0 1-2.8 0L3 13.8A2 2 0 0 1 3 11z"/><circle cx="15" cy="9" r="1.4"/></symbol>
 </svg>
 <!-- Sticky top navbar: app title on the left, a slot (#navExtra) where context controls dock
      (the みんなの日本語 speaking/compare controls render here — see minna.js), and the global
@@ -89,6 +95,7 @@
   <button class="tab" data-tab="stats"><svg class="ic" aria-hidden="true"><use href="#i-chart"/></svg>Stats &amp; Leeches</button>
   <button class="tab" data-tab="minna"><svg class="ic" aria-hidden="true"><use href="#i-book"/></svg>みんなの日本語</button>
   <button class="tab" data-tab="selftalk"><svg class="ic" aria-hidden="true"><use href="#i-mic"/></svg>独り言</button>
+  <button class="tab" data-tab="songs"><svg class="ic" aria-hidden="true"><use href="#i-music"/></svg>歌</button>
 </div>
 
 <div class="wrap">
@@ -229,6 +236,7 @@
         <button class="chip deck" data-deck="mnn-l22">L22</button>
         <button class="chip deck" data-deck="mnn-l23">L23</button>
         <button class="chip deck" data-deck="mnn-l24">L24</button>
+        <button class="chip deck" data-deck="song" style="border-color:var(--godan);color:var(--godan)">歌</button>
       </div></div>
       <div class="fdiv"></div>
       <div class="frow"><span class="filter-label">Level &amp; rank</span><div class="chips">
@@ -396,6 +404,7 @@
         <button class="chip bf" data-filter="mnn-l22">L22</button>
         <button class="chip bf" data-filter="mnn-l23">L23</button>
         <button class="chip bf" data-filter="mnn-l24">L24</button>
+        <button class="chip bf" data-filter="song" style="border-color:var(--godan);color:var(--godan)">歌</button>
       </div></div>
       <!-- Grammar facet (Phase-4): filter to cards whose EXAMPLE sentences use a grammar point.
            Chips are rendered by browse.js from the ids actually present in the deck (labels from the
@@ -471,6 +480,14 @@
   <div class="panel" id="panel-selftalk">
     <div id="stHead" class="st-head"></div>
     <div id="stBody" class="st-body"></div>
+  </div>
+
+  <!-- 歌 / Songs — song & lyric analysis. Filled at runtime by features/songs.js
+       (Library grid → Add flow → Song view: Read/Mine). #sgBody is the stable
+       record-compare attach container (Shadow phase). See SONGS.md. -->
+  <div class="panel" id="panel-songs">
+    <div id="sgHead" class="sg-head"></div>
+    <div id="sgBody" class="sg-body"></div>
   </div>
 
 </div><!-- /.wrap -->

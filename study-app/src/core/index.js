@@ -15,3 +15,4 @@ export * from './recordings.js';
 export * from './audio.js';
 export * from './refs.js';
 export * from './selftalk.js';
+export * from './songs.js';

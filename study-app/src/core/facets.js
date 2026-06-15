@@ -28,6 +28,7 @@ export function oneGroup(v, d) {
   if (d === 'due') return isDue(v.rank);
   if (d === 'minna') return !!v.minna;                         // source facet: any みんなの日本語 card
   if (d === 'italki') return !!v.italki;                       // source facet: covered in an iTalki lesson
+  if (d === 'song') return !!v.song;                           // source facet: any word mined from a 歌/song
   if (CATS.includes(d)) return (v.cat || 'verb') === d;        // part-of-speech facet
   if (['godan', 'ichidan', 'irregular'].includes(d)) return v.type === d;
   if (d === 'suru' || d === 'fake') return v.tags.includes(d);
@@ -58,14 +59,15 @@ export const TOKEN_FACET = {
   verb: 'cat', adjective: 'cat', noun: 'cat', adverb: 'cat', phrase: 'cat',
   godan: 'type', ichidan: 'type', irregular: 'type', suru: 'type', fake: 'type',
   trans: 'trans', intrans: 'trans', 'ti-pair': 'trans', leech: 'status', due: 'status',
-  minna: 'source', italki: 'source',
+  minna: 'source', italki: 'source', song: 'source',
 };
-export const tokenFacet = t => TOKEN_FACET[t] || (/^mnn-l\d+$/.test(t) ? 'source' : 'topic');
+// topic is the default; per-lesson (mnn-l23) AND per-song (song-<extId>) tokens → source.
+export const tokenFacet = t => TOKEN_FACET[t] || (/^mnn-l\d+$/.test(t) || /^song-/.test(t) ? 'source' : 'topic');
 
 // Token → human label for the active-filter recap line.
-export const DECK_LABEL = { verb: 'Verb', adjective: 'Adjective', noun: 'Noun', adverb: 'Adverb', phrase: 'Phrase', godan: 'Godan', ichidan: 'Ichidan', irregular: 'Irregular', suru: 'Suru', fake: 'Fake-ichidan', trans: 'Transitive', intrans: 'Intransitive', 'ti-pair': 'T/I pairs', leech: 'Leeches', due: 'Due cards', motion: 'Motion', transit: 'Transit', wearing: 'Wearing', speaking: 'Speaking', communication: 'Communication', giving: 'Giving/Recv', emotion: 'Emotion', cognition: 'Cognition', perception: 'Perception', existence: 'Existence', change: 'Change', ability: 'Ability', onoff: 'On/Off', daily: 'Daily', body: 'Body', work: 'Work', study: 'Study', food: 'Food', money: 'Money', minna: 'みんなの日本語', italki: 'iTalki' };
-// Token → recap label. Per-lesson source tokens (mnn-l23) render as "L23".
-export function deckLabel(t) { const m = /^mnn-l(\d+)$/.exec(t); return m ? ('L' + m[1]) : (DECK_LABEL[t] || t); }
+export const DECK_LABEL = { verb: 'Verb', adjective: 'Adjective', noun: 'Noun', adverb: 'Adverb', phrase: 'Phrase', godan: 'Godan', ichidan: 'Ichidan', irregular: 'Irregular', suru: 'Suru', fake: 'Fake-ichidan', trans: 'Transitive', intrans: 'Intransitive', 'ti-pair': 'T/I pairs', leech: 'Leeches', due: 'Due cards', motion: 'Motion', transit: 'Transit', wearing: 'Wearing', speaking: 'Speaking', communication: 'Communication', giving: 'Giving/Recv', emotion: 'Emotion', cognition: 'Cognition', perception: 'Perception', existence: 'Existence', change: 'Change', ability: 'Ability', onoff: 'On/Off', daily: 'Daily', body: 'Body', work: 'Work', study: 'Study', food: 'Food', money: 'Money', minna: 'みんなの日本語', italki: 'iTalki', song: '歌' };
+// Token → recap label. Per-lesson source tokens (mnn-l23) render as "L23"; per-song (song-<id>) as "歌".
+export function deckLabel(t) { const m = /^mnn-l(\d+)$/.exec(t); if (m) return 'L' + m[1]; if (/^song-/.test(t)) return '歌'; return DECK_LABEL[t] || t; }
 // Build the active-facet parts for a config (one part per non-empty facet).
 export function filterSummary(c) {
   const parts = [];
