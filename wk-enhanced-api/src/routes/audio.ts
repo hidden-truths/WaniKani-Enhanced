@@ -124,7 +124,12 @@ export async function postRecording(c: Context) {
     try {
         await getStorage().put(storageKey, body, ct, { acl: 'private' });
     } catch {
-        return c.json({ code: 'internal_error' as const, error: 'could not store recording' }, 400);
+        // A storage-write outage is a server-side failure, not a bad request — 500 so the
+        // code (internal_error) and HTTP status agree (every other internal_error is 500; see
+        // index.ts's onError handler). NOT 400: a client/monitor keying retry/alert logic on
+        // the 4xx/5xx split must see a 5xx here. NOT 502/upstream_failure either — that code is
+        // for failed *reads* from external services (cf. serveNativeAudio's fetchMinnaAudio miss).
+        return c.json({ code: 'internal_error' as const, error: 'could not store recording' }, 500);
     }
 
     const dur = durationMs ? Number(durationMs) : null;
@@ -267,6 +272,7 @@ const recPostRoute = createRoute({
         200: { description: 'Saved.', content: { 'application/json': { schema: MinnaRecordingPostResponseSchema } } },
         400: { description: 'Bad request (empty/too large/bad type).', content: { 'application/json': { schema: ErrorSchema } } },
         401: { description: 'Not authorized.', content: { 'application/json': { schema: ErrorSchema } } },
+        500: { description: 'Storage write failed.', content: { 'application/json': { schema: ErrorSchema } } },
     },
 });
 audioRouter.openapi(recPostRoute, postRecording);
