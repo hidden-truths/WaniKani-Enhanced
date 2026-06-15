@@ -295,8 +295,8 @@ tab is **account-gated to an owner allowlist** to keep that material out of publ
 ## Things that look like bugs but aren't (dead-ends)
 
 - **The tab is account-gated + fetched live by design — not offline-first.** Every other
-  surface works over `file://`/offline; this one shows a sign-in wall and needs the
-  server. That's the copyright trade-off, not a regression. Don't "fix" it by baking the
+  surface degrades gracefully offline (cached data in localStorage); this one shows a sign-in
+  wall and needs the server. That's the copyright trade-off, not a regression. Don't "fix" it by baking the
   content into a static `minna.js`.
 - **Vocab activation reuses `custom-verbs`; there is no Minna card store.** Cards live in
   `jpverbs_custom` and sync there. The `minna` key holds *only* notes + `lastLesson`.

@@ -70,6 +70,13 @@ kana (きょ) and ん/っ/ー count per `splitMora`. `pitchHtml` draws an overli
 morae + a step-down at the drop. Get the value from a pitch dictionary (OJAD, NHK) when you
 can — model guesses need a proofread.
 
+### Mnemonics (`mnem`)
+
+Aim for **sound-accurate first**: the English hook should actually resemble the Japanese
+reading. Fall back to a kanji-based hook only when no honest sound link exists (e.g.
+待つ → 松 "pine"). A fake sound-pun is worse than an honest "this is just the kanji" — a
+mnemonic the reader can't trust is anti-useful.
+
 ### Categories, type, transitivity, tags
 
 - `cat` ∈ `verb/adjective/noun/adverb/phrase`. `type` only for verbs (`godan`/`ichidan`/
@@ -119,6 +126,11 @@ Edit the static data files (no UI):
 
 `attachLevels` wires `levels`/`accent` onto the card by `rank`. Keep `verbs-core.test.ts`
 green (it asserts every built-in has 5 well-formed tiers + a numeric accent).
+
+> **Ranking source note.** Built-in ranks are BCCWJ corpus frequency. する vs 言う for #1 is
+> genuinely ambiguous — it depends on whether 〜する compounds count as する or split out as
+> separate lemmas. We put する at #1 (the count a learner *feels*, meeting it constantly via
+> compounds) and note the near-tie on both cards' `tip`. Don't "fix" #1 without reading that tip.
 
 ### C. A user custom card (the "Add card" modal)
 

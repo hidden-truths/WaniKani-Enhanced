@@ -1,6 +1,6 @@
 # 日常日本語 — Japanese Trainer (web study app)
 
-A no-build, offline-capable flashcard + spaced-repetition study tool for everyday
+A Vite-built, offline-degrading flashcard + spaced-repetition study tool for everyday
 Japanese. The built-in content is currently the **100 most frequent Japanese
 verbs** (BCCWJ corpus frequency, each tagged `cat:"verb"`) plus any cards you add
 yourself in any part-of-speech category (verb / adjective / noun / adverb / phrase).
@@ -95,10 +95,11 @@ Server-side details (auth model, cookie, tables) live in
 
 ## Data + persistence
 
-- **Verb dataset** lives in `VERBS[]` in [verbs.js](verbs.js) (100 entries; `jp`,
-  `read`, `mean`, `type`, `jlpt`, `trans`, `tags`, `mnem`, `tip`, `ex`).
-- **Leveled example sentences** live in `EXAMPLES` in [examples.js](examples.js),
-  keyed by rank: `{N5:[jp,en],…,N1:[jp,en]}` (five JLPT tiers, increasing complexity).
+- **Verb dataset** lives in `VERBS[]` in [src/data/verbs.js](src/data/verbs.js) (100
+  entries; `jp`, `read`, `mean`, `type`, `jlpt`, `trans`, `tags`, `mnem`, `tip`, `ex`).
+- **Leveled example sentences**: `EXAMPLES` in [src/data/examples.js](src/data/examples.js),
+  keyed by rank `{N5:[jp,en],…,N1:[jp,en]}` (five JLPT tiers), is the **seed source** for the
+  server sentence store — the app fetches the sentences at runtime, not from this module.
 - **Progress** persists to `localStorage["jpverbs_v3"]`:
   `{ cards:{<rank>:{attempts,right,wrong,box,due}}, sessions:[…], daily:{…} }`.
   Signed in, the same blob is mirrored to the server (server wins on login). The

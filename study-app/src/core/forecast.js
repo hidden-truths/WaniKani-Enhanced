@@ -1,6 +1,6 @@
 // Upcoming-review forecast — buckets every SCHEDULED card (box>0) into time slots for a
 // chosen window. Pure (state.DATA + state.store in, buckets out); the hand-rolled SVG draw
-// (renderForecast) lives in app.js. Leitner intervals top out at 16 days, so the month
+// (renderForecast) lives in features/deck.js. Leitner intervals top out at 16 days, so the month
 // view captures the whole real schedule and the year view is mostly front-loaded — that's
 // accurate, not a bug.
 import { state } from '../state.js';

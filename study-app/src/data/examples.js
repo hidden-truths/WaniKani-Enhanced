@@ -1,12 +1,12 @@
-// Japanese Verb Trainer — leveled example sentences (split out of the dataset).
-// Loaded as a classic <script> before app.js; defines the global `EXAMPLES`.
+// Leveled example sentences. ES module exporting `EXAMPLES` — now the SEED SOURCE
+// for the server sentence store (seed-sentences.ts), not read at runtime.
 //
 // Keyed by verb rank. Each verb has five JLPT tiers (N5 -> N1) of increasing
 // vocabulary + grammar complexity; each tier is [japanese_with_<ruby>_furigana,
 // english]. The headword verb appears (conjugated as needed) in every sentence.
-// Built-in verbs only - custom verbs fall back to their single `ex`. app.js
-// attaches EXAMPLES[rank] to each verb as `v.levels` and picks a tier with
-// exampleForLevel() (graceful fallback to the nearest tier / `ex`).
+// Built-in verbs only. seed-sentences.ts loads these into the sentence store; the
+// app then fetches them and attachLevels() sets each card's `v.levels`, picking a
+// tier with exampleForLevel() (graceful fallback to the nearest tier / `ex`).
 export const EXAMPLES = {
 1: {
   N5: ["<ruby>毎日<rt>まいにち</rt></ruby><ruby>日本語<rt>にほんご</rt></ruby>を<ruby>勉強<rt>べんきょう</rt></ruby>する。","I study Japanese every day."],

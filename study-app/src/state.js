@@ -4,15 +4,15 @@
 // read these, and the test REASSIGNS them (`state.store = {...}`). An importer can read
 // a reassigned `export let` binding but can NEVER write it back (that's a SyntaxError),
 // so a public object whose PROPERTIES are mutated is the one pattern that serves both.
-// app.js sets these at boot (loadStore / rebuildData); core/* read state.store etc.
+// The feature modules set these at boot (loadStore / rebuildData); core/* read state.store etc.
 
 import { VERBS, ACCENTS } from './data/verbs.js';
 import { loadExampleCache } from './persistence/examples.js';
 
 export const state = {
-  // Progress blob; replaced at boot from localStorage (see loadStore in app.js).
+  // Progress blob; replaced at boot from localStorage (see loadStore in persistence/store.js).
   store: { cards: {}, sessions: [], daily: {} },
-  // The live deck (built-ins + Minna overlays + custom), rebuilt by rebuildData() in app.js.
+  // The live deck (built-ins + Minna overlays + custom), rebuilt by rebuildData() in features/custom-cards.js.
   DATA: [],
   MAXRANK: 100,
   // みんなの日本語 dashboard scratchpad + the dedup overlays; replaced at boot.

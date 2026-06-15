@@ -4,7 +4,7 @@
 // signed out or offline — they're no-ops, so calling them is always safe.
 //
 // This replaces the old single-scope `if(typeof scheduleCustomSync==='function')…`
-// forward-reference guards: those existed only because app.js was one scope evaluated
+// forward-reference guards: those existed only because the old single-file app.js was one scope evaluated
 // top-to-bottom. As real modules, the persistence side can't see cloud's bindings, so
 // the indirection lives here. cloud's own schedulers still self-gate on `account`, so a
 // signed-out save() routes here, fires the registered scheduler, and that scheduler

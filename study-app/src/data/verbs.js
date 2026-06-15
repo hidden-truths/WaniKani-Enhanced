@@ -1,6 +1,5 @@
-// Japanese Verb Trainer — the verb dataset (split out of index.html).
-// Loaded as a classic script before app.js; defines the global `VERBS`. See the
-// top-of-file comment in app.js for the schema and the architecture map.
+// The built-in verb dataset. ES module exporting `VERBS` (+ `ACCENTS`).
+// Card schema + authoring: ../../CARDS.md; architecture: ../../CLAUDE.md.
 
 /* ============================================================================
    DATA — the 100-verb dataset

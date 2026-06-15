@@ -1,5 +1,5 @@
-// Barrel for the pure-core modules. app.js does `import * as Core from './core/index.js'`
-// then destructures the bare names it needs; the test imports the named exports directly.
+// Barrel for the pure-core modules. Feature modules import the named exports they need
+// from here (`import { ... } from '../core/index.js'`); the test imports them directly.
 export * from './srs.js';
 export * from './forecast.js';
 export * from './facets.js';

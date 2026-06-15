@@ -1,7 +1,7 @@
 // みんなの日本語 pure helpers: detect when a Minna word already exists as a built-in
 // (dedup target), merge the provenance overlay onto the matching built-in (no duplicate
 // card), and the content signature that drives the "Update N words" button. Read the
-// shared state (BUILTIN_RANK_BY_JP, minnaStore); the activation UI glue lives in app.js.
+// shared state (BUILTIN_RANK_BY_JP, minnaStore); the activation UI glue lives in features/minna.js.
 import { state } from '../state.js';
 
 // A Minna word maps onto a built-in verb iff its dictionary form is a built-in headword.
