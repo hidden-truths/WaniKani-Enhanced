@@ -11,8 +11,10 @@
 //
 //   cd wk-enhanced-api && bun scripts/apply-furigana.ts [lesson...]   (default: 22 23 24)
 import { readFileSync, writeFileSync, existsSync } from 'fs';
+// Single source for kanji detection — shared with the study-app TTS picker so the two can't drift
+// (scripts/ is outside the server tsconfig and may reach across study-app/, as the seed scripts do).
+import { HAS_KANJI } from '../../study-app/src/core/text.js';
 
-const HAS_KANJI = /[一-龯々〆ヶ]/;
 const stripRuby = (s: string) => s.replace(/<rt>.*?<\/rt>/g, '').replace(/<\/?ruby>/g, '');
 function balanced(s: string): boolean {
   const c = (re: RegExp) => (s.match(re) || []).length;

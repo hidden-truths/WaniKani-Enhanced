@@ -12,7 +12,7 @@ import { VERBS } from '../src/data/verbs.js';
 import {
   passes, oneGroup, facetAll, facetMatch, scheduleCard, cardStat, isDue, dueCards,
   rollingAcc, isLeech, leeches, normKana, romajiToKana, reviewForecast, filterSummary,
-  tokenFacet, deckLabel, ttsText, rubyHtml, plainText, isCleanRuby, rubyToSegments, segmentsToRuby, segmentsToReading,
+  tokenFacet, deckLabel, ttsText, HAS_KANJI, rubyHtml, plainText, isCleanRuby, rubyToSegments, segmentsToRuby, segmentsToReading,
   overlayTokens,
   minnaBuiltinRank, applyMinnaOverlays, splitMora, parseAccent,
   cardGrammar, cardMatchesGrammar,
@@ -23,8 +23,9 @@ import {
   waveformPeaks, clampSpeed, COMPARE_SPEEDS, rmsLevel, normGains,
   resolveVariant, parseAudioToken, contextPrefs, isSynthVoice, voiceProvider,
   DEFAULT_AUDIO_PREFS, AUDIO_VOICES, variantOrder, variantIndex, isKnownAudioToken, pruneAudioPrefs,
-  hashStr, groupByTopic, topicGrid, groupByThought, realizeTemplate, cyclePick, grammarTokens, todaysSet, emptyPractice, dayDiff, applyPractice,
+  hashStr, groupByTopic, topicGrid, groupByThought, realizeTemplate, cyclePick, comboRole, grammarTokens, todaysSet, emptyPractice, dayDiff, applyPractice,
   practiceStreak, donePhraseIds, sentenceToPhrase, phraseToSentence,
+  sentenceGrammar, sentenceTokens, sentenceEn,
 } from '../src/core/index.js';
 import { SELFTALK, SELFTALK_TAXONOMY, SELFTALK_TOPICS, SELFTALK_TOPIC_IDS, SELFTALK_GRAMMAR } from '../src/data/selftalk.js';
 import { SELFTALK_TEMPLATES } from '../src/data/selftalk-templates.js';
@@ -98,6 +99,43 @@ test('sentencesToLevels carries annotation tokens + grammar into meta when prese
     { furigana: fur, translations: { en: 'read a book' }, tags: { grammar: ['te-iru'] }, annotation: { tokens, bunsetsu: [], parser: 'p', parsedAt: 1 }, link: { owner_type: 'card', owner_id: '1', tier: 'N5' } },
   ]);
   expect(levels['1'].N5[2]).toEqual({ furigana: fur, tokens, grammar: ['te-iru'] });
+});
+
+test('core/sentence decoders: grammar scalar/array/missing, tokens present/absent, en fallback', () => {
+  // sentenceGrammar — the store may send a scalar tag, an array, or nothing → always an array.
+  expect(sentenceGrammar({ grammar: ['te-iru', 'sou'] })).toEqual(['te-iru', 'sou']);
+  expect(sentenceGrammar({ grammar: 'te-oku' })).toEqual(['te-oku']);   // scalar coerced
+  expect(sentenceGrammar({ grammar: '' })).toEqual([]);                 // empty string → none
+  expect(sentenceGrammar({})).toEqual([]);                             // absent
+  expect(sentenceGrammar(undefined)).toEqual([]);                      // no tags object
+  // sentenceTokens — annotation.tokens array (only with ?annotate=1), else null.
+  const toks = [{ i: 0, start: 0, end: 1, surface: '歯', lemma: '歯', pos: 'NOUN', tag: '', reading: '', dep: '', head: 0 }];
+  expect(sentenceTokens({ annotation: { tokens: toks } })).toBe(toks);
+  expect(sentenceTokens({ annotation: { tokens: null } })).toBeNull();
+  expect(sentenceTokens({})).toBeNull();
+  expect(sentenceTokens(undefined)).toBeNull();
+  // sentenceEn — translations.en with the empty-string fallback.
+  expect(sentenceEn({ translations: { en: 'a dog' } })).toBe('a dog');
+  expect(sentenceEn({ translations: {} })).toBe('');
+  expect(sentenceEn({})).toBe('');
+  expect(sentenceEn(undefined)).toBe('');
+});
+
+test('both store adapters share the core/sentence decoders (no drift between them)', () => {
+  // The same row decoded by each adapter must agree on grammar/tokens/en — the point of the shared
+  // module. The scalar-grammar case in particular was coerced by two separate expressions before.
+  const tokens = [{ i: 0, start: 0, end: 1, surface: '歯', lemma: '歯', pos: 'NOUN', tag: '', reading: '', dep: '', head: 0 }];
+  const row = {
+    id: 'st-x', furigana: rubyToSegments('<ruby>歯<rt>は</rt></ruby>。'), translations: { en: 'tooth' },
+    tags: { topic: 'morning', grammar: 'te-iru' }, annotation: { tokens, bunsetsu: [], parser: 'p', parsedAt: 1 },
+  };
+  const phrase = sentenceToPhrase(row);
+  const meta = sentencesToLevels([{ ...row, link: { owner_type: 'card', owner_id: '1', tier: 'N5' } }])['1'].N5[2];
+  expect(phrase.grammar).toEqual(['te-iru']);   // scalar coerced the SAME way for both adapters now
+  expect(meta.grammar).toEqual(['te-iru']);
+  expect(phrase.tokens).toBe(tokens);
+  expect(meta.tokens).toBe(tokens);
+  expect(phrase.mean).toBe('tooth');
 });
 
 test('cardGrammar unions a card\'s example-tier grammar; cardMatchesGrammar ORs the selection', () => {
@@ -445,6 +483,16 @@ test('ttsText sends the kanji headword (accent-disambiguating), else the reading
   expect(ttsText({ jp: 'サイズ', read: 'サイズ' })).toBe('サイズ');
   expect(ttsText({ jp: 'ホームステイ', read: 'ホームステイ' })).toBe('ホームステイ');
   expect(ttsText({ jp: '角', read: 'かど', tts: 'かど' })).toBe('かど');
+});
+
+test('HAS_KANJI: CJK ideographs + 々/〆/ヶ true, pure kana false (shared single source with the furigana script)', () => {
+  expect(HAS_KANJI.test('橋')).toBe(true);
+  expect(HAS_KANJI.test('々')).toBe(true);       // iteration mark — present once now (was a 々々 dup typo)
+  expect(HAS_KANJI.test('〆')).toBe(true);
+  expect(HAS_KANJI.test('ヶ')).toBe(true);        // counter small-ke, treated as kanji-like
+  expect(HAS_KANJI.test('ひらがな')).toBe(false);
+  expect(HAS_KANJI.test('カタカナ')).toBe(false);
+  expect(ttsText({ jp: '三ヶ月', read: 'さんかげつ' })).toBe('三ヶ月');   // ヶ headword → written form
 });
 
 test('rubyHtml passes the ruby tag set through and escapes everything else', () => {
@@ -1050,6 +1098,23 @@ test('realizeTemplate substitutes fillers + derives reading/plainText; cyclePick
   expect(realizeTemplate(tpl, { mat: 99 }).text).toBe(r1.text.replace('集め', '掘り'));   // out-of-range clamps to last
   expect(cyclePick(tpl, { mat: 1 }, 'mat')).toEqual({ mat: 0 });        // wraps past the end
   expect(cyclePick(tpl, {}, 'act')).toEqual({ act: 1 });
+});
+
+test('comboRole: canonical slot-order combo key (clamped), independent of pick key order', () => {
+  // The single client source for the string the server writes as sentence_link.role (pinned equal to
+  // the server by wk-enhanced-api/scripts/realize-alignment.test.ts).
+  const tpl = {
+    slots: [
+      { id: 'mat', fillers: [{ jp: 'a' }, { jp: 'b' }] },
+      { id: 'act', fillers: [{ jp: 'x' }, { jp: 'y' }, { jp: 'z' }] },
+    ],
+  };
+  expect(comboRole(tpl, {})).toBe('mat:0,act:0');                 // defaults → 0 per slot
+  expect(comboRole(tpl, { mat: 1, act: 2 })).toBe('mat:1,act:2');
+  expect(comboRole(tpl, { act: 1 })).toBe('mat:0,act:1');         // unspecified slot → 0, still emitted
+  expect(comboRole(tpl, { act: 1, mat: 0 })).toBe('mat:0,act:1'); // skeleton order, not picks-key order
+  expect(comboRole(tpl, { act: 99 })).toBe('mat:0,act:2');        // out-of-range clamps to the last filler
+  expect(comboRole({ slots: [] }, {})).toBe('');                  // no slots → empty key
 });
 
 test('SELFTALK_TEMPLATES are well-formed: topics/grammar registered, every realization ruby-consistent', () => {

@@ -6,6 +6,7 @@
 // signal is a lightweight day streak + which phrases were said today (the `practice` record below).
 
 import { plainText, rubyToSegments, segmentsToRuby, segmentsToReading } from './text.js';
+import { sentenceGrammar, sentenceTokens, sentenceEn } from './sentence.js';
 
 // Convert a UI phrase ({id, jp, read?, mean, topic, grammar}) into the sentence-store create/update
 // body ({id, text, furigana, translations, tags, link}). text + furigana come from `jp`; when `jp`
@@ -43,18 +44,17 @@ export function phraseToSentence(phrase) {
 export function sentenceToPhrase(s) {
   const fur = (s && s.furigana) || [];
   const tags = (s && s.tags) || {};
-  const grammar = Array.isArray(tags.grammar) ? tags.grammar : tags.grammar ? [tags.grammar] : [];
   return {
     id: s && s.id,
     jp: segmentsToRuby(fur),
     read: segmentsToReading(fur),
-    mean: (s && s.translations && s.translations.en) || '',
+    mean: sentenceEn(s),
     topic: (tags.topic ?? tags.scene) || '',
     ...(tags.thought ? { thought: tags.thought } : {}),   // optional sub-cluster within the topic
-    grammar,
+    grammar: sentenceGrammar(tags),
     custom: !!(s && s.custom),
     furigana: Array.isArray(fur) ? fur : [],
-    tokens: s && s.annotation && Array.isArray(s.annotation.tokens) ? s.annotation.tokens : null,
+    tokens: sentenceTokens(s),
   };
 }
 
@@ -167,6 +167,17 @@ export function cyclePick(tpl, picks, slotId) {
   const slot = ((tpl && tpl.slots) || []).find((s) => s.id === slotId);
   if (!slot || !(slot.fillers || []).length) return { ...(picks || {}) };
   return { ...(picks || {}), [slotId]: (templatePickIndex(slot, picks) + 1) % slot.fillers.length };
+}
+
+// The canonical combo key over EVERY slot in skeleton order ('slotId:idx,…', each index clamped).
+// The SINGLE client source for that string: features/selftalk.js uses it as the per-session dedup
+// key for POST /v1/templates/{id}/realize, and it MUST equal the `role` the server writes as
+// sentence_link.role for the materialized realization (server port: lib/realize.ts realizeTemplate).
+// Built over ALL slots (not just the picked ids) so two requests for the same effective combo
+// produce the same key → the server's reuse-by-(owner, role) idempotency holds. Pinned equal to the
+// server by wk-enhanced-api/scripts/realize-alignment.test.ts. Pure.
+export function comboRole(tpl, picks) {
+  return ((tpl && tpl.slots) || []).map((s) => `${s.id}:${templatePickIndex(s, picks)}`).join(',');
 }
 
 // The distinct grammar tokens present across `phrases`, in `grammarOrder` first, then any extras

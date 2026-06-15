@@ -36,7 +36,11 @@ export function isCleanRuby(s) {
 // "chopsticks" are both はし). Sending the kanji headword lets Google apply the dictionary
 // accent. Kana-only words have no kanji to send, so they use the reading. `v.tts` is an
 // optional per-card override. The visible reading is always v.read regardless.
-const HAS_KANJI = /[一-龯々々〆]/;
+// Kanji detection for the TTS picker — the SINGLE source for "does this contain kanji". Also
+// imported by the server's furigana-validation script (wk-enhanced-api/scripts/apply-furigana.ts)
+// so the two can't drift. Covers the CJK ideograph block, the iteration marks 々/〆, and the
+// counter small-ke ヶ (kanji-like: 三ヶ月). Stateless (no /g flag) → safe to share.
+export const HAS_KANJI = /[一-龯々〆ヶ]/;
 export function ttsText(v) { return v.tts || (v.jp && HAS_KANJI.test(v.jp) ? v.jp : v.read); }
 
 // Strip furigana ruby back to the base sentence — drop the <rt> readings and the <ruby>

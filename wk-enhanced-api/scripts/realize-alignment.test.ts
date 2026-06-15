@@ -20,7 +20,7 @@ import {
     plainText as serverPlainText,
     rubyToSegments as serverRubyToSegments,
 } from '../src/lib/realize.ts';
-import { realizeTemplate as clientRealize } from '../../study-app/src/core/selftalk.js';
+import { realizeTemplate as clientRealize, comboRole as clientComboRole } from '../../study-app/src/core/selftalk.js';
 import { plainText as clientPlainText, rubyToSegments as clientRubyToSegments } from '../../study-app/src/core/text.js';
 import { SELFTALK_TEMPLATES } from '../../study-app/src/data/selftalk-templates.js';
 
@@ -67,6 +67,10 @@ for (const tpl of SELFTALK_TEMPLATES as any[]) {
             expect(JSON.stringify(serverRubyToSegments(s.jp))).toBe(JSON.stringify(clientRubyToSegments(s.jp)));
             // realized English agrees
             expect(s.mean).toBe(c.mean);
+            // the canonical combo key (written as sentence_link.role) agrees with the client's dedup
+            // key. The client builds it via core comboRole; drift here silently breaks materialize
+            // idempotency / per-session dedup → duplicate public-corpus rows, with no error anywhere.
+            expect(s.role).toBe(clientComboRole(tpl, picks));
         }
     });
 }

@@ -17,7 +17,7 @@
 // features/record-compare.js (Self-Talk feeds it a reserved numeric SCOPE + synth-only references).
 import { state } from '../state.js';
 import { localDay } from '../config.js';
-import { escapeHtml, rubyHtml, plainText, overlayTokens, topicGrid, groupByThought, grammarTokens, todaysSet, applyPractice, practiceStreak, donePhraseIds, sentenceToPhrase, phraseToSentence, realizeTemplate, cyclePick, templatePickIndex } from '../core/index.js';
+import { escapeHtml, rubyHtml, plainText, overlayTokens, topicGrid, groupByThought, grammarTokens, todaysSet, applyPractice, practiceStreak, donePhraseIds, sentenceToPhrase, phraseToSentence, realizeTemplate, cyclePick, templatePickIndex, comboRole } from '../core/index.js';
 import { SELFTALK_TAXONOMY, SELFTALK_TOPICS, SELFTALK_GRAMMAR } from '../data/selftalk.js';
 import { playItem, cycleMod } from './audio.js';
 import { wireWordTaps } from './word-lookup.js';
@@ -140,17 +140,13 @@ function templatesForTopic(topicId) {
 // session by the canonical combo key so cycling/replaying a combo POSTs at most once.
 const materializedCombos = new Set();
 
-// The canonical combo key over ALL of a template's slots (skeleton order, each clamped index) — the
-// SAME string the server derives for the sentence_link role, so our dedup matches its idempotency.
-function comboKey(tpl, picks) {
-  return (tpl.slots || []).map((s) => `${s.id}:${templatePickIndex(s, picks)}`).join(',');
-}
-
 function maybeMaterialize(id) {
   if (!account) return;                                   // public-corpus write → signed-in only
   const tpl = storeTemplates.find((t) => t.id === id);
   if (!tpl) return;                                       // a phrase, not a template — nothing to do
-  const key = id + '|' + comboKey(tpl, tplPicks[id] || {});
+  // comboRole is the SAME string the server writes as sentence_link.role (pinned by the alignment
+  // test), so this per-session dedup key matches the server's reuse-by-(owner, role) idempotency.
+  const key = id + '|' + comboRole(tpl, tplPicks[id] || {});
   if (materializedCombos.has(key)) return;               // already sent this combo this session
   materializedCombos.add(key);
   api('/v1/templates/' + encodeURIComponent(id) + '/realize', { method: 'POST', body: { picks: tplPicks[id] || {} }, retry: true })   // idempotent by hash

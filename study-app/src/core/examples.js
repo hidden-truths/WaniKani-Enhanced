@@ -4,6 +4,7 @@
 // the level set is built from the sentence store by sentencesToLevels (below).
 
 import { segmentsToRuby, isCleanRuby, plainText, rubyToSegments } from './text.js';
+import { sentenceGrammar, sentenceTokens, sentenceEn } from './sentence.js';
 
 export const JLPT_TIERS = ['N5', 'N4', 'N3', 'N2', 'N1'];   // easy → hard
 
@@ -77,12 +78,12 @@ export function sentencesToLevels(sentences) {
     const link = (s && s.link) || {};
     const rank = link.owner_id, tier = link.tier;
     if (rank == null || !tier || !Array.isArray(s.furigana)) continue;
-    const en = (s.translations && s.translations.en) || '';
     const meta = { furigana: s.furigana };
-    if (s.annotation && Array.isArray(s.annotation.tokens)) meta.tokens = s.annotation.tokens;
-    const g = s.tags && s.tags.grammar;
-    if (g) meta.grammar = Array.isArray(g) ? g : [g];
-    (out[rank] ??= {})[tier] = [segmentsToRuby(s.furigana), en, meta];
+    const tokens = sentenceTokens(s);
+    if (tokens) meta.tokens = tokens;
+    const grammar = sentenceGrammar(s.tags);
+    if (grammar.length) meta.grammar = grammar;
+    (out[rank] ??= {})[tier] = [segmentsToRuby(s.furigana), sentenceEn(s), meta];
   }
   return out;
 }
