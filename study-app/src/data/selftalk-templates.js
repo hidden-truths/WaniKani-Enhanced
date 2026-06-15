@@ -26,8 +26,6 @@
 // skeleton supplies the conjugation tail). Every kanji — in fixed parts AND fillers — needs ruby, or
 // the derived reading drifts. MODEL-GENERATED → proofread (esp. that every combo reads naturally).
 
-import { grammarLabel } from './grammar.js';
-
 export const SELFTALK_TEMPLATES = [
   // ==== Minecraft (5) — covering both the resources and night thought clusters ====
   {
@@ -327,10 +325,3 @@ export const SELFTALK_TEMPLATES = [
     ],
   },
 ];
-
-// Templates for one topic id (curated bundle is small, so a linear scan is fine). The label helper
-// keeps grammar chips on the template card speaking the one shared grammar vocabulary.
-export function templatesForTopic(topicId) {
-  return SELFTALK_TEMPLATES.filter((t) => t.topic === topicId);
-}
-export const templateGrammarLabel = grammarLabel;

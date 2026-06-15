@@ -513,7 +513,7 @@ Component contracts you must preserve:
   suggestion ring is still shown, and X/1 overrides it to wrong.)
 - **Browse cards are SUMMARY only — clicking opens the detail MODAL** (`openVerbDetail`,
   `#detailModal`), not an inline expand. The old `.detail`/`.open` inline expansion is
-  gone (the `.card.open .detail` CSS is dead but harmless). Inside the modal, Mnemonic/
+  gone (its CSS was removed too). Inside the modal, Mnemonic/
   Trap/Examples are collapsible `<details>` (don't dump everything at once); Examples
   are JLPT-level-filtered via a selector defaulting to `settings.exampleLevel` — that
   filter is a LOCAL view, it does NOT write the global default (study vs. browse).

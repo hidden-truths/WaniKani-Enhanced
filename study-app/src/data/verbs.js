@@ -14,8 +14,8 @@
        ("top1-25"…"top76-100"). If you re-rank, fix the band tags too.
      • mnem follows the MNEMONIC POLICY (sound-accurate first; see file header).
      • <ruby>漢字<rt>かな</rt></ruby> in examples renders furigana.
-   To grow past 100, this array is the first thing to extract into verbs.json
-   (see OUTSTANDING #7).
+   To grow past 100, this array is the first thing to extract into a verbs.json
+   data file.
    ========================================================================== */
 export const VERBS=[
 {rank:1,jp:"する",read:"する",mean:"to do",type:"irregular",jlpt:"N5",trans:"t",tags:["suru","top1-25"],

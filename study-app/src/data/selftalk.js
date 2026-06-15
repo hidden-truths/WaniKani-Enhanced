@@ -1,7 +1,9 @@
 // 独り言 SELF-TALK — built-in starter phrases for output/speaking practice.
 //
-// Unlike the Minna textbook content, these are original, model-authored lines (no copyright),
-// so they ship offline-first and work for anonymous visitors. Each phrase is a short everyday
+// Unlike the Minna textbook content, these are original, model-authored lines (no copyright), so
+// they're public rows anyone can read without an account. This file is the SEED SOURCE for
+// scripts/seed-sentences.ts; at runtime the Self-Talk tab fetches phrases from the server store
+// (GET /v1/sentences?ownerType=selftalk), not from this bundle. Each phrase is a short everyday
 // utterance — the running monologue of a day — chosen to drill the spoken grammar that
 // reading-only drills miss (〜ている, 〜なきゃ/〜ないと, 〜たい, volitional 〜よう, 〜ておく, 〜そう).
 //

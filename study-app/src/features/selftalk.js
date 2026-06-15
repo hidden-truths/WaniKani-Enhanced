@@ -4,14 +4,16 @@
 // record-compare container; a pinned "Today's focus" cell drills into the rotating daily set. In a
 // topic you read each phrase aloud, play it through the unified audio player (per-context voice
 // priority), record yourself, and A/B against a chosen REFERENCE voice (Siri/Google) via the
-// shared record-and-compare engine. Unlike みんなの日本語 this is OFFLINE-FIRST + anonymous: the
-// built-in starter phrases (data/selftalk.js) ship in the bundle and play/practice without an
-// account. The user's own authored lines + a lightweight practice/streak signal live in
-// state.selftalkStore (synced under the 'selftalk' app key); recording needs an account (takes
-// are private/gated, like Minna's).
+// shared record-and-compare engine. Unlike みんなの日本語 this is ANON-READABLE: the built-in
+// starter phrases are public rows in the server sentence store (fetched via
+// GET /v1/sentences?ownerType=selftalk, with a localStorage read-through cache — see below), so
+// anyone can read/play/practice them without an account; they are NOT shipped in the bundle. The
+// user's own authored lines + a lightweight practice/streak signal live in state.selftalkStore
+// (synced under the 'selftalk' app key); authoring AND recording need an account (takes are
+// private/gated, like Minna's).
 //
 // Rendered lazily on tab activation (renderSelftalk), same pattern as Stats/Minna. Pure logic is
-// core/selftalk.js, content is data/selftalk.js, and the record-and-compare engine is
+// core/selftalk.js, the content seed is data/selftalk.js, and the record-and-compare engine is
 // features/record-compare.js (Self-Talk feeds it a reserved numeric SCOPE + synth-only references).
 import { state } from '../state.js';
 import { localDay } from '../config.js';

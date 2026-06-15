@@ -91,7 +91,7 @@ renderCustomCount();
 // Settings page + みんなの日本語 dashboard. initMinna loads the Minna store (after the rebuild above).
 initSettingsPage();
 initMinna();
-// 独り言 Self-Talk tab (offline-first; loads the synced selftalk store).
+// 独り言 Self-Talk tab (anon-readable; fetches the phrase store + the practice signal).
 initSelftalk();
 
 // ---- Initial paint ---- Flashcard is the default-active panel; Stats renders lazily on
