@@ -44,6 +44,14 @@ const MAX_USER_SENTENCES = 2_000;
 const unauthorized = (c: any) => httpUnauthorized(c, 'Log in to author sentences.');
 const notFound = (c: any) => httpNotFound(c, 'No sentence with that id is yours.');
 
+// 400 if the JSON-serialized payload exceeds `max` bytes; returns the error Response to hand
+// back, or null to continue. `label` names the thing in the message ('sentence' / 'examples').
+// Shared by the three write routes so the size-guard shape can't drift.
+const tooLarge = (c: any, obj: unknown, max: number, label: string) =>
+    JSON.stringify(obj).length > max
+        ? c.json({ code: 'validation_error' as const, error: `${label} too large`, detail: `max ${max} bytes` }, 400)
+        : null;
+
 // ---------- GET / ----------
 
 const listRoute = createRoute({
@@ -88,9 +96,8 @@ sentencesRouter.openapi(createRouteDef, (c) => {
     if (!user) return unauthorized(c);
     const body = c.req.valid('json');
 
-    if (JSON.stringify(body).length > MAX_SENTENCE_BYTES) {
-        return c.json({ code: 'validation_error' as const, error: 'sentence too large', detail: `max ${MAX_SENTENCE_BYTES} bytes` }, 400);
-    }
+    const oversize = tooLarge(c, body, MAX_SENTENCE_BYTES, 'sentence');
+    if (oversize) return oversize;
 
     // Idempotent re-POST of the user's own id (legacy migration replays) → return the existing row.
     const existing = db.getUserSentence({ extId: body.id, viewer: user.id });
@@ -149,9 +156,8 @@ sentencesRouter.openapi(updateRoute, (c) => {
     if (!user) return unauthorized(c);
     const { id } = c.req.valid('param');
     const body = c.req.valid('json');
-    if (JSON.stringify(body).length > MAX_SENTENCE_BYTES) {
-        return c.json({ code: 'validation_error' as const, error: 'sentence too large', detail: `max ${MAX_SENTENCE_BYTES} bytes` }, 400);
-    }
+    const oversize = tooLarge(c, body, MAX_SENTENCE_BYTES, 'sentence');
+    if (oversize) return oversize;
     try {
         const sentence = db.updateUserSentence({
             extId: id,
@@ -225,9 +231,8 @@ sentencesRouter.openapi(cardExamplesRoute, (c) => {
     if (!user) return unauthorized(c); // writes private rows → account-gated
     const { rank } = c.req.valid('param');
     const { examples } = c.req.valid('json');
-    if (JSON.stringify(examples).length > MAX_SENTENCE_BYTES * 6) {
-        return c.json({ code: 'validation_error' as const, error: 'examples too large', detail: `max ${MAX_SENTENCE_BYTES * 6} bytes` }, 400);
-    }
+    const oversize = tooLarge(c, examples, MAX_SENTENCE_BYTES * 6, 'examples');
+    if (oversize) return oversize;
     try {
         const sentences = db.replaceUserCardExamples({ rank, viewer: user.id, examples });
         c.header('Cache-Control', 'no-store');

@@ -4,6 +4,7 @@
 
 import { createHash } from 'node:crypto';
 import { getStorage } from './storage.ts';
+import { normalizeEtag } from '../lib/etag.ts';
 
 const TTS_URL = 'https://translate.googleapis.com/translate_tts';
 const MAX_TEXT_LEN = 200;
@@ -66,7 +67,7 @@ export function serveTtsHit(c: any, hit: TtsHit, log: Record<string, unknown> = 
     const etag = ttsEtag(hit.buffer);
     c.header('ETag', etag);
     c.header('Cache-Control', 'public, no-cache');
-    if ((c.req.header('If-None-Match') || '').replace(/^W\//, '') === etag) {
+    if (normalizeEtag(c.req.header('If-None-Match')) === etag) {
         c.set('logCtx', { ...log, ttsSource: 'not_modified' });
         return c.body(null, 304);
     }
