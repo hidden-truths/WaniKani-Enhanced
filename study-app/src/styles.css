@@ -239,13 +239,6 @@
   .acc{position:absolute;bottom:12px;left:18px;font-family:"SF Mono",ui-monospace,monospace;font-size:10px;color:var(--muted)}
   .tags{display:flex;flex-wrap:wrap;gap:5px;margin-top:10px}
   .tag{font-family:"SF Mono",ui-monospace,monospace;font-size:10px;color:var(--muted);background:var(--paper-2);padding:2px 7px;border-radius:2px}
-  /* Expand/collapse uses a max-height transition (no JS height measurement).
-     900px is an arbitrary ceiling comfortably taller than any card's content. */
-  .detail{max-height:0;overflow:hidden;transition:max-height .3s ease}
-  .card.open .detail{max-height:900px}
-  .detail-inner{padding-top:12px;margin-top:12px;border-top:1px solid var(--line)}
-  .blk{margin-bottom:10px} .blk-label{font-family:"SF Mono",ui-monospace,monospace;font-size:10px;letter-spacing:.18em;text-transform:uppercase;color:var(--godan);margin-bottom:3px}
-  .blk-label.warn{color:#b8860b} .blk-body{font-size:14px}
   .ex{font-size:15px;margin-bottom:2px} .ex .en{display:block;font-size:13px;color:var(--muted);font-style:italic}
   rt{font-size:.55em;color:var(--muted)}   /* furigana ruby text sizing */
   /* Furigana toggle (Settings): hide all readings → ruby renders as bare kanji. */
@@ -306,8 +299,6 @@
   .modal details>summary::after{content:"+";margin-left:auto;color:var(--muted);font-size:14px}
   .modal details[open]>summary::after{content:"−"}
   .modal details>.det-body{padding-top:8px;font-size:14px;line-height:1.5}
-  /* Browse: a small JLPT pill in front of each leveled example sentence. */
-  .ex-pill{font-family:"SF Mono",ui-monospace,monospace;font-size:9px;letter-spacing:.06em;color:var(--muted);border:1px solid var(--line);border-radius:2px;padding:1px 5px;margin-right:6px;vertical-align:.08em}
   /* Flashcard: the leveled-example block on the answer side. The N5–N1 selector
      reuses .jlptseg (segmented). .exlv chips are compact; disabled = no sentence. */
   .example{margin-top:16px;padding-top:14px;border-top:1px dashed var(--line);text-align:left}
@@ -682,12 +673,6 @@
   .st-intro{margin:2px 0 16px}
   .st-kicker{font-family:"SF Mono",ui-monospace,monospace;font-size:11px;letter-spacing:.14em;text-transform:uppercase;color:var(--godan);margin:0 0 4px}
   .st-lede{font-family:Georgia,serif;font-size:14px;color:var(--muted);margin:0;max-width:60ch}
-  .st-section{border-top:1px solid var(--line)}
-  .st-section>summary{list-style:none;cursor:pointer;display:flex;align-items:center;gap:9px;padding:13px 2px;font-family:"SF Mono",ui-monospace,monospace;font-size:12px;letter-spacing:.08em;color:var(--ink)}
-  .st-section>summary::-webkit-details-marker{display:none}
-  .st-section>summary::after{content:"+";margin-left:auto;font-size:16px;line-height:1;color:var(--muted)}
-  .st-section[open]>summary::after{content:"−"}
-  .st-section>summary:hover{color:var(--godan)}
   .st-count{font-size:11px;color:var(--muted);font-weight:normal}
   .st-list{display:flex;flex-direction:column;gap:9px;padding:2px 0 14px}
   .st-phrase{display:flex;gap:12px;align-items:flex-start;padding:11px 13px;border:1px solid var(--line);border-radius:10px;background:var(--paper-2)}

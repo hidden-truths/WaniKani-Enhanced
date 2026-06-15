@@ -5,7 +5,9 @@
 // persists instantly; save() additionally schedules a debounced cloud push via the sync bus.
 //
 //   state.selftalkStore = {
-//     phrases: [{ id, jp, read, mean, scene, grammar:[…], custom:true }…],   // user-authored
+//     // phrases moved to the server sentence store (Phase 1); a pre-store blob's
+//     // phrases are tolerated here only for the one-time sign-in migration.
+//     phrases: [{ id, jp, read, mean, topic, grammar:[…], custom:true }…],   // legacy / pre-migration
 //     practice: { lastDay:'YYYY-MM-DD'|null, streak:int, doneToday:[id…] },
 //   }
 import { state } from '../state.js';
@@ -50,10 +52,4 @@ export function saveSelftalkLocal() {
 export function saveSelftalk() {
   saveSelftalkLocal();
   sync.selftalk();
-}
-
-// True when there's anything worth seeding the cloud from on a fresh account.
-export function hasLocalSelftalk() {
-  const s = state.selftalkStore || {};
-  return !!((s.phrases && s.phrases.length) || (s.practice && s.practice.lastDay));
 }
