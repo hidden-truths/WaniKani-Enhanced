@@ -11,7 +11,7 @@ conversation line) resolves to MULTIPLE tagged voice VARIANTS the user can pick 
 > Spaces bucket (`wk-enhanced-api/scripts/push-tts-variants.ts`) + `audio_variants` manifest seeded on
 > the droplet (`seed-audio-variants.ts`), and the `/v1/audio/tts` ETag + `no-cache` headers (so a
 > re-voiced clip propagates instead of being replayed `immutable`) are live. This doc is now an
-> archival record — forward-looking items live in [NEXT_STEPS.md](NEXT_STEPS.md).
+> archival record — forward-looking items live in [NEXT_STEPS.md](../../study-app/NEXT_STEPS.md).
 >
 > **Decisions locked** with the maintainer: **Google** = one neutral `gtx` variant (no paid
 > Cloud TTS — gender diversity comes from Siri). Picker is **per-context** (reviews / browsing /
@@ -49,11 +49,11 @@ conversation line) resolves to MULTIPLE tagged voice VARIANTS the user can pick 
 > against Siri. `referenceVariants`/`currentRef`/`refUrl` in `features/record-compare.js`.
 >
 > **Follow-ups (branch `audio-followups`):** the ①–⑦ list lives in
-> [NEXT_STEPS.md](NEXT_STEPS.md) "Audio-unify — follow-ups & ideas". Done so far: **② Preview
+> [NEXT_STEPS.md](../../study-app/NEXT_STEPS.md) "Audio-unify — follow-ups & ideas". Done so far: **② Preview
 > voice** — each Voice-priority row has a ▶ auditioning 食べる through that exact variant
-> (`previewVoice` in [src/features/audio.js](src/features/audio.js)); **③ Per-item voice cycle** —
+> (`previewVoice` in [src/features/audio.js](../../study-app/src/features/audio.js)); **③ Per-item voice cycle** —
 > Alt/Shift-click any play button cycles that item's voices (`variantOrder`/`variantIndex` in
-> [src/core/audio.js](src/core/audio.js); `cycleMod` + the cursor in `features/audio.js`);
+> [src/core/audio.js](../../study-app/src/core/audio.js); `cycleMod` + the cursor in `features/audio.js`);
 > **④ Availability hinting** — the editor queries `/v1/audio/variants` and dims synth voices that
 > aren't pre-generated yet (`fetchAvailableVoices`), so ① is visible in the UI; **⑤ Phase 3** —
 > ▶ reference (see above). **① (operator pre-gen of the Siri clips) is done — locally AND on prod**
@@ -71,11 +71,11 @@ conversation line) resolves to MULTIPLE tagged voice VARIANTS the user can pick 
 > (dev `.env` already sets it). Local TTS generation runs on macOS via `say` (system voice).
 
 ## Read first (in order)
-1. [MINNA.md](MINNA.md) — the Minna feature + record-and-compare + roadmap
-2. [CLAUDE.md](CLAUDE.md) — module map; the **TTS**, **audio-pitch**, and **record-and-compare** dead-ends
-3. [../wk-enhanced-api/CLAUDE.md](../wk-enhanced-api/CLAUDE.md) — `/v1/tts` (3-tier storage cache +
+1. [MINNA.md](../../study-app/MINNA.md) — the Minna feature + record-and-compare + roadmap
+2. [CLAUDE.md](../../study-app/CLAUDE.md) — module map; the **TTS**, **audio-pitch**, and **record-and-compare** dead-ends
+3. [../wk-enhanced-api/CLAUDE.md](../../wk-enhanced-api/CLAUDE.md) — `/v1/tts` (3-tier storage cache +
    `ttsKey`), the "Local TTS pre-generation" scripts, the Minna audio/recordings routes + tables
-4. [CARDS.md](CARDS.md) — card / `ttsText` model
+4. [CARDS.md](../../study-app/CARDS.md) — card / `ttsText` model
 
 ## Where audio comes from TODAY (three separate paths)
 Each has its own route, key scheme, and client play path:

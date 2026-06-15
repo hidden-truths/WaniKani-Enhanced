@@ -36,7 +36,7 @@ structure*, and a decision about how the *realizations* become real sentences.
 
 ## What exists today (the feature being migrated)
 
-Full doc: [study-app/SELFTALK.md](study-app/SELFTALK.md) "Templates (slot-swap)". In brief:
+Full doc: [study-app/SELFTALK.md](../../study-app/SELFTALK.md) "Templates (slot-swap)". In brief:
 
 - **Data (client-only):** `SELFTALK_TEMPLATES` in `study-app/src/data/selftalk-templates.js` — 18
   templates. A template is
@@ -58,7 +58,7 @@ Full doc: [study-app/SELFTALK.md](study-app/SELFTALK.md) "Templates (slot-swap)"
 
 ## The store we're building on
 
-Docs: [SENTENCE_STORE_NLP.md](SENTENCE_STORE_NLP.md) + `wk-enhanced-api/CLAUDE.md` "Sentence store".
+Docs: [SENTENCE_STORE_NLP.md](../../SENTENCE_STORE_NLP.md) + `wk-enhanced-api/CLAUDE.md` "Sentence store".
 Schema: `wk-enhanced-api/src/db/schema.sql` "Unified sentence store". Key points:
 
 - Tables: `sentence` (the invariants above), `translation`, `sentence_tag` (`kind ∈ topic|thought|
