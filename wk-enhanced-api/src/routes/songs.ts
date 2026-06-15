@@ -37,7 +37,7 @@ import { log } from '../lib/log.ts';
 
 // Parse a YouTube video id from a watch / youtu.be / embed / shorts URL (also the SSRF guard for the
 // oEmbed proxy — we only ever fetch youtube.com/oembed for a validated id).
-function parseYouTubeId(url: string): string | null {
+export function parseYouTubeId(url: string): string | null {
     let id: string | null = null;
     try {
         const u = new URL(url.trim());
