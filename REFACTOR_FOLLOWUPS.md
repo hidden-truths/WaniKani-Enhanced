@@ -7,7 +7,7 @@ barrel, with per-repo tests. This doc covers the remaining three workstreams fro
 review, in **recommended execution order**:
 
 - **D** — `schemas.ts` → per-domain modules (LOW risk, mechanical — same playbook as `db/client`). Do first as a warm-up. **✅ SHIPPED.**
-- **B** — study-app sync: DRY collapse + resilient transport + offline queue + optimistic concurrency (MEDIUM risk, the high-value one).
+- **B** — study-app sync: DRY collapse + resilient transport + offline queue + optimistic concurrency (MEDIUM risk, the high-value one). **✅ SHIPPED.**
 - **C** — `record-compare.js` decomposition (HIGH risk, lower leverage — its pure logic is already extracted). Do last / optional.
 
 Each section is self-contained: problem → target design → concrete steps → files → tests →
@@ -17,7 +17,7 @@ this doc owns the *how-to-execute*.
 | Workstream | Win | Risk | Effort | Order |
 |---|---|---|---|---|
 | **D** schemas split ✅ | SRP/ISP; co-locate schemas by domain | LOW (barrel + typecheck-guarded, zero behavior change) | ~1–2h | 1st — **SHIPPED** |
-| **B** sync DRY + resilience + concurrency | DRY + DIP + disconnection/concurrency resilience + new tests | MED (hot path; backward-compat progress contract) | ~1–2 days | 2nd |
+| **B** sync DRY + resilience + concurrency ✅ | DRY + DIP + disconnection/concurrency resilience + new tests | MED (hot path; backward-compat progress contract) | ~1–2 days | 2nd — **SHIPPED** |
 | **C** record-compare decomp | SRP on the DOM/audio glue | HIGH (no feature tests, stateful audio, many dead-ends) | ~1–2 days | 3rd / optional |
 
 > **Golden rule for all three:** zero behavior change unless explicitly designed (B's
@@ -87,6 +87,18 @@ endpoint still renders its schema · `git grep "from '../schemas.ts'"` confirms 
 This is the high-value workstream (it hits the original brief's "resilient to concurrency,
 server instability, disconnections" requirement) and fills the study-app's **feature-test gap**.
 Split into four sub-parts B1–B4; ship them as separate commits in order.
+
+> **✅ SHIPPED** as four commits: **B1** `net/transport.js` (timeout + idempotency-aware retry/backoff +
+> `Retry-After`, re-exported as `api`); **B2** `net/sync-queue.js` (durable localStorage FIFO, dedup-by-key,
+> per-account); **B3** `features/synced-blob.js` (`createSyncedBlob` collapses all five trios — incl. minna
+> folded in — + wires the queue + flush on `online`/boot/sign-in + clear-on-logout); **B4** server 409
+> optimistic concurrency on `PUT /v1/progress` (`baseUpdatedAt` compare-and-set, backward-compatible) with
+> the client sending `baseUpdatedAt` + server-wins reconcile. **+33 study-app tests** (transport/queue/
+> synced-blob) and **+7 server tests** (CAS repo cases + integration 409). Browser-verified end-to-end:
+> sign-in → offline grade → queued write → reconnect `online` → flush → server matches local (`cardsMatch:true`),
+> plus the server 409 path confirmed live via curl. Deviations from the design below: the 409 reconcile is
+> **server-wins apply, no blind re-push** (per-blob merge noted as the deeper follow-up); queued offline writes
+> replay **last-write-wins** (omit `baseUpdatedAt`) so an offline change is delivered, not dropped on a stale base.
 
 ### Problem (current state)
 - **5× copy-pasted sync trios.** [study-app/src/features/cloud.js](study-app/src/features/cloud.js)
