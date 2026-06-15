@@ -232,12 +232,17 @@ function maybeShowSignup() {
   if (localStorage.getItem('jpverbs_signup_dismissed') === '1') return;
   document.getElementById('signupBanner').hidden = false;
 }
-// Append a finished session to the durable server log (fire-and-forget; signed-in only).
-// Injected into flashcard's endSession via registerSessionHooks. `mode` keeps the test
-// direction; `details.kind` carries the SRS/free distinction.
+// Append a finished session to the durable server log (signed-in only). Injected into flashcard's
+// endSession via registerSessionHooks. `mode` keeps the test direction; `details.kind` carries the
+// SRS/free distinction. DURABLE (E2): a client idempotencyKey makes the POST safe to retry + queue,
+// so a dropped request (offline / 5xx) no longer silently loses a session — it replays on reconnect
+// and the server dedups by key. Keyed per-session so distinct sessions never collapse in the queue.
 function logSession(right, tot, kind) {
   if (!account) return;
-  try { api('/v1/sessions', { method: 'POST', body: { right, total: tot, mode: cfg.mode, details: { kind, direction: cfg.mode } } }).catch(() => {}); } catch (e) {}
+  const idempotencyKey = crypto.randomUUID();
+  const body = { right, total: tot, mode: cfg.mode, details: { kind, direction: cfg.mode }, idempotencyKey };
+  api('/v1/sessions', { method: 'POST', body, retry: true })
+    .catch(() => queue.enqueue({ key: 'session:' + idempotencyKey, path: '/v1/sessions', method: 'POST', body, accountId: account.id }));
 }
 
 // Wire the auth modal + sign-up banner, register the sync schedulers onto the bus, and inject

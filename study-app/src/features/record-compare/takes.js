@@ -42,16 +42,19 @@ export function setTakes(scope, itemKey, takes) {
 }
 
 // ---------- upload / delete (credentialed) ----------
-// NOTE: the recording upload uses its OWN credentialed fetch (not api()) — it's a non-idempotent
-// binary POST (appends a take), so it stays un-retried/un-queued (see study-app/CLAUDE.md); E2/E3
-// would give it an idempotency key + route it through the transport.
+// NOTE: the recording upload uses its OWN credentialed fetch (not api()) — a binary POST. It now
+// carries a client idempotency key (?idem=) so the SERVER dedups a replay (E2): a retried/queued
+// upload returns the prior take instead of piling up duplicates + orphan storage objects. E3 folds
+// this onto the resilient transport (api, {retry:true}) so it also inherits timeout/backoff + the
+// offline queue.
 export async function uploadTake(control, blob, durationMs) {
   const scope = Number(control.dataset.scope), itemKey = control.dataset.itemkey;
   const keep = clampKeep(settings.recordingsKeep);
   const ct = blob.type || 'audio/webm';
+  const idem = crypto.randomUUID();   // dedup key — a replay of THIS take returns the prior row, no dup
   setSyncStatus('saving…');
   try {
-    const qs = `?lesson=${scope}&itemKey=${encodeURIComponent(itemKey)}&durationMs=${Math.round(durationMs)}&keep=${keep}`;
+    const qs = `?lesson=${scope}&itemKey=${encodeURIComponent(itemKey)}&durationMs=${Math.round(durationMs)}&keep=${keep}&idem=${idem}`;
     const res = await fetch(API_BASE + '/v1/audio/recordings' + qs, {
       method: 'POST', credentials: 'include', cache: 'no-store',
       headers: { 'Content-Type': ct }, body: blob,

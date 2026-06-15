@@ -53,6 +53,18 @@ test('flush replays each entry with retry:true and removes on success', async ()
   expect(api).toHaveBeenCalledWith('/v1/progress/verbs', { method: 'PUT', body: { data: 1 }, retry: true });
 });
 
+test('carries non-progress (session) writes distinctly + replays them with retry (E2 durability)', async () => {
+  api.mockResolvedValue({ ok: true, id: 5, count: 1 });
+  const body1 = { right: 4, total: 6, idempotencyKey: 'sess-1' };
+  enqueue({ key: 'session:sess-1', path: '/v1/sessions', method: 'POST', body: body1, accountId: 1 });
+  enqueue({ key: 'session:sess-2', path: '/v1/sessions', method: 'POST', body: { right: 2, total: 3, idempotencyKey: 'sess-2' }, accountId: 1 });
+  enqueue(entry());   // a progress write coexists
+  expect(size()).toBe(3);   // distinct session keys are NOT collapsed (each session is its own row)
+  expect(await flush(1)).toBe(3);
+  expect(api).toHaveBeenCalledWith('/v1/sessions', { method: 'POST', body: body1, retry: true });   // POST replayed with retry (idempotent server-side)
+  expect(size()).toBe(0);
+});
+
 test('flush invokes onFlushed(key, response) per success', async () => {
   api.mockResolvedValue({ ok: true, updatedAt: 42 });
   enqueue(entry());
