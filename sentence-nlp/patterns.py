@@ -37,17 +37,36 @@ def _inflection(tok) -> str:
         return ""
 
 
+def _is(tok, *, lemma=None, orth=None, tag=None, pos=None) -> bool:
+    """Null-safe single-token predicate: True iff `tok` exists and matches EVERY supplied facet.
+    `lemma`/`orth` take a string OR a set (membership test); `tag` is a substring of the UniDic
+    tag (e.g. '接続助詞'); `pos` is an exact UPOS match. Returns False for a None token, so it
+    doubles as the neighbour check — e.g. `_is(_token_at(toks, i + 1), lemma="も")`."""
+    if tok is None:
+        return False
+
+    def _in(val, field):
+        return field in (val if isinstance(val, (set, list, tuple, frozenset)) else {val})
+
+    if lemma is not None and not _in(lemma, tok.lemma_):
+        return False
+    if orth is not None and not _in(orth, tok.orth_):
+        return False
+    if tag is not None and tag not in tok.tag_:
+        return False
+    if pos is not None and tok.pos_ != pos:
+        return False
+    return True
+
+
 def _has_lemma(doc, lemmas, pos=None, tag_sub=None) -> bool:
-    for t in doc:
-        if t.lemma_ in lemmas and (pos is None or t.pos_ == pos) and (tag_sub is None or tag_sub in t.tag_):
-            return True
-    return False
+    return any(_is(t, lemma=lemmas, pos=pos, tag=tag_sub) for t in doc)
 
 
 def _is_te(tok) -> bool:
     """The て-form connective — て OR its voiced form で (読ん+で+いる), both 接続助詞.
     Distinct from で〔格助詞〕(at/in/by) and で〔ので〕(準体助詞+で)."""
-    return tok.lemma_ in {"て", "で"} and "接続助詞" in tok.tag_
+    return _is(tok, lemma={"て", "で"}, tag="接続助詞")
 
 
 def _te_then(doc, lemmas) -> bool:
@@ -87,8 +106,7 @@ def d_te_mo_ii(doc):
     toks = list(doc)
     for i, t in enumerate(toks):
         if _is_te(t):
-            a, b = _token_at(toks, i + 1), _token_at(toks, i + 2)
-            if a and b and a.lemma_ == "も" and b.lemma_ in {"いい", "良い", "よい"}:
+            if _is(_token_at(toks, i + 1), lemma="も") and _is(_token_at(toks, i + 2), lemma={"いい", "良い", "よい"}):
                 return True
     return False
 
@@ -97,8 +115,7 @@ def d_te_wa_ikenai(doc):
     toks = list(doc)
     for i, t in enumerate(toks):
         if _is_te(t):
-            a, b = _token_at(toks, i + 1), _token_at(toks, i + 2)
-            if a and b and a.lemma_ == "は" and b.lemma_ in {"いける", "行ける", "なる", "成る", "だめ", "駄目", "ならない"}:
+            if _is(_token_at(toks, i + 1), lemma="は") and _is(_token_at(toks, i + 2), lemma={"いける", "行ける", "なる", "成る", "だめ", "駄目", "ならない"}):
                 return True
     return False
 
@@ -128,11 +145,10 @@ def d_volitional(doc):
     # NOT volitional (lemma だ/です).
     toks = list(doc)
     for i, t in enumerate(toks):
-        if t.pos_ == "AUX" and t.lemma_ == "よう":
+        if _is(t, pos="AUX", lemma="よう"):
             return True
-        if t.pos_ == "AUX" and t.lemma_ == "う":
-            prev = _token_at(toks, i - 1)
-            if not (prev and prev.lemma_ in {"だ", "です"}):
+        if _is(t, pos="AUX", lemma="う"):
+            if not _is(_token_at(toks, i - 1), lemma={"だ", "です"}):
                 return True
         if "意志推量形" in _inflection(t) and t.lemma_ not in {"だ", "です"}:
             return True
@@ -143,9 +159,8 @@ def d_hoshii(doc):
     # 〜がほしい (want a thing). Exclude 〜てほしい (benefactive, Tier-2): require the prev token ≠ て.
     toks = list(doc)
     for i, t in enumerate(toks):
-        if t.lemma_ in {"欲しい", "ほしい"}:
-            prev = _token_at(toks, i - 1)
-            if not (prev and prev.lemma_ == "て"):
+        if _is(t, lemma={"欲しい", "ほしい"}):
+            if not _is(_token_at(toks, i - 1), lemma="て"):
                 return True
     return False
 
@@ -153,7 +168,7 @@ def d_hoshii(doc):
 def d_nakya(doc):
     # Obligation family: なきゃ / なくちゃ / なければ(ならない・いけない) / ないと.
     for t in doc:
-        if t.orth_ in {"なきゃ", "なくちゃ"}:
+        if _is(t, orth={"なきゃ", "なくちゃ"}):
             return True
     if _seq(doc, {"ない"}, {"ば"}):            # なけれ+ば
         return True
@@ -172,16 +187,15 @@ def d_cond_ba(doc):
     # ば〔接続助詞〕, but NOT the なければ obligation (that's `nakya`).
     toks = list(doc)
     for i, t in enumerate(toks):
-        if t.lemma_ == "ば" and "接続助詞" in t.tag_:
-            prev = _token_at(toks, i - 1)
-            if not (prev and prev.lemma_ == "ない"):
+        if _is(t, lemma="ば", tag="接続助詞"):
+            if not _is(_token_at(toks, i - 1), lemma="ない"):
                 return True
     return False
 
 
 def d_cond_tara(doc):
     # たら/だら tokenizes as a single 助動詞 token (surface たら, lemma た).
-    return any(t.orth_ in {"たら", "だら"} and t.lemma_ == "た" for t in doc)
+    return any(_is(t, orth={"たら", "だら"}, lemma="た") for t in doc)
 
 
 def d_cond_to(doc):      return _has_lemma(doc, {"と"}, tag_sub="接続助詞")
@@ -189,7 +203,7 @@ def d_cond_to(doc):      return _has_lemma(doc, {"と"}, tag_sub="接続助詞")
 
 def d_cond_nara(doc):
     # なら is the copula だ in its conditional form (surface なら, lemma だ).
-    return any(t.orth_ == "なら" and t.lemma_ == "だ" for t in doc)
+    return any(_is(t, orth="なら", lemma="だ") for t in doc)
 
 
 def d_sou(doc):
@@ -204,9 +218,9 @@ def d_you_da(doc):
     # terminal/past だ・です・だった predicate remains.
     toks = list(doc)
     for i, t in enumerate(toks):
-        if t.lemma_ == "よう" and "形状詞" in t.tag_:
+        if _is(t, lemma="よう", tag="形状詞"):
             nxt = _token_at(toks, i + 1)
-            if nxt and nxt.lemma_ in {"だ", "です"} and nxt.orth_ not in {"な", "に"}:
+            if _is(nxt, lemma={"だ", "です"}) and nxt.orth_ not in {"な", "に"}:
                 return True
     return False
 
@@ -226,9 +240,8 @@ def _no_juntai_then(doc, nxt_orth) -> bool:
     """の〔準体助詞〕immediately followed by `nxt_orth` — the shape of both ので and のに."""
     toks = list(doc)
     for i, t in enumerate(toks):
-        if t.orth_ == "の" and "準体助詞" in t.tag_:
-            nxt = _token_at(toks, i + 1)
-            if nxt and nxt.orth_ == nxt_orth:
+        if _is(t, orth="の", tag="準体助詞"):
+            if _is(_token_at(toks, i + 1), orth=nxt_orth):
                 return True
     return False
 
@@ -244,8 +257,7 @@ def d_counter(doc):
     toks = list(doc)
     for i, t in enumerate(toks):
         is_num = t.pos_ == "NUM" or "数詞" in t.tag_
-        nxt = _token_at(toks, i + 1)
-        if is_num and nxt and "助数詞" in nxt.tag_:
+        if is_num and _is(_token_at(toks, i + 1), tag="助数詞"):
             return True
     return False
 
@@ -254,8 +266,8 @@ def d_shika_nai(doc):
     # しか … ない (the negative is later in the clause).
     toks = list(doc)
     for i, t in enumerate(toks):
-        if t.lemma_ == "しか":
-            if any(u.lemma_ == "ない" for u in toks[i + 1:]):
+        if _is(t, lemma="しか"):
+            if any(_is(u, lemma="ない") for u in toks[i + 1:]):
                 return True
     return False
 

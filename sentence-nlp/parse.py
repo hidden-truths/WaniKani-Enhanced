@@ -36,6 +36,12 @@ def utf16_len(s: str) -> int:
     return len(s.encode("utf-16-le")) // 2
 
 
+def cp_to_utf16(s: str, cp: int) -> int:
+    """Convert a codepoint offset into `s` (what spaCy/GiNZA reports) to a UTF-16 code-unit
+    offset (what JS String indexing uses). The whole offset contract lives in this one call."""
+    return utf16_len(s[:cp])
+
+
 def js_slice(s: str, start16: int, end16: int) -> str:
     """Exact emulation of JS `s.slice(start16, end16)` (UTF-16 code-unit indexed)."""
     b = s.encode("utf-16-le")
@@ -80,10 +86,8 @@ def annotate(nlp, text: str):
     for t in doc:
         if t.is_space:
             continue  # whitespace is never a tap target; keep `i` honest for head refs
-        cp_start = t.idx
-        cp_end = t.idx + len(t.text)
-        start = utf16_len(text[:cp_start])
-        end = utf16_len(text[:cp_end])
+        start = cp_to_utf16(text, t.idx)
+        end = cp_to_utf16(text, t.idx + len(t.text))
         recon = js_slice(text, start, end)
         if recon != t.text:
             problems.append(f"token {t.i} {t.text!r}: js_slice→{recon!r} at [{start},{end}]")
@@ -103,8 +107,8 @@ def annotate(nlp, text: str):
     try:
         for span in ginza.bunsetu_spans(doc):
             bunsetsu.append({
-                "start": utf16_len(text[: span.start_char]),
-                "end": utf16_len(text[: span.end_char]),
+                "start": cp_to_utf16(text, span.start_char),
+                "end": cp_to_utf16(text, span.end_char),
             })
     except Exception as e:  # pragma: no cover
         print(f"warning: bunsetu_spans failed for {text!r}: {e}", file=sys.stderr)
