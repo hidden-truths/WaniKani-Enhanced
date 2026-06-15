@@ -75,7 +75,7 @@ re-assert carry over. (Merging also changes lemmas — `勉強する` vs `勉強
 
 `parse.py` also runs a **curated N5/N4 grammar-point catalog** ([patterns.py](patterns.py)) over each
 Doc and emits the matched ids as `grammar:[…]` per sentence. These are the searchable vocabulary
-written to `sentence_tag(kind='grammar')` — `te-oku`, `passive`, `cond-tara`, `counter`, … (~37
+written to `sentence_tag(kind='grammar')` — `te-oku`, `passive`, `cond-tara`, `counter`, … (38
 points). The ids **reuse the study-app's existing `SELFTALK_GRAMMAR` ids** (`te-iru` / `te-oku` /
 `tai` / `volitional` / `sou` / `nakya`) so GiNZA-detected tags on example sentences and hand-authored
 Self-Talk tags search through one vocabulary.

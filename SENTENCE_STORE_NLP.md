@@ -166,7 +166,7 @@ CREATE TABLE sentence_annotation (
 2. ✅ **SHIPPED** — `scripts/seed-annotations.ts` + `db.upsertAnnotation` (offset gate on write) /
    `db.getAnnotation` (through the shared `VIEWER_VISIBLE` gate), with unit tests: offset-integrity, a
    non-BMP contract pin, and a privacy pin that a private row's annotation never leaks to anon.
-3. ✅ **SHIPPED** — commit 2: curated ~37-point N5/N4 grammar catalog ([../sentence-nlp/patterns.py](sentence-nlp/patterns.py),
+3. ✅ **SHIPPED** — commit 2: curated 38-point N5/N4 grammar catalog ([../sentence-nlp/patterns.py](sentence-nlp/patterns.py),
    Bunpro-grounded, reusing the `SELFTALK_GRAMMAR` ids), detected in the Python parse and written to
    `sentence_tag(kind='grammar')` via `db.setGrammarTags` for `source='example'` rows (Self-Talk keeps
    its hand tags). Every detector pinned in `test_patterns.py` (positives + confusable negatives).
