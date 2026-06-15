@@ -58,6 +58,27 @@ and the windows, so they'd cross-import anyway. A single shared-state module is 
 
 ## Phase C0 — characterization-test net FIRST (the high-value half)
 
+> **✅ SHIPPED.** The remaining inline pure helpers are extracted + unit-tested, zero behavior change:
+> - `core/recordings.js` gained `RECORD_MIME_CANDIDATES`, `chooseMime(candidates, isSupported)` (the pure
+>   core of `pickMime`), `encodeWav` (moved byte-identical), and `biasNative`/`biasTake` (the crossfader curve).
+> - New **`core/refs.js`** (DOM-free; `base`/`httpServed`/`prefs` **injected**): `parseControlCtx`,
+>   `nativePlayable`, `refAvailable`, `referenceVariants`, `defaultRef`, `refVariantId`, `refVariantById`,
+>   `refShortLabel`, `currentRef`, and the URL shapes `nativeUrl`/`takeUrl`/`refUrl`/`refClip`. Added to the
+>   `core/index.js` barrel (collision-checked clean).
+> - [record-compare.js](../study-app/src/features/record-compare.js) now **delegates** via thin same-named
+>   wrappers that bind the feature-owned inputs (`API_BASE`, `HTTP_SERVED`, `settings.audioPrefs`,
+>   `control.dataset`). Net **−25 lines**; the **13 public exports + both consumers
+>   (minna.js/selftalk.js) are byte-for-byte unchanged**.
+> - **`study-app/test/record-compare-core.test.js`** (+39 tests). `bun run test` → **180 pass**,
+>   `bun run build` green. (Server untouched → its suite unaffected.)
+> - **Deviations from the candidate list below:** `pickMime` stays a feature wrapper (it reads the global
+>   `MediaRecorder` + the `RECORD_SUPPORTED` const) delegating to the injected pure `chooseMime`; likewise
+>   `controlCtx`→`parseControlCtx(dataset)` and `currentRef(control,…)`→`currentRef(savedId,…)` keep the DOM
+>   read in the wrapper. `nativeUrl`/`nativePlayable`/`refAvailable`/`refVariantById` had no remaining feature
+>   caller (only other now-core helpers called them), so they live in core only — not imported by the feature.
+>
+> Steps below are the as-planned record.
+
 Extract the **remaining inline pure helpers** into `core/` (or a new pure `core/refs.js`) and
 unit-test them. This is the safety net before touching any stateful glue, and it's worth doing
 **even if you stop here**.

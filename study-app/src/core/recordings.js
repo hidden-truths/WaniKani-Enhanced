@@ -186,3 +186,36 @@ export function clampSpeed(n) {
   for (const s of COMPARE_SPEEDS) { const d = Math.abs(s - v); if (d < bestD) { bestD = d; best = s; } }
   return best;
 }
+
+// MediaRecorder codec preference, best→worst: opus-in-webm, then whatever the browser supports
+// (Safari → mp4). The server strips codec params and validates the base type (audio/webm|mp4|ogg|mpeg).
+export const RECORD_MIME_CANDIDATES = ['audio/webm;codecs=opus', 'audio/webm', 'audio/mp4', 'audio/ogg'];
+// First candidate the predicate accepts, else '' (let MediaRecorder pick its own default). The
+// `isSupported` predicate is injected (the feature passes MediaRecorder.isTypeSupported) so this
+// stays pure/DOM-free and unit-testable.
+export function chooseMime(candidates, isSupported) {
+  for (const c of candidates) { if (isSupported(c)) return c; }
+  return '';
+}
+
+// Float32 PCM samples → a 16-bit mono PCM WAV Blob. WAV because there's no in-browser opus/webm
+// encoder for an AudioBuffer; clips are short so the uncompressed size stays well under the 2 MB
+// cap. Writes the RIFF/`fmt `/`data` header then clamps + scales each sample to int16. Pure (Blob
+// is a platform global available under happy-dom too), so it's unit-tested by inspecting the bytes.
+export function encodeWav(samples, sampleRate) {
+  const len = samples.length, buf = new ArrayBuffer(44 + len * 2), dv = new DataView(buf);
+  const str = (off, s) => { for (let i = 0; i < s.length; i++) dv.setUint8(off + i, s.charCodeAt(i)); };
+  str(0, 'RIFF'); dv.setUint32(4, 36 + len * 2, true); str(8, 'WAVE');
+  str(12, 'fmt '); dv.setUint32(16, 16, true); dv.setUint16(20, 1, true); dv.setUint16(22, 1, true);
+  dv.setUint32(24, sampleRate, true); dv.setUint32(28, sampleRate * 2, true); dv.setUint16(32, 2, true); dv.setUint16(34, 16, true);
+  str(36, 'data'); dv.setUint32(40, len * 2, true);
+  let off = 44;
+  for (let i = 0; i < len; i++) { const s = Math.max(-1, Math.min(1, samples[i])); dv.setInt16(off, s < 0 ? s * 0x8000 : s * 0x7fff, true); off += 2; }
+  return new Blob([buf], { type: 'audio/wav' });
+}
+
+// The ▶ both crossfader curve. `b` ∈ [-1, 1]: +1 = all reference (right), −1 = all you (left), 0 =
+// balanced. Biasing toward one side fades the OTHER out — these gains multiply ON TOP of the
+// normalization gains. Pure → unit-tested to pin the curve.
+export const biasNative = (b) => (b >= 0 ? 1 : 1 + b);   // fade reference out as you slide toward "you"
+export const biasTake = (b) => (b <= 0 ? 1 : 1 - b);     // fade you out as you slide toward "reference"

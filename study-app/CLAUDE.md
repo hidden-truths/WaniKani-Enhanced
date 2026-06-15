@@ -26,7 +26,11 @@ order. The actual DOM/render/feature glue is split into **`src/features/*`** mod
   beside each example's ▶ play (flashcard answer, Browse detail, Minna example rows).
 - **`src/core/`** — the PURE, unit-tested core (DOM-free): `srs`, `forecast`, `facets`,
   `examples`, `kana`, `pitch`, `text`, `minna`, `audio` (the per-context voice-priority
-  `resolveVariant`), behind a barrel `core/index.js`.
+  `resolveVariant`), `recordings` (record-and-compare math — `findTrimBounds`/`waveformPeaks`/
+  `normGains`/`clampSpeed` + the C0 additions `chooseMime`/`encodeWav`/`biasNative`/`biasTake`),
+  `refs` (the record-compare reference-voice selection + audio-URL shapes — `base`/`httpServed`/
+  `prefs` injected so `features/record-compare.js` keeps owning `API_BASE`/`HTTP_SERVED`/`settings`),
+  behind a barrel `core/index.js`.
 - **`src/state.js`** — the ONE shared mutable hub: `state.store` (progress), `state.DATA`
   (the live deck), `state.minnaStore`, `state.MAXRANK`, `state.BUILTIN_RANK_BY_JP`, plus
   `attachLevels()`. An object whose **properties are mutated** (not `export let` — importers

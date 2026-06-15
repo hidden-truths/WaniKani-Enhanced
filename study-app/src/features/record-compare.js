@@ -18,7 +18,15 @@
 import { API_BASE } from '../config.js';
 import { account, api, setSyncStatus } from './cloud-core.js';
 import { settings, saveSettings } from '../settings-store.js';
-import { escapeHtml, clampKeep, formatDuration, validClip, findTrimBounds, waveformPeaks, clampSpeed, COMPARE_SPEEDS, rmsLevel, normGains, resolveVariant, variantOrder } from '../core/index.js';
+import {
+  escapeHtml, clampKeep, formatDuration, validClip, findTrimBounds, waveformPeaks, clampSpeed, COMPARE_SPEEDS, rmsLevel, normGains,
+  // pure record-compare helpers extracted to core (C0) — direct (no binding):
+  encodeWav, chooseMime, RECORD_MIME_CANDIDATES, biasNative, biasTake, refClip, refVariantId, refShortLabel, parseControlCtx,
+  // …and the base/httpServed/prefs-injected ones, wrapped below to keep their feature-local signatures
+  // (core's nativeUrl is reached transitively via refUrl, so it isn't imported here):
+  takeUrl as coreTakeUrl, refUrl as coreRefUrl,
+  referenceVariants as coreReferenceVariants, defaultRef as coreDefaultRef, currentRef as coreCurrentRef,
+} from '../core/index.js';
 import { HTTP_SERVED } from './tts.js';
 import { cycleMod } from './audio.js';
 
@@ -31,10 +39,7 @@ export const RECORD_SUPPORTED = !!(typeof navigator !== 'undefined' && navigator
 // server strips codec params and validates the base type (audio/webm|mp4|ogg|mpeg).
 function pickMime() {
   if (!RECORD_SUPPORTED || !MediaRecorder.isTypeSupported) return '';
-  for (const c of ['audio/webm;codecs=opus', 'audio/webm', 'audio/mp4', 'audio/ogg']) {
-    if (MediaRecorder.isTypeSupported(c)) return c;
-  }
-  return '';
+  return chooseMime(RECORD_MIME_CANDIDATES, (c) => MediaRecorder.isTypeSupported(c));
 }
 
 // ---------- input-device (microphone) selection ----------
@@ -96,17 +101,7 @@ export function exitSpeakingMode() { stopRecording(); stopLiveStream(); speaking
 // to the untouched original.
 let _audioCtx = null;
 function audioCtx() { if (!_audioCtx) { const C = window.AudioContext || window.webkitAudioContext; _audioCtx = new C(); } return _audioCtx; }
-function encodeWav(samples, sampleRate) {
-  const len = samples.length, buf = new ArrayBuffer(44 + len * 2), dv = new DataView(buf);
-  const str = (off, s) => { for (let i = 0; i < s.length; i++) dv.setUint8(off + i, s.charCodeAt(i)); };
-  str(0, 'RIFF'); dv.setUint32(4, 36 + len * 2, true); str(8, 'WAVE');
-  str(12, 'fmt '); dv.setUint32(16, 16, true); dv.setUint16(20, 1, true); dv.setUint16(22, 1, true);
-  dv.setUint32(24, sampleRate, true); dv.setUint32(28, sampleRate * 2, true); dv.setUint16(32, 2, true); dv.setUint16(34, 16, true);
-  str(36, 'data'); dv.setUint32(40, len * 2, true);
-  let off = 44;
-  for (let i = 0; i < len; i++) { const s = Math.max(-1, Math.min(1, samples[i])); dv.setInt16(off, s < 0 ? s * 0x8000 : s * 0x7fff, true); off += 2; }
-  return new Blob([buf], { type: 'audio/wav' });
-}
+// encodeWav (Float32 → 16-bit PCM WAV Blob) is pure → core/recordings.js.
 async function maybeTrim(blob, durationMs) {
   if (!settings.trimSilence) return { blob, durationMs };
   try {
@@ -327,8 +322,9 @@ const COMPARE_TRIM = { leadPadMs: 60, tailPadMs: 120 };
 const bufferCache = new Map();      // url → Promise<AudioBuffer|null> (promise cached so concurrent paints share one decode)
 const resolvedBuffers = new Map();  // url → AudioBuffer (the resolved value, for synchronous window/onset lookups)
 const windowCache = new Map();      // "url|clip" → {start,end} speech window (memoized once the buffer decodes)
-function nativeUrl(src) { return API_BASE + '/v1/audio/native?src=' + encodeURIComponent(src); }
-function takeUrl(id) { return API_BASE + '/v1/audio/recordings/' + id; }
+// URL builders bind API_BASE onto the pure shapes in core/refs.js. nativeUrl is core-internal now
+// (only refUrl needs it); takeUrl is used directly by several waveform/level/compare call sites here.
+function takeUrl(id) { return coreTakeUrl(API_BASE, id); }
 function fetchAudioBuffer(url) {
   if (bufferCache.has(url)) return bufferCache.get(url);
   const p = (async () => {
@@ -497,44 +493,25 @@ export function recordControlHtml(scope, itemKey, nativeSrc, clip, needsClip, te
 // Read the compare context back off a control's dataset (so resetControl can rebuild). `text` is the
 // item's synth text (a word's ttsText / a line or phrase's plain sentence) — enables a synth
 // reference voice. `audioCtx` picks the per-context default reference voice from the resolver.
-function controlCtx(control) {
-  const clipAttr = control.dataset.clip;
-  const clip = clipAttr ? validClip(clipAttr.split(',').map(Number)) : null;
-  return { nativeSrc: control.dataset.native || '', clip, needsClip: control.dataset.needsclip === '1', text: control.dataset.text || '', audioCtx: control.dataset.audioctx || 'minna' };
-}
-// Native compare is playable when there's a native source AND (it's a whole-file item OR a
-// conversation line that has a clip).
-function nativePlayable(ctx) { return !!(ctx.nativeSrc && (!ctx.needsClip || ctx.clip)); }
+// Read the compare context back off a control's dataset (so resetControl can rebuild). The parse is
+// pure → core/refs.js (parseControlCtx); nativePlayable + the reference selection live there too.
+function controlCtx(control) { return parseControlCtx(control.dataset); }
 
 // ---------- reference (compare-target) variants: native + synth voices, via the resolver ----------
 // The compare player's "reference" generalizes the old native-only target to ANY voice (audio-unify
 // Phase 3 / ⑤): native (the cached vnjpclub clip) OR a synth voice (Siri/Google, rendered from the
-// item's text). The USER's own take is the "you" side, never a reference. Which voices are offered +
-// which is the default both come from the SAME machinery the play buttons use — variantOrder for the
-// cycle list, resolveVariant(ctx.audioCtx, …) for the default — so the per-context priority drives it.
-function refAvailable(ctx) { return { native: nativePlayable(ctx), tts: !!(ctx.text && HTTP_SERVED), user: false }; }
-function referenceVariants(ctx) { return variantOrder(refAvailable(ctx)); }
-function defaultRef(ctx) { return resolveVariant(ctx.audioCtx || 'minna', refAvailable(ctx), settings.audioPrefs); }
-function refVariantId(v) { return v ? (v.kind === 'native' ? 'native' : v.voice) : ''; }
-function refVariantById(ctx, id) { return referenceVariants(ctx).find((v) => refVariantId(v) === id) || null; }
+// item's text). The USER's own take is the "you" side, never a reference. The selection logic + URL
+// shapes are PURE → core/refs.js (variantOrder for the cycle list, resolveVariant for the per-context
+// default — so the per-context priority drives it). These thin wrappers bind the feature-owned inputs
+// the core fns take: API_BASE, the live HTTP_SERVED flag, and settings.audioPrefs. refClip/refVariantId/
+// refShortLabel are pure (no binding) → imported directly from core.
+function referenceVariants(ctx) { return coreReferenceVariants(ctx, HTTP_SERVED); }
+function defaultRef(ctx) { return coreDefaultRef(ctx, HTTP_SERVED, settings.audioPrefs); }
 // The control's currently-selected reference: its saved data-ref if still available, else the default.
-function currentRef(control, ctx) {
-  const saved = control.dataset.ref ? refVariantById(ctx, control.dataset.ref) : null;
-  return saved || defaultRef(ctx);
-}
-function refShortLabel(v) {
-  if (!v) return 'ref';
-  if (v.kind === 'native') return 'native';
-  return { 'siri:female': 'Siri F', 'siri:male': 'Siri M', google: 'Google' }[v.voice] || v.voice;
-}
-// Playback URL + clip for a reference variant: native is the gated proxy (sliced by the line
-// clip); a synth voice is the public tagged-TTS endpoint (no clip — windowFor trims its silence).
-function refUrl(ctx, v) {
-  if (!v) return '';
-  if (v.kind === 'native') return nativeUrl(ctx.nativeSrc);
-  return API_BASE + '/v1/audio/tts?text=' + encodeURIComponent(ctx.text) + '&voice=' + encodeURIComponent(v.voice);
-}
-function refClip(ctx, v) { return v && v.kind === 'native' ? ctx.clip : null; }
+function currentRef(control, ctx) { return coreCurrentRef(control.dataset.ref || '', ctx, HTTP_SERVED, settings.audioPrefs); }
+// Playback URL for a reference variant: native is the gated proxy (sliced by refClip's line clip); a
+// synth voice is the public tagged-TTS endpoint (no clip — windowFor trims its silence).
+function refUrl(ctx, v) { return coreRefUrl(API_BASE, ctx, v); }
 
 function recordControlInner(scope, itemKey, ctx) {
   if (!RECORD_SUPPORTED) return `<span class="rec-unsupported">Recording needs a modern browser + microphone.</span>`;
@@ -712,11 +689,9 @@ function setActiveGains(ctx, id, refV) {
 // simultaneous overlay toward one voice while A/B-ing. View-only (not synced) — a momentary
 // comparison aid that resets to centre on reload. Only affects ▶ both (single playback ignores
 // it); live while both are sounding (bothPlaying).
+// The crossfader CURVE (biasNative/biasTake — b=+1 reference, b=−1 you, fade the other out) is pure
+// → core/recordings.js; imported above.
 let compareBias = 0, bothPlaying = false;
-// b = +1 is the REFERENCE (right) end, b = −1 the YOU (left) end. Biasing toward one side fades the
-// OTHER out: at +1 you hear the reference (take→0), at −1 you hear yourself (reference→0).
-const biasNative = (b) => (b >= 0 ? 1 : 1 + b);   // fade reference out as you slide toward "you"
-const biasTake = (b) => (b <= 0 ? 1 : 1 - b);     // fade you out as you slide toward "reference"
 function applyBothVolumes() {
   if (nativeAudioEl) nativeAudioEl.volume = clamp01(activeNativeGain * biasNative(compareBias));
   if (takeAudioEl) takeAudioEl.volume = clamp01(activeTakeGain * biasTake(compareBias));
