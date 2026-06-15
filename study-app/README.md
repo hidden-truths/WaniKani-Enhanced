@@ -20,8 +20,8 @@ DOM/feature glue in [src/features/](src/features), the pure, unit-tested core
 the data modules ([src/data/](src/data) — the `VERBS` dataset + `EXAMPLES` leveled
 sentences). It's a **standalone project** served by its own static (nginx) container at the
 apex `https://wkenhanced.dev`, talking over HTTP to the API at `https://api.wkenhanced.dev`
-(cross-origin, same-site). Originally one self-contained HTML file (derived from
-[../japanese-study/japanese-verbs.html](../japanese-study/japanese-verbs.html)); grew into
+(cross-origin, same-site). Originally one self-contained HTML file (the since-removed
+`japanese-study/japanese-verbs.html`); grew into
 classic-script files served by the API, then was extracted here as its own Vite project once
 it outgrew "a few static files on the API droplet."
 

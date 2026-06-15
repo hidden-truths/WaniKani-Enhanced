@@ -48,8 +48,8 @@ Built + content-hashed by Vite, served by its **own nginx container** at the ape
 `https://wkenhanced.dev` — **separate** from the API container at `api.wkenhanced.dev`
 (two containers, one droplet). The app talks to the API over HTTP **cross-origin**
 (same-site): every `/v1/*` call is rebased onto `API_BASE` (`import.meta.env.VITE_API_BASE`).
-Originally one self-contained HTML file (derived from
-[../japanese-study/japanese-verbs.html](../japanese-study/japanese-verbs.html)); grew into
+Originally one self-contained HTML file (the since-removed
+`japanese-study/japanese-verbs.html`); grew into
 classic-script files served by the API, then extracted here as its own Vite project.
 
 User-facing overview: [README.md](README.md). What to do next: [NEXT_STEPS.md](NEXT_STEPS.md).
