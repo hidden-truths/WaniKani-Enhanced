@@ -1009,53 +1009,69 @@ export function getPublicSentenceByHash(hash: string): SentenceRow | null {
         .get(hash) as SentenceRow | null;
 }
 
+// Reuse-by-hash upsert of a PUBLIC sentence row — the shared skeleton behind seedExampleSentence
+// and materializeTemplateRealization. Resolves the public row by content `hash` (the partial unique
+// index `(hash) WHERE public=1 AND visibility='public'` means at most one). If absent, INSERTs it
+// (ext_id=`${extIdPrefix}-${hash}`, the given `source`, public + curator-owned). If present AND ours
+// (existing.source === source), refreshes furigana + translations so a corrected bundle propagates
+// (text/hash ARE the reuse key, unchanged). If present but FOREIGN (a different source's public row
+// with identical text), leaves its content + translations UNTOUCHED. Returns the row id + whether we
+// `owned` it (created here, or same-source) so the caller can decide whether it may (re)write the
+// grammar/links it controls. Touches NO sentence_link — link + grammar policy lives in the callers.
+function upsertPublicSentenceByHash(input: {
+    source: string;
+    extIdPrefix: string;
+    text: string;
+    furigana: FuriganaSeg[] | null;
+    translations?: Record<string, string>;
+}): { id: number; owned: boolean } {
+    assertFuriganaMatches(input.furigana, input.text);
+    const db = getDb();
+    const hash = ttsTextHash(input.text);
+    const furiganaJson = input.furigana ? JSON.stringify(input.furigana) : null;
+    const existing = getPublicSentenceByHash(hash);
+    if (existing) {
+        const owned = existing.source === input.source;
+        if (owned) {
+            // Our own row — refresh furigana + translations (text/hash unchanged, they ARE the reuse key).
+            db.query('UPDATE sentence SET furigana = ? WHERE id = ?').run(furiganaJson, existing.id);
+            db.query('DELETE FROM translation WHERE sentence_id = ?').run(existing.id);
+            insertSentenceChildren(existing.id, input.translations, undefined, undefined);
+        }
+        // else: foreign public row with identical text — leave its content + translations alone.
+        return { id: existing.id, owned };
+    }
+    const r = db
+        .query(
+            `INSERT INTO sentence (ext_id, hash, text, furigana, lang, source, public, visibility, created_by, created_at)
+             VALUES (?, ?, ?, ?, 'ja', ?, 1, 'public', NULL, ?) RETURNING id`,
+        )
+        .get(`${input.extIdPrefix}-${hash}`, hash, input.text, furiganaJson, input.source, Date.now()) as { id: number };
+    insertSentenceChildren(r.id, input.translations, undefined, undefined);
+    return { id: r.id, owned: true };
+}
+
 // Seed/refresh a PUBLIC built-in EXAMPLE sentence (Phase 2) and (re)set its card links. The seed
 // passes the FULL card-link set for one text in a single call (it groups EXAMPLES by text first),
 // so this REPLACES the sentence's owner_type='card' links wholesale — idempotent on re-seed (same
-// hash → same row → same link set → no growth).
-//
-// Reuse-by-hash (D3): resolve the public row by hash, not ext_id. If absent, create it
-// (ext_id='ex-'+hash, source='example'). If present and ours (source='example'), refresh
-// furigana + translations so a bundle fix propagates; if present but FOREIGN (e.g. a Self-Talk
-// 'selftalk' row with identical text), leave its sentence fields + translations untouched and just
-// attach the card links. Non-card links on a shared row are preserved (only card links are wiped).
+// hash → same row → same link set → no growth). The row itself is upserted reuse-by-hash via
+// upsertPublicSentenceByHash (source='example'); card links are (re)attached even on a foreign reused
+// row (e.g. a 'selftalk' row with identical text) — only card links are wiped, never the shared row's
+// content or its non-card links.
 export function seedExampleSentence(input: {
     text: string;
     furigana?: FuriganaSeg[] | null;
     translations?: Record<string, string>;
     cardLinks: SentenceLink[];
 }): AssembledSentence {
-    const furigana = input.furigana ?? null;
-    assertFuriganaMatches(furigana, input.text);
+    const { id } = upsertPublicSentenceByHash({
+        source: 'example',
+        extIdPrefix: 'ex',
+        text: input.text,
+        furigana: input.furigana ?? null,
+        translations: input.translations,
+    });
     const db = getDb();
-    const hash = ttsTextHash(input.text);
-    const existing = getPublicSentenceByHash(hash);
-
-    let id: number;
-    if (existing) {
-        id = existing.id;
-        if (existing.source === 'example') {
-            // Our own example row — refresh content so bundle edits propagate (text/hash unchanged,
-            // they ARE the reuse key). Replace translations.
-            db.query('UPDATE sentence SET furigana = ? WHERE id = ?').run(
-                furigana ? JSON.stringify(furigana) : null,
-                id,
-            );
-            db.query('DELETE FROM translation WHERE sentence_id = ?').run(id);
-            insertSentenceChildren(id, input.translations, undefined, undefined);
-        }
-        // else: foreign public row (e.g. selftalk) with identical text — leave it alone, just link.
-    } else {
-        const r = db
-            .query(
-                `INSERT INTO sentence (ext_id, hash, text, furigana, lang, source, public, visibility, created_by, created_at)
-                 VALUES (?, ?, ?, ?, 'ja', 'example', 1, 'public', NULL, ?) RETURNING id`,
-            )
-            .get(`ex-${hash}`, hash, input.text, furigana ? JSON.stringify(furigana) : null, Date.now()) as { id: number };
-        id = r.id;
-        insertSentenceChildren(id, input.translations, undefined, undefined);
-    }
-
     // Replace ONLY this sentence's card links (preserve any selftalk/other link on a shared row).
     db.query("DELETE FROM sentence_link WHERE sentence_id = ? AND owner_type = 'card'").run(id);
     for (const link of input.cardLinks) insertSentenceChildren(id, undefined, undefined, link);
@@ -1337,20 +1353,13 @@ export function upsertPublicTemplate(input: {
 // (decision #1: server-authoritative), computes the canonical `role`, and reads `grammar` off the
 // stored template (decision #4: never client-trusted) — this fn is the DB half only.
 //
-// Mirrors seedExampleSentence's reuse-by-hash (decision #6: source='template'):
-//   • hash = ttsTextHash(text), resolved against the public slice (getPublicSentenceByHash) so the
-//     partial-unique-by-hash index is never violated;
-//   • absent → INSERT a public row (ext_id='tpl-'+hash, source='template', created_by=NULL → custom
-//     false; identity-by-hash so two combos with identical text reuse ONE row);
-//   • present + OURS (source='template') → refresh furigana + translations so a corrected template
-//     propagates (text/hash are the reuse key, unchanged);
-//   • present + FOREIGN (an 'example'/'selftalk' public row with identical text) → reuse it
-//     untouched — do NOT clobber its content or grammar — and just attach the template link.
-// Grammar is copied (setGrammarTags) ONLY onto rows we own/created — never a foreign reused row. The
-// template link (owner_type='template', owner_id=<template ext_id>, role) is attached idempotently:
-// re-materializing the same combo → same hash → same row → same (owner_id, role) → no new link.
-// Returns the assembled sentence carrying the TEMPLATE link (the override), not whatever link the
-// shared row happens to list first.
+// The row is upserted reuse-by-hash via upsertPublicSentenceByHash (source='template', decision #6;
+// identity-by-hash so two combos with identical text reuse ONE row). Grammar is copied (setGrammarTags)
+// ONLY onto rows we `owned` (created here / our own source='template') — never a foreign reused
+// 'example'/'selftalk' row. The template link (owner_type='template', owner_id=<template ext_id>, role)
+// is attached idempotently: re-materializing the same combo → same hash → same row → same (owner_id,
+// role) → no new link. Returns the assembled sentence carrying the TEMPLATE link (the override), not
+// whatever link the shared row happens to list first.
 export function materializeTemplateRealization(input: {
     templateExtId: string;
     role: string;
@@ -1359,40 +1368,14 @@ export function materializeTemplateRealization(input: {
     translations?: Record<string, string>;
     grammar?: string[];
 }): AssembledSentence {
-    const furigana = input.furigana ?? null;
-    assertFuriganaMatches(furigana, input.text);
+    const { id, owned } = upsertPublicSentenceByHash({
+        source: 'template',
+        extIdPrefix: 'tpl',
+        text: input.text,
+        furigana: input.furigana ?? null,
+        translations: input.translations,
+    });
     const db = getDb();
-    const hash = ttsTextHash(input.text);
-    const existing = getPublicSentenceByHash(hash);
-
-    let id: number;
-    let owned: boolean; // created here, or our own source='template' row → safe to (re)write content + grammar
-    if (existing) {
-        id = existing.id;
-        owned = existing.source === 'template';
-        if (owned) {
-            // Our own combo row — refresh furigana + translations so a corrected template propagates
-            // (text/hash are the reuse key, unchanged). Replace translations wholesale.
-            db.query('UPDATE sentence SET furigana = ? WHERE id = ?').run(
-                furigana ? JSON.stringify(furigana) : null,
-                id,
-            );
-            db.query('DELETE FROM translation WHERE sentence_id = ?').run(id);
-            insertSentenceChildren(id, input.translations, undefined, undefined);
-        }
-        // else: a foreign public row (example/selftalk) with identical text — leave its content +
-        // grammar alone (it owns those), just attach the template link below.
-    } else {
-        const r = db
-            .query(
-                `INSERT INTO sentence (ext_id, hash, text, furigana, lang, source, public, visibility, created_by, created_at)
-                 VALUES (?, ?, ?, ?, 'ja', 'template', 1, 'public', NULL, ?) RETURNING id`,
-            )
-            .get(`tpl-${hash}`, hash, input.text, furigana ? JSON.stringify(furigana) : null, Date.now()) as { id: number };
-        id = r.id;
-        owned = true;
-        insertSentenceChildren(id, input.translations, undefined, undefined);
-    }
 
     // Copy the template's curated grammar onto rows we own only (decision #4) — never overwrite a
     // foreign reused row's tags. The offline NLP grammar detector skips source!='example' rows
