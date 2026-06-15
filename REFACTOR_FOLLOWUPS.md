@@ -204,6 +204,11 @@ resilience behavior (this part *is* observable): with `bun run dev` (:5173) + `b
 
 ## Workstream C — `record-compare.js` decomposition (high-risk, do last / optional)
 
+> **📋 Detailed, executable guide: [docs/RECORD_COMPARE_DECOMP.md](docs/RECORD_COMPARE_DECOMP.md)** —
+> the full function→module inventory, the shared-singleton split strategy, the 13-export contract,
+> the phased commits (C0 test-net first, then C1+), and the dead-end checklist. The summary below
+> is the orientation; do the work from that doc.
+
 ### Honest framing
 [study-app/src/features/record-compare.js](study-app/src/features/record-compare.js) is 853 lines,
 **but its pure logic is already extracted** into [core/recordings.js](study-app/src/core/recordings.js)
@@ -240,6 +245,56 @@ vs `#mnBody` controls split; speaking-mode keeps ONE mic stream open. Don't "tid
 `cd study-app && bun run test` + `bun run build`; then a full browser pass: record a take, compare
 ▶ you / reference / →you / both / loop, waveforms render, speed + bias work, mic picker, and Self-Talk
 + Minna both still drive the engine. This is browser-observable — use the preview workflow, not just tests.
+
+---
+
+## Enhancement follow-ups (post-B)
+
+B shipped an MVP with two deliberate simplifications + left two durability gaps. These are the
+natural next enhancements — independent, each small, each shippable on its own. Do them **after C**
+(or interleaved — they don't depend on C). None are blocking; the app is correct without them.
+
+### E1 — Per-blob merge on 409 (replace the server-wins MVP)
+Today a 409 reconcile is **server-wins apply** ([study-app/src/features/synced-blob.js](study-app/src/features/synced-blob.js)
+`reconcile()`): the other device's copy is adopted, the local unsynced change is dropped (detected,
+not silently clobbered). Better: a per-blob **merge** so neither side loses data.
+- Add an optional `merge(localData, serverData) → mergedData` to `createSyncedBlob`; `reconcile`
+  calls it, `apply`s the merged result, then **re-pushes** with the server's `updatedAt` as the new
+  base (guard recursion: at most one merge-push round; a second 409 falls back to server-wins).
+- Per-blob mergers: **progress** — union `cards` by `max(box)` + later `due` + summed `attempts`,
+  concat+dedup `sessions`, sum `daily`; **minna** — shallow-merge `notes`/`overlays`/`clips`
+  (newest wins per key); **settings** — small enough that server-wins is fine (skip or last-writer);
+  **custom-verbs** — union by `rank` (keep the newer per card); **selftalk** — practice `max(streak)`.
+- Tests: `synced-blob.test.js` — a 409 with divergent local+server merges (not just adopts) and
+  re-pushes the union. Keep the recursion guard pinned.
+
+### E2 — Idempotency keys for the non-idempotent writes (make them durable)
+`POST /v1/sessions` (`logSession`) and the binary recording upload are fire-and-forget today
+(a dropped POST loses a session / a take) because a blind retry would duplicate a row. Give each a
+**client-generated idempotency key** the server dedups on — then they can be retried + queued like
+the progress PUTs.
+- **Server:** add an `idempotency_key` (TEXT) column/param to `POST /v1/sessions`
+  ([wk-enhanced-api/src/routes/sessions.ts](wk-enhanced-api/src/routes/sessions.ts) +
+  [db/repos/studySessions.ts](wk-enhanced-api/src/db/repos/studySessions.ts)) and to
+  `POST /v1/audio/recordings` ([routes/audio.ts](wk-enhanced-api/src/routes/audio.ts) +
+  [db/repos/recordings.ts](wk-enhanced-api/src/db/repos/recordings.ts)); on a replay of a seen key,
+  return the existing row instead of inserting. Unique index on `(user_id, idempotency_key)`.
+- **Client:** generate a UUID per session/take; allow these POSTs to opt into transport retry
+  (`{retry:true}`) and into the offline queue (`net/sync-queue.js`) — extend the queue to carry
+  non-`progress:` keys, and `logSession`/`uploadTake` enqueue on failure. Update the idempotency
+  table in this doc + the "stays un-queued/un-retried" notes in [study-app/CLAUDE.md](study-app/CLAUDE.md).
+- Tests: server dedup (same key → one row, returns existing); client retry/queue for these POSTs.
+
+### E3 — (optional) route the recording upload through the transport
+Once E2 makes the upload idempotent, fold its bespoke `fetch` ([record-compare.js](study-app/src/features/record-compare.js)
+`uploadTake`) onto the B1 transport (`api`, `{retry:true}`) so it inherits timeout/backoff —
+keeping `credentials:'include'` + the binary body + `Content-Type` passthrough.
+
+### Beyond the refactor
+Not part of this doc, but the next product threads (see [NEXT_STEPS.md](NEXT_STEPS.md) +
+[NEW_FEATURES.md](NEW_FEATURES.md)): the ⭐ **tokenization-granularity** NLP rework
+([SENTENCE_STORE_PHASE4.md](SENTENCE_STORE_PHASE4.md) §8.0) and the **prod deploy** of the
+templates/annotations seed steps. Separate sessions.
 
 ---
 
