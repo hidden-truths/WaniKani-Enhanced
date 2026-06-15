@@ -53,14 +53,35 @@ export function insertRecording(
     contentType: string,
     durationMs: number | null,
     createdAt: number,
+    idempotencyKey: string | null = null,
 ): number {
-    const r = getDb()
-        .query(
-            `INSERT INTO minna_recordings (user_id, lesson, item_key, storage_key, content_type, duration_ms, created_at)
-             VALUES (?, ?, ?, ?, ?, ?, ?)`,
-        )
-        .run(userId, lesson, itemKey, storageKey, contentType, durationMs, createdAt);
-    return Number(r.lastInsertRowid);
+    try {
+        const r = getDb()
+            .query(
+                `INSERT INTO minna_recordings (user_id, lesson, item_key, storage_key, content_type, duration_ms, created_at, idempotency_key)
+                 VALUES (?, ?, ?, ?, ?, ?, ?, ?)`,
+            )
+            .run(userId, lesson, itemKey, storageKey, contentType, durationMs, createdAt, idempotencyKey);
+        return Number(r.lastInsertRowid);
+    } catch (e) {
+        // Lost a concurrent race on the same key (the partial unique index) → adopt the winner's row.
+        // The common replay case is short-circuited earlier in the upload route via
+        // findRecordingByIdempotencyKey (which also skips the storage write); this is the race backstop.
+        if (idempotencyKey) {
+            const raced = findRecordingByIdempotencyKey(userId, idempotencyKey);
+            if (raced) return raced.id;
+        }
+        throw e;
+    }
+}
+
+// Look up an existing take by its client idempotency key (owner-scoped). Lets the upload route return
+// the prior take on a retry WITHOUT re-storing bytes / re-inserting / re-pruning. null if unseen.
+export function findRecordingByIdempotencyKey(userId: number, idempotencyKey: string): RecordingRow | null {
+    const row = getDb()
+        .query(`SELECT ${RECORDING_COLS} FROM minna_recordings WHERE user_id = ? AND idempotency_key = ?`)
+        .get(userId, idempotencyKey) as RawRecordingRow | null;
+    return row ? rowToRecording(row) : null;
 }
 
 // All of a user's takes for one lesson, newest first. The client groups these by

@@ -82,6 +82,24 @@ describe('minna_recordings (record-and-compare)', () => {
         expect(db.listRecordings(u.id, 23)).toHaveLength(2);
     });
 
+    test('idempotency key: findRecordingByIdempotencyKey + the unique index prevent a duplicate take (E2)', () => {
+        const u = db.createUser('ridem@example.com', 'hash');
+        const id = db.insertRecording(u.id, 23, 'mnn:23:0', 'rec/u/0.webm', 'audio/webm', 1500, 1000, 'rkey-1');
+        expect(db.findRecordingByIdempotencyKey(u.id, 'rkey-1')!.id).toBe(id);
+        expect(db.findRecordingByIdempotencyKey(u.id, 'nope')).toBeNull();
+        // a re-insert with the SAME key returns the existing row (the race backstop) — no duplicate
+        const id2 = db.insertRecording(u.id, 23, 'mnn:23:0', 'rec/u/dup.webm', 'audio/webm', 1500, 2000, 'rkey-1');
+        expect(id2).toBe(id);
+        expect(db.listRecordings(u.id, 23)).toHaveLength(1);
+        // the key is per-user
+        const v = db.createUser('ridem2@example.com', 'hash');
+        expect(db.findRecordingByIdempotencyKey(v.id, 'rkey-1')).toBeNull();
+        // NULL key still always inserts (legacy path) — the partial index exempts NULLs
+        add(u.id, 23, 'mnn:23:1', 3000);
+        add(u.id, 23, 'mnn:23:1', 4000);
+        expect(db.listRecordings(u.id, 23).filter((r) => r.itemKey === 'mnn:23:1')).toHaveLength(2);
+    });
+
     test('recordings cascade-delete with the user', () => {
         const u = db.createUser('cascade@example.com', 'hash');
         add(u.id, 23, 'mnn:23:0', 1000);

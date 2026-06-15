@@ -86,7 +86,8 @@ CREATE TABLE IF NOT EXISTS study_sessions (
     right_count       INTEGER NOT NULL,
     total_count       INTEGER NOT NULL,
     mode              TEXT,                    -- 'meaning' | 'reading' | null
-    details           TEXT                     -- optional JSON sidecar
+    details           TEXT,                    -- optional JSON sidecar
+    idempotency_key   TEXT                     -- client-generated dedup key (E2); NULL for legacy rows
 );
 
 CREATE INDEX IF NOT EXISTS study_sessions_user_idx ON study_sessions (user_id, ended_at);
@@ -108,7 +109,8 @@ CREATE TABLE IF NOT EXISTS minna_recordings (
     storage_key       TEXT NOT NULL,           -- object key in the storage layer
     content_type      TEXT NOT NULL,           -- 'audio/webm' | 'audio/mp4' (Safari)
     duration_ms       INTEGER,                 -- recording length, for the UI
-    created_at        INTEGER NOT NULL         -- epoch ms
+    created_at        INTEGER NOT NULL,        -- epoch ms
+    idempotency_key   TEXT                     -- client-generated dedup key (E2); NULL for legacy rows
 );
 
 CREATE INDEX IF NOT EXISTS minna_recordings_item_idx

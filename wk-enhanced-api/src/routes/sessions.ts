@@ -36,8 +36,8 @@ const postRoute = createRoute({
 sessionsRouter.openapi(postRoute, (c) => {
     const user = currentUser(c);
     if (!user) return unauthorized(c, 'Log in to save session history.');
-    const { right, total, mode, details } = c.req.valid('json');
-    const id = db.insertSession(user.id, Date.now(), right, total, mode ?? null, details ?? null);
+    const { right, total, mode, details, idempotencyKey } = c.req.valid('json');
+    const id = db.insertSession(user.id, Date.now(), right, total, mode ?? null, details ?? null, idempotencyKey ?? null);
     const count = db.countSessions(user.id);
     log.info('study.session', { userId: user.id, right, total, count });
     return c.json({ ok: true, id, count }, 200);

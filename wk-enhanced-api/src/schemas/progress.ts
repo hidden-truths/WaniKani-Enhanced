@@ -57,6 +57,12 @@ export const SessionPostRequestSchema = z
         total: z.number().int().min(1),
         mode: z.string().max(20).optional(),
         details: z.any().optional(),
+        idempotencyKey: z
+            .string()
+            .min(1)
+            .max(64)
+            .optional()
+            .openapi({ description: 'Client-generated key; a replay returns the existing row instead of appending a duplicate.' }),
     })
     .openapi('SessionPostRequest');
 

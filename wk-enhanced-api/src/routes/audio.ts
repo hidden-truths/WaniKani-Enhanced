@@ -103,6 +103,19 @@ export async function postRecording(c: Context) {
     const itemKey = c.req.query('itemKey') || '';
     const durationMs = c.req.query('durationMs');
     const keep = c.req.query('keep');
+    const idem = c.req.query('idem') || null;
+
+    // Idempotent replay (the client retried/queued this upload): return the prior take WITHOUT
+    // re-storing bytes, re-inserting, or re-pruning — so the binary upload can be retried/queued
+    // like any idempotent write (E2/E3) without piling up duplicate takes + orphan storage objects.
+    if (idem) {
+        const prior = db.findRecordingByIdempotencyKey(user.id, idem);
+        if (prior) {
+            const takes = db.listRecordings(user.id, prior.lesson).filter((r) => r.itemKey === prior.itemKey);
+            c.set('logCtx', { minnaRec: 'idem_replay', itemKey: prior.itemKey });
+            return c.json({ ok: true, recording: toRecordingDto(prior), takes: takes.map(toRecordingDto) }, 200);
+        }
+    }
 
     const ct = (c.req.header('content-type') || 'audio/webm').split(';')[0]!.trim();
     if (!RECORDING_CONTENT_TYPES.has(ct)) {
@@ -133,7 +146,7 @@ export async function postRecording(c: Context) {
     }
 
     const dur = durationMs ? Number(durationMs) : null;
-    const id = db.insertRecording(user.id, lessonNum, itemKey, storageKey, ct, dur, Date.now());
+    const id = db.insertRecording(user.id, lessonNum, itemKey, storageKey, ct, dur, Date.now(), idem);
 
     // Prune to the user's keep-N (clamped), deleting older takes' storage objects too.
     const keepN = Math.min(MAX_KEEP, Math.max(1, keep ? Number(keep) : DEFAULT_KEEP));

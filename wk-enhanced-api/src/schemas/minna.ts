@@ -62,6 +62,7 @@ export const MinnaRecordingPostQuerySchema = z.object({
     durationMs: z.string().regex(/^\d+$/).optional().openapi({ param: { name: 'durationMs', in: 'query' }, example: '1800' }),
     // Keep-the-newest-N per item; clamped to [1, 20] server-side.
     keep: z.string().regex(/^\d+$/).optional().openapi({ param: { name: 'keep', in: 'query' }, example: '3' }),
+    idem: z.string().min(1).max(64).optional().openapi({ param: { name: 'idem', in: 'query' }, example: 'a1b2c3d4', description: 'Client idempotency key; a replay returns the prior take instead of saving a duplicate.' }),
 });
 
 export const MinnaRecordingPostResponseSchema = z
