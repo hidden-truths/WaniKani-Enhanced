@@ -695,7 +695,7 @@ Component contracts you must preserve:
   cover it. **Materialization does NOT change record-compare's skeleton-keying**, and a realization
   still renders PLAIN ruby (no GiNZA tap-to-lookup) until the **next offline NLP parse** picks up the
   now-public combo rows (no Python on prod → the lag is by design). Full doc: [SELFTALK.md](SELFTALK.md);
-  design + the settled open questions: [../SENTENCE_STORE_TEMPLATES.md](../SENTENCE_STORE_TEMPLATES.md).
+  design + the settled open questions: [../docs/history/SENTENCE_STORE_TEMPLATES.md](../docs/history/SENTENCE_STORE_TEMPLATES.md).
 - **Record-and-compare (`record-compare.js`, the generic engine; Minna + Self-Talk glue feed it):
   the conversation has ONE whole-dialogue MP3, so
   per-line native compare slices it — it does NOT have per-line audio.** A line's native

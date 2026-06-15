@@ -12,6 +12,8 @@ state of the project start at [../../NEXT_STEPS.md](../../NEXT_STEPS.md) and
   session that produced the phases below).
 - **SENTENCE_STORE_PHASE1.md** / **SENTENCE_STORE_PHASE2.md** — the executable build plans
   for Self-Talk (Phase 1) and built-in examples (Phase 2), both shipped.
+- **SENTENCE_STORE_TEMPLATES.md** — the slot-swap-templates design + as-built. Both slices
+  shipped (`be2ee94`, `d29c620`); only the deferred user-authored-templates idea remains.
 
-The living sentence-store docs (the NLP hub, the Phase-4 as-built + the ⭐ tokenization
-rework, and the templates as-built) stay at the repo root as `SENTENCE_STORE_*.md`.
+The living sentence-store docs (the NLP hub + the Phase-4 as-built, which still tracks the ⭐
+tokenization rework) stay at the repo root as `SENTENCE_STORE_*.md`.

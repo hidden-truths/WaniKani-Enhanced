@@ -121,7 +121,7 @@ sentences ("I'm almost out of [wood], let me go [chop] some" → swap the filler
 > `owner_type='template'`, copying the template's curated grammar — so de-dup / export / grammar
 > search / TTS pre-gen cover the combos people use. Tap-to-lookup tokens still LAG until the next
 > offline NLP parse (no Python on prod), so a fresh combo renders plain ruby until then. Full design +
-> phasing + status: [../SENTENCE_STORE_TEMPLATES.md](../SENTENCE_STORE_TEMPLATES.md).
+> phasing + status: [../docs/history/SENTENCE_STORE_TEMPLATES.md](../docs/history/SENTENCE_STORE_TEMPLATES.md).
 
 - **Shape:** `{ id, topic, thought?, grammar, en, jp, slots:[{id,label,fillers:[{jp,en}]}] }`. `jp` is
   the skeleton with `{slotId}` markers + ruby on every fixed kanji; each filler's `jp` carries ruby too.
@@ -151,7 +151,7 @@ sentences ("I'm almost out of [wood], let me go [chop] some" → swap the filler
   degradation as user-authored phrases) until the **next offline NLP parse** picks up the now-public
   combo rows (no Python on prod → the lag is by design). Curated-only; **MODEL-GENERATED → proofread**,
   especially that each filler stays grammatical in the skeleton's tail. Full design + the settled
-  open questions: [../SENTENCE_STORE_TEMPLATES.md](../SENTENCE_STORE_TEMPLATES.md).
+  open questions: [../docs/history/SENTENCE_STORE_TEMPLATES.md](../docs/history/SENTENCE_STORE_TEMPLATES.md).
 
 ## Audio + record-and-compare (reuses the shared engine)
 

@@ -213,7 +213,7 @@ until the tap-to-lookup UI lands.
   served), and realizations get **lazily materialized** as `sentence` rows on first request (linked via
   `sentence_link(owner_type='template')`) so this NLP pipeline + the other store tooling cover the combos
   people actually use — tap-lookup tokens lag until the next offline re-parse. Full design + plan:
-  [SENTENCE_STORE_TEMPLATES.md](SENTENCE_STORE_TEMPLATES.md).
+  [SENTENCE_STORE_TEMPLATES.md](docs/history/SENTENCE_STORE_TEMPLATES.md).
 
 ## Invariants any phase must preserve
 

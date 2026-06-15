@@ -7,10 +7,9 @@ structure lives in the server `sentence_template` table (served by `GET /v1/temp
 the client); a used combo is materialized via `POST /v1/templates/{extId}/realize`. Read this first,
 then the linked files.
 
-**Where the code is:** `selftalk-grid` (the 9 template-UI commits) **and** Slice 1
-(`templates-sentence-store`, `be2ee94`) are merged to `main`. Slice 2 is on branch
-`templates-materialize` (`db.materializeTemplateRealization` + `db.getTemplate` + `lib/realize.ts` +
-`POST /v1/templates/{extId}/realize` + the client `maybeMaterialize` trigger).
+**Where the code is:** all merged to `main` — `selftalk-grid` (the 9 template-UI commits), Slice 1
+(`be2ee94`), and Slice 2 (`d29c620`: `db.materializeTemplateRealization` + `db.getTemplate` +
+`lib/realize.ts` + `POST /v1/templates/{extId}/realize` + the client `maybeMaterialize` trigger).
 
 ---
 
