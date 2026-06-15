@@ -182,47 +182,21 @@ These are ideas for the [wk-enhanced-api](wk-enhanced-api/) server. Most exist *
 
 ### ~~Deploy the server publicly~~ — DONE (2026-05-25)
 
-The first production deploy landed at `https://api.wkenhanced.dev` on DO (SFO3, $7/mo Premium AMD droplet + Spaces) with Cloudflare Tunnel in front. See [wk-enhanced-api/deploy/README.md](wk-enhanced-api/deploy/README.md) for the install recipe (updated post-deploy to capture every workaround). Phase 2 (default-on) shipped as userscript v1.1.1; Phase 3 (server-only + legacy snapshot + rename) shipped as v2.0.0 (see [CLIENT_MIGRATION.md](docs/history/CLIENT_MIGRATION.md)).
+Shipped: prod at `https://api.wkenhanced.dev` (DO SFO3 + Spaces + Cloudflare Tunnel). Install recipe: [wk-enhanced-api/deploy/README.md](wk-enhanced-api/deploy/README.md); migration phases: [docs/history/CLIENT_MIGRATION.md](docs/history/CLIENT_MIGRATION.md).
 
 ### Dockerize the server — **shipped to prod 2026-05-26**
 
-The droplet now runs the server as a Docker Compose stack ([Dockerfile](wk-enhanced-api/Dockerfile), [compose.yaml](wk-enhanced-api/compose.yaml), [.dockerignore](wk-enhanced-api/.dockerignore), [deploy/README.md](wk-enhanced-api/deploy/README.md)). Multi-stage build off `oven/bun:1.3.8` (pinned to match dev); production image carries only production deps + src + data + the deploy scripts. Container runs as the official `bun` user (uid 1000); host `/var/lib/wk-enhanced-api` chowned to 1000:1000 for the bind mount. HEALTHCHECK uses `bun --eval` against `/v1/health` so the image has zero non-Bun deps.
-
-Three systemd units wrap the stack:
-- [`wk-enhanced-api.service`](wk-enhanced-api/deploy/wk-enhanced-api.service) — thin `docker compose up -d` wrapper. Sets `ENV_FILE=/etc/wk-enhanced-api/env` + `DATA_DIR=/var/lib/wk-enhanced-api` so the same compose.yaml works on dev (`./.env` + `./.compose-data/` defaults) and prod (the systemd overrides).
-- [`wk-enhanced-api-warm.service`](wk-enhanced-api/deploy/wk-enhanced-api-warm.service) — curls `POST /v1/admin/warm {"scope":"all"}` against the container's published 127.0.0.1:3000 port (unchanged from pre-Docker — host-side curl reaches container the same way).
-- [`wk-enhanced-api-backup.service`](wk-enhanced-api/deploy/wk-enhanced-api-backup.service) — `docker exec wk-enhanced-api bun run /app/deploy/backup.ts`. Runs the backup script inside the running container (so the script can use `bun:sqlite` + `Bun.S3Client` from the image, no host-side deps).
-
-The 2026-05-26 migration was a one-shot conversion following the "Migrating from a pre-Docker droplet" recipe in deploy/README.md. DB preserved through `chown -R 1000:1000` (metadata-only operation); first containerized boot read the existing rows correctly; bulk re-warm against the new container closed the May-25 missing-words gap (see [NEXT_STEPS.md](NEXT_STEPS.md) "Shipped this session"). First daily backup ran end-to-end (1.6s, 114.6 MB DB) before the timer's first scheduled fire.
+Shipped: the droplet runs the server as a Docker Compose stack (`oven/bun:1.3.8`, uid-1000 `bun` user, bind-mounted SQLite + env) wrapped by three systemd units (run / monthly-warm / daily-backup). Build, migration, and ops detail: [wk-enhanced-api/deploy/README.md](wk-enhanced-api/deploy/README.md) + [wk-enhanced-api/CLAUDE.md](wk-enhanced-api/CLAUDE.md).
 
 Follow-ups (still queue items):
 
-- **CI publish to GHCR** on tag. Today's deploy is `git pull && docker compose build --pull && systemctl restart` on the droplet (rebuilds locally each time, ~1–2 min). Once a GitHub Actions pipeline publishes the image, the droplet flow drops to `docker compose pull && systemctl restart` (seconds). Skip until the local-build flow becomes annoying.
-- **Dev-mode Compose file** (`compose.dev.yaml`) with `--watch` + a bind-mount of `src/` for hot-reload, for contributors who want Docker-equivalent dev. Not urgent — `bun dev` stays the recommended dev loop.
-- **Bundle `sqlite3` CLI in the image** if `docker exec wk-enhanced-api sqlite3 ...` becomes a frequent ad-hoc query pattern. Trade-off is ~5MB of image bloat; today the host has `sqlite3` and the bind mount makes it accessible. Defer until it's actually annoying.
+- **CI publish to GHCR** on tag — drops the droplet deploy from a local `build --pull` (~1–2 min) to `docker compose pull` (seconds). Skip until the local-build flow is annoying.
+- **Dev-mode Compose** (`compose.dev.yaml` with `--watch` + an `src/` bind-mount) for Docker-equivalent dev. Not urgent — `bun dev` stays the recommended loop.
+- **Bundle the `sqlite3` CLI** in the image if ad-hoc `docker exec … sqlite3` becomes frequent (~5 MB bloat). Defer.
 
-The original design notes (the *why* — reproducibility, rollback story, secret handling, the "don't migrate to App Platform" caveat) are preserved below for archeology.
+### DOKS / Kubernetes — **rejected; ADR shipped 2026-05-25**
 
-**Originally specified**: a `Dockerfile` + `docker-compose.yml` so the server runs as a container on the droplet, not as a host-installed Bun binary. Optionally publish images to GitHub Container Registry on every commit.
-
-**Why**: today's deploy chains together a half-dozen host-level concerns (Bun installer, `useradd wkenhanced`, `chown`, systemd unit, `chmod 600` on env file, copy bun to `/usr/local`). A container collapses all of that to "pull image + docker compose up." Future deploys to a new droplet drop from ~30 minutes to ~5 minutes. Also gives us:
-- **Reproducibility**: Bun version pinned in the image instead of "whatever the installer pulled."
-- **Rollback**: `docker compose down && docker pull <previous> && docker compose up` beats `git checkout && bun install`.
-- **Dev/prod parity**: contributors run an identical container locally.
-- **Cleaner secret handling**: Docker secrets / Compose env files instead of `/etc/wk-enhanced-api/env`.
-
-**How**:
-- `Dockerfile`: `FROM oven/bun:1.3` (official image), `COPY package.json bun.lockb ./`, `bun install --production`, `COPY src/ src/`, `COPY data/ data/`, `CMD ["bun", "run", "start"]`. Multi-stage build to drop dev deps from the final image.
-- `docker-compose.yml`: one service, mount `/var/lib/wk-enhanced-api` (SQLite + media-if-local) and `/etc/wk-enhanced-api/env` (env), expose `3000` to localhost only (Cloudflare Tunnel reaches it the same as today).
-- CI: GitHub Actions builds + publishes on tag, droplet pulls latest. Optional but tightens the loop.
-
-**Considerations**: SQLite needs a writable bind-mount; that's straightforward but worth testing under WAL concurrency. `Bun.S3Client` is bundled in Bun; no separate AWS SDK to install. The systemd unit becomes a thin wrapper that runs `docker compose up`. Cloudflare Tunnel stays host-side (no need to containerize it). **Don't migrate to DO App Platform** — its filesystem is ephemeral, which would force a Postgres switch (= +$15/mo). The point of containerizing is operational hygiene, not platform migration.
-
-**Effort**: half a day, including the Compose file + deploy README rewrite + verifying the SQLite + Spaces paths still work under the bind-mount.
-
-### DOKS / Kubernetes — **ADR shipped 2026-05-25**
-
-Written up as [wk-enhanced-api/docs/decisions/ADR-001-no-kubernetes.md](wk-enhanced-api/docs/decisions/ADR-001-no-kubernetes.md) — captures the cost analysis ($24/mo control plane + node vs our current $11/mo all-in), the workload-shape mismatch (one service, bounded traffic, stateful filesystem), the pod-eviction hazard for stateful services, and the operational complexity (~10 manifest types vs five files of systemd). Linked from `wk-enhanced-api/CLAUDE.md` next to the SQLite-not-Postgres dead-end so the two coupled decisions read together. Includes a "when to revisit this" section pinning the trip-wires (more than one service, zero-downtime requirement, multi-region, past vertical-scaling headroom).
+Rejected. Decision + cost analysis ($24/mo+ control-plane/node vs our $11/mo all-in), the workload-shape mismatch (one stateful service), and the revisit trip-wires: [wk-enhanced-api/docs/decisions/ADR-001-no-kubernetes.md](wk-enhanced-api/docs/decisions/ADR-001-no-kubernetes.md) (linked from `wk-enhanced-api/CLAUDE.md` beside the SQLite-not-Postgres dead-end).
 
 ### Per-endpoint IK rate limits (separate gates for /search vs /download_media)
 
@@ -240,11 +214,7 @@ Written up as [wk-enhanced-api/docs/decisions/ADR-001-no-kubernetes.md](wk-enhan
 
 ### 429 retry-with-exponential-backoff in IK service — **shipped 2026-05-25**
 
-Landed across two commits:
-- **`983dcb7`** — `fetchJson` (covers `ikSearch` + `ikIndexMeta`). Base 1s × 2^attempt backoff, cap 30s, 3 retries (4 total attempts). Honors `Retry-After` (delta-seconds and HTTP-date forms; numeric-input short-circuit so Bun's lax `Date.parse("-5")` doesn't accidentally produce a valid timestamp). Logs `ik.fetch.429_backoff` per retry. **5xx deliberately not retried** — different failure mode (server bug, not rate limit); easy to add later if needed.
-- **`942175c`** — same retry budget applied to `ikDownloadMedia` via a shared `fetchWithRetry` helper. Most IK traffic in a bulk warm is `/download_media`, so this is where the retry budget pays off most. Small-body proxy-misses (`<1KB` response) are *not* retried — those are structural "file missing on IK" signals, not transient.
-
-`lastIkCallAt` is intentionally not reset during backoff — the next `rateLimit()` call re-applies the `MIN_GAP_MS` gate naturally, and the backoff sleep is almost always longer than the gate so we don't pay double. Test-only `_ikFetchConfig` knob lets the suite shrink wait times; mirrors the `_useDbForTesting` pattern in `db/client.ts`. The 15s `AbortSignal.timeout` in `ikDownloadMedia` stays as a hard ceiling for the whole call (retries cut into the same budget) — acceptable because media failures leave `audioUrl`/`imageUrl` null and the warm completes anyway via the incomplete-payload signal.
+Shipped (`983dcb7` + `942175c`): `fetchJson` (covers `ikSearch`/`ikIndexMeta`) + `ikDownloadMedia` retry 429s with base-1s × 2^attempt backoff (cap 30s, 3 retries), honor `Retry-After`, and deliberately skip 5xx + small-body proxy-misses. Logs `ik.fetch.429_backoff` per retry; test-only `_ikFetchConfig` shrinks waits. Full rationale: the IK rate-limit dead-end in [wk-enhanced-api/CLAUDE.md](wk-enhanced-api/CLAUDE.md).
 
 ### Two-phase lazy-fill (warm example[0] sync, defer the rest)
 
@@ -354,9 +324,7 @@ Landed across two commits:
 
 ### ETag on /v1/index_meta — **shipped 2026-05-25**
 
-`/v1/index_meta` now supports `If-None-Match`. Same conditional-GET pattern as `/v1/vocab/{word}`: strong ETag derived from `row.fetchedAt`, weak-prefix tolerance for Cloudflare-downgraded validators, 304 path that echoes the same `Cache-Control` + `ETag` headers as 200. The helper pair (`etagFor`, `normalizeEtag`) moved out of `routes/vocab.ts` into `src/lib/etag.ts` so both routes share one definition; unit tests followed the helpers to `src/lib/etag.test.ts`, and four new integration tests cover the round-trip (200 → 304, weak-prefix tolerance, stale-tag 200 path).
-
-`/v1/admin/jobs` is still not ETag-gated — it changes on every warm and only the maintainer hits it, so the win doesn't materialize. Leave alone unless an operator-facing dashboard ever polls it heavily.
+Shipped: `/v1/index_meta` honors `If-None-Match` (same conditional-GET pattern as `/v1/vocab/{word}`); the `etagFor`/`normalizeEtag` helpers were extracted to `src/lib/etag.ts` + tests. (`/v1/admin/jobs` stays un-gated — it changes every warm and only the maintainer polls it.)
 
 ### Bulk endpoint with opt-in warming
 
@@ -414,9 +382,7 @@ Landed across two commits:
 
 ### SQLite backup story — **shipped 2026-05-25**
 
-Implemented under [wk-enhanced-api/deploy/](wk-enhanced-api/deploy/): `backup.ts` uses `bun:sqlite`'s `VACUUM INTO` for a WAL-safe atomic snapshot, then uploads to `s3://<bucket>/backups/YYYY-MM-DD.sqlite` (private) via `Bun.S3Client`, then prunes older backups per a GFS retention policy (default 7 daily + 4 weekly + 12 monthly, tunable via `BACKUP_RETAIN_{DAILY,WEEKLY,MONTHLY}`). The retention selection is a pure helper in `retention.ts` with 15 unit tests. Wired into systemd as `wk-enhanced-api-backup.service` + `wk-enhanced-api-backup.timer` (daily at 03:00 UTC, `Persistent=true` for missed-trigger replay).
-
-Deviations from the original design: no `sqlite3` or `s3cmd` host binaries needed — Bun's built-in primitives cover both the snapshot and the S3 operations. GFS retention is implemented in TypeScript with pure-function tests rather than as ad-hoc bash. See [wk-enhanced-api/deploy/README.md](wk-enhanced-api/deploy/README.md) for install + tunables.
+Shipped: [wk-enhanced-api/deploy/](wk-enhanced-api/deploy/) — `backup.ts` does a WAL-safe `VACUUM INTO` snapshot → `s3://<bucket>/backups/YYYY-MM-DD.sqlite` (private) → GFS prune (default 7 daily + 4 weekly + 12 monthly; pure-helper `retention.ts` + 15 tests), wired to `wk-enhanced-api-backup.timer` (daily 03:00 UTC). No host `sqlite3`/`s3cmd` needed — Bun built-ins. Install + tunables: [wk-enhanced-api/deploy/README.md](wk-enhanced-api/deploy/README.md).
 
 ### Keyed external services (DeepL, OpenAI, Forvo, jpdb)
 
