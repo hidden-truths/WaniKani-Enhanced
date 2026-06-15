@@ -69,7 +69,11 @@ If you're adding something that doesn't fit a row above — a new external servi
 src/
 ├── index.ts                  # OpenAPIHono app, CORS + request log, /docs, /openapi.json, static /media route, boot
 ├── config.ts                 # env-var loading; everything goes through here, no process.env scattered
-├── schemas.ts                # Zod schemas → single source of truth for runtime validation + OpenAPI generation
+├── schemas.ts                # barrel re-exporting schemas/* (so `import { XSchema } from '../schemas.ts'` is unchanged)
+├── schemas/                  # Zod schemas → single source of truth for runtime validation + OpenAPI generation.
+│                             #   One cohesive module per domain: common (base/leaf) · vocab · warm · accounts ·
+│                             #   progress · minna · audio · sentences · templates. One-way layering, no cycles
+│                             #   (common ← sentences; vocab ← warm). Add a schema to its domain file, not the barrel.
 ├── db/
 │   ├── schema.sql            # SQLite tables: vocab/warm + accounts/progress + the sentence store (sentence, translation, sentence_link, sentence_tag, sentence_annotation + public_sentence VIEW) + sentence_template (slot-swap generators) + public_template VIEW
 │   ├── connection.ts         # the bun:sqlite handle: getDb()/openDb()/_useDbForTesting (the test seam)
@@ -266,7 +270,7 @@ These have been investigated; don't re-explore.
 
 - **Storage `keys.ddg` does NOT pre-encode the word.** Earlier versions did, which caused double-encoding (`%25E9` in URLs). The storage layer (`LocalStorage.publicUrl` / `S3Storage.publicUrl`) owns all URL encoding. The on-disk filename for `食べる`'s DDG pool is literally `dev-data/media/ddg/食べる/0.jpg` (UTF-8 on disk), which serves as `/media/ddg/%E9%A3%9F%E3%81%B9%E3%82%8B/0.jpg`. Don't add encoding to the keys layer.
 
-- **`/openapi.json` is auto-generated from Zod schemas; do not hand-write it.** Earlier we had a `src/openapi.ts` that was a hand-rolled spec; it's deleted. Add/change endpoints via `createRoute(...)` + a Zod schema in [src/schemas.ts](src/schemas.ts). The spec at `/openapi.json` and the docs at `/docs` update automatically.
+- **`/openapi.json` is auto-generated from Zod schemas; do not hand-write it.** Earlier we had a `src/openapi.ts` that was a hand-rolled spec; it's deleted. Add/change endpoints via `createRoute(...)` + a Zod schema in the relevant [src/schemas/](src/schemas/) domain module (re-exported by the [src/schemas.ts](src/schemas.ts) barrel). The spec at `/openapi.json` and the docs at `/docs` update automatically.
 
 - **`defaultHook` is per-`OpenAPIHono` instance, NOT inherited from the root app.** Every sub-router constructor must pass `{ defaultHook: zodHook }`. Easy to forget when adding a new route file — if validation failures suddenly return `{success, error}` instead of `{code, error, detail}`, that's the cause.
 
@@ -325,7 +329,7 @@ The `cacheStatus` enum on `vocab.serve` and on the http log line:
 
 **When you change the schema:**
 
-1. Update or add a Zod schema in [src/schemas.ts](src/schemas.ts).
+1. Update or add a Zod schema in the relevant [src/schemas/](src/schemas/) domain module (re-exported by the [src/schemas.ts](src/schemas.ts) barrel).
 2. If the change affects a stored payload shape, **bump `CACHE_SCHEMA_VERSION` equivalents** — currently there's no schema version pin on the server (the userscript has one); add one if mismatched cached data would be actively wrong rather than just stale.
 3. The OpenAPI spec at `/docs` updates on next page-load — no separate spec-generation step.
 

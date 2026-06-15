@@ -6,7 +6,7 @@ God-Object split** (shipped to `main`, commit `c78cc63`). That refactor decompos
 barrel, with per-repo tests. This doc covers the remaining three workstreams from the same
 review, in **recommended execution order**:
 
-- **D** — `schemas.ts` → per-domain modules (LOW risk, mechanical — same playbook as `db/client`). Do first as a warm-up.
+- **D** — `schemas.ts` → per-domain modules (LOW risk, mechanical — same playbook as `db/client`). Do first as a warm-up. **✅ SHIPPED.**
 - **B** — study-app sync: DRY collapse + resilient transport + offline queue + optimistic concurrency (MEDIUM risk, the high-value one).
 - **C** — `record-compare.js` decomposition (HIGH risk, lower leverage — its pure logic is already extracted). Do last / optional.
 
@@ -16,7 +16,7 @@ this doc owns the *how-to-execute*.
 
 | Workstream | Win | Risk | Effort | Order |
 |---|---|---|---|---|
-| **D** schemas split | SRP/ISP; co-locate schemas by domain | LOW (barrel + typecheck-guarded, zero behavior change) | ~1–2h | 1st |
+| **D** schemas split ✅ | SRP/ISP; co-locate schemas by domain | LOW (barrel + typecheck-guarded, zero behavior change) | ~1–2h | 1st — **SHIPPED** |
 | **B** sync DRY + resilience + concurrency | DRY + DIP + disconnection/concurrency resilience + new tests | MED (hot path; backward-compat progress contract) | ~1–2 days | 2nd |
 | **C** record-compare decomp | SRP on the DOM/audio glue | HIGH (no feature tests, stateful audio, many dead-ends) | ~1–2 days | 3rd / optional |
 
@@ -28,6 +28,8 @@ this doc owns the *how-to-execute*.
 ---
 
 ## Workstream D — `schemas.ts` → per-domain modules
+
+> **✅ SHIPPED.** The 733-line / 66-schema module is now `src/schemas/{common,vocab,warm,accounts,progress,minna,audio,sentences,templates}.ts` behind the `src/schemas.ts` re-export barrel. Every schema moved **byte-identical** (verified); all 11 route consumers unchanged; typecheck clean, 237 tests pass, `/openapi.json` identical (55 components, 25 paths). One deviation from the target below: `templates` got its **own** module (a 9th file) rather than folding into `sentences.ts`, mirroring `db/repos/templates.ts` + `routes/templates.ts` (the template schemas are self-contained). The grouping/steps below are kept as the as-built record.
 
 ### Problem
 [wk-enhanced-api/src/schemas.ts](wk-enhanced-api/src/schemas.ts) is **733 lines / 66 exported
