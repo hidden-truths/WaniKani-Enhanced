@@ -146,6 +146,19 @@ describe('songs — words (Mine vocab) + coverage inputs', () => {
         const words = db.getSongs({ viewer: a.id })[0]!.words;
         expect(words.filter((w) => w.lemma === 'うたう').length).toBe(1);
     });
+
+    test('getSongs aggregates lineCount / timedCount / words per song (no cross-song bleed)', () => {
+        const a = db.createUser('a@x.com', 'h');
+        db.createSong({ extId: 'usr-a-1', title: 'one', createdBy: a.id, lines: sampleLines() }); // 2 lines, 1 timed
+        db.createSong({ extId: 'usr-a-2', title: 'two', createdBy: a.id, lines: [
+            { text: 'やま', furigana: seg('やま'), tokens: [tok(0, 2, 'やま', 'NOUN', 'N5')] },
+        ] });
+        const byId = new Map(db.getSongs({ viewer: a.id }).map((s) => [s.id, s]));
+        expect([byId.get('usr-a-1')!.lineCount, byId.get('usr-a-1')!.timedCount]).toEqual([2, 1]);
+        expect([byId.get('usr-a-2')!.lineCount, byId.get('usr-a-2')!.timedCount]).toEqual([1, 0]);
+        // one song's words don't leak into another's aggregate
+        expect(byId.get('usr-a-2')!.words).toEqual([{ lemma: 'やま', jlpt: 'N5' }]);
+    });
 });
 
 describe('songs — timing + update + delete (owner-scoped)', () => {

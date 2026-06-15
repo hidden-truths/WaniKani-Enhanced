@@ -76,7 +76,7 @@ type SongRow = {
     created_at: number;
 };
 
-function songMeta(row: SongRow, lines: AssembledSentence[]): SongMeta {
+function songMetaFrom(row: SongRow, lineCount: number, timedCount: number): SongMeta {
     return {
         id: row.ext_id,
         title: row.title,
@@ -84,9 +84,14 @@ function songMeta(row: SongRow, lines: AssembledSentence[]): SongMeta {
         youtubeId: row.youtube_id,
         source: row.source,
         custom: row.created_by != null,
-        lineCount: lines.length,
-        timedCount: lines.filter((l) => l.link.clip_start_ms != null).length,
+        lineCount,
+        timedCount,
     };
+}
+
+// The assembled-lines caller (getSong) derives the counts from the lines it already holds.
+function songMeta(row: SongRow, lines: AssembledSentence[]): SongMeta {
+    return songMetaFrom(row, lines.length, lines.filter((l) => l.link.clip_start_ms != null).length);
 }
 
 // Pre-validate every line's token offsets against its own text BEFORE any mutation, mirroring the
@@ -105,18 +110,17 @@ function assertTokenOffsets(lines: SongLineInput[]): void {
     }
 }
 
-// Distinct content-word {lemma, jlpt} across a song's lines (for the library coverage % + Mine).
-function songWords(lines: AssembledSentence[]): SongWord[] {
-    const seen = new Map<string, SongWord>();
-    for (const ln of lines) {
-        for (const t of ln.annotation?.tokens ?? []) {
-            if (!CONTENT_POS.has(t.pos)) continue;
-            const lemma = t.lemma || t.surface;
-            if (!lemma || seen.has(lemma)) continue;
-            seen.set(lemma, { lemma, jlpt: t.jlpt ?? null });
-        }
+// Fold one line's content-word {lemma, jlpt} into `seen` (for the library coverage % + Mine vocab).
+// Particles/auxiliaries/punctuation aren't studiable vocabulary. Mutates `seen` so a song's lines
+// accumulate into one deduped set (a chorus word counted once). Operates on a raw token list so the
+// library aggregate can feed it straight from the annotation blob — no full sentence assembly.
+function collectContentWords(seen: Map<string, SongWord>, tokens: AnnotationToken[]): void {
+    for (const t of tokens) {
+        if (!CONTENT_POS.has(t.pos)) continue;
+        const lemma = t.lemma || t.surface;
+        if (!lemma || seen.has(lemma)) continue;
+        seen.set(lemma, { lemma, jlpt: t.jlpt ?? null });
     }
-    return [...seen.values()];
 }
 
 // Insert one lyric line (sentence row + translation + grammar tags + the song link + LLM tokens).
@@ -178,14 +182,45 @@ export function countUserSongs(viewer: number): number {
 
 // Library list: public starters + the caller's own private songs (privacy-gated), newest first,
 // each with its line/timed counts + the distinct content-word list (coverage + difficulty).
+//
+// TWO gated queries total — NOT a per-song full assembly. The old path called getSentences per song
+// (a translation + tag sub-query PER LINE, plus furigana/token JSON.parse) just to derive counts +
+// words: ~O(total lines) round-trips on every library load, and the route is no-store. Instead we
+// pull every visible song line ONCE — only its clip flag + token blob — and fold it into per-song
+// aggregates. The line gate mirrors the song gate (a song's lines share its visibility), so this
+// returns exactly the lines of the songs selected above; the LEFT JOIN keeps unannotated lines.
 export function getSongs(opts: { viewer?: number | null }): SongListItem[] {
     const viewer = opts.viewer ?? null;
-    const rows = getDb()
+    const db = getDb();
+    const rows = db
         .query('SELECT * FROM song WHERE public = 1 OR created_by = ? ORDER BY created_at DESC')
         .all(viewer) as SongRow[];
+    if (!rows.length) return [];
+
+    const lineRows = db
+        .query(
+            `SELECT l.owner_id AS song, l.clip_start_ms AS clip, a.tokens AS tokens
+               FROM sentence_link l
+               JOIN sentence s ON s.id = l.sentence_id
+               LEFT JOIN sentence_annotation a ON a.sentence_id = s.id
+              WHERE l.owner_type = 'song' AND (s.public = 1 OR s.created_by = ?)`,
+        )
+        .all(viewer) as { song: string | null; clip: number | null; tokens: string | null }[];
+
+    type Agg = { lineCount: number; timedCount: number; words: Map<string, SongWord> };
+    const bySong = new Map<string, Agg>();
+    for (const r of lineRows) {
+        if (r.song == null) continue;
+        let agg = bySong.get(r.song);
+        if (!agg) bySong.set(r.song, (agg = { lineCount: 0, timedCount: 0, words: new Map() }));
+        agg.lineCount++;
+        if (r.clip != null) agg.timedCount++;
+        if (r.tokens) collectContentWords(agg.words, JSON.parse(r.tokens) as AnnotationToken[]);
+    }
+
     return rows.map((row) => {
-        const lines = getSentences({ ownerType: 'song', ownerId: row.ext_id, viewer, includeAnnotations: true });
-        return { ...songMeta(row, lines), words: songWords(lines) };
+        const agg = bySong.get(row.ext_id);
+        return { ...songMetaFrom(row, agg?.lineCount ?? 0, agg?.timedCount ?? 0), words: agg ? [...agg.words.values()] : [] };
     });
 }
 
