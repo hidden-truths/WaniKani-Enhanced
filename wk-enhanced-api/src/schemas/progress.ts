@@ -22,6 +22,13 @@ export const ProgressPutRequestSchema = z
         data: z.any().openapi({
             description: 'The full client store to persist. Replaces the prior blob.',
         }),
+        baseUpdatedAt: z.number().int().optional().openapi({
+            description:
+                'Optimistic-concurrency guard: the updatedAt the client last saw for this blob. ' +
+                'If the stored row has moved past it, the write is rejected with 409 and the current ' +
+                '{ data, updatedAt } so the client can reconcile. OMIT for last-write-wins (the legacy ' +
+                'path — no client is forced to upgrade).',
+        }),
     })
     .openapi('ProgressPutRequest');
 
@@ -31,6 +38,17 @@ export const ProgressPutResponseSchema = z
         updatedAt: z.number().int(),
     })
     .openapi('ProgressPutResponse');
+
+// 409 body when a baseUpdatedAt no longer matches the stored row. Carries the server's current
+// copy so the client can reconcile in one round-trip (no follow-up GET).
+export const ProgressConflictResponseSchema = z
+    .object({
+        code: z.literal('conflict'),
+        error: z.string(),
+        data: z.any().nullable().openapi({ description: "The server's current blob (newer than the client's base)." }),
+        updatedAt: z.number().int().openapi({ description: "The server's current updatedAt." }),
+    })
+    .openapi('ProgressConflictResponse');
 
 // One completed study session, appended to the durable server-side log.
 export const SessionPostRequestSchema = z

@@ -14,6 +14,7 @@ import { vocabRouter } from './vocab.ts';
 import { healthRouter } from './health.ts';
 import { indexMetaRouter } from './indexMeta.ts';
 import { adminRouter } from './admin.ts';
+import { progressRouter } from './progress.ts';
 import { openDb, _useDbForTesting } from '../db/client.ts';
 import * as db from '../db/client.ts';
 import { _setWarmAllInFlightForTesting } from '../warm/pipeline.ts';
@@ -30,6 +31,7 @@ beforeEach(() => {
     app.route('/v1/health', healthRouter);
     app.route('/v1/index_meta', indexMetaRouter);
     app.route('/v1/admin', adminRouter);
+    app.route('/v1/progress', progressRouter);
 });
 
 afterEach(() => {
@@ -272,6 +274,49 @@ describe('POST /v1/admin/warm — concurrency guard', () => {
                 body: JSON.stringify({ scope: 'all' }),
             }),
         );
+        expect(res.status).toBe(401);
+    });
+});
+
+describe('PUT /v1/progress/{app} — optimistic concurrency (B4)', () => {
+    function signIn(email: string, token: string) {
+        const u = db.createUser(email, 'h');
+        db.createSession(token, u.id, Date.now() + 100_000);
+    }
+    function putProgress(token: string, appName: string, body: unknown) {
+        return app.fetch(
+            new Request('http://test.local/v1/progress/' + appName, {
+                method: 'PUT',
+                headers: { 'Content-Type': 'application/json', Cookie: 'wk_session=' + token },
+                body: JSON.stringify(body),
+            }),
+        );
+    }
+
+    test('first PUT (no base) writes; a stale baseUpdatedAt → 409 carrying the current copy', async () => {
+        signIn('cc@b.com', 'cctok');
+        let res = await putProgress('cctok', 'verbs', { data: { cards: { 1: {} } } });
+        expect(res.status).toBe(200);
+        const { updatedAt } = (await res.json()) as { updatedAt: number };
+
+        res = await putProgress('cctok', 'verbs', { data: { cards: { 2: {} } }, baseUpdatedAt: updatedAt - 1 });
+        expect(res.status).toBe(409);
+        const body = (await res.json()) as { code: string; data: any; updatedAt: number };
+        expect(body.code).toBe('conflict');
+        expect(body.updatedAt).toBe(updatedAt);
+        expect(body.data).toEqual({ cards: { 1: {} } });   // server copy, not the rejected write
+    });
+
+    test('a matching baseUpdatedAt writes (200)', async () => {
+        signIn('cc2@b.com', 'cc2tok');
+        let res = await putProgress('cc2tok', 'verbs', { data: { v: 1 } });
+        const { updatedAt } = (await res.json()) as { updatedAt: number };
+        res = await putProgress('cc2tok', 'verbs', { data: { v: 2 }, baseUpdatedAt: updatedAt });
+        expect(res.status).toBe(200);
+    });
+
+    test('PUT without a valid session is 401', async () => {
+        const res = await putProgress('', 'verbs', { data: { v: 1 } });
         expect(res.status).toBe(401);
     });
 });

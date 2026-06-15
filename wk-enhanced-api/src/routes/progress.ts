@@ -16,6 +16,7 @@ import {
     ProgressGetResponseSchema,
     ProgressPutRequestSchema,
     ProgressPutResponseSchema,
+    ProgressConflictResponseSchema,
     ErrorSchema,
 } from '../schemas.ts';
 import { zodHook } from '../lib/zodHook.ts';
@@ -86,6 +87,10 @@ const putRoute = createRoute({
         },
         400: { description: 'Malformed body or blob too large.', content: { 'application/json': { schema: ErrorSchema } } },
         401: { description: 'Not logged in.', content: { 'application/json': { schema: ErrorSchema } } },
+        409: {
+            description: 'Optimistic-concurrency conflict — the blob changed since baseUpdatedAt.',
+            content: { 'application/json': { schema: ProgressConflictResponseSchema } },
+        },
     },
 });
 
@@ -93,7 +98,7 @@ progressRouter.openapi(putRoute, (c) => {
     const user = currentUser(c);
     if (!user) return unauthorized(c);
     const { app } = c.req.valid('param');
-    const { data } = c.req.valid('json');
+    const { data, baseUpdatedAt } = c.req.valid('json');
     // Guard blob size. Stringify once here; db.upsertProgress stringifies again
     // (cheap for a few KB) — the duplication keeps the repo layer's contract
     // "give me any JSON-serializable value" clean.
@@ -108,6 +113,20 @@ progressRouter.openapi(putRoute, (c) => {
             400,
         );
     }
-    const updatedAt = db.upsertProgress(user.id, app, data ?? null);
-    return c.json({ ok: true, updatedAt }, 200);
+    // Optimistic concurrency: when the client sends baseUpdatedAt and the stored row has moved
+    // past it, reject with 409 + the server's current copy so the client reconciles (server-wins).
+    // Omitting baseUpdatedAt keeps last-write-wins (no client is forced to upgrade).
+    const result = db.upsertProgress(user.id, app, data ?? null, baseUpdatedAt);
+    if (!result.ok) {
+        return c.json(
+            {
+                code: 'conflict' as const,
+                error: 'progress was modified since baseUpdatedAt',
+                data: result.current.data,
+                updatedAt: result.current.updatedAt,
+            },
+            409,
+        );
+    }
+    return c.json({ ok: true, updatedAt: result.updatedAt }, 200);
 });
