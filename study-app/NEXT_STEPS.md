@@ -155,6 +155,25 @@ build/test setup, and its own deploy.**
 This is the priority. The items below are smaller and can follow.
 
 ## Done (most recent first)
+- ~~歌 / Songs tab — Read + Mine foundation~~ — **shipped** (the foundation-first scope; full design +
+  per-phase checklist: [SONGS.md](SONGS.md)). A 6th tab turning real songs into reading/listening/
+  speaking practice. **Server:** a `song` table + each lyric line as a `sentence` row
+  (`owner_type='song'`, reusing the privacy gate); **`POST /v1/songs/analyze`** — the one genuinely
+  new capability — calls Claude (`@anthropic-ai/sdk`, forced tool-use; `ANTHROPIC_MODEL` default
+  `claude-opus-4-8`) to turn pasted lyrics into furigana + per-line English + grammar tags + per-word
+  JLPT, with the **server computing the UTF-16 token offsets** (never trust an LLM to count code
+  units); `ANTHROPIC_API_KEY`-gated → graceful **503** so it ships before the key is provisioned (the
+  rest of Songs works without it), like the Siri-voice rollout. A 故郷 public-domain starter seed.
+  **Client:** Library (your private songs + anon-readable starters, coverage %, source/level badges),
+  Add (paste + YouTube → analyze → review-flags → save, oEmbed auto-fill), **Read** (furigana flip,
+  reveal-on-tap English, tap-a-word via `overlayTokens`+`wireWordTaps`, grammar chips → reference,
+  per-line replay), **Mine** (vocab by JLPT known/added/new → vocab-activation under `Source:歌`,
+  grammar points + counts, save-line-as-Self-Talk-phrase). New `core/songs.js` (12 tests),
+  `features/songs{,-youtube}.js`, the `song` Source facet, the `songs` audio context. 269 server +
+  204 client tests + builds green; verified live in the preview. **Still to build** (specced in
+  SONGS.md): **Listen** (cloze ⇄ full-line dictation), **Shadow** + tap-to-sync line timing + the
+  YouTube IFrame sync, the `songs` synced progress blob (deferred to Shadow), starter-set curation,
+  the inline Add-review editor. **Operator:** set `ANTHROPIC_API_KEY` on the droplet to enable Add.
 - ~~Sentence-store Phase 2.5 — custom-card examples → private store rows (render-from-store)~~ —
   **shipped** (`sentence-store-phase2.5`). A custom card's whole example set (single `ex` + N5→N1
   `levels`) is dual-written to the server store as PRIVATE rows in one atomic call (`pushCardExamples`

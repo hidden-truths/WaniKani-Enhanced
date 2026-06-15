@@ -39,6 +39,7 @@ it outgrew "a few static files on the API droplet."
 | **Settings** | A gear (icon) in the navbar opens preferences (saved on the device, and synced to your account): default example level, show/hide furigana, default answer mode, audio, free-study-advances-due, and the みんなの日本語 record-and-compare options (recordings to keep per word, silence trim). It also holds **Backup** — JSON export/import of your progress. |
 | **Stats & Leeches** | Overall accuracy, the SRS memory pipeline (Leitner box histogram), daily + per-session accuracy line charts, the leech list, and per-card rolling accuracy (worst-first, capped). All charts are hand-rolled SVG — no chart library. |
 | **みんなの日本語** | A private, **account-gated** Minna no Nihongo lesson workbook (a 4th tab): pick a chapter and study its vocabulary with **native-speaker audio**, grammar points, example sentences, and the model conversation, keeping **per-lesson notes** synced to your account. "Add all vocab to deck" sends a chapter's words into the SRS deck as tagged cards. **Record-and-compare** (Phase 2): turn on speaking mode (controls dock in the navbar) to record your own voice per word / conversation line and **compare it to the native audio** — dual waveforms, 0.5–1× speed, you / native / both playback, and a per-lesson practice history. Owner-gated, so the copyrighted textbook material isn't public. Full doc: [MINNA.md](MINNA.md). |
+| **歌 / Songs** | Turn real songs into reading, listening, and speaking practice (a 6th tab). Paste a song's lyrics + a YouTube link and one **full-auto analysis pass** adds furigana, a per-line English translation, grammar tags, and a JLPT profile (with a proofread step). Then **Read** the lyric viewer (furigana toggle, reveal-on-tap translation, tap-a-word lookup, grammar chips) and **Mine** it — vocabulary by JLPT (known vs new) bulk-adds to the SRS deck under `Source: 歌`, and grammar points cross-link to practice. A small CC/public-domain starter set is readable without an account; your own pasted lyrics stay private. **Listen** + **Shadow** (record-and-compare) + tap-to-sync line timing are coming. Full doc: [SONGS.md](SONGS.md). |
 | **Accounts** | Optional. Sign in to mirror **progress + your custom verbs** to the server and sync across devices. Fully usable signed-out (localStorage). |
 
 ## Run it locally
@@ -89,6 +90,7 @@ session (`credentials:'include'`), set by the backing server:
 | POST | `/v1/sessions` | `{right,total,mode}` — append to the durable session-history log |
 | GET | `/v1/tts?text=<jp>` | Google TTS audio (`audio/mpeg`) for the reading |
 | `/v1/minna/*` | (account/owner-gated) | みんなの日本語 lessons, native audio, record-and-compare recordings + `/v1/minna/practice` history — see [MINNA.md](MINNA.md) |
+| `/v1/songs/*` | (anon-readable; writes account-gated) | 歌/Songs library + CRUD + the `analyze` LLM pass (+ `oembed`) — see [SONGS.md](SONGS.md) |
 
 Server-side details (auth model, cookie, tables) live in
 [../CLAUDE.md](../CLAUDE.md) under "Accounts + study app."

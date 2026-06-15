@@ -12,7 +12,9 @@ order. The actual DOM/render/feature glue is split into **`src/features/*`** mod
   `flashcard` (session lifecycle; owns `session`), `browse` (grid + detail modal + topic
   groups; owns `bcfg`), `stats` (charts), `custom-cards` (rebuildData + #verbModal CRUD),
   `settings-page`, `minna` (the みんなの日本語 dashboard), `selftalk` (the 独り言 Self-Talk
-  output/speaking-practice tab — see [SELFTALK.md](SELFTALK.md)), `record-compare` (the generic
+  output/speaking-practice tab — see [SELFTALK.md](SELFTALK.md)), `songs` + `songs-youtube` (the
+  歌/Songs song & lyric analysis tab — Library/Add/Read/Mine shipped; see [SONGS.md](SONGS.md)),
+  `record-compare` (the generic
   record-and-compare engine — fed by Minna AND Self-Talk; now a **directory**
   `record-compare/{state,capture,takes,playback,waveform,view}.js` behind a 13-export barrel
   `record-compare/index.js`, with `record-compare.js` a thin `export *` re-export so the two
@@ -102,7 +104,8 @@ Backend (auth, progress, cookie, the cross-origin CORS) is the server's:
 
 Markup: `#panel-study` (flashcard setup → card stage → done), `#panel-browse`
 (filter grid), `#panel-stats` (charts + leeches), `#panel-minna` (the みんなの日本語
-lesson dashboard — near-empty in markup, filled at runtime by `renderMinna`), plus
+lesson dashboard — near-empty in markup, filled at runtime by `renderMinna`),
+`#panel-selftalk` (独り言), `#panel-songs` (歌 — `#sgBody` filled by `renderSongs`), plus
 the header/toolbar, tabs, and the auth modal + sign-up banner.
 
 `data/verbs.js` holds the `VERBS` dataset. The old single-file `app.js` sections are now
@@ -717,6 +720,28 @@ Component contracts you must preserve:
   still renders PLAIN ruby (no GiNZA tap-to-lookup) until the **next offline NLP parse** picks up the
   now-public combo rows (no Python on prod → the lag is by design). Full doc: [SELFTALK.md](SELFTALK.md);
   design + the settled open questions: [../docs/history/SENTENCE_STORE_TEMPLATES.md](../docs/history/SENTENCE_STORE_TEMPLATES.md).
+- **歌 / Songs (`features/songs.js`) is anon-readable starters + account-gated BYO, and ASSEMBLES
+  existing primitives (sentence store, vocab-activation, tap-a-word, the grammar catalog, the
+  YouTube IFrame embed) — don't build parallel machinery. A song's lines are `sentence` rows
+  (`owner_type='song'`); the **Library + Add + Read + Mine** foundation is shipped, Listen + Shadow +
+  line-timing are not. Load-bearing dead-ends: (1) **the Add-flow analysis is a SERVER LLM pass**
+  (`POST /v1/songs/analyze`) — the client NEVER analyzes lyrics; it's `ANTHROPIC_API_KEY`-gated, so
+  the Add screen shows an "analysis isn't available yet" state (graceful 503) until the key is
+  provisioned, and Library/Read/Mine keep working without it. (2) `GET /v1/songs/{id}` returns each
+  line as an **AssembledSentence** (grammar in `tags.grammar`, EN in `translations.en`, tokens in
+  `annotation.tokens`, timing on `link.clip_start_ms`); `songs.js` `normalizeLine` flattens it into
+  `{text,furigana,en,grammar,tokens,clipStartMs,ordinal}` that `core/songs.js` + the render operate
+  on — keep that seam (don't read the nested shape in render code). (3) **line ordinal = array index**
+  (server returns lines sorted + contiguous; `compactLink` omits a falsy 0). (4) Mining reuses
+  vocab-activation: a word → a tagged dictionary-form custom card (`song:true`, tags
+  `['歌','song-<extId>']`) under the **Source facet** — `song` + `song-<id>` are routed to `source` in
+  `core/facets.js`, and `annotateSourceChips` now shows the row for songs too (hide-until-Minna-OR-
+  songs); the `歌` chip is in both pickers. (5) `runAnalyze` must read the lyrics `<textarea>` BEFORE
+  `render()` (render rebuilds it from `add.lyrics` — reading after gets the empty rebuilt field). (6)
+  the **YouTube IFrame Player API** (`features/songs-youtube.js`) is a NECESSARY external dep
+  (embedding is the copyright posture) loaded lazily; it degrades gracefully (Read+Mine work if it
+  never loads). The `songs` synced progress blob is deferred to the Shadow phase. **Full doc:
+  [SONGS.md](SONGS.md).**
 - **Record-and-compare (`record-compare.js`, the generic engine; Minna + Self-Talk glue feed it):
   the conversation has ONE whole-dialogue MP3, so
   per-line native compare slices it — it does NOT have per-line audio.** A line's native

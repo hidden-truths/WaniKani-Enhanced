@@ -51,6 +51,7 @@ Single scannable reference for every knob that differs between local dev and the
 | `COOKIE_DOMAIN` | blank (host-only) | `.wkenhanced.dev` | Session-cookie `Domain`. Blank = host-only (correct for dev + any same-origin deploy). Prod sets the dotted apex so the cookie set by `api.` also reaches the apex study-app origin. `lib/auth.ts` set + delete both honor it. |
 | `STUDY_APP_ORIGINS` | `http://localhost:5173` (the Vite default) | `https://wkenhanced.dev` | Comma-sep cross-origin allowlist for the study-app routes' credentialed CORS (`config.studyApp.allowedOrigins`). Only these origins get the echoed-origin + `Allow-Credentials` branch. |
 | `MINNA_OWNER_EMAILS` | usually blank (any signed-in user) | owner email(s) | Comma-sep allowlist gating the みんなの日本語 dashboard + audio (`/v1/minna/*`). Empty = any signed-in account; set to your email in prod to keep the copyrighted Minna content private. |
+| `ANTHROPIC_API_KEY` / `ANTHROPIC_MODEL` | usually blank (Songs analyze 503s) | the key (+ optional model, default `claude-opus-4-8`) | Powers `POST /v1/songs/analyze` (歌/Songs lyric analysis). OPTIONAL — blank → the analyze endpoint returns 503 and the rest of Songs still works; set it to light up the Add flow. Not a startup requirement (no boot validation). |
 | `SESSION_TTL_DAYS` | `30` | `30` | Login session lifetime (cookie maxAge + DB `expires_at`). |
 | Study-app serving | own `vite dev` process on `http://localhost:5173` | own **nginx container** (`web:` service); apex `https://wkenhanced.dev` → `127.0.0.1:8080` | SEPARATE container now — this API serves NO study-app assets (`/`, `/study`, `/app.js`, … are gone; `/` returns service-info JSON). Apex Tunnel ingress → `:8080`, `api.` → `:3000`. See deploy/README.md "two-container cut-over". |
 | `WK_API_TOKEN` | usually blank (skip `scope:all` warms) | required for monthly bulk warm | Personal token from your WK settings. |
@@ -75,9 +76,9 @@ src/
 │                             #   progress · minna · audio · sentences · templates. One-way layering, no cycles
 │                             #   (common ← sentences; vocab ← warm). Add a schema to its domain file, not the barrel.
 ├── db/
-│   ├── schema.sql            # SQLite tables: vocab/warm + accounts/progress + the sentence store (sentence, translation, sentence_link, sentence_tag, sentence_annotation + public_sentence VIEW) + sentence_template (slot-swap generators) + public_template VIEW
+│   ├── schema.sql            # SQLite tables: vocab/warm + accounts/progress + the sentence store (sentence, translation, sentence_link, sentence_tag, sentence_annotation + public_sentence VIEW) + sentence_template (slot-swap generators) + public_template VIEW + song (歌/Songs metadata; lines live in the sentence store) + public_song VIEW
 │   ├── connection.ts         # the bun:sqlite handle: getDb()/openDb()/_useDbForTesting (the test seam)
-│   ├── repos/                # one cohesive repository module per aggregate — vocab, indexMeta, warmJobs, accounts, progress, studySessions, recordings, audioVariants, + the sentence store (sentenceCore shared helpers / sentences / annotations / templates). No SQL escapes these; tests live beside each as *.test.ts.
+│   ├── repos/                # one cohesive repository module per aggregate — vocab, indexMeta, warmJobs, accounts, progress, studySessions, recordings, audioVariants, + the sentence store (sentenceCore shared helpers / sentences / annotations / templates) + songs (歌/Songs metadata + lines). No SQL escapes these; tests live beside each as *.test.ts.
 │   └── client.ts             # barrel: re-exports connection + every repo, so `import * as db from '../db/client.ts'` is unchanged
 ├── lib/
 │   ├── jlpt.ts               # scoreJlpt() — direct port of userscript logic; bundled JLPT_VOCAB at data/jlpt-vocab.json
@@ -106,11 +107,13 @@ src/
 │   ├── minna.ts              # /v1/minna/* — みんなの日本語 lessons + practice history (gated)
 │   ├── audio.ts              # /v1/audio/* — tagged TTS + variants + native + recordings (unified audio surface)
 │   ├── sentences.ts          # /v1/sentences* — the unified sentence store (read + user writes)
-│   └── templates.ts          # /v1/templates* — slot-swap templates + lazy realize
+│   ├── templates.ts          # /v1/templates* — slot-swap templates + lazy realize
+│   └── songs.ts              # /v1/songs* — 歌/Songs library + CRUD + the analyze endpoint (+ oembed)
 ├── services/
 │   ├── ik.ts                 # /search, /index_meta, /download_media — built-in 500ms rate limit
 │   ├── ddg.ts                # two-step vqd HTML scrape → i.js JSON
 │   ├── tts.ts                # Google Translate TTS (client=gtx, Referer spoof) + the storage-backed resolveTts
+│   ├── songAnalyze.ts        # 歌/Songs runtime lyric analysis: Claude (forced tool-use) → furigana/en/grammar/tokens; server computes UTF-16 offsets
 │   ├── minnaAudio.ts         # native vnjpclub MP3 proxy/cache (SSRF-guarded) for /v1/audio/native
 │   ├── wk.ts                 # WK v2 API for vocab corpus enumeration; needs WK_API_TOKEN
 │   └── storage.ts            # storage abstraction: LocalStorage + S3Storage drivers behind one interface
@@ -128,6 +131,7 @@ data/
 - **`@hono/zod-openapi`** — wraps Hono routes with Zod schemas. Single source of truth for validation + OpenAPI docs.
 - **`zod`** (v4) — schemas.
 - **`@scalar/hono-api-reference`** — FastAPI-style docs UI at `/docs`.
+- **`@anthropic-ai/sdk`** — the 歌/Songs lyric-analysis pass (`services/songAnalyze.ts`). The clear win: turning arbitrary pasted lyrics into furigana + English + grammar + JLPT at runtime is the one capability nothing else provides (GiNZA is offline-only). Used by exactly one endpoint, behind an optional env key.
 - **Bun built-ins** for SQLite (`bun:sqlite`) and S3 (`Bun.S3Client`) — no external DB driver, no AWS SDK.
 
 That's the entire `dependencies` block. Resist adding more without a clear win.
@@ -228,6 +232,12 @@ Lazy fill (`GET /v1/vocab/{word}` on a cold word) calls `warmWord()` synchronous
 | PUT | `/v1/sentences/card/{rank}` | Cookie | Replace a custom card's whole example set as PRIVATE rows (Phase 2.5). Body `{examples:[{slot,text,furigana,en}]}` (slot ∈ `ex`/`N5`..`N1`, ≤6); `db.replaceUserCardExamples` deletes the caller's OWN `owner_type='card'`/`owner_id=rank` rows (scoped to `created_by` so it can't touch a public built-in) then inserts the set (`source='custom'`, `public=0`). Empty `examples` clears (card delete). Two path segments so it never shadows `PUT /{id}`. |
 | GET | `/v1/templates[?source=]` | Cookie* | Slot-swap TEMPLATES (the generator structure) via `db.getTemplates` — the literal mirror of the `getSentences` privacy gate. Public (anon) + the caller's own private templates. Curator-only today (no write path). *Anon-readable; in `STUDY_ROUTE` because the study app's call is credentialed. `no-store`. |
 | POST | `/v1/templates/{extId}/realize` | Cookie | Materialize one filler combo into a PUBLIC `sentence` row (Slice 2). Body carries ONLY `{picks}`; the server reconstructs text/furigana/English from the stored skeleton and `db.materializeTemplateRealization` upserts it (`source='template'`, `owner_type='template'` link, idempotent by hash) with the template's curated grammar copied on. Account-gated (writes the public corpus). 404 if the template isn't visible; 400 on furigana mismatch. |
+| GET | `/v1/songs` | Cookie* | 歌/Songs library: public starter songs (anon) + the caller's own private songs, with per-song line/timed counts + distinct content-words (coverage). `db.getSongs` reuses the `getSentences` privacy gate. *Anon-readable; in `STUDY_ROUTE` (credentialed). `no-store`. |
+| GET | `/v1/songs/{id}` | Cookie* | One song: metadata + ordered lines (each an AssembledSentence with `?annotate` tokens + clip timing). Gated. |
+| POST | `/v1/songs` | Cookie | Persist a reviewed analysis as a PRIVATE song: a `song` row + one `sentence` row per line (`owner_type='song'`, ordinal, clip_*) + translations/grammar tags/LLM-token annotations. Idempotent by ext_id. |
+| POST | `/v1/songs/analyze` | Cookie | **The runtime LLM pass** — lyrics → per-line furigana + English + grammar + JLPT tokens via Claude (`services/songAnalyze.ts`, forced tool-use). `503 service_unavailable` when `ANTHROPIC_API_KEY` is unset (so it ships before the key is provisioned). |
+| GET | `/v1/songs/oembed?url=` | Cookie | Keyless YouTube oEmbed proxy → `{title, author, youtubeId}` (SSRF-guarded id parse) for Add-flow auto-fill. |
+| PUT/PUT/DELETE | `/v1/songs/{id}[/timing]` | Cookie | Edit metadata / save per-line tap-to-sync clip starts / delete (owner-scoped). |
 | GET | `/docs` | — | Scalar UI. |
 | GET | `/openapi.json` | — | Auto-generated OpenAPI 3.1 spec. |
 | GET | `/_info` | — | Service-info JSON (the old `/` payload, relocated now that `/` serves the app). |
@@ -241,6 +251,8 @@ Lazy fill (`GET /v1/vocab/{word}` on a cold word) calls `warmWord()` synchronous
 These have been investigated; don't re-explore.
 
 - **`sentence_annotation` token offsets are UTF-16 code-unit offsets, NOT codepoint offsets — do not "simplify" the parser to emit `token.idx`.** The client maps a tapped span back to a token by slicing `sentence.text` in JS, which is UTF-16-indexed; spaCy/GiNZA's `token.idx` is a Unicode *codepoint* offset. They're equal for every BMP character (all kana, kana punctuation, 常用漢字) — so a BMP-only spot check looks fine — but they diverge by +1 per non-BMP codepoint (rare CJK-Ext-B kanji like 𠮟 U+20B9F, a surrogate pair in JS). `sentence-nlp/parse.py` therefore converts to UTF-16 offsets and self-checks every token before writing the artifact, and `db.upsertAnnotation` re-asserts `text.slice(start,end)===surface` against V8 on every write (throws on mismatch). Both layers are pinned by a non-BMP test in `db/repos/annotations.test.ts` that asserts the codepoint offsets a naive parser *would* emit are REJECTED. If you swap the model or rewrite the parser, keep emitting UTF-16 offsets — codepoint offsets pass a kana/常用漢字 test and silently corrupt tap targets only on rare kanji.
+
+- **歌/Songs are the FIRST RUNTIME writer of `sentence_annotation` (LLM tokens), and the analysis is a server LLM pass gated on a key.** Until Songs, annotations were computed ONLY offline by GiNZA and the table was read-only in prod. `POST /v1/songs/analyze` ([src/services/songAnalyze.ts](src/services/songAnalyze.ts)) calls Claude (`@anthropic-ai/sdk`, forced tool-use; `ANTHROPIC_MODEL` default `claude-opus-4-8`) and writes the resulting tokens to `sentence_annotation` with `parser='llm:*'`. **The model returns tokens IN ORDER with NO offsets; the SERVER computes the UTF-16 offsets** by walking the line (`assembleAnalysis` — pure + unit-tested), so the `text.slice(start,end)===surface` contract still holds by construction — never trust an LLM to count code units. This is a deliberate, validated extension of the offline-only posture (song lines are private/curated rows outside the public GiNZA corpus); don't "fix" it back. The endpoint is `ANTHROPIC_API_KEY`-gated → **`503 service_unavailable` when unset** (so the whole Songs surface merges + ships before the key is provisioned; the client shows an "analysis not available yet" state and Library/Read/Mine keep working). A song's lines live in the store via `owner_type='song'` (the `song` table holds metadata, like `sentence_template`); reads reuse the `getSentences`/`upsertPublicSentenceByHash` privacy + reuse-by-hash machinery. Repo: [src/db/repos/songs.ts](src/db/repos/songs.ts); full doc: [../study-app/SONGS.md](../study-app/SONGS.md).
 
 - **IK title encoding is lossy and there is no clean heuristic recovery.** Multiple original titles collapse to the same encoded form (`"Kanon (2006)"`, `"Kanon  2006-"` → `"kanon__2006_"`). The regex heuristic in [src/lib/ikTitles.ts](src/lib/ikTitles.ts) is fallback-only and provably wrong for `durarara__` → "Durarara" (real: "Durarara!!") and similar. The fix is **always** the `/index_meta` map, not a smarter heuristic. The dead-end cases are pinned as tests in [src/lib/ikTitles.test.ts](src/lib/ikTitles.test.ts) — if anyone tries to "fix" the heuristic they'll see the tests intentionally pinning wrong output with a pointer to the right answer (use the map).
 
