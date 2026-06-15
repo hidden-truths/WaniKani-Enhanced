@@ -2,16 +2,16 @@
 //
 //   GET    /v1/audio/variants?text=      — catalog: which SYNTH voices exist for a text
 //   GET    /v1/audio/tts?text=&voice=    — serve a tagged synth clip (public)
-//   GET    /v1/audio/native?src=         — Minna native MP3 (gated)        [also /v1/minna/audio]
-//   POST   /v1/audio/recordings          — save a voice take (gated, per-user) [also /v1/minna/…]
+//   GET    /v1/audio/native?src=         — Minna native MP3 (gated)
+//   POST   /v1/audio/recordings          — save a voice take (gated, per-user)
 //   GET    /v1/audio/recordings?lesson=  — list the user's takes for a lesson (gated)
 //   GET    /v1/audio/recordings/{id}     — stream one of the owner's takes (gated)
 //   DELETE /v1/audio/recordings/{id}     — delete one of the owner's takes (gated)
 //
-// The native + recordings handlers are EXPORTED as path-agnostic functions and ALSO mounted at
-// the legacy /v1/minna/{audio,recordings…} paths by routes/minna.ts, so existing clients keep
-// working while the unified surface lands (Phase 1 of the audio-unify work). They read context
-// off the (already schema-validated) raw query/params so one function serves both path shapes.
+// The native + recordings handlers read all context off the (already schema-validated) raw
+// query/params rather than typed route bindings — originally so the same function could also
+// serve the legacy /v1/minna/{audio,recordings…} alias paths. Those aliases were removed once the
+// last client migrated to /v1/audio/*, which is the only surface now.
 
 import { OpenAPIHono, createRoute, z } from '@hono/zod-openapi';
 import type { Context } from 'hono';

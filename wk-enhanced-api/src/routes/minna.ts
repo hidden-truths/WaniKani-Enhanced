@@ -7,31 +7,22 @@
 //   GET /v1/minna/lessons/{n}    — the curated lesson JSON
 //   GET /v1/minna/practice       — the user's per-lesson practice history
 //
-// The AUDIO routes (native MP3 + per-user voice recordings) now live in routes/audio.ts under
-// the unified /v1/audio surface. They're ALSO mounted HERE at the legacy
-// /v1/minna/{audio,recordings…} paths — the SAME path-agnostic handler functions — so existing
-// clients keep working during the audio-unify transition (Phase 1). When nothing references the
-// legacy paths anymore, these alias mounts can be removed.
+// AUDIO (native MP3 + per-user voice recordings) lives entirely in routes/audio.ts under the
+// unified /v1/audio surface. The legacy /v1/minna/{audio,recordings…} alias mounts that kept
+// pre-audio-unify clients working were removed once the last consumer migrated — nothing is
+// served from /v1/minna/* except the lesson content + practice history below.
 //
 // Content lives in data/minna/lesson-<n>.json (git-tracked, curated by hand from the
 // scrape-minna.ts draft).
 
-import { OpenAPIHono, createRoute, z } from '@hono/zod-openapi';
+import { OpenAPIHono, createRoute } from '@hono/zod-openapi';
 import { readdir } from 'node:fs/promises';
 import { gate, denied } from '../lib/minnaGate.ts';
 import * as db from '../db/client.ts';
-import { serveNativeAudio, postRecording, listRecordings, getRecordingBytes, deleteRecording } from './audio.ts';
 import {
     MinnaLessonsResponseSchema,
     MinnaLessonSchema,
     MinnaLessonParamsSchema,
-    MinnaAudioQuerySchema,
-    MinnaRecordingPostQuerySchema,
-    MinnaRecordingPostResponseSchema,
-    MinnaRecordingsListQuerySchema,
-    MinnaRecordingsListResponseSchema,
-    MinnaRecordingIdParamsSchema,
-    MinnaRecordingDeleteResponseSchema,
     MinnaPracticeResponseSchema,
     ErrorSchema,
 } from '../schemas.ts';
@@ -106,53 +97,6 @@ minnaRouter.openapi(getRoute, async (c) => {
     return c.json(await file.json(), 200);
 });
 
-// ---------- Legacy audio aliases (handlers shared with /v1/audio — see routes/audio.ts) ----------
-
-const audioRoute = createRoute({
-    method: 'get',
-    path: '/audio',
-    tags: ['Accounts'],
-    summary: 'Proxy + cache a native-audio MP3 (legacy alias of /v1/audio/native)',
-    request: { query: MinnaAudioQuerySchema },
-    responses: {
-        200: { description: 'MP3 audio.', content: { 'audio/mpeg': { schema: z.any() } } },
-        400: { description: 'Bad audio path.', content: { 'application/json': { schema: ErrorSchema } } },
-        401: { description: 'Not authorized.', content: { 'application/json': { schema: ErrorSchema } } },
-        502: { description: 'Upstream fetch failed.', content: { 'application/json': { schema: ErrorSchema } } },
-    },
-});
-minnaRouter.openapi(audioRoute, serveNativeAudio);
-
-const recPostRoute = createRoute({
-    method: 'post',
-    path: '/recordings',
-    tags: ['Accounts'],
-    summary: 'Save a voice recording (legacy alias of /v1/audio/recordings)',
-    request: {
-        query: MinnaRecordingPostQuerySchema,
-        body: { required: true, content: { 'audio/webm': { schema: z.any() } } },
-    },
-    responses: {
-        200: { description: 'Saved.', content: { 'application/json': { schema: MinnaRecordingPostResponseSchema } } },
-        400: { description: 'Bad request (empty/too large/bad type).', content: { 'application/json': { schema: ErrorSchema } } },
-        401: { description: 'Not authorized.', content: { 'application/json': { schema: ErrorSchema } } },
-    },
-});
-minnaRouter.openapi(recPostRoute, postRecording);
-
-const recListRoute = createRoute({
-    method: 'get',
-    path: '/recordings',
-    tags: ['Accounts'],
-    summary: "List the current user's recordings for a lesson (legacy alias)",
-    request: { query: MinnaRecordingsListQuerySchema },
-    responses: {
-        200: { description: 'Recordings, newest first.', content: { 'application/json': { schema: MinnaRecordingsListResponseSchema } } },
-        401: { description: 'Not authorized.', content: { 'application/json': { schema: ErrorSchema } } },
-    },
-});
-minnaRouter.openapi(recListRoute, listRecordings);
-
 // ---------- GET /practice (per-lesson practice history) ----------
 //
 // One row per lesson the user has recorded in, with item + take counts and the last-practiced
@@ -178,30 +122,3 @@ minnaRouter.openapi(recPracticeRoute, (c) => {
     const totalItems = lessons.reduce((s, l) => s + l.items, 0);
     return c.json({ lessons, totalItems, totalTakes }, 200);
 });
-
-const recGetRoute = createRoute({
-    method: 'get',
-    path: '/recordings/{id}',
-    tags: ['Accounts'],
-    summary: 'Stream one of the current user’s recordings (legacy alias)',
-    request: { params: MinnaRecordingIdParamsSchema },
-    responses: {
-        200: { description: 'Audio bytes.', content: { 'audio/webm': { schema: z.any() } } },
-        401: { description: 'Not authorized.', content: { 'application/json': { schema: ErrorSchema } } },
-        404: { description: 'No such recording.', content: { 'application/json': { schema: ErrorSchema } } },
-    },
-});
-minnaRouter.openapi(recGetRoute, getRecordingBytes);
-
-const recDeleteRoute = createRoute({
-    method: 'delete',
-    path: '/recordings/{id}',
-    tags: ['Accounts'],
-    summary: 'Delete one of the current user’s recordings (legacy alias)',
-    request: { params: MinnaRecordingIdParamsSchema },
-    responses: {
-        200: { description: 'Deleted (idempotent).', content: { 'application/json': { schema: MinnaRecordingDeleteResponseSchema } } },
-        401: { description: 'Not authorized.', content: { 'application/json': { schema: ErrorSchema } } },
-    },
-});
-minnaRouter.openapi(recDeleteRoute, deleteRecording);

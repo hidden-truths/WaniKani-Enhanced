@@ -411,7 +411,7 @@ export const MinnaRecordingSchema = z
     })
     .openapi('MinnaRecording');
 
-// POST /v1/minna/recordings — the audio bytes are the raw request body; the
+// POST /v1/audio/recordings — the audio bytes are the raw request body; the
 // metadata rides in the query string.
 export const MinnaRecordingPostQuerySchema = z.object({
     lesson: z.string().regex(/^\d+$/).openapi({ param: { name: 'lesson', in: 'query' }, example: '23' }),

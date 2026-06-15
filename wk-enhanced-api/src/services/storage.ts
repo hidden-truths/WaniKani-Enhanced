@@ -68,7 +68,7 @@ class LocalStorage implements Storage {
     async put(key: string, body: ArrayBuffer | Uint8Array, _contentType: string, _opts?: PutOptions): Promise<string> {
         // ACL is a no-op for the local driver: the dev /media/* route is the only
         // way out and it's localhost-only, so there's no public-bucket exposure to
-        // gate. Recordings are served via the auth-gated /v1/minna/recordings route
+        // gate. Recordings are served via the auth-gated /v1/audio/recordings route
         // (storage.get), never via their publicUrl, in every driver.
         const path = join(this.rootDir, key);
         await mkdir(dirname(path), { recursive: true });
