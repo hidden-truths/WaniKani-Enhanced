@@ -239,7 +239,7 @@ export function getSong(opts: { extId: string; viewer?: number | null }): Assemb
 
 // Create a PRIVATE user song from a reviewed analysis. All furigana invariants are checked BEFORE
 // any mutation, so a bad line aborts the whole create. `parser` is the annotation provenance
-// (e.g. 'llm:claude-…'). The route guards idempotency (re-POST of an owned ext_id → existing song).
+// (e.g. 'llm:claude-…'). A re-POST of an owned ext_id is routed to replaceSongLines (upsert), not here.
 export function createSong(input: {
     extId: string;
     title: string;
