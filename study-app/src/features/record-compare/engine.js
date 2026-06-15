@@ -31,6 +31,7 @@ import {
 } from '../../core/index.js';
 import { HTTP_SERVED } from '../tts.js';
 import { cycleMod } from '../audio.js';
+import { S, audioCtx } from './state.js';   // shared mutable singletons + the one AudioContext
 
 // Capability gates. Recording needs getUserMedia + MediaRecorder; both are absent over
 // insecure origins / old browsers. When unavailable we degrade to a quiet hint.
@@ -101,9 +102,7 @@ export function exitSpeakingMode() { stopRecording(); stopLiveStream(); speaking
 // clips are short so the uncompressed size stays well under the 2 MB cap. Gated by the
 // `trimSilence` setting; any failure (decode unsupported, all-silence, too-short) falls back
 // to the untouched original.
-let _audioCtx = null;
-function audioCtx() { if (!_audioCtx) { const C = window.AudioContext || window.webkitAudioContext; _audioCtx = new C(); } return _audioCtx; }
-// encodeWav (Float32 → 16-bit PCM WAV Blob) is pure → core/recordings.js.
+// audioCtx() (the one Web Audio context) → ./state.js; encodeWav (Float32 → WAV Blob) → core/recordings.js.
 async function maybeTrim(blob, durationMs) {
   if (!settings.trimSilence) return { blob, durationMs };
   try {
@@ -147,7 +146,7 @@ export function speakingBarHtml() {
 function biasControlHtml() {
   return `<span class="cmp-bias" title="Balance you vs reference in ▶ both">
       <span class="mic-lbl">You</span>
-      <input type="range" class="bias-slider" min="-100" max="100" value="${Math.round(compareBias * 100)}" aria-label="▶ both balance: you vs reference">
+      <input type="range" class="bias-slider" min="-100" max="100" value="${Math.round(S.compareBias * 100)}" aria-label="▶ both balance: you vs reference">
       <span class="mic-lbl">Ref</span></span>`;
 }
 // The compare playback-speed segmented control (0.5/0.75/1×). Global — one rate for every
@@ -254,22 +253,21 @@ function playRange(a, window, volume, onDone) {
 }
 
 // ---------- gated playback of a saved take ----------
-let takeAudioEl = null, takePlayingBtn = null, takeStop = null;
-function ensureTakeAudio() { if (!takeAudioEl) { takeAudioEl = new Audio(); takeAudioEl.crossOrigin = 'use-credentials'; } return takeAudioEl; }
+function ensureTakeAudio() { if (!S.takeAudioEl) { S.takeAudioEl = new Audio(); S.takeAudioEl.crossOrigin = 'use-credentials'; } return S.takeAudioEl; }
 // Take-list ▶ — plays the WHOLE saved take (a quick listen, not a compare). Tears down any
 // windowed compare playback first so its timeupdate stop can't cut this short.
 function playTake(id, btn) {
   ensureTakeAudio();
-  if (takeStop) { takeStop(); takeStop = null; }
-  if (btn && btn === takePlayingBtn && !takeAudioEl.paused) { takeAudioEl.pause(); btn.classList.remove('playing'); takePlayingBtn = null; return; }
-  if (takePlayingBtn) takePlayingBtn.classList.remove('playing');
-  takeAudioEl.volume = 1;   // raw listen — full volume (compare playback may have left it normalized)
-  takeAudioEl.src = API_BASE + '/v1/audio/recordings/' + id;
-  takePlayingBtn = btn || null; if (btn) btn.classList.add('playing');
-  takeAudioEl.onended = takeAudioEl.onerror = () => { if (takePlayingBtn) { takePlayingBtn.classList.remove('playing'); takePlayingBtn = null; } };
-  takeAudioEl.play().catch(() => { if (btn) btn.classList.remove('playing'); takePlayingBtn = null; });
+  if (S.takeStop) { S.takeStop(); S.takeStop = null; }
+  if (btn && btn === S.takePlayingBtn && !S.takeAudioEl.paused) { S.takeAudioEl.pause(); btn.classList.remove('playing'); S.takePlayingBtn = null; return; }
+  if (S.takePlayingBtn) S.takePlayingBtn.classList.remove('playing');
+  S.takeAudioEl.volume = 1;   // raw listen — full volume (compare playback may have left it normalized)
+  S.takeAudioEl.src = API_BASE + '/v1/audio/recordings/' + id;
+  S.takePlayingBtn = btn || null; if (btn) btn.classList.add('playing');
+  S.takeAudioEl.onended = S.takeAudioEl.onerror = () => { if (S.takePlayingBtn) { S.takePlayingBtn.classList.remove('playing'); S.takePlayingBtn = null; } };
+  S.takeAudioEl.play().catch(() => { if (btn) btn.classList.remove('playing'); S.takePlayingBtn = null; });
 }
-function stopTake() { if (takeStop) { takeStop(); takeStop = null; } if (takeAudioEl) { try { takeAudioEl.pause(); } catch (e) {} } }
+function stopTake() { if (S.takeStop) { S.takeStop(); S.takeStop = null; } if (S.takeAudioEl) { try { S.takeAudioEl.pause(); } catch (e) {} } }
 
 // ---------- reference-audio playback ----------
 // Plays the chosen reference voice (native vnjpclub clip OR a synth voice) over its play window.
@@ -277,17 +275,16 @@ function stopTake() { if (takeStop) { takeStop(); takeStop = null; } if (takeAud
 // player can chain. ONE reused credentialed element serves both: native is gated, and the public
 // synth endpoint tolerates the credentialed cross-origin request (it's under the study-app CORS
 // allowlist), so `crossOrigin='use-credentials'` is safe for either source.
-let nativeAudioEl = null, nativeStop = null;
 function ensureNativeAudio() {
-  if (!nativeAudioEl) { nativeAudioEl = new Audio(); nativeAudioEl.crossOrigin = 'use-credentials'; }
-  return nativeAudioEl;
+  if (!S.nativeAudioEl) { S.nativeAudioEl = new Audio(); S.nativeAudioEl.crossOrigin = 'use-credentials'; }
+  return S.nativeAudioEl;
 }
-function stopNative() { if (nativeStop) { nativeStop(); nativeStop = null; } if (nativeAudioEl) { try { nativeAudioEl.pause(); } catch (e) {} } }
+function stopNative() { if (S.nativeStop) { S.nativeStop(); S.nativeStop = null; } if (S.nativeAudioEl) { try { S.nativeAudioEl.pause(); } catch (e) {} } }
 function playReference(ctx, v, window, volume, onDone) {
   const a = ensureNativeAudio();
   stopNative();
   a.src = refUrl(ctx, v);
-  nativeStop = playRange(a, window, volume, () => { nativeStop = null; if (onDone) onDone(); });
+  S.nativeStop = playRange(a, window, volume, () => { S.nativeStop = null; if (onDone) onDone(); });
 }
 
 // Stop ALL compare playback (reference + take), the cursor loop, and any lit compare buttons.
@@ -295,7 +292,7 @@ function stopCompare(control) {
   stopCursors();
   stopNative();
   stopTake();
-  if (takePlayingBtn) { takePlayingBtn.classList.remove('playing'); takePlayingBtn = null; }
+  if (S.takePlayingBtn) { S.takePlayingBtn.classList.remove('playing'); S.takePlayingBtn = null; }
   if (control) control.querySelectorAll('.cmp-btn.playing').forEach(b => b.classList.remove('playing'));
 }
 
@@ -304,7 +301,7 @@ function playTakeOnce(id, window, volume, onDone) {
   const a = ensureTakeAudio();
   stopTake();
   a.src = API_BASE + '/v1/audio/recordings/' + id;
-  takeStop = playRange(a, window, volume, () => { takeStop = null; if (onDone) onDone(); });
+  S.takeStop = playRange(a, window, volume, () => { S.takeStop = null; if (onDone) onDone(); });
 }
 
 // ---------- dual waveform (Web Audio decode → canvas) ----------
@@ -442,7 +439,6 @@ export function paintCompareWaveforms(root) {
 // one plays at a time — stopCompare clears the others). Each cursor maps its element's
 // currentTime over that element's ACTIVE PLAY WINDOW (so it sweeps the drawn region, not the
 // whole file). Just moves an absolutely-positioned div — no canvas redraw per frame.
-let cursorControl = null, cursorRaf = 0, activeNativeWindow = null, activeTakeWindow = null;
 function setCursor(control, wave, progress) {
   const cur = control.querySelector('.rec-wave-wrap[data-wave="' + wave + '"] .rec-wave-cursor');
   if (!cur) return;
@@ -457,17 +453,17 @@ function progressIn(a, w) {
   return null;
 }
 function tickCursors() {
-  const control = cursorControl;
-  if (!control) { cursorRaf = 0; return; }
-  setCursor(control, 'you', progressIn(takeAudioEl, activeTakeWindow));
-  setCursor(control, 'native', progressIn(nativeAudioEl, activeNativeWindow));
-  cursorRaf = requestAnimationFrame(tickCursors);
+  const control = S.cursorControl;
+  if (!control) { S.cursorRaf = 0; return; }
+  setCursor(control, 'you', progressIn(S.takeAudioEl, S.activeTakeWindow));
+  setCursor(control, 'native', progressIn(S.nativeAudioEl, S.activeNativeWindow));
+  S.cursorRaf = requestAnimationFrame(tickCursors);
 }
-function startCursors(control) { cursorControl = control; if (!cursorRaf) cursorRaf = requestAnimationFrame(tickCursors); }
+function startCursors(control) { S.cursorControl = control; if (!S.cursorRaf) S.cursorRaf = requestAnimationFrame(tickCursors); }
 function stopCursors() {
-  if (cursorRaf) { cancelAnimationFrame(cursorRaf); cursorRaf = 0; }
-  if (cursorControl) cursorControl.querySelectorAll('.rec-wave-cursor').forEach(c => { c.style.opacity = '0'; });
-  cursorControl = null; activeNativeWindow = null; activeTakeWindow = null; bothPlaying = false;
+  if (S.cursorRaf) { cancelAnimationFrame(S.cursorRaf); S.cursorRaf = 0; }
+  if (S.cursorControl) S.cursorControl.querySelectorAll('.rec-wave-cursor').forEach(c => { c.style.opacity = '0'; });
+  S.cursorControl = null; S.activeNativeWindow = null; S.activeTakeWindow = null; S.bothPlaying = false;
 }
 
 // ---------- HTML ----------
@@ -678,12 +674,11 @@ function clearBtn(btn) { if (btn) btn.classList.remove('playing'); }
 // Normalization gains for the currently-played reference/take pair (≤1, attenuate-only): bring the
 // louder clip down so the two play at ~equal volume. Computed from each source's RMS over its
 // spoken window; gain 1 when a level isn't known yet (buffer still decoding) or there's no pair.
-let activeNativeGain = 1, activeTakeGain = 1;
 function setActiveGains(ctx, id, refV) {
   if (refV && id != null) {
     const g = normGains(levelFor(refUrl(ctx, refV), refClip(ctx, refV)), levelFor(takeUrl(id), null));
-    activeNativeGain = g.a; activeTakeGain = g.b;
-  } else { activeNativeGain = 1; activeTakeGain = 1; }
+    S.activeNativeGain = g.a; S.activeTakeGain = g.b;
+  } else { S.activeNativeGain = 1; S.activeTakeGain = 1; }
 }
 
 // Compare BALANCE for ▶ both: a crossfader in [-1, 1] (−1 = all you, 0 = balanced, +1 = all
@@ -693,12 +688,11 @@ function setActiveGains(ctx, id, refV) {
 // it); live while both are sounding (bothPlaying).
 // The crossfader CURVE (biasNative/biasTake — b=+1 reference, b=−1 you, fade the other out) is pure
 // → core/recordings.js; imported above.
-let compareBias = 0, bothPlaying = false;
 function applyBothVolumes() {
-  if (nativeAudioEl) nativeAudioEl.volume = clamp01(activeNativeGain * biasNative(compareBias));
-  if (takeAudioEl) takeAudioEl.volume = clamp01(activeTakeGain * biasTake(compareBias));
+  if (S.nativeAudioEl) S.nativeAudioEl.volume = clamp01(S.activeNativeGain * biasNative(S.compareBias));
+  if (S.takeAudioEl) S.takeAudioEl.volume = clamp01(S.activeTakeGain * biasTake(S.compareBias));
 }
-function setCompareBias(v) { compareBias = Math.max(-1, Math.min(1, v)); if (bothPlaying) applyBothVolumes(); }
+function setCompareBias(v) { S.compareBias = Math.max(-1, Math.min(1, v)); if (S.bothPlaying) applyBothVolumes(); }
 
 // Advance the control's reference voice to the next available one (Alt/Shift-click on ▶ reference),
 // persisting the choice on data-ref so it survives re-render; updates the button label + waveform.
@@ -736,8 +730,8 @@ function handleCompare(control, action, btn, e) {
     const id = newestTakeId(control); if (id == null) return;
     const tw = windowFor(takeUrl(id), null);
     setActiveGains(ctx, id, currentRef(control, ctx));
-    litBtn(control, btn); activeTakeWindow = tw; activeNativeWindow = null; startCursors(control);
-    playTakeOnce(id, tw, activeTakeGain, () => { clearBtn(btn); stopCursors(); });
+    litBtn(control, btn); S.activeTakeWindow = tw; S.activeNativeWindow = null; startCursors(control);
+    playTakeOnce(id, tw, S.activeTakeGain, () => { clearBtn(btn); stopCursors(); });
     return;
   }
   if (action === 'seq') {
@@ -746,8 +740,8 @@ function handleCompare(control, action, btn, e) {
     setActiveGains(ctx, id, v);
     litBtn(control, btn); startCursors(control);
     const runOnce = (after) => {
-      activeNativeWindow = nw; activeTakeWindow = null;
-      playReference(ctx, v, nw, activeNativeGain, () => { activeNativeWindow = null; activeTakeWindow = tw; playTakeOnce(id, tw, activeTakeGain, after); });
+      S.activeNativeWindow = nw; S.activeTakeWindow = null;
+      playReference(ctx, v, nw, S.activeNativeGain, () => { S.activeNativeWindow = null; S.activeTakeWindow = tw; playTakeOnce(id, tw, S.activeTakeGain, after); });
     };
     const loopOrStop = () => { if (control.dataset.loop === '1' && btn.classList.contains('playing')) runOnce(loopOrStop); else { clearBtn(btn); stopCursors(); } };
     runOnce(loopOrStop);
@@ -762,11 +756,11 @@ function handleCompare(control, action, btn, e) {
     const id = newestTakeId(control), v = currentRef(control, ctx); if (id == null || !v) return;
     const nw = windowFor(refUrl(ctx, v), refClip(ctx, v)), tw = windowFor(takeUrl(id), null);
     setActiveGains(ctx, id, v);
-    litBtn(control, btn); activeNativeWindow = nw; activeTakeWindow = tw; bothPlaying = true; startCursors(control);
+    litBtn(control, btn); S.activeNativeWindow = nw; S.activeTakeWindow = tw; S.bothPlaying = true; startCursors(control);
     let pending = 2;
     const join = () => { if (--pending <= 0) { clearBtn(btn); stopCursors(); } };
-    playReference(ctx, v, nw, activeNativeGain * biasNative(compareBias), join);
-    playTakeOnce(id, tw, activeTakeGain * biasTake(compareBias), join);
+    playReference(ctx, v, nw, S.activeNativeGain * biasNative(S.compareBias), join);
+    playTakeOnce(id, tw, S.activeTakeGain * biasTake(S.compareBias), join);
     return;
   }
 }
@@ -775,8 +769,8 @@ function playRef(control, ctx, btn, v) {
   if (!v) return;
   const nw = windowFor(refUrl(ctx, v), refClip(ctx, v));
   setActiveGains(ctx, newestTakeId(control), v);
-  litBtn(control, btn); activeNativeWindow = nw; activeTakeWindow = null; startCursors(control);
-  playReference(ctx, v, nw, activeNativeGain, () => { clearBtn(btn); stopCursors(); });
+  litBtn(control, btn); S.activeNativeWindow = nw; S.activeTakeWindow = null; startCursors(control);
+  playReference(ctx, v, nw, S.activeNativeGain, () => { clearBtn(btn); stopCursors(); });
 }
 
 // Set the global compare speed from a speed-chip click: persist + sync, repaint the chip
@@ -789,8 +783,8 @@ function setCompareSpeed(v, container) {
     const on = Number(b.dataset.speed) === settings.compareSpeed;
     b.classList.toggle('active', on); b.setAttribute('aria-pressed', String(on));
   });
-  if (nativeAudioEl) applySpeed(nativeAudioEl);
-  if (takeAudioEl) applySpeed(takeAudioEl);
+  if (S.nativeAudioEl) applySpeed(S.nativeAudioEl);
+  if (S.takeAudioEl) applySpeed(S.takeAudioEl);
 }
 
 // ---------- wiring (delegated; attach-once, since the host re-renders body) ----------
