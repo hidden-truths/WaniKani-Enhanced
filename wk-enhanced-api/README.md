@@ -42,7 +42,7 @@ Tail `bun dev`'s output to watch the warm pipeline + per-request `cacheStatus` i
 
 ## Requirements
 
-- [Bun](https://bun.sh) 1.1.6+ (uses `bun:sqlite` and the built-in S3 client for prod). Install: `curl -fsSL https://bun.sh/install | bash`.
+- [Bun](https://bun.sh) 1.3.x (prod pins `oven/bun:1.3.8`; uses `bun:sqlite` and the built-in S3 client). Install: `curl -fsSL https://bun.sh/install | bash`.
 - Nothing else for local dev. For prod: a server, optionally an S3-compatible bucket (otherwise the local filesystem driver works fine on a single droplet). Postgres was in the original design but we stuck with SQLite — see [SERVER_DESIGN.md](../SERVER_DESIGN.md) for the deviation rationale.
 
 ## Endpoints
@@ -59,6 +59,8 @@ Tail `bun dev`'s output to watch the warm pipeline + per-request `cacheStatus` i
 | GET | `/docs` | [Scalar](https://github.com/scalar/scalar) docs UI — interactive endpoint browser with "try it" buttons. FastAPI-style. |
 | GET | `/openapi.json` | OpenAPI 3.1 spec. Import into Postman / Insomnia / Bruno / Stoplight if you'd rather use those. |
 
+> This table is the **userscript-facing** vocab/warm + media API. The accounts, study-app sync, unified `/v1/audio/*`, sentence store (`/v1/sentences*`), and `/v1/templates*` surfaces are documented in the canonical API-surface table in [CLAUDE.md](CLAUDE.md).
+
 ### Error response contract
 
 All non-2xx responses share the shape:
@@ -71,7 +73,7 @@ All non-2xx responses share the shape:
 }
 ```
 
-The `code` enum is stable: `validation_error`, `unauthorized`, `not_found`, `conflict`, `upstream_failure`, `service_unavailable`, `internal_error`. Client code should branch on `code`, not `error`. (`conflict` covers e.g. a second `POST /v1/admin/warm {"scope":"all"}` while one's already in flight — returns 409 instead of silently double-running.)
+The `code` enum is stable: `validation_error`, `unauthorized`, `not_found`, `conflict`, `rate_limited`, `upstream_failure`, `service_unavailable`, `internal_error`. Client code should branch on `code`, not `error`. (`conflict` covers e.g. a second `POST /v1/admin/warm {"scope":"all"}` while one's already in flight — returns 409 instead of silently double-running.)
 
 ### Conditional GETs
 
@@ -156,39 +158,26 @@ Idempotent: re-running the warm pipeline overwrites in place, so the keys are st
 
 ```
 wk-enhanced-api/
-├── data/
-│   └── jlpt-vocab.json       # bundled JLPT dict (~93KB), used by JLPT scoring
+├── data/         # bundled JLPT dict, offline NLP annotations, curated Minna lessons
 ├── src/
-│   ├── index.ts              # OpenAPIHono app, static media route, /docs + /openapi.json, boot
-│   ├── config.ts             # env-var loading, typed config
-│   ├── schemas.ts            # Zod schemas — single source of truth for runtime validation + OpenAPI docs
-│   ├── db/
-│   │   ├── schema.sql        # SQLite schema
-│   │   └── client.ts         # repo functions (no SQL leaks out)
-│   ├── lib/
-│   │   ├── ikTitles.ts       # the lossy-title-encoding workaround
-│   │   ├── jlpt.ts           # scoreJlpt — port of userscript logic
-│   │   ├── log.ts            # structured-JSON logger
-│   │   ├── zodHook.ts        # custom validation-failure response shape
-│   │   └── sleep.ts
-│   ├── routes/
-│   │   ├── health.ts
-│   │   ├── vocab.ts          # GET /v1/vocab/:word — lazy-fill on miss
-│   │   ├── indexMeta.ts
-│   │   └── admin.ts          # POST /v1/admin/warm — bearer auth
-│   ├── services/
-│   │   ├── ik.ts             # ImmersionKit /search, /index_meta, /download_media
-│   │   ├── ddg.ts            # DuckDuckGo two-step vqd image scrape
-│   │   ├── tts.ts            # Google Translate TTS fallback
-│   │   ├── wk.ts             # WK v2 API — vocab corpus enumeration
-│   │   └── storage.ts        # local + S3 driver abstraction
-│   └── warm/
-│       └── pipeline.ts       # warmWord, warmAll — the heart
+│   ├── index.ts  # OpenAPIHono app, CORS + request log, /docs, static media route, boot
+│   ├── config.ts # env-var loading, typed config
+│   ├── schemas.ts# Zod schemas — single source of truth for validation + OpenAPI docs
+│   ├── db/       # schema.sql + client.ts (repo functions; no SQL leaks out)
+│   ├── lib/      # jlpt, ikTitles, etag, realize, rateLimit, minnaGate, auth, log, zodHook, sleep
+│   ├── routes/   # health, vocab, indexMeta, admin, auth, progress, sessions, minna,
+│   │             #   audio, sentences, templates (one OpenAPIHono sub-router each)
+│   ├── services/ # ik, ddg, tts, minnaAudio, wk, storage
+│   └── warm/     # pipeline.ts (warmWord, warmAll — the heart)
+├── scripts/      # operator tools (TTS pre-gen, store/annotation seeding, Minna scrape) — run by hand
+├── deploy/       # systemd units, backup/retention scripts, env template, runbook
 ├── .env.example
 ├── package.json
 ├── tsconfig.json
 └── README.md
 ```
+
+Full annotated module map (every file + the data-on-disk conventions): [CLAUDE.md](CLAUDE.md) → "Architecture".
 
 ## Schemas, validation, and docs
 
@@ -267,6 +256,6 @@ Pre-Docker droplets follow a one-shot migration path (install Docker, chown /var
 ## Known limitations / open questions
 
 - **IK title encoding is best-effort on misses.** When `/index_meta` doesn't have a deck, the heuristic in `src/lib/ikTitles.ts` produces a likely-wrong folder name. Concrete consequence: IK's media proxy returns an empty body, our `<1KB` check trips, we fall through to Google TTS for audio (no fallback for images). Same dead-end as the userscript — don't try to make the heuristic smarter.
-- **Bulk warming is still over an hour.** With the per-word IK rate-limit at 50ms gaps (relaxed from 500ms in v0.1) and ~50 examples per word each needing audio + image, full ~6500-word warm is bounded by IK's own response latency more than our throttle. Acceptable for monthly cron; not interactive.
+- **Bulk warming is multi-hour.** With the per-word IK rate-limit floor at 500ms and ~50 examples per word each needing audio + image, a full ~6700-word cold warm runs ~6–10h (`force:false` re-warms are much faster — they skip already-fresh rows). Acceptable for monthly cron; not interactive.
 - **Lazy cold-fill is ~1–3s.** Per-example IK media is warmed synchronously; DDG fallback pool is deferred to a background task (see "DDG deferred" in `warm.word.done` logs and the `incomplete: true` payload flag). If this still feels slow once deployed, the next lever is to defer per-example media too — see [NEW_FEATURES.md](../NEW_FEATURES.md) "Two-phase lazy-fill" entry.
 - **No content negotiation.** All endpoints return JSON only. No HTML or Accept-header branching planned.

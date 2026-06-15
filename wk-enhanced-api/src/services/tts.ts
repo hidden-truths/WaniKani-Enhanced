@@ -34,13 +34,13 @@ export function ttsVariantKey(text: string, provider: string, gender: string, ex
     return `audio/${provider}/${gender || 'default'}/${ttsTextHash(text)}.${ext}`;
 }
 
-// ---------- the 3-tier TTS resolver ----------
+// ---------- the TTS resolver ----------
 //
-// text(+voice) → audio is stable, so it's resolved through a three-tier cache, cheapest
-// first: in-process map → our storage layer → Google. Shared by BOTH `/v1/tts` (default
-// voice) and `/v1/audio/tts?voice=` (a specific tagged voice), so a clip rendered once is
-// reused everywhere. Lives in the service (not the route) so the cache + fallback order can't
-// diverge between the two endpoints.
+// text(+voice) → audio is stable, so it's resolved cheapest-first: our storage layer →
+// Google. (There is intentionally NO in-process buffer cache — see the NOTE below.) Shared
+// by BOTH `/v1/tts` (default voice) and `/v1/audio/tts?voice=` (a specific tagged voice), so
+// a clip rendered once is reused everywhere. Lives in the service (not the route) so the
+// cache + fallback order can't diverge between the two endpoints.
 
 export interface TtsHit {
     buffer: ArrayBuffer;

@@ -2,13 +2,11 @@
 // audio, and upload it into our storage layer so /v1/tts serves it (preferring these
 // .m4a clips over Google — see services/tts.ts ttsKey + the /v1/tts handler).
 //
-// What it voices (deduped by exact text, since the key is content-addressed):
-//   • Card READINGS  — ttsText() for every built-in verb + every みんなの日本語 vocab item
-//     (the text the study app already sends to /v1/tts via speakWord()).
-//   • Example SENTENCES — the built-in leveled examples (examples.js), the Minna vocab
-//     leveled examples, and the Minna grammar / lesson / conversation sentences. Ruby is
-//     stripped to plain text (plainText), which is exactly what the client's sentence
-//     play button requests — so the keys line up.
+// What it voices: the full text set is enumerated by collectTtsTexts() (see
+// collectTtsTexts.ts — the single source of truth, shared with seed-audio-variants.ts so
+// renders + the manifest can't drift): card READINGS (ttsText), every leveled/lesson
+// example SENTENCE (plainText), every 独り言 Self-Talk phrase, and every slot-swap template
+// combo (realizeTemplate). Deduped by exact text, since the key is content-addressed.
 //
 // Pipeline: collect text → skip what's already in storage → render .m4a into a temp dir →
 // upload each to storage at ttsKey(text,'m4a').
