@@ -4,7 +4,7 @@ Living document for the WKEnhanced project. Use this as the entry point for any 
 
 Owns the *what-to-do-next* state of the project. Architecture, design rationale, and dead-end warnings live in [CLAUDE.md](CLAUDE.md), [wk-enhanced-api/CLAUDE.md](wk-enhanced-api/CLAUDE.md), [SERVER_DESIGN.md](SERVER_DESIGN.md), and [CLIENT_MIGRATION.md](docs/history/CLIENT_MIGRATION.md). The feature backlog (everything that isn't time-critical) is in [NEW_FEATURES.md](NEW_FEATURES.md).
 
-**Last updated**: 2026-06-14 — sentence-store work is the active thread and several pieces just landed on `main`: **Self-Talk slot-swap TEMPLATES Slices 1 + 2** (generator structure in the `sentence_template` table served by `GET /v1/templates`; combos lazily materialized as `sentence` rows via `POST /v1/templates/{id}/realize`), **Phase 2.5** (custom-card examples → private store rows), **custom-card completeness** (UI-authored pitch `accent` + leveled `levels`), and **Self-Talk TTS pre-gen** (phrases + every template combo). **Sentence-store Phase 4 (NLP enrichment) is also merged** (offline GiNZA parser → `?annotate=1` serving + the study-app tap-a-word lookup + Browse grammar filter). **The ⭐ next rework is tokenization granularity** — GiNZA morphemes fragment する-verbs + conjugations, so a tapped span doesn't match a word (§1). **Deploy residual:** the new seed steps (`seed-sentences.ts` Pass 3 + `seed-annotations.ts`) haven't run on the droplet, so prod doesn't yet serve templates/annotations (§1 / "Deploy"). The site is private — no public-launch work on the runway.
+**Last updated**: 2026-06-15 — **the `db/client.ts` God-Object split shipped to `main`** (the 1,396-line server repo module → `db/connection.ts` + `db/repos/*` behind a re-export barrel, with per-repo tests; commit `c78cc63`). The remaining SOLID/quality workstreams (schemas split, study-app sync resilience, record-compare decomposition) are planned in [REFACTOR_FOLLOWUPS.md](REFACTOR_FOLLOWUPS.md) — see runway §4. Prior context: sentence-store work is the active thread and several pieces landed on `main`: **Self-Talk slot-swap TEMPLATES Slices 1 + 2** (generator structure in the `sentence_template` table served by `GET /v1/templates`; combos lazily materialized as `sentence` rows via `POST /v1/templates/{id}/realize`), **Phase 2.5** (custom-card examples → private store rows), **custom-card completeness** (UI-authored pitch `accent` + leveled `levels`), and **Self-Talk TTS pre-gen** (phrases + every template combo). **Sentence-store Phase 4 (NLP enrichment) is also merged** (offline GiNZA parser → `?annotate=1` serving + the study-app tap-a-word lookup + Browse grammar filter). **The ⭐ next rework is tokenization granularity** — GiNZA morphemes fragment する-verbs + conjugations, so a tapped span doesn't match a word (§1). **Deploy residual:** the new seed steps (`seed-sentences.ts` Pass 3 + `seed-annotations.ts`) haven't run on the droplet, so prod doesn't yet serve templates/annotations (§1 / "Deploy"). The site is private — no public-launch work on the runway.
 
 ---
 
@@ -45,7 +45,15 @@ A sensible hardening step regardless of traffic.
 
 The Dockerize follow-up. Today's deploys are `docker compose build --pull && systemctl restart` on the droplet — each push triggers a fresh local build (~1–2 min). With a CI pipeline that publishes the image to GHCR on tag, the droplet flow drops to `docker compose pull && systemctl restart` (seconds). See [NEW_FEATURES.md](NEW_FEATURES.md) "Dockerize the server" → follow-ups. Skip until the local-build flow becomes annoying.
 
-### 4. From the wider backlog (NEW_FEATURES.md)
+### 4. SOLID / code-quality refactor follow-ups — see [REFACTOR_FOLLOWUPS.md](REFACTOR_FOLLOWUPS.md)
+
+The `db/client.ts` God-Object split shipped (commit `c78cc63`: 1,396-line module → `db/connection.ts` + `db/repos/*` behind a barrel, per-repo tests, 237 tests green). Three workstreams remain, in recommended order — full steps/files/tests/dead-ends in the doc:
+
+- **D — `schemas.ts` → per-domain modules** (~1–2h, LOW risk): the same barrel playbook as `db/client`; the 733-line / 66-schema file → `schemas/*` behind a re-export barrel. A good warm-up that reinforces the established pattern.
+- **B — study-app sync resilience** (~1–2 days, MED risk, highest value): collapse the five copy-pasted sync trios into one `SyncedBlob` abstraction; add a retry/timeout transport + a durable offline write-queue (flush-on-reconnect); add optimistic concurrency (409) to `PUT /v1/progress`. Fills the study-app feature-test gap. Hits the "resilient to concurrency / instability / disconnections" goal.
+- **C — `record-compare.js` decomposition** (~1–2 days, HIGH risk, optional): split the 853-line DOM/audio glue into capture/takes/playback/waveform/view (its pure logic is already in `core/`). Characterization-test net first; browser-verify each commit.
+
+### 5. From the wider backlog (NEW_FEATURES.md)
 
 Lower priority and not currently blocking anything; jump to [NEW_FEATURES.md](NEW_FEATURES.md) for full design notes.
 
