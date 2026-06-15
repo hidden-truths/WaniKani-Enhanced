@@ -53,7 +53,7 @@ words flowing straight into the SRS deck so they're never studied just once.
         render sections (collapsible <details>):
           Vocabulary · Grammar · Example sentences · Conversation · My notes
               │
-   audio ────┼─► GET /v1/minna/audio?src=/Audio/…mp3
+   audio ────┼─► GET /v1/audio/native?src=/Audio/…mp3
               │     gate → storage.get(key) ─ miss ─► fetchMinnaAudio()  → vnjpclub
               │                                       store.put(key)   [cached forever]
               │     serve bytes, Cache-Control: private  ◄─ one reused <audio> element
@@ -68,8 +68,8 @@ words flowing straight into the SRS deck so they're never studied just once.
 
 Everything in the tab is **gated and fetched live** — unlike the rest of the app, it is
 intentionally *not* offline-first, so the copyrighted textbook material never ships to
-anonymous visitors. The session cookie is same-origin, so `fetch` from the page
-authorizes the `/v1/minna/*` calls automatically.
+anonymous visitors. The session cookie spans the app + API (same-site, `Domain=.wkenhanced.dev`),
+so a credentialed `fetch` from the page authorizes the `/v1/minna/*` calls.
 
 ---
 
@@ -83,8 +83,8 @@ All three are **signed-in only**, optionally narrowed to an owner allowlist
 |---|---|---|---|
 | GET | `/v1/minna/lessons` | `no-store` | Lesson numbers that have curated content (reads `data/minna/`; ignores `*.draft.json`). |
 | GET | `/v1/minna/lessons/{n}` | `no-store` | The curated lesson JSON, served verbatim from `data/minna/lesson-<n>.json`. `404` if absent. |
-| GET | `/v1/audio/native?src=…` | `private, immutable` | A native-audio MP3, proxied from vnjpclub once and cached in storage thereafter. (Legacy alias: `/v1/minna/audio?src=…` — same handler.) |
-| POST | `/v1/audio/recordings?lesson&itemKey&durationMs&keep` | — | **(Phase 2)** Save a voice take (raw `audio/webm`/`mp4` body, ≤2 MB) as a **private** storage object; prune the item to `keep` (≤20). Returns the new take + the item's take list. (Legacy alias: `/v1/minna/recordings`.) |
+| GET | `/v1/audio/native?src=…` | `private, immutable` | A native-audio MP3, proxied from vnjpclub once and cached in storage thereafter. |
+| POST | `/v1/audio/recordings?lesson&itemKey&durationMs&keep` | — | **(Phase 2)** Save a voice take (raw `audio/webm`/`mp4` body, ≤2 MB) as a **private** storage object; prune the item to `keep` (≤20). Returns the new take + the item's take list. |
 | GET | `/v1/audio/recordings?lesson=` | `no-store` | **(Phase 2)** List the user's takes for a lesson, newest first (metadata only). |
 | GET | `/v1/audio/recordings/{id}` | `private, immutable` | **(Phase 2)** Stream one of the **owner's** recordings (404 for a non-owner/missing id). |
 | DELETE | `/v1/audio/recordings/{id}` | — | **(Phase 2)** Delete one of the owner's recordings + its storage object (idempotent). |
@@ -109,7 +109,7 @@ talks to vnjpclub. It is deliberately narrow:
   `minna/audio/<path-minus-/Audio/>` (the new `storage.get()` method in
   [../wk-enhanced-api/src/services/storage.ts](../wk-enhanced-api/src/services/storage.ts) makes get-or-fetch possible).
   So vnjpclub is hit **at most once per file, ever**; every later play is served
-  same-origin from us. In prod that cache is the DO Spaces bucket; in dev it's
+  from our own cache. In prod that cache is the DO Spaces bucket; in dev it's
   `dev-data/media/minna/audio/…`.
 
 **Why `Cache-Control: private` and not `public`:** the audio is account-gated, so a
@@ -201,7 +201,7 @@ lazy — same pattern as Stats). Key pieces:
   closed. `minnaLessonCache` avoids refetching on re-render; `minnaStore.lastLesson`
   remembers the chapter.
 - **Audio** — `mnAudioBtn` renders a play button (`data-aud`); `mnPlay` plays it through
-  **one reused `<audio>`** pointed at `/v1/minna/audio?src=…`. The whole-conversation
+  **one reused `<audio>`** pointed at `/v1/audio/native?src=…`. The whole-conversation
   audio uses the same button.
 - **Notes** — a per-lesson `<textarea>`; debounced (500 ms) `input` → `saveMinna()` →
   localStorage + a synced PUT, with a "saved · synced" / "saved on this device" tell.
@@ -324,7 +324,7 @@ points here). Roughly priority-ordered.
 ### ✅ Phase 2 — record & compare — SHIPPED (MVP)
 
 Record your own voice and compare it to the cached native audio — the marquee feature, and
-the headline reason the audio is proxied + stored same-origin in Phase 1. Frontend lives in
+the headline reason the audio is proxied + cached on our own storage in Phase 1. Frontend lives in
 [src/features/record-compare.js](src/features/record-compare.js) (capture/upload/compare/playback)
 + the conversation-line clip glue in [src/features/minna.js](src/features/minna.js); pure
 helpers in [src/core/recordings.js](src/core/recordings.js).
@@ -462,7 +462,7 @@ helpers in [src/core/recordings.js](src/core/recordings.js).
   Japanese **Siri** system voice (best quality — Siri voices aren't reachable any other way); the
   `jp-tts` Swift CLI (Kyoko/Otoya Enhanced) is the alternative. See the TTS dead-end in
   [CLAUDE.md](CLAUDE.md).
-- ~~**Native audio served from our storage, not vnjpclub**~~ — **shipped.** `/v1/minna/audio`
+- ~~**Native audio served from our storage, not vnjpclub**~~ — **shipped.** `/v1/audio/native`
   always cached on first play; `wk-enhanced-api/scripts/prefetch-minna-audio.ts` now downloads
   the whole lesson catalogue's audio up front so we never round-trip to vnjpclub at play time
   (run with the prod S3 env to seed prod).
@@ -478,7 +478,7 @@ helpers in [src/core/recordings.js](src/core/recordings.js).
   `200` (proves it's the allowlist gating, not a broken session). With a **blank**
   allowlist, any signed-in account gets `200` and the audio response carries
   `Cache-Control: private, …`. (Both verified during the allowlist commit.)
-- **Audio cache** — first `/v1/minna/audio?src=…` for a path logs `cached:false` and
+- **Audio cache** — first `/v1/audio/native?src=…` for a path logs `cached:false` and
   writes `minna/audio/…`; the next logs `cached:true` and never touches vnjpclub.
 - **Activation** — "Add all vocab to deck" bumps the `N/M` count, adds ✓s, and the words
   appear in Browse with the みんなの日本語 badge; re-clicking is a no-op.
