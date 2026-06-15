@@ -13,8 +13,11 @@ order. The actual DOM/render/feature glue is split into **`src/features/*`** mod
   groups; owns `bcfg`), `stats` (charts), `custom-cards` (rebuildData + #verbModal CRUD),
   `settings-page`, `minna` (the みんなの日本語 dashboard), `selftalk` (the 独り言 Self-Talk
   output/speaking-practice tab — see [SELFTALK.md](SELFTALK.md)), `record-compare` (the generic
-  record-and-compare engine: MediaRecorder capture + take list + the reference/you/sequence/both
-  compare player — fed by Minna AND Self-Talk), `a11y` (roving tabindex + chip
+  record-and-compare engine — fed by Minna AND Self-Talk; now a **directory**
+  `record-compare/{state,capture,takes,playback,waveform,view}.js` behind a 13-export barrel
+  `record-compare/index.js`, with `record-compare.js` a thin `export *` re-export so the two
+  consumers' import path is unchanged. `state.js` = the shared mutable `S` singletons + the one
+  `audioCtx()`; the modules form runtime-only import cycles, like cloud⇄minna), `a11y` (roving tabindex + chip
   annotations), `tts`, `audio` (the shared `playItem(item,context)` player — resolves an item to a
   tagged voice variant + routes public-vs-credentialed `<audio>` by `gated`), `render-helpers`
   (shared `jishoUrl`/`provenanceBadge`), and the cloud

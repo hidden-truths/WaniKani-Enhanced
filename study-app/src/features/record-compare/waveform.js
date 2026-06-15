@@ -12,7 +12,7 @@ import { validClip, findTrimBounds, waveformPeaks, rmsLevel, refClip, refShortLa
 import { S, audioCtx } from './state.js';
 import { newestTakeId } from './takes.js';
 // Forward deps used only at runtime (the view wrappers move to view.js C1.6). Safe import cycle.
-import { controlCtx, currentRef, refUrl } from './engine.js';
+import { controlCtx, currentRef, refUrl } from './view.js';
 
 const WAVE_W = 140, WAVE_H = 30;
 export { WAVE_W, WAVE_H };   // consumed by view's waveWrapHtml (canvas width/height)

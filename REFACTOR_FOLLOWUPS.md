@@ -8,7 +8,7 @@ review, in **recommended execution order**:
 
 - **D** — `schemas.ts` → per-domain modules (LOW risk, mechanical — same playbook as `db/client`). Do first as a warm-up. **✅ SHIPPED.**
 - **B** — study-app sync: DRY collapse + resilient transport + offline queue + optimistic concurrency (MEDIUM risk, the high-value one). **✅ SHIPPED.**
-- **C** — `record-compare.js` decomposition (HIGH risk, lower leverage — its pure logic is already extracted). Do last / optional. **C0 (the pure-helper test-net) ✅ SHIPPED; C1+ glue split optional, under reassessment.**
+- **C** — `record-compare.js` decomposition (HIGH risk, lower leverage). **✅ SHIPPED** — C0 (pure-helper test-net) + C1+ (full glue split into `features/record-compare/{state,capture,takes,playback,waveform,view}.js` behind a thin re-export).
 
 Each section is self-contained: problem → target design → concrete steps → files → tests →
 dead-ends to respect → verification. Architecture/rationale lives in the two `CLAUDE.md`s;
@@ -18,7 +18,7 @@ this doc owns the *how-to-execute*.
 |---|---|---|---|---|
 | **D** schemas split ✅ | SRP/ISP; co-locate schemas by domain | LOW (barrel + typecheck-guarded, zero behavior change) | ~1–2h | 1st — **SHIPPED** |
 | **B** sync DRY + resilience + concurrency ✅ | DRY + DIP + disconnection/concurrency resilience + new tests | MED (hot path; backward-compat progress contract) | ~1–2 days | 2nd — **SHIPPED** |
-| **C** record-compare decomp | SRP on the DOM/audio glue | HIGH (no feature tests, stateful audio, many dead-ends) | ~1–2 days | 3rd / optional — **C0 ✅, C1+ optional** |
+| **C** record-compare decomp ✅ | SRP on the DOM/audio glue | HIGH (no feature tests, stateful audio, many dead-ends) | ~1–2 days | 3rd — **SHIPPED (C0 + C1+)** |
 
 > **Golden rule for all three:** zero behavior change unless explicitly designed (B's
 > concurrency + queue). Keep the existing test suites green at every step, add tests for new
@@ -209,15 +209,17 @@ resilience behavior (this part *is* observable): with `bun run dev` (:5173) + `b
 > the phased commits (C0 test-net first, then C1+), and the dead-end checklist. The summary below
 > is the orientation; do the work from that doc.
 
-> **✅ C0 SHIPPED (the high-value half).** The remaining inline pure helpers moved to `core/`
+> **✅ C SHIPPED (C0 + C1+).** **C0** moved the remaining inline pure helpers to `core/`
 > (`core/recordings.js`: `chooseMime`/`RECORD_MIME_CANDIDATES`/`encodeWav`/`biasNative`/`biasTake`;
 > new `core/refs.js`: the reference-variant selection + `parseControlCtx` + the `nativeUrl`/`takeUrl`/
 > `refUrl`/`refClip` shapes, all `base`/`httpServed`/`prefs`-injected) behind the barrel, with
-> **+39 characterization tests** (`record-compare-core.test.js`). `record-compare.js` delegates via thin
-> same-named wrappers — **net −25 lines, 13 public exports + both consumers byte-for-byte unchanged**;
-> `bun run test` 180 pass + `bun run build` green. As-built deviations: see
-> [docs/RECORD_COMPARE_DECOMP.md](docs/RECORD_COMPARE_DECOMP.md) Phase C0. **C1+ (the stateful-glue split
-> into `features/record-compare/`) remains optional — under reassessment** per the doc's decision point.
+> **+39 characterization tests** (`record-compare-core.test.js`). **C1+** then split the 854-line glue
+> into `features/record-compare/{state,capture,takes,playback,waveform,view}.js` behind `index.js`,
+> with `features/record-compare.js` kept as a thin `export *` re-export so **minna.js + selftalk.js
+> import byte-for-byte unchanged** (the 13-export contract held). 8 commits total (C0 + C1.0–C1.6),
+> each green (`bun run test` 180→182, `bun run build`) + browser-smoked; the live mic-driven flow needs
+> a manual pass (headless blocks `getUserMedia`). As-built: see
+> [docs/RECORD_COMPARE_DECOMP.md](docs/RECORD_COMPARE_DECOMP.md) Phases C0 + C1+.
 
 ### Honest framing
 [study-app/src/features/record-compare.js](study-app/src/features/record-compare.js) is 853 lines,

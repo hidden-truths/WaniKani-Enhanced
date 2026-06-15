@@ -7,7 +7,7 @@ import { API_BASE } from '../../config.js';
 import { clampKeep } from '../../core/index.js';
 import { settings } from '../../settings-store.js';
 // Forward dep on the not-yet-peeled view code (resetControl → view.js C1.6). Runtime-only.
-import { resetControl } from './engine.js';
+import { resetControl } from './view.js';
 
 // ---------- take cache (per scope, fetched once) ----------
 // recCache[scope] = array of takes {id,lesson,itemKey,durationMs,createdAt} newest-first.

@@ -13,7 +13,7 @@ import { audioCtx } from './state.js';
 // Forward deps used only inside showReview (runtime): uploadTake (takes) + resetControl (view, still
 // in engine until C1.6). Runtime-only, so these import cycles are safe (no module-eval cross-use).
 import { uploadTake } from './takes.js';
-import { resetControl } from './engine.js';
+import { resetControl } from './view.js';
 
 // Capability gates. Recording needs getUserMedia + MediaRecorder; both are absent over
 // insecure origins / old browsers. When unavailable we degrade to a quiet hint.

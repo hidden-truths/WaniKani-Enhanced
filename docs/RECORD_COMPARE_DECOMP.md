@@ -97,6 +97,30 @@ is now thinner. Otherwise continue.
 
 ## Phase C1+ — split the glue into `features/record-compare/`
 
+> **✅ SHIPPED** (7 commits, C1.0–C1.6, each green + browser-smoked). The 854-line monolith is now
+> `features/record-compare/{state,capture,takes,playback,waveform,view}.js` behind `index.js` (the
+> 13-export barrel), with the original `features/record-compare.js` kept as a one-line
+> `export * from './record-compare/index.js'` so **minna.js + selftalk.js import byte-for-byte
+> unchanged**. As-built notes:
+> - **state.js** holds ONE mutable `S` object (the cross-module singletons: the reused `<audio>` els,
+>   cursor/window state, gains, bias) + the shared `audioCtx()`. Module-LOCAL singletons (capture's
+>   `speakingMode`/`liveStream`/`active`/mic; takes' `recCache`/`onTakeSaved`; waveform's decode caches)
+>   stayed in their owner — `S` is only the genuinely-shared set.
+> - The modules form **runtime-only import cycles** (view↔playback↔waveform↔capture↔takes), fine like
+>   the existing cloud⇄minna cycle — verified: nothing is used at module-eval time. The peel order
+>   exported transient forward-deps from the shrinking remainder and repointed them as each module
+>   landed; the Vite build caught every missing-export slip (e.g. C1.2 forgot to export resetControl).
+> - **C1.6** renamed the fully-drained `engine.js` → `view.js` (HTML builders + ref wrappers +
+>   handlers + once-attached wiring) and repointed the 5 importers; the stale C0 `controlCtx` duplicate
+>   comment was dropped in the move.
+> - Verification per commit: `bun run test` (180→182) + `bun run build` green + grep (no bare/dangling
+>   refs) + headless smoke (load/exports/render + non-mic wiring exercised, incl. a synthetic-control
+>   `paintCompareWaveforms` that drives the waveform⇄view⇄takes chain). The **live mic-driven flow
+>   (record → ▶ you/reference/→you/both/loop → waveforms+cursor → speed+bias → mic picker) needs a
+>   manual browser pass** — the headless preview blocks `getUserMedia`.
+>
+> Steps below are the as-planned record.
+
 Create the directory + an `index.js` that re-exports the 13 public names so
 `minna.js`/`selftalk.js` imports are byte-for-byte unchanged. Then move the glue across small,
 **individually browser-verified** commits in this dependency order (later modules import earlier

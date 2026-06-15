@@ -1,20 +1,23 @@
-// RECORD-AND-COMPARE engine (audio-unify). The learner records themselves saying an item
-// (a Minna vocab word / conversation line, or a Self-Talk phrase) and compares it to a chosen
-// REFERENCE voice — the native clip if the item has one, else a synth voice (Siri/Google)
-// rendered from the item's text. This module owns the MediaRecorder capture flow, upload, the
-// per-item take list, gated take playback, the windowed compare player (you / reference / seq /
-// both / loop), volume normalization, and the dual waveform.
+// RECORD-AND-COMPARE — VIEW layer. Owns the HTML builders (the speaking bar, the per-item record
+// control, the compare buttons + dual-waveform row), the reference-voice WRAPPERS (binding API_BASE /
+// HTTP_SERVED / settings.audioPrefs onto the pure core/refs.js selectors), the per-render rebuild
+// (resetControl / refreshRefUi), the compare-button click handlers (handleCompare / playRef /
+// cycleReference), and the once-attached delegated wiring (wireRecordCompare on the view body,
+// wireSpeakingControls on the navbar slot).
 //
-// It is feature-agnostic: every bit of context (the partition `scope`, the per-item `itemKey`,
-// the native src, the conversation clip, the synth `text`, and the audio CONTEXT used to resolve
-// the default reference voice) rides on each control's `data-*`, so Minna and Self-Talk both feed
-// it the same primitives — Minna glue lives in minna.js, Self-Talk glue in selftalk.js. `scope`
-// is an opaque numeric partition: Minna passes a lesson number (1–50), Self-Talk a reserved id.
-// It maps to the server's `lesson` query param + recordings column (kept as the wire name).
+// The rest of the engine lives in sibling modules, all behind ./index.js: capture (mic + speaking
+// mode + MediaRecorder + trim + review), takes (cache + upload/delete), playback (windowed <audio> +
+// gains + ▶ both bias + speed), waveform (decode → canvas + cursor), state (the shared singletons +
+// the one AudioContext). It is feature-agnostic: every bit of context (the partition `scope`, the
+// per-item `itemKey`, the native src, the conversation clip, the synth `text`, and the audio CONTEXT
+// for the default reference voice) rides on each control's `data-*`, so Minna and Self-Talk both feed
+// the engine the same primitives — Minna glue lives in minna.js, Self-Talk glue in selftalk.js.
 //
-// Recordings are PRIVATE on the server (served only via the owner-gated
-// /v1/audio/recordings/{id}); like the native audio, take playback uses one reused
-// <audio crossOrigin='use-credentials'> so the session cookie authorizes it cross-origin.
+// DEAD-ENDS preserved: the delegated handlers ATTACH ONCE (guard on dataset.*Wired — the host
+// re-renders the body each render, so re-attaching would stack listeners); the speaking bar lives in
+// the navbar #navExtra slot while the record controls live in the view body — TWO delegate roots,
+// don't merge them. `scope` maps to the server's `lesson` query param (kept as the wire name).
+//
 // NOTE: this file lives one level deeper than the other features (features/record-compare/), so its
 // relative imports carry an extra '../' vs a features/*.js module.
 import { API_BASE } from '../../config.js';
@@ -38,7 +41,7 @@ import { WAVE_W, WAVE_H, takeUrl, windowFor, startCursors, stopCursors, paintCon
 
 // RECORD_SUPPORTED, pickMime, mic selection, speaking mode (enter/exit/isSpeakingMode), silence
 // trim (maybeTrim), and the MediaRecorder lifecycle (start/stopRecording, showReview) → ./capture.js.
-// engine.js imports the few that its view/wiring still need (see the capture import above).
+// view.js imports the few that its HTML/wiring still need (see the capture import above).
 
 // ---------- speaking-mode bar (toggle + mic picker) ----------
 // Rendered at the top of the lesson / practice view (Minna or Self-Talk). The toggle enters/
@@ -88,11 +91,11 @@ function speedControlHtml() {
 // (loadRecordings/takesFor/newestTakeId(ForItem)/setTakes/uploadTake/deleteTake/setOnTakeSaved)
 
 // clamp01 / applySpeed / playRange (windowed <audio>) / take + reference playback / stopCompare /
-// playTakeOnce → ./playback.js. engine imports the few its view/wiring need (see playback import).
+// playTakeOnce → ./playback.js. view.js imports the few it still needs (see playback import).
 
 // ---------- dual waveform (decode → canvas) + live playback cursor → ./waveform.js ----------
 // (WAVE_W/H, COMPARE_TRIM, the decode caches, takeUrl, fetch/window/level, draw/paint, the cursor rAF)
-// engine imports the few its view/wiring need (see the waveform import above).
+// view.js imports the few it still needs (see the waveform import above).
 
 // ---------- HTML ----------
 // One control per recordable item (a vocab word, a conversation line, or a Self-Talk phrase).
@@ -121,8 +124,7 @@ export function recordControlHtml(scope, itemKey, nativeSrc, clip, needsClip, te
 // reference voice. `audioCtx` picks the per-context default reference voice from the resolver.
 // Read the compare context back off a control's dataset (so resetControl can rebuild). The parse is
 // pure → core/refs.js (parseControlCtx); nativePlayable + the reference selection live there too.
-export function controlCtx(control) { return parseControlCtx(control.dataset); }   // exported for waveform.js; moves to view.js (C1.6)
-
+export function controlCtx(control) { return parseControlCtx(control.dataset); }   // exported for waveform.js
 // ---------- reference (compare-target) variants: native + synth voices, via the resolver ----------
 // The compare player's "reference" generalizes the old native-only target to ANY voice (audio-unify
 // Phase 3 / ⑤): native (the cached vnjpclub clip) OR a synth voice (Siri/Google, rendered from the
@@ -134,11 +136,9 @@ export function controlCtx(control) { return parseControlCtx(control.dataset); }
 function referenceVariants(ctx) { return coreReferenceVariants(ctx, HTTP_SERVED); }
 function defaultRef(ctx) { return coreDefaultRef(ctx, HTTP_SERVED, settings.audioPrefs); }
 // The control's currently-selected reference: its saved data-ref if still available, else the default.
-export function currentRef(control, ctx) { return coreCurrentRef(control.dataset.ref || '', ctx, HTTP_SERVED, settings.audioPrefs); }   // exported for waveform.js; moves to view.js (C1.6)
-// Playback URL for a reference variant: native is the gated proxy (sliced by refClip's line clip); a
+export function currentRef(control, ctx) { return coreCurrentRef(control.dataset.ref || '', ctx, HTTP_SERVED, settings.audioPrefs); }   // exported for waveform.js// Playback URL for a reference variant: native is the gated proxy (sliced by refClip's line clip); a
 // synth voice is the public tagged-TTS endpoint (no clip — windowFor trims its silence).
-export function refUrl(ctx, v) { return coreRefUrl(API_BASE, ctx, v); }   // exported for playback.js; moves to view.js (C1.6)
-
+export function refUrl(ctx, v) { return coreRefUrl(API_BASE, ctx, v); }   // exported for playback.js
 function recordControlInner(scope, itemKey, ctx) {
   if (!RECORD_SUPPORTED) return `<span class="rec-unsupported">Recording needs a modern browser + microphone.</span>`;
   return `<button class="rec-btn" type="button" data-rec-toggle aria-label="Record yourself"><svg class="ic" aria-hidden="true"><use href="#i-mic"/></svg><span class="rec-label">Record</span></button>

@@ -1,7 +1,8 @@
 // Public barrel for the record-and-compare engine. Re-exports ONLY the 13 names the two consumers
 // (features/minna.js, features/selftalk.js) import — internal helpers/singletons stay private to
-// their modules. As the C1+ split proceeds, each `from` points at the module that now owns the name;
-// the rest still live in engine.js until their peel commit.
+// their owning module. The C1+ split is complete: each `from` points at the module that owns the name
+// (capture / takes / waveform / view), behind ../record-compare.js (a thin `export *` re-export so
+// the consumers' import path never changed). state.js + playback.js are internal-only (no public name).
 export {
   RECORD_SUPPORTED,
   isSpeakingMode,
@@ -20,4 +21,4 @@ export {
   recordControlHtml,
   wireSpeakingControls,
   wireRecordCompare,
-} from './engine.js';
+} from './view.js';

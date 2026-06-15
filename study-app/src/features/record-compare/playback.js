@@ -14,7 +14,7 @@ import { S } from './state.js';
 // Forward deps used only at runtime: stopCursors/levelFor/takeUrl now live in waveform.js; refUrl in
 // engine (→ view.js C1.6). Runtime-only use → the import cycles are safe (no module-eval cross-use).
 import { stopCursors, levelFor, takeUrl } from './waveform.js';
-import { refUrl } from './engine.js';
+import { refUrl } from './view.js';
 
 const clamp01 = (v) => Math.max(0, Math.min(1, v));
 // Apply the compare-player speed to an <audio> element before play. preservesPitch keeps the
