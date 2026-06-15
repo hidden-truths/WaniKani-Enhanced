@@ -959,7 +959,7 @@ Commits, newest first (all on `main`; touch the split web/ files + `src/` where 
    (`scheduleCustomSync`/`pushCustomCloud`/`pullCustomCloud`); add/edit/delete all
    propagate. Server enum widened to `['verbs','custom-verbs']`.
 1. **rate-limit auth (server — touches `src/`, not `index.html`).** Per-IP in-memory
-   limiter on `/v1/auth/{login,register}`; see [../src/lib/rateLimit.ts](../src/lib/rateLimit.ts).
+   limiter on `/v1/auth/{login,register}`; see [../src/lib/rateLimit.ts](../wk-enhanced-api/src/lib/rateLimit.ts).
 1. **pure-core test suite (`web/verbs-core.test.ts`).** Extracts the inline script,
    runs it under a DOM stub, tests passes/scheduleCard/isDue/rollingAcc/isLeech/
    normKana/filterSummary/facets. Guards the core through a future file split.

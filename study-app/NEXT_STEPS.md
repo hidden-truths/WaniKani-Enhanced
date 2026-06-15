@@ -371,7 +371,7 @@ This is the priority. The items below are smaller and can follow.
 - ~~JLPT N2/N1 near-empty filters (in-file #5)~~ — **shipped.** `annotateJlptChips`
   disables (dims) levels with zero verbs + tooltips counts; roving nav skips them.
 - ~~Rate limiting on `/v1/auth/*`~~ — **shipped (server).** Per-IP in-memory limiter
-  ([../src/lib/rateLimit.ts](../src/lib/rateLimit.ts)): login 20/15min, register
+  ([../src/lib/rateLimit.ts](../wk-enhanced-api/src/lib/rateLimit.ts)): login 20/15min, register
   8/hr → `429 {code:'rate_limited'}` + Retry-After.
 - ~~Typed-reading mode + TTS (in-file #1)~~ — **shipped.** Input toggle auto-grades
   typed kana (`normKana`/`submitTyped`, advisory verdict); Audio toggle + speaker
