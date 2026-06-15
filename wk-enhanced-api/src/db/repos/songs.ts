@@ -265,6 +265,49 @@ export function createSong(input: {
     return getSong({ extId: input.extId, viewer: input.createdBy })!;
 }
 
+// Re-save a reviewed analysis onto an EXISTING owned song: replace its metadata AND its lyric lines
+// wholesale (createSong is one-shot; this is the in-place edit, e.g. after fixing a flagged line).
+// Owner-scoped → null if the song isn't the caller's. Atomic: furigana + token offsets are
+// pre-validated, then the metadata update + delete-old-lines + insert-new-lines run in ONE
+// transaction, so a failure can't leave a half-song. Per-line clip timing rides the incoming lines'
+// clipStartMs (the client round-trips it); line ext_ids are ordinal-derived (`<ext>-L<i>`), so they
+// stay STABLE across a re-save — the record-compare itemKey ("<ext>:<ordinal>") is preserved.
+export function replaceSongLines(input: {
+    extId: string;
+    viewer: number;
+    title: string;
+    artist?: string | null;
+    youtubeId?: string | null;
+    lines: SongLineInput[];
+    parser?: string;
+}): AssembledSong | null {
+    for (const ln of input.lines) assertFuriganaMatches(ln.furigana ?? null, ln.text);
+    assertTokenOffsets(input.lines);
+    const db = getDb();
+    const row = db.query('SELECT id FROM song WHERE ext_id = ? AND created_by = ?').get(input.extId, input.viewer) as
+        | { id: number }
+        | null;
+    if (!row) return null;
+    db.transaction(() => {
+        db.query('UPDATE song SET title = ?, artist = ?, youtube_id = ? WHERE id = ?').run(
+            input.title,
+            input.artist ?? null,
+            input.youtubeId ?? null,
+            row.id,
+        );
+        // Drop the song's existing PRIVATE line rows (scoped to the owner so it can't reach anything
+        // else); translations/tags/links/annotations cascade via FK. Then re-insert the new set.
+        db.query(
+            `DELETE FROM sentence WHERE id IN (
+                 SELECT s.id FROM sentence s JOIN sentence_link l ON l.sentence_id = s.id
+                 WHERE l.owner_type = 'song' AND l.owner_id = ? AND s.created_by = ?
+             )`,
+        ).run(input.extId, input.viewer);
+        input.lines.forEach((ln, i) => insertSongLine(input.extId, input.viewer, false, i, ln, input.parser ?? 'llm'));
+    })();
+    return getSong({ extId: input.extId, viewer: input.viewer });
+}
+
 // Edit a song's metadata (title/artist/youtube). Owner-scoped in SQL → null if not the caller's.
 export function updateSong(input: {
     extId: string;

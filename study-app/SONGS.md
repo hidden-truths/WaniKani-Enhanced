@@ -195,7 +195,7 @@ require an account.
 | GET | `/v1/songs/{id}` | anon-OK (gated rows) | One song: meta + ordered lines (furigana, English, grammar, tokens via `annotate=1`, clip timing). |
 | POST | `/v1/songs/analyze` | account | **The LLM pass.** Lyrics + URL → per-line furigana/English/grammar/tokens/flags + profile. `503` without `ANTHROPIC_API_KEY`. |
 | GET | `/v1/songs/oembed?url=` | account | Keyless YouTube oEmbed proxy → `{ title, author }` for auto-fill. |
-| POST | `/v1/songs` | account | Persist a reviewed analysis: song row + sentence rows + links + translations + grammar tags + annotations. Idempotent by `ext_id`. |
+| POST | `/v1/songs` | account | Persist a reviewed analysis: song row + sentence rows + links + translations + grammar tags + annotations. **Upsert by `ext_id`** — re-POSTing your own song replaces its metadata + lines in place (re-save an edited analysis). |
 | PUT | `/v1/songs/{id}` | owner | Edit metadata (title/artist/youtube_id) + re-saved line edits. |
 | PUT | `/v1/songs/{id}/timing` | owner | Save per-line `clip_start_ms` from the tap-to-sync pass. |
 | DELETE | `/v1/songs/{id}` | owner | Delete a song + its line rows (cascade). |
@@ -424,6 +424,7 @@ as work lands. `[ ]` = todo, `[x]` = done, `[~]` = in progress.
 - [x] `scripts/seed-songs.ts` + `data/songs/` (one genuinely-PD starter: 故郷; curated picks deferred).
 - [x] Tests: 16 repo tests incl. the privacy-gate breach pins (private lyrics never leak to anon/another user). Full suite green (262), typecheck clean, routes smoke-tested live.
 - Note: `AnnotationToken` gained optional `jlpt`/`gloss` (LLM-sourced, Songs) + the GiNZA-only `tag`/`dep`/`head` became optional, so one token shape serves both producers. Line **ordinal = array index** (lines are server-sorted + contiguous; `compactLink` omits a falsy 0, but the DB stores correct 0-based ordinals for timing).
+- Follow-up hardening (post-Phase-1): the library `getSongs` is **two gated queries**, not a per-line assembly (it was O(total lines) round-trips on every no-store load); `createSong`/`upsertPublicSong`/`deleteSong`/`updateSongTiming` are **transactional** (no partial songs); and **`POST /v1/songs` is an upsert** (`replaceSongLines`) — re-POSTing your own song replaces its metadata + lines in place, so an edited analysis re-saves under the same `ext_id` (line ext_ids stay stable, the record-compare itemKey is preserved). The Add-review screen's *client-side* inline edit is still deferred; the server path now supports it.
 
 ### Phase 2 — Server: analysis endpoint ✅
 - [x] `@anthropic-ai/sdk` dep + `ANTHROPIC_API_KEY`/`ANTHROPIC_MODEL` (default `claude-opus-4-8`) in `config.ts` + `.env.example`; grammar catalog copied to `wk-enhanced-api/data/grammar.json` (runtime image carries no `study-app/`, so the seed-script import path can't be used at runtime).

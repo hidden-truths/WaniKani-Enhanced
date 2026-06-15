@@ -5,7 +5,7 @@
 //
 //   GET    /v1/songs            — library: public starters + own private songs (anon-readable)
 //   GET    /v1/songs/{id}       — one song: metadata + ordered lines (gated)
-//   POST   /v1/songs            — persist a reviewed analysis as a PRIVATE song (cookie)
+//   POST   /v1/songs            — persist/re-save a reviewed analysis as a PRIVATE song (cookie, upsert)
 //   PUT    /v1/songs/{id}       — edit metadata (cookie, owner)
 //   PUT    /v1/songs/{id}/timing— save per-line clip starts from tap-to-sync (cookie, owner)
 //   DELETE /v1/songs/{id}       — delete own song + its line rows (cookie, owner)
@@ -197,10 +197,10 @@ const createRouteDef = createRoute({
     method: 'post',
     path: '/',
     tags: ['Accounts'],
-    summary: 'Create a private song from a reviewed analysis',
+    summary: 'Create or re-save a private song from a reviewed analysis',
     request: { body: { required: true, content: { 'application/json': { schema: SongCreateRequestSchema } } } },
     responses: {
-        200: { description: 'Created (or the existing song on an idempotent re-POST).', content: { 'application/json': { schema: SongResponseSchema } } },
+        200: { description: 'Created, or replaced in place on a re-POST of your own song.', content: { 'application/json': { schema: SongResponseSchema } } },
         400: { description: 'Malformed body, too large, or furigana mismatch.', content: { 'application/json': { schema: ErrorSchema } } },
         401: { description: 'Not logged in.', content: { 'application/json': { schema: ErrorSchema } } },
         409: { description: 'That song id is already taken.', content: { 'application/json': { schema: ErrorSchema } } },
@@ -215,13 +215,25 @@ songsRouter.openapi(createRouteDef, (c) => {
     const oversize = tooLarge(c, body, MAX_SONG_BYTES);
     if (oversize) return oversize;
 
-    // Idempotent re-POST of the user's own id → return the existing song. A visible song with that id
-    // that's NOT theirs is either a public starter (custom=false) or another account's private song
-    // (createSong's UNIQUE below catches that) — refuse to let them claim it.
+    // Re-POST of the caller's OWN song → upsert: replace its metadata + lines in place (re-save an
+    // edited analysis). A visible song with that id that is NOT theirs is a public starter
+    // (custom=false) → refuse to let them claim it. Another account's PRIVATE id isn't visible here,
+    // so it falls through to createSong, whose UNIQUE(ext_id) maps to 409 below.
     const existing = db.getSong({ extId: body.id, viewer: user.id });
     if (existing) {
-        if (existing.custom) return c.json({ song: existing }, 200);
-        return c.json({ code: 'conflict' as const, error: 'id already taken', detail: 'That song id is reserved.' }, 409);
+        if (!existing.custom) {
+            return c.json({ code: 'conflict' as const, error: 'id already taken', detail: 'That song id is reserved.' }, 409);
+        }
+        const song = db.replaceSongLines({
+            extId: body.id,
+            viewer: user.id,
+            title: body.title,
+            artist: body.artist ?? null,
+            youtubeId: body.youtubeId ?? null,
+            lines: body.lines,
+        });
+        log.info('song.resave', { userId: user.id, extId: body.id, lines: body.lines.length });
+        return c.json({ song: song! }, 200);
     }
 
     if (db.countUserSongs(user.id) >= MAX_USER_SONGS) {

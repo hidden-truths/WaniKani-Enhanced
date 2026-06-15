@@ -242,3 +242,38 @@ describe('songs — write validation (no partial writes)', () => {
         expect(n("SELECT COUNT(*) AS n FROM sentence WHERE source='song'")).toBe(0);
     });
 });
+
+describe('songs — re-save (replaceSongLines, owner-scoped upsert)', () => {
+    test('swaps metadata + lines in place; line ext_ids stay stable', () => {
+        const a = db.createUser('a@x.com', 'h');
+        db.createSong({ extId: 'usr-a-1', title: 'old', createdBy: a.id, lines: sampleLines() });
+        const re = db.replaceSongLines({ extId: 'usr-a-1', viewer: a.id, title: 'new', artist: 'Z', lines: [
+            { text: 'いち', furigana: seg('いち'), en: 'one', tokens: [tok(0, 2, 'いち', 'NOUN', 'N5')] },
+        ] });
+        expect([re!.title, re!.artist]).toEqual(['new', 'Z']);
+        expect(re!.lineCount).toBe(1);
+        expect(re!.lines[0]!.text).toBe('いち');
+        expect(re!.lines[0]!.id).toBe('usr-a-1-L0'); // stable ordinal-derived ext_id (the record-compare itemKey)
+        // the old 2 line rows were REPLACED, not appended
+        expect(n("SELECT COUNT(*) AS n FROM sentence WHERE source='song'")).toBe(1);
+        // the library aggregate reflects the new words, not the old
+        expect(db.getSongs({ viewer: a.id })[0]!.words).toEqual([{ lemma: 'いち', jlpt: 'N5' }]);
+    });
+
+    test('is a null no-op for a non-owner (the song is untouched)', () => {
+        const a = db.createUser('a@x.com', 'h');
+        const b = db.createUser('b@x.com', 'h');
+        db.createSong({ extId: 'usr-a-1', title: 'mine', createdBy: a.id, lines: sampleLines() });
+        expect(db.replaceSongLines({ extId: 'usr-a-1', viewer: b.id, title: 'hijack', lines: [{ text: 'x', furigana: seg('x') }] })).toBeNull();
+        expect(db.getSong({ extId: 'usr-a-1', viewer: a.id })!.title).toBe('mine');
+        expect(n("SELECT COUNT(*) AS n FROM sentence WHERE source='song'")).toBe(2);
+    });
+
+    test('a bad furigana in a re-save aborts WITHOUT mutating the existing song', () => {
+        const a = db.createUser('a@x.com', 'h');
+        db.createSong({ extId: 'usr-a-1', title: 'keep', createdBy: a.id, lines: sampleLines() });
+        expect(() => db.replaceSongLines({ extId: 'usr-a-1', viewer: a.id, title: 'changed', lines: [{ text: 'ほん', furigana: [{ t: 'ちがう' }] }] })).toThrow();
+        const s = db.getSong({ extId: 'usr-a-1', viewer: a.id })!;
+        expect([s.title, s.lineCount]).toEqual(['keep', 2]); // pre-validation threw before the metadata UPDATE
+    });
+});
