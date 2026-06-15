@@ -10,12 +10,14 @@ export {
   initMicSelector,
 } from './capture.js';
 export {
-  speakingBarHtml,
   loadRecordings,
   newestTakeIdForItem,
+  setOnTakeSaved,
+} from './takes.js';
+export {
+  speakingBarHtml,
   paintCompareWaveforms,
   recordControlHtml,
-  setOnTakeSaved,
   wireSpeakingControls,
   wireRecordCompare,
 } from './engine.js';

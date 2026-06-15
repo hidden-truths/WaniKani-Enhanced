@@ -18,10 +18,9 @@
 // NOTE: this file lives one level deeper than the other features (features/record-compare/), so its
 // relative imports carry an extra '../' vs a features/*.js module.
 import { API_BASE } from '../../config.js';
-import { account, api, setSyncStatus } from '../cloud-core.js';
 import { settings, saveSettings } from '../../settings-store.js';
 import {
-  escapeHtml, clampKeep, formatDuration, validClip, findTrimBounds, waveformPeaks, clampSpeed, COMPARE_SPEEDS, rmsLevel, normGains,
+  escapeHtml, formatDuration, validClip, findTrimBounds, waveformPeaks, clampSpeed, COMPARE_SPEEDS, rmsLevel, normGains,
   // pure record-compare helpers extracted to core (C0) — direct (no binding):
   biasNative, biasTake, refClip, refVariantId, refShortLabel, parseControlCtx,
   // …and the base/httpServed/prefs-injected ones, wrapped below to keep their feature-local signatures
@@ -33,6 +32,7 @@ import { HTTP_SERVED } from '../tts.js';
 import { cycleMod } from '../audio.js';
 import { S, audioCtx } from './state.js';   // shared mutable singletons + the one AudioContext
 import { RECORD_SUPPORTED, isSpeakingMode, micOptionsHtml, startRecording, stopRecording } from './capture.js';
+import { takesFor, newestTakeId, deleteTake } from './takes.js';
 
 // RECORD_SUPPORTED, pickMime, mic selection, speaking mode (enter/exit/isSpeakingMode), silence
 // trim (maybeTrim), and the MediaRecorder lifecycle (start/stopRecording, showReview) → ./capture.js.
@@ -82,32 +82,8 @@ function speedControlHtml() {
 }
 // micOptionsHtml (used by speakingBarHtml below) + initMicSelector → ./capture.js.
 
-// ---------- take cache (per scope, fetched once) ----------
-// recCache[scope] = array of takes {id,lesson,itemKey,durationMs,createdAt} newest-first.
-const recCache = {};
-export async function loadRecordings(scope) {
-  if (!account) { recCache[scope] = []; return []; }
-  try {
-    const r = await api('/v1/audio/recordings?lesson=' + scope);   // server param name is `lesson` (opaque partition)
-    recCache[scope] = (r && r.recordings) || [];
-  } catch (e) { recCache[scope] = recCache[scope] || []; }
-  return recCache[scope];
-}
-function takesFor(scope, itemKey) {
-  return (recCache[scope] || []).filter(t => t.itemKey === itemKey);
-}
-// Newest take id for an item (or null) — used by the caller to let a unified play button offer
-// the user's own recording as a 'user'-kind variant. Reads the per-scope take cache that
-// loadRecordings already populated on render.
-export function newestTakeIdForItem(scope, itemKey) {
-  const takes = takesFor(scope, itemKey);
-  return takes.length ? takes[0].id : null;
-}
-// Replace one item's takes in the cache (after upload/delete) without a refetch.
-function setTakes(scope, itemKey, takes) {
-  const others = (recCache[scope] || []).filter(t => t.itemKey !== itemKey);
-  recCache[scope] = others.concat(takes).sort((a, b) => b.createdAt - a.createdAt);
-}
+// ---------- take cache / upload / delete + setOnTakeSaved → ./takes.js ----------
+// (loadRecordings/takesFor/newestTakeId(ForItem)/setTakes/uploadTake/deleteTake/setOnTakeSaved)
 
 const clamp01 = (v) => Math.max(0, Math.min(1, v));
 // Apply the compare-player speed to an <audio> element before play. preservesPitch keeps the
@@ -478,46 +454,10 @@ function refreshRefUi(control) {
 
 // startRecording / stopRecording (MediaRecorder lifecycle) + showReview → ./capture.js.
 
-// Exported so capture.js (showReview's Save) can upload; moves to takes.js (C1.3).
-export async function uploadTake(control, blob, durationMs) {
-  const scope = Number(control.dataset.scope), itemKey = control.dataset.itemkey;
-  const keep = clampKeep(settings.recordingsKeep);
-  const ct = blob.type || 'audio/webm';
-  setSyncStatus('saving…');
-  try {
-    const qs = `?lesson=${scope}&itemKey=${encodeURIComponent(itemKey)}&durationMs=${Math.round(durationMs)}&keep=${keep}`;
-    const res = await fetch(API_BASE + '/v1/audio/recordings' + qs, {
-      method: 'POST', credentials: 'include', cache: 'no-store',
-      headers: { 'Content-Type': ct }, body: blob,
-    });
-    if (!res.ok) throw new Error('HTTP ' + res.status);
-    const data = await res.json();
-    setTakes(scope, itemKey, (data && data.takes) || []);
-    setSyncStatus('✓ recording saved');
-    if (onTakeSaved) { try { onTakeSaved(scope, itemKey); } catch (e) {} }   // notify the host (e.g. Self-Talk practice signal)
-  } catch (e) {
-    setSyncStatus('⚠ could not save recording');
-  }
-  resetControl(control);
-}
-
-async function deleteTake(control, id) {
-  const scope = Number(control.dataset.scope), itemKey = control.dataset.itemkey;
-  try { await api('/v1/audio/recordings/' + id, { method: 'DELETE' }); } catch (e) {}
-  setTakes(scope, itemKey, takesFor(scope, itemKey).filter(t => t.id !== id));
-  resetControl(control);
-}
-
-// Optional host hook fired after a take is successfully saved (scope, itemKey) — lets a consumer
-// record a practice signal (Self-Talk's "practiced today"/streak) without coupling this engine to it.
-let onTakeSaved = null;
-export function setOnTakeSaved(fn) { onTakeSaved = fn || null; }
+// uploadTake / deleteTake / setOnTakeSaved → ./takes.js.
 
 // ---------- compare player ----------
-function newestTakeId(control) {
-  const takes = takesFor(Number(control.dataset.scope), control.dataset.itemkey);
-  return takes.length ? takes[0].id : null;
-}
+// newestTakeId / takesFor / setTakes → ./takes.js (imported above).
 function litBtn(control, btn) { stopCompare(control); if (btn) btn.classList.add('playing'); }
 function clearBtn(btn) { if (btn) btn.classList.remove('playing'); }
 

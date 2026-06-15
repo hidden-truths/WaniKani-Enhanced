@@ -10,10 +10,10 @@ import { setSyncStatus } from '../cloud-core.js';
 import { settings } from '../../settings-store.js';
 import { escapeHtml, findTrimBounds, encodeWav, chooseMime, RECORD_MIME_CANDIDATES } from '../../core/index.js';
 import { audioCtx } from './state.js';
-// Forward deps on the not-yet-peeled remainder; repointed as those peel (uploadTake → takes.js C1.3,
-// resetControl → view.js C1.6). Runtime-only use (inside showReview), so the engine⇄capture import
-// cycle is safe — nothing here runs at module-eval time.
-import { uploadTake, resetControl } from './engine.js';
+// Forward deps used only inside showReview (runtime): uploadTake (takes) + resetControl (view, still
+// in engine until C1.6). Runtime-only, so these import cycles are safe (no module-eval cross-use).
+import { uploadTake } from './takes.js';
+import { resetControl } from './engine.js';
 
 // Capability gates. Recording needs getUserMedia + MediaRecorder; both are absent over
 // insecure origins / old browsers. When unavailable we degrade to a quiet hint.
