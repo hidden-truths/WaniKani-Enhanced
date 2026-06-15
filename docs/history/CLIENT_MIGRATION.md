@@ -1,10 +1,10 @@
 # CLIENT_MIGRATION.md
 
-Plan for migrating the userscript from talking to ImmersionKit / DuckDuckGo / Google TTS directly in the browser to calling a single backing server ([wk-enhanced-api/](wk-enhanced-api/)). **Status (2026-05-25): All three phases shipped.** Userscript [wkenhanced.user.js](wkenhanced.user.js) v2.0.0 is server-only; a v1.1.1 direct-path snapshot was kept at `legacy/` as a frozen fallback (removed in the 2026-06 cleanup). Server runs at `https://api.wkenhanced.dev` with the four deploy-day fixes baked in (Bun `idleTimeout`, fetch `cache: 'no-cache'`, CORS `Access-Control-Expose-Headers: ETag`, weak-ETag tolerance — see DEAD-END WARNINGS in [CLAUDE.md](CLAUDE.md) + [wk-enhanced-api/CLAUDE.md](wk-enhanced-api/CLAUDE.md)).
+Plan for migrating the userscript from talking to ImmersionKit / DuckDuckGo / Google TTS directly in the browser to calling a single backing server ([wk-enhanced-api/](../../wk-enhanced-api/)). **Status (2026-05-25): All three phases shipped.** Userscript [wkenhanced.user.js](../../wkenhanced.user.js) v2.0.0 is server-only; a v1.1.1 direct-path snapshot was kept at `legacy/` as a frozen fallback (removed in the 2026-06 cleanup). Server runs at `https://api.wkenhanced.dev` with the four deploy-day fixes baked in (Bun `idleTimeout`, fetch `cache: 'no-cache'`, CORS `Access-Control-Expose-Headers: ETag`, weak-ETag tolerance — see DEAD-END WARNINGS in [CLAUDE.md](../../CLAUDE.md) + [wk-enhanced-api/CLAUDE.md](../../wk-enhanced-api/CLAUDE.md)).
 
 This was the **biggest planned single change** to the userscript since v0.1 — it deleted roughly half the data-layer code and rebuilt it as a thin client of our API. Done in three phases (coexistence opt-in, default-on flip, slim + legacy snapshot) with a fallback toggle between Phases 1 and 2 so we could verify before fully cutting over.
 
-For server architecture see [wk-enhanced-api/CLAUDE.md](wk-enhanced-api/CLAUDE.md). For the original server design (and what changed from plan to build) see [SERVER_DESIGN.md](SERVER_DESIGN.md).
+For server architecture see [wk-enhanced-api/CLAUDE.md](../../wk-enhanced-api/CLAUDE.md). For the original server design (and what changed from plan to build) see [SERVER_DESIGN.md](../../SERVER_DESIGN.md).
 
 ## Goals
 
@@ -24,7 +24,7 @@ For server architecture see [wk-enhanced-api/CLAUDE.md](wk-enhanced-api/CLAUDE.m
 
 Phase 1 (current state) doesn't require deployment — the toggle is opt-in and dev users point at `http://localhost:3000`. Phase 2 (flipping `useApiServer: true` by default) DOES require the server to be reachable from `www.wanikani.com`.
 
-The canonical deploy checklist now lives in [wk-enhanced-api/README.md](wk-enhanced-api/README.md) under **"Deployment (live)"** — see that for the actual step-by-step (host provisioning, env vars, systemd unit, initial warm, monthly cron, etc.). The short version:
+The canonical deploy checklist now lives in [wk-enhanced-api/README.md](../../wk-enhanced-api/README.md) under **"Deployment (live)"** — see that for the actual step-by-step (host provisioning, env vars, systemd unit, initial warm, monthly cron, etc.). The short version:
 
 1. Pick a domain + provision a droplet + decide local-FS vs S3 storage.
 2. TLS in front (Cloudflare or Caddy) — userscript runs on HTTPS so mixed content is blocked.
@@ -135,7 +135,7 @@ When all green: flip a few trusted users to the API path, gather feedback, watch
 
 Flipped `useApiServer: true` and `apiServerUrl: 'https://api.wkenhanced.dev'` in `DEFAULTS`, added `// @connect api.wkenhanced.dev`, bumped `@version` + `SCRIPT_VERSION`. Single commit `afb02b2` ("Userscript v1.1.0: API server default-on (Phase 2)"). Existing users who had `useApiServer` explicitly toggled keep their preference; new installs get the API path.
 
-**The smoke-test on flip day surfaced four bugs that the rc2 opt-in path didn't exercise** — all fixed before declaring Phase 2 done, version bumped to v1.1.1 to capture them. Each one is documented as a DEAD-END WARNING in [CLAUDE.md](CLAUDE.md) or [wk-enhanced-api/CLAUDE.md](wk-enhanced-api/CLAUDE.md); summarized here for the migration record:
+**The smoke-test on flip day surfaced four bugs that the rc2 opt-in path didn't exercise** — all fixed before declaring Phase 2 done, version bumped to v1.1.1 to capture them. Each one is documented as a DEAD-END WARNING in [CLAUDE.md](../../CLAUDE.md) or [wk-enhanced-api/CLAUDE.md](../../wk-enhanced-api/CLAUDE.md); summarized here for the migration record:
 
 1. **Bun `idleTimeout` reset cold-fill responses** (`9be345c`). Bun's default 10s idle timeout killed responses for words whose lazy-warm took >10s. Server-side warm still completed, but the client got a TCP reset. Fix: `idleTimeout: 60` on the serve export.
 2. **Chrome HTTP cache held stale empty payloads under `max-age=86400`** (`9e1ff1c`). Words hit during the bulk warm got an empty payload, Chrome cached it for 24h, userscript re-served the empty cache copy even after server-side re-warm. Fix: `cache: 'no-cache'` on the three server-bound `fetch()` calls forces conditional revalidation (`If-None-Match` round-trip → cheap 304s on unchanged, fresh 200s on changed).
@@ -148,13 +148,13 @@ Watch the server for traffic + error spikes.
 
 Pulled forward earlier than the originally-planned 2+ week Phase 2 soak per the maintainer's call (low-risk hygiene work paired with the rename rebrand). Three commits, one logical change:
 
-1. `3e495fc` **Legacy: snapshot v1.1.1 direct-path userscript before Phase 3 slimming.** Copied [wk-vocab-review-ik.user.js](legacy/wk-vocab-review-ik-direct.user.js) to `legacy/` with `serverPathEnabled()` hardcoded `false`, `@name` distinguished as "(Legacy Direct)", `@version 1.1.1-legacy`, no `@updateURL`. Plus a [legacy/README.md](legacy/README.md) explaining the trade-offs.
+1. `3e495fc` **Legacy: snapshot v1.1.1 direct-path userscript before Phase 3 slimming.** Copied `wk-vocab-review-ik.user.js` to `legacy/` with `serverPathEnabled()` hardcoded `false`, `@name` distinguished as "(Legacy Direct)", `@version 1.1.1-legacy`, no `@updateURL`. Plus a `legacy/README.md` explaining the trade-offs.
 
-2. `cbfeabf` **Rename wk-vocab-api → wk-enhanced-api in source tree.** Aligned the source directory + package name with the production deployment (which had been running as wk-enhanced-api since the initial deploy). `git mv` + `package.json` `name` + .env defaults + internal log/comment strings; `bun run typecheck && bun test` clean (76 pass). Includes a migration note in `wk-enhanced-api.service` for production droplets that predate the rename — see [wk-enhanced-api/deploy/README.md](wk-enhanced-api/deploy/README.md) "Updating a pre-rename droplet."
+2. `cbfeabf` **Rename wk-vocab-api → wk-enhanced-api in source tree.** Aligned the source directory + package name with the production deployment (which had been running as wk-enhanced-api since the initial deploy). `git mv` + `package.json` `name` + .env defaults + internal log/comment strings; `bun run typecheck && bun test` clean (76 pass). Includes a migration note in `wk-enhanced-api.service` for production droplets that predate the rename — see [wk-enhanced-api/deploy/README.md](../../wk-enhanced-api/deploy/README.md) "Updating a pre-rename droplet."
 
 3. `551e731` **Userscript v2.0.0: rename to wkenhanced.user.js + slim to server-only.** Deleted ~1500 lines: IK URL builders, `fetchAndCache`, IK proxy MP3 fetcher, Google TTS path, DDG two-step scrape, `gmFetch`, IK index_meta fetch + lossy-title heuristic, `scoreJlpt` + bundled `JLPT_VOCAB` (~93KB inline), `maybeUpgradeCache` + `wipeAbandonedCachePrefixes`, `debugWkIkTitle`. Renamed `SCRIPT_ID` to `'wkenhanced'`, settings + cache prefixes to `wkenhanced.*`. Dropped `useApiServer` setting entirely (now no-op). Dropped `@grant GM_xmlhttpRequest`; userscript only talks to `api.wkenhanced.dev` via plain `fetch()`. `CSS_PREFIX` deliberately kept at `'wk-ik'` (internal class namespace, not user-visible — ~140 hardcoded references for zero benefit). Userscript shrank from 4398 → 3529 lines.
 
-Decisions made when pulling Phase 3 forward (documented in [NEXT_STEPS.md](NEXT_STEPS.md) "Phase 3 wrap-up notes"):
+Decisions made when pulling Phase 3 forward (documented in [NEXT_STEPS.md](../../NEXT_STEPS.md) "Phase 3 wrap-up notes"):
 
 - **Direct path preserved, not deleted.** Per maintainer pivot. Legacy/ snapshot is the fallback for "API server is down for an extended period." No auto-update.
 - **`useApiServer` setting removed entirely.** Any stored value silently ignored.
@@ -227,7 +227,7 @@ Unchanged. Reads `payload.examples` and renders. No new network.
 Most of the work is already done. The userscript migration shouldn't require new server endpoints. Possible small server changes during migration:
 
 1. **CORS verification** — confirm `Access-Control-Allow-Origin: *` actually works from `www.wanikani.com` for both GET and the POST batch. Currently we set the header blanket; verify in DevTools that there's no preflight issue.
-2. **`@connect` localhost workflow** — for dev, the userscript needs `@connect localhost` AND the server needs to be running on `http://localhost:3000`. Document in [wk-enhanced-api/CLAUDE.md](wk-enhanced-api/CLAUDE.md) under "Diagnostic helpers".
+2. **`@connect` localhost workflow** — for dev, the userscript needs `@connect localhost` AND the server needs to be running on `http://localhost:3000`. Document in [wk-enhanced-api/CLAUDE.md](../../wk-enhanced-api/CLAUDE.md) under "Diagnostic helpers".
 3. **Production URL hardening** — once deployed, double-check rate limits at the Cloudflare layer (100 req/min per IP across `/v1/*` is the SERVER_DESIGN.md value).
 4. **Cache-Control on `/media/*` static route** — already `max-age=31536000, immutable`. Verify.
 

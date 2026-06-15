@@ -4,7 +4,7 @@
 
 Backing API server for the [WKEnhanced](../wkenhanced.user.js) userscript. Coalesces three external services (ImmersionKit, DuckDuckGo, Google Translate TTS) behind one pre-warmed endpoint so every userscript user doesn't hit those services individually.
 
-**Status**: deployed to production at `https://api.wkenhanced.dev` (DO droplet in SFO3 + DO Spaces, Cloudflare Tunnel for TLS/edge). Userscript v2.0.0 is server-only — every vocab lookup goes through this server. (A frozen v1.1.1 direct-path snapshot was kept at `legacy/` as an offline fallback; it was removed in the 2026-06 cleanup — recoverable from git history.) See [../CLIENT_MIGRATION.md](../CLIENT_MIGRATION.md) for the migration history.
+**Status**: deployed to production at `https://api.wkenhanced.dev` (DO droplet in SFO3 + DO Spaces, Cloudflare Tunnel for TLS/edge). Userscript v2.0.0 is server-only — every vocab lookup goes through this server. (A frozen v1.1.1 direct-path snapshot was kept at `legacy/` as an offline fallback; it was removed in the 2026-06 cleanup — recoverable from git history.) See [../CLIENT_MIGRATION.md](../docs/history/CLIENT_MIGRATION.md) for the migration history.
 
 Source directory was renamed from `wk-vocab-api/` → `wk-enhanced-api/` on 2026-05-25 to match the deployment. Production droplets predating that rename need a one-time `mv` step; see [deploy/README.md](deploy/README.md) "Updating a pre-rename droplet."
 

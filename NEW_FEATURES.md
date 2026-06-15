@@ -4,7 +4,7 @@ Backlog of features discussed in conversation but not yet shipped. Track the des
 
 Loosely ordered by value within each section. Anything urgent should move to a real issue / commit branch — this is the parking lot.
 
-See also [CLAUDE.md](CLAUDE.md) for architecture notes and dead-ends already explored, [README.md](README.md) for the user-facing description of what's shipped today, [SERVER_DESIGN.md](SERVER_DESIGN.md) and [wk-enhanced-api/CLAUDE.md](wk-enhanced-api/CLAUDE.md) for the server, and [CLIENT_MIGRATION.md](CLIENT_MIGRATION.md) for the plan to wire the userscript up to the server.
+See also [CLAUDE.md](CLAUDE.md) for architecture notes and dead-ends already explored, [README.md](README.md) for the user-facing description of what's shipped today, [SERVER_DESIGN.md](SERVER_DESIGN.md) and [wk-enhanced-api/CLAUDE.md](wk-enhanced-api/CLAUDE.md) for the server, and [CLIENT_MIGRATION.md](docs/history/CLIENT_MIGRATION.md) for the plan to wire the userscript up to the server.
 
 ---
 
@@ -182,7 +182,7 @@ These are ideas for the [wk-enhanced-api](wk-enhanced-api/) server. Most exist *
 
 ### ~~Deploy the server publicly~~ — DONE (2026-05-25)
 
-The first production deploy landed at `https://api.wkenhanced.dev` on DO (SFO3, $7/mo Premium AMD droplet + Spaces) with Cloudflare Tunnel in front. See [wk-enhanced-api/deploy/README.md](wk-enhanced-api/deploy/README.md) for the install recipe (updated post-deploy to capture every workaround). Phase 2 (default-on) shipped as userscript v1.1.1; Phase 3 (server-only + legacy snapshot + rename) shipped as v2.0.0 (see [CLIENT_MIGRATION.md](CLIENT_MIGRATION.md)).
+The first production deploy landed at `https://api.wkenhanced.dev` on DO (SFO3, $7/mo Premium AMD droplet + Spaces) with Cloudflare Tunnel in front. See [wk-enhanced-api/deploy/README.md](wk-enhanced-api/deploy/README.md) for the install recipe (updated post-deploy to capture every workaround). Phase 2 (default-on) shipped as userscript v1.1.1; Phase 3 (server-only + legacy snapshot + rename) shipped as v2.0.0 (see [CLIENT_MIGRATION.md](docs/history/CLIENT_MIGRATION.md)).
 
 ### Dockerize the server — **shipped to prod 2026-05-26**
 

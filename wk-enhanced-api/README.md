@@ -2,7 +2,7 @@
 
 Backing API for the [WKEnhanced](../wkenhanced.user.js) userscript. Coalesces ImmersionKit, DuckDuckGo, and Google Translate TTS behind a single pre-warmed endpoint so every client doesn't have to hit three external services individually.
 
-Deployed at `https://api.wkenhanced.dev` (DigitalOcean droplet in SFO3 + Spaces bucket, Cloudflare Tunnel for TLS/edge). The userscript talks to this server exclusively as of v2.0.0; see [../CLIENT_MIGRATION.md](../CLIENT_MIGRATION.md) for the migration history.
+Deployed at `https://api.wkenhanced.dev` (DigitalOcean droplet in SFO3 + Spaces bucket, Cloudflare Tunnel for TLS/edge). The userscript talks to this server exclusively as of v2.0.0; see [../CLIENT_MIGRATION.md](../docs/history/CLIENT_MIGRATION.md) for the migration history.
 
 Doc map:
 

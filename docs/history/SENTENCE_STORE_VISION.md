@@ -123,12 +123,12 @@ point — plus NER. Two models: `ja_ginza` (fast, light) vs `ja_ginza_electra` (
 ## Suggested reading for the planning session (in order)
 
 1. This doc.
-2. [study-app/CARDS.md](study-app/CARDS.md) — the card schema + furigana/example formats (the thing that
+2. [study-app/CARDS.md](../../study-app/CARDS.md) — the card schema + furigana/example formats (the thing that
    stops embedding sentences).
-3. [study-app/CLAUDE.md](study-app/CLAUDE.md) — module map, design-system + offline-first contracts,
-   dead-ends; [study-app/SELFTALK.md](study-app/SELFTALK.md) + [study-app/MINNA.md](study-app/MINNA.md) —
+3. [study-app/CLAUDE.md](../../study-app/CLAUDE.md) — module map, design-system + offline-first contracts,
+   dead-ends; [study-app/SELFTALK.md](../../study-app/SELFTALK.md) + [study-app/MINNA.md](../../study-app/MINNA.md) —
    the three sentence sources.
-4. [wk-enhanced-api/CLAUDE.md](wk-enhanced-api/CLAUDE.md) — the DB tables, the storage layer, the
+4. [wk-enhanced-api/CLAUDE.md](../../wk-enhanced-api/CLAUDE.md) — the DB tables, the storage layer, the
    opaque-`user_progress` model, the unified `/v1/audio/*` surface, deploy shape.
 5. `study-app/src/data/examples.js`, `wk-enhanced-api/data/minna/lesson-23.json`,
    `study-app/src/data/selftalk.js` — the three concrete shapes to unify.
