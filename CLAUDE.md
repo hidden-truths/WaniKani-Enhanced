@@ -95,11 +95,12 @@ These are about the upstream data flow that historically the userscript handled.
 Exposed on `PAGE_WIN` at boot, so reachable directly from devtools:
 
 - `openWkEnhancedSettings()` — open the settings dialog directly. Useful if the WKOF menu link isn't visible in WK's avatar dropdown.
-- `debugWkEnhanced()` — dump four sections, top-to-bottom:
+- `debugWkEnhanced()` — dump five sections, top-to-bottom:
   1. Known reveal-panel selectors with their classList / hidden / computed display / `offsetParent` / `data-state` / `data-quiz-input-quiz-state-value`.
   2. `--- .quiz-input subtree (classes + data-*) ---` — every descendant of `.quiz-input` with non-empty class or `data-*` attrs. Used to identify graded-state markers if the bg-color reveal detection ever stops working.
   3. `--- bg-color chain from input → body ---` — computed `backgroundColor` of every ancestor from `#user-response` up to body. Used to see which element actually carries the green/red color if a future WK moves it from the input itself.
-  4. `--- .character-header DOM tree (bbox in viewport coords) ---` — full recursive dump of `.character-header` and descendants with bounding box, computed `position`, computed `display`, and `font-size`. Used to diagnose vocab-character positioning issues (this is what surfaced the `.character-header__content` positioning trap).
+  4. `--- quiz-queue Stimulus roots (for prefetch tuning) ---` — every `[data-controller~="quiz-queue"]` element with its `data-*` attribute list. Used to find where WK exposes the upcoming-items list so `prefetchUpcomingExamples` / `getUpcomingCharacters` can read it (if the array entries use a field other than `characters`, add it to the `tryAdd` probe list).
+  5. `--- .character-header DOM tree (bbox in viewport coords) ---` — full recursive dump of `.character-header` and descendants with bounding box, computed `position`, computed `display`, and `font-size`. Used to diagnose vocab-character positioning issues (this is what surfaced the `.character-header__content` positioning trap).
 - `debugWkEnhancedApi('<word>')` — API-server diagnostic (defaults to `食べる`). Reports current settings + resolved base URL, probes `/v1/health`, runs a sample `GET /v1/vocab/<word>`, and inspects the local payload cache. Use when a card renders empty / wrong — first stop is usually "is the server reachable" (health probe) vs "is the payload shape what we expect" (sample GET output).
 
 ## When a card renders empty (playbook)

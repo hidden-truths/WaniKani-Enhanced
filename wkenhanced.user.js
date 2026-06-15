@@ -1,7 +1,7 @@
 // ==UserScript==
 // @name         WKEnhanced
 // @namespace    https://github.com/jbrelly/wk-ik-examples
-// @version      2.0.1
+// @version      2.0.2
 // @description  Example sentences (audio + image) inlaid into WaniKani vocab reviews, served from the WKEnhanced API.
 // @author       jbrelly
 // @match        https://www.wanikani.com/*
@@ -19,7 +19,7 @@
 
     const SCRIPT_ID = 'wkenhanced';
     const SCRIPT_TITLE = 'WKEnhanced';
-    const SCRIPT_VERSION = '2.0.1';
+    const SCRIPT_VERSION = '2.0.2';
 
     // API server endpoints. Single source of truth for prod / dev URLs; lift
     // here when changing the deployed domain. Note: changing PROD_API_BASE
@@ -73,6 +73,15 @@
     // socket while we render the current card.
     const SERVER_BATCH_TIMEOUT_MS = 10000;
 
+    // Shared options for every GET to the API. `cache: 'no-cache'` is
+    // load-bearing: it forces conditional revalidation against the server's
+    // ETag instead of letting Chrome's HTTP cache silently serve a stale
+    // (possibly empty) payload for the full `max-age` window the server
+    // advertises — see fetchVocab for the full incident write-up. Spread
+    // per-call to add `headers`/`signal`. POST /v1/vocab/batch deliberately
+    // does NOT use this (browsers don't cache POSTs, so no-cache is moot).
+    const GET_FETCH_OPTS = { credentials: 'omit', mode: 'cors', cache: 'no-cache' };
+
     // CSS class prefix is intentionally kept at 'wk-ik' — it's an
     // implementation-detail class namespace used by injectStyles; renaming
     // would touch ~140 hardcoded CSS rule strings in this file for zero
@@ -106,8 +115,9 @@
         // Base URL of the wk-enhanced-api server. Defaults to PROD_API_BASE;
         // for local dev set to DEV_API_BASE in settings. Trailing slash is
         // stripped at use time. Empty disables data fetching entirely (cards
-        // render empty) — use the legacy/ snapshot if you need a fallback
-        // for a prolonged server outage.
+        // render empty); there is no client-side fallback — the v1.x browser-
+        // direct path was removed in v2.0.0 (recover it from git history if
+        // ever needed for a prolonged server outage).
         apiServerUrl: PROD_API_BASE,
         // On review-session entry, batch-fetch this many upcoming subjects
         // via POST /v1/vocab/batch so the next cards render instantly from
@@ -1791,14 +1801,14 @@
         }
         const probeWord = word || '食べる';
         // Health probe.
-        fetch(`${base}/v1/health`, { credentials: 'omit', mode: 'cors', cache: 'no-cache' })
+        fetch(`${base}/v1/health`, { ...GET_FETCH_OPTS })
             .then((r) => r.json().then((j) => ({ status: r.status, body: j })))
             .then((r) => console.log('GET /v1/health →', r))
             .catch((err) => console.warn('GET /v1/health failed:', err));
         // Sample fetch (raw, no adapter — show what the wire sees).
         const probeUrl = `${base}/v1/vocab/${encodeURIComponent(probeWord)}`;
         console.log(`GET ${probeUrl} ...`);
-        fetch(probeUrl, { credentials: 'omit', mode: 'cors', cache: 'no-cache' })
+        fetch(probeUrl, { ...GET_FETCH_OPTS })
             .then((r) => r.json().then((j) => ({ status: r.status, etag: r.headers.get('ETag'), body: j })))
             .then((r) => {
                 console.log('Server response:', {
@@ -2017,7 +2027,7 @@
         // Chrome cached it under max-age=86400, and the userscript kept
         // re-serving the empty payload from cache even after the warm
         // re-populated the row server-side).
-        return fetch(url, { headers, credentials: 'omit', mode: 'cors', cache: 'no-cache', signal: ctrl.signal })
+        return fetch(url, { ...GET_FETCH_OPTS, headers, signal: ctrl.signal })
             .finally(() => clearTimeout(timer))
             .then((res) => {
                 const ms = Date.now() - t0;
@@ -2193,7 +2203,6 @@
                 _serverAudioUrl: e.audioUrl || null,
                 _serverImageUrl: e.imageUrl || null,
                 _serverFallbackImages: fallbacks,
-                _serverExampleId: e.id || null,
             };
         });
         return {
@@ -2302,7 +2311,7 @@
     // literature. serverPayloadToCacheEntry sets `sound` to a sentinel
     // string when the upstream payload's hasOriginalAudio is true.
     function hasOriginalAudio(e) {
-        return !!(e && (e.sound || e.sound_url));
+        return !!(e && e.sound);
     }
 
     // JLPT scoring (formerly scoreJlpt) is computed server-side and arrives
@@ -3156,6 +3165,16 @@
         renderList();
     }
 
+    // True when a sentence's hardest-word JLPT level is known and harder than
+    // the user's ceiling (numerically lower = harder; N1=1 … N5=5). Unknown
+    // level (no _jlptMax) fails open — never flagged as above-ceiling. Shared
+    // by buildPickerRow (badge styling) and onPickerEntryClick (bypass flag)
+    // so the two can't drift apart on the unknown-level sentinel.
+    function exceedsJlptCeiling(entry, ceiling) {
+        const lvl = typeof entry._jlptMax === 'number' ? entry._jlptMax : 0;
+        return ceiling > 0 && lvl > 0 && lvl < ceiling;
+    }
+
     // Build a single row in the picker list. Factored out so renderList can
     // call it inside its slice loop without 80 lines of inline DOM.
     function buildPickerRow(e, absoluteIdx, currentExample, ceiling, raw, prefs) {
@@ -3165,7 +3184,7 @@
         if (e === currentExample) row.classList.add('current');
 
         const lvl = typeof e._jlptMax === 'number' ? e._jlptMax : 0;
-        const exceedsCeiling = ceiling > 0 && lvl > 0 && lvl < ceiling;
+        const exceedsCeiling = exceedsJlptCeiling(e, ceiling);
         if (exceedsCeiling) {
             row.classList.add('above-ceiling');
             row.title = `Hardest known word ≈ N${lvl}, above your N${ceiling} ceiling.`;
@@ -3226,8 +3245,7 @@
 
     function onPickerEntryClick(entry, raw, prefs) {
         const ceiling = jlptCeilingNumber(prefs.jlptCeiling);
-        const lvl = typeof entry._jlptMax === 'number' ? entry._jlptMax : 5;
-        const exceedsCeiling = ceiling > 0 && lvl < ceiling;
+        const exceedsCeiling = exceedsJlptCeiling(entry, ceiling);
 
         // Match the bypass flag to the chosen entry's relationship to the
         // ceiling. Picking an in-ceiling entry clears any prior bypass —
@@ -3314,11 +3332,12 @@
         card.textContent = 'No example found.';
         attachCardToDom(card);
         state.cardEl = card;
-        // No auto-remove timer: removing the empty card would also strip our
-        // host styling (via the old coupling) and visibly reset the header to
-        // its default WK height. The message is small and tucked into the
-        // bottom-left corner of the expanded purple area; it stays until the
-        // next subject loads.
+        // No auto-remove timer: the empty card stays until the next subject
+        // loads. Host styling is owned by handleDomChange (via applyHostStyling/
+        // clearHostStyling), not card removal — see removeCard — so leaving the
+        // message in place keeps the expanded purple header steady instead of
+        // collapsing to WK's default height. The message is small and tucked
+        // into the bottom-left corner of the purple area.
     }
 
     // Apply / clear the host styling (min-height + position:relative + character
