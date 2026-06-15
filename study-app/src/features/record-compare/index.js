@@ -14,9 +14,9 @@ export {
   newestTakeIdForItem,
   setOnTakeSaved,
 } from './takes.js';
+export { paintCompareWaveforms } from './waveform.js';
 export {
   speakingBarHtml,
-  paintCompareWaveforms,
   recordControlHtml,
   wireSpeakingControls,
   wireRecordCompare,
