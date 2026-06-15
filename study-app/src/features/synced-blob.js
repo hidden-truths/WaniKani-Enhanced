@@ -16,16 +16,20 @@
 //                          when called from a 409 reconcile (Self-Talk skips its re-push then).
 //   shouldSeed()        -> optional: when the server has nothing, push local to seed? (default yes)
 //   onOffline()         -> optional: pull-failure hook (progress shows '⚠ offline'; others quiet)
+//   merge(local,server) -> optional: 409 conflict resolver. When present, a conflict UNIONS the
+//                          local + server copies (no data loss) and re-pushes, instead of the
+//                          server-wins MVP. Pure; the per-blob strategies live in core/merge.js.
 //   debounceMs          -> coalesce window (default 1200, matching the old schedulers)
 
 import { account, api, setSyncStatus } from './cloud-core.js';
 import * as queue from '../net/sync-queue.js';
 
-export function createSyncedBlob({ appKey, read, apply, afterPull, shouldSeed, onOffline, debounceMs = 1200 }) {
+export function createSyncedBlob({ appKey, read, apply, afterPull, shouldSeed, onOffline, merge, debounceMs = 1200 }) {
   const path = '/v1/progress/' + appKey;
   const queueKey = 'progress:' + appKey;
   let timer = null;
   let lastUpdatedAt = null;   // server updated_at for our last sync; sent as baseUpdatedAt (B4)
+  let mergingReconcile = false;   // guards the merge re-push to a single round (E1)
 
   // Debounced push — coalesces the rapid save() calls during a session into one PUT.
   function schedule() {
@@ -56,16 +60,32 @@ export function createSyncedBlob({ appKey, read, apply, afterPull, shouldSeed, o
     }
   }
 
-  // B4 optimistic-concurrency conflict: the server row moved since our lastUpdatedAt. MVP =
-  // server-wins. Adopt the server's current copy (carried on the 409 body) so the other device's
-  // change is preserved, not silently clobbered. afterPull runs in {reconcile:true} mode (Self-Talk
-  // skips its practice re-push then, avoiding a push→409→reconcile loop). No blind re-push;
-  // per-blob merge (progress max(box)+union sessions/daily) is the noted deeper follow-up.
+  // B4 optimistic-concurrency conflict: the server row moved since our lastUpdatedAt. If the blob
+  // supplied a merge() strategy (E1), UNION local + server so NEITHER device's offline change is
+  // lost, apply the union, and re-push it with the server's updatedAt as the new base — guarded to a
+  // SINGLE merge round (a second 409 during that re-push falls through to server-wins, so a device
+  // writing on every beat can't loop us). Without merge() (e.g. settings, where last-writer is fine)
+  // we keep the server-wins MVP: adopt the server copy so the other device's change is preserved, not
+  // silently clobbered. afterPull runs in {reconcile:true} mode (Self-Talk skips its practice re-push
+  // then; our own merge-push below is the single PUT for the merged state).
   async function reconcile(err) {
     const cur = err && err.body;
     if (cur && typeof cur.updatedAt === 'number') lastUpdatedAt = cur.updatedAt;
-    if (cur && cur.data != null && apply(cur.data) && afterPull) {
-      try { await afterPull(cur.data, { reconcile: true }); } catch (e) {}
+    const serverData = cur && cur.data;
+    if (serverData == null) { setSyncStatus('✓ synced'); return; }
+
+    if (merge && !mergingReconcile) {
+      const merged = merge(read(), serverData);
+      if (apply(merged)) {
+        if (afterPull) { try { await afterPull(merged, { reconcile: true }); } catch (e) {} }
+        mergingReconcile = true;
+        try { await push(); } finally { mergingReconcile = false; }   // re-push the union (push sets status/updatedAt)
+        return;
+      }
+    }
+    // No merge() (or merge produced nothing usable / already merged once this chain): server-wins.
+    if (apply(serverData) && afterPull) {
+      try { await afterPull(serverData, { reconcile: true }); } catch (e) {}
     }
     setSyncStatus('✓ synced');
   }

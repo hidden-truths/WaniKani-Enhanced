@@ -9,7 +9,7 @@
 // per-lesson NOTES + the overlays (app key 'minna').
 import { state } from '../state.js';
 import { API_BASE } from '../config.js';
-import { escapeHtml, rubyHtml, plainText, ttsText, CAT_LABEL, minnaBuiltinRank, minnaSig, convItemKey, resolveClip, clipLabel, validClip } from '../core/index.js';
+import { escapeHtml, rubyHtml, plainText, ttsText, CAT_LABEL, minnaBuiltinRank, minnaCardContent, minnaMutablePatch, minnaSig, convItemKey, resolveClip, clipLabel, validClip, mergeMinna } from '../core/index.js';
 import { speak, TTS_OK } from './tts.js';
 import { playItem, cycleMod } from './audio.js';
 import { copyBtnHtml, copyText, speakBtnHtml } from './render-helpers.js';
@@ -46,6 +46,7 @@ export const minnaBlob = createSyncedBlob({
     return false;   // fall through to the fresh-account seed
   },
   shouldSeed: () => !!(Object.keys(state.minnaStore.notes || {}).length || Object.keys(state.minnaStore.overlays || {}).length || Object.keys(state.minnaStore.clips || {}).length),
+  merge: mergeMinna,   // E1: union notes/overlays/clips on a 409 (local wins per key) instead of dropping local
 });
 function scheduleMinnaSync() { minnaBlob.schedule(); }
 export const pullMinnaCloud = minnaBlob.pull;
@@ -80,29 +81,13 @@ const mnWordAudioBtn = (v) => {
 };
 
 // --- Vocab → deck activation (via the custom-card store). ---
-// Build a deck card from a Minna vocab item, using the DICTIONARY form as the headword.
+// Build a deck card from a Minna vocab item, using the DICTIONARY form as the headword. The
+// lesson-derived content comes from core's minnaCardContent — the SAME source the re-activation
+// patch (minnaMutablePatch) and the "Update N words" signature (minnaSig) read, so they can't drift;
+// minnaCard only adds the structural custom/minna flags (a genuinely-new word also gets a `rank` in
+// activateMinnaVocab).
 function minnaCard(item, lesson) {
-  const tags = ['みんなの日本語', 'mnn-l' + lesson];
-  if (item.italki) tags.push('iTalki');
-  const tb = 'みんなの日本語 L' + lesson + ' · textbook form: ' + (item.kanji || item.kana) + (item.context ? ' ' + item.context : '');
-  return {
-    jp: item.dict || item.kanji || item.kana,
-    read: item.dictRead || item.kana,
-    mean: item.mean,
-    cat: item.cat || 'noun',
-    type: item.type || '',
-    jlpt: item.jlpt || 'N4',
-    trans: item.trans || '',
-    tags,
-    mnem: item.mnem || '',
-    tip: item.tip ? (item.tip + '<br><br>' + tb) : tb,
-    levels: item.levels || null,   // { N5:[jp,en], …, N1:[jp,en] } leveled examples
-    accent: item.accent,           // pitch-accent number → the visual pitch marks
-    tts: item.tts,                 // optional TTS-text override (ambiguous single kanji)
-    audio: item.audio || null,     // native vnjpclub src → a 'native' audio variant in Browse/reviews
-    ex: [],
-    custom: true, minna: true, italki: !!item.italki, minnaKey: item.key, minnaLesson: lesson,
-  };
+  return { ...minnaCardContent(item, lesson), custom: true, minna: true };
 }
 // The overlay payload for a built-in match: provenance only (the built-in keeps its content).
 function minnaOverlay(item, lesson) {
@@ -157,9 +142,14 @@ function activateMinnaVocab(lesson, vocab) {
     const fresh = minnaCard(item, lesson);
     const existing = cs.verbs.find(v => v.minnaKey === item.key);
     if (existing) {
-      const changed = minnaSig(existing) !== minnaSig(fresh);
-      Object.assign(existing, { tags: fresh.tags, italki: fresh.italki, mean: fresh.mean, cat: fresh.cat, type: fresh.type, trans: fresh.trans, tip: fresh.tip, levels: fresh.levels, mnem: fresh.mnem, accent: fresh.accent, audio: fresh.audio });
-      if (changed) updated++; custChanged = true;
+      // Patch ALL lesson-derived content (minnaMutablePatch projects exactly the fields minnaCard
+      // builds + minnaSig signs — so a changed jlpt/minnaLesson/ex/tts/… can't be silently dropped
+      // the way the old hand-listed assign did), keeping only the card's rank → SRS progress. No-op
+      // when nothing changed (the button is only enabled when some word is add/update-able anyway).
+      if (minnaSig(existing) !== minnaSig(fresh)) {
+        Object.assign(existing, minnaMutablePatch(fresh));
+        updated++; custChanged = true;
+      }
       return;
     }
     cs.seq = (cs.seq || 100) + 1; fresh.rank = cs.seq; cs.verbs.push(fresh); added++; custChanged = true;

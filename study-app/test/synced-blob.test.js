@@ -34,6 +34,21 @@ function makeBlob(over = {}) {
   return { blob, applied };
 }
 
+// A merge-enabled blob whose apply() UPDATES what read() returns — mirrors production, where apply()
+// writes the live store the subsequent push() re-reads. Needed to exercise the merge → re-push path
+// (the fixed-read makeBlob can't, since its read() never reflects the applied merge).
+function makeMergeBlob(initialLocal, merge) {
+  let local = initialLocal;
+  const applied = [];
+  const blob = createSyncedBlob({
+    appKey: 'verbs',
+    read: () => local,
+    apply: (data) => { applied.push(data); if (data && data.cards) { local = data; return true; } return false; },
+    merge,
+  });
+  return { blob, applied };
+}
+
 test('push success → PUT, saving→synced status, clears any queued copy, records updatedAt', async () => {
   api.mockResolvedValue({ ok: true, updatedAt: 50 });
   const { blob } = makeBlob();
@@ -74,6 +89,37 @@ test('push 409 → reconcile applies the server copy (server-wins), no enqueue',
   expect(blob.lastUpdatedAt).toBe(77);
   expect(queue.enqueue).not.toHaveBeenCalled();
   expect(setSyncStatus).toHaveBeenLastCalledWith('✓ synced');
+});
+
+test('push 409 with merge() → unions local+server, applies it, re-pushes with the server base (E1)', async () => {
+  const merge = (local, server) => ({ cards: { ...local.cards, ...server.cards } });   // union for the test
+  const err = new Error('conflict'); err.status = 409;
+  err.body = { data: { cards: { 9: { box: 5 } } }, updatedAt: 77 };
+  api.mockRejectedValueOnce(err).mockResolvedValueOnce({ ok: true, updatedAt: 88 });   // live push 409s, merge re-push OK
+  const { blob, applied } = makeMergeBlob({ cards: { 1: { box: 2 } } }, merge);
+  await blob.push();
+  expect(applied).toContainEqual({ cards: { 1: { box: 2 }, 9: { box: 5 } } });   // merged union applied (no data lost)
+  // the re-push (call #2) carries the merged data + the server's updatedAt as the new base
+  expect(api).toHaveBeenNthCalledWith(2, '/v1/progress/verbs', {
+    method: 'PUT', body: { data: { cards: { 1: { box: 2 }, 9: { box: 5 } } }, baseUpdatedAt: 77 },
+  });
+  expect(blob.lastUpdatedAt).toBe(88);            // re-push's updatedAt recorded
+  expect(queue.enqueue).not.toHaveBeenCalled();
+  expect(setSyncStatus).toHaveBeenLastCalledWith('✓ synced');
+});
+
+test('merge re-push that 409s AGAIN falls back to server-wins — single round, no loop (E1)', async () => {
+  const merge = vi.fn((local, server) => ({ cards: { ...local.cards, ...server.cards } }));
+  const err1 = new Error('conflict'); err1.status = 409; err1.body = { data: { cards: { 9: { box: 5 } } }, updatedAt: 77 };
+  const err2 = new Error('conflict'); err2.status = 409; err2.body = { data: { cards: { 7: { box: 3 } } }, updatedAt: 99 };
+  api.mockRejectedValueOnce(err1).mockRejectedValueOnce(err2);   // both the live push AND the merge re-push 409
+  const { blob, applied } = makeMergeBlob({ cards: { 1: { box: 2 } } }, merge);
+  await blob.push();
+  expect(merge).toHaveBeenCalledTimes(1);                          // merged ONCE; the 2nd 409 did not merge again
+  expect(applied[applied.length - 1]).toEqual({ cards: { 7: { box: 3 } } });   // server-wins on the 2nd conflict
+  expect(blob.lastUpdatedAt).toBe(99);
+  expect(api).toHaveBeenCalledTimes(2);                            // live push + one merge re-push (no third)
+  expect(queue.enqueue).not.toHaveBeenCalled();
 });
 
 test('push is a no-op when signed out', async () => {

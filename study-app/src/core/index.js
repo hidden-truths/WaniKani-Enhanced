@@ -8,6 +8,7 @@ export * from './kana.js';
 export * from './pitch.js';
 export * from './text.js';
 export * from './sentence.js';
+export * from './merge.js';
 export * from './annotate.js';
 export * from './minna.js';
 export * from './recordings.js';

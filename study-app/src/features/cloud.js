@@ -5,7 +5,7 @@
 // POST /v1/sessions log. The persistence layer schedules pushes via the sync bus, which this
 // module's initCloud() wires up.
 import { state } from '../state.js';
-import { escapeHtml, phraseToSentence, cardExamplesPayload } from '../core/index.js';
+import { escapeHtml, phraseToSentence, cardExamplesPayload, mergeProgress, mergeCustomVerbs, mergeSelftalkPractice } from '../core/index.js';
 import { sync } from '../sync-bus.js';
 import { account, setAccount, api, setSyncStatus, serverReachable, setServerReachable } from './cloud-core.js';
 import { createSyncedBlob } from './synced-blob.js';
@@ -48,6 +48,7 @@ const progressBlob = createSyncedBlob({
     return false;
   },
   onOffline: () => setSyncStatus('⚠ offline'),
+  merge: mergeProgress,   // E1: union cards/sessions/daily on a 409 instead of dropping local progress
 });
 
 // Custom cards (separate namespace; add/edit/delete all propagate via saveCustom).
@@ -60,6 +61,7 @@ const customBlob = createSyncedBlob({
   },
   afterPull: () => { rebuildData(); },
   shouldSeed: () => loadCustom().verbs.length > 0,   // new account — seed only if we have local cards
+  merge: mergeCustomVerbs,   // E1: union cards by rank (local wins), max seq — never drop a card or reuse a rank
 });
 
 // Settings (separate namespace; same server-wins-on-login model).
@@ -105,6 +107,7 @@ const selftalkBlob = createSyncedBlob({
       if (panel && panel.classList.contains('active')) renderSelftalk();
     }
   },
+  merge: mergeSelftalkPractice,   // E1: keep the longer streak / later day on a 409
 });
 
 // POST each legacy phrase to the sentence store as a private row; returns the ones that FAILED so

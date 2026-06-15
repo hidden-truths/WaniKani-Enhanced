@@ -14,7 +14,7 @@ import {
   rollingAcc, isLeech, leeches, normKana, romajiToKana, reviewForecast, filterSummary,
   tokenFacet, deckLabel, ttsText, HAS_KANJI, rubyHtml, plainText, isCleanRuby, rubyToSegments, segmentsToRuby, segmentsToReading,
   overlayTokens,
-  minnaBuiltinRank, applyMinnaOverlays, splitMora, parseAccent,
+  minnaBuiltinRank, applyMinnaOverlays, minnaCardContent, minnaMutablePatch, MINNA_MUTABLE_FIELDS, splitMora, parseAccent,
   cardGrammar, cardMatchesGrammar,
   pitchHtml, minnaSig, cardStamp, colorClass, CATS, exampleForLevel, availableTiers, buildLevels, cardExamplesPayload, sentencesToLevels,
   JLPT_TIERS, BOX_DAYS,
@@ -26,6 +26,7 @@ import {
   hashStr, groupByTopic, topicGrid, groupByThought, realizeTemplate, cyclePick, comboRole, grammarTokens, todaysSet, emptyPractice, dayDiff, applyPractice,
   practiceStreak, donePhraseIds, sentenceToPhrase, phraseToSentence,
   sentenceGrammar, sentenceTokens, sentenceEn,
+  mergeProgress, mergeCustomVerbs, mergeMinna, mergeSelftalkPractice,
 } from '../src/core/index.js';
 import { SELFTALK, SELFTALK_TAXONOMY, SELFTALK_TOPICS, SELFTALK_TOPIC_IDS, SELFTALK_GRAMMAR } from '../src/data/selftalk.js';
 import { SELFTALK_TEMPLATES } from '../src/data/selftalk-templates.js';
@@ -537,6 +538,47 @@ test("minnaSig reflects content (accent/mnem/tip/levels), not just tags", () => 
   expect(minnaSig(withContent)).not.toBe(minnaSig({ ...withContent, audio: '/Audio/other.mp3' }));
   expect(minnaSig(withContent)).not.toBe(minnaSig({ ...withContent, audio: '' }));
   expect(minnaSig(withContent)).toBe(minnaSig({ ...withContent }));
+});
+
+test('MINNA_MUTABLE_FIELDS === the keys minnaCardContent builds (build ↔ patch ↔ sig can\'t drift)', () => {
+  // The shared list IS the contract: every lesson-derived field minnaCardContent emits is in the
+  // list (so the re-activation patch carries it AND minnaSig detects its change) and vice-versa.
+  // Structural flags (custom/minna) and the preserved rank are deliberately NOT lesson content.
+  const item = { key: 'mnn:23:0', dict: '走る', dictRead: 'はしる', kanji: '走る', kana: 'はしる', mean: 'to run', cat: 'verb', type: 'godan', jlpt: 'N5', italki: true };
+  const content = minnaCardContent(item, 23);
+  expect(new Set(Object.keys(content))).toEqual(new Set(MINNA_MUTABLE_FIELDS));
+  expect(content).not.toHaveProperty('custom');
+  expect(content).not.toHaveProperty('minna');
+  expect(content).not.toHaveProperty('rank');
+  // The textbook-form line is appended to tip in core, so build + sig agree on it.
+  expect(content.tip).toContain('textbook form: 走る');
+});
+
+test('minnaMutablePatch projects exactly the mutable fields — never rank / structural flags', () => {
+  const card = { ...minnaCardContent({ key: 'k', dict: '見る', dictRead: 'みる', kana: 'みる', mean: 'see', jlpt: 'N5' }, 7), custom: true, minna: true, rank: 42 };
+  const patch = minnaMutablePatch(card);
+  expect(Object.keys(patch)).toEqual(MINNA_MUTABLE_FIELDS);   // ordered, exact
+  expect(patch).not.toHaveProperty('rank');                   // the SRS-progress key is preserved, not patched
+  expect(patch).not.toHaveProperty('custom');
+  expect(patch).not.toHaveProperty('minna');
+});
+
+test('re-activation patch applies the FULL mutable set (jlpt/minnaLesson/ex/tts), preserving rank', () => {
+  // The bug this fixes: the old hand-listed Object.assign dropped jlpt/minnaLesson/ex/tts on
+  // re-activation, AND minnaSig (lacking jlpt/tts/mean) didn't even flag the change. Now the
+  // detector sees it and the projected patch carries it — without disturbing the card's rank.
+  const item0 = { key: 'mnn:23:5', dict: '歯', dictRead: 'は', kana: 'は', mean: 'tooth', jlpt: 'N5' };
+  const item1 = { ...item0, jlpt: 'N4', tts: 'は', mean: 'tooth (corrected)' };   // lesson re-curated
+  const stored = { ...minnaCardContent(item0, 23), custom: true, minna: true, rank: 7 };  // an activated card with progress
+  const fresh = { ...minnaCardContent(item1, 23), custom: true, minna: true };
+  expect(minnaSig(stored)).not.toBe(minnaSig(fresh));         // detector now sees the jlpt/tts/mean change
+  Object.assign(stored, minnaMutablePatch(fresh));            // ← what activateMinnaVocab does
+  expect(stored.jlpt).toBe('N4');
+  expect(stored.tts).toBe('は');
+  expect(stored.mean).toBe('tooth (corrected)');
+  expect(stored.minnaLesson).toBe(23);
+  expect(stored.ex).toEqual([]);
+  expect(stored.rank).toBe(7);                                // SRS progress key untouched
 });
 
 test('minnaBuiltinRank detects when a Minna word already exists as a built-in verb', () => {
@@ -1336,4 +1378,79 @@ test('overlayTokens escapes content + attributes (safe on the user-authored path
   const out = overlayTokens(segs, toks);
   expect(out).toContain('a&lt;b');             // escaped in both the data-lemma attr and the content
   expect(out).not.toContain('a<b');            // no raw, unescaped angle bracket from the data
+});
+
+// ---------- E1: per-blob 409 conflict mergers (core/merge.js) ----------
+// The union strategies the SyncedBlob reconcile applies so a 409 never silently drops a device's
+// offline work. Pure; the synced-blob.test.js suite covers the reconcile→merge→re-push wiring.
+
+test('mergeProgress: union cards (max box/due/counts, longer attempts), dedup sessions by t, max daily', () => {
+  const local = {
+    cards: {
+      1: { attempts: [1, 0], right: 1, wrong: 1, box: 2, due: 100 },   // server is further along on card 1
+      2: { attempts: [1], right: 1, wrong: 0, box: 1, due: 50 },        // local-only card
+    },
+    sessions: [{ t: 10, right: 3, tot: 5 }, { t: 20, right: 4, tot: 4 }],
+    daily: { '2026-06-15': { right: 3, tot: 5 } },
+  };
+  const server = {
+    cards: {
+      1: { attempts: [1, 1, 1], right: 3, wrong: 0, box: 4, due: 500 }, // ahead on card 1
+      3: { attempts: [0], right: 0, wrong: 1, box: 1, due: 30 },        // server-only card
+    },
+    sessions: [{ t: 20, right: 4, tot: 4 }, { t: 30, right: 2, tot: 3 }], // t:20 shared → deduped
+    daily: { '2026-06-15': { right: 1, tot: 2 }, '2026-06-14': { right: 8, tot: 10 } },
+  };
+  const m = mergeProgress(local, server);
+  expect(m.cards[1]).toEqual({ attempts: [1, 1, 1], right: 3, wrong: 1, box: 4, due: 500 }); // maxes + longer attempts
+  expect(m.cards[2]).toEqual(local.cards[2]);    // local-only preserved
+  expect(m.cards[3]).toEqual(server.cards[3]);   // server-only preserved
+  expect(m.sessions.map((s) => s.t)).toEqual([10, 20, 30]);   // union by t, sorted, no dup
+  expect(m.daily['2026-06-15']).toEqual({ right: 3, tot: 5 }); // per-day max (not sum)
+  expect(m.daily['2026-06-14']).toEqual({ right: 8, tot: 10 });
+});
+
+test('mergeProgress caps merged sessions at 1000 (keeps newest)', () => {
+  const mk = (lo: number, hi: number) => Array.from({ length: hi - lo }, (_, i) => ({ t: lo + i, right: 1, tot: 1 }));
+  const m = mergeProgress({ cards: {}, sessions: mk(0, 800), daily: {} }, { cards: {}, sessions: mk(800, 1400), daily: {} });
+  expect(m.sessions.length).toBe(1000);
+  expect(m.sessions[0].t).toBe(400);                            // oldest kept = 1400 − 1000
+  expect(m.sessions[m.sessions.length - 1].t).toBe(1399);
+});
+
+test('mergeProgress tolerates null / partial input', () => {
+  expect(mergeProgress(null, null)).toEqual({ cards: {}, sessions: [], daily: {} });
+  expect(mergeProgress({ cards: { 1: { box: 3, due: 9, right: 2, wrong: 0, attempts: [1, 1] } } }, null).cards[1].box).toBe(3);
+});
+
+test('mergeCustomVerbs: union by rank (local wins the conflict), seq is the max (no rank reuse)', () => {
+  const local = { seq: 105, verbs: [{ rank: 101, jp: 'A-local' }, { rank: 103, jp: 'C' }] };
+  const server = { seq: 104, verbs: [{ rank: 101, jp: 'A-server' }, { rank: 102, jp: 'B' }] };
+  const m = mergeCustomVerbs(local, server);
+  expect(m.seq).toBe(105);
+  expect(m.verbs.map((v: any) => v.rank)).toEqual([101, 102, 103]);          // union, rank-sorted
+  expect(m.verbs.find((v: any) => v.rank === 101).jp).toBe('A-local');       // local wins
+});
+
+test('mergeMinna: shallow-union notes/overlays + nested-union clips (local wins per key), keeps local cursor', () => {
+  const local = { notes: { 23: 'local note' }, overlays: { 5: { tags: ['x'] } }, clips: { 23: { 0: [1, 2] }, 24: { 1: [3, 4] } }, lastLesson: 24 };
+  const server = { notes: { 23: 'server note', 25: 'srv only' }, overlays: { 6: { tags: ['y'] } }, clips: { 23: { 0: [9, 9], 2: [5, 6] } }, lastLesson: 23 };
+  const m = mergeMinna(local, server);
+  expect(m.notes).toEqual({ 23: 'local note', 25: 'srv only' });             // local wins 23, server-only 25 kept
+  expect(m.overlays).toEqual({ 5: { tags: ['x'] }, 6: { tags: ['y'] } });
+  expect(m.clips[23]).toEqual({ 0: [1, 2], 2: [5, 6] });                     // local wins line 0; server line 2 kept
+  expect(m.clips[24]).toEqual({ 1: [3, 4] });
+  expect(m.lastLesson).toBe(24);
+});
+
+test('mergeSelftalkPractice: max streak, later day, union doneToday only on the same day', () => {
+  expect(mergeSelftalkPractice(
+    { practice: { lastDay: '2026-06-15', streak: 3, doneToday: ['a', 'b'] } },
+    { practice: { lastDay: '2026-06-15', streak: 5, doneToday: ['b', 'c'] } },
+  )).toEqual({ practice: { lastDay: '2026-06-15', streak: 5, doneToday: ['a', 'b', 'c'] } });
+  expect(mergeSelftalkPractice(
+    { practice: { lastDay: '2026-06-14', streak: 9, doneToday: ['x'] } },
+    { practice: { lastDay: '2026-06-15', streak: 2, doneToday: ['y'] } },
+  )).toEqual({ practice: { lastDay: '2026-06-15', streak: 9, doneToday: ['y'] } });   // later day's doneToday, max streak
+  expect(mergeSelftalkPractice(null, null)).toEqual({ practice: { lastDay: null, streak: 0, doneToday: [] } });
 });
