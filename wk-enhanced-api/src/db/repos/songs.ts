@@ -252,11 +252,16 @@ export function createSong(input: {
     for (const ln of input.lines) assertFuriganaMatches(ln.furigana ?? null, ln.text);
     assertTokenOffsets(input.lines);
     const db = getDb();
-    db.query(
-        `INSERT INTO song (ext_id, title, artist, youtube_id, source, public, visibility, created_by, created_at)
-         VALUES (?, ?, ?, ?, 'song', 0, 'private', ?, ?)`,
-    ).run(input.extId, input.title, input.artist ?? null, input.youtubeId ?? null, input.createdBy, Date.now());
-    input.lines.forEach((ln, i) => insertSongLine(input.extId, input.createdBy, false, i, ln, input.parser ?? 'llm'));
+    // One transaction so the song row + its N line rows commit (or roll back) together — a mid-loop
+    // failure can never leave a half-written song. A UNIQUE(ext_id) clash still throws the same
+    // SQLiteError (the route maps it to 409); the rollback just guarantees no orphan line rows.
+    db.transaction(() => {
+        db.query(
+            `INSERT INTO song (ext_id, title, artist, youtube_id, source, public, visibility, created_by, created_at)
+             VALUES (?, ?, ?, ?, 'song', 0, 'private', ?, ?)`,
+        ).run(input.extId, input.title, input.artist ?? null, input.youtubeId ?? null, input.createdBy, Date.now());
+        input.lines.forEach((ln, i) => insertSongLine(input.extId, input.createdBy, false, i, ln, input.parser ?? 'llm'));
+    })();
     return getSong({ extId: input.extId, viewer: input.createdBy })!;
 }
 
@@ -292,10 +297,12 @@ export function updateSongTiming(input: {
     const db = getDb();
     const owns = db.query('SELECT 1 FROM song WHERE ext_id = ? AND created_by = ?').get(input.extId, input.viewer);
     if (!owns) return null;
-    const upd = db.query(
-        "UPDATE sentence_link SET clip_start_ms = ? WHERE owner_type = 'song' AND owner_id = ? AND ordinal = ?",
-    );
-    for (const t of input.timings) upd.run(t.clipStartMs, input.extId, t.ordinal);
+    db.transaction(() => {
+        const upd = db.query(
+            "UPDATE sentence_link SET clip_start_ms = ? WHERE owner_type = 'song' AND owner_id = ? AND ordinal = ?",
+        );
+        for (const t of input.timings) upd.run(t.clipStartMs, input.extId, t.ordinal);
+    })();
     return getSong({ extId: input.extId, viewer: input.viewer });
 }
 
@@ -307,13 +314,15 @@ export function deleteSong(input: { extId: string; viewer: number }): boolean {
         | { id: number }
         | null;
     if (!row) return false;
-    db.query(
-        `DELETE FROM sentence WHERE id IN (
-             SELECT s.id FROM sentence s JOIN sentence_link l ON l.sentence_id = s.id
-             WHERE l.owner_type = 'song' AND l.owner_id = ? AND s.created_by = ?
-         )`,
-    ).run(input.extId, input.viewer); // children cascade
-    db.query('DELETE FROM song WHERE id = ?').run(row.id);
+    db.transaction(() => {
+        db.query(
+            `DELETE FROM sentence WHERE id IN (
+                 SELECT s.id FROM sentence s JOIN sentence_link l ON l.sentence_id = s.id
+                 WHERE l.owner_type = 'song' AND l.owner_id = ? AND s.created_by = ?
+             )`,
+        ).run(input.extId, input.viewer); // children cascade
+        db.query('DELETE FROM song WHERE id = ?').run(row.id);
+    })();
     return true;
 }
 
@@ -333,14 +342,17 @@ export function upsertPublicSong(input: {
     for (const ln of input.lines) assertFuriganaMatches(ln.furigana ?? null, ln.text);
     assertTokenOffsets(input.lines);
     const db = getDb();
-    db.query(
-        `INSERT INTO song (ext_id, title, artist, youtube_id, source, public, visibility, created_by, created_at)
-         VALUES (?, ?, ?, ?, 'song', 1, 'public', NULL, ?)
-         ON CONFLICT(ext_id) DO UPDATE SET
-             title = excluded.title, artist = excluded.artist, youtube_id = excluded.youtube_id,
-             public = 1, visibility = 'public', created_by = NULL`,
-    ).run(input.extId, input.title, input.artist ?? null, input.youtubeId ?? null, Date.now());
-    db.query("DELETE FROM sentence_link WHERE owner_type = 'song' AND owner_id = ?").run(input.extId);
-    input.lines.forEach((ln, i) => insertSongLine(input.extId, null, true, i, ln, input.parser ?? 'llm'));
+    // Atomic re-seed: the song upsert + link wipe + line re-insert commit (or roll back) together.
+    db.transaction(() => {
+        db.query(
+            `INSERT INTO song (ext_id, title, artist, youtube_id, source, public, visibility, created_by, created_at)
+             VALUES (?, ?, ?, ?, 'song', 1, 'public', NULL, ?)
+             ON CONFLICT(ext_id) DO UPDATE SET
+                 title = excluded.title, artist = excluded.artist, youtube_id = excluded.youtube_id,
+                 public = 1, visibility = 'public', created_by = NULL`,
+        ).run(input.extId, input.title, input.artist ?? null, input.youtubeId ?? null, Date.now());
+        db.query("DELETE FROM sentence_link WHERE owner_type = 'song' AND owner_id = ?").run(input.extId);
+        input.lines.forEach((ln, i) => insertSongLine(input.extId, null, true, i, ln, input.parser ?? 'llm'));
+    })();
     return getSong({ extId: input.extId, viewer: null })!;
 }
