@@ -1,0 +1,65 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1">
+<title>歌 / Songs — Add (paste)</title>
+<link rel="stylesheet" href="../mock.css">
+<script src="../mock.js" defer></script>
+</head>
+<body>
+<div class="navbar"><div class="nav-inner">
+  <div class="nav-title">日常日本語 <span class="nav-sub">Japanese Trainer</span></div>
+  <div class="nav-extra"></div>
+  <div class="nav-actions">
+    <button class="nav-btn icon-only" aria-label="Theme"><svg class="ic"><use href="#i-theme"></use></svg></button>
+    <button class="nav-btn icon-only" aria-label="Settings"><svg class="ic"><use href="#i-gear"></use></svg></button>
+    <button class="nav-btn"><svg class="ic"><use href="#i-cloud"></use></svg> jbrelly1337@gmail.com</button>
+  </div>
+</div></div>
+<div class="tabs">
+  <button class="tab"><svg class="ic"><use href="#i-cards"></use></svg> Flashcards</button>
+  <button class="tab"><svg class="ic"><use href="#i-grid"></use></svg> Browse</button>
+  <button class="tab"><svg class="ic"><use href="#i-chart"></use></svg> Stats &amp; Leeches</button>
+  <button class="tab">みんなの日本語</button>
+  <button class="tab">独り言</button>
+  <button class="tab active"><svg class="ic"><use href="#i-music"></use></svg> 歌</button>
+</div>
+
+<div class="screen-cap"><span class="sc-t">Screen 2 · Add a song — Paste</span><span class="sc-d">bring your own song</span></div>
+
+<div class="wrap">
+  <div class="steps">
+    <span class="step on"><span class="sn">1</span> Paste</span>
+    <span class="step"><span class="sn">2</span> Review</span>
+    <span class="step"><span class="sn">3</span> Save</span>
+  </div>
+
+  <label class="field-lbl">Lyrics — paste from anywhere<span class="a">1</span></label>
+  <textarea class="ta jp">朝日がゆっくり昇ってくる
+君の声が聞きたいんだ
+歩きながら歌を口ずさむ
+まだ終わらない夢の続き
+ねえ、一緒に行こう</textarea>
+
+  <label class="field-lbl">YouTube link<span class="a">2</span></label>
+  <input class="inp" value="https://www.youtube.com/watch?v=oRdxUFDoQe0">
+  <p class="add-note" style="margin-top:8px"><svg class="ic"><use href="#i-music"></use></svg> Title &amp; artist auto-filled from the video. The audio stays on YouTube — we embed its player, we don’t re-host it.</p>
+
+  <div class="add-foot">
+    <p class="add-note"><svg class="ic"><use href="#i-alert"></use></svg> Lyrics you paste are stored privately to your account.</p>
+    <button class="chip primary" style="font-size:13px;padding:10px 20px"><svg class="ic"><use href="#i-check"></use></svg> Analyze<span class="a">3</span></button>
+  </div>
+</div>
+
+<div class="legend">
+  <h3>Design notes</h3>
+  <ol>
+    <li><span class="n">1</span><div><b>Paste raw lyrics.</b> No formatting, no furigana, no hand-markup — just the text. Mirrors how custom cards / Self-Talk phrases are authored, but the analysis (next) does the heavy lifting.</div></li>
+    <li><span class="n">2</span><div><b>Link the video.</b> One YouTube URL is the audio source for everything downstream (synced playback, dictation, by-ear shadowing). Embedding sidesteps re-hosting copyrighted audio.</div></li>
+    <li><span class="n">3</span><div><b>Analyze = full-auto.</b> One pass generates furigana, a per-line English translation, grammar tags, and a JLPT/difficulty profile (your “full auto” choice). This is the one genuinely new capability — there’s no runtime furigana/translate today.</div></li>
+    <li><span class="n">·</span><div><b>Privacy posture.</b> BYO lyrics become <i>private</i> store rows (like custom-card examples); only the curated starter set is public. No copyrighted lyrics are redistributed.</div></li>
+  </ol>
+</div>
+</body>
+</html>

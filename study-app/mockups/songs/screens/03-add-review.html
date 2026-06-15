@@ -1,0 +1,89 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1">
+<title>歌 / Songs — Add (review)</title>
+<link rel="stylesheet" href="../mock.css">
+<script src="../mock.js" defer></script>
+</head>
+<body>
+<div class="navbar"><div class="nav-inner">
+  <div class="nav-title">日常日本語 <span class="nav-sub">Japanese Trainer</span></div>
+  <div class="nav-extra"></div>
+  <div class="nav-actions">
+    <button class="nav-btn icon-only" aria-label="Theme"><svg class="ic"><use href="#i-theme"></use></svg></button>
+    <button class="nav-btn icon-only" aria-label="Settings"><svg class="ic"><use href="#i-gear"></use></svg></button>
+    <button class="nav-btn"><svg class="ic"><use href="#i-cloud"></use></svg> jbrelly1337@gmail.com</button>
+  </div>
+</div></div>
+<div class="tabs">
+  <button class="tab"><svg class="ic"><use href="#i-cards"></use></svg> Flashcards</button>
+  <button class="tab"><svg class="ic"><use href="#i-grid"></use></svg> Browse</button>
+  <button class="tab"><svg class="ic"><use href="#i-chart"></use></svg> Stats &amp; Leeches</button>
+  <button class="tab">みんなの日本語</button>
+  <button class="tab">独り言</button>
+  <button class="tab active"><svg class="ic"><use href="#i-music"></use></svg> 歌</button>
+</div>
+
+<div class="screen-cap"><span class="sc-t">Screen 3 · Add a song — Review</span><span class="sc-d">the full-auto analysis, ready to skim &amp; save</span></div>
+
+<div class="wrap">
+  <div class="steps">
+    <span class="step done"><span class="sn"><svg class="ic"><use href="#i-check"></use></svg></span> Paste</span>
+    <span class="step on"><span class="sn">2</span> Review</span>
+    <span class="step"><span class="sn">3</span> Save</span>
+  </div>
+
+  <div class="profile-chips">
+    <span class="pchip plain"><svg class="ic"><use href="#i-music"></use></svg> 夜明けの歌 · サンプル</span>
+    <span style="flex:1"></span>
+    <span class="pchip info">N4</span>
+    <span class="pchip info"><svg class="ic"><use href="#i-tag"></use></svg> 6 grammar points</span>
+    <span class="pchip plain"><svg class="ic"><use href="#i-plus"></use></svg> 24 new words</span>
+    <span class="a">1</span>
+  </div>
+
+  <div class="rev" style="margin-top:6px">
+    <div class="rev-line">
+      <div><div class="rev-jp jp"><ruby>朝日<rt>あさひ</rt></ruby>がゆっくり<ruby>昇<rt>のぼ</rt></ruby>ってくる</div><div class="rev-en">The morning sun slowly rises.</div></div>
+      <svg class="ic pen"><use href="#i-pencil"></use></svg>
+    </div>
+    <div class="rev-line">
+      <div><div class="rev-jp jp"><ruby>君<rt>きみ</rt></ruby>の<ruby>声<rt>こえ</rt></ruby>が<ruby>聞<rt>き</rt></ruby>きたいんだ</div><div class="rev-en">I want to hear your voice.</div></div>
+      <svg class="ic pen"><use href="#i-pencil"></use></svg>
+    </div>
+    <div class="rev-line flag">
+      <div>
+        <div class="rev-jp jp"><ruby>歩<rt>ある</rt></ruby>きながら<ruby>歌<rt>うた</rt></ruby>を<ruby>口<rt>くち</rt></ruby>ずさむ</div>
+        <div class="rev-en">I hum a song while walking.</div>
+        <div class="rev-warn"><svg class="ic"><use href="#i-alert"></use></svg> low-confidence reading on 口ずさむ — check before saving<span class="a">2</span></div>
+      </div>
+      <svg class="ic pen" style="color:var(--noun)"><use href="#i-pencil"></use></svg><span class="a">3</span>
+    </div>
+    <div class="rev-line">
+      <div><div class="rev-jp jp">まだ<ruby>終<rt>お</rt></ruby>わらない<ruby>夢<rt>ゆめ</rt></ruby>の<ruby>続<rt>つづ</rt></ruby>き</div><div class="rev-en">The dream that hasn’t ended yet.</div></div>
+      <svg class="ic pen"><use href="#i-pencil"></use></svg>
+    </div>
+  </div>
+
+  <div class="add-foot">
+    <p class="add-note"><svg class="ic"><use href="#i-alert"></use></svg> Auto-generated — review, then it joins your library.</p>
+    <span style="display:flex;gap:8px">
+      <button class="btn ghost"><svg class="ic"><use href="#i-refresh"></use></svg> Re-analyze</button>
+      <button class="btn srs"><svg class="ic"><use href="#i-check"></use></svg> Save to my library<span class="a">4</span></button>
+    </span>
+  </div>
+</div>
+
+<div class="legend">
+  <h3>Design notes</h3>
+  <ol>
+    <li><span class="n">1</span><div><b>Auto profile.</b> The pass also rates the song — JLPT level, grammar-point count, and how many words are new to your deck — so you know what you’re signing up for before you save.</div></li>
+    <li><span class="n">2</span><div><b>Confidence flags.</b> The analyzer marks lines it’s unsure about (rare readings, ambiguous parses) so the proofread is targeted — you’re not re-checking 42 clean lines, just the few flagged ones.</div></li>
+    <li><span class="n">3</span><div><b>Inline edit.</b> Fix a reading or translation in place (same authoring affordance as custom cards). Edits are what make “full-auto” safe to trust.</div></li>
+    <li><span class="n">4</span><div><b>Save → your library.</b> Writes private sentence rows (one per line) — the song now renders from the store like any other content, and Read / Listen / Shadow / Mine all light up.</div></li>
+  </ol>
+</div>
+</body>
+</html>

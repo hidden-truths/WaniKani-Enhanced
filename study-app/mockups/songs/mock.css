@@ -1,0 +1,244 @@
+/* Mockup stylesheet for the 歌 / Songs tab — faithful to study-app/src/styles.css
+   design tokens + component looks, plus mock-only helpers (annotation markers,
+   legend, song-specific components). NOT shipped; this is a design artifact. */
+
+:root, :root[data-theme="light"]{
+  --ink:#1a1815; --paper:#f5f1e8; --paper-2:#ebe5d6;
+  --godan:#c8442f; --ichidan:#2d4a6b; --irregular:#6b6256;
+  --adjective:#1f7a6b; --noun:#b07d1a; --adverb:#a83b6e; --phrase:#5a6b8c;
+  --muted:#675f52; --line:#d9d1c0; --leech:#9c27b0; --good:#3a7d44;
+  --jp-font:"Hiragino Kaku Gothic ProN","Hiragino Sans","Yu Gothic Medium","Yu Gothic","Meiryo",sans-serif;
+}
+:root[data-theme="dark"]{
+  --ink:#ece6da; --paper:#1c1a17; --paper-2:#262320;
+  --godan:#e8674f; --ichidan:#7aa6d6; --irregular:#a89e8e;
+  --adjective:#4cae9c; --noun:#d6a648; --adverb:#d479a3; --phrase:#8a9bc0;
+  --muted:#9a9182; --line:#3a352e; --leech:#c77dd4; --good:#6bbf78;
+}
+*{box-sizing:border-box;margin:0;padding:0}
+body{background:var(--paper);color:var(--ink);font-family:Georgia,serif;line-height:1.55;-webkit-font-smoothing:antialiased}
+.jp{font-family:var(--jp-font)}
+.wrap{max-width:1100px;margin:0 auto;padding:0 20px 30px}
+rt{font-size:.55em;color:var(--muted)}
+:root[data-furigana="off"] rt{display:none}
+.ic{width:1em;height:1em;display:inline-block;vertical-align:-0.14em;fill:none;stroke:currentColor;stroke-width:2;stroke-linecap:round;stroke-linejoin:round;flex-shrink:0}
+
+/* navbar + tabs */
+.navbar{background:var(--paper);border-bottom:1px solid var(--line)}
+.nav-inner{max-width:1100px;margin:0 auto;padding:9px 20px;display:flex;align-items:center;gap:14px}
+.nav-title{font-family:"SF Mono",ui-monospace,Menlo,monospace;font-weight:700;font-size:16px;letter-spacing:.02em;color:var(--ink);white-space:nowrap;display:inline-flex;align-items:baseline;gap:9px}
+.nav-title .nav-sub{font-size:9px;letter-spacing:.22em;text-transform:uppercase;color:var(--godan);font-weight:400}
+.nav-extra{flex:1;display:flex;justify-content:center;min-width:0}
+.nav-actions{display:flex;align-items:center;gap:6px;margin-left:auto}
+.nav-btn{display:inline-flex;align-items:center;gap:6px;font-family:"SF Mono",ui-monospace,monospace;font-size:12px;border:1px solid var(--line);background:transparent;color:var(--ink);padding:6px 11px;border-radius:2px;cursor:pointer}
+.nav-btn.icon-only{padding:6px 9px}
+.tabs{display:flex;gap:4px;border-bottom:1px solid var(--line);max-width:1100px;margin:0 auto;padding:0 20px;flex-wrap:wrap}
+.tab{font-family:"SF Mono",ui-monospace,monospace;font-size:12px;letter-spacing:.08em;text-transform:uppercase;background:none;border:none;border-bottom:2px solid transparent;color:var(--muted);padding:10px 14px;cursor:pointer;margin-bottom:-1px;display:inline-flex;align-items:center;gap:7px}
+.tab.active{color:var(--ink);border-bottom-color:var(--godan)}
+
+/* chips / filters / buttons */
+.chip{font-family:"SF Mono",ui-monospace,monospace;font-size:12px;border:1px solid var(--line);background:transparent;color:var(--ink);padding:6px 13px;border-radius:2px;cursor:pointer;display:inline-flex;align-items:center;justify-content:center;gap:6px}
+.chip.active{background:color-mix(in srgb,var(--ink) 13%,transparent);color:var(--ink);border-color:var(--ink);font-weight:700}
+.chip.i.active{background:color-mix(in srgb,var(--ichidan) 18%,transparent);color:var(--ichidan);border-color:var(--ichidan)}
+.chip.primary{background:var(--godan);color:#fff;border-color:var(--godan);font-weight:700}
+.chip:disabled{opacity:.38}
+.filter-label{font-family:"SF Mono",ui-monospace,monospace;font-size:11px;letter-spacing:.18em;text-transform:uppercase;color:var(--muted)}
+.jlptseg{display:inline-flex;border:1px solid var(--line);border-radius:2px;overflow:hidden}
+.jlptseg .chip{border:none;border-left:1px solid var(--line);border-radius:0}
+.jlptseg .chip:first-child{border-left:none}
+.jlptseg .chip.active{background:color-mix(in srgb,var(--ink) 18%,transparent)}
+.btn{font-family:"SF Mono",ui-monospace,monospace;font-size:13px;padding:11px 22px;border-radius:3px;border:1px solid var(--line);background:var(--paper);cursor:pointer;letter-spacing:.05em;display:inline-flex;align-items:center;gap:8px;justify-content:center}
+.btn.dark{background:var(--ink);color:var(--paper);border-color:var(--ink)}
+.btn.srs{background:var(--ichidan);color:#fff;border-color:var(--ichidan);font-weight:700}
+.btn.good{border-color:var(--good);color:var(--good);font-weight:700}
+.btn.ghost{background:transparent}
+.search{font-family:Georgia,serif;font-size:14px;border:1px solid var(--line);background:var(--paper);padding:7px 12px;border-radius:2px;color:var(--ink)}
+.toolbar{display:flex;align-items:center;gap:10px;flex-wrap:wrap;margin:6px 0 4px}
+
+.speak-btn{background:none;border:1px solid var(--line);color:var(--ichidan);border-radius:50%;width:30px;height:30px;display:inline-flex;align-items:center;justify-content:center;cursor:pointer;flex-shrink:0;font-size:14px}
+.speak-btn.sm{width:24px;height:24px;font-size:12px}
+
+/* intro */
+.st-intro{margin:18px 0 14px}
+.st-kicker{font-family:"SF Mono",ui-monospace,monospace;font-size:11px;letter-spacing:.18em;text-transform:uppercase;color:var(--godan);margin:0 0 5px}
+.st-lede{font-family:Georgia,serif;font-size:14px;color:var(--muted);max-width:66ch}
+.screen-cap{max-width:1100px;margin:14px auto 0;padding:10px 20px 0;display:flex;align-items:baseline;gap:12px;flex-wrap:wrap}
+.sc-t{font-family:"SF Mono",ui-monospace,monospace;font-size:12px;letter-spacing:.14em;text-transform:uppercase;color:var(--godan);font-weight:700}
+.sc-d{font-family:Georgia,serif;font-size:13px;color:var(--muted)}
+
+/* annotation markers + legend */
+.a{display:inline-flex;align-items:center;justify-content:center;width:18px;height:18px;border-radius:50%;background:var(--godan);color:#fff;font-family:"SF Mono",ui-monospace,monospace;font-size:10px;font-weight:700;line-height:1;vertical-align:super;margin:0 2px;box-shadow:0 0 0 2px var(--paper)}
+.legend{max-width:1100px;margin:20px auto 36px;padding:16px 20px;background:var(--paper-2);border:1px solid var(--line);border-radius:10px}
+.legend h3{font-family:"SF Mono",ui-monospace,monospace;font-size:11px;letter-spacing:.16em;text-transform:uppercase;color:var(--muted);margin-bottom:13px}
+.legend ol{list-style:none;display:grid;grid-template-columns:1fr 1fr;gap:11px 28px}
+.legend li{display:flex;gap:10px;font-family:Georgia,serif;font-size:13.5px;line-height:1.45;color:var(--ink)}
+.legend .n{flex-shrink:0;display:inline-flex;align-items:center;justify-content:center;width:18px;height:18px;border-radius:50%;background:var(--godan);color:#fff;font-family:"SF Mono",ui-monospace,monospace;font-size:10px;font-weight:700;margin-top:2px}
+.legend b{font-weight:700}
+.legend code{font-family:"SF Mono",ui-monospace,monospace;font-size:12px;background:color-mix(in srgb,var(--ink) 8%,transparent);padding:1px 5px;border-radius:3px}
+@media(max-width:760px){.legend ol{grid-template-columns:1fr}}
+
+/* ---- Library ---- */
+.song-grid{display:grid;grid-template-columns:repeat(auto-fill,minmax(320px,1fr));gap:14px;margin-top:14px}
+.song-card{position:relative;background:var(--paper);border:1px solid var(--line);border-left:5px solid var(--ichidan);border-radius:3px;padding:15px 16px}
+.song-card.starter{border-left-color:var(--adjective)}
+.sc-row{display:flex;justify-content:space-between;align-items:flex-start;gap:10px}
+.sc-title{font-size:23px;font-weight:900;line-height:1.1}
+.sc-artist{font-size:13px;color:var(--muted);font-style:italic;margin-top:3px}
+.ring{position:relative;width:40px;height:40px;border-radius:50%;flex-shrink:0;background:conic-gradient(var(--ichidan) var(--p),var(--paper-2) 0)}
+.ring span{position:absolute;inset:5px;border-radius:50%;background:var(--paper);display:flex;align-items:center;justify-content:center;font-family:"SF Mono",ui-monospace,monospace;font-size:11px;font-weight:700;color:var(--ink)}
+.ring.new span{color:var(--muted)}
+.sc-cov{margin-top:13px}
+.sc-cov-top{display:flex;justify-content:space-between;font-family:"SF Mono",ui-monospace,monospace;font-size:11px;color:var(--muted);margin-bottom:4px}
+.sc-cov-top b{color:var(--good);font-weight:700}
+.cov-bar{height:6px;border-radius:3px;background:var(--paper-2);border:1px solid var(--line);overflow:hidden}
+.cov-fill{height:100%;background:var(--good)}
+.sc-meta{display:flex;align-items:center;gap:8px;margin-top:12px;flex-wrap:wrap}
+.lv{font-family:"SF Mono",ui-monospace,monospace;font-size:9px;letter-spacing:.06em;border-radius:2px;padding:2px 6px;border:1px solid var(--muted);color:var(--muted)}
+.lv-n5{color:var(--good);border-color:var(--good)}
+.lv-n4{color:var(--ichidan);border-color:var(--ichidan)}
+.lv-n3{color:var(--noun);border-color:var(--noun)}
+.lv-n2{color:var(--adverb);border-color:var(--adverb)}
+.lv-n1{color:var(--leech);border-color:var(--leech)}
+.src-badge{font-family:"SF Mono",ui-monospace,monospace;font-size:9px;padding:2px 6px;border-radius:2px;letter-spacing:.08em;color:#fff}
+.src-mine{background:var(--ichidan)} .src-starter{background:var(--adjective)}
+.sc-dot{font-family:"SF Mono",ui-monospace,monospace;font-size:10px;color:var(--muted);margin-left:auto}
+.sc-warn{color:var(--noun)}
+
+/* ---- Add a song ---- */
+.steps{display:flex;gap:18px;margin:6px 0 16px}
+.step{font-family:"SF Mono",ui-monospace,monospace;font-size:12px;color:var(--muted);display:inline-flex;align-items:center;gap:7px}
+.step .sn{display:inline-flex;align-items:center;justify-content:center;width:20px;height:20px;border-radius:50%;border:1px solid var(--line);font-size:10px}
+.step.on{color:var(--ichidan)} .step.on .sn{border-color:var(--ichidan);background:color-mix(in srgb,var(--ichidan) 12%,transparent);font-weight:700}
+.step.done{color:var(--good)} .step.done .sn{border-color:var(--good);color:var(--good)}
+.field-lbl{font-family:"SF Mono",ui-monospace,monospace;font-size:10px;letter-spacing:.16em;text-transform:uppercase;color:var(--muted);margin:14px 0 6px;display:block}
+.ta{width:100%;min-height:200px;font-family:var(--jp-font);font-size:16px;line-height:1.9;border:1px solid var(--line);background:var(--paper);padding:12px 14px;border-radius:6px;color:var(--ink)}
+.inp{width:100%;font-family:Georgia,serif;font-size:14px;border:1px solid var(--line);background:var(--paper);padding:10px 12px;border-radius:6px;color:var(--ink)}
+.profile-chips{display:flex;flex-wrap:wrap;gap:8px;align-items:center;margin:6px 0}
+.pchip{display:inline-flex;align-items:center;gap:5px;font-family:"SF Mono",ui-monospace,monospace;font-size:12px;padding:3px 9px;border-radius:3px}
+.pchip.info{background:color-mix(in srgb,var(--ichidan) 14%,transparent);color:var(--ichidan)}
+.pchip.good{background:color-mix(in srgb,var(--good) 16%,transparent);color:var(--good)}
+.pchip.plain{border:1px solid var(--line);color:var(--muted)}
+.rev{border:1px solid var(--line);border-radius:8px;overflow:hidden;background:var(--paper)}
+.rev-line{display:flex;justify-content:space-between;align-items:flex-start;gap:12px;padding:11px 14px;border-bottom:1px solid var(--line)}
+.rev-line:last-child{border-bottom:none}
+.rev-line.flag{background:color-mix(in srgb,var(--noun) 12%,transparent)}
+.rev-jp{font-size:21px;line-height:2.1}
+.rev-en{font-size:13px;color:var(--muted);font-style:italic;margin-top:1px}
+.rev-warn{font-family:"SF Mono",ui-monospace,monospace;font-size:11px;color:var(--noun);margin-top:5px;display:flex;align-items:center;gap:5px}
+.pen{color:var(--muted);font-size:15px;cursor:pointer;flex-shrink:0}
+.add-foot{display:flex;align-items:center;justify-content:space-between;gap:12px;margin-top:14px;flex-wrap:wrap}
+.add-note{font-family:"SF Mono",ui-monospace,monospace;font-size:11px;color:var(--muted);display:inline-flex;align-items:center;gap:6px}
+
+/* ---- Song view shared ---- */
+.song-head{display:flex;align-items:flex-start;justify-content:space-between;gap:12px;margin:14px 0 12px;flex-wrap:wrap}
+.song-h-title{font-size:22px;font-weight:900}
+.song-h-sub{font-size:13px;color:var(--muted);font-style:italic}
+.mode-switch{display:inline-flex;gap:3px;background:var(--paper-2);border:1px solid var(--line);border-radius:6px;padding:3px}
+.mode-sw{font-family:"SF Mono",ui-monospace,monospace;font-size:11px;letter-spacing:.06em;text-transform:uppercase;border:none;background:none;color:var(--muted);padding:7px 13px;border-radius:4px;cursor:pointer;display:inline-flex;align-items:center;gap:6px}
+.mode-sw.on{background:var(--paper);color:var(--ink);font-weight:700;box-shadow:0 1px 2px rgba(0,0,0,.08)}
+.mode-sw.on .g{color:var(--godan)}
+.player{display:flex;align-items:center;gap:12px;background:var(--paper-2);border:1px solid var(--line);border-radius:8px;padding:9px 12px;margin-bottom:10px}
+.player-thumb{width:64px;height:40px;border-radius:5px;background:#161616;color:#fff;display:flex;align-items:center;justify-content:center;font-size:16px;flex-shrink:0}
+.player-bar{flex:1;min-width:0}
+.player-prog{height:4px;background:var(--line);border-radius:2px;position:relative}
+.player-prog i{position:absolute;left:0;top:0;height:4px;border-radius:2px;background:var(--godan);width:34%}
+.player-time{display:flex;justify-content:space-between;font-family:"SF Mono",ui-monospace,monospace;font-size:11px;color:var(--muted);margin-top:5px}
+.ttoolbar{display:flex;gap:8px;margin-bottom:12px;flex-wrap:wrap}
+.tgl{display:inline-flex;align-items:center;gap:6px;font-family:"SF Mono",ui-monospace,monospace;font-size:12px;color:var(--muted);background:transparent;border:1px solid var(--line);padding:5px 10px;border-radius:3px;cursor:pointer}
+.tgl.on{color:var(--ichidan);border-color:var(--ichidan)}
+.lyrics .jp{font-family:var(--jp-font)}
+.lyric{padding:8px 12px;border-radius:6px}
+.lyric.cur{background:color-mix(in srgb,var(--ichidan) 9%,transparent);border-left:3px solid var(--ichidan);border-radius:0 6px 6px 0}
+.lyric.past{opacity:.5}
+.l-top{display:flex;justify-content:space-between;align-items:flex-start;gap:10px}
+.l-jp{font-size:23px;line-height:2.35}
+.l-en{font-size:13.5px;color:var(--muted);font-style:italic;margin-top:1px}
+.l-en.hidden{font-family:"SF Mono",ui-monospace,monospace;font-style:normal;font-size:12px;color:color-mix(in srgb,var(--muted) 75%,transparent);display:inline-flex;align-items:center;gap:5px;cursor:pointer}
+.l-ctl{display:flex;gap:6px;flex-shrink:0}
+.w{border-bottom:1px dotted color-mix(in srgb,var(--ink) 38%,transparent);cursor:pointer;border-radius:0}
+.w:hover{background:color-mix(in srgb,var(--ink) 8%,transparent)}
+.w.active{color:var(--ichidan);border-bottom:1px solid var(--ichidan);background:color-mix(in srgb,var(--ichidan) 10%,transparent)}
+.gram-row{margin-top:6px;display:flex;flex-wrap:wrap;gap:6px;align-items:center}
+.ex-gram-chip{font-family:var(--jp-font),sans-serif;font-size:12px;color:var(--ink);background:color-mix(in srgb,var(--ink) 7%,transparent);border:1px solid var(--line);border-radius:6px;padding:1px 8px}
+.word-pop{display:inline-block;min-width:220px;max-width:300px;background:var(--paper-2);border:1px solid var(--line);border-radius:10px;box-shadow:0 8px 24px rgba(0,0,0,.18);padding:11px 13px;font-family:Georgia,serif;margin-top:8px}
+.wl-head{display:flex;align-items:baseline;gap:8px;flex-wrap:wrap}
+.wl-surface{font-size:20px;color:var(--ink)}
+.wl-read{color:var(--muted);font-size:14px;font-family:var(--jp-font)}
+.wl-mean{font-size:13px;color:var(--muted);margin-top:3px}
+.wl-act{display:inline-flex;align-items:center;gap:5px;font-family:"SF Mono",ui-monospace,monospace;font-size:12px;padding:6px 11px;border-radius:8px;border:1px solid var(--line);background:var(--paper);color:var(--ink);cursor:pointer;margin-top:9px;margin-right:6px}
+.wl-act.add{color:var(--ichidan);border-color:var(--ichidan)}
+
+/* ---- Listen ---- */
+.gap{display:inline-block;min-width:90px;border-bottom:2px solid var(--ichidan);text-align:center;color:var(--muted);padding:0 8px 2px;font-family:var(--jp-font)}
+.gap.filled{color:var(--good);border-color:var(--good)}
+.listen-card{background:color-mix(in srgb,var(--ichidan) 9%,transparent);border-left:3px solid var(--ichidan);border-radius:0 8px 8px 0;padding:14px 16px;margin:6px 0}
+.listen-cue{display:flex;align-items:center;gap:10px;margin-bottom:10px}
+.cue-btn{width:36px;height:36px;border-radius:50%;background:var(--paper);border:1px solid var(--line);color:var(--ichidan);display:inline-flex;align-items:center;justify-content:center;cursor:pointer}
+.cue-hint{font-family:"SF Mono",ui-monospace,monospace;font-size:11px;color:var(--muted)}
+.listen-actions{display:flex;gap:8px;align-items:center;margin-top:12px;flex-wrap:wrap}
+.progresstxt{font-family:"SF Mono",ui-monospace,monospace;font-size:12px;color:var(--muted)}
+
+/* ---- Shadow / record-compare ---- */
+.speaking-bar{display:flex;align-items:center;flex-wrap:wrap;gap:9px;padding:0;border:0;background:none;justify-content:center}
+.speaking-toggle{display:inline-flex;align-items:center;gap:6px}
+.speaking-toggle.active{background:var(--godan);color:#fff;border-color:var(--godan)}
+.mic-lbl{font-family:"SF Mono",ui-monospace,monospace;font-size:10px;letter-spacing:.08em;text-transform:uppercase;color:var(--muted)}
+.mic-select{background:var(--paper);color:var(--ink);border:1px solid var(--line);border-radius:6px;padding:5px 8px;font-family:"SF Mono",ui-monospace,monospace;font-size:12px}
+.speed-chip{padding:3px 9px;font-size:11px}
+.bias-slider{width:90px;accent-color:var(--ichidan)}
+.rec-control{display:flex;align-items:center;flex-wrap:wrap;gap:8px;margin-top:9px;padding-top:9px;border-top:1px dashed var(--line)}
+.rec-btn{display:inline-flex;align-items:center;gap:6px;background:none;border:1px solid var(--line);color:var(--muted);border-radius:14px;padding:3px 11px;font-family:"SF Mono",ui-monospace,monospace;font-size:11px;letter-spacing:.06em;cursor:pointer}
+.rec-take{display:inline-flex;align-items:center;border:1px solid var(--line);border-radius:13px;overflow:hidden;background:var(--paper-2)}
+.rec-take-play{display:inline-flex;align-items:center;gap:4px;background:none;border:none;color:var(--good);font-family:"SF Mono",ui-monospace,monospace;font-size:11px;padding:3px 9px}
+.rec-take-del{background:none;border:none;border-left:1px solid var(--line);color:var(--muted);padding:3px 7px}
+.rec-compare{display:inline-flex;align-items:center;flex-wrap:wrap;gap:6px}
+.cmp-label{font-family:"SF Mono",ui-monospace,monospace;font-size:9px;letter-spacing:.12em;text-transform:uppercase;color:var(--muted)}
+.cmp-btn{display:inline-flex;align-items:center;gap:4px;background:none;border:1px solid var(--line);color:var(--ichidan);border-radius:13px;padding:3px 10px;font-family:"SF Mono",ui-monospace,monospace;font-size:11px;cursor:pointer}
+.cmp-btn.playing{background:var(--ichidan);color:#fff;border-color:var(--ichidan)}
+.cmp-loop{color:var(--muted)}
+.refpick{position:relative;display:inline-flex;align-items:center;gap:6px;border:1px solid var(--ichidan);border-radius:13px;padding:3px 11px;font-family:"SF Mono",ui-monospace,monospace;font-size:11px;color:var(--ichidan);cursor:pointer}
+.refmenu{margin-top:7px;width:max-content;max-width:320px;background:var(--paper);border:1px solid var(--line);border-radius:11px;box-shadow:0 10px 26px rgba(0,0,0,.22);padding:5px;flex-basis:100%}
+.refopt{display:flex;align-items:baseline;gap:9px;padding:8px 10px;border-radius:8px;cursor:pointer}
+.refopt.on{background:color-mix(in srgb,var(--ichidan) 12%,transparent)}
+.refopt .ro-t{font-family:"SF Mono",ui-monospace,monospace;font-size:12px;color:var(--ink)}
+.refopt .ro-d{font-family:Georgia,serif;font-size:12px;color:var(--muted);font-style:italic}
+.wave-row{display:flex;flex-wrap:wrap;gap:14px;margin-top:9px;flex-basis:100%}
+.wave-wrap{display:inline-block}
+.wave-cap{font-family:"SF Mono",ui-monospace,monospace;font-size:9px;letter-spacing:.1em;text-transform:uppercase;color:var(--muted);margin-bottom:3px;display:block}
+
+/* ---- Vocabulary & grammar (Mine) ---- */
+.vg{display:grid;grid-template-columns:1.45fr 1fr;gap:18px;margin-top:14px}
+.vg-card{background:var(--paper-2);border:1px solid var(--line);border-radius:12px;padding:14px 16px}
+.vg-h{font-family:"SF Mono",ui-monospace,monospace;font-size:11px;letter-spacing:.14em;text-transform:uppercase;color:var(--godan);margin-bottom:6px;display:flex;align-items:center;gap:8px}
+.vg-sub{font-family:"SF Mono",ui-monospace,monospace;font-size:11px;color:var(--muted);margin-bottom:8px}
+.lvl-head{font-family:"SF Mono",ui-monospace,monospace;font-size:10px;letter-spacing:.1em;color:var(--muted);margin:12px 0 2px}
+.wrow{display:flex;align-items:center;gap:10px;padding:7px 0;border-top:1px solid var(--line)}
+.wrow:first-of-type{border-top:none}
+.wj{font-size:17px;min-width:78px}
+.wr{font-size:12px;color:var(--muted);font-family:var(--jp-font)}
+.wm{font-size:13px;color:var(--ink);flex:1}
+.kn{font-family:"SF Mono",ui-monospace,monospace;font-size:9px;padding:2px 6px;border-radius:2px}
+.kn.known{color:var(--good);border:1px solid var(--good)}
+.kn.new{color:var(--ichidan);border:1px solid var(--ichidan)}
+.addw{font-family:"SF Mono",ui-monospace,monospace;font-size:11px;border:1px solid var(--line);background:none;color:var(--ichidan);border-radius:11px;padding:2px 9px;cursor:pointer}
+.grow{display:flex;align-items:center;gap:10px;padding:9px 0;border-top:1px solid var(--line)}
+.grow:first-of-type{border-top:none}
+.gp{font-size:15px}
+.gcount{margin-left:auto;font-family:"SF Mono",ui-monospace,monospace;font-size:11px;color:var(--muted)}
+
+/* ---- Grammar reference ---- */
+.gref{max-width:560px;background:var(--paper-2);border:1px solid var(--line);border-radius:12px;padding:18px 20px;margin:14px 0}
+.gref-pat{font-size:20px;font-weight:700}
+.mn-structure{font-family:"SF Mono",ui-monospace,monospace;font-size:12px;color:var(--ink);background:color-mix(in srgb,var(--ink) 6%,transparent);border-radius:6px;padding:7px 10px;margin:8px 0;line-height:1.5}
+.gref-explain{font-size:14px;line-height:1.6;color:var(--ink);margin-bottom:6px}
+.gref-h{font-family:"SF Mono",ui-monospace,monospace;font-size:10px;letter-spacing:.14em;text-transform:uppercase;color:var(--muted);margin:14px 0 6px}
+.gref-line{font-size:16px;padding:6px 0;border-top:1px solid var(--line)}
+.gref-line .gl-en{font-size:12px;color:var(--muted);font-style:italic}
+.xlink{display:inline-flex;align-items:center;gap:6px;font-family:"SF Mono",ui-monospace,monospace;font-size:12px;color:var(--ichidan);border:1px solid var(--line);border-radius:8px;padding:6px 11px;margin:4px 8px 0 0;cursor:pointer}
+
+/* ---- mobile frame (responsive screen) ---- */
+.phone{max-width:390px;margin:18px auto;border:1px solid var(--line);border-radius:26px;overflow:hidden;background:var(--paper);box-shadow:0 14px 40px rgba(0,0,0,.18)}
+.phone .navbar,.phone .tabs,.phone .wrap{max-width:none}
+.phone .nav-inner,.phone .tabs{padding-left:14px;padding-right:14px}
+.phone .wrap{padding:0 14px 20px}
+.phone .tabs{overflow-x:auto;flex-wrap:nowrap}

@@ -1,0 +1,82 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1">
+<title>歌 / Songs — Listen (cloze)</title>
+<link rel="stylesheet" href="../mock.css">
+<script src="../mock.js" defer></script>
+</head>
+<body>
+<div class="navbar"><div class="nav-inner">
+  <div class="nav-title">日常日本語 <span class="nav-sub">Japanese Trainer</span></div>
+  <div class="nav-extra"></div>
+  <div class="nav-actions">
+    <button class="nav-btn icon-only" aria-label="Theme"><svg class="ic"><use href="#i-theme"></use></svg></button>
+    <button class="nav-btn icon-only" aria-label="Settings"><svg class="ic"><use href="#i-gear"></use></svg></button>
+    <button class="nav-btn"><svg class="ic"><use href="#i-cloud"></use></svg> jbrelly1337@gmail.com</button>
+  </div>
+</div></div>
+<div class="tabs">
+  <button class="tab"><svg class="ic"><use href="#i-cards"></use></svg> Flashcards</button>
+  <button class="tab"><svg class="ic"><use href="#i-grid"></use></svg> Browse</button>
+  <button class="tab"><svg class="ic"><use href="#i-chart"></use></svg> Stats &amp; Leeches</button>
+  <button class="tab">みんなの日本語</button>
+  <button class="tab">独り言</button>
+  <button class="tab active"><svg class="ic"><use href="#i-music"></use></svg> 歌</button>
+</div>
+
+<div class="screen-cap"><span class="sc-t">Screen 5 · Song — Listen (cloze)</span><span class="sc-d">dictation, easier mode</span></div>
+
+<div class="wrap">
+  <div class="song-head">
+    <div><div class="song-h-title jp">夜明けの歌</div><div class="song-h-sub">サンプル・アーティスト</div></div>
+    <div class="mode-switch">
+      <button class="mode-sw"><svg class="ic"><use href="#i-book"></use></svg> Read</button>
+      <button class="mode-sw on"><svg class="ic g"><use href="#i-headphones"></use></svg> Listen</button>
+      <button class="mode-sw"><svg class="ic"><use href="#i-mic"></use></svg> Shadow</button>
+    </div>
+  </div>
+
+  <div class="toolbar" style="justify-content:space-between">
+    <div style="display:flex;align-items:center;gap:10px">
+      <span class="filter-label">Difficulty</span>
+      <div class="jlptseg"><button class="chip active">Cloze</button><button class="chip">Full line</button></div>
+      <span class="a">2</span>
+    </div>
+    <span class="progresstxt">Line 6 of 42 · 4 correct</span>
+  </div>
+
+  <div class="lyrics" style="margin-top:8px">
+    <div class="lyric past"><div class="l-jp jp">朝日がゆっくり昇ってくる</div></div>
+
+    <div class="listen-card">
+      <div class="listen-cue">
+        <button class="cue-btn" aria-label="Play line"><svg class="ic"><use href="#i-play"></use></svg></button>
+        <button class="cue-btn" aria-label="Replay slower"><svg class="ic"><use href="#i-repeat"></use></svg></button>
+        <span class="cue-hint">play the line, then fill the gaps<span class="a">3</span></span>
+      </div>
+      <div class="l-jp jp"><ruby>君<rt>きみ</rt></ruby>の <span class="gap">？</span> が <span class="gap filled"><ruby>聞<rt>き</rt></ruby>き</span><svg class="ic" style="color:var(--good);font-size:14px;vertical-align:-2px"><use href="#i-check"></use></svg> たいんだ<span class="a">1</span></div>
+      <div class="listen-actions">
+        <button class="btn srs" style="padding:9px 18px"><svg class="ic"><use href="#i-check"></use></svg> Check</button>
+        <button class="btn ghost" style="padding:9px 16px"><svg class="ic"><use href="#i-eye"></use></svg> Reveal</button>
+        <button class="btn ghost" style="padding:9px 16px">Skip <svg class="ic"><use href="#i-arrow"></use></svg></button>
+        <span class="a">4</span>
+      </div>
+    </div>
+
+    <div class="lyric past" style="opacity:.32"><div class="l-jp jp">歩きながら歌を口ずさむ</div></div>
+  </div>
+</div>
+
+<div class="legend">
+  <h3>Design notes</h3>
+  <ol>
+    <li><span class="n">1</span><div><b>Cloze keeps context.</b> The line stays visible with key words blanked; you hear it and fill the gaps. Lighter than a full transcription and reinforces the song’s own vocab in place.</div></li>
+    <li><span class="n">2</span><div><b>Difficulty toggle.</b> Switch between <b>Cloze</b> (easier) and <b>Full line</b> (hidden, harder — Screen 6) in the same mode, per your “both, switchable” choice.</div></li>
+    <li><span class="n">3</span><div><b>Audio-first.</b> The line plays from the embedded video (its timed slice); a slower replay reuses the compare-player speed control. Listening drives the answer.</div></li>
+    <li><span class="n">4</span><div><b>Check / Reveal.</b> Advisory grading (kana-normalised, like typed-mode) — it’s practice, not SRS, so over-permissiveness is harmless. Reveal self-checks; correct count tracks the session.</div></li>
+  </ol>
+</div>
+</body>
+</html>

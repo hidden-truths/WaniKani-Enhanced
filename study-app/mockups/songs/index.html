@@ -1,0 +1,89 @@
+<!doctype html>
+<html lang="en" data-theme="light">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1">
+<title>歌 / Songs — UX mockups</title>
+<link rel="stylesheet" href="mock.css">
+<style>
+  html,body{height:100%}
+  .gal{display:flex;height:100vh;overflow:hidden}
+  .gal-side{width:288px;flex-shrink:0;border-right:1px solid var(--line);background:var(--paper-2);display:flex;flex-direction:column;padding:16px 0}
+  .gal-head{font-family:"SF Mono",ui-monospace,monospace;font-weight:700;font-size:15px;color:var(--ink);padding:0 18px}
+  .gal-head .nav-sub{font-size:9px;letter-spacing:.22em;text-transform:uppercase;color:var(--godan);font-weight:400;margin-left:6px}
+  .gal-sub{font-family:Georgia,serif;font-size:12px;color:var(--muted);padding:6px 18px 12px;line-height:1.5}
+  .gal-theme{display:flex;gap:3px;margin:0 18px 12px;background:var(--paper);border:1px solid var(--line);border-radius:6px;padding:3px}
+  .gal-theme button{flex:1;font-family:"SF Mono",ui-monospace,monospace;font-size:11px;letter-spacing:.06em;text-transform:uppercase;border:none;background:none;color:var(--muted);padding:6px;border-radius:4px;cursor:pointer}
+  .gal-theme button.on{background:var(--ink);color:var(--paper);font-weight:700}
+  .gal-nav{overflow-y:auto;flex:1;padding:4px 10px}
+  .gal-item{display:flex;align-items:flex-start;gap:10px;width:100%;text-align:left;border:none;background:none;border-radius:8px;padding:9px 10px;cursor:pointer;color:var(--ink)}
+  .gal-item:hover{background:color-mix(in srgb,var(--ink) 6%,transparent)}
+  .gal-item.on{background:color-mix(in srgb,var(--godan) 12%,transparent)}
+  .gal-num{flex-shrink:0;display:inline-flex;align-items:center;justify-content:center;width:20px;height:20px;border-radius:50%;background:var(--godan);color:#fff;font-family:"SF Mono",ui-monospace,monospace;font-size:10px;font-weight:700;margin-top:1px}
+  .gal-item.on .gal-num{background:var(--godan)}
+  .gi-t{font-family:Georgia,serif;font-size:14px;line-height:1.25}
+  .gi-d{font-family:"SF Mono",ui-monospace,monospace;font-size:10px;color:var(--muted);margin-top:2px}
+  .gal-foot{font-family:"SF Mono",ui-monospace,monospace;font-size:9.5px;color:var(--muted);padding:10px 18px 0;border-top:1px solid var(--line);line-height:1.6}
+  .gal-main{flex:1;display:flex;flex-direction:column;min-width:0;background:var(--paper)}
+  .gal-bar{display:flex;align-items:center;gap:12px;padding:10px 18px;border-bottom:1px solid var(--line)}
+  .gal-bar .bt{font-family:"SF Mono",ui-monospace,monospace;font-size:12px;letter-spacing:.08em;text-transform:uppercase;color:var(--ink)}
+  .gal-bar a{margin-left:auto;font-family:"SF Mono",ui-monospace,monospace;font-size:11px;color:var(--ichidan);text-decoration:none;display:inline-flex;align-items:center;gap:5px}
+  #screen{flex:1;width:100%;border:0;background:var(--paper)}
+</style>
+</head>
+<body>
+<div class="gal">
+  <aside class="gal-side">
+    <div class="gal-head">歌 / Songs <span class="nav-sub">mockups</span></div>
+    <div class="gal-sub">Annotated UX mockups for the proposed Songs tab, in the study-app design language. Pick a screen; toggle the theme.</div>
+    <div class="gal-theme"><button id="thL" class="on" onclick="setTheme('light')">Light</button><button id="thD" onclick="setTheme('dark')">Dark</button></div>
+    <nav class="gal-nav" id="nav"></nav>
+    <div class="gal-foot">Static design artifact — not the running app. Architecture is a separate conversation.</div>
+  </aside>
+  <main class="gal-main">
+    <div class="gal-bar"><span class="bt" id="barT">Library</span><a id="openTab" href="#" target="_blank">open in new tab ↗</a></div>
+    <iframe id="screen" title="screen preview"></iframe>
+  </main>
+</div>
+<script>
+  var S = [
+    ['01-library','1','Library','the 歌 tab landing'],
+    ['02-add-paste','2','Add — Paste','bring your own song'],
+    ['03-add-review','3','Add — Review','full-auto analysis'],
+    ['04-read','4','Song — Read','the lyric viewer'],
+    ['05-listen-cloze','5','Listen — Cloze','dictation, easier'],
+    ['06-listen-fullline','6','Listen — Full line','dictation, harder'],
+    ['07-shadow','7','Song — Shadow','record & compare'],
+    ['08-timing','8','Line timing','tap-to-sync'],
+    ['09-vocab-grammar','9','Mine — Vocab & grammar','song → study material'],
+    ['10-grammar-ref','10','Grammar point','reference + cross-links'],
+    ['11-read-mobile','11','Read — Mobile','responsive']
+  ];
+  var theme = 'light', cur = 0;
+  var nav = document.getElementById('nav');
+  S.forEach(function(s, i){
+    var b = document.createElement('button');
+    b.className = 'gal-item' + (i===0?' on':'');
+    b.innerHTML = '<span class="gal-num">'+s[1]+'</span><span><span class="gi-t">'+s[2]+'</span><span class="gi-d">'+s[3]+'</span></span>';
+    b.onclick = function(){ select(i); };
+    nav.appendChild(b);
+  });
+  function url(i){ return 'screens/'+S[i][0]+'.html?theme='+theme; }
+  function select(i){
+    cur = i;
+    document.getElementById('screen').src = url(i);
+    document.getElementById('barT').textContent = S[i][2];
+    document.getElementById('openTab').href = url(i);
+    [].forEach.call(nav.children, function(c, j){ c.classList.toggle('on', j===i); });
+  }
+  function setTheme(t){
+    theme = t;
+    document.documentElement.setAttribute('data-theme', t);
+    document.getElementById('thL').classList.toggle('on', t==='light');
+    document.getElementById('thD').classList.toggle('on', t==='dark');
+    select(cur);
+  }
+  select(0);
+</script>
+</body>
+</html>

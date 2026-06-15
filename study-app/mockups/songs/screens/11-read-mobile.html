@@ -1,0 +1,72 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1">
+<title>歌 / Songs — Read (mobile)</title>
+<link rel="stylesheet" href="../mock.css">
+<script src="../mock.js" defer></script>
+<style>body{background:var(--paper-2)}</style>
+</head>
+<body>
+<div class="screen-cap"><span class="sc-t">Screen 11 · Read — mobile</span><span class="sc-d">the same surfaces, responsive (~390px)</span></div>
+
+<div style="max-width:1100px;margin:0 auto;padding:0 20px">
+  <div class="phone">
+    <div class="navbar"><div class="nav-inner" style="flex-wrap:wrap;gap:8px 10px">
+      <div class="nav-title" style="font-size:14px">日常日本語 <span class="nav-sub">JT</span></div>
+      <div class="nav-actions">
+        <button class="nav-btn icon-only" aria-label="Theme"><svg class="ic"><use href="#i-theme"></use></svg></button>
+        <button class="nav-btn icon-only" aria-label="Settings"><svg class="ic"><use href="#i-gear"></use></svg></button>
+        <button class="nav-btn icon-only" aria-label="Account"><svg class="ic"><use href="#i-cloud"></use></svg></button>
+      </div>
+    </div></div>
+    <div class="tabs">
+      <button class="tab"><svg class="ic"><use href="#i-cards"></use></svg> Flashcards</button>
+      <button class="tab"><svg class="ic"><use href="#i-grid"></use></svg> Browse</button>
+      <button class="tab"><svg class="ic"><use href="#i-chart"></use></svg> Stats</button>
+      <button class="tab">みんな</button>
+      <button class="tab">独り言</button>
+      <button class="tab active"><svg class="ic"><use href="#i-music"></use></svg> 歌</button>
+    </div>
+    <div class="wrap" style="padding-top:14px">
+      <div class="song-head" style="margin-top:0">
+        <div><div class="song-h-title jp" style="font-size:19px">夜明けの歌 <span class="lv lv-n4">N4</span></div><div class="song-h-sub">サンプル・アーティスト</div></div>
+        <div class="mode-switch" style="margin-top:4px">
+          <button class="mode-sw on"><svg class="ic g"><use href="#i-book"></use></svg> Read</button>
+          <button class="mode-sw"><svg class="ic"><use href="#i-headphones"></use></svg></button>
+          <button class="mode-sw"><svg class="ic"><use href="#i-mic"></use></svg></button>
+        </div>
+      </div>
+      <div class="player">
+        <div class="player-thumb" style="width:52px;height:34px"><svg class="ic" style="font-size:16px"><use href="#i-play"></use></svg></div>
+        <div class="player-bar"><div class="player-prog"><i></i></div><div class="player-time"><span>1:12 / 3:31</span><span>synced</span></div></div>
+      </div>
+      <div class="ttoolbar"><button class="tgl on"><svg class="ic"><use href="#i-eye"></use></svg> Furigana</button><button class="tgl"><svg class="ic"><use href="#i-eyeoff"></use></svg> EN · tap</button></div>
+      <div class="lyrics">
+        <div class="lyric past"><div class="l-jp jp">朝日がゆっくり昇ってくる</div></div>
+        <div class="lyric cur">
+          <div class="l-jp jp"><span class="w"><ruby>君<rt>きみ</rt></ruby></span>の<span class="w"><ruby>声<rt>こえ</rt></ruby></span>が<span class="w active"><ruby>聞<rt>き</rt></ruby>きたい</span>んだ</div>
+          <div class="gram-row"><span class="ex-gram-chip">〜たい</span><span class="ex-gram-chip">〜んだ</span></div>
+          <div class="l-en">I want to hear your voice.</div>
+        </div>
+        <div class="lyric">
+          <div class="l-jp jp"><span class="w"><ruby>歩<rt>ある</rt></ruby>きながら</span><span class="w"><ruby>歌<rt>うた</rt></ruby></span>を<span class="w"><ruby>口<rt>くち</rt></ruby>ずさむ</span></div>
+          <div class="l-en hidden"><svg class="ic"><use href="#i-eye"></use></svg> tap to reveal</div>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+
+<div class="legend">
+  <h3>Design notes</h3>
+  <ol>
+    <li><span class="n">·</span><div><b>Same surfaces, stacked.</b> The lyric viewer, mode switch, and player reflow to one column — no separate mobile build, just the app’s existing responsive rules.</div></li>
+    <li><span class="n">·</span><div><b>Navbar wraps.</b> Title + actions on the first row; the docked speaking bar (Shadow) drops to a full-width second row, exactly as Minna/Self-Talk already do.</div></li>
+    <li><span class="n">·</span><div><b>Touch targets.</b> Chips, mode buttons, and tabs honour the ≥40–44px minimums the app already enforces at ≤640px; tabs scroll horizontally.</div></li>
+    <li><span class="n">·</span><div><b>Reading on the go.</b> The most-used surface (Read + tap-word + reveal) is the one that matters most on a phone — listening to a song with the lyrics in hand.</div></li>
+  </ol>
+</div>
+</body>
+</html>

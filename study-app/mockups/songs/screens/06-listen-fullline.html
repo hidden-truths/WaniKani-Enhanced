@@ -1,0 +1,79 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1">
+<title>歌 / Songs — Listen (full line)</title>
+<link rel="stylesheet" href="../mock.css">
+<script src="../mock.js" defer></script>
+</head>
+<body>
+<div class="navbar"><div class="nav-inner">
+  <div class="nav-title">日常日本語 <span class="nav-sub">Japanese Trainer</span></div>
+  <div class="nav-extra"></div>
+  <div class="nav-actions">
+    <button class="nav-btn icon-only" aria-label="Theme"><svg class="ic"><use href="#i-theme"></use></svg></button>
+    <button class="nav-btn icon-only" aria-label="Settings"><svg class="ic"><use href="#i-gear"></use></svg></button>
+    <button class="nav-btn"><svg class="ic"><use href="#i-cloud"></use></svg> jbrelly1337@gmail.com</button>
+  </div>
+</div></div>
+<div class="tabs">
+  <button class="tab"><svg class="ic"><use href="#i-cards"></use></svg> Flashcards</button>
+  <button class="tab"><svg class="ic"><use href="#i-grid"></use></svg> Browse</button>
+  <button class="tab"><svg class="ic"><use href="#i-chart"></use></svg> Stats &amp; Leeches</button>
+  <button class="tab">みんなの日本語</button>
+  <button class="tab">独り言</button>
+  <button class="tab active"><svg class="ic"><use href="#i-music"></use></svg> 歌</button>
+</div>
+
+<div class="screen-cap"><span class="sc-t">Screen 6 · Song — Listen (full line)</span><span class="sc-d">dictation, harder mode — lyrics hidden</span></div>
+
+<div class="wrap">
+  <div class="song-head">
+    <div><div class="song-h-title jp">夜明けの歌</div><div class="song-h-sub">サンプル・アーティスト</div></div>
+    <div class="mode-switch">
+      <button class="mode-sw"><svg class="ic"><use href="#i-book"></use></svg> Read</button>
+      <button class="mode-sw on"><svg class="ic g"><use href="#i-headphones"></use></svg> Listen</button>
+      <button class="mode-sw"><svg class="ic"><use href="#i-mic"></use></svg> Shadow</button>
+    </div>
+  </div>
+
+  <div class="toolbar" style="justify-content:space-between">
+    <div style="display:flex;align-items:center;gap:10px">
+      <span class="filter-label">Difficulty</span>
+      <div class="jlptseg"><button class="chip">Cloze</button><button class="chip active">Full line</button></div>
+    </div>
+    <span class="progresstxt">Line 6 of 42 · 4 correct</span>
+  </div>
+
+  <div class="listen-card" style="margin-top:8px">
+    <div class="listen-cue">
+      <button class="cue-btn" aria-label="Play line"><svg class="ic"><use href="#i-play"></use></svg></button>
+      <button class="cue-btn" aria-label="Replay slower"><svg class="ic"><use href="#i-repeat"></use></svg></button>
+      <span class="cue-hint">lyrics hidden — type the whole line you hear<span class="a">1</span></span>
+    </div>
+    <input class="inp jp" style="font-size:20px;padding:12px 14px" value="きみのこえがききたいんだ"><span class="a">2</span>
+    <div class="listen-actions">
+      <button class="btn srs" style="padding:9px 18px"><svg class="ic"><use href="#i-check"></use></svg> Check</button>
+      <button class="btn ghost" style="padding:9px 16px"><svg class="ic"><use href="#i-eye"></use></svg> Reveal</button>
+      <button class="btn ghost" style="padding:9px 16px">Skip <svg class="ic"><use href="#i-arrow"></use></svg></button>
+    </div>
+    <div style="margin-top:14px;padding-top:12px;border-top:1px dashed var(--line)">
+      <div class="cmp-label" style="margin-bottom:5px">Revealed answer<span class="a">3</span></div>
+      <div class="l-jp jp" style="font-size:21px;line-height:2"><ruby>君<rt>きみ</rt></ruby>の<ruby>声<rt>こえ</rt></ruby>が<ruby>聞<rt>き</rt></ruby>きたいんだ</div>
+      <div class="l-en">I want to hear your voice.</div>
+    </div>
+  </div>
+</div>
+
+<div class="legend">
+  <h3>Design notes</h3>
+  <ol>
+    <li><span class="n">1</span><div><b>Lyrics hidden.</b> No on-screen context — you only have the audio. The truest test of listening comprehension, and the natural “hard” step up from cloze.</div></li>
+    <li><span class="n">2</span><div><b>Transcribe the line.</b> Type kana (romaji auto-folds, like typed-reading mode); the same input path the flashcards already use.</div></li>
+    <li><span class="n">3</span><div><b>Reveal to self-check.</b> The answer shows with furigana + translation. Advisory only — no SRS schedule touched — so guessing freely is fine.</div></li>
+    <li><span class="n">·</span><div><b>Same engine, two difficulties.</b> Cloze and full-line are one mode with a toggle; both replay the line’s timed slice and reuse the slow-down control.</div></li>
+  </ol>
+</div>
+</body>
+</html>
