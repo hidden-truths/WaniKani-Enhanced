@@ -12,7 +12,7 @@ import { API_BASE } from '../config.js';
 import { escapeHtml, rubyHtml, plainText, ttsText, CAT_LABEL, minnaBuiltinRank, minnaSig, convItemKey, resolveClip, clipLabel, validClip } from '../core/index.js';
 import { speak, TTS_OK } from './tts.js';
 import { playItem, cycleMod } from './audio.js';
-import { copyBtnHtml, copyText } from './render-helpers.js';
+import { copyBtnHtml, copyText, speakBtnHtml } from './render-helpers.js';
 import { account, api, setSyncStatus } from './cloud-core.js';
 import { openAuth } from './cloud.js';
 import { loadCustom, saveCustom } from '../persistence/custom.js';
@@ -54,7 +54,7 @@ export function setLineClip(lesson, idx, clip) {
 //
 // The CONVERSATION whole-dialogue audio is native-only (no synth equivalent for a whole
 // conversation): data-native alone → resolves to the native recording.
-const mnAudioBtn = (src) => src ? `<button class="speak-btn" type="button" data-audio-item data-native="${escapeHtml(src)}" aria-label="Play native audio" title="Play native audio"><svg class="ic" aria-hidden="true"><use href="#i-volume"/></svg></button>` : '';
+const mnAudioBtn = (src) => src ? speakBtnHtml({ data: { 'audio-item': true, native: src }, label: 'Play native audio' }) : '';
 // A VOCAB WORD button offers the full catalog: the native recording (if any), a synthesized voice
 // (ttsText → the same kanji-for-accent text the deck uses), and the user's own newest take. Which
 // one plays is the user's 'minna' priority (default: native first). Rendered whenever any audio
@@ -62,7 +62,7 @@ const mnAudioBtn = (src) => src ? `<button class="speak-btn" type="button" data-
 const mnWordAudioBtn = (v) => {
   if (!TTS_OK && !v.audio) return '';
   const text = ttsText({ jp: v.dict || v.kanji || v.kana, read: v.dictRead || v.kana, tts: v.tts });
-  return `<button class="speak-btn" type="button" data-audio-item data-text="${escapeHtml(text)}"${v.audio ? ` data-native="${escapeHtml(v.audio)}"` : ''} data-itemkey="${escapeHtml(v.key)}" aria-label="Play" title="Play"><svg class="ic" aria-hidden="true"><use href="#i-volume"/></svg></button>`;
+  return speakBtnHtml({ data: { 'audio-item': true, text, native: v.audio || null, itemkey: v.key }, label: 'Play' });
 };
 
 // --- Vocab → deck activation (via the custom-card store). ---
@@ -257,7 +257,7 @@ function minnaVocabSection(L) {
 // examples). Carries the ruby-stripped plain text in data-tts (the exact string /v1/tts
 // wants); wired delegated-per-render in wireMinnaLesson. Gated on TTS_OK.
 const ttsSentenceBtn = (jp) => TTS_OK
-  ? ` <button class="speak-btn sm" type="button" data-tts="${escapeHtml(plainText(jp))}" aria-label="Play sentence" title="Play sentence"><svg class="ic" aria-hidden="true"><use href="#i-volume"/></svg></button>`
+  ? ` ${speakBtnHtml({ cls: 'sm', data: { tts: plainText(jp) }, label: 'Play sentence' })}`
   : '';
 function minnaExampleRows(list) {
   // JP via rubyHtml so curated furigana (<ruby>/<rt>) renders and the data-furigana flip

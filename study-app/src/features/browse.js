@@ -10,7 +10,7 @@ import {
 import { settings } from '../settings-store.js';
 import { speakWord, speak, TTS_OK } from './tts.js';
 import { cycleMod } from './audio.js';
-import { jishoUrl, provenanceBadge, copyText } from './render-helpers.js';
+import { jishoUrl, provenanceBadge, copyText, speakBtnHtml } from './render-helpers.js';
 import { wireWordTaps } from './word-lookup.js';
 import { grammarLabel, grammarJlpt, orderGrammar } from '../data/grammar.js';
 import { makeMultiSelect, wireFacets, paintSummary, syncVerbRows } from './deck.js';
@@ -108,7 +108,7 @@ export function openVerbDetail(v) {
   document.getElementById('detailBody').innerHTML = `
     <div class="card-top"><div>
       <div class="verb-jp jp" style="font-size:34px">${v.jp}</div>
-      <div class="verb-reading">${pitchHtml(v.read, v.accent)}${TTS_OK ? ` <button class="speak-btn sm" id="dSpeak" type="button" aria-label="Play reading" title="Play reading"><svg class="ic" aria-hidden="true"><use href="#i-volume"/></svg></button>` : ''}</div>
+      <div class="verb-reading">${pitchHtml(v.read, v.accent)}${TTS_OK ? ` ${speakBtnHtml({ cls: 'sm', id: 'dSpeak', label: 'Play reading' })}` : ''}</div>
       <div class="verb-meaning">${v.mean}</div>
       <a class="jisho-link" target="_blank" rel="noopener noreferrer" href="${jishoUrl(v.jp)}"><svg class="ic" aria-hidden="true"><use href="#i-external"/></svg>View on Jisho</a></div>
       <div style="text-align:right"><div class="stamp ${cardStamp(v).cls}">${cardStamp(v).label}</div><div class="jlpt-pill">${v.jlpt}</div>${provenanceBadge(v)}</div></div>
@@ -118,7 +118,7 @@ export function openVerbDetail(v) {
     ${v.mnem ? `<details open><summary>Mnemonic</summary><div class="det-body">${v.mnem}</div></details>` : ''}
     ${v.tip ? `<details><summary>Trap / tip</summary><div class="det-body">${v.tip}</div></details>` : ''}
     <details><summary>Example sentences</summary><div class="det-body">
-      <span class="jlptseg exseg" id="dExLevels" role="group" aria-label="Example level"></span>${TTS_OK ? `<button class="speak-btn sm" id="dExSpeak" type="button" aria-label="Play example sentence" title="Play example sentence" hidden><svg class="ic" aria-hidden="true"><use href="#i-volume"/></svg></button>` : ''}<button class="speak-btn sm copy-btn" id="dExCopy" type="button" aria-label="Copy sentence" title="Copy sentence" hidden><svg class="ic" aria-hidden="true"><use href="#i-copy"/></svg></button>
+      <span class="jlptseg exseg" id="dExLevels" role="group" aria-label="Example level"></span>${TTS_OK ? `${speakBtnHtml({ cls: 'sm', id: 'dExSpeak', label: 'Play example sentence', hidden: true })}` : ''}<button class="speak-btn sm copy-btn" id="dExCopy" type="button" aria-label="Copy sentence" title="Copy sentence" hidden><svg class="ic" aria-hidden="true"><use href="#i-copy"/></svg></button>
       <div class="ex-jp jp" id="dExJp" style="margin-top:8px"></div><div class="ex-en" id="dExEn"></div><div class="ex-grammar" id="dExGram"></div>
     </div></details>
     ${v.custom ? `<div class="verb-actions"><button class="chip" id="dEdit" type="button"><svg class="ic" aria-hidden="true"><use href="#i-edit"/></svg>Edit</button><button class="chip" id="dDel" type="button" style="border-color:var(--godan);color:var(--godan)"><svg class="ic" aria-hidden="true"><use href="#i-trash"/></svg>Delete</button></div>` : ''}`;
@@ -187,7 +187,7 @@ export function renderBrowse() {
     card.innerHTML = `<div class="rank">#${v.rank}</div>
       ${acc != null ? `<div class="acc">${Math.round(acc * 100)}% acc</div>` : ''}
       <div class="card-top"><div>
-        <div class="verb-jp jp">${v.jp}</div><div class="verb-reading">${pitchHtml(v.read, v.accent)}${TTS_OK ? ` <button class="speak-btn sm" type="button" aria-label="Play reading" title="Play reading"><svg class="ic" aria-hidden="true"><use href="#i-volume"/></svg></button>` : ''}</div>
+        <div class="verb-jp jp">${v.jp}</div><div class="verb-reading">${pitchHtml(v.read, v.accent)}${TTS_OK ? ` ${speakBtnHtml({ cls: 'sm', label: 'Play reading' })}` : ''}</div>
         <div class="verb-meaning">${v.mean}</div></div>
         <div style="text-align:right"><div class="stamp ${stamp.cls}">${stamp.label}</div>
         <div class="jlpt-pill">${v.jlpt}</div>${provenanceBadge(v)}</div></div>

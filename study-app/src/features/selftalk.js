@@ -21,6 +21,7 @@ import { escapeHtml, rubyHtml, plainText, overlayTokens, topicGrid, groupByThoug
 import { SELFTALK_TAXONOMY, SELFTALK_TOPICS, SELFTALK_GRAMMAR } from '../data/selftalk.js';
 import { playItem, cycleMod } from './audio.js';
 import { wireWordTaps } from './word-lookup.js';
+import { speakBtnHtml } from './render-helpers.js';
 import { loadSelftalk, saveSelftalk } from '../persistence/selftalk.js';
 import { account, api, setSyncStatus } from './cloud-core.js';
 import {
@@ -253,7 +254,7 @@ function phraseCardHtml(p, speaking, done) {
   // Record control (synth-only reference — no native clip): shown only in speaking mode + signed in.
   const rec = speaking && account ? recordControlHtml(SELFTALK_SCOPE, p.id, '', null, false, text, 'selftalk') : '';
   return `<div class="st-phrase${done ? ' practiced' : ''}" data-id="${escapeHtml(p.id)}">
-    <button class="speak-btn st-play" type="button" data-play data-text="${escapeHtml(text)}" aria-label="Play phrase" title="Play — ⌥/⇧-click to try another voice"><svg class="ic" aria-hidden="true"><use href="#i-volume"/></svg></button>
+    ${speakBtnHtml({ cls: 'st-play', data: { play: true, text }, label: 'Play phrase', title: 'Play — ⌥/⇧-click to try another voice' })}
     <div class="st-phrase-text">
       <div class="jp st-jp">${p.tokens && p.furigana ? overlayTokens(p.furigana, p.tokens) : rubyHtml(p.jp)}</div>
       <div class="st-read">${escapeHtml(p.read || '')}</div>
@@ -292,7 +293,7 @@ function templateCardHtml(tpl, speaking, done) {
   const grams = (tpl.grammar || []).map((g) => `<span class="st-tag">${escapeHtml(grammarLabel(g))}</span>`).join('');
   const rec = speaking && account ? recordControlHtml(SELFTALK_SCOPE, tpl.id, '', null, false, r.text, 'selftalk') : '';
   return `<div class="st-phrase st-template${done ? ' practiced' : ''}" data-id="${escapeHtml(tpl.id)}">
-    <button class="speak-btn st-play" type="button" data-play data-text="${escapeHtml(r.text)}" aria-label="Play sentence" title="Play — ⌥/⇧-click to try another voice"><svg class="ic" aria-hidden="true"><use href="#i-volume"/></svg></button>
+    ${speakBtnHtml({ cls: 'st-play', data: { play: true, text: r.text }, label: 'Play sentence', title: 'Play — ⌥/⇧-click to try another voice' })}
     <div class="st-phrase-text">
       <div class="jp st-jp st-template-jp">${templateSentenceHtml(tpl, picks)}</div>
       <div class="st-read">${escapeHtml(r.read)}</div>

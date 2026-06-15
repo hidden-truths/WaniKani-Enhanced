@@ -2,6 +2,8 @@
 // coupling (e.g. browse needs provenanceBadge, which is conceptually a Minna concern but
 // rendered on every Browse card — importing it from minna.js would couple browse→minna).
 
+import { escapeHtml } from '../core/index.js';
+
 // Jisho.org dictionary deep-link for a headword. Shown on the flashcard answer side and in
 // the Browse detail modal. encodeURIComponent keeps kanji/kana valid in the URL path
 // (e.g. 食べる → /word/%E9%A3%9F%E3%81%B9%E3%82%8B).
@@ -21,6 +23,21 @@ export function provenanceBadge(v) {
 export function copyBtnHtml(text, id) {
   const t = String(text == null ? '' : text).replace(/"/g, '&quot;');
   return `<button class="speak-btn sm copy-btn"${id ? ` id="${id}"` : ''} type="button" data-copy="${t}" aria-label="Copy sentence" title="Copy sentence"><svg class="ic" aria-hidden="true"><use href="#i-copy"/></svg></button>`;
+}
+
+// Inline "▶ speak" button markup — the play button beside readings / examples / phrases across
+// Browse, Minna, and Self-Talk (mirrors copyBtnHtml). `label` is the aria-label; `title` defaults
+// to it. `cls` adds modifier classes onto the base `speak-btn` (e.g. 'sm', 'st-play'); `id` and
+// `hidden` are optional. `data` is a {name: value} map → `data-<name>` attributes: a `true` value
+// renders a valueless attribute (data-play), any other non-null value is attribute-escaped, and
+// null/false is omitted. Playback is wired by the caller's by-id / delegated [data-*] handler.
+export function speakBtnHtml({ label, title, cls = '', id, data = {}, hidden = false } = {}) {
+  const idAttr = id ? ` id="${id}"` : '';
+  const dataAttrs = Object.entries(data)
+    .filter(([, v]) => v != null && v !== false)
+    .map(([k, v]) => (v === true ? ` data-${k}` : ` data-${k}="${escapeHtml(v)}"`))
+    .join('');
+  return `<button class="speak-btn${cls ? ' ' + cls : ''}"${idAttr} type="button"${dataAttrs} aria-label="${label}" title="${title == null ? label : title}"${hidden ? ' hidden' : ''}><svg class="ic" aria-hidden="true"><use href="#i-volume"/></svg></button>`;
 }
 
 // Copy `text` to the clipboard, with a brief ✓ confirmation on `btn` (swaps its icon to a check
