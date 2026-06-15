@@ -2,12 +2,13 @@
 
 A [Tampermonkey](https://www.tampermonkey.net/) userscript that augments WaniKani vocab reviews with a real example sentence, voice-actor audio, and a scene image — inlaid directly into the big purple character header so you read, hear, and see the word in context the moment you finish answering.
 
-This repo contains two components:
+This repo contains three surfaces:
 
 - **The userscript** ([`wkenhanced.user.js`](wkenhanced.user.js)) — what you install in Tampermonkey. This README covers it.
-- **A backing API server** ([`wk-enhanced-api/`](wk-enhanced-api/)) — Bun + Hono + SQLite, deployed at `https://api.wkenhanced.dev`. Pre-warms ImmersionKit, Google TTS, and DuckDuckGo data so every userscript user doesn't have to hit those services individually. The userscript talks to this server exclusively as of v2.0.0. See [wk-enhanced-api/README.md](wk-enhanced-api/README.md), [CLIENT_MIGRATION.md](CLIENT_MIGRATION.md), and [SERVER_DESIGN.md](SERVER_DESIGN.md).
+- **A backing API server** ([`wk-enhanced-api/`](wk-enhanced-api/)) — Bun + Hono + SQLite, deployed at `https://api.wkenhanced.dev`. Pre-warms ImmersionKit, Google TTS, and DuckDuckGo data so every userscript user doesn't have to hit those services individually. The userscript talks to this server exclusively as of v2.0.0. See [wk-enhanced-api/README.md](wk-enhanced-api/README.md) and [SERVER_DESIGN.md](SERVER_DESIGN.md).
+- **A standalone study app** ([`study-app/`](study-app/)) — the 日常日本語 Japanese trainer (Vite SPA + nginx) at `https://wkenhanced.dev`, with email/password accounts + per-user sync, backed by the same API. Its own docs: [study-app/README.md](study-app/README.md).
 
-A frozen direct-path snapshot of the v1.1.1 userscript (which talks to ImmersionKit, DuckDuckGo, and Google Translate TTS from your browser instead of going through the API server) lives at [legacy/wk-vocab-review-ik-direct.user.js](legacy/wk-vocab-review-ik-direct.user.js). Install that only if you need a fallback for an extended API-server outage; see [legacy/README.md](legacy/README.md) for the trade-offs.
+A frozen direct-path snapshot of the v1.1.1 userscript (which talked to ImmersionKit, DuckDuckGo, and Google Translate TTS straight from the browser) was kept at `legacy/` as an outage fallback; it was **removed in the 2026-06 cleanup** now that the API path is stable, and is recoverable from git history.
 
 ## What it does
 
@@ -114,7 +115,7 @@ All of this is fetched, cached, and served by the API server. The userscript rec
 ## Troubleshooting
 
 - **No card appears on reviews** → Check the DevTools console for `[wkenhanced] ...` lines. The most useful is the `boot OK` line — if it's missing, the boot chain failed somewhere upstream (most often WKOF isn't loaded). Make sure WKOF is enabled and listed before this script in the Tampermonkey dashboard.
-- **Cards render empty for every word** → Most likely the API server is unreachable. Run `debugWkEnhancedApi()` in the console; it probes `/v1/health` and dumps the resolved URL. If `api.wkenhanced.dev` is genuinely down, consider installing the legacy/ snapshot as a temporary fallback.
+- **Cards render empty for every word** → Most likely the API server is unreachable. Run `debugWkEnhancedApi()` in the console; it probes `/v1/health` and dumps the resolved URL. If `api.wkenhanced.dev` is genuinely down, the cards stay empty until it's back (there's no longer a browser-direct fallback).
 - **Translation/image doesn't reveal on answer submit** → Look for `reveal triggered by:` in the console. The expected match is `bg:red(...)` or `bg:green(...)` — meaning the script saw WaniKani paint the input bar. If you only see `…visible(fallback)`, the bg-color check missed and we fell through to the Item-Info-coupled fallback; run `debugWkEnhanced()` right after submitting and paste the output into an issue.
 - **Card looks misaligned (vocab character not centered, content overlapping, etc.)** → Run `debugWkEnhanced()` and paste the `--- .character-header DOM tree ---` section. That output is what lets us identify positioning-context traps inside WaniKani's CSS.
 - **Audio plays twice or overlaps WaniKani's pronunciation** → On a reading submit, the script waits for any non-its-own `<audio>` element to finish before playing. If WaniKani is using Web Audio API (no DOM `<audio>`), the script falls back to a fixed 2.5s delay; in rare cases that delay might be too short for a long pronunciation.

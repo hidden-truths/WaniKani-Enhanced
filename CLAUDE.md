@@ -2,16 +2,16 @@
 
 ## What this project is
 
-A **two-part** project augmenting WaniKani vocab reviews:
+A **three-surface** project augmenting WaniKani vocab reviews (+ a standalone study app):
 
 1. **Tampermonkey userscript** at [wkenhanced.user.js](wkenhanced.user.js) — runs in-browser on WaniKani, injects example sentences, audio, and images into the vocab-review header. As of v2.0.0 the userscript only talks to our backing API server; all upstream coordination (ImmersionKit / DuckDuckGo / Google TTS) happens server-side.
 2. **Backing API server** at [wk-enhanced-api/](wk-enhanced-api/) — Bun + Hono + SQLite. Coalesces IK / DDG / Google TTS behind a single pre-warmed endpoint so every client doesn't hit three external services individually. Has its own [CLAUDE.md](wk-enhanced-api/CLAUDE.md) and [README.md](wk-enhanced-api/README.md) — treat those as authoritative for anything inside `wk-enhanced-api/`.
 
-As of mid-2026 there's also a **third surface**: a **日常日本語 Japanese-trainer study app** — its OWN standalone **Vite** project + nginx container at [study-app/](study-app/), served at the apex `https://wkenhanced.dev/`, with email/password accounts + per-user progress sync. It talks to the API at `api.wkenhanced.dev` **cross-origin** (two containers, one droplet). It began as a self-contained HTML file (the since-removed `japanese-study/japanese-verbs.html`), lived inside the API as `wk-enhanced-api/web/` for a while, then was extracted into [study-app/](study-app/) once it outgrew that. Its own docs: [study-app/README.md](study-app/README.md) + [study-app/CLAUDE.md](study-app/CLAUDE.md); the server side (auth/progress routes + the cross-origin CORS) is in [wk-enhanced-api/CLAUDE.md](wk-enhanced-api/CLAUDE.md) "Accounts + study app"; the cut-over runbook in [wk-enhanced-api/deploy/README.md](wk-enhanced-api/deploy/README.md).
+As of mid-2026 there's also a **third surface**: a **日常日本語 Japanese-trainer study app** — its OWN standalone **Vite** project + nginx container at [study-app/](study-app/), served at the apex `https://wkenhanced.dev/`, with email/password accounts + per-user progress sync. It talks to the API at `api.wkenhanced.dev` **cross-origin** (two containers, one droplet). It was extracted into [study-app/](study-app/) from an earlier in-API `web/` directory once it outgrew it. Its own docs: [study-app/README.md](study-app/README.md) + [study-app/CLAUDE.md](study-app/CLAUDE.md); the server side (auth/progress routes + the cross-origin CORS) is in [wk-enhanced-api/CLAUDE.md](wk-enhanced-api/CLAUDE.md) "Accounts + study app"; the cut-over runbook in [wk-enhanced-api/deploy/README.md](wk-enhanced-api/deploy/README.md).
 
-A **frozen v1.1.1 snapshot** of the userscript's pre-server direct path lives at [legacy/wk-vocab-review-ik-direct.user.js](legacy/wk-vocab-review-ik-direct.user.js), preserved as a fallback for "API server is down for an extended period" scenarios. It calls IK / DDG / Google TTS directly from the browser. No auto-updates. Different `@name` so it can coexist with the main script in Tampermonkey. See [legacy/README.md](legacy/README.md).
+A **frozen v1.1.1 snapshot** of the userscript's pre-server direct path (it called IK / DDG / Google TTS straight from the browser) was kept at `legacy/` as an "API server down for an extended period" fallback. It was **removed in the 2026-06 cleanup** now that the v2.0.0 server path has proven stable; recover it from git history if ever needed.
 
-The server is deployed in production at `https://api.wkenhanced.dev` (DO droplet in SFO3 + Spaces, Cloudflare Tunnel for TLS/edge). Userscript v2.0.0 routes every vocab lookup through it; existing v1.x users on the direct path can either upgrade (paste the new file) or stay on legacy/ if they want browser-direct fetches.
+The server is deployed in production at `https://api.wkenhanced.dev` (DO droplet in SFO3 + Spaces, Cloudflare Tunnel for TLS/edge). Userscript v2.0.0 routes every vocab lookup through it; existing v1.x users on the direct path upgrade by pasting the new file.
 
 This file covers the userscript. For server work, jump to [wk-enhanced-api/CLAUDE.md](wk-enhanced-api/CLAUDE.md). For the migration plan + Phase 1/2/3 deviations + the deploy-day lessons, see [CLIENT_MIGRATION.md](CLIENT_MIGRATION.md) and [wk-enhanced-api/deploy/README.md](wk-enhanced-api/deploy/README.md).
 
@@ -87,7 +87,7 @@ These have been investigated extensively. Don't re-explore them.
 These are about the upstream data flow that historically the userscript handled. The userscript no longer cares — but the server does, so these warnings still matter, just in a different file. Don't re-explore them based on this list; jump to the linked file when relevant:
 
 - **IK's *direct* media bucket (`us-southeast-1.linodeobjects.com/immersionkit/...`) is offline since Aug 2025** → handled server-side via `apiv2.immersionkit.com/download_media?path=...` proxy. See [wk-enhanced-api/CLAUDE.md](wk-enhanced-api/CLAUDE.md).
-- **IK's `title` field is lossy** → server resolves via cached `/index_meta` map; heuristic fallback in [wk-enhanced-api/src/lib/ikTitles.ts](wk-enhanced-api/src/lib/ikTitles.ts). Frozen v1.x heuristic copy lives in `legacy/wk-vocab-review-ik-direct.user.js`.
+- **IK's `title` field is lossy** → server resolves via cached `/index_meta` map; heuristic fallback in [wk-enhanced-api/src/lib/ikTitles.ts](wk-enhanced-api/src/lib/ikTitles.ts). (The frozen v1.x heuristic is in git history, in the removed `legacy/` snapshot.)
 - **JLPT scoring fails open on conjugated verbs** → still true; server computes `jlptMax` per example using the same fail-open semantics. See [wk-enhanced-api/CLAUDE.md](wk-enhanced-api/CLAUDE.md) JLPT section.
 
 ## Diagnostic helpers (callable from browser console)
