@@ -425,12 +425,13 @@ as work lands. `[ ]` = todo, `[x]` = done, `[~]` = in progress.
 - [x] Tests: 16 repo tests incl. the privacy-gate breach pins (private lyrics never leak to anon/another user). Full suite green (262), typecheck clean, routes smoke-tested live.
 - Note: `AnnotationToken` gained optional `jlpt`/`gloss` (LLM-sourced, Songs) + the GiNZA-only `tag`/`dep`/`head` became optional, so one token shape serves both producers. Line **ordinal = array index** (lines are server-sorted + contiguous; `compactLink` omits a falsy 0, but the DB stores correct 0-based ordinals for timing).
 
-### Phase 2 — Server: analysis endpoint
-- [ ] `@anthropic-ai/sdk` dep + `ANTHROPIC_API_KEY`/`ANTHROPIC_MODEL` in `.env.example`.
-- [ ] `services/songAnalyze.ts`: prompt (lyrics + catalog + contract), Claude call, per-line validation + flags, 503 if no key.
-- [ ] `POST /v1/songs/analyze` + `GET /v1/songs/oembed`.
-- [ ] `POST /v1/songs` persists the reviewed analysis atomically (rows + links + translations + tags + annotations).
-- [ ] Tests mock the Anthropic client.
+### Phase 2 — Server: analysis endpoint ✅
+- [x] `@anthropic-ai/sdk` dep + `ANTHROPIC_API_KEY`/`ANTHROPIC_MODEL` (default `claude-opus-4-8`) in `config.ts` + `.env.example`; grammar catalog copied to `wk-enhanced-api/data/grammar.json` (runtime image carries no `study-app/`, so the seed-script import path can't be used at runtime).
+- [x] `services/songAnalyze.ts`: forced tool-use + streaming Claude call; the model returns furigana + tokens (in order, **no offsets**) and the **server computes UTF-16 offsets** by walking the line, so `text.slice(start,end)===surface` holds by construction; furigana validated + flagged; grammar catalog-filtered; 503 (`AnalysisUnavailableError`) when no key.
+- [x] `POST /v1/songs/analyze` (account-gated, 503 graceful) + `GET /v1/songs/oembed` (keyless YouTube title/artist + SSRF-guarded id parse).
+- [x] `POST /v1/songs` (Phase 1) already persists a reviewed analysis atomically — the Add flow's save target; no change needed.
+- [x] 7 unit tests for the pure `assembleAnalysis` (offset computation, furigana validation, flagging, grammar filter) — mock-free per the service-layer test convention; the live Claude call is integration-only. Full suite green (269), typecheck clean, routes smoke-tested (anon 401 / 503 paths, `/{id}` not shadowed).
+- Decision: model returns linguistics, **server does the offset bookkeeping** — never trust an LLM to count UTF-16 code units. Live analyze verifies once `ANTHROPIC_API_KEY` is provisioned (the Add flow shows a "not available yet" state until then).
 
 ### Phase 3 — Client: Library + Add + Read + Mine (foundation)
 - [ ] Tab + `#panel-songs` + sprite glyphs in `index.html`.

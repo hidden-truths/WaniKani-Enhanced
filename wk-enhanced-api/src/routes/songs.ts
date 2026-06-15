@@ -25,10 +25,39 @@ import {
     SongUpdateRequestSchema,
     SongTimingRequestSchema,
     SongIdParamsSchema,
+    SongAnalyzeRequestSchema,
+    SongAnalyzeResponseSchema,
+    SongOembedQuerySchema,
+    SongOembedResponseSchema,
     ErrorSchema,
 } from '../schemas.ts';
+import { analyzeLyrics, splitLyrics, isAnalysisConfigured, AnalysisUnavailableError } from '../services/songAnalyze.ts';
 import { zodHook } from '../lib/zodHook.ts';
 import { log } from '../lib/log.ts';
+
+// Parse a YouTube video id from a watch / youtu.be / embed / shorts URL (also the SSRF guard for the
+// oEmbed proxy — we only ever fetch youtube.com/oembed for a validated id).
+function parseYouTubeId(url: string): string | null {
+    let id: string | null = null;
+    try {
+        const u = new URL(url.trim());
+        const host = u.hostname.replace(/^(www\.|m\.)/, '');
+        if (host === 'youtu.be') id = u.pathname.slice(1).split('/')[0] || null;
+        else if (host === 'youtube.com') {
+            if (u.pathname === '/watch') id = u.searchParams.get('v');
+            else {
+                const m = u.pathname.match(/^\/(embed|shorts|v)\/([^/?#]+)/);
+                if (m) id = m[2]!;
+            }
+        }
+    } catch {
+        return null;
+    }
+    return id && /^[A-Za-z0-9_-]{6,20}$/.test(id) ? id : null;
+}
+
+const serviceUnavailable = (c: any, detail: string) =>
+    c.json({ code: 'service_unavailable' as const, error: 'analysis unavailable', detail }, 503);
 
 export const songsRouter = new OpenAPIHono({ defaultHook: zodHook });
 
@@ -62,6 +91,81 @@ songsRouter.openapi(listRoute, (c) => {
     const songs = db.getSongs({ viewer: user?.id ?? null });
     c.set('logCtx', { viewer: user?.id ?? null, count: songs.length });
     return c.json({ songs }, 200);
+});
+
+// ---------- POST /analyze (the runtime LLM pass) ----------
+// Static path, registered before /{id} so it never matches the id param route.
+
+const analyzeRoute = createRoute({
+    method: 'post',
+    path: '/analyze',
+    tags: ['Accounts'],
+    summary: 'Analyze pasted lyrics → furigana + English + grammar + JLPT tokens',
+    request: { body: { required: true, content: { 'application/json': { schema: SongAnalyzeRequestSchema } } } },
+    responses: {
+        200: { description: 'Per-line analysis.', content: { 'application/json': { schema: SongAnalyzeResponseSchema } } },
+        400: { description: 'No analyzable lines.', content: { 'application/json': { schema: ErrorSchema } } },
+        401: { description: 'Not logged in.', content: { 'application/json': { schema: ErrorSchema } } },
+        502: { description: 'The analysis model call failed.', content: { 'application/json': { schema: ErrorSchema } } },
+        503: { description: 'Analysis not configured on this server (no model API key).', content: { 'application/json': { schema: ErrorSchema } } },
+    },
+});
+
+songsRouter.openapi(analyzeRoute, async (c) => {
+    const user = currentUser(c);
+    if (!user) return unauthorized(c); // writes nothing, but it's a metered model call → account-gated
+    if (!isAnalysisConfigured()) return serviceUnavailable(c, 'Lyrics analysis isn’t available on this server yet.');
+    const { lyrics, title, artist } = c.req.valid('json');
+    const lines = splitLyrics(lyrics);
+    if (!lines.length) return c.json({ code: 'validation_error' as const, error: 'no lyrics', detail: 'Paste at least one line.' }, 400);
+    try {
+        const result = await analyzeLyrics({ lines, title, artist });
+        c.header('Cache-Control', 'no-store');
+        return c.json(result, 200);
+    } catch (err) {
+        if (err instanceof AnalysisUnavailableError) return serviceUnavailable(c, 'Lyrics analysis isn’t available on this server yet.');
+        const msg = err instanceof Error ? err.message : String(err);
+        log.error('songs.analyze.failed', { userId: user.id, lines: lines.length, err: msg });
+        return c.json({ code: 'upstream_failure' as const, error: 'analysis failed', detail: msg }, 502);
+    }
+});
+
+// ---------- GET /oembed (keyless YouTube title/artist) ----------
+
+const oembedRoute = createRoute({
+    method: 'get',
+    path: '/oembed',
+    tags: ['Accounts'],
+    summary: 'Fetch a YouTube video’s title/artist + id (keyless oEmbed proxy)',
+    request: { query: SongOembedQuerySchema },
+    responses: {
+        200: { description: 'Title/artist (best-effort) + the parsed video id.', content: { 'application/json': { schema: SongOembedResponseSchema } } },
+        400: { description: 'Not a YouTube URL.', content: { 'application/json': { schema: ErrorSchema } } },
+        401: { description: 'Not logged in.', content: { 'application/json': { schema: ErrorSchema } } },
+    },
+});
+
+songsRouter.openapi(oembedRoute, async (c) => {
+    const user = currentUser(c);
+    if (!user) return unauthorized(c); // outbound fetch → don't expose as an open proxy
+    const { url } = c.req.valid('query');
+    const youtubeId = parseYouTubeId(url);
+    if (!youtubeId) return c.json({ code: 'validation_error' as const, error: 'not a YouTube URL', detail: 'Paste a youtube.com or youtu.be link.' }, 400);
+    let title = '';
+    let author = '';
+    try {
+        const oe = `https://www.youtube.com/oembed?url=${encodeURIComponent('https://www.youtube.com/watch?v=' + youtubeId)}&format=json`;
+        const r = await fetch(oe, { signal: AbortSignal.timeout(8000), headers: { 'User-Agent': 'wk-enhanced-api' } });
+        if (r.ok) {
+            const j = (await r.json()) as { title?: string; author_name?: string };
+            title = typeof j.title === 'string' ? j.title : '';
+            author = typeof j.author_name === 'string' ? j.author_name : '';
+        }
+    } catch {
+        // best-effort — the client falls back to manual title/artist entry
+    }
+    c.header('Cache-Control', 'no-store');
+    return c.json({ title, author, youtubeId }, 200);
 });
 
 // ---------- GET /{id} ----------

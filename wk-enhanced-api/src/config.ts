@@ -100,6 +100,16 @@ export const config = {
             .map((s) => s.trim().toLowerCase())
             .filter(Boolean),
     },
+    // 歌 / Songs tab — the runtime lyrics-analysis endpoint (POST /v1/songs/analyze) calls
+    // Claude to turn pasted lyrics into furigana + English + grammar + per-word JLPT. The key is
+    // OPTIONAL: without it the analyze endpoint returns 503 (analysis_unavailable) and the rest of
+    // the Songs surface (library, read existing songs, mine) keeps working — so the feature ships
+    // before the key is provisioned, like the Siri-voice rollout. Model defaults to Opus 4.8 for
+    // furigana accuracy; override to a cheaper model (e.g. claude-sonnet-4-6) via ANTHROPIC_MODEL.
+    songs: {
+        anthropicApiKey: process.env.ANTHROPIC_API_KEY || '',
+        anthropicModel: process.env.ANTHROPIC_MODEL || 'claude-opus-4-8',
+    },
     storage: {
         driver: driver as 'local' | 's3',
         localDir: process.env.LOCAL_MEDIA_DIR || './dev-data/media',

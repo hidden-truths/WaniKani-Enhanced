@@ -92,3 +92,45 @@ export const SongTimingRequestSchema = z
 export const SongIdParamsSchema = z.object({
     id: z.string().min(1).max(200).openapi({ param: { name: 'id', in: 'path' }, description: 'The song ext_id.', example: 'usr-7b1c…' }),
 });
+
+// ---- Analysis (POST /v1/songs/analyze) — the runtime LLM pass ----
+
+// Raw pasted lyrics; the server splits into trimmed non-empty lines (returned with the analysis).
+export const SongAnalyzeRequestSchema = z
+    .object({
+        lyrics: z.string().min(1).max(20_000).openapi({ description: 'Raw pasted lyrics (one line per lyric line).' }),
+        title: z.string().max(200).optional(),
+        artist: z.string().max(200).optional(),
+    })
+    .openapi('SongAnalyzeRequest');
+
+// One analyzed line: the canonical line text + furigana + English + grammar ids + offset-resolved
+// tokens + proofread flags ('missing' | 'furigana' | 'tokens' | 'low-confidence').
+export const AnalyzedLineSchema = z
+    .object({
+        index: z.number().int(),
+        text: z.string(),
+        furigana: z.array(FuriganaSegSchema).nullable(),
+        en: z.string(),
+        grammar: z.array(z.string()),
+        tokens: z.array(AnnotationTokenSchema),
+        flags: z.array(z.string()),
+    })
+    .openapi('AnalyzedLine');
+
+export const SongAnalyzeResponseSchema = z
+    .object({
+        profile: z.object({ jlpt: z.string().nullable(), grammarCount: z.number().int(), lineCount: z.number().int() }),
+        lines: z.array(AnalyzedLineSchema),
+    })
+    .openapi('SongAnalyzeResponse');
+
+// ---- oEmbed proxy (GET /v1/songs/oembed) — keyless title/artist auto-fill ----
+
+export const SongOembedQuerySchema = z.object({
+    url: z.string().min(1).max(500).openapi({ param: { name: 'url', in: 'query' }, description: 'A YouTube watch/share URL.' }),
+});
+
+export const SongOembedResponseSchema = z
+    .object({ title: z.string(), author: z.string(), youtubeId: z.string().nullable() })
+    .openapi('SongOembedResponse');
