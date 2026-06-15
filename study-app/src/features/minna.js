@@ -312,7 +312,7 @@ function markerHtml(idx, audioSrc, clip) {
   const v = validClip(clip);
   const fmt = t => (v == null && t == null) ? '–' : Number(t).toFixed(1) + 's';
   return `<div class="clip-marker" data-cidx="${idx}" data-start="${v ? v[0] : ''}" data-end="${v ? v[1] : ''}">
-    <audio class="clip-audio" controls crossorigin="use-credentials" preload="metadata" src="${API_BASE}/v1/minna/audio?src=${encodeURIComponent(audioSrc)}"></audio>
+    <audio class="clip-audio" controls crossorigin="use-credentials" preload="metadata" src="${API_BASE}/v1/audio/native?src=${encodeURIComponent(audioSrc)}"></audio>
     <div class="clip-marker-row">
       <button class="chip" type="button" data-clip-setstart>Set start</button>
       <button class="chip" type="button" data-clip-setend>Set end</button>

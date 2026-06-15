@@ -312,7 +312,7 @@ Component contracts you must preserve:
   `<audio>` srcs prepend it too. The session cookie rides because the two are **same-site**
   (`Domain=.wkenhanced.dev`, `SameSite=Lax`). **Minna native audio is cookie-gated**, so its
   `<audio>` sets `crossOrigin='use-credentials'` — without it the cookie isn't sent and the
-  audio 401s; the server answers `/v1/minna/audio` with an origin-scoped
+  audio 401s; the server answers `/v1/audio/native` with an origin-scoped
   `Allow-Credentials` (never `*`). **Gotcha that bit us once:** the `store`→`state.store`
   module-split rename also rewrote the string `cache:'no-store'` → `'no-state.store'` (the
   hyphen is a word boundary), making every `api()` fetch throw an invalid-`RequestCache`
@@ -624,7 +624,7 @@ Component contracts you must preserve:
   loads content live from `/v1/minna/*` (signed-in only), so the copyrighted textbook
   material never ships to anonymous visitors. `renderMinna()` (lazy on tab activation)
   shows a sign-in gate when `!account`, else fetches the lesson and renders
-  vocab/grammar/examples/conversation + native-audio buttons (`/v1/minna/audio`, one
+  vocab/grammar/examples/conversation + native-audio buttons (`/v1/audio/native`, one
   reused `<audio>` with `crossOrigin='use-credentials'` so the session cookie authorizes
   it cross-origin — see the cross-origin dead-end above). **Vocab "activation"
   REUSES the custom-verb system, not a new data path:** each word becomes a tagged
