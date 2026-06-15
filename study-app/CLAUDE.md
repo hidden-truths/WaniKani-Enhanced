@@ -456,7 +456,7 @@ Component contracts you must preserve:
   `/v1/audio/variants` once per modal-open and the picker annotates "· not generated" (fails open). **Phase 3 (not yet done):** generalize the
   record-compare "▶ native" into "▶ reference" against any chosen voice. Follow-ups (preview, per-item
   cycle, availability hinting, Phase 3) are tracked in [NEXT_STEPS.md](NEXT_STEPS.md). See
-  [NEXT_AUDIO_UNIFY.md](NEXT_AUDIO_UNIFY.md).
+  [NEXT_AUDIO_UNIFY.md](../docs/history/NEXT_AUDIO_UNIFY.md).
 - **TTS prefers the server's Google proxy, falls back to Web Speech.** The synth tier of the player
   above: `speak()` ultimately
   plays `/v1/audio/tts?text=<reading>&voice=<chosen>` (legacy `/v1/tts` still works) via a reused

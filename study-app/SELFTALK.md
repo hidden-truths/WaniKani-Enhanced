@@ -7,7 +7,7 @@ speaking practice — the grammar reading-only drills miss (〜ている, 〜な
 volitional 〜よう, 〜ておく, 〜そう…).
 
 Layer docs: module map + dead-ends in [CLAUDE.md](CLAUDE.md); card/furigana model in
-[CARDS.md](CARDS.md); the shared record-and-compare engine in [NEXT_AUDIO_UNIFY.md](NEXT_AUDIO_UNIFY.md).
+[CARDS.md](CARDS.md); the shared record-and-compare engine in [src/features/record-compare.js](src/features/record-compare.js) (contract in [CLAUDE.md](CLAUDE.md)).
 
 ## What it is (and how it differs from Minna)
 

@@ -29,7 +29,7 @@ pitch accent) have all shipped — **and so has THE BIG ONE: the split into two 
 > `siri:female` clips were pushed to the prod Spaces bucket (`push-tts-variants.ts`) and the
 > `audio_variants` manifest seeded on the droplet (`seed-audio-variants.ts`), so the picker offers
 > the real voices in prod; the `/v1/audio/tts` ETag + `no-cache` headers (so a re-voiced clip
-> propagates) are also live. Full status: [NEXT_AUDIO_UNIFY.md](NEXT_AUDIO_UNIFY.md).
+> propagates) are also live. Full status: [NEXT_AUDIO_UNIFY.md](../docs/history/NEXT_AUDIO_UNIFY.md).
 
 ## ✅ SHIPPED — split into two apps (the learning tool + the API)
 
@@ -201,7 +201,7 @@ This is the priority. The items below are smaller and can follow.
   credentialed native/take by a `gated` flag) + a per-context Voice-priority editor in Settings;
   flashcards/Browse/Minna all routed through it. **UI fixes:** Settings modal now bounds + scrolls
   (sticky ×); a copy-sentence button beside each example's ▶ play. Full status + remaining Phase 3 /
-  ideas: [NEXT_AUDIO_UNIFY.md](NEXT_AUDIO_UNIFY.md) + the Ideas section below.
+  ideas: [NEXT_AUDIO_UNIFY.md](../docs/history/NEXT_AUDIO_UNIFY.md) + the Ideas section below.
 - ~~Minna furigana + local TTS pre-generation + native-audio prefetch~~ — **shipped** (6 commits
   on `minna-phase2-record-compare`). (1) **Furigana** on the Minna grammar/lesson/conversation
   sentences (L22–24, 79 sentences): a `rubyHtml()` sanitizer renders curated `<ruby>` while
@@ -396,7 +396,7 @@ This is the priority. The items below are smaller and can follow.
 
 ## Ideas / not yet scoped
 - **Unify voice-audio sourcing behind one tagged API** — **Phases 1 + 2 SHIPPED** (see Done /
-  [NEXT_AUDIO_UNIFY.md](NEXT_AUDIO_UNIFY.md)): a unified `/v1/audio` surface, a tagged-variant
+  [NEXT_AUDIO_UNIFY.md](../docs/history/NEXT_AUDIO_UNIFY.md)): a unified `/v1/audio` surface, a tagged-variant
   catalog, the `core/audio.js` resolver + shared `playItem` player, and a per-context voice picker.
   Follow-ups + my suggestions below.
 
@@ -441,7 +441,7 @@ This is the priority. The items below are smaller and can follow.
   `loop` compare against the selected reference; each control now carries its synth `text` so even a
   clipless conversation line can compare against Siri, and a word without native audio gains a synth
   reference. `referenceVariants`/`currentRef`/`refUrl`/`playReference` in
-  [src/features/record-compare.js](src/features/record-compare.js). (Detail in [NEXT_AUDIO_UNIFY.md](NEXT_AUDIO_UNIFY.md).)
+  [src/features/record-compare.js](src/features/record-compare.js). (Detail in [NEXT_AUDIO_UNIFY.md](../docs/history/NEXT_AUDIO_UNIFY.md).)
 - ~~**⑦ Token hygiene.**~~ **Shipped.** `settings.audioPrefs` is now pruned of unknown tokens on load
   AND on cloud-pull (`normalizeSettings` → `pruneAudioPrefs` in [settings-store.js](src/settings-store.js)),
   dropping any token a future/foreign palette wouldn't understand and dropping a context that empties

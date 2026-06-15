@@ -14,6 +14,9 @@ state of the project start at [../../NEXT_STEPS.md](../../NEXT_STEPS.md) and
   for Self-Talk (Phase 1) and built-in examples (Phase 2), both shipped.
 - **SENTENCE_STORE_TEMPLATES.md** — the slot-swap-templates design + as-built. Both slices
   shipped (`be2ee94`, `d29c620`); only the deferred user-authored-templates idea remains.
+- **NEXT_AUDIO_UNIFY.md** — the study-app audio-unify epic brief + as-built (one tagged
+  `/v1/audio` surface, voice variants, record-compare). Phases 1–3 + follow-ups ①–⑦ shipped +
+  deployed 2026-06-12.
 
 The living sentence-store docs (the NLP hub + the Phase-4 as-built, which still tracks the ⭐
 tokenization rework) stay at the repo root as `SENTENCE_STORE_*.md`.

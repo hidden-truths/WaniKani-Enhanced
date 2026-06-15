@@ -180,4 +180,4 @@ grammar, furigana, and especially pitch accent is the last step.
   exposes a unified, **voice-tagged** audio surface (`/v1/audio/tts?voice=`, `/v1/audio/variants`)
   so a text can resolve to several voices (Siri male/female, Google, native, your own takes); the
   client adopts it (a per-context voice picker) in audio-unify Phase 2 — see
-  [NEXT_AUDIO_UNIFY.md](NEXT_AUDIO_UNIFY.md). `/v1/tts` stays as the default-voice alias.
+  [NEXT_AUDIO_UNIFY.md](../docs/history/NEXT_AUDIO_UNIFY.md). `/v1/tts` stays as the default-voice alias.
