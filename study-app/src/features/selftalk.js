@@ -153,7 +153,7 @@ function maybeMaterialize(id) {
   const key = id + '|' + comboKey(tpl, tplPicks[id] || {});
   if (materializedCombos.has(key)) return;               // already sent this combo this session
   materializedCombos.add(key);
-  api('/v1/templates/' + encodeURIComponent(id) + '/realize', { method: 'POST', body: { picks: tplPicks[id] || {} } })
+  api('/v1/templates/' + encodeURIComponent(id) + '/realize', { method: 'POST', body: { picks: tplPicks[id] || {} }, retry: true })   // idempotent by hash
     .catch(() => materializedCombos.delete(key));         // failed write → let it retry next time
 }
 
@@ -512,7 +512,7 @@ async function savePhrase(e) {
   renderSelftalk();
   try {
     if (editing) await api('/v1/sentences/' + encodeURIComponent(body.id), { method: 'PUT', body: omitId(body) });
-    else await api('/v1/sentences', { method: 'POST', body });
+    else await api('/v1/sentences', { method: 'POST', body, retry: true });   // idempotent by ext_id
     setSyncStatus('✓ saved');
   } catch (err) { setSyncStatus('⚠ offline'); }
 }

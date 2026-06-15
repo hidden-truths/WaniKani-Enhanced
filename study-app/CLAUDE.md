@@ -18,7 +18,10 @@ order. The actual DOM/render/feature glue is split into **`src/features/*`** mod
   annotations), `tts`, `audio` (the shared `playItem(item,context)` player — resolves an item to a
   tagged voice variant + routes public-vs-credentialed `<audio>` by `gated`), `render-helpers`
   (shared `jishoUrl`/`provenanceBadge`), and the cloud
-  pair `cloud-core` (`api`/`account`/`setSyncStatus`) + `cloud` (sync trios + auth + bootAuth).
+  pair `cloud-core` (`account`/`setSyncStatus`; re-exports `api`) + `cloud` (sync trios + auth + bootAuth).
+- **`src/net/`** — the network layer: `transport` owns `api()`, the resilient fetch choke-point
+  (timeout via `AbortController` + idempotency-aware retry/backoff + `Retry-After`); GET/PUT/DELETE
+  retry by default, POST only with `{retry:true}`. `cloud-core` re-exports `api` so callers are unchanged.
   `render-helpers` also owns `copyBtnHtml`/`copyText` — the "copy sentence to clipboard" button
   beside each example's ▶ play (flashcard answer, Browse detail, Minna example rows).
 - **`src/core/`** — the PURE, unit-tested core (DOM-free): `srs`, `forecast`, `facets`,

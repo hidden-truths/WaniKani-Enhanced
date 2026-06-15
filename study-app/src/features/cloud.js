@@ -74,7 +74,7 @@ async function migrateSelftalkPhrases(localPhrases, cloudPhrases) {
   if (!byId.size) return [];
   const failed = [];
   for (const p of byId.values()) {
-    try { await api('/v1/sentences', { method: 'POST', body: phraseToSentence(p) }); }
+    try { await api('/v1/sentences', { method: 'POST', body: phraseToSentence(p), retry: true }); }   // idempotent by ext_id
     catch (err) { failed.push(p); }
   }
   if (byId.size > failed.length) setSyncStatus('✓ phrases migrated');
