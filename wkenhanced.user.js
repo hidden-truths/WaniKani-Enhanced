@@ -1,7 +1,7 @@
 // ==UserScript==
 // @name         WKEnhanced
 // @namespace    https://github.com/jbrelly/wk-ik-examples
-// @version      2.0.0
+// @version      2.0.1
 // @description  Example sentences (audio + image) inlaid into WaniKani vocab reviews, served from the WKEnhanced API.
 // @author       jbrelly
 // @match        https://www.wanikani.com/*
@@ -19,7 +19,7 @@
 
     const SCRIPT_ID = 'wkenhanced';
     const SCRIPT_TITLE = 'WKEnhanced';
-    const SCRIPT_VERSION = '2.0.0';
+    const SCRIPT_VERSION = '2.0.1';
 
     // API server endpoints. Single source of truth for prod / dev URLs; lift
     // here when changing the deployed domain. Note: changing PROD_API_BASE
@@ -40,8 +40,8 @@
     //
     // The userscript only talks to the wk-enhanced-api server; all upstream
     // resolution (ImmersionKit, DuckDuckGo, Google TTS, title decoding, JLPT
-    // scoring) happens server-side. The direct-path code from v1.x lives in
-    // legacy/ as a frozen fallback and is no longer maintained.
+    // scoring) happens server-side. The browser-direct path from v1.x was
+    // removed in v2.0.0.
     //
     // Cache: payloads are stored under SERVER_CACHE_PREFIX keyed by the raw
     // (un-encoded) word. ETag round-trips: we send `If-None-Match` when
@@ -156,14 +156,13 @@
         answered: false,
         cardEl: null,
         observer: null,
-        emptyTimer: null,
         currentFetchToken: 0,
         // Refresh-button cycling: indices into the cached sentence + image arrays.
         // Reset to saved-selection-or-0 on each new subject; incremented by the
         // refresh buttons; persisted per-word in wkof.file_cache.
         sentenceIdx: 0,
         imageIdx: 0,
-        selections: {},        // {<word>: { s: number, i: number }}
+        selections: {},        // {<word>: { s: sentenceIdx, i: imageIdx, b: jlptBypass }}
         hostEl: null,          // .character-header we attached the card into
         // WK asks reading and meaning as two separate questions per vocab subject.
         // Track which type the user is currently on so we can reset `answered`
@@ -1932,6 +1931,16 @@
         return `${SERVER_CACHE_PREFIX}${encodeURIComponent(word)}`;
     }
 
+    // Persist a server payload to local cache (fire-and-forget). Stamps savedAt
+    // for TTL math; etag may be null (batch entries arrive etag-less). Keeping
+    // this in one place ensures every write site sets savedAt — divergence
+    // there silently breaks the TTL freshness check.
+    function saveServerPayload(word, payload, etag) {
+        const entry = { payload, etag: etag || null, savedAt: Date.now() };
+        wkof.file_cache.save(serverCacheKey(word), entry).catch(() => {});
+        return entry;
+    }
+
     function isServerCacheFresh(entry) {
         if (!entry || !entry.payload || typeof entry.savedAt !== 'number') return false;
         // Incomplete payloads (DDG still warming server-side) get a much
@@ -1946,7 +1955,7 @@
     //   1. Try local cache. If fresh, adapt and return.
     //   2. Otherwise call fetchVocab(word) — which itself sends If-None-Match
     //      and may resolve 304 with cached payload.
-    // Returns the cache-entry shape { fetchedAt, raw, chosen } that
+    // Returns the cache-entry shape { fetchedAt, raw } that
     // pickExample / buildPool / renderCard consume.
     function getExamples(word) {
         return wkof.file_cache
@@ -1973,7 +1982,7 @@
                     ...(entry ? { ageMs: Date.now() - entry.savedAt, hasEtag: !!entry.etag } : {}),
                 });
                 return fetchVocab(word, entry).then((payload) => {
-                    if (!payload) return { fetchedAt: Date.now(), raw: [], chosen: null };
+                    if (!payload) return { fetchedAt: Date.now(), raw: [] };
                     return serverPayloadToCacheEntry(payload);
                 });
             });
@@ -2017,12 +2026,7 @@
                     // ETag matched — refresh the savedAt so TTL math sees this
                     // as a recently-verified entry, but keep the same payload.
                     if (cachedEntryHint && cachedEntryHint.payload) {
-                        const refreshed = {
-                            payload: cachedEntryHint.payload,
-                            etag: cachedEntryHint.etag,
-                            savedAt: Date.now(),
-                        };
-                        wkof.file_cache.save(serverCacheKey(word), refreshed).catch(() => {});
+                        saveServerPayload(word, cachedEntryHint.payload, cachedEntryHint.etag);
                         return cachedEntryHint.payload;
                     }
                     return null;
@@ -2045,8 +2049,7 @@
                         incomplete: !!(payload && payload.incomplete),
                         etag,
                     });
-                    const entry = { payload, etag, savedAt: Date.now() };
-                    wkof.file_cache.save(serverCacheKey(word), entry).catch(() => {});
+                    saveServerPayload(word, payload, etag);
                     return payload;
                 });
             })
@@ -2140,8 +2143,7 @@
             // GET /v1/vocab/{word} the cache-fresh check fires and we skip
             // the network entirely until TTL expiry.
             for (const word of Object.keys(merged.found)) {
-                const entry = { payload: merged.found[word], etag: null, savedAt: Date.now() };
-                wkof.file_cache.save(serverCacheKey(word), entry).catch(() => {});
+                saveServerPayload(word, merged.found[word], null);
             }
             console.log(`[${SCRIPT_ID}] server.batch done`, {
                 requested: words.length,
@@ -2173,7 +2175,7 @@
     //     _serverFallbackImages so loadImageAt can render them
     function serverPayloadToCacheEntry(payload) {
         if (!payload || !Array.isArray(payload.examples)) {
-            return { fetchedAt: Date.now(), raw: [], chosen: null };
+            return { fetchedAt: Date.now(), raw: [] };
         }
         const fallbacks = Array.isArray(payload.fallbackImages) ? payload.fallbackImages : [];
         const raw = payload.examples.map((e) => {
@@ -2194,12 +2196,8 @@
                 _serverExampleId: e.id || null,
             };
         });
-        // Pre-pick `chosen` as a positive-hit signal; the renderer always
-        // re-picks from `raw` at the current state.sentenceIdx anyway.
-        const chosen = raw.length ? pickExample(raw, settings(), 0) : null;
         return {
             fetchedAt: typeof payload.fetchedAt === 'number' ? payload.fetchedAt : Date.now(),
-            chosen,
             raw,
         };
     }
@@ -2283,8 +2281,8 @@
     }
 
     // Returns the encoded source title for an example. The server populates
-    // this from upstream IK metadata; we use it as the key on _prettyTitle
-    // lookups and as a fallback identifier for logging.
+    // this from upstream IK metadata; we use it as the display fallback when
+    // _prettyTitle is absent and as an identifier for logging.
     function getTitle(e) {
         return (e && (e.title || e.deck_name)) || '';
     }
@@ -2335,6 +2333,18 @@
     //   skipSort (default false) — set true to leave entries in input order.
     //     The picker passes true so it can apply its own user-selected sort
     //     without buildPool's length sort fighting it.
+    // Shared example comparators — used by both buildPool's compound sort and
+    // the sentence picker's sort menu (getPickerSorts) so the two can't drift.
+    const cmpExamplesByLength = (mode) => (a, b) => {
+        const d = (a.sentence || '').length - (b.sentence || '').length;
+        return mode === 'longest' ? -d : d;
+    };
+    const cmpExamplesByPreferredLevel = (level) => (a, b) => {
+        const aMatch = a._jlptMax === level;
+        const bMatch = b._jlptMax === level;
+        return aMatch === bMatch ? 0 : aMatch ? -1 : 1;
+    };
+
     function buildPool(examples, prefs, options) {
         if (!examples || !examples.length) return [];
         let pool = examples.slice();
@@ -2366,19 +2376,17 @@
             const preferredLevel = jlptCeilingNumber(prefs.jlptPreferred);
             const lengthMode = prefs.sentencePreference;
             if (preferredLevel > 0 || lengthMode === 'shortest' || lengthMode === 'longest') {
+                const byPref = preferredLevel > 0 ? cmpExamplesByPreferredLevel(preferredLevel) : null;
+                const byLen =
+                    lengthMode === 'shortest' || lengthMode === 'longest'
+                        ? cmpExamplesByLength(lengthMode)
+                        : null;
                 pool.sort((a, b) => {
-                    if (preferredLevel > 0) {
-                        const aMatch = a._jlptMax === preferredLevel;
-                        const bMatch = b._jlptMax === preferredLevel;
-                        if (aMatch !== bMatch) return aMatch ? -1 : 1;
+                    if (byPref) {
+                        const c = byPref(a, b);
+                        if (c !== 0) return c;
                     }
-                    if (lengthMode === 'shortest') {
-                        return (a.sentence || '').length - (b.sentence || '').length;
-                    }
-                    if (lengthMode === 'longest') {
-                        return (b.sentence || '').length - (a.sentence || '').length;
-                    }
-                    return 0;
+                    return byLen ? byLen(a, b) : 0;
                 });
             }
         }
@@ -2635,8 +2643,8 @@
         card.appendChild(leftPanel);
 
         // RIGHT panel: image (hidden until reveal). Sits to the right of the vocab
-        // character. DDG search for "<word> イラスト" (illustration); imageIdx cycles
-        // through up to 10 cached results per word.
+        // character. The server resolves the image pool (IK screenshot first, then
+        // server-provided fallbacks); imageIdx cycles through it with wraparound.
         if (prefs.showImage && target) {
             const rightPanel = document.createElement('div');
             rightPanel.className = `${CSS_PREFIX}-right`;
@@ -2942,21 +2950,16 @@
         if (preferredLevel > 0) {
             sorts.preferred = {
                 label: `Preferred JLPT (N${preferredLevel}) first`,
-                cmp: (a, b) => {
-                    const aMatch = a._jlptMax === preferredLevel;
-                    const bMatch = b._jlptMax === preferredLevel;
-                    if (aMatch !== bMatch) return aMatch ? -1 : 1;
-                    return 0;
-                },
+                cmp: cmpExamplesByPreferredLevel(preferredLevel),
             };
         }
         sorts.shortest = {
             label: 'Sentence length (short → long)',
-            cmp: (a, b) => (a.sentence || '').length - (b.sentence || '').length,
+            cmp: cmpExamplesByLength('shortest'),
         };
         sorts.longest = {
             label: 'Sentence length (long → short)',
-            cmp: (a, b) => (b.sentence || '').length - (a.sentence || '').length,
+            cmp: cmpExamplesByLength('longest'),
         };
         sorts.jlpt_easy = {
             label: 'JLPT level (easy → hard)',
@@ -3496,10 +3499,6 @@
     }
 
     function removeCard() {
-        if (state.emptyTimer) {
-            clearTimeout(state.emptyTimer);
-            state.emptyTimer = null;
-        }
         if (state.cardEl && state.cardEl.parentNode) {
             state.cardEl.parentNode.removeChild(state.cardEl);
         }
