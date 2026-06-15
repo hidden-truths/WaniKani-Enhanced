@@ -158,7 +158,7 @@ CREATE TABLE IF NOT EXISTS sentence (
     text        TEXT NOT NULL,                  -- plainText canonical (byte-for-byte)
     furigana    TEXT,                           -- JSON [{t,r?}]; concat(t) === text
     lang        TEXT NOT NULL DEFAULT 'ja',
-    source      TEXT NOT NULL,                  -- 'builtin' | 'minna' | 'selftalk' | 'example' | 'user'
+    source      TEXT NOT NULL,                  -- 'selftalk' | 'example' | 'custom' (private user card) | 'template' (materialized combo)
     public      INTEGER NOT NULL DEFAULT 0,     -- 1 = export/anon eligible
     visibility  TEXT NOT NULL DEFAULT 'public', -- 'public' | 'private'
     created_by  INTEGER REFERENCES users(id) ON DELETE CASCADE,  -- NULL = curator

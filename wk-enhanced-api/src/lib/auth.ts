@@ -7,11 +7,14 @@
 //   - Every authed request resolves the cookie → session row → user. There is
 //     no client-readable token; the cookie is the whole credential.
 //
-// Why cookies (not a bearer token the JS holds): the study app is served from
-// the SAME origin as this API (both behind the wkenhanced.dev Cloudflare
-// tunnel), so a SameSite=Lax httpOnly cookie travels automatically on every
-// fetch and is immune to XSS token theft. Cross-origin callers can't use these
-// endpoints — that's intentional; only the served app needs them.
+// Why cookies (not a bearer token the JS holds): the study app (apex
+// wkenhanced.dev) and this API (api.wkenhanced.dev) are same-SITE but
+// cross-ORIGIN (two containers behind one Cloudflare tunnel). A SameSite=Lax
+// httpOnly cookie scoped to `.wkenhanced.dev` (see startSession's `domain`
+// below) rides every credentialed fetch from the app and is immune to XSS token
+// theft. Cross-origin use is allowed ONLY for the study-app origins on the
+// credentialed-CORS allowlist (STUDY_APP_ORIGINS, index.ts) — not by same-origin
+// serving (this API serves no study-app assets).
 
 import type { Context } from 'hono';
 import { getCookie, setCookie, deleteCookie } from 'hono/cookie';

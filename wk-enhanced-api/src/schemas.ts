@@ -363,7 +363,7 @@ export const MinnaLessonsResponseSchema = z
     .object({
         lessons: z.array(z.number().int()).openapi({
             description: 'Lesson numbers that have curated content available on this server.',
-            example: [23],
+            example: [22, 23, 24],
         }),
     })
     .openapi('MinnaLessonsResponse');

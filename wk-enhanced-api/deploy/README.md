@@ -109,6 +109,11 @@ cookie spans them via `Domain=.wkenhanced.dev` + an origin-scoped credentialed-C
 (all in code). The steps below are the operator's **one-time cut-over**, ordered for zero
 apex downtime.
 
+> **Status: this cut-over shipped (2026-05-26).** The API serves no static study-app assets
+> anymore (`web/` and its routes are gone) and the apex is served by the `web:` container. The
+> steps below are kept as the historical runbook + the rollback recipe — you don't re-run them
+> on the current droplet.
+
 **1. Droplet env** (`/etc/wk-enhanced-api/env`) — three lines:
 ```
 COOKIE_SECURE=true                        # already in the prod template
@@ -131,8 +136,8 @@ docker compose ps                           # wk-enhanced-api + wk-study-app bot
 curl -sI http://127.0.0.1:8080/             # 200 text/html (the tool)
 curl -s  http://127.0.0.1:3000/v1/health    # API still healthy
 ```
-The API still has its `web/` fallback routes at this stage (until you deploy the
-decommission commit in step 5), so the apex keeps working regardless of ingress state.
+At this point in the cut-over the API still had its `web/` fallback routes (until step 5's
+decommission commit), so the apex kept working regardless of ingress state.
 
 **3. Repoint the Cloudflare apex ingress** from the API (`:3000`) to the tool (`:8080`).
 `api.wkenhanced.dev` stays on `:3000`.

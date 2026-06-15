@@ -14,8 +14,8 @@
 // have no authoring path yet — curator-only).
 //
 // This is the seed→DB step that makes the store the runtime source of truth while keeping the
-// git-tracked study-app bundles (data/selftalk.js, data/examples.js) as the curator authoring
-// source. Cross-project import into the study app is the norm for operator scripts (see
+// git-tracked study-app bundles (study-app/src/data/{selftalk,examples,selftalk-templates}.js)
+// as the curator authoring source. Cross-project import into the study app is the norm for operator scripts (see
 // generate-tts.ts); scripts/ is excluded from the server tsconfig and these modules are pure
 // data / DOM-free.
 //
