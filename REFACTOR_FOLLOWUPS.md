@@ -262,6 +262,23 @@ vs `#mnBody` controls split; speaking-mode keeps ONE mic stream open. Don't "tid
 
 ## Enhancement follow-ups (post-B)
 
+> **✅ E1 + E2 + E3 ALL SHIPPED** (4 commits). **E1** — `createSyncedBlob` gained an injected
+> `merge(local, server)` strategy; on a 409 it UNIONS local+server (no data loss) and re-pushes with
+> the server's `updatedAt` as base, guarded to a single round (2nd 409 → server-wins). Pure per-blob
+> mergers in [study-app/src/core/merge.js](study-app/src/core/merge.js) — progress (max box/due/counts,
+> session dedup-by-`t` cap 1000, daily max), custom-verbs (union by rank, seq=max), minna
+> (notes/overlays/clips union, local wins per key), selftalk (max streak/later day); settings stays
+> server-wins. **E2** — `idempotency_key` on `study_sessions` + `minna_recordings` via a new guarded
+> `ensureColumn`/`migrate` step in [db/connection.ts](wk-enhanced-api/src/db/connection.ts) (SQLite has
+> no `ADD COLUMN IF NOT EXISTS`) + a partial unique index; `insertSession`/`insertRecording` dedup on
+> the key (race backstop via the index); `POST /v1/sessions` takes `idempotencyKey`, the upload takes
+> `?idem=` and early-returns the prior take. Client: `logSession` now retries + offline-queues (key
+> `session:<uuid>`); the upload sends `?idem=`. **E3** — the binary upload routes through the resilient
+> transport (`api(path, {rawBody, contentType, retry:true})` — new `rawBody` path sends a Blob verbatim,
+> JSON callers unchanged); idempotency makes the retry safe; the multi-MB blob is intentionally NOT
+> offline-queued. +tests both sides (study-app 198 · server 246 · typecheck/build green). The MVP
+> caveats below are now resolved; kept as the as-designed record.
+
 B shipped an MVP with two deliberate simplifications + left two durability gaps. These are the
 natural next enhancements — independent, each small, each shippable on its own. Do them **after C**
 (or interleaved — they don't depend on C). None are blocking; the app is correct without them.
