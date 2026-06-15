@@ -18,6 +18,7 @@
 import { OpenAPIHono, createRoute } from '@hono/zod-openapi';
 import * as db from '../db/client.ts';
 import { currentUser } from '../lib/auth.ts';
+import { unauthorized as httpUnauthorized, notFound as httpNotFound } from '../lib/httpErrors.ts';
 import {
     SentenceListResponseSchema,
     SentenceListQuerySchema,
@@ -40,11 +41,8 @@ export const sentencesRouter = new OpenAPIHono({ defaultHook: zodHook });
 const MAX_SENTENCE_BYTES = 8_000;
 const MAX_USER_SENTENCES = 2_000;
 
-const unauthorized = (c: any) =>
-    c.json({ code: 'unauthorized' as const, error: 'not logged in', detail: 'Log in to author sentences.' }, 401);
-
-const notFound = (c: any) =>
-    c.json({ code: 'not_found' as const, error: 'not found', detail: 'No sentence with that id is yours.' }, 404);
+const unauthorized = (c: any) => httpUnauthorized(c, 'Log in to author sentences.');
+const notFound = (c: any) => httpNotFound(c, 'No sentence with that id is yours.');
 
 // ---------- GET / ----------
 

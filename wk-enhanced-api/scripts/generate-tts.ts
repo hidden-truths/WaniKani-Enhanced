@@ -50,11 +50,7 @@ import { ttsKey, ttsVariantKey, ttsTextHash } from '../src/services/tts.ts';
 import { getStorage } from '../src/services/storage.ts';
 import * as db from '../src/db/client.ts';
 
-const arg = (name: string): string | undefined => {
-    const i = process.argv.indexOf(name);
-    return i >= 0 && i + 1 < process.argv.length ? process.argv[i + 1] : undefined;
-};
-const has = (name: string) => process.argv.includes(name);
+import { arg, has } from './lib/args.ts';
 
 const engine = arg('--engine') || 'say';   // 'say' (system voice — can be Siri) | 'jp-tts' (specific installed voice)
 const sayVoice = arg('--say-voice');        // say engine: force a `say -v` voice; default = system voice

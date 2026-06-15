@@ -8,6 +8,7 @@
 
 import { OpenAPIHono, createRoute } from '@hono/zod-openapi';
 import * as db from '../db/client.ts';
+import { unauthorized } from '../lib/httpErrors.ts';
 import { currentUser } from '../lib/auth.ts';
 import { SessionPostRequestSchema, SessionPostResponseSchema, ErrorSchema } from '../schemas.ts';
 import { zodHook } from '../lib/zodHook.ts';
@@ -34,12 +35,7 @@ const postRoute = createRoute({
 
 sessionsRouter.openapi(postRoute, (c) => {
     const user = currentUser(c);
-    if (!user) {
-        return c.json(
-            { code: 'unauthorized' as const, error: 'not logged in', detail: 'Log in to save session history.' },
-            401,
-        );
-    }
+    if (!user) return unauthorized(c, 'Log in to save session history.');
     const { right, total, mode, details } = c.req.valid('json');
     const id = db.insertSession(user.id, Date.now(), right, total, mode ?? null, details ?? null);
     const count = db.countSessions(user.id);

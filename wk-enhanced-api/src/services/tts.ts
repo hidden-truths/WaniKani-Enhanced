@@ -57,6 +57,24 @@ export function ttsEtag(buffer: ArrayBuffer): string {
     return `"${new Bun.CryptoHasher('sha1').update(buffer).digest('hex').slice(0, 20)}"`;
 }
 
+// Serve a resolved TtsHit with cache-correct headers, shared by the legacy `/v1/tts` and
+// `/v1/audio/tts` so the ETag/304 logic — which has bitten this code before — can't diverge:
+// a bytes-ETag + `public, no-cache` (a clip is re-voiceable, so NOT immutable) and a
+// weak-prefix-tolerant If-None-Match 304. `log` fields are merged into the request's logCtx.
+// (c is `any` to stay compatible with both the plain `app.get` and the OpenAPIHono route.)
+export function serveTtsHit(c: any, hit: TtsHit, log: Record<string, unknown> = {}) {
+    const etag = ttsEtag(hit.buffer);
+    c.header('ETag', etag);
+    c.header('Cache-Control', 'public, no-cache');
+    if ((c.req.header('If-None-Match') || '').replace(/^W\//, '') === etag) {
+        c.set('logCtx', { ...log, ttsSource: 'not_modified' });
+        return c.body(null, 304);
+    }
+    c.header('Content-Type', hit.contentType || 'audio/mpeg');
+    c.set('logCtx', { ...log, ttsSource: hit.source });
+    return c.body(hit.buffer);
+}
+
 // NOTE: there is intentionally NO in-process buffer cache here. Storage is the single source of truth
 // so a regenerated clip is served immediately (no server restart needed); repeat upstream Google calls
 // are already avoided because a live gtx render is persisted to storage on first hit. The HTTP layer

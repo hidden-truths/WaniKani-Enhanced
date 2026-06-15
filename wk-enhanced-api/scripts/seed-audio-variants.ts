@@ -27,10 +27,7 @@ import { ttsVariantKey, ttsTextHash } from '../src/services/tts.ts';
 import { getStorage } from '../src/services/storage.ts';
 import * as db from '../src/db/client.ts';
 
-const arg = (name: string): string | undefined => {
-    const i = process.argv.indexOf(name);
-    return i >= 0 && i + 1 < process.argv.length ? process.argv[i + 1] : undefined;
-};
+import { arg } from './lib/args.ts';
 
 const provider = arg('--provider') || 'siri';
 // 'default' is the schema's empty-gender sentinel — accept it as an alias for ''.

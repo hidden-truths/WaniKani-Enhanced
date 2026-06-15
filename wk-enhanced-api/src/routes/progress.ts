@@ -10,6 +10,7 @@
 
 import { OpenAPIHono, createRoute, z } from '@hono/zod-openapi';
 import * as db from '../db/client.ts';
+import { unauthorized as httpUnauthorized } from '../lib/httpErrors.ts';
 import { currentUser } from '../lib/auth.ts';
 import {
     ProgressGetResponseSchema,
@@ -39,11 +40,7 @@ const AppParamSchema = z.object({
 // logged-in client from parking arbitrary data on us.
 const MAX_BLOB_BYTES = 1_000_000;
 
-const unauthorized = (c: any) =>
-    c.json(
-        { code: 'unauthorized' as const, error: 'not logged in', detail: 'Log in to sync progress.' },
-        401,
-    );
+const unauthorized = (c: any) => httpUnauthorized(c, 'Log in to sync progress.');
 
 // ---------- GET /{app} ----------
 

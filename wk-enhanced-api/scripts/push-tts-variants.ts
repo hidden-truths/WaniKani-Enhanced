@@ -51,11 +51,7 @@ import { join } from 'node:path';
 import { config } from '../src/config.ts';
 import { getStorage } from '../src/services/storage.ts';
 
-const arg = (name: string): string | undefined => {
-    const i = process.argv.indexOf(name);
-    return i >= 0 && i + 1 < process.argv.length ? process.argv[i + 1] : undefined;
-};
-const has = (name: string) => process.argv.includes(name);
+import { arg, has } from './lib/args.ts';
 
 const srcDir = arg('--src-dir') || config.storage.localDir;
 const variant = arg('--variant'); // '<provider>:<gender>' — narrows to one slice

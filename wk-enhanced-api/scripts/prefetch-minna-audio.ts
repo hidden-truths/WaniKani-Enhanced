@@ -21,11 +21,7 @@ import { getStorage, keys } from '../src/services/storage.ts';
 import { fetchMinnaAudio, isValidMinnaAudioPath } from '../src/services/minnaAudio.ts';
 import { sleep } from '../src/lib/sleep.ts';
 
-const arg = (name: string): string | undefined => {
-    const i = process.argv.indexOf(name);
-    return i >= 0 && i + 1 < process.argv.length ? process.argv[i + 1] : undefined;
-};
-const has = (name: string) => process.argv.includes(name);
+import { arg, has } from './lib/args.ts';
 
 const onlyLesson = arg('--lesson');
 const force = has('--force');

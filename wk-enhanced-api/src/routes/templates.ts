@@ -23,6 +23,7 @@
 import { OpenAPIHono, createRoute } from '@hono/zod-openapi';
 import * as db from '../db/client.ts';
 import { currentUser } from '../lib/auth.ts';
+import { unauthorized as httpUnauthorized, notFound as httpNotFound } from '../lib/httpErrors.ts';
 import { realizeTemplate } from '../lib/realize.ts';
 import {
     TemplateListResponseSchema,
@@ -37,11 +38,8 @@ import { log } from '../lib/log.ts';
 
 export const templatesRouter = new OpenAPIHono({ defaultHook: zodHook });
 
-const unauthorized = (c: any) =>
-    c.json({ code: 'unauthorized' as const, error: 'not logged in', detail: 'Log in to materialize a template realization.' }, 401);
-
-const notFound = (c: any) =>
-    c.json({ code: 'not_found' as const, error: 'not found', detail: 'No template with that id is visible to you.' }, 404);
+const unauthorized = (c: any) => httpUnauthorized(c, 'Log in to materialize a template realization.');
+const notFound = (c: any) => httpNotFound(c, 'No template with that id is visible to you.');
 
 const listRoute = createRoute({
     method: 'get',
