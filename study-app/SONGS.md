@@ -417,12 +417,13 @@ as work lands. `[ ]` = todo, `[x]` = done, `[~]` = in progress.
 ### Phase 0 — this design doc
 - [x] `study-app/SONGS.md` (this file) — all four modes specced for cross-session tracking.
 
-### Phase 1 — Server: song store + CRUD (no LLM)
-- [ ] `song` table + `public_song` view in `schema.sql`; widen `ownerType` enum to add `'song'`.
-- [ ] `db/repos/songs.ts`: create/get(list, privacy-gated)/get(one + lines)/update/updateTiming/delete.
-- [ ] `routes/songs.ts` + `schemas/songs.ts`: `GET/POST/PUT/DELETE /v1/songs`, `PUT /v1/songs/{id}/timing`; study-app CORS.
-- [ ] `scripts/seed-songs.ts` (mechanism; curated picks deferred).
-- [ ] Tests: repo CRUD + privacy-gate breach test + route tests.
+### Phase 1 — Server: song store + CRUD (no LLM) ✅
+- [x] `song` table + `public_song` view in `schema.sql`. (ownerType enum widens in Phase 2 with the analyze/persist path; song-line READS reuse `getSentences` directly, no enum change needed for CRUD.)
+- [x] `db/repos/songs.ts`: createSong / getSongs(list, gated) / getSong(one + ordered lines) / updateSong / updateSongTiming / deleteSong / upsertPublicSong (starter seed, reuse-by-hash) / countUserSongs.
+- [x] `routes/songs.ts` + `schemas/songs.ts`: `GET/POST/PUT/DELETE /v1/songs`, `PUT /v1/songs/{id}/timing`; mounted + in the study-app CORS allowlist.
+- [x] `scripts/seed-songs.ts` + `data/songs/` (one genuinely-PD starter: 故郷; curated picks deferred).
+- [x] Tests: 16 repo tests incl. the privacy-gate breach pins (private lyrics never leak to anon/another user). Full suite green (262), typecheck clean, routes smoke-tested live.
+- Note: `AnnotationToken` gained optional `jlpt`/`gloss` (LLM-sourced, Songs) + the GiNZA-only `tag`/`dep`/`head` became optional, so one token shape serves both producers. Line **ordinal = array index** (lines are server-sorted + contiguous; `compactLink` omits a falsy 0, but the DB stores correct 0-based ordinals for timing).
 
 ### Phase 2 — Server: analysis endpoint
 - [ ] `@anthropic-ai/sdk` dep + `ANTHROPIC_API_KEY`/`ANTHROPIC_MODEL` in `.env.example`.

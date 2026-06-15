@@ -28,3 +28,6 @@ export * from './repos/sentenceCore.ts';
 export * from './repos/sentences.ts';
 export * from './repos/annotations.ts';
 export * from './repos/templates.ts';
+
+// Songs (歌 / Songs tab) — song metadata + lyric lines (lines live in the sentence store).
+export * from './repos/songs.ts';

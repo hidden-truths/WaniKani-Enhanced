@@ -264,3 +264,38 @@ CREATE INDEX IF NOT EXISTS ix_template_created_by ON sentence_template(created_b
 -- Anon reads and any export read ONLY this view — cannot see private/gated template rows.
 CREATE VIEW IF NOT EXISTS public_template AS
     SELECT * FROM sentence_template WHERE public = 1 AND visibility = 'public';
+
+-- ---------- Songs (歌 / Songs tab — song & lyric analysis) ----------
+--
+-- A SONG is a small metadata entity (title/artist/youtube) — NOT a sentence — so, like
+-- sentence_template, it gets its own table. Each lyric LINE lives in the unified sentence
+-- store: one `sentence` row per line linked via sentence_link(owner_type='song',
+-- owner_id=<song ext_id>, ordinal=<line index>, clip_start_ms=<per-line timing>). So song
+-- lines render through the SAME furigana / tap-a-word (sentence_annotation) / grammar
+-- (sentence_tag) paths as built-in examples, and reads reuse the getSentences privacy gate
+-- verbatim (ownerType='song'). Per-line tap tokens are LLM-sourced (parser='llm:*') — songs
+-- are the first RUNTIME writer of sentence_annotation; the UTF-16 offset gate still applies.
+--
+-- Privacy MIRRORS the sentence store: BYO songs are PRIVATE (public=0, created_by=<user>);
+-- a curated CC / public-domain STARTER set is PUBLIC (public=1, created_by=NULL, anon-readable).
+-- getSongs always ANDs (public=1 OR created_by=:viewer), fail-closed; anon reads public_song.
+--   • `ext_id` is the stable external id — 'usr-<uuid>' (private) | 'song-<slug>' (starter) —
+--     and the record-compare itemKey prefix ("<ext_id>:<ordinal>") + the Source-facet suffix.
+--   • `youtube_id` is the embed source (the master audio is never re-hosted); nullable.
+CREATE TABLE IF NOT EXISTS song (
+    id          INTEGER PRIMARY KEY AUTOINCREMENT,
+    ext_id      TEXT NOT NULL UNIQUE,           -- 'usr-<uuid>' (private) | 'song-<slug>' (public starter)
+    title       TEXT NOT NULL,
+    artist      TEXT,                            -- auto-filled from oEmbed, editable; nullable
+    youtube_id  TEXT,                            -- embed source (audio never re-hosted); nullable
+    source      TEXT NOT NULL DEFAULT 'song',
+    public      INTEGER NOT NULL DEFAULT 0,     -- 1 = curated starter (anon-readable)
+    visibility  TEXT NOT NULL DEFAULT 'private', -- 'public' | 'private'
+    created_by  INTEGER REFERENCES users(id) ON DELETE CASCADE,  -- NULL = curator (starter)
+    created_at  INTEGER NOT NULL                -- epoch ms
+);
+CREATE INDEX IF NOT EXISTS ix_song_created_by ON song(created_by);
+
+-- Anon reads and any export read ONLY this view — cannot see private/gated songs.
+CREATE VIEW IF NOT EXISTS public_song AS
+    SELECT * FROM song WHERE public = 1 AND visibility = 'public';

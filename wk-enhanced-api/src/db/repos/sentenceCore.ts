@@ -40,6 +40,13 @@ export interface SentenceLink {
 // the client maps a tap by slicing `text` in JS, which is UTF-16-indexed; they diverge from
 // codepoint offsets at non-BMP kanji). `lemma` (dictionary form) drives the card/Jisho link;
 // `reading` is GiNZA's (the VISIBLE reading still comes from the stored furigana).
+//
+// `tag`/`dep`/`head` are GiNZA-only (a full dependency parse); they're OPTIONAL because the 歌/Songs
+// analyzer (the runtime LLM pass) emits the same token shape WITHOUT a dependency parse. `jlpt`/
+// `gloss` are the reverse — LLM-only enrichment (per-word level + a short English gloss) the offline
+// GiNZA batch doesn't produce — feeding the Songs word popover + the Mine vocab panel. All are
+// absent-tolerant: the offset gate only reads start/end/surface, and the client overlay reads
+// start/end/lemma/pos/reading, so the two producers interoperate.
 export interface AnnotationToken {
     i: number;
     start: number;
@@ -47,10 +54,12 @@ export interface AnnotationToken {
     surface: string;
     lemma: string;
     pos: string;
-    tag: string;
     reading: string;
-    dep: string;
-    head: number;
+    tag?: string;
+    dep?: string;
+    head?: number;
+    jlpt?: string; // 'N5'..'N1' — LLM-estimated (Songs)
+    gloss?: string; // short English gloss — LLM-sourced (Songs)
 }
 
 // A phrase chunk (also UTF-16 offsets into text), for phrase-level highlight / grammar matching.

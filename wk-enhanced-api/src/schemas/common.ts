@@ -57,10 +57,13 @@ export const SentenceLinkSchema = z
     })
     .openapi('SentenceLink');
 
-// GiNZA-derived structure (Phase 4 NLP enrichment), served only when ?annotate=1. A token is one
-// morpheme; `start`/`end` are UTF-16 code-unit offsets into `text` (see the offset-contract
-// dead-end in wk-enhanced-api/CLAUDE.md), so the client maps a tap by slicing `text` in JS. `lemma`
-// (dictionary form) drives the card/Jisho link; `reading` is GiNZA's (visible reading is furigana).
+// A token is one morpheme; `start`/`end` are UTF-16 code-unit offsets into `text` (see the
+// offset-contract dead-end in wk-enhanced-api/CLAUDE.md), so the client maps a tap by slicing `text`
+// in JS. `lemma` (dictionary form) drives the card/Jisho link; `reading` is the parser's. Two
+// producers share this shape: the offline GiNZA batch (Phase 4) fills `tag`/`dep`/`head` (a full
+// dependency parse); the 歌/Songs runtime LLM pass fills `jlpt`/`gloss` instead. Hence those five are
+// OPTIONAL — each producer omits the other's. The offset gate reads only start/end/surface and the
+// client overlay reads start/end/lemma/pos/reading, so they interoperate.
 export const AnnotationTokenSchema = z
     .object({
         i: z.number().int(),
@@ -69,10 +72,12 @@ export const AnnotationTokenSchema = z
         surface: z.string(),
         lemma: z.string(),
         pos: z.string(),
-        tag: z.string(),
         reading: z.string(),
-        dep: z.string(),
-        head: z.number().int(),
+        tag: z.string().optional(),
+        dep: z.string().optional(),
+        head: z.number().int().optional(),
+        jlpt: z.string().optional().openapi({ description: 'LLM-estimated JLPT level (Songs).', example: 'N4' }),
+        gloss: z.string().optional().openapi({ description: 'Short English gloss (Songs).', example: 'to hum' }),
     })
     .openapi('AnnotationToken');
 

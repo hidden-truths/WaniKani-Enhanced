@@ -33,6 +33,7 @@ import { minnaRouter } from './routes/minna.ts';
 import { audioRouter } from './routes/audio.ts';
 import { sentencesRouter } from './routes/sentences.ts';
 import { templatesRouter } from './routes/templates.ts';
+import { songsRouter } from './routes/songs.ts';
 import { MEDIA_CACHE_CONTROL } from './services/storage.ts';
 import { resolveTts, serveTtsHit } from './services/tts.ts';
 
@@ -46,7 +47,7 @@ const app = new OpenAPIHono({ defaultHook: zodHook });
 //    ETag is exposed so the userscript can read it for conditional revalidation.
 //
 //  - STUDY-APP routes (/v1/auth, /v1/progress, /v1/sessions, /v1/minna, /v1/audio,
-//    /v1/sentences): the study app is a SEPARATE origin (wkenhanced.dev) from this API
+//    /v1/sentences, /v1/templates, /v1/songs): the study app is a SEPARATE origin (wkenhanced.dev) from this API
 //    (api.wkenhanced.dev) in the two-container topology, and its requests are CREDENTIALED
 //    (the session cookie). The spec forbids `*` with credentials, so we must echo the EXACT
 //    requesting origin + `Allow-Credentials: true` — but only for origins on the allowlist
@@ -58,7 +59,7 @@ const app = new OpenAPIHono({ defaultHook: zodHook });
 //    tolerate the echoed-origin branch fine. `/v1/sentences` belongs here even though its GET is
 //    "public" (anon-readable): the study app's api() always sends credentials:'include', so even
 //    the anon read is a credentialed request and a wildcard origin would be browser-rejected.
-const STUDY_ROUTE = /^\/v1\/(auth|progress|sessions|minna|audio|sentences|templates)\b/;
+const STUDY_ROUTE = /^\/v1\/(auth|progress|sessions|minna|audio|sentences|templates|songs)\b/;
 app.use('*', async (c, next) => {
     const origin = c.req.header('Origin');
     if (STUDY_ROUTE.test(c.req.path) && origin && config.studyApp.allowedOrigins.includes(origin)) {
@@ -113,6 +114,7 @@ app.route('/v1/minna', minnaRouter);
 app.route('/v1/audio', audioRouter);
 app.route('/v1/sentences', sentencesRouter);
 app.route('/v1/templates', templatesRouter);
+app.route('/v1/songs', songsRouter);
 
 // TTS for the study app (replaces the browser's uneven speechSynthesis voices with
 // consistent ja-JP audio). The three-tier cache (in-process → storage → Google) + the

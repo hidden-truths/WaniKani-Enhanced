@@ -1,0 +1,12 @@
+{
+  "extId": "song-furusato",
+  "title": "故郷",
+  "artist": "文部省唱歌（public domain）",
+  "youtubeId": null,
+  "lines": [
+    { "jp": "<ruby>兎<rt>うさぎ</rt></ruby><ruby>追<rt>お</rt></ruby>いし<ruby>彼<rt>か</rt></ruby>の<ruby>山<rt>やま</rt></ruby>", "en": "That mountain where I once chased rabbits" },
+    { "jp": "<ruby>小鮒<rt>こぶな</rt></ruby><ruby>釣<rt>つ</rt></ruby>りし<ruby>彼<rt>か</rt></ruby>の<ruby>川<rt>かわ</rt></ruby>", "en": "That river where I once caught little crucian carp" },
+    { "jp": "<ruby>夢<rt>ゆめ</rt></ruby>は<ruby>今<rt>いま</rt></ruby>も<ruby>巡<rt>めぐ</rt></ruby>りて", "en": "The dreams still circle through my mind even now" },
+    { "jp": "<ruby>忘<rt>わす</rt></ruby>れ<ruby>難<rt>がた</rt></ruby>き<ruby>故郷<rt>ふるさと</rt></ruby>", "en": "My unforgettable hometown" }
+  ]
+}

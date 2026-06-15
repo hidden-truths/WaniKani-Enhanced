@@ -25,3 +25,6 @@ export * from './schemas/audio.ts';
 // Unified sentence store (Self-Talk + vocab examples + templates).
 export * from './schemas/sentences.ts';
 export * from './schemas/templates.ts';
+
+// Songs (歌 / Songs tab) — song metadata + lyric lines.
+export * from './schemas/songs.ts';
