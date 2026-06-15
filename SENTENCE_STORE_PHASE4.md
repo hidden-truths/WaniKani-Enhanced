@@ -23,15 +23,15 @@ study-app payoff (tap-a-word lookup + grammar filter). **Phase 4 is complete.**
   during the same parse and written to `sentence_tag(kind='grammar')` for example rows, reusing the
   study-app's existing `SELFTALK_GRAMMAR` ids so auto-detected and hand-authored grammar tags search
   one vocabulary. Every detector is pinned with positives + confusable negatives.
-- **Commit 3 (in progress):** surface it in the study-app. **3a (server, ✅ shipped):** annotations
+- **Commit 3 (✅ shipped):** surface it in the study-app. **3a (server, ✅ shipped):** annotations
   serve on `GET /v1/sentences?annotate=1` via `getSentences({includeAnnotations})` — see §7a. **3b
   (client, ✅ shipped):** tap-a-word → lemma/POS/reading → card-or-Jisho lookup (pure `overlayTokens`
   span-wrap over the ruby + a stateless popover) — see §7b. **3c (client, ✅ shipped):** a grammar
   filter in Browse (card facet over the example tags) + a `patterns.py`-dumped label registry — §7c.
   **All of commit 3 is done; Phase 4 is complete.**
 - **Grammar is ALREADY being served** (it rides `tags.grammar` on the existing `getSentences` read —
-  see §5.4). Only the token **annotation** needed the new serving flag (3a). The client just doesn't
-  *use* either yet (3b/3c).
+  see §5.4). Only the token **annotation** needed the new serving flag (3a); the client now consumes
+  both (3b/3c).
 
 The server (the $6 prod droplet) **only ever reads** this data. All parsing is an offline batch on a
 maintainer machine, loaded at deploy time exactly like `seed-sentences.ts`. There is no Python in prod.
@@ -45,15 +45,9 @@ references it by id. Phase 4 layers GiNZA-derived structure on top so a user can
 sentence and get its lemma / POS / a link to the matching card-or-Jisho, plus **grammar search**
 ("find every sentence using 〜ておく").
 
-Phase map (full version in the brief):
-
-| Phase | Scope | Status |
-|---|---|---|
-| 1 | Self-Talk phrases → store | ✅ shipped + deployed |
-| 2 | Built-in vocab `examples.js` → store (public, linked to cards) | ✅ shipped + deployed |
-| 2.5 | Custom-card `ex` → private rows | ⏳ deferred |
-| 3 (Minna) | Minna sentences → store (`public=0`) | ⏳ deferred |
-| **4 — NLP** | **GiNZA enrichment: `sentence_annotation` + grammar tags + tap UI** | **🔜 commits 1–2 done, commit 3 next** |
+Phase map (canonical, kept current): see [SENTENCE_STORE_NLP.md](SENTENCE_STORE_NLP.md). In short:
+Phases 1, 2, 2.5 and **Phase 4 (this doc)** have shipped; Phase 3 (Minna → store) is deferred; the
+only Phase-4 follow-up still open is the ⭐ tokenization-granularity rework (§8.0).
 
 The NLP target is the **public corpus** (Phase 1 + 2 rows: built-in example sentences + Self-Talk
 built-ins) — a bounded, curator-owned set we can parse once and re-parse on content change. Private
@@ -369,7 +363,7 @@ comments in the same commit.
 
 ---
 
-## 7. Commit 3 — serve + study-app UI (NEXT, not started)
+## 7. Commit 3 — serve + study-app UI (✅ shipped)
 
 The remaining, user-visible work. Bigger than 1–2 because it touches the **study-app frontend** and is
 browser-verified. Recommend splitting into **3a (server) → 3b (tap UI) → 3c (grammar filter)** with the

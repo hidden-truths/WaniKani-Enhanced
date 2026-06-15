@@ -33,7 +33,7 @@ comes second — that ordering was a deliberate decision.
 | **2** | Built-in vocab `examples.js` → store as public rows linked to cards (`owner_type='card'`) | ✅ shipped + deployed |
 | **2.5** | Custom-card `ex`+`levels` → private store rows (render-from-store) | ✅ shipped |
 | **3** | Minna sentences (grammar/conversation/lesson) → store (`public=0`) | ⏳ deferred |
-| **4 — NLP** | GiNZA enrichment: populate `sentence_annotation`; interactive spans + grammar search | 🔜 **this doc** |
+| **4 — NLP** | GiNZA enrichment: populate `sentence_annotation`; interactive spans + grammar search | ✅ shipped; ⭐ tokenization rework next |
 
 Phases are reversible + behavior-preserving (no flag day) — same discipline as the two-app split.
 2.5 and 3 are independent of NLP and can happen in any order; NLP can start now against the public
@@ -147,7 +147,7 @@ CREATE TABLE sentence_annotation (
   **Offset gotcha resolved (load-bearing):** GiNZA's `token.idx` is a *codepoint* offset; JS slicing is
   UTF-16. They diverge at non-BMP kanji (𠮟 U+20B9F). So we emit **UTF-16 offsets** and triple-check them
   (parser self-check → seed `slice===surface` re-assert → a non-BMP pin test). Verified empirically.
-- **Grammar-tag taxonomy → curated hyphenated-romaji slug catalog** (`te-iru`/`te-oku`/`potential`/… ~30,
+- **Grammar-tag taxonomy → curated hyphenated-romaji slug catalog** (`te-iru`/`te-oku`/`potential`/… 38,
   matched over lemma/pos/tag/dep/morph — NOT raw n-grams), aligned to the existing `te-iru`/`tai`/`sou`
   slug style. **Deferred to commit 2** (commit 1 is tokens/offsets/plumbing only); the parser already
   emits `dep`/`head`/`tag` so commit 2 needs no re-parse.
