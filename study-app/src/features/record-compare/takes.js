@@ -3,7 +3,6 @@
 // mutates them). DEAD-END preserved: the server's `lesson` query param is the opaque scope
 // partition's wire name (Minna passes a lesson number, Self-Talk a reserved id) — kept as-is.
 import { account, api, setSyncStatus } from '../cloud-core.js';
-import { API_BASE } from '../../config.js';
 import { clampKeep } from '../../core/index.js';
 import { settings } from '../../settings-store.js';
 // Forward dep on the not-yet-peeled view code (resetControl → view.js C1.6). Runtime-only.
@@ -42,11 +41,12 @@ export function setTakes(scope, itemKey, takes) {
 }
 
 // ---------- upload / delete (credentialed) ----------
-// NOTE: the recording upload uses its OWN credentialed fetch (not api()) — a binary POST. It now
-// carries a client idempotency key (?idem=) so the SERVER dedups a replay (E2): a retried/queued
-// upload returns the prior take instead of piling up duplicates + orphan storage objects. E3 folds
-// this onto the resilient transport (api, {retry:true}) so it also inherits timeout/backoff + the
-// offline queue.
+// The recording upload goes through the resilient transport (api, {retry:true}) — a binary POST via
+// opts.rawBody (the blob sent verbatim with its Content-Type, NOT JSON). It carries a client
+// idempotency key (?idem=) so the SERVER dedups a replay (E2) — which is what makes the transport's
+// retry/backoff safe (a retried upload returns the prior take, never a duplicate). The multi-MB blob
+// is deliberately NOT offline-queued (localStorage is the wrong store for it); transient 5xx/network
+// blips are covered by the in-session retries, a persistent failure surfaces below. list/delete use api() too.
 export async function uploadTake(control, blob, durationMs) {
   const scope = Number(control.dataset.scope), itemKey = control.dataset.itemkey;
   const keep = clampKeep(settings.recordingsKeep);
@@ -55,12 +55,7 @@ export async function uploadTake(control, blob, durationMs) {
   setSyncStatus('saving…');
   try {
     const qs = `?lesson=${scope}&itemKey=${encodeURIComponent(itemKey)}&durationMs=${Math.round(durationMs)}&keep=${keep}&idem=${idem}`;
-    const res = await fetch(API_BASE + '/v1/audio/recordings' + qs, {
-      method: 'POST', credentials: 'include', cache: 'no-store',
-      headers: { 'Content-Type': ct }, body: blob,
-    });
-    if (!res.ok) throw new Error('HTTP ' + res.status);
-    const data = await res.json();
+    const data = await api('/v1/audio/recordings' + qs, { method: 'POST', rawBody: blob, contentType: ct, retry: true });
     setTakes(scope, itemKey, (data && data.takes) || []);
     setSyncStatus('✓ recording saved');
     if (onTakeSaved) { try { onTakeSaved(scope, itemKey); } catch (e) {} }   // notify the host (e.g. Self-Talk practice signal)

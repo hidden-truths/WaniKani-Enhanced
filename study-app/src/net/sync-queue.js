@@ -1,14 +1,18 @@
-// Durable offline write-queue — a localStorage-backed FIFO of pending IDEMPOTENT writes
-// (the full-replace progress PUTs). When a SyncedBlob push fails after the transport's
-// retries (offline / persistent 5xx), it enqueues here; flush() replays on reconnect /
-// boot / sign-in so a change made while offline is never silently lost.
+// Durable offline write-queue — a localStorage-backed FIFO of pending writes. When a SyncedBlob
+// push (or the durable session log) fails after the transport's retries (offline / persistent 5xx),
+// it enqueues here; flush() replays on reconnect / boot / sign-in so a change made while offline is
+// never silently lost.
 //
-// ONLY idempotent writes belong here. POST /v1/sessions and the binary recording upload are
-// non-idempotent (a replay would duplicate a row) and are deliberately NOT queued.
+// Everything queued must be SAFE TO REPLAY: the full-replace progress PUTs are naturally idempotent,
+// and POST /v1/sessions is replay-safe via its client idempotency key (E2, queued as 'session:<uuid>').
+// The binary recording upload is ALSO idempotency-keyed but is deliberately NOT queued — a multi-MB
+// blob doesn't belong in localStorage; its transient failures are covered by the transport's
+// in-session retries (E3).
 //
-// Dedup by `key` (e.g. 'progress:verbs'): a newer write for the same blob REPLACES the older
-// — full-replace PUTs make last-wins correct. Entries are tagged with the accountId so flush
-// only replays the current account's, and clear() drops everything on sign-out.
+// Dedup by `key`: for a progress blob (e.g. 'progress:verbs') a newer write REPLACES the older
+// (full-replace PUTs make last-wins correct); a per-session key ('session:<uuid>') is unique, so
+// distinct sessions never collapse. Entries are tagged with the accountId so flush only replays the
+// current account's, and clear() drops everything on sign-out.
 
 import { api } from './transport.js';
 

@@ -217,8 +217,9 @@ one module each under `src/features/*` (the section names map 1:1 to filenames):
   ([net/sync-queue.js](src/net/sync-queue.js), dedup by `progress:<appKey>`); `flushQueue` replays
   it on `window 'online'`, on boot (before `pullCloud`), and after sign-in, and `doLogout` drops it
   (per-account). Each blob tracks the server `updatedAt` and sends it as `baseUpdatedAt` for **409
-  optimistic concurrency** (server-wins reconcile). Plus `logSession` → `POST /v1/sessions`
-  (durable append-only history, signed-in only; non-idempotent → NOT queued/retried).
+  optimistic concurrency** (per-blob **merge** reconcile — E1, via core/merge.js; settings stays
+  server-wins). Plus `logSession` → `POST /v1/sessions` (durable append-only history, signed-in only;
+  idempotency-keyed (E2) → retried + offline-queued, the server dedups by key).
   `maybeShowSignup` (from `endSession`) shows the sign-up nudge after the first
   session, not on first paint.
 - **UX helpers (added in the polish pass):** `filterSummary`/`paintSummary`
@@ -737,9 +738,13 @@ Component contracts you must preserve:
   onto `#mnBody` (the controls aren't there anymore). The toggle + mic picker are wired
   per-render in `renderNavSpeaking` (the slot's innerHTML is replaced each lesson render). **Recordings are PRIVATE on the server**
   and played via one reused `<audio crossOrigin='use-credentials'>` (gated, cross-origin) —
-  the same cookie-gated-audio path as the native-audio button. The **binary upload uses its
-  own credentialed `fetch`** (not the JSON-only `api()`); list/delete use `api()`. Retention
-  is the `recordingsKeep` setting (default 3, 1–20), sent as `keep` and enforced server-side.
+  the same cookie-gated-audio path as the native-audio button. The **binary upload goes through the
+  resilient transport** (`api(path, { rawBody: blob, contentType, retry: true })`, E3) — `rawBody`
+  sends the blob verbatim with its `Content-Type` instead of JSON. It carries a client idempotency
+  key (`?idem=<uuid>`, E2) so the server dedups a replay, which is what makes the transport's
+  retry/backoff safe (a retried upload returns the prior take, never a duplicate). The multi-MB blob
+  is deliberately NOT offline-queued (localStorage is the wrong store); list/delete use `api()` too.
+  Retention is the `recordingsKeep` setting (default 3, 1–20), sent as `keep` and enforced server-side.
   **The compare player has ▶ you / reference / →you (seq) / both / loop** (audio-unify Phase 3 / ⑤):
   the **reference** generalizes the old native-only target to ANY voice — it resolves via
   `resolveVariant('minna', refAvailable(ctx), prefs)` (per-context priority picks the default), and

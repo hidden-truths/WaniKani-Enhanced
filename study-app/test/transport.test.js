@@ -150,3 +150,25 @@ test('429 waits for Retry-After before retrying', async () => {
   await expect(p).resolves.toEqual({ ok: 1 });
   expect(f).toHaveBeenCalledTimes(2);
 });
+
+test('rawBody is sent verbatim with its Content-Type (binary upload), not JSON-encoded (E3)', async () => {
+  const f = vi.fn().mockResolvedValue(res(200, { ok: true, takes: [] }));
+  vi.stubGlobal('fetch', f);
+  const blob = { fake: 'blob' };   // stand-in object the transport must pass through untouched
+  await api('/v1/audio/recordings?idem=x', { method: 'POST', rawBody: blob, contentType: 'audio/webm', retry: true });
+  const [url, init] = f.mock.calls[0];
+  expect(url).toBe('/v1/audio/recordings?idem=x');
+  expect(init.method).toBe('POST');
+  expect(init.body).toBe(blob);                          // the blob itself — NOT JSON.stringify'd
+  expect(init.headers['Content-Type']).toBe('audio/webm');
+  expect(init.credentials).toBe('include');
+  expect(init.cache).toBe('no-store');
+});
+
+test('a rawBody POST with retry:true retries a transient failure (idempotency-key-safe) (E3)', async () => {
+  const f = vi.fn().mockRejectedValueOnce(netError()).mockResolvedValue(res(200, { ok: 1 }));
+  vi.stubGlobal('fetch', f);
+  await expect(api('/v1/audio/recordings?idem=y', { method: 'POST', rawBody: { b: 1 }, contentType: 'audio/webm', retry: true }))
+    .resolves.toEqual({ ok: 1 });
+  expect(f).toHaveBeenCalledTimes(2);
+});

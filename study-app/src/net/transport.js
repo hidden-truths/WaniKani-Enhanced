@@ -53,20 +53,23 @@ export function _retryAfterMs(res) {
   return null;
 }
 
-// One fetch attempt with a timeout. Returns the Response (any status), or throws a
-// network error (incl. an AbortError when the timeout fires).
-async function fetchOnce(path, method, body, timeoutMs) {
+// One fetch attempt with a timeout. opts.rawBody (a Blob/ArrayBuffer) is sent VERBATIM with
+// opts.contentType — the binary recording upload (E3); otherwise opts.body is JSON-encoded. A raw
+// body must be re-readable across retries (Blob/ArrayBuffer are; a ReadableStream is not). Returns
+// the Response (any status), or throws a network error (incl. an AbortError when the timeout fires).
+async function fetchOnce(path, method, opts, timeoutMs) {
   const ctrl = new AbortController();
   const timer = setTimeout(() => ctrl.abort(), timeoutMs);
+  let headers, body;
+  if (opts.rawBody !== undefined) {
+    body = opts.rawBody;
+    if (opts.contentType) headers = { 'Content-Type': opts.contentType };
+  } else if (opts.body !== undefined) {
+    headers = { 'Content-Type': 'application/json' };
+    body = JSON.stringify(opts.body);
+  }
   try {
-    return await fetch(API_BASE + path, {
-      method,
-      headers: body !== undefined ? { 'Content-Type': 'application/json' } : undefined,
-      body: body !== undefined ? JSON.stringify(body) : undefined,
-      credentials: 'include',
-      cache: 'no-store',
-      signal: ctrl.signal,
-    });
+    return await fetch(API_BASE + path, { method, headers, body, credentials: 'include', cache: 'no-store', signal: ctrl.signal });
   } finally {
     clearTimeout(timer);
   }
@@ -84,7 +87,7 @@ export async function api(path, opts = {}) {
   for (;;) {
     let res;
     try {
-      res = await fetchOnce(path, method, opts.body, timeoutMs);
+      res = await fetchOnce(path, method, opts, timeoutMs);
     } catch (netErr) {
       // Network failure or timeout abort — retry if allowed, else rethrow (no .status).
       if (mayRetry && attempt < maxRetries) {
