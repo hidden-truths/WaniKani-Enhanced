@@ -14,6 +14,7 @@ import { speak, TTS_OK } from './tts.js';
 import { playItem, cycleMod } from './audio.js';
 import { copyBtnHtml, copyText, speakBtnHtml } from './render-helpers.js';
 import { account, api, setSyncStatus } from './cloud-core.js';
+import { createSyncedBlob } from './synced-blob.js';
 import { openAuth } from './cloud.js';
 import { loadCustom, saveCustom } from '../persistence/custom.js';
 import { rebuildData, refreshAfterVerbChange } from './custom-cards.js';
@@ -30,11 +31,24 @@ function loadMinnaStore() { try { const o = JSON.parse(localStorage.getItem(MINN
 function saveMinnaLocal() { try { localStorage.setItem(MINNA_KEY, JSON.stringify(state.minnaStore)); } catch (e) {} }
 function saveMinna() { saveMinnaLocal(); scheduleMinnaSync(); }
 
-// --- Notes/overlays sync trio (mirrors the custom-verb / settings sync; app key 'minna') ---
-let minnaSyncTimer = null;
-function scheduleMinnaSync() { if (!account) return; if (minnaSyncTimer) clearTimeout(minnaSyncTimer); minnaSyncTimer = setTimeout(pushMinnaCloud, 1200); }
-async function pushMinnaCloud() { if (!account) return; setSyncStatus('saving…'); try { await api('/v1/progress/' + MINNA_APP_KEY, { method: 'PUT', body: { data: state.minnaStore } }); setSyncStatus('✓ synced'); } catch (err) { setSyncStatus('⚠ offline'); } }
-export async function pullMinnaCloud() { try { const r = await api('/v1/progress/' + MINNA_APP_KEY); if (r && r.data && typeof r.data === 'object') { state.minnaStore = Object.assign({}, MINNA_DEFAULT, r.data, { notes: r.data.notes || {}, overlays: r.data.overlays || {}, clips: r.data.clips || {} }); saveMinnaLocal(); } else if (Object.keys(state.minnaStore.notes || {}).length || Object.keys(state.minnaStore.overlays || {}).length || Object.keys(state.minnaStore.clips || {}).length) { await pushMinnaCloud(); } } catch (err) {/* offline — keep local notes */} }
+// --- Notes/overlays/clips sync — folded into the shared SyncedBlob abstraction (app key 'minna').
+//     Same server-wins-on-login + fresh-account-seed model as the other blobs; the schedule/pull
+//     names are kept (saveMinna + cloud.js's pullCloud call them). ---
+export const minnaBlob = createSyncedBlob({
+  appKey: MINNA_APP_KEY,
+  read: () => state.minnaStore,
+  apply: (data) => {
+    if (data && typeof data === 'object') {
+      state.minnaStore = Object.assign({}, MINNA_DEFAULT, data, { notes: data.notes || {}, overlays: data.overlays || {}, clips: data.clips || {} });
+      saveMinnaLocal();
+      return true;
+    }
+    return false;   // fall through to the fresh-account seed
+  },
+  shouldSeed: () => !!(Object.keys(state.minnaStore.notes || {}).length || Object.keys(state.minnaStore.overlays || {}).length || Object.keys(state.minnaStore.clips || {}).length),
+});
+function scheduleMinnaSync() { minnaBlob.schedule(); }
+export const pullMinnaCloud = minnaBlob.pull;
 
 // Conversation-line clip ranges (per-user, synced). Read by the compare player to
 // slice the whole-conversation MP3 to one line; written by the in-app clip marker.

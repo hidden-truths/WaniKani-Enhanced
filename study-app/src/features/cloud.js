@@ -8,6 +8,8 @@ import { state } from '../state.js';
 import { escapeHtml, phraseToSentence, cardExamplesPayload } from '../core/index.js';
 import { sync } from '../sync-bus.js';
 import { account, setAccount, api, setSyncStatus, serverReachable, setServerReachable } from './cloud-core.js';
+import { createSyncedBlob } from './synced-blob.js';
+import * as queue from '../net/sync-queue.js';
 import { saveLocal } from '../persistence/store.js';
 import { loadCustom, saveCustomLocal } from '../persistence/custom.js';
 import { normalizeSelftalk, saveSelftalkLocal } from '../persistence/selftalk.js';
@@ -18,7 +20,7 @@ import { renderBrowse } from './browse.js';
 import { renderStats } from './stats.js';
 import { rebuildData, renderCustomCount, refreshAfterVerbChange } from './custom-cards.js';
 import { registerSessionHooks } from './flashcard.js';
-import { pullMinnaCloud, migrateMinnaDupes, renderMinna } from './minna.js';
+import { pullMinnaCloud, migrateMinnaDupes, renderMinna, minnaBlob } from './minna.js';
 import { renderSettings } from './settings-page.js';
 
 const APP_KEY = 'verbs';            // progress namespace on the server
@@ -26,43 +28,84 @@ const CUSTOM_APP_KEY = 'custom-verbs'; // custom-card-definitions namespace
 const SETTINGS_APP_KEY = 'settings'; // synced preferences namespace
 const SELFTALK_APP_KEY = 'selftalk'; // 独り言 phrases + practice/streak namespace
 let authMode = 'login';             // 'login' | 'register' — current modal mode
-let syncTimer = null, customSyncTimer = null, settingsSyncTimer = null, selftalkSyncTimer = null;
 
-// --- Progress sync (the `verbs` blob = state.store). Debounced; coalesces the rapid save()
-//     calls during a session into one PUT. ---
-function scheduleCloudSync() { if (!account) return; if (syncTimer) clearTimeout(syncTimer); syncTimer = setTimeout(pushCloud, 1200); }
-async function pushCloud() { if (!account) return; setSyncStatus('saving…'); try { await api('/v1/progress/' + APP_KEY, { method: 'PUT', body: { data: state.store } }); setSyncStatus('✓ synced'); } catch (err) { setSyncStatus('⚠ offline'); } }
+// The five synced "progress blobs" share one abstraction (createSyncedBlob): debounced push,
+// saving/synced/offline status, the durable offline-queue fallback, server-wins-on-pull,
+// fresh-account seeding, and 409 optimistic concurrency. Each registers only its read/apply +
+// the side-effects unique to it. (Minna's blob lives in minna.js, beside its state.)
 
-// --- Custom-card sync (separate namespace; add/edit/delete all propagate via saveCustom). ---
-function scheduleCustomSync() { if (!account) return; if (customSyncTimer) clearTimeout(customSyncTimer); customSyncTimer = setTimeout(pushCustomCloud, 1200); }
-async function pushCustomCloud() { if (!account) return; setSyncStatus('saving…'); try { await api('/v1/progress/' + CUSTOM_APP_KEY, { method: 'PUT', body: { data: loadCustom() } }); setSyncStatus('✓ synced'); } catch (err) { setSyncStatus('⚠ offline'); } }
-// Pull custom cards after sign-in. Server wins when it has any; a fresh account seeds the
-// cloud from local. Writes via saveCustomLocal() so hydration doesn't immediately re-push.
-async function pullCustomCloud() {
-  try {
-    const r = await api('/v1/progress/' + CUSTOM_APP_KEY);
-    if (r && r.data && Array.isArray(r.data.verbs)) { saveCustomLocal({ seq: r.data.seq || 100, verbs: r.data.verbs }); rebuildData(); }
-    else if (loadCustom().verbs.length) { await pushCustomCloud(); }     // new account — seed from local
-  } catch (err) {/* offline — keep local custom cards */}
-}
+// Progress (the `verbs` blob = state.store).
+const progressBlob = createSyncedBlob({
+  appKey: APP_KEY,
+  read: () => state.store,
+  apply: (data) => {
+    if (data && data.cards) {
+      state.store = { cards: data.cards || {}, sessions: data.sessions || [], daily: data.daily || {} };
+      saveLocal();                 // mirror to localStorage WITHOUT re-pushing
+      setSyncStatus('✓ synced');
+      return true;
+    }
+    return false;
+  },
+  onOffline: () => setSyncStatus('⚠ offline'),
+});
 
-// --- Settings sync (separate namespace; same server-wins-on-login model). ---
-function scheduleSettingsSync() { if (!account) return; if (settingsSyncTimer) clearTimeout(settingsSyncTimer); settingsSyncTimer = setTimeout(pushSettingsCloud, 1200); }
-async function pushSettingsCloud() { if (!account) return; setSyncStatus('saving…'); try { await api('/v1/progress/' + SETTINGS_APP_KEY, { method: 'PUT', body: { data: settings } }); setSyncStatus('✓ synced'); } catch (err) { setSyncStatus('⚠ offline'); } }
-async function pullSettingsCloud() {
-  try {
-    const r = await api('/v1/progress/' + SETTINGS_APP_KEY);
-    if (r && r.data && typeof r.data === 'object') {
-      setSettings(Object.assign({}, DEFAULT_SETTINGS, r.data));   // export let — reassign via the setter
-      saveSettingsLocal(); applyFurigana(); paintPrefChips(); renderSettings();
-    } else { await pushSettingsCloud(); }   // new account — seed from local
-  } catch (err) {/* offline — keep local settings */}
-}
+// Custom cards (separate namespace; add/edit/delete all propagate via saveCustom).
+const customBlob = createSyncedBlob({
+  appKey: CUSTOM_APP_KEY,
+  read: () => loadCustom(),
+  apply: (data) => {
+    if (data && Array.isArray(data.verbs)) { saveCustomLocal({ seq: data.seq || 100, verbs: data.verbs }); return true; }
+    return false;
+  },
+  afterPull: () => { rebuildData(); },
+  shouldSeed: () => loadCustom().verbs.length > 0,   // new account — seed only if we have local cards
+});
 
-// --- Self-Talk sync (the 'selftalk' blob now carries ONLY the practice/streak signal; user phrases
-//     are first-class private rows in the sentence store, synced via /v1/sentences, not here). ---
-function scheduleSelftalkSync() { if (!account) return; if (selftalkSyncTimer) clearTimeout(selftalkSyncTimer); selftalkSyncTimer = setTimeout(pushSelftalkCloud, 1200); }
-async function pushSelftalkCloud() { if (!account) return; setSyncStatus('saving…'); try { await api('/v1/progress/' + SELFTALK_APP_KEY, { method: 'PUT', body: { data: { practice: state.selftalkStore.practice } } }); setSyncStatus('✓ synced'); } catch (err) { setSyncStatus('⚠ offline'); } }
+// Settings (separate namespace; same server-wins-on-login model).
+const settingsBlob = createSyncedBlob({
+  appKey: SETTINGS_APP_KEY,
+  read: () => settings,
+  apply: (data) => {
+    if (data && typeof data === 'object') {
+      setSettings(Object.assign({}, DEFAULT_SETTINGS, data));   // export let — reassign via the setter
+      saveSettingsLocal();
+      return true;
+    }
+    return false;
+  },
+  afterPull: () => { applyFurigana(); paintPrefChips(); renderSettings(); },
+});
+
+// Self-Talk (the 'selftalk' blob carries ONLY the practice/streak signal; user phrases are
+// first-class private rows in the sentence store, synced via /v1/sentences). apply returns true
+// unconditionally so afterPull's one-time phrase migration runs on every pull (even a fresh
+// account with no server practice). selftalkLocalPhrases bridges apply→afterPull (captured before
+// the server's practice overwrites state.selftalkStore).
+let selftalkLocalPhrases = [];
+const selftalkBlob = createSyncedBlob({
+  appKey: SELFTALK_APP_KEY,
+  read: () => ({ practice: state.selftalkStore.practice }),
+  apply: (data) => {
+    selftalkLocalPhrases = (state.selftalkStore && state.selftalkStore.phrases) || [];
+    if (data && typeof data === 'object' && data.practice) {
+      state.selftalkStore = normalizeSelftalk({ practice: data.practice });   // server-wins
+    }
+    return true;
+  },
+  afterPull: async (data, opt = {}) => {
+    const cloudPhrases = (data && Array.isArray(data.phrases)) ? data.phrases : [];
+    const failed = await migrateSelftalkPhrases(selftalkLocalPhrases, cloudPhrases);
+    state.selftalkStore.phrases = failed;   // keep only un-migrated (retried next pull); [] when all done
+    saveSelftalkLocal();
+    if (!opt.reconcile) await selftalkBlob.push();   // the blob now syncs {practice} only
+    // Repaint the tab with the migrated rows (refreshSelftalkPhrases re-reads GET /v1/sentences).
+    if (await refreshSelftalkPhrases()) {
+      const panel = document.getElementById('panel-selftalk');
+      if (panel && panel.classList.contains('active')) renderSelftalk();
+    }
+  },
+});
 
 // POST each legacy phrase to the sentence store as a private row; returns the ones that FAILED so
 // they stay in the blob for a later retry. POST is idempotent by ext_id (the usr-<uuid> ids), so a
@@ -81,35 +124,6 @@ async function migrateSelftalkPhrases(localPhrases, cloudPhrases) {
   return failed;
 }
 
-// Pull Self-Talk after sign-in. The blob carries only the practice/streak signal now; any phrases it
-// still holds (authored before the store existed, locally and/or in a legacy cloud blob) are
-// MIGRATED once into the sentence store as private rows, then dropped from the blob. Server-wins for
-// the practice signal; a fresh account seeds practice from local via the push below.
-async function pullSelftalkCloud() {
-  // Capture local legacy phrases BEFORE the server's practice overwrites state.selftalkStore.
-  const localPhrases = (state.selftalkStore && state.selftalkStore.phrases) || [];
-  let cloudPhrases = [];
-  try {
-    const r = await api('/v1/progress/' + SELFTALK_APP_KEY);
-    if (r && r.data && typeof r.data === 'object') {
-      if (Array.isArray(r.data.phrases)) cloudPhrases = r.data.phrases;
-      if (r.data.practice) state.selftalkStore = normalizeSelftalk({ practice: r.data.practice }); // server-wins
-      // else: keep the locally-loaded practice (seeded to the cloud by the push below)
-    }
-  } catch (err) { return; /* offline — keep local Self-Talk */ }
-
-  const failed = await migrateSelftalkPhrases(localPhrases, cloudPhrases);
-  state.selftalkStore.phrases = failed;   // keep only un-migrated (retried next pull); [] when all done
-  saveSelftalkLocal();
-  await pushSelftalkCloud();               // the blob now syncs {practice} only
-
-  // Repaint the tab with the migrated rows (refreshSelftalkPhrases re-reads GET /v1/sentences).
-  if (await refreshSelftalkPhrases()) {
-    const panel = document.getElementById('panel-selftalk');
-    if (panel && panel.classList.contains('active')) renderSelftalk();
-  }
-}
-
 // One-time-per-device backfill: push every existing custom card's examples into the store so it
 // becomes the source for ALL example text (Phase 2.5). pushCardExamples keeps them current on every
 // save; this catches cards authored before Phase 2.5 / on another device. Flag-gated so it doesn't
@@ -126,24 +140,32 @@ async function migrateCardExamples() {
   if (results.every(r => r.status === 'fulfilled')) localStorage.setItem('jpverbs_cardex_migrated', '1');
 }
 
-// Pull server progress after sign-in. Server wins when it has data; a fresh account inherits
-// whatever's local (one-time migration upward). Then chain the other blobs.
+// Pull every synced blob after sign-in / boot, in order, then run the cross-blob finalizers.
+// Each blob is server-wins with a fresh-account seed; the finalizers apply Minna overlays and
+// backfill custom-card examples. (pullMinnaCloud is minnaBlob.pull, re-exported from minna.js.)
 async function pullCloud() {
-  try {
-    const r = await api('/v1/progress/' + APP_KEY);
-    if (r && r.data && r.data.cards) {
-      state.store = { cards: r.data.cards || {}, sessions: r.data.sessions || [], daily: r.data.daily || {} };
-      saveLocal();                 // mirror to localStorage WITHOUT re-pushing
-      setSyncStatus('✓ synced');
-    } else { await pushCloud(); }   // new account — seed from local
-  } catch (err) { setSyncStatus('⚠ offline'); }
-  await pullCustomCloud();          // custom cards + settings + minna + selftalk share the sign-in pull
-  await pullSettingsCloud();
+  await progressBlob.pull();
+  await customBlob.pull();
+  await settingsBlob.pull();
   await pullMinnaCloud();
-  await pullSelftalkCloud();
+  await selftalkBlob.pull();
   migrateMinnaDupes(); rebuildData();   // apply pulled Minna overlays + clean any dupes
   await migrateCardExamples();          // backfill custom-card examples → private store rows (one-time/device)
   refreshAllViews();
+}
+
+// Flush the durable offline write-queue for the current account (idempotent replays). On each
+// successful replay, bump the owning blob's lastUpdatedAt from the server's response so the next
+// live push won't false-conflict. The blob registry is built lazily here (not at module top level)
+// because minnaBlob is imported across the cloud⇄minna cycle.
+async function flushQueue() {
+  if (!account) return;
+  const byQueueKey = {};
+  for (const b of [progressBlob, customBlob, settingsBlob, selftalkBlob, minnaBlob]) byQueueKey[b.queueKey] = b;
+  await queue.flush(account.id, (key, r) => {
+    const b = byQueueKey[key];
+    if (b && r && typeof r.updatedAt === 'number') b._setLastUpdatedAt(r.updatedAt);
+  });
 }
 
 // Re-render every state.store-derived view. Mirrors the import handler's refresh set.
@@ -188,7 +210,7 @@ function friendlyAuthError(err) {
 
 async function doLogout() {
   try { await api('/v1/auth/logout', { method: 'POST' }); } catch (e) {}
-  setAccount(null); updateAccountChip(); setSyncStatus('');
+  setAccount(null); queue.clear(); updateAccountChip(); setSyncStatus('');   // queued writes are per-account
 }
 
 // Boot: probe the session and hydrate from cloud if signed in. We deliberately do NOT show
@@ -198,7 +220,7 @@ export async function bootAuth() {
   try { const r = await api('/v1/auth/me'); setAccount((r && r.user) ? r.user : null); }
   catch (e) { setServerReachable(false); setAccount(null); }
   updateAccountChip();
-  if (account) { await pullCloud(); return; }
+  if (account) { await flushQueue(); await pullCloud(); return; }   // deliver last session's offline writes, then server-wins
 }
 // Show the dismissible sign-up banner once the user has engaged (finished a session): only
 // when signed out, server reachable, and not previously dismissed. No-ops after that.
@@ -218,11 +240,14 @@ function logSession(right, tot, kind) {
 // Wire the auth modal + sign-up banner, register the sync schedulers onto the bus, and inject
 // the session hooks into flashcard. (bootAuth is kicked off separately, last, from main.)
 export function initCloud() {
-  sync.progress = scheduleCloudSync;
-  sync.custom = scheduleCustomSync;
-  sync.settings = scheduleSettingsSync;
-  sync.selftalk = scheduleSelftalkSync;
+  sync.progress = progressBlob.schedule;
+  sync.custom = customBlob.schedule;
+  sync.settings = settingsBlob.schedule;
+  sync.selftalk = selftalkBlob.schedule;
   registerSessionHooks({ logSession, maybeShowSignup });
+  // Flush queued offline writes when connectivity returns. Flush only — no forced pull, which
+  // would revert in-progress local edits not yet pushed.
+  window.addEventListener('online', () => { flushQueue(); });
 
   const authModal = document.getElementById('authModal');
   document.getElementById('accountBtn').addEventListener('click', () => {
@@ -246,6 +271,7 @@ export function initCloud() {
       setAccount(r.user); updateAccountChip(); closeAuth();
       document.getElementById('authPass').value = '';
       await pullCloud();
+      await flushQueue();
     } catch (err) { errEl.textContent = friendlyAuthError(err); }
     finally { submit.disabled = false; }
   });

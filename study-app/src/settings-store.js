@@ -48,7 +48,7 @@ export function loadSettings() {
 // by other modules operate on the live object and are fine.
 export let settings = loadSettings();
 
-// Wholesale replace — used by cloud's pullSettingsCloud (server-wins on login), the one
+// Wholesale replace — used by the settings SyncedBlob's apply (server-wins on login), the one
 // caller that needs to swap the object identity (to drop stale keys). Importers can read a
 // reassigned `export let` but never write it, so this setter is the cross-module hook.
 export function setSettings(next) { settings = normalizeSettings(next); }

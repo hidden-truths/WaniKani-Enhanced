@@ -18,7 +18,7 @@ order. The actual DOM/render/feature glue is split into **`src/features/*`** mod
   annotations), `tts`, `audio` (the shared `playItem(item,context)` player — resolves an item to a
   tagged voice variant + routes public-vs-credentialed `<audio>` by `gated`), `render-helpers`
   (shared `jishoUrl`/`provenanceBadge`), and the cloud
-  pair `cloud-core` (`account`/`setSyncStatus`; re-exports `api`) + `cloud` (sync trios + auth + bootAuth).
+  pair `cloud-core` (`account`/`setSyncStatus`; re-exports `api`) + `cloud` (the SyncedBlob registry + auth + bootAuth).
 - **`src/net/`** — the network layer: `transport` owns `api()`, the resilient fetch choke-point
   (timeout via `AbortController` + idempotency-aware retry/backoff + `Retry-After`); GET/PUT/DELETE
   retry by default, POST only with `{retry:true}`. `cloud-core` re-exports `api` so callers are unchanged.
@@ -197,11 +197,21 @@ one module each under `src/features/*` (the section names map 1:1 to filenames):
   playback itself is the TTS bullet above.)
 - **Cloud:** `api`, `bootAuth`, `updateAccountChip`, `openAuth`. **Cross-origin**
   (`api()` rebases every path onto `API_BASE` + sends `credentials:'include'`), the
-  session lives in a `.wkenhanced.dev` httpOnly cookie. THREE debounced synced blobs: progress (app `verbs`), custom
-  verbs (app `custom-verbs`), settings (app `settings`) — each with a
-  `schedule*Sync`/`push*Cloud`/`pull*Cloud` trio; all server-wins on login, fresh
-  account seeds from local (`pullCloud` chains all three). Plus `logSession` →
-  `POST /v1/sessions` (durable append-only history, signed-in only).
+  session lives in a `.wkenhanced.dev` httpOnly cookie. **FIVE debounced synced blobs** —
+  progress (`verbs`), custom verbs (`custom-verbs`), settings (`settings`), Self-Talk
+  (`selftalk`), Minna (`minna`) — all built from ONE `createSyncedBlob` abstraction
+  ([features/synced-blob.js](src/features/synced-blob.js)): debounced `schedule` →
+  `push` (PUT `/v1/progress/{appKey}`) → `pull` (server-wins-on-login, fresh-account
+  seed). Each blob supplies only its `read`/`apply` + unique side-effects (custom→`rebuildData`,
+  settings→`applyFurigana`+`paintPrefChips`+`renderSettings`, selftalk→phrase-migration+repaint,
+  minna→overlay merge). `pullCloud` pulls all five in order then runs the cross-blob finalizers
+  (`migrateMinnaDupes`/`rebuildData`/`migrateCardExamples`/`refreshAllViews`). A push that fails
+  after the transport's retries enqueues to the **durable offline write-queue**
+  ([net/sync-queue.js](src/net/sync-queue.js), dedup by `progress:<appKey>`); `flushQueue` replays
+  it on `window 'online'`, on boot (before `pullCloud`), and after sign-in, and `doLogout` drops it
+  (per-account). Each blob tracks the server `updatedAt` and sends it as `baseUpdatedAt` for **409
+  optimistic concurrency** (server-wins reconcile). Plus `logSession` → `POST /v1/sessions`
+  (durable append-only history, signed-in only; non-idempotent → NOT queued/retried).
   `maybeShowSignup` (from `endSession`) shows the sign-up nudge after the first
   session, not on first paint.
 - **UX helpers (added in the polish pass):** `filterSummary`/`paintSummary`
@@ -646,7 +656,7 @@ Component contracts you must preserve:
   generated `levels`/`mnem`/`tip`/`accent` from the lesson JSON (so they reach parity with
   built-ins — same `renderExample`/`pitchHtml` paths). The only NEW synced blob is
   per-lesson NOTES + the overlays + the Phase-2 conversation **clips** under the `minna` app
-  key (4th sync trio). Content source of truth is the server's
+  key (its own `createSyncedBlob`, `minnaBlob`, beside its state in minna.js). Content source of truth is the server's
   `data/minna/lesson-<n>.json` (git-tracked, curated from the `scripts/scrape-minna.ts`
   draft). **Phase 2 — record-your-voice + compare to native audio — has SHIPPED (MVP).**
   **Full feature doc (architecture + data model + roadmap): [MINNA.md](MINNA.md).**
