@@ -66,14 +66,22 @@ def load_song(slug: str):
     return song, lines
 
 
-def download_audio(video_id: str, workdir: Path, cookies_browser=None, cookies_file=None) -> Path:
+def download_audio(video_id: str, workdir: Path, cookies_browser=None, cookies_file=None,
+                   js_runtime="node") -> Path:
     """yt-dlp → a .wav in workdir (transient — discarded with the temp dir).
 
-    YouTube now gates many videos behind a bot check ("Sign in to confirm you're not a bot"); pass
-    cookies from a logged-in browser (--cookies-from-browser) or a cookies.txt (--cookies) to clear it.
+    Two YouTube hurdles, both handled here:
+      • a bot check ("Sign in to confirm you're not a bot") → pass cookies from a logged-in browser
+        (--cookies-from-browser) or a cookies.txt (--cookies).
+      • a player JS challenge (signature / "n" param) → yt-dlp needs a JS runtime + the yt-dlp-ejs
+        solver (`pip install yt-dlp-ejs`). We pass --js-runtimes <js_runtime> (default "node"); Deno is
+        yt-dlp's built-in default but is usually not installed, and enabling an absent runtime is
+        harmless (yt-dlp picks the highest-priority AVAILABLE one), so "node" is a safe default.
     """
     cmd = ["yt-dlp", "-x", "--audio-format", "wav", "--audio-quality", "0",
            "-o", str(workdir / "audio.%(ext)s")]
+    if js_runtime:
+        cmd += ["--js-runtimes", js_runtime]
     if cookies_browser:
         cmd += ["--cookies-from-browser", cookies_browser]
     elif cookies_file:
@@ -124,7 +132,7 @@ def run(slug: str, args) -> None:
     print(f"aligning {slug} — {len(lines)} lines, video {vid}{' (vocals)' if args.vocals else ''} …")
     with tempfile.TemporaryDirectory() as tmp:
         work = Path(tmp)
-        audio = download_audio(vid, work, args.cookies_from_browser, args.cookies)
+        audio = download_audio(vid, work, args.cookies_from_browser, args.cookies, args.js_runtime)
         if args.vocals:
             audio = isolate_vocals(audio, work)
         timed = align(audio, lines, args.model, args.device)
@@ -159,6 +167,10 @@ def main() -> None:
                          "— needed when yt-dlp hits 'Sign in to confirm you're not a bot'")
     ap.add_argument("--cookies", dest="cookies", default=None, metavar="FILE",
                     help="path to a Netscape cookies.txt (alternative to --cookies-from-browser)")
+    ap.add_argument("--js-runtime", dest="js_runtime", default="node", metavar="RUNTIME",
+                    help="JS runtime for yt-dlp's player-challenge solver (deno/node/quickjs; default "
+                         "node — Deno is yt-dlp's default but often absent). Needs `pip install yt-dlp-ejs`. "
+                         "Pass '' to omit.")
     args = ap.parse_args()
 
     slugs = sorted(p.stem for p in SONGS_DIR.glob("*.json")) if args.all else [args.song]

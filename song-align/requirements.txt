@@ -5,5 +5,8 @@
 # (torch comes in via stable-ts/demucs and is large; on Apple Silicon it uses the MPS backend.)
 
 yt-dlp>=2024.8.0        # download the video's audio (transient)
+yt-dlp-ejs>=0.8.0       # YouTube player-challenge (signature / "n") solver — yt-dlp runs it via a JS
+                        # runtime (deno/node/quickjs); without it YouTube serves "only images". align.py
+                        # passes --js-runtimes node by default (Node ≥22; Deno is yt-dlp's own default).
 stable-ts>=2.17.0       # Whisper-based forced alignment of known text (pulls openai-whisper + torch)
 demucs>=4.0.0           # vocal isolation — only needed for --vocals (the default); use --no-vocals to skip

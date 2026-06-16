@@ -22,6 +22,8 @@ is no Python on the prod droplet), and it produces a small committed JSON artifa
 
 ```bash
 brew install ffmpeg                     # system dep (also used by yt-dlp + demucs)
+brew install deno                        # OR already have Node ≥22 — a JS runtime for yt-dlp's
+                                         # player-challenge solver (see the format-error note below)
 cd song-align
 python3 -m venv .venv && source .venv/bin/activate
 pip install -r requirements.txt         # torch is large; Apple Silicon uses the MPS backend
@@ -48,10 +50,22 @@ python3 align.py --all --cookies-from-browser safari    # or: chrome | firefox |
 python3 align.py --all --cookies ~/yt-cookies.txt
 ```
 
-Notes: **Firefox/Safari** are usually the smoothest; **Chrome on macOS** locks its cookie DB while
-running (quit it first, and it may prompt for Keychain access). Also keep yt-dlp current —
-`pip install -U yt-dlp` — the bot countermeasures shift and an outdated yt-dlp is the most common cause.
-The cookies are read locally and only used to authorize the download; nothing is stored.
+Notes: **Firefox/Chrome** are usually the smoothest; **Safari on macOS** stores cookies in a
+TCC-protected file, so the terminal running this needs **Full Disk Access** (System Settings → Privacy
+& Security → Full Disk Access → add Terminal/iTerm, then reopen it) — without it you get
+`Operation not permitted: …Cookies.binarycookies`. **Chrome** locks its cookie DB while running (quit
+it first; it may prompt for Keychain access). The cookies are read locally and only used to authorize
+the download; nothing is stored.
+
+### yt-dlp: "Requested format is not available" / "Only images are available"
+
+YouTube also gates the real media behind a **player JS challenge** (signature + the `n` param). yt-dlp
+solves it by running the **`yt-dlp-ejs`** scripts (in `requirements.txt`) through a **JavaScript
+runtime** — `deno` (yt-dlp's default), `node` (≥22), or `quickjs`. `align.py` passes
+`--js-runtimes node` by default since Deno is often not installed; override with `--js-runtime deno`
+(or `''` to omit). If you see `Signature solving failed` / `n challenge solving failed`, the runtime or
+the solver is missing: `brew install deno` (or have Node ≥22) and `pip install -U yt-dlp-ejs`. Keeping
+yt-dlp current (`pip install -U yt-dlp yt-dlp-ejs`) also matters — these countermeasures shift.
 
 Then, in `wk-enhanced-api/`:
 
