@@ -21,8 +21,10 @@ the layer-specific docs point back here.
   reserved record-compare scope + the day-streak) and みんなの日本語 [MINNA.md](MINNA.md)
   (content tab + the clip-marker timing pattern + vocab activation + the Source facet).
 
-> **Status (2026-06-16): Library + Add + Read + Mine + Listen shipped; a 12-song curated library +
-> offline line-timing (synced highlight + per-line replay) shipped; Shadow still to build.** The
+> **Status (2026-06-16): All four modes shipped — Library + Add + Read + Mine + Listen + Shadow;
+> a 12-song curated library + offline line-timing (synced highlight + per-line replay) shipped.**
+> Remaining follow-ups: the in-app tap-to-sync editor (private BYO timing) + the `songs` synced
+> progress blob (stubbed in Shadow) + the inline Add-review editor. The
 > current state, the shipped commits, the new mechanisms, the open gotchas, and the prioritized
 > what's-left live in **[SONGS_HANDOFF.md](SONGS_HANDOFF.md)** — read it first for a cold start. The
 > [Phase checklist](#phase-checklist--cross-session-tracker) at the bottom is the live tracker. The
@@ -485,10 +487,23 @@ as work lands. `[ ]` = todo, `[x]` = done, `[~]` = in progress.
 - Verified live against the timed ドライフラワー (47/47): cloze offset-slicing, romaji grading, full-line,
   Reveal, count, the mask, and Read/Mine regression. Tests 208 + build green.
 
-### Phase 5 — Shadow + line timing — follow-up
+### Phase 5 — Shadow + line timing — ✅ Shadow shipped (2026-06-16); tap-to-sync still a follow-up
 - [x] **Synced highlight + per-line replay** — implemented in `songs.js` (`highlightAt`/`playSlice`/`replayLine`); unlocked by the Phase-3.5 timing pipeline.
+- [x] **Shadow** speaking bar (`speakingBarHtml`/`wireSpeakingControls`/`initMicSelector` in `#navExtra`,
+  shadow-mode + signed-in only) + per-line `recordControlHtml(SONGS_SCOPE, songLineKey(extId,ord), '',
+  null, false, plainText(lineJp), 'songs')` — the **TTS reference / full rig** (▶you/▶ref/→you/both/loop
+  + dual waveforms). **YouTube-slice by-ear** reference = a per-line "▶ original" `playSlice` on TIMED
+  lines (iframe audio can't be decoded → no waveform/overlay). `setOnTakeSaved` (now **multi-listener**,
+  filtered to `SONGS_SCOPE` so it doesn't clobber Self-Talk's) → the shared day-streak (`applyPractice`
+  on `state.selftalkStore.practice`). Speaking-mode lifecycle reused verbatim (mic auto-release on
+  tab-leave via `onSongsHidden`, browser-tab `visibilitychange` guarded on `#panel-songs`). **Upload
+  reference deferred.** Verified live (signed-in render, by-ear slice, mode transitions, no console
+  errors); the mic-gated record/compare flow is the Self-Talk/Minna engine verbatim (a headless mic is
+  `NotAllowedError`, so the capture step itself wasn't exercised live).
+- [~] **`songs` progress blob** — the shadowed-line signal is **stubbed** (`markShadowed`, a documented
+  no-op) pending the 6th `createSyncedBlob` trio (app key `songs`); the day-streak already gives the
+  "I practiced" signal and the library ring currently shows coverage %.
 - [ ] **In-app tap-to-sync** for PRIVATE BYO songs (generalize the clip-marker; `PUT /v1/songs/{id}/timing`). (The curated public set is timed offline via `song-align/`.)
-- [ ] Shadow speaking bar + per-line `recordControlHtml(SONGS_SCOPE,…, 'songs')` (TTS full rig); YouTube-slice by-ear reference; `setOnTakeSaved` → streak + shadowed-line. **Upload reference deferred.**
 
 ### Phase 6 — Docs + memory (rolling)
 - [~] SONGS_HANDOFF.md added + `song-lyric-tab-design` memory updated (2026-06-16); this checklist current.

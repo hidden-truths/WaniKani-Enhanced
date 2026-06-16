@@ -19,9 +19,12 @@ line-timing pipeline** (forced alignment) that unlocks the synced highlight + pe
 - **Timing:** an offline forced-alignment pipeline ([`song-align/`](../song-align/)) produces per-line
   `clip_start_ms`; the seed merges it. **Synced highlight + per-line replay light up once a song is
   timed.** (The maintainer has run alignment and confirmed it works.)
-- **Still to build (client modes):** **Listen** (dictation) and **Shadow** (record-and-compare) are
-  disabled stubs. Plus an in-app **tap-to-sync** editor for private BYO songs, the `songs` progress blob,
-  and the inline Add-review editor.
+- **Listen + Shadow now SHIPPED (2026-06-16):** Listen = a per-line dictation stepper (cloze ⇄ full-line,
+  advisory grading, Reveal, per-session count, timed-slice/synth audio, masked video). Shadow = the
+  record-compare engine reused verbatim (`SONGS_SCOPE = 80000`, synth-TTS full rig + by-ear YouTube-slice
+  reference, day-streak on save). All four modes are live.
+- **Still to build:** an in-app **tap-to-sync** editor for private BYO songs, the `songs` progress blob
+  (Shadow stubs its shadowed-line signal via `markShadowed`), and the inline Add-review editor.
 
 This session added **8 commits** on top of `7b6306d` (the pre-session HEAD); newest first:
 
@@ -157,24 +160,20 @@ fixed by `cf63d35`). Remaining, by severity:
 
 1. **Finish timing the library** *(maintainer, local + deploy)* — `python3 song-align/align.py --all`,
    spot-check, `bun scripts/seed-songs.ts`, commit the sidecars, re-seed prod. (In progress.)
-2. **Listen mode (dictation)** — SONGS.md "Listen". One mode, two difficulties via a toggle: **cloze**
-   (line visible, key content words blanked — `clozeBlanks` pure helper to add in `core/songs.js`) ⇄
-   **full-line** (hidden, transcribe). **Advisory grading only** (reuse `normKana`/`romajiToKana`, the
-   typed-reading path); Reveal self-check; per-session correct count. Audio = the line's timed slice
-   (`playSlice`) when timed, else synth (`playItem(...,'songs')`). Renders into `#sgBody`; wire a
-   `mode==='listen'` branch in `songs.js` `songHtml` + enable the disabled Listen button.
-3. **Shadow mode (record & compare)** — SONGS.md "Shadow". Reuse the record-compare engine verbatim with
-   **reserved `SONGS_SCOPE = 80000`** + itemKey `"<extId>:<ordinal>"` (`songLineKey`, already in
-   `core/songs.js`). Navbar speaking bar (`speakingBarHtml`/`wireSpeakingControls`/`initMicSelector`),
-   per-line `recordControlHtml(SONGS_SCOPE, "<ext>:<ord>", '', null, false, plainText(lineJp), 'songs')`.
-   Reference tiers: **TTS** (full rig) + **YouTube-slice** (by-ear, timed lines only — iframe audio can't
-   be decoded, so no waveform/▶both). Saving a take → `applyPractice` (day-streak) + the `songs` blob.
-   `'songs'` audio context already exists in `core/audio.js`. **Largest build.**
+2. ✅ **Listen mode (dictation)** — SHIPPED. Per-line stepper, cloze ⇄ full-line (`clozeBlanks` +
+   `clozeLineParts` in `core/songs.js`), advisory grading (`normKana`/`romajiToKana`), Reveal self-check,
+   per-session count, timed-slice/synth audio, masked video. See SONGS.md Phase 4.
+3. ✅ **Shadow mode (record & compare)** — SHIPPED. Record-compare engine reused verbatim
+   (`SONGS_SCOPE = 80000`, `songLineKey` itemKey, `'songs'` audio context = synth-TTS full rig) + a
+   per-line by-ear **YouTube-slice** ("▶ original", timed lines only). `setOnTakeSaved` is now
+   multi-listener (Self-Talk + Songs, scope-filtered); a saved take marks the shared day-streak. The
+   shadowed-line → `songs` blob signal is STUBBED (`markShadowed`). See SONGS.md Phase 5.
 4. **In-app tap-to-sync editor** *(for private BYO songs)* — play the video, tap as each line begins →
    `PUT /v1/songs/{id}/timing`. Generalizes the Minna clip-marker. (Curated set is timed offline; this is
    the BYO path.)
 5. **`songs` synced progress blob** — `createSyncedBlob`, app key `songs`, `{progress:{"<extId>":
-   {starred,shadowed,lastMode,lastLine}}}`. Deferred to Shadow (where stars/shadowed accrue).
+   {starred,shadowed,lastMode,lastLine}}}`. Shadow STUBS the shadowed-line signal (`markShadowed`); build
+   the blob to light up the library progress ring + persist stars.
 6. **Inline Add-review editor** — edit flagged lines before save (the flags guide a re-analyze for now).
 7. **Doc drift cleanup** (below).
 8. **The open validation findings** above (edit/delete UI, etc.).

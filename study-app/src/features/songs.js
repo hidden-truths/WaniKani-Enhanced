@@ -9,18 +9,27 @@
 // the YouTube IFrame wrapper. See SONGS.md for the architecture + dead-ends.
 
 import { state } from '../state.js';
+import { localDay } from '../config.js';
 import { api, account } from './cloud-core.js';
 import {
   escapeHtml, plainText, segmentsToRuby, segmentsToReading, overlayTokens,
   parseYouTubeId, songWords, knownHeadwords, coverage, bucketByJlpt, songLevel, songGrammar,
-  clozeBlanks, clozeLineParts, normKana, romajiToKana,
+  clozeBlanks, clozeLineParts, normKana, romajiToKana, songLineKey, applyPractice,
 } from '../core/index.js';
 import { grammarLabel, grammarJlpt } from '../data/grammar.js';
 import { playItem, cycleMod } from './audio.js';
 import { wireWordTaps } from './word-lookup.js';
 import { mountPlayer, destroyPlayer, playSlice } from './songs-youtube.js';
 import { loadCustom, saveCustom } from '../persistence/custom.js';
+import { saveSelftalk } from '../persistence/selftalk.js';
 import { rebuildData, refreshAfterVerbChange } from './custom-cards.js';
+// 録音 record-and-compare engine (the SAME rig Minna + Self-Talk feed) — Shadow reuses it verbatim
+// with the reserved SONGS_SCOPE + a per-line itemKey; reference = synth (TTS, decodable → full rig).
+import {
+  RECORD_SUPPORTED, enterSpeakingMode, exitSpeakingMode, isSpeakingMode,
+  speakingBarHtml, initMicSelector, wireSpeakingControls,
+  recordControlHtml, wireRecordCompare, paintCompareWaveforms, loadRecordings, setOnTakeSaved,
+} from './record-compare.js';
 
 const CACHE_KEY = 'jpverbs_songs_cache';
 const POS_CAT = { VERB: 'verb', ADJ: 'adjective', NOUN: 'noun', PROPN: 'noun', ADV: 'adverb' };
@@ -40,6 +49,11 @@ let add = { lyrics: '', url: '', title: '', artist: '', analysis: null, busy: fa
 // so re-checking / stepping back never double-counts); checked/revealed/inputs are the current step.
 let listen = null;
 const SLOW_RATE = 0.6;        // slow-replay playback rate for the timed YouTube slice (the "Slower" cue)
+// Shadow (record & compare). Reserved recordings partition (the engine's `scope` → the server's
+// opaque numeric `lesson` param); Minna uses 1–50, Self-Talk 90000, so 80000 never collides. One
+// scope holds every song's takes — the itemKey ("<extId>:<ordinal>", songLineKey) carries song+line.
+const SONGS_SCOPE = 80000;
+let recordingsLoaded = false; // whether this session has fetched the SONGS_SCOPE take cache
 
 function body() { return document.getElementById('sgBody'); }
 
@@ -111,8 +125,14 @@ export function renderSongs() {
 function render() {
   const el = body(); if (!el) return;
   destroyPlayer(); // any prior song's player; song view re-mounts below
+  if (view === 'song' && openSong) {
+    el.innerHTML = songHtml(); mountSongPlayer();
+    if (mode === 'shadow') wireShadow(el);   // record-compare delegates + waveforms
+    songNav();                                // the navbar speaking bar (shadow + account only; clears otherwise)
+    return;
+  }
+  clearNavSpeaking();
   if (view === 'add') { el.innerHTML = addHtml(); return; }
-  if (view === 'song' && openSong) { el.innerHTML = songHtml(); mountSongPlayer(); return; }
   el.innerHTML = libraryHtml();
 }
 
@@ -228,7 +248,7 @@ function songHtml() {
       <div class="mode-switch">
         <button class="mode-sw${mode === 'read' ? ' on' : ''}" data-act="mode" data-mode="read"><svg class="ic g" aria-hidden="true"><use href="#i-book"/></svg> Read</button>
         <button class="mode-sw${mode === 'listen' ? ' on' : ''}" data-act="mode" data-mode="listen"><svg class="ic g" aria-hidden="true"><use href="#i-headphones"/></svg> Listen</button>
-        <button class="mode-sw" data-act="mode" data-mode="shadow" disabled title="Shadow — coming soon"><svg class="ic" aria-hidden="true"><use href="#i-mic"/></svg> Shadow</button>
+        <button class="mode-sw${mode === 'shadow' ? ' on' : ''}" data-act="mode" data-mode="shadow"><svg class="ic g" aria-hidden="true"><use href="#i-mic"/></svg> Shadow</button>
         <button class="mode-sw${mode === 'mine' || mode === 'grammar' ? ' on' : ''}" data-act="mode" data-mode="mine"><svg class="ic g" aria-hidden="true"><use href="#i-tag"/></svg> Mine</button>
       </div>
     </div>`;
@@ -242,6 +262,7 @@ function songHtml() {
   if (mode === 'grammar') content = grammarRefHtml();
   else if (mode === 'mine') content = mineHtml();
   else if (mode === 'listen') content = listenHtml();
+  else if (mode === 'shadow') content = shadowHtml();
   else content = readHtml();
   // The mode content lives in a stable wrapper so Listen can re-render its stepper per step WITHOUT
   // re-running render() (which destroys + re-mounts the YouTube player — an iframe reload every step).
@@ -422,6 +443,98 @@ function playListenLine(slow, btn) {
   playItem({ text: plainText(line.text) }, 'songs', btn);   // synth fallback (slow not available for synth)
 }
 
+// ============================ Shadow (record & compare) ============================
+// Per-line speaking practice, reusing the record-and-compare engine VERBATIM (the same rig Minna +
+// Self-Talk feed) with the reserved SONGS_SCOPE + per-line itemKey. Reference tiers: TTS (the synth
+// reference — decodable, so the full rig: ▶you / ▶ref / →you / both / loop + dual waveforms) AND, for
+// TIMED lines, a by-ear "▶ original" YouTube slice (the iframe's audio can't be decoded → no waveform/
+// overlay, by design). Saving a take marks the shared day-streak + (deferred) the songs progress blob.
+
+function shadowHtml() {
+  const s = openSong;
+  const speaking = isSpeakingMode();
+  let intro;
+  if (!account) {
+    intro = `<div class="signup-banner sg-gate" style="margin:8px 0 14px"><svg class="ic" style="font-size:22px" aria-hidden="true"><use href="#i-mic"/></svg>
+      <div class="sb-text"><b>Sign in to shadow.</b> Recording your voice + comparing it to a reference needs an account. Reading + listening work without one.</div>
+      <button class="btn srs" data-act="signin">Sign in</button></div>`;
+  } else if (!RECORD_SUPPORTED) {
+    intro = `<p class="add-note" style="margin:6px 0 12px"><svg class="ic" aria-hidden="true"><use href="#i-alert"/></svg> Recording needs a modern browser with a microphone.</p>`;
+  } else {
+    intro = speaking
+      ? `<p class="add-note" style="margin:6px 0 12px"><svg class="ic" aria-hidden="true"><use href="#i-mic"/></svg> Record each line, then compare to the reference voice. Tap <b>▶ original</b> to hear the real performance (timed lines).</p>`
+      : `<p class="add-note" style="margin:6px 0 12px"><svg class="ic" aria-hidden="true"><use href="#i-mic"/></svg> Turn on <b>Practice speaking</b> in the bar above to record yourself line by line.</p>`;
+  }
+  const lines = s.lines.map((l, i) => {
+    const jp = l.furigana ? segmentsToRuby(l.furigana) : escapeHtml(l.text);
+    // The by-ear "▶ original" YouTube slice — timed lines only (untimed → the TTS reference covers it).
+    const orig = l.clipStartMs != null
+      ? `<button class="speak-btn sm" data-act="shadowslice" data-ord="${i}" title="Play the original (by ear)" aria-label="Play the original line"><svg class="ic" aria-hidden="true"><use href="#i-play"/></svg></button>` : '';
+    // The full record-and-compare rig (synth reference via the 'songs' audio context) — speaking + signed in.
+    const rec = (speaking && account)
+      ? recordControlHtml(SONGS_SCOPE, songLineKey(s.id, i), '', null, false, plainText(l.text), 'songs') : '';
+    return `<div class="lyric shadow-line" data-ord="${i}">
+      <div class="l-top"><div class="l-jp jp">${jp}</div><div class="l-ctl">${orig}</div></div>
+      ${l.en ? `<div class="l-en">${escapeHtml(l.en)}</div>` : ''}
+      ${rec}
+    </div>`;
+  }).join('');
+  return `${intro}<div class="lyrics">${lines}</div>`;
+}
+
+// Attach the record-compare delegates (once, on the persistent #sgBody) + paint the waveforms.
+function wireShadow(el) {
+  wireRecordCompare(el);
+  if (isSpeakingMode()) paintCompareWaveforms(el);
+}
+// Re-render ONLY the Shadow body (the stable #sgContent — leaves the player mounted), re-wiring the
+// engine + repainting waveforms. Used on the speaking toggle (controls appear/vanish).
+function renderShadow() {
+  const c = document.getElementById('sgContent'); if (!c) return;
+  c.innerHTML = shadowHtml();
+  const el = body(); if (el) wireShadow(el);
+}
+
+// The navbar-docked speaking bar (toggle + mic picker + speed + you⟷ref balance), in #navExtra —
+// only while viewing a song in Shadow + signed in (otherwise the slot is cleared).
+function songNav() {
+  const nav = document.getElementById('navExtra'); if (!nav) return;
+  if (view !== 'song' || mode !== 'shadow' || !RECORD_SUPPORTED || !account) { nav.innerHTML = ''; return; }
+  nav.innerHTML = speakingBarHtml();
+  wireSpeakingControls(nav);   // speed chips + bias slider (attach-once on the slot; shared with Minna/Self-Talk)
+  const tog = nav.querySelector('[data-speaking-toggle]');
+  if (tog) tog.addEventListener('click', async () => {
+    if (isSpeakingMode()) { exitSpeakingMode(); renderShadow(); songNav(); return; }
+    if (!(await enterSpeakingMode())) return;
+    if (!recordingsLoaded) { await loadRecordings(SONGS_SCOPE); recordingsLoaded = true; }
+    renderShadow(); songNav();   // re-render so the per-line record controls appear + the bar updates
+  });
+  initMicSelector(nav, () => { if (isSpeakingMode()) enterSpeakingMode(); });
+}
+function clearNavSpeaking() { const nav = document.getElementById('navExtra'); if (nav) nav.innerHTML = ''; }
+
+// The by-ear YouTube slice for a timed line (Shadow's "▶ original"); no-op if untimed / no player.
+function playShadowSlice(ord) {
+  const l = openSong.lines[ord]; if (!l || l.clipStartMs == null) return;
+  const next = openSong.lines[ord + 1];
+  playSlice(l.clipStartMs / 1000, next && next.clipStartMs != null ? next.clipStartMs / 1000 : undefined);
+}
+
+// A saved Shadow take → the shared "spoke today" day-streak (reuses Self-Talk's practice signal — one
+// speaking streak across both surfaces) + (deferred) the songs progress blob.
+function onSongTakeSaved(itemKey) {
+  if (state.selftalkStore) {
+    state.selftalkStore.practice = applyPractice(state.selftalkStore.practice, itemKey, localDay());
+    saveSelftalk();   // persists + schedules the 'selftalk' blob push (the streak is shared)
+  }
+  markShadowed(itemKey);
+}
+// STUB — the `songs` synced progress blob is unbuilt (it'd be the 6th createSyncedBlob trio:
+// {progress:{"<extId>":{starred,shadowed,lastMode,lastLine}}}, app key 'songs'). When added, record
+// the shadowed (extId, ordinal) here so the library progress ring reflects shadowing. Deferred: the
+// day-streak above already gives the "I practiced" signal, and the ring currently shows coverage %.
+function markShadowed(/* itemKey */) { /* no-op until the songs blob lands */ }
+
 function mineHtml() {
   const s = openSong;
   const k = known();
@@ -500,18 +613,23 @@ async function onClick(e) {
   const t = e.target.closest('[data-act]'); if (!t) return;
   const act = t.dataset.act;
   if (act === 'add') { view = 'add'; add = { lyrics: '', url: '', title: '', artist: '', analysis: null, busy: false, error: '' }; render(); return; }
-  if (act === 'back') { view = 'library'; openSong = null; mode = 'read'; loadLibrary().then(render); render(); return; }
+  if (act === 'back') { exitSpeakingMode(); view = 'library'; openSong = null; mode = 'read'; loadLibrary().then(render); render(); return; }
   if (act === 'signin') { document.getElementById('accountBtn').click(); return; }
   if (act === 'filter') { libFilter = t.dataset.filter; render(); return; }
   if (act === 'open') { await openById(t.dataset.id); return; }
   if (act === 'analyze' || act === 'reanalyze') { await runAnalyze(); return; }
   if (act === 'save') { await saveSong(); return; }
-  if (act === 'mode') { mode = t.dataset.mode === 'mine' ? 'mine' : t.dataset.mode; if (mode !== 'grammar') grammarRef = null; render(); return; }
+  if (act === 'mode') {
+    const next = t.dataset.mode === 'mine' ? 'mine' : t.dataset.mode;
+    if (mode === 'shadow' && next !== 'shadow') exitSpeakingMode();   // release the mic when leaving Shadow
+    mode = next; if (mode !== 'grammar') grammarRef = null; render(); return;
+  }
   if (act === 'grammar') { grammarRef = t.dataset.g; mode = 'grammar'; render(); return; }
   if (act === 'reveal') { const en = t.dataset.en || ''; t.classList.remove('hidden'); t.removeAttribute('data-act'); t.innerHTML = escapeHtml(en); return; }
   if (act === 'reveal-all') { document.querySelectorAll('#sgBody .l-en.hidden').forEach((el) => { el.classList.remove('hidden'); el.innerHTML = escapeHtml(el.dataset.en || ''); el.removeAttribute('data-act'); }); t.classList.toggle('on'); return; }
   if (act === 'furigana') { toggleFurigana(t); return; }
   if (act === 'replay') { replayLine(Number(t.dataset.ord), t.closest('.speak-btn'), e); return; }
+  if (act === 'shadowslice') { playShadowSlice(Number(t.dataset.ord)); return; }
   // ---- Listen (dictation) stepper ----
   if (act === 'ldiff') { listen.diff = t.dataset.diff === 'full' ? 'full' : 'cloze'; resetListenStep(); renderListen(); return; }
   if (act === 'lplay') { playListenLine(false, t.closest('.cue-btn')); return; }
@@ -630,7 +748,26 @@ function flash(msg) {
 // ============================ lifecycle ============================
 export function initSongs() {
   const el = body(); if (!el) return;
-  if (!el._sgWired) { el._sgWired = true; el.addEventListener('click', onClick); el.addEventListener('keydown', onKeydown); wireWordTaps(el); }
+  if (!el._sgWired) {
+    el._sgWired = true;
+    el.addEventListener('click', onClick);
+    el.addEventListener('keydown', onKeydown);
+    wireWordTaps(el);
+    // Shadow take-saved → the shared "spoke today" day-streak. Filtered to SONGS_SCOPE so a
+    // Minna/Self-Talk take never marks song practice; the engine's hook is multi-listener now, so
+    // registering this doesn't clobber Self-Talk's.
+    setOnTakeSaved((scope, itemKey) => { if (scope === SONGS_SCOPE) onSongTakeSaved(itemKey); });
+    // Release the mic if the BROWSER tab is hidden while shadowing (the in-app tab-leave hook doesn't
+    // fire on a browser-tab change) — guarded on #panel-songs active so it doesn't fight Minna/Self-Talk.
+    document.addEventListener('visibilitychange', handleSongsBrowserTabHidden);
+  }
+}
+function handleSongsBrowserTabHidden() {
+  if (!document.hidden || !isSpeakingMode()) return;
+  const panel = document.getElementById('panel-songs');
+  if (!panel || !panel.classList.contains('active')) return;
+  exitSpeakingMode();
+  renderShadow(); songNav();   // repaint the controls/bar to the released state
 }
 // Enter in a Listen input = Check (the dictation shortcut). Ignored once the step is revealed (the
 // gaps/input have frozen) or outside Listen.
@@ -641,4 +778,4 @@ function onKeydown(e) {
   if (mode !== 'listen' || !listen || listen.revealed) return;
   captureListenInputs(); gradeListen(); listen.checked = true; renderListen();
 }
-export function onSongsHidden() { destroyPlayer(); }
+export function onSongsHidden() { exitSpeakingMode(); clearNavSpeaking(); destroyPlayer(); }

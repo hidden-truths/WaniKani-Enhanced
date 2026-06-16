@@ -740,8 +740,21 @@ Component contracts you must preserve:
   `render()` (render rebuilds it from `add.lyrics` — reading after gets the empty rebuilt field). (6)
   the **YouTube IFrame Player API** (`features/songs-youtube.js`) is a NECESSARY external dep
   (embedding is the copyright posture) loaded lazily; it degrades gracefully (Read+Mine work if it
-  never loads). The `songs` synced progress blob is deferred to the Shadow phase. **Full doc:
-  [SONGS.md](SONGS.md).**
+  never loads). **(7) Listen + Shadow are now built** (all four modes ship). Listen is a per-line
+  dictation **stepper** (cloze ⇄ full-line, advisory grading via `normKana`/`romajiToKana`, Reveal
+  self-check, per-session count); cloze blanking is the pure `clozeBlanks`+`clozeLineParts`
+  (`core/songs.js`, offset-slices a blank token sitting mid plain furigana run); mode content renders
+  into a stable `#sgContent` so a step re-render never re-mounts the player; the video is **masked**
+  in Listen (kept playing for audio) so a lyric-burned MV can't spoil the dictation. Shadow reuses the
+  **record-compare engine verbatim** (`SONGS_SCOPE = 80000`, itemKey `songLineKey(extId,ord)`, the
+  `'songs'` audio context = synth TTS reference / full rig) + a per-line by-ear **YouTube-slice**
+  ("▶ original", timed lines only — iframe audio isn't decodable). **`playSlice` now uses its OWN
+  timer** (a slice from a paused player no longer lets the `PLAYING→onTime` poll clobber its stop) and
+  takes a `rate` for slow replay. **`setOnTakeSaved` is now MULTI-LISTENER** (Self-Talk + Songs both
+  subscribe, each filtering by its scope — registering one can't clobber the other); a saved Shadow
+  take marks the shared day-streak (`applyPractice` on `state.selftalkStore.practice`). The `songs`
+  synced progress blob is still unbuilt — the shadowed-line signal is a documented `markShadowed` STUB.
+  **Full doc: [SONGS.md](SONGS.md).**
 - **Record-and-compare (`record-compare.js`, the generic engine; Minna + Self-Talk glue feed it):
   the conversation has ONE whole-dialogue MP3, so
   per-line native compare slices it — it does NOT have per-line audio.** A line's native

@@ -58,7 +58,7 @@ export async function uploadTake(control, blob, durationMs) {
     const data = await api('/v1/audio/recordings' + qs, { method: 'POST', rawBody: blob, contentType: ct, retry: true });
     setTakes(scope, itemKey, (data && data.takes) || []);
     setSyncStatus('✓ recording saved');
-    if (onTakeSaved) { try { onTakeSaved(scope, itemKey); } catch (e) {} }   // notify the host (e.g. Self-Talk practice signal)
+    for (const fn of takeSavedHooks) { try { fn(scope, itemKey); } catch (e) {} }   // notify hosts (each filters by its scope)
   } catch (e) {
     setSyncStatus('⚠ could not save recording');
   }
@@ -72,7 +72,10 @@ export async function deleteTake(control, id) {
   resetControl(control);
 }
 
-// Optional host hook fired after a take is successfully saved (scope, itemKey) — lets a consumer
-// record a practice signal (Self-Talk's "practiced today"/streak) without coupling this engine to it.
-let onTakeSaved = null;
-export function setOnTakeSaved(fn) { onTakeSaved = fn || null; }
+// Optional host hooks fired after a take is successfully saved (scope, itemKey) — lets consumers
+// record a practice signal (Self-Talk's "practiced today"/streak, Songs' day-streak) without coupling
+// this engine to them. MULTIPLE consumers can subscribe (each filters by its own reserved scope), so
+// registering one never clobbers another's — Self-Talk and Songs both ride this. Dedupes a repeat
+// registration (init is idempotent); falsy is a no-op (no caller relies on clearing).
+const takeSavedHooks = [];
+export function setOnTakeSaved(fn) { if (typeof fn === 'function' && !takeSavedHooks.includes(fn)) takeSavedHooks.push(fn); }
