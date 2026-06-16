@@ -4,8 +4,17 @@
 // resolved lines. The offset invariant (text.slice(start,end)===surface) is the load-bearing one —
 // it's what the tap-to-lookup UI relies on.
 
-import { describe, test, expect } from 'bun:test';
-import { assembleAnalysis, offsetTokens, type ModelOutput } from './songAnalyze.ts';
+import { describe, test, expect, afterEach } from 'bun:test';
+import {
+    assembleAnalysis,
+    offsetTokens,
+    splitLyrics,
+    analyzeLyrics,
+    _setAnalysisClientForTesting,
+    type ModelOutput,
+    type AnalysisClient,
+    type AnalysisFinalMessage,
+} from './songAnalyze.ts';
 
 describe('assembleAnalysis — offsets + validation + flags', () => {
     test('a clean line: furigana validates, tokens get correct UTF-16 offsets, grammar is catalog-filtered', () => {
@@ -118,5 +127,69 @@ describe('offsetTokens — in-order UTF-16 offset computation (also reused by th
     test('returns null when a surface cannot be aligned in order (→ seed aborts / analyzer flags)', () => {
         expect(offsetTokens('あ', [{ surface: 'ない', pos: 'verb' }])).toBeNull();
         expect(offsetTokens('歌う歌', [{ surface: '歌', pos: 'noun' }, { surface: '歌う', pos: 'verb' }])).toBeNull(); // 歌う is before the 2nd 歌
+    });
+});
+
+describe('splitLyrics — the unit of analysis (one trimmed, non-empty line each)', () => {
+    test('trims each line and drops blank / whitespace-only lines', () => {
+        expect(splitLyrics('  あ \n\n  い  \n   \r\nう  ')).toEqual(['あ', 'い', 'う']);
+    });
+
+    test('all-blank input yields no lines (the route 400s on this)', () => {
+        expect(splitLyrics('   \n  \n\t\n')).toEqual([]);
+    });
+
+    test('caps at 120 lines so a pasted novel can not blow up the model call', () => {
+        const many = Array.from({ length: 200 }, (_, i) => `行${i}`).join('\n');
+        expect(splitLyrics(many).length).toBe(120);
+    });
+});
+
+// The one impure path, now reachable via the injected client (DIP seam). These cover the
+// server-instability branches that were untestable while Anthropic was new'd inline.
+describe('analyzeLyrics — model-call branches (injected fake client, no network)', () => {
+    afterEach(() => _setAnalysisClientForTesting(null));
+
+    const fakeClient = (msg: AnalysisFinalMessage): AnalysisClient => ({
+        messages: { stream: () => ({ finalMessage: async () => msg }) },
+    });
+    const toolMsg = (input: unknown): AnalysisFinalMessage => ({
+        stop_reason: 'tool_use',
+        content: [{ type: 'tool_use', input }],
+        usage: { input_tokens: 10, output_tokens: 20 },
+    });
+
+    test('success: the tool output is assembled into offset-resolved lines', async () => {
+        _setAnalysisClientForTesting(() =>
+            fakeClient(
+                toolMsg({
+                    profile: { jlpt: 'N5' },
+                    lines: [
+                        {
+                            index: 0,
+                            furigana: [{ t: '歌', r: 'うた' }],
+                            en: 'song',
+                            grammar: ['tai'],
+                            tokens: [{ surface: '歌', lemma: '歌', reading: 'うた', pos: 'NOUN', jlpt: 'N5', gloss: 'song' }],
+                        },
+                    ],
+                }),
+            ),
+        );
+        const r = await analyzeLyrics({ lines: ['歌'] });
+        expect(r.lines[0]!.en).toBe('song');
+        expect(r.lines[0]!.tokens[0]).toMatchObject({ surface: '歌', start: 0, end: 1 });
+        expect('歌'.slice(r.lines[0]!.tokens[0]!.start, r.lines[0]!.tokens[0]!.end)).toBe('歌'); // offset invariant end-to-end
+        expect(r.profile).toEqual({ jlpt: 'N5', grammarCount: 1, lineCount: 1 });
+    });
+
+    test('a truncated (max_tokens) response throws a clear error → the route maps it to 502', async () => {
+        _setAnalysisClientForTesting(() => fakeClient({ stop_reason: 'max_tokens', content: [] }));
+        await expect(analyzeLyrics({ lines: ['あ'] })).rejects.toThrow(/truncat/i);
+    });
+
+    test('a response with no tool_use block (prose instead of structured output) throws', async () => {
+        _setAnalysisClientForTesting(() => fakeClient({ stop_reason: 'end_turn', content: [{ type: 'text' }] }));
+        await expect(analyzeLyrics({ lines: ['あ'] })).rejects.toThrow(/did not return/i);
     });
 });

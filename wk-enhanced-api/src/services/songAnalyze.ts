@@ -250,17 +250,49 @@ function catalogPrompt(): string {
     return CATALOG.map((g) => `- ${g.id} (${g.label}, ${g.jlpt})`).join('\n');
 }
 
-// Analyze a pasted song. Throws AnalysisUnavailableError when no key is configured. `lines` are the
-// already-split, trimmed lyric lines (see splitLyrics).
+// The minimal shape analyzeLyrics uses off the model — just enough to inject a fake in tests without
+// standing up the whole SDK surface. The real Anthropic client satisfies it structurally (a
+// MessageStream has finalMessage(): Promise<Message>, and Message is a superset of this), so
+// production needs no cast. This module's ONE impure dependency lives behind this seam (DIP): the
+// assembly above is pure + unit-tested; these network branches (truncation, missing tool block) were
+// untestable while the client was new'd inline.
+export interface AnalysisFinalMessage {
+    stop_reason: string | null;
+    content: Array<{ type: string; input?: unknown }>;
+    usage?: { input_tokens?: number; output_tokens?: number } | null;
+}
+export interface AnalysisClient {
+    messages: {
+        stream(params: Parameters<Anthropic['messages']['stream']>[0]): { finalMessage(): Promise<AnalysisFinalMessage> };
+    };
+}
+
+let testClientFactory: (() => AnalysisClient) | null = null;
+
+// Resolve the client: a test-injected fake wins; otherwise require a key (throwing the same
+// AnalysisUnavailableError the route maps to 503) and build the real client.
+function getAnalysisClient(): AnalysisClient {
+    if (testClientFactory) return testClientFactory();
+    if (!isAnalysisConfigured()) throw new AnalysisUnavailableError();
+    return new Anthropic({ apiKey: config.songs.anthropicApiKey, maxRetries: 2, timeout: 120_000 });
+}
+
+// Test-only: inject a fake analysis client (pass null to restore the real one). Lets the failure
+// branches (max_tokens truncation, no tool block) + the success path be covered with no network call.
+export function _setAnalysisClientForTesting(factory: (() => AnalysisClient) | null): void {
+    testClientFactory = factory;
+}
+
+// Analyze a pasted song. Throws AnalysisUnavailableError when no key is configured (and no test
+// client is injected). `lines` are the already-split, trimmed lyric lines (see splitLyrics).
 export async function analyzeLyrics(input: {
     lines: string[];
     title?: string;
     artist?: string;
 }): Promise<AnalyzedSong> {
-    if (!isAnalysisConfigured()) throw new AnalysisUnavailableError();
+    const client = getAnalysisClient();
     const { lines, title, artist } = input;
 
-    const client = new Anthropic({ apiKey: config.songs.anthropicApiKey, maxRetries: 2, timeout: 120_000 });
     const header = [title && `Title: ${title}`, artist && `Artist: ${artist}`].filter(Boolean).join('\n');
     const numbered = lines.map((l, i) => `${i}\t${l}`).join('\n');
     const userContent =
