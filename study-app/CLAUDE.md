@@ -13,7 +13,12 @@ order. The actual DOM/render/feature glue is split into **`src/features/*`** mod
   groups; owns `bcfg`), `stats` (charts), `custom-cards` (rebuildData + #verbModal CRUD),
   `settings-page`, `minna` (the みんなの日本語 dashboard), `selftalk` (the 独り言 Self-Talk
   output/speaking-practice tab — see [SELFTALK.md](SELFTALK.md)), `songs` + `songs-youtube` (the
-  歌/Songs song & lyric analysis tab — Library/Add/Read/Mine shipped; see [SONGS.md](SONGS.md)),
+  歌/Songs song & lyric analysis tab — Library/Add/Read/Listen/Shadow/Mine; now a **directory**
+  `songs/{state,library,add,read,listen,shadow,mine,progress}.js` behind `songs/index.js` (the
+  render-dispatch + song-view shell + delegated-events + lifecycle orchestrator), with `songs.js` a
+  thin `export *` re-export so main.js + cloud.js import unchanged. `state.js` = the shared mutable
+  `S` view-state (mutated in place); the modules form runtime-only import cycles (`render`/`flash`
+  re-imported by add/progress/mine), like record-compare. See [SONGS.md](SONGS.md)),
   `record-compare` (the generic
   record-and-compare engine — fed by Minna AND Self-Talk; now a **directory**
   `record-compare/{state,capture,takes,playback,waveform,view}.js` behind a 13-export barrel
@@ -35,6 +40,9 @@ order. The actual DOM/render/feature glue is split into **`src/features/*`** mod
   `normGains`/`clampSpeed` + the C0 additions `chooseMime`/`encodeWav`/`biasNative`/`biasTake`),
   `refs` (the record-compare reference-voice selection + audio-URL shapes — `base`/`httpServed`/
   `prefs` injected so `features/record-compare.js` keeps owning `API_BASE`/`HTTP_SERVED`/`settings`),
+  `songs` (the 歌/Songs pure helpers — coverage / JLPT bucketing / known-vs-new vocab split /
+  `parseYouTubeId` / `clozeBlanks`+`clozeLineParts` / the Listen grade `readingMatch`+`lineReading` /
+  the activation `buildSongCard`+`songCardKey` / `songLineKey`+`parseSongLineKey`),
   behind a barrel `core/index.js`.
 - **`src/state.js`** — the ONE shared mutable hub: `state.store` (progress), `state.DATA`
   (the live deck), `state.minnaStore`, `state.MAXRANK`, `state.BUILTIN_RANK_BY_JP`, plus

@@ -19,7 +19,7 @@ this doc owns the *how-to-execute*.
 | **D** schemas split ✅ | SRP/ISP; co-locate schemas by domain | LOW (barrel + typecheck-guarded, zero behavior change) | ~1–2h | 1st — **SHIPPED** |
 | **B** sync DRY + resilience + concurrency ✅ | DRY + DIP + disconnection/concurrency resilience + new tests | MED (hot path; backward-compat progress contract) | ~1–2 days | 2nd — **SHIPPED** |
 | **C** record-compare decomp ✅ | SRP on the DOM/audio glue | HIGH (no feature tests, stateful audio, many dead-ends) | ~1–2 days | 3rd — **SHIPPED (C0 + C1+)** |
-| **S** songs.js decomp | SRP on the 歌 tab's DOM/mode glue | HIGH (live mic + YouTube + shared mutable view-state; browser-verify each step) | ~1–2 days | after C — C0 **SHIPPED**, C1.0 **SHIPPED**, peels pending |
+| **S** songs.js decomp ✅ | SRP on the 歌 tab's DOM/mode glue | HIGH (live mic + YouTube + shared mutable view-state; browser-verify each step) | ~1–2 days | after C — **SHIPPED** (C0 + C1.0 + C1.1+ peels); needs a live browser pass |
 
 > **Golden rule for all three:** zero behavior change unless explicitly designed (B's
 > concurrency + queue). Keep the existing test suites green at every step, add tests for new
@@ -335,9 +335,13 @@ templates/annotations seed steps. Separate sessions.
 > [study-app/src/core/songs.js](../study-app/src/core/songs.js) (+ `parseSongLineKey` hardened
 > against the `Number('')===0` footgun). **C1.0 SHIPPED** (`be89442`) — `features/songs.js` became
 > the `features/songs/` package (verbatim move to `songs/index.js` + a thin `export *` re-export so
-> `main.js`/`cloud.js` are unchanged; built bundle byte-identical). The **per-mode peels (C1.1+)
-> below are the remaining work** — the HIGH-risk, browser-verified-per-step part, same profile as
-> record-compare's C1+.
+> `main.js`/`cloud.js` are unchanged; built bundle byte-identical). **C1.1+ SHIPPED** (`70412d5`) —
+> the 824-line `index.js` split into `state.js` (the shared `S`) + per-mode modules
+> (`library`/`add`/`read`/`listen`/`shadow`/`mine`/`progress`) behind the orchestrator `index.js`;
+> all view-state routes through `S`, verified by `bun run build` (74 modules resolve) + 214 tests + an
+> exhaustive grep audit (every state ref `S.`-prefixed). **The design + steps below are kept as the
+> as-built record.** One thing still owed: a **live browser pass** of the mic / YouTube / Listen-stepper
+> flows (headless blocks `getUserMedia` + the iframe) — the checklist is in *Verification* below.
 
 ### Honest framing (why it's gated on a browser)
 [study-app/src/features/songs/index.js](../study-app/src/features/songs/index.js) is ~790 lines of

@@ -10,9 +10,10 @@ song becomes four practice modes — **Read · Listen · Shadow · Mine**.
 This feature spans **both** halves of the codebase, like みんなの日本語. This doc ties them together;
 the layer-specific docs point back here.
 
-- **Frontend** (the tab): [index.html](index.html) `#panel-songs` + [src/features/songs.js](src/features/songs.js)
-  + [src/features/songs-youtube.js](src/features/songs-youtube.js) + pure logic in
-  [src/core/songs.js](src/core/songs.js) + Songs styles in [src/styles.css](src/styles.css).
+- **Frontend** (the tab): [index.html](index.html) `#panel-songs` + the
+  [src/features/songs/](src/features/songs/) package (per-mode modules behind `index.js`; thin
+  re-export at [src/features/songs.js](src/features/songs.js)) + [src/features/songs-youtube.js](src/features/songs-youtube.js)
+  + pure logic in [src/core/songs.js](src/core/songs.js) + Songs styles in [src/styles.css](src/styles.css).
 - **Server** (song store + analysis): [../wk-enhanced-api/src/routes/songs.ts](../wk-enhanced-api/src/routes/songs.ts),
   [../wk-enhanced-api/src/services/songAnalyze.ts](../wk-enhanced-api/src/services/songAnalyze.ts),
   [../wk-enhanced-api/src/db/repos/songs.ts](../wk-enhanced-api/src/db/repos/songs.ts).
@@ -404,6 +405,15 @@ JLPT + explanation from the generated catalog (`grammarLabel`/`grammarJlpt`, [da
 - **LLM furigana/tokens are MODEL-GENERATED** — validated for the byte-exact furigana + UTF-16 token
   invariants, but naturalness/accuracy still wants the proofread step (that's what the confidence
   flags + the review screen are for). Same status caveat as `examples.js` / Self-Talk content.
+- **The `features/songs/` modules share view-state via `state.js`'s `S`, mutated IN PLACE** (never
+  reassigned — ES `import`s are read-only, so a module-`let` can't be cross-module-mutated; the
+  record-compare pattern). The modules form **runtime-only import cycles** (`render`/`flash` are
+  imported back from `index.js` by add/progress/mine) — fine because every cross-call fires at
+  event/render time, like cloud⇄minna. Listen/Shadow re-render into the **stable `#sgContent`
+  wrapper** (NOT via `render()`), so the YouTube iframe isn't remounted per step; the delegated
+  click/keydown + `wireWordTaps` + `setOnTakeSaved` are **attach-once** on `#sgBody` (`_sgWired`).
+  Don't "tidy" any of these into eager calls or per-render re-wiring. Full decomposition record +
+  the remaining-peel-free as-built map: [../REFACTOR_FOLLOWUPS.md](../REFACTOR_FOLLOWUPS.md) "Workstream S".
 
 ---
 
@@ -411,13 +421,13 @@ JLPT + explanation from the generated catalog (`grammarLabel`/`grammarJlpt`, [da
 
 | Concern | File |
 |---|---|
-| Tab glue (library/add/read/listen/shadow/mine + lifecycle) | [src/features/songs.js](src/features/songs.js) |
+| Tab — the `features/songs/` package: `index.js` (render dispatch + song-view shell + delegated events + lifecycle) · `state.js` (the shared mutable `S` view-state) · one module per surface/mode (`library`/`add`/`read`/`listen`/`shadow`/`mine`/`progress`). `features/songs.js` is a thin `export *` re-export so consumers' imports are unchanged. | [src/features/songs/](src/features/songs/) |
 | YouTube IFrame loader + player wrapper | [src/features/songs-youtube.js](src/features/songs-youtube.js) |
-| Pure logic (parseYouTubeId, coverage, bucketByJlpt, knownNew, clozeBlanks, songProfile, lineTimingState) | [src/core/songs.js](src/core/songs.js) |
+| Pure logic — DOM-free + unit-tested: `parseYouTubeId`, `coverage`, `bucketByJlpt`, known/new split, `clozeBlanks`/`clozeLineParts`, `songLevel`/`songProgress`/`songGrammar`, `lineTimingState`, `songLineKey`/`parseSongLineKey`, the Listen grade `readingMatch`/`lineReading`, the activation `buildSongCard`/`songCardKey` | [src/core/songs.js](src/core/songs.js) (tests in [test/core.test.ts](test/core.test.ts)) |
 | Synced progress blob (signal only) | [src/persistence/songs.js](src/persistence/songs.js) + [src/features/cloud.js](src/features/cloud.js) |
 | Markup (nav tab, `#panel-songs`, sprite glyphs) | [index.html](index.html) |
 | Styles (ported from mockups/songs/mock.css) | [src/styles.css](src/styles.css) |
-| Song store + repo | [../wk-enhanced-api/src/db/repos/songs.ts](../wk-enhanced-api/src/db/repos/songs.ts), [../wk-enhanced-api/src/db/schema.sql](../wk-enhanced-api/src/db/schema.sql) |
+| Song store + repo — `saveSong` (the single transactional create-or-replace entry) + the shared sentenceCore helpers (`insertPrivateSentenceRow` / `deleteOwnedLines` / the `VIEWER_VISIBLE` privacy gate) | [../wk-enhanced-api/src/db/repos/songs.ts](../wk-enhanced-api/src/db/repos/songs.ts), [../wk-enhanced-api/src/db/repos/sentenceCore.ts](../wk-enhanced-api/src/db/repos/sentenceCore.ts), [../wk-enhanced-api/src/db/schema.sql](../wk-enhanced-api/src/db/schema.sql) |
 | Routes + schemas | [../wk-enhanced-api/src/routes/songs.ts](../wk-enhanced-api/src/routes/songs.ts), [../wk-enhanced-api/src/schemas/songs.ts](../wk-enhanced-api/src/schemas/songs.ts) |
 | The LLM analysis pass | [../wk-enhanced-api/src/services/songAnalyze.ts](../wk-enhanced-api/src/services/songAnalyze.ts) |
 | Starter-set seed mechanism | [../wk-enhanced-api/scripts/seed-songs.ts](../wk-enhanced-api/scripts/seed-songs.ts) |

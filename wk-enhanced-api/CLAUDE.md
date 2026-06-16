@@ -77,8 +77,8 @@ src/
 │                             #   (common ← sentences; vocab ← warm). Add a schema to its domain file, not the barrel.
 ├── db/
 │   ├── schema.sql            # SQLite tables: vocab/warm + accounts/progress + the sentence store (sentence, translation, sentence_link, sentence_tag, sentence_annotation + public_sentence VIEW) + sentence_template (slot-swap generators) + public_template VIEW + song (歌/Songs metadata; lines live in the sentence store) + public_song VIEW
-│   ├── connection.ts         # the bun:sqlite handle: getDb()/openDb()/_useDbForTesting (the test seam)
-│   ├── repos/                # one cohesive repository module per aggregate — vocab, indexMeta, warmJobs, accounts, progress, studySessions, recordings, audioVariants, + the sentence store (sentenceCore shared helpers / sentences / annotations / templates) + songs (歌/Songs metadata + lines). No SQL escapes these; tests live beside each as *.test.ts.
+│   ├── connection.ts         # the bun:sqlite handle: getDb()/openDb()/_useDbForTesting (the test seam) + the connection pragmas (WAL · foreign_keys · busy_timeout=5000 so concurrent writers WAIT, not throw SQLITE_BUSY — pinned in connection.test.ts)
+│   ├── repos/                # one cohesive repository module per aggregate — vocab, indexMeta, warmJobs, accounts, progress, studySessions, recordings, audioVariants, + the sentence store (sentenceCore shared helpers — the VIEWER_VISIBLE privacy gate + insertPrivateSentenceRow/deleteOwnedLines, reused by sentences/songs / sentences / annotations / templates) + songs (歌/Songs metadata + lines; saveSong = the single transactional create-or-replace entry). No SQL escapes these; tests live beside each as *.test.ts.
 │   └── client.ts             # barrel: re-exports connection + every repo, so `import * as db from '../db/client.ts'` is unchanged
 ├── lib/
 │   ├── jlpt.ts               # scoreJlpt() — direct port of userscript logic; bundled JLPT_VOCAB at data/jlpt-vocab.json
@@ -113,7 +113,7 @@ src/
 │   ├── ik.ts                 # /search, /index_meta, /download_media — built-in 500ms rate limit
 │   ├── ddg.ts                # two-step vqd HTML scrape → i.js JSON
 │   ├── tts.ts                # Google Translate TTS (client=gtx, Referer spoof) + the storage-backed resolveTts
-│   ├── songAnalyze.ts        # 歌/Songs runtime lyric analysis: Claude (forced tool-use) → furigana/en/grammar/tokens; server computes UTF-16 offsets
+│   ├── songAnalyze.ts        # 歌/Songs runtime lyric analysis: Claude (forced tool-use) → furigana/en/grammar/tokens; server computes UTF-16 offsets. Client injected via a factory seam (_setAnalysisClientForTesting) so the pure assembly AND the failure branches are unit-tested (songAnalyze.test.ts)
 │   ├── minnaAudio.ts         # native vnjpclub MP3 proxy/cache (SSRF-guarded) for /v1/audio/native
 │   ├── wk.ts                 # WK v2 API for vocab corpus enumeration; needs WK_API_TOKEN
 │   └── storage.ts            # storage abstraction: LocalStorage + S3Storage drivers behind one interface
@@ -234,7 +234,7 @@ Lazy fill (`GET /v1/vocab/{word}` on a cold word) calls `warmWord()` synchronous
 | POST | `/v1/templates/{extId}/realize` | Cookie | Materialize one filler combo into a PUBLIC `sentence` row (Slice 2). Body carries ONLY `{picks}`; the server reconstructs text/furigana/English from the stored skeleton and `db.materializeTemplateRealization` upserts it (`source='template'`, `owner_type='template'` link, idempotent by hash) with the template's curated grammar copied on. Account-gated (writes the public corpus). 404 if the template isn't visible; 400 on furigana mismatch. |
 | GET | `/v1/songs` | Cookie* | 歌/Songs library: public starter songs (anon) + the caller's own private songs, with per-song line/timed counts + distinct content-words (coverage). `db.getSongs` reuses the `getSentences` privacy gate. *Anon-readable; in `STUDY_ROUTE` (credentialed). `no-store`. |
 | GET | `/v1/songs/{id}` | Cookie* | One song: metadata + ordered lines (each an AssembledSentence with `?annotate` tokens + clip timing). Gated. |
-| POST | `/v1/songs` | Cookie | Persist a reviewed analysis as a PRIVATE song: a `song` row + one `sentence` row per line (`owner_type='song'`, ordinal, clip_*) + translations/grammar tags/LLM-token annotations. **Upsert by ext_id** — re-POSTing your own song replaces its metadata + lines in place (`replaceSongLines`), atomically. |
+| POST | `/v1/songs` | Cookie | Persist a reviewed analysis as a PRIVATE song: a `song` row + one `sentence` row per line (`owner_type='song'`, ordinal, clip_*) + translations/grammar tags/LLM-token annotations. **Upsert by ext_id** via `db.saveSong` — the whole create-vs-replace decision + the per-account quota run in ONE `BEGIN IMMEDIATE` transaction (race-free with the busy_timeout), returning a tagged outcome the route maps 1:1: 200 created/replaced · 409 reserved (a public starter) / id-taken (another account's) · 400 quota / invalid (furigana/offset — detail logged, not echoed). |
 | POST | `/v1/songs/analyze` | Cookie | **The runtime LLM pass** — lyrics → per-line furigana + English + grammar + JLPT tokens via Claude (`services/songAnalyze.ts`, forced tool-use). `503 service_unavailable` when `ANTHROPIC_API_KEY` is unset (so it ships before the key is provisioned). |
 | GET | `/v1/songs/oembed?url=` | Cookie | Keyless YouTube oEmbed proxy → `{title, author, youtubeId}` (SSRF-guarded id parse) for Add-flow auto-fill. |
 | PUT/PUT/DELETE | `/v1/songs/{id}[/timing]` | Cookie | Edit metadata / save per-line tap-to-sync clip starts / delete (owner-scoped). |
@@ -413,4 +413,4 @@ The server **backs** the **Japanese-trainer study app** (now its own Vite→ngin
 - No analytics on what users review (only aggregate serve counts).
 - No real-time / push features.
 - No metrics endpoint beyond `/v1/health`. Structured JSON logs are the metrics surface.
-- No tests for the route handlers themselves — pure-function coverage + manual curl is the contract. Route tests become valuable when the API shape stabilizes after the userscript migration.
+- ~~No tests for the route handlers themselves.~~ **Partially superseded** — stabilized surfaces now have in-process `app.fetch()` route tests ([routes/integration.test.ts](src/routes/integration.test.ts) for vocab/health/indexMeta/admin/progress; [routes/songs.test.ts](src/routes/songs.test.ts) for the Songs surface incl. auth/privacy/conflict/cap/no-leak). Pure-function coverage + manual curl remain the contract for everything else; external services (IK/DDG/TTS/Claude) are still never hit in tests (the Claude client is injected via a factory seam — see `songAnalyze.test.ts`).
