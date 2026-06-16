@@ -186,11 +186,20 @@ async function fetchMinnaLesson(n) {
 function mnSection(title, count, bodyHtml, open) {
   return `<details class="mn-section"${open ? ' open' : ''}><summary>${title}${count != null ? ` <span class="mn-count">· ${count}</span>` : ''}</summary><div class="mn-sec-body">${bodyHtml}</div></details>`;
 }
-function renderMinnaGate() {
-  clearSpeakingBar();   // no speaking controls when signed out
+// Two gate states: signed-OUT shows a sign-in invite; signed-in-but-DENIED (a 401 from the
+// owner allowlist, MINNA_OWNER_EMAILS) shows a "not on your account" note WITHOUT a Sign-in
+// button — telling an already-signed-in user to "Sign in" was a misleading dead-end.
+function renderMinnaGate(noAccess = false) {
+  clearSpeakingBar();   // no speaking controls on the gate
   document.getElementById('mnHead').innerHTML = '';
   document.getElementById('mnBody').innerHTML = '';
   const g = document.getElementById('mnGate'); g.hidden = false;
+  if (noAccess) {
+    g.innerHTML = `<svg class="ic gate-ic" aria-hidden="true"><use href="#i-book"/></svg>
+      <h2>みんなの日本語</h2>
+      <p>This Minna no Nihongo workbook is private to its owner's account, so it isn't available here. Everything else in the app works normally.</p>`;
+    return;
+  }
   g.innerHTML = `<svg class="ic gate-ic" aria-hidden="true"><use href="#i-book"/></svg>
     <h2>みんなの日本語</h2>
     <p>Your private Minna no Nihongo workbook — vocabulary with native audio, grammar, example sentences and conversation, lesson by lesson. Sign in to open it.</p>
@@ -203,7 +212,7 @@ export async function renderMinna() {
   const head = document.getElementById('mnHead'), body = document.getElementById('mnBody');
   let lessons = [];
   try { const r = await api('/v1/minna/lessons'); lessons = (r && r.lessons) || []; }
-  catch (e) { if (e.status === 401) { renderMinnaGate(); return; } body.innerHTML = '<div class="mn-error">Could not reach the server.</div>'; return; }
+  catch (e) { if (e.status === 401) { renderMinnaGate(true); return; } body.innerHTML = '<div class="mn-error">Could not reach the server.</div>'; return; }
   if (!lessons.length) { head.innerHTML = ''; body.innerHTML = '<div class="mn-error">No lessons have been added yet.</div>'; return; }
   const cur = lessons.includes(state.minnaStore.lastLesson) ? state.minnaStore.lastLesson : lessons[0];
   state.minnaStore.lastLesson = cur;
