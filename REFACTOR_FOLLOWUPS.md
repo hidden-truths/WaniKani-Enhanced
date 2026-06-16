@@ -19,6 +19,7 @@ this doc owns the *how-to-execute*.
 | **D** schemas split ✅ | SRP/ISP; co-locate schemas by domain | LOW (barrel + typecheck-guarded, zero behavior change) | ~1–2h | 1st — **SHIPPED** |
 | **B** sync DRY + resilience + concurrency ✅ | DRY + DIP + disconnection/concurrency resilience + new tests | MED (hot path; backward-compat progress contract) | ~1–2 days | 2nd — **SHIPPED** |
 | **C** record-compare decomp ✅ | SRP on the DOM/audio glue | HIGH (no feature tests, stateful audio, many dead-ends) | ~1–2 days | 3rd — **SHIPPED (C0 + C1+)** |
+| **S** songs.js decomp | SRP on the 歌 tab's DOM/mode glue | HIGH (live mic + YouTube + shared mutable view-state; browser-verify each step) | ~1–2 days | after C — C0 **SHIPPED**, C1.0 **SHIPPED**, peels pending |
 
 > **Golden rule for all three:** zero behavior change unless explicitly designed (B's
 > concurrency + queue). Keep the existing test suites green at every step, add tests for new
@@ -324,6 +325,81 @@ Not part of this doc, but the next product threads (see [NEXT_STEPS.md](NEXT_STE
 [NEW_FEATURES.md](NEW_FEATURES.md)): the ⭐ **tokenization-granularity** NLP rework
 ([SENTENCE_STORE_PHASE4.md](SENTENCE_STORE_PHASE4.md) §8.0) and the **prod deploy** of the
 templates/annotations seed steps. Separate sessions.
+
+---
+
+## Workstream S — `features/songs.js` decomposition (study-app)
+
+> **C0 SHIPPED** (`b0b1b17`) — the inline pure logic (`readingMatch`, `lineReading`,
+> `parseSongLineKey`, `buildSongCard`/`songCardKey`) moved to the unit-tested
+> [study-app/src/core/songs.js](../study-app/src/core/songs.js) (+ `parseSongLineKey` hardened
+> against the `Number('')===0` footgun). **C1.0 SHIPPED** (`be89442`) — `features/songs.js` became
+> the `features/songs/` package (verbatim move to `songs/index.js` + a thin `export *` re-export so
+> `main.js`/`cloud.js` are unchanged; built bundle byte-identical). The **per-mode peels (C1.1+)
+> below are the remaining work** — the HIGH-risk, browser-verified-per-step part, same profile as
+> record-compare's C1+.
+
+### Honest framing (why it's gated on a browser)
+[study-app/src/features/songs/index.js](../study-app/src/features/songs/index.js) is ~790 lines of
+**irreducible DOM / YouTube / record-compare glue** over a set of mutable module-`let` view-state
+singletons (`view`/`openSong`/`mode`/`listen`/`add`/`library`/…). The pure logic is already in
+`core/songs.js` (C0). Decomposing the glue REQUIRES centralizing that state into a shared mutated-in-
+place object (the record-compare `state.js` pattern) and routing every reference through it — and a
+**missed reference is a runtime `ReferenceError` that `bun run build` + the pure-core tests can't
+catch** (esbuild treats a bare identifier as a global). So every step must be **browser-smoked** (and
+headless blocks `getUserMedia` + the YouTube iframe → it's a manual pass, exactly like record-compare).
+This is the lowest-leverage refactor on the board; do it only when the file's size is actively slowing
+work, one small commit at a time.
+
+### Target design (mirror `features/record-compare/`)
+```
+features/songs/
+  state.js     # the shared mutable `S` (loaded, library, libFilter, view, openSong, mode, grammarRef,
+               #   add, listen, recordingsLoaded) + consts (CACHE_KEY, LV_CLASS, SLOW_RATE,
+               #   SONGS_SCOPE) + body(). Mutated IN PLACE (the study-app state.js pattern).
+  library.js   # cache + fetch + grid: readCache/writeCache/loadLibrary/normalizeLine/loadSong/known
+               #   + libraryHtml/songCardHtml
+  add.js       # paste→analyze→review→save: addHtml/runAnalyze/saveSong
+  read.js      # Read viewer + player: readHtml/starBtnHtml/toggleFurigana + mountSongPlayer/
+               #   highlightAt/replayLine
+  listen.js    # dictation stepper: ensureListen/resetListenStep/listenHtml/listenCardHtml/
+               #   clozeBodyHtml/fullBodyHtml/listenAnswerHtml/renderListen/captureListenInputs/
+               #   gradeListen/playListenLine
+  shadow.js    # record-and-compare: shadowHtml/wireShadow/renderShadow/songNav/clearNavSpeaking/
+               #   playShadowSlice/onSongTakeSaved
+  mine.js      # vocab + grammar: mineHtml/grammarRefHtml/savePhrase/goBrowseGrammar +
+               #   activateSongWords/addOneWord/addAllNew
+  progress.js  # the `songs` blob: progressFor/songEntry/markShadowed/toggleStar/restoreMode/noteMode
+  view.js      # song shell + central dispatch: songHtml + renderSongs/render
+  handlers.js  # onClick/onKeydown/openById/flash
+  index.js     # barrel: export { initSongs, renderSongs, onSongsHidden } (the 3 names consumers use)
+```
+
+### Steps (one commit each, browser-smoke each)
+- **C1.1 — `state.js`.** Extract the singletons + consts + `body()` into `songs/state.js` as `S`;
+  convert `index.js`'s references to `S.*`. Audit: after, grep `index.js` for the unambiguous names
+  (`\b(openSong|libFilter|grammarRef|recordingsLoaded)\b` must be only `S.`-prefixed); the ambiguous
+  ones (`view`/`mode`/`add`/`listen`/`library`/`loaded` also occur in strings/identifiers) must be
+  read-and-converted by hand, not sed'd. Browser-smoke EVERY mode.
+- **C1.2..C1.9 — peel one module per commit** (listen → shadow → mine → library → add → read →
+  progress → view+handlers): move its functions to the sibling file, importing `S` + the cross-module
+  fns it calls; add its public names to `index.js`. Runtime-only import cycles are fine (the cloud⇄minna
+  + record-compare precedent). Browser-smoke the peeled surface after each.
+
+### Dead-ends to respect (study-app CLAUDE.md + SONGS.md)
+- The `#sgContent` stable wrapper (Listen/Shadow re-render WITHOUT remounting the YouTube iframe —
+  don't route them through `render()`). The `#sgBody._sgWired` **once-attached** delegated
+  onClick/keydown + `wireWordTaps` + `setOnTakeSaved(SONGS_SCOPE filter)` + the `visibilitychange`
+  guard (re-attaching stacks listeners). The navbar `#navExtra` speaking-bar lifecycle. `S` is mutated
+  IN PLACE, never reassigned (ES `let` can't be cross-module-mutated). Don't "tidy" any of these.
+
+### Verification (per commit)
+`cd study-app && bun run test && bun run build`, then the manual browser pass: Library filter; Add
+(paste→analyze→save — needs the API + an `ANTHROPIC_API_KEY`, else the 503 state); Read (furigana
+toggle, tap-a-word, line replay ▶, synced highlight); Listen (cloze⇄full, Check/Reveal/Next, the timed
+slice + Slower); Shadow (sign in, Practice-speaking, record a line, ▶you/ref/both/loop, ▶original, the
+shared day-streak); Mine (add word / add all, grammar ref, save-as-phrase). Headless blocks
+`getUserMedia` + the YouTube iframe, so this is a human pass — same as record-compare's live flow.
 
 ---
 
