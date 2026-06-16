@@ -316,6 +316,29 @@ describe('songs — re-save (replaceSongLines, owner-scoped upsert)', () => {
     });
 });
 
+describe('songs — deletePublicSong (curator cleanup, inverse of upsertPublicSong)', () => {
+    test('removes a starter + its line rows; false for unknown id or a private song (scoped to curator)', () => {
+        const a = db.createUser('a@x.com', 'h');
+        db.upsertPublicSong({ extId: 'song-pd', title: 'PD', lines: [{ text: 'やま', furigana: seg('やま'), en: 'mountain' }] });
+        db.createSong({ extId: 'usr-a-1', title: 'mine', createdBy: a.id, lines: [{ text: 'かわ', furigana: seg('かわ') }] });
+        expect(db.deletePublicSong('song-pd')).toBe(true);
+        expect(db.getSong({ extId: 'song-pd', viewer: null })).toBeNull();
+        expect(n("SELECT COUNT(*) AS n FROM sentence WHERE text = 'やま'")).toBe(0); // line row gone
+        expect(db.deletePublicSong('song-missing')).toBe(false); // unknown id
+        expect(db.deletePublicSong('usr-a-1')).toBe(false); // refuses a private (created_by != null) song
+        expect(db.getSong({ extId: 'usr-a-1', viewer: a.id })).not.toBeNull(); // the private song is untouched
+    });
+
+    test('a line shared across two starters (reuse-by-hash) is NOT orphaned when one is deleted', () => {
+        db.upsertPublicSong({ extId: 'song-x', title: 'X', lines: [{ text: 'ラララ', furigana: seg('ラララ') }] });
+        db.upsertPublicSong({ extId: 'song-y', title: 'Y', lines: [{ text: 'ラララ', furigana: seg('ラララ') }] }); // same row, 2 links
+        expect(n("SELECT COUNT(*) AS n FROM sentence WHERE text = 'ラララ'")).toBe(1);
+        db.deletePublicSong('song-x');
+        expect(db.getSong({ extId: 'song-y', viewer: null })!.lines[0]!.text).toBe('ラララ'); // survivor still resolves it
+        expect(n("SELECT COUNT(*) AS n FROM sentence WHERE text = 'ラララ'")).toBe(1); // not orphaned
+    });
+});
+
 describe('songs — public-line metadata on reuse (grammar replace + foreign English)', () => {
     test('re-seeding a public song with CHANGED grammar replaces it (no stale union)', () => {
         db.upsertPublicSong({ extId: 'song-g', title: 'G', lines: [{ text: 'やま', furigana: seg('やま'), en: 'mountain', grammar: ['te-iru'] }] });

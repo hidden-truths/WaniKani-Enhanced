@@ -385,6 +385,29 @@ export function deleteSong(input: { extId: string; viewer: number }): boolean {
     return true;
 }
 
+// Remove a PUBLIC starter song + its lines (curator cleanup — the inverse of upsertPublicSong, e.g.
+// dropping a retired starter). Scoped to created_by IS NULL so it can only ever touch curator rows,
+// never a user's private song. A line's sentence row is deleted ONLY if no other song still links it
+// (reuse-by-hash can share a repeated/identical line across starters — don't orphan the survivors).
+export function deletePublicSong(extId: string): boolean {
+    const db = getDb();
+    const row = db.query('SELECT id FROM song WHERE ext_id = ? AND created_by IS NULL').get(extId) as
+        | { id: number }
+        | null;
+    if (!row) return false;
+    db.transaction(() => {
+        const lineIds = (
+            db.query("SELECT DISTINCT sentence_id AS id FROM sentence_link WHERE owner_type = 'song' AND owner_id = ?").all(extId) as { id: number }[]
+        ).map((r) => r.id);
+        db.query("DELETE FROM sentence_link WHERE owner_type = 'song' AND owner_id = ?").run(extId);
+        const stillLinked = db.query('SELECT 1 FROM sentence_link WHERE sentence_id = ? LIMIT 1');
+        const del = db.query("DELETE FROM sentence WHERE id = ? AND source = 'song' AND created_by IS NULL");
+        for (const id of lineIds) if (!stillLinked.get(id)) del.run(id);
+        db.query('DELETE FROM song WHERE id = ?').run(row.id);
+    })();
+    return true;
+}
+
 // Seed/refresh a PUBLIC starter song (public=1, created_by=NULL, anon-readable) — the curator path
 // for the CC / public-domain starter set. Idempotent by song ext_id: re-running clears the song's
 // existing line links and re-attaches them (lines reuse-by-hash, so a re-seed doesn't grow rows).
