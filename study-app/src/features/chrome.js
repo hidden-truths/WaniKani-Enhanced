@@ -19,6 +19,7 @@ export function initTabs(handlers = {}) {
     document.querySelectorAll('.tab').forEach(x => x.classList.remove('active'));
     document.querySelectorAll('.panel').forEach(x => x.classList.remove('active'));
     t.classList.add('active');
+    t.scrollIntoView({ inline: 'nearest', block: 'nearest' });   // keep the active tab in view in the horizontally-scrollable strip
     document.getElementById('panel-' + next).classList.add('active');
     if (next === 'stats') handlers.stats && handlers.stats();
     if (next === 'browse') handlers.browse && handlers.browse();

@@ -81,9 +81,12 @@
   .nav-extra .speaking-bar.on{background:none;border:0}
   .nav-extra .mic-select{max-width:150px}
 
-  /* Tabs — the three top-level views. .active is driven by TAB NAV in JS. */
-  .tabs{display:flex;gap:4px;border-bottom:1px solid var(--line);max-width:1100px;margin:18px auto 0;padding:0 20px}
-  .tab{font-family:"SF Mono",ui-monospace,monospace;font-size:12px;letter-spacing:.08em;text-transform:uppercase;background:none;border:none;border-bottom:2px solid transparent;color:var(--muted);padding:10px 14px;cursor:pointer;margin-bottom:-1px}
+  /* Tabs — the top-level views. .active is driven by TAB NAV in JS. The strip scrolls
+     horizontally instead of wrapping: six tabs (three with long JP+EN labels) don't fit
+     one row at phone widths, and wrapping squeezed the JP labels into vertical stacks. */
+  .tabs{display:flex;flex-wrap:nowrap;gap:4px;border-bottom:1px solid var(--line);max-width:1100px;margin:18px auto 0;padding:0 20px;overflow-x:auto;overflow-y:hidden;scrollbar-width:none}
+  .tabs::-webkit-scrollbar{display:none}
+  .tab{font-family:"SF Mono",ui-monospace,monospace;font-size:12px;letter-spacing:.08em;text-transform:uppercase;background:none;border:none;border-bottom:2px solid transparent;color:var(--muted);padding:10px 14px;cursor:pointer;margin-bottom:-1px;white-space:nowrap;flex:0 0 auto}
   .tab.active{color:var(--ink);border-bottom-color:var(--godan)}
   .panel{display:none}      /* only one panel visible at a time */
   .panel.active{display:block}
@@ -158,6 +161,10 @@
   .chip{display:inline-flex;align-items:center;justify-content:center;gap:6px}
   .btn{display:inline-flex;align-items:center;justify-content:center;gap:8px}
   .tab{display:inline-flex;align-items:center;gap:7px}
+  /* English gloss on the JP-named tabs (独り言 Self-talk, 歌 Songs, みんなの日本語 Textbook):
+     a quiet, non-uppercased sub-label so each feature is legible to non-readers of JP. */
+  .tab-en{font-size:.82em;letter-spacing:.03em;text-transform:none;color:var(--muted);font-weight:400}
+  .tab.active .tab-en{color:var(--ink);opacity:.7}
   .topic-toggle .ic{font-size:13px}
   /* Filter rows: a fixed label column so every chip group starts at the same x,
      with chips in their own flex track so wrapped rows align under the first chip
