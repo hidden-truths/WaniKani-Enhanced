@@ -277,3 +277,39 @@ describe('songs — re-save (replaceSongLines, owner-scoped upsert)', () => {
         expect([s.title, s.lineCount]).toEqual(['keep', 2]); // pre-validation threw before the metadata UPDATE
     });
 });
+
+describe('songs — public-line metadata on reuse (grammar replace + foreign English)', () => {
+    test('re-seeding a public song with CHANGED grammar replaces it (no stale union)', () => {
+        db.upsertPublicSong({ extId: 'song-g', title: 'G', lines: [{ text: 'やま', furigana: seg('やま'), en: 'mountain', grammar: ['te-iru'] }] });
+        db.upsertPublicSong({ extId: 'song-g', title: 'G', lines: [{ text: 'やま', furigana: seg('やま'), en: 'mountain', grammar: ['passive'] }] });
+        const s = db.getSong({ extId: 'song-g', viewer: null })!;
+        expect(s.lines[0]!.tags.grammar).toEqual(['passive']); // replaced, not the ['passive','te-iru'] union
+        expect(n("SELECT COUNT(*) AS n FROM sentence_tag WHERE kind='grammar'")).toBe(1);
+    });
+
+    test('a repeated chorus line: grammar is last-writer-wins on the shared row, never unioned', () => {
+        db.upsertPublicSong({ extId: 'song-c', title: 'C', lines: [
+            { text: 'ラララ', furigana: seg('ラララ'), grammar: ['te-iru'] },
+            { text: 'ラララ', furigana: seg('ラララ'), grammar: ['passive'] },
+        ] });
+        const s = db.getSong({ extId: 'song-c', viewer: null })!;
+        // ONE shared row → both ordinals report the SAME (last) grammar, and exactly one tag row exists
+        expect(s.lines.map((l) => l.tags.grammar)).toEqual([['passive'], ['passive']]);
+        expect(n("SELECT COUNT(*) AS n FROM sentence_tag WHERE kind='grammar'")).toBe(1);
+    });
+
+    test('reusing a FOREIGN row with no English gains the curator English (line not left untranslated)', () => {
+        db.upsertPublicSentence({ extId: 'st-x', text: 'うみ', furigana: seg('うみ'), source: 'selftalk', link: { owner_type: 'selftalk' } });
+        db.upsertPublicSong({ extId: 'song-f', title: 'F', lines: [{ text: 'うみ', furigana: seg('うみ'), en: 'the sea' }] });
+        const s = db.getSong({ extId: 'song-f', viewer: null })!;
+        expect(s.lines[0]!.translations.en).toBe('the sea');
+        expect(n("SELECT COUNT(*) AS n FROM sentence WHERE text='うみ'")).toBe(1); // reused, not duplicated
+    });
+
+    test('reusing a FOREIGN row that already has English keeps it (documented dedup residual)', () => {
+        db.upsertPublicSentence({ extId: 'st-y', text: 'そら', furigana: seg('そら'), source: 'selftalk', translations: { en: 'sky (existing)' }, link: { owner_type: 'selftalk' } });
+        db.upsertPublicSong({ extId: 'song-f2', title: 'F2', lines: [{ text: 'そら', furigana: seg('そら'), en: 'the sky' }] });
+        const s = db.getSong({ extId: 'song-f2', viewer: null })!;
+        expect(s.lines[0]!.translations.en).toBe('sky (existing)'); // foreign English preserved (index forbids a song-specific dup)
+    });
+});

@@ -18,7 +18,7 @@ import { getDb } from '../connection.ts';
 import { ttsTextHash } from '../../services/tts.ts';
 import { assertFuriganaMatches, insertSentenceChildren, upsertPublicSentenceByHash } from './sentenceCore.ts';
 import { getSentences } from './sentences.ts';
-import { upsertAnnotation } from './annotations.ts';
+import { setGrammarTags, upsertAnnotation } from './annotations.ts';
 import type { AnnotationToken, AssembledSentence, FuriganaSeg } from './sentenceCore.ts';
 
 // UD coarse POS tags that count as a "content word" for the Mine vocab panel + coverage — the rest
@@ -125,10 +125,15 @@ function collectContentWords(seen: Map<string, SongWord>, tokens: AnnotationToke
 
 // Insert one lyric line (sentence row + translation + grammar tags + the song link + LLM tokens).
 // PRIVATE songs get a distinct row per line (ext_id `<songExtId>-L<ord>`; no hash-uniqueness on
-// private rows, so a repeated chorus line is fine). PUBLIC (starter) songs REUSE-BY-HASH — a
-// repeated line collapses to ONE public row carrying multiple song links (one per ordinal); grammar
-// + tokens are written only on our OWN ('song'-source / freshly-created) row so a shared foreign row
-// (e.g. a built-in example with identical text + its GiNZA annotation) is never clobbered.
+// private rows, so a repeated chorus line is fine — its own row, its own metadata). PUBLIC (starter)
+// songs REUSE-BY-HASH — a repeated line collapses to ONE public row carrying multiple song links (one
+// per ordinal). On a row WE own ('song'-source / freshly created) grammar + tokens are SET (replace,
+// last-writer-wins — matching the translation refresh in upsertPublicSentenceByHash) so a re-seed or
+// a repeated chorus line refreshes them in place instead of unioning STALE ids on. A FOREIGN reused
+// row (e.g. a built-in example with identical text + its GiNZA annotation) is never clobbered — we
+// only ADD the curator's English when it carries none (same Japanese → a valid translation, so the
+// line isn't left untranslated); a foreign row that already has English keeps it (the public
+// unique-by-hash index forbids a song-specific duplicate — an unavoidable consequence of dedup).
 function insertSongLine(
     songExtId: string,
     createdBy: number | null,
@@ -151,9 +156,17 @@ function insertSongLine(
             furigana: line.furigana ?? null,
             translations: en,
         });
-        // The song LINK always; grammar + tokens only on our own row (never a foreign reused one).
-        insertSentenceChildren(id, undefined, owned ? grammar : undefined, link);
-        if (owned && line.tokens?.length) upsertAnnotation({ sentenceId: id, tokens: line.tokens, bunsetsu: [], parser });
+        insertSentenceChildren(id, undefined, undefined, link); // the song LINK always
+        if (owned) {
+            // We own the row → SET grammar + tokens (replace, last-wins), so a re-seed / repeated
+            // chorus line refreshes rather than accumulates them (translation is already refreshed
+            // inside upsertPublicSentenceByHash; grammar + tokens follow the same semantics).
+            setGrammarTags(id, line.grammar ?? []);
+            if (line.tokens?.length) upsertAnnotation({ sentenceId: id, tokens: line.tokens, bunsetsu: [], parser });
+        } else if (en && !db.query('SELECT 1 FROM translation WHERE sentence_id = ? AND lang = ?').get(id, 'en')) {
+            // Foreign reused row with NO English yet → add the curator's (never touch its other content).
+            insertSentenceChildren(id, en, undefined, undefined);
+        }
         return;
     }
 
