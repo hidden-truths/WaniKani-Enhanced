@@ -15,18 +15,17 @@ a 12-song curated, fully-timed library + a one-command curation pipeline. Full s
 gotchas: **[study-app/SONGS_HANDOFF.md](study-app/SONGS_HANDOFF.md)** (read it before picking one of
 these up); design source of truth: [study-app/SONGS.md](study-app/SONGS.md). Ordered by value.
 
-### `songs` synced progress blob ⭐ (most shovel-ready; completes Shadow)
+### ~~`songs` synced progress blob ⭐~~ — DONE (2026-06-16)
 
-**What**: the 6th `createSyncedBlob` trio — app key `songs`, shape `{progress:{"<extId>":{starred,
-shadowed,lastMode,lastLine}}}`. Wire the existing `markShadowed()` stub in `features/songs.js` to record
-shadowed line ordinals; add per-line/per-song **star** toggles; render the library card **progress ring**
-from it (today the ring shows coverage %). **Why**: Shadow already accrues the signal but throws it away;
-this is the natural completion + the only missing piece of the per-song progress model in SONGS.md.
-**Complexity**: medium — ~6 shared sync files (`state.js`, `sync-bus.js`, `features/cloud.js`,
-`core/merge.js` + a `mergeSongs` test, `persistence/songs.js`); copy the Self-Talk blob
-(`SELFTALK_APP_KEY`/`selftalkBlob`) almost verbatim. Server enum widen: add `songs` to the
-`/v1/progress/{app}` allowlist in `routes/progress.ts`. **Gotcha**: content is server-authoritative —
-the blob holds PROGRESS ONLY (no line text/furigana/timing), same split as Self-Talk's `{practice}`.
+Shipped (completes Shadow): the 6th `createSyncedBlob` trio (app key `songs`,
+`{progress:{"<extId>":{starred,shadowed,lastMode}}}`, modeled on the Self-Talk blob). `markShadowed`
+records shadowed line ordinals → the library card **progress ring** is now shadowed-lines %
+(`songProgress`); per-line **stars** in Read; **last-mode resume** on reopen. Touched `state.js`,
+`sync-bus.js`, new `persistence/songs.js`, `core/merge.js` (`mergeSongs`), `features/cloud.js`
+(`songsBlob`), `features/songs.js`, + the server `/v1/progress/{app}` enum (added `songs`).
+`mergeSongs`/`songProgress` are pure + unit-tested; PROGRESS ONLY (content stays server-authoritative).
+The original shape's `lastLine` (scroll-to-line resume) was dropped — nothing read it. See
+[study-app/SONGS.md](study-app/SONGS.md) Phase 5 + [study-app/SONGS_HANDOFF.md](study-app/SONGS_HANDOFF.md).
 
 ### Edit / delete a song + a real Add title/artist field (MED validation findings)
 

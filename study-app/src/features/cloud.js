@@ -1,11 +1,11 @@
 // CLOUD ACCOUNTS + SYNC — the feature layer over cloud-core. The app works fully offline
 // against localStorage; signing in mirrors progress to the API so it follows the user across
-// devices. THREE debounced synced blobs (server-wins on login): 'verbs' (state.store),
-// 'custom-verbs', 'settings'; plus the Minna blob (handled in minna.js) and the durable
-// POST /v1/sessions log. The persistence layer schedules pushes via the sync bus, which this
-// module's initCloud() wires up.
+// devices. FIVE debounced synced blobs here (server-wins on login): 'verbs' (state.store),
+// 'custom-verbs', 'settings', 'selftalk', 'songs'; plus the Minna blob (handled in minna.js — six
+// in all) and the durable POST /v1/sessions log. The persistence layer schedules pushes via the
+// sync bus, which this module's initCloud() wires up.
 import { state } from '../state.js';
-import { escapeHtml, phraseToSentence, cardExamplesPayload, mergeProgress, mergeCustomVerbs, mergeSelftalkPractice } from '../core/index.js';
+import { escapeHtml, phraseToSentence, cardExamplesPayload, mergeProgress, mergeCustomVerbs, mergeSelftalkPractice, mergeSongs } from '../core/index.js';
 import { sync } from '../sync-bus.js';
 import { account, setAccount, api, setSyncStatus, serverReachable, setServerReachable } from './cloud-core.js';
 import { createSyncedBlob } from './synced-blob.js';
@@ -13,6 +13,7 @@ import * as queue from '../net/sync-queue.js';
 import { saveLocal } from '../persistence/store.js';
 import { loadCustom, saveCustomLocal } from '../persistence/custom.js';
 import { normalizeSelftalk, saveSelftalkLocal } from '../persistence/selftalk.js';
+import { normalizeSongs, saveSongsLocal } from '../persistence/songs.js';
 import { refreshPhrases as refreshSelftalkPhrases, renderSelftalk } from './selftalk.js';
 import { settings, setSettings, DEFAULT_SETTINGS, saveSettingsLocal, applyFurigana } from '../settings-store.js';
 import { cfg, updateDeckCount, updateDueBanner, paintPrefChips } from './deck.js';
@@ -22,14 +23,16 @@ import { rebuildData, renderCustomCount, refreshAfterVerbChange } from './custom
 import { registerSessionHooks } from './flashcard.js';
 import { pullMinnaCloud, migrateMinnaDupes, renderMinna, minnaBlob } from './minna.js';
 import { renderSettings } from './settings-page.js';
+import { renderSongs } from './songs.js';
 
 const APP_KEY = 'verbs';            // progress namespace on the server
 const CUSTOM_APP_KEY = 'custom-verbs'; // custom-card-definitions namespace
 const SETTINGS_APP_KEY = 'settings'; // synced preferences namespace
 const SELFTALK_APP_KEY = 'selftalk'; // 独り言 phrases + practice/streak namespace
+const SONGS_APP_KEY = 'songs';      // 歌/Songs per-song progress (starred/shadowed lines) namespace
 let authMode = 'login';             // 'login' | 'register' — current modal mode
 
-// The five synced "progress blobs" share one abstraction (createSyncedBlob): debounced push,
+// The six synced "progress blobs" share one abstraction (createSyncedBlob): debounced push,
 // saving/synced/offline status, the durable offline-queue fallback, server-wins-on-pull,
 // fresh-account seeding, and 409 optimistic concurrency. Each registers only its read/apply +
 // the side-effects unique to it. (Minna's blob lives in minna.js, beside its state.)
@@ -110,6 +113,27 @@ const selftalkBlob = createSyncedBlob({
   merge: mergeSelftalkPractice,   // E1: keep the longer streak / later day on a 409
 });
 
+// Songs (the 'songs' blob = state.songsStore): per-song PROGRESS ONLY (starred/shadowed line
+// ordinals + the last view cursor). Song CONTENT is server-authoritative (the sentence store), so
+// this blob never carries line text — same split as Self-Talk's {practice}-only blob. No migration.
+// afterPull re-renders the library so the progress ring reflects the pulled blob if the user is
+// sitting on the Songs tab when they sign in.
+const songsBlob = createSyncedBlob({
+  appKey: SONGS_APP_KEY,
+  read: () => state.songsStore,
+  apply: (data) => {
+    if (data && typeof data === 'object' && data.progress) {
+      state.songsStore = normalizeSongs(data);   // server-wins
+      saveSongsLocal();                           // mirror to localStorage WITHOUT re-pushing
+      return true;
+    }
+    return false;                                 // fall through to the fresh-account seed
+  },
+  afterPull: () => { if (document.getElementById('panel-songs').classList.contains('active')) renderSongs(); },
+  shouldSeed: () => Object.keys(state.songsStore.progress || {}).length > 0,   // new account — seed only if we have local progress
+  merge: mergeSongs,   // E1: union starred/shadowed sets on a 409 (local-wins lastMode) — never drop a shadowed line
+});
+
 // POST each legacy phrase to the sentence store as a private row; returns the ones that FAILED so
 // they stay in the blob for a later retry. POST is idempotent by ext_id (the usr-<uuid> ids), so a
 // replay (re-sign-in / another device) is a no-op. Empty input → no-op.
@@ -152,6 +176,7 @@ async function pullCloud() {
   await settingsBlob.pull();
   await pullMinnaCloud();
   await selftalkBlob.pull();
+  await songsBlob.pull();
   migrateMinnaDupes(); rebuildData();   // apply pulled Minna overlays + clean any dupes
   await migrateCardExamples();          // backfill custom-card examples → private store rows (one-time/device)
   refreshAllViews();
@@ -164,7 +189,7 @@ async function pullCloud() {
 async function flushQueue() {
   if (!account) return;
   const byQueueKey = {};
-  for (const b of [progressBlob, customBlob, settingsBlob, selftalkBlob, minnaBlob]) byQueueKey[b.queueKey] = b;
+  for (const b of [progressBlob, customBlob, settingsBlob, selftalkBlob, songsBlob, minnaBlob]) byQueueKey[b.queueKey] = b;
   await queue.flush(account.id, (key, r) => {
     const b = byQueueKey[key];
     if (b && r && typeof r.updatedAt === 'number') b._setLastUpdatedAt(r.updatedAt);
@@ -252,6 +277,7 @@ export function initCloud() {
   sync.custom = customBlob.schedule;
   sync.settings = settingsBlob.schedule;
   sync.selftalk = selftalkBlob.schedule;
+  sync.songs = songsBlob.schedule;
   registerSessionHooks({ logSession, maybeShowSignup });
   // Flush queued offline writes when connectivity returns. Flush only — no forced pull, which
   // would revert in-progress local edits not yet pushed.

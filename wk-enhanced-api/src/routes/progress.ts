@@ -5,7 +5,7 @@
 //   PUT /v1/progress/{app}   — replace the saved blob
 //
 // `{app}` namespaces progress per surface (verbs / custom-verbs / settings / minna /
-// selftalk — see the enum below). The stored blob is opaque to the server (z.any());
+// selftalk / songs — see the enum below). The stored blob is opaque to the server (z.any());
 // the client owns its shape.
 
 import { OpenAPIHono, createRoute, z } from '@hono/zod-openapi';
@@ -32,7 +32,8 @@ const AppParamSchema = z.object({
         // 'settings'     = the Settings-page preferences (synced separately)
         // 'minna'        = みんなの日本語 dashboard state (per-lesson notes / activation)
         // 'selftalk'     = 独り言 Self-Talk: user-authored phrases + the practice/streak signal
-        .enum(['verbs', 'custom-verbs', 'settings', 'minna', 'selftalk'])
+        // 'songs'        = 歌/Songs: per-song progress (starred/shadowed line ordinals + view cursor)
+        .enum(['verbs', 'custom-verbs', 'settings', 'minna', 'selftalk', 'songs'])
         .openapi({ param: { name: 'app', in: 'path' }, example: 'verbs' }),
 });
 

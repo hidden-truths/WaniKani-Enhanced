@@ -101,6 +101,18 @@ export function lineTimingState(lines) {
 // The record-compare itemKey for a song line (Shadow phase). Stable: "<ext_id>:<ordinal>".
 export function songLineKey(extId, ordinal) { return `${extId}:${ordinal}`; }
 
+// Library progress ring, from the `songs` blob: how much of a song you've SHADOWED. `entry` is the
+// blob's progress[extId] ({ starred, shadowed, … }) or undefined; `lineCount` is the song's line
+// total. Returns { shadowed, starred, pct } — shadowed/starred = distinct line counts, pct =
+// shadowed / lineCount (capped at 100 so a stale blob from a since-shortened song can't overflow).
+export function songProgress(entry, lineCount) {
+  const shadowed = entry && Array.isArray(entry.shadowed) ? entry.shadowed.length : 0;
+  const starred = entry && Array.isArray(entry.starred) ? entry.starred.length : 0;
+  const total = lineCount || 0;
+  const pct = total ? Math.min(100, Math.round((shadowed / total) * 100)) : 0;
+  return { shadowed, starred, pct };
+}
+
 // Distinct grammar points across a song's lines, each with the line count that uses it. `[{id,
 // count}]`, most-used first then by id. Drives the Mine grammar panel + the song-level count.
 export function songGrammar(lines) {

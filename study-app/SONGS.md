@@ -22,9 +22,11 @@ the layer-specific docs point back here.
   (content tab + the clip-marker timing pattern + vocab activation + the Source facet).
 
 > **Status (2026-06-16): All four modes shipped — Library + Add + Read + Mine + Listen + Shadow;
-> a 12-song curated library + offline line-timing (synced highlight + per-line replay) shipped.**
-> Remaining follow-ups: the in-app tap-to-sync editor (private BYO timing) + the `songs` synced
-> progress blob (stubbed in Shadow) + the inline Add-review editor. The
+> a 12-song curated library + offline line-timing (synced highlight + per-line replay); and the
+> `songs` synced progress blob — shadowed-line tracking → library progress ring, per-line stars, and
+> last-mode resume — shipped (completes Shadow).**
+> Remaining follow-ups: the in-app tap-to-sync editor (private BYO timing) + the inline Add-review
+> editor. The
 > current state, the shipped commits, the new mechanisms, the open gotchas, and the prioritized
 > what's-left live in **[SONGS_HANDOFF.md](SONGS_HANDOFF.md)** — read it first for a cold start. The
 > [Phase checklist](#phase-checklist--cross-session-tracker) at the bottom is the live tracker. The
@@ -172,16 +174,19 @@ sentence_link( owner_type='song', owner_id=song.ext_id, ordinal=<lineIndex>,
   like the Self-Talk phrase cache). Timing edits go back via `PUT /v1/songs/{id}/timing`.
 - **Per-song progress** is one synced blob, app key **`songs`** (the 6th sync trio,
   `createSyncedBlob`):
-  `{ progress: { "<songExtId>": { starred:[ord…], shadowed:[ord…], lastMode, lastLine } } }` —
+  `{ progress: { "<songExtId>": { starred:[ord…], shadowed:[ord…], lastMode } } }` —
   *progress only*, mirroring Self-Talk's `{practice}`-only blob (blobs = per-user signals; the store
-  = sentence text). Word **coverage %** is computed live against the deck, not stored.
+  = sentence text). `shadowed` drives the library **progress ring** (`songProgress` = shadowed/lines);
+  `starred` is per-line bookmarks (Read); `lastMode` is the resume cursor (`read`/`listen`/`shadow`/
+  `mine`). **`lastLine` (scroll-to-line resume) was dropped** — nothing reads it; the shape is the
+  three live fields. Word **coverage %** is computed live against the deck, not stored.
 - **Mined vocab** lives in `jpverbs_custom` as tagged cards (the vocab-activation path), **not** in
   the songs blob — exactly as みんなの日本語 vocab lives in `custom-verbs`, not in the `minna` blob.
 
 | Where | Key | Shape |
 |---|---|---|
 | server | `song` table + `sentence`/`sentence_link`/`sentence_tag`/`sentence_annotation` | the song + its lines |
-| localStorage + synced app `songs` | `jpverbs_songs` | `{ progress:{ "<ext_id>": {starred,shadowed,lastMode,lastLine} } }` |
+| localStorage + synced app `songs` | `jpverbs_songs` | `{ progress:{ "<ext_id>": {starred,shadowed,lastMode} } }` |
 | localStorage (read-through cache) | `jpverbs_songs_cache` | last-fetched library + open-song lines |
 | localStorage + synced app `custom-verbs` | `jpverbs_custom` | mined vocab as tagged cards (Source:〈song〉) |
 
@@ -510,9 +515,12 @@ as work lands. `[ ]` = todo, `[x]` = done, `[~]` = in progress.
   reference deferred.** Verified live (signed-in render, by-ear slice, mode transitions, no console
   errors); the mic-gated record/compare flow is the Self-Talk/Minna engine verbatim (a headless mic is
   `NotAllowedError`, so the capture step itself wasn't exercised live).
-- [~] **`songs` progress blob** — the shadowed-line signal is **stubbed** (`markShadowed`, a documented
-  no-op) pending the 6th `createSyncedBlob` trio (app key `songs`); the day-streak already gives the
-  "I practiced" signal and the library ring currently shows coverage %.
+- [x] **`songs` progress blob** (2026-06-16) — the 6th `createSyncedBlob` trio (app key `songs`,
+  `{progress:{"<extId>":{starred,shadowed,lastMode}}}`, modeled on the Self-Talk blob). `markShadowed`
+  now records shadowed ordinals → the library **progress ring** = shadowed-lines % (`songProgress`);
+  per-line **stars** in Read; **last-mode resume** on reopen. `mergeSongs` (union starred/shadowed
+  sets, local-wins `lastMode`) + `songProgress` are pure + unit-tested; the server `/v1/progress/{app}`
+  enum widened to accept `songs`. `lastLine` (scroll-to-line resume) deferred — nothing reads it.
 - [ ] **In-app tap-to-sync** for PRIVATE BYO songs (generalize the clip-marker; `PUT /v1/songs/{id}/timing`). (The curated public set is timed offline via `song-align/`.)
 
 ### Phase 6 — Docs + memory (rolling)

@@ -19,6 +19,9 @@ export const state = {
   minnaStore: { notes: {}, lastLesson: null, overlays: {} },
   // 独り言 Self-Talk: user-authored phrases + the practice/streak signal; replaced at boot.
   selftalkStore: { phrases: [], practice: { lastDay: null, streak: 0, doneToday: [] } },
+  // 歌 Songs: per-song progress (starred/shadowed line ordinals + last view cursor); replaced at boot.
+  // PROGRESS ONLY — song content is server-authoritative (the sentence store). Synced as app 'songs'.
+  songsStore: { progress: {} },
   // Built-in headword (jp) → rank, for Minna activation's dedup-onto-a-built-in path.
   BUILTIN_RANK_BY_JP: {},
   // Leveled vocab example sentences ({ [rank]: { N5:[jp,en], … } }), fetched from the server

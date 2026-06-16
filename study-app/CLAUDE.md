@@ -752,9 +752,14 @@ Component contracts you must preserve:
   timer** (a slice from a paused player no longer lets the `PLAYING→onTime` poll clobber its stop) and
   takes a `rate` for slow replay. **`setOnTakeSaved` is now MULTI-LISTENER** (Self-Talk + Songs both
   subscribe, each filtering by its scope — registering one can't clobber the other); a saved Shadow
-  take marks the shared day-streak (`applyPractice` on `state.selftalkStore.practice`). The `songs`
-  synced progress blob is still unbuilt — the shadowed-line signal is a documented `markShadowed` STUB.
-  **Full doc: [SONGS.md](SONGS.md).**
+  take marks the shared day-streak (`applyPractice` on `state.selftalkStore.practice`). **(8) The `songs`
+  synced progress blob SHIPPED** (2026-06-16, the 6th `createSyncedBlob`, app key `songs`,
+  `{progress:{"<extId>":{starred,shadowed,lastMode}}}`, modeled on the Self-Talk blob): `markShadowed`
+  is no longer a stub — it records shadowed ordinals, so the library card **ring is shadowed-lines %**
+  (`songProgress`, core/songs.js), per-line **stars** live in Read, and reopening a song **restores its
+  last mode**. PROGRESS ONLY — line text/furigana/timing stay server-authoritative (same split as
+  Self-Talk's `{practice}`); `mergeSongs` unions the starred/shadowed sets on a 409. **Full doc:
+  [SONGS.md](SONGS.md).**
 - **Record-and-compare (`record-compare.js`, the generic engine; Minna + Self-Talk glue feed it):
   the conversation has ONE whole-dialogue MP3, so
   per-line native compare slices it — it does NOT have per-line audio.** A line's native

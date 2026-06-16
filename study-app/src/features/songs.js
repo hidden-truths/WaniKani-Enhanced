@@ -14,7 +14,7 @@ import { api, account } from './cloud-core.js';
 import {
   escapeHtml, plainText, segmentsToRuby, segmentsToReading, overlayTokens,
   parseYouTubeId, songWords, knownHeadwords, coverage, bucketByJlpt, songLevel, songGrammar,
-  clozeBlanks, clozeLineParts, normKana, romajiToKana, songLineKey, applyPractice,
+  clozeBlanks, clozeLineParts, normKana, romajiToKana, songLineKey, songProgress, applyPractice,
 } from '../core/index.js';
 import { grammarLabel, grammarJlpt } from '../data/grammar.js';
 import { playItem, cycleMod } from './audio.js';
@@ -22,6 +22,7 @@ import { wireWordTaps } from './word-lookup.js';
 import { mountPlayer, destroyPlayer, playSlice } from './songs-youtube.js';
 import { loadCustom, saveCustom } from '../persistence/custom.js';
 import { saveSelftalk } from '../persistence/selftalk.js';
+import { loadSongs, saveSongs } from '../persistence/songs.js';
 import { rebuildData, refreshAfterVerbChange } from './custom-cards.js';
 // 録音 record-and-compare engine (the SAME rig Minna + Self-Talk feed) — Shadow reuses it verbatim
 // with the reserved SONGS_SCOPE + a per-line itemKey; reference = synth (TTS, decodable → full rig).
@@ -164,6 +165,7 @@ function libraryHtml() {
 
 function songCardHtml(s, k) {
   const cov = coverage(s.words, k);
+  const prog = songProgress(progressFor(s.id), s.lineCount);   // ring = shadowed-lines % (the practice signal); coverage stays in the bar below
   const lvl = songLevel(s.words, null);
   const lvlBadge = lvl ? `<span class="lv ${LV_CLASS[lvl] || ''}">${lvl}</span>` : '';
   const src = s.custom ? '<span class="src-badge src-mine">MINE</span>' : '<span class="src-badge src-starter">STARTER</span>';
@@ -174,7 +176,7 @@ function songCardHtml(s, k) {
     <button class="song-card${s.custom ? '' : ' starter'}" data-act="open" data-id="${escapeHtml(s.id)}" type="button">
       <span class="sc-row">
         <span><span class="sc-title jp">${escapeHtml(s.title)}</span><span class="sc-artist">${escapeHtml(s.artist || '')}</span></span>
-        <span class="ring" style="--p:${cov.pct}%"><span>${cov.pct}</span></span>
+        <span class="ring" style="--p:${prog.pct}%" title="${prog.shadowed} of ${s.lineCount} line${s.lineCount === 1 ? '' : 's'} shadowed"><span>${prog.pct}</span></span>
       </span>
       <span class="sc-cov"><span class="sc-cov-top"><span>you know</span><b>${cov.pct}%</b></span><span class="cov-bar"><i class="cov-fill" style="width:${cov.pct}%"></i></span></span>
       <span class="sc-meta">${lvlBadge}${src}${timed}</span>
@@ -269,8 +271,14 @@ function songHtml() {
   return head + player + `<div id="sgContent">${content}</div>`;
 }
 
+// A per-line star toggle (a bookmark; shown in Read). `.on` = starred. Wired by the 'star' onClick act.
+function starBtnHtml(ord, on) {
+  return `<button class="speak-btn sm sg-star${on ? ' on' : ''}" data-act="star" data-ord="${ord}" aria-pressed="${on}" aria-label="${on ? 'Unstar line' : 'Star line'}" title="Star this line"><svg class="ic" aria-hidden="true"><use href="#i-star"/></svg></button>`;
+}
+
 function readHtml() {
   const s = openSong;
+  const starred = new Set((progressFor(s.id) || {}).starred || []);   // per-line bookmarks (the `songs` blob)
   const ttoolbar = `<div class="ttoolbar">
     <button class="tgl on" data-act="furigana"><svg class="ic" aria-hidden="true"><use href="#i-eye"/></svg> Furigana</button>
     <button class="tgl" data-act="reveal-all"><svg class="ic" aria-hidden="true"><use href="#i-eyeoff"/></svg> Translations · on tap</button>
@@ -288,7 +296,7 @@ function readHtml() {
     return `${head}<div class="lyric${l.section ? ' stanza-start' : ''}" data-ord="${i}">
       <div class="l-top">
         <div class="l-jp jp">${jp}</div>
-        <div class="l-ctl"><button class="speak-btn sm" data-act="replay" data-ord="${i}" aria-label="Replay line" title="Replay line"><svg class="ic" aria-hidden="true"><use href="#i-play"/></svg></button></div>
+        <div class="l-ctl">${starBtnHtml(i, starred.has(i))}<button class="speak-btn sm" data-act="replay" data-ord="${i}" aria-label="Replay line" title="Replay line"><svg class="ic" aria-hidden="true"><use href="#i-play"/></svg></button></div>
       </div>
       ${gram ? `<div class="gram-row">${gram}</div>` : ''}
       ${enRow}
@@ -525,7 +533,7 @@ function playShadowSlice(ord) {
 }
 
 // A saved Shadow take → the shared "spoke today" day-streak (reuses Self-Talk's practice signal — one
-// speaking streak across both surfaces) + (deferred) the songs progress blob.
+// speaking streak across both surfaces) + the songs progress blob (the shadowed-line → ring signal).
 function onSongTakeSaved(itemKey) {
   if (state.selftalkStore) {
     state.selftalkStore.practice = applyPractice(state.selftalkStore.practice, itemKey, localDay());
@@ -533,11 +541,54 @@ function onSongTakeSaved(itemKey) {
   }
   markShadowed(itemKey);
 }
-// STUB — the `songs` synced progress blob is unbuilt (it'd be the 6th createSyncedBlob trio:
-// {progress:{"<extId>":{starred,shadowed,lastMode,lastLine}}}, app key 'songs'). When added, record
-// the shadowed (extId, ordinal) here so the library progress ring reflects shadowing. Deferred: the
-// day-streak above already gives the "I practiced" signal, and the ring currently shows coverage %.
-function markShadowed(/* itemKey */) { /* no-op until the songs blob lands */ }
+
+// ---- the `songs` progress blob (PROGRESS ONLY — song content is server-authoritative) ----
+// Read-only entry lookup for render (does NOT create a row); get-or-create for writes.
+function progressFor(extId) { return state.songsStore.progress[extId]; }
+function songEntry(extId) {
+  const p = state.songsStore.progress;
+  if (!p[extId]) p[extId] = { starred: [], shadowed: [] };
+  return p[extId];
+}
+// Record a shadowed line (feeds the library progress ring). itemKey = songLineKey(extId, ord) =
+// "<extId>:<ord>"; split on the LAST ':' (an extId is usr-<uuid>/song-<slug> — no colon — but be
+// safe). Idempotent per ordinal. The day-streak ("I practiced") is marked separately in onSongTakeSaved.
+function markShadowed(itemKey) {
+  const key = String(itemKey);
+  const i = key.lastIndexOf(':');
+  if (i < 0) return;
+  const extId = key.slice(0, i);
+  const ord = Number(key.slice(i + 1));
+  if (!extId || !Number.isInteger(ord)) return;
+  const entry = songEntry(extId);
+  if (entry.shadowed.includes(ord)) return;   // already recorded — no needless push
+  entry.shadowed.push(ord); entry.shadowed.sort((a, b) => a - b);
+  saveSongs();
+}
+// Toggle a per-line star (a bookmark; shown in Read). Targeted DOM update so the player stays mounted.
+function toggleStar(ord, btn) {
+  if (!openSong || !Number.isInteger(ord)) return;
+  const entry = songEntry(openSong.id);
+  const idx = entry.starred.indexOf(ord);
+  if (idx >= 0) entry.starred.splice(idx, 1);
+  else { entry.starred.push(ord); entry.starred.sort((a, b) => a - b); }
+  saveSongs();
+  const on = entry.starred.includes(ord);
+  if (btn) { btn.classList.toggle('on', on); btn.setAttribute('aria-pressed', String(on)); btn.setAttribute('aria-label', on ? 'Unstar line' : 'Star line'); }
+}
+// The mode to (re)open a song in: the saved view cursor (read/listen/shadow/mine), default Read.
+function restoreMode(extId) {
+  const m = (progressFor(extId) || {}).lastMode;
+  return (m === 'listen' || m === 'shadow' || m === 'mine') ? m : 'read';
+}
+// Persist the resume cursor on a mode switch (no-op if unchanged → no needless push).
+function noteMode(m) {
+  if (!openSong) return;
+  const entry = songEntry(openSong.id);
+  if (entry.lastMode === m) return;
+  entry.lastMode = m;
+  saveSongs();
+}
 
 function mineHtml() {
   const s = openSong;
@@ -626,13 +677,14 @@ async function onClick(e) {
   if (act === 'mode') {
     const next = t.dataset.mode === 'mine' ? 'mine' : t.dataset.mode;
     if (mode === 'shadow' && next !== 'shadow') exitSpeakingMode();   // release the mic when leaving Shadow
-    mode = next; if (mode !== 'grammar') grammarRef = null; render(); return;
+    mode = next; if (mode !== 'grammar') grammarRef = null; noteMode(mode); render(); return;
   }
   if (act === 'grammar') { grammarRef = t.dataset.g; mode = 'grammar'; render(); return; }
   if (act === 'reveal') { const en = t.dataset.en || ''; t.classList.remove('hidden'); t.removeAttribute('data-act'); t.innerHTML = escapeHtml(en); return; }
   if (act === 'reveal-all') { document.querySelectorAll('#sgBody .l-en.hidden').forEach((el) => { el.classList.remove('hidden'); el.innerHTML = escapeHtml(el.dataset.en || ''); el.removeAttribute('data-act'); }); t.classList.toggle('on'); return; }
   if (act === 'furigana') { toggleFurigana(t); return; }
   if (act === 'replay') { replayLine(Number(t.dataset.ord), t.closest('.speak-btn'), e); return; }
+  if (act === 'star') { toggleStar(Number(t.dataset.ord), t); return; }
   if (act === 'shadowslice') { playShadowSlice(Number(t.dataset.ord)); return; }
   // ---- Listen (dictation) stepper ----
   if (act === 'ldiff') { listen.diff = t.dataset.diff === 'full' ? 'full' : 'cloze'; resetListenStep(); renderListen(); return; }
@@ -660,7 +712,7 @@ async function openById(id) {
   try {
     const s = await loadSong(id);
     if (!s) return;
-    openSong = s; view = 'song'; mode = 'read'; grammarRef = null;
+    openSong = s; view = 'song'; mode = restoreMode(s.id); grammarRef = null;
     render();
   } catch (e) { /* offline / gone — stay on library */ }
 }
@@ -751,6 +803,7 @@ function flash(msg) {
 
 // ============================ lifecycle ============================
 export function initSongs() {
+  loadSongs();   // hydrate state.songsStore (the progress blob) from localStorage before any render
   const el = body(); if (!el) return;
   if (!el._sgWired) {
     el._sgWired = true;

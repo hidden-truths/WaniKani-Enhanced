@@ -20,9 +20,10 @@ read, listen to, shadow, and mine, with real synced timing.
   per-line replay, Listen-by-slice, and Shadow's "▶ original" work across the whole library.
 - **Adding a curated song is now ONE command** — `scripts/curate-song.ts` (analyze → write seed →
   time → seed). See "Adding a song" below.
-- **What's left:** ship to prod (re-seed + redeploy — it's all local right now); the `songs` synced
-  **progress blob** (Shadow stubs it); a few MED validation findings; and in-app **tap-to-sync** for
-  user-added (BYO) songs. Full slate in "What's left" + [NEW_FEATURES.md](../NEW_FEATURES.md) "歌/Songs".
+- **What's left:** ship to prod (re-seed + redeploy — it's all local right now); a few MED validation
+  findings; and in-app **tap-to-sync** for user-added (BYO) songs. (The `songs` synced **progress
+  blob** ⭐ — shadowed-line tracking + stars + the library ring — SHIPPED 2026-06-16; see below.) Full
+  slate in "What's left" + [NEW_FEATURES.md](../NEW_FEATURES.md) "歌/Songs".
 
 ⚠️ **Everything this session is committed to local `main` but NOT pushed and NOT deployed.** The prod
 DB has the OLD (untimed) library and the prod study-app container predates Listen/Shadow.
@@ -122,9 +123,12 @@ are in [src/features/songs.js](src/features/songs.js); pure logic in [src/core/s
 - **The day-streak is SHARED with Self-Talk.** A saved Shadow take calls `applyPractice` on
   `state.selftalkStore.practice` + `saveSelftalk()` ("one spoke-today signal" per SONGS.md). The song
   itemKey lands in Self-Talk's `doneToday` — harmless (no phrase id collision), by design.
-- **The `songs` progress blob is a STUB.** `markShadowed()` in [songs.js](src/features/songs.js) is a
-  documented no-op; the shadowed-line → progress-ring signal needs the real `createSyncedBlob` (see
-  "What's left" #2). The day-streak already gives the "I practiced" signal.
+- **The `songs` progress blob SHIPPED (2026-06-16) — `markShadowed()` is no longer a stub.** It records
+  shadowed ordinals into the `songs` blob (app key `songs`, the 6th `createSyncedBlob`, modeled on the
+  Self-Talk blob). The library **ring is now shadowed-lines %** (`songProgress`), per-line **stars** live
+  in Read, and reopening a song **restores its last mode**. PROGRESS ONLY — content stays
+  server-authoritative (don't put line text/timing in the blob). `lastLine` was dropped (nothing reads it).
+  The day-streak (shared with Self-Talk) is still marked separately in `onSongTakeSaved`.
 - **`curate-song.ts` strips token offsets** before writing the seed file — `seed-songs.ts` recomputes
   them via the SAME `offsetTokens`, so they can't drift. Don't write offsets into `data/songs/*.json`.
 - **yt-dlp now needs cookies + a JS runtime.** Bot check → `--cookies-from-browser <browser>` (Safari
@@ -158,11 +162,13 @@ first (full backlog incl. broader-app ideas: [NEW_FEATURES.md](../NEW_FEATURES.m
    against the **prod** DB so the committed timing lands. Droplet pattern:
    [../wk-enhanced-api/deploy/README.md](../wk-enhanced-api/deploy/README.md). Spot-check the
    English-heavy tracks (BANDAGE/CLASSIC/Blinded Eyes/FIESTA) where JA alignment drifts most.
-2. **`songs` synced progress blob** ⭐ *(most shovel-ready new feature; completes Shadow)* —
-   `createSyncedBlob`, app key `songs`, `{progress:{"<extId>":{starred,shadowed,lastMode,lastLine}}}`.
-   Wire `markShadowed()` (the stub) to record shadowed ordinals; add star toggles; show the library
-   **progress ring** from it. ~6 shared sync files (state.js, sync-bus.js, cloud.js, core/merge.js,
-   persistence/songs.js, + a `mergeSongs` test) — model on the Self-Talk blob (`SELFTALK_APP_KEY`).
+2. ~~**`songs` synced progress blob** ⭐~~ — **SHIPPED 2026-06-16 (completes Shadow).** The 6th
+   `createSyncedBlob` trio (app key `songs`, `{progress:{"<extId>":{starred,shadowed,lastMode}}}`,
+   modeled on the Self-Talk blob): `markShadowed` records shadowed ordinals → the library **progress
+   ring** = shadowed-lines % (`songProgress`); per-line **stars** in Read; **last-mode resume** on
+   reopen. Touched the ~6 shared sync files (state.js, sync-bus.js, cloud.js, core/merge.js +
+   `mergeSongs`, new persistence/songs.js) + the server `/v1/progress/{app}` enum (added `songs`).
+   `lastLine` from the original shape was dropped (no reader).
 3. **Edit/delete a song + a real Add title/artist field** *(MED validation findings)* — server has
    `PUT/DELETE /v1/songs/{id}`; the client wires no edit/rename/delete. The Add flow relies on oEmbed
    (returns the channel, not the artist) and saves "Untitled" on a miss with no fix-in-flow.

@@ -16,4 +16,5 @@ export const sync = {
   custom: () => {},     // the `custom-verbs` blob — saveCustom()
   settings: () => {},   // the `settings` blob — saveSettings()
   selftalk: () => {},   // the `selftalk` blob (state.selftalkStore) — saveSelftalk()
+  songs: () => {},      // the `songs` blob (state.songsStore) — saveSongs()
 };

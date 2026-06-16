@@ -861,6 +861,12 @@
 .l-en{font-size:13.5px;color:var(--muted);font-style:italic;margin-top:1px}
 .l-en.hidden{font-family:"SF Mono",ui-monospace,monospace;font-style:normal;font-size:12px;color:color-mix(in srgb,var(--muted) 80%,transparent);display:inline-flex;align-items:center;gap:5px;cursor:pointer}
 .l-ctl{display:flex;gap:6px;flex-shrink:0}
+/* Per-line star toggle (a bookmark; the `songs` progress blob). Off = muted outline; on = filled
+   gold (--noun is the amber design token, theme-aware). Reuses .speak-btn.sm sizing. */
+.sg-star{color:var(--muted)}
+.sg-star:hover{color:var(--noun)}
+.sg-star.on{color:var(--noun)}
+.sg-star.on .ic{fill:currentColor}
 .gram-row{margin-top:6px;display:flex;flex-wrap:wrap;gap:6px;align-items:center}
 .ex-gram-chip[data-act]{cursor:pointer}
 

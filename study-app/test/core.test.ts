@@ -26,8 +26,8 @@ import {
   hashStr, groupByTopic, topicGrid, groupByThought, realizeTemplate, cyclePick, comboRole, grammarTokens, todaysSet, emptyPractice, dayDiff, applyPractice,
   practiceStreak, donePhraseIds, sentenceToPhrase, phraseToSentence,
   sentenceGrammar, sentenceTokens, sentenceEn,
-  mergeProgress, mergeCustomVerbs, mergeMinna, mergeSelftalkPractice,
-  parseYouTubeId, songWords, knownHeadwords, coverage, bucketByJlpt, wordStatus, songLevel, lineTimingState, songLineKey, songGrammar, JLPT_ORDER,
+  mergeProgress, mergeCustomVerbs, mergeMinna, mergeSelftalkPractice, mergeSongs,
+  parseYouTubeId, songWords, knownHeadwords, coverage, bucketByJlpt, wordStatus, songLevel, lineTimingState, songLineKey, songProgress, songGrammar, JLPT_ORDER,
   clozeBlanks, clozeLineParts,
 } from '../src/core/index.js';
 import { SELFTALK, SELFTALK_TAXONOMY, SELFTALK_TOPICS, SELFTALK_TOPIC_IDS, SELFTALK_GRAMMAR } from '../src/data/selftalk.js';
@@ -1457,6 +1457,17 @@ test('mergeSelftalkPractice: max streak, later day, union doneToday only on the 
   expect(mergeSelftalkPractice(null, null)).toEqual({ practice: { lastDay: null, streak: 0, doneToday: [] } });
 });
 
+test('mergeSongs: union starred/shadowed sets per song (sorted), local-wins lastMode, tolerant of null', () => {
+  const m = mergeSongs(
+    { progress: { 'song-a': { starred: [2, 0], shadowed: [1], lastMode: 'shadow' }, 'song-b': { starred: [], shadowed: [0] } } },
+    { progress: { 'song-a': { starred: [0, 5], shadowed: [1, 3], lastMode: 'read' }, 'song-c': { starred: [9], shadowed: [] } } },
+  );
+  expect(m.progress['song-a']).toEqual({ starred: [0, 2, 5], shadowed: [1, 3], lastMode: 'shadow' }); // union sorted; local lastMode wins
+  expect(m.progress['song-b']).toEqual({ starred: [], shadowed: [0] });   // local-only song survives (no lastMode key)
+  expect(m.progress['song-c']).toEqual({ starred: [9], shadowed: [] });   // server-only song survives
+  expect(mergeSongs(null, null)).toEqual({ progress: {} });
+});
+
 // ---- 歌 / Songs (core/songs.js) ----
 
 // A NORMALIZED song line (features/songs.js flattens the server's AssembledSentence into this shape
@@ -1532,6 +1543,13 @@ test('songLevel: fallback wins; else the hardest word level; songLineKey; lineTi
   expect(lineTimingState([sgLine('a', { clip: 0 }), sgLine('b', { clip: 8000 }), sgLine('c')])).toEqual({ timed: 2, total: 3 });
   expect(songGrammar([sgLine('a', { grammar: ['tai', 'nagara'] }), sgLine('b', { grammar: ['tai'] })]))
     .toEqual([{ id: 'tai', count: 2 }, { id: 'nagara', count: 1 }]); // most-used first
+});
+
+test('songProgress: ring % = shadowed lines / lineCount; capped at 100; tolerant of a missing entry', () => {
+  expect(songProgress({ shadowed: [0, 1, 2], starred: [1] }, 10)).toEqual({ shadowed: 3, starred: 1, pct: 30 });
+  expect(songProgress(undefined, 10)).toEqual({ shadowed: 0, starred: 0, pct: 0 });   // no progress recorded yet
+  expect(songProgress({ shadowed: [0, 1] }, 0)).toEqual({ shadowed: 2, starred: 0, pct: 0 });   // unknown line count → 0
+  expect(songProgress({ shadowed: [0, 1, 2] }, 2).pct).toBe(100);   // stale blob (song since shortened) → capped
 });
 
 // ---- Listen (dictation): clozeBlanks + clozeLineParts ----

@@ -97,3 +97,21 @@ export function mergeSelftalkPractice(local, server) {
   else doneToday = ((lastDay === a.lastDay ? a.doneToday : b.doneToday) || []).slice();
   return { practice: { lastDay, streak: Math.max(a.streak || 0, b.streak || 0), doneToday } };
 }
+
+// songs: { progress:{ "<extId>":{ starred:[ord…], shadowed:[ord…], lastMode? } } }
+// starred/shadowed are monotonic "I did this line" SETS — union them (no inflation risk: a repeated
+// reconcile re-unions the same ordinals idempotently, unlike a count). lastMode is a view cursor →
+// keep this device's (local wins), matching mergeMinna's lastLesson. Sorted for deterministic output.
+export function mergeSongs(local, server) {
+  const a = (local && local.progress) || {}, b = (server && server.progress) || {};
+  const progress = {};
+  for (const id of union(a, b)) {
+    const x = a[id] || {}, y = b[id] || {};
+    const ords = (p, q) => [...new Set([...(p || []), ...(q || [])])].sort((m, n) => m - n);
+    const entry = { starred: ords(x.starred, y.starred), shadowed: ords(x.shadowed, y.shadowed) };
+    const lastMode = x.lastMode != null ? x.lastMode : y.lastMode;   // local cursor wins
+    if (lastMode != null) entry.lastMode = lastMode;
+    progress[id] = entry;
+  }
+  return { progress };
+}

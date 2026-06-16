@@ -319,4 +319,12 @@ describe('PUT /v1/progress/{app} — optimistic concurrency (B4)', () => {
         const res = await putProgress('', 'verbs', { data: { v: 1 } });
         expect(res.status).toBe(401);
     });
+
+    test('the songs app namespace is accepted (enum widen)', async () => {
+        signIn('cc3@b.com', 'cc3tok');
+        const res = await putProgress('cc3tok', 'songs', {
+            data: { progress: { 'song-x': { starred: [1], shadowed: [0, 2], lastMode: 'shadow' } } },
+        });
+        expect(res.status).toBe(200);
+    });
 });
