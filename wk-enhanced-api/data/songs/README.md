@@ -41,3 +41,37 @@ not yet filled) and is skipped by the seed until its lines are added.
 
 Re-seeding is idempotent (by `extId`). Run after editing: `bun scripts/seed-songs.ts` (from
 `wk-enhanced-api/`). Curation status is tracked in [study-app/SONGS.md](../../../study-app/SONGS.md).
+
+## Adding a song — one command
+
+[`scripts/curate-song.ts`](../../scripts/curate-song.ts) runs the whole pipeline end to end:
+**analyze → write this seed file → time → seed.** You supply the lyric TEXT (a file) + the metadata;
+it annotates — it never sources or scrapes lyrics.
+
+```bash
+# from wk-enhanced-api/ (so .env loads: ANTHROPIC_API_KEY for analyze, DATABASE_FILE for seed)
+bun scripts/curate-song.ts \
+  --slug betelgeuse-yuuri --title ベテルギウス --artist 優里 \
+  --url 'https://www.youtube.com/watch?v=cbqvxDTLMps' \
+  --lyrics ~/Downloads/song-lyrics/betelgeuse-yuuri.txt \
+  --browser safari            # cookies for the yt-dlp timing step (see ../../../song-align/README.md)
+```
+
+What it does, in order:
+1. **Analyze** the lyrics with the Claude pass (`services/songAnalyze.ts`) → per-line furigana /
+   English / grammar / JLPT tokens. **Flagged lines are printed — proofread them** in the written file
+   (the CLI analog of the Add-flow review step). Needs `ANTHROPIC_API_KEY`.
+2. **Write** `data/songs/<slug>.json` in the format above (the pure, unit-tested `analyzedToSeedFile`).
+3. **Time** it — shells `song-align/align.py --song <slug>` → `data/song-timing/<slug>.json` (needs the
+   song-align venv + YouTube cookies; pass `--browser` / it degrades to UNTIMED on failure).
+4. **Seed** — `bun scripts/seed-songs.ts` merges lyrics + timing into the DB.
+
+Then spot-check the song in the app and **commit** `data/songs/<slug>.json` + `data/song-timing/<slug>.json`.
+
+Useful flags: `--dry-run` (validate + print the plan, no writes) · `--no-align` / `--no-seed` (skip a
+step) · `--no-vocals` (faster, rougher alignment) · `--force` (re-analyze + overwrite an existing seed
+file; otherwise an existing one is reused so you can re-time/re-seed without paying for analysis again).
+
+Notes: stanza `section` headings aren't auto-detected — hand-add them to the seed file if you want
+Verse/Chorus spacing (optional). To curate straight against **prod**, point `DATABASE_FILE` at the prod
+sqlite for the seed step (same pattern as the other seed scripts).

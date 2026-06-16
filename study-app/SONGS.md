@@ -338,8 +338,11 @@ JLPT + explanation from the generated catalog (`grammarLabel`/`grammarJlpt`, [da
   original "genuinely CC / public-domain / Vocaloid only" framing. **The lyric TEXT is maintainer-supplied**
   (pasted in, never scraped); the furigana / English / grammar / per-word-JLPT analysis + per-line timing
   are the transformative layer. **A contributor annotates maintainer-provided text only — it must never
-  source, scrape, or reproduce lyrics itself.** The seed mechanism + the `song-align/` timing pipeline are
-  the curation toolchain. Full state + provenance: [SONGS_HANDOFF.md](SONGS_HANDOFF.md).
+  source, scrape, or reproduce lyrics itself.** The curation toolchain is a **single command** —
+  [`wk-enhanced-api/scripts/curate-song.ts`](../wk-enhanced-api/scripts/curate-song.ts) chains
+  analyze → write `data/songs/<slug>.json` → `song-align/` timing → `seed-songs.ts` (docs:
+  [data/songs/README.md](../wk-enhanced-api/data/songs/README.md) "Adding a song — one command"). Full
+  state + provenance: [SONGS_HANDOFF.md](SONGS_HANDOFF.md).
 - **BYO songs = PRIVATE rows; authoring requires an account.** Paste/analyze/save gate on `account`
   (anon sees a sign-in nudge); your lyrics are private store rows (`created_by`, `visibility=private`),
   never public. This is the same posture as Self-Talk authoring + custom-card examples.
@@ -413,6 +416,8 @@ JLPT + explanation from the generated catalog (`grammarLabel`/`grammarJlpt`, [da
 | Routes + schemas | [../wk-enhanced-api/src/routes/songs.ts](../wk-enhanced-api/src/routes/songs.ts), [../wk-enhanced-api/src/schemas/songs.ts](../wk-enhanced-api/src/schemas/songs.ts) |
 | The LLM analysis pass | [../wk-enhanced-api/src/services/songAnalyze.ts](../wk-enhanced-api/src/services/songAnalyze.ts) |
 | Starter-set seed mechanism | [../wk-enhanced-api/scripts/seed-songs.ts](../wk-enhanced-api/scripts/seed-songs.ts) |
+| One-command curation (analyze→write→time→seed) | [../wk-enhanced-api/scripts/curate-song.ts](../wk-enhanced-api/scripts/curate-song.ts) (+ `.test.ts`) |
+| Offline forced-alignment timing | [../song-align/align.py](../song-align/align.py) |
 
 ---
 

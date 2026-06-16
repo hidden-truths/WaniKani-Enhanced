@@ -160,30 +160,46 @@ fixed by `cf63d35`). Remaining, by severity:
 
 ## What's left (prioritized)
 
-1. ✅ **Library fully timed (2026-06-16)** — all 12 `song-align/` sidecars produced (`large-v3` +
-   vocals), committed, and seeded into the **local** DB (every song `N/N` timed). yt-dlp needed two
-   fixes to get there: cookies for the bot check (`--cookies-from-browser`) + the player-JS-challenge
-   solver (`yt-dlp-ejs` + `--js-runtimes node`) — see [`song-align/README.md`](../song-align/README.md).
-   **Remaining: re-seed PROD** — run `bun scripts/seed-songs.ts` against the prod DB (droplet pattern)
-   so the live library picks up the committed sidecars; spot-check the English-heavy tracks (BANDAGE,
-   CLASSIC, Blinded Eyes, FIESTA) where JA-model alignment drifts most.
-2. ✅ **Listen mode (dictation)** — SHIPPED. Per-line stepper, cloze ⇄ full-line (`clozeBlanks` +
-   `clozeLineParts` in `core/songs.js`), advisory grading (`normKana`/`romajiToKana`), Reveal self-check,
-   per-session count, timed-slice/synth audio, masked video. See SONGS.md Phase 4.
-3. ✅ **Shadow mode (record & compare)** — SHIPPED. Record-compare engine reused verbatim
-   (`SONGS_SCOPE = 80000`, `songLineKey` itemKey, `'songs'` audio context = synth-TTS full rig) + a
-   per-line by-ear **YouTube-slice** ("▶ original", timed lines only). `setOnTakeSaved` is now
-   multi-listener (Self-Talk + Songs, scope-filtered); a saved take marks the shared day-streak. The
-   shadowed-line → `songs` blob signal is STUBBED (`markShadowed`). See SONGS.md Phase 5.
-4. **In-app tap-to-sync editor** *(for private BYO songs)* — play the video, tap as each line begins →
-   `PUT /v1/songs/{id}/timing`. Generalizes the Minna clip-marker. (Curated set is timed offline; this is
-   the BYO path.)
-5. **`songs` synced progress blob** — `createSyncedBlob`, app key `songs`, `{progress:{"<extId>":
-   {starred,shadowed,lastMode,lastLine}}}`. Shadow STUBS the shadowed-line signal (`markShadowed`); build
-   the blob to light up the library progress ring + persist stars.
-6. **Inline Add-review editor** — edit flagged lines before save (the flags guide a re-analyze for now).
-7. **Doc drift cleanup** (below).
-8. **The open validation findings** above (edit/delete UI, etc.).
+**✅ Shipped this round:** all 12 songs timed (local DB), the **Listen** + **Shadow** modes (all four
+modes now live), and a **one-command curation pipeline** (below). Per-mode detail is in the
+[SONGS.md Phase checklist](SONGS.md).
+
+### Adding a curated song — the standing process (one command)
+
+```bash
+# from wk-enhanced-api/  (.env supplies ANTHROPIC_API_KEY for analyze + DATABASE_FILE for seed)
+bun scripts/curate-song.ts --slug <slug> --title <…> --artist <…> \
+    --url <youtube-url> --lyrics <path-to-lyrics.txt> --browser safari
+```
+
+`scripts/curate-song.ts` runs **analyze → write `data/songs/<slug>.json` → time (`song-align`) →
+seed** in one go. You supply the lyric TEXT (a file) + metadata; it annotates — it never sources or
+scrapes lyrics. Flagged lines print for a proofread; `--dry-run` previews the plan, `--force`
+re-analyzes, `--no-align`/`--no-seed` skip a step. Then spot-check the song in the app and **commit**
+`data/songs/<slug>.json` + `data/song-timing/<slug>.json`. Full doc + the per-browser cookie/JS-runtime
+setup: [`wk-enhanced-api/data/songs/README.md`](../wk-enhanced-api/data/songs/README.md) "Adding a song
+— one command" + [`song-align/README.md`](../song-align/README.md). The pure analyze→seed mapping is
+unit-tested (`scripts/curate-song.test.ts`).
+
+### Remaining work, highest-leverage first
+
+1. **Ship to prod** — everything above is local-only. Push `main`, rebuild/redeploy the **study-app
+   container** (Listen/Shadow are client changes), and run `bun scripts/seed-songs.ts` against the
+   **prod** DB (droplet pattern in [wk-enhanced-api/deploy/README.md](../wk-enhanced-api/deploy/README.md))
+   so the committed timing sidecars go live. Verify a timed song on `wkenhanced.dev`; spot-check the
+   English-heavy tracks (BANDAGE/CLASSIC/Blinded Eyes/FIESTA) where JA alignment drifts most.
+2. **`songs` synced progress blob** — `createSyncedBlob`, app key `songs`, `{progress:{"<extId>":
+   {starred,shadowed,lastMode,lastLine}}}`. Shadow STUBS the shadowed-line signal (`markShadowed`);
+   build the blob to light up the library progress ring + persist stars/last-mode. ~6 shared sync files,
+   modeled on the Self-Talk blob.
+3. **Open validation findings (MED)** — no in-app edit/delete-song UI; the Add flow has no title/artist
+   field (oEmbed returns the channel, saves "Untitled" on a miss); analyze caps at 120 lines but persist
+   allows 400 (silent truncation of long songs).
+4. **In-app tap-to-sync editor** *(private BYO songs)* — play the video, tap each line's start →
+   `PUT /v1/songs/{id}/timing`. The curated set is timed offline (curate-song); this is the only timing
+   path for a user's own added song.
+5. **Inline Add-review editor** — edit flagged lines before save (today the flags guide a re-analyze).
+6. **Doc drift cleanup** (below).
 
 ---
 
