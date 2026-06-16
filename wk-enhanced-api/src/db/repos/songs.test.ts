@@ -387,3 +387,65 @@ describe('songs — public-line metadata on reuse (grammar replace + foreign Eng
         expect(s.lines[0]!.translations.en).toBe('sky (existing)'); // foreign English preserved (index forbids a song-specific dup)
     });
 });
+
+// saveSong is the single transactional create-or-replace entry point (POST /v1/songs). The route maps
+// its tag 1:1 to a status, so these pin the decision logic exhaustively. The race-FREEDOM (concurrent
+// POSTs of the same id / racing the cap) is structural — BEGIN IMMEDIATE + the S1 busy_timeout
+// serialize writers — and isn't reproducible with bun:sqlite's synchronous API in one process; what's
+// tested here is that every outcome is a clean tag and that no outcome leaves a partial write.
+describe('songs — saveSong (transactional create-or-replace decision)', () => {
+    const bodyOf = (extId: string, viewer: number, over: Record<string, unknown> = {}) => ({
+        extId, viewer, title: 'T', lines: [{ text: 'やま', furigana: seg('やま'), en: 'mountain' }], ...over,
+    });
+
+    test("a fresh id → 'created' and the song is persisted", () => {
+        const a = db.createUser('a@x.com', 'h');
+        const r = db.saveSong(bodyOf('usr-a-1', a.id, { title: 'first' }));
+        expect(r.kind).toBe('created');
+        expect(r.kind === 'created' && r.song.title).toBe('first');
+        expect(db.countUserSongs(a.id)).toBe(1);
+    });
+
+    test("re-saving your OWN id → 'replaced' in place (metadata + lines), not a second row", () => {
+        const a = db.createUser('a@x.com', 'h');
+        db.saveSong(bodyOf('usr-a-1', a.id, { title: 'first' }));
+        const r = db.saveSong(bodyOf('usr-a-1', a.id, { title: 'second', lines: [{ text: 'かわ', furigana: seg('かわ'), en: 'river' }] }));
+        expect(r.kind).toBe('replaced');
+        expect(r.kind === 'replaced' && r.song.lines.map((l) => l.text)).toEqual(['かわ']);
+        expect(db.countUserSongs(a.id)).toBe(1); // upsert, not a second insert
+    });
+
+    test("a PUBLIC starter id → 'reserved' and the starter is untouched", () => {
+        const a = db.createUser('a@x.com', 'h');
+        db.upsertPublicSong({ extId: 'song-pd', title: 'PD', lines: [{ text: 'うみ', furigana: seg('うみ') }] });
+        const r = db.saveSong(bodyOf('song-pd', a.id, { title: 'HIJACK' }));
+        expect(r.kind).toBe('reserved');
+        expect(db.getSong({ extId: 'song-pd', viewer: null })!.title).toBe('PD'); // not overwritten
+    });
+
+    test("another account's PRIVATE id → 'idTaken' and their song is untouched", () => {
+        const a = db.createUser('a@x.com', 'h');
+        const b = db.createUser('b@x.com', 'h');
+        db.saveSong(bodyOf('usr-b-1', b.id, { title: "b's" }));
+        const r = db.saveSong(bodyOf('usr-b-1', a.id, { title: 'HIJACK' }));
+        expect(r.kind).toBe('idTaken');
+        expect(db.getSong({ extId: 'usr-b-1', viewer: b.id })!.title).toBe("b's"); // not overwritten
+        expect(db.getSong({ extId: 'usr-b-1', viewer: a.id })).toBeNull(); // still not visible to a
+    });
+
+    test("at the per-account cap → 'quota' (enforced inside the txn) with the limit, no write", () => {
+        const a = db.createUser('a@x.com', 'h');
+        for (let i = 0; i < db.MAX_USER_SONGS; i++) db.saveSong(bodyOf(`usr-a-${i}`, a.id));
+        const r = db.saveSong(bodyOf('usr-a-over', a.id));
+        expect(r).toEqual({ kind: 'quota', limit: db.MAX_USER_SONGS });
+        expect(db.countUserSongs(a.id)).toBe(db.MAX_USER_SONGS); // the over-cap one was not written
+    });
+
+    test("a furigana mismatch → 'invalid' (not a throw), with NO partial write", () => {
+        const a = db.createUser('a@x.com', 'h');
+        const r = db.saveSong(bodyOf('usr-a-bad', a.id, { lines: [{ text: 'ほんとう', furigana: [{ t: 'ちがう' }] }] }));
+        expect(r.kind).toBe('invalid');
+        expect(r.kind === 'invalid' && r.detail.length).toBeGreaterThan(0); // detail captured (logged, not echoed)
+        expect(n("SELECT COUNT(*) AS n FROM song")).toBe(0); // validated before the txn — nothing written
+    });
+});

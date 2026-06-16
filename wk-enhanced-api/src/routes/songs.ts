@@ -65,7 +65,6 @@ export const songsRouter = new OpenAPIHono({ defaultHook: zodHook });
 // Measured in real UTF-8 BYTES: the Zod schema bounds the line COUNT + per-field lengths but NOT the
 // furigana/token array lengths, so this is the guard against an array-bomb within those bounds.
 const MAX_SONG_BYTES = 512_000;
-const MAX_USER_SONGS = 200;
 
 const unauthorized = (c: any) => httpUnauthorized(c, 'Log in to add or edit songs.');
 const notFound = (c: any) => httpNotFound(c, 'No song with that id is yours.');
@@ -217,49 +216,40 @@ songsRouter.openapi(createRouteDef, (c) => {
     const oversize = tooLarge(c, body, MAX_SONG_BYTES);
     if (oversize) return oversize;
 
-    // Re-POST of the caller's OWN song → upsert: replace its metadata + lines in place (re-save an
-    // edited analysis). A visible song with that id that is NOT theirs is a public starter
-    // (custom=false) → refuse to let them claim it. Another account's PRIVATE id isn't visible here,
-    // so it falls through to createSong, whose UNIQUE(ext_id) maps to 409 below.
-    const existing = db.getSong({ extId: body.id, viewer: user.id });
-    if (existing) {
-        if (!existing.custom) {
+    // The repo owns the whole create-or-replace decision in ONE transaction (race-free — see
+    // db.saveSong); the route just maps its tagged result 1:1 to a status. No SQLite-error
+    // string-matching, no catch-all that could leak an internal message.
+    const result = db.saveSong({
+        extId: body.id,
+        viewer: user.id,
+        title: body.title,
+        artist: body.artist ?? null,
+        youtubeId: body.youtubeId ?? null,
+        lines: body.lines,
+    });
+    switch (result.kind) {
+        case 'created':
+            log.info('song.create', { userId: user.id, extId: body.id, lines: body.lines.length });
+            return c.json({ song: result.song }, 200);
+        case 'replaced':
+            log.info('song.resave', { userId: user.id, extId: body.id, lines: body.lines.length });
+            return c.json({ song: result.song }, 200);
+        case 'reserved':
             return c.json({ code: 'conflict' as const, error: 'id already taken', detail: 'That song id is reserved.' }, 409);
-        }
-        const song = db.replaceSongLines({
-            extId: body.id,
-            viewer: user.id,
-            title: body.title,
-            artist: body.artist ?? null,
-            youtubeId: body.youtubeId ?? null,
-            lines: body.lines,
-        });
-        log.info('song.resave', { userId: user.id, extId: body.id, lines: body.lines.length });
-        return c.json({ song: song! }, 200);
-    }
-
-    if (db.countUserSongs(user.id) >= MAX_USER_SONGS) {
-        return c.json({ code: 'validation_error' as const, error: 'too many songs', detail: `max ${MAX_USER_SONGS} per account` }, 400);
-    }
-
-    try {
-        const song = db.createSong({
-            extId: body.id,
-            title: body.title,
-            artist: body.artist ?? null,
-            youtubeId: body.youtubeId ?? null,
-            createdBy: user.id,
-            lines: body.lines,
-        });
-        log.info('song.create', { userId: user.id, extId: body.id, lines: body.lines.length });
-        return c.json({ song }, 200);
-    } catch (err) {
-        const msg = err instanceof Error ? err.message : String(err);
-        if (/UNIQUE constraint failed: song\.ext_id/i.test(msg)) {
+        case 'idTaken':
             return c.json({ code: 'conflict' as const, error: 'id already taken', detail: 'That song id belongs to another account.' }, 409);
-        }
-        return c.json({ code: 'validation_error' as const, error: 'invalid song', detail: msg }, 400);
+        case 'quota':
+            return c.json({ code: 'validation_error' as const, error: 'too many songs', detail: `max ${result.limit} per account` }, 400);
+        case 'invalid':
+            // The detail can carry internal offset/furigana text — log it for ops, don't echo it.
+            log.warn('song.invalid', { userId: user.id, extId: body.id, detail: result.detail });
+            return c.json(
+                { code: 'validation_error' as const, error: 'invalid song', detail: 'A line’s furigana or tokens did not line up. Re-analyze and try again.' },
+                400,
+            );
     }
+    result satisfies never; // exhaustiveness — every SaveSongResult kind returns above
+    return c.json({ code: 'internal_error' as const, error: 'internal error' }, 500);
 });
 
 // ---------- PUT /{id} (metadata) ----------

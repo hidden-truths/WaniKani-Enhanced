@@ -147,6 +147,20 @@ describe('POST /v1/songs — auth, create, upsert, conflict, cap', () => {
         expect(res.status).toBe(400);
         expect(((await res.json()) as any).error).toMatch(/too many/);
     });
+
+    test('a furigana mismatch → 400 invalid, and the internal validation message is NOT leaked', async () => {
+        signIn('a@x.com', 'atok');
+        const res = await req('/v1/songs', {
+            method: 'POST',
+            token: 'atok',
+            body: J(songBody('usr-a-bad', { lines: [{ text: 'ほんとう', furigana: [{ t: 'ちがう' }] }] })),
+        });
+        expect(res.status).toBe(400);
+        const j = (await res.json()) as any;
+        expect(j.error).toBe('invalid song');
+        expect(j.detail).not.toContain('ちがう'); // the raw mismatched text must not be echoed
+        expect(j.detail).not.toMatch(/reconstruct|slice/i); // nor the internal phrasing
+    });
 });
 
 describe('GET / DELETE /v1/songs/{id} — ownership', () => {

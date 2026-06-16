@@ -39,6 +39,11 @@ const CONTENT_POS = new Set(['NOUN', 'PROPN', 'VERB', 'ADJ', 'ADV']);
 // the gate "can't drift between callers") authoritative for the privacy-relevant line query too.
 const SONG_VIEWER_VISIBLE = '(public = 1 OR created_by = ?)';
 
+// Per-account authoring cap. Lives in the repo (not the route) so saveSong can enforce it INSIDE the
+// create transaction — the route's old check-then-insert was a TOCTOU race that concurrent creates
+// could overshoot. A vanity bound, but now actually atomic.
+export const MAX_USER_SONGS = 200;
+
 // One lyric line as written by the analyzer (or the seed): plainText + structured furigana, an
 // English line, per-line grammar tags (catalog ids), LLM tokens (UTF-16 offsets, may carry
 // jlpt/gloss), and an optional per-line clip start (tap-to-sync timing).
@@ -326,6 +331,81 @@ export function replaceSongLines(input: {
         input.lines.forEach((ln, i) => insertSongLine(input.extId, input.viewer, false, i, ln, input.parser ?? 'llm'));
     })();
     return getSong({ extId: input.extId, viewer: input.viewer });
+}
+
+// The outcome of a POST /v1/songs save, as a discriminated union the route maps 1:1 to a status.
+// Making every EXPECTED outcome a tag (not a throw / a SQLite-error string-match) keeps the route a
+// pure mapping and stops it leaking internal error text.
+export type SaveSongResult =
+    | { kind: 'created'; song: AssembledSong }
+    | { kind: 'replaced'; song: AssembledSong }
+    | { kind: 'reserved' } // a PUBLIC starter id — not claimable (→ 409)
+    | { kind: 'idTaken' } // another account's PRIVATE id (→ 409)
+    | { kind: 'quota'; limit: number } // at MAX_USER_SONGS (→ 400)
+    | { kind: 'invalid'; detail: string }; // furigana/token-offset mismatch (→ 400, detail logged not echoed)
+
+// Create-or-replace a song from a reviewed analysis — the single transactional entry point behind
+// POST /v1/songs. The whole decision (does an id exist? is it the caller's? are they at quota?) AND
+// the write run in ONE `BEGIN IMMEDIATE` transaction, so two concurrent POSTs for the same brand-new
+// id, or N concurrent creates racing the cap, can't interleave: the IMMEDIATE write-lock + the S1
+// busy_timeout serialize them, and the loser re-reads the winner's committed row here (→ a clean
+// replaced/reserved/idTaken, never a UNIQUE-constraint throw or an over-cap overshoot). Furigana +
+// token offsets are pre-validated OUTSIDE the txn (no DB work) and returned as `invalid` rather than
+// thrown. createSong/replaceSongLines do the actual row writes (reused, nested as savepoints).
+export function saveSong(input: {
+    extId: string;
+    viewer: number;
+    title: string;
+    artist?: string | null;
+    youtubeId?: string | null;
+    lines: SongLineInput[];
+    parser?: string;
+}): SaveSongResult {
+    // Validate before opening the transaction — a malformed line is a clean 'invalid', not a throw.
+    try {
+        for (const ln of input.lines) assertFuriganaMatches(ln.furigana ?? null, ln.text);
+        assertTokenOffsets(input.lines);
+    } catch (e) {
+        return { kind: 'invalid', detail: e instanceof Error ? e.message : String(e) };
+    }
+    const db = getDb();
+    return db
+        .transaction((): SaveSongResult => {
+            // Existence is checked by ext_id (the UNIQUE key) INSIDE the IMMEDIATE txn, so a concurrent
+            // create of the same id is serialized — the loser sees the winner's row, not a UNIQUE throw.
+            const row = db.query('SELECT created_by, public FROM song WHERE ext_id = ?').get(input.extId) as
+                | { created_by: number | null; public: number }
+                | null;
+            if (row) {
+                if (row.created_by !== input.viewer) {
+                    // Visible-but-not-theirs (public starter) or another account's private id → not claimable.
+                    return row.public === 1 ? { kind: 'reserved' } : { kind: 'idTaken' };
+                }
+                const song = replaceSongLines({
+                    extId: input.extId,
+                    viewer: input.viewer,
+                    title: input.title,
+                    artist: input.artist ?? null,
+                    youtubeId: input.youtubeId ?? null,
+                    lines: input.lines,
+                    parser: input.parser,
+                });
+                return { kind: 'replaced', song: song! };
+            }
+            // Fresh create — quota enforced INSIDE the txn (race-free, unlike the old route check).
+            if (countUserSongs(input.viewer) >= MAX_USER_SONGS) return { kind: 'quota', limit: MAX_USER_SONGS };
+            const song = createSong({
+                extId: input.extId,
+                title: input.title,
+                artist: input.artist ?? null,
+                youtubeId: input.youtubeId ?? null,
+                createdBy: input.viewer,
+                lines: input.lines,
+                parser: input.parser,
+            });
+            return { kind: 'created', song };
+        })
+        .immediate();
 }
 
 // Edit a song's metadata (title/artist/youtube). Owner-scoped in SQL → null if not the caller's.
