@@ -26,10 +26,10 @@ import { loadSelftalk, saveSelftalk } from '../persistence/selftalk.js';
 import { createReadThroughCache } from '../persistence/cache.js';
 import { account, api, setSyncStatus } from './cloud-core.js';
 import {
-  RECORD_SUPPORTED, enterSpeakingMode, exitSpeakingMode, isSpeakingMode,
-  speakingBarHtml, initMicSelector, wireSpeakingControls,
-  recordControlHtml, wireRecordCompare, paintCompareWaveforms, loadRecordings, setOnTakeSaved,
+  RECORD_SUPPORTED, exitSpeakingMode, isSpeakingMode,
+  recordControlHtml, wireRecordCompare, paintCompareWaveforms, setOnTakeSaved,
 } from './record-compare.js';
+import { createSpeakingBar, clearSpeakingBar, releaseMicIfHidden } from './speaking-bar.js';
 
 const TODAY_N = 8;             // how many phrases land in the rotating "Today's focus"
 // Reserved recordings partition for Self-Talk (the engine's `scope` → the server's opaque numeric
@@ -400,24 +400,18 @@ function renderTopic(body, topicId) {
   if (speaking) paintCompareWaveforms(body);   // decode + draw take/reference waveforms
 }
 
-// ---- speaking bar (navbar #navExtra) — built from the engine primitives, like minna.js ----
+// ---- speaking bar (navbar #navExtra) — the shared controller (same one Minna + Songs use) ----
+// Recording is account-gated (takes are private/per-user) + capability-gated; the take cache for the
+// reserved SELFTALK_SCOPE is fetched once per session on first enter (the recordingsLoaded guard).
 function renderNavSpeaking() {
-  const nav = document.getElementById('navExtra');
-  if (!nav) return;
-  // Recording is account-gated (takes are private/per-user) + capability-gated; otherwise no bar.
-  if (!RECORD_SUPPORTED || !account) { nav.innerHTML = ''; return; }
-  nav.innerHTML = speakingBarHtml();
-  wireSpeakingControls(nav);   // speed chips + bias slider (attach-once on the slot; shared with Minna)
-  const tog = nav.querySelector('[data-speaking-toggle]');
-  if (tog) tog.addEventListener('click', async () => {
-    if (isSpeakingMode()) { exitSpeakingMode(); renderSelftalk(); return; }
-    if (!(await enterSpeakingMode())) return;
-    if (!recordingsLoaded) { await loadRecordings(SELFTALK_SCOPE); recordingsLoaded = true; }
-    renderSelftalk();          // re-render so the per-phrase record controls + bar appear
-  });
-  initMicSelector(nav, () => { if (isSpeakingMode()) enterSpeakingMode(); });
+  createSpeakingBar({
+    shouldShow: () => RECORD_SUPPORTED && !!account,
+    render: () => renderSelftalk(),   // re-render so the per-phrase record controls + bar appear
+    scope: SELFTALK_SCOPE,
+    isLoaded: () => recordingsLoaded,
+    markLoaded: () => { recordingsLoaded = true; },
+  }).mount();
 }
-function clearNavSpeaking() { const nav = document.getElementById('navExtra'); if (nav) nav.innerHTML = ''; }
 
 // ---- practice signal (streak + "said today") ----
 function markPracticed(id) {
@@ -512,16 +506,13 @@ async function deletePhrase() {
 // ---- lifecycle ----
 // Auto-exit when navigating away from the tab (chrome.js leaveSelftalk → main.js), so the mic
 // never lingers. Mirrors minna.js onMinnaHidden.
-export function onSelftalkHidden() { exitSpeakingMode(); clearNavSpeaking(); stTopic = null; }
+export function onSelftalkHidden() { exitSpeakingMode(); clearSpeakingBar(); stTopic = null; }
 
 // Release the mic when the BROWSER tab is hidden while speaking — but only if Self-Talk is the
-// active panel (don't fight Minna's own visibilitychange handler; exitSpeakingMode is idempotent).
+// active panel (don't fight Minna's own visibilitychange handler; releaseMicIfHidden's exit is idempotent).
 function handleBrowserTabHidden() {
-  if (!document.hidden || !isSpeakingMode()) return;
-  const panel = document.getElementById('panel-selftalk');
-  if (!panel || !panel.classList.contains('active')) return;
-  exitSpeakingMode();
-  renderSelftalk();   // repaint the toggle/controls to the released state
+  const active = () => { const p = document.getElementById('panel-selftalk'); return !!p && p.classList.contains('active'); };
+  if (releaseMicIfHidden(active)) renderSelftalk();   // repaint the toggle/controls to the released state
 }
 
 export function initSelftalk() {

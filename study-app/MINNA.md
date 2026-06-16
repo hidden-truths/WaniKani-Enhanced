@@ -335,9 +335,10 @@ helpers in [src/core/recordings.js](src/core/recordings.js).
 - **Speaking mode (persistent mic) + device picker** — a **Practice speaking** toggle
   (`speakingBarHtml`) opens ONE persistent mic stream and keeps it; the per-word record controls
   only render while it's on (gated by `isSpeakingMode()`). The whole speaking bar (toggle + mic
-  picker + speed + bias) is **docked in the sticky navbar** (`#navExtra`, via `renderNavSpeaking`)
-  so it floats at the top while you scroll the lesson; it's emptied (`clearNavSpeaking`) when you
-  leave the みんなの日本語 tab. The **mic picker + speed/bias only show while speaking**; off, the
+  picker + speed + bias) is **docked in the sticky navbar** (`#navExtra`, via the shared
+  `createSpeakingBar` controller in [src/features/speaking-bar.js](src/features/speaking-bar.js) —
+  the same one Self-Talk + Songs drive) so it floats at the top while you scroll the lesson; it's
+  emptied (`clearSpeakingBar`) when you leave the みんなの日本語 tab. The **mic picker + speed/bias only show while speaking**; off, the
   bar is just the toggle. Each take spins a `MediaRecorder` on that live stream — **no
   `getUserMedia` per take**, which was hitching the mic (and re-triggering the AirPods switch).
   The **Microphone** dropdown pins a specific input via `deviceId:{exact}` so macOS never opens

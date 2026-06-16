@@ -8,10 +8,10 @@ import { account } from '../cloud-core.js';
 import { escapeHtml, plainText, segmentsToRuby, songLineKey } from '../../core/index.js';
 import { playSlice } from '../songs-youtube.js';
 import {
-  RECORD_SUPPORTED, enterSpeakingMode, exitSpeakingMode, isSpeakingMode,
-  speakingBarHtml, initMicSelector, wireSpeakingControls,
-  recordControlHtml, wireRecordCompare, paintCompareWaveforms, loadRecordings,
+  RECORD_SUPPORTED, isSpeakingMode,
+  recordControlHtml, wireRecordCompare, paintCompareWaveforms,
 } from '../record-compare.js';
+import { createSpeakingBar } from '../speaking-bar.js';
 import { S, SONGS_SCOPE, body } from './state.js';
 
 // Render Shadow: the sign-in / record-support gate, then one row per line — the by-ear ▶original
@@ -62,23 +62,17 @@ export function renderShadow() {
 }
 
 // The navbar-docked speaking bar (toggle + mic picker + speed + you⟷ref balance), in #navExtra —
-// only while viewing a song in Shadow + signed in (otherwise the slot is cleared).
+// only while viewing a song in Shadow + signed in (the shared controller clears the slot otherwise).
+// The take cache for the reserved SONGS_SCOPE is fetched once per session on first enter.
 export function songNav() {
-  const nav = document.getElementById('navExtra'); if (!nav) return;
-  if (S.view !== 'song' || S.mode !== 'shadow' || !RECORD_SUPPORTED || !account) { nav.innerHTML = ''; return; }
-  nav.innerHTML = speakingBarHtml();
-  wireSpeakingControls(nav);   // speed chips + bias slider (attach-once on the slot; shared with Minna/Self-Talk)
-  const tog = nav.querySelector('[data-speaking-toggle]');
-  if (tog) tog.addEventListener('click', async () => {
-    if (isSpeakingMode()) { exitSpeakingMode(); renderShadow(); songNav(); return; }
-    if (!(await enterSpeakingMode())) return;
-    if (!S.recordingsLoaded) { await loadRecordings(SONGS_SCOPE); S.recordingsLoaded = true; }
-    renderShadow(); songNav();   // re-render so the per-line record controls appear + the bar updates
-  });
-  initMicSelector(nav, () => { if (isSpeakingMode()) enterSpeakingMode(); });
+  createSpeakingBar({
+    shouldShow: () => S.view === 'song' && S.mode === 'shadow' && RECORD_SUPPORTED && !!account,
+    render: () => { renderShadow(); songNav(); },   // re-render so the per-line record controls appear + the bar updates
+    scope: SONGS_SCOPE,
+    isLoaded: () => S.recordingsLoaded,
+    markLoaded: () => { S.recordingsLoaded = true; },
+  }).mount();
 }
-// Empty the navbar #navExtra slot (the speaking bar) — on tab-leave or when not viewing Shadow.
-export function clearNavSpeaking() { const nav = document.getElementById('navExtra'); if (nav) nav.innerHTML = ''; }
 
 // The by-ear YouTube slice for a timed line (Shadow's "▶ original"); no-op if untimed / no player.
 export function playShadowSlice(ord) {

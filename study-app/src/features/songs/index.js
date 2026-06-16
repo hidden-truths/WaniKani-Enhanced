@@ -11,13 +11,14 @@ import { escapeHtml, songWords, songLevel } from '../../core/index.js';
 import { destroyPlayer } from '../songs-youtube.js';
 import { wireWordTaps } from '../word-lookup.js';
 import { loadSongs } from '../../persistence/songs.js';
-import { exitSpeakingMode, isSpeakingMode, setOnTakeSaved } from '../record-compare.js';
+import { exitSpeakingMode, setOnTakeSaved } from '../record-compare.js';
+import { clearSpeakingBar, releaseMicIfHidden } from '../speaking-bar.js';
 import { S, LV_CLASS, SONGS_SCOPE, body } from './state.js';
 import { libraryHtml, loadLibrary, loadSong } from './library.js';
 import { addHtml, runAnalyze, saveSong } from './add.js';
 import { readHtml, toggleFurigana, mountSongPlayer, replayLine } from './read.js';
 import { listenHtml, renderListen, resetListenStep, captureListenInputs, gradeListen, playListenLine } from './listen.js';
-import { shadowHtml, wireShadow, renderShadow, songNav, clearNavSpeaking, playShadowSlice } from './shadow.js';
+import { shadowHtml, wireShadow, renderShadow, songNav, playShadowSlice } from './shadow.js';
 import { mineHtml, grammarRefHtml, savePhrase, goBrowseGrammar } from './mine.js';
 import { toggleStar, restoreMode, noteMode, addOneWord, addAllNew, onSongTakeSaved } from './progress.js';
 
@@ -38,7 +39,7 @@ export function render() {
     songNav();                                  // the navbar speaking bar (shadow + account only; clears otherwise)
     return;
   }
-  clearNavSpeaking();
+  clearSpeakingBar();
   if (S.view === 'add') { el.innerHTML = addHtml(); return; }
   el.innerHTML = libraryHtml();
 }
@@ -146,11 +147,8 @@ export function initSongs() {
   }
 }
 function handleSongsBrowserTabHidden() {
-  if (!document.hidden || !isSpeakingMode()) return;
-  const panel = document.getElementById('panel-songs');
-  if (!panel || !panel.classList.contains('active')) return;
-  exitSpeakingMode();
-  renderShadow(); songNav();   // repaint the controls/bar to the released state
+  const active = () => { const p = document.getElementById('panel-songs'); return !!p && p.classList.contains('active'); };
+  if (releaseMicIfHidden(active)) { renderShadow(); songNav(); }   // repaint the controls/bar to the released state
 }
 // Enter in a Listen input = Check (the dictation shortcut). Ignored once the step is revealed (the
 // gaps/input have frozen) or outside Listen.
@@ -163,4 +161,4 @@ function onKeydown(e) {
 }
 // Tab-leave teardown (main.js wires it): release the mic, clear the navbar speaking bar, and destroy
 // the YouTube player so a backgrounded tab holds no live mic stream / iframe.
-export function onSongsHidden() { exitSpeakingMode(); clearNavSpeaking(); destroyPlayer(); }
+export function onSongsHidden() { exitSpeakingMode(); clearSpeakingBar(); destroyPlayer(); }

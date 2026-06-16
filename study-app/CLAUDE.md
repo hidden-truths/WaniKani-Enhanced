@@ -782,12 +782,18 @@ Component contracts you must preserve:
   handlers read all context (lesson, itemKey, native src, clip) off the rec-control's
   `data-*`, so they need no closure over the lesson. **The per-item rec-controls live in
   `#mnBody`, but the GLOBAL speaking bar (toggle + mic picker + speed + bias) is docked in the
-  navbar `#navExtra` slot** (`renderNavSpeaking` fills it; `clearNavSpeaking` empties it on
-  tab-leave/gate) so it floats at the top while you scroll the lesson. Its delegate
-  (`wireSpeakingControls`, speed chips + bias slider) attaches once to `#navExtra` —
-  SEPARATE from `wireRecordCompare`'s `#mnBody` delegate; don't move the speed/bias handlers back
-  onto `#mnBody` (the controls aren't there anymore). The toggle + mic picker are wired
-  per-render in `renderNavSpeaking` (the slot's innerHTML is replaced each lesson render). **Recordings are PRIVATE on the server**
+  navbar `#navExtra` slot**, built by the SHARED controller `createSpeakingBar`
+  ([features/speaking-bar.js](src/features/speaking-bar.js)) that みんなの日本語, 独り言 Self-Talk and
+  歌 Songs ALL drive (one definition, not three copies): `mount()` fills the slot — or clears it when
+  the surface's `shouldShow()` is false — and `clearSpeakingBar()` empties it on tab-leave/gate, so
+  it floats at the top while you scroll the lesson. Its delegate (`wireSpeakingControls`, speed chips
+  + bias slider) attaches once to `#navExtra` — SEPARATE from `wireRecordCompare`'s `#mnBody`
+  delegate; don't move the speed/bias handlers back onto `#mnBody` (the controls aren't there
+  anymore). The toggle + mic picker are wired per-render by `mount()` (the slot's innerHTML is
+  replaced each lesson render); each surface's `renderNavSpeaking`/`songNav` wrapper is now just a
+  `createSpeakingBar({…}).mount()` call passing its show-gate, re-render, and reserved take `scope`.
+  The browser-tab-hidden mic release is the shared `releaseMicIfHidden(isActive?)` (Self-Talk/Songs
+  pass a panel-active guard so they don't fight みんなの日本語's unguarded primary handler). **Recordings are PRIVATE on the server**
   and played via one reused `<audio crossOrigin='use-credentials'>` (gated, cross-origin) —
   the same cookie-gated-audio path as the native-audio button. The **binary upload goes through the
   resilient transport** (`api(path, { rawBody: blob, contentType, retry: true })`, E3) — `rawBody`
@@ -855,8 +861,8 @@ Component contracts you must preserve:
   persistent `liveStream` and keeps it; `startRecording` spins a `MediaRecorder` on it with
   **no `getUserMedia` per take**; `onstop` does NOT stop the stream. `minna.js` renders the
   vocab/line rec-controls only `if (isSpeakingMode())`; the **toggle button lives in the
-  navbar-docked speaking bar** (`#navExtra`, `renderNavSpeaking`) and re-renders the lesson on
-  click (which repaints both the body rec-controls and the navbar bar). Don't revert
+  navbar-docked speaking bar** (`#navExtra`, the shared `createSpeakingBar` controller) and
+  re-renders the lesson on click (which repaints both the body rec-controls and the navbar bar). Don't revert
   `startRecording` to per-take `getUserMedia`, and don't render controls outside speaking mode.
   `exitSpeakingMode()` stops the recorder + releases the stream. **Navigating out
   of the lesson context auto-exits speaking mode** so the mic doesn't linger: `chrome.js`

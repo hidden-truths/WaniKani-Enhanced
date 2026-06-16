@@ -164,9 +164,11 @@ sentences ("I'm almost out of [wood], let me go [chop] some" → swap the filler
   **synth-only reference** (`recordControlHtml(SCOPE, id, '', null, false, text, 'selftalk')` — no
   native clip, so ▶ reference resolves to a Siri/Google voice from the phrase text). You get the full
   rig: ▶ you / ▶ reference / →you / both / loop, dual waveform, volume normalization, speed control.
-- **Speaking bar** lives in the navbar `#navExtra` slot (`renderNavSpeaking`, built from the engine
-  primitives `speakingBarHtml`/`initMicSelector`/`wireSpeakingControls`) — gated on account +
-  `RECORD_SUPPORTED`. Per-phrase record controls render only `if (isSpeakingMode())`.
+- **Speaking bar** lives in the navbar `#navExtra` slot, built by the shared `createSpeakingBar`
+  controller ([src/features/speaking-bar.js](src/features/speaking-bar.js) — the same one Minna +
+  Songs drive); Self-Talk's `renderNavSpeaking` just calls it with a `shouldShow` gate on account +
+  `RECORD_SUPPORTED`, the `renderSelftalk` re-render, and the reserved `SELFTALK_SCOPE` take cache.
+  Per-phrase record controls render only `if (isSpeakingMode())`.
 
 ## Practice signal (streak)
 

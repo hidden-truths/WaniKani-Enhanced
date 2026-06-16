@@ -407,6 +407,49 @@ shared day-streak); Mine (add word / add all, grammar ref, save-as-phrase). Head
 
 ---
 
+## Workstream T — cross-feature dedup after the multi-source churn
+
+The Minna-Phase-2 / Self-Talk / Songs surfaces were each built in their own workstream, and each
+re-implemented two cross-cutting concerns from scratch — classic "same concept, copy-pasted from
+multiple sources" drift. This pass collapses them. Ship as independent commits, low→high risk.
+
+| Sub | Win | Risk | Status |
+|---|---|---|---|
+| **T1** read-through localStorage cache | DRY — 4 hand-rolled `try/JSON` cache trios → 1 tested helper | LOW (pure storage, full unit cover) | **✅ SHIPPED** |
+| **T2** speaking-bar controller | DRY + Open/Closed — 3 copies of the `#navExtra` toggle/mic/visibility lifecycle → 1 | MED (live-mic dead-ends; wiring unit-tested, mic flow needs a browser pass) | **✅ SHIPPED** |
+| **T3** `selftalk.js` package decomposition | SRP — the last un-split "speaking surface" (634 lines) → a per-concern package | HIGH (shared-mutable-`S` + runtime cycles + live mic; browser-smoke each peel) | _in progress_ |
+
+### T1 — `persistence/cache.js` `createReadThroughCache` (✅ SHIPPED)
+The "warm from the last good fetch, degrade to cache on failure" `localStorage` primitive was
+open-coded — with subtly varying try/catch — in **four** places: `selftalk.js` phrases AND templates
+(twice in one file), `songs/library.js`, and `persistence/examples.js`. Now one
+`createReadThroughCache({ key, validate, fallback }) → { read, write }`, adopted at all four sites
+(byte-for-byte behavior; `validate`/`fallback` injected so the examples object-map + the array caches
+keep their exact shape guards). +8 unit tests (`test/cache.test.js`): round-trip, miss/corrupt/
+wrong-shape degrade, fresh-empty-per-call, swallow-all on a throwing get/setItem.
+
+### T2 — `features/speaking-bar.js` `createSpeakingBar` (✅ SHIPPED)
+`clearNavSpeaking()` was **byte-identical** in `minna.js`, `selftalk.js` and `songs/shadow.js`, and
+each surface's `renderNavSpeaking`/`songNav` re-built the same `#navExtra` bar (toggle → enter/leave
+speaking mode + lazy take-cache load + re-render; mic picker) plus its own `visibilitychange`
+mic-release. Now one `createSpeakingBar({ shouldShow?, render, scope?, isLoaded?, markLoaded? }) →
+{ mount, onToggle }` + a shared `clearSpeakingBar()` + `releaseMicIfHidden(isActive?)`. Each surface
+passes only what differs (show-gate, re-render, reserved `scope`); adding a 4th speaking surface is
+now a config object, not a copy-paste. Behavior preserved exactly, including みんなの日本語's unguarded
+"primary" visibilitychange vs Self-Talk/Songs' panel-active guard. +16 unit tests
+(`test/speaking-bar.test.js`, engine mocked). **Mic/record/compare flow needs a manual browser pass**
+(headless blocks `getUserMedia`) — checklist mirrors Workstream S's *Verification*.
+
+### T3 — `selftalk.js` → `features/selftalk/` package (_in progress_)
+The 634-line `selftalk.js` is the only record-compare surface never split (record-compare + songs both
+got the per-module treatment). Mirror `features/songs/`: a shared mutable `S` (state.js) + per-concern
+modules (store/view/templates/authoring/practice/speaking) behind an `index.js` barrel, with
+`features/selftalk.js` a thin `export *` re-export so `main.js`/`cloud.js` import unchanged. Same
+dead-ends + browser-smoke discipline as Workstream S (a missed bare identifier is a runtime
+`ReferenceError` that `bun run build` can't catch — grep-audit every state ref to `S.`).
+
+---
+
 ## Cross-cutting
 
 - **Test commands.** Server: `cd wk-enhanced-api && bun run typecheck && bun test`. Study-app: `cd study-app && bun run test && bun run build`. Dev pair: `bun dev` (API :3000) + `bun run dev` (Vite :5173); browser preview via `.claude/launch.json`.
