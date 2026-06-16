@@ -347,9 +347,13 @@ function listenHtml() {
 }
 
 function listenCardHtml(line) {
+  // The "Slower" cue only applies to the timed YouTube slice (real vocals); an untimed line plays
+  // synth, which has no slow-down — so hide it there rather than show a button that does nothing.
+  const slow = line.clipStartMs != null
+    ? `<button class="cue-btn" data-act="lslow" aria-label="Replay slower" title="Replay slower"><svg class="ic" aria-hidden="true"><use href="#i-refresh"/></svg></button>` : '';
   const cue = `<div class="listen-cue">
     <button class="cue-btn" data-act="lplay" aria-label="Play line" title="Play line"><svg class="ic" aria-hidden="true"><use href="#i-play"/></svg></button>
-    <button class="cue-btn" data-act="lslow" aria-label="Replay slower" title="Replay slower"><svg class="ic" aria-hidden="true"><use href="#i-refresh"/></svg></button>
+    ${slow}
     <span class="cue-hint">${listen.diff === 'cloze' ? 'play the line, then fill the gaps' : 'lyrics hidden — type the whole line you hear'}</span>
   </div>`;
   const blanks = listen.diff === 'cloze' ? clozeBlanks(line) : [];
