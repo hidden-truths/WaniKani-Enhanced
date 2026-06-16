@@ -16,7 +16,7 @@
 
 import { getDb } from '../connection.ts';
 import { ttsTextHash } from '../../services/tts.ts';
-import { assertFuriganaMatches, insertSentenceChildren, upsertPublicSentenceByHash } from './sentenceCore.ts';
+import { assertFuriganaMatches, insertSentenceChildren, upsertPublicSentenceByHash, VIEWER_VISIBLE } from './sentenceCore.ts';
 import { getSentences } from './sentences.ts';
 import { setGrammarTags, upsertAnnotation } from './annotations.ts';
 import type { AnnotationToken, AssembledSentence, FuriganaSeg } from './sentenceCore.ts';
@@ -24,6 +24,14 @@ import type { AnnotationToken, AssembledSentence, FuriganaSeg } from './sentence
 // UD coarse POS tags that count as a "content word" for the Mine vocab panel + coverage — the rest
 // (particles, auxiliaries, punctuation, symbols) aren't studiable vocabulary.
 const CONTENT_POS = new Set(['NOUN', 'PROPN', 'VERB', 'ADJ', 'ADV']);
+
+// The privacy gate for the `song` METADATA table. Mirrors sentenceCore's VIEWER_VISIBLE (which gates
+// the `sentence` table) but `song` is its own table, so it needs its own predicate. One SQL fragment
+// binding ONE viewer param (null → public only, fail-closed: `created_by = NULL` is never true), so
+// getSongs + getSong can't drift apart. A song's LINE rows ARE sentence rows, so they reuse
+// sentenceCore's VIEWER_VISIBLE directly — keeping that gate's single source of truth (CLAUDE.md:
+// the gate "can't drift between callers") authoritative for the privacy-relevant line query too.
+const SONG_VIEWER_VISIBLE = '(public = 1 OR created_by = ?)';
 
 // One lyric line as written by the analyzer (or the seed): plainText + structured furigana, an
 // English line, per-line grammar tags (catalog ids), LLM tokens (UTF-16 offsets, may carry
@@ -209,7 +217,7 @@ export function getSongs(opts: { viewer?: number | null }): SongListItem[] {
     const viewer = opts.viewer ?? null;
     const db = getDb();
     const rows = db
-        .query('SELECT * FROM song WHERE public = 1 OR created_by = ? ORDER BY created_at DESC')
+        .query(`SELECT * FROM song WHERE ${SONG_VIEWER_VISIBLE} ORDER BY created_at DESC`)
         .all(viewer) as SongRow[];
     if (!rows.length) return [];
 
@@ -219,7 +227,7 @@ export function getSongs(opts: { viewer?: number | null }): SongListItem[] {
                FROM sentence_link l
                JOIN sentence s ON s.id = l.sentence_id
                LEFT JOIN sentence_annotation a ON a.sentence_id = s.id
-              WHERE l.owner_type = 'song' AND (s.public = 1 OR s.created_by = ?)`,
+              WHERE l.owner_type = 'song' AND ${VIEWER_VISIBLE}`,
         )
         .all(viewer) as { song: string | null; clip: number | null; tokens: string | null }[];
 
@@ -244,7 +252,7 @@ export function getSongs(opts: { viewer?: number | null }): SongListItem[] {
 export function getSong(opts: { extId: string; viewer?: number | null }): AssembledSong | null {
     const viewer = opts.viewer ?? null;
     const row = getDb()
-        .query('SELECT * FROM song WHERE ext_id = ? AND (public = 1 OR created_by = ?)')
+        .query(`SELECT * FROM song WHERE ext_id = ? AND ${SONG_VIEWER_VISIBLE}`)
         .get(opts.extId, viewer) as SongRow | null;
     if (!row) return null;
     const lines = getSentences({ ownerType: 'song', ownerId: opts.extId, viewer, includeAnnotations: true }).sort(
