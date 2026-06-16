@@ -105,7 +105,7 @@
        visitors on a reachable server; dismissal is remembered in localStorage. -->
   <div class="signup-banner" id="signupBanner" hidden>
     <svg class="ic" aria-hidden="true"><use href="#i-cloud-check"/></svg>
-    <div class="sb-text"><b>Save your progress.</b> Create a free account to sync across devices — or just keep studying offline, no account needed.</div>
+    <div class="sb-text"><b>Save your progress.</b> Create a free account to sync across devices — or keep studying as a guest, no account needed.</div>
     <button class="chip primary" id="signupCreate"><svg class="ic" aria-hidden="true"><use href="#i-user"/></svg>Create account</button>
     <button class="sb-dismiss" id="signupDismiss" aria-label="Dismiss" title="Dismiss"><svg class="ic" aria-hidden="true"><use href="#i-x"/></svg></button>
   </div>
@@ -431,12 +431,12 @@
       <div class="frow"><span class="filter-label">Search</span><div class="chips">
         <span class="search-wrap"><svg class="ic" aria-hidden="true"><use href="#i-search"/></svg>
           <input class="search" id="search" placeholder="Search reading, kanji, or meaning…"></span>
-        <span class="count">Showing <b id="num">100</b> of 100</span></div></div>
+        <span class="count">Showing <b id="num">100</b> of <b id="numTotal">100</b></span></div></div>
     </div>
     <!-- Live recap of the active grid query (incl. collapsed topics); set by renderBrowse(). -->
     <div class="filter-summary" id="bSummary"></div>
     <div class="row" style="margin:2px 0 0"><button class="chip" id="addVerbBtn"><svg class="ic" aria-hidden="true"><use href="#i-plus"/></svg>Add card</button><span class="count" id="customCount"></span></div>
-    <div class="hint">Tap a card to expand · rank shown bottom-right, accuracy bottom-left once drilled</div>
+    <div class="hint">Tap a card for details · rank shown bottom-right, accuracy bottom-left once drilled</div>
     <div class="grid" id="grid"></div>
     <div class="empty" id="empty" style="display:none">No words match that filter.</div>
   </div>
@@ -495,7 +495,7 @@
 
 <!-- Account modal. Shared by the login + register flows (text swaps via JS).
      Hidden until #accountBtn (or the first-visit nudge) opens it. The app is
-     fully usable offline without ever opening this. -->
+     fully usable without an account; signing in just syncs progress across devices. -->
 <div class="modal-overlay" id="authModal" role="dialog" aria-modal="true" aria-labelledby="authTitle">
   <div class="modal">
     <button class="modal-x" id="authClose" aria-label="Close">×</button>
@@ -513,7 +513,7 @@
     </form>
     <div class="modal-foot">
       <span id="authToggleText">New here?</span> <a id="authToggle" tabindex="0">Create an account</a>
-      <div style="margin-top:10px"><a id="authOffline" tabindex="0">Continue offline</a></div>
+      <div style="margin-top:10px"><a id="authOffline" tabindex="0">Continue without an account</a></div>
     </div>
   </div>
 </div>

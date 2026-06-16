@@ -198,7 +198,8 @@ export function renderBrowse() {
     if (sb) sb.addEventListener('click', e => { e.stopPropagation(); speakWord(v, 'browse', sb, { cycle: cycleMod(e) }); });
     grid.appendChild(card);
   });
-  document.getElementById('num').textContent = shown;     // "Showing N of 100"
+  document.getElementById('num').textContent = shown;
+  document.getElementById('numTotal').textContent = state.DATA.length;   // total browsable cards (built-ins + custom), not a hard-coded 100
   document.getElementById('empty').style.display = shown ? 'none' : 'block';
   const parts = [...filterSummary(bcfg)];   // filterSummary returns an array of recap parts
   if (bGrammar.length) parts.push('grammar: ' + bGrammar.map(grammarLabel).join(', '));
