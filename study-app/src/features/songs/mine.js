@@ -10,6 +10,8 @@ import { S, LV_CLASS } from './state.js';
 import { known } from './library.js';
 import { flash } from './index.js';
 
+// Render the Mine panel: the song's content words bucketed by JLPT (known / added / new vs the deck,
+// with per-word + bulk add) and its grammar points (each linking to the grammar reference).
 export function mineHtml() {
   const s = S.openSong;
   const k = known();
@@ -42,6 +44,8 @@ export function mineHtml() {
     </div>`;
 }
 
+// Render the grammar-reference sub-view (S.grammarRef): every line in this song that uses the point,
+// each savable as a Self-Talk shadow phrase, plus a Browse deep-link to example sentences.
 export function grammarRefHtml() {
   const s = S.openSong;
   const id = S.grammarRef;
@@ -77,6 +81,7 @@ export async function savePhrase(ord) {
   catch (e) { flash('Could not save the phrase'); }
 }
 
+// Cross-link from a song's grammar point into the Browse tab (example sentences using it).
 export function goBrowseGrammar(id) {
   // Deep-link into Browse filtered to this grammar point (cross-link to example sentences).
   document.querySelector('.tab[data-tab="browse"]').click();

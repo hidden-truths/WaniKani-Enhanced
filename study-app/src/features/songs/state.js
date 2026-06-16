@@ -30,4 +30,5 @@ const SONGS_SCOPE = 80000;
 
 export { CACHE_KEY, LV_CLASS, SLOW_RATE, SONGS_SCOPE };
 
+// The Songs tab's stable render host (#sgBody) — the once-wired delegated-event target + render sink.
 export function body() { return document.getElementById('sgBody'); }

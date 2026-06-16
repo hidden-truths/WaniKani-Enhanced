@@ -14,6 +14,8 @@ import {
 } from '../record-compare.js';
 import { S, SONGS_SCOPE, body } from './state.js';
 
+// Render Shadow: the sign-in / record-support gate, then one row per line — the by-ear ▶original
+// (timed lines) + the full record-and-compare rig (synth reference) when Practice-speaking is on.
 export function shadowHtml() {
   const s = S.openSong;
   const speaking = isSpeakingMode();
@@ -75,6 +77,7 @@ export function songNav() {
   });
   initMicSelector(nav, () => { if (isSpeakingMode()) enterSpeakingMode(); });
 }
+// Empty the navbar #navExtra slot (the speaking bar) — on tab-leave or when not viewing Shadow.
 export function clearNavSpeaking() { const nav = document.getElementById('navExtra'); if (nav) nav.innerHTML = ''; }
 
 // The by-ear YouTube slice for a timed line (Shadow's "▶ original"); no-op if untimed / no player.

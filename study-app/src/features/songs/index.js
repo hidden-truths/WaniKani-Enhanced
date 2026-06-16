@@ -161,4 +161,6 @@ function onKeydown(e) {
   if (S.mode !== 'listen' || !S.listen || S.listen.revealed) return;
   captureListenInputs(); gradeListen(); S.listen.checked = true; renderListen();
 }
+// Tab-leave teardown (main.js wires it): release the mic, clear the navbar speaking bar, and destroy
+// the YouTube player so a backgrounded tab holds no live mic stream / iframe.
 export function onSongsHidden() { exitSpeakingMode(); clearNavSpeaking(); destroyPlayer(); }

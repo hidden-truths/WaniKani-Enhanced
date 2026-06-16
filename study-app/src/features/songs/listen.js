@@ -16,8 +16,11 @@ function ensureListen() {
     S.listen = { songId: S.openSong.id, diff: 'cloze', idx: 0, done: new Set(), checked: false, revealed: false, values: [], fullValue: '' };
   }
 }
+// Clear the current step's transient answer state (typed values + checked/revealed), keeping idx/done.
 export function resetListenStep() { S.listen.checked = false; S.listen.revealed = false; S.listen.values = []; S.listen.fullValue = ''; }
 
+// Render the Listen stepper: the difficulty toggle + progress bar, then the current line's card —
+// or the session-complete screen once idx passes the last line. Lazily (re)inits S.listen.
 export function listenHtml() {
   ensureListen();
   const total = S.openSong.lines.length;

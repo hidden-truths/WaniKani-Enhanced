@@ -12,6 +12,8 @@ import { progressFor } from './progress.js';
 function readCache() { try { const o = JSON.parse(localStorage.getItem(CACHE_KEY)); if (Array.isArray(o)) return o; } catch (e) { /* */ } return []; }
 function writeCache(songs) { try { localStorage.setItem(CACHE_KEY, JSON.stringify(songs)); } catch (e) { /* */ } }
 
+// Fetch the library (public starters + the viewer's own private songs) into S.library, write-through
+// to the cache; on failure fall back to the cache so an offline open still paints.
 export async function loadLibrary() {
   try { const r = await api('/v1/songs'); S.library = (r && r.songs) || []; writeCache(S.library); }
   catch (e) { if (!S.library.length) S.library = readCache(); }
@@ -31,6 +33,8 @@ function normalizeLine(s, i) {
     section: (s.link && s.link.role) || null, // stanza label (Verse/Chorus/…) on a stanza's first line
   };
 }
+// Fetch one assembled song by ext_id, flattening its server lines into the render shape; null if
+// gone/unauthorized. The caller (openById) assigns S.openSong.
 export async function loadSong(id) {
   const r = await api('/v1/songs/' + encodeURIComponent(id));
   const s = r && r.song;

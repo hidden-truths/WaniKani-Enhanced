@@ -14,6 +14,8 @@ function starBtnHtml(ord, on) {
   return `<button class="speak-btn sm sg-star${on ? ' on' : ''}" data-act="star" data-ord="${ord}" aria-pressed="${on}" aria-label="${on ? 'Unstar line' : 'Star line'}" title="Star this line"><svg class="ic" aria-hidden="true"><use href="#i-star"/></svg></button>`;
 }
 
+// Render the Read viewer: the furigana/translation toolbar + one row per line (tap-a-word ruby,
+// per-line star + replay, stanza headings, tap-to-reveal translation).
 export function readHtml() {
   const s = S.openSong;
   const starred = new Set((progressFor(s.id) || {}).starred || []);   // per-line bookmarks (the `songs` blob)

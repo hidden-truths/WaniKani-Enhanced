@@ -34,12 +34,14 @@ function activateSongWords(songExtId, songTitle, words) {
   return added;
 }
 
+// Activate one mined word into the deck (a Source:歌 custom card) + re-render Mine so its row flips.
 export function addOneWord(lemma) {
   const w = songWords(S.openSong.lines).find((x) => x.lemma === lemma);
   if (!w) return;
   const n = activateSongWords(S.openSong.id, S.openSong.title, [w]);
   if (n) render(); // re-render Mine so the row flips to KNOWN-ish (now in deck)
 }
+// Activate every new (not-known, not-already-in-deck) word from the open song in one batch.
 export function addAllNew() {
   const k = known();
   const dk = new Set(state.DATA.map((v) => v.jp));

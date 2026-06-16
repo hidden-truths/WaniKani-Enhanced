@@ -8,6 +8,8 @@ import { S } from './state.js';
 import { known, loadLibrary } from './library.js';
 import { render } from './index.js';
 
+// Render the Add screen for the current step: the sign-in gate (anon), the paste form (no analysis
+// yet), or the review step (analysis present). Driven entirely by S.add.
 export function addHtml() {
   if (!account) {
     return `<button class="st-back" data-act="back"><svg class="ic" aria-hidden="true"><use href="#i-back"/></svg> back</button>
@@ -63,6 +65,8 @@ export function addHtml() {
     </div>`;
 }
 
+// Step 1 → 2: capture the typed lyrics/URL, best-effort oEmbed-fill title/artist, then POST the
+// lyrics to the server LLM analyze endpoint; the result lands in S.add.analysis for the review step.
 export async function runAnalyze() {
   // Capture the typed inputs BEFORE re-rendering (render() rebuilds the textarea from S.add.lyrics).
   const lyricsEl = document.getElementById('sgLyrics'); if (lyricsEl) S.add.lyrics = lyricsEl.value;
@@ -85,6 +89,8 @@ export async function runAnalyze() {
   }
 }
 
+// Step 2 → 3: persist the reviewed analysis as a PRIVATE song (a fresh usr-<uuid> ext_id, retried +
+// server-idempotent), refresh the library, and open the new song in Read.
 export async function saveSong() {
   if (!S.add.analysis) return;
   S.add.busy = true; render();
