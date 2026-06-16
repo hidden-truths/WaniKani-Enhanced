@@ -64,6 +64,12 @@ export function openDb(file: string): Database {
     }
     db.exec('PRAGMA synchronous = NORMAL');
     db.exec('PRAGMA foreign_keys = ON');
+    // Wait (up to 5s) for a held write lock instead of throwing SQLITE_BUSY immediately. Under WAL,
+    // readers never block — but two concurrent WRITE transactions (e.g. two songs saved at once, or a
+    // curator re-seed overlapping a user create) would otherwise have the second throw instantly,
+    // surfacing as a misleading 500/400 a retry would have fixed. The timeout lets it serialize behind
+    // the first. Connection-level + harmless on :memory:, so every repo (not just songs) inherits it.
+    db.exec('PRAGMA busy_timeout = 5000');
     // schema.sql lives next to this file in db/, so the relative URL resolves
     // regardless of which repo module triggered the first getDb().
     const schema = readFileSync(new URL('./schema.sql', import.meta.url), 'utf8');
