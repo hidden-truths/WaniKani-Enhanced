@@ -849,6 +849,8 @@
 .lyrics .jp{font-family:var(--jp-font)}
 .lyrics.furi-off rt{display:none}
 .lyric{padding:8px 12px;border-radius:6px}
+.stanza-label{font:600 10px/1 "SF Mono",ui-monospace,monospace;letter-spacing:.09em;text-transform:uppercase;color:color-mix(in srgb,var(--muted) 85%,transparent);margin:20px 0 5px 12px}
+.lyrics > .stanza-label:first-child{margin-top:4px}
 .lyric.cur{background:color-mix(in srgb,var(--ichidan) 9%,transparent);border-left:3px solid var(--ichidan);border-radius:0 6px 6px 0}
 .lyric.past{opacity:.5}
 .l-top{display:flex;justify-content:space-between;align-items:flex-start;gap:10px}

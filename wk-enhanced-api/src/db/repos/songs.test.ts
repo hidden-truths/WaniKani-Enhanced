@@ -71,6 +71,16 @@ describe('songs — create + read + the assembled line model', () => {
         expect(l0.annotation?.parser).toBe('llm'); // runtime LLM provenance, not GiNZA
     });
 
+    test('a line section rides sentence_link.role → served on the assembled line (stanza spacing)', () => {
+        const a = db.createUser('a@x.com', 'h');
+        const song = db.createSong({ extId: 'usr-sec', title: 'T', createdBy: a.id, lines: [
+            { text: 'いち', furigana: seg('いち'), section: 'Verse 1' }, // first line of a stanza carries the label
+            { text: 'に', furigana: seg('に') }, // within the stanza → no section
+        ] });
+        expect(song.lines[0]!.link.role).toBe('Verse 1');
+        expect(song.lines[1]!.link.role).toBeUndefined(); // compactLink drops a null role
+    });
+
     test('lines come back in ordinal (array-index) order', () => {
         const a = db.createUser('a@x.com', 'h');
         const song = db.createSong({ extId: 'usr-a-2', title: 'T', createdBy: a.id, lines: [

@@ -35,6 +35,9 @@ export interface SongLineInput {
     grammar?: string[];
     tokens?: AnnotationToken[] | null;
     clipStartMs?: number | null;
+    // Stanza label ('Verse'/'Chorus'/'Bridge'…) set ONLY on the FIRST line of a stanza (null within
+    // it) → stored in sentence_link.role, drives the Read viewer's stanza spacing + section heading.
+    section?: string | null;
 }
 
 export interface SongWord {
@@ -144,7 +147,7 @@ function insertSongLine(
 ): void {
     assertFuriganaMatches(line.furigana ?? null, line.text);
     const db = getDb();
-    const link = { owner_type: 'song', owner_id: songExtId, ordinal, clip_start_ms: line.clipStartMs ?? null };
+    const link = { owner_type: 'song', owner_id: songExtId, ordinal, clip_start_ms: line.clipStartMs ?? null, role: line.section ?? null };
     const grammar = line.grammar?.length ? { grammar: line.grammar } : undefined;
     const en = line.en ? { en: line.en } : undefined;
 

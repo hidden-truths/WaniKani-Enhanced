@@ -57,6 +57,7 @@ function normalizeLine(s, i) {
     grammar: (s.tags && s.tags.grammar) || [],
     tokens: (s.annotation && s.annotation.tokens) || [],
     clipStartMs: (s.link && s.link.clip_start_ms != null) ? s.link.clip_start_ms : null,
+    section: (s.link && s.link.role) || null, // stanza label (Verse/Chorus/…) on a stanza's first line
   };
 }
 async function loadSong(id) {
@@ -249,7 +250,9 @@ function readHtml() {
     const en = l.en || '';
     const enRow = en
       ? `<div class="l-en hidden" data-act="reveal" data-en="${escapeHtml(en)}"><svg class="ic" aria-hidden="true"><use href="#i-eye"/></svg> tap to reveal translation</div>` : '';
-    return `<div class="lyric" data-ord="${i}">
+    // A stanza label (set on the first line of each stanza) heads the group + opens the spacing.
+    const head = l.section ? `<div class="stanza-label">${escapeHtml(l.section)}</div>` : '';
+    return `${head}<div class="lyric${l.section ? ' stanza-start' : ''}" data-ord="${i}">
       <div class="l-top">
         <div class="l-jp jp">${jp}</div>
         <div class="l-ctl"><button class="speak-btn sm" data-act="replay" data-ord="${i}" aria-label="Replay line" title="Replay line"><svg class="ic" aria-hidden="true"><use href="#i-play"/></svg></button></div>

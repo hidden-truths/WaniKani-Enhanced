@@ -36,6 +36,7 @@ interface SongFileLine {
     en?: string;
     grammar?: string[];
     tokens?: SongFileToken[]; // optional curated analysis → Mine vocab + coverage + tap-to-lookup
+    section?: string; // stanza label on the FIRST line of a stanza ('Verse'/'Chorus'/…) → Read spacing
 }
 interface SongFile {
     extId: string;
@@ -95,7 +96,7 @@ for (const f of files) {
                 }
                 tokens = computed;
             }
-            return { text, furigana, en: ln.en ?? null, grammar: ln.grammar ?? [], tokens };
+            return { text, furigana, en: ln.en ?? null, grammar: ln.grammar ?? [], tokens, section: ln.section ?? null };
         }),
     });
     songs++;
