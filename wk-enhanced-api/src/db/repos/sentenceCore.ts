@@ -239,6 +239,53 @@ export function insertSentenceChildren(
     }
 }
 
+// INSERT one PRIVATE sentence row (public=0, visibility='private', lang='ja') and return its new id.
+// The exact column list + ttsTextHash(text) + furigana-JSON encoding were hand-rolled in THREE places
+// (createSentence, replaceUserCardExamples, the songs private-line insert) — one copy here so a column,
+// a literal, or the hash derivation can't drift between them. `hash` is computed HERE from `text` (the
+// audio-layer key, never client-set). Callers attach their own children (insertSentenceChildren) +
+// annotations and assemble the return value. `ext_id` must be unique (the caller owns the namespace).
+export function insertPrivateSentenceRow(input: {
+    extId: string;
+    text: string;
+    furigana: FuriganaSeg[] | null;
+    source: string;
+    createdBy: number;
+}): number {
+    const r = getDb()
+        .query(
+            `INSERT INTO sentence (ext_id, hash, text, furigana, lang, source, public, visibility, created_by, created_at)
+             VALUES (?, ?, ?, ?, 'ja', ?, 0, 'private', ?, ?) RETURNING id`,
+        )
+        .get(
+            input.extId,
+            ttsTextHash(input.text),
+            input.text,
+            input.furigana ? JSON.stringify(input.furigana) : null,
+            input.source,
+            input.createdBy,
+            Date.now(),
+        ) as { id: number };
+    return r.id;
+}
+
+// Delete the viewer's OWN private sentence rows linked under (ownerType, ownerId). Child rows
+// (translations / tags / links / annotations) cascade via FK. Scoped to `created_by = viewer` in SQL
+// so it can NEVER touch a public/curator row or another user's private row — the owner-scoping is the
+// load-bearing safety property. One copy of the delete-by-join so it can't drift between the three
+// callers (replaceUserCardExamples card re-save; replaceSongLines + deleteSong). Call inside the
+// caller's transaction when the follow-up re-insert must be atomic with it.
+export function deleteOwnedLines(ownerType: string, ownerId: string, viewer: number): void {
+    getDb()
+        .query(
+            `DELETE FROM sentence WHERE id IN (
+                 SELECT s.id FROM sentence s JOIN sentence_link l ON l.sentence_id = s.id
+                 WHERE l.owner_type = ? AND l.owner_id = ? AND s.created_by = ?
+             )`,
+        )
+        .run(ownerType, ownerId, viewer);
+}
+
 // The PUBLIC sentence with this hash, or null. The partial unique index
 // `(hash) WHERE public=1 AND visibility='public'` guarantees at most one — so this is the
 // reuse key: an identical-text sentence already in the public slice (regardless of its ext_id

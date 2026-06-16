@@ -15,8 +15,14 @@
 // ../../../study-app/SONGS.md.
 
 import { getDb } from '../connection.ts';
-import { ttsTextHash } from '../../services/tts.ts';
-import { assertFuriganaMatches, insertSentenceChildren, upsertPublicSentenceByHash, VIEWER_VISIBLE } from './sentenceCore.ts';
+import {
+    assertFuriganaMatches,
+    deleteOwnedLines,
+    insertPrivateSentenceRow,
+    insertSentenceChildren,
+    upsertPublicSentenceByHash,
+    VIEWER_VISIBLE,
+} from './sentenceCore.ts';
 import { getSentences } from './sentences.ts';
 import { setGrammarTags, upsertAnnotation } from './annotations.ts';
 import type { AnnotationToken, AssembledSentence, FuriganaSeg } from './sentenceCore.ts';
@@ -181,21 +187,16 @@ function insertSongLine(
         return;
     }
 
-    const r = db
-        .query(
-            `INSERT INTO sentence (ext_id, hash, text, furigana, lang, source, public, visibility, created_by, created_at)
-             VALUES (?, ?, ?, ?, 'ja', 'song', 0, 'private', ?, ?) RETURNING id`,
-        )
-        .get(
-            `${songExtId}-L${ordinal}`,
-            ttsTextHash(line.text),
-            line.text,
-            line.furigana ? JSON.stringify(line.furigana) : null,
-            createdBy,
-            Date.now(),
-        ) as { id: number };
-    insertSentenceChildren(r.id, en, grammar, link);
-    if (line.tokens?.length) upsertAnnotation({ sentenceId: r.id, tokens: line.tokens, bunsetsu: [], parser });
+    // Private branch ⇒ a real creator (a public song returns above), so createdBy is non-null here.
+    const id = insertPrivateSentenceRow({
+        extId: `${songExtId}-L${ordinal}`,
+        text: line.text,
+        furigana: line.furigana ?? null,
+        source: 'song',
+        createdBy: createdBy!,
+    });
+    insertSentenceChildren(id, en, grammar, link);
+    if (line.tokens?.length) upsertAnnotation({ sentenceId: id, tokens: line.tokens, bunsetsu: [], parser });
 }
 
 // Count a user's own songs — backs the per-user authoring cap in the route.
@@ -319,14 +320,9 @@ export function replaceSongLines(input: {
             input.youtubeId ?? null,
             row.id,
         );
-        // Drop the song's existing PRIVATE line rows (scoped to the owner so it can't reach anything
-        // else); translations/tags/links/annotations cascade via FK. Then re-insert the new set.
-        db.query(
-            `DELETE FROM sentence WHERE id IN (
-                 SELECT s.id FROM sentence s JOIN sentence_link l ON l.sentence_id = s.id
-                 WHERE l.owner_type = 'song' AND l.owner_id = ? AND s.created_by = ?
-             )`,
-        ).run(input.extId, input.viewer);
+        // Drop the song's existing PRIVATE line rows (owner-scoped so it can't reach anything else);
+        // translations/tags/links/annotations cascade via FK. Then re-insert the new set.
+        deleteOwnedLines('song', input.extId, input.viewer);
         input.lines.forEach((ln, i) => insertSongLine(input.extId, input.viewer, false, i, ln, input.parser ?? 'llm'));
     })();
     return getSong({ extId: input.extId, viewer: input.viewer });
@@ -382,12 +378,7 @@ export function deleteSong(input: { extId: string; viewer: number }): boolean {
         | null;
     if (!row) return false;
     db.transaction(() => {
-        db.query(
-            `DELETE FROM sentence WHERE id IN (
-                 SELECT s.id FROM sentence s JOIN sentence_link l ON l.sentence_id = s.id
-                 WHERE l.owner_type = 'song' AND l.owner_id = ? AND s.created_by = ?
-             )`,
-        ).run(input.extId, input.viewer); // children cascade
+        deleteOwnedLines('song', input.extId, input.viewer); // children cascade via FK
         db.query('DELETE FROM song WHERE id = ?').run(row.id);
     })();
     return true;

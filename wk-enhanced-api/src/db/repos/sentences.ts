@@ -9,7 +9,9 @@ import {
     assembleSentenceRow,
     assertFuriganaMatches,
     compactLink,
+    deleteOwnedLines,
     getSentenceRowById,
+    insertPrivateSentenceRow,
     insertSentenceChildren,
     upsertPublicSentenceByHash,
     SENTENCE_ROW_COLS,
@@ -131,24 +133,15 @@ export function createSentence(input: {
 }): AssembledSentence {
     const furigana = input.furigana ?? null;
     assertFuriganaMatches(furigana, input.text);
-    const db = getDb();
-    const now = Date.now();
-    const r = db
-        .query(
-            `INSERT INTO sentence (ext_id, hash, text, furigana, lang, source, public, visibility, created_by, created_at)
-             VALUES (?, ?, ?, ?, 'ja', ?, 0, 'private', ?, ?) RETURNING id`,
-        )
-        .get(
-            input.extId,
-            ttsTextHash(input.text),
-            input.text,
-            furigana ? JSON.stringify(furigana) : null,
-            input.source,
-            input.createdBy,
-            now,
-        ) as { id: number };
-    insertSentenceChildren(r.id, input.translations, input.tags, input.link);
-    return assembleSentenceRow(getSentenceRowById(r.id)!);
+    const id = insertPrivateSentenceRow({
+        extId: input.extId,
+        text: input.text,
+        furigana,
+        source: input.source,
+        createdBy: input.createdBy,
+    });
+    insertSentenceChildren(id, input.translations, input.tags, input.link);
+    return assembleSentenceRow(getSentenceRowById(id)!);
 }
 
 // Replace a user's own sentence (full overwrite of text + children). Ownership is enforced
@@ -210,35 +203,25 @@ export function replaceUserCardExamples(input: {
     examples: Array<{ slot: string; text: string; furigana?: FuriganaSeg[] | null; en?: string }>;
 }): AssembledSentence[] {
     for (const ex of input.examples) assertFuriganaMatches(ex.furigana ?? null, ex.text);
-    const db = getDb();
-    db.query(
-        `DELETE FROM sentence WHERE id IN (
-             SELECT s.id FROM sentence s JOIN sentence_link l ON l.sentence_id = s.id
-             WHERE l.owner_type = 'card' AND l.owner_id = ? AND s.created_by = ?
-         )`,
-    ).run(input.rank, input.viewer); // children cascade via FK
-    const now = Date.now();
-    const ins = db.query(
-        `INSERT INTO sentence (ext_id, hash, text, furigana, lang, source, public, visibility, created_by, created_at)
-         VALUES (?, ?, ?, ?, 'ja', 'custom', 0, 'private', ?, ?) RETURNING id`,
-    );
+    // Drop the caller's OWN card-example rows (owner-scoped so it can't touch a public built-in),
+    // then re-insert the set. children cascade via FK.
+    deleteOwnedLines('card', input.rank, input.viewer);
     const out: AssembledSentence[] = [];
     for (const ex of input.examples) {
         const tier = ex.slot === 'ex' ? null : ex.slot;
-        const r = ins.get(
-            `usr-${input.viewer}-cardex-${input.rank}-${ex.slot}`,
-            ttsTextHash(ex.text),
-            ex.text,
-            ex.furigana ? JSON.stringify(ex.furigana) : null,
-            input.viewer,
-            now,
-        ) as { id: number };
-        insertSentenceChildren(r.id, ex.en ? { en: ex.en } : undefined, undefined, {
+        const id = insertPrivateSentenceRow({
+            extId: `usr-${input.viewer}-cardex-${input.rank}-${ex.slot}`,
+            text: ex.text,
+            furigana: ex.furigana ?? null,
+            source: 'custom',
+            createdBy: input.viewer,
+        });
+        insertSentenceChildren(id, ex.en ? { en: ex.en } : undefined, undefined, {
             owner_type: 'card',
             owner_id: input.rank,
             tier,
         });
-        out.push(assembleSentenceRow(getSentenceRowById(r.id)!));
+        out.push(assembleSentenceRow(getSentenceRowById(id)!));
     }
     return out;
 }
