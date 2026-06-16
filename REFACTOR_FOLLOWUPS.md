@@ -417,7 +417,7 @@ multiple sources" drift. This pass collapses them. Ship as independent commits, 
 |---|---|---|---|
 | **T1** read-through localStorage cache | DRY — 4 hand-rolled `try/JSON` cache trios → 1 tested helper | LOW (pure storage, full unit cover) | **✅ SHIPPED** |
 | **T2** speaking-bar controller | DRY + Open/Closed — 3 copies of the `#navExtra` toggle/mic/visibility lifecycle → 1 | MED (live-mic dead-ends; wiring unit-tested, mic flow needs a browser pass) | **✅ SHIPPED** |
-| **T3** `selftalk.js` package decomposition | SRP — the last un-split "speaking surface" (634 lines) → a per-concern package | HIGH (shared-mutable-`S` + runtime cycles + live mic; browser-smoke each peel) | _in progress_ |
+| **T3** `selftalk.js` package decomposition | SRP — the last un-split "speaking surface" (634 lines) → a per-concern package | HIGH (shared-mutable-`S` + runtime cycles + live mic; browser-smoke each peel) | **✅ SHIPPED** |
 
 ### T1 — `persistence/cache.js` `createReadThroughCache` (✅ SHIPPED)
 The "warm from the last good fetch, degrade to cache on failure" `localStorage` primitive was
@@ -440,13 +440,25 @@ now a config object, not a copy-paste. Behavior preserved exactly, including み
 (`test/speaking-bar.test.js`, engine mocked). **Mic/record/compare flow needs a manual browser pass**
 (headless blocks `getUserMedia`) — checklist mirrors Workstream S's *Verification*.
 
-### T3 — `selftalk.js` → `features/selftalk/` package (_in progress_)
-The 634-line `selftalk.js` is the only record-compare surface never split (record-compare + songs both
-got the per-module treatment). Mirror `features/songs/`: a shared mutable `S` (state.js) + per-concern
-modules (store/view/templates/authoring/practice/speaking) behind an `index.js` barrel, with
-`features/selftalk.js` a thin `export *` re-export so `main.js`/`cloud.js` import unchanged. Same
-dead-ends + browser-smoke discipline as Workstream S (a missed bare identifier is a runtime
-`ReferenceError` that `bun run build` can't catch — grep-audit every state ref to `S.`).
+### T3 — `selftalk.js` → `features/selftalk/` package (✅ SHIPPED)
+The 634-line `selftalk.js` was the only record-compare surface never split (record-compare + songs
+both got the per-module treatment). Now mirrors `features/songs/`: a shared mutable `S` (state.js) +
+per-concern modules behind an `index.js` orchestrator/barrel, with `features/selftalk.js` a thin
+`export *` re-export so `main.js`/`cloud.js` import byte-for-byte unchanged (public API:
+`initSelftalk`/`showSelftalk`/`onSelftalkHidden`/`refreshPhrases`/`refreshTemplates`/`renderSelftalk`).
+As-built modules: **state** (the `S` + consts + el accessors), **store** (caches + refresh + phrase/
+template-set accessors + `maybeMaterialize`), **view** (the render entry + head + phrase/template card
+builders + grid/topic + slot menus + `toggleGrammar`), **practice** (the streak mark), **authoring**
+(the #stPhraseModal CRUD), **speaking** (the `createSpeakingBar` bar + visibilitychange) — the sketch's
+"templates" concern folded into store (materialize) + view (slot HTML), like Workstream D's
+templates-module deviation. The view⇄speaking import cycle is runtime-only (fine, like cloud⇄minna).
+Every state ref is `S.`-prefixed (grep-audited). **Risk mitigation beyond Workstream S:** because a
+missed bare identifier is a runtime `ReferenceError` that `bun run build` can't catch (esbuild treats
+it as a global) and headless can't run the mic flow, a NEW **render integration test**
+(`test/selftalk-render.test.js`, engine/audio/network mocked) imports the package and DRIVES
+`renderSelftalk`/`drillTopic`/`toggleGrammar`/`initSelftalk` under happy-dom — so a broken render-path
+reference fails a test, not just the browser. 244 study-app tests green; `bun run build` clean
+(83 modules). The live mic/record/template-combo flow still wants a manual browser pass (checklist below).
 
 ---
 

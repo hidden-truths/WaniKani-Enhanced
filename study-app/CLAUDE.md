@@ -12,7 +12,11 @@ order. The actual DOM/render/feature glue is split into **`src/features/*`** mod
   `flashcard` (session lifecycle; owns `session`), `browse` (grid + detail modal + topic
   groups; owns `bcfg`), `stats` (charts), `custom-cards` (rebuildData + #verbModal CRUD),
   `settings-page`, `minna` (the みんなの日本語 dashboard), `selftalk` (the 独り言 Self-Talk
-  output/speaking-practice tab — see [SELFTALK.md](SELFTALK.md)), `songs` + `songs-youtube` (the
+  output/speaking-practice tab — now a **directory** `selftalk/{state,store,view,practice,authoring,
+  speaking}.js` behind `selftalk/index.js` (the lifecycle + delegated-events orchestrator), with
+  `selftalk.js` a thin `export *` re-export so main.js + cloud.js import unchanged; `state.js` = the
+  shared mutable `S` view-state, the modules form runtime-only import cycles like songs — see
+  [SELFTALK.md](SELFTALK.md)), `songs` + `songs-youtube` (the
   歌/Songs song & lyric analysis tab — Library/Add/Read/Listen/Shadow/Mine; now a **directory**
   `songs/{state,library,add,read,listen,shadow,mine,progress}.js` behind `songs/index.js` (the
   render-dispatch + song-view shell + delegated-events + lifecycle orchestrator), with `songs.js` a
