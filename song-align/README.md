@@ -34,7 +34,24 @@ python3 align.py --song dry-flower-yuuri          # one song
 python3 align.py --all                            # every data/songs/*.json with a youtubeId
 python3 align.py --song saikai-vaundy --no-vocals # skip demucs (faster; weaker on dense mixes)
 python3 align.py --song mouichido-taniyuuki --model medium   # smaller/faster model
+python3 align.py --all --cookies-from-browser safari         # clear YouTube's "are you a bot?" gate
 ```
+
+### yt-dlp: "Sign in to confirm you're not a bot"
+
+YouTube gates many downloads behind a bot check. Pass cookies from a browser that's **logged into
+YouTube**:
+
+```bash
+python3 align.py --all --cookies-from-browser safari    # or: chrome | firefox | edge | brave
+# or an exported Netscape cookies.txt:
+python3 align.py --all --cookies ~/yt-cookies.txt
+```
+
+Notes: **Firefox/Safari** are usually the smoothest; **Chrome on macOS** locks its cookie DB while
+running (quit it first, and it may prompt for Keychain access). Also keep yt-dlp current —
+`pip install -U yt-dlp` — the bot countermeasures shift and an outdated yt-dlp is the most common cause.
+The cookies are read locally and only used to authorize the download; nothing is stored.
 
 Then, in `wk-enhanced-api/`:
 

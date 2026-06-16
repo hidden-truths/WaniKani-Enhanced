@@ -27,6 +27,11 @@ Usage:
   python3 align.py --all                                # every data/songs/*.json with a youtubeId
   python3 align.py --song saikai-vaundy --no-vocals     # skip demucs (faster; weaker on dense mixes)
   python3 align.py --song mouichido-taniyuuki --model medium   # smaller/faster Whisper model
+  python3 align.py --all --cookies-from-browser safari # pass browser cookies past YouTube's bot check
+
+If yt-dlp errors "Sign in to confirm you're not a bot", YouTube is gating the download — re-run with
+--cookies-from-browser <safari|chrome|firefox|edge|brave> (a browser logged into YouTube) or
+--cookies <cookies.txt>. Keep yt-dlp current too (`pip install -U yt-dlp`) — bot countermeasures shift.
 
 Install + the copyright posture + accuracy notes: see README.md.
 """
@@ -61,14 +66,20 @@ def load_song(slug: str):
     return song, lines
 
 
-def download_audio(video_id: str, workdir: Path) -> Path:
-    """yt-dlp → a .wav in workdir (transient — discarded with the temp dir)."""
-    subprocess.run(
-        ["yt-dlp", "-x", "--audio-format", "wav", "--audio-quality", "0",
-         "-o", str(workdir / "audio.%(ext)s"),
-         f"https://www.youtube.com/watch?v={video_id}"],
-        check=True,
-    )
+def download_audio(video_id: str, workdir: Path, cookies_browser=None, cookies_file=None) -> Path:
+    """yt-dlp → a .wav in workdir (transient — discarded with the temp dir).
+
+    YouTube now gates many videos behind a bot check ("Sign in to confirm you're not a bot"); pass
+    cookies from a logged-in browser (--cookies-from-browser) or a cookies.txt (--cookies) to clear it.
+    """
+    cmd = ["yt-dlp", "-x", "--audio-format", "wav", "--audio-quality", "0",
+           "-o", str(workdir / "audio.%(ext)s")]
+    if cookies_browser:
+        cmd += ["--cookies-from-browser", cookies_browser]
+    elif cookies_file:
+        cmd += ["--cookies", cookies_file]
+    cmd.append(f"https://www.youtube.com/watch?v={video_id}")
+    subprocess.run(cmd, check=True)
     got = sorted(workdir.glob("audio.*"))
     if not got:
         sys.exit("yt-dlp produced no audio file")
@@ -113,7 +124,7 @@ def run(slug: str, args) -> None:
     print(f"aligning {slug} — {len(lines)} lines, video {vid}{' (vocals)' if args.vocals else ''} …")
     with tempfile.TemporaryDirectory() as tmp:
         work = Path(tmp)
-        audio = download_audio(vid, work)
+        audio = download_audio(vid, work, args.cookies_from_browser, args.cookies)
         if args.vocals:
             audio = isolate_vocals(audio, work)
         timed = align(audio, lines, args.model, args.device)
@@ -142,6 +153,12 @@ def main() -> None:
                     help="isolate vocals with demucs first (default on — best quality)")
     ap.add_argument("--no-vocals", dest="vocals", action="store_false",
                     help="skip demucs (faster, no demucs install; weaker on dense mixes)")
+    ap.add_argument("--cookies-from-browser", dest="cookies_from_browser", default=None,
+                    metavar="BROWSER",
+                    help="read YouTube cookies from a logged-in browser (safari/chrome/firefox/edge/brave) "
+                         "— needed when yt-dlp hits 'Sign in to confirm you're not a bot'")
+    ap.add_argument("--cookies", dest="cookies", default=None, metavar="FILE",
+                    help="path to a Netscape cookies.txt (alternative to --cookies-from-browser)")
     args = ap.parse_args()
 
     slugs = sorted(p.stem for p in SONGS_DIR.glob("*.json")) if args.all else [args.song]
