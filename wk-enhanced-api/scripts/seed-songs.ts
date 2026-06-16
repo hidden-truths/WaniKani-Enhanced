@@ -65,9 +65,27 @@ if (!existsSync(dir)) {
     process.exit(0);
 }
 
+// Optional per-song TIMING sidecar (data/song-timing/<same filename>): { lines:[{ordinal,startMs,…}] },
+// produced by the OFFLINE forced-alignment pipeline (../../song-align/). Maps a line ordinal → its
+// clip_start_ms (video start, ms) → seeded onto the line's sentence_link (upsertPublicSong already
+// carries clipStartMs). Kept SEPARATE from the lyric JSON because timing is machine-generated +
+// video-specific + re-derivable, while the lyrics are hand-curated. No sidecar → the song seeds untimed.
+const timingDir = fileURLToPath(new URL('../data/song-timing', import.meta.url));
+function loadTiming(f: string): Map<number, number> {
+    const m = new Map<number, number>();
+    const p = `${timingDir}/${f}`;
+    if (!existsSync(p)) return m;
+    const data = JSON.parse(readFileSync(p, 'utf8')) as { lines?: { ordinal?: number; startMs?: number | null }[] };
+    for (const t of data.lines ?? []) {
+        if (typeof t.ordinal === 'number' && typeof t.startMs === 'number') m.set(t.ordinal, t.startMs);
+    }
+    return m;
+}
+
 const files = readdirSync(dir).filter((f) => f.endsWith('.json'));
 let songs = 0;
 let lines = 0;
+let timed = 0;
 let skipped = 0;
 for (const f of files) {
     const song = JSON.parse(readFileSync(`${dir}/${f}`, 'utf8')) as SongFile;
@@ -78,6 +96,7 @@ for (const f of files) {
         skipped++;
         continue;
     }
+    const timing = loadTiming(f); // ordinal → clip_start_ms, from the optional alignment sidecar
     db.upsertPublicSong({
         extId: song.extId,
         title: song.title,
@@ -96,10 +115,11 @@ for (const f of files) {
                 }
                 tokens = computed;
             }
-            return { text, furigana, en: ln.en ?? null, grammar: ln.grammar ?? [], tokens, section: ln.section ?? null };
+            return { text, furigana, en: ln.en ?? null, grammar: ln.grammar ?? [], tokens, section: ln.section ?? null, clipStartMs: timing.get(i) ?? null };
         }),
     });
     songs++;
     lines += song.lines.length;
+    timed += song.lines.reduce((n, _ln, i) => n + (timing.has(i) ? 1 : 0), 0);
 }
-console.log(`seeded ${songs} starter song(s) (${lines} lines) into the song store${skipped ? ` — skipped ${skipped} scaffold(s)` : ''}`);
+console.log(`seeded ${songs} starter song(s) (${lines} lines, ${timed} timed) into the song store${skipped ? ` — skipped ${skipped} scaffold(s)` : ''}`);

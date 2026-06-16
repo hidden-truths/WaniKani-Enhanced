@@ -236,6 +236,19 @@ describe('songs — public starter reuse-by-hash + idempotency', () => {
         expect(n("SELECT COUNT(*) AS n FROM sentence_link WHERE owner_type='song'")).toBe(2);
     });
 
+    test('a curated starter carries seeded per-line timing (clip_start_ms + timedCount)', () => {
+        // The seed merges an alignment sidecar → clipStartMs on each line; upsertPublicSong writes it
+        // onto the public sentence_link (untimed lines stay null). This is what unlocks synced highlight.
+        db.upsertPublicSong({ extId: 'song-tm', title: 'T', lines: [
+            { text: 'いち', furigana: seg('いち'), clipStartMs: 1000 },
+            { text: 'に', furigana: seg('に'), clipStartMs: 5200 },
+            { text: 'さん', furigana: seg('さん') }, // no timing for this line
+        ] });
+        const s = db.getSong({ extId: 'song-tm', viewer: null })!;
+        expect(s.lines.map((l) => l.link.clip_start_ms ?? null)).toEqual([1000, 5200, null]);
+        expect(s.timedCount).toBe(2);
+    });
+
     test('a curated starter carries its tokens → annotation served + Mine words/coverage populated', () => {
         // The seed authors in-order tokens (offsets computed by offsetTokens); here they arrive
         // pre-offset, exercising the PUBLIC-branch annotation write the curated set relies on.

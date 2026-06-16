@@ -1,0 +1,9 @@
+# song-align deps — run LOCALLY only (never installed on the prod droplet).
+# Also needs the ffmpeg system binary:  brew install ffmpeg
+#
+# Install:  python3 -m venv .venv && source .venv/bin/activate && pip install -r requirements.txt
+# (torch comes in via stable-ts/demucs and is large; on Apple Silicon it uses the MPS backend.)
+
+yt-dlp>=2024.8.0        # download the video's audio (transient)
+stable-ts>=2.17.0       # Whisper-based forced alignment of known text (pulls openai-whisper + torch)
+demucs>=4.0.0           # vocal isolation — only needed for --vocals (the default); use --no-vocals to skip
