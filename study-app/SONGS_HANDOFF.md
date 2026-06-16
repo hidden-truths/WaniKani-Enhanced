@@ -1,170 +1,182 @@
-# 歌 / Songs — session handoff (2026-06-16)
+# 歌 / Songs — session handoff (2026-06-16, end of "modes + timing + curation" session)
 
-**Snapshot, not the design doc.** The living design + source of truth is [SONGS.md](SONGS.md); the
-architecture/dead-ends live in the three CLAUDE.md files. This doc is the **current state + what's
-left + the gotchas a fresh context must not re-derive**, written at the end of a long session so the
-next session can start cold. When Listen/Shadow ship, fold the still-relevant parts into SONGS.md and
-archive this.
+**This is the cold-start doc.** Read it first, top to bottom — it's written to be the whole context a
+fresh session needs to keep building. The living **design** source of truth is [SONGS.md](SONGS.md)
+(four modes, data model, reuse map, Phase checklist); the architecture/invariants live in the three
+`CLAUDE.md` files. This doc = current state + what's left + the gotchas a fresh context must NOT
+re-derive. When the next batch of features ships, update this in place.
 
 ---
 
-## TL;DR
+## TL;DR — what works right now
 
-The 歌/Songs tab now has a **real curated library** (12 J-pop songs) with full per-line analysis
-(furigana · English · grammar tags · per-word JLPT), **stanza structure**, and a working **offline
-line-timing pipeline** (forced alignment) that unlocks the synced highlight + per-line replay.
+The 歌/Songs tab (the study app's 6th surface) is **feature-complete for v1**: a curated library you
+read, listen to, shadow, and mine, with real synced timing.
 
-- **Library:** 12 public starter songs (the placeholder 故郷 was removed). Each has furigana, a per-line
-  English gloss, grammar-catalog tags, and per-word JLPT tokens → so **Read + Mine + coverage %** all work.
-- **Timing:** an offline forced-alignment pipeline ([`song-align/`](../song-align/)) produces per-line
-  `clip_start_ms`; the seed merges it. **All 12 songs are now timed (2026-06-16)** — every committed
-  sidecar in `wk-enhanced-api/data/song-timing/` is `large-v3` + vocal-isolated, so synced highlight,
-  per-line replay, Listen-by-slice, and Shadow's "▶ original" are live across the whole library, not
-  just the ドライフラワー pilot.
-- **Listen + Shadow now SHIPPED (2026-06-16):** Listen = a per-line dictation stepper (cloze ⇄ full-line,
-  advisory grading, Reveal, per-session count, timed-slice/synth audio, masked video). Shadow = the
-  record-compare engine reused verbatim (`SONGS_SCOPE = 80000`, synth-TTS full rig + by-ear YouTube-slice
-  reference, day-streak on save). All four modes are live.
-- **Still to build:** an in-app **tap-to-sync** editor for private BYO songs, the `songs` progress blob
-  (Shadow stubs its shadowed-line signal via `markShadowed`), and the inline Add-review editor.
+- **All four practice modes are LIVE:** **Read** (lyric viewer) · **Listen** (dictation) · **Shadow**
+  (record & compare) · **Mine** (vocab + grammar). Library + Add (paste→analyze→save) also shipped.
+- **12-song curated J-pop library, ALL TIMED.** Every song has full per-line analysis
+  (furigana · English · grammar · per-word JLPT) **and** forced-alignment timing, so synced highlight,
+  per-line replay, Listen-by-slice, and Shadow's "▶ original" work across the whole library.
+- **Adding a curated song is now ONE command** — `scripts/curate-song.ts` (analyze → write seed →
+  time → seed). See "Adding a song" below.
+- **What's left:** ship to prod (re-seed + redeploy — it's all local right now); the `songs` synced
+  **progress blob** (Shadow stubs it); a few MED validation findings; and in-app **tap-to-sync** for
+  user-added (BYO) songs. Full slate in "What's left" + [NEW_FEATURES.md](../NEW_FEATURES.md) "歌/Songs".
 
-This session added **8 commits** on top of `7b6306d` (the pre-session HEAD); newest first:
+⚠️ **Everything this session is committed to local `main` but NOT pushed and NOT deployed.** The prod
+DB has the OLD (untimed) library and the prod study-app container predates Listen/Shadow.
+
+---
+
+## This session's commits (8, newest first) — on top of `d745d72`
 
 | Commit | What |
 |---|---|
-| `3e96ad2` | **Forced-alignment timing pipeline** (`song-align/`) + seed-timing ingest |
-| `767d327` | Drop 故郷 + `deletePublicSong` (curator cleanup) |
-| `e168565` | Curate the remaining **11 songs** (full analysis, authored via parallel subagents) |
-| `80d3074` | Curate **ドライフラワー** — the pilot song (format + quality reference) |
-| `17a8314` | Per-line **stanza sections** (Verse/Chorus/…) → Read viewer spacing |
-| `a0b7544` | Wire **FIESTA** to its official JP-audio art-track |
-| `42771d7` | Scaffold the 12 songs (oEmbed-verified YouTube ids) |
-| `cf63d35` | Seed carries per-word **tokens** → public starters get Mine/coverage |
+| `53e4824` | **One-command curation** (`scripts/curate-song.ts` + test) + formalize the process |
+| `38fb09a` | gitignore the `song-align/` venv + `__pycache__` |
+| `3cd542b` | **Time the full library** — 12 forced-alignment sidecars (all songs `N/N` timed, local) |
+| `06ea2c7` | song-align: solve YouTube's **player JS challenge** (`yt-dlp-ejs` + `--js-runtimes node`) |
+| `85f7429` | song-align: pass **browser cookies** to yt-dlp (clear the bot check) |
+| `6cca52d` | Listen: hide the "Slower" cue on untimed lines (synth has no slow-down) |
+| `4b9b730` | **Shadow** mode — reuse the record-compare engine for song lines |
+| `8a92e14` | **Listen** mode — cloze ⇄ full-line dictation, advisory grading, timed-slice audio |
 
 ---
 
 ## What the feature is (one paragraph)
 
-The 6th study-app tab. A song = a `song` metadata row (title/artist/youtube_id) + one **sentence-store
-row per lyric line** (`owner_type='song'`), so lines reuse the furigana / tap-a-word / grammar /
-translation machinery and the privacy gate. **Public** starter songs (`created_by=NULL`, anon-readable)
-are the curated set; **private** BYO songs (`created_by=<user>`) come from the in-app Add flow. The audio
-is **always** the embedded YouTube player — never re-hosted. Full design: [SONGS.md](SONGS.md). Server
-side: [../wk-enhanced-api/CLAUDE.md](../wk-enhanced-api/CLAUDE.md). Client side: [CLAUDE.md](CLAUDE.md)
-(the 歌/Songs dead-end).
+A song = a `song` metadata row (title/artist/youtube_id) + one **sentence-store row per lyric line**
+(`owner_type='song'`), so lines reuse the furigana / tap-a-word / grammar / translation machinery and
+the privacy gate. **Public** starter songs (`created_by=NULL`, anon-readable) are the curated 12;
+**private** BYO songs come from the in-app Add flow. Audio is **always** the embedded YouTube player —
+never re-hosted; the only stored audio is the user's own Shadow takes (private) + cached TTS of line
+text. Full design: [SONGS.md](SONGS.md). Server: [../wk-enhanced-api/CLAUDE.md](../wk-enhanced-api/CLAUDE.md)
+(Songs entries). Client: [CLAUDE.md](CLAUDE.md) (the 歌/Songs dead-end).
 
 ---
 
-## The curated 12 (all public starters)
+## The four modes — current state + where the code lives
 
-`wk-enhanced-api/data/songs/<slug>.json` — one file per song. All YouTube ids oEmbed-verified.
+All four render into the stable `#sgContent` wrapper inside `#sgBody`; the YouTube player is mounted
+once per song view (outside `#sgContent`) so partial re-renders don't reload the iframe. Entry points
+are in [src/features/songs.js](src/features/songs.js); pure logic in [src/core/songs.js](src/core/songs.js).
 
-| slug | title | artist | note |
-|---|---|---|---|
-| `bandage-imazu` | BANDAGE | Ayumu Imazu | heavy English |
-| `classic-imazu` | CLASSIC | Ayumu Imazu | heavy English |
-| `blinded-eyes-imazu` | Blinded Eyes | Ayumu Imazu | mostly English |
-| `dry-flower-yuuri` | ドライフラワー | 優里 | **pilot / format reference** |
-| `betelgeuse-yuuri` | ベテルギウス | 優里 | |
-| `mouichido-taniyuuki` | もう一度 | Tani Yuuki | |
-| `hiraishin-taniyuuki` | 非lie心 | Tani Yuuki | title is a 避雷針 wordplay; official lyric video |
-| `saikai-vaundy` | 再会 | Vaundy | literary; anime OP |
-| `chikyugi-yonezu` | 地球儀 | 米津玄師 | Boy & the Heron theme |
-| `tsukiwomiteita-yonezu` | 月を見ていた | 米津玄師 | FFXVI theme |
-| `shiawase-inoue` | 幸せについて、僕が考えたこと | 井上絃 | |
-| `fiesta-izone` | FIESTA (Japanese Ver.) | IZ*ONE | JP-audio art-track (no official JP MV) |
-
-**Provenance / copyright posture (maintainer's decision this session):** these are copyrighted commercial
-J-pop, curated as PUBLIC starters under the maintainer's fair-use / transformative-use stance for this
-single-user deployment. This **overrides** the original SONGS.md "PD/CC only · no redistribution" posture
-(that doc text is stale — see "Doc drift" below). **The lyric TEXT is maintainer-supplied** (pasted into
-`~/Downloads/song-lyrics/<slug>.txt`); the furigana/EN/grammar/JLPT analysis is LLM-authored. **A future
-session must NOT source/scrape/reproduce lyrics itself — only annotate text the maintainer provides.**
+- **Read** (`readHtml`) — the lyric viewer: furigana flip, reveal-on-tap English, tap-a-word
+  (`overlayTokens`+`wireWordTaps`), grammar chips → reference panel, stanza section headings, **synced
+  highlight** (`highlightAt`) + per-line replay (`replayLine` → `playSlice` slice, else synth).
+- **Listen** (`listenHtml`, `mode==='listen'`) — a per-line **dictation stepper** ("Line N of M · K
+  correct"): a **Cloze ⇄ Full-line** difficulty toggle, Play + (timed-only) Slower cues, Check / Reveal /
+  Next. Cloze blanks content words via the pure `clozeBlanks` + `clozeLineParts` (offset-slicing — a
+  blank token can sit mid plain-furigana run). **Advisory grading** via the typed-reading path
+  (`normKana`/`romajiToKana`); a `done` Set is the per-session correct count (no double-count). The
+  video is **masked** in Listen (kept playing for audio) so a lyric-burned MV can't spoil the dictation.
+- **Shadow** (`shadowHtml`, `mode==='shadow'`) — per-line speaking practice reusing the **record-compare
+  engine verbatim**: navbar speaking bar (`speakingBarHtml`/`wireSpeakingControls`/`initMicSelector` in
+  `#navExtra`, shadow+account only) + per-line `recordControlHtml(SONGS_SCOPE, songLineKey(extId,ord),
+  '', null, false, plainText(lineJp), 'songs')` (the synth-TTS reference = full rig). Reference tiers:
+  **TTS** (full rig) + a per-line by-ear **YouTube-slice** ("▶ original", timed lines only — iframe
+  audio isn't decodable). A saved take marks the shared day-streak. Account-gated (recording is private).
+- **Mine** (`mineHtml`) — vocab by JLPT (known/added/new) → bulk/per-word activation as `Source:歌`
+  custom cards; grammar points + counts → reference panel + save-line-as-Self-Talk-phrase.
 
 ---
 
-## New mechanisms shipped this session (the load-bearing ones)
+## New mechanisms shipped this session (load-bearing)
 
-### 1. Seed carries the full analysis (tokens) — `cf63d35`
-The seed file's lyric line gained optional **`tokens`** (content words, in-order surfaces, no offsets) +
-**`grammar`** (catalog ids) + **`section`**. `scripts/seed-songs.ts` computes UTF-16 offsets via the
-**exported `offsetTokens`** from `services/songAnalyze.ts` (one routine, so a hand-authored seed token
-can't drift from a model-authored runtime one). **Why it matters:** before this, public starters were
-token-less → 0% coverage + empty Mine. Now they get the full Read **and** Mine experience.
-Seed format contract: [`wk-enhanced-api/data/songs/README.md`](../wk-enhanced-api/data/songs/README.md).
-
-### 2. Stanza sections — `17a8314`
-A per-line optional **`section`** ("Verse 1" / "Chorus" / …), set ONLY on the first line of each stanza,
-stored in the existing **`sentence_link.role`** column (already plumbed end-to-end via `compactLink` →
-the served `link.role` — no schema change). `songs.js` `normalizeLine` surfaces it as `section`;
-`readHtml` renders a faint stanza heading + opens the spacing. Untagged songs stay a flat list.
-
-### 3. Forced-alignment timing pipeline — `3e96ad2` (the big one)
-**`song-align/`** (repo root, the timing analog of `sentence-nlp/`) — **offline, local-only** (no Python
-on prod): `yt-dlp` downloads the video's audio to a temp dir → `demucs` isolates vocals (`--no-vocals`
-to skip) → **`stable-ts`** force-aligns the KNOWN curated lyric lines (`model.align(..., language='ja',
-original_split=True)` → segment *i* == line ordinal *i*). Emits **`wk-enhanced-api/data/song-timing/<slug>.json`**
-(a timing-only sidecar: `{lines:[{ordinal,startMs,endMs}]}`, **no lyric text**; audio discarded on exit).
-`seed-songs.ts` merges the sidecar → each line's `clip_start_ms`. Sidecar contract:
-[`wk-enhanced-api/data/song-timing/README.md`](../wk-enhanced-api/data/song-timing/README.md); pipeline
-usage + the copyright posture: [`song-align/README.md`](../song-align/README.md). The aligner is
-**swappable** (aeneas / WhisperX) — the sidecar shape is aligner-agnostic.
-
-### 4. `deletePublicSong(extId)` — `767d327`
-Curator cleanup, the inverse of `upsertPublicSong`: scoped to `created_by IS NULL` (can only touch curator
-rows, never a user's private song) and **orphan-safe** (a line's sentence row is deleted only if no other
-song still links it — reuse-by-hash can share a line across starters). Used to drop 故郷. Prod cleanup:
-`bun -e "import('./src/db/client.ts').then(d=>d.deletePublicSong('song-furusato'))"`.
+1. **Listen cloze helpers** — `clozeBlanks(line,{max})` (content-POS tokens to blank) + `clozeLineParts(line,blanks)`
+   (the ordered render plan; offset-slices a blank that sits inside a plain furigana run, keeps ruby
+   segments whole). Pure + unit-tested in [test/core.test.ts](test/core.test.ts). The feature maps the
+   parts → gap `<input>`s; grading compares the typed reading to each blank's `reading`.
+2. **`playSlice` has its OWN timer + a `rate` arg** ([songs-youtube.js](src/features/songs-youtube.js)).
+   A slice started from a paused player used to have its stop clobbered by the synced-highlight poll
+   (they shared one timer) → it overran into the next line. Now `sliceTimer` is separate from `endTimer`,
+   and `rate` (default 1; `SLOW_RATE=0.6`) drives slow replay via `setPlaybackRate`. Benefits Read too.
+3. **`setOnTakeSaved` is now MULTI-LISTENER** ([record-compare/takes.js](src/features/record-compare/takes.js)).
+   Was a single global callback (Self-Talk owned it). Now an additive registry — Self-Talk **and** Songs
+   both subscribe, each filtering by its reserved scope, so registering one can't clobber the other.
+4. **Full library timing + the yt-dlp two-step fix.** `song-align/align.py` gained `--cookies-from-browser`
+   / `--cookies` (YouTube bot check) and `--js-runtimes` + `yt-dlp-ejs` (the player JS/signature
+   challenge). All 12 sidecars are committed in `wk-enhanced-api/data/song-timing/` and seeded locally.
+5. **One-command curation** — [scripts/curate-song.ts](../wk-enhanced-api/scripts/curate-song.ts):
+   analyze (`analyzeLyrics`) → pure `analyzedToSeedFile` → write `data/songs/<slug>.json` → shell
+   `align.py` → shell `seed-songs.ts`. `main()` is guarded by `import.meta.main` so the test can import
+   the pure mapping.
 
 ---
 
 ## ‼️ Gotchas / dead-ends — do NOT re-derive these
 
-- **The in-app tap-to-sync `PUT /v1/songs/{id}/timing` is OWNER-SCOPED** (`created_by`). The 12 curated
-  songs are PUBLIC (`created_by=NULL`), so they **cannot** be timed in-app — they must be timed via the
-  **offline pipeline + seed** (`song-align/` → `data/song-timing/` → re-seed). The tap-to-sync UI (when
-  built) is for **private BYO** songs only.
-- **Synced highlight + per-line replay are ALREADY implemented** in `songs.js` (`highlightAt`, `playSlice`,
-  `replayLine`). They were inert only for lack of `clip_start_ms`. Don't rebuild them — they light up when
-  a song is timed + re-seeded. Mode #1 is effectively done.
-- **`upsertPublicSong` already carries `clipStartMs`** onto the public `sentence_link` (the link is built
-  before the public/private branch in `insertSongLine`). No repo change was needed for public timing.
-- **Lyric sourcing boundary** (above): annotate maintainer-provided text only; never scrape/reproduce.
-- **JLPT/POS subtlety:** the Mine panel + coverage only count `CONTENT_POS = {NOUN,PROPN,VERB,ADJ,ADV}`
-  (`wk-enhanced-api/src/db/repos/songs.ts`). Pronoun tokens (PRON, e.g. 私/僕) are tappable but don't
-  count as Mine vocab — some songs tokenized 僕/私 as NOUN to make them count; inconsistent but harmless.
-- **The seed does NOT catalog-filter grammar ids** (the runtime analyzer does). A non-catalog id (e.g.
-  `te-iku`, which slipped in once and was removed) would seed as a broken chip. There's a throwaway
-  validator pattern in the build (`/tmp/validate-songs.mjs` — not committed) that checks furigana +
-  offsets + grammar-catalog + POS across all song files at once; consider committing a version of it if
-  curation continues.
+**From this session:**
+- **`playSlice` MUST keep its own `sliceTimer`** (gotcha #2 above). Don't "tidy" it back to sharing
+  `endTimer` with the highlight poll — a paused-start slice will overrun.
+- **`setOnTakeSaved` is additive (multi-listener), not set-and-replace.** A new speaking surface
+  registers its own scope-filtered hook; don't revert to a single callback.
+- **Listen renders into `#sgContent`; the player is OUTSIDE it.** Step re-renders call `renderListen()`
+  (rewrites `#sgContent` only) — calling the full `render()` per step would re-mount + reload the iframe.
+  Same pattern for Shadow (`renderShadow`). The video is masked **only** in Listen.
+- **Shadow constants are reserved:** `SONGS_SCOPE = 80000` (engine partition → server `lesson` param;
+  Minna 1–50, Self-Talk 90000 — never reuse), itemKey = `songLineKey(extId, ordinal)` = `"<extId>:<ord>"`,
+  audio context `'songs'` (synth-first). The YouTube-slice reference is **by-ear only** (no waveform/
+  overlay) — an iframe's audio can't be decoded.
+- **The day-streak is SHARED with Self-Talk.** A saved Shadow take calls `applyPractice` on
+  `state.selftalkStore.practice` + `saveSelftalk()` ("one spoke-today signal" per SONGS.md). The song
+  itemKey lands in Self-Talk's `doneToday` — harmless (no phrase id collision), by design.
+- **The `songs` progress blob is a STUB.** `markShadowed()` in [songs.js](src/features/songs.js) is a
+  documented no-op; the shadowed-line → progress-ring signal needs the real `createSyncedBlob` (see
+  "What's left" #2). The day-streak already gives the "I practiced" signal.
+- **`curate-song.ts` strips token offsets** before writing the seed file — `seed-songs.ts` recomputes
+  them via the SAME `offsetTokens`, so they can't drift. Don't write offsets into `data/songs/*.json`.
+- **yt-dlp now needs cookies + a JS runtime.** Bot check → `--cookies-from-browser <browser>` (Safari
+  needs the terminal to have **Full Disk Access** — TCC protects its cookie store). Player challenge →
+  `yt-dlp-ejs` (in `requirements.txt`) + `--js-runtimes node` (align.py passes it by default). Full
+  notes: [../song-align/README.md](../song-align/README.md). A sandboxed/non-interactive shell can't
+  read Safari cookies (TCC) — timing runs in the maintainer's terminal, or via a `cookies.txt`.
+
+**Carried forward (still true):**
+- **The in-app tap-to-sync `PUT /v1/songs/{id}/timing` is OWNER-SCOPED.** The 12 curated songs are
+  PUBLIC (`created_by=NULL`) → they're timed via the **offline pipeline** (curate-song / align.py),
+  NOT in-app. The in-app editor (unbuilt) is for **private BYO** songs only.
+- **Synced highlight + per-line replay are wired** in `songs.js` (`highlightAt`/`playSlice`/`replayLine`).
+- **Lyric sourcing boundary:** annotate maintainer-provided text only; never scrape/source/reproduce lyrics.
+- **Mine/coverage count only `CONTENT_POS = {NOUN,PROPN,VERB,ADJ,ADV}`** (mirror of the server set).
+  PRON tokens (私/僕) are tappable but don't count; some songs tokenized 僕/私 as NOUN to make them count.
+- **The seed does NOT catalog-filter grammar ids** (the runtime analyzer does). A non-catalog id seeds a
+  broken chip — `curate-song` inherits the analyzer's catalog filter, but a hand-edited seed file won't.
+- **Songs are the first RUNTIME writer of `sentence_annotation`** (LLM tokens, `parser='llm:*'`); offsets
+  are UTF-16, server-computed. Don't revert to offline-only. (Server CLAUDE.md.)
 
 ---
 
-## Validation findings still OPEN (catalogued, not yet fixed)
+## What's left (prioritized) — the next session's menu
 
-From the validation pass at the top of the session (the HIGH one — token-less public starters — was
-fixed by `cf63d35`). Remaining, by severity:
+The user wants the next session to focus on **NEW FEATURE development**. Candidates, highest-leverage
+first (full backlog incl. broader-app ideas: [NEW_FEATURES.md](../NEW_FEATURES.md)):
 
-- **MED — no client UI to edit-metadata or delete a song.** Server has `PUT /v1/songs/{id}` + `DELETE
-  /v1/songs/{id}`; `songs.js` wires no edit/rename/delete action. Bites when curating/fixing.
-- **MED — Add flow has no title/artist field**; relies on oEmbed (which returns the *channel*, not the
-  artist), and saves "Untitled" on an oEmbed miss, unfixable in-flow.
-- **LOW–MED — analyze caps at 120 lines** (`splitLyrics`) but persist allows 400 → silent truncation of
-  very long songs.
-- **LOW — the YouTube player remounts on every re-render** (mode switch, add-word) → re-buffers + loses
-  position.
-- **LOW — `goBrowseGrammar` is a dead button** (clicks the Browse tab without applying the grammar filter).
+1. **Ship to prod** *(not a feature, but it gates everything users see)* — push `main`, rebuild/redeploy
+   the **study-app container** (Listen/Shadow are client changes), run `bun scripts/seed-songs.ts`
+   against the **prod** DB so the committed timing lands. Droplet pattern:
+   [../wk-enhanced-api/deploy/README.md](../wk-enhanced-api/deploy/README.md). Spot-check the
+   English-heavy tracks (BANDAGE/CLASSIC/Blinded Eyes/FIESTA) where JA alignment drifts most.
+2. **`songs` synced progress blob** ⭐ *(most shovel-ready new feature; completes Shadow)* —
+   `createSyncedBlob`, app key `songs`, `{progress:{"<extId>":{starred,shadowed,lastMode,lastLine}}}`.
+   Wire `markShadowed()` (the stub) to record shadowed ordinals; add star toggles; show the library
+   **progress ring** from it. ~6 shared sync files (state.js, sync-bus.js, cloud.js, core/merge.js,
+   persistence/songs.js, + a `mergeSongs` test) — model on the Self-Talk blob (`SELFTALK_APP_KEY`).
+3. **Edit/delete a song + a real Add title/artist field** *(MED validation findings)* — server has
+   `PUT/DELETE /v1/songs/{id}`; the client wires no edit/rename/delete. The Add flow relies on oEmbed
+   (returns the channel, not the artist) and saves "Untitled" on a miss with no fix-in-flow.
+4. **In-app tap-to-sync editor (BYO songs)** — play the video, tap each line's start →
+   `PUT /v1/songs/{id}/timing` (owner-scoped). Generalizes the Minna clip-marker; the only timing path
+   for a user's own added song. Largest of the four.
+5. **Inline Add-review editor** — edit flagged lines before save (today the flags just guide a re-analyze).
+
+Also open (lower): `analyze` caps at 120 lines but persist allows 400 (silent truncation); the
+`goBrowseGrammar` button lands on Browse without applying the grammar filter.
 
 ---
 
-## What's left (prioritized)
-
-**✅ Shipped this round:** all 12 songs timed (local DB), the **Listen** + **Shadow** modes (all four
-modes now live), and a **one-command curation pipeline** (below). Per-mode detail is in the
-[SONGS.md Phase checklist](SONGS.md).
-
-### Adding a curated song — the standing process (one command)
+## Adding a curated song — the one command
 
 ```bash
 # from wk-enhanced-api/  (.env supplies ANTHROPIC_API_KEY for analyze + DATABASE_FILE for seed)
@@ -172,70 +184,40 @@ bun scripts/curate-song.ts --slug <slug> --title <…> --artist <…> \
     --url <youtube-url> --lyrics <path-to-lyrics.txt> --browser safari
 ```
 
-`scripts/curate-song.ts` runs **analyze → write `data/songs/<slug>.json` → time (`song-align`) →
-seed** in one go. You supply the lyric TEXT (a file) + metadata; it annotates — it never sources or
-scrapes lyrics. Flagged lines print for a proofread; `--dry-run` previews the plan, `--force`
-re-analyzes, `--no-align`/`--no-seed` skip a step. Then spot-check the song in the app and **commit**
-`data/songs/<slug>.json` + `data/song-timing/<slug>.json`. Full doc + the per-browser cookie/JS-runtime
-setup: [`wk-enhanced-api/data/songs/README.md`](../wk-enhanced-api/data/songs/README.md) "Adding a song
-— one command" + [`song-align/README.md`](../song-align/README.md). The pure analyze→seed mapping is
-unit-tested (`scripts/curate-song.test.ts`).
-
-### Remaining work, highest-leverage first
-
-1. **Ship to prod** — everything above is local-only. Push `main`, rebuild/redeploy the **study-app
-   container** (Listen/Shadow are client changes), and run `bun scripts/seed-songs.ts` against the
-   **prod** DB (droplet pattern in [wk-enhanced-api/deploy/README.md](../wk-enhanced-api/deploy/README.md))
-   so the committed timing sidecars go live. Verify a timed song on `wkenhanced.dev`; spot-check the
-   English-heavy tracks (BANDAGE/CLASSIC/Blinded Eyes/FIESTA) where JA alignment drifts most.
-2. **`songs` synced progress blob** — `createSyncedBlob`, app key `songs`, `{progress:{"<extId>":
-   {starred,shadowed,lastMode,lastLine}}}`. Shadow STUBS the shadowed-line signal (`markShadowed`);
-   build the blob to light up the library progress ring + persist stars/last-mode. ~6 shared sync files,
-   modeled on the Self-Talk blob.
-3. **Open validation findings (MED)** — no in-app edit/delete-song UI; the Add flow has no title/artist
-   field (oEmbed returns the channel, saves "Untitled" on a miss); analyze caps at 120 lines but persist
-   allows 400 (silent truncation of long songs).
-4. **In-app tap-to-sync editor** *(private BYO songs)* — play the video, tap each line's start →
-   `PUT /v1/songs/{id}/timing`. The curated set is timed offline (curate-song); this is the only timing
-   path for a user's own added song.
-5. **Inline Add-review editor** — edit flagged lines before save (today the flags guide a re-analyze).
-6. **Doc drift cleanup** (below).
+Runs analyze → write `data/songs/<slug>.json` → time (`song-align`) → seed. Flagged lines print for a
+proofread; `--dry-run` previews, `--force` re-analyzes, `--no-align`/`--no-seed` skip a step. You supply
+the lyric TEXT (a file); it only annotates. Then spot-check + commit the two JSON files. Full doc +
+the per-browser cookie/JS-runtime setup: [../wk-enhanced-api/data/songs/README.md](../wk-enhanced-api/data/songs/README.md)
+"Adding a song — one command" + [../song-align/README.md](../song-align/README.md).
 
 ---
 
-## Doc drift to fix
+## How to verify / build / test / deploy
 
-- **SONGS.md** "Account-gating & copyright posture" still says **"genuinely CC / public-domain / Vocaloid"
-  + "we do not redistribute copyrighted lyrics"** — now contradicted by the maintainer's public-curated
-  decision. Its phase checklist also predates this session's curation + timing work. (Partially updated;
-  finish it.)
-- The `[ ]` boxes for Phase 4/5 in SONGS.md need the timing-pipeline + synced-highlight progress reflected.
-
----
-
-## How to verify / deploy
-
-- **Server:** `cd wk-enhanced-api && bun test` (song repo + routes + analyze + seed-token/section/timing
-  pins) + `bun run typecheck`. Full suite was **297 green** at handoff.
-- **Client:** `cd study-app && bun run test` (204) + `bun run build`.
-- **Data integrity:** `bun scripts/seed-songs.ts` re-validates every line's furigana (`concat===text`) and
-  recomputes every token offset (`slice===surface`) — it aborts on a bad line and names it. The library
-  GET (`/v1/songs`, anon-OK) exposes per-song words + JLPT; `/v1/songs/{id}` exposes furigana/EN/grammar/
-  tokens + `link.clip_start_ms` + `link.role` (section).
-- **Preview caveat:** `:5173` is the maintainer's own running Vite — **do NOT restart it / `:3000`**
-  (project rule). Drive the already-running preview, or verify via the API with `curl`/DOM `eval`.
-- **Deploy:** data lives in the DB; the repo holds `data/songs/*.json` + `data/song-timing/*.json`. To
-  ship to prod, re-run `bun scripts/seed-songs.ts` against the prod DB (droplet pattern), then
-  `deletePublicSong('song-furusato')` on prod. No `ANTHROPIC_API_KEY` needed (curated, not runtime-analyzed).
+- **Client (study-app):** `cd study-app && bun run test` (208) + `bun run build`. Pure Songs logic is in
+  `core/songs.js` (tested in `test/core.test.ts`).
+- **Server (wk-enhanced-api):** `bun test` (299) + `bun run typecheck`. Song repo/routes/analyze +
+  `curate-song` mapping are covered; the live Claude/align calls are integration-only.
+- **Data integrity:** `bun scripts/seed-songs.ts` re-validates every line's furigana + recomputes token
+  offsets and ABORTS on a bad line (names it). The live API (`/v1/songs`) shows per-song line/timed
+  counts.
+- **Preview caveat:** the maintainer runs Vite on `:5173` + the API on `:3000` — **do NOT restart them**.
+  The MCP preview tool can't attach to a foreign server, so to drive a real browser this session ran a
+  SEPARATE Vite on `:5199` via a temp `--config` with a `/v1` → `:3000` proxy + empty `VITE_API_BASE`
+  (so a non-allowlisted origin clears CORS), then removed the scaffolding. Mic-gated flows (Shadow
+  recording) can't be exercised headlessly (`getUserMedia` → `NotAllowedError`).
+- **Deploy:** data lives in the DB; the repo holds `data/songs/*.json` + `data/song-timing/*.json`.
+  Re-seed prod (`seed-songs.ts` against the prod DB) + redeploy the study-app container.
 
 ---
 
 ## Cold-start reading order for the next session
 
-1. **This file** — current state + what's left + gotchas.
-2. [SONGS.md](SONGS.md) — the design (four modes, data model, reuse map). Note the stale posture/checklist.
-3. [CLAUDE.md](CLAUDE.md) 歌/Songs dead-end + [../wk-enhanced-api/CLAUDE.md](../wk-enhanced-api/CLAUDE.md)
-   Songs entries — architecture + invariants (UTF-16 offsets, privacy gate, etc.).
-4. Code: `wk-enhanced-api/src/db/repos/songs.ts` (+ `.test.ts`), `scripts/seed-songs.ts`,
-   `services/songAnalyze.ts`; `study-app/src/features/songs.js` (+ `songs-youtube.js`),
-   `src/core/songs.js`; `song-align/align.py`.
+1. **This file** — current state, what's left, gotchas.
+2. [SONGS.md](SONGS.md) — the design (four modes, data model, reuse map, Phase checklist).
+3. [NEW_FEATURES.md](../NEW_FEATURES.md) "歌 / Songs" — the new-feature backlog (for a feature-dev session).
+4. [CLAUDE.md](CLAUDE.md) 歌/Songs dead-end + [../wk-enhanced-api/CLAUDE.md](../wk-enhanced-api/CLAUDE.md)
+   Songs entries — architecture + invariants.
+5. Code: `src/features/songs.js` (+ `songs-youtube.js`), `src/core/songs.js`, `src/features/record-compare/*`;
+   server `src/db/repos/songs.ts`, `src/services/songAnalyze.ts`, `scripts/{seed,curate}-song*.ts`;
+   `song-align/align.py`.

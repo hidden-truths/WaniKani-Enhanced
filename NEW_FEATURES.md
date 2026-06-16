@@ -8,6 +8,59 @@ See also [CLAUDE.md](CLAUDE.md) for architecture notes and dead-ends already exp
 
 ---
 
+## 歌 / Songs features
+
+The 歌/Songs surface (study app's 6th tab) shipped all four modes (Read · Listen · Shadow · Mine) +
+a 12-song curated, fully-timed library + a one-command curation pipeline. Full state, code map, and
+gotchas: **[study-app/SONGS_HANDOFF.md](study-app/SONGS_HANDOFF.md)** (read it before picking one of
+these up); design source of truth: [study-app/SONGS.md](study-app/SONGS.md). Ordered by value.
+
+### `songs` synced progress blob ⭐ (most shovel-ready; completes Shadow)
+
+**What**: the 6th `createSyncedBlob` trio — app key `songs`, shape `{progress:{"<extId>":{starred,
+shadowed,lastMode,lastLine}}}`. Wire the existing `markShadowed()` stub in `features/songs.js` to record
+shadowed line ordinals; add per-line/per-song **star** toggles; render the library card **progress ring**
+from it (today the ring shows coverage %). **Why**: Shadow already accrues the signal but throws it away;
+this is the natural completion + the only missing piece of the per-song progress model in SONGS.md.
+**Complexity**: medium — ~6 shared sync files (`state.js`, `sync-bus.js`, `features/cloud.js`,
+`core/merge.js` + a `mergeSongs` test, `persistence/songs.js`); copy the Self-Talk blob
+(`SELFTALK_APP_KEY`/`selftalkBlob`) almost verbatim. Server enum widen: add `songs` to the
+`/v1/progress/{app}` allowlist in `routes/progress.ts`. **Gotcha**: content is server-authoritative —
+the blob holds PROGRESS ONLY (no line text/furigana/timing), same split as Self-Talk's `{practice}`.
+
+### Edit / delete a song + a real Add title/artist field (MED validation findings)
+
+**What**: the server already exposes `PUT /v1/songs/{id}` (metadata) + `DELETE /v1/songs/{id}`; the
+client wires no edit/rename/delete affordance. Separately, the Add flow has no title/artist input — it
+relies on oEmbed (which returns the YouTube *channel*, not the artist) and saves "Untitled" on a miss
+with no way to fix it in-flow. **Why**: curating/fixing a BYO song is currently impossible from the UI.
+**Complexity**: low–medium (a song-header overflow menu + a small form; the API exists).
+
+### In-app tap-to-sync editor (BYO song timing)
+
+**What**: play the embedded video and tap as each line begins → write each line's `clip_start_ms` via
+`PUT /v1/songs/{id}/timing` (owner-scoped). Generalizes みんなの日本語's clip-marker to a whole song.
+**Why**: the curated set is timed offline (curate-song / align.py), but a user's OWN added song has **no
+timing path** without this — so Listen-by-slice + Shadow "▶ original" + synced highlight never light up
+for BYO songs. **Complexity**: medium–high (the largest of these). **Gotcha**: `PUT /timing` is
+owner-scoped, so this is BYO-only; the public curated set stays offline-timed.
+
+### Inline Add-review editor
+
+**What**: let the user edit flagged lines (furigana/reading) in the Add review step before saving,
+instead of only being able to re-analyze. **Why**: targeted fix-ups beat a full re-analyze for one bad
+line. **Complexity**: medium (inline-editable review rows → the existing `POST /v1/songs` persist path).
+
+### Lower-priority Songs cleanups
+
+- `analyze` caps at 120 lines (`splitLyrics`) but persist allows 400 → very long songs silently truncate.
+- `goBrowseGrammar` lands on Browse without applying the grammar filter (dead-ends the cross-link).
+- The YouTube player re-mounts on a full song re-render (mode switch / add-word) → re-buffers; Listen/
+  Shadow already avoid it via the `#sgContent` partial re-render, but Read/Mine switches still remount.
+- Stanza `section` labels aren't auto-detected by `curate-song` — a curator hand-adds them (optional).
+
+---
+
 ## Learning features
 
 ### Click-to-lookup on sentence words
