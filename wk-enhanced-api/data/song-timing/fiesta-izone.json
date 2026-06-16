@@ -1,0 +1,274 @@
+{
+  "extId": "song-fiesta-izone",
+  "videoId": "HDrKQnDpRnY",
+  "model": "large-v3",
+  "vocals": true,
+  "alignedAt": "2026-06-16T09:02:40.059398+00:00",
+  "lines": [
+    {
+      "ordinal": 0,
+      "startMs": 9180,
+      "endMs": 9180
+    },
+    {
+      "ordinal": 1,
+      "startMs": 9180,
+      "endMs": 9180
+    },
+    {
+      "ordinal": 2,
+      "startMs": 9180,
+      "endMs": 28840
+    },
+    {
+      "ordinal": 3,
+      "startMs": 28840,
+      "endMs": 30560
+    },
+    {
+      "ordinal": 4,
+      "startMs": 30880,
+      "endMs": 34800
+    },
+    {
+      "ordinal": 5,
+      "startMs": 35000,
+      "endMs": 38720
+    },
+    {
+      "ordinal": 6,
+      "startMs": 38740,
+      "endMs": 42520
+    },
+    {
+      "ordinal": 7,
+      "startMs": 42700,
+      "endMs": 46880
+    },
+    {
+      "ordinal": 8,
+      "startMs": 47320,
+      "endMs": 51040
+    },
+    {
+      "ordinal": 9,
+      "startMs": 51140,
+      "endMs": 55020
+    },
+    {
+      "ordinal": 10,
+      "startMs": 55240,
+      "endMs": 59340
+    },
+    {
+      "ordinal": 11,
+      "startMs": 59420,
+      "endMs": 64920
+    },
+    {
+      "ordinal": 12,
+      "startMs": 65100,
+      "endMs": 68680
+    },
+    {
+      "ordinal": 13,
+      "startMs": 68740,
+      "endMs": 72240
+    },
+    {
+      "ordinal": 14,
+      "startMs": 72360,
+      "endMs": 74560
+    },
+    {
+      "ordinal": 15,
+      "startMs": 74800,
+      "endMs": 76540
+    },
+    {
+      "ordinal": 16,
+      "startMs": 76660,
+      "endMs": 79220
+    },
+    {
+      "ordinal": 17,
+      "startMs": 79500,
+      "endMs": 80780
+    },
+    {
+      "ordinal": 18,
+      "startMs": 87300,
+      "endMs": 93880
+    },
+    {
+      "ordinal": 19,
+      "startMs": 93880,
+      "endMs": 94900
+    },
+    {
+      "ordinal": 20,
+      "startMs": 97600,
+      "endMs": 100120
+    },
+    {
+      "ordinal": 21,
+      "startMs": 100220,
+      "endMs": 104300
+    },
+    {
+      "ordinal": 22,
+      "startMs": 104480,
+      "endMs": 106000
+    },
+    {
+      "ordinal": 23,
+      "startMs": 106040,
+      "endMs": 109900
+    },
+    {
+      "ordinal": 24,
+      "startMs": 110340,
+      "endMs": 112560
+    },
+    {
+      "ordinal": 25,
+      "startMs": 112780,
+      "endMs": 116760
+    },
+    {
+      "ordinal": 26,
+      "startMs": 117020,
+      "endMs": 120460
+    },
+    {
+      "ordinal": 27,
+      "startMs": 120740,
+      "endMs": 124540
+    },
+    {
+      "ordinal": 28,
+      "startMs": 124620,
+      "endMs": 128980
+    },
+    {
+      "ordinal": 29,
+      "startMs": 129140,
+      "endMs": 133040
+    },
+    {
+      "ordinal": 30,
+      "startMs": 133060,
+      "endMs": 137000
+    },
+    {
+      "ordinal": 31,
+      "startMs": 137200,
+      "endMs": 141280
+    },
+    {
+      "ordinal": 32,
+      "startMs": 141600,
+      "endMs": 146920
+    },
+    {
+      "ordinal": 33,
+      "startMs": 147080,
+      "endMs": 150660
+    },
+    {
+      "ordinal": 34,
+      "startMs": 150680,
+      "endMs": 154040
+    },
+    {
+      "ordinal": 35,
+      "startMs": 154320,
+      "endMs": 156480
+    },
+    {
+      "ordinal": 36,
+      "startMs": 156720,
+      "endMs": 158480
+    },
+    {
+      "ordinal": 37,
+      "startMs": 158560,
+      "endMs": 161260
+    },
+    {
+      "ordinal": 38,
+      "startMs": 161380,
+      "endMs": 162000
+    },
+    {
+      "ordinal": 39,
+      "startMs": 162220,
+      "endMs": 166100
+    },
+    {
+      "ordinal": 40,
+      "startMs": 166300,
+      "endMs": 169680
+    },
+    {
+      "ordinal": 41,
+      "startMs": 169820,
+      "endMs": 174320
+    },
+    {
+      "ordinal": 42,
+      "startMs": 174400,
+      "endMs": 177280
+    },
+    {
+      "ordinal": 43,
+      "startMs": 177840,
+      "endMs": 182100
+    },
+    {
+      "ordinal": 44,
+      "startMs": 182640,
+      "endMs": 185700
+    },
+    {
+      "ordinal": 45,
+      "startMs": 185860,
+      "endMs": 189320
+    },
+    {
+      "ordinal": 46,
+      "startMs": 189420,
+      "endMs": 191620
+    },
+    {
+      "ordinal": 47,
+      "startMs": 191900,
+      "endMs": 193640
+    },
+    {
+      "ordinal": 48,
+      "startMs": 193740,
+      "endMs": 196300
+    },
+    {
+      "ordinal": 49,
+      "startMs": 196540,
+      "endMs": 198300
+    },
+    {
+      "ordinal": 50,
+      "startMs": 198660,
+      "endMs": 204160
+    },
+    {
+      "ordinal": 51,
+      "startMs": 204440,
+      "endMs": 209680
+    },
+    {
+      "ordinal": 52,
+      "startMs": 210740,
+      "endMs": 211900
+    }
+  ]
+}

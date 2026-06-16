@@ -1,0 +1,244 @@
+{
+  "extId": "song-dry-flower-yuuri",
+  "videoId": "kzZ6KXDM1RI",
+  "model": "large-v3",
+  "vocals": true,
+  "alignedAt": "2026-06-16T08:59:04.439259+00:00",
+  "lines": [
+    {
+      "ordinal": 0,
+      "startMs": 14740,
+      "endMs": 17220
+    },
+    {
+      "ordinal": 1,
+      "startMs": 17420,
+      "endMs": 20420
+    },
+    {
+      "ordinal": 2,
+      "startMs": 20680,
+      "endMs": 23640
+    },
+    {
+      "ordinal": 3,
+      "startMs": 23860,
+      "endMs": 25260
+    },
+    {
+      "ordinal": 4,
+      "startMs": 25540,
+      "endMs": 29320
+    },
+    {
+      "ordinal": 5,
+      "startMs": 29660,
+      "endMs": 32620
+    },
+    {
+      "ordinal": 6,
+      "startMs": 32940,
+      "endMs": 35880
+    },
+    {
+      "ordinal": 7,
+      "startMs": 36080,
+      "endMs": 39020
+    },
+    {
+      "ordinal": 8,
+      "startMs": 39360,
+      "endMs": 44920
+    },
+    {
+      "ordinal": 9,
+      "startMs": 45180,
+      "endMs": 51260
+    },
+    {
+      "ordinal": 10,
+      "startMs": 51740,
+      "endMs": 58080
+    },
+    {
+      "ordinal": 11,
+      "startMs": 58340,
+      "endMs": 64500
+    },
+    {
+      "ordinal": 12,
+      "startMs": 64880,
+      "endMs": 71000
+    },
+    {
+      "ordinal": 13,
+      "startMs": 71120,
+      "endMs": 77480
+    },
+    {
+      "ordinal": 14,
+      "startMs": 77700,
+      "endMs": 81000
+    },
+    {
+      "ordinal": 15,
+      "startMs": 81360,
+      "endMs": 88840
+    },
+    {
+      "ordinal": 16,
+      "startMs": 89240,
+      "endMs": 107120
+    },
+    {
+      "ordinal": 17,
+      "startMs": 107120,
+      "endMs": 111100
+    },
+    {
+      "ordinal": 18,
+      "startMs": 111380,
+      "endMs": 114500
+    },
+    {
+      "ordinal": 19,
+      "startMs": 114720,
+      "endMs": 117760
+    },
+    {
+      "ordinal": 20,
+      "startMs": 117880,
+      "endMs": 119160
+    },
+    {
+      "ordinal": 21,
+      "startMs": 119740,
+      "endMs": 123320
+    },
+    {
+      "ordinal": 22,
+      "startMs": 123620,
+      "endMs": 126640
+    },
+    {
+      "ordinal": 23,
+      "startMs": 126940,
+      "endMs": 129900
+    },
+    {
+      "ordinal": 24,
+      "startMs": 130080,
+      "endMs": 133020
+    },
+    {
+      "ordinal": 25,
+      "startMs": 133340,
+      "endMs": 139080
+    },
+    {
+      "ordinal": 26,
+      "startMs": 139300,
+      "endMs": 145320
+    },
+    {
+      "ordinal": 27,
+      "startMs": 146200,
+      "endMs": 152040
+    },
+    {
+      "ordinal": 28,
+      "startMs": 152360,
+      "endMs": 158600
+    },
+    {
+      "ordinal": 29,
+      "startMs": 158840,
+      "endMs": 165020
+    },
+    {
+      "ordinal": 30,
+      "startMs": 165180,
+      "endMs": 171580
+    },
+    {
+      "ordinal": 31,
+      "startMs": 171740,
+      "endMs": 175600
+    },
+    {
+      "ordinal": 32,
+      "startMs": 175880,
+      "endMs": 178180
+    },
+    {
+      "ordinal": 33,
+      "startMs": 178340,
+      "endMs": 198370
+    },
+    {
+      "ordinal": 34,
+      "startMs": 198370,
+      "endMs": 201950
+    },
+    {
+      "ordinal": 35,
+      "startMs": 202610,
+      "endMs": 205210
+    },
+    {
+      "ordinal": 36,
+      "startMs": 205570,
+      "endMs": 212450
+    },
+    {
+      "ordinal": 37,
+      "startMs": 212450,
+      "endMs": 215000
+    },
+    {
+      "ordinal": 38,
+      "startMs": 215130,
+      "endMs": 218330
+    },
+    {
+      "ordinal": 39,
+      "startMs": 218530,
+      "endMs": 220370
+    },
+    {
+      "ordinal": 40,
+      "startMs": 220370,
+      "endMs": 221530
+    },
+    {
+      "ordinal": 41,
+      "startMs": 224150,
+      "endMs": 229910
+    },
+    {
+      "ordinal": 42,
+      "startMs": 230110,
+      "endMs": 236390
+    },
+    {
+      "ordinal": 43,
+      "startMs": 236690,
+      "endMs": 240610
+    },
+    {
+      "ordinal": 44,
+      "startMs": 241210,
+      "endMs": 242990
+    },
+    {
+      "ordinal": 45,
+      "startMs": 243270,
+      "endMs": 247770
+    },
+    {
+      "ordinal": 46,
+      "startMs": 248050,
+      "endMs": 281290
+    }
+  ]
+}

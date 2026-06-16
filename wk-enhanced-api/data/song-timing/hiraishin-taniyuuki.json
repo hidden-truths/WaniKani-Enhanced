@@ -1,0 +1,199 @@
+{
+  "extId": "song-hiraishin-taniyuuki",
+  "videoId": "Ne1ybS2ljws",
+  "model": "large-v3",
+  "vocals": true,
+  "alignedAt": "2026-06-16T09:06:55.999562+00:00",
+  "lines": [
+    {
+      "ordinal": 0,
+      "startMs": 900,
+      "endMs": 6420
+    },
+    {
+      "ordinal": 1,
+      "startMs": 6480,
+      "endMs": 12860
+    },
+    {
+      "ordinal": 2,
+      "startMs": 13760,
+      "endMs": 19320
+    },
+    {
+      "ordinal": 3,
+      "startMs": 20080,
+      "endMs": 24680
+    },
+    {
+      "ordinal": 4,
+      "startMs": 25680,
+      "endMs": 32780
+    },
+    {
+      "ordinal": 5,
+      "startMs": 32940,
+      "endMs": 38520
+    },
+    {
+      "ordinal": 6,
+      "startMs": 38660,
+      "endMs": 42240
+    },
+    {
+      "ordinal": 7,
+      "startMs": 42340,
+      "endMs": 45620
+    },
+    {
+      "ordinal": 8,
+      "startMs": 45660,
+      "endMs": 51500
+    },
+    {
+      "ordinal": 9,
+      "startMs": 51660,
+      "endMs": 71480
+    },
+    {
+      "ordinal": 10,
+      "startMs": 71480,
+      "endMs": 76980
+    },
+    {
+      "ordinal": 11,
+      "startMs": 77100,
+      "endMs": 83320
+    },
+    {
+      "ordinal": 12,
+      "startMs": 83780,
+      "endMs": 89620
+    },
+    {
+      "ordinal": 13,
+      "startMs": 90180,
+      "endMs": 95040
+    },
+    {
+      "ordinal": 14,
+      "startMs": 96840,
+      "endMs": 103200
+    },
+    {
+      "ordinal": 15,
+      "startMs": 103280,
+      "endMs": 108680
+    },
+    {
+      "ordinal": 16,
+      "startMs": 109020,
+      "endMs": 112640
+    },
+    {
+      "ordinal": 17,
+      "startMs": 113020,
+      "endMs": 115980
+    },
+    {
+      "ordinal": 18,
+      "startMs": 116220,
+      "endMs": 121620
+    },
+    {
+      "ordinal": 19,
+      "startMs": 121900,
+      "endMs": 127340
+    },
+    {
+      "ordinal": 20,
+      "startMs": 129780,
+      "endMs": 131700
+    },
+    {
+      "ordinal": 21,
+      "startMs": 131880,
+      "endMs": 138240
+    },
+    {
+      "ordinal": 22,
+      "startMs": 138360,
+      "endMs": 143280
+    },
+    {
+      "ordinal": 23,
+      "startMs": 144920,
+      "endMs": 147680
+    },
+    {
+      "ordinal": 24,
+      "startMs": 147760,
+      "endMs": 150720
+    },
+    {
+      "ordinal": 25,
+      "startMs": 150840,
+      "endMs": 154480
+    },
+    {
+      "ordinal": 26,
+      "startMs": 154560,
+      "endMs": 169980
+    },
+    {
+      "ordinal": 27,
+      "startMs": 170180,
+      "endMs": 175860
+    },
+    {
+      "ordinal": 28,
+      "startMs": 176100,
+      "endMs": 183180
+    },
+    {
+      "ordinal": 29,
+      "startMs": 183440,
+      "endMs": 188900
+    },
+    {
+      "ordinal": 30,
+      "startMs": 189160,
+      "endMs": 193980
+    },
+    {
+      "ordinal": 31,
+      "startMs": 194800,
+      "endMs": 198500
+    },
+    {
+      "ordinal": 32,
+      "startMs": 198680,
+      "endMs": 202320
+    },
+    {
+      "ordinal": 33,
+      "startMs": 202460,
+      "endMs": 205300
+    },
+    {
+      "ordinal": 34,
+      "startMs": 205320,
+      "endMs": 208100
+    },
+    {
+      "ordinal": 35,
+      "startMs": 208500,
+      "endMs": 212520
+    },
+    {
+      "ordinal": 36,
+      "startMs": 212840,
+      "endMs": 215560
+    },
+    {
+      "ordinal": 37,
+      "startMs": 216280,
+      "endMs": 221720
+    }
+  ]
+}

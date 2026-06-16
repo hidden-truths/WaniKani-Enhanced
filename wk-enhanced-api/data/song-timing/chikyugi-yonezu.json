@@ -1,0 +1,129 @@
+{
+  "extId": "song-chikyugi-yonezu",
+  "videoId": "VUsURj_OYdA",
+  "model": "large-v3",
+  "vocals": true,
+  "alignedAt": "2026-06-16T08:45:42.231431+00:00",
+  "lines": [
+    {
+      "ordinal": 0,
+      "startMs": 16260,
+      "endMs": 28660
+    },
+    {
+      "ordinal": 1,
+      "startMs": 31600,
+      "endMs": 42560
+    },
+    {
+      "ordinal": 2,
+      "startMs": 42780,
+      "endMs": 57300
+    },
+    {
+      "ordinal": 3,
+      "startMs": 58140,
+      "endMs": 76120
+    },
+    {
+      "ordinal": 4,
+      "startMs": 76120,
+      "endMs": 82900
+    },
+    {
+      "ordinal": 5,
+      "startMs": 83120,
+      "endMs": 89060
+    },
+    {
+      "ordinal": 6,
+      "startMs": 89340,
+      "endMs": 99180
+    },
+    {
+      "ordinal": 7,
+      "startMs": 99180,
+      "endMs": 104100
+    },
+    {
+      "ordinal": 8,
+      "startMs": 104100,
+      "endMs": 124060
+    },
+    {
+      "ordinal": 9,
+      "startMs": 124060,
+      "endMs": 136320
+    },
+    {
+      "ordinal": 10,
+      "startMs": 136680,
+      "endMs": 150240
+    },
+    {
+      "ordinal": 11,
+      "startMs": 150340,
+      "endMs": 152380
+    },
+    {
+      "ordinal": 12,
+      "startMs": 152380,
+      "endMs": 152380
+    },
+    {
+      "ordinal": 13,
+      "startMs": 152380,
+      "endMs": 152380
+    },
+    {
+      "ordinal": 14,
+      "startMs": 152380,
+      "endMs": 182780
+    },
+    {
+      "ordinal": 15,
+      "startMs": 182920,
+      "endMs": 195340
+    },
+    {
+      "ordinal": 16,
+      "startMs": 195340,
+      "endMs": 201960
+    },
+    {
+      "ordinal": 17,
+      "startMs": 202320,
+      "endMs": 215120
+    },
+    {
+      "ordinal": 18,
+      "startMs": 215120,
+      "endMs": 220580
+    },
+    {
+      "ordinal": 19,
+      "startMs": 221180,
+      "endMs": 226780
+    },
+    {
+      "ordinal": 20,
+      "startMs": 227060,
+      "endMs": 235780
+    },
+    {
+      "ordinal": 21,
+      "startMs": 236680,
+      "endMs": 241860
+    },
+    {
+      "ordinal": 22,
+      "startMs": 241860,
+      "endMs": 248320
+    },
+    {
+      "ordinal": 23,
+      "startMs": 248540,
+      "endMs": 254140
+    }
+  ]
+}

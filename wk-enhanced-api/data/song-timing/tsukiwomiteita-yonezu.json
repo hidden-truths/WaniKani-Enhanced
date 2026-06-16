@@ -1,0 +1,214 @@
+{
+  "extId": "song-tsukiwomiteita-yonezu",
+  "videoId": "1kUZ0LoUELI",
+  "model": "large-v3",
+  "vocals": true,
+  "alignedAt": "2026-06-16T09:26:55.010531+00:00",
+  "lines": [
+    {
+      "ordinal": 0,
+      "startMs": 940,
+      "endMs": 5080
+    },
+    {
+      "ordinal": 1,
+      "startMs": 6400,
+      "endMs": 9020
+    },
+    {
+      "ordinal": 2,
+      "startMs": 9400,
+      "endMs": 16080
+    },
+    {
+      "ordinal": 3,
+      "startMs": 16540,
+      "endMs": 21280
+    },
+    {
+      "ordinal": 4,
+      "startMs": 23000,
+      "endMs": 27120
+    },
+    {
+      "ordinal": 5,
+      "startMs": 28460,
+      "endMs": 31460
+    },
+    {
+      "ordinal": 6,
+      "startMs": 34020,
+      "endMs": 38300
+    },
+    {
+      "ordinal": 7,
+      "startMs": 38500,
+      "endMs": 43440
+    },
+    {
+      "ordinal": 8,
+      "startMs": 45640,
+      "endMs": 47740
+    },
+    {
+      "ordinal": 9,
+      "startMs": 48020,
+      "endMs": 50520
+    },
+    {
+      "ordinal": 10,
+      "startMs": 50780,
+      "endMs": 53500
+    },
+    {
+      "ordinal": 11,
+      "startMs": 54560,
+      "endMs": 56800
+    },
+    {
+      "ordinal": 12,
+      "startMs": 58480,
+      "endMs": 63040
+    },
+    {
+      "ordinal": 13,
+      "startMs": 63360,
+      "endMs": 68680
+    },
+    {
+      "ordinal": 14,
+      "startMs": 68760,
+      "endMs": 73940
+    },
+    {
+      "ordinal": 15,
+      "startMs": 75280,
+      "endMs": 80200
+    },
+    {
+      "ordinal": 16,
+      "startMs": 81940,
+      "endMs": 87240
+    },
+    {
+      "ordinal": 17,
+      "startMs": 87340,
+      "endMs": 107220
+    },
+    {
+      "ordinal": 18,
+      "startMs": 107400,
+      "endMs": 111260
+    },
+    {
+      "ordinal": 19,
+      "startMs": 111540,
+      "endMs": 118420
+    },
+    {
+      "ordinal": 20,
+      "startMs": 118680,
+      "endMs": 123800
+    },
+    {
+      "ordinal": 21,
+      "startMs": 125680,
+      "endMs": 127820
+    },
+    {
+      "ordinal": 22,
+      "startMs": 128000,
+      "endMs": 130540
+    },
+    {
+      "ordinal": 23,
+      "startMs": 130860,
+      "endMs": 133800
+    },
+    {
+      "ordinal": 24,
+      "startMs": 134020,
+      "endMs": 136760
+    },
+    {
+      "ordinal": 25,
+      "startMs": 137080,
+      "endMs": 142980
+    },
+    {
+      "ordinal": 26,
+      "startMs": 143980,
+      "endMs": 148660
+    },
+    {
+      "ordinal": 27,
+      "startMs": 148720,
+      "endMs": 154040
+    },
+    {
+      "ordinal": 28,
+      "startMs": 154800,
+      "endMs": 160300
+    },
+    {
+      "ordinal": 29,
+      "startMs": 160540,
+      "endMs": 163880
+    },
+    {
+      "ordinal": 30,
+      "startMs": 163880,
+      "endMs": 167880
+    },
+    {
+      "ordinal": 31,
+      "startMs": 168080,
+      "endMs": 170600
+    },
+    {
+      "ordinal": 32,
+      "startMs": 170840,
+      "endMs": 176200
+    },
+    {
+      "ordinal": 33,
+      "startMs": 176480,
+      "endMs": 181700
+    },
+    {
+      "ordinal": 34,
+      "startMs": 181900,
+      "endMs": 187820
+    },
+    {
+      "ordinal": 35,
+      "startMs": 187820,
+      "endMs": 193700
+    },
+    {
+      "ordinal": 36,
+      "startMs": 193700,
+      "endMs": 198200
+    },
+    {
+      "ordinal": 37,
+      "startMs": 198500,
+      "endMs": 203840
+    },
+    {
+      "ordinal": 38,
+      "startMs": 204040,
+      "endMs": 209100
+    },
+    {
+      "ordinal": 39,
+      "startMs": 210460,
+      "endMs": 215140
+    },
+    {
+      "ordinal": 40,
+      "startMs": 215760,
+      "endMs": 222140
+    }
+  ]
+}

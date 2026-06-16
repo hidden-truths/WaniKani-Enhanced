@@ -17,8 +17,10 @@ line-timing pipeline** (forced alignment) that unlocks the synced highlight + pe
 - **Library:** 12 public starter songs (the placeholder 故郷 was removed). Each has furigana, a per-line
   English gloss, grammar-catalog tags, and per-word JLPT tokens → so **Read + Mine + coverage %** all work.
 - **Timing:** an offline forced-alignment pipeline ([`song-align/`](../song-align/)) produces per-line
-  `clip_start_ms`; the seed merges it. **Synced highlight + per-line replay light up once a song is
-  timed.** (The maintainer has run alignment and confirmed it works.)
+  `clip_start_ms`; the seed merges it. **All 12 songs are now timed (2026-06-16)** — every committed
+  sidecar in `wk-enhanced-api/data/song-timing/` is `large-v3` + vocal-isolated, so synced highlight,
+  per-line replay, Listen-by-slice, and Shadow's "▶ original" are live across the whole library, not
+  just the ドライフラワー pilot.
 - **Listen + Shadow now SHIPPED (2026-06-16):** Listen = a per-line dictation stepper (cloze ⇄ full-line,
   advisory grading, Reveal, per-session count, timed-slice/synth audio, masked video). Shadow = the
   record-compare engine reused verbatim (`SONGS_SCOPE = 80000`, synth-TTS full rig + by-ear YouTube-slice
@@ -158,8 +160,13 @@ fixed by `cf63d35`). Remaining, by severity:
 
 ## What's left (prioritized)
 
-1. **Finish timing the library** *(maintainer, local + deploy)* — `python3 song-align/align.py --all`,
-   spot-check, `bun scripts/seed-songs.ts`, commit the sidecars, re-seed prod. (In progress.)
+1. ✅ **Library fully timed (2026-06-16)** — all 12 `song-align/` sidecars produced (`large-v3` +
+   vocals), committed, and seeded into the **local** DB (every song `N/N` timed). yt-dlp needed two
+   fixes to get there: cookies for the bot check (`--cookies-from-browser`) + the player-JS-challenge
+   solver (`yt-dlp-ejs` + `--js-runtimes node`) — see [`song-align/README.md`](../song-align/README.md).
+   **Remaining: re-seed PROD** — run `bun scripts/seed-songs.ts` against the prod DB (droplet pattern)
+   so the live library picks up the committed sidecars; spot-check the English-heavy tracks (BANDAGE,
+   CLASSIC, Blinded Eyes, FIESTA) where JA-model alignment drifts most.
 2. ✅ **Listen mode (dictation)** — SHIPPED. Per-line stepper, cloze ⇄ full-line (`clozeBlanks` +
    `clozeLineParts` in `core/songs.js`), advisory grading (`normKana`/`romajiToKana`), Reveal self-check,
    per-session count, timed-slice/synth audio, masked video. See SONGS.md Phase 4.

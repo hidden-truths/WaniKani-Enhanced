@@ -1,0 +1,209 @@
+{
+  "extId": "song-saikai-vaundy",
+  "videoId": "WcaSSvtHFeM",
+  "model": "large-v3",
+  "vocals": true,
+  "alignedAt": "2026-06-16T09:16:50.576775+00:00",
+  "lines": [
+    {
+      "ordinal": 0,
+      "startMs": 40160,
+      "endMs": 40860
+    },
+    {
+      "ordinal": 1,
+      "startMs": 41620,
+      "endMs": 43860
+    },
+    {
+      "ordinal": 2,
+      "startMs": 46500,
+      "endMs": 46980
+    },
+    {
+      "ordinal": 3,
+      "startMs": 48000,
+      "endMs": 50100
+    },
+    {
+      "ordinal": 4,
+      "startMs": 51260,
+      "endMs": 52920
+    },
+    {
+      "ordinal": 5,
+      "startMs": 52960,
+      "endMs": 56100
+    },
+    {
+      "ordinal": 6,
+      "startMs": 57960,
+      "endMs": 59280
+    },
+    {
+      "ordinal": 7,
+      "startMs": 59340,
+      "endMs": 62460
+    },
+    {
+      "ordinal": 8,
+      "startMs": 66220,
+      "endMs": 68800
+    },
+    {
+      "ordinal": 9,
+      "startMs": 69000,
+      "endMs": 72040
+    },
+    {
+      "ordinal": 10,
+      "startMs": 72240,
+      "endMs": 74340
+    },
+    {
+      "ordinal": 11,
+      "startMs": 74660,
+      "endMs": 76800
+    },
+    {
+      "ordinal": 12,
+      "startMs": 76980,
+      "endMs": 80180
+    },
+    {
+      "ordinal": 13,
+      "startMs": 80460,
+      "endMs": 87700
+    },
+    {
+      "ordinal": 14,
+      "startMs": 87840,
+      "endMs": 90640
+    },
+    {
+      "ordinal": 15,
+      "startMs": 91200,
+      "endMs": 96440
+    },
+    {
+      "ordinal": 16,
+      "startMs": 96700,
+      "endMs": 117090
+    },
+    {
+      "ordinal": 17,
+      "startMs": 117090,
+      "endMs": 117570
+    },
+    {
+      "ordinal": 18,
+      "startMs": 117810,
+      "endMs": 120470
+    },
+    {
+      "ordinal": 19,
+      "startMs": 123290,
+      "endMs": 123830
+    },
+    {
+      "ordinal": 20,
+      "startMs": 124850,
+      "endMs": 126810
+    },
+    {
+      "ordinal": 21,
+      "startMs": 127010,
+      "endMs": 129510
+    },
+    {
+      "ordinal": 22,
+      "startMs": 129590,
+      "endMs": 132850
+    },
+    {
+      "ordinal": 23,
+      "startMs": 134790,
+      "endMs": 136010
+    },
+    {
+      "ordinal": 24,
+      "startMs": 136130,
+      "endMs": 142650
+    },
+    {
+      "ordinal": 25,
+      "startMs": 143090,
+      "endMs": 145710
+    },
+    {
+      "ordinal": 26,
+      "startMs": 145850,
+      "endMs": 148910
+    },
+    {
+      "ordinal": 27,
+      "startMs": 149670,
+      "endMs": 151290
+    },
+    {
+      "ordinal": 28,
+      "startMs": 151450,
+      "endMs": 153570
+    },
+    {
+      "ordinal": 29,
+      "startMs": 153930,
+      "endMs": 198310
+    },
+    {
+      "ordinal": 30,
+      "startMs": 198690,
+      "endMs": 204670
+    },
+    {
+      "ordinal": 31,
+      "startMs": 204950,
+      "endMs": 211130
+    },
+    {
+      "ordinal": 32,
+      "startMs": 211290,
+      "endMs": 218250
+    },
+    {
+      "ordinal": 33,
+      "startMs": 218990,
+      "endMs": 222990
+    },
+    {
+      "ordinal": 34,
+      "startMs": 222990,
+      "endMs": 225150
+    },
+    {
+      "ordinal": 35,
+      "startMs": 225150,
+      "endMs": 228190
+    },
+    {
+      "ordinal": 36,
+      "startMs": 228250,
+      "endMs": 235870
+    },
+    {
+      "ordinal": 37,
+      "startMs": 235870,
+      "endMs": 238510
+    },
+    {
+      "ordinal": 38,
+      "startMs": 238750,
+      "endMs": 244430
+    },
+    {
+      "ordinal": 39,
+      "startMs": 244610,
+      "endMs": 272750
+    }
+  ]
+}

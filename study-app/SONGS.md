@@ -467,6 +467,11 @@ as work lands. `[ ]` = todo, `[x]` = done, `[~]` = in progress.
   `clip_start_ms`. **Synced highlight + per-line replay (already wired in `songs.js`) now light up once a
   song is timed.** ‼️ `PUT /timing` is owner-scoped → the PUBLIC curated set is timed via this offline
   pipeline, NOT in-app.
+- [x] **Whole library timed (2026-06-16):** all 12 sidecars (`large-v3` + vocals) committed + seeded
+  locally — every song is `N/N` timed, so highlight / per-line replay / Listen-slice / Shadow "▶ original"
+  work library-wide. (yt-dlp needed `--cookies-from-browser` for the bot check + `yt-dlp-ejs` +
+  `--js-runtimes node` for the player JS challenge — captured in `song-align/README.md`.) **Prod re-seed
+  is the one remaining step.**
 
 ### Phase 4 — Listen (dictation) ✅ (2026-06-16)
 - [x] A per-line **stepper** ("Line N of M · K correct") with a **Cloze ⇄ Full-line** difficulty toggle,
