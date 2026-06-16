@@ -21,8 +21,8 @@ the layer-specific docs point back here.
   reserved record-compare scope + the day-streak) and みんなの日本語 [MINNA.md](MINNA.md)
   (content tab + the clip-marker timing pattern + vocab activation + the Source facet).
 
-> **Status (2026-06-16): Library + Add + Read + Mine shipped; a 12-song curated library + offline
-> line-timing (synced highlight + per-line replay) shipped; Listen + Shadow still to build.** The
+> **Status (2026-06-16): Library + Add + Read + Mine + Listen shipped; a 12-song curated library +
+> offline line-timing (synced highlight + per-line replay) shipped; Shadow still to build.** The
 > current state, the shipped commits, the new mechanisms, the open gotchas, and the prioritized
 > what's-left live in **[SONGS_HANDOFF.md](SONGS_HANDOFF.md)** — read it first for a cold start. The
 > [Phase checklist](#phase-checklist--cross-session-tracker) at the bottom is the live tracker. The
@@ -466,8 +466,24 @@ as work lands. `[ ]` = todo, `[x]` = done, `[~]` = in progress.
   song is timed.** ‼️ `PUT /timing` is owner-scoped → the PUBLIC curated set is timed via this offline
   pipeline, NOT in-app.
 
-### Phase 4 — Listen (dictation) — follow-up
-- [ ] Cloze ⇄ full-line toggle; advisory grading (`normKana`/`romajiToKana`); reveal self-check; per-session count; line replay (slice/by-ear/synth).
+### Phase 4 — Listen (dictation) ✅ (2026-06-16)
+- [x] A per-line **stepper** ("Line N of M · K correct") with a **Cloze ⇄ Full-line** difficulty toggle,
+  Play + Replay-slower cues, and Check / Reveal / Next — `mode==='listen'` in `features/songs.js`,
+  rendered into a new stable `#sgContent` wrapper so a step re-render (`renderListen`) never re-mounts
+  the YouTube player.
+- [x] **Cloze**: pure `clozeBlanks` (content-POS tokens, capped) + `clozeLineParts` (the offset-slicing
+  render plan — a blank token can sit MID plain furigana run, e.g. じゃなくて|いい|ね) in `core/songs.js`,
+  both unit-tested. Each gap is an `<input>` graded against the token reading.
+- [x] **Full-line**: one input for the whole-line reading (`segmentsToReading`).
+- [x] **Advisory grading** via the typed-reading path (`normKana`/`romajiToKana`); Reveal self-check
+  (answer block w/ furigana + EN, and Check hidden after Reveal so the count can't be gamed); per-session
+  correct count via a `done` Set (re-check / step-back can't double-count).
+- [x] **Line audio** = the timed YouTube slice (`playSlice`, now with a SEPARATE slice timer so a start
+  from a paused player can't clobber the stop, + a `rate` arg for the slow replay), else synth
+  (`playItem(…,'songs')`). In Listen the video is **masked** (kept playing for audio, covered visually) so
+  a lyric-burned MV doesn't spoil the dictation.
+- Verified live against the timed ドライフラワー (47/47): cloze offset-slicing, romaji grading, full-line,
+  Reveal, count, the mask, and Read/Mine regression. Tests 208 + build green.
 
 ### Phase 5 — Shadow + line timing — follow-up
 - [x] **Synced highlight + per-line replay** — implemented in `songs.js` (`highlightAt`/`playSlice`/`replayLine`); unlocked by the Phase-3.5 timing pipeline.

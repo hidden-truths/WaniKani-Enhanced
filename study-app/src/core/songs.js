@@ -112,3 +112,67 @@ export function songGrammar(lines) {
     .map(([id, count]) => ({ id, count }))
     .sort((a, b) => b.count - a.count || a.id.localeCompare(b.id));
 }
+
+// ---- Listen (dictation) ----
+// Which content-word tokens to blank for the cloze (easier) difficulty: the line's content words
+// (CONTENT_POS — same set songWords/coverage use) in order, capped at `max` (default 4) so a long
+// line keeps enough visible context to stay easier than full-line. Returns
+// [{ start, end, surface, reading, lemma }] — UTF-16 offsets into the line text (token-aligned per
+// the server's offset contract), `reading` (hiragana) is what the typed answer is graded against.
+// Pure; `clozeLineParts` consumes the result to render, the Listen grader consumes `reading`.
+export function clozeBlanks(line, opts) {
+  const max = (opts && opts.max) || 4;
+  const out = [];
+  for (const t of ((line && line.tokens) || [])) {
+    if (!CONTENT_POS.has(t.pos)) continue;
+    if (t.start == null || t.end == null) continue;
+    out.push({ start: t.start, end: t.end, surface: t.surface, reading: t.reading || '', lemma: t.lemma || t.surface });
+    if (out.length >= max) break;
+  }
+  return out;
+}
+
+// The ordered render plan for a cloze line: the line's visible runs (ruby where the furigana has a
+// reading, plain text otherwise) interleaved with a gap at each blank token range. Parts are
+// { type:'ruby', t, r } | { type:'text', t } | { type:'gap', start, end, surface, reading, lemma }.
+// The offset slicing is the tricky bit kept here (and tested): a PLAIN furigana run can contain a
+// blank token MID-RUN (e.g. じゃなくて|いい|ね — the いい token sits inside one plain segment), so a
+// segment isn't safe to treat as whole; a RUBY segment is always wholly inside one token (the offset
+// contract) so it's only ever fully inside or fully outside a blank. `blanks` from clozeBlanks.
+export function clozeLineParts(line, blanks) {
+  const segs = (line && line.furigana && line.furigana.length) ? line.furigana : [{ t: (line && line.text) || '' }];
+  const bl = [...(blanks || [])].sort((a, b) => a.start - b.start);
+  const gapAt = (pos) => bl.find((x) => pos >= x.start && pos < x.end);   // the blank covering offset `pos`, if any
+  const gapPart = (b) => ({ type: 'gap', start: b.start, end: b.end, surface: b.surface, reading: b.reading, lemma: b.lemma });
+  const parts = [];
+  let offset = 0;
+  // Walk a plain run [a, a+str.length), slicing it into text parts and gaps at blank boundaries.
+  const emitPlain = (str, a) => {
+    const end = a + str.length;
+    let pos = a;
+    while (pos < end) {
+      const blk = gapAt(pos);
+      if (blk) {                                              // inside a blank → skip its chars; emit the gap once
+        if (pos === blk.start) parts.push(gapPart(blk));
+        pos = Math.min(blk.end, end);
+      } else {                                                // visible text up to the next blank start (or run end)
+        const next = bl.find((x) => x.start > pos);
+        const stop = next ? Math.min(next.start, end) : end;
+        parts.push({ type: 'text', t: str.slice(pos - a, stop - a) });
+        pos = stop;
+      }
+    }
+  };
+  for (const seg of segs) {
+    const t = seg.t || '';
+    const a = offset; offset += t.length;
+    if (seg.r != null) {                                      // ruby seg: wholly inside one token
+      const blk = gapAt(a);
+      if (blk) { if (a === blk.start) parts.push(gapPart(blk)); }   // a multi-seg blank emits its gap on its first seg only
+      else parts.push({ type: 'ruby', t, r: seg.r });
+    } else {
+      emitPlain(t, a);
+    }
+  }
+  return parts;
+}

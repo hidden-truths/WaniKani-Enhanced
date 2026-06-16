@@ -28,6 +28,7 @@ import {
   sentenceGrammar, sentenceTokens, sentenceEn,
   mergeProgress, mergeCustomVerbs, mergeMinna, mergeSelftalkPractice,
   parseYouTubeId, songWords, knownHeadwords, coverage, bucketByJlpt, wordStatus, songLevel, lineTimingState, songLineKey, songGrammar, JLPT_ORDER,
+  clozeBlanks, clozeLineParts,
 } from '../src/core/index.js';
 import { SELFTALK, SELFTALK_TAXONOMY, SELFTALK_TOPICS, SELFTALK_TOPIC_IDS, SELFTALK_GRAMMAR } from '../src/data/selftalk.js';
 import { SELFTALK_TEMPLATES } from '../src/data/selftalk-templates.js';
@@ -1531,4 +1532,71 @@ test('songLevel: fallback wins; else the hardest word level; songLineKey; lineTi
   expect(lineTimingState([sgLine('a', { clip: 0 }), sgLine('b', { clip: 8000 }), sgLine('c')])).toEqual({ timed: 2, total: 3 });
   expect(songGrammar([sgLine('a', { grammar: ['tai', 'nagara'] }), sgLine('b', { grammar: ['tai'] })]))
     .toEqual([{ id: 'tai', count: 2 }, { id: 'nagara', count: 1 }]); // most-used first
+});
+
+// ---- Listen (dictation): clozeBlanks + clozeLineParts ----
+// A token with UTF-16 offsets, as the server serves them (start/end index the line text).
+const sgTokAt = (start: number, end: number, surface: string, pos: string, reading: string, jlpt?: string) =>
+  ({ start, end, surface, lemma: surface, reading, pos, ...(jlpt ? { jlpt } : {}) });
+
+test('clozeBlanks: content words only, with offsets; caps at max; skips offset-less tokens', () => {
+  const line = sgLine('多分 私じゃなくていいね', {
+    tokens: [sgTokAt(0, 2, '多分', 'ADV', 'たぶん', 'N3'), sgTokAt(9, 11, 'いい', 'ADJ', 'いい', 'N5')],
+  });
+  expect(clozeBlanks(line)).toEqual([
+    { start: 0, end: 2, surface: '多分', reading: 'たぶん', lemma: '多分' },
+    { start: 9, end: 11, surface: 'いい', reading: 'いい', lemma: 'いい' },
+  ]);
+  // particles/aux (ADP, AUX, …) aren't content words; a token missing offsets is unspliceable → dropped.
+  const mixed = sgLine('歌をうたう', {
+    tokens: [sgTokAt(0, 1, '歌', 'NOUN', 'うた', 'N5'), { surface: 'を', lemma: 'を', reading: 'を', pos: 'ADP' }, sgTokAt(2, 5, 'うたう', 'VERB', 'うたう', 'N5')],
+  });
+  expect(clozeBlanks(mixed).map((b) => b.surface)).toEqual(['歌', 'うたう']);
+  // cap: only the first `max` content tokens are blanked (a long line keeps later context visible).
+  const many = sgLine('xxxxx', { tokens: [0, 1, 2, 3, 4, 5].map((i) => sgTokAt(i, i + 1, 'x' + i, 'NOUN', 'x')) });
+  expect(clozeBlanks(many, { max: 2 }).map((b) => b.surface)).toEqual(['x0', 'x1']);
+});
+
+test('clozeLineParts: a blank token MID plain run is sliced out (じゃなくて|いい|ね), ruby kept whole', () => {
+  const line = sgLine('多分 私じゃなくていいね', {
+    furigana: [{ t: '多分', r: 'たぶん' }, { t: ' ' }, { t: '私', r: 'わたし' }, { t: 'じゃなくていいね' }],
+    tokens: [sgTokAt(0, 2, '多分', 'ADV', 'たぶん'), sgTokAt(9, 11, 'いい', 'ADJ', 'いい')],
+  });
+  expect(clozeLineParts(line, clozeBlanks(line))).toEqual([
+    { type: 'gap', start: 0, end: 2, surface: '多分', reading: 'たぶん', lemma: '多分' },
+    { type: 'text', t: ' ' },
+    { type: 'ruby', t: '私', r: 'わたし' },
+    { type: 'text', t: 'じゃなくて' },
+    { type: 'gap', start: 9, end: 11, surface: 'いい', reading: 'いい', lemma: 'いい' },
+    { type: 'text', t: 'ね' },
+  ]);
+});
+
+test('clozeLineParts: a ruby seg inside a blank, and a blank spanning ruby+okurigana, emit one gap', () => {
+  // 君の[声]が[聞き]たい — 声 is a whole ruby seg inside its blank; 聞き spans the 聞<rt>き</rt> ruby seg
+  // PLUS the trailing okurigana き plain seg → still one gap, the okurigana absorbed into it.
+  const line = sgLine('君の声が聞きたい', {
+    furigana: [{ t: '君', r: 'きみ' }, { t: 'の' }, { t: '声', r: 'こえ' }, { t: 'が' }, { t: '聞', r: 'き' }, { t: 'き' }, { t: 'たい' }],
+    tokens: [sgTokAt(2, 3, '声', 'NOUN', 'こえ'), sgTokAt(4, 6, '聞き', 'VERB', 'きき')],
+  });
+  expect(clozeLineParts(line, clozeBlanks(line))).toEqual([
+    { type: 'ruby', t: '君', r: 'きみ' },
+    { type: 'text', t: 'の' },
+    { type: 'gap', start: 2, end: 3, surface: '声', reading: 'こえ', lemma: '声' },
+    { type: 'text', t: 'が' },
+    { type: 'gap', start: 4, end: 6, surface: '聞き', reading: 'きき', lemma: '聞き' },
+    { type: 'text', t: 'たい' },
+  ]);
+});
+
+test('clozeLineParts: no furigana (plain line) slices a mid-string blank; no blanks → all visible', () => {
+  const plain = sgLine('あいうえお', { tokens: [sgTokAt(1, 3, 'いう', 'NOUN', 'いう')] });
+  expect(clozeLineParts(plain, clozeBlanks(plain))).toEqual([
+    { type: 'text', t: 'あ' },
+    { type: 'gap', start: 1, end: 3, surface: 'いう', reading: 'いう', lemma: 'いう' },
+    { type: 'text', t: 'えお' },
+  ]);
+  // no blanks → the line renders fully (ruby where present, text otherwise), no gaps.
+  const line = sgLine('朝日', { furigana: [{ t: '朝日', r: 'あさひ' }], tokens: [] });
+  expect(clozeLineParts(line, [])).toEqual([{ type: 'ruby', t: '朝日', r: 'あさひ' }]);
 });

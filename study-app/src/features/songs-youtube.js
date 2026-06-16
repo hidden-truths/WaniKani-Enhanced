@@ -5,7 +5,10 @@
 
 let apiReady = null; // Promise<void> — resolves when window.YT.Player is available (or the load failed)
 let player = null; // the live YT.Player
-let endTimer = null; // interval that pauses a [start,end] slice / drives onTime
+let endTimer = null; // 250ms poll that drives the synced-highlight onTime callback while playing
+let sliceTimer = null; // 80ms poll that pauses a [start,end] per-line slice — kept SEPARATE from endTimer
+                       // so the PLAYING→startPoll(onTime) handler (fired when a slice starts from a paused
+                       // player) can't clear the slice's stop and let it overrun into the next line
 
 // Lazy-load https://www.youtube.com/iframe_api ONCE. Resolves when YT.Player is ready, or on a load
 // error (the caller checks the returned player for null and degrades).
@@ -48,26 +51,31 @@ function startPoll(onTime) {
   endTimer = setInterval(() => { try { onTime(player.getCurrentTime()); } catch (e) { stopTimer(); } }, 250);
 }
 function stopTimer() { if (endTimer) { clearInterval(endTimer); endTimer = null; } }
+function stopSlice() { if (sliceTimer) { clearInterval(sliceTimer); sliceTimer = null; } }
 
 export function getPlayer() { return player; }
 
 export function destroyPlayer() {
   stopTimer();
+  stopSlice();
   if (player) { try { player.destroy(); } catch (e) { /* ignore */ } player = null; }
 }
 
-// Play a [startSec, endSec] slice by ear (per-line replay / the YouTube-slice Shadow reference).
-// Seeks + plays, then pauses at `end`. No player (untimed / API down) → no-op; the caller falls
-// back to a synth play of the line. Returns true if a slice was actually started.
-export function playSlice(start, end) {
+// Play a [startSec, endSec] slice by ear (per-line replay / Listen line audio / the YouTube-slice
+// Shadow reference). Seeks + plays, then pauses at `end` (compared in MEDIA time, so a slowed slice
+// still stops at the right lyric). `rate` (<1) drives the slow replay via setPlaybackRate; omitted/1
+// resets to normal speed. No player (untimed / API down) → no-op; the caller falls back to a synth
+// play of the line. Returns true if a slice was actually started.
+export function playSlice(start, end, rate) {
   if (!player || start == null) return false;
   try {
+    if (player.setPlaybackRate) player.setPlaybackRate(rate || 1);
     player.seekTo(start, true);
     player.playVideo();
-    stopTimer();
+    stopSlice();
     if (end != null) {
-      endTimer = setInterval(() => {
-        try { if (player.getCurrentTime() >= end) { player.pauseVideo(); stopTimer(); } } catch (e) { stopTimer(); }
+      sliceTimer = setInterval(() => {
+        try { if (player.getCurrentTime() >= end) { player.pauseVideo(); stopSlice(); } } catch (e) { stopSlice(); }
       }, 80);
     }
     return true;

@@ -11,8 +11,9 @@
 import { state } from '../state.js';
 import { api, account } from './cloud-core.js';
 import {
-  escapeHtml, plainText, segmentsToRuby, overlayTokens,
+  escapeHtml, plainText, segmentsToRuby, segmentsToReading, overlayTokens,
   parseYouTubeId, songWords, knownHeadwords, coverage, bucketByJlpt, songLevel, songGrammar,
+  clozeBlanks, clozeLineParts, normKana, romajiToKana,
 } from '../core/index.js';
 import { grammarLabel, grammarJlpt } from '../data/grammar.js';
 import { playItem, cycleMod } from './audio.js';
@@ -31,9 +32,14 @@ let library = [];            // [{id,title,artist,youtubeId,source,custom,lineCo
 let libFilter = 'all';        // 'all' | 'mine' | 'starter'
 let view = 'library';         // 'library' | 'add' | 'song'
 let openSong = null;          // the assembled song {id,title,artist,youtubeId,lines,…} when viewing one
-let mode = 'read';            // 'read' | 'mine' | 'grammar'
+let mode = 'read';            // 'read' | 'listen' | 'mine' | 'grammar'
 let grammarRef = null;        // the grammar id currently open in the reference panel
 let add = { lyrics: '', url: '', title: '', artist: '', analysis: null, busy: false, error: '' };
+// Listen (dictation) per-song stepper state; (re)initialized by ensureListen() when the song changes.
+// idx = current line; diff = cloze|full; done = line indices answered all-correct (correct = done.size,
+// so re-checking / stepping back never double-counts); checked/revealed/inputs are the current step.
+let listen = null;
+const SLOW_RATE = 0.6;        // slow-replay playback rate for the timed YouTube slice (the "Slower" cue)
 
 function body() { return document.getElementById('sgBody'); }
 
@@ -221,19 +227,25 @@ function songHtml() {
       <div><div class="song-h-title jp">${escapeHtml(s.title)} ${lvl ? `<span class="lv ${LV_CLASS[lvl] || ''}">${lvl}</span>` : ''}</div><div class="song-h-sub">${escapeHtml(s.artist || '')}</div></div>
       <div class="mode-switch">
         <button class="mode-sw${mode === 'read' ? ' on' : ''}" data-act="mode" data-mode="read"><svg class="ic g" aria-hidden="true"><use href="#i-book"/></svg> Read</button>
-        <button class="mode-sw" data-act="mode" data-mode="listen" disabled title="Listen — coming soon"><svg class="ic" aria-hidden="true"><use href="#i-headphones"/></svg> Listen</button>
+        <button class="mode-sw${mode === 'listen' ? ' on' : ''}" data-act="mode" data-mode="listen"><svg class="ic g" aria-hidden="true"><use href="#i-headphones"/></svg> Listen</button>
         <button class="mode-sw" data-act="mode" data-mode="shadow" disabled title="Shadow — coming soon"><svg class="ic" aria-hidden="true"><use href="#i-mic"/></svg> Shadow</button>
         <button class="mode-sw${mode === 'mine' || mode === 'grammar' ? ' on' : ''}" data-act="mode" data-mode="mine"><svg class="ic g" aria-hidden="true"><use href="#i-tag"/></svg> Mine</button>
       </div>
     </div>`;
+  // In Listen the video is MASKED (a cover over the still-playing iframe, not display:none which can
+  // stop YT audio) — many lyric MVs burn the words into the frame, which would spoil the dictation.
+  const masked = mode === 'listen';
   const player = s.youtubeId
-    ? `<div class="sg-yt"><div id="sgPlayer"></div></div>`
+    ? `<div class="sg-yt${masked ? ' masked' : ''}"><div id="sgPlayer"></div>${masked ? '<div class="sg-yt-mask"><svg class="ic" aria-hidden="true"><use href="#i-headphones"/></svg> audio only — listen and type</div>' : ''}</div>`
     : `<p class="add-note" style="margin:6px 0 12px"><svg class="ic" aria-hidden="true"><use href="#i-music"/></svg> No video linked — per-line audio uses a synthesized voice.</p>`;
   let content;
   if (mode === 'grammar') content = grammarRefHtml();
   else if (mode === 'mine') content = mineHtml();
+  else if (mode === 'listen') content = listenHtml();
   else content = readHtml();
-  return head + player + content;
+  // The mode content lives in a stable wrapper so Listen can re-render its stepper per step WITHOUT
+  // re-running render() (which destroys + re-mounts the YouTube player — an iframe reload every step).
+  return head + player + `<div id="sgContent">${content}</div>`;
 }
 
 function readHtml() {
@@ -262,6 +274,152 @@ function readHtml() {
     </div>`;
   }).join('');
   return `${ttoolbar}<div class="lyrics">${lines}</div>`;
+}
+
+// ============================ Listen (dictation) ============================
+// A per-line stepper: cloze (key content words blanked) ⇄ full-line (hidden, transcribe the whole
+// line), advisory grading (the typed-reading path — practice, not SRS), Reveal self-check, and a
+// per-session correct count. Line audio is the timed YouTube slice (playSlice), else a synth play.
+// Renders into the stable #sgContent so a step re-render (renderListen) never re-mounts the player.
+
+function ensureListen() {
+  if (!listen || listen.songId !== openSong.id) {
+    // done = line indices answered all-correct → correct count = done.size (re-checking / stepping
+    // back can't double-count, and Reveal never adds to it).
+    listen = { songId: openSong.id, diff: 'cloze', idx: 0, done: new Set(), checked: false, revealed: false, values: [], fullValue: '' };
+  }
+}
+function resetListenStep() { listen.checked = false; listen.revealed = false; listen.values = []; listen.fullValue = ''; }
+
+// Advisory grade — the same permissive typed-reading compare the flashcards use: romaji folds to
+// kana, katakana→hiragana, spaces/long-vowel marks normalized. Over-permissiveness is harmless here
+// (practice, never the SRS schedule). Empty expected → never a match.
+function readingMatch(input, expected) {
+  if (!expected) return false;
+  return normKana(romajiToKana(input || '')) === normKana(expected);
+}
+// The line's whole reading (full-line answer) from the store's furigana; a plain-kana line with no
+// furigana reads as its own text.
+function lineReading(line) { return line.furigana ? segmentsToReading(line.furigana) : plainText(line.text); }
+
+function listenHtml() {
+  ensureListen();
+  const total = openSong.lines.length;
+  const correct = listen.done.size;
+  const diffChip = (id, label) => `<button class="chip${listen.diff === id ? ' active' : ''}" data-act="ldiff" data-diff="${id}" role="radio" aria-checked="${listen.diff === id}">${label}</button>`;
+  const bar = `<div class="toolbar sg-listen-bar">
+    <div class="sg-diff">
+      <span class="filter-label">Difficulty</span>
+      <div class="jlptseg" role="radiogroup" aria-label="Listen difficulty">${diffChip('cloze', 'Cloze')}${diffChip('full', 'Full line')}</div>
+    </div>
+    <span class="progresstxt">${listen.idx >= total ? `Done · ${correct} of ${total} correct` : `Line ${listen.idx + 1} of ${total} · ${correct} correct`}</span>
+  </div>`;
+  if (listen.idx >= total) {
+    return `${bar}<div class="listen-done">
+      <div class="ld-title">Session complete</div>
+      <div class="ld-score">${correct} <span>/ ${total}</span></div>
+      <div class="ld-sub">lines transcribed correctly this session</div>
+      <button class="btn srs" data-act="lrestart"><svg class="ic" aria-hidden="true"><use href="#i-refresh"/></svg> Start over</button>
+    </div>`;
+  }
+  return bar + listenCardHtml(openSong.lines[listen.idx]);
+}
+
+function listenCardHtml(line) {
+  const cue = `<div class="listen-cue">
+    <button class="cue-btn" data-act="lplay" aria-label="Play line" title="Play line"><svg class="ic" aria-hidden="true"><use href="#i-play"/></svg></button>
+    <button class="cue-btn" data-act="lslow" aria-label="Replay slower" title="Replay slower"><svg class="ic" aria-hidden="true"><use href="#i-refresh"/></svg></button>
+    <span class="cue-hint">${listen.diff === 'cloze' ? 'play the line, then fill the gaps' : 'lyrics hidden — type the whole line you hear'}</span>
+  </div>`;
+  const blanks = listen.diff === 'cloze' ? clozeBlanks(line) : [];
+  const noGaps = listen.diff === 'cloze' && !blanks.length;   // a line with no content words to blank
+  const bodyHtml = listen.diff === 'full'
+    ? fullBodyHtml(line)
+    : (noGaps ? `<div class="l-jp jp">${line.furigana ? segmentsToRuby(line.furigana) : escapeHtml(line.text)}</div>` : clozeBodyHtml(line, blanks));
+  // Check disappears for a no-gap cloze line and once Revealed (the answer is shown → grading it would
+  // just be self-marking). Reveal disappears once used. Next is always present (acts as Skip pre-answer).
+  const canCheck = !noGaps && !listen.revealed;
+  const nextLabel = (listen.checked || listen.revealed || noGaps) ? 'Next' : 'Skip';
+  const actions = `<div class="listen-actions">
+    ${canCheck ? `<button class="btn srs" data-act="lcheck"><svg class="ic" aria-hidden="true"><use href="#i-check"/></svg> Check</button>` : ''}
+    ${!listen.revealed ? `<button class="btn ghost" data-act="lreveal"><svg class="ic" aria-hidden="true"><use href="#i-eye"/></svg> Reveal</button>` : ''}
+    <button class="btn ghost" data-act="lnext">${nextLabel} <svg class="ic" aria-hidden="true"><use href="#i-chevron"/></svg></button>
+  </div>`;
+  return `<div class="listen-card">${cue}${bodyHtml}${actions}${listen.revealed ? listenAnswerHtml(line) : ''}</div>`;
+}
+
+// The cloze line: visible ruby/text runs from clozeLineParts interleaved with a gap per blank. A gap
+// is an <input> until Check (→ the typed value with a ✓/✕) or Reveal (→ the frozen typed value).
+function clozeBodyHtml(line, blanks) {
+  let gi = -1;
+  const html = clozeLineParts(line, blanks).map((p) => {
+    if (p.type === 'ruby') return `<ruby>${escapeHtml(p.t)}<rt>${escapeHtml(p.r)}</rt></ruby>`;
+    if (p.type === 'text') return escapeHtml(p.t);
+    gi += 1;
+    const val = listen.values[gi] || '';
+    if (listen.checked) {
+      const ok = readingMatch(val, p.reading || p.surface);
+      return `<span class="gap-res ${ok ? 'ok' : 'bad'}">${escapeHtml(val || '⋯')}<span class="gap-mark">${ok ? '✓' : '✕'}</span></span>`;
+    }
+    if (listen.revealed) return `<span class="gap-res neutral">${escapeHtml(val || '⋯')}</span>`;
+    return `<input class="gap-inp jp" data-gi="${gi}" value="${escapeHtml(val)}" aria-label="Fill the missing word" autocomplete="off" autocapitalize="off" spellcheck="false">`;
+  }).join('');
+  return `<div class="l-jp jp listen-cloze">${html}</div>`;
+}
+
+// Full-line: one input for the whole line's reading. After Check it freezes with a ✓/✕ verdict.
+function fullBodyHtml(line) {
+  if (listen.checked) {
+    const ok = readingMatch(listen.fullValue, lineReading(line));
+    return `<div class="listen-full"><input class="inp jp listen-full-inp ${ok ? 'ok' : 'bad'}" value="${escapeHtml(listen.fullValue)}" readonly>
+      <span class="listen-verdict ${ok ? 'ok' : 'bad'}">${ok ? '✓ matches' : '✕ not quite'}</span></div>`;
+  }
+  return `<div class="listen-full"><input class="inp jp listen-full-inp" value="${escapeHtml(listen.fullValue)}" placeholder="type the reading you hear" autocomplete="off" autocapitalize="off" spellcheck="false"${listen.revealed ? ' readonly' : ''}></div>`;
+}
+
+function listenAnswerHtml(line) {
+  return `<div class="listen-answer">
+    <div class="cmp-label">Revealed answer</div>
+    <div class="l-jp jp">${line.furigana ? segmentsToRuby(line.furigana) : escapeHtml(line.text)}</div>
+    ${line.en ? `<div class="l-en">${escapeHtml(line.en)}</div>` : ''}
+  </div>`;
+}
+
+// Re-render ONLY the Listen stepper (the #sgContent wrapper), leaving the mounted YouTube player be.
+function renderListen() { const c = document.getElementById('sgContent'); if (c) c.innerHTML = listenHtml(); }
+
+// Pull the current step's typed value(s) out of the DOM before a re-render (the same capture-before-
+// render dance runAnalyze uses for the lyrics textarea).
+function captureListenInputs() {
+  if (!listen) return;
+  if (listen.diff === 'cloze') {
+    const inps = [...document.querySelectorAll('#sgBody .gap-inp')];
+    if (inps.length) listen.values = inps.map((el) => el.value);
+  } else {
+    const el = document.querySelector('#sgBody .listen-full-inp');
+    if (el) listen.fullValue = el.value;
+  }
+}
+// Advisory-grade the current step; mark the line done (counts once) iff every gap / the full line matches.
+function gradeListen() {
+  const line = openSong.lines[listen.idx]; if (!line) return;
+  let ok;
+  if (listen.diff === 'cloze') {
+    const blanks = clozeBlanks(line);
+    if (!blanks.length) return;   // no-gap line — not gradable (Check isn't shown for it)
+    ok = blanks.every((b, i) => readingMatch(listen.values[i] || '', b.reading || b.surface));
+  } else {
+    ok = readingMatch(listen.fullValue, lineReading(line));
+  }
+  if (ok) listen.done.add(listen.idx);
+}
+// Play the current line: the timed YouTube slice ([start, next-start], optionally slowed), else synth.
+function playListenLine(slow, btn) {
+  const line = openSong.lines[listen.idx]; if (!line) return;
+  const next = openSong.lines[listen.idx + 1];
+  if (line.clipStartMs != null
+    && playSlice(line.clipStartMs / 1000, next && next.clipStartMs != null ? next.clipStartMs / 1000 : undefined, slow ? SLOW_RATE : 1)) return;
+  playItem({ text: plainText(line.text) }, 'songs', btn);   // synth fallback (slow not available for synth)
 }
 
 function mineHtml() {
@@ -354,6 +512,14 @@ async function onClick(e) {
   if (act === 'reveal-all') { document.querySelectorAll('#sgBody .l-en.hidden').forEach((el) => { el.classList.remove('hidden'); el.innerHTML = escapeHtml(el.dataset.en || ''); el.removeAttribute('data-act'); }); t.classList.toggle('on'); return; }
   if (act === 'furigana') { toggleFurigana(t); return; }
   if (act === 'replay') { replayLine(Number(t.dataset.ord), t.closest('.speak-btn'), e); return; }
+  // ---- Listen (dictation) stepper ----
+  if (act === 'ldiff') { listen.diff = t.dataset.diff === 'full' ? 'full' : 'cloze'; resetListenStep(); renderListen(); return; }
+  if (act === 'lplay') { playListenLine(false, t.closest('.cue-btn')); return; }
+  if (act === 'lslow') { playListenLine(true, t.closest('.cue-btn')); return; }
+  if (act === 'lcheck') { captureListenInputs(); gradeListen(); listen.checked = true; renderListen(); return; }
+  if (act === 'lreveal') { captureListenInputs(); listen.revealed = true; renderListen(); return; }
+  if (act === 'lnext') { listen.idx = Math.min(listen.idx + 1, openSong.lines.length); resetListenStep(); renderListen(); return; }
+  if (act === 'lrestart') { listen.idx = 0; listen.done.clear(); resetListenStep(); renderListen(); return; }
   if (act === 'addword') { addOneWord(t.dataset.lemma); return; }
   if (act === 'addall') { addAllNew(); return; }
   if (act === 'savephrase') { await savePhrase(Number(t.dataset.ord)); return; }
@@ -464,6 +630,15 @@ function flash(msg) {
 // ============================ lifecycle ============================
 export function initSongs() {
   const el = body(); if (!el) return;
-  if (!el._sgWired) { el._sgWired = true; el.addEventListener('click', onClick); wireWordTaps(el); }
+  if (!el._sgWired) { el._sgWired = true; el.addEventListener('click', onClick); el.addEventListener('keydown', onKeydown); wireWordTaps(el); }
+}
+// Enter in a Listen input = Check (the dictation shortcut). Ignored once the step is revealed (the
+// gaps/input have frozen) or outside Listen.
+function onKeydown(e) {
+  if (e.key !== 'Enter') return;
+  if (!e.target.closest('.gap-inp, .listen-full-inp')) return;
+  e.preventDefault();
+  if (mode !== 'listen' || !listen || listen.revealed) return;
+  captureListenInputs(); gradeListen(); listen.checked = true; renderListen();
 }
 export function onSongsHidden() { destroyPlayer(); }

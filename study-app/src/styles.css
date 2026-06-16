@@ -842,7 +842,10 @@
 .mode-sw.on{background:var(--paper);color:var(--ink);font-weight:700;box-shadow:0 1px 2px rgba(0,0,0,.08)}
 .mode-sw.on .g{color:var(--godan)}
 .sg-yt{max-width:480px;margin:0 0 12px}
-.sg-yt>div,.sg-yt iframe{width:100%;aspect-ratio:16/9;border:0;border-radius:8px;background:#161616;display:block}
+.sg-yt>#sgPlayer,.sg-yt iframe{width:100%;aspect-ratio:16/9;border:0;border-radius:8px;background:#161616;display:block}
+/* Listen: mask the video (it keeps playing for audio) so a lyric-burned MV doesn't spoil dictation. */
+.sg-yt.masked{position:relative}
+.sg-yt-mask{position:absolute;inset:0;z-index:2;display:flex;align-items:center;justify-content:center;gap:8px;border-radius:8px;background:var(--paper-2);color:var(--muted);font-family:"SF Mono",ui-monospace,monospace;font-size:12px;letter-spacing:.04em}
 .ttoolbar{display:flex;gap:8px;margin-bottom:12px;flex-wrap:wrap}
 .tgl{display:inline-flex;align-items:center;gap:6px;font-family:"SF Mono",ui-monospace,monospace;font-size:12px;color:var(--muted);background:transparent;border:1px solid var(--line);padding:5px 10px;border-radius:3px;cursor:pointer}
 .tgl.on{color:var(--ichidan);border-color:var(--ichidan)}
@@ -860,6 +863,39 @@
 .l-ctl{display:flex;gap:6px;flex-shrink:0}
 .gram-row{margin-top:6px;display:flex;flex-wrap:wrap;gap:6px;align-items:center}
 .ex-gram-chip[data-act]{cursor:pointer}
+
+/* ---- Listen (dictation) — ported from mockups/songs/mock.css + the graded states ---- */
+.sg-listen-bar{display:flex;align-items:center;justify-content:space-between;gap:12px;flex-wrap:wrap;margin:6px 0 4px}
+.sg-diff{display:flex;align-items:center;gap:10px}
+.progresstxt{font-family:"SF Mono",ui-monospace,monospace;font-size:12px;color:var(--muted)}
+.listen-card{background:color-mix(in srgb,var(--ichidan) 9%,transparent);border-left:3px solid var(--ichidan);border-radius:0 8px 8px 0;padding:14px 16px;margin:8px 0}
+.listen-cue{display:flex;align-items:center;gap:10px;margin-bottom:12px}
+.cue-btn{width:36px;height:36px;border-radius:50%;background:var(--paper);border:1px solid var(--line);color:var(--ichidan);display:inline-flex;align-items:center;justify-content:center;cursor:pointer;flex-shrink:0}
+.cue-btn.playing{background:var(--ichidan);color:#fff;border-color:var(--ichidan)}
+.cue-hint{font-family:"SF Mono",ui-monospace,monospace;font-size:11px;color:var(--muted)}
+.listen-cloze{line-height:2.5}
+.gap-inp{display:inline-block;width:6em;max-width:60vw;border:none;border-bottom:2px solid var(--ichidan);background:transparent;color:var(--ink);font-family:var(--jp-font);font-size:20px;text-align:center;padding:0 6px 2px;margin:0 2px}
+.gap-inp:focus{outline:none;background:color-mix(in srgb,var(--ichidan) 8%,transparent)}
+.gap-res{display:inline-block;min-width:4em;text-align:center;border-bottom:2px solid var(--line);padding:0 6px 2px;margin:0 2px;font-family:var(--jp-font);font-size:20px}
+.gap-res.ok{color:var(--good);border-color:var(--good)}
+.gap-res.bad{color:var(--godan);border-color:var(--godan)}
+.gap-res.neutral{color:var(--muted)}
+.gap-mark{font-size:13px;margin-left:4px;font-family:"SF Mono",ui-monospace,monospace}
+.listen-full{display:flex;align-items:center;gap:10px;flex-wrap:wrap}
+.listen-full-inp{font-size:20px;padding:11px 13px;flex:1;min-width:min(420px,100%)}
+.listen-full-inp.ok{border-color:var(--good)}
+.listen-full-inp.bad{border-color:var(--godan)}
+.listen-verdict{font-family:"SF Mono",ui-monospace,monospace;font-size:12px}
+.listen-verdict.ok{color:var(--good)}
+.listen-verdict.bad{color:var(--godan)}
+.listen-actions{display:flex;gap:8px;align-items:center;margin-top:14px;flex-wrap:wrap}
+.listen-answer{margin-top:14px;padding-top:12px;border-top:1px dashed var(--line)}
+.listen-answer .l-jp{font-size:21px;line-height:2}
+.listen-done{text-align:center;padding:34px 16px}
+.ld-title{font-family:"SF Mono",ui-monospace,monospace;font-size:12px;letter-spacing:.12em;text-transform:uppercase;color:var(--muted)}
+.ld-score{font-size:44px;font-weight:900;margin:6px 0 2px}
+.ld-score span{font-size:24px;color:var(--muted);font-weight:400}
+.ld-sub{font-size:13px;color:var(--muted);font-style:italic;margin-bottom:16px}
 
 /* ---- Mine (vocab & grammar) ---- */
 .vg{display:grid;grid-template-columns:1.4fr 1fr;gap:18px;margin-top:14px}
