@@ -352,7 +352,13 @@
   .btn.reveal{background:var(--ink);color:var(--paper);border-color:var(--ink);width:100%;max-width:560px}
   .btn.wrong{border-color:var(--godan);color:var(--godan)} .btn.wrong:hover{background:var(--godan);color:#fff}
   .btn.right{border-color:var(--good);color:var(--good)} .btn.right:hover{background:var(--good);color:#fff}
-  .btn.srs{background:var(--ichidan);color:#fff;border-color:var(--ichidan);font-weight:700}     /* "Review due cards" CTA */
+  /* CTA colors each carry ONE meaning: vermilion (--godan, .btn.primary / .chip.primary) is
+     the general primary action (Start, Add, Sign in, Save); indigo (--ichidan, .btn.srs) is
+     reserved for the SRS / scheduled-review path (the due banner). Don't reuse .btn.srs for a
+     non-SRS button — doing that (Sign in / Save) is what made the colour meaningless. */
+  .btn.primary{background:var(--godan);color:#fff;border-color:var(--godan);font-weight:700}
+  .btn.primary:hover{filter:brightness(.92)}
+  .btn.srs{background:var(--ichidan);color:#fff;border-color:var(--ichidan);font-weight:700}     /* the due/SRS "Review due cards" CTA ONLY */
   .btn.srs:hover{filter:brightness(1.08)}
   .btn.srs:disabled{background:transparent;color:var(--muted);border-color:var(--line);cursor:default;filter:none}   /* shown as "All caught up" */
   .kbd{font-size:10px;opacity:.6}      /* keyboard-shortcut hints on buttons */

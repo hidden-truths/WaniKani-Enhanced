@@ -38,7 +38,7 @@ export function listenHtml() {
       <div class="ld-title">Session complete</div>
       <div class="ld-score">${correct} <span>/ ${total}</span></div>
       <div class="ld-sub">lines transcribed correctly this session</div>
-      <button class="btn srs" data-act="lrestart"><svg class="ic" aria-hidden="true"><use href="#i-refresh"/></svg> Start over</button>
+      <button class="btn primary" data-act="lrestart"><svg class="ic" aria-hidden="true"><use href="#i-refresh"/></svg> Start over</button>
     </div>`;
   }
   return bar + listenCardHtml(S.openSong.lines[S.listen.idx]);
@@ -64,7 +64,7 @@ function listenCardHtml(line) {
   const canCheck = !noGaps && !S.listen.revealed;
   const nextLabel = (S.listen.checked || S.listen.revealed || noGaps) ? 'Next' : 'Skip';
   const actions = `<div class="listen-actions">
-    ${canCheck ? `<button class="btn srs" data-act="lcheck"><svg class="ic" aria-hidden="true"><use href="#i-check"/></svg> Check</button>` : ''}
+    ${canCheck ? `<button class="btn primary" data-act="lcheck"><svg class="ic" aria-hidden="true"><use href="#i-check"/></svg> Check</button>` : ''}
     ${!S.listen.revealed ? `<button class="btn ghost" data-act="lreveal"><svg class="ic" aria-hidden="true"><use href="#i-eye"/></svg> Reveal</button>` : ''}
     <button class="btn ghost" data-act="lnext">${nextLabel} <svg class="ic" aria-hidden="true"><use href="#i-chevron"/></svg></button>
   </div>`;

@@ -15,7 +15,7 @@ export function addHtml() {
     return `<button class="st-back" data-act="back"><svg class="ic" aria-hidden="true"><use href="#i-back"/></svg> back</button>
       <div class="signup-banner sg-gate"><svg class="ic" style="font-size:22px"><use href="#i-user"/></svg>
       <div class="sb-text"><b>Sign in to add a song.</b> Your pasted lyrics are stored privately to your account. Reading the bundled starter songs needs no account.</div>
-      <button class="btn srs" data-act="signin">Sign in</button></div>`;
+      <button class="btn primary" data-act="signin">Sign in</button></div>`;
   }
   const a = S.add.analysis;
   const steps = (n) => `<div class="steps">
@@ -60,7 +60,7 @@ export function addHtml() {
       <p class="add-note"><svg class="ic" aria-hidden="true"><use href="#i-alert"/></svg> Auto-generated${flagged ? ` — ${flagged} line${flagged === 1 ? '' : 's'} flagged to check` : ''}. Review, then it joins your library.</p>
       <span style="display:flex;gap:8px">
         <button class="btn ghost" data-act="reanalyze"${S.add.busy ? ' disabled' : ''}><svg class="ic" aria-hidden="true"><use href="#i-refresh"/></svg> Re-analyze</button>
-        <button class="btn srs" data-act="save"${S.add.busy ? ' disabled' : ''}><svg class="ic" aria-hidden="true"><use href="#i-check"/></svg> ${S.add.busy ? 'Saving…' : 'Save to my library'}</button>
+        <button class="btn primary" data-act="save"${S.add.busy ? ' disabled' : ''}><svg class="ic" aria-hidden="true"><use href="#i-check"/></svg> ${S.add.busy ? 'Saving…' : 'Save to my library'}</button>
       </span>
     </div>`;
 }

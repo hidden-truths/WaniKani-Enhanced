@@ -23,7 +23,7 @@ export function shadowHtml() {
   if (!account) {
     intro = `<div class="signup-banner sg-gate" style="margin:8px 0 14px"><svg class="ic" style="font-size:22px" aria-hidden="true"><use href="#i-mic"/></svg>
       <div class="sb-text"><b>Sign in to shadow.</b> Recording your voice + comparing it to a reference needs an account. Reading + listening work without one.</div>
-      <button class="btn srs" data-act="signin">Sign in</button></div>`;
+      <button class="btn primary" data-act="signin">Sign in</button></div>`;
   } else if (!RECORD_SUPPORTED) {
     intro = `<p class="add-note" style="margin:6px 0 12px"><svg class="ic" aria-hidden="true"><use href="#i-alert"/></svg> Recording needs a modern browser with a microphone.</p>`;
   } else {
