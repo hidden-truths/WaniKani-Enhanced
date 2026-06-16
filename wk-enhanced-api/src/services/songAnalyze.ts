@@ -100,7 +100,10 @@ function furiganaReconstructs(furigana: FuriganaSeg[] | null | undefined, text: 
 // Compute UTF-16 offsets by walking the line: find each surface at/after a running cursor. Returns
 // null if any surface can't be aligned in order (→ caller flags + drops tokens). `indexOf` uses
 // UTF-16 indices (JS strings), so start/end satisfy text.slice(start,end)===surface by construction.
-function offsetTokens(text: string, tokens: ModelToken[]): AnalyzedToken[] | null {
+// Exported so the curated-starter seed (scripts/seed-songs.ts) computes offsets the SAME way the
+// runtime analyzer does — one offset routine, so a hand-authored seed token can't drift from a
+// model-authored one.
+export function offsetTokens(text: string, tokens: ModelToken[]): AnalyzedToken[] | null {
     const out: AnalyzedToken[] = [];
     let cursor = 0;
     for (const t of tokens) {

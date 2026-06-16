@@ -225,6 +225,34 @@ describe('songs — public starter reuse-by-hash + idempotency', () => {
         expect(n("SELECT COUNT(*) AS n FROM sentence WHERE source='song'")).toBe(2);
         expect(n("SELECT COUNT(*) AS n FROM sentence_link WHERE owner_type='song'")).toBe(2);
     });
+
+    test('a curated starter carries its tokens → annotation served + Mine words/coverage populated', () => {
+        // The seed authors in-order tokens (offsets computed by offsetTokens); here they arrive
+        // pre-offset, exercising the PUBLIC-branch annotation write the curated set relies on.
+        db.upsertPublicSong({ extId: 'song-t', title: 'T', lines: [
+            { text: 'うたをうたう', furigana: seg('うたをうたう'), en: 'I sing a song', grammar: ['te-iru'],
+              tokens: [tok(0, 2, 'うた', 'NOUN', 'N5', 'song'), tok(3, 6, 'うたう', 'VERB', 'N5', 'to sing')] },
+        ] });
+        const s = db.getSong({ extId: 'song-t', viewer: null })!; // anon-readable starter
+        expect(s.lines[0]!.annotation?.tokens.map((t) => t.surface)).toEqual(['うた', 'うたう']);
+        expect(s.lines[0]!.annotation?.parser).toBe('llm');
+        // the library aggregate (coverage + Mine inputs) sees the distinct content words
+        const words = db.getSongs({ viewer: null }).find((x) => x.id === 'song-t')!.words;
+        expect(words).toContainEqual({ lemma: 'うた', jlpt: 'N5' });
+        expect(words).toContainEqual({ lemma: 'うたう', jlpt: 'N5' });
+    });
+
+    test('re-seeding a public song with CHANGED tokens replaces them on the shared row (no stale union)', () => {
+        db.upsertPublicSong({ extId: 'song-rt', title: 'R', lines: [
+            { text: 'やま', furigana: seg('やま'), tokens: [tok(0, 2, 'やま', 'NOUN', 'N5', 'mountain')] },
+        ] });
+        db.upsertPublicSong({ extId: 'song-rt', title: 'R', lines: [
+            { text: 'やま', furigana: seg('やま'), tokens: [tok(0, 2, 'やま', 'NOUN', 'N4', 'mountain (edited)')] },
+        ] });
+        const s = db.getSong({ extId: 'song-rt', viewer: null })!;
+        expect(s.lines[0]!.annotation?.tokens.map((t) => t.jlpt)).toEqual(['N4']); // replaced, not appended
+        expect(n("SELECT COUNT(*) AS n FROM sentence_annotation")).toBe(1);
+    });
 });
 
 describe('songs — write validation (no partial writes)', () => {

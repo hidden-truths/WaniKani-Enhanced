@@ -5,7 +5,7 @@
 // it's what the tap-to-lookup UI relies on.
 
 import { describe, test, expect } from 'bun:test';
-import { assembleAnalysis, type ModelOutput } from './songAnalyze.ts';
+import { assembleAnalysis, offsetTokens, type ModelOutput } from './songAnalyze.ts';
 
 describe('assembleAnalysis — offsets + validation + flags', () => {
     test('a clean line: furigana validates, tokens get correct UTF-16 offsets, grammar is catalog-filtered', () => {
@@ -92,5 +92,31 @@ describe('assembleAnalysis — offsets + validation + flags', () => {
         const line = assembleAnalysis([text], out).lines[0]!;
         expect(line.tokens.map((t) => text.slice(t.start, t.end))).toEqual(['朝日', '昇る']);
         expect(line.flags).toEqual([]);
+    });
+});
+
+// offsetTokens is exported so the curated-starter seed (scripts/seed-songs.ts) computes offsets the
+// SAME way — one routine, no drift between hand-authored seed tokens and model-authored runtime ones.
+describe('offsetTokens — in-order UTF-16 offset computation (also reused by the song seed)', () => {
+    test('computes start/end so text.slice===surface; a repeated surface aligns to the NEXT occurrence', () => {
+        const text = '歌を歌う';
+        const toks = offsetTokens(text, [{ surface: '歌', pos: 'noun' }, { surface: '歌う', pos: 'verb' }]);
+        expect(toks).not.toBeNull();
+        expect(toks!.map((t) => [t.start, t.end])).toEqual([[0, 1], [2, 4]]); // 2nd 歌 after the cursor, not back at 0
+        for (const t of toks!) expect(text.slice(t.start, t.end)).toBe(t.surface);
+        expect(toks![0]!.pos).toBe('NOUN'); // pos upper-cased; lemma/reading defaulted
+        expect(toks![0]!.lemma).toBe('歌');
+    });
+
+    test('non-BMP surface (surrogate pair) gets UTF-16 (not codepoint) offsets', () => {
+        const text = '𠮟る'; // 𠮟 = U+20B9F, one codepoint = TWO UTF-16 code units
+        const toks = offsetTokens(text, [{ surface: '𠮟る', lemma: '𠮟る', pos: 'VERB' }])!;
+        expect(toks[0]!.end).toBe(3); // 2 units for 𠮟 + 1 for る — codepoint length would be 2
+        expect(text.slice(toks[0]!.start, toks[0]!.end)).toBe('𠮟る');
+    });
+
+    test('returns null when a surface cannot be aligned in order (→ seed aborts / analyzer flags)', () => {
+        expect(offsetTokens('あ', [{ surface: 'ない', pos: 'verb' }])).toBeNull();
+        expect(offsetTokens('歌う歌', [{ surface: '歌', pos: 'noun' }, { surface: '歌う', pos: 'verb' }])).toBeNull(); // 歌う is before the 2nd 歌
     });
 });
