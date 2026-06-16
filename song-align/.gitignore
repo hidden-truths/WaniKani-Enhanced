@@ -1,0 +1,5 @@
+# Local-only pipeline workspace — never committed (the venv + Python caches are machine-specific).
+# The committed artifacts are the timing sidecars in ../wk-enhanced-api/data/song-timing/.
+.venv/
+__pycache__/
+*.pyc
