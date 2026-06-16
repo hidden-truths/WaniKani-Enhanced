@@ -23,6 +23,7 @@ import { playItem, cycleMod } from './audio.js';
 import { wireWordTaps } from './word-lookup.js';
 import { speakBtnHtml } from './render-helpers.js';
 import { loadSelftalk, saveSelftalk } from '../persistence/selftalk.js';
+import { createReadThroughCache } from '../persistence/cache.js';
 import { account, api, setSyncStatus } from './cloud-core.js';
 import {
   RECORD_SUPPORTED, enterSpeakingMode, exitSpeakingMode, isSpeakingMode,
@@ -54,16 +55,8 @@ let recordingsLoaded = false;  // whether the take cache has been fetched this s
 // last good fetch in localStorage as a READ-THROUGH cache so the tab still renders if the
 // fetch fails (offline / server down). The bundled SELFTALK constant in data/selftalk.js is no
 // longer read at runtime — it's the seed source for scripts/seed-sentences.ts.
-const STORE_CACHE_KEY = 'jpverbs_selftalk_cache';
 let storePhrases = [];         // the live phrase set (built-ins + own), from the fetch or the cache
-
-function loadCachedPhrases() {
-  try { const o = JSON.parse(localStorage.getItem(STORE_CACHE_KEY)); if (Array.isArray(o)) return o; } catch (e) {}
-  return [];
-}
-function cachePhrases(phrases) {
-  try { localStorage.setItem(STORE_CACHE_KEY, JSON.stringify(phrases)); } catch (e) {}
-}
+const phraseCache = createReadThroughCache({ key: 'jpverbs_selftalk_cache' });
 
 // Refresh storePhrases from the store + update the cache. Degrades to the cache on failure so
 // the tab never goes blank from a network hiccup. Returns true on a successful network refresh.
@@ -71,10 +64,10 @@ export async function refreshPhrases() {
   try {
     const r = await api('/v1/sentences?ownerType=selftalk&annotate=1');
     storePhrases = ((r && r.sentences) || []).map(sentenceToPhrase);
-    cachePhrases(storePhrases);
+    phraseCache.write(storePhrases);
     return true;
   } catch (e) {
-    if (!storePhrases.length) storePhrases = loadCachedPhrases();   // offline first load → fall back to cache
+    if (!storePhrases.length) storePhrases = phraseCache.read();   // offline first load → fall back to cache
     return false;
   }
 }
@@ -85,11 +78,11 @@ export async function refreshPhrases() {
 function upsertLocalPhrase(phrase) {
   const i = storePhrases.findIndex((p) => p.id === phrase.id);
   if (i >= 0) storePhrases[i] = phrase; else storePhrases.push(phrase);
-  cachePhrases(storePhrases);
+  phraseCache.write(storePhrases);
 }
 function removeLocalPhrase(id) {
   storePhrases = storePhrases.filter((p) => p.id !== id);
-  cachePhrases(storePhrases);
+  phraseCache.write(storePhrases);
 }
 
 // Slot-swap TEMPLATES now come from the store too (GET /v1/templates), not the JS bundle — same
@@ -98,16 +91,8 @@ function removeLocalPhrase(id) {
 // at runtime. The realize/render code is unchanged — it operates on this same
 // { id, topic, thought?, grammar, en, jp, slots } structure, and `id` stays the SKELETON ext_id the
 // record-compare keys on.
-const TPL_CACHE_KEY = 'jpverbs_selftalk_templates_cache';
 let storeTemplates = [];       // the live template set, from the fetch or the cache
-
-function loadCachedTemplates() {
-  try { const o = JSON.parse(localStorage.getItem(TPL_CACHE_KEY)); if (Array.isArray(o)) return o; } catch (e) {}
-  return [];
-}
-function cacheTemplates(t) {
-  try { localStorage.setItem(TPL_CACHE_KEY, JSON.stringify(t)); } catch (e) {}
-}
+const templateCache = createReadThroughCache({ key: 'jpverbs_selftalk_templates_cache' });
 
 // Refresh storeTemplates from the store + update the cache. Degrades to the cache on failure so the
 // slot-swap cards never vanish from a network hiccup. Returns true on a successful network refresh.
@@ -115,10 +100,10 @@ export async function refreshTemplates() {
   try {
     const r = await api('/v1/templates?source=selftalk');
     storeTemplates = (r && r.templates) || [];
-    cacheTemplates(storeTemplates);
+    templateCache.write(storeTemplates);
     return true;
   } catch (e) {
-    if (!storeTemplates.length) storeTemplates = loadCachedTemplates();   // offline first load → fall back to cache
+    if (!storeTemplates.length) storeTemplates = templateCache.read();   // offline first load → fall back to cache
     return false;
   }
 }
@@ -192,7 +177,7 @@ export function renderSelftalk() {
 // from the store, then repaint if the network set changed. Wired in main.js as the 独り言 tab's
 // render handler (renderSelftalk stays the render-only fn used by the internal re-renders).
 export async function showSelftalk() {
-  if (!storeTemplates.length) storeTemplates = loadCachedTemplates();   // instant frame from cache (templates)
+  if (!storeTemplates.length) storeTemplates = templateCache.read();   // instant frame from cache (templates)
   const hadCache = storePhrases.length > 0;
   if (hadCache) renderSelftalk();
   const [phrasesChanged, templatesChanged] = await Promise.all([refreshPhrases(), refreshTemplates()]);
@@ -541,7 +526,7 @@ function handleBrowserTabHidden() {
 
 export function initSelftalk() {
   loadSelftalk();
-  storePhrases = loadCachedPhrases();   // warm from the last good fetch so the first paint isn't blank
+  storePhrases = phraseCache.read();   // warm from the last good fetch so the first paint isn't blank
   // Background refresh at boot so the cache is fresh; re-render if the tab is already showing.
   refreshPhrases().then((changed) => {
     const panel = document.getElementById('panel-selftalk');

@@ -5,18 +5,18 @@
 import { api } from '../cloud-core.js';
 import { state } from '../../state.js';
 import { escapeHtml, knownHeadwords, coverage, songLevel, songProgress } from '../../core/index.js';
+import { createReadThroughCache } from '../../persistence/cache.js';
 import { S, CACHE_KEY, LV_CLASS } from './state.js';
 import { progressFor } from './progress.js';
 
 // ---- read-through cache + fetch ----
-function readCache() { try { const o = JSON.parse(localStorage.getItem(CACHE_KEY)); if (Array.isArray(o)) return o; } catch (e) { /* */ } return []; }
-function writeCache(songs) { try { localStorage.setItem(CACHE_KEY, JSON.stringify(songs)); } catch (e) { /* */ } }
+const cache = createReadThroughCache({ key: CACHE_KEY });
 
 // Fetch the library (public starters + the viewer's own private songs) into S.library, write-through
 // to the cache; on failure fall back to the cache so an offline open still paints.
 export async function loadLibrary() {
-  try { const r = await api('/v1/songs'); S.library = (r && r.songs) || []; writeCache(S.library); }
-  catch (e) { if (!S.library.length) S.library = readCache(); }
+  try { const r = await api('/v1/songs'); S.library = (r && r.songs) || []; cache.write(S.library); }
+  catch (e) { if (!S.library.length) S.library = cache.read(); }
 }
 // Flatten the server's AssembledSentence line (grammar in tags, en in translations, tokens in
 // annotation, timing on link) into the song-line shape core/songs.js + the render operate on. Line
