@@ -62,6 +62,8 @@ const serviceUnavailable = (c: any, detail: string) =>
 export const songsRouter = new OpenAPIHono({ defaultHook: zodHook });
 
 // A song carries lyrics + per-line tokens, so it's bigger than a single sentence — but still small.
+// Measured in real UTF-8 BYTES: the Zod schema bounds the line COUNT + per-field lengths but NOT the
+// furigana/token array lengths, so this is the guard against an array-bomb within those bounds.
 const MAX_SONG_BYTES = 512_000;
 const MAX_USER_SONGS = 200;
 
@@ -69,7 +71,7 @@ const unauthorized = (c: any) => httpUnauthorized(c, 'Log in to add or edit song
 const notFound = (c: any) => httpNotFound(c, 'No song with that id is yours.');
 
 const tooLarge = (c: any, obj: unknown, max: number) =>
-    JSON.stringify(obj).length > max
+    Buffer.byteLength(JSON.stringify(obj), 'utf8') > max
         ? c.json({ code: 'validation_error' as const, error: 'song too large', detail: `max ${max} bytes` }, 400)
         : null;
 
