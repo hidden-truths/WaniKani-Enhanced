@@ -28,7 +28,7 @@ import {
   sentenceGrammar, sentenceTokens, sentenceEn,
   mergeProgress, mergeCustomVerbs, mergeMinna, mergeSelftalkPractice, mergeSongs,
   parseYouTubeId, songWords, knownHeadwords, coverage, bucketByJlpt, wordStatus, songLevel, lineTimingState, songLineKey, songProgress, songGrammar, JLPT_ORDER,
-  clozeBlanks, clozeLineParts,
+  clozeBlanks, clozeLineParts, parseSongLineKey, readingMatch, lineReading, buildSongCard, songCardKey,
 } from '../src/core/index.js';
 import { SELFTALK, SELFTALK_TAXONOMY, SELFTALK_TOPICS, SELFTALK_TOPIC_IDS, SELFTALK_GRAMMAR } from '../src/data/selftalk.js';
 import { SELFTALK_TEMPLATES } from '../src/data/selftalk-templates.js';
@@ -1617,4 +1617,44 @@ test('clozeLineParts: no furigana (plain line) slices a mid-string blank; no bla
   // no blanks → the line renders fully (ruby where present, text otherwise), no gaps.
   const line = sgLine('朝日', { furigana: [{ t: '朝日', r: 'あさひ' }], tokens: [] });
   expect(clozeLineParts(line, [])).toEqual([{ type: 'ruby', t: '朝日', r: 'あさひ' }]);
+});
+
+// ---- Songs: pure helpers extracted from features/songs.js (C0 of the decomposition) ----
+test('parseSongLineKey: inverse of songLineKey; tolerant of malformed input', () => {
+  expect(parseSongLineKey(songLineKey('usr-abc', 4))).toEqual({ extId: 'usr-abc', ordinal: 4 });
+  expect(parseSongLineKey('song-fuyu:0')).toEqual({ extId: 'song-fuyu', ordinal: 0 });
+  expect(parseSongLineKey('nocolon')).toBeNull();        // no separator
+  expect(parseSongLineKey('usr-x:notanint')).toBeNull(); // non-integer ordinal
+  expect(parseSongLineKey('usr-x:')).toBeNull();         // empty ordinal → NaN
+});
+
+test('readingMatch: permissive typed-reading compare (romaji + kana folding); empty never matches', () => {
+  expect(readingMatch('うた', 'うた')).toBe(true);
+  expect(readingMatch('uta', 'うた')).toBe(true);          // romaji folds to kana
+  expect(readingMatch('ウタ', 'うた')).toBe(true);          // katakana → hiragana
+  expect(readingMatch('ちがう', 'うた')).toBe(false);       // genuine mismatch
+  expect(readingMatch('うた', '')).toBe(false);            // empty expected → never a match
+  expect(readingMatch('', 'うた')).toBe(false);            // empty input
+});
+
+test('lineReading: whole-line reading from furigana, else the plain text', () => {
+  expect(lineReading(sgLine('歌を', { furigana: [{ t: '歌', r: 'うた' }, { t: 'を' }] }))).toBe('うたを');
+  expect(lineReading(sgLine('またあした'))).toBe('またあした'); // no furigana → its own text
+});
+
+test('songCardKey + buildSongCard: stable dedup key + the tagged activation-card shape', () => {
+  expect(songCardKey('usr-x', '食べる')).toBe('song-usr-x-食べる');
+  const card = buildSongCard({
+    songExtId: 'usr-x', songTitle: 'Fuyu', rank: 101,
+    word: { lemma: '食べる', reading: 'たべる', gloss: 'to eat', pos: 'VERB', jlpt: 'N5' },
+  });
+  expect(card).toMatchObject({
+    rank: 101, jp: '食べる', read: 'たべる', mean: 'to eat', cat: 'verb', jlpt: 'N5',
+    song: true, songId: 'usr-x', songTitle: 'Fuyu', songKey: 'song-usr-x-食べる', custom: true,
+  });
+  expect(card.tags).toEqual(['歌', 'song-usr-x', 'custom']);
+  // POS mapping + defaults: PROPN→noun, unknown→noun; reading falls back to lemma, gloss to ''.
+  expect(buildSongCard({ songExtId: 's', songTitle: 'T', rank: 1, word: { lemma: '東京', pos: 'PROPN' } }).cat).toBe('noun');
+  const bare = buildSongCard({ songExtId: 's', songTitle: 'T', rank: 2, word: { lemma: 'あ', pos: 'X' } });
+  expect(bare).toMatchObject({ cat: 'noun', read: 'あ', mean: '' });
 });

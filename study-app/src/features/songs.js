@@ -12,9 +12,10 @@ import { state } from '../state.js';
 import { localDay } from '../config.js';
 import { api, account } from './cloud-core.js';
 import {
-  escapeHtml, plainText, segmentsToRuby, segmentsToReading, overlayTokens,
+  escapeHtml, plainText, segmentsToRuby, overlayTokens,
   parseYouTubeId, songWords, knownHeadwords, coverage, bucketByJlpt, songLevel, songGrammar,
-  clozeBlanks, clozeLineParts, normKana, romajiToKana, songLineKey, songProgress, applyPractice,
+  clozeBlanks, clozeLineParts, songLineKey, parseSongLineKey, songProgress, applyPractice,
+  readingMatch, lineReading, buildSongCard, songCardKey,
 } from '../core/index.js';
 import { grammarLabel, grammarJlpt } from '../data/grammar.js';
 import { playItem, cycleMod } from './audio.js';
@@ -33,7 +34,6 @@ import {
 } from './record-compare.js';
 
 const CACHE_KEY = 'jpverbs_songs_cache';
-const POS_CAT = { VERB: 'verb', ADJ: 'adjective', NOUN: 'noun', PROPN: 'noun', ADV: 'adverb' };
 const LV_CLASS = { N5: 'lv-n5', N4: 'lv-n4', N3: 'lv-n3', N2: 'lv-n2', N1: 'lv-n1' };
 
 // ---- module view state ----
@@ -101,16 +101,11 @@ function activateSongWords(songExtId, songTitle, words) {
   const existingKeys = new Set(cs.verbs.map((v) => v.songKey).filter(Boolean));
   let added = 0;
   for (const w of words) {
-    const songKey = 'song-' + songExtId + '-' + w.lemma;
+    const songKey = songCardKey(songExtId, w.lemma);
     if (existingKeys.has(songKey)) continue;
     if (existingJp.has(w.lemma)) continue; // already in the deck — don't duplicate
     cs.seq = (cs.seq || 100) + 1;
-    cs.verbs.push({
-      rank: cs.seq, jp: w.lemma, read: w.reading || w.lemma, mean: w.gloss || '',
-      cat: POS_CAT[w.pos] || 'noun', type: '', jlpt: w.jlpt || '', trans: '',
-      tags: ['歌', 'song-' + songExtId, 'custom'], song: true, songId: songExtId, songTitle, songKey,
-      mnem: '', tip: '', ex: [], accent: null, levels: null, custom: true,
-    });
+    cs.verbs.push(buildSongCard({ songExtId, songTitle, word: w, rank: cs.seq }));
     existingKeys.add(songKey); existingJp.add(w.lemma); added++;
   }
   if (added) { saveCustom(cs); rebuildData(); refreshAfterVerbChange(); }
@@ -320,16 +315,8 @@ function ensureListen() {
 }
 function resetListenStep() { listen.checked = false; listen.revealed = false; listen.values = []; listen.fullValue = ''; }
 
-// Advisory grade — the same permissive typed-reading compare the flashcards use: romaji folds to
-// kana, katakana→hiragana, spaces/long-vowel marks normalized. Over-permissiveness is harmless here
-// (practice, never the SRS schedule). Empty expected → never a match.
-function readingMatch(input, expected) {
-  if (!expected) return false;
-  return normKana(romajiToKana(input || '')) === normKana(expected);
-}
-// The line's whole reading (full-line answer) from the store's furigana; a plain-kana line with no
-// furigana reads as its own text.
-function lineReading(line) { return line.furigana ? segmentsToReading(line.furigana) : plainText(line.text); }
+// (readingMatch — the advisory typed-reading compare — and lineReading — the whole-line reading —
+// are pure + unit-tested in core/songs.js; imported above.)
 
 function listenHtml() {
   ensureListen();
@@ -551,18 +538,15 @@ function songEntry(extId) {
   return p[extId];
 }
 // Record a shadowed line (feeds the library progress ring). itemKey = songLineKey(extId, ord) =
-// "<extId>:<ord>"; split on the LAST ':' (an extId is usr-<uuid>/song-<slug> — no colon — but be
-// safe). Idempotent per ordinal. The day-streak ("I practiced") is marked separately in onSongTakeSaved.
+// "<extId>:<ord>", decoded by the pure parseSongLineKey. Idempotent per ordinal. The day-streak
+// ("I practiced") is marked separately in onSongTakeSaved.
 function markShadowed(itemKey) {
-  const key = String(itemKey);
-  const i = key.lastIndexOf(':');
-  if (i < 0) return;
-  const extId = key.slice(0, i);
-  const ord = Number(key.slice(i + 1));
-  if (!extId || !Number.isInteger(ord)) return;
+  const parsed = parseSongLineKey(itemKey);
+  if (!parsed) return;
+  const { extId, ordinal } = parsed;
   const entry = songEntry(extId);
-  if (entry.shadowed.includes(ord)) return;   // already recorded — no needless push
-  entry.shadowed.push(ord); entry.shadowed.sort((a, b) => a - b);
+  if (entry.shadowed.includes(ordinal)) return;   // already recorded — no needless push
+  entry.shadowed.push(ordinal); entry.shadowed.sort((a, b) => a - b);
   saveSongs();
 }
 // Toggle a per-line star (a bookmark; shown in Read). Targeted DOM update so the player stays mounted.

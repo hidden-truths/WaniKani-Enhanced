@@ -1,6 +1,10 @@
 // Pure helpers for the 歌 / Songs tab — DOM-free + unit-tested (test/core.test.ts). Coverage,
-// JLPT bucketing, the known/new vocab split, YouTube id parsing, and the record-compare itemKey.
+// JLPT bucketing, the known/new vocab split, YouTube id parsing, the record-compare itemKey, the
+// Listen (dictation) grading, and the vocab-activation card shape.
 // Song CONTENT is server-authoritative (the sentence store); these turn it into what the UI shows.
+
+import { normKana, romajiToKana } from './kana.js';
+import { plainText, segmentsToReading } from './text.js';
 
 // UD coarse-POS that count as studiable content words (the rest — particles, auxiliaries,
 // punctuation — aren't vocabulary). Mirrors the server's CONTENT_POS so coverage agrees.
@@ -101,6 +105,22 @@ export function lineTimingState(lines) {
 // The record-compare itemKey for a song line (Shadow phase). Stable: "<ext_id>:<ordinal>".
 export function songLineKey(extId, ordinal) { return `${extId}:${ordinal}`; }
 
+// Inverse of songLineKey: "<ext_id>:<ordinal>" → { extId, ordinal }, or null if malformed. Split on
+// the LAST ':' (an ext_id is usr-<uuid> / song-<slug> — no colon — but be safe). Used when a saved
+// Shadow take reports its itemKey back and we need the song + line it belongs to.
+export function parseSongLineKey(itemKey) {
+  const key = String(itemKey);
+  const i = key.lastIndexOf(':');
+  if (i < 0) return null;
+  const extId = key.slice(0, i);
+  const ordStr = key.slice(i + 1);
+  const ordinal = Number(ordStr);
+  // ordStr === '' guards the Number('') === 0 footgun (a trailing-colon key would otherwise
+  // resolve to a phantom line 0). Malformed keys never occur in practice; reject them safely.
+  if (!extId || ordStr === '' || !Number.isInteger(ordinal)) return null;
+  return { extId, ordinal };
+}
+
 // Library progress ring, from the `songs` blob: how much of a song you've SHADOWED. `entry` is the
 // blob's progress[extId] ({ starred, shadowed, … }) or undefined; `lineCount` is the song's line
 // total. Returns { shadowed, starred, pct } — shadowed/starred = distinct line counts, pct =
@@ -187,4 +207,52 @@ export function clozeLineParts(line, blanks) {
     }
   }
   return parts;
+}
+
+// ---- Listen (dictation) grading ----
+// Advisory match for the typed-reading path — the SAME permissive compare the flashcards use: romaji
+// folds to kana, katakana→hiragana, spaces/long-vowel marks normalized. Over-permissiveness is
+// harmless (practice, never the SRS schedule). Empty expected → never a match.
+export function readingMatch(input, expected) {
+  if (!expected) return false;
+  return normKana(romajiToKana(input || '')) === normKana(expected);
+}
+
+// The whole-line reading (full-line dictation answer) from the stored furigana; a plain-kana line
+// with no furigana reads as its own text.
+export function lineReading(line) {
+  return line.furigana ? segmentsToReading(line.furigana) : plainText(line.text);
+}
+
+// ---- vocab activation (Source:歌) ----
+// UD coarse-POS → the deck's `cat`. PROPN folds to noun; anything unmapped defaults to noun.
+const SONG_POS_CAT = { VERB: 'verb', ADJ: 'adjective', NOUN: 'noun', PROPN: 'noun', ADV: 'adverb' };
+
+// Stable, idempotent dedup key for a mined song word: one activated card per (song, lemma).
+export function songCardKey(songExtId, lemma) { return 'song-' + songExtId + '-' + lemma; }
+
+// Build the tagged custom-card object for a mined song word (Source:歌), mirroring the みんなの日本語
+// activation shape. Pure: the caller assigns the monotonic `rank` and owns dedup + persistence.
+export function buildSongCard({ songExtId, songTitle, word, rank }) {
+  return {
+    rank,
+    jp: word.lemma,
+    read: word.reading || word.lemma,
+    mean: word.gloss || '',
+    cat: SONG_POS_CAT[word.pos] || 'noun',
+    type: '',
+    jlpt: word.jlpt || '',
+    trans: '',
+    tags: ['歌', 'song-' + songExtId, 'custom'],
+    song: true,
+    songId: songExtId,
+    songTitle,
+    songKey: songCardKey(songExtId, word.lemma),
+    mnem: '',
+    tip: '',
+    ex: [],
+    accent: null,
+    levels: null,
+    custom: true,
+  };
 }
