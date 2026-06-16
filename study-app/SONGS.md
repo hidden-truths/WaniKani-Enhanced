@@ -21,8 +21,10 @@ the layer-specific docs point back here.
   reserved record-compare scope + the day-streak) and みんなの日本語 [MINNA.md](MINNA.md)
   (content tab + the clip-marker timing pattern + vocab activation + the Source facet).
 
-> **Status: under construction.** Build order is **foundation first** (server schema + the analysis
-> endpoint + **Read + Mine**), then **Listen**, then **Shadow + line timing**. The
+> **Status (2026-06-16): Library + Add + Read + Mine shipped; a 12-song curated library + offline
+> line-timing (synced highlight + per-line replay) shipped; Listen + Shadow still to build.** The
+> current state, the shipped commits, the new mechanisms, the open gotchas, and the prioritized
+> what's-left live in **[SONGS_HANDOFF.md](SONGS_HANDOFF.md)** — read it first for a cold start. The
 > [Phase checklist](#phase-checklist--cross-session-tracker) at the bottom is the live tracker. The
 > UX is locked by the mockups in [mockups/songs/](mockups/songs/) (open `index.html`) and the memory
 > note `song-lyric-tab-design`; this doc is the **technical** source of truth.
@@ -328,11 +330,14 @@ JLPT + explanation from the generated catalog (`grammarLabel`/`grammarJlpt`, [da
 
 ## Account-gating & copyright posture (mirrors Self-Talk)
 
-- **Starter set = PUBLIC rows, anon-readable.** A small curated **genuinely CC / public-domain /
-  Vocaloid** set (`public=1, created_by=NULL`), seeded by `scripts/seed-songs.ts`. Anon visitors can
-  Read / Listen / Mine them, so the tab is useful on day one. (Curation of the actual song picks is a
-  deferred content pass — the seeding *mechanism* ships; we do **not** redistribute copyrighted
-  lyrics.)
+- **Starter set = PUBLIC rows, anon-readable** (`public=1, created_by=NULL`), seeded by
+  `scripts/seed-songs.ts`. **As of 2026-06 the starter set is a 12-song curated J-pop library** — the
+  maintainer's fair-use / transformative-use call for this single-user deployment, **superseding** the
+  original "genuinely CC / public-domain / Vocaloid only" framing. **The lyric TEXT is maintainer-supplied**
+  (pasted in, never scraped); the furigana / English / grammar / per-word-JLPT analysis + per-line timing
+  are the transformative layer. **A contributor annotates maintainer-provided text only — it must never
+  source, scrape, or reproduce lyrics itself.** The seed mechanism + the `song-align/` timing pipeline are
+  the curation toolchain. Full state + provenance: [SONGS_HANDOFF.md](SONGS_HANDOFF.md).
 - **BYO songs = PRIVATE rows; authoring requires an account.** Paste/analyze/save gate on `account`
   (anon sees a sign-in nudge); your lyrics are private store rows (`created_by`, `visibility=private`),
   never public. This is the same posture as Self-Talk authoring + custom-card examples.
@@ -447,15 +452,31 @@ as work lands. `[ ]` = todo, `[x]` = done, `[~]` = in progress.
 - DEVIATION: the **`songs` synced blob is deferred to the Shadow phase** (Phase 5), where stars + shadowed-lines actually accrue. The foundation needs none — song content is server-authoritative and coverage is computed live; mined vocab syncs under `custom-verbs`. Library/Read/Mine all work without it.
 - DEFERRED to follow-ups: inline edit in the Add-review screen (flags guide a re-analyze for now); per-song `song-<id>` chips in the picker (the master `歌` chip + the per-song tags ship; dynamic chip injection is later); the grammar-reference cross-link COUNTS (save-line-as-phrase + a Browse deep-link ship).
 
+### Phase 3.5 — Curated library + offline line-timing ✅ (2026-06-16) — see [SONGS_HANDOFF.md](SONGS_HANDOFF.md)
+- [x] **12-song curated J-pop library** (public starters; the 故郷 placeholder dropped). Full per-line
+  analysis (furigana/EN/grammar/JLPT) authored from maintainer-supplied lyrics, validated (furigana concat
+  + token offsets) + seeded. Pilot ドライフラワー (`80d3074`); the other 11 via parallel subagents (`e168565`).
+- [x] **Seed carries the analysis** (`cf63d35`): seed-file `tokens`/`grammar`/`section`; UTF-16 offsets via
+  the shared `offsetTokens` (exported from `songAnalyze.ts`) → public starters get Mine/coverage, not just plain ruby.
+- [x] **Stanza sections** (`17a8314`): per-line `section` stored in `sentence_link.role` → Read viewer spacing.
+- [x] **`deletePublicSong`** (`767d327`): curator cleanup (orphan-safe, scoped to `created_by IS NULL`).
+- [x] **Offline forced-alignment timing pipeline** (`3e96ad2`): `song-align/` (yt-dlp → demucs → stable-ts
+  forced-align of the known lyrics) → `data/song-timing/<slug>.json` sidecar → `seed-songs.ts` merges →
+  `clip_start_ms`. **Synced highlight + per-line replay (already wired in `songs.js`) now light up once a
+  song is timed.** ‼️ `PUT /timing` is owner-scoped → the PUBLIC curated set is timed via this offline
+  pipeline, NOT in-app.
+
 ### Phase 4 — Listen (dictation) — follow-up
 - [ ] Cloze ⇄ full-line toggle; advisory grading (`normKana`/`romajiToKana`); reveal self-check; per-session count; line replay (slice/by-ear/synth).
 
 ### Phase 5 — Shadow + line timing — follow-up
-- [ ] Tap-to-sync timing (generalize the clip-marker; `PUT /v1/songs/{id}/timing`); synced highlight + per-line replay unlock.
+- [x] **Synced highlight + per-line replay** — implemented in `songs.js` (`highlightAt`/`playSlice`/`replayLine`); unlocked by the Phase-3.5 timing pipeline.
+- [ ] **In-app tap-to-sync** for PRIVATE BYO songs (generalize the clip-marker; `PUT /v1/songs/{id}/timing`). (The curated public set is timed offline via `song-align/`.)
 - [ ] Shadow speaking bar + per-line `recordControlHtml(SONGS_SCOPE,…, 'songs')` (TTS full rig); YouTube-slice by-ear reference; `setOnTakeSaved` → streak + shadowed-line. **Upload reference deferred.**
 
 ### Phase 6 — Docs + memory (rolling)
-- [ ] Keep this checklist current; update `README.md`, `NEXT_STEPS.md`, `CLAUDE.md` (+ server `CLAUDE.md`) with the surface/routes/dead-ends; update the `song-lyric-tab-design` memory (architecture resolved + shipped phases).
+- [~] SONGS_HANDOFF.md added + `song-lyric-tab-design` memory updated (2026-06-16); this checklist current.
+  TODO: refresh `README.md` / `NEXT_STEPS.md` / the CLAUDE.md Songs dead-ends with the curation + timing surface.
 
 ---
 
