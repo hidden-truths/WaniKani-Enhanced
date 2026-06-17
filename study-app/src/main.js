@@ -27,6 +27,7 @@ import './styles/base.css';
 import './styles/chrome.css';
 import './styles.css';            // shared core (buttons/chips/inputs/filters) + not-yet-peeled surfaces
 import './styles/flashcards.css'; // study-panel surface (peeled; overrides the shared core)
+import './styles/browse.css';     // browse grid + detail-memory (peeled)
 import { VERBS } from './data/verbs.js';
 import { state, attachLevels } from './state.js';
 import { loadCustom } from './persistence/custom.js';
