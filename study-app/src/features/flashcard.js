@@ -102,7 +102,11 @@ function showCard() {
     document.getElementById('aRead').innerHTML = pitchHtml(v.read, v.accent) + ' &nbsp; ' + v.jp;
     document.getElementById('aMean').textContent = '';
   }
-  document.getElementById('aNote').innerHTML = v.mnem + (v.tip ? '<br><br>' + v.tip : '');
+  // Mnemonic + trap/tip, each with a small label (matching the Browse detail modal) so they read
+  // as two distinct notes instead of one run-together block. Both interpolate as HTML like before.
+  document.getElementById('aNote').innerHTML =
+    (v.mnem ? `<div class="a-note-row"><span class="a-note-tag">Mnemonic</span>${v.mnem}</div>` : '')
+    + (v.tip ? `<div class="a-note-row a-note-trap"><span class="a-note-tag">Trap / tip</span>${v.tip}</div>` : '');
   document.getElementById('jishoLink').href = jishoUrl(v.jp);   // dictionary deep-link
   renderExample(v);                                   // leveled example (shown once revealed)
   document.getElementById('answer').classList.remove('show');

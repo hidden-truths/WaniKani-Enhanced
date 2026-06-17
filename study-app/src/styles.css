@@ -349,6 +349,12 @@
   .pitch .pa.drop{border-right:2px solid currentColor;padding-right:1px;margin-right:1px}
   .answer .a-mean{font-size:20px;font-style:italic;margin-top:4px}
   .answer .a-note{font-size:13px;color:var(--muted);margin-top:10px;line-height:1.5}
+  .a-note-row{margin-top:8px}
+  .a-note-row:first-child{margin-top:0}
+  /* small label distinguishing the mnemonic from the trap/tip (the answer-side analog of the
+     Browse detail modal's "Mnemonic" / "Trap / tip" section headers). Trap tag in the warning tone. */
+  .a-note-tag{display:inline-block;font-family:"SF Mono",ui-monospace,monospace;font-size:9px;letter-spacing:.1em;text-transform:uppercase;color:var(--ink);opacity:.55;margin-right:7px}
+  .a-note-trap .a-note-tag{color:var(--godan);opacity:1}
   .fc-buttons{max-width:560px;margin:18px auto 0;display:flex;gap:10px;justify-content:center}
   .btn{font-family:"SF Mono",ui-monospace,monospace;font-size:13px;padding:12px 28px;border-radius:3px;border:1px solid var(--line);background:var(--paper);cursor:pointer;letter-spacing:.05em}
   .btn:hover{border-color:var(--ink)}
