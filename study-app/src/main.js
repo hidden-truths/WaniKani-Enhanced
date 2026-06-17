@@ -24,6 +24,7 @@
 // then the (shrinking) per-surface sheet. See styles/tokens.css + styles/base.css.
 import './styles/tokens.css';
 import './styles/base.css';
+import './styles/chrome.css';
 import './styles.css';
 import { VERBS } from './data/verbs.js';
 import { state, attachLevels } from './state.js';
