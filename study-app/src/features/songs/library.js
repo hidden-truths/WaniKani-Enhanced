@@ -82,7 +82,7 @@ function songCardHtml(s, k) {
     <button class="song-card${s.custom ? '' : ' starter'}" data-act="open" data-id="${escapeHtml(s.id)}" type="button">
       <span class="sc-row">
         <span><span class="sc-title jp">${escapeHtml(s.title)}</span><span class="sc-artist">${escapeHtml(s.artist || '')}</span></span>
-        <span class="ring" style="--p:${prog.pct}%" title="${prog.shadowed} of ${s.lineCount} line${s.lineCount === 1 ? '' : 's'} shadowed"><span>${prog.pct}</span></span>
+        <span class="sc-ring"><span class="ring" style="--p:${prog.pct}%" title="${prog.shadowed} of ${s.lineCount} line${s.lineCount === 1 ? '' : 's'} shadowed"><span>${prog.pct}</span></span><span class="sc-ring-cap">shadowed</span></span>
       </span>
       <span class="sc-cov"><span class="sc-cov-top"><span>you know</span><b>${cov.pct}%</b></span><span class="cov-bar"><i class="cov-fill" style="width:${cov.pct}%"></i></span></span>
       <span class="sc-meta">${lvlBadge}${src}${timed}</span>
