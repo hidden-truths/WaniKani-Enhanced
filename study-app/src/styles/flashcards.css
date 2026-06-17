@@ -12,7 +12,9 @@
 /* ---- Study-home HERO: the giant due-count numeral (今日の復習 / today's review) beside the
    upcoming-review forecast side card — the mock's editorial composition. #fcSetup leads with
    this; the study picker (type / direction / filters / Start) follows below. ---- */
-.hero{display:grid;grid-template-columns:1fr auto;gap:34px;align-items:end;padding:24px 0 14px}
+/* top gap now comes from .wrap's padding-top (Phase 9) — zero the hero's own top
+   so it doesn't double up; every surface shares the one gap below the chrome. */
+.hero{display:grid;grid-template-columns:1fr auto;gap:34px;align-items:end;padding:0 0 14px}
 .hero-left{max-width:560px;display:flex;flex-direction:column;align-items:flex-start;min-width:0}
 .hero-kicker{font-family:var(--mono);font-size:11px;letter-spacing:.3em;text-transform:uppercase;color:var(--gold);font-weight:500;display:inline-flex;align-items:center;gap:10px;margin-bottom:20px}
 .hero-kicker::before{content:"";width:22px;height:1px;background:var(--gold);display:inline-block}
@@ -77,7 +79,7 @@
 
 /* mobile: stack the hero (numeral over the forecast) and the picker */
 @media (max-width:900px){
-  .hero{grid-template-columns:1fr;gap:24px;padding:14px 0 6px}
+  .hero{grid-template-columns:1fr;gap:24px;padding:0 0 6px}
   .bignum{font-size:120px}
   .forecast-card{min-width:0}
 }
@@ -91,7 +93,7 @@
    session chrome → card (prompt FACE ⇄ answer FACE) → grade row. showCard()/reveal()
    drive it; grade keys 1/x wrong, 2/space right. See flashcard.js.
    ========================================================================= */
-.fc-setup{padding:14px 0}
+.fc-setup{padding:0 0 14px}
 .fc-stage{display:none;padding:8px 0 48px}
 .fc-stage.active{display:block}
 

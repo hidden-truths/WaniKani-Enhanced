@@ -7,7 +7,7 @@
    none/hidden). Imported after styles.css.
    ========================================================================= */
 /* Signed-out gate — a lifted sheet. */
-.mn-gate{text-align:center;padding:48px 22px;background:var(--surf-card);border:1px solid var(--line);border-radius:16px;margin-top:20px;box-shadow:var(--lift-md),var(--inner-hi)}
+.mn-gate{text-align:center;padding:48px 22px;background:var(--surf-card);border:1px solid var(--line);border-radius:16px;margin-top:0;box-shadow:var(--lift-md),var(--inner-hi)}
 .mn-gate .gate-ic{font-size:34px;color:var(--reading)}
 .mn-gate h2{font-family:var(--display);font-size:24px;font-weight:900;margin:12px 0 6px}
 .mn-gate p{color:var(--muted);max-width:46ch;margin:0 auto 18px}

@@ -26,9 +26,12 @@ body{
 .jp{font-family:var(--jp-font)}
 /* Main column (Phase 9 — widened to the mock's airier frame). max-width + 40px
    gutter match the topbar's 1180-column padding (chrome.css), so the page content
-   aligns under the brand/tabs. Mobile drops to the mock's 18px gutter. */
-.wrap{position:relative;z-index:1;max-width:1180px;margin:0 auto;padding:0 40px 96px}
-@media (max-width:640px){ .wrap{ padding:0 18px 64px; } }
+   aligns under the brand/tabs. The 56px TOP gap is the breathing room below the
+   sticky chrome (the mocks put ~54–62px on each surface's first section; we put
+   it once on .wrap and zero the per-surface first-element tops so every surface
+   matches). Mobile drops to the 18px gutter + a tighter top. */
+.wrap{position:relative;z-index:1;max-width:1180px;margin:0 auto;padding:56px 40px 96px}
+@media (max-width:640px){ .wrap{ padding:28px 18px 64px; } }
 
 /* ---- Atmosphere layers (fixed, behind content, pointer-events:none) ----------
    .grain: fine paper grain — visible by day (multiply), a whisper by night

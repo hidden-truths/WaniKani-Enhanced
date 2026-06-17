@@ -22,7 +22,7 @@
 
   /* Per-surface editorial header (kicker + title + optional count cluster) — Browse / Stats /
      Self-Talk / Songs. The global headline was removed (navbar) but each surface keeps its own. */
-  .page-head{display:flex;align-items:flex-end;justify-content:space-between;gap:24px;flex-wrap:wrap;margin:6px 0 22px}
+  .page-head{display:flex;align-items:flex-end;justify-content:space-between;gap:24px;flex-wrap:wrap;margin:0 0 22px}
   .page-kicker{font-family:var(--mono);font-size:11px;letter-spacing:.3em;text-transform:uppercase;color:var(--gold);font-weight:500;display:inline-flex;align-items:center;gap:10px;margin-bottom:13px}
   .page-kicker::before{content:"";width:22px;height:1px;background:var(--gold);display:inline-block}
   .page-kicker .jp{font-family:var(--jp);letter-spacing:.06em;text-transform:none}
