@@ -42,18 +42,7 @@ export async function showSelftalk() {
   if (phrasesChanged || templatesChanged || !hadCache) renderSelftalk();
 }
 
-// ---- head (kicker + lede + streak + add affordance + grammar filter) ----
-function streakRowHtml() {
-  const pr = (state.selftalkStore && state.selftalkStore.practice) || {};
-  const today = localDay();
-  const streak = practiceStreak(pr, today);
-  const done = donePhraseIds(pr, today).size;
-  if (streak > 0) {
-    return `<div class="st-streak-row"><span class="st-streak"><svg class="ic" aria-hidden="true"><use href="#i-target"/></svg>${streak}-day streak</span>${done ? `<span class="st-today-count">${done} said today</span>` : ''}</div>`;
-  }
-  return `<div class="st-streak-row"><span class="st-streak-hint">Say a phrase out loud, then mark it — start a daily streak.</span></div>`;
-}
-
+// ---- head (the editorial header: kicker + title + lede + streak/progress meta + grammar filter) ----
 // Authoring writes PRIVATE server rows, so it requires an account; anon gets a sign-in nudge
 // (reading stays anon). Mirrors how the record controls gate on `account`.
 function addAffordanceHtml() {
@@ -69,13 +58,24 @@ export function renderHead() {
   const gramChip = (tok, label, on) =>
     `<button class="chip st-gram${on ? ' active' : ''}" type="button" data-stgram="${escapeHtml(tok)}" aria-pressed="${on}">${escapeHtml(label)}</button>`;
   const chips = toks.map((t) => gramChip(t, grammarLabel(t), S.stGrammar.includes(t))).join('');
+  // streak + said-today fold into the header meta pills (the mock's "12-day streak · today 3/5").
+  const pr = (state.selftalkStore && state.selftalkStore.practice) || {};
+  const today = localDay();
+  const streak = practiceStreak(pr, today);
+  const done = donePhraseIds(pr, today).size;
   head.innerHTML = `
-    <div class="st-intro">
-      <p class="st-kicker">独り言 · Self-Talk</p>
-      <p class="st-lede">Narrate your day out loud. Tap ▶ to hear a phrase, then say it yourself — ⌥/⇧-click ▶ to try another voice.</p>
-      ${streakRowHtml()}
-      <div class="st-actions">${addAffordanceHtml()}</div>
-    </div>
+    <section class="page-head st-head">
+      <div>
+        <div class="page-kicker"><span class="jp">独り言</span> · Self-talk</div>
+        <h1 class="page-title">Say it out loud <span class="jp st-title-jp">声に出して</span></h1>
+        <p class="st-lede">Read the phrase, hear a model voice, then <b>say it yourself</b> and mark it — ⌥/⇧-click ▶ to try another voice.</p>
+      </div>
+      <div class="page-counts">
+        ${streak > 0 ? `<span class="pill"><span class="dot"></span><b>${streak}-day</b>&nbsp;streak</span>` : `<span class="pill"><span class="dot"></span>start a streak</span>`}
+        ${done ? `<span class="pill st-today"><span class="dot"></span><b>${done}</b>&nbsp;said today</span>` : ''}
+      </div>
+    </section>
+    <div class="st-actions">${addAffordanceHtml()}</div>
     <div class="frow"><span class="filter-label">Grammar</span>
       <div class="chips" role="group" aria-label="Grammar filter">${gramChip('all', 'All', allActive)}${chips}</div></div>`;
 }
