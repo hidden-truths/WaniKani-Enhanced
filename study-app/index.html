@@ -158,19 +158,22 @@
         <aside class="forecast-card" id="forecast">
           <div class="fcast-head">
             <span class="fcast-title"><svg class="ic" aria-hidden="true"><use href="#i-chart"/></svg>Upcoming reviews</span>
-            <span class="jlptseg fcast-horizons" id="fcHorizons" role="group" aria-label="Forecast window">
-              <button class="chip fch" type="button" data-h="24h">24h</button>
-              <button class="chip fch active" type="button" data-h="week">Week</button>
-              <button class="chip fch" type="button" data-h="month">Month</button>
-              <button class="chip fch" type="button" data-h="year">Year</button>
-            </span>
+            <span class="fcast-total">7&nbsp;days</span>
           </div>
           <div class="fcast-chart" id="forecastChart"></div>
         </aside>
       </section>
-      <!-- Study type: Free study never touches the SRS schedule (practice any
-           cards); SRS review only serves DUE cards and promotes/demotes them.
-           cfg.kind; wired below. The due banner above is the quick "all due" SRS. -->
+      <!-- The mock's study home is JUST the hero — so the whole deck picker (study type, test
+           direction, filters, order, Start) tucks behind ONE disclosure; the default view stays
+           mock-clean and the hero's "Review due cards" / "Free study" are the primary entry
+           points. Native <details> handles the arbitrary content height (incl. the nested
+           topic-region) with no max-height math. Chips inside keep their classes/data-* so
+           wireFacets/makeMultiSelect/roving are blind to the wrapper. -->
+      <details class="more-filters" id="moreFilters">
+        <summary><svg class="ic" aria-hidden="true"><use href="#i-filter"/></svg>Customize session</summary>
+      <!-- Study type: Free study never touches the SRS schedule (practice any cards); SRS review
+           only serves DUE cards and promotes/demotes them. cfg.kind. The hero "Review due cards"
+           is the quick "all due" SRS path; the hero "Free study" the quick free path. -->
       <div class="frow"><span class="filter-label">Study type</span><div class="chips" role="radiogroup">
         <button class="chip skind active" data-skind="free" title="Practice any cards — does not change review dates">Free study</button>
         <button class="chip skind" data-skind="srs" title="Review only cards that are currently due, and reschedule them"><svg class="ic" aria-hidden="true"><use href="#i-refresh"/></svg>SRS review</button>
@@ -180,14 +183,6 @@
         <button class="chip mode active" data-mode="meaning">JP → meaning + reading</button>
         <button class="chip mode" data-mode="reading">Meaning → reading + JP</button>
       </div></div>
-      <!-- Secondary options + deck filters tucked behind a disclosure so the picker
-           isn't an 11-row wall before you can study. Native <details> handles the
-           arbitrary content height (incl. the nested topic-region) with no max-height
-           math. Chips inside keep their classes/data-* so wireFacets/makeMultiSelect/
-           roving are blind to the wrapper. The live recap (#deckSummary) stays visible
-           below so the collapsed filter state is always legible. -->
-      <details class="more-filters" id="moreFilters">
-        <summary><svg class="ic" aria-hidden="true"><use href="#i-filter"/></svg>More filters &amp; options</summary>
       <!-- Input mode: self-graded reveal (default) or type-the-reading auto-grading.
            Persisted to localStorage (jpverbs_input); see FLASHCARD SESSION. -->
       <div class="frow"><span class="filter-label">Input</span><div class="chips" role="radiogroup">
@@ -290,7 +285,6 @@
         <button class="chip ord" data-ord="freq">By frequency</button>
         <button class="chip ord" data-ord="worst">Worst-first</button>
       </div></div>
-      </details>
       <div class="fdiv"></div>
       <!-- Live recap of the active deck query (incl. collapsed topics); set by updateDeckCount(). -->
       <div class="filter-summary" id="deckSummary"></div>
@@ -298,6 +292,7 @@
         <button class="chip primary" id="startBtn"><svg class="ic" aria-hidden="true"><use href="#i-play"/></svg>Start session</button>
         <span class="count" id="deckCount"></span>   <!-- live "N cards in deck" -->
       </div>
+      </details>
     </div>
 
     <!-- ACTIVE CARD. All text nodes are filled by showCard(); .answer is hidden

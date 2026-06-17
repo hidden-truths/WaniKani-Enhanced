@@ -55,7 +55,7 @@
 .fcast-head{display:flex;align-items:center;justify-content:space-between;gap:14px;margin-bottom:16px;flex-wrap:wrap}
 .fcast-title{display:inline-flex;align-items:center;gap:8px;font-family:var(--display);font-weight:600;font-size:16px;color:var(--ink)}
 .fcast-title .ic{font-size:15px;color:var(--gold)}
-.fcast-horizons .fch{font-size:10.5px;padding:5px 9px}
+.fcast-total{font-family:var(--mono);font-size:11px;letter-spacing:.18em;text-transform:uppercase;color:var(--muted)}
 .fcast-chart{margin-top:4px}
 .fcast-empty{padding:18px 4px;text-align:center;color:var(--muted);font-size:13px;max-width:300px}
 

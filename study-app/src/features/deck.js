@@ -32,7 +32,7 @@ export function registerStartSession(fn) { onStartSession = fn; }
 // at init — exported so importers see the live binding.
 export let repaintDeck = () => {};
 
-let forecastHorizon = 'week';   // '24h' | 'week' | 'month' | 'year' — view-only, not synced
+const forecastHorizon = 'week'; // the mock's forecast is a fixed 7-day side card (no toggle)
 let rminEl = null, rmaxEl = null;
 
 /* ---- Upcoming-review forecast ----
@@ -218,13 +218,6 @@ export function initDeckUI() {
   document.querySelectorAll('.chip.rpreset').forEach(b => b.addEventListener('click', () => {
     rminEl.value = b.dataset.lo; rmaxEl.value = b.dataset.hi; syncRange();
   }));
-  // Forecast horizon toggle (24h/week/month/year): view-only, re-renders the bars.
-  document.getElementById('fcHorizons').addEventListener('click', e => {
-    const b = e.target.closest('.fch'); if (!b) return;
-    forecastHorizon = b.dataset.h;
-    document.querySelectorAll('.fch').forEach(x => x.classList.toggle('active', x === b));
-    renderForecast();
-  });
 }
 function syncRange() {
   let lo = parseInt(rminEl.value) || 1, hi = parseInt(rmaxEl.value) || state.MAXRANK;
