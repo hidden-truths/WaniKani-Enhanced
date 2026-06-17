@@ -72,6 +72,27 @@
 
   .footer-note{ text-align:center; margin:50px 0 0; font-family:var(--mono); font-size:10.5px; letter-spacing:.22em; text-transform:uppercase; color:var(--muted); opacity:.7; }
   .footer-note .jp{ font-family:var(--jp); }
+
+  /* ---- mobile (≤640px) ---- */
+  @media (max-width:640px){
+    .page-head{ padding:38px 0 6px; }
+    .section-div{ margin:36px 0 18px; }
+    /* banner stacks: seal + text on top, CTAs full-width below */
+    .due-banner{ flex-direction:column; align-items:flex-start; gap:18px; padding:22px; }
+    .due-banner .hanko{ width:62px; height:62px; }
+    .due-banner .hanko .glyph{ font-size:28px; }
+    .due-banner .bmain{ width:100%; }
+    .due-banner .btitle{ font-size:21px; }
+    .due-banner .bcta{ width:100%; }
+    .due-banner .bcta .btn{ flex:1 1 auto; justify-content:center; }
+    .estate{ padding:42px 22px; }
+    .estate h3{ font-size:24px; }
+    .summary{ padding:36px 22px 32px; }
+    .summary h3{ font-size:28px; }
+    .summary-stats{ gap:10px; }
+    .sstat{ padding:14px 8px; }
+    .sstat .v{ font-size:26px; }
+  }
 </style>
 </head>
 <body>

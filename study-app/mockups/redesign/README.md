@@ -70,6 +70,18 @@ The moments *around* the cards, all built on a shared **modal / overlay / form**
 | Flashcard prompt (pre-reveal) | [`hybrid-prompt.html`](hybrid-prompt.html) | [light](screens/hybrid-prompt.png) · [dark](screens/hybrid-prompt-dark.png) |
 | Banners & empty states | [`hybrid-states.html`](hybrid-states.html) | [light](screens/hybrid-states.png) · [dark](screens/hybrid-states-dark.png) |
 
+## Mobile / responsive
+
+Every surface has a narrow-width (≤640px) treatment driven from a shared layer in
+[`system.css`](system.css): the topbar collapses (CSS grid) to a compact brand + actions row over
+a horizontally-scrollable tab strip, the display type scales down, and modals go full-width with
+stacked field/settings rows. Surface grids stack (hero, notes, the Browse grid, Songs two-column,
+Stats metrics, the Minna vocab table, the Self-talk rig, the states banner).
+
+Reference shots (≈500px — the headless-Chrome min width): [Flashcards](screens/hybrid-day-night-mobile.png) ·
+[Browse](screens/hybrid-browse-mobile.png) · [Settings](screens/hybrid-settings-mobile.png) ·
+[States](screens/hybrid-states-mobile.png).
+
 ## Type & color, at a glance
 
 **The shipping system (serif-free, all surfaces):**
@@ -82,7 +94,6 @@ The moments *around* the cards, all built on a shared **modal / overlay / form**
 
 ## Next
 
-Main + secondary surfaces are all built. Remaining: a **mobile / responsive pass** over every
-surface, another **critique sweep** on the polished set, and — later, in a code session —
-translating the agreed direction into the real `index.html` + `src/styles.css`. See
-[HANDOFF.md](HANDOFF.md) "What's next".
+Main + secondary surfaces are built and have a **mobile / responsive pass** (≤640px). Remaining:
+another **critique sweep** on the polished set, and — later, in a code session — translating the
+agreed direction into the real `index.html` + `src/styles.css`. See [HANDOFF.md](HANDOFF.md) "What's next".

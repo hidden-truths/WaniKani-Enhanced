@@ -757,3 +757,63 @@ ruby rt{
   }
   .reveal{ opacity:1; transform:none; }
 }
+
+/* ============================================================
+   RESPONSIVE · MOBILE  (≤640px, tightened ≤430px)
+   Narrow-width treatments for the SHARED chrome + components.
+   Surface-specific grids stack in each surface's own <style>
+   (each surface adds its own @media (max-width:640px) block).
+   ============================================================ */
+@media (max-width:640px){
+  .wrap{ padding:0 18px 64px; }
+
+  /* TOP BAR — explicit grid (deterministic): brand + actions on row 1,
+     a horizontally scrollable tab strip spanning row 2. (Grid areas avoid
+     the flex-wrap quirk that dropped the right-hand actions at ~390px.) */
+  .topbar{
+    display:grid;
+    grid-template-columns:1fr auto;
+    grid-template-areas:"brand actions" "nav nav";
+    align-items:center; row-gap:9px; column-gap:12px;
+    padding:12px 18px;
+  }
+  .brand{ grid-area:brand; min-width:0; }
+  .brand .jp{ font-size:20px; }
+  .brand .sub{ display:none; }
+  .top-actions{ grid-area:actions; gap:8px; }
+  .icon-btn{ width:36px; height:36px; }
+  .avatar{ width:36px; height:36px; font-size:14px; }
+  .nav{
+    grid-area:nav; margin:0 -18px; padding:7px 18px 1px;
+    gap:3px; flex-wrap:nowrap; overflow-x:auto; -webkit-overflow-scrolling:touch;
+    border-top:1px solid var(--line); scrollbar-width:none;
+  }
+  .nav::-webkit-scrollbar{ display:none; }
+  .nav a{ flex:0 0 auto; padding:8px 11px; font-size:14px; }
+
+  /* display type scales down */
+  h1{ font-size:31px; }
+  h2{ font-size:22px; }
+  .bignum{ font-size:98px; }
+  .kicker{ font-size:10.5px; letter-spacing:.24em; }
+
+  /* DIALOG — more width on a small screen, stacked field rows */
+  .overlay{ padding:12px; }
+  .modal{ max-height:calc(100vh - 24px); border-radius:18px; }
+  .modal.wide, .modal.narrow{ width:100%; }
+  .modal-head{ padding:20px 18px 14px; }
+  .modal-body{ padding:18px 18px 20px; }
+  .modal-foot{ padding:14px 18px 18px; }
+  .modal-title{ font-size:21px; }
+  .field-row{ grid-template-columns:1fr; }
+
+  /* settings rows stack: label over control, left-aligned */
+  .set-card{ padding:2px 14px; }
+  .set-row{ flex-direction:column; align-items:flex-start; gap:11px; }
+  .set-ctrl{ flex:0 0 auto; }
+}
+@media (max-width:430px){
+  .bignum{ font-size:84px; }
+  .nav a{ font-size:13.5px; padding:8px 9px; }
+  h1{ font-size:28px; }
+}

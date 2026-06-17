@@ -83,6 +83,13 @@
   }
   .tier.empty .tier-badge{ color:var(--faint); background:var(--chip-bg); border-color:var(--line); }
   .tier .textarea{ min-height:54px; }
+
+  /* ---- mobile (≤640px): accent input + preview stack; faint backdrop loosens ---- */
+  @media (max-width:640px){
+    .accent-grid{ grid-template-columns:1fr; }
+    .preview-box .preview-cap{ margin-left:0; }
+    .backdrop-cards{ grid-template-columns:1fr 1fr; }
+  }
 </style>
 </head>
 <body>

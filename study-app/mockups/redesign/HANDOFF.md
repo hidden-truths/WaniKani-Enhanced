@@ -10,13 +10,12 @@
   every main surface in both a warm-paper **light** theme and a candle-lit warm **dark** theme.
 - **Where:** [study-app/mockups/redesign/](.) — `system.css` + `system.js` + one `hybrid-*.html`
   per surface + an `index.html` gallery + retina-ish screenshots in `screens/`.
-- **State:** all **6 main surfaces + the 5 secondary surfaces (Settings / sign-in / add-card
-  modals, the pre-reveal flashcard prompt, banners & empty states) done in both themes, polished
-  (~9/10).** A shared **modal / overlay / form kit** was added to `system.css`. Not yet in the real app.
-- **Next:** a mobile/responsive pass · another critique sweep · (later) port `system.css` into the
-  real `index.html` + `src/styles.css`.
+- **State:** all **6 main + 5 secondary surfaces done in both themes, polished (~9/10), and given a
+  mobile/responsive pass (≤640px).** A shared modal/form kit + a mobile layer live in `system.css`.
+  Not yet in the real app.
+- **Next:** another critique sweep · (later) port `system.css` into the real `index.html` + `src/styles.css`.
 - **Commits:** `51d566d` (build) → `8dc71b6` (polish) → `66b7f69` (bug fixes) → secondary surfaces +
-  modal kit (this session), all on `main`.
+  modal kit → mobile pass (this session), all on `main`.
 
 ## What this is (and is NOT)
 - It IS a design exploration in throwaway-but-committed mocks. Each surface is an `.html` file
@@ -81,6 +80,10 @@
   `.field-hint` · `.input`/`.textarea`/`.select`(+`.select-wrap`/`.chev`) · `.switch`(`.is-on`/
   `.knob`) · `.set-group`/`.set-card`/`.set-row`(+`.stack`) · `.btn-sm`. Modals render OVER a
   dimmed backdrop — a faint `.wrap[aria-hidden]` copy of the surface behind them.
+- **Responsive layer (≤640px, ≤430px; added this session):** at the END of `system.css` — the
+  topbar becomes a CSS grid (compact brand + actions row over a horizontally-scrollable nav strip),
+  `.bignum`/`h1`/`h2` scale down, modals go full-width (`.modal.wide/.narrow → 100%`) with stacked
+  `.field-row` + `.set-row`. Each surface ALSO adds its own `@media (max-width:640px)` for its grids.
 - **`system.js`:** sets `data-theme` on `<html>` from `?theme=` (else light) before paint, wires
   `#themeToggle` (☼ by day / ☾ by night), adds press feedback + `.reveal` stagger.
 
@@ -104,11 +107,13 @@ Each has light + dark screenshots in `screens/` (`<name>.png` light, `<name>-dar
 hero's dark is `hybrid-dark.png`). The A/B/C exploration mocks are kept as-is (still serif — historical).
 
 ## Known issues / not yet addressed
-- **Secondary surfaces:** DONE this session (Settings, auth, add-card modals + pre-reveal prompt +
-  banners/empty states) — see the done table. They're desktop-only too (no mobile pass yet).
-- **Desktop-only.** Everything is designed at 1280px. No mobile/responsive pass yet (the topbar
-  nav, the Browse filter bar, the Stats grids, the Songs two-column, and the Self-talk rig all
-  need narrow-width treatments).
+- **Secondary surfaces:** DONE (Settings, auth, add-card modals + pre-reveal prompt +
+  banners/empty states) — see the done table.
+- **Mobile / responsive pass:** DONE this session (≤640px). A shared mobile layer in `system.css`
+  (grid topbar + scrollable tab strip, type scale, full-width modals with stacked field/settings
+  rows) plus per-surface grid stacking. Verified at ~500px — the headless-Chrome min width (see the
+  clamp gotcha in Dead-ends). The ≤430 fine-tuning is reasoned, not screenshot-verified, since
+  headless won't render below ~500px.
 - **Lower-priority critique items** intentionally deferred in the polish pass (e.g. Songs
   light-hero could go further; Stats spacing scale could be even tighter; some agents flagged
   minor per-surface nits). Re-running the critique on the *polished* set will surface the next tier.
@@ -118,8 +123,10 @@ hero's dark is `hybrid-dark.png`). The A/B/C exploration mocks are kept as-is (s
 ## What's next (the options the maintainer is choosing among)
 1. ~~**Secondary surfaces**~~ — **DONE this session.** Settings, auth, add-card modals + the
    pre-reveal prompt + banners/empty states, on a new shared modal/overlay/form kit in `system.css`.
-2. **Mobile / responsive pass** — narrow-width treatments for every surface (now including the 3 modals).
-3. **Another critique sweep** — re-run the per-surface design critics on the *polished* mocks (now incl. the 5 secondary surfaces) to find the next tier of improvements.
+2. ~~**Mobile / responsive pass**~~ — **DONE this session.** A shared ≤640px layer in `system.css`
+   (grid topbar + scroll-nav, type scale, full-width modals + stacked rows) + per-surface grid
+   stacking; verified at ~500px (the headless min width).
+3. **Another critique sweep** — re-run the per-surface design critics on the *polished* mocks (now incl. the 5 secondary surfaces + mobile) to find the next tier of improvements.
 4. **(Later, a CODE session) Production translation** — port `system.css` into the real
    `index.html` + `src/styles.css`, wired to live data. Big, separate effort.
 
@@ -142,6 +149,8 @@ hero's dark is `hybrid-dark.png`). The A/B/C exploration mocks are kept as-is (s
   **Modals are `position:fixed` + centered**, so the window height isn't "full page" — size it TALL
   enough that the modal doesn't scroll *inside* its own `max-height:calc(100vh - 40px)` cap, or the
   shot clips the modal's lower half. (Settings/add-card are tall; auth/prompt are short.)
+- **Mobile shots:** `--window-size=500,<H>` (headless won't go below ~500px wide — see Dead-ends);
+  the ≤640 layer renders there. Reference mobile shots live at `screens/<name>-mobile.png` (light).
 - **Verify visually** by `Read`-ing the PNG (vision). For a new surface, shoot BOTH themes.
 - **Slim before committing:** `for f in screens/*.png; do sips --resampleWidth 1280 "$f"; done`
 - **Commit conventions** (repo-wide): one logical change → one commit; commit to `main`; stage
@@ -164,4 +173,14 @@ hero's dark is `hybrid-dark.png`). The A/B/C exploration mocks are kept as-is (s
   Launch preview panel) + `Read`-ing the PNGs yourself.
 - **`.claude/launch.json`** picked up two preview entries (`study-app-design`, `redesign-mocks`).
   Harmless; remove if you like. It had pre-existing local modifications — don't blindly revert it.
+- **Headless Chrome clamps the window to a ~500px minimum width.** `--window-size=390,H` (even
+  `360`) still renders at `innerWidth:500` (confirmed via a DOM probe). So the `--screenshot` recipe
+  can't shoot true-390 mobile — verify the ≤640 layer at 500px and reason about the ≤430 rules.
+  (True 390 needs the DevTools-protocol device-emulation path, not `--window-size`.) This caused a
+  false "the mobile topbar drops the gear + avatar at 390" scare — at the real 500px floor all three
+  actions render fine. Don't chase phantom sub-500 layout bugs from the screenshots.
+- **The mobile topbar is a CSS GRID, not flex-wrap.** At ≤640 `.topbar` uses
+  `grid-template-areas:"brand actions" "nav nav"` so brand + the 3 actions share row 1 and the
+  scrollable tab strip spans row 2. An earlier flex-wrap + `order` version dropped the right-hand
+  actions at narrow widths; grid areas are deterministic. Don't revert it to flex-wrap.
 - **Don't reach for `show_widget`/Imagine** for the mocks — flat + claude.ai-themed, wrong vehicle.
