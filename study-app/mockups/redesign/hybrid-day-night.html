@@ -14,22 +14,28 @@
 
   /* SECTION 1 · study home */
   .hero{
-    display:grid; grid-template-columns:1fr auto; gap:44px;
+    display:grid; grid-template-columns:1fr auto; gap:32px;
     padding:62px 0 30px; align-items:end;
   }
   .hero-left{ max-width:560px; }
   .hero .eyebrow{ margin-bottom:22px; }
 
-  /* "cards due for review" sub-line under the big numeral */
+  /* loosen the big numeral's line-height locally so its descenders/baseline
+     don't clamp into the sub-label below (system.css ships .84) */
+  .bignum{ line-height:.9; }
+
+  /* "cards due for review" sub-line under the big numeral.
+     Clear big→small step: smaller size + a real gap above. */
   .due-label{
     display:block;
     font-family:var(--display);
-    font-weight:600; font-size:25px; line-height:1.2; letter-spacing:-.01em;
+    font-weight:600; font-size:17.5px; line-height:1.25; letter-spacing:.005em;
     color:var(--muted);
-    margin-top:14px;
+    margin-top:22px;
     -webkit-text-fill-color:currentColor;   /* opt back out of the dark gradient clip */
   }
-  .due-label em{ color:var(--brand); font-style:normal; font-weight:700; }
+  /* emphasize "due for review" by weight + ink rather than a lone vermilion phrase */
+  .due-label em{ color:var(--ink); font-style:normal; font-weight:700; }
 
   .hero-meta{ display:flex; align-items:center; gap:18px; margin:30px 0; flex-wrap:wrap; }
   .progress-line{ font-size:14.5px; color:var(--muted); }
@@ -38,7 +44,7 @@
   .cta-row{ display:flex; align-items:center; gap:16px; margin-top:6px; flex-wrap:wrap; }
 
   /* forecast card (extends shared .panel) */
-  .forecast{ padding:24px 26px 20px; min-width:340px; }
+  .forecast{ padding:24px 26px 20px; min-width:300px; }
   .forecast::after{
     content:""; position:absolute; left:24px; top:0; width:40px; height:3px;
     background:var(--gold); border-radius:0 0 3px 3px;
@@ -53,25 +59,34 @@
   .bar-track{ width:100%; display:flex; align-items:flex-end; justify-content:center; flex:1; }
   .bar{
     width:13px; border-radius:6px; background:var(--deeper);
+    min-height:28px;   /* floor so empty/near-empty days read as short bars, not slivers */
     transform-origin:bottom; animation:grow .8s cubic-bezier(.2,.7,.3,1) backwards;
     transition:transform .25s ease;
   }
-  [data-theme="dark"] .bar{ background:rgba(255,238,222,.06); border:1px solid var(--line); }
+  [data-theme="dark"] .bar{
+    /* faint lit top-edge + soft glow so non-today bars look fully rendered, not half-lit */
+    background:linear-gradient(180deg, rgba(255,238,222,.16), rgba(255,238,222,.05));
+    border:1px solid var(--line);
+    box-shadow:inset 0 1px 0 0 rgba(255,238,222,.18), 0 0 14px -8px rgba(255,238,222,.5);
+  }
   .bar-col:hover .bar{ transform:scaleY(1.05); }
   .bar.today{ background:linear-gradient(to top, var(--brand), #e06043); box-shadow:0 6px 14px -6px rgba(205,67,39,.7); }
   [data-theme="dark"] .bar.today{
     background:linear-gradient(180deg, #FF8A6E, var(--brand) 70%, #cf4226); border:none;
     box-shadow:0 0 22px -2px rgba(255,107,74,.6), var(--inner-hi);
   }
-  .bar.tiny{ background:var(--line); }
-  [data-theme="dark"] .bar.tiny{ background:rgba(255,238,222,.07); }
+  /* empty/near-empty bars — darken clearly above the card border so they're visible */
+  .bar.tiny{ background:#C9B690; }
+  [data-theme="dark"] .bar.tiny{
+    background:linear-gradient(180deg, rgba(255,238,222,.14), rgba(255,238,222,.045));
+  }
   .bar-num{ font-family:var(--mono); font-size:11px; color:var(--muted); }
   .bar-col.is-today .bar-num{ color:var(--brand); font-weight:600; }
   .bar-day{ font-family:var(--mono); font-size:10px; letter-spacing:.08em; text-transform:uppercase; color:var(--muted); }
   .bar-col.is-today .bar-day{ color:var(--ink); font-weight:600; }
 
   /* divider between sections */
-  .section-div{ display:flex; align-items:center; gap:20px; margin:54px 0 30px; }
+  .section-div{ display:flex; align-items:center; gap:20px; margin:40px 0 30px; }
   .section-div .label{
     font-family:var(--mono); font-size:11px; letter-spacing:.32em; text-transform:uppercase; color:var(--muted);
     white-space:nowrap;
@@ -144,7 +159,8 @@
     font-size:54px; line-height:1.02; color:var(--ink);
     margin-top:26px; letter-spacing:-.022em;
   }
-  [data-theme="dark"] .meaning{ color:#fff; }
+  /* keep the most important word in the candle-lit palette, not cold white */
+  [data-theme="dark"] .meaning{ color:#F6EEE0; }
   .meaning .lead{ color:var(--muted); font-weight:500; font-size:.52em; padding-right:10px; letter-spacing:-.01em; }
 
   /* tag row */
@@ -210,6 +226,9 @@
 
   /* grade controls */
   .grade-row{ display:grid; grid-template-columns:1fr 1fr; gap:18px; margin-top:30px; }
+  /* In LIGHT, give "wrong" a subtle brand-soft fill (dark already does) so the
+     50/50 reads as two real choices, not one solid + one tentative outline. */
+  [data-theme="light"] .grade.wrong{ background:var(--brand-soft); }
 
   .footer-note{
     text-align:center; margin-top:46px;

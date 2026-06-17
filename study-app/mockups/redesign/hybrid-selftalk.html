@@ -97,10 +97,11 @@
   }
   [data-theme="dark"] .prompt-en{ color:#fff; }
 
-  /* TEMPLATE scaffold — dashed slots */
+  /* TEMPLATE scaffold — dashed slots. margin-top gives the 46px headline air;
+     scaffold + example below form one tight "compose" unit. */
   .scaffold{
-    margin-top:26px; border:1px solid var(--line); border-radius:16px;
-    padding:22px 24px 20px; box-shadow:var(--lift-sm); position:relative; overflow:hidden;
+    margin-top:32px; border:1px solid var(--line); border-radius:16px;
+    padding:22px 24px 20px; box-shadow:var(--lift-sm), var(--inner-hi); position:relative; overflow:hidden;
   }
   [data-theme="light"] .scaffold{ background:linear-gradient(180deg, #FFFBF3, var(--raised)); }
   [data-theme="dark"] .scaffold{ background:linear-gradient(165deg, rgba(217,169,78,.06), rgba(255,238,222,.015)); }
@@ -114,22 +115,26 @@
     font-family:var(--jp); font-weight:500; font-size:33px; line-height:1.6; color:var(--ink); letter-spacing:.01em;
     margin:13px 0 0; display:flex; align-items:center; flex-wrap:wrap; gap:2px;
   }
+  /* a clean blank-to-fill: dashed underline + faint brand wash, no underscore glyphs */
   .slot{
-    display:inline-flex; align-items:center; justify-content:center; min-width:120px; padding:1px 14px;
-    border-bottom:2.5px dashed var(--brand); color:var(--brand);
-    font-family:var(--mono); font-size:13px; letter-spacing:.04em;
+    display:inline-block; min-width:80px; height:1.1em; padding:0 6px; margin:0 1px;
+    border-bottom:2.5px dashed var(--brand); border-radius:3px 3px 0 0;
+    background:color-mix(in srgb, var(--brand) 9%, transparent);
+    transform:translateY(-.04em);
   }
-  [data-theme="dark"] .slot{ color:#FF8A6E; border-color:rgba(255,107,74,.55); }
+  [data-theme="dark"] .slot{ border-color:rgba(255,107,74,.55); background:rgba(255,107,74,.10); }
   .hint{ margin-top:12px; font-family:var(--mono); font-size:12px; letter-spacing:.02em; color:var(--muted); display:inline-flex; align-items:center; gap:8px; }
   .hint .pat{ color:var(--gold); font-weight:500; }
   .hint .jp{ font-family:var(--jp); }
 
-  /* EXAMPLE answer */
-  .example{ margin-top:22px; padding-left:2px; }
+  /* EXAMPLE answer — UNBOXED + downshifted so it reads as "one way to fill it,"
+     not a twin of the bordered scaffold. Smaller, lighter, quieter. */
+  .example{ margin-top:18px; padding-left:14px; border-left:2px solid var(--line); }
   .example .ex-head{ display:flex; align-items:center; justify-content:space-between; gap:16px; }
-  .ex-jp{ font-family:var(--jp); font-weight:500; font-size:34px; line-height:1.65; color:var(--ink); letter-spacing:.01em; margin:12px 0 0; }
-  .ex-jp ruby rt{ transform:translateY(1px); }
-  .ex-en{ font-family:var(--body); font-size:17px; color:var(--muted); margin:8px 0 0; }
+  .ex-jp{ font-family:var(--jp); font-weight:400; font-size:27px; line-height:1.55; color:var(--faint); letter-spacing:.01em; margin:9px 0 0; }
+  .ex-jp ruby rt{ transform:translateY(1px); color:var(--muted); }
+  [data-theme="dark"] .ex-jp ruby rt{ color:#C99; }
+  .ex-en{ font-family:var(--body); font-size:15px; color:var(--muted); margin:7px 0 0; }
   .model-btn{
     display:inline-flex; align-items:center; gap:10px; cursor:pointer;
     font-family:var(--body); font-size:14px; font-weight:600; color:var(--reading);
@@ -141,32 +146,26 @@
   [data-theme="dark"] .model-btn{ box-shadow:0 0 18px -8px rgba(138,143,224,.5); }
   .model-btn svg{ width:14px; height:14px; }
 
-  /* grammar pills */
-  .grammar-row{ display:flex; align-items:center; gap:10px; margin-top:22px; flex-wrap:wrap; }
-  .gtag{
-    font-family:var(--jp); font-weight:500; font-size:15px; color:var(--reading);
-    padding:6px 14px; border-radius:10px; background:var(--reading-soft); border:1px solid var(--reading-line);
-    display:inline-flex; align-items:center; gap:8px;
-  }
-  [data-theme="dark"] .gtag{ color:var(--reading); }
-  .gtag .en{ font-family:var(--mono); font-size:10px; letter-spacing:.1em; text-transform:uppercase; color:var(--muted); }
-
   /* ===================== RECORD-AND-COMPARE RIG ===================== */
+  /* extra top margin opens a clear gap after the "compose" unit so this
+     "perform" zone reads as the second act, not a sixth stacked paragraph */
   .rig{
-    margin-top:30px; border-radius:18px; padding:26px 28px 24px; position:relative; overflow:hidden;
-    border:1px solid var(--line); box-shadow:var(--lift-sm);
+    margin-top:44px; border-radius:18px; padding:26px 28px 24px; position:relative; overflow:hidden;
+    border:1px solid var(--line);
   }
-  [data-theme="light"] .rig{ background:var(--surf-inset); }
-  [data-theme="dark"] .rig{ background:rgba(255,238,222,.025); border-color:rgba(255,107,74,.16); }
+  /* a RECESSED tray (inset shadow, not an outward lift) so the raised wave-row
+     chips inside it read as sitting in a well — the depth that was too subtle before */
+  [data-theme="light"] .rig{ background:var(--surf-inset); box-shadow:inset 0 2px 5px -2px rgba(28,23,20,.18); }
+  [data-theme="dark"] .rig{ background:rgba(255,238,222,.025); border-color:rgba(255,107,74,.16); box-shadow:inset 0 2px 6px -2px rgba(0,0,0,.4); }
 
   .rig-top{ display:flex; align-items:center; justify-content:space-between; gap:20px; flex-wrap:wrap; }
 
-  /* the prominent record button */
+  /* the prominent record button — the loudest, brightest vermilion in the rig */
   .record-btn{
     display:inline-flex; align-items:center; gap:14px; cursor:pointer;
-    font-family:var(--body); font-size:17px; font-weight:600; letter-spacing:.01em;
+    font-family:var(--body); font-size:18px; font-weight:700; letter-spacing:.01em;
     color:var(--brand-on); background:var(--brand);
-    border:none; border-radius:14px; padding:16px 26px 16px 22px;
+    border:none; border-radius:14px; padding:18px 30px 18px 24px;
     box-shadow:var(--cta-shadow);
     transition:transform .16s ease, box-shadow .2s ease, background .2s ease;
   }
@@ -197,7 +196,7 @@
   .wave-row{
     display:grid; grid-template-columns:auto 1fr auto; align-items:center; gap:16px;
     padding:13px 14px; border-radius:13px; border:1px solid var(--line);
-    background:var(--surf-card);
+    background:var(--surf-card); box-shadow:var(--lift-sm), var(--inner-hi);
   }
   [data-theme="dark"] .wave-row{ background:rgba(44,35,27,.42); border-color:var(--line); }
   .wave-row .who{
@@ -205,8 +204,10 @@
     width:62px; display:inline-flex; align-items:center; gap:8px;
   }
   .wave-row .who .swatch{ width:9px; height:9px; border-radius:2px; }
-  .wave-row.you .who{ color:var(--brand); }
-  .wave-row.you .who .swatch{ background:var(--brand); }
+  .wave-row.you .who{ color:var(--brand-deep); }
+  .wave-row.you .who .swatch{ background:var(--brand-deep); }
+  [data-theme="dark"] .wave-row.you .who{ color:var(--brand); }
+  [data-theme="dark"] .wave-row.you .who .swatch{ background:var(--brand); }
   .wave-row.native .who{ color:var(--reading); }
   .wave-row.native .who .swatch{ background:var(--reading); }
 
@@ -218,8 +219,10 @@
     transform-origin:center; animation:wgrow .6s cubic-bezier(.2,.7,.3,1) backwards;
   }
   @keyframes wgrow{ from{ transform:scaleY(.15); opacity:.4; } to{ transform:scaleY(1); opacity:1; } }
-  .wave-row.you .wave b{ background:linear-gradient(to top, var(--brand-deep), var(--brand)); }
-  [data-theme="dark"] .wave-row.you .wave b{ background:linear-gradient(to top, var(--brand-deep), #FF8A6E); }
+  /* "You" bars sit in the deep-brand range so the Record button stays the
+     single brightest vermilion in the rig (it owns the primary action). */
+  .wave-row.you .wave b{ background:linear-gradient(to top, #7E2412, var(--brand-deep)); }
+  [data-theme="dark"] .wave-row.you .wave b{ background:linear-gradient(to top, var(--brand-deep), var(--brand)); }
   .wave-row.native .wave b{ background:linear-gradient(to top, var(--reading-deep), var(--reading)); }
   [data-theme="dark"] .wave-row.native .wave b{ background:linear-gradient(to top, var(--reading-deep), var(--reading)); }
   /* native row is the reference take — slightly quieter presence */
@@ -231,6 +234,8 @@
     display:grid; place-items:center; cursor:pointer; color:var(--brand);
     box-shadow:var(--lift-sm); transition:transform .16s ease, background .2s ease, color .2s ease;
   }
+  .wave-row.you .wave-play{ color:var(--brand-deep); }
+  [data-theme="dark"] .wave-row.you .wave-play{ color:var(--brand); }
   .wave-row.native .wave-play{ color:var(--reading); }
   .wave-play:hover{ transform:translateY(-2px) scale(1.04); }
   .wave-row.you .wave-play:hover{ background:var(--brand); color:var(--brand-on); }
@@ -304,7 +309,8 @@
   }
   @media (max-width:640px){
     .feature-in{ padding:24px 22px 28px; }
-    .scaffold-jp, .ex-jp{ font-size:26px; }
+    .scaffold-jp{ font-size:26px; }
+    .ex-jp{ font-size:22px; }
     .rig-top{ flex-direction:column; align-items:stretch; }
     .record-btn{ justify-content:center; }
   }
@@ -390,7 +396,7 @@
         <!-- top: prompt step + hanko -->
         <div class="feature-top">
           <div class="prompt-meta">
-            <span class="prompt-step"><span class="pip"></span>Prompt 4 of 5</span>
+            <span class="prompt-step"><span class="pip"></span>Now speaking</span>
             <span class="step-track">
               <b class="done"></b><b class="done"></b><b class="now"></b><b></b><b></b>
             </span>
@@ -409,7 +415,7 @@
             <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round"><path d="M4 7V5a1 1 0 0 1 1-1h14a1 1 0 0 1 1 1v2M9 20h6M12 4v16"/></svg>
             Template
           </div>
-          <p class="scaffold-jp">「<ruby>朝<rt>あさ</rt></ruby>、<span class="slot">＿＿＿</span>てから、<span class="slot">＿＿＿</span>ます。」</p>
+          <p class="scaffold-jp">「<ruby>朝<rt>あさ</rt></ruby>、<span class="slot"></span>てから、<span class="slot"></span>ます。」</p>
           <div class="hint">
             <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="9"/><path d="M12 16v-4M12 8h.01"/></svg>
             pattern: <span class="pat jp">〜てから</span> <span style="opacity:.85">(after doing…)</span>
@@ -430,12 +436,6 @@
           </div>
           <p class="ex-jp"><ruby>朝<rt>あさ</rt></ruby>、コーヒーを<ruby>飲<rt>の</rt></ruby>んでから、<ruby>仕事<rt>しごと</rt></ruby>に<ruby>行<rt>い</rt></ruby>きます。</p>
           <p class="ex-en">In the morning, after I drink coffee, I go to work.</p>
-        </div>
-
-        <!-- grammar pills -->
-        <div class="grammar-row">
-          <span class="gtag">〜てから <span class="en">after</span></span>
-          <span class="gtag">〜ます <span class="en">polite</span></span>
         </div>
 
         <!-- RECORD-AND-COMPARE RIG -->

@@ -62,13 +62,17 @@
   .prog-pct{ font-family:var(--display); font-weight:700; font-size:14px; color:var(--brand); white-space:nowrap; }
   [data-theme="dark"] .prog-pct{ color:#FF8A6E; }
 
-  .lesson-actions{ display:flex; flex-direction:column; align-items:flex-end; gap:12px; }
+  .lesson-actions{ display:flex; flex-direction:column; align-items:flex-end; gap:10px; }
   @media (max-width:920px){ .lesson-actions{ align-items:flex-start; } }
+  /* lock note — demoted: smaller, fainter (faintest ink token), and detached
+     from the CTA so it reads as a quiet footnote, not a rival to the button.
+     (No opacity here — the .reveal entrance ends at opacity:1 and would win;
+     the --faint color carries the demotion.) */
   .gated-note{
-    font-family:var(--mono); font-size:10px; letter-spacing:.16em; text-transform:uppercase; color:var(--muted);
-    display:inline-flex; align-items:center; gap:7px; opacity:.85;
+    font-family:var(--mono); font-size:9px; letter-spacing:.14em; text-transform:uppercase; color:var(--faint);
+    display:inline-flex; align-items:center; gap:6px; font-weight:500;
   }
-  .gated-note svg{ width:12px; height:12px; }
+  .gated-note svg{ width:10px; height:10px; opacity:.8; }
 
   /* chapter selector strip */
   .chapter-strip{ display:flex; align-items:center; gap:10px; margin:26px 0 6px; flex-wrap:wrap; }
@@ -104,35 +108,57 @@
   .vocab-list{ display:flex; flex-direction:column; }
   .vrow{
     display:grid; grid-template-columns:minmax(120px,1.4fr) minmax(96px,1fr) 2fr auto;
-    align-items:center; gap:20px; padding:15px 6px;
+    align-items:center; gap:20px; padding:13px 14px;
     transition:background .18s ease;
     border-radius:10px;
   }
+  /* zebra backbone — alternate rows get a faint inset so the eye tracks
+     JP → English → romaji straight across each row */
+  .vrow:nth-child(even){ background:color-mix(in srgb, var(--surf-inset) 55%, transparent); }
   .vrow:hover{ background:var(--surf-inset); }
   /* hairline between word GROUPS (not every row) */
-  .vrow.group-top{ border-top:1px solid var(--line); margin-top:6px; padding-top:21px; }
+  .vrow.group-top{ border-top:1px solid var(--line); margin-top:6px; padding-top:19px; }
+  /* JP headword = clearly dominant */
   .vrow .v-jp{ font-family:var(--jp); font-weight:700; font-size:27px; color:var(--ink); line-height:1; }
-  .vrow .v-read{ font-family:var(--mono); font-size:14px; color:var(--reading); letter-spacing:.02em; }
-  [data-theme="dark"] .vrow .v-read{ color:var(--reading); }
+  /* English = secondary */
   .vrow .v-en{ font-family:var(--body); font-size:16px; color:var(--muted); }
   .vrow .v-en b{ color:var(--ink); font-weight:600; }
-  .vrow .v-tools{ display:flex; align-items:center; gap:9px; justify-self:end; }
-  /* compact play button for the dense list */
-  .vrow .play-btn{ width:40px; height:40px; }
-  .vrow .play-btn svg{ width:15px; height:15px; }
-  /* record-and-compare dot */
-  .rec-dot{
-    width:34px; height:34px; border-radius:50%; border:1px solid var(--line); background:var(--surf-inset);
-    display:grid; place-items:center; cursor:pointer; color:var(--brand);
+  /* romaji = dropped a notch (smaller + faint) so the read order is unambiguous */
+  .vrow .v-read{ font-family:var(--mono); font-size:12px; color:var(--faint); letter-spacing:.02em; }
+  [data-theme="dark"] .vrow .v-read{ color:var(--faint); }
+  .vrow .v-tools{ display:flex; align-items:center; gap:8px; justify-self:end; }
+  /* ── one visual language for the two inline buttons ──
+     both are quiet round buttons at the SAME diameter; the play is accented
+     (brand-tinted), the record sits a touch quieter — no more bold-filled vs
+     timid-bordered mismatch. Both override the system .play-btn sizing. */
+  .vrow .play-btn,
+  .vrow .rec-dot{
+    width:36px; height:36px; border-radius:50%;
+    display:grid; place-items:center; cursor:pointer;
+    border:1px solid var(--line); box-shadow:none;
     transition:transform .16s ease, border-color .16s ease, background .16s ease, color .16s ease;
   }
-  .rec-dot::before{ content:""; width:11px; height:11px; border-radius:50%; background:currentColor; box-shadow:0 0 0 3px color-mix(in srgb, var(--brand) 16%, transparent); }
-  .rec-dot:hover{ transform:translateY(-1px); border-color:var(--brand); background:var(--brand-soft); }
-  [data-theme="dark"] .rec-dot{ color:#FF8A6E; }
+  .vrow .play-btn svg{ width:14px; height:14px; }
+  /* play — accented: brand-tinted wash so it reads as the primary action */
+  .vrow .play-btn{ color:var(--brand); background:var(--brand-soft); border-color:color-mix(in srgb, var(--brand) 28%, transparent); }
+  .vrow .play-btn:hover{ background:var(--brand); color:var(--brand-on); transform:translateY(-1px); border-color:var(--brand); }
+  [data-theme="dark"] .vrow .play-btn{ color:#FF8A6E; background:var(--brand-soft); border-color:rgba(255,107,74,.3); }
+  [data-theme="dark"] .vrow .play-btn:hover{ color:#fff; }
+  /* record — quieter sibling: same shell, neutral surface, the same brand tint
+     only appears on the mic dot + hover */
+  .vrow .rec-dot{ color:var(--brand); background:var(--surf-inset); }
+  .vrow .rec-dot::before{ content:""; width:11px; height:11px; border-radius:50%; background:currentColor; box-shadow:0 0 0 3px color-mix(in srgb, var(--brand) 16%, transparent); }
+  .vrow .rec-dot:hover{ transform:translateY(-1px); border-color:var(--brand); background:var(--brand-soft); }
+  [data-theme="dark"] .vrow .rec-dot{ color:#FF8A6E; }
+  /* GROUP labels — promoted: legible 11px muted with a hairline, not tiny faint */
   .grp-label{
-    font-family:var(--mono); font-size:9.5px; letter-spacing:.24em; text-transform:uppercase; color:var(--faint);
-    padding:18px 6px 2px; font-weight:500;
+    font-family:var(--mono); font-size:11px; letter-spacing:.2em; text-transform:uppercase; color:var(--muted);
+    padding:20px 14px 10px; font-weight:600;
+    display:flex; align-items:center; gap:12px;
   }
+  .grp-label::after{ content:""; flex:1; height:1px; background:var(--line); }
+  /* first group label sits tighter to the panel top */
+  .vocab-panel > .grp-label:first-child{ padding-top:4px; }
   @media (max-width:760px){
     .vrow{ grid-template-columns:1fr auto; grid-template-areas:"jp tools" "read tools" "en tools"; gap:4px 16px; }
     .vrow .v-jp{ grid-area:jp; } .vrow .v-read{ grid-area:read; } .vrow .v-en{ grid-area:en; margin-top:2px; }
@@ -162,7 +188,9 @@
     background:var(--surf-inset); border:1px solid var(--line); position:relative; overflow:hidden;
   }
   [data-theme="light"] .g-ex{ background:linear-gradient(180deg, #FFFBF3, var(--surf-inset)); }
-  [data-theme="dark"] .g-ex{ background:linear-gradient(165deg, rgba(138,143,224,.06), rgba(255,238,222,.015)); }
+  /* warm specimen-on-paper in dark too — was an indigo (cool) tint that fought
+     the coral/amber palette; now a warm coral/amber wash. Gold left-rule stays. */
+  [data-theme="dark"] .g-ex{ background:linear-gradient(165deg, rgba(255,107,74,.06), rgba(217,169,78,.03)); border-color:rgba(217,169,78,.16); }
   .g-ex::before{ content:""; position:absolute; left:0; top:14px; bottom:14px; width:3px; border-radius:3px; background:var(--gold); }
   .g-ex .ex-jp{ font-family:var(--jp); font-weight:500; font-size:18px; line-height:1.85; color:var(--ink); margin:0 0 6px; }
   .g-ex .ex-en{ font-family:var(--body); font-size:14px; color:var(--muted); margin:0; }
@@ -171,29 +199,45 @@
   .g-ex .play-btn svg{ width:14px; height:14px; }
   .g-ex .ex-mark{ font-family:var(--mono); font-size:10px; letter-spacing:.16em; text-transform:uppercase; color:var(--faint); }
 
-  /* ===== model conversation ===== */
+  /* ===== model conversation — reads as a DIALOGUE, not a list =====
+     A speaks from the left, B answers from the right; each turn is a faintly
+     speaker-tinted bubble with a thin speaker-colored edge. */
   .convo-panel{ padding:32px 36px 30px; }
-  .convo{ display:flex; flex-direction:column; gap:6px; margin-top:6px; }
+  .convo{ display:flex; flex-direction:column; gap:14px; margin-top:6px; }
   .turn{
-    display:grid; grid-template-columns:auto 1fr auto; gap:18px; align-items:start;
-    padding:16px 8px; border-radius:12px; transition:background .18s ease;
+    display:grid; grid-template-columns:auto 1fr auto; gap:16px; align-items:center;
+    padding:15px 16px; border-radius:14px;
+    background:var(--brand-soft); border:1px solid color-mix(in srgb, var(--brand) 16%, transparent);
+    border-left:3px solid var(--brand);
+    max-width:90%; transition:transform .16s ease;
   }
-  .turn:hover{ background:var(--surf-inset); }
-  .turn + .turn{ border-top:1px solid var(--line); }
+  .turn:hover{ transform:translateY(-1px); }
+  /* B answers from the right: mirror the column order, push to the right edge,
+     and recolor to the indigo (reading) speaker */
+  .turn.is-b{
+    grid-template-columns:auto 1fr auto;
+    margin-left:auto; text-align:right;
+    background:var(--reading-soft); border-color:var(--reading-line);
+    border-left:1px solid var(--reading-line); border-right:3px solid var(--reading);
+  }
+  .turn.is-b .spk{ order:3; }
+  .turn.is-b .turn-body{ order:2; }
+  .turn.is-b .play-btn{ order:1; }
   .spk{
     flex:0 0 auto; width:36px; height:36px; border-radius:50%;
     display:grid; place-items:center; font-family:var(--display); font-weight:700; font-size:15px;
-    border:1.5px solid var(--line); margin-top:2px;
+    border:1.5px solid var(--line);
   }
   .spk.a{ color:var(--brand); background:var(--brand-soft); border-color:color-mix(in srgb, var(--brand) 35%, transparent); }
   .spk.b{ color:var(--reading); background:var(--reading-soft); border-color:var(--reading-line); }
   [data-theme="dark"] .spk.a{ color:#FF8A6E; }
-  .turn-body .t-jp{ font-family:var(--jp); font-weight:500; font-size:21px; line-height:1.75; color:var(--ink); margin:0; }
+  .turn-body .t-jp{ font-family:var(--jp); font-weight:500; font-size:21px; line-height:1.6; color:var(--ink); margin:0; }
   .turn-body .t-en{ font-family:var(--body); font-size:15px; color:var(--muted); margin:5px 0 0; }
   .turn .play-btn{ width:40px; height:40px; align-self:center; }
   .turn .play-btn svg{ width:15px; height:15px; }
   @media (max-width:640px){
-    .turn{ grid-template-columns:auto 1fr; }
+    .turn, .turn.is-b{ max-width:100%; grid-template-columns:auto 1fr; text-align:left; }
+    .turn.is-b .spk{ order:1; } .turn.is-b .turn-body{ order:2; } .turn.is-b .play-btn{ order:3; }
     .turn .play-btn{ grid-column:2; justify-self:start; margin-top:6px; }
   }
 
@@ -305,12 +349,14 @@
         <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"><path d="M12 5v14M5 12h14"/></svg>
         Add all vocab to deck
       </button>
-      <span class="gated-note">
-        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><rect x="4" y="11" width="16" height="9" rx="2"/><path d="M8 11V7a4 4 0 0 1 8 0v4"/></svg>
-        Account-gated · textbook material
-      </span>
     </div>
   </section>
+
+  <!-- demoted lock note — quiet footnote under the header, away from the CTA -->
+  <div class="gated-note reveal d2" style="margin:10px 2px 0">
+    <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><rect x="4" y="11" width="16" height="9" rx="2"/><path d="M8 11V7a4 4 0 0 1 8 0v4"/></svg>
+    Account-gated · textbook material
+  </div>
 
   <!-- chapter selector + speaking-mode hint -->
   <div class="chapter-strip reveal d3">
@@ -322,8 +368,9 @@
     <button class="chip">8</button>
     <button class="chip">9</button>
     <span class="gap">…</span>
-    <button class="btn-ghost speaking-hint" style="padding:9px 16px;font-size:14px;">
-      <span style="font-size:15px">🎙</span>&nbsp;Speaking practice
+    <button class="btn-ghost speaking-hint" style="padding:9px 16px;font-size:14px;display:inline-flex;align-items:center;gap:9px;">
+      <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><rect x="9" y="3" width="6" height="11" rx="3"/><path d="M5 11a7 7 0 0 0 14 0M12 18v3"/></svg>
+      Speaking practice
     </button>
   </div>
 
@@ -521,7 +568,7 @@
           <button class="play-btn" title="Play line" aria-label="Play line"><svg viewBox="0 0 24 24" fill="currentColor"><path d="M8 5v14l11-7z"/></svg></button>
         </div>
 
-        <div class="turn">
+        <div class="turn is-b">
           <span class="spk b">B</span>
           <div class="turn-body">
             <p class="t-jp">はい、どうぞ。</p>
@@ -539,7 +586,7 @@
           <button class="play-btn" title="Play line" aria-label="Play line"><svg viewBox="0 0 24 24" fill="currentColor"><path d="M8 5v14l11-7z"/></svg></button>
         </div>
 
-        <div class="turn">
+        <div class="turn is-b">
           <span class="spk b">B</span>
           <div class="turn-body">
             <p class="t-jp">いいえ、いつでも いいですよ。</p>

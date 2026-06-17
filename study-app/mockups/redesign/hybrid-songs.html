@@ -22,6 +22,13 @@
      SONG HEADER — a cinematic hero panel (the spotlight overture)
      ============================================================ */
   .song-hero{ grid-column:1 / -1; overflow:hidden; padding:0; }
+  /* LIGHT: lift the hero clearly off the paper so it reads as a distinct raised stage
+     (it otherwise nearly dissolves into the warm washi) */
+  [data-theme="light"] .song-hero{
+    background:linear-gradient(168deg, #FFFDF8, #FBF6EC);
+    border-color:color-mix(in srgb, var(--brand) 16%, var(--line));
+    box-shadow:var(--lift-lg), inset 0 0 0 1px rgba(255,253,248,.9), var(--inner-hi);
+  }
   .song-hero .hero-inner{
     display:grid; grid-template-columns:1fr auto; gap:38px;
     padding:34px 38px 30px; position:relative; z-index:2;
@@ -77,14 +84,14 @@
     -webkit-background-clip:text; background-clip:text; -webkit-text-fill-color:transparent;
     filter:drop-shadow(0 8px 30px rgba(255,107,74,.28));
   }
+  /* romaji = a quiet romanization above the title, not a section label */
   .song-romaji{
-    font-family:var(--display); font-weight:600; font-size:20px; letter-spacing:-.01em;
-    color:var(--muted); margin-bottom:4px;
+    font-family:var(--body); font-weight:400; font-style:italic; font-size:15px; letter-spacing:.01em;
+    color:var(--faint); margin-bottom:7px;
   }
-  .song-romaji .dash{ color:var(--gold); padding:0 8px; }
   .song-artist{
-    font-family:var(--body); font-size:15px; color:var(--faint);
-    display:inline-flex; align-items:center; gap:9px;
+    font-family:var(--body); font-size:15px; color:var(--muted);
+    display:inline-flex; align-items:center; gap:11px; margin-top:9px;
   }
   .song-artist .cc{
     font-family:var(--mono); font-size:10px; letter-spacing:.16em; text-transform:uppercase;
@@ -93,9 +100,9 @@
   }
   [data-theme="dark"] .song-artist .cc{ border-color:rgba(86,217,166,.3); }
 
-  /* hero action cluster */
-  .hero-actions{ display:flex; align-items:center; gap:12px; margin-top:24px; flex-wrap:wrap; }
-  .play-video{ font-size:16px; padding:14px 24px; }
+  /* hero action cluster — the quieter utility row beneath the mode-tabs band */
+  .hero-actions{ display:flex; align-items:center; gap:12px; margin-top:18px; flex-wrap:wrap; }
+  .play-video{ font-size:15px; padding:12px 22px; }
   .play-video .tri{ display:inline-flex; }
   .fg-toggle .sw{
     width:30px; height:17px; border-radius:999px; position:relative; flex-shrink:0;
@@ -155,10 +162,10 @@
   }
   .mine-progress .mp-text{ font-size:13px; line-height:1.35; color:var(--muted); }
   .mine-progress .mp-text b{ font-family:var(--display); font-weight:700; color:var(--ink); }
-  .mine-progress .mp-text .mine-btn{
-    margin-top:7px; font-size:13px; padding:8px 14px;
+  .mine-progress .mp-hint{
+    margin-top:5px; font-family:var(--mono); font-size:10px; letter-spacing:.1em;
+    text-transform:uppercase; color:var(--faint);
   }
-  .mine-progress .mp-text .mine-btn .pick{ font-size:14px; }
 
   /* the faint spotlight wash bleeding down from the hero into the stage */
   .song-hero::after{
@@ -184,41 +191,54 @@
   .ctx-row .crumb .sep{ color:var(--line); }
   .ctx-row .spacer{ flex:1; }
 
-  /* mode tabs for THIS song (Read active) */
-  .mode-tabs{ display:inline-flex; gap:4px; }
+  /* mode tabs for THIS song (Read active) — the per-song PRIMARY nav, its own band:
+     a segmented control sitting on a recessed track so it reads as one switch */
+  .mode-tabs{
+    display:inline-flex; gap:3px; margin:22px 0 4px; padding:4px;
+    border-radius:13px; background:var(--surf-inset); border:1px solid var(--line);
+    box-shadow:inset 0 1px 3px rgba(28,23,20,.08);
+  }
+  [data-theme="dark"] .mode-tabs{
+    background:rgba(0,0,0,.22); border-color:rgba(255,238,222,.07);
+    box-shadow:inset 0 1px 4px rgba(0,0,0,.5);
+  }
   .mode-tabs .mtab{
-    font-family:var(--body); font-size:13.5px; font-weight:500; color:var(--muted);
-    padding:8px 15px; border-radius:10px; cursor:pointer; border:1px solid transparent;
+    font-family:var(--body); font-size:14px; font-weight:500; color:var(--muted);
+    padding:9px 18px; border-radius:10px; cursor:pointer; border:1px solid transparent;
     display:inline-flex; align-items:center; gap:8px;
-    transition:color .16s ease, background .16s ease, border-color .16s ease;
+    transition:color .16s ease, background .16s ease, border-color .16s ease, box-shadow .2s ease;
   }
-  .mode-tabs .mtab .mi{ font-family:var(--mono); font-size:11px; opacity:.7; }
-  .mode-tabs .mtab:hover{ color:var(--ink); background:color-mix(in srgb, var(--ink) 6%, transparent); }
+  .mode-tabs .mtab .mi{ font-family:var(--jp); font-weight:700; font-size:13px; opacity:.85; }
+  .mode-tabs .mtab:hover{ color:var(--ink); }
   .mode-tabs .mtab.active{
-    color:var(--brand); font-weight:600; background:color-mix(in srgb, var(--brand) 12%, transparent);
-    border-color:var(--brand);
+    color:var(--brand-on); font-weight:600;
+    background:var(--brand); border-color:var(--brand);
+    box-shadow:var(--lift-sm);
   }
+  .mode-tabs .mtab.active .mi{ opacity:1; }
   [data-theme="dark"] .mode-tabs .mtab.active{
-    color:#FF8A6E; background:var(--brand-soft); border-color:rgba(255,107,74,.4);
-    box-shadow:0 0 18px -8px rgba(255,107,74,.6);
+    color:#1F0C06; background:linear-gradient(160deg, #FF8A6E, var(--brand));
+    border-color:transparent; box-shadow:0 4px 14px -4px rgba(255,107,74,.7);
   }
+  [data-theme="dark"] .mode-tabs .mtab.active .mi{ color:#1F0C06; }
 
   /* ============================================================
      THE LYRIC STAGE — a column of line rows on a soft spotlight
      ============================================================ */
   .lyric-stage{ position:relative; }
-  /* the spotlight pool behind the current line */
+  /* the spotlight pool behind the current line — a wide, clearly visible wash */
   .lyric-stage::before{
-    content:""; position:absolute; left:-30px; right:-30px; pointer-events:none; z-index:0;
-    top:188px; height:150px;       /* roughly over the "current" line */
+    content:""; position:absolute; left:-60px; right:-60px; pointer-events:none; z-index:0;
+    top:150px; height:230px;       /* roughly over the "current" line */
     transition:opacity .55s ease;
   }
   [data-theme="light"] .lyric-stage::before{
-    background:radial-gradient(60% 100% at 30% 50%, rgba(205,67,39,.06), transparent 72%);
+    background:radial-gradient(72% 100% at 30% 50%, rgba(205,67,39,.12), transparent 74%);
+    filter:blur(8px);
   }
   [data-theme="dark"] .lyric-stage::before{
-    background:radial-gradient(58% 120% at 28% 50%, rgba(255,107,74,.14), transparent 72%);
-    filter:blur(20px);
+    background:radial-gradient(70% 130% at 27% 50%, rgba(255,107,74,.26), transparent 74%);
+    filter:blur(26px);
   }
 
   .stage-label{
@@ -277,20 +297,24 @@
     box-shadow:var(--lift-md);
   }
   [data-theme="light"] .ll.current{
-    background:linear-gradient(100deg, var(--brand-soft), var(--raised) 70%);
-    border-color:color-mix(in srgb, var(--brand) 40%, transparent);
+    background:linear-gradient(100deg, color-mix(in srgb, var(--brand) 18%, var(--raised)), var(--raised) 72%);
+    border-color:color-mix(in srgb, var(--brand) 48%, transparent);
   }
   [data-theme="dark"] .ll.current{
-    background:linear-gradient(105deg, rgba(255,107,74,.14), rgba(44,35,27,.55) 72%);
-    border-color:rgba(255,107,74,.4);
-    box-shadow:0 0 0 1px rgba(255,107,74,.12), 0 18px 50px -20px rgba(0,0,0,.7), 0 0 70px -22px rgba(255,107,74,.7), var(--inner-hi);
+    background:linear-gradient(105deg, rgba(255,107,74,.21), rgba(44,35,27,.55) 74%);
+    border-color:rgba(255,107,74,.5);
+    box-shadow:0 0 0 1px rgba(255,107,74,.18), 0 18px 50px -20px rgba(0,0,0,.7), 0 0 96px -20px rgba(255,107,74,.85), var(--inner-hi);
   }
   /* glowing left bar marking the playhead */
   .ll.current::before{
-    content:""; position:absolute; left:0; top:14px; bottom:14px; width:4px; border-radius:0 4px 4px 0;
-    background:var(--brand);
+    content:""; position:absolute; left:0; top:11px; bottom:11px; width:6px; border-radius:0 5px 5px 0;
+    background:linear-gradient(180deg, var(--brand), var(--brand-deep));
+    box-shadow:0 0 14px 1px color-mix(in srgb, var(--brand) 55%, transparent);
   }
-  [data-theme="dark"] .ll.current::before{ box-shadow:0 0 16px 1px rgba(255,107,74,.85); }
+  [data-theme="dark"] .ll.current::before{
+    background:linear-gradient(180deg, #FF8A6E, var(--brand));
+    box-shadow:0 0 22px 2px rgba(255,107,74,.95), 0 0 6px 0 rgba(255,154,128,.9);
+  }
   .ll.current .jp{ color:var(--ink); }
   [data-theme="dark"] .ll.current .jp{ text-shadow:0 2px 22px rgba(255,107,74,.3); }
   /* a tiny "now playing" equalizer badge */
@@ -333,7 +357,6 @@
   }
   .vr-head{ display:flex; align-items:baseline; justify-content:space-between; margin-bottom:6px; }
   .vr-title{ font-family:var(--display); font-weight:700; font-size:18px; color:var(--ink); letter-spacing:-.01em; }
-  .vr-count{ font-family:var(--mono); font-size:10.5px; letter-spacing:.12em; color:var(--muted); }
   .vr-sub{ font-family:var(--body); font-size:13px; color:var(--faint); margin-bottom:18px; }
 
   .vr-group{ margin-bottom:20px; }
@@ -352,14 +375,40 @@
   [data-theme="dark"] .vr-glabel.is-known .pip{ box-shadow:0 0 0 3px rgba(86,217,166,.12), 0 0 8px 0 rgba(86,217,166,.6); }
   .vr-gable .grow{ flex:1; }
 
-  /* a mined-word row */
+  /* a mined-word row — a faint state tint (left edge + wash) gives the rail identity
+     instead of reading as a generic gray list */
   .vword{
-    display:flex; align-items:center; gap:12px; padding:11px 12px; border-radius:12px;
+    position:relative; overflow:hidden;
+    display:flex; align-items:center; gap:13px; padding:11px 13px 11px 15px; border-radius:12px;
     background:var(--surf-inset); border:1px solid var(--line);
     margin-bottom:9px; transition:transform .18s ease, box-shadow .18s ease, border-color .18s ease;
   }
+  /* the left state-edge */
+  .vword::before{
+    content:""; position:absolute; left:0; top:0; bottom:0; width:3px; border-radius:3px 0 0 3px;
+  }
+  /* NEW (default .vword) — warm vermilion tint */
+  .vword{
+    background:linear-gradient(90deg, color-mix(in srgb, var(--brand) 8%, var(--surf-inset)), var(--surf-inset) 56%);
+  }
+  .vword::before{ background:var(--brand); opacity:.7; }
+  [data-theme="dark"] .vword{
+    background:linear-gradient(90deg, rgba(255,107,74,.11), var(--surf-inset) 56%);
+    border-color:rgba(255,107,74,.16);
+  }
+  [data-theme="dark"] .vword::before{ box-shadow:0 0 8px 0 rgba(255,107,74,.6); }
+  /* KNOWN — calm jade tint */
+  .vword.is-known{
+    background:linear-gradient(90deg, color-mix(in srgb, var(--good) 9%, var(--surf-inset)), var(--surf-inset) 56%);
+  }
+  .vword.is-known::before{ background:var(--good); opacity:.7; }
+  [data-theme="dark"] .vword.is-known{
+    background:linear-gradient(90deg, rgba(86,217,166,.10), var(--surf-inset) 56%);
+    border-color:rgba(86,217,166,.16);
+  }
+  [data-theme="dark"] .vword.is-known::before{ box-shadow:0 0 8px 0 rgba(86,217,166,.55); }
   .vword:hover{ transform:translateY(-2px); box-shadow:var(--lift-sm); }
-  .vword .vw-jp{ font-family:var(--jp); font-weight:700; font-size:24px; color:var(--ink); line-height:1; }
+  .vword .vw-jp{ font-family:var(--jp); font-weight:700; font-size:27px; color:var(--ink); line-height:1; }
   .vword .vw-main{ min-width:0; flex:1; }
   .vword .vw-read{ font-family:var(--jp); font-size:12.5px; color:var(--muted); margin-top:3px; }
   .vword .vw-en{ font-family:var(--body); font-size:12.5px; color:var(--faint); }
@@ -413,6 +462,8 @@
     .ll .jp{ font-size:27px; line-height:1.7; }
     .song-title{ font-size:38px; }
     .ll .num{ display:none; }
+    .mode-tabs{ display:flex; width:100%; }
+    .mode-tabs .mtab{ flex:1; justify-content:center; padding:9px 6px; }
   }
 </style>
 </head>
@@ -481,12 +532,21 @@
 
         <!-- title + artist + actions -->
         <div class="song-head-main">
-          <div class="song-romaji">Asa no Uta <span class="dash">—</span> Morning Song</div>
+          <div class="song-romaji">Asa no Uta</div>
           <h1 class="song-title">朝の歌</h1>
           <div class="song-artist">
-            original · CC <span class="cc">CC&nbsp;BY</span> · safe practice text
+            Morning Song <span class="cc">CC&nbsp;BY</span>
           </div>
 
+          <!-- the per-song mode tabs: Read active (primary per-song nav, own band) -->
+          <div class="mode-tabs" role="tablist" aria-label="Song practice modes">
+            <span class="mtab active" role="tab" aria-selected="true"><span class="mi">読</span> Read</span>
+            <span class="mtab" role="tab" aria-selected="false"><span class="mi">聴</span> Listen</span>
+            <span class="mtab" role="tab" aria-selected="false"><span class="mi">影</span> Shadow</span>
+            <span class="mtab" role="tab" aria-selected="false"><span class="mi">採</span> Mine</span>
+          </div>
+
+          <!-- quieter utility cluster: playback + furigana -->
           <div class="hero-actions">
             <button class="btn btn-primary play-video">
               <span class="tri">
@@ -499,14 +559,6 @@
               <span class="sw"></span>
               <span class="jp" style="font-size:13px">ふりがな</span> ON
             </button>
-
-            <!-- the per-song mode tabs: Read active -->
-            <div class="mode-tabs" role="tablist" aria-label="Song practice modes" style="margin-left:auto">
-              <span class="mtab active" role="tab" aria-selected="true"><span class="mi">読</span> Read</span>
-              <span class="mtab" role="tab" aria-selected="false"><span class="mi">聴</span> Listen</span>
-              <span class="mtab" role="tab" aria-selected="false"><span class="mi">影</span> Shadow</span>
-              <span class="mtab" role="tab" aria-selected="false"><span class="mi">採</span> Mine</span>
-            </div>
           </div>
         </div>
 
@@ -538,12 +590,8 @@
               <span class="pct">57%</span>
             </div>
             <div class="mp-text">
-              mined <b>8</b> / 14 words
-              <div>
-                <button class="btn btn-ghost mine-btn">
-                  <span class="pick">⛏</span> Mine vocabulary
-                </button>
-              </div>
+              <b>8</b> / 14 words mined
+              <div class="mp-hint">add the rest from the rail&nbsp;→</div>
             </div>
           </div>
         </div>
@@ -646,7 +694,6 @@
     <aside class="vocab-rail panel reveal d4">
       <div class="vr-head">
         <span class="vr-title">Vocabulary mined</span>
-        <span class="vr-count">8 / 14</span>
       </div>
       <div class="vr-sub">Words pulled from these lyrics, split by what&rsquo;s already in your deck.</div>
 

@@ -19,12 +19,31 @@
   .browse-head h1 .jp{ font-weight:900; letter-spacing:0; }
   .browse-head .count-pill{ display:flex; align-items:center; gap:18px; flex-wrap:wrap; }
 
-  /* ===== filter bar (extends .panel) ===== */
-  .filters{ margin-top:30px; padding:22px 24px 20px; }
+  /* ===== filter bar (extends .panel) — kept visually light so the GRID leads ===== */
+  .filters{
+    margin-top:30px; padding:18px 22px 16px;
+    box-shadow:var(--lift-sm), var(--inner-hi);   /* shallower than a .panel so it recedes */
+  }
+  [data-theme="dark"] .filters{ background:var(--surf-inset); }
   .filters::after{
-    content:""; position:absolute; left:24px; top:0; width:40px; height:3px;
+    content:""; position:absolute; left:22px; top:0; width:34px; height:3px;
     background:var(--gold); border-radius:0 0 3px 3px;
   }
+
+  /* "More filters" disclosure — folds the secondary facet rows away by default */
+  .more-filters{ margin-top:4px; }
+  .more-filters > summary{
+    list-style:none; cursor:pointer; display:inline-flex; align-items:center; gap:8px;
+    font-family:var(--mono); font-size:10.5px; letter-spacing:.16em; text-transform:uppercase;
+    color:var(--muted); font-weight:500; padding:6px 0; user-select:none;
+    transition:color .16s ease;
+  }
+  .more-filters > summary::-webkit-details-marker{ display:none; }
+  .more-filters > summary:hover{ color:var(--ink); }
+  .more-filters > summary .mf-chev{ width:13px; height:13px; transition:transform .2s ease; color:var(--faint); }
+  .more-filters[open] > summary .mf-chev{ transform:rotate(90deg); }
+  .more-filters[open] > summary{ color:var(--ink); }
+  .more-filters .mf-rows{ padding-top:2px; }
   /* search field */
   .search{
     position:relative; margin-bottom:20px;
@@ -44,8 +63,7 @@
   [data-theme="dark"] .search input:focus{ border-color:rgba(255,107,74,.5); box-shadow:0 0 0 3px rgba(255,107,74,.14); }
 
   /* a labelled filter row: fixed label column + flex chip track */
-  .frow{ display:flex; align-items:flex-start; gap:16px; padding:7px 0; }
-  .frow + .frow{ border-top:1px solid color-mix(in srgb, var(--line) 60%, transparent); }
+  .frow{ display:flex; align-items:flex-start; gap:16px; padding:5px 0; }
   .frow .flabel{
     flex:0 0 96px; padding-top:8px;
     font-family:var(--mono); font-size:11px; letter-spacing:.16em; text-transform:uppercase;
@@ -59,13 +77,17 @@
   [data-theme="dark"] .chip.c-ichidan.active{ color:var(--reading); background:var(--reading-soft); border-color:var(--reading-line); }
   .chip.c-irregular.active{ color:var(--gold); background:color-mix(in srgb, var(--gold) 16%, transparent); border-color:var(--gold); }
 
-  /* trailing action cluster */
-  .frow .spacer{ flex:1; }
+  /* action cluster — Topics · Leeches on the left, Add card on the right */
+  .filter-actions{
+    display:flex; align-items:center; gap:10px; flex-wrap:wrap;
+    margin-top:14px; padding-top:14px; border-top:1px solid color-mix(in srgb, var(--line) 55%, transparent);
+  }
+  .filter-actions .fa-spacer{ flex:1; }
   .pill.toggle{ cursor:pointer; transition:transform .16s ease, border-color .16s ease, color .16s ease; }
   .pill.toggle:hover{ transform:translateY(-1px); border-color:var(--gold); }
   .pill.leech-toggle{ color:var(--leech); }
-  .pill.leech-toggle .dot{ background:var(--leech); box-shadow:0 0 0 4px var(--leech-soft); }
-  [data-theme="dark"] .pill.leech-toggle .dot{ box-shadow:0 0 0 4px var(--leech-soft), 0 0 9px 1px rgba(199,146,234,.6); }
+  .pill.leech-toggle .alert-ic{ width:14px; height:14px; }
+  [data-theme="dark"] .pill.leech-toggle{ filter:drop-shadow(0 0 6px rgba(199,146,234,.45)); }
   .btn.btn-add{
     font-size:14px; font-weight:600; padding:10px 16px; border-radius:11px;
     background:var(--surf-inset); color:var(--ink); border:1px dashed var(--brand);
@@ -130,13 +152,16 @@
     display:flex; align-items:center; justify-content:space-between; gap:12px;
     margin-top:18px; padding-top:14px; border-top:1px solid color-mix(in srgb, var(--line) 70%, transparent);
   }
+  /* accuracy meter: muted on healthy cards (the spine is the real signal),
+     saturated only for the leech/low (.warn) state */
   .vc-acc{ display:inline-flex; align-items:center; gap:8px; font-family:var(--mono); font-size:12px; color:var(--muted); }
-  .vc-acc .acc-num{ font-weight:600; color:var(--good); }
+  .vc-acc .acc-num{ font-weight:600; color:var(--muted); }
   .vc-acc.warn .acc-num{ color:var(--leech); }
-  .vc-acc .meter{ width:42px; height:5px; border-radius:3px; background:var(--deeper); overflow:hidden; }
+  .vc-acc .meter{ width:34px; height:4px; border-radius:3px; background:var(--deeper); overflow:hidden; }
   [data-theme="dark"] .vc-acc .meter{ background:rgba(255,238,222,.08); }
-  .vc-acc .meter span{ display:block; height:100%; border-radius:3px; background:var(--good); }
-  .vc-acc.warn .meter span{ background:var(--leech); }
+  .vc-acc .meter span{ display:block; height:100%; border-radius:3px; background:var(--faint); opacity:.8; }
+  .vc-acc.warn .meter{ width:42px; height:5px; }
+  .vc-acc.warn .meter span{ background:var(--leech); opacity:1; }
   .vc-right{ display:inline-flex; align-items:center; gap:12px; }
   .vc-rank{ font-family:var(--mono); font-size:12px; color:var(--faint); letter-spacing:.04em; }
   .vc-rank b{ color:var(--ink); font-weight:600; }
@@ -150,15 +175,16 @@
   }
   .section-div .line{ flex:1; height:1px; background:var(--line); }
 
-  /* ===== detail view (inline, NOT a modal) ===== */
+  /* ===== detail view (inline, NOT a modal) — a peer of the grid card it opened from ===== */
   .detail{ margin-top:24px; padding:0; overflow:hidden; }
-  .detail .d-inner{ padding:30px 34px 30px 40px; position:relative; z-index:2; }
-  .d-eyebrow{
-    font-family:var(--mono); font-size:10.5px; letter-spacing:.24em; text-transform:uppercase; color:var(--muted); font-weight:500;
-    display:inline-flex; align-items:center; gap:9px; margin-bottom:18px;
+  /* echo the selected card's brand outline as a top accent so the panel reads as that card, expanded */
+  .detail::before{
+    content:""; position:absolute; left:0; right:0; top:0; height:4px; z-index:4;
+    background:linear-gradient(90deg, var(--brand), var(--brand-deep));
   }
-  .d-eyebrow .pip{ width:6px; height:6px; border-radius:50%; background:var(--leech); }
-  [data-theme="dark"] .d-eyebrow .pip{ box-shadow:0 0 8px 1px rgba(199,146,234,.6); }
+  [data-theme="dark"] .detail::before{ box-shadow:0 0 18px 0 rgba(255,107,74,.5); }
+  /* padding pulled in toward the grid card's (20px 22px) so it reads as a peer surface */
+  .detail .d-inner{ padding:24px 24px 22px; position:relative; z-index:2; }
 
   .d-head{ display:flex; align-items:flex-start; gap:28px; flex-wrap:wrap; }
   .d-head .d-word{
@@ -177,8 +203,7 @@
   }
   [data-theme="dark"] .d-stamp-cls{ background:var(--brand-soft); color:#FF8A6E; border:1px solid rgba(255,107,74,.26); box-shadow:0 0 18px -8px rgba(255,107,74,.6); }
   .d-stamp-cls .jp{ font-family:var(--jp); letter-spacing:.04em; }
-  .d-meaning{ font-family:var(--display); font-weight:700; font-size:32px; color:var(--ink); margin-top:18px; letter-spacing:-.02em; }
-  .d-meaning .lead{ color:var(--muted); font-weight:500; font-size:.6em; padding-right:8px; }
+  .d-meaning{ font-family:var(--display); font-weight:700; font-size:26px; color:var(--ink); margin-top:16px; letter-spacing:-.015em; }
 
   /* memory line — Leitner pips */
   .d-memory{
@@ -342,27 +367,7 @@
       </div>
     </div>
 
-    <!-- type -->
-    <div class="frow">
-      <span class="flabel">Type</span>
-      <div class="chips" role="group" aria-label="Verb type">
-        <button class="chip">Godan</button>
-        <button class="chip c-ichidan">Ichidan</button>
-        <button class="chip c-irregular">Irregular</button>
-        <button class="chip"><span class="jp">する</span>-verbs</button>
-      </div>
-    </div>
-
-    <!-- transitivity -->
-    <div class="frow">
-      <span class="flabel">Transitivity</span>
-      <div class="chips" role="group" aria-label="Transitivity">
-        <button class="chip">Transitive</button>
-        <button class="chip">Intransitive</button>
-      </div>
-    </div>
-
-    <!-- jlpt + topics / leeches / add -->
+    <!-- jlpt — its own clean row -->
     <div class="frow">
       <span class="flabel">JLPT</span>
       <div class="chips" role="group" aria-label="JLPT level">
@@ -373,17 +378,53 @@
           <button class="chip">N2</button>
           <button class="chip">N1</button>
         </div>
-        <span class="spacer"></span>
-        <span class="pill toggle">
-          Topics
-          <svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="m6 9 6 6 6-6"/></svg>
-        </span>
-        <span class="pill toggle leech-toggle"><span class="dot"></span>⚠ Leeches</span>
-        <button class="btn btn-add">
-          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"><path d="M12 5v14M5 12h14"/></svg>
-          Add card
-        </button>
       </div>
+    </div>
+
+    <!-- secondary facets, folded away by default -->
+    <details class="more-filters">
+      <summary>
+        <svg class="mf-chev" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"><path d="m9 6 6 6-6 6"/></svg>
+        More filters
+      </summary>
+      <div class="mf-rows">
+        <!-- type -->
+        <div class="frow">
+          <span class="flabel">Type</span>
+          <div class="chips" role="group" aria-label="Verb type">
+            <button class="chip">Godan</button>
+            <button class="chip c-ichidan">Ichidan</button>
+            <button class="chip c-irregular">Irregular</button>
+            <button class="chip"><span class="jp">する</span>-verbs</button>
+          </div>
+        </div>
+
+        <!-- transitivity -->
+        <div class="frow">
+          <span class="flabel">Transitivity</span>
+          <div class="chips" role="group" aria-label="Transitivity">
+            <button class="chip">Transitive</button>
+            <button class="chip">Intransitive</button>
+          </div>
+        </div>
+      </div>
+    </details>
+
+    <!-- action cluster: Topics · Leeches · Add card -->
+    <div class="filter-actions">
+      <span class="pill toggle">
+        Topics
+        <svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="m6 9 6 6 6-6"/></svg>
+      </span>
+      <span class="pill toggle leech-toggle">
+        <svg class="alert-ic" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M12 9v4M12 17h.01M10.3 3.9 2.4 18a2 2 0 0 0 1.7 3h15.8a2 2 0 0 0 1.7-3L13.7 3.9a2 2 0 0 0-3.4 0z"/></svg>
+        Leeches
+      </span>
+      <span class="fa-spacer"></span>
+      <button class="btn btn-add">
+        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"><path d="M12 5v14M5 12h14"/></svg>
+        Add card
+      </button>
     </div>
 
     <!-- summary -->
@@ -701,7 +742,7 @@
 
   <!-- ===================== DETAIL VIEW (inline) ===================== -->
   <div class="section-div reveal d7">
-    <span class="label">Detail view</span>
+    <span class="label">Detail view · opens on card tap</span>
     <span class="line"></span>
     <span class="hanko" style="width:46px;height:46px;border-width:2px" title="detail">
       <span class="ring"></span>
@@ -711,7 +752,6 @@
 
   <section class="detail card reveal d8">
     <div class="d-inner">
-      <div class="d-eyebrow"><span class="pip"></span>Detail view · opens on card tap</div>
 
       <!-- header -->
       <div class="d-head">
@@ -729,7 +769,7 @@
           <div class="d-stamps">
             <span class="d-stamp-cls">GODAN&nbsp;·&nbsp;<span class="jp">五段</span></span>
           </div>
-          <div class="d-meaning"><span class="lead">to</span>pay</div>
+          <div class="d-meaning">to pay</div>
         </div>
         <div class="hanko" title="godan verb seal">
           <span class="ring"></span>
@@ -757,7 +797,7 @@
       <!-- disclosure blocks -->
       <div class="d-blocks">
 
-        <details class="d-block b-mnemonic" open>
+        <details class="d-block b-mnemonic">
           <summary>
             <svg class="lead-ic" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><path d="M9 18h6M10 21h4M12 3a6 6 0 0 0-4 10.5c.6.6 1 1.3 1 2.1V16h6v-.4c0-.8.4-1.5 1-2.1A6 6 0 0 0 12 3z"/></svg>
             Mnemonic
@@ -768,7 +808,7 @@
           </div>
         </details>
 
-        <details class="d-block b-trap" open>
+        <details class="d-block b-trap">
           <summary>
             <svg class="lead-ic" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.9" stroke-linecap="round" stroke-linejoin="round"><path d="M12 9v4M12 17h.01M10.3 3.9 2.4 18a2 2 0 0 0 1.7 3h15.8a2 2 0 0 0 1.7-3L13.7 3.9a2 2 0 0 0-3.4 0z"/></svg>
             Trap · tip

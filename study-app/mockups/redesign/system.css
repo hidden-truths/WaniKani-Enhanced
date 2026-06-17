@@ -26,15 +26,15 @@
 [data-theme="light"]{
   /* surfaces */
   --paper:#F3ECDD;          /* page */
-  --raised:#FBF6EC;         /* cards */
-  --deeper:#E7DBC4;         /* insets / empty bars */
+  --raised:#FDFAF4;         /* cards — brighter so sheets lift off the paper */
+  --deeper:#E4D7BE;         /* insets / empty bars */
   --base:#EDE4D2;           /* deepest wash */
 
   /* ink */
   --ink:#1C1714;
   --muted:#6B6052;
   --faint:#897C6B;
-  --line:#D8CBB0;
+  --line:#CEBE9F;
 
   /* functional palette (role tokens) */
   --brand:#CD4327;          /* vermilion — brand + godan spine/seal */
@@ -57,13 +57,13 @@
   --spine:linear-gradient(to bottom, var(--brand), var(--brand-deep));
   --chip-bg:var(--raised);
   --surf-card:var(--raised);
-  --surf-inset:var(--paper);
+  --surf-inset:#EBE0CB;
   --surf-nav:rgba(251,246,236,.72);
 
-  /* warm, liftable shadows */
-  --lift-sm:0 1px 2px rgba(28,23,20,.06), 0 2px 6px -2px rgba(28,23,20,.10);
-  --lift-md:0 1px 2px rgba(28,23,20,.06), 0 14px 34px -10px rgba(28,23,20,.20);
-  --lift-lg:0 2px 4px rgba(28,23,20,.07), 0 34px 66px -20px rgba(28,23,20,.30);
+  /* warm, liftable shadows (deepened so light-mode cards read as raised paper) */
+  --lift-sm:0 1px 2px rgba(28,23,20,.08), 0 3px 8px -2px rgba(28,23,20,.13);
+  --lift-md:0 1px 2px rgba(28,23,20,.08), 0 12px 30px -8px rgba(28,23,20,.26);
+  --lift-lg:0 2px 5px rgba(28,23,20,.10), 0 30px 60px -18px rgba(28,23,20,.36);
   --card-shadow:var(--lift-lg);
 
   --cta-shadow:0 1px 2px rgba(168,49,26,.4), 0 14px 28px -10px rgba(205,67,39,.55);
@@ -72,7 +72,7 @@
   /* atmosphere knobs */
   --grain-opacity:.30;
   --grain-blend:multiply;
-  --inner-hi:none;
+  --inner-hi:inset 0 1px 0 0 rgba(255,252,246,.75);   /* subtle raised highlight */
 
   /* fonts */
   --display:"Bricolage Grotesque", "Hanken Grotesk", system-ui, sans-serif;
@@ -115,7 +115,7 @@
   --spine:linear-gradient(to bottom, var(--brand), #C5421F);
   --chip-bg:rgba(255,238,222,.035);
   --surf-card:linear-gradient(168deg, rgba(44,35,27,.74), rgba(36,28,22,.62));
-  --surf-inset:rgba(255,238,222,.028);
+  --surf-inset:rgba(255,238,222,.055);
   --surf-nav:rgba(22,18,15,.62);
 
   /* deep ambient + warm glows */
