@@ -1,0 +1,131 @@
+/* =========================================================================
+   FLASHCARDS (Day/Night Phase 2) — the study home (due banner · forecast · big
+   count · Start) + the flashcard stage (spine · prompt · revealed reading+pitch
+   · meaning · notes · example · grade buttons) + the pre-reveal state. These are
+   study-panel-ONLY rules, peeled from styles.css; the shared buttons/chips/
+   speak-btn/filter primitives stay in styles.css (the shared core), reskinned in
+   place. Markup + JS wiring unchanged (#fcSetup/#fcStage/#fcDone, .flashcard
+   .<class>, the grade keys). Imported before styles.css so its mobile @media +
+   shared base still win.
+   ========================================================================= */
+
+/* ---- Study home: due banner (SRS entry; .empty recolors to "caught up") ---- */
+.due-banner{
+  display:flex; align-items:center; justify-content:space-between; gap:16px; flex-wrap:wrap;
+  background:var(--surf-card); border:1px solid var(--line); border-radius:16px;
+  padding:18px 24px; margin-bottom:18px; position:relative; overflow:hidden;
+  box-shadow:var(--lift-md), var(--inner-hi);
+}
+.due-banner::before{content:"";position:absolute;left:0;top:0;bottom:0;width:5px;background:var(--reading)}
+.due-banner.empty::before{background:var(--good)}
+[data-theme="dark"] .due-banner{border-color:rgba(138,143,224,.18)}
+.due-count{font-family:var(--display);font-weight:800;font-size:46px;line-height:1;letter-spacing:-.02em;color:var(--reading)}
+.due-banner.empty .due-count{color:var(--good)}
+.due-label{font-family:var(--mono);font-size:11px;letter-spacing:.14em;text-transform:uppercase;color:var(--muted);margin-top:6px}
+
+/* ---- Study home: upcoming-review forecast (hand-rolled SVG + horizon toggle) ---- */
+.fcast{
+  background:var(--surf-card); border:1px solid var(--line); border-radius:16px;
+  padding:18px 20px 10px; margin-bottom:18px; box-shadow:var(--lift-md), var(--inner-hi);
+}
+.fcast-head{display:flex;align-items:center;justify-content:space-between;gap:12px;flex-wrap:wrap}
+.fcast-title{display:inline-flex;align-items:center;gap:8px;font-family:var(--mono);font-size:11px;letter-spacing:.18em;text-transform:uppercase;color:var(--muted)}
+.fcast-title .ic{font-size:14px;color:var(--gold)}
+.fcast-horizons .fch{font-size:11px;padding:5px 10px}
+.fcast-chart{margin-top:8px}
+.fcast-chart svg{display:block;width:100%;height:auto}
+.fcast-empty{padding:16px 4px;text-align:center;color:var(--muted);font-size:13px}
+
+/* ---- Study stage chrome ---- */
+.fc-setup{padding:14px 0}
+.fc-stage{display:none;padding:10px 0 40px}
+.fc-stage.active{display:block}
+.progress{font-family:var(--mono);font-size:11px;letter-spacing:.12em;text-transform:uppercase;color:var(--muted);text-align:center;margin-bottom:18px}
+
+/* ---- The flashcard surface (raised paper by day, frosted glass by night) ---- */
+.flashcard{
+  max-width:620px; margin:0 auto; min-height:300px;
+  background:var(--surf-card); border:1px solid var(--line); border-radius:22px;
+  padding:44px 40px; text-align:center; position:relative; overflow:hidden;
+  box-shadow:var(--card-shadow), var(--inner-hi);
+  backdrop-filter:blur(22px) saturate(135%); -webkit-backdrop-filter:blur(22px) saturate(135%);
+  transition:transform .25s cubic-bezier(.2,.7,.3,1), box-shadow .25s ease;
+}
+[data-theme="dark"] .flashcard{border-color:rgba(255,107,74,.2)}
+/* spine — verb-class colored left edge (default = irregular gold) */
+.flashcard .spine{position:absolute;left:0;top:0;bottom:0;width:7px;z-index:3;background:linear-gradient(to bottom,var(--gold),#8a6c24)}
+[data-theme="dark"] .flashcard .spine{box-shadow:0 0 18px 0 rgba(255,107,74,.45)}
+.flashcard.godan .spine{background:linear-gradient(to bottom,var(--godan),var(--brand-deep))}
+.flashcard.ichidan .spine{background:linear-gradient(to bottom,var(--ichidan),var(--reading-deep))}
+.flashcard.irregular .spine{background:linear-gradient(to bottom,var(--gold),#8a6c24)}
+.flashcard.i-adj .spine,.flashcard.na-adj .spine{background:var(--adjective)}
+.flashcard.noun .spine{background:var(--noun)} .flashcard.adverb .spine{background:var(--adverb)} .flashcard.phrase .spine{background:var(--phrase)}
+.flashcard.leech .spine{background:linear-gradient(to bottom,var(--leech),#5e2c77)}
+
+.prompt-label{font-family:var(--mono);font-size:10.5px;letter-spacing:.2em;text-transform:uppercase;color:var(--muted);margin-bottom:18px}
+.prompt-main{font-family:var(--jp);font-weight:700;font-size:72px;line-height:1.05;color:var(--ink);letter-spacing:.02em}
+[data-theme="dark"] .prompt-main{text-shadow:0 6px 42px rgba(255,107,74,.18)}
+.prompt-sub{font-family:var(--body);font-size:18px;color:var(--muted);margin-top:10px}
+
+/* ---- Revealed answer ---- */
+.answer{margin-top:26px;padding-top:22px;border-top:1px solid var(--line);display:none}
+.answer.show{display:block}
+.a-read-wrap{display:flex;align-items:center;justify-content:center;gap:12px}
+.answer .a-read{font-family:var(--jp);font-size:34px;font-weight:500;color:var(--reading)}
+/* pitch accent — overline over the high morae + a downstep tick (reading colour) */
+.pitch{white-space:nowrap}
+.pitch .pa{display:inline-block;border-top:2.5px solid transparent;padding-top:2px}
+.pitch .pa.hi{border-top-color:currentColor}
+.pitch .pa.drop{border-right:2.5px solid currentColor;padding-right:1px;margin-right:1px}
+[data-theme="dark"] .a-read .pa.hi,[data-theme="dark"] .a-read .pa.drop{filter:drop-shadow(0 0 6px rgba(138,143,224,.6))}
+/* revealed meaning — confident Bricolage display (the most important word) */
+.answer .a-mean{font-family:var(--display);font-weight:700;font-size:32px;line-height:1.08;letter-spacing:-.02em;color:var(--ink);margin-top:12px}
+[data-theme="dark"] .answer .a-mean{color:#F6EEE0}
+.answer .a-note{font-family:var(--body);font-size:14px;color:var(--muted);margin:14px auto 0;line-height:1.55;text-align:left;max-width:48ch}
+.a-note-row{margin-top:8px}
+.a-note-row:first-child{margin-top:0}
+.a-note-tag{display:inline-block;font-family:var(--mono);font-size:9px;font-weight:500;letter-spacing:.14em;text-transform:uppercase;color:var(--gold);margin-right:8px}
+.a-note-trap .a-note-tag{color:var(--brand)}
+
+/* ---- Example block (answer side) — raised inset with a gold rule ---- */
+.example{margin-top:20px;border:1px solid var(--line);border-radius:14px;padding:18px 20px;text-align:left;position:relative;overflow:hidden;box-shadow:var(--lift-sm)}
+[data-theme="light"] .example{background:linear-gradient(180deg,#FFFBF3,var(--raised))}
+[data-theme="dark"] .example{background:rgba(255,238,222,.025)}
+.example[hidden]{display:none}
+.example::before{content:"";position:absolute;left:0;top:16px;bottom:16px;width:3px;border-radius:3px;background:var(--gold)}
+.ex-head{display:flex;align-items:center;justify-content:space-between;gap:10px;margin-bottom:10px;flex-wrap:wrap}
+.ex-label{font-family:var(--mono);font-size:10px;letter-spacing:.2em;text-transform:uppercase;color:var(--muted)}
+.ex-jp{font-family:var(--jp);font-size:21px;line-height:1.7;color:var(--ink)}
+.ex-en{font-family:var(--body);font-size:14px;color:var(--muted);margin-top:6px}
+/* N5–N1 level selector (a .jlptseg of .exlv chips; segmented base in styles.css) */
+.exseg .exlv{font-size:11px;padding:5px 9px}
+.exseg .exlv:disabled{opacity:.35;cursor:default}
+
+/* ---- Reveal / grade / SRS button variants (extend the shared .btn) ---- */
+.fc-buttons{max-width:620px;margin:18px auto 0;display:flex;gap:14px;justify-content:center}
+.btn.reveal{background:var(--brand);color:var(--brand-on);border:none;font-weight:600;width:100%;max-width:620px;box-shadow:var(--cta-shadow)}
+.btn.reveal:hover{background:var(--brand-deep);box-shadow:var(--cta-shadow-hover);transform:translateY(-2px)}
+[data-theme="dark"] .btn.reveal{background:linear-gradient(160deg,#FF8A6E,var(--brand) 55%,var(--brand-deep))}
+.btn.wrong{flex:1;padding:16px 22px;font-size:16px;border-radius:14px;background:var(--surf-card);color:var(--brand-deep);border:1.5px solid var(--brand);font-weight:600;box-shadow:var(--lift-sm)}
+[data-theme="light"] .btn.wrong{background:color-mix(in srgb,var(--brand) 12%,var(--raised))}
+[data-theme="dark"] .btn.wrong{background:var(--brand-soft);color:#FF8A6E;border-color:rgba(255,107,74,.4)}
+.btn.wrong:hover{background:var(--brand);color:var(--brand-on);transform:translateY(-2px)}
+.btn.right{flex:1;padding:16px 22px;font-size:16px;border-radius:14px;background:linear-gradient(180deg,#46855A,var(--good));color:var(--good-on);border:1.5px solid var(--good);font-weight:600;box-shadow:0 10px 24px -12px rgba(63,122,78,.6)}
+[data-theme="dark"] .btn.right{background:linear-gradient(160deg,#6FE7BA,var(--good) 60%,var(--good-deep));border-color:transparent;box-shadow:0 10px 30px -12px rgba(86,217,166,.45)}
+.btn.right:hover{transform:translateY(-2px)}
+/* SRS "Review due cards" CTA — indigo (the scheduled-review path only) */
+.btn.srs{background:var(--reading);color:#fff;border:none;font-weight:600;box-shadow:0 10px 24px -12px rgba(42,74,110,.5)}
+[data-theme="dark"] .btn.srs{background:linear-gradient(160deg,#9AA0F0,var(--reading) 60%,var(--reading-deep));color:#0e1530;box-shadow:0 10px 30px -12px rgba(138,143,224,.5)}
+.btn.srs:hover{transform:translateY(-2px);filter:brightness(1.05)}
+.btn.srs:disabled{background:var(--chip-bg);color:var(--muted);border:1px solid var(--line);box-shadow:none;cursor:default;filter:none}
+.btn.suggested{box-shadow:0 0 0 2px var(--reading)}
+
+/* ---- Typed-answer input + advisory verdict ---- */
+.answer-input{flex:1;min-width:0;font-family:var(--jp);font-size:24px;text-align:center;border:1px solid var(--line);background:var(--surf-inset);padding:13px 16px;border-radius:12px;color:var(--ink)}
+.answer-input:focus{outline:none;border-color:var(--brand);box-shadow:0 0 0 3px var(--brand-soft)}
+.answer-input:disabled{opacity:.6}
+#inputRow{align-items:stretch}
+.verdict{display:flex;align-items:center;justify-content:center;gap:7px;font-family:var(--mono);font-size:12px;letter-spacing:.04em;margin-bottom:14px}
+.verdict[hidden]{display:none}
+.verdict.ok{color:var(--good)} .verdict.bad{color:var(--brand)}
+.verdict .ic{font-size:16px}
