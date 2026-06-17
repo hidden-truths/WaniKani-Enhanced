@@ -560,6 +560,180 @@ ruby rt{
 [data-theme="dark"] .is-leech::before{ box-shadow:0 0 18px 0 rgba(199,146,234,.5); }
 
 /* ============================================================
+   OVERLAY · MODAL · FORM CONTROLS
+   The dialog layer (Settings / auth / add-card) + the shared
+   form primitives every modal builds on. Light = a raised paper
+   sheet on a warm scrim; dark = frosted glass on a deep scrim.
+   Modals SCROLL inside a capped height; head + foot stay pinned.
+   ============================================================ */
+@keyframes overlayIn{ from{ opacity:0; } to{ opacity:1; } }
+@keyframes modalPop{
+  from{ opacity:0; transform:translateY(14px) scale(.985); }
+  to{ opacity:1; transform:none; }
+}
+
+.overlay{
+  position:fixed; inset:0; z-index:100;
+  display:grid; place-items:center; padding:20px;
+  background:rgba(28,23,20,.42);
+  backdrop-filter:blur(7px) saturate(118%);
+  -webkit-backdrop-filter:blur(7px) saturate(118%);
+  animation:overlayIn .3s ease forwards;
+}
+[data-theme="dark"] .overlay{ background:rgba(8,6,4,.64); }
+
+.modal{
+  position:relative; width:min(560px, 100%);
+  max-height:calc(100vh - 40px); overflow-y:auto;
+  background:var(--surf-card);
+  border:1px solid var(--line); border-radius:20px;
+  box-shadow:var(--card-shadow), var(--inner-hi);
+  backdrop-filter:blur(26px) saturate(140%);
+  -webkit-backdrop-filter:blur(26px) saturate(140%);
+  animation:modalPop .42s cubic-bezier(.2,.7,.3,1) both;
+}
+[data-theme="dark"] .modal{ border-color:rgba(255,107,74,.18); }
+.modal.narrow{ width:min(440px, 100%); }
+.modal.wide{ width:min(700px, 100%); }
+
+/* sticky head — title + close; an opaque-ish wash so scrolled
+   content can't bleed through the frosted sheet behind it */
+.modal-head{
+  position:sticky; top:0; z-index:4;
+  display:flex; align-items:flex-start; justify-content:space-between; gap:18px;
+  padding:26px 28px 18px;
+  background:var(--raised);
+  border-bottom:1px solid var(--line);
+  border-radius:20px 20px 0 0;
+}
+[data-theme="dark"] .modal-head{
+  background:linear-gradient(180deg, rgba(34,27,21,.96), rgba(30,24,19,.9));
+  backdrop-filter:blur(14px);
+  -webkit-backdrop-filter:blur(14px);
+}
+.modal-head .modal-kicker{ margin-bottom:10px; }
+.modal-title{
+  font-family:var(--display); font-weight:700; font-size:24px;
+  letter-spacing:-.018em; line-height:1.1; color:var(--ink); margin:0;
+}
+.modal-title .jp{ font-family:var(--jp); font-weight:700; }
+.modal-sub{ font-family:var(--body); font-size:14px; color:var(--muted); margin:7px 0 0; }
+
+.modal-x{
+  flex:0 0 auto; width:36px; height:36px; border-radius:10px;
+  border:1px solid var(--line); background:var(--chip-bg);
+  display:grid; place-items:center; cursor:pointer; color:var(--muted);
+  box-shadow:var(--lift-sm);
+  transition:color .16s ease, border-color .16s ease, transform .16s ease, background .16s ease;
+}
+.modal-x:hover{ color:var(--brand); border-color:var(--brand); transform:translateY(-1px); }
+[data-theme="dark"] .modal-x:hover{ color:var(--ink); border-color:var(--brand); background:var(--brand-soft); }
+.modal-x svg{ width:16px; height:16px; }
+
+.modal-body{ padding:22px 28px 24px; }
+
+.modal-foot{
+  position:sticky; bottom:0; z-index:4;
+  display:flex; align-items:center; justify-content:flex-end; gap:13px;
+  padding:16px 28px 22px;
+  background:var(--raised);
+  border-top:1px solid var(--line);
+  border-radius:0 0 20px 20px;
+}
+[data-theme="dark"] .modal-foot{
+  background:linear-gradient(0deg, rgba(34,27,21,.96), rgba(30,24,19,.9));
+  backdrop-filter:blur(14px);
+  -webkit-backdrop-filter:blur(14px);
+}
+.modal-foot .spacer{ margin-right:auto; }
+/* compact secondary action button used in modal feet/inline */
+.btn-sm{ font-size:14.5px; font-weight:600; padding:11px 18px; border-radius:11px; }
+
+/* ---- form primitives (stacked field + horizontal setting row) ---- */
+.field{ display:flex; flex-direction:column; gap:8px; margin-bottom:18px; }
+.field:last-child{ margin-bottom:0; }
+.field-row{ display:grid; grid-template-columns:1fr 1fr; gap:16px; }
+.field-label{
+  font-family:var(--mono); font-size:11px; letter-spacing:.18em;
+  text-transform:uppercase; color:var(--muted); font-weight:500;
+  display:inline-flex; align-items:center; gap:8px;
+}
+.field-label .req{ color:var(--brand); font-size:13px; }
+.field-hint{ font-family:var(--body); font-size:13px; color:var(--faint); line-height:1.45; }
+
+.input, .textarea, .select{
+  font-family:var(--body); font-size:15.5px; color:var(--ink); width:100%;
+  background:var(--surf-inset); border:1px solid var(--line); border-radius:11px;
+  padding:12px 14px;
+  transition:border-color .18s ease, box-shadow .18s ease, background .18s ease;
+}
+.input::placeholder, .textarea::placeholder{ color:var(--faint); }
+.input:focus, .textarea:focus, .select:focus{
+  outline:none; border-color:var(--brand);
+  box-shadow:0 0 0 3px var(--brand-soft); background:var(--raised);
+}
+[data-theme="dark"] .input, [data-theme="dark"] .textarea, [data-theme="dark"] .select{ background:var(--chip-bg); }
+[data-theme="dark"] .input:focus, [data-theme="dark"] .textarea:focus, [data-theme="dark"] .select:focus{
+  background:rgba(255,238,222,.05); box-shadow:0 0 0 3px var(--brand-soft);
+}
+.textarea{ min-height:86px; resize:vertical; line-height:1.55; }
+.input.jp, .textarea.jp{ font-family:var(--jp); font-size:18px; }
+
+/* select with a custom chevron (wrap in .select-wrap) */
+.select-wrap{ position:relative; }
+.select{ appearance:none; -webkit-appearance:none; padding-right:40px; cursor:pointer; }
+.select-wrap .chev{
+  position:absolute; right:13px; top:50%; transform:translateY(-50%);
+  pointer-events:none; color:var(--muted); width:16px; height:16px;
+}
+
+/* toggle switch */
+.switch{
+  position:relative; flex:0 0 auto;
+  width:48px; height:28px; border-radius:999px;
+  border:1px solid var(--line); background:var(--deeper);
+  cursor:pointer; padding:0;
+  transition:background .2s ease, border-color .2s ease, box-shadow .2s ease;
+}
+.switch .knob{
+  position:absolute; top:2px; left:2px; width:22px; height:22px; border-radius:50%;
+  background:var(--raised); box-shadow:var(--lift-sm);
+  transition:transform .22s cubic-bezier(.2,.7,.3,1), background .2s ease;
+}
+.switch.is-on{ background:var(--brand); border-color:var(--brand); }
+.switch.is-on .knob{ transform:translateX(20px); background:#fff; }
+[data-theme="dark"] .switch{ background:var(--chip-bg); }
+[data-theme="dark"] .switch.is-on{ background:var(--brand); box-shadow:0 0 18px -4px rgba(255,107,74,.65); }
+[data-theme="dark"] .switch.is-on .knob{ background:#1a0d09; }
+
+/* one Settings row: label + description on the left, control on the right */
+.set-group{ margin-bottom:26px; }
+.set-group:last-child{ margin-bottom:0; }
+.set-group-label{
+  font-family:var(--mono); font-size:11px; letter-spacing:.26em; text-transform:uppercase;
+  color:var(--gold); font-weight:500; margin-bottom:6px;
+  display:inline-flex; align-items:center; gap:9px;
+}
+.set-group-label::before{ content:""; width:16px; height:1px; background:var(--gold); display:inline-block; }
+.set-card{
+  background:var(--surf-inset); border:1px solid var(--line); border-radius:14px;
+  padding:4px 18px; box-shadow:var(--lift-sm);
+}
+[data-theme="dark"] .set-card{ background:var(--chip-bg); }
+.set-row{
+  display:flex; align-items:center; justify-content:space-between; gap:24px;
+  padding:15px 0; border-bottom:1px solid var(--line);
+}
+.set-row:last-child{ border-bottom:none; }
+/* stack the control under the label when it's too wide to sit beside it */
+.set-row.stack{ flex-direction:column; align-items:stretch; gap:12px; }
+.set-row.stack .set-ctrl{ align-self:flex-start; }
+.set-main{ min-width:0; }
+.set-label{ font-family:var(--display); font-weight:600; font-size:15.5px; color:var(--ink); }
+.set-desc{ font-family:var(--body); font-size:13px; color:var(--muted); margin-top:2px; line-height:1.45; }
+.set-ctrl{ flex:0 0 auto; }
+
+/* ============================================================
    ENTRANCE UTILITY  (.reveal + stagger; .in optional escape hatch)
    Content is fully visible without JS — these are entrances only.
    ============================================================ */

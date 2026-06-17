@@ -1,7 +1,8 @@
 # Redesign explorations — 日常日本語 (Japanese Trainer)
 
-> **Status (latest):** all six main surfaces done in both themes, critiqued, polished (~9/10),
-> two layout bugs fixed. **Picking up this work? Read [HANDOFF.md](HANDOFF.md) first** — it has the
+> **Status (latest):** all six main surfaces + the secondary surfaces (Settings / sign-in /
+> add-card modals, the pre-reveal flashcard prompt, banners & empty states) done in both themes,
+> polished (~9/10). **Picking up this work? Read [HANDOFF.md](HANDOFF.md) first** — it has the
 > full journey, the decisions and why, the design-system reference, the screenshot runbook, the
 > dead-ends, and what's next. This README is the catalog; HANDOFF is the status.
 
@@ -55,6 +56,20 @@ themes, the topbar/nav, cards, chips, buttons, hanko, pitch-accent, atmosphere, 
 | みんなの日本語 | [`hybrid-minna.html`](hybrid-minna.html) | [light](screens/hybrid-minna.png) · [dark](screens/hybrid-minna-dark.png) |
 | 独り言 Self-talk | [`hybrid-selftalk.html`](hybrid-selftalk.html) | [light](screens/hybrid-selftalk.png) · [dark](screens/hybrid-selftalk-dark.png) |
 
+## Secondary surfaces — modals, prompts & states
+
+The moments *around* the cards, all built on a shared **modal / overlay / form** kit added once to
+[`system.css`](system.css) (`.overlay`, `.modal` + `.narrow`/`.wide`, `.modal-head`/`-body`/`-foot`,
+`.field`/`.field-row`, `.input`/`.textarea`/`.select`, `.switch`, `.set-group`/`.set-card`/`.set-row`).
+
+| Surface | File | Screens |
+|---------|------|---------|
+| Settings | [`hybrid-settings.html`](hybrid-settings.html) | [light](screens/hybrid-settings.png) · [dark](screens/hybrid-settings-dark.png) |
+| Sign in / register | [`hybrid-auth.html`](hybrid-auth.html) | [light](screens/hybrid-auth.png) · [dark](screens/hybrid-auth-dark.png) |
+| Add a card | [`hybrid-addcard.html`](hybrid-addcard.html) | [light](screens/hybrid-addcard.png) · [dark](screens/hybrid-addcard-dark.png) |
+| Flashcard prompt (pre-reveal) | [`hybrid-prompt.html`](hybrid-prompt.html) | [light](screens/hybrid-prompt.png) · [dark](screens/hybrid-prompt-dark.png) |
+| Banners & empty states | [`hybrid-states.html`](hybrid-states.html) | [light](screens/hybrid-states.png) · [dark](screens/hybrid-states-dark.png) |
+
 ## Type & color, at a glance
 
 **The shipping system (serif-free, all surfaces):**
@@ -67,6 +82,7 @@ themes, the topbar/nav, cards, chips, buttons, hanko, pitch-accent, atmosphere, 
 
 ## Next
 
-Develop the **Hybrid** across the remaining surfaces — Browse, Stats, the みんなの日本語
-textbook, Songs, and Self-talk — then translate the agreed direction into the real
-`index.html` + `src/styles.css`.
+Main + secondary surfaces are all built. Remaining: a **mobile / responsive pass** over every
+surface, another **critique sweep** on the polished set, and — later, in a code session —
+translating the agreed direction into the real `index.html` + `src/styles.css`. See
+[HANDOFF.md](HANDOFF.md) "What's next".

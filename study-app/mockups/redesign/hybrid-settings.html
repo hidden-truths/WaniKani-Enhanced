@@ -1,0 +1,363 @@
+<!DOCTYPE html>
+<html lang="en" data-theme="light">
+<head>
+<meta charset="UTF-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1.0" />
+<title>日常日本語 · Settings</title>
+<link rel="preconnect" href="https://fonts.googleapis.com" />
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+<link rel="stylesheet" href="system.css" />
+<script src="system.js" defer></script>
+<style>
+  /* ---- surface-specific: Settings modal ----
+     Overlay / modal / field primitives all live in system.css.
+     This adds only the dimmed backdrop + the voice-priority editor
+     + a couple of compact-control tweaks. */
+
+  /* faint study-home behind the scrim, just enough to read as context */
+  .backdrop-hero{ display:grid; grid-template-columns:1fr auto; gap:32px; padding:54px 0 30px; align-items:end; }
+  .backdrop-hero .bignum{ line-height:.9; }
+  .backdrop-hero .due-label{
+    display:block; font-family:var(--display); font-weight:600; font-size:17.5px;
+    color:var(--muted); margin-top:20px; -webkit-text-fill-color:currentColor;
+  }
+  .backdrop-hero .due-label em{ color:var(--ink); font-style:normal; font-weight:700; }
+  .bp-card{ min-width:300px; padding:24px 26px; }
+  .bp-bars{ display:flex; gap:13px; align-items:flex-end; height:90px; margin-top:8px; }
+  .bp-bars .b{ width:13px; border-radius:6px; background:var(--deeper); }
+  .bp-bars .b.t{ background:linear-gradient(to top, var(--brand), #e06043); }
+
+  /* compact segmented + chips inside settings rows */
+  .set-row .segmented .chip{ font-size:13px; padding:7px 13px; }
+  .ctx-seg{ margin-bottom:14px; }
+  .ctx-seg .chip{ font-size:13px; padding:8px 14px; }
+
+  /* voice-priority ordered list */
+  .vp-list{ display:flex; flex-direction:column; gap:9px; }
+  .vp-item{
+    display:flex; align-items:center; gap:13px;
+    padding:11px 13px; border:1px solid var(--line); border-radius:12px;
+    background:var(--surf-card); box-shadow:var(--lift-sm);
+    transition:border-color .18s ease, transform .18s ease;
+  }
+  .vp-item:hover{ transform:translateY(-1px); border-color:var(--gold); }
+  [data-theme="dark"] .vp-item{ background:var(--chip-bg); }
+  .vp-rank{
+    font-family:var(--display); font-weight:700; font-size:15px; color:var(--brand);
+    width:18px; text-align:center; flex:0 0 auto;
+  }
+  .vp-handle{ color:var(--faint); flex:0 0 auto; display:grid; cursor:grab; }
+  .vp-handle svg{ width:15px; height:15px; }
+  .vp-main{ flex:1 1 auto; min-width:0; }
+  .vp-name{ font-family:var(--body); font-weight:600; font-size:14.5px; color:var(--ink); }
+  .vp-name .muted{ font-weight:400; color:var(--muted); }
+  .vp-kind{
+    font-family:var(--mono); font-size:10px; letter-spacing:.14em; text-transform:uppercase;
+    color:var(--muted); margin-top:2px; display:inline-flex; align-items:center; gap:7px;
+  }
+  .vp-kind .nogen{ color:var(--faint); }
+  .vp-item.is-off{ opacity:.62; }
+  .vp-audition{ flex:0 0 auto; }
+
+  /* stepper (recordings keep N) */
+  .stepper{
+    display:inline-flex; align-items:center; gap:0;
+    border:1px solid var(--line); border-radius:11px; background:var(--surf-inset);
+    box-shadow:var(--lift-sm); overflow:hidden;
+  }
+  [data-theme="dark"] .stepper{ background:var(--chip-bg); }
+  .stepper button{
+    width:36px; height:36px; border:none; background:transparent; cursor:pointer;
+    color:var(--muted); display:grid; place-items:center; font-size:18px; line-height:1;
+    transition:color .16s ease, background .16s ease;
+  }
+  .stepper button:hover{ color:var(--brand); background:var(--brand-soft); }
+  .stepper .val{
+    font-family:var(--display); font-weight:700; font-size:16px; color:var(--ink);
+    min-width:34px; text-align:center; border-left:1px solid var(--line); border-right:1px solid var(--line); padding:7px 0;
+  }
+
+  /* backup / account small action rows */
+  .mini-row{ display:flex; gap:11px; flex-wrap:wrap; }
+  .account-strip{
+    display:flex; align-items:center; justify-content:space-between; gap:18px;
+    padding:14px 16px; border:1px solid var(--line); border-radius:13px;
+    background:var(--surf-inset); box-shadow:var(--lift-sm);
+  }
+  [data-theme="dark"] .account-strip{ background:var(--chip-bg); }
+  .account-strip .who{ display:flex; align-items:center; gap:13px; min-width:0; }
+  .account-strip .who .em{ font-family:var(--body); font-weight:600; font-size:15px; color:var(--ink); }
+  .account-strip .who .st{ font-family:var(--mono); font-size:10.5px; letter-spacing:.14em; text-transform:uppercase; color:var(--good); }
+  [data-theme="dark"] .account-strip .who .st{ color:var(--good); }
+  .danger{ color:var(--brand); border-color:color-mix(in srgb, var(--brand) 45%, var(--line)); }
+  .danger:hover{ background:var(--brand-soft); border-color:var(--brand); }
+</style>
+</head>
+<body>
+
+<!-- hidden SVG filter for the ink-stamp hanko texture -->
+<svg style="position:absolute;width:0;height:0;overflow:hidden;pointer-events:none" aria-hidden="true">
+  <filter id="stamp">
+    <feTurbulence type="fractalNoise" baseFrequency="0.9" numOctaves="2" result="noise"/>
+    <feDisplacementMap in="SourceGraphic" in2="noise" scale="1.4"/>
+  </filter>
+</svg>
+
+<div class="grain"></div>
+<div class="atmos"></div>
+
+<!-- ===================== TOP BAR ===================== -->
+<header class="topbar">
+  <div class="brand">
+    <span class="jp">日常日本語</span>
+    <span class="sub">Japanese&nbsp;Trainer</span>
+  </div>
+  <nav class="nav">
+    <a href="#" class="active">Flashcards</a>
+    <a href="#">Browse</a>
+    <a href="#">Stats</a>
+    <a href="#"><span class="min">みんなの日本語</span> · Textbook</a>
+    <a href="#"><span class="min">独り言</span> · Self-talk</a>
+    <a href="#"><span class="min">歌</span> · Songs</a>
+  </nav>
+  <div class="top-actions">
+    <button class="icon-btn" id="themeToggle" title="Toggle day / night" aria-label="Toggle day / night theme">
+      <svg class="sun" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="3.6"/><path d="M12 3v2M12 19v2M5.6 5.6l1.4 1.4M17 17l1.4 1.4M3 12h2M19 12h2M5.6 18.4 7 17M17 7l1.4-1.4"/></svg>
+      <svg class="moon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round"><path d="M21 12.8A9 9 0 1 1 11.2 3a7 7 0 0 0 9.8 9.8z"/></svg>
+    </button>
+    <button class="icon-btn" title="Settings" aria-label="Settings" style="color:var(--brand);border-color:var(--brand)">
+      <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="3"/><path d="M19.4 15a1.65 1.65 0 0 0 .33 1.82l.06.06a2 2 0 1 1-2.83 2.83l-.06-.06a1.65 1.65 0 0 0-1.82-.33 1.65 1.65 0 0 0-1 1.51V21a2 2 0 0 1-4 0v-.09A1.65 1.65 0 0 0 9 19.4a1.65 1.65 0 0 0-1.82.33l-.06.06a2 2 0 1 1-2.83-2.83l.06-.06a1.65 1.65 0 0 0 .33-1.82 1.65 1.65 0 0 0-1.51-1H3a2 2 0 0 1 0-4h.09A1.65 1.65 0 0 0 4.6 9a1.65 1.65 0 0 0-.33-1.82l-.06-.06a2 2 0 1 1 2.83-2.83l.06.06a1.65 1.65 0 0 0 1.82.33H9a1.65 1.65 0 0 0 1-1.51V3a2 2 0 0 1 4 0v.09a1.65 1.65 0 0 0 1 1.51 1.65 1.65 0 0 0 1.82-.33l.06-.06a2 2 0 1 1 2.83 2.83l-.06.06a1.65 1.65 0 0 0-.33 1.82V9a1.65 1.65 0 0 0 1.51 1H21a2 2 0 0 1 0 4h-.09a1.65 1.65 0 0 0-1.51 1z"/></svg>
+    </button>
+    <div class="avatar" title="Account · jbrelly">J</div>
+  </div>
+</header>
+
+<!-- faint backdrop so the modal reads as opened over the study home -->
+<div class="wrap" aria-hidden="true">
+  <section class="backdrop-hero">
+    <div>
+      <div class="kicker" style="margin-bottom:20px">今日の復習 · Today&rsquo;s review</div>
+      <div class="bignum">100<span class="due-label">cards <em>due for review</em></span></div>
+      <div class="hero-meta" style="display:flex;gap:18px;margin:28px 0;flex-wrap:wrap">
+        <span class="pill"><span class="dot"></span><b>Day&nbsp;12</b>&nbsp;streak</span>
+      </div>
+    </div>
+    <aside class="bp-card panel">
+      <div style="display:flex;justify-content:space-between;align-items:baseline;margin-bottom:6px">
+        <span style="font-family:var(--display);font-weight:600;font-size:17px">Upcoming reviews</span>
+        <span style="font-family:var(--mono);font-size:11px;letter-spacing:.18em;text-transform:uppercase;color:var(--muted)">7&nbsp;days</span>
+      </div>
+      <div class="bp-bars">
+        <span class="b t" style="height:90%"></span><span class="b" style="height:16%"></span>
+        <span class="b" style="height:9%"></span><span class="b" style="height:22%"></span>
+        <span class="b" style="height:9%"></span><span class="b" style="height:15%"></span><span class="b" style="height:9%"></span>
+      </div>
+    </aside>
+  </section>
+</div>
+
+<!-- ===================== SETTINGS MODAL ===================== -->
+<div class="overlay">
+  <div class="modal" role="dialog" aria-modal="true" aria-labelledby="setTitle">
+
+    <div class="modal-head">
+      <div>
+        <div class="kicker modal-kicker">設定 · Preferences</div>
+        <h2 class="modal-title" id="setTitle">Settings</h2>
+        <p class="modal-sub">Changes save to your account automatically.</p>
+      </div>
+      <button class="modal-x" title="Close" aria-label="Close settings">
+        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.1" stroke-linecap="round" stroke-linejoin="round"><path d="M18 6 6 18M6 6l12 12"/></svg>
+      </button>
+    </div>
+
+    <div class="modal-body">
+
+      <!-- STUDY -->
+      <div class="set-group">
+        <div class="set-group-label">Study</div>
+        <div class="set-card">
+          <div class="set-row">
+            <div class="set-main">
+              <div class="set-label">Default example level</div>
+              <div class="set-desc">Which JLPT tier the answer-side sentence shows first.</div>
+            </div>
+            <div class="set-ctrl">
+              <div class="select-wrap">
+                <select class="select" aria-label="Default example level">
+                  <option>N5 · easiest</option><option selected>N4</option><option>N3</option><option>N2</option><option>N1 · hardest</option>
+                </select>
+                <svg class="chev" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="m6 9 6 6 6-6"/></svg>
+              </div>
+            </div>
+          </div>
+          <div class="set-row">
+            <div class="set-main">
+              <div class="set-label">Furigana</div>
+              <div class="set-desc">Show reading hints over kanji everywhere.</div>
+            </div>
+            <div class="set-ctrl"><button class="switch is-on" role="switch" aria-checked="true" aria-label="Furigana"><span class="knob"></span></button></div>
+          </div>
+          <div class="set-row">
+            <div class="set-main">
+              <div class="set-label">Free study advances due cards</div>
+              <div class="set-desc">Grading an already-due card in free study still moves its review date.</div>
+            </div>
+            <div class="set-ctrl"><button class="switch is-on" role="switch" aria-checked="true" aria-label="Free study advances due cards"><span class="knob"></span></button></div>
+          </div>
+        </div>
+      </div>
+
+      <!-- REVIEW INPUT -->
+      <div class="set-group">
+        <div class="set-group-label">Review input</div>
+        <div class="set-card">
+          <div class="set-row">
+            <div class="set-main">
+              <div class="set-label">Default input</div>
+              <div class="set-desc">How a flashcard is answered before you grade it.</div>
+            </div>
+            <div class="set-ctrl">
+              <div class="segmented" role="radiogroup" aria-label="Default input">
+                <button class="chip active">Self-graded</button>
+                <button class="chip">Type the reading</button>
+              </div>
+            </div>
+          </div>
+          <div class="set-row">
+            <div class="set-main">
+              <div class="set-label">Audio on reveal</div>
+              <div class="set-desc">Autoplay the reading when the answer is shown.</div>
+            </div>
+            <div class="set-ctrl"><button class="switch is-on" role="switch" aria-checked="true" aria-label="Audio on reveal"><span class="knob"></span></button></div>
+          </div>
+        </div>
+      </div>
+
+      <!-- VOICE PRIORITY -->
+      <div class="set-group">
+        <div class="set-group-label">Voice priority</div>
+        <p class="field-hint" style="margin:-2px 0 12px">Order the voices each context prefers. The first available is used; drag to reorder, ▶ to audition.</p>
+        <div class="ctx-seg segmented" role="radiogroup" aria-label="Voice context">
+          <button class="chip active">Reviews</button>
+          <button class="chip">Browse</button>
+          <button class="chip"><span class="min jp">みんなの日本語</span></button>
+        </div>
+        <div class="vp-list">
+          <div class="vp-item">
+            <span class="vp-rank">1</span>
+            <span class="vp-handle" title="Drag to reorder"><svg viewBox="0 0 24 24" fill="currentColor"><circle cx="9" cy="6" r="1.5"/><circle cx="15" cy="6" r="1.5"/><circle cx="9" cy="12" r="1.5"/><circle cx="15" cy="12" r="1.5"/><circle cx="9" cy="18" r="1.5"/><circle cx="15" cy="18" r="1.5"/></svg></span>
+            <div class="vp-main">
+              <div class="vp-name">Siri <span class="muted">— Japanese (Female)</span></div>
+              <div class="vp-kind">Synth · premium</div>
+            </div>
+            <button class="tool-btn vp-audition" title="Audition voice" aria-label="Audition voice"><svg viewBox="0 0 24 24" fill="currentColor"><path d="M8 5v14l11-7z"/></svg></button>
+          </div>
+          <div class="vp-item">
+            <span class="vp-rank">2</span>
+            <span class="vp-handle" title="Drag to reorder"><svg viewBox="0 0 24 24" fill="currentColor"><circle cx="9" cy="6" r="1.5"/><circle cx="15" cy="6" r="1.5"/><circle cx="9" cy="12" r="1.5"/><circle cx="15" cy="12" r="1.5"/><circle cx="9" cy="18" r="1.5"/><circle cx="15" cy="18" r="1.5"/></svg></span>
+            <div class="vp-main">
+              <div class="vp-name">Native clip <span class="muted">— recorded</span></div>
+              <div class="vp-kind">Native</div>
+            </div>
+            <button class="tool-btn vp-audition" title="Audition voice" aria-label="Audition voice"><svg viewBox="0 0 24 24" fill="currentColor"><path d="M8 5v14l11-7z"/></svg></button>
+          </div>
+          <div class="vp-item is-off">
+            <span class="vp-rank">3</span>
+            <span class="vp-handle" title="Drag to reorder"><svg viewBox="0 0 24 24" fill="currentColor"><circle cx="9" cy="6" r="1.5"/><circle cx="15" cy="6" r="1.5"/><circle cx="9" cy="12" r="1.5"/><circle cx="15" cy="12" r="1.5"/><circle cx="9" cy="18" r="1.5"/><circle cx="15" cy="18" r="1.5"/></svg></span>
+            <div class="vp-main">
+              <div class="vp-name">Google <span class="muted">— ja-JP</span></div>
+              <div class="vp-kind">Synth <span class="nogen">· not generated</span></div>
+            </div>
+            <button class="tool-btn vp-audition" title="Audition voice" aria-label="Audition voice"><svg viewBox="0 0 24 24" fill="currentColor"><path d="M8 5v14l11-7z"/></svg></button>
+          </div>
+        </div>
+      </div>
+
+      <!-- RECORDINGS -->
+      <div class="set-group">
+        <div class="set-group-label">Recordings</div>
+        <div class="set-card">
+          <div class="set-row">
+            <div class="set-main">
+              <div class="set-label">Keep last takes</div>
+              <div class="set-desc">How many recordings to store per phrase.</div>
+            </div>
+            <div class="set-ctrl">
+              <div class="stepper" aria-label="Keep last takes">
+                <button aria-label="Fewer">&minus;</button><span class="val">3</span><button aria-label="More">+</button>
+              </div>
+            </div>
+          </div>
+          <div class="set-row">
+            <div class="set-main">
+              <div class="set-label">Trim silence</div>
+              <div class="set-desc">Auto-clip dead air from the start and end of a take.</div>
+            </div>
+            <div class="set-ctrl"><button class="switch is-on" role="switch" aria-checked="true" aria-label="Trim silence"><span class="knob"></span></button></div>
+          </div>
+          <div class="set-row">
+            <div class="set-main">
+              <div class="set-label">Compare speed</div>
+              <div class="set-desc">Playback rate when comparing your take to the reference.</div>
+            </div>
+            <div class="set-ctrl">
+              <div class="segmented" role="radiogroup" aria-label="Compare speed">
+                <button class="chip">0.5&times;</button><button class="chip">0.75&times;</button><button class="chip active">1&times;</button>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <!-- BACKUP -->
+      <div class="set-group">
+        <div class="set-group-label">Backup</div>
+        <div class="set-card">
+          <div class="set-row stack">
+            <div class="set-main">
+              <div class="set-label">Your data</div>
+              <div class="set-desc">Export a JSON snapshot, restore one, or clear cached media.</div>
+            </div>
+            <div class="set-ctrl mini-row">
+              <button class="btn btn-ghost btn-sm">
+                <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><path d="M12 3v12m0 0 4-4m-4 4-4-4M4 17v2a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2v-2"/></svg>
+                Export
+              </button>
+              <button class="btn btn-ghost btn-sm">
+                <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><path d="M12 21V9m0 0 4 4m-4-4-4 4M4 7V5a2 2 0 0 1 2-2h12a2 2 0 0 1 2 2v2"/></svg>
+                Import
+              </button>
+              <button class="btn btn-ghost btn-sm danger">Clear cache</button>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <!-- ACCOUNT -->
+      <div class="set-group">
+        <div class="set-group-label">Account</div>
+        <div class="account-strip">
+          <div class="who">
+            <span class="avatar" style="width:34px;height:34px;font-size:14px">J</span>
+            <div>
+              <div class="em">jbrelly@gmail.com</div>
+              <div class="st">● Signed in · synced</div>
+            </div>
+          </div>
+          <button class="btn btn-ghost btn-sm">Sign out</button>
+        </div>
+      </div>
+
+    </div>
+
+    <div class="modal-foot">
+      <span class="spacer field-hint">Saved&nbsp;·&nbsp;just now</span>
+      <button class="btn btn-primary btn-sm">Done</button>
+    </div>
+
+  </div>
+</div>
+
+</body>
+</html>

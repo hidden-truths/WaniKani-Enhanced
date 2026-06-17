@@ -10,11 +10,13 @@
   every main surface in both a warm-paper **light** theme and a candle-lit warm **dark** theme.
 - **Where:** [study-app/mockups/redesign/](.) — `system.css` + `system.js` + one `hybrid-*.html`
   per surface + an `index.html` gallery + retina-ish screenshots in `screens/`.
-- **State:** all **6 main surfaces done in both themes, critiqued, polished (~9/10), 2 layout
-  bugs fixed.** Not yet translated into the real app.
-- **Next:** secondary surfaces · a mobile/responsive pass · another critique sweep · (later)
-  port `system.css` into the real `index.html` + `src/styles.css`.
-- **Commits:** `51d566d` (build) → `8dc71b6` (polish) → `66b7f69` (bug fixes), all on `main`.
+- **State:** all **6 main surfaces + the 5 secondary surfaces (Settings / sign-in / add-card
+  modals, the pre-reveal flashcard prompt, banners & empty states) done in both themes, polished
+  (~9/10).** A shared **modal / overlay / form kit** was added to `system.css`. Not yet in the real app.
+- **Next:** a mobile/responsive pass · another critique sweep · (later) port `system.css` into the
+  real `index.html` + `src/styles.css`.
+- **Commits:** `51d566d` (build) → `8dc71b6` (polish) → `66b7f69` (bug fixes) → secondary surfaces +
+  modal kit (this session), all on `main`.
 
 ## What this is (and is NOT)
 - It IS a design exploration in throwaway-but-committed mocks. Each surface is an `.html` file
@@ -73,6 +75,12 @@
   `.hanko` (+`#stamp` SVG filter, defined per file), `.pitch`(`.pa/.pa.hi/.pa.drop`),
   `.play-btn/.tool-btn`, `.grade.wrong/.grade.right`, ruby `rt`, `.spine`+`.is-godan/.is-ichidan/
   .is-irregular/.is-leech`, `.reveal`(+`.d1..d8` stagger; reduced-motion safe).
+- **Dialog + forms (added this session):** `.overlay` (warm scrim + blur) · `.modal`(+`.narrow`/
+  `.wide`; capped-height internal scroll) · `.modal-head`/`.modal-title`/`.modal-sub`/`.modal-x`
+  (close)/`.modal-body`/`.modal-foot`(+`.spacer`) · `.field`/`.field-row` (2-col)/`.field-label`/
+  `.field-hint` · `.input`/`.textarea`/`.select`(+`.select-wrap`/`.chev`) · `.switch`(`.is-on`/
+  `.knob`) · `.set-group`/`.set-card`/`.set-row`(+`.stack`) · `.btn-sm`. Modals render OVER a
+  dimmed backdrop — a faint `.wrap[aria-hidden]` copy of the surface behind them.
 - **`system.js`:** sets `data-theme` on `<html>` from `?theme=` (else light) before paint, wires
   `#themeToggle` (☼ by day / ☾ by night), adds press feedback + `.reveal` stagger.
 
@@ -85,14 +93,19 @@
 | Stats | `hybrid-stats.html` | hero metrics + hand-rolled SVG charts (pipeline, line, per-card) |
 | みんなの日本語 | `hybrid-minna.html` | Lesson 7 dashboard (vocab, grammar, dialogue, notes) |
 | 独り言 Self-talk | `hybrid-selftalk.html` | output practice + record-and-compare rig |
+| Settings modal | `hybrid-settings.html` | preferences: example level, furigana, input/audio, voice-priority editor, recordings, backup, account |
+| Sign-in modal | `hybrid-auth.html` | auth: 入 seal, sign-in / create-account tabs, anon escape hatch |
+| Add-card modal | `hybrid-addcard.html` | authoring: category/type/transitivity, live pitch-accent preview, 5 leveled-example tiers |
+| Flashcard prompt | `hybrid-prompt.html` | in-session **pre-reveal** side: session chrome, big word, frosted "hidden" veils, Show-answer CTA |
+| States & empty | `hybrid-states.html` | due-cards banner, all-caught-up, no-results, session-complete summary, sign-in gate |
 | Gallery | `index.html` | contact sheet of directions + applied surfaces |
 
 Each has light + dark screenshots in `screens/` (`<name>.png` light, `<name>-dark.png` dark;
 hero's dark is `hybrid-dark.png`). The A/B/C exploration mocks are kept as-is (still serif — historical).
 
 ## Known issues / not yet addressed
-- **Secondary surfaces missing:** Settings modal, the auth/sign-in modal, the add-card modal, the
-  **in-session flashcard PROMPT side** (pre-reveal), the due-cards banner / SRS entry, empty states.
+- **Secondary surfaces:** DONE this session (Settings, auth, add-card modals + pre-reveal prompt +
+  banners/empty states) — see the done table. They're desktop-only too (no mobile pass yet).
 - **Desktop-only.** Everything is designed at 1280px. No mobile/responsive pass yet (the topbar
   nav, the Browse filter bar, the Stats grids, the Songs two-column, and the Self-talk rig all
   need narrow-width treatments).
@@ -103,9 +116,10 @@ hero's dark is `hybrid-dark.png`). The A/B/C exploration mocks are kept as-is (s
   `system.css`. Fine for mocks; a real port would consolidate.
 
 ## What's next (the options the maintainer is choosing among)
-1. **Secondary surfaces** — Settings, auth modal, add-card modal, the pre-reveal flashcard prompt, banners/empty states.
-2. **Mobile / responsive pass** — narrow-width treatments for every surface.
-3. **Another critique sweep** — re-run the per-surface design critics on the *polished* mocks to find the next tier of improvements.
+1. ~~**Secondary surfaces**~~ — **DONE this session.** Settings, auth, add-card modals + the
+   pre-reveal prompt + banners/empty states, on a new shared modal/overlay/form kit in `system.css`.
+2. **Mobile / responsive pass** — narrow-width treatments for every surface (now including the 3 modals).
+3. **Another critique sweep** — re-run the per-surface design critics on the *polished* mocks (now incl. the 5 secondary surfaces) to find the next tier of improvements.
 4. **(Later, a CODE session) Production translation** — port `system.css` into the real
    `index.html` + `src/styles.css`, wired to live data. Big, separate effort.
 
@@ -124,6 +138,10 @@ hero's dark is `hybrid-dark.png`). The A/B/C exploration mocks are kept as-is (s
   ```
   Approx full-page heights: hero 1850 · browse 2620 · songs 2400 · stats 2700 · minna 2980 ·
   selftalk 2240 · gallery (index.html) 3100. (Bump if content clips; trim if lots of bottom blank.)
+  Secondary surfaces: settings 1980 · auth 1120 · addcard 1700 · prompt 1120 · states 2560.
+  **Modals are `position:fixed` + centered**, so the window height isn't "full page" — size it TALL
+  enough that the modal doesn't scroll *inside* its own `max-height:calc(100vh - 40px)` cap, or the
+  shot clips the modal's lower half. (Settings/add-card are tall; auth/prompt are short.)
 - **Verify visually** by `Read`-ing the PNG (vision). For a new surface, shoot BOTH themes.
 - **Slim before committing:** `for f in screens/*.png; do sips --resampleWidth 1280 "$f"; done`
 - **Commit conventions** (repo-wide): one logical change → one commit; commit to `main`; stage
