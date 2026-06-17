@@ -227,9 +227,9 @@
   }
   .chip:focus-visible{outline-offset:1px}
 
-  /* Typed-answer field + verdict (.answer-input/#inputRow/.a-read-wrap/.verdict)
-     → styles/flashcards.css (Phase 2). The shared .speak-btn (reading audio; .sm
-     is the inline Browse/example variant) stays here. */
+  /* The editorial flashcard — card/hanko/word-block/notes/example/grade + the typed-answer
+     field & verdict — lives in styles/flashcards.css (Phase 8). The shared .speak-btn (reading
+     audio; .sm is the inline Browse/example variant) stays here. */
   .speak-btn{background:var(--surf-inset);border:1px solid var(--line);color:var(--reading);border-radius:50%;width:36px;height:36px;display:inline-flex;align-items:center;justify-content:center;cursor:pointer;flex-shrink:0;box-shadow:var(--lift-sm);transition:transform .16s ease,background .2s ease,color .2s ease,border-color .2s ease}
   .speak-btn:hover{color:#fff;background:var(--reading);border-color:var(--reading);transform:translateY(-1px)}
   [data-theme="dark"] .speak-btn{background:radial-gradient(circle at 35% 30%,rgba(138,143,224,.2),rgba(138,143,224,.05));border-color:rgba(138,143,224,.32)}

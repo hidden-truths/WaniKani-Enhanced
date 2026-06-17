@@ -295,57 +295,102 @@
       </details>
     </div>
 
-    <!-- ACTIVE CARD. All text nodes are filled by showCard(); .answer is hidden
-         until reveal(). The grade buttons map to keys 1 (wrong) / 2 (right). -->
+    <!-- ACTIVE CARD — the editorial flashcard. showCard() fills the text nodes; reveal()/
+         submitTyped() flip the prompt FACE → the answer FACE + grade row (all inside the card).
+         Grade keys: 1/x wrong, 2/space/enter right. The session chrome (End session + recalled
+         pill + counter + progress bar) sits above the card. -->
     <div class="fc-stage" id="fcStage">
-      <div class="progress" id="fcProgress"></div>
-      <div class="flashcard" id="flashcard">
-        <div class="spine"></div>
-        <div class="prompt-label" id="promptLabel"></div>
-        <div class="prompt-main jp" id="promptMain"></div>     <!-- prompt side -->
-        <div class="prompt-sub" id="promptSub"></div>
-        <div class="answer" id="answer">                        <!-- revealed side -->
-          <div class="verdict" id="typedVerdict" hidden></div>  <!-- typed-mode auto-grade -->
-          <div class="a-read-wrap">
-            <span class="a-read jp" id="aRead"></span>
-            <button class="speak-btn" id="speakBtn" type="button" aria-label="Play reading" title="Play reading"><svg class="ic" aria-hidden="true"><use href="#i-volume"/></svg></button>
-          </div>
-          <div class="a-mean" id="aMean"></div>
-          <!-- Dictionary deep-link; href set per-card by showCard(). -->
-          <a class="jisho-link" id="jishoLink" target="_blank" rel="noopener noreferrer"><svg class="ic" aria-hidden="true"><use href="#i-external"/></svg>View on Jisho</a>
-          <div class="a-note" id="aNote"></div>                 <!-- mnemonic + tip -->
-          <!-- Leveled example sentence: pick a JLPT tier; renderExample() fills it. -->
-          <div class="example" id="exampleBlock" hidden>
-            <div class="ex-head"><span class="ex-label">Example</span><span class="jlptseg exseg" id="exLevels" role="group" aria-label="Example difficulty"></span><button class="speak-btn sm" id="exSpeak" type="button" aria-label="Play example sentence" title="Play example sentence" hidden><svg class="ic" aria-hidden="true"><use href="#i-volume"/></svg></button><button class="speak-btn sm copy-btn" id="exCopy" type="button" aria-label="Copy sentence" title="Copy sentence" hidden><svg class="ic" aria-hidden="true"><use href="#i-copy"/></svg></button></div>
-            <div class="ex-jp jp" id="exJp"></div>
-            <div class="ex-en" id="exEn"></div>
+      <!-- session chrome -->
+      <div class="session">
+        <div class="session-top">
+          <button class="exit" id="endBtn" type="button"><svg class="ic" aria-hidden="true"><use href="#i-back"/></svg>End session</button>
+          <div class="session-stats">
+            <span class="pill"><span class="dot"></span><b id="sessAcc">—</b>&nbsp;recalled</span>
+            <span class="counter" id="fcProgress"></span>
           </div>
         </div>
+        <div class="progress-track"><div class="progress-fill" id="sessFill"></div></div>
       </div>
-      <!-- Three button rows, one visible at a time. Self-graded: revealRow → grade.
-           Typed: inputRow (kana field + Check) → grade. See showCard(). -->
-      <div class="fc-buttons" id="revealRow">
-        <button class="btn reveal" id="revealBtn"><svg class="ic" aria-hidden="true"><use href="#i-target"/></svg>Reveal answer <span class="kbd">[space]</span></button>
+
+      <div class="card-stage">
+        <article class="flashcard" id="flashcard">
+          <div class="spine"></div>
+          <span class="corner-wash"></span>
+          <div class="card-inner">
+            <div class="card-top">
+              <div class="card-kicker"><span class="pip"></span><span id="promptLabel"></span></div>
+              <div class="hanko" id="cardHanko"><span class="ring"></span><span class="glyph jp" id="hankoGlyph"></span></div>
+            </div>
+
+            <!-- PROMPT FACE (pre-reveal): the dominant word + non-spoiling class/level tags +
+                 frosted "hidden" veils where the reading/meaning will appear, then the CTA. -->
+            <div class="prompt-face" id="promptFace">
+              <div class="prompt-zone">
+                <div class="prompt-word jp" id="promptWord"></div>
+                <div class="prompt-tags" id="promptTags"></div>
+                <div class="veil-stack" aria-hidden="true">
+                  <div class="veil-row"><span class="veil-label" id="veilLabelA">Reading</span><span class="veil-bar"><span class="lock"><svg class="ic" aria-hidden="true"><use href="#i-eyeoff"/></svg></span><span class="lock-text">hidden</span></span></div>
+                  <div class="veil-row"><span class="veil-label" id="veilLabelB">Meaning</span><span class="veil-bar"><span class="lock"><svg class="ic" aria-hidden="true"><use href="#i-eyeoff"/></svg></span><span class="lock-text">hidden</span></span></div>
+                </div>
+              </div>
+              <!-- recall CTA (self-graded) OR the typed-kana input — one shown at a time. -->
+              <div class="reveal-cta" id="revealRow">
+                <button class="btn btn-primary show-answer" id="revealBtn"><svg class="ic" aria-hidden="true"><use href="#i-eye"/></svg>Show answer</button>
+                <div class="kbd-hint"><span class="kbd">Space</span> or <span class="kbd">Enter</span> to flip <span class="kbd-sep">·</span> then <span class="kbd">1</span>&nbsp;wrong / <span class="kbd">2</span>&nbsp;right</div>
+              </div>
+              <div class="reveal-cta" id="inputRow" style="display:none">
+                <input type="text" class="answer-input jp" id="answerInput" autocomplete="off" autocapitalize="off" autocorrect="off" spellcheck="false" placeholder="type the reading (kana or romaji)…" aria-label="Type the reading in kana or romaji">
+                <button class="btn btn-primary" id="checkBtn" type="button"><svg class="ic" aria-hidden="true"><use href="#i-check"/></svg>Check <span class="kbd">Enter</span></button>
+              </div>
+            </div>
+
+            <!-- ANSWER FACE (revealed): word-block (word · pitch/reading · play) + meaning +
+                 tag-row (class · level · Jisho) + note-cards + leveled example. -->
+            <div class="answer" id="answer">
+              <div class="verdict" id="typedVerdict" hidden></div>
+              <div class="word-block">
+                <div class="answer-word jp" id="answerWord"></div>
+                <div class="tate-rule"></div>
+                <div class="reading-area"><div class="reading-row">
+                  <span class="pitch jp" id="aRead"></span>
+                  <span class="pitch-tag" id="aAccent" hidden></span>
+                  <button class="play-btn" id="speakBtn" type="button" aria-label="Play reading" title="Play reading"><svg class="ic" aria-hidden="true"><use href="#i-volume"/></svg></button>
+                </div></div>
+              </div>
+              <div class="meaning" id="aMean"></div>
+              <div class="tag-row" id="aTags"></div>
+              <div class="a-note" id="aNote"></div>                 <!-- mnemonic + trap note-cards -->
+              <!-- Leveled example sentence: pick a JLPT tier; renderExample() fills it. -->
+              <div class="example" id="exampleBlock" hidden>
+                <div class="ex-head"><span class="ex-label"><svg class="ic" aria-hidden="true"><use href="#i-book"/></svg>Example</span><span class="jlptseg exseg" id="exLevels" role="group" aria-label="Example difficulty"></span><span class="ex-tools"><button class="speak-btn sm" id="exSpeak" type="button" aria-label="Play example sentence" title="Play example sentence" hidden><svg class="ic" aria-hidden="true"><use href="#i-volume"/></svg></button><button class="speak-btn sm copy-btn" id="exCopy" type="button" aria-label="Copy sentence" title="Copy sentence" hidden><svg class="ic" aria-hidden="true"><use href="#i-copy"/></svg></button></span></div>
+                <div class="ex-jp jp" id="exJp"></div>
+                <div class="ex-en" id="exEn"></div>
+              </div>
+            </div>
+
+            <!-- grade controls (revealed) -->
+            <div class="grade-row" id="gradeRow" style="display:none">
+              <button class="grade wrong" id="wrongBtn"><svg class="ic" aria-hidden="true"><use href="#i-x"/></svg>Got it wrong <span class="kbd">1</span></button>
+              <button class="grade right" id="rightBtn"><svg class="ic" aria-hidden="true"><use href="#i-check"/></svg>Got it right <span class="kbd">2</span></button>
+            </div>
+          </div>
+        </article>
       </div>
-      <div class="fc-buttons" id="inputRow" style="display:none">
-        <input type="text" class="answer-input jp" id="answerInput" autocomplete="off" autocapitalize="off" autocorrect="off" spellcheck="false" placeholder="type the reading (kana or romaji)…" aria-label="Type the reading in kana or romaji">
-        <button class="btn" id="checkBtn" type="button"><svg class="ic" aria-hidden="true"><use href="#i-check"/></svg>Check <span class="kbd">[enter]</span></button>
-      </div>
-      <div class="fc-buttons" id="gradeRow" style="display:none">
-        <button class="btn wrong" id="wrongBtn"><svg class="ic" aria-hidden="true"><use href="#i-x"/></svg>Got it wrong <span class="kbd">[1 / x]</span></button>
-        <button class="btn right" id="rightBtn"><svg class="ic" aria-hidden="true"><use href="#i-check"/></svg>Got it right <span class="kbd">[2 / space]</span></button>
-      </div>
-      <div class="hint"><button class="chip" id="endBtn">End session</button></div>
     </div>
 
     <!-- END-OF-SESSION score card. Populated by endSession(). -->
     <div class="fc-stage" id="fcDone">
-      <div class="flashcard"><div class="spine"></div>
-        <div class="prompt-label">Session complete</div>
-        <div class="prompt-main" id="doneScore" style="font-family:var(--display)"></div>
-        <div class="prompt-sub" id="doneDetail"></div>
+      <div class="card-stage">
+        <article class="flashcard done-card">
+          <span class="corner-wash"></span>
+          <div class="card-inner">
+            <div class="card-kicker"><span class="pip"></span>Session complete</div>
+            <div class="done-score" id="doneScore"></div>
+            <div class="done-detail" id="doneDetail"></div>
+            <div class="reveal-cta"><button class="btn btn-primary" id="againBtn"><svg class="ic" aria-hidden="true"><use href="#i-refresh"/></svg>Study again</button></div>
+          </div>
+        </article>
       </div>
-      <div class="fc-buttons"><button class="chip primary" id="againBtn"><svg class="ic" aria-hidden="true"><use href="#i-refresh"/></svg>Study again</button></div>
     </div>
   </div>
 
