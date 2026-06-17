@@ -6,7 +6,7 @@
 > truth) are `system.css` + `screens/*.png`; the shipped design system is documented in
 > [../CLAUDE.md](../CLAUDE.md) "Design system". A ready-to-paste **kickoff prompt is at the bottom**.
 
-## Status — ✅ the Day/Night SKIN is shipped + verified (Phases 0–7); ⏳ the mock LAYOUTS are the next phase
+## Status — ✅ SKIN (Phases 0–7) + ✅ the mock LAYOUTS (Phase 8) shipped + verified; ⏳ maintainer sign-off + push
 
 The serif-free **"Day / Night"** *design system* — palette, both themes, all-sans type, atmosphere,
 lifted-card treatment, tap-a-word, the speaking rig — is applied to the real app via
@@ -165,21 +165,28 @@ radiogroups; the inline-SVG-sprite size-via-inline-style hack (the new `#stamp` 
 flip; the `#navExtra` dock; the reduced-motion rule (kills transition **and** animation); no framework /
 no chart library / no CDN icon font (Google Fonts is the one external dep, degrades to system fonts).
 
-## Remaining work — Phase 8: realize the mock layouts
-The Phase 0–7 skin/QA backlog is **done**: signed-in verification ✓, the speaking-mode lift ✓
-(`34eef8c`), Safari ✓. What's left is the editorial-layout realization (Decision 5 — markup/JS allowed):
-1. **Re-compare Browse + Stats** to `hybrid-browse*.png` / `hybrid-stats*.png` first (likely closest) —
-   fix the small deltas and lock them as the "this is what done looks like" reference.
-2. **Rebuild the editorial compositions** surface by surface against `screens/*.png` (the gap table):
-   ~~the study-home hero~~ ✅ · ~~the 2-col + hanko flashcard~~ ✅ (Phase 8 — prompt/answer faces,
-   session chrome, hanko seal, note-cards, editorial grade bar; both modes + typed + mobile verified),
-   then the みんなの日本語 hanko hero + grammar grid + conversation bubbles, the 歌 Songs play-card hero,
-   the 独り言 "now speaking" rig. Keep the dead-end CONTRACTS intact while changing structure.
-3. **Both themes, every change**; verify each surface **signed-in** (the proxy-harness recipe below) AND
-   anon, `Read`-comparing to the matching `screens/*.png`.
-4. **Optional polish** carried over: re-tune the four non-verb accents to the warm palette; the
-   modal-kit / record-compare own-file split.
-5. **Push / open the PR** — still pending maintainer go-ahead.
+## Remaining work — Phase 8: ✅ all seven surfaces realized (pending sign-off + push)
+Every "The gap" row is now closed — the editorial compositions are built, both themes, with the
+dead-end CONTRACTS intact and `bun run test` 245 + `bun run build` green throughout. Phase 8 commits:
+`c71fe61` study-home hero · `63eb1bb` study-home (drop hybrid: no toggle, picker tucked) · `3701005`
+flashcard (2-col + hanko, prompt/answer faces) · `76ddcc5` Browse (header + filter panel) · `f705e75`
+Stats (header + metric hero + sections) · `a247197` みんなの日本語 (hanko hero + grammar grid + speaker
+bubbles) · `68fe6b7` 歌 Songs (play-card hero) · `78448c6` 独り言 Self-Talk (editorial header + cards).
+
+**Verification:** anon surfaces (study-home, flashcard, Browse, Stats) driven on a separate `:5174`
+design preview, both themes. The three account-gated surfaces (みんなの日本語, 歌 Songs, 独り言) verified
+**signed-in against the real owner account** (Lesson 23 / a starter song / a topic's phrases) through a
+throwaway same-origin proxy harness, both themes. The harness's temp files (proxy config + the reused
+session token) were removed after use — recreate via the recipe below if re-verifying.
+
+What's left:
+1. **One interaction-model call for the maintainer — 独り言:** the mock implies a *daily-5 featured-card +
+   prompt-rail* flow; the app kept its richer **topic-browser** (a superset). The editorial SKIN (header +
+   spine'd cards) shipped; restructuring the *flow* to the mock is a separate UX decision if wanted.
+2. **Optional polish** carried over: re-tune the four non-verb accents to the warm palette; the
+   modal-kit / record-compare own-file split; 歌 Songs' cover-ring play button + segmented coverage bar
+   are a lighter approximation of the mock.
+3. **Maintainer sign-off, then push / open the PR** (still on `redesign-migration`, not pushed).
 
 ## How to continue / verify
 - **Don't touch `:5173` (study-app) or `:3000` (API)** — the maintainer's live tabs. Drive the running
