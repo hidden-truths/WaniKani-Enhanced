@@ -73,13 +73,18 @@ function renderCardBars() {
 // Rebuild the entire Stats panel from state.store. Called on tab activation and after
 // import/reset. Each block maps 1:1 to a container in the markup.
 export function renderStats() {
-  // Summary boxes: overall accuracy + counts. "studied" = cards with ≥1 attempt.
-  let tot = 0, right = 0, studied = 0;
-  state.DATA.forEach(v => { const c = state.store.cards[v.rank]; if (c && c.attempts.length) { studied++; tot += c.attempts.length; right += c.right; } });
-  const overall = tot ? Math.round(100 * right / tot) : 0;
-  // SRS vs free-study split. Legacy sessions with no `kind` count as SRS (the old behavior).
+  // Summary boxes. "Cards drilled" = distinct cards with ≥1 attempt (the card ledger).
+  let studied = 0;
+  state.DATA.forEach(v => { const c = state.store.cards[v.rank]; if (c && c.attempts.length) studied++; });
+  // Review counts + overall accuracy come from the SESSION ledger, NOT the per-card attempt sum,
+  // so the Total / SRS / Free tiles reconcile (Total = SRS + Free) and accuracy shares their
+  // denominator. `kind` lives only on sessions, so that's the only ledger that can be split; for
+  // normal use (every grade lands in exactly one logged session) the session sum equals the
+  // per-card attempt sum anyway. Legacy sessions with no `kind` count as SRS (the old behavior).
   const mix = { srs: { rev: 0, right: 0 }, free: { rev: 0, right: 0 } };
   state.store.sessions.forEach(s => { const m = mix[s.kind === 'free' ? 'free' : 'srs']; m.rev += s.tot; m.right += s.right; });
+  const tot = mix.srs.rev + mix.free.rev, right = mix.srs.right + mix.free.right;
+  const overall = tot ? Math.round(100 * right / tot) : 0;
   const acc = m => m.rev ? Math.round(100 * m.right / m.rev) + '% correct' : 'no reviews yet';
   const sg = document.getElementById('statgrid');
   sg.innerHTML = `
