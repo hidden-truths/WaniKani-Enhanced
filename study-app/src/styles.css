@@ -126,12 +126,7 @@
   .filter-summary .ic{font-size:13px;color:var(--godan)}
   .filter-summary b{color:var(--ink);font-weight:400}
   .filter-summary:empty{display:none}
-  /* Leech list: rows become carded for a cleaner, scannable look. */
-  .leech-row{display:flex;align-items:center;gap:11px;padding:9px 12px;border:1px solid var(--line);border-left:3px solid var(--leech);border-radius:0 3px 3px 0;background:var(--paper-2);margin-bottom:7px}
-  .leech-row .lr-jp{font-size:20px;font-weight:700;line-height:1.1}
-  .leech-row .lr-meta{color:var(--muted);font-size:13px;font-style:italic}
-  .leech-row .lr-acc{margin-left:auto;font-family:var(--mono);font-size:12px;color:var(--leech);font-weight:700}
-  .leech-row .lr-acc .ic{font-size:13px;vertical-align:-0.15em;margin-right:3px}
+  /* Leech list (.leech-row) → styles/stats.css (Phase 4). */
   /* Search field with a leading icon. */
   .search-wrap{position:relative;flex:1;min-width:180px}
   .search-wrap>.ic{position:absolute;left:12px;top:50%;transform:translateY(-50%);color:var(--muted);font-size:15px;pointer-events:none}
@@ -251,14 +246,9 @@
   .chip:disabled{opacity:.38;cursor:default}
   .chip:disabled:hover{border-color:var(--line);background:transparent}
 
-  /* Stats view: summary boxes, chart cards, leech list, SRS legend. */
-  .statgrid{display:grid;grid-template-columns:repeat(auto-fit,minmax(150px,1fr));gap:14px;margin:18px 0}
-  .statbox{border:1px solid var(--line);border-radius:4px;padding:16px;background:var(--paper)}
-  .statbox .v{font-size:34px;font-weight:900} .statbox .l{font-family:var(--mono);font-size:11px;letter-spacing:.14em;text-transform:uppercase;color:var(--muted);margin-top:2px}
-  .chart-card{border:1px solid var(--line);border-radius:4px;padding:18px;background:var(--paper);margin-bottom:18px}
-  /* Sentence-case (not uppercased): these are long descriptive sentences, and
-     spaced uppercase is hard to scan at length. Short labels stay uppercase. */
-  .chart-title{font-family:var(--mono);font-size:12px;letter-spacing:.02em;color:var(--muted);margin-bottom:12px}
+  /* Stats cards + chart panels + leech list + SRS legend (.statgrid/.statbox/
+     .chart-card/.chart-title/.srs-legend) → styles/stats.css (Phase 4). The
+     global chart svg{} rule + circle.pt hover stay here. */
   svg{display:block;width:100%;height:auto}    /* charts scale to container width */
   /* Line-chart points enlarge on hover (the native <title> shows the readout). */
   svg circle.pt{transition:r .12s ease} svg circle.pt:hover{r:5.5}
@@ -266,7 +256,6 @@
   .danger{font-family:var(--mono);font-size:11px;color:var(--godan);cursor:pointer;background:none;border:none;text-decoration:underline}
 
   .hint{text-align:center;color:var(--muted);font-size:12px;font-family:var(--mono);margin:18px 0 6px}
-  .srs-legend{font-family:var(--mono);font-size:10px;color:var(--muted);margin-top:10px;line-height:1.5}
   .set-actions{display:inline-flex;gap:6px}   /* Settings "Backup" row: Export / Import buttons */
   /* ---- Motion: entrance animations -----------------------------------------
      Subtle, short, easing-out. Each runs on the state class being (re)applied, so
