@@ -129,22 +129,6 @@
         </div>
         <button class="btn srs" id="dueBtn"><svg class="ic" aria-hidden="true"><use href="#i-play"/></svg>Review due cards</button>
       </div>
-      <!-- Upcoming-review forecast: how many scheduled cards come due over the
-           chosen window. The horizon toggle is view-only state (forecastHorizon);
-           bars are rebuilt by renderForecast() whenever the schedule changes
-           (it's called from updateDueBanner). See FLASHCARD / reviewForecast(). -->
-      <div class="fcast" id="forecast">
-        <div class="fcast-head">
-          <span class="fcast-title"><svg class="ic" aria-hidden="true"><use href="#i-chart"/></svg>Upcoming reviews</span>
-          <span class="jlptseg fcast-horizons" id="fcHorizons" role="group" aria-label="Forecast window">
-            <button class="chip fch" type="button" data-h="24h">24h</button>
-            <button class="chip fch active" type="button" data-h="week">Week</button>
-            <button class="chip fch" type="button" data-h="month">Month</button>
-            <button class="chip fch" type="button" data-h="year">Year</button>
-          </span>
-        </div>
-        <div class="fcast-chart" id="forecastChart"></div>
-      </div>
       <!-- Study type: Free study never touches the SRS schedule (practice any
            cards); SRS review only serves DUE cards and promotes/demotes them.
            cfg.kind; wired below. The due banner above is the quick "all due" SRS. -->
@@ -274,6 +258,25 @@
       <div class="row" style="margin-top:2px">
         <button class="chip primary" id="startBtn"><svg class="ic" aria-hidden="true"><use href="#i-play"/></svg>Start session</button>
         <span class="count" id="deckCount"></span>   <!-- live "N cards in deck" -->
+      </div>
+      <!-- Upcoming-review forecast: how many scheduled cards come due over the chosen window.
+           Placed BELOW the picker on purpose — it's supporting context, not the primary action,
+           so the study CONTROLS (due banner + Start) lead and it also fills the otherwise-empty
+           lower area on wide screens. The horizon toggle is view-only state (forecastHorizon);
+           bars rebuild via renderForecast() from updateDueBanner. Don't move it back above the
+           picker. See FLASHCARD / reviewForecast(). -->
+      <div class="fdiv"></div>
+      <div class="fcast" id="forecast">
+        <div class="fcast-head">
+          <span class="fcast-title"><svg class="ic" aria-hidden="true"><use href="#i-chart"/></svg>Upcoming reviews</span>
+          <span class="jlptseg fcast-horizons" id="fcHorizons" role="group" aria-label="Forecast window">
+            <button class="chip fch" type="button" data-h="24h">24h</button>
+            <button class="chip fch active" type="button" data-h="week">Week</button>
+            <button class="chip fch" type="button" data-h="month">Month</button>
+            <button class="chip fch" type="button" data-h="year">Year</button>
+          </span>
+        </div>
+        <div class="fcast-chart" id="forecastChart"></div>
       </div>
     </div>
 
