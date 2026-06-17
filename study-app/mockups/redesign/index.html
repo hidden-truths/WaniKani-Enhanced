@@ -1,0 +1,161 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1">
+<title>Redesign explorations · 日常日本語</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Fraunces:ital,opsz,wght@0,9..144,400..900;1,9..144,400..600&family=Newsreader:ital,opsz,wght@0,6..72,400..600;1,6..72,400&family=Spline+Sans+Mono:wght@400;500&family=Noto+Serif+JP:wght@600;900&display=swap" rel="stylesheet">
+<style>
+  :root{
+    --paper:#F3ECDD; --raised:#FBF6EC; --deeper:#E7DBC4;
+    --ink:#1C1714; --muted:#6B6052; --line:#D8CBB0;
+    --vermilion:#CD4327; --indigo:#2A4A6E; --gold:#A8842E;
+  }
+  *{box-sizing:border-box;margin:0;padding:0}
+  body{
+    background:var(--paper); color:var(--ink);
+    font-family:"Newsreader",Georgia,serif; line-height:1.6; -webkit-font-smoothing:antialiased;
+    background-image:
+      radial-gradient(120% 80% at 100% 0%, rgba(205,67,39,.06), transparent 55%),
+      radial-gradient(100% 70% at 0% 100%, rgba(42,74,110,.05), transparent 55%);
+    min-height:100vh;
+  }
+  .grain{position:fixed;inset:0;pointer-events:none;opacity:.5;z-index:0;mix-blend-mode:multiply;
+    background-image:url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='160' height='160'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='.9' numOctaves='2' stitchTiles='stitch'/%3E%3CfeColorMatrix type='saturate' values='0'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23n)' opacity='.045'/%3E%3C/svg%3E");}
+  .wrap{position:relative;z-index:1;max-width:1120px;margin:0 auto;padding:56px 28px 96px}
+  .kick{font-family:"Spline Sans Mono",monospace;font-size:11px;letter-spacing:.28em;text-transform:uppercase;color:var(--vermilion);margin-bottom:14px}
+  h1{font-family:"Fraunces",serif;font-weight:600;font-size:clamp(40px,6vw,68px);line-height:1.02;letter-spacing:-.02em}
+  h1 .jp{font-family:"Noto Serif JP",serif;font-weight:900}
+  .lede{max-width:680px;margin-top:18px;font-size:18px;color:var(--muted)}
+  .lede b{color:var(--ink);font-weight:600}
+  .rule{height:1px;background:linear-gradient(90deg,var(--gold),transparent);opacity:.5;margin:40px 0 34px}
+  .grid{display:grid;grid-template-columns:repeat(2,1fr);gap:30px}
+  @media(max-width:760px){.grid{grid-template-columns:1fr}}
+  .card{position:relative;background:var(--raised);border:1px solid var(--line);border-radius:14px;overflow:hidden;
+    box-shadow:0 1px 2px rgba(28,23,20,.05),0 18px 40px -16px rgba(28,23,20,.22);
+    transition:transform .25s cubic-bezier(.2,.7,.3,1),box-shadow .25s;text-decoration:none;color:inherit;display:block}
+  .card:hover{transform:translateY(-4px);box-shadow:0 2px 4px rgba(28,23,20,.07),0 30px 60px -18px rgba(28,23,20,.32)}
+  .shot{display:block;width:100%;height:300px;object-fit:cover;object-position:top center;border-bottom:1px solid var(--line);background:var(--deeper)}
+  .body{padding:20px 22px 24px}
+  .tagrow{display:flex;align-items:center;gap:10px;margin-bottom:8px}
+  .letter{font-family:"Spline Sans Mono",monospace;font-size:12px;font-weight:500;color:#fff;background:var(--ink);width:24px;height:24px;border-radius:6px;display:inline-flex;align-items:center;justify-content:center;flex-shrink:0}
+  .card.chosen .letter{background:var(--vermilion)}
+  .name{font-family:"Fraunces",serif;font-weight:600;font-size:25px;letter-spacing:-.01em}
+  .chosen-badge{margin-left:auto;font-family:"Spline Sans Mono",monospace;font-size:10px;letter-spacing:.14em;text-transform:uppercase;color:var(--vermilion);border:1px solid var(--vermilion);border-radius:20px;padding:3px 11px}
+  .desc{color:var(--muted);font-size:15.5px;margin-top:2px}
+  .open{display:inline-flex;align-items:center;gap:6px;margin-top:14px;font-family:"Spline Sans Mono",monospace;font-size:11px;letter-spacing:.12em;text-transform:uppercase;color:var(--vermilion)}
+  .card.chosen{border-color:var(--vermilion);box-shadow:0 1px 2px rgba(205,67,39,.1),0 18px 44px -16px rgba(205,67,39,.3)}
+  .foot{margin-top:46px;font-family:"Spline Sans Mono",monospace;font-size:11px;letter-spacing:.1em;color:var(--muted)}
+  .foot a{color:var(--indigo)}
+</style>
+</head>
+<body>
+<div class="grain"></div>
+<div class="wrap">
+  <div class="kick">Visual design · explorations</div>
+  <h1>Redesigning <span class="jp">日常日本語</span><br>the Japanese trainer</h1>
+  <p class="lede">Four self-contained directions, each rendering the <b>same</b> content — the study
+  home and the core revealed flashcard for 払う — so the <i>feel</i> is directly comparable.
+  Keep the functional color, the hanko, the pitch accent; lose the flat, tiny, monospace-everywhere austerity.</p>
+
+  <div class="rule"></div>
+
+  <div class="grid">
+    <a class="card chosen" href="hybrid-day-night.html">
+      <img class="shot" src="screens/hybrid-day-night.png" alt="Hybrid Day / Night mock" loading="lazy">
+      <div class="body">
+        <div class="tagrow"><span class="letter">★</span><span class="name">Hybrid · Day / Night</span><span class="chosen-badge">Chosen</span></div>
+        <p class="desc">One system, two themes: warm editorial light + an atmospheric warm dark ("candle-lit washi at night"). Working ☼/☾ toggle.</p>
+        <span class="open">Open live mock →</span>
+      </div>
+    </a>
+
+    <a class="card" href="a-sumi-vermilion.html">
+      <img class="shot" src="screens/a-sumi-vermilion.png" alt="Sumi &amp; Vermilion mock" loading="lazy">
+      <div class="body">
+        <div class="tagrow"><span class="letter">A</span><span class="name">Sumi &amp; Vermilion</span></div>
+        <p class="desc">Warm premium editorial — elevates the existing washi/ink DNA. Fraunces display, a round 払 hanko seal, paper grain, liftable shadows.</p>
+        <span class="open">Open live mock →</span>
+      </div>
+    </a>
+
+    <a class="card" href="c-yoru-luxe.html">
+      <img class="shot" src="screens/c-yoru-luxe.png" alt="Yoru / Quiet Luxe mock" loading="lazy">
+      <div class="body">
+        <div class="tagrow"><span class="letter">C</span><span class="name">Yoru · Quiet Luxe</span></div>
+        <p class="desc">Soft, dark-first, modern-premium calm. Atmospheric glows, frosted-glass cards, a coral jewel accent, the meaning set in serif.</p>
+        <span class="open">Open live mock →</span>
+      </div>
+    </a>
+
+    <a class="card" href="b-neo-transit.html">
+      <img class="shot" src="screens/b-neo-transit.png" alt="Neo / Transit mock" loading="lazy">
+      <div class="body">
+        <div class="tagrow"><span class="letter">B</span><span class="name">Neo · Transit</span></div>
+        <p class="desc">Bold Tokyo transit-signage energy. Giant Anton "100" bleeding off a departures board, station-code chips, signal red/blue blocks.</p>
+        <span class="open">Open live mock →</span>
+      </div>
+    </a>
+  </div>
+
+  <div class="rule" style="margin:54px 0 26px"></div>
+  <div class="kick">The chosen lane · surfaces</div>
+  <h1 style="font-size:clamp(28px,4vw,40px);margin-bottom:6px">Hybrid system, applied</h1>
+  <p class="lede" style="font-size:16px;margin-top:8px">Carrying Day/Night beyond the hero — now all-sans (Bricolage Grotesque + Hanken Grotesk, no serif), every surface on a shared <code style="font-family:var(--mono);font-size:.85em">system.css</code> with a working ☼/☾ toggle.</p>
+  <div class="grid" style="margin-top:26px">
+    <a class="card" href="hybrid-day-night.html">
+      <img class="shot" src="screens/hybrid-day-night.png" alt="Flashcards hero" loading="lazy">
+      <div class="body">
+        <div class="tagrow"><span class="letter">札</span><span class="name">Flashcards</span></div>
+        <p class="desc">Study home + the revealed flashcard. Bricolage "100", hanko seal, pitch-accent, the godan spine, day/night.</p>
+        <span class="open">Open live mock →</span>
+      </div>
+    </a>
+    <a class="card" href="hybrid-browse.html">
+      <img class="shot" src="screens/hybrid-browse.png" alt="Browse screen" loading="lazy">
+      <div class="body">
+        <div class="tagrow"><span class="letter">索</span><span class="name">Browse</span></div>
+        <p class="desc">Full filter bar + a color-coded verb grid (godan/ichidan/irregular/leech) and an inline card detail with memory pips.</p>
+        <span class="open">Open live mock →</span>
+      </div>
+    </a>
+    <a class="card" href="hybrid-songs.html">
+      <img class="shot" src="screens/hybrid-songs.png" alt="Songs lyric reader" loading="lazy">
+      <div class="body">
+        <div class="tagrow"><span class="letter">歌</span><span class="name">Songs · Read</span></div>
+        <p class="desc">The lyric viewer: furigana, per-line translation, grammar chips, a now-playing line, and a mined-vocab rail. Best dark-mode showcase.</p>
+        <span class="open">Open live mock →</span>
+      </div>
+    </a>
+    <a class="card" href="hybrid-stats.html">
+      <img class="shot" src="screens/hybrid-stats.png" alt="Stats screen" loading="lazy">
+      <div class="body">
+        <div class="tagrow"><span class="letter">統</span><span class="name">Stats</span></div>
+        <p class="desc">Hero metric cards, the Leitner "memory pipeline" over the functional ramp, a glowing daily-accuracy line, the leech list, and per-card bars.</p>
+        <span class="open">Open live mock →</span>
+      </div>
+    </a>
+    <a class="card" href="hybrid-minna.html">
+      <img class="shot" src="screens/hybrid-minna.png" alt="みんなの日本語 textbook" loading="lazy">
+      <div class="body">
+        <div class="tagrow"><span class="letter">課</span><span class="name">みんなの日本語</span></div>
+        <p class="desc">Lesson 7 dashboard: vocab with native audio + record, grammar points, a model conversation, and synced notes.</p>
+        <span class="open">Open live mock →</span>
+      </div>
+    </a>
+    <a class="card" href="hybrid-selftalk.html">
+      <img class="shot" src="screens/hybrid-selftalk.png" alt="独り言 Self-talk" loading="lazy">
+      <div class="body">
+        <div class="tagrow"><span class="letter">独</span><span class="name">Self-talk</span></div>
+        <p class="desc">Output practice: a prompt with a template scaffold, a you-vs-native record-and-compare rig, and the day's prompt rail.</p>
+        <span class="open">Open live mock →</span>
+      </div>
+    </a>
+  </div>
+
+  <p class="foot">日常日本語 · redesign explorations — see <a href="README.md">README.md</a> for the full writeup. Mocks only; no production code touched.</p>
+</div>
+</body>
+</html>

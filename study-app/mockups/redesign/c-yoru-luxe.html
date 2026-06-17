@@ -1,0 +1,823 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>日常日本語 · Yoru</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Hanken+Grotesk:ital,wght@0,300;0,400;0,500;0,600;0,700;0,800&family=Instrument+Serif:ital@0;1&family=Noto+Sans+JP:wght@400;500;700;900&display=swap" rel="stylesheet">
+<style>
+  :root{
+    /* base / surfaces */
+    --ink:#0E1117;
+    --bg:#11151C;
+    --surf-1:#171C26;
+    --surf-2:#1E2530;
+    --border:rgba(255,255,255,.07);
+    --border-strong:rgba(255,255,255,.11);
+    /* text */
+    --text:#ECE8E1;
+    --muted:#9AA3B2;
+    --faint:#646E7E;
+    /* jewels */
+    --coral:#FF6B4A;
+    --coral-soft:#FF8A6E;
+    --jade:#56D9A6;
+    --indigo:#7C8CF8;
+    /* glows */
+    --coral-glow:rgba(255,107,74,.45);
+    --jade-glow:rgba(86,217,166,.40);
+    --indigo-glow:rgba(124,140,248,.40);
+
+    --shadow-card:0 24px 60px -24px rgba(0,0,0,.7), 0 8px 24px -16px rgba(0,0,0,.6);
+    --inner-hi:inset 0 1px 0 0 rgba(255,255,255,.06);
+    --r-lg:22px;
+    --r-md:16px;
+    --r-pill:999px;
+    --font:'Hanken Grotesk', sans-serif;
+    --font-jp:'Noto Sans JP', sans-serif;
+    --font-serif:'Instrument Serif', serif;
+  }
+
+  *{box-sizing:border-box;margin:0;padding:0;}
+
+  html{scroll-behavior:smooth;}
+
+  body{
+    font-family:var(--font);
+    color:var(--text);
+    background:var(--ink);
+    -webkit-font-smoothing:antialiased;
+    text-rendering:optimizeLegibility;
+    line-height:1.5;
+    position:relative;
+    overflow-x:hidden;
+    min-height:100vh;
+  }
+
+  /* ---------- atmospheric background ---------- */
+  .atmos{
+    position:fixed;
+    inset:0;
+    z-index:0;
+    pointer-events:none;
+    background:
+      radial-gradient(900px 600px at 82% -8%, rgba(124,140,248,.18), transparent 60%),
+      radial-gradient(800px 620px at 6% 8%, rgba(255,107,74,.13), transparent 62%),
+      radial-gradient(1100px 800px at 50% 118%, rgba(86,217,166,.07), transparent 60%),
+      linear-gradient(180deg, #0E1117 0%, #11151C 40%, #0E1117 100%);
+  }
+  /* faint film grain */
+  .grain{
+    position:fixed;
+    inset:0;
+    z-index:1;
+    pointer-events:none;
+    opacity:.035;
+    mix-blend-mode:overlay;
+    background-image:url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='160' height='160'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='.85' numOctaves='2' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23n)'/%3E%3C/svg%3E");
+  }
+
+  .wrap{
+    position:relative;
+    z-index:2;
+    max-width:1080px;
+    margin:0 auto;
+    padding:0 32px 96px;
+  }
+
+  /* ---------- top bar ---------- */
+  .topbar{
+    position:sticky;
+    top:0;
+    z-index:40;
+    margin:0 -32px 0;
+    padding:18px 32px;
+    display:flex;
+    align-items:center;
+    gap:28px;
+    background:rgba(14,17,23,.62);
+    backdrop-filter:blur(20px) saturate(140%);
+    -webkit-backdrop-filter:blur(20px) saturate(140%);
+    border-bottom:1px solid var(--border);
+  }
+  .brand{display:flex;align-items:center;gap:13px;flex-shrink:0;}
+  .brand .mark{
+    width:42px;height:42px;border-radius:13px;
+    display:grid;place-items:center;
+    font-family:var(--font-jp);font-weight:700;font-size:19px;
+    color:var(--text);
+    background:linear-gradient(150deg,var(--surf-2),var(--surf-1));
+    border:1px solid var(--border-strong);
+    box-shadow:var(--inner-hi), 0 0 22px -6px var(--coral-glow);
+    position:relative;
+  }
+  .brand .mark::after{
+    content:"";position:absolute;inset:0;border-radius:13px;
+    box-shadow:inset 0 0 14px -4px var(--coral-glow);
+  }
+  .brand .name{font-family:var(--font-jp);font-weight:700;font-size:18px;letter-spacing:.5px;line-height:1.1;}
+  .brand .sub{font-size:11px;color:var(--faint);letter-spacing:.16em;text-transform:uppercase;margin-top:2px;}
+
+  .nav{display:flex;align-items:center;gap:4px;margin-left:8px;flex-wrap:wrap;}
+  .nav a{
+    position:relative;
+    font-size:14px;
+    color:var(--muted);
+    text-decoration:none;
+    padding:9px 14px;
+    border-radius:var(--r-pill);
+    transition:color .25s ease, background .25s ease;
+    white-space:nowrap;
+  }
+  .nav a .jp{font-family:var(--font-jp);font-weight:500;}
+  .nav a:hover{color:var(--text);background:rgba(255,255,255,.04);}
+  .nav a.active{color:var(--text);}
+  .nav a.active::after{
+    content:"";
+    position:absolute;
+    left:14px;right:14px;bottom:-2px;height:2px;
+    border-radius:2px;
+    background:linear-gradient(90deg,transparent,var(--coral),transparent);
+    box-shadow:0 0 12px 1px var(--coral-glow);
+  }
+
+  .topbar .spacer{flex:1;}
+  .topbar .actions{display:flex;align-items:center;gap:10px;flex-shrink:0;}
+  .icon-btn{
+    width:38px;height:38px;border-radius:var(--r-pill);
+    display:grid;place-items:center;
+    border:1px solid var(--border);
+    background:rgba(255,255,255,.025);
+    color:var(--muted);
+    cursor:pointer;
+    transition:all .25s ease;
+  }
+  .icon-btn:hover{color:var(--text);border-color:var(--border-strong);background:rgba(255,255,255,.05);}
+  .icon-btn svg{width:18px;height:18px;}
+  .account{
+    display:flex;align-items:center;gap:9px;
+    padding:5px 14px 5px 6px;
+    border-radius:var(--r-pill);
+    border:1px solid var(--border);
+    background:rgba(255,255,255,.025);
+    cursor:pointer;
+    transition:all .25s ease;
+  }
+  .account:hover{border-color:var(--border-strong);background:rgba(255,255,255,.05);}
+  .account .ava{
+    width:28px;height:28px;border-radius:var(--r-pill);
+    background:linear-gradient(145deg,var(--coral),#b8412a);
+    display:grid;place-items:center;font-size:12px;font-weight:700;color:#1a0d09;
+    box-shadow:0 0 14px -4px var(--coral-glow);
+  }
+  .account .who{font-size:13px;color:var(--muted);}
+
+  /* ---------- generic glass card ---------- */
+  .glass{
+    position:relative;
+    background:linear-gradient(168deg, rgba(30,37,48,.72), rgba(23,28,38,.62));
+    backdrop-filter:blur(22px) saturate(135%);
+    -webkit-backdrop-filter:blur(22px) saturate(135%);
+    border:1px solid var(--border);
+    border-radius:var(--r-lg);
+    box-shadow:var(--shadow-card), var(--inner-hi);
+    transition:border-color .35s ease, transform .35s ease, box-shadow .35s ease;
+  }
+  .glass:hover{border-color:var(--border-strong);}
+
+  /* ---------- entrance ---------- */
+  .rise{opacity:0;transform:translateY(22px);animation:rise .9s cubic-bezier(.2,.7,.2,1) forwards;}
+  @keyframes rise{to{opacity:1;transform:none;}}
+  .d1{animation-delay:.05s}.d2{animation-delay:.13s}.d3{animation-delay:.22s}
+  .d4{animation-delay:.32s}.d5{animation-delay:.42s}.d6{animation-delay:.52s}
+
+  /* ---------- section heading ---------- */
+  .section-tag{
+    display:inline-flex;align-items:center;gap:9px;
+    font-size:11.5px;letter-spacing:.22em;text-transform:uppercase;
+    color:var(--faint);
+    margin:0 0 18px 4px;
+  }
+  .section-tag .dot{width:6px;height:6px;border-radius:50%;background:var(--coral);box-shadow:0 0 10px 1px var(--coral-glow);}
+
+  /* ===================================================
+     SECTION 1 — STUDY HOME HERO
+     =================================================== */
+  .hero{
+    margin-top:54px;
+    display:grid;
+    grid-template-columns:1.15fr .85fr;
+    gap:22px;
+  }
+
+  .hero-focal{
+    padding:48px 46px;
+    overflow:hidden;
+    display:flex;
+    flex-direction:column;
+    justify-content:center;
+  }
+  .hero-focal::before{
+    content:"";
+    position:absolute;
+    width:420px;height:420px;
+    left:-90px;top:-120px;
+    border-radius:50%;
+    background:radial-gradient(circle, rgba(255,107,74,.20), transparent 65%);
+    filter:blur(8px);
+    pointer-events:none;
+  }
+  .hero-focal .kicker{
+    font-size:12.5px;letter-spacing:.18em;text-transform:uppercase;
+    color:var(--muted);margin-bottom:18px;position:relative;
+  }
+  .focal-num{
+    position:relative;
+    font-weight:700;
+    font-size:148px;
+    line-height:.82;
+    letter-spacing:-.04em;
+    background:linear-gradient(175deg,#fff 0%, #ECE8E1 38%, #FFB7A4 105%);
+    -webkit-background-clip:text;background-clip:text;
+    -webkit-text-fill-color:transparent;
+    filter:drop-shadow(0 8px 40px rgba(255,107,74,.28));
+  }
+  .focal-sub{
+    font-size:17px;color:var(--muted);margin-top:10px;position:relative;
+    letter-spacing:.01em;
+  }
+  .focal-sub b{color:var(--text);font-weight:600;}
+
+  .hero-cta{display:flex;gap:14px;margin-top:36px;position:relative;}
+
+  .btn{
+    font-family:var(--font);
+    font-size:15px;font-weight:600;letter-spacing:.01em;
+    border-radius:var(--r-pill);
+    padding:15px 30px;
+    cursor:pointer;
+    border:1px solid transparent;
+    display:inline-flex;align-items:center;gap:10px;
+    transition:transform .2s ease, box-shadow .3s ease, background .3s ease;
+    text-decoration:none;
+  }
+  .btn:active{transform:translateY(1px);}
+  .btn-primary{
+    color:#1a0a06;
+    background:linear-gradient(160deg,var(--coral-soft),var(--coral) 55%,#e8512f);
+    box-shadow:0 0 0 0 var(--coral-glow), 0 10px 30px -10px rgba(255,107,74,.6);
+    animation:breathe 3.6s ease-in-out infinite;
+  }
+  .btn-primary:hover{box-shadow:0 0 0 6px rgba(255,107,74,.10), 0 14px 36px -10px rgba(255,107,74,.75);transform:translateY(-1px);}
+  @keyframes breathe{
+    0%,100%{box-shadow:0 0 0 0 rgba(255,107,74,0), 0 10px 30px -12px rgba(255,107,74,.55);}
+    50%{box-shadow:0 0 0 8px rgba(255,107,74,.07), 0 14px 40px -10px rgba(255,107,74,.8);}
+  }
+  .btn-ghost{
+    color:var(--text);
+    background:rgba(255,255,255,.04);
+    border:1px solid var(--border-strong);
+  }
+  .btn-ghost:hover{background:rgba(255,255,255,.075);border-color:rgba(255,255,255,.18);}
+
+  /* hero side column */
+  .hero-side{display:flex;flex-direction:column;gap:22px;}
+
+  .forecast{padding:26px 26px 22px;}
+  .forecast .head{display:flex;align-items:baseline;justify-content:space-between;margin-bottom:22px;}
+  .forecast .head h3{font-size:15px;font-weight:600;letter-spacing:.01em;}
+  .forecast .head .meta{font-size:12px;color:var(--faint);letter-spacing:.04em;}
+  .bars{display:flex;align-items:flex-end;gap:12px;height:128px;}
+  .bar-col{flex:1;display:flex;flex-direction:column;align-items:center;gap:10px;height:100%;justify-content:flex-end;}
+  .bar-track{
+    width:100%;
+    height:100%;
+    display:flex;align-items:flex-end;justify-content:center;
+  }
+  .bar{
+    width:100%;
+    max-width:30px;
+    border-radius:8px;
+    background:rgba(255,255,255,.05);
+    border:1px solid var(--border);
+    transition:filter .3s ease;
+    position:relative;
+  }
+  .bar.dim{height:7%;}
+  .bar.s2{height:13%;}
+  .bar.today{
+    height:100%;
+    background:linear-gradient(180deg,var(--coral-soft),var(--coral) 70%,#cf4226);
+    border:none;
+    box-shadow:0 0 22px -2px var(--coral-glow), var(--inner-hi);
+  }
+  .bar .val{
+    position:absolute;top:-22px;left:50%;transform:translateX(-50%);
+    font-size:12.5px;font-weight:700;color:var(--coral-soft);
+  }
+  .bar-col .lbl{font-size:11.5px;color:var(--faint);letter-spacing:.04em;}
+  .bar-col.is-today .lbl{color:var(--text);font-weight:600;}
+
+  .streak{
+    padding:22px 26px;
+    display:flex;align-items:center;gap:18px;
+  }
+  .streak .flame{
+    width:48px;height:48px;border-radius:14px;flex-shrink:0;
+    display:grid;place-items:center;
+    background:linear-gradient(150deg,rgba(255,107,74,.16),rgba(255,107,74,.04));
+    border:1px solid rgba(255,107,74,.22);
+    box-shadow:inset 0 0 16px -6px var(--coral-glow), 0 0 18px -8px var(--coral-glow);
+  }
+  .streak .flame svg{width:24px;height:24px;}
+  .streak .copy .big{font-size:22px;font-weight:700;letter-spacing:-.01em;}
+  .streak .copy .big span{color:var(--coral-soft);}
+  .streak .copy .small{font-size:12.5px;color:var(--muted);margin-top:1px;}
+  .streak .prog{margin-left:auto;text-align:right;}
+  .streak .prog .pv{font-size:14px;font-weight:600;}
+  .streak .prog .pv em{color:var(--faint);font-style:normal;font-weight:400;}
+  .streak .prog .ptrack{
+    width:108px;height:6px;border-radius:6px;margin-top:8px;
+    background:rgba(255,255,255,.06);overflow:hidden;
+  }
+  .streak .prog .pfill{
+    height:100%;width:4%;border-radius:6px;
+    background:linear-gradient(90deg,var(--jade),#3fbf8c);
+    box-shadow:0 0 12px 0 var(--jade-glow);
+  }
+
+  /* ===================================================
+     SECTION 2 — THE FLASHCARD
+     =================================================== */
+  .stage{
+    margin-top:80px;
+    position:relative;
+    display:flex;
+    justify-content:center;
+    padding:30px 0 10px;
+  }
+  /* soft spotlight behind the card */
+  .stage::before{
+    content:"";
+    position:absolute;
+    width:760px;height:540px;
+    top:-10px;left:50%;transform:translateX(-50%);
+    background:
+      radial-gradient(closest-side, rgba(255,107,74,.16), transparent 72%),
+      radial-gradient(closest-side, rgba(124,140,248,.10), transparent 78%);
+    filter:blur(20px);
+    pointer-events:none;
+    z-index:0;
+  }
+
+  .card{
+    position:relative;
+    z-index:2;
+    width:680px;max-width:100%;
+    padding:42px 46px 38px;
+    /* coral verb-class edge */
+    border:1px solid rgba(255,107,74,.22);
+    box-shadow:
+      var(--shadow-card),
+      var(--inner-hi),
+      0 0 0 1px rgba(255,107,74,.06),
+      0 0 60px -22px var(--coral-glow);
+  }
+  .card::before{
+    /* top coral hairline accent */
+    content:"";
+    position:absolute;left:46px;right:46px;top:0;height:1px;
+    background:linear-gradient(90deg,transparent,var(--coral),transparent);
+    opacity:.55;
+  }
+
+  .card-kicker{
+    display:flex;align-items:center;gap:10px;
+    font-size:12px;letter-spacing:.05em;color:var(--muted);
+    margin-bottom:30px;
+  }
+  .card-kicker .vbadge{
+    display:inline-flex;align-items:center;gap:7px;
+    font-size:11px;font-weight:600;letter-spacing:.08em;text-transform:uppercase;
+    color:var(--coral-soft);
+    padding:5px 11px;border-radius:var(--r-pill);
+    background:rgba(255,107,74,.10);
+    border:1px solid rgba(255,107,74,.24);
+  }
+  .card-kicker .vbadge .pulse{
+    width:6px;height:6px;border-radius:50%;background:var(--coral);
+    box-shadow:0 0 8px 1px var(--coral-glow);
+  }
+  .card-kicker .sep{color:var(--faint);}
+
+  /* prompt word */
+  .prompt{
+    font-family:var(--font-jp);
+    font-weight:700;
+    font-size:104px;
+    line-height:1;
+    letter-spacing:.02em;
+    text-align:center;
+    color:var(--text);
+    text-shadow:0 6px 40px rgba(255,107,74,.22), 0 2px 8px rgba(0,0,0,.4);
+    margin:6px 0 28px;
+  }
+
+  /* reading row + pitch accent */
+  .reading-row{
+    display:flex;align-items:center;justify-content:center;gap:18px;
+    margin-bottom:8px;
+  }
+  .reading{
+    font-family:var(--font-jp);
+    font-weight:500;
+    font-size:34px;
+    letter-spacing:.04em;
+    color:var(--text);
+    display:inline-flex;
+    align-items:flex-start;
+  }
+  /* each mora; high moras get an overline; the dropping one gets a step down */
+  .mora{position:relative;padding:10px 1px 0;}
+  .mora.high::before{
+    content:"";
+    position:absolute;left:0;right:-1px;top:6px;height:2px;
+    background:var(--indigo);
+    box-shadow:0 0 8px 0 var(--indigo-glow);
+  }
+  /* downstep marker: vertical drop at the end of the last high mora */
+  .mora.drop::after{
+    content:"";
+    position:absolute;right:-1px;top:6px;width:2px;height:13px;
+    background:var(--indigo);
+    box-shadow:0 0 8px 0 var(--indigo-glow);
+    border-radius:1px;
+  }
+  .pitch-tag{
+    font-size:12px;color:var(--indigo);font-weight:600;
+    border:1px solid rgba(124,140,248,.3);
+    background:rgba(124,140,248,.08);
+    padding:3px 9px;border-radius:var(--r-pill);
+    letter-spacing:.04em;
+    align-self:center;
+  }
+
+  .play-btn{
+    width:46px;height:46px;border-radius:50%;flex-shrink:0;
+    display:grid;place-items:center;cursor:pointer;
+    color:var(--indigo);
+    background:radial-gradient(circle at 35% 30%, rgba(124,140,248,.22), rgba(124,140,248,.05));
+    border:1px solid rgba(124,140,248,.32);
+    box-shadow:0 0 22px -6px var(--indigo-glow), var(--inner-hi);
+    transition:transform .2s ease, box-shadow .3s ease;
+  }
+  .play-btn:hover{transform:scale(1.06);box-shadow:0 0 28px -4px var(--indigo-glow);}
+  .play-btn svg{width:18px;height:18px;margin-left:2px;}
+
+  /* meaning — serif accent */
+  .meaning{
+    text-align:center;
+    margin:14px 0 26px;
+  }
+  .meaning .label{
+    font-size:11px;letter-spacing:.22em;text-transform:uppercase;color:var(--faint);
+    margin-bottom:2px;
+  }
+  .meaning .word{
+    font-family:var(--font-serif);
+    font-weight:400;
+    font-size:54px;
+    line-height:1.05;
+    letter-spacing:.01em;
+    color:#fff;
+    font-style:italic;
+  }
+
+  /* tag row */
+  .tags{
+    display:flex;flex-wrap:wrap;gap:10px;justify-content:center;
+    margin-bottom:30px;
+  }
+  .pill{
+    display:inline-flex;align-items:center;gap:7px;
+    font-size:13px;font-weight:500;
+    padding:8px 15px;border-radius:var(--r-pill);
+    border:1px solid var(--border);
+    background:rgba(255,255,255,.03);
+    color:var(--muted);
+    text-decoration:none;
+    transition:all .25s ease;
+  }
+  .pill:hover{border-color:var(--border-strong);color:var(--text);}
+  .pill.coral{
+    color:var(--coral-soft);
+    background:rgba(255,107,74,.10);
+    border-color:rgba(255,107,74,.26);
+    box-shadow:0 0 18px -8px var(--coral-glow);
+  }
+  .pill.coral .jp{font-family:var(--font-jp);font-weight:700;}
+  .pill .ext{color:var(--faint);}
+  .pill.link:hover{color:var(--indigo);border-color:rgba(124,140,248,.3);background:rgba(124,140,248,.07);}
+
+  /* notes */
+  .notes{display:grid;grid-template-columns:1fr 1fr;gap:14px;margin-bottom:26px;}
+  .note{
+    border-radius:var(--r-md);
+    border:1px solid var(--border);
+    background:rgba(255,255,255,.022);
+    padding:16px 18px;
+  }
+  .note .nlabel{
+    display:flex;align-items:center;gap:8px;
+    font-size:11px;letter-spacing:.14em;text-transform:uppercase;
+    color:var(--faint);margin-bottom:9px;
+  }
+  .note .nlabel .ic{width:14px;height:14px;}
+  .note.tip{
+    border-color:rgba(255,107,74,.18);
+    background:linear-gradient(160deg,rgba(255,107,74,.06),rgba(255,107,74,.015));
+  }
+  .note.tip .nlabel{color:var(--coral-soft);}
+  .note p{font-size:14px;line-height:1.55;color:var(--text);}
+  .note p .jp{font-family:var(--font-jp);}
+  .note p .em{color:var(--muted);}
+  .note p .hl{color:var(--coral-soft);font-weight:600;}
+
+  /* example */
+  .example{
+    border-radius:var(--r-md);
+    border:1px solid var(--border);
+    background:linear-gradient(165deg,rgba(124,140,248,.05),rgba(255,255,255,.015));
+    padding:22px 22px 18px;
+    margin-bottom:30px;
+  }
+  .example .ehead{display:flex;align-items:center;justify-content:space-between;margin-bottom:16px;}
+  .example .ehead .nlabel{
+    display:flex;align-items:center;gap:8px;
+    font-size:11px;letter-spacing:.16em;text-transform:uppercase;color:var(--faint);
+  }
+  .example .tools{display:flex;gap:8px;}
+  .mini-btn{
+    width:34px;height:34px;border-radius:10px;display:grid;place-items:center;
+    border:1px solid var(--border);background:rgba(255,255,255,.03);
+    color:var(--muted);cursor:pointer;transition:all .25s ease;
+  }
+  .mini-btn:hover{color:var(--text);border-color:var(--border-strong);background:rgba(255,255,255,.06);}
+  .mini-btn svg{width:15px;height:15px;}
+  .mini-btn.play{color:var(--indigo);border-color:rgba(124,140,248,.28);background:rgba(124,140,248,.07);}
+  .mini-btn.play:hover{box-shadow:0 0 16px -6px var(--indigo-glow);}
+
+  .ex-jp{
+    font-family:var(--font-jp);
+    font-weight:500;
+    font-size:30px;
+    line-height:1.7;
+    color:var(--text);
+    letter-spacing:.01em;
+  }
+  .ex-jp ruby rt{
+    font-size:.42em;
+    font-weight:500;
+    color:var(--indigo);
+    letter-spacing:.02em;
+  }
+  .ex-en{font-size:15px;color:var(--muted);margin-top:12px;font-style:normal;}
+  .ex-en .lead{font-family:var(--font-serif);font-style:italic;font-size:19px;color:var(--text);margin-right:2px;}
+
+  /* grade controls */
+  .grade{display:grid;grid-template-columns:1fr 1fr;gap:14px;}
+  .grade-btn{
+    font-family:var(--font);
+    font-size:15.5px;font-weight:600;
+    padding:17px;border-radius:var(--r-md);
+    cursor:pointer;display:flex;align-items:center;justify-content:center;gap:10px;
+    transition:all .25s ease;
+    border:1px solid transparent;
+  }
+  .grade-btn svg{width:18px;height:18px;}
+  .grade-wrong{
+    color:var(--coral-soft);
+    background:rgba(255,107,74,.07);
+    border:1px solid rgba(255,107,74,.28);
+  }
+  .grade-wrong:hover{background:rgba(255,107,74,.13);box-shadow:0 0 24px -10px var(--coral-glow);transform:translateY(-1px);}
+  .grade-right{
+    color:#0c1f17;
+    background:linear-gradient(160deg,#6fe7ba,var(--jade) 60%,#37b888);
+    box-shadow:0 10px 30px -12px var(--jade-glow), var(--inner-hi);
+  }
+  .grade-right:hover{box-shadow:0 0 0 6px rgba(86,217,166,.10), 0 14px 36px -10px var(--jade-glow);transform:translateY(-1px);}
+
+  /* footer whisper */
+  .whisper{
+    text-align:center;color:var(--faint);font-size:12px;letter-spacing:.1em;
+    margin-top:48px;
+  }
+  .whisper .jp{font-family:var(--font-jp);}
+
+  @media (max-width:1080px){
+    .hero{grid-template-columns:1fr;}
+    .notes{grid-template-columns:1fr;}
+  }
+</style>
+</head>
+<body>
+  <div class="atmos"></div>
+  <div class="grain"></div>
+
+  <div class="wrap">
+
+    <!-- ===================== TOP BAR ===================== -->
+    <header class="topbar">
+      <div class="brand">
+        <div class="mark">日</div>
+        <div>
+          <div class="name">日常日本語</div>
+          <div class="sub">Japanese Trainer</div>
+        </div>
+      </div>
+      <nav class="nav">
+        <a href="#" class="active">Flashcards</a>
+        <a href="#">Browse</a>
+        <a href="#">Stats</a>
+        <a href="#"><span class="jp">みんなの日本語</span></a>
+        <a href="#"><span class="jp">独り言</span></a>
+        <a href="#"><span class="jp">歌</span></a>
+      </nav>
+      <div class="spacer"></div>
+      <div class="actions">
+        <button class="icon-btn" title="Theme" aria-label="Theme">
+          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round"><path d="M21 12.8A9 9 0 1 1 11.2 3a7 7 0 0 0 9.8 9.8z"/></svg>
+        </button>
+        <button class="icon-btn" title="Settings" aria-label="Settings">
+          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="3"/><path d="M19.4 15a1.65 1.65 0 0 0 .33 1.82l.06.06a2 2 0 1 1-2.83 2.83l-.06-.06a1.65 1.65 0 0 0-1.82-.33 1.65 1.65 0 0 0-1 1.51V21a2 2 0 0 1-4 0v-.09A1.65 1.65 0 0 0 9 19.4a1.65 1.65 0 0 0-1.82.33l-.06.06a2 2 0 1 1-2.83-2.83l.06-.06a1.65 1.65 0 0 0 .33-1.82 1.65 1.65 0 0 0-1.51-1H3a2 2 0 0 1 0-4h.09A1.65 1.65 0 0 0 4.6 9a1.65 1.65 0 0 0-.33-1.82l-.06-.06a2 2 0 1 1 2.83-2.83l.06.06a1.65 1.65 0 0 0 1.82.33H9a1.65 1.65 0 0 0 1-1.51V3a2 2 0 0 1 4 0v.09a1.65 1.65 0 0 0 1 1.51 1.65 1.65 0 0 0 1.82-.33l.06-.06a2 2 0 1 1 2.83 2.83l-.06.06a1.65 1.65 0 0 0-.33 1.82V9a1.65 1.65 0 0 0 1.51 1H21a2 2 0 0 1 0 4h-.09a1.65 1.65 0 0 0-1.51 1z"/></svg>
+        </button>
+        <div class="account">
+          <div class="ava">J</div>
+          <span class="who">jbrelly</span>
+        </div>
+      </div>
+    </header>
+
+    <!-- ===================== SECTION 1 — STUDY HOME ===================== -->
+    <div class="section-tag rise d1" style="margin-top:54px;"><span class="dot"></span>Study home · evening session</div>
+
+    <section class="hero">
+      <!-- focal -->
+      <div class="glass hero-focal rise d2">
+        <div class="kicker">Today, you have</div>
+        <div class="focal-num">100</div>
+        <div class="focal-sub">cards <b>due for review</b> — ready when you are.</div>
+        <div class="hero-cta">
+          <a href="#" class="btn btn-primary">
+            <svg viewBox="0 0 24 24" width="18" height="18" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><polygon points="6 4 20 12 6 20 6 4" fill="currentColor" stroke="none"/></svg>
+            Review due cards
+          </a>
+          <a href="#" class="btn btn-ghost">Free study</a>
+        </div>
+      </div>
+
+      <!-- side column -->
+      <div class="hero-side">
+        <div class="glass forecast rise d3">
+          <div class="head">
+            <h3>Upcoming reviews</h3>
+            <span class="meta">next 7 days</span>
+          </div>
+          <div class="bars">
+            <div class="bar-col is-today">
+              <div class="bar-track"><div class="bar today"><span class="val">4</span></div></div>
+              <span class="lbl">Today</span>
+            </div>
+            <div class="bar-col"><div class="bar-track"><div class="bar s2"></div></div><span class="lbl">Wed</span></div>
+            <div class="bar-col"><div class="bar-track"><div class="bar dim"></div></div><span class="lbl">Thu</span></div>
+            <div class="bar-col"><div class="bar-track"><div class="bar dim"></div></div><span class="lbl">Fri</span></div>
+            <div class="bar-col"><div class="bar-track"><div class="bar s2"></div></div><span class="lbl">Sat</span></div>
+            <div class="bar-col"><div class="bar-track"><div class="bar dim"></div></div><span class="lbl">Sun</span></div>
+            <div class="bar-col"><div class="bar-track"><div class="bar dim"></div></div><span class="lbl">Mon</span></div>
+          </div>
+        </div>
+
+        <div class="glass streak rise d4">
+          <div class="flame">
+            <svg viewBox="0 0 24 24" fill="none" stroke="var(--coral-soft)" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round"><path d="M12 2c1 3-1 5-1 5s4 1 4 6a4 4 0 0 1-8 0c0-2 1-3 1-3s-1 4 1 4c0 0-3-3 3-12z"/></svg>
+          </div>
+          <div class="copy">
+            <div class="big"><span>12</span>-day streak</div>
+            <div class="small">Keep the evening habit alive.</div>
+          </div>
+          <div class="prog">
+            <div class="pv">4 <em>/ 100 today</em></div>
+            <div class="ptrack"><div class="pfill"></div></div>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <!-- ===================== SECTION 2 — FLASHCARD ===================== -->
+    <div class="section-tag rise d3" style="margin-top:80px;"><span class="dot"></span>Flashcard · revealed</div>
+
+    <div class="stage">
+      <article class="glass card rise d4">
+        <div class="card-kicker">
+          <span class="vbadge"><span class="pulse"></span>Godan verb</span>
+          <span class="sep">·</span>
+          Read &amp; recall · meaning + reading
+        </div>
+
+        <div class="prompt">払う</div>
+
+        <div class="reading-row">
+          <div class="reading">
+            <span class="mora">は</span><span class="mora high drop">ら</span><span class="mora">う</span>
+          </div>
+          <span class="pitch-tag">pitch [2]</span>
+          <button class="play-btn" title="Play reading" aria-label="Play reading">
+            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round"><polygon points="11 5 6 9 2 9 2 15 6 15 11 19 11 5" fill="currentColor" stroke="none"/><path d="M15.5 8.5a5 5 0 0 1 0 7"/><path d="M18.5 5.5a9 9 0 0 1 0 13"/></svg>
+          </button>
+        </div>
+
+        <div class="meaning">
+          <div class="label">Meaning</div>
+          <div class="word">to pay</div>
+        </div>
+
+        <div class="tags">
+          <span class="pill coral">Godan · <span class="jp">五段</span></span>
+          <span class="pill">N5</span>
+          <a href="#" class="pill link">View on Jisho <span class="ext">↗</span></a>
+        </div>
+
+        <div class="notes">
+          <div class="note">
+            <div class="nlabel">
+              <svg class="ic" viewBox="0 0 24 24" fill="none" stroke="var(--faint)" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round"><path d="M9 18h6M10 22h4M12 2a7 7 0 0 0-4 12.7c.6.5 1 1.3 1 2.1v.2h6v-.2c0-.8.4-1.6 1-2.1A7 7 0 0 0 12 2z"/></svg>
+              Mnemonic
+            </div>
+            <p><span class="jp">はらう</span> <span class="em">“ha-row”</span> — <span class="hl">hand over the dough</span>.</p>
+          </div>
+          <div class="note tip">
+            <div class="nlabel">
+              <svg class="ic" viewBox="0 0 24 24" fill="none" stroke="var(--coral-soft)" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round"><path d="M12 9v4M12 17h.01M10.3 3.9 1.8 18a2 2 0 0 0 1.7 3h17a2 2 0 0 0 1.7-3L13.7 3.9a2 2 0 0 0-3.4 0z"/></svg>
+              Trap / tip
+            </div>
+            <p><span class="jp">払う</span> = pay; <span class="jp">支払う</span> <span class="em">(しはらい)</span> = the formal <span class="em">“pay / settle”</span>.</p>
+          </div>
+        </div>
+
+        <div class="example">
+          <div class="ehead">
+            <div class="nlabel">
+              <svg class="ic" width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="var(--faint)" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round"><path d="M4 19.5A2.5 2.5 0 0 1 6.5 17H20"/><path d="M6.5 2H20v20H6.5A2.5 2.5 0 0 1 4 19.5v-15A2.5 2.5 0 0 1 6.5 2z"/></svg>
+              Example
+            </div>
+            <div class="tools">
+              <button class="mini-btn play" title="Play sentence" aria-label="Play sentence">
+                <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round"><polygon points="6 4 20 12 6 20 6 4" fill="currentColor" stroke="none"/></svg>
+              </button>
+              <button class="mini-btn" title="Copy" aria-label="Copy">
+                <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round"><rect x="9" y="9" width="13" height="13" rx="2"/><path d="M5 15H4a2 2 0 0 1-2-2V4a2 2 0 0 1 2-2h9a2 2 0 0 1 2 2v1"/></svg>
+              </button>
+            </div>
+          </div>
+          <div class="ex-jp">お<ruby>金<rt>かね</rt></ruby>を<ruby>払<rt>はら</rt></ruby>う。</div>
+          <div class="ex-en"><span class="lead">Pay the money.</span></div>
+        </div>
+
+        <div class="grade">
+          <button class="grade-btn grade-wrong">
+            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><line x1="18" y1="6" x2="6" y2="18"/><line x1="6" y1="6" x2="18" y2="18"/></svg>
+            Got it wrong
+          </button>
+          <button class="grade-btn grade-right">
+            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"><polyline points="20 6 9 17 4 12"/></svg>
+            Got it right
+          </button>
+        </div>
+      </article>
+    </div>
+
+    <div class="whisper">夜 · <span class="jp">静かに学ぶ</span> — quiet, focused study</div>
+
+  </div>
+
+  <script>
+    // tasteful entrance: stagger the bar growth after load so the strip "fills in"
+    window.addEventListener('load', () => {
+      document.querySelectorAll('.bar').forEach((b, i) => {
+        const h = b.style.height || getComputedStyle(b).height;
+        b.animate(
+          [{ transform:'scaleY(0)' , transformOrigin:'bottom' },
+           { transform:'scaleY(1)', transformOrigin:'bottom' }],
+          { duration: 700, delay: 500 + i*60, easing:'cubic-bezier(.2,.8,.2,1)', fill:'backwards' }
+        );
+      });
+      // streak progress fill grows in
+      const pf = document.querySelector('.pfill');
+      if (pf){ pf.animate([{width:'0%'},{width:'4%'}], {duration:900, delay:700, easing:'ease-out', fill:'backwards'}); }
+    });
+  </script>
+</body>
+</html>

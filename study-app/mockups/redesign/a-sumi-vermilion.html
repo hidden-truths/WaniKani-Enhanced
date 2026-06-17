@@ -1,0 +1,750 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1.0" />
+<title>日常日本語 · Sumi &amp; Vermilion</title>
+<link rel="preconnect" href="https://fonts.googleapis.com" />
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+<link href="https://fonts.googleapis.com/css2?family=Fraunces:ital,opsz,wght@0,9..144,400;0,9..144,500;0,9..144,600;0,9..144,900;1,9..144,400;1,9..144,500;1,9..144,600&family=Newsreader:ital,opsz,wght@0,6..72,400;0,6..72,500;0,6..72,600;1,6..72,400;1,6..72,500&family=Spline+Sans+Mono:wght@400;500;600&family=Noto+Serif+JP:wght@500;700;900&family=Zen+Kaku+Gothic+New:wght@400;500;700&display=swap" rel="stylesheet" />
+<style>
+  :root{
+    /* paper layers */
+    --paper-page:#F3ECDD;
+    --paper-raised:#FBF6EC;
+    --paper-deep:#E7DBC4;
+    /* ink */
+    --ink:#1C1714;
+    --ink-muted:#6B6052;
+    --hairline:#D8CBB0;
+    /* accents */
+    --vermilion:#CD4327;
+    --vermilion-deep:#A8311A;
+    --vermilion-soft:#F3DACE;
+    --indigo:#2A4A6E;
+    --gold:#A8842E;
+    --green:#3F7A4E;
+    --green-soft:#DCE7DA;
+    /* shadows */
+    --lift-sm:0 1px 2px rgba(28,23,20,.06), 0 2px 6px -2px rgba(28,23,20,.10);
+    --lift-md:0 1px 2px rgba(28,23,20,.06), 0 12px 32px -8px rgba(28,23,20,.18);
+    --lift-lg:0 2px 4px rgba(28,23,20,.07), 0 30px 60px -18px rgba(28,23,20,.28);
+    --serif-display:"Fraunces", Georgia, serif;
+    --serif-body:"Newsreader", Georgia, serif;
+    --mono:"Spline Sans Mono", ui-monospace, monospace;
+    --jp-serif:"Noto Serif JP", serif;
+    --jp-sans:"Zen Kaku Gothic New", sans-serif;
+  }
+
+  *{ box-sizing:border-box; }
+  html,body{ margin:0; padding:0; }
+
+  body{
+    background-color:var(--paper-page);
+    color:var(--ink);
+    font-family:var(--serif-body);
+    font-size:16px;
+    line-height:1.55;
+    -webkit-font-smoothing:antialiased;
+    text-rendering:optimizeLegibility;
+    position:relative;
+    overflow-x:hidden;
+  }
+
+  /* ---- paper grain + ink-wash atmosphere ---- */
+  body::before{
+    /* fine paper grain */
+    content:"";
+    position:fixed; inset:0; z-index:0; pointer-events:none;
+    background-image:url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='180' height='180'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.9' numOctaves='2' stitchTiles='stitch'/%3E%3CfeColorMatrix type='saturate' values='0'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23n)' opacity='0.5'/%3E%3C/svg%3E");
+    opacity:.30;
+    mix-blend-mode:multiply;
+  }
+  body::after{
+    /* warm ink-wash blooms, very subtle */
+    content:"";
+    position:fixed; inset:0; z-index:0; pointer-events:none;
+    background:
+      radial-gradient(60% 55% at 88% 6%, rgba(205,67,39,.10), rgba(205,67,39,0) 60%),
+      radial-gradient(55% 50% at 4% 96%, rgba(42,74,110,.07), rgba(42,74,110,0) 62%),
+      radial-gradient(120% 90% at 50% -10%, rgba(231,219,196,.55), rgba(231,219,196,0) 55%);
+  }
+
+  .wrap{ position:relative; z-index:1; max-width:1180px; margin:0 auto; padding:0 40px 96px; }
+
+  /* ===================== TOP BAR ===================== */
+  .topbar{
+    position:relative; z-index:2;
+    display:flex; align-items:center; gap:36px;
+    padding:26px 40px 22px;
+    max-width:1180px; margin:0 auto;
+  }
+  .brand{ display:flex; align-items:baseline; gap:14px; min-width:0; }
+  .brand .jp{
+    font-family:var(--jp-serif); font-weight:900;
+    font-size:27px; letter-spacing:.04em; color:var(--ink);
+    line-height:1; white-space:nowrap;
+  }
+  .brand .sub{
+    font-family:var(--mono); font-size:10.5px; letter-spacing:.34em;
+    text-transform:uppercase; color:var(--ink-muted);
+    border-left:1px solid var(--hairline); padding-left:14px;
+    transform:translateY(-1px);
+  }
+
+  nav.surfaces{
+    display:flex; align-items:center; gap:4px; margin-left:8px; flex:1;
+  }
+  nav.surfaces a{
+    font-family:var(--serif-body); font-size:15px; font-weight:500;
+    color:var(--ink-muted); text-decoration:none;
+    padding:8px 13px; border-radius:8px; white-space:nowrap;
+    transition:color .18s ease, background .18s ease;
+    position:relative;
+  }
+  nav.surfaces a .min{ font-family:var(--jp-sans); font-weight:500; }
+  nav.surfaces a:hover{ color:var(--ink); background:rgba(216,203,176,.32); }
+  nav.surfaces a.active{ color:var(--ink); font-weight:600; }
+  nav.surfaces a.active::after{
+    content:""; position:absolute; left:13px; right:13px; bottom:1px; height:2px;
+    background:var(--vermilion); border-radius:2px;
+  }
+
+  .top-actions{ display:flex; align-items:center; gap:10px; }
+  .icon-btn{
+    width:38px; height:38px; border-radius:50%;
+    border:1px solid var(--hairline); background:var(--paper-raised);
+    display:grid; place-items:center; cursor:pointer; color:var(--ink-muted);
+    box-shadow:var(--lift-sm); transition:transform .18s ease, color .18s ease, border-color .18s ease;
+  }
+  .icon-btn:hover{ transform:translateY(-1px); color:var(--ink); border-color:var(--gold); }
+  .icon-btn svg{ width:18px; height:18px; }
+  .avatar{
+    width:38px; height:38px; border-radius:50%;
+    background:linear-gradient(150deg,var(--indigo),#1d3550);
+    color:#F3ECDD; display:grid; place-items:center;
+    font-family:var(--serif-display); font-weight:600; font-size:16px;
+    box-shadow:var(--lift-sm); cursor:pointer;
+    border:1.5px solid rgba(251,246,236,.5);
+  }
+
+  .topbar-rule{
+    max-width:1180px; margin:0 auto; height:1px; position:relative; z-index:1;
+    background:linear-gradient(to right, transparent, var(--hairline) 12%, var(--hairline) 88%, transparent);
+  }
+  .topbar-rule::after{
+    content:""; position:absolute; left:40px; top:0; width:54px; height:2px; top:-0.5px;
+    background:var(--vermilion);
+  }
+
+  /* shared kicker */
+  .kicker{
+    font-family:var(--mono); font-size:11px; letter-spacing:.3em;
+    text-transform:uppercase; color:var(--gold); font-weight:500;
+    display:inline-flex; align-items:center; gap:10px;
+  }
+  .kicker::before{ content:""; width:22px; height:1px; background:var(--gold); display:inline-block; }
+
+  /* ===================== HERO ===================== */
+  .hero{
+    display:grid; grid-template-columns:1fr auto; gap:40px;
+    padding:64px 0 30px; align-items:end;
+  }
+  .hero-left{ max-width:560px; }
+  .hero .eyebrow{ margin-bottom:22px; }
+
+  .bignum{
+    font-family:var(--serif-display);
+    font-weight:900;
+    font-size:188px;
+    line-height:.84;
+    letter-spacing:-.02em;
+    color:var(--ink);
+    font-variation-settings:"opsz" 144, "SOFT" 0;
+    position:relative;
+    display:inline-block;
+  }
+  .bignum .due-label{
+    display:block;
+    font-family:var(--serif-display);
+    font-weight:500; font-style:italic;
+    font-size:25px; line-height:1.2; letter-spacing:0;
+    color:var(--ink-muted);
+    margin-top:6px;
+  }
+  .bignum .due-label em{ color:var(--vermilion); font-style:italic; font-weight:600; }
+
+  .hero-meta{
+    display:flex; align-items:center; gap:18px;
+    margin:30px 0 30px;
+    font-family:var(--serif-body);
+  }
+  .streak-chip{
+    display:inline-flex; align-items:center; gap:9px;
+    padding:8px 15px 8px 12px; border-radius:999px;
+    background:var(--paper-raised); border:1px solid var(--hairline);
+    box-shadow:var(--lift-sm);
+    font-size:14px; color:var(--ink);
+  }
+  .streak-chip b{ font-weight:600; }
+  .streak-chip .dot{
+    width:9px; height:9px; border-radius:50%; background:var(--vermilion);
+    box-shadow:0 0 0 4px var(--vermilion-soft);
+  }
+  .progress-line{ font-size:14.5px; color:var(--ink-muted); }
+  .progress-line b{ color:var(--ink); font-weight:600; font-family:var(--serif-display); }
+
+  .cta-row{ display:flex; align-items:center; gap:16px; margin-top:6px; }
+  .btn{
+    font-family:var(--serif-body); cursor:pointer;
+    border:none; border-radius:12px;
+    display:inline-flex; align-items:center; gap:11px;
+    transition:transform .16s ease, box-shadow .2s ease, background .2s ease;
+  }
+  .btn-primary{
+    background:var(--vermilion); color:#FCEFE9;
+    font-size:17px; font-weight:600; padding:16px 28px;
+    box-shadow:0 1px 2px rgba(168,49,26,.4), 0 14px 28px -10px rgba(205,67,39,.6);
+    letter-spacing:.01em;
+  }
+  .btn-primary .arr{ transition:transform .2s ease; }
+  .btn-primary:hover{ background:var(--vermilion-deep); transform:translateY(-2px); box-shadow:0 2px 4px rgba(168,49,26,.45), 0 22px 40px -12px rgba(205,67,39,.7); }
+  .btn-primary:hover .arr{ transform:translateX(4px); }
+  .btn-ghost{
+    background:transparent; color:var(--ink);
+    font-size:16px; font-weight:500; padding:15px 22px;
+    border:1px solid var(--hairline); box-shadow:var(--lift-sm);
+  }
+  .btn-ghost:hover{ background:var(--paper-raised); transform:translateY(-2px); border-color:var(--ink-muted); }
+
+  /* forecast card */
+  .forecast{
+    background:var(--paper-raised);
+    border:1px solid var(--hairline);
+    border-radius:18px;
+    padding:24px 26px 20px;
+    box-shadow:var(--lift-md);
+    min-width:330px;
+    position:relative;
+  }
+  .forecast::before{
+    /* deckled paper top edge accent */
+    content:""; position:absolute; left:24px; top:0; width:40px; height:3px;
+    background:var(--gold); border-radius:0 0 3px 3px;
+  }
+  .forecast .head{
+    display:flex; justify-content:space-between; align-items:baseline; margin-bottom:20px;
+  }
+  .forecast .head .title{
+    font-family:var(--serif-display); font-weight:600; font-size:17px; color:var(--ink);
+  }
+  .forecast .head .total{
+    font-family:var(--mono); font-size:11px; letter-spacing:.18em; text-transform:uppercase; color:var(--ink-muted);
+  }
+  .bars{ display:grid; grid-template-columns:repeat(7,1fr); gap:13px; align-items:end; height:104px; }
+  .bar-col{ display:flex; flex-direction:column; align-items:center; gap:9px; height:100%; justify-content:flex-end; }
+  .bar-track{ width:100%; display:flex; align-items:flex-end; justify-content:center; flex:1; }
+  .bar{
+    width:13px; border-radius:6px;
+    background:var(--paper-deep);
+    position:relative;
+    transition:transform .25s ease;
+  }
+  .bar-col:hover .bar{ transform:scaleY(1.05); transform-origin:bottom; }
+  .bar.today{
+    background:linear-gradient(to top,var(--vermilion),#e06043);
+    box-shadow:0 6px 14px -6px rgba(205,67,39,.7);
+  }
+  .bar.tiny{ background:var(--hairline); }
+  .bar-num{ font-family:var(--mono); font-size:11px; color:var(--ink-muted); }
+  .bar.today + .bar-num,
+  .bar-col.is-today .bar-num{ color:var(--vermilion); font-weight:600; }
+  .bar-day{ font-family:var(--mono); font-size:10px; letter-spacing:.08em; text-transform:uppercase; color:var(--ink-muted); }
+  .bar-col.is-today .bar-day{ color:var(--ink); font-weight:600; }
+
+  /* divider between sections */
+  .section-div{
+    display:flex; align-items:center; gap:20px; margin:54px 0 30px;
+  }
+  .section-div .label{
+    font-family:var(--mono); font-size:11px; letter-spacing:.32em; text-transform:uppercase; color:var(--ink-muted);
+    white-space:nowrap;
+  }
+  .section-div .line{ flex:1; height:1px; background:var(--hairline); }
+  .section-div .seal-mini{ flex:0 0 auto; }
+
+  /* ===================== FLASHCARD ===================== */
+  .card-stage{ position:relative; padding:8px 0 0; }
+
+  .flashcard{
+    position:relative;
+    background:var(--paper-raised);
+    border:1px solid var(--hairline);
+    border-radius:22px;
+    box-shadow:var(--lift-lg);
+    overflow:hidden;
+    transition:transform .3s cubic-bezier(.2,.7,.3,1), box-shadow .3s ease;
+  }
+  .flashcard:hover{ transform:translateY(-4px); box-shadow:0 4px 8px rgba(28,23,20,.08), 0 44px 80px -22px rgba(28,23,20,.34); }
+  /* vermilion verb-class spine */
+  .flashcard::before{
+    content:""; position:absolute; left:0; top:0; bottom:0; width:7px;
+    background:linear-gradient(to bottom,var(--vermilion),var(--vermilion-deep));
+    z-index:3;
+  }
+  /* faint corner wash inside card */
+  .flashcard::after{
+    content:""; position:absolute; right:0; top:0; width:340px; height:300px; pointer-events:none;
+    background:radial-gradient(70% 70% at 90% 10%, rgba(205,67,39,.06), rgba(205,67,39,0) 70%);
+  }
+
+  .card-inner{ padding:38px 46px 40px 52px; position:relative; z-index:2; }
+
+  .card-top{ display:flex; justify-content:space-between; align-items:flex-start; gap:24px; }
+  .card-kicker{
+    font-family:var(--mono); font-size:11px; letter-spacing:.2em; text-transform:uppercase;
+    color:var(--ink-muted); display:inline-flex; align-items:center; gap:9px;
+  }
+  .card-kicker .pip{ width:6px; height:6px; border-radius:50%; background:var(--vermilion); }
+
+  /* HANKO SEAL */
+  .hanko{
+    flex:0 0 auto;
+    width:84px; height:84px; border-radius:50%;
+    border:3px solid var(--vermilion);
+    color:var(--vermilion);
+    display:grid; place-items:center;
+    transform:rotate(-7deg);
+    position:relative;
+    background:
+      radial-gradient(circle at 50% 50%, rgba(205,67,39,.07), rgba(205,67,39,.02));
+    box-shadow:inset 0 0 0 2px rgba(205,67,39,.15);
+    filter:url(#stamp);
+  }
+  .hanko .glyph{
+    font-family:var(--jp-serif); font-weight:900; font-size:38px; line-height:1; letter-spacing:0;
+  }
+  .hanko .ring{
+    position:absolute; inset:6px; border-radius:50%; border:1px solid rgba(205,67,39,.45);
+  }
+
+  /* main grid: word + reading */
+  .word-block{ display:flex; align-items:flex-end; gap:38px; margin-top:18px; flex-wrap:wrap; }
+  .prompt-word{
+    font-family:var(--jp-serif); font-weight:700;
+    font-size:128px; line-height:.92; color:var(--ink);
+    letter-spacing:.02em;
+    position:relative;
+  }
+  /* thin vertical vermilion tategaki rule beside the word */
+  .tate-rule{
+    align-self:stretch; width:2px; background:linear-gradient(to bottom, var(--vermilion), rgba(205,67,39,.15));
+    margin:8px 2px 12px; border-radius:2px;
+  }
+
+  .reading-area{ padding-bottom:14px; }
+  .reading-row{ display:flex; align-items:flex-end; gap:18px; }
+
+  /* pitch accent notation */
+  .pitch{
+    font-family:var(--jp-sans); font-weight:500;
+    font-size:46px; line-height:1; color:var(--ink);
+    display:inline-flex; align-items:flex-end; letter-spacing:.02em;
+  }
+  /* pitch graph: low morae sit a touch lower, high morae carry an indigo overline,
+     the drop is a vertical step at the right edge of the last high mora. Tokyo [2]:
+     は(low) ら(high) → drop → う(low). */
+  .mora{ position:relative; padding:10px 1px 0; color:var(--ink); }
+  .mora.low{ transform:translateY(3px); }
+  .mora.high::before{
+    content:""; position:absolute; left:-1px; right:-1px; top:5px; height:2.5px;
+    background:var(--indigo);
+  }
+  /* drop step: vertical tick descending off the right edge of the high mora */
+  .mora.drop::after{
+    content:""; position:absolute; right:-1px; top:5px; height:15px; width:2.5px;
+    background:var(--indigo);
+  }
+  .pitch-tag{
+    font-family:var(--mono); font-size:11px; letter-spacing:.12em; color:var(--indigo);
+    border:1px solid rgba(42,74,110,.35); border-radius:6px; padding:2px 7px;
+    transform:translateY(-9px);
+    background:rgba(42,74,110,.05);
+  }
+
+  .play-btn{
+    width:46px; height:46px; border-radius:50%;
+    background:var(--paper-page); border:1px solid var(--hairline);
+    display:grid; place-items:center; cursor:pointer; color:var(--vermilion);
+    box-shadow:var(--lift-sm); transition:transform .16s ease, background .2s ease, color .2s ease;
+    transform:translateY(-4px);
+  }
+  .play-btn:hover{ background:var(--vermilion); color:#FCEFE9; transform:translateY(-6px); }
+  .play-btn svg{ width:17px; height:17px; margin-left:2px; }
+
+  .meaning{
+    font-family:var(--serif-display); font-weight:500; font-style:italic;
+    font-size:42px; line-height:1.05; color:var(--ink);
+    margin-top:26px; letter-spacing:-.005em;
+  }
+  .meaning .lead{ color:var(--ink-muted); font-style:italic; font-weight:400; font-size:.62em; padding-right:6px; }
+
+  /* tag row */
+  .tag-row{ display:flex; align-items:center; gap:11px; margin-top:24px; flex-wrap:wrap; }
+  .tag{
+    font-family:var(--mono); font-size:11px; letter-spacing:.12em; text-transform:uppercase; font-weight:500;
+    padding:6px 12px; border-radius:8px; display:inline-flex; align-items:center; gap:7px;
+  }
+  .tag.class{ background:var(--vermilion); color:#FCEFE9; box-shadow:0 8px 16px -8px rgba(205,67,39,.6); }
+  .tag.class .jp{ font-family:var(--jp-sans); letter-spacing:.04em; }
+  .tag.level{ background:var(--paper-deep); color:var(--ink); border:1px solid var(--hairline); }
+  .tag.link{
+    background:transparent; color:var(--indigo); border:1px solid rgba(42,74,110,.3);
+    text-decoration:none; transition:background .18s ease, transform .18s ease;
+  }
+  .tag.link:hover{ background:rgba(42,74,110,.07); transform:translateY(-1px); }
+  .tag.link svg{ width:11px; height:11px; }
+
+  /* notes grid */
+  .notes{ display:grid; grid-template-columns:1fr 1fr; gap:18px; margin-top:32px; }
+  .note{
+    border-radius:14px; padding:18px 20px 18px;
+    background:var(--paper-page);
+    border:1px solid var(--hairline);
+    box-shadow:var(--lift-sm);
+    position:relative;
+    transition:transform .2s ease, box-shadow .2s ease;
+  }
+  .note:hover{ transform:translateY(-2px); box-shadow:var(--lift-md); }
+  .note .note-label{
+    font-family:var(--mono); font-size:10.5px; letter-spacing:.2em; text-transform:uppercase;
+    display:inline-flex; align-items:center; gap:8px; margin-bottom:9px; font-weight:500;
+  }
+  .note .note-body{ font-family:var(--serif-body); font-size:16px; line-height:1.5; color:var(--ink); }
+  .note .note-body b{ font-weight:600; }
+  .note .note-body .jp{ font-family:var(--jp-sans); }
+
+  .note.mnemonic{ border-left:3px solid var(--gold); }
+  .note.mnemonic .note-label{ color:var(--gold); }
+  .note.trap{ border-left:3px solid var(--vermilion); background:linear-gradient(180deg, var(--vermilion-soft), var(--paper-page) 70%); }
+  .note.trap .note-label{ color:var(--vermilion-deep); }
+  .note.trap .note-label svg{ width:13px; height:13px; }
+
+  /* example block */
+  .example{
+    margin-top:22px;
+    background:linear-gradient(180deg, #FFFBF3, var(--paper-raised));
+    border:1px solid var(--hairline);
+    border-radius:16px;
+    padding:24px 26px 22px;
+    box-shadow:var(--lift-sm);
+    position:relative;
+  }
+  .example::before{
+    content:""; position:absolute; left:0; top:20px; bottom:20px; width:3px; border-radius:3px;
+    background:var(--gold);
+  }
+  .ex-head{ display:flex; justify-content:space-between; align-items:center; margin-bottom:14px; }
+  .ex-label{
+    font-family:var(--mono); font-size:10.5px; letter-spacing:.22em; text-transform:uppercase; color:var(--ink-muted); font-weight:500;
+  }
+  .ex-tools{ display:flex; gap:8px; }
+  .tool-btn{
+    width:34px; height:34px; border-radius:9px; border:1px solid var(--hairline); background:var(--paper-page);
+    display:grid; place-items:center; cursor:pointer; color:var(--ink-muted);
+    transition:color .16s ease, border-color .16s ease, transform .16s ease;
+  }
+  .tool-btn:hover{ color:var(--vermilion); border-color:var(--vermilion); transform:translateY(-1px); }
+  .tool-btn svg{ width:15px; height:15px; }
+
+  .ex-jp{
+    font-family:var(--jp-serif); font-weight:500;
+    font-size:34px; line-height:1.7; color:var(--ink); letter-spacing:.01em;
+  }
+  .ex-jp ruby rt{
+    font-family:var(--jp-sans); font-weight:500;
+    font-size:.34em; color:var(--vermilion); letter-spacing:.04em;
+    transform:translateY(2px);
+  }
+  .ex-en{
+    font-family:var(--serif-body); font-style:italic; font-size:17px; color:var(--ink-muted);
+    margin-top:8px;
+  }
+
+  /* grade controls */
+  .grade-row{ display:grid; grid-template-columns:1fr 1fr; gap:18px; margin-top:30px; }
+  .grade{
+    font-family:var(--serif-body); cursor:pointer;
+    border-radius:14px; padding:18px 22px;
+    display:flex; align-items:center; justify-content:center; gap:12px;
+    font-size:17px; font-weight:600;
+    transition:transform .16s ease, box-shadow .2s ease, background .2s ease;
+  }
+  .grade .kbd{
+    font-family:var(--mono); font-size:11px; font-weight:500; letter-spacing:.04em;
+    border-radius:6px; padding:3px 7px; margin-left:2px;
+  }
+  .grade.wrong{
+    background:var(--paper-raised); color:var(--vermilion-deep);
+    border:1.5px solid var(--vermilion); box-shadow:var(--lift-sm);
+  }
+  .grade.wrong .kbd{ background:var(--vermilion-soft); color:var(--vermilion-deep); }
+  .grade.wrong:hover{ background:var(--vermilion); color:#FCEFE9; transform:translateY(-2px); box-shadow:0 16px 30px -12px rgba(205,67,39,.55); }
+  .grade.wrong:hover .kbd{ background:rgba(252,239,233,.22); color:#FCEFE9; }
+  .grade.right{
+    background:linear-gradient(180deg,#46855A,var(--green));
+    color:#F2F7EF; border:1.5px solid var(--green);
+    box-shadow:0 1px 2px rgba(35,68,43,.4), 0 16px 30px -12px rgba(63,122,78,.6);
+  }
+  .grade.right .kbd{ background:rgba(242,247,239,.2); color:#F2F7EF; }
+  .grade.right:hover{ transform:translateY(-2px); box-shadow:0 2px 4px rgba(35,68,43,.45), 0 22px 38px -14px rgba(63,122,78,.7); }
+  .grade svg{ width:19px; height:19px; }
+
+  /* ===== entrance animation ===== */
+  @keyframes rise{
+    from{ opacity:0; transform:translateY(18px); }
+    to{ opacity:1; transform:translateY(0); }
+  }
+  .reveal{ opacity:0; animation:rise .7s cubic-bezier(.2,.7,.3,1) forwards; }
+  .d1{ animation-delay:.05s; } .d2{ animation-delay:.13s; } .d3{ animation-delay:.21s; }
+  .d4{ animation-delay:.29s; } .d5{ animation-delay:.37s; } .d6{ animation-delay:.45s; }
+  .d7{ animation-delay:.53s; } .d8{ animation-delay:.61s; }
+  @media (prefers-reduced-motion:reduce){
+    .reveal{ animation:none; opacity:1; }
+  }
+  /* bar grow */
+  @keyframes grow{ from{ transform:scaleY(0); } to{ transform:scaleY(1); } }
+  .bar{ transform-origin:bottom; animation:grow .8s cubic-bezier(.2,.7,.3,1) backwards; }
+
+  .footer-note{
+    text-align:center; margin-top:46px;
+    font-family:var(--mono); font-size:10.5px; letter-spacing:.22em; text-transform:uppercase; color:var(--ink-muted);
+    opacity:.7;
+  }
+</style>
+</head>
+<body>
+
+<!-- hidden SVG filters for ink-stamp texture -->
+<svg width="0" height="0" style="position:absolute" aria-hidden="true">
+  <filter id="stamp">
+    <feTurbulence type="fractalNoise" baseFrequency="0.9" numOctaves="2" result="noise"/>
+    <feDisplacementMap in="SourceGraphic" in2="noise" scale="1.4"/>
+  </filter>
+</svg>
+
+<!-- ===================== TOP BAR ===================== -->
+<header class="topbar">
+  <div class="brand">
+    <span class="jp">日常日本語</span>
+    <span class="sub">Japanese&nbsp;Trainer</span>
+  </div>
+  <nav class="surfaces">
+    <a href="#" class="active">Flashcards</a>
+    <a href="#">Browse</a>
+    <a href="#">Stats</a>
+    <a href="#"><span class="min">みんなの日本語</span> · Textbook</a>
+    <a href="#"><span class="min">独り言</span> · Self-talk</a>
+    <a href="#"><span class="min">歌</span> · Songs</a>
+  </nav>
+  <div class="top-actions">
+    <button class="icon-btn" title="Theme" aria-label="Toggle theme">
+      <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6"><path d="M12 3v2M12 19v2M5.6 5.6l1.4 1.4M17 17l1.4 1.4M3 12h2M19 12h2M5.6 18.4 7 17M17 7l1.4-1.4"/><circle cx="12" cy="12" r="3.6"/></svg>
+    </button>
+    <button class="icon-btn" title="Settings" aria-label="Settings">
+      <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6"><circle cx="12" cy="12" r="3"/><path d="M19.4 15a1.6 1.6 0 0 0 .3 1.8l.1.1a2 2 0 1 1-2.8 2.8l-.1-.1a1.6 1.6 0 0 0-2.7 1.1V21a2 2 0 1 1-4 0v-.1A1.6 1.6 0 0 0 7.5 19.4a1.6 1.6 0 0 0-1.8.3l-.1.1a2 2 0 1 1-2.8-2.8l.1-.1a1.6 1.6 0 0 0-1.1-2.7H1a2 2 0 1 1 0-4h.1A1.6 1.6 0 0 0 2.6 7.5a1.6 1.6 0 0 0-.3-1.8l-.1-.1a2 2 0 1 1 2.8-2.8l.1.1a1.6 1.6 0 0 0 1.8.3H7a1.6 1.6 0 0 0 1-1.5V1a2 2 0 1 1 4 0v.1a1.6 1.6 0 0 0 2.7 1.1l.1-.1a2 2 0 1 1 2.8 2.8l-.1.1a1.6 1.6 0 0 0-.3 1.8V7a1.6 1.6 0 0 0 1.5 1H21a2 2 0 1 1 0 4h-.1a1.6 1.6 0 0 0-1.5 1z"/></svg>
+    </button>
+    <div class="avatar" title="Account">J</div>
+  </div>
+</header>
+<div class="topbar-rule"></div>
+
+<div class="wrap">
+
+  <!-- ===================== SECTION 1 · STUDY HOME ===================== -->
+  <section class="hero">
+    <div class="hero-left">
+      <div class="kicker eyebrow reveal d1">今日の復習 · Today&rsquo;s review</div>
+      <div class="bignum reveal d2">100<span class="due-label">cards <em>due for review</em></span></div>
+
+      <div class="hero-meta reveal d3">
+        <span class="streak-chip"><span class="dot"></span><b>Day&nbsp;12</b>&nbsp;streak</span>
+        <span class="progress-line"><b>4</b> of <b>100</b> studied today</span>
+      </div>
+
+      <div class="cta-row reveal d4">
+        <button class="btn btn-primary">
+          Review due cards
+          <span class="arr">
+            <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2"><path d="M5 12h14M13 6l6 6-6 6"/></svg>
+          </span>
+        </button>
+        <button class="btn btn-ghost">
+          <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8"><path d="M4 5h16M4 12h16M4 19h10"/></svg>
+          Free study
+        </button>
+      </div>
+    </div>
+
+    <!-- forecast -->
+    <aside class="forecast reveal d5">
+      <div class="head">
+        <span class="title">Upcoming reviews</span>
+        <span class="total">7&nbsp;days</span>
+      </div>
+      <div class="bars">
+        <div class="bar-col is-today">
+          <div class="bar-track"><div class="bar today" style="height:90%;animation-delay:.5s"></div></div>
+          <span class="bar-num">4</span><span class="bar-day">Today</span>
+        </div>
+        <div class="bar-col">
+          <div class="bar-track"><div class="bar tiny" style="height:12%;animation-delay:.56s"></div></div>
+          <span class="bar-num">1</span><span class="bar-day">Wed</span>
+        </div>
+        <div class="bar-col">
+          <div class="bar-track"><div class="bar tiny" style="height:8%;animation-delay:.62s"></div></div>
+          <span class="bar-num">0</span><span class="bar-day">Thu</span>
+        </div>
+        <div class="bar-col">
+          <div class="bar-track"><div class="bar tiny" style="height:18%;animation-delay:.68s"></div></div>
+          <span class="bar-num">2</span><span class="bar-day">Fri</span>
+        </div>
+        <div class="bar-col">
+          <div class="bar-track"><div class="bar tiny" style="height:8%;animation-delay:.74s"></div></div>
+          <span class="bar-num">0</span><span class="bar-day">Sat</span>
+        </div>
+        <div class="bar-col">
+          <div class="bar-track"><div class="bar tiny" style="height:12%;animation-delay:.8s"></div></div>
+          <span class="bar-num">1</span><span class="bar-day">Sun</span>
+        </div>
+        <div class="bar-col">
+          <div class="bar-track"><div class="bar tiny" style="height:8%;animation-delay:.86s"></div></div>
+          <span class="bar-num">0</span><span class="bar-day">Mon</span>
+        </div>
+      </div>
+    </aside>
+  </section>
+
+  <!-- divider -->
+  <div class="section-div reveal d5">
+    <span class="label">Now studying</span>
+    <span class="line"></span>
+    <span class="seal-mini">
+      <svg width="40" height="40" viewBox="0 0 40 40">
+        <circle cx="20" cy="20" r="17" fill="none" stroke="var(--vermilion)" stroke-width="2.2"/>
+        <text x="20" y="26" text-anchor="middle" font-family="Noto Serif JP, serif" font-weight="900" font-size="18" fill="var(--vermilion)">復</text>
+      </svg>
+    </span>
+  </div>
+
+  <!-- ===================== SECTION 2 · THE FLASHCARD ===================== -->
+  <section class="card-stage">
+    <article class="flashcard reveal d6">
+      <div class="card-inner">
+
+        <!-- top: kicker + hanko -->
+        <div class="card-top">
+          <div>
+            <div class="card-kicker"><span class="pip"></span>Read &amp; recall · meaning + reading</div>
+          </div>
+          <div class="hanko" title="godan verb seal">
+            <span class="ring"></span>
+            <span class="glyph">払</span>
+          </div>
+        </div>
+
+        <!-- word + reading -->
+        <div class="word-block">
+          <div class="prompt-word">払う</div>
+          <div class="tate-rule"></div>
+          <div class="reading-area">
+            <div class="reading-row">
+              <span class="pitch" aria-label="harau, accent pattern 2 — low, high, drop">
+                <span class="mora low">は</span><span class="mora high drop">ら</span><span class="mora low">う</span>
+              </span>
+              <span class="pitch-tag">accent&nbsp;［2］</span>
+              <button class="play-btn" title="Play reading" aria-label="Play reading">
+                <svg viewBox="0 0 24 24" fill="currentColor"><path d="M8 5v14l11-7z"/></svg>
+              </button>
+            </div>
+          </div>
+        </div>
+
+        <!-- meaning -->
+        <div class="meaning"><span class="lead">to</span>pay</div>
+
+        <!-- tag row -->
+        <div class="tag-row">
+          <span class="tag class">GODAN&nbsp;·&nbsp;<span class="jp">五段</span></span>
+          <span class="tag level">N5</span>
+          <a href="#" class="tag link">View on Jisho
+            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M7 17 17 7M9 7h8v8"/></svg>
+          </a>
+        </div>
+
+        <!-- notes -->
+        <div class="notes">
+          <div class="note mnemonic">
+            <div class="note-label">
+              <svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8"><path d="M9 18h6M10 21h4M12 3a6 6 0 0 0-4 10.5c.6.6 1 1.3 1 2.1V16h6v-.4c0-.8.4-1.5 1-2.1A6 6 0 0 0 12 3z"/></svg>
+              Mnemonic
+            </div>
+            <div class="note-body"><span class="jp">はらう</span> &ldquo;<b>ha-row</b>&rdquo; — hand over the dough.</div>
+          </div>
+          <div class="note trap">
+            <div class="note-label">
+              <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.9"><path d="M12 9v4M12 17h.01M10.3 3.9 2.4 18a2 2 0 0 0 1.7 3h15.8a2 2 0 0 0 1.7-3L13.7 3.9a2 2 0 0 0-3.4 0z"/></svg>
+              Trap / tip
+            </div>
+            <div class="note-body"><span class="jp">払う</span> = pay; <span class="jp">支払う</span> <b>(しはらい)</b> = the formal &ldquo;pay / settle.&rdquo;</div>
+          </div>
+        </div>
+
+        <!-- example -->
+        <div class="example">
+          <div class="ex-head">
+            <span class="ex-label">Example</span>
+            <div class="ex-tools">
+              <button class="tool-btn" title="Play sentence" aria-label="Play sentence">
+                <svg viewBox="0 0 24 24" fill="currentColor"><path d="M8 5v14l11-7z"/></svg>
+              </button>
+              <button class="tool-btn" title="Copy sentence" aria-label="Copy sentence">
+                <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.7"><rect x="9" y="9" width="11" height="11" rx="2"/><path d="M5 15V5a2 2 0 0 1 2-2h10"/></svg>
+              </button>
+            </div>
+          </div>
+          <p class="ex-jp"><ruby>お<rt></rt>金<rt>かね</rt>を払<rt>はら</rt>う</ruby>。</p>
+          <p class="ex-en">Pay the money.</p>
+        </div>
+
+        <!-- grade controls -->
+        <div class="grade-row">
+          <button class="grade wrong">
+            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2"><path d="M18 6 6 18M6 6l12 12"/></svg>
+            Got it wrong <span class="kbd">1</span>
+          </button>
+          <button class="grade right">
+            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.4"><path d="M20 6 9 17l-5-5"/></svg>
+            Got it right <span class="kbd">2</span>
+          </button>
+        </div>
+
+      </div>
+    </article>
+  </section>
+
+  <div class="footer-note reveal d8">日常日本語 — sumi &amp; vermilion</div>
+
+</div>
+
+<script>
+  // tasteful: re-trigger entrance if the doc was already loaded (no-op fallback safe)
+  // and add a soft press feedback to grade buttons.
+  document.querySelectorAll('.grade, .btn, .play-btn, .tool-btn').forEach(function(el){
+    el.addEventListener('pointerdown', function(){ el.style.transform = 'translateY(1px) scale(.99)'; });
+    el.addEventListener('pointerup',   function(){ el.style.transform = ''; });
+    el.addEventListener('pointerleave',function(){ el.style.transform = ''; });
+  });
+</script>
+</body>
+</html>
