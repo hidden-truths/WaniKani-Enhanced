@@ -1,0 +1,109 @@
+/* =========================================================================
+   DESIGN TOKENS — "Day / Night" redesign system (the palette of record).
+   Every component references these vars, so light/dark is one data-theme flip
+   and the hand-rolled SVG charts reskin for free. The production token NAMES
+   the code/charts already use (--godan/--ichidan/--irregular/--paper-2/--jp-font)
+   are ALIASED onto the redesign role tokens (--brand/--reading/--gold/--raised)
+   at the bottom of each block — so var(--godan) etc. keep resolving.
+
+   THREE blocks, kept in sync: light (:root), dark ([data-theme="dark"]), and the
+   prefers-color-scheme fallback (dark ONLY when the user hasn't explicitly chosen
+   light — the manual toggle writes data-theme, which always wins). Edit all three.
+
+   Palette intent (functional, not decorative):
+     godan=vermilion · ichidan=indigo · irregular=gold · leech=plum · good=jade
+     adjective=teal · noun=amber · adverb=rose · phrase=slate  (non-verb cats —
+     carried forward from the old palette; the redesign system doesn't define them
+     and no mock shows them, so re-tune in a later pass if wanted).
+   ========================================================================= */
+:root, :root[data-theme="light"]{
+  /* surfaces — warm washi paper; cards lift via a BRIGHTER raised sheet + shadow */
+  --paper:#F3ECDD; --raised:#FFFDF6; --deeper:#E4D7BE; --base:#EDE4D2;
+  /* ink */
+  --ink:#1C1714; --muted:#6B6052; --faint:#897C6B; --line:#CEBE9F;
+  /* functional role tokens */
+  --brand:#CD4327; --brand-deep:#A8311A; --brand-soft:#F3DACE; --brand-on:#FCEFE9;
+  --reading:#2A4A6E; --reading-deep:#1D3550; --reading-soft:rgba(42,74,110,.11); --reading-line:rgba(42,74,110,.34);
+  --good:#3F7A4E; --good-deep:#2C5C39; --good-soft:#DCE7DA; --good-on:#F2F7EF;
+  --gold:#8C6C1C;
+  --leech:#7E3F9C; --leech-soft:rgba(126,63,156,.10);
+  /* non-verb category accents (spine + hanko stamp) — carried forward unchanged */
+  --adjective:#1f7a6b; --noun:#b07d1a; --adverb:#a83b6e; --phrase:#5a6b8c;
+  /* derived surfaces */
+  --spine:linear-gradient(to bottom, var(--brand), var(--brand-deep));
+  --chip-bg:var(--raised); --surf-card:var(--raised); --surf-inset:#EBE0CB; --surf-nav:rgba(251,246,236,.72);
+  /* warm, liftable shadows (light depth is SHADOW-driven, not luminance-driven) */
+  --lift-sm:0 1px 2px rgba(46,33,20,.11), 0 4px 10px -2px rgba(46,33,20,.16);
+  --lift-md:0 2px 4px rgba(46,33,20,.11), 0 16px 34px -8px rgba(46,33,20,.32);
+  --lift-lg:0 4px 9px rgba(46,33,20,.13), 0 36px 66px -16px rgba(46,33,20,.42);
+  --card-shadow:var(--lift-lg);
+  --cta-shadow:0 1px 2px rgba(168,49,26,.32), 0 10px 22px -10px rgba(205,67,39,.40);
+  --cta-shadow-hover:0 2px 5px rgba(168,49,26,.4), 0 18px 34px -12px rgba(205,67,39,.55);
+  /* atmosphere knobs + subtle raised highlight */
+  --grain-opacity:.30; --grain-blend:multiply;
+  --inner-hi:inset 0 1px 0 0 rgba(255,252,246,.75);
+  /* fonts — all-sans */
+  --display:"Bricolage Grotesque","Hanken Grotesk",system-ui,sans-serif;
+  --body:"Hanken Grotesk",system-ui,-apple-system,sans-serif;
+  --mono:"Spline Sans Mono",ui-monospace,"SF Mono",monospace;
+  --jp:var(--jp-font);
+  /* ALIASES — existing code + SVG charts reskin for free.
+     --jp-font is the live token the Settings font switcher rewrites at runtime;
+     keep it (this is just its new default). */
+  --godan:var(--brand); --ichidan:var(--reading); --irregular:var(--gold);
+  --paper-2:var(--raised);
+  --jp-font:"Zen Kaku Gothic New","Noto Sans JP",sans-serif;
+}
+/* Dark — warm charcoal + coral/amber glow + frosted glass (NOT cold-blue tech). */
+[data-theme="dark"]{
+  --paper:#1B1612; --base:#16120F; --raised:rgba(44,35,27,.62); --deeper:#241C16;
+  --ink:#ECE3D5; --muted:#A89A86; --faint:#7A6E5E; --line:rgba(255,238,222,.09);
+  --brand:#FF6B4A; --brand-deep:#E8512F; --brand-soft:rgba(255,107,74,.12); --brand-on:#1F0C06;
+  --reading:#8A8FE0; --reading-deep:#6A6FC8; --reading-soft:rgba(138,143,224,.15); --reading-line:rgba(138,143,224,.62);
+  --good:#56D9A6; --good-deep:#37B888; --good-soft:rgba(86,217,166,.10); --good-on:#0B1F16;
+  --gold:#D9A94E;
+  --leech:#C792EA; --leech-soft:rgba(199,146,234,.12);
+  --adjective:#4cae9c; --noun:#d6a648; --adverb:#d479a3; --phrase:#8a9bc0;
+  --spine:linear-gradient(to bottom, var(--brand), #C5421F);
+  --chip-bg:rgba(255,238,222,.035);
+  --surf-card:linear-gradient(168deg, rgba(44,35,27,.74), rgba(36,28,22,.62));
+  --surf-inset:rgba(255,238,222,.055); --surf-nav:rgba(22,18,15,.62);
+  --lift-sm:0 1px 2px rgba(0,0,0,.4), 0 2px 8px -2px rgba(0,0,0,.5);
+  --lift-md:0 18px 44px -18px rgba(0,0,0,.65), 0 6px 18px -12px rgba(0,0,0,.55);
+  --lift-lg:0 28px 64px -22px rgba(0,0,0,.7), 0 10px 28px -16px rgba(0,0,0,.6);
+  --card-shadow:var(--lift-lg), 0 0 0 1px rgba(255,107,74,.06), 0 0 70px -26px rgba(255,107,74,.55);
+  --cta-shadow:0 10px 30px -12px rgba(255,107,74,.55);
+  --cta-shadow-hover:0 0 0 6px rgba(255,107,74,.10), 0 16px 40px -10px rgba(255,107,74,.8);
+  --grain-opacity:.05; --grain-blend:overlay;
+  --inner-hi:inset 0 1px 0 0 rgba(255,238,222,.06);
+  --godan:var(--brand); --ichidan:var(--reading); --irregular:var(--gold);
+  --paper-2:var(--raised);
+}
+/* System-preference fallback: dark tokens ONLY when no explicit light choice.
+   Mirror of [data-theme="dark"] above — keep the two in sync. */
+@media (prefers-color-scheme: dark){
+  :root:not([data-theme="light"]){
+    --paper:#1B1612; --base:#16120F; --raised:rgba(44,35,27,.62); --deeper:#241C16;
+    --ink:#ECE3D5; --muted:#A89A86; --faint:#7A6E5E; --line:rgba(255,238,222,.09);
+    --brand:#FF6B4A; --brand-deep:#E8512F; --brand-soft:rgba(255,107,74,.12); --brand-on:#1F0C06;
+    --reading:#8A8FE0; --reading-deep:#6A6FC8; --reading-soft:rgba(138,143,224,.15); --reading-line:rgba(138,143,224,.62);
+    --good:#56D9A6; --good-deep:#37B888; --good-soft:rgba(86,217,166,.10); --good-on:#0B1F16;
+    --gold:#D9A94E;
+    --leech:#C792EA; --leech-soft:rgba(199,146,234,.12);
+    --adjective:#4cae9c; --noun:#d6a648; --adverb:#d479a3; --phrase:#8a9bc0;
+    --spine:linear-gradient(to bottom, var(--brand), #C5421F);
+    --chip-bg:rgba(255,238,222,.035);
+    --surf-card:linear-gradient(168deg, rgba(44,35,27,.74), rgba(36,28,22,.62));
+    --surf-inset:rgba(255,238,222,.055); --surf-nav:rgba(22,18,15,.62);
+    --lift-sm:0 1px 2px rgba(0,0,0,.4), 0 2px 8px -2px rgba(0,0,0,.5);
+    --lift-md:0 18px 44px -18px rgba(0,0,0,.65), 0 6px 18px -12px rgba(0,0,0,.55);
+    --lift-lg:0 28px 64px -22px rgba(0,0,0,.7), 0 10px 28px -16px rgba(0,0,0,.6);
+    --card-shadow:var(--lift-lg), 0 0 0 1px rgba(255,107,74,.06), 0 0 70px -26px rgba(255,107,74,.55);
+    --cta-shadow:0 10px 30px -12px rgba(255,107,74,.55);
+    --cta-shadow-hover:0 0 0 6px rgba(255,107,74,.10), 0 16px 40px -10px rgba(255,107,74,.8);
+    --grain-opacity:.05; --grain-blend:overlay;
+    --inner-hi:inset 0 1px 0 0 rgba(255,238,222,.06);
+    --godan:var(--brand); --ichidan:var(--reading); --irregular:var(--gold);
+    --paper-2:var(--raised);
+  }
+}

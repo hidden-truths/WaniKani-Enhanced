@@ -1,59 +1,13 @@
   /* =========================================================================
-     DESIGN TOKENS
-     All theming flows through these CSS custom properties. Components never
-     hardcode a color — they reference a var — so switching light/dark is just
-     a matter of redefining the vars under a different selector. This is also
-     why the SVG charts use var(--godan) etc. inline.
-
-     Palette intent (functional, not decorative):
-       --ink/--paper/--paper-2 : text / background / raised surface
-       --godan    vermilion  → う-verbs (the most common class)
-       --ichidan  indigo     → る-verbs  + used as the "action/primary" accent
-       --irregular stone     → する/来る/etc.
-       --muted/--line        : secondary text / hairline borders
-       --leech    purple     → chronically-missed cards (see isLeech)
-       --good     green      → high accuracy / "caught up"
-       --jp-font             : swapped at runtime by the font selector
+     DESIGN TOKENS + BASE moved out (Day/Night migration, Phase 0):
+       · the :root token layer (palette + fonts, both themes + the
+         prefers-color-scheme fallback) now lives in  styles/tokens.css
+       · the reset, page <body>, .jp, .wrap + atmosphere (.grain/.atmos) now
+         live in  styles/base.css
+     Both are imported BEFORE this file in src/main.js (tokens → base → styles),
+     so the cascade order is preserved. This file holds the per-surface +
+     component CSS, peeled out into styles/<surface>.css as each phase reskins it.
      ========================================================================= */
-  :root, :root[data-theme="light"]{
-    --ink:#1a1815; --paper:#f5f1e8; --paper-2:#ebe5d6;
-    --godan:#c8442f; --ichidan:#2d4a6b; --irregular:#6b6256;
-    /* Non-verb category accents (spine + hanko stamp): teal/amber/rose/slate, each
-       distinct from the verb-class hues + leech purple. See colorClass/cardStamp. */
-    --adjective:#1f7a6b; --noun:#b07d1a; --adverb:#a83b6e; --phrase:#5a6b8c;
-    /* --muted darkened from #7a7164 (≈4.0:1, failed AA for the many small labels)
-       to ≈5.3:1 on --paper while staying clearly secondary to --ink. */
-    --muted:#675f52; --line:#d9d1c0; --leech:#9c27b0;
-    --good:#3a7d44;
-    --jp-font:"Noto Sans JP",sans-serif;
-  }
-  /* Dark theme: same token names, remapped. Brighter accent hues so the
-     red/blue class distinction survives on a dark surface. */
-  :root[data-theme="dark"]{
-    --ink:#ece6da; --paper:#1c1a17; --paper-2:#262320;
-    --godan:#e8674f; --ichidan:#7aa6d6; --irregular:#a89e8e;
-    --adjective:#4cae9c; --noun:#d6a648; --adverb:#d479a3; --phrase:#8a9bc0;
-    --muted:#9a9182; --line:#3a352e; --leech:#c77dd4;
-    --good:#6bbf78;
-  }
-  /* System-preference fallback: applies dark tokens ONLY when the user hasn't
-     explicitly chosen light (data-theme="light"). The manual toggle writes an
-     explicit data-theme which always wins over this. */
-  @media (prefers-color-scheme: dark){
-    :root:not([data-theme="light"]){
-      --ink:#ece6da; --paper:#1c1a17; --paper-2:#262320;
-      --godan:#e8674f; --ichidan:#7aa6d6; --irregular:#a89e8e;
-      --adjective:#4cae9c; --noun:#d6a648; --adverb:#d479a3; --phrase:#8a9bc0;
-      --muted:#9a9182; --line:#3a352e; --leech:#c77dd4;
-      --good:#6bbf78;
-    }
-  }
-  /* Base. Body is a serif for English chrome; Japanese text gets .jp (the
-     swappable --jp-font) so only the JP glyphs change when you pick a font. */
-  *{box-sizing:border-box;margin:0;padding:0}
-  body{background:var(--paper);color:var(--ink);font-family:Georgia,serif;line-height:1.55;-webkit-font-smoothing:antialiased}
-  .jp{font-family:var(--jp-font)}
-  .wrap{max-width:1100px;margin:0 auto;padding:0 20px 80px}
 
   /* ---- Sticky top navbar ----------------------------------------------------
      Anchored to the top: app title (left), a #navExtra slot where context controls
@@ -62,12 +16,12 @@
      float at the top. */
   .navbar{position:sticky;top:0;z-index:50;background:var(--paper);border-bottom:1px solid var(--line)}
   .nav-inner{max-width:1100px;margin:0 auto;padding:9px 20px;display:flex;align-items:center;gap:14px}
-  .nav-title{font-family:"SF Mono",ui-monospace,Menlo,monospace;font-weight:700;font-size:16px;letter-spacing:.02em;color:var(--ink);white-space:nowrap;display:inline-flex;align-items:baseline;gap:9px}
+  .nav-title{font-family:var(--mono);font-weight:700;font-size:16px;letter-spacing:.02em;color:var(--ink);white-space:nowrap;display:inline-flex;align-items:baseline;gap:9px}
   .nav-title .nav-sub{font-size:9px;letter-spacing:.22em;text-transform:uppercase;color:var(--godan);font-weight:400}
   .nav-extra{flex:1;display:flex;justify-content:center;min-width:0}   /* docked context controls */
   .nav-extra:empty{flex:1}
   .nav-actions{display:flex;align-items:center;gap:6px;margin-left:auto}
-  .nav-btn{display:inline-flex;align-items:center;gap:6px;font-family:"SF Mono",ui-monospace,monospace;font-size:12px;border:1px solid var(--line);background:transparent;color:var(--ink);padding:6px 11px;border-radius:2px;cursor:pointer;transition:all .15s}
+  .nav-btn{display:inline-flex;align-items:center;gap:6px;font-family:var(--mono);font-size:12px;border:1px solid var(--line);background:transparent;color:var(--ink);padding:6px 11px;border-radius:2px;cursor:pointer;transition:all .15s}
   .nav-btn:hover{border-color:var(--godan);color:var(--godan)}
   .nav-btn .ic{font-size:15px}
   .nav-btn.icon-only{padding:6px 8px}
@@ -84,9 +38,9 @@
   /* Tabs — the top-level views. .active is driven by TAB NAV in JS. The strip scrolls
      horizontally instead of wrapping: six tabs (three with long JP+EN labels) don't fit
      one row at phone widths, and wrapping squeezed the JP labels into vertical stacks. */
-  .tabs{display:flex;flex-wrap:nowrap;gap:4px;border-bottom:1px solid var(--line);max-width:1100px;margin:18px auto 0;padding:0 20px;overflow-x:auto;overflow-y:hidden;scrollbar-width:none}
+  .tabs{position:relative;z-index:1;display:flex;flex-wrap:nowrap;gap:4px;border-bottom:1px solid var(--line);max-width:1100px;margin:18px auto 0;padding:0 20px;overflow-x:auto;overflow-y:hidden;scrollbar-width:none}
   .tabs::-webkit-scrollbar{display:none}
-  .tab{font-family:"SF Mono",ui-monospace,monospace;font-size:12px;letter-spacing:.08em;text-transform:uppercase;background:none;border:none;border-bottom:2px solid transparent;color:var(--muted);padding:10px 14px;cursor:pointer;margin-bottom:-1px;white-space:nowrap;flex:0 0 auto}
+  .tab{font-family:var(--mono);font-size:12px;letter-spacing:.08em;text-transform:uppercase;background:none;border:none;border-bottom:2px solid transparent;color:var(--muted);padding:10px 14px;cursor:pointer;margin-bottom:-1px;white-space:nowrap;flex:0 0 auto}
   .tab.active{color:var(--ink);border-bottom-color:var(--godan)}
   .panel{display:none}      /* only one panel visible at a time */
   .panel.active{display:block}
@@ -95,8 +49,8 @@
      godan/ichidan color when active (used on the class filter buttons). */
   .controls{padding:18px 0 8px}
   .row{display:flex;flex-wrap:wrap;gap:8px;align-items:center;margin-bottom:8px}
-  .filter-label{font-family:"SF Mono",ui-monospace,monospace;font-size:11px;letter-spacing:.18em;text-transform:uppercase;color:var(--muted);margin-right:4px}
-  .chip{font-family:"SF Mono",ui-monospace,monospace;font-size:12px;border:1px solid var(--line);background:transparent;color:var(--ink);padding:6px 13px;border-radius:2px;cursor:pointer;transition:all .15s}
+  .filter-label{font-family:var(--mono);font-size:11px;letter-spacing:.18em;text-transform:uppercase;color:var(--muted);margin-right:4px}
+  .chip{font-family:var(--mono);font-size:12px;border:1px solid var(--line);background:transparent;color:var(--ink);padding:6px 13px;border-radius:2px;cursor:pointer;transition:all .15s}
   .chip:hover{border-color:var(--ink)}
   /* Active = a quiet tinted wash + colored border + bold, NOT a solid ink block.
      The old solid-ink fill made a picker full of defaults read as a wall of black
@@ -106,12 +60,12 @@
   .chip.i.active{background:color-mix(in srgb,var(--ichidan) 18%,transparent);color:var(--ichidan);border-color:var(--ichidan)}
   .chip.primary{background:var(--godan);color:#fff;border-color:var(--godan);font-weight:700}
   .chip.primary:hover{filter:brightness(.92)}
-  .search{flex:1;min-width:160px;font-family:Georgia,serif;font-size:14px;border:1px solid var(--line);background:var(--paper);padding:7px 12px;border-radius:2px;color:var(--ink)}
+  .search{flex:1;min-width:160px;font-family:var(--body);font-size:14px;border:1px solid var(--line);background:var(--paper);padding:7px 12px;border-radius:2px;color:var(--ink)}
   .search:focus{outline:none;border-color:var(--ink)}
   select.chip{appearance:none;padding-right:24px}
-  .rangeinput{width:58px;font-family:"SF Mono",ui-monospace,monospace;font-size:12px;border:1px solid var(--line);background:var(--paper);padding:6px 8px;border-radius:2px;color:var(--ink)}
+  .rangeinput{width:58px;font-family:var(--mono);font-size:12px;border:1px solid var(--line);background:var(--paper);padding:6px 8px;border-radius:2px;color:var(--ink)}
   .rangeinput:focus{outline:none;border-color:var(--ink)}
-  .jlpt-pill{font-family:"SF Mono",ui-monospace,monospace;font-size:9px;letter-spacing:.08em;color:var(--muted);border:1px solid var(--line);border-radius:2px;padding:2px 5px;margin-top:5px;display:inline-block}
+  .jlpt-pill{font-family:var(--mono);font-size:9px;letter-spacing:.08em;color:var(--muted);border:1px solid var(--line);border-radius:2px;padding:2px 5px;margin-top:5px;display:inline-block}
 
   /* --- Filter grouping (filter redesign) -----------------------------------
      Chips are unchanged + still wired by class/data-* selector; this only adds
@@ -125,7 +79,7 @@
      the study setup leads with Study-type + Test-direction + Start. Native details
      (arbitrary height; nests the topic-region cleanly). */
   .more-filters{border-top:1px solid var(--line);border-bottom:1px solid var(--line);margin:6px 0 10px}
-  .more-filters>summary{list-style:none;cursor:pointer;display:flex;align-items:center;gap:8px;padding:13px 2px;font-family:"SF Mono",ui-monospace,monospace;font-size:11px;letter-spacing:.14em;text-transform:uppercase;color:var(--muted)}
+  .more-filters>summary{list-style:none;cursor:pointer;display:flex;align-items:center;gap:8px;padding:13px 2px;font-family:var(--mono);font-size:11px;letter-spacing:.14em;text-transform:uppercase;color:var(--muted)}
   .more-filters>summary::-webkit-details-marker{display:none}
   .more-filters>summary .ic{font-size:14px;color:var(--godan)}
   .more-filters>summary::after{content:"+";margin-left:auto;font-size:16px;line-height:1;color:var(--muted)}
@@ -133,7 +87,7 @@
   .more-filters>summary:hover{color:var(--ink)}
   .more-filters[open]>summary{margin-bottom:10px}
   /* Topic disclosure: dashed = closed, solid + ink = has active selections. */
-  .topic-toggle{font-family:"SF Mono",ui-monospace,monospace;font-size:12px;border:1px dashed var(--line);background:transparent;color:var(--muted);padding:6px 13px;border-radius:2px;cursor:pointer;transition:all .15s;display:inline-flex;align-items:center;gap:7px}
+  .topic-toggle{font-family:var(--mono);font-size:12px;border:1px dashed var(--line);background:transparent;color:var(--muted);padding:6px 13px;border-radius:2px;cursor:pointer;transition:all .15s;display:inline-flex;align-items:center;gap:7px}
   .topic-toggle:hover{border-color:var(--ink);color:var(--ink)}
   .topic-toggle.has-active{border-style:solid;border-color:var(--ink);color:var(--ink)}
   .topic-toggle .tt-arr{display:inline-block;transition:transform .2s;font-size:9px}
@@ -193,7 +147,7 @@
   }
   /* Active-filter recap line: a quiet one-liner summarizing the current query
      (incl. collapsed topics) so the whole filter state is legible at a glance. */
-  .filter-summary{display:flex;align-items:center;gap:7px;font-family:"SF Mono",ui-monospace,monospace;font-size:11px;color:var(--muted);margin:2px 0 10px;min-height:16px}
+  .filter-summary{display:flex;align-items:center;gap:7px;font-family:var(--mono);font-size:11px;color:var(--muted);margin:2px 0 10px;min-height:16px}
   .filter-summary .ic{font-size:13px;color:var(--godan)}
   .filter-summary b{color:var(--ink);font-weight:400}
   .filter-summary:empty{display:none}
@@ -201,7 +155,7 @@
   .leech-row{display:flex;align-items:center;gap:11px;padding:9px 12px;border:1px solid var(--line);border-left:3px solid var(--leech);border-radius:0 3px 3px 0;background:var(--paper-2);margin-bottom:7px}
   .leech-row .lr-jp{font-size:20px;font-weight:700;line-height:1.1}
   .leech-row .lr-meta{color:var(--muted);font-size:13px;font-style:italic}
-  .leech-row .lr-acc{margin-left:auto;font-family:"SF Mono",ui-monospace,monospace;font-size:12px;color:var(--leech);font-weight:700}
+  .leech-row .lr-acc{margin-left:auto;font-family:var(--mono);font-size:12px;color:var(--leech);font-weight:700}
   .leech-row .lr-acc .ic{font-size:13px;vertical-align:-0.15em;margin-right:3px}
   /* Search field with a leading icon. */
   .search-wrap{position:relative;flex:1;min-width:180px}
@@ -213,7 +167,7 @@
   .signup-banner{display:flex;align-items:center;gap:14px;border:1px solid var(--ichidan);border-left:5px solid var(--ichidan);background:var(--paper-2);border-radius:4px;padding:12px 16px;margin:0 0 20px}
   .signup-banner[hidden]{display:none}
   .signup-banner>.ic{font-size:24px;color:var(--ichidan)}
-  .signup-banner .sb-text{flex:1;font-size:14px;line-height:1.45;font-family:Georgia,serif}
+  .signup-banner .sb-text{flex:1;font-size:14px;line-height:1.45;font-family:var(--body)}
   .signup-banner .sb-text b{font-weight:700}
   .signup-banner .sb-dismiss{background:none;border:none;color:var(--muted);cursor:pointer;padding:4px;display:inline-flex}
   .signup-banner .sb-dismiss:hover{color:var(--ink)}
@@ -233,32 +187,32 @@
   .card.selected{box-shadow:0 0 0 2px var(--ink)}
   .card-top{display:flex;justify-content:space-between;align-items:flex-start;gap:10px}
   .verb-jp{font-size:28px;font-weight:900;line-height:1.1}
-  .verb-reading{font-size:13px;color:var(--muted);font-family:"SF Mono",ui-monospace,monospace}
+  .verb-reading{font-size:13px;color:var(--muted);font-family:var(--mono)}
   .verb-meaning{font-size:15px;margin-top:5px;font-style:italic}
   /* "Hanko" stamp — the rotated class label, like a vermilion seal. */
-  .stamp{flex-shrink:0;font-family:"SF Mono",ui-monospace,monospace;font-size:9px;letter-spacing:.12em;text-transform:uppercase;border:1.5px solid var(--irregular);color:var(--irregular);padding:3px 7px;border-radius:2px;font-weight:700;transform:rotate(2deg)}
+  .stamp{flex-shrink:0;font-family:var(--mono);font-size:9px;letter-spacing:.12em;text-transform:uppercase;border:1.5px solid var(--irregular);color:var(--irregular);padding:3px 7px;border-radius:2px;font-weight:700;transform:rotate(2deg)}
   .stamp.godan{border-color:var(--godan);color:var(--godan)} .stamp.ichidan{border-color:var(--ichidan);color:var(--ichidan)}
   .stamp.i-adj,.stamp.na-adj{border-color:var(--adjective);color:var(--adjective)}
   .stamp.noun{border-color:var(--noun);color:var(--noun)} .stamp.adverb{border-color:var(--adverb);color:var(--adverb)} .stamp.phrase{border-color:var(--phrase);color:var(--phrase)}
-  .leech-badge{display:inline-block;font-family:"SF Mono",ui-monospace,monospace;font-size:9px;background:var(--leech);color:#fff;padding:2px 6px;border-radius:2px;letter-spacing:.1em;margin-top:6px}
+  .leech-badge{display:inline-block;font-family:var(--mono);font-size:9px;background:var(--leech);color:#fff;padding:2px 6px;border-radius:2px;letter-spacing:.1em;margin-top:6px}
   /* rank pinned bottom-right, accuracy bottom-left — they never collide with
      the top-right stamp/jlpt-pill (this was a bug we fixed deliberately). */
-  .rank{position:absolute;bottom:12px;right:14px;font-family:"SF Mono",ui-monospace,monospace;font-size:10px;color:var(--muted);letter-spacing:.04em}
-  .acc{position:absolute;bottom:12px;left:18px;font-family:"SF Mono",ui-monospace,monospace;font-size:10px;color:var(--muted)}
+  .rank{position:absolute;bottom:12px;right:14px;font-family:var(--mono);font-size:10px;color:var(--muted);letter-spacing:.04em}
+  .acc{position:absolute;bottom:12px;left:18px;font-family:var(--mono);font-size:10px;color:var(--muted)}
   .tags{display:flex;flex-wrap:wrap;gap:5px;margin-top:10px}
-  .tag{font-family:"SF Mono",ui-monospace,monospace;font-size:10px;color:var(--muted);background:var(--paper-2);padding:2px 7px;border-radius:2px}
+  .tag{font-family:var(--mono);font-size:10px;color:var(--muted);background:var(--paper-2);padding:2px 7px;border-radius:2px}
   .ex{font-size:15px;margin-bottom:2px} .ex .en{display:block;font-size:13px;color:var(--muted);font-style:italic}
   rt{font-size:.55em;color:var(--muted)}   /* furigana ruby text sizing */
   /* Furigana toggle (Settings): hide all readings → ruby renders as bare kanji. */
   :root[data-furigana="off"] rt{display:none}
   /* Settings modal rows: label + a segmented control, wrapping on narrow. */
   .set-row{display:flex;align-items:center;justify-content:space-between;gap:12px;flex-wrap:wrap;margin:14px 0}
-  .set-row>label{font-family:"SF Mono",ui-monospace,monospace;font-size:11px;letter-spacing:.1em;text-transform:uppercase;color:var(--muted)}
+  .set-row>label{font-family:var(--mono);font-size:11px;letter-spacing:.1em;text-transform:uppercase;color:var(--muted)}
   .set-row .jlptseg .chip{font-size:12px;padding:6px 11px}
-  .set-hint{display:block;max-width:280px;margin-top:5px;font-family:Georgia,"Times New Roman",serif;font-size:12px;letter-spacing:0;text-transform:none;color:var(--muted);opacity:.85}
-  .set-num{width:64px;background:var(--paper);color:var(--ink);border:1px solid var(--line);border-radius:6px;padding:6px 8px;font-family:"SF Mono",ui-monospace,monospace;font-size:13px;text-align:center}
+  .set-hint{display:block;max-width:280px;margin-top:5px;font-family:var(--body);font-size:12px;letter-spacing:0;text-transform:none;color:var(--muted);opacity:.85}
+  .set-num{width:64px;background:var(--paper);color:var(--ink);border:1px solid var(--line);border-radius:6px;padding:6px 8px;font-family:var(--mono);font-size:13px;text-align:center}
   .set-num:focus{outline:none;border-color:var(--ichidan)}
-  .set-select{background:var(--paper);color:var(--ink);border:1px solid var(--line);border-radius:6px;padding:6px 8px;font-family:"SF Mono",ui-monospace,monospace;font-size:13px;cursor:pointer}
+  .set-select{background:var(--paper);color:var(--ink);border:1px solid var(--line);border-radius:6px;padding:6px 8px;font-family:var(--mono);font-size:13px;cursor:pointer}
   .set-select:focus{outline:none;border-color:var(--ichidan)}
   /* A set-row whose control is a full-width block under the label (vs the inline segment rows). */
   .set-row-block{flex-direction:column;align-items:stretch}
@@ -267,8 +221,8 @@
   .voice-prefs{display:grid;grid-template-columns:repeat(auto-fit,minmax(180px,1fr));gap:12px;width:100%}
   .voice-ctx{border:1px solid var(--line);border-radius:8px;padding:9px 10px;background:var(--paper)}
   .voice-ctx-head{display:flex;align-items:center;justify-content:space-between;margin-bottom:6px}
-  .voice-ctx-name{font-family:"SF Mono",ui-monospace,monospace;font-size:11px;letter-spacing:.08em;text-transform:uppercase;color:var(--ink)}
-  .voice-reset{background:none;border:none;cursor:pointer;font-family:"SF Mono",ui-monospace,monospace;font-size:10px;letter-spacing:.06em;text-transform:uppercase;color:var(--muted)}
+  .voice-ctx-name{font-family:var(--mono);font-size:11px;letter-spacing:.08em;text-transform:uppercase;color:var(--ink)}
+  .voice-reset{background:none;border:none;cursor:pointer;font-family:var(--mono);font-size:10px;letter-spacing:.06em;text-transform:uppercase;color:var(--muted)}
   .voice-reset:hover{color:var(--godan)}
   .voice-list{list-style:none;margin:0 0 7px;padding:0;counter-reset:vp}
   .voice-item{display:flex;align-items:center;justify-content:space-between;gap:6px;padding:4px 0;border-top:1px solid var(--line)}
@@ -276,20 +230,20 @@
   .voice-left{display:inline-flex;align-items:center;gap:7px;min-width:0}
   .voice-preview:hover:not(:disabled){border-color:var(--good);color:var(--good)}
   .voice-preview.playing{background:var(--ichidan);color:#fff;border-color:var(--ichidan)}
-  .voice-tok{font-family:Georgia,"Times New Roman",serif;font-size:13px;color:var(--ink)}
+  .voice-tok{font-family:var(--body);font-size:13px;color:var(--ink)}
   .voice-ungen .voice-tok{color:var(--muted)}
-  .voice-note{font-family:"SF Mono",ui-monospace,monospace;font-size:10px;letter-spacing:.04em;color:var(--muted);font-style:italic}
-  .voice-tok::before{counter-increment:vp;content:counter(vp) ". ";color:var(--muted);font-family:"SF Mono",ui-monospace,monospace;font-size:11px}
+  .voice-note{font-family:var(--mono);font-size:10px;letter-spacing:.04em;color:var(--muted);font-style:italic}
+  .voice-tok::before{counter-increment:vp;content:counter(vp) ". ";color:var(--muted);font-family:var(--mono);font-size:11px}
   .voice-ops{display:inline-flex;gap:2px;flex-shrink:0}
   .voice-op{background:none;border:1px solid var(--line);border-radius:5px;cursor:pointer;color:var(--muted);width:22px;height:22px;line-height:1;font-size:11px;display:inline-flex;align-items:center;justify-content:center}
   .voice-op:hover:not(:disabled){border-color:var(--ichidan);color:var(--ink)}
   .voice-op:disabled{opacity:.3;cursor:default}
   .voice-del:hover{border-color:var(--godan);color:var(--godan)}
-  .voice-add{width:100%;background:var(--paper-2);color:var(--ink);border:1px solid var(--line);border-radius:6px;padding:5px 7px;font-family:"SF Mono",ui-monospace,monospace;font-size:12px}
+  .voice-add{width:100%;background:var(--paper-2);color:var(--ink);border:1px solid var(--line);border-radius:6px;padding:5px 7px;font-family:var(--mono);font-size:12px}
   .voice-add:focus{outline:none;border-color:var(--ichidan)}
   /* Browse detail modal: memory line + collapsible <details> sections. */
   /* Visual SRS status: 5-segment Leitner track + box number + due chip. */
-  .det-memory{display:flex;align-items:center;flex-wrap:wrap;gap:10px;font-family:"SF Mono",ui-monospace,monospace;font-size:12px;color:var(--muted);margin:12px 0 6px}
+  .det-memory{display:flex;align-items:center;flex-wrap:wrap;gap:10px;font-family:var(--mono);font-size:12px;color:var(--muted);margin:12px 0 6px}
   .det-memory.new{gap:7px}
   .det-memory .ic{font-size:14px}
   .srs-track{display:inline-flex;gap:3px}
@@ -300,11 +254,11 @@
   .srs-due{display:inline-flex;align-items:center;gap:4px}
   .srs-due.now{color:var(--godan);font-weight:700}
   /* Jisho dictionary deep-link (flashcard answer + detail modal). */
-  .jisho-link{display:inline-flex;align-items:center;gap:5px;font-family:"SF Mono",ui-monospace,monospace;font-size:11px;letter-spacing:.08em;text-transform:uppercase;color:var(--ichidan);text-decoration:none;margin-top:8px}
+  .jisho-link{display:inline-flex;align-items:center;gap:5px;font-family:var(--mono);font-size:11px;letter-spacing:.08em;text-transform:uppercase;color:var(--ichidan);text-decoration:none;margin-top:8px}
   .jisho-link:hover{text-decoration:underline}
   .jisho-link .ic{font-size:13px}
   .modal details{border-top:1px solid var(--line);padding:10px 0;margin-top:4px}
-  .modal details>summary{cursor:pointer;list-style:none;font-family:"SF Mono",ui-monospace,monospace;font-size:10px;letter-spacing:.18em;text-transform:uppercase;color:var(--godan);display:flex;align-items:center}
+  .modal details>summary{cursor:pointer;list-style:none;font-family:var(--mono);font-size:10px;letter-spacing:.18em;text-transform:uppercase;color:var(--godan);display:flex;align-items:center}
   .modal details>summary::-webkit-details-marker{display:none}
   .modal details>summary::after{content:"+";margin-left:auto;color:var(--muted);font-size:14px}
   .modal details[open]>summary::after{content:"−"}
@@ -314,13 +268,13 @@
   .example{margin-top:16px;padding-top:14px;border-top:1px dashed var(--line);text-align:left}
   .example[hidden]{display:none}
   .ex-head{display:flex;align-items:center;justify-content:space-between;gap:10px;margin-bottom:8px;flex-wrap:wrap}
-  .ex-label{font-family:"SF Mono",ui-monospace,monospace;font-size:10px;letter-spacing:.18em;text-transform:uppercase;color:var(--godan)}
+  .ex-label{font-family:var(--mono);font-size:10px;letter-spacing:.18em;text-transform:uppercase;color:var(--godan)}
   .exseg .exlv{font-size:11px;padding:4px 9px}
   .exseg .exlv:disabled{opacity:.35;cursor:default}
   .ex-jp{font-size:18px;line-height:1.6}
   .ex-en{font-size:13px;color:var(--muted);font-style:italic;margin-top:4px}
 
-  .count{font-family:"SF Mono",ui-monospace,monospace;font-size:11px;color:var(--muted);width:100%}
+  .count{font-family:var(--mono);font-size:11px;color:var(--muted);width:100%}
   .count b{color:var(--godan)}
 
   /* Flashcard view. Three stages share #panel-study and are toggled by JS:
@@ -329,13 +283,13 @@
   .fc-setup{padding:20px 0}
   .fc-stage{display:none;padding:10px 0 40px}
   .fc-stage.active{display:block}
-  .progress{font-family:"SF Mono",ui-monospace,monospace;font-size:12px;color:var(--muted);text-align:center;margin-bottom:18px}
+  .progress{font-family:var(--mono);font-size:12px;color:var(--muted);text-align:center;margin-bottom:18px}
   .flashcard{max-width:560px;margin:0 auto;min-height:300px;background:var(--paper);border:1px solid var(--line);border-radius:6px;padding:48px 32px;text-align:center;box-shadow:0 10px 40px rgba(26,24,21,.08);position:relative}
   .flashcard .spine{position:absolute;left:0;top:0;bottom:0;width:6px;border-radius:6px 0 0 6px;background:var(--irregular)}
   .flashcard.godan .spine{background:var(--godan)} .flashcard.ichidan .spine{background:var(--ichidan)}
   .flashcard.i-adj .spine,.flashcard.na-adj .spine{background:var(--adjective)}
   .flashcard.noun .spine{background:var(--noun)} .flashcard.adverb .spine{background:var(--adverb)} .flashcard.phrase .spine{background:var(--phrase)}
-  .prompt-label{font-family:"SF Mono",ui-monospace,monospace;font-size:10px;letter-spacing:.22em;text-transform:uppercase;color:var(--muted);margin-bottom:20px}
+  .prompt-label{font-family:var(--mono);font-size:10px;letter-spacing:.22em;text-transform:uppercase;color:var(--muted);margin-bottom:20px}
   .prompt-main{font-size:56px;font-weight:900;line-height:1.05}
   .prompt-sub{font-size:20px;color:var(--muted);margin-top:8px;font-style:italic}
   .answer{margin-top:24px;padding-top:20px;border-top:1px dashed var(--line);display:none}
@@ -353,10 +307,10 @@
   .a-note-row:first-child{margin-top:0}
   /* small label distinguishing the mnemonic from the trap/tip (the answer-side analog of the
      Browse detail modal's "Mnemonic" / "Trap / tip" section headers). Trap tag in the warning tone. */
-  .a-note-tag{display:inline-block;font-family:"SF Mono",ui-monospace,monospace;font-size:9px;letter-spacing:.1em;text-transform:uppercase;color:var(--ink);opacity:.55;margin-right:7px}
+  .a-note-tag{display:inline-block;font-family:var(--mono);font-size:9px;letter-spacing:.1em;text-transform:uppercase;color:var(--ink);opacity:.55;margin-right:7px}
   .a-note-trap .a-note-tag{color:var(--godan);opacity:1}
   .fc-buttons{max-width:560px;margin:18px auto 0;display:flex;gap:10px;justify-content:center}
-  .btn{font-family:"SF Mono",ui-monospace,monospace;font-size:13px;padding:12px 28px;border-radius:3px;border:1px solid var(--line);background:var(--paper);cursor:pointer;letter-spacing:.05em}
+  .btn{font-family:var(--mono);font-size:13px;padding:12px 28px;border-radius:3px;border:1px solid var(--line);background:var(--paper);cursor:pointer;letter-spacing:.05em}
   .btn:hover{border-color:var(--ink)}
   .btn.reveal{background:var(--ink);color:var(--paper);border-color:var(--ink);width:100%;max-width:560px}
   .btn.wrong{border-color:var(--godan);color:var(--godan)} .btn.wrong:hover{background:var(--godan);color:#fff}
@@ -379,11 +333,11 @@
   .due-banner.empty{border-color:var(--line);border-left-color:var(--good)}
   .due-count{font-size:38px;font-weight:900;line-height:1;color:var(--ichidan)}
   .due-banner.empty .due-count{color:var(--good)}
-  .due-label{font-family:"SF Mono",ui-monospace,monospace;font-size:11px;letter-spacing:.1em;text-transform:uppercase;color:var(--muted);margin-top:4px}
+  .due-label{font-family:var(--mono);font-size:11px;letter-spacing:.1em;text-transform:uppercase;color:var(--muted);margin-top:4px}
   /* Upcoming-review forecast — hand-rolled vertical-bar SVG + horizon toggle. */
   .fcast{border:1px solid var(--line);border-radius:4px;background:var(--paper);padding:14px 16px 6px;margin-bottom:18px}
   .fcast-head{display:flex;align-items:center;justify-content:space-between;gap:12px;flex-wrap:wrap}
-  .fcast-title{display:inline-flex;align-items:center;gap:7px;font-family:"SF Mono",ui-monospace,monospace;font-size:11px;letter-spacing:.16em;text-transform:uppercase;color:var(--muted)}
+  .fcast-title{display:inline-flex;align-items:center;gap:7px;font-family:var(--mono);font-size:11px;letter-spacing:.16em;text-transform:uppercase;color:var(--muted)}
   .fcast-title .ic{font-size:14px}
   .fcast-horizons .fch{font-size:11px;padding:5px 10px}
   .fcast-chart{margin-top:6px}
@@ -415,7 +369,7 @@
   .copy-btn{color:var(--muted)}                 /* a quieter sibling of the ▶ play button */
   .copy-btn:hover{color:var(--ichidan)}
   .speak-btn.copied{color:var(--good)}          /* brief ✓ confirmation after a copy */
-  .verdict{display:flex;align-items:center;justify-content:center;gap:7px;font-family:"SF Mono",ui-monospace,monospace;font-size:13px;letter-spacing:.04em;margin-bottom:14px}
+  .verdict{display:flex;align-items:center;justify-content:center;gap:7px;font-family:var(--mono);font-size:13px;letter-spacing:.04em;margin-bottom:14px}
   .verdict[hidden]{display:none}
   .verdict.ok{color:var(--good)} .verdict.bad{color:var(--godan)}
   .verdict .ic{font-size:16px}
@@ -429,19 +383,19 @@
   /* Stats view: summary boxes, chart cards, leech list, SRS legend. */
   .statgrid{display:grid;grid-template-columns:repeat(auto-fit,minmax(150px,1fr));gap:14px;margin:18px 0}
   .statbox{border:1px solid var(--line);border-radius:4px;padding:16px;background:var(--paper)}
-  .statbox .v{font-size:34px;font-weight:900} .statbox .l{font-family:"SF Mono",ui-monospace,monospace;font-size:11px;letter-spacing:.14em;text-transform:uppercase;color:var(--muted);margin-top:2px}
+  .statbox .v{font-size:34px;font-weight:900} .statbox .l{font-family:var(--mono);font-size:11px;letter-spacing:.14em;text-transform:uppercase;color:var(--muted);margin-top:2px}
   .chart-card{border:1px solid var(--line);border-radius:4px;padding:18px;background:var(--paper);margin-bottom:18px}
   /* Sentence-case (not uppercased): these are long descriptive sentences, and
      spaced uppercase is hard to scan at length. Short labels stay uppercase. */
-  .chart-title{font-family:"SF Mono",ui-monospace,monospace;font-size:12px;letter-spacing:.02em;color:var(--muted);margin-bottom:12px}
+  .chart-title{font-family:var(--mono);font-size:12px;letter-spacing:.02em;color:var(--muted);margin-bottom:12px}
   svg{display:block;width:100%;height:auto}    /* charts scale to container width */
   /* Line-chart points enlarge on hover (the native <title> shows the readout). */
   svg circle.pt{transition:r .12s ease} svg circle.pt:hover{r:5.5}
   .empty{text-align:center;padding:50px 20px;color:var(--muted)}
-  .danger{font-family:"SF Mono",ui-monospace,monospace;font-size:11px;color:var(--godan);cursor:pointer;background:none;border:none;text-decoration:underline}
+  .danger{font-family:var(--mono);font-size:11px;color:var(--godan);cursor:pointer;background:none;border:none;text-decoration:underline}
 
-  .hint{text-align:center;color:var(--muted);font-size:12px;font-family:"SF Mono",ui-monospace,monospace;margin:18px 0 6px}
-  .srs-legend{font-family:"SF Mono",ui-monospace,monospace;font-size:10px;color:var(--muted);margin-top:10px;line-height:1.5}
+  .hint{text-align:center;color:var(--muted);font-size:12px;font-family:var(--mono);margin:18px 0 6px}
+  .srs-legend{font-family:var(--mono);font-size:10px;color:var(--muted);margin-top:10px;line-height:1.5}
   .set-actions{display:inline-flex;gap:6px}   /* Settings "Backup" row: Export / Import buttons */
   /* ---- Motion: entrance animations -----------------------------------------
      Subtle, short, easing-out. Each runs on the state class being (re)applied, so
@@ -480,7 +434,7 @@
      to the backing API. The account button lives in the navbar; the modal is a
      simple email/password form shared by the login + register flows. */
   /* Transient sync/feedback pill in the navbar (auto-cleared by setSyncStatus). Empty → no gap. */
-  .acct-status{font-family:"SF Mono",ui-monospace,monospace;font-size:10px;color:var(--muted);white-space:nowrap}
+  .acct-status{font-family:var(--mono);font-size:10px;color:var(--muted);white-space:nowrap}
   .acct-status:empty{display:none}
   .modal-overlay{position:fixed;inset:0;background:rgba(0,0,0,.5);display:none;align-items:center;justify-content:center;z-index:1000;padding:20px}
   .modal-overlay.show{display:flex}
@@ -488,10 +442,10 @@
   /* When a tall modal (e.g. Settings) scrolls, keep its × pinned to the top-right of the scroll
      viewport instead of scrolling away with the content (float keeps it out of the title's flow). */
   .modal-overlay .modal-x{position:sticky;float:right;top:0}
-  .modal h2{font-size:24px;font-weight:900;letter-spacing:-.01em}
+  .modal h2{font-family:var(--display);font-size:24px;font-weight:900;letter-spacing:-.01em}
   .modal .sub{color:var(--muted);font-size:13px;margin-top:4px;margin-bottom:14px}
-  .modal label{display:block;font-family:"SF Mono",ui-monospace,monospace;font-size:10px;letter-spacing:.16em;text-transform:uppercase;color:var(--muted);margin:12px 0 4px}
-  .modal input{width:100%;font-family:Georgia,serif;font-size:15px;border:1px solid var(--line);background:var(--paper);padding:10px 12px;border-radius:3px;color:var(--ink)}
+  .modal label{display:block;font-family:var(--mono);font-size:10px;letter-spacing:.16em;text-transform:uppercase;color:var(--muted);margin:12px 0 4px}
+  .modal input{width:100%;font-family:var(--body);font-size:15px;border:1px solid var(--line);background:var(--paper);padding:10px 12px;border-radius:3px;color:var(--ink)}
   .modal input:focus{outline:none;border-color:var(--ichidan)}
   .modal-err{color:var(--godan);font-size:13px;margin-top:12px;min-height:18px;line-height:1.4}
   .modal-actions{margin-top:18px}
@@ -506,7 +460,7 @@
   #detailBody .card-top{padding-right:30px}
   /* Add/edit-verb modal: a wider form with a two-column field grid + selects. */
   .modal.wide{max-width:560px}
-  .modal select, .modal textarea{width:100%;font-family:Georgia,serif;font-size:15px;border:1px solid var(--line);background:var(--paper);padding:10px 12px;border-radius:3px;color:var(--ink)}
+  .modal select, .modal textarea{width:100%;font-family:var(--body);font-size:15px;border:1px solid var(--line);background:var(--paper);padding:10px 12px;border-radius:3px;color:var(--ink)}
   .modal select:focus, .modal textarea:focus{outline:none;border-color:var(--ichidan)}
   .modal textarea{resize:vertical;min-height:46px;line-height:1.4}
   .form-grid{display:grid;grid-template-columns:1fr 1fr;gap:0 16px}
@@ -515,14 +469,14 @@
   /* Add-card "Pitch & leveled examples" disclosure: inline hints + a live pitch-accent preview
      box sized to line up with the adjacent number input. */
   .modal .field-hint{color:var(--muted);font-size:12px;line-height:1.55;margin:8px 0}
-  .modal .field-hint code{font-family:"SF Mono",ui-monospace,monospace;font-size:11px;background:var(--paper-2);padding:1px 4px;border-radius:3px}
+  .modal .field-hint code{font-family:var(--mono);font-size:11px;background:var(--paper-2);padding:1px 4px;border-radius:3px}
   .modal .acc-preview{min-height:41px;display:flex;align-items:center;font-family:var(--jp-font);font-size:20px;color:var(--ink)}
   .modal-actions.split{display:flex;gap:10px}
   .modal-actions.split .btn{width:auto;flex:1}
   .btn.danger-btn{border-color:var(--godan);color:var(--godan);flex:0 0 auto}
   .btn.danger-btn:hover{background:var(--godan);color:#fff}
   /* Custom-verb affordances in Browse: a badge + edit/delete buttons. */
-  .custom-badge{display:inline-block;font-family:"SF Mono",ui-monospace,monospace;font-size:9px;background:var(--ichidan);color:#fff;padding:2px 6px;border-radius:2px;letter-spacing:.1em;margin-top:6px}
+  .custom-badge{display:inline-block;font-family:var(--mono);font-size:9px;background:var(--ichidan);color:#fff;padding:2px 6px;border-radius:2px;letter-spacing:.1em;margin-top:6px}
   .verb-actions{display:flex;gap:8px;margin-top:10px}
   .verb-actions .chip{font-size:11px;padding:4px 10px}
 
@@ -536,18 +490,18 @@
   /* Signed-out gate. */
   .mn-gate{text-align:center;padding:48px 22px;background:var(--paper-2);border:1px solid var(--line);border-radius:14px;margin-top:20px}
   .mn-gate .gate-ic{font-size:34px;color:var(--ichidan)}
-  .mn-gate h2{font-family:Georgia;font-size:24px;font-weight:900;margin:12px 0 6px}
+  .mn-gate h2{font-family:var(--display);font-size:24px;font-weight:900;margin:12px 0 6px}
   .mn-gate p{color:var(--muted);max-width:46ch;margin:0 auto 18px}
   /* Lesson heading + chapter picker. */
   .mn-head{margin-top:18px}
-  .mn-kicker{font-family:"SF Mono",ui-monospace,monospace;font-size:11px;letter-spacing:.24em;text-transform:uppercase;color:var(--godan);margin-bottom:8px}
-  .mn-title{font-family:Georgia;font-size:clamp(24px,4vw,34px);font-weight:900;line-height:1.05}
+  .mn-kicker{font-family:var(--mono);font-size:11px;letter-spacing:.24em;text-transform:uppercase;color:var(--godan);margin-bottom:8px}
+  .mn-title{font-family:var(--display);font-size:clamp(24px,4vw,34px);font-weight:900;line-height:1.05}
   .mn-theme{color:var(--muted);margin-top:6px;font-size:15px}
-  .mn-loading,.mn-error{padding:30px 4px;color:var(--muted);font-family:"SF Mono",ui-monospace,monospace;font-size:13px}
+  .mn-loading,.mn-error{padding:30px 4px;color:var(--muted);font-family:var(--mono);font-size:13px}
   .mn-error{color:var(--godan)}
   /* Section card + its collapsible header (mirrors the modal <details> pattern). */
   .mn-section{background:var(--paper-2);border:1px solid var(--line);border-radius:14px;padding:6px 18px 8px;margin-top:16px}
-  .mn-section>summary{cursor:pointer;list-style:none;font-family:"SF Mono",ui-monospace,monospace;font-size:11px;letter-spacing:.18em;text-transform:uppercase;color:var(--godan);display:flex;align-items:center;gap:8px;padding:12px 0}
+  .mn-section>summary{cursor:pointer;list-style:none;font-family:var(--mono);font-size:11px;letter-spacing:.18em;text-transform:uppercase;color:var(--godan);display:flex;align-items:center;gap:8px;padding:12px 0}
   .mn-section>summary::-webkit-details-marker{display:none}
   .mn-section>summary::after{content:"+";margin-left:auto;color:var(--muted);font-size:16px}
   .mn-section[open]>summary::after{content:"−"}
@@ -566,19 +520,19 @@
   .mn-vocab .v-audio{width:44px;text-align:center}
   .mn-kanji{font-size:20px}
   .mn-kana{color:var(--muted);font-size:13px;margin-top:2px}
-  .mn-ctx{color:var(--muted);font-size:12px;font-family:"SF Mono",ui-monospace,monospace;margin-left:2px}
+  .mn-ctx{color:var(--muted);font-size:12px;font-family:var(--mono);margin-left:2px}
   .mn-mean{font-size:14px}
-  .mn-pos{display:inline-block;font-family:"SF Mono",ui-monospace,monospace;font-size:9px;letter-spacing:.1em;color:var(--muted);border:1px solid var(--line);border-radius:2px;padding:1px 5px;margin-left:8px;vertical-align:1px}
+  .mn-pos{display:inline-block;font-family:var(--mono);font-size:9px;letter-spacing:.1em;color:var(--muted);border:1px solid var(--line);border-radius:2px;padding:1px 5px;margin-left:8px;vertical-align:1px}
   /* iTalki marker — words covered in the maintainer's iTalki lessons (the `italki`
      flag in the lesson JSON). A filled indigo chip so they pop in the vocab table. */
-  .mn-italki{display:inline-block;font-family:"SF Mono",ui-monospace,monospace;font-size:9px;letter-spacing:.06em;background:var(--ichidan);color:#fff;border-radius:3px;padding:1px 5px;margin-left:6px;vertical-align:1px}
+  .mn-italki{display:inline-block;font-family:var(--mono);font-size:9px;letter-spacing:.06em;background:var(--ichidan);color:#fff;border-radius:3px;padding:1px 5px;margin-left:6px;vertical-align:1px}
   /* Audio button — reuse .speak-btn look, add a playing state. */
   .speak-btn.playing{background:var(--ichidan);color:#fff;border-color:var(--ichidan)}
   /* Grammar cards. */
   .mn-gram{padding:14px 0;border-top:1px solid var(--line)}
   .mn-gram:first-child{border-top:none}
   .mn-pattern{font-size:18px;font-weight:700}
-  .mn-structure{font-family:"SF Mono",ui-monospace,monospace;font-size:12px;color:var(--ink);background:color-mix(in srgb,var(--ink) 6%,transparent);border-radius:6px;padding:7px 10px;margin:8px 0;line-height:1.5}
+  .mn-structure{font-family:var(--mono);font-size:12px;color:var(--ink);background:color-mix(in srgb,var(--ink) 6%,transparent);border-radius:6px;padding:7px 10px;margin:8px 0;line-height:1.5}
   .mn-explain{font-size:14px;line-height:1.6;margin-bottom:8px}
   .mn-ex{display:flex;flex-direction:column;gap:9px;margin-top:8px}
   .mn-ex .e-jp{font-size:16px}
@@ -587,25 +541,25 @@
   .mn-conv-audio{display:flex;align-items:center;gap:10px;margin:4px 0 14px;color:var(--muted);font-size:13px}
   .mn-line{display:flex;gap:10px;padding:9px 0;border-top:1px solid var(--line)}
   .mn-line:first-child{border-top:none}
-  .mn-role{font-family:"SF Mono",ui-monospace,monospace;font-size:11px;color:var(--ichidan);flex:0 0 64px;padding-top:3px}
+  .mn-role{font-family:var(--mono);font-size:11px;color:var(--ichidan);flex:0 0 64px;padding-top:3px}
   .mn-line .l-jp{font-size:16px}
   .mn-line .l-en{color:var(--muted);font-size:13px;margin-top:2px}
   /* Add-to-deck action + provenance badge. */
   .mn-actions{display:flex;align-items:center;gap:12px;flex-wrap:wrap;margin:6px 0 2px}
-  .v-in{color:var(--good);font-family:"SF Mono",ui-monospace,monospace;font-size:11px;white-space:nowrap}
-  .minna-badge{display:inline-block;font-family:"SF Mono",ui-monospace,monospace;font-size:9px;background:var(--adjective);color:#fff;padding:2px 6px;border-radius:2px;letter-spacing:.08em;margin-top:6px}
+  .v-in{color:var(--good);font-family:var(--mono);font-size:11px;white-space:nowrap}
+  .minna-badge{display:inline-block;font-family:var(--mono);font-size:9px;background:var(--adjective);color:#fff;padding:2px 6px;border-radius:2px;letter-spacing:.08em;margin-top:6px}
   /* Notes — the "augment as I study" area (synced under the minna app key). */
-  .mn-notes textarea{width:100%;min-height:120px;background:var(--paper);color:var(--ink);border:1px solid var(--line);border-radius:8px;padding:12px;font-family:Georgia,serif;font-size:14px;line-height:1.6;resize:vertical}
+  .mn-notes textarea{width:100%;min-height:120px;background:var(--paper);color:var(--ink);border:1px solid var(--line);border-radius:8px;padding:12px;font-family:var(--body);font-size:14px;line-height:1.6;resize:vertical}
   .mn-notes textarea:focus{outline:none;border-color:var(--ichidan)}
-  .mn-saved{font-family:"SF Mono",ui-monospace,monospace;font-size:11px;color:var(--muted);margin-top:6px;min-height:14px}
+  .mn-saved{font-family:var(--mono);font-size:11px;color:var(--muted);margin-top:6px;min-height:14px}
   /* Practice history — cross-lesson roll-up of saved takes (counts + last-practiced). */
-  .mn-ph-total{font-family:"SF Mono",ui-monospace,monospace;font-size:12px;color:var(--muted);margin:0 0 10px}
+  .mn-ph-total{font-family:var(--mono);font-size:12px;color:var(--muted);margin:0 0 10px}
   .mn-ph{width:100%;border-collapse:collapse;font-size:13px}
-  .mn-ph th{text-align:left;font-family:"SF Mono",ui-monospace,monospace;font-size:10px;letter-spacing:.08em;text-transform:uppercase;color:var(--muted);font-weight:400;padding:0 10px 6px 0;border-bottom:1px solid var(--line)}
+  .mn-ph th{text-align:left;font-family:var(--mono);font-size:10px;letter-spacing:.08em;text-transform:uppercase;color:var(--muted);font-weight:400;padding:0 10px 6px 0;border-bottom:1px solid var(--line)}
   .mn-ph th:last-child,.mn-ph td:last-child{text-align:right}
   .mn-ph td{padding:7px 10px 7px 0;border-top:1px solid var(--line)}
   .mn-ph tbody tr:first-child td{border-top:0}
-  .mn-ph td:first-child{font-family:"SF Mono",ui-monospace,monospace;color:var(--ichidan)}
+  .mn-ph td:first-child{font-family:var(--mono);color:var(--ichidan)}
   .mn-ph-when{color:var(--muted);white-space:nowrap}
   .mn-ph-cur td{background:color-mix(in srgb,var(--ichidan) 8%,transparent)}
   .mn-ph-cur td:first-child{font-weight:700}
@@ -617,7 +571,7 @@
      controls visually belong to the word ABOVE them, not the one below. */
   .mn-rec-row td{border-top:0 solid transparent;padding-top:2px;padding-bottom:16px}
   .rec-control{display:flex;align-items:center;flex-wrap:wrap;gap:8px}
-  .rec-btn{display:inline-flex;align-items:center;gap:6px;background:none;border:1px solid var(--line);color:var(--muted);border-radius:14px;padding:3px 10px 3px 8px;font-family:"SF Mono",ui-monospace,monospace;font-size:11px;letter-spacing:.06em;cursor:pointer;transition:all .15s}
+  .rec-btn{display:inline-flex;align-items:center;gap:6px;background:none;border:1px solid var(--line);color:var(--muted);border-radius:14px;padding:3px 10px 3px 8px;font-family:var(--mono);font-size:11px;letter-spacing:.06em;cursor:pointer;transition:all .15s}
   .rec-btn:hover{border-color:var(--godan);color:var(--godan)}
   .rec-btn .ic{font-size:14px}
   /* Recording: a steady red so it reads as "live"; the reduced-motion rule below
@@ -626,7 +580,7 @@
   @keyframes recPulse{0%,100%{opacity:1}50%{opacity:.62}}
   .rec-takes{display:inline-flex;align-items:center;gap:6px;flex-wrap:wrap}
   .rec-take{display:inline-flex;align-items:center;border:1px solid var(--line);border-radius:13px;overflow:hidden;background:var(--paper-2)}
-  .rec-take-play{display:inline-flex;align-items:center;gap:4px;background:none;border:none;color:var(--good);font-family:"SF Mono",ui-monospace,monospace;font-size:11px;padding:3px 8px;cursor:pointer}
+  .rec-take-play{display:inline-flex;align-items:center;gap:4px;background:none;border:none;color:var(--good);font-family:var(--mono);font-size:11px;padding:3px 8px;cursor:pointer}
   .rec-take-play .ic{font-size:12px}
   .rec-take-play.playing{background:var(--good);color:#fff}
   .rec-take-del{background:none;border:none;border-left:1px solid var(--line);color:var(--muted);padding:3px 7px;cursor:pointer;display:inline-flex;align-items:center}
@@ -636,7 +590,7 @@
   .rec-review .rec-preview{height:32px;max-width:220px}
   .rec-review .chip{font-size:11px;padding:4px 10px}
   .rec-review .rec-save{border-color:var(--good);color:var(--good);font-weight:700}
-  .rec-unsupported{font-family:Georgia,serif;font-size:12px;color:var(--muted);opacity:.85}
+  .rec-unsupported{font-family:var(--body);font-size:12px;color:var(--muted);opacity:.85}
   /* Speaking-mode bar — a toggle that opens a persistent mic stream + the device picker.
      Record controls only render while it's on. */
   .speaking-bar{display:flex;align-items:center;flex-wrap:wrap;gap:10px;margin:10px 0 16px;padding:10px 12px;border:1px solid var(--line);border-radius:8px;background:var(--paper-2)}
@@ -645,8 +599,8 @@
   .speaking-toggle.active{background:var(--godan);color:#fff;border-color:var(--godan)}
   .speaking-toggle .ic{font-size:14px}
   .mic-pick{display:inline-flex;align-items:center;gap:6px}
-  .mic-lbl{font-family:"SF Mono",ui-monospace,monospace;font-size:10px;letter-spacing:.1em;text-transform:uppercase;color:var(--muted)}
-  .mic-select{background:var(--paper);color:var(--ink);border:1px solid var(--line);border-radius:6px;padding:5px 8px;font-family:"SF Mono",ui-monospace,monospace;font-size:12px;max-width:220px}
+  .mic-lbl{font-family:var(--mono);font-size:10px;letter-spacing:.1em;text-transform:uppercase;color:var(--muted)}
+  .mic-select{background:var(--paper);color:var(--ink);border:1px solid var(--line);border-radius:6px;padding:5px 8px;font-family:var(--mono);font-size:12px;max-width:220px}
   .mic-select:focus{outline:none;border-color:var(--ichidan)}
   .cmp-speed{display:inline-flex;align-items:center;gap:5px}
   .speed-chip{padding:3px 9px;font-size:11px}
@@ -654,36 +608,36 @@
   .bias-slider{width:96px;accent-color:var(--ichidan);cursor:pointer}
   /* Compare player — ▶ you / ▶ native / ▶ native→you + loop. Shows once a take exists. */
   .rec-compare{display:inline-flex;align-items:center;flex-wrap:wrap;gap:6px;margin-left:2px}
-  .cmp-label{font-family:"SF Mono",ui-monospace,monospace;font-size:9px;letter-spacing:.12em;text-transform:uppercase;color:var(--muted)}
-  .cmp-btn{display:inline-flex;align-items:center;gap:4px;background:none;border:1px solid var(--line);color:var(--ichidan);border-radius:13px;padding:3px 9px;font-family:"SF Mono",ui-monospace,monospace;font-size:11px;cursor:pointer;transition:all .15s}
+  .cmp-label{font-family:var(--mono);font-size:9px;letter-spacing:.12em;text-transform:uppercase;color:var(--muted)}
+  .cmp-btn{display:inline-flex;align-items:center;gap:4px;background:none;border:1px solid var(--line);color:var(--ichidan);border-radius:13px;padding:3px 9px;font-family:var(--mono);font-size:11px;cursor:pointer;transition:all .15s}
   .cmp-btn:hover{border-color:var(--ichidan);background:var(--paper-2)}
   .cmp-btn .ic{font-size:12px}
   .cmp-btn.playing{background:var(--ichidan);color:#fff;border-color:var(--ichidan)}
   .cmp-loop{color:var(--muted)}
   .cmp-loop.active{background:var(--good);color:#fff;border-color:var(--good)}
   /* ▶ reference button names the current compare voice (native / Siri F/M / Google). */
-  .cmp-ref .cmp-ref-lbl{font-family:"SF Mono",ui-monospace,monospace;font-size:10px;letter-spacing:.02em}
+  .cmp-ref .cmp-ref-lbl{font-family:var(--mono);font-size:10px;letter-spacing:.02em}
   /* Dual waveform (you vs reference) — canvas painted by paintControlWaves; cursor is an overlay. */
   .rec-wave-row{display:flex;flex-wrap:wrap;gap:12px;margin-top:7px;flex-basis:100%}
   .rec-wave-wrap{position:relative;display:inline-block;width:140px;height:30px}
   canvas.rec-wave{display:block;width:140px;height:30px}
   .rec-wave-cursor{position:absolute;top:0;bottom:0;left:0;width:2px;background:var(--ink);opacity:0;pointer-events:none;transition:opacity .12s}
-  .rec-wave-cap{position:absolute;top:-2px;right:1px;font-family:"SF Mono",ui-monospace,monospace;font-size:9px;letter-spacing:.1em;text-transform:uppercase;color:var(--muted);opacity:.7;pointer-events:none}
+  .rec-wave-cap{position:absolute;top:-2px;right:1px;font-family:var(--mono);font-size:9px;letter-spacing:.1em;text-transform:uppercase;color:var(--muted);opacity:.7;pointer-events:none}
   /* Conversation-line layout + clip marker. */
   .mn-line-body{flex:1;min-width:0}
   .mn-line-rec{display:flex;flex-wrap:wrap;align-items:center;gap:8px;margin-top:7px}
   .clip-zone{display:inline-flex;align-items:center;gap:7px}
-  .clip-current{font-family:"SF Mono",ui-monospace,monospace;font-size:10px;color:var(--good);border:1px solid color-mix(in srgb,var(--good) 45%,var(--line));border-radius:10px;padding:1px 7px}
-  .clip-edit{background:none;border:1px dashed var(--line);color:var(--muted);border-radius:11px;padding:2px 9px;font-family:"SF Mono",ui-monospace,monospace;font-size:10px;letter-spacing:.04em;cursor:pointer}
+  .clip-current{font-family:var(--mono);font-size:10px;color:var(--good);border:1px solid color-mix(in srgb,var(--good) 45%,var(--line));border-radius:10px;padding:1px 7px}
+  .clip-edit{background:none;border:1px dashed var(--line);color:var(--muted);border-radius:11px;padding:2px 9px;font-family:var(--mono);font-size:10px;letter-spacing:.04em;cursor:pointer}
   .clip-edit:hover{border-color:var(--ichidan);color:var(--ichidan)}
   .clip-marker{flex-basis:100%;border:1px solid var(--line);border-radius:8px;padding:10px;background:var(--paper-2);margin-top:4px}
   .clip-audio{width:100%;height:34px;margin-bottom:8px}
   .clip-marker-row{display:flex;flex-wrap:wrap;align-items:center;gap:7px}
   .clip-marker-row .chip{font-size:11px;padding:4px 10px}
   .clip-marker-row .clip-save{border-color:var(--good);color:var(--good);font-weight:700}
-  .clip-readout{font-family:"SF Mono",ui-monospace,monospace;font-size:11px;color:var(--muted)}
+  .clip-readout{font-family:var(--mono);font-size:11px;color:var(--muted)}
   .clip-readout b{color:var(--ink)}
-  .clip-tip{font-family:Georgia,serif;font-size:12px;color:var(--muted);opacity:.85;margin-top:7px}
+  .clip-tip{font-family:var(--body);font-size:12px;color:var(--muted);opacity:.85;margin-top:7px}
   @media (prefers-reduced-motion:reduce){ .rec-btn.recording{animation:none} }
   @media (max-width:640px){
     .mn-role{flex-basis:48px;font-size:10px}
@@ -693,8 +647,8 @@
 
   /* ---- 独り言 Self-Talk ---- */
   .st-intro{margin:2px 0 16px}
-  .st-kicker{font-family:"SF Mono",ui-monospace,monospace;font-size:11px;letter-spacing:.14em;text-transform:uppercase;color:var(--godan);margin:0 0 4px}
-  .st-lede{font-family:Georgia,serif;font-size:14px;color:var(--muted);margin:0;max-width:60ch}
+  .st-kicker{font-family:var(--mono);font-size:11px;letter-spacing:.14em;text-transform:uppercase;color:var(--godan);margin:0 0 4px}
+  .st-lede{font-family:var(--body);font-size:14px;color:var(--muted);margin:0;max-width:60ch}
   .st-count{font-size:11px;color:var(--muted);font-weight:normal}
   .st-list{display:flex;flex-direction:column;gap:9px;padding:2px 0 14px}
   .st-phrase{display:flex;gap:12px;align-items:flex-start;padding:11px 13px;border:1px solid var(--line);border-radius:10px;background:var(--paper-2)}
@@ -702,25 +656,25 @@
   .st-phrase-text{flex:1;min-width:0}
   .st-jp{font-size:19px;line-height:1.55}
   .st-read{font-size:12px;color:var(--muted);margin-top:3px;font-family:var(--jp-font)}
-  .st-en{font-size:13.5px;color:var(--ink);opacity:.82;margin-top:4px;font-family:Georgia,serif}
+  .st-en{font-size:13.5px;color:var(--ink);opacity:.82;margin-top:4px;font-family:var(--body)}
   .st-phrase-meta{display:flex;gap:6px;flex-wrap:wrap;align-items:center;margin-top:8px}
-  .st-tag{font-family:"SF Mono",ui-monospace,monospace;font-size:10px;letter-spacing:.04em;color:var(--muted);border:1px solid var(--line);border-radius:5px;padding:2px 6px}
-  .st-badge{font-family:"SF Mono",ui-monospace,monospace;font-size:10px;letter-spacing:.06em;text-transform:uppercase;color:var(--godan);border:1px solid color-mix(in srgb,var(--godan) 45%,transparent);border-radius:5px;padding:2px 6px}
-  .st-empty{font-family:Georgia,serif;color:var(--muted);padding:20px 2px}
+  .st-tag{font-family:var(--mono);font-size:10px;letter-spacing:.04em;color:var(--muted);border:1px solid var(--line);border-radius:5px;padding:2px 6px}
+  .st-badge{font-family:var(--mono);font-size:10px;letter-spacing:.06em;text-transform:uppercase;color:var(--godan);border:1px solid color-mix(in srgb,var(--godan) 45%,transparent);border-radius:5px;padding:2px 6px}
+  .st-empty{font-family:var(--body);color:var(--muted);padding:20px 2px}
   .st-actions{margin-top:13px}
   .st-edit{background:none;border:none;color:var(--muted);cursor:pointer;padding:4px;border-radius:6px;flex-shrink:0;align-self:flex-start;transition:color .15s}
   .st-edit:hover{color:var(--godan)}
   .st-edit .ic{font-size:16px}
   .st-gram-checks{display:flex;flex-wrap:wrap;gap:8px 14px;margin-top:4px}
-  .st-gram-check{display:inline-flex;align-items:center;gap:6px;font-family:Georgia,serif;font-size:13px;color:var(--ink);cursor:pointer}
+  .st-gram-check{display:inline-flex;align-items:center;gap:6px;font-family:var(--body);font-size:13px;color:var(--ink);cursor:pointer}
   .st-streak-row{margin-top:11px;display:flex;align-items:center;gap:12px;flex-wrap:wrap}
-  .st-streak{display:inline-flex;align-items:center;gap:6px;font-family:"SF Mono",ui-monospace,monospace;font-size:12px;letter-spacing:.04em;color:var(--good);border:1px solid color-mix(in srgb,var(--good) 40%,transparent);border-radius:6px;padding:3px 9px}
+  .st-streak{display:inline-flex;align-items:center;gap:6px;font-family:var(--mono);font-size:12px;letter-spacing:.04em;color:var(--good);border:1px solid color-mix(in srgb,var(--good) 40%,transparent);border-radius:6px;padding:3px 9px}
   .st-streak .ic{font-size:14px}
-  .st-today-count,.st-streak-hint{font-family:Georgia,serif;font-size:13px;color:var(--muted)}
+  .st-today-count,.st-streak-hint{font-family:var(--body);font-size:13px;color:var(--muted)}
   .st-bottom{display:flex;flex-direction:column;align-items:flex-start;gap:9px;margin-top:9px}
-  .st-mark{background:none;border:1px solid var(--line);border-radius:7px;font-family:"SF Mono",ui-monospace,monospace;font-size:11px;color:var(--muted);padding:4px 9px;cursor:pointer;transition:all .15s}
+  .st-mark{background:none;border:1px solid var(--line);border-radius:7px;font-family:var(--mono);font-size:11px;color:var(--muted);padding:4px 9px;cursor:pointer;transition:all .15s}
   .st-mark:hover{color:var(--good);border-color:color-mix(in srgb,var(--good) 45%,transparent)}
-  .st-done{display:inline-flex;align-items:center;gap:5px;font-family:"SF Mono",ui-monospace,monospace;font-size:11px;color:var(--good)}
+  .st-done{display:inline-flex;align-items:center;gap:5px;font-family:var(--mono);font-size:11px;color:var(--good)}
   .st-done .ic{font-size:13px}
   .st-phrase.practiced{border-color:color-mix(in srgb,var(--good) 35%,var(--line))}
   /* category→topic grid + drill-in (P1b). The grid is #stBody's top level; clicking a cell swaps
@@ -728,7 +682,7 @@
      container. Cells are functional (label + jp kicker + a phrase/said tally), not decorative. */
   .st-cat{margin-top:20px}
   .st-cat:first-child{margin-top:6px}
-  .st-cat-head{display:flex;align-items:center;gap:8px;margin:0 0 10px;font-family:"SF Mono",ui-monospace,monospace;font-size:11px;letter-spacing:.12em;text-transform:uppercase;color:var(--muted)}
+  .st-cat-head{display:flex;align-items:center;gap:8px;margin:0 0 10px;font-family:var(--mono);font-size:11px;letter-spacing:.12em;text-transform:uppercase;color:var(--muted)}
   .st-cat-head .ic{font-size:14px;color:var(--godan)}
   .st-cat-jp{font-family:var(--jp-font);letter-spacing:normal;text-transform:none;color:var(--muted);opacity:.7}
   .st-grid{display:grid;grid-template-columns:repeat(auto-fill,minmax(158px,1fr));gap:10px}
@@ -736,23 +690,23 @@
   .st-cell{display:flex;flex-direction:column;align-items:flex-start;gap:5px;text-align:left;padding:13px 14px;min-height:76px;border:1px solid var(--line);border-radius:11px;background:var(--paper-2);cursor:pointer;transition:border-color .15s,transform .05s}
   .st-cell:hover{border-color:color-mix(in srgb,var(--godan) 45%,var(--line))}
   .st-cell:active{transform:translateY(1px)}
-  .st-cell-label{font-family:Georgia,serif;font-size:15px;color:var(--ink);line-height:1.3}
+  .st-cell-label{font-family:var(--body);font-size:15px;color:var(--ink);line-height:1.3}
   .st-cell-jp{font-family:var(--jp-font);font-size:12px;color:var(--muted)}
-  .st-cell-count{margin-top:auto;font-family:"SF Mono",ui-monospace,monospace;font-size:10.5px;letter-spacing:.03em;color:var(--muted)}
+  .st-cell-count{margin-top:auto;font-family:var(--mono);font-size:10.5px;letter-spacing:.03em;color:var(--muted)}
   .st-cell-count .done{color:var(--good)}
   .st-today-cell{border-color:color-mix(in srgb,var(--good) 42%,var(--line));background:color-mix(in srgb,var(--good) 7%,var(--paper-2))}
   .st-today-cell .ic{font-size:15px;color:var(--good)}
   .st-today-row{display:flex;align-items:center;gap:7px}
-  .st-today-cell .st-cell-label{font-family:"SF Mono",ui-monospace,monospace;font-size:12px;letter-spacing:.06em;text-transform:uppercase}
-  .st-back{display:inline-flex;align-items:center;gap:5px;background:none;border:none;cursor:pointer;font-family:"SF Mono",ui-monospace,monospace;font-size:11px;letter-spacing:.06em;color:var(--muted);padding:4px 2px;margin-bottom:4px;transition:color .15s}
+  .st-today-cell .st-cell-label{font-family:var(--mono);font-size:12px;letter-spacing:.06em;text-transform:uppercase}
+  .st-back{display:inline-flex;align-items:center;gap:5px;background:none;border:none;cursor:pointer;font-family:var(--mono);font-size:11px;letter-spacing:.06em;color:var(--muted);padding:4px 2px;margin-bottom:4px;transition:color .15s}
   .st-back:hover{color:var(--godan)}
   .st-back .ic{font-size:13px;transform:rotate(90deg)}
   .st-topic-head{display:flex;align-items:baseline;gap:10px;flex-wrap:wrap;margin:2px 0 13px;padding-bottom:11px;border-bottom:1px solid var(--line)}
-  .st-topic-title{font-family:Georgia,serif;font-size:20px;color:var(--ink)}
+  .st-topic-title{font-family:var(--body);font-size:20px;color:var(--ink)}
   .st-topic-jp{font-family:var(--jp-font);font-size:14px;color:var(--muted)}
-  .st-register{font-family:"SF Mono",ui-monospace,monospace;font-size:10px;letter-spacing:.05em;color:var(--ichidan);border:1px solid color-mix(in srgb,var(--ichidan) 40%,transparent);border-radius:5px;padding:2px 7px}
+  .st-register{font-family:var(--mono);font-size:10px;letter-spacing:.05em;color:var(--ichidan);border:1px solid color-mix(in srgb,var(--ichidan) 40%,transparent);border-radius:5px;padding:2px 7px}
   /* "sentence thought" sub-cluster heading inside a drilled topic (P2b) */
-  .st-thought{display:flex;align-items:center;gap:8px;margin:18px 0 3px;font-family:"SF Mono",ui-monospace,monospace;font-size:11.5px;letter-spacing:.08em;color:var(--ink)}
+  .st-thought{display:flex;align-items:center;gap:8px;margin:18px 0 3px;font-family:var(--mono);font-size:11.5px;letter-spacing:.08em;color:var(--ink)}
   .st-thought:first-of-type{margin-top:4px}
   /* slot-swap templates (P3): a {slot} is a tinted, tappable chip inside the realized sentence; an
      ⌥-click / long-press opens its filler menu. The card reuses .st-phrase chrome. */
@@ -770,7 +724,7 @@
   .st-fill.active{background:color-mix(in srgb,var(--godan) 14%,transparent);color:var(--godan)}
   .st-fill rt{font-size:.6em;color:var(--muted)}
   .st-fill.active rt{color:color-mix(in srgb,var(--godan) 70%,var(--muted))}
-  .st-fill-en{margin-left:auto;font-family:Georgia,serif;font-style:italic;font-size:11.5px;color:var(--muted);white-space:nowrap}
+  .st-fill-en{margin-left:auto;font-family:var(--body);font-style:italic;font-size:11.5px;color:var(--muted);white-space:nowrap}
   .st-shuffle{background:none;border:1px solid var(--line);border-radius:7px;color:var(--muted);cursor:pointer;padding:3px 7px;display:inline-flex;align-items:center;transition:color .15s,border-color .15s}
   .st-shuffle:hover{color:var(--godan);border-color:color-mix(in srgb,var(--godan) 45%,transparent)}
   .st-shuffle .ic{font-size:13px}
@@ -785,16 +739,16 @@
   .extok{cursor:pointer;border-radius:4px;transition:background-color .12s ease}
   .extok:hover{background:color-mix(in srgb,var(--ink) 10%,transparent)}
   .extok:focus-visible{outline:none;background:color-mix(in srgb,var(--ink) 10%,transparent);box-shadow:0 0 0 2px color-mix(in srgb,var(--godan) 55%,transparent)}
-  .word-pop{position:absolute;z-index:1000;min-width:140px;max-width:280px;background:var(--paper-2);border:1px solid var(--line);border-radius:10px;box-shadow:0 8px 24px rgba(0,0,0,.18);padding:10px 12px;font-family:Georgia,"Times New Roman",serif;animation:modalPop .14s ease}
+  .word-pop{position:absolute;z-index:1000;min-width:140px;max-width:280px;background:var(--paper-2);border:1px solid var(--line);border-radius:10px;box-shadow:0 8px 24px rgba(0,0,0,.18);padding:10px 12px;font-family:var(--body);animation:modalPop .14s ease}
   .word-pop .wl-head{display:flex;align-items:baseline;gap:8px;flex-wrap:wrap}
   .word-pop .wl-surface{font-size:20px;color:var(--ink)}
   .word-pop .wl-read{color:var(--muted);font-size:14px}
   .word-pop .wl-lemma{font-size:13px;color:var(--muted);margin-top:2px}
-  .word-pop .wl-pos{font-family:"SF Mono",ui-monospace,monospace;font-size:10px;text-transform:uppercase;letter-spacing:.06em;color:var(--muted);margin:5px 0 9px}
-  .word-pop .wl-act{display:inline-block;font-family:"SF Mono",ui-monospace,monospace;font-size:12px;padding:5px 11px;border-radius:8px;border:1px solid var(--line);background:var(--paper);color:var(--ink);cursor:pointer;text-decoration:none}
+  .word-pop .wl-pos{font-family:var(--mono);font-size:10px;text-transform:uppercase;letter-spacing:.06em;color:var(--muted);margin:5px 0 9px}
+  .word-pop .wl-act{display:inline-block;font-family:var(--mono);font-size:12px;padding:5px 11px;border-radius:8px;border:1px solid var(--line);background:var(--paper);color:var(--ink);cursor:pointer;text-decoration:none}
   .word-pop .wl-act:hover{background:color-mix(in srgb,var(--ink) 8%,transparent)}
   /* Grammar points on a detail-modal example (read-only) — surfaces what the Browse grammar filter matches. */
-  .ex-grammar{margin-top:6px;display:flex;flex-wrap:wrap;gap:5px;align-items:center;font-family:"SF Mono",ui-monospace,monospace;font-size:10px;text-transform:uppercase;letter-spacing:.05em;color:var(--muted)}
+  .ex-grammar{margin-top:6px;display:flex;flex-wrap:wrap;gap:5px;align-items:center;font-family:var(--mono);font-size:10px;text-transform:uppercase;letter-spacing:.05em;color:var(--muted)}
   .ex-gram-chip{font-family:var(--jp-font),sans-serif;text-transform:none;letter-spacing:0;font-size:12px;color:var(--ink);background:color-mix(in srgb,var(--ink) 7%,transparent);border:1px solid var(--line);border-radius:6px;padding:1px 7px}
 
 /* ============================ 歌 / Songs tab ============================
@@ -803,10 +757,10 @@
    only the song-specific components live here. Listen/Shadow styles arrive with those phases. */
 .sg-intro{margin:18px 0 14px}
 .sg-toolbar{display:flex;align-items:center;gap:10px;flex-wrap:wrap;margin:6px 0 4px}
-.sg-empty{font-family:Georgia,serif;color:var(--muted);margin:24px 0}
+.sg-empty{font-family:var(--body);color:var(--muted);margin:24px 0}
 .sg-err{color:var(--godan)}
 .sg-gate{margin:16px 0;align-items:center}
-.lv{font-family:"SF Mono",ui-monospace,monospace;font-size:9px;letter-spacing:.06em;border-radius:2px;padding:2px 6px;border:1px solid var(--muted);color:var(--muted)}
+.lv{font-family:var(--mono);font-size:9px;letter-spacing:.06em;border-radius:2px;padding:2px 6px;border:1px solid var(--muted);color:var(--muted)}
 .lv-n5{color:var(--good);border-color:var(--good)} .lv-n4{color:var(--ichidan);border-color:var(--ichidan)}
 .lv-n3{color:var(--noun);border-color:var(--noun)} .lv-n2{color:var(--adverb);border-color:var(--adverb)} .lv-n1{color:var(--leech);border-color:var(--leech)}
 
@@ -819,33 +773,33 @@
 .sc-title{display:block;font-size:22px;font-weight:900;line-height:1.1}
 .sc-artist{display:block;font-size:13px;color:var(--muted);font-style:italic;margin-top:3px}
 .ring{position:relative;display:inline-block;width:40px;height:40px;border-radius:50%;flex-shrink:0;background:conic-gradient(var(--ichidan) var(--p),var(--paper-2) 0)}
-.ring>span{position:absolute;inset:5px;border-radius:50%;background:var(--paper);display:flex;align-items:center;justify-content:center;font-family:"SF Mono",ui-monospace,monospace;font-size:11px;font-weight:700;color:var(--ink)}
+.ring>span{position:absolute;inset:5px;border-radius:50%;background:var(--paper);display:flex;align-items:center;justify-content:center;font-family:var(--mono);font-size:11px;font-weight:700;color:var(--ink)}
 .sc-ring{display:flex;flex-direction:column;align-items:center;gap:3px;flex-shrink:0}   /* ring + a visible label so the % isn't a bare number (the coverage bar below says "you know") */
-.sc-ring-cap{font-family:"SF Mono",ui-monospace,monospace;font-size:9px;letter-spacing:.05em;text-transform:uppercase;color:var(--muted)}
+.sc-ring-cap{font-family:var(--mono);font-size:9px;letter-spacing:.05em;text-transform:uppercase;color:var(--muted)}
 .sc-cov{display:block;margin-top:13px}
-.sc-cov-top{display:flex;justify-content:space-between;font-family:"SF Mono",ui-monospace,monospace;font-size:11px;color:var(--muted);margin-bottom:4px}
+.sc-cov-top{display:flex;justify-content:space-between;font-family:var(--mono);font-size:11px;color:var(--muted);margin-bottom:4px}
 .sc-cov-top b{color:var(--good);font-weight:700}
 .cov-bar{display:block;height:6px;border-radius:3px;background:var(--paper-2);border:1px solid var(--line);overflow:hidden}
 .cov-fill{display:block;height:100%;background:var(--good)}
 .sc-meta{display:flex;align-items:center;gap:8px;margin-top:12px;flex-wrap:wrap}
-.src-badge{font-family:"SF Mono",ui-monospace,monospace;font-size:9px;padding:2px 6px;border-radius:2px;letter-spacing:.08em;color:#fff}
+.src-badge{font-family:var(--mono);font-size:9px;padding:2px 6px;border-radius:2px;letter-spacing:.08em;color:#fff}
 .src-mine{background:var(--ichidan)} .src-starter{background:var(--adjective)}
-.sc-dot{font-family:"SF Mono",ui-monospace,monospace;font-size:10px;color:var(--muted);margin-left:auto}
+.sc-dot{font-family:var(--mono);font-size:10px;color:var(--muted);margin-left:auto}
 .sc-warn{color:var(--noun)}
 
 /* ---- Add a song ---- */
 .steps{display:flex;gap:18px;margin:14px 0 16px;flex-wrap:wrap}
-.step{font-family:"SF Mono",ui-monospace,monospace;font-size:12px;color:var(--muted);display:inline-flex;align-items:center;gap:7px}
+.step{font-family:var(--mono);font-size:12px;color:var(--muted);display:inline-flex;align-items:center;gap:7px}
 .step .sn{display:inline-flex;align-items:center;justify-content:center;width:20px;height:20px;border-radius:50%;border:1px solid var(--line);font-size:10px}
 .step.on{color:var(--ichidan)} .step.on .sn{border-color:var(--ichidan);background:color-mix(in srgb,var(--ichidan) 12%,transparent);font-weight:700}
 .step.done{color:var(--good)} .step.done .sn{border-color:var(--good);color:var(--good)}
-.field-lbl{font-family:"SF Mono",ui-monospace,monospace;font-size:10px;letter-spacing:.16em;text-transform:uppercase;color:var(--muted);margin:14px 0 6px;display:block}
+.field-lbl{font-family:var(--mono);font-size:10px;letter-spacing:.16em;text-transform:uppercase;color:var(--muted);margin:14px 0 6px;display:block}
 .ta{width:100%;min-height:200px;font-family:var(--jp-font);font-size:16px;line-height:1.9;border:1px solid var(--line);background:var(--paper);padding:12px 14px;border-radius:6px;color:var(--ink)}
-.inp{width:100%;font-family:Georgia,serif;font-size:14px;border:1px solid var(--line);background:var(--paper);padding:10px 12px;border-radius:6px;color:var(--ink)}
-.add-note{font-family:"SF Mono",ui-monospace,monospace;font-size:11px;color:var(--muted);display:inline-flex;align-items:center;gap:6px;margin-top:8px}
+.inp{width:100%;font-family:var(--body);font-size:14px;border:1px solid var(--line);background:var(--paper);padding:10px 12px;border-radius:6px;color:var(--ink)}
+.add-note{font-family:var(--mono);font-size:11px;color:var(--muted);display:inline-flex;align-items:center;gap:6px;margin-top:8px}
 .add-foot{display:flex;align-items:center;justify-content:space-between;gap:12px;margin-top:14px;flex-wrap:wrap}
 .profile-chips{display:flex;flex-wrap:wrap;gap:8px;align-items:center;margin:6px 0}
-.pchip{display:inline-flex;align-items:center;gap:5px;font-family:"SF Mono",ui-monospace,monospace;font-size:12px;padding:3px 9px;border-radius:3px}
+.pchip{display:inline-flex;align-items:center;gap:5px;font-family:var(--mono);font-size:12px;padding:3px 9px;border-radius:3px}
 .pchip.info{background:color-mix(in srgb,var(--ichidan) 14%,transparent);color:var(--ichidan)}
 .pchip.plain{border:1px solid var(--line);color:var(--muted)}
 .rev{border:1px solid var(--line);border-radius:8px;overflow:hidden;background:var(--paper);margin-top:6px}
@@ -854,14 +808,14 @@
 .rev-line.flag{background:color-mix(in srgb,var(--noun) 12%,transparent)}
 .rev-jp{font-size:21px;line-height:2.1}
 .rev-en{font-size:13px;color:var(--muted);font-style:italic;margin-top:1px}
-.rev-warn{font-family:"SF Mono",ui-monospace,monospace;font-size:11px;color:var(--noun);margin-top:5px;display:flex;align-items:center;gap:5px}
+.rev-warn{font-family:var(--mono);font-size:11px;color:var(--noun);margin-top:5px;display:flex;align-items:center;gap:5px}
 
 /* ---- Song view (shared + Read) ---- */
 .song-head{display:flex;align-items:flex-start;justify-content:space-between;gap:12px;margin:10px 0 12px;flex-wrap:wrap}
 .song-h-title{font-size:22px;font-weight:900}
 .song-h-sub{font-size:13px;color:var(--muted);font-style:italic}
 .mode-switch{display:inline-flex;gap:3px;background:var(--paper-2);border:1px solid var(--line);border-radius:6px;padding:3px;flex-wrap:wrap}
-.mode-sw{font-family:"SF Mono",ui-monospace,monospace;font-size:11px;letter-spacing:.06em;text-transform:uppercase;border:none;background:none;color:var(--muted);padding:7px 13px;border-radius:4px;cursor:pointer;display:inline-flex;align-items:center;gap:6px}
+.mode-sw{font-family:var(--mono);font-size:11px;letter-spacing:.06em;text-transform:uppercase;border:none;background:none;color:var(--muted);padding:7px 13px;border-radius:4px;cursor:pointer;display:inline-flex;align-items:center;gap:6px}
 .mode-sw:disabled{opacity:.45;cursor:default}
 .mode-sw.on{background:var(--paper);color:var(--ink);font-weight:700;box-shadow:0 1px 2px rgba(0,0,0,.08)}
 .mode-sw.on .g{color:var(--godan)}
@@ -869,21 +823,21 @@
 .sg-yt>#sgPlayer,.sg-yt iframe{width:100%;aspect-ratio:16/9;border:0;border-radius:8px;background:#161616;display:block}
 /* Listen: mask the video (it keeps playing for audio) so a lyric-burned MV doesn't spoil dictation. */
 .sg-yt.masked{position:relative}
-.sg-yt-mask{position:absolute;inset:0;z-index:2;display:flex;align-items:center;justify-content:center;gap:8px;border-radius:8px;background:var(--paper-2);color:var(--muted);font-family:"SF Mono",ui-monospace,monospace;font-size:12px;letter-spacing:.04em}
+.sg-yt-mask{position:absolute;inset:0;z-index:2;display:flex;align-items:center;justify-content:center;gap:8px;border-radius:8px;background:var(--paper-2);color:var(--muted);font-family:var(--mono);font-size:12px;letter-spacing:.04em}
 .ttoolbar{display:flex;gap:8px;margin-bottom:12px;flex-wrap:wrap}
-.tgl{display:inline-flex;align-items:center;gap:6px;font-family:"SF Mono",ui-monospace,monospace;font-size:12px;color:var(--muted);background:transparent;border:1px solid var(--line);padding:5px 10px;border-radius:3px;cursor:pointer}
+.tgl{display:inline-flex;align-items:center;gap:6px;font-family:var(--mono);font-size:12px;color:var(--muted);background:transparent;border:1px solid var(--line);padding:5px 10px;border-radius:3px;cursor:pointer}
 .tgl.on{color:var(--ichidan);border-color:var(--ichidan)}
 .lyrics .jp{font-family:var(--jp-font)}
 .lyrics.furi-off rt{display:none}
 .lyric{padding:8px 12px;border-radius:6px}
-.stanza-label{font:600 10px/1 "SF Mono",ui-monospace,monospace;letter-spacing:.09em;text-transform:uppercase;color:color-mix(in srgb,var(--muted) 85%,transparent);margin:20px 0 5px 12px}
+.stanza-label{font:600 10px/1 var(--mono);letter-spacing:.09em;text-transform:uppercase;color:color-mix(in srgb,var(--muted) 85%,transparent);margin:20px 0 5px 12px}
 .lyrics > .stanza-label:first-child{margin-top:4px}
 .lyric.cur{background:color-mix(in srgb,var(--ichidan) 9%,transparent);border-left:3px solid var(--ichidan);border-radius:0 6px 6px 0}
 .lyric.past{opacity:.5}
 .l-top{display:flex;justify-content:space-between;align-items:flex-start;gap:10px}
 .l-jp{font-size:23px;line-height:2.35}
 .l-en{font-size:13.5px;color:var(--muted);font-style:italic;margin-top:1px}
-.l-en.hidden{font-family:"SF Mono",ui-monospace,monospace;font-style:normal;font-size:12px;color:color-mix(in srgb,var(--muted) 80%,transparent);display:inline-flex;align-items:center;gap:5px;cursor:pointer}
+.l-en.hidden{font-family:var(--mono);font-style:normal;font-size:12px;color:color-mix(in srgb,var(--muted) 80%,transparent);display:inline-flex;align-items:center;gap:5px;cursor:pointer}
 .l-ctl{display:flex;gap:6px;flex-shrink:0}
 /* Per-line star toggle (a bookmark; the `songs` progress blob). Off = muted outline; on = filled
    gold (--noun is the amber design token, theme-aware). Reuses .speak-btn.sm sizing. */
@@ -897,12 +851,12 @@
 /* ---- Listen (dictation) — ported from mockups/songs/mock.css + the graded states ---- */
 .sg-listen-bar{display:flex;align-items:center;justify-content:space-between;gap:12px;flex-wrap:wrap;margin:6px 0 4px}
 .sg-diff{display:flex;align-items:center;gap:10px}
-.progresstxt{font-family:"SF Mono",ui-monospace,monospace;font-size:12px;color:var(--muted)}
+.progresstxt{font-family:var(--mono);font-size:12px;color:var(--muted)}
 .listen-card{background:color-mix(in srgb,var(--ichidan) 9%,transparent);border-left:3px solid var(--ichidan);border-radius:0 8px 8px 0;padding:14px 16px;margin:8px 0}
 .listen-cue{display:flex;align-items:center;gap:10px;margin-bottom:12px}
 .cue-btn{width:36px;height:36px;border-radius:50%;background:var(--paper);border:1px solid var(--line);color:var(--ichidan);display:inline-flex;align-items:center;justify-content:center;cursor:pointer;flex-shrink:0}
 .cue-btn.playing{background:var(--ichidan);color:#fff;border-color:var(--ichidan)}
-.cue-hint{font-family:"SF Mono",ui-monospace,monospace;font-size:11px;color:var(--muted)}
+.cue-hint{font-family:var(--mono);font-size:11px;color:var(--muted)}
 .listen-cloze{line-height:2.5}
 .gap-inp{display:inline-block;width:6em;max-width:60vw;border:none;border-bottom:2px solid var(--ichidan);background:transparent;color:var(--ink);font-family:var(--jp-font);font-size:20px;text-align:center;padding:0 6px 2px;margin:0 2px}
 .gap-inp:focus{outline:none;background:color-mix(in srgb,var(--ichidan) 8%,transparent)}
@@ -910,19 +864,19 @@
 .gap-res.ok{color:var(--good);border-color:var(--good)}
 .gap-res.bad{color:var(--godan);border-color:var(--godan)}
 .gap-res.neutral{color:var(--muted)}
-.gap-mark{font-size:13px;margin-left:4px;font-family:"SF Mono",ui-monospace,monospace}
+.gap-mark{font-size:13px;margin-left:4px;font-family:var(--mono)}
 .listen-full{display:flex;align-items:center;gap:10px;flex-wrap:wrap}
 .listen-full-inp{font-size:20px;padding:11px 13px;flex:1;min-width:min(420px,100%)}
 .listen-full-inp.ok{border-color:var(--good)}
 .listen-full-inp.bad{border-color:var(--godan)}
-.listen-verdict{font-family:"SF Mono",ui-monospace,monospace;font-size:12px}
+.listen-verdict{font-family:var(--mono);font-size:12px}
 .listen-verdict.ok{color:var(--good)}
 .listen-verdict.bad{color:var(--godan)}
 .listen-actions{display:flex;gap:8px;align-items:center;margin-top:14px;flex-wrap:wrap}
 .listen-answer{margin-top:14px;padding-top:12px;border-top:1px dashed var(--line)}
 .listen-answer .l-jp{font-size:21px;line-height:2}
 .listen-done{text-align:center;padding:34px 16px}
-.ld-title{font-family:"SF Mono",ui-monospace,monospace;font-size:12px;letter-spacing:.12em;text-transform:uppercase;color:var(--muted)}
+.ld-title{font-family:var(--mono);font-size:12px;letter-spacing:.12em;text-transform:uppercase;color:var(--muted)}
 .ld-score{font-size:44px;font-weight:900;margin:6px 0 2px}
 .ld-score span{font-size:24px;color:var(--muted);font-weight:400}
 .ld-sub{font-size:13px;color:var(--muted);font-style:italic;margin-bottom:16px}
@@ -930,23 +884,23 @@
 /* ---- Mine (vocab & grammar) ---- */
 .vg{display:grid;grid-template-columns:1.4fr 1fr;gap:18px;margin-top:14px}
 .vg-card{background:var(--paper-2);border:1px solid var(--line);border-radius:12px;padding:14px 16px}
-.vg-h{font-family:"SF Mono",ui-monospace,monospace;font-size:11px;letter-spacing:.14em;text-transform:uppercase;color:var(--godan);margin-bottom:6px;display:flex;align-items:center;gap:8px}
-.vg-sub{font-family:"SF Mono",ui-monospace,monospace;font-size:11px;color:var(--muted);margin-bottom:8px}
-.lvl-head{font-family:"SF Mono",ui-monospace,monospace;font-size:10px;letter-spacing:.1em;color:var(--muted);margin:12px 0 2px}
+.vg-h{font-family:var(--mono);font-size:11px;letter-spacing:.14em;text-transform:uppercase;color:var(--godan);margin-bottom:6px;display:flex;align-items:center;gap:8px}
+.vg-sub{font-family:var(--mono);font-size:11px;color:var(--muted);margin-bottom:8px}
+.lvl-head{font-family:var(--mono);font-size:10px;letter-spacing:.1em;color:var(--muted);margin:12px 0 2px}
 .wrow{display:flex;align-items:center;gap:10px;padding:7px 0;border-top:1px solid var(--line)}
 .wj{font-size:17px;min-width:74px} .wr{font-size:12px;color:var(--muted);font-family:var(--jp-font)} .wm{font-size:13px;color:var(--ink);flex:1}
-.kn{font-family:"SF Mono",ui-monospace,monospace;font-size:9px;padding:2px 6px;border-radius:2px}
+.kn{font-family:var(--mono);font-size:9px;padding:2px 6px;border-radius:2px}
 .kn.known{color:var(--good);border:1px solid var(--good)} .kn.new{color:var(--ichidan);border:1px solid var(--ichidan)} .kn.added{color:var(--muted);border:1px solid var(--line)}
-.addw{font-family:"SF Mono",ui-monospace,monospace;font-size:11px;border:1px solid var(--line);background:none;color:var(--ichidan);border-radius:11px;padding:2px 9px;cursor:pointer}
+.addw{font-family:var(--mono);font-size:11px;border:1px solid var(--line);background:none;color:var(--ichidan);border-radius:11px;padding:2px 9px;cursor:pointer}
 .grow{display:flex;align-items:center;gap:10px;padding:9px 0;border-top:1px solid var(--line);cursor:pointer}
-.gp{font-size:15px} .gcount{margin-left:auto;font-family:"SF Mono",ui-monospace,monospace;font-size:11px;color:var(--muted)}
+.gp{font-size:15px} .gcount{margin-left:auto;font-family:var(--mono);font-size:11px;color:var(--muted)}
 
 /* ---- Grammar reference ---- */
 .gref{max-width:560px;background:var(--paper-2);border:1px solid var(--line);border-radius:12px;padding:18px 20px;margin:14px 0}
 .gref-pat{font-size:20px;font-weight:700}
-.gref-h{font-family:"SF Mono",ui-monospace,monospace;font-size:10px;letter-spacing:.14em;text-transform:uppercase;color:var(--muted);margin:14px 0 6px}
+.gref-h{font-family:var(--mono);font-size:10px;letter-spacing:.14em;text-transform:uppercase;color:var(--muted);margin:14px 0 6px}
 .gref-line{font-size:16px;padding:8px 0;border-top:1px solid var(--line)}
 .gref-line .gl-en{font-size:12px;color:var(--muted);font-style:italic}
-.xlink{display:inline-flex;align-items:center;gap:6px;font-family:"SF Mono",ui-monospace,monospace;font-size:12px;color:var(--ichidan);border:1px solid var(--line);border-radius:8px;padding:6px 11px;margin:4px 8px 0 0;cursor:pointer;background:none}
+.xlink{display:inline-flex;align-items:center;gap:6px;font-family:var(--mono);font-size:12px;color:var(--ichidan);border:1px solid var(--line);border-radius:8px;padding:6px 11px;margin:4px 8px 0 0;cursor:pointer;background:none}
 
 @media(max-width:760px){.vg{grid-template-columns:1fr}}

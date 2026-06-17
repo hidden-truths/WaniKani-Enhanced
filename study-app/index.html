@@ -14,15 +14,32 @@
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 <title>日常日本語 — Japanese Trainer</title>
-<!-- The ONLY external dependency. Five Japanese webfaces for the font switcher
-     (gothic / mincho / rounded / soft-serif / brush). If this fails to load
-     (offline), the app falls back to system Japanese fonts and still works. -->
+<!-- The ONLY external dependency (Google Fonts). Two stylesheets:
+     1) the Day/Night UI stack — Bricolage Grotesque (display) · Hanken Grotesk
+        (body/UI) · Spline Sans Mono (micro-labels) · Zen Kaku Gothic New (the
+        default Japanese face);
+     2) the other Japanese webfaces the Settings font switcher offers (mincho /
+        rounded / soft-serif / brush).
+     If this fails to load (offline), the app falls back to system fonts (sans +
+     system Japanese) and still works — nothing hard-depends on it. -->
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Bricolage+Grotesque:opsz,wght@12..96,500;12..96,600;12..96,700;12..96,800&family=Hanken+Grotesk:wght@400;500;600;700&family=Spline+Sans+Mono:wght@400;500;600&family=Zen+Kaku+Gothic+New:wght@500;700;900&display=swap" rel="stylesheet">
 <link href="https://fonts.googleapis.com/css2?family=Noto+Sans+JP:wght@400;700;900&family=Noto+Serif+JP:wght@400;700;900&family=Zen+Maru+Gothic:wght@500;700&family=Kaisei+Decol:wght@400;700&family=Yuji+Syuku&display=swap" rel="stylesheet">
 <!-- styles.css is imported by src/main.js; Vite bundles + hashes it into the build. -->
 </head>
 <body>
+<!-- Day/Night atmosphere: fine paper grain + warm radial blooms, both FIXED at
+     z-index:0 behind content (see styles/base.css). Purely decorative. -->
+<div class="grain" aria-hidden="true"></div>
+<div class="atmos" aria-hidden="true"></div>
+<!-- Hanko ink-texture SVG filter (filter:url(#stamp), used by the seal/stamp).
+     Size hidden via INLINE STYLE — same trap as the icon sprite below: the global
+     svg{width:100%} chart rule would otherwise balloon it into a click-eating
+     overlay (Chromium height:auto→0, Firefox/Safari→150px). Don't move to attrs. -->
+<svg style="position:absolute;width:0;height:0;overflow:hidden;pointer-events:none" aria-hidden="true" focusable="false">
+  <filter id="stamp"><feTurbulence type="fractalNoise" baseFrequency="0.9" numOctaves="2" result="noise"/><feDisplacementMap in="SourceGraphic" in2="noise" scale="1.4"/></filter>
+</svg>
 <!-- Inline SVG icon sprite. Self-contained (no CDN/icon-font) so icons work
      offline like the rest of the app; referenced via <svg class="ic"><use href="#i-…"/>.
      All stroke-based on a 24-grid; color/size inherit via currentColor + 1em in .ic.
@@ -327,7 +344,7 @@
     <div class="fc-stage" id="fcDone">
       <div class="flashcard"><div class="spine"></div>
         <div class="prompt-label">Session complete</div>
-        <div class="prompt-main" id="doneScore" style="font-family:Georgia"></div>
+        <div class="prompt-main" id="doneScore" style="font-family:var(--display)"></div>
         <div class="prompt-sub" id="doneDetail"></div>
       </div>
       <div class="fc-buttons"><button class="chip primary" id="againBtn"><svg class="ic" aria-hidden="true"><use href="#i-refresh"/></svg>Study again</button></div>
@@ -639,6 +656,7 @@
       </span></div>
     <div class="set-row"><label>Japanese font<span class="set-hint">The typeface used for all Japanese text.</span></label>
       <select class="set-select" id="fontSel">
+        <option value='"Zen Kaku Gothic New","Noto Sans JP",sans-serif' selected>Zen Kaku (gothic)</option>
         <option value='"Noto Sans JP",sans-serif'>Noto Sans (gothic)</option>
         <option value='"Noto Serif JP",serif'>Noto Serif (mincho)</option>
         <option value='"Zen Maru Gothic",sans-serif'>Zen Maru (rounded)</option>

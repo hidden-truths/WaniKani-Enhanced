@@ -20,6 +20,10 @@
    - bootAuth() is LAST and not awaited (it chains pullCloud → rebuildData →
      refreshAllViews, which touch every feature — all must be initialized first).
    ========================================================================== */
+// Styles, in cascade order: the Day/Night token layer + base/atmosphere first,
+// then the (shrinking) per-surface sheet. See styles/tokens.css + styles/base.css.
+import './styles/tokens.css';
+import './styles/base.css';
 import './styles.css';
 import { VERBS } from './data/verbs.js';
 import { state, attachLevels } from './state.js';
