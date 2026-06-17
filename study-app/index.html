@@ -55,6 +55,8 @@
   <symbol id="i-user" viewBox="0 0 24 24"><circle cx="12" cy="8" r="4"/><path d="M4 21a8 8 0 0 1 16 0"/></symbol>
   <symbol id="i-cloud-check" viewBox="0 0 24 24"><path d="M7 18a4 4 0 0 1-.5-7.97A6 6 0 0 1 18 9.5 3.5 3.5 0 0 1 17.5 18"/><path d="M9 15.5 11 17.5 15 13"/></symbol>
   <symbol id="i-contrast" viewBox="0 0 24 24"><circle cx="12" cy="12" r="9"/><path d="M12 3v18a9 9 0 0 0 0-18z" fill="currentColor" stroke="none"/></symbol>
+  <symbol id="i-sun" viewBox="0 0 24 24"><circle cx="12" cy="12" r="3.6"/><path d="M12 3v2M12 19v2M5.6 5.6l1.4 1.4M17 17l1.4 1.4M3 12h2M19 12h2M5.6 18.4 7 17M17 7l1.4-1.4"/></symbol>
+  <symbol id="i-moon" viewBox="0 0 24 24"><path d="M21 12.8A9 9 0 1 1 11.2 3a7 7 0 0 0 9.8 9.8z"/></symbol>
   <symbol id="i-download" viewBox="0 0 24 24"><path d="M12 4v11M8 11l4 4 4-4"/><path d="M5 19h14"/></symbol>
   <symbol id="i-upload" viewBox="0 0 24 24"><path d="M12 20V9M8 13l4-4 4 4"/><path d="M5 5h14"/></symbol>
   <symbol id="i-play" viewBox="0 0 24 24"><path d="M7 5.5v13a1 1 0 0 0 1.5.87l11-6.5a1 1 0 0 0 0-1.74l-11-6.5A1 1 0 0 0 7 5.5z" fill="currentColor" stroke="none"/></symbol>
@@ -87,33 +89,39 @@
   <symbol id="i-tag" viewBox="0 0 24 24"><path d="M3 11l8-8 9 1 1 9-8 8a2 2 0 0 1-2.8 0L3 13.8A2 2 0 0 1 3 11z"/><circle cx="15" cy="9" r="1.4"/></symbol>
   <symbol id="i-star" viewBox="0 0 24 24"><path d="M12 3L14.2 9L20.6 9.2L15.5 13.1L17.3 19.3L12 15.7L6.7 19.3L8.5 13.1L3.4 9.2L9.8 9Z"/></symbol>
 </svg>
-<!-- Sticky top navbar: app title on the left, a slot (#navExtra) where context controls dock
-     (the みんなの日本語 speaking/compare controls render here — see minna.js), and the global
-     action buttons on the right (theme + settings are icon-only; the account button shows the
-     synced email). Sync feedback is a brief auto-clearing pill (#syncStatus). Import/Export and
-     the hidden file input moved into the Settings modal. Handlers: THEME (chrome.js), account
-     (cloud.js), Settings (settings-page.js), Export/Import (io.js). -->
-<nav class="navbar">
-  <div class="nav-inner">
-    <div class="nav-title">日常日本語<span class="nav-sub">Japanese Trainer</span></div>
-    <div class="nav-extra" id="navExtra"></div>
-    <div class="nav-actions">
+<!-- Sticky chrome: the mock's SINGLE-ROW topbar (brand · inline tab-nav · theme/settings/account
+     actions) stacked over an on-demand speaking-bar dock. Both stick together as one unit (.chrome)
+     so the #navExtra speaking/compare controls stay pinned while studying. #navExtra is the SAME
+     load-bearing slot the みんなの日本語 / 独り言 / 歌-Shadow speaking bars mount into (speaking-bar.js) —
+     RELOCATED here out of the old centered nav slot, not removed; :empty hides it (no second tier).
+     The tabs keep their .tab class + data-tab so initTabs() wiring is unchanged (just restyled as
+     the mock's underline-active nav links). Handlers: tabs + THEME (chrome.js), account (cloud.js),
+     Settings (settings-page.js), Export/Import (io.js, in the Settings modal). Sync feedback is the
+     auto-clearing #syncStatus pill; the account state lives behind the round #accountBtn avatar. -->
+<div class="chrome">
+  <header class="topbar">
+    <div class="brand"><span class="jp">日常日本語</span><span class="sub">Japanese&nbsp;Trainer</span></div>
+    <nav class="nav" aria-label="Sections">
+      <button class="tab active" data-tab="study">Flashcards</button>
+      <button class="tab" data-tab="browse">Browse</button>
+      <button class="tab" data-tab="stats">Stats</button>
+      <button class="tab" data-tab="minna"><span class="min">みんなの日本語</span> · Textbook</button>
+      <button class="tab" data-tab="selftalk"><span class="min">独り言</span> · Self-talk</button>
+      <button class="tab" data-tab="songs"><span class="min">歌</span> · Songs</button>
+    </nav>
+    <div class="top-actions">
       <span class="acct-status" id="syncStatus" role="status" aria-live="polite"></span>
-      <button class="nav-btn icon-only" id="themeToggle" aria-label="Toggle light/dark" title="Toggle light/dark"><svg class="ic" aria-hidden="true"><use href="#i-contrast"/></svg></button>
-      <button class="nav-btn icon-only" id="settingsBtn" aria-label="Settings" title="Settings"><svg class="ic" aria-hidden="true"><use href="#i-settings"/></svg></button>
-      <button class="nav-btn" id="accountBtn" aria-label="Account" title="Sign in to sync progress"><svg class="ic" aria-hidden="true"><use href="#i-user"/></svg><span class="nav-acct-name">Sign in</span></button>
+      <!-- theme toggle shows the icon for the mode you'll switch TO (☼ by day, ☾ by night). -->
+      <button class="icon-btn" id="themeToggle" aria-label="Toggle light/dark" title="Toggle light/dark"><svg class="ic sun" aria-hidden="true"><use href="#i-sun"/></svg><svg class="ic moon" aria-hidden="true"><use href="#i-moon"/></svg></button>
+      <button class="icon-btn" id="settingsBtn" aria-label="Settings" title="Settings"><svg class="ic" aria-hidden="true"><use href="#i-settings"/></svg></button>
+      <!-- Account avatar: round gradient + initial when signed in, a muted person glyph when signed
+           out (set by updateAccountChip). Keeps #accountBtn's id + click wiring (cloud.js). -->
+      <button class="avatar signed-out" id="accountBtn" aria-label="Account" title="Sign in to sync progress"><svg class="ic" aria-hidden="true"><use href="#i-user"/></svg></button>
     </div>
-  </div>
-</nav>
-
-<!-- Top-level view switcher. data-tab maps to #panel-<tab>; see TAB NAV. -->
-<div class="tabs">
-  <button class="tab active" data-tab="study"><svg class="ic" aria-hidden="true"><use href="#i-cards"/></svg>Flashcards</button>
-  <button class="tab" data-tab="browse"><svg class="ic" aria-hidden="true"><use href="#i-grid"/></svg>Browse</button>
-  <button class="tab" data-tab="stats"><svg class="ic" aria-hidden="true"><use href="#i-chart"/></svg>Stats</button>
-  <button class="tab" data-tab="minna"><svg class="ic" aria-hidden="true"><use href="#i-book"/></svg><span class="jp">みんなの日本語</span><span class="tab-en">Textbook</span></button>
-  <button class="tab" data-tab="selftalk"><svg class="ic" aria-hidden="true"><use href="#i-mic"/></svg><span class="jp">独り言</span><span class="tab-en">Self-talk</span></button>
-  <button class="tab" data-tab="songs"><svg class="ic" aria-hidden="true"><use href="#i-music"/></svg><span class="jp">歌</span><span class="tab-en">Songs</span></button>
+  </header>
+  <!-- Speaking/compare bar dock (load-bearing #navExtra): filled by speaking-bar.js for みんなの日本語 /
+       独り言 / 歌-Shadow. Empty → display:none; filled → a frosted sub-bar tier under the topbar. -->
+  <div class="nav-extra" id="navExtra"></div>
 </div>
 
 <div class="wrap">

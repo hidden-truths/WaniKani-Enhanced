@@ -105,7 +105,7 @@
      text baseline with a consistent gap (text-only chips are unaffected — one child). */
   .chip{display:inline-flex;align-items:center;justify-content:center;gap:6px}
   .btn{display:inline-flex;align-items:center;justify-content:center;gap:8px}
-  /* .tab inline-flex + .tab-en gloss → styles/chrome.css (Phase 1). */
+  /* The topbar tab-nav (.nav .tab, underline-active) → styles/chrome.css (Phase 9). */
   .topic-toggle .ic{font-size:13px}
   /* Filter rows: a fixed label column so every chip group starts at the same x,
      with chips in their own flex track so wrapped rows align under the first chip
@@ -122,17 +122,33 @@
     .topic-region .topic-inner{padding-left:0}
     /* Comfortable touch targets on mobile (chips are ~30px tall on desktop). */
     .chip,.topic-toggle{min-height:40px}
-    .tab{min-height:44px}
     .speak-btn{width:40px;height:40px}
-    /* Navbar on narrow screens: brand + actions share row 1 (the mono sub is
-       hidden + the brand shrinks so they fit), the docked context controls
-       (#navExtra) drop to a full-width second row. */
-    .nav-inner{flex-wrap:wrap;gap:8px 10px}
-    .nav-title{font-size:19px}
-    .nav-title .nav-sub{display:none}
-    .nav-extra{order:3;flex-basis:100%;justify-content:flex-start}
-    .nav-extra:empty{display:none}
-    .nav-acct-name{max-width:120px}
+    /* TOPBAR on narrow screens (Phase 9): the mock's explicit grid — brand +
+       actions on row 1, a horizontally-scrollable tab strip spanning row 2.
+       (Grid areas avoid the flex-wrap quirk that dropped the right-hand actions
+       at ~390px.) Lives here, after chrome.css's desktop rules, so it wins at
+       ≤640px (cascade Rule A). The #navExtra dock just spans full width below. */
+    .topbar{
+      display:grid;
+      grid-template-columns:1fr auto;
+      grid-template-areas:"brand actions" "nav nav";
+      align-items:center; row-gap:9px; column-gap:12px;
+      padding:12px 18px;
+    }
+    .brand{grid-area:brand;min-width:0}
+    .brand .jp{font-size:20px}
+    .brand .sub{display:none}
+    .top-actions{grid-area:actions;gap:8px}
+    .icon-btn,.avatar{width:36px;height:36px}
+    .avatar{font-size:14px}
+    .nav{
+      grid-area:nav; margin:0 -18px; padding:7px 18px 1px;
+      gap:3px; flex-wrap:nowrap; overflow-x:auto; -webkit-overflow-scrolling:touch;
+      border-top:1px solid var(--line); scrollbar-width:none;
+    }
+    .nav::-webkit-scrollbar{display:none}
+    .nav .tab{flex:0 0 auto; padding:8px 11px; font-size:14px; min-height:40px}
+    .nav-extra{padding:8px 18px}
   }
   /* Active-filter recap line: a quiet one-liner summarizing the current query
      (incl. collapsed topics) so the whole filter state is legible at a glance. */

@@ -1,92 +1,150 @@
 /* =========================================================================
-   CHROME (Day/Night Phase 1) — the sticky frosted top navbar (brand · #navExtra
-   dock · action buttons) + the underline-active tab strip. Peeled out of
-   styles.css and reskinned to the redesign topbar; markup + JS wiring unchanged
-   (.navbar / .nav-* / .tabs / .tab, data-tab). Imported tokens → base → chrome →
-   styles, so the styles.css @media chrome overrides (mobile — Phase 7) and the
-   #navExtra .speaking-bar overrides (みんなの日本語 — Phase 5) still win from there.
+   CHROME (Day/Night Phase 9) — the mock's SINGLE-ROW topbar: brand · inline
+   tab-nav (underline-active) · theme/settings/account actions, stacked over an
+   on-demand speaking-bar dock (#navExtra). Replaces the old two-row .navbar +
+   separate .tabs strip. The whole thing sticks as one unit (.chrome) so the
+   #navExtra speaking/compare controls stay pinned while studying.
+
+   Markup/JS wiring unchanged: tabs keep .tab + data-tab (initTabs), the action
+   ids (#themeToggle/#settingsBtn/#accountBtn/#syncStatus) + #navExtra are stable.
+   Imported tokens → base → chrome → styles, so the styles.css mobile @media
+   topbar overrides + the #navExtra .speaking-bar trims still win from there
+   (cascade Rule A). Spec: mockups/redesign/system.css .topbar/.brand/.nav/
+   .top-actions/.icon-btn/.avatar + its @media grid.
    ========================================================================= */
 
-/* Frosted, sticky top bar — warm glass over the washi/charcoal page. */
-.navbar{
-  position:sticky; top:0; z-index:50;
+/* Sticky wrapper — topbar + the optional speaking-bar dock stick together. */
+.chrome{ position:sticky; top:0; z-index:50; }
+
+/* Frosted single-row top bar — full-bleed (margin trick), content aligned to
+   the 1180 column (matches .wrap's 40px gutter). */
+.topbar{
+  display:flex; align-items:center; gap:30px;
+  padding:18px 40px;
+  margin:0 calc((100vw - 100%) / -2);
+  padding-left:max(40px, calc((100vw - 1180px)/2 + 40px));
+  padding-right:max(40px, calc((100vw - 1180px)/2 + 40px));
   background:var(--surf-nav);
   backdrop-filter:blur(20px) saturate(140%);
   -webkit-backdrop-filter:blur(20px) saturate(140%);
   border-bottom:1px solid var(--line);
   transition:background .5s ease, border-color .5s ease;
 }
-.nav-inner{max-width:1100px;margin:0 auto;padding:13px 20px;display:flex;align-items:center;gap:18px}
 
-/* Brand — 日常日本語 in the gothic JP face + a mono sub behind a hairline divider. */
-.nav-title{
-  font-family:var(--jp); font-weight:900; font-size:21px; letter-spacing:.02em;
-  color:var(--ink); white-space:nowrap; display:inline-flex; align-items:baseline; gap:12px; flex-shrink:0;
+/* Brand — 日常日本語 in the gothic JP face (fixed, not the swappable --jp-font)
+   + a mono sub behind a hairline divider. */
+.brand{ display:flex; align-items:baseline; gap:14px; min-width:0; flex-shrink:0; }
+.brand .jp{
+  font-family:var(--jp); font-weight:900;
+  font-size:25px; letter-spacing:.045em; color:var(--ink);
+  line-height:1; white-space:nowrap;
 }
-.nav-title .nav-sub{
-  font-family:var(--mono); font-size:9.5px; letter-spacing:.28em; text-transform:uppercase;
-  color:var(--muted); font-weight:500;
-  border-left:1px solid var(--line); padding-left:12px;
+.brand .sub{
+  font-family:var(--mono); font-size:10px; letter-spacing:.32em;
+  text-transform:uppercase; color:var(--muted); font-weight:500;
+  border-left:1px solid var(--line); padding-left:14px;
+  transform:translateY(-1px); white-space:nowrap;
 }
 
-/* #navExtra dock — the speaking/compare bar mounts here (styles.css trims it). */
-.nav-extra{flex:1;display:flex;justify-content:center;min-width:0}
-.nav-extra:empty{flex:1}
-
-/* Right-hand actions: round icon buttons (theme/settings) + the account pill. */
-.nav-actions{display:flex;align-items:center;gap:10px;margin-left:auto}
-.nav-btn{
-  display:inline-flex; align-items:center; gap:7px;
-  font-family:var(--body); font-size:13.5px; font-weight:500;
-  border:1px solid var(--line); background:var(--chip-bg); color:var(--ink);
-  padding:8px 14px; border-radius:999px; cursor:pointer;
-  box-shadow:var(--lift-sm);
-  transition:transform .16s ease, color .16s ease, border-color .16s ease, background .16s ease;
+/* Inline tab-nav — body-font links with an underline-active bar (a warm
+   gradient glow by night). The tabs are <button.tab data-tab> (initTabs wiring),
+   styled as the mock's .nav a. */
+.nav{ display:flex; align-items:center; gap:2px; margin-left:6px; flex:1; flex-wrap:wrap; }
+.nav .tab{
+  position:relative; display:inline-flex; align-items:center;
+  font-family:var(--body); font-size:14.5px; font-weight:500;
+  color:var(--muted); background:none; border:none; cursor:pointer;
+  padding:8px 12px; border-radius:8px; white-space:nowrap;
+  transition:color .18s ease, background .18s ease;
 }
-.nav-btn:hover{transform:translateY(-1px);border-color:var(--gold)}
-.nav-btn .ic{font-size:15px;color:var(--muted)}
-.nav-btn:hover .ic{color:var(--ink)}
-.nav-btn.icon-only{width:38px;height:38px;padding:0;justify-content:center;border-radius:50%;color:var(--muted)}
-.nav-btn.icon-only .ic{font-size:17px}
-.nav-btn.icon-only:hover{color:var(--ink)}
-/* theme toggle picks up the warm gold glow by night (mirrors the redesign). */
-[data-theme="dark"] #themeToggle{color:var(--gold);border-color:rgba(217,169,78,.35);box-shadow:0 0 18px -6px rgba(217,169,78,.5)}
-.nav-acct-name{max-width:190px;overflow:hidden;text-overflow:ellipsis;white-space:nowrap}
+.nav .tab .min{ font-family:var(--jp); font-weight:500; }
+.nav .tab:hover{ color:var(--ink); background:color-mix(in srgb, var(--ink) 7%, transparent); }
+.nav .tab.active{ color:var(--ink); font-weight:600; }
+.nav .tab.active::after{
+  content:""; position:absolute; left:12px; right:12px; bottom:1px; height:2px;
+  background:var(--brand); border-radius:2px;
+}
+[data-theme="dark"] .nav .tab.active::after{
+  background:linear-gradient(90deg, transparent, var(--brand), transparent);
+  box-shadow:0 0 12px 1px rgba(255,107,74,.5);
+}
+
+/* Right-hand actions: round icon buttons (theme/settings) + the account avatar. */
+.top-actions{ display:flex; align-items:center; gap:10px; flex-shrink:0; }
 
 /* Transient sync/feedback pill (#syncStatus) — auto-cleared; empty → no gap. */
-.acct-status{font-family:var(--mono);font-size:10px;letter-spacing:.04em;color:var(--muted);white-space:nowrap}
-.acct-status:empty{display:none}
+.acct-status{ font-family:var(--mono); font-size:10px; letter-spacing:.04em; color:var(--muted); white-space:nowrap; }
+.acct-status:empty{ display:none; }
 
-/* Tab strip — horizontally scrollable; body-font links with an underline-active
-   bar (a warm gradient glow by night). */
-.tabs{
-  position:relative; z-index:1;
-  display:flex; flex-wrap:nowrap; gap:2px;
+.icon-btn{
+  width:38px; height:38px; border-radius:50%; padding:0;
+  border:1px solid var(--line); background:var(--chip-bg);
+  display:grid; place-items:center; cursor:pointer; color:var(--muted);
+  box-shadow:var(--lift-sm);
+  transition:transform .18s ease, color .18s ease, border-color .18s ease, background .18s ease;
+}
+.icon-btn:hover{ transform:translateY(-1px); color:var(--ink); border-color:var(--gold); }
+.icon-btn svg{ width:18px; height:18px; }
+
+/* theme toggle: shows the icon for the mode you'll switch TO (☼ by day, ☾ by night). */
+#themeToggle .moon{ display:none; }
+#themeToggle .sun{ display:block; }
+[data-theme="dark"] #themeToggle .moon{ display:block; }
+[data-theme="dark"] #themeToggle .sun{ display:none; }
+/* before any explicit toggle, honor the system preference for the icon too */
+@media (prefers-color-scheme: dark){
+  :root:not([data-theme]) #themeToggle .moon{ display:block; }
+  :root:not([data-theme]) #themeToggle .sun{ display:none; }
+}
+[data-theme="dark"] #themeToggle{
+  color:var(--gold); border-color:rgba(217,169,78,.35);
+  box-shadow:0 0 18px -6px rgba(217,169,78,.5);
+}
+
+/* Account avatar — round gradient + the user's initial (set by updateAccountChip
+   via textContent) when signed in; a muted person glyph when signed out. Keeps
+   #accountBtn's id + click wiring. */
+.avatar{
+  width:38px; height:38px; border-radius:50%; padding:0;
+  background:linear-gradient(150deg, var(--reading), var(--reading-deep));
+  color:#F3ECDD; display:grid; place-items:center;
+  font-family:var(--display); font-weight:700; font-size:16px;
+  box-shadow:var(--lift-sm); cursor:pointer;
+  border:1.5px solid rgba(251,246,236,.5);
+  transition:transform .18s ease, box-shadow .18s ease, border-color .18s ease, background .18s ease;
+}
+.avatar:hover{ transform:translateY(-1px); }
+[data-theme="dark"] .avatar{
+  background:linear-gradient(145deg, var(--brand), #b8412a); color:#1a0d09;
+  border:1px solid rgba(255,238,222,.18);
+  box-shadow:0 0 16px -4px rgba(255,107,74,.55);
+}
+/* signed out — neutral, muted person glyph (no gradient, reads as "sign in") */
+.avatar.signed-out,
+[data-theme="dark"] .avatar.signed-out{
+  background:var(--chip-bg); color:var(--muted);
+  border:1px solid var(--line); box-shadow:var(--lift-sm);
+}
+.avatar.signed-out:hover{ color:var(--ink); border-color:var(--gold); }
+.avatar.signed-out svg{ width:18px; height:18px; }
+
+/* #navExtra speaking-bar dock — RELOCATED out of the old centered nav slot to a
+   frosted sub-bar tier directly under the topbar (still inside .chrome, so it
+   stays pinned while studying). Empty → display:none (no second tier). The
+   .nav-extra .speaking-bar chrome-trims live in styles.css (cascade Rule A). */
+.nav-extra{
+  display:flex; justify-content:center; align-items:center;
+  padding:9px 40px;
+  padding-left:max(40px, calc((100vw - 1180px)/2 + 40px));
+  padding-right:max(40px, calc((100vw - 1180px)/2 + 40px));
+  background:var(--surf-nav);
+  backdrop-filter:blur(20px) saturate(140%);
+  -webkit-backdrop-filter:blur(20px) saturate(140%);
   border-bottom:1px solid var(--line);
-  max-width:1100px; margin:14px auto 0; padding:0 20px;
-  overflow-x:auto; overflow-y:hidden; scrollbar-width:none;
 }
-.tabs::-webkit-scrollbar{display:none}
-.tab{
-  position:relative;
-  display:inline-flex; align-items:center; gap:8px;
-  font-family:var(--body); font-size:14.5px; font-weight:500; letter-spacing:0; text-transform:none;
-  background:none; border:none; color:var(--muted);
-  padding:11px 14px; cursor:pointer; white-space:nowrap; flex:0 0 auto;
-  transition:color .16s ease;
-}
-.tab .jp{font-family:var(--jp);font-weight:600}
-.tab:hover{color:var(--ink)}
-.tab.active{color:var(--ink);font-weight:600}
-.tab.active::after{content:"";position:absolute;left:14px;right:14px;bottom:-1px;height:2px;background:var(--brand);border-radius:2px}
-[data-theme="dark"] .tab.active::after{background:linear-gradient(90deg,transparent,var(--brand),transparent);box-shadow:0 0 12px 1px rgba(255,107,74,.5)}
-.tab .ic{font-size:16px;color:var(--muted)}
-.tab.active .ic{color:var(--brand)}
-/* English gloss on the JP-named tabs (Textbook / Self-talk / Songs). */
-.tab-en{font-size:.82em;letter-spacing:.02em;text-transform:none;color:var(--faint);font-weight:400}
-.tab.active .tab-en{color:var(--muted)}
+.nav-extra:empty{ display:none; }
 
 /* Tab panels — one visible at a time (JS toggles .active; entrance anim stays
    in styles.css motion). */
-.panel{display:none}
-.panel.active{display:block}
+.panel{ display:none; }
+.panel.active{ display:block; }

@@ -5,7 +5,7 @@
 // in all) and the durable POST /v1/sessions log. The persistence layer schedules pushes via the
 // sync bus, which this module's initCloud() wires up.
 import { state } from '../state.js';
-import { escapeHtml, phraseToSentence, cardExamplesPayload, mergeProgress, mergeCustomVerbs, mergeSelftalkPractice, mergeSongs } from '../core/index.js';
+import { phraseToSentence, cardExamplesPayload, mergeProgress, mergeCustomVerbs, mergeSelftalkPractice, mergeSongs } from '../core/index.js';
 import { sync } from '../sync-bus.js';
 import { account, setAccount, api, setSyncStatus, serverReachable, setServerReachable } from './cloud-core.js';
 import { createSyncedBlob } from './synced-blob.js';
@@ -203,11 +203,24 @@ function refreshAllViews() {
   if (document.getElementById('panel-minna').classList.contains('active')) renderMinna();
 }
 
+// The account avatar (#accountBtn — the round .avatar in the topbar): signed in → the user's
+// initial via textContent + the gradient skin; signed out → a muted person glyph + the
+// .signed-out skin. The email rides ONLY in the title attribute (set via .title, not innerHTML),
+// so the user-controlled string is never HTML-interpolated — no escaping needed.
 function updateAccountChip() {
   const btn = document.getElementById('accountBtn');
-  // The account email is escapeHtml'd before interpolation (user-controlled → XSS otherwise).
-  if (account) { btn.innerHTML = '<svg class="ic" aria-hidden="true"><use href="#i-cloud-check"/></svg><span class="nav-acct-name">' + escapeHtml(account.email) + '</span>'; btn.title = 'Signed in — click to sign out'; }
-  else { btn.innerHTML = '<svg class="ic" aria-hidden="true"><use href="#i-user"/></svg><span class="nav-acct-name">Sign in</span>'; btn.title = 'Sign in to sync progress'; setSyncStatus(''); }
+  if (!btn) return;
+  if (account) {
+    const initial = ((account.email || '?').trim().charAt(0) || '?').toUpperCase();
+    btn.classList.remove('signed-out');
+    btn.textContent = initial;
+    btn.title = 'Signed in as ' + account.email + ' — click to sign out';
+  } else {
+    btn.classList.add('signed-out');
+    btn.innerHTML = '<svg class="ic" aria-hidden="true"><use href="#i-user"/></svg>';
+    btn.title = 'Sign in to sync progress';
+    setSyncStatus('');
+  }
 }
 
 /* ---- Auth modal ---- */
