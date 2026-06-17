@@ -29,6 +29,9 @@ import './styles.css';            // shared core (buttons/chips/inputs/filters) 
 import './styles/flashcards.css'; // study-panel surface (peeled; overrides the shared core)
 import './styles/browse.css';     // browse grid + detail-memory (peeled)
 import './styles/stats.css';      // stats metric cards + chart panels + leech list (peeled)
+import './styles/minna.css';      // みんなの日本語 dashboard (peeled)
+import './styles/selftalk.css';   // 独り言 Self-Talk (peeled)
+import './styles/songs.css';      // 歌 Songs (peeled)
 import { VERBS } from './data/verbs.js';
 import { state, attachLevels } from './state.js';
 import { loadCustom } from './persistence/custom.js';

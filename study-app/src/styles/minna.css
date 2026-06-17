@@ -1,0 +1,86 @@
+/* =========================================================================
+   みんなの日本語 DASHBOARD (Day/Night Phase 5) — account-gated lesson view (gate ·
+   vocab table · grammar · conversation · notes · practice history). Peeled from
+   styles.css; the SHARED .speak-btn.playing + .minna-badge + the record-compare/
+   speaking-bar kit stay in styles.css. The .mn-vocab border rules are the
+   WebKit/Safari border-collapse fix — preserved verbatim (don't go back to
+   none/hidden). Imported after styles.css.
+   ========================================================================= */
+/* Signed-out gate — a lifted sheet. */
+.mn-gate{text-align:center;padding:48px 22px;background:var(--surf-card);border:1px solid var(--line);border-radius:16px;margin-top:20px;box-shadow:var(--lift-md),var(--inner-hi)}
+.mn-gate .gate-ic{font-size:34px;color:var(--reading)}
+.mn-gate h2{font-family:var(--display);font-size:24px;font-weight:900;margin:12px 0 6px}
+.mn-gate p{color:var(--muted);max-width:46ch;margin:0 auto 18px}
+/* Lesson heading + chapter picker. */
+.mn-head{margin-top:18px}
+.mn-kicker{font-family:var(--mono);font-size:11px;letter-spacing:.24em;text-transform:uppercase;color:var(--brand);margin-bottom:8px}
+.mn-title{font-family:var(--display);font-size:clamp(24px,4vw,34px);font-weight:900;line-height:1.05}
+.mn-theme{color:var(--muted);margin-top:6px;font-size:15px}
+.mn-loading,.mn-error{padding:30px 4px;color:var(--muted);font-family:var(--mono);font-size:13px}
+.mn-error{color:var(--brand)}
+/* Section card + its collapsible header. */
+.mn-section{background:var(--surf-card);border:1px solid var(--line);border-radius:16px;padding:6px 18px 8px;margin-top:16px;box-shadow:var(--lift-sm),var(--inner-hi)}
+.mn-section>summary{cursor:pointer;list-style:none;font-family:var(--mono);font-size:11px;letter-spacing:.18em;text-transform:uppercase;color:var(--brand);display:flex;align-items:center;gap:8px;padding:12px 0}
+.mn-section>summary::-webkit-details-marker{display:none}
+.mn-section>summary::after{content:"+";margin-left:auto;color:var(--muted);font-size:16px}
+.mn-section[open]>summary::after{content:"−"}
+.mn-section .mn-count{color:var(--muted);font-weight:400;letter-spacing:.1em}
+.mn-sec-body{padding:2px 0 10px}
+/* Vocab table. */
+.mn-vocab{width:100%;border-collapse:collapse}
+/* WebKit/Safari border-collapse quirk: a `border-top:none`/`hidden` cell edge still gets
+   PAINTED by Safari using the cell's border WIDTH + default colour (currentColor ≈ --ink,
+   near-WHITE in dark mode) — a phantom white line under each word that Chrome doesn't draw.
+   `none`/`hidden` don't kill it; only an explicit 0 WIDTH + transparent COLOUR leaves nothing
+   to paint. So the base is `border:0 solid transparent` and ONLY the real separator (word-row
+   top) gets a visible 1px --line. Don't go back to `none` on the borderless edges. */
+.mn-vocab td{padding:9px 8px;border:0 solid transparent;border-top:1px solid var(--line);vertical-align:middle}
+.mn-vocab tr:first-child td{border-top:0 solid transparent}
+.mn-vocab .v-audio{width:44px;text-align:center}
+.mn-kanji{font-family:var(--jp);font-size:20px}
+.mn-kana{color:var(--muted);font-size:13px;margin-top:2px;font-family:var(--jp)}
+.mn-ctx{color:var(--muted);font-size:12px;font-family:var(--mono);margin-left:2px}
+.mn-mean{font-size:14px}
+.mn-pos{display:inline-block;font-family:var(--mono);font-size:9px;letter-spacing:.1em;color:var(--muted);border:1px solid var(--line);border-radius:6px;padding:1px 6px;margin-left:8px;vertical-align:1px}
+/* iTalki marker — a filled indigo chip so covered words pop in the vocab table. */
+.mn-italki{display:inline-block;font-family:var(--mono);font-size:9px;letter-spacing:.06em;background:var(--ichidan);color:#fff;border-radius:6px;padding:1px 6px;margin-left:6px;vertical-align:1px}
+/* Grammar cards. */
+.mn-gram{padding:14px 0;border-top:1px solid var(--line)}
+.mn-gram:first-child{border-top:none}
+.mn-pattern{font-family:var(--jp);font-size:18px;font-weight:700}
+.mn-structure{font-family:var(--mono);font-size:12px;color:var(--ink);background:var(--surf-inset);border-radius:8px;padding:8px 11px;margin:8px 0;line-height:1.5}
+.mn-explain{font-size:14px;line-height:1.6;margin-bottom:8px}
+.mn-ex{display:flex;flex-direction:column;gap:9px;margin-top:8px}
+.mn-ex .e-jp{font-family:var(--jp);font-size:16px}
+.mn-ex .e-en{color:var(--muted);font-size:13px;margin-top:1px}
+/* Conversation. */
+.mn-conv-audio{display:flex;align-items:center;gap:10px;margin:4px 0 14px;color:var(--muted);font-size:13px}
+.mn-line{display:flex;gap:10px;padding:9px 0;border-top:1px solid var(--line)}
+.mn-line:first-child{border-top:none}
+.mn-role{font-family:var(--mono);font-size:11px;color:var(--reading);flex:0 0 64px;padding-top:3px}
+.mn-line .l-jp{font-family:var(--jp);font-size:16px}
+.mn-line .l-en{color:var(--muted);font-size:13px;margin-top:2px}
+/* Add-to-deck action. */
+.mn-actions{display:flex;align-items:center;gap:12px;flex-wrap:wrap;margin:6px 0 2px}
+.v-in{color:var(--good);font-family:var(--mono);font-size:11px;white-space:nowrap}
+/* Notes — the "augment as I study" area (synced under the minna app key). */
+.mn-notes textarea{width:100%;min-height:120px;background:var(--surf-inset);color:var(--ink);border:1px solid var(--line);border-radius:12px;padding:13px;font-family:var(--body);font-size:14px;line-height:1.6;resize:vertical}
+.mn-notes textarea:focus{outline:none;border-color:var(--brand);box-shadow:0 0 0 3px var(--brand-soft)}
+.mn-saved{font-family:var(--mono);font-size:11px;color:var(--muted);margin-top:6px;min-height:14px}
+/* Practice history — cross-lesson roll-up of saved takes. */
+.mn-ph-total{font-family:var(--mono);font-size:12px;color:var(--muted);margin:0 0 10px}
+.mn-ph{width:100%;border-collapse:collapse;font-size:13px}
+.mn-ph th{text-align:left;font-family:var(--mono);font-size:10px;letter-spacing:.08em;text-transform:uppercase;color:var(--muted);font-weight:400;padding:0 10px 6px 0;border-bottom:1px solid var(--line)}
+.mn-ph th:last-child,.mn-ph td:last-child{text-align:right}
+.mn-ph td{padding:7px 10px 7px 0;border-top:1px solid var(--line)}
+.mn-ph tbody tr:first-child td{border-top:0}
+.mn-ph td:first-child{font-family:var(--mono);color:var(--reading)}
+.mn-ph-when{color:var(--muted);white-space:nowrap}
+.mn-ph-cur td{background:color-mix(in srgb,var(--reading) 8%,transparent)}
+.mn-ph-cur td:first-child{font-weight:700}
+
+@media (max-width:640px){
+  .mn-role{flex-basis:48px;font-size:10px}
+  .mn-kanji{font-size:18px}
+  .mn-vocab td{padding:8px 5px}
+}
