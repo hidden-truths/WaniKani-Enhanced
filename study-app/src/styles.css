@@ -113,9 +113,12 @@
     .chip,.topic-toggle{min-height:40px}
     .tab{min-height:44px}
     .speak-btn{width:40px;height:40px}
-    /* Navbar wraps on narrow screens: title + actions on the first row, the docked
-       context controls (#navExtra) drop to a full-width second row. */
+    /* Navbar on narrow screens: brand + actions share row 1 (the mono sub is
+       hidden + the brand shrinks so they fit), the docked context controls
+       (#navExtra) drop to a full-width second row. */
     .nav-inner{flex-wrap:wrap;gap:8px 10px}
+    .nav-title{font-size:19px}
+    .nav-title .nav-sub{display:none}
     .nav-extra{order:3;flex-basis:100%;justify-content:flex-start}
     .nav-extra:empty{display:none}
     .nav-acct-name{max-width:120px}

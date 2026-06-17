@@ -286,29 +286,44 @@ onto built-in cards' `v.accent` by `attachLevels` (Minna cards carry their own).
 
 ## Design system
 
-> **A full visual redesign is COMPLETE as mocks and is the next big task to ship.** A serif-free
-> "Day / Night" system (all-sans: Bricolage Grotesque + Hanken Grotesk + Spline Sans Mono + Zen Kaku
-> Gothic New; warm washi light + candle-lit warm dark) lives in [mockups/redesign/](mockups/redesign/)
-> with a shared `system.css` — **11 surfaces, both themes, mobile-passed, twice-critiqued (~9.3/10)**,
-> NOT yet applied to the real `index.html`/`src/styles.css`. **To migrate, start at
-> [mockups/redesign/MIGRATION.md](mockups/redesign/MIGRATION.md)** (the plan: reskin-in-place + token
-> aliasing) + its [MIGRATION_PROMPT.md](mockups/redesign/MIGRATION_PROMPT.md); the mock journey is in
-> [mockups/redesign/HANDOFF.md](mockups/redesign/HANDOFF.md). The section below documents the
-> **current production design** (what's still shipping until the migration lands).
+> **The "Day / Night" redesign is SHIPPED** (Phases 0–7, 2026-06-17, on the `redesign-migration`
+> branch): an all-sans system (Bricolage Grotesque display + Hanken Grotesk body + Spline Sans Mono
+> labels + Zen Kaku Gothic New for Japanese; warm washi-paper light + candle-lit warm-charcoal dark)
+> applied to the real app via **reskin-in-place + token aliasing** — markup, class names, `data-*` and
+> the JS contracts are unchanged; only the CSS + the `index.html` head/atmosphere changed. The CSS is
+> now **split per surface**: `src/styles/tokens.css` (the palette — both themes + the
+> prefers-color-scheme fallback) + `base.css` (reset/body/`.wrap`/atmosphere) +
+> `chrome/flashcards/browse/stats/minna/selftalk/songs.css`; the SHARED core (buttons, chips, filters,
+> `.speak-btn`, the overlay/modal/form kit, record-compare/speaking-bar, tap-a-word, global utils)
+> stays in `src/styles.css`. `src/main.js` imports them in cascade order (tokens → base → chrome →
+> styles → flashcards → browse → stats → minna → selftalk → songs). The mocks stay in
+> [mockups/redesign/](mockups/redesign/) as the visual reference; the migration plan + load-bearing
+> dead-ends are in [mockups/redesign/MIGRATION.md](mockups/redesign/MIGRATION.md) + HANDOFF.md.
 
-**Type-label rule:** uppercase-mono (the signature) is for SHORT labels only —
-filter/stat/section labels, kickers, tabs. Longer descriptive strings (chart
-titles, helper/hint text) are sentence-case mono so they stay scannable; don't
-add `text-transform:uppercase` to a multi-word sentence.
+**Type-label rule:** uppercase-mono (`--mono`, Spline Sans Mono — the signature) is for SHORT labels
+only — filter/stat/section labels, kickers. Longer descriptive strings (chart titles, helper/hint
+text) are sentence-case mono so they stay scannable; don't add `text-transform:uppercase` to a
+multi-word sentence. (The redesign moved the **tabs** off uppercase-mono onto body-font sentence-case
+with an underline-active bar — see `styles/chrome.css`.)
 
-All theming flows through CSS custom properties (`--ink/--paper/--paper-2`,
-`--godan/--ichidan/--irregular`, `--adjective/--noun/--adverb/--phrase`,
-`--muted/--line`, `--leech`, `--good`, `--jp-font`); light/dark is one `data-theme`
-flip on `<html>`. Colors are **functional, not decorative** — verb classes
-(godan=vermilion, ichidan=indigo, irregular=stone) and the non-verb category
-accents (adjective=teal, noun=amber, adverb=rose, phrase=slate) both paint the card
-spine + hanko stamp via `colorClass(v)`; leech=purple. Mono labels (`SF Mono`), serif chrome (Georgia), swappable
-`.jp` font for Japanese text.
+All theming flows through CSS custom properties in `styles/tokens.css`. The redesign **role tokens**
+are the source of truth: surfaces `--paper/--raised/--deeper/--base` + `--surf-card/--surf-inset/
+--surf-nav/--chip-bg`; ink `--ink/--muted/--faint/--line`; functional `--brand(-deep/-soft/-on)`
+(godan), `--reading(...)` (ichidan), `--good(...)`, `--gold` (irregular), `--leech`; shadows
+`--lift-sm/md/lg --card-shadow --cta-shadow --inner-hi`; fonts `--display/--body/--mono/--jp`. The
+PRODUCTION token NAMES the feature code + the hand-rolled SVG charts already reference are **aliased**
+onto these so they reskin for free: `--godan→--brand`, `--ichidan→--reading`, `--irregular→--gold`,
+`--paper-2→--raised`; `--jp-font` stays the live token the Settings font switcher rewrites (new
+default Zen Kaku Gothic New, `--jp` flows from it). Light/dark is one `data-theme` flip on `<html>`
+(+ a `prefers-color-scheme` fallback). Colors are **functional, not decorative** — verb classes
+(godan=vermilion/coral, ichidan=indigo, irregular=gold) and the non-verb category accents
+(adjective=teal, noun=amber, adverb=rose, phrase=slate) paint the card spine + hanko stamp via
+`colorClass(v)`; leech=plum, "got it right"=jade. Type is **all-sans** (the Georgia serif + SF-Mono
+were removed): `--display` (Bricolage — display/numerals/the revealed meaning), `--body` (Hanken —
+UI/prose), `--mono` (Spline Sans Mono — short labels), `--jp` (Zen Kaku Gothic New — all Japanese).
+The `.grain` + `.atmos` fixed layers (`styles/base.css`, behind content at z-0) carry the
+paper-grain + candle-glow atmosphere; light depth is **shadow-driven** (`--lift-*`), dark depth is
+**glow-driven** — both live on the component surfaces, not on luminance.
 
 Component contracts you must preserve:
 
