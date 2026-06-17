@@ -180,8 +180,8 @@ compositions that still need a fidelity pass. Per row — the mock vs what ships
 
 | Surface | Mock (`screens/*.png`, the target) | Ships today | Phase 9 work |
 |---|---|---|---|
-| **🔴 Global chrome / navbar** | single-row `.topbar`: brand · tabs INLINE as `.nav a` (underline-active) · `.top-actions` ending in a round `.avatar`; **no middle dock**; mobile = `"brand actions"/"nav nav"` grid | ❌ **WRONG, never touched**: two-row — `.navbar` (brand + centered `#navExtra` dock + a "Sign in" **text** button) + a **separate `.tabs`** strip | rebuild as the single-row inline-tab topbar + round avatar; **reconcile the `#navExtra` speaking-bar dock** (a dead-end — can't delete) |
-| **🔴 Global margins** | `.wrap{max-width:1180px; padding:0 40px 96px}`; topbar inner padding aligned to the 1180 column | ❌ **CRAMPED**: `.wrap{max-width:1100px; padding:0 20px 80px}`, navbar/tabs match at 1100/20 | widen to 1180 + 40px gutter across `.wrap`/navbar/tabs — biggest single look fix |
+| **✅ Global chrome / navbar** | single-row `.topbar`: brand · tabs INLINE as `.nav a` (underline-active) · `.top-actions` ending in a round `.avatar`; **no middle dock**; mobile = `"brand actions"/"nav nav"` grid | ✅ **DONE** (`5e53239`): rebuilt into the single-row `.topbar` (brand + sub · inline `.nav .tab` underline-active links, text-only · `.top-actions` = theme/settings `.icon-btn` + round gradient `.avatar` with the user's initial / muted person glyph). `#navExtra` speaking-bar dock RELOCATED intact to a frosted sub-bar tier under the topbar (same id/class; `:empty` hides it; both in a sticky `.chrome` so it floats while studying). Sun/moon toggle. Mobile = the `"brand actions"/"nav nav"` grid (scrollable nav, no overflow). All wiring (`initTabs`/`data-tab`/`#accountBtn`/`updateAccountChip`/`#syncStatus`) intact. Verified both themes + mobile. | ~~rebuild as single-row topbar + reconcile `#navExtra`~~ — shipped |
+| **✅ Global margins** | `.wrap{max-width:1180px; padding:0 40px 96px}`; topbar inner padding aligned to the 1180 column | ✅ **DONE** (`64daef2`): `.wrap` widened to `max-width:1180px; padding:0 40px 96px` (mobile `0 18px 64px`), matching the topbar's 1180-column padding so page content aligns under the brand/tabs (brand + page-kicker both at x=90). Verified both themes. | ~~widen to 1180 + 40px gutter~~ — shipped |
 | **Study home** | giant standalone `bignum` review hero (~188px) under a 今日の復習 kicker; forecast as a side card; the editorial flashcard below | ◐ **built (needs fidelity pass)** (Phase 8, first surface): hero numeral promoted to a 178px `.bignum`, 今日の復習 kicker, streak pill + studied-today meta, vermilion `Review due cards` + `Free study` CTAs, forecast rebuilt as the editorial side card (HTML/CSS `.bars`, horizon toggle kept). Both themes + caught-up/anon/mobile verified. | ~~promote the hero numeral; compose hero + forecast~~ — shipped |
 | **Flashcard** | wide **2-column editorial** card with a big rotated **hanko seal**, accent pill, reading/trap note-cards, example, big jade/vermilion grade bar | ◐ **built (needs fidelity pass)** (Phase 8): rebuilt #fcStage into the session-chrome (End/recalled/counter/progress) + the card's prompt FACE (centered word · class/level tags · "hidden" veils · Show answer, hybrid-prompt) ⇄ answer FACE (word-block · tate-rule · pitch + accent tag + play · big meaning · solid class pill + Jisho · 2-up mnemonic/trap note-cards · example · jade/vermilion grade bar, hybrid-day-night). Reading mode hides the kanji behind a class-seal hanko. Both themes · both modes · typed · grading · mobile verified. | ~~rebuild as the 2-col + hanko~~ — shipped |
 | **Browse** | color-coded grid cards w/ hanko stamps + an editorial detail | ◐ **built (needs fidelity pass)** (Phase 8): added the editorial header (語彙の一覧 · Word library kicker + "Browse the deck" + a card/leech count cluster), framed the filters as a panel with search-first + a "More filters" disclosure for Type/Transitivity; the color-coded grid was already close. Both themes verified. | ~~re-compare, fix small deltas~~ — done |
@@ -204,22 +204,22 @@ no chart library / no CDN icon font (Google Fonts is the one external dep, degra
 ## Remaining work — Phase 9: fix the frame, then make every surface mock-FAITHFUL
 
 Phase 8 (8 commits, `c71fe61`…`78448c6`) built the per-surface compositions but **left the frame wrong
-and didn't do a fidelity pass — the site does not yet match the mocks.** Phase 9, in strict order:
+and didn't do a fidelity pass.** Phase 9, in strict order (steps 1–2, the frame, are now DONE):
 
-1. **Global chrome / navbar (do FIRST — every screen).** Rebuild the two-row `.navbar` + separate
-   `.tabs` into the mock's **single-row `.topbar`**: `.brand` (日常日本語 + the "Japanese Trainer" sub),
-   the tabs **inline** as `.nav`-style links with the underline-active bar, and `.top-actions` =
-   theme `.icon-btn` + settings `.icon-btn` + a round gradient **`.avatar`** (initial; the account state
-   still lives behind it — keep `accountBtn`'s id/wiring). **Reconcile the `#navExtra` speaking-bar dock**
-   (a CLAUDE.md dead-end — みんなの日本語/独り言/歌 mount the record-compare/speaking bar there; it can't be
-   deleted): decide where it lives in the single-row topbar (e.g. a second sticky sub-bar under the
-   topbar, or a slot that only appears in speaking mode). Mobile = the mock's `"brand actions"/"nav nav"`
-   grid. Keep the tab JS (`data-tab`, `initTabs`, the leaveMinna hook) working. Spec: `system.css`
-   `.topbar`/`.brand`/`.nav`/`.top-actions`/`.icon-btn`/`.avatar` + the `@media` block; `index.html`
-   ~90–116; `src/styles/chrome.css`.
-2. **Global margins (do SECOND — every screen).** Widen `.wrap` to `max-width:1180px; padding:0 40px 96px`
-   (`base.css`) and match the topbar/tabs to the 1180 column + 40px gutter. This is the biggest single
-   "now it looks like the mock" change; do it before any per-surface tuning.
+1. ✅ **Global chrome / navbar — DONE (`5e53239`).** Rebuilt the two-row `.navbar` + separate `.tabs`
+   into the mock's **single-row `.topbar`**: `.brand` (日常日本語 + "Japanese Trainer" sub) · the tabs
+   **inline** as `.nav .tab` underline-active links (text-only) · `.top-actions` = theme/settings
+   `.icon-btn` + a round gradient **`.avatar`** (user's initial via textContent / muted person glyph
+   signed-out; `#accountBtn` id + click + `updateAccountChip` kept). The **`#navExtra` speaking-bar dock**
+   was RELOCATED intact (same id + `.nav-extra` class) to a frosted sub-bar tier directly under the
+   topbar, both inside a sticky `.chrome` wrapper so it still floats while studying; `:empty` hides it
+   in normal use — speaking-bar.js / clearSpeakingBar / the `.nav-extra .speaking-bar` trims untouched.
+   Sun/moon toggle (+ prefers-color-scheme fallback). Mobile = the `"brand actions"/"nav nav"` grid
+   (scrollable nav, no overflow). `initTabs`/`data-tab`/leave-hooks intact. Verified both themes + mobile.
+2. ✅ **Global margins — DONE (`64daef2`).** Widened `.wrap` to `max-width:1180px; padding:0 40px 96px`
+   (mobile `0 18px 64px`), matching the topbar's 1180-column padding so content aligns under the
+   brand/tabs (brand + page-kicker both at x=90). Verified both themes.
+   **→ NEXT: staging gate — show the maintainer the reframed app (both themes) before the fidelity grind.**
 3. **歌 Songs — rebuild for real** (the Phase-8 version is a rejected half-measure). The `hybrid-songs.html`
    play-card: a circular cover-ring **play button** (video plays on demand via "Play with video"), a
    **segmented** coverage bar, the lyrics-only toggle, over the editorial lyric reader (the **glowing
