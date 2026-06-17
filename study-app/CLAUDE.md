@@ -286,6 +286,12 @@ onto built-in cards' `v.accent` by `attachLevels` (Minna cards carry their own).
 
 ## Design system
 
+> **A full visual redesign is in flight — mocks only, NOT yet applied to this app.** A serif-free
+> "Day / Night" system (all-sans: Bricolage Grotesque + Hanken Grotesk + Zen Kaku Gothic New; warm
+> washi light + candle-lit warm dark) lives in [mockups/redesign/](mockups/redesign/) with a shared
+> `system.css`. Start at [mockups/redesign/HANDOFF.md](mockups/redesign/HANDOFF.md). The section
+> below documents the **current production design** (still shipping in `index.html`/`src/styles.css`).
+
 **Type-label rule:** uppercase-mono (the signature) is for SHORT labels only —
 filter/stat/section labels, kickers, tabs. Longer descriptive strings (chart
 titles, helper/hint text) are sentence-case mono so they stay scannable; don't

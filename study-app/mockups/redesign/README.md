@@ -1,5 +1,10 @@
 # Redesign explorations — 日常日本語 (Japanese Trainer)
 
+> **Status (latest):** all six main surfaces done in both themes, critiqued, polished (~9/10),
+> two layout bugs fixed. **Picking up this work? Read [HANDOFF.md](HANDOFF.md) first** — it has the
+> full journey, the decisions and why, the design-system reference, the screenshot runbook, the
+> dead-ends, and what's next. This README is the catalog; HANDOFF is the status.
+
 Visual-design exploration for the study app. **Mocks only — no production code.** Each
 file is a self-contained HTML page (own fonts via Google Fonts, own palette + atmosphere)
 rendering the *same* content so the directions are directly comparable: the **study home**

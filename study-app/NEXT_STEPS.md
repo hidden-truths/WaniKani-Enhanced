@@ -414,6 +414,12 @@ This is the priority. The items below are smaller and can follow.
   "What's deliberately NOT in v1."
 
 ## Ideas / not yet scoped
+- **Visual redesign — serif-free "Day / Night" system (mocks in flight).** A full redesign of every
+  surface lives as committed HTML mocks in [mockups/redesign/](mockups/redesign/) (one shared
+  `system.css`, all-sans, warm-paper light + candle-lit warm dark). All 6 main surfaces are done,
+  critiqued, and polished (~9/10); NOT yet applied to the real `index.html`/`src/styles.css`.
+  Continue the design passes (secondary surfaces, a mobile pass, more critique) or port it to
+  production — **start at [mockups/redesign/HANDOFF.md](mockups/redesign/HANDOFF.md).**
 - **Unify voice-audio sourcing behind one tagged API** — **Phases 1 + 2 SHIPPED** (see Done /
   [NEXT_AUDIO_UNIFY.md](../docs/history/NEXT_AUDIO_UNIFY.md)): a unified `/v1/audio` surface, a tagged-variant
   catalog, the `core/audio.js` resolver + shared `playItem` player, and a per-context voice picker.
