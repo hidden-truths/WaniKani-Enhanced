@@ -207,6 +207,15 @@ function endSession() {
 export function initFlashcardUI() {
   document.getElementById('startBtn').addEventListener('click', () => startSession());
   document.getElementById('dueBtn').addEventListener('click', startDueSession);
+  // Hero "Free study" quick-start: flip study type to free, reflect it on the picker chips +
+  // Start label, then start over the current deck (the picker below is for a customized run).
+  const heroFree = document.getElementById('heroFreeBtn');
+  if (heroFree) heroFree.addEventListener('click', () => {
+    cfg.kind = 'free';
+    document.querySelectorAll('.chip.skind').forEach(x => x.classList.toggle('active', x.dataset.skind === 'free'));
+    updateStartLabel(); updateDeckCount();
+    startSession();
+  });
   document.getElementById('revealBtn').addEventListener('click', reveal);
   document.getElementById('checkBtn').addEventListener('click', submitTyped);
   document.getElementById('speakBtn').addEventListener('click', playReading);

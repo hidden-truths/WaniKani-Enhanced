@@ -9,9 +9,10 @@
 // in features/browse.js but reuses makeMultiSelect/wireFacets/paintSummary/syncVerbRows
 // exported here.
 import { state } from '../state.js';
+import { localDay } from '../config.js';
 import { settings, saveSettings } from '../settings-store.js';
 import {
-  passes, isDue, dueCards, rollingAcc, reviewForecast,
+  passes, isDue, dueCards, rollingAcc, reviewForecast, studyStreak,
   facetAll, DECK_FACETS, tokenFacet, filterSummary,
 } from '../core/index.js';
 
@@ -35,34 +36,30 @@ let forecastHorizon = 'week';   // '24h' | 'week' | 'month' | 'year' — view-on
 let rminEl = null, rmaxEl = null;
 
 /* ---- Upcoming-review forecast ----
-   reviewForecast() is pure (core/forecast.js); renderForecast() draws the hand-rolled
-   vertical-bar SVG. Leitner intervals top out at 16 days, so the month view captures the
-   whole real schedule and the year view is front-loaded — accurate, not a bug. */
+   reviewForecast() is pure (core/forecast.js); renderForecast() draws the editorial side-card
+   bars (HTML/CSS — the mock's `.bars` grid, sized by --godan/--ichidan via flashcards.css).
+   Leitner intervals top out at 16 days, so the month view captures the whole real schedule and
+   the year view is front-loaded — accurate, not a bug. Every slot is drawn (empty days take the
+   .bar min-height floor) so the full window stays legible even where nothing's due. */
 export function renderForecast() {
   const el = document.getElementById('forecastChart'); if (!el) return;
   const { bars, max } = reviewForecast(forecastHorizon);
   const total = bars.reduce((s, b) => s + b.count, 0);
   if (!total) { el.innerHTML = '<div class="fcast-empty">No reviews scheduled in this window — drill some cards to start the clock.</div>'; return; }
-  const n = bars.length, W = 720, H = 156, pad = { l: 8, r: 8, t: 18, b: 22 };
-  const iw = W - pad.l - pad.r, ih = H - pad.t - pad.b, base = pad.t + ih;
-  const bw = iw / n, gap = Math.min(6, bw * 0.22);
-  const yOf = c => base - (max ? c / max : 0) * ih;
-  let g = `<svg viewBox="0 0 ${W} ${H}" role="img" aria-label="Upcoming reviews over the next ${forecastHorizon}; ${total} scheduled">`;
-  // Every slot gets a faint background box so the full time breakdown is visible even where
-  // nothing is due (24 hours / 7 days / a month of days / 12 months).
+  const n = bars.length, gap = n > 10 ? 4 : 12;                      // tighten the grid for dense windows
+  let h = `<div class="bars" style="grid-template-columns:repeat(${n},1fr);gap:${gap}px" role="img" aria-label="Upcoming reviews over the next ${forecastHorizon}; ${total} scheduled">`;
   bars.forEach((b, i) => {
-    const x = (pad.l + i * bw + gap / 2).toFixed(1), bwid = (bw - gap).toFixed(1), cx = (pad.l + i * bw + bw / 2).toFixed(1);
-    g += `<rect x="${x}" y="${pad.t.toFixed(1)}" width="${bwid}" height="${ih.toFixed(1)}" rx="2" fill="var(--paper-2)" opacity="0.55"/>`;
-    if (b.count) {
-      const y = yOf(b.count), col = b.now ? 'var(--godan)' : 'var(--ichidan)';
-      g += `<rect class="fbar" x="${x}" y="${y.toFixed(1)}" width="${bwid}" height="${(base - y).toFixed(1)}" rx="2" fill="${col}" opacity="0.92"><title>${b.tip}: ${b.count} card${b.count === 1 ? '' : 's'}</title></rect>`;
-      g += `<text x="${cx}" y="${(y - 4).toFixed(1)}" text-anchor="middle" font-size="9" fill="var(--muted)" font-family="monospace">${b.count}</text>`;
-    }
-    if (b.label) g += `<text x="${cx}" y="${H - 7}" text-anchor="middle" font-size="8" fill="var(--muted)" font-family="monospace">${b.label}</text>`;
+    const pct = b.count === 0 ? 0 : Math.max(16, Math.round((b.count / max) * 92));  // non-zero ≥16%; 92% leaves headroom
+    const cls = b.now ? 'today' : (b.count === 0 ? 'tiny' : '');     // today = vermilion; empty = faint floor bar
+    const showNum = n <= 7 || b.count > 0;                           // hide the wall of 0s on dense windows
+    const tip = `${b.tip}: ${b.count} card${b.count === 1 ? '' : 's'}`;
+    h += `<div class="bar-col${b.now ? ' is-today' : ''}" title="${tip}">`
+      + `<div class="bar-track"><div class="bar ${cls}" style="height:${pct}%;animation-delay:${Math.min(i * 0.05, 0.7).toFixed(2)}s"></div></div>`
+      + `<span class="bar-num">${showNum ? b.count : ''}</span>`
+      + `<span class="bar-day">${b.label || ''}</span>`
+      + '</div>';
   });
-  g += `<line x1="${pad.l}" y1="${base.toFixed(1)}" x2="${W - pad.r}" y2="${base.toFixed(1)}" stroke="var(--line)" stroke-width="1"/>`;
-  g += '</svg>';
-  el.innerHTML = g;
+  el.innerHTML = h + '</div>';
 }
 
 /* Generic multi-select chip group. Reused for both cfg and bcfg facets. 'all' is exclusive;
@@ -159,7 +156,8 @@ export function updateDeckCount() {
   document.getElementById('deckCount').innerHTML = `<b>${n}</b> ${cfg.kind === 'srs' ? 'due in this deck' : 'cards in deck'}`;
   paintSummary('deckSummary', filterSummary(cfg));
 }
-// SRS banner: count due cards, flip to the green "all caught up" state at 0.
+// SRS hero: the giant due count (flips to the green "all caught up" state at 0), the streak +
+// studied-today meta, and the forecast — all reflect the schedule, so they refresh together.
 export function updateDueBanner() {
   const n = dueCards().length;
   document.getElementById('dueCount').textContent = n;
@@ -169,7 +167,15 @@ export function updateDueBanner() {
   document.getElementById('dueBtn').innerHTML = n === 0
     ? '<svg class="ic" aria-hidden="true"><use href="#i-check"/></svg>All caught up'
     : '<svg class="ic" aria-hidden="true"><use href="#i-play"/></svg>Review due cards';
-  renderForecast();   // the due count and the forecast both reflect the schedule — refresh together
+  // Hero meta: the day streak pill (hidden at 0 — stays alive across a not-yet-studied today)
+  // and today's review tally over the deck size, mirroring the mock.
+  const daily = state.store.daily || {}, today = localDay();
+  const streak = studyStreak(daily, today);
+  const streakEl = document.getElementById('heroStreak');
+  if (streakEl) { streakEl.hidden = streak < 1; const b = streakEl.querySelector('b'); if (b) b.textContent = 'Day ' + streak; }
+  const studiedEl = document.getElementById('heroStudied');
+  if (studiedEl) { const done = (daily[today] && daily[today].tot) || 0; studiedEl.innerHTML = `<b>${done}</b> of <b>${state.DATA.length}</b> studied today`; }
+  renderForecast();
 }
 // "Review due cards": force the deck to due-only, worst-first, full range, and reflect that
 // in the chip UI before starting. Overrides the picker on purpose — a dedicated review flow.

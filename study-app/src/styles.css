@@ -217,8 +217,8 @@
   .btn.primary:hover{background:var(--brand-deep);transform:translateY(-2px);box-shadow:var(--cta-shadow-hover)}
   [data-theme="dark"] .btn.primary{background:linear-gradient(160deg,#FF8A6E,var(--brand) 55%,var(--brand-deep))}
   .kbd{font-family:var(--mono);font-size:10px;font-weight:500;letter-spacing:.02em;opacity:.7}      /* keyboard-shortcut hints on buttons */
-  /* Due banner + upcoming-review forecast (.due-banner/.due-*/.fcast*) →
-     styles/flashcards.css (Phase 2). */
+  /* Study-home hero — the giant due-count numeral + forecast side card
+     (.hero/.bignum/.forecast-card/.bars) → styles/flashcards.css (Phase 8). */
   /* Accessibility: a visible keyboard-focus ring on every interactive element.
      :focus-visible (not :focus) so it only shows for keyboard nav, not clicks.
      PARTIAL — see OUTSTANDING #4 (chips still lack roving-tabindex grouping). */

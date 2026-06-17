@@ -146,7 +146,7 @@ composition vs what ships today:
 
 | Surface | Mock (`screens/*.png`, the target) | Ships today | Carpentry left (Phase 8) |
 |---|---|---|---|
-| **Study home** | giant standalone `bignum` review hero (~188px) under a 今日の復習 kicker; forecast as a side card; the editorial flashcard below | the bignum sits small INSIDE the due-banner; picker + forecast stacked below | promote the hero numeral; compose hero + forecast like the mock |
+| **Study home** | giant standalone `bignum` review hero (~188px) under a 今日の復習 kicker; forecast as a side card; the editorial flashcard below | ✅ **DONE** (Phase 8, first surface): hero numeral promoted to a 178px `.bignum`, 今日の復習 kicker, streak pill + studied-today meta, vermilion `Review due cards` + `Free study` CTAs, forecast rebuilt as the editorial side card (HTML/CSS `.bars`, horizon toggle kept). Both themes + caught-up/anon/mobile verified. | ~~promote the hero numeral; compose hero + forecast~~ — shipped |
 | **Flashcard** | wide **2-column editorial** card with a big rotated **hanko seal**, accent pill, reading/trap note-cards, example, big jade/vermilion grade bar | the production **centered single-column** card (explicitly kept) | rebuild as the 2-col + hanko composition (markup) |
 | **Browse** | color-coded grid cards w/ hanko stamps + an editorial detail | reskinned grid + hanko stamp — **closest to its mock** | re-compare to `hybrid-browse*.png`, fix small deltas |
 | **Stats** | hero metric row + the pipeline/line/per-card SVG charts in an editorial grid | lifted metric cards + reskinned charts — **likely close** | re-compare to `hybrid-stats*.png` (spacing/scale) |
@@ -171,9 +171,10 @@ The Phase 0–7 skin/QA backlog is **done**: signed-in verification ✓, the spe
 1. **Re-compare Browse + Stats** to `hybrid-browse*.png` / `hybrid-stats*.png` first (likely closest) —
    fix the small deltas and lock them as the "this is what done looks like" reference.
 2. **Rebuild the editorial compositions** surface by surface against `screens/*.png` (the gap table):
-   the study-home hero, the 2-col + hanko flashcard, the みんなの日本語 hanko hero + grammar grid +
-   conversation bubbles, the 歌 Songs play-card hero, the 独り言 "now speaking" rig. Keep the dead-end
-   CONTRACTS intact while changing structure.
+   ~~the study-home hero~~ ✅ (Phase 8, first surface — `studyStreak` core helper + tests, hero markup +
+   `flashcards.css`, HTML-bar `renderForecast`), then the 2-col + hanko flashcard, the みんなの日本語 hanko
+   hero + grammar grid + conversation bubbles, the 歌 Songs play-card hero, the 独り言 "now speaking" rig.
+   Keep the dead-end CONTRACTS intact while changing structure.
 3. **Both themes, every change**; verify each surface **signed-in** (the proxy-harness recipe below) AND
    anon, `Read`-comparing to the matching `screens/*.png`.
 4. **Optional polish** carried over: re-tune the four non-verb accents to the warm palette; the
