@@ -338,15 +338,6 @@
        here. Cards are rendered by renderBrowse(). ==================== -->
   <div class="panel" id="panel-browse">
     <div class="controls">
-      <div class="frow"><span class="filter-label">Font</span><div class="chips">
-        <select class="chip" id="fontSel">
-          <option value='"Noto Sans JP",sans-serif'>Noto Sans (gothic)</option>
-          <option value='"Noto Serif JP",serif'>Noto Serif (mincho)</option>
-          <option value='"Zen Maru Gothic",sans-serif'>Zen Maru (rounded)</option>
-          <option value='"Kaisei Decol",serif'>Kaisei Decol (soft serif)</option>
-          <option value='"Yuji Syuku",serif'>Yuji Syuku (brush)</option>
-        </select>
-      </div></div>
       <!-- Tier 1: grammar (always visible). The .bf chips split into AND'd facets
            by TOKEN_FACET; the lone "All" chip is the master reset (clears every
            facet) and lives in the Category row. Verb-only rows hide for non-verbs. -->
@@ -643,6 +634,14 @@
         <button class="chip setfg" type="button" data-setfg="on">Show</button>
         <button class="chip setfg" type="button" data-setfg="off">Hide</button>
       </span></div>
+    <div class="set-row"><label>Japanese font<span class="set-hint">The typeface used for all Japanese text.</span></label>
+      <select class="set-select" id="fontSel">
+        <option value='"Noto Sans JP",sans-serif'>Noto Sans (gothic)</option>
+        <option value='"Noto Serif JP",serif'>Noto Serif (mincho)</option>
+        <option value='"Zen Maru Gothic",sans-serif'>Zen Maru (rounded)</option>
+        <option value='"Kaisei Decol",serif'>Kaisei Decol (soft serif)</option>
+        <option value='"Yuji Syuku",serif'>Yuji Syuku (brush)</option>
+      </select></div>
     <div class="set-row"><label>Default answer mode</label>
       <span class="jlptseg" id="setInput" role="group" aria-label="Default answer mode">
         <button class="chip setin" type="button" data-setin="self">Self-graded</button>

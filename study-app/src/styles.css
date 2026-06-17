@@ -258,6 +258,8 @@
   .set-hint{display:block;max-width:280px;margin-top:5px;font-family:Georgia,"Times New Roman",serif;font-size:12px;letter-spacing:0;text-transform:none;color:var(--muted);opacity:.85}
   .set-num{width:64px;background:var(--paper);color:var(--ink);border:1px solid var(--line);border-radius:6px;padding:6px 8px;font-family:"SF Mono",ui-monospace,monospace;font-size:13px;text-align:center}
   .set-num:focus{outline:none;border-color:var(--ichidan)}
+  .set-select{background:var(--paper);color:var(--ink);border:1px solid var(--line);border-radius:6px;padding:6px 8px;font-family:"SF Mono",ui-monospace,monospace;font-size:13px;cursor:pointer}
+  .set-select:focus{outline:none;border-color:var(--ichidan)}
   /* A set-row whose control is a full-width block under the label (vs the inline segment rows). */
   .set-row-block{flex-direction:column;align-items:stretch}
   .set-row-block>label{margin-bottom:8px}
