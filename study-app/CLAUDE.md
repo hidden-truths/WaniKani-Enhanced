@@ -286,11 +286,15 @@ onto built-in cards' `v.accent` by `attachLevels` (Minna cards carry their own).
 
 ## Design system
 
-> **A full visual redesign is in flight — mocks only, NOT yet applied to this app.** A serif-free
-> "Day / Night" system (all-sans: Bricolage Grotesque + Hanken Grotesk + Zen Kaku Gothic New; warm
-> washi light + candle-lit warm dark) lives in [mockups/redesign/](mockups/redesign/) with a shared
-> `system.css`. Start at [mockups/redesign/HANDOFF.md](mockups/redesign/HANDOFF.md). The section
-> below documents the **current production design** (still shipping in `index.html`/`src/styles.css`).
+> **A full visual redesign is COMPLETE as mocks and is the next big task to ship.** A serif-free
+> "Day / Night" system (all-sans: Bricolage Grotesque + Hanken Grotesk + Spline Sans Mono + Zen Kaku
+> Gothic New; warm washi light + candle-lit warm dark) lives in [mockups/redesign/](mockups/redesign/)
+> with a shared `system.css` — **11 surfaces, both themes, mobile-passed, twice-critiqued (~9.3/10)**,
+> NOT yet applied to the real `index.html`/`src/styles.css`. **To migrate, start at
+> [mockups/redesign/MIGRATION.md](mockups/redesign/MIGRATION.md)** (the plan: reskin-in-place + token
+> aliasing) + its [MIGRATION_PROMPT.md](mockups/redesign/MIGRATION_PROMPT.md); the mock journey is in
+> [mockups/redesign/HANDOFF.md](mockups/redesign/HANDOFF.md). The section below documents the
+> **current production design** (what's still shipping until the migration lands).
 
 **Type-label rule:** uppercase-mono (the signature) is for SHORT labels only —
 filter/stat/section labels, kickers, tabs. Longer descriptive strings (chart

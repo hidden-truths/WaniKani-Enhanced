@@ -96,5 +96,6 @@ Reference shots (≈500px — the headless-Chrome min width): [Flashcards](scree
 ## Next
 
 All surfaces are built, mobile-passed (≤640px), and through a 2nd critique sweep (~9.3/10). The only
-remaining step is — later, in a code session — translating the agreed direction into the real
-`index.html` + `src/styles.css`. See [HANDOFF.md](HANDOFF.md) "What's next".
+remaining step is the **production migration** — porting the look into the real `index.html` +
+`src/styles.css` (reskin-in-place + token aliasing). Plan: **[MIGRATION.md](MIGRATION.md)** · kickoff:
+[MIGRATION_PROMPT.md](MIGRATION_PROMPT.md).

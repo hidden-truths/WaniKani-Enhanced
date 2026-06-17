@@ -3,6 +3,8 @@
 > **For the next session.** This is the authoritative status of the 日常日本語 study-app
 > visual redesign. Read this first, then [README.md](README.md) (the catalog) and
 > [system.css](system.css) (the source of truth for tokens/components).
+> **Migrating the mocks into the real app? Read [MIGRATION.md](MIGRATION.md) (plan) +
+> [MIGRATION_PROMPT.md](MIGRATION_PROMPT.md) (kickoff).**
 
 ## TL;DR
 - **What:** a full visual redesign of the study app as **self-contained HTML mocks** — *no
@@ -13,7 +15,7 @@
 - **State:** all **6 main + 5 secondary surfaces done in both themes, mobile-passed (≤640px), and
   through a 2nd critique sweep — now ~9.3/10 with light↔dark depth parity.** A shared modal/form kit,
   mobile layer, and deepened light-depth tokens live in `system.css`. Not yet in the real app.
-- **Next:** (later) port `system.css` into the real `index.html` + `src/styles.css`.
+- **Next:** migrate to production — reskin-in-place + token aliasing (plan: [MIGRATION.md](MIGRATION.md)).
 - **Commits:** `51d566d` (build) → `8dc71b6` (polish) → `66b7f69` (bug fixes) → secondary surfaces +
   modal kit → mobile pass → critique sweep #2 (this session), all on `main`.
 
@@ -140,8 +142,9 @@ hero's dark is `hybrid-dark.png`). The A/B/C exploration mocks are kept as-is (s
    stacking; verified at ~500px (the headless min width).
 3. ~~**Another critique sweep**~~ — **DONE this session.** 11 per-surface critics (both themes) →
    one cross-cutting light-depth fix in `system.css` + surgical per-surface fixes; now ~9.3/10.
-4. **(Later, a CODE session) Production translation** — port `system.css` into the real
-   `index.html` + `src/styles.css`, wired to live data. Big, separate effort.
+4. **Production migration (the next session)** — port the look into the real `index.html` +
+   `src/styles.css` via **reskin-in-place + token aliasing** (the SVG charts + existing `var(--…)`
+   refs reskin for free). Plan: [MIGRATION.md](MIGRATION.md); kickoff: [MIGRATION_PROMPT.md](MIGRATION_PROMPT.md).
 
 ## Runbook — how to work on it
 - **Serve:** the mocks are static files. Use the running Vite dev server (`bun run dev` →

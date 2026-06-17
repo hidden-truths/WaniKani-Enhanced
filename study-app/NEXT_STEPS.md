@@ -31,6 +31,26 @@ pitch accent) have all shipped — **and so has THE BIG ONE: the split into two 
 > the real voices in prod; the `/v1/audio/tts` ETag + `no-cache` headers (so a re-voiced clip
 > propagates) are also live. Full status: [NEXT_AUDIO_UNIFY.md](../docs/history/NEXT_AUDIO_UNIFY.md).
 
+## 🚩 THE NEXT BIG ONE — migrate the app to the Day/Night redesign
+
+A complete visual redesign — the serif-free **"Day / Night"** system — is **finished as mocks**
+([mockups/redesign/](mockups/redesign/)): 11 surfaces (every tab + the Settings/auth/add-card modals,
+the pre-reveal flashcard prompt, banners/empty states), both themes, a mobile pass (≤640px), and two
+critique sweeps (~9.3/10). It is **NOT yet applied** to the real `index.html`/`src/styles.css`.
+
+**This is the priority.** The plan is a **reskin-in-place**: keep the markup, class names, and JS
+contracts; rewrite `src/styles.css` (+ a small `index.html` head/atmosphere change) using **token
+aliasing** (alias `--godan`/`--ichidan`/`--paper`/… onto the new palette) so the hand-rolled SVG
+charts and every existing `var(--…)` reference reskin for free. Phased, each phase shippable.
+
+- **Read + plan:** [mockups/redesign/MIGRATION.md](mockups/redesign/MIGRATION.md) — strategy, the
+  mocks-vs-production gap, the phased plan (Phase 0 = tokens/fonts/atmosphere first), the load-bearing
+  constraints to preserve, and the open decisions to confirm first.
+- **Kickoff prompt:** [mockups/redesign/MIGRATION_PROMPT.md](mockups/redesign/MIGRATION_PROMPT.md).
+- **Visual source of truth:** [mockups/redesign/system.css](mockups/redesign/system.css) + the
+  `screens/*.png`; the mock journey + dead-ends are in
+  [mockups/redesign/HANDOFF.md](mockups/redesign/HANDOFF.md).
+
 ## ✅ SHIPPED — split into two apps (the learning tool + the API)
 
 This app was extracted from `wk-enhanced-api/web/` into its own standalone **Vite** project
@@ -414,12 +434,10 @@ This is the priority. The items below are smaller and can follow.
   "What's deliberately NOT in v1."
 
 ## Ideas / not yet scoped
-- **Visual redesign — serif-free "Day / Night" system (mocks in flight).** A full redesign of every
-  surface lives as committed HTML mocks in [mockups/redesign/](mockups/redesign/) (one shared
-  `system.css`, all-sans, warm-paper light + candle-lit warm dark). All 6 main surfaces are done,
-  critiqued, and polished (~9/10); NOT yet applied to the real `index.html`/`src/styles.css`.
-  Continue the design passes (secondary surfaces, a mobile pass, more critique) or port it to
-  production — **start at [mockups/redesign/HANDOFF.md](mockups/redesign/HANDOFF.md).**
+- **Visual redesign — "Day / Night" system.** Mocks are COMPLETE (11 surfaces, both themes, a mobile
+  pass, twice-critiqued ~9.3/10). Shipping it is now the **top priority** — see **🚩 THE NEXT BIG ONE**
+  near the top of this file and the plan in
+  [mockups/redesign/MIGRATION.md](mockups/redesign/MIGRATION.md).
 - **Unify voice-audio sourcing behind one tagged API** — **Phases 1 + 2 SHIPPED** (see Done /
   [NEXT_AUDIO_UNIFY.md](../docs/history/NEXT_AUDIO_UNIFY.md)): a unified `/v1/audio` surface, a tagged-variant
   catalog, the `core/audio.js` resolver + shared `playItem` player, and a per-context voice picker.
