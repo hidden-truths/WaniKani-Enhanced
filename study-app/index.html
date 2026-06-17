@@ -517,19 +517,35 @@
        (called on tab activation). Charts are hand-built SVG/HTML strings —
        no chart library. Reset wipes the store after a confirm(). ====== -->
   <div class="panel" id="panel-stats">
-    <div class="statgrid" id="statgrid"></div>                <!-- summary boxes -->
-    <div class="chart-card"><div class="chart-title">Memory pipeline — Leitner boxes (higher box = longer interval = better learned)</div>
-      <div id="boxDist"></div>                                <!-- SRS box histogram -->
-      <div class="srs-legend">New → Box 1 (1d) → 2 (2d) → 3 (4d) → 4 (8d) → 5 (16d). A correct answer promotes a card; a wrong answer drops it to Box 1.</div>
+    <!-- Editorial header + subtitle (mock); the subtitle is set by renderStats(). -->
+    <section class="page-head">
+      <div>
+        <div class="page-kicker"><span class="jp">学習の記録</span> · Your progress</div>
+        <h1 class="page-title">Progress</h1>
+      </div>
+    </section>
+    <p class="stats-sub" id="statsSub"></p>
+    <div class="statgrid" id="statgrid"></div>                <!-- editorial metric cards -->
+
+    <div class="section-div"><span class="sd-label">Retention</span><span class="sd-line"></span></div>
+    <div class="chart-grid">
+      <div class="chart-card"><div class="chart-title">Memory pipeline — Leitner boxes (higher box = longer interval = better learned)</div>
+        <div id="boxDist"></div>                                <!-- SRS box histogram -->
+        <div class="srs-legend">New → Box 1 (1d) → 2 (2d) → 3 (4d) → 4 (8d) → 5 (16d). A correct answer promotes a card; a wrong answer drops it to Box 1.</div>
+      </div>
+      <div class="chart-card"><div class="chart-title">Daily accuracy — one point per day studied</div><div id="chartDaily"></div></div>
     </div>
-    <div class="chart-card"><div class="chart-title">Daily accuracy — one point per day studied</div><div id="chartDaily"></div></div>
     <div class="chart-card"><div class="chart-title">Per-session accuracy — most recent 20 sessions</div><div id="chartSession"></div></div>
+
+    <div class="section-div"><span class="sd-label">Needs work</span><span class="sd-line"></span></div>
     <div class="chart-card"><div class="chart-title">⚠ Leeches — chronically missed (rolling accuracy &lt; 60% over ≥ 4 attempts)</div>
       <div id="leechList"></div>
       <div class="row" style="margin-top:12px"><button class="chip primary" id="studyLeeches"><svg class="ic" aria-hidden="true"><use href="#i-play"/></svg>Study leeches now</button></div>
     </div>
+
+    <div class="section-div"><span class="sd-label">Per-card accuracy</span><span class="sd-line"></span></div>
     <div class="chart-card"><div class="chart-title">Per-card rolling accuracy (last 8 attempts)</div><div id="cardBars"></div></div>
-    <div class="row"><button class="danger" id="resetBtn">Reset all stats &amp; history</button></div>
+    <div class="row" style="margin-top:18px"><button class="danger" id="resetBtn">Reset all stats &amp; history</button></div>
   </div>
 
   <!-- ===== みんなの日本語 PANEL =========================================
