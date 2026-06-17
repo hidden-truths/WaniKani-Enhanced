@@ -68,7 +68,8 @@
   [data-theme="dark"] .preview-box{ background:var(--chip-bg); }
   .preview-box .preview-cap{
     font-family:var(--mono); font-size:10px; letter-spacing:.18em; text-transform:uppercase;
-    color:var(--faint); font-weight:500; margin-left:auto; align-self:flex-start;
+    color:var(--muted); font-weight:400; margin-left:auto; align-self:flex-start;
+    opacity:.55;
   }
 
   /* leveled-example tier blocks */
@@ -82,6 +83,15 @@
     width:max-content;
   }
   .tier.empty .tier-badge{ color:var(--faint); background:var(--chip-bg); border-color:var(--line); }
+  .tier.empty .tier-fields input,
+  .tier.empty .tier-fields textarea{
+    background:var(--deeper);
+    opacity:.72;
+  }
+  [data-theme="dark"] .tier.empty .tier-fields input,
+  [data-theme="dark"] .tier.empty .tier-fields textarea{
+    background:rgba(255,238,222,.025);
+  }
   .tier .textarea{ min-height:54px; }
 
   /* ---- mobile (≤640px): accent input + preview stack; faint backdrop loosens ---- */

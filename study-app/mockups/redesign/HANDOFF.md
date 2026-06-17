@@ -10,12 +10,12 @@
   every main surface in both a warm-paper **light** theme and a candle-lit warm **dark** theme.
 - **Where:** [study-app/mockups/redesign/](.) — `system.css` + `system.js` + one `hybrid-*.html`
   per surface + an `index.html` gallery + retina-ish screenshots in `screens/`.
-- **State:** all **6 main + 5 secondary surfaces done in both themes, polished (~9/10), and given a
-  mobile/responsive pass (≤640px).** A shared modal/form kit + a mobile layer live in `system.css`.
-  Not yet in the real app.
-- **Next:** another critique sweep · (later) port `system.css` into the real `index.html` + `src/styles.css`.
+- **State:** all **6 main + 5 secondary surfaces done in both themes, mobile-passed (≤640px), and
+  through a 2nd critique sweep — now ~9.3/10 with light↔dark depth parity.** A shared modal/form kit,
+  mobile layer, and deepened light-depth tokens live in `system.css`. Not yet in the real app.
+- **Next:** (later) port `system.css` into the real `index.html` + `src/styles.css`.
 - **Commits:** `51d566d` (build) → `8dc71b6` (polish) → `66b7f69` (bug fixes) → secondary surfaces +
-  modal kit → mobile pass (this session), all on `main`.
+  modal kit → mobile pass → critique sweep #2 (this session), all on `main`.
 
 ## What this is (and is NOT)
 - It IS a design exploration in throwaway-but-committed mocks. Each surface is an `.html` file
@@ -40,6 +40,13 @@
 6. **Polish pass:** one cross-cutting `system.css` fix (light-theme depth) + six per-surface
    refinements. Now ~9/10.
 7. **Bug fixes:** the hero "100" alignment + the Songs line-number/playhead overlap (see Dead-ends).
+8. **Secondary surfaces + modal kit, then a mobile pass** (this session — see the done table).
+9. **Critique sweep #2:** 11 per-surface design critics (both themes) on the polished set. The
+   universal finding (again): *light didn't lift like dark.* Fixed cross-cuttingly in `system.css`
+   (deeper warm card shadows, brighter `--raised`, AA-darkened `--gold`, softer light CTA glow,
+   stronger segmented-tab active, bumped reading tints, dimmer light modal scrim) + ~1–4 surgical
+   fixes per surface (e.g. Songs now-playing line, Stats accuracy fill, Self-talk rig inset, prompt
+   veils, states banner seal). Now ~9.3, with the light/dark gap largely closed.
 
 ## Key decisions (and why)
 - **One system, two themes.** Light = warm washi paper + sumi ink. Dark = "candle-lit washi at
@@ -54,6 +61,11 @@
   leech=plum · "got it right"=green→jade. Plus the round **hanko seal**, the **pitch-accent**
   overline notation, and **furigana** ruby. These are pedagogically meaningful — keep them.
 - **Charts are hand-rolled inline SVG** (the app forbids chart libraries — honor that).
+- **Light-theme depth is SHADOW-driven, not luminance-driven.** Two critique rounds said light "felt
+  flat." The fix lives in the light `--lift-*` shadows (warm-brown, deepened) + a slightly brighter
+  `--raised`, NOT in making cards whiter — there's almost no luminance headroom over the washi
+  `--paper`. Don't flatten the shadows back, and don't push `--raised` toward pure white (it'd lose
+  the washi warmth). `--gold` was also darkened to `#8C6C1C` so mono labels pass AA on paper.
 - **`show_widget`/Imagine is the WRONG tool** for these mocks (it's flat + themed to claude.ai).
   Standalone HTML + headless-Chrome screenshots is the right path (matches `mockups/songs/`).
 - **Screenshots committed at 1× (~1280px wide)** to keep the repo lean (~22MB vs ~54MB retina);
@@ -126,7 +138,8 @@ hero's dark is `hybrid-dark.png`). The A/B/C exploration mocks are kept as-is (s
 2. ~~**Mobile / responsive pass**~~ — **DONE this session.** A shared ≤640px layer in `system.css`
    (grid topbar + scroll-nav, type scale, full-width modals + stacked rows) + per-surface grid
    stacking; verified at ~500px (the headless min width).
-3. **Another critique sweep** — re-run the per-surface design critics on the *polished* mocks (now incl. the 5 secondary surfaces + mobile) to find the next tier of improvements.
+3. ~~**Another critique sweep**~~ — **DONE this session.** 11 per-surface critics (both themes) →
+   one cross-cutting light-depth fix in `system.css` + surgical per-surface fixes; now ~9.3/10.
 4. **(Later, a CODE session) Production translation** — port `system.css` into the real
    `index.html` + `src/styles.css`, wired to live data. Big, separate effort.
 

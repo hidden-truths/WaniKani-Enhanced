@@ -31,8 +31,8 @@
   /* head: center the seal + title block (auth is a focused, single-column moment) */
   .auth-head{ flex-direction:column; align-items:center; text-align:center; gap:0; padding-bottom:20px; }
   /* shrink the shared hanko to a compact brand seal above the title */
-  .auth-seal{ width:46px; height:46px; border-width:2px; margin-bottom:14px; }
-  .auth-seal .glyph{ font-size:21px; }
+  .auth-seal{ width:54px; height:54px; border-width:2.5px; margin-bottom:15px; }
+  .auth-seal .glyph{ font-size:24px; }
   .auth-seal .ring{ inset:4px; }
   .auth-head .modal-kicker{ margin-bottom:9px; }
   /* the × still pins top-right while the head content centers */
@@ -46,11 +46,11 @@
   .label-row{ display:flex; align-items:center; justify-content:space-between; gap:12px; }
   .forgot{
     font-family:var(--body); font-size:12.5px; font-weight:500; letter-spacing:0;
-    text-transform:none; color:var(--reading); text-decoration:none;
+    text-transform:none; color:var(--muted); text-decoration:none;
     transition:color .16s ease;
   }
   .forgot:hover{ color:var(--brand); text-decoration:underline; }
-  [data-theme="dark"] .forgot{ color:var(--reading); }
+  [data-theme="dark"] .forgot{ color:var(--muted); }
 
   /* the primary submit + the small footer line under it */
   .auth-submit{ width:100%; margin-top:4px; }
@@ -58,9 +58,9 @@
     text-align:center; margin:16px 0 0;
     font-family:var(--body); font-size:14px; color:var(--muted);
   }
-  .auth-foot-line a{ color:var(--reading); font-weight:600; text-decoration:none; }
-  .auth-foot-line a:hover{ color:var(--brand); text-decoration:underline; }
-  [data-theme="dark"] .auth-foot-line a{ color:var(--reading); }
+  .auth-foot-line a{ color:var(--brand); font-weight:600; text-decoration:none; }
+  .auth-foot-line a:hover{ color:var(--brand-deep); text-decoration:underline; }
+  [data-theme="dark"] .auth-foot-line a{ color:#FF8A6E; }
 
   /* hairline "or" divider before the anon-browse escape hatch */
   .or-div{ display:flex; align-items:center; gap:16px; margin:24px 0 18px; }
@@ -71,6 +71,7 @@
   }
 
   .auth-anon{ width:100%; }
+  [data-theme="light"] .auth-anon{ background:var(--surf-inset); }
 </style>
 </head>
 <body>

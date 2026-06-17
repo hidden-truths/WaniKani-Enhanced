@@ -26,7 +26,7 @@
 [data-theme="light"]{
   /* surfaces */
   --paper:#F3ECDD;          /* page */
-  --raised:#FDFAF4;         /* cards — brighter so sheets lift off the paper */
+  --raised:#FFFDF6;         /* cards — brighter so sheets lift off the paper */
   --deeper:#E4D7BE;         /* insets / empty bars */
   --base:#EDE4D2;           /* deepest wash */
 
@@ -43,13 +43,13 @@
   --brand-on:#FCEFE9;       /* text on a brand fill */
   --reading:#2A4A6E;        /* indigo — reading / pitch overline / ichidan */
   --reading-deep:#1D3550;
-  --reading-soft:rgba(42,74,110,.07);
-  --reading-line:rgba(42,74,110,.32);
+  --reading-soft:rgba(42,74,110,.11);
+  --reading-line:rgba(42,74,110,.34);
   --good:#3F7A4E;           /* jade-by-night / forest-by-day — correct */
   --good-deep:#2C5C39;
   --good-soft:#DCE7DA;
   --good-on:#F2F7EF;
-  --gold:#A8842E;           /* fine rules / mnemonic accent */
+  --gold:#8C6C1C;           /* fine rules / mnemonic accent (deepened for AA on labels) */
   --leech:#7E3F9C;          /* plum — leech cards */
   --leech-soft:rgba(126,63,156,.10);
 
@@ -60,14 +60,16 @@
   --surf-inset:#EBE0CB;
   --surf-nav:rgba(251,246,236,.72);
 
-  /* warm, liftable shadows (deepened so light-mode cards read as raised paper) */
-  --lift-sm:0 1px 2px rgba(28,23,20,.08), 0 3px 8px -2px rgba(28,23,20,.13);
-  --lift-md:0 1px 2px rgba(28,23,20,.08), 0 12px 30px -8px rgba(28,23,20,.26);
-  --lift-lg:0 2px 5px rgba(28,23,20,.10), 0 30px 60px -18px rgba(28,23,20,.36);
+  /* warm, liftable shadows — deepened (the universal critique note was that
+     light-mode cards didn't lift off the washi page the way the dark ones do);
+     warmer brown tint + more spread so sheets read as raised paper */
+  --lift-sm:0 1px 2px rgba(46,33,20,.11), 0 4px 10px -2px rgba(46,33,20,.16);
+  --lift-md:0 2px 4px rgba(46,33,20,.11), 0 16px 34px -8px rgba(46,33,20,.32);
+  --lift-lg:0 4px 9px rgba(46,33,20,.13), 0 36px 66px -16px rgba(46,33,20,.42);
   --card-shadow:var(--lift-lg);
 
-  --cta-shadow:0 1px 2px rgba(168,49,26,.4), 0 14px 28px -10px rgba(205,67,39,.55);
-  --cta-shadow-hover:0 2px 4px rgba(168,49,26,.45), 0 22px 40px -12px rgba(205,67,39,.7);
+  --cta-shadow:0 1px 2px rgba(168,49,26,.32), 0 10px 22px -10px rgba(205,67,39,.40);
+  --cta-shadow-hover:0 2px 5px rgba(168,49,26,.4), 0 18px 34px -12px rgba(205,67,39,.55);
 
   /* atmosphere knobs */
   --grain-opacity:.30;
@@ -101,8 +103,8 @@
   --brand-on:#1F0C06;
   --reading:#8A8FE0;                 /* warm indigo */
   --reading-deep:#6A6FC8;
-  --reading-soft:rgba(138,143,224,.10);
-  --reading-line:rgba(138,143,224,.55);
+  --reading-soft:rgba(138,143,224,.15);
+  --reading-line:rgba(138,143,224,.62);
   --good:#56D9A6;                    /* jade */
   --good-deep:#37B888;
   --good-soft:rgba(86,217,166,.10);
@@ -409,6 +411,11 @@ h2{ font-size:27px; }
 .segmented .chip:first-child{ border-radius:10px 0 0 10px; margin-left:0; }
 .segmented .chip:last-child{ border-radius:0 10px 10px 0; }
 .segmented .chip.active{ position:relative; z-index:1; }
+/* segmented controls read as TABS/toggles (navigational), so their active state
+   gets a stronger wash than facet filter chips — critics flagged the 12% mix as
+   barely registering as "selected" in light. */
+[data-theme="light"] .segmented .chip.active{ background:var(--brand-soft); }
+[data-theme="dark"] .segmented .chip.active{ background:rgba(255,107,74,.20); }
 
 /* ============================================================
    MOTIFS  (.hanko seal · .pitch accent notation)
@@ -575,7 +582,7 @@ ruby rt{
 .overlay{
   position:fixed; inset:0; z-index:100;
   display:grid; place-items:center; padding:20px;
-  background:rgba(28,23,20,.42);
+  background:rgba(28,23,20,.52);
   backdrop-filter:blur(7px) saturate(118%);
   -webkit-backdrop-filter:blur(7px) saturate(118%);
   animation:overlayIn .3s ease forwards;

@@ -51,7 +51,7 @@
     content:""; position:absolute; pointer-events:none; z-index:0;
     width:760px; height:520px; top:0; left:50%; transform:translateX(-50%); transition:opacity .55s ease;
   }
-  [data-theme="light"] .card-stage::before{ background:radial-gradient(closest-side, rgba(205,67,39,.06), transparent 72%); }
+  [data-theme="light"] .card-stage::before{ background:radial-gradient(closest-side, rgba(205,67,39,.11), transparent 72%); }
   [data-theme="dark"] .card-stage::before{
     background:radial-gradient(closest-side, rgba(255,107,74,.18), transparent 72%), radial-gradient(closest-side, rgba(217,169,78,.07), transparent 80%);
     filter:blur(22px);
@@ -87,29 +87,35 @@
     font-family:var(--mono); font-size:11px; letter-spacing:.12em; text-transform:uppercase; font-weight:500;
     padding:6px 12px; border-radius:8px; display:inline-flex; align-items:center; gap:7px;
   }
-  .tag.cls{ background:var(--brand); color:var(--brand-on); box-shadow:0 8px 16px -8px rgba(205,67,39,.6); }
-  [data-theme="dark"] .tag.cls{ background:var(--brand-soft); color:#FF8A6E; border:1px solid rgba(255,107,74,.26); box-shadow:0 0 18px -8px rgba(255,107,74,.6); }
+  /* Tinted outline in both themes — "Show answer" stays the only solid element */
+  .tag.cls{ background:var(--brand-soft); color:var(--brand); border:1px solid rgba(205,67,39,.35); }
+  [data-theme="dark"] .tag.cls{ background:var(--brand-soft); color:#FF8A6E; border:1px solid rgba(255,107,74,.32); }
   .tag.cls .jp{ font-family:var(--jp); letter-spacing:.04em; }
   .tag.level{ background:var(--deeper); color:var(--ink); border:1px solid var(--line); }
   [data-theme="dark"] .tag.level{ background:var(--chip-bg); color:var(--muted); }
 
-  /* "answer hidden" veils — frosted bars where reading + meaning will appear */
-  .veil-stack{ width:100%; max-width:430px; margin:34px auto 0; display:flex; flex-direction:column; gap:12px; }
+  /* "answer hidden" veils — frosted bars where reading + meaning will appear.
+     Asymmetric widths + solid border so they read as CONCEALED CONTENT, not form fields. */
+  .veil-stack{ width:100%; max-width:480px; margin:34px auto 0; display:flex; flex-direction:column; gap:12px; }
   .veil-row{ display:flex; align-items:center; gap:16px; }
   .veil-label{
     flex:0 0 76px; text-align:right;
     font-family:var(--mono); font-size:10.5px; letter-spacing:.18em; text-transform:uppercase; color:var(--muted);
   }
   .veil-bar{
-    flex:1; height:40px; border-radius:11px; position:relative;
-    background:var(--surf-inset); border:1px dashed var(--line);
+    flex:1; border-radius:11px; position:relative;
+    background:var(--surf-inset); border:1px solid var(--line);
     display:flex; align-items:center; justify-content:center; gap:8px;
     color:var(--faint); overflow:hidden;
   }
+  /* Reading veil: taller, narrower */
+  .veil-row:first-child .veil-bar{ height:56px; max-width:300px; }
+  /* Meaning veil: slightly shorter, wider */
+  .veil-row:last-child  .veil-bar{ height:50px; max-width:380px; }
   [data-theme="dark"] .veil-bar{ background:var(--chip-bg); }
-  /* faint diagonal hatch so the bar reads as "redacted", not just empty */
+  /* diagonal hatch — a touch more opaque so the bar reads as "redacted", not just empty */
   .veil-bar::before{
-    content:""; position:absolute; inset:0; pointer-events:none; opacity:.5;
+    content:""; position:absolute; inset:0; pointer-events:none; opacity:.7;
     background:repeating-linear-gradient(135deg, transparent 0 7px, color-mix(in srgb, var(--muted) 16%, transparent) 7px 8px);
   }
   .veil-bar .lock{ display:inline-flex; position:relative; z-index:1; }
@@ -129,8 +135,8 @@
   [data-theme="dark"] .kbd{ background:var(--chip-bg); color:var(--ink); }
 
   .footer-note{
-    text-align:center; margin-top:40px;
-    font-family:var(--mono); font-size:10.5px; letter-spacing:.22em; text-transform:uppercase; color:var(--muted); opacity:.7;
+    text-align:center; margin-top:60px;
+    font-family:var(--mono); font-size:9.5px; letter-spacing:.35em; text-transform:uppercase; color:var(--muted); opacity:.45;
   }
   .footer-note .jp{ font-family:var(--jp); }
 

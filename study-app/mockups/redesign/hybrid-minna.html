@@ -118,10 +118,11 @@
   .vrow:hover{ background:var(--surf-inset); }
   /* hairline between word GROUPS (not every row) */
   .vrow.group-top{ border-top:1px solid var(--line); margin-top:6px; padding-top:19px; }
-  /* JP headword = clearly dominant */
-  .vrow .v-jp{ font-family:var(--jp); font-weight:700; font-size:27px; color:var(--ink); line-height:1; }
-  /* English = secondary */
-  .vrow .v-en{ font-family:var(--body); font-size:16px; color:var(--muted); }
+  /* JP headword = clearly dominant but not crushing — 23px keeps it primary
+     without overwhelming the English gloss at reading distance */
+  .vrow .v-jp{ font-family:var(--jp); font-weight:700; font-size:23px; color:var(--ink); line-height:1; }
+  /* English gloss = full ink weight 500 so meaning reads as a peer, not a footnote */
+  .vrow .v-en{ font-family:var(--body); font-size:16px; color:var(--ink); font-weight:500; }
   .vrow .v-en b{ color:var(--ink); font-weight:600; }
   /* romaji = dropped a notch (smaller + faint) so the read order is unambiguous */
   .vrow .v-read{ font-family:var(--mono); font-size:12px; color:var(--faint); letter-spacing:.02em; }
@@ -253,7 +254,11 @@
     background-image:repeating-linear-gradient(to bottom, transparent, transparent 31px, var(--line) 31px, var(--line) 32px);
     background-position:0 14px;
   }
-  [data-theme="dark"] .note-paper{ background-color:rgba(255,238,222,.02); }
+  [data-theme="dark"] .note-paper{
+    background-color:rgba(255,238,222,.02);
+    /* rule lines are invisible at the default --line opacity in dark; bump just enough to read */
+    background-image:repeating-linear-gradient(to bottom, transparent, transparent 31px, rgba(255,238,222,.13) 31px, rgba(255,238,222,.13) 32px);
+  }
   .note-paper p{ font-family:var(--body); font-size:15.5px; line-height:32px; color:var(--ink); margin:0; }
   .note-paper p + p{ margin-top:0; }
   .note-paper .jp{ font-family:var(--jp); }

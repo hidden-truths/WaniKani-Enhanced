@@ -37,17 +37,29 @@
   [data-theme="dark"] .due-banner .btitle b{ color:#FF8A6E; }
   .due-banner .bsub{ font-family:var(--body); font-size:15px; color:var(--muted); margin-top:6px; }
   .due-banner .bcta{ flex:0 0 auto; display:flex; align-items:center; gap:13px; flex-wrap:wrap; }
+  /* hero hanko — 96px so it anchors the eye, not a bullet */
+  .due-banner .hanko{ width:96px; height:96px; margin-right:4px; flex-shrink:0; }
+  .due-banner .hanko .glyph{ font-size:42px; }
+  [data-theme="light"] .due-banner .hanko{ box-shadow:var(--lift-md); }
 
   /* ===== empty-state medallion + scaffold ===== */
   .estate{ text-align:center; padding:54px 44px; display:flex; flex-direction:column; align-items:center; }
+  /* sign-in gate gets extra top breathing room — reads as a deliberate "wall" */
+  .estate.gate{ padding-top:74px; }
   .medallion{
-    width:82px; height:82px; border-radius:50%; display:grid; place-items:center;
+    width:76px; height:76px; border-radius:50%; display:grid; place-items:center;
     border:2px solid var(--line); background:var(--surf-inset); color:var(--muted);
     box-shadow:var(--lift-sm), var(--inner-hi); margin-bottom:24px;
   }
-  .medallion svg{ width:34px; height:34px; }
-  .medallion.good{ color:var(--good); border-color:color-mix(in srgb, var(--good) 48%, var(--line)); background:var(--good-soft); }
-  [data-theme="dark"] .medallion.good{ background:var(--good-soft); box-shadow:0 0 26px -6px rgba(86,217,166,.5), var(--inner-hi); }
+  .medallion svg{ width:32px; height:32px; }
+  /* celebratory "All caught up" medallion — larger + aura ring */
+  .medallion.good{
+    width:96px; height:96px;
+    color:var(--good); border-color:color-mix(in srgb, var(--good) 48%, var(--line)); background:var(--good-soft);
+    box-shadow:0 0 0 8px var(--good-soft), var(--lift-sm), var(--inner-hi);
+  }
+  .medallion.good svg{ width:40px; height:40px; }
+  [data-theme="dark"] .medallion.good{ background:var(--good-soft); box-shadow:0 0 0 8px var(--good-soft), 0 0 26px -6px rgba(86,217,166,.5), var(--inner-hi); }
   .medallion.read{ color:var(--reading); border-color:var(--reading-line); background:var(--reading-soft); }
   [data-theme="dark"] .medallion.read{ box-shadow:0 0 26px -8px rgba(138,143,224,.5), var(--inner-hi); }
   .estate h3{ font-family:var(--display); font-weight:700; font-size:27px; letter-spacing:-.018em; color:var(--ink); margin:0; }
@@ -66,7 +78,7 @@
   .sstat{ background:var(--surf-inset); border:1px solid var(--line); border-radius:14px; padding:18px 12px; box-shadow:var(--lift-sm); }
   [data-theme="dark"] .sstat{ background:var(--chip-bg); }
   .sstat .v{ font-family:var(--display); font-weight:800; font-size:32px; line-height:1; color:var(--ink); letter-spacing:-.02em; }
-  .sstat .v.good{ color:var(--good); }
+  .sstat .v.good{ color:var(--good); font-size:35px; } /* ~1.1× of 32px — the emotional headline pops */
   .sstat .l{ font-family:var(--mono); font-size:10px; letter-spacing:.16em; text-transform:uppercase; color:var(--muted); margin-top:9px; }
   .summary .actions{ display:flex; gap:14px; margin-top:26px; flex-wrap:wrap; justify-content:center; }
 
@@ -79,8 +91,8 @@
     .section-div{ margin:36px 0 18px; }
     /* banner stacks: seal + text on top, CTAs full-width below */
     .due-banner{ flex-direction:column; align-items:flex-start; gap:18px; padding:22px; }
-    .due-banner .hanko{ width:62px; height:62px; }
-    .due-banner .hanko .glyph{ font-size:28px; }
+    .due-banner .hanko{ width:64px; height:64px; }
+    .due-banner .hanko .glyph{ font-size:29px; }
     .due-banner .bmain{ width:100%; }
     .due-banner .btitle{ font-size:21px; }
     .due-banner .bcta{ width:100%; }
@@ -229,7 +241,7 @@
 
   <!-- 5 · SIGN-IN GATE -->
   <div class="section-div reveal d6"><span class="label"><span class="num">05</span> &nbsp;Sign-in gate · Textbook</span><span class="line"></span></div>
-  <section class="estate card reveal d6">
+  <section class="estate gate card reveal d6">
     <div class="medallion read">
       <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><rect x="5" y="11" width="14" height="10" rx="2"/><path d="M8 11V7a4 4 0 0 1 8 0v4"/></svg>
     </div>

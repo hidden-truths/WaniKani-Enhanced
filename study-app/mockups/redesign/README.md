@@ -2,7 +2,8 @@
 
 > **Status (latest):** all six main surfaces + the secondary surfaces (Settings / sign-in /
 > add-card modals, the pre-reveal flashcard prompt, banners & empty states) done in both themes,
-> polished (~9/10). **Picking up this work? Read [HANDOFF.md](HANDOFF.md) first** — it has the
+> mobile-passed (≤640px), and through a 2nd critique sweep — **~9.3/10 with light↔dark depth
+> parity. Picking up this work? Read [HANDOFF.md](HANDOFF.md) first** — it has the
 > full journey, the decisions and why, the design-system reference, the screenshot runbook, the
 > dead-ends, and what's next. This README is the catalog; HANDOFF is the status.
 
@@ -94,6 +95,6 @@ Reference shots (≈500px — the headless-Chrome min width): [Flashcards](scree
 
 ## Next
 
-Main + secondary surfaces are built and have a **mobile / responsive pass** (≤640px). Remaining:
-another **critique sweep** on the polished set, and — later, in a code session — translating the
-agreed direction into the real `index.html` + `src/styles.css`. See [HANDOFF.md](HANDOFF.md) "What's next".
+All surfaces are built, mobile-passed (≤640px), and through a 2nd critique sweep (~9.3/10). The only
+remaining step is — later, in a code session — translating the agreed direction into the real
+`index.html` + `src/styles.css`. See [HANDOFF.md](HANDOFF.md) "What's next".
