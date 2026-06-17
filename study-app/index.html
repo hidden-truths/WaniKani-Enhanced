@@ -400,10 +400,24 @@
        .bf / .bjlpt classes, not .deck / .jlpt. The font selector also lives
        here. Cards are rendered by renderBrowse(). ==================== -->
   <div class="panel" id="panel-browse">
+    <!-- Editorial header (mock): kicker + title + a card/leech count cluster (set by renderBrowse). -->
+    <section class="page-head">
+      <div>
+        <div class="page-kicker"><span class="jp">語彙の一覧</span> · Word library</div>
+        <h1 class="page-title">Browse the deck</h1>
+      </div>
+      <div class="page-counts">
+        <span class="pill"><span class="dot"></span><b id="bHeadCount">—</b>&nbsp;cards</span>
+        <span class="pill" id="bHeadLeechPill" hidden><span class="dot leech"></span><b id="bHeadLeech">0</b>&nbsp;leeches</span>
+      </div>
+    </section>
     <div class="controls">
-      <!-- Tier 1: grammar (always visible). The .bf chips split into AND'd facets
-           by TOKEN_FACET; the lone "All" chip is the master reset (clears every
-           facet) and lives in the Category row. Verb-only rows hide for non-verbs. -->
+      <!-- Search leads the filter panel (mock). The .bf chips split into AND'd facets by
+           TOKEN_FACET; the lone "All" chip is the master reset; verb-only rows tuck below. -->
+      <div class="frow"><span class="filter-label">Search</span><div class="chips">
+        <span class="search-wrap"><svg class="ic" aria-hidden="true"><use href="#i-search"/></svg>
+          <input class="search" id="search" placeholder="Search reading, kanji, or meaning…"></span>
+        <span class="count">Showing <b id="num">100</b> of <b id="numTotal">100</b></span></div></div>
       <div class="frow"><span class="filter-label">Category</span><div class="chips">
         <button class="chip bf active" data-filter="all">All</button>
         <button class="chip bf" data-filter="verb">Verb</button>
@@ -412,6 +426,10 @@
         <button class="chip bf" data-filter="adverb">Adverb</button>
         <button class="chip bf" data-filter="phrase">Phrase</button>
       </div></div>
+      <!-- Secondary verb facets tuck behind a disclosure (mock). Chips keep their class +
+           data-filter so wireFacets/syncVerbRows are blind to the wrapper. -->
+      <details class="more-filters" id="bMoreFilters">
+        <summary><svg class="ic" aria-hidden="true"><use href="#i-filter"/></svg>More filters</summary>
       <div class="frow verb-only"><span class="filter-label">Type</span><div class="chips">
         <button class="chip bf g" data-filter="godan">Godan</button>
         <button class="chip bf i" data-filter="ichidan">Ichidan</button>
@@ -424,6 +442,7 @@
         <button class="chip bf" data-filter="intrans">Intransitive</button>
         <button class="chip bf" data-filter="ti-pair">T/I pairs</button>
       </div></div>
+      </details>
       <div class="fdiv"></div>
       <!-- Tier 2: topic (the long semantic tail) collapsed behind a disclosure;
            Leeches is a status filter, kept always-visible beside the toggle. -->
@@ -484,10 +503,6 @@
         <span style="color:var(--muted)">–</span>
         <input type="number" class="rangeinput" id="brmax" min="1" max="100" value="100">
       </div></div>
-      <div class="frow"><span class="filter-label">Search</span><div class="chips">
-        <span class="search-wrap"><svg class="ic" aria-hidden="true"><use href="#i-search"/></svg>
-          <input class="search" id="search" placeholder="Search reading, kanji, or meaning…"></span>
-        <span class="count">Showing <b id="num">100</b> of <b id="numTotal">100</b></span></div></div>
     </div>
     <!-- Live recap of the active grid query (incl. collapsed topics); set by renderBrowse(). -->
     <div class="filter-summary" id="bSummary"></div>

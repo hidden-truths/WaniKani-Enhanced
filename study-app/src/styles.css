@@ -20,6 +20,17 @@
   .nav-extra .speaking-bar.on{background:none;border:0}
   .nav-extra .mic-select{max-width:150px}
 
+  /* Per-surface editorial header (kicker + title + optional count cluster) — Browse / Stats /
+     Self-Talk / Songs. The global headline was removed (navbar) but each surface keeps its own. */
+  .page-head{display:flex;align-items:flex-end;justify-content:space-between;gap:24px;flex-wrap:wrap;margin:6px 0 22px}
+  .page-kicker{font-family:var(--mono);font-size:11px;letter-spacing:.3em;text-transform:uppercase;color:var(--gold);font-weight:500;display:inline-flex;align-items:center;gap:10px;margin-bottom:13px}
+  .page-kicker::before{content:"";width:22px;height:1px;background:var(--gold);display:inline-block}
+  .page-kicker .jp{font-family:var(--jp);letter-spacing:.06em;text-transform:none}
+  .page-title{font-family:var(--display);font-weight:800;font-size:40px;letter-spacing:-.018em;line-height:1.04;color:var(--ink);margin:0}
+  .page-counts{display:flex;gap:10px;flex-wrap:wrap}
+  .page-counts .pill .dot.leech{background:var(--leech);box-shadow:0 0 0 4px var(--leech-soft)}
+  @media (max-width:640px){ .page-title{font-size:30px} .page-head{margin-bottom:16px} }
+
   /* Controls / filter chips. The .g and .i modifiers tint a chip with the
      godan/ichidan color when active (used on the class filter buttons). */
   .controls{padding:18px 0 8px}
