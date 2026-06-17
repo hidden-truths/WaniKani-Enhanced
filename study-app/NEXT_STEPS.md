@@ -31,25 +31,34 @@ pitch accent) have all shipped — **and so has THE BIG ONE: the split into two 
 > the real voices in prod; the `/v1/audio/tts` ETag + `no-cache` headers (so a re-voiced clip
 > propagates) are also live. Full status: [NEXT_AUDIO_UNIFY.md](../docs/history/NEXT_AUDIO_UNIFY.md).
 
-## 🚩 THE NEXT BIG ONE — migrate the app to the Day/Night redesign
+## 🚩 IN PROGRESS — the Day/Night redesign migration (Phases 0–7 shipped; finishing touches left)
 
-A complete visual redesign — the serif-free **"Day / Night"** system — is **finished as mocks**
-([mockups/redesign/](mockups/redesign/)): 11 surfaces (every tab + the Settings/auth/add-card modals,
-the pre-reveal flashcard prompt, banners/empty states), both themes, a mobile pass (≤640px), and two
-critique sweeps (~9.3/10). It is **NOT yet applied** to the real `index.html`/`src/styles.css`.
+The serif-free **"Day / Night"** visual redesign is **applied to the real app** — Phases 0–7 (2026-06-17),
+**8 commits on the `redesign-migration` branch** (NOT yet pushed/merged). Done via **reskin-in-place +
+token aliasing**: markup, class names, `data-*`, and JS contracts unchanged; the CSS is now **split per
+surface** — `src/styles/{tokens,base,chrome,flashcards,browse,stats,minna,selftalk,songs}.css` + the
+shared core in `src/styles.css`, imported in cascade order by `main.js`. All-sans type, atmosphere
+layers, both themes. `bun run test` (244) + `bun run build` stayed green every phase. The token aliases
+(`--godan→--brand`, `--ichidan→--reading`, `--irregular→--gold`, `--paper-2→--raised`) reskinned the
+hand-rolled SVG charts for free, exactly as planned.
 
-**This is the priority.** The plan is a **reskin-in-place**: keep the markup, class names, and JS
-contracts; rewrite `src/styles.css` (+ a small `index.html` head/atmosphere change) using **token
-aliasing** (alias `--godan`/`--ichidan`/`--paper`/… onto the new palette) so the hand-rolled SVG
-charts and every existing `var(--…)` reference reskin for free. Phased, each phase shippable.
+> **➡️ To continue, read [mockups/redesign/MIGRATION_PROGRESS.md](mockups/redesign/MIGRATION_PROGRESS.md)
+> FIRST** — what we did, the decisions, the per-surface file map, and the remaining work, with a
+> ready-to-paste kickoff prompt at the end. The mocks stay in [mockups/redesign/](mockups/redesign/)
+> as the visual reference (`system.css` + `screens/*.png`); the original plan is in
+> [mockups/redesign/MIGRATION.md](mockups/redesign/MIGRATION.md); the design system is documented in
+> [CLAUDE.md](CLAUDE.md) "Design system".
 
-- **Read + plan:** [mockups/redesign/MIGRATION.md](mockups/redesign/MIGRATION.md) — strategy, the
-  mocks-vs-production gap, the phased plan (Phase 0 = tokens/fonts/atmosphere first), the load-bearing
-  constraints to preserve, and the open decisions to confirm first.
-- **Kickoff prompt:** [mockups/redesign/MIGRATION_PROMPT.md](mockups/redesign/MIGRATION_PROMPT.md).
-- **Visual source of truth:** [mockups/redesign/system.css](mockups/redesign/system.css) + the
-  `screens/*.png`; the mock journey + dead-ends are in
-  [mockups/redesign/HANDOFF.md](mockups/redesign/HANDOFF.md).
+**Remaining (next session):**
+- **Signed-in verification pass** — the みんなの日本語 *lesson* content (vocab table / grammar /
+  conversation) and the full 歌 Songs UI (Library/Add/Read/Listen/Shadow/Mine) were reskinned from the
+  mocks + tokens but only verified at the **gate / anon shell** (they're account/server-gated). Sign in
+  (dev API + `MINNA_OWNER_EMAILS`) and walk them in both themes; fix anything that reads flat.
+- **Shared record-compare + speaking-bar + tap-a-word `.word-pop`** got a light token-warm pass, not the
+  full lifted treatment — polish them (signed-in speaking-mode UI; still in the shared `src/styles.css`).
+- **Safari** — only verified on Chrome. Re-check the `.mn-vocab` border-collapse table (the trap rule is
+  preserved verbatim) + the modal/navbar `backdrop-filter`s.
+- **Push / open the PR** once reviewed.
 
 ## ✅ SHIPPED — split into two apps (the learning tool + the API)
 

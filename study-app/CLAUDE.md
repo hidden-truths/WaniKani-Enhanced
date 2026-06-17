@@ -90,7 +90,9 @@ Backend (auth, progress, cookie, the cross-origin CORS) is the server's:
    → `dist/`; `bun run preview` serves the built bundle. Edit modules under `src/`:
    pure logic in `src/core/*`, shared state in `src/state.js`, DOM/feature glue in
    `src/features/*` (boot order in `src/main.js`), markup in `index.html`, styles in
-   `src/styles.css` (imported by `main.js`).
+   `src/styles/*.css` (the Day/Night design system — `tokens`/`base`/`chrome`/per-surface)
+   plus the shared core `src/styles.css`, all imported in cascade order by `main.js`. See
+   "Design system" below.
 2. **Verify visually.** This is a UI; screenshot the change. Drive it with the
    browser-preview tooling (`.claude/launch.json` has both `study-app` and
    `wk-enhanced-api` configs). See the preview caveat in the dead-ends below. **Run

@@ -142,9 +142,12 @@ hero's dark is `hybrid-dark.png`). The A/B/C exploration mocks are kept as-is (s
    stacking; verified at ~500px (the headless min width).
 3. ~~**Another critique sweep**~~ — **DONE this session.** 11 per-surface critics (both themes) →
    one cross-cutting light-depth fix in `system.css` + surgical per-surface fixes; now ~9.3/10.
-4. **Production migration (the next session)** — port the look into the real `index.html` +
-   `src/styles.css` via **reskin-in-place + token aliasing** (the SVG charts + existing `var(--…)`
-   refs reskin for free). Plan: [MIGRATION.md](MIGRATION.md); kickoff: [MIGRATION_PROMPT.md](MIGRATION_PROMPT.md).
+4. ~~**Production migration**~~ — **DONE (Phases 0–7, 2026-06-17, `redesign-migration` branch).** The
+   look was ported into the real `index.html` + a per-surface `src/styles/*` split via
+   **reskin-in-place + token aliasing** (the SVG charts + existing `var(--…)` refs reskinned for free,
+   as planned). What landed + the decisions + the remaining finishing touches:
+   [MIGRATION_PROGRESS.md](MIGRATION_PROGRESS.md). Original plan: [MIGRATION.md](MIGRATION.md). **These
+   mocks stay as the visual reference — don't delete them.**
 
 ## Runbook — how to work on it
 - **Serve:** the mocks are static files. Use the running Vite dev server (`bun run dev` →

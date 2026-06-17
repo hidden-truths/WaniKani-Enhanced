@@ -1,5 +1,12 @@
 # Day / Night redesign → production migration plan
 
+> **✅ STATUS: SHIPPED (Phases 0–7, 2026-06-17)** — this plan was executed on the
+> `redesign-migration` branch (8 commits, not yet merged). **For what actually landed, the
+> decisions made, and the remaining finishing touches, read
+> [MIGRATION_PROGRESS.md](MIGRATION_PROGRESS.md).** The document below is the original PLAN,
+> kept as the historical record (the approach, constraints, and dead-ends it describes are
+> still authoritative — they were followed).
+
 > **For the session that ports the redesign into the real app.** This is the authoritative
 > bridge from the *mocks* (`mockups/redesign/`) to the *shipping* app (`index.html` +
 > `src/styles.css`). Read this first, then [HANDOFF.md](HANDOFF.md) (mock status), then
