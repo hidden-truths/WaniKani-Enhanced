@@ -28,10 +28,12 @@ export function registerCardActions(h) { if (h.openVerbModal) openVerbModal = h.
 let repaintBrowse = () => {};
 let detailVerb = null, detailLevel = null;
 
-/* Collapsible Topic groups. The chips inside stay wired by their .bf/.deck class + data-*
-   (makeMultiSelect ignores DOM nesting); this only toggles a max-height region and keeps a
-   live "· N" badge on the toggle. A MutationObserver on the region's class attrs keeps the
-   badge correct even when selections change programmatically. Open state persists per-panel. */
+/* Collapsible disclosure groups: the Topic chips AND the dynamically-rendered Grammar chips.
+   The chips inside stay wired by their own class + data-* (makeMultiSelect / the grammar
+   delegate ignore DOM nesting); this only toggles a max-height region and keeps a live "· N"
+   badge on the toggle. A MutationObserver on the region (class + childList) keeps the badge
+   correct when selections change programmatically AND when renderGrammarChips rebuilds the
+   chip DOM. Open state persists per-panel. */
 function setupTopicGroups() {
   document.querySelectorAll('.topic-toggle').forEach(btn => {
     const region = document.getElementById(btn.dataset.target);
@@ -52,7 +54,7 @@ function setupTopicGroups() {
       const open = !region.classList.contains('open');
       setOpen(open); localStorage.setItem(key, open ? '1' : '0');
     });
-    new MutationObserver(refresh).observe(region, { subtree: true, attributes: true, attributeFilter: ['class'] });
+    new MutationObserver(refresh).observe(region, { subtree: true, childList: true, attributes: true, attributeFilter: ['class'] });
     setOpen(localStorage.getItem(key) === '1');
     refresh();
   });
@@ -146,12 +148,15 @@ let lastGrammarKey = null;  // signature of the present-id set, so chips rebuild
 // vanish from the deck are pruned. Roving is handled by the boot-time .chips pass (a11y.js).
 function renderGrammarChips() {
   const row = document.getElementById('bGrammarRow'), box = document.getElementById('bGrammarChips');
+  const region = document.getElementById('bGrammarRegion');
   if (!row || !box) return;
   const present = new Set();
   for (const v of state.DATA) for (const g of cardGrammar(v)) present.add(g);
   if (bGrammar.length) bGrammar = bGrammar.filter((g) => present.has(g));
   const ids = orderGrammar(present);
-  row.style.display = ids.length ? '' : 'none';
+  const show = ids.length > 0;                          // hide the toggle AND its disclosure region when no example carries grammar
+  row.style.display = show ? '' : 'none';
+  if (region) region.style.display = show ? '' : 'none';
   const key = ids.join(',');
   if (key === lastGrammarKey) {  // same chips → just re-sync active state, keep the DOM + focus
     box.querySelectorAll('.bg-gram').forEach((b) => {

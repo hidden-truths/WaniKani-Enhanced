@@ -410,8 +410,10 @@
       <!-- Grammar facet (Phase-4): filter to cards whose EXAMPLE sentences use a grammar point.
            Chips are rendered by browse.js from the ids actually present in the deck (labels from the
            shared catalog), grouped N5-first; the whole row hides until some example carries grammar. -->
-      <div class="frow grammar-row" id="bGrammarRow" style="display:none"><span class="filter-label">Grammar</span>
-        <div class="chips" id="bGrammarChips" role="group" aria-label="Grammar filter"></div></div>
+      <div class="frow grammar-row" id="bGrammarRow" style="display:none"><span class="filter-label">Grammar</span><div class="chips">
+        <button class="topic-toggle" data-target="bGrammarRegion" data-label="Grammar points" aria-expanded="false" aria-controls="bGrammarRegion"><span class="tt-text">Grammar points</span><svg class="ic tt-arr" aria-hidden="true"><use href="#i-chevron"/></svg></button>
+      </div></div>
+      <div class="topic-region grammar-region" id="bGrammarRegion"><div class="topic-inner" id="bGrammarChips" role="group" aria-label="Grammar filter"></div></div>
       <div class="fdiv"></div>
       <!-- Tier 3: level + frequency band on one line. -->
       <div class="frow"><span class="filter-label">Level &amp; rank</span><div class="chips">

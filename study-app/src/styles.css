@@ -141,6 +141,7 @@
   /* max-height collapse (no JS height measurement), mirrors the .detail pattern. */
   .topic-region{max-height:0;overflow:hidden;transition:max-height .3s ease;width:100%}
   .topic-region.open{max-height:400px}
+  .topic-region.grammar-region.open{max-height:1000px}  /* up to ~38 grammar chips — far taller than the 19-chip topic list, esp. when they wrap many rows on mobile */
   .topic-inner{display:flex;flex-wrap:wrap;gap:7px;padding-top:10px}
   .topic-inner .chip{font-size:12px;padding:5px 11px;color:var(--muted)} /* secondary tier */
   .topic-inner .chip:hover{color:var(--ink)}
