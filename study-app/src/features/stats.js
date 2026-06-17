@@ -90,7 +90,7 @@ export function renderStats() {
   sg.innerHTML = `
     <div class="statbox"><div class="v">${overall}%</div><div class="l">Overall accuracy</div></div>
     <div class="statbox"><div class="v">${tot}</div><div class="l">Total reviews</div></div>
-    <div class="statbox"><div class="v">${studied}/${state.DATA.length}</div><div class="l">Cards drilled</div></div>
+    <div class="statbox"><div class="v">${studied}/${state.DATA.length}</div><div class="l">Cards studied</div></div>
     <div class="statbox"><div class="v" style="color:var(--ichidan)">${dueCards().length}</div><div class="l">Due today</div></div>
     <div class="statbox" title="${acc(mix.srs)}"><div class="v" style="color:var(--ichidan)">${mix.srs.rev}</div><div class="l">SRS reviews</div></div>
     <div class="statbox" title="${acc(mix.free)}"><div class="v">${mix.free.rev}</div><div class="l">Free-study reviews</div></div>
