@@ -6,12 +6,14 @@
 > truth) are `system.css` + `screens/*.png`; the shipped design system is documented in
 > [../CLAUDE.md](../CLAUDE.md) "Design system". A ready-to-paste **kickoff prompt is at the bottom**.
 
-## Status — ✅ Phases 0–7 shipped, finishing touches left
+## Status — ✅ Phases 0–7 shipped + signed-in verification pass done; push pending
 
 The serif-free **"Day / Night"** redesign is applied to the real app via **reskin-in-place + token
 aliasing**. Markup, class names, `data-*`, and every JS contract are unchanged — only CSS + the
-`index.html` head/atmosphere changed. **8 commits on the `redesign-migration` branch (NOT pushed/merged).**
-`bun run test` (244 passing) + `bun run build` were green every phase.
+`index.html` head/atmosphere changed. The Phase 0–7 commits + the shared speaking-mode lift (`34eef8c`)
+live on the `redesign-migration` branch (**NOT pushed/merged**). `bun run test` (244 passing) +
+`bun run build` were green every phase. The signed-in surfaces (Minna / Songs / Self-Talk) are now
+verified with real content in both themes — see "Verified vs not" below.
 
 | Phase | Commit | What landed |
 |---|---|---|
@@ -99,18 +101,33 @@ were never touched): chrome · flashcards home + a revealed card · browse grid 
 + charts (seeded sample data) · self-talk grid · the Minna sign-in gate · Settings (light) + auth (dark)
 modals · mobile at ~390px (no horizontal overflow). All compared against `screens/*.png`.
 
-**NOT deeply verified (reskinned from mocks + tokens, but account/server-gated so only the gate/anon
-shell rendered):**
-- **みんなの日本語 lesson content** — the vocab table, grammar cards, conversation, notes, practice
-  history. Only the **sign-in gate** was on screen.
-- **歌 Songs full UI** — Library cards, the Add flow, the Read lyric reader, Listen dictation, Mine
-  vocab/grammar, the grammar reference. Only the **anon empty shell** rendered.
-- **Self-Talk** — the grid + cells were verified; the **drilled-in phrase lists** + slot-swap templates
-  need server phrase data.
-- **The shared record-compare / speaking-bar / tap-a-word `.word-pop`** — these got a *light* token-warm
-  pass (rounded, token colors), NOT the full lifted treatment. Signed-in speaking-mode UI.
-- **Safari** — everything was on Chrome (the preview). The `.mn-vocab` border-collapse trap rule is
-  preserved **verbatim** in `minna.css`, but a real Safari look is owed (also the `backdrop-filter`s).
+**Verified signed-in this session (both themes, dev API + the real owner account, content actually
+rendered — drove a temporary same-origin proxy harness since the `:3000` credentialed-CORS allowlist
+only echoes `:5173`):**
+- **みんなの日本語 lesson content** — lesson heading + progress, the vocab table (POS + iTalki badges),
+  grammar cards, example sentences, the conversation, notes, practice history. Faithful; no CSS fixes.
+- **歌 Songs full UI** — Library grid (ring/coverage/badges), Add flow, the Read lyric reader (stanzas,
+  grammar chips, cur-line), Listen dictation, Shadow, Mine vocab/grammar, the grammar reference.
+  Faithful; no CSS fixes.
+- **独り言 Self-Talk** — drilled into a topic: lifted phrase cards, the brand-tinted slot chips + filler
+  menu, TEMPLATE badges + grammar tags. Faithful; no CSS fixes.
+- **The shared record-compare / speaking-bar / tap-a-word `.word-pop`** — LIFTED to match the system
+  (commit `34eef8c`): `.rec-btn`/`.rec-take`/`.cmp-btn` raised (`--surf-inset` + `--lift-sm` + hover),
+  waveforms framed as tiles, `.word-pop` → token frosted popover, `.speaking-bar` radius 8→12.
+- **Safari/WebKit** — confirmed via an isolated repro: the verbatim `.mn-vocab` rule paints NO phantom
+  lines, and the navbar/modal `-webkit-backdrop-filter`s frost correctly.
+
+**Mock deviations that are intentional (reskin-in-place — closing them needs a markup/JS change the
+migration forbids):**
+- **Minna conversation** renders as a clean role-labelled list, not the mock's two-colour speaker
+  bubbles: the mock keys colour off per-speaker `.turn.is-b` classes, but production `.mn-line`/`.mn-role`
+  has no speaker hook — faithful bubbles would need a `data-role`/`is-b` on `.mn-line` (one-line render
+  change) before any CSS can land. Flagged, not done.
+- **Minna grammar** is a vertical list, not the mock's 3-up card grid — the real grammar points carry
+  long explanations + 5–6 examples each, which would cram a 3-column grid; vertical fits better.
+- **The editorial hanko lesson-number tile** (Minna header) and the mock's stylised Songs "play card"
+  aren't reproduced — production keeps a plain heading + the real YouTube embed (same call as the
+  centred flashcard).
 
 ## Load-bearing things preserved (do not regress — see ../CLAUDE.md dead-ends)
 Chip wiring by class + `data-*`; the `.frow`/`.chips` two-track layout; roving-tabindex / ARIA
@@ -119,15 +136,16 @@ radiogroups; the inline-SVG-sprite size-via-inline-style hack (the new `#stamp` 
 flip; the `#navExtra` dock; the reduced-motion rule (kills transition **and** animation); no framework /
 no chart library / no CDN icon font (Google Fonts is the one external dep, degrades to system fonts).
 
-## Remaining work (priority order)
-1. **Signed-in verification pass** on Minna lesson content + the full Songs UI + Self-Talk phrase lists,
-   in both themes. Sign in via the dev API (`bun dev` in `../wk-enhanced-api`, `MINNA_OWNER_EMAILS`
-   includes the account). Fix anything that reads flat / unlifted / mis-colored.
-2. **Polish the shared record-compare + speaking-bar + `.word-pop`** to the full lifted treatment.
-3. **Safari check** — the `.mn-vocab` table + the modal/navbar `backdrop-filter`s.
-4. **Optional:** re-tune the four non-verb category accents to the warm palette; consider whether the
-   modal kit + record-compare deserve their own files (currently shared in `styles.css`).
-5. **Push / open the PR** once reviewed.
+## Remaining work
+1. ✅ **Signed-in verification pass** (Minna / Songs / Self-Talk, both themes) — done this session; all
+   faithful, no fixes needed (see "Verified" above).
+2. ✅ **Lift the shared record-compare / speaking-bar / `.word-pop`** — done (commit `34eef8c`).
+3. ✅ **Safari check** — done (`.mn-vocab` clean + backdrop-filters render).
+4. **Optional (not done):** re-tune the four non-verb category accents to the warm palette (they read
+   fine in the Songs JLPT/source badges as-is, so left unchanged); consider whether the modal kit +
+   record-compare deserve their own files (currently shared in `styles.css`); optionally relax the
+   no-markup rule to add the Minna conversation speaker bubbles (see the deviation note above).
+5. **Push / open the PR** — pending maintainer go-ahead (they asked not to push yet).
 
 ## How to continue / verify
 - **Don't touch `:5173` (study-app) or `:3000` (API)** — the maintainer's live tabs. Drive the running
