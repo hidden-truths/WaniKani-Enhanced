@@ -302,12 +302,17 @@ onto built-in cards' `v.accent` by `attachLevels` (Minna cards carry their own).
 > [mockups/redesign/](mockups/redesign/) as the visual reference; the migration plan + load-bearing
 > dead-ends are in [mockups/redesign/MIGRATION.md](mockups/redesign/MIGRATION.md) + HANDOFF.md.
 >
-> **⚠ Skin ≠ layout — the mocks aren't realized yet.** Reskin-in-place only restyled the EXISTING
-> markup, so the app wears the Day/Night skin but does NOT yet have the mocks' editorial *layouts*: the
-> giant `bignum` review hero, the 2-column + hanko flashcard, the みんなの日本語 hanko lesson-tile / grammar
-> card grid / two-colour conversation bubbles, the 歌 Songs play-card hero, the 独り言 "now speaking" rig.
-> Building those is **Phase 8** — markup/JS are now in scope (the contracts above still hold). Current
-> state + the per-surface gap table: [mockups/redesign/MIGRATION_PROGRESS.md](mockups/redesign/MIGRATION_PROGRESS.md).
+> **⚠ Skin ≠ layout, and the layout is only HALF done — the app still does NOT match the mocks.**
+> Phase 8 (`c71fe61`…`78448c6`, on `redesign-migration`, not pushed) rebuilt each panel's *composition*
+> (the bignum hero, the 2-col + hanko flashcard, the Browse/Stats headers, the みんなの日本語 hanko hero +
+> grammar grid + speaker bubbles, a Songs play-card, the Self-Talk header) — but the maintainer reviewed
+> it and **it still doesn't read as `screens/*.png`** because the work skipped the *frame*: the **navbar
+> is structurally wrong** (a two-row `.navbar` + separate `.tabs` + a `#navExtra` dock + a text account
+> button, vs the mock's single-row inline-tab `.topbar` + round `.avatar`) and the **global margins are
+> cramped** (`.wrap`/navbar/tabs at `1100px`/`20px` vs the mock's `1180px`/`40px`) — both on EVERY
+> screen — 歌 Songs is a half-measure, and the panels need a pixel-fidelity pass. **Phase 9 = fix the
+> frame (navbar + margins) FIRST, then Songs, then a per-surface fidelity pass.** Full reality check +
+> the priority-ordered plan: [mockups/redesign/MIGRATION_PROGRESS.md](mockups/redesign/MIGRATION_PROGRESS.md).
 
 **Type-label rule:** uppercase-mono (`--mono`, Spline Sans Mono — the signature) is for SHORT labels
 only — filter/stat/section labels, kickers. Longer descriptive strings (chart titles, helper/hint

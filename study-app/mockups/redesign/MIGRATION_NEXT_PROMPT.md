@@ -1,106 +1,127 @@
-# Kickoff prompt — Phase 8: realize the mock LAYOUTS
+# Kickoff prompt — Phase 9: fix the FRAME, then make every surface mock-faithful
 
-> Paste the block below to start the next session. It assumes the `redesign-migration` branch is
-> checked out (Phases 0–7 + the speaking-mode lift shipped, not pushed). Earlier sessions applied the
-> Day/Night **skin**; this phase builds the mocks' **layouts**.
+> Paste the block below to start the next session. The `redesign-migration` branch is checked out
+> (Phases 0–8 committed, **not pushed**). Phase 8 built the per-surface *compositions* but the app
+> **still does not look like the mocks** — the global frame (navbar + margins) is wrong on every screen,
+> 歌 Songs is a half-measure, and the panels need a pixel-fidelity pass. This phase fixes that.
 
 ---
 
-You are building **Phase 8 of the "Day / Night" redesign** of the production 日常日本語 / Japanese
+You are building **Phase 9 of the "Day / Night" redesign** of the production 日常日本語 / Japanese
 Trainer study app (`study-app/`) — a Vite, no-framework, ES-modules app on the **`redesign-migration`**
 branch (checked out, not pushed). This is real production code: work in **small, shippable, reversible
-steps, one surface at a time, and verify every change in the browser yourself.**
+steps and verify every change in the browser yourself.**
 
-## Why this phase exists (read this — it changes the rules)
-Phases 0–7 applied the redesign as **reskin-in-place**: CSS-only, on the existing markup. That shipped
-the *skin* (palette, both themes, all-sans type, atmosphere, lifted cards) and it's solid and verified.
-**But it did NOT build the mocks' editorial *layouts*** — so today the app looks like a warm-themed
-version of the old compact app, not like `screens/*.png`. The maintainer reviewed it and wants the app
-to actually **match the mocks**. So Phase 8 **relaxes reskin-in-place: you MAY now change markup + JS**
-(and add per-surface CSS) to build the editorial compositions. The foundation (tokens, themes, component
-skin) stays — you're adding the carpentry on top of the paint.
+## WHY THIS PHASE EXISTS — read this, it sets the priority
+Phase 8 rebuilt each panel's editorial *composition* (the bignum study-home hero, the 2-col + hanko
+flashcard, the Browse/Stats headers, the みんなの日本語 hanko hero + grammar grid + speaker bubbles, a
+Songs play-card, the Self-Talk header). The maintainer reviewed it and **it still does not read as
+`screens/*.png`.** Their words: *"the site currently does not look like our design mock-ups at all"* —
+specifically the **navbar is completely wrong**, the **margins don't match**, **Songs is a rejected
+half-measure**, and **many mocks don't quite match**. The Phase-8 panels are scaffolding sitting inside
+a wrong, cramped frame. Your job is to make it ACTUALLY match the mocks, frame first.
 
-## Read first, in this order (before any code)
-1. `study-app/mockups/redesign/MIGRATION_PROGRESS.md` — **start here.** "Status", **"The gap"**
-   (the per-surface mock-vs-shipped table = your worklist), "Key decisions" (esp. **Decision 5**), the
-   CSS architecture + the two cascade rules, and the signed-in proxy-harness verify recipe.
-2. `study-app/CLAUDE.md` — the **"Design system"** section (incl. the **"⚠ Skin ≠ layout"** note) and
-   the **"Things that look like bugs but aren't"** dead-ends. The dead-ends are the CONTRACTS you must
-   not break even while changing structure (see Hard constraints).
-3. `study-app/mockups/redesign/system.css` — the visual source of truth (tokens, both themes, and the
-   mock components: `.bignum`, `.hanko`, `.spine`, `.card/.panel`, `.grade`, the `.turn`/`.turn.is-b`
-   conversation bubbles, etc.). **Translate these onto the app; don't ship system.css verbatim.**
-4. The mock you're working on, next to BOTH its screenshots, e.g. `hybrid-day-night.html` +
-   `screens/hybrid-day-night.png` (+ `hybrid-dark.png`). One pair per surface in `screens/`.
+## READ FIRST, IN THIS ORDER (before any code)
+1. `study-app/mockups/redesign/MIGRATION_PROGRESS.md` — start here. The **"⚠ The honest gap
+   (post-Phase-8 review)"** section and **"Remaining work — Phase 9"** are your priority-ordered
+   worklist. Also: the CSS-architecture cascade rules, the "Load-bearing things preserved" list, and the
+   **signed-in proxy-harness recipe** ("How to continue / verify").
+2. `study-app/CLAUDE.md` — the "Design system" section (the "⚠ Skin ≠ layout" note now describes this
+   exact gap) and the **"Things that look like bugs but aren't" dead-ends** — those are the CONTRACTS
+   you must not break even while restructuring chrome. Especially: the **`#navExtra` speaking-bar dock**,
+   the tab JS (`data-tab`/`initTabs`/the `leaveMinna` hook), roving-tabindex/ARIA, the `.mn-vocab` Safari
+   rule, record-compare keying.
+3. `study-app/mockups/redesign/system.css` — the visual source of truth. For this phase the
+   **`.topbar` / `.brand` / `.nav` / `.top-actions` / `.icon-btn` / `.avatar` block + its `@media`
+   topbar grid**, and **`.wrap`** (`max-width:1180px; padding:0 40px 96px`), are what you're matching.
+4. The mock you're working on, next to BOTH its screenshots (`screens/<name>.png` + `-dark.png`), e.g.
+   `hybrid-songs.html` + `screens/hybrid-songs.png`. Translate onto the app; don't ship system.css verbatim.
 
-## The work — one surface at a time, against its mock
-The worklist is the **"The gap" table** in MIGRATION_PROGRESS.md. Suggested order:
-1. **Re-compare Browse + Stats first** (they got the closest reskin). Screenshot each in both themes,
-   diff against `hybrid-browse*.png` / `hybrid-stats*.png`, and close the small deltas. This calibrates
-   "how close is close enough" cheaply before the big rebuilds.
-2. **Then rebuild the editorial compositions** (these need markup/JS, not just CSS):
-   - **Study home** — promote the small banner count to the giant standalone `bignum` review hero with
-     the 今日の復習 kicker + the forecast as a side card (`hybrid-day-night`).
-   - **Flashcard** — the wide **2-column editorial card with the rotated hanko seal**, accent pill,
-     reading/trap note-cards, example, big jade/vermilion grade bar (`hybrid-day-night` /
-     `hybrid-prompt`).
-   - **みんなの日本語** — the hero **hanko lesson-number tile**, the **3-up grammar card grid**, and the
-     **two-colour speaker bubbles** (`hybrid-minna`; the mock keys speaker colour off `.turn.is-b`, so
-     add a speaker marker in `renderConversation`).
-   - **歌 Songs** — the stylised **play-card hero** (cover ring + coverage) (`hybrid-songs`).
-   - **独り言 Self-Talk** — the big **"NOW SPEAKING" card** (prompt + scaffold + the spacious record rig
-     + waveforms) over the quiet prompt rail (`hybrid-selftalk`).
+## THE WORK — in STRICT order (the frame is the precondition for everything else)
+1. **Global chrome / navbar (FIRST — it's on every screen).** The app ships a WRONG two-row chrome:
+   `<nav class="navbar">` (brand + a centered `#navExtra` dock + theme/settings + a **text** "Sign in"
+   button) with a **separate `<div class="tabs">`** strip below. Rebuild it as the mock's **single-row
+   `.topbar`**: `.brand` (日常日本語 + a "Japanese Trainer" sub) · the tabs **inline** as `.nav`-style
+   links with the underline-active bar · `.top-actions` = theme `.icon-btn` + settings `.icon-btn` + a
+   **round gradient `.avatar`** (the user's initial; the account/sign-in state lives behind it — keep
+   `#accountBtn`'s id + click wiring + `updateAccountChip`). **Reconcile the `#navExtra` speaking-bar
+   dock** (a dead-end: みんなの日本語/独り言/歌 mount the record-compare/speaking bar there via
+   `createSpeakingBar` — it CANNOT be deleted): give it a home in the single-row world (e.g. a sticky
+   sub-bar directly under the topbar, shown only when a surface mounts it). Mobile = the mock's
+   `grid-template-areas:"brand actions" / "nav nav"` (brand+actions row, then a horizontally-scrollable
+   nav row). Keep `initTabs` + `data-tab` working. Files: `index.html` (~90–116), `src/styles/chrome.css`.
+2. **Global margins (SECOND — every screen).** Widen `.wrap` to `max-width:1180px; padding:0 40px 96px`
+   (`src/styles/base.css`) and align the topbar/tabs to the same 1180 column + 40px gutter (the mock
+   uses `padding-left:max(40px, calc((100vw - 1180px)/2 + 40px))` on the topbar). This is the single
+   biggest "now it looks like the mock" change — do it before any per-surface tuning, then re-screenshot
+   every surface (the extra width changes grid wrapping).
+3. **歌 Songs — rebuild for real** (the Phase-8 hero is a rejected half-measure). Match
+   `hybrid-songs.html`: the play-card with a circular **cover-ring play button** (the video plays on
+   demand — "Play with video" — not a raw iframe sitting in the hero), a **segmented** coverage bar +
+   coverage ring, the lyrics-only toggle, over the editorial lyric reader with the **glowing current
+   line**, and the **mined-vocab side panel** beside Read. Keep the YouTube-embed lifecycle, the stable
+   `#sgContent` re-render, and the Shadow record-compare seams.
+4. **Per-surface FIDELITY pass** over study-home, flashcard, Browse, Stats, みんなの日本語, 独り言: open
+   each `screens/*.png` next to a live render in BOTH themes and close the deltas — exact paddings, font
+   sizes, gaps, the hero/section rhythm — against `system.css` + each mock's inline `<style>`. This is
+   the bulk of the work and only pays off after 1 + 2.
+5. **独り言 interaction-model decision (ask the maintainer):** keep the current topic-browser (a
+   functional superset) or restructure to the mock's daily-5 *featured-card + prompt-rail* flow. The
+   editorial skin already shipped; the flow change is a real UX call.
+6. **Optional polish:** re-tune the four non-verb category accents to the warm palette; the modal-kit /
+   record-compare own-file split.
+7. **Maintainer sign-off → push / open the PR.**
 
-**Stage it: rebuild ONE surface fully (both themes, matching the mock), then STOP and show the maintainer
-before mass-rebuilding the rest** — editorial layout is a matter of taste, and a look-check after the
-first surface (suggest the **study-home hero** or the **flashcard** — the most-seen) prevents a large
-wrong-direction effort. This mirrors the Phase-0 pause.
+Stage it: do 1 then 2, then **stop and show the maintainer the reframed app in both themes** before the
+big per-surface fidelity grind — the frame is what they reacted to, so confirm it before investing in 3+4.
 
-## Hard constraints (do not violate)
-- **Markup/JS changes are allowed now (Decision 5) — but the CONTRACTS hold.** Don't break any CLAUDE.md
-  dead-end: chip wiring by class + `data-*`; `.frow`/`.chips`; roving-tabindex / ARIA radiogroups; the
-  inline-SVG-sprite size-via-inline-style hack; the **`.mn-vocab` `0 solid transparent` Safari rule**;
-  modals scroll-cap + sticky `.modal-x`; the `data-furigana` flip; the **`#navExtra` speaking-bar dock**;
-  record-compare keying (scopes/itemKeys); the sentence-store / `normalizeLine` seams; `state.js`
-  single-writer singletons. Change STRUCTURE to hit the mock; keep the wiring the dead-ends protect.
-  If a layout needs new markup, add it without disturbing those hooks.
-- **Both themes, every change.** Keep `data-theme` + the `prefers-color-scheme` fallback + the chrome.js
-  toggle. Functional color stays (godan=vermilion/coral · ichidan=indigo · irregular=gold · leech=plum ·
-  good=jade); only treatment/layout changes.
+## HARD CONSTRAINTS (do not violate)
+- **Keep every CLAUDE.md dead-end / contract intact while restructuring:** the `#navExtra` speaking-bar
+  dock (relocate, don't delete), the tab wiring (`data-tab`/`initTabs`/`leaveMinna`/per-tab renders),
+  `#accountBtn`/`updateAccountChip`/`#syncStatus`, chip wiring by class + `data-*`, `.frow`/`.chips`,
+  roving-tabindex / ARIA radiogroups, the inline-SVG-sprite size hack + `#stamp` filter, the `.mn-vocab`
+  `0 solid transparent` Safari rule, modals scroll-cap + sticky `.modal-x`, the `data-furigana` flip,
+  record-compare keying (scopes/itemKeys), the sentence-store / `normalizeLine` seams, `state.js`
+  single-writer singletons, the reduced-motion rule.
+- **Both themes, every change.** `data-theme` + the `prefers-color-scheme` fallback + the chrome.js
+  toggle. Functional color stays (godan=vermilion · ichidan=indigo · irregular=gold · leech=plum ·
+  good=jade).
 - **Token aliasing is the linchpin** — keep `--godan→--brand` / `--ichidan→--reading` /
-  `--irregular→--gold` / `--paper-2→--raised` resolving; the hand-rolled SVG charts read those.
-- **Respect the CSS cascade order**: `chrome.css` before `styles.css`; surface files after `styles.css`,
-  each self-contained with its own mobile `@media`. New surface rules + their mobile overrides go in the
-  surface file.
-- **Keep core pure + DOM-free** (`src/core/*` is unit-tested under happy-dom); feature glue in
-  `src/features/*`, shared mutable state in `src/state.js`.
-- No framework, no chart library, no CDN icon font — icons stay the inline `<symbol>` sprite, charts
+  `--irregular→--gold` / `--paper-2→--raised` resolving (the hand-rolled SVG charts read those).
+- **CSS cascade order:** `chrome.css` before `styles.css`; surface files after `styles.css`, each
+  self-contained with its own mobile `@media`. The chrome mobile overrides live in `styles.css` (rule A)
+  — when you restructure the navbar, move/keep those overrides consistent with the new markup.
+- **No framework, no chart library, no CDN icon font.** Icons stay the inline `<symbol>` sprite; charts
   stay hand-rolled SVG. Google Fonts is the only external dep; degrade gracefully offline.
-- **⚠️ Do NOT stop/restart the dev servers on `:5173` (study-app) or `:3000` (API)** — the maintainer has
-  live tabs. Drive a SEPARATE design preview / proxy harness for your checks. Only restart a server if
-  it's actually down (`curl -s localhost:5173` / `localhost:3000/v1/health`).
+- Keep `src/core/*` pure + DOM-free (unit-tested under happy-dom); feature glue in `src/features/*`,
+  shared mutable state in `src/state.js`.
+- **⚠️ Do NOT stop/restart the dev servers on `:5173` (study-app) or `:3000` (API)** — the maintainer
+  has live tabs. Drive a SEPARATE design preview / proxy harness. Only restart a server if it's actually
+  down (`curl -s localhost:5173` / `localhost:3000/v1/health`).
 
-## Verify each change yourself (don't ask the maintainer to check)
-- `bun run test` (244 must stay green — a broken `core/*` export fails it) + `bun run build` green.
-- **Screenshot the touched surface in BOTH themes and `Read` the PNGs, comparing to the matching
-  `screens/*.png`.** Force a theme with `document.documentElement.setAttribute('data-theme','light'|'dark')`
-  (the preview's system pref is dark). Seed the home/stats via `localStorage['jpverbs_v3']` + reload.
-- **Minna content + Songs/Self-Talk content are server-backed and need a signed-in same-origin preview**
-  — a plain `:5174` preview loads ZERO server content (credentialed CORS only echoes `:5173`). Use the
-  **proxy-harness + reused-session-cookie recipe in MIGRATION_PROGRESS.md "How to continue / verify"**.
-  Stay VIEW-ONLY on the real account (no activating vocab / recording / authoring).
-- Report what changed in prose. **One logical change per commit** on `redesign-migration`; stage explicit
-  paths (never `git add -A`; leave `.claude/launch.json` and any temp harness files out); end each commit
-  with `Co-Authored-By: Claude Opus 4.8 <noreply@anthropic.com>`.
-- **Update the docs as you go**: tick the surface off "The gap" + "Remaining work" in
-  MIGRATION_PROGRESS.md; keep CLAUDE.md "Design system" accurate.
+## VERIFY EVERY CHANGE YOURSELF (don't ask the maintainer to check)
+- `bun run test` (≥244 must stay green) + `bun run build` green.
+- Screenshot the touched screen in BOTH themes and `Read` the PNGs side-by-side with the matching
+  `screens/*.png`. Force a theme with `document.documentElement.setAttribute('data-theme','light'|'dark')`
+  (the preview's system pref is dark). Seed home/stats via `localStorage['jpverbs_v3']` + reload.
+- **みんなの日本語 / 歌 / 独り言 content is account-gated** — verify SIGNED-IN via the same-origin proxy
+  harness in MIGRATION_PROGRESS.md "How to continue / verify": a throwaway `vite --config <tmp>.mjs`
+  proxying `/v1` + `/media` → `:3000` with `VITE_API_BASE=` empty, and the owner session cookie injected
+  **server-side** in the proxy config (`proxy.on('proxyReq', …setHeader('cookie', …))`) — the preview
+  context blocks `document.cookie`. Read a valid token from `wk-enhanced-api/dev-data/wk-vocab.sqlite`
+  `sessions` (owner = `MINNA_OWNER_EMAILS`); confirm with `curl <proxy>/v1/auth/me`. Stay VIEW-ONLY on
+  the real account. Delete the temp harness files (they hold the token) when done.
+- Report what changed in prose. **One logical change per commit** on `redesign-migration`; stage
+  explicit paths (**never `git add -A`**; leave `.claude/launch.json` + temp harness files out); end
+  each commit with `Co-Authored-By: Claude Opus 4.8 <noreply@anthropic.com>`.
+- Update `MIGRATION_PROGRESS.md` as you go (tick the frame rows / ◐ rows as they become mock-faithful).
 
-## Definition of done (per surface, then overall)
-A surface is done when its live render (both themes, signed-in where gated) **matches its
-`screens/*.png` mock** — the editorial composition, not just the palette — with tests + build green and
-no dead-end/contract regressed. Phase 8 is done when every "The gap" row is closed, the docs reflect it,
-and the maintainer signs off. Keep the mocks in `mockups/redesign/` as the reference — don't delete them.
-**Push / open the PR only when the maintainer says so.**
+## DEFINITION OF DONE
+A screen is done when its live render (both themes, signed-in where gated) matches its `screens/*.png`
+mock — **the frame AND the composition AND the spacing**, not just the palette — with `bun run test` +
+`bun run build` green and no dead-end/contract regressed. **Phase 9 is done when the maintainer agrees
+the site looks like the mock-ups.** Keep the mocks in `mockups/redesign/` as the reference. Push / open
+the PR only when the maintainer says so.
 
-Start by reading the four docs above and skimming the mocks, then give me a **short written plan** —
-which surface you'll rebuild first and how you'll structure it — **before editing any code.**
+Start by reading the docs above and the `.topbar` + `.wrap` specs, then give me a short written plan for
+the navbar rebuild (including how you'll reconcile the `#navExtra` speaking-bar dock) before editing code.
