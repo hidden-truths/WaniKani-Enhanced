@@ -6,14 +6,24 @@
 > truth) are `system.css` + `screens/*.png`; the shipped design system is documented in
 > [../CLAUDE.md](../CLAUDE.md) "Design system". A ready-to-paste **kickoff prompt is at the bottom**.
 
-## Status — ✅ Phases 0–7 shipped + signed-in verification pass done; push pending
+## Status — ✅ the Day/Night SKIN is shipped + verified (Phases 0–7); ⏳ the mock LAYOUTS are the next phase
 
-The serif-free **"Day / Night"** redesign is applied to the real app via **reskin-in-place + token
-aliasing**. Markup, class names, `data-*`, and every JS contract are unchanged — only CSS + the
-`index.html` head/atmosphere changed. The Phase 0–7 commits + the shared speaking-mode lift (`34eef8c`)
-live on the `redesign-migration` branch (**NOT pushed/merged**). `bun run test` (244 passing) +
-`bun run build` were green every phase. The signed-in surfaces (Minna / Songs / Self-Talk) are now
-verified with real content in both themes — see "Verified vs not" below.
+The serif-free **"Day / Night"** *design system* — palette, both themes, all-sans type, atmosphere,
+lifted-card treatment, tap-a-word, the speaking rig — is applied to the real app via
+**reskin-in-place + token aliasing** (Phases 0–7 + the speaking-mode lift `34eef8c`, on the
+`redesign-migration` branch, **NOT pushed/merged**; `bun run test` 244 + `bun run build` green every
+phase; signed-in Minna/Songs/Self-Talk verified with real content in both themes this session).
+
+**But "reskin-in-place" only ever changed CSS on the EXISTING markup — so the app now wears the
+Day/Night *skin*, it does NOT yet have the mocks' editorial *layouts*.** Side-by-side with
+`screens/*.png` the difference is large, and the maintainer flagged it ("the site does not look like
+the mock-ups"): the mocks are dramatic editorial compositions — a giant `bignum` review hero, the wide
+2-column flashcard with a hanko seal, lesson hanko-number tiles, two-colour conversation bubbles,
+grammar card grids, the spacious record rig — and almost none of those compositions were built, because
+they need markup/JS changes that Phases 0–7 deliberately forbade. **Realizing the mocks is the next
+phase (Phase 8 — see "The gap" + "Remaining work").** What Phases 0–7 bought is the right foundation:
+the token system, both themes, and the component skin the editorial layouts will build ON — paint
+before carpentry, not wasted.
 
 | Phase | Commit | What landed |
 |---|---|---|
@@ -69,6 +79,14 @@ live here.
    incrementally ("during the migration"), peeling each surface as its phase reskinned it.
 4. **Phase 0 then a look-check, then continue phase-by-phase.** ✅ — paused after Phase 0 for approval,
    then ran 1–7 (maintainer said "commit, continue", no push).
+5. **(NEW — this review) Realize the mock LAYOUTS; reskin-in-place is now RELAXED.** Having seen the
+   reskinned result, the maintainer wants the app to actually MATCH the mocks, not just wear their
+   palette. So Phase 8 **may change markup + JS** (and add per-surface CSS) to build the editorial
+   compositions — this supersedes Decision 1's "don't touch markup/JS". **The load-bearing CONTRACTS
+   still hold, though:** chip wiring by class + `data-*`, `.frow`/`.chips`, roving/ARIA radiogroups, the
+   `.mn-vocab` Safari `0-solid-transparent` rule, the `#navExtra` speaking-bar dock, record-compare
+   keying (scopes/itemKeys), the sentence-store/`normalizeLine` seams, and no framework / chart-lib /
+   CDN-icon-font. Change the STRUCTURE to hit the mock; don't break the wiring the dead-ends protect.
 
 **Token aliasing (the linchpin, `styles/tokens.css`):** the redesign role tokens are the source of
 truth (`--brand`/`--reading`/`--gold`/`--raised`/…). The **production token names the code + charts
@@ -117,17 +135,28 @@ only echoes `:5173`):**
 - **Safari/WebKit** — confirmed via an isolated repro: the verbatim `.mn-vocab` rule paints NO phantom
   lines, and the navbar/modal `-webkit-backdrop-filter`s frost correctly.
 
-**Mock deviations that are intentional (reskin-in-place — closing them needs a markup/JS change the
-migration forbids):**
-- **Minna conversation** renders as a clean role-labelled list, not the mock's two-colour speaker
-  bubbles: the mock keys colour off per-speaker `.turn.is-b` classes, but production `.mn-line`/`.mn-role`
-  has no speaker hook — faithful bubbles would need a `data-role`/`is-b` on `.mn-line` (one-line render
-  change) before any CSS can land. Flagged, not done.
-- **Minna grammar** is a vertical list, not the mock's 3-up card grid — the real grammar points carry
-  long explanations + 5–6 examples each, which would cram a 3-column grid; vertical fits better.
-- **The editorial hanko lesson-number tile** (Minna header) and the mock's stylised Songs "play card"
-  aren't reproduced — production keeps a plain heading + the real YouTube embed (same call as the
-  centred flashcard).
+So: the *skin* is verified everywhere; the *layouts* are not built. The per-surface backlog is the
+next section.
+
+## The gap — the SKIN shipped, the mock LAYOUTS did not (the Phase 8 backlog)
+
+The honest delta vs `screens/*.png`. Reskin-in-place changed only CSS on the existing markup, so every
+surface has the Day/Night palette/type/lift but keeps its OLD compact structure. Per surface — the mock
+composition vs what ships today:
+
+| Surface | Mock (`screens/*.png`, the target) | Ships today | Carpentry left (Phase 8) |
+|---|---|---|---|
+| **Study home** | giant standalone `bignum` review hero (~188px) under a 今日の復習 kicker; forecast as a side card; the editorial flashcard below | the bignum sits small INSIDE the due-banner; picker + forecast stacked below | promote the hero numeral; compose hero + forecast like the mock |
+| **Flashcard** | wide **2-column editorial** card with a big rotated **hanko seal**, accent pill, reading/trap note-cards, example, big jade/vermilion grade bar | the production **centered single-column** card (explicitly kept) | rebuild as the 2-col + hanko composition (markup) |
+| **Browse** | color-coded grid cards w/ hanko stamps + an editorial detail | reskinned grid + hanko stamp — **closest to its mock** | re-compare to `hybrid-browse*.png`, fix small deltas |
+| **Stats** | hero metric row + the pipeline/line/per-card SVG charts in an editorial grid | lifted metric cards + reskinned charts — **likely close** | re-compare to `hybrid-stats*.png` (spacing/scale) |
+| **みんなの日本語** | hero **hanko lesson-number tile** (七 / 第7課) + progress, 3-up grammar **cards**, two-colour speaker **bubbles** | plain "Lesson N" heading, vertical grammar list, role-labelled conversation list | build the hanko hero, the grammar grid, the bubble dialogue |
+| **歌 Songs** | stylised play-card hero (cover ring + coverage) + side-by-side Read/Mine | real YouTube embed + plain title; modes are separate tabs | the hero treatment; pair Read+Mine if wanted |
+| **独り言 Self-Talk** | the big "NOW SPEAKING" editorial card (prompt + scaffold + the spacious record rig + waveforms) over a quiet prompt rail | a topic→phrase list with the COMPACT record controls (lifted this session) | the "now speaking" composition + the prompt rail |
+
+**Re-compare Browse + Stats first** (closest already) to confirm how far they are; the other five clearly
+need layout work. The verified skin is the paint; this table is the carpentry. Each row is markup/JS +
+per-surface CSS under Decision 5 — see "Remaining work".
 
 ## Load-bearing things preserved (do not regress — see ../CLAUDE.md dead-ends)
 Chip wiring by class + `data-*`; the `.frow`/`.chips` two-track layout; roving-tabindex / ARIA
@@ -136,16 +165,20 @@ radiogroups; the inline-SVG-sprite size-via-inline-style hack (the new `#stamp` 
 flip; the `#navExtra` dock; the reduced-motion rule (kills transition **and** animation); no framework /
 no chart library / no CDN icon font (Google Fonts is the one external dep, degrades to system fonts).
 
-## Remaining work
-1. ✅ **Signed-in verification pass** (Minna / Songs / Self-Talk, both themes) — done this session; all
-   faithful, no fixes needed (see "Verified" above).
-2. ✅ **Lift the shared record-compare / speaking-bar / `.word-pop`** — done (commit `34eef8c`).
-3. ✅ **Safari check** — done (`.mn-vocab` clean + backdrop-filters render).
-4. **Optional (not done):** re-tune the four non-verb category accents to the warm palette (they read
-   fine in the Songs JLPT/source badges as-is, so left unchanged); consider whether the modal kit +
-   record-compare deserve their own files (currently shared in `styles.css`); optionally relax the
-   no-markup rule to add the Minna conversation speaker bubbles (see the deviation note above).
-5. **Push / open the PR** — pending maintainer go-ahead (they asked not to push yet).
+## Remaining work — Phase 8: realize the mock layouts
+The Phase 0–7 skin/QA backlog is **done**: signed-in verification ✓, the speaking-mode lift ✓
+(`34eef8c`), Safari ✓. What's left is the editorial-layout realization (Decision 5 — markup/JS allowed):
+1. **Re-compare Browse + Stats** to `hybrid-browse*.png` / `hybrid-stats*.png` first (likely closest) —
+   fix the small deltas and lock them as the "this is what done looks like" reference.
+2. **Rebuild the editorial compositions** surface by surface against `screens/*.png` (the gap table):
+   the study-home hero, the 2-col + hanko flashcard, the みんなの日本語 hanko hero + grammar grid +
+   conversation bubbles, the 歌 Songs play-card hero, the 独り言 "now speaking" rig. Keep the dead-end
+   CONTRACTS intact while changing structure.
+3. **Both themes, every change**; verify each surface **signed-in** (the proxy-harness recipe below) AND
+   anon, `Read`-comparing to the matching `screens/*.png`.
+4. **Optional polish** carried over: re-tune the four non-verb accents to the warm palette; the
+   modal-kit / record-compare own-file split.
+5. **Push / open the PR** — still pending maintainer go-ahead.
 
 ## How to continue / verify
 - **Don't touch `:5173` (study-app) or `:3000` (API)** — the maintainer's live tabs. Drive the running
@@ -153,10 +186,20 @@ no chart library / no CDN icon font (Google Fonts is the one external dep, degra
   free port like 5174, not the 5180 the tool reports). Force a theme with
   `document.documentElement.setAttribute('data-theme','light'|'dark')` (the preview's system pref is
   dark). Seed stats via `localStorage['jpverbs_v3']` + reload (CLAUDE.md dead-end).
+- **Verifying SIGNED-IN surfaces (Minna content is account-gated; Songs/Self-Talk content is server-backed
+  too) needs a same-origin path to the API** — every `api()` call is credentialed and the `:3000` CORS
+  allowlist only echoes `:5173`, so a plain `:5174` preview loads ZERO server content. The recipe that
+  worked this session: a throwaway same-origin **proxy** Vite (`vite --config <tmp>.mjs --mode proxy`
+  with a `.env.proxy` `VITE_API_BASE=` + `server.proxy { '/v1','/media' → http://localhost:3000 }`),
+  point the preview browser at it, then inject a reused dev session cookie — read a valid token from
+  `wk-enhanced-api/dev-data/wk-vocab.sqlite` `sessions`, and if a stale httpOnly session is in the jar
+  `POST /v1/auth/logout` first, then `document.cookie='wk_session=<token>'`. Minna is gated to
+  `MINNA_OWNER_EMAILS` (dev: the owner account). Headless Chrome has no mic → speaking-mode controls need
+  a `getUserMedia` stub (or injected markup) to render. Stay VIEW-ONLY on the real account.
 - Each phase: `bun run test` + `bun run build` green; screenshot the touched surface in **both themes**;
   compare to `screens/*.png`; `Read` the PNG to confirm; one commit per logical change; stage explicit
   paths; end the message with `Co-Authored-By: Claude Opus 4.8 <noreply@anthropic.com>`.
 
 ## Kickoff prompt for the next session
-See [MIGRATION_NEXT_PROMPT.md](MIGRATION_NEXT_PROMPT.md) (also reproduced in the chat that generated this
-doc) — paste it to resume.
+See [MIGRATION_NEXT_PROMPT.md](MIGRATION_NEXT_PROMPT.md) — the **Phase 8** prompt (realize the mock
+layouts). Paste it to resume.

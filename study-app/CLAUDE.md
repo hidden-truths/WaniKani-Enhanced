@@ -288,7 +288,7 @@ onto built-in cards' `v.accent` by `attachLevels` (Minna cards carry their own).
 
 ## Design system
 
-> **The "Day / Night" redesign is SHIPPED** (Phases 0–7, 2026-06-17, on the `redesign-migration`
+> **The "Day / Night" design SYSTEM — the *skin* — is SHIPPED** (Phases 0–7, 2026-06-17, on the `redesign-migration`
 > branch): an all-sans system (Bricolage Grotesque display + Hanken Grotesk body + Spline Sans Mono
 > labels + Zen Kaku Gothic New for Japanese; warm washi-paper light + candle-lit warm-charcoal dark)
 > applied to the real app via **reskin-in-place + token aliasing** — markup, class names, `data-*` and
@@ -301,6 +301,13 @@ onto built-in cards' `v.accent` by `attachLevels` (Minna cards carry their own).
 > styles → flashcards → browse → stats → minna → selftalk → songs). The mocks stay in
 > [mockups/redesign/](mockups/redesign/) as the visual reference; the migration plan + load-bearing
 > dead-ends are in [mockups/redesign/MIGRATION.md](mockups/redesign/MIGRATION.md) + HANDOFF.md.
+>
+> **⚠ Skin ≠ layout — the mocks aren't realized yet.** Reskin-in-place only restyled the EXISTING
+> markup, so the app wears the Day/Night skin but does NOT yet have the mocks' editorial *layouts*: the
+> giant `bignum` review hero, the 2-column + hanko flashcard, the みんなの日本語 hanko lesson-tile / grammar
+> card grid / two-colour conversation bubbles, the 歌 Songs play-card hero, the 独り言 "now speaking" rig.
+> Building those is **Phase 8** — markup/JS are now in scope (the contracts above still hold). Current
+> state + the per-surface gap table: [mockups/redesign/MIGRATION_PROGRESS.md](mockups/redesign/MIGRATION_PROGRESS.md).
 
 **Type-label rule:** uppercase-mono (`--mono`, Spline Sans Mono — the signature) is for SHORT labels
 only — filter/stat/section labels, kickers. Longer descriptive strings (chart titles, helper/hint
