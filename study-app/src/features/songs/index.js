@@ -7,7 +7,7 @@
 // byte-for-byte unchanged. The modules + this file form runtime-only import cycles (render/flash are
 // imported back by add/progress/mine), fine like cloud⇄minna. See REFACTOR_FOLLOWUPS.md "Workstream S".
 
-import { escapeHtml, songWords, songLevel } from '../../core/index.js';
+import { escapeHtml, songWords, songLevel, coverage, knownHeadwords } from '../../core/index.js';
 import { destroyPlayer } from '../songs-youtube.js';
 import { wireWordTaps } from '../word-lookup.js';
 import { loadSongs } from '../../persistence/songs.js';
@@ -47,24 +47,33 @@ export function render() {
 // ---- Song view shell (Read / Listen / Shadow / Mine / Grammar reference) ----
 function songHtml() {
   const s = S.openSong;
-  const lvl = songLevel(songWords(s.lines), null);
-  const head = `
-    <button class="st-back" data-act="back"><svg class="ic" aria-hidden="true"><use href="#i-back"/></svg> back to library</button>
-    <div class="song-head">
-      <div><div class="song-h-title jp">${escapeHtml(s.title)} ${lvl ? `<span class="lv ${LV_CLASS[lvl] || ''}">${lvl}</span>` : ''}</div><div class="song-h-sub">${escapeHtml(s.artist || '')}</div></div>
-      <div class="mode-switch">
-        <button class="mode-sw${S.mode === 'read' ? ' on' : ''}" data-act="mode" data-mode="read"><svg class="ic g" aria-hidden="true"><use href="#i-book"/></svg> Read</button>
-        <button class="mode-sw${S.mode === 'listen' ? ' on' : ''}" data-act="mode" data-mode="listen"><svg class="ic g" aria-hidden="true"><use href="#i-headphones"/></svg> Listen</button>
-        <button class="mode-sw${S.mode === 'shadow' ? ' on' : ''}" data-act="mode" data-mode="shadow"><svg class="ic g" aria-hidden="true"><use href="#i-mic"/></svg> Shadow</button>
-        <button class="mode-sw${S.mode === 'mine' || S.mode === 'grammar' ? ' on' : ''}" data-act="mode" data-mode="mine"><svg class="ic g" aria-hidden="true"><use href="#i-tag"/></svg> Mine</button>
-      </div>
-    </div>`;
+  const words = songWords(s.lines);
+  const lvl = songLevel(words, null);
+  const cov = coverage(words, knownHeadwords()).pct;   // % of the song's vocabulary you already know
   // In Listen the video is MASKED (a cover over the still-playing iframe, not display:none which can
   // stop YT audio) — many lyric MVs burn the words into the frame, which would spoil the dictation.
   const masked = S.mode === 'listen';
   const player = s.youtubeId
     ? `<div class="sg-yt${masked ? ' masked' : ''}"><div id="sgPlayer"></div>${masked ? '<div class="sg-yt-mask"><svg class="ic" aria-hidden="true"><use href="#i-headphones"/></svg> audio only — listen and type</div>' : ''}</div>`
-    : `<p class="add-note" style="margin:6px 0 12px"><svg class="ic" aria-hidden="true"><use href="#i-music"/></svg> No video linked — per-line audio uses a synthesized voice.</p>`;
+    : `<p class="add-note" style="margin:0"><svg class="ic" aria-hidden="true"><use href="#i-music"/></svg> No video linked — per-line audio uses a synthesized voice.</p>`;
+  // Editorial play-card HERO (mock): title + level, mode tabs, a coverage ring, and the framed player.
+  const mode = (m, ic, label) => `<button class="mode-sw${(S.mode === m || (m === 'mine' && S.mode === 'grammar')) ? ' on' : ''}" data-act="mode" data-mode="${m}"><svg class="ic g" aria-hidden="true"><use href="#i-${ic}"/></svg> ${label}</button>`;
+  const head = `
+    <button class="st-back" data-act="back"><svg class="ic" aria-hidden="true"><use href="#i-back"/></svg> back to library</button>
+    <div class="song-hero">
+      <div class="song-hero-top">
+        <div class="song-hero-info">
+          <div class="song-h-title jp">${escapeHtml(s.title)} ${lvl ? `<span class="lv ${LV_CLASS[lvl] || ''}">${lvl}</span>` : ''}</div>
+          <div class="song-h-sub">${escapeHtml(s.artist || '')}</div>
+          <div class="mode-switch">${mode('read', 'book', 'Read')}${mode('listen', 'headphones', 'Listen')}${mode('shadow', 'mic', 'Shadow')}${mode('mine', 'tag', 'Mine')}</div>
+        </div>
+        <div class="song-hero-cov" title="${cov}% of this song's vocabulary is already in your deck">
+          <span class="ring cov-ring" style="--p:${cov}%"><span>${cov}%</span></span>
+          <span class="cov-cap">coverage</span>
+        </div>
+      </div>
+      <div class="song-hero-player">${player}</div>
+    </div>`;
   let content;
   if (S.mode === 'grammar') content = grammarRefHtml();
   else if (S.mode === 'mine') content = mineHtml();
@@ -73,7 +82,8 @@ function songHtml() {
   else content = readHtml();
   // The mode content lives in a stable wrapper so Listen can re-render its stepper per step WITHOUT
   // re-running render() (which destroys + re-mounts the YouTube player — an iframe reload every step).
-  return head + player + `<div id="sgContent">${content}</div>`;
+  // (The player is inside the hero `head` now.)
+  return head + `<div id="sgContent">${content}</div>`;
 }
 
 // ============================ handlers ============================
