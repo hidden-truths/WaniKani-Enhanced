@@ -11,7 +11,13 @@ order. The actual DOM/render/feature glue is split into **`src/features/*`** mod
   (export/import), `deck` (filter model + picker + forecast + due banner; owns `cfg`),
   `flashcard` (session lifecycle; owns `session`), `browse` (grid + detail modal + topic
   groups; owns `bcfg`), `stats` (charts), `custom-cards` (rebuildData + #verbModal CRUD),
-  `settings-page`, `minna` (the みんなの日本語 dashboard), `selftalk` (the 独り言 Self-Talk
+  `settings-page`, `minna` (the みんなの日本語 dashboard — now a **directory**
+  `minna/{state,store,activate,clips,speaking,view}.js` behind `minna/index.js` (the lifecycle +
+  public-API barrel), with `minna.js` a thin `export *` re-export so main.js + cloud.js import
+  unchanged; `state.js` = the shared mutable `S` (lessons list + lesson cache), the store/sync +
+  clip ranges in `store.js`, the vocab→deck glue over the pure core planner in `activate.js`, the
+  conversation clip marker in `clips.js`, the nav speaking dock in `speaking.js`; runtime-only import
+  cycles like the others — see [MINNA.md](MINNA.md)), `selftalk` (the 独り言 Self-Talk
   output/speaking-practice tab — now a **directory** `selftalk/{state,store,view,practice,authoring,
   speaking}.js` behind `selftalk/index.js` (the lifecycle + delegated-events orchestrator), with
   `selftalk.js` a thin `export *` re-export so main.js + cloud.js import unchanged; `state.js` = the

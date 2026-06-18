@@ -10,9 +10,13 @@ This feature spans **both** halves of the codebase. This doc is the one place th
 ties them together; the layer-specific docs carry quick local references that point
 back here:
 
-- **Frontend** (the tab itself): [index.html](index.html) `#panel-minna` +
-  [src/features/minna.js](src/features/minna.js) + Minna styles in [src/styles.css](src/styles.css).
-  Contributor notes: the みんなの日本語 dead-end in [CLAUDE.md](CLAUDE.md).
+- **Frontend** (the tab itself): [index.html](index.html) `#panel-minna` + the
+  [src/features/minna/](src/features/minna/) package (`state`/`store`/`activate`/`clips`/`speaking`/
+  `view` behind `index.js`; [src/features/minna.js](src/features/minna.js) is a thin re-export) +
+  Minna styles in [src/styles.css](src/styles.css). Per-function references below that say
+  `minna.js` now live in the package (render/sections → `view.js`, the SyncedBlob + clip ranges →
+  `store.js`, vocab activation → `activate.js`, the clip marker → `clips.js`). Contributor notes:
+  the みんなの日本語 dead-end in [CLAUDE.md](CLAUDE.md).
 - **Server** (content + audio + gating): [../wk-enhanced-api/src/routes/minna.ts](../wk-enhanced-api/src/routes/minna.ts),
   [../wk-enhanced-api/src/services/minnaAudio.ts](../wk-enhanced-api/src/services/minnaAudio.ts),
   [../wk-enhanced-api/data/minna/](../wk-enhanced-api/data/minna/). API rows + the `MINNA_OWNER_EMAILS` parity row

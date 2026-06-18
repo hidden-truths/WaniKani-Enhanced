@@ -462,6 +462,30 @@ reference fails a test, not just the browser. 244 study-app tests green; `bun ru
 
 ---
 
+## Workstream M — `features/minna.js` decomposition (study-app)
+
+> **✅ SHIPPED** (3 commits). minna.js was the **last large feature module never decomposed** — every
+> sibling speaking surface (record-compare/, songs/, selftalk/) had already been split, but the
+> 540-line みんなの日本語 dashboard still mixed persistence, cloud sync, vocab-activation domain glue,
+> rendering, the clip-marker UI, and lifecycle in one file (7 commits of multi-source churn). Done in
+> the established order: **M0** (pure-helper test-net + DRY) → **M-test** (render integration test) →
+> **M1** (the package split).
+
+| Sub | Win | Risk | Status |
+|---|---|---|---|
+| **M0** pure activation planner + helpers → core | DRY/SRP — the preview-count + the apply re-derived the same per-word verdict twice; now one pure `planMinnaActivation` (decision) replayed by a thin apply (effect). +`buildMinnaCard`/`buildMinnaOverlay`/`minnaOverlaySig`/`kanjiNum`/`normalizeMinnaStore` moved to core. +10 unit tests. | LOW (pure, behavior-preserving) | **✅ SHIPPED** (`6490887`) |
+| **M-test** render integration test | The decomposition safety net — drives `renderMinna`→every section + the gate/speaking/clip/add-deck/notes paths under happy-dom (engine/audio/net/persistence/cloud mocked), so a missed cross-module reference fails a test, not just the browser. Mirrors `selftalk-render.test.js`. | LOW | **✅ SHIPPED** (`2817692`) |
+| **M1** `features/minna/` package | SRP — `state`/`store`/`activate`/`clips`/`speaking`/`view` behind `index.js`; `minna.js` a thin `export *` re-export so main.js + cloud.js import byte-for-byte unchanged (all 8 public names flow through). | HIGH (runtime cycles + many dead-ends; mitigated by M-test) | **✅ SHIPPED** (`25989c0`) |
+
+As-built: every dead-end preserved (credentialed cross-origin clip `<audio>` + `API_BASE` rebase,
+attach-once clip wiring, the unguarded "primary" speaking-bar lifecycle, `state.minnaStore` mutated in
+place, `loadRecordings` per-lesson-render); runtime-only import cycles (view⇄clips, view⇄speaking,
+cloud⇄minna). 283 study-app tests green; `bun run build` clean (102 modules, bundle flat). **The live
+mic/record/clip-marker flow still wants a manual browser pass** (headless blocks `getUserMedia` + the
+cookie-gated `<audio>`), exactly like Workstreams C/S/T.
+
+---
+
 ## Cross-cutting
 
 - **Test commands.** Server: `cd wk-enhanced-api && bun run typecheck && bun test`. Study-app: `cd study-app && bun run test && bun run build`. Dev pair: `bun dev` (API :3000) + `bun run dev` (Vite :5173); browser preview via `.claude/launch.json`.
