@@ -9,7 +9,7 @@
 // per-lesson NOTES + the overlays (app key 'minna').
 import { state } from '../state.js';
 import { API_BASE } from '../config.js';
-import { escapeHtml, rubyHtml, plainText, ttsText, CAT_LABEL, minnaBuiltinRank, minnaCardContent, minnaMutablePatch, minnaSig, convItemKey, resolveClip, clipLabel, validClip, mergeMinna } from '../core/index.js';
+import { escapeHtml, rubyHtml, foldFurigana, plainText, ttsText, CAT_LABEL, minnaBuiltinRank, minnaCardContent, minnaMutablePatch, minnaSig, convItemKey, resolveClip, clipLabel, validClip, mergeMinna } from '../core/index.js';
 import { speak, TTS_OK } from './tts.js';
 import { playItem, cycleMod } from './audio.js';
 import { copyBtnHtml, copyText, speakBtnHtml } from './render-helpers.js';
@@ -306,9 +306,9 @@ async function renderMinnaLesson(n, body) {
   wireMinnaLesson(n, L, body);
 }
 // Lesson vocab → the mock's labeled word-grid (was a <table>): rows grouped by part of speech under
-// a .grp-label, each row = JP headword · kana reading(+context) · gloss(+iTalki) · play+record tools.
-// Keeps the app data the static mock omits — kana, the iTalki workflow marker, SRS deck-status —
-// restyled to fit. The POS now reads off the group label, so the per-row POS badge is dropped.
+// a .grp-label, each row = JP headword (with folded furigana) · usage · gloss · tags · play+record.
+// Keeps the app data the static mock omits — the iTalki workflow marker, SRS deck-status, and the
+// usage hint — each in its OWN column. The POS reads off the group label, so no per-row POS badge.
 const GROUP_LABEL = { verb: 'Verbs', adjective: 'Adjectives', noun: 'Nouns', adverb: 'Adverbs', phrase: 'Phrases' };
 function minnaVocabSection(L) {
   if (!L.vocab || !L.vocab.length) return '';
@@ -317,9 +317,8 @@ function minnaVocabSection(L) {
   const order = [], byCat = {};
   L.vocab.forEach(v => { const c = v.cat || 'other'; if (!byCat[c]) { byCat[c] = []; order.push(c); } byCat[c].push(v); });
   const vrow = v => {
-    const head = escapeHtml(v.kanji || v.kana);
-    const read = (v.kanji && v.kana && v.kanji !== v.kana) ? escapeHtml(v.kana) : '';
-    const ctx = v.context ? `<span class="v-ctx jp">${escapeHtml(v.context)}</span>` : '';
+    const head = rubyHtml(foldFurigana(v.kanji || v.kana, v.kana));   // furigana ruby (plain for kana-only)
+    const usage = v.context ? escapeHtml(v.context) : '';
     const italki = v.italki ? '<span class="v-italki" title="Covered in your iTalki lesson">iTalki</span>' : '';
     const inDeck = minnaInDeck(v.key) ? '<span class="v-in" title="In your SRS deck">✓</span>' : '';
     // Record affordance: out of speaking mode a rec-dot ENTERS it (mic-gated, wired in wireMinnaLesson);
@@ -328,8 +327,9 @@ function minnaVocabSection(L) {
     const recRow = speaking ? `<div class="vrow-rec">${recordControlHtml(L.lesson, v.key, v.audio, null, false, ttsText({ jp: v.dict || v.kanji || v.kana, read: v.dictRead || v.kana, tts: v.tts }))}</div>` : '';
     return `<div class="vrow">
       <span class="v-jp jp">${head}</span>
-      <span class="v-read jp">${read}${ctx}</span>
-      <span class="v-en">${escapeHtml(v.mean)}${italki}</span>
+      <span class="v-usage jp">${usage}</span>
+      <span class="v-en">${escapeHtml(v.mean)}</span>
+      <span class="v-tags">${italki}</span>
       <span class="v-tools">${inDeck}${mnWordAudioBtn(v)}${recDot}</span>
     </div>${recRow}`;
   };

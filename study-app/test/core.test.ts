@@ -12,7 +12,7 @@ import { VERBS } from '../src/data/verbs.js';
 import {
   passes, oneGroup, facetAll, facetMatch, scheduleCard, cardStat, isDue, dueCards,
   rollingAcc, isLeech, leeches, normKana, romajiToKana, reviewForecast, studyStreak, filterSummary,
-  tokenFacet, deckLabel, ttsText, HAS_KANJI, rubyHtml, plainText, isCleanRuby, rubyToSegments, segmentsToRuby, segmentsToReading,
+  tokenFacet, deckLabel, ttsText, HAS_KANJI, rubyHtml, plainText, isCleanRuby, rubyToSegments, segmentsToRuby, segmentsToReading, foldFurigana,
   overlayTokens,
   minnaBuiltinRank, applyMinnaOverlays, minnaCardContent, minnaMutablePatch, MINNA_MUTABLE_FIELDS, splitMora, parseAccent,
   cardGrammar, cardMatchesGrammar,
@@ -93,6 +93,22 @@ test('sentencesToLevels groups store sentences by owner_id + tier, reconstructin
     N3: ['むずかしい。', 'difficult', { furigana: rubyToSegments('むずかしい。') }],
   });
   expect(levels['2']).toEqual({ N5: ['いぬ。', 'a dog', { furigana: rubyToSegments('いぬ。') }] });
+});
+
+test('foldFurigana: okurigana fold, compound whole-word ruby, kana-only passthrough', () => {
+  // okurigana stripped from both ends → reading only over the kanji core
+  expect(foldFurigana('聞きます', 'ききます')).toBe('<ruby>聞<rt>き</rt></ruby>きます');
+  expect(foldFurigana('回します', 'まわします')).toBe('<ruby>回<rt>まわ</rt></ruby>します');
+  expect(foldFurigana('変えます', 'かえます')).toBe('<ruby>変<rt>か</rt></ruby>えます');
+  // leading kana prefix preserved (お is shared kana before the kanji)
+  expect(foldFurigana('お茶', 'おちゃ')).toBe('お<ruby>茶<rt>ちゃ</rt></ruby>');
+  // all-kanji compound with no shared edges → whole-word ruby
+  expect(foldFurigana('図書館', 'としょかん')).toBe('<ruby>図書館<rt>としょかん</rt></ruby>');
+  // kana-only headword (no kanji) → unchanged, no ruby
+  expect(foldFurigana('あげる', 'あげる')).toBe('あげる');
+  expect(foldFurigana('まだ', 'まだ')).toBe('まだ');
+  // rendering through rubyHtml round-trips the markup (the actual render path)
+  expect(rubyHtml(foldFurigana('聞きます', 'ききます'))).toBe('<ruby>聞<rt>き</rt></ruby>きます');
 });
 
 test('sentencesToLevels carries annotation tokens + grammar into meta when present', () => {

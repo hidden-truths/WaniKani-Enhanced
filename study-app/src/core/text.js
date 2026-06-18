@@ -92,3 +92,25 @@ export function segmentsToRuby(segs) {
 export function segmentsToReading(segs) {
   return (segs || []).map((s) => (s ? (s.r ?? s.t ?? '') : '')).join('');
 }
+
+// Fold a headword + its full kana reading into furigana RUBY markup: strip the shared leading/
+// trailing kana (okurigana) and put the remaining reading over the kanji core —
+// foldFurigana('聞きます','ききます') → '<ruby>聞<rt>き</rt></ruby>きます'. A compound with no shared
+// edges gets whole-word ruby ('図書館','としょかん' → '<ruby>図書館<rt>としょかん</rt></ruby>'); a
+// kana-only headword (kanji === kana, or no kanji at all) returns the word unchanged (no ruby). The
+// result is meant to be rendered through rubyHtml() (so it's escaped + honors the data-furigana flip).
+// Heuristic by design — it can't split a reading across multiple interior kanji, so it gives those
+// whole-word ruby, which reads fine for vocab headwords. Pure. (BMP kana/kanji only — Minna vocab.)
+export function foldFurigana(kanji, kana) {
+  const k = String(kanji || ''), r = String(kana || '');
+  if (!k || !r || k === r || !HAS_KANJI.test(k)) return k || r;
+  let p = 0; // shared leading kana
+  while (p < k.length && p < r.length && k[p] === r[p] && !HAS_KANJI.test(k[p])) p++;
+  let s = 0; // shared trailing kana (okurigana)
+  while (s < k.length - p && s < r.length - p && k[k.length - 1 - s] === r[r.length - 1 - s] && !HAS_KANJI.test(k[k.length - 1 - s])) s++;
+  const midK = k.slice(p, k.length - s);
+  if (!midK) return k; // everything was shared kana → nothing to annotate
+  const midR = r.slice(p, r.length - s);
+  const core = midR ? `<ruby>${midK}<rt>${midR}</rt></ruby>` : midK;
+  return k.slice(0, p) + core + (s ? k.slice(k.length - s) : '');
+}

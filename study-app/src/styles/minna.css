@@ -79,13 +79,14 @@
 .grp-label::after{content:"";flex:1;height:1px;background:var(--line)}
 .vocab-groups>.grp-label:first-child{padding-top:2px}
 .vocab-list{display:flex;flex-direction:column}
-.vrow{display:grid;grid-template-columns:minmax(120px,1.4fr) minmax(96px,1fr) 2fr auto;align-items:center;gap:20px;padding:11px 12px;border-radius:10px;transition:background .18s ease}
+.vrow{display:grid;grid-template-columns:minmax(120px,1.3fr) minmax(64px,0.7fr) minmax(150px,1.9fr) auto auto;align-items:center;gap:18px;padding:12px;border-radius:10px;transition:background .18s ease}
 .vrow:nth-child(even){background:color-mix(in srgb,var(--surf-inset) 55%,transparent)}
 .vrow:hover{background:var(--surf-inset)}
-.vrow .v-jp{font-family:var(--jp);font-weight:700;font-size:23px;color:var(--ink);line-height:1}
-.vrow .v-read{font-family:var(--jp);font-size:13px;color:var(--faint);letter-spacing:.02em;display:flex;flex-direction:column;gap:2px;min-width:0}
-.vrow .v-ctx{font-family:var(--jp);font-size:11px;color:var(--faint)}
-.vrow .v-en{font-family:var(--body);font-size:16px;color:var(--ink);font-weight:500;display:flex;align-items:center;gap:8px;flex-wrap:wrap}
+/* headword carries folded furigana (rt above the kanji); the line-height leaves room for the ruby */
+.vrow .v-jp{font-family:var(--jp);font-weight:700;font-size:23px;color:var(--ink);line-height:1.45}
+.vrow .v-usage{font-family:var(--jp);font-size:12.5px;color:var(--faint);min-width:0}
+.vrow .v-en{font-family:var(--body);font-size:16px;color:var(--ink);font-weight:500}
+.vrow .v-tags{display:flex;align-items:center;gap:6px;flex-wrap:wrap}
 .vrow .v-tools{display:flex;align-items:center;gap:8px;justify-self:end}
 .v-italki{font-family:var(--mono);font-size:9px;letter-spacing:.06em;background:var(--ichidan);color:#fff;border-radius:6px;padding:1px 6px}
 .vrow .v-in{color:var(--good);font-size:13px;font-family:var(--mono)}
@@ -102,8 +103,8 @@
 /* speaking-mode full record control as a full-width sub-row under its word */
 .vrow-rec{padding:2px 12px 14px}
 @media (max-width:760px){
-  .vrow{grid-template-columns:1fr auto;grid-template-areas:"jp tools" "read tools" "en tools";gap:4px 16px;padding:11px 10px}
-  .vrow .v-jp{grid-area:jp}.vrow .v-read{grid-area:read}.vrow .v-en{grid-area:en;margin-top:2px}
+  .vrow{grid-template-columns:1fr auto;grid-template-areas:"jp tools" "usage tools" "en tools" "tags tools";gap:3px 16px;padding:11px 10px}
+  .vrow .v-jp{grid-area:jp}.vrow .v-usage{grid-area:usage}.vrow .v-en{grid-area:en;margin-top:2px}.vrow .v-tags{grid-area:tags;margin-top:5px}
   .vrow .v-tools{grid-area:tools;align-self:center}
 }
 /* Grammar — 3-up card grid (mock): tag · JP pattern · gloss · one specimen example. */
