@@ -156,7 +156,9 @@
 [data-theme="light"] .pipeline .pcol:nth-child(4) .pbar{background:linear-gradient(180deg,color-mix(in srgb,var(--box-3) 72%,#000) 0%,var(--box-3) 55%,color-mix(in srgb,var(--box-3) 90%,#fff) 100%) !important}
 [data-theme="light"] .pipeline .pcol:nth-child(5) .pbar{background:linear-gradient(180deg,color-mix(in srgb,var(--box-4) 72%,#000) 0%,var(--box-4) 55%,color-mix(in srgb,var(--box-4) 90%,#fff) 100%) !important}
 [data-theme="light"] .pipeline .pcol:nth-child(6) .pbar{background:linear-gradient(180deg,color-mix(in srgb,var(--box-5) 72%,#000) 0%,var(--box-5) 55%,color-mix(in srgb,var(--box-5) 90%,#fff) 100%) !important}
-.pbar .count{font-family:var(--display);font-weight:700;font-size:20px;color:#fff;padding-top:14px;line-height:1;text-shadow:0 1px 3px rgba(0,0,0,.35)}
+/* width:100%+text-align:center is load-bearing: a global .count{width:100%} (styles.css)
+   leaks onto these spans, so without an explicit center the number sits at the left edge. */
+.pbar .count{font-family:var(--display);font-weight:700;font-size:20px;color:#fff;width:100%;text-align:center;padding-top:14px;line-height:1;text-shadow:0 1px 3px rgba(0,0,0,.35)}
 .pbar.count-above{overflow:visible}
 .pbar.count-above .count{position:absolute;bottom:100%;left:50%;transform:translateX(-50%);padding:0 0 8px;color:var(--ink);text-shadow:none}
 .pcol .plabel{font-family:var(--mono);font-size:11px;letter-spacing:.03em;color:var(--muted);text-align:center;line-height:1.3}
