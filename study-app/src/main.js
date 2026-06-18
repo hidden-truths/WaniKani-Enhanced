@@ -41,7 +41,7 @@ import { loadStore } from './persistence/store.js';
 import { applyFurigana } from './settings-store.js';
 import { initTtsUI } from './features/tts.js';
 import { initA11y } from './features/a11y.js';
-import { initTabs, initFontSwitch, initTheme } from './features/chrome.js';
+import { initTabs, initFontSwitch, initTheme, initFuriToggle } from './features/chrome.js';
 import { initExportImport } from './features/io.js';
 import { registerStartSession, initDeckUI, updateDeckCount, updateDueBanner, updateStartLabel } from './features/deck.js';
 import { startSession, initFlashcardUI } from './features/flashcard.js';
@@ -69,6 +69,7 @@ applyFurigana();
 initTabs({ stats: () => renderStats(), browse: () => renderBrowse(), minna: () => renderMinna(), leaveMinna: () => onMinnaHidden(), selftalk: () => showSelftalk(), leaveSelftalk: () => onSelftalkHidden(), songs: () => renderSongs(), leaveSongs: () => onSongsHidden() });
 initFontSwitch();
 initTheme();
+initFuriToggle();
 initExportImport();
 
 // Deck picker. registerStartSession lets deck's startDueSession trigger a run without

@@ -1,16 +1,18 @@
 /* =========================================================================
-   CHROME (Day/Night Phase 9) — the mock's SINGLE-ROW topbar: brand · inline
-   tab-nav (underline-active) · theme/settings/account actions, stacked over an
-   on-demand speaking-bar dock (#navExtra). Replaces the old two-row .navbar +
-   separate .tabs strip. The whole thing sticks as one unit (.chrome) so the
-   #navExtra speaking/compare controls stay pinned while studying.
+   CHROME (blend) — the mock's SINGLE-ROW topbar: brand seal + name · inline
+   underline-active tab-nav · ふ furigana / theme / settings / account actions,
+   stacked over an on-demand speaking-bar dock (#navExtra). The whole thing
+   sticks as one unit (.chrome) so the #navExtra speaking/compare controls stay
+   pinned while studying.
 
    Markup/JS wiring unchanged: tabs keep .tab + data-tab (initTabs), the action
-   ids (#themeToggle/#settingsBtn/#accountBtn/#syncStatus) + #navExtra are stable.
-   Imported tokens → base → chrome → styles, so the styles.css mobile @media
-   topbar overrides + the #navExtra .speaking-bar trims still win from there
-   (cascade Rule A). Spec: mockups/redesign/system.css .topbar/.brand/.nav/
-   .top-actions/.icon-btn/.avatar + its @media grid.
+   ids (#furiToggle/#themeToggle/#settingsBtn/#accountBtn/#syncStatus) + #navExtra
+   are stable. Maps the mock's .chrome/.brand/.nav/.icon/.avatar onto the app's
+   .topbar/.brand/.nav .tab/.icon-btn/.avatar; mock tokens (--shu/--ink-2/--sink/
+   --paper-2) → app role tokens (--brand/--ink-2/--deeper/--raised). Imported
+   tokens → base → chrome → styles, so styles.css mobile @media overrides still
+   win (cascade Rule A). Spec: mockups/sleek/flashcards.html .chrome/.brand/.nav/
+   .actions/.icon/.avatar/.furi-tog/.marker.
    ========================================================================= */
 
 /* Sticky wrapper — topbar + the optional speaking-bar dock stick together. */
@@ -19,49 +21,57 @@
 /* Frosted single-row top bar — full-bleed (margin trick), content aligned to
    the 1180 column (matches .wrap's 40px gutter). */
 .topbar{
-  display:flex; align-items:center; gap:30px;
-  padding:18px 40px;
+  display:flex; align-items:center; gap:26px;
+  padding:16px 40px;
   margin:0 calc((100vw - 100%) / -2);
   padding-left:max(40px, calc((100vw - 1180px)/2 + 40px));
   padding-right:max(40px, calc((100vw - 1180px)/2 + 40px));
   background:var(--surf-nav);
-  backdrop-filter:blur(20px) saturate(140%);
-  -webkit-backdrop-filter:blur(20px) saturate(140%);
+  backdrop-filter:blur(14px) saturate(1.3);
+  -webkit-backdrop-filter:blur(14px) saturate(1.3);
   border-bottom:1px solid var(--line);
   transition:background .5s ease, border-color .5s ease;
 }
 
-/* Brand — 日常日本語 in the gothic JP face (fixed, not the swappable --jp-font)
-   + a mono sub behind a hairline divider. */
-.brand{ display:flex; align-items:baseline; gap:14px; min-width:0; flex-shrink:0; }
+/* Brand — a vermilion (gold by night) 日 seal + the gothic JP name stacked over
+   a mono sub. The .jp name uses the fixed --jp (not the swappable --jp-font). */
+.brand{ display:flex; align-items:center; gap:12px; flex-shrink:0; min-width:0; }
+.brand .seal{
+  width:30px; height:30px; border-radius:8px; flex:0 0 auto;
+  display:grid; place-items:center;
+  background:var(--brand); color:#fff;
+  font-family:var(--jp-min); font-weight:700; font-size:16px;
+  box-shadow:var(--cta-shadow);
+}
+[data-theme="dark"] .brand .seal{ background:linear-gradient(150deg, var(--gold), #c89a45); color:#1a1206; }
+.brand-name{ display:flex; flex-direction:column; line-height:1.05; min-width:0; }
 .brand .jp{
-  font-family:var(--jp); font-weight:900;
-  font-size:25px; letter-spacing:.045em; color:var(--ink);
-  line-height:1; white-space:nowrap;
+  font-family:var(--jp); font-weight:900; font-size:19px;
+  letter-spacing:.02em; color:var(--ink); white-space:nowrap;
 }
 .brand .sub{
-  font-family:var(--mono); font-size:10px; letter-spacing:.32em;
-  text-transform:uppercase; color:var(--muted); font-weight:500;
-  border-left:1px solid var(--line); padding-left:14px;
-  transform:translateY(-1px); white-space:nowrap;
+  font-family:var(--mono); font-size:10px; letter-spacing:.28em;
+  text-transform:uppercase; color:var(--muted); font-weight:500; white-space:nowrap;
 }
 
 /* Inline tab-nav — body-font links with an underline-active bar (a warm
    gradient glow by night). The tabs are <button.tab data-tab> (initTabs wiring),
-   styled as the mock's .nav a. */
-.nav{ display:flex; align-items:center; gap:2px; margin-left:6px; flex:1; flex-wrap:wrap; }
+   styled as the mock's .nav a; the JP-named tabs carry .min for the JP face.
+   min-width:0 + overflow-x:auto lets the strip scroll on narrow widths. */
+.nav{ display:flex; align-items:center; gap:4px; margin-left:8px; min-width:0; overflow-x:auto; scrollbar-width:none; }
+.nav::-webkit-scrollbar{ display:none; }
 .nav .tab{
   position:relative; display:inline-flex; align-items:center;
-  font-family:var(--body); font-size:14.5px; font-weight:500;
-  color:var(--muted); background:none; border:none; cursor:pointer;
-  padding:8px 12px; border-radius:8px; white-space:nowrap;
+  font-family:var(--body); font-size:14.5px; font-weight:600;
+  color:var(--ink-2); background:none; border:none; cursor:pointer;
+  padding:8px 13px; border-radius:9px; white-space:nowrap;
   transition:color .18s ease, background .18s ease;
 }
-.nav .tab .min{ font-family:var(--jp); font-weight:500; }
-.nav .tab:hover{ color:var(--ink); background:color-mix(in srgb, var(--ink) 7%, transparent); }
-.nav .tab.active{ color:var(--ink); font-weight:600; }
+.nav .tab .min{ font-family:var(--jp); font-weight:700; }
+.nav .tab:hover{ color:var(--ink); background:var(--brand-soft); }
+.nav .tab.active{ color:var(--ink); }
 .nav .tab.active::after{
-  content:""; position:absolute; left:12px; right:12px; bottom:1px; height:2px;
+  content:""; position:absolute; left:13px; right:13px; bottom:1px; height:2.5px;
   background:var(--brand); border-radius:2px;
 }
 [data-theme="dark"] .nav .tab.active::after{
@@ -69,8 +79,8 @@
   box-shadow:0 0 12px 1px rgba(255,107,74,.5);
 }
 
-/* Right-hand actions: round icon buttons (theme/settings) + the account avatar. */
-.top-actions{ display:flex; align-items:center; gap:10px; flex-shrink:0; }
+/* Right-hand actions: round icon buttons (ふ/theme/settings) + the account avatar. */
+.top-actions{ margin-left:auto; display:flex; align-items:center; gap:10px; flex-shrink:0; }
 
 /* Transient sync/feedback pill (#syncStatus) — auto-cleared; empty → no gap. */
 .acct-status{ font-family:var(--mono); font-size:10px; letter-spacing:.04em; color:var(--muted); white-space:nowrap; }
@@ -78,13 +88,24 @@
 
 .icon-btn{
   width:38px; height:38px; border-radius:50%; padding:0;
-  border:1px solid var(--line); background:var(--chip-bg);
-  display:grid; place-items:center; cursor:pointer; color:var(--muted);
-  box-shadow:var(--lift-sm);
+  border:1px solid var(--line); background:var(--raised);
+  display:grid; place-items:center; cursor:pointer; color:var(--ink-2);
+  box-shadow:var(--lift-md);
   transition:transform .18s ease, color .18s ease, border-color .18s ease, background .18s ease;
 }
 .icon-btn:hover{ transform:translateY(-1px); color:var(--ink); border-color:var(--gold); }
 .icon-btn svg{ width:18px; height:18px; }
+
+/* ふ furigana toggle — the JP glyph + a dot indicator (vermilion on, muted off);
+   off state dims + insets. State painted by chrome.js initFuriToggle (observer). */
+.furi-tog{ position:relative; }
+.furi-tog .jp{ font-family:var(--jp); font-weight:700; font-size:15px; line-height:1; }
+.furi-tog.off{ color:var(--muted); background:var(--deeper); }
+.furi-tog::after{
+  content:""; position:absolute; right:6px; top:6px; width:6px; height:6px;
+  border-radius:50%; background:var(--brand);
+}
+.furi-tog.off::after{ background:var(--muted); }
 
 /* theme toggle: shows the icon for the mode you'll switch TO (☼ by day, ☾ by night). */
 #themeToggle .moon{ display:none; }
@@ -96,55 +117,62 @@
   :root:not([data-theme]) #themeToggle .moon{ display:block; }
   :root:not([data-theme]) #themeToggle .sun{ display:none; }
 }
-[data-theme="dark"] #themeToggle{
-  color:var(--gold); border-color:rgba(217,169,78,.35);
-  box-shadow:0 0 18px -6px rgba(217,169,78,.5);
-}
 
-/* Account avatar — round gradient + the user's initial (set by updateAccountChip
-   via textContent) when signed in; a muted person glyph when signed out. Keeps
-   #accountBtn's id + click wiring. */
+/* Account avatar — vermilion (gold by night) gradient + the user's initial (set by
+   updateAccountChip via textContent) signed-in; a muted person glyph signed-out.
+   Keeps #accountBtn's id + click wiring. */
 .avatar{
   width:38px; height:38px; border-radius:50%; padding:0;
-  background:linear-gradient(150deg, var(--reading), var(--reading-deep));
-  color:#F3ECDD; display:grid; place-items:center;
-  font-family:var(--display); font-weight:700; font-size:16px;
-  box-shadow:var(--lift-sm); cursor:pointer;
-  border:1.5px solid rgba(251,246,236,.5);
+  background:linear-gradient(150deg, var(--brand), var(--brand-deep));
+  color:#fff; display:grid; place-items:center;
+  font-family:var(--mono); font-weight:700; font-size:15px;
+  box-shadow:var(--cta-shadow); cursor:pointer; border:none;
   transition:transform .18s ease, box-shadow .18s ease, border-color .18s ease, background .18s ease;
 }
 .avatar:hover{ transform:translateY(-1px); }
 [data-theme="dark"] .avatar{
-  background:linear-gradient(145deg, var(--brand), #b8412a); color:#1a0d09;
-  border:1px solid rgba(255,238,222,.18);
-  box-shadow:0 0 16px -4px rgba(255,107,74,.55);
+  background:linear-gradient(150deg, var(--gold), #c89a45); color:#1a1206;
+  box-shadow:0 0 16px -4px rgba(231,188,107,.5);
 }
 /* signed out — neutral, muted person glyph (no gradient, reads as "sign in") */
 .avatar.signed-out,
 [data-theme="dark"] .avatar.signed-out{
-  background:var(--chip-bg); color:var(--muted);
+  background:var(--raised); color:var(--muted);
   border:1px solid var(--line); box-shadow:var(--lift-sm);
 }
 .avatar.signed-out:hover{ color:var(--ink); border-color:var(--gold); }
 .avatar.signed-out svg{ width:18px; height:18px; }
 
-/* #navExtra speaking-bar dock — RELOCATED out of the old centered nav slot to a
-   frosted sub-bar tier directly under the topbar (still inside .chrome, so it
-   stays pinned while studying). Empty → display:none (no second tier). The
-   .nav-extra .speaking-bar chrome-trims live in styles.css (cascade Rule A). */
+/* #navExtra speaking-bar dock — a frosted sub-bar tier directly under the topbar
+   (still inside .chrome, so it stays pinned while studying). Empty → display:none.
+   The .nav-extra .speaking-bar chrome-trims live in record-compare.css. */
 .nav-extra{
   display:flex; justify-content:center; align-items:center;
   padding:9px 40px;
   padding-left:max(40px, calc((100vw - 1180px)/2 + 40px));
   padding-right:max(40px, calc((100vw - 1180px)/2 + 40px));
   background:var(--surf-nav);
-  backdrop-filter:blur(20px) saturate(140%);
-  -webkit-backdrop-filter:blur(20px) saturate(140%);
+  backdrop-filter:blur(14px) saturate(1.3);
+  -webkit-backdrop-filter:blur(14px) saturate(1.3);
   border-bottom:1px solid var(--line);
 }
 .nav-extra:empty{ display:none; }
 
-/* Tab panels — one visible at a time (JS toggles .active; entrance anim stays
-   in styles.css motion). */
+/* Numbered section markers — the mock's NN / 06 page/section headers. Defined here
+   (page-structure chrome); each surface applies .marker in its own phase. The .wrap
+   top gap provides the first marker's top space, so the default marker has no top pad;
+   mid-page sub-markers (.submarker) keep theirs. */
+.marker{ display:flex; align-items:baseline; gap:16px; padding:0 0 22px; }
+.marker .idx{ font-family:var(--display); font-weight:800; font-size:34px; line-height:1; letter-spacing:-.02em; color:var(--ink); }
+[data-theme="dark"] .marker .idx{ color:var(--gold); }
+.marker .idx .slash{ color:var(--muted); font-weight:600; }
+.marker .ttl{ font-family:var(--jp-min); font-weight:600; font-size:17px; letter-spacing:.14em; color:var(--ink); }
+.marker .en{ font-family:var(--mono); font-size:11px; letter-spacing:.26em; text-transform:uppercase; color:var(--muted); }
+.marker .rule{ flex:1; height:1px; background:var(--line); align-self:center; }
+.marker.submarker{ padding:30px 0 18px; }
+.marker.submarker .ttl{ font-size:15px; color:var(--ink-2); }
+.marker.submarker::before{ content:""; width:24px; height:2px; background:var(--brand); align-self:center; border-radius:2px; }
+
+/* Tab panels — one visible at a time (JS toggles .active; entrance anim in styles.css). */
 .panel{ display:none; }
 .panel.active{ display:block; }

@@ -1,6 +1,7 @@
-// App "chrome" (shell): tab navigation, the Japanese-font switcher, and the light/dark
-// theme toggle. All three are thin DOM wiring with their own localStorage keys (font/theme
-// are device-ish, not synced).
+// App "chrome" (shell): tab navigation, the Japanese-font switcher, the light/dark
+// theme toggle, and the ふ furigana toggle. All thin DOM wiring; font/theme are device-ish
+// (their own localStorage keys), furigana rides the synced `settings` blob.
+import { settings, saveSettings } from '../settings-store.js';
 
 // TAB NAV — show one panel, hide the rest. Stats/Browse/Minna re-render on show so they
 // always reflect the latest state.store. The per-tab render is passed in as handlers so
@@ -56,4 +57,23 @@ export function initTheme() {
     document.documentElement.setAttribute('data-theme', next);
     localStorage.setItem('jpverbs_theme', next);
   });
+}
+
+// ふ FURIGANA TOGGLE (topbar) — flips settings.furigana, which `applyFurigana()` writes to
+// <html data-furigana>; saveSettings() persists + syncs. The button's on/off paint is driven
+// by a MutationObserver on that attribute, so it stays correct no matter who flips furigana
+// (this button, the Settings #setFuri control, or a cloud pull's applyFurigana). The Settings
+// modal's #setFuri only re-syncs on its next render — a brief desync if it's open at toggle time.
+export function initFuriToggle() {
+  const btn = document.getElementById('furiToggle');
+  if (!btn) return;
+  const paint = () => {
+    const on = document.documentElement.dataset.furigana !== 'off';
+    btn.classList.toggle('on', on);
+    btn.classList.toggle('off', !on);
+    btn.setAttribute('aria-pressed', String(on));
+  };
+  paint();
+  new MutationObserver(paint).observe(document.documentElement, { attributes: true, attributeFilter: ['data-furigana'] });
+  btn.addEventListener('click', () => { settings.furigana = !settings.furigana; saveSettings(); });
 }

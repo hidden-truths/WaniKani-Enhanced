@@ -15,7 +15,7 @@ feature code + hand-rolled SVG charts reskin for free. Theme attr stays the app'
 |---|---|---|---|
 | 0 | Plan + this doc | — | ✅ done |
 | 1 | Tokens | `styles/tokens.css`, `index.html` (fonts) | ✅ done (verified both themes, :5191) |
-| 2 | Frame (chrome) | `styles/chrome.css`, `index.html`, `features/chrome.js` | ☐ |
+| 2 | Frame (chrome) | `styles/chrome.css`, `index.html`, `features/chrome.js` | ✅ done (verified both themes; ふ toggle works) |
 | 3 | Shared kit | `styles/base.css`, `styles.css` | ☐ |
 | 4 | Flashcards | `styles/flashcards.css`, `features/flashcard.js`, `index.html` | ☐ |
 | 5 | Browse | `styles/browse.css` (+ minor markup) | ☐ |

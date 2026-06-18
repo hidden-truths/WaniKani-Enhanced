@@ -102,17 +102,22 @@
      auto-clearing #syncStatus pill; the account state lives behind the round #accountBtn avatar. -->
 <div class="chrome">
   <header class="topbar">
-    <div class="brand"><span class="jp">日常日本語</span><span class="sub">Japanese&nbsp;Trainer</span></div>
+    <div class="brand">
+      <div class="seal" aria-hidden="true">日</div>
+      <div class="brand-name"><span class="jp">日常日本語</span><span class="sub">Japanese&nbsp;Trainer</span></div>
+    </div>
     <nav class="nav" aria-label="Sections">
       <button class="tab active" data-tab="study">Flashcards</button>
       <button class="tab" data-tab="browse">Browse</button>
       <button class="tab" data-tab="stats">Stats</button>
-      <button class="tab" data-tab="minna"><span class="min">みんなの日本語</span> · Textbook</button>
-      <button class="tab" data-tab="selftalk"><span class="min">独り言</span> · Self-talk</button>
-      <button class="tab" data-tab="songs"><span class="min">歌</span> · Songs</button>
+      <button class="tab" data-tab="minna" title="教科書 · Textbook"><span class="min">教科書</span></button>
+      <button class="tab" data-tab="selftalk" title="独り言 · Self-talk"><span class="min">独り言</span></button>
+      <button class="tab" data-tab="songs" title="歌 · Songs"><span class="min">歌</span></button>
     </nav>
     <div class="top-actions">
       <span class="acct-status" id="syncStatus" role="status" aria-live="polite"></span>
+      <!-- ふ furigana toggle: flips <html data-furigana> via settings.furigana (chrome.js initFuriToggle). -->
+      <button class="icon-btn furi-tog on" id="furiToggle" aria-label="Toggle furigana" aria-pressed="true" title="Furigana on/off"><span class="jp">ふ</span></button>
       <!-- theme toggle shows the icon for the mode you'll switch TO (☼ by day, ☾ by night). -->
       <button class="icon-btn" id="themeToggle" aria-label="Toggle light/dark" title="Toggle light/dark"><svg class="ic sun" aria-hidden="true"><use href="#i-sun"/></svg><svg class="ic moon" aria-hidden="true"><use href="#i-moon"/></svg></button>
       <button class="icon-btn" id="settingsBtn" aria-label="Settings" title="Settings"><svg class="ic" aria-hidden="true"><use href="#i-settings"/></svg></button>
