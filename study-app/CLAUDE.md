@@ -288,31 +288,31 @@ onto built-in cards' `v.accent` by `attachLevels` (Minna cards carry their own).
 
 ## Design system
 
-> **The "Day / Night" design SYSTEM — the *skin* — is SHIPPED** (Phases 0–7, 2026-06-17, on the `redesign-migration`
-> branch): an all-sans system (Bricolage Grotesque display + Hanken Grotesk body + Spline Sans Mono
-> labels + Zen Kaku Gothic New for Japanese; warm washi-paper light + candle-lit warm-charcoal dark)
-> applied to the real app via **reskin-in-place + token aliasing** — markup, class names, `data-*` and
-> the JS contracts are unchanged; only the CSS + the `index.html` head/atmosphere changed. The CSS is
-> now **split per surface**: `src/styles/tokens.css` (the palette — both themes + the
-> prefers-color-scheme fallback) + `base.css` (reset/body/`.wrap`/atmosphere) +
-> `chrome/flashcards/browse/stats/minna/selftalk/songs.css`; the SHARED core (buttons, chips, filters,
-> `.speak-btn`, the overlay/modal/form kit, record-compare/speaking-bar, tap-a-word, global utils)
-> stays in `src/styles.css`. `src/main.js` imports them in cascade order (tokens → base → chrome →
-> styles → flashcards → browse → stats → minna → selftalk → songs). The mocks stay in
-> [mockups/redesign/](mockups/redesign/) as the visual reference; the migration plan + load-bearing
-> dead-ends are in [mockups/redesign/MIGRATION.md](mockups/redesign/MIGRATION.md) + HANDOFF.md.
+> **The "Day / Night" redesign is COMPLETE — skin AND layout** (Phases 0–9, 2026-06-17, on the
+> `redesign-migration` branch, pending push): an all-sans system (Bricolage Grotesque display + Hanken
+> Grotesk body + Spline Sans Mono labels + Zen Kaku Gothic New for Japanese; warm washi-paper light +
+> candle-lit warm-charcoal dark). Phases 0–7 reskinned in place + token-aliased; Phase 8 rebuilt the
+> per-panel compositions; **Phase 9 fixed the FRAME and finished the match** — the chrome is the mock's
+> single-row `.topbar` (brand · inline underline-tabs · theme/settings + round `.avatar`), with the
+> load-bearing `#navExtra` speaking-bar dock relocated to a sticky sub-bar; `.wrap` is the 1180/40
+> column with a uniform top gap; 歌 Songs is rebuilt as the two-column stage (hero play-card · on-demand
+> video · glowing playhead · mined-vocab rail); 独り言 is the daily-5 hybrid (featured card + rail +
+> the kept topic browser); the non-verb accents are re-tuned to the warm palette. All verified
+> signed-in in both themes.
 >
-> **⚠ Skin ≠ layout, and the layout is only HALF done — the app still does NOT match the mocks.**
-> Phase 8 (`c71fe61`…`78448c6`, on `redesign-migration`, not pushed) rebuilt each panel's *composition*
-> (the bignum hero, the 2-col + hanko flashcard, the Browse/Stats headers, the みんなの日本語 hanko hero +
-> grammar grid + speaker bubbles, a Songs play-card, the Self-Talk header) — but the maintainer reviewed
-> it and **it still doesn't read as `screens/*.png`** because the work skipped the *frame*: the **navbar
-> is structurally wrong** (a two-row `.navbar` + separate `.tabs` + a `#navExtra` dock + a text account
-> button, vs the mock's single-row inline-tab `.topbar` + round `.avatar`) and the **global margins are
-> cramped** (`.wrap`/navbar/tabs at `1100px`/`20px` vs the mock's `1180px`/`40px`) — both on EVERY
-> screen — 歌 Songs is a half-measure, and the panels need a pixel-fidelity pass. **Phase 9 = fix the
-> frame (navbar + margins) FIRST, then Songs, then a per-surface fidelity pass.** Full reality check +
-> the priority-ordered plan: [mockups/redesign/MIGRATION_PROGRESS.md](mockups/redesign/MIGRATION_PROGRESS.md).
+> **The CSS is split per surface + shared kit.** `src/styles/tokens.css` (palette — both themes + the
+> prefers-color-scheme fallback) + `base.css` (reset/body/`.wrap`/atmosphere) + `chrome.css`; the SHARED
+> core stays in `src/styles.css` (buttons, chips, filters, `.speak-btn`, tap-a-word, global utils +
+> motion keyframes), with two shared kits peeled to their own files — **`styles/modals.css`** (the
+> overlay/sheet/× + form primitives + Settings rows + voice editor + in-modal `<details>`) and
+> **`styles/record-compare.css`** (the record/play/compare + speaking-bar engine UI + the `#navExtra`
+> dock trims); then the per-surface `flashcards/browse/stats/minna/selftalk/songs.css`. `src/main.js`
+> imports them in cascade order: **tokens → base → chrome → styles → modals → record-compare →
+> flashcards → browse → stats → minna → selftalk → songs** (modals + record-compare sit in the
+> shared-core slot, after styles.css + chrome.css so Rule A holds; the modal entrance keyframes
+> overlayIn/modalPop stay in styles.css since modalPop is shared with the tap-a-word `.word-pop`). The
+> mocks stay in [mockups/redesign/](mockups/redesign/) as the visual reference; the full Phase-by-phase
+> record is [mockups/redesign/MIGRATION_PROGRESS.md](mockups/redesign/MIGRATION_PROGRESS.md).
 
 **Type-label rule:** uppercase-mono (`--mono`, Spline Sans Mono — the signature) is for SHORT labels
 only — filter/stat/section labels, kickers. Longer descriptive strings (chart titles, helper/hint
@@ -331,8 +331,8 @@ onto these so they reskin for free: `--godan→--brand`, `--ichidan→--reading`
 default Zen Kaku Gothic New, `--jp` flows from it). Light/dark is one `data-theme` flip on `<html>`
 (+ a `prefers-color-scheme` fallback). Colors are **functional, not decorative** — verb classes
 (godan=vermilion/coral, ichidan=indigo, irregular=gold) and the non-verb category accents
-(adjective=teal, noun=amber, adverb=rose, phrase=slate) paint the card spine + hanko stamp via
-`colorClass(v)`; leech=plum, "got it right"=jade. Type is **all-sans** (the Georgia serif + SF-Mono
+(adjective=viridian, noun=ochre, adverb=wine-rose, phrase=taupe — Phase 9 re-tuned to the warm washi
+palette) paint the card spine + hanko stamp via `colorClass(v)`; leech=plum, "got it right"=jade. Type is **all-sans** (the Georgia serif + SF-Mono
 were removed): `--display` (Bricolage — display/numerals/the revealed meaning), `--body` (Hanken —
 UI/prose), `--mono` (Spline Sans Mono — short labels), `--jp` (Zen Kaku Gothic New — all Japanese).
 The `.grain` + `.atmos` fixed layers (`styles/base.css`, behind content at z-0) carry the
@@ -369,13 +369,18 @@ Component contracts you must preserve:
   + `float:right` so it stays pinned top-right while the body scrolls (don't revert it to plain
   `absolute` — a tall modal like Settings would scroll the × out of reach). Add long modal content
   freely; it just scrolls.
-- **Sticky navbar (`.navbar` / `.nav-inner`)** is the anchored top bar: title (left), the
-  `#navExtra` slot (a context-controls dock — `minna.js` fills it with the speaking/compare bar,
-  empties it on tab-leave), and `.nav-actions` (right) — theme + settings are `.nav-btn.icon-only`
-  (icon, no text label; keep their `aria-label`/`title`), the account button is a `.nav-btn` with
-  the cloud icon + email. Transient sync/feedback is the auto-clearing `#syncStatus` pill (set via
-  `setSyncStatus`), NOT a persistent label. Import/Export live in the Settings modal's "Backup"
-  row (`io.js` still finds them by id). There is no `<header>`/`<h1>` headline anymore.
+- **Sticky chrome (`.chrome` > `.topbar` + `#navExtra`)** is the anchored top bar (Phase 9 — the mock's
+  SINGLE row, was a two-row `.navbar`+`.tabs`). `.chrome` is the sticky wrapper holding the `.topbar`
+  (`.brand` left · the tabs INLINE as `.nav .tab` underline-active links, keeping `.tab`+`data-tab` so
+  `initTabs` is unchanged · `.top-actions` right = theme/settings `.icon-btn` + the round gradient
+  `.avatar` account button) **over** the `#navExtra` speaking-bar dock — a frosted sub-bar that
+  `minna.js`/`selftalk`/`songs-shadow` fill via `createSpeakingBar` (`:empty`→hidden), relocated here
+  out of the old centered slot but with the SAME id/class so its wiring + the `.nav-extra .speaking-bar`
+  trims (now in `record-compare.css`) are unchanged. The account button is `#accountBtn` (id + click
+  wiring + `updateAccountChip` kept) — `updateAccountChip` now renders the user's INITIAL (via
+  textContent) signed-in / a muted person glyph signed-out, with the email in the `title` (no more
+  innerHTML interpolation of the email). Transient sync/feedback is the auto-clearing `#syncStatus`
+  pill (`setSyncStatus`). Import/Export live in the Settings modal's "Backup" row. No `<header>`/`<h1>`.
 
 ## Things that look like bugs but aren't (DEAD-END WARNINGS)
 

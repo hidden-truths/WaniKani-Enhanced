@@ -31,34 +31,44 @@ pitch accent) have all shipped — **and so has THE BIG ONE: the split into two 
 > the real voices in prod; the `/v1/audio/tts` ETag + `no-cache` headers (so a re-voiced clip
 > propagates) are also live. Full status: [NEXT_AUDIO_UNIFY.md](../docs/history/NEXT_AUDIO_UNIFY.md).
 
-## 🚩 IN PROGRESS — the Day/Night redesign migration (Phases 0–7 shipped; finishing touches left)
+## ✅ SHIPPED (pending push/merge) — the Day/Night redesign (Phases 0–9)
 
-The serif-free **"Day / Night"** visual redesign is **applied to the real app** — Phases 0–7 (2026-06-17),
-**8 commits on the `redesign-migration` branch** (NOT yet pushed/merged). Done via **reskin-in-place +
-token aliasing**: markup, class names, `data-*`, and JS contracts unchanged; the CSS is now **split per
-surface** — `src/styles/{tokens,base,chrome,flashcards,browse,stats,minna,selftalk,songs}.css` + the
-shared core in `src/styles.css`, imported in cascade order by `main.js`. All-sans type, atmosphere
-layers, both themes. `bun run test` (244) + `bun run build` stayed green every phase. The token aliases
-(`--godan→--brand`, `--ichidan→--reading`, `--irregular→--gold`, `--paper-2→--raised`) reskinned the
-hand-rolled SVG charts for free, exactly as planned.
+The serif-free **"Day / Night"** redesign is **complete — skin AND layout** — on the
+`redesign-migration` branch (2026-06-17, **NOT yet pushed/merged** at time of writing). Phases 0–7
+reskinned-in-place + token-aliased; Phase 8 rebuilt the per-panel compositions; **Phase 9 fixed the
+FRAME and finished the match**: the single-row `.topbar` (brand · inline underline-tabs · theme/settings
++ round `.avatar`) with the `#navExtra` speaking-bar dock relocated to a sticky sub-bar; the 1180/40
+`.wrap` column with a uniform top gap; 歌 Songs rebuilt as the two-column stage (hero play-card ·
+on-demand video · glowing playhead · mined-vocab rail); 独り言 the daily-5 hybrid (featured card + rail +
+the kept topic browser); the non-verb accents re-tuned to the warm palette; and the modal-kit +
+record-compare CSS peeled to `styles/modals.css` + `styles/record-compare.css`. **All verified signed-in
+(owner via the proxy harness) in both themes; `bun run test` (245) + `bun run build` green throughout.**
+The per-phase record + the signed-in proxy-harness recipe are in
+[mockups/redesign/MIGRATION_PROGRESS.md](mockups/redesign/MIGRATION_PROGRESS.md); the design system is
+[CLAUDE.md](CLAUDE.md) "Design system"; the mocks stay in [mockups/redesign/](mockups/redesign/).
 
-> **➡️ To continue, read [mockups/redesign/MIGRATION_PROGRESS.md](mockups/redesign/MIGRATION_PROGRESS.md)
-> FIRST** — what we did, the decisions, the per-surface file map, and the remaining work, with a
-> ready-to-paste kickoff prompt at the end. The mocks stay in [mockups/redesign/](mockups/redesign/)
-> as the visual reference (`system.css` + `screens/*.png`); the original plan is in
-> [mockups/redesign/MIGRATION.md](mockups/redesign/MIGRATION.md); the design system is documented in
-> [CLAUDE.md](CLAUDE.md) "Design system".
-
-**Remaining (next session):**
-- **Signed-in verification pass** — the みんなの日本語 *lesson* content (vocab table / grammar /
-  conversation) and the full 歌 Songs UI (Library/Add/Read/Listen/Shadow/Mine) were reskinned from the
-  mocks + tokens but only verified at the **gate / anon shell** (they're account/server-gated). Sign in
-  (dev API + `MINNA_OWNER_EMAILS`) and walk them in both themes; fix anything that reads flat.
-- **Shared record-compare + speaking-bar + tap-a-word `.word-pop`** got a light token-warm pass, not the
-  full lifted treatment — polish them (signed-in speaking-mode UI; still in the shared `src/styles.css`).
-- **Safari** — only verified on Chrome. Re-check the `.mn-vocab` border-collapse table (the trap rule is
-  preserved verbatim) + the modal/navbar `backdrop-filter`s.
-- **Push / open the PR** once reviewed.
+**Next steps / possible improvements (none blocking):**
+- **Safari/WebKit pass.** Only verified headless-Chromium. Re-check on real Safari: the `.mn-vocab`
+  border-collapse table (the `0 solid transparent` trap rule is preserved), the topbar/modal/card/rail
+  `backdrop-filter` frosting, and the `-webkit-background-clip:text` gradient titles (dark bignum,
+  song-title, 独り言 featured) — they fall back to a flat fill if clip-text misbehaves.
+- **Real-device mobile pass.** Verified at ~390px headless; test on a real phone: the scrollable nav
+  row, the daily-5 / songs two-column collapse (`≤860px`/`≤1080px`), and tap targets.
+- **歌 "Play with video" autoplay + the line-sync.** Headless YouTube is unreliable, so the on-demand
+  autoplay + the `highlightAt` glowing-line sync weren't exercised end-to-end with a real playing video
+  — confirm in a real browser (the CSS + the `.ll.current` toggle are verified via a simulated current line).
+- **独り言 daily-5 could feature templates.** The daily rotation is `todaysSet(phrases)` (fixed phrases);
+  the mock's featured prompts are slot-swap *template* scaffolds. Including templates in the daily set
+  (or preferring a template when one matches the day's topic) would match the mock's scaffold card more
+  closely. The rail/feature plumbing already handles either card type via `.st-phrase`.
+- **歌 coverage as a segmented bar.** The mock's hero shows a *segmented* coverage bar; the app shows the
+  JLPT-difficulty stacked bar + a mining ring (richer, but not the exact segmented-coverage motif). A
+  dedicated coverage-segment row could be added if wanted.
+- **Accent AA-contrast audit.** The re-tuned non-verb accents (viridian/ochre/wine-rose/taupe) read well
+  as spine/stamp fills; double-check AA when used as *text* on chips (the Source-filter chips) in both themes.
+- **Optional: animate the `#navExtra` sub-bar in** (slide/fade) when a speaking surface mounts it, so it
+  doesn't pop. Covered by `prefers-reduced-motion` if added.
+- **Push / open the PR** (operator) once the maintainer signs off.
 
 ## ✅ SHIPPED — split into two apps (the learning tool + the API)
 
@@ -443,10 +453,9 @@ This is the priority. The items below are smaller and can follow.
   "What's deliberately NOT in v1."
 
 ## Ideas / not yet scoped
-- **Visual redesign — "Day / Night" system.** Mocks are COMPLETE (11 surfaces, both themes, a mobile
-  pass, twice-critiqued ~9.3/10). Shipping it is now the **top priority** — see **🚩 THE NEXT BIG ONE**
-  near the top of this file and the plan in
-  [mockups/redesign/MIGRATION.md](mockups/redesign/MIGRATION.md).
+- ~~**Visual redesign — "Day / Night" system.**~~ **SHIPPED (Phases 0–9, pending push/merge)** — see
+  "✅ SHIPPED — the Day/Night redesign" near the top of this file for the summary + the next-steps/
+  possible-improvements list. The mocks stay in [mockups/redesign/](mockups/redesign/) as the reference.
 - **Unify voice-audio sourcing behind one tagged API** — **Phases 1 + 2 SHIPPED** (see Done /
   [NEXT_AUDIO_UNIFY.md](../docs/history/NEXT_AUDIO_UNIFY.md)): a unified `/v1/audio` surface, a tagged-variant
   catalog, the `core/audio.js` resolver + shared `playItem` player, and a per-context voice picker.

@@ -8,15 +8,17 @@
 
 ## Status — ✅ Phase 9 done (pending maintainer sign-off + push/PR)
 
-**Phase 9 (2026-06-17, `5e53239`…`e545c28`, on `redesign-migration`, NOT pushed) fixed the frame and
-finished the match.** The chrome is the mock's single-row topbar (with the `#navExtra` speaking-bar
-dock relocated to a sticky sub-bar), the content frame is the 1180/40 column with proper top breathing
-room, 歌 Songs is rebuilt as the two-column stage (hero play-card · on-demand video · glowing playhead ·
-mined-vocab rail), 独り言 is the daily-5 hybrid (featured card + rail + the kept topic browser), and the
-fidelity pass confirmed study-home/flashcard/Browse/Stats/みんなの日本語 already land once the frame is
-right. All verified signed-in in both themes; `bun run test` 245 green + `bun run build` green. Remaining:
-maintainer sign-off → push / open the PR (+ optional polish — the four non-verb accents, the modal-kit
-split). The historical Phase-8 reality check is kept below for context.
+**Phase 9 (2026-06-17, `5e53239`…`e335077`, on `redesign-migration`) fixed the frame and finished the
+match.** The chrome is the mock's single-row topbar (with the `#navExtra` speaking-bar dock relocated to
+a sticky sub-bar), the content frame is the 1180/40 column with proper top breathing room, 歌 Songs is
+rebuilt as the two-column stage (hero play-card · on-demand video · glowing playhead · mined-vocab rail),
+独り言 is the daily-5 hybrid (featured card + rail + the kept topic browser), the fidelity pass confirmed
+study-home/flashcard/Browse/Stats/みんなの日本語 already land once the frame is right, and the optional
+polish shipped (the four non-verb accents re-tuned to the warm palette; the modal-kit + record-compare
+CSS peeled to their own files). All verified signed-in in both themes; `bun run test` 245 green +
+`bun run build` green. **Remaining: maintainer sign-off → merge to `main` (then push).** Next-steps /
+possible improvements are in [../../NEXT_STEPS.md](../../NEXT_STEPS.md). The historical Phase-8 reality
+check is kept below for context.
 
 ## (historical) Phase 8 built the per-surface compositions, but the site STILL did not match the mocks
 
@@ -247,8 +249,13 @@ and didn't do a fidelity pass.** Phase 9, in strict order (steps 1–2, the fram
    prompts" rail (click a rail card to feature it) as the default entry, with the category→topic→phrase
    browser kept below as the superset. Only the featured card renders a phrase (one record control per
    view; invariant held). TODAY_N 8→5. Verified signed-in both themes incl. the rail→feature swap.
-6. **Optional polish:** re-tune the four non-verb accents; the modal-kit / record-compare own-file split.
-7. **Maintainer sign-off → push / open the PR** (still local on `redesign-migration`).
+6. ✅ **Optional polish — DONE (`59faa56`, `e335077`).** The four non-verb category accents re-tuned to
+   the warm washi palette (teal/amber/magenta/slate → viridian/ochre/wine-rose/taupe), and the modal-kit
+   + record-compare kits peeled from `styles.css` to their own `styles/modals.css` + `styles/record-compare.css`
+   (imported in the shared-core cascade slot). Both verified; build + tests 245 green.
+7. **Maintainer sign-off → merge to `main`** (then push when ready). Further next-steps / possible
+   improvements (Safari pass, real-device mobile, 歌 autoplay sync, 独り言 daily-5 templates, accent
+   AA-audit) are listed in [../../NEXT_STEPS.md](../../NEXT_STEPS.md) "✅ SHIPPED — the Day/Night redesign".
 
 **Verification each step:** `bun run test` (≥245) + `bun run build` green; screenshot the touched
 screen in BOTH themes and `Read`-compare to `screens/*.png`; the gated surfaces (みんなの日本語/歌/独り言)
