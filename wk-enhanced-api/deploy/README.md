@@ -356,6 +356,33 @@ needed. Verify: `curl -s "https://api.wkenhanced.dev/v1/audio/variants?text=%E9%
 now lists `siri:male`/`siri:female` (not just `google`), the study app's Settings picker offers them, and
 `curl -s "https://api.wkenhanced.dev/v1/audio/tts?text=…&voice=siri:male" -o /tmp/m.m4a` plays the male voice.
 
+## Verify the whole deploy in one shot (`verify-prod.ts`)
+
+After the seeds + pushes above, run the **read-only** verifier to confirm prod actually serves
+everything authored locally. It makes anonymous GETs only (no `.env`, no S3/DB creds, no cookie) and
+exits non-zero on any drift, so it doubles as a deploy-script gate or a cron heartbeat:
+
+```bash
+# From wk-enhanced-api/ on any machine with the repo (reads local data/ + the study-app bundles, hits
+# the public API). Run it RIGHT AFTER a deploy to catch a half-applied one.
+bun scripts/verify-prod.ts                                # check api.wkenhanced.dev
+bun scripts/verify-prod.ts --full                         # exhaustive voice probe (every TTS text, slower)
+bun scripts/verify-prod.ts --base http://localhost:3000   # check a local/dev server instead
+```
+
+It checks `/v1/health`; songs (`/v1/songs` vs `data/songs/*.json` by ext id + timing sidecars);
+selftalk + example sentences + annotations (`/v1/sentences`); templates (`/v1/templates`); and a
+SAMPLE of voice clips (`/v1/audio/variants` — are `siri:male`/`siri:female` live?). **Voices are
+sampled over HTTP, not exhaustive** — when it flags missing voices, the authoritative byte+manifest
+reconcile is `seed-audio-variants.ts` on the droplet (reports present/absent per clip). Default-voice
+(`tts/<hash>`) clips + Minna native MP3s have no public catalog endpoint, so they're noted, not
+asserted. A clean run prints `✓ prod is in sync with local content`.
+
+> The split that bites: a voice can have its **bytes** in the bucket yet be absent from
+> `/v1/audio/variants` because the `audio_variants` **manifest row** (DB) was never seeded — the
+> picker reads the manifest, not storage. So the two-step voice deploy is always *push bytes from the
+> Mac* (`push-tts-variants.ts`) **then** *seed the manifest on the droplet* (`seed-audio-variants.ts`).
+
 ## Migrating from a pre-Docker droplet
 
 Pre-Docker droplets ran Bun directly via `wk-enhanced-api.service` as the unprivileged `wkenhanced` host user. Conversion is one-shot:
