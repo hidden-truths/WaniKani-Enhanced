@@ -160,9 +160,16 @@
 .mn-actions{display:flex;align-items:center;gap:12px;flex-wrap:wrap;margin:6px 0 2px}
 .v-in{color:var(--good);font-family:var(--mono);font-size:11px;white-space:nowrap}
 /* Notes — the "augment as I study" area (synced under the minna app key). */
-.mn-notes textarea{width:100%;min-height:120px;background:var(--surf-inset);color:var(--ink);border:1px solid var(--line);border-radius:12px;padding:13px;font-family:var(--body);font-size:14px;line-height:1.6;resize:vertical}
-.mn-notes textarea:focus{outline:none;border-color:var(--brand);box-shadow:0 0 0 3px var(--brand-soft)}
-.mn-saved{font-family:var(--mono);font-size:11px;color:var(--muted);margin-top:6px;min-height:14px}
+/* Notes — the editable textarea wears the mock's ruled note-paper; the save status is now the green
+   "synced" pill in the section header (.mn-saved retired, #mnNotesSaved is the pill's text span). */
+.mn-notes .note-paper{width:100%;min-height:160px;resize:vertical;background-color:var(--surf-inset);color:var(--ink);border:1px solid var(--line);border-radius:14px;padding:18px 22px 20px;font-family:var(--body);font-size:15.5px;line-height:32px;background-image:repeating-linear-gradient(to bottom,transparent,transparent 31px,var(--line) 31px,var(--line) 32px);background-position:0 12px}
+[data-theme="dark"] .mn-notes .note-paper{background-color:rgba(255,238,222,.02);background-image:repeating-linear-gradient(to bottom,transparent,transparent 31px,rgba(255,238,222,.13) 31px,rgba(255,238,222,.13) 32px)}
+.mn-notes .note-paper:focus{outline:none;border-color:var(--brand);box-shadow:0 0 0 3px var(--brand-soft)}
+.mn-notes .note-paper::placeholder{color:var(--faint)}
+/* synced pill (extends the shared .pill) — green, and neutralizes the .sec-count mono/uppercase it sits in */
+.pill.synced{color:var(--good);text-transform:none;letter-spacing:normal}
+.pill.synced .ic{font-size:13px}
+[data-theme="dark"] .pill.synced{background:var(--good-soft);border-color:color-mix(in srgb,var(--good) 30%,transparent)}
 /* Practice history — cross-lesson roll-up of saved takes. */
 .mn-ph-total{font-family:var(--mono);font-size:12px;color:var(--muted);margin:0 0 10px}
 .mn-ph{width:100%;border-collapse:collapse;font-size:13px}

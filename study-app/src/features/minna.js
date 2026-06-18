@@ -465,7 +465,11 @@ function practiceHistorySection(practice, current) {
 }
 function minnaNotesSection(n) {
   const val = escapeHtml((state.minnaStore.notes && state.minnaStore.notes[n]) || '');
-  return mnSection('My notes', null, `<div class="mn-notes"><textarea id="mnNotes" placeholder="Augment this lesson as you study with your tutor — grammar nuances, mistakes to avoid, anything. Synced to your account.">${val}</textarea><div class="mn-saved" id="mnNotesSaved"></div></div>`, false);
+  // The save/sync status rides as the mock's green "synced" pill in the section header (was the
+  // .mn-saved line); #mnNotesSaved is the pill's text span, updated by the input handler below.
+  const pill = `<span class="pill synced"><svg class="ic" aria-hidden="true"><use href="#i-check"/></svg><span id="mnNotesSaved">${account ? 'synced' : 'on this device'}</span></span>`;
+  const body = `<div class="mn-notes"><textarea id="mnNotes" class="note-paper" placeholder="Augment this lesson as you study with your tutor — grammar nuances, mistakes to avoid, anything. Synced to your account.">${val}</textarea></div>`;
+  return mnSection('My notes', pill, body, false, { jp: '第' + n + '課' });
 }
 // Fill the navbar #navExtra slot with the speaking/compare controls via the shared controller (the
 // same one Self-Talk + Songs use). The slot is a stable element in the navbar (so the controls float
