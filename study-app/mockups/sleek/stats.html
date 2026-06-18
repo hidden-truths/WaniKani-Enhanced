@@ -72,8 +72,8 @@ ruby{ruby-align:center}rt{font-family:"Zen Kaku Gothic New";font-weight:500;colo
 .lrow{display:flex;align-items:center;gap:14px;padding:12px 0;border-top:1px solid var(--line-2)}
 .lrow .jp{font-family:"Zen Kaku Gothic New";font-weight:700;font-size:22px;line-height:1.6;min-width:86px}
 .lrow .jp rt{font-size:.4em;font-weight:500}
-.lrow .pos{display:flex;align-items:center;gap:6px;font-family:"Spline Sans Mono";font-size:10px;letter-spacing:.08em;color:var(--ink-2);border:1px solid var(--line);border-radius:7px;padding:4px 9px;flex:0 0 auto}
-.lrow .pos .d{width:7px;height:7px;border-radius:50%}
+.lrow .bullet{width:32px;height:32px;border-radius:50%;display:grid;place-items:center;font-family:"Zen Kaku Gothic New";font-weight:700;font-size:15px;color:#fff;background:var(--cls);flex:0 0 auto}
+[data-theme="night"] .lrow .bullet{color:#15110a}
 .lrow .m{font-size:14px;color:var(--ink-2)}
 .lrow .acc{font-family:"Bricolage Grotesque";font-weight:700;font-size:18px;color:var(--shu);min-width:48px;text-align:right}
 .lrow .bar{margin-left:auto;width:80px;height:6px;border-radius:4px;background:var(--sink);overflow:hidden}.lrow .bar i{display:block;height:100%;background:linear-gradient(90deg,var(--shu),var(--shu-deep))}
@@ -139,10 +139,10 @@ ruby{ruby-align:center}rt{font-family:"Zen Kaku Gothic New";font-weight:500;colo
     <div class="leech rise d4">
       <h3>Leeches · needs work <span class="chip">4 CARDS</span></h3>
       <div class="note">under 60% over their last several attempts — drill these first</div>
-      <div class="lrow"><span class="jp"><ruby>必<rt>ひつ</rt>要<rt>よう</rt></ruby></span><span class="pos"><span class="d" style="background:var(--noun)"></span>NOUN</span><span class="m">necessary</span><div class="bar"><i style="width:42%"></i></div><span class="acc">42%</span></div>
-      <div class="lrow"><span class="jp"><ruby>確<rt>かく</rt>認<rt>にん</rt></ruby></span><span class="pos"><span class="d" style="background:var(--noun)"></span>NOUN</span><span class="m">confirmation</span><div class="bar"><i style="width:50%"></i></div><span class="acc">50%</span></div>
-      <div class="lrow"><span class="jp"><ruby>調<rt>しら</rt></ruby>べる</span><span class="pos"><span class="d" style="background:var(--ichidan)"></span>ICHIDAN</span><span class="m">to investigate</span><div class="bar"><i style="width:55%"></i></div><span class="acc">55%</span></div>
-      <div class="lrow"><span class="jp"><ruby>違<rt>ちが</rt></ruby>う</span><span class="pos"><span class="d" style="background:var(--godan)"></span>GODAN</span><span class="m">to differ</span><div class="bar"><i style="width:58%"></i></div><span class="acc">58%</span></div>
+      <div class="lrow"><div class="bullet" style="--cls:var(--noun)">名</div><span class="jp"><ruby>必<rt>ひつ</rt>要<rt>よう</rt></ruby></span><span class="m">necessary</span><div class="bar"><i style="width:42%"></i></div><span class="acc">42%</span></div>
+      <div class="lrow"><div class="bullet" style="--cls:var(--noun)">名</div><span class="jp"><ruby>確<rt>かく</rt>認<rt>にん</rt></ruby></span><span class="m">confirmation</span><div class="bar"><i style="width:50%"></i></div><span class="acc">50%</span></div>
+      <div class="lrow"><div class="bullet" style="--cls:var(--ichidan)">一</div><span class="jp"><ruby>調<rt>しら</rt></ruby>べる</span><span class="m">to investigate</span><div class="bar"><i style="width:55%"></i></div><span class="acc">55%</span></div>
+      <div class="lrow"><div class="bullet" style="--cls:var(--godan)">五</div><span class="jp"><ruby>違<rt>ちが</rt></ruby>う</span><span class="m">to differ</span><div class="bar"><i style="width:58%"></i></div><span class="acc">58%</span></div>
     </div>
   </section>
   <div class="foot-r"><span>03 · Stats · 記録</span><span class="jp-min">継続は力なり</span><span>日常日本語</span></div>
