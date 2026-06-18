@@ -4,7 +4,7 @@
 // labels) because they're intentionally the light-theme hairline tone.
 import { state } from '../state.js';
 import { localDay } from '../config.js';
-import { rollingAcc, isLeech, leeches, dueCards, studyStreak } from '../core/index.js';
+import { rollingAcc, leeches, dueCards, studyStreak } from '../core/index.js';
 import { save } from '../persistence/store.js';
 import { cfg, repaintDeck, updateDeckCount } from './deck.js';
 import { startSession } from './flashcard.js';
@@ -45,41 +45,32 @@ function drawDaily(el, pts) {
   if (line && line.getTotalLength) { const L = Math.ceil(line.getTotalLength()); line.style.strokeDasharray = L; line.style.strokeDashoffset = L; line.style.animation = 'drawLine 1.3s cubic-bezier(.4,.6,.2,1) .3s forwards'; }
   setBadge('dailyToday', vals[n - 1] + '%');
 }
-// Horizontal bar list. items = [{label, val(0–100), color}].
-function barChart(el, items) {
-  el.innerHTML = '';
-  if (!items.length) { el.innerHTML = '<div class="empty" style="padding:24px">No attempts logged yet.</div>'; return; }
-  let h = '';
-  items.forEach(it => {
-    h += `<div style="display:flex;align-items:center;gap:8px;margin-bottom:5px">
-      <div style="width:120px;font-family:var(--jp-font);font-size:14px">${it.label}</div>
-      <div style="flex:1;background:var(--paper-2);border-radius:2px;height:16px;position:relative">
-        <div style="width:${it.val}%;background:${it.color};height:100%;border-radius:2px"></div></div>
-      <div style="width:42px;text-align:right;font-family:monospace;font-size:11px;color:var(--muted)">${it.val}%</div></div>`;
-  });
-  el.innerHTML = h;
-}
-// Per-card accuracy bars, capped to the worst CARDBARS_CAP by default (sorted worst→best so
-// the actionable cards lead) with a show-all toggle. Uncapped, a fully-drilled deck is a
-// ~2600px wall of mostly-mastered bars.
 // Set a panel badge's text if present (badges live in the markup; renderStats fills the counts).
 const setBadge = (id, txt) => { const b = document.getElementById(id); if (b) b.textContent = txt; };
+
+// Per-card accuracy bars (mock): a 2-column grid of word + track + %, colour-coded on the
+// accuracy ramp (poor <55 / mid 55-75 / good >75), worst-first, capped to CARDBARS_CAP with a
+// show-all toggle (uncapped, a fully-drilled deck is a ~2600px wall of mostly-mastered bars).
 const CARDBARS_CAP = 20;
 let cardBarsExpanded = false;
 function renderCardBars() {
   const drilled = state.DATA.filter(v => { const c = state.store.cards[v.rank]; return c && c.attempts.length; })
-    .map(v => ({ label: v.jp, val: Math.round(rollingAcc(v.rank) * 100), color: isLeech(v.rank) ? 'var(--leech)' : (rollingAcc(v.rank) >= 0.8 ? 'var(--good)' : 'var(--godan)') }))
+    .map(v => ({ jp: v.jp, val: Math.round(rollingAcc(v.rank) * 100) }))
     .sort((a, b) => a.val - b.val);
   const el = document.getElementById('cardBars');
-  barChart(el, cardBarsExpanded ? drilled : drilled.slice(0, CARDBARS_CAP));
+  if (!drilled.length) { el.innerHTML = '<div class="empty" style="padding:24px">No attempts logged yet.</div>'; setBadge('cardbarsBadge', '—'); return; }
+  const shown = cardBarsExpanded ? drilled : drilled.slice(0, CARDBARS_CAP);
+  const tone = v => v < 55 ? 'poor' : (v <= 75 ? 'mid' : 'good');
+  const cap = `showing ${cardBarsExpanded ? `all ${drilled.length}` : `the worst ${Math.min(CARDBARS_CAP, drilled.length)} of ${drilled.length}`} studied`;
+  const toggle = drilled.length > CARDBARS_CAP ? ` · <button class="cb-toggle" type="button">${cardBarsExpanded ? 'show worst ' + CARDBARS_CAP : 'show all'}</button>` : '';
+  el.innerHTML = '<div class="cardbars">' + shown.map((c, i) => {
+    const t = tone(c.val);
+    return `<div class="cbar"><span class="cb-word jp">${c.jp}</span><span class="cb-track"><span class="cb-fill ${t}" style="width:${c.val}%;animation-delay:${(0.4 + i * 0.02).toFixed(2)}s"></span></span><span class="cb-pct ${t}">${c.val}%</span></div>`;
+  }).join('') + '</div>'
+    + `<div class="cardbars-cap"><span class="legend"><i><b style="background:var(--acc-poor)"></b>under 55%</i><i><b style="background:var(--acc-mid)"></b>55–75%</i><i><b style="background:var(--acc-good)"></b>over 75%</i></span><span>${cap}${toggle}</span></div>`;
   setBadge('cardbarsBadge', (cardBarsExpanded ? 'all ' + drilled.length : 'worst ' + Math.min(CARDBARS_CAP, drilled.length)) + ' shown');
-  if (drilled.length > CARDBARS_CAP) {
-    const btn = document.createElement('button');
-    btn.className = 'chip'; btn.style.marginTop = '12px';
-    btn.textContent = cardBarsExpanded ? `Show worst ${CARDBARS_CAP} only` : `Show all ${drilled.length} cards`;
-    btn.addEventListener('click', () => { cardBarsExpanded = !cardBarsExpanded; renderCardBars(); });
-    el.appendChild(btn);
-  }
+  const tg = el.querySelector('.cb-toggle');
+  if (tg) tg.addEventListener('click', () => { cardBarsExpanded = !cardBarsExpanded; renderCardBars(); });
 }
 // Rebuild the entire Stats panel from state.store. Called on tab activation and after
 // import/reset. Each block maps 1:1 to a container in the markup.

@@ -181,3 +181,27 @@
 .chart-foot .key .swatch.dash{background:none;border-top:2px dashed var(--gold);height:0}
 .chart-foot .big{margin-left:auto;font-family:var(--display);font-size:15px;color:var(--ink);font-weight:600}
 .chart-foot .big span{font-family:var(--mono);font-size:11px;color:var(--muted);font-weight:400;letter-spacing:.04em}
+
+/* ===== PER-CARD ACCURACY — 2-column bars, colour-coded poor/mid/good (mock 268-298) ===== */
+.cardbars{display:grid;grid-template-columns:1fr 1fr;gap:11px 40px}
+.cbar{display:grid;grid-template-columns:92px 1fr 44px;align-items:center;gap:16px}
+.cbar .cb-word{font-family:var(--jp);font-weight:700;font-size:19px;color:var(--ink);letter-spacing:.02em}
+.cbar .cb-track{height:14px;border-radius:7px;background:var(--deeper);overflow:hidden;position:relative}
+[data-theme="dark"] .cbar .cb-track{background:rgba(255,238,222,.06)}
+.cbar .cb-fill{display:block;height:100%;border-radius:7px;position:relative;transform-origin:left;animation:growX .85s cubic-bezier(.2,.7,.3,1) backwards}
+.cbar .cb-fill.poor{background:var(--acc-poor)}
+.cbar .cb-fill.mid{background:var(--acc-mid)}
+.cbar .cb-fill.good{background:var(--acc-good)}
+[data-theme="dark"] .cbar .cb-fill.poor{box-shadow:0 0 16px -4px var(--acc-poor)}
+[data-theme="dark"] .cbar .cb-fill.mid{box-shadow:0 0 16px -4px var(--acc-mid)}
+[data-theme="dark"] .cbar .cb-fill.good{box-shadow:0 0 16px -4px var(--acc-good)}
+.cbar .cb-pct{font-family:var(--mono);font-size:12.5px;font-weight:600;text-align:right}
+.cbar .cb-pct.poor{color:var(--acc-poor)}
+.cbar .cb-pct.mid{color:var(--acc-mid)}
+.cbar .cb-pct.good{color:var(--acc-good)}
+.cardbars-cap{margin-top:18px;padding-top:15px;border-top:1px solid var(--line);display:flex;align-items:center;justify-content:space-between;flex-wrap:wrap;gap:10px;font-family:var(--mono);font-size:11px;color:var(--muted);letter-spacing:.02em}
+.cardbars-cap .legend{display:flex;gap:14px;flex-wrap:wrap}
+.cardbars-cap .legend i{display:inline-flex;align-items:center;gap:6px}
+.cardbars-cap .legend i b{width:11px;height:11px;border-radius:3px;display:inline-block}
+.cardbars-cap .cb-toggle{font-family:var(--mono);font-size:11px;color:var(--brand);background:none;border:none;cursor:pointer;text-decoration:underline;padding:0;letter-spacing:.02em}
+@media (max-width:760px){.cardbars{grid-template-columns:1fr}}
