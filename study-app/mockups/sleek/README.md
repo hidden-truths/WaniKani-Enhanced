@@ -31,11 +31,18 @@ The shipped one to develop. Merges all three:
   glow). Vermilion/coral stays the **brand signal** (CTA + red-pen); gold is the lacquer
   *material*.
 
-### Surfaces mocked in the blend
-- `index.html` — Flashcards (home + nameplate card)
-- `browse.html` — Browse (lighter filter bar + line-bullet vocab grid)
-- `stats.html` — Progress dashboard (stat cards, Leitner histogram, daily-accuracy line, leeches)
+### Surfaces mocked in the blend (all surfaces, both themes)
+- `index.html` — Flashcards (home + nameplate card + subway-line SRS pipeline)
+- `browse.html` — Browse (lighter filter bar + line-bullet vocab grid, ruby furigana)
+- `stats.html` — Progress dashboard (stat cards, gradient Leitner histogram, daily-accuracy line, leeches with line-bullets)
+- `minna.html` — 教科書 / みんなの日本語 (chapter picker, vocab list, grammar, model conversation, notes; owner-gated)
+- `selftalk.html` — 独り言 / Self-talk (streak, featured record-prompt, daily-five rail, topic browser)
+- `songs.html` — 歌 / Songs (the two-column study stage: hero play-card, lyric viewer with glowing playhead, mined-vocab rail)
+- `modals.html` — overlays showcase (Settings · Add card · Sign in) over a dimmed scrim
 
-### Still to mock, then port
-教科書 (Minna) · 独り言 (Self-talk) · 歌 (Songs) · modals (settings / add-card / auth),
-then port the locked system into the app (`src/styles/tokens.css` + chrome + per-surface CSS).
+Shared across all: the **ふ furigana toggle** (ruby over kanji, toggle-able), the **line-colour
+= word-class** bullets, numbered `NN / 06` section markers, the Day/Night `.themer`.
+
+### Next: port into the app
+Port the locked system into the app (`src/styles/tokens.css` palette + `chrome` + each
+per-surface CSS) to match these mocks, verifying in the live app in both themes.

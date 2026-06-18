@@ -1,0 +1,296 @@
+<!doctype html>
+<html lang="en" data-theme="day" data-furigana="on">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>教科書 — 日常日本語 blend system</title>
+<link rel="preconnect" href="https://fonts.googleapis.com"><link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Bricolage+Grotesque:opsz,wght@12..96,400;12..96,600;12..96,800&family=Hanken+Grotesk:wght@400;500;600;700;800&family=Spline+Sans+Mono:wght@400;500;600&family=Zen+Kaku+Gothic+New:wght@500;700;900&family=Zen+Old+Mincho:wght@400;600;700;900&display=swap" rel="stylesheet">
+<style>
+:root,:root[data-theme="day"]{--paper:#F4F1E8;--paper-2:#FBFAF4;--sink:#ECE7D9;--ink:#15130D;--ink-2:#4B4536;--muted:#857C66;--line:#16130b1c;--line-2:#16130b12;--grid:#1d160814;--shu:#DC3A22;--shu-deep:#B12C16;--shu-wash:#dc3a2212;--gold:#9A6B0F;--gold-soft:#9a6b0f14;--godan:#DC3A22;--ichidan:#234C86;--irregular:#9A6B0F;--adjective:#2C7D6B;--noun:#A06A1E;--adverb:#A14258;--phrase:#736353;--leech:#7C3A95;--good:#2C7A4F;--shadow:0 1px 0 #ffffffcc,0 1px 2px #1a140820,0 22px 40px -22px #2a200f2e;--shadow-lg:0 1px 0 #ffffffcc,0 2px 4px #1a140822,0 48px 70px -34px #2a200f3a;--cta-shadow:0 1px 2px #b12c1633,0 14px 26px -12px #dc3a2255;--card-edge:transparent;--r:18px}
+[data-theme="night"]{--paper:#100D09;--paper-2:#1b1610;--sink:#171209;--ink:#F1E9D8;--ink-2:#C0B49C;--muted:#857a64;--line:#fff0d815;--line-2:#fff0d80a;--grid:#fff0d808;--shu:#FF6B4A;--shu-deep:#FF6B4A;--shu-wash:#ff6b4a14;--gold:#E7BC6B;--gold-soft:#e7bc6b18;--godan:#FF6B4A;--ichidan:#8FA0EE;--irregular:#E0AC55;--adjective:#5CC0A6;--noun:#D8A24E;--adverb:#D6818F;--phrase:#AB9A85;--leech:#C792EA;--good:#56D29A;--shadow:0 1px 2px #00000060,0 24px 44px -24px #000000aa;--shadow-lg:0 2px 6px #00000066,0 50px 80px -36px #000000cc,0 0 0 1px #e7bc6b0f;--cta-shadow:0 0 0 1px #ff6b4a22,0 16px 34px -14px #ff6b4a66;--card-edge:linear-gradient(150deg,#e7bc6b66,transparent 38%)}
+*{box-sizing:border-box;margin:0;padding:0}html{-webkit-font-smoothing:antialiased;text-rendering:optimizeLegibility}
+body{font-family:"Hanken Grotesk",system-ui,sans-serif;color:var(--ink);background:var(--paper);line-height:1.5;min-height:100vh;overflow-x:hidden;position:relative}
+body::before{content:"";position:fixed;inset:0;z-index:0;pointer-events:none;background:linear-gradient(var(--grid) 1px,transparent 1px) 0 0/100% 30px,linear-gradient(90deg,var(--grid) 1px,transparent 1px) 0 0/30px 100%;-webkit-mask-image:radial-gradient(120% 80% at 50% 0%,#000,#0009 42%,transparent 78%);mask-image:radial-gradient(120% 80% at 50% 0%,#000,#0009 42%,transparent 78%);opacity:.9}
+[data-theme="night"] body::before{background:radial-gradient(900px 600px at 84% -8%,rgba(231,188,107,.13),transparent 60%),radial-gradient(1100px 800px at 50% 116%,rgba(255,107,74,.07),transparent 60%);-webkit-mask-image:none;mask-image:none;opacity:1}
+[data-theme="night"] body::after{content:"";position:fixed;inset:0;z-index:0;pointer-events:none;opacity:.4;mix-blend-mode:overlay;background-image:url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='120' height='120'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='.9' numOctaves='2'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23n)' opacity='.5'/%3E%3C/svg%3E")}
+.mono{font-family:"Spline Sans Mono",monospace}.disp{font-family:"Bricolage Grotesque",sans-serif}
+.jp{font-family:"Zen Kaku Gothic New",sans-serif}.jp-min{font-family:"Zen Old Mincho",serif}
+/* furigana = ruby OVER the kanji, toggle-able */
+ruby{ruby-align:center}
+rt{font-family:"Zen Kaku Gothic New";font-weight:500;color:var(--ichidan);letter-spacing:.03em;line-height:1;user-select:none;transition:opacity .25s}
+[data-furigana="off"] rt{opacity:0}
+.furi-tog{position:relative}.furi-tog .jp{font-weight:700;font-size:15px}.furi-tog.off{color:var(--muted);background:var(--sink)}.furi-tog::after{content:"";position:absolute;right:6px;top:6px;width:6px;height:6px;border-radius:50%;background:var(--shu)}.furi-tog.off::after{background:var(--muted)}
+
+/* ===== CHROME ===== */
+.chrome{position:sticky;top:0;z-index:50;display:flex;align-items:center;gap:26px;padding:16px clamp(20px,4vw,52px);background:color-mix(in srgb,var(--paper) 82%,transparent);backdrop-filter:saturate(1.3) blur(14px);border-bottom:1px solid var(--line)}
+.brand{display:flex;align-items:center;gap:12px}.brand .seal{width:30px;height:30px;border-radius:8px;display:grid;place-items:center;flex:0 0 auto;background:var(--shu);color:#fff;font-family:"Zen Old Mincho",serif;font-weight:700;font-size:16px;box-shadow:var(--cta-shadow)}[data-theme="night"] .brand .seal{background:linear-gradient(150deg,var(--gold),#c89a45);color:#1a1206}
+.brand b{font-family:"Zen Kaku Gothic New";font-weight:900;font-size:19px;letter-spacing:.02em}.brand small{font-family:"Spline Sans Mono";font-size:10px;letter-spacing:.28em;color:var(--muted);text-transform:uppercase}
+.nav{display:flex;gap:4px;margin-left:8px}.nav a{position:relative;padding:8px 13px;border-radius:9px;cursor:pointer;font-weight:600;font-size:14.5px;color:var(--ink-2);text-decoration:none;transition:.18s}.nav a .jp{font-weight:700}.nav a:hover{color:var(--ink);background:var(--shu-wash)}.nav a.on{color:var(--ink)}.nav a.on::after{content:"";position:absolute;left:13px;right:13px;bottom:1px;height:2.5px;background:var(--shu);border-radius:2px}
+.actions{margin-left:auto;display:flex;align-items:center;gap:10px}.icon{width:38px;height:38px;border-radius:50%;display:grid;place-items:center;cursor:pointer;background:var(--paper-2);border:1px solid var(--line);color:var(--ink-2);box-shadow:var(--shadow);transition:.18s}.icon:hover{color:var(--ink);transform:translateY(-1px)}.icon svg{width:18px;height:18px;fill:none;stroke:currentColor;stroke-width:1.7;stroke-linecap:round;stroke-linejoin:round}.avatar{background:linear-gradient(150deg,var(--shu),var(--shu-deep));color:#fff;border:none;font-weight:700;font-family:"Spline Sans Mono"}[data-theme="night"] .avatar{background:linear-gradient(150deg,var(--gold),#c89a45);color:#1a1206}
+
+.sheet{position:relative;z-index:1;max-width:1200px;margin:0 auto;padding:0 clamp(20px,4vw,52px) 120px}
+.marker{display:flex;align-items:baseline;gap:16px;padding:46px 0 8px}.marker .idx{font-family:"Bricolage Grotesque";font-weight:800;font-size:34px;line-height:1;letter-spacing:-.02em}[data-theme="night"] .marker .idx{color:var(--gold)}.marker .idx .slash{color:var(--muted);font-weight:600}.marker .ttl{font-family:"Zen Old Mincho";font-weight:600;font-size:17px;letter-spacing:.14em}.marker .en{font-family:"Spline Sans Mono";font-size:11px;letter-spacing:.26em;text-transform:uppercase;color:var(--muted)}.marker .rule{flex:1;height:1px;background:var(--line);align-self:center}
+
+/* headline */
+.head{display:flex;align-items:flex-end;justify-content:space-between;gap:24px;margin-bottom:30px;flex-wrap:wrap}
+.head .l .kick{display:flex;align-items:center;gap:11px;margin-bottom:10px}
+.head .l .kick .owner{font-family:"Spline Sans Mono";font-size:10.5px;letter-spacing:.12em;font-weight:600;text-transform:uppercase;color:var(--gold);border:1px solid color-mix(in srgb,var(--gold) 42%,transparent);background:var(--gold-soft);border-radius:30px;padding:4px 11px;display:flex;align-items:center;gap:6px}
+.head .l .kick .owner svg{width:11px;height:11px;fill:none;stroke:currentColor;stroke-width:2}
+.head h1{font-family:"Zen Kaku Gothic New";font-weight:900;font-size:clamp(52px,8vw,84px);letter-spacing:.01em;line-height:1.02}
+.head h1 rt{font-size:.22em;font-weight:600;color:var(--ichidan)}
+.head .sub{font-size:16.5px;color:var(--ink-2);margin-top:8px}.head .sub b{color:var(--ink);font-weight:700}
+.head .r{font-family:"Spline Sans Mono";font-size:11.5px;letter-spacing:.1em;color:var(--ink-2);background:var(--paper-2);border:1px solid var(--line);border-radius:30px;padding:9px 16px;display:flex;align-items:center;gap:9px;box-shadow:var(--shadow)}
+.head .r .d{width:8px;height:8px;border-radius:50%;background:var(--shu)}.head .r b{font-family:"Bricolage Grotesque";font-size:15px;color:var(--ink)}
+
+/* ===== CHAPTER PICKER ===== */
+.chapwrap{position:relative;margin-bottom:8px}
+.chaprow{display:flex;gap:10px;overflow-x:auto;padding:4px 2px 14px;scroll-snap-type:x proximity;-webkit-overflow-scrolling:touch}
+.chaprow::-webkit-scrollbar{height:6px}.chaprow::-webkit-scrollbar-thumb{background:var(--line);border-radius:6px}.chaprow::-webkit-scrollbar-track{background:transparent}
+.chap{flex:0 0 auto;scroll-snap-align:start;cursor:pointer;border:1px solid var(--line);background:var(--paper-2);border-radius:13px;padding:12px 16px 11px;min-width:96px;text-align:center;transition:.16s;box-shadow:var(--shadow)}
+.chap:hover{transform:translateY(-2px);color:var(--ink)}
+.chap .n{font-family:"Zen Kaku Gothic New";font-weight:700;font-size:21px;line-height:1.1;color:var(--ink)}
+.chap .lab{font-family:"Spline Sans Mono";font-size:9px;letter-spacing:.14em;text-transform:uppercase;color:var(--muted);margin-top:4px}
+.chap.done .n{color:var(--ink-2)}.chap.done::after{content:"✓";display:block;font-size:11px;color:var(--good);margin-top:2px;line-height:1}
+.chap.on{background:linear-gradient(168deg,var(--shu),var(--shu-deep));border:none;box-shadow:var(--cta-shadow)}
+.chap.on .n{color:#fff}.chap.on .lab{color:#ffffffcc}
+.chapwrap .fade{position:absolute;top:0;bottom:14px;width:46px;pointer-events:none;z-index:2}
+.chapwrap .fade.r{right:0;background:linear-gradient(90deg,transparent,var(--paper))}
+.chaphint{display:flex;align-items:center;gap:7px;font-family:"Spline Sans Mono";font-size:10px;letter-spacing:.08em;color:var(--muted);margin:0 0 30px 2px}
+.chaphint svg{width:13px;height:13px;fill:none;stroke:currentColor;stroke-width:2;stroke-linecap:round;stroke-linejoin:round}
+
+/* ===== SELECTED-LESSON HEADER ===== */
+.lesson{display:flex;align-items:flex-end;justify-content:space-between;gap:24px;background:var(--paper-2);border:1px solid var(--line);border-radius:var(--r);box-shadow:var(--shadow-lg);padding:26px 30px;position:relative;overflow:hidden;flex-wrap:wrap}
+.lesson::before{content:"";position:absolute;left:0;right:0;top:0;height:3px;background:linear-gradient(90deg,var(--shu),var(--gold))}
+.lesson .seal{position:absolute;top:18px;right:26px;width:60px;height:60px;border-radius:50%;display:grid;place-items:center;border:2.5px solid var(--shu);color:var(--shu);font-family:"Zen Old Mincho";font-weight:700;font-size:26px;box-shadow:inset 0 0 0 4px var(--paper-2),inset 0 0 0 5px color-mix(in srgb,var(--shu) 26%,transparent)}
+[data-theme="night"] .lesson .seal{box-shadow:inset 0 0 0 4px var(--paper-2),0 0 22px -6px var(--shu)}
+.lesson .l .ttl{display:flex;align-items:baseline;gap:14px}
+.lesson .l .ttl .big{font-family:"Bricolage Grotesque";font-weight:800;font-size:56px;letter-spacing:-.02em;line-height:1}
+.lesson .l .ttl .jp-big{font-family:"Zen Kaku Gothic New";font-weight:900;font-size:34px;color:var(--ink-2);letter-spacing:.02em}
+.lesson .l .sub{font-size:15.5px;color:var(--ink-2);margin-top:10px;display:flex;align-items:center;gap:10px}
+.lesson .l .sub .pipe{width:5px;height:5px;border-radius:50%;background:var(--gold)}
+.lesson .l .meta{display:flex;gap:22px;margin-top:16px}
+.lesson .l .meta .m{display:flex;flex-direction:column;gap:2px}
+.lesson .l .meta .m .v{font-family:"Bricolage Grotesque";font-weight:700;font-size:22px;line-height:1}.lesson .l .meta .m .v.shu{color:var(--shu)}.lesson .l .meta .m .v.ind{color:var(--ichidan)}
+.lesson .l .meta .m .k{font-family:"Spline Sans Mono";font-size:9.5px;letter-spacing:.14em;text-transform:uppercase;color:var(--muted)}
+.lesson .acts{display:flex;gap:12px;flex-wrap:wrap}
+
+.btn{display:inline-flex;align-items:center;gap:10px;cursor:pointer;border:1px solid var(--line);font-family:inherit;font-weight:700;font-size:15px;padding:14px 22px;border-radius:13px;transition:.18s;color:var(--ink);background:var(--paper);box-shadow:var(--shadow)}
+.btn:hover{transform:translateY(-2px);box-shadow:var(--shadow-lg)}
+.btn svg{width:18px;height:18px;fill:none;stroke:currentColor;stroke-width:2;stroke-linecap:round;stroke-linejoin:round}
+.btn.primary{background:linear-gradient(168deg,var(--shu),var(--shu-deep));color:#fff;border:none;box-shadow:var(--cta-shadow)}
+.btn.ghost{background:transparent;color:var(--ink-2);border:1px solid var(--line)}.btn.ghost:hover{color:var(--ink);border-color:color-mix(in srgb,var(--ink) 22%,transparent)}
+.btn .mini{font-family:"Spline Sans Mono";font-size:10px;letter-spacing:.06em;color:var(--muted);font-weight:500;text-transform:uppercase}
+
+/* ===== SECTION DIVIDER (from stats) ===== */
+.secdiv{display:flex;align-items:center;gap:16px;margin:46px 0 20px}
+.secdiv .lab{font-family:"Spline Sans Mono";font-size:11px;letter-spacing:.26em;text-transform:uppercase;color:var(--muted)}
+.secdiv .lab .jp-min{font-family:"Zen Old Mincho";letter-spacing:.1em;text-transform:none;font-size:14px;color:var(--ink-2);margin-right:6px}
+.secdiv .rule{flex:1;height:1px;background:var(--line)}
+.secdiv .seal{width:34px;height:34px;border-radius:50%;border:2px solid var(--ac);color:var(--ac);display:grid;place-items:center;font-family:"Zen Old Mincho";font-weight:700;font-size:16px}
+[data-theme="night"] .secdiv .seal{box-shadow:0 0 18px -5px var(--ac)}
+
+/* metro line-bullet (from browse/stats) */
+.bullet{width:34px;height:34px;border-radius:50%;display:grid;place-items:center;font-family:"Zen Kaku Gothic New";font-weight:700;font-size:16px;color:#fff;background:var(--cls);flex:0 0 auto;box-shadow:0 0 0 3px color-mix(in srgb,var(--cls) 20%,transparent)}
+[data-theme="night"] .bullet{color:#15110a}
+
+/* ===== VOCAB LIST ===== */
+.vocab{background:var(--paper-2);border:1px solid var(--line);border-radius:var(--r);box-shadow:var(--shadow);overflow:hidden}
+.vrow{display:flex;align-items:center;gap:18px;padding:15px 22px;transition:.15s}
+.vrow+.vrow{border-top:1px solid var(--line-2)}
+.vrow:hover{background:var(--shu-wash)}
+.vrow .w{font-family:"Zen Kaku Gothic New";font-weight:700;font-size:27px;line-height:1.6;min-width:140px}
+.vrow .w rt{font-size:.4em;font-weight:500}
+.vrow .mean{flex:1;font-size:15.5px;color:var(--ink-2)}
+.vrow .cls{font-family:"Spline Sans Mono";font-size:10px;letter-spacing:.08em;text-transform:uppercase;color:var(--cls);border:1px solid color-mix(in srgb,var(--cls) 38%,transparent);background:color-mix(in srgb,var(--cls) 9%,transparent);border-radius:7px;padding:4px 9px;font-weight:600}
+.play{width:40px;height:40px;border-radius:50%;border:1px solid var(--line);background:var(--paper);display:grid;place-items:center;cursor:pointer;color:var(--shu);box-shadow:var(--shadow);flex:0 0 auto;transition:.15s}
+.play:hover{transform:translateY(-1px);box-shadow:var(--shadow-lg)}
+.play svg{width:16px;height:16px;fill:currentColor}
+.play.sm{width:32px;height:32px}.play.sm svg{width:13px;height:13px}
+
+/* ===== GRAMMAR CARDS ===== */
+.gcards{display:flex;flex-direction:column;gap:14px}
+.gcard{background:var(--paper-2);border:1px solid var(--line);border-radius:var(--r);box-shadow:var(--shadow);padding:20px 24px;position:relative;overflow:hidden}
+.gcard::before{content:"";position:absolute;left:0;top:0;bottom:0;width:3px;background:var(--ichidan)}
+.gcard .gtop{display:flex;align-items:center;gap:14px;flex-wrap:wrap;margin-bottom:6px}
+.gcard .chip{font-family:"Zen Kaku Gothic New";font-weight:700;font-size:19px;letter-spacing:.02em;color:var(--ichidan);border:1px solid color-mix(in srgb,var(--ichidan) 36%,transparent);background:color-mix(in srgb,var(--ichidan) 9%,transparent);border-radius:10px;padding:6px 13px;flex:0 0 auto}
+.gcard .gloss{font-size:14.5px;color:var(--ink-2);font-style:italic}
+.gcard .ex{margin-top:14px;background:linear-gradient(180deg,var(--shu-wash),transparent);border:1px solid color-mix(in srgb,var(--shu) 16%,transparent);border-radius:13px;padding:16px 18px;display:flex;align-items:flex-start;gap:14px}
+.gcard .ex .body{flex:1}
+.gcard .ex .jp{font-family:"Zen Kaku Gothic New";font-weight:500;font-size:23px;letter-spacing:.01em;line-height:1.9}
+.gcard .ex .jp rt{font-size:.42em;color:var(--muted);font-weight:500}
+.gcard .ex .en{font-size:14px;color:var(--muted);margin-top:4px;font-style:italic}
+
+/* ===== CONVERSATION ===== */
+.convo{background:var(--paper-2);border:1px solid var(--line);border-radius:var(--r);box-shadow:var(--shadow);padding:8px 24px;position:relative;overflow:hidden}
+.convo::before{content:"";position:absolute;left:0;right:0;top:0;height:3px;background:linear-gradient(90deg,var(--gold),var(--shu))}
+.cline{display:flex;align-items:flex-start;gap:16px;padding:18px 0}
+.cline+.cline{border-top:1px solid var(--line-2)}
+.cline .who{flex:0 0 auto;width:84px;display:flex;flex-direction:column;gap:5px;padding-top:3px}
+.cline .who .av{width:32px;height:32px;border-radius:50%;display:grid;place-items:center;font-family:"Zen Kaku Gothic New";font-weight:700;font-size:14px;color:#fff;background:var(--sp);box-shadow:0 0 0 3px color-mix(in srgb,var(--sp) 18%,transparent)}
+[data-theme="night"] .cline .who .av{color:#15110a}
+.cline .who .nm{font-family:"Spline Sans Mono";font-size:10px;letter-spacing:.06em;color:var(--muted);text-transform:uppercase}
+.cline .body{flex:1}
+.cline .jp{font-family:"Zen Kaku Gothic New";font-weight:500;font-size:22px;letter-spacing:.01em;line-height:1.9}
+.cline .jp rt{font-size:.42em;color:var(--muted);font-weight:500}
+.cline .en{font-size:14px;color:var(--muted);margin-top:3px;font-style:italic}
+
+/* ===== NOTES ===== */
+.notebox{background:var(--paper-2);border:1px solid var(--line);border-radius:var(--r);box-shadow:var(--shadow);padding:6px;position:relative}
+.notebox .nbhead{display:flex;align-items:center;justify-content:space-between;padding:12px 16px 8px}
+.notebox .nbhead .t{font-family:"Spline Sans Mono";font-size:10.5px;letter-spacing:.16em;text-transform:uppercase;color:var(--muted);display:flex;align-items:center;gap:8px}
+.notebox .nbhead .t svg{width:14px;height:14px;fill:none;stroke:var(--shu);stroke-width:1.8}
+.notebox .nbhead .save{font-family:"Spline Sans Mono";font-size:10px;letter-spacing:.1em;text-transform:uppercase;color:var(--muted)}
+.notebox textarea{width:100%;min-height:140px;resize:vertical;border:1px solid var(--line-2);background:var(--sink);border-radius:13px;padding:16px 18px;font-family:"Hanken Grotesk",system-ui,sans-serif;font-size:15px;color:var(--ink);line-height:1.6;outline:none;transition:.18s}
+.notebox textarea::placeholder{color:var(--muted)}
+.notebox textarea:focus{border-color:color-mix(in srgb,var(--shu) 40%,transparent);background:var(--paper)}
+
+.foot{display:flex;justify-content:space-between;align-items:center;margin-top:60px;padding-top:22px;border-top:1px solid var(--line);font-family:"Spline Sans Mono";font-size:10.5px;letter-spacing:.18em;text-transform:uppercase;color:var(--muted)}
+.foot .jp-min{font-family:"Zen Old Mincho";letter-spacing:.1em;text-transform:none;font-size:13px;color:var(--ink-2)}
+
+@keyframes rise{from{opacity:0;transform:translateY(14px)}to{opacity:1;transform:none}}.rise{animation:rise .6s cubic-bezier(.2,.7,.2,1) both}.d1{animation-delay:.04s}.d2{animation-delay:.1s}.d3{animation-delay:.16s}.d4{animation-delay:.22s}.d5{animation-delay:.28s}
+.themer{position:fixed;right:18px;bottom:18px;z-index:99;display:flex;gap:4px;background:var(--paper-2);border:1px solid var(--line);border-radius:30px;padding:4px;box-shadow:var(--shadow-lg)}.themer button{font-family:"Spline Sans Mono";font-size:11px;letter-spacing:.1em;border:none;background:none;color:var(--muted);padding:7px 14px;border-radius:24px;cursor:pointer;text-transform:uppercase}.themer button.on{background:var(--shu);color:#fff}[data-theme="night"] .themer button.on{background:var(--gold);color:#1a1206}
+@media(max-width:780px){.vrow .w{min-width:0}.lesson .seal{display:none}}
+</style>
+</head>
+<body>
+<header class="chrome">
+  <div class="brand"><div class="seal">日</div><div style="display:flex;flex-direction:column;line-height:1.05"><b class="jp">日常日本語</b><small>Japanese Trainer</small></div></div>
+  <nav class="nav"><a>Flashcards</a><a>Browse</a><a>Stats</a><a class="on"><span class="jp">教科書</span></a><a><span class="jp">独り言</span></a><a><span class="jp">歌</span></a></nav>
+  <div class="actions">
+    <div class="icon furi-tog on" id="furiTog" title="Furigana on/off"><span class="jp">ふ</span></div>
+    <div class="icon"><svg viewBox="0 0 24 24"><circle cx="12" cy="12" r="4.5"/><path d="M12 2v2M12 20v2M2 12h2M20 12h2M5 5l1.5 1.5M17.5 17.5 19 19M19 5l-1.5 1.5M6.5 17.5 5 19"/></svg></div>
+    <div class="icon"><svg viewBox="0 0 24 24"><circle cx="12" cy="12" r="3"/><path d="M19 12a7 7 0 0 0-.1-1.2l2-1.6-2-3.4-2.4 1a7 7 0 0 0-2-1.2L14 2h-4l-.5 2.6a7 7 0 0 0-2 1.2l-2.4-1-2 3.4 2 1.6A7 7 0 0 0 5 12c0 .4 0 .8.1 1.2l-2 1.6 2 3.4 2.4-1a7 7 0 0 0 2 1.2L10 22h4l.5-2.6a7 7 0 0 0 2-1.2l2.4 1 2-3.4-2-1.6c.1-.4.1-.8.1-1.2Z"/></svg></div>
+    <div class="icon avatar">J</div>
+  </div>
+</header>
+
+<main class="sheet">
+  <div class="marker rise d1"><div class="idx">04<span class="slash"> / </span><span style="color:var(--muted)">06</span></div><div class="ttl jp-min">教科書</div><div class="en">Textbook</div><div class="rule"></div></div>
+
+  <div class="head rise d1">
+    <div class="l">
+      <div class="kick"><span class="owner"><svg viewBox="0 0 24 24"><rect x="5" y="11" width="14" height="10" rx="2"/><path d="M8 11V8a4 4 0 0 1 8 0v3"/></svg>Owner</span></div>
+      <h1 class="jp"><ruby>皆<rt>みんな</rt></ruby>の<ruby>日<rt>に</rt>本<rt>ほん</rt>語<rt>ご</rt></ruby></h1>
+      <div class="sub">Work the textbook lesson-by-lesson — vocab, grammar &amp; model conversations from <b>みんなの日本語 初級</b>.</div>
+    </div>
+    <div class="r"><span class="d"></span><b>25</b> lessons</div>
+  </div>
+
+  <!-- ===== CHAPTER PICKER ===== -->
+  <div class="chapwrap rise d2">
+    <div class="chaprow">
+      <div class="chap done"><div class="n jp">第10課</div><div class="lab">Done</div></div>
+      <div class="chap done"><div class="n jp">第11課</div><div class="lab">Done</div></div>
+      <div class="chap done"><div class="n jp">第12課</div><div class="lab">Done</div></div>
+      <div class="chap done"><div class="n jp">第13課</div><div class="lab">Done</div></div>
+      <div class="chap on"><div class="n jp">第14課</div><div class="lab">Now</div></div>
+      <div class="chap"><div class="n jp">第15課</div><div class="lab">Lesson</div></div>
+      <div class="chap"><div class="n jp">第16課</div><div class="lab">Lesson</div></div>
+      <div class="chap"><div class="n jp">第17課</div><div class="lab">Lesson</div></div>
+      <div class="chap"><div class="n jp">第18課</div><div class="lab">Lesson</div></div>
+      <div class="chap"><div class="n jp">第19課</div><div class="lab">Lesson</div></div>
+    </div>
+    <div class="fade r"></div>
+  </div>
+  <div class="chaphint rise d2"><svg viewBox="0 0 24 24"><path d="M5 12h14M13 6l6 6-6 6"/></svg> Scroll for more lessons · 第1課 – 第25課</div>
+
+  <!-- ===== SELECTED-LESSON HEADER ===== -->
+  <section class="lesson rise d2">
+    <div class="seal jp-min">課</div>
+    <div class="l">
+      <div class="ttl"><span class="big disp">第14課</span><span class="jp-big">て-form</span></div>
+      <div class="sub"><span class="jp" style="color:var(--ink);font-weight:500">て-form</span> <span class="pipe"></span> requests &amp; ongoing actions</div>
+      <div class="meta">
+        <div class="m"><span class="v shu">8</span><span class="k">Vocab</span></div>
+        <div class="m"><span class="v ind">3</span><span class="k">Grammar</span></div>
+        <div class="m"><span class="v">1</span><span class="k">Conversation</span></div>
+      </div>
+    </div>
+    <div class="acts">
+      <button class="btn primary"><svg viewBox="0 0 24 24"><path d="M12 5v14M5 12h14"/></svg> Add all vocab to deck</button>
+      <button class="btn ghost"><svg viewBox="0 0 24 24"><path d="M12 2a3 3 0 0 0-3 3v6a3 3 0 0 0 6 0V5a3 3 0 0 0-3-3Z"/><path d="M5 11a7 7 0 0 0 14 0M12 18v3"/></svg> Speaking mode <span class="mini">rec &amp; compare</span></button>
+    </div>
+  </section>
+
+  <!-- ===== 語彙 VOCABULARY ===== -->
+  <div class="secdiv rise d3"><span class="lab"><span class="jp-min">語彙</span>· Vocabulary</span><span class="rule"></span><span class="seal jp-min" style="--ac:var(--shu)">語</span></div>
+  <section class="vocab rise d3">
+    <div class="vrow"><div class="bullet" style="--cls:var(--godan)">五</div><span class="w jp"><ruby>押<rt>お</rt></ruby>す</span><span class="mean">to push</span><span class="cls" style="--cls:var(--godan)">五 godan</span><button class="play"><svg viewBox="0 0 24 24"><path d="M8 5v14l11-7z"/></svg></button></div>
+    <div class="vrow"><div class="bullet" style="--cls:var(--godan)">五</div><span class="w jp"><ruby>呼<rt>よ</rt></ruby>ぶ</span><span class="mean">to call</span><span class="cls" style="--cls:var(--godan)">五 godan</span><button class="play"><svg viewBox="0 0 24 24"><path d="M8 5v14l11-7z"/></svg></button></div>
+    <div class="vrow"><div class="bullet" style="--cls:var(--godan)">五</div><span class="w jp"><ruby>急<rt>いそ</rt></ruby>ぐ</span><span class="mean">to hurry</span><span class="cls" style="--cls:var(--godan)">五 godan</span><button class="play"><svg viewBox="0 0 24 24"><path d="M8 5v14l11-7z"/></svg></button></div>
+    <div class="vrow"><div class="bullet" style="--cls:var(--godan)">五</div><span class="w jp"><ruby>待<rt>ま</rt></ruby>つ</span><span class="mean">to wait</span><span class="cls" style="--cls:var(--godan)">五 godan</span><button class="play"><svg viewBox="0 0 24 24"><path d="M8 5v14l11-7z"/></svg></button></div>
+    <div class="vrow"><div class="bullet" style="--cls:var(--godan)">五</div><span class="w jp"><ruby>持<rt>も</rt></ruby>つ</span><span class="mean">to hold / carry</span><span class="cls" style="--cls:var(--godan)">五 godan</span><button class="play"><svg viewBox="0 0 24 24"><path d="M8 5v14l11-7z"/></svg></button></div>
+    <div class="vrow"><div class="bullet" style="--cls:var(--godan)">五</div><span class="w jp"><ruby>手<rt>て</rt>伝<rt>つだ</rt></ruby>う</span><span class="mean">to help</span><span class="cls" style="--cls:var(--godan)">五 godan</span><button class="play"><svg viewBox="0 0 24 24"><path d="M8 5v14l11-7z"/></svg></button></div>
+    <div class="vrow"><div class="bullet" style="--cls:var(--godan)">五</div><span class="w jp"><ruby>座<rt>すわ</rt></ruby>る</span><span class="mean">to sit</span><span class="cls" style="--cls:var(--godan)">五 godan</span><button class="play"><svg viewBox="0 0 24 24"><path d="M8 5v14l11-7z"/></svg></button></div>
+    <div class="vrow"><div class="bullet" style="--cls:var(--godan)">五</div><span class="w jp"><ruby>使<rt>つか</rt></ruby>う</span><span class="mean">to use</span><span class="cls" style="--cls:var(--godan)">五 godan</span><button class="play"><svg viewBox="0 0 24 24"><path d="M8 5v14l11-7z"/></svg></button></div>
+  </section>
+
+  <!-- ===== 文法 GRAMMAR ===== -->
+  <div class="secdiv rise d3"><span class="lab"><span class="jp-min">文法</span>· Grammar</span><span class="rule"></span><span class="seal jp-min" style="--ac:var(--ichidan)">文</span></div>
+  <section class="gcards rise d4">
+    <div class="gcard">
+      <div class="gtop"><span class="chip jp">〜てください</span><span class="gloss">"please do ~"</span></div>
+      <div class="ex">
+        <div class="body"><div class="jp">ちょっと<ruby>待<rt>ま</rt></ruby>ってください。</div><div class="en">Please wait a moment.</div></div>
+        <button class="play sm"><svg viewBox="0 0 24 24"><path d="M8 5v14l11-7z"/></svg></button>
+      </div>
+    </div>
+    <div class="gcard">
+      <div class="gtop"><span class="chip jp">〜ています</span><span class="gloss">"~ing / ongoing state"</span></div>
+      <div class="ex">
+        <div class="body"><div class="jp"><ruby>今<rt>いま</rt></ruby>、<ruby>本<rt>ほん</rt></ruby>を<ruby>読<rt>よ</rt></ruby>んでいます。</div><div class="en">I'm reading a book now.</div></div>
+        <button class="play sm"><svg viewBox="0 0 24 24"><path d="M8 5v14l11-7z"/></svg></button>
+      </div>
+    </div>
+    <div class="gcard">
+      <div class="gtop"><span class="chip jp">〜ましょうか</span><span class="gloss">"shall I ~?"</span></div>
+      <div class="ex">
+        <div class="body"><div class="jp"><ruby>荷<rt>に</rt>物<rt>もつ</rt></ruby>を<ruby>持<rt>も</rt></ruby>ちましょうか。</div><div class="en">Shall I carry your bag?</div></div>
+        <button class="play sm"><svg viewBox="0 0 24 24"><path d="M8 5v14l11-7z"/></svg></button>
+      </div>
+    </div>
+  </section>
+
+  <!-- ===== 会話 CONVERSATION ===== -->
+  <div class="secdiv rise d3"><span class="lab"><span class="jp-min">会話</span>· Conversation</span><span class="rule"></span><span class="seal jp-min" style="--ac:var(--gold)">会</span></div>
+  <section class="convo rise d4">
+    <div class="cline">
+      <div class="who"><span class="av jp" style="--sp:var(--ichidan)">駅</span><span class="nm">Staff</span></div>
+      <div class="body"><div class="jp"><ruby>荷<rt>に</rt>物<rt>もつ</rt></ruby>を<ruby>持<rt>も</rt></ruby>ちましょうか。</div><div class="en">Shall I carry your luggage?</div></div>
+      <button class="play sm"><svg viewBox="0 0 24 24"><path d="M8 5v14l11-7z"/></svg></button>
+    </div>
+    <div class="cline">
+      <div class="who"><span class="av jp" style="--sp:var(--shu)">客</span><span class="nm">Tourist</span></div>
+      <div class="body"><div class="jp">ありがとうございます。じゃ、お<ruby>願<rt>ねが</rt></ruby>いします。</div><div class="en">Thank you. Yes, please.</div></div>
+      <button class="play sm"><svg viewBox="0 0 24 24"><path d="M8 5v14l11-7z"/></svg></button>
+    </div>
+    <div class="cline">
+      <div class="who"><span class="av jp" style="--sp:var(--ichidan)">駅</span><span class="nm">Staff</span></div>
+      <div class="body"><div class="jp"><ruby>電<rt>でん</rt>車<rt>しゃ</rt></ruby>が<ruby>来<rt>き</rt></ruby>ますから、<ruby>急<rt>いそ</rt></ruby>いでください。</div><div class="en">The train is coming, so please hurry.</div></div>
+      <button class="play sm"><svg viewBox="0 0 24 24"><path d="M8 5v14l11-7z"/></svg></button>
+    </div>
+    <div class="cline">
+      <div class="who"><span class="av jp" style="--sp:var(--shu)">客</span><span class="nm">Tourist</span></div>
+      <div class="body"><div class="jp">はい、わかりました。<ruby>手<rt>て</rt>伝<rt>つだ</rt></ruby>ってくれて、ありがとう。</div><div class="en">Okay, got it. Thanks for helping me.</div></div>
+      <button class="play sm"><svg viewBox="0 0 24 24"><path d="M8 5v14l11-7z"/></svg></button>
+    </div>
+  </section>
+
+  <!-- ===== メモ NOTES ===== -->
+  <div class="secdiv rise d3"><span class="lab"><span class="jp-min">メモ</span>· Notes</span><span class="rule"></span><span class="seal jp-min" style="--ac:var(--phrase)">記</span></div>
+  <section class="notebox rise d4">
+    <div class="nbhead"><div class="t"><svg viewBox="0 0 24 24"><path d="M12 20h9M16.5 3.5a2.1 2.1 0 0 1 3 3L7 19l-4 1 1-4Z"/></svg> Lesson scratchpad</div><div class="save">Saved · synced</div></div>
+    <textarea placeholder="Your notes for 第14課…  e.g. て-form sound changes: う/つ/る → って, ぶ/む/ぬ → んで, く → いて (exception: 行く → 行って)"></textarea>
+  </section>
+
+  <div class="foot"><span>04 · 教科書 · Textbook</span><span class="jp-min">継続は力なり</span><span>みんなの日本語 · 第14課</span></div>
+</main>
+
+<div class="themer"><button class="on" data-t="day">Day</button><button data-t="night">Night</button></div>
+<script>
+document.querySelectorAll('.themer button').forEach(b=>b.addEventListener('click',()=>{document.documentElement.dataset.theme=b.dataset.t;document.querySelectorAll('.themer button').forEach(x=>x.classList.toggle('on',x===b))}));
+const ft=document.getElementById('furiTog');ft.addEventListener('click',()=>{const off=document.documentElement.dataset.furigana==='off';document.documentElement.dataset.furigana=off?'on':'off';ft.classList.toggle('on',off);ft.classList.toggle('off',!off)});
+</script>
+</body>
+</html>

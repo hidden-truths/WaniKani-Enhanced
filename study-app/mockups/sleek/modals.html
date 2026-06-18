@@ -1,0 +1,417 @@
+<!doctype html>
+<html lang="en" data-theme="day" data-furigana="on">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Modals — 日常日本語 blend system</title>
+<link rel="preconnect" href="https://fonts.googleapis.com"><link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Bricolage+Grotesque:opsz,wght@12..96,400;12..96,600;12..96,800&family=Hanken+Grotesk:wght@400;500;600;700;800&family=Spline+Sans+Mono:wght@400;500;600&family=Zen+Kaku+Gothic+New:wght@500;700;900&family=Zen+Old+Mincho:wght@400;600;700;900&display=swap" rel="stylesheet">
+<style>
+/* ============================================================
+   日常日本語 — BLEND DESIGN SYSTEM (tokens reused verbatim from index.html)
+   ============================================================ */
+:root, :root[data-theme="day"]{
+  --paper:#F4F1E8; --paper-2:#FBFAF4; --sink:#ECE7D9;
+  --ink:#15130D; --ink-2:#4B4536; --muted:#857C66;
+  --line:#16130b1c; --line-2:#16130b12; --grid:#1d160814;
+  --shu:#DC3A22; --shu-deep:#B12C16; --shu-wash:#dc3a2212;
+  --gold:#9A6B0F; --gold-soft:#9a6b0f14;
+  --godan:#DC3A22; --ichidan:#234C86; --irregular:#9A6B0F;
+  --adjective:#2C7D6B; --noun:#A06A1E; --adverb:#A14258; --phrase:#736353;
+  --leech:#7C3A95; --good:#2C7A4F;
+  --shadow:0 1px 0 #ffffffcc, 0 1px 2px #1a140820, 0 22px 40px -22px #2a200f2e;
+  --shadow-lg:0 1px 0 #ffffffcc, 0 2px 4px #1a140822, 0 48px 70px -34px #2a200f3a;
+  --cta-shadow:0 1px 2px #b12c1633, 0 14px 26px -12px #dc3a2255;
+  --card-edge:transparent;
+  --scrim:rgba(28,22,12,.5);
+  --r:18px;
+}
+[data-theme="night"]{
+  --paper:#100D09; --paper-2:#1b1610; --sink:#171209;
+  --ink:#F1E9D8; --ink-2:#C0B49C; --muted:#857a64;
+  --line:#fff0d815; --line-2:#fff0d80a; --grid:#fff0d808;
+  --shu:#FF6B4A; --shu-deep:#FF6B4A; --shu-wash:#ff6b4a14;
+  --gold:#E7BC6B; --gold-soft:#e7bc6b18;
+  --godan:#FF6B4A; --ichidan:#8FA0EE; --irregular:#E0AC55;
+  --adjective:#5CC0A6; --noun:#D8A24E; --adverb:#D6818F; --phrase:#AB9A85;
+  --leech:#C792EA; --good:#56D29A;
+  --shadow:0 1px 2px #00000060, 0 24px 44px -24px #000000aa;
+  --shadow-lg:0 2px 6px #00000066, 0 50px 80px -36px #000000cc, 0 0 0 1px #e7bc6b0f;
+  --cta-shadow:0 0 0 1px #ff6b4a22, 0 16px 34px -14px #ff6b4a66;
+  --card-edge:linear-gradient(150deg,#e7bc6b66,transparent 38%);
+  --scrim:rgba(0,0,0,.62);
+}
+*{box-sizing:border-box;margin:0;padding:0}
+html{-webkit-font-smoothing:antialiased;text-rendering:optimizeLegibility}
+body{font-family:"Hanken Grotesk",system-ui,sans-serif;color:var(--ink);background:var(--paper);line-height:1.5;min-height:100vh;overflow-x:hidden;position:relative}
+/* DAY: 原稿 manuscript grid, masked. NIGHT: lacquer gold glow + grain. */
+body::before{content:"";position:fixed;inset:0;z-index:0;pointer-events:none;
+  background:linear-gradient(var(--grid) 1px,transparent 1px) 0 0/100% 30px,linear-gradient(90deg,var(--grid) 1px,transparent 1px) 0 0/30px 100%;
+  -webkit-mask-image:radial-gradient(120% 80% at 50% 0%,#000,#0009 42%,transparent 78%);mask-image:radial-gradient(120% 80% at 50% 0%,#000,#0009 42%,transparent 78%);opacity:.9}
+[data-theme="night"] body::before{
+  background:radial-gradient(900px 600px at 84% -8%,rgba(231,188,107,.13),transparent 60%),radial-gradient(1100px 800px at 50% 116%,rgba(255,107,74,.07),transparent 60%);
+  -webkit-mask-image:none;mask-image:none;opacity:1}
+[data-theme="night"] body::after{content:"";position:fixed;inset:0;z-index:0;pointer-events:none;opacity:.4;mix-blend-mode:overlay;
+  background-image:url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='120' height='120'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='.9' numOctaves='2'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23n)' opacity='.5'/%3E%3C/svg%3E")}
+
+.mono{font-family:"Spline Sans Mono",monospace}.disp{font-family:"Bricolage Grotesque",sans-serif}
+.jp{font-family:"Zen Kaku Gothic New",sans-serif}.jp-min{font-family:"Zen Old Mincho",serif}
+ruby{ruby-align:center}
+rt{font-family:"Zen Kaku Gothic New";font-weight:500;color:var(--ichidan);letter-spacing:.03em;line-height:1;user-select:none;transition:opacity .25s}
+[data-furigana="off"] rt{opacity:0}
+.furi-tog{position:relative}
+.furi-tog .jp{font-weight:700;font-size:15px}
+.furi-tog.off{color:var(--muted);background:var(--sink)}
+.furi-tog::after{content:"";position:absolute;right:6px;top:6px;width:6px;height:6px;border-radius:50%;background:var(--shu)}
+.furi-tog.off::after{background:var(--muted)}
+
+/* ===== CHROME (reused) — sits dimmed behind the scrim ===== */
+.chrome{position:sticky;top:0;z-index:50;display:flex;align-items:center;gap:26px;padding:16px clamp(20px,4vw,52px);background:color-mix(in srgb,var(--paper) 82%,transparent);backdrop-filter:saturate(1.3) blur(14px);border-bottom:1px solid var(--line)}
+.brand{display:flex;align-items:center;gap:12px}
+.brand .seal{width:30px;height:30px;border-radius:8px;display:grid;place-items:center;flex:0 0 auto;background:var(--shu);color:#fff;font-family:"Zen Old Mincho",serif;font-weight:700;font-size:16px;box-shadow:var(--cta-shadow)}
+[data-theme="night"] .brand .seal{background:linear-gradient(150deg,var(--gold),#c89a45);color:#1a1206}
+.brand b{font-family:"Zen Kaku Gothic New";font-weight:900;font-size:19px;letter-spacing:.02em}
+.brand small{font-family:"Spline Sans Mono";font-size:10px;letter-spacing:.28em;color:var(--muted);text-transform:uppercase}
+.nav{display:flex;gap:4px;margin-left:8px}
+.nav a{position:relative;padding:8px 13px;border-radius:9px;cursor:pointer;font-weight:600;font-size:14.5px;color:var(--ink-2);text-decoration:none;transition:.18s}
+.nav a .jp{font-weight:700}
+.nav a:hover{color:var(--ink);background:var(--shu-wash)}
+.nav a.on{color:var(--ink)}
+.nav a.on::after{content:"";position:absolute;left:13px;right:13px;bottom:1px;height:2.5px;background:var(--shu);border-radius:2px}
+.actions{margin-left:auto;display:flex;align-items:center;gap:10px}
+.icon{width:38px;height:38px;border-radius:50%;display:grid;place-items:center;cursor:pointer;background:var(--paper-2);border:1px solid var(--line);color:var(--ink-2);box-shadow:var(--shadow);transition:.18s}
+.icon:hover{color:var(--ink);transform:translateY(-1px)}
+.icon svg{width:18px;height:18px;fill:none;stroke:currentColor;stroke-width:1.7;stroke-linecap:round;stroke-linejoin:round}
+.avatar{background:linear-gradient(150deg,var(--shu),var(--shu-deep));color:#fff;border:none;font-weight:700;font-family:"Spline Sans Mono"}
+[data-theme="night"] .avatar{background:linear-gradient(150deg,var(--gold),#c89a45);color:#1a1206}
+
+/* ===== BUTTONS (reused from index.html) ===== */
+.btn{display:inline-flex;align-items:center;justify-content:center;gap:10px;cursor:pointer;border:1px solid var(--line);font-family:inherit;font-weight:700;font-size:15.5px;padding:14px 22px;border-radius:13px;transition:.18s;color:var(--ink);background:var(--paper-2);box-shadow:var(--shadow)}
+.btn:hover{transform:translateY(-2px);box-shadow:var(--shadow-lg)}
+.btn svg{width:18px;height:18px;fill:none;stroke:currentColor;stroke-width:2;stroke-linecap:round;stroke-linejoin:round}
+.btn.primary{background:linear-gradient(168deg,var(--shu),var(--shu-deep));color:#fff;border:none;box-shadow:var(--cta-shadow)}
+.btn.block{width:100%}
+.btn.sm{padding:11px 16px;font-size:14px;border-radius:11px}
+
+/* ===== SEGMENTED CONTROL (reused from browse.html) ===== */
+.seg{display:flex;border:1px solid var(--line);border-radius:9px;overflow:hidden}
+.seg button{font-family:"Spline Sans Mono";font-size:12.5px;font-weight:500;padding:8px 13px;border:none;background:var(--paper);color:var(--ink-2);cursor:pointer;border-right:1px solid var(--line);transition:.14s;white-space:nowrap}
+.seg button:last-child{border-right:none}
+.seg button:hover{color:var(--ink)}
+.seg button.on{background:var(--ink);color:var(--paper)}
+.seg button.dim{opacity:.35}
+
+/* ===== CHIPS (reused from browse.html) ===== */
+.chip{font-family:inherit;font-size:13.5px;font-weight:600;padding:7px 13px;border-radius:9px;border:1px solid var(--line);background:var(--paper);color:var(--ink-2);cursor:pointer;display:flex;align-items:center;gap:7px;transition:.15s}
+.chip .b{width:8px;height:8px;border-radius:50%}
+.chip .bul{width:13px;height:13px;border-radius:50%;display:grid;place-items:center;font-family:"Zen Kaku Gothic New";font-weight:700;font-size:8px;color:#fff;flex:0 0 auto}
+[data-theme="night"] .chip .bul{color:#15110a}
+.chip:hover{color:var(--ink)}
+.chip.on{background:var(--shu-wash);border-color:color-mix(in srgb,var(--shu) 45%,transparent);color:var(--shu);font-weight:700}
+/* line-colour chips carry their own functional tint when active */
+.chip.cls.on{background:color-mix(in srgb,var(--cls) 12%,transparent);border-color:color-mix(in srgb,var(--cls) 50%,transparent);color:var(--cls)}
+.chips{display:flex;gap:7px;flex-wrap:wrap;align-items:center}
+
+/* ===== SEARCH-STYLE TEXT INPUTS (built on browse.html .search) ===== */
+.field{display:flex;flex-direction:column;gap:7px}
+.field .flab{font-family:"Spline Sans Mono";font-size:10.5px;letter-spacing:.16em;text-transform:uppercase;color:var(--muted);display:flex;align-items:center;gap:8px}
+.field .flab .jp{font-family:"Zen Kaku Gothic New";letter-spacing:.02em;text-transform:none;font-size:12px;color:var(--ink-2);font-weight:700}
+.input{display:flex;align-items:center;gap:10px;background:var(--sink);border-radius:11px;padding:12px 15px;border:1px solid var(--line-2);transition:.16s}
+.input:focus-within{border-color:color-mix(in srgb,var(--shu) 45%,transparent);background:var(--paper-2);box-shadow:0 0 0 3px var(--shu-wash)}
+.input svg{width:17px;height:17px;fill:none;stroke:var(--muted);stroke-width:2;flex:0 0 auto}
+.input input{border:none;background:none;outline:none;font-family:inherit;font-size:15px;color:var(--ink);width:100%}
+.input input.jp{font-family:"Zen Kaku Gothic New";font-weight:500;font-size:18px}
+.input input::placeholder{color:var(--muted);opacity:.8}
+.input.jp-input input{font-family:"Zen Kaku Gothic New";font-weight:500;font-size:19px}
+/* select-styled control */
+.selwrap{position:relative;background:var(--sink);border-radius:11px;border:1px solid var(--line-2);transition:.16s}
+.selwrap:focus-within{border-color:color-mix(in srgb,var(--shu) 45%,transparent);background:var(--paper-2);box-shadow:0 0 0 3px var(--shu-wash)}
+.selwrap select{appearance:none;-webkit-appearance:none;border:none;background:none;outline:none;font-family:inherit;font-weight:600;font-size:14.5px;color:var(--ink);width:100%;padding:12px 38px 12px 15px;cursor:pointer}
+.selwrap::after{content:"";position:absolute;right:15px;top:50%;width:9px;height:9px;border-right:2px solid var(--muted);border-bottom:2px solid var(--muted);transform:translateY(-65%) rotate(45deg);pointer-events:none}
+
+/* ===== TOGGLE SWITCH ===== */
+.toggle{position:relative;width:46px;height:27px;border-radius:30px;border:1px solid var(--line);background:var(--sink);cursor:pointer;flex:0 0 auto;transition:.2s;box-shadow:inset 0 1px 2px #1a140814}
+.toggle::after{content:"";position:absolute;top:2px;left:2px;width:21px;height:21px;border-radius:50%;background:var(--paper-2);box-shadow:0 1px 3px #1a140840;transition:.2s cubic-bezier(.2,.7,.2,1)}
+.toggle.on{background:linear-gradient(150deg,var(--shu),var(--shu-deep));border-color:transparent}
+.toggle.on::after{transform:translateX(19px);background:#fff}
+[data-theme="night"] .toggle.on{background:linear-gradient(150deg,var(--gold),#c89a45)}
+[data-theme="night"] .toggle.on::after{background:#1a1206}
+
+/* ===== SCRIM + MODAL SHOWCASE ===== */
+.scrim{position:fixed;inset:0;z-index:80;background:var(--scrim);backdrop-filter:blur(5px) saturate(.9);-webkit-backdrop-filter:blur(5px) saturate(.9)}
+.stage{position:relative;z-index:81;max-width:1240px;margin:0 auto;padding:clamp(28px,5vh,60px) clamp(18px,4vw,48px) 130px}
+.stage-head{text-align:center;margin-bottom:34px}
+.stage-head .kick{display:inline-flex;align-items:center;gap:10px;font-family:"Spline Sans Mono";font-size:11px;letter-spacing:.24em;text-transform:uppercase;color:#fff;font-weight:500;background:color-mix(in srgb,#000 18%,transparent);border:1px solid #ffffff2e;border-radius:30px;padding:7px 16px;backdrop-filter:blur(6px)}
+[data-theme="night"] .stage-head .kick{color:var(--gold);border-color:#e7bc6b40}
+.stage-head .kick .ln{width:22px;height:1px;background:currentColor;opacity:.6}
+.stage-head h1{font-family:"Bricolage Grotesque";font-weight:800;font-size:clamp(34px,5vw,52px);letter-spacing:-.03em;line-height:1.02;color:#fff;margin-top:16px;text-shadow:0 2px 24px #00000050}
+[data-theme="night"] .stage-head h1{background:linear-gradient(176deg,#fff,var(--gold));-webkit-background-clip:text;background-clip:text;color:transparent;text-shadow:none;filter:drop-shadow(0 8px 30px rgba(231,188,107,.25))}
+.stage-head p{font-size:15.5px;color:#ffffffce;margin-top:8px}
+[data-theme="night"] .stage-head p{color:var(--ink-2)}
+
+.deck{display:grid;grid-template-columns:repeat(3,minmax(0,1fr));gap:24px;align-items:start}
+@media(max-width:1080px){.deck{grid-template-columns:1fr;max-width:520px;margin:0 auto}}
+
+.mlabel{font-family:"Spline Sans Mono";font-size:10.5px;letter-spacing:.26em;text-transform:uppercase;color:#fff;display:flex;align-items:center;gap:9px;margin:0 4px 11px;font-weight:500}
+[data-theme="night"] .mlabel{color:var(--gold)}
+.mlabel::before{content:"";width:18px;height:2px;background:var(--shu);border-radius:2px}
+[data-theme="night"] .mlabel::before{background:var(--gold)}
+
+/* the modal card itself */
+.modal{position:relative;background:var(--paper-2);border:1px solid var(--line);border-radius:20px;box-shadow:var(--shadow-lg);overflow:hidden}
+.modal::after{content:"";position:absolute;inset:0;border-radius:20px;padding:1px;background:var(--card-edge);-webkit-mask:linear-gradient(#000 0 0) content-box,linear-gradient(#000 0 0);-webkit-mask-composite:xor;mask-composite:exclude;pointer-events:none}
+.modal::before{content:"";position:absolute;left:0;right:0;top:0;height:3px;border-radius:20px 20px 0 0;z-index:2}
+.modal.set::before{background:linear-gradient(90deg,var(--shu),var(--irregular))}
+.modal.add::before{background:linear-gradient(90deg,var(--godan),var(--adjective),var(--noun))}
+.modal.sign::before{background:linear-gradient(90deg,var(--ichidan),var(--shu))}
+.m-head{display:flex;align-items:flex-start;justify-content:space-between;gap:12px;padding:22px 22px 14px}
+.m-head .ht{display:flex;flex-direction:column;gap:3px}
+.m-head h2{font-family:"Bricolage Grotesque";font-weight:800;font-size:23px;letter-spacing:-.01em;line-height:1.05}
+.m-head .hjp{font-family:"Zen Old Mincho";font-weight:600;font-size:12.5px;letter-spacing:.16em;color:var(--muted)}
+.m-x{position:sticky;top:14px;flex:0 0 auto;width:34px;height:34px;border-radius:50%;border:1px solid var(--line);background:var(--paper);color:var(--ink-2);display:grid;place-items:center;cursor:pointer;box-shadow:var(--shadow);transition:.16s}
+.m-x:hover{color:var(--shu);border-color:color-mix(in srgb,var(--shu) 45%,transparent);transform:rotate(90deg)}
+.m-x svg{width:15px;height:15px;fill:none;stroke:currentColor;stroke-width:2.2;stroke-linecap:round}
+.m-body{padding:4px 22px 22px;max-height:calc(100vh - 220px);overflow-y:auto}
+
+/* hairline-separated rows */
+.row{display:flex;align-items:center;justify-content:space-between;gap:14px;padding:15px 0;border-top:1px solid var(--line-2)}
+.row:first-child{border-top:none}
+.row .rl{display:flex;flex-direction:column;gap:2px;min-width:0}
+.row .rl .t{font-weight:600;font-size:14.5px;color:var(--ink)}
+.row .rl .s{font-size:12px;color:var(--muted)}
+.row .rl .t .jp{font-family:"Zen Kaku Gothic New";font-weight:700}
+.row .rr{display:flex;align-items:center;gap:8px;flex:0 0 auto}
+.row.stack{flex-direction:column;align-items:stretch;gap:9px}
+.row.stack .rr{justify-content:flex-start;flex-wrap:wrap}
+
+/* small inline voice-priority hint chips (ordered) */
+.vorder{display:flex;align-items:center;gap:6px;flex-wrap:wrap}
+.vorder .vc{font-family:"Spline Sans Mono";font-size:11px;letter-spacing:.02em;color:var(--ink-2);background:var(--sink);border:1px solid var(--line);border-radius:7px;padding:5px 9px;display:flex;align-items:center;gap:5px}
+.vorder .vc.lead{color:var(--shu);border-color:color-mix(in srgb,var(--shu) 38%,transparent);background:var(--shu-wash);font-weight:600}
+.vorder .arr{color:var(--muted);font-size:11px}
+
+/* subtle danger-tinted text button */
+.danger-btn{font-family:inherit;font-weight:600;font-size:13px;color:var(--shu);background:none;border:none;border-radius:8px;padding:9px 12px;margin-top:6px;cursor:pointer;display:inline-flex;align-items:center;gap:8px;transition:.15s;width:100%;justify-content:center;border:1px solid transparent}
+.danger-btn:hover{background:var(--shu-wash);border-color:color-mix(in srgb,var(--shu) 22%,transparent)}
+.danger-btn svg{width:15px;height:15px;fill:none;stroke:currentColor;stroke-width:2;stroke-linecap:round;stroke-linejoin:round}
+
+/* form blocks (Add card / Sign in) */
+.fstack{display:flex;flex-direction:column;gap:15px}
+.fgroup{display:flex;flex-direction:column;gap:8px}
+.fgroup .glab{font-family:"Spline Sans Mono";font-size:10.5px;letter-spacing:.16em;text-transform:uppercase;color:var(--muted)}
+.duo{display:grid;grid-template-columns:1fr 1fr;gap:12px}
+@media(max-width:420px){.duo{grid-template-columns:1fr}}
+
+/* collapsed details inside Add card */
+details.more{border:1px solid var(--line);border-radius:12px;background:var(--sink);overflow:hidden}
+details.more>summary{list-style:none;cursor:pointer;display:flex;align-items:center;gap:10px;padding:13px 15px;font-weight:600;font-size:13.5px;color:var(--ink-2);transition:.15s}
+details.more>summary::-webkit-details-marker{display:none}
+details.more>summary:hover{color:var(--ink)}
+details.more>summary .chev{margin-left:auto;width:9px;height:9px;border-right:2px solid var(--muted);border-bottom:2px solid var(--muted);transform:rotate(45deg);transition:.2s}
+details.more[open]>summary .chev{transform:rotate(225deg)}
+details.more>summary .sjp{font-family:"Zen Old Mincho";font-size:12px;color:var(--muted);letter-spacing:.06em}
+details.more .more-inner{padding:2px 15px 16px;font-size:13px;color:var(--muted)}
+
+/* sign-in copy + muted link */
+.lede{font-size:14px;color:var(--ink-2);margin:2px 0 4px;line-height:1.55}
+.mutedlink{font-family:inherit;font-size:13px;color:var(--muted);background:none;border:none;cursor:pointer;text-align:center;padding:4px;transition:.15s}
+.mutedlink:hover{color:var(--ink)}
+.mutedlink b{color:var(--shu);font-weight:700}
+.signfoot{display:flex;flex-direction:column;gap:12px;margin-top:4px;padding-top:16px;border-top:1px solid var(--line-2)}
+
+.foot{position:relative;z-index:81;display:flex;justify-content:center;gap:14px;align-items:center;padding:0 0 50px;font-family:"Spline Sans Mono";font-size:10.5px;letter-spacing:.18em;text-transform:uppercase;color:#ffffffaa}
+[data-theme="night"] .foot{color:var(--muted)}
+.foot .jp-min{font-family:"Zen Old Mincho";letter-spacing:.1em;text-transform:none;font-size:13px;color:#fff}
+[data-theme="night"] .foot .jp-min{color:var(--ink-2)}
+
+@keyframes pop{from{opacity:0;transform:translateY(18px) scale(.97)}to{opacity:1;transform:none}}
+.pop{animation:pop .55s cubic-bezier(.2,.7,.2,1) both}
+.p1{animation-delay:.04s}.p2{animation-delay:.13s}.p3{animation-delay:.22s}
+@media(prefers-reduced-motion:reduce){.pop{animation:none}}
+
+.themer{position:fixed;right:18px;bottom:18px;z-index:99;display:flex;gap:4px;background:var(--paper-2);border:1px solid var(--line);border-radius:30px;padding:4px;box-shadow:var(--shadow-lg)}
+.themer button{font-family:"Spline Sans Mono";font-size:11px;letter-spacing:.1em;border:none;background:none;color:var(--muted);padding:7px 14px;border-radius:24px;cursor:pointer;text-transform:uppercase}
+.themer button.on{background:var(--shu);color:#fff}
+[data-theme="night"] .themer button.on{background:var(--gold);color:#1a1206}
+</style>
+</head>
+<body>
+
+<!-- dimmed chrome behind the scrim -->
+<header class="chrome" aria-hidden="true">
+  <div class="brand"><div class="seal">日</div><div style="display:flex;flex-direction:column;line-height:1.05"><b class="jp">日常日本語</b><small>Japanese Trainer</small></div></div>
+  <nav class="nav"><a class="on">Flashcards</a><a>Browse</a><a>Stats</a><a><span class="jp">教科書</span></a><a><span class="jp">独り言</span></a><a><span class="jp">歌</span></a></nav>
+  <div class="actions">
+    <div class="icon furi-tog on"><span class="jp">ふ</span></div>
+    <div class="icon"><svg viewBox="0 0 24 24"><circle cx="12" cy="12" r="4.5"/><path d="M12 2v2M12 20v2M2 12h2M20 12h2M5 5l1.5 1.5M17.5 17.5 19 19M19 5l-1.5 1.5M6.5 17.5 5 19"/></svg></div>
+    <div class="icon"><svg viewBox="0 0 24 24"><circle cx="12" cy="12" r="3"/><path d="M19 12a7 7 0 0 0-.1-1.2l2-1.6-2-3.4-2.4 1a7 7 0 0 0-2-1.2L14 2h-4l-.5 2.6a7 7 0 0 0-2 1.2l-2.4-1-2 3.4 2 1.6A7 7 0 0 0 5 12c0 .4 0 .8.1 1.2l-2 1.6 2 3.4 2.4-1a7 7 0 0 0 2 1.2L10 22h4l.5-2.6a7 7 0 0 0 2-1.2l2.4 1 2-3.4-2-1.6c.1-.4.1-.8.1-1.2Z"/></svg></div>
+    <div class="icon avatar">J</div>
+  </div>
+</header>
+
+<!-- the dark scrim over the manuscript-grid background -->
+<div class="scrim"></div>
+
+<main class="stage">
+  <div class="stage-head">
+    <span class="kick"><span class="ln"></span>Overlay system<span class="ln"></span></span>
+    <h1>Modals &amp; dialogs</h1>
+    <p>Three of the app&rsquo;s overlays in the blend — paper-card sheets over a dimmed manuscript scrim.</p>
+  </div>
+
+  <div class="deck">
+
+    <!-- ========== 1 · SETTINGS ========== -->
+    <div>
+      <div class="mlabel">Settings</div>
+      <section class="modal set pop p1" aria-label="Settings dialog">
+        <div class="m-head">
+          <div class="ht"><h2>Settings</h2><span class="hjp">設定</span></div>
+          <button class="m-x" title="Close"><svg viewBox="0 0 24 24"><path d="M6 6l12 12M18 6 6 18"/></svg></button>
+        </div>
+        <div class="m-body">
+          <div class="row">
+            <div class="rl"><span class="t">Example level</span><span class="s">Default JLPT tier for sentences</span></div>
+            <div class="rr"><div class="seg" role="group" aria-label="Example level">
+              <button>N5</button><button class="on">N4</button><button>N3</button><button>N2</button><button>N1</button>
+            </div></div>
+          </div>
+          <div class="row">
+            <div class="rl"><span class="t">Furigana <span class="jp">ふりがな</span></span><span class="s">Show readings over kanji</span></div>
+            <div class="rr"><button class="toggle on" role="switch" aria-checked="true" title="Furigana on"></button></div>
+          </div>
+          <div class="row">
+            <div class="rl"><span class="t">Answer mode</span><span class="s">How you grade a recall</span></div>
+            <div class="rr"><div class="seg" role="group" aria-label="Answer mode">
+              <button class="on">Self-graded</button><button>Type the reading</button>
+            </div></div>
+          </div>
+          <div class="row">
+            <div class="rl"><span class="t">Audio</span><span class="s">Autoplay the reading on reveal</span></div>
+            <div class="rr"><button class="toggle on" role="switch" aria-checked="true" title="Audio on"></button></div>
+          </div>
+          <div class="row stack">
+            <div class="rl"><span class="t">Voice priority</span><span class="s">Order voices are tried for playback</span></div>
+            <div class="rr"><div class="vorder">
+              <span class="vc lead">Native</span><span class="arr">›</span>
+              <span class="vc">Siri ♀</span><span class="arr">›</span>
+              <span class="vc">TTS</span>
+            </div></div>
+          </div>
+          <div class="row stack">
+            <div class="rl"><span class="t">Backup</span><span class="s">Save or restore your deck &amp; progress</span></div>
+            <div class="rr" style="gap:10px;width:100%">
+              <button class="btn sm" style="flex:1"><svg viewBox="0 0 24 24"><path d="M12 3v12M7 10l5 5 5-5M5 21h14"/></svg> Export JSON</button>
+              <button class="btn sm" style="flex:1"><svg viewBox="0 0 24 24"><path d="M12 21V9M7 14l5-5 5 5M5 3h14"/></svg> Import</button>
+            </div>
+          </div>
+          <button class="danger-btn"><svg viewBox="0 0 24 24"><path d="M4 7h16M9 7V4h6v3M6 7l1 13h10l1-13"/></svg> Clear cache</button>
+        </div>
+      </section>
+    </div>
+
+    <!-- ========== 2 · ADD CARD ========== -->
+    <div>
+      <div class="mlabel">Add card</div>
+      <section class="modal add pop p2" aria-label="Add a card dialog">
+        <div class="m-head">
+          <div class="ht"><h2>Add a card</h2><span class="hjp">新しい単語</span></div>
+          <button class="m-x" title="Close"><svg viewBox="0 0 24 24"><path d="M6 6l12 12M18 6 6 18"/></svg></button>
+        </div>
+        <div class="m-body">
+          <div class="fstack">
+            <div class="fgroup">
+              <span class="glab">Category</span>
+              <div class="chips">
+                <button class="chip cls on" style="--cls:var(--godan)"><span class="bul" style="background:var(--godan)">五</span>Verb</button>
+                <button class="chip cls" style="--cls:var(--adjective)"><span class="bul" style="background:var(--adjective)">い</span>Adjective</button>
+                <button class="chip cls" style="--cls:var(--noun)"><span class="bul" style="background:var(--noun)">名</span>Noun</button>
+                <button class="chip cls" style="--cls:var(--adverb)"><span class="bul" style="background:var(--adverb)">副</span>Adverb</button>
+                <button class="chip cls" style="--cls:var(--phrase)"><span class="bul" style="background:var(--phrase)">句</span>Phrase</button>
+              </div>
+            </div>
+
+            <div class="field">
+              <span class="flab"><span class="jp">日本語</span> · Word</span>
+              <label class="input jp-input"><input class="jp" placeholder="食べる" spellcheck="false"></label>
+            </div>
+            <div class="duo">
+              <div class="field">
+                <span class="flab">Reading</span>
+                <label class="input"><input class="jp" placeholder="たべる" spellcheck="false"></label>
+              </div>
+              <div class="field">
+                <span class="flab">Meaning</span>
+                <label class="input"><input placeholder="to eat" spellcheck="false"></label>
+              </div>
+            </div>
+
+            <div class="duo">
+              <div class="fgroup">
+                <span class="glab">Type</span>
+                <div class="selwrap"><select aria-label="Type">
+                  <option>Godan</option><option selected>Ichidan</option><option>Irregular</option>
+                </select></div>
+              </div>
+              <div class="fgroup">
+                <span class="glab">Transitivity</span>
+                <div class="seg" role="group" aria-label="Transitivity" style="height:100%;align-items:center">
+                  <button class="on">Transitive</button><button>Intransitive</button>
+                </div>
+              </div>
+            </div>
+
+            <details class="more">
+              <summary><svg viewBox="0 0 24 24" style="width:16px;height:16px;fill:none;stroke:currentColor;stroke-width:2"><path d="M3 12h4l3-8 4 16 3-8h4"/></svg> Pitch accent &amp; leveled examples <span class="sjp">声調</span><span class="chev"></span></summary>
+              <div class="more-inner">Set the Tokyo accent number and write an N5–N1 example for each tier.</div>
+            </details>
+
+            <button class="btn primary block"><svg viewBox="0 0 24 24"><path d="M5 13l4 4L19 7"/></svg> Save card</button>
+          </div>
+        </div>
+      </section>
+    </div>
+
+    <!-- ========== 3 · SIGN IN ========== -->
+    <div>
+      <div class="mlabel">Sign in</div>
+      <section class="modal sign pop p3" aria-label="Sign in dialog">
+        <div class="m-head">
+          <div class="ht"><h2>Sign in</h2><span class="hjp">ログイン</span></div>
+          <button class="m-x" title="Close"><svg viewBox="0 0 24 24"><path d="M6 6l12 12M18 6 6 18"/></svg></button>
+        </div>
+        <div class="m-body">
+          <div class="fstack">
+            <p class="lede">Sync progress &amp; custom cards across devices.</p>
+            <div class="field">
+              <span class="flab">Email</span>
+              <label class="input"><svg viewBox="0 0 24 24"><rect x="3" y="5" width="18" height="14" rx="2"/><path d="m3 7 9 6 9-6"/></svg><input type="text" placeholder="you@example.com" autocomplete="off"></label>
+            </div>
+            <div class="field">
+              <span class="flab">Password</span>
+              <label class="input"><svg viewBox="0 0 24 24"><rect x="5" y="11" width="14" height="9" rx="2"/><path d="M8 11V8a4 4 0 0 1 8 0v3"/></svg><input type="text" placeholder="••••••••" autocomplete="off"></label>
+            </div>
+            <div class="signfoot">
+              <button class="btn primary block"><svg viewBox="0 0 24 24"><path d="M5 12h14M13 6l6 6-6 6"/></svg> Sign in</button>
+              <button class="mutedlink">No account yet? <b>Create account</b></button>
+            </div>
+          </div>
+        </div>
+      </section>
+    </div>
+
+  </div>
+</main>
+
+<div class="foot"><span>日常日本語 · blend system</span><span class="jp-min">日々是好日</span><span>Overlays</span></div>
+
+<div class="themer"><button class="on" data-t="day">Day</button><button data-t="night">Night</button></div>
+<script>
+document.querySelectorAll('.themer button').forEach(b=>b.addEventListener('click',()=>{document.documentElement.dataset.theme=b.dataset.t;document.querySelectorAll('.themer button').forEach(x=>x.classList.toggle('on',x===b))}));
+// demo interactivity — toggles + segmented controls + chips (mock only, no submit)
+document.querySelectorAll('.toggle').forEach(t=>t.addEventListener('click',()=>{const on=t.classList.toggle('on');t.setAttribute('aria-checked',on)}));
+document.querySelectorAll('.seg').forEach(seg=>seg.addEventListener('click',e=>{const b=e.target.closest('button');if(!b)return;seg.querySelectorAll('button').forEach(x=>x.classList.toggle('on',x===b))}));
+document.querySelectorAll('.fgroup .chips').forEach(row=>row.addEventListener('click',e=>{const c=e.target.closest('.chip');if(!c)return;row.querySelectorAll('.chip').forEach(x=>x.classList.remove('on'));c.classList.add('on')}));
+</script>
+</body>
+</html>
