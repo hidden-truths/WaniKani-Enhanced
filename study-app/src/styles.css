@@ -263,6 +263,10 @@
   #boxDist .barx{transform-origin:left;animation:growX .5s cubic-bezier(.2,.7,.3,1) both}
   @keyframes growY{from{transform:scaleY(0)}to{transform:scaleY(1)}}
   .fcast-chart svg rect.fbar{transform-box:fill-box;transform-origin:bottom;animation:growY .45s cubic-bezier(.2,.7,.3,1) both}
+  /* CTA breathe — primary buttons gently pulse their warm glow by night (mock: system.css
+     [data-theme=dark] .btn-primary). Skips :disabled (the caught-up jade hero state). */
+  @keyframes breathe{0%,100%{box-shadow:0 10px 30px -12px rgba(255,107,74,.5)}50%{box-shadow:0 0 0 8px rgba(255,107,74,.07),0 16px 44px -10px rgba(255,107,74,.85)}}
+  [data-theme="dark"] .btn.primary:not(:disabled),[data-theme="dark"] .btn.btn-primary:not(:disabled),[data-theme="dark"] .btn.hero-due:not(:disabled){animation:breathe 3.6s ease-in-out infinite}
   /* Tactile press feedback on buttons/chips. */
   .btn{transition:transform .12s ease,background .15s ease,color .15s ease,border-color .15s ease}
   .btn:active,.chip:active{transform:translateY(1px)}
