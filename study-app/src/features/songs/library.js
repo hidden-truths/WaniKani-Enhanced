@@ -5,19 +5,21 @@
 import { api } from '../cloud-core.js';
 import { state } from '../../state.js';
 import { escapeHtml, knownHeadwords, coverage, songLevel, songProgress } from '../../core/index.js';
-import { createReadThroughCache } from '../../persistence/cache.js';
+import { createReadThroughResource } from '../../persistence/resource.js';
 import { S, CACHE_KEY, LV_CLASS } from './state.js';
 import { progressFor } from './progress.js';
 
-// ---- read-through cache + fetch ----
-const cache = createReadThroughCache({ key: CACHE_KEY });
+// ---- read-through resource: fetch the library (public starters + the viewer's own private songs)
+// into S.library, write-through to the cache, and fall back to the cache on a failed/offline open so
+// the grid still paints. Resolves true on a successful network refresh (callers ignore it). ----
+const libraryResource = createReadThroughResource({
+  cacheKey: CACHE_KEY,
+  fetch: () => api('/v1/songs').then((r) => (r && r.songs) || []),
+  current: () => S.library,
+  apply: (v) => { S.library = v; },
+});
 
-// Fetch the library (public starters + the viewer's own private songs) into S.library, write-through
-// to the cache; on failure fall back to the cache so an offline open still paints.
-export async function loadLibrary() {
-  try { const r = await api('/v1/songs'); S.library = (r && r.songs) || []; cache.write(S.library); }
-  catch (e) { if (!S.library.length) S.library = cache.read(); }
-}
+export function loadLibrary() { return libraryResource.refresh(); }
 // Flatten the server's AssembledSentence line (grammar in tags, en in translations, tokens in
 // annotation, timing on link) into the song-line shape core/songs.js + the render operate on. Line
 // ordinal = array index (server returns them sorted + contiguous; compactLink omits a falsy 0).

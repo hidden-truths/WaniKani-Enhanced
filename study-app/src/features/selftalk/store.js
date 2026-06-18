@@ -7,7 +7,7 @@ import { state } from '../../state.js';
 import { sentenceToPhrase, comboRole } from '../../core/index.js';
 import { SELFTALK_GRAMMAR } from '../../data/selftalk.js';
 import { account, api } from '../cloud-core.js';
-import { createReadThroughCache } from '../../persistence/cache.js';
+import { createReadThroughResource } from '../../persistence/resource.js';
 import { S } from './state.js';
 
 // Phrases + templates come from the unified sentence store (GET /v1/sentences?ownerType=selftalk,
@@ -15,40 +15,32 @@ import { S } from './state.js';
 // We keep the last good fetch in localStorage as a READ-THROUGH cache so the tab still renders if the
 // fetch fails (offline / server down). The bundled data/selftalk.js + data/selftalk-templates.js are
 // the seed sources for scripts/seed-sentences.ts, no longer read at runtime.
-const phraseCache = createReadThroughCache({ key: 'jpverbs_selftalk_cache' });
-const templateCache = createReadThroughCache({ key: 'jpverbs_selftalk_templates_cache' });
+// Each set is a read-through resource: warm from the last good fetch, freshen from the server, and
+// degrade to the cache on a network hiccup so the tab never goes blank. The resource also coalesces
+// concurrent refreshes — the Self-Talk tab's init (index.js) and its first render (view.js) both call
+// refreshPhrases(), and those overlap; one in-flight fetch now serves both.
+const phrasesResource = createReadThroughResource({
+  cacheKey: 'jpverbs_selftalk_cache',
+  fetch: () => api('/v1/sentences?ownerType=selftalk&annotate=1').then((r) => (r && r.sentences) || []),
+  adapt: (rows) => rows.map(sentenceToPhrase),
+  current: () => S.storePhrases,
+  apply: (v) => { S.storePhrases = v; },
+});
+const templatesResource = createReadThroughResource({
+  cacheKey: 'jpverbs_selftalk_templates_cache',
+  fetch: () => api('/v1/templates?source=selftalk').then((r) => (r && r.templates) || []),
+  current: () => S.storeTemplates,
+  apply: (v) => { S.storeTemplates = v; },
+});
 
 // Warm the in-memory sets from the last good fetch so the first paint isn't blank (boot / tab open).
-export function warmPhrasesFromCache() { S.storePhrases = phraseCache.read(); }
-export function warmTemplatesFromCache() { S.storeTemplates = templateCache.read(); }
+export function warmPhrasesFromCache() { phrasesResource.warm(); }
+export function warmTemplatesFromCache() { templatesResource.warm(); }
 
-// Refresh storePhrases from the store + update the cache. Degrades to the cache on failure so the
-// tab never goes blank from a network hiccup. Returns true on a successful network refresh.
-export async function refreshPhrases() {
-  try {
-    const r = await api('/v1/sentences?ownerType=selftalk&annotate=1');
-    S.storePhrases = ((r && r.sentences) || []).map(sentenceToPhrase);
-    phraseCache.write(S.storePhrases);
-    return true;
-  } catch (e) {
-    if (!S.storePhrases.length) S.storePhrases = phraseCache.read();   // offline first load → fall back to cache
-    return false;
-  }
-}
-
-// Refresh storeTemplates from the store + update the cache. Degrades to the cache on failure so the
-// slot-swap cards never vanish from a network hiccup. Returns true on a successful network refresh.
-export async function refreshTemplates() {
-  try {
-    const r = await api('/v1/templates?source=selftalk');
-    S.storeTemplates = (r && r.templates) || [];
-    templateCache.write(S.storeTemplates);
-    return true;
-  } catch (e) {
-    if (!S.storeTemplates.length) S.storeTemplates = templateCache.read();   // offline first load → fall back to cache
-    return false;
-  }
-}
+// Refresh from the store + update the cache; degrade to cache on failure. Resolve true on a successful
+// network refresh (the index.js/view.js callers branch on it to know whether to repaint).
+export function refreshPhrases() { return phrasesResource.refresh(); }
+export function refreshTemplates() { return templatesResource.refresh(); }
 
 // Optimistic local-set mutators: authoring updates storePhrases + the cache immediately so the UI
 // reflects the change before the API write confirms (the usr-<uuid> id is final from birth, so
@@ -56,11 +48,11 @@ export async function refreshTemplates() {
 export function upsertLocalPhrase(phrase) {
   const i = S.storePhrases.findIndex((p) => p.id === phrase.id);
   if (i >= 0) S.storePhrases[i] = phrase; else S.storePhrases.push(phrase);
-  phraseCache.write(S.storePhrases);
+  phrasesResource.save(S.storePhrases);
 }
 export function removeLocalPhrase(id) {
   S.storePhrases = S.storePhrases.filter((p) => p.id !== id);
-  phraseCache.write(S.storePhrases);
+  phrasesResource.save(S.storePhrases);
 }
 
 // Templates for one topic id (the curated set is small, so a linear scan is fine).

@@ -52,10 +52,18 @@ order. The actual DOM/render/feature glue is split into **`src/features/*`** mod
   (the live deck), `state.minnaStore`, `state.MAXRANK`, `state.BUILTIN_RANK_BY_JP`, plus
   `attachLevels()`. An object whose **properties are mutated** (not `export let` — importers
   can't reassign those, and the test does `state.store = {...}`).
-- **`src/persistence/`** (localStorage: `store`/`custom`), **`src/settings-store.js`**
+- **`src/persistence/`** (localStorage: `store`/`custom`; plus `cache.js`'s
+  `createReadThroughCache` and `resource.js`'s `createReadThroughResource` — see below),
+  **`src/settings-store.js`**
   (synced prefs + `setSettings`), **`src/config.js`** (`API_BASE`/`localDay`), and
   **`src/sync-bus.js`** — the seam where persistence schedules cloud pushes (`sync.progress`/
   `custom`/`settings`) that `cloud.js` registers, replacing the old `typeof` forward-refs.
+  **Any server-backed list cached in localStorage (the deck examples, Self-Talk phrases +
+  templates, the Songs library) MUST go through `createReadThroughResource`** — it owns the
+  fetch→adapt→cache-write→offline-degrade flow plus single-flight coalescing (concurrent
+  refreshes share one fetch) and the `adoptEmpty` clobber-guard, so each consumer declares
+  only its endpoint/adapter/landing-spot. Don't hand-roll a fifth `try{fetch}catch{readCache}`
+  copy; that duplication (with no concurrency guard) is exactly what it replaced.
 - **`src/data/`** — `verbs.js` (`export const VERBS`/`ACCENTS`) + `examples.js`
   (`export const EXAMPLES` — now the SEED SOURCE for the sentence store, not read at runtime;
   the deck fetches examples from the server store).
