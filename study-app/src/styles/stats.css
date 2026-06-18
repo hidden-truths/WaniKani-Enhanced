@@ -6,23 +6,81 @@
    + the stat entrance animations stay in styles.css.)
    ========================================================================= */
 
-/* editorial subtitle under the Progress title */
-.stats-sub{font-family:var(--body);font-size:16px;color:var(--muted);max-width:62ch;margin:-10px 0 24px;line-height:1.5}
-.stats-sub b{color:var(--ink);font-weight:700;font-family:var(--display)}
+/* editorial page head — stats-scoped (the global .page-title is 40px; the Stats mock
+   wants the big 64px display title + a 17.5px lead capped to 580px, mock lines 36-42). */
+#panel-stats .page-head{margin-bottom:0}
+#panel-stats .page-kicker{margin-bottom:16px}
+#panel-stats .page-title{font-size:64px;line-height:1.02}
+.stats-sub{font-family:var(--body);font-size:17.5px;color:var(--muted);max-width:580px;margin:15px 0 0;line-height:1.5}
+.stats-sub b{color:var(--ink);font-weight:600}
 
 /* section dividers (Retention · Needs work · Per-card accuracy) */
 .section-div{display:flex;align-items:center;gap:18px;margin:36px 0 18px}
 .section-div .sd-label{font-family:var(--mono);font-size:11px;letter-spacing:.3em;text-transform:uppercase;color:var(--muted);font-weight:600;white-space:nowrap}
 .section-div .sd-line{flex:1;height:1px;background:var(--line)}
 
-/* metric cards — big number + label + a small context sublabel (mock hero grid) */
-.statgrid{display:grid;grid-template-columns:repeat(auto-fit,minmax(190px,1fr));gap:16px;margin:18px 0}
-.statbox{background:var(--surf-card);border:1px solid var(--line);border-radius:16px;padding:20px 22px;box-shadow:var(--lift-md),var(--inner-hi)}
-[data-theme="dark"] .statbox{border-color:rgba(255,107,74,.1)}
-.statbox .v{font-family:var(--display);font-size:46px;font-weight:800;line-height:1;letter-spacing:-.03em;color:var(--ink)}
-.statbox .v .vsm{font-size:.42em;font-weight:700;color:var(--muted);letter-spacing:0}
-.statbox .l{font-family:var(--mono);font-size:11px;letter-spacing:.14em;text-transform:uppercase;color:var(--muted);margin-top:8px}
-.statbox .s{font-family:var(--body);font-size:13px;color:var(--faint);margin-top:3px}
+/* ===== METRIC CARDS — 3 HERO + 3 QUIET (mock hero grid, lines 53-145) =====
+   6-col grid, each tile spans 2 → 3 per row. Heroes carry the big 84px gradient
+   numeral + a warm corner-wash; quiet tiles are pushed down 18px to break the row.
+   NOTE: the mock's hero modifier is `.hero`, but the live app already owns a global
+   `.hero` (the study-home bignum hero: display:grid 1fr/auto) that would hijack these
+   cards' layout — so the hero modifier here is `.is-hero`. Don't rename it back. */
+.metrics{display:grid;grid-template-columns:repeat(6,1fr);gap:18px;margin-top:32px}
+.metric{grid-column:span 2;position:relative;overflow:hidden;background:var(--surf-card);border:1px solid var(--line);border-radius:18px;padding:22px 24px 20px;box-shadow:var(--lift-md),var(--inner-hi);transition:transform .22s cubic-bezier(.2,.7,.3,1),box-shadow .25s ease,border-color .25s ease}
+[data-theme="dark"] .metric{border-color:rgba(255,107,74,.14)}
+.metric:hover{transform:translateY(-4px);box-shadow:var(--lift-lg),var(--inner-hi)}
+[data-theme="dark"] .metric:hover{border-color:rgba(255,107,74,.26);box-shadow:var(--lift-lg),0 0 0 1px rgba(255,107,74,.08),0 0 64px -24px rgba(255,107,74,.7),var(--inner-hi)}
+.metric .m-label{font-family:var(--mono);font-size:10.5px;letter-spacing:.18em;text-transform:uppercase;color:var(--muted);font-weight:500;display:flex;align-items:center;gap:8px}
+.metric .m-label svg{width:13px;height:13px;opacity:.9;flex:0 0 auto}
+.metric .m-val{font-family:var(--display);font-weight:700;color:var(--ink);line-height:.92;letter-spacing:-.03em;margin-top:14px;display:flex;align-items:baseline;gap:6px;font-variation-settings:"opsz" 60}
+.metric .m-val .unit{font-size:.4em;font-weight:600;color:var(--muted);letter-spacing:0}
+.metric .m-val .frac{font-family:var(--display);font-weight:600;font-size:.46em;color:var(--muted);letter-spacing:-.01em}
+.metric .m-sub{font-family:var(--body);font-size:13.5px;color:var(--muted);margin-top:8px}
+.metric .m-sub b{color:var(--ink);font-weight:600}
+
+/* HERO — dial the numeral up (84px) + a warm corner wash + a gradient numeral */
+.metric.is-hero .m-val{font-size:84px;font-weight:800;font-variation-settings:"opsz" 96;margin-top:12px}
+.metric.is-hero::before{content:"";position:absolute;left:-40px;bottom:-50px;width:170px;height:170px;border-radius:50%;pointer-events:none;z-index:0;background:radial-gradient(circle,var(--brand-soft),transparent 70%);opacity:.7}
+[data-theme="dark"] .metric.is-hero::before{opacity:1;background:radial-gradient(circle,rgba(255,107,74,.10),transparent 70%)}
+.metric.is-hero .m-label,.metric.is-hero .m-val,.metric.is-hero .m-sub,.metric.is-hero .trend{position:relative;z-index:1}
+[data-theme="dark"] .metric.is-hero .m-val{background:linear-gradient(175deg,#FFF7EF 0%,#ECE3D5 44%,#FFC2B0 118%);-webkit-background-clip:text;background-clip:text;-webkit-text-fill-color:transparent;filter:drop-shadow(0 6px 26px rgba(255,107,74,.22))}
+[data-theme="dark"] .metric.is-hero .m-val .unit,[data-theme="dark"] .metric.is-hero .m-val .frac{-webkit-text-fill-color:currentColor}
+[data-theme="light"] .metric.is-hero .m-val{background:linear-gradient(168deg,var(--ink) 38%,var(--brand-deep) 130%);-webkit-background-clip:text;background-clip:text;-webkit-text-fill-color:transparent}
+[data-theme="light"] .metric.is-hero .m-val .unit,[data-theme="light"] .metric.is-hero .m-val .frac{-webkit-text-fill-color:currentColor}
+
+/* QUIET — smaller numeral, pushed down so a clear gap divides the two rows */
+.metric.quiet{margin-top:18px}
+.metric.quiet .m-val{font-size:46px;font-weight:700;margin-top:8px}
+
+/* accent corner-washes + value tints */
+.metric.accent-good::after,.metric.accent-leech::after{content:"";position:absolute;right:-30px;top:-30px;width:150px;height:150px;border-radius:50%;pointer-events:none;opacity:.55}
+.metric.accent-good::after{background:radial-gradient(circle,var(--good-soft),transparent 70%)}
+[data-theme="dark"] .metric.accent-good::after{opacity:.9;background:radial-gradient(circle,rgba(86,217,166,.16),transparent 70%)}
+.metric.accent-good .m-label svg{color:var(--good)}
+.metric.accent-leech::after{background:radial-gradient(circle,var(--leech-soft),transparent 70%)}
+[data-theme="dark"] .metric.accent-leech::after{opacity:.9;background:radial-gradient(circle,rgba(199,146,234,.18),transparent 70%)}
+.metric.leech .m-val{color:var(--leech)}
+[data-theme="dark"] .metric.leech .m-val{text-shadow:0 0 26px rgba(199,146,234,.45)}
+.metric.leech .m-label svg{color:var(--leech)}
+.metric.due .m-val{color:var(--brand)}
+.metric.streak .m-label svg{color:var(--brand)}
+
+/* trend pill on the accuracy hero (green up / brand down) */
+.trend{display:inline-flex;align-items:center;gap:5px;font-family:var(--mono);font-size:11px;letter-spacing:.04em;font-weight:500;padding:4px 9px;border-radius:999px;margin-top:14px;color:var(--good);background:var(--good-soft);border:1px solid color-mix(in srgb,var(--good) 30%,transparent)}
+.trend svg{width:12px;height:12px}
+.trend.down{color:var(--brand);background:var(--brand-soft);border-color:color-mix(in srgb,var(--brand) 30%,transparent)}
+.trend.down svg{transform:scaleY(-1)}
+
+/* metric responsive (mock lines 318-332) */
+@media (max-width:1080px){
+  .metrics{grid-template-columns:repeat(4,1fr)}
+  #panel-stats .page-title{font-size:50px}
+  .metric.is-hero .m-val{font-size:68px}
+}
+@media (max-width:640px){
+  .metrics{grid-template-columns:1fr 1fr}
+  .metric,.metric.is-hero,.metric.quiet{grid-column:span 2;margin-top:0}
+}
 
 /* two-up chart grid under Retention */
 .chart-grid{display:grid;grid-template-columns:1fr 1fr;gap:18px}

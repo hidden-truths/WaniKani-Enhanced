@@ -88,20 +88,42 @@ export function renderStats() {
   const overall = tot ? Math.round(100 * right / tot) : 0;
   const total = state.DATA.length, due = dueCards().length, leechN = leeches().length;
   const streak = studyStreak(state.store.daily, localDay()), sessN = state.store.sessions.length;
-  // Editorial subtitle (mock) — a one-line read on the deck's state.
+  // Editorial lead (mock voice) — a one-line read on the deck's state.
   const sub = document.getElementById('statsSub');
   if (sub) sub.innerHTML = tot
-    ? `${streak ? `<b>${streak}</b> day${streak === 1 ? '' : 's'} in a row — ` : ''}<b>${studied}</b> of <b>${total}</b> cards in rotation, <b>${overall}%</b> overall accuracy across <b>${sessN}</b> session${sessN === 1 ? '' : 's'}.`
+    ? `${streak ? `<b>${streak}</b> day${streak === 1 ? '' : 's'} in a row, ` : ''}<b>${studied}</b> of <b>${total}</b> cards in rotation.${leechN ? ` The pipeline is filling — <b>${leechN}</b> stubborn leech${leechN === 1 ? '' : 'es'} ${leechN === 1 ? 'is' : 'are'} still holding you up.` : ` <b>${overall}%</b> overall accuracy across <b>${sessN}</b> session${sessN === 1 ? '' : 's'}.`}`
     : 'No reviews logged yet — finish a flashcard session to start your record.';
-  // Metric cards (the mock's hero grid): big number + label + a small context sublabel.
+  // Metric cards — the mock's hero grid: 3 HERO (accuracy/studied/reviews) over 3 QUIET
+  // (due/streak/leeches). Label icons are inline (match the mock); the accuracy hero
+  // carries a REAL week-over-week trend pill from the session ledger (it falls back to a
+  // plain sublabel when there isn't a full prior week to compare against).
+  const mIcon = (p, sw = 1.7) => `<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="${sw}" stroke-linecap="round" stroke-linejoin="round">${p}</svg>`;
+  const I = {
+    check: '<path d="M20 6 9 17l-5-5"/>',
+    book: '<path d="M4 19.5A2.5 2.5 0 0 1 6.5 17H20"/><path d="M6.5 2H20v20H6.5A2.5 2.5 0 0 1 4 19.5v-15A2.5 2.5 0 0 1 6.5 2z"/>',
+    hist: '<path d="M3 12a9 9 0 1 0 3-6.7L3 8M3 4v4h4"/>',
+    clock: '<circle cx="12" cy="12" r="9"/><path d="M12 7v5l3 2"/>',
+    flame: '<path d="M12 3c2 3 4 4.5 4 8a4 4 0 0 1-8 0c0-1.5.6-2.6 1.4-3.6C9.8 8.6 11 7 12 3z"/>',
+    alert: '<path d="M12 9v4M12 17h.01M10.3 3.9 2.4 18a2 2 0 0 0 1.7 3h15.8a2 2 0 0 0 1.7-3L13.7 3.9a2 2 0 0 0-3.4 0z"/>',
+    trend: '<path d="M3 17 9 11l4 4 8-8M21 7h-5M21 7v5"/>'
+  };
+  // Week-over-week accuracy delta (points), from the session ledger; null if no prior week.
+  const WK = 7 * 864e5, nowT = Date.now();
+  const win = { tw: { r: 0, t: 0 }, lw: { r: 0, t: 0 } };
+  state.store.sessions.forEach(s => { if (!s.t) return; if (s.t >= nowT - WK) { win.tw.r += s.right; win.tw.t += s.tot; } else if (s.t >= nowT - 2 * WK) { win.lw.r += s.right; win.lw.t += s.tot; } });
+  const dPts = (win.tw.t && win.lw.t) ? Math.round(100 * win.tw.r / win.tw.t - 100 * win.lw.r / win.lw.t) : null;
+  const accExtra = dPts == null
+    ? `<div class="m-sub">of <b>${tot.toLocaleString()}</b> review${tot === 1 ? '' : 's'}</div>`
+    : `<span class="trend${dPts < 0 ? ' down' : ''}">${mIcon(I.trend, 2.2)}${dPts < 0 ? '−' : '+'}${Math.abs(dPts)} pts vs last week</span>`;
+  const pctStudied = total ? Math.round(100 * studied / total) : 0;
   const sg = document.getElementById('statgrid');
   sg.innerHTML = `
-    <div class="statbox"><div class="v">${overall}%</div><div class="l">Overall accuracy</div><div class="s">of ${tot} review${tot === 1 ? '' : 's'}</div></div>
-    <div class="statbox"><div class="v">${studied}<span class="vsm">/${total}</span></div><div class="l">Cards studied</div><div class="s">in rotation</div></div>
-    <div class="statbox"><div class="v">${tot}</div><div class="l">Reviews logged</div><div class="s">${mix.srs.rev} SRS · ${mix.free.rev} free</div></div>
-    <div class="statbox"><div class="v" style="color:var(--ichidan)">${due}</div><div class="l">Due today</div><div class="s">scheduled now</div></div>
-    <div class="statbox"><div class="v">${streak}<span class="vsm"> day${streak === 1 ? '' : 's'}</span></div><div class="l">Current streak</div><div class="s">${streak ? 'keep it alive' : 'study today to start'}</div></div>
-    <div class="statbox"><div class="v" style="color:var(--leech)">${leechN}</div><div class="l">Active leeches</div><div class="s">${leechN ? 'need review' : 'all clear'}</div></div>`;
+    <div class="metric is-hero accent-good"><div class="m-label">${mIcon(I.check, 1.8)}Overall accuracy</div><div class="m-val">${overall}<span class="unit">%</span></div>${accExtra}</div>
+    <div class="metric is-hero"><div class="m-label">${mIcon(I.book)}Cards studied</div><div class="m-val">${studied}<span class="frac">&thinsp;/&thinsp;${total}</span></div><div class="m-sub"><b>${pctStudied}%</b> of the deck in rotation</div></div>
+    <div class="metric is-hero"><div class="m-label">${mIcon(I.hist)}Reviews logged</div><div class="m-val">${tot.toLocaleString()}</div><div class="m-sub">across <b>${sessN}</b> session${sessN === 1 ? '' : 's'}</div></div>
+    <div class="metric quiet due"><div class="m-label">${mIcon(I.clock)}Due today</div><div class="m-val">${due}</div><div class="m-sub">${due ? 'ready to review now' : 'all caught up'}</div></div>
+    <div class="metric quiet streak"><div class="m-label">${mIcon(I.flame)}Current streak</div><div class="m-val">${streak}<span class="unit">day${streak === 1 ? '' : 's'}</span></div><div class="m-sub">${streak ? 'keep it lit' : 'study today to start'}</div></div>
+    <div class="metric quiet leech accent-leech"><div class="m-label">${mIcon(I.alert, 1.8)}Active leeches</div><div class="m-val">${leechN}</div><div class="m-sub">${leechN ? 'chronically missed' : 'all clear'}</div></div>`;
   // Daily accuracy line: one point per day in state.store.daily (label = MM-DD).
   const days = Object.keys(state.store.daily).sort();
   lineChart(document.getElementById('chartDaily'), days.map(d => ({ y: Math.round(100 * state.store.daily[d].right / state.store.daily[d].tot), label: d.slice(5) })), { aria: 'Daily accuracy, percent correct per day' });

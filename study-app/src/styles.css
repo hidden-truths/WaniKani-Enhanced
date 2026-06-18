@@ -236,9 +236,9 @@
   .chip:disabled{opacity:.38;cursor:default}
   .chip:disabled:hover{border-color:var(--line);background:transparent}
 
-  /* Stats cards + chart panels + leech list + SRS legend (.statgrid/.statbox/
-     .chart-card/.chart-title/.srs-legend) → styles/stats.css (Phase 4). The
-     global chart svg{} rule + circle.pt hover stay here. */
+  /* Stats cards + chart panels + leech list + SRS legend (.metrics/.metric/
+     .chart-card/.chart-title/.srs-legend) → styles/stats.css. The global chart
+     svg{} rule + circle.pt hover stay here. */
   svg{display:block;width:100%;height:auto}    /* charts scale to container width */
   /* Line-chart points enlarge on hover (the native <title> shows the readout). */
   svg circle.pt{transition:r .12s ease} svg circle.pt:hover{r:5.5}
@@ -263,11 +263,11 @@
   .panel.active{animation:panelIn .24s ease}                              /* tab switch */
   /* Stats cards rise in with a light stagger; bars grow from their baseline. */
   @keyframes riseIn{from{opacity:0;transform:translateY(10px)}to{opacity:1;transform:none}}
-  .statgrid .statbox,.chart-card{animation:riseIn .32s ease backwards}
-  .statgrid .statbox:nth-child(2){animation-delay:.03s} .statgrid .statbox:nth-child(3){animation-delay:.06s}
-  .statgrid .statbox:nth-child(4){animation-delay:.09s} .statgrid .statbox:nth-child(5){animation-delay:.12s}
-  .statgrid .statbox:nth-child(6){animation-delay:.15s} .statgrid .statbox:nth-child(7){animation-delay:.18s}
-  .statgrid .statbox:nth-child(8){animation-delay:.21s}
+  .metrics .metric,.chart-card{animation:riseIn .32s ease backwards}
+  .metrics .metric:nth-child(2){animation-delay:.03s} .metrics .metric:nth-child(3){animation-delay:.06s}
+  .metrics .metric:nth-child(4){animation-delay:.09s} .metrics .metric:nth-child(5){animation-delay:.12s}
+  .metrics .metric:nth-child(6){animation-delay:.15s} .metrics .metric:nth-child(7){animation-delay:.18s}
+  .metrics .metric:nth-child(8){animation-delay:.21s}
   @keyframes growX{from{transform:scaleX(0)}to{transform:scaleX(1)}}
   #boxDist .barx{transform-origin:left;animation:growX .5s cubic-bezier(.2,.7,.3,1) both}
   @keyframes growY{from{transform:scaleY(0)}to{transform:scaleY(1)}}
