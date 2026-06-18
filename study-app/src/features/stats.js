@@ -10,33 +10,40 @@ import { cfg, repaintDeck, updateDeckCount } from './deck.js';
 import { startSession } from './flashcard.js';
 import { renderBrowse } from './browse.js';
 
-// 0–100% line chart. pts = [{y, label}]. Single-point series is centered. opt: {color, aria}.
-function lineChart(el, pts, opt = {}) {
-  const W = 720, H = 212, pad = { l: 38, r: 50, t: 18, b: 30 };
+// Daily-accuracy line chart (mock): a zoomed y-axis so the line uses the canvas, an area
+// gradient, a gold dashed average, the jade line with a CSS glow (theme-aware via --dl-line),
+// dots, and sparse date ticks. All colors are CSS vars so the chart re-tints on a theme flip
+// with NO re-render. pts = [{y, label}]; the foot's "today" readout is set from the last point.
+function drawDaily(el, pts) {
   el.innerHTML = '';
-  if (pts.length === 0) { el.innerHTML = '<div class="empty" style="padding:24px">No data yet — finish a flashcard session.</div>'; return; }
+  if (!pts.length) { el.innerHTML = '<div class="empty" style="padding:24px">No data yet — finish a flashcard session.</div>'; setBadge('dailyToday', '—'); return; }
+  const W = 620, H = 270, pad = { l: 34, r: 16, t: 20, b: 30 };
   const iw = W - pad.l - pad.r, ih = H - pad.t - pad.b;
-  const n = pts.length, color = opt.color || 'var(--godan)';
-  const xOf = i => pad.l + (n === 1 ? iw / 2 : iw * i / (n - 1));   // x position by index
-  const yOf = y => pad.t + ih - (y / 100) * ih;              // y position by percentage
-  let g = `<svg viewBox="0 0 ${W} ${H}" role="img" aria-label="${opt.aria || 'Accuracy over time, percent correct'}">`;
-  // gridlines + y-axis labels at 0/25/50/75/100 (theme-aware tones)
-  [0, 25, 50, 75, 100].forEach(gy => { const y = yOf(gy); g += `<line x1="${pad.l}" y1="${y}" x2="${W - pad.r}" y2="${y}" stroke="var(--line)" stroke-width="1"/><text x="${pad.l - 6}" y="${y + 3}" text-anchor="end" font-size="9" fill="var(--muted)" font-family="monospace">${gy}</text>`; });
-  // y-axis caption
-  g += `<text x="${pad.l - 6}" y="${pad.t - 6}" text-anchor="end" font-size="8" fill="var(--muted)" font-family="monospace">% correct</text>`;
-  // dashed average reference line + right-margin label
-  const avg = Math.round(pts.reduce((s, p) => s + p.y, 0) / n), ay = yOf(avg);
-  g += `<line x1="${pad.l}" y1="${ay}" x2="${W - pad.r}" y2="${ay}" stroke="var(--ichidan)" stroke-width="1" stroke-dasharray="3 3" opacity="0.65"/><text x="${W - pad.r + 4}" y="${ay + 3}" font-size="8.5" fill="var(--ichidan)" font-family="monospace">avg ${avg}%</text>`;
-  // area fill under the line + the line itself
-  const dpath = pts.map((p, i) => `${i ? 'L' : 'M'}${xOf(i).toFixed(1)},${yOf(p.y).toFixed(1)}`).join(' ');
-  g += `<path d="${dpath} L${xOf(n - 1).toFixed(1)},${yOf(0).toFixed(1)} L${xOf(0).toFixed(1)},${yOf(0).toFixed(1)} Z" fill="${color}" opacity="0.08"/>`;
-  g += `<path d="${dpath}" fill="none" stroke="${color}" stroke-width="2"/>`;
-  // points (with hover readout) + value labels (few points) + thinned x-axis labels
-  pts.forEach((p, i) => { const x = xOf(i), y = yOf(p.y);
-    g += `<circle class="pt" cx="${x}" cy="${y}" r="3.2" fill="${color}"><title>${p.label}: ${p.y}%</title></circle>`;
-    if (n <= 12) g += `<text x="${x}" y="${y - 7}" text-anchor="middle" font-size="8.5" fill="var(--muted)" font-family="monospace">${p.y}</text>`;
-    if (n <= 12 || i % Math.ceil(n / 8) === 0) g += `<text x="${x}" y="${H - 9}" text-anchor="middle" font-size="8" fill="var(--muted)" font-family="monospace">${p.label}</text>`; });
+  const vals = pts.map(p => p.y), n = vals.length;
+  const avg = Math.round(vals.reduce((s, v) => s + v, 0) / n);
+  // adaptive zoom: floor a touch below the min (rounded to 5, capped at 80) so even a high,
+  // flat series uses the canvas instead of floating in the top third; ceil 100.
+  const ymin = Math.min(80, Math.floor(Math.max(0, Math.min(...vals) - 8) / 5) * 5), ymax = 100;
+  const xOf = i => pad.l + (n === 1 ? iw / 2 : iw * i / (n - 1));
+  const yOf = v => pad.t + ih - (v - ymin) / (ymax - ymin) * ih;
+  let g = `<svg class="dl-svg" viewBox="0 0 ${W} ${H}" role="img" aria-label="Daily accuracy over ${n} day${n === 1 ? '' : 's'}, percent correct">`;
+  g += `<defs><linearGradient id="dlArea" x1="0" y1="0" x2="0" y2="1"><stop offset="0%" stop-color="var(--dl-line)" stop-opacity=".26"/><stop offset="100%" stop-color="var(--dl-line)" stop-opacity="0"/></linearGradient></defs>`;
+  // faint gridlines + y labels at the multiples of 10 inside the zoomed range
+  for (let v = Math.ceil(ymin / 10) * 10; v <= 100; v += 10) { const y = yOf(v); g += `<line x1="${pad.l}" y1="${y}" x2="${W - pad.r}" y2="${y}" stroke="var(--line)" stroke-width="1" opacity=".55"/><text x="${pad.l - 8}" y="${y + 3.5}" text-anchor="end" font-size="11" fill="var(--muted)" font-family="var(--mono)" opacity=".85">${v}</text>`; }
+  const d = pts.map((p, i) => `${i ? 'L' : 'M'}${xOf(i).toFixed(1)},${yOf(p.y).toFixed(1)}`).join(' ');
+  g += `<path d="${d} L${xOf(n - 1).toFixed(1)},${yOf(ymin)} L${xOf(0).toFixed(1)},${yOf(ymin)} Z" fill="url(#dlArea)"/>`;
+  const ay = yOf(avg);
+  g += `<line x1="${pad.l}" y1="${ay}" x2="${W - pad.r}" y2="${ay}" stroke="var(--gold)" stroke-width="2.5" stroke-dasharray="8 5" opacity=".9"/><text x="${W - pad.r}" y="${ay - 7}" text-anchor="end" font-size="11.5" fill="var(--gold)" font-family="var(--mono)" font-weight="500">avg ${avg}%</text>`;
+  g += `<path id="dailyLine" d="${d}" fill="none" stroke="var(--dl-line)" stroke-width="2.8" stroke-linecap="round" stroke-linejoin="round"/>`;
+  pts.forEach((p, i) => { const cx = xOf(i), cy = yOf(p.y), last = i === n - 1; g += `<circle cx="${cx.toFixed(1)}" cy="${cy.toFixed(1)}" r="${last ? 5 : 3.2}" fill="${last ? 'var(--dl-line)' : 'var(--paper)'}" stroke="var(--dl-line)" stroke-width="${last ? 0 : 2}"><title>${p.label}: ${p.y}%</title></circle>`; });
+  // ~5 evenly-spaced date ticks; the last reads "today"
+  const ticks = [...new Set([0, Math.round((n - 1) / 4), Math.round((n - 1) / 2), Math.round(3 * (n - 1) / 4), n - 1])];
+  ticks.forEach(i => { g += `<text x="${xOf(i).toFixed(1)}" y="${H - 8}" text-anchor="middle" font-size="10.5" fill="var(--muted)" font-family="var(--mono)">${i === n - 1 ? 'today' : pts[i].label}</text>`; });
   g += '</svg>'; el.innerHTML = g;
+  // animate the line draw-in over its true length (so any series length draws smoothly)
+  const line = el.querySelector('#dailyLine');
+  if (line && line.getTotalLength) { const L = Math.ceil(line.getTotalLength()); line.style.strokeDasharray = L; line.style.strokeDashoffset = L; line.style.animation = 'drawLine 1.3s cubic-bezier(.4,.6,.2,1) .3s forwards'; }
+  setBadge('dailyToday', vals[n - 1] + '%');
 }
 // Horizontal bar list. items = [{label, val(0–100), color}].
 function barChart(el, items) {
@@ -133,7 +140,7 @@ export function renderStats() {
   const days = Object.keys(state.store.daily).sort();
   const dvals = days.map(d => Math.round(100 * state.store.daily[d].right / state.store.daily[d].tot));
   setBadge('dailyBadge', dvals.length ? 'avg ' + Math.round(dvals.reduce((s, x) => s + x, 0) / dvals.length) + '%' : 'no data yet');
-  lineChart(document.getElementById('chartDaily'), days.map((d, i) => ({ y: dvals[i], label: d.slice(5) })), { aria: 'Daily accuracy, percent correct per day' });
+  drawDaily(document.getElementById('chartDaily'), days.map((d, i) => ({ y: dvals[i], label: d.slice(5) })));
   // Leech list: the cards isLeech() currently flags, with their rolling accuracy.
   const lz = leeches(); const ll = document.getElementById('leechList');
   setBadge('leechBadge', lz.length + (lz.length === 1 ? ' card' : ' cards'));

@@ -143,3 +143,19 @@
 .pipe-legend .ramp{display:flex;align-items:center;gap:7px}
 .pipe-legend .ramp .swatches{display:inline-flex;gap:3px}
 .pipe-legend .ramp .swatches i{width:14px;height:8px;border-radius:2px}
+
+/* ===== DAILY ACCURACY chart (mock 219-230 + script) — the line colour is theme-aware via
+   --dl-line, so the SVG (built with var() fills) re-tints on a theme flip with no re-render. */
+#panel-stats{--dl-line:var(--good-deep)}
+[data-theme="dark"] #panel-stats{--dl-line:var(--good)}
+.dl-svg{width:100%;height:auto;display:block}
+#dailyLine{filter:drop-shadow(0 0 2.4px color-mix(in srgb,var(--dl-line) 55%,transparent))}
+[data-theme="dark"] #dailyLine{filter:drop-shadow(0 0 5px var(--dl-line))}
+@keyframes drawLine{to{stroke-dashoffset:0}}
+@media (prefers-reduced-motion:reduce){#dailyLine{animation:none !important;stroke-dashoffset:0 !important}}
+.chart-foot{display:flex;align-items:center;gap:18px;flex-wrap:wrap;margin-top:18px;padding-top:16px;border-top:1px solid var(--line);font-family:var(--mono);font-size:11px;color:var(--muted);letter-spacing:.02em}
+.chart-foot .key{display:inline-flex;align-items:center;gap:7px}
+.chart-foot .key .swatch{width:18px;height:3px;border-radius:2px;background:var(--dl-line)}
+.chart-foot .key .swatch.dash{background:none;border-top:2px dashed var(--gold);height:0}
+.chart-foot .big{margin-left:auto;font-family:var(--display);font-size:15px;color:var(--ink);font-weight:600}
+.chart-foot .big span{font-family:var(--mono);font-size:11px;color:var(--muted);font-weight:400;letter-spacing:.04em}
