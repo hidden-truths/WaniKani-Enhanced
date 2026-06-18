@@ -166,7 +166,7 @@ export function updateDueBanner() {
   document.getElementById('dueBtn').disabled = n === 0;
   document.getElementById('dueBtn').innerHTML = n === 0
     ? '<svg class="ic" aria-hidden="true"><use href="#i-check"/></svg>All caught up'
-    : '<svg class="ic" aria-hidden="true"><use href="#i-play"/></svg>Review due cards';
+    : 'Review due cards<span class="arr"><svg class="ic" aria-hidden="true"><use href="#i-arrow-right"/></svg></span>';
   // Hero meta: the day streak pill (hidden at 0 — stays alive across a not-yet-studied today)
   // and today's review tally over the deck size, mirroring the mock.
   const daily = state.store.daily || {}, today = localDay();

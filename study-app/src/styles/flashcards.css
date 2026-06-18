@@ -42,6 +42,9 @@
    button is overridden here) + a ghost "Free study" quick-start */
 .cta-row{display:flex;align-items:center;gap:16px;flex-wrap:wrap;margin-top:6px}
 .btn.hero-due{background:var(--brand);color:var(--brand-on);border:none;font-weight:600;font-size:17px;padding:16px 28px;box-shadow:var(--cta-shadow)}
+/* trailing arrow (mock): nudges right on hover */
+.hero-due .arr{display:inline-flex;transition:transform .2s ease}
+.hero-due:hover .arr{transform:translateX(4px)}
 [data-theme="dark"] .btn.hero-due{background:linear-gradient(160deg,#FF8A6E,var(--brand) 55%,var(--brand-deep))}
 .btn.hero-due:hover{background:var(--brand-deep);transform:translateY(-2px);box-shadow:var(--cta-shadow-hover)}
 [data-theme="dark"] .btn.hero-due:hover{background:linear-gradient(160deg,#FF8A6E,var(--brand) 55%,var(--brand-deep))}
