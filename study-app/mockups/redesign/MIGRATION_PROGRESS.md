@@ -6,7 +6,7 @@
 > truth) are `system.css` + `screens/*.png`; the shipped design system is documented in
 > [../CLAUDE.md](../CLAUDE.md) "Design system". A ready-to-paste **kickoff prompt is at the bottom**.
 
-## Status — ⚠ fidelity audit IN PROGRESS on `redesign-fidelity` (Phase-9 "✅" was premature)
+## Status — ⚠ fidelity audit IN PROGRESS on `redesign-fidelity` (Phase-9 "✅" was premature; Flashcards + Stats rebuilt)
 
 > **2026-06-17 fidelity re-audit (maintainer: "still a lot of problems").** The Phase-9 "per-surface
 > fidelity pass — DONE for 5 of 6" was **over-stated**. A page-by-page, element-by-element re-check
@@ -68,8 +68,34 @@ mock's full-column card + the consequent word-size bump); audio play uses the **
 84px — the app's responsive breakpoints (900/430) differ from the mock's (640/430); fix breakpoints +
 bignum together in the sweep, not piecemeal.
 
+### Stats page — REBUILT (2026-06-18, 7 commits on `redesign-fidelity`)
+The maintainer flagged Stats as "a LOT of problems." It was NOT mock-faithful — Phase 8/9 had only
+RESKINNED the old panels (flat 6-up metric grid, horizontal pipeline, generic 0-100 daily chart, thin
+leech rows, 1-col per-card, no seals/panel-chrome/footer). Re-audited element-by-element vs
+`screens/hybrid-stats.png` / `-dark` + `hybrid-stats.html` and rebuilt the whole surface (each its own
+commit; `bun run test` 245 + `bun run build` green per commit; verified both themes at 1280 + 390px):
+- **`1834264`** — page head 64px + 17.5px lead; flat auto-fit 6-tile `.statgrid` → the **3-hero /
+  3-quiet** `.metrics` grid (84px gradient numerals, icon labels, warm corner-washes, tinted quiet
+  values) + a **real week-over-week trend pill** from the session ledger. The hero modifier is
+  `.is-hero`, NOT the mock's `.hero` — the global study-home `.hero` grid (`display:grid 1fr/auto`) was
+  hijacking the cards' layout and right-shifting the numeral.
+- **`07ede2d`** — the 記/虫 section seals; `.chart-card` promoted to the mock panel (gold tab + a
+  `.panel-head` of display title + mono sub + data-driven badge); dropped the per-session chart (not in
+  the mock). NB the live `.panel` class is the tab container, so the cards stay `.chart-card`.
+- **`d2b28db`** — memory pipeline: horizontal bars → the **vertical stone→jade** Leitner bars (new
+  `--box-0..5` ramp, compressed 52-88% height band, counts inside/above, the ramp legend).
+- **`ddf9004`** — daily accuracy: generic 0-100 line → a zoomed/area-gradient/gold-avg/jade-glow chart
+  (theme-aware `--dl-line` so it re-tints with no re-render; `getTotalLength` draw-in) + the
+  daily%/average/today foot.
+- **`54b519e`** — leeches: thin rows → rich plum-spined rows (accuracy bar + attempts), worst-first,
+  with a per-row **Review** pill that drills that one card (`reviewSingle`, free study). New shared
+  `--acc-poor/mid/good` ramp.
+- **`2a4d59d`** — per-card: 1-col list → the **2-column** poor/mid/good grid + cap legend (removed the
+  now-orphan `barChart()`).
+- footer seal-line + the leech mobile-stack rule.
+
 **Remaining pages still need this same element-by-element audit — do NOT trust their "✅":** Browse,
-Stats, みんなの日本語, 歌 Songs, 独り言, Modals, and the full mobile sweep.
+みんなの日本語, 歌 Songs, 独り言, Modals, and the full mobile sweep. (Flashcards + Stats are done.)
 
 ## (historical) Phase 8 built the per-surface compositions, but the site STILL did not match the mocks
 
@@ -250,7 +276,7 @@ compositions that still need a fidelity pass. Per row — the mock vs what ships
 | **Study home** | giant standalone `bignum` review hero (~188px) under a 今日の復習 kicker; forecast as a side card; the editorial flashcard below | ◐ **built (needs fidelity pass)** (Phase 8, first surface): hero numeral promoted to a 178px `.bignum`, 今日の復習 kicker, streak pill + studied-today meta, vermilion `Review due cards` + `Free study` CTAs, forecast rebuilt as the editorial side card (HTML/CSS `.bars`, horizon toggle kept). Both themes + caught-up/anon/mobile verified. | ~~promote the hero numeral; compose hero + forecast~~ — shipped |
 | **Flashcard** | wide **2-column editorial** card with a big rotated **hanko seal**, accent pill, reading/trap note-cards, example, big jade/vermilion grade bar | ◐ **built (needs fidelity pass)** (Phase 8): rebuilt #fcStage into the session-chrome (End/recalled/counter/progress) + the card's prompt FACE (centered word · class/level tags · "hidden" veils · Show answer, hybrid-prompt) ⇄ answer FACE (word-block · tate-rule · pitch + accent tag + play · big meaning · solid class pill + Jisho · 2-up mnemonic/trap note-cards · example · jade/vermilion grade bar, hybrid-day-night). Reading mode hides the kanji behind a class-seal hanko. Both themes · both modes · typed · grading · mobile verified. | ~~rebuild as the 2-col + hanko~~ — shipped |
 | **Browse** | color-coded grid cards w/ hanko stamps + an editorial detail | ◐ **built (needs fidelity pass)** (Phase 8): added the editorial header (語彙の一覧 · Word library kicker + "Browse the deck" + a card/leech count cluster), framed the filters as a panel with search-first + a "More filters" disclosure for Type/Transitivity; the color-coded grid was already close. Both themes verified. | ~~re-compare, fix small deltas~~ — done |
-| **Stats** | hero metric row + the pipeline/line/per-card SVG charts in an editorial grid | ◐ **built (needs fidelity pass)** (Phase 8): added the header (学習の記録 · Your progress + "Progress" + an editorial subtitle), reworked the metric tiles into 6 hero cards with context sublabels (+ a Current-streak tile via `studyStreak`), and grouped the charts under Retention / Needs work / Per-card section dividers with a 2-up Memory-pipeline + Daily-accuracy grid. Charts reskinned for free via the token aliases. Both themes verified. | ~~re-compare (spacing/scale)~~ — done |
+| **✅ Stats** | hero metric row + the pipeline/line/per-card SVG charts in an editorial grid | ✅ **REBUILT mock-faithful** (2026-06-18, `redesign-fidelity`, 7 commits — see "Stats page — REBUILT" above): the Phase-8 ◐ was only a reskin, NOT the mock. Now: 3-hero/3-quiet metric grid (gradient numerals + real week-over-week trend), 記/虫 seals + gold-tab panels (title/sub/badge), the VERTICAL stone→jade pipeline, the zoomed/gradient/gold-avg/glow daily chart, rich plum leech rows + per-row Review action, the 2-col poor/mid/good per-card grid, the footer seal-line. Both themes + 390px verified. | rebuilt |
 | **みんなの日本語** | hero **hanko lesson-number tile** (七 / 第7課) + progress, 3-up grammar **cards**, two-colour speaker **bubbles** | ◐ **built (needs fidelity pass)** (Phase 8): rebuilt `renderMinnaLesson` into the lesson-seal hero (kanji-number hanko tile + 第N課 + theme + vocab/grammar progress meter + Add CTA), numbered `.sec-head` sections over lifted panels, a 3-up `.grammar-grid` of `.gcard` (tag · pattern · structure · gloss · specimen example), and two-colour speaker `.turn`/`.turn.is-b` bubbles (speaker marker added in `renderConversation`, role→a/b). The `.mn-vocab` Safari rule + rec-control/clip wiring preserved. **Verified SIGNED-IN (real Lesson 23, owner account via the proxy harness) in both themes.** | ~~build hanko hero, grammar grid, bubbles~~ — shipped |
 | **✅ 歌 Songs** | stylised play-card hero (cover ring + coverage) + side-by-side Read/Mine | ✅ **REBUILT** (`118e658`): the mock's two-column `.songs-grid` STAGE — a vinyl-disc hero play-card (gradient title + JLPT badge + artist · 読/聴/影/採 mode-tabs on a recessed track · on-demand "Play with video" + ふりがな switch · JLPT difficulty profile bar + SVG mining ring), an on-demand video bay (hidden until asked; the old always-on 0%-coverage iframe is gone), the Read lyric stage (`.ll` rows · tap-a-word ruby · grammar pills · per-line tools · the **glowing `.ll.current` playhead** + a now-playing eq badge), and the **mined-vocab rail** beside Read (NEW vs KNOWN, per-word + bulk add). Listen/Shadow/Mine still render full-width. **Verified SIGNED-IN both themes** (owner via the proxy harness) incl. a simulated current line. | ~~hero treatment~~ — rebuilt for real |
 | **独り言 Self-Talk** | the big "NOW SPEAKING" editorial card (prompt + scaffold + the spacious record rig + waveforms) over a quiet prompt rail | ◐ **built (skin only)** (Phase 8): the editorial header (独り言 · Self-talk kicker + "Say it out loud 声に出して" + lead + a streak / said-today meta-pill), and the drilled phrase cards reskinned as spacious editorial cards with a class spine + lift. **Verified signed-in** both themes. **DECIDED (2026-06-17): build the HYBRID** — add a daily-5 *featured card* as the default entry, keep the topic-browser (the superset) reachable below it. Skin shipped; the daily-5 featured card is the remaining build. | build the daily-5 featured card atop the kept topic-browser; verify both themes |

@@ -205,3 +205,13 @@
 .cardbars-cap .legend i b{width:11px;height:11px;border-radius:3px;display:inline-block}
 .cardbars-cap .cb-toggle{font-family:var(--mono);font-size:11px;color:var(--brand);background:none;border:none;cursor:pointer;text-decoration:underline;padding:0;letter-spacing:.02em}
 @media (max-width:760px){.cardbars{grid-template-columns:1fr}}
+
+/* footer seal-line (mock 310-315) */
+.footer-note{text-align:center;margin-top:56px;font-family:var(--mono);font-size:10.5px;letter-spacing:.22em;text-transform:uppercase;color:var(--muted);opacity:.75}
+.footer-note .jp{font-family:var(--jp);letter-spacing:.1em}
+
+/* leech rows stack on narrow (mock line 331) */
+@media (max-width:640px){
+  .leech-row{grid-template-columns:1fr;gap:12px}
+  .leech-word{min-width:0}
+}
