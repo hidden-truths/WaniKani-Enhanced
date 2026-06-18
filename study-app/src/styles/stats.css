@@ -117,4 +117,29 @@
 .leech-row .lr-acc{margin-left:auto;font-family:var(--mono);font-size:12px;color:var(--leech);font-weight:700}
 .leech-row .lr-acc .ic{font-size:13px;vertical-align:-0.15em;margin-right:3px}
 
-.srs-legend{font-family:var(--mono);font-size:10px;color:var(--muted);margin-top:10px;line-height:1.5}
+/* ===== MEMORY PIPELINE — vertical Leitner bars on a stone→jade ramp (mock 170-217) ===== */
+/* the only NEW palette the system doesn't ship: the New→Box5 ramp (light + dark) */
+:root,[data-theme="light"]{--box-0:#A99C86;--box-1:#CD4327;--box-2:#D8743A;--box-3:#C79A2E;--box-4:#7D9B4E;--box-5:#3F7A4E}
+[data-theme="dark"]{--box-0:#7C7060;--box-1:#FF6B4A;--box-2:#FF9359;--box-3:#E8C26A;--box-4:#9FD27A;--box-5:#56D9A6}
+.pipeline{display:grid;grid-template-columns:repeat(6,1fr);gap:18px;align-items:end;height:240px;padding-top:8px}
+.pcol{display:flex;flex-direction:column;align-items:center;gap:12px;height:100%;justify-content:flex-end}
+.pbar-track{width:100%;flex:1;display:flex;align-items:flex-end;justify-content:center}
+.pbar{width:100%;max-width:62px;border-radius:9px 9px 3px 3px;position:relative;box-shadow:var(--lift-sm);display:flex;align-items:flex-start;justify-content:center;transform-origin:bottom;animation:growY .9s cubic-bezier(.2,.7,.3,1) backwards}
+.pcol:hover .pbar{transform:scaleY(1.03)}
+/* light bars repaint richer (darken the top) so they read as saturated paper-ink, not faded */
+[data-theme="light"] .pipeline .pcol:nth-child(1) .pbar{background:linear-gradient(180deg,color-mix(in srgb,var(--box-0) 78%,#000),var(--box-0)) !important}
+[data-theme="light"] .pipeline .pcol:nth-child(2) .pbar{background:linear-gradient(180deg,color-mix(in srgb,var(--box-1) 78%,#000),var(--box-1)) !important}
+[data-theme="light"] .pipeline .pcol:nth-child(3) .pbar{background:linear-gradient(180deg,color-mix(in srgb,var(--box-2) 78%,#000),var(--box-2)) !important}
+[data-theme="light"] .pipeline .pcol:nth-child(4) .pbar{background:linear-gradient(180deg,color-mix(in srgb,var(--box-3) 78%,#000),var(--box-3)) !important}
+[data-theme="light"] .pipeline .pcol:nth-child(5) .pbar{background:linear-gradient(180deg,color-mix(in srgb,var(--box-4) 78%,#000),var(--box-4)) !important}
+[data-theme="light"] .pipeline .pcol:nth-child(6) .pbar{background:linear-gradient(180deg,color-mix(in srgb,var(--box-5) 78%,#000),var(--box-5)) !important}
+.pbar .count{font-family:var(--display);font-weight:700;font-size:20px;color:#fff;padding-top:9px;line-height:1;text-shadow:0 1px 3px rgba(0,0,0,.35)}
+.pbar.count-above{overflow:visible}
+.pbar.count-above .count{position:absolute;bottom:100%;left:50%;transform:translateX(-50%);padding:0 0 5px;color:var(--ink);text-shadow:none}
+.pcol .plabel{font-family:var(--mono);font-size:11px;letter-spacing:.03em;color:var(--muted);text-align:center;line-height:1.3}
+.pcol .plabel b{display:block;color:var(--ink);font-weight:600;font-size:11.5px}
+.pcol.best .plabel b{color:var(--good)}
+.pipe-legend{display:flex;align-items:center;justify-content:space-between;margin-top:20px;padding-top:16px;border-top:1px solid var(--line);font-family:var(--mono);font-size:11px;letter-spacing:.03em;color:var(--muted)}
+.pipe-legend .ramp{display:flex;align-items:center;gap:7px}
+.pipe-legend .ramp .swatches{display:inline-flex;gap:3px}
+.pipe-legend .ramp .swatches i{width:14px;height:8px;border-radius:2px}

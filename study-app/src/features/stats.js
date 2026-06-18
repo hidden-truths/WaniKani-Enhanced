@@ -4,7 +4,7 @@
 // labels) because they're intentionally the light-theme hairline tone.
 import { state } from '../state.js';
 import { localDay } from '../config.js';
-import { rollingAcc, isLeech, leeches, dueCards, studyStreak, BOX_COLORS } from '../core/index.js';
+import { rollingAcc, isLeech, leeches, dueCards, studyStreak } from '../core/index.js';
 import { save } from '../persistence/store.js';
 import { cfg, repaintDeck, updateDeckCount } from './deck.js';
 import { startSession } from './flashcard.js';
@@ -144,18 +144,28 @@ export function renderStats() {
     <span class="lr-acc"><svg class="ic" aria-hidden="true"><use href="#i-alert"/></svg>${Math.round(rollingAcc(v.rank) * 100)}%</span></div>`).join(''); }
   // Per-card accuracy bars (worst-first, capped + show-all toggle).
   renderCardBars();
-  // SRS memory pipeline: count cards in each Leitner box (0=New … 5).
+  // SRS memory pipeline (mock): six VERTICAL bars on the stone→jade Leitner ramp.
+  // Heights are a compressed read on each box's count (the true count is the label);
+  // a 0-count box is a short stub. The count sits inside tall bars (white) and floats
+  // above short ones (ink). Box 5 = best-learned (jade label). The bar fill is set inline
+  // as the dark gradient; stats.css overrides per-column in light (mock mechanism).
   const boxes = [0, 0, 0, 0, 0, 0]; // index = box 0..5
   state.DATA.forEach(v => { const c = state.store.cards[v.rank]; const b = c && c.box ? c.box : 0; boxes[b]++; });
-  const boxLabels = ['New', 'Box 1', 'Box 2', 'Box 3', 'Box 4', 'Box 5'];
-  const boxColors = BOX_COLORS;   // New→stone, then red→amber→gold→olive→green as cards mature
+  const boxName = ['New', 'Box 1', 'Box 2', 'Box 3', 'Box 4', 'Box 5'];
+  const boxInt = ['unseen', '1 day', '2 days', '4 days', '8 days', '16 days'];
   setBadge('pipeBadge', total + (total === 1 ? ' card' : ' cards'));
-  const bd = document.getElementById('boxDist');
-  bd.innerHTML = boxes.map((n, i) => `<div style="display:flex;align-items:center;gap:8px;margin-bottom:5px">
-    <div style="width:54px;font-family:monospace;font-size:11px;color:var(--muted)">${boxLabels[i]}</div>
-    <div style="flex:1;background:var(--paper-2);border-radius:2px;height:16px;position:relative">
-      <div class="barx" style="width:${total ? Math.round(100 * n / total) : 0}%;background:${boxColors[i]};height:100%;border-radius:2px;min-width:${n ? '3px' : '0'}"></div></div>
-    <div style="width:32px;text-align:right;font-family:monospace;font-size:11px;color:var(--muted)">${n}</div></div>`).join('');
+  // map the count RANGE to a compressed 52–88% band (mock) so the colour ramp leads, not
+  // a sawtooth of raw heights; a 0-count box is a short stub. The label shows the true count.
+  const nzBox = boxes.filter(n => n > 0);
+  const minBox = nzBox.length ? Math.min(...nzBox) : 0, maxBox = Math.max(...boxes, 1);
+  const pcols = boxes.map((n, i) => {
+    const h = n === 0 ? 4 : (maxBox === minBox ? 88 : Math.round(52 + (n - minBox) / (maxBox - minBox) * 36));
+    const above = n === 0 || h < 60;                               // shorter bars float the count above
+    const grad = `linear-gradient(180deg, color-mix(in srgb,var(--box-${i}) 82%, #fff 8%), var(--box-${i}))`;
+    return `<div class="pcol${i === 5 ? ' best' : ''}"><div class="pbar-track"><div class="pbar${above ? ' count-above' : ''}" style="height:${h}%;background:${grad};animation-delay:${(0.3 + i * 0.06).toFixed(2)}s"><span class="count">${n}</span></div></div><div class="plabel"><b>${boxName[i]}</b>${boxInt[i]}</div></div>`;
+  }).join('');
+  const swatches = boxes.map((n, i) => `<i style="background:var(--box-${i})"></i>`).join('');
+  document.getElementById('boxDist').innerHTML = `<div class="pipeline">${pcols}</div><div class="pipe-legend"><span>least learned</span><span class="ramp"><span class="swatches">${swatches}</span></span><span>best learned</span></div>`;
 }
 
 // Wire the Stats-panel actions (study-leeches jump + hard reset).
