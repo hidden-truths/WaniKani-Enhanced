@@ -22,8 +22,12 @@
 .sc-row{display:flex;justify-content:space-between;align-items:flex-start;gap:10px}
 .sc-title{display:block;font-family:var(--display);font-size:22px;font-weight:800;line-height:1.1;letter-spacing:-.01em}
 .sc-artist{display:block;font-size:13px;color:var(--muted);margin-top:3px}
-.ring{position:relative;display:inline-block;width:40px;height:40px;border-radius:50%;flex-shrink:0;background:conic-gradient(var(--ichidan) var(--p),var(--surf-inset) 0)}
-.ring>span{position:absolute;inset:5px;border-radius:50%;background:var(--surf-card);display:flex;align-items:center;justify-content:center;font-family:var(--mono);font-size:11px;font-weight:700;color:var(--ink)}
+/* Coverage ring — SCOPED to .sc-ring (it's only ever `.sc-ring > .ring`, library.js).
+   A bare global `.ring` collided with the decorative seal rings (`.hanko .ring`,
+   `.lesson-seal .ring`), which set only `inset` and inherited this 40×40 conic size →
+   a mis-sized, offset circle artifact inside the hanko/lesson seals. Keep it scoped. */
+.sc-ring .ring{position:relative;display:inline-block;width:40px;height:40px;border-radius:50%;flex-shrink:0;background:conic-gradient(var(--ichidan) var(--p),var(--surf-inset) 0)}
+.sc-ring .ring>span{position:absolute;inset:5px;border-radius:50%;background:var(--surf-card);display:flex;align-items:center;justify-content:center;font-family:var(--mono);font-size:11px;font-weight:700;color:var(--ink)}
 .sc-ring{display:flex;flex-direction:column;align-items:center;gap:3px;flex-shrink:0}
 .sc-ring-cap{font-family:var(--mono);font-size:9px;letter-spacing:.05em;text-transform:uppercase;color:var(--muted)}
 .sc-cov{display:block;margin-top:13px}
