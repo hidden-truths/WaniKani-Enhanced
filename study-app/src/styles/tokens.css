@@ -1,10 +1,16 @@
 /* =========================================================================
-   DESIGN TOKENS — "Day / Night" redesign system (the palette of record).
-   Every component references these vars, so light/dark is one data-theme flip
-   and the hand-rolled SVG charts reskin for free. The production token NAMES
+   DESIGN TOKENS — the "BLEND" system (the palette of record).
+   GENKŌ rice-paper + sumi ink + vermilion red-pen 朱筆 · KAISATSU line-colour =
+   word class · YORU black-lacquer + maki-e gold night. Every component
+   references these vars, so light/dark is one data-theme flip and the
+   hand-rolled SVG charts reskin for free.
+
+   The mocks (mockups/sleek/) use a different vocabulary (--shu/--ink-2/--sink,
+   data-theme day/night); this file MAPS that palette onto the app's role-token
+   NAMES so the feature code + charts keep resolving. The production token names
    the code/charts already use (--godan/--ichidan/--irregular/--paper-2/--jp-font)
-   are ALIASED onto the redesign role tokens (--brand/--reading/--gold/--raised)
-   at the bottom of each block — so var(--godan) etc. keep resolving.
+   are ALIASED onto the role tokens (--brand/--reading/--gold/--raised) at the
+   bottom of each block.
 
    THREE blocks, kept in sync: light (:root), dark ([data-theme="dark"]), and the
    prefers-color-scheme fallback (dark ONLY when the user hasn't explicitly chosen
@@ -13,43 +19,48 @@
    Palette intent (functional, not decorative):
      godan=vermilion · ichidan=indigo · irregular=gold · leech=plum · good=jade
      adjective=viridian · noun=ochre · adverb=wine-rose · phrase=taupe  (non-verb
-     cats — Phase 9 re-tuned to the warm washi palette: the old cool teal/amber/
-     magenta/SLATE were re-warmed [slate→taupe is the biggest shift] so they read
-     as part of the day/night system, kept distinct from each other + the verb hues.
-     The redesign mocks don't define these (all 100 built-ins are verbs); they show
-     on custom + Minna/song non-verb cards via colorClass()).
+     cats — identical to the prior warm-washi values, so they carry over). These
+     are the metro "line-colours": a word's class colours its spine + line-bullet
+     via colorClass().
    ========================================================================= */
 :root, :root[data-theme="light"]{
-  /* surfaces — warm washi paper; cards lift via a BRIGHTER raised sheet + shadow */
-  --paper:#F3ECDD; --raised:#FFFDF6; --deeper:#E4D7BE; --base:#EDE4D2;
-  /* ink */
-  --ink:#1C1714; --muted:#6B6052; --faint:#897C6B; --line:#CEBE9F;
-  /* functional role tokens */
-  --brand:#CD4327; --brand-deep:#A8311A; --brand-soft:#F3DACE; --brand-on:#FCEFE9;
-  --reading:#2A4A6E; --reading-deep:#1D3550; --reading-soft:rgba(42,74,110,.11); --reading-line:rgba(42,74,110,.34);
-  --good:#3F7A4E; --good-deep:#2C5C39; --good-soft:#DCE7DA; --good-on:#F2F7EF;
-  --gold:#8C6C1C;
-  --leech:#7E3F9C; --leech-soft:rgba(126,63,156,.10);
-  /* non-verb category accents (spine + hanko stamp) — warm washi (Phase 9): viridian · ochre · wine-rose · taupe */
-  --adjective:#2c7d6b; --noun:#a06a1e; --adverb:#a14258; --phrase:#736353;
+  /* surfaces — bright rice-paper; cards lift via a BRIGHTER raised sheet + shadow */
+  --paper:#F4F1E8; --raised:#FBFAF4; --deeper:#ECE7D9; --base:#EFEADD;
+  /* sumi ink — near-black, high contrast (+ a secondary ink for sub-labels) */
+  --ink:#15130D; --ink-2:#4B4536; --muted:#857C66; --faint:#9A8F78;
+  /* hairlines + the 原稿 manuscript grid */
+  --line:#16130B1C; --line-2:#16130B12; --grid:#1D160814;
+  /* brand accent — the teacher's red pen 朱 */
+  --brand:#DC3A22; --brand-deep:#B12C16; --brand-soft:rgba(220,58,34,.07); --brand-on:#FCEFE9;
+  --reading:#234C86; --reading-deep:#1A3A66; --reading-soft:rgba(35,76,134,.11); --reading-line:rgba(35,76,134,.34);
+  --good:#2C7A4F; --good-deep:#1F6440; --good-soft:rgba(44,122,79,.12); --good-on:#F2F7EF;
+  /* maki-e gold (material; richer at night) */
+  --gold:#9A6B0F; --gold-soft:rgba(154,107,15,.08);
+  --leech:#7C3A95; --leech-soft:rgba(124,58,149,.10);
+  /* non-verb category accents (spine + line-bullet) — viridian · ochre · wine-rose · taupe */
+  --adjective:#2C7D6B; --noun:#A06A1E; --adverb:#A14258; --phrase:#736353;
   /* derived surfaces */
   --spine:linear-gradient(to bottom, var(--brand), var(--brand-deep));
-  --chip-bg:var(--raised); --surf-card:var(--raised); --surf-inset:#EBE0CB; --surf-nav:rgba(251,246,236,.72);
+  --chip-bg:var(--raised); --surf-card:var(--raised); --surf-inset:#ECE7D9; --surf-nav:rgba(244,241,232,.82);
+  --card-edge:transparent;
   /* warm, liftable shadows (light depth is SHADOW-driven, not luminance-driven) */
-  --lift-sm:0 1px 2px rgba(46,33,20,.11), 0 4px 10px -2px rgba(46,33,20,.16);
-  --lift-md:0 2px 4px rgba(46,33,20,.11), 0 16px 34px -8px rgba(46,33,20,.32);
-  --lift-lg:0 4px 9px rgba(46,33,20,.13), 0 36px 66px -16px rgba(46,33,20,.42);
+  --lift-sm:0 1px 2px #1A14081A, 0 4px 10px -3px #2A200F24;
+  --lift-md:0 1px 0 #FFFFFFCC, 0 1px 2px #1A140820, 0 22px 40px -22px #2A200F2E;
+  --lift-lg:0 1px 0 #FFFFFFCC, 0 2px 4px #1A140822, 0 48px 70px -34px #2A200F3A;
   --card-shadow:var(--lift-lg);
-  --cta-shadow:0 1px 2px rgba(168,49,26,.32), 0 10px 22px -10px rgba(205,67,39,.40);
-  --cta-shadow-hover:0 2px 5px rgba(168,49,26,.4), 0 18px 34px -12px rgba(205,67,39,.55);
+  --cta-shadow:0 1px 2px #B12C1633, 0 14px 26px -12px #DC3A2255;
+  --cta-shadow-hover:0 2px 5px #B12C1640, 0 22px 40px -14px #DC3A2266;
   /* atmosphere knobs + subtle raised highlight */
   --grain-opacity:.30; --grain-blend:multiply;
-  --inner-hi:inset 0 1px 0 0 rgba(255,252,246,.75);
-  /* fonts — all-sans */
+  --inner-hi:inset 0 1px 0 0 rgba(255,255,255,.8);
+  /* radius */
+  --r:18px;
+  /* fonts — all-sans UI + Zen Old Mincho for editorial JP (rails/kickers/markers) */
   --display:"Bricolage Grotesque","Hanken Grotesk",system-ui,sans-serif;
   --body:"Hanken Grotesk",system-ui,-apple-system,sans-serif;
   --mono:"Spline Sans Mono",ui-monospace,"SF Mono",monospace;
   --jp:var(--jp-font);
+  --jp-min:"Zen Old Mincho",serif;
   /* ALIASES — existing code + SVG charts reskin for free.
      --jp-font is the live token the Settings font switcher rewrites at runtime;
      keep it (this is just its new default). */
@@ -57,28 +68,31 @@
   --paper-2:var(--raised);
   --jp-font:"Zen Kaku Gothic New","Noto Sans JP",sans-serif;
 }
-/* Dark — warm charcoal + coral/amber glow + frosted glass (NOT cold-blue tech). */
+/* Night — black lacquer 漆 + maki-e gold 金 glow + grain. Vermilion/coral stays
+   the brand signal; gold is the lacquer material. */
 [data-theme="dark"]{
-  --paper:#1B1612; --base:#16120F; --raised:rgba(44,35,27,.62); --deeper:#241C16;
-  --ink:#ECE3D5; --muted:#A89A86; --faint:#7A6E5E; --line:rgba(255,238,222,.09);
-  --brand:#FF6B4A; --brand-deep:#E8512F; --brand-soft:rgba(255,107,74,.12); --brand-on:#1F0C06;
-  --reading:#8A8FE0; --reading-deep:#6A6FC8; --reading-soft:rgba(138,143,224,.15); --reading-line:rgba(138,143,224,.62);
-  --good:#56D9A6; --good-deep:#37B888; --good-soft:rgba(86,217,166,.10); --good-on:#0B1F16;
-  --gold:#D9A94E;
+  --paper:#100D09; --raised:#1B1610; --deeper:#171209; --base:#0D0A07;
+  --ink:#F1E9D8; --ink-2:#C0B49C; --muted:#857A64; --faint:#6E6353;
+  --line:#FFF0D815; --line-2:#FFF0D80A; --grid:#FFF0D808;
+  --brand:#FF6B4A; --brand-deep:#E8512F; --brand-soft:rgba(255,107,74,.08); --brand-on:#1F0C06;
+  --reading:#8FA0EE; --reading-deep:#6F77C9; --reading-soft:rgba(143,160,238,.15); --reading-line:rgba(143,160,238,.62);
+  --good:#56D29A; --good-deep:#37B888; --good-soft:rgba(86,210,154,.10); --good-on:#0B1F16;
+  --gold:#E7BC6B; --gold-soft:rgba(231,188,107,.10);
   --leech:#C792EA; --leech-soft:rgba(199,146,234,.12);
-  --adjective:#5cbfa6; --noun:#d8a24e; --adverb:#d6818f; --phrase:#ab9a85;
-  --spine:linear-gradient(to bottom, var(--brand), #C5421F);
-  --chip-bg:rgba(255,238,222,.035);
-  --surf-card:linear-gradient(168deg, rgba(44,35,27,.74), rgba(36,28,22,.62));
-  --surf-inset:rgba(255,238,222,.055); --surf-nav:rgba(22,18,15,.62);
-  --lift-sm:0 1px 2px rgba(0,0,0,.4), 0 2px 8px -2px rgba(0,0,0,.5);
-  --lift-md:0 18px 44px -18px rgba(0,0,0,.65), 0 6px 18px -12px rgba(0,0,0,.55);
-  --lift-lg:0 28px 64px -22px rgba(0,0,0,.7), 0 10px 28px -16px rgba(0,0,0,.6);
-  --card-shadow:var(--lift-lg), 0 0 0 1px rgba(255,107,74,.06), 0 0 70px -26px rgba(255,107,74,.55);
-  --cta-shadow:0 10px 30px -12px rgba(255,107,74,.55);
-  --cta-shadow-hover:0 0 0 6px rgba(255,107,74,.10), 0 16px 40px -10px rgba(255,107,74,.8);
-  --grain-opacity:.05; --grain-blend:overlay;
-  --inner-hi:inset 0 1px 0 0 rgba(255,238,222,.06);
+  --adjective:#5CC0A6; --noun:#D8A24E; --adverb:#D6818F; --phrase:#AB9A85;
+  --spine:linear-gradient(to bottom, var(--brand), var(--brand-deep));
+  --chip-bg:rgba(255,240,216,.035);
+  --surf-card:linear-gradient(168deg, #221B14, #1B1610);
+  --surf-inset:#171209; --surf-nav:rgba(16,13,9,.72);
+  --card-edge:linear-gradient(150deg,#E7BC6B66,transparent 38%);
+  --lift-sm:0 1px 2px #00000050, 0 2px 8px -2px #00000070;
+  --lift-md:0 1px 2px #00000060, 0 24px 44px -24px #000000AA;
+  --lift-lg:0 2px 6px #00000066, 0 50px 80px -36px #000000CC, 0 0 0 1px #E7BC6B0F;
+  --card-shadow:var(--lift-lg);
+  --cta-shadow:0 0 0 1px #FF6B4A22, 0 16px 34px -14px #FF6B4A66;
+  --cta-shadow-hover:0 0 0 6px rgba(255,107,74,.10), 0 18px 40px -10px rgba(255,107,74,.8);
+  --grain-opacity:.08; --grain-blend:overlay;
+  --inner-hi:inset 0 1px 0 0 rgba(255,240,216,.06);
   --godan:var(--brand); --ichidan:var(--reading); --irregular:var(--gold);
   --paper-2:var(--raised);
 }
@@ -86,26 +100,28 @@
    Mirror of [data-theme="dark"] above — keep the two in sync. */
 @media (prefers-color-scheme: dark){
   :root:not([data-theme="light"]){
-    --paper:#1B1612; --base:#16120F; --raised:rgba(44,35,27,.62); --deeper:#241C16;
-    --ink:#ECE3D5; --muted:#A89A86; --faint:#7A6E5E; --line:rgba(255,238,222,.09);
-    --brand:#FF6B4A; --brand-deep:#E8512F; --brand-soft:rgba(255,107,74,.12); --brand-on:#1F0C06;
-    --reading:#8A8FE0; --reading-deep:#6A6FC8; --reading-soft:rgba(138,143,224,.15); --reading-line:rgba(138,143,224,.62);
-    --good:#56D9A6; --good-deep:#37B888; --good-soft:rgba(86,217,166,.10); --good-on:#0B1F16;
-    --gold:#D9A94E;
+    --paper:#100D09; --raised:#1B1610; --deeper:#171209; --base:#0D0A07;
+    --ink:#F1E9D8; --ink-2:#C0B49C; --muted:#857A64; --faint:#6E6353;
+    --line:#FFF0D815; --line-2:#FFF0D80A; --grid:#FFF0D808;
+    --brand:#FF6B4A; --brand-deep:#E8512F; --brand-soft:rgba(255,107,74,.08); --brand-on:#1F0C06;
+    --reading:#8FA0EE; --reading-deep:#6F77C9; --reading-soft:rgba(143,160,238,.15); --reading-line:rgba(143,160,238,.62);
+    --good:#56D29A; --good-deep:#37B888; --good-soft:rgba(86,210,154,.10); --good-on:#0B1F16;
+    --gold:#E7BC6B; --gold-soft:rgba(231,188,107,.10);
     --leech:#C792EA; --leech-soft:rgba(199,146,234,.12);
-    --adjective:#5cbfa6; --noun:#d8a24e; --adverb:#d6818f; --phrase:#ab9a85;
-    --spine:linear-gradient(to bottom, var(--brand), #C5421F);
-    --chip-bg:rgba(255,238,222,.035);
-    --surf-card:linear-gradient(168deg, rgba(44,35,27,.74), rgba(36,28,22,.62));
-    --surf-inset:rgba(255,238,222,.055); --surf-nav:rgba(22,18,15,.62);
-    --lift-sm:0 1px 2px rgba(0,0,0,.4), 0 2px 8px -2px rgba(0,0,0,.5);
-    --lift-md:0 18px 44px -18px rgba(0,0,0,.65), 0 6px 18px -12px rgba(0,0,0,.55);
-    --lift-lg:0 28px 64px -22px rgba(0,0,0,.7), 0 10px 28px -16px rgba(0,0,0,.6);
-    --card-shadow:var(--lift-lg), 0 0 0 1px rgba(255,107,74,.06), 0 0 70px -26px rgba(255,107,74,.55);
-    --cta-shadow:0 10px 30px -12px rgba(255,107,74,.55);
-    --cta-shadow-hover:0 0 0 6px rgba(255,107,74,.10), 0 16px 40px -10px rgba(255,107,74,.8);
-    --grain-opacity:.05; --grain-blend:overlay;
-    --inner-hi:inset 0 1px 0 0 rgba(255,238,222,.06);
+    --adjective:#5CC0A6; --noun:#D8A24E; --adverb:#D6818F; --phrase:#AB9A85;
+    --spine:linear-gradient(to bottom, var(--brand), var(--brand-deep));
+    --chip-bg:rgba(255,240,216,.035);
+    --surf-card:linear-gradient(168deg, #221B14, #1B1610);
+    --surf-inset:#171209; --surf-nav:rgba(16,13,9,.72);
+    --card-edge:linear-gradient(150deg,#E7BC6B66,transparent 38%);
+    --lift-sm:0 1px 2px #00000050, 0 2px 8px -2px #00000070;
+    --lift-md:0 1px 2px #00000060, 0 24px 44px -24px #000000AA;
+    --lift-lg:0 2px 6px #00000066, 0 50px 80px -36px #000000CC, 0 0 0 1px #E7BC6B0F;
+    --card-shadow:var(--lift-lg);
+    --cta-shadow:0 0 0 1px #FF6B4A22, 0 16px 34px -14px #FF6B4A66;
+    --cta-shadow-hover:0 0 0 6px rgba(255,107,74,.10), 0 18px 40px -10px rgba(255,107,74,.8);
+    --grain-opacity:.08; --grain-blend:overlay;
+    --inner-hi:inset 0 1px 0 0 rgba(255,240,216,.06);
     --godan:var(--brand); --ichidan:var(--reading); --irregular:var(--gold);
     --paper-2:var(--raised);
   }
