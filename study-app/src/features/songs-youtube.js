@@ -28,14 +28,15 @@ function loadApi() {
 }
 
 // Mount a player on `el` for `videoId`. Returns the YT.Player, or null if the API failed to load.
-// `onTime(seconds)` (optional) fires ~4×/s while playing — drives synced highlight.
-export async function mountPlayer(el, videoId, { onTime } = {}) {
+// `onTime(seconds)` (optional) fires ~4×/s while playing — drives synced highlight. `autoplay` starts
+// playback on mount (used by Read's "Play with video" — a user gesture, so sound autoplay is allowed).
+export async function mountPlayer(el, videoId, { onTime, autoplay } = {}) {
   destroyPlayer();
   await loadApi();
   if (!(window.YT && window.YT.Player) || !el) return null;
   player = new window.YT.Player(el, {
     videoId,
-    playerVars: { rel: 0, modestbranding: 1, playsinline: 1 },
+    playerVars: { rel: 0, modestbranding: 1, playsinline: 1, autoplay: autoplay ? 1 : 0 },
     events: {
       onStateChange: (e) => {
         if (e.data === window.YT.PlayerState.PLAYING && onTime) startPoll(onTime);

@@ -90,7 +90,9 @@ Backend (auth, progress, cookie, the cross-origin CORS) is the server's:
    → `dist/`; `bun run preview` serves the built bundle. Edit modules under `src/`:
    pure logic in `src/core/*`, shared state in `src/state.js`, DOM/feature glue in
    `src/features/*` (boot order in `src/main.js`), markup in `index.html`, styles in
-   `src/styles.css` (imported by `main.js`).
+   `src/styles/*.css` (the Day/Night design system — `tokens`/`base`/`chrome`/per-surface)
+   plus the shared core `src/styles.css`, all imported in cascade order by `main.js`. See
+   "Design system" below.
 2. **Verify visually.** This is a UI; screenshot the change. Drive it with the
    browser-preview tooling (`.claude/launch.json` has both `study-app` and
    `wk-enhanced-api` configs). See the preview caveat in the dead-ends below. **Run
@@ -286,29 +288,56 @@ onto built-in cards' `v.accent` by `attachLevels` (Minna cards carry their own).
 
 ## Design system
 
-> **A full visual redesign is COMPLETE as mocks and is the next big task to ship.** A serif-free
-> "Day / Night" system (all-sans: Bricolage Grotesque + Hanken Grotesk + Spline Sans Mono + Zen Kaku
-> Gothic New; warm washi light + candle-lit warm dark) lives in [mockups/redesign/](mockups/redesign/)
-> with a shared `system.css` — **11 surfaces, both themes, mobile-passed, twice-critiqued (~9.3/10)**,
-> NOT yet applied to the real `index.html`/`src/styles.css`. **To migrate, start at
-> [mockups/redesign/MIGRATION.md](mockups/redesign/MIGRATION.md)** (the plan: reskin-in-place + token
-> aliasing) + its [MIGRATION_PROMPT.md](mockups/redesign/MIGRATION_PROMPT.md); the mock journey is in
-> [mockups/redesign/HANDOFF.md](mockups/redesign/HANDOFF.md). The section below documents the
-> **current production design** (what's still shipping until the migration lands).
+> **The "Day / Night" redesign is COMPLETE — skin AND layout** (Phases 0–9, 2026-06-17, on the
+> `redesign-migration` branch, pending push): an all-sans system (Bricolage Grotesque display + Hanken
+> Grotesk body + Spline Sans Mono labels + Zen Kaku Gothic New for Japanese; warm washi-paper light +
+> candle-lit warm-charcoal dark). Phases 0–7 reskinned in place + token-aliased; Phase 8 rebuilt the
+> per-panel compositions; **Phase 9 fixed the FRAME and finished the match** — the chrome is the mock's
+> single-row `.topbar` (brand · inline underline-tabs · theme/settings + round `.avatar`), with the
+> load-bearing `#navExtra` speaking-bar dock relocated to a sticky sub-bar; `.wrap` is the 1180/40
+> column with a uniform top gap; 歌 Songs is rebuilt as the two-column stage (hero play-card · on-demand
+> video · glowing playhead · mined-vocab rail); 独り言 is the daily-5 hybrid (featured card + rail +
+> the kept topic browser); the non-verb accents are re-tuned to the warm palette. All verified
+> signed-in in both themes.
+>
+> **The CSS is split per surface + shared kit.** `src/styles/tokens.css` (palette — both themes + the
+> prefers-color-scheme fallback) + `base.css` (reset/body/`.wrap`/atmosphere) + `chrome.css`; the SHARED
+> core stays in `src/styles.css` (buttons, chips, filters, `.speak-btn`, tap-a-word, global utils +
+> motion keyframes), with two shared kits peeled to their own files — **`styles/modals.css`** (the
+> overlay/sheet/× + form primitives + Settings rows + voice editor + in-modal `<details>`) and
+> **`styles/record-compare.css`** (the record/play/compare + speaking-bar engine UI + the `#navExtra`
+> dock trims); then the per-surface `flashcards/browse/stats/minna/selftalk/songs.css`. `src/main.js`
+> imports them in cascade order: **tokens → base → chrome → styles → modals → record-compare →
+> flashcards → browse → stats → minna → selftalk → songs** (modals + record-compare sit in the
+> shared-core slot, after styles.css + chrome.css so Rule A holds; the modal entrance keyframes
+> overlayIn/modalPop stay in styles.css since modalPop is shared with the tap-a-word `.word-pop`). The
+> mocks stay in [mockups/redesign/](mockups/redesign/) as the visual reference; the full Phase-by-phase
+> record is [mockups/redesign/MIGRATION_PROGRESS.md](mockups/redesign/MIGRATION_PROGRESS.md).
 
-**Type-label rule:** uppercase-mono (the signature) is for SHORT labels only —
-filter/stat/section labels, kickers, tabs. Longer descriptive strings (chart
-titles, helper/hint text) are sentence-case mono so they stay scannable; don't
-add `text-transform:uppercase` to a multi-word sentence.
+**Type-label rule:** uppercase-mono (`--mono`, Spline Sans Mono — the signature) is for SHORT labels
+only — filter/stat/section labels, kickers. Longer descriptive strings (chart titles, helper/hint
+text) are sentence-case mono so they stay scannable; don't add `text-transform:uppercase` to a
+multi-word sentence. (The redesign moved the **tabs** off uppercase-mono onto body-font sentence-case
+with an underline-active bar — see `styles/chrome.css`.)
 
-All theming flows through CSS custom properties (`--ink/--paper/--paper-2`,
-`--godan/--ichidan/--irregular`, `--adjective/--noun/--adverb/--phrase`,
-`--muted/--line`, `--leech`, `--good`, `--jp-font`); light/dark is one `data-theme`
-flip on `<html>`. Colors are **functional, not decorative** — verb classes
-(godan=vermilion, ichidan=indigo, irregular=stone) and the non-verb category
-accents (adjective=teal, noun=amber, adverb=rose, phrase=slate) both paint the card
-spine + hanko stamp via `colorClass(v)`; leech=purple. Mono labels (`SF Mono`), serif chrome (Georgia), swappable
-`.jp` font for Japanese text.
+All theming flows through CSS custom properties in `styles/tokens.css`. The redesign **role tokens**
+are the source of truth: surfaces `--paper/--raised/--deeper/--base` + `--surf-card/--surf-inset/
+--surf-nav/--chip-bg`; ink `--ink/--muted/--faint/--line`; functional `--brand(-deep/-soft/-on)`
+(godan), `--reading(...)` (ichidan), `--good(...)`, `--gold` (irregular), `--leech`; shadows
+`--lift-sm/md/lg --card-shadow --cta-shadow --inner-hi`; fonts `--display/--body/--mono/--jp`. The
+PRODUCTION token NAMES the feature code + the hand-rolled SVG charts already reference are **aliased**
+onto these so they reskin for free: `--godan→--brand`, `--ichidan→--reading`, `--irregular→--gold`,
+`--paper-2→--raised`; `--jp-font` stays the live token the Settings font switcher rewrites (new
+default Zen Kaku Gothic New, `--jp` flows from it). Light/dark is one `data-theme` flip on `<html>`
+(+ a `prefers-color-scheme` fallback). Colors are **functional, not decorative** — verb classes
+(godan=vermilion/coral, ichidan=indigo, irregular=gold) and the non-verb category accents
+(adjective=viridian, noun=ochre, adverb=wine-rose, phrase=taupe — Phase 9 re-tuned to the warm washi
+palette) paint the card spine + hanko stamp via `colorClass(v)`; leech=plum, "got it right"=jade. Type is **all-sans** (the Georgia serif + SF-Mono
+were removed): `--display` (Bricolage — display/numerals/the revealed meaning), `--body` (Hanken —
+UI/prose), `--mono` (Spline Sans Mono — short labels), `--jp` (Zen Kaku Gothic New — all Japanese).
+The `.grain` + `.atmos` fixed layers (`styles/base.css`, behind content at z-0) carry the
+paper-grain + candle-glow atmosphere; light depth is **shadow-driven** (`--lift-*`), dark depth is
+**glow-driven** — both live on the component surfaces, not on luminance.
 
 Component contracts you must preserve:
 
@@ -340,13 +369,18 @@ Component contracts you must preserve:
   + `float:right` so it stays pinned top-right while the body scrolls (don't revert it to plain
   `absolute` — a tall modal like Settings would scroll the × out of reach). Add long modal content
   freely; it just scrolls.
-- **Sticky navbar (`.navbar` / `.nav-inner`)** is the anchored top bar: title (left), the
-  `#navExtra` slot (a context-controls dock — `minna.js` fills it with the speaking/compare bar,
-  empties it on tab-leave), and `.nav-actions` (right) — theme + settings are `.nav-btn.icon-only`
-  (icon, no text label; keep their `aria-label`/`title`), the account button is a `.nav-btn` with
-  the cloud icon + email. Transient sync/feedback is the auto-clearing `#syncStatus` pill (set via
-  `setSyncStatus`), NOT a persistent label. Import/Export live in the Settings modal's "Backup"
-  row (`io.js` still finds them by id). There is no `<header>`/`<h1>` headline anymore.
+- **Sticky chrome (`.chrome` > `.topbar` + `#navExtra`)** is the anchored top bar (Phase 9 — the mock's
+  SINGLE row, was a two-row `.navbar`+`.tabs`). `.chrome` is the sticky wrapper holding the `.topbar`
+  (`.brand` left · the tabs INLINE as `.nav .tab` underline-active links, keeping `.tab`+`data-tab` so
+  `initTabs` is unchanged · `.top-actions` right = theme/settings `.icon-btn` + the round gradient
+  `.avatar` account button) **over** the `#navExtra` speaking-bar dock — a frosted sub-bar that
+  `minna.js`/`selftalk`/`songs-shadow` fill via `createSpeakingBar` (`:empty`→hidden), relocated here
+  out of the old centered slot but with the SAME id/class so its wiring + the `.nav-extra .speaking-bar`
+  trims (now in `record-compare.css`) are unchanged. The account button is `#accountBtn` (id + click
+  wiring + `updateAccountChip` kept) — `updateAccountChip` now renders the user's INITIAL (via
+  textContent) signed-in / a muted person glyph signed-out, with the email in the `title` (no more
+  innerHTML interpolation of the email). Transient sync/feedback is the auto-clearing `#syncStatus`
+  pill (`setSyncStatus`). Import/Export live in the Settings modal's "Backup" row. No `<header>`/`<h1>`.
 
 ## Things that look like bugs but aren't (DEAD-END WARNINGS)
 

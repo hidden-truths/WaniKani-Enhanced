@@ -31,25 +31,44 @@ pitch accent) have all shipped — **and so has THE BIG ONE: the split into two 
 > the real voices in prod; the `/v1/audio/tts` ETag + `no-cache` headers (so a re-voiced clip
 > propagates) are also live. Full status: [NEXT_AUDIO_UNIFY.md](../docs/history/NEXT_AUDIO_UNIFY.md).
 
-## 🚩 THE NEXT BIG ONE — migrate the app to the Day/Night redesign
+## ✅ SHIPPED (pending push/merge) — the Day/Night redesign (Phases 0–9)
 
-A complete visual redesign — the serif-free **"Day / Night"** system — is **finished as mocks**
-([mockups/redesign/](mockups/redesign/)): 11 surfaces (every tab + the Settings/auth/add-card modals,
-the pre-reveal flashcard prompt, banners/empty states), both themes, a mobile pass (≤640px), and two
-critique sweeps (~9.3/10). It is **NOT yet applied** to the real `index.html`/`src/styles.css`.
+The serif-free **"Day / Night"** redesign is **complete — skin AND layout** — on the
+`redesign-migration` branch (2026-06-17, **NOT yet pushed/merged** at time of writing). Phases 0–7
+reskinned-in-place + token-aliased; Phase 8 rebuilt the per-panel compositions; **Phase 9 fixed the
+FRAME and finished the match**: the single-row `.topbar` (brand · inline underline-tabs · theme/settings
++ round `.avatar`) with the `#navExtra` speaking-bar dock relocated to a sticky sub-bar; the 1180/40
+`.wrap` column with a uniform top gap; 歌 Songs rebuilt as the two-column stage (hero play-card ·
+on-demand video · glowing playhead · mined-vocab rail); 独り言 the daily-5 hybrid (featured card + rail +
+the kept topic browser); the non-verb accents re-tuned to the warm palette; and the modal-kit +
+record-compare CSS peeled to `styles/modals.css` + `styles/record-compare.css`. **All verified signed-in
+(owner via the proxy harness) in both themes; `bun run test` (245) + `bun run build` green throughout.**
+The per-phase record + the signed-in proxy-harness recipe are in
+[mockups/redesign/MIGRATION_PROGRESS.md](mockups/redesign/MIGRATION_PROGRESS.md); the design system is
+[CLAUDE.md](CLAUDE.md) "Design system"; the mocks stay in [mockups/redesign/](mockups/redesign/).
 
-**This is the priority.** The plan is a **reskin-in-place**: keep the markup, class names, and JS
-contracts; rewrite `src/styles.css` (+ a small `index.html` head/atmosphere change) using **token
-aliasing** (alias `--godan`/`--ichidan`/`--paper`/… onto the new palette) so the hand-rolled SVG
-charts and every existing `var(--…)` reference reskin for free. Phased, each phase shippable.
-
-- **Read + plan:** [mockups/redesign/MIGRATION.md](mockups/redesign/MIGRATION.md) — strategy, the
-  mocks-vs-production gap, the phased plan (Phase 0 = tokens/fonts/atmosphere first), the load-bearing
-  constraints to preserve, and the open decisions to confirm first.
-- **Kickoff prompt:** [mockups/redesign/MIGRATION_PROMPT.md](mockups/redesign/MIGRATION_PROMPT.md).
-- **Visual source of truth:** [mockups/redesign/system.css](mockups/redesign/system.css) + the
-  `screens/*.png`; the mock journey + dead-ends are in
-  [mockups/redesign/HANDOFF.md](mockups/redesign/HANDOFF.md).
+**Next steps / possible improvements (none blocking):**
+- **Safari/WebKit pass.** Only verified headless-Chromium. Re-check on real Safari: the `.mn-vocab`
+  border-collapse table (the `0 solid transparent` trap rule is preserved), the topbar/modal/card/rail
+  `backdrop-filter` frosting, and the `-webkit-background-clip:text` gradient titles (dark bignum,
+  song-title, 独り言 featured) — they fall back to a flat fill if clip-text misbehaves.
+- **Real-device mobile pass.** Verified at ~390px headless; test on a real phone: the scrollable nav
+  row, the daily-5 / songs two-column collapse (`≤860px`/`≤1080px`), and tap targets.
+- **歌 "Play with video" autoplay + the line-sync.** Headless YouTube is unreliable, so the on-demand
+  autoplay + the `highlightAt` glowing-line sync weren't exercised end-to-end with a real playing video
+  — confirm in a real browser (the CSS + the `.ll.current` toggle are verified via a simulated current line).
+- **独り言 daily-5 could feature templates.** The daily rotation is `todaysSet(phrases)` (fixed phrases);
+  the mock's featured prompts are slot-swap *template* scaffolds. Including templates in the daily set
+  (or preferring a template when one matches the day's topic) would match the mock's scaffold card more
+  closely. The rail/feature plumbing already handles either card type via `.st-phrase`.
+- **歌 coverage as a segmented bar.** The mock's hero shows a *segmented* coverage bar; the app shows the
+  JLPT-difficulty stacked bar + a mining ring (richer, but not the exact segmented-coverage motif). A
+  dedicated coverage-segment row could be added if wanted.
+- **Accent AA-contrast audit.** The re-tuned non-verb accents (viridian/ochre/wine-rose/taupe) read well
+  as spine/stamp fills; double-check AA when used as *text* on chips (the Source-filter chips) in both themes.
+- **Optional: animate the `#navExtra` sub-bar in** (slide/fade) when a speaking surface mounts it, so it
+  doesn't pop. Covered by `prefers-reduced-motion` if added.
+- **Push / open the PR** (operator) once the maintainer signs off.
 
 ## ✅ SHIPPED — split into two apps (the learning tool + the API)
 
@@ -434,10 +453,9 @@ This is the priority. The items below are smaller and can follow.
   "What's deliberately NOT in v1."
 
 ## Ideas / not yet scoped
-- **Visual redesign — "Day / Night" system.** Mocks are COMPLETE (11 surfaces, both themes, a mobile
-  pass, twice-critiqued ~9.3/10). Shipping it is now the **top priority** — see **🚩 THE NEXT BIG ONE**
-  near the top of this file and the plan in
-  [mockups/redesign/MIGRATION.md](mockups/redesign/MIGRATION.md).
+- ~~**Visual redesign — "Day / Night" system.**~~ **SHIPPED (Phases 0–9, pending push/merge)** — see
+  "✅ SHIPPED — the Day/Night redesign" near the top of this file for the summary + the next-steps/
+  possible-improvements list. The mocks stay in [mockups/redesign/](mockups/redesign/) as the reference.
 - **Unify voice-audio sourcing behind one tagged API** — **Phases 1 + 2 SHIPPED** (see Done /
   [NEXT_AUDIO_UNIFY.md](../docs/history/NEXT_AUDIO_UNIFY.md)): a unified `/v1/audio` surface, a tagged-variant
   catalog, the `core/audio.js` resolver + shared `playItem` player, and a per-context voice picker.

@@ -183,8 +183,13 @@ async function fetchMinnaLesson(n) {
   const r = await api('/v1/minna/lessons/' + n);
   minnaLessonCache[n] = r; return r;
 }
-function mnSection(title, count, bodyHtml, open) {
-  return `<details class="mn-section"${open ? ' open' : ''}><summary>${title}${count != null ? ` <span class="mn-count">· ${count}</span>` : ''}</summary><div class="mn-sec-body">${bodyHtml}</div></details>`;
+// Section = a collapsible card with the mock's numbered .sec-head (a numbered badge + title +
+// an optional JP sub-label, count on the right). opts: {num, jp, unit}.
+function mnSection(title, count, bodyHtml, open, opts = {}) {
+  const { num, jp, unit } = opts;
+  const left = `<span class="sec-title">${num ? `<span class="num">${num}</span>` : ''}<span class="sec-h2">${title}</span>${jp ? `<span class="jp-sub jp">${jp}</span>` : ''}</span>`;
+  const right = count != null ? `<span class="sec-count">${count}${unit ? ' ' + unit : ''}</span>` : '';
+  return `<details class="mn-section"${open ? ' open' : ''}><summary class="sec-head">${left}${right}</summary><div class="mn-sec-body">${bodyHtml}</div></details>`;
 }
 // Two gate states: signed-OUT shows a sign-in invite; signed-in-but-DENIED (a 401 from the
 // owner allowlist, MINNA_OWNER_EMAILS) shows a "not on your account" note WITHOUT a Sign-in
@@ -225,6 +230,14 @@ export async function renderMinna() {
   head.querySelectorAll('.mnch').forEach(b => b.addEventListener('click', () => { exitSpeakingMode(); state.minnaStore.lastLesson = Number(b.dataset.lesson); saveMinna(); renderMinna(); }));
   await renderMinnaLesson(cur, body);
 }
+// Lesson number → kanji (7→七, 23→二十三) for the hanko lesson seal.
+const KNUM = ['〇', '一', '二', '三', '四', '五', '六', '七', '八', '九'];
+function kanjiNum(n) {
+  if (n < 10) return KNUM[n] || String(n);
+  if (n < 20) return '十' + (n % 10 ? KNUM[n % 10] : '');
+  if (n < 100) return KNUM[Math.floor(n / 10)] + '十' + (n % 10 ? KNUM[n % 10] : '');
+  return String(n);
+}
 async function renderMinnaLesson(n, body) {
   body.innerHTML = '<div class="mn-loading">Loading lesson ' + n + '…</div>';
   let L;
@@ -238,15 +251,26 @@ async function renderMinnaLesson(n, body) {
   const btn = st.toAdd ? { ic: 'plus', label: 'Add all vocab to deck', dis: '' }
     : st.toUpdate ? { ic: 'refresh', label: 'Update ' + st.toUpdate + ' word' + (st.toUpdate === 1 ? '' : 's'), dis: '' }
       : { ic: 'check', label: 'All vocab in your deck', dis: ' disabled' };
+  const vocabN = (L.vocab || []).length, gramN = (L.grammar || []).length;
+  const pct = st.total ? Math.round(100 * st.inDeck / st.total) : 0;
   body.innerHTML = `
-    <div class="mn-head" style="margin-top:14px">
-      <div class="mn-title">${escapeHtml(L.title || ('Lesson ' + n))}</div>
-      ${L.theme ? `<div class="mn-theme">${escapeHtml(L.theme)}</div>` : ''}
-    </div>
-    <div class="mn-actions">
-      <button class="chip primary" id="mnAddDeck"${btn.dis}><svg class="ic" aria-hidden="true"><use href="#i-${btn.ic}"/></svg>${btn.label}</button>
-      <span class="v-in" id="mnDeckCount">${st.inDeck}/${st.total} in your SRS deck</span>
-    </div>
+    <section class="lesson-head" style="margin-top:14px">
+      <div class="lesson-seal" title="Lesson ${n} seal"><span class="ring"></span><span class="ka jp">${kanjiNum(n)}</span><span class="romaji">dai ${n} ka</span></div>
+      <div class="lesson-info">
+        <h1 class="lesson-no">第${n}課</h1>
+        <div class="lesson-sub">Lesson&nbsp;${n}${L.theme ? ` · <span class="accent">${escapeHtml(L.theme)}</span>` : ''}</div>
+        <div class="lesson-progress">
+          <span class="prog-stat">vocab <b>${vocabN}</b></span>
+          <span class="prog-stat">grammar <b>${gramN}</b></span>
+          <div class="prog-meter"><div class="prog-fill" style="width:${pct}%"></div></div>
+          <span class="prog-pct">${pct}% in deck</span>
+        </div>
+      </div>
+      <div class="lesson-actions">
+        <button class="btn btn-primary" id="mnAddDeck"${btn.dis}><svg class="ic" aria-hidden="true"><use href="#i-${btn.ic}"/></svg>${btn.label}</button>
+        <span class="v-in" id="mnDeckCount">${st.inDeck}/${st.total} in your SRS deck</span>
+      </div>
+    </section>
     ${minnaVocabSection(L)}
     ${minnaGrammarSection(L)}
     ${minnaExamplesSection(L)}
@@ -265,7 +289,7 @@ function minnaVocabSection(L) {
       <td style="text-align:right">${minnaInDeck(v.key) ? '<span class="v-in">✓</span>' : ''}</td>
     </tr>${speaking ? `
     <tr class="mn-rec-row"><td></td><td colspan="3">${recordControlHtml(L.lesson, v.key, v.audio, null, false, ttsText({ jp: v.dict || v.kanji || v.kana, read: v.dictRead || v.kana, tts: v.tts }))}</td></tr>` : ''}`).join('');
-  return mnSection('Vocabulary', L.vocab.length, `<table class="mn-vocab"><tbody>${rows}</tbody></table>`, true);
+  return mnSection('Vocabulary', L.vocab.length, `<table class="mn-vocab"><tbody>${rows}</tbody></table>`, true, { num: 1, jp: 'ことば', unit: 'words' });
 }
 // A small inline TTS button for a sentence that has no native audio (grammar / lesson
 // examples). Carries the ruby-stripped plain text in data-tts (the exact string /v1/tts
@@ -281,13 +305,18 @@ function minnaExampleRows(list) {
 }
 function minnaGrammarSection(L) {
   if (!L.grammar || !L.grammar.length) return '';
-  const items = L.grammar.map(g => `<div class="mn-gram">
-      <div class="mn-pattern jp">${escapeHtml(g.pattern)}</div>
-      ${g.structure ? `<div class="mn-structure jp">${escapeHtml(g.structure)}</div>` : ''}
-      ${g.explain ? `<div class="mn-explain">${escapeHtml(g.explain)}</div>` : ''}
-      ${g.examples && g.examples.length ? minnaExampleRows(g.examples) : ''}
-    </div>`).join('');
-  return mnSection('Grammar', L.grammar.length, items, true);
+  // 3-up grammar card grid (mock): a tag + the JP pattern + the gloss + one specimen example.
+  const cards = L.grammar.map(g => {
+    const ex = g.examples && g.examples.length ? g.examples[0] : null;
+    return `<article class="card gcard">
+      <span class="g-tag"><span class="dot"></span>${escapeHtml(g.label || 'Pattern')}</span>
+      <div class="g-pattern jp">${escapeHtml(g.pattern || '')}</div>
+      ${g.structure ? `<div class="g-structure jp">${escapeHtml(g.structure)}</div>` : ''}
+      ${g.explain ? `<p class="g-gloss">${escapeHtml(g.explain)}</p>` : ''}
+      ${ex ? `<div class="g-ex"><p class="ex-jp jp">${rubyHtml(ex.jp)}</p><p class="ex-en">${escapeHtml(ex.en)}</p><div class="g-ex-foot"><span class="ex-mark">Example</span>${ttsSentenceBtn(ex.jp)}</div></div>` : ''}
+    </article>`;
+  }).join('');
+  return mnSection('Grammar points', L.grammar.length, `<div class="grammar-grid">${cards}</div>`, true, { num: 2, jp: 'ぶんぽう', unit: 'patterns' });
 }
 function minnaExamplesSection(L) {
   if (!L.examples || !L.examples.length) return '';
@@ -295,18 +324,29 @@ function minnaExamplesSection(L) {
 }
 function minnaConversationSection(L) {
   const c = L.conversation; if (!c || !c.lines || !c.lines.length) return '';
-  const head = c.title ? `<div class="mn-theme jp" style="margin:0 0 8px">${escapeHtml(c.title)}</div>` : '';
+  const head = c.title ? `<div class="convo-title jp">${escapeHtml(c.title)}</div>` : '';
   const audio = c.audio ? `<div class="mn-conv-audio">${mnAudioBtn(c.audio)}<span>Play the whole conversation</span></div>` : '';
+  // Two-colour speaker BUBBLES (mock): the first distinct role speaks from the left (A / brand),
+  // the second from the right (B / indigo, via .turn.is-b). roleMap assigns a stable speaker
+  // index per role so the colours/sides stay consistent across the dialogue.
+  const roleMap = {}; let nextSpk = 0;
   const lines = c.lines.map((ln, idx) => {
-    // Each line is recordable; its native-compare target is a CLIP of the one whole-
-    // conversation MP3 (c.audio). The clip comes from line.clip ∪ the synced store.
+    const role = (ln.role || '').trim();
+    if (!(role in roleMap)) roleMap[role] = nextSpk++;
+    const isB = roleMap[role] % 2 === 1;
+    const mark = role && role.length <= 2 ? escapeHtml(role) : (isB ? 'B' : 'A');
+    // Each line is recordable; its native-compare target is a CLIP of the one whole-conversation
+    // MP3 (c.audio). The clip comes from line.clip ∪ the synced store.
     const clip = c.audio ? resolveClip(ln.clip, getLineClip(L.lesson, idx)) : null;
     const rec = (c.audio && isSpeakingMode())
       ? `<div class="mn-line-rec">${recordControlHtml(L.lesson, convItemKey(L.lesson, idx), c.audio, clip, true, plainText(ln.jp))}${clipAffordanceHtml(idx, clip)}</div>`
       : '';
-    return `<div class="mn-line"><div class="mn-role">${escapeHtml(ln.role || '')}</div><div class="mn-line-body"><div class="l-jp jp">${rubyHtml(ln.jp)}</div><div class="l-en">${escapeHtml(ln.en)}</div>${rec}</div></div>`;
+    return `<div class="turn${isB ? ' is-b' : ''}">
+      <span class="spk ${isB ? 'b' : 'a'}">${mark}</span>
+      <div class="turn-body"><p class="t-jp jp">${rubyHtml(ln.jp)}</p><p class="t-en">${escapeHtml(ln.en)}</p>${rec}</div>
+    </div>`;
   }).join('');
-  return mnSection('Conversation', c.lines.length, head + audio + lines, false);
+  return mnSection('Model conversation', c.lines.length, `${head}${audio}<div class="convo">${lines}</div>`, true, { num: 3, jp: 'かいわ', unit: 'lines' });
 }
 // The clip affordance per conversation line: a current-clip readout + a Set/Edit button
 // that opens the in-app marker (wired in wireMinnaClips). `idx` is the line index.

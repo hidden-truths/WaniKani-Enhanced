@@ -18,9 +18,10 @@ export const S = {
   storeTemplates: [],       // the live slot-swap template set, from the fetch or the cache
   materializedCombos: new Set(), // template combos POSTed to /realize this session (per-session dedup)
   editingId: null,          // the phrase id open in the authoring modal (null = adding a new one)
+  stFeatured: null,         // the daily prompt currently in the "Now speaking" featured card (null = default)
 };
 
-export const TODAY_N = 8;            // how many phrases land in the rotating "Today's focus"
+export const TODAY_N = 5;            // the daily-5: how many phrases land in "Today's prompts"
 export const TODAY_TOPIC = '__today__';
 // Reserved recordings partition (the engine's `scope` → the server's opaque numeric `lesson` param).
 // Minna uses lesson numbers 1–50; this sits far above them so they never collide. Don't reuse 90000

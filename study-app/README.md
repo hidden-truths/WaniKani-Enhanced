@@ -9,9 +9,10 @@ Leitner SRS (separate **SRS review** and **free study** modes), romaji-or-kana
 typed-reading auto-grading, Google text-to-speech, **five JLPT-leveled (N5→N1)
 example sentences per card**, **visual pitch-accent marks**, an upcoming-reviews
 forecast, Jisho dictionary
-links, a filterable browse grid, progress stats, light/dark themes, five Japanese
-fonts, JSON export/import, and optional **email/password accounts that sync
-progress AND your custom cards across devices**.
+links, a filterable browse grid, progress stats, a warm light / candle-lit dark
+theme (the "Day / Night" design system), a Japanese-font switcher, JSON
+export/import, and optional **email/password accounts that sync progress AND your
+custom cards across devices**.
 
 A **Vite** app (ES modules, no framework). [index.html](index.html) loads one entry
 ([src/main.js](src/main.js) — a thin boot file that wires the feature modules) on top of the

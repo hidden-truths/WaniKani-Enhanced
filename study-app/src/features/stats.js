@@ -3,7 +3,8 @@
 // render helpers fed by renderStats(). A few SVG colors are literal hex (gridlines/axis
 // labels) because they're intentionally the light-theme hairline tone.
 import { state } from '../state.js';
-import { rollingAcc, isLeech, leeches, dueCards, BOX_COLORS } from '../core/index.js';
+import { localDay } from '../config.js';
+import { rollingAcc, isLeech, leeches, dueCards, studyStreak, BOX_COLORS } from '../core/index.js';
 import { save } from '../persistence/store.js';
 import { cfg, repaintDeck, updateDeckCount } from './deck.js';
 import { startSession } from './flashcard.js';
@@ -85,17 +86,22 @@ export function renderStats() {
   state.store.sessions.forEach(s => { const m = mix[s.kind === 'free' ? 'free' : 'srs']; m.rev += s.tot; m.right += s.right; });
   const tot = mix.srs.rev + mix.free.rev, right = mix.srs.right + mix.free.right;
   const overall = tot ? Math.round(100 * right / tot) : 0;
-  const acc = m => m.rev ? Math.round(100 * m.right / m.rev) + '% correct' : 'no reviews yet';
+  const total = state.DATA.length, due = dueCards().length, leechN = leeches().length;
+  const streak = studyStreak(state.store.daily, localDay()), sessN = state.store.sessions.length;
+  // Editorial subtitle (mock) — a one-line read on the deck's state.
+  const sub = document.getElementById('statsSub');
+  if (sub) sub.innerHTML = tot
+    ? `${streak ? `<b>${streak}</b> day${streak === 1 ? '' : 's'} in a row — ` : ''}<b>${studied}</b> of <b>${total}</b> cards in rotation, <b>${overall}%</b> overall accuracy across <b>${sessN}</b> session${sessN === 1 ? '' : 's'}.`
+    : 'No reviews logged yet — finish a flashcard session to start your record.';
+  // Metric cards (the mock's hero grid): big number + label + a small context sublabel.
   const sg = document.getElementById('statgrid');
   sg.innerHTML = `
-    <div class="statbox"><div class="v">${overall}%</div><div class="l">Overall accuracy</div></div>
-    <div class="statbox"><div class="v">${tot}</div><div class="l">Total reviews</div></div>
-    <div class="statbox"><div class="v">${studied}/${state.DATA.length}</div><div class="l">Cards studied</div></div>
-    <div class="statbox"><div class="v" style="color:var(--ichidan)">${dueCards().length}</div><div class="l">Due today</div></div>
-    <div class="statbox" title="${acc(mix.srs)}"><div class="v" style="color:var(--ichidan)">${mix.srs.rev}</div><div class="l">SRS reviews</div></div>
-    <div class="statbox" title="${acc(mix.free)}"><div class="v">${mix.free.rev}</div><div class="l">Free-study reviews</div></div>
-    <div class="statbox"><div class="v" style="color:var(--leech)">${leeches().length}</div><div class="l">Active leeches</div></div>
-    <div class="statbox"><div class="v">${state.store.sessions.length}</div><div class="l">Sessions</div></div>`;
+    <div class="statbox"><div class="v">${overall}%</div><div class="l">Overall accuracy</div><div class="s">of ${tot} review${tot === 1 ? '' : 's'}</div></div>
+    <div class="statbox"><div class="v">${studied}<span class="vsm">/${total}</span></div><div class="l">Cards studied</div><div class="s">in rotation</div></div>
+    <div class="statbox"><div class="v">${tot}</div><div class="l">Reviews logged</div><div class="s">${mix.srs.rev} SRS · ${mix.free.rev} free</div></div>
+    <div class="statbox"><div class="v" style="color:var(--ichidan)">${due}</div><div class="l">Due today</div><div class="s">scheduled now</div></div>
+    <div class="statbox"><div class="v">${streak}<span class="vsm"> day${streak === 1 ? '' : 's'}</span></div><div class="l">Current streak</div><div class="s">${streak ? 'keep it alive' : 'study today to start'}</div></div>
+    <div class="statbox"><div class="v" style="color:var(--leech)">${leechN}</div><div class="l">Active leeches</div><div class="s">${leechN ? 'need review' : 'all clear'}</div></div>`;
   // Daily accuracy line: one point per day in state.store.daily (label = MM-DD).
   const days = Object.keys(state.store.daily).sort();
   lineChart(document.getElementById('chartDaily'), days.map(d => ({ y: Math.round(100 * state.store.daily[d].right / state.store.daily[d].tot), label: d.slice(5) })), { aria: 'Daily accuracy, percent correct per day' });
@@ -114,7 +120,6 @@ export function renderStats() {
   // SRS memory pipeline: count cards in each Leitner box (0=New … 5).
   const boxes = [0, 0, 0, 0, 0, 0]; // index = box 0..5
   state.DATA.forEach(v => { const c = state.store.cards[v.rank]; const b = c && c.box ? c.box : 0; boxes[b]++; });
-  const total = state.DATA.length;
   const boxLabels = ['New', 'Box 1', 'Box 2', 'Box 3', 'Box 4', 'Box 5'];
   const boxColors = BOX_COLORS;   // New→stone, then red→amber→gold→olive→green as cards mature
   const bd = document.getElementById('boxDist');

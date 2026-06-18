@@ -44,6 +44,42 @@ export function mineHtml() {
     </div>`;
 }
 
+// The mined-vocab side panel shown BESIDE the Read lyrics (mock): the song's content words split into
+// NEW (not in your deck → add) and KNOWN (already studying), with per-word + a bulk add. The fuller
+// workbench (JLPT buckets + grammar reference) stays in the Mine TAB (mineHtml). Reuses the same
+// addword / addall handlers (progress.js) so wiring is shared.
+export function vocabRailHtml() {
+  const s = S.openSong;
+  const k = known();
+  const dk = new Set(state.DATA.map((v) => v.jp)); // deck headwords (added but unstudied count as known here)
+  const seen = new Set();
+  const uniq = songWords(s.lines).filter((w) => (seen.has(w.lemma) ? false : seen.add(w.lemma)));
+  const newWords = uniq.filter((w) => !k.has(w.lemma) && !dk.has(w.lemma));
+  const knownWords = uniq.filter((w) => k.has(w.lemma) || dk.has(w.lemma));
+  const word = (w, isKnown) => `
+    <div class="vword${isKnown ? ' is-known' : ''}">
+      <span class="vw-jp jp">${escapeHtml(w.lemma)}</span>
+      <div class="vw-main"><div class="vw-read jp">${escapeHtml(w.reading || '')}</div><div class="vw-en">${escapeHtml(w.gloss || '')}</div></div>
+      <div class="vw-meta">${w.jlpt ? `<span class="vw-jlpt">${escapeHtml(w.jlpt)}</span>` : ''}${isKnown
+        ? `<span class="vw-add" title="Already in your deck" aria-label="Already studying ${escapeHtml(w.gloss || w.lemma)}"><svg class="ic" aria-hidden="true"><use href="#i-check"/></svg></span>`
+        : `<button class="vw-add" data-act="addword" data-lemma="${escapeHtml(w.lemma)}" title="Add ${escapeHtml(w.lemma)} to deck" aria-label="Add ${escapeHtml(w.gloss || w.lemma)} to deck"><svg class="ic" aria-hidden="true"><use href="#i-plus"/></svg></button>`}</div>
+    </div>`;
+  return `
+    <aside class="vocab-rail">
+      <div class="vr-head"><span class="vr-title">Vocabulary mined</span></div>
+      <div class="vr-sub">Words from these lyrics, split by what&rsquo;s already in your deck.</div>
+      ${newWords.length ? `<div class="vr-group new">
+        <div class="vr-glabel is-new"><span class="pip"></span> New &middot; add to deck</div>
+        ${newWords.map((w) => word(w, false)).join('')}
+      </div>` : ''}
+      ${knownWords.length ? `<div class="vr-group knew">
+        <div class="vr-glabel is-known"><span class="pip"></span> Known &middot; already studying</div>
+        ${knownWords.map((w) => word(w, true)).join('')}
+      </div>` : ''}
+      ${newWords.length ? `<div class="vr-foot"><button class="btn btn-primary bulk" data-act="addall"><svg class="ic" aria-hidden="true"><use href="#i-plus"/></svg> Add ${newWords.length} new word${newWords.length === 1 ? '' : 's'} to deck</button></div>` : ''}
+    </aside>`;
+}
+
 // Render the grammar-reference sub-view (S.grammarRef): every line in this song that uses the point,
 // each savable as a Self-Talk shadow phrase, plus a Browse deep-link to example sentences.
 export function grammarRefHtml() {

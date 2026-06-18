@@ -11,7 +11,7 @@ import { state, attachLevels } from '../src/state.js';
 import { VERBS } from '../src/data/verbs.js';
 import {
   passes, oneGroup, facetAll, facetMatch, scheduleCard, cardStat, isDue, dueCards,
-  rollingAcc, isLeech, leeches, normKana, romajiToKana, reviewForecast, filterSummary,
+  rollingAcc, isLeech, leeches, normKana, romajiToKana, reviewForecast, studyStreak, filterSummary,
   tokenFacet, deckLabel, ttsText, HAS_KANJI, rubyHtml, plainText, isCleanRuby, rubyToSegments, segmentsToRuby, segmentsToReading,
   overlayTokens,
   minnaBuiltinRank, applyMinnaOverlays, minnaCardContent, minnaMutablePatch, MINNA_MUTABLE_FIELDS, splitMora, parseAccent,
@@ -335,6 +335,22 @@ test('reviewForecast: buckets scheduled cards; overdue folds into slot 0', () =>
   expect(wk.bars.reduce((s: number, b: any) => s + b.count, 0)).toBe(2);
   expect(reviewForecast('24h').bars.length).toBe(24);
   expect(reviewForecast('year').bars.length).toBe(12);
+});
+
+test('studyStreak: counts consecutive studied days, alive across an un-studied today', () => {
+  const today = '2026-06-17';
+  // three days in a row ending today
+  expect(studyStreak({ '2026-06-15': { tot: 4 }, '2026-06-16': { tot: 9 }, '2026-06-17': { tot: 2 } }, today)).toBe(3);
+  // today not yet studied, but yesterday counted → streak still alive (anchors on yesterday)
+  expect(studyStreak({ '2026-06-15': { tot: 4 }, '2026-06-16': { tot: 9 } }, today)).toBe(2);
+  // a gap breaks the run (the 14th is missing)
+  expect(studyStreak({ '2026-06-13': { tot: 5 }, '2026-06-15': { tot: 5 }, '2026-06-16': { tot: 5 } }, today)).toBe(2);
+  // idle today AND yesterday → broken
+  expect(studyStreak({ '2026-06-14': { tot: 5 } }, today)).toBe(0);
+  // a zero-attempt day doesn't count
+  expect(studyStreak({ '2026-06-16': { right: 0, tot: 0 }, '2026-06-17': { tot: 3 } }, today)).toBe(1);
+  expect(studyStreak({}, today)).toBe(0);
+  expect(studyStreak(null, today)).toBe(0);
 });
 
 test('facetAll: empty or ["all"] is no-constraint; specific tokens constrain', () => {

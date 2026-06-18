@@ -20,7 +20,20 @@
    - bootAuth() is LAST and not awaited (it chains pullCloud → rebuildData →
      refreshAllViews, which touch every feature — all must be initialized first).
    ========================================================================== */
-import './styles.css';
+// Styles, in cascade order: the Day/Night token layer + base/atmosphere first,
+// then the (shrinking) per-surface sheet. See styles/tokens.css + styles/base.css.
+import './styles/tokens.css';
+import './styles/base.css';
+import './styles/chrome.css';
+import './styles.css';            // shared core (buttons/chips/inputs/filters) + not-yet-peeled surfaces
+import './styles/modals.css';     // shared modal + form kit (overlay/sheet/×, Settings rows, voice editor) ┐ shared-core
+import './styles/record-compare.css'; // shared record-and-compare + speaking-bar kit (minna/selftalk/songs) ┘ slot, after styles.css
+import './styles/flashcards.css'; // study-panel surface (peeled; overrides the shared core)
+import './styles/browse.css';     // browse grid + detail-memory (peeled)
+import './styles/stats.css';      // stats metric cards + chart panels + leech list (peeled)
+import './styles/minna.css';      // みんなの日本語 dashboard (peeled)
+import './styles/selftalk.css';   // 独り言 Self-Talk (peeled)
+import './styles/songs.css';      // 歌 Songs (peeled)
 import { VERBS } from './data/verbs.js';
 import { state, attachLevels } from './state.js';
 import { loadCustom } from './persistence/custom.js';

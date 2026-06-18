@@ -1,0 +1,51 @@
+/* =========================================================================
+   BROWSE (Day/Night Phase 3) — the colour-coded grid of cards + the detail-modal
+   memory track. Peeled from styles.css; the filter bar reuses the shared chips/
+   segmented/search/topic-toggle (reskinned in Phase 2). Markup + JS unchanged
+   (.card.<class>, .stamp, data-*). Imported after styles.css.
+   ========================================================================= */
+
+/* The filter bar is a framed panel (mock): search leads, secondary facets tuck. */
+#panel-browse .controls{background:var(--surf-card);border:1px solid var(--line);border-radius:18px;box-shadow:var(--lift-md),var(--inner-hi);padding:20px 24px 14px;margin-bottom:10px}
+[data-theme="dark"] #panel-browse .controls{border-color:rgba(255,107,74,.12)}
+#panel-browse .controls .search-wrap{flex:1;min-width:220px}
+
+/* Lifted card; the left border encodes the class colour (leech → plum). */
+.grid{display:grid;grid-template-columns:repeat(auto-fill,minmax(300px,1fr));gap:16px;margin-top:14px}
+.card{position:relative;background:var(--surf-card);border:1px solid var(--line);border-left:5px solid var(--gold);border-radius:14px;padding:16px 16px 30px 18px;cursor:pointer;box-shadow:var(--lift-sm);transition:transform .2s cubic-bezier(.2,.7,.3,1),box-shadow .2s ease,border-color .2s ease}
+.card:hover{transform:translateY(-3px);box-shadow:var(--lift-md)}
+[data-theme="dark"] .card{border-color:rgba(255,107,74,.12)}
+[data-theme="dark"] .card:hover{border-color:rgba(255,107,74,.22)}
+.card.godan{border-left-color:var(--godan)} .card.ichidan{border-left-color:var(--ichidan)}
+.card.i-adj,.card.na-adj{border-left-color:var(--adjective)}
+.card.noun{border-left-color:var(--noun)} .card.adverb{border-left-color:var(--adverb)} .card.phrase{border-left-color:var(--phrase)}
+.card.leech{border-left-color:var(--leech)}
+.card.selected{box-shadow:0 0 0 2px var(--brand),var(--lift-md)}
+.card-top{display:flex;justify-content:space-between;align-items:flex-start;gap:10px}
+.verb-jp{font-family:var(--jp);font-size:28px;font-weight:700;line-height:1.1;color:var(--ink)}
+.verb-reading{font-size:13px;color:var(--muted);font-family:var(--jp)}
+.verb-meaning{font-family:var(--body);font-size:15px;margin-top:5px;color:var(--ink)}
+/* hanko-ish class stamp — a rotated, tinted seal label */
+.stamp{flex-shrink:0;font-family:var(--mono);font-size:9px;letter-spacing:.12em;text-transform:uppercase;border:1.5px solid var(--gold);color:var(--gold);background:color-mix(in srgb,var(--gold) 8%,transparent);padding:3px 8px;border-radius:7px;font-weight:600;transform:rotate(2deg)}
+.stamp.godan{border-color:var(--godan);color:var(--godan);background:color-mix(in srgb,var(--godan) 8%,transparent)}
+.stamp.ichidan{border-color:var(--ichidan);color:var(--ichidan);background:color-mix(in srgb,var(--ichidan) 8%,transparent)}
+.stamp.i-adj,.stamp.na-adj{border-color:var(--adjective);color:var(--adjective)}
+.stamp.noun{border-color:var(--noun);color:var(--noun)} .stamp.adverb{border-color:var(--adverb);color:var(--adverb)} .stamp.phrase{border-color:var(--phrase);color:var(--phrase)}
+.leech-badge{display:inline-block;font-family:var(--mono);font-size:9px;background:var(--leech);color:#fff;padding:2px 7px;border-radius:6px;letter-spacing:.1em;margin-top:6px}
+/* rank pinned bottom-right, accuracy bottom-left (clear of the top-right stamp) */
+.rank{position:absolute;bottom:12px;right:14px;font-family:var(--mono);font-size:10px;color:var(--faint);letter-spacing:.04em}
+.acc{position:absolute;bottom:12px;left:18px;font-family:var(--mono);font-size:10px;color:var(--faint)}
+.tags{display:flex;flex-wrap:wrap;gap:5px;margin-top:10px}
+.tag{font-family:var(--mono);font-size:10px;color:var(--muted);background:var(--surf-inset);padding:3px 8px;border-radius:6px}
+
+/* Detail-modal memory line — 5-segment Leitner track + box number + due chip */
+.det-memory{display:flex;align-items:center;flex-wrap:wrap;gap:10px;font-family:var(--mono);font-size:12px;color:var(--muted);margin:12px 0 6px}
+.det-memory.new{gap:7px}
+.det-memory .ic{font-size:14px}
+.srs-track{display:inline-flex;gap:3px}
+.srs-pip{display:inline-block;width:18px;height:7px;border-radius:3px;background:var(--surf-inset);border:1px solid var(--line)}
+.srs-pip.on{border-color:transparent}
+.srs-boxn{color:var(--ink);font-weight:700;letter-spacing:.02em}
+.srs-boxn small{color:var(--muted);font-weight:400}
+.srs-due{display:inline-flex;align-items:center;gap:4px}
+.srs-due.now{color:var(--brand);font-weight:700}

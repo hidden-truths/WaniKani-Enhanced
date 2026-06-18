@@ -14,15 +14,32 @@
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 <title>日常日本語 — Japanese Trainer</title>
-<!-- The ONLY external dependency. Five Japanese webfaces for the font switcher
-     (gothic / mincho / rounded / soft-serif / brush). If this fails to load
-     (offline), the app falls back to system Japanese fonts and still works. -->
+<!-- The ONLY external dependency (Google Fonts). Two stylesheets:
+     1) the Day/Night UI stack — Bricolage Grotesque (display) · Hanken Grotesk
+        (body/UI) · Spline Sans Mono (micro-labels) · Zen Kaku Gothic New (the
+        default Japanese face);
+     2) the other Japanese webfaces the Settings font switcher offers (mincho /
+        rounded / soft-serif / brush).
+     If this fails to load (offline), the app falls back to system fonts (sans +
+     system Japanese) and still works — nothing hard-depends on it. -->
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Bricolage+Grotesque:opsz,wght@12..96,500;12..96,600;12..96,700;12..96,800&family=Hanken+Grotesk:wght@400;500;600;700&family=Spline+Sans+Mono:wght@400;500;600&family=Zen+Kaku+Gothic+New:wght@500;700;900&display=swap" rel="stylesheet">
 <link href="https://fonts.googleapis.com/css2?family=Noto+Sans+JP:wght@400;700;900&family=Noto+Serif+JP:wght@400;700;900&family=Zen+Maru+Gothic:wght@500;700&family=Kaisei+Decol:wght@400;700&family=Yuji+Syuku&display=swap" rel="stylesheet">
 <!-- styles.css is imported by src/main.js; Vite bundles + hashes it into the build. -->
 </head>
 <body>
+<!-- Day/Night atmosphere: fine paper grain + warm radial blooms, both FIXED at
+     z-index:0 behind content (see styles/base.css). Purely decorative. -->
+<div class="grain" aria-hidden="true"></div>
+<div class="atmos" aria-hidden="true"></div>
+<!-- Hanko ink-texture SVG filter (filter:url(#stamp), used by the seal/stamp).
+     Size hidden via INLINE STYLE — same trap as the icon sprite below: the global
+     svg{width:100%} chart rule would otherwise balloon it into a click-eating
+     overlay (Chromium height:auto→0, Firefox/Safari→150px). Don't move to attrs. -->
+<svg style="position:absolute;width:0;height:0;overflow:hidden;pointer-events:none" aria-hidden="true" focusable="false">
+  <filter id="stamp"><feTurbulence type="fractalNoise" baseFrequency="0.9" numOctaves="2" result="noise"/><feDisplacementMap in="SourceGraphic" in2="noise" scale="1.4"/></filter>
+</svg>
 <!-- Inline SVG icon sprite. Self-contained (no CDN/icon-font) so icons work
      offline like the rest of the app; referenced via <svg class="ic"><use href="#i-…"/>.
      All stroke-based on a 24-grid; color/size inherit via currentColor + 1em in .ic.
@@ -38,6 +55,8 @@
   <symbol id="i-user" viewBox="0 0 24 24"><circle cx="12" cy="8" r="4"/><path d="M4 21a8 8 0 0 1 16 0"/></symbol>
   <symbol id="i-cloud-check" viewBox="0 0 24 24"><path d="M7 18a4 4 0 0 1-.5-7.97A6 6 0 0 1 18 9.5 3.5 3.5 0 0 1 17.5 18"/><path d="M9 15.5 11 17.5 15 13"/></symbol>
   <symbol id="i-contrast" viewBox="0 0 24 24"><circle cx="12" cy="12" r="9"/><path d="M12 3v18a9 9 0 0 0 0-18z" fill="currentColor" stroke="none"/></symbol>
+  <symbol id="i-sun" viewBox="0 0 24 24"><circle cx="12" cy="12" r="3.6"/><path d="M12 3v2M12 19v2M5.6 5.6l1.4 1.4M17 17l1.4 1.4M3 12h2M19 12h2M5.6 18.4 7 17M17 7l1.4-1.4"/></symbol>
+  <symbol id="i-moon" viewBox="0 0 24 24"><path d="M21 12.8A9 9 0 1 1 11.2 3a7 7 0 0 0 9.8 9.8z"/></symbol>
   <symbol id="i-download" viewBox="0 0 24 24"><path d="M12 4v11M8 11l4 4 4-4"/><path d="M5 19h14"/></symbol>
   <symbol id="i-upload" viewBox="0 0 24 24"><path d="M12 20V9M8 13l4-4 4 4"/><path d="M5 5h14"/></symbol>
   <symbol id="i-play" viewBox="0 0 24 24"><path d="M7 5.5v13a1 1 0 0 0 1.5.87l11-6.5a1 1 0 0 0 0-1.74l-11-6.5A1 1 0 0 0 7 5.5z" fill="currentColor" stroke="none"/></symbol>
@@ -70,33 +89,39 @@
   <symbol id="i-tag" viewBox="0 0 24 24"><path d="M3 11l8-8 9 1 1 9-8 8a2 2 0 0 1-2.8 0L3 13.8A2 2 0 0 1 3 11z"/><circle cx="15" cy="9" r="1.4"/></symbol>
   <symbol id="i-star" viewBox="0 0 24 24"><path d="M12 3L14.2 9L20.6 9.2L15.5 13.1L17.3 19.3L12 15.7L6.7 19.3L8.5 13.1L3.4 9.2L9.8 9Z"/></symbol>
 </svg>
-<!-- Sticky top navbar: app title on the left, a slot (#navExtra) where context controls dock
-     (the みんなの日本語 speaking/compare controls render here — see minna.js), and the global
-     action buttons on the right (theme + settings are icon-only; the account button shows the
-     synced email). Sync feedback is a brief auto-clearing pill (#syncStatus). Import/Export and
-     the hidden file input moved into the Settings modal. Handlers: THEME (chrome.js), account
-     (cloud.js), Settings (settings-page.js), Export/Import (io.js). -->
-<nav class="navbar">
-  <div class="nav-inner">
-    <div class="nav-title">日常日本語<span class="nav-sub">Japanese Trainer</span></div>
-    <div class="nav-extra" id="navExtra"></div>
-    <div class="nav-actions">
+<!-- Sticky chrome: the mock's SINGLE-ROW topbar (brand · inline tab-nav · theme/settings/account
+     actions) stacked over an on-demand speaking-bar dock. Both stick together as one unit (.chrome)
+     so the #navExtra speaking/compare controls stay pinned while studying. #navExtra is the SAME
+     load-bearing slot the みんなの日本語 / 独り言 / 歌-Shadow speaking bars mount into (speaking-bar.js) —
+     RELOCATED here out of the old centered nav slot, not removed; :empty hides it (no second tier).
+     The tabs keep their .tab class + data-tab so initTabs() wiring is unchanged (just restyled as
+     the mock's underline-active nav links). Handlers: tabs + THEME (chrome.js), account (cloud.js),
+     Settings (settings-page.js), Export/Import (io.js, in the Settings modal). Sync feedback is the
+     auto-clearing #syncStatus pill; the account state lives behind the round #accountBtn avatar. -->
+<div class="chrome">
+  <header class="topbar">
+    <div class="brand"><span class="jp">日常日本語</span><span class="sub">Japanese&nbsp;Trainer</span></div>
+    <nav class="nav" aria-label="Sections">
+      <button class="tab active" data-tab="study">Flashcards</button>
+      <button class="tab" data-tab="browse">Browse</button>
+      <button class="tab" data-tab="stats">Stats</button>
+      <button class="tab" data-tab="minna"><span class="min">みんなの日本語</span> · Textbook</button>
+      <button class="tab" data-tab="selftalk"><span class="min">独り言</span> · Self-talk</button>
+      <button class="tab" data-tab="songs"><span class="min">歌</span> · Songs</button>
+    </nav>
+    <div class="top-actions">
       <span class="acct-status" id="syncStatus" role="status" aria-live="polite"></span>
-      <button class="nav-btn icon-only" id="themeToggle" aria-label="Toggle light/dark" title="Toggle light/dark"><svg class="ic" aria-hidden="true"><use href="#i-contrast"/></svg></button>
-      <button class="nav-btn icon-only" id="settingsBtn" aria-label="Settings" title="Settings"><svg class="ic" aria-hidden="true"><use href="#i-settings"/></svg></button>
-      <button class="nav-btn" id="accountBtn" aria-label="Account" title="Sign in to sync progress"><svg class="ic" aria-hidden="true"><use href="#i-user"/></svg><span class="nav-acct-name">Sign in</span></button>
+      <!-- theme toggle shows the icon for the mode you'll switch TO (☼ by day, ☾ by night). -->
+      <button class="icon-btn" id="themeToggle" aria-label="Toggle light/dark" title="Toggle light/dark"><svg class="ic sun" aria-hidden="true"><use href="#i-sun"/></svg><svg class="ic moon" aria-hidden="true"><use href="#i-moon"/></svg></button>
+      <button class="icon-btn" id="settingsBtn" aria-label="Settings" title="Settings"><svg class="ic" aria-hidden="true"><use href="#i-settings"/></svg></button>
+      <!-- Account avatar: round gradient + initial when signed in, a muted person glyph when signed
+           out (set by updateAccountChip). Keeps #accountBtn's id + click wiring (cloud.js). -->
+      <button class="avatar signed-out" id="accountBtn" aria-label="Account" title="Sign in to sync progress"><svg class="ic" aria-hidden="true"><use href="#i-user"/></svg></button>
     </div>
-  </div>
-</nav>
-
-<!-- Top-level view switcher. data-tab maps to #panel-<tab>; see TAB NAV. -->
-<div class="tabs">
-  <button class="tab active" data-tab="study"><svg class="ic" aria-hidden="true"><use href="#i-cards"/></svg>Flashcards</button>
-  <button class="tab" data-tab="browse"><svg class="ic" aria-hidden="true"><use href="#i-grid"/></svg>Browse</button>
-  <button class="tab" data-tab="stats"><svg class="ic" aria-hidden="true"><use href="#i-chart"/></svg>Stats</button>
-  <button class="tab" data-tab="minna"><svg class="ic" aria-hidden="true"><use href="#i-book"/></svg>みんなの日本語<span class="tab-en">Textbook</span></button>
-  <button class="tab" data-tab="selftalk"><svg class="ic" aria-hidden="true"><use href="#i-mic"/></svg>独り言<span class="tab-en">Self-talk</span></button>
-  <button class="tab" data-tab="songs"><svg class="ic" aria-hidden="true"><use href="#i-music"/></svg>歌<span class="tab-en">Songs</span></button>
+  </header>
+  <!-- Speaking/compare bar dock (load-bearing #navExtra): filled by speaking-bar.js for みんなの日本語 /
+       独り言 / 歌-Shadow. Empty → display:none; filled → a frosted sub-bar tier under the topbar. -->
+  <div class="nav-extra" id="navExtra"></div>
 </div>
 
 <div class="wrap">
@@ -121,17 +146,42 @@
        JS binds them by selector). ==================================== -->
   <div class="panel active" id="panel-study">
     <div class="fc-setup" id="fcSetup">
-      <!-- SRS entry point. #dueCount + disabled state are set by updateDueBanner(). -->
-      <div class="due-banner" id="dueBanner">
-        <div>
-          <div class="due-count" id="dueCount">—</div>
-          <div class="due-label">cards due for review (spaced repetition)</div>
+      <!-- STUDY-HOME HERO — the giant due-count numeral (今日の復習 / today's review) beside the
+           upcoming-reviews forecast side card. #dueCount, #dueBanner.empty, and the streak +
+           studied meta are set by updateDueBanner(); the forecast (#forecastChart) by
+           renderForecast(). The picker (study type / direction / filters / Start) follows below. -->
+      <section class="hero">
+        <div class="hero-left">
+          <div class="hero-kicker"><span class="jp">今日の復習</span> · Today&rsquo;s review</div>
+          <div class="bignum" id="dueBanner"><span id="dueCount">—</span><span class="due-label">cards <em>due for review</em></span></div>
+          <div class="hero-meta">
+            <span class="pill hero-streak" id="heroStreak" hidden><span class="dot"></span><b>Day 0</b>&nbsp;streak</span>
+            <span class="progress-line" id="heroStudied"></span>
+          </div>
+          <div class="cta-row">
+            <button class="btn hero-due" id="dueBtn"><svg class="ic" aria-hidden="true"><use href="#i-play"/></svg>Review due cards</button>
+            <button class="btn hero-free" id="heroFreeBtn"><svg class="ic" aria-hidden="true"><use href="#i-cards"/></svg>Free study</button>
+          </div>
         </div>
-        <button class="btn srs" id="dueBtn"><svg class="ic" aria-hidden="true"><use href="#i-play"/></svg>Review due cards</button>
-      </div>
-      <!-- Study type: Free study never touches the SRS schedule (practice any
-           cards); SRS review only serves DUE cards and promotes/demotes them.
-           cfg.kind; wired below. The due banner above is the quick "all due" SRS. -->
+        <aside class="forecast-card" id="forecast">
+          <div class="fcast-head">
+            <span class="fcast-title"><svg class="ic" aria-hidden="true"><use href="#i-chart"/></svg>Upcoming reviews</span>
+            <span class="fcast-total">7&nbsp;days</span>
+          </div>
+          <div class="fcast-chart" id="forecastChart"></div>
+        </aside>
+      </section>
+      <!-- The mock's study home is JUST the hero — so the whole deck picker (study type, test
+           direction, filters, order, Start) tucks behind ONE disclosure; the default view stays
+           mock-clean and the hero's "Review due cards" / "Free study" are the primary entry
+           points. Native <details> handles the arbitrary content height (incl. the nested
+           topic-region) with no max-height math. Chips inside keep their classes/data-* so
+           wireFacets/makeMultiSelect/roving are blind to the wrapper. -->
+      <details class="more-filters" id="moreFilters">
+        <summary><svg class="ic" aria-hidden="true"><use href="#i-filter"/></svg>Customize session</summary>
+      <!-- Study type: Free study never touches the SRS schedule (practice any cards); SRS review
+           only serves DUE cards and promotes/demotes them. cfg.kind. The hero "Review due cards"
+           is the quick "all due" SRS path; the hero "Free study" the quick free path. -->
       <div class="frow"><span class="filter-label">Study type</span><div class="chips" role="radiogroup">
         <button class="chip skind active" data-skind="free" title="Practice any cards — does not change review dates">Free study</button>
         <button class="chip skind" data-skind="srs" title="Review only cards that are currently due, and reschedule them"><svg class="ic" aria-hidden="true"><use href="#i-refresh"/></svg>SRS review</button>
@@ -141,14 +191,6 @@
         <button class="chip mode active" data-mode="meaning">JP → meaning + reading</button>
         <button class="chip mode" data-mode="reading">Meaning → reading + JP</button>
       </div></div>
-      <!-- Secondary options + deck filters tucked behind a disclosure so the picker
-           isn't an 11-row wall before you can study. Native <details> handles the
-           arbitrary content height (incl. the nested topic-region) with no max-height
-           math. Chips inside keep their classes/data-* so wireFacets/makeMultiSelect/
-           roving are blind to the wrapper. The live recap (#deckSummary) stays visible
-           below so the collapsed filter state is always legible. -->
-      <details class="more-filters" id="moreFilters">
-        <summary><svg class="ic" aria-hidden="true"><use href="#i-filter"/></svg>More filters &amp; options</summary>
       <!-- Input mode: self-graded reveal (default) or type-the-reading auto-grading.
            Persisted to localStorage (jpverbs_input); see FLASHCARD SESSION. -->
       <div class="frow"><span class="filter-label">Input</span><div class="chips" role="radiogroup">
@@ -251,7 +293,6 @@
         <button class="chip ord" data-ord="freq">By frequency</button>
         <button class="chip ord" data-ord="worst">Worst-first</button>
       </div></div>
-      </details>
       <div class="fdiv"></div>
       <!-- Live recap of the active deck query (incl. collapsed topics); set by updateDeckCount(). -->
       <div class="filter-summary" id="deckSummary"></div>
@@ -259,78 +300,105 @@
         <button class="chip primary" id="startBtn"><svg class="ic" aria-hidden="true"><use href="#i-play"/></svg>Start session</button>
         <span class="count" id="deckCount"></span>   <!-- live "N cards in deck" -->
       </div>
-      <!-- Upcoming-review forecast: how many scheduled cards come due over the chosen window.
-           Placed BELOW the picker on purpose — it's supporting context, not the primary action,
-           so the study CONTROLS (due banner + Start) lead and it also fills the otherwise-empty
-           lower area on wide screens. The horizon toggle is view-only state (forecastHorizon);
-           bars rebuild via renderForecast() from updateDueBanner. Don't move it back above the
-           picker. See FLASHCARD / reviewForecast(). -->
-      <div class="fdiv"></div>
-      <div class="fcast" id="forecast">
-        <div class="fcast-head">
-          <span class="fcast-title"><svg class="ic" aria-hidden="true"><use href="#i-chart"/></svg>Upcoming reviews</span>
-          <span class="jlptseg fcast-horizons" id="fcHorizons" role="group" aria-label="Forecast window">
-            <button class="chip fch" type="button" data-h="24h">24h</button>
-            <button class="chip fch active" type="button" data-h="week">Week</button>
-            <button class="chip fch" type="button" data-h="month">Month</button>
-            <button class="chip fch" type="button" data-h="year">Year</button>
-          </span>
-        </div>
-        <div class="fcast-chart" id="forecastChart"></div>
-      </div>
+      </details>
     </div>
 
-    <!-- ACTIVE CARD. All text nodes are filled by showCard(); .answer is hidden
-         until reveal(). The grade buttons map to keys 1 (wrong) / 2 (right). -->
+    <!-- ACTIVE CARD — the editorial flashcard. showCard() fills the text nodes; reveal()/
+         submitTyped() flip the prompt FACE → the answer FACE + grade row (all inside the card).
+         Grade keys: 1/x wrong, 2/space/enter right. The session chrome (End session + recalled
+         pill + counter + progress bar) sits above the card. -->
     <div class="fc-stage" id="fcStage">
-      <div class="progress" id="fcProgress"></div>
-      <div class="flashcard" id="flashcard">
-        <div class="spine"></div>
-        <div class="prompt-label" id="promptLabel"></div>
-        <div class="prompt-main jp" id="promptMain"></div>     <!-- prompt side -->
-        <div class="prompt-sub" id="promptSub"></div>
-        <div class="answer" id="answer">                        <!-- revealed side -->
-          <div class="verdict" id="typedVerdict" hidden></div>  <!-- typed-mode auto-grade -->
-          <div class="a-read-wrap">
-            <span class="a-read jp" id="aRead"></span>
-            <button class="speak-btn" id="speakBtn" type="button" aria-label="Play reading" title="Play reading"><svg class="ic" aria-hidden="true"><use href="#i-volume"/></svg></button>
-          </div>
-          <div class="a-mean" id="aMean"></div>
-          <!-- Dictionary deep-link; href set per-card by showCard(). -->
-          <a class="jisho-link" id="jishoLink" target="_blank" rel="noopener noreferrer"><svg class="ic" aria-hidden="true"><use href="#i-external"/></svg>View on Jisho</a>
-          <div class="a-note" id="aNote"></div>                 <!-- mnemonic + tip -->
-          <!-- Leveled example sentence: pick a JLPT tier; renderExample() fills it. -->
-          <div class="example" id="exampleBlock" hidden>
-            <div class="ex-head"><span class="ex-label">Example</span><span class="jlptseg exseg" id="exLevels" role="group" aria-label="Example difficulty"></span><button class="speak-btn sm" id="exSpeak" type="button" aria-label="Play example sentence" title="Play example sentence" hidden><svg class="ic" aria-hidden="true"><use href="#i-volume"/></svg></button><button class="speak-btn sm copy-btn" id="exCopy" type="button" aria-label="Copy sentence" title="Copy sentence" hidden><svg class="ic" aria-hidden="true"><use href="#i-copy"/></svg></button></div>
-            <div class="ex-jp jp" id="exJp"></div>
-            <div class="ex-en" id="exEn"></div>
+      <!-- session chrome -->
+      <div class="session">
+        <div class="session-top">
+          <button class="exit" id="endBtn" type="button"><svg class="ic" aria-hidden="true"><use href="#i-back"/></svg>End session</button>
+          <div class="session-stats">
+            <span class="pill"><span class="dot"></span><b id="sessAcc">—</b>&nbsp;recalled</span>
+            <span class="counter" id="fcProgress"></span>
           </div>
         </div>
+        <div class="progress-track"><div class="progress-fill" id="sessFill"></div></div>
       </div>
-      <!-- Three button rows, one visible at a time. Self-graded: revealRow → grade.
-           Typed: inputRow (kana field + Check) → grade. See showCard(). -->
-      <div class="fc-buttons" id="revealRow">
-        <button class="btn reveal" id="revealBtn"><svg class="ic" aria-hidden="true"><use href="#i-target"/></svg>Reveal answer <span class="kbd">[space]</span></button>
+
+      <div class="card-stage">
+        <article class="flashcard" id="flashcard">
+          <div class="spine"></div>
+          <span class="corner-wash"></span>
+          <div class="card-inner">
+            <div class="card-top">
+              <div class="card-kicker"><span class="pip"></span><span id="promptLabel"></span></div>
+              <div class="hanko" id="cardHanko"><span class="ring"></span><span class="glyph jp" id="hankoGlyph"></span></div>
+            </div>
+
+            <!-- PROMPT FACE (pre-reveal): the dominant word + non-spoiling class/level tags +
+                 frosted "hidden" veils where the reading/meaning will appear, then the CTA. -->
+            <div class="prompt-face" id="promptFace">
+              <div class="prompt-zone">
+                <div class="prompt-word jp" id="promptWord"></div>
+                <div class="prompt-tags" id="promptTags"></div>
+                <div class="veil-stack" aria-hidden="true">
+                  <div class="veil-row"><span class="veil-label" id="veilLabelA">Reading</span><span class="veil-bar"><span class="lock"><svg class="ic" aria-hidden="true"><use href="#i-eyeoff"/></svg></span><span class="lock-text">hidden</span></span></div>
+                  <div class="veil-row"><span class="veil-label" id="veilLabelB">Meaning</span><span class="veil-bar"><span class="lock"><svg class="ic" aria-hidden="true"><use href="#i-eyeoff"/></svg></span><span class="lock-text">hidden</span></span></div>
+                </div>
+              </div>
+              <!-- recall CTA (self-graded) OR the typed-kana input — one shown at a time. -->
+              <div class="reveal-cta" id="revealRow">
+                <button class="btn btn-primary show-answer" id="revealBtn"><svg class="ic" aria-hidden="true"><use href="#i-eye"/></svg>Show answer</button>
+                <div class="kbd-hint"><span class="kbd">Space</span> or <span class="kbd">Enter</span> to flip <span class="kbd-sep">·</span> then <span class="kbd">1</span>&nbsp;wrong / <span class="kbd">2</span>&nbsp;right</div>
+              </div>
+              <div class="reveal-cta" id="inputRow" style="display:none">
+                <input type="text" class="answer-input jp" id="answerInput" autocomplete="off" autocapitalize="off" autocorrect="off" spellcheck="false" placeholder="type the reading (kana or romaji)…" aria-label="Type the reading in kana or romaji">
+                <button class="btn btn-primary" id="checkBtn" type="button"><svg class="ic" aria-hidden="true"><use href="#i-check"/></svg>Check <span class="kbd">Enter</span></button>
+              </div>
+            </div>
+
+            <!-- ANSWER FACE (revealed): word-block (word · pitch/reading · play) + meaning +
+                 tag-row (class · level · Jisho) + note-cards + leveled example. -->
+            <div class="answer" id="answer">
+              <div class="verdict" id="typedVerdict" hidden></div>
+              <div class="word-block">
+                <div class="answer-word jp" id="answerWord"></div>
+                <div class="tate-rule"></div>
+                <div class="reading-area"><div class="reading-row">
+                  <span class="pitch jp" id="aRead"></span>
+                  <span class="pitch-tag" id="aAccent" hidden></span>
+                  <button class="play-btn" id="speakBtn" type="button" aria-label="Play reading" title="Play reading"><svg class="ic" aria-hidden="true"><use href="#i-volume"/></svg></button>
+                </div></div>
+              </div>
+              <div class="meaning" id="aMean"></div>
+              <div class="tag-row" id="aTags"></div>
+              <div class="a-note" id="aNote"></div>                 <!-- mnemonic + trap note-cards -->
+              <!-- Leveled example sentence: pick a JLPT tier; renderExample() fills it. -->
+              <div class="example" id="exampleBlock" hidden>
+                <div class="ex-head"><span class="ex-label"><svg class="ic" aria-hidden="true"><use href="#i-book"/></svg>Example</span><span class="jlptseg exseg" id="exLevels" role="group" aria-label="Example difficulty"></span><span class="ex-tools"><button class="speak-btn sm" id="exSpeak" type="button" aria-label="Play example sentence" title="Play example sentence" hidden><svg class="ic" aria-hidden="true"><use href="#i-volume"/></svg></button><button class="speak-btn sm copy-btn" id="exCopy" type="button" aria-label="Copy sentence" title="Copy sentence" hidden><svg class="ic" aria-hidden="true"><use href="#i-copy"/></svg></button></span></div>
+                <div class="ex-jp jp" id="exJp"></div>
+                <div class="ex-en" id="exEn"></div>
+              </div>
+            </div>
+
+            <!-- grade controls (revealed) -->
+            <div class="grade-row" id="gradeRow" style="display:none">
+              <button class="grade wrong" id="wrongBtn"><svg class="ic" aria-hidden="true"><use href="#i-x"/></svg>Got it wrong <span class="kbd">1</span></button>
+              <button class="grade right" id="rightBtn"><svg class="ic" aria-hidden="true"><use href="#i-check"/></svg>Got it right <span class="kbd">2</span></button>
+            </div>
+          </div>
+        </article>
       </div>
-      <div class="fc-buttons" id="inputRow" style="display:none">
-        <input type="text" class="answer-input jp" id="answerInput" autocomplete="off" autocapitalize="off" autocorrect="off" spellcheck="false" placeholder="type the reading (kana or romaji)…" aria-label="Type the reading in kana or romaji">
-        <button class="btn" id="checkBtn" type="button"><svg class="ic" aria-hidden="true"><use href="#i-check"/></svg>Check <span class="kbd">[enter]</span></button>
-      </div>
-      <div class="fc-buttons" id="gradeRow" style="display:none">
-        <button class="btn wrong" id="wrongBtn"><svg class="ic" aria-hidden="true"><use href="#i-x"/></svg>Got it wrong <span class="kbd">[1 / x]</span></button>
-        <button class="btn right" id="rightBtn"><svg class="ic" aria-hidden="true"><use href="#i-check"/></svg>Got it right <span class="kbd">[2 / space]</span></button>
-      </div>
-      <div class="hint"><button class="chip" id="endBtn">End session</button></div>
     </div>
 
     <!-- END-OF-SESSION score card. Populated by endSession(). -->
     <div class="fc-stage" id="fcDone">
-      <div class="flashcard"><div class="spine"></div>
-        <div class="prompt-label">Session complete</div>
-        <div class="prompt-main" id="doneScore" style="font-family:Georgia"></div>
-        <div class="prompt-sub" id="doneDetail"></div>
+      <div class="card-stage">
+        <article class="flashcard done-card">
+          <span class="corner-wash"></span>
+          <div class="card-inner">
+            <div class="card-kicker"><span class="pip"></span>Session complete</div>
+            <div class="done-score" id="doneScore"></div>
+            <div class="done-detail" id="doneDetail"></div>
+            <div class="reveal-cta"><button class="btn btn-primary" id="againBtn"><svg class="ic" aria-hidden="true"><use href="#i-refresh"/></svg>Study again</button></div>
+          </div>
+        </article>
       </div>
-      <div class="fc-buttons"><button class="chip primary" id="againBtn"><svg class="ic" aria-hidden="true"><use href="#i-refresh"/></svg>Study again</button></div>
     </div>
   </div>
 
@@ -340,10 +408,24 @@
        .bf / .bjlpt classes, not .deck / .jlpt. The font selector also lives
        here. Cards are rendered by renderBrowse(). ==================== -->
   <div class="panel" id="panel-browse">
+    <!-- Editorial header (mock): kicker + title + a card/leech count cluster (set by renderBrowse). -->
+    <section class="page-head">
+      <div>
+        <div class="page-kicker"><span class="jp">語彙の一覧</span> · Word library</div>
+        <h1 class="page-title">Browse the deck</h1>
+      </div>
+      <div class="page-counts">
+        <span class="pill"><span class="dot"></span><b id="bHeadCount">—</b>&nbsp;cards</span>
+        <span class="pill" id="bHeadLeechPill" hidden><span class="dot leech"></span><b id="bHeadLeech">0</b>&nbsp;leeches</span>
+      </div>
+    </section>
     <div class="controls">
-      <!-- Tier 1: grammar (always visible). The .bf chips split into AND'd facets
-           by TOKEN_FACET; the lone "All" chip is the master reset (clears every
-           facet) and lives in the Category row. Verb-only rows hide for non-verbs. -->
+      <!-- Search leads the filter panel (mock). The .bf chips split into AND'd facets by
+           TOKEN_FACET; the lone "All" chip is the master reset; verb-only rows tuck below. -->
+      <div class="frow"><span class="filter-label">Search</span><div class="chips">
+        <span class="search-wrap"><svg class="ic" aria-hidden="true"><use href="#i-search"/></svg>
+          <input class="search" id="search" placeholder="Search reading, kanji, or meaning…"></span>
+        <span class="count">Showing <b id="num">100</b> of <b id="numTotal">100</b></span></div></div>
       <div class="frow"><span class="filter-label">Category</span><div class="chips">
         <button class="chip bf active" data-filter="all">All</button>
         <button class="chip bf" data-filter="verb">Verb</button>
@@ -352,6 +434,10 @@
         <button class="chip bf" data-filter="adverb">Adverb</button>
         <button class="chip bf" data-filter="phrase">Phrase</button>
       </div></div>
+      <!-- Secondary verb facets tuck behind a disclosure (mock). Chips keep their class +
+           data-filter so wireFacets/syncVerbRows are blind to the wrapper. -->
+      <details class="more-filters" id="bMoreFilters">
+        <summary><svg class="ic" aria-hidden="true"><use href="#i-filter"/></svg>More filters</summary>
       <div class="frow verb-only"><span class="filter-label">Type</span><div class="chips">
         <button class="chip bf g" data-filter="godan">Godan</button>
         <button class="chip bf i" data-filter="ichidan">Ichidan</button>
@@ -364,6 +450,7 @@
         <button class="chip bf" data-filter="intrans">Intransitive</button>
         <button class="chip bf" data-filter="ti-pair">T/I pairs</button>
       </div></div>
+      </details>
       <div class="fdiv"></div>
       <!-- Tier 2: topic (the long semantic tail) collapsed behind a disclosure;
            Leeches is a status filter, kept always-visible beside the toggle. -->
@@ -424,10 +511,6 @@
         <span style="color:var(--muted)">–</span>
         <input type="number" class="rangeinput" id="brmax" min="1" max="100" value="100">
       </div></div>
-      <div class="frow"><span class="filter-label">Search</span><div class="chips">
-        <span class="search-wrap"><svg class="ic" aria-hidden="true"><use href="#i-search"/></svg>
-          <input class="search" id="search" placeholder="Search reading, kanji, or meaning…"></span>
-        <span class="count">Showing <b id="num">100</b> of <b id="numTotal">100</b></span></div></div>
     </div>
     <!-- Live recap of the active grid query (incl. collapsed topics); set by renderBrowse(). -->
     <div class="filter-summary" id="bSummary"></div>
@@ -442,19 +525,35 @@
        (called on tab activation). Charts are hand-built SVG/HTML strings —
        no chart library. Reset wipes the store after a confirm(). ====== -->
   <div class="panel" id="panel-stats">
-    <div class="statgrid" id="statgrid"></div>                <!-- summary boxes -->
-    <div class="chart-card"><div class="chart-title">Memory pipeline — Leitner boxes (higher box = longer interval = better learned)</div>
-      <div id="boxDist"></div>                                <!-- SRS box histogram -->
-      <div class="srs-legend">New → Box 1 (1d) → 2 (2d) → 3 (4d) → 4 (8d) → 5 (16d). A correct answer promotes a card; a wrong answer drops it to Box 1.</div>
+    <!-- Editorial header + subtitle (mock); the subtitle is set by renderStats(). -->
+    <section class="page-head">
+      <div>
+        <div class="page-kicker"><span class="jp">学習の記録</span> · Your progress</div>
+        <h1 class="page-title">Progress</h1>
+      </div>
+    </section>
+    <p class="stats-sub" id="statsSub"></p>
+    <div class="statgrid" id="statgrid"></div>                <!-- editorial metric cards -->
+
+    <div class="section-div"><span class="sd-label">Retention</span><span class="sd-line"></span></div>
+    <div class="chart-grid">
+      <div class="chart-card"><div class="chart-title">Memory pipeline — Leitner boxes (higher box = longer interval = better learned)</div>
+        <div id="boxDist"></div>                                <!-- SRS box histogram -->
+        <div class="srs-legend">New → Box 1 (1d) → 2 (2d) → 3 (4d) → 4 (8d) → 5 (16d). A correct answer promotes a card; a wrong answer drops it to Box 1.</div>
+      </div>
+      <div class="chart-card"><div class="chart-title">Daily accuracy — one point per day studied</div><div id="chartDaily"></div></div>
     </div>
-    <div class="chart-card"><div class="chart-title">Daily accuracy — one point per day studied</div><div id="chartDaily"></div></div>
     <div class="chart-card"><div class="chart-title">Per-session accuracy — most recent 20 sessions</div><div id="chartSession"></div></div>
+
+    <div class="section-div"><span class="sd-label">Needs work</span><span class="sd-line"></span></div>
     <div class="chart-card"><div class="chart-title">⚠ Leeches — chronically missed (rolling accuracy &lt; 60% over ≥ 4 attempts)</div>
       <div id="leechList"></div>
       <div class="row" style="margin-top:12px"><button class="chip primary" id="studyLeeches"><svg class="ic" aria-hidden="true"><use href="#i-play"/></svg>Study leeches now</button></div>
     </div>
+
+    <div class="section-div"><span class="sd-label">Per-card accuracy</span><span class="sd-line"></span></div>
     <div class="chart-card"><div class="chart-title">Per-card rolling accuracy (last 8 attempts)</div><div id="cardBars"></div></div>
-    <div class="row"><button class="danger" id="resetBtn">Reset all stats &amp; history</button></div>
+    <div class="row" style="margin-top:18px"><button class="danger" id="resetBtn">Reset all stats &amp; history</button></div>
   </div>
 
   <!-- ===== みんなの日本語 PANEL =========================================
@@ -639,6 +738,7 @@
       </span></div>
     <div class="set-row"><label>Japanese font<span class="set-hint">The typeface used for all Japanese text.</span></label>
       <select class="set-select" id="fontSel">
+        <option value='"Zen Kaku Gothic New","Noto Sans JP",sans-serif' selected>Zen Kaku (gothic)</option>
         <option value='"Noto Sans JP",sans-serif'>Noto Sans (gothic)</option>
         <option value='"Noto Serif JP",serif'>Noto Serif (mincho)</option>
         <option value='"Zen Maru Gothic",sans-serif'>Zen Maru (rounded)</option>

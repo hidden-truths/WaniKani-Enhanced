@@ -1,0 +1,44 @@
+/* =========================================================================
+   STATS (Day/Night Phase 4) — hero metric cards + chart panels + the leech list.
+   The hand-rolled SVG charts (lineChart/barChart) reskin for free via the token
+   aliases (var(--godan)/--ichidan/--good/--muted/--line). Peeled from styles.css;
+   imported after styles.css. (The global svg{} chart rule + .svg circle.pt hover
+   + the stat entrance animations stay in styles.css.)
+   ========================================================================= */
+
+/* editorial subtitle under the Progress title */
+.stats-sub{font-family:var(--body);font-size:16px;color:var(--muted);max-width:62ch;margin:-10px 0 24px;line-height:1.5}
+.stats-sub b{color:var(--ink);font-weight:700;font-family:var(--display)}
+
+/* section dividers (Retention · Needs work · Per-card accuracy) */
+.section-div{display:flex;align-items:center;gap:18px;margin:36px 0 18px}
+.section-div .sd-label{font-family:var(--mono);font-size:11px;letter-spacing:.3em;text-transform:uppercase;color:var(--muted);font-weight:600;white-space:nowrap}
+.section-div .sd-line{flex:1;height:1px;background:var(--line)}
+
+/* metric cards — big number + label + a small context sublabel (mock hero grid) */
+.statgrid{display:grid;grid-template-columns:repeat(auto-fit,minmax(190px,1fr));gap:16px;margin:18px 0}
+.statbox{background:var(--surf-card);border:1px solid var(--line);border-radius:16px;padding:20px 22px;box-shadow:var(--lift-md),var(--inner-hi)}
+[data-theme="dark"] .statbox{border-color:rgba(255,107,74,.1)}
+.statbox .v{font-family:var(--display);font-size:46px;font-weight:800;line-height:1;letter-spacing:-.03em;color:var(--ink)}
+.statbox .v .vsm{font-size:.42em;font-weight:700;color:var(--muted);letter-spacing:0}
+.statbox .l{font-family:var(--mono);font-size:11px;letter-spacing:.14em;text-transform:uppercase;color:var(--muted);margin-top:8px}
+.statbox .s{font-family:var(--body);font-size:13px;color:var(--faint);margin-top:3px}
+
+/* two-up chart grid under Retention */
+.chart-grid{display:grid;grid-template-columns:1fr 1fr;gap:18px}
+.chart-grid .chart-card{margin-bottom:0}
+@media (max-width:860px){.chart-grid{grid-template-columns:1fr}}
+
+.chart-card{background:var(--surf-card);border:1px solid var(--line);border-radius:16px;padding:20px 22px;margin-bottom:18px;box-shadow:var(--lift-md),var(--inner-hi)}
+[data-theme="dark"] .chart-card{border-color:rgba(255,107,74,.1)}
+/* sentence-case (not uppercased) — long descriptive titles; short labels stay caps */
+.chart-title{font-family:var(--mono);font-size:12px;letter-spacing:.02em;color:var(--muted);margin-bottom:14px}
+
+/* Leech list — carded rows with a plum spine */
+.leech-row{display:flex;align-items:center;gap:11px;padding:11px 14px;border:1px solid var(--line);border-left:4px solid var(--leech);border-radius:0 12px 12px 0;background:var(--surf-inset);margin-bottom:8px}
+.leech-row .lr-jp{font-family:var(--jp);font-size:20px;font-weight:700;line-height:1.1;color:var(--ink)}
+.leech-row .lr-meta{color:var(--muted);font-size:13px}
+.leech-row .lr-acc{margin-left:auto;font-family:var(--mono);font-size:12px;color:var(--leech);font-weight:700}
+.leech-row .lr-acc .ic{font-size:13px;vertical-align:-0.15em;margin-right:3px}
+
+.srs-legend{font-family:var(--mono);font-size:10px;color:var(--muted);margin-top:10px;line-height:1.5}

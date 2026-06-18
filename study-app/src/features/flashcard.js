@@ -76,67 +76,94 @@ export function renderExample(v) {
   } else { block.hidden = true; if (speakBtn) speakBtn.hidden = true; if (copyBtn) copyBtn.hidden = true; }
 }
 
-// Render session.deck[session.i]. The two test directions swap prompt vs answer fields.
-// NOTE: prompt JP uses innerHTML (v.jp may carry markup); reading/meaning use textContent.
+// ---- hanko + class-pill helpers (the editorial card's seal + tags) ----
+const CLASS_JP = { godan: '五段', ichidan: '一段', irregular: '不規則', 'i-adj': 'い形', 'na-adj': 'な形' };
+// reading mode shows the JP as the ANSWER, so the hanko can't spell the word — use a class seal.
+const CLASS_SEAL = { godan: '五', ichidan: '一', irregular: '不', 'i-adj': '形', 'na-adj': '形', verb: '動', adjective: '形', noun: '名', adverb: '副', phrase: '句' };
+const firstKanji = jp => (String(jp || '').match(/[㐀-鿿]/) || [String(jp || '？')[0]])[0];
+// The class pill ("GODAN · 五段"), tinted by colorClass via the CSS .tag.cls.<class>.
+function classPill(v) {
+  const cls = colorClass(v), jp = CLASS_JP[cls];
+  return `<span class="tag cls ${cls}">${cardStamp(v).label}${jp ? ' · <span class="jp">' + jp + '</span>' : ''}</span>`;
+}
+
+// Render session.deck[session.i] into the prompt FACE (the answer face is filled too but stays
+// hidden until reveal). The two test directions swap which side is the prompt; reading mode hides
+// the word's kanji (it's the answer) behind a class-seal hanko. JP uses innerHTML (v.jp may carry
+// markup / pitchHtml); plain strings use textContent.
 function showCard() {
   const v = session.deck[session.i];
   session.revealed = false;
-  document.getElementById('fcProgress').textContent = `Card ${session.i + 1} of ${session.deck.length}`;
+  // session chrome: position, running recall %, progress bar.
+  const pos = session.i + 1, total = session.deck.length;
+  document.getElementById('fcProgress').innerHTML = `${pos} <i>/ ${total}</i>`;
+  const done = session.results.length, got = session.results.reduce((s, x) => s + x, 0);
+  document.getElementById('sessAcc').textContent = done ? Math.round(100 * got / done) + '%' : '—';
+  document.getElementById('sessFill').style.width = (pos / total * 100) + '%';
+  // card spine color + hanko tint + card-advance entrance.
   const fc = document.getElementById('flashcard');
-  fc.className = 'flashcard ' + colorClass(v);   // sets the colored spine via CSS
-  void fc.offsetWidth; fc.classList.add('card-in');   // restart the card-advance entrance animation
+  fc.className = 'flashcard ' + colorClass(v);
+  void fc.offsetWidth; fc.classList.add('card-in');
+  document.getElementById('cardHanko').className = 'hanko ' + colorClass(v);
+  const pw = document.getElementById('promptWord'), aw = document.getElementById('answerWord');
   if (cfg.mode === 'meaning') {            // JP shown → recall meaning + reading
-    document.getElementById('promptLabel').textContent = 'Read this — give meaning + reading';
-    document.getElementById('promptMain').className = 'prompt-main jp';
-    document.getElementById('promptMain').innerHTML = v.jp;
-    document.getElementById('promptSub').textContent = '';
-    document.getElementById('aRead').className = 'a-read jp';
-    document.getElementById('aRead').innerHTML = pitchHtml(v.read, v.accent);
+    document.getElementById('promptLabel').textContent = 'Read & recall · meaning + reading';
+    pw.className = 'prompt-word jp'; pw.innerHTML = v.jp;
+    aw.className = 'answer-word jp'; aw.innerHTML = v.jp;
+    document.getElementById('hankoGlyph').textContent = firstKanji(v.jp);
     document.getElementById('aMean').textContent = v.mean;
+    document.getElementById('veilLabelA').textContent = 'Reading';
+    document.getElementById('veilLabelB').textContent = 'Meaning';
   } else {                               // meaning shown → recall reading + kanji
-    document.getElementById('promptLabel').textContent = 'Give the reading + kanji';
-    document.getElementById('promptMain').className = 'prompt-main';
-    document.getElementById('promptMain').textContent = v.mean;
-    document.getElementById('promptSub').textContent = cardStamp(v).label;
-    document.getElementById('aRead').className = 'a-read jp';
-    document.getElementById('aRead').innerHTML = pitchHtml(v.read, v.accent) + ' &nbsp; ' + v.jp;
-    document.getElementById('aMean').textContent = '';
+    document.getElementById('promptLabel').textContent = 'Recall · reading + kanji';
+    pw.className = 'prompt-word'; pw.textContent = v.mean;     // English prompt (display font)
+    aw.className = 'answer-word jp'; aw.innerHTML = v.jp;
+    document.getElementById('hankoGlyph').textContent = CLASS_SEAL[colorClass(v)] || '語';
+    document.getElementById('aMean').textContent = '';        // meaning IS the prompt
+    document.getElementById('veilLabelA').textContent = 'Reading';
+    document.getElementById('veilLabelB').textContent = 'Japanese';
   }
-  // Mnemonic + trap/tip, each with a small label (matching the Browse detail modal) so they read
-  // as two distinct notes instead of one run-together block. Both interpolate as HTML like before.
+  document.getElementById('aRead').innerHTML = pitchHtml(v.read, v.accent);
+  const acc = document.getElementById('aAccent');
+  if (v.accent != null && v.accent !== '') { acc.hidden = false; acc.textContent = 'accent ［' + v.accent + '］'; }
+  else acc.hidden = true;
+  // tags: prompt side = class + level (no Jisho — it would spoil); answer side adds Jisho.
+  const lvl = v.jlpt ? `<span class="tag level">${v.jlpt}</span>` : '';
+  document.getElementById('promptTags').innerHTML = classPill(v) + lvl;
+  document.getElementById('aTags').innerHTML = classPill(v) + lvl
+    + `<a class="tag link" href="${jishoUrl(v.jp)}" target="_blank" rel="noopener noreferrer">View on Jisho <svg class="ic" aria-hidden="true"><use href="#i-external"/></svg></a>`;
+  // mnemonic + trap as two note-cards (the mock's 2-up grid).
   document.getElementById('aNote').innerHTML =
-    (v.mnem ? `<div class="a-note-row"><span class="a-note-tag">Mnemonic</span>${v.mnem}</div>` : '')
-    + (v.tip ? `<div class="a-note-row a-note-trap"><span class="a-note-tag">Trap / tip</span>${v.tip}</div>` : '');
-  document.getElementById('jishoLink').href = jishoUrl(v.jp);   // dictionary deep-link
+    (v.mnem ? `<div class="note mnemonic"><div class="note-label"><svg class="ic" aria-hidden="true"><use href="#i-star"/></svg>Mnemonic</div><div class="note-body">${v.mnem}</div></div>` : '')
+    + (v.tip ? `<div class="note trap"><div class="note-label"><svg class="ic" aria-hidden="true"><use href="#i-alert"/></svg>Trap / tip</div><div class="note-body">${v.tip}</div></div>` : '');
   renderExample(v);                                   // leveled example (shown once revealed)
+  // reset to the PROMPT face; the answer face + grade row stay hidden until reveal().
+  document.getElementById('promptFace').style.display = '';
   document.getElementById('answer').classList.remove('show');
-  // Reset the answer affordances for this card. Typed mode shows the kana input; self-graded
-  // shows Reveal. Grade buttons (+ suggested ring + typed verdict) start hidden.
-  const typed = cfg.input === 'type';
-  document.getElementById('revealRow').style.display = typed ? 'none' : 'flex';
-  document.getElementById('inputRow').style.display = typed ? 'flex' : 'none';
   document.getElementById('gradeRow').style.display = 'none';
   document.getElementById('wrongBtn').classList.remove('suggested');
   document.getElementById('rightBtn').classList.remove('suggested');
   document.getElementById('typedVerdict').hidden = true;
   session.suggested = undefined;
+  const typed = cfg.input === 'type';
+  document.getElementById('revealRow').style.display = typed ? 'none' : 'flex';
+  document.getElementById('inputRow').style.display = typed ? 'flex' : 'none';
   const inp = document.getElementById('answerInput');
   inp.value = ''; inp.disabled = false;
   if (typed) setTimeout(() => inp.focus(), 0);
 }
-// Show the answer side (shared by self-graded Reveal and typed Check). Autoplays the reading
-// when Audio=Auto. Sets session.revealed so grading is permitted.
+// Flip the card: hide the prompt face (which holds the reveal/input rows), show the answer face
+// + the grade row. Shared by self-graded Reveal and typed Check. Autoplays the reading when
+// Audio=Auto. Sets session.revealed so grading is permitted.
 function revealAnswer() {
   session.revealed = true;
+  document.getElementById('promptFace').style.display = 'none';
   document.getElementById('answer').classList.add('show');
+  document.getElementById('gradeRow').style.display = 'grid';
   if (cfg.audio === 'auto') playReading();
 }
-// Self-graded path: reveal, then flip to the two grade buttons.
-function reveal() {
-  revealAnswer();
-  document.getElementById('revealRow').style.display = 'none';
-  document.getElementById('gradeRow').style.display = 'flex';
-}
+// Self-graded path: flip to the answer + grade buttons.
+function reveal() { revealAnswer(); }
 // Typed path: grade the typed kana against v.read, reveal + a verdict, then surface the
 // grade buttons with the auto-judged one emphasized. The verdict is ADVISORY — 1/2 or a
 // click still overrides (typo forgiveness); session.suggested drives the Enter-accepts path.
@@ -154,8 +181,6 @@ function submitTyped() {
   verdict.innerHTML = correct
     ? '<svg class="ic" aria-hidden="true"><use href="#i-check"/></svg>Correct'
     : '<svg class="ic" aria-hidden="true"><use href="#i-x"/></svg>You typed “' + escapeHtml(inp.value.trim() || '—') + '”';
-  document.getElementById('inputRow').style.display = 'none';
-  document.getElementById('gradeRow').style.display = 'flex';
   document.getElementById('wrongBtn').classList.toggle('suggested', !correct);
   document.getElementById('rightBtn').classList.toggle('suggested', correct);
 }
@@ -207,6 +232,15 @@ function endSession() {
 export function initFlashcardUI() {
   document.getElementById('startBtn').addEventListener('click', () => startSession());
   document.getElementById('dueBtn').addEventListener('click', startDueSession);
+  // Hero "Free study" quick-start: flip study type to free, reflect it on the picker chips +
+  // Start label, then start over the current deck (the picker below is for a customized run).
+  const heroFree = document.getElementById('heroFreeBtn');
+  if (heroFree) heroFree.addEventListener('click', () => {
+    cfg.kind = 'free';
+    document.querySelectorAll('.chip.skind').forEach(x => x.classList.toggle('active', x.dataset.skind === 'free'));
+    updateStartLabel(); updateDeckCount();
+    startSession();
+  });
   document.getElementById('revealBtn').addEventListener('click', reveal);
   document.getElementById('checkBtn').addEventListener('click', submitTyped);
   document.getElementById('speakBtn').addEventListener('click', playReading);

@@ -42,18 +42,7 @@ export async function showSelftalk() {
   if (phrasesChanged || templatesChanged || !hadCache) renderSelftalk();
 }
 
-// ---- head (kicker + lede + streak + add affordance + grammar filter) ----
-function streakRowHtml() {
-  const pr = (state.selftalkStore && state.selftalkStore.practice) || {};
-  const today = localDay();
-  const streak = practiceStreak(pr, today);
-  const done = donePhraseIds(pr, today).size;
-  if (streak > 0) {
-    return `<div class="st-streak-row"><span class="st-streak"><svg class="ic" aria-hidden="true"><use href="#i-target"/></svg>${streak}-day streak</span>${done ? `<span class="st-today-count">${done} said today</span>` : ''}</div>`;
-  }
-  return `<div class="st-streak-row"><span class="st-streak-hint">Say a phrase out loud, then mark it — start a daily streak.</span></div>`;
-}
-
+// ---- head (the editorial header: kicker + title + lede + streak/progress meta + grammar filter) ----
 // Authoring writes PRIVATE server rows, so it requires an account; anon gets a sign-in nudge
 // (reading stays anon). Mirrors how the record controls gate on `account`.
 function addAffordanceHtml() {
@@ -69,13 +58,24 @@ export function renderHead() {
   const gramChip = (tok, label, on) =>
     `<button class="chip st-gram${on ? ' active' : ''}" type="button" data-stgram="${escapeHtml(tok)}" aria-pressed="${on}">${escapeHtml(label)}</button>`;
   const chips = toks.map((t) => gramChip(t, grammarLabel(t), S.stGrammar.includes(t))).join('');
+  // streak + said-today fold into the header meta pills (the mock's "12-day streak · today 3/5").
+  const pr = (state.selftalkStore && state.selftalkStore.practice) || {};
+  const today = localDay();
+  const streak = practiceStreak(pr, today);
+  const done = donePhraseIds(pr, today).size;
   head.innerHTML = `
-    <div class="st-intro">
-      <p class="st-kicker">独り言 · Self-Talk</p>
-      <p class="st-lede">Narrate your day out loud. Tap ▶ to hear a phrase, then say it yourself — ⌥/⇧-click ▶ to try another voice.</p>
-      ${streakRowHtml()}
-      <div class="st-actions">${addAffordanceHtml()}</div>
-    </div>
+    <section class="page-head st-head">
+      <div>
+        <div class="page-kicker"><span class="jp">独り言</span> · Self-talk</div>
+        <h1 class="page-title">Say it out loud <span class="jp st-title-jp">声に出して</span></h1>
+        <p class="st-lede">Read the phrase, hear a model voice, then <b>say it yourself</b> and mark it — ⌥/⇧-click ▶ to try another voice.</p>
+      </div>
+      <div class="page-counts">
+        ${streak > 0 ? `<span class="pill"><span class="dot"></span><b>${streak}-day</b>&nbsp;streak</span>` : `<span class="pill"><span class="dot"></span>start a streak</span>`}
+        ${done ? `<span class="pill st-today"><span class="dot"></span><b>${done}</b>&nbsp;said today</span>` : ''}
+      </div>
+    </section>
+    <div class="st-actions">${addAffordanceHtml()}</div>
     <div class="frow"><span class="filter-label">Grammar</span>
       <div class="chips" role="group" aria-label="Grammar filter">${gramChip('all', 'All', allActive)}${chips}</div></div>`;
 }
@@ -175,9 +175,14 @@ function renderBody() {
 // only #stBody re-renders. Returning to the grid leaves any speaking mode intact (the nav toggle).
 export function drillTopic(id) { S.stTopic = id; renderBody(); }
 
-// The grid: a pinned "Today's focus" cell over category sections of topic cells. Each cell carries a
-// phrase tally + today's said-count; clicking drills in. No phrases render here, so there are no
-// record controls — only the topic view has them.
+// Pick a daily prompt into the "Now speaking" featured card (the rail). Re-renders the grid body so
+// the featured card swaps + the rail's .current marker moves; a different prompt resets the record area.
+export function featureDaily(id) { S.stFeatured = id; renderBody(); }
+
+// The grid (the default 独り言 view, HYBRID): the daily-5 — a "Now speaking" FEATURED card over a
+// "Today's prompts" rail — atop the category→topic browser (kept as the superset). Only the featured
+// card renders a phrase (with its record control); the rail cards + topic cells don't, so the
+// one-record-control-per-(scope,id)-per-view invariant holds (grid ⇄ topic still render one at a time).
 function renderGrid(body) {
   const phrases = filteredPhrases();
   const templates = filteredTemplates();
@@ -185,8 +190,34 @@ function renderGrid(body) {
   if (!items.length) { body.innerHTML = `<div class="st-empty">No phrases match this filter.</div>`; return; }
   const today = localDay();
   const doneSet = donePhraseIds(state.selftalkStore.practice, today);
-  const todayIds = new Set(todaysSet(phrases, today, TODAY_N));   // "today" is the daily PHRASE rotation
-  const todayDone = [...todayIds].filter((id) => doneSet.has(id)).length;
+  const speaking = isSpeakingMode();
+
+  // ---- daily-5: a "Now speaking" featured card + the "Today's prompts" rail ----
+  const daily = todaysSet(phrases, today, TODAY_N).map((id) => phrases.find((p) => p.id === id)).filter(Boolean);
+  let dailyHtml = '';
+  if (daily.length) {
+    // featured = the chosen prompt, else the first not-yet-said, else the first (so you land on what's next).
+    const featured = daily.find((p) => p.id === S.stFeatured) || daily.find((p) => !doneSet.has(p.id)) || daily[0];
+    const railCard = (p, i) => {
+      const done = doneSet.has(p.id);
+      return `<button class="st-rail-card${p.id === featured.id ? ' current' : ''}${done ? ' done' : ''}" type="button" data-st-feature="${escapeHtml(p.id)}">
+        <span class="st-rail-num">${done ? '<svg class="ic" aria-hidden="true"><use href="#i-check"/></svg>' : i + 1}</span>
+        <span class="st-rail-text">${escapeHtml(p.mean)}</span>
+      </button>`;
+    };
+    dailyHtml = `<section class="st-daily">
+      <div class="st-now">
+        <div class="st-now-head"><span class="st-eq" aria-hidden="true"><i></i><i></i><i></i></span> Now speaking</div>
+        ${phraseCardHtml(featured, speaking, doneSet.has(featured.id))}
+      </div>
+      <aside class="st-rail">
+        <p class="st-rail-head"><svg class="ic" aria-hidden="true"><use href="#i-target"/></svg> Today&rsquo;s prompts <span class="st-count">${daily.length}</span></p>
+        <div class="st-rail-list">${daily.map(railCard).join('')}</div>
+      </aside>
+    </section>`;
+  }
+
+  // ---- the category→topic browser (kept below as the superset) ----
   const grid = topicGrid(items, SELFTALK_TAXONOMY, doneSet);      // count phrases AND templates per cell
   const tplByTopic = {};
   for (const t of templates) tplByTopic[t.topic] = (tplByTopic[t.topic] || 0) + 1;
@@ -207,14 +238,11 @@ function renderGrid(body) {
   const catSection = (c) =>
     `<div class="st-cat"><p class="st-cat-head">${c.icon ? `<svg class="ic" aria-hidden="true"><use href="#${escapeHtml(c.icon)}"/></svg>` : ''}${escapeHtml(c.label)}${c.jp ? ` <span class="st-cat-jp">${escapeHtml(c.jp)}</span>` : ''}</p>
        <div class="st-grid">${c.topics.map(cell).join('')}</div></div>`;
-  const todayCell = todayIds.size
-    ? `<div class="st-grid st-today-grid"><button class="st-cell st-today-cell" type="button" data-st-topic="${TODAY_TOPIC}">
-         <span class="st-today-row"><svg class="ic" aria-hidden="true"><use href="#i-target"/></svg><span class="st-cell-label">Today's focus</span></span>
-         ${tally(todayIds.size, todayDone, 0)}
-       </button></div>`
-    : '';
-  body.innerHTML = todayCell + grid.map(catSection).join('');
-  wireWordTaps(body);   // harmless on the grid (no word spans); keeps the attach-once delegate live
+  const browse = `<section class="st-browse"><p class="st-browse-head">Browse all topics <span class="line-rule"></span></p>${grid.map(catSection).join('')}</section>`;
+  body.innerHTML = dailyHtml + browse;
+  wireWordTaps(body);            // the featured card's word spans (+ keeps the attach-once delegate live)
+  wireRecordCompare(body);       // the featured card's record/play/delete/compare (attach-once)
+  if (speaking) paintCompareWaveforms(body);
 }
 
 // A drilled-in topic (or the rotating "today" set): a back button, the topic head (+ register

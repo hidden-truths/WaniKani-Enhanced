@@ -1,0 +1,133 @@
+/* =========================================================================
+   独り言 SELF-TALK (Day/Night Phase 5) — the intro/streak, the category→topic
+   grid that drills into one topic, the phrase cards, and the slot-swap template
+   chrome. Peeled from styles.css (contiguous block, own mobile @media). The
+   shared record-compare/speaking-bar + tap-a-word popover stay in styles.css.
+   Already token-warmed by Phase 0; here the cards/cells lift + round and JP text
+   gets the gothic face. Imported after styles.css.
+   ========================================================================= */
+/* editorial header (mock: "Say it out loud 声に出して" + streak/said-today meta) */
+.st-head{margin-bottom:10px}
+.st-title-jp{font-family:var(--jp);font-weight:800;font-size:.58em;color:var(--brand);margin-left:12px;letter-spacing:.02em}
+[data-theme="dark"] .st-title-jp{color:#FF8A6E}
+.st-lede{font-family:var(--body);font-size:16px;color:var(--muted);margin:14px 0 0;max-width:62ch;line-height:1.5}
+.st-lede b{color:var(--ink);font-weight:700}
+.pill.st-today .dot{background:var(--good);box-shadow:0 0 0 4px var(--good-soft)}
+[data-theme="dark"] .pill.st-today .dot{box-shadow:0 0 0 4px var(--good-soft),0 0 9px 1px rgba(86,217,166,.6)}
+.st-count{font-size:11px;color:var(--muted);font-weight:normal}
+
+/* ---- daily-5 (Phase 9 hybrid): a "Now speaking" FEATURED card + a "Today's prompts" rail, atop
+   the kept topic browser. The featured card is the only one with the record rig (one per view). ---- */
+.st-daily{display:grid;grid-template-columns:minmax(0,1fr) 300px;gap:22px;align-items:start;margin:4px 0 8px}
+.st-now-head{display:inline-flex;align-items:center;gap:9px;font-family:var(--mono);font-size:10.5px;letter-spacing:.2em;text-transform:uppercase;color:var(--brand);margin-bottom:11px}
+[data-theme="dark"] .st-now-head{color:#FF8A6E}
+.st-eq{display:inline-flex;align-items:flex-end;gap:2px;height:12px}
+.st-eq i{width:2.5px;background:var(--brand);border-radius:2px;animation:eqbar .9s ease-in-out infinite}
+[data-theme="dark"] .st-eq i{background:#FF8A6E;box-shadow:0 0 6px 0 rgba(255,107,74,.6)}
+.st-eq i:nth-child(1){height:50%;animation-delay:0s}.st-eq i:nth-child(2){height:100%;animation-delay:.18s}.st-eq i:nth-child(3){height:70%;animation-delay:.36s}
+@keyframes eqbar{0%,100%{transform:scaleY(.4)}50%{transform:scaleY(1)}}
+/* the featured card reads larger + more prominent than a list card */
+.st-now .st-phrase{padding:24px 26px 22px 28px;border-radius:18px}
+.st-now .st-phrase::before{width:5px}
+.st-now .st-jp{font-size:27px;line-height:1.5}
+.st-now .st-en{font-size:15px}
+[data-theme="light"] .st-now .st-phrase{background:linear-gradient(168deg,#FFFDF8,#FBF6EC);border-color:color-mix(in srgb,var(--brand) 16%,var(--line))}
+/* the prompt rail */
+.st-rail{position:relative;background:var(--surf-card);border:1px solid var(--line);border-radius:16px;padding:16px 15px;box-shadow:var(--lift-md),var(--inner-hi)}
+[data-theme="dark"] .st-rail{border-color:rgba(255,107,74,.14)}
+.st-rail-head{display:flex;align-items:center;gap:8px;margin:2px 2px 12px;font-family:var(--mono);font-size:10.5px;letter-spacing:.14em;text-transform:uppercase;color:var(--muted)}
+.st-rail-head .ic{font-size:14px;color:var(--brand)}
+.st-rail-head .st-count{margin-left:auto}
+.st-rail-list{display:flex;flex-direction:column;gap:8px}
+.st-rail-card{display:flex;align-items:center;gap:11px;text-align:left;width:100%;padding:11px 13px;border:1px solid var(--line);border-radius:11px;background:var(--surf-inset);cursor:pointer;transition:border-color .15s,transform .15s,background .15s}
+.st-rail-card:hover{transform:translateY(-1px);border-color:color-mix(in srgb,var(--brand) 40%,var(--line))}
+.st-rail-num{flex-shrink:0;width:22px;height:22px;border-radius:50%;display:grid;place-items:center;font-family:var(--mono);font-size:11px;font-weight:600;color:var(--muted);background:var(--chip-bg);border:1px solid var(--line)}
+.st-rail-num .ic{font-size:12px}
+.st-rail-text{font-family:var(--body);font-size:13.5px;color:var(--ink);line-height:1.35;overflow:hidden;display:-webkit-box;-webkit-line-clamp:2;-webkit-box-orient:vertical}
+.st-rail-card.current{border-color:var(--brand);background:color-mix(in srgb,var(--brand) 10%,var(--surf-card))}
+.st-rail-card.current .st-rail-num{background:var(--brand);color:var(--brand-on);border-color:var(--brand)}
+[data-theme="dark"] .st-rail-card.current{background:var(--brand-soft)}
+.st-rail-card.done .st-rail-num{background:var(--good-soft);color:var(--good-deep);border-color:color-mix(in srgb,var(--good) 40%,transparent)}
+[data-theme="dark"] .st-rail-card.done .st-rail-num{color:var(--good)}
+.st-rail-card.done .st-rail-text{color:var(--muted)}
+/* the topic browser kept below the daily-5 */
+.st-browse{margin-top:26px}
+.st-browse-head{display:flex;align-items:center;gap:14px;margin:0 0 6px;font-family:var(--mono);font-size:10.5px;letter-spacing:.2em;text-transform:uppercase;color:var(--muted)}
+.st-browse-head .line-rule{flex:1;height:1px;background:var(--line)}
+
+.st-list{display:flex;flex-direction:column;gap:10px;padding:2px 0 14px}
+/* phrase card — editorial: a class spine + spacious lift (toward the mock's "now speaking" card) */
+.st-phrase{position:relative;overflow:hidden;display:flex;gap:14px;align-items:flex-start;padding:18px 20px 18px 22px;border:1px solid var(--line);border-radius:14px;background:var(--surf-card);box-shadow:var(--lift-md),var(--inner-hi);transition:transform .2s cubic-bezier(.2,.7,.3,1),box-shadow .2s ease}
+.st-phrase::before{content:"";position:absolute;left:0;top:0;bottom:0;width:4px;background:linear-gradient(to bottom,var(--brand),var(--brand-deep))}
+.st-phrase:hover{transform:translateY(-2px);box-shadow:var(--lift-lg),var(--inner-hi)}
+[data-theme="dark"] .st-phrase{border-color:rgba(255,107,74,.14)}
+[data-theme="dark"] .st-phrase::before{box-shadow:0 0 14px 0 rgba(255,107,74,.45)}
+.st-phrase.practiced::before{background:linear-gradient(to bottom,var(--good),var(--good-deep))}
+.st-play{margin-top:1px}
+.st-phrase-text{flex:1;min-width:0}
+.st-jp{font-family:var(--jp);font-size:21px;line-height:1.55;color:var(--ink)}
+.st-read{font-size:12px;color:var(--muted);margin-top:3px;font-family:var(--jp)}
+.st-en{font-size:13.5px;color:var(--ink);opacity:.82;margin-top:4px;font-family:var(--body)}
+.st-phrase-meta{display:flex;gap:6px;flex-wrap:wrap;align-items:center;margin-top:8px}
+.st-tag{font-family:var(--mono);font-size:10px;letter-spacing:.04em;color:var(--muted);border:1px solid var(--line);border-radius:6px;padding:2px 7px}
+.st-badge{font-family:var(--mono);font-size:10px;letter-spacing:.06em;text-transform:uppercase;color:var(--brand);border:1px solid color-mix(in srgb,var(--brand) 45%,transparent);border-radius:6px;padding:2px 7px}
+.st-empty{font-family:var(--body);color:var(--muted);padding:20px 2px}
+.st-actions{margin-top:13px}
+.st-edit{background:none;border:none;color:var(--muted);cursor:pointer;padding:4px;border-radius:6px;flex-shrink:0;align-self:flex-start;transition:color .15s}
+.st-edit:hover{color:var(--brand)}
+.st-edit .ic{font-size:16px}
+.st-gram-checks{display:flex;flex-wrap:wrap;gap:8px 14px;margin-top:4px}
+.st-gram-check{display:inline-flex;align-items:center;gap:6px;font-family:var(--body);font-size:13px;color:var(--ink);cursor:pointer}
+.st-bottom{display:flex;flex-direction:column;align-items:flex-start;gap:9px;margin-top:9px}
+.st-mark{background:none;border:1px solid var(--line);border-radius:8px;font-family:var(--mono);font-size:11px;color:var(--muted);padding:5px 10px;cursor:pointer;transition:all .15s}
+.st-mark:hover{color:var(--good);border-color:color-mix(in srgb,var(--good) 45%,transparent)}
+.st-done{display:inline-flex;align-items:center;gap:5px;font-family:var(--mono);font-size:11px;color:var(--good)}
+.st-done .ic{font-size:13px}
+.st-phrase.practiced{border-color:color-mix(in srgb,var(--good) 35%,var(--line))}
+/* category→topic grid + drill-in: clicking a cell swaps #stBody to that topic's
+   phrase list, keeping #stBody the stable record-compare container. */
+.st-cat{margin-top:20px}
+.st-cat:first-child{margin-top:6px}
+.st-cat-head{display:flex;align-items:center;gap:8px;margin:0 0 10px;font-family:var(--mono);font-size:11px;letter-spacing:.12em;text-transform:uppercase;color:var(--muted)}
+.st-cat-head .ic{font-size:14px;color:var(--brand)}
+.st-cat-jp{font-family:var(--jp);letter-spacing:normal;text-transform:none;color:var(--muted);opacity:.7}
+.st-grid{display:grid;grid-template-columns:repeat(auto-fill,minmax(158px,1fr));gap:12px}
+.st-cell{display:flex;flex-direction:column;align-items:flex-start;gap:5px;text-align:left;padding:14px 15px;min-height:78px;border:1px solid var(--line);border-radius:14px;background:var(--surf-card);box-shadow:var(--lift-sm);cursor:pointer;transition:border-color .15s,transform .15s,box-shadow .2s}
+.st-cell:hover{border-color:color-mix(in srgb,var(--brand) 45%,var(--line));transform:translateY(-2px);box-shadow:var(--lift-md)}
+.st-cell:active{transform:translateY(0)}
+.st-cell-label{font-family:var(--body);font-size:15px;color:var(--ink);line-height:1.3}
+.st-cell-jp{font-family:var(--jp);font-size:12px;color:var(--muted)}
+.st-cell-count{margin-top:auto;font-family:var(--mono);font-size:10.5px;letter-spacing:.03em;color:var(--muted)}
+.st-cell-count .done{color:var(--good)}
+.st-back{display:inline-flex;align-items:center;gap:5px;background:none;border:none;cursor:pointer;font-family:var(--mono);font-size:11px;letter-spacing:.06em;color:var(--muted);padding:4px 2px;margin-bottom:4px;transition:color .15s}
+.st-back:hover{color:var(--brand)}
+.st-back .ic{font-size:13px;transform:rotate(90deg)}
+.st-topic-head{display:flex;align-items:baseline;gap:10px;flex-wrap:wrap;margin:2px 0 13px;padding-bottom:11px;border-bottom:1px solid var(--line)}
+.st-topic-title{font-family:var(--display);font-weight:700;font-size:22px;color:var(--ink)}
+.st-topic-jp{font-family:var(--jp);font-size:14px;color:var(--muted)}
+.st-register{font-family:var(--mono);font-size:10px;letter-spacing:.05em;color:var(--reading);border:1px solid color-mix(in srgb,var(--reading) 40%,transparent);border-radius:6px;padding:2px 7px}
+.st-thought{display:flex;align-items:center;gap:8px;margin:18px 0 3px;font-family:var(--mono);font-size:11.5px;letter-spacing:.08em;color:var(--ink)}
+.st-thought:first-of-type{margin-top:4px}
+/* slot-swap templates: a {slot} is a tinted, tappable chip; ⌥-click opens its filler menu */
+.st-badge-tpl{color:var(--reading);border-color:color-mix(in srgb,var(--reading) 45%,transparent)}
+.st-slot-wrap{position:relative;display:inline-block}
+.st-slot{font:inherit;color:var(--brand);background:color-mix(in srgb,var(--brand) 10%,transparent);border:1px solid color-mix(in srgb,var(--brand) 35%,transparent);border-radius:7px;padding:0 5px;margin:0 1px;cursor:pointer;transition:background-color .12s}
+.st-slot:hover{background:color-mix(in srgb,var(--brand) 20%,transparent)}
+.st-slot rt{color:var(--brand)}
+.st-slot-menu{position:absolute;top:100%;left:0;z-index:20;margin-top:6px;display:flex;flex-direction:column;gap:1px;width:max-content;max-width:260px;padding:5px;background:var(--surf-card);border:1px solid var(--line);border-radius:12px;box-shadow:var(--lift-lg)}
+.st-slot-menu[hidden]{display:none}
+.st-fill{display:flex;align-items:center;gap:16px;width:100%;font-family:var(--jp);font-size:16px;line-height:1.3;text-align:left;background:none;border:none;border-radius:8px;padding:7px 11px;cursor:pointer;color:var(--ink)}
+.st-fill:hover{background:var(--surf-inset)}
+.st-fill.active{background:color-mix(in srgb,var(--brand) 14%,transparent);color:var(--brand)}
+.st-fill rt{font-size:.6em;color:var(--muted)}
+.st-fill.active rt{color:color-mix(in srgb,var(--brand) 70%,var(--muted))}
+.st-fill-en{margin-left:auto;font-family:var(--body);font-size:11.5px;color:var(--muted);white-space:nowrap}
+.st-shuffle{background:none;border:1px solid var(--line);border-radius:8px;color:var(--muted);cursor:pointer;padding:4px 8px;display:inline-flex;align-items:center;transition:color .15s,border-color .15s}
+.st-shuffle:hover{color:var(--brand);border-color:color-mix(in srgb,var(--brand) 45%,transparent)}
+.st-shuffle .ic{font-size:13px}
+@media (max-width:860px){ .st-daily{grid-template-columns:1fr} }
+@media (max-width:640px){
+  .st-jp{font-size:18px}
+  .st-now .st-jp{font-size:22px}
+  .st-grid{grid-template-columns:repeat(auto-fill,minmax(140px,1fr));gap:8px}
+}

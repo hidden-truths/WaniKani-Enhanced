@@ -11,6 +11,7 @@ export const S = {
   view: 'library', // 'library' | 'add' | 'song'
   openSong: null, // the assembled song {id,title,…,lines} when viewing one
   mode: 'read', // 'read' | 'listen' | 'shadow' | 'mine' | 'grammar'
+  videoOn: false, // Read mode: the video bay is hidden until "Play with video" (mock) — Listen/Shadow mount it regardless
   grammarRef: null, // the grammar id currently open in the reference panel
   add: { lyrics: '', url: '', title: '', artist: '', analysis: null, busy: false, error: '' },
   // Listen (dictation) per-song stepper; (re)initialized by ensureListen() when the song changes.

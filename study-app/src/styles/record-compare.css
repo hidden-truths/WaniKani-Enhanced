@@ -1,0 +1,96 @@
+/* =========================================================================
+   RECORD-AND-COMPARE + SPEAKING BAR (Day/Night Phase 9 — peeled from styles.css)
+   The shared record/play/compare engine UI used by みんなの日本語 + 独り言 + 歌-Shadow:
+   the per-item record control (mic button · take list · compare player · dual
+   waveform), the navbar-docked speaking bar (toggle · mic picker · speed · bias),
+   and the conversation clip-marker. Imported AFTER styles.css (so it stays in the
+   shared-core cascade slot, before the per-surface files) — and after chrome.css,
+   so the #navExtra dock trims below still win over chrome's dock rules (Rule A).
+   The shared .speak-btn (+ .speak-btn.playing) and the .minna-badge stay in
+   styles.css. See features/record-compare/* + features/speaking-bar.js.
+   ========================================================================= */
+
+/* The speaking bar, docked in the chrome's #navExtra sub-bar: strip its block chrome
+   (border/bg/margin/padding) so it reads as part of the bar rather than a card. Keeps
+   the base flex-wrap so a narrow viewport drops controls to a second line instead of
+   clipping; the device select is trimmed since long mic names would dominate the row. */
+.nav-extra .speaking-bar{margin:0;padding:0;border:0;background:none;gap:8px;justify-content:center}
+.nav-extra .speaking-bar.on{background:none;border:0}
+.nav-extra .mic-select{max-width:150px}
+
+/* Record-and-compare. The rec-row is a subtle sub-row under each vocab entry; the
+   control holds a mic button + take list + compare player. A word and its OWN controls
+   are one unit — no rule between them (.mn-rec-row td zeroes its top edge to 0-width
+   transparent — see the WebKit note in styles.css by .mn-vocab; `none`/`hidden` paint a
+   phantom white line in Safari). The NEXT word keeps its normal separator (.mn-vocab td
+   border-top) so the controls visually belong to the word ABOVE them. */
+.mn-rec-row td{border-top:0 solid transparent;padding-top:2px;padding-bottom:16px}
+.rec-control{display:flex;align-items:center;flex-wrap:wrap;gap:8px}
+.rec-btn{display:inline-flex;align-items:center;gap:6px;background:var(--surf-inset);border:1px solid var(--line);color:var(--muted);border-radius:14px;padding:3px 10px 3px 8px;font-family:var(--mono);font-size:11px;letter-spacing:.06em;cursor:pointer;box-shadow:var(--lift-sm);transition:all .15s}
+.rec-btn:hover{border-color:var(--godan);color:var(--godan);transform:translateY(-1px)}
+.rec-btn .ic{font-size:14px}
+/* Recording: a steady red so it reads as "live"; the reduced-motion rule below
+   keeps the pulse optional. */
+.rec-btn.recording{border-color:var(--godan);color:#fff;background:var(--godan);animation:recPulse 1.1s ease-in-out infinite}
+@keyframes recPulse{0%,100%{opacity:1}50%{opacity:.62}}
+.rec-takes{display:inline-flex;align-items:center;gap:6px;flex-wrap:wrap}
+.rec-take{display:inline-flex;align-items:center;border:1px solid var(--line);border-radius:13px;overflow:hidden;background:var(--paper-2);box-shadow:var(--lift-sm)}
+.rec-take-play{display:inline-flex;align-items:center;gap:4px;background:none;border:none;color:var(--good);font-family:var(--mono);font-size:11px;padding:3px 8px;cursor:pointer}
+.rec-take-play .ic{font-size:12px}
+.rec-take-play.playing{background:var(--good);color:#fff}
+.rec-take-del{background:none;border:none;border-left:1px solid var(--line);color:var(--muted);padding:3px 7px;cursor:pointer;display:inline-flex;align-items:center}
+.rec-take-del:hover{color:var(--leech)}
+.rec-take-del .ic{font-size:12px}
+.rec-review{display:flex;align-items:center;flex-wrap:wrap;gap:8px}
+.rec-review .rec-preview{height:32px;max-width:220px}
+.rec-review .chip{font-size:11px;padding:4px 10px}
+.rec-review .rec-save{border-color:var(--good);color:var(--good);font-weight:700}
+.rec-unsupported{font-family:var(--body);font-size:12px;color:var(--muted);opacity:.85}
+/* Speaking-mode bar — a toggle that opens a persistent mic stream + the device picker.
+   Record controls only render while it's on. */
+.speaking-bar{display:flex;align-items:center;flex-wrap:wrap;gap:10px;margin:10px 0 16px;padding:10px 12px;border:1px solid var(--line);border-radius:12px;background:var(--paper-2)}
+.speaking-bar.on{border-color:var(--godan);background:color-mix(in srgb,var(--godan) 7%,var(--paper-2))}
+.speaking-toggle{display:inline-flex;align-items:center;gap:6px}
+.speaking-toggle.active{background:var(--godan);color:#fff;border-color:var(--godan)}
+.speaking-toggle .ic{font-size:14px}
+.mic-pick{display:inline-flex;align-items:center;gap:6px}
+.mic-lbl{font-family:var(--mono);font-size:10px;letter-spacing:.1em;text-transform:uppercase;color:var(--muted)}
+.mic-select{background:var(--paper);color:var(--ink);border:1px solid var(--line);border-radius:6px;padding:5px 8px;font-family:var(--mono);font-size:12px;max-width:220px}
+.mic-select:focus{outline:none;border-color:var(--ichidan)}
+.cmp-speed{display:inline-flex;align-items:center;gap:5px}
+.speed-chip{padding:3px 9px;font-size:11px}
+.cmp-bias{display:inline-flex;align-items:center;gap:6px}
+.bias-slider{width:96px;accent-color:var(--ichidan);cursor:pointer}
+/* Compare player — ▶ you / ▶ native / ▶ native→you + loop. Shows once a take exists. */
+.rec-compare{display:inline-flex;align-items:center;flex-wrap:wrap;gap:6px;margin-left:2px}
+.cmp-label{font-family:var(--mono);font-size:9px;letter-spacing:.12em;text-transform:uppercase;color:var(--muted)}
+.cmp-btn{display:inline-flex;align-items:center;gap:4px;background:var(--surf-inset);border:1px solid var(--line);color:var(--ichidan);border-radius:13px;padding:3px 9px;font-family:var(--mono);font-size:11px;cursor:pointer;box-shadow:var(--lift-sm);transition:all .15s}
+.cmp-btn:hover{border-color:var(--ichidan);background:var(--paper-2);transform:translateY(-1px)}
+.cmp-btn .ic{font-size:12px}
+.cmp-btn.playing{background:var(--ichidan);color:#fff;border-color:var(--ichidan)}
+.cmp-loop{color:var(--muted)}
+.cmp-loop.active{background:var(--good);color:#fff;border-color:var(--good)}
+/* ▶ reference button names the current compare voice (native / Siri F/M / Google). */
+.cmp-ref .cmp-ref-lbl{font-family:var(--mono);font-size:10px;letter-spacing:.02em}
+/* Dual waveform (you vs reference) — canvas painted by paintControlWaves; cursor is an overlay. */
+.rec-wave-row{display:flex;flex-wrap:wrap;gap:12px;margin-top:7px;flex-basis:100%}
+.rec-wave-wrap{position:relative;display:inline-block;width:140px;height:30px;background:var(--surf-inset);border-radius:8px;box-shadow:var(--lift-sm)}
+canvas.rec-wave{display:block;width:140px;height:30px;border-radius:8px}
+.rec-wave-cursor{position:absolute;top:0;bottom:0;left:0;width:2px;background:var(--ink);opacity:0;pointer-events:none;transition:opacity .12s}
+.rec-wave-cap{position:absolute;top:-2px;right:1px;font-family:var(--mono);font-size:9px;letter-spacing:.1em;text-transform:uppercase;color:var(--muted);opacity:.7;pointer-events:none}
+/* Conversation-line layout + clip marker (みんなの日本語 conversation). */
+.mn-line-body{flex:1;min-width:0}
+.mn-line-rec{display:flex;flex-wrap:wrap;align-items:center;gap:8px;margin-top:7px}
+.clip-zone{display:inline-flex;align-items:center;gap:7px}
+.clip-current{font-family:var(--mono);font-size:10px;color:var(--good);border:1px solid color-mix(in srgb,var(--good) 45%,var(--line));border-radius:10px;padding:1px 7px}
+.clip-edit{background:none;border:1px dashed var(--line);color:var(--muted);border-radius:11px;padding:2px 9px;font-family:var(--mono);font-size:10px;letter-spacing:.04em;cursor:pointer}
+.clip-edit:hover{border-color:var(--ichidan);color:var(--ichidan)}
+.clip-marker{flex-basis:100%;border:1px solid var(--line);border-radius:8px;padding:10px;background:var(--paper-2);margin-top:4px}
+.clip-audio{width:100%;height:34px;margin-bottom:8px}
+.clip-marker-row{display:flex;flex-wrap:wrap;align-items:center;gap:7px}
+.clip-marker-row .chip{font-size:11px;padding:4px 10px}
+.clip-marker-row .clip-save{border-color:var(--good);color:var(--good);font-weight:700}
+.clip-readout{font-family:var(--mono);font-size:11px;color:var(--muted)}
+.clip-readout b{color:var(--ink)}
+.clip-tip{font-family:var(--body);font-size:12px;color:var(--muted);opacity:.85;margin-top:7px}
+@media (prefers-reduced-motion:reduce){ .rec-btn.recording{animation:none} }

@@ -34,3 +34,28 @@ export function reviewForecast(h) {
   });
   return { bars, max: bars.reduce((m, b) => Math.max(m, b.count), 0) };
 }
+
+// Day streak from the daily-accuracy map — the count of consecutive days, ending today (or
+// yesterday when today hasn't been studied yet), on which at least one card was reviewed.
+// daily: { 'YYYY-MM-DD': {right,tot} } (state.store.daily); todayKey is localDay(). Pure +
+// tested. A gap (a day with no reviews) breaks the run; today not-yet-studied keeps the streak
+// "alive" iff yesterday counted, so the hero pill doesn't blink to 0 first thing in the morning.
+export function studyStreak(daily, todayKey) {
+  if (!daily || !todayKey) return 0;
+  const studied = k => { const d = daily[k]; return !!(d && d.tot > 0); };
+  let key = todayKey;
+  if (!studied(key)) {                 // nothing yet today — anchor on yesterday if it counted
+    key = addDays(todayKey, -1);
+    if (!studied(key)) return 0;
+  }
+  let n = 0;
+  while (studied(key)) { n++; key = addDays(key, -1); }
+  return n;
+}
+// 'YYYY-MM-DD' + delta days, via a LOCAL Date (no UTC shift) so it round-trips localDay().
+function addDays(key, delta) {
+  const [y, m, d] = key.split('-').map(Number);
+  const dt = new Date(y, m - 1, d + delta);
+  const p = n => String(n).padStart(2, '0');
+  return dt.getFullYear() + '-' + p(dt.getMonth() + 1) + '-' + p(dt.getDate());
+}

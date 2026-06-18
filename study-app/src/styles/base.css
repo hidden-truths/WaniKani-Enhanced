@@ -1,0 +1,74 @@
+/* =========================================================================
+   BASE / FOUNDATION — reset, page body, atmosphere layers, main column.
+   Imported after tokens.css and before the per-surface styles. The "Day / Night"
+   atmosphere (.grain + .atmos) sits FIXED behind everything at z-index:0, so the
+   content containers take z-index:1 to stay above it (.wrap here; .tabs in
+   styles.css; the navbar z-50 and modals z-1000 already clear it).
+   ========================================================================= */
+*{box-sizing:border-box;margin:0;padding:0}
+
+/* Body is all-sans now (was Georgia serif). Japanese text gets .jp (the swappable
+   --jp-font) so only the JP glyphs change when you pick a font in Settings. */
+body{
+  background-color:var(--paper);
+  color:var(--ink);
+  font-family:var(--body);
+  font-size:16px;
+  line-height:1.55;
+  font-weight:400;
+  -webkit-font-smoothing:antialiased;
+  text-rendering:optimizeLegibility;
+  position:relative;
+  overflow-x:hidden;
+  min-height:100vh;
+  transition:background-color .5s ease, color .5s ease;
+}
+.jp{font-family:var(--jp-font)}
+/* Main column (Phase 9 — widened to the mock's airier frame). max-width + 40px
+   gutter match the topbar's 1180-column padding (chrome.css), so the page content
+   aligns under the brand/tabs. The 56px TOP gap is the breathing room below the
+   sticky chrome (the mocks put ~54–62px on each surface's first section; we put
+   it once on .wrap and zero the per-surface first-element tops so every surface
+   matches). Mobile drops to the 18px gutter + a tighter top. */
+.wrap{position:relative;z-index:1;max-width:1180px;margin:0 auto;padding:56px 40px 96px}
+@media (max-width:640px){ .wrap{ padding:28px 18px 64px; } }
+
+/* ---- Atmosphere layers (fixed, behind content, pointer-events:none) ----------
+   .grain: fine paper grain — visible by day (multiply), a whisper by night
+   (overlay); opacity/blend come from --grain-* in tokens.css (theme-aware incl.
+   the prefers-color-scheme fallback). .atmos: warm radial blooms — washi sun-wash
+   by day, candle glow + a vertical wash by night. */
+.grain{
+  position:fixed; inset:0; z-index:0; pointer-events:none;
+  background-image:url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='180' height='180'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.9' numOctaves='2' stitchTiles='stitch'/%3E%3CfeColorMatrix type='saturate' values='0'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23n)' opacity='0.55'/%3E%3C/svg%3E");
+  opacity:var(--grain-opacity);
+  mix-blend-mode:var(--grain-blend);
+  transition:opacity .5s ease;
+}
+.atmos{
+  position:fixed; inset:0; z-index:0; pointer-events:none;
+  transition:opacity .5s ease, background .5s ease;
+}
+:root .atmos, [data-theme="light"] .atmos{
+  background:
+    radial-gradient(60% 55% at 88% 4%, rgba(205,67,39,.11), rgba(205,67,39,0) 60%),
+    radial-gradient(55% 50% at 3% 96%, rgba(42,74,110,.07), rgba(42,74,110,0) 62%),
+    radial-gradient(120% 90% at 50% -12%, rgba(231,219,196,.55), rgba(231,219,196,0) 55%);
+}
+[data-theme="dark"] .atmos{
+  background:
+    radial-gradient(820px 600px at 86% -6%, rgba(255,107,74,.20), transparent 60%),
+    radial-gradient(760px 600px at 4% 10%, rgba(217,169,78,.13), transparent 62%),
+    radial-gradient(1000px 760px at 50% 120%, rgba(255,107,74,.06), transparent 60%),
+    linear-gradient(180deg, #16120F 0%, #1B1612 42%, #16120F 100%);
+}
+/* dark atmosphere under the system-preference fallback (no explicit theme set) */
+@media (prefers-color-scheme: dark){
+  :root:not([data-theme="light"]) .atmos{
+    background:
+      radial-gradient(820px 600px at 86% -6%, rgba(255,107,74,.20), transparent 60%),
+      radial-gradient(760px 600px at 4% 10%, rgba(217,169,78,.13), transparent 62%),
+      radial-gradient(1000px 760px at 50% 120%, rgba(255,107,74,.06), transparent 60%),
+      linear-gradient(180deg, #16120F 0%, #1B1612 42%, #16120F 100%);
+  }
+}

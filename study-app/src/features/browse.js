@@ -205,6 +205,11 @@ export function renderBrowse() {
   });
   document.getElementById('num').textContent = shown;
   document.getElementById('numTotal').textContent = state.DATA.length;   // total browsable cards (built-ins + custom), not a hard-coded 100
+  // Editorial header count pills (total deck + leeches); the leech pill hides at zero.
+  const total = state.DATA.length, leechN = state.DATA.filter(v => isLeech(v.rank)).length;
+  document.getElementById('bHeadCount').textContent = total;
+  const lp = document.getElementById('bHeadLeechPill');
+  if (lp) { lp.hidden = leechN === 0; document.getElementById('bHeadLeech').textContent = leechN; }
   document.getElementById('empty').style.display = shown ? 'none' : 'block';
   const parts = [...filterSummary(bcfg)];   // filterSummary returns an array of recap parts
   if (bGrammar.length) parts.push('grammar: ' + bGrammar.map(grammarLabel).join(', '));

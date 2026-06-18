@@ -70,14 +70,21 @@ test('the package barrel exports the public API main.js + cloud.js consume', () 
   }
 });
 
-test('renderSelftalk paints the head (kicker + grammar filter) and the topic grid — no ReferenceError', () => {
+test('renderSelftalk paints the head + the daily-5 featured card/rail + the topic browser — no ReferenceError', () => {
   renderSelftalk();
   expect(html('stHead')).toContain('独り言');
   expect(html('stHead')).toContain('data-stgram="all"');   // the grammar "All" chip
-  // grid view (stTopic === null): category/topic cells, no phrase cards yet
-  expect(html('stBody')).toContain('st-cell');
-  expect(html('stBody')).toContain('st-grid');
-  expect(html('stBody')).not.toContain('st-phrase');
+  const body = html('stBody');
+  // hybrid grid (stTopic === null): a "Now speaking" featured card + a "Today's prompts" rail,
+  // ATOP the kept category/topic browser.
+  expect(body).toContain('st-daily');
+  expect(body).toContain('st-now');               // the featured card wrapper
+  expect(body).toContain('data-st-feature="st-a"'); // a rail card
+  expect(body).toContain('st-cell');              // the topic browser kept below
+  expect(body).toContain('st-grid');
+  // exactly ONE phrase card renders in the grid (the featured) — preserves the
+  // one-record-control-per-(scope,id)-per-view invariant (rail cards carry no record control).
+  expect((body.match(/st-play/g) || []).length).toBe(1);
 });
 
 test('drillTopic renders that topic\'s phrase list (the only view with record controls)', () => {
@@ -90,12 +97,14 @@ test('drillTopic renders that topic\'s phrase list (the only view with record co
   expect(body).toContain('I am fine');
 });
 
-test('drillTopic(null) returns to the grid', () => {
+test('drillTopic(null) returns to the grid (daily-5 + browser, not the drilled topic list)', () => {
   drillTopic(TOPIC);
   drillTopic(null);
   expect(S.stTopic).toBeNull();
-  expect(html('stBody')).toContain('st-cell');
-  expect(html('stBody')).not.toContain('st-phrase');
+  const body = html('stBody');
+  expect(body).toContain('st-cell');     // the topic browser
+  expect(body).toContain('st-daily');    // the daily-5 featured card + rail
+  expect((body.match(/st-play/g) || []).length).toBe(1);   // one featured phrase, not the full topic list
 });
 
 test('toggleGrammar updates the filter and re-renders without throwing', () => {

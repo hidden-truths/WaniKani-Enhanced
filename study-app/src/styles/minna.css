@@ -1,0 +1,143 @@
+/* =========================================================================
+   みんなの日本語 DASHBOARD (Day/Night Phase 5) — account-gated lesson view (gate ·
+   vocab table · grammar · conversation · notes · practice history). Peeled from
+   styles.css; the SHARED .speak-btn.playing + .minna-badge + the record-compare/
+   speaking-bar kit stay in styles.css. The .mn-vocab border rules are the
+   WebKit/Safari border-collapse fix — preserved verbatim (don't go back to
+   none/hidden). Imported after styles.css.
+   ========================================================================= */
+/* Signed-out gate — a lifted sheet. */
+.mn-gate{text-align:center;padding:48px 22px;background:var(--surf-card);border:1px solid var(--line);border-radius:16px;margin-top:0;box-shadow:var(--lift-md),var(--inner-hi)}
+.mn-gate .gate-ic{font-size:34px;color:var(--reading)}
+.mn-gate h2{font-family:var(--display);font-size:24px;font-weight:900;margin:12px 0 6px}
+.mn-gate p{color:var(--muted);max-width:46ch;margin:0 auto 18px}
+.mn-kicker{font-family:var(--mono);font-size:11px;letter-spacing:.24em;text-transform:uppercase;color:var(--brand);margin-bottom:8px}
+.mn-theme{color:var(--muted);margin-top:6px;font-size:15px}
+
+/* ---- Lesson-seal HERO (mock): hanko number tile + lesson info + progress + Add CTA ---- */
+.lesson-head{display:grid;grid-template-columns:auto 1fr auto;gap:30px;align-items:center;padding:30px 34px;background:var(--surf-card);border:1px solid var(--line);border-radius:18px;box-shadow:var(--lift-md),var(--inner-hi)}
+[data-theme="dark"] .lesson-head{border-color:rgba(255,107,74,.14)}
+@media (max-width:920px){.lesson-head{grid-template-columns:1fr;gap:22px}}
+.lesson-seal{flex:0 0 auto;width:112px;height:112px;border-radius:22px;border:3px solid var(--brand);color:var(--brand);display:flex;flex-direction:column;align-items:center;justify-content:center;gap:2px;transform:rotate(-3deg);position:relative;background:radial-gradient(circle at 50% 40%,rgba(205,67,39,.08),rgba(205,67,39,.02));box-shadow:inset 0 0 0 2px rgba(205,67,39,.14);filter:url(#stamp)}
+[data-theme="dark"] .lesson-seal{background:radial-gradient(circle at 50% 40%,rgba(255,107,74,.16),rgba(255,107,74,.04));box-shadow:inset 0 0 0 2px rgba(255,107,74,.26),0 0 30px -6px rgba(255,107,74,.5)}
+.lesson-seal .ring{position:absolute;inset:7px;border-radius:16px;border:1px solid rgba(205,67,39,.4)}
+[data-theme="dark"] .lesson-seal .ring{border-color:rgba(255,107,74,.5)}
+.lesson-seal .ka{font-family:var(--jp);font-weight:900;font-size:52px;line-height:.9}
+.lesson-seal .romaji{font-family:var(--mono);font-size:9px;letter-spacing:.22em;text-transform:uppercase}
+.lesson-info .lesson-no{font-family:var(--display);font-weight:800;font-size:42px;letter-spacing:-.02em;line-height:1.04;margin:0 0 6px;color:var(--ink)}
+.lesson-info .lesson-sub{font-family:var(--display);font-weight:600;font-size:19px;color:var(--muted);letter-spacing:-.01em}
+.lesson-info .lesson-sub .accent{color:var(--brand)}
+[data-theme="dark"] .lesson-info .lesson-sub .accent{color:#FF8A6E}
+.lesson-progress{display:flex;align-items:center;gap:16px;margin-top:18px;flex-wrap:wrap}
+.prog-stat{font-family:var(--mono);font-size:12px;letter-spacing:.06em;color:var(--muted)}
+.prog-stat b{color:var(--ink);font-weight:600;font-family:var(--display);font-size:14px;letter-spacing:0}
+.prog-meter{flex:1;min-width:140px;height:7px;border-radius:99px;background:var(--deeper);overflow:hidden}
+[data-theme="dark"] .prog-meter{background:rgba(255,238,222,.07);border:1px solid var(--line)}
+.prog-fill{height:100%;border-radius:99px;background:linear-gradient(90deg,var(--brand),#e06043);transition:width .8s cubic-bezier(.2,.7,.3,1)}
+[data-theme="dark"] .prog-fill{background:linear-gradient(90deg,#FF8A6E,var(--brand));box-shadow:0 0 14px -2px rgba(255,107,74,.7)}
+.prog-pct{font-family:var(--display);font-weight:700;font-size:14px;color:var(--brand);white-space:nowrap}
+[data-theme="dark"] .prog-pct{color:#FF8A6E}
+.lesson-actions{display:flex;flex-direction:column;align-items:flex-end;gap:9px}
+@media (max-width:920px){.lesson-actions{align-items:flex-start}}
+.lesson-actions .btn-primary{white-space:nowrap}
+.mn-loading,.mn-error{padding:30px 4px;color:var(--muted);font-family:var(--mono);font-size:13px}
+.mn-error{color:var(--brand)}
+/* Section = a numbered .sec-head (mock) above a lifted panel body; still a <details> so
+   long/secondary sections (practice history) collapse. */
+.mn-section{margin-top:40px}
+.mn-section>summary.sec-head{cursor:pointer;list-style:none;display:flex;align-items:flex-end;gap:14px;margin:0 0 16px;flex-wrap:wrap}
+.mn-section>summary::-webkit-details-marker{display:none}
+.sec-head .sec-title{display:flex;align-items:center;gap:14px}
+.sec-head .num{font-family:var(--display);font-weight:800;font-size:15px;color:var(--brand-on);background:var(--brand);width:30px;height:30px;border-radius:9px;display:grid;place-items:center;box-shadow:0 6px 14px -7px rgba(205,67,39,.7)}
+[data-theme="dark"] .sec-head .num{background:var(--brand-soft);color:#FF8A6E;border:1px solid rgba(255,107,74,.28);box-shadow:0 0 16px -7px rgba(255,107,74,.7)}
+.sec-head .sec-h2{font-family:var(--display);font-weight:700;font-size:23px;color:var(--ink)}
+.sec-head .jp-sub{font-family:var(--jp);font-weight:700;font-size:15px;color:var(--muted);transform:translateY(1px)}
+.sec-head .sec-count{margin-left:auto;font-family:var(--mono);font-size:11px;letter-spacing:.18em;text-transform:uppercase;color:var(--muted)}
+.mn-section>summary.sec-head::after{content:"−";color:var(--faint);font-size:18px;line-height:1;padding-bottom:2px}
+.mn-section:not([open])>summary.sec-head::after{content:"+"}
+.mn-sec-body{background:var(--surf-card);border:1px solid var(--line);border-radius:18px;padding:24px 30px;box-shadow:var(--lift-md),var(--inner-hi)}
+[data-theme="dark"] .mn-sec-body{border-color:rgba(255,107,74,.12)}
+/* Vocab table. */
+.mn-vocab{width:100%;border-collapse:collapse}
+/* WebKit/Safari border-collapse quirk: a `border-top:none`/`hidden` cell edge still gets
+   PAINTED by Safari using the cell's border WIDTH + default colour (currentColor ≈ --ink,
+   near-WHITE in dark mode) — a phantom white line under each word that Chrome doesn't draw.
+   `none`/`hidden` don't kill it; only an explicit 0 WIDTH + transparent COLOUR leaves nothing
+   to paint. So the base is `border:0 solid transparent` and ONLY the real separator (word-row
+   top) gets a visible 1px --line. Don't go back to `none` on the borderless edges. */
+.mn-vocab td{padding:9px 8px;border:0 solid transparent;border-top:1px solid var(--line);vertical-align:middle}
+.mn-vocab tr:first-child td{border-top:0 solid transparent}
+.mn-vocab .v-audio{width:44px;text-align:center}
+.mn-kanji{font-family:var(--jp);font-size:20px}
+.mn-kana{color:var(--muted);font-size:13px;margin-top:2px;font-family:var(--jp)}
+.mn-ctx{color:var(--muted);font-size:12px;font-family:var(--mono);margin-left:2px}
+.mn-mean{font-size:14px}
+.mn-pos{display:inline-block;font-family:var(--mono);font-size:9px;letter-spacing:.1em;color:var(--muted);border:1px solid var(--line);border-radius:6px;padding:1px 6px;margin-left:8px;vertical-align:1px}
+/* iTalki marker — a filled indigo chip so covered words pop in the vocab table. */
+.mn-italki{display:inline-block;font-family:var(--mono);font-size:9px;letter-spacing:.06em;background:var(--ichidan);color:#fff;border-radius:6px;padding:1px 6px;margin-left:6px;vertical-align:1px}
+/* Grammar — 3-up card grid (mock): tag · JP pattern · gloss · one specimen example. */
+.grammar-grid{display:grid;grid-template-columns:repeat(3,1fr);gap:18px}
+@media (max-width:980px){.grammar-grid{grid-template-columns:1fr}}
+.gcard{display:flex;flex-direction:column;padding:22px 22px 20px;background:var(--surf-inset);border:1px solid var(--line);border-radius:16px;box-shadow:var(--lift-sm)}
+[data-theme="dark"] .gcard{background:var(--chip-bg)}
+.gcard .g-tag{font-family:var(--mono);font-size:10px;letter-spacing:.2em;text-transform:uppercase;font-weight:500;color:var(--gold);display:inline-flex;align-items:center;gap:8px;margin-bottom:12px}
+.gcard .g-tag .dot{width:6px;height:6px;border-radius:50%;background:var(--gold)}
+.gcard .g-pattern{font-family:var(--jp);font-weight:700;font-size:20px;color:var(--ink);line-height:1.35;margin-bottom:8px}
+.gcard .g-structure{font-family:var(--mono);font-size:12px;color:var(--ink);background:var(--surf-card);border:1px solid var(--line);border-radius:8px;padding:7px 10px;margin-bottom:8px;line-height:1.5}
+.gcard .g-gloss{font-family:var(--body);font-size:14px;color:var(--muted);line-height:1.5;margin:0 0 16px}
+.gcard .g-gloss b{color:var(--ink);font-weight:600}
+.g-ex{margin-top:auto;border-radius:13px;padding:15px 17px;background:var(--surf-card);border:1px solid var(--line);position:relative;overflow:hidden}
+[data-theme="light"] .g-ex{background:linear-gradient(180deg,#FFFBF3,var(--raised))}
+[data-theme="dark"] .g-ex{background:linear-gradient(165deg,rgba(255,107,74,.06),rgba(217,169,78,.03));border-color:rgba(217,169,78,.16)}
+.g-ex::before{content:"";position:absolute;left:0;top:14px;bottom:14px;width:3px;border-radius:3px;background:var(--gold)}
+.g-ex .ex-jp{font-family:var(--jp);font-weight:500;font-size:17px;line-height:1.8;color:var(--ink);margin:0 0 6px}
+.g-ex .ex-en{font-family:var(--body);font-size:13.5px;color:var(--muted);margin:0}
+.g-ex-foot{display:flex;align-items:center;justify-content:space-between;margin-top:12px}
+.g-ex .ex-mark{font-family:var(--mono);font-size:10px;letter-spacing:.16em;text-transform:uppercase;color:var(--faint)}
+
+/* Example sentences (the standalone examples section). */
+.mn-ex{display:flex;flex-direction:column;gap:9px;margin-top:2px}
+.mn-ex .e-jp{font-family:var(--jp);font-size:17px;line-height:1.7}
+.mn-ex .e-en{color:var(--muted);font-size:14px;margin-top:1px}
+/* Conversation — two-colour speaker bubbles (mock): A from the left (brand), B from the
+   right (indigo via .turn.is-b). The per-line rec-control renders inside .turn-body. */
+.mn-conv-audio{display:flex;align-items:center;gap:10px;margin:0 0 16px;color:var(--muted);font-size:13px}
+.convo-title{font-family:var(--jp);font-weight:700;font-size:16px;color:var(--muted);margin:0 0 12px}
+.convo{display:flex;flex-direction:column;gap:14px}
+.turn{display:grid;grid-template-columns:auto 1fr;gap:16px;align-items:start;padding:15px 16px;border-radius:14px;background:var(--brand-soft);border:1px solid color-mix(in srgb,var(--brand) 16%,transparent);border-left:3px solid var(--brand);max-width:90%;transition:transform .16s ease}
+.turn:hover{transform:translateY(-1px)}
+.turn.is-b{grid-template-columns:1fr auto;margin-left:auto;text-align:right;background:var(--reading-soft);border-color:var(--reading-line);border-left:1px solid var(--reading-line);border-right:3px solid var(--reading)}
+.turn.is-b .spk{order:2}
+.turn.is-b .turn-body{order:1}
+.spk{flex:0 0 auto;width:36px;height:36px;border-radius:50%;display:grid;place-items:center;font-family:var(--display);font-weight:700;font-size:15px;border:1.5px solid var(--line)}
+.spk.a{color:var(--brand);background:var(--brand-soft);border-color:color-mix(in srgb,var(--brand) 35%,transparent)}
+.spk.b{color:var(--reading);background:var(--reading-soft);border-color:var(--reading-line)}
+[data-theme="dark"] .spk.a{color:#FF8A6E}
+.turn-body{min-width:0}
+.turn-body .t-jp{font-family:var(--jp);font-weight:500;font-size:20px;line-height:1.6;color:var(--ink);margin:0}
+.turn-body .t-en{font-family:var(--body);font-size:14.5px;color:var(--muted);margin:5px 0 0}
+@media (max-width:640px){.turn,.turn.is-b{max-width:100%;grid-template-columns:auto 1fr;text-align:left}.turn.is-b .spk{order:1}.turn.is-b .turn-body{order:2}}
+/* Add-to-deck action. */
+.mn-actions{display:flex;align-items:center;gap:12px;flex-wrap:wrap;margin:6px 0 2px}
+.v-in{color:var(--good);font-family:var(--mono);font-size:11px;white-space:nowrap}
+/* Notes — the "augment as I study" area (synced under the minna app key). */
+.mn-notes textarea{width:100%;min-height:120px;background:var(--surf-inset);color:var(--ink);border:1px solid var(--line);border-radius:12px;padding:13px;font-family:var(--body);font-size:14px;line-height:1.6;resize:vertical}
+.mn-notes textarea:focus{outline:none;border-color:var(--brand);box-shadow:0 0 0 3px var(--brand-soft)}
+.mn-saved{font-family:var(--mono);font-size:11px;color:var(--muted);margin-top:6px;min-height:14px}
+/* Practice history — cross-lesson roll-up of saved takes. */
+.mn-ph-total{font-family:var(--mono);font-size:12px;color:var(--muted);margin:0 0 10px}
+.mn-ph{width:100%;border-collapse:collapse;font-size:13px}
+.mn-ph th{text-align:left;font-family:var(--mono);font-size:10px;letter-spacing:.08em;text-transform:uppercase;color:var(--muted);font-weight:400;padding:0 10px 6px 0;border-bottom:1px solid var(--line)}
+.mn-ph th:last-child,.mn-ph td:last-child{text-align:right}
+.mn-ph td{padding:7px 10px 7px 0;border-top:1px solid var(--line)}
+.mn-ph tbody tr:first-child td{border-top:0}
+.mn-ph td:first-child{font-family:var(--mono);color:var(--reading)}
+.mn-ph-when{color:var(--muted);white-space:nowrap}
+.mn-ph-cur td{background:color-mix(in srgb,var(--reading) 8%,transparent)}
+.mn-ph-cur td:first-child{font-weight:700}
+
+@media (max-width:640px){
+  .mn-role{flex-basis:48px;font-size:10px}
+  .mn-kanji{font-size:18px}
+  .mn-vocab td{padding:8px 5px}
+}
