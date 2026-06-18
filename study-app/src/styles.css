@@ -220,6 +220,15 @@
   .copy-btn{color:var(--muted)}                 /* a quieter sibling of the ▶ play button */
   .copy-btn:hover{color:var(--brand);background:none}
   .speak-btn.copied{color:var(--good)}          /* brief ✓ confirmation after a copy */
+  /* Inline tool button — the bordered tile used for example play/copy (mock .tool-btn),
+     bigger + more present than .speak-btn.sm. Flashcard #exSpeak/#exCopy; .playing while
+     audio runs, .copied for the brief ✓ after a copy. */
+  .tool-btn{width:34px;height:34px;border-radius:9px;border:1px solid var(--line);background:var(--surf-inset);display:grid;place-items:center;cursor:pointer;color:var(--muted);transition:color .16s ease,border-color .16s ease,transform .16s ease,background .16s ease}
+  .tool-btn:hover{color:var(--brand);border-color:var(--brand);transform:translateY(-1px)}
+  [data-theme="dark"] .tool-btn:hover{color:var(--ink);border-color:var(--brand);background:var(--brand-soft)}
+  .tool-btn .ic{font-size:15px}
+  .tool-btn.playing{color:var(--brand);border-color:var(--brand);background:var(--brand-soft)}
+  .tool-btn.copied{color:var(--good);border-color:var(--good)}
   /* .verdict (typed advisory) + .btn.suggested → styles/flashcards.css (Phase 2). */
   /* Empty filter levels (e.g. N2/N1 — the 100 frequent verbs are almost all
      N5–N4) are disabled + dimmed by annotateJlptChips() rather than offered as a
