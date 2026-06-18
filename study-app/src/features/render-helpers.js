@@ -37,7 +37,7 @@ export function speakBtnHtml({ label, title, cls = '', id, data = {}, hidden = f
     .filter(([, v]) => v != null && v !== false)
     .map(([k, v]) => (v === true ? ` data-${k}` : ` data-${k}="${escapeHtml(v)}"`))
     .join('');
-  return `<button class="speak-btn${cls ? ' ' + cls : ''}"${idAttr} type="button"${dataAttrs} aria-label="${label}" title="${title == null ? label : title}"${hidden ? ' hidden' : ''}><svg class="ic" aria-hidden="true"><use href="#i-volume"/></svg></button>`;
+  return `<button class="speak-btn${cls ? ' ' + cls : ''}"${idAttr} type="button"${dataAttrs} aria-label="${label}" title="${title == null ? label : title}"${hidden ? ' hidden' : ''}><svg class="ic" aria-hidden="true"><use href="#i-play"/></svg></button>`;
 }
 
 // Copy `text` to the clipboard, with a brief ✓ confirmation on `btn` (swaps its icon to a check

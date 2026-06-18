@@ -235,7 +235,7 @@
 .play-btn:hover{background:var(--brand);color:var(--brand-on);transform:translateY(-6px)}
 [data-theme="dark"] .play-btn{color:var(--reading);background:radial-gradient(circle at 35% 30%,rgba(138,143,224,.22),rgba(138,143,224,.05));border-color:rgba(138,143,224,.32);box-shadow:0 0 22px -6px rgba(138,143,224,.45),var(--inner-hi)}
 [data-theme="dark"] .play-btn:hover{color:#fff;transform:translateY(-6px) scale(1.05)}
-.play-btn .ic{font-size:17px}
+.play-btn .ic{font-size:17px;margin-left:2px}
 .play-btn.playing{background:var(--brand);color:var(--brand-on)}
 [data-theme="dark"] .play-btn.playing{color:#fff}
 
