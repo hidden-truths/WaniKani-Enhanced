@@ -178,6 +178,7 @@ export function migrateMinnaDupes() {
 
 // --- Render ---
 const minnaLessonCache = {};               // n -> lesson JSON (avoids refetch on re-render)
+let minnaLessons = [];                      // available lesson numbers — for the chapter strip below the hero; set by renderMinna
 async function fetchMinnaLesson(n) {
   if (minnaLessonCache[n]) return minnaLessonCache[n];
   const r = await api('/v1/minna/lessons/' + n);
@@ -224,13 +225,10 @@ export async function renderMinna() {
   if (!lessons.length) { head.innerHTML = ''; body.innerHTML = '<div class="mn-error">No lessons have been added yet.</div>'; return; }
   const cur = lessons.includes(state.minnaStore.lastLesson) ? state.minnaStore.lastLesson : lessons[0];
   state.minnaStore.lastLesson = cur;
-  head.innerHTML = `<div class="page-kicker"><span class="jp">みんなの日本語</span> · Textbook</div>
-    <div class="frow"><span class="filter-label">Chapter</span><div class="chips" id="mnChapters" aria-label="Chapter">
-      ${lessons.map(n => `<button class="chip mnch${n === cur ? ' active' : ''}" type="button" data-lesson="${n}">L${n}</button>`).join('')}
-    </div></div>`;
-  // Switching chapters leaves the current speaking context — release the persistent mic so it
-  // doesn't stay open across the navigation (the next lesson re-renders speaking-off).
-  head.querySelectorAll('.mnch').forEach(b => b.addEventListener('click', () => { exitSpeakingMode(); state.minnaStore.lastLesson = Number(b.dataset.lesson); saveMinna(); renderMinna(); }));
+  // Kicker only in the head; the chapter selector is relocated below the hero (the mock) — see
+  // chapterStripHtml + wireMinnaLesson. minnaLessons feeds that strip across re-renders.
+  minnaLessons = lessons;
+  head.innerHTML = `<div class="page-kicker"><span class="jp">みんなの日本語</span> · Textbook</div>`;
   await renderMinnaLesson(cur, body);
 }
 // Lesson number → kanji (7→七, 23→二十三) for the hanko lesson seal.
@@ -240,6 +238,26 @@ function kanjiNum(n) {
   if (n < 20) return '十' + (n % 10 ? KNUM[n % 10] : '');
   if (n < 100) return KNUM[Math.floor(n / 10)] + '十' + (n % 10 ? KNUM[n % 10] : '');
   return String(n);
+}
+// A quiet "this is account-gated material" footnote under the hero (the mock).
+const GATED_NOTE = `<div class="gated-note"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><rect x="4" y="11" width="16" height="9" rx="2"/><path d="M8 11V7a4 4 0 0 1 8 0v4"/></svg>Account-gated · textbook material</div>`;
+// The mock's inline chapter strip (below the hero): a "Lesson" label, bare-numeral chips windowed
+// around the current lesson with … gaps when there are many, and a right-aligned "Speaking practice"
+// ghost button that enters speaking mode (wired to the nav speaking-bar controller in wireMinnaLesson).
+function chapterStripHtml(n) {
+  if (!minnaLessons.length) return '';
+  let shown = minnaLessons, lead = false, trail = false;
+  if (minnaLessons.length > 9) {
+    const i = minnaLessons.indexOf(n), start = Math.max(0, i - 2), end = Math.min(minnaLessons.length, i + 3);
+    shown = minnaLessons.slice(start, end); lead = start > 0; trail = end < minnaLessons.length;
+  }
+  const chips = shown.map(m => `<button class="chip mnch${m === n ? ' active' : ''}" type="button" data-lesson="${m}">${m}</button>`).join('');
+  const speaking = isSpeakingMode();
+  return `<div class="chapter-strip">
+    <span class="lbl">Lesson</span>
+    ${lead ? '<span class="gap">…</span>' : ''}${chips}${trail ? '<span class="gap">…</span>' : ''}
+    <button class="speaking-hint${speaking ? ' is-active' : ''}" type="button" data-mn-speak><svg class="ic" aria-hidden="true"><use href="#i-mic"/></svg>${speaking ? 'Stop speaking' : 'Speaking practice'}</button>
+  </div>`;
 }
 async function renderMinnaLesson(n, body) {
   body.innerHTML = '<div class="mn-loading">Loading lesson ' + n + '…</div>';
@@ -277,6 +295,8 @@ async function renderMinnaLesson(n, body) {
         <span class="v-in" id="mnDeckCount">${st.inDeck}/${st.total} in your SRS deck</span>
       </div>
     </section>
+    ${GATED_NOTE}
+    ${chapterStripHtml(n)}
     ${minnaVocabSection(L)}
     ${minnaGrammarSection(L)}
     ${minnaExamplesSection(L)}
@@ -479,7 +499,12 @@ function minnaNotesSection(n) {
 // controller takes no scope/load guard here; and it always shows (renderMinnaGate clears the slot
 // when signed out, so this is only reached for a signed-in, rendered lesson).
 function renderNavSpeaking(n, body) {
-  createSpeakingBar({ render: () => renderMinnaLesson(n, body) }).mount();
+  // The dock shows ONLY while speaking (the mock: an idle dock is empty → hidden via .nav-extra:empty);
+  // the chapter-strip "Speaking practice" button is the entry. Returns the controller so that button
+  // can toggle it. shouldShow keys off speaking state; render re-mounts on every lesson re-render.
+  const bar = createSpeakingBar({ shouldShow: () => isSpeakingMode(), render: () => renderMinnaLesson(n, body) });
+  bar.mount();
+  return bar;
 }
 function wireMinnaLesson(n, L, body) {
   // Unified audio buttons (vocab words + conversation): resolve native/synth/take per the 'minna'
@@ -501,7 +526,12 @@ function wireMinnaLesson(n, L, body) {
   wireRecordCompare(body);   // delegated record/play/delete/compare handlers (attach-once)
   wireMinnaClips(body);    // delegated conversation-line clip-marker handlers (attach-once)
   paintCompareWaveforms(body);   // decode + draw the you/native compare waveforms for this render
-  renderNavSpeaking(n, body);    // dock the speaking/compare controls into the navbar
+  const speakingBar = renderNavSpeaking(n, body);    // dock the speaking controls (shown only while speaking)
+  // Chapter chips (relocated below the hero) — switching releases the mic so it can't stay open across
+  // the navigation. The inline "Speaking practice" button is the speaking-mode entry (the dock is idle-empty).
+  body.querySelectorAll('.mnch').forEach(b => b.addEventListener('click', () => { exitSpeakingMode(); state.minnaStore.lastLesson = Number(b.dataset.lesson); saveMinna(); renderMinna(); }));
+  const speakBtn = body.querySelector('[data-mn-speak]');
+  if (speakBtn) speakBtn.addEventListener('click', () => speakingBar.onToggle());
   const add = body.querySelector('#mnAddDeck');
   if (add) add.addEventListener('click', () => {
     const { added, updated } = activateMinnaVocab(n, L.vocab || []);

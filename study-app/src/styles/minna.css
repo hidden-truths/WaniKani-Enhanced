@@ -41,6 +41,19 @@
 .lesson-actions{display:flex;flex-direction:column;align-items:flex-end;gap:9px}
 @media (max-width:920px){.lesson-actions{align-items:flex-start}}
 .lesson-actions .btn-primary{white-space:nowrap}
+/* Quiet gated-note footnote + the inline chapter strip (relocated below the hero — the mock). */
+.gated-note{font-family:var(--mono);font-size:9px;letter-spacing:.14em;text-transform:uppercase;color:var(--faint);display:inline-flex;align-items:center;gap:6px;font-weight:500;margin:14px 2px 0}
+.gated-note svg{width:10px;height:10px;opacity:.8}
+.chapter-strip{display:flex;align-items:center;gap:10px;margin:22px 0 6px;flex-wrap:wrap}
+.chapter-strip .lbl{font-family:var(--mono);font-size:10px;letter-spacing:.28em;text-transform:uppercase;color:var(--muted);margin-right:4px}
+.chapter-strip .mnch{font-family:var(--display);font-weight:600;min-width:40px;text-align:center}
+.chapter-strip .gap{color:var(--faint);font-family:var(--mono);font-size:13px;padding:0 2px}
+.speaking-hint{margin-left:auto;display:inline-flex;align-items:center;gap:9px;padding:9px 16px;font-family:var(--body);font-size:14px;font-weight:500;color:var(--ink);background:var(--chip-bg);border:1px solid var(--line);border-radius:11px;box-shadow:var(--lift-sm);cursor:pointer;transition:transform .16s ease,border-color .16s ease,background .16s ease,color .16s ease}
+.speaking-hint .ic{font-size:15px}
+.speaking-hint:hover{border-color:var(--brand);color:var(--brand);transform:translateY(-1px)}
+.speaking-hint.is-active{background:var(--brand-soft);border-color:var(--brand);color:var(--brand)}
+[data-theme="dark"] .speaking-hint.is-active{color:#FF8A6E}
+@media (max-width:640px){.speaking-hint{margin-left:0}}
 .mn-loading,.mn-error{padding:30px 4px;color:var(--muted);font-family:var(--mono);font-size:13px}
 .mn-error{color:var(--brand)}
 /* Section = a numbered .sec-head (mock) above a lifted panel body; still a <details> so
