@@ -186,10 +186,13 @@ async function fetchMinnaLesson(n) {
 // Section = a collapsible card with the mock's numbered .sec-head (a numbered badge + title +
 // an optional JP sub-label, count on the right). opts: {num, jp, unit}.
 function mnSection(title, count, bodyHtml, open, opts = {}) {
-  const { num, jp, unit } = opts;
+  const { num, jp, unit, bare } = opts;
   const left = `<span class="sec-title">${num ? `<span class="num">${num}</span>` : ''}<span class="sec-h2">${title}</span>${jp ? `<span class="jp-sub jp">${jp}</span>` : ''}</span>`;
   const right = count != null ? `<span class="sec-count">${count}${unit ? ' ' + unit : ''}</span>` : '';
-  return `<details class="mn-section"${open ? ' open' : ''}><summary class="sec-head">${left}${right}</summary><div class="mn-sec-body">${bodyHtml}</div></details>`;
+  // bare: render the body WITHOUT the lifted .mn-sec-body panel — used by Grammar, whose cards
+  // float on the page individually (the mock), not nested inside a containing panel.
+  const inner = bare ? `<div class="mn-sec-bare">${bodyHtml}</div>` : `<div class="mn-sec-body">${bodyHtml}</div>`;
+  return `<details class="mn-section"${open ? ' open' : ''}><summary class="sec-head">${left}${right}</summary>${inner}</details>`;
 }
 // Two gate states: signed-OUT shows a sign-in invite; signed-in-but-DENIED (a 401 from the
 // owner allowlist, MINNA_OWNER_EMAILS) shows a "not on your account" note WITHOUT a Sign-in
@@ -332,7 +335,7 @@ function minnaGrammarSection(L) {
   // 3-up grammar card grid (mock): a tag + the JP pattern + the gloss + one specimen example.
   const cards = L.grammar.map(g => {
     const ex = g.examples && g.examples.length ? g.examples[0] : null;
-    return `<article class="card gcard">
+    return `<article class="gcard">
       <span class="g-tag"><span class="dot"></span>${escapeHtml(g.label || 'Pattern')}</span>
       <div class="g-pattern jp">${escapeHtml(g.pattern || '')}</div>
       ${g.structure ? `<div class="g-structure jp">${escapeHtml(g.structure)}</div>` : ''}
@@ -340,7 +343,7 @@ function minnaGrammarSection(L) {
       ${ex ? `<div class="g-ex"><p class="ex-jp jp">${rubyHtml(ex.jp)}</p><p class="ex-en">${escapeHtml(ex.en)}</p><div class="g-ex-foot"><span class="ex-mark">Example</span>${ttsSentenceBtn(ex.jp)}</div></div>` : ''}
     </article>`;
   }).join('');
-  return mnSection('Grammar points', L.grammar.length, `<div class="grammar-grid">${cards}</div>`, true, { num: 2, jp: 'ぶんぽう', unit: 'patterns' });
+  return mnSection('Grammar points', L.grammar.length, `<div class="grammar-grid">${cards}</div>`, true, { num: 2, jp: 'ぶんぽう', unit: 'patterns', bare: true });
 }
 function minnaExamplesSection(L) {
   if (!L.examples || !L.examples.length) return '';

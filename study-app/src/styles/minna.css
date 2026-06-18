@@ -94,14 +94,19 @@
   .vrow .v-tools{grid-area:tools;align-self:center}
 }
 /* Grammar — 3-up card grid (mock): tag · JP pattern · gloss · one specimen example. */
-.grammar-grid{display:grid;grid-template-columns:repeat(3,1fr);gap:18px}
+.grammar-grid{display:grid;grid-template-columns:repeat(3,1fr);gap:20px}
 @media (max-width:980px){.grammar-grid{grid-template-columns:1fr}}
-.gcard{display:flex;flex-direction:column;padding:22px 22px 20px;background:var(--surf-inset);border:1px solid var(--line);border-radius:16px;box-shadow:var(--lift-sm)}
-[data-theme="dark"] .gcard{background:var(--chip-bg)}
+/* Grammar cards are de-nested from the section panel (mnSection bare:true) so each floats as a
+   raised card on the page — the mock, not card-in-panel. */
+.mn-sec-bare{margin:0}
+.gcard{display:flex;flex-direction:column;padding:24px 24px 22px;background:var(--surf-card);border:1px solid var(--line);border-radius:18px;box-shadow:var(--lift-md),var(--inner-hi);cursor:default;transition:transform .25s cubic-bezier(.2,.7,.3,1),box-shadow .25s ease,border-color .25s ease}
+[data-theme="dark"] .gcard{border-color:rgba(255,107,74,.14)}
+.gcard:hover{transform:translateY(-3px);box-shadow:var(--lift-lg),var(--inner-hi)}
+[data-theme="dark"] .gcard:hover{border-color:rgba(255,107,74,.28)}
 .gcard .g-tag{font-family:var(--mono);font-size:10px;letter-spacing:.2em;text-transform:uppercase;font-weight:500;color:var(--gold);display:inline-flex;align-items:center;gap:8px;margin-bottom:12px}
 .gcard .g-tag .dot{width:6px;height:6px;border-radius:50%;background:var(--gold)}
 .gcard .g-pattern{font-family:var(--jp);font-weight:700;font-size:20px;color:var(--ink);line-height:1.35;margin-bottom:8px}
-.gcard .g-structure{font-family:var(--mono);font-size:12px;color:var(--ink);background:var(--surf-card);border:1px solid var(--line);border-radius:8px;padding:7px 10px;margin-bottom:8px;line-height:1.5}
+.gcard .g-structure{font-family:var(--mono);font-size:12px;color:var(--ink);background:var(--surf-inset);border:1px solid var(--line);border-radius:8px;padding:7px 10px;margin-bottom:10px;line-height:1.5}
 .gcard .g-gloss{font-family:var(--body);font-size:14px;color:var(--muted);line-height:1.5;margin:0 0 16px}
 .gcard .g-gloss b{color:var(--ink);font-weight:600}
 .g-ex{margin-top:auto;border-radius:13px;padding:15px 17px;background:var(--surf-card);border:1px solid var(--line);position:relative;overflow:hidden}
@@ -112,6 +117,12 @@
 .g-ex .ex-en{font-family:var(--body);font-size:13.5px;color:var(--muted);margin:0}
 .g-ex-foot{display:flex;align-items:center;justify-content:space-between;margin-top:12px}
 .g-ex .ex-mark{font-family:var(--mono);font-size:10px;letter-spacing:.16em;text-transform:uppercase;color:var(--faint)}
+/* The specimen example's play — the mock's round brand-tinted button (overrides the inline .speak-btn.sm). */
+.g-ex .speak-btn.sm{width:38px;height:38px;border:1px solid color-mix(in srgb,var(--brand) 28%,transparent);background:var(--brand-soft);color:var(--brand);box-shadow:none;margin-left:0;vertical-align:baseline}
+.g-ex .speak-btn.sm .ic{font-size:15px}
+.g-ex .speak-btn.sm:hover{background:var(--brand);color:var(--brand-on);border-color:var(--brand);transform:translateY(-1px)}
+[data-theme="dark"] .g-ex .speak-btn.sm{color:#FF8A6E;border-color:rgba(255,107,74,.3)}
+[data-theme="dark"] .g-ex .speak-btn.sm:hover{color:#fff;background:var(--brand)}
 
 /* Example sentences (the standalone examples section). */
 .mn-ex{display:flex;flex-direction:column;gap:9px;margin-top:2px}
