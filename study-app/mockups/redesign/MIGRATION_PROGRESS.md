@@ -188,7 +188,7 @@ compositions that still need a fidelity pass. Per row — the mock vs what ships
 | **Stats** | hero metric row + the pipeline/line/per-card SVG charts in an editorial grid | ◐ **built (needs fidelity pass)** (Phase 8): added the header (学習の記録 · Your progress + "Progress" + an editorial subtitle), reworked the metric tiles into 6 hero cards with context sublabels (+ a Current-streak tile via `studyStreak`), and grouped the charts under Retention / Needs work / Per-card section dividers with a 2-up Memory-pipeline + Daily-accuracy grid. Charts reskinned for free via the token aliases. Both themes verified. | ~~re-compare (spacing/scale)~~ — done |
 | **みんなの日本語** | hero **hanko lesson-number tile** (七 / 第7課) + progress, 3-up grammar **cards**, two-colour speaker **bubbles** | ◐ **built (needs fidelity pass)** (Phase 8): rebuilt `renderMinnaLesson` into the lesson-seal hero (kanji-number hanko tile + 第N課 + theme + vocab/grammar progress meter + Add CTA), numbered `.sec-head` sections over lifted panels, a 3-up `.grammar-grid` of `.gcard` (tag · pattern · structure · gloss · specimen example), and two-colour speaker `.turn`/`.turn.is-b` bubbles (speaker marker added in `renderConversation`, role→a/b). The `.mn-vocab` Safari rule + rec-control/clip wiring preserved. **Verified SIGNED-IN (real Lesson 23, owner account via the proxy harness) in both themes.** | ~~build hanko hero, grammar grid, bubbles~~ — shipped |
 | **✅ 歌 Songs** | stylised play-card hero (cover ring + coverage) + side-by-side Read/Mine | ✅ **REBUILT** (`118e658`): the mock's two-column `.songs-grid` STAGE — a vinyl-disc hero play-card (gradient title + JLPT badge + artist · 読/聴/影/採 mode-tabs on a recessed track · on-demand "Play with video" + ふりがな switch · JLPT difficulty profile bar + SVG mining ring), an on-demand video bay (hidden until asked; the old always-on 0%-coverage iframe is gone), the Read lyric stage (`.ll` rows · tap-a-word ruby · grammar pills · per-line tools · the **glowing `.ll.current` playhead** + a now-playing eq badge), and the **mined-vocab rail** beside Read (NEW vs KNOWN, per-word + bulk add). Listen/Shadow/Mine still render full-width. **Verified SIGNED-IN both themes** (owner via the proxy harness) incl. a simulated current line. | ~~hero treatment~~ — rebuilt for real |
-| **独り言 Self-Talk** | the big "NOW SPEAKING" editorial card (prompt + scaffold + the spacious record rig + waveforms) over a quiet prompt rail | ◐ **built (skin only)** (Phase 8): the editorial header (独り言 · Self-talk kicker + "Say it out loud 声に出して" + lead + a streak / said-today meta-pill), and the drilled phrase cards reskinned as spacious editorial cards with a class spine + lift. **Verified signed-in** both themes. NOTE: the app keeps its richer **topic-browser** model (category→topic grid → phrase list) rather than restructuring to the mock's daily-5 *featured-card + rail* flow — that's an interaction-model change, not just a skin, and the topic browser is a superset; flagged for the maintainer. | ~~the "now speaking" composition + prompt rail~~ — editorial skin shipped; daily-5 flow intentionally not restructured |
+| **独り言 Self-Talk** | the big "NOW SPEAKING" editorial card (prompt + scaffold + the spacious record rig + waveforms) over a quiet prompt rail | ◐ **built (skin only)** (Phase 8): the editorial header (独り言 · Self-talk kicker + "Say it out loud 声に出して" + lead + a streak / said-today meta-pill), and the drilled phrase cards reskinned as spacious editorial cards with a class spine + lift. **Verified signed-in** both themes. **DECIDED (2026-06-17): build the HYBRID** — add a daily-5 *featured card* as the default entry, keep the topic-browser (the superset) reachable below it. Skin shipped; the daily-5 featured card is the remaining build. | build the daily-5 featured card atop the kept topic-browser; verify both themes |
 
 **The two 🔴 frame rows come FIRST in Phase 9** — they're the precondition for every per-surface
 fidelity pass (refining a panel's spacing inside a wrong, cramped frame is wasted). Then 歌 Songs
@@ -225,12 +225,16 @@ and didn't do a fidelity pass.** Phase 9, in strict order (steps 1–2, the fram
    on-demand video bay, the Read lyric stage with the **glowing current line** + now-playing badge, and
    the **mined-vocab rail** beside Read. YouTube-embed + `#sgContent` re-render + Shadow seams kept.
    Verified signed-in both themes.
-4. **Per-surface FIDELITY pass** over the ◐ rows (study-home, flashcard, Browse, Stats, みんなの日本語,
-   独り言): open each `screens/*.png` next to a live render in BOTH themes and close the deltas — exact
-   paddings, font sizes, gaps, hero/section rhythm — vs `system.css`/the per-mock inline `<style>`. This
-   is the bulk of the "make it match" work and only pays off after 1 + 2.
-5. **独り言 interaction-model call** (maintainer): keep the topic-browser (a functional superset) or
-   restructure to the mock's daily-5 *featured-card + prompt-rail* flow. Editorial skin already shipped.
+4. ✅ **Per-surface FIDELITY pass — DONE for 5 of 6.** With the frame fixed (1+2), the Phase-8
+   compositions now LAND: **study-home, flashcard (prompt + answer), Browse, Stats, and みんなの日本語**
+   were each compared live (signed-in via the proxy harness) against their `screens/*.png` and read as
+   the mocks with **no further changes needed** — the wrong frame, not the panels, was the miss. (The
+   `#navExtra` "Practice speaking" dock confirmed working as the sticky sub-bar under みんなの日本語.)
+   Remaining surface: 独り言 (step 5).
+5. **独り言 — build the HYBRID (maintainer's call): a daily-5 featured card + the topic-browser kept
+   below it.** The editorial skin already shipped; this adds a daily-5 *featured-card* as the default
+   entry, with the existing category→topic→phrase browser still reachable underneath. (NOT a full
+   restructure — the topic browser stays as the superset.) Signed-in surface; verify both themes.
 6. **Optional polish:** re-tune the four non-verb accents; the modal-kit / record-compare own-file split.
 7. **Maintainer sign-off → push / open the PR** (still local on `redesign-migration`).
 
