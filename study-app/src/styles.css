@@ -165,7 +165,7 @@
   .signup-banner .sb-dismiss{background:none;border:none;color:var(--muted);cursor:pointer;padding:4px;display:inline-flex}
   .signup-banner .sb-dismiss:hover{color:var(--ink)}
 
-  /* Browse grid cards (.grid/.card/.stamp/.verb-*/.rank/.acc/.tags) + the detail
+  /* Browse grid cards (.grid/.card/.stamp/.verb-* /.rank/.acc/.tags) + the detail
      memory track → styles/browse.css (Phase 3). */
   .ex{font-size:15px;margin-bottom:2px} .ex .en{display:block;font-size:13px;color:var(--muted);margin-top:2px}
   /* furigana ruby — gothic, brand-tinted, tight over the kanji (global) */
@@ -183,7 +183,7 @@
   .count{font-family:var(--mono);font-size:11px;color:var(--muted);width:100%}
   .count b{color:var(--godan)}
 
-  /* Flashcard stage (.fc-setup/.fc-stage/.flashcard/.spine/.prompt-*/.answer/
+  /* Flashcard stage (.fc-setup/.fc-stage/.flashcard/.spine/.prompt-* /.answer/
      .a-read/.pitch/.a-mean/.a-note*) → styles/flashcards.css (Phase 2). */
   /* BUTTON — body-font, rounded, lifted. Functional-colour meaning preserved:
      .primary (brand CTA — Start/Add/Save/Sign in) is the shared default here; the
@@ -315,7 +315,7 @@
   .ex-grammar{margin-top:6px;display:flex;flex-wrap:wrap;gap:5px;align-items:center;font-family:var(--mono);font-size:10px;text-transform:uppercase;letter-spacing:.05em;color:var(--muted)}
   .ex-gram-chip{font-family:var(--jp-font),sans-serif;text-transform:none;letter-spacing:0;font-size:12px;color:var(--ink);background:color-mix(in srgb,var(--ink) 7%,transparent);border:1px solid var(--line);border-radius:6px;padding:1px 7px}
 
-/* 歌 / Songs tab (.sg-*/.song-*/.lyric/.listen-*/.vg-*/.gref) → styles/songs.css
+/* 歌 / Songs tab (.sg-* /.song-* /.lyric/.listen-* /.vg-* /.gref) → styles/songs.css
    (Phase 5). Shared .ex-grammar/.ex-gram-chip (tap-a-word) stay above in styles.css. */
 
 /* (Songs Add flow + Song view continue in styles/songs.css.) */
