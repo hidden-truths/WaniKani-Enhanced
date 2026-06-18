@@ -12,9 +12,12 @@
 
    Palette intent (functional, not decorative):
      godan=vermilion · ichidan=indigo · irregular=gold · leech=plum · good=jade
-     adjective=teal · noun=amber · adverb=rose · phrase=slate  (non-verb cats —
-     carried forward from the old palette; the redesign system doesn't define them
-     and no mock shows them, so re-tune in a later pass if wanted).
+     adjective=viridian · noun=ochre · adverb=wine-rose · phrase=taupe  (non-verb
+     cats — Phase 9 re-tuned to the warm washi palette: the old cool teal/amber/
+     magenta/SLATE were re-warmed [slate→taupe is the biggest shift] so they read
+     as part of the day/night system, kept distinct from each other + the verb hues.
+     The redesign mocks don't define these (all 100 built-ins are verbs); they show
+     on custom + Minna/song non-verb cards via colorClass()).
    ========================================================================= */
 :root, :root[data-theme="light"]{
   /* surfaces — warm washi paper; cards lift via a BRIGHTER raised sheet + shadow */
@@ -27,8 +30,8 @@
   --good:#3F7A4E; --good-deep:#2C5C39; --good-soft:#DCE7DA; --good-on:#F2F7EF;
   --gold:#8C6C1C;
   --leech:#7E3F9C; --leech-soft:rgba(126,63,156,.10);
-  /* non-verb category accents (spine + hanko stamp) — carried forward unchanged */
-  --adjective:#1f7a6b; --noun:#b07d1a; --adverb:#a83b6e; --phrase:#5a6b8c;
+  /* non-verb category accents (spine + hanko stamp) — warm washi (Phase 9): viridian · ochre · wine-rose · taupe */
+  --adjective:#2c7d6b; --noun:#a06a1e; --adverb:#a14258; --phrase:#736353;
   /* derived surfaces */
   --spine:linear-gradient(to bottom, var(--brand), var(--brand-deep));
   --chip-bg:var(--raised); --surf-card:var(--raised); --surf-inset:#EBE0CB; --surf-nav:rgba(251,246,236,.72);
@@ -63,7 +66,7 @@
   --good:#56D9A6; --good-deep:#37B888; --good-soft:rgba(86,217,166,.10); --good-on:#0B1F16;
   --gold:#D9A94E;
   --leech:#C792EA; --leech-soft:rgba(199,146,234,.12);
-  --adjective:#4cae9c; --noun:#d6a648; --adverb:#d479a3; --phrase:#8a9bc0;
+  --adjective:#5cbfa6; --noun:#d8a24e; --adverb:#d6818f; --phrase:#ab9a85;
   --spine:linear-gradient(to bottom, var(--brand), #C5421F);
   --chip-bg:rgba(255,238,222,.035);
   --surf-card:linear-gradient(168deg, rgba(44,35,27,.74), rgba(36,28,22,.62));
@@ -90,7 +93,7 @@
     --good:#56D9A6; --good-deep:#37B888; --good-soft:rgba(86,217,166,.10); --good-on:#0B1F16;
     --gold:#D9A94E;
     --leech:#C792EA; --leech-soft:rgba(199,146,234,.12);
-    --adjective:#4cae9c; --noun:#d6a648; --adverb:#d479a3; --phrase:#8a9bc0;
+    --adjective:#5cbfa6; --noun:#d8a24e; --adverb:#d6818f; --phrase:#ab9a85;
     --spine:linear-gradient(to bottom, var(--brand), #C5421F);
     --chip-bg:rgba(255,238,222,.035);
     --surf-card:linear-gradient(168deg, rgba(44,35,27,.74), rgba(36,28,22,.62));
