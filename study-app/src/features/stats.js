@@ -168,7 +168,7 @@ export function renderStats() {
   const pcols = boxes.map((n, i) => {
     const h = n === 0 ? 3 : Math.max(7, Math.round(n / maxBox * 88));
     const above = h < 58;                                          // shorter bars float the count above
-    const grad = `linear-gradient(180deg, color-mix(in srgb,var(--box-${i}) 82%, #fff 8%), var(--box-${i}))`;
+    const grad = `linear-gradient(180deg, color-mix(in srgb,var(--box-${i}) 68%, #fff) 0%, var(--box-${i}) 52%, color-mix(in srgb,var(--box-${i}) 80%, #000) 100%)`;
     return `<div class="pcol${i === 5 ? ' best' : ''}"><div class="pbar-track"><div class="pbar${above ? ' count-above' : ''}" style="height:${h}%;background:${grad};animation-delay:${(0.3 + i * 0.06).toFixed(2)}s"><span class="count">${n}</span></div></div><div class="plabel"><b>${boxName[i]}</b>${boxInt[i]}</div></div>`;
   }).join('');
   const swatches = boxes.map((n, i) => `<i style="background:var(--box-${i})"></i>`).join('');
