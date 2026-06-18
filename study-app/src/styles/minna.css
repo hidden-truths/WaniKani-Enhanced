@@ -58,24 +58,41 @@
 .mn-section:not([open])>summary.sec-head::after{content:"+"}
 .mn-sec-body{background:var(--surf-card);border:1px solid var(--line);border-radius:18px;padding:24px 30px;box-shadow:var(--lift-md),var(--inner-hi)}
 [data-theme="dark"] .mn-sec-body{border-color:rgba(255,107,74,.12)}
-/* Vocab table. */
-.mn-vocab{width:100%;border-collapse:collapse}
-/* WebKit/Safari border-collapse quirk: a `border-top:none`/`hidden` cell edge still gets
-   PAINTED by Safari using the cell's border WIDTH + default colour (currentColor ≈ --ink,
-   near-WHITE in dark mode) — a phantom white line under each word that Chrome doesn't draw.
-   `none`/`hidden` don't kill it; only an explicit 0 WIDTH + transparent COLOUR leaves nothing
-   to paint. So the base is `border:0 solid transparent` and ONLY the real separator (word-row
-   top) gets a visible 1px --line. Don't go back to `none` on the borderless edges. */
-.mn-vocab td{padding:9px 8px;border:0 solid transparent;border-top:1px solid var(--line);vertical-align:middle}
-.mn-vocab tr:first-child td{border-top:0 solid transparent}
-.mn-vocab .v-audio{width:44px;text-align:center}
-.mn-kanji{font-family:var(--jp);font-size:20px}
-.mn-kana{color:var(--muted);font-size:13px;margin-top:2px;font-family:var(--jp)}
-.mn-ctx{color:var(--muted);font-size:12px;font-family:var(--mono);margin-left:2px}
-.mn-mean{font-size:14px}
-.mn-pos{display:inline-block;font-family:var(--mono);font-size:9px;letter-spacing:.1em;color:var(--muted);border:1px solid var(--line);border-radius:6px;padding:1px 6px;margin-left:8px;vertical-align:1px}
-/* iTalki marker — a filled indigo chip so covered words pop in the vocab table. */
-.mn-italki{display:inline-block;font-family:var(--mono);font-size:9px;letter-spacing:.06em;background:var(--ichidan);color:#fff;border-radius:6px;padding:1px 6px;margin-left:6px;vertical-align:1px}
+/* Vocab → the mock's labeled word-grid (replaced the <table>; the old border-collapse WebKit
+   note no longer applies here — the practice-history .mn-ph table is unaffected). Rows grouped by
+   POS under a .grp-label; each .vrow = JP headword · kana reading(+context) · gloss(+iTalki) · tools. */
+.vocab-groups{display:flex;flex-direction:column}
+.grp-label{font-family:var(--mono);font-size:11px;letter-spacing:.2em;text-transform:uppercase;color:var(--muted);font-weight:600;padding:20px 6px 10px;display:flex;align-items:center;gap:12px}
+.grp-label::after{content:"";flex:1;height:1px;background:var(--line)}
+.vocab-groups>.grp-label:first-child{padding-top:2px}
+.vocab-list{display:flex;flex-direction:column}
+.vrow{display:grid;grid-template-columns:minmax(120px,1.4fr) minmax(96px,1fr) 2fr auto;align-items:center;gap:20px;padding:11px 12px;border-radius:10px;transition:background .18s ease}
+.vrow:nth-child(even){background:color-mix(in srgb,var(--surf-inset) 55%,transparent)}
+.vrow:hover{background:var(--surf-inset)}
+.vrow .v-jp{font-family:var(--jp);font-weight:700;font-size:23px;color:var(--ink);line-height:1}
+.vrow .v-read{font-family:var(--jp);font-size:13px;color:var(--faint);letter-spacing:.02em;display:flex;flex-direction:column;gap:2px;min-width:0}
+.vrow .v-ctx{font-family:var(--jp);font-size:11px;color:var(--faint)}
+.vrow .v-en{font-family:var(--body);font-size:16px;color:var(--ink);font-weight:500;display:flex;align-items:center;gap:8px;flex-wrap:wrap}
+.vrow .v-tools{display:flex;align-items:center;gap:8px;justify-self:end}
+.v-italki{font-family:var(--mono);font-size:9px;letter-spacing:.06em;background:var(--ichidan);color:#fff;border-radius:6px;padding:1px 6px}
+.vrow .v-in{color:var(--good);font-size:13px;font-family:var(--mono)}
+/* play = the shared .speak-btn rewired brand-tinted (the mock's vocab play); rec-dot = quieter sibling */
+.vrow .speak-btn{width:36px;height:36px;color:var(--brand);background:var(--brand-soft);border-color:color-mix(in srgb,var(--brand) 28%,transparent)}
+.vrow .speak-btn .ic{font-size:15px}
+.vrow .speak-btn:hover{background:var(--brand);color:var(--brand-on);border-color:var(--brand)}
+[data-theme="dark"] .vrow .speak-btn{color:#FF8A6E;background:var(--brand-soft);border-color:rgba(255,107,74,.3)}
+[data-theme="dark"] .vrow .speak-btn:hover{color:#fff;background:var(--brand)}
+.rec-dot{width:36px;height:36px;border-radius:50%;display:grid;place-items:center;cursor:pointer;border:1px solid var(--line);background:var(--surf-inset);color:var(--brand);flex-shrink:0;transition:transform .16s ease,border-color .16s ease,background .16s ease}
+.rec-dot::before{content:"";width:11px;height:11px;border-radius:50%;background:currentColor;box-shadow:0 0 0 3px color-mix(in srgb,var(--brand) 16%,transparent)}
+.rec-dot:hover{transform:translateY(-1px);border-color:var(--brand);background:var(--brand-soft)}
+[data-theme="dark"] .rec-dot{color:#FF8A6E}
+/* speaking-mode full record control as a full-width sub-row under its word */
+.vrow-rec{padding:2px 12px 14px}
+@media (max-width:760px){
+  .vrow{grid-template-columns:1fr auto;grid-template-areas:"jp tools" "read tools" "en tools";gap:4px 16px;padding:11px 10px}
+  .vrow .v-jp{grid-area:jp}.vrow .v-read{grid-area:read}.vrow .v-en{grid-area:en;margin-top:2px}
+  .vrow .v-tools{grid-area:tools;align-self:center}
+}
 /* Grammar — 3-up card grid (mock): tag · JP pattern · gloss · one specimen example. */
 .grammar-grid{display:grid;grid-template-columns:repeat(3,1fr);gap:18px}
 @media (max-width:980px){.grammar-grid{grid-template-columns:1fr}}
@@ -136,9 +153,3 @@
 .mn-ph-when{color:var(--muted);white-space:nowrap}
 .mn-ph-cur td{background:color-mix(in srgb,var(--reading) 8%,transparent)}
 .mn-ph-cur td:first-child{font-weight:700}
-
-@media (max-width:640px){
-  .mn-role{flex-basis:48px;font-size:10px}
-  .mn-kanji{font-size:18px}
-  .mn-vocab td{padding:8px 5px}
-}

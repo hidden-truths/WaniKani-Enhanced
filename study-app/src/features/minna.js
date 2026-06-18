@@ -18,7 +18,7 @@ import { createSyncedBlob } from './synced-blob.js';
 import { openAuth } from './cloud.js';
 import { loadCustom, saveCustom } from '../persistence/custom.js';
 import { rebuildData, refreshAfterVerbChange } from './custom-cards.js';
-import { loadRecordings, recordControlHtml, wireRecordCompare, paintCompareWaveforms, isSpeakingMode, exitSpeakingMode, newestTakeIdForItem } from './record-compare.js';
+import { loadRecordings, recordControlHtml, wireRecordCompare, paintCompareWaveforms, isSpeakingMode, enterSpeakingMode, exitSpeakingMode, newestTakeIdForItem } from './record-compare.js';
 import { createSpeakingBar, clearSpeakingBar, releaseMicIfHidden } from './speaking-bar.js';
 
 const MINNA_APP_KEY = 'minna';
@@ -282,17 +282,38 @@ async function renderMinnaLesson(n, body) {
     ${minnaNotesSection(n)}`;
   wireMinnaLesson(n, L, body);
 }
+// Lesson vocab → the mock's labeled word-grid (was a <table>): rows grouped by part of speech under
+// a .grp-label, each row = JP headword · kana reading(+context) · gloss(+iTalki) · play+record tools.
+// Keeps the app data the static mock omits — kana, the iTalki workflow marker, SRS deck-status —
+// restyled to fit. The POS now reads off the group label, so the per-row POS badge is dropped.
+const GROUP_LABEL = { verb: 'Verbs', adjective: 'Adjectives', noun: 'Nouns', adverb: 'Adverbs', phrase: 'Phrases' };
 function minnaVocabSection(L) {
   if (!L.vocab || !L.vocab.length) return '';
   const speaking = isSpeakingMode();
-  const rows = L.vocab.map(v => `<tr>
-      <td class="v-audio">${mnWordAudioBtn(v)}</td>
-      <td><div class="mn-kanji jp">${escapeHtml(v.kanji || v.kana)}</div><div class="mn-kana jp">${escapeHtml(v.kana)}${v.context ? ` <span class="mn-ctx">${escapeHtml(v.context)}</span>` : ''}</div></td>
-      <td class="mn-mean">${escapeHtml(v.mean)}<span class="mn-pos">${escapeHtml(CAT_LABEL[v.cat] || v.cat || '')}</span>${v.italki ? '<span class="mn-italki" title="Covered in your iTalki lesson">iTalki</span>' : ''}</td>
-      <td style="text-align:right">${minnaInDeck(v.key) ? '<span class="v-in">✓</span>' : ''}</td>
-    </tr>${speaking ? `
-    <tr class="mn-rec-row"><td></td><td colspan="3">${recordControlHtml(L.lesson, v.key, v.audio, null, false, ttsText({ jp: v.dict || v.kanji || v.kana, read: v.dictRead || v.kana, tts: v.tts }))}</td></tr>` : ''}`).join('');
-  return mnSection('Vocabulary', L.vocab.length, `<table class="mn-vocab"><tbody>${rows}</tbody></table>`, true, { num: 1, jp: 'ことば', unit: 'words' });
+  // Bucket by POS, preserving first-seen order, so the grid reads as grouped word-lists.
+  const order = [], byCat = {};
+  L.vocab.forEach(v => { const c = v.cat || 'other'; if (!byCat[c]) { byCat[c] = []; order.push(c); } byCat[c].push(v); });
+  const vrow = v => {
+    const head = escapeHtml(v.kanji || v.kana);
+    const read = (v.kanji && v.kana && v.kanji !== v.kana) ? escapeHtml(v.kana) : '';
+    const ctx = v.context ? `<span class="v-ctx jp">${escapeHtml(v.context)}</span>` : '';
+    const italki = v.italki ? '<span class="v-italki" title="Covered in your iTalki lesson">iTalki</span>' : '';
+    const inDeck = minnaInDeck(v.key) ? '<span class="v-in" title="In your SRS deck">✓</span>' : '';
+    // Record affordance: out of speaking mode a rec-dot ENTERS it (mic-gated, wired in wireMinnaLesson);
+    // in speaking mode the full record-and-compare control renders below the row (wiring unchanged).
+    const recDot = speaking ? '' : '<button class="rec-dot" type="button" data-mn-rec aria-label="Record &amp; compare this word" title="Record &amp; compare"></button>';
+    const recRow = speaking ? `<div class="vrow-rec">${recordControlHtml(L.lesson, v.key, v.audio, null, false, ttsText({ jp: v.dict || v.kanji || v.kana, read: v.dictRead || v.kana, tts: v.tts }))}</div>` : '';
+    return `<div class="vrow">
+      <span class="v-jp jp">${head}</span>
+      <span class="v-read jp">${read}${ctx}</span>
+      <span class="v-en">${escapeHtml(v.mean)}${italki}</span>
+      <span class="v-tools">${inDeck}${mnWordAudioBtn(v)}${recDot}</span>
+    </div>${recRow}`;
+  };
+  const groups = order.map(c =>
+    `<div class="grp-label">${escapeHtml(GROUP_LABEL[c] || CAT_LABEL[c] || c)}</div><div class="vocab-list">${byCat[c].map(vrow).join('')}</div>`
+  ).join('');
+  return mnSection('Vocabulary', L.vocab.length, `<div class="vocab-groups">${groups}</div>`, true, { num: 1, jp: 'ことば', unit: 'words' });
 }
 // A small inline TTS button for a sentence that has no native audio (grammar / lesson
 // examples). Carries the ruby-stripped plain text in data-tts (the exact string /v1/tts
@@ -460,6 +481,12 @@ function wireMinnaLesson(n, L, body) {
   body.querySelectorAll('[data-tts]').forEach(b => b.addEventListener('click', (e) => speak(b.dataset.tts, 'minna', b, { cycle: cycleMod(e) })));
   // Copy an example sentence (plain text) to the clipboard for dictionary lookup.
   body.querySelectorAll('[data-copy]').forEach(b => b.addEventListener('click', () => copyText(b.dataset.copy, b)));
+  // A vocab rec-dot enters speaking mode (acquires the mic) and re-renders the lesson so the full
+  // per-word record-and-compare controls appear. Mic-blocked is surfaced by enterSpeakingMode.
+  body.querySelectorAll('[data-mn-rec]').forEach(b => b.addEventListener('click', async () => {
+    if (isSpeakingMode()) return;
+    if (await enterSpeakingMode()) renderMinnaLesson(n, body);
+  }));
   wireRecordCompare(body);   // delegated record/play/delete/compare handlers (attach-once)
   wireMinnaClips(body);    // delegated conversation-line clip-marker handlers (attach-once)
   paintCompareWaveforms(body);   // decode + draw the you/native compare waveforms for this render

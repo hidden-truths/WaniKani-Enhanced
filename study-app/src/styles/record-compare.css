@@ -18,13 +18,9 @@
 .nav-extra .speaking-bar.on{background:none;border:0}
 .nav-extra .mic-select{max-width:150px}
 
-/* Record-and-compare. The rec-row is a subtle sub-row under each vocab entry; the
-   control holds a mic button + take list + compare player. A word and its OWN controls
-   are one unit — no rule between them (.mn-rec-row td zeroes its top edge to 0-width
-   transparent — see the WebKit note in styles.css by .mn-vocab; `none`/`hidden` paint a
-   phantom white line in Safari). The NEXT word keeps its normal separator (.mn-vocab td
-   border-top) so the controls visually belong to the word ABOVE them. */
-.mn-rec-row td{border-top:0 solid transparent;padding-top:2px;padding-bottom:16px}
+/* Record-and-compare. The control holds a mic button + take list + compare player. In みんなの日本語
+   it renders as a full-width sub-row under its vocab word (.vrow-rec, styled in minna.css); Self-Talk
+   and Songs mount it inline. */
 .rec-control{display:flex;align-items:center;flex-wrap:wrap;gap:8px}
 .rec-btn{display:inline-flex;align-items:center;gap:6px;background:var(--surf-inset);border:1px solid var(--line);color:var(--muted);border-radius:14px;padding:3px 10px 3px 8px;font-family:var(--mono);font-size:11px;letter-spacing:.06em;cursor:pointer;box-shadow:var(--lift-sm);transition:all .15s}
 .rec-btn:hover{border-color:var(--godan);color:var(--godan);transform:translateY(-1px)}
