@@ -15,6 +15,7 @@ import {
   tokenFacet, deckLabel, ttsText, HAS_KANJI, rubyHtml, plainText, isCleanRuby, rubyToSegments, segmentsToRuby, segmentsToReading, foldFurigana,
   overlayTokens,
   minnaBuiltinRank, applyMinnaOverlays, minnaCardContent, minnaMutablePatch, MINNA_MUTABLE_FIELDS, splitMora, parseAccent,
+  buildMinnaCard, buildMinnaOverlay, minnaOverlaySig, normalizeMinnaStore, kanjiNum, planMinnaActivation,
   cardGrammar, cardMatchesGrammar,
   pitchHtml, minnaSig, cardStamp, colorClass, CATS, exampleForLevel, availableTiers, buildLevels, cardExamplesPayload, sentencesToLevels,
   JLPT_TIERS, BOX_DAYS,
@@ -642,6 +643,147 @@ test('applyMinnaOverlays merges Minna provenance onto the matching built-in (no 
   expect(merged.filter((v: any) => v.jp === '聞く').length).toBe(1);
   const other = state.DATA.find((v: any) => v.rank <= 100 && v.jp !== '聞く')!;
   expect(merged.find((v: any) => v.jp === other.jp)).toBe(other);
+});
+
+// ── New pure Minna helpers (extracted from features/minna.js for SRP + testability) ──────────────
+test('kanjiNum renders the lesson-seal numeral in kanji (0–99), passing ≥100 through', () => {
+  expect(kanjiNum(0)).toBe('〇');
+  expect(kanjiNum(7)).toBe('七');
+  expect(kanjiNum(10)).toBe('十');
+  expect(kanjiNum(11)).toBe('十一');
+  expect(kanjiNum(19)).toBe('十九');
+  expect(kanjiNum(20)).toBe('二十');
+  expect(kanjiNum(23)).toBe('二十三');
+  expect(kanjiNum(50)).toBe('五十');
+  expect(kanjiNum(99)).toBe('九十九');
+  expect(kanjiNum(100)).toBe('100');   // no lesson reaches it; pass through rather than mis-render
+});
+
+test('normalizeMinnaStore degrades corrupt input + forces the three sub-maps onto the defaults', () => {
+  const DEF = { notes: {}, lastLesson: 23, overlays: {}, clips: {} };
+  // null / non-object (corrupt JSON, a bare number) → a fresh store on the defaults
+  expect(normalizeMinnaStore(null, DEF)).toEqual({ notes: {}, lastLesson: 23, overlays: {}, clips: {} });
+  expect(normalizeMinnaStore(5 as any, DEF)).toEqual({ notes: {}, lastLesson: 23, overlays: {}, clips: {} });
+  // a partial object keeps its known keys, fills the missing sub-maps, honors a lastLesson override
+  const got = normalizeMinnaStore({ lastLesson: 7, notes: { 7: 'hi' } }, DEF);
+  expect(got).toEqual({ lastLesson: 7, notes: { 7: 'hi' }, overlays: {}, clips: {} });
+  // returns a fresh top-level object — mutating it never leaks into the shared defaults
+  const out = normalizeMinnaStore({}, DEF);
+  out.notes['1'] = 'z'; out.lastLesson = 99;
+  expect(DEF.notes).toEqual({});
+  expect(DEF.lastLesson).toBe(23);
+});
+
+test('buildMinnaCard wraps the pure content with the custom/minna flags (no rank — assigned at apply)', () => {
+  const item = { key: 'mnn:23:0', dict: '走る', dictRead: 'はしる', kanji: '走る', kana: 'はしる', mean: 'to run', cat: 'verb', type: 'godan', jlpt: 'N5' };
+  const card = buildMinnaCard(item, 23);
+  expect(card.custom).toBe(true);
+  expect(card.minna).toBe(true);
+  expect(card).not.toHaveProperty('rank');            // rank is the SRS-progress key, set monotonically at apply time
+  expect(card.minnaKey).toBe('mnn:23:0');
+  expect(card.jp).toBe('走る');                         // the DICTIONARY form is the headword
+  expect(minnaSig(card)).toBe(minnaSig(minnaCardContent(item, 23)));   // build ↔ content can't drift
+});
+
+test('buildMinnaOverlay carries provenance + only the content a built-in lacks', () => {
+  const plain = buildMinnaOverlay({ key: 'k1', dict: '聞く', mean: 'listen' }, 23);
+  expect(plain.tags).toEqual(['みんなの日本語', 'mnn-l23']);
+  expect(plain.italki).toBe(false);
+  expect(plain.minnaLesson).toBe(23);
+  expect(plain.minnaKey).toBe('k1');
+  expect(plain).not.toHaveProperty('accent');         // omitted when the word doesn't carry it
+  expect(plain).not.toHaveProperty('audio');
+  const rich = buildMinnaOverlay({ key: 'k2', dict: '橋', mean: 'bridge', italki: true, accent: 2, tts: '橋', audio: '/Audio/hashi.mp3' }, 7);
+  expect(rich.tags).toContain('iTalki');
+  expect(rich.italki).toBe(true);
+  expect(rich.accent).toBe(2);
+  expect(rich.tts).toBe('橋');
+  expect(rich.audio).toBe('/Audio/hashi.mp3');
+});
+
+test('minnaOverlaySig reflects tags / iTalki / accent (incl. 0) / native audio', () => {
+  const base = buildMinnaOverlay({ key: 'k', dict: '聞く', mean: 'x' }, 23);
+  expect(minnaOverlaySig(base)).toBe(minnaOverlaySig({ ...base }));
+  expect(minnaOverlaySig(base)).not.toBe(minnaOverlaySig({ ...base, italki: true }));
+  expect(minnaOverlaySig(base)).not.toBe(minnaOverlaySig({ ...base, accent: 0 }));   // heiban (0) ≠ absent
+  expect(minnaOverlaySig(base)).not.toBe(minnaOverlaySig({ ...base, audio: '/a.mp3' }));
+  expect(minnaOverlaySig(base)).not.toBe(minnaOverlaySig({ ...base, tags: [...base.tags, 'iTalki'] }));
+});
+
+// The crown jewel: the pure activation planner. Decision separated from effect → exhaustively tested.
+const A_NEW = { key: 'a', dict: 'サイズ', dictRead: 'さいず', kana: 'サイズ', mean: 'size', cat: 'noun', jlpt: 'N4' };
+const B_NEW = { key: 'b', dict: 'メートル', dictRead: 'めーとる', kana: 'メートル', mean: 'meter', cat: 'noun', jlpt: 'N4' };
+const C_BUILTIN = { key: 'c', dict: '聞く', dictRead: 'きく', kana: 'きく', mean: 'to listen', cat: 'verb', jlpt: 'N5' };
+
+test('planMinnaActivation: fresh activation — new words → card-add, built-in matches → overlay-add', () => {
+  const { ops, counts } = planMinnaActivation(23, [A_NEW, C_BUILTIN], [], {});
+  expect(counts).toEqual({ inDeck: 0, total: 2, toAdd: 2, toUpdate: 0 });
+  const cardAdd = ops.find((o: any) => o.kind === 'card-add');
+  expect(cardAdd.card.minnaKey).toBe('a');
+  expect(cardAdd.card).not.toHaveProperty('rank');   // planner never assigns the rank
+  const rankC = minnaBuiltinRank(C_BUILTIN);
+  expect(ops).toContainEqual({ kind: 'overlay-add', rank: rankC, overlay: expect.objectContaining({ minnaKey: 'c' }) });
+});
+
+test('planMinnaActivation: already-current deck → no ops, everything counted in-deck', () => {
+  const existing = { ...buildMinnaCard(A_NEW, 23), rank: 101 };
+  const overlays = { [minnaBuiltinRank(C_BUILTIN)]: buildMinnaOverlay(C_BUILTIN, 23) };
+  const { ops, counts } = planMinnaActivation(23, [A_NEW, C_BUILTIN], [existing], overlays);
+  expect(counts).toEqual({ inDeck: 2, total: 2, toAdd: 0, toUpdate: 0 });
+  expect(ops).toEqual([]);
+});
+
+test('planMinnaActivation: changed lesson content → card-update / overlay-update (counted as toUpdate)', () => {
+  const existing = { ...buildMinnaCard(A_NEW, 23), rank: 101 };
+  const changedA = { ...A_NEW, mean: 'size (corrected)' };
+  const rankC = minnaBuiltinRank(C_BUILTIN);
+  const staleOverlay = { ...buildMinnaOverlay(C_BUILTIN, 23), italki: true, tags: ['みんなの日本語', 'mnn-l23', 'iTalki'] };
+  const { ops, counts } = planMinnaActivation(23, [changedA, C_BUILTIN], [existing], { [rankC]: staleOverlay });
+  expect(counts).toEqual({ inDeck: 2, total: 2, toAdd: 0, toUpdate: 2 });
+  expect(ops).toContainEqual({ kind: 'card-update', minnaKey: 'a', card: expect.objectContaining({ mean: 'size (corrected)' }) });
+  expect(ops).toContainEqual({ kind: 'overlay-update', rank: rankC, overlay: expect.objectContaining({ italki: false }) });
+});
+
+test('planMinnaActivation: a stale custom card that now matches a built-in is dropped (dedup)', () => {
+  // Word once activated as a custom card, but its dict form IS a built-in → migrate to an overlay.
+  const word = { key: 'dup', dict: '聞く', dictRead: 'きく', kana: 'きく', mean: 'to listen', cat: 'verb', jlpt: 'N5' };
+  const staleCard = { ...buildMinnaCard(word, 23), rank: 105 };
+  const rank = minnaBuiltinRank(word);
+  // No overlay yet → overlay-add (counted) + card-remove (a cleanup, NOT counted)
+  const fresh = planMinnaActivation(23, [word], [staleCard], {});
+  expect(fresh.counts).toEqual({ inDeck: 0, total: 1, toAdd: 1, toUpdate: 0 });
+  expect(fresh.ops).toContainEqual({ kind: 'overlay-add', rank, overlay: expect.objectContaining({ minnaKey: 'dup' }) });
+  expect(fresh.ops).toContainEqual({ kind: 'card-remove', minnaKey: 'dup' });
+  // Overlay already current, but the stale card lingers → ONLY a card-remove, no overlay churn.
+  const settled = planMinnaActivation(23, [word], [staleCard], { [rank]: buildMinnaOverlay(word, 23) });
+  expect(settled.counts).toEqual({ inDeck: 1, total: 1, toAdd: 0, toUpdate: 0 });
+  expect(settled.ops).toEqual([{ kind: 'card-remove', minnaKey: 'dup' }]);
+});
+
+test('planMinnaActivation: replaying the ops mutates the stores correctly (order + monotonic ranks)', () => {
+  // A reference apply (the same switch features/minna.js runs) — proves the op-list is sufficient and
+  // correctly ordered: new-card ranks come out monotonic in vocab order, the dedup card is removed.
+  const applyOps = (ops: any[], verbs: any[], overlays: any) => {
+    const cs = { seq: 100, verbs: verbs.map((v) => ({ ...v })) };
+    const ov = { ...overlays };
+    for (const op of ops) {
+      if (op.kind === 'overlay-add') ov[op.rank] = op.overlay;
+      else if (op.kind === 'overlay-update') ov[op.rank] = { ...ov[op.rank], ...op.overlay };
+      else if (op.kind === 'card-remove') { const i = cs.verbs.findIndex((v: any) => v.minnaKey === op.minnaKey); if (i >= 0) cs.verbs.splice(i, 1); }
+      else if (op.kind === 'card-update') { const e = cs.verbs.find((v: any) => v.minnaKey === op.minnaKey); if (e) Object.assign(e, minnaMutablePatch(op.card)); }
+      else if (op.kind === 'card-add') { cs.seq += 1; op.card.rank = cs.seq; cs.verbs.push(op.card); }
+    }
+    return { cs, ov };
+  };
+  const dupCard = { ...buildMinnaCard(C_BUILTIN, 23), rank: 50 };   // a stale custom card for a now-built-in word
+  const { ops, counts } = planMinnaActivation(23, [A_NEW, B_NEW, C_BUILTIN], [dupCard], {});
+  expect(counts).toEqual({ inDeck: 0, total: 3, toAdd: 3, toUpdate: 0 });
+  const { cs, ov } = applyOps(ops, [dupCard], {});
+  // dedup card gone; the two genuinely-new words remain, in order, with monotonic ranks
+  expect(cs.verbs.map((v: any) => v.minnaKey)).toEqual(['a', 'b']);
+  expect(cs.verbs.map((v: any) => v.rank)).toEqual([101, 102]);
+  // the built-in now carries an overlay instead of a duplicate card
+  expect(ov[minnaBuiltinRank(C_BUILTIN)].minnaKey).toBe('c');
 });
 
 test("deckLabel + filterSummary surface the source facet (per-lesson → 'L23')", () => {

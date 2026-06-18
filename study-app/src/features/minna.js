@@ -9,7 +9,7 @@
 // per-lesson NOTES + the overlays (app key 'minna').
 import { state } from '../state.js';
 import { API_BASE } from '../config.js';
-import { escapeHtml, rubyHtml, foldFurigana, plainText, ttsText, CAT_LABEL, minnaBuiltinRank, minnaCardContent, minnaMutablePatch, minnaSig, convItemKey, resolveClip, clipLabel, validClip, mergeMinna } from '../core/index.js';
+import { escapeHtml, rubyHtml, foldFurigana, plainText, ttsText, CAT_LABEL, minnaMutablePatch, convItemKey, resolveClip, clipLabel, validClip, mergeMinna, buildMinnaCard, buildMinnaOverlay, normalizeMinnaStore, kanjiNum, planMinnaActivation } from '../core/index.js';
 import { speak, TTS_OK } from './tts.js';
 import { playItem, cycleMod } from './audio.js';
 import { copyBtnHtml, copyText, speakBtnHtml } from './render-helpers.js';
@@ -28,7 +28,7 @@ const MINNA_KEY = 'jpverbs_minna';
 // `clips` = { <lesson>: { <lineIdx>: [startSec, endSec] } } — per-user conversation-line
 // clip ranges set via the in-app marker (record-and-compare). Synced under the same key.
 const MINNA_DEFAULT = { notes: {}, lastLesson: 23, overlays: {}, clips: {} };
-function loadMinnaStore() { try { const o = JSON.parse(localStorage.getItem(MINNA_KEY)); if (o && typeof o === 'object') return Object.assign({}, MINNA_DEFAULT, o, { notes: o.notes || {}, overlays: o.overlays || {}, clips: o.clips || {} }); } catch (e) {} return Object.assign({}, MINNA_DEFAULT, { notes: {}, overlays: {}, clips: {} }); }
+function loadMinnaStore() { try { return normalizeMinnaStore(JSON.parse(localStorage.getItem(MINNA_KEY)), MINNA_DEFAULT); } catch (e) {} return normalizeMinnaStore(null, MINNA_DEFAULT); }
 function saveMinnaLocal() { try { localStorage.setItem(MINNA_KEY, JSON.stringify(state.minnaStore)); } catch (e) {} }
 function saveMinna() { saveMinnaLocal(); scheduleMinnaSync(); }
 
@@ -40,7 +40,7 @@ export const minnaBlob = createSyncedBlob({
   read: () => state.minnaStore,
   apply: (data) => {
     if (data && typeof data === 'object') {
-      state.minnaStore = Object.assign({}, MINNA_DEFAULT, data, { notes: data.notes || {}, overlays: data.overlays || {}, clips: data.clips || {} });
+      state.minnaStore = normalizeMinnaStore(data, MINNA_DEFAULT);
       saveMinnaLocal();
       return true;
     }
@@ -82,83 +82,45 @@ const mnWordAudioBtn = (v) => {
 };
 
 // --- Vocab → deck activation (via the custom-card store). ---
-// Build a deck card from a Minna vocab item, using the DICTIONARY form as the headword. The
-// lesson-derived content comes from core's minnaCardContent — the SAME source the re-activation
-// patch (minnaMutablePatch) and the "Update N words" signature (minnaSig) read, so they can't drift;
-// minnaCard only adds the structural custom/minna flags (a genuinely-new word also gets a `rank` in
-// activateMinnaVocab).
-function minnaCard(item, lesson) {
-  return { ...minnaCardContent(item, lesson), custom: true, minna: true };
-}
-// The overlay payload for a built-in match: provenance only (the built-in keeps its content).
-function minnaOverlay(item, lesson) {
-  const tags = ['みんなの日本語', 'mnn-l' + lesson]; if (item.italki) tags.push('iTalki');
-  const o = { tags, italki: !!item.italki, minnaLesson: lesson, minnaKey: item.key };
-  if (item.accent != null) o.accent = item.accent; if (item.tts) o.tts = item.tts;
-  if (item.audio) o.audio = item.audio;   // native src → merged onto the built-in by applyMinnaOverlays
-  return o;
-}
-const overlaySig = o => (o.tags || []).join('|') + '·i' + (o.italki ? 1 : 0) + '·a' + (o.accent ?? '') + '·au' + (o.audio || '');
+// The card/overlay BUILDERS + the activation PLANNER are pure and live in core/minna.js
+// (buildMinnaCard / buildMinnaOverlay / minnaOverlaySig / planMinnaActivation), so the decision is
+// unit-tested in isolation; the two functions below are the thin glue that reads the live stores
+// (preview) and replays the planner's ops onto them (apply).
 // A word is in the deck if it's a custom card OR an overlay on a built-in.
 function minnaInDeck(key) {
   if (loadCustom().verbs.some(v => v.minnaKey === key)) return true;
   const ov = (state.minnaStore && state.minnaStore.overlays) || {};
   return Object.keys(ov).some(r => ov[r].minnaKey === key);
 }
-// Non-mutating preview of what "Add all vocab to deck" would do.
+// Non-mutating preview of what "Add all vocab to deck" would do — the add/update/in-deck counts
+// come straight off the pure planner, so the button's label can never disagree with what the apply
+// below will actually do.
 function minnaActivationStatus(lesson, vocab) {
-  const cs = loadCustom(); const ov = (state.minnaStore && state.minnaStore.overlays) || {};
-  let inDeck = 0, toAdd = 0, toUpdate = 0;
-  vocab.forEach(item => {
-    const br = minnaBuiltinRank(item);
-    if (br) {
-      const cur = ov[br];
-      if (!cur) { toAdd++; return; }
-      inDeck++;
-      if (overlaySig(cur) !== overlaySig(minnaOverlay(item, lesson))) toUpdate++;
-      return;
-    }
-    const existing = cs.verbs.find(v => v.minnaKey === item.key);
-    if (!existing) { toAdd++; return; }
-    inDeck++;
-    if (minnaSig(existing) !== minnaSig(minnaCard(item, lesson))) toUpdate++;
-  });
-  return { inDeck, total: vocab.length, toAdd, toUpdate };
+  const ov = (state.minnaStore && state.minnaStore.overlays) || {};
+  return planMinnaActivation(lesson, vocab, loadCustom().verbs, ov).counts;
 }
-// Activate a lesson's vocab. Built-in matches REUSE the built-in via an overlay; new words
-// become custom cards. Re-activation patches metadata in place (preserving rank → progress).
+// Activate a lesson's vocab by replaying the planner's operations onto the custom-card store + the
+// overlay map. Built-in matches REUSE the built-in via an overlay; new words become custom cards
+// (rank assigned here, monotonically, so SRS progress can't collide); a stale custom card that now
+// matches a built-in is dropped (dedup). Re-activation patches mutable content in place via
+// minnaMutablePatch (preserving rank → progress). Saves + rebuilds only what actually changed.
 function activateMinnaVocab(lesson, vocab) {
   const cs = loadCustom(); const ov = state.minnaStore.overlays = state.minnaStore.overlays || {};
-  let added = 0, updated = 0, custChanged = false, ovChanged = false;
-  vocab.forEach(item => {
-    const br = minnaBuiltinRank(item);
-    if (br) {
-      const fresh = minnaOverlay(item, lesson), cur = ov[br];
-      if (!cur) { ov[br] = fresh; added++; ovChanged = true; }
-      else if (overlaySig(cur) !== overlaySig(fresh)) { ov[br] = Object.assign({}, cur, fresh); updated++; ovChanged = true; }
-      const di = cs.verbs.findIndex(v => v.minnaKey === item.key);
-      if (di >= 0) { cs.verbs.splice(di, 1); custChanged = true; }
-      return;
+  const { ops, counts } = planMinnaActivation(lesson, vocab, cs.verbs, ov);
+  let custChanged = false, ovChanged = false;
+  for (const op of ops) {
+    switch (op.kind) {
+      case 'overlay-add': ov[op.rank] = op.overlay; ovChanged = true; break;
+      case 'overlay-update': ov[op.rank] = Object.assign({}, ov[op.rank], op.overlay); ovChanged = true; break;
+      case 'card-remove': { const i = cs.verbs.findIndex(v => v.minnaKey === op.minnaKey); if (i >= 0) { cs.verbs.splice(i, 1); custChanged = true; } break; }
+      case 'card-update': { const e = cs.verbs.find(v => v.minnaKey === op.minnaKey); if (e) { Object.assign(e, minnaMutablePatch(op.card)); custChanged = true; } break; }
+      case 'card-add': cs.seq = (cs.seq || 100) + 1; op.card.rank = cs.seq; cs.verbs.push(op.card); custChanged = true; break;
     }
-    const fresh = minnaCard(item, lesson);
-    const existing = cs.verbs.find(v => v.minnaKey === item.key);
-    if (existing) {
-      // Patch ALL lesson-derived content (minnaMutablePatch projects exactly the fields minnaCard
-      // builds + minnaSig signs — so a changed jlpt/minnaLesson/ex/tts/… can't be silently dropped
-      // the way the old hand-listed assign did), keeping only the card's rank → SRS progress. No-op
-      // when nothing changed (the button is only enabled when some word is add/update-able anyway).
-      if (minnaSig(existing) !== minnaSig(fresh)) {
-        Object.assign(existing, minnaMutablePatch(fresh));
-        updated++; custChanged = true;
-      }
-      return;
-    }
-    cs.seq = (cs.seq || 100) + 1; fresh.rank = cs.seq; cs.verbs.push(fresh); added++; custChanged = true;
-  });
+  }
   if (custChanged) saveCustom(cs);
   if (ovChanged) saveMinna();
   if (custChanged || ovChanged) { rebuildData(); refreshAfterVerbChange(); }
-  return { added, updated };
+  return { added: counts.toAdd, updated: counts.toUpdate };
 }
 // One-time cleanup of pre-dedup duplicates → overlays. Idempotent; runs on boot + after a
 // cloud pull, syncs only on change.
@@ -231,14 +193,7 @@ export async function renderMinna() {
   head.innerHTML = `<div class="page-kicker"><span class="jp">みんなの日本語</span> · Textbook</div>`;
   await renderMinnaLesson(cur, body);
 }
-// Lesson number → kanji (7→七, 23→二十三) for the hanko lesson seal.
-const KNUM = ['〇', '一', '二', '三', '四', '五', '六', '七', '八', '九'];
-function kanjiNum(n) {
-  if (n < 10) return KNUM[n] || String(n);
-  if (n < 20) return '十' + (n % 10 ? KNUM[n % 10] : '');
-  if (n < 100) return KNUM[Math.floor(n / 10)] + '十' + (n % 10 ? KNUM[n % 10] : '');
-  return String(n);
-}
+// (kanjiNum — number → kanji numeral for the hanko lesson seal — now lives in core/minna.js.)
 // A quiet "this is account-gated material" footnote under the hero (the mock).
 const GATED_NOTE = `<div class="gated-note"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><rect x="4" y="11" width="16" height="9" rx="2"/><path d="M8 11V7a4 4 0 0 1 8 0v4"/></svg>Account-gated · textbook material</div>`;
 // The mock's inline chapter strip (below the hero): a "Lesson" label, bare-numeral chips windowed
