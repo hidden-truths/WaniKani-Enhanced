@@ -452,6 +452,20 @@ Component contracts you must preserve:
   `border-top:1px solid var(--line)`); the first row + `.mn-rec-row` zero their top edge to
   `0 solid transparent`. Don't "tidy" those back to `none`/`hidden`. (Inline comment in
   [src/styles.css](src/styles.css) by `.mn-vocab`.)
+- **Never let `*/` appear *inside* a CSS comment** — e.g. a class-glob like `.prompt-*/.answer` or
+  `.verb-*/.rank` in a `/* … */` "moved to surface X" pointer. The `*/` closes the comment EARLY; the
+  leftover text + the following comment collapse into a garbage selector that **silently swallows the
+  next real rule**. This deleted the base `.btn{ …border-radius;background;border;box-shadow… }` rule —
+  every button went square, dev AND prod (minifiers honour `*/` too) — until the 2026-06 fidelity audit;
+  three such landmines existed in [src/styles.css](src/styles.css). Keep a space between the `*` and the
+  `/` (`.prompt-* /.answer`). `bun run build` does NOT warn, so after a CSS edit confirm a touched rule
+  actually *applies* (computed style), not just that the file parses. See the fidelity-audit section in
+  [mockups/redesign/MIGRATION_PROGRESS.md](mockups/redesign/MIGRATION_PROGRESS.md).
+- **`songs.css` `.ring` is SCOPED to `.sc-ring .ring` — don't unscope it.** A bare global `.ring` (the
+  40×40 conic coverage ring) collides with the decorative seal rings (`.hanko .ring`, `.lesson-seal
+  .ring`, which set only `inset` + inherit the 40×40 size/fill), painting a mis-sized, offset circle
+  inside the flashcard hanko and the みんなの日本語 lesson seal. The coverage ring is only ever used as
+  `.sc-ring > .ring` (library.js), so the scope is safe; the seal rings rely on it staying scoped.
 - **The icon sprite is inline + offline-first.** Don't replace it with Tabler/
   Lucide-via-CDN — icons would break offline, defeating the single-file premise.
   Add new glyphs as `<symbol>`s. (`-filled` style names don't exist here; these

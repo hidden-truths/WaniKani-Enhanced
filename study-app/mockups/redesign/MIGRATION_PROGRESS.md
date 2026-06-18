@@ -6,7 +6,16 @@
 > truth) are `system.css` + `screens/*.png`; the shipped design system is documented in
 > [../CLAUDE.md](../CLAUDE.md) "Design system". A ready-to-paste **kickoff prompt is at the bottom**.
 
-## Status — ✅ Phase 9 done (pending maintainer sign-off + push/PR)
+## Status — ⚠ fidelity audit IN PROGRESS on `redesign-fidelity` (Phase-9 "✅" was premature)
+
+> **2026-06-17 fidelity re-audit (maintainer: "still a lot of problems").** The Phase-9 "per-surface
+> fidelity pass — DONE for 5 of 6" was **over-stated**. A page-by-page, element-by-element re-check
+> found the **Flashcards** page did NOT match `screens/*.png`: buttons were square *app-wide* (a CSS
+> comment bug deleted the base `.btn` rule — in **prod too**), the hanko had a mis-sized-circle artifact
+> (a global `.ring` collision), the forecast was mis-sized, the dark-mode CTA glow was missing, and the
+> play/copy + hero-CTA icons were wrong. **All fixed** on `redesign-fidelity` (off `main`, 7 commits) —
+> see **"Fidelity audit (2026-06-17)"** immediately below. **The other pages still need the same pass;
+> do NOT trust their "✅."**
 
 **Phase 9 (2026-06-17, `5e53239`…`e335077`, on `redesign-migration`) fixed the frame and finished the
 match.** The chrome is the mock's single-row topbar (with the `#navExtra` speaking-bar dock relocated to
@@ -19,6 +28,48 @@ CSS peeled to their own files). All verified signed-in in both themes; `bun run 
 `bun run build` green. **Remaining: maintainer sign-off → merge to `main` (then push).** Next-steps /
 possible improvements are in [../../NEXT_STEPS.md](../../NEXT_STEPS.md). The historical Phase-8 reality
 check is kept below for context.
+
+## Fidelity audit (2026-06-17) — Flashcards page DONE; prior "✅" markers were premature
+
+Branch `redesign-fidelity` (off `main`). The Flashcards page (study home + the card) was re-audited
+element-by-element against `screens/hybrid-day-night.png` / `-mobile` + `hybrid-prompt.html` in BOTH
+themes. It did **not** match. Root causes + fixes (each its own commit; `bun run test` 245 + `bun run
+build` green per commit; verified light + dark + ~390px):
+
+- **`f3d35f0` — every button was square, app-wide (dev AND prod).** A class-glob in a `styles.css`
+  comment (`…/.spine/.prompt-*/.answer/…`) contains `*/` (inside `.prompt-*/`), which **prematurely
+  closes the CSS comment**; the leftover text + the following comment collapsed into a garbage selector
+  that **swallowed the entire base `.btn{ …border-radius:12px; background; border; box-shadow… }` rule**,
+  so all buttons lost their radius/fill/lift. Three such landmines existed (one also ate `.ex{font-size}`).
+  Minifiers honour `*/` too, so prod was affected, not just dev. Fixed by spacing the `*` off the `/`.
+- **`847a438` — the hanko "mis-sized circle" was a global `.ring` collision.** `songs.css` shipped a
+  bare global `.ring` (its 40×40 conic coverage ring, only ever used as `.sc-ring > .ring`) that, being
+  imported last, leaked onto the decorative seal rings (`.hanko .ring`, `.lesson-seal .ring` — which set
+  only `inset`), forcing a 40px offset circle + a stray conic fill. Scoped it to `.sc-ring .ring`. (The
+  みんなの日本語 lesson seal had the identical artifact.)
+- **`0da0bb2`** — restored the mock's dark-mode `@keyframes breathe` glow on primary CTAs (the app had
+  dropped it). Excludes `:disabled` so the caught-up jade hero stays still.
+- **`b74ea8e`** — study-home hero + forecast fidelity: numeral 178→188, kicker/due-label/meta margins,
+  CTA sizes; forecast dropped a stray chart icon + matched padding/title/bars (104px, 13px gap, **28px
+  floor bars not 9px slivers**, 6px radius).
+- **`22f821f`** — flashcard example play/copy → the mock's 34px bordered `.tool-btn` tiles (with
+  `.playing`/`.copied` states), was 24px round `.speak-btn.sm`.
+- **`bbfcd91`** — audio "play" buttons → the filled ▶ `#i-play` triangle **app-wide** (`speakBtnHtml` +
+  the two flashcard play buttons), was the 🔊 speaker. Left the speaker on the auto-play **setting** label
+  + the record-compare **reference** button (where speaker-vs-▶ distinguishes reference voice from take).
+- **`e0888d0`** — hero CTA icons: "Review due cards" → text + a **trailing arrow** (`#i-arrow-right`,
+  hover-slides right); "Free study" → a **list-lines** icon (`#i-list`). Added both as sprite symbols.
+
+**Maintainer decisions this pass:** the flashcard **stays 820px centered** (declined widening to the
+mock's full-column card + the consequent word-size bump); audio play uses the **▶ triangle** everywhere
+(chosen over keeping the speaker glyph).
+
+**Open mobile nit (deferred to the dedicated mobile sweep):** the bignum is 96px at ≤430px vs the mock's
+84px — the app's responsive breakpoints (900/430) differ from the mock's (640/430); fix breakpoints +
+bignum together in the sweep, not piecemeal.
+
+**Remaining pages still need this same element-by-element audit — do NOT trust their "✅":** Browse,
+Stats, みんなの日本語, 歌 Songs, 独り言, Modals, and the full mobile sweep.
 
 ## (historical) Phase 8 built the per-surface compositions, but the site STILL did not match the mocks
 
@@ -239,7 +290,10 @@ and didn't do a fidelity pass.** Phase 9, in strict order (steps 1–2, the fram
    on-demand video bay, the Read lyric stage with the **glowing current line** + now-playing badge, and
    the **mined-vocab rail** beside Read. YouTube-embed + `#sgContent` re-render + Shadow seams kept.
    Verified signed-in both themes.
-4. ✅ **Per-surface FIDELITY pass — DONE for 5 of 6.** With the frame fixed (1+2), the Phase-8
+4. ⚠ **Per-surface FIDELITY pass — OVER-CLAIMED; corrected 2026-06-17** (Flashcards had real shipped
+   deltas — square buttons app-wide, the hanko `.ring` collision, forecast sizing, missing glow, wrong
+   icons — all fixed on `redesign-fidelity`, see "Fidelity audit" near the top; Browse/Stats/みんなの日本語
+   are NOT yet re-verified by that bar). ~~DONE for 5 of 6.~~ With the frame fixed (1+2), the Phase-8
    compositions now LAND: **study-home, flashcard (prompt + answer), Browse, Stats, and みんなの日本語**
    were each compared live (signed-in via the proxy harness) against their `screens/*.png` and read as
    the mocks with **no further changes needed** — the wrong frame, not the panels, was the miss. (The
