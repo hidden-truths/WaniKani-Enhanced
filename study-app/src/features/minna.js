@@ -368,9 +368,13 @@ function minnaConversationSection(L) {
     const rec = (c.audio && isSpeakingMode())
       ? `<div class="mn-line-rec">${recordControlHtml(L.lesson, convItemKey(L.lesson, idx), c.audio, clip, true, plainText(ln.jp))}${clipAffordanceHtml(idx, clip)}</div>`
       : '';
+    // Per-line play (TTS of the line, like the grammar/example sentences) — the mock's round play
+    // button on every turn; wired via the shared [data-tts] handler in wireMinnaLesson.
+    const play = TTS_OK ? speakBtnHtml({ cls: 'turn-play', data: { tts: plainText(ln.jp) }, label: 'Play line' }) : '';
     return `<div class="turn${isB ? ' is-b' : ''}">
       <span class="spk ${isB ? 'b' : 'a'}">${mark}</span>
       <div class="turn-body"><p class="t-jp jp">${rubyHtml(ln.jp)}</p><p class="t-en">${escapeHtml(ln.en)}</p>${rec}</div>
+      ${play}
     </div>`;
   }).join('');
   return mnSection('Model conversation', c.lines.length, `${head}${audio}<div class="convo">${lines}</div>`, true, { num: 3, jp: 'かいわ', unit: 'lines' });

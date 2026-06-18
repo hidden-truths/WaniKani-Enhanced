@@ -133,11 +133,13 @@
 .mn-conv-audio{display:flex;align-items:center;gap:10px;margin:0 0 16px;color:var(--muted);font-size:13px}
 .convo-title{font-family:var(--jp);font-weight:700;font-size:16px;color:var(--muted);margin:0 0 12px}
 .convo{display:flex;flex-direction:column;gap:14px}
-.turn{display:grid;grid-template-columns:auto 1fr;gap:16px;align-items:start;padding:15px 16px;border-radius:14px;background:var(--brand-soft);border:1px solid color-mix(in srgb,var(--brand) 16%,transparent);border-left:3px solid var(--brand);max-width:90%;transition:transform .16s ease}
+.turn{display:grid;grid-template-columns:auto 1fr auto;gap:16px;align-items:center;padding:15px 16px;border-radius:14px;background:var(--brand-soft);border:1px solid color-mix(in srgb,var(--brand) 16%,transparent);border-left:3px solid var(--brand);max-width:90%;transition:transform .16s ease}
 .turn:hover{transform:translateY(-1px)}
-.turn.is-b{grid-template-columns:1fr auto;margin-left:auto;text-align:right;background:var(--reading-soft);border-color:var(--reading-line);border-left:1px solid var(--reading-line);border-right:3px solid var(--reading)}
-.turn.is-b .spk{order:2}
-.turn.is-b .turn-body{order:1}
+/* B answers from the right: mirror the column order (play · body · speaker) + recolor to indigo. */
+.turn.is-b{grid-template-columns:auto 1fr auto;margin-left:auto;text-align:right;background:var(--reading-soft);border-color:var(--reading-line);border-left:1px solid var(--reading-line);border-right:3px solid var(--reading)}
+.turn.is-b .spk{order:3}
+.turn.is-b .turn-body{order:2}
+.turn.is-b .turn-play{order:1}
 .spk{flex:0 0 auto;width:36px;height:36px;border-radius:50%;display:grid;place-items:center;font-family:var(--display);font-weight:700;font-size:15px;border:1.5px solid var(--line)}
 .spk.a{color:var(--brand);background:var(--brand-soft);border-color:color-mix(in srgb,var(--brand) 35%,transparent)}
 .spk.b{color:var(--reading);background:var(--reading-soft);border-color:var(--reading-line)}
@@ -145,7 +147,15 @@
 .turn-body{min-width:0}
 .turn-body .t-jp{font-family:var(--jp);font-weight:500;font-size:20px;line-height:1.6;color:var(--ink);margin:0}
 .turn-body .t-en{font-family:var(--body);font-size:14.5px;color:var(--muted);margin:5px 0 0}
-@media (max-width:640px){.turn,.turn.is-b{max-width:100%;grid-template-columns:auto 1fr;text-align:left}.turn.is-b .spk{order:1}.turn.is-b .turn-body{order:2}}
+/* Per-line play — round, tinted to the speaker (A=brand, B=reading), the mock's turn play button. */
+.turn .turn-play{width:40px;height:40px;align-self:center;justify-self:end;background:var(--surf-card);color:var(--brand);border-color:color-mix(in srgb,var(--brand) 22%,transparent)}
+.turn .turn-play .ic{font-size:15px}
+.turn .turn-play:hover{background:var(--brand);color:var(--brand-on);border-color:var(--brand)}
+.turn.is-b .turn-play{color:var(--reading);border-color:var(--reading-line)}
+.turn.is-b .turn-play:hover{background:var(--reading);color:#fff;border-color:var(--reading)}
+[data-theme="dark"] .turn .turn-play{color:#FF8A6E}
+[data-theme="dark"] .turn.is-b .turn-play{color:var(--reading)}
+@media (max-width:640px){.turn,.turn.is-b{max-width:100%;grid-template-columns:auto 1fr;text-align:left}.turn.is-b .spk{order:1}.turn.is-b .turn-body{order:2}.turn .turn-play,.turn.is-b .turn-play{order:3;grid-column:2;justify-self:start;margin-top:6px}}
 /* Add-to-deck action. */
 .mn-actions{display:flex;align-items:center;gap:12px;flex-wrap:wrap;margin:6px 0 2px}
 .v-in{color:var(--good);font-family:var(--mono);font-size:11px;white-space:nowrap}
