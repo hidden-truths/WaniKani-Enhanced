@@ -6,7 +6,7 @@
 > truth) are `system.css` + `screens/*.png`; the shipped design system is documented in
 > [../CLAUDE.md](../CLAUDE.md) "Design system". A ready-to-paste **kickoff prompt is at the bottom**.
 
-## Status — ⚠ fidelity audit IN PROGRESS on `redesign-fidelity` (Phase-9 "✅" was premature; Flashcards + Stats rebuilt)
+## Status — ⚠ fidelity audit IN PROGRESS on `redesign-fidelity` (Phase-9 "✅" was premature; Flashcards + Stats + みんなの日本語 rebuilt)
 
 > **2026-06-17 fidelity re-audit (maintainer: "still a lot of problems").** The Phase-9 "per-surface
 > fidelity pass — DONE for 5 of 6" was **over-stated**. A page-by-page, element-by-element re-check
@@ -28,6 +28,32 @@ CSS peeled to their own files). All verified signed-in in both themes; `bun run 
 `bun run build` green. **Remaining: maintainer sign-off → merge to `main` (then push).** Next-steps /
 possible improvements are in [../../NEXT_STEPS.md](../../NEXT_STEPS.md). The historical Phase-8 reality
 check is kept below for context.
+
+## Fidelity audit (2026-06-18) — みんなの日本語 page DONE (was over-claimed "Faithful")
+
+Branch `redesign-fidelity` (off `main`). The signed-in みんなの日本語 lesson was re-audited
+element-by-element (proxy harness, real owner account, Lesson 23) against `screens/hybrid-minna.png` /
+`-dark` + `hybrid-minna.html`. The Phase-9 "Faithful; no CSS fixes" claim was wrong — it did **not**
+match. Rebuilt in 6 commits (BOTH themes + ~390px, 245 tests + `bun run build` green each):
+- `2eb129c` **lesson-header** — kicker → shared `.page-kicker` (gold + dash + "Textbook", was a
+  vermilion `.mn-kicker`); the seal sizes its kanji to fit multi-char numbers (二十三 overflowed at a
+  fixed 52px on every real 2-digit lesson); seal/hero values aligned to the mock.
+- `7171bcc` **vocabulary** — the dense `<table>` became the mock's grouped `.vrow` word-grid (POS
+  groups + hairlines, zebra, 23px JP, round play+record on the right); kept kana + iTalki/POS + deck-✓.
+  Retired the `.mn-vocab` table + its WebKit border-collapse rule (no longer a table).
+- `ac5438a` **grammar** — de-nested the 3-up grid so cards float as raised `.card`s (`mnSection` gained
+  a `bare` mode); structure box lightened; round brand example-play.
+- `883fe8e` **conversation** — a per-line round play button on every turn (3-col, mirrored for B),
+  speaker-tinted; wired via the existing `[data-tts]` handler.
+- `4b22415` **notes** — the editable textarea wears the ruled note-paper + a green "synced" pill in
+  the section header (kept editable + the debounced sync).
+- `25e47e1` **chapter strip + speaking entry** — relocated below the hero as the mock's inline strip +
+  a "Speaking practice" ghost button + a gated-note footnote; the `#navExtra` dock now hides when idle
+  (`shouldShow:()=>isSpeakingMode()`), so the full-width "Practice speaking" sub-bar is gone. Self-Talk
+  /Songs untouched.
+
+Decisions (maintainer): keep the app's richer data the static mock omits (kana not romaji, iTalki/POS,
+deck-✓), and keep sections collapsible. Remaining gated surfaces (歌 Songs, 独り言) still need the pass.
 
 ## Fidelity audit (2026-06-17) — Flashcards page DONE; prior "✅" markers were premature
 
