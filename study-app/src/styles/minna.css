@@ -11,24 +11,25 @@
 .mn-gate .gate-ic{font-size:34px;color:var(--reading)}
 .mn-gate h2{font-family:var(--display);font-size:24px;font-weight:900;margin:12px 0 6px}
 .mn-gate p{color:var(--muted);max-width:46ch;margin:0 auto 18px}
-.mn-kicker{font-family:var(--mono);font-size:11px;letter-spacing:.24em;text-transform:uppercase;color:var(--brand);margin-bottom:8px}
 .mn-theme{color:var(--muted);margin-top:6px;font-size:15px}
+/* The page kicker (みんなの日本語 · Textbook) reuses the shared .page-kicker (gold + lead-dash,
+   styles.css) so it matches Browse/Stats and the mock — no bespoke .mn-kicker. */
 
 /* ---- Lesson-seal HERO (mock): hanko number tile + lesson info + progress + Add CTA ---- */
-.lesson-head{display:grid;grid-template-columns:auto 1fr auto;gap:30px;align-items:center;padding:30px 34px;background:var(--surf-card);border:1px solid var(--line);border-radius:18px;box-shadow:var(--lift-md),var(--inner-hi)}
+.lesson-head{display:grid;grid-template-columns:auto 1fr auto;gap:34px;align-items:center;padding:34px 38px;background:var(--surf-card);border:1px solid var(--line);border-radius:18px;box-shadow:var(--lift-md),var(--inner-hi)}
 [data-theme="dark"] .lesson-head{border-color:rgba(255,107,74,.14)}
 @media (max-width:920px){.lesson-head{grid-template-columns:1fr;gap:22px}}
-.lesson-seal{flex:0 0 auto;width:112px;height:112px;border-radius:22px;border:3px solid var(--brand);color:var(--brand);display:flex;flex-direction:column;align-items:center;justify-content:center;gap:2px;transform:rotate(-3deg);position:relative;background:radial-gradient(circle at 50% 40%,rgba(205,67,39,.08),rgba(205,67,39,.02));box-shadow:inset 0 0 0 2px rgba(205,67,39,.14);filter:url(#stamp)}
+.lesson-seal{flex:0 0 auto;width:118px;height:118px;border-radius:24px;border:3px solid var(--brand);color:var(--brand);display:flex;flex-direction:column;align-items:center;justify-content:center;gap:2px;transform:rotate(-3deg);position:relative;background:radial-gradient(circle at 50% 40%,rgba(205,67,39,.08),rgba(205,67,39,.02));box-shadow:inset 0 0 0 2px rgba(205,67,39,.14);filter:url(#stamp)}
 [data-theme="dark"] .lesson-seal{background:radial-gradient(circle at 50% 40%,rgba(255,107,74,.16),rgba(255,107,74,.04));box-shadow:inset 0 0 0 2px rgba(255,107,74,.26),0 0 30px -6px rgba(255,107,74,.5)}
-.lesson-seal .ring{position:absolute;inset:7px;border-radius:16px;border:1px solid rgba(205,67,39,.4)}
+.lesson-seal .ring{position:absolute;inset:7px;border-radius:18px;border:1px solid rgba(205,67,39,.4)}
 [data-theme="dark"] .lesson-seal .ring{border-color:rgba(255,107,74,.5)}
-.lesson-seal .ka{font-family:var(--jp);font-weight:900;font-size:52px;line-height:.9}
-.lesson-seal .romaji{font-family:var(--mono);font-size:9px;letter-spacing:.22em;text-transform:uppercase}
-.lesson-info .lesson-no{font-family:var(--display);font-weight:800;font-size:42px;letter-spacing:-.02em;line-height:1.04;margin:0 0 6px;color:var(--ink)}
-.lesson-info .lesson-sub{font-family:var(--display);font-weight:600;font-size:19px;color:var(--muted);letter-spacing:-.01em}
+.lesson-seal .ka{font-family:var(--jp);font-weight:900;font-size:54px;line-height:.9;letter-spacing:0;white-space:nowrap}
+.lesson-seal .romaji{font-family:var(--mono);font-size:9.5px;letter-spacing:.26em;text-transform:uppercase}
+.lesson-info .lesson-no{font-family:var(--display);font-weight:800;font-size:46px;letter-spacing:-.02em;line-height:1.04;margin:0 0 6px;color:var(--ink)}
+.lesson-info .lesson-sub{font-family:var(--display);font-weight:600;font-size:20px;color:var(--muted);letter-spacing:-.01em}
 .lesson-info .lesson-sub .accent{color:var(--brand)}
 [data-theme="dark"] .lesson-info .lesson-sub .accent{color:#FF8A6E}
-.lesson-progress{display:flex;align-items:center;gap:16px;margin-top:18px;flex-wrap:wrap}
+.lesson-progress{display:flex;align-items:center;gap:16px;margin-top:20px;flex-wrap:wrap}
 .prog-stat{font-family:var(--mono);font-size:12px;letter-spacing:.06em;color:var(--muted)}
 .prog-stat b{color:var(--ink);font-weight:600;font-family:var(--display);font-size:14px;letter-spacing:0}
 .prog-meter{flex:1;min-width:140px;height:7px;border-radius:99px;background:var(--deeper);overflow:hidden}

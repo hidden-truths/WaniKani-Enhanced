@@ -221,7 +221,7 @@ export async function renderMinna() {
   if (!lessons.length) { head.innerHTML = ''; body.innerHTML = '<div class="mn-error">No lessons have been added yet.</div>'; return; }
   const cur = lessons.includes(state.minnaStore.lastLesson) ? state.minnaStore.lastLesson : lessons[0];
   state.minnaStore.lastLesson = cur;
-  head.innerHTML = `<div class="mn-kicker">みんなの日本語 · Minna no Nihongo</div>
+  head.innerHTML = `<div class="page-kicker"><span class="jp">みんなの日本語</span> · Textbook</div>
     <div class="frow"><span class="filter-label">Chapter</span><div class="chips" id="mnChapters" aria-label="Chapter">
       ${lessons.map(n => `<button class="chip mnch${n === cur ? ' active' : ''}" type="button" data-lesson="${n}">L${n}</button>`).join('')}
     </div></div>`;
@@ -253,9 +253,12 @@ async function renderMinnaLesson(n, body) {
       : { ic: 'check', label: 'All vocab in your deck', dis: ' disabled' };
   const vocabN = (L.vocab || []).length, gramN = (L.grammar || []).length;
   const pct = st.total ? Math.round(100 * st.inDeck / st.total) : 0;
+  // The seal holds the lesson number in kanji; multi-char numbers (二十三) must shrink to
+  // stay on one line inside the 118px tile — the mock's 54px is sized for a single glyph.
+  const ka = kanjiNum(n), kaFs = ka.length >= 3 ? 30 : ka.length === 2 ? 40 : 54;
   body.innerHTML = `
     <section class="lesson-head" style="margin-top:14px">
-      <div class="lesson-seal" title="Lesson ${n} seal"><span class="ring"></span><span class="ka jp">${kanjiNum(n)}</span><span class="romaji">dai ${n} ka</span></div>
+      <div class="lesson-seal" title="Lesson ${n} seal"><span class="ring"></span><span class="ka jp" style="font-size:${kaFs}px">${ka}</span><span class="romaji">dai ${n} ka</span></div>
       <div class="lesson-info">
         <h1 class="lesson-no">第${n}課</h1>
         <div class="lesson-sub">Lesson&nbsp;${n}${L.theme ? ` · <span class="accent">${escapeHtml(L.theme)}</span>` : ''}</div>
