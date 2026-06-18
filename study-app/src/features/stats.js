@@ -161,13 +161,13 @@ export function renderStats() {
   const boxName = ['New', 'Box 1', 'Box 2', 'Box 3', 'Box 4', 'Box 5'];
   const boxInt = ['unseen', '1 day', '2 days', '4 days', '8 days', '16 days'];
   setBadge('pipeBadge', total + (total === 1 ? ' card' : ' cards'));
-  // map the count RANGE to a compressed 52–88% band (mock) so the colour ramp leads, not
-  // a sawtooth of raw heights; a 0-count box is a short stub. The label shows the true count.
-  const nzBox = boxes.filter(n => n > 0);
-  const minBox = nzBox.length ? Math.min(...nzBox) : 0, maxBox = Math.max(...boxes, 1);
+  // bar height is PROPORTIONAL to the box count (mock: the tallest box → ~88%), so the
+  // bars honestly reflect the numbers — NOT range-normalized, which squished the heights
+  // whenever one box was an outlier. A small floor keeps tiny boxes visible; 0 → a stub.
+  const maxBox = Math.max(...boxes, 1);
   const pcols = boxes.map((n, i) => {
-    const h = n === 0 ? 4 : (maxBox === minBox ? 88 : Math.round(52 + (n - minBox) / (maxBox - minBox) * 36));
-    const above = n === 0 || h < 60;                               // shorter bars float the count above
+    const h = n === 0 ? 3 : Math.max(7, Math.round(n / maxBox * 88));
+    const above = h < 58;                                          // shorter bars float the count above
     const grad = `linear-gradient(180deg, color-mix(in srgb,var(--box-${i}) 82%, #fff 8%), var(--box-${i}))`;
     return `<div class="pcol${i === 5 ? ' best' : ''}"><div class="pbar-track"><div class="pbar${above ? ' count-above' : ''}" style="height:${h}%;background:${grad};animation-delay:${(0.3 + i * 0.06).toFixed(2)}s"><span class="count">${n}</span></div></div><div class="plabel"><b>${boxName[i]}</b>${boxInt[i]}</div></div>`;
   }).join('');
