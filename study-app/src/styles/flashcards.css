@@ -14,22 +14,22 @@
    this; the study picker (type / direction / filters / Start) follows below. ---- */
 /* top gap now comes from .wrap's padding-top (Phase 9) — zero the hero's own top
    so it doesn't double up; every surface shares the one gap below the chrome. */
-.hero{display:grid;grid-template-columns:1fr auto;gap:34px;align-items:end;padding:0 0 14px}
+.hero{display:grid;grid-template-columns:1fr auto;gap:32px;align-items:end;padding:0 0 14px}
 .hero-left{max-width:560px;display:flex;flex-direction:column;align-items:flex-start;min-width:0}
-.hero-kicker{font-family:var(--mono);font-size:11px;letter-spacing:.3em;text-transform:uppercase;color:var(--gold);font-weight:500;display:inline-flex;align-items:center;gap:10px;margin-bottom:20px}
+.hero-kicker{font-family:var(--mono);font-size:11px;letter-spacing:.3em;text-transform:uppercase;color:var(--gold);font-weight:500;display:inline-flex;align-items:center;gap:10px;margin-bottom:22px}
 .hero-kicker::before{content:"";width:22px;height:1px;background:var(--gold);display:inline-block}
 .hero-kicker .jp{font-family:var(--jp);letter-spacing:.06em;text-transform:none}
 
 /* the big numeral — Bricolage at high optical size; dark gets the warm gradient text-fill */
-.bignum{font-family:var(--display);font-weight:800;font-size:178px;line-height:.9;letter-spacing:-.045em;color:var(--ink);font-variation-settings:"opsz" 96;display:inline-block;position:relative}
+.bignum{font-family:var(--display);font-weight:800;font-size:188px;line-height:.9;letter-spacing:-.045em;color:var(--ink);font-variation-settings:"opsz" 96;display:inline-block;position:relative}
 [data-theme="dark"] .bignum{background:linear-gradient(175deg,#FFF7EF 0%,#ECE3D5 40%,#FFB7A4 108%);-webkit-background-clip:text;background-clip:text;-webkit-text-fill-color:transparent;filter:drop-shadow(0 10px 44px rgba(255,107,74,.30))}
 /* "all caught up" — recolor the numeral to good/jade */
 #dueBanner.empty{color:var(--good)}
 [data-theme="dark"] #dueBanner.empty{background:none;-webkit-text-fill-color:var(--good);filter:drop-shadow(0 10px 44px rgba(86,217,166,.3))}
-.due-label{display:block;font-family:var(--display);font-weight:600;font-size:17.5px;line-height:1.25;letter-spacing:.005em;color:var(--muted);margin-top:20px;-webkit-text-fill-color:currentColor}
+.due-label{display:block;font-family:var(--display);font-weight:600;font-size:17.5px;line-height:1.25;letter-spacing:.005em;color:var(--muted);margin-top:22px;-webkit-text-fill-color:currentColor}
 .due-label em{color:var(--ink);font-style:normal;font-weight:700}
 
-.hero-meta{display:flex;align-items:center;gap:18px;margin:26px 0 22px;flex-wrap:wrap}
+.hero-meta{display:flex;align-items:center;gap:18px;margin:30px 0;flex-wrap:wrap}
 .pill{display:inline-flex;align-items:center;gap:9px;padding:8px 15px 8px 12px;border-radius:999px;background:var(--chip-bg);border:1px solid var(--line);box-shadow:var(--lift-sm);font-family:var(--body);font-size:14px;color:var(--ink)}
 .pill[hidden]{display:none}
 .pill b{font-weight:600;font-family:var(--display)}
@@ -40,32 +40,32 @@
 
 /* hero CTAs — vermilion primary "Review due cards" (matches the mock; the app's indigo SRS
    button is overridden here) + a ghost "Free study" quick-start */
-.cta-row{display:flex;align-items:center;gap:14px;flex-wrap:wrap}
-.btn.hero-due{background:var(--brand);color:var(--brand-on);border:none;font-weight:600;font-size:16px;padding:15px 26px;box-shadow:var(--cta-shadow)}
+.cta-row{display:flex;align-items:center;gap:16px;flex-wrap:wrap;margin-top:6px}
+.btn.hero-due{background:var(--brand);color:var(--brand-on);border:none;font-weight:600;font-size:17px;padding:16px 28px;box-shadow:var(--cta-shadow)}
 [data-theme="dark"] .btn.hero-due{background:linear-gradient(160deg,#FF8A6E,var(--brand) 55%,var(--brand-deep))}
 .btn.hero-due:hover{background:var(--brand-deep);transform:translateY(-2px);box-shadow:var(--cta-shadow-hover)}
 [data-theme="dark"] .btn.hero-due:hover{background:linear-gradient(160deg,#FF8A6E,var(--brand) 55%,var(--brand-deep))}
 .btn.hero-due:disabled{background:var(--good-soft);color:var(--good-deep);border:1px solid var(--good);box-shadow:none;cursor:default;transform:none}
 [data-theme="dark"] .btn.hero-due:disabled{background:var(--good-soft);color:var(--good);border-color:rgba(86,217,166,.4)}
-.btn.hero-free{background:var(--chip-bg);color:var(--ink);border:1px solid var(--line);box-shadow:var(--lift-sm);font-weight:500;font-size:15px;padding:14px 22px}
+.btn.hero-free{background:var(--chip-bg);color:var(--ink);border:1px solid var(--line);box-shadow:var(--lift-sm);font-weight:500;font-size:16px;padding:15px 22px}
 .btn.hero-free:hover{background:color-mix(in srgb,var(--ink) 6%,var(--chip-bg));border-color:var(--muted);transform:translateY(-2px)}
 
 /* forecast side card — NOT .panel (that's the tab container). Card surface + a gold top tab. */
-.forecast-card{min-width:300px;align-self:end;padding:22px 24px 18px;border-radius:18px;position:relative;background:var(--surf-card);border:1px solid var(--line);box-shadow:var(--lift-md),var(--inner-hi);backdrop-filter:blur(22px) saturate(135%);-webkit-backdrop-filter:blur(22px) saturate(135%)}
+.forecast-card{min-width:300px;align-self:end;padding:24px 26px 20px;border-radius:18px;position:relative;background:var(--surf-card);border:1px solid var(--line);box-shadow:var(--lift-md),var(--inner-hi);backdrop-filter:blur(22px) saturate(135%);-webkit-backdrop-filter:blur(22px) saturate(135%)}
 [data-theme="dark"] .forecast-card{border-color:rgba(255,107,74,.14)}
 .forecast-card::after{content:"";position:absolute;left:24px;top:0;width:40px;height:3px;background:var(--gold);border-radius:0 0 3px 3px}
-.fcast-head{display:flex;align-items:center;justify-content:space-between;gap:14px;margin-bottom:16px;flex-wrap:wrap}
-.fcast-title{display:inline-flex;align-items:center;gap:8px;font-family:var(--display);font-weight:600;font-size:16px;color:var(--ink)}
+.fcast-head{display:flex;align-items:center;justify-content:space-between;gap:14px;margin-bottom:20px;flex-wrap:wrap}
+.fcast-title{display:inline-flex;align-items:center;gap:8px;font-family:var(--display);font-weight:600;font-size:17px;color:var(--ink)}
 .fcast-title .ic{font-size:15px;color:var(--gold)}
 .fcast-total{font-family:var(--mono);font-size:11px;letter-spacing:.18em;text-transform:uppercase;color:var(--muted)}
 .fcast-chart{margin-top:4px}
 .fcast-empty{padding:18px 4px;text-align:center;color:var(--muted);font-size:13px;max-width:300px}
 
 /* the bars (mock .bars grid; column count + gap set inline = slot count) */
-.bars{display:grid;align-items:end;height:112px}
+.bars{display:grid;align-items:end;height:104px}
 .bar-col{display:flex;flex-direction:column;align-items:center;gap:8px;height:100%;justify-content:flex-end;min-width:0}
 .bar-track{width:100%;display:flex;align-items:flex-end;justify-content:center;flex:1}
-.bar{width:13px;max-width:72%;border-radius:6px 6px 2px 2px;background:var(--deeper);min-height:9px;transform-origin:bottom;animation:growY .7s cubic-bezier(.2,.7,.3,1) backwards;transition:transform .2s ease}
+.bar{width:13px;max-width:72%;border-radius:6px;background:var(--deeper);min-height:28px;transform-origin:bottom;animation:growY .7s cubic-bezier(.2,.7,.3,1) backwards;transition:transform .2s ease}
 .bar-col:hover .bar{transform:scaleY(1.04)}
 .bar.today{background:linear-gradient(to top,var(--brand),#e06043);box-shadow:0 6px 14px -6px rgba(205,67,39,.6)}
 [data-theme="dark"] .bar{background:linear-gradient(180deg,rgba(255,238,222,.16),rgba(255,238,222,.05));border:1px solid var(--line)}
@@ -74,7 +74,7 @@
 [data-theme="dark"] .bar.tiny{background:linear-gradient(180deg,rgba(255,238,222,.12),rgba(255,238,222,.04))}
 .bar-num{font-family:var(--mono);font-size:11px;color:var(--muted);min-height:1em}
 .bar-col.is-today .bar-num{color:var(--brand);font-weight:600}
-.bar-day{font-family:var(--mono);font-size:9.5px;letter-spacing:.06em;text-transform:uppercase;color:var(--muted);white-space:nowrap}
+.bar-day{font-family:var(--mono);font-size:10px;letter-spacing:.08em;text-transform:uppercase;color:var(--muted);white-space:nowrap}
 .bar-col.is-today .bar-day{color:var(--ink);font-weight:600}
 
 /* mobile: stack the hero (numeral over the forecast) and the picker */

@@ -46,7 +46,7 @@ export function renderForecast() {
   const { bars, max } = reviewForecast(forecastHorizon);
   const total = bars.reduce((s, b) => s + b.count, 0);
   if (!total) { el.innerHTML = '<div class="fcast-empty">No reviews scheduled in this window — drill some cards to start the clock.</div>'; return; }
-  const n = bars.length, gap = n > 10 ? 4 : 12;                      // tighten the grid for dense windows
+  const n = bars.length, gap = n > 10 ? 4 : 13;                      // tighten the grid for dense windows
   let h = `<div class="bars" style="grid-template-columns:repeat(${n},1fr);gap:${gap}px" role="img" aria-label="Upcoming reviews over the next ${forecastHorizon}; ${total} scheduled">`;
   bars.forEach((b, i) => {
     const pct = b.count === 0 ? 0 : Math.max(16, Math.round((b.count / max) * 92));  // non-zero ≥16%; 92% leaves headroom
