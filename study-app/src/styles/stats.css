@@ -110,12 +110,34 @@
 .panel-badge{flex:0 0 auto;font-family:var(--mono);font-size:10.5px;letter-spacing:.14em;text-transform:uppercase;font-weight:500;color:var(--muted);background:var(--chip-bg);border:1px solid var(--line);padding:6px 11px;border-radius:8px;white-space:nowrap}
 .panel-badge.leech-badge{color:var(--leech);border-color:color-mix(in srgb,var(--leech) 36%,transparent);background:var(--leech-soft)}
 
-/* Leech list — carded rows with a plum spine */
-.leech-row{display:flex;align-items:center;gap:11px;padding:11px 14px;border:1px solid var(--line);border-left:4px solid var(--leech);border-radius:0 12px 12px 0;background:var(--surf-inset);margin-bottom:8px}
-.leech-row .lr-jp{font-family:var(--jp);font-size:20px;font-weight:700;line-height:1.1;color:var(--ink)}
-.leech-row .lr-meta{color:var(--muted);font-size:13px}
-.leech-row .lr-acc{margin-left:auto;font-family:var(--mono);font-size:12px;color:var(--leech);font-weight:700}
-.leech-row .lr-acc .ic{font-size:13px;vertical-align:-0.15em;margin-right:3px}
+/* accuracy ramp — poor→mid→good, shared by the leech bars + per-card bars (mock 22-32) */
+:root,[data-theme="light"]{--acc-poor:var(--brand);--acc-mid:var(--gold);--acc-good:var(--good)}
+[data-theme="dark"]{--acc-poor:var(--brand);--acc-mid:#E8C26A;--acc-good:var(--good)}
+
+/* ===== LEECHES — rich plum-spined rows (mock 232-266) ===== */
+.leech-list{display:flex;flex-direction:column;gap:12px}
+.leech-row{position:relative;display:grid;grid-template-columns:auto 1fr auto;align-items:center;gap:18px;padding:15px 18px 15px 20px;border:1px solid var(--line);border-left:3px solid var(--leech);border-radius:14px;background:var(--surf-inset);box-shadow:var(--lift-sm);transition:transform .18s ease,box-shadow .2s ease,border-color .2s ease}
+.leech-row:hover{transform:translateY(-2px);box-shadow:var(--lift-md);border-color:color-mix(in srgb,var(--leech) 50%,transparent)}
+[data-theme="dark"] .leech-row:hover{box-shadow:var(--lift-md),0 0 32px -14px rgba(199,146,234,.6)}
+.leech-word{display:flex;align-items:baseline;gap:12px;min-width:190px}
+.leech-word .jp{font-family:var(--jp);font-weight:700;font-size:29px;color:var(--ink);line-height:1;letter-spacing:.02em}
+[data-theme="dark"] .leech-word .jp{text-shadow:0 2px 18px rgba(199,146,234,.2)}
+.leech-word .read{font-family:var(--jp);font-size:13.5px;color:var(--muted)}
+.leech-mid{min-width:0}
+.leech-mid .mean{font-family:var(--body);font-size:15.5px;color:var(--ink)}
+.leech-mid .mean .hum{color:var(--muted);font-size:.85em}
+.leech-mid .accwrap{display:flex;align-items:center;gap:11px;margin-top:9px;flex-wrap:wrap}
+.leech-mid .accbar{flex:1;max-width:200px;min-width:90px;height:7px;border-radius:4px;background:var(--deeper);overflow:hidden}
+[data-theme="dark"] .leech-mid .accbar{background:rgba(255,238,222,.07)}
+.leech-mid .accbar i{display:block;height:100%;border-radius:4px;background:linear-gradient(90deg,var(--acc-poor),color-mix(in srgb,var(--acc-poor) 70%,var(--acc-mid)));transform-origin:left;animation:growX .85s cubic-bezier(.2,.7,.3,1) backwards}
+.leech-mid .accpct{font-family:var(--mono);font-size:12px;font-weight:600;color:var(--acc-poor)}
+.leech-mid .attempts{font-family:var(--mono);font-size:11px;color:var(--muted);letter-spacing:.02em}
+.leech-act{flex:0 0 auto}
+/* "Review" uses the base .pill, tinted plum */
+.pill.review{color:var(--leech);background:var(--leech-soft);border-color:color-mix(in srgb,var(--leech) 36%,transparent);cursor:pointer;padding:8px 14px}
+.pill.review svg{width:13px;height:13px}
+.pill.review:hover{background:var(--leech);color:#fff;transform:translateY(-1px)}
+[data-theme="dark"] .pill.review:hover{color:#1a0d22;box-shadow:0 0 22px -6px rgba(199,146,234,.7)}
 
 /* ===== MEMORY PIPELINE — vertical Leitner bars on a stone→jade ramp (mock 170-217) ===== */
 /* the only NEW palette the system doesn't ship: the New→Box5 ramp (light + dark) */

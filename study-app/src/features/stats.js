@@ -141,14 +141,23 @@ export function renderStats() {
   const dvals = days.map(d => Math.round(100 * state.store.daily[d].right / state.store.daily[d].tot));
   setBadge('dailyBadge', dvals.length ? 'avg ' + Math.round(dvals.reduce((s, x) => s + x, 0) / dvals.length) + '%' : 'no data yet');
   drawDaily(document.getElementById('chartDaily'), days.map((d, i) => ({ y: dvals[i], label: d.slice(5) })));
-  // Leech list: the cards isLeech() currently flags, with their rolling accuracy.
-  const lz = leeches(); const ll = document.getElementById('leechList');
+  // Leech list (mock): rich plum-spined rows, worst-first, each with an accuracy bar, the
+  // attempt count, and a per-row Review pill that drills that one card (wired in initStatsUI).
+  const lz = leeches().slice().sort((a, b) => rollingAcc(a.rank) - rollingAcc(b.rank));
+  const ll = document.getElementById('leechList');
   setBadge('leechBadge', lz.length + (lz.length === 1 ? ' card' : ' cards'));
   if (!lz.length) { ll.innerHTML = '<div class="empty" style="padding:18px">No leeches detected. A leech is any card under 60% over its last 4+ attempts.</div>'; }
-  else { ll.innerHTML = lz.map(v => `<div class="leech-row">
-    <span class="lr-jp jp">${v.jp}</span>
-    <span class="lr-meta">${v.read} · ${v.mean}</span>
-    <span class="lr-acc"><svg class="ic" aria-hidden="true"><use href="#i-alert"/></svg>${Math.round(rollingAcc(v.rank) * 100)}%</span></div>`).join(''); }
+  else {
+    ll.innerHTML = '<div class="leech-list">' + lz.map((v, i) => {
+      const pct = Math.round(rollingAcc(v.rank) * 100);
+      const att = (state.store.cards[v.rank] || { attempts: [] }).attempts.length;
+      return `<div class="leech-row">
+        <div class="leech-word"><span class="jp">${v.jp}</span><span class="read">${v.read}</span></div>
+        <div class="leech-mid"><div class="mean">${v.mean}</div><div class="accwrap"><span class="accbar"><i style="width:${pct}%;animation-delay:${(0.45 + i * 0.05).toFixed(2)}s"></i></span><span class="accpct">${pct}%</span><span class="attempts">· ${att} attempt${att === 1 ? '' : 's'}</span></div></div>
+        <div class="leech-act"><button class="pill review" data-rank="${v.rank}" title="Review ${v.jp} now">${mIcon(I.hist, 2)}Review</button></div>
+      </div>`;
+    }).join('') + '</div>';
+  }
   // Per-card accuracy bars (worst-first, capped + show-all toggle).
   renderCardBars();
   // SRS memory pipeline (mock): six VERTICAL bars on the stone→jade Leitner ramp.
@@ -175,7 +184,21 @@ export function renderStats() {
   document.getElementById('boxDist').innerHTML = `<div class="pipeline">${pcols}</div><div class="pipe-legend"><span>least learned</span><span class="ramp"><span class="swatches">${swatches}</span></span><span>best learned</span></div>`;
 }
 
-// Wire the Stats-panel actions (study-leeches jump + hard reset).
+// Drill a single card now: scope the flashcard deck to one rank in FREE study (so the card is
+// reviewable regardless of its due date) and start. Mirrors the studyLeeches jump; used by the
+// per-row leech "Review" pills.
+function reviewSingle(rank) {
+  document.querySelector('.tab[data-tab="study"]').click();
+  cfg.cat = []; cfg.type = []; cfg.trans = []; cfg.topic = []; cfg.status = []; cfg.source = []; cfg.jlpt = ['all']; cfg.kind = 'free'; cfg.rmin = rank; cfg.rmax = rank;
+  repaintDeck();
+  document.querySelectorAll('.chip.jlpt').forEach(x => x.classList.toggle('active', x.dataset.jlpt === 'all'));
+  const rminEl = document.getElementById('rmin'), rmaxEl = document.getElementById('rmax');
+  if (rminEl) rminEl.value = rank; if (rmaxEl) rmaxEl.value = rank;
+  updateDeckCount();
+  startSession();
+}
+
+// Wire the Stats-panel actions (study-leeches jump + per-row review + hard reset).
 export function initStatsUI() {
   // "Study leeches now": jump to the flashcard tab with a leech-only deck. Like
   // startDueSession() it overrides the picker and syncs the chip UI to match.
@@ -187,6 +210,11 @@ export function initStatsUI() {
     document.getElementById('rmin').value = 1; document.getElementById('rmax').value = 100;
     updateDeckCount();
     startSession();
+  });
+  // Per-row leech "Review" pills (delegated — the list re-renders on every renderStats).
+  document.getElementById('leechList').addEventListener('click', (e) => {
+    const btn = e.target.closest('.pill.review'); if (!btn) return;
+    reviewSingle(+btn.dataset.rank);
   });
   // Hard reset: wipe ALL progress (after a confirm) and re-render derived views.
   document.getElementById('resetBtn').addEventListener('click', () => {
