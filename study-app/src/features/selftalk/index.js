@@ -15,7 +15,7 @@ import { loadSelftalk } from '../../persistence/selftalk.js';
 import { setOnTakeSaved } from '../record-compare.js';
 import { S, SELFTALK_SCOPE } from './state.js';
 import { warmPhrasesFromCache, refreshPhrases, maybeMaterialize } from './store.js';
-import { renderSelftalk, drillTopic, toggleGrammar, repaintTemplateCard, closeSlotMenus, openSlotMenu } from './view.js';
+import { renderSelftalk, drillTopic, featureDaily, toggleGrammar, repaintTemplateCard, closeSlotMenus, openSlotMenu } from './view.js';
 import { markPracticed, reflectPracticed } from './practice.js';
 import { openPhraseModal, closePhraseModal, savePhrase, deletePhrase } from './authoring.js';
 import { handleBrowserTabHidden } from './speaking.js';
@@ -59,6 +59,8 @@ export function initSelftalk() {
       if (topicCell) { drillTopic(topicCell.dataset.stTopic); return; }
       const back = e.target.closest('[data-st-back]');
       if (back) { drillTopic(null); return; }
+      const feat = e.target.closest('[data-st-feature]');
+      if (feat) { featureDaily(feat.dataset.stFeature); return; }
       // ---- slot-swap templates: pick from the menu / cycle / open menu / shuffle ----
       const pick = e.target.closest('[data-st-pick]');
       if (pick) {

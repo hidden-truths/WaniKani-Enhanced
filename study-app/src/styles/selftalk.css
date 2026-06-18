@@ -15,6 +15,46 @@
 .pill.st-today .dot{background:var(--good);box-shadow:0 0 0 4px var(--good-soft)}
 [data-theme="dark"] .pill.st-today .dot{box-shadow:0 0 0 4px var(--good-soft),0 0 9px 1px rgba(86,217,166,.6)}
 .st-count{font-size:11px;color:var(--muted);font-weight:normal}
+
+/* ---- daily-5 (Phase 9 hybrid): a "Now speaking" FEATURED card + a "Today's prompts" rail, atop
+   the kept topic browser. The featured card is the only one with the record rig (one per view). ---- */
+.st-daily{display:grid;grid-template-columns:minmax(0,1fr) 300px;gap:22px;align-items:start;margin:4px 0 8px}
+.st-now-head{display:inline-flex;align-items:center;gap:9px;font-family:var(--mono);font-size:10.5px;letter-spacing:.2em;text-transform:uppercase;color:var(--brand);margin-bottom:11px}
+[data-theme="dark"] .st-now-head{color:#FF8A6E}
+.st-eq{display:inline-flex;align-items:flex-end;gap:2px;height:12px}
+.st-eq i{width:2.5px;background:var(--brand);border-radius:2px;animation:eqbar .9s ease-in-out infinite}
+[data-theme="dark"] .st-eq i{background:#FF8A6E;box-shadow:0 0 6px 0 rgba(255,107,74,.6)}
+.st-eq i:nth-child(1){height:50%;animation-delay:0s}.st-eq i:nth-child(2){height:100%;animation-delay:.18s}.st-eq i:nth-child(3){height:70%;animation-delay:.36s}
+@keyframes eqbar{0%,100%{transform:scaleY(.4)}50%{transform:scaleY(1)}}
+/* the featured card reads larger + more prominent than a list card */
+.st-now .st-phrase{padding:24px 26px 22px 28px;border-radius:18px}
+.st-now .st-phrase::before{width:5px}
+.st-now .st-jp{font-size:27px;line-height:1.5}
+.st-now .st-en{font-size:15px}
+[data-theme="light"] .st-now .st-phrase{background:linear-gradient(168deg,#FFFDF8,#FBF6EC);border-color:color-mix(in srgb,var(--brand) 16%,var(--line))}
+/* the prompt rail */
+.st-rail{position:relative;background:var(--surf-card);border:1px solid var(--line);border-radius:16px;padding:16px 15px;box-shadow:var(--lift-md),var(--inner-hi)}
+[data-theme="dark"] .st-rail{border-color:rgba(255,107,74,.14)}
+.st-rail-head{display:flex;align-items:center;gap:8px;margin:2px 2px 12px;font-family:var(--mono);font-size:10.5px;letter-spacing:.14em;text-transform:uppercase;color:var(--muted)}
+.st-rail-head .ic{font-size:14px;color:var(--brand)}
+.st-rail-head .st-count{margin-left:auto}
+.st-rail-list{display:flex;flex-direction:column;gap:8px}
+.st-rail-card{display:flex;align-items:center;gap:11px;text-align:left;width:100%;padding:11px 13px;border:1px solid var(--line);border-radius:11px;background:var(--surf-inset);cursor:pointer;transition:border-color .15s,transform .15s,background .15s}
+.st-rail-card:hover{transform:translateY(-1px);border-color:color-mix(in srgb,var(--brand) 40%,var(--line))}
+.st-rail-num{flex-shrink:0;width:22px;height:22px;border-radius:50%;display:grid;place-items:center;font-family:var(--mono);font-size:11px;font-weight:600;color:var(--muted);background:var(--chip-bg);border:1px solid var(--line)}
+.st-rail-num .ic{font-size:12px}
+.st-rail-text{font-family:var(--body);font-size:13.5px;color:var(--ink);line-height:1.35;overflow:hidden;display:-webkit-box;-webkit-line-clamp:2;-webkit-box-orient:vertical}
+.st-rail-card.current{border-color:var(--brand);background:color-mix(in srgb,var(--brand) 10%,var(--surf-card))}
+.st-rail-card.current .st-rail-num{background:var(--brand);color:var(--brand-on);border-color:var(--brand)}
+[data-theme="dark"] .st-rail-card.current{background:var(--brand-soft)}
+.st-rail-card.done .st-rail-num{background:var(--good-soft);color:var(--good-deep);border-color:color-mix(in srgb,var(--good) 40%,transparent)}
+[data-theme="dark"] .st-rail-card.done .st-rail-num{color:var(--good)}
+.st-rail-card.done .st-rail-text{color:var(--muted)}
+/* the topic browser kept below the daily-5 */
+.st-browse{margin-top:26px}
+.st-browse-head{display:flex;align-items:center;gap:14px;margin:0 0 6px;font-family:var(--mono);font-size:10.5px;letter-spacing:.2em;text-transform:uppercase;color:var(--muted)}
+.st-browse-head .line-rule{flex:1;height:1px;background:var(--line)}
+
 .st-list{display:flex;flex-direction:column;gap:10px;padding:2px 0 14px}
 /* phrase card — editorial: a class spine + spacious lift (toward the mock's "now speaking" card) */
 .st-phrase{position:relative;overflow:hidden;display:flex;gap:14px;align-items:flex-start;padding:18px 20px 18px 22px;border:1px solid var(--line);border-radius:14px;background:var(--surf-card);box-shadow:var(--lift-md),var(--inner-hi);transition:transform .2s cubic-bezier(.2,.7,.3,1),box-shadow .2s ease}
@@ -52,7 +92,6 @@
 .st-cat-head .ic{font-size:14px;color:var(--brand)}
 .st-cat-jp{font-family:var(--jp);letter-spacing:normal;text-transform:none;color:var(--muted);opacity:.7}
 .st-grid{display:grid;grid-template-columns:repeat(auto-fill,minmax(158px,1fr));gap:12px}
-.st-today-grid{margin-bottom:4px}
 .st-cell{display:flex;flex-direction:column;align-items:flex-start;gap:5px;text-align:left;padding:14px 15px;min-height:78px;border:1px solid var(--line);border-radius:14px;background:var(--surf-card);box-shadow:var(--lift-sm);cursor:pointer;transition:border-color .15s,transform .15s,box-shadow .2s}
 .st-cell:hover{border-color:color-mix(in srgb,var(--brand) 45%,var(--line));transform:translateY(-2px);box-shadow:var(--lift-md)}
 .st-cell:active{transform:translateY(0)}
@@ -60,10 +99,6 @@
 .st-cell-jp{font-family:var(--jp);font-size:12px;color:var(--muted)}
 .st-cell-count{margin-top:auto;font-family:var(--mono);font-size:10.5px;letter-spacing:.03em;color:var(--muted)}
 .st-cell-count .done{color:var(--good)}
-.st-today-cell{border-color:color-mix(in srgb,var(--good) 42%,var(--line));background:color-mix(in srgb,var(--good) 7%,var(--surf-card))}
-.st-today-cell .ic{font-size:15px;color:var(--good)}
-.st-today-row{display:flex;align-items:center;gap:7px}
-.st-today-cell .st-cell-label{font-family:var(--mono);font-size:12px;letter-spacing:.06em;text-transform:uppercase}
 .st-back{display:inline-flex;align-items:center;gap:5px;background:none;border:none;cursor:pointer;font-family:var(--mono);font-size:11px;letter-spacing:.06em;color:var(--muted);padding:4px 2px;margin-bottom:4px;transition:color .15s}
 .st-back:hover{color:var(--brand)}
 .st-back .ic{font-size:13px;transform:rotate(90deg)}
@@ -90,7 +125,9 @@
 .st-shuffle{background:none;border:1px solid var(--line);border-radius:8px;color:var(--muted);cursor:pointer;padding:4px 8px;display:inline-flex;align-items:center;transition:color .15s,border-color .15s}
 .st-shuffle:hover{color:var(--brand);border-color:color-mix(in srgb,var(--brand) 45%,transparent)}
 .st-shuffle .ic{font-size:13px}
+@media (max-width:860px){ .st-daily{grid-template-columns:1fr} }
 @media (max-width:640px){
   .st-jp{font-size:18px}
+  .st-now .st-jp{font-size:22px}
   .st-grid{grid-template-columns:repeat(auto-fill,minmax(140px,1fr));gap:8px}
 }
