@@ -268,6 +268,33 @@ WAL alongside the live server safely. Verify after:
 独り言 tab + the flashcard/Browse example sentences should populate, with the credentialed CORS header
 echoing the apex origin.
 
+**歌/Songs starter library (`seed-songs.ts`).** Seeds the curated starter songs (`data/songs/*.json`)
+as PUBLIC, anon-readable rows — the `song` table + one `sentence` row per line (`owner_type='song'`).
+Without it `GET /v1/songs` returns nothing and the apex study-app's 歌/Songs library renders empty.
+**Run it AFTER `seed-sentences.ts`** and BEFORE `seed-annotations.ts` below. Same mounted-repo
+invocation + the same `ENV_FILE`/`DATA_DIR` gotcha — **plus one extra flag the other seeds don't need:**
+
+> **CRITICAL — `seed-songs.ts` requires `-e NODE_PATH=/app/node_modules`.** Unlike the pure-import
+> `seed-sentences.ts` / `seed-annotations.ts`, this script imports `@anthropic-ai/sdk` *transitively*
+> (via `offsetTokens` from `src/services/songAnalyze.ts` — reused so the seed's UTF-16 token offsets
+> match the runtime analyzer's). The mounted host repo at `/repo` ships no `node_modules`, so the bare
+> seed-sentences-style invocation fails with `error: Cannot find module '@anthropic-ai/sdk' from
+> '/repo/wk-enhanced-api/src/services/songAnalyze.ts'`. The `-e NODE_PATH=/app/node_modules` points
+> Bun at the image's installed production deps (the Dockerfile's `WORKDIR /app` + `COPY --from=deps
+> /app/node_modules`) so the transitive dep resolves.
+
+```bash
+cd /opt/wk-enhanced-api/wk-enhanced-api
+ENV_FILE=/etc/wk-enhanced-api/env DATA_DIR=/var/lib/wk-enhanced-api \
+  docker compose run --rm --no-deps \
+  -e NODE_PATH=/app/node_modules \
+  -v /opt/wk-enhanced-api:/repo -w /repo/wk-enhanced-api \
+  api bun scripts/seed-songs.ts
+# → "seeded N starter song(s) (… lines, … timed) into the song store". Idempotent (upsert by song
+#   ext_id, reuse-by-hash per line). Verify: `curl https://api.wkenhanced.dev/v1/songs` lists the
+#   starter songs and the apex study-app's 歌/Songs library populates.
+```
+
 **Phase 4 — NLP annotations + grammar tags (`seed-annotations.ts`).** Loads the committed
 `data/annotations.json` (parsed OFFLINE — no Python on the droplet) into `sentence_annotation` and writes
 the detected grammar ids to `sentence_tag(kind='grammar')`. Without it the study-app's tap-a-word lookup

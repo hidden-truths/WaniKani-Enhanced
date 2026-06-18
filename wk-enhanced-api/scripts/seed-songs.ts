@@ -12,9 +12,15 @@
 // User-authored BYO songs are NOT seeded here — those are written live via POST /v1/songs as PRIVATE
 // rows. Only lyrics you're entitled to redistribute belong in data/songs/ (see its README).
 //
-// Run from wk-enhanced-api/ so .env loads (→ DATABASE_FILE). To seed PROD, point DATABASE_FILE at the
-// prod sqlite (or run on the droplet), same pattern as seed-sentences.ts.
+// Run from wk-enhanced-api/ so .env loads (→ DATABASE_FILE) for LOCAL seeding:
 //   bun scripts/seed-songs.ts
+// To seed PROD, run on the droplet via the mounted-repo `docker compose run`. NOTE: the
+// seed-sentences.ts / seed-annotations.ts pattern does NOT work bare here — unlike those pure-import
+// scripts, this one imports @anthropic-ai/sdk TRANSITIVELY (via offsetTokens from
+// src/services/songAnalyze.ts), and the mounted host repo has no node_modules, so the bare invocation
+// fails with "Cannot find module '@anthropic-ai/sdk' from .../src/services/songAnalyze.ts". Pass
+// `-e NODE_PATH=/app/node_modules` so Bun resolves it from the image's installed deps. Exact command:
+// deploy/README.md "Updating after a git pull" → 歌/Songs starter library.
 import { readdirSync, readFileSync, existsSync } from 'node:fs';
 import { fileURLToPath } from 'node:url';
 import { plainText, rubyToSegments } from '../../study-app/src/core/text.js';
