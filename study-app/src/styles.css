@@ -9,16 +9,9 @@
      component CSS, peeled out into styles/<surface>.css as each phase reskins it.
      ========================================================================= */
 
-  /* ---- Sticky top navbar + tab strip → moved to styles/chrome.css (Phase 1).
-     The #navExtra speaking-bar overrides below STAY here (みんなの日本語 — Phase 5),
-     as do the navbar/tab mobile overrides in the @media block further down. ---- */
-  /* The みんなの日本語 speaking bar, docked in #navExtra: strip its block chrome (border/bg/
-     margin/padding) so it reads as part of the navbar rather than a card. Keeps the base
-     flex-wrap so a narrow viewport drops controls to a second line instead of clipping; the
-     device select is trimmed since long mic names would otherwise dominate the row. */
-  .nav-extra .speaking-bar{margin:0;padding:0;border:0;background:none;gap:8px;justify-content:center}
-  .nav-extra .speaking-bar.on{background:none;border:0}
-  .nav-extra .mic-select{max-width:150px}
+  /* ---- Sticky top navbar + tab strip → styles/chrome.css (Phase 1); the #navExtra
+     speaking-bar dock trims → styles/record-compare.css (Phase 9). The navbar/tab
+     mobile overrides STAY here in the @media block further down (cascade Rule A). ---- */
 
   /* Per-surface editorial header (kicker + title + optional count cluster) — Browse / Stats /
      Self-Talk / Songs. The global headline was removed (navbar) but each surface keeps its own. */
@@ -180,53 +173,11 @@
   [data-theme="dark"] ruby rt,[data-theme="dark"] rt{color:#FF9B80}
   /* Furigana toggle (Settings): hide all readings → ruby renders as bare kanji. */
   :root[data-furigana="off"] rt{display:none}
-  /* Settings modal rows: label + a segmented control, wrapping on narrow. */
-  .set-row{display:flex;align-items:center;justify-content:space-between;gap:12px;flex-wrap:wrap;margin:14px 0}
-  .set-row>label{font-family:var(--mono);font-size:11px;letter-spacing:.1em;text-transform:uppercase;color:var(--muted)}
-  .set-row .jlptseg .chip{font-size:12px;padding:6px 11px}
-  .set-hint{display:block;max-width:280px;margin-top:5px;font-family:var(--body);font-size:12px;letter-spacing:0;text-transform:none;color:var(--muted);opacity:.85}
-  .set-num{width:64px;background:var(--surf-inset);color:var(--ink);border:1px solid var(--line);border-radius:9px;padding:7px 9px;font-family:var(--mono);font-size:13px;text-align:center}
-  .set-num:focus{outline:none;border-color:var(--brand);box-shadow:0 0 0 3px var(--brand-soft)}
-  .set-select{background:var(--surf-inset);color:var(--ink);border:1px solid var(--line);border-radius:9px;padding:7px 9px;font-family:var(--mono);font-size:13px;cursor:pointer}
-  .set-select:focus{outline:none;border-color:var(--brand);box-shadow:0 0 0 3px var(--brand-soft)}
-  /* A set-row whose control is a full-width block under the label (vs the inline segment rows). */
-  .set-row-block{flex-direction:column;align-items:stretch}
-  .set-row-block>label{margin-bottom:8px}
-  /* Voice-priority editor: one column per context, an ordered list + an "add" select each. */
-  .voice-prefs{display:grid;grid-template-columns:repeat(auto-fit,minmax(180px,1fr));gap:12px;width:100%}
-  .voice-ctx{border:1px solid var(--line);border-radius:12px;padding:10px 12px;background:var(--surf-inset)}
-  .voice-ctx-head{display:flex;align-items:center;justify-content:space-between;margin-bottom:6px}
-  .voice-ctx-name{font-family:var(--mono);font-size:11px;letter-spacing:.08em;text-transform:uppercase;color:var(--ink)}
-  .voice-reset{background:none;border:none;cursor:pointer;font-family:var(--mono);font-size:10px;letter-spacing:.06em;text-transform:uppercase;color:var(--muted)}
-  .voice-reset:hover{color:var(--godan)}
-  .voice-list{list-style:none;margin:0 0 7px;padding:0;counter-reset:vp}
-  .voice-item{display:flex;align-items:center;justify-content:space-between;gap:6px;padding:4px 0;border-top:1px solid var(--line)}
-  .voice-item:first-child{border-top:0}
-  .voice-left{display:inline-flex;align-items:center;gap:7px;min-width:0}
-  .voice-preview:hover:not(:disabled){border-color:var(--good);color:var(--good)}
-  .voice-preview.playing{background:var(--ichidan);color:#fff;border-color:var(--ichidan)}
-  .voice-tok{font-family:var(--body);font-size:13px;color:var(--ink)}
-  .voice-ungen .voice-tok{color:var(--muted)}
-  .voice-note{font-family:var(--mono);font-size:10px;letter-spacing:.04em;color:var(--muted);font-style:italic}
-  .voice-tok::before{counter-increment:vp;content:counter(vp) ". ";color:var(--muted);font-family:var(--mono);font-size:11px}
-  .voice-ops{display:inline-flex;gap:2px;flex-shrink:0}
-  .voice-op{background:none;border:1px solid var(--line);border-radius:5px;cursor:pointer;color:var(--muted);width:22px;height:22px;line-height:1;font-size:11px;display:inline-flex;align-items:center;justify-content:center}
-  .voice-op:hover:not(:disabled){border-color:var(--ichidan);color:var(--ink)}
-  .voice-op:disabled{opacity:.3;cursor:default}
-  .voice-del:hover{border-color:var(--godan);color:var(--godan)}
-  .voice-add{width:100%;background:var(--chip-bg);color:var(--ink);border:1px solid var(--line);border-radius:9px;padding:6px 8px;font-family:var(--mono);font-size:12px}
-  .voice-add:focus{outline:none;border-color:var(--brand);box-shadow:0 0 0 3px var(--brand-soft)}
   /* Detail-modal memory track (.det-memory/.srs-*) → styles/browse.css (Phase 3). */
   /* Jisho dictionary deep-link (flashcard answer + detail modal). */
   .jisho-link{display:inline-flex;align-items:center;gap:5px;font-family:var(--mono);font-size:11px;letter-spacing:.08em;text-transform:uppercase;color:var(--ichidan);text-decoration:none;margin-top:8px}
   .jisho-link:hover{text-decoration:underline}
   .jisho-link .ic{font-size:13px}
-  .modal details{border-top:1px solid var(--line);padding:10px 0;margin-top:4px}
-  .modal details>summary{cursor:pointer;list-style:none;font-family:var(--mono);font-size:10px;letter-spacing:.18em;text-transform:uppercase;color:var(--godan);display:flex;align-items:center}
-  .modal details>summary::-webkit-details-marker{display:none}
-  .modal details>summary::after{content:"+";margin-left:auto;color:var(--muted);font-size:14px}
-  .modal details[open]>summary::after{content:"−"}
-  .modal details>.det-body{padding-top:8px;font-size:14px;line-height:1.5}
   /* .example / .ex-* / .exseg leveled-example block → styles/flashcards.css (Phase 2). */
 
   .count{font-family:var(--mono);font-size:11px;color:var(--muted);width:100%}
@@ -319,54 +270,10 @@
      who ask for it (content stays visible — the animations are entrances only). */
   @media (prefers-reduced-motion:reduce){*{transition:none!important;animation:none!important}}
 
-  /* ---- Account modal + cloud-sync chip ----------------------------------
-     The app works fully offline (localStorage); signing in mirrors progress
-     to the backing API. The account button lives in the navbar; the modal is a
-     simple email/password form shared by the login + register flows. */
-  /* (#syncStatus pill .acct-status → styles/chrome.css, Phase 1.) */
-  .modal-overlay{position:fixed;inset:0;background:rgba(28,23,20,.52);backdrop-filter:blur(7px) saturate(118%);-webkit-backdrop-filter:blur(7px) saturate(118%);display:none;align-items:center;justify-content:center;z-index:1000;padding:20px}
-  [data-theme="dark"] .modal-overlay{background:rgba(8,6,4,.64)}
-  .modal-overlay.show{display:flex}
-  /* surf-card sheet; the scroll-cap (max-height + overflow-y) keeps a tall modal
-     scrolling INSIDE its own height + the sticky .modal-x — don't remove these. */
-  .modal{position:relative;background:var(--surf-card);color:var(--ink);border:1px solid var(--line);border-radius:20px;max-width:420px;width:100%;padding:26px 28px;box-shadow:var(--card-shadow),var(--inner-hi);backdrop-filter:blur(26px) saturate(140%);-webkit-backdrop-filter:blur(26px) saturate(140%);max-height:calc(100vh - 40px);overflow-y:auto}
-  [data-theme="dark"] .modal{border-color:rgba(255,107,74,.18)}
-  /* When a tall modal (e.g. Settings) scrolls, keep its × pinned to the top-right of the scroll
-     viewport instead of scrolling away with the content (float keeps it out of the title's flow). */
-  .modal-overlay .modal-x{position:sticky;float:right;top:0}
-  .modal h2{font-family:var(--display);font-size:24px;font-weight:900;letter-spacing:-.01em}
-  .modal .sub{color:var(--muted);font-size:13px;margin-top:4px;margin-bottom:14px}
-  .modal label{display:block;font-family:var(--mono);font-size:10px;letter-spacing:.16em;text-transform:uppercase;color:var(--muted);margin:12px 0 4px}
-  .modal input{width:100%;font-family:var(--body);font-size:15px;border:1px solid var(--line);background:var(--surf-inset);padding:12px 14px;border-radius:11px;color:var(--ink)}
-  .modal input:focus{outline:none;border-color:var(--brand);box-shadow:0 0 0 3px var(--brand-soft)}
-  .modal-err{color:var(--godan);font-size:13px;margin-top:12px;min-height:18px;line-height:1.4}
-  .modal-actions{margin-top:18px}
-  .modal-actions .btn{width:100%;text-align:center}
-  .modal-foot{text-align:center;margin-top:16px;font-size:12px;color:var(--muted)}
-  .modal-foot a{color:var(--ichidan);cursor:pointer;text-decoration:underline}
-  /* Pinned to the modal corner (absolute, not float) so it never collides with
-     content that's also right-aligned — e.g. the class stamp in the detail modal. */
-  .modal-x{position:absolute;top:16px;right:18px;z-index:1;cursor:pointer;color:var(--muted);font-size:20px;line-height:1;background:var(--chip-bg);border:1px solid var(--line);width:34px;height:34px;display:inline-flex;align-items:center;justify-content:center;border-radius:10px;box-shadow:var(--lift-sm);transition:color .16s ease,border-color .16s ease,transform .16s ease}
-  .modal-x:hover{color:var(--brand);border-color:var(--brand);transform:translateY(-1px)}
-  /* Detail modal's top row reserves space so the stamp/JLPT column clears the ×. */
-  #detailBody .card-top{padding-right:30px}
-  /* Add/edit-verb modal: a wider form with a two-column field grid + selects. */
-  .modal.wide{max-width:560px}
-  .modal select, .modal textarea{width:100%;font-family:var(--body);font-size:15px;border:1px solid var(--line);background:var(--surf-inset);padding:12px 14px;border-radius:11px;color:var(--ink)}
-  .modal select:focus, .modal textarea:focus{outline:none;border-color:var(--brand);box-shadow:0 0 0 3px var(--brand-soft)}
-  .modal textarea{resize:vertical;min-height:46px;line-height:1.4}
-  .form-grid{display:grid;grid-template-columns:1fr 1fr;gap:0 16px}
-  .form-grid .full{grid-column:1 / -1}
-  @media(max-width:520px){.form-grid{grid-template-columns:1fr}}
-  /* Add-card "Pitch & leveled examples" disclosure: inline hints + a live pitch-accent preview
-     box sized to line up with the adjacent number input. */
-  .modal .field-hint{color:var(--muted);font-size:12px;line-height:1.55;margin:8px 0}
-  .modal .field-hint code{font-family:var(--mono);font-size:11px;background:var(--paper-2);padding:1px 4px;border-radius:3px}
-  .modal .acc-preview{min-height:41px;display:flex;align-items:center;font-family:var(--jp-font);font-size:20px;color:var(--ink)}
-  .modal-actions.split{display:flex;gap:10px}
-  .modal-actions.split .btn{width:auto;flex:1}
-  .btn.danger-btn{background:var(--chip-bg);border:1px solid var(--brand);color:var(--brand);flex:0 0 auto;box-shadow:none}
-  .btn.danger-btn:hover{background:var(--brand);color:var(--brand-on);border-color:var(--brand)}
+  /* ---- The modal + form kit (account/auth + add-card modal sheet, the Settings
+     setting-rows + Voice-priority editor, the in-modal <details>) → styles/modals.css
+     (Phase 9). The modal entrance keyframes (overlayIn/modalPop) stay in the motion
+     block above — modalPop is shared with the tap-a-word .word-pop below. ---- */
   /* Custom-verb affordances in Browse: a badge + edit/delete buttons. */
   .custom-badge{display:inline-block;font-family:var(--mono);font-size:9px;background:var(--ichidan);color:#fff;padding:2px 7px;border-radius:6px;letter-spacing:.1em;margin-top:6px}
   .verb-actions{display:flex;gap:8px;margin-top:10px}
@@ -375,8 +282,8 @@
   /* =========================================================================
      みんなの日本語 DASHBOARD (#panel-minna) — gate · vocab table · grammar ·
      conversation · notes · practice history → styles/minna.css (Phase 5).
-     The SHARED .speak-btn.playing + .minna-badge below STAY here, as does the
-     record-compare/speaking-bar kit further down (used by minna + selftalk + songs).
+     The SHARED .speak-btn.playing + .minna-badge below STAY here; the
+     record-compare/speaking-bar kit was peeled to styles/record-compare.css (Phase 9).
      ========================================================================= */
   /* Audio button — reuse .speak-btn look, add a playing state. */
   .speak-btn.playing{background:var(--ichidan);color:#fff;border-color:var(--ichidan)}
@@ -384,82 +291,6 @@
      badge below is shared with Browse cards, so it stays here. */
   .minna-badge{display:inline-block;font-family:var(--mono);font-size:9px;background:var(--adjective);color:#fff;padding:2px 7px;border-radius:6px;letter-spacing:.08em;margin-top:6px}
   /* (Minna notes + practice-history → styles/minna.css.) */
-  /* Record-and-compare (Phase 2). The rec-row is a subtle sub-row under each vocab
-     entry; the control holds a mic button + take list + compare player. A word and its OWN
-     controls are one unit — no rule between them (.mn-rec-row td zeroes its top edge to
-     0-width transparent — see the WebKit note above; `none`/`hidden` paint a phantom white line
-     in Safari). The NEXT word keeps its normal separator line (.mn-vocab td border-top) so the
-     controls visually belong to the word ABOVE them, not the one below. */
-  .mn-rec-row td{border-top:0 solid transparent;padding-top:2px;padding-bottom:16px}
-  .rec-control{display:flex;align-items:center;flex-wrap:wrap;gap:8px}
-  .rec-btn{display:inline-flex;align-items:center;gap:6px;background:var(--surf-inset);border:1px solid var(--line);color:var(--muted);border-radius:14px;padding:3px 10px 3px 8px;font-family:var(--mono);font-size:11px;letter-spacing:.06em;cursor:pointer;box-shadow:var(--lift-sm);transition:all .15s}
-  .rec-btn:hover{border-color:var(--godan);color:var(--godan);transform:translateY(-1px)}
-  .rec-btn .ic{font-size:14px}
-  /* Recording: a steady red so it reads as "live"; the reduced-motion rule below
-     keeps the pulse optional. */
-  .rec-btn.recording{border-color:var(--godan);color:#fff;background:var(--godan);animation:recPulse 1.1s ease-in-out infinite}
-  @keyframes recPulse{0%,100%{opacity:1}50%{opacity:.62}}
-  .rec-takes{display:inline-flex;align-items:center;gap:6px;flex-wrap:wrap}
-  .rec-take{display:inline-flex;align-items:center;border:1px solid var(--line);border-radius:13px;overflow:hidden;background:var(--paper-2);box-shadow:var(--lift-sm)}
-  .rec-take-play{display:inline-flex;align-items:center;gap:4px;background:none;border:none;color:var(--good);font-family:var(--mono);font-size:11px;padding:3px 8px;cursor:pointer}
-  .rec-take-play .ic{font-size:12px}
-  .rec-take-play.playing{background:var(--good);color:#fff}
-  .rec-take-del{background:none;border:none;border-left:1px solid var(--line);color:var(--muted);padding:3px 7px;cursor:pointer;display:inline-flex;align-items:center}
-  .rec-take-del:hover{color:var(--leech)}
-  .rec-take-del .ic{font-size:12px}
-  .rec-review{display:flex;align-items:center;flex-wrap:wrap;gap:8px}
-  .rec-review .rec-preview{height:32px;max-width:220px}
-  .rec-review .chip{font-size:11px;padding:4px 10px}
-  .rec-review .rec-save{border-color:var(--good);color:var(--good);font-weight:700}
-  .rec-unsupported{font-family:var(--body);font-size:12px;color:var(--muted);opacity:.85}
-  /* Speaking-mode bar — a toggle that opens a persistent mic stream + the device picker.
-     Record controls only render while it's on. */
-  .speaking-bar{display:flex;align-items:center;flex-wrap:wrap;gap:10px;margin:10px 0 16px;padding:10px 12px;border:1px solid var(--line);border-radius:12px;background:var(--paper-2)}
-  .speaking-bar.on{border-color:var(--godan);background:color-mix(in srgb,var(--godan) 7%,var(--paper-2))}
-  .speaking-toggle{display:inline-flex;align-items:center;gap:6px}
-  .speaking-toggle.active{background:var(--godan);color:#fff;border-color:var(--godan)}
-  .speaking-toggle .ic{font-size:14px}
-  .mic-pick{display:inline-flex;align-items:center;gap:6px}
-  .mic-lbl{font-family:var(--mono);font-size:10px;letter-spacing:.1em;text-transform:uppercase;color:var(--muted)}
-  .mic-select{background:var(--paper);color:var(--ink);border:1px solid var(--line);border-radius:6px;padding:5px 8px;font-family:var(--mono);font-size:12px;max-width:220px}
-  .mic-select:focus{outline:none;border-color:var(--ichidan)}
-  .cmp-speed{display:inline-flex;align-items:center;gap:5px}
-  .speed-chip{padding:3px 9px;font-size:11px}
-  .cmp-bias{display:inline-flex;align-items:center;gap:6px}
-  .bias-slider{width:96px;accent-color:var(--ichidan);cursor:pointer}
-  /* Compare player — ▶ you / ▶ native / ▶ native→you + loop. Shows once a take exists. */
-  .rec-compare{display:inline-flex;align-items:center;flex-wrap:wrap;gap:6px;margin-left:2px}
-  .cmp-label{font-family:var(--mono);font-size:9px;letter-spacing:.12em;text-transform:uppercase;color:var(--muted)}
-  .cmp-btn{display:inline-flex;align-items:center;gap:4px;background:var(--surf-inset);border:1px solid var(--line);color:var(--ichidan);border-radius:13px;padding:3px 9px;font-family:var(--mono);font-size:11px;cursor:pointer;box-shadow:var(--lift-sm);transition:all .15s}
-  .cmp-btn:hover{border-color:var(--ichidan);background:var(--paper-2);transform:translateY(-1px)}
-  .cmp-btn .ic{font-size:12px}
-  .cmp-btn.playing{background:var(--ichidan);color:#fff;border-color:var(--ichidan)}
-  .cmp-loop{color:var(--muted)}
-  .cmp-loop.active{background:var(--good);color:#fff;border-color:var(--good)}
-  /* ▶ reference button names the current compare voice (native / Siri F/M / Google). */
-  .cmp-ref .cmp-ref-lbl{font-family:var(--mono);font-size:10px;letter-spacing:.02em}
-  /* Dual waveform (you vs reference) — canvas painted by paintControlWaves; cursor is an overlay. */
-  .rec-wave-row{display:flex;flex-wrap:wrap;gap:12px;margin-top:7px;flex-basis:100%}
-  .rec-wave-wrap{position:relative;display:inline-block;width:140px;height:30px;background:var(--surf-inset);border-radius:8px;box-shadow:var(--lift-sm)}
-  canvas.rec-wave{display:block;width:140px;height:30px;border-radius:8px}
-  .rec-wave-cursor{position:absolute;top:0;bottom:0;left:0;width:2px;background:var(--ink);opacity:0;pointer-events:none;transition:opacity .12s}
-  .rec-wave-cap{position:absolute;top:-2px;right:1px;font-family:var(--mono);font-size:9px;letter-spacing:.1em;text-transform:uppercase;color:var(--muted);opacity:.7;pointer-events:none}
-  /* Conversation-line layout + clip marker. */
-  .mn-line-body{flex:1;min-width:0}
-  .mn-line-rec{display:flex;flex-wrap:wrap;align-items:center;gap:8px;margin-top:7px}
-  .clip-zone{display:inline-flex;align-items:center;gap:7px}
-  .clip-current{font-family:var(--mono);font-size:10px;color:var(--good);border:1px solid color-mix(in srgb,var(--good) 45%,var(--line));border-radius:10px;padding:1px 7px}
-  .clip-edit{background:none;border:1px dashed var(--line);color:var(--muted);border-radius:11px;padding:2px 9px;font-family:var(--mono);font-size:10px;letter-spacing:.04em;cursor:pointer}
-  .clip-edit:hover{border-color:var(--ichidan);color:var(--ichidan)}
-  .clip-marker{flex-basis:100%;border:1px solid var(--line);border-radius:8px;padding:10px;background:var(--paper-2);margin-top:4px}
-  .clip-audio{width:100%;height:34px;margin-bottom:8px}
-  .clip-marker-row{display:flex;flex-wrap:wrap;align-items:center;gap:7px}
-  .clip-marker-row .chip{font-size:11px;padding:4px 10px}
-  .clip-marker-row .clip-save{border-color:var(--good);color:var(--good);font-weight:700}
-  .clip-readout{font-family:var(--mono);font-size:11px;color:var(--muted)}
-  .clip-readout b{color:var(--ink)}
-  .clip-tip{font-family:var(--body);font-size:12px;color:var(--muted);opacity:.85;margin-top:7px}
-  @media (prefers-reduced-motion:reduce){ .rec-btn.recording{animation:none} }
   /* (minna vocab/role mobile overrides → styles/minna.css with its desktop rules.) */
 
   /* 独り言 Self-Talk (.st-*) → styles/selftalk.css (Phase 5). */

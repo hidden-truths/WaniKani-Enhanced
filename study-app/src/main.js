@@ -26,6 +26,8 @@ import './styles/tokens.css';
 import './styles/base.css';
 import './styles/chrome.css';
 import './styles.css';            // shared core (buttons/chips/inputs/filters) + not-yet-peeled surfaces
+import './styles/modals.css';     // shared modal + form kit (overlay/sheet/×, Settings rows, voice editor) ┐ shared-core
+import './styles/record-compare.css'; // shared record-and-compare + speaking-bar kit (minna/selftalk/songs) ┘ slot, after styles.css
 import './styles/flashcards.css'; // study-panel surface (peeled; overrides the shared core)
 import './styles/browse.css';     // browse grid + detail-memory (peeled)
 import './styles/stats.css';      // stats metric cards + chart panels + leech list (peeled)
