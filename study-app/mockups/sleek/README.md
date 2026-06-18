@@ -7,7 +7,16 @@ sepia-safe. Full critique: [../DESIGN_AUDIT_2026-06.md](../DESIGN_AUDIT_2026-06.
 
 Each file is a **self-contained HTML mock** (Google Fonts + inline CSS, no build). Serve
 with the `sleek-mocks` launch config (python http.server on :5192) and use the **Day / Night
-toggle** bottom-right.
+toggle** (bottom-right on each mock; top-right on the gallery).
+
+> **Start at [`index.html`](index.html)** — a **gallery** that indexes every mock with live
+> thumbnails and a single Day/Night switch that themes them all at once. Built for reviewing
+> the set in one place. (`flashcards.html` is the Flashcards surface; the gallery took over
+> `index.html` so the root URL lands on the index.)
+
+### How to review (e.g. a fresh critique session)
+1. `python3 -m http.server 5192` from this directory (or the `sleek-mocks` launch config).
+2. Open `http://localhost:5192/` → the gallery. Toggle Day/Night; click any tile to open it.
 
 ## Three directions explored
 
@@ -32,7 +41,8 @@ The shipped one to develop. Merges all three:
   *material*.
 
 ### Surfaces mocked in the blend (all surfaces, both themes)
-- `index.html` — Flashcards (home + nameplate card + subway-line SRS pipeline)
+- `index.html` — **the gallery** (live thumbnails of everything + a global Day/Night toggle)
+- `flashcards.html` — Flashcards (home + nameplate card + subway-line SRS pipeline)
 - `browse.html` — Browse (lighter filter bar + line-bullet vocab grid, ruby furigana)
 - `stats.html` — Progress dashboard (stat cards, gradient Leitner histogram, daily-accuracy line, leeches with line-bullets)
 - `minna.html` — 教科書 / みんなの日本語 (chapter picker, vocab list, grammar, model conversation, notes; owner-gated)

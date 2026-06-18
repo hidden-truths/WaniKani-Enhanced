@@ -1,0 +1,365 @@
+<!doctype html>
+<html lang="en" data-theme="day" data-furigana="on">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>日常日本語 — blend system (GENKŌ × nameplate × lacquer)</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Bricolage+Grotesque:opsz,wght@12..96,400;12..96,600;12..96,800&family=Hanken+Grotesk:wght@400;500;600;700;800&family=Spline+Sans+Mono:wght@400;500;600&family=Zen+Kaku+Gothic+New:wght@500;700;900&family=Zen+Old+Mincho:wght@400;600;700;900&display=swap" rel="stylesheet">
+<style>
+/* ============================================================
+   日常日本語 — BLEND DESIGN SYSTEM
+   Base: GENKŌ (rice-paper · sumi ink · red-pen vermilion · 縦書き rails · 原稿 grid)
+   + KAISATSU (line-colour = verb class · station-nameplate card · subway SRS pipeline)
+   + YORU (Night = black lacquer 漆 + maki-e gold 金, vermilion stays the brand signal)
+   ============================================================ */
+:root, :root[data-theme="day"]{
+  --paper:#F4F1E8; --paper-2:#FBFAF4; --sink:#ECE7D9;
+  --ink:#15130D; --ink-2:#4B4536; --muted:#857C66;
+  --line:#16130b1c; --line-2:#16130b12; --grid:#1d160814;
+  /* brand accent — the teacher's red pen 朱 */
+  --shu:#DC3A22; --shu-deep:#B12C16; --shu-wash:#dc3a2212;
+  /* maki-e gold (material; richer in Night) */
+  --gold:#9A6B0F; --gold-soft:#9a6b0f14;
+  /* ——— LINE COLOURS = verb / word classes (functional) ——— */
+  --godan:#DC3A22; --ichidan:#234C86; --irregular:#9A6B0F;
+  --adjective:#2C7D6B; --noun:#A06A1E; --adverb:#A14258; --phrase:#736353;
+  --leech:#7C3A95; --good:#2C7A4F;
+  --shadow:0 1px 0 #ffffffcc, 0 1px 2px #1a140820, 0 22px 40px -22px #2a200f2e;
+  --shadow-lg:0 1px 0 #ffffffcc, 0 2px 4px #1a140822, 0 48px 70px -34px #2a200f3a;
+  --cta-shadow:0 1px 2px #b12c1633, 0 14px 26px -12px #dc3a2255;
+  --card-edge:transparent;
+  --r:18px;
+}
+[data-theme="night"]{
+  --paper:#100D09; --paper-2:#1b1610; --sink:#171209;
+  --ink:#F1E9D8; --ink-2:#C0B49C; --muted:#857a64;
+  --line:#fff0d815; --line-2:#fff0d80a; --grid:#fff0d808;
+  --shu:#FF6B4A; --shu-deep:#FF6B4A; --shu-wash:#ff6b4a14;
+  --gold:#E7BC6B; --gold-soft:#e7bc6b18;
+  --godan:#FF6B4A; --ichidan:#8FA0EE; --irregular:#E0AC55;
+  --adjective:#5CC0A6; --noun:#D8A24E; --adverb:#D6818F; --phrase:#AB9A85;
+  --leech:#C792EA; --good:#56D29A;
+  --shadow:0 1px 2px #00000060, 0 24px 44px -24px #000000aa;
+  --shadow-lg:0 2px 6px #00000066, 0 50px 80px -36px #000000cc, 0 0 0 1px #e7bc6b0f;
+  --cta-shadow:0 0 0 1px #ff6b4a22, 0 16px 34px -14px #ff6b4a66;
+  --card-edge:linear-gradient(150deg,#e7bc6b66,transparent 38%);
+}
+*{box-sizing:border-box;margin:0;padding:0}
+html{-webkit-font-smoothing:antialiased;text-rendering:optimizeLegibility}
+body{font-family:"Hanken Grotesk",system-ui,sans-serif;color:var(--ink);background:var(--paper);line-height:1.5;min-height:100vh;overflow-x:hidden;position:relative}
+/* DAY: 原稿 manuscript grid, masked. NIGHT: lacquer gold glow + grain. */
+body::before{content:"";position:fixed;inset:0;z-index:0;pointer-events:none;
+  background:linear-gradient(var(--grid) 1px,transparent 1px) 0 0/100% 30px,linear-gradient(90deg,var(--grid) 1px,transparent 1px) 0 0/30px 100%;
+  -webkit-mask-image:radial-gradient(120% 80% at 50% 0%,#000,#0009 42%,transparent 78%);mask-image:radial-gradient(120% 80% at 50% 0%,#000,#0009 42%,transparent 78%);opacity:.9}
+[data-theme="night"] body::before{
+  background:radial-gradient(900px 600px at 84% -8%,rgba(231,188,107,.13),transparent 60%),radial-gradient(1100px 800px at 50% 116%,rgba(255,107,74,.07),transparent 60%);
+  -webkit-mask-image:none;mask-image:none;opacity:1}
+[data-theme="night"] body::after{content:"";position:fixed;inset:0;z-index:0;pointer-events:none;opacity:.4;mix-blend-mode:overlay;
+  background-image:url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='120' height='120'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='.9' numOctaves='2'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23n)' opacity='.5'/%3E%3C/svg%3E")}
+
+.mono{font-family:"Spline Sans Mono",monospace}.disp{font-family:"Bricolage Grotesque",sans-serif}
+.jp{font-family:"Zen Kaku Gothic New",sans-serif}.jp-min{font-family:"Zen Old Mincho",serif}
+/* furigana = ruby OVER the kanji, toggle-able (mirrors the app's data-furigana) */
+ruby{ruby-align:center}
+rt{font-family:"Zen Kaku Gothic New";font-weight:500;color:var(--ichidan);letter-spacing:.03em;line-height:1;user-select:none;transition:opacity .25s}
+[data-furigana="off"] rt{opacity:0}
+.furi-tog{position:relative}
+.furi-tog .jp{font-weight:700;font-size:15px}
+.furi-tog.off{color:var(--muted);background:var(--sink)}
+.furi-tog::after{content:"";position:absolute;right:6px;top:6px;width:6px;height:6px;border-radius:50%;background:var(--shu)}
+.furi-tog.off::after{background:var(--muted)}
+
+/* ===== CHROME ===== */
+.chrome{position:sticky;top:0;z-index:50;display:flex;align-items:center;gap:26px;padding:16px clamp(20px,4vw,52px);background:color-mix(in srgb,var(--paper) 82%,transparent);backdrop-filter:saturate(1.3) blur(14px);border-bottom:1px solid var(--line)}
+.brand{display:flex;align-items:center;gap:12px}
+.brand .seal{width:30px;height:30px;border-radius:8px;display:grid;place-items:center;flex:0 0 auto;background:var(--shu);color:#fff;font-family:"Zen Old Mincho",serif;font-weight:700;font-size:16px;box-shadow:var(--cta-shadow)}
+[data-theme="night"] .brand .seal{background:linear-gradient(150deg,var(--gold),#c89a45);color:#1a1206}
+.brand b{font-family:"Zen Kaku Gothic New";font-weight:900;font-size:19px;letter-spacing:.02em}
+.brand small{font-family:"Spline Sans Mono";font-size:10px;letter-spacing:.28em;color:var(--muted);text-transform:uppercase}
+.nav{display:flex;gap:4px;margin-left:8px}
+.nav a{position:relative;padding:8px 13px;border-radius:9px;cursor:pointer;font-weight:600;font-size:14.5px;color:var(--ink-2);text-decoration:none;transition:.18s}
+.nav a .jp{font-weight:700}
+.nav a:hover{color:var(--ink);background:var(--shu-wash)}
+.nav a.on{color:var(--ink)}
+.nav a.on::after{content:"";position:absolute;left:13px;right:13px;bottom:1px;height:2.5px;background:var(--shu);border-radius:2px}
+.actions{margin-left:auto;display:flex;align-items:center;gap:10px}
+.icon{width:38px;height:38px;border-radius:50%;display:grid;place-items:center;cursor:pointer;background:var(--paper-2);border:1px solid var(--line);color:var(--ink-2);box-shadow:var(--shadow);transition:.18s}
+.icon:hover{color:var(--ink);transform:translateY(-1px)}
+.icon svg{width:18px;height:18px;fill:none;stroke:currentColor;stroke-width:1.7;stroke-linecap:round;stroke-linejoin:round}
+.avatar{background:linear-gradient(150deg,var(--shu),var(--shu-deep));color:#fff;border:none;font-weight:700;font-family:"Spline Sans Mono"}
+[data-theme="night"] .avatar{background:linear-gradient(150deg,var(--gold),#c89a45);color:#1a1206}
+
+.sheet{position:relative;z-index:1;max-width:1200px;margin:0 auto;padding:0 clamp(20px,4vw,52px) 120px}
+.marker{display:flex;align-items:baseline;gap:16px;padding:46px 0 22px}
+.marker .idx{font-family:"Bricolage Grotesque";font-weight:800;font-size:34px;line-height:1;letter-spacing:-.02em}
+[data-theme="night"] .marker .idx{color:var(--gold)}
+.marker .idx .slash{color:var(--muted);font-weight:600}
+.marker .ttl{font-family:"Zen Old Mincho";font-weight:600;font-size:17px;letter-spacing:.14em}
+.marker .en{font-family:"Spline Sans Mono";font-size:11px;letter-spacing:.26em;text-transform:uppercase;color:var(--muted)}
+.marker .rule{flex:1;height:1px;background:var(--line);align-self:center}
+.marker.submarker{padding:30px 0 18px}
+.marker.submarker .ttl{font-size:15px;color:var(--ink-2)}
+.marker.submarker::before{content:"";width:24px;height:2px;background:var(--shu);align-self:center;border-radius:2px}
+
+/* ===== 01 HOME ===== */
+.home{display:grid;grid-template-columns:54px 1fr 360px;gap:34px;align-items:start}
+.rail{display:flex;flex-direction:column;align-items:center;gap:18px;padding-top:6px;align-self:stretch}
+.rail .vtext{writing-mode:vertical-rl;text-orientation:upright;font-family:"Zen Old Mincho";font-weight:600;font-size:20px;letter-spacing:.34em;color:var(--ink)}
+.rail .tick{flex:1;width:1px;background:linear-gradient(var(--line),transparent);min-height:40px}
+.rail .stamp{writing-mode:vertical-rl;font-family:"Spline Sans Mono";font-size:10px;letter-spacing:.3em;color:var(--muted);text-transform:uppercase}
+.console{padding-top:4px}
+.kick{display:flex;align-items:center;gap:10px;font-family:"Spline Sans Mono";font-size:11.5px;letter-spacing:.24em;text-transform:uppercase;color:var(--shu);font-weight:500}
+.kick .ln{width:30px;height:1px;background:var(--shu);opacity:.6}
+.kick .jp-min{font-family:"Zen Old Mincho";color:var(--ink);letter-spacing:.1em;text-transform:none;font-size:13px}
+.bignum{font-family:"Bricolage Grotesque";font-weight:800;letter-spacing:-.04em;font-size:clamp(150px,21vw,260px);line-height:.82;margin:6px 0 0 -6px;background:linear-gradient(176deg,var(--ink),#2a2417);-webkit-background-clip:text;background-clip:text;color:transparent}
+[data-theme="night"] .bignum{background:linear-gradient(176deg,#fff,var(--gold));-webkit-background-clip:text;background-clip:text;filter:drop-shadow(0 14px 40px rgba(231,188,107,.2))}
+.bignum .unit{-webkit-text-fill-color:var(--shu);font-size:.3em;vertical-align:.9em;letter-spacing:0;margin-left:8px;font-weight:600}
+.baseline{height:2px;background:var(--ink);width:min(520px,100%);margin:2px 0 16px}
+[data-theme="night"] .baseline{background:linear-gradient(90deg,var(--gold),transparent)}
+.subline{display:flex;align-items:baseline;gap:8px;font-size:17px;color:var(--ink-2)}
+.subline b{color:var(--ink);font-weight:700}.subline .dot{width:5px;height:5px;border-radius:50%;background:var(--shu);align-self:center}
+.cta-row{display:flex;gap:12px;margin-top:26px;flex-wrap:wrap}
+.btn{display:inline-flex;align-items:center;gap:10px;cursor:pointer;border:1px solid var(--line);font-family:inherit;font-weight:700;font-size:15.5px;padding:15px 24px;border-radius:13px;transition:.18s;color:var(--ink);background:var(--paper-2);box-shadow:var(--shadow)}
+.btn:hover{transform:translateY(-2px);box-shadow:var(--shadow-lg)}
+.btn svg{width:18px;height:18px;fill:none;stroke:currentColor;stroke-width:2;stroke-linecap:round;stroke-linejoin:round}
+.btn.primary{background:linear-gradient(168deg,var(--shu),var(--shu-deep));color:#fff;border:none;box-shadow:var(--cta-shadow);padding-right:26px}
+.btn .kbd{font-family:"Spline Sans Mono";font-size:11px;opacity:.7;border:1px solid currentColor;border-radius:5px;padding:1px 5px}
+.meta-row{display:flex;gap:26px;margin-top:34px;padding-top:20px;border-top:1px solid var(--line)}
+.meta{display:flex;flex-direction:column;gap:3px}
+.meta .n{font-family:"Bricolage Grotesque";font-weight:700;font-size:26px;line-height:1}
+.meta .n.shu{color:var(--shu)}.meta .n.ind{color:var(--ichidan)}.meta .n.plum{color:var(--leech)}
+.meta .l{font-family:"Spline Sans Mono";font-size:10.5px;letter-spacing:.16em;text-transform:uppercase;color:var(--muted)}
+
+.upcoming{background:var(--paper-2);border:1px solid var(--line);border-radius:var(--r);box-shadow:var(--shadow-lg);padding:22px 22px 18px;position:relative;overflow:hidden}
+.upcoming::before{content:"";position:absolute;left:0;right:0;top:0;height:3px;background:linear-gradient(90deg,var(--shu),var(--irregular))}
+.upcoming h3{display:flex;align-items:center;justify-content:space-between;font-size:15px;font-weight:700}
+.upcoming h3 .when{font-family:"Spline Sans Mono";font-size:10px;letter-spacing:.18em;color:var(--muted);text-transform:uppercase}
+.upcoming .lead{font-size:12.5px;color:var(--muted);margin:4px 0 18px}
+.spark{display:flex;align-items:flex-end;gap:7px;height:118px;padding-bottom:22px;border-bottom:1px solid var(--line)}
+.spark .bar{flex:1;border-radius:4px 4px 0 0;background:var(--sink);position:relative;min-height:5px}
+.spark .bar.lit{background:linear-gradient(var(--shu),var(--shu-deep))}
+.spark .bar.lit.gold{background:linear-gradient(var(--irregular),#7d560a)}
+[data-theme="night"] .spark .bar.lit{box-shadow:0 0 16px -4px var(--shu)}
+.spark .bar span{position:absolute;bottom:-20px;left:0;right:0;text-align:center;font-family:"Zen Kaku Gothic New";font-size:11px;color:var(--muted)}
+.spark .bar b{position:absolute;top:-17px;left:0;right:0;text-align:center;font-family:"Bricolage Grotesque";font-size:12px;color:var(--ink)}
+.upfoot{display:flex;justify-content:space-between;align-items:center;margin-top:16px}
+.upfoot .tot{font-size:13px;color:var(--ink-2)}.upfoot .tot b{font-family:"Bricolage Grotesque";font-size:17px;color:var(--ink)}
+.linkbtn{font-family:"Spline Sans Mono";font-size:10.5px;letter-spacing:.12em;text-transform:uppercase;color:var(--shu);cursor:pointer;display:flex;align-items:center;gap:5px;font-weight:600}
+
+/* SRS pipeline as a subway line (from KAISATSU) */
+.pipe{margin:30px 0 0;background:var(--paper-2);border:1px solid var(--line);border-radius:var(--r);box-shadow:var(--shadow);padding:20px 30px 26px}
+.pipe .ph{display:flex;justify-content:space-between;align-items:center;margin-bottom:6px}
+.pipe .ph .t{font-weight:700;font-size:14px;display:flex;gap:9px;align-items:center}
+.pipe .ph .t .jp-min{font-family:"Zen Old Mincho";color:var(--muted);font-weight:600}
+.pipe .ph .leg{font-family:"Spline Sans Mono";font-size:10px;letter-spacing:.14em;text-transform:uppercase;color:var(--muted)}
+.lineviz{display:flex;align-items:center;margin-top:26px}
+.lineviz .seg{flex:1;height:5px;border-radius:3px;background:var(--line)}
+.lineviz .stop{display:flex;flex-direction:column;align-items:center;position:relative}
+.lineviz .dot{width:17px;height:17px;border-radius:50%;border:3px solid var(--ink-2);background:var(--paper-2);z-index:1}
+.lineviz .dot.fill{background:var(--ink-2)}
+.lineviz .stop.cur .dot{border-color:var(--shu);background:var(--shu);box-shadow:0 0 0 4px var(--shu-wash)}
+.lineviz .stop b{position:absolute;top:-23px;font-family:"Bricolage Grotesque";font-weight:700;font-size:14px}
+.lineviz .stop em{position:absolute;top:24px;font-style:normal;font-family:"Spline Sans Mono";font-size:9.5px;color:var(--muted);white-space:nowrap}
+
+/* ===== 02 NAMEPLATE CARD ===== */
+.cardwrap{display:grid;grid-template-columns:54px 1fr;gap:34px}
+.card{position:relative;background:var(--paper-2);border:1px solid var(--line);border-radius:24px;box-shadow:var(--shadow-lg);overflow:hidden}
+.card::after{content:"";position:absolute;inset:0;border-radius:24px;padding:1px;background:var(--card-edge);-webkit-mask:linear-gradient(#000 0 0) content-box,linear-gradient(#000 0 0);-webkit-mask-composite:xor;mask-composite:exclude;pointer-events:none}
+/* line-colour header bar = the verb-class "line" */
+.nphead{display:flex;justify-content:space-between;align-items:center;padding:11px 22px;background:color-mix(in srgb,var(--irregular) 16%,var(--paper-2));border-bottom:1px solid color-mix(in srgb,var(--irregular) 30%,transparent)}
+.nphead .l{display:flex;align-items:center;gap:11px;font-family:"Spline Sans Mono";font-size:11.5px;letter-spacing:.1em;color:var(--ink-2);font-weight:500}
+.nphead .l .bullet{width:13px;height:13px;border-radius:50%;background:var(--irregular);box-shadow:0 0 0 3px color-mix(in srgb,var(--irregular) 22%,transparent)}
+.nphead .l b{color:var(--irregular);font-weight:600}.nphead .l .jp{font-family:"Zen Kaku Gothic New"}
+.nphead .r{font-family:"Spline Sans Mono";font-size:11px;letter-spacing:.08em;color:var(--muted);display:flex;gap:13px;align-items:center}
+.card-body{padding:30px 44px 30px;position:relative}
+.nameplate{text-align:center;position:relative}
+.np-seal{position:absolute;top:-4px;right:0;width:66px;height:66px;border-radius:50%;display:grid;place-items:center;border:2.5px solid var(--irregular);color:var(--irregular);font-family:"Zen Old Mincho";font-weight:700;font-size:28px;box-shadow:inset 0 0 0 4px var(--paper-2),inset 0 0 0 5px color-mix(in srgb,var(--irregular) 28%,transparent)}
+[data-theme="night"] .np-seal{box-shadow:inset 0 0 0 4px var(--paper-2),0 0 22px -6px var(--irregular)}
+.furi{font-family:"Zen Kaku Gothic New";font-weight:700;font-size:25px;color:var(--ichidan);letter-spacing:.05em;position:relative;display:inline-block;padding-top:9px}
+.furi .p{position:absolute;top:0;left:1px;right:1px;height:7px;border:2.5px solid var(--ichidan);border-bottom:none;border-radius:5px 5px 0 0;opacity:.85}
+[data-theme="night"] .furi .p{box-shadow:0 0 12px -2px var(--ichidan)}
+.name{font-family:"Zen Kaku Gothic New";font-weight:900;font-size:clamp(80px,11vw,128px);line-height:1.5;letter-spacing:.02em;margin:2px 0}
+.name .ok{color:var(--muted)}
+.name rt{font-size:.2em;font-weight:600;padding-bottom:.18em}
+[data-theme="night"] .name rt{color:var(--ichidan)}
+.romaji{font-family:"Bricolage Grotesque";font-weight:600;font-size:42px;letter-spacing:-.01em;color:var(--ink);position:relative;display:inline-block;margin-top:4px}
+.romaji::after{content:"";position:absolute;left:-2px;right:-2px;bottom:-7px;height:7px;background:url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='120' height='7' viewBox='0 0 120 7'%3E%3Cpath d='M1 4 Q 30 1 60 4 T 119 3' fill='none' stroke='%23DC3A22' stroke-width='2.4' stroke-linecap='round'/%3E%3C/svg%3E") repeat-x center/auto 7px}
+[data-theme="night"] .romaji::after{background:url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='120' height='7' viewBox='0 0 120 7'%3E%3Cpath d='M1 4 Q 30 1 60 4 T 119 3' fill='none' stroke='%23FF6B4A' stroke-width='2.4' stroke-linecap='round'/%3E%3C/svg%3E") repeat-x center/auto 7px}
+/* adjacent-card row (prev / play / next) */
+.adj{display:flex;justify-content:space-between;align-items:center;margin-top:26px}
+.adj .st{display:flex;align-items:center;gap:9px;color:var(--muted);font-size:13.5px;font-weight:600}
+.adj .st b{color:var(--ink-2)}.adj .st .jp{font-family:"Zen Kaku Gothic New"}
+.adj .st svg{width:17px;height:17px;fill:none;stroke:currentColor;stroke-width:2.2;stroke-linecap:round;stroke-linejoin:round}
+.adj .mid{display:flex;gap:12px;align-items:center}
+.adj .play{width:50px;height:50px;border-radius:50%;border:1px solid var(--line);background:var(--paper);display:grid;place-items:center;cursor:pointer;color:var(--shu);box-shadow:var(--shadow)}
+.adj .play svg{width:18px;height:18px;fill:currentColor}
+.adj .acc{font-family:"Spline Sans Mono";font-size:11px;color:var(--muted);border:1px solid var(--line);border-radius:7px;padding:5px 9px}
+
+.divider{height:1px;background:var(--line);margin:26px 0}
+.tags{display:flex;gap:9px;flex-wrap:wrap;align-items:center}
+.tag{font-family:"Spline Sans Mono";font-size:11.5px;letter-spacing:.06em;padding:6px 11px;border-radius:8px;border:1px solid var(--line);color:var(--ink-2);display:flex;align-items:center;gap:7px}
+.tag .bul{width:7px;height:7px;border-radius:2px;background:var(--irregular)}
+.tag.cls{color:var(--irregular);border-color:color-mix(in srgb,var(--irregular) 40%,transparent);background:color-mix(in srgb,var(--irregular) 9%,transparent);font-weight:600}
+.tag.ji{color:var(--shu);border-color:color-mix(in srgb,var(--shu) 35%,transparent);cursor:pointer}
+.tag.ji svg{width:12px;height:12px;fill:none;stroke:currentColor;stroke-width:2}
+.notes{display:grid;grid-template-columns:1fr 1fr;gap:14px;margin-top:18px}
+.note{background:var(--sink);border-radius:13px;padding:14px 16px;border:1px solid var(--line-2)}
+.note .h{font-family:"Spline Sans Mono";font-size:10px;letter-spacing:.18em;text-transform:uppercase;color:var(--muted);display:flex;gap:7px;align-items:center;margin-bottom:6px}
+.note .h .jp-min{font-family:"Zen Old Mincho";letter-spacing:.05em;text-transform:none;font-size:12px;color:var(--ink-2)}
+.note p{font-size:14px;color:var(--ink-2)}.note p .jp{color:var(--ink);font-weight:500}
+.example{margin-top:14px;background:linear-gradient(180deg,var(--shu-wash),transparent);border:1px solid color-mix(in srgb,var(--shu) 16%,transparent);border-radius:13px;padding:18px 20px}
+.example .h{font-family:"Spline Sans Mono";font-size:10px;letter-spacing:.18em;text-transform:uppercase;color:var(--shu);display:flex;justify-content:space-between;align-items:center;margin-bottom:10px}
+.example .h .tools{display:flex;gap:8px}
+.example .h .tools i{width:24px;height:24px;border-radius:7px;border:1px solid var(--line);display:grid;place-items:center;color:var(--ink-2);cursor:pointer}
+.example .h .tools i svg{width:13px;height:13px;fill:none;stroke:currentColor;stroke-width:1.8}
+.example .jp{font-family:"Zen Kaku Gothic New";font-weight:500;font-size:27px;letter-spacing:.01em;line-height:2}
+.example .jp rt{font-size:.42em;color:var(--muted);font-weight:500}
+.example .jp em{font-style:normal;color:var(--shu);text-decoration:underline;text-decoration-color:var(--shu);text-decoration-thickness:2px;text-underline-offset:4px}
+.example .jp em rt{color:var(--shu)}
+.example .en{font-size:14px;color:var(--muted);margin-top:6px;font-style:italic}
+.grade{display:grid;grid-template-columns:1fr 1.4fr;gap:14px;margin-top:22px}
+.grade button{font-family:inherit;cursor:pointer;border-radius:14px;padding:18px;font-weight:700;font-size:16px;display:flex;align-items:center;justify-content:center;gap:10px;transition:.16s;border:1px solid var(--line)}
+.grade button svg{width:18px;height:18px;fill:none;stroke:currentColor;stroke-width:2.2;stroke-linecap:round}
+.grade .wrong{background:var(--paper);color:var(--ink-2)}
+.grade .wrong:hover{border-color:color-mix(in srgb,var(--shu) 45%,transparent);color:var(--shu);transform:translateY(-2px)}
+.grade .right{background:linear-gradient(168deg,var(--good),#1f6440);color:#fff;border:none;box-shadow:0 14px 26px -14px var(--good)}
+.grade .right:hover{transform:translateY(-2px)}
+.grade .kbd{font-family:"Spline Sans Mono";font-size:11px;opacity:.7;border:1px solid currentColor;border-radius:5px;padding:0 6px;font-weight:500}
+.cardprog{display:flex;align-items:center;gap:14px;padding:14px 22px 0}
+.cardprog .track{flex:1;height:3px;background:var(--sink);border-radius:3px;overflow:hidden}
+.cardprog .track i{display:block;height:100%;width:1%;background:var(--shu);border-radius:3px}
+.cardprog .count{font-family:"Spline Sans Mono";font-size:12px;color:var(--muted)}.cardprog .count b{color:var(--ink);font-family:"Bricolage Grotesque"}
+
+.foot{display:flex;justify-content:space-between;align-items:center;margin-top:60px;padding-top:22px;border-top:1px solid var(--line);font-family:"Spline Sans Mono";font-size:10.5px;letter-spacing:.18em;text-transform:uppercase;color:var(--muted)}
+.foot .jp-min{font-family:"Zen Old Mincho";letter-spacing:.1em;text-transform:none;font-size:13px;color:var(--ink-2)}
+
+@keyframes rise{from{opacity:0;transform:translateY(16px)}to{opacity:1;transform:none}}
+.rise{animation:rise .7s cubic-bezier(.2,.7,.2,1) both}
+.d1{animation-delay:.05s}.d2{animation-delay:.12s}.d3{animation-delay:.19s}.d4{animation-delay:.26s}.d5{animation-delay:.33s}
+
+.themer{position:fixed;right:18px;bottom:18px;z-index:99;display:flex;gap:4px;background:var(--paper-2);border:1px solid var(--line);border-radius:30px;padding:4px;box-shadow:var(--shadow-lg)}
+.themer button{font-family:"Spline Sans Mono";font-size:11px;letter-spacing:.1em;border:none;background:none;color:var(--muted);padding:7px 14px;border-radius:24px;cursor:pointer;text-transform:uppercase}
+.themer button.on{background:var(--shu);color:#fff}
+[data-theme="night"] .themer button.on{background:var(--gold);color:#1a1206}
+@media(max-width:1000px){.home{grid-template-columns:1fr}.rail{display:none}.cardwrap{grid-template-columns:1fr}.upcoming{order:-1}}
+</style>
+</head>
+<body>
+<header class="chrome">
+  <div class="brand"><div class="seal">日</div><div style="display:flex;flex-direction:column;line-height:1.05"><b class="jp">日常日本語</b><small>Japanese Trainer</small></div></div>
+  <nav class="nav"><a class="on">Flashcards</a><a>Browse</a><a>Stats</a><a><span class="jp">教科書</span></a><a><span class="jp">独り言</span></a><a><span class="jp">歌</span></a></nav>
+  <div class="actions">
+    <div class="icon furi-tog on" id="furiTog" title="Furigana on/off"><span class="jp">ふ</span></div>
+    <div class="icon"><svg viewBox="0 0 24 24"><circle cx="12" cy="12" r="4.5"/><path d="M12 2v2M12 20v2M2 12h2M20 12h2M5 5l1.5 1.5M17.5 17.5 19 19M19 5l-1.5 1.5M6.5 17.5 5 19"/></svg></div>
+    <div class="icon"><svg viewBox="0 0 24 24"><circle cx="12" cy="12" r="3"/><path d="M19 12a7 7 0 0 0-.1-1.2l2-1.6-2-3.4-2.4 1a7 7 0 0 0-2-1.2L14 2h-4l-.5 2.6a7 7 0 0 0-2 1.2l-2.4-1-2 3.4 2 1.6A7 7 0 0 0 5 12c0 .4 0 .8.1 1.2l-2 1.6 2 3.4 2.4-1a7 7 0 0 0 2 1.2L10 22h4l.5-2.6a7 7 0 0 0 2-1.2l2.4 1 2-3.4-2-1.6c.1-.4.1-.8.1-1.2Z"/></svg></div>
+    <div class="icon avatar">J</div>
+  </div>
+</header>
+
+<main class="sheet">
+  <div class="marker rise d1"><div class="idx">01<span class="slash"> / </span><span style="color:var(--muted)">06</span></div><div class="ttl jp-min">復習</div><div class="en">Today&rsquo;s review</div><div class="rule"></div></div>
+
+  <section class="home">
+    <aside class="rail rise d2"><div class="vtext jp-min">今日の課題</div><div class="tick"></div><div class="stamp">日 / 06.18</div></aside>
+    <div class="console">
+      <div class="kick rise d2"><span class="ln"></span>Due now<span class="jp-min">・要復習</span></div>
+      <div class="bignum rise d2">100<span class="unit">cards</span></div>
+      <div class="baseline rise d3"></div>
+      <div class="subline rise d3"><b>0</b> studied today<span class="dot"></span> deck in rotation <b>100 / 100</b></div>
+      <div class="cta-row rise d4">
+        <button class="btn primary">Review due cards <svg viewBox="0 0 24 24"><path d="M5 12h14M13 6l6 6-6 6"/></svg></button>
+        <button class="btn"><svg viewBox="0 0 24 24"><path d="M4 6h16M4 12h16M4 18h10"/></svg> Free study</button>
+        <button class="btn"><svg viewBox="0 0 24 24"><path d="M3 6h18M6 6v12a2 2 0 0 0 2 2h8a2 2 0 0 0 2-2V6M10 11v5M14 11v5"/></svg> Customize <span class="kbd">F</span></button>
+      </div>
+      <div class="meta-row rise d5">
+        <div class="meta"><div class="n shu">100</div><div class="l">Due today</div></div>
+        <div class="meta"><div class="n">0d</div><div class="l">Streak</div></div>
+        <div class="meta"><div class="n ind">3.2k</div><div class="l">Reviews logged</div></div>
+        <div class="meta"><div class="n plum">0</div><div class="l">Active leeches</div></div>
+      </div>
+    </div>
+    <aside class="upcoming rise d4">
+      <h3>Upcoming reviews <span class="when">7 days</span></h3>
+      <div class="lead">Drill cards to start the clock — your schedule fills as boxes climb.</div>
+      <div class="spark">
+        <div class="bar lit" style="height:78%"><b>42</b><span>今</span></div>
+        <div class="bar lit gold" style="height:46%"><b>24</b><span>火</span></div>
+        <div class="bar" style="height:22%"><b>11</b><span>水</span></div>
+        <div class="bar lit" style="height:60%"><b>31</b><span>木</span></div>
+        <div class="bar" style="height:16%"><b>8</b><span>金</span></div>
+        <div class="bar" style="height:34%"><b>18</b><span>土</span></div>
+        <div class="bar lit gold" style="height:50%"><b>26</b><span>日</span></div>
+      </div>
+      <div class="upfoot"><div class="tot"><b>160</b> reviews queued</div><div class="linkbtn">Forecast →</div></div>
+    </aside>
+  </section>
+
+  <!-- SRS pipeline = subway line -->
+  <div class="pipe rise d5" style="margin-left:88px">
+    <div class="ph"><div class="t">記憶パイプライン <span class="jp-min">・</span><span style="color:var(--muted);font-weight:500">Memory pipeline</span></div><div class="leg">Leitner boxes · higher = better learned</div></div>
+    <div class="lineviz">
+      <div class="stop cur"><b>100</b><div class="dot fill"></div><em>New</em></div><div class="seg"></div>
+      <div class="stop"><b>0</b><div class="dot"></div><em>Box 1 · 1d</em></div><div class="seg"></div>
+      <div class="stop"><b>0</b><div class="dot"></div><em>Box 2 · 2d</em></div><div class="seg"></div>
+      <div class="stop"><b>0</b><div class="dot"></div><em>Box 3 · 4d</em></div><div class="seg"></div>
+      <div class="stop"><b>0</b><div class="dot"></div><em>Box 4 · 8d</em></div><div class="seg"></div>
+      <div class="stop"><b>0</b><div class="dot"></div><em>Mastered · 16d</em></div>
+    </div>
+  </div>
+
+  <div class="marker submarker rise d2" style="margin-top:30px"><div class="ttl jp-min">札</div><div class="en">The card</div><div class="rule"></div></div>
+
+  <section class="cardwrap">
+    <aside class="rail rise d3"><div class="vtext jp-min" style="color:var(--irregular)">不規則</div><div class="tick"></div><div class="stamp">1 / 100</div></aside>
+    <div class="card rise d3">
+      <div class="cardprog"><span class="count"><b>1</b> / 100</span><div class="track"><i></i></div><span class="count">recalled <b style="color:var(--shu)">—</b></span></div>
+      <!-- line-colour header bar = the class "line" -->
+      <div class="nphead">
+        <div class="l"><span class="bullet"></span><b class="jp">不規則</b> · IRREGULAR · する-verb</div>
+        <div class="r"><span>READ &amp; RECALL</span><span>MEANING + READING</span></div>
+      </div>
+      <div class="card-body">
+        <div class="nameplate">
+          <div class="np-seal">料</div>
+          <div class="name jp"><ruby>料<rt>りょう</rt>理<rt>り</rt></ruby><span class="ok">する</span></div>
+          <div class="romaji disp">to cook</div>
+          <div class="adj">
+            <div class="st"><svg viewBox="0 0 24 24"><path d="M19 12H5M11 6l-6 6 6 6"/></svg> prev <span class="jp">借りる</span></div>
+            <div class="mid"><span class="acc">accent [0]</span><button class="play"><svg viewBox="0 0 24 24"><path d="M8 5v14l11-7z"/></svg></button></div>
+            <div class="st">next <span class="jp">来る</span> <svg viewBox="0 0 24 24"><path d="M5 12h14M13 6l6 6-6 6"/></svg></div>
+          </div>
+        </div>
+        <div class="divider"></div>
+        <div class="tags">
+          <span class="tag cls"><span class="bul"></span>IRREG · 不規則</span>
+          <span class="tag">N4</span><span class="tag">SURU</span>
+          <span class="tag ji">View on Jisho <svg viewBox="0 0 24 24"><path d="M7 17 17 7M9 7h8v8"/></svg></span>
+        </div>
+        <div class="notes">
+          <div class="note"><div class="h">✎ Mnemonic <span class="jp-min">語呂</span></div><p><span class="jp">料理</span>(cooking) + <span class="jp">する</span> — the textbook "do a noun" verb.</p></div>
+          <div class="note"><div class="h">⚠ Trap / tip</div><p>Or just <span class="jp">作る</span> for making a single dish.</p></div>
+        </div>
+        <div class="example">
+          <div class="h">例文 · Example <span class="tools"><i><svg viewBox="0 0 24 24"><path d="M8 5v14l11-7z"/></svg></i><i><svg viewBox="0 0 24 24"><path d="M8 8h12v12H8zM4 4h12v2M4 4v12h2"/></svg></i></span></div>
+          <div class="jp"><ruby>夕<rt>ゆう</rt>飯<rt>はん</rt></ruby>を<em><ruby>料<rt>りょう</rt>理<rt>り</rt></ruby>する</em>。</div><div class="en">Cook dinner.</div>
+        </div>
+        <div class="grade">
+          <button class="wrong"><svg viewBox="0 0 24 24"><path d="M6 6l12 12M18 6 6 18"/></svg> Got it wrong <span class="kbd">1</span></button>
+          <button class="right"><svg viewBox="0 0 24 24"><path d="M5 13l4 4L19 7"/></svg> Got it right <span class="kbd">2</span></button>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <div class="foot"><span>日常日本語 · blend system</span><span class="jp-min">日々是好日</span><span>GENKŌ × 改札 × 夜</span></div>
+</main>
+
+<div class="themer"><button class="on" data-t="day">Day</button><button data-t="night">Night</button></div>
+<script>
+document.querySelectorAll('.themer button').forEach(b=>b.addEventListener('click',()=>{document.documentElement.dataset.theme=b.dataset.t;document.querySelectorAll('.themer button').forEach(x=>x.classList.toggle('on',x===b))}));
+const ft=document.getElementById('furiTog');ft.addEventListener('click',()=>{const off=document.documentElement.dataset.furigana==='off';document.documentElement.dataset.furigana=off?'on':'off';ft.classList.toggle('on',off);ft.classList.toggle('off',!off)});
+</script>
+</body>
+</html>
