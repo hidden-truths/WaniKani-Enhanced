@@ -1,0 +1,262 @@
+<!doctype html>
+<html lang="en" data-theme="night">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>夜 YORU — 日常日本語 redesign mock</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Hanken+Grotesk:wght@400;500;600;700;800&family=Instrument+Serif:ital@0;1&family=Spline+Sans+Mono:wght@400;500&family=Zen+Kaku+Gothic+New:wght@500;700;900&family=Zen+Old+Mincho:wght@600;700;900&display=swap" rel="stylesheet">
+<style>
+:root{
+  /* ——— NIGHT: black lacquer (漆) + maki-e gold (金) + jewels ——— */
+  --base:#0C0B10;          /* deep night-sky black, faint indigo */
+  --base-2:#0F0E14;
+  --glass:rgba(255,255,255,.045);
+  --glass-2:rgba(255,255,255,.07);
+  --edge:rgba(255,238,210,.10);
+  --edge-2:rgba(255,238,210,.06);
+  --ink:#F3EFE7;
+  --ink-2:#BDB6C4;
+  --muted:#7E7790;
+  --gold:#E7BC6B;          /* maki-e gold — primary luxe accent */
+  --gold-deep:#C89A45;
+  --gold-soft:rgba(231,188,107,.12);
+  /* jewels — signal colours */
+  --ruri:#6E8CFF;          /* ichidan — lapis */
+  --shu:#FF7A63;           /* godan — coral lacquer */
+  --kohaku:#E7BC6B;        /* irregular — amber/gold */
+  --jade:#54D7A2;          /* correct */
+  --murasaki:#C58BF2;      /* leech */
+  --glow-gold:0 0 0 1px rgba(231,188,107,.14), 0 30px 80px -30px rgba(231,188,107,.30);
+  --radius:22px;
+}
+[data-theme="day"]{
+  /* day lacquer — warm cream + black ink + gold */
+  --base:#F1EBDD; --base-2:#EDE6D5;
+  --glass:#FCFAF3; --glass-2:#FFFFFF;
+  --edge:rgba(40,28,8,.12); --edge-2:rgba(40,28,8,.07);
+  --ink:#1A150C; --ink-2:#5B5340; --muted:#8C8266;
+  --gold:#A87B1E; --gold-deep:#8A6212; --gold-soft:rgba(168,123,30,.12);
+  --ruri:#39529C; --shu:#C8472C; --kohaku:#9A6B0F; --jade:#2C7A4F; --murasaki:#7C3A95;
+  --glow-gold:0 1px 2px rgba(40,28,8,.18), 0 30px 60px -28px rgba(40,28,8,.35);
+}
+*{box-sizing:border-box;margin:0;padding:0}
+html{-webkit-font-smoothing:antialiased;text-rendering:optimizeLegibility}
+body{
+  font-family:"Hanken Grotesk",system-ui,sans-serif; color:var(--ink);
+  background:var(--base); line-height:1.55; min-height:100vh; overflow-x:hidden; position:relative;
+}
+/* cinematic atmosphere: gold dust + spotlight vignette */
+body::before{
+  content:""; position:fixed; inset:0; z-index:0; pointer-events:none;
+  background:
+    radial-gradient(900px 620px at 78% -8%, rgba(231,188,107,.16), transparent 60%),
+    radial-gradient(800px 700px at 12% 18%, rgba(110,140,255,.08), transparent 62%),
+    radial-gradient(1200px 900px at 50% 120%, rgba(255,122,99,.07), transparent 60%);
+}
+[data-theme="day"] body::before{
+  background:
+    radial-gradient(900px 620px at 80% -10%, rgba(168,123,30,.14), transparent 60%),
+    radial-gradient(800px 700px at 10% 20%, rgba(57,82,156,.06), transparent 62%);
+}
+body::after{ /* fine grain */
+  content:""; position:fixed; inset:0; z-index:0; pointer-events:none; opacity:.5; mix-blend-mode:overlay;
+  background-image:url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='120' height='120'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='.9' numOctaves='2'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23n)' opacity='.5'/%3E%3C/svg%3E");
+}
+.mono{font-family:"Spline Sans Mono",monospace}
+.serif{font-family:"Instrument Serif",Georgia,serif}
+.jp{font-family:"Zen Kaku Gothic New",sans-serif}
+.jp-min{font-family:"Zen Old Mincho",serif}
+
+/* CHROME */
+.chrome{position:sticky;top:0;z-index:50;display:flex;align-items:center;gap:26px;padding:18px clamp(20px,4vw,56px);background:color-mix(in srgb,var(--base) 72%,transparent);backdrop-filter:blur(18px) saturate(1.2);border-bottom:1px solid var(--edge-2)}
+.brand{display:flex;align-items:center;gap:12px}
+.brand .seal{width:32px;height:32px;border-radius:10px;display:grid;place-items:center;background:linear-gradient(150deg,var(--gold),var(--gold-deep));color:#1a1206;font-family:"Zen Old Mincho",serif;font-weight:900;font-size:17px;box-shadow:var(--glow-gold)}
+.brand b{font-family:"Zen Kaku Gothic New";font-weight:900;font-size:19px;letter-spacing:.02em}
+.brand small{font-family:"Spline Sans Mono";font-size:9.5px;letter-spacing:.3em;color:var(--muted);text-transform:uppercase}
+.nav{display:flex;gap:2px;margin-left:6px}
+.nav a{position:relative;padding:9px 14px;border-radius:10px;cursor:pointer;font-weight:600;font-size:14.5px;color:var(--ink-2);text-decoration:none;transition:.2s}
+.nav a:hover{color:var(--ink)}
+.nav a.on{color:var(--gold)}
+.nav a.on::after{content:"";position:absolute;left:50%;transform:translateX(-50%);bottom:2px;width:5px;height:5px;border-radius:50%;background:var(--gold);box-shadow:0 0 10px var(--gold)}
+.actions{margin-left:auto;display:flex;gap:10px}
+.icon{width:39px;height:39px;border-radius:50%;display:grid;place-items:center;cursor:pointer;background:var(--glass);border:1px solid var(--edge);color:var(--ink-2);transition:.2s}
+.icon:hover{color:var(--gold);border-color:var(--gold)}
+.icon svg{width:18px;height:18px;fill:none;stroke:currentColor;stroke-width:1.6;stroke-linecap:round;stroke-linejoin:round}
+.avatar{background:linear-gradient(150deg,var(--gold),var(--gold-deep));color:#1a1206;border:none;font-weight:800;font-family:"Spline Sans Mono"}
+
+.sheet{position:relative;z-index:1;max-width:1180px;margin:0 auto;padding:0 clamp(20px,4vw,56px) 120px}
+.kicker{display:flex;align-items:center;gap:12px;font-family:"Spline Sans Mono";font-size:11px;letter-spacing:.32em;text-transform:uppercase;color:var(--muted);padding:54px 0 0}
+.kicker .ln{width:42px;height:1px;background:var(--gold);opacity:.5}
+.kicker .jp-min{font-family:"Zen Old Mincho";color:var(--gold);letter-spacing:.18em;font-size:14px;text-transform:none}
+
+/* ===== 01 HOME — cinematic spotlight ===== */
+.hero{display:grid;grid-template-columns:1.5fr 1fr;gap:48px;align-items:center;padding:20px 0 30px;min-height:62vh}
+.hero-l{position:relative}
+.huge{font-family:"Hanken Grotesk";font-weight:800;font-size:clamp(150px,22vw,280px);line-height:.8;letter-spacing:-.045em;background:linear-gradient(168deg,#fff,var(--gold) 130%);-webkit-background-clip:text;background-clip:text;color:transparent;filter:drop-shadow(0 18px 50px rgba(231,188,107,.25));position:relative}
+[data-theme="day"] .huge{background:linear-gradient(168deg,var(--ink),var(--gold-deep));-webkit-background-clip:text;background-clip:text;filter:none}
+.huge .u{display:block;font-family:"Instrument Serif";font-style:italic;font-weight:400;font-size:.18em;letter-spacing:0;color:var(--gold);-webkit-text-fill-color:var(--gold);margin-top:.1em;filter:none}
+.lead{font-family:"Instrument Serif";font-style:italic;font-size:27px;color:var(--ink-2);margin:8px 0 4px;line-height:1.3}
+.lead b{font-style:normal;font-family:"Hanken Grotesk";font-weight:700;color:var(--ink)}
+.statline{display:flex;gap:30px;margin:26px 0 30px;flex-wrap:wrap}
+.statline .s{display:flex;flex-direction:column;gap:2px}
+.statline .s b{font-family:"Hanken Grotesk";font-weight:800;font-size:23px}
+.statline .s.g b{color:var(--gold)} .statline .s.r b{color:var(--ruri)} .statline .s.p b{color:var(--murasaki)}
+.statline .s span{font-family:"Spline Sans Mono";font-size:10px;letter-spacing:.16em;text-transform:uppercase;color:var(--muted)}
+.cta{display:flex;gap:14px;flex-wrap:wrap}
+.btn{display:inline-flex;align-items:center;gap:10px;cursor:pointer;font-family:inherit;font-weight:700;font-size:15.5px;padding:16px 26px;border-radius:15px;transition:.2s;color:var(--ink);background:var(--glass);border:1px solid var(--edge)}
+.btn:hover{border-color:var(--gold);transform:translateY(-2px)}
+.btn svg{width:18px;height:18px;fill:none;stroke:currentColor;stroke-width:2;stroke-linecap:round;stroke-linejoin:round}
+.btn.primary{background:linear-gradient(150deg,var(--gold),var(--gold-deep));color:#1a1206;border:none;box-shadow:var(--glow-gold)}
+.btn.primary:hover{box-shadow:0 0 0 1px rgba(231,188,107,.3),0 26px 60px -22px rgba(231,188,107,.6)}
+
+/* forecast glass orb panel */
+.fore{background:var(--glass);border:1px solid var(--edge);border-radius:26px;padding:26px 26px 22px;backdrop-filter:blur(10px);box-shadow:0 40px 90px -40px rgba(0,0,0,.7);position:relative;overflow:hidden}
+.fore::before{content:"";position:absolute;top:-40%;right:-20%;width:60%;height:80%;background:radial-gradient(circle,var(--gold-soft),transparent 70%);pointer-events:none}
+.fore h3{display:flex;justify-content:space-between;align-items:center;font-size:15px;font-weight:700}
+.fore h3 .w{font-family:"Spline Sans Mono";font-size:10px;letter-spacing:.18em;color:var(--gold);text-transform:uppercase}
+.fore .sub{font-family:"Instrument Serif";font-style:italic;font-size:16px;color:var(--muted);margin:6px 0 22px}
+.ring-row{display:flex;align-items:flex-end;gap:10px;height:130px;padding-bottom:24px;border-bottom:1px solid var(--edge-2)}
+.ring-row .b{flex:1;border-radius:6px 6px 3px 3px;background:rgba(255,255,255,.06);position:relative;min-height:6px}
+.ring-row .b.g{background:linear-gradient(var(--gold),var(--gold-deep));box-shadow:0 0 18px -4px var(--gold)}
+.ring-row .b.r{background:linear-gradient(var(--shu),#c2503b)}
+.ring-row .b b{position:absolute;top:-18px;left:0;right:0;text-align:center;font-family:"Hanken Grotesk";font-weight:700;font-size:11px}
+.ring-row .b span{position:absolute;bottom:-21px;left:0;right:0;text-align:center;font-family:"Zen Kaku Gothic New";font-size:11px;color:var(--muted)}
+.fore .ft{display:flex;justify-content:space-between;align-items:center;margin-top:18px}
+.fore .ft .t{font-family:"Instrument Serif";font-style:italic;font-size:17px;color:var(--ink-2)} .fore .ft .t b{font-style:normal;font-family:"Hanken Grotesk";font-weight:800;color:var(--gold)}
+.fore .ft .lk{font-family:"Spline Sans Mono";font-size:10px;letter-spacing:.14em;text-transform:uppercase;color:var(--gold);cursor:pointer;display:flex;gap:6px;align-items:center}
+
+/* ===== 02 CARD — glowing lacquer slab ===== */
+.cardsec{padding-top:8px}
+.card{position:relative;margin-top:22px;background:linear-gradient(168deg,var(--glass-2),var(--glass));border:1px solid var(--edge);border-radius:30px;padding:44px 50px 36px;box-shadow:var(--glow-gold),0 60px 120px -50px rgba(0,0,0,.8);overflow:hidden}
+.card::after{content:"";position:absolute;inset:0;border-radius:30px;padding:1px;background:linear-gradient(150deg,rgba(231,188,107,.5),transparent 40%);-webkit-mask:linear-gradient(#000 0 0) content-box,linear-gradient(#000 0 0);-webkit-mask-composite:xor;mask-composite:exclude;pointer-events:none}
+.card .glow{position:absolute;top:-30%;left:30%;width:50%;height:90%;background:radial-gradient(circle,var(--gold-soft),transparent 65%);pointer-events:none}
+.ctop{display:flex;justify-content:space-between;align-items:flex-start;position:relative;z-index:1}
+.ctx{font-family:"Spline Sans Mono";font-size:11px;letter-spacing:.24em;text-transform:uppercase;color:var(--muted);display:flex;align-items:center;gap:9px}
+.ctx .d{width:6px;height:6px;border-radius:50%;background:var(--kohaku);box-shadow:0 0 10px var(--kohaku)}
+.seal{width:78px;height:78px;border-radius:50%;display:grid;place-items:center;border:2px solid var(--gold);color:var(--gold);font-family:"Zen Old Mincho";font-weight:700;font-size:34px;box-shadow:0 0 0 5px var(--gold-soft),0 0 30px -6px var(--gold)}
+.glyph{font-family:"Zen Kaku Gothic New";font-weight:900;font-size:clamp(86px,12vw,138px);line-height:1;margin:20px 0 4px;letter-spacing:.01em;position:relative;z-index:1}
+.glyph .ok{color:var(--muted)}
+.rd{display:flex;align-items:center;gap:16px;margin:6px 0 26px;flex-wrap:wrap;position:relative;z-index:1}
+.rd .r{font-family:"Zen Kaku Gothic New";font-weight:700;font-size:34px;color:var(--ruri);position:relative;padding-top:9px}
+.rd .r .p{position:absolute;top:0;left:2px;right:2px;height:8px;border:2.5px solid var(--ruri);border-bottom:none;border-radius:6px 6px 0 0;box-shadow:0 0 12px -2px var(--ruri)}
+.play{width:48px;height:48px;border-radius:50%;border:1px solid var(--gold);background:var(--gold-soft);color:var(--gold);display:grid;place-items:center;cursor:pointer}
+.play svg{width:17px;height:17px;fill:currentColor}
+.acc{font-family:"Spline Sans Mono";font-size:11px;color:var(--muted);border:1px solid var(--edge);border-radius:8px;padding:6px 10px}
+.mean{font-family:"Instrument Serif";font-style:italic;font-size:58px;line-height:1;color:var(--gold);position:relative;z-index:1;letter-spacing:.01em}
+.tags{display:flex;gap:10px;margin-top:22px;flex-wrap:wrap;position:relative;z-index:1}
+.tag{font-family:"Spline Sans Mono";font-size:11.5px;letter-spacing:.06em;padding:7px 12px;border-radius:9px;border:1px solid var(--edge);color:var(--ink-2);display:flex;align-items:center;gap:7px}
+.tag .b{width:7px;height:7px;border-radius:50%}
+.tag.cls{color:var(--kohaku);border-color:rgba(231,188,107,.4);background:var(--gold-soft)} .tag.cls .b{background:var(--kohaku);box-shadow:0 0 8px var(--kohaku)}
+.tag.ji{color:var(--gold);border-color:rgba(231,188,107,.4);cursor:pointer}
+.tag.ji svg{width:12px;height:12px;fill:none;stroke:currentColor;stroke-width:2}
+.ex{margin-top:24px;background:rgba(110,140,255,.05);border:1px solid rgba(110,140,255,.16);border-radius:16px;padding:20px 22px;position:relative;z-index:1}
+.ex .h{font-family:"Spline Sans Mono";font-size:10px;letter-spacing:.18em;text-transform:uppercase;color:var(--ruri);margin-bottom:9px}
+.ex .j{font-family:"Zen Kaku Gothic New";font-weight:500;font-size:27px} .ex .j em{font-style:normal;color:var(--gold)}
+.ex .e{font-family:"Instrument Serif";font-style:italic;font-size:17px;color:var(--muted);margin-top:5px}
+.grade{display:grid;grid-template-columns:1fr 1.4fr;gap:14px;margin-top:26px;position:relative;z-index:1}
+.grade button{font-family:inherit;cursor:pointer;border-radius:16px;padding:18px;font-weight:700;font-size:16px;display:flex;align-items:center;justify-content:center;gap:10px;transition:.18s;border:1px solid var(--edge)}
+.grade button svg{width:18px;height:18px;fill:none;stroke:currentColor;stroke-width:2.2;stroke-linecap:round}
+.grade .w{background:var(--glass);color:var(--ink-2)} .grade .w:hover{border-color:var(--shu);color:var(--shu)}
+.grade .r{background:linear-gradient(150deg,var(--jade),#2f9d70);color:#06170f;border:none;box-shadow:0 0 30px -10px var(--jade)} .grade .r:hover{transform:translateY(-2px)}
+.grade .k{font-family:"Spline Sans Mono";font-size:11px;opacity:.65;border:1px solid currentColor;border-radius:5px;padding:0 6px}
+
+.foot{display:flex;justify-content:space-between;margin-top:60px;padding-top:22px;border-top:1px solid var(--edge-2);font-family:"Spline Sans Mono";font-size:10.5px;letter-spacing:.18em;text-transform:uppercase;color:var(--muted)}
+.foot .jp-min{font-family:"Zen Old Mincho";letter-spacing:.1em;text-transform:none;font-size:14px;color:var(--gold)}
+
+@keyframes rise{from{opacity:0;transform:translateY(18px)}to{opacity:1;transform:none}}
+.rise{animation:rise .8s cubic-bezier(.2,.7,.2,1) both}
+.d1{animation-delay:.05s}.d2{animation-delay:.13s}.d3{animation-delay:.22s}.d4{animation-delay:.32s}.d5{animation-delay:.42s}
+
+.themer{position:fixed;right:18px;bottom:18px;z-index:99;display:flex;gap:4px;background:var(--glass);border:1px solid var(--edge);border-radius:30px;padding:4px;backdrop-filter:blur(10px)}
+.themer button{font-family:"Spline Sans Mono";font-size:11px;letter-spacing:.1em;border:none;background:none;color:var(--muted);padding:7px 14px;border-radius:24px;cursor:pointer;text-transform:uppercase}
+.themer button.on{background:var(--gold);color:#1a1206}
+@media(max-width:980px){.hero{grid-template-columns:1fr;gap:30px}.fore{order:-1}}
+</style>
+</head>
+<body>
+<header class="chrome">
+  <div class="brand"><div class="seal">日</div><div style="display:flex;flex-direction:column;line-height:1.05"><b class="jp">日常日本語</b><small>Japanese Trainer</small></div></div>
+  <nav class="nav"><a class="on">Flashcards</a><a>Browse</a><a>Stats</a><a><span class="jp">教科書</span></a><a><span class="jp">独り言</span></a><a><span class="jp">歌</span></a></nav>
+  <div class="actions">
+    <div class="icon"><svg viewBox="0 0 24 24"><path d="M21 12.8A9 9 0 1 1 11.2 3 7 7 0 0 0 21 12.8Z"/></svg></div>
+    <div class="icon"><svg viewBox="0 0 24 24"><circle cx="12" cy="12" r="3"/><path d="M19 12a7 7 0 0 0-.1-1.2l2-1.6-2-3.4-2.4 1a7 7 0 0 0-2-1.2L14 2h-4l-.5 2.6a7 7 0 0 0-2 1.2l-2.4-1-2 3.4 2 1.6A7 7 0 0 0 5 12c0 .4 0 .8.1 1.2l-2 1.6 2 3.4 2.4-1a7 7 0 0 0 2 1.2L10 22h4l.5-2.6a7 7 0 0 0 2-1.2l2.4 1 2-3.4-2-1.6c.1-.4.1-.8.1-1.2Z"/></svg></div>
+    <div class="icon avatar">J</div>
+  </div>
+</header>
+
+<main class="sheet">
+  <div class="kicker rise d1"><span class="ln"></span>Today&rsquo;s review<span class="jp-min">・要復習</span></div>
+  <section class="hero">
+    <div class="hero-l">
+      <div class="huge rise d2">100<span class="u">cards await tonight</span></div>
+      <div class="lead rise d3"><b>0</b> studied today — the deck rests at <b>100&#8202;/&#8202;100</b> in rotation.</div>
+      <div class="statline rise d3">
+        <div class="s g"><b>100</b><span>Due today</span></div>
+        <div class="s"><b>0d</b><span>Streak</span></div>
+        <div class="s r"><b>3.2k</b><span>Logged</span></div>
+        <div class="s p"><b>0</b><span>Leeches</span></div>
+      </div>
+      <div class="cta rise d4">
+        <button class="btn primary">Begin review <svg viewBox="0 0 24 24"><path d="M5 12h14M13 6l6 6-6 6"/></svg></button>
+        <button class="btn"><svg viewBox="0 0 24 24"><path d="M4 6h16M4 12h16M4 18h10"/></svg> Free study</button>
+      </div>
+    </div>
+    <aside class="fore rise d3">
+      <h3>Upcoming reviews <span class="w">7 nights</span></h3>
+      <div class="sub">Your schedule lights up as boxes climb.</div>
+      <div class="ring-row">
+        <div class="b g" style="height:80%"><b>42</b><span>今</span></div>
+        <div class="b r" style="height:48%"><b>24</b><span>火</span></div>
+        <div class="b" style="height:24%"><b>11</b><span>水</span></div>
+        <div class="b g" style="height:62%"><b>31</b><span>木</span></div>
+        <div class="b" style="height:18%"><b>8</b><span>金</span></div>
+        <div class="b" style="height:36%"><b>18</b><span>土</span></div>
+        <div class="b r" style="height:54%"><b>26</b><span>日</span></div>
+      </div>
+      <div class="ft"><div class="t"><b>160</b> queued</div><div class="lk">Forecast →</div></div>
+    </aside>
+  </section>
+
+  <div class="kicker rise d1" style="padding-top:24px"><span class="ln"></span>The card<span class="jp-min">・札</span></div>
+  <section class="cardsec">
+    <div class="card rise d2">
+      <div class="glow"></div>
+      <div class="ctop">
+        <div class="ctx"><span class="d"></span>Read &amp; recall · meaning + reading &nbsp;·&nbsp; 1 / 100</div>
+        <div class="seal">料</div>
+      </div>
+      <div class="glyph jp">料理<span class="ok">する</span></div>
+      <div class="rd">
+        <div class="r jp">りょうりする<span class="p"></span></div>
+        <button class="play"><svg viewBox="0 0 24 24"><path d="M8 5v14l11-7z"/></svg></button>
+        <span class="acc">accent [0]</span>
+      </div>
+      <div class="mean">to cook</div>
+      <div class="tags">
+        <span class="tag cls"><span class="b"></span>IRREG · 不規則</span>
+        <span class="tag">N4</span><span class="tag">SURU</span>
+        <span class="tag ji">View on Jisho <svg viewBox="0 0 24 24"><path d="M7 17 17 7M9 7h8v8"/></svg></span>
+      </div>
+      <div class="ex">
+        <div class="h">例文 · Example</div>
+        <div class="j jp">夕飯を<em>料理する</em>。</div>
+        <div class="e">Cook dinner.</div>
+      </div>
+      <div class="grade">
+        <button class="w"><svg viewBox="0 0 24 24"><path d="M6 6l12 12M18 6 6 18"/></svg> Got it wrong <span class="k">1</span></button>
+        <button class="r"><svg viewBox="0 0 24 24"><path d="M5 13l4 4L19 7"/></svg> Got it right <span class="k">2</span></button>
+      </div>
+    </div>
+  </section>
+
+  <div class="foot"><span>夜 · YORU direction mock</span><span class="jp-min">月夜の勉強</span><span>日常日本語</span></div>
+</main>
+
+<div class="themer"><button data-t="day">Day</button><button class="on" data-t="night">Night</button></div>
+<script>
+document.querySelectorAll('.themer button').forEach(b=>b.onclick=()=>{document.documentElement.dataset.theme=b.dataset.t;document.querySelectorAll('.themer button').forEach(x=>x.classList.toggle('on',x===b))});
+</script>
+</body>
+</html>

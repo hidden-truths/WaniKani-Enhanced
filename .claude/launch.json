@@ -18,10 +18,9 @@
     {
       "name": "study-app-design",
       "runtimeExecutable": "bun",
-      "runtimeArgs": ["run", "dev"],
+      "runtimeArgs": ["run", "dev", "--", "--port", "5191", "--strictPort"],
       "cwd": "study-app",
-      "port": 5180,
-      "autoPort": true
+      "port": 5191
     },
     {
       "name": "redesign-mocks",
@@ -30,6 +29,13 @@
       "cwd": "study-app/mockups/redesign",
       "port": 5190,
       "autoPort": true
+    },
+    {
+      "name": "sleek-mocks",
+      "runtimeExecutable": "python3",
+      "runtimeArgs": ["-m", "http.server", "5192"],
+      "cwd": "study-app/mockups/sleek",
+      "port": 5192
     }
   ]
 }

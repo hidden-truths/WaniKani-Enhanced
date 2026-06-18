@@ -1,0 +1,148 @@
+<!doctype html>
+<html lang="en" data-theme="day">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Stats — 日常日本語 blend system</title>
+<link rel="preconnect" href="https://fonts.googleapis.com"><link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Bricolage+Grotesque:opsz,wght@12..96,400;12..96,600;12..96,800&family=Hanken+Grotesk:wght@400;500;600;700;800&family=Spline+Sans+Mono:wght@400;500;600&family=Zen+Kaku+Gothic+New:wght@500;700;900&family=Zen+Old+Mincho:wght@400;600;700;900&display=swap" rel="stylesheet">
+<style>
+:root,:root[data-theme="day"]{--paper:#F4F1E8;--paper-2:#FBFAF4;--sink:#ECE7D9;--ink:#15130D;--ink-2:#4B4536;--muted:#857C66;--line:#16130b1c;--line-2:#16130b12;--grid:#1d160814;--shu:#DC3A22;--shu-deep:#B12C16;--shu-wash:#dc3a2212;--gold:#9A6B0F;--godan:#DC3A22;--ichidan:#234C86;--irregular:#9A6B0F;--adjective:#2C7D6B;--noun:#A06A1E;--adverb:#A14258;--phrase:#736353;--leech:#7C3A95;--good:#2C7A4F;--teal:#2F7E7A;--shadow:0 1px 0 #ffffffcc,0 1px 2px #1a140820,0 22px 40px -22px #2a200f2e;--shadow-lg:0 1px 0 #ffffffcc,0 2px 4px #1a140822,0 48px 70px -34px #2a200f3a;--cta-shadow:0 1px 2px #b12c1633,0 14px 26px -12px #dc3a2255;--r:18px}
+[data-theme="night"]{--paper:#100D09;--paper-2:#1b1610;--sink:#171209;--ink:#F1E9D8;--ink-2:#C0B49C;--muted:#857a64;--line:#fff0d815;--line-2:#fff0d80a;--grid:#fff0d808;--shu:#FF6B4A;--shu-deep:#FF6B4A;--shu-wash:#ff6b4a14;--gold:#E7BC6B;--godan:#FF6B4A;--ichidan:#8FA0EE;--irregular:#E0AC55;--adjective:#5CC0A6;--noun:#D8A24E;--adverb:#D6818F;--phrase:#AB9A85;--leech:#C792EA;--good:#56D29A;--teal:#56C7C0;--shadow:0 1px 2px #00000060,0 24px 44px -24px #000000aa;--shadow-lg:0 2px 6px #00000066,0 50px 80px -36px #000000cc,0 0 0 1px #e7bc6b0f;--cta-shadow:0 0 0 1px #ff6b4a22,0 16px 34px -14px #ff6b4a66}
+*{box-sizing:border-box;margin:0;padding:0}html{-webkit-font-smoothing:antialiased}
+body{font-family:"Hanken Grotesk",system-ui,sans-serif;color:var(--ink);background:var(--paper);line-height:1.5;min-height:100vh;overflow-x:hidden;position:relative}
+body::before{content:"";position:fixed;inset:0;z-index:0;pointer-events:none;background:linear-gradient(var(--grid) 1px,transparent 1px) 0 0/100% 30px,linear-gradient(90deg,var(--grid) 1px,transparent 1px) 0 0/30px 100%;-webkit-mask-image:radial-gradient(120% 70% at 50% 0%,#000,#0009 42%,transparent 78%);mask-image:radial-gradient(120% 70% at 50% 0%,#000,#0009 42%,transparent 78%);opacity:.9}
+[data-theme="night"] body::before{background:radial-gradient(900px 600px at 84% -8%,rgba(231,188,107,.12),transparent 60%);-webkit-mask-image:none;mask-image:none}
+.jp{font-family:"Zen Kaku Gothic New",sans-serif}.jp-min{font-family:"Zen Old Mincho",serif}.mono{font-family:"Spline Sans Mono",monospace}.disp{font-family:"Bricolage Grotesque",sans-serif}
+.chrome{position:sticky;top:0;z-index:50;display:flex;align-items:center;gap:26px;padding:16px clamp(20px,4vw,52px);background:color-mix(in srgb,var(--paper) 82%,transparent);backdrop-filter:saturate(1.3) blur(14px);border-bottom:1px solid var(--line)}
+.brand{display:flex;align-items:center;gap:12px}.brand .seal{width:30px;height:30px;border-radius:8px;display:grid;place-items:center;background:var(--shu);color:#fff;font-family:"Zen Old Mincho";font-weight:700;font-size:16px;box-shadow:var(--cta-shadow)}[data-theme="night"] .brand .seal{background:linear-gradient(150deg,var(--gold),#c89a45);color:#1a1206}
+.brand b{font-family:"Zen Kaku Gothic New";font-weight:900;font-size:19px}.brand small{font-family:"Spline Sans Mono";font-size:10px;letter-spacing:.28em;color:var(--muted);text-transform:uppercase}
+.nav{display:flex;gap:4px;margin-left:8px}.nav a{position:relative;padding:8px 13px;border-radius:9px;cursor:pointer;font-weight:600;font-size:14.5px;color:var(--ink-2);text-decoration:none;transition:.18s}.nav a .jp{font-weight:700}.nav a:hover{color:var(--ink);background:var(--shu-wash)}.nav a.on{color:var(--ink)}.nav a.on::after{content:"";position:absolute;left:13px;right:13px;bottom:1px;height:2.5px;background:var(--shu);border-radius:2px}
+.actions{margin-left:auto;display:flex;align-items:center;gap:10px}.icon{width:38px;height:38px;border-radius:50%;display:grid;place-items:center;cursor:pointer;background:var(--paper-2);border:1px solid var(--line);color:var(--ink-2);box-shadow:var(--shadow)}.icon svg{width:18px;height:18px;fill:none;stroke:currentColor;stroke-width:1.7;stroke-linecap:round;stroke-linejoin:round}.avatar{background:linear-gradient(150deg,var(--shu),var(--shu-deep));color:#fff;border:none;font-weight:700;font-family:"Spline Sans Mono"}[data-theme="night"] .avatar{background:linear-gradient(150deg,var(--gold),#c89a45);color:#1a1206}
+.sheet{position:relative;z-index:1;max-width:1200px;margin:0 auto;padding:0 clamp(20px,4vw,52px) 120px}
+.marker{display:flex;align-items:baseline;gap:16px;padding:46px 0 8px}.marker .idx{font-family:"Bricolage Grotesque";font-weight:800;font-size:34px;line-height:1;letter-spacing:-.02em}[data-theme="night"] .marker .idx{color:var(--gold)}.marker .idx .slash{color:var(--muted);font-weight:600}.marker .ttl{font-family:"Zen Old Mincho";font-weight:600;font-size:17px;letter-spacing:.14em}.marker .en{font-family:"Spline Sans Mono";font-size:11px;letter-spacing:.26em;text-transform:uppercase;color:var(--muted)}.marker .rule{flex:1;height:1px;background:var(--line);align-self:center}
+.headline{font-family:"Bricolage Grotesque";font-weight:800;font-size:54px;letter-spacing:-.03em;line-height:1;margin-bottom:6px}
+.sub{color:var(--ink-2);font-size:16px;margin-bottom:26px}
+
+.stats{display:grid;grid-template-columns:repeat(3,1fr);gap:16px}
+.stat{position:relative;background:var(--paper-2);border:1px solid var(--line);border-radius:var(--r);box-shadow:var(--shadow);padding:20px 22px;overflow:hidden}
+.stat::before{content:"";position:absolute;left:0;top:0;bottom:0;width:3px;background:var(--ac)}
+.stat .k{font-family:"Spline Sans Mono";font-size:10.5px;letter-spacing:.16em;text-transform:uppercase;color:var(--muted);display:flex;align-items:center;gap:8px;margin-bottom:8px}
+.stat .k svg{width:14px;height:14px;fill:none;stroke:var(--ac);stroke-width:2}
+.stat .v{font-family:"Bricolage Grotesque";font-weight:800;font-size:50px;line-height:.92;letter-spacing:-.02em}
+.stat .v small{font-size:.42em;font-weight:700;color:var(--muted)}
+.stat .v .ac{color:var(--ac)}
+.stat .d{font-size:13px;color:var(--ink-2);margin-top:6px}.stat .d b{color:var(--ink);font-weight:700}
+
+.secdiv{display:flex;align-items:center;gap:16px;margin:44px 0 18px}
+.secdiv .lab{font-family:"Spline Sans Mono";font-size:11px;letter-spacing:.26em;text-transform:uppercase;color:var(--muted)}
+.secdiv .rule{flex:1;height:1px;background:var(--line)}
+.secdiv .seal{width:34px;height:34px;border-radius:50%;border:2px solid var(--ac);color:var(--ac);display:grid;place-items:center;font-family:"Zen Old Mincho";font-weight:700;font-size:16px}
+[data-theme="night"] .secdiv .seal{box-shadow:0 0 18px -5px var(--ac)}
+
+.two{display:grid;grid-template-columns:1.15fr 1fr;gap:16px}
+.panel{background:var(--paper-2);border:1px solid var(--line);border-radius:var(--r);box-shadow:var(--shadow-lg);padding:24px 26px;position:relative;overflow:hidden}
+.panel::before{content:"";position:absolute;left:0;right:0;top:0;height:3px;background:linear-gradient(90deg,var(--shu),var(--irregular))}
+.panel h3{font-weight:700;font-size:19px;display:flex;align-items:center;justify-content:space-between}
+.panel h3 .chip{font-family:"Spline Sans Mono";font-size:10px;letter-spacing:.12em;color:var(--ink-2);border:1px solid var(--line);border-radius:20px;padding:5px 11px}
+.panel .note{font-family:"Spline Sans Mono";font-size:11px;color:var(--muted);margin:4px 0 22px;letter-spacing:.02em}
+/* box histogram */
+.hist{display:flex;align-items:flex-end;gap:14px;height:200px;padding-bottom:42px;position:relative}
+.hist .col{flex:1;display:flex;flex-direction:column;align-items:center;height:100%;justify-content:flex-end;position:relative}
+.hist .bar{width:100%;border-radius:6px 6px 0 0;position:relative;min-height:6px}
+.hist .bar b{position:absolute;top:-22px;left:0;right:0;text-align:center;font-family:"Bricolage Grotesque";font-weight:700;font-size:17px;color:var(--ink)}
+.hist .lbl{position:absolute;bottom:-38px;left:0;right:0;text-align:center}
+.hist .lbl .n{font-weight:700;font-size:12px}.hist .lbl .t{font-family:"Spline Sans Mono";font-size:9px;color:var(--muted);display:block}
+.legend{display:flex;justify-content:space-between;font-family:"Spline Sans Mono";font-size:10px;letter-spacing:.08em;text-transform:uppercase;color:var(--muted);margin-top:8px;align-items:center}
+.legend .pips{display:flex;gap:4px}.legend .pips i{width:16px;height:6px;border-radius:2px}
+/* line chart */
+.lc{position:relative}
+.lc svg{width:100%;height:auto;display:block;overflow:visible}
+.lc .ax{font-family:"Spline Sans Mono";font-size:10px;fill:var(--muted)}
+.lcfoot{display:flex;justify-content:space-between;font-family:"Spline Sans Mono";font-size:10px;color:var(--muted);margin-top:10px;letter-spacing:.06em}
+.lcfoot .k{display:flex;gap:16px}.lcfoot .k span{display:flex;align-items:center;gap:6px}.lcfoot .k i{width:14px;height:3px;border-radius:2px}
+
+.leech{background:var(--paper-2);border:1px solid var(--line);border-radius:var(--r);box-shadow:var(--shadow);padding:22px 26px;border-left:3px solid var(--leech)}
+.leech h3{font-weight:700;font-size:18px;display:flex;justify-content:space-between;align-items:center}
+.leech h3 .chip{font-family:"Spline Sans Mono";font-size:10px;color:var(--leech);border:1px solid color-mix(in srgb,var(--leech) 40%,transparent);border-radius:20px;padding:5px 11px}
+.leech .note{font-family:"Spline Sans Mono";font-size:11px;color:var(--muted);margin:4px 0 16px}
+.lrow{display:flex;align-items:center;gap:14px;padding:11px 0;border-top:1px solid var(--line-2)}
+.lrow .jp{font-family:"Zen Kaku Gothic New";font-weight:700;font-size:22px}
+.lrow .r{font-family:"Zen Kaku Gothic New";font-size:13px;color:var(--muted)}
+.lrow .m{margin-left:auto;font-size:14px;color:var(--ink-2)}
+.lrow .acc{font-family:"Bricolage Grotesque";font-weight:700;font-size:18px;color:var(--shu)}
+.lrow .bar{width:80px;height:6px;border-radius:4px;background:var(--sink);overflow:hidden}.lrow .bar i{display:block;height:100%;background:var(--shu)}
+.foot-r{display:flex;justify-content:space-between;align-items:center;margin-top:54px;padding-top:22px;border-top:1px solid var(--line);font-family:"Spline Sans Mono";font-size:10.5px;letter-spacing:.18em;text-transform:uppercase;color:var(--muted)}.foot-r .jp-min{font-family:"Zen Old Mincho";letter-spacing:.1em;text-transform:none;font-size:13px;color:var(--ink-2)}
+@keyframes rise{from{opacity:0;transform:translateY(14px)}to{opacity:1;transform:none}}.rise{animation:rise .6s cubic-bezier(.2,.7,.2,1) both}.d1{animation-delay:.04s}.d2{animation-delay:.1s}.d3{animation-delay:.16s}.d4{animation-delay:.22s}
+.themer{position:fixed;right:18px;bottom:18px;z-index:99;display:flex;gap:4px;background:var(--paper-2);border:1px solid var(--line);border-radius:30px;padding:4px;box-shadow:var(--shadow-lg)}.themer button{font-family:"Spline Sans Mono";font-size:11px;letter-spacing:.1em;border:none;background:none;color:var(--muted);padding:7px 14px;border-radius:24px;cursor:pointer;text-transform:uppercase}.themer button.on{background:var(--shu);color:#fff}[data-theme="night"] .themer button.on{background:var(--gold);color:#1a1206}
+@media(max-width:980px){.stats{grid-template-columns:1fr 1fr}.two{grid-template-columns:1fr}}
+</style>
+</head>
+<body>
+<header class="chrome">
+  <div class="brand"><div class="seal">日</div><div style="display:flex;flex-direction:column;line-height:1.05"><b class="jp">日常日本語</b><small>Japanese Trainer</small></div></div>
+  <nav class="nav"><a>Flashcards</a><a>Browse</a><a class="on">Stats</a><a><span class="jp">教科書</span></a><a><span class="jp">独り言</span></a><a><span class="jp">歌</span></a></nav>
+  <div class="actions"><div class="icon"><svg viewBox="0 0 24 24"><circle cx="12" cy="12" r="4.5"/><path d="M12 2v2M12 20v2M2 12h2M20 12h2M5 5l1.5 1.5M17.5 17.5 19 19M19 5l-1.5 1.5M6.5 17.5 5 19"/></svg></div><div class="icon"><svg viewBox="0 0 24 24"><circle cx="12" cy="12" r="3"/><path d="M19 12a7 7 0 0 0-.1-1.2l2-1.6-2-3.4-2.4 1a7 7 0 0 0-2-1.2L14 2h-4l-.5 2.6a7 7 0 0 0-2 1.2l-2.4-1-2 3.4 2 1.6A7 7 0 0 0 5 12c0 .4 0 .8.1 1.2l-2 1.6 2 3.4 2.4-1a7 7 0 0 0 2 1.2L10 22h4l.5-2.6a7 7 0 0 0 2-1.2l2.4 1 2-3.4-2-1.6c.1-.4.1-.8.1-1.2Z"/></svg></div><div class="icon avatar">J</div></div>
+</header>
+<main class="sheet">
+  <div class="marker rise d1"><div class="idx">03<span class="slash"> / </span><span style="color:var(--muted)">06</span></div><div class="ttl jp-min">記録</div><div class="en">Your progress</div><div class="rule"></div></div>
+  <h1 class="headline rise d1">Progress</h1>
+  <p class="sub rise d1">Across <b>342</b> reviews over <b>18</b> days — keep the streak alive.</p>
+
+  <section class="stats rise d2">
+    <div class="stat" style="--ac:var(--good)"><div class="k"><svg viewBox="0 0 24 24"><path d="M5 13l4 4L19 7"/></svg>Overall accuracy</div><div class="v">87<small>%</small></div><div class="d">of <b>342</b> reviews</div></div>
+    <div class="stat" style="--ac:var(--ichidan)"><div class="k"><svg viewBox="0 0 24 24"><rect x="4" y="4" width="16" height="16" rx="2"/></svg>Cards studied</div><div class="v">88<small> / 100</small></div><div class="d"><b>88%</b> of the deck in rotation</div></div>
+    <div class="stat" style="--ac:var(--gold)"><div class="k"><svg viewBox="0 0 24 24"><path d="M21 12a9 9 0 1 1-3-6.7M21 4v5h-5"/></svg>Reviews logged</div><div class="v">342</div><div class="d">across <b>24</b> sessions</div></div>
+    <div class="stat" style="--ac:var(--shu)"><div class="k"><svg viewBox="0 0 24 24"><circle cx="12" cy="12" r="9"/><path d="M12 7v5l3 2"/></svg>Due today</div><div class="v"><span class="ac">23</span></div><div class="d">ready to review now</div></div>
+    <div class="stat" style="--ac:var(--noun)"><div class="k"><svg viewBox="0 0 24 24"><path d="M12 2 4 7v6c0 5 8 9 8 9s8-4 8-9V7Z"/></svg>Current streak</div><div class="v">18<small> days</small></div><div class="d"><b>🔥</b> personal best: 24</div></div>
+    <div class="stat" style="--ac:var(--leech)"><div class="k"><svg viewBox="0 0 24 24"><path d="M12 2 2 20h20Z"/><path d="M12 9v5M12 17v.5"/></svg>Active leeches</div><div class="v"><span class="ac">4</span></div><div class="d">under 60% — drill these</div></div>
+  </section>
+
+  <div class="secdiv rise d3"><span class="lab">Retention</span><span class="rule"></span><span class="seal jp-min" style="--ac:var(--shu)">記</span></div>
+  <section class="two">
+    <div class="panel rise d3">
+      <h3>Memory pipeline <span class="chip">100 CARDS</span></h3>
+      <div class="note">Leitner boxes · higher box = better learned</div>
+      <div class="hist">
+        <div class="col"><div class="bar" style="height:55%;background:var(--muted)"><b>12</b></div><div class="lbl"><span class="n">New</span><span class="t">unseen</span></div></div>
+        <div class="col"><div class="bar" style="height:82%;background:var(--shu)"><b>18</b></div><div class="lbl"><span class="n">Box 1</span><span class="t">1 day</span></div></div>
+        <div class="col"><div class="bar" style="height:100%;background:var(--noun)"><b>22</b></div><div class="lbl"><span class="n">Box 2</span><span class="t">2 days</span></div></div>
+        <div class="col"><div class="bar" style="height:91%;background:var(--ichidan)"><b>20</b></div><div class="lbl"><span class="n">Box 3</span><span class="t">4 days</span></div></div>
+        <div class="col"><div class="bar" style="height:73%;background:var(--teal)"><b>16</b></div><div class="lbl"><span class="n">Box 4</span><span class="t">8 days</span></div></div>
+        <div class="col"><div class="bar" style="height:55%;background:var(--good)"><b>12</b></div><div class="lbl"><span class="n">Mastered</span><span class="t">16 days</span></div></div>
+      </div>
+      <div class="legend"><span>least learned</span><span class="pips"><i style="background:var(--muted)"></i><i style="background:var(--shu)"></i><i style="background:var(--noun)"></i><i style="background:var(--ichidan)"></i><i style="background:var(--teal)"></i><i style="background:var(--good)"></i></span><span>best learned</span></div>
+    </div>
+    <div class="panel rise d4">
+      <h3>Daily accuracy <span class="chip">LAST 14 DAYS</span></h3>
+      <div class="note">percent correct · average 85%</div>
+      <div class="lc">
+        <svg viewBox="0 0 600 200" preserveAspectRatio="none" style="height:200px">
+          <defs><linearGradient id="g" x1="0" y1="0" x2="0" y2="1"><stop offset="0" stop-color="var(--good)" stop-opacity=".28"/><stop offset="1" stop-color="var(--good)" stop-opacity="0"/></linearGradient></defs>
+          <line x1="0" y1="80" x2="600" y2="80" stroke="var(--ink-2)" stroke-width="1.5" stroke-dasharray="5 6" opacity=".5"/>
+          <polygon points="0,132 46,100 92,148 138,80 185,60 231,108 277,68 323,52 369,84 415,40 462,64 508,56 554,72 600,48 600,200 0,200" fill="url(#g)"/>
+          <polyline points="0,132 46,100 92,148 138,80 185,60 231,108 277,68 323,52 369,84 415,40 462,64 508,56 554,72 600,48" fill="none" stroke="var(--good)" stroke-width="3" stroke-linecap="round" stroke-linejoin="round"/>
+          <circle cx="600" cy="48" r="5.5" fill="var(--good)" stroke="var(--paper-2)" stroke-width="2.5"/>
+        </svg>
+      </div>
+      <div class="lcfoot"><div class="k"><span><i style="background:var(--good)"></i>daily %</span><span><i style="background:var(--ink-2)"></i>average</span></div><span>today · 93%</span></div>
+    </div>
+  </section>
+
+  <div class="secdiv rise d3"><span class="lab">Needs work</span><span class="rule"></span><span class="seal jp-min" style="--ac:var(--leech)">虫</span></div>
+  <section>
+    <div class="leech rise d4">
+      <h3>Leeches · needs work <span class="chip">4 CARDS</span></h3>
+      <div class="note">under 60% over their last several attempts — drill these first</div>
+      <div class="lrow"><span class="jp">必要</span><span class="r">ひつよう</span><span class="m">necessary</span><div class="bar"><i style="width:42%"></i></div><span class="acc">42%</span></div>
+      <div class="lrow"><span class="jp">確認</span><span class="r">かくにん</span><span class="m">confirmation</span><div class="bar"><i style="width:50%"></i></div><span class="acc">50%</span></div>
+      <div class="lrow"><span class="jp">調べる</span><span class="r">しらべる</span><span class="m">to investigate</span><div class="bar"><i style="width:55%"></i></div><span class="acc">55%</span></div>
+      <div class="lrow"><span class="jp">違う</span><span class="r">ちがう</span><span class="m">to differ</span><div class="bar"><i style="width:58%"></i></div><span class="acc">58%</span></div>
+    </div>
+  </section>
+  <div class="foot-r"><span>03 · Stats · 記録</span><span class="jp-min">継続は力なり</span><span>日常日本語</span></div>
+</main>
+<div class="themer"><button class="on" data-t="day">Day</button><button data-t="night">Night</button></div>
+<script>document.querySelectorAll('.themer button').forEach(b=>b.onclick=()=>{document.documentElement.dataset.theme=b.dataset.t;document.querySelectorAll('.themer button').forEach(x=>x.classList.toggle('on',x===b))});</script>
+</body>
+</html>

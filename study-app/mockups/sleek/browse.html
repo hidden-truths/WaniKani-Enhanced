@@ -1,0 +1,125 @@
+<!doctype html>
+<html lang="en" data-theme="day">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Browse — 日常日本語 blend system</title>
+<link rel="preconnect" href="https://fonts.googleapis.com"><link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Bricolage+Grotesque:opsz,wght@12..96,400;12..96,600;12..96,800&family=Hanken+Grotesk:wght@400;500;600;700;800&family=Spline+Sans+Mono:wght@400;500;600&family=Zen+Kaku+Gothic+New:wght@500;700;900&family=Zen+Old+Mincho:wght@400;600;700;900&display=swap" rel="stylesheet">
+<style>
+:root,:root[data-theme="day"]{--paper:#F4F1E8;--paper-2:#FBFAF4;--sink:#ECE7D9;--ink:#15130D;--ink-2:#4B4536;--muted:#857C66;--line:#16130b1c;--line-2:#16130b12;--grid:#1d160814;--shu:#DC3A22;--shu-deep:#B12C16;--shu-wash:#dc3a2212;--gold:#9A6B0F;--godan:#DC3A22;--ichidan:#234C86;--irregular:#9A6B0F;--adjective:#2C7D6B;--noun:#A06A1E;--adverb:#A14258;--phrase:#736353;--leech:#7C3A95;--good:#2C7A4F;--shadow:0 1px 0 #ffffffcc,0 1px 2px #1a140820,0 22px 40px -22px #2a200f2e;--shadow-lg:0 1px 0 #ffffffcc,0 2px 4px #1a140822,0 48px 70px -34px #2a200f3a;--cta-shadow:0 1px 2px #b12c1633,0 14px 26px -12px #dc3a2255;--r:18px}
+[data-theme="night"]{--paper:#100D09;--paper-2:#1b1610;--sink:#171209;--ink:#F1E9D8;--ink-2:#C0B49C;--muted:#857a64;--line:#fff0d815;--line-2:#fff0d80a;--grid:#fff0d808;--shu:#FF6B4A;--shu-deep:#FF6B4A;--shu-wash:#ff6b4a14;--gold:#E7BC6B;--godan:#FF6B4A;--ichidan:#8FA0EE;--irregular:#E0AC55;--adjective:#5CC0A6;--noun:#D8A24E;--adverb:#D6818F;--phrase:#AB9A85;--leech:#C792EA;--good:#56D29A;--shadow:0 1px 2px #00000060,0 24px 44px -24px #000000aa;--shadow-lg:0 2px 6px #00000066,0 50px 80px -36px #000000cc,0 0 0 1px #e7bc6b0f;--cta-shadow:0 0 0 1px #ff6b4a22,0 16px 34px -14px #ff6b4a66}
+*{box-sizing:border-box;margin:0;padding:0}html{-webkit-font-smoothing:antialiased}
+body{font-family:"Hanken Grotesk",system-ui,sans-serif;color:var(--ink);background:var(--paper);line-height:1.5;min-height:100vh;overflow-x:hidden;position:relative}
+body::before{content:"";position:fixed;inset:0;z-index:0;pointer-events:none;background:linear-gradient(var(--grid) 1px,transparent 1px) 0 0/100% 30px,linear-gradient(90deg,var(--grid) 1px,transparent 1px) 0 0/30px 100%;-webkit-mask-image:radial-gradient(120% 70% at 50% 0%,#000,#0009 42%,transparent 78%);mask-image:radial-gradient(120% 70% at 50% 0%,#000,#0009 42%,transparent 78%);opacity:.9}
+[data-theme="night"] body::before{background:radial-gradient(900px 600px at 84% -8%,rgba(231,188,107,.12),transparent 60%);-webkit-mask-image:none;mask-image:none}
+.jp{font-family:"Zen Kaku Gothic New",sans-serif}.jp-min{font-family:"Zen Old Mincho",serif}.mono{font-family:"Spline Sans Mono",monospace}.disp{font-family:"Bricolage Grotesque",sans-serif}
+.chrome{position:sticky;top:0;z-index:50;display:flex;align-items:center;gap:26px;padding:16px clamp(20px,4vw,52px);background:color-mix(in srgb,var(--paper) 82%,transparent);backdrop-filter:saturate(1.3) blur(14px);border-bottom:1px solid var(--line)}
+.brand{display:flex;align-items:center;gap:12px}.brand .seal{width:30px;height:30px;border-radius:8px;display:grid;place-items:center;background:var(--shu);color:#fff;font-family:"Zen Old Mincho";font-weight:700;font-size:16px;box-shadow:var(--cta-shadow)}[data-theme="night"] .brand .seal{background:linear-gradient(150deg,var(--gold),#c89a45);color:#1a1206}
+.brand b{font-family:"Zen Kaku Gothic New";font-weight:900;font-size:19px}.brand small{font-family:"Spline Sans Mono";font-size:10px;letter-spacing:.28em;color:var(--muted);text-transform:uppercase}
+.nav{display:flex;gap:4px;margin-left:8px}.nav a{position:relative;padding:8px 13px;border-radius:9px;cursor:pointer;font-weight:600;font-size:14.5px;color:var(--ink-2);text-decoration:none;transition:.18s}.nav a .jp{font-weight:700}.nav a:hover{color:var(--ink);background:var(--shu-wash)}.nav a.on{color:var(--ink)}.nav a.on::after{content:"";position:absolute;left:13px;right:13px;bottom:1px;height:2.5px;background:var(--shu);border-radius:2px}
+.actions{margin-left:auto;display:flex;align-items:center;gap:10px}.icon{width:38px;height:38px;border-radius:50%;display:grid;place-items:center;cursor:pointer;background:var(--paper-2);border:1px solid var(--line);color:var(--ink-2);box-shadow:var(--shadow);transition:.18s}.icon:hover{color:var(--ink)}.icon svg{width:18px;height:18px;fill:none;stroke:currentColor;stroke-width:1.7;stroke-linecap:round;stroke-linejoin:round}.avatar{background:linear-gradient(150deg,var(--shu),var(--shu-deep));color:#fff;border:none;font-weight:700;font-family:"Spline Sans Mono"}[data-theme="night"] .avatar{background:linear-gradient(150deg,var(--gold),#c89a45);color:#1a1206}
+.sheet{position:relative;z-index:1;max-width:1200px;margin:0 auto;padding:0 clamp(20px,4vw,52px) 120px}
+.marker{display:flex;align-items:baseline;gap:16px;padding:46px 0 8px}.marker .idx{font-family:"Bricolage Grotesque";font-weight:800;font-size:34px;line-height:1;letter-spacing:-.02em}[data-theme="night"] .marker .idx{color:var(--gold)}.marker .idx .slash{color:var(--muted);font-weight:600}.marker .ttl{font-family:"Zen Old Mincho";font-weight:600;font-size:17px;letter-spacing:.14em}.marker .en{font-family:"Spline Sans Mono";font-size:11px;letter-spacing:.26em;text-transform:uppercase;color:var(--muted)}.marker .rule{flex:1;height:1px;background:var(--line);align-self:center}
+.headline{display:flex;align-items:flex-end;justify-content:space-between;margin-bottom:24px}
+.headline h1{font-family:"Bricolage Grotesque";font-weight:800;font-size:54px;letter-spacing:-.03em;line-height:1}
+.headline .count{font-family:"Spline Sans Mono";font-size:12px;letter-spacing:.1em;color:var(--ink-2);background:var(--paper-2);border:1px solid var(--line);border-radius:30px;padding:8px 16px;display:flex;align-items:center;gap:9px;box-shadow:var(--shadow)}
+.headline .count .d{width:8px;height:8px;border-radius:50%;background:var(--shu)}.headline .count b{font-family:"Bricolage Grotesque";font-size:15px;color:var(--ink)}
+
+/* lighter filter bar */
+.filters{background:var(--paper-2);border:1px solid var(--line);border-radius:var(--r);box-shadow:var(--shadow);padding:6px;display:flex;flex-direction:column;gap:2px}
+.frow{display:flex;align-items:center;gap:12px;padding:10px 14px}
+.frow+.frow{border-top:1px solid var(--line-2)}
+.frow .lab{font-family:"Spline Sans Mono";font-size:10.5px;letter-spacing:.16em;text-transform:uppercase;color:var(--muted);width:78px;flex:0 0 auto}
+.search{flex:1;display:flex;align-items:center;gap:10px;background:var(--sink);border-radius:10px;padding:11px 15px;border:1px solid var(--line-2)}
+.search svg{width:17px;height:17px;fill:none;stroke:var(--muted);stroke-width:2}.search input{border:none;background:none;outline:none;font-family:inherit;font-size:15px;color:var(--ink);width:100%}
+.chips{display:flex;gap:7px;flex-wrap:wrap;align-items:center}
+.chip{font-family:inherit;font-size:13.5px;font-weight:600;padding:7px 13px;border-radius:9px;border:1px solid var(--line);background:var(--paper);color:var(--ink-2);cursor:pointer;display:flex;align-items:center;gap:7px;transition:.15s}
+.chip .b{width:8px;height:8px;border-radius:50%}
+.chip:hover{color:var(--ink)}
+.chip.on{background:var(--shu-wash);border-color:color-mix(in srgb,var(--shu) 45%,transparent);color:var(--shu);font-weight:700}
+.chip.dim{opacity:.4;cursor:default}
+.chip.leech{color:var(--leech);border-color:color-mix(in srgb,var(--leech) 40%,transparent)}.chip.leech .b{background:var(--leech);border-radius:2px}
+.seg{display:flex;border:1px solid var(--line);border-radius:9px;overflow:hidden}
+.seg button{font-family:"Spline Sans Mono";font-size:12.5px;font-weight:500;padding:8px 13px;border:none;background:var(--paper);color:var(--ink-2);cursor:pointer;border-right:1px solid var(--line)}
+.seg button:last-child{border-right:none}.seg button.on{background:var(--ink);color:var(--paper)}.seg button.dim{opacity:.35}
+.more{margin-left:auto;font-family:"Spline Sans Mono";font-size:11px;letter-spacing:.12em;text-transform:uppercase;color:var(--muted);cursor:pointer;display:flex;align-items:center;gap:6px}
+.addbar{display:flex;align-items:center;justify-content:space-between;margin:18px 2px 6px}
+.addbtn{display:inline-flex;align-items:center;gap:9px;font-family:inherit;font-weight:700;font-size:14.5px;padding:11px 18px;border-radius:11px;border:1px dashed color-mix(in srgb,var(--shu) 50%,transparent);background:var(--shu-wash);color:var(--shu);cursor:pointer}
+.addbtn svg{width:16px;height:16px;fill:none;stroke:currentColor;stroke-width:2.4;stroke-linecap:round}
+.hint{font-family:"Spline Sans Mono";font-size:11px;color:var(--muted)}
+
+/* grid of mini station-plate cards */
+.grid{display:grid;grid-template-columns:repeat(3,1fr);gap:16px;margin-top:14px}
+.vcard{position:relative;background:var(--paper-2);border:1px solid var(--line);border-radius:16px;box-shadow:var(--shadow);padding:18px 20px 16px;cursor:pointer;transition:.18s;overflow:hidden}
+.vcard:hover{transform:translateY(-3px);box-shadow:var(--shadow-lg)}
+.vcard::before{content:"";position:absolute;left:0;top:14px;bottom:14px;width:4px;border-radius:0 3px 3px 0;background:var(--cls)}
+.vcard .top{display:flex;justify-content:space-between;align-items:flex-start;margin-bottom:8px}
+.vcard .w{display:flex;align-items:baseline;gap:10px}
+.vcard .kanji{font-family:"Zen Kaku Gothic New";font-weight:900;font-size:34px;line-height:1}
+.vcard .read{font-family:"Zen Kaku Gothic New";font-weight:500;font-size:14px;color:var(--ichidan);position:relative;padding-top:5px}
+.vcard .read .p{position:absolute;top:0;left:0;right:0;height:4px;border:1.5px solid var(--ichidan);border-bottom:none;border-radius:3px 3px 0 0;opacity:.7}
+.vcard .play{width:26px;height:26px;border-radius:50%;border:1px solid var(--line);display:grid;place-items:center;color:var(--shu);background:var(--paper);flex:0 0 auto}.vcard .play svg{width:11px;height:11px;fill:currentColor}
+.vcard .bullet{width:30px;height:30px;border-radius:50%;display:grid;place-items:center;font-family:"Spline Sans Mono";font-weight:700;font-size:10px;letter-spacing:.02em;color:#fff;background:var(--cls);flex:0 0 auto}
+[data-theme="night"] .vcard .bullet{color:#15110a}
+.vcard .mean{font-size:16px;font-weight:600;color:var(--ink);margin-bottom:12px}
+.vcard .foot{display:flex;justify-content:space-between;align-items:center}
+.vcard .tg{display:flex;gap:6px;flex-wrap:wrap}
+.vcard .t{font-family:"Spline Sans Mono";font-size:10px;letter-spacing:.04em;color:var(--muted);border:1px solid var(--line);border-radius:6px;padding:3px 7px}
+.vcard .t.lv{color:var(--ink-2);font-weight:600}
+.vcard .rank{font-family:"Bricolage Grotesque";font-size:13px;color:var(--muted);font-weight:600}
+.foot-r{display:flex;justify-content:space-between;align-items:center;margin-top:54px;padding-top:22px;border-top:1px solid var(--line);font-family:"Spline Sans Mono";font-size:10.5px;letter-spacing:.18em;text-transform:uppercase;color:var(--muted)}.foot-r .jp-min{font-family:"Zen Old Mincho";letter-spacing:.1em;text-transform:none;font-size:13px;color:var(--ink-2)}
+@keyframes rise{from{opacity:0;transform:translateY(14px)}to{opacity:1;transform:none}}.rise{animation:rise .6s cubic-bezier(.2,.7,.2,1) both}.d1{animation-delay:.04s}.d2{animation-delay:.1s}.d3{animation-delay:.16s}
+.themer{position:fixed;right:18px;bottom:18px;z-index:99;display:flex;gap:4px;background:var(--paper-2);border:1px solid var(--line);border-radius:30px;padding:4px;box-shadow:var(--shadow-lg)}.themer button{font-family:"Spline Sans Mono";font-size:11px;letter-spacing:.1em;border:none;background:none;color:var(--muted);padding:7px 14px;border-radius:24px;cursor:pointer;text-transform:uppercase}.themer button.on{background:var(--shu);color:#fff}[data-theme="night"] .themer button.on{background:var(--gold);color:#1a1206}
+@media(max-width:980px){.grid{grid-template-columns:1fr 1fr}}
+</style>
+</head>
+<body>
+<header class="chrome">
+  <div class="brand"><div class="seal">日</div><div style="display:flex;flex-direction:column;line-height:1.05"><b class="jp">日常日本語</b><small>Japanese Trainer</small></div></div>
+  <nav class="nav"><a>Flashcards</a><a class="on">Browse</a><a>Stats</a><a><span class="jp">教科書</span></a><a><span class="jp">独り言</span></a><a><span class="jp">歌</span></a></nav>
+  <div class="actions"><div class="icon"><svg viewBox="0 0 24 24"><circle cx="12" cy="12" r="4.5"/><path d="M12 2v2M12 20v2M2 12h2M20 12h2M5 5l1.5 1.5M17.5 17.5 19 19M19 5l-1.5 1.5M6.5 17.5 5 19"/></svg></div><div class="icon"><svg viewBox="0 0 24 24"><circle cx="12" cy="12" r="3"/><path d="M19 12a7 7 0 0 0-.1-1.2l2-1.6-2-3.4-2.4 1a7 7 0 0 0-2-1.2L14 2h-4l-.5 2.6a7 7 0 0 0-2 1.2l-2.4-1-2 3.4 2 1.6A7 7 0 0 0 5 12c0 .4 0 .8.1 1.2l-2 1.6 2 3.4 2.4-1a7 7 0 0 0 2 1.2L10 22h4l.5-2.6a7 7 0 0 0 2-1.2l2.4 1 2-3.4-2-1.6c.1-.4.1-.8.1-1.2Z"/></svg></div><div class="icon avatar">J</div></div>
+</header>
+<main class="sheet">
+  <div class="marker rise d1"><div class="idx">02<span class="slash"> / </span><span style="color:var(--muted)">06</span></div><div class="ttl jp-min">一覧</div><div class="en">Word library</div><div class="rule"></div></div>
+  <div class="headline rise d1"><h1>Browse the deck</h1><div class="count"><span class="d"></span><b>100</b> cards</div></div>
+
+  <div class="filters rise d2">
+    <div class="frow"><span class="lab">Search</span><label class="search"><svg viewBox="0 0 24 24"><circle cx="11" cy="11" r="7"/><path d="m20 20-3.5-3.5"/></svg><input placeholder="Search reading, kanji, or meaning…"></label></div>
+    <div class="frow"><span class="lab">Class</span><div class="chips">
+      <button class="chip on">All</button>
+      <button class="chip"><span class="b" style="background:var(--godan)"></span>Verb</button>
+      <button class="chip"><span class="b" style="background:var(--adjective)"></span>Adjective</button>
+      <button class="chip"><span class="b" style="background:var(--noun)"></span>Noun</button>
+      <button class="chip"><span class="b" style="background:var(--adverb)"></span>Adverb</button>
+      <button class="chip"><span class="b" style="background:var(--phrase)"></span>Phrase</button>
+    </div></div>
+    <div class="frow"><span class="lab">Level</span>
+      <div class="seg"><button class="on">All</button><button>N5</button><button>N4</button><button>N3</button><button class="dim">N2</button><button class="dim">N1</button></div>
+      <button class="chip leech"><span class="b"></span>Leeches</button>
+      <span class="more">Topic · Transitivity · Rank ＋</span>
+    </div>
+  </div>
+
+  <div class="addbar rise d2">
+    <button class="addbtn"><svg viewBox="0 0 24 24"><path d="M12 5v14M5 12h14"/></svg> Add card</button>
+    <span class="hint">Tap a card for details · rank bottom-right, accuracy bottom-left once drilled</span>
+  </div>
+
+  <div class="grid rise d3">
+    <div class="vcard" style="--cls:var(--irregular)"><div class="top"><div class="w"><span class="kanji jp">する</span><span class="read jp">する<span class="p"></span></span><button class="play"><svg viewBox="0 0 24 24"><path d="M8 5v14l11-7z"/></svg></button></div><div class="bullet">不</div></div><div class="mean">to do</div><div class="foot"><div class="tg"><span class="t lv">N5</span><span class="t">TRANS</span><span class="t">SURU</span></div><span class="rank">#1</span></div></div>
+    <div class="vcard" style="--cls:var(--godan)"><div class="top"><div class="w"><span class="kanji jp">言う</span><span class="read jp">いう<span class="p"></span></span><button class="play"><svg viewBox="0 0 24 24"><path d="M8 5v14l11-7z"/></svg></button></div><div class="bullet">五</div></div><div class="mean">to say</div><div class="foot"><div class="tg"><span class="t lv">N5</span><span class="t">TRANS</span><span class="t">SPEAK</span></div><span class="rank">#2</span></div></div>
+    <div class="vcard" style="--cls:var(--godan)"><div class="top"><div class="w"><span class="kanji jp">ある</span><span class="read jp">ある<span class="p"></span></span><button class="play"><svg viewBox="0 0 24 24"><path d="M8 5v14l11-7z"/></svg></button></div><div class="bullet">五</div></div><div class="mean">to be / exist (inanimate)</div><div class="foot"><div class="tg"><span class="t lv">N5</span><span class="t">INTR</span><span class="t">EXIST</span></div><span class="rank">#3</span></div></div>
+    <div class="vcard" style="--cls:var(--godan)"><div class="top"><div class="w"><span class="kanji jp">なる</span><span class="read jp">なる<span class="p"></span></span><button class="play"><svg viewBox="0 0 24 24"><path d="M8 5v14l11-7z"/></svg></button></div><div class="bullet">五</div></div><div class="mean">to become</div><div class="foot"><div class="tg"><span class="t lv">N5</span><span class="t">INTR</span><span class="t">CHANGE</span></div><span class="rank">#4</span></div></div>
+    <div class="vcard" style="--cls:var(--ichidan)"><div class="top"><div class="w"><span class="kanji jp">見る</span><span class="read jp">みる<span class="p"></span></span><button class="play"><svg viewBox="0 0 24 24"><path d="M8 5v14l11-7z"/></svg></button></div><div class="bullet">一</div></div><div class="mean">to see / watch</div><div class="foot"><div class="tg"><span class="t lv">N5</span><span class="t">TRANS</span><span class="t">PERCEIVE</span></div><span class="rank">#8</span></div></div>
+    <div class="vcard" style="--cls:var(--irregular)"><div class="top"><div class="w"><span class="kanji jp">来る</span><span class="read jp">くる<span class="p"></span></span><button class="play"><svg viewBox="0 0 24 24"><path d="M8 5v14l11-7z"/></svg></button></div><div class="bullet">不</div></div><div class="mean">to come</div><div class="foot"><div class="tg"><span class="t lv">N5</span><span class="t">INTR</span><span class="t">MOTION</span></div><span class="rank">#7</span></div></div>
+    <div class="vcard" style="--cls:var(--ichidan)"><div class="top"><div class="w"><span class="kanji jp">食べる</span><span class="read jp">たべる<span class="p"></span></span><button class="play"><svg viewBox="0 0 24 24"><path d="M8 5v14l11-7z"/></svg></button></div><div class="bullet">一</div></div><div class="mean">to eat</div><div class="foot"><div class="tg"><span class="t lv">N5</span><span class="t">TRANS</span></div><span class="rank">#23</span></div></div>
+    <div class="vcard" style="--cls:var(--adjective)"><div class="top"><div class="w"><span class="kanji jp">高い</span><span class="read jp">たかい<span class="p"></span></span><button class="play"><svg viewBox="0 0 24 24"><path d="M8 5v14l11-7z"/></svg></button></div><div class="bullet">い</div></div><div class="mean">tall / expensive</div><div class="foot"><div class="tg"><span class="t lv">N5</span><span class="t">い-ADJ</span></div><span class="rank">#41</span></div></div>
+    <div class="vcard" style="--cls:var(--noun)"><div class="top"><div class="w"><span class="kanji jp">時間</span><span class="read jp">じかん<span class="p"></span></span><button class="play"><svg viewBox="0 0 24 24"><path d="M8 5v14l11-7z"/></svg></button></div><div class="bullet">名</div></div><div class="mean">time / hour</div><div class="foot"><div class="tg"><span class="t lv">N5</span><span class="t">NOUN</span></div><span class="rank">#56</span></div></div>
+  </div>
+  <div class="foot-r"><span>02 · Browse · 一覧</span><span class="jp-min">塵も積もれば山となる</span><span>日常日本語</span></div>
+</main>
+<div class="themer"><button class="on" data-t="day">Day</button><button data-t="night">Night</button></div>
+<script>document.querySelectorAll('.themer button').forEach(b=>b.onclick=()=>{document.documentElement.dataset.theme=b.dataset.t;document.querySelectorAll('.themer button').forEach(x=>x.classList.toggle('on',x===b))});</script>
+</body>
+</html>
