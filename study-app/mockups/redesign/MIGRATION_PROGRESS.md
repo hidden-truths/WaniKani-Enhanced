@@ -6,7 +6,19 @@
 > truth) are `system.css` + `screens/*.png`; the shipped design system is documented in
 > [../CLAUDE.md](../CLAUDE.md) "Design system". A ready-to-paste **kickoff prompt is at the bottom**.
 
-## Status — ⚠️ Phase 8 built the per-surface compositions, but the site STILL does not match the mocks
+## Status — ✅ Phase 9 done (pending maintainer sign-off + push/PR)
+
+**Phase 9 (2026-06-17, `5e53239`…`e545c28`, on `redesign-migration`, NOT pushed) fixed the frame and
+finished the match.** The chrome is the mock's single-row topbar (with the `#navExtra` speaking-bar
+dock relocated to a sticky sub-bar), the content frame is the 1180/40 column with proper top breathing
+room, 歌 Songs is rebuilt as the two-column stage (hero play-card · on-demand video · glowing playhead ·
+mined-vocab rail), 独り言 is the daily-5 hybrid (featured card + rail + the kept topic browser), and the
+fidelity pass confirmed study-home/flashcard/Browse/Stats/みんなの日本語 already land once the frame is
+right. All verified signed-in in both themes; `bun run test` 245 green + `bun run build` green. Remaining:
+maintainer sign-off → push / open the PR (+ optional polish — the four non-verb accents, the modal-kit
+split). The historical Phase-8 reality check is kept below for context.
+
+## (historical) Phase 8 built the per-surface compositions, but the site STILL did not match the mocks
 
 Honest assessment after the maintainer's Phase-8 review (2026-06-17): **not there.** Phase 8 (8 commits,
 `c71fe61`…`78448c6`, on `redesign-migration`, **NOT pushed**) rebuilt each panel's *composition* —
@@ -231,10 +243,10 @@ and didn't do a fidelity pass.** Phase 9, in strict order (steps 1–2, the fram
    the mocks with **no further changes needed** — the wrong frame, not the panels, was the miss. (The
    `#navExtra` "Practice speaking" dock confirmed working as the sticky sub-bar under みんなの日本語.)
    Remaining surface: 独り言 (step 5).
-5. **独り言 — build the HYBRID (maintainer's call): a daily-5 featured card + the topic-browser kept
-   below it.** The editorial skin already shipped; this adds a daily-5 *featured-card* as the default
-   entry, with the existing category→topic→phrase browser still reachable underneath. (NOT a full
-   restructure — the topic browser stays as the superset.) Signed-in surface; verify both themes.
+5. ✅ **独り言 — HYBRID BUILT (`e545c28`).** A daily-5 "Now speaking" featured card + a "Today's
+   prompts" rail (click a rail card to feature it) as the default entry, with the category→topic→phrase
+   browser kept below as the superset. Only the featured card renders a phrase (one record control per
+   view; invariant held). TODAY_N 8→5. Verified signed-in both themes incl. the rail→feature swap.
 6. **Optional polish:** re-tune the four non-verb accents; the modal-kit / record-compare own-file split.
 7. **Maintainer sign-off → push / open the PR** (still local on `redesign-migration`).
 
