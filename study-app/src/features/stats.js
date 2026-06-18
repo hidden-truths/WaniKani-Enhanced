@@ -55,6 +55,8 @@ function barChart(el, items) {
 // Per-card accuracy bars, capped to the worst CARDBARS_CAP by default (sorted worst→best so
 // the actionable cards lead) with a show-all toggle. Uncapped, a fully-drilled deck is a
 // ~2600px wall of mostly-mastered bars.
+// Set a panel badge's text if present (badges live in the markup; renderStats fills the counts).
+const setBadge = (id, txt) => { const b = document.getElementById(id); if (b) b.textContent = txt; };
 const CARDBARS_CAP = 20;
 let cardBarsExpanded = false;
 function renderCardBars() {
@@ -63,6 +65,7 @@ function renderCardBars() {
     .sort((a, b) => a.val - b.val);
   const el = document.getElementById('cardBars');
   barChart(el, cardBarsExpanded ? drilled : drilled.slice(0, CARDBARS_CAP));
+  setBadge('cardbarsBadge', (cardBarsExpanded ? 'all ' + drilled.length : 'worst ' + Math.min(CARDBARS_CAP, drilled.length)) + ' shown');
   if (drilled.length > CARDBARS_CAP) {
     const btn = document.createElement('button');
     btn.className = 'chip'; btn.style.marginTop = '12px';
@@ -124,14 +127,16 @@ export function renderStats() {
     <div class="metric quiet due"><div class="m-label">${mIcon(I.clock)}Due today</div><div class="m-val">${due}</div><div class="m-sub">${due ? 'ready to review now' : 'all caught up'}</div></div>
     <div class="metric quiet streak"><div class="m-label">${mIcon(I.flame)}Current streak</div><div class="m-val">${streak}<span class="unit">day${streak === 1 ? '' : 's'}</span></div><div class="m-sub">${streak ? 'keep it lit' : 'study today to start'}</div></div>
     <div class="metric quiet leech accent-leech"><div class="m-label">${mIcon(I.alert, 1.8)}Active leeches</div><div class="m-val">${leechN}</div><div class="m-sub">${leechN ? 'chronically missed' : 'all clear'}</div></div>`;
-  // Daily accuracy line: one point per day in state.store.daily (label = MM-DD).
+  // Daily accuracy line: one point per day in state.store.daily (label = MM-DD). The panel
+  // badge shows the mean daily accuracy. (The mock has no per-session chart — the old
+  // #chartSession was dropped; daily accuracy is the single retention line.)
   const days = Object.keys(state.store.daily).sort();
-  lineChart(document.getElementById('chartDaily'), days.map(d => ({ y: Math.round(100 * state.store.daily[d].right / state.store.daily[d].tot), label: d.slice(5) })), { aria: 'Daily accuracy, percent correct per day' });
-  // Per-session line: last 20 sessions, labeled by their absolute session number.
-  const sess = state.store.sessions.slice(-20);
-  lineChart(document.getElementById('chartSession'), sess.map((s, i) => ({ y: Math.round(100 * s.right / s.tot), label: '#' + (state.store.sessions.length - sess.length + i + 1) })), { color: 'var(--ichidan)', aria: 'Per-session accuracy, percent correct per session' });
+  const dvals = days.map(d => Math.round(100 * state.store.daily[d].right / state.store.daily[d].tot));
+  setBadge('dailyBadge', dvals.length ? 'avg ' + Math.round(dvals.reduce((s, x) => s + x, 0) / dvals.length) + '%' : 'no data yet');
+  lineChart(document.getElementById('chartDaily'), days.map((d, i) => ({ y: dvals[i], label: d.slice(5) })), { aria: 'Daily accuracy, percent correct per day' });
   // Leech list: the cards isLeech() currently flags, with their rolling accuracy.
   const lz = leeches(); const ll = document.getElementById('leechList');
+  setBadge('leechBadge', lz.length + (lz.length === 1 ? ' card' : ' cards'));
   if (!lz.length) { ll.innerHTML = '<div class="empty" style="padding:18px">No leeches detected. A leech is any card under 60% over its last 4+ attempts.</div>'; }
   else { ll.innerHTML = lz.map(v => `<div class="leech-row">
     <span class="lr-jp jp">${v.jp}</span>
@@ -144,6 +149,7 @@ export function renderStats() {
   state.DATA.forEach(v => { const c = state.store.cards[v.rank]; const b = c && c.box ? c.box : 0; boxes[b]++; });
   const boxLabels = ['New', 'Box 1', 'Box 2', 'Box 3', 'Box 4', 'Box 5'];
   const boxColors = BOX_COLORS;   // New→stone, then red→amber→gold→olive→green as cards mature
+  setBadge('pipeBadge', total + (total === 1 ? ' card' : ' cards'));
   const bd = document.getElementById('boxDist');
   bd.innerHTML = boxes.map((n, i) => `<div style="display:flex;align-items:center;gap:8px;margin-bottom:5px">
     <div style="width:54px;font-family:monospace;font-size:11px;color:var(--muted)">${boxLabels[i]}</div>

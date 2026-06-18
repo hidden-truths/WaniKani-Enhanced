@@ -14,10 +14,15 @@
 .stats-sub{font-family:var(--body);font-size:17.5px;color:var(--muted);max-width:580px;margin:15px 0 0;line-height:1.5}
 .stats-sub b{color:var(--ink);font-weight:600}
 
-/* section dividers (Retention · Needs work · Per-card accuracy) */
-.section-div{display:flex;align-items:center;gap:18px;margin:36px 0 18px}
-.section-div .sd-label{font-family:var(--mono);font-size:11px;letter-spacing:.3em;text-transform:uppercase;color:var(--muted);font-weight:600;white-space:nowrap}
+/* section dividers (Retention · Needs work · Per-card accuracy) — mono label · rule ·
+   a small kanji seal (記/虫); mock lines 44-51. */
+.section-div{display:flex;align-items:center;gap:20px;margin:48px 0 24px}
+.section-div .sd-label{font-family:var(--mono);font-size:11px;letter-spacing:.32em;text-transform:uppercase;color:var(--muted);font-weight:500;white-space:nowrap}
 .section-div .sd-line{flex:1;height:1px;background:var(--line)}
+.section-div .seal-mini{flex:0 0 auto;display:grid;place-items:center}
+/* the global svg{width:100%} rule would blow the seal up — pin it; font follows --jp */
+.section-div .seal-mini svg{width:38px;height:38px}
+.section-div .seal-mini text{font-family:var(--jp);font-weight:900}
 
 /* ===== METRIC CARDS — 3 HERO + 3 QUIET (mock hero grid, lines 53-145) =====
    6-col grid, each tile spans 2 → 3 per row. Heroes carry the big 84px gradient
@@ -82,15 +87,28 @@
   .metric,.metric.is-hero,.metric.quiet{grid-column:span 2;margin-top:0}
 }
 
-/* two-up chart grid under Retention */
-.chart-grid{display:grid;grid-template-columns:1fr 1fr;gap:18px}
+/* two-up chart grid under Retention (mock .panel-grid: gap 24) */
+.chart-grid{display:grid;grid-template-columns:1fr 1fr;gap:24px}
 .chart-grid .chart-card{margin-bottom:0}
 @media (max-width:860px){.chart-grid{grid-template-columns:1fr}}
 
-.chart-card{background:var(--surf-card);border:1px solid var(--line);border-radius:16px;padding:20px 22px;margin-bottom:18px;box-shadow:var(--lift-md),var(--inner-hi)}
-[data-theme="dark"] .chart-card{border-color:rgba(255,107,74,.1)}
-/* sentence-case (not uppercased) — long descriptive titles; short labels stay caps */
-.chart-title{font-family:var(--mono);font-size:12px;letter-spacing:.02em;color:var(--muted);margin-bottom:14px}
+/* ===== PANEL CHROME — .chart-card promoted to the mock's .panel (gold tab + head) =====
+   The live `.panel` class is the tab container (#panel-stats), so the cards stay
+   `.chart-card`; this gives them the mock's surface + gold tab + panel-head. */
+.chart-card{position:relative;background:var(--surf-card);border:1px solid var(--line);border-radius:18px;padding:28px 30px 26px;margin-bottom:24px;box-shadow:var(--lift-md),var(--inner-hi);backdrop-filter:blur(22px) saturate(135%);-webkit-backdrop-filter:blur(22px) saturate(135%);transition:transform .25s cubic-bezier(.2,.7,.3,1),box-shadow .25s ease,border-color .25s ease}
+[data-theme="dark"] .chart-card{border-color:rgba(255,107,74,.14)}
+.chart-card:hover{transform:translateY(-3px);box-shadow:var(--lift-lg),var(--inner-hi)}
+[data-theme="dark"] .chart-card:hover{border-color:rgba(255,107,74,.28);box-shadow:var(--lift-lg),0 0 0 1px rgba(255,107,74,.1),0 0 80px -24px rgba(255,107,74,.6),var(--inner-hi)}
+/* the gold tab on the panel's top-left edge */
+.chart-card::before{content:"";position:absolute;left:30px;top:0;width:44px;height:3px;background:var(--gold);border-radius:0 0 3px 3px}
+[data-theme="dark"] .chart-card::before{box-shadow:0 0 12px 0 rgba(217,169,78,.5)}
+
+/* panel head — display title + mono sub + a mono badge (mock lines 159-168) */
+.panel-head{display:flex;justify-content:space-between;align-items:flex-start;gap:18px;margin-bottom:22px}
+.panel-head .title{font-family:var(--display);font-weight:700;font-size:23px;color:var(--ink);letter-spacing:-.012em;margin:0}
+.panel-head .sub{font-family:var(--mono);font-size:11px;letter-spacing:.03em;color:var(--muted);margin-top:7px}
+.panel-badge{flex:0 0 auto;font-family:var(--mono);font-size:10.5px;letter-spacing:.14em;text-transform:uppercase;font-weight:500;color:var(--muted);background:var(--chip-bg);border:1px solid var(--line);padding:6px 11px;border-radius:8px;white-space:nowrap}
+.panel-badge.leech-badge{color:var(--leech);border-color:color-mix(in srgb,var(--leech) 36%,transparent);background:var(--leech-soft)}
 
 /* Leech list — carded rows with a plum spine */
 .leech-row{display:flex;align-items:center;gap:11px;padding:11px 14px;border:1px solid var(--line);border-left:4px solid var(--leech);border-radius:0 12px 12px 0;background:var(--surf-inset);margin-bottom:8px}

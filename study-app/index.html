@@ -537,24 +537,37 @@
     <p class="stats-sub" id="statsSub"></p>
     <div class="metrics" id="statgrid"></div>                <!-- editorial metric cards (3 hero + 3 quiet) -->
 
-    <div class="section-div"><span class="sd-label">Retention</span><span class="sd-line"></span></div>
-    <div class="chart-grid">
-      <div class="chart-card"><div class="chart-title">Memory pipeline — Leitner boxes (higher box = longer interval = better learned)</div>
-        <div id="boxDist"></div>                                <!-- SRS box histogram -->
-        <div class="srs-legend">New → Box 1 (1d) → 2 (2d) → 3 (4d) → 4 (8d) → 5 (16d). A correct answer promotes a card; a wrong answer drops it to Box 1.</div>
-      </div>
-      <div class="chart-card"><div class="chart-title">Daily accuracy — one point per day studied</div><div id="chartDaily"></div></div>
+    <div class="section-div">
+      <span class="sd-label">Retention</span><span class="sd-line"></span>
+      <span class="seal-mini"><svg viewBox="0 0 40 40" aria-hidden="true"><circle cx="20" cy="20" r="17" fill="none" stroke="var(--brand)" stroke-width="2.2"/><text x="20" y="26" text-anchor="middle" font-size="17" fill="var(--brand)">記</text></svg></span>
     </div>
-    <div class="chart-card"><div class="chart-title">Per-session accuracy — most recent 20 sessions</div><div id="chartSession"></div></div>
+    <div class="chart-grid">
+      <div class="chart-card">
+        <div class="panel-head"><div><h2 class="title">Memory pipeline</h2><div class="sub">Leitner boxes · higher box = better learned</div></div><span class="panel-badge" id="pipeBadge"></span></div>
+        <div id="boxDist"></div>                                <!-- SRS box histogram → vertical pipeline -->
+      </div>
+      <div class="chart-card">
+        <div class="panel-head"><div><h2 class="title">Daily accuracy</h2><div class="sub">last 14 days · percent correct</div></div><span class="panel-badge" id="dailyBadge"></span></div>
+        <div id="chartDaily"></div>
+      </div>
+    </div>
+    <!-- per-session accuracy chart removed: not in the Stats mock; daily accuracy is the one retention line -->
 
-    <div class="section-div"><span class="sd-label">Needs work</span><span class="sd-line"></span></div>
-    <div class="chart-card"><div class="chart-title">⚠ Leeches — chronically missed (rolling accuracy &lt; 60% over ≥ 4 attempts)</div>
+    <div class="section-div">
+      <span class="sd-label">Needs work</span><span class="sd-line"></span>
+      <span class="seal-mini"><svg viewBox="0 0 40 40" aria-hidden="true"><circle cx="20" cy="20" r="17" fill="none" stroke="var(--leech)" stroke-width="2.2"/><text x="20" y="26" text-anchor="middle" font-size="17" fill="var(--leech)">虫</text></svg></span>
+    </div>
+    <div class="chart-card">
+      <div class="panel-head"><div><h2 class="title">Leeches · needs work</h2><div class="sub">under 60% over their last several attempts — drill these first</div></div><span class="panel-badge leech-badge" id="leechBadge"></span></div>
       <div id="leechList"></div>
-      <div class="row" style="margin-top:12px"><button class="chip primary" id="studyLeeches"><svg class="ic" aria-hidden="true"><use href="#i-play"/></svg>Study leeches now</button></div>
+      <div class="row" style="margin-top:14px"><button class="chip primary" id="studyLeeches"><svg class="ic" aria-hidden="true"><use href="#i-play"/></svg>Study all leeches</button></div>
     </div>
 
     <div class="section-div"><span class="sd-label">Per-card accuracy</span><span class="sd-line"></span></div>
-    <div class="chart-card"><div class="chart-title">Per-card rolling accuracy (last 8 attempts)</div><div id="cardBars"></div></div>
+    <div class="chart-card">
+      <div class="panel-head"><div><h2 class="title">Per-card accuracy</h2><div class="sub">worst-first · each bar is that card&rsquo;s rolling correctness</div></div><span class="panel-badge" id="cardbarsBadge"></span></div>
+      <div id="cardBars"></div>
+    </div>
     <div class="row" style="margin-top:18px"><button class="danger" id="resetBtn">Reset all stats &amp; history</button></div>
   </div>
 
