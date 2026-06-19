@@ -6,7 +6,7 @@
 // renderMinnaLesson is exported because the clips + speaking siblings re-render through it (runtime
 // import cycles, fine like cloud⇄minna).
 import { state } from '../../state.js';
-import { escapeHtml, rubyHtml, foldFurigana, plainText, ttsText, CAT_LABEL, convItemKey, resolveClip, kanjiNum } from '../../core/index.js';
+import { escapeHtml, rubyHtml, foldFurigana, plainText, ttsText, CAT_LABEL, convItemKey, resolveClip, kanjiNum, colorClass, cardStamp, classKanji } from '../../core/index.js';
 import { speak, TTS_OK } from '../tts.js';
 import { playItem, cycleMod } from '../audio.js';
 import { copyBtnHtml, copyText, speakBtnHtml } from '../render-helpers.js';
@@ -156,9 +156,10 @@ export async function renderMinnaLesson(n, body) {
   wireMinnaLesson(n, L, body);
 }
 // Lesson vocab → the mock's labeled word-grid (was a <table>): rows grouped by part of speech under a
-// .grp-label, each row = JP headword (with folded furigana) · usage · gloss · tags · play+record.
+// .grp-label, each row = class line-bullet · JP headword (with folded furigana) · usage · gloss · tags · play+record.
 // Keeps the app data the static mock omits — the iTalki workflow marker, SRS deck-status, and the
-// usage hint — each in its OWN column. The POS reads off the group label, so no per-row POS badge.
+// usage hint — each in its OWN column. The per-row .line-bullet (shared with Browse/Stats; class kanji
+// 五/一/不/名/副 via colorClass(v)) echoes the POS the group label already names — matching the mock's bullet.
 const GROUP_LABEL = { verb: 'Verbs', adjective: 'Adjectives', noun: 'Nouns', adverb: 'Adverbs', phrase: 'Phrases' };
 function minnaVocabSection(L) {
   if (!L.vocab || !L.vocab.length) return '';
@@ -176,6 +177,7 @@ function minnaVocabSection(L) {
     const recDot = speaking ? '' : '<button class="rec-dot" type="button" data-mn-rec aria-label="Record &amp; compare this word" title="Record &amp; compare"></button>';
     const recRow = speaking ? `<div class="vrow-rec">${recordControlHtml(L.lesson, v.key, v.audio, null, false, ttsText({ jp: v.dict || v.kanji || v.kana, read: v.dictRead || v.kana, tts: v.tts }))}</div>` : '';
     return `<div class="vrow">
+      <span class="line-bullet ${colorClass(v)}" title="${cardStamp(v).label}">${classKanji(v)}</span>
       <span class="v-jp jp">${head}</span>
       <span class="v-usage jp">${usage}</span>
       <span class="v-en">${escapeHtml(v.mean)}</span>

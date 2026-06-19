@@ -73,13 +73,15 @@
 [data-theme="dark"] .mn-sec-body{border-color:rgba(255,107,74,.12)}
 /* Vocab → the mock's labeled word-grid (replaced the <table>; the old border-collapse WebKit
    note no longer applies here — the practice-history .mn-ph table is unaffected). Rows grouped by
-   POS under a .grp-label; each .vrow = JP headword · kana reading(+context) · gloss(+iTalki) · tools. */
+   POS under a .grp-label; each .vrow = class line-bullet · JP headword · kana reading(+context) · gloss(+iTalki) · tools. */
 .vocab-groups{display:flex;flex-direction:column}
 .grp-label{font-family:var(--mono);font-size:11px;letter-spacing:.2em;text-transform:uppercase;color:var(--muted);font-weight:600;padding:20px 6px 10px;display:flex;align-items:center;gap:12px}
 .grp-label::after{content:"";flex:1;height:1px;background:var(--line)}
 .vocab-groups>.grp-label:first-child{padding-top:2px}
 .vocab-list{display:flex;flex-direction:column}
-.vrow{display:grid;grid-template-columns:minmax(120px,1.3fr) minmax(64px,0.7fr) minmax(150px,1.9fr) auto auto;align-items:center;gap:18px;padding:12px;border-radius:10px;transition:background .18s ease}
+.vrow{display:grid;grid-template-columns:auto minmax(120px,1.3fr) minmax(64px,0.7fr) minmax(150px,1.9fr) auto auto;align-items:center;gap:18px;padding:12px;border-radius:10px;transition:background .18s ease}
+/* class line-bullet (shared component, styles.css) leads each row — bumped to the mock's 34px next to the 23px headword */
+.vrow .line-bullet{width:34px;height:34px;font-size:16px}
 .vrow:nth-child(even){background:color-mix(in srgb,var(--surf-inset) 55%,transparent)}
 .vrow:hover{background:var(--surf-inset)}
 /* headword carries folded furigana (rt above the kanji); the line-height leaves room for the ruby */
@@ -103,7 +105,8 @@
 /* speaking-mode full record control as a full-width sub-row under its word */
 .vrow-rec{padding:2px 12px 14px}
 @media (max-width:760px){
-  .vrow{grid-template-columns:1fr auto;grid-template-areas:"jp tools" "usage tools" "en tools" "tags tools";gap:3px 16px;padding:11px 10px}
+  .vrow{grid-template-columns:auto 1fr auto;grid-template-areas:"bul jp tools" "bul usage tools" "bul en tools" "bul tags tools";gap:3px 14px;padding:11px 10px}
+  .vrow .line-bullet{grid-area:bul;align-self:start;margin-top:3px}
   .vrow .v-jp{grid-area:jp}.vrow .v-usage{grid-area:usage}.vrow .v-en{grid-area:en;margin-top:2px}.vrow .v-tags{grid-area:tags;margin-top:5px}
   .vrow .v-tools{grid-area:tools;align-self:center}
 }
