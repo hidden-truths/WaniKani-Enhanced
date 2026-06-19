@@ -168,11 +168,26 @@
   /* Browse grid cards (.grid/.card/.stamp/.verb-* /.rank/.acc/.tags) + the detail
      memory track → styles/browse.css (Phase 3). */
   .ex{font-size:15px;margin-bottom:2px} .ex .en{display:block;font-size:13px;color:var(--muted);margin-top:2px}
-  /* furigana ruby — gothic, brand-tinted, tight over the kanji (global) */
-  ruby rt,rt{font-family:var(--jp);font-weight:500;font-size:.4em;color:var(--brand);letter-spacing:.04em}
-  [data-theme="dark"] ruby rt,[data-theme="dark"] rt{color:#FF9B80}
-  /* Furigana toggle (Settings): hide all readings → ruby renders as bare kanji. */
+  /* furigana ruby — gothic, indigo (= the reading colour), tight over the kanji (global).
+     var(--reading) is theme-aware (indigo day / periwinkle night), so no dark override. */
+  ruby rt,rt{font-family:var(--jp);font-weight:500;font-size:.4em;color:var(--reading);letter-spacing:.04em}
+  /* Furigana toggle (chrome ふ / Settings): hide all readings → ruby renders as bare kanji. */
   :root[data-furigana="off"] rt{display:none}
+
+  /* Metro "line-bullet" — a class-colour circle with the word-class kanji (五/一/不/い/名).
+     Shared across Browse / Stats / Minna / Songs; colour keys off colorClass(v)'s class
+     (godan/ichidan/irregular/i-adj/na-adj/noun/adverb/phrase). Day = white glyph on the
+     saturated hue, night = dark ink on the brighter hue. Per-surface markup sets the kanji. */
+  .line-bullet{width:30px;height:30px;border-radius:50%;flex:0 0 auto;display:grid;place-items:center;line-height:1;font-family:var(--jp);font-weight:700;font-size:14px;color:#fff;background:var(--muted)}
+  [data-theme="dark"] .line-bullet{color:#15110A}
+  .line-bullet.godan{background:var(--godan)}
+  .line-bullet.ichidan{background:var(--ichidan)}
+  .line-bullet.irregular{background:var(--irregular)}
+  .line-bullet.i-adj,.line-bullet.na-adj,.line-bullet.adjective{background:var(--adjective)}
+  .line-bullet.noun{background:var(--noun)}
+  .line-bullet.adverb{background:var(--adverb)}
+  .line-bullet.phrase{background:var(--phrase)}
+  .line-bullet.leech{background:var(--leech)}
   /* Detail-modal memory track (.det-memory/.srs-*) → styles/browse.css (Phase 3). */
   /* Jisho dictionary deep-link (flashcard answer + detail modal). */
   .jisho-link{display:inline-flex;align-items:center;gap:5px;font-family:var(--mono);font-size:11px;letter-spacing:.08em;text-transform:uppercase;color:var(--ichidan);text-decoration:none;margin-top:8px}
@@ -189,10 +204,10 @@
      .primary (brand CTA — Start/Add/Save/Sign in) is the shared default here; the
      study-panel grade/SRS variants (.reveal/.wrong/.right/.srs/.suggested) live in
      styles/flashcards.css. (.fc-buttons row layout moved there too.) */
-  .btn{font-family:var(--body);font-size:15px;font-weight:500;padding:13px 22px;border-radius:12px;border:1px solid var(--line);background:var(--chip-bg);color:var(--ink);cursor:pointer;box-shadow:var(--lift-sm);transition:transform .16s ease,box-shadow .2s ease,background .2s ease,border-color .2s ease,color .2s ease}
-  .btn:hover{transform:translateY(-1px);border-color:var(--muted)}
-  .btn.primary{background:var(--brand);color:var(--brand-on);border:none;font-weight:600;box-shadow:var(--cta-shadow)}
-  .btn.primary:hover{background:var(--brand-deep);transform:translateY(-2px);box-shadow:var(--cta-shadow-hover)}
+  .btn{font-family:var(--body);font-size:15px;font-weight:600;padding:14px 22px;border-radius:13px;border:1px solid var(--line);background:var(--raised);color:var(--ink);cursor:pointer;box-shadow:var(--lift-sm);transition:transform .16s ease,box-shadow .2s ease,background .2s ease,border-color .2s ease,color .2s ease}
+  .btn:hover{transform:translateY(-1px);border-color:var(--muted);box-shadow:var(--lift-md)}
+  .btn.primary{background:linear-gradient(168deg,var(--brand),var(--brand-deep));color:#fff;border:none;font-weight:700;box-shadow:var(--cta-shadow)}
+  .btn.primary:hover{transform:translateY(-2px);box-shadow:var(--cta-shadow-hover)}
   [data-theme="dark"] .btn.primary{background:linear-gradient(160deg,#FF8A6E,var(--brand) 55%,var(--brand-deep))}
   .kbd{font-family:var(--mono);font-size:10px;font-weight:500;letter-spacing:.02em;opacity:.7}      /* keyboard-shortcut hints on buttons */
   /* Study-home hero — the giant due-count numeral + forecast side card

@@ -36,8 +36,9 @@ body{
 /* ---- Atmosphere layers (fixed, behind content, pointer-events:none) ----------
    .grain: fine paper grain — visible by day (multiply), a whisper by night
    (overlay); opacity/blend come from --grain-* in tokens.css (theme-aware incl.
-   the prefers-color-scheme fallback). .atmos: warm radial blooms — washi sun-wash
-   by day, candle glow + a vertical wash by night. */
+   the prefers-color-scheme fallback). .atmos (blend): the 原稿 manuscript grid +
+   a warm sun-wash by day (masked to fade out toward the bottom), maki-e gold +
+   coral candle glow by night (no mask). */
 .grain{
   position:fixed; inset:0; z-index:0; pointer-events:none;
   background-image:url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='180' height='180'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.9' numOctaves='2' stitchTiles='stitch'/%3E%3CfeColorMatrix type='saturate' values='0'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23n)' opacity='0.55'/%3E%3C/svg%3E");
@@ -51,24 +52,29 @@ body{
 }
 :root .atmos, [data-theme="light"] .atmos{
   background:
-    radial-gradient(60% 55% at 88% 4%, rgba(205,67,39,.11), rgba(205,67,39,0) 60%),
-    radial-gradient(55% 50% at 3% 96%, rgba(42,74,110,.07), rgba(42,74,110,0) 62%),
-    radial-gradient(120% 90% at 50% -12%, rgba(231,219,196,.55), rgba(231,219,196,0) 55%);
+    linear-gradient(var(--grid) 1px, transparent 1px) 0 0 / 100% 30px,
+    linear-gradient(90deg, var(--grid) 1px, transparent 1px) 0 0 / 30px 100%,
+    radial-gradient(60% 55% at 88% 4%, rgba(220,58,34,.07), transparent 60%),
+    radial-gradient(120% 90% at 50% -12%, rgba(231,219,196,.5), transparent 56%);
+  -webkit-mask-image: radial-gradient(120% 82% at 50% 0%, #000, rgba(0,0,0,.6) 44%, transparent 80%);
+          mask-image: radial-gradient(120% 82% at 50% 0%, #000, rgba(0,0,0,.6) 44%, transparent 80%);
 }
 [data-theme="dark"] .atmos{
   background:
     radial-gradient(820px 600px at 86% -6%, rgba(255,107,74,.20), transparent 60%),
-    radial-gradient(760px 600px at 4% 10%, rgba(217,169,78,.13), transparent 62%),
+    radial-gradient(760px 600px at 4% 10%, rgba(231,188,107,.14), transparent 62%),
     radial-gradient(1000px 760px at 50% 120%, rgba(255,107,74,.06), transparent 60%),
-    linear-gradient(180deg, #16120F 0%, #1B1612 42%, #16120F 100%);
+    linear-gradient(180deg, #100D09 0%, #1B1610 42%, #100D09 100%);
+  -webkit-mask-image: none; mask-image: none;
 }
 /* dark atmosphere under the system-preference fallback (no explicit theme set) */
 @media (prefers-color-scheme: dark){
   :root:not([data-theme="light"]) .atmos{
     background:
       radial-gradient(820px 600px at 86% -6%, rgba(255,107,74,.20), transparent 60%),
-      radial-gradient(760px 600px at 4% 10%, rgba(217,169,78,.13), transparent 62%),
+      radial-gradient(760px 600px at 4% 10%, rgba(231,188,107,.14), transparent 62%),
       radial-gradient(1000px 760px at 50% 120%, rgba(255,107,74,.06), transparent 60%),
-      linear-gradient(180deg, #16120F 0%, #1B1612 42%, #16120F 100%);
+      linear-gradient(180deg, #100D09 0%, #1B1610 42%, #100D09 100%);
+    -webkit-mask-image: none; mask-image: none;
   }
 }
