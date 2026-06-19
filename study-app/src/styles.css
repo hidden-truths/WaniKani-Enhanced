@@ -287,10 +287,8 @@
   #boxDist .barx{transform-origin:left;animation:growX .5s cubic-bezier(.2,.7,.3,1) both}
   @keyframes growY{from{transform:scaleY(0)}to{transform:scaleY(1)}}
   .fcast-chart svg rect.fbar{transform-box:fill-box;transform-origin:bottom;animation:growY .45s cubic-bezier(.2,.7,.3,1) both}
-  /* CTA breathe — primary buttons gently pulse their warm glow by night (mock: system.css
-     [data-theme=dark] .btn-primary). Skips :disabled (the caught-up jade hero state). */
-  @keyframes breathe{0%,100%{box-shadow:0 10px 30px -12px rgba(255,107,74,.5)}50%{box-shadow:0 0 0 8px rgba(255,107,74,.07),0 16px 44px -10px rgba(255,107,74,.85)}}
-  [data-theme="dark"] .btn.primary:not(:disabled),[data-theme="dark"] .btn.btn-primary:not(:disabled),[data-theme="dark"] .btn.hero-due:not(:disabled){animation:breathe 3.6s ease-in-out infinite}
+  /* CTA breathe REMOVED (2026-06) — the night-time pulsing warm-glow animation on primary
+     buttons was performance-heavy + over the top; primaries keep their static --cta-shadow. */
   /* Tactile press feedback on buttons/chips. */
   .btn{transition:transform .12s ease,background .15s ease,color .15s ease,border-color .15s ease}
   .btn:active,.chip:active{transform:translateY(1px)}
@@ -330,7 +328,7 @@
   .extok{cursor:pointer;border-radius:4px;transition:background-color .12s ease}
   .extok:hover{background:color-mix(in srgb,var(--ink) 10%,transparent)}
   .extok:focus-visible{outline:none;background:color-mix(in srgb,var(--ink) 10%,transparent);box-shadow:0 0 0 2px color-mix(in srgb,var(--godan) 55%,transparent)}
-  .word-pop{position:absolute;z-index:1000;min-width:140px;max-width:280px;background:var(--surf-card);border:1px solid var(--line);border-radius:14px;box-shadow:var(--lift-lg),var(--inner-hi);backdrop-filter:blur(14px) saturate(135%);-webkit-backdrop-filter:blur(14px) saturate(135%);padding:12px 14px;font-family:var(--body);animation:modalPop .14s ease}
+  .word-pop{position:absolute;z-index:1000;min-width:140px;max-width:280px;background:var(--surf-card);border:1px solid var(--line);border-radius:14px;box-shadow:var(--lift-lg),var(--inner-hi);padding:12px 14px;font-family:var(--body);animation:modalPop .14s ease}
   [data-theme="dark"] .word-pop{border-color:rgba(255,107,74,.18)}
   .word-pop .wl-head{display:flex;align-items:baseline;gap:8px;flex-wrap:wrap}
   .word-pop .wl-surface{font-size:20px;color:var(--ink)}

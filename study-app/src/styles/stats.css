@@ -43,12 +43,10 @@
 .metric .m-sub{font-family:var(--body);font-size:13.5px;color:var(--muted);margin-top:8px}
 .metric .m-sub b{color:var(--ink);font-weight:600}
 
-/* HERO — dial the numeral up (84px) + a warm corner wash + a gradient numeral */
+/* HERO — dial the numeral up (84px) + a gradient numeral (the corner-wash glow was removed) */
 .metric.is-hero .m-val{font-size:84px;font-weight:800;font-variation-settings:"opsz" 96;margin-top:12px}
-.metric.is-hero::before{content:"";position:absolute;left:-40px;bottom:-50px;width:170px;height:170px;border-radius:50%;pointer-events:none;z-index:0;background:radial-gradient(circle,var(--brand-soft),transparent 70%);opacity:.7}
-[data-theme="dark"] .metric.is-hero::before{opacity:1;background:radial-gradient(circle,rgba(255,107,74,.10),transparent 70%)}
 .metric.is-hero .m-label,.metric.is-hero .m-val,.metric.is-hero .m-sub,.metric.is-hero .trend{position:relative;z-index:1}
-[data-theme="dark"] .metric.is-hero .m-val{background:linear-gradient(175deg,#FFF7EF 0%,#ECE3D5 44%,#FFC2B0 118%);-webkit-background-clip:text;background-clip:text;-webkit-text-fill-color:transparent;filter:drop-shadow(0 6px 26px rgba(255,107,74,.22))}
+[data-theme="dark"] .metric.is-hero .m-val{background:linear-gradient(175deg,#FFF7EF 0%,#ECE3D5 44%,#FFC2B0 118%);-webkit-background-clip:text;background-clip:text;-webkit-text-fill-color:transparent}
 [data-theme="dark"] .metric.is-hero .m-val .unit,[data-theme="dark"] .metric.is-hero .m-val .frac{-webkit-text-fill-color:currentColor}
 [data-theme="light"] .metric.is-hero .m-val{background:linear-gradient(168deg,var(--ink) 38%,var(--brand-deep) 130%);-webkit-background-clip:text;background-clip:text;-webkit-text-fill-color:transparent}
 [data-theme="light"] .metric.is-hero .m-val .unit,[data-theme="light"] .metric.is-hero .m-val .frac{-webkit-text-fill-color:currentColor}
@@ -57,15 +55,9 @@
 .metric.quiet{margin-top:18px}
 .metric.quiet .m-val{font-size:46px;font-weight:700;margin-top:8px}
 
-/* accent corner-washes + value tints */
-.metric.accent-good::after,.metric.accent-leech::after{content:"";position:absolute;right:-30px;top:-30px;width:150px;height:150px;border-radius:50%;pointer-events:none;opacity:.55}
-.metric.accent-good::after{background:radial-gradient(circle,var(--good-soft),transparent 70%)}
-[data-theme="dark"] .metric.accent-good::after{opacity:.9;background:radial-gradient(circle,rgba(86,217,166,.16),transparent 70%)}
+/* accent value tints (the corner-wash glow blobs were removed) */
 .metric.accent-good .m-label svg{color:var(--good)}
-.metric.accent-leech::after{background:radial-gradient(circle,var(--leech-soft),transparent 70%)}
-[data-theme="dark"] .metric.accent-leech::after{opacity:.9;background:radial-gradient(circle,rgba(199,146,234,.18),transparent 70%)}
 .metric.leech .m-val{color:var(--leech)}
-[data-theme="dark"] .metric.leech .m-val{text-shadow:0 0 26px rgba(199,146,234,.45)}
 .metric.leech .m-label svg{color:var(--leech)}
 .metric.due .m-val{color:var(--brand)}
 .metric.streak .m-label svg{color:var(--brand)}
@@ -95,13 +87,12 @@
 /* ===== PANEL CHROME — .chart-card promoted to the mock's .panel (gold tab + head) =====
    The live `.panel` class is the tab container (#panel-stats), so the cards stay
    `.chart-card`; this gives them the mock's surface + gold tab + panel-head. */
-.chart-card{position:relative;background:var(--surf-card);border:1px solid var(--line);border-radius:18px;padding:28px 30px 26px;margin-bottom:24px;box-shadow:var(--lift-md),var(--inner-hi);backdrop-filter:blur(22px) saturate(135%);-webkit-backdrop-filter:blur(22px) saturate(135%);transition:transform .25s cubic-bezier(.2,.7,.3,1),box-shadow .25s ease,border-color .25s ease}
+.chart-card{position:relative;background:var(--surf-card);border:1px solid var(--line);border-radius:18px;padding:28px 30px 26px;margin-bottom:24px;box-shadow:var(--lift-md),var(--inner-hi);transition:transform .25s cubic-bezier(.2,.7,.3,1),box-shadow .25s ease,border-color .25s ease}
 [data-theme="dark"] .chart-card{border-color:rgba(255,107,74,.14)}
 .chart-card:hover{transform:translateY(-3px);box-shadow:var(--lift-lg),var(--inner-hi)}
-[data-theme="dark"] .chart-card:hover{border-color:rgba(255,107,74,.28);box-shadow:var(--lift-lg),0 0 0 1px rgba(255,107,74,.1),0 0 80px -24px rgba(255,107,74,.6),var(--inner-hi)}
+[data-theme="dark"] .chart-card:hover{border-color:rgba(255,107,74,.28);box-shadow:var(--lift-lg),var(--inner-hi)}
 /* the gold tab on the panel's top-left edge */
 .chart-card::before{content:"";position:absolute;left:30px;top:0;width:44px;height:3px;background:var(--gold);border-radius:0 0 3px 3px}
-[data-theme="dark"] .chart-card::before{box-shadow:0 0 12px 0 rgba(217,169,78,.5)}
 
 /* panel head — display title + mono sub + a mono badge (mock lines 159-168) */
 .panel-head{display:flex;justify-content:space-between;align-items:flex-start;gap:18px;margin-bottom:22px}
@@ -120,10 +111,9 @@
 /* leech row leads with the class line-bullet (blend); a touch larger than the grid bullets */
 .leech-row .line-bullet{width:32px;height:32px;font-size:15px}
 .leech-row:hover{transform:translateY(-2px);box-shadow:var(--lift-md);border-color:color-mix(in srgb,var(--leech) 50%,transparent)}
-[data-theme="dark"] .leech-row:hover{box-shadow:var(--lift-md),0 0 32px -14px rgba(199,146,234,.6)}
+[data-theme="dark"] .leech-row:hover{box-shadow:var(--lift-md)}
 .leech-word{display:flex;align-items:baseline;gap:12px;min-width:190px}
 .leech-word .jp{font-family:var(--jp);font-weight:700;font-size:29px;color:var(--ink);line-height:1;letter-spacing:.02em}
-[data-theme="dark"] .leech-word .jp{text-shadow:0 2px 18px rgba(199,146,234,.2)}
 .leech-word .read{font-family:var(--jp);font-size:13.5px;color:var(--muted)}
 .leech-mid{min-width:0}
 .leech-mid .mean{font-family:var(--body);font-size:15.5px;color:var(--ink)}
@@ -139,7 +129,7 @@
 .pill.review{color:var(--leech);background:var(--leech-soft);border-color:color-mix(in srgb,var(--leech) 36%,transparent);cursor:pointer;padding:8px 14px}
 .pill.review svg{width:13px;height:13px}
 .pill.review:hover{background:var(--leech);color:#fff;transform:translateY(-1px)}
-[data-theme="dark"] .pill.review:hover{color:#1a0d22;box-shadow:0 0 22px -6px rgba(199,146,234,.7)}
+[data-theme="dark"] .pill.review:hover{color:#1a0d22}
 
 /* ===== MEMORY PIPELINE — vertical Leitner bars on a stone→jade ramp (mock 170-217) ===== */
 /* the only NEW palette the system doesn't ship: the New→Box5 ramp (light + dark) */

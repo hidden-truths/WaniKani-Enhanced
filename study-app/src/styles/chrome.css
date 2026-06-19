@@ -76,7 +76,6 @@
 }
 [data-theme="dark"] .nav .tab.active::after{
   background:linear-gradient(90deg, transparent, var(--brand), transparent);
-  box-shadow:0 0 12px 1px rgba(255,107,74,.5);
 }
 
 /* Right-hand actions: round icon buttons (ふ/theme/settings) + the account avatar. */
@@ -132,7 +131,7 @@
 .avatar:hover{ transform:translateY(-1px); }
 [data-theme="dark"] .avatar{
   background:linear-gradient(150deg, var(--gold), #c89a45); color:#1a1206;
-  box-shadow:0 0 16px -4px rgba(231,188,107,.5);
+  box-shadow:var(--cta-shadow);
 }
 /* signed out — neutral, muted person glyph (no gradient, reads as "sign in") */
 .avatar.signed-out,

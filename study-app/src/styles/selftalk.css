@@ -61,7 +61,6 @@
 .st-phrase::before{content:"";position:absolute;left:0;top:0;bottom:0;width:4px;background:linear-gradient(to bottom,var(--brand),var(--brand-deep))}
 .st-phrase:hover{transform:translateY(-2px);box-shadow:var(--lift-lg),var(--inner-hi)}
 [data-theme="dark"] .st-phrase{border-color:rgba(255,107,74,.14)}
-[data-theme="dark"] .st-phrase::before{box-shadow:0 0 14px 0 rgba(255,107,74,.45)}
 .st-phrase.practiced::before{background:linear-gradient(to bottom,var(--good),var(--good-deep))}
 .st-play{margin-top:1px}
 .st-phrase-text{flex:1;min-width:0}

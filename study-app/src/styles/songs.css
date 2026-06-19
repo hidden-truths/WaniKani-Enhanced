@@ -85,29 +85,26 @@
 .ctx-row .st-back .ic{transform:none}
 
 /* ---- HERO play-card ---- */
-.song-hero{position:relative;overflow:hidden;padding:0;border-radius:20px;background:var(--surf-card);border:1px solid var(--line);box-shadow:var(--lift-md),var(--inner-hi);backdrop-filter:blur(22px) saturate(135%);-webkit-backdrop-filter:blur(22px) saturate(135%)}
+.song-hero{position:relative;overflow:hidden;padding:0;border-radius:20px;background:var(--surf-card);border:1px solid var(--line);box-shadow:var(--lift-md),var(--inner-hi)}
 [data-theme="dark"] .song-hero{border-color:rgba(255,107,74,.14)}
 [data-theme="light"] .song-hero{background:linear-gradient(168deg,#FFFDF8,#FBF6EC);border-color:color-mix(in srgb,var(--brand) 16%,var(--line));box-shadow:var(--lift-lg),inset 0 0 0 1px rgba(255,253,248,.9),var(--inner-hi)}
-.song-hero::after{content:"";position:absolute;inset:0;z-index:1;pointer-events:none}
-[data-theme="light"] .song-hero::after{background:radial-gradient(120% 130% at 18% -10%,rgba(205,67,39,.07),transparent 55%)}
-[data-theme="dark"] .song-hero::after{background:radial-gradient(120% 140% at 16% -16%,rgba(255,107,74,.16),transparent 56%),radial-gradient(80% 100% at 92% 0%,rgba(217,169,78,.08),transparent 60%)}
 .hero-inner{display:grid;grid-template-columns:auto 1fr auto;gap:32px;padding:30px 34px 28px;position:relative;z-index:2}
 
 /* vinyl disc */
 .disc{grid-row:1/span 2;align-self:center;width:120px;height:120px;border-radius:50%;position:relative;display:grid;place-items:center;flex-shrink:0;background:radial-gradient(circle at 50% 50%,var(--brand-soft),transparent 58%),conic-gradient(from 210deg,rgba(205,67,39,.10),rgba(205,67,39,0) 40%,rgba(205,67,39,.10));border:1px solid var(--line);box-shadow:var(--lift-md),inset 0 0 0 1px rgba(205,67,39,.10)}
-[data-theme="dark"] .disc{background:radial-gradient(circle at 42% 36%,rgba(255,107,74,.30),transparent 56%),conic-gradient(from 210deg,rgba(255,107,74,.16),rgba(255,107,74,0) 38%,rgba(255,107,74,.16));border-color:rgba(255,107,74,.24);box-shadow:0 0 44px -8px rgba(255,107,74,.6),inset 0 0 0 1px rgba(255,107,74,.18)}
+[data-theme="dark"] .disc{background:radial-gradient(circle at 42% 36%,rgba(255,107,74,.30),transparent 56%),conic-gradient(from 210deg,rgba(255,107,74,.16),rgba(255,107,74,0) 38%,rgba(255,107,74,.16));border-color:rgba(255,107,74,.24);box-shadow:var(--lift-md),inset 0 0 0 1px rgba(255,107,74,.18)}
 .disc::before,.disc::after{content:"";position:absolute;border-radius:50%;border:1px solid var(--line);opacity:.6;pointer-events:none}
 .disc::before{inset:13px}.disc::after{inset:28px}
 [data-theme="dark"] .disc::before,[data-theme="dark"] .disc::after{border-color:rgba(255,238,222,.10)}
 .disc .label{width:44px;height:44px;border-radius:50%;background:var(--brand);display:grid;place-items:center;box-shadow:0 0 0 4px var(--surf-card),var(--lift-sm);z-index:2}
-[data-theme="dark"] .disc .label{box-shadow:0 0 0 4px rgba(22,18,15,.7),0 0 22px -4px rgba(255,107,74,.8)}
+[data-theme="dark"] .disc .label{box-shadow:0 0 0 4px rgba(22,18,15,.7)}
 .disc .label .glyph{font-family:var(--jp);font-weight:900;font-size:22px;line-height:1;color:var(--brand-on)}
 [data-theme="dark"] .disc .label .glyph{color:#1F0C06}
 .disc .spindle{position:absolute;width:8px;height:8px;border-radius:50%;z-index:3;background:var(--surf-card);border:1px solid var(--line)}
 
 .song-head-main{min-width:0}
 .song-title{font-family:var(--jp);font-weight:900;font-size:clamp(32px,4vw,54px);line-height:1.05;letter-spacing:.01em;color:var(--ink);margin:0;overflow-wrap:anywhere}
-[data-theme="dark"] .song-title{background:linear-gradient(172deg,#FFF7EF 0%,#ECE3D5 46%,#FFB7A4 116%);-webkit-background-clip:text;background-clip:text;-webkit-text-fill-color:transparent;filter:drop-shadow(0 8px 30px rgba(255,107,74,.28))}
+[data-theme="dark"] .song-title{background:linear-gradient(172deg,#FFF7EF 0%,#ECE3D5 46%,#FFB7A4 116%);-webkit-background-clip:text;background-clip:text;-webkit-text-fill-color:transparent}
 .song-title .lv{font-size:11px;vertical-align:middle;margin-left:8px;-webkit-text-fill-color:currentColor}
 .song-artist{font-family:var(--body);font-size:15px;color:var(--muted);margin-top:8px}
 
@@ -174,9 +171,6 @@
 
 /* ---- THE LYRIC STAGE ---- */
 .lyric-stage{position:relative}
-.lyric-stage::before{content:"";position:absolute;left:-50px;right:-50px;top:150px;height:230px;pointer-events:none;z-index:0;transition:opacity .55s ease}
-[data-theme="light"] .lyric-stage::before{background:radial-gradient(72% 100% at 30% 50%,rgba(205,67,39,.10),transparent 74%);filter:blur(8px)}
-[data-theme="dark"] .lyric-stage::before{background:radial-gradient(70% 130% at 27% 50%,rgba(255,107,74,.24),transparent 74%);filter:blur(26px)}
 .stage-label{font-family:var(--mono);font-size:10.5px;letter-spacing:.26em;text-transform:uppercase;color:var(--muted);display:flex;align-items:center;gap:12px;margin:2px 0 16px}
 .stage-label .line-rule{flex:1;height:1px;background:var(--line)}
 .stage-label .count{color:var(--gold);letter-spacing:.16em}
@@ -206,7 +200,7 @@
 .ll.current{background:var(--surf-card);border-color:var(--line);box-shadow:var(--lift-md);padding-left:36px}
 .ll.current .num{left:13px}
 [data-theme="light"] .ll.current{background:linear-gradient(100deg,color-mix(in srgb,var(--brand) 26%,var(--raised)),var(--raised) 72%);border-color:color-mix(in srgb,var(--brand) 46%,transparent)}
-[data-theme="dark"] .ll.current{background:linear-gradient(105deg,rgba(255,107,74,.21),rgba(44,35,27,.55) 74%);border-color:rgba(255,107,74,.5);box-shadow:0 0 0 1px rgba(255,107,74,.18),0 18px 50px -20px rgba(0,0,0,.7),0 0 96px -20px rgba(255,107,74,.85),var(--inner-hi)}
+[data-theme="dark"] .ll.current{background:linear-gradient(105deg,rgba(255,107,74,.21),rgba(44,35,27,.55) 74%);border-color:rgba(255,107,74,.5);box-shadow:0 0 0 1px rgba(255,107,74,.18),0 18px 50px -20px rgba(0,0,0,.7),var(--inner-hi)}
 .ll.current::before{content:"";position:absolute;left:0;top:11px;bottom:11px;width:6px;border-radius:0 5px 5px 0;background:linear-gradient(180deg,var(--brand),var(--brand-deep));box-shadow:0 0 14px 1px color-mix(in srgb,var(--brand) 55%,transparent)}
 [data-theme="dark"] .ll.current::before{background:linear-gradient(180deg,#FF8A6E,var(--brand));box-shadow:0 0 22px 2px rgba(255,107,74,.95),0 0 6px 0 rgba(255,154,128,.9)}
 .ll.past{opacity:.5}
@@ -231,7 +225,7 @@
 .lt.sg-star.starred .ic{fill:currentColor}
 
 /* ---- VOCAB RAIL (mined vocabulary) ---- */
-.vocab-rail{position:sticky;top:80px;padding:24px 22px 22px;background:var(--surf-card);border:1px solid var(--line);border-radius:18px;box-shadow:var(--lift-md),var(--inner-hi);backdrop-filter:blur(22px) saturate(135%);-webkit-backdrop-filter:blur(22px) saturate(135%)}
+.vocab-rail{position:sticky;top:80px;padding:24px 22px 22px;background:var(--surf-card);border:1px solid var(--line);border-radius:18px;box-shadow:var(--lift-md),var(--inner-hi)}
 [data-theme="dark"] .vocab-rail{border-color:rgba(255,107,74,.14)}
 .vocab-rail::after{content:"";position:absolute;left:24px;top:0;width:38px;height:3px;background:var(--gold);border-radius:0 0 3px 3px}
 .vr-head{display:flex;align-items:baseline;justify-content:space-between;margin-bottom:6px}
@@ -263,7 +257,7 @@
 .vw-meta{display:flex;align-items:center;gap:7px;margin-left:auto;flex-shrink:0}
 .vw-jlpt{font-family:var(--mono);font-size:9.5px;letter-spacing:.08em;font-weight:500;padding:3px 7px;border-radius:6px;border:1px solid var(--line);color:var(--muted);background:var(--chip-bg)}
 .vw-add{width:30px;height:30px;border-radius:9px;flex-shrink:0;display:grid;place-items:center;cursor:pointer;background:var(--brand);color:var(--brand-on);border:none;box-shadow:var(--lift-sm);transition:transform .16s ease,box-shadow .2s ease}
-[data-theme="dark"] .vw-add{background:linear-gradient(155deg,#FF8A6E,var(--brand));box-shadow:0 0 14px -4px rgba(255,107,74,.7)}
+[data-theme="dark"] .vw-add{background:linear-gradient(155deg,#FF8A6E,var(--brand));box-shadow:var(--lift-sm)}
 .vw-add:hover{transform:translateY(-2px) scale(1.05)}
 .vw-add .ic{width:15px;height:15px}
 .vword.is-known .vw-add{background:var(--good-soft);color:var(--good-deep);box-shadow:none;cursor:default}

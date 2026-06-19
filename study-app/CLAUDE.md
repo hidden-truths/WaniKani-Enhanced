@@ -350,8 +350,13 @@ palette) paint the card spine + hanko stamp via `colorClass(v)`; leech=plum, "go
 were removed): `--display` (Bricolage — display/numerals/the revealed meaning), `--body` (Hanken —
 UI/prose), `--mono` (Spline Sans Mono — short labels), `--jp` (Zen Kaku Gothic New — all Japanese).
 The `.grain` + `.atmos` fixed layers (`styles/base.css`, behind content at z-0) carry the
-paper-grain + candle-glow atmosphere; light depth is **shadow-driven** (`--lift-*`), dark depth is
-**glow-driven** — both live on the component surfaces, not on luminance.
+paper-grain + (light) manuscript-grid atmosphere; depth is **shadow-driven** (`--lift-*`/
+`--card-shadow`) in BOTH themes. **The decorative glow was cut back hard (2026-06 — performance +
+calmer):** the big background radial "orbs", the per-card glow blobs + their `filter:blur()`, the
+night-time CTA `breathe` animation, the no-op card `backdrop-filter`s (the cards are opaque
+`--surf-card`, so it only cost GPU), and the prominent dark-mode neon halos are all gone — only
+small accent glows (pips, the now-playing equalizer, the chart line) + the frosted nav/modal-overlay
+remain. Don't reintroduce a background orb layer or per-element neon halos.
 
 Component contracts you must preserve:
 

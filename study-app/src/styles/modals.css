@@ -15,7 +15,7 @@
 .modal-overlay.show{display:flex}
 /* surf-card sheet; the scroll-cap (max-height + overflow-y) keeps a tall modal
    scrolling INSIDE its own height + the sticky .modal-x — don't remove these. */
-.modal{position:relative;background:var(--surf-card);color:var(--ink);border:1px solid var(--line);border-radius:20px;max-width:420px;width:100%;padding:26px 28px;box-shadow:var(--card-shadow),var(--inner-hi);backdrop-filter:blur(26px) saturate(140%);-webkit-backdrop-filter:blur(26px) saturate(140%);max-height:calc(100vh - 40px);overflow-y:auto}
+.modal{position:relative;background:var(--surf-card);color:var(--ink);border:1px solid var(--line);border-radius:20px;max-width:420px;width:100%;padding:26px 28px;box-shadow:var(--card-shadow),var(--inner-hi);max-height:calc(100vh - 40px);overflow-y:auto}
 [data-theme="dark"] .modal{border-color:rgba(255,107,74,.18)}
 /* When a tall modal (e.g. Settings) scrolls, keep its × pinned to the top-right of the scroll
    viewport instead of scrolling away with the content (float keeps it out of the title's flow). */
