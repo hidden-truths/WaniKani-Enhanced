@@ -62,6 +62,28 @@ maintainer's real data, both themes (screenshots in the session):
 mock — `.word-block`'s own gap keeps the glyph↔reading spacing) and the dead `.hero-kicker` CSS. Both
 maintainer-confirmed before removal. Throughout: `bun run test` 283/283, `bun run build` clean.
 
+### Glow-cut verification (2026-06-19, on `main`) — no regressions
+
+The ~90% decorative-glow cut (`20101fc`) was verified **signed in on :5173, both themes** with the
+maintainer's real data. The cut's own commit had covered home/songs/stats/flashcards; this pass closed
+the loop on the five remaining surfaces — **教科書 Minna (lesson seal), 独り言 Self-talk, Browse, the
+Flashcard reveal face (hanko), and the modals** — and found **nothing too flat and nothing still too
+glowy** (no fixes needed). What was checked, and why each still reads with depth despite losing its
+neon halo:
+- **Seals** (`.lesson-seal`, `.hanko` godan + ichidan) keep their 2px inset accent-glow + 3px colored
+  border + inner `.ring` + `filter:url(#stamp)` — verified at near-1:1; they read as intentional ink
+  stamps, not flat discs.
+- **CTAs/avatar** keep the static `--cta-shadow` (a real drop, not a 360° halo); cards keep
+  `--card-shadow`; the play button keeps its indigo radial fill + border + `--inner-hi`.
+- **`.word-pop` is still opaque** — its `background:var(--surf-card)` is a *gradient* in dark
+  (`linear-gradient(168deg,#221B14,#1B1610)`, both stops opaque), so `background-color` reads
+  `transparent` but `background-image` paints solid. Removing its (no-op) `backdrop-filter` did NOT
+  make it see-through; confirmed via `elementFromPoint` over the MNEMONIC card behind it.
+- **Modals** stay opaque (`--surf-card`) with `--card-shadow`; only the `.modal-overlay` frost
+  (`blur(7px)`) remains — the one backdrop-filter that frosts real content.
+
+`bun run test` 290/290 green; `bun run build` clean (CSS 137.6 kB, unchanged from the cut).
+
 ## Token map (mock → app role token; theme attr = light/dark)
 
 | App token (name kept) | ← mock | Day | Night |
