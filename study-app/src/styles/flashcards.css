@@ -16,9 +16,6 @@
    so it doesn't double up; every surface shares the one gap below the chrome. */
 .hero{display:grid;grid-template-columns:1fr auto;gap:32px;align-items:end;padding:0 0 14px}
 .hero-left{max-width:560px;display:flex;flex-direction:column;align-items:flex-start;min-width:0}
-.hero-kicker{font-family:var(--mono);font-size:11px;letter-spacing:.3em;text-transform:uppercase;color:var(--gold);font-weight:500;display:inline-flex;align-items:center;gap:10px;margin-bottom:22px}
-.hero-kicker::before{content:"";width:22px;height:1px;background:var(--gold);display:inline-block}
-.hero-kicker .jp{font-family:var(--jp);letter-spacing:.06em;text-transform:none}
 
 /* the big numeral — Bricolage at high optical size; dark gets the warm gradient text-fill */
 .bignum{font-family:var(--display);font-weight:800;font-size:188px;line-height:.9;letter-spacing:-.045em;color:var(--ink);font-variation-settings:"opsz" 96;display:inline-block;position:relative}
@@ -248,8 +245,6 @@
 .word-block{display:flex;align-items:flex-end;gap:34px;flex-wrap:wrap}
 .answer-word{font-family:var(--jp);font-weight:700;font-size:112px;line-height:.92;color:var(--ink);letter-spacing:.02em}
 [data-theme="dark"] .answer-word{text-shadow:0 6px 42px rgba(255,107,74,.22),0 2px 8px rgba(0,0,0,.45)}
-.tate-rule{align-self:stretch;width:2px;background:linear-gradient(to bottom,var(--brand),rgba(205,67,39,.15));margin:8px 2px 12px;border-radius:2px}
-[data-theme="dark"] .tate-rule{box-shadow:0 0 10px 0 rgba(255,107,74,.4)}
 .reading-area{padding-bottom:12px}
 .reading-row{display:flex;align-items:flex-end;gap:16px;flex-wrap:wrap}
 #aRead{font-family:var(--jp);font-weight:500;font-size:42px;line-height:1;color:var(--reading);white-space:nowrap}
@@ -355,7 +350,6 @@
   .prompt-word:not(.jp){font-size:44px}
   .answer-word{font-size:74px}
   .word-block{gap:20px}
-  .tate-rule{display:none}
   .meaning{font-size:38px}
   #aRead{font-size:34px}
   .grade-row{grid-template-columns:1fr}
