@@ -18,7 +18,7 @@ feature code + hand-rolled SVG charts reskin for free. Theme attr stays the app'
 | 2 | Frame (chrome) | `styles/chrome.css`, `index.html`, `features/chrome.js` | ✅ done (verified both themes; ふ toggle works) |
 | 3 | Shared kit | `styles/base.css`, `styles.css` | ✅ done (grid/glow, ruby→indigo, line-bullet, btn gradient; 283 tests green) |
 | 4 | Flashcards | `styles/flashcards.css`, `features/flashcard.js`, `deck.js`, `index.html` | ✅ done (nphead bar, red-pen meaning, subway pipeline; both themes; 283 tests) |
-| 5 | Browse | `styles/browse.css` (+ minor markup) | ☐ |
+| 5 | Browse | `styles/browse.css`, `browse.js`, `core/facets.js`, `index.html` | ✅ done (line-bullet cards, NN/06 marker, lighter filter; both themes) |
 | 6 | Stats | `styles/stats.css` | ☐ |
 | 7 | Minna / Self-talk / Songs | `styles/minna.css` `selftalk.css` `songs.css` | ☐ |
 | 8 | Modals | `styles/modals.css`, `index.html` | ☐ |

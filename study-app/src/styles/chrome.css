@@ -162,7 +162,7 @@
    (page-structure chrome); each surface applies .marker in its own phase. The .wrap
    top gap provides the first marker's top space, so the default marker has no top pad;
    mid-page sub-markers (.submarker) keep theirs. */
-.marker{ display:flex; align-items:baseline; gap:16px; padding:0 0 22px; }
+.marker{ display:flex; align-items:baseline; gap:16px; padding:0 0 12px; }
 .marker .idx{ font-family:var(--display); font-weight:800; font-size:34px; line-height:1; letter-spacing:-.02em; color:var(--ink); }
 [data-theme="dark"] .marker .idx{ color:var(--gold); }
 .marker .idx .slash{ color:var(--muted); font-weight:600; }

@@ -20,6 +20,10 @@ export function cardStamp(v) {
   if (v.type && TYPE_LABEL[v.type]) return { label: TYPE_LABEL[v.type], cls: v.type };
   return { label: CAT_LABEL[v.cat] || (v.cat || '').toUpperCase(), cls: v.cat || '' };
 }
+// The single class kanji shown inside a metro line-bullet (五/一/不/い/な/名/副/句), keyed by
+// colorClass. Used by Browse / Stats / the flashcard nphead via the shared .line-bullet.
+export const BULLET_KANJI = { godan: '五', ichidan: '一', irregular: '不', 'i-adj': 'い', 'na-adj': 'な', verb: '動', adjective: '形', noun: '名', adverb: '副', phrase: '句' };
+export const classKanji = v => BULLET_KANJI[colorClass(v)] || '語';
 
 // Does card v match a single group token d?
 export function oneGroup(v, d) {

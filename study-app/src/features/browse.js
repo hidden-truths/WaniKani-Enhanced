@@ -3,7 +3,7 @@
 // meaning. Clicking a card opens the detail MODAL (openVerbDetail), not an inline expand.
 import { state } from '../state.js';
 import {
-  passes, isLeech, rollingAcc, colorClass, cardStamp, pitchHtml, escapeHtml, plainText,
+  passes, isLeech, rollingAcc, colorClass, cardStamp, classKanji, pitchHtml, escapeHtml, plainText,
   availableTiers, exampleForLevel, JLPT_TIERS, BOX_COLORS, nextDueLabel, filterSummary, overlayTokens,
   cardGrammar, cardMatchesGrammar,
 } from '../core/index.js';
@@ -113,7 +113,7 @@ export function openVerbDetail(v) {
       <div class="verb-reading">${pitchHtml(v.read, v.accent)}${TTS_OK ? ` ${speakBtnHtml({ cls: 'sm', id: 'dSpeak', label: 'Play reading' })}` : ''}</div>
       <div class="verb-meaning">${v.mean}</div>
       <a class="jisho-link" target="_blank" rel="noopener noreferrer" href="${jishoUrl(v.jp)}"><svg class="ic" aria-hidden="true"><use href="#i-external"/></svg>View on Jisho</a></div>
-      <div style="text-align:right"><div class="stamp ${cardStamp(v).cls}">${cardStamp(v).label}</div><div class="jlpt-pill">${v.jlpt}</div>${provenanceBadge(v)}</div></div>
+      <div class="card-rcol"><span class="line-bullet ${cardStamp(v).cls}" title="${cardStamp(v).label}">${classKanji(v)}</span><div class="jlpt-pill">${v.jlpt}</div>${provenanceBadge(v)}</div></div>
     ${isLeech(v.rank) ? '<span class="leech-badge">⚠ LEECH</span>' : ''}
     <div class="tags">${tags}</div>
     ${detailMemoryLine(v)}
@@ -194,7 +194,7 @@ export function renderBrowse() {
       <div class="card-top"><div>
         <div class="verb-jp jp">${v.jp}</div><div class="verb-reading">${pitchHtml(v.read, v.accent)}${TTS_OK ? ` ${speakBtnHtml({ cls: 'sm', label: 'Play reading' })}` : ''}</div>
         <div class="verb-meaning">${v.mean}</div></div>
-        <div style="text-align:right"><div class="stamp ${stamp.cls}">${stamp.label}</div>
+        <div class="card-rcol"><span class="line-bullet ${stamp.cls}" title="${stamp.label}">${classKanji(v)}</span>
         <div class="jlpt-pill">${v.jlpt}</div>${provenanceBadge(v)}</div></div>
       ${leech ? '<span class="leech-badge">⚠ LEECH</span>' : ''}
       <div class="tags">${tiLabel ? `<span class="tag" style="color:var(--ichidan)">${tiLabel}</span>` : ''}${v.tags.filter(t => !t.startsWith('top') && t !== 'みんなの日本語' && !/^mnn-l\d+$/.test(t)).map(t => t === 'iTalki' ? `<span class="tag" style="color:var(--ichidan);border:1px solid var(--ichidan)">iTalki</span>` : `<span class="tag">${escapeHtml(t)}</span>`).join('')}</div>`;
