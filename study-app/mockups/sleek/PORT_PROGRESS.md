@@ -21,7 +21,7 @@ feature code + hand-rolled SVG charts reskin for free. Theme attr stays the app'
 | 5 | Browse | `styles/browse.css`, `browse.js`, `core/facets.js`, `index.html` | ✅ done (line-bullet cards, NN/06 marker, lighter filter; both themes) |
 | 6 | Stats | `styles/stats.css`, `stats.js`, `index.html` | ✅ done (glossy histogram, leech line-bullets, 03/06 marker; both themes; seeded to verify) |
 | 7 | Minna / Self-talk / Songs | render headers + `index.html` | ✅ done (already blend-aligned via Phase 1 + prior redesign; unified NN/06 markers across all 6 surfaces, incl. Flashcards retrofit) |
-| 8 | Modals | `styles/modals.css`, `index.html` | ☐ |
+| 8 | Modals | (verified — no changes) | ✅ done (already blend-aligned via shared modal kit + Phase 1; Settings both themes + scroll contract + Sign-in verified) |
 | 9 | Fidelity audit | all surfaces, both themes | ☐ |
 
 ## Token map (mock → app role token; theme attr = light/dark)
