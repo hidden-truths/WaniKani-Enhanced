@@ -13,15 +13,13 @@ A **frozen v1.1.1 snapshot** of the userscript's pre-server direct path (it call
 
 The server is deployed in production at `https://api.wkenhanced.dev` (DO droplet in SFO3 + Spaces, Cloudflare Tunnel for TLS/edge). Userscript v2.0.0 routes every vocab lookup through it; existing v1.x users on the direct path upgrade by pasting the new file.
 
-This file covers the userscript. For server work, jump to [wk-enhanced-api/CLAUDE.md](wk-enhanced-api/CLAUDE.md). For the migration plan + Phase 1/2/3 deviations + the deploy-day lessons, see [CLIENT_MIGRATION.md](docs/history/CLIENT_MIGRATION.md) and [wk-enhanced-api/deploy/README.md](wk-enhanced-api/deploy/README.md).
+This file covers the userscript. For server work, jump to [wk-enhanced-api/CLAUDE.md](wk-enhanced-api/CLAUDE.md). For the deploy-day lessons, see [wk-enhanced-api/deploy/README.md](wk-enhanced-api/deploy/README.md). (The client migration — Phases 1/2/3 — shipped in v2.0.0; the consolidated record is in [ROADMAP.html](ROADMAP.html).)
 
 **Reading order for a cold start:**
-1. [NEXT_STEPS.md](NEXT_STEPS.md) — *what to do next*, in priority order. Read this first if you're picking up a session in progress; everything else is reference material.
+1. [ROADMAP.html](ROADMAP.html) — *what to do next* + the shipped record. The single consolidated backlog across all surfaces (open items + completed milestones, filterable). Read this first if you're picking up a session in progress; everything else is reference material.
 2. This file — userscript architecture + dead-ends.
 3. [SERVER_DESIGN.md](SERVER_DESIGN.md) — design rationale for the server (with implementation deviations noted at the top).
 4. [wk-enhanced-api/CLAUDE.md](wk-enhanced-api/CLAUDE.md) — server architecture + dead-ends.
-5. [CLIENT_MIGRATION.md](docs/history/CLIENT_MIGRATION.md) — migration plan (all three phases shipped).
-6. [NEW_FEATURES.md](NEW_FEATURES.md) — backlog of features discussed but not yet shipped (now includes a Server-side improvements section).
 
 **The userscript is a single file.** No build step, no tests, no package manager — read the whole file to see everything. The server is a separate codebase that happens to live in the same git repo (`package.json`, test suite, type-check, the works).
 

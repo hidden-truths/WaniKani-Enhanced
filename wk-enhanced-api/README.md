@@ -2,7 +2,7 @@
 
 Backing API for the [WKEnhanced](../wkenhanced.user.js) userscript. Coalesces ImmersionKit, DuckDuckGo, and Google Translate TTS behind a single pre-warmed endpoint so every client doesn't have to hit three external services individually.
 
-Deployed at `https://api.wkenhanced.dev` (DigitalOcean droplet in SFO3 + Spaces bucket, Cloudflare Tunnel for TLS/edge). The userscript talks to this server exclusively as of v2.0.0; see [../CLIENT_MIGRATION.md](../docs/history/CLIENT_MIGRATION.md) for the migration history.
+Deployed at `https://api.wkenhanced.dev` (DigitalOcean droplet in SFO3 + Spaces bucket, Cloudflare Tunnel for TLS/edge). The userscript talks to this server exclusively as of v2.0.0; see [../ROADMAP.html](../ROADMAP.html) (completed milestones) for the migration history.
 
 Doc map:
 
@@ -257,5 +257,5 @@ Pre-Docker droplets follow a one-shot migration path (install Docker, chown /var
 
 - **IK title encoding is best-effort on misses.** When `/index_meta` doesn't have a deck, the heuristic in `src/lib/ikTitles.ts` produces a likely-wrong folder name. Concrete consequence: IK's media proxy returns an empty body, our `<1KB` check trips, we fall through to Google TTS for audio (no fallback for images). Same dead-end as the userscript — don't try to make the heuristic smarter.
 - **Bulk warming is multi-hour.** With the per-word IK rate-limit floor at 500ms and ~50 examples per word each needing audio + image, a full ~6700-word cold warm runs ~6–10h (`force:false` re-warms are much faster — they skip already-fresh rows). Acceptable for monthly cron; not interactive.
-- **Lazy cold-fill is ~1–3s.** Per-example IK media is warmed synchronously; DDG fallback pool is deferred to a background task (see "DDG deferred" in `warm.word.done` logs and the `incomplete: true` payload flag). If this still feels slow once deployed, the next lever is to defer per-example media too — see [NEW_FEATURES.md](../NEW_FEATURES.md) "Two-phase lazy-fill" entry.
+- **Lazy cold-fill is ~1–3s.** Per-example IK media is warmed synchronously; DDG fallback pool is deferred to a background task (see "DDG deferred" in `warm.word.done` logs and the `incomplete: true` payload flag). If this still feels slow once deployed, the next lever is to defer per-example media too — see [ROADMAP.html](../ROADMAP.html) (api: "Two-phase lazy-fill").
 - **No content negotiation.** All endpoints return JSON only. No HTML or Accept-header branching planned.

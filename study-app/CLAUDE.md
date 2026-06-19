@@ -90,7 +90,7 @@ Originally one self-contained HTML file (the since-removed
 `japanese-study/japanese-verbs.html`); grew into
 classic-script files served by the API, then extracted here as its own Vite project.
 
-User-facing overview: [README.md](README.md). What to do next: [NEXT_STEPS.md](NEXT_STEPS.md).
+User-facing overview: [README.md](README.md). What to do next: [ROADMAP.html](../ROADMAP.html) (the consolidated cross-surface backlog).
 **Card data model + authoring: [CARDS.md](CARDS.md).** みんなの日本語: [MINNA.md](MINNA.md).
 Backend (auth, progress, cookie, the cross-origin CORS) is the server's:
 [../wk-enhanced-api/CLAUDE.md](../wk-enhanced-api/CLAUDE.md) "Accounts + study app",
@@ -326,7 +326,7 @@ onto built-in cards' `v.accent` by `attachLevels` (Minna cards carry their own).
 > shared-core slot, after styles.css + chrome.css so Rule A holds; the modal entrance keyframes
 > overlayIn/modalPop stay in styles.css since modalPop is shared with the tap-a-word `.word-pop`). The
 > mocks stay in [mockups/redesign/](mockups/redesign/) as the visual reference; the full Phase-by-phase
-> record is [mockups/redesign/MIGRATION_PROGRESS.md](mockups/redesign/MIGRATION_PROGRESS.md).
+> record is [ROADMAP.html](../ROADMAP.html) (completed redesign record).
 
 **Type-label rule:** uppercase-mono (`--mono`, Spline Sans Mono — the signature) is for SHORT labels
 only — filter/stat/section labels, kickers. Longer descriptive strings (chart titles, helper/hint
@@ -483,7 +483,7 @@ Component contracts you must preserve:
   three such landmines existed in [src/styles.css](src/styles.css). Keep a space between the `*` and the
   `/` (`.prompt-* /.answer`). `bun run build` does NOT warn, so after a CSS edit confirm a touched rule
   actually *applies* (computed style), not just that the file parses. See the fidelity-audit section in
-  [mockups/redesign/MIGRATION_PROGRESS.md](mockups/redesign/MIGRATION_PROGRESS.md).
+  [ROADMAP.html](../ROADMAP.html) (completed redesign record).
 - **`songs.css` `.ring` is SCOPED to `.sc-ring .ring` — don't unscope it.** A bare global `.ring` (the
   40×40 conic coverage ring) collides with the decorative seal rings (`.hanko .ring`, `.lesson-seal
   .ring`, which set only `inset` + inherit the 40×40 size/fill), painting a mis-sized, offset circle
@@ -572,8 +572,8 @@ Component contracts you must preserve:
   the server hasn't pre-generated (④): `fetchAvailableVoices` (features/audio.js) reads
   `/v1/audio/variants` once per modal-open and the picker annotates "· not generated" (fails open). **Phase 3 (not yet done):** generalize the
   record-compare "▶ native" into "▶ reference" against any chosen voice. Follow-ups (preview, per-item
-  cycle, availability hinting, Phase 3) are tracked in [NEXT_STEPS.md](NEXT_STEPS.md). See
-  [NEXT_AUDIO_UNIFY.md](../docs/history/NEXT_AUDIO_UNIFY.md).
+  cycle, availability hinting, Phase 3) are tracked in [ROADMAP.html](../ROADMAP.html) — audio-unify
+  shipped; the residual doc-reconcile is a low-priority item there.
 - **TTS prefers the server's Google proxy, falls back to Web Speech.** The synth tier of the player
   above: `speak()` ultimately
   plays `/v1/audio/tts?text=<reading>&voice=<chosen>` (legacy `/v1/tts` still works) via a reused
@@ -702,7 +702,7 @@ Component contracts you must preserve:
   Adjectives reuse the `type` field for the い/な split (`i-adj`/`na-adj`); nouns/
   adverbs/phrases have no subtype. Don't reintroduce verb-only framing in headers/
   empty-states, and don't make Type/Transitivity unconditional again. **Still not
-  done** (tracked in NEXT_STEPS): conjugation drills, and proofed built-in non-verb
+  done** (tracked in ROADMAP.html): conjugation drills, and proofed built-in non-verb
   content (the dataset is still 100 verbs — categories are a model/UI capability that
   users populate).
 - **Reviewing a card early never promotes it; free study reschedules only ALREADY-DUE
@@ -812,7 +812,7 @@ Component contracts you must preserve:
   cover it. **Materialization does NOT change record-compare's skeleton-keying**, and a realization
   still renders PLAIN ruby (no GiNZA tap-to-lookup) until the **next offline NLP parse** picks up the
   now-public combo rows (no Python on prod → the lag is by design). Full doc: [SELFTALK.md](SELFTALK.md);
-  design + the settled open questions: [../docs/history/SENTENCE_STORE_TEMPLATES.md](../docs/history/SENTENCE_STORE_TEMPLATES.md).
+  design + the settled open questions: [../ROADMAP.html](../ROADMAP.html) (store: slot-swap templates).
 - **歌 / Songs (`features/songs.js`) is anon-readable starters + account-gated BYO, and ASSEMBLES
   existing primitives (sentence store, vocab-activation, tap-a-word, the grammar catalog, the
   YouTube IFrame embed) — don't build parallel machinery. A song's lines are `sentence` rows
@@ -1171,4 +1171,4 @@ Commits, newest first (all on `main`; touch the split web/ files + `src/` where 
 
 Earlier history (the integration itself) is in `7fea5e3`/`f2bb4d8` and the server
 docs. Each change preserved the chip wiring; verification was live (preview +
-DOM eval), not a test suite — see NEXT_STEPS for the testing debt.
+DOM eval), not a test suite — see ROADMAP.html for the testing debt.

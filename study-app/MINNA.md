@@ -22,7 +22,7 @@ back here:
   [../wk-enhanced-api/data/minna/](../wk-enhanced-api/data/minna/). API rows + the `MINNA_OWNER_EMAILS` parity row
   live in [../wk-enhanced-api/CLAUDE.md](../wk-enhanced-api/CLAUDE.md).
 - **Roadmap**: the [Next steps](#roadmap--next-steps) section below is the Minna-specific
-  backlog (Phase 2 = record-and-compare). The general [NEXT_STEPS.md](NEXT_STEPS.md)
+  backlog (Phase 2 = record-and-compare). The general [ROADMAP.html](../ROADMAP.html)
   points here for anything Minna.
 
 It is a **separate concern from the verb trainer** it lives beside — different data
@@ -322,7 +322,7 @@ tab is **account-gated to an owner allowlist** to keep that material out of publ
 
 ## Roadmap / next steps
 
-Minna-specific backlog (the general study-app roadmap in [NEXT_STEPS.md](NEXT_STEPS.md)
+Minna-specific backlog (the general study-app roadmap in [ROADMAP.html](../ROADMAP.html)
 points here). Roughly priority-ordered.
 
 ### ✅ Phase 2 — record & compare — SHIPPED (MVP)

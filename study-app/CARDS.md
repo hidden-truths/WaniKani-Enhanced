@@ -151,7 +151,7 @@ Browse → **Add card** authors a **complete** card from the UI — `jp`, `read`
 
 So a UI-authored card now reaches the same completeness as a built-in. Furigana is still hand-typed as
 ruby markup; an "AI-generate" button that drafts the tiers + accent server-side is a possible future
-add — see [NEXT_STEPS.md](NEXT_STEPS.md).
+add — see [ROADMAP.html](../ROADMAP.html) (cards: AI-generate tiers + accent).
 
 **Storage (Phase 2.5).** The example text (the single `ex` + the `levels` tiers) is **dual-written to the
 server sentence store** as PRIVATE rows when you're signed in (`PUT /v1/sentences/card/{rank}` →
@@ -180,4 +180,4 @@ grammar, furigana, and especially pitch accent is the last step.
   exposes a unified, **voice-tagged** audio surface (`/v1/audio/tts?voice=`, `/v1/audio/variants`)
   so a text can resolve to several voices (Siri male/female, Google, native, your own takes); the
   client adopts it (a per-context voice picker) in audio-unify Phase 2 — see
-  [NEXT_AUDIO_UNIFY.md](../docs/history/NEXT_AUDIO_UNIFY.md). `/v1/tts` stays as the default-voice alias.
+  [ROADMAP.html](../ROADMAP.html) (audio-unify — shipped). `/v1/tts` stays as the default-voice alias.

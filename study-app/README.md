@@ -27,7 +27,7 @@ classic-script files served by the API, then was extracted here as its own Vite 
 it outgrew "a few static files on the API droplet."
 
 > New to the codebase? Read [CLAUDE.md](CLAUDE.md) for architecture + the
-> dead-end warnings, and [NEXT_STEPS.md](NEXT_STEPS.md) for what to do next.
+> dead-end warnings, and [ROADMAP.html](../ROADMAP.html) for what to do next.
 > Adding content? [CARDS.md](CARDS.md) is the card data model + how to author a
 > complete vocab card (every field, the furigana/pitch formats, and recipes).
 

@@ -413,7 +413,7 @@ JLPT + explanation from the generated catalog (`grammarLabel`/`grammarJlpt`, [da
   wrapper** (NOT via `render()`), so the YouTube iframe isn't remounted per step; the delegated
   click/keydown + `wireWordTaps` + `setOnTakeSaved` are **attach-once** on `#sgBody` (`_sgWired`).
   Don't "tidy" any of these into eager calls or per-render re-wiring. Full decomposition record +
-  the remaining-peel-free as-built map: [../REFACTOR_FOLLOWUPS.md](../docs/history/REFACTOR_FOLLOWUPS.md) "Workstream S".
+  the remaining-peel-free as-built map: [../ROADMAP.html](../ROADMAP.html) (refactor: Workstream S — shipped).
 
 ---
 
@@ -535,14 +535,14 @@ as work lands. `[ ]` = todo, `[x]` = done, `[~]` = in progress.
 
 ### Phase 6 — Docs + memory (rolling)
 - [~] SONGS_HANDOFF.md added + `song-lyric-tab-design` memory updated (2026-06-16); this checklist current.
-  TODO: refresh `README.md` / `NEXT_STEPS.md` / the CLAUDE.md Songs dead-ends with the curation + timing surface.
+  TODO: refresh `README.md` / the CLAUDE.md Songs dead-ends with the curation + timing surface (tracked in ROADMAP.html).
 
 ---
 
 ## Verifying Songs changes
 - `cd study-app && bun run test` (core suite incl. `core/songs.js`) + `bun run build` green.
 - `cd wk-enhanced-api && bun test` green (song repo + routes + analyze with a **mocked** Anthropic client — no live key in CI).
-- **Drive the already-running preview — do NOT restart :5173 / :3000** (the NEXT_STEPS warning). The
+- **Drive the already-running preview — do NOT restart :5173 / :3000** (a standing rule). The
   preview reloads the tab on capture, so assert transient state (active mode, open song, applied
   filters) via DOM `eval`, not a follow-up screenshot.
 - Analyze: no key → graceful `503` + the "not available yet" Add state; with a key (or a mocked

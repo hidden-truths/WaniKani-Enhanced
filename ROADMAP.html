@@ -1,0 +1,940 @@
+<!DOCTYPE html>
+<html lang="en" data-theme="day">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>日常日本語 · WKEnhanced — Roadmap</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Bricolage+Grotesque:opsz,wght@12..96,400..800&family=Hanken+Grotesk:wght@400;500;600;700&family=Spline+Sans+Mono:wght@400;500;600&family=Zen+Kaku+Gothic+New:wght@400;500;700;900&family=Zen+Old+Mincho:wght@400;600;700;900&display=swap" rel="stylesheet">
+<style>
+/* ============ Day / Night blend tokens (canonical, from PORT_PROGRESS.md) ============ */
+:root, [data-theme="day"]{
+  --paper:#F4F1E8; --raised:#FBFAF4; --deeper:#ECE7D9; --base:#EFEADD;
+  --ink:#15130D; --ink-2:#4B4536; --muted:#857C66; --faint:#9A8F78;
+  --line:#16130B1C; --line-2:#16130B12; --grid:#1D160814;
+  --brand:#DC3A22; --brand-deep:#B12C16; --brand-soft:rgba(220,58,34,.07); --brand-on:#FCEFE9;
+  --reading:#234C86; --gold:#9A6B0F; --gold-soft:rgba(154,107,15,.08);
+  --good:#2C7A4F; --leech:#7C3A95;
+  --adjective:#2C7D6B; --noun:#A06A1E; --adverb:#A14258; --phrase:#736353;
+  --surf-nav:rgba(244,241,232,.82);
+  --card-shadow:0 1px 2px rgba(20,16,8,.05),0 6px 18px -8px rgba(20,16,8,.14);
+  --lift-sm:0 1px 2px rgba(20,16,8,.06); --cta-shadow:0 3px 12px -4px rgba(220,58,34,.45);
+  --grain-op:.5;
+}
+[data-theme="night"]{
+  --paper:#100D09; --raised:#1B1610; --deeper:#171209; --base:#0D0A07;
+  --ink:#F1E9D8; --ink-2:#C0B49C; --muted:#857A64; --faint:#6E6353;
+  --line:#FFF0D815; --line-2:#FFF0D80A; --grid:#FFF0D808;
+  --brand:#FF6B4A; --brand-deep:#E8512F; --brand-soft:rgba(255,107,74,.08); --brand-on:#1F0C06;
+  --reading:#8FA0EE; --gold:#E7BC6B; --gold-soft:rgba(231,188,107,.10);
+  --good:#56D29A; --leech:#C792EA;
+  --adjective:#5CC0A6; --noun:#D8A24E; --adverb:#D6818F; --phrase:#AB9A85;
+  --surf-nav:rgba(16,13,9,.78);
+  --card-shadow:0 1px 2px rgba(0,0,0,.3),0 8px 22px -10px rgba(0,0,0,.5);
+  --lift-sm:0 1px 2px rgba(0,0,0,.35); --cta-shadow:0 3px 14px -4px rgba(255,107,74,.4);
+  --grain-op:.35;
+}
+*{box-sizing:border-box}
+html{scroll-behavior:smooth}
+body{
+  margin:0; background:var(--paper); color:var(--ink);
+  font-family:"Hanken Grotesk",system-ui,sans-serif; font-size:15px; line-height:1.55;
+  -webkit-font-smoothing:antialiased;
+}
+/* faint manuscript grid + paper grain, very subtle (per the glow-cut ethos) */
+body::before{
+  content:""; position:fixed; inset:0; z-index:0; pointer-events:none; opacity:var(--grain-op);
+  background-image:linear-gradient(var(--grid) 1px,transparent 1px),linear-gradient(90deg,var(--grid) 1px,transparent 1px);
+  background-size:34px 34px;
+  mask-image:radial-gradient(ellipse 120% 80% at 50% 0%,#000 30%,transparent 85%);
+}
+.disp{font-family:"Bricolage Grotesque",sans-serif}
+.mono{font-family:"Spline Sans Mono",ui-monospace,monospace}
+.jp{font-family:"Zen Kaku Gothic New",sans-serif}
+.jpm{font-family:"Zen Old Mincho",serif}
+a{color:var(--reading); text-decoration:none}
+a:hover{text-decoration:underline}
+
+/* ============ Chrome ============ */
+.chrome{position:sticky; top:0; z-index:30; backdrop-filter:blur(12px) saturate(1.2);
+  background:var(--surf-nav); border-bottom:1px solid var(--line)}
+.topbar{max-width:1240px; margin:0 auto; padding:14px 28px; display:flex; align-items:center; gap:20px; flex-wrap:wrap}
+.brand{display:flex; align-items:baseline; gap:12px; margin-right:auto}
+.brand .seal{font-family:"Zen Old Mincho",serif; font-weight:900; font-size:23px; color:var(--brand);
+  border:2px solid var(--brand); border-radius:9px; padding:2px 9px; line-height:1; letter-spacing:1px;
+  box-shadow:inset 0 0 0 2px var(--brand-soft)}
+.brand .ttl{font-family:"Bricolage Grotesque",sans-serif; font-weight:700; font-size:19px; letter-spacing:-.2px}
+.brand .sub{font-family:"Spline Sans Mono",monospace; font-size:11px; color:var(--muted); text-transform:uppercase; letter-spacing:1.5px}
+.top-actions{display:flex; align-items:center; gap:10px}
+.icon-btn{appearance:none; border:1px solid var(--line); background:var(--raised); color:var(--ink);
+  width:38px; height:38px; border-radius:10px; cursor:pointer; font-size:16px; display:grid; place-items:center;
+  box-shadow:var(--lift-sm); transition:transform .12s, border-color .12s}
+.icon-btn:hover{transform:translateY(-1px); border-color:var(--muted)}
+
+/* ============ Layout ============ */
+.wrap{max-width:1240px; margin:0 auto; padding:28px; position:relative; z-index:1}
+.lede{display:flex; gap:28px; align-items:flex-end; flex-wrap:wrap; margin-bottom:22px}
+.lede h1{font-family:"Bricolage Grotesque",sans-serif; font-weight:800; font-size:clamp(30px,4.4vw,46px);
+  line-height:1.02; letter-spacing:-1px; margin:0 0 8px}
+.lede p{margin:0; color:var(--ink-2); max-width:60ch; font-size:15.5px}
+.kicker{font-family:"Spline Sans Mono",monospace; text-transform:uppercase; letter-spacing:2px;
+  font-size:11px; color:var(--brand); font-weight:600; margin-bottom:10px}
+.bignum{font-family:"Bricolage Grotesque",sans-serif; font-weight:800; line-height:.9; text-align:right}
+.bignum b{font-size:64px; display:block; letter-spacing:-2px}
+.bignum span{font-family:"Spline Sans Mono",monospace; font-size:11px; text-transform:uppercase;
+  letter-spacing:1.5px; color:var(--muted)}
+
+/* summary stat strip */
+.stats{display:flex; gap:10px; flex-wrap:wrap; margin:6px 0 24px}
+.stat{flex:1 1 120px; min-width:118px; background:var(--raised); border:1px solid var(--line);
+  border-radius:13px; padding:13px 15px; box-shadow:var(--card-shadow); position:relative; overflow:hidden}
+.stat::before{content:""; position:absolute; left:0; top:0; bottom:0; width:4px; background:var(--accent,var(--brand))}
+.stat b{font-family:"Bricolage Grotesque",sans-serif; font-size:27px; font-weight:800; display:block; line-height:1}
+.stat span{font-family:"Spline Sans Mono",monospace; font-size:10.5px; text-transform:uppercase; letter-spacing:1px; color:var(--muted)}
+
+/* ============ Reference / mocks panel ============ */
+details.ref{background:var(--raised); border:1px solid var(--line); border-radius:14px; margin-bottom:22px;
+  box-shadow:var(--card-shadow); overflow:hidden}
+details.ref>summary{cursor:pointer; padding:15px 20px; font-family:"Bricolage Grotesque",sans-serif;
+  font-weight:700; font-size:15px; list-style:none; display:flex; align-items:center; gap:10px}
+details.ref>summary::-webkit-details-marker{display:none}
+details.ref>summary::before{content:"▸"; color:var(--brand); transition:transform .15s; font-size:12px}
+details.ref[open]>summary::before{transform:rotate(90deg)}
+.ref-body{padding:4px 20px 20px; border-top:1px solid var(--line-2)}
+.ref-grid{display:grid; grid-template-columns:repeat(auto-fill,minmax(230px,1fr)); gap:12px; margin-top:14px}
+.ref-card{border:1px solid var(--line); border-radius:11px; padding:13px 15px; background:var(--paper)}
+.ref-card h4{margin:0 0 4px; font-family:"Spline Sans Mono",monospace; font-size:11px; text-transform:uppercase;
+  letter-spacing:1px; color:var(--ink-2)}
+.ref-card .lk{display:block; font-size:13.5px; margin-top:3px}
+.ref-card p{margin:7px 0 0; font-size:12.5px; color:var(--muted); line-height:1.45}
+
+/* ============ Filter bar ============ */
+.controls{position:sticky; top:67px; z-index:20; background:var(--paper);
+  padding:14px 0 12px; margin-bottom:6px; border-bottom:1px solid var(--line)}
+.searchrow{display:flex; gap:12px; align-items:center; flex-wrap:wrap; margin-bottom:12px}
+.search{flex:1 1 280px; display:flex; align-items:center; gap:10px; background:var(--raised);
+  border:1px solid var(--line); border-radius:11px; padding:0 14px; box-shadow:var(--lift-sm)}
+.search input{flex:1; border:0; background:transparent; color:var(--ink); font-size:14.5px;
+  font-family:inherit; padding:11px 0; outline:none}
+.search .ic{color:var(--muted); font-size:15px}
+.groupby{display:flex; gap:6px; align-items:center}
+.groupby label{font-family:"Spline Sans Mono",monospace; font-size:10.5px; text-transform:uppercase;
+  letter-spacing:1px; color:var(--muted)}
+.groupby select{font-family:inherit; font-size:13.5px; padding:9px 12px; border-radius:10px;
+  border:1px solid var(--line); background:var(--raised); color:var(--ink); cursor:pointer; box-shadow:var(--lift-sm)}
+.toggle-ship{font-family:"Spline Sans Mono",monospace; font-size:11.5px; letter-spacing:.4px; padding:10px 13px;
+  border-radius:10px; border:1px dashed var(--line); background:var(--raised); color:var(--muted); cursor:pointer;
+  box-shadow:var(--lift-sm); white-space:nowrap}
+.toggle-ship:hover{border-color:var(--good); color:var(--ink-2)}
+.toggle-ship.on{border-style:solid; border-color:color-mix(in srgb,var(--good) 55%,var(--line));
+  background:color-mix(in srgb,var(--good) 13%,var(--raised)); color:var(--ink)}
+.facets{display:flex; flex-direction:column; gap:8px}
+.facetrow{display:flex; gap:7px; flex-wrap:wrap; align-items:center}
+.facetrow>.flabel{font-family:"Spline Sans Mono",monospace; font-size:10px; text-transform:uppercase;
+  letter-spacing:1px; color:var(--faint); width:74px; flex:none}
+.chip{appearance:none; cursor:pointer; border:1px solid var(--line); background:var(--raised); color:var(--ink-2);
+  border-radius:999px; padding:5px 12px; font-size:12.5px; font-family:inherit; font-weight:500;
+  display:inline-flex; align-items:center; gap:6px; transition:all .12s; white-space:nowrap}
+.chip:hover{border-color:var(--muted)}
+.chip .dot{width:8px; height:8px; border-radius:50%; background:var(--accent,var(--muted)); flex:none}
+.chip .ct{font-family:"Spline Sans Mono",monospace; font-size:10.5px; color:var(--faint)}
+.chip.active{font-weight:700; color:var(--ink); border-color:color-mix(in srgb,var(--accent,var(--brand)) 55%,var(--line));
+  background:color-mix(in srgb,var(--accent,var(--brand)) 13%,var(--raised))}
+.chip.active .ct{color:var(--ink-2)}
+.clearbtn{margin-left:auto; font-family:"Spline Sans Mono",monospace; font-size:11px; text-transform:uppercase;
+  letter-spacing:1px; color:var(--brand); background:none; border:0; cursor:pointer; padding:6px 4px}
+.clearbtn:hover{text-decoration:underline}
+.resultline{font-family:"Spline Sans Mono",monospace; font-size:11.5px; color:var(--muted); margin:10px 2px 0}
+
+/* ============ Groups + items ============ */
+.group{margin:26px 0 0}
+.group-head{display:flex; align-items:center; gap:12px; margin:0 0 4px; padding:8px 2px; cursor:pointer; user-select:none}
+.group-head .gk{font-family:"Zen Old Mincho",serif; font-weight:900; font-size:20px; color:#fff;
+  background:var(--accent,var(--brand)); width:38px; height:38px; border-radius:10px; display:grid; place-items:center; flex:none;
+  box-shadow:var(--lift-sm)}
+.group-head h2{font-family:"Bricolage Grotesque",sans-serif; font-weight:700; font-size:18px; margin:0; letter-spacing:-.3px}
+.group-head .gsub{font-family:"Spline Sans Mono",monospace; font-size:11px; color:var(--muted); margin-left:2px}
+.group-head .gcount{margin-left:auto; font-family:"Spline Sans Mono",monospace; font-size:11px; color:var(--muted)}
+.group-head .gtog{color:var(--faint); font-size:12px; transition:transform .15s}
+.group.collapsed .gtog{transform:rotate(-90deg)}
+.group.collapsed .items{display:none}
+.group-line{height:2px; background:linear-gradient(90deg,var(--accent,var(--brand)),transparent 70%); opacity:.35; margin:0 0 12px; border-radius:2px}
+.items{display:grid; grid-template-columns:repeat(auto-fill,minmax(330px,1fr)); gap:12px}
+
+.item{background:var(--raised); border:1px solid var(--line); border-radius:14px; box-shadow:var(--card-shadow);
+  overflow:hidden; transition:transform .12s, box-shadow .12s; position:relative}
+.item:hover{transform:translateY(-2px); box-shadow:0 4px 10px rgba(20,16,8,.08),0 14px 30px -12px rgba(20,16,8,.22)}
+.item::before{content:""; position:absolute; left:0; top:0; bottom:0; width:3px; background:var(--accent,var(--brand)); opacity:.85}
+.item-head{padding:14px 16px 12px; cursor:pointer}
+.item-top{display:flex; align-items:center; gap:8px; margin-bottom:7px}
+.prio{width:9px; height:9px; border-radius:50%; flex:none}
+.prio.high{background:var(--brand); box-shadow:0 0 0 3px var(--brand-soft)}
+.prio.med{background:var(--gold)}
+.prio.low{background:var(--muted)}
+.item-top .pri-lbl{font-family:"Spline Sans Mono",monospace; font-size:9.5px; text-transform:uppercase; letter-spacing:1px; color:var(--faint)}
+.item-top .star{margin-left:auto; color:var(--gold); font-size:14px}
+.item h3{font-family:"Bricolage Grotesque",sans-serif; font-weight:700; font-size:15.5px; line-height:1.22; margin:0 0 7px; letter-spacing:-.2px}
+.item .summary{font-size:13px; color:var(--ink-2); line-height:1.45; margin:0}
+.tags{display:flex; gap:6px; flex-wrap:wrap; margin-top:11px}
+.tag{font-family:"Spline Sans Mono",monospace; font-size:9.5px; text-transform:uppercase; letter-spacing:.7px;
+  padding:3px 7px; border-radius:6px; border:1px solid var(--line); color:var(--ink-2); display:inline-flex; gap:5px; align-items:center}
+.tag .sdot{width:7px; height:7px; border-radius:50%; background:var(--accent,var(--brand))}
+.tag.status{border-style:dashed}
+.tag.status.todo{color:var(--reading)}
+.tag.status.partial{color:var(--gold)}
+.tag.status.blocked{color:var(--adverb)}
+.tag.status.idea{color:var(--muted)}
+.tag.status.followup{color:var(--good)}
+.tag.status.completed{color:var(--good); border-style:solid; background:color-mix(in srgb,var(--good) 9%,transparent)}
+.prio.done{width:auto; height:auto; background:none; box-shadow:none; color:var(--good); font-size:12px; font-weight:800; line-height:.9; display:inline-flex}
+.item.shipped{opacity:.92}
+.item.shipped::before{opacity:.4}
+
+.item-body{display:none; padding:0 16px 16px; border-top:1px solid var(--line-2); margin-top:2px}
+.item.open .item-body{display:block; animation:fade .18s ease}
+@keyframes fade{from{opacity:0; transform:translateY(-3px)}to{opacity:1; transform:none}}
+.item-body .det{font-size:13.5px; color:var(--ink); line-height:1.6; margin:13px 0 0}
+.item-body .note{margin-top:11px; font-size:12.5px; color:var(--gold); background:var(--gold-soft);
+  border:1px solid color-mix(in srgb,var(--gold) 30%,transparent); border-radius:9px; padding:8px 11px; line-height:1.5}
+.item-body .note b{font-family:"Spline Sans Mono",monospace; font-size:10px; text-transform:uppercase; letter-spacing:1px}
+.field{margin-top:13px}
+.field .fl{font-family:"Spline Sans Mono",monospace; font-size:9.5px; text-transform:uppercase; letter-spacing:1px; color:var(--faint); margin-bottom:5px}
+pre.example{margin:0; background:var(--deeper); border:1px solid var(--line); border-radius:9px; padding:10px 12px;
+  font-family:"Spline Sans Mono",monospace; font-size:12px; color:var(--ink); overflow-x:auto; line-height:1.5; white-space:pre-wrap; word-break:break-word}
+.srcs, .mocks{display:flex; gap:8px; flex-wrap:wrap}
+.src, .mocklink{font-family:"Spline Sans Mono",monospace; font-size:11px; padding:4px 9px; border-radius:7px;
+  border:1px solid var(--line); background:var(--paper); color:var(--ink-2)}
+.mocklink{color:var(--reading); border-color:color-mix(in srgb,var(--reading) 35%,var(--line))}
+.mocklink::before{content:"◳ "}
+
+.empty{text-align:center; padding:70px 20px; color:var(--muted)}
+.empty .big{font-family:"Zen Old Mincho",serif; font-size:48px; color:var(--faint); margin-bottom:10px}
+
+footer{max-width:1240px; margin:40px auto 0; padding:24px 28px 60px; border-top:1px solid var(--line);
+  position:relative; z-index:1; color:var(--muted); font-size:13px; line-height:1.6}
+footer .mono{font-size:11.5px; color:var(--faint)}
+footer b{color:var(--ink-2)}
+
+@media (max-width:640px){
+  .wrap{padding:18px}
+  .facetrow>.flabel{width:100%}
+  .controls{top:0}
+  .bignum{text-align:left}
+}
+</style>
+</head>
+<body>
+
+<header class="chrome">
+  <div class="topbar">
+    <div class="brand">
+      <span class="seal">日</span>
+      <div>
+        <div class="ttl">Roadmap &amp; Backlog</div>
+        <div class="sub">日常日本語 · WKEnhanced</div>
+      </div>
+    </div>
+    <div class="top-actions">
+      <button class="icon-btn" id="expandAll" title="Expand / collapse all">⇕</button>
+      <button class="icon-btn" id="themeToggle" title="Day / Night">☾</button>
+    </div>
+  </div>
+</header>
+
+<main class="wrap">
+  <div class="lede">
+    <div style="flex:1 1 460px">
+      <div class="kicker">Single source of truth · the future of the project</div>
+      <h1>Everything that's<br>still on the table.</h1>
+      <p>One consolidated, filterable view of every open feature, bug, polish item, content gap and
+      infra task — distilled from ~40 scattered markdown docs across all three surfaces (userscript ·
+      API server · study&#8209;app) and the NLP / song&#8209;alignment subprojects. Click any card to expand the
+      full spec, code pointers, and mock links. The default board is forward-looking; flip <b>✓ Show shipped</b>
+      to fold in the ~34 completed milestones. This file is now the single source of truth — the scattered
+      backlog &amp; progress docs were consolidated here and removed.</p>
+    </div>
+    <div class="bignum" id="heroNum"><b>—</b><span>open items</span></div>
+  </div>
+
+  <div class="stats" id="statStrip"></div>
+
+  <details class="ref">
+    <summary>Design &amp; mock reference — the visual language this all lives in</summary>
+    <div class="ref-body">
+      <p style="margin:8px 0 0;color:var(--ink-2);font-size:13.5px">The shipped skin is the <b>“Day / Night” blend</b>
+      (warm washi paper · candle&#8209;lit charcoal · vermilion red&#8209;pen · indigo reading · maki&#8209;e gold). This page is
+      themed in those exact tokens. The interactive mocks below are the reference for anything visual; several
+      backlog items link directly to the specific mock screen they'd build toward.</p>
+      <div class="ref-grid">
+        <div class="ref-card">
+          <h4>Blend / sleek — SHIPPED system</h4>
+          <a class="lk" href="study-app/mockups/sleek/index.html">sleek/index.html — live gallery + Day/Night toggle</a>
+          <a class="lk" href="study-app/mockups/sleek/PORT_PROGRESS.md">PORT_PROGRESS.md — port log + token map</a>
+          <p>Flashcards · Browse · Stats · Minna · Self&#8209;talk · Songs · Modals, each as a themed mock.</p>
+        </div>
+        <div class="ref-card">
+          <h4>Day/Night redesign — prior gen</h4>
+          <a class="lk" href="study-app/mockups/redesign/index.html">redesign/index.html — contact sheet</a>
+          <a class="lk" href="study-app/mockups/redesign/HANDOFF.md">HANDOFF.md — critique + deferred polish</a>
+          <p>The earlier exploration + per&#8209;surface hybrids and the <code>screens/*.png</code> shots (light/dark/mobile).</p>
+        </div>
+        <div class="ref-card">
+          <h4>歌 / Songs — UX mock browser</h4>
+          <a class="lk" href="study-app/mockups/songs/index.html">songs/index.html — 11 annotated screens</a>
+          <p>Library · Add · Read · Listen (cloze / full) · Shadow · Line&#8209;timing · Mine · Grammar&#8209;ref · mobile.</p>
+        </div>
+      </div>
+    </div>
+  </details>
+
+  <section class="controls">
+    <div class="searchrow">
+      <div class="search">
+        <span class="ic">⌕</span>
+        <input id="search" type="text" placeholder="Search titles, specs, file paths, ids…" autocomplete="off">
+      </div>
+      <div class="groupby">
+        <label for="groupSel">Group by</label>
+        <select id="groupSel">
+          <option value="surface">Surface / area</option>
+          <option value="status">Stage / status</option>
+          <option value="prio">Priority</option>
+          <option value="type">Type</option>
+        </select>
+      </div>
+      <button class="toggle-ship" id="shipToggle" aria-pressed="false">✓ Show shipped</button>
+    </div>
+    <div class="facets" id="facets"></div>
+    <div class="resultline" id="resultLine"></div>
+  </section>
+
+  <div id="board"></div>
+
+  <div class="empty" id="emptyState" style="display:none">
+    <div class="big jpm">空</div>
+    <div>No items match these filters.</div>
+  </div>
+</main>
+
+<footer>
+  <p><b>How this page works.</b> It's a static, self&#8209;contained HTML file — no build, no server, no dependencies
+  beyond Google Fonts (degrades to system fonts offline), matching the project's own ethos. The backlog data is
+  embedded inline. The scattered <b>backlog &amp; progress docs</b> (<span class="mono">NEXT_STEPS.md</span>,
+  <span class="mono">NEW_FEATURES.md</span>, the redesign/blend migration logs, the <span class="mono">docs/history/</span>
+  archive, …) were consolidated here and <b>removed</b> in the 2026&#8209;06&#8209;19 cleanup. The <b>architecture
+  references are kept and authoritative</b>: the three <span class="mono">CLAUDE.md</span> files, the READMEs, the
+  feature living&#8209;docs (<span class="mono">SONGS / MINNA / CARDS / SELFTALK.md</span>), <span class="mono">SERVER_DESIGN.md</span>,
+  the ADR, and the deploy runbook — they hold dead&#8209;end warnings + data formats, not backlog.</p>
+  <p class="mono" id="genline"></p>
+</footer>
+
+<script type="application/json" id="roadmap-data">
+[
+{"id":"store-tokenization-merge","surface":"store","type":"techdebt","status":"todo","prio":"high","star":true,
+"title":"⭐ Tokenization merge pass — tap whole words, not morphemes","summary":"Add a post-tokenization merge pass in parse.py so a tapped span is the word a learner looks up, not a raw GiNZA morpheme.",
+"detail":"The flagged top rework, the only genuinely-open Phase 4 item. Tap-to-lookup units come straight from GiNZA split-mode-C, so する-verbs split (勉強 + する), conjugations fragment (食べ+させ+られ+た), and て-form + aux split (読んでいる → 読ん+で+いる) — a tapped span rarely matches 'a word'. Fix: a post-tokenization MERGE pass in sentence-nlp/parse.py coalescing a content word + its trailing function morphemes into one token (lemma = dictionary form), then a full re-parse + re-seed. The already-emitted-but-unconsumed bunsetsu spans are a natural basis. The UTF-16 offset contract survives a merge automatically. This is a PARSER issue — do NOT fix it in the client overlay. Merging changes lemmas, so re-tune tap→card matching alongside it.",
+"example":"勉強(NOUN)+する(VERB) → 勉強する ;  食べ+させ+られ+た → one token, lemma 食べる",
+"src":["sentence-nlp/README.md:54-73","SENTENCE_STORE_PHASE4.md:445-468","NEXT_STEPS.md:29-33"]},
+
+{"id":"infra-prod-reseed-nlp","surface":"infra","type":"infra","status":"partial","prio":"high",
+"title":"Deploy NLP annotations + templates to prod (seed steps)","summary":"Run seed-annotations.ts after seed-sentences.ts on the droplet so prod actually serves tap-to-lookup tokens + grammar tags + template combos.",
+"detail":"Phase 4 (NLP enrichment) + slot-swap templates are merged to main but the prod deploy is the residual: a both-container rebuild plus seed-sentences.ts (incl. templates Pass 3) THEN seed-annotations.ts run against the prod sqlite. Skip it and the tap UI silently shows plain ruby in prod. The committed annotations.json ships in the image; annotations resolve by content hash, so an offline-parsed artifact seeds prod correctly with no Python on the droplet. Same docker-compose-run pattern as the rest of the seed step.",
+"example":"docker compose run … bun scripts/seed-sentences.ts  →  bun scripts/seed-annotations.ts","note":"Ordering matters — sentence rows must exist before annotations resolve by hash.",
+"src":["NEXT_STEPS.md:7,31","SENTENCE_STORE_PHASE4.md:161-168","sentence-nlp/README.md:118-124"]},
+
+{"id":"infra-prod-reseed-song-timing","surface":"infra","type":"infra","status":"todo","prio":"high",
+"title":"Re-seed the timed Songs library on prod","summary":"Run seed-songs.ts against the prod DB so the committed per-line timing sidecars land; prod still has the old untimed library + predates Listen/Shadow.",
+"detail":"Everything Songs is committed to local main but not pushed/deployed; the prod study-app container predates Listen/Shadow and the prod DB has the untimed library. Steps: push main, rebuild/redeploy the study-app container (Listen/Shadow are client changes), and run seed-songs.ts pointed at the prod DB (DATABASE_FILE / on the droplet) so each line's clip_start_ms lands. The git-tracked sidecars (data/song-timing/<slug>.json) make the prod re-seed pick them up — no Python on prod, the seed is a Bun step. Spot-check English-heavy tracks (BANDAGE / CLASSIC / Blinded Eyes / FIESTA) where JA alignment drifts most.",
+"example":"bun scripts/seed-songs.ts  (DATABASE_FILE → prod DB)",
+"src":["study-app/SONGS_HANDOFF.md:28-30,156-164","song-align/README.md:70-79"]},
+
+{"id":"us-click-to-lookup","surface":"userscript","type":"feature","status":"todo","prio":"high",
+"title":"Click-to-lookup on sentence words","summary":"Click a word in the IK sentence → open jisho.org in a new tab. Turns the card into a vocab-discovery surface.","detail":"High QoL. IK already returns e.word_list — a pre-segmented token array, so no client tokenizer is needed. Wrap each word_list token in a <span> inside renderSentence / renderSentencePlain; click opens https://jisho.org/search/<encodeURIComponent(word)>. Skip the target vocab word (already <mark>'d); filter single particles (は/の/が) via a 'kanji-containing OR length ≥ 2' threshold; apply to picker rows too. Where word_list segmentation is wrong, that's acceptable degradation. Pairs naturally with long-press-to-open-picker for a single-tap = lookup / long-press = picker gesture language.",
+"example":"https://jisho.org/search/<encodeURIComponent(word)>",
+"src":["NEW_FEATURES.md:65-78","NEXT_STEPS.md:64"]},
+
+{"id":"songs-byo-timing-editor","surface":"songs","type":"feature","status":"todo","prio":"med",
+"title":"In-app tap-to-sync timing editor (BYO songs)","summary":"Play the embedded video and tap as each line begins → write each line's clip_start_ms. The only timing path for a user's own added song.","detail":"The curated set is timed offline (curate-song / align.py), but a user's OWN added song has no timing path without this — so Listen-by-slice, Shadow '▶ original', and synced highlight never light up for BYO songs. Generalizes みんなの日本語's clip-marker to a whole song; per-line timing is optional + resumable (each tap writes that line's clip_start_ms; End = the next line's start). Largest of the open Songs items. Gotcha: PUT /timing is owner-scoped, so this is BYO-only — the public curated set stays offline-timed.",
+"example":"PUT /v1/songs/{id}/timing  (owner-scoped) → clip_start_ms per line",
+"mock":[["study-app/mockups/songs/screens/08-timing.html","Line-timing screen"]],
+"src":["NEW_FEATURES.md:38-46","study-app/SONGS.md:534","study-app/SONGS_HANDOFF.md:177-178"]},
+
+{"id":"songs-edit-delete-fields","surface":"songs","type":"feature","status":"todo","prio":"med",
+"title":"Edit / delete a song + a real Add title-artist field","summary":"Wire client edit/rename/delete over the existing PUT/DELETE routes, and add a manual title/artist input to the Add flow.","detail":"Two MED validation findings. The server already exposes PUT /v1/songs/{id} (metadata) + DELETE /v1/songs/{id}; the client wires no edit/rename/delete affordance. Separately the Add flow has no title/artist input — it relies on oEmbed (which returns the YouTube channel, not the artist) and saves 'Untitled' on a miss with no in-flow fix. Curating/fixing a BYO song is currently impossible from the UI. Complexity low–medium (a song-header overflow menu + a small form; the API exists).",
+"example":"PUT /v1/songs/{id} (title/artist/youtube_id) · DELETE /v1/songs/{id} (cascades line rows)",
+"src":["NEW_FEATURES.md:30-37","study-app/SONGS_HANDOFF.md:173-175"]},
+
+{"id":"songs-inline-add-review","surface":"songs","type":"feature","status":"todo","prio":"med",
+"title":"Inline Add-review editor","summary":"Let the user edit flagged lines (furigana / reading) in the Add review step before saving, instead of only re-analyzing.","detail":"Today a line that fails validation or that the model self-flags only guides a full re-analyze; targeted fix-ups beat re-analyzing for one bad line. The server path already supports it — POST /v1/songs is an upsert (replaceSongLines), re-POSTing your own song replaces metadata + lines in place — so this is a pure client build: inline-editable review rows feeding the existing persist path. Complexity medium.",
+"example":"inline-editable review rows → POST /v1/songs (upsert by ext_id)",
+"mock":[["study-app/mockups/songs/screens/03-add-review.html","Add — Review screen"]],
+"src":["NEW_FEATURES.md:47-51","study-app/SONGS_HANDOFF.md:179"]},
+
+{"id":"cards-conjugation-drills","surface":"cards","type":"feature","status":"todo","prio":"med",
+"title":"Conjugation drills (new study mode)","summary":"Quiz て-form / past / negative / potential off the dataset's type field — the verb-trainer mode the recognition flashcards lack.","detail":"Called out as 'the only Ideas item with teeth.' The app trains recognition (meaning/reading recall) and output (Self-Talk) but has no production/conjugation practice. The dataset already has type (godan/ichidan/irregular) + trans — enough to drive a drill of conjugated forms. A natural next study mode; the remaining transition work from the de-verb-ify effort (alongside built-in non-verb content).",
+"src":["study-app/NEXT_STEPS.md:528-529","study-app/CLAUDE.md de-verb-ify dead-end"]},
+
+{"id":"cards-builtin-nonverb","surface":"cards","type":"content","status":"todo","prio":"med",
+"title":"Built-in non-verb content (adjectives / nouns / adverbs)","summary":"Curate a baked-in set of common non-verbs with leveled examples; all 100 built-ins are still verbs.","detail":"The category capability shipped (filters, add-card modal, per-category hanko stamps + spines via cardStamp/colorClass), but the 100 baked-in cards are all verbs — users add non-verbs themselves. A curated set of common adjectives/nouns/adverbs in verbs.js (+ N5→N1 leveled examples in examples.js) would make the categories useful out of the box. Rename the VERBS/verbs.js internals only if/when it stops being mostly verbs.",
+"example":"new verbs.js entries with cat:'adjective'|'noun'|'adverb' + tiers in examples.js","src":["study-app/NEXT_STEPS.md:525-527","study-app/CARDS.md:80-88"]},
+
+{"id":"minna-more-lessons","surface":"minna","type":"content","status":"partial","prio":"med",
+"title":"Curate more みんなの日本語 lessons","summary":"Run the scraper + curate additional chapters into data/minna/lesson-<n>.json. Shipped so far: L22, L23, L24.","detail":"The whole UI is already N-lesson aware (chapter chips, lastLesson); the design generalizes to all 50 lessons. Pipeline: draft with scripts/scrape-minna.ts (emits *.draft.json) → curate by hand (fix readings, add dict/dictRead, tidy grammar, pick conversation audio) → audio just works (proxy fetches/caches) → ship (static data, normal redeploy). Each genuinely-new word also needs generated levels/mnem/tip/accent, validated for ruby balance + headword presence.",
+"example":"bun scripts/scrape-minna.ts <n> → data/minna/lesson-<n>.draft.json → curate","src":["study-app/MINNA.md:441-445","study-app/NEXT_STEPS.md:519-522"]},
+
+{"id":"design-safari-pass","surface":"design","type":"bug","status":"todo","prio":"med",
+"title":"Safari / WebKit verification pass","summary":"The whole skin was only verified headless-Chromium; re-check on real Safari, especially the remaining border-collapse table.","detail":"WebKit silently paints border:none/hidden edges anyway (using width + currentColor ≈ --ink, near-white in dark) where Chromium draws nothing — so the preview hides the bug. The now-removed .mn-vocab table was the known case; the practice-history .mn-ph table is still border-collapse and untouched (it zeroes its no-border edge with 0 solid transparent — keep it). Also re-check the topbar/modal/card/rail backdrop-filter frosting and the -webkit-background-clip:text gradient titles (dark bignum, song-title, 独り言 featured — they fall back to a flat fill if clip-text misbehaves). Verify in real Safari, both themes, or reason from computed borderTop.",
+"src":["study-app/NEXT_STEPS.md:51-54","study-app/mockups/redesign/MIGRATION_PROGRESS.md:364"]},
+
+{"id":"design-mobile-pass","surface":"design","type":"polish","status":"todo","prio":"med",
+"title":"Real-device (true ≤430px) mobile pass","summary":"Headless Chrome clamps to ~500px, so the ≤430 layer is reasoned, not screenshot-verified. Test on a real phone.","detail":"Verify on a real device: the scrollable nav row, the daily-5 / songs two-column collapse (≤860px / ≤1080px), and tap targets. A known open nit: the bignum is 96px at ≤430px vs the mock's 84px because the app's breakpoints (900/430) differ from the mock's (640/430) — fix breakpoints + bignum together in the sweep, not piecemeal. True 390px needs the DevTools device-emulation path, not --window-size.","src":["study-app/NEXT_STEPS.md:55-57","study-app/mockups/redesign/MIGRATION_PROGRESS.md:94"]},
+
+{"id":"design-accent-aa","surface":"design","type":"polish","status":"todo","prio":"med",
+"title":"Non-verb accent AA-contrast audit","summary":"The four re-tuned non-verb accents read fine as spine/stamp fills; double-check AA when used as text on chips.","detail":"adjective=viridian, noun=ochre, adverb=wine-rose, phrase=taupe were re-tuned to the warm washi palette in Phase 9 but not AA-audited as text. --gold and --muted were already explicitly darkened for AA on labels; the new accents should get the same treatment where they paint mono labels/badges (the Source-filter chips), in both themes.","src":["study-app/NEXT_STEPS.md:67-68","study-app/mockups/redesign/MIGRATION_PROGRESS.md:364"]},
+
+{"id":"api-morpho-jlpt","surface":"api","type":"feature","status":"idea","prio":"med",
+"title":"Morphological JLPT scoring (kuromoji / MeCab)","summary":"Lemmatize conjugated verbs before the JLPT dictionary lookup so the ceiling stops failing open on verb-heavy sentences.","detail":"scoreJlpt is fail-open on conjugated forms — IK gives 食べた, the dict has 食べる, the token is skipped, and verb-heavy sentences score 0 (= unknown, don't filter). So the ceiling is strict on nouns/adjectives but permissive on verbs. Add kuromoji (~50MB dict — bundle as a downloadable + cache at first warm, or vendor into the image / Spaces); run word_list through kuromoji → dictionary forms → look up in JLPT_VOCAB; score the same hardest-wins way; bump the cache schema version (everything re-warms). DEAD-END to honour: do NOT add stem-mapping/suffix-stripping heuristics without a real analyzer. Discuss the bundling story first.","example":"食べた → lemma 食べる → JLPT lookup hits","note":"Depends on the schema-version-pin (forces a full re-warm).",
+"src":["NEW_FEATURES.md:295-307","wk-enhanced-api/CLAUDE.md:263"]},
+
+{"id":"api-schema-version-pin","surface":"api","type":"techdebt","status":"todo","prio":"med",
+"title":"Schema version pin for cached payloads","summary":"Add a payload_schema_version column to vocab_examples, bumped on every response-shape change, so stale rows clear on boot instead of serving broken data.","detail":"The userscript has CACHE_SCHEMA_VERSION for exactly this; the server has none — today a payload shape change (e.g. renaming hasOriginalAudio) means stale rows serve broken data until re-warmed. Add payload_schema_version INTEGER NOT NULL DEFAULT 1 + a PAYLOAD_SCHEMA_VERSION constant; upsertVocab writes the current version, getVocab returns null (or triggers re-warm) on mismatch; on boot count stale rows, log + optionally background-refresh. ALTER TABLE ADD COLUMN is the migration. ~30 min defensive infra; couple bumps with userscript schema bumps. Prerequisite for morpho-JLPT and pitch-accent payload (both reshape the payload).","example":"payload_schema_version INTEGER NOT NULL DEFAULT 1","src":["NEW_FEATURES.md:335-347","wk-enhanced-api/CLAUDE.md:357-360"]},
+
+{"id":"infra-cloudflare-rules","surface":"infra","type":"infra","status":"todo","prio":"med",
+"title":"Cloudflare rate-limit + cache rules","summary":"Two dashboard rules still pending from the post-deploy runway: a per-IP rate limit on /v1/* and a cache rule on /v1/vocab/*.","detail":"(1) Rate-limiting: 100 req/min per IP across /v1/* (Free tier allows exactly 1 rule). (2) Cache rules on /v1/vocab/*: 'Respect origin Cache-Control headers', then VERIFY by hitting the same word twice — the second hit should show cf-cache-status: HIT. As of 2026-05-25 it showed DYNAMIC, meaning Cloudflare wasn't caching at all. ~10 min of UI work; sensible hardening regardless of traffic.","example":"expect cf-cache-status: HIT on the 2nd /v1/vocab/{word}","src":["NEXT_STEPS.md:36-42"]},
+
+{"id":"api-pitch-accent-payload","surface":"api","type":"content","status":"idea","prio":"med",
+"title":"Pitch-accent data in the vocab payload","summary":"Bundle kanjium pitch-accent data server-side and attach a pitchAccent field so the userscript can render it by the target word.","detail":"Pitch accent is a known WK gap (they cover meaning + reading, not pitch); N2+ listening/production needs it. Server-side is the right host — bundle once, every client gets it. Source: kanjium (CC-licensed, ~3000 entries for common N5–N3 vocab, ~200KB) in src/data/pitch-accent.json; warmWord attaches pitchAccent; bump the payload schema version. Licensing check needed; coverage is sparse for rarer vocab (null is fine). This is the server half of the userscript pitch-accent card feature.","example":"pitchAccent: { pattern: 'atamadaka', drop_at: 1 }  // or contour string ⓪","mock":[["https://github.com/mifunetoshiro/kanjium","kanjium data source"]],"note":"Depends on the schema-version-pin.","src":["NEW_FEATURES.md:408-420"]},
+
+{"id":"api-health-metrics","surface":"api","type":"feature","status":"idea","prio":"med",
+"title":"Health metrics expansion","summary":"Add 24h serve counts, cache hit rate, and storage byte totals to /v1/health for capacity planning + cost monitoring without Prometheus.","detail":"serve_count already tracks per-word — aggregate over last_served_at > now-24h; cache hit rate = (total /v1/vocab requests − cold misses) / total (needs a vocab_requests counter row in a new metrics table); storage size via one S3 ListObjects, cached 5 minutes so health stays fast. Add a separate /v1/admin/stats endpoint if it grows. The concrete expansion of SERVER_DESIGN's bare-minimum {warmedWords, lastWarmRunAt, serveCountLast24h}. Shares storage-byte surfacing with media LRU eviction.","src":["NEW_FEATURES.md:422-433","SERVER_DESIGN.md:405"]},
+
+{"id":"api-ik-circuit-breaker","surface":"api","type":"feature","status":"idea","prio":"med",
+"title":"Circuit-breaker for IK outages","summary":"After N IK failures in M minutes, stop calling IK for a cooldown and serve fallbacks immediately (TTS audio, DDG image, no image).","detail":"During an IK outage every cold warm hits the 15s IK timeout before falling back; a breaker recognizes 'IK is down' after ~3 failed requests and skips the doomed calls. Module-state counter + last-failed-at in services/ik.ts; if count > 3 within 5 min, return a stub failure for the next 10 min (the warm pipeline handles 'no examples' → empty 200); auto-recover by zeroing after cooldown; log entry/exit. Must NOT trip on normal 'deck has no audio' misses — only count actual transport failures (timeout, 5xx, network). A client-side userscript twin also exists in the backlog.","src":["NEW_FEATURES.md:349-362","SERVER_DESIGN.md:419"]},
+
+{"id":"api-ik-ratelimits","surface":"api","type":"infra","status":"partial","prio":"med",
+"title":"Per-endpoint IK rate limits (/search vs /download_media)","summary":"Split the global MIN_GAP_MS into a conservative /search gate and a permissive /download_media gate — could cut bulk warm from ~6-10h to ~2-3h.","detail":"Bulk warm spends ~100 /download_media calls per word for ~one /search. Add MIN_GAP_SEARCH_MS (500ms) + MIN_GAP_MEDIA_MS (100ms) with two lastCallAt timestamps + two gate functions. The 429-backoff prerequisite shipped (983dcb7+942175c). Remaining gates before flipping globally: (a) verify /download_media wasn't part of the rc2 lockout via single curls during a small-scope warm; (b) run a ~100-word scope-word re-warm with a temporary MIN_GAP_MEDIA_MS=100, rolled back if any 429 fires. Lowering below 500ms is a careful-small-scope operation — IK appears to have a per-IP soft ceiling backoff alone doesn't address.","example":"MIN_GAP_SEARCH_MS=500, MIN_GAP_MEDIA_MS=100  (services/ik.ts)","src":["NEW_FEATURES.md:253-265"]},
+
+{"id":"us-persist-selection-hash","surface":"userscript","type":"techdebt","status":"todo","prio":"med",
+"title":"Persist sentence selection by content hash, not index","summary":"After the 10→1000 cached-sentence bump, a saved 's: 37' index can point at a totally different sentence; key the saved pick by sentence-text hash.","detail":"state.selections[<word>] becomes { sentenceHash, imageIdx, b }; on load, search cached.raw for an entry whose sentence hashes to the saved value, fall back to index 0; applySavedSelection converts hash → index against the current pool. Migration: bump CACHE_SCHEMA_VERSION so old selections wipe (or write both fields during a transition window, prefer hash on read). More pressing since the pool grew + the sort changed.","example":"state.selections[<word>] = { sentenceHash:'<hash>', imageIdx:N, b:bool }","src":["NEW_FEATURES.md:192-202"]},
+
+{"id":"us-jlpt-badge-card","surface":"userscript","type":"feature","status":"todo","prio":"med",
+"title":"JLPT badge on the review card itself","summary":"Show the per-sentence colored JLPT chip (already in the picker) on the actual review card.","detail":"Lets the user see the current sentence's difficulty without opening the picker. The formatExample shape from pickExample doesn't carry _jlptMax — extend it to include the level number; add a <span class='wk-ik-card-badge lvl-nX'> next to the sentence text in renderCard, reusing the picker badge CSS; position inline-end of the sentence row. Test it doesn't push controls onto a second line in the tight 280px header at narrow viewports.","example":"<span class=\"wk-ik-card-badge lvl-nX\">","src":["NEW_FEATURES.md:79-89"]},
+
+{"id":"us-picker-filter","surface":"userscript","type":"polish","status":"todo","prio":"med",
+"title":"Filter input inside the sentence picker","summary":"A find-as-you-type box at the top of the picker narrowing visible rows — with ~500-sentence pools, pagination alone is tedious.","detail":"Add <input type='text' placeholder='Filter…'> in the picker header; filter on top of the current sort: sortedPool.filter(e => sentence.includes(q) || translation.includes(q)); reset pagination to page 0 on each query change; case-insensitive EN match, exact-substring JA. New pickerState.filter field. Do NOT auto-focus the input — focus would steal keyboard navigation from WK's answer input. Manual focus only.","example":"sortedPool.filter(e => sentence.includes(q) || translation.includes(q))","src":["NEW_FEATURES.md:107-118"]},
+
+{"id":"us-kanji-review","surface":"userscript","type":"feature","status":"idea","prio":"med",
+"title":"Kanji-review support","summary":"For single-kanji subjects (≈half of WK reviews, currently no-ops), show a list of compound vocab using the kanji.","detail":"Detect kanji subjects in getCurrentSubject()/isVocab() (already classified — take the kanji branch); query IK with the kanji as q. Card layout differs: a list of compound vocab using the kanji is more useful than one sentence (maybe pull from WKOF item data instead of IK). Content semantics differ enough to need its own card-layout component.","src":["NEW_FEATURES.md:158-168"]},
+
+{"id":"us-lesson-page","surface":"userscript","type":"feature","status":"idea","prio":"med",
+"title":"Lesson-page support","summary":"Show the IK card during WK lessons, not just reviews — lessons are where meaning + reading are first learned.","detail":"Extend the @match directive + registerListeners to fire on /subjects/lesson/... URLs. Lessons have no 'answer graded' reveal trigger — content is shown directly, so a different reveal strategy fits (reveal everything immediately, no testing context to spoil). WK's lesson DOM is structurally different from reviews; probably needs its own handleLessonChange analogue. Investigate selectors first. Extra-study / self-study modes (/subjects/extra_study/...) are a sibling follow-on.","src":["NEW_FEATURES.md:170-179,181-187"]},
+
+{"id":"minna-section-types","surface":"minna","type":"feature","status":"idea","prio":"med",
+"title":"New みんなの日本語 section types (exercises / listening / kanji)","summary":"Add interactive auto-checked exercises/drills, listening, and kanji sections to lessons.","detail":"The lesson JSON shape is extensible (vocab[]/grammar[]/examples[]/conversation); each new section is a new top-level array plus a per-type renderer in renderMinnaLesson. Exercises/drills imply grading logic, not just display — the deepest of the three. Turns the dashboard into a fuller textbook workbook.","src":["study-app/MINNA.md:447-449"]},
+
+{"id":"minna-trim-mic-verify","surface":"minna","type":"techdebt","status":"partial","prio":"med",
+"title":"Real-mic verification of the silence-trim tuning","summary":"Record real words with leading/trailing silence to confirm auto-trim doesn't clip speech — the one path not verifiable headlessly.","detail":"The trim (adaptive threshold off a robust peak + sustain gate + lead pad) is verified by unit tests + a synthetic decode (no real mic headlessly → getUserMedia NotAllowedError). Record a few words, especially aspirated onsets (引きます, 吹きます), and confirm nothing's clipped. Knobs in src/core/recordings.js: nudge leadPadMs/ratio if an onset clips or there's dead air; bump minRunMs if a mechanical trackpad click leaks past the sustain gate, lower it if a short utterance is dropped. Shares the headless-mic limitation with all the record-compare browser passes.","example":"knobs: leadPadMs / ratio / minRunMs  (src/core/recordings.js)","src":["study-app/MINNA.md:413-420","study-app/NEXT_STEPS.md:308-309"]},
+
+{"id":"core-mic-browser-pass","surface":"core","type":"techdebt","status":"followup","prio":"med",
+"title":"Manual browser pass of all mic / record / compare flows","summary":"Several shipped splits (record-compare, songs, selftalk, minna, speaking-bar) each owe a live mic pass that headless getUserMedia can't run.","detail":"Per-commit verification was bun run test + build + headless smoke, but the live mic-driven flow is human-only: a missed state reference is a runtime ReferenceError that build + pure-core tests can't catch (esbuild treats a bare identifier as a global). One consolidated pass: sign in; enter speaking mode; record a take; compare ▶you / ▶reference / →you / both / loop; confirm both waveforms render + cursor sweeps; speed (0.5/0.75/1×) + bias crossfader; mic picker lists inputs; delete a take; confirm both Self-Talk AND Minna still drive the one engine; plus Songs Shadow (▶original, day-streak) and Listen (timed slice + Slower). Render integration tests guard the render path, but not the live mic path. .claude/launch.json has the preview configs.","src":["docs/RECORD_COMPARE_DECOMP.md:119-121","docs/history/REFACTOR_FOLLOWUPS.md:343-346,442-487"]},
+
+{"id":"store-phase3-minna","surface":"store","type":"feature","status":"blocked","prio":"med",
+"title":"Phase 3 — Minna sentences into the store (public=0)","summary":"Migrate grammar-point, conversation, and lesson sentences into the unified store as gated private rows via the polymorphic link model.","detail":"Grammar-point + conversation + lesson sentences become sentence rows with public=0 (copyright-gated, same as the Minna route gate). Grammar-points + conversations get stable owner ids; sentence_link.role/clip_* already model speaker + per-line clip ranges. The largest content migration and the one that most exercises the polymorphic link model (schema supports these owner types now; only selftalk/card/song/template are populated). Independent of NLP. Once Minna lands it can be added to the parse corpus — note Minna's bunsetsu spaces in text (unlike Self-Talk).","example":"sentence{source:'minna', public:0} + sentence_link(owner_type ∈ grammar_point|conversation|lesson, role, clip_start_ms, clip_end_ms)","src":["SENTENCE_STORE_NLP.md:35,206-209","wk-enhanced-api/CLAUDE.md:154,157"]},
+
+{"id":"store-bunsetsu-consume","surface":"store","type":"feature","status":"todo","prio":"med",
+"title":"Consume the stored bunsetsu spans","summary":"bunsetsu phrase-chunk spans are written on every annotation but unconsumed — use them for phrase-level highlighting / pattern matching / a coarser tap layer.","detail":"A bunsetsu (content word + its particles/aux) is close to the learner's 'word/phrase' unit, so this overlaps with — and could feed or partly substitute for — the tokenization merge pass. Stored shape: bunsetsu:[{start,end}] (UTF-16 offsets) in sentence_annotation.bunsetsu. Data already ships; this unblocks phrase UX in the client overlay.","example":"\"bunsetsu\":[{\"start\":0,\"end\":2},{\"start\":2,\"end\":4},{\"start\":4,\"end\":10}]","src":["SENTENCE_STORE_PHASE4.md:140-141,478","sentence-nlp/README.md:69-72"]},
+
+{"id":"cards-ai-generate","surface":"cards","type":"feature","status":"blocked","prio":"med",
+"title":"AI-generate button for custom-card tiers + accent","summary":"A server-side button that drafts the 5 leveled example tiers + pitch accent for a hand-authored custom card.","detail":"Custom-card completeness shipped — the Add-card modal authors accent + the five N5→N1 levels tiers — but furigana is hand-typed as ruby and the tiers are hand-entered. An AI-generate button would draft levels (ruby on every kanji, headword in each, escalating N5→N1) + accent server-side, mirroring the per-word Minna content workflow and the Songs analyze server-LLM pattern (ANTHROPIC_API_KEY). Output still wants a proofread. Validators parseAccent/buildLevels/isCleanRuby already exist.","example":"drafts levels:{N5..N1:[jp,en]} + accent (0-12)","src":["study-app/CARDS.md:152-154","study-app/NEXT_STEPS.md:236-238"]},
+
+{"id":"songs-segmented-coverage","surface":"songs","type":"polish","status":"partial","prio":"low",
+"title":"Songs hero segmented coverage bar","summary":"The mock's hero shows a segmented coverage bar; the shipped hero uses a JLPT difficulty profile + mining ring instead.","detail":"Both the blend README and the redesign spec describe a segmented coverage bar on the Songs play-card; the rebuilt Songs surface shipped a difficulty/coverage panel + SVG mining ring (richer, but not the exact segmented motif). Flagged in the signed-in audit as a deliberate structural delta kept per re-skin-not-rewrite scope, not a regression — so a dedicated coverage-segment row is an optional fidelity improvement. Both themes.","mock":[["study-app/mockups/sleek/songs.html","sleek/songs.html hero"]],"src":["study-app/NEXT_STEPS.md:64-66","study-app/mockups/redesign/MIGRATION_PROGRESS.md:168"]},
+
+{"id":"songs-video-autoplay-sync","surface":"songs","type":"bug","status":"todo","prio":"med",
+"title":"歌 Play-with-video autoplay + line-sync (real-browser verify)","summary":"The on-demand video autoplay + glowing-line highlightAt sync weren't exercised end-to-end with a real playing YouTube video.","detail":"Headless YouTube is unreliable, so the autoplay + the highlightAt glowing-line sync were verified only via a simulated current line (the CSS + the .ll.current toggle are confirmed). Confirm in a real browser that the playhead tracks the song automatically. This is the feature substrate that makes the visual playhead real; the playhead styling itself is done.","example":"the .ll.current toggle / highlightAt glowing-line sync","src":["study-app/NEXT_STEPS.md:58-59","study-app/mockups/redesign/MIGRATION_PROGRESS.md:307"]},
+
+{"id":"songs-analyze-line-cap","surface":"songs","type":"bug","status":"todo","prio":"low",
+"title":"Analyze caps at 120 lines but persist allows 400","summary":"Long songs silently truncate — analyze (splitLyrics) caps at 120 lines while the persist path accepts 400.","detail":"Align the two limits or surface a warning when a song exceeds the analyze cap. A lower-priority Songs cleanup.","example":"splitLyrics caps at 120; POST /v1/songs persist allows 400","src":["NEW_FEATURES.md:55","study-app/SONGS_HANDOFF.md:180-182"]},
+
+{"id":"songs-gobrowsegrammar","surface":"songs","type":"bug","status":"todo","prio":"low",
+"title":"goBrowseGrammar doesn't apply the grammar filter","summary":"The grammar-reference Browse jump lands on Browse without pre-applying the grammar filter, dead-ending the cross-link.","detail":"The grammar reference panel cross-links to the Self-Talk phrases + example sentences that teach a pattern via the Browse grammar facet; the deep-link should set the grammar chip selection before switching tabs so the user lands on the filtered set, not the unfiltered grid.","example":"goBrowseGrammar → set the Browse grammar facet before tab switch","src":["NEW_FEATURES.md:56","study-app/SONGS_HANDOFF.md:180-182"]},
+
+{"id":"songs-youtube-remount","surface":"songs","type":"bug","status":"partial","prio":"low",
+"title":"YouTube player re-mounts on Read/Mine switch (re-buffers)","summary":"Mode switch / add-word re-renders the whole song and remounts the player; Listen/Shadow already avoid this via #sgContent partial re-render.","detail":"Extend the #sgContent partial-re-render pattern (used by Listen/Shadow) to Read/Mine switches so the player keeps playing instead of re-buffering.","example":"#sgContent partial re-render","src":["NEW_FEATURES.md:57-59"]},
+
+{"id":"songs-crosslink-counts","surface":"songs","type":"feature","status":"partial","prio":"low",
+"title":"Grammar-reference cross-link counts","summary":"Surface how many Self-Talk phrases / examples already teach a pattern, so a song becomes a discovery surface into practice you already have.","detail":"From Phase 3 deferred follow-ups: save-line-as-shadow-phrase + the Browse deep-link shipped, but the cross-link COUNTS are still to build. The store's grammar tags + the Browse grammar facet already index these.","src":["study-app/SONGS.md:297-299,475"]},
+
+{"id":"songs-per-song-chips","surface":"songs","type":"feature","status":"partial","prio":"low",
+"title":"Dynamic per-song chips in the deck pickers","summary":"Inject song-<id> chips into the Study/Browse pickers so you can study one song's mined words like a per-lesson L24 chip.","detail":"The master 歌 chip + per-song song-<id> tags on cards already ship and route to the source facet (like mnn-l<n>), so you can already filter by token — but dynamic chip injection into the picker UI is deferred.","example":"song-<id> source-facet tokens; mirrors mnn-l<n> → L24 chip","src":["study-app/SONGS.md:289-291,475"]},
+
+{"id":"songs-upload-reference","surface":"songs","type":"feature","status":"blocked","prio":"low",
+"title":"Upload reference tier for Shadow","summary":"A third Shadow reference tier: a decodable user-uploaded file driving the full record-compare rig (waveform, ▶both, level-match).","detail":"Shadow's reference picker generalizes 'reference = any voice'. Beyond TTS (default, full rig) and the YouTube slice (by-ear — the iframe's audio can't be decoded, so no waveform/▶both), an uploaded decodable file would get the full overlay rig. Deferred: needs an upload route + private reference storage; specced, not in the foundation.","mock":[["study-app/mockups/songs/screens/07-shadow.html","Shadow screen"]],"src":["study-app/SONGS.md:265-267","study-app/SONGS_HANDOFF.md:79"]},
+
+{"id":"songs-section-labels","surface":"songs","type":"content","status":"idea","prio":"low",
+"title":"Auto-detect stanza section labels","summary":"curate-song doesn't auto-detect stanza section labels — a curator hand-adds them.","detail":"Optional. The one-command curation pipeline (analyze → write seed → time → seed) automates a single song, but section headings still need a hand-add.","src":["NEW_FEATURES.md:60","study-app/SONGS.md:536-538"]},
+
+{"id":"songs-docs-refresh","surface":"songs","type":"techdebt","status":"partial","prio":"low",
+"title":"Refresh README / NEXT_STEPS / CLAUDE with curation + timing","summary":"Update the cross-cutting docs to cover the new Songs curation (curate-song.ts) + the song-align timing pipeline.","detail":"Songs Phase 6 (docs, rolling): SONGS_HANDOFF.md + the song-lyric-tab-design memory are current, but README.md / NEXT_STEPS.md / the CLAUDE.md Songs dead-ends still want the curation + timing surface reflected.","src":["study-app/SONGS.md:536-538"]},
+
+{"id":"selftalk-daily5-templates","surface":"selftalk","type":"feature","status":"todo","prio":"low",
+"title":"独り言 daily-5 could feature slot-swap templates","summary":"Include templates in the daily set (or prefer one matching the day's topic) to match the mock's scaffold card.","detail":"The daily rotation is todaysSet(phrases) (fixed phrases); the mock's featured prompts are slot-swap template scaffolds. The rail/feature plumbing already handles either card type via .st-phrase, so this is a content/selection change, not new plumbing. Also a closer mock match for the daily-5 hybrid.","mock":[["study-app/mockups/sleek/selftalk.html","sleek/selftalk.html"]],"src":["study-app/NEXT_STEPS.md:60-63"]},
+
+{"id":"selftalk-larger-set","surface":"selftalk","type":"content","status":"idea","prio":"low",
+"title":"Larger curated Self-Talk starter set","summary":"Author more built-in phrases (public rows seeded from data/selftalk.js); each must tag ≥1 teaching tag + pass the furigana round-trip.","detail":"Built-in phrases are model-generated and want a grammar/furigana proofread, especially the Gaming + Conversations-by-register content. Each phrase carries ≥1 of the 6 teaching tags (te-iru/nakya/tai/volitional/te-oku/sou). After editing, re-run seed-sentences.ts to push to the store (+ the NLP re-parse for tap-to-lookup). Bundled with wanting a per-phrase favorite / hide-from-rotation control.","example":"edit src/data/selftalk.js (seed source) → seed-sentences.ts","src":["study-app/SELFTALK.md:191-201,208"]},
+
+{"id":"selftalk-tts-pregen","surface":"selftalk","type":"infra","status":"todo","prio":"low",
+"title":"Pre-generate Self-Talk phrases into the TTS corpus","summary":"Add the 独り言 phrases to collectTtsTexts() so the Siri reference is a pre-generated .m4a, not Google-synthed on first play.","detail":"Templates were already added to pre-gen; the base phrases are the residual. Add them to collectTtsTexts() and re-run the generate-tts → push → seed flow. Optional operator step — first play Google-synths + caches regardless.","example":"add phrases to collectTtsTexts(); re-run generate-tts + push + seed","src":["study-app/SELFTALK.md:205-207","study-app/NEXT_STEPS.md:250-251"]},
+
+{"id":"selftalk-copy-button","surface":"selftalk","type":"feature","status":"idea","prio":"low",
+"title":"Copy-sentence button on Self-Talk phrases","summary":"Wire the existing copyBtnHtml/copyText primitive onto phrases, mirroring the example-row copy button.","detail":"The shared copy-to-clipboard button already exists in render-helpers (flashcard answer, Browse detail, Minna example rows); this is just wiring it onto Self-Talk phrases. Part of the broader copy-button polish (also: copy on conversation lines + vocab words, modifier/long-press to copy the kana reading or the JP+EN pair).","example":"reuse copyBtnHtml / copyText from src/net/render-helpers","src":["study-app/SELFTALK.md:208","study-app/NEXT_STEPS.md:512-514"]},
+
+{"id":"cards-custom-pitch","surface":"cards","type":"feature","status":"partial","prio":"low",
+"title":"Pitch accent for the rest (custom cards + proofread)","summary":"Built-ins + Minna have pitch; the model-generated accents want a proofread, and an authoritative source (OJAD/NHK) would beat regeneration.","detail":"The custom-card-completeness ship added an accent field to the Add-card modal, so the old 'custom cards have no pitch field' claim is partly stale — but ACCENTS is keyed by built-in rank, and the accents across built-ins/Minna are model-generated and want a proofread pass (esp. the nakadaka/odaka calls). Wiring an authoritative source (OJAD/NHK data) would beat regeneration.","src":["study-app/NEXT_STEPS.md:515-518"]},
+
+{"id":"content-proofread","surface":"core","type":"content","status":"todo","prio":"low",
+"title":"Content proofread passes (model-generated → human)","summary":"Several shipped datasets are model-generated and want a real human pass: leveled examples, the 47 new Minna words, pitch accents, Siri readings.","detail":"None are blocking — quality polish. The leveled example sentences (data/examples.js → re-run seed-sentences.ts after edits), the 47 generated Minna words' examples/mnemonics, pitch accents (ACCENTS + Minna), and the Apple/Siri-voice readings (a real-ear listen — the local male clips were pushed to prod; spot-check they actually sound male). Edits to examples.js only reach the app after re-running seed-sentences.ts (idempotent; refreshes furigana/translation in place).","example":"fix EXAMPLES[rank][tier] in data/examples.js → re-run seed-sentences.ts","src":["study-app/CARDS.md:164-170","study-app/NEXT_STEPS.md:73,472-476"]},
+
+{"id":"us-pitch-accent","surface":"userscript","type":"feature","status":"idea","prio":"low",
+"title":"Pitch accent for the target word (card)","summary":"Show pitch-accent notation under the highlighted target word — WK covers meaning + reading but not pitch.","detail":"The heaviest userscript feature — punt until the simpler ones are done. Needs an external data source: bundle a static pitch JSON for common N5–N3 vocab (~3000 entries, ~200KB, Kanjium CC-licensed), or query an API (kanjium-pitch, jpdb.io — adds a network dep), or integrate a WKOF community pitch script via its API. Licensing on bundled data needs checking. Pairs with the server-side pitch-accent payload item.","example":"せいしゅん⓪  or a contour line under the target word","src":["NEW_FEATURES.md:91-101"]},
+
+{"id":"us-longpress-picker","surface":"userscript","type":"polish","status":"idea","prio":"low",
+"title":"Long-press the sentence text to open the picker","summary":"Add long-press on the sentence (the largest UI element) as a second, more discoverable picker trigger beyond the small ⟳ button.","detail":"Mirror the existing long-press handler from sentenceRefreshBtn onto sentenceEl, reusing the same lastLongPressAt debounce per-card; skip the contextmenu trigger (fights browser text-selection menus). Pair with click-to-lookup for single-tap = lookup / long-press = picker. Feature-flag-worthy — could surprise users.","src":["NEW_FEATURES.md:132-141"]},
+
+{"id":"us-persist-sort","surface":"userscript","type":"polish","status":"todo","prio":"low",
+"title":"Persist picker sort across opens","summary":"Remember the last-selected picker sort (session-scoped in memory).","detail":"Module-level state.lastPickerSort = null; applySort() writes it; the overlay reads it as the initial sort, falling back to 'preferred' (if jlptPreferred set) or 'default'. No disk persistence — session-scoped is enough. Gotcha: when jlptPreferred changes mid-session, detect and fall back to default.","example":"state.lastPickerSort set by applySort(), read by the overlay","src":["NEW_FEATURES.md:120-130"]},
+
+{"id":"us-settings-tabs","surface":"userscript","type":"polish","status":"idea","prio":"low",
+"title":"Settings dialog tabs (Behavior / Selection / Cache)","summary":"Split the settings form across WKOF tabs instead of one long scrolling form.","detail":"WKOF supports tabs:{…} natively. Restructure the content: object in openSettings() from one page into top-level tabs:{ behavior:{…}, selection:{…}, cache:{…} } and move dropdowns/checkboxes into their tabs. Keep the scroll-cap CSS as defense-in-depth (some tabs may still be tall). QoL as the settings list grows.","example":"tabs: { behavior:{…}, selection:{…}, cache:{…} }","src":["NEW_FEATURES.md:143-152"]},
+
+{"id":"us-ik-circuit-breaker","surface":"userscript","type":"techdebt","status":"idea","prio":"low",
+"title":"IK outage circuit-breaker (client)","summary":"When IK has failed N times recently, skip it for a cooldown and serve fallbacks immediately. Should be invisible.","detail":"Track { count, lastFailedAt } in module state; if count > 3 within 5 min, skip IK for the next 10 min; auto-recover after the cooldown; log to console on activation. The client twin of the server circuit-breaker — largely moot since v2.0.0 routes through the server, but kept in the backlog.","src":["NEW_FEATURES.md:204-215"]},
+
+{"id":"us-cache-lru","surface":"userscript","type":"techdebt","status":"idea","prio":"low",
+"title":"Storage cap / LRU eviction for the sentence cache","summary":"Cap total sentence-cache size (~50MB) and evict least-recently-used entries; a heavy user could accumulate 100MB+ at 1000 sentences/word.","detail":"Track lastAccessedAt on each wk-ik-examples.ik.<word> entry (write-through on read); periodically sweep (settings open, or every Nth review) — if measureCacheSizes().examples > THRESHOLD, delete LRU entries until under; surface 'Auto-evicted N entries' in the settings cache section. Only matters for prolific users; the Clear-cache button is the nuclear option. Defer until someone complains.","src":["NEW_FEATURES.md:217-227"]},
+
+{"id":"api-lru-eviction","surface":"api","type":"infra","status":"idea","prio":"low",
+"title":"LRU eviction for media storage","summary":"Cap total Spaces media (e.g. 50GB) and evict least-recently-served media when over; the next request lazy-warms.","detail":"last_served_at + serve_count on vocab_examples are already populated for exactly this. Periodic sweep (cron, or every Nth /v1/admin/warm): if measureMediaSize() > THRESHOLD, find words with the lowest last_served_at + N*log(serve_count) (LRU-ish with mild popularity weighting), delete their media objects, reset payload.audioUrl/imageUrl to null. Don't evict the DB row, only the media. Track evicted-bytes in /v1/health. The userscript Clear-cache button must NOT trigger server eviction.","example":"score = last_served_at + N*log(serve_count)","src":["NEW_FEATURES.md:322-333"]},
+
+{"id":"api-ddg-alternative","surface":"api","type":"techdebt","status":"idea","prio":"low",
+"title":"Better DDG image-search alternative","summary":"Replace/supplement the fragile DuckDuckGo image scrape (rotates HTML every few months) with a more stable source, keeping DDG as one source.","detail":"Each DDG HTML rotation breaks fallback images until the regex is updated. Options by stability vs effort: (1) Bing Image Search API — paid but stable, free tier, env-var key; (2) bundle a hand-curated open-source 'concept illustration' set for common JLPT words (~100MB Spaces, highest stability/lowest coverage); (3) multiple-source fallback DDG→Google→Bing. Keep DDG as one source for redundancy. A cheap canary: a weekly assertion in the warm run that DDG returns ≥N results for a sentinel word like 犬.","src":["NEW_FEATURES.md:309-320","SERVER_DESIGN.md:424"]},
+
+{"id":"api-ik-title-overrides","surface":"api","type":"content","status":"idea","prio":"low",
+"title":"Manual override map for IK title decoding","summary":"A hand-maintained encoded_title → {title, category} map layered over IK's /index_meta for the worst offenders.","detail":"For cases where /index_meta has no entry and the heuristic fallback is wrong (durarara__ → 'Durarara' not 'Durarara!!'). New src/data/title-overrides.json; resolveIkFolderAndCategory checks overrides first, then IK index_meta, then heuristic. ~ten entries covers the worst cases. This is the sanctioned escape hatch for the lossy-IK-title dead-end (the heuristic itself stays un-fixed). Invest only after real 'audio missing for word X' reports.","example":"{ \"durarara__\": { \"title\": \"Durarara!!\", \"category\": \"anime\" } }","src":["NEW_FEATURES.md:364-375"]},
+
+{"id":"api-bulk-warm","surface":"api","type":"feature","status":"idea","prio":"low",
+"title":"Bulk endpoint with opt-in warming","summary":"Add ?warm=true to POST /v1/vocab/batch to lazy-warm misses instead of returning them as missing.","detail":"For 'force-warm these 10 words' workflows as one call. Add warm:boolean to BatchRequestSchema; when true still return {found, missing:[]} but kick off warmWord per miss at concurrency 4, wait, return the full found map; cap warming-mode at ~10. The prefetch flow (batch → individual GETs for misses) stays right for the userscript's actual use. Only worth it if needed.","example":"POST /v1/vocab/batch  { words:[…], warm:true }","src":["NEW_FEATURES.md:381-392"]},
+
+{"id":"api-two-phase-warm","surface":"api","type":"feature","status":"idea","prio":"low",
+"title":"Two-phase lazy-fill (warm example[0], defer the rest)","summary":"On cold fill, warm only the first example's media synchronously and background the rest + DDG — cuts cold latency from ~1-3s to ~500ms-1s.","detail":"Split warmWord into warmWordPriority(word) (warm only examples[0] / first with sound, upsert incomplete:true with later examples audioUrl/imageUrl:null) and warmWordComplete(word) (warm remaining + DDG, re-upsert incomplete:false); ddgInFlight generalizes to a warmInFlight Set keyed by word. The userscript must handle null media on later examples (it already handles incomplete:true for a short local TTL). Trade-off: cycling to an un-warmed example shows 'no audio/image' until the background completes. Only worth it if cold latency becomes a real complaint.","example":"{ incomplete:true, examples:[{audioUrl:null, imageUrl:null}…] }","src":["NEW_FEATURES.md:271-283"]},
+
+{"id":"api-per-example-warm","surface":"api","type":"feature","status":"idea","prio":"low",
+"title":"Per-example media-warm endpoint","summary":"POST /v1/vocab/{word}/warm-example warms a specific example's media on demand so a cycled-into example can re-render.","detail":"Pairs with two-phase lazy-fill for 'instant first card, on-demand cycle' UX. Takes { exampleId }, looks up the IK example from the cached payload, runs the per-example warm path, updates the DB row, returns the warmed example. Idempotent (storage.exists short-circuits). Hard dependency on two-phase lazy-fill shipping first.","example":"POST /v1/vocab/{word}/warm-example  { exampleId }","src":["NEW_FEATURES.md:285-293"]},
+
+{"id":"api-translation-lang","surface":"api","type":"feature","status":"idea","prio":"low",
+"title":"Translation-language switcher (DE / FR / ES)","summary":"Serve translations in a chosen language from IK's multi-language data instead of hardcoded English.","detail":"IK's /search returns multiple translation fields per example (translation_de, translation_es, …); currently everything but English is discarded. Store all available translations in the payload (small bytes); client picks one via a setting or browser language; an optional ?lang=de could pre-select to save bytes, but full-payload-all-langs is simpler. Low priority while the maintainer is English-native; bundle into a larger i18n pass on demand. The 1:N translation table already models this (translation{sentence_id, lang, text, ordinal}).","example":"GET /v1/vocab/{word}?lang=de","src":["NEW_FEATURES.md:394-406","SENTENCE_STORE_VISION.md:53"]},
+
+{"id":"store-templates-user","surface":"store","type":"feature","status":"blocked","prio":"low",
+"title":"User-authored (private) slot-swap templates — write path","summary":"Build the POST/PUT/DELETE + editor for private user-authored templates; today they're curator-only (read + lazy realize shipped).","detail":"Slices shipped curator-only: the private columns (created_by, visibility), the mirrored TEMPLATE_VIEWER_VISIBLE read gate, the public_template VIEW + breach test, and lazy materialization (POST /v1/templates/{extId}/realize). The authoring WRITE path is deferred read-first, like phrases. sentence_template already carries created_by (NULL = curator) + public/visibility. No migration needed when added.","example":"sentence_template{created_by:<user>, public:0, visibility:'private'} — new POST/PUT/DELETE under routes/templates.ts","src":["SENTENCE_STORE_TEMPLATES.md:170-171,222-223","wk-enhanced-api/CLAUDE.md:158"]},
+
+{"id":"store-tier2-grammar","surface":"store","type":"content","status":"blocked","prio":"low",
+"title":"Tier-2 grammar detectors (catalog expansion)","summary":"Add the deferred lower-priority grammar detectors to patterns.py as a commit-2.x expansion, then re-parse + re-seed.","detail":"Lower-priority points omitted from the N5/N4 set: causative-passive, tagaru, nasai, imperative, te-aru/te-iku/te-kuru/te-hoshii, benefactives (te-ageru/kureru/morau + bare), yotei, mitai, darou, temo, kedo, toki, mae-ni, ato-de, you-ni-naru/suru, keigo (sonkei/kenjou/teinei). Each new detector needs positives + confusable negatives pinned in test_patterns.py, then a full re-parse → seed-annotations.ts. The patterns.py registry dump to study-app/src/data/grammar.json must be re-run after any catalog change so client filter labels can't drift.","example":"new {id,label,jlpt,detect(doc)->bool} entries in sentence-nlp/patterns.py","src":["SENTENCE_STORE_PHASE4.md:472-475"]},
+
+{"id":"store-selftalk-grammar","surface":"store","type":"techdebt","status":"blocked","prio":"low",
+"title":"Self-Talk grammar enrichment (provenance strategy)","summary":"Merge GiNZA-auto-detected grammar tags onto Self-Talk rows without clobbering curator hand-authored tags — needs a provenance column.","detail":"The offline artifact computes grammar for Self-Talk rows too, but seed-annotations.ts skips writing it because there's no provenance column to distinguish auto vs hand-authored, so the no-clobber rule scopes the grammar write to source='example' rows only. Merging GiNZA tags onto Self-Talk needs a provenance strategy (e.g. an origin∈'auto'|'hand' column on sentence_tag) so auto + curated tags coexist.","example":"add origin∈'auto'|'hand' to sentence_tag so setGrammarTags can merge","src":["SENTENCE_STORE_PHASE4.md:251-252,476-477"]},
+
+{"id":"store-minna-nlp-corpus","surface":"store","type":"content","status":"blocked","prio":"low",
+"title":"Add Minna rows to the offline NLP parse corpus","summary":"Once Minna sentences exist as rows (Phase 3), extend parse.py's corpus so tap-to-lookup + grammar tags cover them.","detail":"Strictly downstream of Phase 3 — nothing to parse until Minna rows exist. The parser must account for Minna's bunsetsu spaces in text (the one source whose canonical text has inter-word spaces). Minna is public=0, and the offline parser reads the public_sentence view, so the export step would need widening. A re-parse + re-seed of the full hash-keyed loop.","src":["SENTENCE_STORE_PHASE4.md:480-482","SENTENCE_STORE_NLP.md:208-209"]},
+
+{"id":"store-dedup-private","surface":"store","type":"techdebt","status":"idea","prio":"low",
+"title":"Private rows are invisible to public-only tooling","summary":"Custom-card examples + user Self-Talk phrases aren't covered by NLP tap-to-lookup, export, de-dup, or TTS pre-gen — all read the public_sentence view.","detail":"A caveat inherent to privacy. Batch NLP explicitly excludes private user sentences (no offline access; live parsing needs the ruled-out Python service). The vision's 'de-duplicate' and 'find every sentence using 〜ておく across the corpus' goals apply only to the public slice. No fix chosen — a future dedup tool for private rows would run per-user, not over the public view.","src":["SENTENCE_STORE_NLP.md:95-98,204"]},
+
+{"id":"store-live-parsing","surface":"store","type":"idea","status":"blocked","prio":"low",
+"title":"Live NLP parsing of user content (Python sidecar)","summary":"Parsing arbitrary user-authored content live is deferred indefinitely — the prod box has no Python and GiNZA is heavy.","detail":"The hard constraint: GiNZA is Python, the $6 droplet runs a single Bun container with no Python, and the models are heavy (ja_ginza_electra ~16GB; even ja_ginza as a hot service is too much). Candidate directions sketched but ruled out for now: (b) a live Python sidecar (second container, on-demand parse endpoint) or (c) a hybrid (batch the curated corpus, queue user content async). This is the infra dependency blocking tap-to-lookup on private Self-Talk/custom-card rows.","src":["SENTENCE_STORE_NLP.md:85-98","SENTENCE_STORE_VISION.md:86-88"]},
+
+{"id":"store-reparse-cadence","surface":"store","type":"techdebt","status":"followup","prio":"low",
+"title":"Offline NLP re-parse cadence for runtime-written rows","summary":"No scheduled re-run of the offline parse, so runtime-written public rows (template realizations) accumulate without GiNZA tokens until an operator re-parses + re-seeds.","detail":"The server only READS sentence_annotation; population is an offline batch (parse.py → annotations.json → seed-annotations.ts) run as a manual deploy step, resolved by content hash. Songs are the first runtime writer (via the Claude analyze pass); template realize is a second, whose tap-to-lookup tokens lag until the next offline parse picks up the now-public combo rows (and that batch only rewrites source='example' grammar). Either a scheduled off-droplet parse + re-seed loop, or accept the manual cadence. No Python on the droplet is firm.","src":["wk-enhanced-api/CLAUDE.md:154,158"]},
+
+{"id":"store-changed-only","surface":"store","type":"idea","status":"idea","prio":"low",
+"title":"Optional --changed-only incremental re-parse","summary":"Skip unchanged sentences instead of always re-parsing the whole corpus — a 'later if ever needed' enhancement.","detail":"Re-parse is currently full + hash-keyed (~544 sentences, cheap to parse wholesale). parse.py already has --limit N + --verify; --changed-only would join them if the full re-parse ever becomes too slow.","src":["SENTENCE_STORE_NLP.md:158-160"]},
+
+{"id":"store-ginza-model","surface":"store","type":"idea","status":"idea","prio":"low",
+"title":"Revisit ja_ginza vs ja_ginza_electra","summary":"Optionally reconsider the GiNZA model (lighter ja_ginza vs the heavier electra transformer); provenance is recorded so swapping is just a re-run.","detail":"The parser provenance is recorded in the artifact's parser field (ja_ginza_electra/5.2.0 ginza/5.2.0 splitC) → land in sentence_annotation.parser. ELECTRA was chosen for its better dependency parse (which grammar detectors lean on); plain ja_ginza is lighter and tokenization/lemma/reading come from SudachiPy either way. A future quality/footprint reconsideration, not a committed task.","src":["SENTENCE_STORE_PHASE4.md:479"]},
+
+{"id":"store-align-swap","surface":"tooling","type":"idea","status":"idea","prio":"low",
+"title":"Swap the stable-ts aligner if it misbehaves","summary":"The aligner-agnostic sidecar contract lets you swap aeneas / WhisperX / Montreal Forced Aligner without changing the seed.","detail":"Current pipeline: yt-dlp → demucs --two-stems=vocals → stable-ts model.align(). If stable-ts misaligns a track: aeneas (CPU, espeak TTS + DTW — purpose-built for text→audio fragment sync, finicky C install) or WhisperX / MFA (heavier). Swap the align() body, keep the {lines:[{ordinal,startMs,endMs}]} shape, and the seed ingests it unchanged. English/mixed lines (BANDAGE, CLASSIC, Blinded Eyes, FIESTA hooks) align less reliably under a ja model and need eyeballing.","example":"swap align() in song-align/align.py, keep {lines:[{ordinal,startMs,endMs}]}","src":["song-align/README.md:99-110"]},
+
+{"id":"infra-ghcr-ci","surface":"infra","type":"infra","status":"todo","prio":"low",
+"title":"CI publish the server image to GHCR on tag","summary":"Replace the droplet's local docker compose build (~1-2 min) with docker compose pull (seconds) via a GHCR publish pipeline.","detail":"Today's deploys are docker compose build --pull && restart on the droplet — each push triggers a fresh local build. With a GitHub Actions pipeline that publishes to GHCR on tag, the compose image: tag becomes pullable and the droplet flow drops to docker compose pull && systemctl restart. ~1 hour of Actions. Skip until the local-build flow gets annoying. The ADR notes recovery time drops ~30→~5 min with a pullable image.","example":"droplet: docker compose pull && systemctl restart","src":["NEXT_STEPS.md:44-46","wk-enhanced-api/deploy/README.md:468"]},
+
+{"id":"infra-compose-dev","surface":"infra","type":"infra","status":"idea","prio":"low",
+"title":"Dev-mode Compose (compose.dev.yaml --watch)","summary":"A compose.dev.yaml with --watch + an src/ bind-mount for Docker-equivalent dev.","detail":"A Dockerize follow-up. Not urgent — bun dev stays the recommended/fastest loop; this only buys prod-equivalent-container parity for contributors who want it.","example":"compose.dev.yaml with --watch + src/ bind-mount","src":["NEW_FEATURES.md:246"]},
+
+{"id":"infra-sqlite-cli","surface":"infra","type":"techdebt","status":"idea","prio":"low",
+"title":"Bundle the sqlite3 CLI in the server image","summary":"Bundle sqlite3 into the image if ad-hoc docker exec … sqlite3 becomes frequent (~5MB bloat). Defer.","detail":"The runtime image ships only src/+data/ (not scripts/), and seeds run via a mounted host repo — there's no in-image sqlite3 for hand inspection today. Defer until ad-hoc exec is frequent.","src":["NEW_FEATURES.md:247"]},
+
+{"id":"infra-egress-monitor","surface":"infra","type":"infra","status":"idea","prio":"low",
+"title":"Cost / Spaces-egress monitoring digest","summary":"A weekly self-emailed digest of DO Spaces egress (a one-line cron calling the DO API) plus billing-dashboard watching.","detail":"Egress is the main variable cost; Spaces overage is $0.01/GB after 1TB (a 5TB month is +$40 — the surge ceiling worth knowing about). A cron hitting the DO API, distinct from the in-app health metrics. Needs outbound email (shares the email-provider gap with password reset).","src":["SERVER_DESIGN.md:386,406"]},
+
+{"id":"infra-vertical-upsize","surface":"infra","type":"infra","status":"idea","prio":"low",
+"title":"Vertical droplet upsize playbook","summary":"If traffic outgrows one droplet, manually upsize ($6 → $12 → $24) before any second droplet or orchestration.","detail":"An ADR-001 accepted consequence (no autoscaling): vertical headroom is plenty for the bounded-userbase scale expected. A documented operator trip-wire, not build work — the revisit threshold is $24/mo + $5 Spaces ≈ $29/mo, ~8GB RAM / 4 vCPU.","src":["docs/decisions/ADR-001-no-kubernetes.md:75","SERVER_DESIGN.md:82"]},
+
+{"id":"api-sessions-aggregate","surface":"api","type":"feature","status":"followup","prio":"low",
+"title":"GET to list / aggregate study sessions","summary":"The write path (POST /v1/sessions) already appends every session to the durable study_sessions table; a read/aggregate endpoint is the missing surface.","detail":"The never-pruned study_sessions table is the source of truth (the capped client store.sessions the charts use is separate, so nothing is lost past the client cap). Only the GET list/aggregate view is unbuilt — the data is already captured.","example":"GET /v1/sessions  (list/aggregate over study_sessions)","src":["wk-enhanced-api/CLAUDE.md:392"]},
+
+{"id":"api-password-reset","surface":"api","type":"feature","status":"blocked","prio":"med",
+"title":"Password reset / email verification","summary":"A forgotten password currently means a new account; add reset + verification. The one remaining account gap.","detail":"There's no outbound email. Deliberately deferred since it needs an email provider + secrets, not worth provisioning until the app has real users — the first real follow-up if it gets users. Shares the email-provider infra gap with the egress-monitoring digest. Listed under 'What's deliberately NOT in v1.'","src":["wk-enhanced-api/CLAUDE.md:412","study-app/NEXT_STEPS.md:449-453"]},
+
+{"id":"api-route-tests","surface":"refactor","type":"techdebt","status":"partial","prio":"low",
+"title":"Route-handler test coverage for remaining surfaces","summary":"Extend in-process app.fetch() route tests beyond the covered surfaces; live external-service integration tests stay out of scope.","detail":"Stabilized surfaces have route tests (routes/integration.test.ts for vocab/health/indexMeta/admin/progress; routes/songs.test.ts for Songs incl. auth/privacy/conflict/cap/no-leak). Pure-function coverage + manual curl remain the contract for everything else; external services (IK/DDG/TTS/Claude) are never hit in tests (the Claude client is a factory seam). The remainder: route tests for auth, sessions, minna, audio, sentences, templates. Live integration tests are intentionally NOT planned (flaky/slow/rate-limited).","src":["wk-enhanced-api/CLAUDE.md:418-419"]},
+
+{"id":"api-warm-curl-check","surface":"refactor","type":"techdebt","status":"followup","prio":"low",
+"title":"Live cold-warm curl after the mediaCache adoption","summary":"Workstream U collapsed five read-through sites onto singleFlight + mediaCache; the warm media path has no automated coverage, so a live cold-warm curl is the belt-and-suspenders check.","detail":"External services aren't mocked, so the pipeline adoption rests on behavior-tracing + typecheck. Intentional deltas: native-audio now persists in the background, and concurrent same-key warms hit upstream once (can flip a would-be cache stat to fetched under a tight race). 17 unit tests added (322→339).","example":"POST /v1/admin/warm  { scope:'word', word:'…', force:true }","src":["docs/history/REFACTOR_FOLLOWUPS.md:537-544"]},
+
+{"id":"core-audio-pitch-carrier","surface":"core","type":"idea","status":"idea","prio":"low",
+"title":"Carrier-particle TTS for odaka accent","summary":"Optionally feed TTS a carrier particle (橋が, not 橋) so isolated-word audio can realize a 尾高 (odaka) accent.","detail":"An isolated word can't realize odaka — the drop lands on a following particle that isn't there — and no TTS engine can be told an accent, so the audio accent is approximate and the visual pitchHtml overline/drop is the source of truth. The lever, if audio accent ever needs to improve, is a carrier particle: a coordinated ttsText/driver change + full TTS regen. Deliberately NOT done.","example":"speak 橋が instead of 橋 (coordinated ttsText + driver change + regen)","src":["study-app/CLAUDE.md:607-613"]},
+
+{"id":"core-custom-verb-uuid","surface":"core","type":"techdebt","status":"idea","prio":"low",
+"title":"Custom-verb sync conflict handling (UUID per verb)","summary":"Give each custom verb a UUID id to remove the cross-device seq-rank collision risk.","detail":"Today it's last-write-wins + server-wins on login (fine for one user); two devices adding verbs offline could collide on a seq-assigned rank. A UUID-per-verb id would remove the collision if it matters. Partly mitigated by the shipped 409-merge sync resilience, but the rank-collision root cause remains.","src":["study-app/NEXT_STEPS.md:530-532"]},
+
+{"id":"core-copy-polish","surface":"core","type":"polish","status":"todo","prio":"low",
+"title":"Copy-button polish (conversation lines, vocab, modifier-copy)","summary":"Extend the copy-sentence button to conversation lines + vocab words, and add a modifier/long-press to copy the kana or the JP+EN pair.","detail":"Today it copies the plain (kanji, ruby-stripped) sentence for dictionary lookup. Optional extensions on a just-shipped feature.","src":["study-app/NEXT_STEPS.md:512-514"]},
+
+{"id":"core-testing-debt","surface":"refactor","type":"techdebt","status":"partial","prio":"low",
+"title":"Backfill tests for live-verified feature glue","summary":"Many UX/design changes were verified live (preview + DOM eval), not with a test suite — the pure core has Vitest coverage but the src/features/* glue is largely hand-verified.","detail":"Reducing this debt means more automated coverage of feature-level behavior. The pure core (test/core.test.ts / verbs-core.test.ts) imports real modules so a broken export fails loudly, but the DOM/feature layer leans on the browser preview.","src":["study-app/CLAUDE.md:1166-1168"]},
+
+{"id":"minna-per-line-audio","surface":"minna","type":"feature","status":"idea","prio":"low",
+"title":"Per-line conversation audio","summary":"Add optional per-line conversation audio if a source exposes it, keeping the single whole-dialogue MP3 player as fallback.","detail":"Currently the conversation has one audio file for the whole dialogue (the data model reflects vnjpclub's conversation.audio); per-line native compare slices that one MP3 via a [startSec,endSec] clip range. Real per-line audio would make the slicing unnecessary — the line model would gain an optional audio field. Gated on an upstream source actually exposing per-line files.","src":["study-app/MINNA.md:474-476"]},
+
+{"id":"minna-italki-flags","surface":"minna","type":"content","status":"partial","prio":"low",
+"title":"Add iTalki flags to L22 / L24","summary":"Set italki:true per word on L22/L24 as those tutoring sessions happen (L23 already carries them).","detail":"The italki:true flag adds the iTalki tag + a vocab-table badge + the Source-facet filter; re-activation PATCHES the tag onto an already-added card without losing rank ('Update N tags'). An ongoing per-word content edit, not a build.","example":"\"italki\": true in data/minna/lesson-22.json / lesson-24.json","src":["study-app/MINNA.md:445-446"]},
+
+{"id":"core-audio-phase3-reconcile","surface":"core","type":"techdebt","status":"followup","prio":"low",
+"title":"Reconcile the audio-unify Phase-3 doc note","summary":"One CLAUDE.md dead-end says Phase 3 (generalize ▶native → ▶reference) is 'not yet done', while a later dead-end + NEXT_STEPS describe it shipped for record-compare. Verify which sub-items remain.","detail":"The Minna/Self-Talk record-compare reference generalization shipped (resolveVariant('minna', refAvailable(ctx), prefs) + Alt/Shift-click voice cycling). The residual is a stale doc note — confirm against NEXT_STEPS that nothing genuinely remains and de-stale the dead-end. A low-priority cleanup, not a feature.","src":["study-app/CLAUDE.md:573-575,890-893"]},
+
+{"id":"design-navextra-anim","surface":"design","type":"polish","status":"idea","prio":"low",
+"title":"Animate the #navExtra sub-bar on mount","summary":"Slide/fade the speaking sub-bar in when a surface mounts it, so it doesn't pop. Covered by prefers-reduced-motion.","detail":"Phase 9 relocated the load-bearing #navExtra speaking-bar dock to a frosted sticky sub-bar under the single-row topbar, shown only when a surface mounts it (:empty → hidden) via createSpeakingBar. The relocation is verified, but it appears/disappears abruptly; an entrance/exit transition (consistent with the redesign's reduced-motion-safe entrances) would smooth it.","src":["study-app/NEXT_STEPS.md:69-70"]},
+
+{"id":"design-fidelity-deltas","surface":"design","type":"polish","status":"followup","prio":"low",
+"title":"Residual per-surface pixel-fidelity deltas","summary":"The port is complete + verified, but the HANDOFF flags deferred minor nits; re-running the critique surfaces the next tier.","detail":"Lower-priority critique items intentionally deferred (e.g. 'Songs light-hero could go further', 'Stats spacing scale could be tighter', assorted per-surface nits) — cosmetic deltas vs screens/*.png in both themes, not blocking. The natural remaining polish backlog once the high-priority design items are done.","src":["study-app/mockups/redesign/HANDOFF.md:131"]},
+
+{"id":"design-structural-deltas","surface":"design","type":"idea","status":"followup","prio":"low",
+"title":"Minna / Songs / Self-talk structural deltas vs the mocks","summary":"Three deliberate app↔mock divergences kept per re-skin-not-rewrite scope; revisit only if you want the literal mock composition.","detail":"教科書 Minna jumps to the last lesson with a left hanko seal vs the mock's 皆の日本語 directory hero + right 課 circle; Songs shows a difficulty/coverage panel vs the mock's inline YouTube thumb; Self-talk uses a side-rail daily-5 vs the mock's horizontal row. Each is a possible future fidelity convergence, NOT a regression. Both themes.","src":["study-app/mockups/sleek/PORT_PROGRESS.md:55"]},
+
+{"id":"api-keyed-services","surface":"api","type":"feature","status":"blocked","prio":"low",
+"title":"Keyed external services (BYO-key enrichment)","summary":"Support user-provided API keys for DeepL / OpenAI / Forvo / jpdb enrichment, proxied without caching under any key the requester can't reach.","detail":"Committed posture is no maintainer-paid keys for users, but a user with their own key could opt in. New endpoints (POST /v1/translate, POST /v1/grammar/{word}); key via a per-service header (X-DeepL-Key), opaque, never logged/persisted; the server may cache the response keyed by hash(key, request) so user A's response is never served to user B. That 'never cache under a key the requester can't reach' rule is load-bearing for 'don't data-mine accounts'. Explicit v1 non-goal — get a security review before shipping any keyed endpoint; out of scope without a separate conversation.","example":"X-DeepL-Key: <key> ; cache key = hash(key, request)","src":["NEW_FEATURES.md:439-450","SERVER_DESIGN.md:43"]},
+
+{"id":"api-postgres-if-scale","surface":"api","type":"techdebt","status":"blocked","prio":"low",
+"title":"Postgres migration if scale demands (currently rejected)","summary":"SQLite-in-prod is deliberate; the repo barrel keeps a Postgres move mechanical-if-needed. Revisit on concurrent-write/backup pain.","detail":"Don't pre-emptively add Postgres — the SQLite story is deliberate (bun:sqlite). The src/db/repos/ functions behind the src/db/client.ts barrel hide all SQL so migrating later is mechanical. ADR-001 enumerates the revisit trip-wires (more than one service; zero-downtime rolling deploys; multi-region failover; user base past one-droplet vertical scaling). A documented deferred decision, not active work.","src":["SERVER_DESIGN.md:11","docs/decisions/ADR-001-no-kubernetes.md:85-93"]},
+
+{"id":"api-shared-ratelimit","surface":"api","type":"techdebt","status":"blocked","prio":"low",
+"title":"Shared rate-limit store if the server scales out","summary":"The auth rate limiter is process-local (resets on restart, not shared); a shared store is needed only if a second instance ever exists.","detail":"Fine for the single droplet. Coupled to the ADR-001 'scale past one droplet' trip-wire — only actionable if/when a second instance exists.","src":["wk-enhanced-api/CLAUDE.md:413"]},
+
+{"id":"api-index-meta-drop","surface":"api","type":"techdebt","status":"idea","prio":"low",
+"title":"Drop the /v1/index_meta side-channel","summary":"The endpoint exists as a compatibility side-channel and can probably be removed once older cache entries age out.","detail":"The :word endpoint already pre-resolves titles; /v1/index_meta keeps the userscript's existing indexMeta path working as a side channel. A small cleanup gated on confidence that no client still relies on it (ETag support for it already shipped).","src":["SERVER_DESIGN.md:132"]},
+
+{"id":"api-deeplink-example","surface":"api","type":"idea","status":"idea","prio":"low",
+"title":"Single-example deep-link endpoint","summary":"GET /v1/vocab/:word?at=<exampleId> returning one example, so a sentence selection could be shared/deep-linked.","detail":"A deliberate non-goal (the client wants the full pool for the picker, not a 'give me one sentence' endpoint), revisited only if sharing a sentence selection becomes desired. Not in v1.","example":"GET /v1/vocab/:word?at=<exampleId>","src":["SERVER_DESIGN.md:165,420"]},
+
+{"id":"api-telemetry","surface":"api","type":"idea","status":"idea","prio":"low",
+"title":"Opt-in anonymous telemetry channel","summary":"POST /v1/telemetry/anonymous with rate-limited counters so users can share that they've reviewed N cards.","detail":"Punted to a 'we'll see if anyone asks' bucket. Must stay aggregate/anonymous — against the v1 non-goal 'no analytics on what users review' (request counts per word for capacity planning, not who looked at what).","example":"POST /v1/telemetry/anonymous  (rate-limited counters)","src":["SERVER_DESIGN.md:45,422"]},
+
+{"id":"store-tts-pregen-corpus","surface":"store","type":"feature","status":"followup","prio":"low",
+"title":"Audio pre-gen over the whole unified corpus","summary":"A founding payoff of normalizing sentences: pre-generate TTS across one canonical corpus. Partly realized via template + Self-Talk enumeration.","detail":"collectTtsTexts.ts already enumerates all template combos (full per-template cartesian product via realizeTemplate) + Self-Talk phrases for local pre-render. The broader 'pre-gen across the entire unified store as one corpus' remains an open optimization beyond that enumeration.","src":["SENTENCE_STORE_VISION.md:30-31","SENTENCE_STORE_TEMPLATES.md:151"]},
+
+{"id":"design-mock-consolidate","surface":"design","type":"idea","status":"idea","prio":"low",
+"title":"Consolidate per-surface mock CSS (mocks only)","summary":"The reference mocks re-declare surface CSS per file; a tidy-up would consolidate. Reference-asset-only, zero user impact.","detail":"In the redesign mocks each surface re-declares its own CSS while shared rules live in system.css; HANDOFF calls this 'fine for mocks; a real port would consolidate'. The production port already split CSS per-surface + shared core, so this affects only the mockups/ HTML, not the app. Lowest priority.","src":["study-app/mockups/redesign/HANDOFF.md:135"]},
+
+{"id":"us-multiple-sentences","surface":"userscript","type":"idea","status":"idea","prio":"low",
+"title":"Multiple sentences per card","summary":"Show 2 example sentences alongside instead of 1. Real estate is tight in the 280px header band.","detail":"Speculative parking-lot idea.","src":["NEW_FEATURES.md:458"]},
+
+{"id":"us-image-source-label","surface":"userscript","type":"idea","status":"idea","prio":"low",
+"title":"Per-card image-source label on the card","summary":"Show a 'From <source>' overlay on the IK screenshot — the picker already shows it, the card doesn't.","detail":"Speculative parking-lot idea.","src":["NEW_FEATURES.md:461"]},
+
+{"id":"us-novelty-bias","surface":"userscript","type":"idea","status":"idea","prio":"low",
+"title":"Sentence-listened tracking / novelty bias","summary":"A heatmap-style record of which sentences you've encountered, to bias picks toward novel ones.","detail":"More valuable now that the per-word pool is huge. Speculative parking-lot idea.","src":["NEW_FEATURES.md:462"]},
+
+{"id":"us-anki-export","surface":"userscript","type":"idea","status":"idea","prio":"low",
+"title":"Export starred sentences to Anki","summary":"An .apkg builder — would need a sentence-starring UI first.","detail":"Speculative parking-lot idea; a sentence-starring UI is a prerequisite.","src":["NEW_FEATURES.md:463"]},
+
+{"id":"us-ceiling-toggle","surface":"userscript","type":"idea","status":"idea","prio":"low",
+"title":"Per-card JLPT-ceiling override toggle","summary":"A small on-card button that flips bypassCeilingForCurrentSubject without opening the picker.","detail":"For 'I want harder sentences for this one word' without committing through the picker. Speculative parking-lot idea.","example":"flips bypassCeilingForCurrentSubject","src":["NEW_FEATURES.md:466"]},
+
+{"id":"us-blocklist","surface":"userscript","type":"idea","status":"idea","prio":"low",
+"title":"Source-attribution blocklist","summary":"Skip examples from specific anime / categories.","detail":"Easy if you ever hit a deck you really dislike; otherwise low-value. Speculative parking-lot idea.","src":["NEW_FEATURES.md:460"]},
+
+{"id":"us-next-hotkey","surface":"userscript","type":"idea","status":"idea","prio":"low",
+"title":"Configurable hotkey for 'next sentence'","summary":"Like P for play, but for ⟳. Add only if the user actually wants it.","detail":"Speculative parking-lot idea.","src":["NEW_FEATURES.md:465"]},
+
+{"id":"us-wk-dark","surface":"userscript","type":"idea","status":"idea","prio":"low",
+"title":"Dark-mode adaptation if WK ships a dark theme","summary":"The white-on-purple shadow tuning won't translate if WaniKani ever ships a true dark theme. Punt until WK changes.","detail":"Speculative parking-lot idea.","src":["NEW_FEATURES.md:464"]},
+
+{"id":"done-two-app-split","surface":"infra","type":"infra","status":"completed","prio":"high","when":"in prod",
+"title":"Two-app split + cross-origin deploy","summary":"study-app extracted from wk-enhanced-api/web into its own Vite project + nginx container at the apex wkenhanced.dev; API at api.wkenhanced.dev. Cookie Domain=.wkenhanced.dev + an origin-scoped credentialed-CORS branch; live in prod on a DO droplet + Spaces behind a Cloudflare Tunnel."},
+{"id":"done-dockerize","surface":"infra","type":"infra","status":"completed","prio":"med","when":"in prod",
+"title":"Dockerized two-container prod + runbook","summary":"compose.yaml with two services (API + study-app nginx), the cut-over runbook, COOKIE_DOMAIN / STUDY_APP_ORIGINS env, and the Cloudflare apex-ingress repoint. Deploy = docker compose build --pull && restart on the droplet."},
+{"id":"done-v2-cutover","surface":"userscript","type":"feature","status":"completed","prio":"high","when":"v2.0.0",
+"title":"Userscript v2.0.0 server cutover","summary":"Every vocab lookup routes through the API; dropped GM_xmlhttpRequest for plain fetch against the CORS-permissive server; ETag conditional revalidation (If-None-Match → 304) + batch prefetch of upcoming subjects. Replaced the v1.x direct IK/DDG/TTS browser path via a 3-phase client migration."},
+{"id":"done-sentence-picker","surface":"userscript","type":"feature","status":"completed","prio":"med","when":"shipped",
+"title":"Sentence picker + JLPT ceiling","summary":"Per-card sentence picker over the full pool (up to ~1000 sentences/word), JLPT-aware sort + a configurable difficulty ceiling with per-subject bypass, pagination, refresh, and per-word selection persistence."},
+{"id":"done-ik-coalesce","surface":"api","type":"feature","status":"completed","prio":"high","when":"shipped",
+"title":"IK / DDG / TTS coalesced behind one endpoint","summary":"The server pre-warms + coalesces ImmersionKit, DuckDuckGo images, and Google TTS behind a single per-card endpoint (+ POST /batch), with media proxied to Spaces/CDN, server-side JLPT scoring, and IK title decoding — so clients never hit the three upstreams directly. Lazy-fill on cold words; admin warm endpoint."},
+{"id":"done-tts-3tier","surface":"api","type":"feature","status":"completed","prio":"med","when":"shipped",
+"title":"Storage-backed Apple-voice TTS + native audio","summary":"/v1/tts (and the unified /v1/audio group) serve from a 3-tier cache (in-process → storage → Google), preferring a pre-generated Apple-voice .m4a; native Minna audio is proxied + prefetched into storage. Tagged voice-variant catalog + dual-gender Siri pre-gen pushed to prod."},
+{"id":"done-ratelimit-backoff","surface":"api","type":"infra","status":"completed","prio":"med","when":"shipped",
+"title":"Auth rate limiting + IK 429 backoff","summary":"Per-IP in-memory limiter on /v1/auth/* (login 20/15min, register 8/hr → 429 + Retry-After) and exponential 429-backoff on the IK client."},
+{"id":"done-mediacache-singleflight","surface":"api","type":"techdebt","status":"completed","prio":"med","when":"workstream U",
+"title":"Read-through mediaCache + singleFlight","summary":"Collapsed five hand-rolled try{fetch}catch{readCache} sites onto lib/singleFlight.ts + services/mediaCache.ts (resolveMediaUrl/resolveMediaBytes) so concurrent same-key warms hit upstream once; native audio persists in the background. 17 unit tests."},
+{"id":"done-route-tests","surface":"api","type":"techdebt","status":"completed","prio":"low","when":"shipped",
+"title":"In-process route / integration tests","summary":"app.fetch() route tests for the stabilized surfaces (vocab/health/indexMeta/admin/progress + the Songs surface incl. auth/privacy/conflict/cap/no-leak); the Claude client behind a factory seam so external services are never hit in tests."},
+{"id":"done-accounts-sync","surface":"core","type":"feature","status":"completed","prio":"high","when":"shipped",
+"title":"Accounts + cross-device cloud sync","summary":"Email/password accounts (httpOnly .wkenhanced.dev cookie) + SIX debounced synced blobs from one createSyncedBlob abstraction — progress, custom verbs, settings, Self-Talk, Minna, songs — server-wins-on-login with fresh-account seeding."},
+{"id":"done-sync-resilience","surface":"core","type":"techdebt","status":"completed","prio":"med","when":"E1/E2",
+"title":"Sync resilience — 409 merge + offline queue","summary":"Per-blob 409 optimistic-concurrency reconcile (merge via core/merge.js; settings stays server-wins), a durable offline write-queue (dedup by appKey, replays on 'online' / boot / sign-in), and idempotency-keyed durable session logging."},
+{"id":"done-srs","surface":"core","type":"feature","status":"completed","prio":"high","when":"shipped",
+"title":"Leitner SRS + free-study modes + forecast","summary":"Leitner-box SRS (cardStat/scheduleCard/isDue/leeches), an SRS-vs-free study-type toggle (free study never touches the schedule), the upcoming-review forecast chart, and a visual per-card Leitner box indicator."},
+{"id":"done-session-history","surface":"core","type":"feature","status":"completed","prio":"low","when":"shipped",
+"title":"Durable session history","summary":"Append-only study_sessions table + POST /v1/sessions on every session end, so history survives beyond the capped client-side store.sessions (charts only)."},
+{"id":"done-module-split","surface":"refactor","type":"techdebt","status":"completed","prio":"med","when":"shipped",
+"title":"app.js → modules (the file split)","summary":"The 1934-line single-scope app.js became one module per section under src/features/*, a pure unit-tested src/core/*, a shared src/state.js hub, and a thin src/main.js entry that just wires initX() in boot order. Eval-time cycles broken by callback seams + the sync-bus."},
+{"id":"done-refactor-workstreams","surface":"refactor","type":"techdebt","status":"completed","prio":"med","when":"D/B/C/S/T/M/U",
+"title":"SOLID refactor workstreams + decompositions","summary":"Workstreams D/B/C/S/T/M/U plus the record-compare decomposition (C0 pure helpers + C1 file-split into record-compare/{state,capture,takes,playback,waveform,view}.js) and the songs/, minna/, selftalk/ package splits. All green; the doctrine now is to target NEW churn, not re-split."},
+{"id":"done-a11y","surface":"core","type":"feature","status":"completed","prio":"low","when":"shipped",
+"title":"A11y — roving tabindex + radiogroups","summary":"Roving-tabindex chip groups (one tab stop, arrow nav, skips disabled chips) with ARIA radiogroup semantics on single-select rows (role=radio + synced aria-checked) and toolbar semantics on multi-select facet rows."},
+{"id":"done-typed-romaji","surface":"core","type":"feature","status":"completed","prio":"low","when":"shipped",
+"title":"Typed-reading mode + romaji input","summary":"Advisory typed-reading grading (normKana compare against v.read, suggests but never auto-schedules) with romajiToKana folding (greedy Hepburn + wāpuro variants, sokuon/ん) so kana-IME and romaji typists share one path."},
+{"id":"done-settings-page","surface":"core","type":"feature","status":"completed","prio":"low","when":"shipped",
+"title":"DB-backed Settings page","summary":"Settings modal (example level, furigana, input/audio mode, free-review-due, recordings keep, trim, compare speed, per-context voice priority) stored in jpverbs_settings + synced; furigana is a global <html data-furigana> CSS flip."},
+{"id":"done-audio-unify","surface":"core","type":"feature","status":"completed","prio":"med","when":"Phases 1-3 + ①-⑦",
+"title":"Audio-unify (one player + voice picker)","summary":"Unified /v1/audio route group + tagged voice-variant catalog (server); the pure core/audio.js resolver + shared playItem() player (public synth vs credentialed native/take) + a per-context Voice-priority editor (client). Follow-ups ①-⑦: preview, per-item Alt/Shift-click cycle, availability hinting, reference-compare generalization, token hygiene."},
+{"id":"done-multi-category","surface":"cards","type":"feature","status":"completed","prio":"med","when":"shipped",
+"title":"Multi-category cards (de-verb-ify UI)","summary":"A cat facet (verb/adjective/noun/adverb/phrase) leads both filter panels; per-category hanko stamps + spines via cardStamp/colorClass; the Add-card modal shows Type for verbs+adjectives and Transitivity for verbs. (Built-in non-verb content + conjugation drills remain open.)"},
+{"id":"done-leveled-examples","surface":"cards","type":"feature","status":"completed","prio":"med","when":"shipped",
+"title":"Leveled example sentences (N5-N1)","summary":"Five JLPT tiers per built-in card with an answer-side selector + Browse leveled list (exampleForLevel/availableTiers, fallback exact→nearest→ex→null). Model-generated + format-validated; now seeded from the sentence store."},
+{"id":"done-custom-cards","surface":"cards","type":"feature","status":"completed","prio":"med","when":"shipped",
+"title":"Custom cards — CRUD + completeness","summary":"Add/edit/delete custom verbs (monotonic rank, synced under custom-verbs); the Add-card modal authors completeness — pitch accent (live pitchHtml preview) + the five N5-N1 leveled tiers (validated clean ruby), dual-written to the store as private rows when signed in."},
+{"id":"done-browse-detail","surface":"cards","type":"feature","status":"completed","prio":"low","when":"shipped",
+"title":"Browse detail modal + Jisho links","summary":"Clicking a Browse card opens a modal (collapsible Mnemonic/Trap/Examples, JLPT-level-filtered), a 5-segment Leitner memory track + next-review chip, and a Jisho.org dictionary deep-link on the answer side + detail modal."},
+{"id":"done-minna-dashboard","surface":"minna","type":"feature","status":"completed","prio":"high","when":"shipped",
+"title":"みんなの日本語 dashboard (account-gated)","summary":"A Minna no Nihongo lesson dashboard (vocab w/ native audio, grammar, examples, conversation) fetched from /v1/minna/* (signed-in only — copyrighted content never reaches anon). Vocab activates into the SRS deck as tagged cards; per-lesson notes sync. Lessons 22/23/24 curated."},
+{"id":"done-minna-record-compare","surface":"minna","type":"feature","status":"completed","prio":"med","when":"Phase 2",
+"title":"Minna record-and-compare","summary":"Record per vocab word / conversation line, compare to cached native audio (▶you / ▶native / ▶native→you / loop + dual waveform + live cursor, 0.5/0.75/1× speed, balance crossfader, auto-normalize, speech-window alignment, auto-trim silence), a speaking-mode persistent mic, device picker, per-lesson practice history, and auto-exit on navigation."},
+{"id":"done-minna-content","surface":"minna","type":"content","status":"completed","prio":"med","when":"shipped",
+"title":"Minna content parity / dedup / pitch / furigana","summary":"Dedup overlays (Minna words matching a built-in reuse it — no duplicates), 47 generated new-word example/mnemonic sets, visual pitch accent (pitchHtml; TTS sends the kanji headword for homographs), the iTalki tag + Source filter facet, curated furigana on lesson sentences, and prefetched native audio."},
+{"id":"done-selftalk","surface":"selftalk","type":"feature","status":"completed","prio":"med","when":"shipped",
+"title":"独り言 Self-Talk tab","summary":"An output/speaking-practice tab: built-in starter phrases (7 scenes) + author-your-own lines (synced selftalk blob → private store rows), ruby + English + grammar tags, the unified player, record-and-compare against a reference voice, a localDay-keyed Today's-focus filter, and a light streak / said-today signal."},
+{"id":"done-songs-modes","surface":"songs","type":"feature","status":"completed","prio":"high","when":"shipped",
+"title":"歌 / Songs — all four modes","summary":"A 6th tab turning songs into practice: Library + Add (paste/YouTube → analyze → save), Read (furigana flip, reveal-on-tap EN, tap-a-word, grammar chips, per-line replay), Listen (cloze ⇄ full-line dictation), Shadow (record-compare per line), Mine (vocab by JLPT known/new → SRS activation under Source:歌, grammar points). POST /v1/songs/analyze calls Claude (server computes UTF-16 offsets)."},
+{"id":"done-songs-timing","surface":"songs","type":"feature","status":"completed","prio":"med","when":"shipped",
+"title":"Songs timed library + alignment pipeline","summary":"12 curated public starters, fully timed via the offline song-align/ forced-alignment pipeline (yt-dlp → demucs → stable-ts → per-line clip_start_ms sidecars), unlocking synced highlight + per-line replay. The songs synced progress blob (starred/shadowed/lastMode) completes Shadow."},
+{"id":"done-store-phases","surface":"store","type":"feature","status":"completed","prio":"med","when":"Ph1/2/2.5",
+"title":"Sentence store — Phases 1, 2, 2.5","summary":"A DB-authoritative unified sentence store with a privacy gate: Phase 1 migrated Self-Talk phrases, Phase 2 the built-in vocab examples (read-from-store), Phase 2.5 dual-writes custom-card examples as private rows. Read-through localStorage caches; data/*.js are now seed sources only."},
+{"id":"done-store-nlp","surface":"store","type":"feature","status":"completed","prio":"med","when":"Phase 4",
+"title":"Sentence store — Phase 4 NLP annotations","summary":"Offline GiNZA parse (sentence-nlp/) → committed annotations.json → seed-annotations.ts populates sentence_annotation (UTF-16 tap tokens + bunsetsu spans) and grammar sentence_tags from a 38-point N5/N4 detector catalog. Powers tap-to-lookup + the Browse grammar facet. (The ⭐ tokenization merge pass is the open follow-up.)"},
+{"id":"done-store-templates","surface":"store","type":"feature","status":"completed","prio":"low","when":"shipped",
+"title":"Slot-swap templates (curator)","summary":"sentence_template table + GET /v1/templates[?source=] + lazy materialization (POST /v1/templates/{extId}/realize). Private columns + the mirrored read gate + breach test ship now; the user-authoring write path is the open follow-up."},
+{"id":"done-daynight","surface":"design","type":"polish","status":"completed","prio":"med","when":"Phases 0-9",
+"title":"Day/Night redesign (skin + layout)","summary":"An all-sans warm-washi / candle-charcoal system: tokens + per-panel composition rebuild, the single-row .topbar frame with the #navExtra speaking-bar dock, CSS split per-surface + shared kit. Verified signed-in both themes."},
+{"id":"done-blend-port","surface":"design","type":"polish","status":"completed","prio":"med","when":"Phases 0-10",
+"title":"Blend / sleek port + glow cut","summary":"Ported the locked blend system (GENKŌ + KAISATSU + YORU) surface-by-surface (station nameplate, subway SRS pipeline, line-bullet cards, glossy histogram, NN/06 markers) with a signed-in data-rich audit, then a ~90% decorative-glow cut (orbs, per-card halos, no-op backdrop-filters) for performance. 290/290 tests."}
+]
+</script>
+
+<script>
+const SURFACES={
+  store:{label:"Sentence store / NLP",jp:"文",color:"var(--leech)"},
+  api:{label:"API server",jp:"鯖",color:"var(--reading)"},
+  userscript:{label:"Userscript",jp:"script",color:"var(--brand)"},
+  songs:{label:"Study-app · 歌 Songs",jp:"歌",color:"var(--adjective)"},
+  minna:{label:"Study-app · 教科書 Minna",jp:"課",color:"var(--noun)"},
+  selftalk:{label:"Study-app · 独り言 Self-talk",jp:"独",color:"var(--adverb)"},
+  cards:{label:"Study-app · Cards & study",jp:"札",color:"var(--good)"},
+  core:{label:"Study-app · Core / audio",jp:"核",color:"var(--phrase)"},
+  design:{label:"Design & polish",jp:"意",color:"var(--brand-deep)"},
+  infra:{label:"Infra / Deploy",jp:"配",color:"var(--gold)"},
+  refactor:{label:"Refactor / test debt",jp:"整",color:"var(--ink-2)"},
+  tooling:{label:"Tooling / pipelines",jp:"具",color:"var(--muted)"}
+};
+const SURFACE_ORDER=["store","api","userscript","songs","minna","selftalk","cards","core","design","infra","refactor","tooling"];
+const TYPES={
+  feature:{label:"Feature"},bug:{label:"Bug"},polish:{label:"Polish"},
+  content:{label:"Content"},infra:{label:"Infra"},techdebt:{label:"Tech debt"},idea:{label:"Idea"}
+};
+const TYPE_ORDER=["feature","bug","polish","content","infra","techdebt","idea"];
+const STATUS={
+  todo:{label:"Not started"},partial:{label:"In progress"},
+  blocked:{label:"Blocked · needs infra"},idea:{label:"Unscoped idea"},
+  followup:{label:"Loose end"},completed:{label:"Shipped"}
+};
+const STATUS_ORDER=["todo","partial","blocked","followup","idea","completed"];
+const STATUS_COLOR={todo:"var(--reading)",partial:"var(--gold)",blocked:"var(--adverb)",followup:"var(--good)",idea:"var(--muted)",completed:"var(--good)"};
+const STATUS_GLYPH={todo:"◔",partial:"◑",blocked:"◓",followup:"◕",idea:"○",completed:"●"};
+const PRIO={high:{label:"High"},med:{label:"Medium"},low:{label:"Low"}};
+const PRIO_ORDER=["high","med","low"];
+
+const DATA=JSON.parse(document.getElementById('roadmap-data').textContent);
+
+// ---------- state ----------
+const filters={surface:new Set(),type:new Set(),status:new Set(),prio:new Set()};
+let groupBy="surface";
+let query="";
+let allOpen=false;
+let showShipped=false;
+const isOpen=it=>it.status!=="completed";
+
+// ---------- helpers ----------
+const el=(t,c,h)=>{const e=document.createElement(t); if(c)e.className=c; if(h!=null)e.innerHTML=h; return e;};
+const esc=s=>String(s).replace(/[&<>]/g,m=>({"&":"&amp;","<":"&lt;",">":"&gt;"}[m]));
+function passes(it){
+  if(it.status==="completed"&&!showShipped&&!filters.status.has("completed"))return false;
+  if(filters.surface.size&&!filters.surface.has(it.surface))return false;
+  if(filters.type.size&&!filters.type.has(it.type))return false;
+  if(filters.status.size&&!filters.status.has(it.status))return false;
+  if(filters.prio.size&&!filters.prio.has(it.prio))return false;
+  if(query){
+    const hay=(it.id+" "+it.title+" "+it.summary+" "+(it.detail||"")+" "+(it.src||[]).join(" ")+" "+(it.example||"")).toLowerCase();
+    if(!hay.includes(query))return false;
+  }
+  return true;
+}
+function groupConf(key){
+  if(groupBy==="surface")return{order:SURFACE_ORDER,meta:SURFACES,key:i=>i.surface,glyph:k=>SURFACES[k].jp,color:k=>SURFACES[k].color,label:k=>SURFACES[k].label};
+  if(groupBy==="status")return{order:STATUS_ORDER,meta:STATUS,key:i=>i.status,glyph:k=>STATUS_GLYPH[k],color:k=>STATUS_COLOR[k],label:k=>STATUS[k].label};
+  if(groupBy==="prio")return{order:PRIO_ORDER,meta:PRIO,key:i=>i.prio,glyph:k=>({high:"一",med:"二",low:"三"}[k]),color:k=>({high:"var(--brand)",med:"var(--gold)",low:"var(--muted)"}[k]),label:k=>PRIO[k].label+" priority"};
+  return{order:TYPE_ORDER,meta:TYPES,key:i=>i.type,glyph:k=>({feature:"✦",bug:"⚠",polish:"✶",content:"✎",infra:"⚙",techdebt:"⟲",idea:"◌"}[k]),color:k=>SURFACES.core.color,label:k=>TYPES[k].label+"s"};
+}
+
+// ---------- render facet bar ----------
+function facetRow(name,order,metaLabel,colorFn){
+  const row=el("div","facetrow");
+  row.appendChild(el("span","flabel",metaLabel));
+  order.forEach(k=>{
+    const count=DATA.filter(i=>(name==="status"||showShipped||i.status!=="completed")&&i[name==="prio"?"prio":name]===k).length;
+    const c=el("button","chip"+(filters[name].has(k)?" active":""));
+    if(colorFn)c.style.setProperty("--accent",colorFn(k));
+    c.innerHTML=(colorFn?'<span class="dot"></span>':'')+esc(facetLabel(name,k))+' <span class="ct">'+count+'</span>';
+    c.onclick=()=>{filters[name].has(k)?filters[name].delete(k):filters[name].add(k); render(); buildFacets();};
+    row.appendChild(c);
+  });
+  return row;
+}
+function facetLabel(name,k){
+  if(name==="surface")return SURFACES[k].label;
+  if(name==="type")return TYPES[k].label;
+  if(name==="status")return STATUS[k].label;
+  if(name==="prio")return PRIO[k].label;
+}
+function buildFacets(){
+  const box=document.getElementById("facets"); box.innerHTML="";
+  box.appendChild(facetRow("surface",SURFACE_ORDER,"Surface",k=>SURFACES[k].color));
+  box.appendChild(facetRow("type",TYPE_ORDER,"Type",null));
+  box.appendChild(facetRow("status",STATUS_ORDER,"Stage",k=>STATUS_COLOR[k]));
+  const prow=facetRow("prio",PRIO_ORDER,"Priority",k=>({high:"var(--brand)",med:"var(--gold)",low:"var(--muted)"}[k]));
+  const anyActive=Object.values(filters).some(s=>s.size)||query;
+  if(anyActive){
+    const clr=el("button","clearbtn",null,"Clear all");
+    clr.textContent="✕ clear filters";
+    clr.onclick=()=>{Object.values(filters).forEach(s=>s.clear()); query=""; document.getElementById("search").value=""; render(); buildFacets();};
+    prow.appendChild(clr);
+  }
+  box.appendChild(prow);
+}
+
+// ---------- render board ----------
+function itemCard(it){
+  const card=el("div","item"+(allOpen?" open":"")+(it.status==="completed"?" shipped":""));
+  card.style.setProperty("--accent",SURFACES[it.surface].color);
+  const mocks=(it.mock||[]).map(m=>'<a class="mocklink" href="'+esc(m[0])+'"'+(m[0].startsWith('http')?' target="_blank" rel="noopener"':'')+'>'+esc(m[1])+'</a>').join("");
+  const srcs=(it.src||[]).map(s=>'<span class="src">'+esc(s)+'</span>').join("");
+  const head=el("div","item-head");
+  head.innerHTML=
+    '<div class="item-top"><span class="prio '+(it.status==="completed"?"done":it.prio)+'">'+(it.status==="completed"?"✓":"")+'</span><span class="pri-lbl">'+(it.status==="completed"?"Shipped":esc(PRIO[it.prio].label))+'</span>'+(it.star?'<span class="star" title="flagged top item">★</span>':'')+'</div>'+
+    '<h3>'+esc(it.title)+'</h3>'+
+    '<p class="summary">'+esc(it.summary)+'</p>'+
+    '<div class="tags">'+
+      '<span class="tag"><span class="sdot"></span>'+esc(SURFACES[it.surface].label)+'</span>'+
+      '<span class="tag">'+esc(TYPES[it.type].label)+'</span>'+
+      '<span class="tag status '+it.status+'">'+esc(STATUS[it.status].label)+(it.when?' · '+esc(it.when):'')+'</span>'+
+    '</div>';
+  head.onclick=()=>card.classList.toggle("open");
+  const body=el("div","item-body");
+  body.innerHTML=
+    '<p class="det">'+esc(it.detail||it.summary)+'</p>'+
+    (it.note?'<div class="note"><b>⚠ note · </b>'+esc(it.note)+'</div>':'')+
+    (it.example?'<div class="field"><div class="fl">Example / code pointer</div><pre class="example">'+esc(it.example)+'</pre></div>':'')+
+    (mocks?'<div class="field"><div class="fl">Mock reference</div><div class="mocks">'+mocks+'</div></div>':'')+
+    (srcs?'<div class="field"><div class="fl">Source docs</div><div class="srcs">'+srcs+'</div></div>':'');
+  card.appendChild(head); card.appendChild(body);
+  return card;
+}
+function render(){
+  const board=document.getElementById("board"); board.innerHTML="";
+  const shown=DATA.filter(passes);
+  document.getElementById("emptyState").style.display=shown.length?"none":"block";
+  const conf=groupConf();
+  const groups={};
+  shown.forEach(it=>{const k=conf.key(it); (groups[k]=groups[k]||[]).push(it);});
+  // priority sort within a group
+  const prioRank={high:0,med:1,low:2};
+  conf.order.forEach(k=>{
+    const items=groups[k]; if(!items||!items.length)return;
+    items.sort((a,b)=>((isOpen(b)?1:0)-(isOpen(a)?1:0))||(prioRank[a.prio]-prioRank[b.prio])||(b.star?1:0)-(a.star?1:0));
+    const g=el("section","group");
+    const gh=el("div","group-head");
+    gh.style.setProperty("--accent",conf.color(k));
+    gh.innerHTML='<span class="gk">'+conf.glyph(k)+'</span><h2>'+esc(conf.label(k))+'</h2>'+
+      '<span class="gcount">'+items.length+' item'+(items.length>1?'s':'')+'</span><span class="gtog">▾</span>';
+    gh.onclick=()=>g.classList.toggle("collapsed");
+    g.appendChild(gh);
+    const line=el("div","group-line"); line.style.setProperty("--accent",conf.color(k)); g.appendChild(line);
+    const items_wrap=el("div","items");
+    items.forEach(it=>items_wrap.appendChild(itemCard(it)));
+    g.appendChild(items_wrap);
+    board.appendChild(g);
+  });
+  // result line
+  const openTotal=DATA.filter(isOpen).length;
+  const shippedShown=shown.filter(i=>!isOpen(i)).length;
+  document.getElementById("resultLine").textContent=
+    "Showing "+shown.length+" item"+(shown.length!==1?"s":"")+" · "+(shown.length-shippedShown)+" open of "+openTotal+
+    (shippedShown?" · "+shippedShown+" shipped":"")+" · grouped by "+
+    ({surface:"surface",status:"stage",prio:"priority",type:"type"}[groupBy]);
+}
+function buildStats(){
+  const strip=document.getElementById("statStrip"); strip.innerHTML="";
+  const openTotal=DATA.filter(isOpen).length;
+  document.getElementById("heroNum").querySelector("b").textContent=openTotal;
+  const defs=[
+    {n:openTotal,l:"open items",c:"var(--ink)"},
+    {n:DATA.filter(i=>isOpen(i)&&i.prio==="high").length,l:"high priority",c:"var(--brand)"},
+    {n:DATA.filter(i=>isOpen(i)&&i.type==="feature").length,l:"features",c:"var(--good)"},
+    {n:DATA.filter(i=>isOpen(i)&&i.type==="bug").length,l:"bugs",c:"var(--adverb)"},
+    {n:DATA.filter(i=>isOpen(i)&&i.type==="polish").length,l:"polish",c:"var(--reading)"},
+    {n:DATA.filter(i=>isOpen(i)&&i.status==="blocked").length,l:"blocked · infra",c:"var(--gold)"},
+    {n:DATA.filter(i=>!isOpen(i)).length,l:"shipped ✓",c:"var(--good)"}
+  ];
+  defs.forEach(d=>{const s=el("div","stat"); s.style.setProperty("--accent",d.c);
+    s.innerHTML='<b>'+d.n+'</b><span>'+d.l+'</span>'; strip.appendChild(s);});
+}
+
+// ---------- wiring ----------
+document.getElementById("search").addEventListener("input",e=>{query=e.target.value.trim().toLowerCase(); render(); buildFacets();});
+document.getElementById("groupSel").addEventListener("change",e=>{groupBy=e.target.value; render();});
+document.getElementById("expandAll").addEventListener("click",()=>{
+  allOpen=!allOpen;
+  document.querySelectorAll(".item").forEach(c=>c.classList.toggle("open",allOpen));
+});
+const tt=document.getElementById("themeToggle");
+function setTheme(t){document.documentElement.setAttribute("data-theme",t); tt.textContent=t==="night"?"☀":"☾"; try{localStorage.setItem("roadmap-theme",t);}catch(e){}}
+tt.addEventListener("click",()=>setTheme(document.documentElement.getAttribute("data-theme")==="night"?"day":"night"));
+(function initTheme(){let t; try{t=localStorage.getItem("roadmap-theme");}catch(e){} if(!t)t=window.matchMedia&&window.matchMedia("(prefers-color-scheme: dark)").matches?"night":"day"; setTheme(t);})();
+
+const shipBtn=document.getElementById("shipToggle");
+shipBtn.addEventListener("click",()=>{showShipped=!showShipped; shipBtn.setAttribute("aria-pressed",String(showShipped)); shipBtn.classList.toggle("on",showShipped); shipBtn.textContent=showShipped?"✓ Hide shipped":"✓ Show shipped"; render(); buildFacets();});
+document.getElementById("genline").textContent="Consolidated from ~40 source docs (since removed) across all three surfaces + the NLP / song-alignment subprojects. "+DATA.filter(isOpen).length+" open items + "+DATA.filter(i=>!isOpen(i)).length+" shipped milestones. This file is the single source of truth — update it as work lands.";
+
+buildStats(); buildFacets(); render();
+</script>
+</body>
+</html>

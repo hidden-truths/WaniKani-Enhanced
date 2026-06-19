@@ -23,7 +23,7 @@ read, listen to, shadow, and mine, with real synced timing.
 - **What's left:** ship to prod (re-seed + redeploy — it's all local right now); a few MED validation
   findings; and in-app **tap-to-sync** for user-added (BYO) songs. (The `songs` synced **progress
   blob** ⭐ — shadowed-line tracking + stars + the library ring — SHIPPED 2026-06-16; see below.) Full
-  slate in "What's left" + [NEW_FEATURES.md](../NEW_FEATURES.md) "歌/Songs".
+  slate in "What's left" + [ROADMAP.html](../ROADMAP.html) "歌/Songs".
 
 ⚠️ **Everything this session is committed to local `main` but NOT pushed and NOT deployed.** The prod
 DB has the OLD (untimed) library and the prod study-app container predates Listen/Shadow.
@@ -155,7 +155,7 @@ are in [src/features/songs.js](src/features/songs.js); pure logic in [src/core/s
 ## What's left (prioritized) — the next session's menu
 
 The user wants the next session to focus on **NEW FEATURE development**. Candidates, highest-leverage
-first (full backlog incl. broader-app ideas: [NEW_FEATURES.md](../NEW_FEATURES.md)):
+first (full backlog incl. broader-app ideas: [ROADMAP.html](../ROADMAP.html)):
 
 1. **Ship to prod** *(not a feature, but it gates everything users see)* — push `main`, rebuild/redeploy
    the **study-app container** (Listen/Shadow are client changes), run `bun scripts/seed-songs.ts`
@@ -221,7 +221,7 @@ the per-browser cookie/JS-runtime setup: [../wk-enhanced-api/data/songs/README.m
 
 1. **This file** — current state, what's left, gotchas.
 2. [SONGS.md](SONGS.md) — the design (four modes, data model, reuse map, Phase checklist).
-3. [NEW_FEATURES.md](../NEW_FEATURES.md) "歌 / Songs" — the new-feature backlog (for a feature-dev session).
+3. [ROADMAP.html](../ROADMAP.html) "歌 / Songs" — the new-feature backlog (for a feature-dev session).
 4. [CLAUDE.md](CLAUDE.md) 歌/Songs dead-end + [../wk-enhanced-api/CLAUDE.md](../wk-enhanced-api/CLAUDE.md)
    Songs entries — architecture + invariants.
 5. Code: `src/features/songs.js` (+ `songs-youtube.js`), `src/core/songs.js`, `src/features/record-compare/*`;

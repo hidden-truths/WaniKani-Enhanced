@@ -2,9 +2,9 @@
 
 The detailed as-built record for **Phase 4** of the unified sentence store, plus the full plan
 for **commit 3** (the remaining work). Companion to the overview/brief
-[SENTENCE_STORE_NLP.md](SENTENCE_STORE_NLP.md); same family as the shipped
-[SENTENCE_STORE_PHASE1.md](docs/history/SENTENCE_STORE_PHASE1.md) / [SENTENCE_STORE_PHASE2.md](docs/history/SENTENCE_STORE_PHASE2.md)
-plans. If you are picking this work up cold, read the brief first, then this.
+[SENTENCE_STORE_NLP.md](SENTENCE_STORE_NLP.md); the shipped Phase 1/2 plans + the original
+vision were consolidated into [ROADMAP.html](ROADMAP.html) (store: completed).
+If you are picking this work up cold, read the brief first, then this.
 
 **Branch:** `sentence-store-phase4` · **Commits:** `f1e4f60` (1), `75f7972` (2), `8a20db6` (3a),
 `24558f9` (3b), 3c. Commits 1/2/3a were behavior-preserving + additive; 3b/3c are the user-visible

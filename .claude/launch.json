@@ -36,6 +36,14 @@
       "runtimeArgs": ["-m", "http.server", "5192"],
       "cwd": "study-app/mockups/sleek",
       "port": 5192
+    },
+    {
+      "name": "roadmap",
+      "runtimeExecutable": "python3",
+      "runtimeArgs": ["-m", "http.server", "5188"],
+      "cwd": ".",
+      "port": 5188,
+      "autoPort": true
     }
   ]
 }

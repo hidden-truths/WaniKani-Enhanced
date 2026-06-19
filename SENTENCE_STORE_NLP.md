@@ -3,9 +3,7 @@
 General overview of the unified sentence store as it stands today, and the plan for the **NLP
 enrichment phase** — the next stage. This is the entry doc for picking that work up.
 
-**Reading order:** this file (overview + NLP plan) → [SENTENCE_STORE_VISION.md](docs/history/SENTENCE_STORE_VISION.md)
-(original rationale + the open questions, mostly resolved) → [SENTENCE_STORE_PHASE1.md](docs/history/SENTENCE_STORE_PHASE1.md)
-/ [SENTENCE_STORE_PHASE2.md](docs/history/SENTENCE_STORE_PHASE2.md) (the shipped phase plans) → **[SENTENCE_STORE_PHASE4.md](SENTENCE_STORE_PHASE4.md)
+**Reading order:** this file (overview + NLP plan; the original vision + the shipped Phase 1/2 plans were consolidated into [ROADMAP.html](ROADMAP.html)) → **[SENTENCE_STORE_PHASE4.md](SENTENCE_STORE_PHASE4.md)
 (the Phase-4 as-built record + commit-3 plan — the detailed companion to this brief; READ IT if you're
 picking up Phase 4)**. The authoritative
 schema is [wk-enhanced-api/src/db/schema.sql](wk-enhanced-api/src/db/schema.sql) "Unified sentence
@@ -213,7 +211,7 @@ until the tap-to-lookup UI lands.
   served), and realizations get **lazily materialized** as `sentence` rows on first request (linked via
   `sentence_link(owner_type='template')`) so this NLP pipeline + the other store tooling cover the combos
   people actually use — tap-lookup tokens lag until the next offline re-parse. Full design + plan:
-  [SENTENCE_STORE_TEMPLATES.md](docs/history/SENTENCE_STORE_TEMPLATES.md).
+  [ROADMAP.html](ROADMAP.html) (store: slot-swap templates).
 
 ## Invariants any phase must preserve
 
