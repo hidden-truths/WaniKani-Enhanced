@@ -464,8 +464,12 @@ Component contracts you must preserve:
   *style*, leaving width+colour to paint. The fix: base every cell edge at
   `border:0 solid transparent` and re-add ONLY the real separator (`.mn-vocab td` word-row
   `border-top:1px solid var(--line)`); the first row + `.mn-rec-row` zero their top edge to
-  `0 solid transparent`. Don't "tidy" those back to `none`/`hidden`. (Inline comment in
-  [src/styles.css](src/styles.css) by `.mn-vocab`.)
+  `0 solid transparent`. Don't "tidy" those back to `none`/`hidden`. **Update (Day/Night
+  redesign):** the みんなの日本語 vocab list is now the `.vrow` CSS **grid** in
+  [styles/minna.css](src/styles/minna.css) — the `.mn-vocab` `<table>` + its border rules were
+  removed, so this trap no longer touches the vocab list (a grid can't paint phantom edges). It
+  now guards only the remaining `border-collapse` table, practice-history `.mn-ph`, which zeroes
+  its no-border edge with `border-top:0` (width 0); the principle stands for any future one.
 - **Never let `*/` appear *inside* a CSS comment** — e.g. a class-glob like `.prompt-*/.answer` or
   `.verb-*/.rank` in a `/* … */` "moved to surface X" pointer. The `*/` closes the comment EARLY; the
   leftover text + the following comment collapse into a garbage selector that **silently swallows the

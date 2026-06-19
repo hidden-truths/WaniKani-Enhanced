@@ -23,6 +23,7 @@ feature code + hand-rolled SVG charts reskin for free. Theme attr stays the app'
 | 7 | Minna / Self-talk / Songs | render headers + `index.html` | ✅ done (already blend-aligned via Phase 1 + prior redesign; unified NN/06 markers across all 6 surfaces, incl. Flashcards retrofit) |
 | 8 | Modals | (verified — no changes) | ✅ done (already blend-aligned via shared modal kit + Phase 1; Settings both themes + scroll contract + Sign-in verified) |
 | 9 | Fidelity audit | all surfaces, both themes | ✅ done — **PORT COMPLETE** |
+| 10 | Signed-in audit + finish | Minna/Browse/Stats real data; line-bullets; cleanups | ✅ done — **FULLY VERIFIED** |
 
 **Audit results (2026-06-18):** `bun run build` compiles (102 modules, CSS 143 kB); no
 `*/`-in-comment landmines in any touched CSS; `bun run test` 283/283 green; all 6 tabs cycle
@@ -30,8 +31,36 @@ with zero console errors; both themes verified per-surface (tokens resolve + ali
 chrome single-row + ふ toggle, manuscript grid/gold glow, nameplate + subway pipeline, line-
 bullet browse cards, glossy histogram + leech bullets, NN/06 markers on all 6 surfaces,
 modal scroll contract). Minna signed-in marker verified via the minna-render test (couldn't
-sign in on the :5191 design port — CORS allowlist is :5173). Remaining nicety: Minna vocab
-line-bullets (signed-in render against the border-sensitive table — deferred).
+sign in on the :5191 design port — CORS allowlist is :5173). The signed-in data-rich pass +
+Minna vocab line-bullets were deferred here (need a :5173 sign-in) — **both DONE**; see below.
+
+### Signed-in audit + finish (2026-06-18, on `main`)
+
+The three data-rich surfaces CORS blocked on :5191 were verified **signed in on :5173** with the
+maintainer's real data, both themes (screenshots in the session):
+
+- **教科書 Minna** — lesson hero/seal, vocab grid, grammar cards, model conversation, the
+  speaking-bar/record-compare dock + per-row rec-controls, the `04/06` marker: all faithful.
+  **The vocab line-bullet (the one deferred nicety) SHIPPED** (`b764fb4`): each `.vrow` leads with
+  the shared `.line-bullet` (五/一/不/名/副 via `colorClass`/`classKanji`), exactly like Browse/Stats.
+  ⚠️ **Dead-end correction:** the Minna vocab is NO LONGER a `border-collapse` table — the redesign
+  rebuilt it as a CSS **grid** (`.vrow{display:grid}`), so the `.mn-vocab` Safari border trap does
+  NOT apply to this render (verified via computed 6-col grid + both themes). The `.mn-vocab` rules
+  are gone; only the practice-history `.mn-ph` table is still border-collapse (untouched).
+- **独り言 Self-talk / 歌 Songs** — featured/now-speaking card, phrase cards, prompt rail, slot-swap
+  templates (Self-talk, verified in the Minecraft topic); hero play-card + glowing disc, lyrics +
+  tap-to-reveal, mined-vocab rail (Songs, opened a real starter song): all faithful, both themes.
+  Structural deltas from the mocks — Minna jumps to the last lesson (no 皆の日本語 directory hero) with
+  a left hanko seal vs the mock's right 課 circle; Songs shows a difficulty/coverage panel vs an
+  inline YouTube thumb (on-demand video); Self-talk uses a side-rail daily-5 vs the mock's horizontal
+  row — are the prior **redesign composition**, kept per the re-skin-not-rewrite scope, NOT regressions.
+- **Browse / Stats / modals** — verified with real progress (147 cards incl. 47 activated Minna,
+  Box-N memory tracks in the detail modal, real glossy histogram). Settings / Add-card / Browse-detail
+  modals: blend kit, scroll + sticky × hold. (Browse's per-row line-bullets shipped in phase 5.)
+
+**Minor cleanups (`39af8ad`):** removed the orphaned flashcard `.tate-rule` divider (absent from the
+mock — `.word-block`'s own gap keeps the glyph↔reading spacing) and the dead `.hero-kicker` CSS. Both
+maintainer-confirmed before removal. Throughout: `bun run test` 283/283, `bun run build` clean.
 
 ## Token map (mock → app role token; theme attr = light/dark)
 

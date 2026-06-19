@@ -1,10 +1,11 @@
 /* =========================================================================
    みんなの日本語 DASHBOARD (Day/Night Phase 5) — account-gated lesson view (gate ·
-   vocab table · grammar · conversation · notes · practice history). Peeled from
+   vocab grid · grammar · conversation · notes · practice history). Peeled from
    styles.css; the SHARED .speak-btn.playing + .minna-badge + the record-compare/
-   speaking-bar kit stay in styles.css. The .mn-vocab border rules are the
-   WebKit/Safari border-collapse fix — preserved verbatim (don't go back to
-   none/hidden). Imported after styles.css.
+   speaking-bar kit stay in styles.css. The vocab list is the .vrow GRID (the old
+   .mn-vocab <table> + its WebKit border-collapse fix are gone); the one remaining
+   border-collapse table is practice-history .mn-ph (no-border edge = border-top:0).
+   Imported after styles.css.
    ========================================================================= */
 /* Signed-out gate — a lifted sheet. */
 .mn-gate{text-align:center;padding:48px 22px;background:var(--surf-card);border:1px solid var(--line);border-radius:16px;margin-top:0;box-shadow:var(--lift-md),var(--inner-hi)}
