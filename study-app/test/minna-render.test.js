@@ -104,10 +104,10 @@ test('the package barrel exports the public API main.js + cloud.js consume', () 
   expect(typeof pkg.minnaBlob.pull).toBe('function');
 });
 
-test('renderMinna (signed in) paints the head kicker + every lesson section — no ReferenceError', async () => {
+test('renderMinna (signed in) paints the head marker + every lesson section — no ReferenceError', async () => {
   await renderMinna();
   expect(document.getElementById('mnGate').hidden).toBe(true);
-  expect(html('mnHead')).toContain('みんなの日本語');
+  expect(html('mnHead')).toContain('教科書');                 // blend NN/06 section marker (教科書 · Textbook)
   const body = html('mnBody');
   // lesson hero + seal (kanji numeral) + add-deck CTA
   expect(body).toContain('第23課');

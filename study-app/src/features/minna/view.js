@@ -86,7 +86,7 @@ export async function renderMinna() {
   // Kicker only in the head; the chapter selector is relocated below the hero (the mock) — see
   // chapterStripHtml + wireMinnaLesson. S.lessons feeds that strip across re-renders.
   S.lessons = lessons;
-  head.innerHTML = `<div class="page-kicker"><span class="jp">みんなの日本語</span> · Textbook</div>`;
+  head.innerHTML = `<div class="marker"><div class="idx">04<span class="slash"> / 06</span></div><div class="ttl jp-min">教科書</div><div class="en">Textbook</div><div class="rule"></div></div>`;
   await renderMinnaLesson(cur, body);
 }
 // A quiet "this is account-gated material" footnote under the hero (the mock).
