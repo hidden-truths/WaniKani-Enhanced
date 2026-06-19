@@ -196,6 +196,16 @@ class S3Storage implements Storage {
 }
 
 let _storage: Storage | null = null;
+
+// Test-only seam: force the storage singleton (mirrors db's `_useDbForTesting`
+// and the warm pipeline's `_setWarmAllInFlightForTesting`). Pass an in-memory
+// fake to exercise storage-dependent routes/services without touching the
+// filesystem or S3; pass null to reset so the next getStorage() rebuilds from
+// config. Don't call this from app code.
+export function _setStorageForTesting(s: Storage | null): void {
+    _storage = s;
+}
+
 export function getStorage(): Storage {
     if (_storage) return _storage;
     if (config.storage.driver === 's3') {
