@@ -30,6 +30,7 @@ import {
   mergeProgress, mergeCustomVerbs, mergeMinna, mergeSelftalkPractice, mergeSongs,
   parseYouTubeId, songWords, knownHeadwords, coverage, bucketByJlpt, wordStatus, songLevel, lineTimingState, songLineKey, songProgress, songGrammar, JLPT_ORDER,
   clozeBlanks, clozeLineParts, parseSongLineKey, readingMatch, lineReading, buildSongCard, songCardKey,
+  accuracyMix, weekOverWeekDelta, boxCounts, dailyAccuracySvg, pipelineHtml,
 } from '../src/core/index.js';
 import { SELFTALK, SELFTALK_TAXONOMY, SELFTALK_TOPICS, SELFTALK_TOPIC_IDS, SELFTALK_GRAMMAR } from '../src/data/selftalk.js';
 import { SELFTALK_TEMPLATES } from '../src/data/selftalk-templates.js';
@@ -1831,4 +1832,73 @@ test('songCardKey + buildSongCard: stable dedup key + the tagged activation-card
   expect(buildSongCard({ songExtId: 's', songTitle: 'T', rank: 1, word: { lemma: '東京', pos: 'PROPN' } }).cat).toBe('noun');
   const bare = buildSongCard({ songExtId: 's', songTitle: 'T', rank: 2, word: { lemma: 'あ', pos: 'X' } });
   expect(bare).toMatchObject({ cat: 'noun', read: 'あ', mean: '' });
+});
+
+// --- core/charts.js — the pure Stats builders (extracted from features/stats.js) ---
+
+test('accuracyMix: empty ledger is all-zero', () => {
+  expect(accuracyMix([])).toEqual({ srs: { rev: 0, right: 0 }, free: { rev: 0, right: 0 }, tot: 0, right: 0, overall: 0 });
+});
+
+test('accuracyMix: splits srs/free, legacy no-kind counts as srs, overall reconciles', () => {
+  const m = accuracyMix([
+    { kind: 'srs', tot: 10, right: 8 },
+    { kind: 'free', tot: 5, right: 5 },
+    { tot: 5, right: 0 }, // no kind → srs
+  ]);
+  expect(m.srs).toEqual({ rev: 15, right: 8 });
+  expect(m.free).toEqual({ rev: 5, right: 5 });
+  expect(m.tot).toBe(20);
+  expect(m.right).toBe(13);
+  expect(m.overall).toBe(65); // round(100*13/20)
+});
+
+test('weekOverWeekDelta: this-week vs last-week points delta, null without a prior week', () => {
+  const WK = 7 * 864e5, now = 1_700_000_000_000;
+  const sessions = [
+    { t: now - 1000, right: 9, tot: 10 },          // this week → 90%
+    { t: now - WK - 1000, right: 7, tot: 10 },     // last week → 70%
+    { right: 1, tot: 1 },                          // no `t` → ignored
+    { t: now - 3 * WK, right: 0, tot: 10 },        // older than 2 weeks → ignored
+  ];
+  expect(weekOverWeekDelta(sessions, now)).toBe(20);
+  // Only this week, no prior week to compare → null.
+  expect(weekOverWeekDelta([{ t: now - 1000, right: 9, tot: 10 }], now)).toBeNull();
+  expect(weekOverWeekDelta([], now)).toBeNull();
+});
+
+test('boxCounts: tallies cards per Leitner box; missing/box-0 cards land in box 0', () => {
+  const data = [{ rank: 1 }, { rank: 2 }, { rank: 3 }, { rank: 4 }];
+  const cards = { 1: { box: 0 }, 2: { box: 3 }, 3: { box: 5 } }; // rank 4 has no card row
+  expect(boxCounts(data, cards)).toEqual([2, 0, 0, 1, 0, 1]); // ranks 1 & 4 → box 0
+});
+
+test('dailyAccuracySvg: well-formed SVG with the line path, avg label, a dot per point, and a "today" tick', () => {
+  const svg = dailyAccuracySvg([{ y: 100, label: '06-01' }, { y: 50, label: '06-02' }]);
+  expect(svg.startsWith('<svg')).toBe(true);
+  expect(svg.endsWith('</svg>')).toBe(true);
+  expect(svg).toContain('aria-label="Daily accuracy over 2 days, percent correct"');
+  expect(svg).toContain('id="dailyLine"');
+  expect(svg).toContain('avg 75%'); // round((100+50)/2)
+  expect((svg.match(/<circle/g) || []).length).toBe(2); // one dot per point
+  expect(svg).toContain('>today</text>'); // last tick relabeled
+});
+
+test('dailyAccuracySvg: a single-point series is centered and does not divide by zero', () => {
+  const svg = dailyAccuracySvg([{ y: 90, label: '06-01' }]);
+  expect(svg).toContain('aria-label="Daily accuracy over 1 day, percent correct"');
+  expect(svg).toContain('cx="319.0"'); // a lone point is centered: pad.l 34 + iw/2 (570/2=285)
+  expect((svg.match(/<circle/g) || []).length).toBe(1);
+});
+
+test('pipelineHtml: six bars, box-5 flagged best, counts + swatches present, height is proportional', () => {
+  const html = pipelineHtml([5, 3, 2, 1, 0, 4]);
+  expect((html.match(/class="pcol/g) || []).length).toBe(6);
+  expect(html).toContain('class="pcol best"'); // index 5
+  expect((html.match(/class="count"/g) || []).length).toBe(6);
+  expect((html.match(/<i style="background:var\(--box-/g) || []).length).toBe(6); // legend swatches
+  expect(html).toContain('least learned');
+  expect(html).toContain('best learned');
+  expect(html).toContain('height:88%'); // the tallest box (5, the max) → ~88%
+  expect(html).toContain('height:3%'); // the 0-count box → a stub
 });
