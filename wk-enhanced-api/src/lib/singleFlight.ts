@@ -7,15 +7,18 @@
 // it backs any "do this expensive thing at most once concurrently per key"
 // need. Today:
 //   • services/mediaCache.ts coalesces concurrent cold-fills of the same media
-//     key (two users hitting 食べる at once → one IK download, not two).
-//   • warm/pipeline.ts's bespoke `ddgInFlight` Set is a coarser, hand-rolled
-//     instance of this same idea (it dedupes a whole background DDG task per
-//     word, not a single keyed result). Left as-is for now; it could adopt this
-//     class later if we want one mechanism.
+//     key (two users hitting 食べる at once → one IK download, not two), JOINING
+//     waiters so they share the one result.
+//   • warm/pipeline.ts's `ddgWarms` guards the per-word background DDG task at a
+//     coarser granularity (a whole task, not a single keyed result). It DROPS a
+//     duplicate instead of joining — it checks has() and returns early when one
+//     is already running, since the caller is fire-and-forget. Both granularities
+//     ride this one primitive and get the automatic on-settle cleanup.
 //
 // Scope: per-process (a module/instance-level Map). Correct for the single-
-// droplet deploy — the same caveat as `ddgInFlight` / `lastIkCallAt` in
-// services/ik.ts. A multi-process world would need a shared coordinator (e.g.
+// droplet deploy — the same caveat as `ddgWarms` (warm/pipeline.ts) / the
+// `lastIkCallAt` rate limiter in services/ik.ts. A multi-process world would
+// need a shared coordinator (e.g.
 // a Redis lock) for cross-process coalescing; the call sites already tolerate
 // the occasional duplicate upstream call (idempotent, content-addressed writes)
 // so that upgrade is optional, not load-bearing.

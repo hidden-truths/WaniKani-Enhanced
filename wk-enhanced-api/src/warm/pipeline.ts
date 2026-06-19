@@ -20,6 +20,7 @@ import { googleTts } from '../services/tts.ts';
 import { fetchAllWkVocab } from '../services/wk.ts';
 import { getStorage, keys } from '../services/storage.ts';
 import { resolveMediaUrl } from '../services/mediaCache.ts';
+import { SingleFlight } from '../lib/singleFlight.ts';
 import { scoreJlpt } from '../lib/jlpt.ts';
 import { ikTitleToFolder, prettifyTitle, resolveCategory, type IndexMeta } from '../lib/ikTitles.ts';
 
@@ -71,16 +72,18 @@ export interface VocabPayload {
     incomplete?: boolean;
 }
 
-// Words with an active background DDG warm. Prevents a re-warm or a second
-// lazy-fill from kicking off a duplicate DDG fetch while one's already in
-// flight. Module-scoped (process-singleton); fine for a single-droplet
-// deployment, would need Redis-or-similar in a multi-process world.
-//
-// This is a COARSER, word-level cousin of services/mediaCache.ts's per-key
-// single-flight (lib/singleFlight.ts): it dedupes a whole background task, not a
-// single keyed result, so it stays a hand-rolled Set here rather than adopting
-// the generic SingleFlight. Same idea, different granularity.
-const ddgInFlight = new Set<string>();
+// Dedupes overlapping background DDG completions per word: a re-warm or a second
+// lazy-fill that fires while one is already running is DROPPED (the work is
+// best-effort fallback imagery and the caller is fire-and-forget, so there's
+// nothing to await or share). This is the COARSER, word-level cousin of
+// mediaCache's per-key coalescing — it guards a whole background task, not a
+// single keyed result — but it now rides the SAME generic primitive
+// (lib/singleFlight.ts). The win over the prior hand-rolled Set: the in-flight
+// slot is freed automatically on settle, so a throw from db.getVocab/upsertVocab
+// (which sit OUTSIDE the inner try/catch) can no longer strand a word "in flight"
+// forever the way a skipped manual `delete` would have. Process-singleton; a
+// multi-process world would need a shared coordinator (same caveat as warmAll).
+const ddgWarms = new SingleFlight<void>();
 
 // Whether a `warmAll` is currently running. Prevents a manual
 // `POST /v1/admin/warm {"scope":"all"}` from kicking off a second bulk
@@ -268,7 +271,7 @@ export async function warmWord(word: string, options?: { force?: boolean }): Pro
 
 // Background task: fetch DDG illustration pool, upload, and re-upsert the
 // vocab row with the full fallbackImages array and incomplete=false.
-// Deduped by `ddgInFlight` so a concurrent re-warm doesn't trigger a duplicate.
+// Deduped by `ddgWarms` (SingleFlight) so a concurrent re-warm doesn't trigger a duplicate.
 //
 // Idempotency: this runs after warmWord has already upserted the row. We
 // re-read the row right before the final upsert so any concurrent change
@@ -277,60 +280,63 @@ export async function warmWord(word: string, options?: { force?: boolean }): Pro
 // serve a stable payload with empty fallbackImages than to leave clients
 // re-fetching forever waiting for DDG to come back.
 async function completeDdgInBackground(word: string): Promise<void> {
-    if (ddgInFlight.has(word)) {
+    // Drop a duplicate rather than join it: the caller is fire-and-forget and the
+    // result is best-effort, so a concurrent completion for the same word is just
+    // skipped (exactly as the prior Set did). has()→run() is race-free in the
+    // single-threaded event loop — there's no await between the two.
+    if (ddgWarms.has(word)) {
         log.debug('warm.ddg.background.skip_inflight', { word });
         return;
     }
-    ddgInFlight.add(word);
-    const t0 = Date.now();
-    const storage = getStorage();
-    let urls = 0;
-    let fetched = 0;
-    let failed = 0;
-    let fallbackImages: string[] = [];
-    try {
-        const ddgUrls = await ddgSearchImages(word);
-        urls = ddgUrls.length;
-        const indexed = ddgUrls.map((url, idx) => ({ url, idx }));
-        const uploaded = await batched(indexed, 3, async ({ url, idx }) => {
-            const img = await ddgFetchImage(url);
-            if (!img) {
-                failed++;
-                return null;
-            }
-            fetched++;
-            const key = keys.ddg(word, idx);
-            return storage.put(key, img.buffer, img.contentType);
+    await ddgWarms.run(word, async () => {
+        const t0 = Date.now();
+        const storage = getStorage();
+        let urls = 0;
+        let fetched = 0;
+        let failed = 0;
+        let fallbackImages: string[] = [];
+        try {
+            const ddgUrls = await ddgSearchImages(word);
+            urls = ddgUrls.length;
+            const indexed = ddgUrls.map((url, idx) => ({ url, idx }));
+            const uploaded = await batched(indexed, 3, async ({ url, idx }) => {
+                const img = await ddgFetchImage(url);
+                if (!img) {
+                    failed++;
+                    return null;
+                }
+                fetched++;
+                const key = keys.ddg(word, idx);
+                return storage.put(key, img.buffer, img.contentType);
+            });
+            fallbackImages = uploaded.filter((u): u is string => u !== null);
+        } catch (err) {
+            log.warn('warm.ddg.background.failed', { word, err: (err as Error).message });
+        }
+
+        // Re-read the row so we layer on top of whatever the latest payload is.
+        // If the row vanished (cache evicted between warm and now — shouldn't
+        // happen in practice), bail without writing.
+        const row = db.getVocab(word);
+        if (!row) {
+            log.warn('warm.ddg.background.row_missing', { word });
+            return;
+        }
+        const fullPayload: VocabPayload = {
+            ...(row.payload as VocabPayload),
+            fallbackImages,
+            incomplete: false,
+        };
+        db.upsertVocab(word, fullPayload, fullPayload.examples?.length || 0);
+
+        log.info('warm.ddg.background.done', {
+            word,
+            ms: Date.now() - t0,
+            urls,
+            fetched,
+            failed,
+            fallbackImages: fallbackImages.length,
         });
-        fallbackImages = uploaded.filter((u): u is string => u !== null);
-    } catch (err) {
-        log.warn('warm.ddg.background.failed', { word, err: (err as Error).message });
-    }
-
-    // Re-read the row so we layer on top of whatever the latest payload is.
-    // If the row vanished (cache evicted between warm and now — shouldn't
-    // happen in practice), bail without writing.
-    const row = db.getVocab(word);
-    if (!row) {
-        log.warn('warm.ddg.background.row_missing', { word });
-        ddgInFlight.delete(word);
-        return;
-    }
-    const fullPayload: VocabPayload = {
-        ...(row.payload as VocabPayload),
-        fallbackImages,
-        incomplete: false,
-    };
-    db.upsertVocab(word, fullPayload, fullPayload.examples?.length || 0);
-    ddgInFlight.delete(word);
-
-    log.info('warm.ddg.background.done', {
-        word,
-        ms: Date.now() - t0,
-        urls,
-        fetched,
-        failed,
-        fallbackImages: fallbackImages.length,
     });
 }
 

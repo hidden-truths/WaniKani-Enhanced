@@ -65,7 +65,8 @@ export interface MediaBytesResult {
 // (the bytes for a key never change — that's exactly why media is served
 // `immutable`), so any two concurrent loaders for a key would produce identical
 // bytes. This single map is where the entire server gets herd protection on
-// media — it generalizes the warm pipeline's bespoke per-word `ddgInFlight`.
+// media — the same `SingleFlight` primitive the warm pipeline's per-word
+// `ddgWarms` rides, at a finer (per-key) granularity.
 const mediaLoads = new SingleFlight<LoadedMedia | null>();
 
 // Test-only: how many upstream loads are currently in flight. Lets a test
