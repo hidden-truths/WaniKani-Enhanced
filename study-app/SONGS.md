@@ -413,7 +413,7 @@ JLPT + explanation from the generated catalog (`grammarLabel`/`grammarJlpt`, [da
   wrapper** (NOT via `render()`), so the YouTube iframe isn't remounted per step; the delegated
   click/keydown + `wireWordTaps` + `setOnTakeSaved` are **attach-once** on `#sgBody` (`_sgWired`).
   Don't "tidy" any of these into eager calls or per-render re-wiring. Full decomposition record +
-  the remaining-peel-free as-built map: [../REFACTOR_FOLLOWUPS.md](../REFACTOR_FOLLOWUPS.md) "Workstream S".
+  the remaining-peel-free as-built map: [../REFACTOR_FOLLOWUPS.md](../docs/history/REFACTOR_FOLLOWUPS.md) "Workstream S".
 
 ---
 

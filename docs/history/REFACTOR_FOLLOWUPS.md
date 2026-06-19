@@ -1,30 +1,32 @@
 # REFACTOR_FOLLOWUPS.md
 
-Implementation plan for the SOLID / quality workstreams that follow the **`db/client.ts`
-God-Object split** (shipped to `main`, commit `c78cc63`). That refactor decomposed the
+**As-built record of the SOLID / code-quality refactor campaign** that followed the
+`db/client.ts` God-Object split (shipped to `main`, commit `c78cc63` — it decomposed the
 1,396-line server repo module into `db/connection.ts` + `db/repos/*` behind a re-export
-barrel, with per-repo tests. This doc covers the remaining three workstreams from the same
-review, in **recommended execution order**:
-
-- **D** — `schemas.ts` → per-domain modules (LOW risk, mechanical — same playbook as `db/client`). Do first as a warm-up. **✅ SHIPPED.**
-- **B** — study-app sync: DRY collapse + resilient transport + offline queue + optimistic concurrency (MEDIUM risk, the high-value one). **✅ SHIPPED.**
-- **C** — `record-compare.js` decomposition (HIGH risk, lower leverage). **✅ SHIPPED** — C0 (pure-helper test-net) + C1+ (full glue split into `features/record-compare/{state,capture,takes,playback,waveform,view}.js` behind a thin re-export).
+barrel, with per-repo tests). **Every workstream below has SHIPPED.** This is the historical
+record of *what was done and why*, archived under `docs/history/` per the repo convention for
+a completed plan (cf. [CLIENT_MIGRATION.md](CLIENT_MIGRATION.md)). Architecture / rationale
+lives in the two `CLAUDE.md`s; this doc owns the per-workstream how-it-was-executed.
 
 Each section is self-contained: problem → target design → concrete steps → files → tests →
-dead-ends to respect → verification. Architecture/rationale lives in the two `CLAUDE.md`s;
-this doc owns the *how-to-execute*.
+dead-ends respected → verification. The `✅ SHIPPED` callout at the top of each is the as-built
+summary; the body beneath it is the executable detail, kept for reference.
 
-| Workstream | Win | Risk | Effort | Order |
-|---|---|---|---|---|
-| **D** schemas split ✅ | SRP/ISP; co-locate schemas by domain | LOW (barrel + typecheck-guarded, zero behavior change) | ~1–2h | 1st — **SHIPPED** |
-| **B** sync DRY + resilience + concurrency ✅ | DRY + DIP + disconnection/concurrency resilience + new tests | MED (hot path; backward-compat progress contract) | ~1–2 days | 2nd — **SHIPPED** |
-| **C** record-compare decomp ✅ | SRP on the DOM/audio glue | HIGH (no feature tests, stateful audio, many dead-ends) | ~1–2 days | 3rd — **SHIPPED (C0 + C1+)** |
-| **S** songs.js decomp ✅ | SRP on the 歌 tab's DOM/mode glue | HIGH (live mic + YouTube + shared mutable view-state; browser-verify each step) | ~1–2 days | after C — **SHIPPED** (C0 + C1.0 + C1.1+ peels); needs a live browser pass |
+| Workstream | Win | Risk | Status |
+|---|---|---|---|
+| **D** `schemas.ts` → per-domain modules | SRP/ISP; co-locate schemas by domain | LOW | **✅ SHIPPED** |
+| **B** study-app sync: DRY + resilient transport + offline queue + optimistic concurrency | DRY + DIP + disconnection/concurrency resilience + new tests | MED | **✅ SHIPPED** (B1–B4) |
+| **C** `record-compare.js` decomposition | SRP on the DOM/audio glue | HIGH | **✅ SHIPPED** (C0 + C1+) |
+| **S** `songs.js` decomposition | SRP on the 歌 tab's DOM/mode glue | HIGH | **✅ SHIPPED** |
+| **T** cross-feature dedup (read-through cache · speaking-bar · selftalk decomp) | DRY + SRP after the multi-source churn | LOW–HIGH | **✅ SHIPPED** (T1–T3) |
+| **M** `minna.js` decomposition | SRP on the last large feature module | HIGH | **✅ SHIPPED** (M0 + M-test + M1) |
+| **U** server read-through media cache (`mediaCache` + `singleFlight`) | DRY + DIP + concurrency resilience on the server media path | MED | **✅ SHIPPED** |
+| **E1–E3** post-B enhancements (409 merge · idempotency keys · upload via transport) | data-loss + durability gaps closed | LOW–MED | **✅ SHIPPED** |
 
-> **Golden rule for all three:** zero behavior change unless explicitly designed (B's
-> concurrency + queue). Keep the existing test suites green at every step, add tests for new
-> code, and respect every DEAD-END WARNING in [wk-enhanced-api/CLAUDE.md](wk-enhanced-api/CLAUDE.md)
-> and [study-app/CLAUDE.md](study-app/CLAUDE.md). One logical change → one commit.
+> **Golden rule (held throughout):** zero behavior change unless explicitly designed (B's
+> concurrency + queue; U's single-flight dedup). The existing test suites stayed green at every
+> step, new code got tests, and every DEAD-END WARNING in [wk-enhanced-api/CLAUDE.md](../../wk-enhanced-api/CLAUDE.md)
+> and [study-app/CLAUDE.md](../../study-app/CLAUDE.md) was respected. One logical change → one commit.
 
 ---
 
@@ -33,7 +35,7 @@ this doc owns the *how-to-execute*.
 > **✅ SHIPPED.** The 733-line / 66-schema module is now `src/schemas/{common,vocab,warm,accounts,progress,minna,audio,sentences,templates}.ts` behind the `src/schemas.ts` re-export barrel. Every schema moved **byte-identical** (verified); all 11 route consumers unchanged; typecheck clean, 237 tests pass, `/openapi.json` identical (55 components, 25 paths). One deviation from the target below: `templates` got its **own** module (a 9th file) rather than folding into `sentences.ts`, mirroring `db/repos/templates.ts` + `routes/templates.ts` (the template schemas are self-contained). The grouping/steps below are kept as the as-built record.
 
 ### Problem
-[wk-enhanced-api/src/schemas.ts](wk-enhanced-api/src/schemas.ts) is **733 lines / 66 exported
+[wk-enhanced-api/src/schemas.ts](../../wk-enhanced-api/src/schemas.ts) is **733 lines / 66 exported
 Zod schemas** in one module — the single source of truth for validation + OpenAPI generation,
 imported by every route. It already has clean `// ----------` section banners, so it's a textbook
 candidate for the *same* split the `db/client` God-Object got: cohesive per-domain modules behind
@@ -60,17 +62,17 @@ Path params / Batch / Warm-job / Accounts / Progress / みんなの日本語 / r
 sentence store`). Collapse the tiny request/param/response banners into their domain file.
 
 ### Steps
-1. Read [schemas.ts](wk-enhanced-api/src/schemas.ts) end to end; note inter-schema references (responses that embed component schemas like `ExampleSchema`, `PublicUserSchema`, `FuriganaSegSchema`). Anything referenced by 2+ domains → `schemas/common.ts`.
+1. Read [schemas.ts](../../wk-enhanced-api/src/schemas.ts) end to end; note inter-schema references (responses that embed component schemas like `ExampleSchema`, `PublicUserSchema`, `FuriganaSegSchema`). Anything referenced by 2+ domains → `schemas/common.ts`.
 2. Create `src/schemas/common.ts` first; move the shared/base schemas verbatim. Then create each domain file, moving its schemas verbatim and importing shared ones from `./common.ts` (use `import` not `import type` — Zod schemas are runtime values).
 3. Replace `src/schemas.ts` body with `export * from './schemas/<each>.ts'` (one line per module). Keep a header comment explaining the barrel, mirroring `db/client.ts`.
 4. **Verify no export-name collisions** before relying on `export *`: `grep -hoE "^export const [A-Za-z]+Schema" src/schemas/*.ts | sort | uniq -d` must be empty (same check used for the db split).
 5. `bun run typecheck` (catches missed imports / cycles / verbatimModuleSyntax issues — note `verbatimModuleSyntax: true`, so type-only imports need `import type`).
-6. `bun test` — the existing [routes/integration.test.ts](wk-enhanced-api/src/routes/integration.test.ts) + the zodHook exercise the schemas end-to-end; all must stay green.
+6. `bun test` — the existing [routes/integration.test.ts](../../wk-enhanced-api/src/routes/integration.test.ts) + the zodHook exercise the schemas end-to-end; all must stay green.
 
 ### Files
 `wk-enhanced-api/src/schemas.ts` (→ barrel) + new `wk-enhanced-api/src/schemas/*.ts`. **No route
 files change** — they keep `import { XSchema } from '../schemas.ts'`. Optionally update the
-`schemas.ts` line in the [wk-enhanced-api/CLAUDE.md](wk-enhanced-api/CLAUDE.md) architecture tree.
+`schemas.ts` line in the [wk-enhanced-api/CLAUDE.md](../../wk-enhanced-api/CLAUDE.md) architecture tree.
 
 ### Dead-ends / gotchas
 - **`/openapi.json` is auto-generated from these Zod schemas** — do not hand-write a spec. The split must not change any schema *shape*, only its file home (verify `/docs` still renders + `bun test` green).
@@ -102,22 +104,22 @@ Split into four sub-parts B1–B4; ship them as separate commits in order.
 > replay **last-write-wins** (omit `baseUpdatedAt`) so an offline change is delivered, not dropped on a stale base.
 
 ### Problem (current state)
-- **5× copy-pasted sync trios.** [study-app/src/features/cloud.js](study-app/src/features/cloud.js)
+- **5× copy-pasted sync trios.** [study-app/src/features/cloud.js](../../study-app/src/features/cloud.js)
   has four near-identical `schedule*Sync` + `push*Cloud` (+ `pull*Cloud`) sets — `verbs`
   (`scheduleCloudSync`/`pushCloud`), `custom-verbs`, `settings`, `selftalk` — plus four
-  `*SyncTimer` vars; **and a fifth** in [study-app/src/features/minna.js](study-app/src/features/minna.js)
+  `*SyncTimer` vars; **and a fifth** in [study-app/src/features/minna.js](../../study-app/src/features/minna.js)
   (`scheduleMinnaSync`/`pushMinnaCloud`/`pullMinnaCloud`, deliberately off the bus). A "synced
   blob" is one concept copy-pasted five times → adding a blob means a new trio (Open/Closed violation).
-- **No resilient transport.** [study-app/src/features/cloud-core.js](study-app/src/features/cloud-core.js)
+- **No resilient transport.** [study-app/src/features/cloud-core.js](../../study-app/src/features/cloud-core.js)
   `api()` has **no timeout, no retry, no backoff**. A network failure throws fetch's `TypeError`
   → treated as "unreachable". Every `push*Cloud` does `try { await api(PUT) } catch { setSyncStatus('⚠ offline') }`
   — i.e. **a failed write is silently dropped**; it only reaches the server when the next `save()`
   happens to reschedule a push. A change made while offline can be lost.
-- **Fire-and-forget durable log.** `logSession` ([cloud.js](study-app/src/features/cloud.js)) does
+- **Fire-and-forget durable log.** `logSession` ([cloud.js](../../study-app/src/features/cloud.js)) does
   `api('/v1/sessions', POST).catch(()=>{})` — a dropped POST silently loses a session even though
   the `study_sessions` table is supposed to be the *durable* record.
-- **Last-write-wins progress.** Server `upsertProgress` ([db/repos/progress.ts](wk-enhanced-api/src/db/repos/progress.ts))
-  returns `updatedAt` but nothing checks it; `PUT /v1/progress/{app}` ([routes/progress.ts](wk-enhanced-api/src/routes/progress.ts))
+- **Last-write-wins progress.** Server `upsertProgress` ([db/repos/progress.ts](../../wk-enhanced-api/src/db/repos/progress.ts))
+  returns `updatedAt` but nothing checks it; `PUT /v1/progress/{app}` ([routes/progress.ts](../../wk-enhanced-api/src/routes/progress.ts))
   unconditionally replaces. Two devices syncing concurrently → silent lost update.
 
 ### B1 — Resilient transport layer (DIP)
@@ -132,7 +134,7 @@ choke-point gains, *behind the existing `api()` signature*:
 | Safe to auto-retry (idempotent) | Do NOT auto-retry (non-idempotent) |
 |---|---|
 | All `GET` (`/v1/auth/me`, `/v1/progress/*`, `/v1/minna/*`, `/v1/audio/variants`) | `POST /v1/sessions` — appends a row → retry = duplicate session |
-| `PUT /v1/progress/{app}` (all 5 blobs — full replace) | the binary recording upload ([record-compare.js](study-app/src/features/record-compare.js) ~L664, its own `fetch`) — appends a take |
+| `PUT /v1/progress/{app}` (all 5 blobs — full replace) | the binary recording upload ([record-compare.js](../../study-app/src/features/record-compare.js) ~L664, its own `fetch`) — appends a take |
 | `PUT /v1/sentences/{id}`, `PUT /v1/sentences/card/{rank}` (replace) | `POST /v1/auth/{login,register}` — user-facing + rate-limited; surface the error instead |
 | `DELETE /v1/sentences/{id}`, `DELETE /v1/audio/recordings/{id}` | |
 | `POST /v1/sentences`, `POST /v1/templates/{id}/realize` — server is idempotent (by `ext_id` / by hash) | |
@@ -161,8 +163,8 @@ createSyncedBlob({ appKey, read, apply, afterPull?, debounceMs = 1200 }) → { s
 - `push()` — `setSyncStatus('saving…')` → idempotent `PUT /v1/progress/{appKey}` via the B1 transport; on failure → B2 queue + `'⚠ offline'`; on success → `'✓ synced'` and record the server `updatedAt` (for B4).
 - `pull()` — server-wins-on-login: GET, if server has data → `apply(data)` + `afterPull?()`; else (fresh account) → `push()` to seed from local. **Preserve every existing pull side-effect** via `apply`/`afterPull`: custom→`rebuildData`, settings→`applyFurigana`+`paintPrefChips`+`renderSettings`, selftalk→migrate-phrases+repaint, minna→overlay merge.
 
-Register all five blobs declaratively in [cloud.js](study-app/src/features/cloud.js) (and move
-minna's into the registry). The [sync-bus.js](study-app/src/sync-bus.js) seam stays — `initCloud`
+Register all five blobs declaratively in [cloud.js](../../study-app/src/features/cloud.js) (and move
+minna's into the registry). The [sync-bus.js](../../study-app/src/sync-bus.js) seam stays — `initCloud`
 fills `sync.progress/custom/settings/selftalk` from the registry instead of four hand-written
 schedulers. Net: ~80 lines of copy-paste → one tested abstraction + five ~3-line registrations.
 
@@ -171,10 +173,10 @@ schedulers. Net: ~80 lines of copy-paste → one tested abstraction + five ~3-li
   (body field) / `If-Unmodified-Since`. `db.upsertProgress` becomes a compare-and-set: if the stored
   `updated_at` ≠ `baseUpdatedAt` → **409** with the current `{ data, updatedAt }`. Omitting
   `baseUpdatedAt` keeps today's last-write-wins (no client is forced to upgrade). Files:
-  [routes/progress.ts](wk-enhanced-api/src/routes/progress.ts),
-  [db/repos/progress.ts](wk-enhanced-api/src/db/repos/progress.ts) (conditional UPDATE),
-  [schemas.ts](wk-enhanced-api/src/schemas.ts) (`ProgressPutRequestSchema` + a 409 response), and
-  new cases in [db/repos/progress.test.ts](wk-enhanced-api/src/db/repos/progress.test.ts).
+  [routes/progress.ts](../../wk-enhanced-api/src/routes/progress.ts),
+  [db/repos/progress.ts](../../wk-enhanced-api/src/db/repos/progress.ts) (conditional UPDATE),
+  [schemas.ts](../../wk-enhanced-api/src/schemas.ts) (`ProgressPutRequestSchema` + a 409 response), and
+  new cases in [db/repos/progress.test.ts](../../wk-enhanced-api/src/db/repos/progress.test.ts).
 - **Client:** each `SyncedBlob` remembers the last server `updatedAt`, sends it as `baseUpdatedAt`,
   and on **409** reconciles. MVP: pull server copy, re-apply, re-push (conflict *detected*, not
   silently clobbered). Better: per-blob merge (progress: `max(box)` + union sessions/daily). Ship the
@@ -184,11 +186,11 @@ schedulers. Net: ~80 lines of copy-paste → one tested abstraction + five ~3-li
 - `study-app/test/net.test.js` (or `src/net/*.test.js`): transport — timeout fires; retry-then-succeed; give-up after N; `Retry-After` honored; **4xx never retried**; POST not retried unless opted in.
 - queue — enqueue on failure; flush on `online`; dedup by key; survives a reload (localStorage round-trip); dropped on sign-out.
 - synced-blob — `schedule` debounces/coalesces; `push` success/failure paths; `pull` server-wins vs fresh-account-seed; **409 → reconcile**.
-- Mock `fetch` (happy-dom). Follow the existing pure-core test conventions in [study-app/test/core.test.ts](study-app/test/core.test.ts).
+- Mock `fetch` (happy-dom). Follow the existing pure-core test conventions in [study-app/test/core.test.ts](../../study-app/test/core.test.ts).
 - Server: add `db/repos/progress.test.ts` compare-and-set cases (stale `baseUpdatedAt` → no write; matching → write) and a `routes` 409 path if route tests are added.
 
 ### Dead-ends to respect (B)
-- **`cache: 'no-store'` on every `api()` fetch is LOAD-BEARING** — keep it; don't let a refactor/rename mangle the string (the `'no-state.store'` incident in [study-app/CLAUDE.md](study-app/CLAUDE.md)).
+- **`cache: 'no-store'` on every `api()` fetch is LOAD-BEARING** — keep it; don't let a refactor/rename mangle the string (the `'no-state.store'` incident in [study-app/CLAUDE.md](../../study-app/CLAUDE.md)).
 - **Cross-origin + credentialed:** every call rebases onto `API_BASE` and sends `credentials:'include'`; the cookie rides because the two origins are same-site. Don't switch to relative `/v1`.
 - **Don't auto-retry** `POST /v1/sessions` or the binary recording upload without an idempotency key (see the table).
 - **Preserve** server-wins-on-login + fresh-account-seeds-from-local, and every per-blob pull side-effect.
@@ -205,7 +207,7 @@ resilience behavior (this part *is* observable): with `bun run dev` (:5173) + `b
 
 ## Workstream C — `record-compare.js` decomposition (high-risk, do last / optional)
 
-> **📋 Detailed, executable guide: [docs/RECORD_COMPARE_DECOMP.md](docs/RECORD_COMPARE_DECOMP.md)** —
+> **📋 Detailed, executable guide: [docs/RECORD_COMPARE_DECOMP.md](../../docs/RECORD_COMPARE_DECOMP.md)** —
 > the full function→module inventory, the shared-singleton split strategy, the 13-export contract,
 > the phased commits (C0 test-net first, then C1+), and the dead-end checklist. The summary below
 > is the orientation; do the work from that doc.
@@ -220,13 +222,13 @@ resilience behavior (this part *is* observable): with `bun run dev` (:5173) + `b
 > import byte-for-byte unchanged** (the 13-export contract held). 8 commits total (C0 + C1.0–C1.6),
 > each green (`bun run test` 180→182, `bun run build`) + browser-smoked; the live mic-driven flow needs
 > a manual pass (headless blocks `getUserMedia`). As-built: see
-> [docs/RECORD_COMPARE_DECOMP.md](docs/RECORD_COMPARE_DECOMP.md) Phases C0 + C1+.
+> [docs/RECORD_COMPARE_DECOMP.md](../../docs/RECORD_COMPARE_DECOMP.md) Phases C0 + C1+.
 
 ### Honest framing
-[study-app/src/features/record-compare.js](study-app/src/features/record-compare.js) is 853 lines,
-**but its pure logic is already extracted** into [core/recordings.js](study-app/src/core/recordings.js)
+[study-app/src/features/record-compare.js](../../study-app/src/features/record-compare.js) is 853 lines,
+**but its pure logic is already extracted** into [core/recordings.js](../../study-app/src/core/recordings.js)
 (`findTrimBounds`, `waveformPeaks`, `normGains`, `rmsLevel`, `clampSpeed`, `clampKeep`,
-`resolveClip`, …) and [core/audio.js](study-app/src/core/audio.js) (`resolveVariant`, `variantOrder`).
+`resolveClip`, …) and [core/audio.js](../../study-app/src/core/audio.js) (`resolveVariant`, `variantOrder`).
 So the remaining lines are **irreducible browser-API glue** (MediaRecorder, Web Audio decode,
 `<canvas>`, `<audio>`, DOM). The SRP win is real but modest, and there are **no feature tests**
 today and several load-bearing dead-ends. **Lowest leverage of the three — do it last, in small
@@ -238,8 +240,8 @@ browser-verified commits, only if the file's size is actively slowing work.**
    variant helpers `controlCtx`/`refAvailable`/`referenceVariants`) into `core/` and unit-test them.
    This is the safety net before moving stateful glue.
 2. **Split by responsibility** into `study-app/src/features/record-compare/` (keep `index.js`
-   re-exporting the *same* public names so [minna.js](study-app/src/features/minna.js) +
-   [selftalk.js](study-app/src/features/selftalk.js) imports don't change):
+   re-exporting the *same* public names so [minna.js](../../study-app/src/features/minna.js) +
+   [selftalk.js](../../study-app/src/features/selftalk.js) imports don't change):
    - `capture.js` — speaking mode (`enter/exitSpeakingMode`, `liveStream`), mic pick (`enumerateMics`, `setSelectedMic`, `micConstraint`), `MediaRecorder` lifecycle, WAV encode + `maybeTrim` (calls core `findTrimBounds`).
    - `takes.js` — take store (`loadRecordings`/`takesFor`/`setTakes`/`newestTakeIdForItem`), the credentialed upload + list/delete.
    - `playback.js` — `<audio>` elements, `playRange`/`playTake`/`playReference`, `applySpeed`, volume/`normGains`, the you/reference/seq/both/loop players, cursors.
@@ -248,7 +250,7 @@ browser-verified commits, only if the file's size is actively slowing work.**
 3. Keep the **shared speaking-mode singletons + `setOnTakeSaved` hook** semantics intact (shared module-global with Minna AND Self-Talk; the `SELFTALK_SCOPE` take-saved filter; the `visibilitychange` guard on the active panel).
 4. Browser-verify after **each** commit.
 
-### Dead-ends to respect (C) — all in [study-app/CLAUDE.md](study-app/CLAUDE.md)
+### Dead-ends to respect (C) — all in [study-app/CLAUDE.md](../../study-app/CLAUDE.md)
 The AirPods-HFP mic-`deviceId` pin; the windowed-playback alignment (`playRange` + `COMPARE_TRIM`,
 **not** Media-Fragments `#t=`); the canvas-waveform decode-fails-safe; the **once-attached**
 delegated handlers (re-attaching per render stacks listeners); the navbar-`#navExtra` speaking bar
@@ -266,11 +268,11 @@ vs `#mnBody` controls split; speaking-mode keeps ONE mic stream open. Don't "tid
 > **✅ E1 + E2 + E3 ALL SHIPPED** (4 commits). **E1** — `createSyncedBlob` gained an injected
 > `merge(local, server)` strategy; on a 409 it UNIONS local+server (no data loss) and re-pushes with
 > the server's `updatedAt` as base, guarded to a single round (2nd 409 → server-wins). Pure per-blob
-> mergers in [study-app/src/core/merge.js](study-app/src/core/merge.js) — progress (max box/due/counts,
+> mergers in [study-app/src/core/merge.js](../../study-app/src/core/merge.js) — progress (max box/due/counts,
 > session dedup-by-`t` cap 1000, daily max), custom-verbs (union by rank, seq=max), minna
 > (notes/overlays/clips union, local wins per key), selftalk (max streak/later day); settings stays
 > server-wins. **E2** — `idempotency_key` on `study_sessions` + `minna_recordings` via a new guarded
-> `ensureColumn`/`migrate` step in [db/connection.ts](wk-enhanced-api/src/db/connection.ts) (SQLite has
+> `ensureColumn`/`migrate` step in [db/connection.ts](../../wk-enhanced-api/src/db/connection.ts) (SQLite has
 > no `ADD COLUMN IF NOT EXISTS`) + a partial unique index; `insertSession`/`insertRecording` dedup on
 > the key (race backstop via the index); `POST /v1/sessions` takes `idempotencyKey`, the upload takes
 > `?idem=` and early-returns the prior take. Client: `logSession` now retries + offline-queues (key
@@ -285,7 +287,7 @@ natural next enhancements — independent, each small, each shippable on its own
 (or interleaved — they don't depend on C). None are blocking; the app is correct without them.
 
 ### E1 — Per-blob merge on 409 (replace the server-wins MVP)
-Today a 409 reconcile is **server-wins apply** ([study-app/src/features/synced-blob.js](study-app/src/features/synced-blob.js)
+Today a 409 reconcile is **server-wins apply** ([study-app/src/features/synced-blob.js](../../study-app/src/features/synced-blob.js)
 `reconcile()`): the other device's copy is adopted, the local unsynced change is dropped (detected,
 not silently clobbered). Better: a per-blob **merge** so neither side loses data.
 - Add an optional `merge(localData, serverData) → mergedData` to `createSyncedBlob`; `reconcile`
@@ -304,26 +306,26 @@ not silently clobbered). Better: a per-blob **merge** so neither side loses data
 **client-generated idempotency key** the server dedups on — then they can be retried + queued like
 the progress PUTs.
 - **Server:** add an `idempotency_key` (TEXT) column/param to `POST /v1/sessions`
-  ([wk-enhanced-api/src/routes/sessions.ts](wk-enhanced-api/src/routes/sessions.ts) +
-  [db/repos/studySessions.ts](wk-enhanced-api/src/db/repos/studySessions.ts)) and to
-  `POST /v1/audio/recordings` ([routes/audio.ts](wk-enhanced-api/src/routes/audio.ts) +
-  [db/repos/recordings.ts](wk-enhanced-api/src/db/repos/recordings.ts)); on a replay of a seen key,
+  ([wk-enhanced-api/src/routes/sessions.ts](../../wk-enhanced-api/src/routes/sessions.ts) +
+  [db/repos/studySessions.ts](../../wk-enhanced-api/src/db/repos/studySessions.ts)) and to
+  `POST /v1/audio/recordings` ([routes/audio.ts](../../wk-enhanced-api/src/routes/audio.ts) +
+  [db/repos/recordings.ts](../../wk-enhanced-api/src/db/repos/recordings.ts)); on a replay of a seen key,
   return the existing row instead of inserting. Unique index on `(user_id, idempotency_key)`.
 - **Client:** generate a UUID per session/take; allow these POSTs to opt into transport retry
   (`{retry:true}`) and into the offline queue (`net/sync-queue.js`) — extend the queue to carry
   non-`progress:` keys, and `logSession`/`uploadTake` enqueue on failure. Update the idempotency
-  table in this doc + the "stays un-queued/un-retried" notes in [study-app/CLAUDE.md](study-app/CLAUDE.md).
+  table in this doc + the "stays un-queued/un-retried" notes in [study-app/CLAUDE.md](../../study-app/CLAUDE.md).
 - Tests: server dedup (same key → one row, returns existing); client retry/queue for these POSTs.
 
 ### E3 — (optional) route the recording upload through the transport
-Once E2 makes the upload idempotent, fold its bespoke `fetch` ([record-compare.js](study-app/src/features/record-compare.js)
+Once E2 makes the upload idempotent, fold its bespoke `fetch` ([record-compare.js](../../study-app/src/features/record-compare.js)
 `uploadTake`) onto the B1 transport (`api`, `{retry:true}`) so it inherits timeout/backoff —
 keeping `credentials:'include'` + the binary body + `Content-Type` passthrough.
 
 ### Beyond the refactor
-Not part of this doc, but the next product threads (see [NEXT_STEPS.md](NEXT_STEPS.md) +
-[NEW_FEATURES.md](NEW_FEATURES.md)): the ⭐ **tokenization-granularity** NLP rework
-([SENTENCE_STORE_PHASE4.md](SENTENCE_STORE_PHASE4.md) §8.0) and the **prod deploy** of the
+Not part of this doc, but the next product threads (see [NEXT_STEPS.md](../../NEXT_STEPS.md) +
+[NEW_FEATURES.md](../../NEW_FEATURES.md)): the ⭐ **tokenization-granularity** NLP rework
+([SENTENCE_STORE_PHASE4.md](../../SENTENCE_STORE_PHASE4.md) §8.0) and the **prod deploy** of the
 templates/annotations seed steps. Separate sessions.
 
 ---
@@ -332,7 +334,7 @@ templates/annotations seed steps. Separate sessions.
 
 > **C0 SHIPPED** (`b0b1b17`) — the inline pure logic (`readingMatch`, `lineReading`,
 > `parseSongLineKey`, `buildSongCard`/`songCardKey`) moved to the unit-tested
-> [study-app/src/core/songs.js](../study-app/src/core/songs.js) (+ `parseSongLineKey` hardened
+> [study-app/src/core/songs.js](../../study-app/src/core/songs.js) (+ `parseSongLineKey` hardened
 > against the `Number('')===0` footgun). **C1.0 SHIPPED** (`be89442`) — `features/songs.js` became
 > the `features/songs/` package (verbatim move to `songs/index.js` + a thin `export *` re-export so
 > `main.js`/`cloud.js` are unchanged; built bundle byte-identical). **C1.1+ SHIPPED** (`70412d5`) —
@@ -344,7 +346,7 @@ templates/annotations seed steps. Separate sessions.
 > flows (headless blocks `getUserMedia` + the iframe) — the checklist is in *Verification* below.
 
 ### Honest framing (why it's gated on a browser)
-[study-app/src/features/songs/index.js](../study-app/src/features/songs/index.js) is ~790 lines of
+[study-app/src/features/songs/index.js](../../study-app/src/features/songs/index.js) is ~790 lines of
 **irreducible DOM / YouTube / record-compare glue** over a set of mutable module-`let` view-state
 singletons (`view`/`openSong`/`mode`/`listen`/`add`/`library`/…). The pure logic is already in
 `core/songs.js` (C0). Decomposing the glue REQUIRES centralizing that state into a shared mutated-in-
@@ -552,5 +554,5 @@ ETag layers untouched; `ddgInFlight` (word-level task dedup, a different granula
 
 - **Test commands.** Server: `cd wk-enhanced-api && bun run typecheck && bun test`. Study-app: `cd study-app && bun run test && bun run build`. Dev pair: `bun dev` (API :3000) + `bun run dev` (Vite :5173); browser preview via `.claude/launch.json`.
 - **Commit discipline.** One logical change → one commit; D = 1 commit; B = 4 (B1–B4); C = several small browser-verified commits. Update the relevant `CLAUDE.md`/`NEXT_STEPS.md` in the same commit when structure changes.
-- **The barrel pattern is now established** (`db/client.ts`). Reuse it verbatim for D, and for any future module that grows past ~one responsibility.
-- This doc is the doc-of-record for these three; mark items done / move to `docs/history/` when shipped.
+- **The barrel pattern is established** (`db/client.ts`, the schemas split, and the `features/*` package re-exports). Reuse it verbatim for any future module that grows past ~one responsibility.
+- This is the doc-of-record for the SOLID / quality refactor campaign — all workstreams (D · B · C · S · T · M · U + the E1–E3 enhancements) shipped. Archived here under `docs/history/` now that the plan is complete.

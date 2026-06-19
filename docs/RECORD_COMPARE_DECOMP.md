@@ -1,6 +1,6 @@
 # Workstream C — `record-compare.js` decomposition (execution guide)
 
-> Doc-of-record: [REFACTOR_FOLLOWUPS.md](../REFACTOR_FOLLOWUPS.md) (this is the detailed C
+> Doc-of-record: [REFACTOR_FOLLOWUPS.md](history/REFACTOR_FOLLOWUPS.md) (this is the detailed C
 > appendix it points at). Dead-ends: [study-app/CLAUDE.md](../study-app/CLAUDE.md). C is the
 > **last + optional + HIGH-risk** workstream of the SOLID/quality refactor — D and B shipped.
 
