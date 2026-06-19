@@ -178,6 +178,12 @@
           <div class="fcast-chart" id="forecastChart"></div>
         </aside>
       </section>
+      <!-- SRS pipeline drawn as a subway line (blend / KAISATSU): the Leitner box distribution
+           New → Box 1-4 → Mastered, filled by renderPipeline() (deck.js) from store box counts. -->
+      <section class="pipe" id="srsPipe" aria-label="Memory pipeline">
+        <div class="pipe-head"><div class="pipe-title"><span class="jp-min">記憶パイプライン</span> Memory pipeline</div><div class="pipe-leg">Leitner boxes · higher = better learned</div></div>
+        <div class="lineviz" id="pipeViz"></div>
+      </section>
       <!-- The mock's study home is JUST the hero — so the whole deck picker (study type, test
            direction, filters, order, Start) tucks behind ONE disclosure; the default view stays
            mock-clean and the hero's "Review due cards" / "Free study" are the primary entry
@@ -329,13 +335,16 @@
 
       <div class="card-stage">
         <article class="flashcard" id="flashcard">
-          <div class="spine"></div>
           <span class="corner-wash"></span>
           <div class="card-inner">
-            <div class="card-top">
+            <!-- line-colour header bar (blend nphead): class line-bullet + label · question-type meta.
+                 #cardBullet/#cardClsJp/#cardClsEn set by showCard(); the line colour comes from the
+                 card's .flashcard.<class> via per-class .nphead tints. The hanko floats top-right. -->
+            <div class="nphead">
+              <div class="np-line"><span class="line-bullet" id="cardBullet"></span><b class="np-cls jp" id="cardClsJp"></b><span class="np-cls-en" id="cardClsEn"></span></div>
               <div class="card-kicker"><span class="pip"></span><span id="promptLabel"></span></div>
-              <div class="hanko" id="cardHanko"><span class="ring"></span><span class="glyph jp" id="hankoGlyph"></span></div>
             </div>
+            <div class="hanko" id="cardHanko"><span class="ring"></span><span class="glyph jp" id="hankoGlyph"></span></div>
 
             <!-- PROMPT FACE (pre-reveal): the dominant word + non-spoiling class/level tags +
                  frosted "hidden" veils where the reading/meaning will appear, then the CTA. -->

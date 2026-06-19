@@ -105,6 +105,13 @@ function showCard() {
   fc.className = 'flashcard ' + colorClass(v);
   void fc.offsetWidth; fc.classList.add('card-in');
   document.getElementById('cardHanko').className = 'hanko ' + colorClass(v);
+  // line-colour header bar (nphead): the class line-bullet + JP/EN class labels.
+  const cls = colorClass(v);
+  const bullet = document.getElementById('cardBullet');
+  bullet.className = 'line-bullet ' + cls;
+  bullet.textContent = CLASS_SEAL[cls] || '語';
+  document.getElementById('cardClsJp').textContent = CLASS_JP[cls] || '';
+  document.getElementById('cardClsEn').textContent = cardStamp(v).label || '';
   const pw = document.getElementById('promptWord'), aw = document.getElementById('answerWord');
   if (cfg.mode === 'meaning') {            // JP shown → recall meaning + reading
     document.getElementById('promptLabel').textContent = 'Read & recall · meaning + reading';

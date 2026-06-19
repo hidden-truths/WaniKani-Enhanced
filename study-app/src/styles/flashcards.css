@@ -91,6 +91,29 @@
   .hero-due,.hero-free{flex:1}
 }
 
+/* ---- SRS pipeline (subway line) — the Leitner box distribution on the study home.
+   renderPipeline() (deck.js) fills #pipeViz with 6 stops; the busiest box gets .cur. ---- */
+.pipe{margin:34px 0 0;background:var(--surf-card);border:1px solid var(--line);border-radius:var(--r);box-shadow:var(--lift-md),var(--inner-hi);padding:20px 30px 40px;backdrop-filter:blur(22px) saturate(135%);-webkit-backdrop-filter:blur(22px) saturate(135%)}
+[data-theme="dark"] .pipe{border-color:rgba(255,107,74,.14)}
+.pipe-head{display:flex;justify-content:space-between;align-items:center;gap:14px;flex-wrap:wrap}
+.pipe-title{font-family:var(--body);font-weight:700;font-size:14px;color:var(--ink);display:flex;gap:9px;align-items:center}
+.pipe-title .jp-min{font-family:var(--jp-min);color:var(--muted);font-weight:600}
+.pipe-leg{font-family:var(--mono);font-size:10px;letter-spacing:.14em;text-transform:uppercase;color:var(--muted)}
+.lineviz{display:flex;align-items:center;margin-top:40px}
+.lineviz .seg{flex:1;height:5px;border-radius:3px;background:var(--line)}
+.lineviz .stop{display:flex;flex-direction:column;align-items:center;position:relative}
+.lineviz .dot{width:17px;height:17px;border-radius:50%;border:3px solid var(--ink-2);background:var(--raised);z-index:1}
+.lineviz .dot.fill{background:var(--ink-2)}
+.lineviz .stop.cur .dot{border-color:var(--brand);background:var(--brand);box-shadow:0 0 0 4px var(--brand-soft)}
+[data-theme="dark"] .lineviz .stop.cur .dot{box-shadow:0 0 0 4px var(--brand-soft),0 0 14px -2px var(--brand)}
+.lineviz .stop b{position:absolute;top:-24px;font-family:var(--display);font-weight:700;font-size:14px;color:var(--ink)}
+.lineviz .stop.cur b{color:var(--brand)}
+.lineviz .stop em{position:absolute;top:24px;font-style:normal;font-family:var(--mono);font-size:9.5px;letter-spacing:.04em;color:var(--muted);white-space:nowrap}
+@media (max-width:640px){
+  .pipe{padding:18px 16px 36px}
+  .lineviz .stop em{font-size:8px}
+}
+
 /* =========================================================================
    FLASHCARD — the wide 2-column editorial card (hybrid-day-night / hybrid-prompt):
    session chrome → card (prompt FACE ⇄ answer FACE) → grade row. showCard()/reveal()
@@ -123,7 +146,7 @@
 /* ---- the card surface (raised paper by day, frosted glass by night) ---- */
 .flashcard{
   position:relative; z-index:1; max-width:820px; margin:0 auto;
-  background:var(--surf-card); border:1px solid var(--line); border-radius:22px;
+  background:var(--surf-card); border:1px solid var(--line); border-radius:24px;
   overflow:hidden; box-shadow:var(--card-shadow), var(--inner-hi);
   backdrop-filter:blur(22px) saturate(135%); -webkit-backdrop-filter:blur(22px) saturate(135%);
   transition:transform .25s cubic-bezier(.2,.7,.3,1), box-shadow .25s ease;
@@ -132,26 +155,31 @@
 .flashcard:hover{transform:translateY(-3px)}
 .flashcard .corner-wash{position:absolute;right:0;top:0;width:360px;height:320px;pointer-events:none;z-index:1;background:radial-gradient(70% 70% at 90% 8%,rgba(205,67,39,.06),rgba(205,67,39,0) 70%)}
 [data-theme="dark"] .flashcard .corner-wash{background:radial-gradient(70% 70% at 90% 8%,rgba(255,107,74,.10),rgba(255,107,74,0) 70%)}
-/* spine — class-colored left edge (default = irregular gold) */
-.flashcard .spine{position:absolute;left:0;top:0;bottom:0;width:7px;z-index:3;background:linear-gradient(to bottom,var(--gold),#8a6c24)}
-[data-theme="dark"] .flashcard .spine{box-shadow:0 0 18px 0 rgba(255,107,74,.45)}
-.flashcard.godan .spine{background:linear-gradient(to bottom,var(--godan),var(--brand-deep))}
-.flashcard.ichidan .spine{background:linear-gradient(to bottom,var(--ichidan),var(--reading-deep))}
-.flashcard.irregular .spine{background:linear-gradient(to bottom,var(--gold),#8a6c24)}
-.flashcard.i-adj .spine,.flashcard.na-adj .spine{background:var(--adjective)}
-.flashcard.noun .spine{background:var(--noun)} .flashcard.adverb .spine{background:var(--adverb)} .flashcard.phrase .spine{background:var(--phrase)}
-.flashcard.leech .spine{background:linear-gradient(to bottom,var(--leech),#5e2c77)}
-
-.card-inner{padding:34px 46px 38px 52px;position:relative;z-index:2}
-.card-top{display:flex;justify-content:space-between;align-items:flex-start;gap:24px}
+.card-inner{padding:34px 46px 38px;position:relative;z-index:2}
+/* ---- line-colour header bar (nphead) — the class "line" + question-type meta, full-bleed to
+   the card edges and tinted by the card class. Replaces the old left spine. The mix base is
+   --raised (a solid in BOTH themes; --surf-card is a gradient by night → can't color-mix it). ---- */
+.nphead{display:flex;align-items:center;justify-content:space-between;gap:16px;margin:-34px -46px 30px;padding:12px 30px 11px;background:color-mix(in srgb,var(--gold) 12%,var(--raised));border-bottom:1px solid color-mix(in srgb,var(--gold) 28%,transparent)}
+.np-line{display:flex;align-items:center;gap:11px;min-width:0;font-family:var(--mono);font-size:11.5px;letter-spacing:.06em;color:var(--ink-2)}
+.np-line .line-bullet{width:24px;height:24px;font-size:12px}
+.np-cls{font-family:var(--jp);font-weight:700;color:var(--ink)}
+.np-cls-en{color:var(--muted);text-transform:uppercase;letter-spacing:.12em}
+.flashcard.godan .nphead{background:color-mix(in srgb,var(--godan) 12%,var(--raised));border-bottom-color:color-mix(in srgb,var(--godan) 28%,transparent)}
+.flashcard.ichidan .nphead{background:color-mix(in srgb,var(--ichidan) 12%,var(--raised));border-bottom-color:color-mix(in srgb,var(--ichidan) 28%,transparent)}
+.flashcard.irregular .nphead{background:color-mix(in srgb,var(--gold) 12%,var(--raised));border-bottom-color:color-mix(in srgb,var(--gold) 28%,transparent)}
+.flashcard.i-adj .nphead,.flashcard.na-adj .nphead{background:color-mix(in srgb,var(--adjective) 12%,var(--raised));border-bottom-color:color-mix(in srgb,var(--adjective) 28%,transparent)}
+.flashcard.noun .nphead{background:color-mix(in srgb,var(--noun) 12%,var(--raised));border-bottom-color:color-mix(in srgb,var(--noun) 28%,transparent)}
+.flashcard.adverb .nphead{background:color-mix(in srgb,var(--adverb) 12%,var(--raised));border-bottom-color:color-mix(in srgb,var(--adverb) 28%,transparent)}
+.flashcard.phrase .nphead{background:color-mix(in srgb,var(--phrase) 12%,var(--raised));border-bottom-color:color-mix(in srgb,var(--phrase) 28%,transparent)}
+.flashcard.leech .nphead{background:color-mix(in srgb,var(--leech) 12%,var(--raised));border-bottom-color:color-mix(in srgb,var(--leech) 28%,transparent)}
 .card-kicker{font-family:var(--mono);font-size:11px;letter-spacing:.2em;text-transform:uppercase;color:var(--muted);display:inline-flex;align-items:center;gap:9px}
 .card-kicker .pip{width:6px;height:6px;border-radius:50%;background:var(--brand);flex:0 0 auto}
 [data-theme="dark"] .card-kicker .pip{box-shadow:0 0 8px 1px rgba(255,107,74,.6)}
 
 /* ---- HANKO seal (rotated, ink-stamp texture) — tints with the card class ---- */
-.hanko{flex:0 0 auto;width:84px;height:84px;border-radius:50%;border:3px solid var(--brand);color:var(--brand);display:grid;place-items:center;transform:rotate(-7deg);position:relative;background:radial-gradient(circle at 50% 50%,rgba(205,67,39,.07),rgba(205,67,39,.02));box-shadow:inset 0 0 0 2px rgba(205,67,39,.15);filter:url(#stamp)}
+.hanko{position:absolute;top:58px;right:42px;z-index:4;width:64px;height:64px;border-radius:50%;border:3px solid var(--brand);color:var(--brand);display:grid;place-items:center;transform:rotate(-7deg);background:radial-gradient(circle at 50% 50%,rgba(205,67,39,.07),rgba(205,67,39,.02));box-shadow:inset 0 0 0 2px rgba(205,67,39,.15);filter:url(#stamp)}
 [data-theme="dark"] .hanko{background:radial-gradient(circle at 50% 50%,rgba(255,107,74,.16),rgba(255,107,74,.04));box-shadow:inset 0 0 0 2px rgba(255,107,74,.25),0 0 26px -6px rgba(255,107,74,.55)}
-.hanko .glyph{font-family:var(--jp);font-weight:900;font-size:38px;line-height:1}
+.hanko .glyph{font-family:var(--jp);font-weight:900;font-size:30px;line-height:1}
 .hanko .ring{position:absolute;inset:6px;border-radius:50%;border:1px solid rgba(205,67,39,.45)}
 [data-theme="dark"] .hanko .ring{border-color:rgba(255,107,74,.5)}
 .hanko.ichidan{border-color:var(--reading);color:var(--reading);background:radial-gradient(circle at 50% 50%,var(--reading-soft),transparent);box-shadow:inset 0 0 0 2px var(--reading-soft)}
@@ -243,10 +271,14 @@
 [data-theme="dark"] .play-btn.playing{color:#fff}
 
 /* revealed meaning — confident Bricolage display (the most important word) */
-.meaning{font-family:var(--display);font-weight:700;font-size:52px;line-height:1.02;color:var(--ink);margin-top:24px;letter-spacing:-.022em}
+.meaning{font-family:var(--display);font-weight:700;font-size:52px;line-height:1.02;color:var(--ink);margin-top:24px;letter-spacing:-.022em;position:relative;display:inline-block;max-width:100%;padding-bottom:9px}
+/* the teacher's red pen — a hand-drawn vermilion underline under the revealed meaning */
+.meaning::after{content:"";position:absolute;left:0;right:0;bottom:0;height:7px;background:url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='120' height='7' viewBox='0 0 120 7'%3E%3Cpath d='M1 4 Q 30 1 60 4 T 119 3' fill='none' stroke='%23DC3A22' stroke-width='2.4' stroke-linecap='round'/%3E%3C/svg%3E") repeat-x left center/auto 7px}
+[data-theme="dark"] .meaning::after{background-image:url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='120' height='7' viewBox='0 0 120 7'%3E%3Cpath d='M1 4 Q 30 1 60 4 T 119 3' fill='none' stroke='%23FF6B4A' stroke-width='2.4' stroke-linecap='round'/%3E%3C/svg%3E")}
 [data-theme="dark"] .meaning{color:#F6EEE0}
 .meaning .lead{color:var(--muted);font-weight:500;font-size:.52em;padding-right:10px;letter-spacing:-.01em}
 .meaning:empty{display:none}
+.meaning:empty::after{content:none}
 .tag-row{display:flex;align-items:center;gap:11px;margin-top:22px;flex-wrap:wrap}
 
 /* note-cards (mnemonic + trap) — 2-up grid, single note spans full width */
@@ -315,7 +347,10 @@
 
 /* ---- mobile ---- */
 @media (max-width:760px){
-  .card-inner{padding:26px 24px 30px 30px}
+  .card-inner{padding:26px 22px 30px}
+  .nphead{margin:-26px -22px 24px;padding:10px 18px}
+  .hanko{top:50px;right:18px;width:54px;height:54px}
+  .hanko .glyph{font-size:26px}
   .prompt-word{font-size:84px}
   .prompt-word:not(.jp){font-size:44px}
   .answer-word{font-size:74px}

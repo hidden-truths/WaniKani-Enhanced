@@ -62,6 +62,26 @@ export function renderForecast() {
   el.innerHTML = h + '</div>';
 }
 
+/* ---- SRS pipeline (subway line) ----
+   The whole deck's Leitner box distribution (New → Box 1-4 → Mastered) drawn as a metro line:
+   one dot per box (filled when it holds cards), the busiest box marked .cur ("you are here"),
+   counts above / interval labels below. A pure box tally off state.store.cards — no schedule
+   math (that's renderForecast). Styled in flashcards.css (.pipe/.lineviz/.stop/.dot/.seg). */
+const PIPE_STOPS = ['New', 'Box 1 · 1d', 'Box 2 · 2d', 'Box 3 · 4d', 'Box 4 · 8d', 'Mastered · 16d'];
+export function renderPipeline() {
+  const viz = document.getElementById('pipeViz'); if (!viz) return;
+  const counts = [0, 0, 0, 0, 0, 0];
+  const cards = state.store.cards || {};
+  for (const v of state.DATA) { const b = Math.min((cards[v.rank] && cards[v.rank].box) || 0, 5); counts[b]++; }
+  const cur = counts.indexOf(Math.max(...counts));   // the busiest box = "you are here"
+  let h = '';
+  for (let i = 0; i < 6; i++) {
+    h += `<div class="stop${i === cur ? ' cur' : ''}"><b>${counts[i]}</b><span class="dot${counts[i] > 0 ? ' fill' : ''}"></span><em>${PIPE_STOPS[i]}</em></div>`;
+    if (i < 5) h += '<span class="seg"></span>';
+  }
+  viz.innerHTML = h;
+}
+
 /* Generic multi-select chip group. Reused for both cfg and bcfg facets. 'all' is exclusive;
    deselecting the last specific token falls back to ['all']. paint() syncs .active. */
 export function makeMultiSelect(selector, getArr, setArr, attr, onChange) {
@@ -176,6 +196,7 @@ export function updateDueBanner() {
   const studiedEl = document.getElementById('heroStudied');
   if (studiedEl) { const done = (daily[today] && daily[today].tot) || 0; studiedEl.innerHTML = `<b>${done}</b> of <b>${state.DATA.length}</b> studied today`; }
   renderForecast();
+  renderPipeline();
 }
 // "Review due cards": force the deck to due-only, worst-first, full range, and reflect that
 // in the chip UI before starting. Overrides the picker on purpose — a dedicated review flow.
