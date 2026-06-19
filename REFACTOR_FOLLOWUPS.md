@@ -486,6 +486,68 @@ cookie-gated `<audio>`), exactly like Workstreams C/S/T.
 
 ---
 
+## Workstream U — server media read-through cache consolidation
+
+> **✅ SHIPPED.** The "storage hit? serve : load upstream → persist → serve" read-through was
+> hand-rolled in **five** places that grew up independently with the warm / audio / Minna features:
+> `warm/pipeline.ts:warmOneExample` (audio-IK, audio-TTS, image-IK — 3×), `services/tts.ts:resolveTts`
+> (the google clip tier), and `routes/audio.ts:serveNativeAudio` (the native MP3 proxy). Each re-spelled
+> the caching policy, the error-swallowing, and — in the pipeline — concurrent cold-fills with NO dedup.
+> Classic "same concept, copy-pasted from multiple sources" drift (DRY); the pipeline copy also mixed
+> media policy + caching + stats in one function (SRP).
+
+### Problem (SOLID)
+- **DRY:** one concept (read-through over the `Storage` layer) implemented 5× with subtly different
+  error handling — a fix or a resilience improvement had to be made in five places or drift.
+- **SRP:** `warmOneExample` owned the IK-before-TTS policy AND the exists/fetch/put mechanic AND the
+  per-example stats — three reasons to change in one block.
+- **DIP/OCP:** every site re-derived caching against the concrete `storage` calls; adding a new cached
+  media source (song audio next) meant another copy of the dance rather than a new loader.
+- **Concurrency gap:** two users hitting the same cold word raced two identical IK/TTS downloads — the
+  brief's "resilient to concurrency" was unmet on the server media path (only the bespoke word-level
+  `ddgInFlight` Set existed, and only for DDG).
+
+### As-built design (two small, injected, fully-tested primitives)
+- **`lib/singleFlight.ts`** — generic keyed in-flight coalescing (`SingleFlight<T>.run(key, fn)`): while a
+  promise for `key` is in flight, concurrent callers share it. Pure, no I/O; identity-guarded cleanup on
+  settle (coalescing, not memoization — a rejection is shared then forgotten so the next call retries).
+  Generalizes `ddgInFlight` (left as the coarser word-level cousin, with a pointer comment).
+- **`services/mediaCache.ts`** — read-through over the `Storage` interface (DIP: storage + an upstream
+  `MediaLoader` are injected), in two modes for the two caller shapes:
+  - `resolveMediaUrl` (URL mode — the warm pipeline): `exists()` HEAD on a hit (never downloads bytes to
+    re-derive a URL — load-bearing efficiency, ~100 keys/cold word) → else load → `put` (awaited) → URL.
+  - `resolveMediaBytes` (bytes mode — TTS, native audio): `get()` on a hit → else load → return bytes
+    immediately + persist in the **background** (fire-and-forget, write-errors swallowed; a `persisted`
+    promise is exposed for tests). Both share one process-wide `SingleFlight` keyed by storage key — safe
+    because media keys are content-/id-addressed (concurrent loads produce identical bytes), so the whole
+    server now gets thundering-herd protection on media in one place.
+
+### Adoption (behavior-preserving)
+Five sites collapsed onto the two helpers. The warm pipeline keeps only the audio/image **policy** +
+the `cache`/`fetched`/`failed`/`skipped` stat mapping + the `warm.ik_*_miss` debug logs (loaders log the
+miss); every case (cache-hit / fetch / IK-miss-fallthrough-to-TTS / TTS-fail / image-miss) was traced to
+the prior output. TTS source labels (`storage-mp3`/`google`) and the native route's `cached` log flag
+preserved. The only intentional deltas: native-audio now persists in the **background** instead of
+blocking the response (same bytes served, marginally faster), and concurrent same-key warms hit upstream
+once (a strict improvement that can flip a would-be `cache` stat to `fetched` under a tight race — the
+stats are documented-approximate operational signals).
+
+### Tests + verification
++**17 unit tests** (`lib/singleFlight.test.ts` ×7 — coalescing, different keys, no-leak-on-settle, shared
+rejection then clean retry, sync-throw; `services/mediaCache.test.ts` ×10 — URL/bytes hit & miss, loader-
+null degrade, `acl` passthrough, swallowed write outage, concurrent-miss single-flight + in-flight-count
+cleanup), all with an in-memory `Storage` fake + counting loaders (no network, matching the suite's
+convention). `bun run typecheck` clean; **`bun test` 322 → 339** green. The warm media path has no
+automated coverage (external services aren't mocked) so the pipeline adoption rests on behavior-tracing +
+typecheck; a live cold-warm `curl` is the belt-and-suspenders check before relying on it in prod.
+
+### Dead-ends respected
+The `<1KB`-body miss detection stays in the loaders (`googleTts`/`fetchMinnaAudio`/`ikDownloadMedia`); the
+native MP3 stays `acl:'private'` + `private, …` Cache-Control (never a shared cache); `cache: 'no-store'`/
+ETag layers untouched; `ddgInFlight` (word-level task dedup, a different granularity) left as-is.
+
+---
+
 ## Cross-cutting
 
 - **Test commands.** Server: `cd wk-enhanced-api && bun run typecheck && bun test`. Study-app: `cd study-app && bun run test && bun run build`. Dev pair: `bun dev` (API :3000) + `bun run dev` (Vite :5173); browser preview via `.claude/launch.json`.

@@ -17,6 +17,7 @@ import { OpenAPIHono, createRoute, z } from '@hono/zod-openapi';
 import type { Context } from 'hono';
 import { gate, denied } from '../lib/minnaGate.ts';
 import { getStorage, keys } from '../services/storage.ts';
+import { resolveMediaBytes } from '../services/mediaCache.ts';
 import { fetchMinnaAudio, isValidMinnaAudioPath } from '../services/minnaAudio.ts';
 import { resolveTts, ttsTextHash, serveTtsHit } from '../services/tts.ts';
 import * as db from '../db/client.ts';
@@ -70,30 +71,30 @@ export async function serveNativeAudio(c: Context) {
     if (!isValidMinnaAudioPath(src)) {
         return c.json({ code: 'validation_error' as const, error: 'bad audio path' }, 400);
     }
-    const storage = getStorage();
-    const key = keys.minnaAudio(src);
-    let bytes = await storage.get(key);
-    let cached = true;
-    if (!bytes) {
-        cached = false;
-        bytes = await fetchMinnaAudio(src);
-        if (!bytes) return c.json({ code: 'upstream_failure' as const, error: 'audio unavailable' }, 502);
-        try {
-            // PRIVATE object: account-gated copyrighted content — the stored object must not be
-            // publicly reachable at its (guessable) bucket URL either. Served ONLY through this
-            // gated route via storage.get(); the publicUrl is never used.
-            await storage.put(key, bytes, 'audio/mpeg', { acl: 'private' });
-        } catch {
-            /* serve the bytes we have even if caching failed */
-        }
-    }
-    c.set('logCtx', { minnaAudio: src, cached });
+    // Read-through over storage (mediaCache): hit → the cached copy; miss → fetch from vnjpclub
+    // once, then persist in the background. PRIVATE object: account-gated copyrighted content must
+    // not be publicly reachable at its (guessable) bucket URL — it is served ONLY through this gated
+    // route via storage.get(); the publicUrl is never used. Single-flight collapses a burst of
+    // concurrent first-plays of the same file into one upstream fetch; a storage-write outage is
+    // swallowed so we still serve the bytes we fetched.
+    const res = await resolveMediaBytes({
+        storage: getStorage(),
+        key: keys.minnaAudio(src),
+        cachedContentType: 'audio/mpeg',
+        putOptions: { acl: 'private' },
+        load: async () => {
+            const b = await fetchMinnaAudio(src);
+            return b ? { buffer: b, contentType: 'audio/mpeg' } : null;
+        },
+    });
+    if (!res.buffer) return c.json({ code: 'upstream_failure' as const, error: 'audio unavailable' }, 502);
+    c.set('logCtx', { minnaAudio: src, cached: res.source === 'cache' });
     c.header('Content-Type', 'audio/mpeg');
     // `private`, NOT `public`: account-gated content must never sit in a SHARED cache (Cloudflare
     // / any CDN in front of the origin) — that would serve it to unauthorized users and bypass the
     // gate. The owner's own browser still caches it for a year (immutable, content-addressed key).
     c.header('Cache-Control', 'private, max-age=31536000, immutable');
-    return c.body(bytes);
+    return c.body(res.buffer);
 }
 
 export async function postRecording(c: Context) {

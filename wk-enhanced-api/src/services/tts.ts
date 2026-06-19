@@ -4,6 +4,7 @@
 
 import { createHash } from 'node:crypto';
 import { getStorage } from './storage.ts';
+import { resolveMediaBytes } from './mediaCache.ts';
 import { normalizeEtag } from '../lib/etag.ts';
 
 const TTS_URL = 'https://translate.googleapis.com/translate_tts';
@@ -97,14 +98,25 @@ export async function resolveTts(text: string, voice?: string): Promise<TtsHit |
 
     // The Google (gtx) voice: a previously-persisted `.mp3`, else live, persisted on first hit. This
     // is the honest fallback for any EXPLICIT voice we can't serve from its own clip — generic, not a
-    // stand-in for a different specific voice.
+    // stand-in for a different specific voice. A read-through over storage (mediaCache): hit → the
+    // stored `.mp3`; miss → live gtx render, persisted in the background (single-flighted so a burst
+    // of first-time requests for one text renders it once, not N times).
     const googleHit = async (): Promise<TtsHit | null> => {
-        const mp3 = await storage.get(ttsKey(text, 'mp3'));
-        if (mp3) return { buffer: mp3, contentType: 'audio/mpeg', source: 'storage-mp3' };
-        const r = await googleTts(text);
-        if (!r) return null;
-        void storage.put(ttsKey(text, 'mp3'), r.buffer, r.contentType || 'audio/mpeg').catch(() => {}); // fire-and-forget
-        return { buffer: r.buffer, contentType: r.contentType, source: 'google' };
+        const res = await resolveMediaBytes({
+            storage,
+            key: ttsKey(text, 'mp3'),
+            cachedContentType: 'audio/mpeg',
+            load: async () => {
+                const r = await googleTts(text);
+                return r ? { buffer: r.buffer, contentType: r.contentType || 'audio/mpeg' } : null;
+            },
+        });
+        if (!res.buffer) return null;
+        return {
+            buffer: res.buffer,
+            contentType: res.contentType ?? 'audio/mpeg',
+            source: res.source === 'cache' ? 'storage-mp3' : 'google',
+        };
     };
 
     let hit: TtsHit | null;

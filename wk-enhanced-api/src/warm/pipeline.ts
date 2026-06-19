@@ -19,6 +19,7 @@ import { ddgSearchImages, ddgFetchImage } from '../services/ddg.ts';
 import { googleTts } from '../services/tts.ts';
 import { fetchAllWkVocab } from '../services/wk.ts';
 import { getStorage, keys } from '../services/storage.ts';
+import { resolveMediaUrl } from '../services/mediaCache.ts';
 import { scoreJlpt } from '../lib/jlpt.ts';
 import { ikTitleToFolder, prettifyTitle, resolveCategory, type IndexMeta } from '../lib/ikTitles.ts';
 
@@ -74,6 +75,11 @@ export interface VocabPayload {
 // lazy-fill from kicking off a duplicate DDG fetch while one's already in
 // flight. Module-scoped (process-singleton); fine for a single-droplet
 // deployment, would need Redis-or-similar in a multi-process world.
+//
+// This is a COARSER, word-level cousin of services/mediaCache.ts's per-key
+// single-flight (lib/singleFlight.ts): it dedupes a whole background task, not a
+// single keyed result, so it stays a hand-rolled Set here rather than adopting
+// the generic SingleFlight. Same idea, different granularity.
 const ddgInFlight = new Set<string>();
 
 // Whether a `warmAll` is currently running. Prevents a manual
@@ -348,72 +354,79 @@ async function warmOneExample(
     const id = exampleId(e, encodedTitle, 0);
 
     // ---- Audio ----
+    // Two read-throughs over the SAME content-addressed key (so a re-warm
+    // overwrites in place): the IK voice-actor recording first, then a Google
+    // TTS fallback when IK has no `sound` or its proxy missed. mediaCache owns
+    // the exists→fetch→put dance + single-flight; this block owns the audio
+    // POLICY (IK-before-TTS) and the per-example `audioStorage` stats. An IK
+    // miss leaves audioStorage 'skipped' and falls through to the TTS block.
     let audioUrl: string | null = null;
     let hasOriginalAudio = false;
     let audioSource: MediaStats['audioSource'] = 'none';
     let audioStorage: MediaStats['audioStorage'] = 'skipped';
+    const audioKey = keys.audio(category, encodedTitle, id);
     if (e.sound) {
-        const audioKey = keys.audio(category, encodedTitle, id);
-        if (await storage.exists(audioKey)) {
-            audioUrl = storage.publicUrl(audioKey);
+        const sound = e.sound;
+        const res = await resolveMediaUrl({
+            storage,
+            key: audioKey,
+            load: async () => {
+                const r = await ikDownloadMedia(buildDownloadMediaUrl(category, folder, sound));
+                if (r.ok && r.buffer) return { buffer: r.buffer, contentType: r.contentType || 'audio/mpeg' };
+                log.debug('warm.ik_audio_miss', { word, id, err: r.error });
+                return null;
+            },
+        });
+        if (res.url) {
+            audioUrl = res.url;
             hasOriginalAudio = true;
             audioSource = 'ik';
-            audioStorage = 'cache';
-        } else {
-            const url = buildDownloadMediaUrl(category, folder, e.sound);
-            const r = await ikDownloadMedia(url);
-            if (r.ok && r.buffer) {
-                audioUrl = await storage.put(audioKey, r.buffer, r.contentType || 'audio/mpeg');
-                hasOriginalAudio = true;
-                audioSource = 'ik';
-                audioStorage = 'fetched';
-            } else {
-                log.debug('warm.ik_audio_miss', { word, id, err: r.error });
-            }
+            audioStorage = res.source; // 'cache' | 'fetched'
         }
     }
-    // TTS fallback when there's no original audio (text-only literature) or
-    // the IK proxy failed. Keyed by the same example id so re-warming
-    // overwrites in place.
     if (!audioUrl && e.sentence) {
-        const audioKey = keys.audio(category, encodedTitle, id);
-        if (await storage.exists(audioKey)) {
-            audioUrl = storage.publicUrl(audioKey);
+        const sentence = e.sentence;
+        const res = await resolveMediaUrl({
+            storage,
+            key: audioKey,
+            load: async () => {
+                const tts = await googleTts(sentence);
+                return tts ? { buffer: tts.buffer, contentType: tts.contentType } : null;
+            },
+        });
+        if (res.url) {
+            audioUrl = res.url;
             audioSource = 'tts';
-            audioStorage = 'cache';
+            audioStorage = res.source; // 'cache' | 'fetched'
         } else {
-            const tts = await googleTts(e.sentence);
-            if (tts) {
-                audioUrl = await storage.put(audioKey, tts.buffer, tts.contentType);
-                audioSource = 'tts';
-                audioStorage = 'fetched';
-            } else {
-                audioStorage = 'failed';
-            }
+            audioStorage = 'failed';
         }
     }
 
     // ---- Image ----
+    // Single read-through (no TTS-style fallback — an image miss just leaves
+    // imageUrl null and clients fall back to the DDG pool).
     let imageUrl: string | null = null;
     let imageSource: MediaStats['imageSource'] = 'none';
     let imageStorage: MediaStats['imageStorage'] = 'skipped';
     if (e.image) {
-        const imageKey = keys.image(category, encodedTitle, id);
-        if (await storage.exists(imageKey)) {
-            imageUrl = storage.publicUrl(imageKey);
-            imageSource = 'ik';
-            imageStorage = 'cache';
-        } else {
-            const url = buildDownloadMediaUrl(category, folder, e.image);
-            const r = await ikDownloadMedia(url);
-            if (r.ok && r.buffer) {
-                imageUrl = await storage.put(imageKey, r.buffer, r.contentType || 'image/jpeg');
-                imageSource = 'ik';
-                imageStorage = 'fetched';
-            } else {
-                imageStorage = 'failed';
+        const image = e.image;
+        const res = await resolveMediaUrl({
+            storage,
+            key: keys.image(category, encodedTitle, id),
+            load: async () => {
+                const r = await ikDownloadMedia(buildDownloadMediaUrl(category, folder, image));
+                if (r.ok && r.buffer) return { buffer: r.buffer, contentType: r.contentType || 'image/jpeg' };
                 log.debug('warm.ik_image_miss', { word, id, err: r.error });
-            }
+                return null;
+            },
+        });
+        if (res.url) {
+            imageUrl = res.url;
+            imageSource = 'ik';
+            imageStorage = res.source; // 'cache' | 'fetched'
+        } else {
+            imageStorage = 'failed';
         }
     }
 
