@@ -4,7 +4,7 @@
 // labels) because they're intentionally the light-theme hairline tone.
 import { state } from '../state.js';
 import { localDay } from '../config.js';
-import { rollingAcc, leeches, dueCards, studyStreak } from '../core/index.js';
+import { rollingAcc, leeches, dueCards, studyStreak, colorClass, classKanji, cardStamp } from '../core/index.js';
 import { save } from '../persistence/store.js';
 import { cfg, repaintDeck, updateDeckCount } from './deck.js';
 import { startSession } from './flashcard.js';
@@ -143,6 +143,7 @@ export function renderStats() {
       const pct = Math.round(rollingAcc(v.rank) * 100);
       const att = (state.store.cards[v.rank] || { attempts: [] }).attempts.length;
       return `<div class="leech-row">
+        <span class="line-bullet ${colorClass(v)}" title="${cardStamp(v).label}">${classKanji(v)}</span>
         <div class="leech-word"><span class="jp">${v.jp}</span><span class="read">${v.read}</span></div>
         <div class="leech-mid"><div class="mean">${v.mean}</div><div class="accwrap"><span class="accbar"><i style="width:${pct}%;animation-delay:${(0.45 + i * 0.05).toFixed(2)}s"></i></span><span class="accpct">${pct}%</span><span class="attempts">· ${att} attempt${att === 1 ? '' : 's'}</span></div></div>
         <div class="leech-act"><button class="pill review" data-rank="${v.rank}" title="Review ${v.jp} now">${mIcon(I.hist, 2)}Review</button></div>
@@ -155,7 +156,7 @@ export function renderStats() {
   // Heights are a compressed read on each box's count (the true count is the label);
   // a 0-count box is a short stub. The count sits inside tall bars (white) and floats
   // above short ones (ink). Box 5 = best-learned (jade label). The bar fill is set inline
-  // as the dark gradient; stats.css overrides per-column in light (mock mechanism).
+  // as a glossy light-top gradient (blend) for BOTH themes; stats.css adds the inset highlight.
   const boxes = [0, 0, 0, 0, 0, 0]; // index = box 0..5
   state.DATA.forEach(v => { const c = state.store.cards[v.rank]; const b = c && c.box ? c.box : 0; boxes[b]++; });
   const boxName = ['New', 'Box 1', 'Box 2', 'Box 3', 'Box 4', 'Box 5'];
@@ -168,7 +169,7 @@ export function renderStats() {
   const pcols = boxes.map((n, i) => {
     const h = n === 0 ? 3 : Math.max(7, Math.round(n / maxBox * 88));
     const above = h < 58;                                          // shorter bars float the count above
-    const grad = `linear-gradient(180deg, color-mix(in srgb,var(--box-${i}) 68%, #fff) 0%, var(--box-${i}) 52%, color-mix(in srgb,var(--box-${i}) 80%, #000) 100%)`;
+    const grad = `linear-gradient(180deg, color-mix(in srgb,var(--box-${i}) 80%, #fff) 0%, var(--box-${i}) 58%, color-mix(in srgb,var(--box-${i}) 72%, #000) 100%)`;
     return `<div class="pcol${i === 5 ? ' best' : ''}"><div class="pbar-track"><div class="pbar${above ? ' count-above' : ''}" style="height:${h}%;background:${grad};animation-delay:${(0.3 + i * 0.06).toFixed(2)}s"><span class="count">${n}</span></div></div><div class="plabel"><b>${boxName[i]}</b>${boxInt[i]}</div></div>`;
   }).join('');
   const swatches = boxes.map((n, i) => `<i style="background:var(--box-${i})"></i>`).join('');
