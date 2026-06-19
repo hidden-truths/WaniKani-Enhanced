@@ -221,6 +221,37 @@ function updateAccountChip() {
     btn.title = 'Sign in to sync progress';
     setSyncStatus('');
   }
+  updateDevRoadmapLink();
+}
+
+// DEV-ONLY maintainer convenience: a "Roadmap" link in the topbar that opens the repo-root
+// ROADMAP.html (the consolidated backlog hub, served by the dev-server middleware in vite.config.js).
+// Shown ONLY under `vite dev` (import.meta.env.DEV) AND only for the dev/maintainer account — so it
+// never ships in the prod bundle (the guard below is statically false there → dead-code-eliminated)
+// and the internal backlog is never served publicly. Allowlist via VITE_DEV_EMAILS (comma-separated);
+// defaults to the dev account. Toggled from updateAccountChip() on every sign-in/out/boot.
+function updateDevRoadmapLink() {
+  if (!import.meta.env.DEV) return;   // statically false in `vite build` → whole body is dead-code-eliminated
+  const emails = (import.meta.env.VITE_DEV_EMAILS || 'dylan_j_kelly@icloud.com')
+    .split(',').map(s => s.trim().toLowerCase()).filter(Boolean);
+  const show = !!account && emails.includes((account.email || '').toLowerCase());
+  let link = document.getElementById('devRoadmapLink');
+  if (show && !link) {
+    const actions = document.querySelector('.top-actions');
+    if (!actions) return;
+    link = document.createElement('a');
+    link.id = 'devRoadmapLink';
+    link.className = 'icon-btn';
+    link.href = '/ROADMAP.html';
+    link.target = '_blank';
+    link.rel = 'noopener';
+    link.title = 'Project roadmap & backlog (dev only)';
+    link.setAttribute('aria-label', 'Project roadmap');
+    link.innerHTML = '<svg class="ic" aria-hidden="true"><use href="#i-list"/></svg>';
+    actions.insertBefore(link, document.getElementById('settingsBtn') || null);
+  } else if (!show && link) {
+    link.remove();
+  }
 }
 
 /* ---- Auth modal ---- */
