@@ -22,7 +22,16 @@ feature code + hand-rolled SVG charts reskin for free. Theme attr stays the app'
 | 6 | Stats | `styles/stats.css`, `stats.js`, `index.html` | ✅ done (glossy histogram, leech line-bullets, 03/06 marker; both themes; seeded to verify) |
 | 7 | Minna / Self-talk / Songs | render headers + `index.html` | ✅ done (already blend-aligned via Phase 1 + prior redesign; unified NN/06 markers across all 6 surfaces, incl. Flashcards retrofit) |
 | 8 | Modals | (verified — no changes) | ✅ done (already blend-aligned via shared modal kit + Phase 1; Settings both themes + scroll contract + Sign-in verified) |
-| 9 | Fidelity audit | all surfaces, both themes | ☐ |
+| 9 | Fidelity audit | all surfaces, both themes | ✅ done — **PORT COMPLETE** |
+
+**Audit results (2026-06-18):** `bun run build` compiles (102 modules, CSS 143 kB); no
+`*/`-in-comment landmines in any touched CSS; `bun run test` 283/283 green; all 6 tabs cycle
+with zero console errors; both themes verified per-surface (tokens resolve + aliases hold,
+chrome single-row + ふ toggle, manuscript grid/gold glow, nameplate + subway pipeline, line-
+bullet browse cards, glossy histogram + leech bullets, NN/06 markers on all 6 surfaces,
+modal scroll contract). Minna signed-in marker verified via the minna-render test (couldn't
+sign in on the :5191 design port — CORS allowlist is :5173). Remaining nicety: Minna vocab
+line-bullets (signed-in render against the border-sensitive table — deferred).
 
 ## Token map (mock → app role token; theme attr = light/dark)
 
