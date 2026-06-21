@@ -737,7 +737,9 @@ footer b{color:var(--ink-2)}
 {"id":"done-daynight","surface":"design","type":"polish","status":"completed","prio":"med","when":"Phases 0-9",
 "title":"Day/Night redesign (skin + layout)","summary":"An all-sans warm-washi / candle-charcoal system: tokens + per-panel composition rebuild, the single-row .topbar frame with the #navExtra speaking-bar dock, CSS split per-surface + shared kit. Verified signed-in both themes."},
 {"id":"done-blend-port","surface":"design","type":"polish","status":"completed","prio":"med","when":"Phases 0-10",
-"title":"Blend / sleek port + glow cut","summary":"Ported the locked blend system (GENKŌ + KAISATSU + YORU) surface-by-surface (station nameplate, subway SRS pipeline, line-bullet cards, glossy histogram, NN/06 markers) with a signed-in data-rich audit, then a ~90% decorative-glow cut (orbs, per-card halos, no-op backdrop-filters) for performance. 290/290 tests."}
+"title":"Blend / sleek port + glow cut","summary":"Ported the locked blend system (GENKŌ + KAISATSU + YORU) surface-by-surface (station nameplate, subway SRS pipeline, line-bullet cards, glossy histogram, NN/06 markers) with a signed-in data-rich audit, then a ~90% decorative-glow cut (orbs, per-card halos, no-op backdrop-filters) for performance. 290/290 tests."},
+{"id":"done-dev-roadmap-link","surface":"core","type":"infra","status":"completed","prio":"low","when":"dev only",
+"title":"Dev-account-only Roadmap navbar link","summary":"A 'Roadmap' icon-button (the #i-list glyph) in the study-app topbar opens this ROADMAP.html in a new tab — injected from updateAccountChip(), gated on import.meta.env.DEV + the signed-in email ∈ VITE_DEV_EMAILS (default: the dev account), removed on sign-out. ROADMAP.html + the mockups galleries are served on :5173 by a configureServer middleware in vite.config.js. Fully stripped from the prod bundle — the internal backlog is never served publicly (that would need a real owner-gated route)."}
 ]
 </script>
 

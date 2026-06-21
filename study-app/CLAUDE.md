@@ -106,7 +106,10 @@ Backend (auth, progress, cookie, the cross-origin CORS) is the server's:
    `src/features/*` (boot order in `src/main.js`), markup in `index.html`, styles in
    `src/styles/*.css` (the Day/Night design system — `tokens`/`base`/`chrome`/per-surface)
    plus the shared core `src/styles.css`, all imported in cascade order by `main.js`. See
-   "Design system" below.
+   "Design system" below. **Dev-only:** [vite.config.js](vite.config.js) adds a `configureServer`
+   middleware that serves the repo-root [ROADMAP.html](../ROADMAP.html) (the consolidated backlog) + the
+   `mockups/` galleries on `:5173`, reached via a dev-account-only navbar link (the chrome contract +
+   `cloud.js` `updateDevRoadmapLink`); none of it ships in `bun run build`.
 2. **Verify visually.** This is a UI; screenshot the change. Drive it with the
    browser-preview tooling (`.claude/launch.json` has both `study-app` and
    `wk-enhanced-api` configs). See the preview caveat in the dead-ends below. **Run
@@ -400,6 +403,14 @@ Component contracts you must preserve:
   textContent) signed-in / a muted person glyph signed-out, with the email in the `title` (no more
   innerHTML interpolation of the email). Transient sync/feedback is the auto-clearing `#syncStatus`
   pill (`setSyncStatus`). Import/Export live in the Settings modal's "Backup" row. No `<header>`/`<h1>`.
+  **DEV-ONLY extra:** `updateDevRoadmapLink()` (cloud.js, called from `updateAccountChip`) injects a
+  `#devRoadmapLink` "Roadmap" `.icon-btn` (the `#i-list` glyph) into `.top-actions` (before `#settingsBtn`)
+  that opens the repo-root [ROADMAP.html](../ROADMAP.html) (the consolidated backlog hub) in a new tab —
+  gated on `import.meta.env.DEV` **and** the signed-in email ∈ `VITE_DEV_EMAILS` (default: the dev account),
+  removed on sign-out. It's dead-code-eliminated from the prod bundle (verified: 0 occurrences in `dist`);
+  `ROADMAP.html` + the `/study-app/mockups/` galleries are served on `:5173` by a `configureServer`
+  middleware in [vite.config.js](vite.config.js). The internal backlog is deliberately NOT served in prod —
+  exposing it there would need a real owner-gated route, not just the navbar gate.
 
 ## Things that look like bugs but aren't (DEAD-END WARNINGS)
 
