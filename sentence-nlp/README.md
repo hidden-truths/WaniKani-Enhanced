@@ -41,35 +41,63 @@ work.
   `ginza` + model versions are recorded in the artifact's `parser` field and land in
   `sentence_annotation.parser` — the provenance a re-parse decision keys on.
 - **Split mode C** (longest units) — token boundaries closest to dictionary headwords, so a
-  tapped token matches the deck's card lemmas. **(But see "Known limitation" below — split mode C
-  is still per-MORPHEME, which fragments する-verbs and conjugations.)**
-- **Re-parse strategy: full, hash-keyed.** The corpus is tiny (~544 sentences), so we re-parse
-  the whole exported corpus rather than diffing. Each annotation is keyed by
+  tapped token matches the deck's card lemmas. Split-C is still per-MORPHEME, so a
+  post-tokenization **merge pass** (next section) coalesces a content word + its inflectional
+  tail into one tap unit on top of it.
+- **Re-parse strategy: full, hash-keyed.** The corpus is tiny (~577 non-song public sentences), so
+  we re-parse the whole exported corpus rather than diffing. Each annotation is keyed by
   `hash = ttsTextHash(text)`, which is environment-independent — so an artifact parsed offline
   on a Mac seeds **prod** correctly (same text → same hash → resolves the prod row). Because
   the parser parses the exact text it read from `public_sentence`, offsets are self-consistent
   with the row by construction; a re-parse can only ever change *quality*, never offset
   correctness.
 
-## ⭐ Known limitation → next rework: tokenization granularity
+## Tokenization granularity — the merge pass (SHIPPED)
 
-**The headline follow-up.** The tap-to-lookup units are GiNZA's raw morphemes, and split mode C is
-"longest *morpheme*", not "the word a learner would look up" — so tapping often selects the wrong span:
+Split mode C is "longest *morpheme*", not "the word a learner would look up", so the raw GiNZA tokens
+fragment the unit a learner taps as ONE word. A post-tokenization **merge pass** (`merge_groups` in
+[parse.py](parse.py)) fixes this: each content anchor absorbs the contiguous run of trailing bound
+morphemes that inflect it, producing one tap unit per word.
 
-- **サ変 する-verbs split:** 勉強する → `勉強`(NOUN) + `する`(VERB) — the compound isn't one tap unit.
-- **Conjugations fragment:** 食べさせられた → `食べ`+`させ`+`られ`+`た` (stem resolves the lemma, but the
-  inflection is several tiny aux tap-targets).
-- **て-form + aux split:** 読んでいる → `読ん`+`で`+`いる` (we *detect* 〜ている as grammar, but the tap
-  units stay split).
+| raw split-C morphemes | merged tap unit | lemma |
+|---|---|---|
+| 勉強(NOUN) + する(AUX) | 勉強する | 勉強する |
+| 食べ + させ + られ + た | 食べさせられた | 食べる |
+| 読ん + で + いる | 読んでいる | 読む |
+| 説明 + し + て + ください | 説明してください | 説明する |
 
-**The fix is a post-tokenization MERGE pass in `parse.py`** (then re-parse → re-seed, the usual full
-hash-keyed loop): coalesce a content word + its trailing function morphemes into one token — サ変名詞+する
-→ `勉強する`; verb/adj stem + inflectional aux chain → one token spanning the conjugated surface (lemma =
-dictionary form); optionally te-form + auxiliary. The **`bunsetsu` spans we already emit** (content word +
-its particles/aux, currently unconsumed in the client) are a natural merge basis or a coarser alternative
-tap layer. The offset contract is preserved automatically — a merged token's surface is the contiguous
-concat of its parts, so `text.slice(start,end) === surface` still holds and the UTF-16 self-check + seed
-re-assert carry over. (Merging also changes lemmas — `勉強する` vs `勉強` — so tune tap→card matching with it.)
+**The merge rule** (grounded in the actual `ja_ginza_electra` morphology, not POS n-grams): a content
+anchor — UPOS ∈ {VERB, ADJ, NOUN, PROPN, PRON, ADV, NUM, INTJ} — absorbs each immediately-following,
+**contiguous** token that is a bound trailing morpheme, i.e. one of:
+
+- **UPOS `AUX`** — the する of a サ変-verb (`動詞-非自立可能`, lemma する) + the whole conjugation chain
+  (させ / られ / た / ます / たい / だ / です / ない…), all `dep=aux` heading the content word;
+- **`dep == fixed`** — a multiword auxiliary component: the verb of 〜ている / 〜ておく / 〜てくる, or 〜てください;
+- **the 接続助詞 て/で** (`助詞-接続助詞`) — so it bridges a content verb to its auxiliary (読ん+**で**+いる)
+  and a bare て-form (食べて) merges too.
+
+Case/binding particles (は / を / が / に, location-で — UPOS `ADP`, `助詞-格助詞`/`係助詞`) and the
+non-て connectives (ながら, から) are NOT bound morphemes, so they break the unit and stay their own
+(gap) tokens.
+
+**Lemma** = the anchor's lemma, which is already the dictionary form for verbs/adjectives (食べ→食べる,
+高く→高い). A サ変 noun keeps its bare-noun lemma even when it heads the verb (GiNZA marks it `pos=VERB`),
+so we append する to recover the dictionary form (勉強 → 勉強する). **Reading** is the concat of the
+parts' readings (タベサセラレタ for 食べさせられた).
+
+**The offset contract survives a merge for free:** a group is contiguous by construction, so the merged
+surface is exactly `text[anchor.start:last.end]` — `js_slice === surface` still holds, the UTF-16
+self-check (`--verify`, incl. a non-BMP sample) passes on merged tokens, and `seed-annotations.ts`'s V8
+re-assert carries over. Effect on the corpus: ~24% fewer tap units (8177 → 6224 on the shared rows),
+and the provenance string becomes `…splitC+merge`.
+
+**Scope note:** `parse.py` excludes `source='song'` rows — song lines are RUNTIME LLM-annotated
+(`parser='llm'`, carrying jlpt/gloss the Mine UI needs) and live outside the offline GiNZA corpus, so
+the artifact must never re-seed GiNZA tokens over them. Deferred (acceptable, GiNZA-parse-inherent, not
+regressions): 〜たくない splits at the negative adjective (行きたく | ない); かもしれない and other
+leading-function-word MWEs aren't absorbed; 〜てくる is inconsistent (空いてきた merges, 持って+きた doesn't).
+Each still resolves the content word's correct lemma. The stored **`bunsetsu`** spans remain a possible
+coarser *alternative* tap layer (still unconsumed in the client).
 
 ## Grammar tags (`patterns.py`)
 
@@ -111,8 +139,10 @@ python3.10 -m venv .venv
 ```
 
 `parse.py` reads the `public_sentence` VIEW (public rows only — private user sentences are
-physically excluded, so the offline batch can never touch them) and writes one annotation per
-row, keyed by `hash`. It does **not** write to the DB; the Bun seed step does.
+physically excluded, so the offline batch can never touch them), minus `source='song'` rows (those
+carry runtime LLM annotations the GiNZA artifact must not clobber — see the merge-pass scope note),
+and writes one annotation per row, keyed by `hash`. It does **not** write to the DB; the Bun seed
+step does.
 
 ## Deploy
 

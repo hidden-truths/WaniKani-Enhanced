@@ -73,35 +73,111 @@ def load_nlp():
 def parser_provenance(nlp) -> str:
     m = nlp.meta
     model = f"{m.get('lang', 'ja')}_{m.get('name', 'ginza_electra')}/{m.get('version', '?')}"
-    return f"{model} ginza/{pkg_version('ginza')} splitC"
+    return f"{model} ginza/{pkg_version('ginza')} splitC+merge"
+
+
+# ---- merge pass: coalesce a content word + its trailing function morphemes into one tap unit ----
+#
+# Split mode C is "longest *morpheme*", which still fragments the unit a learner taps as ONE word:
+# サ変 する-verbs split (勉強 + する), conjugations break into stem + an aux chain (食べ+させ+られ+た),
+# and a て-form auxiliary splits off (読ん+で+いる). So after tokenizing we MERGE each content word
+# with the contiguous run of trailing bound morphemes that inflect it. The morphology is unambiguous
+# (confirmed empirically against ja_ginza_electra): the trailing pieces are UPOS=AUX (the する of a
+# サ変 verb + the whole conjugation chain させ/られ/た/ます/たい/だ/です/ない…), or `fixed` MWE
+# components (the auxiliary verb of 〜ている/〜ておく/〜てください), bridged by the 接続助詞 て/で.
+# Case/binding particles (は/を/が/に, case-で — UPOS ADP, tag 助詞-格助詞/係助詞) are NOT bound
+# morphemes, so they break the unit and stay their own (gap) tokens.
+#
+# The offset contract survives a merge for free: a group is contiguous by construction, so the merged
+# surface is exactly text[anchor.start:last.end] — `js_slice === surface` still holds and the seed-side
+# re-assert carries over. Merging only ever makes tokens COARSER; it can't move an offset off a
+# code-unit boundary.
+
+# UPOS tags that may ANCHOR a merge — a contentful head whose inflection the trailing morphemes belong
+# to. Pure function words (ADP/SCONJ/PART/PUNCT/AUX-alone…) never anchor, so a stray aux after a
+# particle stays its own token instead of swallowing the particle.
+_ANCHOR_POS = {"VERB", "ADJ", "NOUN", "PROPN", "PRON", "ADV", "NUM", "INTJ"}
+
+
+def _is_tail_morpheme(prev, cur) -> bool:
+    """True when `cur` is a bound trailing morpheme of the word ending at `prev` — so it merges LEFT
+    into the same tap unit. Requires CONTIGUITY (no space/gap between them; offsets are codepoint
+    indices, consistent on both sides) plus one of:
+      • UPOS AUX — the する of a サ変-verb + the inflection chain (させ/られ/た/ます/たい/だ/です/ない…);
+      • dep == 'fixed' — a multiword auxiliary component: 〜ている/〜ておく/〜てくる's verb, 〜てください;
+      • the 接続助詞 て/で itself — so it bridges a content verb to its auxiliary (読ん+で+いる) and a
+        bare て-form (食べて) merges into one unit too."""
+    if cur.idx != prev.idx + len(prev.text):
+        return False  # a gap (particle/space) sits between them → the unit ends at `prev`
+    if cur.pos_ == "AUX":
+        return True
+    if cur.dep_ == "fixed":
+        return True
+    if cur.tag_ == "助詞-接続助詞" and cur.text in ("て", "で"):
+        return True
+    return False
+
+
+def merge_groups(doc):
+    """Group `doc`'s non-space tokens into tap units: each content anchor absorbs its contiguous run
+    of trailing bound morphemes (`_is_tail_morpheme`). Returns a list of groups, each a non-empty,
+    contiguous list of spaCy tokens. A function word — or any token nothing attaches to — is a
+    singleton group (identical to the raw split-C tokenization)."""
+    toks = [t for t in doc if not t.is_space]
+    groups = []
+    i, n = 0, len(toks)
+    while i < n:
+        group = [toks[i]]
+        if toks[i].pos_ in _ANCHOR_POS:
+            k = i + 1
+            while k < n and _is_tail_morpheme(toks[k - 1], toks[k]):
+                group.append(toks[k])
+                k += 1
+            i = k
+        else:
+            i += 1
+        groups.append(group)
+    return groups
 
 
 def annotate(nlp, text: str):
-    """Return (tokens, bunsetsu, grammar, problems) for one sentence. `grammar` is the list of
-    curated grammar-point ids detected (patterns.py). `problems` is a list of offset-contract
-    violations (empty == clean); callers MUST treat non-empty as fatal."""
+    """Return (tokens, bunsetsu, grammar, problems) for one sentence. Tokens are the MERGED tap units
+    (see merge_groups). `grammar` is the list of curated grammar-point ids detected (patterns.py).
+    `problems` is a list of offset-contract violations (empty == clean); callers MUST treat non-empty
+    as fatal."""
     doc = nlp(text)
+    groups = merge_groups(doc)
+    # original doc-token index → its group index, so a merged token's `head` still points at a real
+    # (post-merge) token. Spaces are excluded from groups and never head a dependency.
+    group_of = {t.i: gi for gi, g in enumerate(groups) for t in g}
     tokens = []
     problems = []
-    for t in doc:
-        if t.is_space:
-            continue  # whitespace is never a tap target; keep `i` honest for head refs
-        start = cp_to_utf16(text, t.idx)
-        end = cp_to_utf16(text, t.idx + len(t.text))
+    for gi, g in enumerate(groups):
+        anchor, last = g[0], g[-1]
+        start = cp_to_utf16(text, anchor.idx)
+        end = cp_to_utf16(text, last.idx + len(last.text))
+        surface = "".join(t.text for t in g)
         recon = js_slice(text, start, end)
-        if recon != t.text:
-            problems.append(f"token {t.i} {t.text!r}: js_slice→{recon!r} at [{start},{end}]")
+        if recon != surface:
+            problems.append(f"group {gi} {surface!r}: js_slice→{recon!r} at [{start},{end}]")
+        # Lemma = the anchor's lemma, which IS the dictionary form for verbs/adjectives (食べ→食べる,
+        # 高く→高い). GiNZA gives a サ変 noun the bare-noun lemma even when it's the verbal head
+        # (pos==VERB), so append する to recover the dictionary form (勉強 → 勉強する).
+        lemma = anchor.lemma_
+        if anchor.pos_ == "VERB" and "サ変可能" in anchor.tag_:
+            lemma = anchor.lemma_ + "する"
+        reading = "".join(reading_of(t) for t in g)  # full-unit reading (タベサセラレタ for 食べさせられた)
         tokens.append({
-            "i": t.i,
+            "i": gi,
             "start": start,
             "end": end,
-            "surface": t.text,
-            "lemma": t.lemma_,
-            "pos": t.pos_,
-            "tag": t.tag_,
-            "reading": reading_of(t),
-            "dep": t.dep_,
-            "head": t.head.i,
+            "surface": surface,
+            "lemma": lemma,
+            "pos": anchor.pos_,
+            "tag": anchor.tag_,
+            "reading": reading,
+            "dep": anchor.dep_,
+            "head": group_of.get(anchor.head.i, gi),
         })
     bunsetsu = []
     try:
@@ -164,7 +240,11 @@ def cmd_verify(nlp) -> int:
 def cmd_parse(nlp, db_path: str, out_path: str, limit: int | None) -> int:
     con = sqlite3.connect(f"file:{db_path}?mode=ro", uri=True)
     con.row_factory = sqlite3.Row
-    sql = "SELECT id, ext_id, hash, text FROM public_sentence ORDER BY id"
+    # Songs are RUNTIME LLM-annotated (parser='llm', carrying jlpt/gloss the Mine UI needs) and live
+    # OUTSIDE the offline GiNZA corpus — re-seeding GiNZA tokens over an LLM song row would drop those
+    # fields. Exclude them here so the artifact only covers GiNZA-owned public rows (example / selftalk
+    # / realized template combos). The seed resolves by hash, so an excluded row is simply never matched.
+    sql = "SELECT id, ext_id, hash, text FROM public_sentence WHERE source <> 'song' ORDER BY id"
     if limit:
         sql += f" LIMIT {int(limit)}"
     rows = con.execute(sql).fetchall()

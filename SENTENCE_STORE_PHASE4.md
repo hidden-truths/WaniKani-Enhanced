@@ -46,8 +46,9 @@ sentence and get its lemma / POS / a link to the matching card-or-Jisho, plus **
 ("find every sentence using 〜ておく").
 
 Phase map (canonical, kept current): see [SENTENCE_STORE_NLP.md](SENTENCE_STORE_NLP.md). In short:
-Phases 1, 2, 2.5 and **Phase 4 (this doc)** have shipped; Phase 3 (Minna → store) is deferred; the
-only Phase-4 follow-up still open is the ⭐ tokenization-granularity rework (§8.0).
+Phases 1, 2, 2.5 and **Phase 4 (this doc)** have shipped — including the ⭐ tokenization-granularity
+merge pass (§8.0); Phase 3 (Minna → store) is deferred. The remaining Phase-4 residual is the prod
+re-seed of the merged artifact (deploy step, not a parse change).
 
 The NLP target is the **public corpus** (Phase 1 + 2 rows: built-in example sentences + Self-Talk
 built-ins) — a bounded, curator-owned set we can parse once and re-parse on content change. Private
@@ -442,30 +443,30 @@ open decisions settled with the user first (same collaborative pattern as commit
 
 ## 8. Deferred / future
 
-### 8.0 ⭐ MAJOR NEXT STEP — tokenization granularity (the tap units don't match "a word")
-**Status: the headline follow-up; the maintainer flagged the current parse as not behaving as wanted.**
-The tap-to-lookup units come straight from GiNZA's morphemes (split mode C). C was chosen so a token's
-lemma sits near a dictionary headword (good for tap→card) — but "longest *morpheme*" still fragments the
-units a learner thinks of as ONE word, so tapping a word often selects the wrong span:
-- **サ変 する-verbs split:** 勉強する → `勉強`(NOUN) + `する`(VERB). Tapping the compound gets the bare
-  noun or the generic する, never 勉強する. (The canonical complaint.)
-- **Conjugations fragment:** an inflected form becomes stem + an auxiliary chain — 食べさせられた →
-  `食べ`+`させ`+`られ`+`た`. The stem resolves the lemma, but the inflection is several tiny aux tap-
-  targets and the visible word isn't one unit.
-- **て-form + aux split:** 読んでいる → `読ん`+`で`+`いる`. We DETECT 〜ている as grammar, but the *tap*
-  units are still split.
+### 8.0 ✅ SHIPPED — tokenization granularity (tap whole words, not morphemes)
+**Status: done.** The tap-to-lookup units used to come straight from GiNZA's morphemes (split mode C).
+C keeps a token's lemma near a dictionary headword (good for tap→card), but "longest *morpheme*" still
+fragmented the unit a learner thinks of as ONE word: サ変 split (勉強 + する), conjugations fragmented
+(食べ+させ+られ+た), て-form auxiliaries split (読ん+で+いる).
 
-**The rework (a `parse.py` change → re-parse → re-seed; offsets self-consistent by construction):** add a
-post-tokenization **merge pass** that coalesces a content word + its trailing function morphemes into one
-tap unit — merge サ変名詞+する → one `勉強する` token; merge a verb/adj stem + its inflectional aux chain
-into one token spanning the whole conjugated surface (lemma = dictionary form); optionally merge the
-て-form + auxiliary (coordinated with the grammar detectors). We **already store `bunsetsu` spans**
-(currently unconsumed) — a bunsetsu (content word + its particles/aux) is close to the learner's "word/
-phrase" unit and is a natural basis for the merge, or a coarser *alternative* tap layer. The offset
-contract still holds (a merged token's surface is the contiguous concat of its parts → `slice===surface`),
-and the UTF-16 self-check + the seed re-assert carry over unchanged.
-**Interaction:** merging changes lemmas (`勉強する` vs `勉強`), which feeds tap→card resolution — tune the
-lemma→card matching alongside it, but tokenization is the lead. Re-run is the full hash-keyed loop in §6.2.
+**The fix (a `parse.py` change → re-parse → re-seed):** a post-tokenization **merge pass** (`merge_groups`)
+coalesces a content anchor + its contiguous run of trailing bound morphemes into one tap unit — the
+trailing pieces are UPOS `AUX` (サ変 する + the conjugation chain させ/られ/た/ます/たい/だ/です/ない…),
+`dep=fixed` MWE components (〜ている/〜ておく/〜てください), bridged by the 接続助詞 て/で; case/binding
+particles break the unit. Lemma = the anchor's lemma (the dictionary form for verbs/adjectives), with する
+appended for サ変 nouns (勉強 → 勉強する). The offset contract held by construction (contiguous group →
+`slice===surface`); the UTF-16 self-check + seed V8 re-assert passed on every merged token. Effect: ~24%
+fewer tap units (8177 → 6224 on the shared corpus); provenance now `…splitC+merge`. The grammar detectors
+run on the raw `Doc` BEFORE the merge, so they were unaffected. **Full design + the merge rule:
+[sentence-nlp/README.md](sentence-nlp/README.md) "Tokenization granularity — the merge pass".**
+
+`parse.py` excludes `source='song'` rows (runtime LLM-annotated, outside the GiNZA corpus). The stored
+`bunsetsu` spans remain a possible coarser *alternative* tap layer (still unconsumed). The client overlay
+(`overlayTokens`) + tap→card resolution (`word-lookup.js`) needed NO change — both already read whatever
+tokens/lemmas they're served, and the coarser merged lemmas resolve to cards/Jisho the same way.
+**Remaining:** the **prod re-seed** (`seed-annotations.ts` against the prod DB) deploys the merged
+artifact — until then prod still serves the old split-C tokens (tracked in [ROADMAP.html](ROADMAP.html),
+infra: "Deploy NLP annotations + templates to prod").
 
 ### 8.x Other deferred (not commit 3)
 - **Tier-2 grammar** (detectable, lower priority, omitted from the N5/N4 set): `causative-passive`,

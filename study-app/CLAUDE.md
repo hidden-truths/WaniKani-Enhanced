@@ -667,11 +667,15 @@ Component contracts you must preserve:
   imports `openVerbDetail` from browse and browse imports `wireWordTaps` — a runtime-only (event-time)
   cycle, fine like cloud⇄minna. Renders on the flashcard answer side, Browse detail, and Self-Talk
   built-ins (user-authored private phrases aren't parsed offline → no tokens → plain ruby).
-  **Known limitation (a PARSER issue, not a wiring bug — don't "fix" it here):** the tap UNITS are
-  GiNZA's raw morphemes, so a する-verb splits (勉強 + する) and a conjugation fragments into stem +
-  aux (食べ+させ+られ+た) — tapping doesn't always select "a word." The fix is a merge pass in
-  `sentence-nlp/parse.py` + a re-parse (the ⭐ next rework — see SENTENCE_STORE_PHASE4.md §8.0); the
-  client overlay just renders whatever tokens it's served.
+  **Tap units are now WHOLE WORDS (parser merge pass shipped — don't re-split here):** the tap units
+  used to be GiNZA's raw morphemes (勉強 + する; 食べ+させ+られ+た), but a post-tokenization **merge pass**
+  in `sentence-nlp/parse.py` (`merge_groups`) now coalesces a content word + its inflectional tail into
+  one unit (勉強する; 食べさせられた→食べる; 読んでいる→読む) — see SENTENCE_STORE_PHASE4.md §8.0. The client
+  overlay + `resolveCard` needed NO change: they already render/resolve whatever tokens+lemmas they're
+  served, and the coarser merged lemmas (dictionary form) resolve to a deck card or Jisho the same way.
+  So tapping selects the word a learner looks up. **Local dev is re-seeded; PROD still serves the old
+  split-C tokens until the prod re-seed (`seed-annotations.ts`) runs** — tracked in ROADMAP.html. Don't
+  add a client-side re-tokenizer; granularity is a parser concern.
 - **The grammar-filter labels come from a GENERATED catalog, not a hand-kept list — don't add a
   parallel one.** [src/data/grammar.json](src/data/grammar.json) (`[{id,label,jlpt}]`×38) is dumped by
   `sentence-nlp/patterns.py` (`python3 patterns.py`) — the SAME catalog whose detectors write

@@ -251,7 +251,7 @@ footer b{color:var(--ink-2)}
       infra task — distilled from ~40 scattered markdown docs across all three surfaces (userscript ·
       API server · study&#8209;app) and the NLP / song&#8209;alignment subprojects. Click any card to expand the
       full spec, code pointers, and mock links. The default board is forward-looking; flip <b>✓ Show shipped</b>
-      to fold in the ~34 completed milestones. This file is now the single source of truth — the scattered
+      to fold in the ~36 completed milestones. This file is now the single source of truth — the scattered
       backlog &amp; progress docs were consolidated here and removed.</p>
     </div>
     <div class="bignum" id="heroNum"><b>—</b><span>open items</span></div>
@@ -331,12 +331,6 @@ footer b{color:var(--ink-2)}
 
 <script type="application/json" id="roadmap-data">
 [
-{"id":"store-tokenization-merge","surface":"store","type":"techdebt","status":"todo","prio":"high","star":true,
-"title":"⭐ Tokenization merge pass — tap whole words, not morphemes","summary":"Add a post-tokenization merge pass in parse.py so a tapped span is the word a learner looks up, not a raw GiNZA morpheme.",
-"detail":"The flagged top rework, the only genuinely-open Phase 4 item. Tap-to-lookup units come straight from GiNZA split-mode-C, so する-verbs split (勉強 + する), conjugations fragment (食べ+させ+られ+た), and て-form + aux split (読んでいる → 読ん+で+いる) — a tapped span rarely matches 'a word'. Fix: a post-tokenization MERGE pass in sentence-nlp/parse.py coalescing a content word + its trailing function morphemes into one token (lemma = dictionary form), then a full re-parse + re-seed. The already-emitted-but-unconsumed bunsetsu spans are a natural basis. The UTF-16 offset contract survives a merge automatically. This is a PARSER issue — do NOT fix it in the client overlay. Merging changes lemmas, so re-tune tap→card matching alongside it.",
-"example":"勉強(NOUN)+する(VERB) → 勉強する ;  食べ+させ+られ+た → one token, lemma 食べる",
-"src":["sentence-nlp/README.md:54-73","SENTENCE_STORE_PHASE4.md:445-468","NEXT_STEPS.md:29-33"]},
-
 {"id":"infra-prod-reseed-nlp","surface":"infra","type":"infra","status":"partial","prio":"high",
 "title":"Deploy NLP annotations + templates to prod (seed steps)","summary":"Run seed-annotations.ts after seed-sentences.ts on the droplet so prod actually serves tap-to-lookup tokens + grammar tags + template combos.",
 "detail":"Phase 4 (NLP enrichment) + slot-swap templates are merged to main but the prod deploy is the residual: a both-container rebuild plus seed-sentences.ts (incl. templates Pass 3) THEN seed-annotations.ts run against the prod sqlite. Skip it and the tap UI silently shows plain ruby in prod. The committed annotations.json ships in the image; annotations resolve by content hash, so an offline-parsed artifact seeds prod correctly with no Python on the droplet. Same docker-compose-run pattern as the rest of the seed step.",
@@ -731,7 +725,9 @@ footer b{color:var(--ink-2)}
 {"id":"done-store-phases","surface":"store","type":"feature","status":"completed","prio":"med","when":"Ph1/2/2.5",
 "title":"Sentence store — Phases 1, 2, 2.5","summary":"A DB-authoritative unified sentence store with a privacy gate: Phase 1 migrated Self-Talk phrases, Phase 2 the built-in vocab examples (read-from-store), Phase 2.5 dual-writes custom-card examples as private rows. Read-through localStorage caches; data/*.js are now seed sources only."},
 {"id":"done-store-nlp","surface":"store","type":"feature","status":"completed","prio":"med","when":"Phase 4",
-"title":"Sentence store — Phase 4 NLP annotations","summary":"Offline GiNZA parse (sentence-nlp/) → committed annotations.json → seed-annotations.ts populates sentence_annotation (UTF-16 tap tokens + bunsetsu spans) and grammar sentence_tags from a 38-point N5/N4 detector catalog. Powers tap-to-lookup + the Browse grammar facet. (The ⭐ tokenization merge pass is the open follow-up.)"},
+"title":"Sentence store — Phase 4 NLP annotations","summary":"Offline GiNZA parse (sentence-nlp/) → committed annotations.json → seed-annotations.ts populates sentence_annotation (UTF-16 tap tokens + bunsetsu spans) and grammar sentence_tags from a 38-point N5/N4 detector catalog. Powers tap-to-lookup + the Browse grammar facet. (A ⭐ post-tokenization merge pass then made the tap units whole words, not morphemes — see below.)"},
+{"id":"done-store-nlp-merge","surface":"store","type":"techdebt","status":"completed","prio":"high","when":"2026-06-21",
+"title":"⭐ Tokenization merge pass — tap whole words, not morphemes","summary":"Post-tokenization merge in sentence-nlp/parse.py (merge_groups): each content word absorbs its contiguous run of trailing bound morphemes (UPOS AUX + dep=fixed MWE components + bridging 接続助詞 て/で), so a tap selects 勉強する / 食べさせられた→食べる / 読んでいる→読む instead of a raw split-C morpheme. Lemma = dictionary form (+する for サ変 nouns). Offset contract held (UTF-16 self-check + seed V8 re-assert passed on every merged token); ~24% fewer tap units (8177→6224), provenance splitC+merge. Songs excluded from the parse (runtime LLM-annotated). The client overlay + tap→card resolution needed NO change. Dev DB re-seeded + verified; PROD re-seed is the remaining deploy step (infra-prod-reseed-nlp)."},
 {"id":"done-store-templates","surface":"store","type":"feature","status":"completed","prio":"low","when":"shipped",
 "title":"Slot-swap templates (curator)","summary":"sentence_template table + GET /v1/templates[?source=] + lazy materialization (POST /v1/templates/{extId}/realize). Private columns + the mirrored read gate + breach test ship now; the user-authoring write path is the open follow-up."},
 {"id":"done-daynight","surface":"design","type":"polish","status":"completed","prio":"med","when":"Phases 0-9",
