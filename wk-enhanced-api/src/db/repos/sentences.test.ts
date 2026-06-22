@@ -341,3 +341,56 @@ describe('sentence store — countUserSentences / getUserSentence / reuse-by-has
         expect(() => db.upsertPublicSentenceByHash({ source: 'template', extIdPrefix: 'tpl', text: 'ほんとう。', furigana: [{ t: 'ちがう' }] })).toThrow();
     });
 });
+
+describe('みんなの日本語 (Minna) gated sentences — Phase 3', () => {
+    const seg = (text: string) => [{ t: text }];
+    const gLink = { owner_type: 'grammar_point', owner_id: 'mnn-22-g0', ordinal: 0 };
+
+    // BREACH PIN: Minna is copyright-gated curator content (public=0, created_by=NULL). It must be
+    // DARK to the generic getSentences gate — even when queried under the exact owner_type it's linked
+    // under — so a bug in any sentence-store read path can never leak the textbook material. Only the
+    // email-gated /v1/minna route (getMinnaAnnotations) may reach it. If this breaks, fix the leak.
+    test('BREACH PIN: a Minna gated row is dark to getSentences for anon AND any viewer', () => {
+        const u = db.createUser('m@x.com', 'h');
+        db.seedMinnaSentence({ extId: 'mnn-22-g0-0', text: 'これは ほんです。', furigana: seg('これは ほんです。'), translations: { en: 'This is a book.' }, link: gLink });
+        for (const ownerType of ['grammar_point', 'lesson', 'conversation', 'selftalk', 'card']) {
+            expect(db.getSentences({ ownerType, viewer: null })).toEqual([]);
+            expect(db.getSentences({ ownerType, viewer: u.id })).toEqual([]);
+        }
+        expect((mem.query("SELECT COUNT(*) AS n FROM public_sentence WHERE source='minna'").get() as { n: number }).n).toBe(0);
+    });
+
+    test('getMinnaSentenceByExtId + getMinnaAnnotations reach the gated row (the /v1/minna serve path)', () => {
+        db.seedMinnaSentence({ extId: 'mnn-22-conv-0', text: 'どんな へやですか。', furigana: seg('どんな へやですか。'), translations: { en: 'What room?' }, link: { owner_type: 'conversation', owner_id: 'mnn-22-conv', role: '不動産屋', ordinal: 0 } });
+        const row = db.getMinnaSentenceByExtId('mnn-22-conv-0')!;
+        expect(row.ext_id).toBe('mnn-22-conv-0');
+        expect(row.public).toBe(0);
+        expect(row.source).toBe('minna');
+        // seed-annotations attaches tokens by id; getMinnaAnnotations maps them by hash for the route.
+        const tokens = [{ i: 0, start: 0, end: 3, surface: 'どんな', lemma: 'どんな', pos: 'DET', reading: 'ドンナ' }];
+        db.upsertAnnotation({ sentenceId: row.id, tokens, bunsetsu: [], parser: 'test' });
+        const map = db.getMinnaAnnotations();
+        const hit = map.get(ttsTextHash('どんな へやですか。'));
+        expect(hit?.tokens).toEqual(tokens);
+        expect(hit?.furigana).toEqual(seg('どんな へやですか。'));
+    });
+
+    test('seedMinnaSentence is idempotent (re-seed does not duplicate rows/links/translations)', () => {
+        const payload = { extId: 'mnn-22-ex-0', text: 'これは ほんです。', furigana: seg('これは ほんです。'), translations: { en: 'A book.' }, link: { owner_type: 'lesson', owner_id: '22', ordinal: 0 } };
+        db.seedMinnaSentence(payload);
+        db.seedMinnaSentence(payload);
+        const n = (sql: string) => (mem.query(sql).get() as { n: number }).n;
+        expect(n("SELECT COUNT(*) AS n FROM sentence WHERE source='minna'")).toBe(1);
+        expect(n('SELECT COUNT(*) AS n FROM translation')).toBe(1);
+        expect(n('SELECT COUNT(*) AS n FROM sentence_link')).toBe(1);
+        expect(mem.query('SELECT owner_type, owner_id, ordinal FROM sentence_link').get()).toEqual({ owner_type: 'lesson', owner_id: '22', ordinal: 0 });
+    });
+
+    test('seedMinnaSentence preserves GiNZA grammar tags across a content re-seed (seed order safety)', () => {
+        db.seedMinnaSentence({ extId: 'mnn-22-g1-0', text: 'たべます。', furigana: seg('たべます。'), translations: { en: 'eat' }, link: gLink });
+        const row = db.getMinnaSentenceByExtId('mnn-22-g1-0')!;
+        db.setGrammarTags(row.id, ['te-iru']); // simulate seed-annotations writing grammar after seed-sentences
+        db.seedMinnaSentence({ extId: 'mnn-22-g1-0', text: 'たべます。', furigana: seg('たべます。'), translations: { en: 'eats' }, link: gLink }); // re-seed content
+        expect((mem.query("SELECT value FROM sentence_tag WHERE kind='grammar'").all() as { value: string }[])).toEqual([{ value: 'te-iru' }]);
+    });
+});

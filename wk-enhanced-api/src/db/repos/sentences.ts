@@ -292,3 +292,75 @@ export function seedExampleSentence(input: {
     for (const link of input.cardLinks) insertSentenceChildren(id, undefined, undefined, link);
     return assembleSentenceRow(getSentenceRowById(id)!);
 }
+
+// Seed/refresh a GATED みんなの日本語 (Minna) sentence — copyright-gated CURATOR content (Phase 3).
+// Like upsertPublicSentence but PUBLIC=0, so it's excluded from the public_sentence VIEW *and* dark
+// to the getSentences gate (`public=1 OR created_by=:viewer` — never true for public=0 + created_by
+// NULL): the generic read path can NEVER surface it, only the email-gated /v1/minna route reads these
+// rows (via getMinnaAnnotations). visibility='public' + created_by=NULL mark it curator-owned. The
+// row's mere existence is what lets the offline GiNZA batch attach tap-to-lookup tokens (resolved by
+// the unique ext_id — Minna text has bunsetsu spaces, so it never shares a hash with a space-free
+// public example, but ext_id resolution is collision-proof regardless). Idempotent by ext_id (the
+// seed owns the `mnn-<lesson>-<type>-<idx>` namespace); replaces translations + the single link on
+// re-seed, but preserves sentence_tag so seed-annotations' GiNZA grammar survives a content re-seed.
+export function seedMinnaSentence(input: {
+    extId: string;
+    text: string;
+    furigana?: FuriganaSeg[] | null;
+    translations?: Record<string, string>;
+    link: SentenceLink;
+}): AssembledSentence {
+    const furigana = input.furigana ?? null;
+    assertFuriganaMatches(furigana, input.text);
+    const db = getDb();
+    const r = db
+        .query(
+            `INSERT INTO sentence (ext_id, hash, text, furigana, lang, source, public, visibility, created_by, created_at)
+             VALUES (?, ?, ?, ?, 'ja', 'minna', 0, 'public', NULL, ?)
+             ON CONFLICT(ext_id) DO UPDATE SET
+                 hash = excluded.hash, text = excluded.text, furigana = excluded.furigana,
+                 source = 'minna', public = 0, visibility = 'public', created_by = NULL
+             RETURNING id`,
+        )
+        .get(input.extId, ttsTextHash(input.text), input.text, furigana ? JSON.stringify(furigana) : null, Date.now()) as {
+        id: number;
+    };
+    db.query('DELETE FROM translation WHERE sentence_id = ?').run(r.id);
+    db.query('DELETE FROM sentence_link WHERE sentence_id = ?').run(r.id);
+    insertSentenceChildren(r.id, input.translations, undefined, input.link);
+    return assembleSentenceRow(getSentenceRowById(r.id)!);
+}
+
+// Read every gated Minna annotation as a hash → {tokens, furigana} map (Phase 3 serving). The
+// /v1/minna route enriches its lesson JSON by matching each sentence's ttsTextHash against this map
+// to attach tap-to-lookup tokens. Scoped to source='minna' (so it can't pick up a space-free public
+// example that happens to share a hash) + curator rows; identical-text Minna rows carry identical
+// GiNZA tokens, so a hash key is unambiguous for the lookup. NOT gated by viewer — the caller
+// (routes/minna.ts) already applies the MINNA_OWNER_EMAILS gate, and these rows are public=0.
+export function getMinnaAnnotations(): Map<string, { tokens: AnnotationToken[]; furigana: FuriganaSeg[] | null }> {
+    const rows = getDb()
+        .query(
+            `SELECT s.hash, s.furigana, a.tokens
+             FROM sentence s JOIN sentence_annotation a ON a.sentence_id = s.id
+             WHERE s.source = 'minna' AND s.public = 0 AND a.tokens IS NOT NULL`,
+        )
+        .all() as { hash: string; furigana: string | null; tokens: string }[];
+    const map = new Map<string, { tokens: AnnotationToken[]; furigana: FuriganaSeg[] | null }>();
+    for (const r of rows) {
+        map.set(r.hash, {
+            tokens: JSON.parse(r.tokens) as AnnotationToken[],
+            furigana: r.furigana ? (JSON.parse(r.furigana) as FuriganaSeg[]) : null,
+        });
+    }
+    return map;
+}
+
+// Resolve a Minna sentence row by its (unique) ext_id — the seed-annotations resolver for source=
+// 'minna'. Public rows resolve by hash (reuse-by-hash dedup), but Minna rows aren't hash-deduped and
+// a space-free Minna sentence could share a hash with a public example, so the annotation seed keys
+// Minna by ext_id instead (collision-proof). Scoped to source='minna' so it can't return anything else.
+export function getMinnaSentenceByExtId(extId: string): SentenceRow | null {
+    return getDb()
+        .query(`SELECT ${SENTENCE_ROW_COLS} FROM sentence WHERE ext_id = ? AND source = 'minna' AND public = 0`)
+        .get(extId) as SentenceRow | null;
+}

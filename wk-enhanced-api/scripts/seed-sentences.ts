@@ -22,6 +22,7 @@
 // Run from wk-enhanced-api/ so .env loads (→ DATABASE_FILE). To seed PROD, point DATABASE_FILE
 // at the prod sqlite (or run on the droplet) with the prod env, same pattern as generate-tts.ts.
 //   bun scripts/seed-sentences.ts
+import { readdirSync, readFileSync } from 'node:fs';
 import { SELFTALK } from '../../study-app/src/data/selftalk.js';
 import { EXAMPLES } from '../../study-app/src/data/examples.js';
 import { SELFTALK_TEMPLATES } from '../../study-app/src/data/selftalk-templates.js';
@@ -104,3 +105,32 @@ for (const t of SELFTALK_TEMPLATES) {
     templates++;
 }
 console.log(`seeded ${templates} Self-Talk slot-swap templates into the sentence_template table`);
+
+// ---- Pass 4: みんなの日本語 (Minna) sentences → GATED store rows (public=0, Phase 3) ----
+// Grammar-point examples, lesson examples, and conversation lines from the curated lesson JSON
+// (data/minna/lesson-<n>.json) become sentence rows (source='minna', public=0 — copyright-gated;
+// dark to getSentences, served only by the email-gated /v1/minna route via db.getMinnaAnnotations)
+// linked by owner_type ∈ grammar_point|lesson|conversation. The row's existence is what lets the
+// offline GiNZA batch attach tap-to-lookup tokens (sentence-nlp/parse.py now reads these too).
+// ext_id is position-derived (`mnn-<lesson>-<type>-<idx>`), so re-seeding is idempotent.
+const minnaDir = new URL('../data/minna/', import.meta.url);
+let minnaCount = 0;
+const seedMinna = (extId: string, jp: string, en: string, link: db.SentenceLink) => {
+    if (!jp || typeof jp !== 'string') return;
+    db.seedMinnaSentence({ extId, text: plainText(jp), furigana: furiganaFor(jp, extId), translations: en ? { en } : {}, link });
+    minnaCount++;
+};
+const minnaFiles = readdirSync(minnaDir).filter((f) => /^lesson-\d+\.json$/.test(f)).sort();
+for (const file of minnaFiles) {
+    const n = Number(file.match(/lesson-(\d+)/)![1]);
+    // eslint-disable-next-line @typescript-eslint/no-explicit-any
+    const lesson = JSON.parse(readFileSync(new URL(file, minnaDir), 'utf8')) as any;
+    (lesson.grammar ?? []).forEach((g: { examples?: { jp: string; en: string }[] }, gi: number) =>
+        (g.examples ?? []).forEach((e, ei) =>
+            seedMinna(`mnn-${n}-g${gi}-${ei}`, e.jp, e.en, { owner_type: 'grammar_point', owner_id: `mnn-${n}-g${gi}`, ordinal: ei })));
+    (lesson.examples ?? []).forEach((e: { jp: string; en: string }, i: number) =>
+        seedMinna(`mnn-${n}-ex-${i}`, e.jp, e.en, { owner_type: 'lesson', owner_id: String(n), ordinal: i }));
+    (lesson.conversation?.lines ?? []).forEach((ln: { role?: string; jp: string; en: string }, i: number) =>
+        seedMinna(`mnn-${n}-conv-${i}`, ln.jp, ln.en, { owner_type: 'conversation', owner_id: `mnn-${n}-conv`, role: ln.role ?? null, ordinal: i }));
+}
+console.log(`seeded ${minnaCount} みんなの日本語 sentences (gated, public=0) from ${minnaFiles.length} lessons into the sentence store`);
