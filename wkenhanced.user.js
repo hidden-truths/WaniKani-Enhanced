@@ -1,7 +1,7 @@
 // ==UserScript==
 // @name         WKEnhanced
 // @namespace    https://github.com/jbrelly/wk-ik-examples
-// @version      2.0.3
+// @version      2.0.4
 // @description  Example sentences (audio + image) inlaid into WaniKani vocab reviews, served from the WKEnhanced API.
 // @author       jbrelly
 // @match        https://www.wanikani.com/*
@@ -19,7 +19,7 @@
 
     const SCRIPT_ID = 'wkenhanced';
     const SCRIPT_TITLE = 'WKEnhanced';
-    const SCRIPT_VERSION = '2.0.3';
+    const SCRIPT_VERSION = '2.0.4';
 
     // API server endpoints. Single source of truth for prod / dev URLs; lift
     // here when changing the deployed domain. Note: changing PROD_API_BASE
@@ -1102,7 +1102,8 @@
     gap: 0.3em;
     padding-top: 0.05em;
 }
-.${CSS_PREFIX}-picker-badge {
+.${CSS_PREFIX}-picker-badge,
+.${CSS_PREFIX}-card-badge {
     display: inline-block;
     font-size: 0.72em;
     font-weight: 600;
@@ -1113,13 +1114,20 @@
     background: #888;
     letter-spacing: 0.02em;
 }
+/* The card chip rides at the inline-end of the controls row (a glance-able
+   difficulty marker beside play/ふ/⟳); shares the JLPT colours below. */
+.${CSS_PREFIX}-card-badge {
+    margin-left: auto;
+    align-self: center;
+    flex: none;
+}
 /* JLPT-level colors: green (easy) → red (hard). The unknown badge is neutral
    grey with reduced opacity so it doesn't compete with the real-level chips. */
-.${CSS_PREFIX}-picker-badge.lvl-n5 { background: #2e7d32; }
-.${CSS_PREFIX}-picker-badge.lvl-n4 { background: #558b2f; }
-.${CSS_PREFIX}-picker-badge.lvl-n3 { background: #ef6c00; }
-.${CSS_PREFIX}-picker-badge.lvl-n2 { background: #c62828; }
-.${CSS_PREFIX}-picker-badge.lvl-n1 { background: #6a1b9a; }
+.${CSS_PREFIX}-picker-badge.lvl-n5, .${CSS_PREFIX}-card-badge.lvl-n5 { background: #2e7d32; }
+.${CSS_PREFIX}-picker-badge.lvl-n4, .${CSS_PREFIX}-card-badge.lvl-n4 { background: #558b2f; }
+.${CSS_PREFIX}-picker-badge.lvl-n3, .${CSS_PREFIX}-card-badge.lvl-n3 { background: #ef6c00; }
+.${CSS_PREFIX}-picker-badge.lvl-n2, .${CSS_PREFIX}-card-badge.lvl-n2 { background: #c62828; }
+.${CSS_PREFIX}-picker-badge.lvl-n1, .${CSS_PREFIX}-card-badge.lvl-n1 { background: #6a1b9a; }
 .${CSS_PREFIX}-picker-badge.lvl-unknown {
     background: #bbb;
     color: #555;
@@ -2447,6 +2455,8 @@
             translation: e.translation || '',
             // Pre-segmented IK tokens — drives click-to-lookup on the card.
             word_list: Array.isArray(e.word_list) ? e.word_list : [],
+            // Hardest-word JLPT level (0 = unknown) — drives the card's JLPT chip.
+            _jlptMax: typeof e._jlptMax === 'number' ? e._jlptMax : 0,
             title: getTitle(e),
             ikAudioUrl: e._serverAudioUrl || null,
             ikImageUrl: e._serverImageUrl || null,
@@ -2667,6 +2677,21 @@
         sentenceRefreshBtn.addEventListener('pointerleave', clearLongPress);
         sentenceRefreshBtn.addEventListener('pointercancel', clearLongPress);
         leftControls.appendChild(sentenceRefreshBtn);
+
+        // JLPT difficulty chip for the current sentence (known levels only —
+        // unknown/0 stays unbadged so conjugated-verb sentences don't all wear
+        // a "?" in the always-visible header; the picker keeps "?" for its
+        // denser compare view). Reuses the picker badge colours; pushed to the
+        // inline-end of the controls row via margin-left:auto. renderCard runs
+        // afresh on every sentence cycle, so the chip never goes stale.
+        const jlptLvl = typeof example._jlptMax === 'number' ? example._jlptMax : 0;
+        if (jlptLvl >= 1 && jlptLvl <= 5) {
+            const jlptBadge = document.createElement('span');
+            jlptBadge.className = `${CSS_PREFIX}-card-badge lvl-n${jlptLvl}`;
+            jlptBadge.textContent = `N${jlptLvl}`;
+            jlptBadge.title = `Hardest identifiable word in this sentence is JLPT N${jlptLvl}`;
+            leftControls.appendChild(jlptBadge);
+        }
 
         leftPanel.appendChild(leftControls);
 
