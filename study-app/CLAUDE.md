@@ -838,8 +838,8 @@ Component contracts you must preserve:
 - **歌 / Songs (`features/songs.js`) is anon-readable starters + account-gated BYO, and ASSEMBLES
   existing primitives (sentence store, vocab-activation, tap-a-word, the grammar catalog, the
   YouTube IFrame embed) — don't build parallel machinery. A song's lines are `sentence` rows
-  (`owner_type='song'`); the **Library + Add + Read + Mine** foundation is shipped, Listen + Shadow +
-  line-timing are not. Load-bearing dead-ends: (1) **the Add-flow analysis is a SERVER LLM pass**
+  (`owner_type='song'`); the full surface — **Library · Add · Read · Listen · Shadow · Mine** +
+  line-timing — is shipped (all four modes; see (7) below). Load-bearing dead-ends: (1) **the Add-flow analysis is a SERVER LLM pass**
   (`POST /v1/songs/analyze`) — the client NEVER analyzes lyrics; it's `ANTHROPIC_API_KEY`-gated, so
   the Add screen shows an "analysis isn't available yet" state (graceful 503) until the key is
   provisioned, and Library/Read/Mine keep working without it. (2) `GET /v1/songs/{id}` returns each
