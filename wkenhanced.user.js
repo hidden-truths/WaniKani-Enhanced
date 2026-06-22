@@ -1,7 +1,7 @@
 // ==UserScript==
 // @name         WKEnhanced
 // @namespace    https://github.com/jbrelly/wk-ik-examples
-// @version      2.0.2
+// @version      2.0.3
 // @description  Example sentences (audio + image) inlaid into WaniKani vocab reviews, served from the WKEnhanced API.
 // @author       jbrelly
 // @match        https://www.wanikani.com/*
@@ -19,7 +19,7 @@
 
     const SCRIPT_ID = 'wkenhanced';
     const SCRIPT_TITLE = 'WKEnhanced';
-    const SCRIPT_VERSION = '2.0.2';
+    const SCRIPT_VERSION = '2.0.3';
 
     // API server endpoints. Single source of truth for prod / dev URLs; lift
     // here when changing the deployed domain. Note: changing PROD_API_BASE
@@ -94,6 +94,11 @@
         autoPlayAudio: false,
         showImage: true,
         showFurigana: true,
+        // When on, dictionary-eligible words in the example sentence become
+        // jisho.org links (click a word → open its entry in a new tab). Skips
+        // the target vocab word and lone particles. Applies to the card and
+        // the sentence-picker rows.
+        clickToLookup: true,
         playHotkey: 'p',
         // String key (matches dropdown content keys); parsed to float at apply
         // time. '1' = native speed, which is also the audio element default.
@@ -482,6 +487,13 @@
                             hover_tip:
                                 'When on, render furigana (small kana above kanji) on the example sentence after you submit the reading question. Furigana is always hidden before the reading is graded so it doesn\'t spoil the answer. The target vocab word\'s own reading is never shown. Per-card ふ button toggles it on/off without changing this default.',
                         },
+                        clickToLookup: {
+                            type: 'checkbox',
+                            label: 'Click a word to look it up on jisho.org',
+                            default: DEFAULTS.clickToLookup,
+                            hover_tip:
+                                'When on, dictionary-eligible words in the example sentence become links — click one to open its jisho.org entry in a new tab. The target vocab word and lone particles are skipped; segmentation comes from ImmersionKit, so an occasional word may be split oddly. Also applies to the sentence picker.',
+                        },
                         playHotkey: {
                             type: 'text',
                             label: 'Hotkey to replay audio',
@@ -782,6 +794,29 @@
    <rt> by renderSentence), CSS hides it so the reading is never visible
    above the very word being tested. */
 .${CARD_CLASS} mark.${CSS_PREFIX}-target ruby rt { display: none; }
+/* Click-to-lookup: dictionary-eligible words become jisho.org links. Inherit
+   the surrounding text colour (white on the purple card band, normal ink in the
+   picker) instead of the default blue <a> which is illegible on purple, and
+   signal interactivity with a faint dotted underline that solidifies on hover. */
+.${CARD_CLASS} .${CSS_PREFIX}-sentence a.${CSS_PREFIX}-word,
+.${CSS_PREFIX}-picker-text a.${CSS_PREFIX}-word {
+    color: inherit;
+    text-decoration: underline dotted;
+    text-decoration-color: rgba(255,255,255,0.45);
+    text-underline-offset: 0.18em;
+    cursor: pointer;
+}
+.${CARD_CLASS} .${CSS_PREFIX}-sentence a.${CSS_PREFIX}-word:hover {
+    text-decoration-style: solid;
+    text-decoration-color: currentColor;
+}
+.${CSS_PREFIX}-picker-text a.${CSS_PREFIX}-word {
+    text-decoration-color: rgba(0,0,0,0.3);
+}
+.${CSS_PREFIX}-picker-text a.${CSS_PREFIX}-word:hover {
+    text-decoration-style: solid;
+    text-decoration-color: currentColor;
+}
 .${CARD_CLASS} .${CSS_PREFIX}-left-controls {
     display: flex;
     align-items: center;
@@ -2410,6 +2445,8 @@
             sentence: e.sentence || '',
             sentence_with_furigana: e.sentence_with_furigana || '',
             translation: e.translation || '',
+            // Pre-segmented IK tokens — drives click-to-lookup on the card.
+            word_list: Array.isArray(e.word_list) ? e.word_list : [],
             title: getTitle(e),
             ikAudioUrl: e._serverAudioUrl || null,
             ikImageUrl: e._serverImageUrl || null,
@@ -2772,11 +2809,11 @@
     //   * caller asked for no furigana (gating logic in revealAll / settings),
     //   * the IK example has no sentence_with_furigana field, or
     //   * the parser found no kanji-bracket pairs.
-    function renderSentence(container, sentence, sentenceWithFurigana, target, withFurigana) {
+    function renderSentence(container, sentence, sentenceWithFurigana, target, withFurigana, wordList) {
         container.textContent = ''; // clear
         const segments = withFurigana ? parseFurigana(sentenceWithFurigana) : null;
         if (!segments) {
-            renderSentencePlain(container, sentence, target);
+            renderSentencePlain(container, sentence, target, wordList);
             return;
         }
 
@@ -2838,6 +2875,7 @@
             }
         }
         closeMark();
+        linkifyWords(container, wordList, target);
 
         function appendToTarget(node, intoMark) {
             if (intoMark) {
@@ -2853,21 +2891,137 @@
         }
     }
 
-    function renderSentencePlain(container, sentence, target) {
+    function renderSentencePlain(container, sentence, target, wordList) {
         if (!target || !sentence.includes(target)) {
             container.textContent = sentence;
-            return;
+        } else {
+            const parts = sentence.split(target);
+            parts.forEach((part, idx) => {
+                if (part) container.appendChild(document.createTextNode(part));
+                if (idx < parts.length - 1) {
+                    const mark = document.createElement('mark');
+                    mark.className = `${CSS_PREFIX}-target`;
+                    mark.textContent = target;
+                    container.appendChild(mark);
+                }
+            });
         }
-        const parts = sentence.split(target);
-        parts.forEach((part, idx) => {
-            if (part) container.appendChild(document.createTextNode(part));
-            if (idx < parts.length - 1) {
-                const mark = document.createElement('mark');
-                mark.className = `${CSS_PREFIX}-target`;
-                mark.textContent = target;
-                container.appendChild(mark);
+        linkifyWords(container, wordList, target);
+    }
+
+    // ---- Click-to-lookup ----------------------------------------------------
+    // Wrap dictionary-eligible IK word_list tokens in the rendered sentence as
+    // jisho.org links, turning the card (and the picker rows) into a vocab-
+    // discovery surface. Implemented as a post-pass over the already-rendered
+    // DOM so the delicate furigana / <mark>-target logic in renderSentence
+    // stays untouched.
+    //
+    // Best-effort by design: tokens are aligned to the rendered *base* text
+    // (visible characters minus furigana <rt> readings) by greedy forward
+    // substring match, so any IK segmentation drift degrades to a few unwrapped
+    // words rather than mis-rendering. Skips the target word (already <mark>'d)
+    // and lone particles (は/の/が…) via a "contains kanji OR ≥2 chars" gate.
+    // Gated on the clickToLookup setting (default on; treat missing as on so
+    // existing users get the feature before WKOF merges the new default).
+    function linkifyWords(container, wordList, target) {
+        if (settings().clickToLookup === false) return;
+        if (!Array.isArray(wordList) || wordList.length === 0) return;
+
+        // Visible characters of a node, excluding furigana <rt> readings, so
+        // offsets line up with the plain sentence the word_list tokenizes.
+        const baseText = (node) => {
+            if (node.nodeType === Node.TEXT_NODE) return node.data;
+            if (node.nodeName === 'RT') return '';
+            let s = '';
+            node.childNodes.forEach((c) => { s += baseText(c); });
+            return s;
+        };
+
+        const nodes = Array.from(container.childNodes);
+        const full = nodes.map(baseText).join('');
+        if (!full) return;
+
+        // Resolve each token to an absolute [start,end) range in `full` by
+        // greedy forward match. Unfound tokens (spacing / segmentation drift)
+        // are skipped; the target word and lone particles are not linked.
+        const hasKanji = (s) => /[々一-鿿豈-﫿]/.test(s);
+        const eligible = (tok) => hasKanji(tok) || [...tok].length >= 2;
+        const ranges = [];
+        let cursor = 0;
+        for (const tok of wordList) {
+            if (!tok) continue;
+            const idx = full.indexOf(tok, cursor);
+            if (idx === -1) continue;
+            cursor = idx + tok.length;
+            if (tok === target) continue;
+            if (!eligible(tok)) continue;
+            ranges.push({ start: idx, end: cursor, tok });
+        }
+        if (ranges.length === 0) return;
+        const rangeAt = (i) => ranges.find((r) => i >= r.start && i < r.end) || null;
+        const isTargetMark = (node) =>
+            node.nodeType === Node.ELEMENT_NODE &&
+            !!node.classList && node.classList.contains(`${CSS_PREFIX}-target`);
+
+        // Rebuild the container's children, splitting text nodes at token
+        // boundaries and grouping consecutive nodes that share one token (e.g. a
+        // <ruby> kanji stem + its trailing okurigana text) into a single <a>.
+        const frag = document.createDocumentFragment();
+        let link = null;
+        let linkRange = null;
+        let pos = 0;
+        const flush = () => {
+            if (link) { frag.appendChild(link); link = null; linkRange = null; }
+        };
+        const emit = (node, range) => {
+            if (!range) { flush(); frag.appendChild(node); return; }
+            if (!link || linkRange !== range) {
+                flush();
+                link = document.createElement('a');
+                link.className = `${CSS_PREFIX}-word`;
+                link.href = `https://jisho.org/search/${encodeURIComponent(range.tok)}`;
+                link.target = '_blank';
+                link.rel = 'noopener noreferrer';
+                link.title = `Look up ${range.tok} on jisho.org`;
+                // Inside the click-to-select picker rows, opening a word must not
+                // also pick that row — let the anchor navigate, stop the row
+                // handler. Harmless on the card (the sentence has no click).
+                link.addEventListener('click', (ev) => ev.stopPropagation());
+                linkRange = range;
             }
-        });
+            link.appendChild(node);
+        };
+
+        for (const node of nodes) {
+            const t = baseText(node);
+            const len = t.length;
+            if (len === 0) { flush(); frag.appendChild(node); continue; }
+            // The target mark and atomic ruby nodes are assigned wholesale by
+            // their first character; only plain text runs are split mid-node.
+            if (isTargetMark(node) || node.nodeType !== Node.TEXT_NODE) {
+                emit(node, isTargetMark(node) ? null : rangeAt(pos));
+                pos += len;
+                continue;
+            }
+            let local = 0;
+            while (local < len) {
+                const r = rangeAt(pos + local);
+                let end;
+                if (r) {
+                    end = Math.min(len, r.end - pos);
+                } else {
+                    const next = ranges.find((x) => x.start > pos + local);
+                    end = next ? Math.min(len, next.start - pos) : len;
+                }
+                emit(document.createTextNode(t.slice(local, end)), r);
+                local = end;
+            }
+            pos += len;
+        }
+        flush();
+
+        container.textContent = '';
+        container.appendChild(frag);
     }
 
     // Render the sentence into `sentenceEl` AND synchronize the ふ-visibility
@@ -2909,7 +3063,8 @@
                 example.sentence,
                 example.sentence_with_furigana,
                 state.currentCharacters || '',
-                emitRuby
+                emitRuby,
+                example.word_list
             );
             sentenceEl.dataset.wkIkEmitRuby = String(emitRuby);
         }
@@ -3204,6 +3359,10 @@
         text.className = `${CSS_PREFIX}-picker-text`;
         text.setAttribute('lang', 'ja');
         text.textContent = e.sentence || '';
+        // Click-to-lookup on picker rows too. The link handler stops the click
+        // from also selecting the row (see linkifyWords); `word` is the target
+        // so its dictionary form isn't linked.
+        linkifyWords(text, e.word_list, word);
         main.appendChild(text);
 
         if (e.translation) {
