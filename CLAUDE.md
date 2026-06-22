@@ -51,9 +51,11 @@ When you edit the file:
 
 ## External services
 
-The userscript talks to exactly one external service:
+The userscript talks to exactly one external service over the network:
 
 - **`api.wkenhanced.dev`** — our backing API. The server handles upstream coordination with ImmersionKit, DuckDuckGo, and Google Translate TTS; the userscript just consumes pre-resolved JSON payloads + pre-built CDN URLs. CORS is permissive (`Access-Control-Allow-Origin: *`) so we use plain `fetch()` — no `GM_xmlhttpRequest` needed.
+
+The **click-to-lookup** feature (v2.0.3, `clickToLookup` setting, default on) also opens **jisho.org**, but as a plain `<a target="_blank">` link the user clicks — browser navigation in a new tab, NOT a fetch from the userscript — so it needs no `@connect`/`@grant` entry (the "one external service" rule above is about network requests). It wraps each IK `word_list` token in the rendered sentence (skipping the `<mark>`'d target + lone particles) via a DOM post-pass, `linkifyWords`; see the `us-click-to-lookup` record in [ROADMAP.html](ROADMAP.html).
 
 Two endpoints in use:
 - **`GET /v1/vocab/{word}`** — per-card payload. Includes ETag for conditional revalidation; the userscript caches the ETag locally and sends `If-None-Match` on revisits for cheap 304 round-trips.
