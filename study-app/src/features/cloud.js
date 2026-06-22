@@ -5,12 +5,13 @@
 // in all) and the durable POST /v1/sessions log. The persistence layer schedules pushes via the
 // sync bus, which this module's initCloud() wires up.
 import { state } from '../state.js';
-import { phraseToSentence, cardExamplesPayload, mergeProgress, mergeCustomVerbs, mergeSelftalkPractice, mergeSongs } from '../core/index.js';
+import { mergeProgress, mergeCustomVerbs, mergeSelftalkPractice, mergeSongs } from '../core/index.js';
 import { sync } from '../sync-bus.js';
 import { account, setAccount, api, setSyncStatus, serverReachable, setServerReachable } from './cloud-core.js';
 import { createSyncedBlob } from './synced-blob.js';
 import * as queue from '../net/sync-queue.js';
 import { createSyncOrchestrator } from '../net/sync-orchestrator.js';
+import { migrateSelftalkPhrases, migrateCardExamples } from './cloud-migrations.js';
 import { saveLocal } from '../persistence/store.js';
 import { loadCustom, saveCustomLocal } from '../persistence/custom.js';
 import { normalizeSelftalk, saveSelftalkLocal } from '../persistence/selftalk.js';
@@ -163,39 +164,6 @@ function orchestrator() {
   return _orchestrator || (_orchestrator = createSyncOrchestrator({
     registry: blobRegistry, queue, sync, getAccount: () => account,
   }));
-}
-
-// POST each legacy phrase to the sentence store as a private row; returns the ones that FAILED so
-// they stay in the blob for a later retry. POST is idempotent by ext_id (the usr-<uuid> ids), so a
-// replay (re-sign-in / another device) is a no-op. Empty input → no-op.
-async function migrateSelftalkPhrases(localPhrases, cloudPhrases) {
-  const byId = new Map();
-  for (const p of cloudPhrases) if (p && p.id) byId.set(p.id, p);
-  for (const p of localPhrases) if (p && p.id) byId.set(p.id, p);   // local wins on a dup id
-  if (!byId.size) return [];
-  const failed = [];
-  for (const p of byId.values()) {
-    try { await api('/v1/sentences', { method: 'POST', body: phraseToSentence(p), retry: true }); }   // idempotent by ext_id
-    catch (err) { failed.push(p); }
-  }
-  if (byId.size > failed.length) setSyncStatus('✓ phrases migrated');
-  return failed;
-}
-
-// One-time-per-device backfill: push every existing custom card's examples into the store so it
-// becomes the source for ALL example text (Phase 2.5). pushCardExamples keeps them current on every
-// save; this catches cards authored before Phase 2.5 / on another device. Flag-gated so it doesn't
-// re-run each sign-in; a partial run is harmless (the localStorage blob still renders any card not
-// yet migrated) and retried next sign-in until all succeed. Idempotent — the PUT replaces wholesale.
-async function migrateCardExamples() {
-  if (!account) return;
-  if (localStorage.getItem('jpverbs_cardex_migrated')) return;
-  const verbs = (loadCustom().verbs || []).filter(v => (v.ex && v.ex.length) || (v.levels && Object.keys(v.levels).length));
-  if (!verbs.length) { localStorage.setItem('jpverbs_cardex_migrated', '1'); return; }
-  const results = await Promise.allSettled(
-    verbs.map(v => api('/v1/sentences/card/' + encodeURIComponent(v.rank), { method: 'PUT', body: cardExamplesPayload(v) })),
-  );
-  if (results.every(r => r.status === 'fulfilled')) localStorage.setItem('jpverbs_cardex_migrated', '1');
 }
 
 // Pull every synced blob after sign-in / boot (server-wins, fresh-account seed; each blob isolated so
