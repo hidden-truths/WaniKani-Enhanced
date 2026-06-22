@@ -120,7 +120,8 @@ src/
 │   ├── mediaCache.ts         # read-through cache over Storage (resolveMediaUrl / resolveMediaBytes) + single-flight; the ONE home for "storage hit? serve : load upstream→persist→serve", used by the warm pipeline (audio/image), tts (google clip), and the native-audio route
 │   └── storage.ts            # storage abstraction: LocalStorage + S3Storage drivers behind one interface
 └── warm/
-    └── pipeline.ts           # warmWord (single) + warmAll (corpus); see "Warm pipeline" below
+    ├── pipeline.ts           # warmWord (single) + warmAll (corpus); see "Warm pipeline" below
+    └── helpers.ts            # the pipeline's PURE bits — exampleId (deterministic media-key id), batched (bounded-concurrency map), aggregateMediaStats (the warm.word.done tally); unit-tested in helpers.test.ts (no IK/DDG/TTS mocking)
 data/
 ├── jlpt-vocab.json           # 7604-entry JLPT word list, extracted from the userscript. Bundled (~93KB).
 ├── annotations.json          # offline GiNZA token/grammar artifact (../sentence-nlp) → seed-annotations.ts

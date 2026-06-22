@@ -19,10 +19,11 @@ import { ddgSearchImages, ddgFetchImage } from '../services/ddg.ts';
 import { googleTts } from '../services/tts.ts';
 import { fetchAllWkVocab } from '../services/wk.ts';
 import { getStorage, keys } from '../services/storage.ts';
-import { resolveMediaUrl } from '../services/mediaCache.ts';
+import { resolveMediaUrl, type MediaLoader } from '../services/mediaCache.ts';
 import { SingleFlight } from '../lib/singleFlight.ts';
 import { scoreJlpt } from '../lib/jlpt.ts';
 import { ikTitleToFolder, prettifyTitle, resolveCategory, type IndexMeta } from '../lib/ikTitles.ts';
+import { aggregateMediaStats, batched, exampleId, type MediaStats } from './helpers.ts';
 
 // Per-word example cap. The userscript can show up to ~500 in the picker but
 // in practice ~25 is the most a user scrolls through. Keep 50 for room.
@@ -46,17 +47,6 @@ export interface WarmedExample {
     hasOriginalAudio: boolean;  // false = audio was synthesized via TTS
     audioUrl: string | null;
     imageUrl: string | null;
-}
-
-// Per-example media stats collected during warmOneExample. Aggregated into
-// the warm.word.done log line so the operator can see at a glance how much
-// of a warm was satisfied by the storage-cache vs how much required fresh
-// IK / TTS / DDG calls. Internal — not part of the public payload.
-interface MediaStats {
-    audioSource: 'ik' | 'tts' | 'none';
-    audioStorage: 'cache' | 'fetched' | 'failed' | 'skipped';
-    imageSource: 'ik' | 'none';
-    imageStorage: 'cache' | 'fetched' | 'failed' | 'skipped';
 }
 
 export interface VocabPayload {
@@ -104,18 +94,6 @@ export function _setWarmAllInFlightForTesting(value: boolean): void {
     warmAllInFlight = value;
 }
 
-// Stable, deterministic example id even when IK gives us no `id` (rare but
-// happens with some test data). Combines encoded title + a content hash to
-// keep media object keys idempotent across re-warms.
-function exampleId(e: IkExample, encodedTitle: string, index: number): string {
-    if (e.id && typeof e.id === 'string') return e.id;
-    // Hash the sentence text so the same example always lands at the same key.
-    const text = (e.sentence || '') + '|' + (e.sound || '') + '|' + (e.image || '');
-    let hash = 0;
-    for (let i = 0; i < text.length; i++) hash = ((hash << 5) - hash + text.charCodeAt(i)) | 0;
-    return `${encodedTitle}_${index}_${(hash >>> 0).toString(36)}`;
-}
-
 // Refresh /index_meta if stale, return current map. Cached in DB.
 export async function ensureIndexMeta(force = false): Promise<IndexMeta> {
     const existing = db.getIndexMeta();
@@ -134,17 +112,6 @@ export async function ensureIndexMeta(force = false): Promise<IndexMeta> {
         // Degrade: return whatever stale we have, or empty.
         return existing?.decks || {};
     }
-}
-
-// Process N items in parallel batches.
-async function batched<T, U>(items: T[], size: number, fn: (item: T) => Promise<U>): Promise<U[]> {
-    const out: U[] = [];
-    for (let i = 0; i < items.length; i += size) {
-        const slice = items.slice(i, i + size);
-        const results = await Promise.all(slice.map(fn));
-        out.push(...results);
-    }
-    return out;
 }
 
 // Warm a single word end-to-end. Idempotent: re-warming an existing word
@@ -232,23 +199,10 @@ export async function warmWord(word: string, options?: { force?: boolean }): Pro
     };
     db.upsertVocab(word, payload, examples.length);
 
-    // Aggregate per-example stats. `audio.ik + audio.tts + audio.none` always
-    // sums to examples.length. `audioStorage.cache` counts examples where the
-    // audio file was already in storage from a prior warm (no IK / TTS call
-    // needed this run); `audioStorage.fetched` counts fresh downloads. The
-    // ratio between these is the most useful operational signal — high cache
-    // hit = re-warm finished fast; high fetched = lots of new media work.
-    const audio = { ik: 0, tts: 0, none: 0 };
-    const audioStorage = { cache: 0, fetched: 0, failed: 0, skipped: 0 };
-    const image = { ik_present: 0, ik_missing: 0 };
-    const imageStorage = { cache: 0, fetched: 0, failed: 0, skipped: 0 };
-    for (const s of allStats) {
-        audio[s.audioSource]++;
-        audioStorage[s.audioStorage]++;
-        if (s.imageSource === 'ik') image.ik_present++;
-        else image.ik_missing++;
-        imageStorage[s.imageStorage]++;
-    }
+    // Aggregate per-example stats for the operator log (helpers.ts, pure + tested). `audio.ik +
+    // audio.tts + audio.none` sums to examples.length; `audioStorage.cache` vs `.fetched` is the key
+    // signal — high cache = re-warm finished fast with no external calls; high fetched = new media work.
+    const { audio, audioStorage, image, imageStorage } = aggregateMediaStats(allStats);
 
     log.info('warm.word.done', {
         word,
@@ -340,6 +294,26 @@ async function completeDdgInBackground(word: string): Promise<void> {
     });
 }
 
+// Build the resolveMediaUrl `load` for one IK media file: download via the proxy, return the buffer
+// (with a media-type default) or null + a miss log. The audio + image read-throughs differ ONLY in
+// the file, the default content-type, and the miss-log event — so they share this one factory instead
+// of two near-identical closures (the resolver still owns the exists→fetch→put + single-flight).
+function ikMediaLoad(
+    category: string,
+    folder: string,
+    file: string,
+    defaultType: string,
+    missEvent: string,
+    ctx: Record<string, unknown>,
+): MediaLoader {
+    return async () => {
+        const r = await ikDownloadMedia(buildDownloadMediaUrl(category, folder, file));
+        if (r.ok && r.buffer) return { buffer: r.buffer, contentType: r.contentType || defaultType };
+        log.debug(missEvent, { ...ctx, err: r.error });
+        return null;
+    };
+}
+
 async function warmOneExample(
     word: string,
     e: IkExample,
@@ -376,12 +350,7 @@ async function warmOneExample(
         const res = await resolveMediaUrl({
             storage,
             key: audioKey,
-            load: async () => {
-                const r = await ikDownloadMedia(buildDownloadMediaUrl(category, folder, sound));
-                if (r.ok && r.buffer) return { buffer: r.buffer, contentType: r.contentType || 'audio/mpeg' };
-                log.debug('warm.ik_audio_miss', { word, id, err: r.error });
-                return null;
-            },
+            load: ikMediaLoad(category, folder, sound, 'audio/mpeg', 'warm.ik_audio_miss', { word, id }),
         });
         if (res.url) {
             audioUrl = res.url;
@@ -420,12 +389,7 @@ async function warmOneExample(
         const res = await resolveMediaUrl({
             storage,
             key: keys.image(category, encodedTitle, id),
-            load: async () => {
-                const r = await ikDownloadMedia(buildDownloadMediaUrl(category, folder, image));
-                if (r.ok && r.buffer) return { buffer: r.buffer, contentType: r.contentType || 'image/jpeg' };
-                log.debug('warm.ik_image_miss', { word, id, err: r.error });
-                return null;
-            },
+            load: ikMediaLoad(category, folder, image, 'image/jpeg', 'warm.ik_image_miss', { word, id }),
         });
         if (res.url) {
             imageUrl = res.url;
