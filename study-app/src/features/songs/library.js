@@ -44,6 +44,20 @@ export async function loadSong(id) {
   return s;
 }
 
+// Edit one of the viewer's OWN songs' metadata (title/artist). Owner-scoped server-side (PUT 404s a
+// starter / another account's song). Returns the updated song meta, or null on failure.
+export async function updateSong(id, fields) {
+  const r = await api('/v1/songs/' + encodeURIComponent(id), { method: 'PUT', body: fields });
+  return (r && r.song) || null;
+}
+
+// Delete one of the viewer's OWN songs (cascades its line rows). Owner-scoped server-side. Returns
+// true on success.
+export async function removeSong(id) {
+  const r = await api('/v1/songs/' + encodeURIComponent(id), { method: 'DELETE' });
+  return !!(r && r.ok);
+}
+
 // ---- the known-headword set (recomputed per render; cheap) ----
 export function known() { return knownHeadwords(state.store.cards, state.DATA); }
 

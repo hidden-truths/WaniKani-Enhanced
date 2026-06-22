@@ -15,7 +15,7 @@ import { loadSongs } from '../../persistence/songs.js';
 import { exitSpeakingMode, setOnTakeSaved } from '../record-compare.js';
 import { clearSpeakingBar, releaseMicIfHidden } from '../speaking-bar.js';
 import { S, LV_CLASS, SONGS_SCOPE, body } from './state.js';
-import { libraryHtml, loadLibrary, loadSong, known } from './library.js';
+import { libraryHtml, loadLibrary, loadSong, known, updateSong, removeSong } from './library.js';
 import { addHtml, runAnalyze, saveSong } from './add.js';
 import { readHtml, toggleFurigana, mountSongPlayer, replayLine } from './read.js';
 import { listenHtml, renderListen, resetListenStep, captureListenInputs, gradeListen, playListenLine } from './listen.js';
@@ -97,8 +97,17 @@ function songHtml() {
     <div class="hero-inner">
       <div class="disc" aria-hidden="true"><span class="label"><span class="glyph jp">${escapeHtml(glyph)}</span></span><span class="spindle"></span></div>
       <div class="song-head-main">
-        <h1 class="song-title jp">${escapeHtml(s.title)}${lvl ? ` <span class="lv ${LV_CLASS[lvl] || ''}">${lvl}</span>` : ''}</h1>
-        ${s.artist ? `<div class="song-artist">${escapeHtml(s.artist)}</div>` : ''}
+        ${S.editing
+      ? `<div class="song-edit" style="display:flex;flex-direction:column;gap:8px;max-width:440px;margin-bottom:10px">
+            <input id="sgEditTitle" class="inp jp" value="${escapeHtml(s.title)}" placeholder="Song title" aria-label="Song title">
+            <input id="sgEditArtist" class="inp" value="${escapeHtml(s.artist || '')}" placeholder="Artist" aria-label="Artist">
+            <div style="display:flex;gap:8px">
+              <button class="btn primary" data-act="songeditsave"><svg class="ic" aria-hidden="true"><use href="#i-check"/></svg> Save</button>
+              <button class="btn ghost" data-act="songeditcancel">Cancel</button>
+            </div>
+          </div>`
+      : `<h1 class="song-title jp">${escapeHtml(s.title)}${lvl ? ` <span class="lv ${LV_CLASS[lvl] || ''}">${lvl}</span>` : ''}</h1>
+        ${s.artist ? `<div class="song-artist">${escapeHtml(s.artist)}</div>` : ''}`}
         <div class="mode-tabs" role="tablist" aria-label="Song practice modes">${tabs}</div>
         ${actions}
       </div>
@@ -129,7 +138,7 @@ function songHtml() {
   // The mode content lives in a stable wrapper so Listen can re-render its stepper per step WITHOUT
   // re-running render() (which destroys + re-mounts the YouTube player). The vocab rail sits beside Read.
   return `<div class="songs-grid${S.mode === 'read' ? ' rd' : ''}">
-    <div class="ctx-row"><span class="sg-crumb">歌 · Songs · ${modeLabel}</span><span class="spacer"></span><button class="st-back" data-act="back"><svg class="ic" aria-hidden="true"><use href="#i-back"/></svg> Library</button></div>
+    <div class="ctx-row"><span class="sg-crumb">歌 · Songs · ${modeLabel}</span><span class="spacer"></span>${s.custom && !S.editing ? `<button class="st-back" data-act="songedit"><svg class="ic" aria-hidden="true"><use href="#i-edit"/></svg> Edit</button><button class="st-back" data-act="songdelete"><svg class="ic" aria-hidden="true"><use href="#i-trash"/></svg> Delete</button>` : ''}<button class="st-back" data-act="back"><svg class="ic" aria-hidden="true"><use href="#i-back"/></svg> Library</button></div>
     ${hero}
     ${bay}
     <div id="sgContent">${content}</div>
@@ -142,8 +151,34 @@ async function onClick(e) {
   const t = e.target.closest('[data-act]'); if (!t) return;
   const act = t.dataset.act;
   if (act === 'add') { S.view = 'add'; S.add = { lyrics: '', url: '', title: '', artist: '', analysis: null, busy: false, error: '' }; render(); return; }
-  if (act === 'back') { exitSpeakingMode(); S.view = 'library'; S.openSong = null; S.mode = 'read'; S.videoOn = false; loadLibrary().then(render); render(); return; }
+  if (act === 'back') { exitSpeakingMode(); S.view = 'library'; S.openSong = null; S.mode = 'read'; S.videoOn = false; S.editing = false; loadLibrary().then(render); render(); return; }
   if (act === 'playvideo') { S.videoOn = true; render(); return; }   // mount + autoplay the on-demand video bay (Read)
+  // ---- Edit / delete one of the viewer's OWN songs (owner-scoped server-side) ----
+  if (act === 'songedit') { S.editing = true; render(); return; }
+  if (act === 'songeditcancel') { S.editing = false; render(); return; }
+  if (act === 'songeditsave') {
+    const title = (document.getElementById('sgEditTitle')?.value || '').trim();
+    const artist = (document.getElementById('sgEditArtist')?.value || '').trim();
+    if (!title) { flash('Title can’t be empty'); return; }
+    try {
+      const updated = await updateSong(S.openSong.id, { title, artist: artist || null });
+      if (updated) { S.openSong.title = updated.title; S.openSong.artist = updated.artist; flash('Saved'); }
+      else flash('Couldn’t save changes');
+    } catch (e) { flash('Couldn’t save changes'); }
+    S.editing = false; loadLibrary().then(render); render(); return;
+  }
+  if (act === 'songdelete') {
+    const s = S.openSong; if (!s) return;
+    if (!window.confirm(`Delete “${s.title}”? This removes the song and its lines for good.`)) return;
+    try {
+      if (await removeSong(s.id)) {
+        exitSpeakingMode();
+        S.editing = false; S.view = 'library'; S.openSong = null; S.mode = 'read'; S.videoOn = false;
+        loadLibrary().then(render); render();
+      } else flash('Couldn’t delete the song');
+    } catch (e) { flash('Couldn’t delete the song'); }
+    return;
+  }
   if (act === 'signin') { document.getElementById('accountBtn').click(); return; }
   if (act === 'filter') { S.libFilter = t.dataset.filter; render(); return; }
   if (act === 'open') { await openById(t.dataset.id); return; }
@@ -179,7 +214,7 @@ async function openById(id) {
   try {
     const s = await loadSong(id);
     if (!s) return;
-    S.openSong = s; S.view = 'song'; S.mode = restoreMode(s.id); S.grammarRef = null; S.videoOn = false;
+    S.openSong = s; S.view = 'song'; S.mode = restoreMode(s.id); S.grammarRef = null; S.videoOn = false; S.editing = false;
     render();
   } catch (e) { /* offline / gone — stay on library */ }
 }
