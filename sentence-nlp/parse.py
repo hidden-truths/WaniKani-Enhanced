@@ -1,10 +1,12 @@
 #!/usr/bin/env python3
 """Offline GiNZA parser for the unified sentence store (Phase 4).
 
-Reads the public sentence corpus (the `public_sentence` VIEW — public rows only, so this
-batch can never touch a private user sentence) and emits one annotation per row, keyed by
-the row's content `hash`, into a JSON artifact that `wk-enhanced-api/scripts/seed-annotations.ts`
-loads into the `sentence_annotation` table.
+Reads the curator sentence corpus — the PUBLIC slice (the `public_sentence` VIEW, minus
+runtime-LLM songs) PLUS the GATED みんなの日本語 rows (source='minna', public=0; the
+`created_by IS NULL` guard keeps private user sentences out) — and emits one annotation per
+row into a JSON artifact that `wk-enhanced-api/scripts/seed-annotations.ts` loads into the
+`sentence_annotation` table. Each annotation carries `hash` + `ext_id` + `source`; the seed
+resolves public rows by hash and Minna rows by ext_id (Minna isn't hash-deduped).
 
 THE LOAD-BEARING CONTRACT — token offsets:
     `tokens[].{start,end}` index into `sentence.text` and the study-app slices `text` with them
@@ -240,11 +242,20 @@ def cmd_verify(nlp) -> int:
 def cmd_parse(nlp, db_path: str, out_path: str, limit: int | None) -> int:
     con = sqlite3.connect(f"file:{db_path}?mode=ro", uri=True)
     con.row_factory = sqlite3.Row
-    # Songs are RUNTIME LLM-annotated (parser='llm', carrying jlpt/gloss the Mine UI needs) and live
-    # OUTSIDE the offline GiNZA corpus — re-seeding GiNZA tokens over an LLM song row would drop those
-    # fields. Exclude them here so the artifact only covers GiNZA-owned public rows (example / selftalk
-    # / realized template combos). The seed resolves by hash, so an excluded row is simply never matched.
-    sql = "SELECT id, ext_id, hash, text FROM public_sentence WHERE source <> 'song' ORDER BY id"
+    # The GiNZA corpus is the PUBLIC curator slice (examples / Self-Talk / realized template combos —
+    # the public_sentence VIEW) PLUS the GATED みんなの日本語 rows (source='minna', public=0; Phase 3).
+    # Songs are excluded: they're RUNTIME LLM-annotated (parser='llm', carrying jlpt/gloss the Mine UI
+    # needs), so re-seeding GiNZA tokens over them would drop those fields. We read the `sentence` table
+    # directly (not the public_sentence VIEW) because Minna is public=0, but the `created_by IS NULL`
+    # guard keeps PRIVATE user sentences out — the exact safety the VIEW gave us for free. `source` is
+    # emitted so seed-annotations resolves a Minna annotation by its unique ext_id (Minna isn't
+    # hash-deduped, and a space-free Minna line could share a hash with a public example).
+    sql = (
+        "SELECT id, ext_id, hash, text, source FROM sentence "
+        "WHERE (public = 1 AND visibility = 'public' AND source <> 'song') "
+        "   OR (source = 'minna' AND public = 0 AND created_by IS NULL) "
+        "ORDER BY id"
+    )
     if limit:
         sql += f" LIMIT {int(limit)}"
     rows = con.execute(sql).fetchall()
@@ -267,6 +278,7 @@ def cmd_parse(nlp, db_path: str, out_path: str, limit: int | None) -> int:
         annotations.append({
             "hash": r["hash"],
             "ext_id": r["ext_id"],
+            "source": r["source"],  # 'minna' → seed resolves by ext_id, else by hash
             "text": text,  # echoed so the seed loader can guard against a stale artifact
             "tokens": tokens,
             "bunsetsu": bunsetsu,

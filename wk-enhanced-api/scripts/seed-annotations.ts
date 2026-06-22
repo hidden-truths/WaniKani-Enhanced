@@ -6,8 +6,9 @@
 // Each annotation is keyed by the sentence's content `hash` (= ttsTextHash(text)), which is
 // environment-independent — so an artifact parsed offline on a Mac seeds PROD correctly (same text
 // → same hash → resolves the prod row). The seed:
-//   • resolves the public row by hash (getPublicSentenceByHash) — annotations target the public
-//     corpus only, exactly what the offline batch can see;
+//   • resolves the row by content hash for the PUBLIC slice (getPublicSentenceByHash) and by the
+//     unique ext_id for GATED みんなの日本語 rows (source='minna', public=0 — dark to the hash lookup,
+//     and not hash-deduped, so ext_id is the collision-proof key);
 //   • NEVER touches a 歌/Songs row (source='song') — those carry the richer RUNTIME LLM annotation
 //     (jlpt/gloss the Mine UI reads); a GiNZA artifact must never overwrite one. Belt-and-suspenders:
 //     sentence-nlp/parse.py already filters song rows out upstream, so this is the seed-layer backstop;
@@ -29,6 +30,7 @@ export interface Artifact {
     annotations: {
         hash: string;
         ext_id: string;
+        source?: string; // 'minna' → resolve by ext_id (gated, public=0); else by hash. Omitted by older artifacts.
         text: string;
         tokens: db.AnnotationToken[];
         bunsetsu: db.AnnotationBunsetsu[];
@@ -55,7 +57,10 @@ export function seedAnnotations(artifact: Artifact): SeedAnnotationsResult {
     let grammarRows = 0;
     let grammarTags = 0;
     for (const a of artifact.annotations) {
-        const row = db.getPublicSentenceByHash(a.hash);
+        // Public rows resolve by content hash (reuse-by-hash dedup); GATED みんなの日本語 rows (public=0)
+        // are dark to getPublicSentenceByHash, and they aren't hash-deduped (a space-free Minna line
+        // could share a hash with a public example), so they resolve by their UNIQUE ext_id instead.
+        const row = a.source === 'minna' ? db.getMinnaSentenceByExtId(a.ext_id) : db.getPublicSentenceByHash(a.hash);
         if (!row) {
             // The sentence isn't in the store (corpus changed since the parse, or seed-sentences.ts
             // hasn't run). Skip rather than fail — annotations are additive.
@@ -88,9 +93,10 @@ export function seedAnnotations(artifact: Artifact): SeedAnnotationsResult {
             console.error(`offset gate FAILED for ${a.ext_id} (hash ${a.hash.slice(0, 12)})`);
             throw err;
         }
-        // Grammar tags go onto EXAMPLE rows only (source='example'). Self-Talk rows keep their
-        // hand-authored grammar tags (curated, intentional) — we don't clobber them with GiNZA's.
-        if (row.source === 'example') {
+        // GiNZA grammar tags go onto EXAMPLE + みんなの日本語 rows. Self-Talk rows keep their
+        // hand-authored grammar tags (curated, intentional) — we don't clobber those with GiNZA's;
+        // Minna has none of its own, so writing the detected tags is safe + future-useful.
+        if (row.source === 'example' || row.source === 'minna') {
             db.setGrammarTags(row.id, a.grammar);
             if (a.grammar.length) grammarRows++;
             grammarTags += a.grammar.length;
@@ -106,6 +112,6 @@ if (import.meta.main) {
     const r = seedAnnotations(artifact);
     console.log(
         `seeded ${r.seeded} annotations (${r.missing} not in store, ${r.stale} stale, ${r.skippedSong} song-owned skipped); ` +
-            `${r.grammarTags} grammar tags on ${r.grammarRows} example rows — parser ${artifact.parser}`,
+            `${r.grammarTags} grammar tags on ${r.grammarRows} example/minna rows — parser ${artifact.parser}`,
     );
 }

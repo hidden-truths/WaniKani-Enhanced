@@ -19,6 +19,8 @@ import { OpenAPIHono, createRoute } from '@hono/zod-openapi';
 import { readdir } from 'node:fs/promises';
 import { gate, denied } from '../lib/minnaGate.ts';
 import * as db from '../db/client.ts';
+import { plainText } from '../lib/realize.ts';
+import { ttsTextHash } from '../services/tts.ts';
 import {
     MinnaLessonsResponseSchema,
     MinnaLessonSchema,
@@ -33,6 +35,39 @@ export const minnaRouter = new OpenAPIHono({ defaultHook: zodHook });
 // data/minna/ relative to this module (src/routes/) — robust to cwd, same idiom
 // as the static web serve in index.ts.
 const DATA_DIR = new URL('../../data/minna/', import.meta.url);
+
+// A curated lesson is served verbatim from the JSON EXCEPT we layer on GiNZA tap-to-lookup (Phase 3):
+// the grammar/example/conversation sentences are also gated `sentence` rows (source='minna'), so we
+// match each one's plainText hash against the store's Minna annotations and attach `tokens` + the
+// structured `furigana` segments. The client then renders overlayTokens (tap-a-word) instead of plain
+// ruby for those lines. The JSON stays the content source; the store supplies only the NLP layer.
+// FAIL-SOFT: a sentence with no annotation yet (offline parse not re-run, or text drift) simply keeps
+// its plain ruby. `plainText` here is the SAME byte-for-byte port the seed hashed with (lib/realize.ts).
+interface LessonSentence {
+    jp?: string;
+    tokens?: db.AnnotationToken[];
+    furigana?: db.FuriganaSeg[] | null;
+}
+// Loosely-typed lesson in/out — the lesson JSON shape is owned by the study-app client (the schema is
+// z.any()-based) and arrives here as Bun's `file.json()` (any); only the per-sentence attach is typed.
+// Exported for unit testing (the route handler is gated; this is the pure enrichment).
+// eslint-disable-next-line @typescript-eslint/no-explicit-any
+export function enrichLessonAnnotations(lesson: any): any {
+    const ann = db.getMinnaAnnotations();
+    if (ann.size === 0) return lesson; // nothing parsed yet → serve the lesson untouched
+    const attach = (s: LessonSentence | null | undefined) => {
+        if (!s || typeof s.jp !== 'string') return;
+        const hit = ann.get(ttsTextHash(plainText(s.jp)));
+        if (hit) {
+            s.tokens = hit.tokens;
+            s.furigana = hit.furigana;
+        }
+    };
+    for (const g of lesson?.grammar ?? []) for (const e of g?.examples ?? []) attach(e);
+    for (const e of lesson?.examples ?? []) attach(e);
+    for (const ln of lesson?.conversation?.lines ?? []) attach(ln);
+    return lesson;
+}
 
 // ---------- GET /lessons ----------
 
@@ -94,7 +129,7 @@ minnaRouter.openapi(getRoute, async (c) => {
         );
     }
     c.header('Cache-Control', 'no-store');
-    return c.json(await file.json(), 200);
+    return c.json(enrichLessonAnnotations(await file.json()), 200);
 });
 
 // ---------- GET /practice (per-lesson practice history) ----------
