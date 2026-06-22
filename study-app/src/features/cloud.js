@@ -10,6 +10,7 @@ import { sync } from '../sync-bus.js';
 import { account, setAccount, api, setSyncStatus, serverReachable, setServerReachable } from './cloud-core.js';
 import { createSyncedBlob } from './synced-blob.js';
 import * as queue from '../net/sync-queue.js';
+import { createSyncOrchestrator } from '../net/sync-orchestrator.js';
 import { saveLocal } from '../persistence/store.js';
 import { loadCustom, saveCustomLocal } from '../persistence/custom.js';
 import { normalizeSelftalk, saveSelftalkLocal } from '../persistence/selftalk.js';
@@ -21,7 +22,7 @@ import { renderBrowse } from './browse.js';
 import { renderStats } from './stats.js';
 import { rebuildData, renderCustomCount, refreshAfterVerbChange } from './custom-cards.js';
 import { registerSessionHooks } from './flashcard.js';
-import { pullMinnaCloud, migrateMinnaDupes, renderMinna, minnaBlob } from './minna.js';
+import { migrateMinnaDupes, renderMinna, minnaBlob } from './minna.js';
 import { renderSettings } from './settings-page.js';
 import { renderSongs } from './songs.js';
 
@@ -134,6 +135,36 @@ const songsBlob = createSyncedBlob({
   merge: mergeSongs,   // E1: union starred/shadowed sets on a 409 (local-wins lastMode) — never drop a shadowed line
 });
 
+// ── The synced-blob REGISTRY: the single ordered source of truth that pull / flush / bus-wiring all
+// derive from. This used to be three hand-maintained copies of the blob list (pullCloud / flushQueue /
+// initCloud), each with minna special-cased — adding a blob meant editing all three, and a drift (a
+// blob flushed but not pulled) would false-409 that device forever. A new synced blob is now added in
+// exactly ONE place: here. `busKey` is the persistence sync-bus slot the blob's debounced scheduler
+// wires onto; minna has none (saveMinna calls minnaBlob.schedule directly). A FUNCTION, not a const,
+// because minnaBlob rides the cloud⇄minna import cycle and isn't initialized at this module's eval time
+// — the registry is read lazily, at call time. Order is the pull order (preserved verbatim).
+function blobRegistry() {
+  return [
+    { blob: progressBlob, busKey: 'progress' },
+    { blob: customBlob,   busKey: 'custom' },
+    { blob: settingsBlob, busKey: 'settings' },
+    { blob: minnaBlob,    busKey: null },        // off-bus: saveMinna schedules minnaBlob directly
+    { blob: selftalkBlob, busKey: 'selftalk' },
+    { blob: songsBlob,    busKey: 'songs' },
+  ];
+}
+
+// One orchestrator over that registry (net/sync-orchestrator.js): pull-all / flush-all / bus-wire,
+// DOM-free + dependency-injected. Memoized lazily — first use is initCloud(), by which point every
+// feature module (incl. minna) has evaluated, so minnaBlob is live. `account` is read through a thunk
+// so the orchestrator always sees the live sign-in state, never a stale capture.
+let _orchestrator = null;
+function orchestrator() {
+  return _orchestrator || (_orchestrator = createSyncOrchestrator({
+    registry: blobRegistry, queue, sync, getAccount: () => account,
+  }));
+}
+
 // POST each legacy phrase to the sentence store as a private row; returns the ones that FAILED so
 // they stay in the blob for a later retry. POST is idempotent by ext_id (the usr-<uuid> ids), so a
 // replay (re-sign-in / another device) is a no-op. Empty input → no-op.
@@ -167,33 +198,22 @@ async function migrateCardExamples() {
   if (results.every(r => r.status === 'fulfilled')) localStorage.setItem('jpverbs_cardex_migrated', '1');
 }
 
-// Pull every synced blob after sign-in / boot, in order, then run the cross-blob finalizers.
-// Each blob is server-wins with a fresh-account seed; the finalizers apply Minna overlays and
-// backfill custom-card examples. (pullMinnaCloud is minnaBlob.pull, re-exported from minna.js.)
+// Pull every synced blob after sign-in / boot (server-wins, fresh-account seed; each blob isolated so
+// one failure can't block the rest — see pullAll), then run the cross-blob finalizers: apply pulled
+// Minna overlays + clean dupes, backfill custom-card examples, and refresh the state.store-derived views.
 async function pullCloud() {
-  await progressBlob.pull();
-  await customBlob.pull();
-  await settingsBlob.pull();
-  await pullMinnaCloud();
-  await selftalkBlob.pull();
-  await songsBlob.pull();
+  await orchestrator().pullAll();
   migrateMinnaDupes(); rebuildData();   // apply pulled Minna overlays + clean any dupes
   await migrateCardExamples();          // backfill custom-card examples → private store rows (one-time/device)
   refreshAllViews();
 }
 
 // Flush the durable offline write-queue for the current account (idempotent replays). On each
-// successful replay, bump the owning blob's lastUpdatedAt from the server's response so the next
-// live push won't false-conflict. The blob registry is built lazily here (not at module top level)
-// because minnaBlob is imported across the cloud⇄minna cycle.
+// successful replay the orchestrator bumps the owning blob's lastUpdatedAt from the server's response
+// (mapped by queueKey off the same registry) so the next live push won't false-conflict. No-op signed
+// out. Fire-and-forget callers (the 'online' listener) tolerate the returned promise.
 async function flushQueue() {
-  if (!account) return;
-  const byQueueKey = {};
-  for (const b of [progressBlob, customBlob, settingsBlob, selftalkBlob, songsBlob, minnaBlob]) byQueueKey[b.queueKey] = b;
-  await queue.flush(account.id, (key, r) => {
-    const b = byQueueKey[key];
-    if (b && r && typeof r.updatedAt === 'number') b._setLastUpdatedAt(r.updatedAt);
-  });
+  await orchestrator().flushAll();
 }
 
 // Re-render every state.store-derived view. Mirrors the import handler's refresh set.
@@ -317,11 +337,7 @@ function logSession(right, tot, kind) {
 // Wire the auth modal + sign-up banner, register the sync schedulers onto the bus, and inject
 // the session hooks into flashcard. (bootAuth is kicked off separately, last, from main.)
 export function initCloud() {
-  sync.progress = progressBlob.schedule;
-  sync.custom = customBlob.schedule;
-  sync.settings = settingsBlob.schedule;
-  sync.selftalk = selftalkBlob.schedule;
-  sync.songs = songsBlob.schedule;
+  orchestrator().wireBus();   // wire each bus-keyed blob's debounced scheduler onto the persistence sync-bus
   registerSessionHooks({ logSession, maybeShowSignup });
   // Flush queued offline writes when connectivity returns. Flush only — no forced pull, which
   // would revert in-progress local edits not yet pushed.

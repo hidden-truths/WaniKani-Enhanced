@@ -41,7 +41,13 @@ order. The actual DOM/render/feature glue is split into **`src/features/*`** mod
   pair `cloud-core` (`account`/`setSyncStatus`; re-exports `api`) + `cloud` (the SyncedBlob registry + auth + bootAuth).
 - **`src/net/`** — the network layer: `transport` owns `api()`, the resilient fetch choke-point
   (timeout via `AbortController` + idempotency-aware retry/backoff + `Retry-After`); GET/PUT/DELETE
-  retry by default, POST only with `{retry:true}`. `cloud-core` re-exports `api` so callers are unchanged.
+  retry by default, POST only with `{retry:true}`. `sync-queue` is the durable offline write-queue
+  (localStorage FIFO, dedup by key, replay on reconnect). `sync-orchestrator` is the pure, DI'd group
+  layer over the **blob registry** — `createSyncOrchestrator({registry,queue,sync,getAccount})` exposing
+  `pullAll` / `flushAll` / `wireBus`; cloud.js declares the ordered `[{blob,busKey}]` registry ONCE and
+  delegates, so adding a synced blob no longer means editing pullCloud + flushQueue + initCloud in
+  lockstep (Open/Closed). `pullAll` isolates each blob (one failure can't abort the rest). DOM-free →
+  unit-tested in `test/sync-orchestrator.test.js`. `cloud-core` re-exports `api` so callers are unchanged.
   `render-helpers` also owns `copyBtnHtml`/`copyText` — the "copy sentence to clipboard" button
   beside each example's ▶ play (flashcard answer, Browse detail, Minna example rows).
 - **`src/core/`** — the PURE, unit-tested core (DOM-free): `srs`, `forecast`, `facets`,
@@ -238,18 +244,23 @@ one module each under `src/features/*` (the section names map 1:1 to filenames):
   playback itself is the TTS bullet above.)
 - **Cloud:** `api`, `bootAuth`, `updateAccountChip`, `openAuth`. **Cross-origin**
   (`api()` rebases every path onto `API_BASE` + sends `credentials:'include'`), the
-  session lives in a `.wkenhanced.dev` httpOnly cookie. **FIVE debounced synced blobs** —
-  progress (`verbs`), custom verbs (`custom-verbs`), settings (`settings`), Self-Talk
-  (`selftalk`), Minna (`minna`) — all built from ONE `createSyncedBlob` abstraction
+  session lives in a `.wkenhanced.dev` httpOnly cookie. **SIX debounced synced blobs** —
+  progress (`verbs`), custom verbs (`custom-verbs`), settings (`settings`), Minna (`minna`),
+  Self-Talk (`selftalk`), Songs (`songs`) — all built from ONE `createSyncedBlob` abstraction
   ([features/synced-blob.js](src/features/synced-blob.js)): debounced `schedule` →
   `push` (PUT `/v1/progress/{appKey}`) → `pull` (server-wins-on-login, fresh-account
   seed). Each blob supplies only its `read`/`apply` + unique side-effects (custom→`rebuildData`,
   settings→`applyFurigana`+`paintPrefChips`+`renderSettings`, selftalk→phrase-migration+repaint,
-  minna→overlay merge). `pullCloud` pulls all five in order then runs the cross-blob finalizers
+  minna→overlay merge, songs→library re-render). All six are declared ONCE in `cloud.js`'s ordered
+  **blob registry** (`[{blob,busKey}]`); `pullCloud`/`flushQueue`/`initCloud` delegate to the DI'd
+  **sync-orchestrator** ([net/sync-orchestrator.js](src/net/sync-orchestrator.js)) so the pull / flush /
+  bus-wire sets can never drift. `pullCloud` runs `orchestrator.pullAll()` (each blob isolated — one
+  failure can't abort the rest) then the cross-blob finalizers
   (`migrateMinnaDupes`/`rebuildData`/`migrateCardExamples`/`refreshAllViews`). A push that fails
   after the transport's retries enqueues to the **durable offline write-queue**
-  ([net/sync-queue.js](src/net/sync-queue.js), dedup by `progress:<appKey>`); `flushQueue` replays
-  it on `window 'online'`, on boot (before `pullCloud`), and after sign-in, and `doLogout` drops it
+  ([net/sync-queue.js](src/net/sync-queue.js), dedup by `progress:<appKey>`); `flushQueue`
+  (`orchestrator.flushAll()`) replays it on `window 'online'`, on boot (before `pullCloud`), and after
+  sign-in, bumping each blob's `lastUpdatedAt` from the replay response; `doLogout` drops it
   (per-account). Each blob tracks the server `updatedAt` and sends it as `baseUpdatedAt` for **409
   optimistic concurrency** (per-blob **merge** reconcile — E1, via core/merge.js; settings stays
   server-wins). Plus `logSession` → `POST /v1/sessions` (durable append-only history, signed-in only;
