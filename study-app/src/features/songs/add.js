@@ -30,7 +30,12 @@ export function addHtml() {
       <textarea id="sgLyrics" class="ta jp" placeholder="一行ずつ歌詞を貼り付けてください…">${escapeHtml(S.add.lyrics)}</textarea>
       <label class="field-lbl" for="sgUrl">YouTube link</label>
       <input id="sgUrl" class="inp" placeholder="https://www.youtube.com/watch?v=…" value="${escapeHtml(S.add.url)}">
-      <p class="add-note"><svg class="ic" aria-hidden="true"><use href="#i-music"/></svg> Title &amp; artist auto-fill from the video. The audio stays on YouTube — we embed its player, we don't re-host it.</p>
+      <label class="field-lbl" for="sgTitle">Title &amp; artist <span style="font-weight:400;text-transform:none;letter-spacing:0;color:var(--muted)">— optional</span></label>
+      <div style="display:flex;gap:10px">
+        <input id="sgTitle" class="inp" style="flex:1" placeholder="Song title" value="${escapeHtml(S.add.title)}">
+        <input id="sgArtist" class="inp" style="flex:1" placeholder="Artist" value="${escapeHtml(S.add.artist)}">
+      </div>
+      <p class="add-note"><svg class="ic" aria-hidden="true"><use href="#i-music"/></svg> Leave title &amp; artist blank to auto-fill from the video. The audio stays on YouTube — we embed its player, we don't re-host it.</p>
       <div class="add-foot">
         <p class="add-note"><svg class="ic" aria-hidden="true"><use href="#i-alert"/></svg> ${S.add.error ? `<span class="sg-err">${escapeHtml(S.add.error)}</span>` : 'Lyrics you paste are stored privately to your account.'}</p>
         <button class="chip primary" data-act="analyze"${S.add.busy ? ' disabled' : ''}><svg class="ic" aria-hidden="true"><use href="#i-check"/></svg> ${S.add.busy ? 'Analyzing…' : 'Analyze'}</button>
@@ -71,11 +76,14 @@ export async function runAnalyze() {
   // Capture the typed inputs BEFORE re-rendering (render() rebuilds the textarea from S.add.lyrics).
   const lyricsEl = document.getElementById('sgLyrics'); if (lyricsEl) S.add.lyrics = lyricsEl.value;
   const urlEl = document.getElementById('sgUrl'); if (urlEl) S.add.url = urlEl.value;
+  const titleEl = document.getElementById('sgTitle'); if (titleEl) S.add.title = titleEl.value.trim();
+  const artistEl = document.getElementById('sgArtist'); if (artistEl) S.add.artist = artistEl.value.trim();
   S.add.busy = true; S.add.error = ''; render();
   S.add.youtubeId = parseYouTubeId(S.add.url);
-  // oEmbed title/artist auto-fill (best-effort) before analysis.
+  // oEmbed title/artist auto-fill (best-effort) before analysis — only fills fields the user left
+  // blank, so a hand-typed title/artist always wins over the YouTube channel name.
   if (S.add.youtubeId && !S.add.title) {
-    try { const oe = await api('/v1/songs/oembed?url=' + encodeURIComponent(S.add.url)); if (oe) { S.add.title = oe.title || ''; S.add.artist = oe.author || ''; } } catch (e) { /* */ }
+    try { const oe = await api('/v1/songs/oembed?url=' + encodeURIComponent(S.add.url)); if (oe) { S.add.title = oe.title || ''; if (!S.add.artist) S.add.artist = oe.author || ''; } } catch (e) { /* */ }
   }
   try {
     const r = await api('/v1/songs/analyze', { method: 'POST', body: { lyrics: S.add.lyrics, title: S.add.title || undefined, artist: S.add.artist || undefined } });
