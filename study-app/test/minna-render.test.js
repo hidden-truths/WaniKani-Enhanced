@@ -38,6 +38,9 @@ vi.mock('../src/features/speaking-bar.js', () => ({
 vi.mock('../src/features/audio.js', () => ({ playItem: () => {}, cycleMod: () => false }));
 vi.mock('../src/features/tts.js', () => ({ speak: () => {}, TTS_OK: true }));
 vi.mock('../src/features/cloud.js', () => ({ openAuth: vi.fn() }));
+// Tap-a-word wiring is a side-effecting collaborator (a delegated handler that pulls browse +
+// persistence at eval); mock it like the others so this render test doesn't load that chain.
+vi.mock('../src/features/word-lookup.js', () => ({ wireWordTaps: () => {} }));
 vi.mock('../src/features/custom-cards.js', () => ({ rebuildData: vi.fn(), refreshAfterVerbChange: vi.fn() }));
 vi.mock('../src/persistence/custom.js', () => ({
   loadCustom: () => ({ seq: 100, verbs: [] }),   // fresh per call → no built-in/overlap; every word is "new"
@@ -72,7 +75,18 @@ const LESSON = {
     { key: 'mnn:23:0', kanji: '駅', kana: 'えき', dict: '駅', dictRead: 'えき', mean: 'station', cat: 'noun', context: '〜で' },
     { key: 'mnn:23:1', kanji: '聞く', kana: 'きく', dict: '聞く', dictRead: 'きく', mean: 'to ask', cat: 'verb', italki: true },
   ],
-  grammar: [{ label: 'Topic', pattern: '〜は〜です', structure: 'N は N です', explain: 'X is Y', examples: [{ jp: 'これは駅です', en: 'This is a station' }] }],
+  // The grammar specimen carries server-attached GiNZA tokens (Phase 3 enrichLessonAnnotations) so the
+  // render exercises the tappable overlay path; furigana segments + token offsets index the same plain
+  // text (これは駅です). 駅です is one merged tap unit (lemma 駅).
+  grammar: [{ label: 'Topic', pattern: '〜は〜です', structure: 'N は N です', explain: 'X is Y', examples: [{
+    jp: 'これは駅です', en: 'This is a station',
+    furigana: [{ t: 'これは' }, { t: '駅', r: 'えき' }, { t: 'です' }],
+    tokens: [
+      { i: 0, start: 0, end: 2, surface: 'これ', lemma: 'これ', pos: 'PRON', reading: 'コレ' },
+      { i: 1, start: 2, end: 3, surface: 'は', lemma: 'は', pos: 'ADP', reading: 'ハ' },
+      { i: 2, start: 3, end: 6, surface: '駅です', lemma: '駅', pos: 'NOUN', reading: 'エキデス' },
+    ],
+  }] }],
   examples: [{ jp: '駅はどこですか', en: 'Where is the station?' }],
   conversation: { title: '会話', audio: '/Audio/conv23.mp3', lines: [{ role: 'A', jp: 'すみません', en: 'Excuse me' }, { role: 'B', jp: 'はい', en: 'Yes' }] },
 };
@@ -122,6 +136,9 @@ test('renderMinna (signed in) paints the head marker + every lesson section — 
   expect(body).toContain('iTalki');                          // 聞く is flagged italki
   // grammar + examples + conversation sections
   expect(body).toContain('This is a station');               // grammar specimen example
+  // Phase 3: a server-annotated sentence renders TAPPABLE GiNZA word spans (overlayTokens), not plain ruby
+  expect(body).toContain('class="extok"');
+  expect(body).toContain('data-lemma="駅"');                 // 駅です merged to its dictionary form 駅
   expect(body).toContain('Where is the station?');           // example sentence
   expect(body).toContain('会話');                            // conversation title
   expect(body).toContain('Excuse me');

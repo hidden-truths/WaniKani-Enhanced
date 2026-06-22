@@ -6,7 +6,8 @@
 // renderMinnaLesson is exported because the clips + speaking siblings re-render through it (runtime
 // import cycles, fine like cloud⇄minna).
 import { state } from '../../state.js';
-import { escapeHtml, rubyHtml, foldFurigana, plainText, ttsText, CAT_LABEL, convItemKey, resolveClip, kanjiNum, colorClass, cardStamp, classKanji } from '../../core/index.js';
+import { escapeHtml, rubyHtml, overlayTokens, foldFurigana, plainText, ttsText, CAT_LABEL, convItemKey, resolveClip, kanjiNum, colorClass, cardStamp, classKanji } from '../../core/index.js';
+import { wireWordTaps } from '../word-lookup.js';
 import { speak, TTS_OK } from '../tts.js';
 import { playItem, cycleMod } from '../audio.js';
 import { copyBtnHtml, copyText, speakBtnHtml } from '../render-helpers.js';
@@ -196,11 +197,15 @@ function minnaVocabSection(L) {
 const ttsSentenceBtn = (jp) => TTS_OK
   ? ` ${speakBtnHtml({ cls: 'sm', data: { tts: plainText(jp) }, label: 'Play sentence' })}`
   : '';
+// Render a Minna sentence's JP: tappable GiNZA word overlay when the server attached tokens
+// (Phase 3 — grammar/example/conversation rows carry `tokens` + structured `furigana`), else the
+// curated plain ruby. Both honour the global furigana flip; taps are wired on #mnBody (wireWordTaps).
+const mnSentenceJp = (s) => (s && s.tokens && s.furigana ? overlayTokens(s.furigana, s.tokens) : rubyHtml(s.jp));
 function minnaExampleRows(list) {
   // JP via rubyHtml so curated furigana (<ruby>/<rt>) renders and the data-furigana flip toggles it;
   // EN stays fully escaped. Plain (ruby-less) sentences round-trip unchanged. A copy button (always
   // shown) puts the plain sentence on the clipboard for dictionary lookup.
-  return `<div class="mn-ex">${list.map(e => `<div><div class="e-jp jp">${rubyHtml(e.jp)}${ttsSentenceBtn(e.jp)}${copyBtnHtml(plainText(e.jp))}</div><div class="e-en">${escapeHtml(e.en)}</div></div>`).join('')}</div>`;
+  return `<div class="mn-ex">${list.map(e => `<div><div class="e-jp jp">${mnSentenceJp(e)}${ttsSentenceBtn(e.jp)}${copyBtnHtml(plainText(e.jp))}</div><div class="e-en">${escapeHtml(e.en)}</div></div>`).join('')}</div>`;
 }
 function minnaGrammarSection(L) {
   if (!L.grammar || !L.grammar.length) return '';
@@ -212,7 +217,7 @@ function minnaGrammarSection(L) {
       <div class="g-pattern jp">${escapeHtml(g.pattern || '')}</div>
       ${g.structure ? `<div class="g-structure jp">${escapeHtml(g.structure)}</div>` : ''}
       ${g.explain ? `<p class="g-gloss">${escapeHtml(g.explain)}</p>` : ''}
-      ${ex ? `<div class="g-ex"><p class="ex-jp jp">${rubyHtml(ex.jp)}</p><p class="ex-en">${escapeHtml(ex.en)}</p><div class="g-ex-foot"><span class="ex-mark">Example</span>${ttsSentenceBtn(ex.jp)}</div></div>` : ''}
+      ${ex ? `<div class="g-ex"><p class="ex-jp jp">${mnSentenceJp(ex)}</p><p class="ex-en">${escapeHtml(ex.en)}</p><div class="g-ex-foot"><span class="ex-mark">Example</span>${ttsSentenceBtn(ex.jp)}</div></div>` : ''}
     </article>`;
   }).join('');
   return mnSection('Grammar points', L.grammar.length, `<div class="grammar-grid">${cards}</div>`, true, { num: 2, jp: 'ぶんぽう', unit: 'patterns', bare: true });
@@ -245,7 +250,7 @@ function minnaConversationSection(L) {
     const play = TTS_OK ? speakBtnHtml({ cls: 'turn-play', data: { tts: plainText(ln.jp) }, label: 'Play line' }) : '';
     return `<div class="turn${isB ? ' is-b' : ''}">
       <span class="spk ${isB ? 'b' : 'a'}">${mark}</span>
-      <div class="turn-body"><p class="t-jp jp">${rubyHtml(ln.jp)}</p><p class="t-en">${escapeHtml(ln.en)}</p>${rec}</div>
+      <div class="turn-body"><p class="t-jp jp">${mnSentenceJp(ln)}</p><p class="t-en">${escapeHtml(ln.en)}</p>${rec}</div>
       ${play}
     </div>`;
   }).join('');
@@ -301,6 +306,7 @@ function wireMinnaLesson(n, L, body) {
   }));
   wireRecordCompare(body);   // delegated record/play/delete/compare handlers (attach-once)
   wireMinnaClips(body);    // delegated conversation-line clip-marker handlers (attach-once)
+  wireWordTaps(body);    // delegated tap-a-word lookup on GiNZA-tokenized sentences (attach-once)
   paintCompareWaveforms(body);   // decode + draw the you/native compare waveforms for this render
   const speakingBar = renderNavSpeaking(n, body);    // dock the speaking controls (shown only while speaking)
   // Chapter chips (relocated below the hero) — switching releases the mic so it can't stay open across

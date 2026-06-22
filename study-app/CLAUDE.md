@@ -758,7 +758,14 @@ Component contracts you must preserve:
   shows a sign-in gate when `!account`, else fetches the lesson and renders
   vocab/grammar/examples/conversation + native-audio buttons (`/v1/audio/native`, one
   reused `<audio>` with `crossOrigin='use-credentials'` so the session cookie authorizes
-  it cross-origin — see the cross-origin dead-end above). **Vocab "activation"
+  it cross-origin — see the cross-origin dead-end above). **Tap-to-lookup on Minna sentences
+  (Phase 3):** the grammar/example/conversation sentences are ALSO gated `sentence` rows in the
+  store (`source='minna'`, public=0), GiNZA-parsed offline; the `/v1/minna/lessons/{n}` route
+  attaches each one's `tokens` + structured `furigana` (matched by plainText hash), and `view.js`'s
+  `mnSentenceJp` renders `overlayTokens` (tappable words via `wireWordTaps` on `#mnBody`) when they're
+  present, else plain `rubyHtml` — so Minna gets the same merge-quality tap-a-word as the flashcards.
+  The lesson JSON stays the CONTENT source; the store supplies only the NLP layer (don't move Minna's
+  text/structure into the store — only its sentences are rows). **Vocab "activation"
   REUSES the custom-verb system, not a new data path:** each word becomes a tagged
   (`みんなの日本語` + `mnn-l<n>`, plus `iTalki` for words flagged `italki:true` in the lesson
   JSON) DICTIONARY-form custom card via `loadCustom`/`saveCustom` +`seq`, so it joins the
