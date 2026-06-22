@@ -1,7 +1,7 @@
 // ==UserScript==
 // @name         WKEnhanced
 // @namespace    https://github.com/jbrelly/wk-ik-examples
-// @version      2.0.4
+// @version      2.0.5
 // @description  Example sentences (audio + image) inlaid into WaniKani vocab reviews, served from the WKEnhanced API.
 // @author       jbrelly
 // @match        https://www.wanikani.com/*
@@ -19,7 +19,7 @@
 
     const SCRIPT_ID = 'wkenhanced';
     const SCRIPT_TITLE = 'WKEnhanced';
-    const SCRIPT_VERSION = '2.0.4';
+    const SCRIPT_VERSION = '2.0.5';
 
     // API server endpoints. Single source of truth for prod / dev URLs; lift
     // here when changing the deployed domain. Note: changing PROD_API_BASE
@@ -1001,6 +1001,22 @@
     background: #fff;
     color: inherit;
     cursor: pointer;
+}
+.${CSS_PREFIX}-picker-filter-row {
+    margin-top: 0.5em;
+}
+.${CSS_PREFIX}-picker-filter {
+    font: inherit;
+    width: 100%;
+    box-sizing: border-box;
+    padding: 0.35em 0.55em;
+    border: 1px solid rgba(0, 0, 0, 0.2);
+    border-radius: 4px;
+    background: #fff;
+    color: inherit;
+}
+.${CSS_PREFIX}-picker-filter::placeholder {
+    opacity: 0.6;
 }
 .${CSS_PREFIX}-picker-note {
     font-size: 0.8em;
@@ -3209,6 +3225,7 @@
                 return cmp ? fullPool.slice().sort(cmp) : fullPool.slice();
             })(),
             page: 0,
+            filter: '',
         };
 
         const overlay = document.createElement('div');
@@ -3248,6 +3265,25 @@
 
         header.appendChild(titleRow);
 
+        // Find-as-you-type filter. Narrows the visible rows on top of the
+        // current sort; case-insensitive on the English translation, exact
+        // substring on the Japanese. NOT auto-focused — focus here would steal
+        // keyboard input from WK's answer box; the user clicks in to use it.
+        const filterRow = document.createElement('div');
+        filterRow.className = `${CSS_PREFIX}-picker-filter-row`;
+        const filterInput = document.createElement('input');
+        filterInput.type = 'text';
+        filterInput.className = `${CSS_PREFIX}-picker-filter`;
+        filterInput.placeholder = 'Filter by word or meaning…';
+        filterInput.setAttribute('aria-label', 'Filter sentences');
+        filterInput.addEventListener('input', () => {
+            pickerState.filter = filterInput.value;
+            pickerState.page = 0;
+            renderList();
+        });
+        filterRow.appendChild(filterInput);
+        header.appendChild(filterRow);
+
         if (ceiling > 0) {
             const note = document.createElement('div');
             note.className = `${CSS_PREFIX}-picker-note`;
@@ -3283,24 +3319,37 @@
 
         overlay.appendChild(panel);
 
+        // The rows to show = the sorted pool narrowed by the filter query.
+        // Filtering only affects display; selection is by entry identity
+        // (onPickerEntryClick), so a filtered pick still resolves correctly.
+        function currentView() {
+            const q = pickerState.filter.trim().toLowerCase();
+            if (!q) return pickerState.sortedPool;
+            return pickerState.sortedPool.filter((e) =>
+                (e.sentence || '').toLowerCase().includes(q) ||
+                (e.translation || '').toLowerCase().includes(q));
+        }
+
         function renderList() {
             list.innerHTML = '';
-            const total = pickerState.sortedPool.length;
+            const view = currentView();
+            const total = view.length;
             const totalPages = Math.max(1, Math.ceil(total / PICKER_PAGE_SIZE));
             pickerState.page = Math.max(0, Math.min(pickerState.page, totalPages - 1));
             const start = pickerState.page * PICKER_PAGE_SIZE;
             const end = Math.min(start + PICKER_PAGE_SIZE, total);
 
             for (let i = start; i < end; i++) {
-                const e = pickerState.sortedPool[i];
+                const e = view[i];
                 list.appendChild(buildPickerRow(e, i, currentExample, ceiling, raw, prefs));
             }
 
+            const filtered = !!pickerState.filter.trim();
             prevBtn.disabled = pickerState.page === 0;
             nextBtn.disabled = pickerState.page >= totalPages - 1;
             pageLabel.textContent = total
-                ? `${start + 1}–${end} of ${total}   ·   Page ${pickerState.page + 1} / ${totalPages}`
-                : 'No candidates';
+                ? `${start + 1}–${end} of ${total}${filtered ? ' (filtered)' : ''}   ·   Page ${pickerState.page + 1} / ${totalPages}`
+                : (filtered ? 'No matches' : 'No candidates');
             list.scrollTop = 0;
         }
 
@@ -3320,7 +3369,7 @@
             }
         });
         nextBtn.addEventListener('click', () => {
-            const totalPages = Math.ceil(pickerState.sortedPool.length / PICKER_PAGE_SIZE);
+            const totalPages = Math.ceil(currentView().length / PICKER_PAGE_SIZE);
             if (pickerState.page < totalPages - 1) {
                 pickerState.page++;
                 renderList();
