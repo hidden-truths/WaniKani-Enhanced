@@ -132,6 +132,25 @@ function assertTokenOffsets(lines: SongLineInput[]): void {
     }
 }
 
+// Validate every line BEFORE any mutation — furigana (concat(seg.t) === text) + LLM token offsets —
+// so a bad line aborts the whole create/replace/seed cleanly instead of leaving a half-written song.
+// The four write entry points (createSong / replaceSongLines / saveSong / upsertPublicSong) share this
+// one prelude; upsertAnnotation re-asserts the offset contract per-row on write too.
+function assertLinesValid(lines: SongLineInput[]): void {
+    for (const ln of lines) assertFuriganaMatches(ln.furigana ?? null, ln.text);
+    assertTokenOffsets(lines);
+}
+
+// The owner-scoped song lookup that gates every mutation: the row's numeric id IFF the song exists AND
+// belongs to `viewer` (created_by = viewer), else null. One place so replaceSongLines / updateSong /
+// updateSongTiming / deleteSong can't drift on the ownership predicate.
+function ownedSongId(extId: string, viewer: number): number | null {
+    const row = getDb().query('SELECT id FROM song WHERE ext_id = ? AND created_by = ?').get(extId, viewer) as
+        | { id: number }
+        | null;
+    return row ? row.id : null;
+}
+
 // Fold one line's content-word {lemma, jlpt} into `seen` (for the library coverage % + Mine vocab).
 // Particles/auxiliaries/punctuation aren't studiable vocabulary. Mutates `seen` so a song's lines
 // accumulate into one deduped set (a chorus word counted once). Operates on a raw token list so the
@@ -279,8 +298,7 @@ export function createSong(input: {
     lines: SongLineInput[];
     parser?: string;
 }): AssembledSong {
-    for (const ln of input.lines) assertFuriganaMatches(ln.furigana ?? null, ln.text);
-    assertTokenOffsets(input.lines);
+    assertLinesValid(input.lines);
     const db = getDb();
     // One transaction so the song row + its N line rows commit (or roll back) together — a mid-loop
     // failure can never leave a half-written song. A UNIQUE(ext_id) clash still throws the same
@@ -311,19 +329,16 @@ export function replaceSongLines(input: {
     lines: SongLineInput[];
     parser?: string;
 }): AssembledSong | null {
-    for (const ln of input.lines) assertFuriganaMatches(ln.furigana ?? null, ln.text);
-    assertTokenOffsets(input.lines);
+    assertLinesValid(input.lines);
+    const id = ownedSongId(input.extId, input.viewer);
+    if (id == null) return null;
     const db = getDb();
-    const row = db.query('SELECT id FROM song WHERE ext_id = ? AND created_by = ?').get(input.extId, input.viewer) as
-        | { id: number }
-        | null;
-    if (!row) return null;
     db.transaction(() => {
         db.query('UPDATE song SET title = ?, artist = ?, youtube_id = ? WHERE id = ?').run(
             input.title,
             input.artist ?? null,
             input.youtubeId ?? null,
-            row.id,
+            id,
         );
         // Drop the song's existing PRIVATE line rows (owner-scoped so it can't reach anything else);
         // translations/tags/links/annotations cascade via FK. Then re-insert the new set.
@@ -363,8 +378,7 @@ export function saveSong(input: {
 }): SaveSongResult {
     // Validate before opening the transaction — a malformed line is a clean 'invalid', not a throw.
     try {
-        for (const ln of input.lines) assertFuriganaMatches(ln.furigana ?? null, ln.text);
-        assertTokenOffsets(input.lines);
+        assertLinesValid(input.lines);
     } catch (e) {
         return { kind: 'invalid', detail: e instanceof Error ? e.message : String(e) };
     }
@@ -416,16 +430,13 @@ export function updateSong(input: {
     artist?: string | null;
     youtubeId?: string | null;
 }): AssembledSong | null {
-    const db = getDb();
-    const row = db.query('SELECT id FROM song WHERE ext_id = ? AND created_by = ?').get(input.extId, input.viewer) as
-        | { id: number }
-        | null;
-    if (!row) return null;
-    db.query('UPDATE song SET title = ?, artist = ?, youtube_id = ? WHERE id = ?').run(
+    const id = ownedSongId(input.extId, input.viewer);
+    if (id == null) return null;
+    getDb().query('UPDATE song SET title = ?, artist = ?, youtube_id = ? WHERE id = ?').run(
         input.title,
         input.artist ?? null,
         input.youtubeId ?? null,
-        row.id,
+        id,
     );
     return getSong({ extId: input.extId, viewer: input.viewer });
 }
@@ -437,9 +448,8 @@ export function updateSongTiming(input: {
     viewer: number;
     timings: Array<{ ordinal: number; clipStartMs: number | null }>;
 }): AssembledSong | null {
+    if (ownedSongId(input.extId, input.viewer) == null) return null;
     const db = getDb();
-    const owns = db.query('SELECT 1 FROM song WHERE ext_id = ? AND created_by = ?').get(input.extId, input.viewer);
-    if (!owns) return null;
     db.transaction(() => {
         const upd = db.query(
             "UPDATE sentence_link SET clip_start_ms = ? WHERE owner_type = 'song' AND owner_id = ? AND ordinal = ?",
@@ -452,14 +462,12 @@ export function updateSongTiming(input: {
 // Delete a user's own song + its private line rows (children cascade via FK). Owner-scoped no-op
 // returning false for a non-owner / unknown id.
 export function deleteSong(input: { extId: string; viewer: number }): boolean {
+    const id = ownedSongId(input.extId, input.viewer);
+    if (id == null) return false;
     const db = getDb();
-    const row = db.query('SELECT id FROM song WHERE ext_id = ? AND created_by = ?').get(input.extId, input.viewer) as
-        | { id: number }
-        | null;
-    if (!row) return false;
     db.transaction(() => {
         deleteOwnedLines('song', input.extId, input.viewer); // children cascade via FK
-        db.query('DELETE FROM song WHERE id = ?').run(row.id);
+        db.query('DELETE FROM song WHERE id = ?').run(id);
     })();
     return true;
 }
@@ -500,8 +508,7 @@ export function upsertPublicSong(input: {
     lines: SongLineInput[];
     parser?: string;
 }): AssembledSong {
-    for (const ln of input.lines) assertFuriganaMatches(ln.furigana ?? null, ln.text);
-    assertTokenOffsets(input.lines);
+    assertLinesValid(input.lines);
     const db = getDb();
     // Atomic re-seed: the song upsert + link wipe + line re-insert commit (or roll back) together.
     db.transaction(() => {
