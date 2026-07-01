@@ -180,7 +180,7 @@ export function updateDeckCount() {
 // studied-today meta, and the forecast — all reflect the schedule, so they refresh together.
 export function updateDueBanner() {
   const n = dueCards().length;
-  document.getElementById('dueCount').textContent = n;
+  document.getElementById('dueCount').textContent = String(n);   // explicit: textContent = 0 (number) renders '' in some DOM impls
   const banner = document.getElementById('dueBanner');
   banner.classList.toggle('empty', n === 0);
   document.getElementById('dueBtn').disabled = n === 0;
@@ -200,12 +200,15 @@ export function updateDueBanner() {
 }
 // "Review due cards": force the deck to due-only, worst-first, full range, and reflect that
 // in the chip UI before starting. Overrides the picker on purpose — a dedicated review flow.
+// Resets ALL six DECK_FACETS (cat included — it arrived after this function and was missed,
+// silently narrowing "review everything due" to the stale category) and ranges to the REAL
+// top rank (state.MAXRANK — a hardcoded 100 excluded every due custom/Minna/song card).
 export function startDueSession() {
-  cfg.kind = 'srs'; cfg.type = []; cfg.trans = []; cfg.topic = []; cfg.status = ['due']; cfg.source = []; cfg.jlpt = ['all']; cfg.rmin = 1; cfg.rmax = 100; cfg.ord = 'worst';
+  cfg.kind = 'srs'; cfg.cat = []; cfg.type = []; cfg.trans = []; cfg.topic = []; cfg.status = ['due']; cfg.source = []; cfg.jlpt = ['all']; cfg.rmin = 1; cfg.rmax = state.MAXRANK; cfg.ord = 'worst';
   repaintDeck();
   document.querySelectorAll('.chip.skind').forEach(x => x.classList.toggle('active', x.dataset.skind === 'srs'));
   document.querySelectorAll('.chip.jlpt').forEach(x => x.classList.toggle('active', x.dataset.jlpt === 'all'));
-  document.getElementById('rmin').value = 1; document.getElementById('rmax').value = 100;
+  document.getElementById('rmin').value = 1; document.getElementById('rmax').value = state.MAXRANK;
   document.querySelectorAll('.chip.ord').forEach(x => x.classList.toggle('active', x.dataset.ord === 'worst'));
   updateStartLabel();
   onStartSession();
