@@ -1,11 +1,13 @@
 // 歌 / Songs — package orchestrator. Owns the top-level render dispatch (library / add / song-view),
 // the song-view shell (mode switch + player + the stable #sgContent wrapper), the once-attached
-// delegated click/keydown, navigation (openById), and the lifecycle (initSongs/onSongsHidden). Each
-// MODE + surface lives in its own sibling module behind this barrel; shared mutable view-state is the
-// `S` object in ./state.js (mutated in place — the record-compare pattern). features/songs.js is a
-// thin re-export of this file, so main.js + cloud.js import { initSongs, renderSongs, onSongsHidden }
-// byte-for-byte unchanged. The modules + this file form runtime-only import cycles (render/flash are
-// imported back by add/progress/mine), fine like cloud⇄minna. See REFACTOR_FOLLOWUPS.md "Workstream S".
+// delegated click/keydown (a declarative ACTIONS map — adding a feature adds an entry, it doesn't
+// grow a dispatcher), navigation (openById + the S.nav epoch that drops stale async resolutions),
+// and the lifecycle (initSongs/onSongsHidden). Each MODE + surface lives in its own sibling module
+// behind this barrel; shared mutable view-state is the `S` object in ./state.js (mutated in place —
+// the record-compare pattern). features/songs.js is a thin re-export of this file, so main.js +
+// cloud.js import { initSongs, renderSongs, onSongsHidden } byte-for-byte unchanged. The modules +
+// this file form runtime-only import cycles (render/showLibrary/refreshLibrary are imported back by
+// add/progress/edit), fine like cloud⇄minna. See REFACTOR_FOLLOWUPS.md "Workstream S".
 
 import { escapeHtml, songWords, songLevel } from '../../core/index.js';
 import { state } from '../../state.js';
@@ -15,8 +17,9 @@ import { loadSongs } from '../../persistence/songs.js';
 import { exitSpeakingMode, setOnTakeSaved } from '../record-compare.js';
 import { clearSpeakingBar, releaseMicIfHidden } from '../speaking-bar.js';
 import { S, LV_CLASS, SONGS_SCOPE, body } from './state.js';
-import { libraryHtml, loadLibrary, loadSong, known, updateSong, removeSong } from './library.js';
+import { libraryHtml, loadLibrary, loadSong, known } from './library.js';
 import { addHtml, runAnalyze, saveSong } from './add.js';
+import { startEdit, cancelEdit, saveEdit, deleteSong } from './edit.js';
 import { readHtml, toggleFurigana, mountSongPlayer, replayLine } from './read.js';
 import { listenHtml, renderListen, resetListenStep, captureListenInputs, gradeListen, playListenLine } from './listen.js';
 import { shadowHtml, wireShadow, renderShadow, songNav, playShadowSlice } from './shadow.js';
@@ -29,8 +32,9 @@ export function renderSongs() {
   render();
 }
 
-// Exported so add.js (runAnalyze/saveSong) + progress.js (addOneWord/addAllNew) can re-render after a
-// state mutation without threading a callback through (runtime-only cycle, like cloud⇄minna).
+// Exported so add.js (runAnalyze/saveSong), progress.js (addOneWord/addAllNew) and edit.js can
+// re-render after a state mutation without threading a callback through (runtime-only cycle, like
+// cloud⇄minna).
 export function render() {
   const el = body(); if (!el) return;
   destroyPlayer(); // any prior song's player; song view re-mounts below
@@ -99,8 +103,9 @@ function songHtml() {
       <div class="song-head-main">
         ${S.editing
       ? `<div class="song-edit" style="display:flex;flex-direction:column;gap:8px;max-width:440px;margin-bottom:10px">
-            <input id="sgEditTitle" class="inp jp" value="${escapeHtml(s.title)}" placeholder="Song title" aria-label="Song title">
-            <input id="sgEditArtist" class="inp" value="${escapeHtml(s.artist || '')}" placeholder="Artist" aria-label="Artist">
+            <input id="sgEditTitle" class="inp jp" value="${escapeHtml(S.editing.title)}" placeholder="Song title" aria-label="Song title">
+            <input id="sgEditArtist" class="inp" value="${escapeHtml(S.editing.artist)}" placeholder="Artist" aria-label="Artist">
+            ${S.editing.error ? `<span class="sg-err">${escapeHtml(S.editing.error)}</span>` : ''}
             <div style="display:flex;gap:8px">
               <button class="btn primary" data-act="songeditsave"><svg class="ic" aria-hidden="true"><use href="#i-check"/></svg> Save</button>
               <button class="btn ghost" data-act="songeditcancel">Cancel</button>
@@ -146,83 +151,93 @@ function songHtml() {
   </div>`;
 }
 
-// ============================ handlers ============================
-async function onClick(e) {
-  const t = e.target.closest('[data-act]'); if (!t) return;
-  const act = t.dataset.act;
-  if (act === 'add') { S.view = 'add'; S.add = { lyrics: '', url: '', title: '', artist: '', analysis: null, busy: false, error: '' }; render(); return; }
-  if (act === 'back') { exitSpeakingMode(); S.view = 'library'; S.openSong = null; S.mode = 'read'; S.videoOn = false; S.editing = false; loadLibrary().then(render); render(); return; }
-  if (act === 'playvideo') { S.videoOn = true; render(); return; }   // mount + autoplay the on-demand video bay (Read)
-  // ---- Edit / delete one of the viewer's OWN songs (owner-scoped server-side) ----
-  if (act === 'songedit') { S.editing = true; render(); return; }
-  if (act === 'songeditcancel') { S.editing = false; render(); return; }
-  if (act === 'songeditsave') {
-    const title = (document.getElementById('sgEditTitle')?.value || '').trim();
-    const artist = (document.getElementById('sgEditArtist')?.value || '').trim();
-    if (!title) { flash('Title can’t be empty'); return; }
-    try {
-      const updated = await updateSong(S.openSong.id, { title, artist: artist || null });
-      if (updated) { S.openSong.title = updated.title; S.openSong.artist = updated.artist; flash('Saved'); }
-      else flash('Couldn’t save changes');
-    } catch (e) { flash('Couldn’t save changes'); }
-    S.editing = false; loadLibrary().then(render); render(); return;
-  }
-  if (act === 'songdelete') {
-    const s = S.openSong; if (!s) return;
-    if (!window.confirm(`Delete “${s.title}”? This removes the song and its lines for good.`)) return;
-    try {
-      if (await removeSong(s.id)) {
-        exitSpeakingMode();
-        S.editing = false; S.view = 'library'; S.openSong = null; S.mode = 'read'; S.videoOn = false;
-        loadLibrary().then(render); render();
-      } else flash('Couldn’t delete the song');
-    } catch (e) { flash('Couldn’t delete the song'); }
-    return;
-  }
-  if (act === 'signin') { document.getElementById('accountBtn').click(); return; }
-  if (act === 'filter') { S.libFilter = t.dataset.filter; render(); return; }
-  if (act === 'open') { await openById(t.dataset.id); return; }
-  if (act === 'analyze' || act === 'reanalyze') { await runAnalyze(); return; }
-  if (act === 'save') { await saveSong(); return; }
-  if (act === 'mode') {
-    const next = t.dataset.mode === 'mine' ? 'mine' : t.dataset.mode;
-    if (S.mode === 'shadow' && next !== 'shadow') exitSpeakingMode();   // release the mic when leaving Shadow
-    S.mode = next; S.videoOn = false; if (S.mode !== 'grammar') S.grammarRef = null; noteMode(S.mode); render(); return;
-  }
-  if (act === 'grammar') { S.grammarRef = t.dataset.g; S.mode = 'grammar'; render(); return; }
-  if (act === 'reveal') { const en = t.dataset.en || ''; t.classList.remove('hidden'); t.removeAttribute('data-act'); t.innerHTML = escapeHtml(en); return; }
-  if (act === 'reveal-all') { document.querySelectorAll('#sgBody .ll .en.hidden').forEach((el) => { el.classList.remove('hidden'); el.innerHTML = escapeHtml(el.dataset.en || ''); el.removeAttribute('data-act'); }); t.classList.toggle('on'); return; }
-  if (act === 'furigana') { toggleFurigana(t); return; }
-  if (act === 'replay') { replayLine(Number(t.dataset.ord), t.closest('.speak-btn'), e); return; }
-  if (act === 'star') { toggleStar(Number(t.dataset.ord), t); return; }
-  if (act === 'shadowslice') { playShadowSlice(Number(t.dataset.ord)); return; }
-  // ---- Listen (dictation) stepper ----
-  if (act === 'ldiff') { S.listen.diff = t.dataset.diff === 'full' ? 'full' : 'cloze'; resetListenStep(); renderListen(); return; }
-  if (act === 'lplay') { playListenLine(false, t.closest('.cue-btn')); return; }
-  if (act === 'lslow') { playListenLine(true, t.closest('.cue-btn')); return; }
-  if (act === 'lcheck') { captureListenInputs(); gradeListen(); S.listen.checked = true; renderListen(); return; }
-  if (act === 'lreveal') { captureListenInputs(); S.listen.revealed = true; renderListen(); return; }
-  if (act === 'lnext') { S.listen.idx = Math.min(S.listen.idx + 1, S.openSong.lines.length); resetListenStep(); renderListen(); return; }
-  if (act === 'lrestart') { S.listen.idx = 0; S.listen.done.clear(); resetListenStep(); renderListen(); return; }
-  if (act === 'addword') { addOneWord(t.dataset.lemma); return; }
-  if (act === 'addall') { addAllNew(); return; }
-  if (act === 'savephrase') { await savePhrase(Number(t.dataset.ord)); return; }
-  if (act === 'browse-grammar') { goBrowseGrammar(t.dataset.g); return; }
+// ============================ navigation ============================
+// One navigation epoch: every view change bumps it, so an in-flight async open (openById on a slow
+// network) resolving AFTER the user moved on can tell, and drops its result instead of clobbering
+// the current view (or letting the FIRST-clicked of two rapid opens win over the LAST-clicked).
+export function bumpNav() { return ++S.nav; }
+
+// Reset to the library view (Back + a successful delete) and refresh the grid from the server.
+export function showLibrary() {
+  S.view = 'library'; S.openSong = null; S.mode = 'read'; S.videoOn = false; S.editing = null;
+  bumpNav();
+  refreshLibrary();
 }
 
+// Optimistic repaint now + repaint again when the network refresh lands. render() reads the CURRENT
+// S, so the late repaint is always of whatever view the user is on — never a stale one.
+export function refreshLibrary() { loadLibrary().then(render); render(); }
+
 async function openById(id) {
+  const nav = bumpNav();
   try {
     const s = await loadSong(id);
-    if (!s) return;
-    S.openSong = s; S.view = 'song'; S.mode = restoreMode(s.id); S.grammarRef = null; S.videoOn = false; S.editing = false;
+    if (!s || nav !== S.nav) return;   // gone/unauthorized, or the user navigated on mid-flight
+    S.openSong = s; S.view = 'song'; S.mode = restoreMode(s.id); S.grammarRef = null; S.videoOn = false; S.editing = null;
     render();
   } catch (e) { /* offline / gone — stay on library */ }
 }
 
-// Exported so mine.js (savePhrase) can surface a transient status. The auto-clearing #syncStatus pill.
-export function flash(msg) {
-  const el = document.getElementById('syncStatus'); if (!el) return;
-  el.textContent = msg; setTimeout(() => { if (el.textContent === msg) el.textContent = ''; }, 2200);
+// ============================ handlers ============================
+// Read the inline edit form's current values (the DOM is the source of the in-progress keystrokes;
+// S.editing only learns them here, on save, so a re-render mid-typing can't happen).
+function readEditDraft() {
+  return {
+    title: document.getElementById('sgEditTitle')?.value || '',
+    artist: document.getElementById('sgEditArtist')?.value || '',
+  };
+}
+
+// The delegated-click action table (buttons carry data-act). One entry per action — a new feature
+// registers here instead of growing a dispatcher function. Handlers get (target, event).
+const ACTIONS = {
+  add: () => { S.view = 'add'; S.add = { lyrics: '', url: '', title: '', artist: '', analysis: null, busy: false, error: '' }; bumpNav(); render(); },
+  back: () => { exitSpeakingMode(); showLibrary(); },
+  playvideo: () => { S.videoOn = true; render(); },   // mount + autoplay the on-demand video bay (Read)
+  // ---- Edit / delete one of the viewer's OWN songs (owner-scoped; flows live in ./edit.js) ----
+  songedit: () => startEdit(),
+  songeditcancel: () => cancelEdit(),
+  songeditsave: () => saveEdit(readEditDraft()),
+  songdelete: () => deleteSong(),
+  signin: () => { document.getElementById('accountBtn').click(); },
+  filter: (t) => { S.libFilter = t.dataset.filter; render(); },
+  open: (t) => openById(t.dataset.id),
+  analyze: () => runAnalyze(),
+  reanalyze: () => runAnalyze(),
+  save: () => saveSong(),
+  mode: (t) => {
+    const next = t.dataset.mode === 'mine' ? 'mine' : t.dataset.mode;
+    if (S.mode === 'shadow' && next !== 'shadow') exitSpeakingMode();   // release the mic when leaving Shadow
+    S.mode = next; S.videoOn = false; if (S.mode !== 'grammar') S.grammarRef = null; noteMode(S.mode); render();
+  },
+  grammar: (t) => { S.grammarRef = t.dataset.g; S.mode = 'grammar'; render(); },
+  reveal: (t) => { const en = t.dataset.en || ''; t.classList.remove('hidden'); t.removeAttribute('data-act'); t.innerHTML = escapeHtml(en); },
+  'reveal-all': (t) => {
+    document.querySelectorAll('#sgBody .ll .en.hidden').forEach((el) => { el.classList.remove('hidden'); el.innerHTML = escapeHtml(el.dataset.en || ''); el.removeAttribute('data-act'); });
+    t.classList.toggle('on');
+  },
+  furigana: (t) => toggleFurigana(t),
+  replay: (t, e) => replayLine(Number(t.dataset.ord), t.closest('.speak-btn'), e),
+  star: (t) => toggleStar(Number(t.dataset.ord), t),
+  shadowslice: (t) => playShadowSlice(Number(t.dataset.ord)),
+  // ---- Listen (dictation) stepper ----
+  ldiff: (t) => { S.listen.diff = t.dataset.diff === 'full' ? 'full' : 'cloze'; resetListenStep(); renderListen(); },
+  lplay: (t) => playListenLine(false, t.closest('.cue-btn')),
+  lslow: (t) => playListenLine(true, t.closest('.cue-btn')),
+  lcheck: () => { captureListenInputs(); gradeListen(); S.listen.checked = true; renderListen(); },
+  lreveal: () => { captureListenInputs(); S.listen.revealed = true; renderListen(); },
+  lnext: () => { S.listen.idx = Math.min(S.listen.idx + 1, S.openSong.lines.length); resetListenStep(); renderListen(); },
+  lrestart: () => { S.listen.idx = 0; S.listen.done.clear(); resetListenStep(); renderListen(); },
+  addword: (t) => addOneWord(t.dataset.lemma),
+  addall: () => addAllNew(),
+  savephrase: (t) => savePhrase(Number(t.dataset.ord)),
+  'browse-grammar': (t) => goBrowseGrammar(t.dataset.g),
+};
+
+function onClick(e) {
+  const t = e.target.closest('[data-act]'); if (!t) return;
+  const handler = ACTIONS[t.dataset.act];
+  if (handler) handler(t, e);
 }
 
 // ============================ lifecycle ============================

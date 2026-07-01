@@ -24,11 +24,15 @@ order. The actual DOM/render/feature glue is split into **`src/features/*`** mod
   shared mutable `S` view-state, the modules form runtime-only import cycles like songs — see
   [SELFTALK.md](SELFTALK.md)), `songs` + `songs-youtube` (the
   歌/Songs song & lyric analysis tab — Library/Add/Read/Listen/Shadow/Mine; now a **directory**
-  `songs/{state,library,add,read,listen,shadow,mine,progress}.js` behind `songs/index.js` (the
-  render-dispatch + song-view shell + delegated-events + lifecycle orchestrator), with `songs.js` a
+  `songs/{state,library,add,edit,read,listen,shadow,mine,progress}.js` behind `songs/index.js` (the
+  render-dispatch + song-view shell + the declarative `ACTIONS` click table + navigation (with the
+  `S.nav` epoch that drops stale async opens) + lifecycle orchestrator), with `songs.js` a
   thin `export *` re-export so main.js + cloud.js import unchanged. `state.js` = the shared mutable
-  `S` view-state (mutated in place); the modules form runtime-only import cycles (`render`/`flash`
-  re-imported by add/progress/mine), like record-compare. See [SONGS.md](SONGS.md)),
+  `S` view-state (mutated in place); the modules form runtime-only import cycles (`render`/
+  `showLibrary`/`refreshLibrary` re-imported by add/progress/edit), like record-compare. Transient
+  status pills go through cloud-core's `setSyncStatus` (the one `#syncStatus` writer — the old local
+  `flash()` copy is gone). Render/navigation glue tested in `test/songs-render.test.js`. See
+  [SONGS.md](SONGS.md)),
   `record-compare` (the generic
   record-and-compare engine — fed by Minna AND Self-Talk; now a **directory**
   `record-compare/{state,capture,takes,playback,waveform,view}.js` behind a 13-export barrel

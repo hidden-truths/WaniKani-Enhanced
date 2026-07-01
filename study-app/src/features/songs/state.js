@@ -13,7 +13,8 @@ export const S = {
   mode: 'read', // 'read' | 'listen' | 'shadow' | 'mine' | 'grammar'
   videoOn: false, // Read mode: the video bay is hidden until "Play with video" (mock) — Listen/Shadow mount it regardless
   grammarRef: null, // the grammar id currently open in the reference panel
-  editing: false, // song view: the inline title/artist edit form is open (owner-only)
+  editing: null, // song view: the inline edit form's DRAFT {title, artist, error} while open (owner-only), else null — the draft (not the song) backs the inputs so a failed save keeps the typed values
+  nav: 0, // navigation epoch — bumped on every view change (bumpNav); in-flight async opens compare it on resolve and drop stale results
   add: { lyrics: '', url: '', title: '', artist: '', analysis: null, busy: false, error: '' },
   // Listen (dictation) per-song stepper; (re)initialized by ensureListen() when the song changes.
   // idx = current line; diff = cloze|full; done = line indices answered all-correct (correct =

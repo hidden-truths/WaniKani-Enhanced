@@ -2,13 +2,12 @@
 // grammar reference sub-view, save-a-line-as-a-Self-Talk-phrase, and the deep-link into Browse. Part
 // of the features/songs/ package; shared mutable state in ./state.js. See REFACTOR_FOLLOWUPS.md "S".
 
-import { api, account } from '../cloud-core.js';
+import { api, account, setSyncStatus } from '../cloud-core.js';
 import { state } from '../../state.js';
 import { escapeHtml, segmentsToRuby, songWords, bucketByJlpt, songGrammar } from '../../core/index.js';
 import { grammarLabel, grammarJlpt } from '../../data/grammar.js';
 import { S, LV_CLASS } from './state.js';
 import { known } from './library.js';
-import { flash } from './index.js';
 
 // Render the Mine panel: the song's content words bucketed by JLPT (known / added / new vs the deck,
 // with per-word + bulk add) and its grammar points (each linking to the grammar reference).
@@ -113,8 +112,8 @@ export async function savePhrase(ord) {
     tags: (l.grammar && l.grammar.length) ? { grammar: l.grammar } : undefined,
     link: { owner_type: 'selftalk' },
   };
-  try { await api('/v1/sentences', { method: 'POST', body, retry: true }); flash('Saved to 独り言 Self-Talk'); }
-  catch (e) { flash('Could not save the phrase'); }
+  try { await api('/v1/sentences', { method: 'POST', body, retry: true }); setSyncStatus('Saved to 独り言 Self-Talk'); }
+  catch (e) { setSyncStatus('⚠ could not save the phrase'); }
 }
 
 // Cross-link from a song's grammar point into the Browse tab (example sentences using it).
