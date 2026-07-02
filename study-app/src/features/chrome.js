@@ -28,6 +28,7 @@ export function initTabs(handlers = {}) {
     if (next === 'selftalk') handlers.selftalk && handlers.selftalk();
     if (next === 'songs') handlers.songs && handlers.songs();
     if (next === 'wanikani') handlers.wanikani && handlers.wanikani();
+    if (next === 'jlpt') handlers.jlpt && handlers.jlpt();
   }));
 }
 

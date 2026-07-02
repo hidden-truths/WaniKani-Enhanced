@@ -1,9 +1,10 @@
 // CLOUD ACCOUNTS + SYNC — the feature layer over cloud-core. The app works fully offline
 // against localStorage; signing in mirrors progress to the API so it follows the user across
-// devices. FIVE debounced synced blobs here (server-wins on login): 'verbs' (state.store),
-// 'custom-verbs', 'settings', 'selftalk', 'songs'; plus the Minna blob (handled in minna.js — six
-// in all) and the durable POST /v1/sessions log. The persistence layer schedules pushes via the
-// sync bus, which this module's initCloud() wires up.
+// devices. FIVE debounced synced blobs are defined here (server-wins on login): 'verbs'
+// (state.store), 'custom-verbs', 'settings', 'selftalk', 'songs'; plus the three defined beside
+// their state ('minna' in minna.js, 'wanikani' in wanikani/store.js, 'jlpt' in jlpt/store.js —
+// EIGHT in all, every one listed in blobRegistry below) and the durable POST /v1/sessions log.
+// The persistence layer schedules pushes via the sync bus, which this module's initCloud() wires up.
 import { state } from '../state.js';
 import { mergeProgress, mergeCustomVerbs, mergeSelftalkPractice, mergeSongs } from '../core/index.js';
 import { sync } from '../sync-bus.js';
@@ -27,6 +28,7 @@ import { migrateMinnaDupes, renderMinna, minnaBlob } from './minna.js';
 import { renderSettings } from './settings-page.js';
 import { renderSongs } from './songs.js';
 import { wanikaniBlob } from './wanikani.js';
+import { jlptBlob, renderJlpt } from './jlpt.js';
 
 const APP_KEY = 'verbs';            // progress namespace on the server
 const CUSTOM_APP_KEY = 'custom-verbs'; // custom-card-definitions namespace
@@ -154,6 +156,7 @@ function blobRegistry() {
     { blob: selftalkBlob, busKey: 'selftalk' },
     { blob: songsBlob,    busKey: 'songs' },
     { blob: wanikaniBlob, busKey: null },        // off-bus: saveWanikani schedules wanikaniBlob directly
+    { blob: jlptBlob,     busKey: null },        // off-bus: saveJlpt schedules jlptBlob directly
   ];
 }
 
@@ -191,6 +194,7 @@ function refreshAllViews() {
   updateDeckCount(); updateDueBanner(); renderBrowse(); renderCustomCount();
   if (document.getElementById('panel-stats').classList.contains('active')) renderStats();
   if (document.getElementById('panel-minna').classList.contains('active')) renderMinna();
+  if (document.getElementById('panel-jlpt').classList.contains('active')) renderJlpt();
 }
 
 // The account avatar (#accountBtn — the round .avatar in the topbar): signed in → the user's

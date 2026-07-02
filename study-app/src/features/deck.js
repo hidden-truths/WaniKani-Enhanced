@@ -14,6 +14,7 @@ import { settings, saveSettings } from '../settings-store.js';
 import {
   passes, isDue, dueCards, rollingAcc, reviewForecast, studyStreak,
   facetAll, DECK_FACETS, tokenFacet, filterSummary,
+  practiceStreak, examCountdown,
 } from '../core/index.js';
 
 // Flashcard deck config — OWNED here. mode = test direction; cat/type/trans/topic/status =
@@ -193,6 +194,23 @@ export function updateDueBanner() {
   const streak = studyStreak(daily, today);
   const streakEl = document.getElementById('heroStreak');
   if (streakEl) { streakEl.hidden = streak < 1; const b = streakEl.querySelector('b'); if (b) b.textContent = 'Day ' + streak; }
+  // Cross-tab daily-loop pills: the SPEAKING streak (独り言/歌 takes, invisible outside those
+  // tabs before this) and the JLPT countdown — both jump to their tab (wired in initDeckUI).
+  const speakEl = document.getElementById('heroSpeak');
+  if (speakEl) {
+    const sp = practiceStreak(state.selftalkStore.practice, today);
+    speakEl.hidden = sp < 1;
+    const b = speakEl.querySelector('b'); if (b) b.textContent = 'Day ' + sp;
+  }
+  const jlptEl = document.getElementById('heroJlpt');
+  if (jlptEl) {
+    const cd = examCountdown((state.jlptStore || {}).examDate, Date.now());
+    jlptEl.hidden = !cd || cd.past;
+    if (cd && !cd.past) {
+      const lv = document.getElementById('heroJlptLevel'); if (lv) lv.textContent = state.jlptStore.level || 'N3';
+      const d = document.getElementById('heroJlptDays'); if (d) d.textContent = cd.days === 0 ? 'today!' : `in ${cd.days} day${cd.days === 1 ? '' : 's'}`;
+    }
+  }
   const studiedEl = document.getElementById('heroStudied');
   if (studiedEl) { const done = (daily[today] && daily[today].tot) || 0; studiedEl.innerHTML = `<b>${done}</b> of <b>${state.DATA.length}</b> studied today`; }
   renderForecast();
@@ -230,12 +248,32 @@ export function studyWkCards() {
   onStartSession();
 }
 
+// "Study all leeches": jump to the flashcard tab scoped to leech cards in FREE study
+// (leeches aren't necessarily due — free mode makes them reviewable now) and start.
+// Extracted from stats.js so Stats + the JLPT tab share ONE jump (and because the old
+// stats copy hardcoded rmax=100, silently excluding every custom/Minna/song/鰐蟹 leech).
+export function studyLeechCards() {
+  document.querySelector('.tab[data-tab="study"]').click();
+  cfg.kind = 'free'; cfg.cat = []; cfg.type = []; cfg.trans = []; cfg.topic = []; cfg.status = ['leech']; cfg.source = []; cfg.jlpt = ['all']; cfg.rmin = 1; cfg.rmax = state.MAXRANK; cfg.ord = 'worst';
+  repaintDeck();
+  document.querySelectorAll('.chip.skind').forEach(x => x.classList.toggle('active', x.dataset.skind === 'free'));
+  document.querySelectorAll('.chip.jlpt').forEach(x => x.classList.toggle('active', x.dataset.jlpt === 'all'));
+  document.getElementById('rmin').value = 1; document.getElementById('rmax').value = state.MAXRANK;
+  document.querySelectorAll('.chip.ord').forEach(x => x.classList.toggle('active', x.dataset.ord === 'worst'));
+  updateStartLabel();
+  onStartSession();
+}
+
 // Wire the deck picker chips + range inputs + forecast horizon toggle. Runs after the data
 // build, so state.MAXRANK is final here (cfg.rmax is set to it).
 export function initDeckUI() {
   cfg.rmax = state.MAXRANK;
   cfg.input = settings.input;
   cfg.audio = settings.audio;
+  // The hero's cross-tab pills jump to their tabs (chrome's initTabs handles the render).
+  const jump = (id, tab) => { const el = document.getElementById(id); if (el) el.addEventListener('click', () => { const t = document.querySelector(`.tab[data-tab="${tab}"]`); if (t) t.click(); }); };
+  jump('heroSpeak', 'selftalk');
+  jump('heroJlpt', 'jlpt');
   document.querySelectorAll('.chip.mode').forEach(b => b.addEventListener('click', () => {
     document.querySelectorAll('.chip.mode').forEach(x => x.classList.remove('active')); b.classList.add('active'); cfg.mode = b.dataset.mode; updateDeckCount();
   }));

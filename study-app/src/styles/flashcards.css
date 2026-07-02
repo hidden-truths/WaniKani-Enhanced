@@ -32,6 +32,13 @@
 .pill b{font-weight:600;font-family:var(--display)}
 .pill .dot{width:9px;height:9px;border-radius:50%;background:var(--brand);box-shadow:0 0 0 4px var(--brand-soft)}
 [data-theme="dark"] .pill .dot{box-shadow:0 0 0 4px rgba(255,107,74,.14),0 0 9px 1px rgba(255,107,74,.6)}
+/* cross-tab daily-loop pills (speaking streak → 独り言, JLPT countdown → 合格): button pills */
+button.pill.hero-jump{cursor:pointer;transition:border-color .15s,transform .15s}
+button.pill.hero-jump:hover{border-color:var(--ink-2);transform:translateY(-1px)}
+.pill .dot.speak{background:var(--reading);box-shadow:0 0 0 4px var(--reading-soft)}
+[data-theme="dark"] .pill .dot.speak{box-shadow:0 0 0 4px var(--reading-soft)}
+.pill .dot.jlpt{background:var(--gold);box-shadow:0 0 0 4px var(--gold-soft)}
+[data-theme="dark"] .pill .dot.jlpt{box-shadow:0 0 0 4px var(--gold-soft)}
 .progress-line{font-family:var(--body);font-size:14.5px;color:var(--muted)}
 .progress-line b{color:var(--ink);font-weight:700;font-family:var(--display)}
 

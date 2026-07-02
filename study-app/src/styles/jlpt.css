@@ -1,0 +1,131 @@
+/* =========================================================================
+   合格 JLPT — per-surface sheet (peeled, like stats/songs/wanikani).
+   Mission control for the exam date: countdown hero + daily-training
+   checklist + readiness lens + the four papers. Everything flows through
+   the Day/Night role tokens; the ring/heatmap are hand-rolled (no libs).
+   Scope: #panel-jlpt.
+   ========================================================================= */
+
+/* ---- head ------------------------------------------------------------------ */
+#jlptHead .page-head{align-items:flex-end}
+.jl-title-jp{font-size:.55em;color:var(--gold);font-weight:700}
+.jl-sub{margin-top:4px;color:var(--muted);font-size:13px}
+.jl-levelseg{display:inline-flex;border:1px solid var(--line);border-radius:999px;overflow:hidden}
+.jl-levelchip{padding:7px 13px;border:none;background:var(--chip-bg);color:var(--muted);font:600 12.5px var(--mono);
+  cursor:pointer;border-right:1px solid var(--line);transition:color .15s,background .15s}
+.jl-levelchip:last-child{border-right:none}
+.jl-levelchip:hover{color:var(--ink)}
+.jl-levelchip.active{color:var(--brand);background:var(--brand-soft);font-weight:700}
+
+/* ---- hero: countdown + today ring ------------------------------------------- */
+.jl-hero{display:flex;align-items:stretch;justify-content:space-between;gap:26px;background:var(--surf-card);
+  border:1px solid var(--line);border-radius:var(--r);box-shadow:var(--card-shadow);padding:26px 30px 22px;
+  margin-bottom:18px;animation:jlRise .5s cubic-bezier(.2,.7,.2,1) both}
+.jl-count{display:flex;align-items:baseline;gap:14px}
+.jl-days{font-family:var(--display);font-size:clamp(56px,8vw,84px);font-weight:800;letter-spacing:-2px;line-height:.95;color:var(--ink)}
+.jl-days-label{font-size:15px;color:var(--ink-2);max-width:12ch;line-height:1.35}
+.jl-days-label em{font-style:normal;color:var(--muted)}
+.jl-hero-meta{display:flex;align-items:center;gap:12px;margin-top:10px}
+.jl-examdate{font-family:var(--mono);font-size:12.5px;color:var(--ink-2)}
+.jl-dateedit{display:inline-flex;align-items:center;gap:6px;font-family:var(--mono);font-size:11px;color:var(--muted);cursor:pointer}
+.jl-dateedit .ic{width:12px;height:12px}
+.jl-dateedit input{border:1px solid var(--line);background:var(--surf-inset);color:var(--ink);border-radius:8px;
+  padding:2px 6px;font:500 11.5px var(--mono);cursor:pointer}
+.jl-hero-sub{margin-top:6px;color:var(--muted);font-size:13px}
+.jl-hero-pills{display:flex;flex-wrap:wrap;gap:8px;margin-top:14px}
+.jl-hero-pills .dot.speak{background:var(--reading)}
+.jl-hero-pills .dot.wk{background:var(--gold)}
+.jl-hero-ring{position:relative;flex:none;width:132px;align-self:center}
+.jl-hero-ring svg{display:block;width:132px;height:132px;transform:rotate(-90deg)}
+.jl-ring-track{fill:none;stroke:var(--surf-inset);stroke-width:9}
+.jl-ring-fill{fill:none;stroke:var(--brand);stroke-width:9;stroke-linecap:round;transition:stroke-dashoffset .5s cubic-bezier(.2,.7,.2,1)}
+.jl-ring-fill.full{stroke:var(--good)}
+.jl-ring-center{position:absolute;inset:0;display:flex;flex-direction:column;align-items:center;justify-content:center;gap:1px}
+.jl-ring-center b{font-family:var(--display);font-size:26px;font-weight:800;letter-spacing:-.5px}
+.jl-ring-center b span{font-size:15px;color:var(--muted);font-weight:600}
+.jl-ring-center em{font-style:normal;font-family:var(--mono);font-size:10px;text-transform:uppercase;letter-spacing:.8px;color:var(--muted)}
+
+/* ---- cards (the wk-card idiom, jl-scoped) --------------------------------------- */
+.jl-card{background:var(--surf-card);border:1px solid var(--line);border-radius:var(--r);box-shadow:var(--lift-md);
+  padding:20px 22px;margin-bottom:18px;animation:jlRise .45s cubic-bezier(.2,.7,.2,1) both}
+.jl-card-head{display:flex;align-items:flex-start;justify-content:space-between;gap:12px;margin-bottom:14px}
+.jl-card-head .title{margin:0;font-family:var(--display);font-size:17px;letter-spacing:-.1px}
+.jl-card-head .title .jp-min{font-size:15px;color:var(--brand)}
+.jl-card-head .sub{color:var(--muted);font-size:12.5px;margin-top:3px;line-height:1.5}
+.jl-two{display:grid;grid-template-columns:1fr 1fr;gap:18px;margin-bottom:18px}
+.jl-two>.jl-card{margin-bottom:0}
+.jl-empty{color:var(--muted);font-size:13.5px;padding:14px 4px}
+.jl-link{background:none;border:none;padding:0;color:var(--reading);font:600 inherit var(--body);cursor:pointer;text-decoration:underline;text-underline-offset:2px}
+
+/* ---- checklist --------------------------------------------------------------------- */
+.jl-tasks{display:flex;flex-direction:column;gap:7px}
+.jl-task{display:flex;align-items:center;gap:13px;padding:10px 12px;border:1px solid var(--line);border-radius:12px;
+  background:var(--chip-bg);transition:border-color .15s,opacity .2s}
+.jl-task.done{border-color:color-mix(in srgb, var(--good) 35%, transparent);background:color-mix(in srgb, var(--good) 4%, var(--chip-bg))}
+.jl-task.done .jl-task-main b{color:var(--muted);text-decoration:line-through;text-decoration-color:color-mix(in srgb, var(--good) 55%, transparent);text-decoration-thickness:1.5px}
+.jl-task.unavailable{opacity:.72}
+.jl-check{flex:none;width:26px;height:26px;display:inline-flex;align-items:center;justify-content:center;border-radius:9px;
+  border:1.5px solid var(--line);background:var(--surf-inset);color:var(--good);cursor:pointer;transition:border-color .15s,background .15s}
+.jl-check:hover{border-color:var(--good)}
+.jl-check.on{border-color:var(--good);background:var(--good-soft)}
+.jl-check.auto{cursor:default;border-style:dashed}
+.jl-check.auto:hover{border-color:var(--line)}
+.jl-check.auto.on{border-style:solid;border-color:var(--good);background:var(--good-soft)}
+.jl-check.off{cursor:default;opacity:.5}
+.jl-check .ic{width:14px;height:14px}
+.jl-task-jp{flex:none;width:22px;text-align:center;font-size:16px;font-weight:900;color:var(--ink);opacity:.32}
+.jl-task.done .jl-task-jp{color:var(--good);opacity:.75}
+.jl-task-main{display:flex;flex-direction:column;gap:1px;min-width:0;flex:1}
+.jl-task-main b{font-size:14px}
+.jl-task-sub{font-size:12px;color:var(--muted);line-height:1.45}
+.jl-go{flex:none;display:inline-flex;align-items:center;gap:6px;text-decoration:none}
+.jl-go .ic{width:12px;height:12px}
+
+/* heatmap foot */
+.jl-heat{display:flex;align-items:center;gap:5px;margin-top:16px;padding-top:14px;border-top:1px solid var(--line)}
+.jl-heat-label{font-family:var(--mono);font-size:10.5px;text-transform:uppercase;letter-spacing:.8px;color:var(--muted);margin-right:6px}
+.jl-heatcell{width:16px;height:16px;border-radius:5px;background:var(--surf-inset);border:1px solid var(--line)}
+.jl-heatcell.l1{background:color-mix(in srgb, var(--good) 22%, var(--surf-inset));border-color:transparent}
+.jl-heatcell.l2{background:color-mix(in srgb, var(--good) 45%, var(--surf-inset));border-color:transparent}
+.jl-heatcell.l3{background:color-mix(in srgb, var(--good) 70%, var(--surf-inset));border-color:transparent}
+.jl-heatcell.l4{background:var(--good);border-color:transparent}
+
+/* ---- readiness ------------------------------------------------------------------------ */
+.jl-covrow{display:grid;grid-template-columns:96px 1fr 58px;align-items:center;gap:12px;margin-top:10px}
+.jl-cov-label{font-family:var(--mono);font-size:11.5px;color:var(--ink-2)}
+.jl-covtrack{position:relative;height:10px;border-radius:999px;background:var(--surf-inset);overflow:hidden}
+.jl-covfill{position:absolute;left:0;top:0;bottom:0;border-radius:999px;background:color-mix(in srgb, var(--reading) 45%, transparent);
+  transform-origin:left;animation:jlGrowX .7s cubic-bezier(.2,.7,.2,1) both}
+.jl-covfill.hi{background:var(--reading);z-index:1}
+.jl-covval{font-family:var(--mono);font-size:12.5px;text-align:right}
+.jl-covsub{color:var(--muted);font-size:11.5px;margin:4px 0 2px;grid-column:1/-1;line-height:1.5}
+.jl-statgrid{display:grid;grid-template-columns:1fr 1fr;gap:10px;margin-bottom:8px}
+.jl-stat{border:1px solid var(--line);border-radius:12px;background:var(--chip-bg);padding:12px 14px 10px;display:flex;flex-direction:column;gap:1px}
+.jl-stat b{font-family:var(--display);font-size:22px;font-weight:800;letter-spacing:-.4px}
+.jl-stat span{font-family:var(--mono);font-size:10.5px;color:var(--muted);text-transform:uppercase;letter-spacing:.6px}
+.jl-stat.warn b{color:var(--leech)}
+
+/* ---- the four papers --------------------------------------------------------------------- */
+.jl-sections{display:grid;grid-template-columns:repeat(auto-fill,minmax(300px,1fr));gap:14px}
+.jl-section{border:1px solid var(--line);border-radius:14px;background:var(--surf-inset);padding:15px 16px 13px;display:flex;flex-direction:column;gap:8px}
+.jl-section-head{display:flex;align-items:center;gap:10px}
+.jl-section-head b{font-size:14.5px;flex:1}
+.jl-section-head .ic{width:16px;height:16px;color:var(--muted)}
+.jl-section-jp{flex:none;font-size:15px;font-weight:900;color:var(--brand)}
+.jl-section p{margin:0;font-size:12.5px;line-height:1.6;color:var(--ink-2)}
+.jl-section-links{display:flex;flex-wrap:wrap;gap:7px;margin-top:2px}
+
+/* ---- motion + responsive ------------------------------------------------------------------- */
+@keyframes jlRise{from{opacity:0;transform:translateY(10px)}to{opacity:1;transform:none}}
+@keyframes jlGrowX{from{transform:scaleX(0)}to{transform:scaleX(1)}}
+
+@media (max-width:900px){
+  .jl-two{grid-template-columns:1fr}
+}
+@media (max-width:640px){
+  .jl-hero{flex-direction:column;align-items:flex-start;gap:16px}
+  .jl-hero-ring{align-self:center}
+  .jl-task{flex-wrap:wrap}
+  .jl-task .jl-go{margin-left:39px}
+  #jlptHead .page-head{flex-direction:column;align-items:flex-start;gap:12px}
+}

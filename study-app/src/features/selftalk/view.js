@@ -66,7 +66,7 @@ export function renderHead() {
   head.innerHTML = `
     <section class="page-head st-head">
       <div>
-        <div class="marker"><div class="idx">05<span class="slash"> / 07</span></div><div class="ttl jp-min">独り言</div><div class="en">Self-talk</div><div class="rule"></div></div>
+        <div class="marker"><div class="idx">06<span class="slash"> / 08</span></div><div class="ttl jp-min">独り言</div><div class="en">Self-talk</div><div class="rule"></div></div>
         <h1 class="page-title">Say it out loud <span class="jp st-title-jp">声に出して</span></h1>
         <p class="st-lede">Read the phrase, hear a model voice, then <b>say it yourself</b> and mark it — ⌥/⇧-click ▶ to try another voice.</p>
       </div>

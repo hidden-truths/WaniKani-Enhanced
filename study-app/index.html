@@ -110,6 +110,7 @@
       <button class="tab active" data-tab="study">Flashcards</button>
       <button class="tab" data-tab="browse">Browse</button>
       <button class="tab" data-tab="stats">Stats</button>
+      <button class="tab" data-tab="jlpt" title="合格 · JLPT prep">JLPT</button>
       <button class="tab" data-tab="minna" title="教科書 · Textbook"><span class="min">教科書</span></button>
       <button class="tab" data-tab="selftalk" title="独り言 · Self-talk"><span class="min">独り言</span></button>
       <button class="tab" data-tab="songs" title="歌 · Songs"><span class="min">歌</span></button>
@@ -158,12 +159,17 @@
            upcoming-reviews forecast side card. #dueCount, #dueBanner.empty, and the streak +
            studied meta are set by updateDueBanner(); the forecast (#forecastChart) by
            renderForecast(). The picker (study type / direction / filters / Start) follows below. -->
-      <div class="marker"><div class="idx">01<span class="slash"> / 07</span></div><div class="ttl jp-min">復習</div><div class="en">Today&rsquo;s review</div><div class="rule"></div></div>
+      <div class="marker"><div class="idx">01<span class="slash"> / 08</span></div><div class="ttl jp-min">復習</div><div class="en">Today&rsquo;s review</div><div class="rule"></div></div>
       <section class="hero">
         <div class="hero-left">
           <div class="bignum" id="dueBanner"><span id="dueCount">—</span><span class="due-label">cards <em>due for review</em></span></div>
           <div class="hero-meta">
             <span class="pill hero-streak" id="heroStreak" hidden><span class="dot"></span><b>Day 0</b>&nbsp;streak</span>
+            <!-- Cross-tab daily-loop pills (set by updateDueBanner): the 独り言/歌 SPEAKING streak
+                 and the 合格 JLPT countdown — buttons that jump to their tab, so the whole daily
+                 loop reads from the study home. Hidden until each signal exists. -->
+            <button class="pill hero-jump" id="heroSpeak" hidden type="button" title="Speaking streak — open 独り言"><span class="dot speak"></span><b>Day 0</b>&nbsp;speaking</button>
+            <button class="pill hero-jump" id="heroJlpt" hidden type="button" title="Open the JLPT plan"><span class="dot jlpt"></span><b id="heroJlptLevel">N3</b>&nbsp;<span id="heroJlptDays"></span></button>
             <span class="progress-line" id="heroStudied"></span>
           </div>
           <div class="cta-row">
@@ -428,7 +434,7 @@
     <!-- Editorial header (mock): kicker + title + a card/leech count cluster (set by renderBrowse). -->
     <section class="page-head">
       <div>
-        <div class="marker"><div class="idx">02<span class="slash"> / 07</span></div><div class="ttl jp-min">一覧</div><div class="en">Word library</div><div class="rule"></div></div>
+        <div class="marker"><div class="idx">02<span class="slash"> / 08</span></div><div class="ttl jp-min">一覧</div><div class="en">Word library</div><div class="rule"></div></div>
         <h1 class="page-title">Browse the deck</h1>
       </div>
       <div class="page-counts">
@@ -546,7 +552,7 @@
     <!-- Editorial header + subtitle (mock); the subtitle is set by renderStats(). -->
     <section class="page-head">
       <div>
-        <div class="marker"><div class="idx">03<span class="slash"> / 07</span></div><div class="ttl jp-min">記録</div><div class="en">Your progress</div><div class="rule"></div></div>
+        <div class="marker"><div class="idx">03<span class="slash"> / 08</span></div><div class="ttl jp-min">記録</div><div class="en">Your progress</div><div class="rule"></div></div>
         <h1 class="page-title">Progress</h1>
       </div>
     </section>
@@ -591,6 +597,19 @@
     </div>
     <div class="row" style="margin-top:18px"><button class="danger" id="resetBtn">Reset all stats &amp; history</button></div>
     <div class="footer-note">日常日本語 — <span class="jp">塵も積もれば山となる</span> · many little reviews make a mountain</div>
+  </div>
+
+  <!-- ===== 合格 JLPT PANEL ==============================================
+       Exam mission control: countdown to the test date, the daily-training
+       checklist (auto-checked from live app signals + manual ticks, per-day
+       record synced as app 'jlpt'), the vocabulary-readiness lens over the
+       bundled JLPT word list (deck + WaniKani coverage), and the four exam
+       papers mapped onto the surfaces that train them. Near-empty in markup —
+       #jlptHead/#jlptBody are filled by renderJlpt() (features/jlpt/view.js),
+       which also carries the attach-once delegated click wiring (wireJlpt). -->
+  <div class="panel" id="panel-jlpt">
+    <div id="jlptHead" class="jl-head"></div>
+    <div id="jlptBody" class="jl-body"></div>
   </div>
 
   <!-- ===== みんなの日本語 PANEL =========================================

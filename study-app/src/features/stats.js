@@ -8,7 +8,7 @@ import { localDay } from '../config.js';
 import { rollingAcc, leeches, dueCards, studyStreak, colorClass, classKanji, cardStamp,
   accuracyMix, weekOverWeekDelta, boxCounts, dailyAccuracySvg, pipelineHtml } from '../core/index.js';
 import { save } from '../persistence/store.js';
-import { cfg, repaintDeck, updateDeckCount } from './deck.js';
+import { cfg, repaintDeck, updateDeckCount, studyLeechCards } from './deck.js';
 import { startSession } from './flashcard.js';
 import { renderBrowse } from './browse.js';
 
@@ -145,17 +145,11 @@ function reviewSingle(rank) {
 
 // Wire the Stats-panel actions (study-leeches jump + per-row review + hard reset).
 export function initStatsUI() {
-  // "Study leeches now": jump to the flashcard tab with a leech-only deck. Like
-  // startDueSession() it overrides the picker and syncs the chip UI to match.
-  document.getElementById('studyLeeches').addEventListener('click', () => {
-    document.querySelector('.tab[data-tab="study"]').click();
-    cfg.type = []; cfg.trans = []; cfg.topic = []; cfg.status = ['leech']; cfg.source = []; cfg.jlpt = ['all']; cfg.rmin = 1; cfg.rmax = 100;
-    repaintDeck();
-    document.querySelectorAll('.chip.jlpt').forEach(x => x.classList.toggle('active', x.dataset.jlpt === 'all'));
-    document.getElementById('rmin').value = 1; document.getElementById('rmax').value = 100;
-    updateDeckCount();
-    startSession();
-  });
+  // "Study leeches now": jump to the flashcard tab with a leech-only deck — the shared
+  // studyLeechCards() (deck.js; also used by the JLPT tab's checklist), which overrides
+  // the picker, syncs the chip UI, and ranges to the REAL top rank (the old inline copy
+  // hardcoded rmax=100, silently excluding custom/Minna/song/鰐蟹 leeches).
+  document.getElementById('studyLeeches').addEventListener('click', studyLeechCards);
   // Per-row leech "Review" pills (delegated — the list re-renders on every renderStats).
   document.getElementById('leechList').addEventListener('click', (e) => {
     const btn = e.target.closest('.pill.review'); if (!btn) return;

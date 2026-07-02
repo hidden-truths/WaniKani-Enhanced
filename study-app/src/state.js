@@ -26,6 +26,9 @@ export const state = {
   // the WK dataset itself is a device-local IndexedDB cache (features/wanikani/idb.js),
   // re-syncable from api.wanikani.com. Synced as app 'wanikani'.
   wanikaniStore: { token: null },
+  // 合格 JLPT: target level + exam date + the rolling daily-checklist record; replaced at
+  // boot (features/jlpt/store.js loadJlpt). Synced as app 'jlpt'.
+  jlptStore: { level: 'N3', examDate: '', days: {} },
   // Built-in headword (jp) → rank, for Minna activation's dedup-onto-a-built-in path.
   BUILTIN_RANK_BY_JP: {},
   // Leveled vocab example sentences ({ [rank]: { N5:[jp,en], … } }), fetched from the server

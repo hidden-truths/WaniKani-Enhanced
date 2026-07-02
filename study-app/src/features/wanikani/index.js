@@ -28,15 +28,24 @@ export function initWanikani() {
 // Tab activation: paint whatever we have, then freshen.
 export function showWanikani() {
   renderWanikani();
-  ensureData();
+  ensureWkData();
 }
 
-async function ensureData() {
+// Other surfaces (the JLPT tab's readiness/checklist) subscribe to dataset arrivals —
+// fired whenever adoptWkData lands fresh data (cache hydrate + each completed sync).
+const wkDataListeners = [];
+export function onWkData(fn) { wkDataListeners.push(fn); }
+const notifyWkData = () => { for (const fn of wkDataListeners) { try { fn(); } catch (e) {} } };
+
+// Load the cached dataset into memory (instant) + kick a background freshen. Exported for
+// the JLPT tab, which needs WK signals (reviews-now / leeches / N3 coverage) WITHOUT the
+// user ever opening the 鰐蟹 tab. Safe no-op without a token.
+export async function ensureWkData() {
   const token = state.wanikaniStore.token;
   if (!token) return;
   if (!S.loaded) {
     const cached = await loadWkCache().catch(() => null);
-    if (cached) { adoptWkData(cached); renderWanikani(); }
+    if (cached) { adoptWkData(cached); if (panelActive()) renderWanikani(); notifyWkData(); }
   }
   maybeSyncWk(false);
 }
@@ -51,6 +60,7 @@ export async function maybeSyncWk(force) {
   try {
     const bundle = await syncWk(token, (msg) => { S.syncMsg = msg; renderWkStatus(); });
     adoptWkData(bundle);
+    notifyWkData();
   } catch (e) {
     S.syncErr = e && e.code === 'unauthorized'
       ? 'WaniKani rejected the token — reconnect with a fresh one.'
