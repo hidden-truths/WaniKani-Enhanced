@@ -268,9 +268,9 @@
         <button class="chip deck" data-deck="food">Food/Cooking</button>
         <button class="chip deck" data-deck="money">Money</button>
       </div></div>
-      <!-- Source facet: Minna no Nihongo provenance — all みんなの日本語 cards, the
-           iTalki subset, or a single lesson. The whole row is hidden by
-           annotateSourceChips() until the deck has Minna cards; empty chips dim. -->
+      <!-- Source facet: provenance — all みんなの日本語 cards, the iTalki subset, a
+           single lesson, 歌/song mines, or 鰐蟹/WaniKani activations. The whole row is
+           hidden by annotateSourceChips() until the deck has any; empty chips dim. -->
       <div class="frow source-row"><span class="filter-label">Source</span><div class="chips">
         <button class="chip deck" data-deck="minna" style="border-color:var(--adjective);color:var(--adjective)">みんなの日本語</button>
         <button class="chip deck" data-deck="italki" style="border-color:var(--ichidan);color:var(--ichidan)">iTalki</button>
@@ -278,6 +278,7 @@
         <button class="chip deck" data-deck="mnn-l23">L23</button>
         <button class="chip deck" data-deck="mnn-l24">L24</button>
         <button class="chip deck" data-deck="song" style="border-color:var(--godan);color:var(--godan)">歌</button>
+        <button class="chip deck" data-deck="wanikani" style="border-color:var(--gold);color:var(--gold)">鰐蟹</button>
       </div></div>
       <div class="fdiv"></div>
       <div class="frow"><span class="filter-label">Level &amp; rank</span><div class="chips">
@@ -495,7 +496,7 @@
         <button class="chip bf" data-filter="food">Food</button>
         <button class="chip bf" data-filter="money">Money</button>
       </div></div>
-      <!-- Source facet (Minna provenance) — hidden until the deck has Minna cards. -->
+      <!-- Source facet (provenance: Minna / iTalki / 歌 / 鰐蟹) — hidden until the deck has any. -->
       <div class="frow source-row"><span class="filter-label">Source</span><div class="chips">
         <button class="chip bf" data-filter="minna" style="border-color:var(--adjective);color:var(--adjective)">みんなの日本語</button>
         <button class="chip bf" data-filter="italki" style="border-color:var(--ichidan);color:var(--ichidan)">iTalki</button>
@@ -503,6 +504,7 @@
         <button class="chip bf" data-filter="mnn-l23">L23</button>
         <button class="chip bf" data-filter="mnn-l24">L24</button>
         <button class="chip bf" data-filter="song" style="border-color:var(--godan);color:var(--godan)">歌</button>
+        <button class="chip bf" data-filter="wanikani" style="border-color:var(--gold);color:var(--gold)">鰐蟹</button>
       </div></div>
       <!-- Grammar facet (Phase-4): filter to cards whose EXAMPLE sentences use a grammar point.
            Chips are rendered by browse.js from the ids actually present in the deck (labels from the

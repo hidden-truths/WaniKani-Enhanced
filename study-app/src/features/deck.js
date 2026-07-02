@@ -214,6 +214,22 @@ export function startDueSession() {
   onStartSession();
 }
 
+// "Study the 鰐蟹 deck now": jump to the flashcard tab scoped to WK-activated cards in
+// FREE study (fresh activations aren't due yet — free mode makes them reviewable
+// immediately) and start. The wanikani tab's post-activation CTA; mirrors the
+// studyLeeches jump (stats.js) — overrides the picker and syncs the chip UI to match.
+export function studyWkCards() {
+  document.querySelector('.tab[data-tab="study"]').click();
+  cfg.kind = 'free'; cfg.cat = []; cfg.type = []; cfg.trans = []; cfg.topic = []; cfg.status = []; cfg.source = ['wanikani']; cfg.jlpt = ['all']; cfg.rmin = 1; cfg.rmax = state.MAXRANK; cfg.ord = 'worst';
+  repaintDeck();
+  document.querySelectorAll('.chip.skind').forEach(x => x.classList.toggle('active', x.dataset.skind === 'free'));
+  document.querySelectorAll('.chip.jlpt').forEach(x => x.classList.toggle('active', x.dataset.jlpt === 'all'));
+  document.getElementById('rmin').value = 1; document.getElementById('rmax').value = state.MAXRANK;
+  document.querySelectorAll('.chip.ord').forEach(x => x.classList.toggle('active', x.dataset.ord === 'worst'));
+  updateStartLabel();
+  onStartSession();
+}
+
 // Wire the deck picker chips + range inputs + forecast horizon toggle. Runs after the data
 // build, so state.MAXRANK is final here (cfg.rmax is set to it).
 export function initDeckUI() {

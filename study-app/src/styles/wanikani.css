@@ -60,7 +60,9 @@
 .wk-two>.wk-card{margin-bottom:0}
 .wk-empty{color:var(--muted);font-size:13.5px;padding:18px 4px}
 .wk-morebtn{margin-top:12px}
-.wk-card svg{display:block;width:100%;height:auto}
+/* charts fill the card — but NOT the .ic button glyphs (this type rule outranks .ic's
+   1em sizing by specificity, so icons inside a wk-card button would blow up full-width) */
+.wk-card svg:not(.ic){display:block;width:100%;height:auto}
 
 /* ---- hero metrics -------------------------------------------------------------- */
 .wk-metrics{display:grid;grid-template-columns:repeat(6,1fr);gap:12px;margin-bottom:18px}
@@ -262,6 +264,31 @@
 .wk-d-sentence{margin-bottom:12px}
 .wk-d-sentence .jp{font-size:15.5px;line-height:1.8}
 .wk-d-sen-en{font-size:12.5px;color:var(--muted);margin-top:2px}
+
+/* ---- wk-leech-to-deck activation (add buttons, in-deck badges, actionable metrics) ------------ */
+/* a/button metric cards (reviews→wanikani.com, leeches→Leeches view) keep the plain
+   card's look; the .act affordance is the corner glyph + hover lift. */
+a.wk-metric,button.wk-metric{text-decoration:none;color:var(--ink);font:inherit;text-align:left;cursor:pointer}
+.wk-metric.act:hover{border-color:var(--ink-2);transform:translateY(-2px);box-shadow:var(--lift-md);transition:border-color .15s,transform .15s,box-shadow .15s}
+.wk-metric-go{position:absolute;right:10px;bottom:10px;width:14px;height:14px;color:var(--faint)}
+.wk-metric.act:hover .wk-metric-go{color:var(--ink-2)}
+
+.wk-addbtn{display:inline-flex;align-items:center;gap:7px;color:var(--good);
+  border-color:color-mix(in srgb, var(--good) 45%, transparent);background:var(--good-soft)}
+.wk-addbtn:hover{border-color:var(--good)}
+.wk-studybtn{display:inline-flex;align-items:center;gap:7px;color:var(--gold);
+  border-color:color-mix(in srgb, var(--gold) 45%, transparent);background:var(--gold-soft)}
+.wk-studybtn:hover{border-color:var(--gold)}
+.wk-leech-actions{flex:none;display:inline-flex;align-items:center;gap:8px;flex-wrap:wrap;justify-content:flex-end}
+.wk-btnrow{display:flex;align-items:center;gap:10px;flex-wrap:wrap}
+.wk-btnrow .wk-morebtn,.wk-btnrow .wk-studybtn{margin-top:12px}
+.wk-indeck{flex:none;display:inline-flex;align-items:center;gap:3px;color:var(--good);font:700 10.5px var(--mono);
+  border:1px solid color-mix(in srgb, var(--good) 40%, transparent);border-radius:999px;padding:2px 8px;background:var(--good-soft)}
+.wk-indeck .ic{width:11px;height:11px}
+.wk-indeck em{font-style:normal;text-transform:uppercase;letter-spacing:.5px}
+.wk-indeck-note{display:inline-flex;align-items:center;gap:6px;color:var(--good);font:600 12px var(--mono)}
+.wk-indeck-note .ic{width:13px;height:13px}
+.wk-cluster-foot{display:flex;align-items:center;justify-content:flex-end;min-height:26px}
 
 /* ---- motion + responsive --------------------------------------------------------------------- */
 @keyframes wkRise{from{opacity:0;transform:translateY(10px)}to{opacity:1;transform:none}}

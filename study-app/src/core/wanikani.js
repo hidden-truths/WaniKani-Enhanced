@@ -300,3 +300,60 @@ export function timeUntil(ms, nowMs) {
   if (d < 48 * 3600e3) return 'in ' + Math.round(d / 3600e3) + 'h';
   return 'in ' + Math.round(d / 864e5) + 'd';
 }
+
+/* ---- Deck activation (wk-leech-to-deck) ------------------------------------ */
+
+// Map a WK subject's parts_of_speech list onto the deck's card taxonomy. The specific
+// verb kinds win over the generic scan; the generic scan matches '… verb' with the
+// space so 'adverb' can never read as a verb. Unrecognized pos (counter, numeral,
+// proper noun, …) land in the noun bucket — the deck's own default — so a new WK pos
+// string can never make an un-renderable card. trans only means something on verbs;
+// a both-ways verb (rare) stays ''.
+export function wkPosTraits(pos) {
+  const list = (pos || []).map((p) => String(p).toLowerCase());
+  const has = (s) => list.includes(s);
+  let cat = null, type = '';
+  if (has('godan verb')) { cat = 'verb'; type = 'godan'; }
+  else if (has('ichidan verb')) { cat = 'verb'; type = 'ichidan'; }
+  else if (list.some((p) => p === 'verb' || p.endsWith(' verb'))) cat = 'verb';
+  else if (has('い adjective') || has('i adjective')) { cat = 'adjective'; type = 'i-adj'; }
+  else if (has('な adjective') || has('na adjective')) { cat = 'adjective'; type = 'na-adj'; }
+  else if (list.some((p) => p.endsWith('adjective'))) cat = 'adjective';
+  else if (has('adverb')) cat = 'adverb';
+  else if (has('expression') || has('interjection') || has('conjunction') || has('particle')) cat = 'phrase';
+  else cat = 'noun';
+  const t = has('transitive verb'), i = has('intransitive verb');
+  const trans = cat === 'verb' && t !== i ? (t ? 't' : 'i') : '';
+  return { cat, type, trans };
+}
+
+// Build the tagged custom-card object for a WK VOCABULARY subject (Source:鰐蟹) —
+// the songs/minna activation shape. Pure: the caller assigns the monotonic `rank`
+// and owns dedup + persistence. The deck's Leitner SRS takes over from here; the WK
+// SRS schedule is never written back (read-only token), the wkId keeps provenance.
+// mnem/tip/ex[jp] are innerHTML'd by the flashcard/Browse notes, so everything is
+// escaped here — the WK mnemonics via renderWkMarkup (escape-then-style, keeping the
+// coloured <kanji>/<reading>/… highlights the user already learned from).
+export function buildWkCard(s, rank) {
+  const { cat, type, trans } = wkPosTraits(s.pos);
+  const alts = (s.meanings || []).filter((m) => !m.primary).map((m) => m.m);
+  const from = `WaniKani level ${s.level}` + (s.docUrl
+    ? ` · <a href="${wkEscape(s.docUrl)}" target="_blank" rel="noopener">wanikani.com</a>` : '');
+  return {
+    rank,
+    jp: s.chars,
+    read: primaryReading(s) || s.chars,
+    mean: [primaryMeaning(s), ...alts.slice(0, 2)].filter(Boolean).join(', '),
+    cat, type, trans,
+    jlpt: '',
+    tags: ['鰐蟹', 'wk-l' + s.level],
+    wanikani: true,
+    wkId: s.id,
+    mnem: s.meaningMnemonic ? renderWkMarkup(s.meaningMnemonic) : '',
+    tip: (s.readingMnemonic ? '<b>Reading:</b> ' + renderWkMarkup(s.readingMnemonic) + '<br><br>' : '') + from,
+    ex: (s.contextSentences || []).map((cs) => [wkEscape(cs.ja), cs.en]),
+    accent: null,
+    levels: null,
+    custom: true,
+  };
+}

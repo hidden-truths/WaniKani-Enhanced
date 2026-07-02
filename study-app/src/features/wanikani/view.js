@@ -8,9 +8,12 @@ import { S } from './state.js';
 import { wkEscape } from '../../core/index.js';
 import { connectWanikani, disconnectWanikani, maybeSyncWk } from './index.js';
 import { dashboardHtml } from './dashboard.js';
-import { leechesHtml, leechList, expandLeeches } from './leeches.js';
+import { leechesHtml, leechList, leechClusters, expandLeeches, expandClusters } from './leeches.js';
 import { browseHtml, browseResultsHtml } from './browse.js';
 import { detailHtml } from './detail.js';
+import { activateWkVocab } from './activate.js';
+import { studyWkCards } from '../deck.js';
+import { setSyncStatus } from '../cloud-core.js';
 
 export const panelActive = () => {
   const p = document.getElementById('panel-wanikani');
@@ -159,7 +162,36 @@ const ACTIONS = {
   },
   showmore: () => { S.browseCap += 400; renderWanikani(); },
   leechmore: () => { expandLeeches(); renderWanikani(); },
+  clustermore: () => { expandClusters(); renderWanikani(); },
+
+  // wk-leech-to-deck activation: a confusion family / every leech / one subject
+  // becomes tagged Source:鰐蟹 flashcards (activate.js), then the view repaints so
+  // buttons flip to in-deck state. The bulk add confirms first — it can add hundreds.
+  addcluster: (el) => {
+    const c = leechClusters().find((x) => x.kanji.id === Number(el.dataset.id));
+    if (!c) return;
+    flashAdded(activateWkVocab(c.members.map((m) => m.subject)));
+    renderWanikani();
+  },
+  addleeches: () => {
+    const leeches = leechList().map((l) => l.subject);
+    if (!confirm(`Add every WaniKani vocab leech to your study deck as flashcards? They join the deck's own SRS (WaniKani is never written to).`)) return;
+    flashAdded(activateWkVocab(leeches));
+    renderWanikani();
+  },
+  addsubject: (el) => {
+    const s = S.subjects.get(Number(el.dataset.id));
+    if (!s) return;
+    flashAdded(activateWkVocab([s]));
+    if (S.detailId) document.getElementById('wkModalBody').innerHTML = detailHtml(S.detailId);
+    renderWanikani();   // badges/buttons behind the modal repaint too
+  },
+  studywk: () => { closeDetail(); studyWkCards(); },
 };
+
+const flashAdded = (n) => setSyncStatus(n
+  ? `鰐蟹 → deck: ${n} card${n === 1 ? '' : 's'} added`
+  : 'already in your deck — nothing to add');
 
 const toggleTok = (arr, tok) => { const i = arr.indexOf(tok); i >= 0 ? arr.splice(i, 1) : arr.push(tok); };
 

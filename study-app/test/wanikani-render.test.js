@@ -1,20 +1,37 @@
 // Render-glue test for the 鰐蟹 WaniKani package (src/features/wanikani/*) — the layer
-// the pure core tests can't reach: the token gate, the head/sub-nav, and the three
-// views composing over seeded S data, under happy-dom. Network (api.wanikani.com),
-// IndexedDB and the synced blob are never touched: we render directly with seeded
-// state instead of driving showWanikani()'s load path.
+// the pure core tests can't reach: the token gate, the head/sub-nav, the three
+// views composing over seeded S data, and the wk-leech-to-deck activation glue
+// (activate.js against a real Map-backed localStorage), under happy-dom. Network
+// (api.wanikani.com), IndexedDB and the synced blob are never touched: we render
+// directly with seeded state instead of driving showWanikani()'s load path.
 import { test, expect, beforeEach, vi } from 'vitest';
 
 // The synced-blob chain drags in cloud-core/transport; the render layer only needs a
-// schedulable stub.
+// schedulable stub. Same hermetic treatment for the app-wide surfaces view.js/activate.js
+// now touch: the deck jump, the sync-status pill, and custom-cards' rebuild fan-out
+// (custom-cards.js would drag deck/browse/stats/a11y and their eval-time localStorage reads).
 vi.mock('../src/features/synced-blob.js', () => ({
   createSyncedBlob: () => ({ schedule: () => {}, push: async () => {}, pull: async () => {} }),
 }));
+vi.mock('../src/features/deck.js', () => ({ studyWkCards: vi.fn() }));
+vi.mock('../src/features/cloud-core.js', () => ({ setSyncStatus: () => {}, api: async () => ({}), account: null }));
+vi.mock('../src/features/custom-cards.js', () => ({ rebuildData: vi.fn(), refreshAfterVerbChange: () => {} }));
+
+// persistence/custom.js reads localStorage at call time — give it a working Map-backed fake.
+const bag = new Map();
+vi.stubGlobal('localStorage', {
+  getItem: (k) => (bag.has(k) ? bag.get(k) : null),
+  setItem: (k, v) => bag.set(k, String(v)),
+  removeItem: (k) => bag.delete(k),
+  clear: () => bag.clear(),
+});
 
 import { state } from '../src/state.js';
 import { S, adoptWkData, resetWkData } from '../src/features/wanikani/state.js';
 import { renderWanikani } from '../src/features/wanikani/view.js';
 import { detailHtml } from '../src/features/wanikani/detail.js';
+import { activateWkVocab, wkInDeck, activatableWk } from '../src/features/wanikani/activate.js';
+import { loadCustom } from '../src/persistence/custom.js';
 
 const NOW = Date.now();
 const subj = (id, type, chars, o = {}) => ({
@@ -60,6 +77,8 @@ beforeEach(() => {
     <div class="modal-overlay" id="wkModal"><div class="modal"><button id="wkModalX">×</button><div id="wkModalBody"></div></div></div>`;
   resetWkData();
   state.wanikaniStore = { token: null };
+  state.DATA = [];
+  bag.clear();
 });
 
 test('no token → the connect gate renders', () => {
@@ -121,4 +140,57 @@ test('detail html → record, mnemonic markup, family + sibling strips, audio', 
   expect(html).toContain('data-wk-act="audio"');
   expect(html).toContain('Context sentences');
   expect(html).toContain('leech');                    // 虫 badge (score 6 ≥ 1)
+});
+
+/* ---- wk-leech-to-deck ---------------------------------------------------------- */
+
+test('leeches view renders the activation affordances (bulk add + per-family drill)', () => {
+  state.wanikaniStore = { token: 't' };
+  adoptWkData(bundle());
+  S.view = 'leeches';
+  renderWanikani();
+  const body = document.getElementById('wkBody').innerHTML;
+  expect(body).toContain('data-wk-act="addleeches"');       // bulk "Add all N to deck"
+  expect(body).toContain('data-wk-act="addcluster"');       // per-family drill button
+  expect(body).toContain('Drill this family');
+});
+
+test('activateWkVocab adds tagged cards once and skips words already in the deck', () => {
+  adoptWkData(bundle());
+  const v1 = S.subjects.get(21), v2 = S.subjects.get(22), kanji = S.subjects.get(10);
+  // kanji are never card-able; 生まれる already in the deck under the same headword
+  state.DATA = [{ rank: 7, jp: '生まれる' }];
+  expect(activatableWk([kanji, v1, v2]).map((s) => s.id)).toEqual([21]);
+  expect(activateWkVocab([kanji, v1, v2])).toBe(1);
+  const added = loadCustom().verbs;
+  expect(added.length).toBe(1);
+  expect(added[0].jp).toBe('生きる');
+  expect(added[0].wanikani).toBe(true);
+  expect(added[0].wkId).toBe(21);
+  expect(added[0].tags).toContain('鰐蟹');
+  expect(added[0].rank).toBeGreaterThan(100);               // monotonic seq, custom range
+  // idempotent: the deck now carries wkId 21 (rebuildData is mocked, so mirror it)
+  state.DATA = [...state.DATA, ...added];
+  expect(wkInDeck(v1)).toBe(true);
+  expect(activateWkVocab([v1, v2])).toBe(0);                // wkId match + headword match both skip
+});
+
+test('detail modal offers Add to deck for vocab and shows in-deck state after activation', () => {
+  adoptWkData(bundle());
+  expect(detailHtml(21)).toContain('data-wk-act="addsubject"');
+  expect(detailHtml(10)).not.toContain('data-wk-act="addsubject"');   // kanji: no card path
+  activateWkVocab([S.subjects.get(21)]);
+  state.DATA = [...loadCustom().verbs];                     // rebuildData is mocked — mirror it
+  const html = detailHtml(21);
+  expect(html).not.toContain('data-wk-act="addsubject"');
+  expect(html).toContain('in your deck');
+  expect(html).toContain('data-wk-act="studywk"');
+});
+
+test('dashboard leech metric jumps to the Leeches view', () => {
+  state.wanikaniStore = { token: 't' };
+  adoptWkData(bundle());
+  renderWanikani();
+  const body = document.getElementById('wkBody').innerHTML;
+  expect(body).toMatch(/<button class="wk-metric leech act" data-wk-act="view" data-view="leeches">/);
 });

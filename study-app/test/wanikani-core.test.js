@@ -7,6 +7,7 @@ import {
   confusionClusters, levelProgress, levelPace, accuracySummary,
   slimSubject, slimAssignment, slimStat, renderWkMarkup, wkEscape,
   primaryMeaning, primaryReading, subjectMatches, timeUntil,
+  wkPosTraits, buildWkCard,
 } from '../src/core/wanikani.js';
 
 const NOW = Date.parse('2026-07-01T12:00:00Z');
@@ -252,4 +253,64 @@ test('primary pickers + search + timeUntil', () => {
   expect(timeUntil(NOW + 5 * H, NOW)).toBe('in 5h');
   expect(timeUntil(NOW + 3 * D, NOW)).toBe('in 3d');
   expect(timeUntil(null, NOW)).toBe('—');
+});
+
+/* ---- deck activation (wk-leech-to-deck) ------------------------------------ */
+
+test('wkPosTraits maps WK parts_of_speech onto the deck taxonomy', () => {
+  expect(wkPosTraits(['transitive verb', 'godan verb'])).toEqual({ cat: 'verb', type: 'godan', trans: 't' });
+  expect(wkPosTraits(['intransitive verb', 'ichidan verb'])).toEqual({ cat: 'verb', type: 'ichidan', trans: 'i' });
+  expect(wkPosTraits(['する verb'])).toEqual({ cat: 'verb', type: '', trans: '' });
+  // 'adverb' must never read as a verb (the ' verb' suffix scan needs the space)
+  expect(wkPosTraits(['adverb'])).toEqual({ cat: 'adverb', type: '', trans: '' });
+  expect(wkPosTraits(['い adjective'])).toEqual({ cat: 'adjective', type: 'i-adj', trans: '' });
+  expect(wkPosTraits(['な adjective', 'noun'])).toEqual({ cat: 'adjective', type: 'na-adj', trans: '' });
+  expect(wkPosTraits(['expression'])).toEqual({ cat: 'phrase', type: '', trans: '' });
+  expect(wkPosTraits(['noun'])).toEqual({ cat: 'noun', type: '', trans: '' });
+  expect(wkPosTraits(['proper noun'])).toEqual({ cat: 'noun', type: '', trans: '' });
+  expect(wkPosTraits([])).toEqual({ cat: 'noun', type: '', trans: '' });
+  // a both-ways verb claims neither transitivity
+  expect(wkPosTraits(['transitive verb', 'intransitive verb', 'godan verb']).trans).toBe('');
+});
+
+test('buildWkCard builds a tagged Source:鰐蟹 custom card from a vocab subject', () => {
+  const s = subj(21, 'vocabulary', '変える', {
+    level: 19,
+    pos: ['transitive verb', 'ichidan verb'],
+    meanings: [{ m: 'To Change Something', primary: true }, { m: 'To Alter', primary: false }],
+    readings: [{ r: 'かえる', primary: true, accepted: true }],
+    meaningMnemonic: 'You <kanji>change</kanji> it.',
+    readingMnemonic: 'Read as <reading>かえる</reading>.',
+    contextSentences: [{ ja: '色を変える。', en: 'Change the color.' }],
+    docUrl: 'https://www.wanikani.com/vocabulary/変える',
+  });
+  const c = buildWkCard(s, 123);
+  expect(c.rank).toBe(123);
+  expect(c.jp).toBe('変える');
+  expect(c.read).toBe('かえる');
+  expect(c.mean).toBe('To Change Something, To Alter');
+  expect(c.cat).toBe('verb'); expect(c.type).toBe('ichidan'); expect(c.trans).toBe('t');
+  expect(c.tags).toEqual(['鰐蟹', 'wk-l19']);
+  expect(c.wanikani).toBe(true); expect(c.wkId).toBe(21); expect(c.custom).toBe(true);
+  // mnem/tip are innerHTML'd downstream — WK markup pre-rendered, never raw
+  expect(c.mnem).toContain('<span class="wkm wkm-kanji">change</span>');
+  expect(c.tip).toContain('wkm-reading');
+  expect(c.tip).toContain('WaniKani level 19');
+  expect(c.tip).toContain('wanikani.com');
+  expect(c.ex).toEqual([['色を変える。', 'Change the color.']]);
+  expect(c.jlpt).toBe('');
+});
+
+test('buildWkCard: kana vocab falls back to chars for the reading; hostile text stays escaped', () => {
+  const kana = subj(31, 'vocabulary', 'ばら', { level: 22, pos: ['noun'], readings: [] });
+  expect(buildWkCard(kana, 1).read).toBe('ばら');
+  const hostile = subj(32, 'vocabulary', '毒', {
+    level: 5, pos: ['noun'],
+    meaningMnemonic: '<script>alert(1)</script> poison',
+    contextSentences: [{ ja: '<img onerror=x>毒です。', en: 'It is poison.' }],
+  });
+  const c = buildWkCard(hostile, 2);
+  expect(c.mnem).not.toContain('<script>');
+  expect(c.ex[0][0]).not.toContain('<img');
+  expect(c.ex[0][0]).toContain('&lt;img');
 });

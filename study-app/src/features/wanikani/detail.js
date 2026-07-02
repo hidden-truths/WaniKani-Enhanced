@@ -9,6 +9,7 @@ import {
   wkEscape, renderWkMarkup, stageBand, WK_BANDS, timeUntil, leechScore,
 } from '../../core/index.js';
 import { charHtml, typeCss, subjectRowHtml, TYPE_JP } from './bits.js';
+import { wkInDeck } from './activate.js';
 
 export function detailHtml(id) {
   const s = S.subjects.get(id);
@@ -69,11 +70,22 @@ function recordHtml(s) {
     ${stageChip}
     ${next ? `<span class="wk-d-rec-note">${next}</span>` : ''}
     ${score >= 1 ? `<span class="wk-leech-badge big" title="Leech score ${score.toFixed(1)}"><span class="jp">虫</span> leech ${score >= 10 ? Math.round(score) : score.toFixed(1)}</span>` : ''}
+    ${deckActionHtml(s)}
     ${st ? `<div class="wk-d-accs">
       ${side('Meaning', st.meaningCorrect, st.meaningIncorrect, st.meaningCurrentStreak, st.meaningMaxStreak)}
       ${side('Reading', st.readingCorrect, st.readingIncorrect, st.readingCurrentStreak, st.readingMaxStreak)}
     </div>` : ''}
   </div>`;
+}
+
+// wk-leech-to-deck: vocabulary can be activated into the study deck right from the
+// modal (kanji/radicals can't — they're not cards; their treatment is the family drill).
+function deckActionHtml(s) {
+  if (s.type !== 'vocabulary' || !s.chars) return '';
+  return wkInDeck(s)
+    ? `<span class="wk-indeck-note"><svg class="ic" aria-hidden="true"><use href="#i-check"/></svg>in your deck</span>
+       <button class="chip wk-studybtn" data-wk-act="studywk"><svg class="ic" aria-hidden="true"><use href="#i-cards"/></svg>Study</button>`
+    : `<button class="chip wk-addbtn" data-wk-act="addsubject" data-id="${s.id}"><svg class="ic" aria-hidden="true"><use href="#i-plus"/></svg>Add to deck</button>`;
 }
 
 /* ---- facts (part of speech) --------------------------------------------------------- */

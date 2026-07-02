@@ -44,7 +44,8 @@ export function accSplitHtml(subjectId) {
 
 // Compact clickable subject ROW (leech list, family lists). `opts.act` picks the click
 // action ('open' from a view, 'jump' from inside the modal); `opts.leech` adds the 虫
-// badge; `opts.score` shows the leech score chip.
+// badge; `opts.score` shows the leech score chip; `opts.inDeck` marks a word already
+// activated into the study deck (wk-leech-to-deck).
 export function subjectRowHtml(s, opts = {}) {
   const act = opts.act || 'open';
   const st = S.stats.get(s.id);
@@ -56,6 +57,7 @@ export function subjectRowHtml(s, opts = {}) {
       <span class="wk-row-meaning">${wkEscape(primaryMeaning(s))}</span>
     </span>
     ${opts.leech ? '<span class="wk-leech-badge" title="Leech"><span class="jp">虫</span></span>' : ''}
+    ${opts.inDeck ? '<span class="wk-indeck" title="In your study deck"><svg class="ic" aria-hidden="true"><use href="#i-check"/></svg><em>deck</em></span>' : ''}
     ${accSplitHtml(s.id)}
     ${stageSealHtml(s.id)}
     ${score != null ? `<span class="wk-score" title="Leech score">${score >= 10 ? Math.round(score) : score.toFixed(1)}</span>` : ''}

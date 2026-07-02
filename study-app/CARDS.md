@@ -35,7 +35,7 @@ A card is a plain object. `✓` = required for the card to function; the rest ma
 | `type` | string | — | Sub-class: verbs `godan`/`ichidan`/`irregular`; adjectives `i-adj`/`na-adj`; else `''`. The **Type** facet + stamp label. |
 | `trans` | string | — | Transitivity (verbs only): `t` (transitive) / `i` (intransitive) / `''`. The **Transitivity** facet. |
 | `jlpt` | string | — | `N5`…`N1`. The **JLPT** facet. Minna default `N4`. |
-| `tags` | string[] | — | Semantic/topic tokens (`motion`, `daily`, …) + specials (`suru`, `fake`) + provenance (`custom`, `みんなの日本語`, `mnn-l<n>`, `iTalki`). Drive the **Topic** + **Source** facets and the Browse tag chips. |
+| `tags` | string[] | — | Semantic/topic tokens (`motion`, `daily`, …) + specials (`suru`, `fake`) + provenance (`custom`, `みんなの日本語`, `mnn-l<n>`, `iTalki`, `歌`/`song-<id>`, `鰐蟹`/`wk-l<n>`). Drive the **Topic** + **Source** facets and the Browse tag chips. |
 | `mnem` | string (HTML) | — | Mnemonic / memory hook. Rendered via `innerHTML` (so `<b>`/`<br>` are allowed — author-controlled, keep it safe). |
 | `tip` | string (HTML) | — | Trap / usage note (similar words, nuance, conjugation gotcha). Rendered via `innerHTML`. |
 | `ex` | `[[jp,en]]` | — | A single fallback example. Used only when `levels` is absent. |
@@ -44,6 +44,7 @@ A card is a plain object. `✓` = required for the card to function; the rest ma
 | `tts` | string | — | Optional TTS-text override for an ambiguous single kanji Google misreads (e.g. `角` → set `"かど"`). Defaults to the kanji headword. |
 | `custom` | bool | — | Marks a user/Minna card (CUSTOM badge, Edit/Delete). |
 | `minna`, `italki`, `minnaKey`, `minnaLesson` | — | Minna provenance (see [MINNA.md](MINNA.md)). |
+| `wanikani`, `wkId` | — | 鰐蟹/WaniKani provenance (leech→deck activation): `wanikani:true` feeds the **Source** facet, `wkId` is the WK subject id (the dedup key against re-adds). Built by `buildWkCard` (core/wanikani.js). |
 | `skip` | bool | — | Built-in only: exclude from the deck. |
 
 ## Format conventions (get these right)

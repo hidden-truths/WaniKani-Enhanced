@@ -33,10 +33,13 @@ order. The actual DOM/render/feature glue is split into **`src/features/*`** mod
   status pills go through cloud-core's `setSyncStatus` (the one `#syncStatus` writer — the old local
   `flash()` copy is gone). Render/navigation glue tested in `test/songs-render.test.js`. See
   [SONGS.md](SONGS.md)), `wanikani` (the 鰐蟹 WaniKani companion tab — a **directory**
-  `wanikani/{state,store,api,idb,sync,view,dashboard,leeches,browse,detail,bits}.js` behind
+  `wanikani/{state,store,api,idb,sync,view,dashboard,leeches,browse,detail,bits,activate}.js` behind
   `wanikani/index.js` (lifecycle: `initWanikani`/`showWanikani` + the connect/sync orchestration),
   with `wanikani.js` a thin `export *` re-export. Token gate → dashboard / 苦手 leeches +
-  same-kanji confusion groups / corpus browser + a subject detail modal; `view.js` owns the
+  same-kanji confusion groups / corpus browser + a subject detail modal; `activate.js` is the
+  wk-leech-to-deck glue (a leech / confusion family / any vocab subject → tagged Source:鰐蟹
+  custom cards via the pure `buildWkCard`, drilled by the app's OWN Leitner — WK is never
+  written back; dedup = wkId + deck-headword skip, the songs-style path, NOT Minna overlays); `view.js` owns the
   render dispatch + a songs-style declarative `ACTIONS` click table on the panel. `api.js` talks
   to **api.wanikani.com DIRECTLY** (CORS; deliberately NOT net/transport's `api()` — no cookies,
   no API_BASE) and `idb.js` is the app's ONE IndexedDB cache (see the dead-end below). Pure
@@ -482,8 +485,8 @@ Component contracts you must preserve:
   `.deck`/`.bf` + `data-deck`/`data-filter`. "Godan + Motion" = `godan AND motion`
   (intersection); tokens within one facet OR. `cfg`/`bcfg` hold
   `cat`/`type`/`trans`/`topic`/`status`/`source` arrays (empty = no constraint).
-  `source` (added for みんなの日本語 provenance) matches the `minna`/`italki` card flags and
-  `mnn-l<n>` tags. Don't reintroduce a single shared array — that was the old confusing
+  `source` (provenance) matches the `minna`/`italki`/`song`/`wanikani` card flags and
+  the `mnn-l<n>`/`song-<id>`/`wk-l<n>` tags. Don't reintroduce a single shared array — that was the old confusing
   behavior. (`passes` treats a *missing* facet array as no-constraint too, so older test
   cfgs without `source`/`cat` still pass.)
 - **The single "All" chip is a master reset** that clears all four facets at once

@@ -8,6 +8,7 @@ import {
 } from '../../core/index.js';
 import { leechList } from './leeches.js';
 import { subjectRowHtml } from './bits.js';
+import { wkDeckIndex, wkInDeck, wkDeckCount } from './activate.js';
 
 export function dashboardHtml() {
   const now = Date.now();
@@ -37,24 +38,33 @@ export function dashboardHtml() {
 
 /* ---- hero metrics ------------------------------------------------------------ */
 
+// The actionable metrics link out: reviews/lessons open the matching wanikani.com
+// session in a new tab (this app can't run WK reviews — the token is read-only), and
+// the leech card jumps to the Leeches view. The rest stay plain readouts.
 function metricsHtml(assignments, bands, fc, lp, acc, leeches, now) {
   // "next +N in Xh": the first non-empty upcoming slot of the current forecast window.
   const upcoming = nextBatch(assignments, now);
   const cards = [
-    { big: fc.availableNow, label: 'reviews now', jp: '復習', cls: fc.availableNow ? 'hot' : '', sub: upcoming },
-    { big: (S.summary && S.summary.lessons) || 0, label: 'lessons ready', jp: '学習', sub: '' },
+    { big: fc.availableNow, label: 'reviews now', jp: '復習', cls: fc.availableNow ? 'hot' : '', sub: upcoming,
+      href: fc.availableNow ? 'https://www.wanikani.com/subjects/review' : null },
+    { big: (S.summary && S.summary.lessons) || 0, label: 'lessons ready', jp: '学習', sub: '',
+      href: (S.summary && S.summary.lessons) ? 'https://www.wanikani.com/subjects/lesson' : null },
     { big: lp.pct + '%', label: 'level ' + ((S.user && S.user.level) || '—') + ' progress', jp: '段階', sub: `${lp.passed} of ${lp.needed} kanji passed` },
     { big: bands.apprentice, label: 'apprentice', jp: '見習', cls: 'appr', sub: 'the churn zone' },
     { big: bands.burned, label: 'burned', jp: '焼却', cls: 'burn', sub: 'done forever' },
-    { big: leeches.length, label: 'leeches', jp: '苦手', cls: leeches.length ? 'leech' : '', sub: leeches.length ? 'see the Leeches view' : 'none — clean slate' },
+    { big: leeches.length, label: 'leeches', jp: '苦手', cls: leeches.length ? 'leech' : '', sub: leeches.length ? 'see the Leeches view' : 'none — clean slate',
+      view: leeches.length ? 'leeches' : null },
   ];
-  return `<div class="wk-metrics">` + cards.map((c) => `
-    <div class="wk-metric ${c.cls || ''}">
+  return `<div class="wk-metrics">` + cards.map((c) => {
+    const inner = `
       <span class="wk-metric-jp jp-min" aria-hidden="true">${c.jp}</span>
       <b class="wk-metric-big">${c.big}</b>
       <span class="wk-metric-label">${c.label}</span>
-      ${c.sub ? `<span class="wk-metric-sub">${c.sub}</span>` : ''}
-    </div>`).join('') + `</div>`;
+      ${c.sub ? `<span class="wk-metric-sub">${c.sub}</span>` : ''}`;
+    if (c.href) return `<a class="wk-metric ${c.cls || ''} act" href="${c.href}" target="_blank" rel="noopener" title="Start on wanikani.com">${inner}<svg class="ic wk-metric-go" aria-hidden="true"><use href="#i-external"/></svg></a>`;
+    if (c.view) return `<button class="wk-metric ${c.cls || ''} act" data-wk-act="view" data-view="${c.view}">${inner}<svg class="ic wk-metric-go" aria-hidden="true"><use href="#i-arrow-right"/></svg></button>`;
+    return `<div class="wk-metric ${c.cls || ''}">${inner}</div>`;
+  }).join('') + `</div>`;
 }
 
 function nextBatch(assignments, now) {
@@ -174,11 +184,16 @@ function accuracyHtml(acc) {
 /* ---- leech preview ------------------------------------------------------------------ */
 
 function leechPreviewHtml(leeches) {
-  const rows = leeches.slice(0, 5).map((l) => subjectRowHtml(l.subject, { leech: true, score: true })).join('');
+  const idx = wkDeckIndex();
+  const rows = leeches.slice(0, 5).map((l) => subjectRowHtml(l.subject, { leech: true, score: true, inDeck: wkInDeck(l.subject, idx) })).join('');
+  const inDeck = wkDeckCount();
   return `<div class="wk-card-head"><div><h2 class="title">Worst leeches</h2><div class="sub">the items eating your review sessions</div></div>
     ${leeches.length ? `<span class="wk-card-badge leech">${leeches.length}</span>` : ''}</div>
     ${leeches.length
       ? `<div class="wk-rows">${rows}</div>
-         <button class="chip wk-morebtn" data-wk-act="view" data-view="leeches"><svg class="ic" aria-hidden="true"><use href="#i-arrow-right"/></svg>All leeches & confusion groups</button>`
+         <div class="wk-btnrow">
+           <button class="chip wk-morebtn" data-wk-act="view" data-view="leeches"><svg class="ic" aria-hidden="true"><use href="#i-arrow-right"/></svg>All leeches & confusion groups</button>
+           ${inDeck ? `<button class="chip wk-studybtn" data-wk-act="studywk"><svg class="ic" aria-hidden="true"><use href="#i-cards"/></svg>Study 鰐蟹 deck · ${inDeck}</button>` : ''}
+         </div>`
       : `<div class="wk-empty">Nothing qualifies as a leech right now. 素晴らしい。</div>`}`;
 }

@@ -114,22 +114,22 @@ export function annotateCatChips(){
     b.title = n===0 ? `No ${t}s yet — add one in Browse` : `${n} ${t}${n===1?'':'s'}`;
   });
 }
-// Source facet (みんなの日本語 / iTalki / per-lesson) only applies once Minna vocab
-// has been activated. Hide the whole Source row when the deck has no Minna cards;
-// otherwise dim individual source chips that currently match nothing. Same shape
-// as annotateCatChips; runs at boot and on every state.DATA change.
+// Source facet (みんなの日本語 / iTalki / per-lesson / 歌 / 鰐蟹) only applies once
+// provenance-tagged vocab has been activated. Hide the whole Source row when the deck
+// has none; otherwise dim individual source chips that currently match nothing. Same
+// shape as annotateCatChips; runs at boot and on every state.DATA change.
 export function annotateSourceChips(){
-  // Show the Source row once the deck has ANY provenance-tagged cards — みんなの日本語 OR a 歌/song
-  // word (both populate the source facet); otherwise hide it entirely.
-  const hasSource=state.DATA.some(v=>v.minna||v.song);
+  // Show the Source row once the deck has ANY provenance-tagged cards — みんなの日本語, a
+  // 歌/song word, or a 鰐蟹/WaniKani activation (all populate the source facet).
+  const hasSource=state.DATA.some(v=>v.minna||v.song||v.wanikani);
   document.querySelectorAll('.frow.source-row').forEach(r=>{r.style.display=hasSource?'':'none';});
   if(!hasSource)return;
-  const counts={minna:0,italki:0,song:0};
-  state.DATA.forEach(v=>{ if(v.minna)counts.minna++; if(v.italki)counts.italki++; if(v.song)counts.song++;
+  const counts={minna:0,italki:0,song:0,wanikani:0};
+  state.DATA.forEach(v=>{ if(v.minna)counts.minna++; if(v.italki)counts.italki++; if(v.song)counts.song++; if(v.wanikani)counts.wanikani++;
     (v.tags||[]).forEach(t=>{ if(/^mnn-l\d+$/.test(t)||/^song-/.test(t))counts[t]=(counts[t]||0)+1; }); });
   document.querySelectorAll('.chip.deck,.chip.bf').forEach(b=>{
     const t=b.dataset.deck||b.dataset.filter;
-    if(t!=='minna'&&t!=='italki'&&t!=='song'&&!/^mnn-l\d+$/.test(t)&&!/^song-/.test(t))return;
+    if(t!=='minna'&&t!=='italki'&&t!=='song'&&t!=='wanikani'&&!/^mnn-l\d+$/.test(t)&&!/^song-/.test(t))return;
     const n=counts[t]||0;
     b.disabled=n===0;
     b.title=n===0?'No cards with this source yet':`${n} card${n===1?'':'s'}`;
