@@ -8,6 +8,7 @@ import { escapeHtml, segmentsToRuby, songWords, bucketByJlpt, songGrammar } from
 import { grammarLabel, grammarJlpt } from '../../data/grammar.js';
 import { S, LV_CLASS } from './state.js';
 import { known } from './library.js';
+import { openBrowseGrammar } from '../browse.js';   // runtime-only (event-time) import, like word-lookup⇄browse
 
 // Render the Mine panel: the song's content words bucketed by JLPT (known / added / new vs the deck,
 // with per-word + bulk add) and its grammar points (each linking to the grammar reference).
@@ -116,10 +117,10 @@ export async function savePhrase(ord) {
   catch (e) { setSyncStatus('⚠ could not save the phrase'); }
 }
 
-// Cross-link from a song's grammar point into the Browse tab (example sentences using it).
+// Cross-link from a song's grammar point into the Browse tab, filtered to this grammar
+// point (cards whose example sentences use it). The tab click renders Browse unfiltered;
+// openBrowseGrammar then applies the selection + opens the disclosure and re-renders.
 export function goBrowseGrammar(id) {
-  // Deep-link into Browse filtered to this grammar point (cross-link to example sentences).
   document.querySelector('.tab[data-tab="browse"]').click();
-  // The Browse grammar facet is its own chip row; selecting it programmatically is a follow-up —
-  // for now this lands the user on Browse where the グラマー chip for this id is available.
+  openBrowseGrammar(id);
 }

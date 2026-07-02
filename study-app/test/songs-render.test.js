@@ -24,6 +24,7 @@ vi.mock('../src/features/speaking-bar.js', () => ({
   releaseMicIfHidden: () => false,
 }));
 vi.mock('../src/features/word-lookup.js', () => ({ wireWordTaps: () => {} }));
+vi.mock('../src/features/browse.js', () => ({ openBrowseGrammar: () => {} }));   // mine.js's grammar deep-link target (browse drags settings-store's eval-time localStorage read)
 vi.mock('../src/features/audio.js', () => ({ playItem: () => {}, cycleMod: () => false }));
 vi.mock('../src/features/songs-youtube.js', () => ({
   mountPlayer: async () => {}, getPlayer: () => null, destroyPlayer: () => {}, playSlice: () => {},

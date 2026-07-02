@@ -172,6 +172,19 @@ function renderGrammarChips() {
   }).join('');
 }
 
+// Deep-link into the grammar facet (Songs grammar pills / the JLPT tab's grammar task):
+// select the id (when given AND present in the deck — renderGrammarChips prunes vanished
+// ids anyway), open the disclosure so the selection is visible, and re-render. The caller
+// switches to the Browse tab first (the tab click's renderBrowse is harmless — this one
+// runs after with the selection applied).
+export function openBrowseGrammar(id) {
+  if (id) bGrammar = [id];
+  const region = document.getElementById('bGrammarRegion');
+  const toggle = document.querySelector('.topic-toggle[data-target="bGrammarRegion"]');
+  if (region && toggle && !region.classList.contains('open')) toggle.click();   // persists open-state like a user click
+  renderBrowse();
+}
+
 // Re-render the whole grid on any filter/search change. passF = facet+rank filter; passQ =
 // search text. The frequency "topN-M" tags are filtered OUT of the visible tag chips.
 export function renderBrowse() {
