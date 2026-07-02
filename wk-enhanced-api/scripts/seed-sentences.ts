@@ -1,5 +1,5 @@
 // seed-sentences — seed the built-in curator content into the store as PUBLIC rows
-// (public=1, visibility='public', created_by=NULL). Three passes:
+// (public=1, visibility='public', created_by=NULL — except the gated Minna pass). Five passes:
 //   1. 独り言 Self-Talk phrases (Phase 1) — one `sentence` row each, idempotent by ext_id
 //      (db.upsertPublicSentence).
 //   2. Built-in vocab EXAMPLE sentences (Phase 2) — leveled `sentence` rows linked to cards
@@ -10,6 +10,9 @@
 //      `sentence_template` table (db.upsertPublicTemplate, idempotent by ext_id). A template has
 //      no single fixed text/hash, so it isn't a `sentence` row; its realizations become sentence
 //      rows lazily in a later slice. See ../../SENTENCE_STORE_TEMPLATES.md.
+//   4. みんなの日本語 sentences — GATED rows (public=0; copyright), see the pass comment below.
+//   5. N3 grammar-catalog example sentences — PUBLIC rows linked owner_type='grammar_point'
+//      (db.upsertPublicSentence, idempotent by ext_id `gp-<pointId>-<ordinal>`).
 // User-authored content is NOT seeded here — those are written live via /v1/sentences (templates
 // have no authoring path yet — curator-only).
 //
@@ -26,6 +29,7 @@ import { readdirSync, readFileSync } from 'node:fs';
 import { SELFTALK } from '../../study-app/src/data/selftalk.js';
 import { EXAMPLES } from '../../study-app/src/data/examples.js';
 import { SELFTALK_TEMPLATES } from '../../study-app/src/data/selftalk-templates.js';
+import { GRAMMAR_N3 } from '../../study-app/src/data/grammar-n3.js';
 import { plainText, rubyToSegments } from '../../study-app/src/core/text.js';
 import * as db from '../src/db/client.ts';
 
@@ -134,3 +138,27 @@ for (const file of minnaFiles) {
         seedMinna(`mnn-${n}-conv-${i}`, ln.jp, ln.en, { owner_type: 'conversation', owner_id: `mnn-${n}-conv`, role: ln.role ?? null, ordinal: i }));
 }
 console.log(`seeded ${minnaCount} みんなの日本語 sentences (gated, public=0) from ${minnaFiles.length} lessons into the sentence store`);
+
+// ---- Pass 5: N3 grammar-catalog example sentences → PUBLIC rows linked to grammar points ----
+// The generated study-app catalog (data/grammar-n3.js — the runtime content source for the cloze
+// drill) additionally seeds the store so the offline GiNZA batch can attach tap-to-lookup tokens
+// and the TTS pre-gen covers the sentences. The rows are PUBLIC (the catalog isn't copyrighted,
+// unlike Minna's gated grammar_point rows above, which share the owner_type but stay public=0 /
+// dark to getSentences). ext_id `gp-<pointId>-<ordinal>` is position-derived → idempotent; the
+// client resolves tokens by (owner_id, ordinal), matching its example indexes.
+let grammarCount = 0;
+for (const p of GRAMMAR_N3) {
+    p.examples.forEach((ex: { jp: string; en: string }, i: number) => {
+        db.upsertPublicSentence({
+            extId: `gp-${p.id}-${i}`,
+            text: plainText(ex.jp),
+            furigana: furiganaFor(ex.jp, `gp-${p.id}-${i}`),
+            source: 'grammar',
+            translations: { en: ex.en },
+            tags: { grammar: [p.id] },
+            link: { owner_type: 'grammar_point', owner_id: p.id, ordinal: i },
+        });
+        grammarCount++;
+    });
+}
+console.log(`seeded ${grammarCount} N3 grammar example sentences (${GRAMMAR_N3.length} points) into the sentence store`);

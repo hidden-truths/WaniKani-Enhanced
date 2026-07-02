@@ -49,7 +49,9 @@ const annotationsResource = createReadThroughResource({
     for (const s of sentences || []) {
       const link = (s && s.link) || {};
       const tokens = sentenceTokens(s);
-      if (link.owner_id != null && link.ordinal != null && tokens) out[`${link.owner_id}:${link.ordinal}`] = tokens;
+      // compactLink drops a FALSY ordinal from the wire (every point's first example is
+      // ordinal 0) — default it back, or example 0 would never get its tokens.
+      if (link.owner_id != null && tokens) out[`${link.owner_id}:${link.ordinal ?? 0}`] = tokens;
     }
     return out;
   },

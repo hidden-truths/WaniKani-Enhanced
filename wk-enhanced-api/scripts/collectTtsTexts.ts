@@ -24,6 +24,7 @@ import { VERBS } from '../../study-app/src/data/verbs.js';
 import { EXAMPLES } from '../../study-app/src/data/examples.js';
 import { SELFTALK } from '../../study-app/src/data/selftalk.js';
 import { SELFTALK_TEMPLATES } from '../../study-app/src/data/selftalk-templates.js';
+import { GRAMMAR_N3 } from '../../study-app/src/data/grammar-n3.js';
 import { ttsText, plainText } from '../../study-app/src/core/text.js';
 import { realizeTemplate } from '../../study-app/src/core/selftalk.js';
 
@@ -83,6 +84,12 @@ export function collectTtsTexts(): { items: TtsItem[]; skippedLong: number } {
             }
             if (k < 0) break; // odometer wrapped past the first slot → all combos enumerated
         }
+    }
+
+    // N3 grammar-catalog example sentences (the cloze drill's answer-face ▶ plays these; the
+    // rows also live in the store via seed-sentences Pass 5, same plainText key either way).
+    for (const p of GRAMMAR_N3 as any[]) {
+        (p.examples || []).forEach((ex: any, i: number) => add(plainText(ex.jp), `gp:${p.id}:${i}`));
     }
 
     return { items, skippedLong };

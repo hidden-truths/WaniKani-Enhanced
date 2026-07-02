@@ -394,3 +394,34 @@ describe('みんなの日本語 (Minna) gated sentences — Phase 3', () => {
         expect((mem.query("SELECT value FROM sentence_tag WHERE kind='grammar'").all() as { value: string }[])).toEqual([{ value: 'te-iru' }]);
     });
 });
+
+describe('N3 grammar-catalog rows (seed-sentences Pass 5) — the PUBLIC grammar_point surface', () => {
+    const seg = (text: string) => [{ t: text }];
+
+    // The positive half of the Minna breach pin above: the two contents SHARE
+    // owner_type='grammar_point', and an ownerType=grammar_point read must serve the public
+    // catalog rows while the gated Minna rows stay dark — for anon and signed-in alike.
+    test('anon + signed-in reads serve the catalog rows only, never the co-owner-typed Minna rows', () => {
+        db.upsertPublicSentence({ extId: 'gp-you-ni-naru-0', text: 'およげるようになった。', furigana: seg('およげるようになった。'), source: 'grammar', translations: { en: 'Became able to swim.' }, tags: { grammar: ['you-ni-naru'] }, link: { owner_type: 'grammar_point', owner_id: 'you-ni-naru', ordinal: 0 } });
+        db.seedMinnaSentence({ extId: 'mnn-22-g0-0', text: 'これは ほんです。', furigana: seg('これは ほんです。'), translations: { en: 'This is a book.' }, link: { owner_type: 'grammar_point', owner_id: 'mnn-22-g0', ordinal: 0 } });
+        const anon = db.getSentences({ ownerType: 'grammar_point', viewer: null });
+        expect(anon.map((s) => s.id)).toEqual(['gp-you-ni-naru-0']);
+        // compactLink drops a FALSY ordinal from the wire — the client defaults absent → 0.
+        expect(anon[0].link).toMatchObject({ owner_type: 'grammar_point', owner_id: 'you-ni-naru' });
+        expect(anon[0].link?.ordinal ?? 0).toBe(0);
+        expect(anon[0].tags?.grammar).toEqual(['you-ni-naru']);
+        const u = db.createUser('u@x.com', 'h');
+        expect(db.getSentences({ ownerType: 'grammar_point', viewer: u.id }).map((s) => s.id)).toEqual(['gp-you-ni-naru-0']);
+    });
+
+    test('ownerId narrows to one point; the (owner_id, ordinal-defaulted) key covers every example', () => {
+        db.upsertPublicSentence({ extId: 'gp-a-1', text: 'ぶんに。', furigana: seg('ぶんに。'), source: 'grammar', translations: { en: '2' }, link: { owner_type: 'grammar_point', owner_id: 'a', ordinal: 1 } });
+        db.upsertPublicSentence({ extId: 'gp-a-0', text: 'ぶんいち。', furigana: seg('ぶんいち。'), source: 'grammar', translations: { en: '1' }, link: { owner_type: 'grammar_point', owner_id: 'a', ordinal: 0 } });
+        db.upsertPublicSentence({ extId: 'gp-b-0', text: 'べつのてん。', furigana: seg('べつのてん。'), source: 'grammar', translations: { en: 'other' }, link: { owner_type: 'grammar_point', owner_id: 'b', ordinal: 0 } });
+        const a = db.getSentences({ ownerType: 'grammar_point', ownerId: 'a', viewer: null });
+        expect(a.map((s) => s.id).sort()).toEqual(['gp-a-0', 'gp-a-1']);   // rows return in insertion (s.id) order, not by ordinal
+        // The client's token-map key `${owner_id}:${ordinal ?? 0}` must cover both examples.
+        const keys = new Set(a.map((s) => `${s.link?.owner_id}:${s.link?.ordinal ?? 0}`));
+        expect(keys).toEqual(new Set(['a:0', 'a:1']));
+    });
+});

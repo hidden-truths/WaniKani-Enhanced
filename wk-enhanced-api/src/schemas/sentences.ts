@@ -28,12 +28,14 @@ export const SentenceListResponseSchema = z
     .openapi('SentenceListResponse');
 
 // GET /v1/sentences?ownerType=[&ownerId=] — 'selftalk' (Phase 1) + 'card' (Phase 2, built-in
-// vocab example sentences). The enum widens as later phases wire grammar/conversation owners.
-// ownerId narrows a 'card' read to one rank; omitted = the whole owner surface (the deck's
-// boot batch). Returns one entry per link (a reused sentence reports every owner_id/tier).
+// vocab example sentences) + 'grammar_point' (the N3 grammar catalog's example sentences,
+// public rows seeded by seed-sentences.ts Pass 5; the GATED Minna grammar_point rows share
+// the owner_type but stay dark through the same VIEWER_VISIBLE gate — public=0). The enum
+// widens as later phases wire conversation owners. ownerId narrows to one owner; omitted =
+// the whole owner surface. Returns one entry per link.
 export const SentenceListQuerySchema = z.object({
     ownerType: z
-        .enum(['selftalk', 'card'])
+        .enum(['selftalk', 'card', 'grammar_point'])
         .openapi({ param: { name: 'ownerType', in: 'query' }, description: 'Which owner surface to read.', example: 'card' }),
     ownerId: z
         .string()
