@@ -2,7 +2,9 @@
 // pieces (tiles, rows, stage seals, accuracy bars) that dashboard / leeches / browse /
 // detail all compose. Pure string builders over the S maps; no DOM.
 import { S } from './state.js';
+import { state } from '../../state.js';
 import { wkEscape, stageBand, WK_BANDS, primaryMeaning, primaryReading, leechScore } from '../../core/index.js';
+import { jlptOf } from '../jlpt/data.js';
 
 // Subject-type CSS suffix (--wk-<type> tokens): radical / kanji / vocab.
 export const typeCss = (s) => (s.type === 'radical' ? 'radical' : s.type === 'kanji' ? 'kanji' : 'vocab');
@@ -50,12 +52,18 @@ export function subjectRowHtml(s, opts = {}) {
   const act = opts.act || 'open';
   const st = S.stats.get(s.id);
   const score = opts.score && st ? leechScore(st) : null;
+  // JLPT badge (the exam lens): vocabulary matched against the bundled word list; the
+  // user's TARGET level (jlptStore.level) gets the highlighted .focus tint. Fails soft
+  // to nothing before the lazy jlpt chunk loads / for unlisted words.
+  const jlpt = s.type === 'vocabulary' ? jlptOf(s.chars, primaryReading(s)) : '';
+  const target = (state.jlptStore || {}).level || 'N3';
   return `<button class="wk-row t-${typeCss(s)}" data-wk-act="${act}" data-id="${s.id}">
     <span class="wk-row-char">${charHtml(s)}</span>
     <span class="wk-row-main">
       <span class="wk-row-reading jp">${wkEscape(primaryReading(s))}</span>
       <span class="wk-row-meaning">${wkEscape(primaryMeaning(s))}</span>
     </span>
+    ${jlpt ? `<span class="wk-jlpt${jlpt === target ? ' focus' : ''}" title="JLPT ${jlpt} vocabulary">${jlpt}</span>` : ''}
     ${opts.leech ? '<span class="wk-leech-badge" title="Leech"><span class="jp">虫</span></span>' : ''}
     ${opts.inDeck ? '<span class="wk-indeck" title="In your study deck"><svg class="ic" aria-hidden="true"><use href="#i-check"/></svg><em>deck</em></span>' : ''}
     ${accSplitHtml(s.id)}

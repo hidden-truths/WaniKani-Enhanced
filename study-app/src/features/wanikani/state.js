@@ -26,6 +26,8 @@ export const S = {
   // view cursor
   view: 'dashboard',      // 'dashboard' | 'leeches' | 'browse'
   forecastMode: '24h',    // '24h' | '7d'
+  leechQ: '',             // leech-list search text
+  leechJlpt: '',          // leech-list JLPT filter ('' = all; 'N3' etc.)
   browse: { level: null, types: [], bands: [], q: '' },   // level null = user's current level
   browseCap: 400,         // grid render cap (bumped by "show more")
   detailId: null,         // open subject in the detail modal
@@ -50,6 +52,7 @@ export function resetWkData() {
     loaded: false, user: null, summary: null, progressions: [], lastSyncAt: null,
     syncing: false, syncMsg: '', syncErr: '', verifying: false, gateErr: '',
     view: 'dashboard', detailId: null, detailStack: [], browseCap: 400,
+    leechQ: '', leechJlpt: '',
     browse: { level: null, types: [], bands: [], q: '' },
   });
   S.subjects = new Map(); S.assignments = new Map(); S.stats = new Map();

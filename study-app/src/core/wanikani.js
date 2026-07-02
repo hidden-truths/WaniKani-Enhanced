@@ -328,13 +328,15 @@ export function wkPosTraits(pos) {
 }
 
 // Build the tagged custom-card object for a WK VOCABULARY subject (Source:鰐蟹) —
-// the songs/minna activation shape. Pure: the caller assigns the monotonic `rank`
-// and owns dedup + persistence. The deck's Leitner SRS takes over from here; the WK
-// SRS schedule is never written back (read-only token), the wkId keeps provenance.
-// mnem/tip/ex[jp] are innerHTML'd by the flashcard/Browse notes, so everything is
-// escaped here — the WK mnemonics via renderWkMarkup (escape-then-style, keeping the
-// coloured <kanji>/<reading>/… highlights the user already learned from).
-export function buildWkCard(s, rank) {
+// the songs/minna activation shape. Pure: the caller assigns the monotonic `rank`,
+// looks up the optional `jlpt` level (features/jlpt/data.js jlptOf — '' when unknown,
+// so the deck's JLPT facet can slice 鰐蟹 cards), and owns dedup + persistence. The
+// deck's Leitner SRS takes over from here; the WK SRS schedule is never written back
+// (read-only token), the wkId keeps provenance. mnem/tip/ex[jp] are innerHTML'd by the
+// flashcard/Browse notes, so everything is escaped here — the WK mnemonics via
+// renderWkMarkup (escape-then-style, keeping the coloured <kanji>/<reading>/…
+// highlights the user already learned from).
+export function buildWkCard(s, rank, jlpt = '') {
   const { cat, type, trans } = wkPosTraits(s.pos);
   const alts = (s.meanings || []).filter((m) => !m.primary).map((m) => m.m);
   const from = `WaniKani level ${s.level}` + (s.docUrl
@@ -345,7 +347,7 @@ export function buildWkCard(s, rank) {
     read: primaryReading(s) || s.chars,
     mean: [primaryMeaning(s), ...alts.slice(0, 2)].filter(Boolean).join(', '),
     cat, type, trans,
-    jlpt: '',
+    jlpt,
     tags: ['鰐蟹', 'wk-l' + s.level],
     wanikani: true,
     wkId: s.id,

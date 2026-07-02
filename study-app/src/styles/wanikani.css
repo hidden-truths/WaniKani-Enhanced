@@ -157,6 +157,23 @@
 .wk-score{flex:none;min-width:38px;text-align:center;font:700 12px var(--mono);color:var(--leech);
   background:var(--leech-soft);border-radius:8px;padding:3px 7px}
 
+/* JLPT badge on subject rows (the exam lens; .focus = the user's target level) */
+.wk-jlpt{flex:none;font:700 10.5px var(--mono);color:var(--muted);border:1px solid var(--line);border-radius:7px;padding:2px 6px}
+.wk-jlpt.focus{color:var(--gold);border-color:color-mix(in srgb, var(--gold) 45%, transparent);background:var(--gold-soft)}
+
+/* ---- exam-focus bar (leeches view) --------------------------------------------------------- */
+.wk-focusbar{display:flex;align-items:center;justify-content:space-between;gap:16px;flex-wrap:wrap;
+  border-color:color-mix(in srgb, var(--gold) 35%, var(--line))}
+.wk-focus-main{display:flex;align-items:center;gap:14px;min-width:0}
+.wk-focus-main b{font-size:14.5px}
+.wk-focus-main .sub{color:var(--muted);font-size:12.5px;margin-top:2px}
+.wk-focus-seal{flex:none;width:46px;height:46px;display:flex;align-items:center;justify-content:center;font-size:15px;
+  font-weight:900;border:2px solid var(--gold);color:var(--gold);border-radius:11px;filter:url(#stamp);transform:rotate(-3deg)}
+
+/* ---- leech-list filters (search + JLPT chips) ------------------------------------------------ */
+.wk-leech-filters{display:flex;align-items:center;gap:12px;flex-wrap:wrap;margin-bottom:12px}
+.wk-leech-filters .wk-searchwrap{flex:1;min-width:220px}
+
 /* ---- confusion clusters ------------------------------------------------------------------ */
 .wk-clusters{display:grid;grid-template-columns:repeat(auto-fill,minmax(340px,1fr));gap:14px}
 .wk-cluster{border:1px solid var(--line);border-radius:14px;background:var(--surf-inset);padding:12px;display:flex;flex-direction:column;gap:10px}

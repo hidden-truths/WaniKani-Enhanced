@@ -96,7 +96,7 @@ test('token + loaded data → dashboard with metrics, pipeline, leech preview', 
   const head = document.getElementById('wkHead').innerHTML;
   expect(head).toContain('Level 22');
   expect(head).toContain('tester');
-  expect(head).toContain('07<span class="slash"> / 07</span>');
+  expect(head).toContain('08<span class="slash"> / 08</span>');
   const body = document.getElementById('wkBody').innerHTML;
   expect(body).toContain('wk-metrics');
   expect(body).toContain('SRS pipeline');
@@ -185,6 +185,31 @@ test('detail modal offers Add to deck for vocab and shows in-deck state after ac
   expect(html).not.toContain('data-wk-act="addsubject"');
   expect(html).toContain('in your deck');
   expect(html).toContain('data-wk-act="studywk"');
+});
+
+test('exam lens: JLPT badges, the target-level focus bar, and the leech filters', async () => {
+  const { ensureJlptMap } = await import('../src/features/jlpt/data.js');
+  await ensureJlptMap();                                      // the real (local) word-list chunk
+  state.jlptStore = { level: 'N4', examDate: '2026-12-06', days: {} };
+  state.wanikaniStore = { token: 't' };
+  adoptWkData(bundle());
+  S.view = 'leeches';
+  renderWanikani();
+  const body = document.getElementById('wkBody').innerHTML;
+  // 生きる is the leech and N4 (the target) → focus bar + one-tap add + highlighted badge
+  expect(body).toContain('1 of your 1 leeches is N4 vocabulary');
+  expect(body).toContain('data-wk-act="addfocus"');
+  expect(body).toContain('wk-jlpt focus');                    // 生きる's N4 badge, target-tinted
+  expect(body).toContain('>N5<');                             // 生まれる rides along with its own level
+  // the list gained a search box + JLPT chips (level counts from the leech list)
+  expect(document.getElementById('wkLeechQ')).toBeTruthy();
+  expect(body).toContain('data-wk-act="ljlpt"');
+  expect(body).toContain('N4 · 1');
+  // the search filter narrows the rendered rows (filteredLeeches path)
+  S.leechQ = 'no-such-word';
+  renderWanikani();
+  expect(document.getElementById('wkBody').innerHTML).toContain('No leech matches that filter.');
+  S.leechQ = '';
 });
 
 test('dashboard leech metric jumps to the Leeches view', () => {

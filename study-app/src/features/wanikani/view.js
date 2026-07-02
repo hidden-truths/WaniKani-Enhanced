@@ -8,7 +8,7 @@ import { S } from './state.js';
 import { wkEscape } from '../../core/index.js';
 import { connectWanikani, disconnectWanikani, maybeSyncWk } from './index.js';
 import { dashboardHtml } from './dashboard.js';
-import { leechesHtml, leechList, leechClusters, expandLeeches, expandClusters } from './leeches.js';
+import { leechesHtml, leechList, leechClusters, expandLeeches, expandClusters, focusLeeches, filteredLeeches, leechRowsHtml } from './leeches.js';
 import { browseHtml, browseResultsHtml } from './browse.js';
 import { detailHtml } from './detail.js';
 import { activateWkVocab } from './activate.js';
@@ -47,7 +47,7 @@ export function renderWkStatus() {
 }
 
 function headHtml(token) {
-  const marker = `<div class="marker"><div class="idx">07<span class="slash"> / 07</span></div><div class="ttl jp-min">鰐蟹</div><div class="en">WaniKani</div><div class="rule"></div></div>`;
+  const marker = `<div class="marker"><div class="idx">08<span class="slash"> / 08</span></div><div class="ttl jp-min">鰐蟹</div><div class="en">WaniKani</div><div class="rule"></div></div>`;
   if (!token || !S.loaded) {
     return `${marker}<section class="page-head"><div><h1 class="page-title">WaniKani companion</h1></div></section>`;
   }
@@ -164,9 +164,14 @@ const ACTIONS = {
   leechmore: () => { expandLeeches(); renderWanikani(); },
   clustermore: () => { expandClusters(); renderWanikani(); },
 
-  // wk-leech-to-deck activation: a confusion family / every leech / one subject
-  // becomes tagged Source:鰐蟹 flashcards (activate.js), then the view repaints so
-  // buttons flip to in-deck state. The bulk add confirms first — it can add hundreds.
+  // Leech-list view filters: the JLPT chip re-renders the view (chip active states live
+  // in the card head); the search input is handled below (in-place row swap, keeps focus).
+  ljlpt: (el) => { S.leechJlpt = el.dataset.level || ''; renderWanikani(); },
+
+  // wk-leech-to-deck activation: a confusion family / the filtered leech list / the
+  // target-JLPT slice / one subject becomes tagged Source:鰐蟹 flashcards (activate.js),
+  // then the view repaints so buttons flip to in-deck state. The bulk add confirms
+  // first — it can add hundreds; the focus add is the already-counted exam slice.
   addcluster: (el) => {
     const c = leechClusters().find((x) => x.kanji.id === Number(el.dataset.id));
     if (!c) return;
@@ -174,9 +179,13 @@ const ACTIONS = {
     renderWanikani();
   },
   addleeches: () => {
-    const leeches = leechList().map((l) => l.subject);
-    if (!confirm(`Add every WaniKani vocab leech to your study deck as flashcards? They join the deck's own SRS (WaniKani is never written to).`)) return;
+    const leeches = filteredLeeches(leechList()).map((l) => l.subject);
+    if (!confirm(`Add ${S.leechQ || S.leechJlpt ? 'the filtered' : 'every'} WaniKani vocab leech${leeches.length === 1 ? '' : 'es'} to your study deck as flashcards? They join the deck's own SRS (WaniKani is never written to).`)) return;
     flashAdded(activateWkVocab(leeches));
+    renderWanikani();
+  },
+  addfocus: () => {
+    flashAdded(activateWkVocab(focusLeeches().map((l) => l.subject)));
     renderWanikani();
   },
   addsubject: (el) => {
@@ -219,13 +228,19 @@ export function wireWanikani() {
   });
   let searchTimer = null;
   panel.addEventListener('input', (e) => {
-    if (e.target.id !== 'wkSearch') return;
-    const q = e.target.value;
+    if (e.target.id !== 'wkSearch' && e.target.id !== 'wkLeechQ') return;
+    const id = e.target.id, q = e.target.value;
     clearTimeout(searchTimer);
     searchTimer = setTimeout(() => {
-      S.browse.q = q.trim(); S.browseCap = 400;
-      const grid = document.getElementById('wkBrowseResults');
-      if (grid) grid.outerHTML = browseResultsHtml();
+      if (id === 'wkSearch') {
+        S.browse.q = q.trim(); S.browseCap = 400;
+        const grid = document.getElementById('wkBrowseResults');
+        if (grid) grid.outerHTML = browseResultsHtml();
+      } else {
+        S.leechQ = q.trim();
+        const rows = document.getElementById('wkLeechRows');
+        if (rows) rows.outerHTML = leechRowsHtml();   // rows only — the input keeps focus
+      }
     }, 160);
   });
 }
