@@ -6,7 +6,9 @@ import {
   passes, isLeech, rollingAcc, colorClass, cardStamp, classKanji, pitchHtml, escapeHtml, plainText,
   availableTiers, exampleForLevel, JLPT_TIERS, BOX_COLORS, nextDueLabel, filterSummary, overlayTokens,
   cardGrammar, cardMatchesGrammar,
+  rubyToSegments, clozeLineParts, grammarBlank, clozePartsToHtml,
 } from '../core/index.js';
+import { grammarPointOf, ensureGrammarPoints } from './grammar/data.js';
 import { settings } from '../settings-store.js';
 import { speakWord, speak, TTS_OK } from './tts.js';
 import { cycleMod } from './audio.js';
@@ -107,24 +109,37 @@ export function openVerbDetail(v) {
   detailVerb = v; detailLevel = null;
   const tiLabel = v.trans === 't' ? 'transitive' : (v.trans === 'i' ? 'intransitive' : '');
   const tags = `${tiLabel ? `<span class="tag" style="color:var(--ichidan)">${tiLabel}</span>` : ''}${v.tags.filter(t => !t.startsWith('top')).map(t => `<span class="tag">${escapeHtml(t)}</span>`).join('')}`;
-  document.getElementById('detailBody').innerHTML = `
-    <div class="card-top"><div>
-      <div class="verb-jp jp" style="font-size:34px">${v.jp}</div>
-      <div class="verb-reading">${pitchHtml(v.read, v.accent)}${TTS_OK ? ` ${speakBtnHtml({ cls: 'sm', id: 'dSpeak', label: 'Play reading' })}` : ''}</div>
-      <div class="verb-meaning">${v.mean}</div>
-      <a class="jisho-link" target="_blank" rel="noopener noreferrer" href="${jishoUrl(v.jp)}"><svg class="ic" aria-hidden="true"><use href="#i-external"/></svg>View on Jisho</a></div>
-      <div class="card-rcol"><span class="line-bullet ${cardStamp(v).cls}" title="${cardStamp(v).label}">${classKanji(v)}</span><div class="jlpt-pill">${v.jlpt}</div>${provenanceBadge(v)}</div></div>
-    ${isLeech(v.rank) ? '<span class="leech-badge">⚠ LEECH</span>' : ''}
-    <div class="tags">${tags}</div>
-    ${detailMemoryLine(v)}
+  // Grammar cards swap the mnemonic/tip/leveled-example sections for the point's
+  // explanation + formation + its FULL example list (looked up by grammarId — never stored
+  // on the card). Catalog chunk not up yet → kick it and re-open once loaded.
+  const gp = v.grammar ? grammarPointOf(v.grammarId) : null;
+  if (v.grammar && !gp) ensureGrammarPoints().then(() => { if (detailVerb === v) openVerbDetail(v); }).catch(() => {});
+  const midSections = gp ? `
+    <details open><summary>Meaning</summary><div class="det-body">${escapeHtml(gp.explanation)}</div></details>
+    <details open><summary>Formation</summary><div class="det-body">${escapeHtml(gp.formation)}</div></details>
+    <details open><summary>Example sentences</summary><div class="det-body">
+      ${gp.examples.map((ex) => `<div class="gp-ex"><div class="ex-jp jp">${clozePartsToHtml(clozeLineParts({ text: plainText(ex.jp), furigana: rubyToSegments(ex.jp) }, grammarBlank(ex)), 'reveal')}</div><div class="ex-en">${escapeHtml(ex.en)}</div></div>`).join('')}
+    </div></details>`
+    : `
     ${v.mnem ? `<details open><summary>Mnemonic</summary><div class="det-body">${v.mnem}</div></details>` : ''}
     ${v.tip ? `<details><summary>Trap / tip</summary><div class="det-body">${v.tip}</div></details>` : ''}
     <details><summary>Example sentences</summary><div class="det-body">
       <span class="jlptseg exseg" id="dExLevels" role="group" aria-label="Example level"></span>${TTS_OK ? `${speakBtnHtml({ cls: 'sm', id: 'dExSpeak', label: 'Play example sentence', hidden: true })}` : ''}<button class="speak-btn sm copy-btn" id="dExCopy" type="button" aria-label="Copy sentence" title="Copy sentence" hidden><svg class="ic" aria-hidden="true"><use href="#i-copy"/></svg></button>
       <div class="ex-jp jp" id="dExJp" style="margin-top:8px"></div><div class="ex-en" id="dExEn"></div><div class="ex-grammar" id="dExGram"></div>
-    </div></details>
+    </div></details>`;
+  document.getElementById('detailBody').innerHTML = `
+    <div class="card-top"><div>
+      <div class="verb-jp jp" style="font-size:34px">${v.jp}</div>
+      <div class="verb-reading">${pitchHtml(v.read, v.accent)}${TTS_OK ? ` ${speakBtnHtml({ cls: 'sm', id: 'dSpeak', label: 'Play reading' })}` : ''}</div>
+      <div class="verb-meaning">${v.mean}</div>
+      <a class="jisho-link" target="_blank" rel="noopener noreferrer" href="${jishoUrl(v.jp.replace(/^〜/, ''))}"><svg class="ic" aria-hidden="true"><use href="#i-external"/></svg>View on Jisho</a></div>
+      <div class="card-rcol"><span class="line-bullet ${cardStamp(v).cls}" title="${cardStamp(v).label}">${classKanji(v)}</span><div class="jlpt-pill">${v.jlpt}</div>${provenanceBadge(v)}</div></div>
+    ${isLeech(v.rank) ? '<span class="leech-badge">⚠ LEECH</span>' : ''}
+    <div class="tags">${tags}</div>
+    ${detailMemoryLine(v)}
+    ${midSections}
     ${v.custom ? `<div class="verb-actions"><button class="chip" id="dEdit" type="button"><svg class="ic" aria-hidden="true"><use href="#i-edit"/></svg>Edit</button><button class="chip" id="dDel" type="button" style="border-color:var(--godan);color:var(--godan)"><svg class="ic" aria-hidden="true"><use href="#i-trash"/></svg>Delete</button></div>` : ''}`;
-  renderDetailExample();
+  if (!gp) renderDetailExample();
   const sp = document.getElementById('dSpeak'); if (sp) sp.addEventListener('click', (e) => speakWord(v, 'browse', sp, { cycle: cycleMod(e) }));
   const exsp = document.getElementById('dExSpeak'); if (exsp) exsp.addEventListener('click', (e) => speak(plainText(document.getElementById('dExJp').innerHTML), 'browse', exsp, { cycle: cycleMod(e) }));
   const excp = document.getElementById('dExCopy'); if (excp) excp.addEventListener('click', () => copyText(plainText(document.getElementById('dExJp').innerHTML), excp));

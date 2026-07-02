@@ -187,6 +187,7 @@
   .line-bullet.noun{background:var(--noun)}
   .line-bullet.adverb{background:var(--adverb)}
   .line-bullet.phrase{background:var(--phrase)}
+  .line-bullet.grammar{background:var(--grammar)}
   .line-bullet.leech{background:var(--leech)}
   /* Detail-modal memory track (.det-memory/.srs-*) → styles/browse.css (Phase 3). */
   /* Jisho dictionary deep-link (flashcard answer + detail modal). */

@@ -29,6 +29,22 @@ vi.mock('../src/persistence/store.js', () => ({ save: vi.fn() }));
 vi.mock('../src/features/tts.js', () => ({ TTS_OK: true, speak: vi.fn(), speakWord: vi.fn() }));
 vi.mock('../src/features/audio.js', () => ({ cycleMod: () => false }));
 vi.mock('../src/features/word-lookup.js', () => ({ wireWordTaps: () => {} }));
+// The grammar catalog singleton, mocked with one two-example point (drives the cloze branch).
+const GP = vi.hoisted(() => ({
+  point: {
+    id: 'you-ni-naru', label: '〜ようになる', read: 'ようになる', mean: 'come to', jlpt: 'N3',
+    explanation: 'Change of state.', formation: 'V-dict + ようになる',
+    examples: [
+      { jp: '<ruby>泳<rt>およ</rt></ruby>げるようになった。', en: 'Became able to swim.', blank: 'ようになった' },
+      { jp: '<ruby>起<rt>お</rt></ruby>きるようになる。', en: 'Come to get up.', blank: 'ようになる' },
+    ],
+  },
+}));
+vi.mock('../src/features/grammar/data.js', () => ({
+  grammarPointOf: (id) => (id === GP.point.id ? GP.point : null),
+  grammarTokensFor: () => null,
+  ensureGrammarPoints: () => Promise.resolve([GP.point]),
+}));
 
 import { state } from '../src/state.js';
 import { startSession, initFlashcardUI, registerSessionHooks, session } from '../src/features/flashcard.js';
@@ -188,6 +204,50 @@ test('ending with nothing graded returns to the picker without a score card', ()
   expect(el('fcSetup').style.display).toBe('block');
   expect(state.store.sessions).toHaveLength(0);
   expect(hooks.logSession).not.toHaveBeenCalled();
+});
+
+const GRAMMAR_CARD = { rank: 301, jp: '〜ようになる', read: 'ようになる', mean: 'come to', jlpt: 'N3', cat: 'grammar', type: '', trans: '', tags: ['文法'], grammar: true, grammarId: 'you-ni-naru' };
+
+test('grammar card: cloze prompt hides the pattern, typed mode is forced off, 法 hanko', () => {
+  ctx.cfg.input = 'type';                                       // grammar overrides typed mode per-card
+  ctx.deck = [GRAMMAR_CARD];
+  startSession();
+  expect(el('promptLabel').textContent).toBe('Grammar · fill the blank');
+  const prompt = el('promptWord');
+  expect(prompt.className).toContain('gp-cloze');
+  expect(prompt.innerHTML).toContain('cloze-gap');
+  expect(prompt.innerHTML).toContain('<ruby>泳<rt>およ</rt></ruby>');
+  expect(prompt.innerHTML).not.toContain('ようになった');        // the answer is hidden
+  expect(el('hankoGlyph').textContent).toBe('法');
+  expect(el('inputRow').style.display).toBe('none');            // self-graded despite input:type
+  expect(el('revealRow').style.display).toBe('flex');
+});
+
+test('grammar card reveal: pattern + meaning + explanation/formation notes + the marked full sentence; grading stamps `last`', () => {
+  ctx.deck = [GRAMMAR_CARD];
+  startSession();
+  el('revealBtn').click();
+  expect(el('answerWord').textContent).toBe('〜ようになる');
+  expect(el('aMean').textContent).toBe('come to');
+  expect(el('aNote').innerHTML).toContain('Change of state.');
+  expect(el('aNote').innerHTML).toContain('V-dict + ようになる');
+  expect(el('exampleBlock').hidden).toBe(false);
+  expect(el('exLevels').style.display).toBe('none');            // no tier selector for grammar
+  expect(el('exJp').innerHTML).toContain('gp-hit');             // the blank returned, marked
+  expect(el('exJp').innerHTML).toContain('ようになった');
+  expect(el('exEn').textContent).toBe('Became able to swim.');
+  const before = Date.now();
+  el('rightBtn').click();
+  expect(state.store.cards[301].last).toBeGreaterThanOrEqual(before);   // the 法 auto-signal stamp
+  expect(state.store.cards[301]).toMatchObject({ attempts: [1], right: 1, box: 1 });
+});
+
+test('grammar example rotates deterministically with the attempt count', () => {
+  state.store.cards[301] = { attempts: [1], right: 1, wrong: 0, box: 1, due: 0 };   // 1 prior attempt → example 2
+  ctx.deck = [GRAMMAR_CARD];
+  startSession();
+  expect(el('promptWord').innerHTML).toContain('<ruby>起<rt>お</rt></ruby>');
+  expect(el('promptWord').innerHTML).not.toContain('ようになる。');   // example 2's blank hidden
 });
 
 test('the local sessions record is capped at 1000 (charts only — the durable log is server-side)', () => {

@@ -21,6 +21,7 @@
 .card.godan::before{background:var(--godan)} .card.ichidan::before{background:var(--ichidan)}
 .card.i-adj::before,.card.na-adj::before{background:var(--adjective)}
 .card.noun::before{background:var(--noun)} .card.adverb::before{background:var(--adverb)} .card.phrase::before{background:var(--phrase)}
+.card.grammar::before{background:var(--grammar)}
 .card.leech::before{background:var(--leech)}
 .card.selected{box-shadow:0 0 0 2px var(--brand),var(--lift-md)}
 .card-top{display:flex;justify-content:space-between;align-items:flex-start;gap:10px}

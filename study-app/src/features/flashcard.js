@@ -10,7 +10,9 @@ import { localDay } from '../config.js';
 import {
   availableTiers, exampleForLevel, JLPT_TIERS, colorClass, cardStamp, pitchHtml,
   normKana, romajiToKana, escapeHtml, plainText, cardStat, scheduleCard, isDue, overlayTokens,
+  rubyToSegments, clozeLineParts, grammarBlank, clozePartsToHtml, pickGrammarExample,
 } from '../core/index.js';
+import { grammarPointOf, grammarTokensFor, ensureGrammarPoints } from './grammar/data.js';
 import { settings, saveSettings } from '../settings-store.js';
 import { save } from '../persistence/store.js';
 import { speakWord, speak, TTS_OK } from './tts.js';
@@ -51,6 +53,7 @@ export function startSession() {
 // The chosen tier is the synced setting settings.exampleLevel. Disabled tiers (no sentence)
 // can't be picked; falls back to the card's own JLPT level, then the easiest available.
 export function renderExample(v) {
+  if (v && v.cat === 'grammar') { renderGrammarExample(v); return; }
   const block = document.getElementById('exampleBlock'), seg = document.getElementById('exLevels');
   const tiers = availableTiers(v);
   if (tiers.length) {
@@ -76,10 +79,35 @@ export function renderExample(v) {
   } else { block.hidden = true; if (speakBtn) speakBtn.hidden = true; if (copyBtn) copyBtn.hidden = true; }
 }
 
+// Grammar-card answer face: the FULL example sentence (the cloze's blank returned, marked),
+// no tier selector (grammar examples aren't leveled). The example is the same rotation
+// showCard used — recomputed from the card's attempt count, so the two always agree.
+// GiNZA tokens (grammarTokensFor — present once the store rows are seeded + annotated)
+// upgrade it to the tap-a-word overlay; ▶/copy read plainText off the node either way.
+function renderGrammarExample(v) {
+  const block = document.getElementById('exampleBlock'), seg = document.getElementById('exLevels');
+  seg.style.display = 'none'; seg.innerHTML = '';
+  const speakBtn = document.getElementById('exSpeak'), copyBtn = document.getElementById('exCopy');
+  const p = grammarPointOf(v.grammarId);
+  const n = (((state.store.cards || {})[v.rank] || {}).attempts || []).length;
+  const ex = p ? pickGrammarExample(p.examples, n) : null;
+  if (!ex) { block.hidden = true; if (speakBtn) speakBtn.hidden = true; if (copyBtn) copyBtn.hidden = true; return; }
+  const idx = p.examples.indexOf(ex);
+  const line = { text: plainText(ex.jp), furigana: rubyToSegments(ex.jp) };
+  const tokens = grammarTokensFor(v.grammarId, idx);
+  const exJp = document.getElementById('exJp');
+  exJp.innerHTML = tokens ? overlayTokens(line.furigana, tokens) : clozePartsToHtml(clozeLineParts(line, grammarBlank(ex)), 'reveal');
+  wireWordTaps(exJp);
+  document.getElementById('exEn').textContent = ex.en;
+  block.hidden = false;
+  if (speakBtn) speakBtn.hidden = !TTS_OK;
+  if (copyBtn) copyBtn.hidden = false;
+}
+
 // ---- hanko + class-pill helpers (the editorial card's seal + tags) ----
-const CLASS_JP = { godan: '五段', ichidan: '一段', irregular: '不規則', 'i-adj': 'い形', 'na-adj': 'な形' };
+const CLASS_JP = { godan: '五段', ichidan: '一段', irregular: '不規則', 'i-adj': 'い形', 'na-adj': 'な形', grammar: '文法' };
 // reading mode shows the JP as the ANSWER, so the hanko can't spell the word — use a class seal.
-const CLASS_SEAL = { godan: '五', ichidan: '一', irregular: '不', 'i-adj': '形', 'na-adj': '形', verb: '動', adjective: '形', noun: '名', adverb: '副', phrase: '句' };
+const CLASS_SEAL = { godan: '五', ichidan: '一', irregular: '不', 'i-adj': '形', 'na-adj': '形', verb: '動', adjective: '形', noun: '名', adverb: '副', phrase: '句', grammar: '法' };
 const firstKanji = jp => (String(jp || '').match(/[㐀-鿿]/) || [String(jp || '？')[0]])[0];
 // The class pill ("GODAN · 五段"), tinted by colorClass via the CSS .tag.cls.<class>.
 function classPill(v) {
@@ -113,7 +141,31 @@ function showCard() {
   document.getElementById('cardClsJp').textContent = CLASS_JP[cls] || '';
   document.getElementById('cardClsEn').textContent = cardStamp(v).label || '';
   const pw = document.getElementById('promptWord'), aw = document.getElementById('answerWord');
-  if (cfg.mode === 'meaning') {            // JP shown → recall meaning + reading
+  if (v.cat === 'grammar') {               // grammar cloze: sentence with the pattern blanked
+    // Both test directions render the cloze — the pattern IS the recall target either way.
+    // Example rotation is deterministic from the attempt count (renderGrammarExample agrees).
+    const gp = grammarPointOf(v.grammarId);
+    const n = (((state.store.cards || {})[v.rank] || {}).attempts || []).length;
+    const ex = gp ? pickGrammarExample(gp.examples, n) : null;
+    document.getElementById('promptLabel').textContent = 'Grammar · fill the blank';
+    if (ex) {
+      const line = { text: plainText(ex.jp), furigana: rubyToSegments(ex.jp) };
+      pw.className = 'prompt-word jp gp-cloze';
+      pw.innerHTML = clozePartsToHtml(clozeLineParts(line, grammarBlank(ex)), 'gap');
+    } else {
+      // Catalog chunk not up yet (rare — initGrammar preloads): plain pattern card for this
+      // paint; re-render once the chunk lands if the same card is still face-up.
+      pw.className = 'prompt-word jp'; pw.textContent = v.jp;
+      ensureGrammarPoints().then(() => {
+        if (session && !session.revealed && session.deck[session.i] === v) showCard();
+      }).catch(() => {});
+    }
+    aw.className = 'answer-word jp'; aw.textContent = v.jp;
+    document.getElementById('hankoGlyph').textContent = '法';
+    document.getElementById('aMean').textContent = v.mean;
+    document.getElementById('veilLabelA').textContent = 'Pattern';
+    document.getElementById('veilLabelB').textContent = 'Meaning';
+  } else if (cfg.mode === 'meaning') {     // JP shown → recall meaning + reading
     document.getElementById('promptLabel').textContent = 'Read & recall · meaning + reading';
     pw.className = 'prompt-word jp'; pw.innerHTML = v.jp;
     aw.className = 'answer-word jp'; aw.innerHTML = v.jp;
@@ -139,9 +191,14 @@ function showCard() {
   document.getElementById('promptTags').innerHTML = classPill(v) + lvl;
   document.getElementById('aTags').innerHTML = classPill(v) + lvl
     + `<a class="tag link" href="${jishoUrl(v.jp)}" target="_blank" rel="noopener noreferrer">View on Jisho <svg class="ic" aria-hidden="true"><use href="#i-external"/></svg></a>`;
-  // mnemonic + trap as two note-cards (the mock's 2-up grid).
-  document.getElementById('aNote').innerHTML =
-    (v.mnem ? `<div class="note mnemonic"><div class="note-label"><svg class="ic" aria-hidden="true"><use href="#i-star"/></svg>Mnemonic</div><div class="note-body">${v.mnem}</div></div>` : '')
+  // mnemonic + trap as two note-cards (the mock's 2-up grid); a grammar card fills them with
+  // the point's explanation + formation instead — looked up by grammarId, never stored on the
+  // card, so a content fix reaches every existing card without re-activation.
+  const gpNotes = v.cat === 'grammar' ? grammarPointOf(v.grammarId) : null;
+  document.getElementById('aNote').innerHTML = gpNotes
+    ? `<div class="note mnemonic"><div class="note-label"><svg class="ic" aria-hidden="true"><use href="#i-star"/></svg>Meaning</div><div class="note-body">${escapeHtml(gpNotes.explanation)}</div></div>`
+      + `<div class="note trap"><div class="note-label"><svg class="ic" aria-hidden="true"><use href="#i-list"/></svg>Formation</div><div class="note-body">${escapeHtml(gpNotes.formation)}</div></div>`
+    : (v.mnem ? `<div class="note mnemonic"><div class="note-label"><svg class="ic" aria-hidden="true"><use href="#i-star"/></svg>Mnemonic</div><div class="note-body">${v.mnem}</div></div>` : '')
     + (v.tip ? `<div class="note trap"><div class="note-label"><svg class="ic" aria-hidden="true"><use href="#i-alert"/></svg>Trap / tip</div><div class="note-body">${v.tip}</div></div>` : '');
   renderExample(v);                                   // leveled example (shown once revealed)
   // reset to the PROMPT face; the answer face + grade row stay hidden until reveal().
@@ -152,7 +209,9 @@ function showCard() {
   document.getElementById('rightBtn').classList.remove('suggested');
   document.getElementById('typedVerdict').hidden = true;
   session.suggested = undefined;
-  const typed = cfg.input === 'type';
+  // Typed mode is forced OFF for grammar cards — there's no single kana answer to grade
+  // (the blank is a conjugated pattern span); they're self-graded like the reveal path.
+  const typed = cfg.input === 'type' && v.cat !== 'grammar';
   document.getElementById('revealRow').style.display = typed ? 'none' : 'flex';
   document.getElementById('inputRow').style.display = typed ? 'flex' : 'none';
   const inp = document.getElementById('answerInput');
@@ -199,6 +258,7 @@ function grade(correct) {
   const v = session.deck[session.i];
   const c = cardStat(v.rank);
   c.attempts.push(correct ? 1 : 0);
+  c.last = Date.now();   // most-recent grade stamp — the 法 checklist auto-signal (merged with max on 409)
   if (correct) c.right++; else c.wrong++;
   if (isDue(v.rank) && (session.kind === 'srs' || settings.freeReviewDue)) scheduleCard(c, correct);
   session.results.push(correct ? 1 : 0);
@@ -285,8 +345,10 @@ export function initFlashcardUI() {
     if (e.target === document.getElementById('answerInput')) return;   // field owns its keys
     const k = e.key, isSpace = e.code === 'Space', isEnter = k === 'Enter';
     if (!session.revealed) {
-      if (cfg.input === 'type') { if (isEnter) { e.preventDefault(); submitTyped(); } }   // typed: Enter submits
-      else if (isSpace || isEnter) { e.preventDefault(); reveal(); }                       // self: flip
+      // Same per-card guard as showCard: a grammar card is self-graded even in typed mode.
+      const typedNow = cfg.input === 'type' && session.deck[session.i].cat !== 'grammar';
+      if (typedNow) { if (isEnter) { e.preventDefault(); submitTyped(); } }   // typed: Enter submits
+      else if (isSpace || isEnter) { e.preventDefault(); reveal(); }          // self: flip
       return;
     }
     // Revealed → grade. Space/Enter/2 mark correct; X/1 mark wrong.

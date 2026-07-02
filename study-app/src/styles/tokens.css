@@ -37,8 +37,9 @@
   /* maki-e gold (material; richer at night) */
   --gold:#9A6B0F; --gold-soft:rgba(154,107,15,.08);
   --leech:#7C3A95; --leech-soft:rgba(124,58,149,.10);
-  /* non-verb category accents (spine + line-bullet) — viridian · ochre · wine-rose · taupe */
-  --adjective:#2C7D6B; --noun:#A06A1E; --adverb:#A14258; --phrase:#736353;
+  /* non-verb category accents (spine + line-bullet) — viridian · ochre · wine-rose · taupe ·
+     deep-water teal (grammar 法 cloze cards) */
+  --adjective:#2C7D6B; --noun:#A06A1E; --adverb:#A14258; --phrase:#736353; --grammar:#20707E;
   /* 鰐蟹 WaniKani line-colours (subject types) + SRS station ramp, washi-tuned takes on
      WK's blue/pink/purple. Burned is bronze by day, maki-e gold at night. */
   --wk-radical:#2E7BA0; --wk-kanji:#B23A66; --wk-vocab:#6C4BA0;
@@ -83,7 +84,7 @@
   --good:#56D29A; --good-deep:#37B888; --good-soft:rgba(86,210,154,.10); --good-on:#0B1F16;
   --gold:#E7BC6B; --gold-soft:rgba(231,188,107,.10);
   --leech:#C792EA; --leech-soft:rgba(199,146,234,.12);
-  --adjective:#5CC0A6; --noun:#D8A24E; --adverb:#D6818F; --phrase:#AB9A85;
+  --adjective:#5CC0A6; --noun:#D8A24E; --adverb:#D6818F; --phrase:#AB9A85; --grammar:#5FB8C6;
   --wk-radical:#64B7E0; --wk-kanji:#F27AA5; --wk-vocab:#B18FF0;
   --wk-appr:#E884A6; --wk-guru:#BA8BDD; --wk-master:#90A6F0; --wk-enl:#6FC0DC; --wk-burn:#E7BC6B;
   --spine:linear-gradient(to bottom, var(--brand), var(--brand-deep));
@@ -114,7 +115,7 @@
     --good:#56D29A; --good-deep:#37B888; --good-soft:rgba(86,210,154,.10); --good-on:#0B1F16;
     --gold:#E7BC6B; --gold-soft:rgba(231,188,107,.10);
     --leech:#C792EA; --leech-soft:rgba(199,146,234,.12);
-    --adjective:#5CC0A6; --noun:#D8A24E; --adverb:#D6818F; --phrase:#AB9A85;
+    --adjective:#5CC0A6; --noun:#D8A24E; --adverb:#D6818F; --phrase:#AB9A85; --grammar:#5FB8C6;
     --wk-radical:#64B7E0; --wk-kanji:#F27AA5; --wk-vocab:#B18FF0;
     --wk-appr:#E884A6; --wk-guru:#BA8BDD; --wk-master:#90A6F0; --wk-enl:#6FC0DC; --wk-burn:#E7BC6B;
     --spine:linear-gradient(to bottom, var(--brand), var(--brand-deep));
