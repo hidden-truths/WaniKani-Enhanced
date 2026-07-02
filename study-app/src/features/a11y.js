@@ -120,16 +120,16 @@ export function annotateCatChips(){
 // shape as annotateCatChips; runs at boot and on every state.DATA change.
 export function annotateSourceChips(){
   // Show the Source row once the deck has ANY provenance-tagged cards — みんなの日本語, a
-  // 歌/song word, or a 鰐蟹/WaniKani activation (all populate the source facet).
-  const hasSource=state.DATA.some(v=>v.minna||v.song||v.wanikani);
+  // 歌/song word, a 鰐蟹/WaniKani activation, or a 合格 gap-fill add (all populate the facet).
+  const hasSource=state.DATA.some(v=>v.minna||v.song||v.wanikani||v.jlptfill);
   document.querySelectorAll('.frow.source-row').forEach(r=>{r.style.display=hasSource?'':'none';});
   if(!hasSource)return;
-  const counts={minna:0,italki:0,song:0,wanikani:0};
-  state.DATA.forEach(v=>{ if(v.minna)counts.minna++; if(v.italki)counts.italki++; if(v.song)counts.song++; if(v.wanikani)counts.wanikani++;
-    (v.tags||[]).forEach(t=>{ if(/^mnn-l\d+$/.test(t)||/^song-/.test(t))counts[t]=(counts[t]||0)+1; }); });
+  const counts={minna:0,italki:0,song:0,wanikani:0,jlptfill:0};
+  state.DATA.forEach(v=>{ if(v.minna)counts.minna++; if(v.italki)counts.italki++; if(v.song)counts.song++; if(v.wanikani)counts.wanikani++; if(v.jlptfill)counts.jlptfill++;
+    (v.tags||[]).forEach(t=>{ if(/^mnn-l\d+$/.test(t)||/^song-/.test(t)||/^jlpt-n\d$/.test(t))counts[t]=(counts[t]||0)+1; }); });
   document.querySelectorAll('.chip.deck,.chip.bf').forEach(b=>{
     const t=b.dataset.deck||b.dataset.filter;
-    if(t!=='minna'&&t!=='italki'&&t!=='song'&&t!=='wanikani'&&!/^mnn-l\d+$/.test(t)&&!/^song-/.test(t))return;
+    if(t!=='minna'&&t!=='italki'&&t!=='song'&&t!=='wanikani'&&t!=='jlptfill'&&!/^mnn-l\d+$/.test(t)&&!/^song-/.test(t)&&!/^jlpt-n\d$/.test(t))return;
     const n=counts[t]||0;
     b.disabled=n===0;
     b.title=n===0?'No cards with this source yet':`${n} card${n===1?'':'s'}`;

@@ -235,6 +235,7 @@
         <button class="chip deck" data-deck="noun">Noun</button>
         <button class="chip deck" data-deck="adverb">Adverb</button>
         <button class="chip deck" data-deck="phrase">Phrase</button>
+        <button class="chip deck" data-deck="grammar">Grammar</button>
       </div></div>
       <div class="frow verb-only"><span class="filter-label">Type</span><div class="chips">
         <button class="chip deck g" data-deck="godan">Godan</button>
@@ -285,6 +286,7 @@
         <button class="chip deck" data-deck="mnn-l24">L24</button>
         <button class="chip deck" data-deck="song" style="border-color:var(--godan);color:var(--godan)">歌</button>
         <button class="chip deck" data-deck="wanikani" style="border-color:var(--gold);color:var(--gold)">鰐蟹</button>
+        <button class="chip deck" data-deck="jlptfill" style="border-color:var(--reading);color:var(--reading)">JLPT</button>
       </div></div>
       <div class="fdiv"></div>
       <div class="frow"><span class="filter-label">Level &amp; rank</span><div class="chips">
@@ -456,6 +458,7 @@
         <button class="chip bf" data-filter="noun">Noun</button>
         <button class="chip bf" data-filter="adverb">Adverb</button>
         <button class="chip bf" data-filter="phrase">Phrase</button>
+        <button class="chip bf" data-filter="grammar">Grammar</button>
       </div></div>
       <!-- Secondary verb facets tuck behind a disclosure (mock). Chips keep their class +
            data-filter so wireFacets/syncVerbRows are blind to the wrapper. -->
@@ -511,6 +514,7 @@
         <button class="chip bf" data-filter="mnn-l24">L24</button>
         <button class="chip bf" data-filter="song" style="border-color:var(--godan);color:var(--godan)">歌</button>
         <button class="chip bf" data-filter="wanikani" style="border-color:var(--gold);color:var(--gold)">鰐蟹</button>
+        <button class="chip bf" data-filter="jlptfill" style="border-color:var(--reading);color:var(--reading)">JLPT</button>
       </div></div>
       <!-- Grammar facet (Phase-4): filter to cards whose EXAMPLE sentences use a grammar point.
            Chips are rendered by browse.js from the ids actually present in the deck (labels from the
@@ -712,6 +716,7 @@
           <option value="noun">Noun</option>
           <option value="adverb">Adverb</option>
           <option value="phrase">Phrase / expression</option>
+          <option value="grammar">Grammar point</option>
         </select></div>
         <div id="vfTypeCell"><label for="vfType">Type</label><select id="vfType">
           <option value="godan">Godan (う-verb)</option>

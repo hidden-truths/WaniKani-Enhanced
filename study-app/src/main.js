@@ -56,6 +56,7 @@ import { initSelftalk, showSelftalk, onSelftalkHidden } from './features/selftal
 import { initSongs, renderSongs, onSongsHidden } from './features/songs.js';
 import { initWanikani, showWanikani } from './features/wanikani.js';
 import { initJlpt, showJlpt } from './features/jlpt.js';
+import { initGrammar } from './features/grammar/index.js';
 import { initExamples } from './features/examples.js';
 import { initCloud, bootAuth } from './features/cloud.js';
 
@@ -119,6 +120,9 @@ initWanikani();
 // 合格 JLPT tab (exam countdown + daily checklist + readiness lens). AFTER initWanikani —
 // its boot pass subscribes to WK data arrivals + kicks the lazy JLPT word-list chunk.
 initJlpt();
+// Grammar system (no tab — surfaces via the JLPT lens + flashcard cloze). Preloads the
+// catalog chunk when the deck already holds grammar cards; kicks the annotations cache.
+initGrammar();
 
 // ---- Initial paint ---- Flashcard is the default-active panel; Stats renders lazily on
 // tab-open; Browse needs one render now so it's ready on switch.

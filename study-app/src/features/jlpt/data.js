@@ -24,6 +24,34 @@ export function ensureJlptMap() {
   return loading;
 }
 
+// ---- per-level enriched word entries (the gap-fill card source) ----
+// The generated data/jlpt-words/<level>.js files: frequency-ordered [jp, read, mean, cat,
+// type, trans] tuples (JMdict-enriched — the bare jlpt.js map has no readings/glosses).
+// LITERAL loader map so Vite code-splits one chunk per level; only the target level's
+// ~150KB ever loads. jlptWords() is the sync fail-soft twin (null before the chunk lands).
+const WORD_LOADERS = {
+  N5: () => import('../../data/jlpt-words/N5.js'),
+  N4: () => import('../../data/jlpt-words/N4.js'),
+  N3: () => import('../../data/jlpt-words/N3.js'),
+  N2: () => import('../../data/jlpt-words/N2.js'),
+  N1: () => import('../../data/jlpt-words/N1.js'),
+};
+const wordsByLevel = {};
+const wordsLoading = {};
+
+export function ensureJlptWords(level) {
+  if (wordsByLevel[level]) return Promise.resolve(wordsByLevel[level]);
+  if (!WORD_LOADERS[level]) return Promise.resolve(null);
+  wordsLoading[level] = wordsLoading[level] || WORD_LOADERS[level]().then((m) => {
+    wordsByLevel[level] = m.WORDS;
+    return m.WORDS;
+  });
+  return wordsLoading[level];
+}
+
+// The level's entry array when loaded, else null (render code branches on it).
+export const jlptWords = (level) => wordsByLevel[level] || null;
+
 // The map when loaded, else null (render code branches on it).
 export const jlptMap = () => map;
 

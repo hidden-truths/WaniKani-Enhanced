@@ -140,7 +140,18 @@ function saveVerb(e) {
     accent: acc.value, levels, custom: true };
   const cs = loadCustom();
   const existing = editingRank != null ? cs.verbs.findIndex(v => v.rank === editingRank) : -1;
-  if (existing >= 0) { verb.rank = editingRank; cs.verbs[existing] = verb; }      // edit in place (keep rank → keep progress)
+  if (existing >= 0) {
+    verb.rank = editingRank;                                  // edit in place (keep rank → keep progress)
+    // Carry the machine-set provenance/identity fields through the rebuild — the form doesn't
+    // edit them, and dropping them would orphan the card from its source on every manual edit:
+    // the source facet + dedup (minna/song/wanikani/wkId/jlptfill), the grammar content lookup
+    // (grammar/grammarId), the quota pace signal (added), and the TTS override (tts).
+    const prev = cs.verbs[existing];
+    for (const k of ['minna', 'minnaKey', 'italki', 'song', 'wanikani', 'wkId', 'jlptfill', 'added', 'grammar', 'grammarId', 'tts']) {
+      if (prev[k] !== undefined && verb[k] === undefined) verb[k] = prev[k];
+    }
+    cs.verbs[existing] = verb;
+  }
   else { cs.seq = (cs.seq || 100) + 1; verb.rank = cs.seq; cs.verbs.push(verb); } // new monotonic rank
   saveCustom(cs);
   rebuildData(); closeVerbModal(); refreshAfterVerbChange();

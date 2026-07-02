@@ -38,7 +38,7 @@ export const jlptBlob = createSyncedBlob({
   appKey: 'jlpt',
   read: () => state.jlptStore,
   apply: (data) => {
-    if (data && typeof data === 'object' && (data.level || data.examDate || data.days)) {
+    if (data && typeof data === 'object' && (data.level || data.examDate || data.days || data.targets)) {
       state.jlptStore = normalizeJlpt(data, localDay(), DEFAULTS);
       saveJlptLocal();   // mirror WITHOUT re-pushing
       return true;
@@ -46,10 +46,11 @@ export const jlptBlob = createSyncedBlob({
     return false;   // nothing usable → fall through to the fresh-account seed
   },
   merge: mergeJlpt,
-  // Seed the cloud only once the user has actually touched the tab (a day record or a
-  // non-default date/level) — a fresh browser shouldn't push an empty blob at sign-in.
+  // Seed the cloud only once the user has actually touched the tab (a day record, a
+  // non-default date/level, or a pacing target — defaults are never materialized, so a
+  // targets key means the user set one) — a fresh browser shouldn't push an empty blob.
   shouldSeed: () => {
     const s = state.jlptStore;
-    return !!(s && (Object.keys(s.days || {}).length || s.level !== DEFAULTS.level || s.examDate !== DEFAULTS.examDate));
+    return !!(s && (Object.keys(s.days || {}).length || s.level !== DEFAULTS.level || s.examDate !== DEFAULTS.examDate || Object.keys(s.targets || {}).length));
   },
 });

@@ -248,6 +248,33 @@ export function studyWkCards() {
   onStartSession();
 }
 
+// "Drill grammar": the same jump scoped to the grammar CATEGORY (cloze cards) — the JLPT
+// tab's grammar-lens CTA. Free study: fresh activations aren't due yet.
+export function studyGrammarDeck() {
+  document.querySelector('.tab[data-tab="study"]').click();
+  cfg.kind = 'free'; cfg.cat = ['grammar']; cfg.type = []; cfg.trans = []; cfg.topic = []; cfg.status = []; cfg.source = []; cfg.jlpt = ['all']; cfg.rmin = 1; cfg.rmax = state.MAXRANK; cfg.ord = 'worst';
+  repaintDeck();
+  document.querySelectorAll('.chip.skind').forEach(x => x.classList.toggle('active', x.dataset.skind === 'free'));
+  document.querySelectorAll('.chip.jlpt').forEach(x => x.classList.toggle('active', x.dataset.jlpt === 'all'));
+  document.getElementById('rmin').value = 1; document.getElementById('rmax').value = state.MAXRANK;
+  document.querySelectorAll('.chip.ord').forEach(x => x.classList.toggle('active', x.dataset.ord === 'worst'));
+  updateStartLabel();
+  onStartSession();
+}
+
+// "Study them now" (合格 gap-fill): the same jump scoped to Source: JLPT cards.
+export function studyJlptCards() {
+  document.querySelector('.tab[data-tab="study"]').click();
+  cfg.kind = 'free'; cfg.cat = []; cfg.type = []; cfg.trans = []; cfg.topic = []; cfg.status = []; cfg.source = ['jlptfill']; cfg.jlpt = ['all']; cfg.rmin = 1; cfg.rmax = state.MAXRANK; cfg.ord = 'worst';
+  repaintDeck();
+  document.querySelectorAll('.chip.skind').forEach(x => x.classList.toggle('active', x.dataset.skind === 'free'));
+  document.querySelectorAll('.chip.jlpt').forEach(x => x.classList.toggle('active', x.dataset.jlpt === 'all'));
+  document.getElementById('rmin').value = 1; document.getElementById('rmax').value = state.MAXRANK;
+  document.querySelectorAll('.chip.ord').forEach(x => x.classList.toggle('active', x.dataset.ord === 'worst'));
+  updateStartLabel();
+  onStartSession();
+}
+
 // "Study all leeches": jump to the flashcard tab scoped to leech cards in FREE study
 // (leeches aren't necessarily due — free mode makes them reviewable now) and start.
 // Extracted from stats.js so Stats + the JLPT tab share ONE jump (and because the old
