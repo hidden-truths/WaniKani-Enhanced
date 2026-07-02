@@ -9,8 +9,10 @@ import { isLeech, isDue } from './srs.js';
 // Conjugation/word-class subtype labels (the `type` field).
 export const TYPE_LABEL = { godan: 'GODAN', ichidan: 'ICHIDAN', irregular: 'IRREG', 'i-adj': 'い-ADJ', 'na-adj': 'な-ADJ' };
 // Part-of-speech categories (the `cat` field); 'verb' is the historical default.
-export const CATS = ['verb', 'adjective', 'noun', 'adverb', 'phrase'];
-export const CAT_LABEL = { verb: 'VERB', adjective: 'ADJ', noun: 'NOUN', adverb: 'ADVERB', phrase: 'PHRASE' };
+// 'grammar' (the sixth) is the N3 grammar-point cloze cards — ordinary custom cards
+// drilled by the same Leitner, rendered as a cloze in the flashcard (core/grammar.js).
+export const CATS = ['verb', 'adjective', 'noun', 'adverb', 'phrase', 'grammar'];
+export const CAT_LABEL = { verb: 'VERB', adjective: 'ADJ', noun: 'NOUN', adverb: 'ADVERB', phrase: 'PHRASE', grammar: 'GRAMMAR' };
 
 // The color token a card paints with (spine / hanko stamp): its subtype if it has one,
 // else its category.
@@ -22,7 +24,7 @@ export function cardStamp(v) {
 }
 // The single class kanji shown inside a metro line-bullet (五/一/不/い/な/名/副/句), keyed by
 // colorClass. Used by Browse / Stats / the flashcard nphead via the shared .line-bullet.
-export const BULLET_KANJI = { godan: '五', ichidan: '一', irregular: '不', 'i-adj': 'い', 'na-adj': 'な', verb: '動', adjective: '形', noun: '名', adverb: '副', phrase: '句' };
+export const BULLET_KANJI = { godan: '五', ichidan: '一', irregular: '不', 'i-adj': 'い', 'na-adj': 'な', verb: '動', adjective: '形', noun: '名', adverb: '副', phrase: '句', grammar: '法' };
 export const classKanji = v => BULLET_KANJI[colorClass(v)] || '語';
 
 // Does card v match a single group token d?
@@ -34,6 +36,7 @@ export function oneGroup(v, d) {
   if (d === 'italki') return !!v.italki;                       // source facet: covered in an iTalki lesson
   if (d === 'song') return !!v.song;                           // source facet: any word mined from a 歌/song
   if (d === 'wanikani') return !!v.wanikani;                   // source facet: activated from the 鰐蟹 WaniKani tab
+  if (d === 'jlptfill') return !!v.jlptfill;                   // source facet: added by the 合格 gap-fill ('jlpt' is the LEVEL facet)
   if (CATS.includes(d)) return (v.cat || 'verb') === d;        // part-of-speech facet
   if (['godan', 'ichidan', 'irregular'].includes(d)) return v.type === d;
   if (d === 'suru' || d === 'fake') return v.tags.includes(d);
@@ -61,20 +64,20 @@ export function passes(v, c) {
 // Token → facet routing. topic is the default; per-lesson tokens (mnn-l23) → source.
 export const DECK_FACETS = ['cat', 'type', 'trans', 'topic', 'status', 'source'];
 export const TOKEN_FACET = {
-  verb: 'cat', adjective: 'cat', noun: 'cat', adverb: 'cat', phrase: 'cat',
+  verb: 'cat', adjective: 'cat', noun: 'cat', adverb: 'cat', phrase: 'cat', grammar: 'cat',
   godan: 'type', ichidan: 'type', irregular: 'type', suru: 'type', fake: 'type',
   trans: 'trans', intrans: 'trans', 'ti-pair': 'trans', leech: 'status', due: 'status',
-  minna: 'source', italki: 'source', song: 'source', wanikani: 'source',
+  minna: 'source', italki: 'source', song: 'source', wanikani: 'source', jlptfill: 'source',
 };
-// topic is the default; per-lesson (mnn-l23), per-song (song-<extId>) AND per-WK-level
-// (wk-l22) tokens → source.
-export const tokenFacet = t => TOKEN_FACET[t] || (/^mnn-l\d+$/.test(t) || /^song-/.test(t) || /^wk-l\d+$/.test(t) ? 'source' : 'topic');
+// topic is the default; per-lesson (mnn-l23), per-song (song-<extId>), per-WK-level
+// (wk-l22) AND per-JLPT-level gap-fill (jlpt-n3) tokens → source.
+export const tokenFacet = t => TOKEN_FACET[t] || (/^mnn-l\d+$/.test(t) || /^song-/.test(t) || /^wk-l\d+$/.test(t) || /^jlpt-n\d$/.test(t) ? 'source' : 'topic');
 
 // Token → human label for the active-filter recap line.
-export const DECK_LABEL = { verb: 'Verb', adjective: 'Adjective', noun: 'Noun', adverb: 'Adverb', phrase: 'Phrase', godan: 'Godan', ichidan: 'Ichidan', irregular: 'Irregular', suru: 'Suru', fake: 'Fake-ichidan', trans: 'Transitive', intrans: 'Intransitive', 'ti-pair': 'T/I pairs', leech: 'Leeches', due: 'Due cards', motion: 'Motion', transit: 'Transit', wearing: 'Wearing', speaking: 'Speaking', communication: 'Communication', giving: 'Giving/Recv', emotion: 'Emotion', cognition: 'Cognition', perception: 'Perception', existence: 'Existence', change: 'Change', ability: 'Ability', onoff: 'On/Off', daily: 'Daily', body: 'Body', work: 'Work', study: 'Study', food: 'Food', money: 'Money', minna: 'みんなの日本語', italki: 'iTalki', song: '歌', wanikani: '鰐蟹' };
+export const DECK_LABEL = { verb: 'Verb', adjective: 'Adjective', noun: 'Noun', adverb: 'Adverb', phrase: 'Phrase', grammar: 'Grammar', jlptfill: 'JLPT', godan: 'Godan', ichidan: 'Ichidan', irregular: 'Irregular', suru: 'Suru', fake: 'Fake-ichidan', trans: 'Transitive', intrans: 'Intransitive', 'ti-pair': 'T/I pairs', leech: 'Leeches', due: 'Due cards', motion: 'Motion', transit: 'Transit', wearing: 'Wearing', speaking: 'Speaking', communication: 'Communication', giving: 'Giving/Recv', emotion: 'Emotion', cognition: 'Cognition', perception: 'Perception', existence: 'Existence', change: 'Change', ability: 'Ability', onoff: 'On/Off', daily: 'Daily', body: 'Body', work: 'Work', study: 'Study', food: 'Food', money: 'Money', minna: 'みんなの日本語', italki: 'iTalki', song: '歌', wanikani: '鰐蟹' };
 // Token → recap label. Per-lesson source tokens (mnn-l23) render as "L23"; per-song
-// (song-<id>) as "歌"; per-WK-level (wk-l22) as "WK L22".
-export function deckLabel(t) { const m = /^mnn-l(\d+)$/.exec(t); if (m) return 'L' + m[1]; if (/^song-/.test(t)) return '歌'; const w = /^wk-l(\d+)$/.exec(t); if (w) return 'WK L' + w[1]; return DECK_LABEL[t] || t; }
+// (song-<id>) as "歌"; per-WK-level (wk-l22) as "WK L22"; gap-fill level (jlpt-n3) as "N3".
+export function deckLabel(t) { const m = /^mnn-l(\d+)$/.exec(t); if (m) return 'L' + m[1]; if (/^song-/.test(t)) return '歌'; const w = /^wk-l(\d+)$/.exec(t); if (w) return 'WK L' + w[1]; const j = /^jlpt-n(\d)$/.exec(t); if (j) return 'N' + j[1]; return DECK_LABEL[t] || t; }
 // Build the active-facet parts for a config (one part per non-empty facet).
 export function filterSummary(c) {
   const parts = [];

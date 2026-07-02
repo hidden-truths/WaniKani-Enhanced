@@ -7,6 +7,8 @@ import {
   JLPT_LEVEL_ORDER, buildJlptMap, jlptLookup, jlptLevelTotal, examCountdown,
   deckJlptCoverage, wkJlptCoverage, normalizeJlpt, mergeJlpt, shiftDay, checklistHeat,
   JLPT_DAYS_KEEP,
+  DEFAULT_TARGETS, jlptTargets, deckWordSet, wkVocabIndex, jlptGap, selectGapBatch,
+  buildJlptCard, weeklyAddPace, pacePlan, PACE_BUFFER_DAYS,
 } from '../src/core/jlpt.js';
 import { buildWkCard } from '../src/core/wanikani.js';
 
@@ -121,4 +123,122 @@ test('checklistHeat returns oldest→today with done capped at taskCount', () =>
 
 test('JLPT_LEVEL_ORDER runs easy → hard', () => {
   expect(JLPT_LEVEL_ORDER).toEqual(['N5', 'N4', 'N3', 'N2', 'N1']);
+});
+
+/* ---- pacing coach + gap-fill --------------------------------------------------- */
+
+test('jlptTargets applies defaults at read; stored targets override per field', () => {
+  expect(jlptTargets(null)).toEqual(DEFAULT_TARGETS);
+  expect(jlptTargets({ targets: { wordsPerDay: 20 } })).toEqual({ wordsPerDay: 20, grammarPerWeek: DEFAULT_TARGETS.grammarPerWeek });
+});
+
+test('normalizeJlpt clamps targets to sane ints and OMITS the key when empty', () => {
+  const t = normalizeJlpt({ targets: { wordsPerDay: '15.6', grammarPerWeek: 500, junk: 3 } }, '2026-07-01');
+  expect(t.targets).toEqual({ wordsPerDay: 16 });          // rounded; 500 out of range; junk dropped
+  const bare = normalizeJlpt({ level: 'N3' }, '2026-07-01');
+  expect('targets' in bare).toBe(false);                   // pre-targets blob round-trips shape-identical
+  expect('targets' in normalizeJlpt({ targets: { wordsPerDay: 0 } }, '2026-07-01')).toBe(false);
+});
+
+test('mergeJlpt unions targets per field, local wins', () => {
+  const m = mergeJlpt({ targets: { wordsPerDay: 8 } }, { targets: { wordsPerDay: 15, grammarPerWeek: 7 } });
+  expect(m.targets).toEqual({ wordsPerDay: 8, grammarPerWeek: 7 });
+  expect('targets' in mergeJlpt({ days: {} }, { days: {} })).toBe(false);
+});
+
+test('deckWordSet collects headwords AND readings', () => {
+  const s = deckWordSet([{ jp: '一方', read: 'いっぽう' }, { jp: 'ある' }]);
+  expect(s.has('一方') && s.has('いっぽう') && s.has('ある')).toBe(true);
+});
+
+test('wkVocabIndex maps visible vocabulary chars to stage/started/wkLevel', () => {
+  const subjects = new Map([
+    [1, { id: 1, type: 'vocabulary', chars: '一方', level: 14 }],
+    [2, { id: 2, type: 'kanji', chars: '方', level: 3 }],           // not vocabulary → skipped
+    [3, { id: 3, type: 'vocabulary', chars: '経済', level: 30, hidden: true }],
+  ]);
+  const assignments = new Map([[1, { startedAt: 1, stage: 6 }]]);
+  const idx = wkVocabIndex(subjects, assignments);
+  expect(idx.get('一方')).toEqual({ stage: 6, started: true, wkLevel: 14 });
+  expect(idx.has('方') || idx.has('経済')).toBe(false);
+});
+
+test('jlptGap: covered = inDeck OR guru, with the overlap counted once', () => {
+  // N3 words in MAP: あいにく, 一方, あらゆる
+  const deckWords = new Set(['あいにく', '一方']);
+  const wkIndex = new Map([
+    ['一方', { stage: 6, started: true, wkLevel: 14 }],    // guru AND in deck → both
+    ['あらゆる', { stage: 2, started: true, wkLevel: 20 }], // started but below guru → NOT covered
+  ]);
+  const gap = jlptGap(MAP, 'N3', deckWords, wkIndex);
+  expect(gap).toEqual({ total: 3, covered: 2, inDeck: 2, guru: 1, both: 1, uncovered: ['あらゆる'] });
+  expect(jlptGap(MAP, 'N3', new Set(), null).uncovered.length).toBe(3);
+});
+
+test('selectGapBatch tiers: off-WK first, locked-above, unlocked, started-below-guru last', () => {
+  const entries = [
+    ['学ぶ', 'まなぶ', 'to learn', 'verb', 'godan', 't'],      // started below guru → tier 4
+    ['自由', 'じゆう', 'freedom', 'noun', '', ''],              // on WK, locked above user level → tier 2
+    ['宝', 'たから', 'treasure', 'noun', '', ''],               // on WK, unlocked, not started → tier 3
+    ['あらゆる', 'あらゆる', 'every', 'adjective', '', ''],      // not on WK → tier 1
+    ['covered', 'covered', 'x', 'noun', '', ''],                // not uncovered → excluded
+  ];
+  const uncovered = ['学ぶ', '自由', '宝', 'あらゆる'];
+  const wkIndex = new Map([
+    ['学ぶ', { stage: 2, started: true, wkLevel: 10 }],
+    ['自由', { stage: 0, started: false, wkLevel: 40 }],
+    ['宝', { stage: 0, started: false, wkLevel: 15 }],
+  ]);
+  const batch = selectGapBatch(entries, uncovered, wkIndex, 22, 3);
+  expect(batch.map((e) => e[0])).toEqual(['あらゆる', '自由', '宝']);
+  expect(selectGapBatch(entries, uncovered, wkIndex, 22, 99).map((e) => e[0])).toEqual(['あらゆる', '自由', '宝', '学ぶ']);
+});
+
+test('buildJlptCard: minimal tagged card, jlptfill source flag + added day-stamp', () => {
+  const c = buildJlptCard(['独り', 'ひとり', 'one person', 'noun', '', ''], 205, 'N3', '2026-07-01');
+  expect(c).toEqual({
+    rank: 205, jp: '独り', read: 'ひとり', mean: 'one person',
+    cat: 'noun', type: '', trans: '', jlpt: 'N3',
+    tags: ['JLPT', 'jlpt-n3'], jlptfill: true, added: '2026-07-01',
+    mnem: '', tip: 'JLPT N3 word list', ex: [], accent: null, levels: null, custom: true,
+  });
+  expect(buildJlptCard(['ああ', '', 'like that', 'adverb', '', ''], 1, 'N5', 'd').read).toBe('ああ');
+});
+
+test('weeklyAddPace counts added-stamps in the trailing window, per level', () => {
+  const data = [
+    { jlpt: 'N3', added: '2026-07-01' },
+    { jlpt: 'N3', added: '2026-06-28' },
+    { jlpt: 'N3', added: '2026-06-20' },   // outside the 7-day window
+    { jlpt: 'N4', added: '2026-07-01' },   // other level
+    { jlpt: 'N3' },                        // no stamp (non-gap-fill card)
+  ];
+  expect(weeklyAddPace(data, '2026-07-01', 'N3')).toEqual({ today: 1, week: 2, avgPerDay: 2 / 7 });
+});
+
+test('pacePlan verdicts: behind / on-track / ahead / done; null-safe on missing or past exam', () => {
+  const gap = { total: 2069, covered: 869 };   // 1200 uncovered
+  // 158 days − 14 buffer = 144 eff days → need ceil(1200/144)=9/day; at 12/day finish in 100d → slack 44
+  const p = pacePlan({ daysLeft: 158, gap, targets: { wordsPerDay: 12, grammarPerWeek: 5 } });
+  expect(p.effDays).toBe(158 - PACE_BUFFER_DAYS);
+  expect(p.neededPerDay).toBe(9);
+  expect(p.slackDays).toBe(44);
+  expect(p.verdict).toBe('ahead');
+  expect(pacePlan({ daysLeft: 158, gap, targets: { wordsPerDay: 5 } }).verdict).toBe('behind');
+  expect(pacePlan({ daysLeft: 158, gap: { total: 10, covered: 10 }, targets: {} }).verdict).toBe('done');
+  expect(pacePlan({ daysLeft: null, gap })).toBe(null);
+  expect(pacePlan({ daysLeft: -3, gap })).toBe(null);
+});
+
+test('pacePlan grammar line: remaining vs weekly target', () => {
+  const p = pacePlan({
+    daysLeft: 158, gap: { total: 0, covered: 0 },
+    targets: { grammarPerWeek: 5 }, grammar: { studied: 21, total: 81 },
+  });
+  // 60 remaining, ~20.6 weeks left, 12 weeks to finish at 5/week → ahead
+  expect(p.grammar.remaining).toBe(60);
+  expect(p.grammar.neededPerWeek).toBe(3);
+  expect(p.grammar.verdict).toBe('ahead');
+  expect(pacePlan({ daysLeft: 30, gap: { total: 0, covered: 0 }, targets: { grammarPerWeek: 5 }, grammar: { studied: 0, total: 81 } }).grammar.verdict).toBe('behind');
+  expect(pacePlan({ daysLeft: 158, gap: { total: 0, covered: 0 }, grammar: null }).grammar).toBe(undefined);
 });

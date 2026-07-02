@@ -95,6 +95,142 @@ export function wkJlptCoverage(map, level, subjects, assignmentsBySubject) {
   return { total, onWk, started, guru };
 }
 
+/* ---- pacing coach + gap-fill --------------------------------------------------- */
+
+// Default daily/weekly quotas — the ~1 hour/day study budget. NEVER materialized into the
+// synced blob (shouldSeed stays honest); jlptTargets applies them at read time.
+export const DEFAULT_TARGETS = { wordsPerDay: 12, grammarPerWeek: 5 };
+// The final stretch is review-only: a word added days before the exam can't reach a solid box,
+// so the pace math plans against daysLeft minus this buffer.
+export const PACE_BUFFER_DAYS = 14;
+export const jlptTargets = (store) => ({ ...DEFAULT_TARGETS, ...((store && store.targets) || {}) });
+
+// Every headword AND reading in the deck — the gap-fill's "already have it" set. Same
+// matching semantics as deckJlptCoverage (a list word matches a card's jp or read).
+export function deckWordSet(data) {
+  const s = new Set();
+  for (const v of data || []) {
+    if (v && v.jp) s.add(v.jp);
+    if (v && v.read) s.add(v.read);
+  }
+  return s;
+}
+
+// chars → { stage, started, wkLevel } for visible WK vocabulary (the wanikani-tab Maps) —
+// wkJlptCoverage's internals, extracted so the gap/batch math can reuse one index.
+export function wkVocabIndex(subjects, assignmentsBySubject) {
+  const idx = new Map();
+  for (const s of subjects ? subjects.values() : []) {
+    if (s.type !== 'vocabulary' || s.hidden || !s.chars || idx.has(s.chars)) continue;
+    const a = assignmentsBySubject && assignmentsBySubject.get(s.id);
+    const started = !!(a && a.startedAt && !a.hidden);
+    idx.set(s.chars, { stage: started ? (a.stage || 0) : 0, started, wkLevel: s.level || 0 });
+  }
+  return idx;
+}
+
+// The level's coverage gap. covered = inDeck OR Guru+ on WK (the readiness lens's union
+// semantics); `both` powers the honest-overlap copy; `uncovered` keeps map iteration order.
+export function jlptGap(map, level, deckWords, wkIndex) {
+  let total = 0, inDeck = 0, guru = 0, both = 0;
+  const uncovered = [];
+  for (const [word, lvl] of map || []) {
+    if (lvl !== level) continue;
+    total++;
+    const d = !!(deckWords && deckWords.has(word));
+    const g = !!(wkIndex && (wkIndex.get(word) || {}).started && wkIndex.get(word).stage >= 5);
+    if (d) inDeck++;
+    if (g) guru++;
+    if (d && g) both++;
+    if (!d && !g) uncovered.push(word);
+  }
+  return { total, covered: inDeck + guru - both, inDeck, guru, both, uncovered };
+}
+
+// Today's gap-fill batch: the first `n` uncovered words in tier order, frequency-ordered within
+// each tier (entries — the generated data/jlpt-words rows — are already frequency-ordered):
+//   ① not on WK at all (WK will never teach these — highest value)
+//   ② on WK but locked above the user's current level (won't arrive by exam)
+//   ③ on WK, unlocked, lesson not yet taken
+//   ④ started but below Guru — WK's SRS is already actively teaching them, add LAST
+export function selectGapBatch(entries, uncovered, wkIndex, userWkLevel, n) {
+  const want = uncovered instanceof Set ? uncovered : new Set(uncovered || []);
+  const tiers = [[], [], [], []];
+  for (const e of entries || []) {
+    if (!want.has(e[0])) continue;
+    const w = wkIndex && wkIndex.get(e[0]);
+    const tier = !w ? 0 : !w.started ? ((w.wkLevel || 0) > (userWkLevel || 0) ? 1 : 2) : 3;
+    tiers[tier].push(e);
+  }
+  return tiers.flat().slice(0, Math.max(0, n || 0));
+}
+
+// The tagged minimal card for one generated entry [jp, read, mean, cat, type, trans]. Pure: the
+// caller assigns the monotonic `rank`. `jlptfill` is the source-facet flag ('jlpt' is taken by
+// the LEVEL facet); `added` (the local day key) is the quota checklist row's live signal.
+export function buildJlptCard(entry, rank, level, todayKey) {
+  const [jp, read, mean, cat, type, trans] = entry;
+  return {
+    rank,
+    jp,
+    read: read || jp,
+    mean: mean || '',
+    cat: cat || 'noun', type: type || '', trans: trans || '',
+    jlpt: level,
+    tags: ['JLPT', 'jlpt-' + String(level).toLowerCase()],
+    jlptfill: true,
+    added: todayKey,
+    mnem: '', tip: `JLPT ${level} word list`, ex: [], accent: null, levels: null, custom: true,
+  };
+}
+
+// Deck-add pace over the trailing `n` days, from the `added` day-stamps buildJlptCard writes.
+// Only gap-fill cards carry `added` in wave 1, so this is honestly "gap-fill adds", not all adds.
+export function weeklyAddPace(data, todayKey, level, n = 7) {
+  const cutoff = shiftDay(todayKey, -(n - 1));
+  let today = 0, week = 0;
+  for (const v of data || []) {
+    if (!v || !v.added || v.jlpt !== level) continue;
+    if (v.added === todayKey) today++;
+    if (v.added >= cutoff && v.added <= todayKey) week++;
+  }
+  return { today, week, avgPerDay: week / n };
+}
+
+// The pacing verdict: what closing the gap by the exam requires vs the user's targets.
+// `grammar` is the injectable {studied, total} from grammarCoverage (null → no grammar line).
+// Null-safe: no/past exam date → null (the view falls back to the set-your-date copy).
+export function pacePlan({ daysLeft, gap, targets, grammar = null, bufferDays = PACE_BUFFER_DAYS }) {
+  if (daysLeft == null || daysLeft < 0) return null;
+  const t = { ...DEFAULT_TARGETS, ...(targets || {}) };
+  const effDays = Math.max(1, daysLeft - bufferDays);
+  const uncovered = gap ? Math.max(0, gap.total - gap.covered) : 0;
+  const neededPerDay = Math.ceil(uncovered / effDays);
+  const daysToFinish = t.wordsPerDay > 0 ? Math.ceil(uncovered / t.wordsPerDay) : Infinity;
+  const slackDays = effDays - daysToFinish;
+  const verdict = uncovered === 0 ? 'done' : slackDays >= 7 ? 'ahead' : slackDays >= 0 ? 'on-track' : 'behind';
+  const out = {
+    effDays, uncovered, neededPerDay,
+    targetPerDay: t.wordsPerDay,
+    slackDays, slackWeeks: Math.round(slackDays / 7),
+    verdict,
+  };
+  if (grammar && grammar.total) {
+    const remaining = Math.max(0, grammar.total - (grammar.studied || 0));
+    const weeksLeft = Math.max(1, effDays / 7);
+    const weeksToFinish = t.grammarPerWeek > 0 ? remaining / t.grammarPerWeek : Infinity;
+    const gSlack = Math.floor(weeksLeft - weeksToFinish);
+    out.grammar = {
+      remaining,
+      neededPerWeek: Math.ceil(remaining / weeksLeft),
+      targetPerWeek: t.grammarPerWeek,
+      slackWeeks: gSlack,
+      verdict: remaining === 0 ? 'done' : gSlack >= 1 ? 'ahead' : gSlack >= 0 ? 'on-track' : 'behind',
+    };
+  }
+  return out;
+}
+
 /* ---- daily checklist record ----------------------------------------------------- */
 
 // The synced blob's `days` map: { 'YYYY-MM-DD': { <taskId>: 1 } }. These helpers are the
@@ -115,6 +251,17 @@ export function normalizeJlpt(o, todayKey, defaults = {}) {
   if (!o || typeof o !== 'object') return base;
   if (JLPT_LEVEL_ORDER.includes(o.level)) base.level = o.level;
   if (typeof o.examDate === 'string' && /^\d{4}-\d{2}-\d{2}$/.test(o.examDate)) base.examDate = o.examDate;
+  // Optional pacing targets: clamp to sane ints, drop junk, and OMIT the key entirely when
+  // empty so a pre-targets blob round-trips byte-identical (defaults live in DEFAULT_TARGETS,
+  // applied at read via jlptTargets — never materialized here).
+  if (o.targets && typeof o.targets === 'object') {
+    const clean = {};
+    for (const k of ['wordsPerDay', 'grammarPerWeek']) {
+      const v = Math.round(Number(o.targets[k]));
+      if (Number.isFinite(v) && v >= 1 && v <= 99) clean[k] = v;
+    }
+    if (Object.keys(clean).length) base.targets = clean;
+  }
   const cutoff = todayKey ? shiftDay(todayKey, -JLPT_DAYS_KEEP) : null;
   for (const [day, rec] of Object.entries(o.days || {})) {
     if (!/^\d{4}-\d{2}-\d{2}$/.test(day) || !rec || typeof rec !== 'object') continue;
@@ -134,11 +281,16 @@ export function mergeJlpt(local, server) {
   for (const day of new Set([...Object.keys(a.days || {}), ...Object.keys(b.days || {})])) {
     days[day] = { ...((b.days || {})[day] || {}), ...((a.days || {})[day] || {}) };
   }
-  return {
+  const out = {
     level: a.level || b.level || 'N3',
     examDate: a.examDate || b.examDate || '',
     days,
   };
+  // Per-field union, local wins (device A can set wordsPerDay while B sets grammarPerWeek);
+  // key omitted when neither side has targets, matching normalizeJlpt.
+  const targets = { ...(b.targets || {}), ...(a.targets || {}) };
+  if (Object.keys(targets).length) out.targets = targets;
+  return out;
 }
 
 // 'YYYY-MM-DD' + n days (local-date arithmetic, no TZ drift: noon anchor).

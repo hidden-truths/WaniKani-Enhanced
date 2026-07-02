@@ -39,6 +39,10 @@ export function mergeProgress(local, server) {
       box: Math.max(x.box || 0, y.box || 0),          // furthest SRS progress
       due: Math.max(x.due || 0, y.due || 0),          // later due (consistent with the higher box)
     };
+    // `last` (most-recent grade, epoch ms — the 法 checklist row's signal) merges with max;
+    // this field list is explicit, so omitting it here would silently drop it on every 409.
+    const last = Math.max(x.last || 0, y.last || 0);
+    if (last) cards[rank].last = last;
   }
   const seen = new Set();
   const sessions = [];

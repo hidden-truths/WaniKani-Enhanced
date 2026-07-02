@@ -19,3 +19,4 @@ export * from './songs.js';
 export * from './charts.js';
 export * from './wanikani.js';
 export * from './jlpt.js';
+export * from './grammar.js';
