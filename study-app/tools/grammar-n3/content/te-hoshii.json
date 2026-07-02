@@ -1,0 +1,27 @@
+{
+  "id": "te-hoshii",
+  "explanation": "V-て + ほしい expresses wanting SOMEONE ELSE to do something; the person is marked with に: 父にたばこをやめてほしい. Compare 〜たい, which is only for what the speaker wants to do themselves. The negative is 〜ないでほしい (\"I want you not to …\"). 〜てもらいたい means the same with a slightly humbler tone.",
+  "formation": "（person に）V-て + ほしい／V-ないで + ほしい",
+  "examples": [
+    {
+      "jp": "<ruby>父<rt>ちち</rt></ruby>には、たばこをやめてほしいです。",
+      "en": "I want my father to quit smoking.",
+      "blank": "てほしい"
+    },
+    {
+      "jp": "<ruby>友達<rt>ともだち</rt></ruby>に、<ruby>引<rt>ひ</rt></ruby>っ<ruby>越<rt>こ</rt></ruby>しを<ruby>手伝<rt>てつだ</rt></ruby>ってほしいと<ruby>頼<rt>たの</rt></ruby>んだ。",
+      "en": "I asked a friend to help me with my move.",
+      "blank": "てほしい"
+    },
+    {
+      "jp": "ここに、ごみを<ruby>捨<rt>す</rt></ruby>てないでほしい。",
+      "en": "I'd like people not to dump trash here.",
+      "blank": "ないでほしい"
+    },
+    {
+      "jp": "みんなに、もっとこの<ruby>町<rt>まち</rt></ruby>の<ruby>良<rt>よ</rt></ruby>さを<ruby>知<rt>し</rt></ruby>ってほしい。",
+      "en": "I want more people to know how great this town is.",
+      "blank": "てほしい"
+    }
+  ]
+}

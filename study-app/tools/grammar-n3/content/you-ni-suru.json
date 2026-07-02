@@ -1,0 +1,27 @@
+{
+  "id": "you-ni-suru",
+  "explanation": "Expresses a deliberate, conscious effort: \"make a point of doing / see to it that\". The continuous 〜ようにしている marks a habit you maintain on purpose. Contrast with ようになる, where the change simply comes about — ようにする is you steering the change. 〜ようにしてください is a softer, indirect request than a bare 〜てください.",
+  "formation": "V-dict / V-ない + ようにする（ようにしている＝maintained habit）",
+  "examples": [
+    {
+      "jp": "<ruby>毎日<rt>まいにち</rt></ruby><ruby>野菜<rt>やさい</rt></ruby>を<ruby>食<rt>た</rt></ruby>べるようにしています。",
+      "en": "I make a point of eating vegetables every day.",
+      "blank": "ようにしています"
+    },
+    {
+      "jp": "<ruby>寝<rt>ね</rt></ruby>る<ruby>前<rt>まえ</rt></ruby>はスマホを<ruby>見<rt>み</rt></ruby>ないようにしています。",
+      "en": "I try not to look at my phone before going to bed.",
+      "blank": "ようにしています"
+    },
+    {
+      "jp": "<ruby>会議<rt>かいぎ</rt></ruby>に<ruby>遅<rt>おく</rt></ruby>れないようにしてください。",
+      "en": "Please see to it that you're not late for the meeting.",
+      "blank": "ようにしてください"
+    },
+    {
+      "jp": "これからはもっと<ruby>早<rt>はや</rt></ruby>く<ruby>寝<rt>ね</rt></ruby>るようにします。",
+      "en": "From now on, I'll make an effort to go to bed earlier.",
+      "blank": "ようにします"
+    }
+  ]
+}

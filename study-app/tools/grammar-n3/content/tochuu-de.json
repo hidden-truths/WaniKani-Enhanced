@@ -1,0 +1,27 @@
+{
+  "id": "tochuu-de",
+  "explanation": "\"Partway through\" a movement or an ongoing event: 行く途中で = on the way there, 会議の途中で = in the middle of the meeting. The verb stays in the dictionary form even when the whole sentence is past (行く途中で会った — never 行った途中で). 最中に is the dramatic cousin (\"at the very height of, when something interrupted\"); 途中で is neutral.",
+  "formation": "V-dict / N の + 途中で",
+  "examples": [
+    {
+      "jp": "<ruby>学校<rt>がっこう</rt></ruby>へ<ruby>行<rt>い</rt></ruby>く<ruby>途中<rt>とちゅう</rt></ruby>で、<ruby>先生<rt>せんせい</rt></ruby>に<ruby>会<rt>あ</rt></ruby>った。",
+      "en": "I ran into my teacher on the way to school.",
+      "blank": "途中で"
+    },
+    {
+      "jp": "<ruby>会議<rt>かいぎ</rt></ruby>の<ruby>途中<rt>とちゅう</rt></ruby>で、<ruby>電話<rt>でんわ</rt></ruby>が<ruby>鳴<rt>な</rt></ruby>ってしまった。",
+      "en": "My phone went off in the middle of the meeting.",
+      "blank": "途中で"
+    },
+    {
+      "jp": "<ruby>帰<rt>かえ</rt></ruby>る<ruby>途中<rt>とちゅう</rt></ruby>で、コンビニに<ruby>寄<rt>よ</rt></ruby>って<ruby>牛乳<rt>ぎゅうにゅう</rt></ruby>を<ruby>買<rt>か</rt></ruby>った。",
+      "en": "On my way home I stopped by a convenience store and bought milk.",
+      "blank": "途中で"
+    },
+    {
+      "jp": "<ruby>疲<rt>つか</rt></ruby>れていて、<ruby>映画<rt>えいが</rt></ruby>の<ruby>途中<rt>とちゅう</rt></ruby>で<ruby>寝<rt>ね</rt></ruby>てしまった。",
+      "en": "I was so tired I fell asleep partway through the movie.",
+      "blank": "途中で"
+    }
+  ]
+}

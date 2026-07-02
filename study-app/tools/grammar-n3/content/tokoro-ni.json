@@ -1,0 +1,27 @@
+{
+  "id": "tokoro-ni",
+  "explanation": "ところに／ところへ marks something — often a person or a phone call — arriving right at the moment a scene is unfolding: 出かけようとしたところに電話が来た. It follows V-ている, V-た, or V-(よ)うとした, and the second clause is typically an arrival or interruption (来る, 電話がかかる). 最中に stresses being mid-activity; 〜たとたん reports an instant result after a completed action — ところに freezes a moment and has something walk into it.",
+  "formation": "V-ている / V-た / V-(よ)うとした + ところに／ところへ",
+  "examples": [
+    {
+      "jp": "<ruby>出<rt>で</rt></ruby>かけようとしたところに、<ruby>電話<rt>でんわ</rt></ruby>がかかってきた。",
+      "en": "Just as I was about to head out, the phone rang.",
+      "blank": "ところに"
+    },
+    {
+      "jp": "<ruby>困<rt>こま</rt></ruby>っているところに、<ruby>先輩<rt>せんぱい</rt></ruby>が<ruby>来<rt>き</rt></ruby>て<ruby>助<rt>たす</rt></ruby>けてくれた。",
+      "en": "Right when I was stuck, my senpai came along and helped me.",
+      "blank": "ところに"
+    },
+    {
+      "jp": "お<ruby>風呂<rt>ふろ</rt></ruby>に<ruby>入<rt>はい</rt></ruby>っているところへ、<ruby>客<rt>きゃく</rt></ruby>が<ruby>来<rt>き</rt></ruby>た。",
+      "en": "A visitor showed up right while I was in the bath.",
+      "blank": "ところへ"
+    },
+    {
+      "jp": "<ruby>彼<rt>かれ</rt></ruby>の<ruby>話<rt>はなし</rt></ruby>をしているところに、<ruby>本人<rt>ほんにん</rt></ruby>が<ruby>来<rt>き</rt></ruby>た。",
+      "en": "Just as we were talking about him, the man himself walked in.",
+      "blank": "ところに"
+    }
+  ]
+}

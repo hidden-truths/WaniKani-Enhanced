@@ -1,0 +1,27 @@
+{
+  "id": "ippou-da",
+  "explanation": "Attaches to a dictionary-form verb of change (増える・減る・上がる…) and says the change keeps moving in that one direction, often with a worried tone: 物価は上がる一方だ = prices do nothing but rise. Don't confuse it with 〜一方（で）, which contrasts two sides (\"on the other hand\"). 〜ばかりだ is a close synonym but is used only for changes for the worse.",
+  "formation": "V-dict (a change verb: 増える・減る・上がる…) + 一方だ",
+  "examples": [
+    {
+      "jp": "<ruby>今年<rt>ことし</rt></ruby>に<ruby>入<rt>はい</rt></ruby>って、<ruby>物価<rt>ぶっか</rt></ruby>は<ruby>上<rt>あ</rt></ruby>がる<ruby>一方<rt>いっぽう</rt></ruby>だ。",
+      "en": "Since the start of this year, prices have done nothing but rise.",
+      "blank": "一方だ"
+    },
+    {
+      "jp": "この<ruby>町<rt>まち</rt></ruby>では、<ruby>子<rt>こ</rt></ruby>どもの<ruby>数<rt>かず</rt></ruby>が<ruby>減<rt>へ</rt></ruby>る<ruby>一方<rt>いっぽう</rt></ruby>だ。",
+      "en": "In this town, the number of children just keeps falling.",
+      "blank": "一方だ"
+    },
+    {
+      "jp": "<ruby>仕事<rt>しごと</rt></ruby>が<ruby>忙<rt>いそが</rt></ruby>しくて、ストレスはたまる<ruby>一方<rt>いっぽう</rt></ruby>だ。",
+      "en": "Work is so busy that my stress just keeps piling up.",
+      "blank": "一方だ"
+    },
+    {
+      "jp": "<ruby>練習<rt>れんしゅう</rt></ruby>しないと、<ruby>日本語<rt>にほんご</rt></ruby>は<ruby>忘<rt>わす</rt></ruby>れる<ruby>一方<rt>いっぽう</rt></ruby>ですよ。",
+      "en": "If you don't practice, your Japanese will only keep slipping away.",
+      "blank": "一方です"
+    }
+  ]
+}

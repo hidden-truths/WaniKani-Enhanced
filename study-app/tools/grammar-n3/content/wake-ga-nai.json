@@ -1,0 +1,27 @@
+{
+  "id": "wake-ga-nai",
+  "explanation": "Emphatic denial: 'there's absolutely no way that…' — the speaker rejects the very possibility, often with feeling. Its siblings differ sharply: わけではない only partially denies ('not necessarily'), わけだ affirms a natural conclusion ('no wonder / that means'), and わけにはいかない is 'can't very well do' for social reasons. In most sentences it can swap with はずがない, but わけがない sounds more colloquial and emotive.",
+  "formation": "V・い-adj（普通形）+ わけがない ／ な-adj な・N の + わけがない",
+  "examples": [
+    {
+      "jp": "あんなに<ruby>仲<rt>なか</rt></ruby>がいい<ruby>二人<rt>ふたり</rt></ruby>が<ruby>別<rt>わか</rt></ruby>れるわけがない。",
+      "en": "There's no way those two, close as they are, would break up.",
+      "blank": "わけがない"
+    },
+    {
+      "jp": "<ruby>練習<rt>れんしゅう</rt></ruby>もしないで、<ruby>試合<rt>しあい</rt></ruby>に<ruby>勝<rt>か</rt></ruby>てるわけがない。",
+      "en": "There's no way you can win the match without even practicing.",
+      "blank": "わけがない"
+    },
+    {
+      "jp": "こんな<ruby>簡単<rt>かんたん</rt></ruby>な<ruby>漢字<rt>かんじ</rt></ruby>、<ruby>彼<rt>かれ</rt></ruby>が<ruby>読<rt>よ</rt></ruby>めないわけがない。",
+      "en": "A kanji this easy — there's no way he can't read it.",
+      "blank": "わけがない"
+    },
+    {
+      "jp": "<ruby>毎日<rt>まいにち</rt></ruby><ruby>遊<rt>あそ</rt></ruby>んでばかりで、<ruby>成績<rt>せいせき</rt></ruby>が<ruby>上<rt>あ</rt></ruby>がるわけがありません。",
+      "en": "If all you do is play every day, there's no way your grades will improve.",
+      "blank": "わけがありません"
+    }
+  ]
+}

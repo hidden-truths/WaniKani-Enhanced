@@ -1,0 +1,27 @@
+{
+  "id": "you-ni",
+  "explanation": "States a purpose: \"so that …\". It attaches to verbs the subject can't fully control — potential forms, ない-forms, and verbs like 分かる・聞こえる・治る. Contrast with ために, which takes volitional verbs and the same subject in both clauses; ように is the choice when the outcome is a hoped-for state or the subjects differ.",
+  "formation": "V-dict / V-ない / V-potential + ように、…",
+  "examples": [
+    {
+      "jp": "<ruby>忘<rt>わす</rt></ruby>れないように、メモを<ruby>取<rt>と</rt></ruby>りました。",
+      "en": "I took notes so that I wouldn't forget.",
+      "blank": "ように"
+    },
+    {
+      "jp": "<ruby>後<rt>うし</rt></ruby>ろの<ruby>人<rt>ひと</rt></ruby>にも<ruby>聞<rt>き</rt></ruby>こえるように、<ruby>大<rt>おお</rt></ruby>きな<ruby>声<rt>こえ</rt></ruby>で<ruby>話<rt>はな</rt></ruby>した。",
+      "en": "I spoke in a loud voice so that the people in the back could hear too.",
+      "blank": "ように"
+    },
+    {
+      "jp": "<ruby>子<rt>こ</rt></ruby>どもでも<ruby>読<rt>よ</rt></ruby>めるように、ふりがなが<ruby>付<rt>つ</rt></ruby>いています。",
+      "en": "Furigana is added so that even children can read it.",
+      "blank": "ように"
+    },
+    {
+      "jp": "<ruby>風邪<rt>かぜ</rt></ruby>が<ruby>早<rt>はや</rt></ruby>く<ruby>治<rt>なお</rt></ruby>るように、ゆっくり<ruby>休<rt>やす</rt></ruby>んでください。",
+      "en": "Please rest well so that your cold gets better quickly.",
+      "blank": "ように"
+    }
+  ]
+}

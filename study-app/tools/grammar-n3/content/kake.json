@@ -1,0 +1,27 @@
+{
+  "id": "kake",
+  "explanation": "Verb stem + かけ marks an action that was started but left unfinished: 食べかけのパン is bread someone began eating and abandoned. As a verb, 〜かける means to begin doing something (and stop midway) or to be on the verge of doing it (言いかける = start to say). It is the mirror image of 〜きる, which stresses carrying an action through to the very end.",
+  "formation": "V-ます stem + かけ（の N）／かける",
+  "examples": [
+    {
+      "jp": "テーブルに<ruby>食<rt>た</rt></ruby>べかけのパンがある。",
+      "en": "There's a half-eaten piece of bread on the table.",
+      "blank": "かけ"
+    },
+    {
+      "jp": "<ruby>読<rt>よ</rt></ruby>みかけの<ruby>本<rt>ほん</rt></ruby>が<ruby>机<rt>つくえ</rt></ruby>の<ruby>上<rt>うえ</rt></ruby>に<ruby>置<rt>お</rt></ruby>いてある。",
+      "en": "A book I'm partway through is sitting on the desk.",
+      "blank": "かけ"
+    },
+    {
+      "jp": "<ruby>手紙<rt>てがみ</rt></ruby>を<ruby>書<rt>か</rt></ruby>きかけて、<ruby>電話<rt>でんわ</rt></ruby>に<ruby>出<rt>で</rt></ruby>た。",
+      "en": "I started writing a letter, then answered the phone.",
+      "blank": "かけて"
+    },
+    {
+      "jp": "<ruby>彼<rt>かれ</rt></ruby>は<ruby>何<rt>なに</rt></ruby>か<ruby>言<rt>い</rt></ruby>いかけて、<ruby>急<rt>きゅう</rt></ruby>に<ruby>黙<rt>だま</rt></ruby>ってしまった。",
+      "en": "He started to say something, then suddenly went quiet.",
+      "blank": "かけて"
+    }
+  ]
+}

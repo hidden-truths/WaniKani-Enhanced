@@ -1,0 +1,27 @@
+{
+  "id": "you-to-suru",
+  "explanation": "Volitional + とする expresses an attempt (\"try to\") or the moment just before an action (\"be about to\"): 出ようとしたとき = just as I was about to leave. Don't confuse it with ようにする, which is a sustained habit-effort — 寝ようとした is one attempt on one night, 寝るようにしている is a policy. In the attempt sense it often implies the try failed or was interrupted.",
+  "formation": "V volitional（〜(よ)う）+ とする（出ようとする・行こうとする）",
+  "examples": [
+    {
+      "jp": "<ruby>家<rt>いえ</rt></ruby>を<ruby>出<rt>で</rt></ruby>ようとしたとき、<ruby>電話<rt>でんわ</rt></ruby>が<ruby>鳴<rt>な</rt></ruby>った。",
+      "en": "Just as I was about to leave the house, the phone rang.",
+      "blank": "ようとした"
+    },
+    {
+      "jp": "<ruby>嫌<rt>いや</rt></ruby>なことを<ruby>忘<rt>わす</rt></ruby>れようとしても、なかなか<ruby>忘<rt>わす</rt></ruby>れられない。",
+      "en": "Even when I try to forget unpleasant things, I just can't.",
+      "blank": "ようとしても"
+    },
+    {
+      "jp": "<ruby>寝<rt>ね</rt></ruby>ようとしたら、<ruby>隣<rt>となり</rt></ruby>の<ruby>部屋<rt>へや</rt></ruby>からうるさい<ruby>音<rt>おと</rt></ruby>がした。",
+      "en": "Just when I was about to go to sleep, a loud noise came from the next room.",
+      "blank": "ようとしたら"
+    },
+    {
+      "jp": "<ruby>彼<rt>かれ</rt></ruby>は<ruby>失敗<rt>しっぱい</rt></ruby>しても、また<ruby>新<rt>あたら</rt></ruby>しいことを<ruby>始<rt>はじ</rt></ruby>めようとする。",
+      "en": "Even when he fails, he keeps trying to start something new.",
+      "blank": "ようとする"
+    }
+  ]
+}

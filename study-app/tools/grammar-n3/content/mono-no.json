@@ -1,0 +1,27 @@
+{
+  "id": "mono-no",
+  "explanation": "A formal connective 'although / but': A is true, yet the result you'd expect from A doesn't follow (買ったものの、使い方が分からない). Stiffer and more written than けど・が, and unlike のに it carries no tone of complaint or surprise — just neutral contrast. It has nothing to do with sentence-final ものだ (general truths, nostalgia, admonition); the shared もの is form only.",
+  "formation": "V・い-adj（普通形）+ ものの ／ な-adj な・である + ものの",
+  "examples": [
+    {
+      "jp": "<ruby>大学<rt>だいがく</rt></ruby>を<ruby>卒業<rt>そつぎょう</rt></ruby>したものの、<ruby>仕事<rt>しごと</rt></ruby>が<ruby>見<rt>み</rt></ruby>つからない。",
+      "en": "Although I graduated from university, I can't find a job.",
+      "blank": "ものの"
+    },
+    {
+      "jp": "<ruby>運転免許<rt>うんてんめんきょ</rt></ruby>は<ruby>持<rt>も</rt></ruby>っているものの、ほとんど<ruby>運転<rt>うんてん</rt></ruby>しない。",
+      "en": "I have a driver's license, but I hardly ever drive.",
+      "blank": "ものの"
+    },
+    {
+      "jp": "<ruby>新<rt>あたら</rt></ruby>しいパソコンを<ruby>買<rt>か</rt></ruby>ったものの、<ruby>使<rt>つか</rt></ruby>い<ruby>方<rt>かた</rt></ruby>がよく<ruby>分<rt>わ</rt></ruby>からない。",
+      "en": "I bought a new computer, but I don't really know how to use it.",
+      "blank": "ものの"
+    },
+    {
+      "jp": "やせると<ruby>言<rt>い</rt></ruby>ったものの、なかなか<ruby>運動<rt>うんどう</rt></ruby>する<ruby>時間<rt>じかん</rt></ruby>がない。",
+      "en": "I said I'd lose weight, but I just can't find time to exercise.",
+      "blank": "ものの"
+    }
+  ]
+}

@@ -1,0 +1,27 @@
+{
+  "id": "hazu-ga-nai",
+  "explanation": "Strong, reasoned denial: 'there's no way that / it can't be'. It is the negative counterpart of はずだ ('should be, by my reasoning') and the direct opposite of に違いない ('must be'). Nearly interchangeable with わけがない — はずがない leans on logical grounds ('given what I know'), while わけがない sounds a bit more emotional and colloquial.",
+  "formation": "V・い-adj（普通形）+ はずがない ／ な-adj な・N の + はずがない",
+  "examples": [
+    {
+      "jp": "<ruby>真面目<rt>まじめ</rt></ruby>な<ruby>彼<rt>かれ</rt></ruby>が<ruby>嘘<rt>うそ</rt></ruby>をつくはずがない。",
+      "en": "There's no way someone as serious as he is would lie.",
+      "blank": "はずがない"
+    },
+    {
+      "jp": "こんな<ruby>難<rt>むずか</rt></ruby>しい<ruby>問題<rt>もんだい</rt></ruby>、<ruby>子供<rt>こども</rt></ruby>に<ruby>解<rt>と</rt></ruby>けるはずがない。",
+      "en": "A problem this hard can't possibly be solved by a child.",
+      "blank": "はずがない"
+    },
+    {
+      "jp": "この<ruby>値段<rt>ねだん</rt></ruby>で<ruby>本物<rt>ほんもの</rt></ruby>のブランド<ruby>品<rt>ひん</rt></ruby>のはずがない。",
+      "en": "At this price, it can't possibly be a genuine brand item.",
+      "blank": "はずがない"
+    },
+    {
+      "jp": "<ruby>彼女<rt>かのじょ</rt></ruby>は<ruby>昨日<rt>きのう</rt></ruby><ruby>国<rt>くに</rt></ruby>に<ruby>帰<rt>かえ</rt></ruby>ったから、ここにいるはずがありません。",
+      "en": "She went back to her country yesterday, so she can't possibly be here.",
+      "blank": "はずがありません"
+    }
+  ]
+}

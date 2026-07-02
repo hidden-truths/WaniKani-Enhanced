@@ -1,0 +1,27 @@
+{
+  "id": "wa-mochiron",
+  "explanation": "\"A, of course, and B as well\" — A is presented as obvious or taken for granted, and B extends the claim to something less expected, usually marked with も. It attaches to nouns. Compared with だけでなく it foregrounds how self-evident A is rather than simply adding B.",
+  "formation": "N + はもちろん、…も",
+  "examples": [
+    {
+      "jp": "<ruby>彼<rt>かれ</rt></ruby>は<ruby>漢字<rt>かんじ</rt></ruby>はもちろん、<ruby>敬語<rt>けいご</rt></ruby>も<ruby>上手<rt>じょうず</rt></ruby>です。",
+      "en": "He's good at keigo, not to mention kanji.",
+      "blank": "はもちろん"
+    },
+    {
+      "jp": "この<ruby>温泉<rt>おんせん</rt></ruby>は<ruby>週末<rt>しゅうまつ</rt></ruby>はもちろん、<ruby>平日<rt>へいじつ</rt></ruby>も<ruby>混<rt>こ</rt></ruby>んでいる。",
+      "en": "This hot spring is crowded even on weekdays, let alone weekends.",
+      "blank": "はもちろん"
+    },
+    {
+      "jp": "<ruby>東京<rt>とうきょう</rt></ruby>はもちろん、<ruby>地方<rt>ちほう</rt></ruby>の<ruby>町<rt>まち</rt></ruby>にも<ruby>外国人<rt>がいこくじん</rt></ruby>が<ruby>増<rt>ふ</rt></ruby>えた。",
+      "en": "Foreigners have increased not just in Tokyo, of course, but in regional towns too.",
+      "blank": "はもちろん"
+    },
+    {
+      "jp": "この<ruby>店<rt>みせ</rt></ruby>では、カードはもちろん、スマホでも<ruby>払<rt>はら</rt></ruby>える。",
+      "en": "At this shop you can pay by card, of course, and even by phone.",
+      "blank": "はもちろん"
+    }
+  ]
+}

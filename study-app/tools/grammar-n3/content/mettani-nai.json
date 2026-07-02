@@ -1,0 +1,27 @@
+{
+  "id": "mettani-nai",
+  "explanation": "Pure FREQUENCY: \"rarely, hardly ever\" — the event does occur, just very seldom (父はめったに怒らない). It leaves room for exceptions, unlike 決して〜ない, an absolute zero backed by will or judgment; and it counts how often, while なかなか〜ない is about a wanted result that resists coming. Always takes a negative; めったにない on its own = \"(such chances) are rare\".",
+  "formation": "めったに + V-ない（めったにない）",
+  "examples": [
+    {
+      "jp": "<ruby>父<rt>ちち</rt></ruby>はめったに<ruby>怒<rt>おこ</rt></ruby>らないが、<ruby>怒<rt>おこ</rt></ruby>ると<ruby>怖<rt>こわ</rt></ruby>い。",
+      "en": "My father rarely gets angry, but he's scary when he does.",
+      "blank": "めったに"
+    },
+    {
+      "jp": "<ruby>忙<rt>いそが</rt></ruby>しくて、めったに<ruby>映画<rt>えいが</rt></ruby>を<ruby>見<rt>み</rt></ruby>に<ruby>行<rt>い</rt></ruby>かない。",
+      "en": "I'm so busy that I hardly ever go to see movies.",
+      "blank": "めったに"
+    },
+    {
+      "jp": "こんなチャンスはめったにないから、ぜひ<ruby>参加<rt>さんか</rt></ruby>したい。",
+      "en": "Chances like this are rare, so I definitely want to take part.",
+      "blank": "めったに"
+    },
+    {
+      "jp": "<ruby>祖母<rt>そぼ</rt></ruby>は<ruby>元気<rt>げんき</rt></ruby>で、めったに<ruby>病気<rt>びょうき</rt></ruby>にならない。",
+      "en": "My grandmother is in good health and rarely gets sick.",
+      "blank": "めったに"
+    }
+  ]
+}

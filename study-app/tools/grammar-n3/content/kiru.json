@@ -1,0 +1,27 @@
+{
+  "id": "kiru",
+  "explanation": "Verb stem + きる means to do something completely, all the way to the end: 読みきる is to finish every last page. The potential forms きれる／きれない are extremely common — 食べきれない means \"can't manage to eat it all.\" With states it means \"utterly\" (疲れきる = be completely exhausted). Contrast 〜かけ, which marks the opposite: an action left half-done.",
+  "formation": "V-ます stem + きる／きれる／きれない",
+  "examples": [
+    {
+      "jp": "<ruby>長<rt>なが</rt></ruby>い<ruby>小説<rt>しょうせつ</rt></ruby>を<ruby>一週間<rt>いっしゅうかん</rt></ruby>で<ruby>読<rt>よ</rt></ruby>みきった。",
+      "en": "I finished the whole long novel in a week.",
+      "blank": "きった"
+    },
+    {
+      "jp": "<ruby>料理<rt>りょうり</rt></ruby>が<ruby>多<rt>おお</rt></ruby>すぎて、<ruby>全部<rt>ぜんぶ</rt></ruby>は<ruby>食<rt>た</rt></ruby>べきれなかった。",
+      "en": "There was too much food, and I couldn't eat it all.",
+      "blank": "きれなかった"
+    },
+    {
+      "jp": "マラソンを<ruby>最後<rt>さいご</rt></ruby>まで<ruby>走<rt>はし</rt></ruby>りきって、<ruby>涙<rt>なみだ</rt></ruby>が<ruby>出<rt>で</rt></ruby>た。",
+      "en": "I ran the marathon all the way to the finish, and tears came to my eyes.",
+      "blank": "きって"
+    },
+    {
+      "jp": "<ruby>彼女<rt>かのじょ</rt></ruby>は<ruby>疲<rt>つか</rt></ruby>れきった<ruby>顔<rt>かお</rt></ruby>で<ruby>帰<rt>かえ</rt></ruby>ってきた。",
+      "en": "She came home looking utterly exhausted.",
+      "blank": "きった"
+    }
+  ]
+}

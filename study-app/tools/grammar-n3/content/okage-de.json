@@ -1,0 +1,27 @@
+{
+  "id": "okage-de",
+  "explanation": "Credits a good result to someone or something: \"thanks to …\", with a nuance of gratitude. It contrasts with せいで, which blames a bad result, and with the neutral ため（に）. Used ironically it can blame too (君のおかげでひどい目にあった). The set greeting おかげさまで（元気です） thanks unspecified good fortune.",
+  "formation": "N の / V-た / い-adj / な-adj な + おかげで",
+  "examples": [
+    {
+      "jp": "<ruby>先生<rt>せんせい</rt></ruby>のおかげで、<ruby>試験<rt>しけん</rt></ruby>に<ruby>合格<rt>ごうかく</rt></ruby>できました。",
+      "en": "Thanks to my teacher, I passed the exam.",
+      "blank": "おかげで"
+    },
+    {
+      "jp": "<ruby>毎日<rt>まいにち</rt></ruby><ruby>練習<rt>れんしゅう</rt></ruby>したおかげで、<ruby>発音<rt>はつおん</rt></ruby>がよくなりました。",
+      "en": "Thanks to practicing every day, my pronunciation has improved.",
+      "blank": "おかげで"
+    },
+    {
+      "jp": "<ruby>薬<rt>くすり</rt></ruby>のおかげで、<ruby>熱<rt>ねつ</rt></ruby>がすぐ<ruby>下<rt>さ</rt></ruby>がりました。",
+      "en": "Thanks to the medicine, my fever went down right away.",
+      "blank": "おかげで"
+    },
+    {
+      "jp": "<ruby>友達<rt>ともだち</rt></ruby>が<ruby>手伝<rt>てつだ</rt></ruby>ってくれたおかげで、<ruby>引<rt>ひ</rt></ruby>っ<ruby>越<rt>こ</rt></ruby>しが<ruby>早<rt>はや</rt></ruby>く<ruby>終<rt>お</rt></ruby>わった。",
+      "en": "Thanks to my friend helping out, the move finished early.",
+      "blank": "おかげで"
+    }
+  ]
+}

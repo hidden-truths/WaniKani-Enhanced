@@ -1,0 +1,27 @@
+{
+  "id": "wake-da",
+  "explanation": "States a conclusion that follows naturally from the facts: 'so that means…', or — on discovering the reason for something — 'no wonder!' (often with どうりで). Within the わけ family this is the affirmative one: わけではない softens or partially denies an implication ('it's not that…'), わけがない flatly denies any possibility ('no way'), and わけにはいかない is 'can't very well do' for social or moral reasons.",
+  "formation": "V・い-adj（普通形）+ わけだ ／ な-adj な・N という + わけだ",
+  "examples": [
+    {
+      "jp": "<ruby>十年<rt>じゅうねん</rt></ruby>も<ruby>日本<rt>にほん</rt></ruby>にいたのか。<ruby>日本語<rt>にほんご</rt></ruby>が<ruby>上手<rt>じょうず</rt></ruby>なわけだ。",
+      "en": "You were in Japan for ten whole years? No wonder your Japanese is good.",
+      "blank": "わけだ"
+    },
+    {
+      "jp": "エアコンが<ruby>壊<rt>こわ</rt></ruby>れていた。どうりで<ruby>暑<rt>あつ</rt></ruby>いわけだ。",
+      "en": "The air conditioner was broken. No wonder it's hot.",
+      "blank": "わけだ"
+    },
+    {
+      "jp": "<ruby>一<rt>いち</rt></ruby>ドルが<ruby>百五十円<rt>ひゃくごじゅうえん</rt></ruby>なら、この<ruby>本<rt>ほん</rt></ruby>は<ruby>千五百円<rt>せんごひゃくえん</rt></ruby>になるわけだ。",
+      "en": "If one dollar is 150 yen, that means this book comes to 1,500 yen.",
+      "blank": "わけだ"
+    },
+    {
+      "jp": "<ruby>毎日<rt>まいにち</rt></ruby><ruby>五時間<rt>ごじかん</rt></ruby>も<ruby>練習<rt>れんしゅう</rt></ruby>しているのか。<ruby>強<rt>つよ</rt></ruby>いわけだ。",
+      "en": "He practices five hours every day? No wonder he's strong.",
+      "blank": "わけだ"
+    }
+  ]
+}

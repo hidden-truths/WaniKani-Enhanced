@@ -1,0 +1,27 @@
+{
+  "id": "ni-totte",
+  "explanation": "\"For / from the standpoint of\": names whose perspective a judgment is made from — usually a person or group — and is followed by an evaluation like 大切だ, 難しい, or いい経験だ. Don't confuse it with に対して: 私にとって means \"in my eyes\", while 私に対して means \"directed at me\".",
+  "formation": "N（person / group）+ にとって",
+  "examples": [
+    {
+      "jp": "<ruby>私<rt>わたし</rt></ruby>にとって、<ruby>家族<rt>かぞく</rt></ruby>が<ruby>一番<rt>いちばん</rt></ruby><ruby>大切<rt>たいせつ</rt></ruby>です。",
+      "en": "For me, family is the most important thing.",
+      "blank": "にとって"
+    },
+    {
+      "jp": "この<ruby>問題<rt>もんだい</rt></ruby>は、<ruby>子供<rt>こども</rt></ruby>にとって<ruby>難<rt>むずか</rt></ruby>しすぎる。",
+      "en": "This problem is too difficult for children.",
+      "blank": "にとって"
+    },
+    {
+      "jp": "<ruby>外国人<rt>がいこくじん</rt></ruby>にとって、<ruby>漢字<rt>かんじ</rt></ruby>を<ruby>覚<rt>おぼ</rt></ruby>えるのは<ruby>大変<rt>たいへん</rt></ruby>だ。",
+      "en": "For foreigners, memorizing kanji is a real challenge.",
+      "blank": "にとって"
+    },
+    {
+      "jp": "あの<ruby>失敗<rt>しっぱい</rt></ruby>は、<ruby>彼<rt>かれ</rt></ruby>にとっていい<ruby>経験<rt>けいけん</rt></ruby>になった。",
+      "en": "That failure turned out to be a good experience for him.",
+      "blank": "にとって"
+    }
+  ]
+}

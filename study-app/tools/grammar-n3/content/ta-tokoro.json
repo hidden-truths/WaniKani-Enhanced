@@ -1,0 +1,27 @@
+{
+  "id": "ta-tokoro",
+  "explanation": "V-た + ところ、… means \"when I did X, (I found that) …\" — you did something like calling or checking, and report what you discovered (電話したところ、休みだった). The result is a state you found, not something you caused; the tone is neutral and slightly formal. Don't confuse it with 〜たとたん (a sudden event follows instantly) or 〜ところだった (the event never actually happened).",
+  "formation": "V-た + ところ、…",
+  "examples": [
+    {
+      "jp": "<ruby>店<rt>みせ</rt></ruby>に<ruby>電話<rt>でんわ</rt></ruby>したところ、<ruby>今日<rt>きょう</rt></ruby>は<ruby>休<rt>やす</rt></ruby>みだった。",
+      "en": "When I called the shop, it turned out they were closed today.",
+      "blank": "たところ"
+    },
+    {
+      "jp": "<ruby>先生<rt>せんせい</rt></ruby>に<ruby>聞<rt>き</rt></ruby>いたところ、<ruby>試験<rt>しけん</rt></ruby>は<ruby>来週<rt>らいしゅう</rt></ruby>だそうだ。",
+      "en": "When I asked the teacher, I learned the exam is next week.",
+      "blank": "たところ"
+    },
+    {
+      "jp": "<ruby>箱<rt>はこ</rt></ruby>を<ruby>開<rt>あ</rt></ruby>けてみたところ、<ruby>中<rt>なか</rt></ruby>は<ruby>空<rt>から</rt></ruby>だった。",
+      "en": "When I opened the box, I found it was empty inside.",
+      "blank": "たところ"
+    },
+    {
+      "jp": "インターネットで<ruby>調<rt>しら</rt></ruby>べたところ、その<ruby>話<rt>はなし</rt></ruby>は<ruby>本当<rt>ほんとう</rt></ruby>だった。",
+      "en": "When I looked it up online, the story turned out to be true.",
+      "blank": "たところ"
+    }
+  ]
+}

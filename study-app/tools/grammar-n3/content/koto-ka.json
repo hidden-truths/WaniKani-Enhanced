@@ -1,0 +1,27 @@
+{
+  "id": "koto-ka",
+  "explanation": "An emphatic exclamation: \"how …! / how many times …!\". It pairs with a question word — どんなに・何度・どれほど — and the sentence ends in ことか instead of answering the question. The tone is emotional and often retrospective, looking back on something long endured or deeply felt.",
+  "formation": "どんなに／何度／どれほど ＋ V・Adj（普通形）+ ことか",
+  "examples": [
+    {
+      "jp": "<ruby>合格<rt>ごうかく</rt></ruby>できて、どんなにうれしかったことか。",
+      "en": "How happy I was to pass!",
+      "blank": "ことか"
+    },
+    {
+      "jp": "<ruby>子<rt>こ</rt></ruby>どものころ、この<ruby>歌<rt>うた</rt></ruby>を<ruby>何度<rt>なんど</rt></ruby><ruby>歌<rt>うた</rt></ruby>ったことか。",
+      "en": "How many times I sang this song as a child!",
+      "blank": "ことか"
+    },
+    {
+      "jp": "<ruby>一人<rt>ひとり</rt></ruby>の<ruby>生活<rt>せいかつ</rt></ruby>がどれほど<ruby>寂<rt>さび</rt></ruby>しいことか。",
+      "en": "How lonely living alone is!",
+      "blank": "ことか"
+    },
+    {
+      "jp": "あなたに<ruby>会<rt>あ</rt></ruby>えるのを、どんなに<ruby>待<rt>ま</rt></ruby>っていたことか。",
+      "en": "How long I've been waiting to see you!",
+      "blank": "ことか"
+    }
+  ]
+}

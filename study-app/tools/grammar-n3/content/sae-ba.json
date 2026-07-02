@@ -1,0 +1,27 @@
+{
+  "id": "sae-ba",
+  "explanation": "Singles out ONE thing as the only condition that matters: \"as long as …; if only …\" (お金さえあれば). Nouns take さえ plus the ば form; verbs use stem + さえすれば or て form + さえいれば. Unlike plain さえ (\"even\"), this pattern always pairs with ば and says that single condition is sufficient — nothing else matters.",
+  "formation": "N さえ + V-ば / V-stem + さえすれば / V-て + さえいれば",
+  "examples": [
+    {
+      "jp": "お<ruby>金<rt>かね</rt></ruby>さえあれば、<ruby>何<rt>なん</rt></ruby>でも<ruby>買<rt>か</rt></ruby>えると<ruby>思<rt>おも</rt></ruby>っていた。",
+      "en": "I used to think that as long as you had money, you could buy anything.",
+      "blank": "さえ"
+    },
+    {
+      "jp": "<ruby>天気<rt>てんき</rt></ruby>さえよければ、<ruby>富士山<rt>ふじさん</rt></ruby>が<ruby>見<rt>み</rt></ruby>えるはずです。",
+      "en": "As long as the weather is good, you should be able to see Mt. Fuji.",
+      "blank": "さえ"
+    },
+    {
+      "jp": "この<ruby>薬<rt>くすり</rt></ruby>を<ruby>飲<rt>の</rt></ruby>みさえすれば、すぐによくなりますよ。",
+      "en": "As long as you take this medicine, you'll get better soon.",
+      "blank": "さえ"
+    },
+    {
+      "jp": "あなたがそばにいてくれさえすれば、<ruby>私<rt>わたし</rt></ruby>は<ruby>幸<rt>しあわ</rt></ruby>せです。",
+      "en": "As long as you're by my side, I'm happy.",
+      "blank": "さえ"
+    }
+  ]
+}

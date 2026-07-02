@@ -1,0 +1,32 @@
+{
+  "id": "ni-yotte",
+  "explanation": "A multi-purpose connector with four main senses: the agent of a passive (\"written by a famous author\"), means (\"through discussion\"), cause (\"because of the typhoon\"), and variation (\"depending on the country\"). Context decides which; the \"depending on\" sense usually pairs with 違う or 変わる. によっては singles out specific cases (\"in some cases\").",
+  "formation": "N + によって（によっては／により／による + N）",
+  "examples": [
+    {
+      "jp": "この<ruby>小説<rt>しょうせつ</rt></ruby>は<ruby>有名<rt>ゆうめい</rt></ruby>な<ruby>作家<rt>さっか</rt></ruby>によって<ruby>書<rt>か</rt></ruby>かれた。",
+      "en": "This novel was written by a famous author.",
+      "blank": "によって"
+    },
+    {
+      "jp": "<ruby>国<rt>くに</rt></ruby>によって、<ruby>食事<rt>しょくじ</rt></ruby>のマナーが<ruby>違<rt>ちが</rt></ruby>う。",
+      "en": "Table manners differ from country to country.",
+      "blank": "によって"
+    },
+    {
+      "jp": "<ruby>台風<rt>たいふう</rt></ruby>によって、<ruby>電車<rt>でんしゃ</rt></ruby>が<ruby>止<rt>と</rt></ruby>まった。",
+      "en": "The trains stopped because of the typhoon.",
+      "blank": "によって"
+    },
+    {
+      "jp": "インターネットによって、<ruby>買<rt>か</rt></ruby>い<ruby>物<rt>もの</rt></ruby>がとても<ruby>便利<rt>べんり</rt></ruby>になった。",
+      "en": "Thanks to the internet, shopping has become very convenient.",
+      "blank": "によって"
+    },
+    {
+      "jp": "<ruby>話<rt>はな</rt></ruby>し<ruby>合<rt>あ</rt></ruby>いによって、<ruby>問題<rt>もんだい</rt></ruby>を<ruby>解決<rt>かいけつ</rt></ruby>した。",
+      "en": "We solved the problem through discussion.",
+      "blank": "によって"
+    }
+  ]
+}

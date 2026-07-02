@@ -1,0 +1,27 @@
+{
+  "id": "gimi",
+  "explanation": "'A touch of / slightly …': verb stem or noun + 気味 describes a slight, usually unwelcome condition showing right now — 疲れ気味 (a little worn out), 太り気味 (a bit overweight), 遅れ気味 (running behind). Contrast がち, a tendency that recurs over time: 風邪気味 means you feel a cold coming on today, 風邪をひきがち means you often catch them. っぽい is a looser, casual '-ish' about quality or appearance.",
+  "formation": "V-ます stem・N + 気味（だ・の）",
+  "examples": [
+    {
+      "jp": "<ruby>今朝<rt>けさ</rt></ruby>から<ruby>風邪<rt>かぜ</rt></ruby><ruby>気味<rt>ぎみ</rt></ruby>で、<ruby>頭<rt>あたま</rt></ruby>が<ruby>痛<rt>いた</rt></ruby>い。",
+      "en": "I've had a touch of a cold since this morning, and my head hurts.",
+      "blank": "気味"
+    },
+    {
+      "jp": "<ruby>最近<rt>さいきん</rt></ruby>ちょっと<ruby>太<rt>ふと</rt></ruby>り<ruby>気味<rt>ぎみ</rt></ruby>なので、<ruby>甘<rt>あま</rt></ruby>い<ruby>物<rt>もの</rt></ruby>を<ruby>控<rt>ひか</rt></ruby>えている。",
+      "en": "I've been putting on a bit of weight lately, so I'm cutting back on sweets.",
+      "blank": "気味"
+    },
+    {
+      "jp": "<ruby>仕事<rt>しごと</rt></ruby>が<ruby>続<rt>つづ</rt></ruby>いて、<ruby>少<rt>すこ</rt></ruby>し<ruby>疲<rt>つか</rt></ruby>れ<ruby>気味<rt>ぎみ</rt></ruby>だ。",
+      "en": "Work has kept piling on, and I'm feeling a little run-down.",
+      "blank": "気味"
+    },
+    {
+      "jp": "<ruby>電車<rt>でんしゃ</rt></ruby>が<ruby>遅<rt>おく</rt></ruby>れ<ruby>気味<rt>ぎみ</rt></ruby>で、<ruby>会議<rt>かいぎ</rt></ruby>に<ruby>間<rt>ま</rt></ruby>に<ruby>合<rt>あ</rt></ruby>うか<ruby>心配<rt>しんぱい</rt></ruby>だ。",
+      "en": "The train is running a bit behind, and I'm worried about making the meeting.",
+      "blank": "気味"
+    }
+  ]
+}

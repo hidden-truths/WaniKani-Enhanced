@@ -1,0 +1,27 @@
+{
+  "id": "betsu-ni-nai",
+  "explanation": "Casual, dismissive negation: \"not particularly / nothing special\" (別に用事はない). It downplays the whole matter, where めったに measures frequency, なかなか marks a result resisting your effort, and 決して makes an absolute vow. On its own as an answer, 「別に。」 sounds curt or sulky — soften it in polite speech (別に何もありません).",
+  "formation": "別に + V・adj (negative 〜ない・〜ません)",
+  "examples": [
+    {
+      "jp": "<ruby>別<rt>べつ</rt></ruby>に<ruby>用事<rt>ようじ</rt></ruby>はないけど、<ruby>声<rt>こえ</rt></ruby>が<ruby>聞<rt>き</rt></ruby>きたくて<ruby>電話<rt>でんわ</rt></ruby>した。",
+      "en": "It's nothing in particular — I just wanted to hear your voice, so I called.",
+      "blank": "別に"
+    },
+    {
+      "jp": "<ruby>辛<rt>から</rt></ruby>いものは<ruby>別<rt>べつ</rt></ruby>に<ruby>好<rt>す</rt></ruby>きでも<ruby>嫌<rt>きら</rt></ruby>いでもない。",
+      "en": "I don't particularly like or dislike spicy food.",
+      "blank": "別に"
+    },
+    {
+      "jp": "<ruby>一人<rt>ひとり</rt></ruby>で<ruby>行<rt>い</rt></ruby>っても、<ruby>別<rt>べつ</rt></ruby>に<ruby>怖<rt>こわ</rt></ruby>くないよ。",
+      "en": "Even if I go alone, it's not really scary.",
+      "blank": "別に"
+    },
+    {
+      "jp": "<ruby>遅<rt>おく</rt></ruby>れても<ruby>別<rt>べつ</rt></ruby>に<ruby>問題<rt>もんだい</rt></ruby>はありませんよ。",
+      "en": "It's no particular problem even if you're a bit late.",
+      "blank": "別に"
+    }
+  ]
+}

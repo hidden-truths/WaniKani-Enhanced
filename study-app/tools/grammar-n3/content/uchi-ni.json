@@ -1,0 +1,27 @@
+{
+  "id": "uchi-ni",
+  "explanation": "うちに means \"while the current state still holds\" — do it before that window closes: 熱いうちに飲む (drink it before it cools). With a negative verb, 〜ないうちに means \"before something happens\" (忘れないうちに = before I forget). Unlike 間に, which neutrally locates an event inside a span, うちに implies the chance disappears once the state changes.",
+  "formation": "V-dict / V-ている / V-ない / い-adj / N の + うちに",
+  "examples": [
+    {
+      "jp": "スープは<ruby>熱<rt>あつ</rt></ruby>いうちに<ruby>飲<rt>の</rt></ruby>んでください。",
+      "en": "Please drink the soup while it's hot.",
+      "blank": "うちに"
+    },
+    {
+      "jp": "<ruby>明<rt>あか</rt></ruby>るいうちに<ruby>家<rt>いえ</rt></ruby>に<ruby>帰<rt>かえ</rt></ruby>りましょう。",
+      "en": "Let's head home while it's still light out.",
+      "blank": "うちに"
+    },
+    {
+      "jp": "<ruby>赤<rt>あか</rt></ruby>ちゃんが<ruby>寝<rt>ね</rt></ruby>ているうちに、<ruby>夕飯<rt>ゆうはん</rt></ruby>を<ruby>作<rt>つく</rt></ruby>ってしまおう。",
+      "en": "I'll get dinner made while the baby is asleep.",
+      "blank": "うちに"
+    },
+    {
+      "jp": "<ruby>忘<rt>わす</rt></ruby>れないうちに、メモしておきましょう。",
+      "en": "Let's jot it down before we forget.",
+      "blank": "うちに"
+    }
+  ]
+}

@@ -1,0 +1,27 @@
+{
+  "id": "to-ieba",
+  "explanation": "Picks up something just mentioned and runs with it: \"speaking of …\" (旅行といえば), or names the classic association of a topic (京都といえばお寺). Related forms: 〜というと asks about or confirms what something refers to, and 〜といったら adds emotive emphasis. A handy conversation-linker — listen for it in the N3 listening section.",
+  "formation": "N + といえば",
+  "examples": [
+    {
+      "jp": "<ruby>日本<rt>にほん</rt></ruby>の<ruby>食<rt>た</rt></ruby>べ<ruby>物<rt>もの</rt></ruby>といえば、やっぱり<ruby>寿司<rt>すし</rt></ruby>でしょう。",
+      "en": "When it comes to Japanese food, it has to be sushi.",
+      "blank": "といえば"
+    },
+    {
+      "jp": "<ruby>京都<rt>きょうと</rt></ruby>といえば、<ruby>古<rt>ふる</rt></ruby>いお<ruby>寺<rt>てら</rt></ruby>が<ruby>有名<rt>ゆうめい</rt></ruby>です。",
+      "en": "Speaking of Kyoto, it's famous for its old temples.",
+      "blank": "といえば"
+    },
+    {
+      "jp": "<ruby>山田<rt>やまだ</rt></ruby>さんといえば、<ruby>最近<rt>さいきん</rt></ruby><ruby>見<rt>み</rt></ruby>かけませんね。",
+      "en": "Speaking of Yamada-san, I haven't seen him around lately.",
+      "blank": "といえば"
+    },
+    {
+      "jp": "<ruby>旅行<rt>りょこう</rt></ruby>といえば、<ruby>田中<rt>たなか</rt></ruby>さんは<ruby>来月<rt>らいげつ</rt></ruby><ruby>沖縄<rt>おきなわ</rt></ruby>に<ruby>行<rt>い</rt></ruby>くそうですよ。",
+      "en": "Speaking of trips, I hear Tanaka-san is going to Okinawa next month.",
+      "blank": "といえば"
+    }
+  ]
+}

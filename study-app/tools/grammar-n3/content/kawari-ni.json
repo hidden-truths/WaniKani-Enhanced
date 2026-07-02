@@ -1,0 +1,27 @@
+{
+  "id": "kawari-ni",
+  "explanation": "Two related uses. After N の it means \"in place of\" (病気の母のかわりに = instead of my sick mother). After a clause it marks an exchange or trade-off — \"in return for / to make up for\" — where the two halves balance out: 働くかわりに休みをもらう. Also written 代わりに; the kana form is equally common.",
+  "formation": "N の / V-dict・V-た (plain) + かわりに",
+  "examples": [
+    {
+      "jp": "<ruby>病気<rt>びょうき</rt></ruby>の<ruby>母<rt>はは</rt></ruby>のかわりに、<ruby>私<rt>わたし</rt></ruby>が<ruby>買<rt>か</rt></ruby>い<ruby>物<rt>もの</rt></ruby>に<ruby>行<rt>い</rt></ruby>った。",
+      "en": "I went shopping in place of my sick mother.",
+      "blank": "かわりに"
+    },
+    {
+      "jp": "<ruby>日曜日<rt>にちようび</rt></ruby>に<ruby>働<rt>はたら</rt></ruby>くかわりに、<ruby>月曜日<rt>げつようび</rt></ruby>は<ruby>休<rt>やす</rt></ruby>みです。",
+      "en": "In exchange for working on Sunday, I get Monday off.",
+      "blank": "かわりに"
+    },
+    {
+      "jp": "<ruby>車<rt>くるま</rt></ruby>を<ruby>買<rt>か</rt></ruby>うかわりに、<ruby>毎年<rt>まいとし</rt></ruby><ruby>旅行<rt>りょこう</rt></ruby>に<ruby>行<rt>い</rt></ruby>くことにした。",
+      "en": "Instead of buying a car, we decided to take a trip every year.",
+      "blank": "かわりに"
+    },
+    {
+      "jp": "<ruby>手伝<rt>てつだ</rt></ruby>ってもらったかわりに、<ruby>昼<rt>ひる</rt></ruby>ご<ruby>飯<rt>はん</rt></ruby>をごちそうした。",
+      "en": "In return for the help, I treated them to lunch.",
+      "blank": "かわりに"
+    }
+  ]
+}

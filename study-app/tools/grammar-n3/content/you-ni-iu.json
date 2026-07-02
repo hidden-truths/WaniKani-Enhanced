@@ -1,0 +1,27 @@
+{
+  "id": "you-ni-iu",
+  "explanation": "Reports a command or request indirectly: \"tell / ask someone to do\". The verb of speaking varies — 言う・頼む・注意する・伝える — and it very often appears in the passive (〜ように言われた, \"I was told to …\"). The verb before ように is dictionary form or ない-form; unlike a direct quote with と, no quotation is implied.",
+  "formation": "V-dict / V-ない + ように言う（頼む・注意する・伝える）",
+  "examples": [
+    {
+      "jp": "<ruby>医者<rt>いしゃ</rt></ruby>にお<ruby>酒<rt>さけ</rt></ruby>をやめるように<ruby>言<rt>い</rt></ruby>われました。",
+      "en": "The doctor told me to stop drinking.",
+      "blank": "ように"
+    },
+    {
+      "jp": "<ruby>母<rt>はは</rt></ruby>に、<ruby>部屋<rt>へや</rt></ruby>を<ruby>片付<rt>かたづ</rt></ruby>けるように<ruby>言<rt>い</rt></ruby>われた。",
+      "en": "My mother told me to tidy up my room.",
+      "blank": "ように"
+    },
+    {
+      "jp": "<ruby>先生<rt>せんせい</rt></ruby>は<ruby>学生<rt>がくせい</rt></ruby>に、<ruby>遅刻<rt>ちこく</rt></ruby>しないように<ruby>言<rt>い</rt></ruby>いました。",
+      "en": "The teacher told the students not to be late.",
+      "blank": "ように"
+    },
+    {
+      "jp": "<ruby>友達<rt>ともだち</rt></ruby>に、<ruby>明日<rt>あした</rt></ruby>は<ruby>早<rt>はや</rt></ruby>く<ruby>来<rt>く</rt></ruby>るように<ruby>頼<rt>たの</rt></ruby>みました。",
+      "en": "I asked my friend to come early tomorrow.",
+      "blank": "ように"
+    }
+  ]
+}

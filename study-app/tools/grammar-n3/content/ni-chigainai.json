@@ -1,0 +1,27 @@
+{
+  "id": "ni-chigainai",
+  "explanation": "Confident conjecture from evidence: 'must be / I'm sure that'. Where はずだ is a cooler 'should be' worked out by reasoning, に違いない is conviction — the speaker feels certain — and its direct opposites are はずがない・わけがない. It sounds somewhat stiff or written; in casual speech きっと〜と思う is more common.",
+  "formation": "V・い-adj（普通形）+ に違いない ／ N・な-adj + に違いない",
+  "examples": [
+    {
+      "jp": "<ruby>電気<rt>でんき</rt></ruby>がついているから、<ruby>彼<rt>かれ</rt></ruby>は<ruby>家<rt>いえ</rt></ruby>にいるに<ruby>違<rt>ちが</rt></ruby>いない。",
+      "en": "The lights are on, so he must be home.",
+      "blank": "に違いない"
+    },
+    {
+      "jp": "あんなに<ruby>練習<rt>れんしゅう</rt></ruby>したのだから、<ruby>彼女<rt>かのじょ</rt></ruby>は<ruby>合格<rt>ごうかく</rt></ruby>するに<ruby>違<rt>ちが</rt></ruby>いない。",
+      "en": "After all that practice, she's bound to pass.",
+      "blank": "に違いない"
+    },
+    {
+      "jp": "<ruby>犯人<rt>はんにん</rt></ruby>はこの<ruby>窓<rt>まど</rt></ruby>から<ruby>入<rt>はい</rt></ruby>ったに<ruby>違<rt>ちが</rt></ruby>いない。",
+      "en": "The culprit must have come in through this window.",
+      "blank": "に違いない"
+    },
+    {
+      "jp": "<ruby>誰<rt>だれ</rt></ruby>かがここでタバコを<ruby>吸<rt>す</rt></ruby>ったに<ruby>違<rt>ちが</rt></ruby>いありません。",
+      "en": "Someone must have smoked here, no doubt about it.",
+      "blank": "に違いありません"
+    }
+  ]
+}

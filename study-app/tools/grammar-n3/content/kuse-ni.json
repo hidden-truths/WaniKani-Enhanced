@@ -1,0 +1,27 @@
+{
+  "id": "kuse-ni",
+  "explanation": "Means \"even though\", but with a critical, accusing tone: the speaker disapproves of or looks down on the subject. Unlike the neutral のに, くせに carries blame or contempt, so it's used about people (usually someone else), not plain facts — and never about someone you should be polite to.",
+  "formation": "V-plain / い-adj / な-adj な / N の + くせに",
+  "examples": [
+    {
+      "jp": "<ruby>彼<rt>かれ</rt></ruby>は<ruby>知<rt>し</rt></ruby>っているくせに、<ruby>教<rt>おし</rt></ruby>えてくれない。",
+      "en": "Even though he knows, he won't tell me.",
+      "blank": "くせに"
+    },
+    {
+      "jp": "<ruby>弟<rt>おとうと</rt></ruby>は<ruby>自分<rt>じぶん</rt></ruby>では<ruby>何<rt>なに</rt></ruby>もしないくせに、<ruby>文句<rt>もんく</rt></ruby>ばかり<ruby>言<rt>い</rt></ruby>う。",
+      "en": "My little brother does nothing himself, yet all he does is complain.",
+      "blank": "くせに"
+    },
+    {
+      "jp": "<ruby>彼女<rt>かのじょ</rt></ruby>は<ruby>歌<rt>うた</rt></ruby>が<ruby>下手<rt>へた</rt></ruby>なくせに、いつもカラオケに<ruby>行<rt>い</rt></ruby>きたがる。",
+      "en": "Even though she's a bad singer, she always wants to go to karaoke.",
+      "blank": "くせに"
+    },
+    {
+      "jp": "<ruby>学生<rt>がくせい</rt></ruby>のくせに、<ruby>高<rt>たか</rt></ruby>い<ruby>車<rt>くるま</rt></ruby>に<ruby>乗<rt>の</rt></ruby>っている。",
+      "en": "He's just a student, and yet he drives an expensive car.",
+      "blank": "くせに"
+    }
+  ]
+}

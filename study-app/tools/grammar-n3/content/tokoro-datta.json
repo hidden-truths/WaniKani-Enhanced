@@ -1,0 +1,27 @@
+{
+  "id": "tokoro-datta",
+  "explanation": "V-dictionary + ところだった means something very nearly happened but didn't: 乗り遅れるところだった = I almost missed the train (but caught it). It usually pairs with もう少しで or 危うく and carries relief or alarm. Note the contrast with 〜たところ: たところ reports what really happened when you did something, while ところだった is a near miss that was avoided.",
+  "formation": "（もう少しで／危うく）V-dict + ところだった",
+  "examples": [
+    {
+      "jp": "もう<ruby>少<rt>すこ</rt></ruby>しで<ruby>電車<rt>でんしゃ</rt></ruby>に<ruby>乗<rt>の</rt></ruby>り<ruby>遅<rt>おく</rt></ruby>れるところだった。",
+      "en": "I very nearly missed the train.",
+      "blank": "ところだった"
+    },
+    {
+      "jp": "<ruby>寝坊<rt>ねぼう</rt></ruby>して、<ruby>会議<rt>かいぎ</rt></ruby>に<ruby>遅<rt>おく</rt></ruby>れるところでした。",
+      "en": "I overslept and almost ended up late for the meeting.",
+      "blank": "ところでした"
+    },
+    {
+      "jp": "スマホを<ruby>見<rt>み</rt></ruby>ていて、<ruby>階段<rt>かいだん</rt></ruby>から<ruby>落<rt>お</rt></ruby>ちるところだった。",
+      "en": "I was looking at my phone and nearly fell down the stairs.",
+      "blank": "ところだった"
+    },
+    {
+      "jp": "<ruby>危<rt>あや</rt></ruby>うく<ruby>大事<rt>だいじ</rt></ruby>な<ruby>約束<rt>やくそく</rt></ruby>を<ruby>忘<rt>わす</rt></ruby>れるところだった。",
+      "en": "I came dangerously close to forgetting an important appointment.",
+      "blank": "ところだった"
+    }
+  ]
+}

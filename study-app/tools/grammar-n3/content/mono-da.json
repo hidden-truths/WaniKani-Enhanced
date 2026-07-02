@@ -1,0 +1,27 @@
+{
+  "id": "mono-da",
+  "explanation": "A sentence-ender with three N3 jobs: general truths about how things naturally are (人は失敗するものだ), nostalgic 'used to' after the た-form (よく泳いだものだ), and mild admonition about common sense (敬語を使うものだ) — like べきだ, but appealing to social norms rather than the speaker's personal opinion. It can also add exclamatory feeling (早いものだ). Don't confuse it with ものの, a connective meaning 'although' — same もの, unrelated meaning.",
+  "formation": "V-dict・V-ない + ものだ（一般論・当然・感慨）／ V-た + ものだ（回想）",
+  "examples": [
+    {
+      "jp": "<ruby>人間<rt>にんげん</rt></ruby>は<ruby>誰<rt>だれ</rt></ruby>でも<ruby>失敗<rt>しっぱい</rt></ruby>するものだよ。",
+      "en": "Everyone makes mistakes — that's just how people are.",
+      "blank": "ものだ"
+    },
+    {
+      "jp": "<ruby>子供<rt>こども</rt></ruby>のころ、この<ruby>川<rt>かわ</rt></ruby>でよく<ruby>泳<rt>およ</rt></ruby>いだものだ。",
+      "en": "When I was a kid, I used to swim in this river all the time.",
+      "blank": "ものだ"
+    },
+    {
+      "jp": "<ruby>目上<rt>めうえ</rt></ruby>の<ruby>人<rt>ひと</rt></ruby>には<ruby>敬語<rt>けいご</rt></ruby>を<ruby>使<rt>つか</rt></ruby>うものだ。",
+      "en": "One is supposed to use polite language with one's superiors.",
+      "blank": "ものだ"
+    },
+    {
+      "jp": "<ruby>時間<rt>じかん</rt></ruby>がたつのは<ruby>早<rt>はや</rt></ruby>いものですね。",
+      "en": "Time really does fly, doesn't it?",
+      "blank": "ものです"
+    }
+  ]
+}

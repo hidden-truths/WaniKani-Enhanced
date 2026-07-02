@@ -1,0 +1,27 @@
+{
+  "id": "ni-tsuite",
+  "explanation": "\"About / concerning\": marks the topic you talk, think, write, or ask about. Attaches straight to a noun; before another noun it becomes についての (日本についての本). It's the everyday default — the formal に関して says the same thing but belongs in reports and announcements.",
+  "formation": "N + について（についての + N）",
+  "examples": [
+    {
+      "jp": "<ruby>日本<rt>にほん</rt></ruby>の<ruby>文化<rt>ぶんか</rt></ruby>について<ruby>勉強<rt>べんきょう</rt></ruby>しています。",
+      "en": "I'm studying Japanese culture.",
+      "blank": "について"
+    },
+    {
+      "jp": "この<ruby>問題<rt>もんだい</rt></ruby>について、どう<ruby>思<rt>おも</rt></ruby>いますか。",
+      "en": "What do you think about this issue?",
+      "blank": "について"
+    },
+    {
+      "jp": "<ruby>将来<rt>しょうらい</rt></ruby>について、<ruby>家族<rt>かぞく</rt></ruby>とゆっくり<ruby>話<rt>はな</rt></ruby>し<ruby>合<rt>あ</rt></ruby>った。",
+      "en": "I had a good long talk with my family about my future.",
+      "blank": "について"
+    },
+    {
+      "jp": "<ruby>昨日<rt>きのう</rt></ruby>の<ruby>事故<rt>じこ</rt></ruby>について、ニュースで<ruby>詳<rt>くわ</rt></ruby>しく<ruby>見<rt>み</rt></ruby>た。",
+      "en": "I saw a detailed report about yesterday's accident on the news.",
+      "blank": "について"
+    }
+  ]
+}

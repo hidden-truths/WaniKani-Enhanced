@@ -1,0 +1,27 @@
+{
+  "id": "to-shite",
+  "explanation": "\"As / in the capacity of\": names the role, position, or category something counts as — working as a doctor, coming as an exchange student, famous as a tourist spot. Attaches directly to a noun. Related forms: としては (\"for a …\" comparisons) and としても (\"even as / also as\").",
+  "formation": "N + として（としては／としても）",
+  "examples": [
+    {
+      "jp": "<ruby>彼<rt>かれ</rt></ruby>は<ruby>医者<rt>いしゃ</rt></ruby>として、20<ruby>年<rt>ねん</rt></ruby><ruby>働<rt>はたら</rt></ruby>いている。",
+      "en": "He has worked as a doctor for twenty years.",
+      "blank": "として"
+    },
+    {
+      "jp": "<ruby>留学生<rt>りゅうがくせい</rt></ruby>として、<ruby>日本<rt>にほん</rt></ruby>に<ruby>来<rt>き</rt></ruby>ました。",
+      "en": "I came to Japan as an exchange student.",
+      "blank": "として"
+    },
+    {
+      "jp": "この<ruby>寺<rt>てら</rt></ruby>は、<ruby>観光地<rt>かんこうち</rt></ruby>として<ruby>有名<rt>ゆうめい</rt></ruby>です。",
+      "en": "This temple is famous as a tourist spot.",
+      "blank": "として"
+    },
+    {
+      "jp": "<ruby>趣味<rt>しゅみ</rt></ruby>として、<ruby>週末<rt>しゅうまつ</rt></ruby>に<ruby>料理<rt>りょうり</rt></ruby>を<ruby>習<rt>なら</rt></ruby>っている。",
+      "en": "As a hobby, I'm taking cooking lessons on weekends.",
+      "blank": "として"
+    }
+  ]
+}

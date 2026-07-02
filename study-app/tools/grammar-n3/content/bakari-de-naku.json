@@ -1,0 +1,27 @@
+{
+  "id": "bakari-de-naku",
+  "explanation": "\"Not only A but also B\" — the B clause usually carries も or まで to mark the addition. Slightly more emphatic and formal-sounding than だけでなく, but used the same way: it attaches to nouns directly and to verbs and adjectives in plain form (な-adjectives take な).",
+  "formation": "N ／ 普通形（な-adj な）+ ばかりでなく、…も",
+  "examples": [
+    {
+      "jp": "<ruby>彼<rt>かれ</rt></ruby>は<ruby>英語<rt>えいご</rt></ruby>ばかりでなく、<ruby>中国語<rt>ちゅうごくご</rt></ruby>も<ruby>話<rt>はな</rt></ruby>せます。",
+      "en": "He can speak not only English but also Chinese.",
+      "blank": "ばかりでなく"
+    },
+    {
+      "jp": "この<ruby>店<rt>みせ</rt></ruby>は<ruby>安<rt>やす</rt></ruby>いばかりでなく、<ruby>味<rt>あじ</rt></ruby>もいい。",
+      "en": "This restaurant isn't just cheap — the food is good too.",
+      "blank": "ばかりでなく"
+    },
+    {
+      "jp": "<ruby>彼女<rt>かのじょ</rt></ruby>は<ruby>歌<rt>うた</rt></ruby>が<ruby>上手<rt>じょうず</rt></ruby>なばかりでなく、ダンスも<ruby>得意<rt>とくい</rt></ruby>だ。",
+      "en": "She's not only a good singer — she's also great at dancing.",
+      "blank": "ばかりでなく"
+    },
+    {
+      "jp": "<ruby>寝坊<rt>ねぼう</rt></ruby>したばかりでなく、<ruby>財布<rt>さいふ</rt></ruby>まで<ruby>忘<rt>わす</rt></ruby>れてしまった。",
+      "en": "Not only did I oversleep, I even forgot my wallet.",
+      "blank": "ばかりでなく"
+    }
+  ]
+}

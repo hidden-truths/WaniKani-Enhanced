@@ -1,0 +1,27 @@
+{
+  "id": "ta-bakari",
+  "explanation": "\"Just did\" — the action feels very recent to the speaker. The recency is subjective: minutes (食べたばかり) or even months (日本に来たばかり), as long as it still feels fresh. Contrast with 〜たところ, which means literally right after finishing. Before a noun it takes の: 買ったばかりの車.",
+  "formation": "V-た + ばかり（だ／で／の＋N）",
+  "examples": [
+    {
+      "jp": "さっき<ruby>昼<rt>ひる</rt></ruby>ご<ruby>飯<rt>はん</rt></ruby>を<ruby>食<rt>た</rt></ruby>べたばかりです。",
+      "en": "I just ate lunch a little while ago.",
+      "blank": "たばかり"
+    },
+    {
+      "jp": "<ruby>買<rt>か</rt></ruby>ったばかりのスマホを<ruby>落<rt>お</rt></ruby>としてしまった。",
+      "en": "I dropped the smartphone I had just bought.",
+      "blank": "たばかり"
+    },
+    {
+      "jp": "<ruby>日本<rt>にほん</rt></ruby>に<ruby>来<rt>き</rt></ruby>たばかりのころは、<ruby>毎日<rt>まいにち</rt></ruby>が<ruby>大変<rt>たいへん</rt></ruby>でした。",
+      "en": "When I had just come to Japan, every day was a struggle.",
+      "blank": "たばかり"
+    },
+    {
+      "jp": "この<ruby>会社<rt>かいしゃ</rt></ruby>に<ruby>入<rt>はい</rt></ruby>ったばかりで、まだ<ruby>仕事<rt>しごと</rt></ruby>に<ruby>慣<rt>な</rt></ruby>れていません。",
+      "en": "I've only just joined this company, so I'm not used to the work yet.",
+      "blank": "たばかり"
+    }
+  ]
+}

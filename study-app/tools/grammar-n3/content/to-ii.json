@@ -1,0 +1,27 @@
+{
+  "id": "to-ii",
+  "explanation": "Expresses a hope or wish: \"it would be nice if …; I hope …\" (晴れるといいですね), usually softened with ね, なあ or (ん)ですが. For things beyond your control it's a pure hope; about actions (聞いたらいい), たらいい・ばいい shade into advice: \"you should just …\". Use 〜といいですね to wish someone else well.",
+  "formation": "V-dict + といい / V-たら + いい（＋ね・なあ・んですが）",
+  "examples": [
+    {
+      "jp": "<ruby>明日<rt>あした</rt></ruby>のピクニック、<ruby>晴<rt>は</rt></ruby>れるといいですね。",
+      "en": "I hope it's sunny for the picnic tomorrow.",
+      "blank": "といい"
+    },
+    {
+      "jp": "お<ruby>母<rt>かあ</rt></ruby>さんの<ruby>風邪<rt>かぜ</rt></ruby>が<ruby>早<rt>はや</rt></ruby>く<ruby>治<rt>なお</rt></ruby>るといいですね。",
+      "en": "I hope your mother's cold gets better soon.",
+      "blank": "といい"
+    },
+    {
+      "jp": "<ruby>分<rt>わ</rt></ruby>からないときは、<ruby>先生<rt>せんせい</rt></ruby>に<ruby>聞<rt>き</rt></ruby>いたらいいですよ。",
+      "en": "When you don't understand, you should just ask the teacher.",
+      "blank": "たらいい"
+    },
+    {
+      "jp": "<ruby>新<rt>あたら</rt></ruby>しい<ruby>仕事<rt>しごと</rt></ruby>が<ruby>早<rt>はや</rt></ruby>く<ruby>見<rt>み</rt></ruby>つかるといいんですが。",
+      "en": "I hope I find a new job soon.",
+      "blank": "といい"
+    }
+  ]
+}

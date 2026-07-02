@@ -1,0 +1,27 @@
+{
+  "id": "sae",
+  "explanation": "Adds \"even\" to an extreme example so everything milder can be inferred: 水さえ飲めなかった \"couldn't even drink water\". It replaces が/を and follows other particles (にさえ; でさえ is the form after subjects: 子どもでさえ). Stronger and more pointed than も; the literary equivalent is すら. Don't confuse it with 〜さえ〜ば, where さえ marks a sufficient condition instead.",
+  "formation": "N + さえ（が/を に代わる）/ N + でさえ・にさえ",
+  "examples": [
+    {
+      "jp": "<ruby>忙<rt>いそが</rt></ruby>しくて、<ruby>昼<rt>ひる</rt></ruby>ご<ruby>飯<rt>はん</rt></ruby>を<ruby>食<rt>た</rt></ruby>べる<ruby>時間<rt>じかん</rt></ruby>さえなかった。",
+      "en": "I was so busy I didn't even have time to eat lunch.",
+      "blank": "さえ"
+    },
+    {
+      "jp": "そんなことは、<ruby>子<rt>こ</rt></ruby>どもでさえ<ruby>知<rt>し</rt></ruby>っている。",
+      "en": "Even a child knows that.",
+      "blank": "でさえ"
+    },
+    {
+      "jp": "<ruby>熱<rt>ねつ</rt></ruby>が<ruby>高<rt>たか</rt></ruby>くて、<ruby>水<rt>みず</rt></ruby>さえ<ruby>飲<rt>の</rt></ruby>めなかった。",
+      "en": "My fever was so high I couldn't even drink water.",
+      "blank": "さえ"
+    },
+    {
+      "jp": "<ruby>引<rt>ひ</rt></ruby>っ<ruby>越<rt>こ</rt></ruby>したことを、<ruby>親友<rt>しんゆう</rt></ruby>にさえ<ruby>話<rt>はな</rt></ruby>していない。",
+      "en": "I haven't even told my best friend that I moved.",
+      "blank": "さえ"
+    }
+  ]
+}

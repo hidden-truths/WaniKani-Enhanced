@@ -1,0 +1,27 @@
+{
+  "id": "saichuu-ni",
+  "explanation": "最中に means \"right in the middle of\" — at the very peak of an activity, usually when something interrupts it (会議の最中に携帯が鳴った). It takes V-ている or N の. Its siblings divide the work: 間に merely places an event somewhere inside a time span, and うちに urges acting before a window closes — 最中に zooms in on the busiest moment of the action itself.",
+  "formation": "V-ている / N の + 最中に",
+  "examples": [
+    {
+      "jp": "<ruby>会議<rt>かいぎ</rt></ruby>の<ruby>最中<rt>さいちゅう</rt></ruby>に、<ruby>携帯電話<rt>けいたいでんわ</rt></ruby>が<ruby>鳴<rt>な</rt></ruby>ってしまった。",
+      "en": "My phone went off right in the middle of the meeting.",
+      "blank": "最中に"
+    },
+    {
+      "jp": "シャワーを<ruby>浴<rt>あ</rt></ruby>びている<ruby>最中<rt>さいちゅう</rt></ruby>に、お<ruby>湯<rt>ゆ</rt></ruby>が<ruby>止<rt>と</rt></ruby>まった。",
+      "en": "The hot water cut out right while I was taking a shower.",
+      "blank": "最中に"
+    },
+    {
+      "jp": "<ruby>勉強<rt>べんきょう</rt></ruby>している<ruby>最中<rt>さいちゅう</rt></ruby>に、<ruby>弟<rt>おとうと</rt></ruby>が<ruby>話<rt>はな</rt></ruby>しかけてくる。",
+      "en": "My little brother keeps talking to me right when I'm in the middle of studying.",
+      "blank": "最中に"
+    },
+    {
+      "jp": "<ruby>試合<rt>しあい</rt></ruby>の<ruby>最中<rt>さいちゅう</rt></ruby>に、<ruby>急<rt>きゅう</rt></ruby>に<ruby>雨<rt>あめ</rt></ruby>が<ruby>降<rt>ふ</rt></ruby>り<ruby>出<rt>だ</rt></ruby>した。",
+      "en": "Right in the middle of the match, it suddenly started to rain.",
+      "blank": "最中に"
+    }
+  ]
+}

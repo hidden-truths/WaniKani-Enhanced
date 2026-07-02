@@ -1,0 +1,27 @@
+{
+  "id": "muke-muki",
+  "explanation": "向け means deliberately made or targeted FOR a group — the maker's intention: 子ども向けの番組 is produced for kids. 向き means naturally suited TO a group, intended or not: 子ども向きの番組 just happens to suit them. Both attach directly to a noun and continue with の+N, に, or だ. Rule of thumb: \"designed for\" → 向け, \"a good fit for\" → 向き.",
+  "formation": "N + 向け／向き（+ の N / に / だ）",
+  "examples": [
+    {
+      "jp": "これは<ruby>初心者<rt>しょしんしゃ</rt></ruby><ruby>向<rt>む</rt></ruby>けの<ruby>日本語<rt>にほんご</rt></ruby>の<ruby>本<rt>ほん</rt></ruby>です。",
+      "en": "This is a Japanese textbook made for beginners.",
+      "blank": "向け"
+    },
+    {
+      "jp": "この<ruby>会社<rt>かいしゃ</rt></ruby>は<ruby>子<rt>こ</rt></ruby>ども<ruby>向<rt>む</rt></ruby>けのゲームを<ruby>作<rt>つく</rt></ruby>っている。",
+      "en": "This company makes games aimed at children.",
+      "blank": "向け"
+    },
+    {
+      "jp": "この<ruby>仕事<rt>しごと</rt></ruby>は<ruby>体力<rt>たいりょく</rt></ruby>のある<ruby>人<rt>ひと</rt></ruby><ruby>向<rt>む</rt></ruby>きだ。",
+      "en": "This job is suited to people with stamina.",
+      "blank": "向き"
+    },
+    {
+      "jp": "このあっさりした<ruby>味<rt>あじ</rt></ruby>は、お<ruby>年寄<rt>としよ</rt></ruby>り<ruby>向<rt>む</rt></ruby>きだと<ruby>思<rt>おも</rt></ruby>う。",
+      "en": "I think this light flavor is a good fit for elderly people.",
+      "blank": "向き"
+    }
+  ]
+}

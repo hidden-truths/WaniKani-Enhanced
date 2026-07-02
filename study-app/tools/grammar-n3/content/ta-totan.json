@@ -1,0 +1,27 @@
+{
+  "id": "ta-totan",
+  "explanation": "V-た + とたん（に） pins two past events together: the instant the first finished, the second happened — suddenly, and usually outside the speaker's control (ドアを開けたとたん、猫が飛び出した). Because it reports a surprise, the second clause can't be something you chose or planned to do. Compare 〜たところ, a calm \"when I did X, I found Y,\" and 〜ところに, where something intrudes on a scene still in progress.",
+  "formation": "V-た + とたん（に）",
+  "examples": [
+    {
+      "jp": "ドアを<ruby>開<rt>あ</rt></ruby>けたとたん、<ruby>猫<rt>ねこ</rt></ruby>が<ruby>飛<rt>と</rt></ruby>び<ruby>出<rt>だ</rt></ruby>した。",
+      "en": "The moment I opened the door, the cat shot out.",
+      "blank": "たとたん"
+    },
+    {
+      "jp": "<ruby>立<rt>た</rt></ruby>ち<ruby>上<rt>あ</rt></ruby>がったとたんに、めまいがした。",
+      "en": "The instant I stood up, I felt dizzy.",
+      "blank": "たとたんに"
+    },
+    {
+      "jp": "<ruby>彼<rt>かれ</rt></ruby>の<ruby>顔<rt>かお</rt></ruby>を<ruby>見<rt>み</rt></ruby>たとたん、<ruby>涙<rt>なみだ</rt></ruby>が<ruby>出<rt>で</rt></ruby>てきた。",
+      "en": "The moment I saw his face, tears welled up.",
+      "blank": "たとたん"
+    },
+    {
+      "jp": "<ruby>布団<rt>ふとん</rt></ruby>に<ruby>入<rt>はい</rt></ruby>ったとたんに、<ruby>眠<rt>ねむ</rt></ruby>ってしまった。",
+      "en": "I fell asleep the moment I got into bed.",
+      "blank": "たとたんに"
+    }
+  ]
+}

@@ -1,0 +1,27 @@
+{
+  "id": "ta-mama",
+  "explanation": "V-た + まま says a state created by an action was left unchanged while something else happened: 電気をつけたまま寝た (fell asleep with the light still on). It often implies that's not how things should be. Use 〜ながら for two actions in parallel — まま holds a STATE, not an ongoing action. It also attaches to nouns (そのまま) and adjectives.",
+  "formation": "V-た / V-ない / N の / adj + まま",
+  "examples": [
+    {
+      "jp": "<ruby>電気<rt>でんき</rt></ruby>をつけたまま、<ruby>寝<rt>ね</rt></ruby>てしまった。",
+      "en": "I fell asleep with the light still on.",
+      "blank": "たまま"
+    },
+    {
+      "jp": "<ruby>窓<rt>まど</rt></ruby>を<ruby>開<rt>あ</rt></ruby>けたまま<ruby>出<rt>で</rt></ruby>かけて、<ruby>雨<rt>あめ</rt></ruby>が<ruby>入<rt>はい</rt></ruby>ってしまった。",
+      "en": "I went out with the window left open, and the rain got in.",
+      "blank": "たまま"
+    },
+    {
+      "jp": "<ruby>彼<rt>かれ</rt></ruby>は<ruby>靴<rt>くつ</rt></ruby>を<ruby>履<rt>は</rt></ruby>いたまま、<ruby>部屋<rt>へや</rt></ruby>に<ruby>入<rt>はい</rt></ruby>ってきた。",
+      "en": "He came into the room with his shoes still on.",
+      "blank": "たまま"
+    },
+    {
+      "jp": "<ruby>傘<rt>かさ</rt></ruby>を<ruby>借<rt>か</rt></ruby>りたまま、<ruby>返<rt>かえ</rt></ruby>すのを<ruby>忘<rt>わす</rt></ruby>れていた。",
+      "en": "I'd borrowed an umbrella and forgotten to give it back.",
+      "blank": "たまま"
+    }
+  ]
+}

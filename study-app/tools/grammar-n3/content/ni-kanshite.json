@@ -1,0 +1,22 @@
+{
+  "id": "ni-kanshite",
+  "explanation": "A formal \"regarding / with respect to\" — the stiff, written-language cousin of について. You'll meet it in reports, meetings, announcements, and the news; in casual conversation について sounds more natural. Before a noun it becomes に関する（に関しての）, as in 環境に関する本.",
+  "formation": "N + に関して（に関する + N）",
+  "examples": [
+    {
+      "jp": "この<ruby>件<rt>けん</rt></ruby>に<ruby>関<rt>かん</rt></ruby>しては、<ruby>後<rt>あと</rt></ruby>でメールでご<ruby>説明<rt>せつめい</rt></ruby>します。",
+      "en": "As for this matter, I'll explain by email later.",
+      "blank": "に関して"
+    },
+    {
+      "jp": "<ruby>環境問題<rt>かんきょうもんだい</rt></ruby>に<ruby>関<rt>かん</rt></ruby>して、クラスで<ruby>発表<rt>はっぴょう</rt></ruby>した。",
+      "en": "I gave a class presentation on environmental issues.",
+      "blank": "に関して"
+    },
+    {
+      "jp": "<ruby>新<rt>あたら</rt></ruby>しいサービスに<ruby>関<rt>かん</rt></ruby>して、<ruby>質問<rt>しつもん</rt></ruby>が<ruby>多<rt>おお</rt></ruby>く<ruby>届<rt>とど</rt></ruby>いている。",
+      "en": "We've been getting a lot of questions about the new service.",
+      "blank": "に関して"
+    }
+  ]
+}

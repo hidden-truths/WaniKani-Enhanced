@@ -1,0 +1,27 @@
+{
+  "id": "to-iu-koto-da",
+  "explanation": "Two uses. (1) Hearsay: reports information from another source — \"I hear that / they say that\" — a little more direct and report-like than 〜そうだ. (2) Conclusion: restates what something amounts to, often after つまり — \"in other words, it means that\". Both attach to a plain-form clause.",
+  "formation": "普通形 + ということだ（hearsay ／ つまり…＝conclusion）",
+  "examples": [
+    {
+      "jp": "ニュースによると、<ruby>明日<rt>あした</rt></ruby>は<ruby>雪<rt>ゆき</rt></ruby>が<ruby>降<rt>ふ</rt></ruby>るということだ。",
+      "en": "According to the news, it's going to snow tomorrow.",
+      "blank": "ということだ"
+    },
+    {
+      "jp": "<ruby>田中<rt>たなか</rt></ruby>さんは<ruby>来月<rt>らいげつ</rt></ruby><ruby>結婚<rt>けっこん</rt></ruby>するということです。",
+      "en": "I hear that Ms. Tanaka is getting married next month.",
+      "blank": "ということです"
+    },
+    {
+      "jp": "<ruby>返事<rt>へんじ</rt></ruby>がないのは、つまり<ruby>嫌<rt>いや</rt></ruby>だということだ。",
+      "en": "No reply means, in other words, that the answer is no.",
+      "blank": "ということだ"
+    },
+    {
+      "jp": "<ruby>学校<rt>がっこう</rt></ruby>のお<ruby>知<rt>し</rt></ruby>らせによると、<ruby>午後<rt>ごご</rt></ruby>の<ruby>授業<rt>じゅぎょう</rt></ruby>は<ruby>休<rt>やす</rt></ruby>みだということです。",
+      "en": "According to the school notice, afternoon classes are canceled.",
+      "blank": "ということです"
+    }
+  ]
+}

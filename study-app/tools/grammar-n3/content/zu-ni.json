@@ -1,0 +1,27 @@
+{
+  "id": "zu-ni",
+  "explanation": "V-ない stem + ずに is a slightly formal, written-flavored equivalent of 〜ないで meaning \"without doing\": 朝ごはんを食べずに出かけた. The one irregular form is する → せずに. It only replaces ないで in the \"did Y without doing X\" sense — requests like 〜ないでください keep ないで.",
+  "formation": "V-ない stem + ずに（する → せずに）",
+  "examples": [
+    {
+      "jp": "<ruby>朝<rt>あさ</rt></ruby>ごはんを<ruby>食<rt>た</rt></ruby>べずに、<ruby>学校<rt>がっこう</rt></ruby>へ<ruby>行<rt>い</rt></ruby>った。",
+      "en": "I went to school without eating breakfast.",
+      "blank": "ずに"
+    },
+    {
+      "jp": "<ruby>辞書<rt>じしょ</rt></ruby>を<ruby>使<rt>つか</rt></ruby>わずに、<ruby>日本語<rt>にほんご</rt></ruby>の<ruby>新聞<rt>しんぶん</rt></ruby>を<ruby>読<rt>よ</rt></ruby>んでみた。",
+      "en": "I tried reading a Japanese newspaper without using a dictionary.",
+      "blank": "ずに"
+    },
+    {
+      "jp": "<ruby>傘<rt>かさ</rt></ruby>を<ruby>持<rt>も</rt></ruby>たずに<ruby>出<rt>で</rt></ruby>て、<ruby>雨<rt>あめ</rt></ruby>に<ruby>降<rt>ふ</rt></ruby>られた。",
+      "en": "I left without taking an umbrella and got caught in the rain.",
+      "blank": "ずに"
+    },
+    {
+      "jp": "<ruby>彼<rt>かれ</rt></ruby>は<ruby>誰<rt>だれ</rt></ruby>にも<ruby>相談<rt>そうだん</rt></ruby>せずに、<ruby>会社<rt>かいしゃ</rt></ruby>を<ruby>辞<rt>や</rt></ruby>めてしまった。",
+      "en": "He quit the company without consulting anyone.",
+      "blank": "ずに"
+    }
+  ]
+}

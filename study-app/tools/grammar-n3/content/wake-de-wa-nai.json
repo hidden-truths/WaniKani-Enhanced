@@ -1,0 +1,27 @@
+{
+  "id": "wake-de-wa-nai",
+  "explanation": "Partial negation: heads off a conclusion the listener might jump to — 'it's not that…', 'not necessarily'. Much softer than わけがない, which denies something outright; わけだ is the affirmative sibling ('so that means / no wonder'), and わけにはいかない means 'can't very well do'. Often paired with 別に or 必ずしも, and the double negative 〜ないわけではない means 'it's not that I don't…'.",
+  "formation": "V・い-adj（普通形）+ わけではない ／ な-adj な・N という + わけではない",
+  "examples": [
+    {
+      "jp": "<ruby>肉<rt>にく</rt></ruby>が<ruby>嫌<rt>きら</rt></ruby>いなわけではないが、あまり<ruby>食<rt>た</rt></ruby>べない。",
+      "en": "It's not that I dislike meat; I just don't eat it much.",
+      "blank": "わけではない"
+    },
+    {
+      "jp": "<ruby>日本人<rt>にほんじん</rt></ruby>なら<ruby>誰<rt>だれ</rt></ruby>でも<ruby>敬語<rt>けいご</rt></ruby>が<ruby>使<rt>つか</rt></ruby>えるわけではない。",
+      "en": "It's not the case that every Japanese person can use keigo.",
+      "blank": "わけではない"
+    },
+    {
+      "jp": "<ruby>忙<rt>いそが</rt></ruby>しくて<ruby>行<rt>い</rt></ruby>けないだけで、<ruby>行<rt>い</rt></ruby>きたくないわけではない。",
+      "en": "I just can't go because I'm busy — it's not that I don't want to.",
+      "blank": "わけではない"
+    },
+    {
+      "jp": "<ruby>高<rt>たか</rt></ruby>いものが<ruby>必<rt>かなら</rt></ruby>ずしもいいわけではありません。",
+      "en": "Expensive things aren't necessarily good.",
+      "blank": "わけではありません"
+    }
+  ]
+}

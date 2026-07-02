@@ -1,0 +1,27 @@
+{
+  "id": "koto-wa-nai",
+  "explanation": "Tells someone an action is unnecessary: \"there's no need to …\". Very common when reassuring or comforting (心配することはない). Don't confuse it with 〜たことがない (\"have never done\") or 〜ことがある (\"sometimes happens\") — here the verb stays in dictionary form and the sentence ends in ない／ありません.",
+  "formation": "V-dict + ことはない",
+  "examples": [
+    {
+      "jp": "そんなに<ruby>心配<rt>しんぱい</rt></ruby>することはないよ。",
+      "en": "There's no need to worry that much.",
+      "blank": "ことはない"
+    },
+    {
+      "jp": "<ruby>君<rt>きみ</rt></ruby>が<ruby>謝<rt>あやま</rt></ruby>ることはない。<ruby>悪<rt>わる</rt></ruby>いのは<ruby>私<rt>わたし</rt></ruby>だ。",
+      "en": "You don't need to apologize. I'm the one at fault.",
+      "blank": "ことはない"
+    },
+    {
+      "jp": "<ruby>時間<rt>じかん</rt></ruby>は<ruby>十分<rt>じゅうぶん</rt></ruby>あるから、<ruby>急<rt>いそ</rt></ruby>ぐことはないですよ。",
+      "en": "We have plenty of time, so there's no need to hurry.",
+      "blank": "ことはない"
+    },
+    {
+      "jp": "<ruby>失敗<rt>しっぱい</rt></ruby>しても、そんなに<ruby>落<rt>お</rt></ruby>ち<ruby>込<rt>こ</rt></ruby>むことはありません。",
+      "en": "Even if you fail, there's no need to get so down about it.",
+      "blank": "ことはありません"
+    }
+  ]
+}

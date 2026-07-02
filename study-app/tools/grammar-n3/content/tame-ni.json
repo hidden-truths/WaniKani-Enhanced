@@ -1,0 +1,27 @@
+{
+  "id": "tame-ni",
+  "explanation": "One shape, two jobs. Purpose: V-dict / N の + ために = \"in order to, for the sake of\" (大学に入るために), with an action the subject controls. Cause: plain past / N の + ため（に） = a formal \"because of\" (台風のために電車が止まった). Read the verb to disambiguate: volitional → purpose, non-volitional or past → reason. In the cause sense it's stiffer than から／ので — common in news and announcements.",
+  "formation": "purpose: V-dict / N の + ために ・ cause: V・adj (plain) / N の + ため（に）",
+  "examples": [
+    {
+      "jp": "<ruby>家族<rt>かぞく</rt></ruby>のために、<ruby>毎日<rt>まいにち</rt></ruby><ruby>働<rt>はたら</rt></ruby>いている。",
+      "en": "I work every day for my family's sake.",
+      "blank": "ために"
+    },
+    {
+      "jp": "<ruby>大学<rt>だいがく</rt></ruby>に<ruby>入<rt>はい</rt></ruby>るために、<ruby>毎晩<rt>まいばん</rt></ruby><ruby>勉強<rt>べんきょう</rt></ruby>している。",
+      "en": "I study every night in order to get into university.",
+      "blank": "ために"
+    },
+    {
+      "jp": "<ruby>台風<rt>たいふう</rt></ruby>のために、<ruby>電車<rt>でんしゃ</rt></ruby>が<ruby>止<rt>と</rt></ruby>まっている。",
+      "en": "The trains are stopped because of the typhoon.",
+      "blank": "ために"
+    },
+    {
+      "jp": "<ruby>事故<rt>じこ</rt></ruby>があったために、<ruby>道<rt>みち</rt></ruby>が<ruby>混<rt>こ</rt></ruby>んでいる。",
+      "en": "The roads are congested because there was an accident.",
+      "blank": "ために"
+    }
+  ]
+}

@@ -1,0 +1,27 @@
+{
+  "id": "to-tomo-ni",
+  "explanation": "Three related uses: plain accompaniment 'together with N' (家族とともに), 'as A changes, B changes too' (時代とともに), and 'at the same time as / upon' (卒業とともに). It sounds formal and written — in conversation 〜と一緒に or 〜たら is more natural. Unlike につれて, which only marks gradual proportional change, とともに attaches directly to nouns and also covers one-time simultaneity.",
+  "formation": "N + とともに ／ V-dict + とともに",
+  "examples": [
+    {
+      "jp": "<ruby>正月<rt>しょうがつ</rt></ruby>は<ruby>家族<rt>かぞく</rt></ruby>とともにゆっくり<ruby>過<rt>す</rt></ruby>ごした。",
+      "en": "I spent New Year's relaxing together with my family.",
+      "blank": "とともに"
+    },
+    {
+      "jp": "<ruby>気温<rt>きおん</rt></ruby>が<ruby>上<rt>あ</rt></ruby>がるとともに、ビールの<ruby>売<rt>う</rt></ruby>り<ruby>上<rt>あ</rt></ruby>げも<ruby>伸<rt>の</rt></ruby>びる。",
+      "en": "As the temperature rises, beer sales climb as well.",
+      "blank": "とともに"
+    },
+    {
+      "jp": "<ruby>時代<rt>じだい</rt></ruby>とともに、<ruby>言葉<rt>ことば</rt></ruby>の<ruby>使<rt>つか</rt></ruby>い<ruby>方<rt>かた</rt></ruby>も<ruby>変<rt>か</rt></ruby>わっていく。",
+      "en": "Along with the times, the way words are used changes too.",
+      "blank": "とともに"
+    },
+    {
+      "jp": "<ruby>卒業<rt>そつぎょう</rt></ruby>とともに、この<ruby>町<rt>まち</rt></ruby>を<ruby>離<rt>はな</rt></ruby>れることになった。",
+      "en": "Upon graduating, I ended up leaving this town.",
+      "blank": "とともに"
+    }
+  ]
+}

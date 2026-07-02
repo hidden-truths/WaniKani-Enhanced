@@ -1,0 +1,27 @@
+{
+  "id": "kurai",
+  "explanation": "Marks degree like ほど, but tends to color it as small, trivial, or a bare minimum: 名前くらい書ける \"I can at least write my name\"; 電話くらいできるでしょう. It also handles \"so … that\" extents in casual speech (歩けないくらい疲れた), where ほど would sound a touch more formal or extreme. ぐらい is a free variant, and both give approximate quantities (三十分くらい).",
+  "formation": "V (plain) / い-adj / N + くらい・ぐらい",
+  "examples": [
+    {
+      "jp": "<ruby>自分<rt>じぶん</rt></ruby>の<ruby>名前<rt>なまえ</rt></ruby>くらい、<ruby>漢字<rt>かんじ</rt></ruby>で<ruby>書<rt>か</rt></ruby>けますよ。",
+      "en": "I can at least write my own name in kanji, you know.",
+      "blank": "くらい"
+    },
+    {
+      "jp": "<ruby>忙<rt>いそが</rt></ruby>しくても、<ruby>電話<rt>でんわ</rt></ruby>くらいはできるでしょう。",
+      "en": "Even if you're busy, you can at least make a phone call.",
+      "blank": "くらい"
+    },
+    {
+      "jp": "<ruby>疲<rt>つか</rt></ruby>れて、もう<ruby>一歩<rt>いっぽ</rt></ruby>も<ruby>歩<rt>ある</rt></ruby>けないくらいだった。",
+      "en": "I was so tired I could hardly take another step.",
+      "blank": "くらい"
+    },
+    {
+      "jp": "<ruby>彼<rt>かれ</rt></ruby>の<ruby>部屋<rt>へや</rt></ruby>は、<ruby>足<rt>あし</rt></ruby>の<ruby>踏<rt>ふ</rt></ruby>み<ruby>場<rt>ば</rt></ruby>もないくらい<ruby>汚<rt>きたな</rt></ruby>かった。",
+      "en": "His room was so messy there was nowhere to step.",
+      "blank": "くらい"
+    }
+  ]
+}

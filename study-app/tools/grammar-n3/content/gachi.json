@@ -1,0 +1,27 @@
+{
+  "id": "gachi",
+  "explanation": "'Tends to / often ends up': verb stem or noun + がち marks a recurring, usually undesirable tendency — 休みがち (often absent), 病気がち (sickly). It's about what happens repeatedly over time, while 気味 is a slight state right now (風邪気味 'a touch of a cold' vs 風邪をひきがち 'catches colds a lot'), and っぽい is a casual '-ish' about quality or appearance. It behaves like a な-adjective (がちな N・がちだ).",
+  "formation": "V-ます stem・N + がち（だ・な・の）",
+  "examples": [
+    {
+      "jp": "<ruby>冬<rt>ふゆ</rt></ruby>は<ruby>風邪<rt>かぜ</rt></ruby>をひきがちなので、<ruby>気<rt>き</rt></ruby>をつけている。",
+      "en": "I tend to catch colds in winter, so I'm careful.",
+      "blank": "がち"
+    },
+    {
+      "jp": "<ruby>彼<rt>かれ</rt></ruby>は<ruby>子供<rt>こども</rt></ruby>のころ、<ruby>病気<rt>びょうき</rt></ruby>がちだった。",
+      "en": "He was often sick as a child.",
+      "blank": "がち"
+    },
+    {
+      "jp": "<ruby>最近<rt>さいきん</rt></ruby>、<ruby>仕事<rt>しごと</rt></ruby>が<ruby>忙<rt>いそが</rt></ruby>しくて、<ruby>朝<rt>あさ</rt></ruby>ごはんを<ruby>抜<rt>ぬ</rt></ruby>きがちだ。",
+      "en": "Lately work has been busy, and I tend to skip breakfast.",
+      "blank": "がち"
+    },
+    {
+      "jp": "<ruby>一人暮<rt>ひとりぐ</rt></ruby>らしだと、<ruby>野菜<rt>やさい</rt></ruby>が<ruby>不足<rt>ふそく</rt></ruby>しがちになる。",
+      "en": "When you live alone, you tend to run short on vegetables.",
+      "blank": "がち"
+    }
+  ]
+}

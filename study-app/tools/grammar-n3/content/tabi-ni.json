@@ -1,0 +1,27 @@
+{
+  "id": "tabi-ni",
+  "explanation": "Means \"every time X happens, Y also happens\" — Y follows X without exception. Compared with plain 〜と, たびに highlights the repetition itself, and often a feeling or change the speaker notices on each occasion (memories, a new hairstyle, nerves).",
+  "formation": "V-dict / N の + たびに",
+  "examples": [
+    {
+      "jp": "この<ruby>歌<rt>うた</rt></ruby>を<ruby>聞<rt>き</rt></ruby>くたびに、<ruby>高校時代<rt>こうこうじだい</rt></ruby>を<ruby>思<rt>おも</rt></ruby>い<ruby>出<rt>だ</rt></ruby>す。",
+      "en": "Every time I hear this song, I remember my high school days.",
+      "blank": "たびに"
+    },
+    {
+      "jp": "<ruby>彼女<rt>かのじょ</rt></ruby>は<ruby>会<rt>あ</rt></ruby>うたびに、<ruby>髪型<rt>かみがた</rt></ruby>が<ruby>変<rt>か</rt></ruby>わっている。",
+      "en": "Every time I see her, she has a different hairstyle.",
+      "blank": "たびに"
+    },
+    {
+      "jp": "<ruby>母<rt>はは</rt></ruby>は<ruby>旅行<rt>りょこう</rt></ruby>のたびに、お<ruby>土産<rt>みやげ</rt></ruby>を<ruby>買<rt>か</rt></ruby>ってきてくれる。",
+      "en": "Every time my mom travels, she brings me back a souvenir.",
+      "blank": "たびに"
+    },
+    {
+      "jp": "テストのたびに、お<ruby>腹<rt>なか</rt></ruby>が<ruby>痛<rt>いた</rt></ruby>くなる。",
+      "en": "Every time there's a test, my stomach starts hurting.",
+      "blank": "たびに"
+    }
+  ]
+}

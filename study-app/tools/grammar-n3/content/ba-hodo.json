@@ -1,0 +1,27 @@
+{
+  "id": "ba-hodo",
+  "explanation": "Repeats the same verb or adjective — first in the ば conditional, then in dictionary form — to say \"the more X, the more Y\" (練習すればするほど). The second clause changes in step with the first. い-adjectives repeat too (安ければ安いほど); な-adjectives use 〜であればあるほど. Don't drop the repeated word — 〜すればほど alone is ungrammatical.",
+  "formation": "V-ば V-dict + ほど / い-adj ければ い-adj + ほど（な-adj: であればあるほど）",
+  "examples": [
+    {
+      "jp": "<ruby>練習<rt>れんしゅう</rt></ruby>すればするほど、<ruby>上手<rt>じょうず</rt></ruby>になります。",
+      "en": "The more you practice, the better you get.",
+      "blank": "ほど"
+    },
+    {
+      "jp": "<ruby>値段<rt>ねだん</rt></ruby>は<ruby>安<rt>やす</rt></ruby>ければ<ruby>安<rt>やす</rt></ruby>いほど、よく<ruby>売<rt>う</rt></ruby>れます。",
+      "en": "The cheaper the price, the better things sell.",
+      "blank": "ほど"
+    },
+    {
+      "jp": "<ruby>考<rt>かんが</rt></ruby>えれば<ruby>考<rt>かんが</rt></ruby>えるほど、<ruby>分<rt>わ</rt></ruby>からなくなってきた。",
+      "en": "The more I think about it, the less I understand.",
+      "blank": "ほど"
+    },
+    {
+      "jp": "この<ruby>町<rt>まち</rt></ruby>は、<ruby>住<rt>す</rt></ruby>めば<ruby>住<rt>す</rt></ruby>むほど<ruby>好<rt>す</rt></ruby>きになっていく。",
+      "en": "The longer I live in this town, the more I come to like it.",
+      "blank": "ほど"
+    }
+  ]
+}

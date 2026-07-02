@@ -1,0 +1,27 @@
+{
+  "id": "ppoi",
+  "explanation": "Turns a noun or a verb/adjective stem into an い-adjective meaning '-ish, like, tends to': 子供っぽい (childish), 白っぽい (whitish), 忘れっぽい (forgetful). Casual and often faintly critical — 子供っぽい complains, while 子供らしい ('childlike, as a child should be') approves. Compare がち (a recurring tendency, usually bad) and 気味 (a slight current state): っぽい is about perceived quality or appearance.",
+  "formation": "N・V-ます stem・い-adj stem + っぽい（い形容詞として活用）",
+  "examples": [
+    {
+      "jp": "その<ruby>服<rt>ふく</rt></ruby>、ちょっと<ruby>子供<rt>こども</rt></ruby>っぽいんじゃない？",
+      "en": "Isn't that outfit a little childish?",
+      "blank": "っぽい"
+    },
+    {
+      "jp": "<ruby>祖父<rt>そふ</rt></ruby>は<ruby>年<rt>とし</rt></ruby>を<ruby>取<rt>と</rt></ruby>って、<ruby>忘<rt>わす</rt></ruby>れっぽくなった。",
+      "en": "My grandfather has gotten forgetful with age.",
+      "blank": "っぽく"
+    },
+    {
+      "jp": "<ruby>彼女<rt>かのじょ</rt></ruby>は<ruby>飽<rt>あ</rt></ruby>きっぽい<ruby>性格<rt>せいかく</rt></ruby>で、<ruby>何<rt>なに</rt></ruby>を<ruby>始<rt>はじ</rt></ruby>めても<ruby>続<rt>つづ</rt></ruby>かない。",
+      "en": "She gets bored of things easily — whatever she starts, she never keeps it up.",
+      "blank": "っぽい"
+    },
+    {
+      "jp": "<ruby>彼<rt>かれ</rt></ruby>の<ruby>話<rt>はなし</rt></ruby>は<ruby>嘘<rt>うそ</rt></ruby>っぽくて、みんな<ruby>信<rt>しん</rt></ruby>じなかった。",
+      "en": "His story sounded like a lie, and nobody believed it.",
+      "blank": "っぽくて"
+    }
+  ]
+}

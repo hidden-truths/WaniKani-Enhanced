@@ -1,0 +1,27 @@
+{
+  "id": "ni-taishite",
+  "explanation": "Two uses: (1) \"toward / in response to\" — marks the target an action or attitude is directed at (being polite to customers, answering a question); (2) \"in contrast to\" — sets two things against each other, often as 〜のに対して. Don't confuse it with にとって, which gives a viewpoint (\"for me\"): 私に対して means \"directed at me\", not \"in my eyes\".",
+  "formation": "N + に対して、plain clause + の + に対して（contrast）",
+  "examples": [
+    {
+      "jp": "<ruby>目上<rt>めうえ</rt></ruby>の<ruby>人<rt>ひと</rt></ruby>に<ruby>対<rt>たい</rt></ruby>して、<ruby>失礼<rt>しつれい</rt></ruby>な<ruby>言<rt>い</rt></ruby>い<ruby>方<rt>かた</rt></ruby>をしてはいけない。",
+      "en": "You mustn't speak rudely to your superiors.",
+      "blank": "に対して"
+    },
+    {
+      "jp": "お<ruby>客様<rt>きゃくさま</rt></ruby>に<ruby>対<rt>たい</rt></ruby>して、いつも<ruby>丁寧<rt>ていねい</rt></ruby>に<ruby>話<rt>はな</rt></ruby>しています。",
+      "en": "I always speak politely to customers.",
+      "blank": "に対して"
+    },
+    {
+      "jp": "その<ruby>質問<rt>しつもん</rt></ruby>に<ruby>対<rt>たい</rt></ruby>して、<ruby>彼<rt>かれ</rt></ruby>は<ruby>何<rt>なに</rt></ruby>も<ruby>答<rt>こた</rt></ruby>えなかった。",
+      "en": "He didn't answer that question at all.",
+      "blank": "に対して"
+    },
+    {
+      "jp": "<ruby>兄<rt>あに</rt></ruby>は<ruby>静<rt>しず</rt></ruby>かなのに<ruby>対<rt>たい</rt></ruby>して、<ruby>妹<rt>いもうと</rt></ruby>はとてもにぎやかだ。",
+      "en": "My older brother is quiet, whereas my little sister is very lively.",
+      "blank": "に対して"
+    }
+  ]
+}

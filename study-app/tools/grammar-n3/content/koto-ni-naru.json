@@ -1,0 +1,27 @@
+{
+  "id": "koto-ni-naru",
+  "explanation": "Marks a decision or outcome settled by outside circumstances rather than the speaker's own will: \"it has been decided that / it turns out that\". Contrast with ことにする, where the speaker decides. The continuous 〜ことになっている states a standing rule or arrangement. Japanese often prefers it even for one's own news, to sound modest.",
+  "formation": "V-dict / V-ない + ことになる（ことになっている＝rule・arrangement）",
+  "examples": [
+    {
+      "jp": "<ruby>来月<rt>らいげつ</rt></ruby>から<ruby>大阪<rt>おおさか</rt></ruby>で<ruby>働<rt>はたら</rt></ruby>くことになりました。",
+      "en": "It's been decided that I'll be working in Osaka from next month.",
+      "blank": "ことになりました"
+    },
+    {
+      "jp": "<ruby>会議<rt>かいぎ</rt></ruby>は<ruby>金曜日<rt>きんようび</rt></ruby>に<ruby>行<rt>おこな</rt></ruby>われることになった。",
+      "en": "It was decided that the meeting would be held on Friday.",
+      "blank": "ことになった"
+    },
+    {
+      "jp": "この<ruby>学校<rt>がっこう</rt></ruby>では、<ruby>教室<rt>きょうしつ</rt></ruby>で<ruby>靴<rt>くつ</rt></ruby>を<ruby>脱<rt>ぬ</rt></ruby>ぐことになっています。",
+      "en": "At this school, the rule is that you take off your shoes in the classroom.",
+      "blank": "ことになっています"
+    },
+    {
+      "jp": "<ruby>話<rt>はな</rt></ruby>し<ruby>合<rt>あ</rt></ruby>いの<ruby>結果<rt>けっか</rt></ruby>、<ruby>旅行<rt>りょこう</rt></ruby>は<ruby>中止<rt>ちゅうし</rt></ruby>することになりました。",
+      "en": "As a result of the discussion, it was decided to cancel the trip.",
+      "blank": "ことになりました"
+    }
+  ]
+}

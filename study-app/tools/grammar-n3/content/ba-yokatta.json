@@ -1,0 +1,27 @@
+{
+  "id": "ba-yokatta",
+  "explanation": "Expresses regret about the past: \"I should have …; I wish I had …\" (もっと寝ればよかった). The negative 〜なければよかった means \"I wish I hadn't\". Often paired with と後悔している or a sighing なあ. Contrast 〜てよかった, which is relief or gladness about what DID happen — no regret involved.",
+  "formation": "V-ば + よかった（否定: V-なければよかった）",
+  "examples": [
+    {
+      "jp": "<ruby>昨日<rt>きのう</rt></ruby>の<ruby>夜<rt>よる</rt></ruby>、もっと<ruby>早<rt>はや</rt></ruby>く<ruby>寝<rt>ね</rt></ruby>ればよかった。",
+      "en": "I should have gone to bed earlier last night.",
+      "blank": "ばよかった"
+    },
+    {
+      "jp": "<ruby>雨<rt>あめ</rt></ruby>だから、<ruby>傘<rt>かさ</rt></ruby>を<ruby>持<rt>も</rt></ruby>ってくればよかった。",
+      "en": "It's raining — I should have brought an umbrella.",
+      "blank": "ばよかった"
+    },
+    {
+      "jp": "<ruby>学生<rt>がくせい</rt></ruby>のとき、もっと<ruby>英語<rt>えいご</rt></ruby>を<ruby>勉強<rt>べんきょう</rt></ruby>すればよかった。",
+      "en": "I wish I had studied English more when I was a student.",
+      "blank": "ばよかった"
+    },
+    {
+      "jp": "あんなことを<ruby>言<rt>い</rt></ruby>わなければよかったと<ruby>後悔<rt>こうかい</rt></ruby>している。",
+      "en": "I regret saying that — I wish I hadn't.",
+      "blank": "なければよかった"
+    }
+  ]
+}

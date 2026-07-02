@@ -1,0 +1,27 @@
+{
+  "id": "koso",
+  "explanation": "Emphasizes the preceding word as \"precisely this one and no other\": 今年こそ \"this year for sure\", こちらこそ \"it's I who should be thanking you\". 〜からこそ stresses a reason: \"precisely because\". It spotlights and insists — unlike さえ it adds no \"even\" nuance, just emphasis.",
+  "formation": "N + こそ / 〜から + こそ（強調）",
+  "examples": [
+    {
+      "jp": "こちらこそ、よろしくお<ruby>願<rt>ねが</rt></ruby>いします。",
+      "en": "The pleasure is mine — I look forward to working with you.",
+      "blank": "こそ"
+    },
+    {
+      "jp": "<ruby>今年<rt>ことし</rt></ruby>こそ、<ruby>試験<rt>しけん</rt></ruby>に<ruby>合格<rt>ごうかく</rt></ruby>するつもりだ。",
+      "en": "This year for sure, I'm going to pass the exam.",
+      "blank": "こそ"
+    },
+    {
+      "jp": "<ruby>健康<rt>けんこう</rt></ruby>こそが、<ruby>一番<rt>いちばん</rt></ruby><ruby>大切<rt>たいせつ</rt></ruby>なものだと<ruby>思<rt>おも</rt></ruby>う。",
+      "en": "Health is the very thing that matters most, I think.",
+      "blank": "こそ"
+    },
+    {
+      "jp": "<ruby>難<rt>むずか</rt></ruby>しいからこそ、<ruby>挑戦<rt>ちょうせん</rt></ruby>する<ruby>価値<rt>かち</rt></ruby>があるんです。",
+      "en": "It's precisely because it's hard that it's worth trying.",
+      "blank": "こそ"
+    }
+  ]
+}

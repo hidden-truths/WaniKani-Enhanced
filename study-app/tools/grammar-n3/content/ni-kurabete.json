@@ -1,0 +1,27 @@
+{
+  "id": "ni-kurabete",
+  "explanation": "\"Compared to / with\": sets a baseline noun and states how something differs from it — hotter, cheaper, more talkative. Attaches to a noun; と比べて is an interchangeable variant. For a simple \"A is more … than B\" in everyday speech, plain Bより is lighter — に比べて spells the comparison out explicitly.",
+  "formation": "N + に比べて（＝と比べて）",
+  "examples": [
+    {
+      "jp": "<ruby>去年<rt>きょねん</rt></ruby>に<ruby>比<rt>くら</rt></ruby>べて、<ruby>今年<rt>ことし</rt></ruby>の<ruby>夏<rt>なつ</rt></ruby>はずっと<ruby>暑<rt>あつ</rt></ruby>い。",
+      "en": "Compared to last year, this summer is much hotter.",
+      "blank": "に比べて"
+    },
+    {
+      "jp": "<ruby>都会<rt>とかい</rt></ruby>に<ruby>比<rt>くら</rt></ruby>べて、<ruby>田舎<rt>いなか</rt></ruby>は<ruby>物価<rt>ぶっか</rt></ruby>が<ruby>安<rt>やす</rt></ruby>い。",
+      "en": "Compared with the city, prices in the countryside are low.",
+      "blank": "に比べて"
+    },
+    {
+      "jp": "<ruby>兄<rt>あに</rt></ruby>に<ruby>比<rt>くら</rt></ruby>べて、<ruby>弟<rt>おとうと</rt></ruby>はよく<ruby>話<rt>はな</rt></ruby>すほうだ。",
+      "en": "Compared to my older brother, my younger brother is the talkative one.",
+      "blank": "に比べて"
+    },
+    {
+      "jp": "<ruby>日本語<rt>にほんご</rt></ruby>は、<ruby>英語<rt>えいご</rt></ruby>に<ruby>比<rt>くら</rt></ruby>べて<ruby>発音<rt>はつおん</rt></ruby>が<ruby>簡単<rt>かんたん</rt></ruby>だと<ruby>思<rt>おも</rt></ruby>う。",
+      "en": "I think Japanese pronunciation is simple compared to English.",
+      "blank": "に比べて"
+    }
+  ]
+}

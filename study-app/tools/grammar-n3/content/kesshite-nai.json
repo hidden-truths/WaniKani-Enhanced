@@ -1,0 +1,27 @@
+{
+  "id": "kesshite-nai",
+  "explanation": "The strongest of the negative adverbs: an absolute \"never / by no means\" backed by willpower or firm judgment — vows (決して忘れません), resolutions, prohibitions (決して開けてはいけません). It admits no exceptions, unlike めったに〜ない (rare but possible) or 必ずしも〜ない (true in some cases only). Emphatic and a little weighty — casual speech usually reaches for 絶対に instead.",
+  "formation": "決して + V-ない・〜ません／negative expression（〜てはいけない）",
+  "examples": [
+    {
+      "jp": "<ruby>皆<rt>みな</rt></ruby>さんの<ruby>親切<rt>しんせつ</rt></ruby>は<ruby>決<rt>けっ</rt></ruby>して<ruby>忘<rt>わす</rt></ruby>れません。",
+      "en": "I will never forget your kindness.",
+      "blank": "決して"
+    },
+    {
+      "jp": "<ruby>決<rt>けっ</rt></ruby>してうそをつかないと<ruby>約束<rt>やくそく</rt></ruby>した。",
+      "en": "I promised never to tell a lie.",
+      "blank": "決して"
+    },
+    {
+      "jp": "ここで<ruby>泳<rt>およ</rt></ruby>ぐのは<ruby>決<rt>けっ</rt></ruby>して<ruby>安全<rt>あんぜん</rt></ruby>ではない。",
+      "en": "Swimming here is by no means safe.",
+      "blank": "決して"
+    },
+    {
+      "jp": "このドアは<ruby>決<rt>けっ</rt></ruby>して<ruby>開<rt>あ</rt></ruby>けてはいけません。",
+      "en": "You must never open this door.",
+      "blank": "決して"
+    }
+  ]
+}

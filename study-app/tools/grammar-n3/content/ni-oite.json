@@ -1,0 +1,27 @@
+{
+  "id": "ni-oite",
+  "explanation": "A formal \"in / at / on\" marking the place, time, or field where something happens — essentially the written-language version of で. Common in speeches, ceremonies, exams, and reports (会議において, 現代社会において); in casual talk it sounds stiff, so stick with で there. Before a noun it becomes における.",
+  "formation": "N + において（における + N）",
+  "examples": [
+    {
+      "jp": "<ruby>卒業式<rt>そつぎょうしき</rt></ruby>は、<ruby>体育館<rt>たいいくかん</rt></ruby>において<ruby>行<rt>おこな</rt></ruby>われます。",
+      "en": "The graduation ceremony will be held in the gymnasium.",
+      "blank": "において"
+    },
+    {
+      "jp": "<ruby>現代社会<rt>げんだいしゃかい</rt></ruby>において、スマホは<ruby>生活<rt>せいかつ</rt></ruby>に<ruby>欠<rt>か</rt></ruby>かせない。",
+      "en": "In modern society, smartphones are indispensable to daily life.",
+      "blank": "において"
+    },
+    {
+      "jp": "<ruby>日本<rt>にほん</rt></ruby>において、<ruby>桜<rt>さくら</rt></ruby>は<ruby>特別<rt>とくべつ</rt></ruby>な<ruby>意味<rt>いみ</rt></ruby>を<ruby>持<rt>も</rt></ruby>つ<ruby>花<rt>はな</rt></ruby>だ。",
+      "en": "In Japan, cherry blossoms are flowers with a special meaning.",
+      "blank": "において"
+    },
+    {
+      "jp": "その<ruby>大会<rt>たいかい</rt></ruby>は、<ruby>来年<rt>らいねん</rt></ruby><ruby>東京<rt>とうきょう</rt></ruby>において<ruby>開<rt>ひら</rt></ruby>かれる<ruby>予定<rt>よてい</rt></ruby>だ。",
+      "en": "The tournament is scheduled to be held in Tokyo next year.",
+      "blank": "において"
+    }
+  ]
+}

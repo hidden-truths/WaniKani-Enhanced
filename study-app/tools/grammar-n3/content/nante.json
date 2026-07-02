@@ -1,0 +1,27 @@
+{
+  "id": "nante",
+  "explanation": "Reacts emotionally to something or plays it down: surprise (当たるなんて！ \"to think I'd win!\"), disbelief, contempt, or modesty. なんて follows nouns or whole clauses; なんか follows nouns, often self-deprecating (私なんか). Both are casual — in careful speech use など. The dismissive tone can sting, so mind what it's aimed at.",
+  "formation": "N・plain clause + なんて / N + なんか",
+  "examples": [
+    {
+      "jp": "<ruby>宝<rt>たから</rt></ruby>くじに<ruby>当<rt>あ</rt></ruby>たるなんて、<ruby>信<rt>しん</rt></ruby>じられない。",
+      "en": "I can't believe I won the lottery.",
+      "blank": "なんて"
+    },
+    {
+      "jp": "<ruby>私<rt>わたし</rt></ruby>の<ruby>料理<rt>りょうり</rt></ruby>なんか、<ruby>母<rt>はは</rt></ruby>の<ruby>味<rt>あじ</rt></ruby>には<ruby>勝<rt>か</rt></ruby>てません。",
+      "en": "My cooking is nothing compared to my mother's.",
+      "blank": "なんか"
+    },
+    {
+      "jp": "<ruby>嘘<rt>うそ</rt></ruby>をつくなんて、あなたらしくないですね。",
+      "en": "Telling a lie? That's not like you.",
+      "blank": "なんて"
+    },
+    {
+      "jp": "<ruby>休<rt>やす</rt></ruby>みの<ruby>日<rt>ひ</rt></ruby>に<ruby>仕事<rt>しごと</rt></ruby>をするなんて、いやだなあ。",
+      "en": "Working on my day off? No thanks.",
+      "blank": "なんて"
+    }
+  ]
+}

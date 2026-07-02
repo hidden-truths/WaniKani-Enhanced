@@ -1,0 +1,27 @@
+{
+  "id": "hodo",
+  "explanation": "Names an extreme point to show how far something goes: \"so … that; to the point of\" (死ぬほど疲れた). It AFFIRMS a high degree by measuring against that extreme, and also gives approximate amounts (三十分ほど). Compared with くらい it leans big, dramatic and slightly more formal; and where 〜ほど〜はない denies that anything reaches the named level, plain ほど simply asserts the degree.",
+  "formation": "V-dict・V-ない / い-adj / N + ほど",
+  "examples": [
+    {
+      "jp": "<ruby>今日<rt>きょう</rt></ruby>は<ruby>仕事<rt>しごと</rt></ruby>が<ruby>多<rt>おお</rt></ruby>くて、<ruby>死<rt>し</rt></ruby>ぬほど<ruby>疲<rt>つか</rt></ruby>れた。",
+      "en": "I had so much work today that I'm dead tired.",
+      "blank": "ほど"
+    },
+    {
+      "jp": "<ruby>足<rt>あし</rt></ruby>が<ruby>痛<rt>いた</rt></ruby>くなるほど、たくさん<ruby>歩<rt>ある</rt></ruby>いた。",
+      "en": "We walked so much that my feet started to hurt.",
+      "blank": "ほど"
+    },
+    {
+      "jp": "<ruby>彼<rt>かれ</rt></ruby>の<ruby>話<rt>はなし</rt></ruby>は、<ruby>涙<rt>なみだ</rt></ruby>が<ruby>出<rt>で</rt></ruby>るほど<ruby>面白<rt>おもしろ</rt></ruby>かった。",
+      "en": "His story was so funny I was in tears.",
+      "blank": "ほど"
+    },
+    {
+      "jp": "<ruby>山<rt>やま</rt></ruby>の<ruby>上<rt>うえ</rt></ruby>からの<ruby>景色<rt>けしき</rt></ruby>は、<ruby>言葉<rt>ことば</rt></ruby>にできないほど<ruby>美<rt>うつく</rt></ruby>しかった。",
+      "en": "The view from the mountaintop was indescribably beautiful.",
+      "blank": "ほど"
+    }
+  ]
+}

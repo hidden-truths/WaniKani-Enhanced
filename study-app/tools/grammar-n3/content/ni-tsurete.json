@@ -1,0 +1,27 @@
+{
+  "id": "ni-tsurete",
+  "explanation": "As A gradually progresses, B changes along with it — two changes moving in tandem (年を取るにつれて、体力が落ちる). A must be something that changes by degrees, and B is usually a natural, unwilled result — not a one-time event or a decision. Close to とともに, but につれて is specifically for gradual proportional change, while とともに is more formal and also covers plain accompaniment and one-time simultaneity.",
+  "formation": "V-dict + につれて ／ N（変化を表す語）+ につれて",
+  "examples": [
+    {
+      "jp": "<ruby>年<rt>とし</rt></ruby>を<ruby>取<rt>と</rt></ruby>るにつれて、<ruby>体力<rt>たいりょく</rt></ruby>が<ruby>落<rt>お</rt></ruby>ちてきた。",
+      "en": "As I get older, my stamina has been declining.",
+      "blank": "につれて"
+    },
+    {
+      "jp": "<ruby>日本語<rt>にほんご</rt></ruby>の<ruby>勉強<rt>べんきょう</rt></ruby>が<ruby>進<rt>すす</rt></ruby>むにつれて、ドラマが<ruby>分<rt>わ</rt></ruby>かるようになった。",
+      "en": "As my Japanese studies progressed, I came to understand dramas.",
+      "blank": "につれて"
+    },
+    {
+      "jp": "<ruby>町<rt>まち</rt></ruby>の<ruby>人口<rt>じんこう</rt></ruby>が<ruby>増<rt>ふ</rt></ruby>えるにつれて、<ruby>店<rt>みせ</rt></ruby>も<ruby>多<rt>おお</rt></ruby>くなった。",
+      "en": "As the town's population grew, the number of shops increased too.",
+      "blank": "につれて"
+    },
+    {
+      "jp": "<ruby>試験<rt>しけん</rt></ruby>の<ruby>日<rt>ひ</rt></ruby>が<ruby>近<rt>ちか</rt></ruby>づくにつれて、<ruby>不安<rt>ふあん</rt></ruby>が<ruby>大<rt>おお</rt></ruby>きくなってきた。",
+      "en": "As the exam day approaches, my anxiety keeps growing.",
+      "blank": "につれて"
+    }
+  ]
+}

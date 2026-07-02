@@ -1,0 +1,27 @@
+{
+  "id": "kanarazushimo",
+  "explanation": "PARTIAL negation: \"not necessarily / not always\" — it denies only the \"in every case\" part, so some cases remain true: 高いものが必ずしもいいとは限らない. It usually ends in とは限らない or わけではない rather than a bare ない. Keep it apart from 決して〜ない, which wipes out all cases; 必ずしも just breaks the generalization. Logical and slightly formal — at home in essays and opinions.",
+  "formation": "必ずしも + 〜ない（とは限らない・わけではない）",
+  "examples": [
+    {
+      "jp": "<ruby>高<rt>たか</rt></ruby>いものが<ruby>必<rt>かなら</rt></ruby>ずしもいいとは<ruby>限<rt>かぎ</rt></ruby>らない。",
+      "en": "Expensive things aren't necessarily good.",
+      "blank": "必ずしも"
+    },
+    {
+      "jp": "<ruby>有名<rt>ゆうめい</rt></ruby>な<ruby>店<rt>みせ</rt></ruby>が<ruby>必<rt>かなら</rt></ruby>ずしもおいしいわけではない。",
+      "en": "Famous restaurants aren't always delicious.",
+      "blank": "必ずしも"
+    },
+    {
+      "jp": "お<ruby>金<rt>かね</rt></ruby>があれば<ruby>必<rt>かなら</rt></ruby>ずしも<ruby>幸<rt>しあわ</rt></ruby>せになれるわけではない。",
+      "en": "Having money doesn't necessarily mean you can be happy.",
+      "blank": "必ずしも"
+    },
+    {
+      "jp": "<ruby>薬<rt>くすり</rt></ruby>を<ruby>飲<rt>の</rt></ruby>めば<ruby>必<rt>かなら</rt></ruby>ずしもすぐ<ruby>治<rt>なお</rt></ruby>るわけではない。",
+      "en": "Taking medicine doesn't always mean you'll get better right away.",
+      "blank": "必ずしも"
+    }
+  ]
+}

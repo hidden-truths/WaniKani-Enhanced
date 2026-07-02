@@ -1,0 +1,27 @@
+{
+  "id": "tatoe-temo",
+  "explanation": "A hypothetical concession: \"even if X, still Y\" — たとえ announces up front that the following ても clause is hypothetical or extreme, and the main clause holds regardless (たとえ雨が降っても行く). Nouns and な-adjectives take たとえ〜でも. It strengthens plain 〜ても; don't confuse it with 〜てもかまわない, which grants permission.",
+  "formation": "たとえ + V-ても / い-adj くても / N・な-adj でも",
+  "examples": [
+    {
+      "jp": "たとえ<ruby>雨<rt>あめ</rt></ruby>が<ruby>降<rt>ふ</rt></ruby>っても、<ruby>試合<rt>しあい</rt></ruby>は<ruby>行<rt>おこな</rt></ruby>われます。",
+      "en": "Even if it rains, the match will go ahead.",
+      "blank": "ても"
+    },
+    {
+      "jp": "たとえ<ruby>失敗<rt>しっぱい</rt></ruby>しても、また<ruby>挑戦<rt>ちょうせん</rt></ruby>すればいい。",
+      "en": "Even if you fail, you can just try again.",
+      "blank": "ても"
+    },
+    {
+      "jp": "たとえ<ruby>冗談<rt>じょうだん</rt></ruby>でも、<ruby>言<rt>い</rt></ruby>ってはいけないことがある。",
+      "en": "Even as a joke, there are things you must not say.",
+      "blank": "でも"
+    },
+    {
+      "jp": "たとえ<ruby>両親<rt>りょうしん</rt></ruby>に<ruby>反対<rt>はんたい</rt></ruby>されても、<ruby>彼<rt>かれ</rt></ruby>と<ruby>結婚<rt>けっこん</rt></ruby>するつもりです。",
+      "en": "Even if my parents oppose it, I intend to marry him.",
+      "blank": "ても"
+    }
+  ]
+}

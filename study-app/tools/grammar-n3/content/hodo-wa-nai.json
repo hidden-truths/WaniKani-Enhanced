@@ -1,0 +1,27 @@
+{
+  "id": "hodo-wa-nai",
+  "explanation": "A superlative built through denial: \"nothing / no one is as … as X\" (富士山ほど美しい山はない). ほど names X's level and the final negative denies that anything else reaches it — the opposite move from plain ほど, which affirms a degree. As AはBほど〜ない it makes a simple comparison: \"A is not as … as B\". In casual speech くらい can replace ほど here.",
+  "formation": "N ほど + 〜 + はない / A は B ほど + 〜ない",
+  "examples": [
+    {
+      "jp": "<ruby>母<rt>はは</rt></ruby>の<ruby>料理<rt>りょうり</rt></ruby>ほどおいしいものはない。",
+      "en": "Nothing tastes as good as my mother's cooking.",
+      "blank": "ほど"
+    },
+    {
+      "jp": "<ruby>今年<rt>ことし</rt></ruby>の<ruby>夏<rt>なつ</rt></ruby>ほど<ruby>暑<rt>あつ</rt></ruby>い<ruby>夏<rt>なつ</rt></ruby>はなかった。",
+      "en": "No summer has ever been as hot as this one.",
+      "blank": "ほど"
+    },
+    {
+      "jp": "<ruby>富士山<rt>ふじさん</rt></ruby>ほど<ruby>美<rt>うつく</rt></ruby>しい<ruby>山<rt>やま</rt></ruby>はないと<ruby>思<rt>おも</rt></ruby>う。",
+      "en": "I don't think any mountain is as beautiful as Mt. Fuji.",
+      "blank": "ほど"
+    },
+    {
+      "jp": "<ruby>東京<rt>とうきょう</rt></ruby>の<ruby>冬<rt>ふゆ</rt></ruby>は、<ruby>北海道<rt>ほっかいどう</rt></ruby>の<ruby>冬<rt>ふゆ</rt></ruby>ほど<ruby>寒<rt>さむ</rt></ruby>くないです。",
+      "en": "Winters in Tokyo aren't as cold as winters in Hokkaido.",
+      "blank": "ほど"
+    }
+  ]
+}

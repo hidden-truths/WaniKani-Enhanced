@@ -1,0 +1,27 @@
+{
+  "id": "baai-wa",
+  "explanation": "A formal \"if / in the event that\", the staple of announcements, rules, and instructions: 火事の場合は… 場合 is a noun, so attachment is noun-style: V plain + 場合, N の場合, な-adj な場合. Unlike たら it frames a whole hypothetical situation rather than a sequence of events, and it sounds official — stations and offices use it constantly.",
+  "formation": "V (plain) / い-adj / な-adj な / N の + 場合は",
+  "examples": [
+    {
+      "jp": "<ruby>火事<rt>かじ</rt></ruby>の<ruby>場合<rt>ばあい</rt></ruby>は、エレベーターを<ruby>使<rt>つか</rt></ruby>わないでください。",
+      "en": "In case of fire, do not use the elevator.",
+      "blank": "場合は"
+    },
+    {
+      "jp": "<ruby>遅<rt>おく</rt></ruby>れる<ruby>場合<rt>ばあい</rt></ruby>は、<ruby>必<rt>かなら</rt></ruby>ず<ruby>連絡<rt>れんらく</rt></ruby>してください。",
+      "en": "If you're going to be late, be sure to let us know.",
+      "blank": "場合は"
+    },
+    {
+      "jp": "<ruby>雨<rt>あめ</rt></ruby>が<ruby>降<rt>ふ</rt></ruby>った<ruby>場合<rt>ばあい</rt></ruby>は、<ruby>試合<rt>しあい</rt></ruby>は<ruby>中止<rt>ちゅうし</rt></ruby>になります。",
+      "en": "If it rains, the match will be called off.",
+      "blank": "場合は"
+    },
+    {
+      "jp": "レシートが<ruby>必要<rt>ひつよう</rt></ruby>な<ruby>場合<rt>ばあい</rt></ruby>は、スタッフに<ruby>言<rt>い</rt></ruby>ってください。",
+      "en": "If you need a receipt, please tell a member of staff.",
+      "blank": "場合は"
+    }
+  ]
+}

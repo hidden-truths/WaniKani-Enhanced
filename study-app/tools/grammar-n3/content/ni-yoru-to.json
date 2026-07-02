@@ -1,0 +1,27 @@
+{
+  "id": "ni-yoru-to",
+  "explanation": "\"According to …\": marks the source of reported information — the news, a forecast, what someone said. The sentence usually ends in a hearsay form like 〜そうだ or 〜らしい, because you're passing on what the source says rather than making your own claim. によれば is a slightly more formal equivalent.",
+  "formation": "N + によると（＝によれば）…〜そうだ／〜らしい",
+  "examples": [
+    {
+      "jp": "<ruby>天気予報<rt>てんきよほう</rt></ruby>によると、<ruby>明日<rt>あした</rt></ruby>は<ruby>雪<rt>ゆき</rt></ruby>が<ruby>降<rt>ふ</rt></ruby>るそうだ。",
+      "en": "According to the weather forecast, it's going to snow tomorrow.",
+      "blank": "によると"
+    },
+    {
+      "jp": "ニュースによると、<ruby>来月<rt>らいげつ</rt></ruby>から<ruby>電気代<rt>でんきだい</rt></ruby>が<ruby>上<rt>あ</rt></ruby>がるらしい。",
+      "en": "According to the news, electricity prices are apparently going up next month.",
+      "blank": "によると"
+    },
+    {
+      "jp": "<ruby>友達<rt>ともだち</rt></ruby>の<ruby>話<rt>はなし</rt></ruby>によると、あの<ruby>店<rt>みせ</rt></ruby>のラーメンはおいしいそうだ。",
+      "en": "According to what my friend says, the ramen at that place is delicious.",
+      "blank": "によると"
+    },
+    {
+      "jp": "アンケートによると、<ruby>若<rt>わか</rt></ruby>い<ruby>人<rt>ひと</rt></ruby>はあまりテレビを<ruby>見<rt>み</rt></ruby>ないようだ。",
+      "en": "According to the survey, it seems young people don't watch much TV.",
+      "blank": "によると"
+    }
+  ]
+}

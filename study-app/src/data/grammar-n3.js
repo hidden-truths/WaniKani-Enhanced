@@ -3,7 +3,7 @@
 // + tools/grammar-n3/content/<id>.json (per-point content; LLM-drafted, human-proofread).
 // Regenerate: node tools/grammar-n3/build.mjs
 // Loaded LAZILY via dynamic import (features/grammar/data.js ensureGrammarPoints) so the catalog
-// code-splits out of the main bundle, like data/jlpt.js. 3/81 points have content.
+// code-splits out of the main bundle, like data/jlpt.js. 81/81 points have content.
 export const GRAMMAR_N3 = [
   {
     "id": "you-ni-naru",
@@ -37,6 +37,409 @@ export const GRAMMAR_N3 = [
     ]
   },
   {
+    "id": "you-ni-suru",
+    "label": "〜ようにする",
+    "read": "ようにする",
+    "mean": "make an effort to; see to it that",
+    "jlpt": "N3",
+    "explanation": "Expresses a deliberate, conscious effort: \"make a point of doing / see to it that\". The continuous 〜ようにしている marks a habit you maintain on purpose. Contrast with ようになる, where the change simply comes about — ようにする is you steering the change. 〜ようにしてください is a softer, indirect request than a bare 〜てください.",
+    "formation": "V-dict / V-ない + ようにする（ようにしている＝maintained habit）",
+    "examples": [
+      {
+        "jp": "<ruby>毎日<rt>まいにち</rt></ruby><ruby>野菜<rt>やさい</rt></ruby>を<ruby>食<rt>た</rt></ruby>べるようにしています。",
+        "en": "I make a point of eating vegetables every day.",
+        "blank": "ようにしています"
+      },
+      {
+        "jp": "<ruby>寝<rt>ね</rt></ruby>る<ruby>前<rt>まえ</rt></ruby>はスマホを<ruby>見<rt>み</rt></ruby>ないようにしています。",
+        "en": "I try not to look at my phone before going to bed.",
+        "blank": "ようにしています"
+      },
+      {
+        "jp": "<ruby>会議<rt>かいぎ</rt></ruby>に<ruby>遅<rt>おく</rt></ruby>れないようにしてください。",
+        "en": "Please see to it that you're not late for the meeting.",
+        "blank": "ようにしてください"
+      },
+      {
+        "jp": "これからはもっと<ruby>早<rt>はや</rt></ruby>く<ruby>寝<rt>ね</rt></ruby>るようにします。",
+        "en": "From now on, I'll make an effort to go to bed earlier.",
+        "blank": "ようにします"
+      }
+    ]
+  },
+  {
+    "id": "you-ni",
+    "label": "〜ように (purpose)",
+    "read": "ように",
+    "mean": "so that; in order that",
+    "jlpt": "N3",
+    "explanation": "States a purpose: \"so that …\". It attaches to verbs the subject can't fully control — potential forms, ない-forms, and verbs like 分かる・聞こえる・治る. Contrast with ために, which takes volitional verbs and the same subject in both clauses; ように is the choice when the outcome is a hoped-for state or the subjects differ.",
+    "formation": "V-dict / V-ない / V-potential + ように、…",
+    "examples": [
+      {
+        "jp": "<ruby>忘<rt>わす</rt></ruby>れないように、メモを<ruby>取<rt>と</rt></ruby>りました。",
+        "en": "I took notes so that I wouldn't forget.",
+        "blank": "ように"
+      },
+      {
+        "jp": "<ruby>後<rt>うし</rt></ruby>ろの<ruby>人<rt>ひと</rt></ruby>にも<ruby>聞<rt>き</rt></ruby>こえるように、<ruby>大<rt>おお</rt></ruby>きな<ruby>声<rt>こえ</rt></ruby>で<ruby>話<rt>はな</rt></ruby>した。",
+        "en": "I spoke in a loud voice so that the people in the back could hear too.",
+        "blank": "ように"
+      },
+      {
+        "jp": "<ruby>子<rt>こ</rt></ruby>どもでも<ruby>読<rt>よ</rt></ruby>めるように、ふりがなが<ruby>付<rt>つ</rt></ruby>いています。",
+        "en": "Furigana is added so that even children can read it.",
+        "blank": "ように"
+      },
+      {
+        "jp": "<ruby>風邪<rt>かぜ</rt></ruby>が<ruby>早<rt>はや</rt></ruby>く<ruby>治<rt>なお</rt></ruby>るように、ゆっくり<ruby>休<rt>やす</rt></ruby>んでください。",
+        "en": "Please rest well so that your cold gets better quickly.",
+        "blank": "ように"
+      }
+    ]
+  },
+  {
+    "id": "you-ni-iu",
+    "label": "〜ように言う",
+    "read": "ようにいう",
+    "mean": "tell / ask someone to do",
+    "jlpt": "N3",
+    "explanation": "Reports a command or request indirectly: \"tell / ask someone to do\". The verb of speaking varies — 言う・頼む・注意する・伝える — and it very often appears in the passive (〜ように言われた, \"I was told to …\"). The verb before ように is dictionary form or ない-form; unlike a direct quote with と, no quotation is implied.",
+    "formation": "V-dict / V-ない + ように言う（頼む・注意する・伝える）",
+    "examples": [
+      {
+        "jp": "<ruby>医者<rt>いしゃ</rt></ruby>にお<ruby>酒<rt>さけ</rt></ruby>をやめるように<ruby>言<rt>い</rt></ruby>われました。",
+        "en": "The doctor told me to stop drinking.",
+        "blank": "ように"
+      },
+      {
+        "jp": "<ruby>母<rt>はは</rt></ruby>に、<ruby>部屋<rt>へや</rt></ruby>を<ruby>片付<rt>かたづ</rt></ruby>けるように<ruby>言<rt>い</rt></ruby>われた。",
+        "en": "My mother told me to tidy up my room.",
+        "blank": "ように"
+      },
+      {
+        "jp": "<ruby>先生<rt>せんせい</rt></ruby>は<ruby>学生<rt>がくせい</rt></ruby>に、<ruby>遅刻<rt>ちこく</rt></ruby>しないように<ruby>言<rt>い</rt></ruby>いました。",
+        "en": "The teacher told the students not to be late.",
+        "blank": "ように"
+      },
+      {
+        "jp": "<ruby>友達<rt>ともだち</rt></ruby>に、<ruby>明日<rt>あした</rt></ruby>は<ruby>早<rt>はや</rt></ruby>く<ruby>来<rt>く</rt></ruby>るように<ruby>頼<rt>たの</rt></ruby>みました。",
+        "en": "I asked my friend to come early tomorrow.",
+        "blank": "ように"
+      }
+    ]
+  },
+  {
+    "id": "koto-ni-naru",
+    "label": "〜ことになる",
+    "read": "ことになる",
+    "mean": "it has been decided that; it turns out that",
+    "jlpt": "N3",
+    "explanation": "Marks a decision or outcome settled by outside circumstances rather than the speaker's own will: \"it has been decided that / it turns out that\". Contrast with ことにする, where the speaker decides. The continuous 〜ことになっている states a standing rule or arrangement. Japanese often prefers it even for one's own news, to sound modest.",
+    "formation": "V-dict / V-ない + ことになる（ことになっている＝rule・arrangement）",
+    "examples": [
+      {
+        "jp": "<ruby>来月<rt>らいげつ</rt></ruby>から<ruby>大阪<rt>おおさか</rt></ruby>で<ruby>働<rt>はたら</rt></ruby>くことになりました。",
+        "en": "It's been decided that I'll be working in Osaka from next month.",
+        "blank": "ことになりました"
+      },
+      {
+        "jp": "<ruby>会議<rt>かいぎ</rt></ruby>は<ruby>金曜日<rt>きんようび</rt></ruby>に<ruby>行<rt>おこな</rt></ruby>われることになった。",
+        "en": "It was decided that the meeting would be held on Friday.",
+        "blank": "ことになった"
+      },
+      {
+        "jp": "この<ruby>学校<rt>がっこう</rt></ruby>では、<ruby>教室<rt>きょうしつ</rt></ruby>で<ruby>靴<rt>くつ</rt></ruby>を<ruby>脱<rt>ぬ</rt></ruby>ぐことになっています。",
+        "en": "At this school, the rule is that you take off your shoes in the classroom.",
+        "blank": "ことになっています"
+      },
+      {
+        "jp": "<ruby>話<rt>はな</rt></ruby>し<ruby>合<rt>あ</rt></ruby>いの<ruby>結果<rt>けっか</rt></ruby>、<ruby>旅行<rt>りょこう</rt></ruby>は<ruby>中止<rt>ちゅうし</rt></ruby>することになりました。",
+        "en": "As a result of the discussion, it was decided to cancel the trip.",
+        "blank": "ことになりました"
+      }
+    ]
+  },
+  {
+    "id": "koto-ni-suru",
+    "label": "〜ことにする",
+    "read": "ことにする",
+    "mean": "decide to",
+    "jlpt": "N3",
+    "explanation": "The speaker's own decision: \"decide to do (or not do)\". Contrast with ことになる, where the decision is made for you by circumstances or others. The continuous 〜ことにしている describes a habit you keep up as a personal rule — a decision that is still in force.",
+    "formation": "V-dict / V-ない + ことにする（ことにしている＝personal rule）",
+    "examples": [
+      {
+        "jp": "<ruby>健康<rt>けんこう</rt></ruby>のために、<ruby>毎朝<rt>まいあさ</rt></ruby><ruby>走<rt>はし</rt></ruby>ることにしました。",
+        "en": "For my health, I've decided to run every morning.",
+        "blank": "ことにしました"
+      },
+      {
+        "jp": "<ruby>今年<rt>ことし</rt></ruby>の<ruby>夏<rt>なつ</rt></ruby>は<ruby>国<rt>くに</rt></ruby>へ<ruby>帰<rt>かえ</rt></ruby>らないことにした。",
+        "en": "I've decided not to go back to my country this summer.",
+        "blank": "ことにした"
+      },
+      {
+        "jp": "<ruby>甘<rt>あま</rt></ruby>いものは<ruby>週末<rt>しゅうまつ</rt></ruby>だけ<ruby>食<rt>た</rt></ruby>べることにしています。",
+        "en": "I make it a rule to eat sweets only on weekends.",
+        "blank": "ことにしています"
+      },
+      {
+        "jp": "<ruby>迷<rt>まよ</rt></ruby>ったけれど、<ruby>新<rt>あたら</rt></ruby>しいパソコンを<ruby>買<rt>か</rt></ruby>うことにしました。",
+        "en": "I hesitated, but I decided to buy a new computer.",
+        "blank": "ことにしました"
+      }
+    ]
+  },
+  {
+    "id": "koto-wa-nai",
+    "label": "〜ことはない",
+    "read": "ことはない",
+    "mean": "there is no need to",
+    "jlpt": "N3",
+    "explanation": "Tells someone an action is unnecessary: \"there's no need to …\". Very common when reassuring or comforting (心配することはない). Don't confuse it with 〜たことがない (\"have never done\") or 〜ことがある (\"sometimes happens\") — here the verb stays in dictionary form and the sentence ends in ない／ありません.",
+    "formation": "V-dict + ことはない",
+    "examples": [
+      {
+        "jp": "そんなに<ruby>心配<rt>しんぱい</rt></ruby>することはないよ。",
+        "en": "There's no need to worry that much.",
+        "blank": "ことはない"
+      },
+      {
+        "jp": "<ruby>君<rt>きみ</rt></ruby>が<ruby>謝<rt>あやま</rt></ruby>ることはない。<ruby>悪<rt>わる</rt></ruby>いのは<ruby>私<rt>わたし</rt></ruby>だ。",
+        "en": "You don't need to apologize. I'm the one at fault.",
+        "blank": "ことはない"
+      },
+      {
+        "jp": "<ruby>時間<rt>じかん</rt></ruby>は<ruby>十分<rt>じゅうぶん</rt></ruby>あるから、<ruby>急<rt>いそ</rt></ruby>ぐことはないですよ。",
+        "en": "We have plenty of time, so there's no need to hurry.",
+        "blank": "ことはない"
+      },
+      {
+        "jp": "<ruby>失敗<rt>しっぱい</rt></ruby>しても、そんなに<ruby>落<rt>お</rt></ruby>ち<ruby>込<rt>こ</rt></ruby>むことはありません。",
+        "en": "Even if you fail, there's no need to get so down about it.",
+        "blank": "ことはありません"
+      }
+    ]
+  },
+  {
+    "id": "koto-ka",
+    "label": "〜ことか",
+    "read": "ことか",
+    "mean": "how …! (emphatic exclamation)",
+    "jlpt": "N3",
+    "explanation": "An emphatic exclamation: \"how …! / how many times …!\". It pairs with a question word — どんなに・何度・どれほど — and the sentence ends in ことか instead of answering the question. The tone is emotional and often retrospective, looking back on something long endured or deeply felt.",
+    "formation": "どんなに／何度／どれほど ＋ V・Adj（普通形）+ ことか",
+    "examples": [
+      {
+        "jp": "<ruby>合格<rt>ごうかく</rt></ruby>できて、どんなにうれしかったことか。",
+        "en": "How happy I was to pass!",
+        "blank": "ことか"
+      },
+      {
+        "jp": "<ruby>子<rt>こ</rt></ruby>どものころ、この<ruby>歌<rt>うた</rt></ruby>を<ruby>何度<rt>なんど</rt></ruby><ruby>歌<rt>うた</rt></ruby>ったことか。",
+        "en": "How many times I sang this song as a child!",
+        "blank": "ことか"
+      },
+      {
+        "jp": "<ruby>一人<rt>ひとり</rt></ruby>の<ruby>生活<rt>せいかつ</rt></ruby>がどれほど<ruby>寂<rt>さび</rt></ruby>しいことか。",
+        "en": "How lonely living alone is!",
+        "blank": "ことか"
+      },
+      {
+        "jp": "あなたに<ruby>会<rt>あ</rt></ruby>えるのを、どんなに<ruby>待<rt>ま</rt></ruby>っていたことか。",
+        "en": "How long I've been waiting to see you!",
+        "blank": "ことか"
+      }
+    ]
+  },
+  {
+    "id": "to-iu-koto-da",
+    "label": "〜ということだ",
+    "read": "ということだ",
+    "mean": "I hear that; it means that",
+    "jlpt": "N3",
+    "explanation": "Two uses. (1) Hearsay: reports information from another source — \"I hear that / they say that\" — a little more direct and report-like than 〜そうだ. (2) Conclusion: restates what something amounts to, often after つまり — \"in other words, it means that\". Both attach to a plain-form clause.",
+    "formation": "普通形 + ということだ（hearsay ／ つまり…＝conclusion）",
+    "examples": [
+      {
+        "jp": "ニュースによると、<ruby>明日<rt>あした</rt></ruby>は<ruby>雪<rt>ゆき</rt></ruby>が<ruby>降<rt>ふ</rt></ruby>るということだ。",
+        "en": "According to the news, it's going to snow tomorrow.",
+        "blank": "ということだ"
+      },
+      {
+        "jp": "<ruby>田中<rt>たなか</rt></ruby>さんは<ruby>来月<rt>らいげつ</rt></ruby><ruby>結婚<rt>けっこん</rt></ruby>するということです。",
+        "en": "I hear that Ms. Tanaka is getting married next month.",
+        "blank": "ということです"
+      },
+      {
+        "jp": "<ruby>返事<rt>へんじ</rt></ruby>がないのは、つまり<ruby>嫌<rt>いや</rt></ruby>だということだ。",
+        "en": "No reply means, in other words, that the answer is no.",
+        "blank": "ということだ"
+      },
+      {
+        "jp": "<ruby>学校<rt>がっこう</rt></ruby>のお<ruby>知<rt>し</rt></ruby>らせによると、<ruby>午後<rt>ごご</rt></ruby>の<ruby>授業<rt>じゅぎょう</rt></ruby>は<ruby>休<rt>やす</rt></ruby>みだということです。",
+        "en": "According to the school notice, afternoon classes are canceled.",
+        "blank": "ということです"
+      }
+    ]
+  },
+  {
+    "id": "ta-bakari",
+    "label": "〜たばかり",
+    "read": "たばかり",
+    "mean": "just did; just finished",
+    "jlpt": "N3",
+    "explanation": "\"Just did\" — the action feels very recent to the speaker. The recency is subjective: minutes (食べたばかり) or even months (日本に来たばかり), as long as it still feels fresh. Contrast with 〜たところ, which means literally right after finishing. Before a noun it takes の: 買ったばかりの車.",
+    "formation": "V-た + ばかり（だ／で／の＋N）",
+    "examples": [
+      {
+        "jp": "さっき<ruby>昼<rt>ひる</rt></ruby>ご<ruby>飯<rt>はん</rt></ruby>を<ruby>食<rt>た</rt></ruby>べたばかりです。",
+        "en": "I just ate lunch a little while ago.",
+        "blank": "たばかり"
+      },
+      {
+        "jp": "<ruby>買<rt>か</rt></ruby>ったばかりのスマホを<ruby>落<rt>お</rt></ruby>としてしまった。",
+        "en": "I dropped the smartphone I had just bought.",
+        "blank": "たばかり"
+      },
+      {
+        "jp": "<ruby>日本<rt>にほん</rt></ruby>に<ruby>来<rt>き</rt></ruby>たばかりのころは、<ruby>毎日<rt>まいにち</rt></ruby>が<ruby>大変<rt>たいへん</rt></ruby>でした。",
+        "en": "When I had just come to Japan, every day was a struggle.",
+        "blank": "たばかり"
+      },
+      {
+        "jp": "この<ruby>会社<rt>かいしゃ</rt></ruby>に<ruby>入<rt>はい</rt></ruby>ったばかりで、まだ<ruby>仕事<rt>しごと</rt></ruby>に<ruby>慣<rt>な</rt></ruby>れていません。",
+        "en": "I've only just joined this company, so I'm not used to the work yet.",
+        "blank": "たばかり"
+      }
+    ]
+  },
+  {
+    "id": "bakari-de-naku",
+    "label": "〜ばかりでなく",
+    "read": "ばかりでなく",
+    "mean": "not only … but also",
+    "jlpt": "N3",
+    "explanation": "\"Not only A but also B\" — the B clause usually carries も or まで to mark the addition. Slightly more emphatic and formal-sounding than だけでなく, but used the same way: it attaches to nouns directly and to verbs and adjectives in plain form (な-adjectives take な).",
+    "formation": "N ／ 普通形（な-adj な）+ ばかりでなく、…も",
+    "examples": [
+      {
+        "jp": "<ruby>彼<rt>かれ</rt></ruby>は<ruby>英語<rt>えいご</rt></ruby>ばかりでなく、<ruby>中国語<rt>ちゅうごくご</rt></ruby>も<ruby>話<rt>はな</rt></ruby>せます。",
+        "en": "He can speak not only English but also Chinese.",
+        "blank": "ばかりでなく"
+      },
+      {
+        "jp": "この<ruby>店<rt>みせ</rt></ruby>は<ruby>安<rt>やす</rt></ruby>いばかりでなく、<ruby>味<rt>あじ</rt></ruby>もいい。",
+        "en": "This restaurant isn't just cheap — the food is good too.",
+        "blank": "ばかりでなく"
+      },
+      {
+        "jp": "<ruby>彼女<rt>かのじょ</rt></ruby>は<ruby>歌<rt>うた</rt></ruby>が<ruby>上手<rt>じょうず</rt></ruby>なばかりでなく、ダンスも<ruby>得意<rt>とくい</rt></ruby>だ。",
+        "en": "She's not only a good singer — she's also great at dancing.",
+        "blank": "ばかりでなく"
+      },
+      {
+        "jp": "<ruby>寝坊<rt>ねぼう</rt></ruby>したばかりでなく、<ruby>財布<rt>さいふ</rt></ruby>まで<ruby>忘<rt>わす</rt></ruby>れてしまった。",
+        "en": "Not only did I oversleep, I even forgot my wallet.",
+        "blank": "ばかりでなく"
+      }
+    ]
+  },
+  {
+    "id": "dake-de-naku",
+    "label": "〜だけでなく",
+    "read": "だけでなく",
+    "mean": "not only … but also",
+    "jlpt": "N3",
+    "explanation": "\"Not only … but also\" — the most neutral, everyday member of the family; the added B is usually marked with も. Attaches to nouns directly and to plain-form verbs and adjectives (な-adjectives take な). ばかりでなく is a slightly more emphatic equivalent, and 〜はもちろん frames A as obvious.",
+    "formation": "N ／ 普通形（な-adj な）+ だけでなく、…も",
+    "examples": [
+      {
+        "jp": "<ruby>平日<rt>へいじつ</rt></ruby>だけでなく、<ruby>週末<rt>しゅうまつ</rt></ruby>も<ruby>働<rt>はたら</rt></ruby>いています。",
+        "en": "I work not only on weekdays but on weekends too.",
+        "blank": "だけでなく"
+      },
+      {
+        "jp": "この<ruby>料理<rt>りょうり</rt></ruby>は<ruby>見<rt>み</rt></ruby>た<ruby>目<rt>め</rt></ruby>だけでなく、<ruby>味<rt>あじ</rt></ruby>もすばらしい。",
+        "en": "This dish isn't just beautiful to look at — it tastes wonderful too.",
+        "blank": "だけでなく"
+      },
+      {
+        "jp": "<ruby>漢字<rt>かんじ</rt></ruby>が<ruby>読<rt>よ</rt></ruby>めるだけでなく、<ruby>書<rt>か</rt></ruby>くこともできます。",
+        "en": "I can not only read kanji but also write them.",
+        "blank": "だけでなく"
+      },
+      {
+        "jp": "<ruby>彼<rt>かれ</rt></ruby>は<ruby>親切<rt>しんせつ</rt></ruby>なだけでなく、ユーモアもある。",
+        "en": "He's not only kind — he has a sense of humor too.",
+        "blank": "だけでなく"
+      }
+    ]
+  },
+  {
+    "id": "wa-mochiron",
+    "label": "〜はもちろん",
+    "read": "はもちろん",
+    "mean": "not to mention; let alone",
+    "jlpt": "N3",
+    "explanation": "\"A, of course, and B as well\" — A is presented as obvious or taken for granted, and B extends the claim to something less expected, usually marked with も. It attaches to nouns. Compared with だけでなく it foregrounds how self-evident A is rather than simply adding B.",
+    "formation": "N + はもちろん、…も",
+    "examples": [
+      {
+        "jp": "<ruby>彼<rt>かれ</rt></ruby>は<ruby>漢字<rt>かんじ</rt></ruby>はもちろん、<ruby>敬語<rt>けいご</rt></ruby>も<ruby>上手<rt>じょうず</rt></ruby>です。",
+        "en": "He's good at keigo, not to mention kanji.",
+        "blank": "はもちろん"
+      },
+      {
+        "jp": "この<ruby>温泉<rt>おんせん</rt></ruby>は<ruby>週末<rt>しゅうまつ</rt></ruby>はもちろん、<ruby>平日<rt>へいじつ</rt></ruby>も<ruby>混<rt>こ</rt></ruby>んでいる。",
+        "en": "This hot spring is crowded even on weekdays, let alone weekends.",
+        "blank": "はもちろん"
+      },
+      {
+        "jp": "<ruby>東京<rt>とうきょう</rt></ruby>はもちろん、<ruby>地方<rt>ちほう</rt></ruby>の<ruby>町<rt>まち</rt></ruby>にも<ruby>外国人<rt>がいこくじん</rt></ruby>が<ruby>増<rt>ふ</rt></ruby>えた。",
+        "en": "Foreigners have increased not just in Tokyo, of course, but in regional towns too.",
+        "blank": "はもちろん"
+      },
+      {
+        "jp": "この<ruby>店<rt>みせ</rt></ruby>では、カードはもちろん、スマホでも<ruby>払<rt>はら</rt></ruby>える。",
+        "en": "At this shop you can pay by card, of course, and even by phone.",
+        "blank": "はもちろん"
+      }
+    ]
+  },
+  {
+    "id": "okage-de",
+    "label": "〜おかげで",
+    "read": "おかげで",
+    "mean": "thanks to",
+    "jlpt": "N3",
+    "explanation": "Credits a good result to someone or something: \"thanks to …\", with a nuance of gratitude. It contrasts with せいで, which blames a bad result, and with the neutral ため（に）. Used ironically it can blame too (君のおかげでひどい目にあった). The set greeting おかげさまで（元気です） thanks unspecified good fortune.",
+    "formation": "N の / V-た / い-adj / な-adj な + おかげで",
+    "examples": [
+      {
+        "jp": "<ruby>先生<rt>せんせい</rt></ruby>のおかげで、<ruby>試験<rt>しけん</rt></ruby>に<ruby>合格<rt>ごうかく</rt></ruby>できました。",
+        "en": "Thanks to my teacher, I passed the exam.",
+        "blank": "おかげで"
+      },
+      {
+        "jp": "<ruby>毎日<rt>まいにち</rt></ruby><ruby>練習<rt>れんしゅう</rt></ruby>したおかげで、<ruby>発音<rt>はつおん</rt></ruby>がよくなりました。",
+        "en": "Thanks to practicing every day, my pronunciation has improved.",
+        "blank": "おかげで"
+      },
+      {
+        "jp": "<ruby>薬<rt>くすり</rt></ruby>のおかげで、<ruby>熱<rt>ねつ</rt></ruby>がすぐ<ruby>下<rt>さ</rt></ruby>がりました。",
+        "en": "Thanks to the medicine, my fever went down right away.",
+        "blank": "おかげで"
+      },
+      {
+        "jp": "<ruby>友達<rt>ともだち</rt></ruby>が<ruby>手伝<rt>てつだ</rt></ruby>ってくれたおかげで、<ruby>引<rt>ひ</rt></ruby>っ<ruby>越<rt>こ</rt></ruby>しが<ruby>早<rt>はや</rt></ruby>く<ruby>終<rt>お</rt></ruby>わった。",
+        "en": "Thanks to my friend helping out, the move finished early.",
+        "blank": "おかげで"
+      }
+    ]
+  },
+  {
     "id": "sei-de",
     "label": "〜せいで",
     "read": "せいで",
@@ -63,6 +466,626 @@ export const GRAMMAR_N3 = [
     ]
   },
   {
+    "id": "kuse-ni",
+    "label": "〜くせに",
+    "read": "くせに",
+    "mean": "even though; despite (critical)",
+    "jlpt": "N3",
+    "explanation": "Means \"even though\", but with a critical, accusing tone: the speaker disapproves of or looks down on the subject. Unlike the neutral のに, くせに carries blame or contempt, so it's used about people (usually someone else), not plain facts — and never about someone you should be polite to.",
+    "formation": "V-plain / い-adj / な-adj な / N の + くせに",
+    "examples": [
+      {
+        "jp": "<ruby>彼<rt>かれ</rt></ruby>は<ruby>知<rt>し</rt></ruby>っているくせに、<ruby>教<rt>おし</rt></ruby>えてくれない。",
+        "en": "Even though he knows, he won't tell me.",
+        "blank": "くせに"
+      },
+      {
+        "jp": "<ruby>弟<rt>おとうと</rt></ruby>は<ruby>自分<rt>じぶん</rt></ruby>では<ruby>何<rt>なに</rt></ruby>もしないくせに、<ruby>文句<rt>もんく</rt></ruby>ばかり<ruby>言<rt>い</rt></ruby>う。",
+        "en": "My little brother does nothing himself, yet all he does is complain.",
+        "blank": "くせに"
+      },
+      {
+        "jp": "<ruby>彼女<rt>かのじょ</rt></ruby>は<ruby>歌<rt>うた</rt></ruby>が<ruby>下手<rt>へた</rt></ruby>なくせに、いつもカラオケに<ruby>行<rt>い</rt></ruby>きたがる。",
+        "en": "Even though she's a bad singer, she always wants to go to karaoke.",
+        "blank": "くせに"
+      },
+      {
+        "jp": "<ruby>学生<rt>がくせい</rt></ruby>のくせに、<ruby>高<rt>たか</rt></ruby>い<ruby>車<rt>くるま</rt></ruby>に<ruby>乗<rt>の</rt></ruby>っている。",
+        "en": "He's just a student, and yet he drives an expensive car.",
+        "blank": "くせに"
+      }
+    ]
+  },
+  {
+    "id": "tabi-ni",
+    "label": "〜たびに",
+    "read": "たびに",
+    "mean": "every time; whenever",
+    "jlpt": "N3",
+    "explanation": "Means \"every time X happens, Y also happens\" — Y follows X without exception. Compared with plain 〜と, たびに highlights the repetition itself, and often a feeling or change the speaker notices on each occasion (memories, a new hairstyle, nerves).",
+    "formation": "V-dict / N の + たびに",
+    "examples": [
+      {
+        "jp": "この<ruby>歌<rt>うた</rt></ruby>を<ruby>聞<rt>き</rt></ruby>くたびに、<ruby>高校時代<rt>こうこうじだい</rt></ruby>を<ruby>思<rt>おも</rt></ruby>い<ruby>出<rt>だ</rt></ruby>す。",
+        "en": "Every time I hear this song, I remember my high school days.",
+        "blank": "たびに"
+      },
+      {
+        "jp": "<ruby>彼女<rt>かのじょ</rt></ruby>は<ruby>会<rt>あ</rt></ruby>うたびに、<ruby>髪型<rt>かみがた</rt></ruby>が<ruby>変<rt>か</rt></ruby>わっている。",
+        "en": "Every time I see her, she has a different hairstyle.",
+        "blank": "たびに"
+      },
+      {
+        "jp": "<ruby>母<rt>はは</rt></ruby>は<ruby>旅行<rt>りょこう</rt></ruby>のたびに、お<ruby>土産<rt>みやげ</rt></ruby>を<ruby>買<rt>か</rt></ruby>ってきてくれる。",
+        "en": "Every time my mom travels, she brings me back a souvenir.",
+        "blank": "たびに"
+      },
+      {
+        "jp": "テストのたびに、お<ruby>腹<rt>なか</rt></ruby>が<ruby>痛<rt>いた</rt></ruby>くなる。",
+        "en": "Every time there's a test, my stomach starts hurting.",
+        "blank": "たびに"
+      }
+    ]
+  },
+  {
+    "id": "tsuide-ni",
+    "label": "〜ついでに",
+    "read": "ついでに",
+    "mean": "while (I'm) at it; on the occasion of",
+    "jlpt": "N3",
+    "explanation": "\"While I'm at it / taking the opportunity\": you do a secondary action on the occasion of a main one. The main action comes first — V-dict for something you're about to do, V-た for something already done, or N の — and the extra action follows. The add-on should be lighter than the main errand.",
+    "formation": "V-dict / V-た / N の + ついでに",
+    "examples": [
+      {
+        "jp": "<ruby>買<rt>か</rt></ruby>い<ruby>物<rt>もの</rt></ruby>のついでに、<ruby>図書館<rt>としょかん</rt></ruby>に<ruby>寄<rt>よ</rt></ruby>った。",
+        "en": "While I was out shopping, I stopped by the library.",
+        "blank": "ついでに"
+      },
+      {
+        "jp": "<ruby>駅<rt>えき</rt></ruby>に<ruby>行<rt>い</rt></ruby>くついでに、この<ruby>手紙<rt>てがみ</rt></ruby>を<ruby>出<rt>だ</rt></ruby>してくれない？",
+        "en": "Since you're going to the station anyway, could you mail this letter for me?",
+        "blank": "ついでに"
+      },
+      {
+        "jp": "<ruby>実家<rt>じっか</rt></ruby>に<ruby>帰<rt>かえ</rt></ruby>ったついでに、<ruby>昔<rt>むかし</rt></ruby>の<ruby>友達<rt>ともだち</rt></ruby>に<ruby>会<rt>あ</rt></ruby>ってきた。",
+        "en": "While I was back at my parents' place, I met up with an old friend.",
+        "blank": "ついでに"
+      },
+      {
+        "jp": "<ruby>部屋<rt>へや</rt></ruby>の<ruby>掃除<rt>そうじ</rt></ruby>のついでに、いらない<ruby>服<rt>ふく</rt></ruby>を<ruby>捨<rt>す</rt></ruby>てた。",
+        "en": "While cleaning my room, I threw out clothes I don't need.",
+        "blank": "ついでに"
+      }
+    ]
+  },
+  {
+    "id": "toori-ni",
+    "label": "〜とおりに",
+    "read": "とおりに",
+    "mean": "just as; in the way that",
+    "jlpt": "N3",
+    "explanation": "\"Exactly as / in the way that\": the action matches a model, instruction, or expectation. After a verb it's とおりに (言ったとおりに); after a noun it's N のとおりに — or the noun fuses directly as N どおりに (予定どおり), with the reading voiced to どおり. The に can drop in casual speech.",
+    "formation": "V-dict / V-た + とおりに、N の + とおりに（N + どおりに）",
+    "examples": [
+      {
+        "jp": "<ruby>先生<rt>せんせい</rt></ruby>が<ruby>言<rt>い</rt></ruby>ったとおりに、<ruby>毎日<rt>まいにち</rt></ruby><ruby>練習<rt>れんしゅう</rt></ruby>してください。",
+        "en": "Please practice every day, just as the teacher said.",
+        "blank": "とおりに"
+      },
+      {
+        "jp": "<ruby>説明書<rt>せつめいしょ</rt></ruby>のとおりに、<ruby>棚<rt>たな</rt></ruby>を<ruby>組<rt>く</rt></ruby>み<ruby>立<rt>た</rt></ruby>てた。",
+        "en": "I assembled the shelf according to the instructions.",
+        "blank": "とおりに"
+      },
+      {
+        "jp": "<ruby>私<rt>わたし</rt></ruby>がやるとおりに、やってみてください。",
+        "en": "Try doing it exactly the way I do it.",
+        "blank": "とおりに"
+      },
+      {
+        "jp": "レシピのとおりに<ruby>作<rt>つく</rt></ruby>ったのに、<ruby>味<rt>あじ</rt></ruby>が<ruby>変<rt>へん</rt></ruby>だ。",
+        "en": "I made it exactly as the recipe said, but it tastes strange.",
+        "blank": "とおりに"
+      }
+    ]
+  },
+  {
+    "id": "ni-yoru-to",
+    "label": "〜によると",
+    "read": "によると",
+    "mean": "according to",
+    "jlpt": "N3",
+    "explanation": "\"According to …\": marks the source of reported information — the news, a forecast, what someone said. The sentence usually ends in a hearsay form like 〜そうだ or 〜らしい, because you're passing on what the source says rather than making your own claim. によれば is a slightly more formal equivalent.",
+    "formation": "N + によると（＝によれば）…〜そうだ／〜らしい",
+    "examples": [
+      {
+        "jp": "<ruby>天気予報<rt>てんきよほう</rt></ruby>によると、<ruby>明日<rt>あした</rt></ruby>は<ruby>雪<rt>ゆき</rt></ruby>が<ruby>降<rt>ふ</rt></ruby>るそうだ。",
+        "en": "According to the weather forecast, it's going to snow tomorrow.",
+        "blank": "によると"
+      },
+      {
+        "jp": "ニュースによると、<ruby>来月<rt>らいげつ</rt></ruby>から<ruby>電気代<rt>でんきだい</rt></ruby>が<ruby>上<rt>あ</rt></ruby>がるらしい。",
+        "en": "According to the news, electricity prices are apparently going up next month.",
+        "blank": "によると"
+      },
+      {
+        "jp": "<ruby>友達<rt>ともだち</rt></ruby>の<ruby>話<rt>はなし</rt></ruby>によると、あの<ruby>店<rt>みせ</rt></ruby>のラーメンはおいしいそうだ。",
+        "en": "According to what my friend says, the ramen at that place is delicious.",
+        "blank": "によると"
+      },
+      {
+        "jp": "アンケートによると、<ruby>若<rt>わか</rt></ruby>い<ruby>人<rt>ひと</rt></ruby>はあまりテレビを<ruby>見<rt>み</rt></ruby>ないようだ。",
+        "en": "According to the survey, it seems young people don't watch much TV.",
+        "blank": "によると"
+      }
+    ]
+  },
+  {
+    "id": "ni-yotte",
+    "label": "〜によって",
+    "read": "によって",
+    "mean": "by means of; depending on; because of",
+    "jlpt": "N3",
+    "explanation": "A multi-purpose connector with four main senses: the agent of a passive (\"written by a famous author\"), means (\"through discussion\"), cause (\"because of the typhoon\"), and variation (\"depending on the country\"). Context decides which; the \"depending on\" sense usually pairs with 違う or 変わる. によっては singles out specific cases (\"in some cases\").",
+    "formation": "N + によって（によっては／により／による + N）",
+    "examples": [
+      {
+        "jp": "この<ruby>小説<rt>しょうせつ</rt></ruby>は<ruby>有名<rt>ゆうめい</rt></ruby>な<ruby>作家<rt>さっか</rt></ruby>によって<ruby>書<rt>か</rt></ruby>かれた。",
+        "en": "This novel was written by a famous author.",
+        "blank": "によって"
+      },
+      {
+        "jp": "<ruby>国<rt>くに</rt></ruby>によって、<ruby>食事<rt>しょくじ</rt></ruby>のマナーが<ruby>違<rt>ちが</rt></ruby>う。",
+        "en": "Table manners differ from country to country.",
+        "blank": "によって"
+      },
+      {
+        "jp": "<ruby>台風<rt>たいふう</rt></ruby>によって、<ruby>電車<rt>でんしゃ</rt></ruby>が<ruby>止<rt>と</rt></ruby>まった。",
+        "en": "The trains stopped because of the typhoon.",
+        "blank": "によって"
+      },
+      {
+        "jp": "インターネットによって、<ruby>買<rt>か</rt></ruby>い<ruby>物<rt>もの</rt></ruby>がとても<ruby>便利<rt>べんり</rt></ruby>になった。",
+        "en": "Thanks to the internet, shopping has become very convenient.",
+        "blank": "によって"
+      },
+      {
+        "jp": "<ruby>話<rt>はな</rt></ruby>し<ruby>合<rt>あ</rt></ruby>いによって、<ruby>問題<rt>もんだい</rt></ruby>を<ruby>解決<rt>かいけつ</rt></ruby>した。",
+        "en": "We solved the problem through discussion.",
+        "blank": "によって"
+      }
+    ]
+  },
+  {
+    "id": "ni-taishite",
+    "label": "〜に対して",
+    "read": "にたいして",
+    "mean": "toward; in contrast to",
+    "jlpt": "N3",
+    "explanation": "Two uses: (1) \"toward / in response to\" — marks the target an action or attitude is directed at (being polite to customers, answering a question); (2) \"in contrast to\" — sets two things against each other, often as 〜のに対して. Don't confuse it with にとって, which gives a viewpoint (\"for me\"): 私に対して means \"directed at me\", not \"in my eyes\".",
+    "formation": "N + に対して、plain clause + の + に対して（contrast）",
+    "examples": [
+      {
+        "jp": "<ruby>目上<rt>めうえ</rt></ruby>の<ruby>人<rt>ひと</rt></ruby>に<ruby>対<rt>たい</rt></ruby>して、<ruby>失礼<rt>しつれい</rt></ruby>な<ruby>言<rt>い</rt></ruby>い<ruby>方<rt>かた</rt></ruby>をしてはいけない。",
+        "en": "You mustn't speak rudely to your superiors.",
+        "blank": "に対して"
+      },
+      {
+        "jp": "お<ruby>客様<rt>きゃくさま</rt></ruby>に<ruby>対<rt>たい</rt></ruby>して、いつも<ruby>丁寧<rt>ていねい</rt></ruby>に<ruby>話<rt>はな</rt></ruby>しています。",
+        "en": "I always speak politely to customers.",
+        "blank": "に対して"
+      },
+      {
+        "jp": "その<ruby>質問<rt>しつもん</rt></ruby>に<ruby>対<rt>たい</rt></ruby>して、<ruby>彼<rt>かれ</rt></ruby>は<ruby>何<rt>なに</rt></ruby>も<ruby>答<rt>こた</rt></ruby>えなかった。",
+        "en": "He didn't answer that question at all.",
+        "blank": "に対して"
+      },
+      {
+        "jp": "<ruby>兄<rt>あに</rt></ruby>は<ruby>静<rt>しず</rt></ruby>かなのに<ruby>対<rt>たい</rt></ruby>して、<ruby>妹<rt>いもうと</rt></ruby>はとてもにぎやかだ。",
+        "en": "My older brother is quiet, whereas my little sister is very lively.",
+        "blank": "に対して"
+      }
+    ]
+  },
+  {
+    "id": "ni-tsuite",
+    "label": "〜について",
+    "read": "について",
+    "mean": "about; concerning",
+    "jlpt": "N3",
+    "explanation": "\"About / concerning\": marks the topic you talk, think, write, or ask about. Attaches straight to a noun; before another noun it becomes についての (日本についての本). It's the everyday default — the formal に関して says the same thing but belongs in reports and announcements.",
+    "formation": "N + について（についての + N）",
+    "examples": [
+      {
+        "jp": "<ruby>日本<rt>にほん</rt></ruby>の<ruby>文化<rt>ぶんか</rt></ruby>について<ruby>勉強<rt>べんきょう</rt></ruby>しています。",
+        "en": "I'm studying Japanese culture.",
+        "blank": "について"
+      },
+      {
+        "jp": "この<ruby>問題<rt>もんだい</rt></ruby>について、どう<ruby>思<rt>おも</rt></ruby>いますか。",
+        "en": "What do you think about this issue?",
+        "blank": "について"
+      },
+      {
+        "jp": "<ruby>将来<rt>しょうらい</rt></ruby>について、<ruby>家族<rt>かぞく</rt></ruby>とゆっくり<ruby>話<rt>はな</rt></ruby>し<ruby>合<rt>あ</rt></ruby>った。",
+        "en": "I had a good long talk with my family about my future.",
+        "blank": "について"
+      },
+      {
+        "jp": "<ruby>昨日<rt>きのう</rt></ruby>の<ruby>事故<rt>じこ</rt></ruby>について、ニュースで<ruby>詳<rt>くわ</rt></ruby>しく<ruby>見<rt>み</rt></ruby>た。",
+        "en": "I saw a detailed report about yesterday's accident on the news.",
+        "blank": "について"
+      }
+    ]
+  },
+  {
+    "id": "ni-kanshite",
+    "label": "〜に関して",
+    "read": "にかんして",
+    "mean": "regarding; with respect to",
+    "jlpt": "N3",
+    "explanation": "A formal \"regarding / with respect to\" — the stiff, written-language cousin of について. You'll meet it in reports, meetings, announcements, and the news; in casual conversation について sounds more natural. Before a noun it becomes に関する（に関しての）, as in 環境に関する本.",
+    "formation": "N + に関して（に関する + N）",
+    "examples": [
+      {
+        "jp": "この<ruby>件<rt>けん</rt></ruby>に<ruby>関<rt>かん</rt></ruby>しては、<ruby>後<rt>あと</rt></ruby>でメールでご<ruby>説明<rt>せつめい</rt></ruby>します。",
+        "en": "As for this matter, I'll explain by email later.",
+        "blank": "に関して"
+      },
+      {
+        "jp": "<ruby>環境問題<rt>かんきょうもんだい</rt></ruby>に<ruby>関<rt>かん</rt></ruby>して、クラスで<ruby>発表<rt>はっぴょう</rt></ruby>した。",
+        "en": "I gave a class presentation on environmental issues.",
+        "blank": "に関して"
+      },
+      {
+        "jp": "<ruby>新<rt>あたら</rt></ruby>しいサービスに<ruby>関<rt>かん</rt></ruby>して、<ruby>質問<rt>しつもん</rt></ruby>が<ruby>多<rt>おお</rt></ruby>く<ruby>届<rt>とど</rt></ruby>いている。",
+        "en": "We've been getting a lot of questions about the new service.",
+        "blank": "に関して"
+      }
+    ]
+  },
+  {
+    "id": "ni-totte",
+    "label": "〜にとって",
+    "read": "にとって",
+    "mean": "for; from the standpoint of",
+    "jlpt": "N3",
+    "explanation": "\"For / from the standpoint of\": names whose perspective a judgment is made from — usually a person or group — and is followed by an evaluation like 大切だ, 難しい, or いい経験だ. Don't confuse it with に対して: 私にとって means \"in my eyes\", while 私に対して means \"directed at me\".",
+    "formation": "N（person / group）+ にとって",
+    "examples": [
+      {
+        "jp": "<ruby>私<rt>わたし</rt></ruby>にとって、<ruby>家族<rt>かぞく</rt></ruby>が<ruby>一番<rt>いちばん</rt></ruby><ruby>大切<rt>たいせつ</rt></ruby>です。",
+        "en": "For me, family is the most important thing.",
+        "blank": "にとって"
+      },
+      {
+        "jp": "この<ruby>問題<rt>もんだい</rt></ruby>は、<ruby>子供<rt>こども</rt></ruby>にとって<ruby>難<rt>むずか</rt></ruby>しすぎる。",
+        "en": "This problem is too difficult for children.",
+        "blank": "にとって"
+      },
+      {
+        "jp": "<ruby>外国人<rt>がいこくじん</rt></ruby>にとって、<ruby>漢字<rt>かんじ</rt></ruby>を<ruby>覚<rt>おぼ</rt></ruby>えるのは<ruby>大変<rt>たいへん</rt></ruby>だ。",
+        "en": "For foreigners, memorizing kanji is a real challenge.",
+        "blank": "にとって"
+      },
+      {
+        "jp": "あの<ruby>失敗<rt>しっぱい</rt></ruby>は、<ruby>彼<rt>かれ</rt></ruby>にとっていい<ruby>経験<rt>けいけん</rt></ruby>になった。",
+        "en": "That failure turned out to be a good experience for him.",
+        "blank": "にとって"
+      }
+    ]
+  },
+  {
+    "id": "to-shite",
+    "label": "〜として",
+    "read": "として",
+    "mean": "as; in the capacity of",
+    "jlpt": "N3",
+    "explanation": "\"As / in the capacity of\": names the role, position, or category something counts as — working as a doctor, coming as an exchange student, famous as a tourist spot. Attaches directly to a noun. Related forms: としては (\"for a …\" comparisons) and としても (\"even as / also as\").",
+    "formation": "N + として（としては／としても）",
+    "examples": [
+      {
+        "jp": "<ruby>彼<rt>かれ</rt></ruby>は<ruby>医者<rt>いしゃ</rt></ruby>として、20<ruby>年<rt>ねん</rt></ruby><ruby>働<rt>はたら</rt></ruby>いている。",
+        "en": "He has worked as a doctor for twenty years.",
+        "blank": "として"
+      },
+      {
+        "jp": "<ruby>留学生<rt>りゅうがくせい</rt></ruby>として、<ruby>日本<rt>にほん</rt></ruby>に<ruby>来<rt>き</rt></ruby>ました。",
+        "en": "I came to Japan as an exchange student.",
+        "blank": "として"
+      },
+      {
+        "jp": "この<ruby>寺<rt>てら</rt></ruby>は、<ruby>観光地<rt>かんこうち</rt></ruby>として<ruby>有名<rt>ゆうめい</rt></ruby>です。",
+        "en": "This temple is famous as a tourist spot.",
+        "blank": "として"
+      },
+      {
+        "jp": "<ruby>趣味<rt>しゅみ</rt></ruby>として、<ruby>週末<rt>しゅうまつ</rt></ruby>に<ruby>料理<rt>りょうり</rt></ruby>を<ruby>習<rt>なら</rt></ruby>っている。",
+        "en": "As a hobby, I'm taking cooking lessons on weekends.",
+        "blank": "として"
+      }
+    ]
+  },
+  {
+    "id": "ni-oite",
+    "label": "〜において",
+    "read": "において",
+    "mean": "in; at; on (formal)",
+    "jlpt": "N3",
+    "explanation": "A formal \"in / at / on\" marking the place, time, or field where something happens — essentially the written-language version of で. Common in speeches, ceremonies, exams, and reports (会議において, 現代社会において); in casual talk it sounds stiff, so stick with で there. Before a noun it becomes における.",
+    "formation": "N + において（における + N）",
+    "examples": [
+      {
+        "jp": "<ruby>卒業式<rt>そつぎょうしき</rt></ruby>は、<ruby>体育館<rt>たいいくかん</rt></ruby>において<ruby>行<rt>おこな</rt></ruby>われます。",
+        "en": "The graduation ceremony will be held in the gymnasium.",
+        "blank": "において"
+      },
+      {
+        "jp": "<ruby>現代社会<rt>げんだいしゃかい</rt></ruby>において、スマホは<ruby>生活<rt>せいかつ</rt></ruby>に<ruby>欠<rt>か</rt></ruby>かせない。",
+        "en": "In modern society, smartphones are indispensable to daily life.",
+        "blank": "において"
+      },
+      {
+        "jp": "<ruby>日本<rt>にほん</rt></ruby>において、<ruby>桜<rt>さくら</rt></ruby>は<ruby>特別<rt>とくべつ</rt></ruby>な<ruby>意味<rt>いみ</rt></ruby>を<ruby>持<rt>も</rt></ruby>つ<ruby>花<rt>はな</rt></ruby>だ。",
+        "en": "In Japan, cherry blossoms are flowers with a special meaning.",
+        "blank": "において"
+      },
+      {
+        "jp": "その<ruby>大会<rt>たいかい</rt></ruby>は、<ruby>来年<rt>らいねん</rt></ruby><ruby>東京<rt>とうきょう</rt></ruby>において<ruby>開<rt>ひら</rt></ruby>かれる<ruby>予定<rt>よてい</rt></ruby>だ。",
+        "en": "The tournament is scheduled to be held in Tokyo next year.",
+        "blank": "において"
+      }
+    ]
+  },
+  {
+    "id": "ni-kurabete",
+    "label": "〜に比べて",
+    "read": "にくらべて",
+    "mean": "compared to",
+    "jlpt": "N3",
+    "explanation": "\"Compared to / with\": sets a baseline noun and states how something differs from it — hotter, cheaper, more talkative. Attaches to a noun; と比べて is an interchangeable variant. For a simple \"A is more … than B\" in everyday speech, plain Bより is lighter — に比べて spells the comparison out explicitly.",
+    "formation": "N + に比べて（＝と比べて）",
+    "examples": [
+      {
+        "jp": "<ruby>去年<rt>きょねん</rt></ruby>に<ruby>比<rt>くら</rt></ruby>べて、<ruby>今年<rt>ことし</rt></ruby>の<ruby>夏<rt>なつ</rt></ruby>はずっと<ruby>暑<rt>あつ</rt></ruby>い。",
+        "en": "Compared to last year, this summer is much hotter.",
+        "blank": "に比べて"
+      },
+      {
+        "jp": "<ruby>都会<rt>とかい</rt></ruby>に<ruby>比<rt>くら</rt></ruby>べて、<ruby>田舎<rt>いなか</rt></ruby>は<ruby>物価<rt>ぶっか</rt></ruby>が<ruby>安<rt>やす</rt></ruby>い。",
+        "en": "Compared with the city, prices in the countryside are low.",
+        "blank": "に比べて"
+      },
+      {
+        "jp": "<ruby>兄<rt>あに</rt></ruby>に<ruby>比<rt>くら</rt></ruby>べて、<ruby>弟<rt>おとうと</rt></ruby>はよく<ruby>話<rt>はな</rt></ruby>すほうだ。",
+        "en": "Compared to my older brother, my younger brother is the talkative one.",
+        "blank": "に比べて"
+      },
+      {
+        "jp": "<ruby>日本語<rt>にほんご</rt></ruby>は、<ruby>英語<rt>えいご</rt></ruby>に<ruby>比<rt>くら</rt></ruby>べて<ruby>発音<rt>はつおん</rt></ruby>が<ruby>簡単<rt>かんたん</rt></ruby>だと<ruby>思<rt>おも</rt></ruby>う。",
+        "en": "I think Japanese pronunciation is simple compared to English.",
+        "blank": "に比べて"
+      }
+    ]
+  },
+  {
+    "id": "ni-tsurete",
+    "label": "〜につれて",
+    "read": "につれて",
+    "mean": "as … progresses; along with",
+    "jlpt": "N3",
+    "explanation": "As A gradually progresses, B changes along with it — two changes moving in tandem (年を取るにつれて、体力が落ちる). A must be something that changes by degrees, and B is usually a natural, unwilled result — not a one-time event or a decision. Close to とともに, but につれて is specifically for gradual proportional change, while とともに is more formal and also covers plain accompaniment and one-time simultaneity.",
+    "formation": "V-dict + につれて ／ N（変化を表す語）+ につれて",
+    "examples": [
+      {
+        "jp": "<ruby>年<rt>とし</rt></ruby>を<ruby>取<rt>と</rt></ruby>るにつれて、<ruby>体力<rt>たいりょく</rt></ruby>が<ruby>落<rt>お</rt></ruby>ちてきた。",
+        "en": "As I get older, my stamina has been declining.",
+        "blank": "につれて"
+      },
+      {
+        "jp": "<ruby>日本語<rt>にほんご</rt></ruby>の<ruby>勉強<rt>べんきょう</rt></ruby>が<ruby>進<rt>すす</rt></ruby>むにつれて、ドラマが<ruby>分<rt>わ</rt></ruby>かるようになった。",
+        "en": "As my Japanese studies progressed, I came to understand dramas.",
+        "blank": "につれて"
+      },
+      {
+        "jp": "<ruby>町<rt>まち</rt></ruby>の<ruby>人口<rt>じんこう</rt></ruby>が<ruby>増<rt>ふ</rt></ruby>えるにつれて、<ruby>店<rt>みせ</rt></ruby>も<ruby>多<rt>おお</rt></ruby>くなった。",
+        "en": "As the town's population grew, the number of shops increased too.",
+        "blank": "につれて"
+      },
+      {
+        "jp": "<ruby>試験<rt>しけん</rt></ruby>の<ruby>日<rt>ひ</rt></ruby>が<ruby>近<rt>ちか</rt></ruby>づくにつれて、<ruby>不安<rt>ふあん</rt></ruby>が<ruby>大<rt>おお</rt></ruby>きくなってきた。",
+        "en": "As the exam day approaches, my anxiety keeps growing.",
+        "blank": "につれて"
+      }
+    ]
+  },
+  {
+    "id": "to-tomo-ni",
+    "label": "〜とともに",
+    "read": "とともに",
+    "mean": "together with; as … also",
+    "jlpt": "N3",
+    "explanation": "Three related uses: plain accompaniment 'together with N' (家族とともに), 'as A changes, B changes too' (時代とともに), and 'at the same time as / upon' (卒業とともに). It sounds formal and written — in conversation 〜と一緒に or 〜たら is more natural. Unlike につれて, which only marks gradual proportional change, とともに attaches directly to nouns and also covers one-time simultaneity.",
+    "formation": "N + とともに ／ V-dict + とともに",
+    "examples": [
+      {
+        "jp": "<ruby>正月<rt>しょうがつ</rt></ruby>は<ruby>家族<rt>かぞく</rt></ruby>とともにゆっくり<ruby>過<rt>す</rt></ruby>ごした。",
+        "en": "I spent New Year's relaxing together with my family.",
+        "blank": "とともに"
+      },
+      {
+        "jp": "<ruby>気温<rt>きおん</rt></ruby>が<ruby>上<rt>あ</rt></ruby>がるとともに、ビールの<ruby>売<rt>う</rt></ruby>り<ruby>上<rt>あ</rt></ruby>げも<ruby>伸<rt>の</rt></ruby>びる。",
+        "en": "As the temperature rises, beer sales climb as well.",
+        "blank": "とともに"
+      },
+      {
+        "jp": "<ruby>時代<rt>じだい</rt></ruby>とともに、<ruby>言葉<rt>ことば</rt></ruby>の<ruby>使<rt>つか</rt></ruby>い<ruby>方<rt>かた</rt></ruby>も<ruby>変<rt>か</rt></ruby>わっていく。",
+        "en": "Along with the times, the way words are used changes too.",
+        "blank": "とともに"
+      },
+      {
+        "jp": "<ruby>卒業<rt>そつぎょう</rt></ruby>とともに、この<ruby>町<rt>まち</rt></ruby>を<ruby>離<rt>はな</rt></ruby>れることになった。",
+        "en": "Upon graduating, I ended up leaving this town.",
+        "blank": "とともに"
+      }
+    ]
+  },
+  {
+    "id": "hazu-ga-nai",
+    "label": "〜はずがない",
+    "read": "はずがない",
+    "mean": "cannot be; it is impossible that",
+    "jlpt": "N3",
+    "explanation": "Strong, reasoned denial: 'there's no way that / it can't be'. It is the negative counterpart of はずだ ('should be, by my reasoning') and the direct opposite of に違いない ('must be'). Nearly interchangeable with わけがない — はずがない leans on logical grounds ('given what I know'), while わけがない sounds a bit more emotional and colloquial.",
+    "formation": "V・い-adj（普通形）+ はずがない ／ な-adj な・N の + はずがない",
+    "examples": [
+      {
+        "jp": "<ruby>真面目<rt>まじめ</rt></ruby>な<ruby>彼<rt>かれ</rt></ruby>が<ruby>嘘<rt>うそ</rt></ruby>をつくはずがない。",
+        "en": "There's no way someone as serious as he is would lie.",
+        "blank": "はずがない"
+      },
+      {
+        "jp": "こんな<ruby>難<rt>むずか</rt></ruby>しい<ruby>問題<rt>もんだい</rt></ruby>、<ruby>子供<rt>こども</rt></ruby>に<ruby>解<rt>と</rt></ruby>けるはずがない。",
+        "en": "A problem this hard can't possibly be solved by a child.",
+        "blank": "はずがない"
+      },
+      {
+        "jp": "この<ruby>値段<rt>ねだん</rt></ruby>で<ruby>本物<rt>ほんもの</rt></ruby>のブランド<ruby>品<rt>ひん</rt></ruby>のはずがない。",
+        "en": "At this price, it can't possibly be a genuine brand item.",
+        "blank": "はずがない"
+      },
+      {
+        "jp": "<ruby>彼女<rt>かのじょ</rt></ruby>は<ruby>昨日<rt>きのう</rt></ruby><ruby>国<rt>くに</rt></ruby>に<ruby>帰<rt>かえ</rt></ruby>ったから、ここにいるはずがありません。",
+        "en": "She went back to her country yesterday, so she can't possibly be here.",
+        "blank": "はずがありません"
+      }
+    ]
+  },
+  {
+    "id": "ni-chigainai",
+    "label": "〜に違いない",
+    "read": "にちがいない",
+    "mean": "must be; no doubt",
+    "jlpt": "N3",
+    "explanation": "Confident conjecture from evidence: 'must be / I'm sure that'. Where はずだ is a cooler 'should be' worked out by reasoning, に違いない is conviction — the speaker feels certain — and its direct opposites are はずがない・わけがない. It sounds somewhat stiff or written; in casual speech きっと〜と思う is more common.",
+    "formation": "V・い-adj（普通形）+ に違いない ／ N・な-adj + に違いない",
+    "examples": [
+      {
+        "jp": "<ruby>電気<rt>でんき</rt></ruby>がついているから、<ruby>彼<rt>かれ</rt></ruby>は<ruby>家<rt>いえ</rt></ruby>にいるに<ruby>違<rt>ちが</rt></ruby>いない。",
+        "en": "The lights are on, so he must be home.",
+        "blank": "に違いない"
+      },
+      {
+        "jp": "あんなに<ruby>練習<rt>れんしゅう</rt></ruby>したのだから、<ruby>彼女<rt>かのじょ</rt></ruby>は<ruby>合格<rt>ごうかく</rt></ruby>するに<ruby>違<rt>ちが</rt></ruby>いない。",
+        "en": "After all that practice, she's bound to pass.",
+        "blank": "に違いない"
+      },
+      {
+        "jp": "<ruby>犯人<rt>はんにん</rt></ruby>はこの<ruby>窓<rt>まど</rt></ruby>から<ruby>入<rt>はい</rt></ruby>ったに<ruby>違<rt>ちが</rt></ruby>いない。",
+        "en": "The culprit must have come in through this window.",
+        "blank": "に違いない"
+      },
+      {
+        "jp": "<ruby>誰<rt>だれ</rt></ruby>かがここでタバコを<ruby>吸<rt>す</rt></ruby>ったに<ruby>違<rt>ちが</rt></ruby>いありません。",
+        "en": "Someone must have smoked here, no doubt about it.",
+        "blank": "に違いありません"
+      }
+    ]
+  },
+  {
+    "id": "wake-da",
+    "label": "〜わけだ",
+    "read": "わけだ",
+    "mean": "no wonder; that means",
+    "jlpt": "N3",
+    "explanation": "States a conclusion that follows naturally from the facts: 'so that means…', or — on discovering the reason for something — 'no wonder!' (often with どうりで). Within the わけ family this is the affirmative one: わけではない softens or partially denies an implication ('it's not that…'), わけがない flatly denies any possibility ('no way'), and わけにはいかない is 'can't very well do' for social or moral reasons.",
+    "formation": "V・い-adj（普通形）+ わけだ ／ な-adj な・N という + わけだ",
+    "examples": [
+      {
+        "jp": "<ruby>十年<rt>じゅうねん</rt></ruby>も<ruby>日本<rt>にほん</rt></ruby>にいたのか。<ruby>日本語<rt>にほんご</rt></ruby>が<ruby>上手<rt>じょうず</rt></ruby>なわけだ。",
+        "en": "You were in Japan for ten whole years? No wonder your Japanese is good.",
+        "blank": "わけだ"
+      },
+      {
+        "jp": "エアコンが<ruby>壊<rt>こわ</rt></ruby>れていた。どうりで<ruby>暑<rt>あつ</rt></ruby>いわけだ。",
+        "en": "The air conditioner was broken. No wonder it's hot.",
+        "blank": "わけだ"
+      },
+      {
+        "jp": "<ruby>一<rt>いち</rt></ruby>ドルが<ruby>百五十円<rt>ひゃくごじゅうえん</rt></ruby>なら、この<ruby>本<rt>ほん</rt></ruby>は<ruby>千五百円<rt>せんごひゃくえん</rt></ruby>になるわけだ。",
+        "en": "If one dollar is 150 yen, that means this book comes to 1,500 yen.",
+        "blank": "わけだ"
+      },
+      {
+        "jp": "<ruby>毎日<rt>まいにち</rt></ruby><ruby>五時間<rt>ごじかん</rt></ruby>も<ruby>練習<rt>れんしゅう</rt></ruby>しているのか。<ruby>強<rt>つよ</rt></ruby>いわけだ。",
+        "en": "He practices five hours every day? No wonder he's strong.",
+        "blank": "わけだ"
+      }
+    ]
+  },
+  {
+    "id": "wake-de-wa-nai",
+    "label": "〜わけではない",
+    "read": "わけではない",
+    "mean": "it is not that; not necessarily",
+    "jlpt": "N3",
+    "explanation": "Partial negation: heads off a conclusion the listener might jump to — 'it's not that…', 'not necessarily'. Much softer than わけがない, which denies something outright; わけだ is the affirmative sibling ('so that means / no wonder'), and わけにはいかない means 'can't very well do'. Often paired with 別に or 必ずしも, and the double negative 〜ないわけではない means 'it's not that I don't…'.",
+    "formation": "V・い-adj（普通形）+ わけではない ／ な-adj な・N という + わけではない",
+    "examples": [
+      {
+        "jp": "<ruby>肉<rt>にく</rt></ruby>が<ruby>嫌<rt>きら</rt></ruby>いなわけではないが、あまり<ruby>食<rt>た</rt></ruby>べない。",
+        "en": "It's not that I dislike meat; I just don't eat it much.",
+        "blank": "わけではない"
+      },
+      {
+        "jp": "<ruby>日本人<rt>にほんじん</rt></ruby>なら<ruby>誰<rt>だれ</rt></ruby>でも<ruby>敬語<rt>けいご</rt></ruby>が<ruby>使<rt>つか</rt></ruby>えるわけではない。",
+        "en": "It's not the case that every Japanese person can use keigo.",
+        "blank": "わけではない"
+      },
+      {
+        "jp": "<ruby>忙<rt>いそが</rt></ruby>しくて<ruby>行<rt>い</rt></ruby>けないだけで、<ruby>行<rt>い</rt></ruby>きたくないわけではない。",
+        "en": "I just can't go because I'm busy — it's not that I don't want to.",
+        "blank": "わけではない"
+      },
+      {
+        "jp": "<ruby>高<rt>たか</rt></ruby>いものが<ruby>必<rt>かなら</rt></ruby>ずしもいいわけではありません。",
+        "en": "Expensive things aren't necessarily good.",
+        "blank": "わけではありません"
+      }
+    ]
+  },
+  {
+    "id": "wake-ga-nai",
+    "label": "〜わけがない",
+    "read": "わけがない",
+    "mean": "there is no way that",
+    "jlpt": "N3",
+    "explanation": "Emphatic denial: 'there's absolutely no way that…' — the speaker rejects the very possibility, often with feeling. Its siblings differ sharply: わけではない only partially denies ('not necessarily'), わけだ affirms a natural conclusion ('no wonder / that means'), and わけにはいかない is 'can't very well do' for social reasons. In most sentences it can swap with はずがない, but わけがない sounds more colloquial and emotive.",
+    "formation": "V・い-adj（普通形）+ わけがない ／ な-adj な・N の + わけがない",
+    "examples": [
+      {
+        "jp": "あんなに<ruby>仲<rt>なか</rt></ruby>がいい<ruby>二人<rt>ふたり</rt></ruby>が<ruby>別<rt>わか</rt></ruby>れるわけがない。",
+        "en": "There's no way those two, close as they are, would break up.",
+        "blank": "わけがない"
+      },
+      {
+        "jp": "<ruby>練習<rt>れんしゅう</rt></ruby>もしないで、<ruby>試合<rt>しあい</rt></ruby>に<ruby>勝<rt>か</rt></ruby>てるわけがない。",
+        "en": "There's no way you can win the match without even practicing.",
+        "blank": "わけがない"
+      },
+      {
+        "jp": "こんな<ruby>簡単<rt>かんたん</rt></ruby>な<ruby>漢字<rt>かんじ</rt></ruby>、<ruby>彼<rt>かれ</rt></ruby>が<ruby>読<rt>よ</rt></ruby>めないわけがない。",
+        "en": "A kanji this easy — there's no way he can't read it.",
+        "blank": "わけがない"
+      },
+      {
+        "jp": "<ruby>毎日<rt>まいにち</rt></ruby><ruby>遊<rt>あそ</rt></ruby>んでばかりで、<ruby>成績<rt>せいせき</rt></ruby>が<ruby>上<rt>あ</rt></ruby>がるわけがありません。",
+        "en": "If all you do is play every day, there's no way your grades will improve.",
+        "blank": "わけがありません"
+      }
+    ]
+  },
+  {
     "id": "wake-ni-wa-ikanai",
     "label": "〜わけにはいかない",
     "read": "わけにはいかない",
@@ -85,6 +1108,1401 @@ export const GRAMMAR_N3 = [
         "jp": "<ruby>借<rt>か</rt></ruby>りた<ruby>本<rt>ほん</rt></ruby>を<ruby>返<rt>かえ</rt></ruby>さないわけにはいきません。",
         "en": "I can't very well not return the book I borrowed.",
         "blank": "わけにはいきません"
+      }
+    ]
+  },
+  {
+    "id": "beki-da",
+    "label": "〜べきだ",
+    "read": "べきだ",
+    "mean": "should; ought to",
+    "jlpt": "N3",
+    "explanation": "A strong 'should / ought to': the speaker asserts what is right or proper to do. It's more forceful than 〜たほうがいい (advice), and unlike ものだ — which appeals to general social common sense — べきだ presents the speaker's own judgment. The negative is べきではない ('shouldn't'), and with する both するべき and すべき are accepted. Don't use it for laws or fixed rules; that's なければならない.",
+    "formation": "V-dict + べきだ（する → すべきだ／するべきだ）；否定は V-dict + べきではない",
+    "examples": [
+      {
+        "jp": "<ruby>学生<rt>がくせい</rt></ruby>のうちに、もっと<ruby>本<rt>ほん</rt></ruby>を<ruby>読<rt>よ</rt></ruby>むべきだ。",
+        "en": "While you're a student, you should read more books.",
+        "blank": "べきだ"
+      },
+      {
+        "jp": "<ruby>体<rt>からだ</rt></ruby>の<ruby>調子<rt>ちょうし</rt></ruby>が<ruby>悪<rt>わる</rt></ruby>いなら、<ruby>早<rt>はや</rt></ruby>く<ruby>病院<rt>びょういん</rt></ruby>に<ruby>行<rt>い</rt></ruby>くべきだよ。",
+        "en": "If you're not feeling well, you should get to a hospital right away.",
+        "blank": "べきだ"
+      },
+      {
+        "jp": "<ruby>人<rt>ひと</rt></ruby>の<ruby>悪口<rt>わるぐち</rt></ruby>を<ruby>言<rt>い</rt></ruby>うべきではないと<ruby>思<rt>おも</rt></ruby>う。",
+        "en": "I don't think you should speak ill of others.",
+        "blank": "べきではない"
+      },
+      {
+        "jp": "<ruby>大事<rt>だいじ</rt></ruby>なことは、<ruby>家族<rt>かぞく</rt></ruby>と<ruby>相談<rt>そうだん</rt></ruby>して<ruby>決<rt>き</rt></ruby>めるべきです。",
+        "en": "Important matters should be decided after talking them over with your family.",
+        "blank": "べきです"
+      }
+    ]
+  },
+  {
+    "id": "mono-da",
+    "label": "〜ものだ",
+    "read": "ものだ",
+    "mean": "used to; it is natural that; should",
+    "jlpt": "N3",
+    "explanation": "A sentence-ender with three N3 jobs: general truths about how things naturally are (人は失敗するものだ), nostalgic 'used to' after the た-form (よく泳いだものだ), and mild admonition about common sense (敬語を使うものだ) — like べきだ, but appealing to social norms rather than the speaker's personal opinion. It can also add exclamatory feeling (早いものだ). Don't confuse it with ものの, a connective meaning 'although' — same もの, unrelated meaning.",
+    "formation": "V-dict・V-ない + ものだ（一般論・当然・感慨）／ V-た + ものだ（回想）",
+    "examples": [
+      {
+        "jp": "<ruby>人間<rt>にんげん</rt></ruby>は<ruby>誰<rt>だれ</rt></ruby>でも<ruby>失敗<rt>しっぱい</rt></ruby>するものだよ。",
+        "en": "Everyone makes mistakes — that's just how people are.",
+        "blank": "ものだ"
+      },
+      {
+        "jp": "<ruby>子供<rt>こども</rt></ruby>のころ、この<ruby>川<rt>かわ</rt></ruby>でよく<ruby>泳<rt>およ</rt></ruby>いだものだ。",
+        "en": "When I was a kid, I used to swim in this river all the time.",
+        "blank": "ものだ"
+      },
+      {
+        "jp": "<ruby>目上<rt>めうえ</rt></ruby>の<ruby>人<rt>ひと</rt></ruby>には<ruby>敬語<rt>けいご</rt></ruby>を<ruby>使<rt>つか</rt></ruby>うものだ。",
+        "en": "One is supposed to use polite language with one's superiors.",
+        "blank": "ものだ"
+      },
+      {
+        "jp": "<ruby>時間<rt>じかん</rt></ruby>がたつのは<ruby>早<rt>はや</rt></ruby>いものですね。",
+        "en": "Time really does fly, doesn't it?",
+        "blank": "ものです"
+      }
+    ]
+  },
+  {
+    "id": "mono-no",
+    "label": "〜ものの",
+    "read": "ものの",
+    "mean": "although; but",
+    "jlpt": "N3",
+    "explanation": "A formal connective 'although / but': A is true, yet the result you'd expect from A doesn't follow (買ったものの、使い方が分からない). Stiffer and more written than けど・が, and unlike のに it carries no tone of complaint or surprise — just neutral contrast. It has nothing to do with sentence-final ものだ (general truths, nostalgia, admonition); the shared もの is form only.",
+    "formation": "V・い-adj（普通形）+ ものの ／ な-adj な・である + ものの",
+    "examples": [
+      {
+        "jp": "<ruby>大学<rt>だいがく</rt></ruby>を<ruby>卒業<rt>そつぎょう</rt></ruby>したものの、<ruby>仕事<rt>しごと</rt></ruby>が<ruby>見<rt>み</rt></ruby>つからない。",
+        "en": "Although I graduated from university, I can't find a job.",
+        "blank": "ものの"
+      },
+      {
+        "jp": "<ruby>運転免許<rt>うんてんめんきょ</rt></ruby>は<ruby>持<rt>も</rt></ruby>っているものの、ほとんど<ruby>運転<rt>うんてん</rt></ruby>しない。",
+        "en": "I have a driver's license, but I hardly ever drive.",
+        "blank": "ものの"
+      },
+      {
+        "jp": "<ruby>新<rt>あたら</rt></ruby>しいパソコンを<ruby>買<rt>か</rt></ruby>ったものの、<ruby>使<rt>つか</rt></ruby>い<ruby>方<rt>かた</rt></ruby>がよく<ruby>分<rt>わ</rt></ruby>からない。",
+        "en": "I bought a new computer, but I don't really know how to use it.",
+        "blank": "ものの"
+      },
+      {
+        "jp": "やせると<ruby>言<rt>い</rt></ruby>ったものの、なかなか<ruby>運動<rt>うんどう</rt></ruby>する<ruby>時間<rt>じかん</rt></ruby>がない。",
+        "en": "I said I'd lose weight, but I just can't find time to exercise.",
+        "blank": "ものの"
+      }
+    ]
+  },
+  {
+    "id": "ppoi",
+    "label": "〜っぽい",
+    "read": "っぽい",
+    "mean": "-ish; looks / tends to",
+    "jlpt": "N3",
+    "explanation": "Turns a noun or a verb/adjective stem into an い-adjective meaning '-ish, like, tends to': 子供っぽい (childish), 白っぽい (whitish), 忘れっぽい (forgetful). Casual and often faintly critical — 子供っぽい complains, while 子供らしい ('childlike, as a child should be') approves. Compare がち (a recurring tendency, usually bad) and 気味 (a slight current state): っぽい is about perceived quality or appearance.",
+    "formation": "N・V-ます stem・い-adj stem + っぽい（い形容詞として活用）",
+    "examples": [
+      {
+        "jp": "その<ruby>服<rt>ふく</rt></ruby>、ちょっと<ruby>子供<rt>こども</rt></ruby>っぽいんじゃない？",
+        "en": "Isn't that outfit a little childish?",
+        "blank": "っぽい"
+      },
+      {
+        "jp": "<ruby>祖父<rt>そふ</rt></ruby>は<ruby>年<rt>とし</rt></ruby>を<ruby>取<rt>と</rt></ruby>って、<ruby>忘<rt>わす</rt></ruby>れっぽくなった。",
+        "en": "My grandfather has gotten forgetful with age.",
+        "blank": "っぽく"
+      },
+      {
+        "jp": "<ruby>彼女<rt>かのじょ</rt></ruby>は<ruby>飽<rt>あ</rt></ruby>きっぽい<ruby>性格<rt>せいかく</rt></ruby>で、<ruby>何<rt>なに</rt></ruby>を<ruby>始<rt>はじ</rt></ruby>めても<ruby>続<rt>つづ</rt></ruby>かない。",
+        "en": "She gets bored of things easily — whatever she starts, she never keeps it up.",
+        "blank": "っぽい"
+      },
+      {
+        "jp": "<ruby>彼<rt>かれ</rt></ruby>の<ruby>話<rt>はなし</rt></ruby>は<ruby>嘘<rt>うそ</rt></ruby>っぽくて、みんな<ruby>信<rt>しん</rt></ruby>じなかった。",
+        "en": "His story sounded like a lie, and nobody believed it.",
+        "blank": "っぽくて"
+      }
+    ]
+  },
+  {
+    "id": "gachi",
+    "label": "〜がち",
+    "read": "がち",
+    "mean": "prone to; tends to (undesirable)",
+    "jlpt": "N3",
+    "explanation": "'Tends to / often ends up': verb stem or noun + がち marks a recurring, usually undesirable tendency — 休みがち (often absent), 病気がち (sickly). It's about what happens repeatedly over time, while 気味 is a slight state right now (風邪気味 'a touch of a cold' vs 風邪をひきがち 'catches colds a lot'), and っぽい is a casual '-ish' about quality or appearance. It behaves like a な-adjective (がちな N・がちだ).",
+    "formation": "V-ます stem・N + がち（だ・な・の）",
+    "examples": [
+      {
+        "jp": "<ruby>冬<rt>ふゆ</rt></ruby>は<ruby>風邪<rt>かぜ</rt></ruby>をひきがちなので、<ruby>気<rt>き</rt></ruby>をつけている。",
+        "en": "I tend to catch colds in winter, so I'm careful.",
+        "blank": "がち"
+      },
+      {
+        "jp": "<ruby>彼<rt>かれ</rt></ruby>は<ruby>子供<rt>こども</rt></ruby>のころ、<ruby>病気<rt>びょうき</rt></ruby>がちだった。",
+        "en": "He was often sick as a child.",
+        "blank": "がち"
+      },
+      {
+        "jp": "<ruby>最近<rt>さいきん</rt></ruby>、<ruby>仕事<rt>しごと</rt></ruby>が<ruby>忙<rt>いそが</rt></ruby>しくて、<ruby>朝<rt>あさ</rt></ruby>ごはんを<ruby>抜<rt>ぬ</rt></ruby>きがちだ。",
+        "en": "Lately work has been busy, and I tend to skip breakfast.",
+        "blank": "がち"
+      },
+      {
+        "jp": "<ruby>一人暮<rt>ひとりぐ</rt></ruby>らしだと、<ruby>野菜<rt>やさい</rt></ruby>が<ruby>不足<rt>ふそく</rt></ruby>しがちになる。",
+        "en": "When you live alone, you tend to run short on vegetables.",
+        "blank": "がち"
+      }
+    ]
+  },
+  {
+    "id": "gimi",
+    "label": "〜気味",
+    "read": "ぎみ",
+    "mean": "a touch of; slightly",
+    "jlpt": "N3",
+    "explanation": "'A touch of / slightly …': verb stem or noun + 気味 describes a slight, usually unwelcome condition showing right now — 疲れ気味 (a little worn out), 太り気味 (a bit overweight), 遅れ気味 (running behind). Contrast がち, a tendency that recurs over time: 風邪気味 means you feel a cold coming on today, 風邪をひきがち means you often catch them. っぽい is a looser, casual '-ish' about quality or appearance.",
+    "formation": "V-ます stem・N + 気味（だ・の）",
+    "examples": [
+      {
+        "jp": "<ruby>今朝<rt>けさ</rt></ruby>から<ruby>風邪<rt>かぜ</rt></ruby><ruby>気味<rt>ぎみ</rt></ruby>で、<ruby>頭<rt>あたま</rt></ruby>が<ruby>痛<rt>いた</rt></ruby>い。",
+        "en": "I've had a touch of a cold since this morning, and my head hurts.",
+        "blank": "気味"
+      },
+      {
+        "jp": "<ruby>最近<rt>さいきん</rt></ruby>ちょっと<ruby>太<rt>ふと</rt></ruby>り<ruby>気味<rt>ぎみ</rt></ruby>なので、<ruby>甘<rt>あま</rt></ruby>い<ruby>物<rt>もの</rt></ruby>を<ruby>控<rt>ひか</rt></ruby>えている。",
+        "en": "I've been putting on a bit of weight lately, so I'm cutting back on sweets.",
+        "blank": "気味"
+      },
+      {
+        "jp": "<ruby>仕事<rt>しごと</rt></ruby>が<ruby>続<rt>つづ</rt></ruby>いて、<ruby>少<rt>すこ</rt></ruby>し<ruby>疲<rt>つか</rt></ruby>れ<ruby>気味<rt>ぎみ</rt></ruby>だ。",
+        "en": "Work has kept piling on, and I'm feeling a little run-down.",
+        "blank": "気味"
+      },
+      {
+        "jp": "<ruby>電車<rt>でんしゃ</rt></ruby>が<ruby>遅<rt>おく</rt></ruby>れ<ruby>気味<rt>ぎみ</rt></ruby>で、<ruby>会議<rt>かいぎ</rt></ruby>に<ruby>間<rt>ま</rt></ruby>に<ruby>合<rt>あ</rt></ruby>うか<ruby>心配<rt>しんぱい</rt></ruby>だ。",
+        "en": "The train is running a bit behind, and I'm worried about making the meeting.",
+        "blank": "気味"
+      }
+    ]
+  },
+  {
+    "id": "kake",
+    "label": "〜かけ",
+    "read": "かけ",
+    "mean": "half-done; in the middle of",
+    "jlpt": "N3",
+    "explanation": "Verb stem + かけ marks an action that was started but left unfinished: 食べかけのパン is bread someone began eating and abandoned. As a verb, 〜かける means to begin doing something (and stop midway) or to be on the verge of doing it (言いかける = start to say). It is the mirror image of 〜きる, which stresses carrying an action through to the very end.",
+    "formation": "V-ます stem + かけ（の N）／かける",
+    "examples": [
+      {
+        "jp": "テーブルに<ruby>食<rt>た</rt></ruby>べかけのパンがある。",
+        "en": "There's a half-eaten piece of bread on the table.",
+        "blank": "かけ"
+      },
+      {
+        "jp": "<ruby>読<rt>よ</rt></ruby>みかけの<ruby>本<rt>ほん</rt></ruby>が<ruby>机<rt>つくえ</rt></ruby>の<ruby>上<rt>うえ</rt></ruby>に<ruby>置<rt>お</rt></ruby>いてある。",
+        "en": "A book I'm partway through is sitting on the desk.",
+        "blank": "かけ"
+      },
+      {
+        "jp": "<ruby>手紙<rt>てがみ</rt></ruby>を<ruby>書<rt>か</rt></ruby>きかけて、<ruby>電話<rt>でんわ</rt></ruby>に<ruby>出<rt>で</rt></ruby>た。",
+        "en": "I started writing a letter, then answered the phone.",
+        "blank": "かけて"
+      },
+      {
+        "jp": "<ruby>彼<rt>かれ</rt></ruby>は<ruby>何<rt>なに</rt></ruby>か<ruby>言<rt>い</rt></ruby>いかけて、<ruby>急<rt>きゅう</rt></ruby>に<ruby>黙<rt>だま</rt></ruby>ってしまった。",
+        "en": "He started to say something, then suddenly went quiet.",
+        "blank": "かけて"
+      }
+    ]
+  },
+  {
+    "id": "kiru",
+    "label": "〜きる",
+    "read": "きる",
+    "mean": "do completely; do to the end",
+    "jlpt": "N3",
+    "explanation": "Verb stem + きる means to do something completely, all the way to the end: 読みきる is to finish every last page. The potential forms きれる／きれない are extremely common — 食べきれない means \"can't manage to eat it all.\" With states it means \"utterly\" (疲れきる = be completely exhausted). Contrast 〜かけ, which marks the opposite: an action left half-done.",
+    "formation": "V-ます stem + きる／きれる／きれない",
+    "examples": [
+      {
+        "jp": "<ruby>長<rt>なが</rt></ruby>い<ruby>小説<rt>しょうせつ</rt></ruby>を<ruby>一週間<rt>いっしゅうかん</rt></ruby>で<ruby>読<rt>よ</rt></ruby>みきった。",
+        "en": "I finished the whole long novel in a week.",
+        "blank": "きった"
+      },
+      {
+        "jp": "<ruby>料理<rt>りょうり</rt></ruby>が<ruby>多<rt>おお</rt></ruby>すぎて、<ruby>全部<rt>ぜんぶ</rt></ruby>は<ruby>食<rt>た</rt></ruby>べきれなかった。",
+        "en": "There was too much food, and I couldn't eat it all.",
+        "blank": "きれなかった"
+      },
+      {
+        "jp": "マラソンを<ruby>最後<rt>さいご</rt></ruby>まで<ruby>走<rt>はし</rt></ruby>りきって、<ruby>涙<rt>なみだ</rt></ruby>が<ruby>出<rt>で</rt></ruby>た。",
+        "en": "I ran the marathon all the way to the finish, and tears came to my eyes.",
+        "blank": "きって"
+      },
+      {
+        "jp": "<ruby>彼女<rt>かのじょ</rt></ruby>は<ruby>疲<rt>つか</rt></ruby>れきった<ruby>顔<rt>かお</rt></ruby>で<ruby>帰<rt>かえ</rt></ruby>ってきた。",
+        "en": "She came home looking utterly exhausted.",
+        "blank": "きった"
+      }
+    ]
+  },
+  {
+    "id": "ta-totan",
+    "label": "〜たとたん",
+    "read": "たとたん",
+    "mean": "the moment that; just as",
+    "jlpt": "N3",
+    "explanation": "V-た + とたん（に） pins two past events together: the instant the first finished, the second happened — suddenly, and usually outside the speaker's control (ドアを開けたとたん、猫が飛び出した). Because it reports a surprise, the second clause can't be something you chose or planned to do. Compare 〜たところ, a calm \"when I did X, I found Y,\" and 〜ところに, where something intrudes on a scene still in progress.",
+    "formation": "V-た + とたん（に）",
+    "examples": [
+      {
+        "jp": "ドアを<ruby>開<rt>あ</rt></ruby>けたとたん、<ruby>猫<rt>ねこ</rt></ruby>が<ruby>飛<rt>と</rt></ruby>び<ruby>出<rt>だ</rt></ruby>した。",
+        "en": "The moment I opened the door, the cat shot out.",
+        "blank": "たとたん"
+      },
+      {
+        "jp": "<ruby>立<rt>た</rt></ruby>ち<ruby>上<rt>あ</rt></ruby>がったとたんに、めまいがした。",
+        "en": "The instant I stood up, I felt dizzy.",
+        "blank": "たとたんに"
+      },
+      {
+        "jp": "<ruby>彼<rt>かれ</rt></ruby>の<ruby>顔<rt>かお</rt></ruby>を<ruby>見<rt>み</rt></ruby>たとたん、<ruby>涙<rt>なみだ</rt></ruby>が<ruby>出<rt>で</rt></ruby>てきた。",
+        "en": "The moment I saw his face, tears welled up.",
+        "blank": "たとたん"
+      },
+      {
+        "jp": "<ruby>布団<rt>ふとん</rt></ruby>に<ruby>入<rt>はい</rt></ruby>ったとたんに、<ruby>眠<rt>ねむ</rt></ruby>ってしまった。",
+        "en": "I fell asleep the moment I got into bed.",
+        "blank": "たとたんに"
+      }
+    ]
+  },
+  {
+    "id": "saichuu-ni",
+    "label": "〜最中に",
+    "read": "さいちゅうに",
+    "mean": "right in the middle of",
+    "jlpt": "N3",
+    "explanation": "最中に means \"right in the middle of\" — at the very peak of an activity, usually when something interrupts it (会議の最中に携帯が鳴った). It takes V-ている or N の. Its siblings divide the work: 間に merely places an event somewhere inside a time span, and うちに urges acting before a window closes — 最中に zooms in on the busiest moment of the action itself.",
+    "formation": "V-ている / N の + 最中に",
+    "examples": [
+      {
+        "jp": "<ruby>会議<rt>かいぎ</rt></ruby>の<ruby>最中<rt>さいちゅう</rt></ruby>に、<ruby>携帯電話<rt>けいたいでんわ</rt></ruby>が<ruby>鳴<rt>な</rt></ruby>ってしまった。",
+        "en": "My phone went off right in the middle of the meeting.",
+        "blank": "最中に"
+      },
+      {
+        "jp": "シャワーを<ruby>浴<rt>あ</rt></ruby>びている<ruby>最中<rt>さいちゅう</rt></ruby>に、お<ruby>湯<rt>ゆ</rt></ruby>が<ruby>止<rt>と</rt></ruby>まった。",
+        "en": "The hot water cut out right while I was taking a shower.",
+        "blank": "最中に"
+      },
+      {
+        "jp": "<ruby>勉強<rt>べんきょう</rt></ruby>している<ruby>最中<rt>さいちゅう</rt></ruby>に、<ruby>弟<rt>おとうと</rt></ruby>が<ruby>話<rt>はな</rt></ruby>しかけてくる。",
+        "en": "My little brother keeps talking to me right when I'm in the middle of studying.",
+        "blank": "最中に"
+      },
+      {
+        "jp": "<ruby>試合<rt>しあい</rt></ruby>の<ruby>最中<rt>さいちゅう</rt></ruby>に、<ruby>急<rt>きゅう</rt></ruby>に<ruby>雨<rt>あめ</rt></ruby>が<ruby>降<rt>ふ</rt></ruby>り<ruby>出<rt>だ</rt></ruby>した。",
+        "en": "Right in the middle of the match, it suddenly started to rain.",
+        "blank": "最中に"
+      }
+    ]
+  },
+  {
+    "id": "uchi-ni",
+    "label": "〜うちに",
+    "read": "うちに",
+    "mean": "while; before (the situation changes)",
+    "jlpt": "N3",
+    "explanation": "うちに means \"while the current state still holds\" — do it before that window closes: 熱いうちに飲む (drink it before it cools). With a negative verb, 〜ないうちに means \"before something happens\" (忘れないうちに = before I forget). Unlike 間に, which neutrally locates an event inside a span, うちに implies the chance disappears once the state changes.",
+    "formation": "V-dict / V-ている / V-ない / い-adj / N の + うちに",
+    "examples": [
+      {
+        "jp": "スープは<ruby>熱<rt>あつ</rt></ruby>いうちに<ruby>飲<rt>の</rt></ruby>んでください。",
+        "en": "Please drink the soup while it's hot.",
+        "blank": "うちに"
+      },
+      {
+        "jp": "<ruby>明<rt>あか</rt></ruby>るいうちに<ruby>家<rt>いえ</rt></ruby>に<ruby>帰<rt>かえ</rt></ruby>りましょう。",
+        "en": "Let's head home while it's still light out.",
+        "blank": "うちに"
+      },
+      {
+        "jp": "<ruby>赤<rt>あか</rt></ruby>ちゃんが<ruby>寝<rt>ね</rt></ruby>ているうちに、<ruby>夕飯<rt>ゆうはん</rt></ruby>を<ruby>作<rt>つく</rt></ruby>ってしまおう。",
+        "en": "I'll get dinner made while the baby is asleep.",
+        "blank": "うちに"
+      },
+      {
+        "jp": "<ruby>忘<rt>わす</rt></ruby>れないうちに、メモしておきましょう。",
+        "en": "Let's jot it down before we forget.",
+        "blank": "うちに"
+      }
+    ]
+  },
+  {
+    "id": "aida-ni",
+    "label": "〜間に",
+    "read": "あいだに",
+    "mean": "while; during (at some point within)",
+    "jlpt": "N3",
+    "explanation": "間に places an event at some point within a clearly bounded span: 留守の間に荷物が届いた (the package came at some point while I was out). Without に, 〜間 means the action lasted the WHOLE span; with に it happens once inside it. It is neutral about urgency — compare うちに (\"before the window closes\") and 最中に (\"right at the peak, usually interrupted\").",
+    "formation": "V-ている / V-dict / N の + 間に",
+    "examples": [
+      {
+        "jp": "<ruby>昼休<rt>ひるやす</rt></ruby>みの<ruby>間<rt>あいだ</rt></ruby>に、<ruby>銀行<rt>ぎんこう</rt></ruby>へ<ruby>行<rt>い</rt></ruby>ってきた。",
+        "en": "I made a trip to the bank during my lunch break.",
+        "blank": "間に"
+      },
+      {
+        "jp": "<ruby>留守<rt>るす</rt></ruby>の<ruby>間<rt>あいだ</rt></ruby>に、<ruby>荷物<rt>にもつ</rt></ruby>が<ruby>届<rt>とど</rt></ruby>いていた。",
+        "en": "A package had arrived while I was out.",
+        "blank": "間に"
+      },
+      {
+        "jp": "<ruby>寝<rt>ね</rt></ruby>ている<ruby>間<rt>あいだ</rt></ruby>に、<ruby>雪<rt>ゆき</rt></ruby>が<ruby>積<rt>つ</rt></ruby>もっていた。",
+        "en": "Snow had piled up while I was sleeping.",
+        "blank": "間に"
+      },
+      {
+        "jp": "<ruby>日本<rt>にほん</rt></ruby>にいる<ruby>間<rt>あいだ</rt></ruby>に、<ruby>富士山<rt>ふじさん</rt></ruby>に<ruby>登<rt>のぼ</rt></ruby>ってみたい。",
+        "en": "While I'm in Japan, I'd like to climb Mt. Fuji.",
+        "blank": "間に"
+      }
+    ]
+  },
+  {
+    "id": "tokoro-ni",
+    "label": "〜ところに／ところへ",
+    "read": "ところに",
+    "mean": "just when; at the very moment",
+    "jlpt": "N3",
+    "explanation": "ところに／ところへ marks something — often a person or a phone call — arriving right at the moment a scene is unfolding: 出かけようとしたところに電話が来た. It follows V-ている, V-た, or V-(よ)うとした, and the second clause is typically an arrival or interruption (来る, 電話がかかる). 最中に stresses being mid-activity; 〜たとたん reports an instant result after a completed action — ところに freezes a moment and has something walk into it.",
+    "formation": "V-ている / V-た / V-(よ)うとした + ところに／ところへ",
+    "examples": [
+      {
+        "jp": "<ruby>出<rt>で</rt></ruby>かけようとしたところに、<ruby>電話<rt>でんわ</rt></ruby>がかかってきた。",
+        "en": "Just as I was about to head out, the phone rang.",
+        "blank": "ところに"
+      },
+      {
+        "jp": "<ruby>困<rt>こま</rt></ruby>っているところに、<ruby>先輩<rt>せんぱい</rt></ruby>が<ruby>来<rt>き</rt></ruby>て<ruby>助<rt>たす</rt></ruby>けてくれた。",
+        "en": "Right when I was stuck, my senpai came along and helped me.",
+        "blank": "ところに"
+      },
+      {
+        "jp": "お<ruby>風呂<rt>ふろ</rt></ruby>に<ruby>入<rt>はい</rt></ruby>っているところへ、<ruby>客<rt>きゃく</rt></ruby>が<ruby>来<rt>き</rt></ruby>た。",
+        "en": "A visitor showed up right while I was in the bath.",
+        "blank": "ところへ"
+      },
+      {
+        "jp": "<ruby>彼<rt>かれ</rt></ruby>の<ruby>話<rt>はなし</rt></ruby>をしているところに、<ruby>本人<rt>ほんにん</rt></ruby>が<ruby>来<rt>き</rt></ruby>た。",
+        "en": "Just as we were talking about him, the man himself walked in.",
+        "blank": "ところに"
+      }
+    ]
+  },
+  {
+    "id": "ta-tokoro",
+    "label": "〜たところ",
+    "read": "たところ",
+    "mean": "when I did …, (I found that)",
+    "jlpt": "N3",
+    "explanation": "V-た + ところ、… means \"when I did X, (I found that) …\" — you did something like calling or checking, and report what you discovered (電話したところ、休みだった). The result is a state you found, not something you caused; the tone is neutral and slightly formal. Don't confuse it with 〜たとたん (a sudden event follows instantly) or 〜ところだった (the event never actually happened).",
+    "formation": "V-た + ところ、…",
+    "examples": [
+      {
+        "jp": "<ruby>店<rt>みせ</rt></ruby>に<ruby>電話<rt>でんわ</rt></ruby>したところ、<ruby>今日<rt>きょう</rt></ruby>は<ruby>休<rt>やす</rt></ruby>みだった。",
+        "en": "When I called the shop, it turned out they were closed today.",
+        "blank": "たところ"
+      },
+      {
+        "jp": "<ruby>先生<rt>せんせい</rt></ruby>に<ruby>聞<rt>き</rt></ruby>いたところ、<ruby>試験<rt>しけん</rt></ruby>は<ruby>来週<rt>らいしゅう</rt></ruby>だそうだ。",
+        "en": "When I asked the teacher, I learned the exam is next week.",
+        "blank": "たところ"
+      },
+      {
+        "jp": "<ruby>箱<rt>はこ</rt></ruby>を<ruby>開<rt>あ</rt></ruby>けてみたところ、<ruby>中<rt>なか</rt></ruby>は<ruby>空<rt>から</rt></ruby>だった。",
+        "en": "When I opened the box, I found it was empty inside.",
+        "blank": "たところ"
+      },
+      {
+        "jp": "インターネットで<ruby>調<rt>しら</rt></ruby>べたところ、その<ruby>話<rt>はなし</rt></ruby>は<ruby>本当<rt>ほんとう</rt></ruby>だった。",
+        "en": "When I looked it up online, the story turned out to be true.",
+        "blank": "たところ"
+      }
+    ]
+  },
+  {
+    "id": "tokoro-datta",
+    "label": "〜ところだった",
+    "read": "ところだった",
+    "mean": "almost did; was on the verge of",
+    "jlpt": "N3",
+    "explanation": "V-dictionary + ところだった means something very nearly happened but didn't: 乗り遅れるところだった = I almost missed the train (but caught it). It usually pairs with もう少しで or 危うく and carries relief or alarm. Note the contrast with 〜たところ: たところ reports what really happened when you did something, while ところだった is a near miss that was avoided.",
+    "formation": "（もう少しで／危うく）V-dict + ところだった",
+    "examples": [
+      {
+        "jp": "もう<ruby>少<rt>すこ</rt></ruby>しで<ruby>電車<rt>でんしゃ</rt></ruby>に<ruby>乗<rt>の</rt></ruby>り<ruby>遅<rt>おく</rt></ruby>れるところだった。",
+        "en": "I very nearly missed the train.",
+        "blank": "ところだった"
+      },
+      {
+        "jp": "<ruby>寝坊<rt>ねぼう</rt></ruby>して、<ruby>会議<rt>かいぎ</rt></ruby>に<ruby>遅<rt>おく</rt></ruby>れるところでした。",
+        "en": "I overslept and almost ended up late for the meeting.",
+        "blank": "ところでした"
+      },
+      {
+        "jp": "スマホを<ruby>見<rt>み</rt></ruby>ていて、<ruby>階段<rt>かいだん</rt></ruby>から<ruby>落<rt>お</rt></ruby>ちるところだった。",
+        "en": "I was looking at my phone and nearly fell down the stairs.",
+        "blank": "ところだった"
+      },
+      {
+        "jp": "<ruby>危<rt>あや</rt></ruby>うく<ruby>大事<rt>だいじ</rt></ruby>な<ruby>約束<rt>やくそく</rt></ruby>を<ruby>忘<rt>わす</rt></ruby>れるところだった。",
+        "en": "I came dangerously close to forgetting an important appointment.",
+        "blank": "ところだった"
+      }
+    ]
+  },
+  {
+    "id": "ta-mama",
+    "label": "〜たまま",
+    "read": "たまま",
+    "mean": "leaving as is; still (unchanged)",
+    "jlpt": "N3",
+    "explanation": "V-た + まま says a state created by an action was left unchanged while something else happened: 電気をつけたまま寝た (fell asleep with the light still on). It often implies that's not how things should be. Use 〜ながら for two actions in parallel — まま holds a STATE, not an ongoing action. It also attaches to nouns (そのまま) and adjectives.",
+    "formation": "V-た / V-ない / N の / adj + まま",
+    "examples": [
+      {
+        "jp": "<ruby>電気<rt>でんき</rt></ruby>をつけたまま、<ruby>寝<rt>ね</rt></ruby>てしまった。",
+        "en": "I fell asleep with the light still on.",
+        "blank": "たまま"
+      },
+      {
+        "jp": "<ruby>窓<rt>まど</rt></ruby>を<ruby>開<rt>あ</rt></ruby>けたまま<ruby>出<rt>で</rt></ruby>かけて、<ruby>雨<rt>あめ</rt></ruby>が<ruby>入<rt>はい</rt></ruby>ってしまった。",
+        "en": "I went out with the window left open, and the rain got in.",
+        "blank": "たまま"
+      },
+      {
+        "jp": "<ruby>彼<rt>かれ</rt></ruby>は<ruby>靴<rt>くつ</rt></ruby>を<ruby>履<rt>は</rt></ruby>いたまま、<ruby>部屋<rt>へや</rt></ruby>に<ruby>入<rt>はい</rt></ruby>ってきた。",
+        "en": "He came into the room with his shoes still on.",
+        "blank": "たまま"
+      },
+      {
+        "jp": "<ruby>傘<rt>かさ</rt></ruby>を<ruby>借<rt>か</rt></ruby>りたまま、<ruby>返<rt>かえ</rt></ruby>すのを<ruby>忘<rt>わす</rt></ruby>れていた。",
+        "en": "I'd borrowed an umbrella and forgotten to give it back.",
+        "blank": "たまま"
+      }
+    ]
+  },
+  {
+    "id": "zu-ni",
+    "label": "〜ずに",
+    "read": "ずに",
+    "mean": "without doing",
+    "jlpt": "N3",
+    "explanation": "V-ない stem + ずに is a slightly formal, written-flavored equivalent of 〜ないで meaning \"without doing\": 朝ごはんを食べずに出かけた. The one irregular form is する → せずに. It only replaces ないで in the \"did Y without doing X\" sense — requests like 〜ないでください keep ないで.",
+    "formation": "V-ない stem + ずに（する → せずに）",
+    "examples": [
+      {
+        "jp": "<ruby>朝<rt>あさ</rt></ruby>ごはんを<ruby>食<rt>た</rt></ruby>べずに、<ruby>学校<rt>がっこう</rt></ruby>へ<ruby>行<rt>い</rt></ruby>った。",
+        "en": "I went to school without eating breakfast.",
+        "blank": "ずに"
+      },
+      {
+        "jp": "<ruby>辞書<rt>じしょ</rt></ruby>を<ruby>使<rt>つか</rt></ruby>わずに、<ruby>日本語<rt>にほんご</rt></ruby>の<ruby>新聞<rt>しんぶん</rt></ruby>を<ruby>読<rt>よ</rt></ruby>んでみた。",
+        "en": "I tried reading a Japanese newspaper without using a dictionary.",
+        "blank": "ずに"
+      },
+      {
+        "jp": "<ruby>傘<rt>かさ</rt></ruby>を<ruby>持<rt>も</rt></ruby>たずに<ruby>出<rt>で</rt></ruby>て、<ruby>雨<rt>あめ</rt></ruby>に<ruby>降<rt>ふ</rt></ruby>られた。",
+        "en": "I left without taking an umbrella and got caught in the rain.",
+        "blank": "ずに"
+      },
+      {
+        "jp": "<ruby>彼<rt>かれ</rt></ruby>は<ruby>誰<rt>だれ</rt></ruby>にも<ruby>相談<rt>そうだん</rt></ruby>せずに、<ruby>会社<rt>かいしゃ</rt></ruby>を<ruby>辞<rt>や</rt></ruby>めてしまった。",
+        "en": "He quit the company without consulting anyone.",
+        "blank": "ずに"
+      }
+    ]
+  },
+  {
+    "id": "te-hajimete",
+    "label": "〜てはじめて",
+    "read": "てはじめて",
+    "mean": "only after doing … (did I realize)",
+    "jlpt": "N3",
+    "explanation": "V-て + はじめて means \"only after doing X …\" — the experience of X is what first made the realization or event possible: 病気になってはじめて健康の大切さが分かった. The second clause is usually 分かる・気づく・知る. It is stronger than the plain adverb 初めて (\"for the first time\"): the て-form connection insists that without X, it would never have happened.",
+    "formation": "V-て + はじめて",
+    "examples": [
+      {
+        "jp": "<ruby>病気<rt>びょうき</rt></ruby>になってはじめて、<ruby>健康<rt>けんこう</rt></ruby>の<ruby>大切<rt>たいせつ</rt></ruby>さが<ruby>分<rt>わ</rt></ruby>かった。",
+        "en": "Only after getting sick did I understand how precious health is.",
+        "blank": "てはじめて"
+      },
+      {
+        "jp": "<ruby>日本<rt>にほん</rt></ruby>に<ruby>来<rt>き</rt></ruby>てはじめて、<ruby>本物<rt>ほんもの</rt></ruby>の<ruby>桜<rt>さくら</rt></ruby>を<ruby>見<rt>み</rt></ruby>た。",
+        "en": "It was only after coming to Japan that I saw real cherry blossoms.",
+        "blank": "てはじめて"
+      },
+      {
+        "jp": "<ruby>一人暮<rt>ひとりぐ</rt></ruby>らしをしてはじめて、<ruby>親<rt>おや</rt></ruby>のありがたさに<ruby>気<rt>き</rt></ruby>づいた。",
+        "en": "Only once I lived on my own did I realize how much my parents did for me.",
+        "blank": "てはじめて"
+      },
+      {
+        "jp": "<ruby>失<rt>うしな</rt></ruby>ってはじめて、その<ruby>人<rt>ひと</rt></ruby>の<ruby>大切<rt>たいせつ</rt></ruby>さが<ruby>分<rt>わ</rt></ruby>かるものだ。",
+        "en": "It's only after losing someone that you realize how much they mattered.",
+        "blank": "てはじめて"
+      }
+    ]
+  },
+  {
+    "id": "te-hoshii",
+    "label": "〜てほしい",
+    "read": "てほしい",
+    "mean": "want someone to do",
+    "jlpt": "N3",
+    "explanation": "V-て + ほしい expresses wanting SOMEONE ELSE to do something; the person is marked with に: 父にたばこをやめてほしい. Compare 〜たい, which is only for what the speaker wants to do themselves. The negative is 〜ないでほしい (\"I want you not to …\"). 〜てもらいたい means the same with a slightly humbler tone.",
+    "formation": "（person に）V-て + ほしい／V-ないで + ほしい",
+    "examples": [
+      {
+        "jp": "<ruby>父<rt>ちち</rt></ruby>には、たばこをやめてほしいです。",
+        "en": "I want my father to quit smoking.",
+        "blank": "てほしい"
+      },
+      {
+        "jp": "<ruby>友達<rt>ともだち</rt></ruby>に、<ruby>引<rt>ひ</rt></ruby>っ<ruby>越<rt>こ</rt></ruby>しを<ruby>手伝<rt>てつだ</rt></ruby>ってほしいと<ruby>頼<rt>たの</rt></ruby>んだ。",
+        "en": "I asked a friend to help me with my move.",
+        "blank": "てほしい"
+      },
+      {
+        "jp": "ここに、ごみを<ruby>捨<rt>す</rt></ruby>てないでほしい。",
+        "en": "I'd like people not to dump trash here.",
+        "blank": "ないでほしい"
+      },
+      {
+        "jp": "みんなに、もっとこの<ruby>町<rt>まち</rt></ruby>の<ruby>良<rt>よ</rt></ruby>さを<ruby>知<rt>し</rt></ruby>ってほしい。",
+        "en": "I want more people to know how great this town is.",
+        "blank": "てほしい"
+      }
+    ]
+  },
+  {
+    "id": "temo-kamawanai",
+    "label": "〜てもかまわない",
+    "read": "てもかまわない",
+    "mean": "it is fine even if; don't mind",
+    "jlpt": "N3",
+    "explanation": "Gives permission or expresses indifference: \"it's fine even if …; I don't mind\". A slightly more reserved cousin of 〜てもいい — かまわない literally means \"it doesn't matter to me\", so it often signals no objection rather than warm approval. The negative 〜なくてもかまわない means \"you don't have to\". Polite form: 〜てもかまいません.",
+    "formation": "V-て / い-adj くて + もかまわない；N・な-adj + でもかまわない",
+    "examples": [
+      {
+        "jp": "このペンを<ruby>使<rt>つか</rt></ruby>ってもかまわないよ。",
+        "en": "You can use this pen — I don't mind.",
+        "blank": "てもかまわない"
+      },
+      {
+        "jp": "<ruby>写真<rt>しゃしん</rt></ruby>を<ruby>撮<rt>と</rt></ruby>ってもかまいませんか。",
+        "en": "Do you mind if I take a photo?",
+        "blank": "てもかまいません"
+      },
+      {
+        "jp": "<ruby>狭<rt>せま</rt></ruby>くてもかまわないから、<ruby>駅<rt>えき</rt></ruby>に<ruby>近<rt>ちか</rt></ruby>い<ruby>部屋<rt>へや</rt></ruby>がいい。",
+        "en": "I don't mind if it's small — I want a room close to the station.",
+        "blank": "てもかまわない"
+      },
+      {
+        "jp": "<ruby>中古<rt>ちゅうこ</rt></ruby>でもかまわないので、<ruby>安<rt>やす</rt></ruby>いパソコンを<ruby>探<rt>さが</rt></ruby>しています。",
+        "en": "A used one is fine, so I'm looking for a cheap computer.",
+        "blank": "でもかまわない"
+      }
+    ]
+  },
+  {
+    "id": "ba-hodo",
+    "label": "〜ば〜ほど",
+    "read": "ば〜ほど",
+    "mean": "the more …, the more",
+    "jlpt": "N3",
+    "explanation": "Repeats the same verb or adjective — first in the ば conditional, then in dictionary form — to say \"the more X, the more Y\" (練習すればするほど). The second clause changes in step with the first. い-adjectives repeat too (安ければ安いほど); な-adjectives use 〜であればあるほど. Don't drop the repeated word — 〜すればほど alone is ungrammatical.",
+    "formation": "V-ば V-dict + ほど / い-adj ければ い-adj + ほど（な-adj: であればあるほど）",
+    "examples": [
+      {
+        "jp": "<ruby>練習<rt>れんしゅう</rt></ruby>すればするほど、<ruby>上手<rt>じょうず</rt></ruby>になります。",
+        "en": "The more you practice, the better you get.",
+        "blank": "ほど"
+      },
+      {
+        "jp": "<ruby>値段<rt>ねだん</rt></ruby>は<ruby>安<rt>やす</rt></ruby>ければ<ruby>安<rt>やす</rt></ruby>いほど、よく<ruby>売<rt>う</rt></ruby>れます。",
+        "en": "The cheaper the price, the better things sell.",
+        "blank": "ほど"
+      },
+      {
+        "jp": "<ruby>考<rt>かんが</rt></ruby>えれば<ruby>考<rt>かんが</rt></ruby>えるほど、<ruby>分<rt>わ</rt></ruby>からなくなってきた。",
+        "en": "The more I think about it, the less I understand.",
+        "blank": "ほど"
+      },
+      {
+        "jp": "この<ruby>町<rt>まち</rt></ruby>は、<ruby>住<rt>す</rt></ruby>めば<ruby>住<rt>す</rt></ruby>むほど<ruby>好<rt>す</rt></ruby>きになっていく。",
+        "en": "The longer I live in this town, the more I come to like it.",
+        "blank": "ほど"
+      }
+    ]
+  },
+  {
+    "id": "ba-yokatta",
+    "label": "〜ばよかった",
+    "read": "ばよかった",
+    "mean": "should have; I wish I had",
+    "jlpt": "N3",
+    "explanation": "Expresses regret about the past: \"I should have …; I wish I had …\" (もっと寝ればよかった). The negative 〜なければよかった means \"I wish I hadn't\". Often paired with と後悔している or a sighing なあ. Contrast 〜てよかった, which is relief or gladness about what DID happen — no regret involved.",
+    "formation": "V-ば + よかった（否定: V-なければよかった）",
+    "examples": [
+      {
+        "jp": "<ruby>昨日<rt>きのう</rt></ruby>の<ruby>夜<rt>よる</rt></ruby>、もっと<ruby>早<rt>はや</rt></ruby>く<ruby>寝<rt>ね</rt></ruby>ればよかった。",
+        "en": "I should have gone to bed earlier last night.",
+        "blank": "ばよかった"
+      },
+      {
+        "jp": "<ruby>雨<rt>あめ</rt></ruby>だから、<ruby>傘<rt>かさ</rt></ruby>を<ruby>持<rt>も</rt></ruby>ってくればよかった。",
+        "en": "It's raining — I should have brought an umbrella.",
+        "blank": "ばよかった"
+      },
+      {
+        "jp": "<ruby>学生<rt>がくせい</rt></ruby>のとき、もっと<ruby>英語<rt>えいご</rt></ruby>を<ruby>勉強<rt>べんきょう</rt></ruby>すればよかった。",
+        "en": "I wish I had studied English more when I was a student.",
+        "blank": "ばよかった"
+      },
+      {
+        "jp": "あんなことを<ruby>言<rt>い</rt></ruby>わなければよかったと<ruby>後悔<rt>こうかい</rt></ruby>している。",
+        "en": "I regret saying that — I wish I hadn't.",
+        "blank": "なければよかった"
+      }
+    ]
+  },
+  {
+    "id": "to-ii",
+    "label": "〜といい／〜たらいい",
+    "read": "といい",
+    "mean": "it would be nice if; I hope",
+    "jlpt": "N3",
+    "explanation": "Expresses a hope or wish: \"it would be nice if …; I hope …\" (晴れるといいですね), usually softened with ね, なあ or (ん)ですが. For things beyond your control it's a pure hope; about actions (聞いたらいい), たらいい・ばいい shade into advice: \"you should just …\". Use 〜といいですね to wish someone else well.",
+    "formation": "V-dict + といい / V-たら + いい（＋ね・なあ・んですが）",
+    "examples": [
+      {
+        "jp": "<ruby>明日<rt>あした</rt></ruby>のピクニック、<ruby>晴<rt>は</rt></ruby>れるといいですね。",
+        "en": "I hope it's sunny for the picnic tomorrow.",
+        "blank": "といい"
+      },
+      {
+        "jp": "お<ruby>母<rt>かあ</rt></ruby>さんの<ruby>風邪<rt>かぜ</rt></ruby>が<ruby>早<rt>はや</rt></ruby>く<ruby>治<rt>なお</rt></ruby>るといいですね。",
+        "en": "I hope your mother's cold gets better soon.",
+        "blank": "といい"
+      },
+      {
+        "jp": "<ruby>分<rt>わ</rt></ruby>からないときは、<ruby>先生<rt>せんせい</rt></ruby>に<ruby>聞<rt>き</rt></ruby>いたらいいですよ。",
+        "en": "When you don't understand, you should just ask the teacher.",
+        "blank": "たらいい"
+      },
+      {
+        "jp": "<ruby>新<rt>あたら</rt></ruby>しい<ruby>仕事<rt>しごと</rt></ruby>が<ruby>早<rt>はや</rt></ruby>く<ruby>見<rt>み</rt></ruby>つかるといいんですが。",
+        "en": "I hope I find a new job soon.",
+        "blank": "といい"
+      }
+    ]
+  },
+  {
+    "id": "sae",
+    "label": "〜さえ",
+    "read": "さえ",
+    "mean": "even",
+    "jlpt": "N3",
+    "explanation": "Adds \"even\" to an extreme example so everything milder can be inferred: 水さえ飲めなかった \"couldn't even drink water\". It replaces が/を and follows other particles (にさえ; でさえ is the form after subjects: 子どもでさえ). Stronger and more pointed than も; the literary equivalent is すら. Don't confuse it with 〜さえ〜ば, where さえ marks a sufficient condition instead.",
+    "formation": "N + さえ（が/を に代わる）/ N + でさえ・にさえ",
+    "examples": [
+      {
+        "jp": "<ruby>忙<rt>いそが</rt></ruby>しくて、<ruby>昼<rt>ひる</rt></ruby>ご<ruby>飯<rt>はん</rt></ruby>を<ruby>食<rt>た</rt></ruby>べる<ruby>時間<rt>じかん</rt></ruby>さえなかった。",
+        "en": "I was so busy I didn't even have time to eat lunch.",
+        "blank": "さえ"
+      },
+      {
+        "jp": "そんなことは、<ruby>子<rt>こ</rt></ruby>どもでさえ<ruby>知<rt>し</rt></ruby>っている。",
+        "en": "Even a child knows that.",
+        "blank": "でさえ"
+      },
+      {
+        "jp": "<ruby>熱<rt>ねつ</rt></ruby>が<ruby>高<rt>たか</rt></ruby>くて、<ruby>水<rt>みず</rt></ruby>さえ<ruby>飲<rt>の</rt></ruby>めなかった。",
+        "en": "My fever was so high I couldn't even drink water.",
+        "blank": "さえ"
+      },
+      {
+        "jp": "<ruby>引<rt>ひ</rt></ruby>っ<ruby>越<rt>こ</rt></ruby>したことを、<ruby>親友<rt>しんゆう</rt></ruby>にさえ<ruby>話<rt>はな</rt></ruby>していない。",
+        "en": "I haven't even told my best friend that I moved.",
+        "blank": "さえ"
+      }
+    ]
+  },
+  {
+    "id": "sae-ba",
+    "label": "〜さえ〜ば",
+    "read": "さえ〜ば",
+    "mean": "if only; as long as",
+    "jlpt": "N3",
+    "explanation": "Singles out ONE thing as the only condition that matters: \"as long as …; if only …\" (お金さえあれば). Nouns take さえ plus the ば form; verbs use stem + さえすれば or て form + さえいれば. Unlike plain さえ (\"even\"), this pattern always pairs with ば and says that single condition is sufficient — nothing else matters.",
+    "formation": "N さえ + V-ば / V-stem + さえすれば / V-て + さえいれば",
+    "examples": [
+      {
+        "jp": "お<ruby>金<rt>かね</rt></ruby>さえあれば、<ruby>何<rt>なん</rt></ruby>でも<ruby>買<rt>か</rt></ruby>えると<ruby>思<rt>おも</rt></ruby>っていた。",
+        "en": "I used to think that as long as you had money, you could buy anything.",
+        "blank": "さえ"
+      },
+      {
+        "jp": "<ruby>天気<rt>てんき</rt></ruby>さえよければ、<ruby>富士山<rt>ふじさん</rt></ruby>が<ruby>見<rt>み</rt></ruby>えるはずです。",
+        "en": "As long as the weather is good, you should be able to see Mt. Fuji.",
+        "blank": "さえ"
+      },
+      {
+        "jp": "この<ruby>薬<rt>くすり</rt></ruby>を<ruby>飲<rt>の</rt></ruby>みさえすれば、すぐによくなりますよ。",
+        "en": "As long as you take this medicine, you'll get better soon.",
+        "blank": "さえ"
+      },
+      {
+        "jp": "あなたがそばにいてくれさえすれば、<ruby>私<rt>わたし</rt></ruby>は<ruby>幸<rt>しあわ</rt></ruby>せです。",
+        "en": "As long as you're by my side, I'm happy.",
+        "blank": "さえ"
+      }
+    ]
+  },
+  {
+    "id": "koso",
+    "label": "〜こそ",
+    "read": "こそ",
+    "mean": "precisely; the very",
+    "jlpt": "N3",
+    "explanation": "Emphasizes the preceding word as \"precisely this one and no other\": 今年こそ \"this year for sure\", こちらこそ \"it's I who should be thanking you\". 〜からこそ stresses a reason: \"precisely because\". It spotlights and insists — unlike さえ it adds no \"even\" nuance, just emphasis.",
+    "formation": "N + こそ / 〜から + こそ（強調）",
+    "examples": [
+      {
+        "jp": "こちらこそ、よろしくお<ruby>願<rt>ねが</rt></ruby>いします。",
+        "en": "The pleasure is mine — I look forward to working with you.",
+        "blank": "こそ"
+      },
+      {
+        "jp": "<ruby>今年<rt>ことし</rt></ruby>こそ、<ruby>試験<rt>しけん</rt></ruby>に<ruby>合格<rt>ごうかく</rt></ruby>するつもりだ。",
+        "en": "This year for sure, I'm going to pass the exam.",
+        "blank": "こそ"
+      },
+      {
+        "jp": "<ruby>健康<rt>けんこう</rt></ruby>こそが、<ruby>一番<rt>いちばん</rt></ruby><ruby>大切<rt>たいせつ</rt></ruby>なものだと<ruby>思<rt>おも</rt></ruby>う。",
+        "en": "Health is the very thing that matters most, I think.",
+        "blank": "こそ"
+      },
+      {
+        "jp": "<ruby>難<rt>むずか</rt></ruby>しいからこそ、<ruby>挑戦<rt>ちょうせん</rt></ruby>する<ruby>価値<rt>かち</rt></ruby>があるんです。",
+        "en": "It's precisely because it's hard that it's worth trying.",
+        "blank": "こそ"
+      }
+    ]
+  },
+  {
+    "id": "hodo",
+    "label": "〜ほど",
+    "read": "ほど",
+    "mean": "to the extent that; so … that",
+    "jlpt": "N3",
+    "explanation": "Names an extreme point to show how far something goes: \"so … that; to the point of\" (死ぬほど疲れた). It AFFIRMS a high degree by measuring against that extreme, and also gives approximate amounts (三十分ほど). Compared with くらい it leans big, dramatic and slightly more formal; and where 〜ほど〜はない denies that anything reaches the named level, plain ほど simply asserts the degree.",
+    "formation": "V-dict・V-ない / い-adj / N + ほど",
+    "examples": [
+      {
+        "jp": "<ruby>今日<rt>きょう</rt></ruby>は<ruby>仕事<rt>しごと</rt></ruby>が<ruby>多<rt>おお</rt></ruby>くて、<ruby>死<rt>し</rt></ruby>ぬほど<ruby>疲<rt>つか</rt></ruby>れた。",
+        "en": "I had so much work today that I'm dead tired.",
+        "blank": "ほど"
+      },
+      {
+        "jp": "<ruby>足<rt>あし</rt></ruby>が<ruby>痛<rt>いた</rt></ruby>くなるほど、たくさん<ruby>歩<rt>ある</rt></ruby>いた。",
+        "en": "We walked so much that my feet started to hurt.",
+        "blank": "ほど"
+      },
+      {
+        "jp": "<ruby>彼<rt>かれ</rt></ruby>の<ruby>話<rt>はなし</rt></ruby>は、<ruby>涙<rt>なみだ</rt></ruby>が<ruby>出<rt>で</rt></ruby>るほど<ruby>面白<rt>おもしろ</rt></ruby>かった。",
+        "en": "His story was so funny I was in tears.",
+        "blank": "ほど"
+      },
+      {
+        "jp": "<ruby>山<rt>やま</rt></ruby>の<ruby>上<rt>うえ</rt></ruby>からの<ruby>景色<rt>けしき</rt></ruby>は、<ruby>言葉<rt>ことば</rt></ruby>にできないほど<ruby>美<rt>うつく</rt></ruby>しかった。",
+        "en": "The view from the mountaintop was indescribably beautiful.",
+        "blank": "ほど"
+      }
+    ]
+  },
+  {
+    "id": "hodo-wa-nai",
+    "label": "〜ほど〜はない",
+    "read": "ほど〜はない",
+    "mean": "nothing so … as; not as … as",
+    "jlpt": "N3",
+    "explanation": "A superlative built through denial: \"nothing / no one is as … as X\" (富士山ほど美しい山はない). ほど names X's level and the final negative denies that anything else reaches it — the opposite move from plain ほど, which affirms a degree. As AはBほど〜ない it makes a simple comparison: \"A is not as … as B\". In casual speech くらい can replace ほど here.",
+    "formation": "N ほど + 〜 + はない / A は B ほど + 〜ない",
+    "examples": [
+      {
+        "jp": "<ruby>母<rt>はは</rt></ruby>の<ruby>料理<rt>りょうり</rt></ruby>ほどおいしいものはない。",
+        "en": "Nothing tastes as good as my mother's cooking.",
+        "blank": "ほど"
+      },
+      {
+        "jp": "<ruby>今年<rt>ことし</rt></ruby>の<ruby>夏<rt>なつ</rt></ruby>ほど<ruby>暑<rt>あつ</rt></ruby>い<ruby>夏<rt>なつ</rt></ruby>はなかった。",
+        "en": "No summer has ever been as hot as this one.",
+        "blank": "ほど"
+      },
+      {
+        "jp": "<ruby>富士山<rt>ふじさん</rt></ruby>ほど<ruby>美<rt>うつく</rt></ruby>しい<ruby>山<rt>やま</rt></ruby>はないと<ruby>思<rt>おも</rt></ruby>う。",
+        "en": "I don't think any mountain is as beautiful as Mt. Fuji.",
+        "blank": "ほど"
+      },
+      {
+        "jp": "<ruby>東京<rt>とうきょう</rt></ruby>の<ruby>冬<rt>ふゆ</rt></ruby>は、<ruby>北海道<rt>ほっかいどう</rt></ruby>の<ruby>冬<rt>ふゆ</rt></ruby>ほど<ruby>寒<rt>さむ</rt></ruby>くないです。",
+        "en": "Winters in Tokyo aren't as cold as winters in Hokkaido.",
+        "blank": "ほど"
+      }
+    ]
+  },
+  {
+    "id": "kurai",
+    "label": "〜くらい／ぐらい",
+    "read": "くらい",
+    "mean": "to the degree that; so … that; at least",
+    "jlpt": "N3",
+    "explanation": "Marks degree like ほど, but tends to color it as small, trivial, or a bare minimum: 名前くらい書ける \"I can at least write my name\"; 電話くらいできるでしょう. It also handles \"so … that\" extents in casual speech (歩けないくらい疲れた), where ほど would sound a touch more formal or extreme. ぐらい is a free variant, and both give approximate quantities (三十分くらい).",
+    "formation": "V (plain) / い-adj / N + くらい・ぐらい",
+    "examples": [
+      {
+        "jp": "<ruby>自分<rt>じぶん</rt></ruby>の<ruby>名前<rt>なまえ</rt></ruby>くらい、<ruby>漢字<rt>かんじ</rt></ruby>で<ruby>書<rt>か</rt></ruby>けますよ。",
+        "en": "I can at least write my own name in kanji, you know.",
+        "blank": "くらい"
+      },
+      {
+        "jp": "<ruby>忙<rt>いそが</rt></ruby>しくても、<ruby>電話<rt>でんわ</rt></ruby>くらいはできるでしょう。",
+        "en": "Even if you're busy, you can at least make a phone call.",
+        "blank": "くらい"
+      },
+      {
+        "jp": "<ruby>疲<rt>つか</rt></ruby>れて、もう<ruby>一歩<rt>いっぽ</rt></ruby>も<ruby>歩<rt>ある</rt></ruby>けないくらいだった。",
+        "en": "I was so tired I could hardly take another step.",
+        "blank": "くらい"
+      },
+      {
+        "jp": "<ruby>彼<rt>かれ</rt></ruby>の<ruby>部屋<rt>へや</rt></ruby>は、<ruby>足<rt>あし</rt></ruby>の<ruby>踏<rt>ふ</rt></ruby>み<ruby>場<rt>ば</rt></ruby>もないくらい<ruby>汚<rt>きたな</rt></ruby>かった。",
+        "en": "His room was so messy there was nowhere to step.",
+        "blank": "くらい"
+      }
+    ]
+  },
+  {
+    "id": "nante",
+    "label": "〜なんて／なんか",
+    "read": "なんて",
+    "mean": "things like; (dismissive) such as",
+    "jlpt": "N3",
+    "explanation": "Reacts emotionally to something or plays it down: surprise (当たるなんて！ \"to think I'd win!\"), disbelief, contempt, or modesty. なんて follows nouns or whole clauses; なんか follows nouns, often self-deprecating (私なんか). Both are casual — in careful speech use など. The dismissive tone can sting, so mind what it's aimed at.",
+    "formation": "N・plain clause + なんて / N + なんか",
+    "examples": [
+      {
+        "jp": "<ruby>宝<rt>たから</rt></ruby>くじに<ruby>当<rt>あ</rt></ruby>たるなんて、<ruby>信<rt>しん</rt></ruby>じられない。",
+        "en": "I can't believe I won the lottery.",
+        "blank": "なんて"
+      },
+      {
+        "jp": "<ruby>私<rt>わたし</rt></ruby>の<ruby>料理<rt>りょうり</rt></ruby>なんか、<ruby>母<rt>はは</rt></ruby>の<ruby>味<rt>あじ</rt></ruby>には<ruby>勝<rt>か</rt></ruby>てません。",
+        "en": "My cooking is nothing compared to my mother's.",
+        "blank": "なんか"
+      },
+      {
+        "jp": "<ruby>嘘<rt>うそ</rt></ruby>をつくなんて、あなたらしくないですね。",
+        "en": "Telling a lie? That's not like you.",
+        "blank": "なんて"
+      },
+      {
+        "jp": "<ruby>休<rt>やす</rt></ruby>みの<ruby>日<rt>ひ</rt></ruby>に<ruby>仕事<rt>しごと</rt></ruby>をするなんて、いやだなあ。",
+        "en": "Working on my day off? No thanks.",
+        "blank": "なんて"
+      }
+    ]
+  },
+  {
+    "id": "to-ieba",
+    "label": "〜といえば",
+    "read": "といえば",
+    "mean": "speaking of",
+    "jlpt": "N3",
+    "explanation": "Picks up something just mentioned and runs with it: \"speaking of …\" (旅行といえば), or names the classic association of a topic (京都といえばお寺). Related forms: 〜というと asks about or confirms what something refers to, and 〜といったら adds emotive emphasis. A handy conversation-linker — listen for it in the N3 listening section.",
+    "formation": "N + といえば",
+    "examples": [
+      {
+        "jp": "<ruby>日本<rt>にほん</rt></ruby>の<ruby>食<rt>た</rt></ruby>べ<ruby>物<rt>もの</rt></ruby>といえば、やっぱり<ruby>寿司<rt>すし</rt></ruby>でしょう。",
+        "en": "When it comes to Japanese food, it has to be sushi.",
+        "blank": "といえば"
+      },
+      {
+        "jp": "<ruby>京都<rt>きょうと</rt></ruby>といえば、<ruby>古<rt>ふる</rt></ruby>いお<ruby>寺<rt>てら</rt></ruby>が<ruby>有名<rt>ゆうめい</rt></ruby>です。",
+        "en": "Speaking of Kyoto, it's famous for its old temples.",
+        "blank": "といえば"
+      },
+      {
+        "jp": "<ruby>山田<rt>やまだ</rt></ruby>さんといえば、<ruby>最近<rt>さいきん</rt></ruby><ruby>見<rt>み</rt></ruby>かけませんね。",
+        "en": "Speaking of Yamada-san, I haven't seen him around lately.",
+        "blank": "といえば"
+      },
+      {
+        "jp": "<ruby>旅行<rt>りょこう</rt></ruby>といえば、<ruby>田中<rt>たなか</rt></ruby>さんは<ruby>来月<rt>らいげつ</rt></ruby><ruby>沖縄<rt>おきなわ</rt></ruby>に<ruby>行<rt>い</rt></ruby>くそうですよ。",
+        "en": "Speaking of trips, I hear Tanaka-san is going to Okinawa next month.",
+        "blank": "といえば"
+      }
+    ]
+  },
+  {
+    "id": "tatoe-temo",
+    "label": "たとえ〜ても",
+    "read": "たとえ〜ても",
+    "mean": "even if",
+    "jlpt": "N3",
+    "explanation": "A hypothetical concession: \"even if X, still Y\" — たとえ announces up front that the following ても clause is hypothetical or extreme, and the main clause holds regardless (たとえ雨が降っても行く). Nouns and な-adjectives take たとえ〜でも. It strengthens plain 〜ても; don't confuse it with 〜てもかまわない, which grants permission.",
+    "formation": "たとえ + V-ても / い-adj くても / N・な-adj でも",
+    "examples": [
+      {
+        "jp": "たとえ<ruby>雨<rt>あめ</rt></ruby>が<ruby>降<rt>ふ</rt></ruby>っても、<ruby>試合<rt>しあい</rt></ruby>は<ruby>行<rt>おこな</rt></ruby>われます。",
+        "en": "Even if it rains, the match will go ahead.",
+        "blank": "ても"
+      },
+      {
+        "jp": "たとえ<ruby>失敗<rt>しっぱい</rt></ruby>しても、また<ruby>挑戦<rt>ちょうせん</rt></ruby>すればいい。",
+        "en": "Even if you fail, you can just try again.",
+        "blank": "ても"
+      },
+      {
+        "jp": "たとえ<ruby>冗談<rt>じょうだん</rt></ruby>でも、<ruby>言<rt>い</rt></ruby>ってはいけないことがある。",
+        "en": "Even as a joke, there are things you must not say.",
+        "blank": "でも"
+      },
+      {
+        "jp": "たとえ<ruby>両親<rt>りょうしん</rt></ruby>に<ruby>反対<rt>はんたい</rt></ruby>されても、<ruby>彼<rt>かれ</rt></ruby>と<ruby>結婚<rt>けっこん</rt></ruby>するつもりです。",
+        "en": "Even if my parents oppose it, I intend to marry him.",
+        "blank": "ても"
+      }
+    ]
+  },
+  {
+    "id": "you-to-suru",
+    "label": "〜（よ）うとする",
+    "read": "ようとする",
+    "mean": "try to; be about to",
+    "jlpt": "N3",
+    "explanation": "Volitional + とする expresses an attempt (\"try to\") or the moment just before an action (\"be about to\"): 出ようとしたとき = just as I was about to leave. Don't confuse it with ようにする, which is a sustained habit-effort — 寝ようとした is one attempt on one night, 寝るようにしている is a policy. In the attempt sense it often implies the try failed or was interrupted.",
+    "formation": "V volitional（〜(よ)う）+ とする（出ようとする・行こうとする）",
+    "examples": [
+      {
+        "jp": "<ruby>家<rt>いえ</rt></ruby>を<ruby>出<rt>で</rt></ruby>ようとしたとき、<ruby>電話<rt>でんわ</rt></ruby>が<ruby>鳴<rt>な</rt></ruby>った。",
+        "en": "Just as I was about to leave the house, the phone rang.",
+        "blank": "ようとした"
+      },
+      {
+        "jp": "<ruby>嫌<rt>いや</rt></ruby>なことを<ruby>忘<rt>わす</rt></ruby>れようとしても、なかなか<ruby>忘<rt>わす</rt></ruby>れられない。",
+        "en": "Even when I try to forget unpleasant things, I just can't.",
+        "blank": "ようとしても"
+      },
+      {
+        "jp": "<ruby>寝<rt>ね</rt></ruby>ようとしたら、<ruby>隣<rt>となり</rt></ruby>の<ruby>部屋<rt>へや</rt></ruby>からうるさい<ruby>音<rt>おと</rt></ruby>がした。",
+        "en": "Just when I was about to go to sleep, a loud noise came from the next room.",
+        "blank": "ようとしたら"
+      },
+      {
+        "jp": "<ruby>彼<rt>かれ</rt></ruby>は<ruby>失敗<rt>しっぱい</rt></ruby>しても、また<ruby>新<rt>あたら</rt></ruby>しいことを<ruby>始<rt>はじ</rt></ruby>めようとする。",
+        "en": "Even when he fails, he keeps trying to start something new.",
+        "blank": "ようとする"
+      }
+    ]
+  },
+  {
+    "id": "kawari-ni",
+    "label": "〜かわりに",
+    "read": "かわりに",
+    "mean": "instead of; in exchange for",
+    "jlpt": "N3",
+    "explanation": "Two related uses. After N の it means \"in place of\" (病気の母のかわりに = instead of my sick mother). After a clause it marks an exchange or trade-off — \"in return for / to make up for\" — where the two halves balance out: 働くかわりに休みをもらう. Also written 代わりに; the kana form is equally common.",
+    "formation": "N の / V-dict・V-た (plain) + かわりに",
+    "examples": [
+      {
+        "jp": "<ruby>病気<rt>びょうき</rt></ruby>の<ruby>母<rt>はは</rt></ruby>のかわりに、<ruby>私<rt>わたし</rt></ruby>が<ruby>買<rt>か</rt></ruby>い<ruby>物<rt>もの</rt></ruby>に<ruby>行<rt>い</rt></ruby>った。",
+        "en": "I went shopping in place of my sick mother.",
+        "blank": "かわりに"
+      },
+      {
+        "jp": "<ruby>日曜日<rt>にちようび</rt></ruby>に<ruby>働<rt>はたら</rt></ruby>くかわりに、<ruby>月曜日<rt>げつようび</rt></ruby>は<ruby>休<rt>やす</rt></ruby>みです。",
+        "en": "In exchange for working on Sunday, I get Monday off.",
+        "blank": "かわりに"
+      },
+      {
+        "jp": "<ruby>車<rt>くるま</rt></ruby>を<ruby>買<rt>か</rt></ruby>うかわりに、<ruby>毎年<rt>まいとし</rt></ruby><ruby>旅行<rt>りょこう</rt></ruby>に<ruby>行<rt>い</rt></ruby>くことにした。",
+        "en": "Instead of buying a car, we decided to take a trip every year.",
+        "blank": "かわりに"
+      },
+      {
+        "jp": "<ruby>手伝<rt>てつだ</rt></ruby>ってもらったかわりに、<ruby>昼<rt>ひる</rt></ruby>ご<ruby>飯<rt>はん</rt></ruby>をごちそうした。",
+        "en": "In return for the help, I treated them to lunch.",
+        "blank": "かわりに"
+      }
+    ]
+  },
+  {
+    "id": "wari-ni",
+    "label": "〜わりに",
+    "read": "わりに",
+    "mean": "considering; for",
+    "jlpt": "N3",
+    "explanation": "\"For / considering …\": the result doesn't match the expectation set by the standard — 値段のわりにおいしい (good for the price). The gap can run in either direction, better or worse. Compared with にしては, わりに takes a looser, more general standard; and unlike くせに it carries no criticism — it's a neutral \"more/less than you'd expect\".",
+    "formation": "N の / な-adj な / V・い-adj (plain) + わりに（は）",
+    "examples": [
+      {
+        "jp": "この<ruby>店<rt>みせ</rt></ruby>は<ruby>値段<rt>ねだん</rt></ruby>のわりに<ruby>料理<rt>りょうり</rt></ruby>がおいしい。",
+        "en": "For the price, the food at this place is really good.",
+        "blank": "わりに"
+      },
+      {
+        "jp": "<ruby>父<rt>ちち</rt></ruby>は<ruby>年<rt>とし</rt></ruby>のわりに、ずっと<ruby>若<rt>わか</rt></ruby>く<ruby>見<rt>み</rt></ruby>える。",
+        "en": "My father looks much younger than his age.",
+        "blank": "わりに"
+      },
+      {
+        "jp": "たくさん<ruby>勉強<rt>べんきょう</rt></ruby>したわりに、<ruby>点数<rt>てんすう</rt></ruby>はよくなかった。",
+        "en": "Considering how much I studied, my score wasn't very good.",
+        "blank": "わりに"
+      },
+      {
+        "jp": "この<ruby>仕事<rt>しごと</rt></ruby>は<ruby>大変<rt>たいへん</rt></ruby>なわりに、<ruby>給料<rt>きゅうりょう</rt></ruby>が<ruby>安<rt>やす</rt></ruby>い。",
+        "en": "This job pays poorly for how demanding it is.",
+        "blank": "わりに"
+      }
+    ]
+  },
+  {
+    "id": "muke-muki",
+    "label": "〜向け／〜向き",
+    "read": "むけ・むき",
+    "mean": "intended for / suited to",
+    "jlpt": "N3",
+    "explanation": "向け means deliberately made or targeted FOR a group — the maker's intention: 子ども向けの番組 is produced for kids. 向き means naturally suited TO a group, intended or not: 子ども向きの番組 just happens to suit them. Both attach directly to a noun and continue with の+N, に, or だ. Rule of thumb: \"designed for\" → 向け, \"a good fit for\" → 向き.",
+    "formation": "N + 向け／向き（+ の N / に / だ）",
+    "examples": [
+      {
+        "jp": "これは<ruby>初心者<rt>しょしんしゃ</rt></ruby><ruby>向<rt>む</rt></ruby>けの<ruby>日本語<rt>にほんご</rt></ruby>の<ruby>本<rt>ほん</rt></ruby>です。",
+        "en": "This is a Japanese textbook made for beginners.",
+        "blank": "向け"
+      },
+      {
+        "jp": "この<ruby>会社<rt>かいしゃ</rt></ruby>は<ruby>子<rt>こ</rt></ruby>ども<ruby>向<rt>む</rt></ruby>けのゲームを<ruby>作<rt>つく</rt></ruby>っている。",
+        "en": "This company makes games aimed at children.",
+        "blank": "向け"
+      },
+      {
+        "jp": "この<ruby>仕事<rt>しごと</rt></ruby>は<ruby>体力<rt>たいりょく</rt></ruby>のある<ruby>人<rt>ひと</rt></ruby><ruby>向<rt>む</rt></ruby>きだ。",
+        "en": "This job is suited to people with stamina.",
+        "blank": "向き"
+      },
+      {
+        "jp": "このあっさりした<ruby>味<rt>あじ</rt></ruby>は、お<ruby>年寄<rt>としよ</rt></ruby>り<ruby>向<rt>む</rt></ruby>きだと<ruby>思<rt>おも</rt></ruby>う。",
+        "en": "I think this light flavor is a good fit for elderly people.",
+        "blank": "向き"
+      }
+    ]
+  },
+  {
+    "id": "baai-wa",
+    "label": "〜場合は",
+    "read": "ばあいは",
+    "mean": "in the case of; if",
+    "jlpt": "N3",
+    "explanation": "A formal \"if / in the event that\", the staple of announcements, rules, and instructions: 火事の場合は… 場合 is a noun, so attachment is noun-style: V plain + 場合, N の場合, な-adj な場合. Unlike たら it frames a whole hypothetical situation rather than a sequence of events, and it sounds official — stations and offices use it constantly.",
+    "formation": "V (plain) / い-adj / な-adj な / N の + 場合は",
+    "examples": [
+      {
+        "jp": "<ruby>火事<rt>かじ</rt></ruby>の<ruby>場合<rt>ばあい</rt></ruby>は、エレベーターを<ruby>使<rt>つか</rt></ruby>わないでください。",
+        "en": "In case of fire, do not use the elevator.",
+        "blank": "場合は"
+      },
+      {
+        "jp": "<ruby>遅<rt>おく</rt></ruby>れる<ruby>場合<rt>ばあい</rt></ruby>は、<ruby>必<rt>かなら</rt></ruby>ず<ruby>連絡<rt>れんらく</rt></ruby>してください。",
+        "en": "If you're going to be late, be sure to let us know.",
+        "blank": "場合は"
+      },
+      {
+        "jp": "<ruby>雨<rt>あめ</rt></ruby>が<ruby>降<rt>ふ</rt></ruby>った<ruby>場合<rt>ばあい</rt></ruby>は、<ruby>試合<rt>しあい</rt></ruby>は<ruby>中止<rt>ちゅうし</rt></ruby>になります。",
+        "en": "If it rains, the match will be called off.",
+        "blank": "場合は"
+      },
+      {
+        "jp": "レシートが<ruby>必要<rt>ひつよう</rt></ruby>な<ruby>場合<rt>ばあい</rt></ruby>は、スタッフに<ruby>言<rt>い</rt></ruby>ってください。",
+        "en": "If you need a receipt, please tell a member of staff.",
+        "blank": "場合は"
+      }
+    ]
+  },
+  {
+    "id": "tochuu-de",
+    "label": "〜途中で",
+    "read": "とちゅうで",
+    "mean": "on the way; in the middle of",
+    "jlpt": "N3",
+    "explanation": "\"Partway through\" a movement or an ongoing event: 行く途中で = on the way there, 会議の途中で = in the middle of the meeting. The verb stays in the dictionary form even when the whole sentence is past (行く途中で会った — never 行った途中で). 最中に is the dramatic cousin (\"at the very height of, when something interrupted\"); 途中で is neutral.",
+    "formation": "V-dict / N の + 途中で",
+    "examples": [
+      {
+        "jp": "<ruby>学校<rt>がっこう</rt></ruby>へ<ruby>行<rt>い</rt></ruby>く<ruby>途中<rt>とちゅう</rt></ruby>で、<ruby>先生<rt>せんせい</rt></ruby>に<ruby>会<rt>あ</rt></ruby>った。",
+        "en": "I ran into my teacher on the way to school.",
+        "blank": "途中で"
+      },
+      {
+        "jp": "<ruby>会議<rt>かいぎ</rt></ruby>の<ruby>途中<rt>とちゅう</rt></ruby>で、<ruby>電話<rt>でんわ</rt></ruby>が<ruby>鳴<rt>な</rt></ruby>ってしまった。",
+        "en": "My phone went off in the middle of the meeting.",
+        "blank": "途中で"
+      },
+      {
+        "jp": "<ruby>帰<rt>かえ</rt></ruby>る<ruby>途中<rt>とちゅう</rt></ruby>で、コンビニに<ruby>寄<rt>よ</rt></ruby>って<ruby>牛乳<rt>ぎゅうにゅう</rt></ruby>を<ruby>買<rt>か</rt></ruby>った。",
+        "en": "On my way home I stopped by a convenience store and bought milk.",
+        "blank": "途中で"
+      },
+      {
+        "jp": "<ruby>疲<rt>つか</rt></ruby>れていて、<ruby>映画<rt>えいが</rt></ruby>の<ruby>途中<rt>とちゅう</rt></ruby>で<ruby>寝<rt>ね</rt></ruby>てしまった。",
+        "en": "I was so tired I fell asleep partway through the movie.",
+        "blank": "途中で"
+      }
+    ]
+  },
+  {
+    "id": "tame-ni",
+    "label": "〜ため（に）",
+    "read": "ために",
+    "mean": "for; in order to; because of",
+    "jlpt": "N3",
+    "explanation": "One shape, two jobs. Purpose: V-dict / N の + ために = \"in order to, for the sake of\" (大学に入るために), with an action the subject controls. Cause: plain past / N の + ため（に） = a formal \"because of\" (台風のために電車が止まった). Read the verb to disambiguate: volitional → purpose, non-volitional or past → reason. In the cause sense it's stiffer than から／ので — common in news and announcements.",
+    "formation": "purpose: V-dict / N の + ために ・ cause: V・adj (plain) / N の + ため（に）",
+    "examples": [
+      {
+        "jp": "<ruby>家族<rt>かぞく</rt></ruby>のために、<ruby>毎日<rt>まいにち</rt></ruby><ruby>働<rt>はたら</rt></ruby>いている。",
+        "en": "I work every day for my family's sake.",
+        "blank": "ために"
+      },
+      {
+        "jp": "<ruby>大学<rt>だいがく</rt></ruby>に<ruby>入<rt>はい</rt></ruby>るために、<ruby>毎晩<rt>まいばん</rt></ruby><ruby>勉強<rt>べんきょう</rt></ruby>している。",
+        "en": "I study every night in order to get into university.",
+        "blank": "ために"
+      },
+      {
+        "jp": "<ruby>台風<rt>たいふう</rt></ruby>のために、<ruby>電車<rt>でんしゃ</rt></ruby>が<ruby>止<rt>と</rt></ruby>まっている。",
+        "en": "The trains are stopped because of the typhoon.",
+        "blank": "ために"
+      },
+      {
+        "jp": "<ruby>事故<rt>じこ</rt></ruby>があったために、<ruby>道<rt>みち</rt></ruby>が<ruby>混<rt>こ</rt></ruby>んでいる。",
+        "en": "The roads are congested because there was an accident.",
+        "blank": "ために"
+      }
+    ]
+  },
+  {
+    "id": "ippou-da",
+    "label": "〜一方だ",
+    "read": "いっぽうだ",
+    "mean": "keeps on …-ing (moving in one direction)",
+    "jlpt": "N3",
+    "explanation": "Attaches to a dictionary-form verb of change (増える・減る・上がる…) and says the change keeps moving in that one direction, often with a worried tone: 物価は上がる一方だ = prices do nothing but rise. Don't confuse it with 〜一方（で）, which contrasts two sides (\"on the other hand\"). 〜ばかりだ is a close synonym but is used only for changes for the worse.",
+    "formation": "V-dict (a change verb: 増える・減る・上がる…) + 一方だ",
+    "examples": [
+      {
+        "jp": "<ruby>今年<rt>ことし</rt></ruby>に<ruby>入<rt>はい</rt></ruby>って、<ruby>物価<rt>ぶっか</rt></ruby>は<ruby>上<rt>あ</rt></ruby>がる<ruby>一方<rt>いっぽう</rt></ruby>だ。",
+        "en": "Since the start of this year, prices have done nothing but rise.",
+        "blank": "一方だ"
+      },
+      {
+        "jp": "この<ruby>町<rt>まち</rt></ruby>では、<ruby>子<rt>こ</rt></ruby>どもの<ruby>数<rt>かず</rt></ruby>が<ruby>減<rt>へ</rt></ruby>る<ruby>一方<rt>いっぽう</rt></ruby>だ。",
+        "en": "In this town, the number of children just keeps falling.",
+        "blank": "一方だ"
+      },
+      {
+        "jp": "<ruby>仕事<rt>しごと</rt></ruby>が<ruby>忙<rt>いそが</rt></ruby>しくて、ストレスはたまる<ruby>一方<rt>いっぽう</rt></ruby>だ。",
+        "en": "Work is so busy that my stress just keeps piling up.",
+        "blank": "一方だ"
+      },
+      {
+        "jp": "<ruby>練習<rt>れんしゅう</rt></ruby>しないと、<ruby>日本語<rt>にほんご</rt></ruby>は<ruby>忘<rt>わす</rt></ruby>れる<ruby>一方<rt>いっぽう</rt></ruby>ですよ。",
+        "en": "If you don't practice, your Japanese will only keep slipping away.",
+        "blank": "一方です"
+      }
+    ]
+  },
+  {
+    "id": "nakanaka-nai",
+    "label": "なかなか〜ない",
+    "read": "なかなか〜ない",
+    "mean": "not easily; hardly",
+    "jlpt": "N3",
+    "explanation": "Something you're waiting for or working toward just won't happen easily — impatience at resistance: バスがなかなか来ない. It's about DIFFICULTY, not frequency: めったに〜ない = it does happen but rarely, 決して〜ない = it never happens as a matter of will. Often pairs with a negative potential (なかなか覚えられない). Polarity trap: before a positive word なかなか means \"quite\" (なかなかいい).",
+    "formation": "なかなか + V-ない（often potential: なかなか〜られない）",
+    "examples": [
+      {
+        "jp": "バスがなかなか<ruby>来<rt>こ</rt></ruby>なくて、<ruby>遅刻<rt>ちこく</rt></ruby>しそうだ。",
+        "en": "The bus just won't come, and I'm about to be late.",
+        "blank": "なかなか"
+      },
+      {
+        "jp": "<ruby>漢字<rt>かんじ</rt></ruby>の<ruby>読<rt>よ</rt></ruby>み<ruby>方<rt>かた</rt></ruby>がなかなか<ruby>覚<rt>おぼ</rt></ruby>えられない。",
+        "en": "I just can't seem to memorize kanji readings.",
+        "blank": "なかなか"
+      },
+      {
+        "jp": "<ruby>夜<rt>よる</rt></ruby>、コーヒーを<ruby>飲<rt>の</rt></ruby>むと、なかなか<ruby>眠<rt>ねむ</rt></ruby>れない。",
+        "en": "If I drink coffee at night, it's hard to fall asleep.",
+        "blank": "なかなか"
+      },
+      {
+        "jp": "<ruby>仕事<rt>しごと</rt></ruby>が<ruby>忙<rt>いそが</rt></ruby>しくて、<ruby>運動<rt>うんどう</rt></ruby>する<ruby>時間<rt>じかん</rt></ruby>がなかなか<ruby>取<rt>と</rt></ruby>れない。",
+        "en": "Work is so busy that I can hardly find time to exercise.",
+        "blank": "なかなか"
+      }
+    ]
+  },
+  {
+    "id": "mettani-nai",
+    "label": "めったに〜ない",
+    "read": "めったに〜ない",
+    "mean": "rarely; seldom",
+    "jlpt": "N3",
+    "explanation": "Pure FREQUENCY: \"rarely, hardly ever\" — the event does occur, just very seldom (父はめったに怒らない). It leaves room for exceptions, unlike 決して〜ない, an absolute zero backed by will or judgment; and it counts how often, while なかなか〜ない is about a wanted result that resists coming. Always takes a negative; めったにない on its own = \"(such chances) are rare\".",
+    "formation": "めったに + V-ない（めったにない）",
+    "examples": [
+      {
+        "jp": "<ruby>父<rt>ちち</rt></ruby>はめったに<ruby>怒<rt>おこ</rt></ruby>らないが、<ruby>怒<rt>おこ</rt></ruby>ると<ruby>怖<rt>こわ</rt></ruby>い。",
+        "en": "My father rarely gets angry, but he's scary when he does.",
+        "blank": "めったに"
+      },
+      {
+        "jp": "<ruby>忙<rt>いそが</rt></ruby>しくて、めったに<ruby>映画<rt>えいが</rt></ruby>を<ruby>見<rt>み</rt></ruby>に<ruby>行<rt>い</rt></ruby>かない。",
+        "en": "I'm so busy that I hardly ever go to see movies.",
+        "blank": "めったに"
+      },
+      {
+        "jp": "こんなチャンスはめったにないから、ぜひ<ruby>参加<rt>さんか</rt></ruby>したい。",
+        "en": "Chances like this are rare, so I definitely want to take part.",
+        "blank": "めったに"
+      },
+      {
+        "jp": "<ruby>祖母<rt>そぼ</rt></ruby>は<ruby>元気<rt>げんき</rt></ruby>で、めったに<ruby>病気<rt>びょうき</rt></ruby>にならない。",
+        "en": "My grandmother is in good health and rarely gets sick.",
+        "blank": "めったに"
+      }
+    ]
+  },
+  {
+    "id": "kesshite-nai",
+    "label": "決して〜ない",
+    "read": "けっして〜ない",
+    "mean": "never; by no means",
+    "jlpt": "N3",
+    "explanation": "The strongest of the negative adverbs: an absolute \"never / by no means\" backed by willpower or firm judgment — vows (決して忘れません), resolutions, prohibitions (決して開けてはいけません). It admits no exceptions, unlike めったに〜ない (rare but possible) or 必ずしも〜ない (true in some cases only). Emphatic and a little weighty — casual speech usually reaches for 絶対に instead.",
+    "formation": "決して + V-ない・〜ません／negative expression（〜てはいけない）",
+    "examples": [
+      {
+        "jp": "<ruby>皆<rt>みな</rt></ruby>さんの<ruby>親切<rt>しんせつ</rt></ruby>は<ruby>決<rt>けっ</rt></ruby>して<ruby>忘<rt>わす</rt></ruby>れません。",
+        "en": "I will never forget your kindness.",
+        "blank": "決して"
+      },
+      {
+        "jp": "<ruby>決<rt>けっ</rt></ruby>してうそをつかないと<ruby>約束<rt>やくそく</rt></ruby>した。",
+        "en": "I promised never to tell a lie.",
+        "blank": "決して"
+      },
+      {
+        "jp": "ここで<ruby>泳<rt>およ</rt></ruby>ぐのは<ruby>決<rt>けっ</rt></ruby>して<ruby>安全<rt>あんぜん</rt></ruby>ではない。",
+        "en": "Swimming here is by no means safe.",
+        "blank": "決して"
+      },
+      {
+        "jp": "このドアは<ruby>決<rt>けっ</rt></ruby>して<ruby>開<rt>あ</rt></ruby>けてはいけません。",
+        "en": "You must never open this door.",
+        "blank": "決して"
+      }
+    ]
+  },
+  {
+    "id": "kanarazushimo",
+    "label": "必ずしも〜ない",
+    "read": "かならずしも〜ない",
+    "mean": "not necessarily; not always",
+    "jlpt": "N3",
+    "explanation": "PARTIAL negation: \"not necessarily / not always\" — it denies only the \"in every case\" part, so some cases remain true: 高いものが必ずしもいいとは限らない. It usually ends in とは限らない or わけではない rather than a bare ない. Keep it apart from 決して〜ない, which wipes out all cases; 必ずしも just breaks the generalization. Logical and slightly formal — at home in essays and opinions.",
+    "formation": "必ずしも + 〜ない（とは限らない・わけではない）",
+    "examples": [
+      {
+        "jp": "<ruby>高<rt>たか</rt></ruby>いものが<ruby>必<rt>かなら</rt></ruby>ずしもいいとは<ruby>限<rt>かぎ</rt></ruby>らない。",
+        "en": "Expensive things aren't necessarily good.",
+        "blank": "必ずしも"
+      },
+      {
+        "jp": "<ruby>有名<rt>ゆうめい</rt></ruby>な<ruby>店<rt>みせ</rt></ruby>が<ruby>必<rt>かなら</rt></ruby>ずしもおいしいわけではない。",
+        "en": "Famous restaurants aren't always delicious.",
+        "blank": "必ずしも"
+      },
+      {
+        "jp": "お<ruby>金<rt>かね</rt></ruby>があれば<ruby>必<rt>かなら</rt></ruby>ずしも<ruby>幸<rt>しあわ</rt></ruby>せになれるわけではない。",
+        "en": "Having money doesn't necessarily mean you can be happy.",
+        "blank": "必ずしも"
+      },
+      {
+        "jp": "<ruby>薬<rt>くすり</rt></ruby>を<ruby>飲<rt>の</rt></ruby>めば<ruby>必<rt>かなら</rt></ruby>ずしもすぐ<ruby>治<rt>なお</rt></ruby>るわけではない。",
+        "en": "Taking medicine doesn't always mean you'll get better right away.",
+        "blank": "必ずしも"
+      }
+    ]
+  },
+  {
+    "id": "betsu-ni-nai",
+    "label": "別に〜ない",
+    "read": "べつに〜ない",
+    "mean": "not particularly",
+    "jlpt": "N3",
+    "explanation": "Casual, dismissive negation: \"not particularly / nothing special\" (別に用事はない). It downplays the whole matter, where めったに measures frequency, なかなか marks a result resisting your effort, and 決して makes an absolute vow. On its own as an answer, 「別に。」 sounds curt or sulky — soften it in polite speech (別に何もありません).",
+    "formation": "別に + V・adj (negative 〜ない・〜ません)",
+    "examples": [
+      {
+        "jp": "<ruby>別<rt>べつ</rt></ruby>に<ruby>用事<rt>ようじ</rt></ruby>はないけど、<ruby>声<rt>こえ</rt></ruby>が<ruby>聞<rt>き</rt></ruby>きたくて<ruby>電話<rt>でんわ</rt></ruby>した。",
+        "en": "It's nothing in particular — I just wanted to hear your voice, so I called.",
+        "blank": "別に"
+      },
+      {
+        "jp": "<ruby>辛<rt>から</rt></ruby>いものは<ruby>別<rt>べつ</rt></ruby>に<ruby>好<rt>す</rt></ruby>きでも<ruby>嫌<rt>きら</rt></ruby>いでもない。",
+        "en": "I don't particularly like or dislike spicy food.",
+        "blank": "別に"
+      },
+      {
+        "jp": "<ruby>一人<rt>ひとり</rt></ruby>で<ruby>行<rt>い</rt></ruby>っても、<ruby>別<rt>べつ</rt></ruby>に<ruby>怖<rt>こわ</rt></ruby>くないよ。",
+        "en": "Even if I go alone, it's not really scary.",
+        "blank": "別に"
+      },
+      {
+        "jp": "<ruby>遅<rt>おく</rt></ruby>れても<ruby>別<rt>べつ</rt></ruby>に<ruby>問題<rt>もんだい</rt></ruby>はありませんよ。",
+        "en": "It's no particular problem even if you're a bit late.",
+        "blank": "別に"
       }
     ]
   }

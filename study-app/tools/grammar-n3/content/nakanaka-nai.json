@@ -1,0 +1,27 @@
+{
+  "id": "nakanaka-nai",
+  "explanation": "Something you're waiting for or working toward just won't happen easily — impatience at resistance: バスがなかなか来ない. It's about DIFFICULTY, not frequency: めったに〜ない = it does happen but rarely, 決して〜ない = it never happens as a matter of will. Often pairs with a negative potential (なかなか覚えられない). Polarity trap: before a positive word なかなか means \"quite\" (なかなかいい).",
+  "formation": "なかなか + V-ない（often potential: なかなか〜られない）",
+  "examples": [
+    {
+      "jp": "バスがなかなか<ruby>来<rt>こ</rt></ruby>なくて、<ruby>遅刻<rt>ちこく</rt></ruby>しそうだ。",
+      "en": "The bus just won't come, and I'm about to be late.",
+      "blank": "なかなか"
+    },
+    {
+      "jp": "<ruby>漢字<rt>かんじ</rt></ruby>の<ruby>読<rt>よ</rt></ruby>み<ruby>方<rt>かた</rt></ruby>がなかなか<ruby>覚<rt>おぼ</rt></ruby>えられない。",
+      "en": "I just can't seem to memorize kanji readings.",
+      "blank": "なかなか"
+    },
+    {
+      "jp": "<ruby>夜<rt>よる</rt></ruby>、コーヒーを<ruby>飲<rt>の</rt></ruby>むと、なかなか<ruby>眠<rt>ねむ</rt></ruby>れない。",
+      "en": "If I drink coffee at night, it's hard to fall asleep.",
+      "blank": "なかなか"
+    },
+    {
+      "jp": "<ruby>仕事<rt>しごと</rt></ruby>が<ruby>忙<rt>いそが</rt></ruby>しくて、<ruby>運動<rt>うんどう</rt></ruby>する<ruby>時間<rt>じかん</rt></ruby>がなかなか<ruby>取<rt>と</rt></ruby>れない。",
+      "en": "Work is so busy that I can hardly find time to exercise.",
+      "blank": "なかなか"
+    }
+  ]
+}

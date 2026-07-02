@@ -1,0 +1,27 @@
+{
+  "id": "wari-ni",
+  "explanation": "\"For / considering …\": the result doesn't match the expectation set by the standard — 値段のわりにおいしい (good for the price). The gap can run in either direction, better or worse. Compared with にしては, わりに takes a looser, more general standard; and unlike くせに it carries no criticism — it's a neutral \"more/less than you'd expect\".",
+  "formation": "N の / な-adj な / V・い-adj (plain) + わりに（は）",
+  "examples": [
+    {
+      "jp": "この<ruby>店<rt>みせ</rt></ruby>は<ruby>値段<rt>ねだん</rt></ruby>のわりに<ruby>料理<rt>りょうり</rt></ruby>がおいしい。",
+      "en": "For the price, the food at this place is really good.",
+      "blank": "わりに"
+    },
+    {
+      "jp": "<ruby>父<rt>ちち</rt></ruby>は<ruby>年<rt>とし</rt></ruby>のわりに、ずっと<ruby>若<rt>わか</rt></ruby>く<ruby>見<rt>み</rt></ruby>える。",
+      "en": "My father looks much younger than his age.",
+      "blank": "わりに"
+    },
+    {
+      "jp": "たくさん<ruby>勉強<rt>べんきょう</rt></ruby>したわりに、<ruby>点数<rt>てんすう</rt></ruby>はよくなかった。",
+      "en": "Considering how much I studied, my score wasn't very good.",
+      "blank": "わりに"
+    },
+    {
+      "jp": "この<ruby>仕事<rt>しごと</rt></ruby>は<ruby>大変<rt>たいへん</rt></ruby>なわりに、<ruby>給料<rt>きゅうりょう</rt></ruby>が<ruby>安<rt>やす</rt></ruby>い。",
+      "en": "This job pays poorly for how demanding it is.",
+      "blank": "わりに"
+    }
+  ]
+}

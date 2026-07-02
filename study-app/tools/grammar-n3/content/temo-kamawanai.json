@@ -1,0 +1,27 @@
+{
+  "id": "temo-kamawanai",
+  "explanation": "Gives permission or expresses indifference: \"it's fine even if …; I don't mind\". A slightly more reserved cousin of 〜てもいい — かまわない literally means \"it doesn't matter to me\", so it often signals no objection rather than warm approval. The negative 〜なくてもかまわない means \"you don't have to\". Polite form: 〜てもかまいません.",
+  "formation": "V-て / い-adj くて + もかまわない；N・な-adj + でもかまわない",
+  "examples": [
+    {
+      "jp": "このペンを<ruby>使<rt>つか</rt></ruby>ってもかまわないよ。",
+      "en": "You can use this pen — I don't mind.",
+      "blank": "てもかまわない"
+    },
+    {
+      "jp": "<ruby>写真<rt>しゃしん</rt></ruby>を<ruby>撮<rt>と</rt></ruby>ってもかまいませんか。",
+      "en": "Do you mind if I take a photo?",
+      "blank": "てもかまいません"
+    },
+    {
+      "jp": "<ruby>狭<rt>せま</rt></ruby>くてもかまわないから、<ruby>駅<rt>えき</rt></ruby>に<ruby>近<rt>ちか</rt></ruby>い<ruby>部屋<rt>へや</rt></ruby>がいい。",
+      "en": "I don't mind if it's small — I want a room close to the station.",
+      "blank": "てもかまわない"
+    },
+    {
+      "jp": "<ruby>中古<rt>ちゅうこ</rt></ruby>でもかまわないので、<ruby>安<rt>やす</rt></ruby>いパソコンを<ruby>探<rt>さが</rt></ruby>しています。",
+      "en": "A used one is fine, so I'm looking for a cheap computer.",
+      "blank": "でもかまわない"
+    }
+  ]
+}

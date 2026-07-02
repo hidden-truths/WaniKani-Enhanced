@@ -1,0 +1,27 @@
+{
+  "id": "toori-ni",
+  "explanation": "\"Exactly as / in the way that\": the action matches a model, instruction, or expectation. After a verb it's とおりに (言ったとおりに); after a noun it's N のとおりに — or the noun fuses directly as N どおりに (予定どおり), with the reading voiced to どおり. The に can drop in casual speech.",
+  "formation": "V-dict / V-た + とおりに、N の + とおりに（N + どおりに）",
+  "examples": [
+    {
+      "jp": "<ruby>先生<rt>せんせい</rt></ruby>が<ruby>言<rt>い</rt></ruby>ったとおりに、<ruby>毎日<rt>まいにち</rt></ruby><ruby>練習<rt>れんしゅう</rt></ruby>してください。",
+      "en": "Please practice every day, just as the teacher said.",
+      "blank": "とおりに"
+    },
+    {
+      "jp": "<ruby>説明書<rt>せつめいしょ</rt></ruby>のとおりに、<ruby>棚<rt>たな</rt></ruby>を<ruby>組<rt>く</rt></ruby>み<ruby>立<rt>た</rt></ruby>てた。",
+      "en": "I assembled the shelf according to the instructions.",
+      "blank": "とおりに"
+    },
+    {
+      "jp": "<ruby>私<rt>わたし</rt></ruby>がやるとおりに、やってみてください。",
+      "en": "Try doing it exactly the way I do it.",
+      "blank": "とおりに"
+    },
+    {
+      "jp": "レシピのとおりに<ruby>作<rt>つく</rt></ruby>ったのに、<ruby>味<rt>あじ</rt></ruby>が<ruby>変<rt>へん</rt></ruby>だ。",
+      "en": "I made it exactly as the recipe said, but it tastes strange.",
+      "blank": "とおりに"
+    }
+  ]
+}

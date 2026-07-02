@@ -1,0 +1,27 @@
+{
+  "id": "dake-de-naku",
+  "explanation": "\"Not only … but also\" — the most neutral, everyday member of the family; the added B is usually marked with も. Attaches to nouns directly and to plain-form verbs and adjectives (な-adjectives take な). ばかりでなく is a slightly more emphatic equivalent, and 〜はもちろん frames A as obvious.",
+  "formation": "N ／ 普通形（な-adj な）+ だけでなく、…も",
+  "examples": [
+    {
+      "jp": "<ruby>平日<rt>へいじつ</rt></ruby>だけでなく、<ruby>週末<rt>しゅうまつ</rt></ruby>も<ruby>働<rt>はたら</rt></ruby>いています。",
+      "en": "I work not only on weekdays but on weekends too.",
+      "blank": "だけでなく"
+    },
+    {
+      "jp": "この<ruby>料理<rt>りょうり</rt></ruby>は<ruby>見<rt>み</rt></ruby>た<ruby>目<rt>め</rt></ruby>だけでなく、<ruby>味<rt>あじ</rt></ruby>もすばらしい。",
+      "en": "This dish isn't just beautiful to look at — it tastes wonderful too.",
+      "blank": "だけでなく"
+    },
+    {
+      "jp": "<ruby>漢字<rt>かんじ</rt></ruby>が<ruby>読<rt>よ</rt></ruby>めるだけでなく、<ruby>書<rt>か</rt></ruby>くこともできます。",
+      "en": "I can not only read kanji but also write them.",
+      "blank": "だけでなく"
+    },
+    {
+      "jp": "<ruby>彼<rt>かれ</rt></ruby>は<ruby>親切<rt>しんせつ</rt></ruby>なだけでなく、ユーモアもある。",
+      "en": "He's not only kind — he has a sense of humor too.",
+      "blank": "だけでなく"
+    }
+  ]
+}

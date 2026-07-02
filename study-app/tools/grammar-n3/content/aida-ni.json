@@ -1,0 +1,27 @@
+{
+  "id": "aida-ni",
+  "explanation": "間に places an event at some point within a clearly bounded span: 留守の間に荷物が届いた (the package came at some point while I was out). Without に, 〜間 means the action lasted the WHOLE span; with に it happens once inside it. It is neutral about urgency — compare うちに (\"before the window closes\") and 最中に (\"right at the peak, usually interrupted\").",
+  "formation": "V-ている / V-dict / N の + 間に",
+  "examples": [
+    {
+      "jp": "<ruby>昼休<rt>ひるやす</rt></ruby>みの<ruby>間<rt>あいだ</rt></ruby>に、<ruby>銀行<rt>ぎんこう</rt></ruby>へ<ruby>行<rt>い</rt></ruby>ってきた。",
+      "en": "I made a trip to the bank during my lunch break.",
+      "blank": "間に"
+    },
+    {
+      "jp": "<ruby>留守<rt>るす</rt></ruby>の<ruby>間<rt>あいだ</rt></ruby>に、<ruby>荷物<rt>にもつ</rt></ruby>が<ruby>届<rt>とど</rt></ruby>いていた。",
+      "en": "A package had arrived while I was out.",
+      "blank": "間に"
+    },
+    {
+      "jp": "<ruby>寝<rt>ね</rt></ruby>ている<ruby>間<rt>あいだ</rt></ruby>に、<ruby>雪<rt>ゆき</rt></ruby>が<ruby>積<rt>つ</rt></ruby>もっていた。",
+      "en": "Snow had piled up while I was sleeping.",
+      "blank": "間に"
+    },
+    {
+      "jp": "<ruby>日本<rt>にほん</rt></ruby>にいる<ruby>間<rt>あいだ</rt></ruby>に、<ruby>富士山<rt>ふじさん</rt></ruby>に<ruby>登<rt>のぼ</rt></ruby>ってみたい。",
+      "en": "While I'm in Japan, I'd like to climb Mt. Fuji.",
+      "blank": "間に"
+    }
+  ]
+}

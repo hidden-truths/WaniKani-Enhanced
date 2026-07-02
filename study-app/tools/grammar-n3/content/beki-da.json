@@ -1,0 +1,27 @@
+{
+  "id": "beki-da",
+  "explanation": "A strong 'should / ought to': the speaker asserts what is right or proper to do. It's more forceful than 〜たほうがいい (advice), and unlike ものだ — which appeals to general social common sense — べきだ presents the speaker's own judgment. The negative is べきではない ('shouldn't'), and with する both するべき and すべき are accepted. Don't use it for laws or fixed rules; that's なければならない.",
+  "formation": "V-dict + べきだ（する → すべきだ／するべきだ）；否定は V-dict + べきではない",
+  "examples": [
+    {
+      "jp": "<ruby>学生<rt>がくせい</rt></ruby>のうちに、もっと<ruby>本<rt>ほん</rt></ruby>を<ruby>読<rt>よ</rt></ruby>むべきだ。",
+      "en": "While you're a student, you should read more books.",
+      "blank": "べきだ"
+    },
+    {
+      "jp": "<ruby>体<rt>からだ</rt></ruby>の<ruby>調子<rt>ちょうし</rt></ruby>が<ruby>悪<rt>わる</rt></ruby>いなら、<ruby>早<rt>はや</rt></ruby>く<ruby>病院<rt>びょういん</rt></ruby>に<ruby>行<rt>い</rt></ruby>くべきだよ。",
+      "en": "If you're not feeling well, you should get to a hospital right away.",
+      "blank": "べきだ"
+    },
+    {
+      "jp": "<ruby>人<rt>ひと</rt></ruby>の<ruby>悪口<rt>わるぐち</rt></ruby>を<ruby>言<rt>い</rt></ruby>うべきではないと<ruby>思<rt>おも</rt></ruby>う。",
+      "en": "I don't think you should speak ill of others.",
+      "blank": "べきではない"
+    },
+    {
+      "jp": "<ruby>大事<rt>だいじ</rt></ruby>なことは、<ruby>家族<rt>かぞく</rt></ruby>と<ruby>相談<rt>そうだん</rt></ruby>して<ruby>決<rt>き</rt></ruby>めるべきです。",
+      "en": "Important matters should be decided after talking them over with your family.",
+      "blank": "べきです"
+    }
+  ]
+}

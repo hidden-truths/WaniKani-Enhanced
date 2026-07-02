@@ -1,0 +1,27 @@
+{
+  "id": "te-hajimete",
+  "explanation": "V-て + はじめて means \"only after doing X …\" — the experience of X is what first made the realization or event possible: 病気になってはじめて健康の大切さが分かった. The second clause is usually 分かる・気づく・知る. It is stronger than the plain adverb 初めて (\"for the first time\"): the て-form connection insists that without X, it would never have happened.",
+  "formation": "V-て + はじめて",
+  "examples": [
+    {
+      "jp": "<ruby>病気<rt>びょうき</rt></ruby>になってはじめて、<ruby>健康<rt>けんこう</rt></ruby>の<ruby>大切<rt>たいせつ</rt></ruby>さが<ruby>分<rt>わ</rt></ruby>かった。",
+      "en": "Only after getting sick did I understand how precious health is.",
+      "blank": "てはじめて"
+    },
+    {
+      "jp": "<ruby>日本<rt>にほん</rt></ruby>に<ruby>来<rt>き</rt></ruby>てはじめて、<ruby>本物<rt>ほんもの</rt></ruby>の<ruby>桜<rt>さくら</rt></ruby>を<ruby>見<rt>み</rt></ruby>た。",
+      "en": "It was only after coming to Japan that I saw real cherry blossoms.",
+      "blank": "てはじめて"
+    },
+    {
+      "jp": "<ruby>一人暮<rt>ひとりぐ</rt></ruby>らしをしてはじめて、<ruby>親<rt>おや</rt></ruby>のありがたさに<ruby>気<rt>き</rt></ruby>づいた。",
+      "en": "Only once I lived on my own did I realize how much my parents did for me.",
+      "blank": "てはじめて"
+    },
+    {
+      "jp": "<ruby>失<rt>うしな</rt></ruby>ってはじめて、その<ruby>人<rt>ひと</rt></ruby>の<ruby>大切<rt>たいせつ</rt></ruby>さが<ruby>分<rt>わ</rt></ruby>かるものだ。",
+      "en": "It's only after losing someone that you realize how much they mattered.",
+      "blank": "てはじめて"
+    }
+  ]
+}
