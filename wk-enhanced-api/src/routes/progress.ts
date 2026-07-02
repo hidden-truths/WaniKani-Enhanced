@@ -5,8 +5,8 @@
 //   PUT /v1/progress/{app}   — replace the saved blob
 //
 // `{app}` namespaces progress per surface (verbs / custom-verbs / settings / minna /
-// selftalk / songs / wanikani — see the enum below). The stored blob is opaque to the
-// server (z.any()); the client owns its shape.
+// selftalk / songs / wanikani / jlpt — see the enum below). The stored blob is opaque
+// to the server (z.any()); the client owns its shape.
 
 import { OpenAPIHono, createRoute, z } from '@hono/zod-openapi';
 import * as db from '../db/client.ts';
@@ -36,7 +36,8 @@ const AppParamSchema = z.object({
         // 'wanikani'     = 鰐蟹/WaniKani tab: the user's WK API token + small prefs (WK DATA is
         //                  never stored here — it lives in the client's IndexedDB, re-syncable
         //                  from api.wanikani.com at any time)
-        .enum(['verbs', 'custom-verbs', 'settings', 'minna', 'selftalk', 'songs', 'wanikani'])
+        // 'jlpt'         = 合格/JLPT tab: target level + exam date + the rolling daily-checklist record
+        .enum(['verbs', 'custom-verbs', 'settings', 'minna', 'selftalk', 'songs', 'wanikani', 'jlpt'])
         .openapi({ param: { name: 'app', in: 'path' }, example: 'verbs' }),
 });
 

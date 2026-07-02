@@ -335,4 +335,12 @@ describe('PUT /v1/progress/{app} — optimistic concurrency (B4)', () => {
         });
         expect(res.status).toBe(200);
     });
+
+    test('the jlpt app namespace is accepted (enum widen)', async () => {
+        signIn('cc5@b.com', 'cc5tok');
+        const res = await putProgress('cc5tok', 'jlpt', {
+            data: { level: 'N3', examDate: '2026-12-06', days: { '2026-07-01': { due: 1, speak: 1 } } },
+        });
+        expect(res.status).toBe(200);
+    });
 });
