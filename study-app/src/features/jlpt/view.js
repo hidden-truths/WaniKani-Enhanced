@@ -10,12 +10,17 @@ import { localDay } from '../../config.js';
 import {
   dueCards, leeches, studyStreak, practiceStreak,
   examCountdown, deckJlptCoverage, wkJlptCoverage, checklistHeat, shiftDay,
-  wkForecast, JLPT_LEVEL_ORDER,
+  wkForecast, JLPT_LEVEL_ORDER, escapeHtml,
+  jlptTargets, deckWordSet, wkVocabIndex, jlptGap, selectGapBatch, weeklyAddPace, pacePlan,
+  grammarCoverage, grammarReviewedToday,
 } from '../../core/index.js';
-import { jlptMap } from './data.js';
+import { jlptMap, ensureJlptMap, jlptWords, ensureJlptWords } from './data.js';
+import { addJlptWords, jlptDeckCount } from './activate.js';
+import { grammarPoints, ensureGrammarPoints, activateGrammarPoints, grammarDeckCount } from '../grammar/index.js';
 import { saveJlpt } from './store.js';
-import { startDueSession, studyLeechCards } from '../deck.js';
-import { openBrowseGrammar } from '../browse.js';
+import { setSyncStatus } from '../cloud-core.js';
+import { startDueSession, studyLeechCards, studyGrammarDeck, studyJlptCards } from '../deck.js';
+import { openBrowseGrammar, openVerbDetail } from '../browse.js';
 import { S as WK } from '../wanikani/state.js';
 import { leechList } from '../wanikani/leeches.js';
 
@@ -28,13 +33,30 @@ const goTab = (tab) => { const t = document.querySelector(`.tab[data-tab="${tab}
 // on tab open; onWkData re-renders when it lands).
 function collectSignals() {
   const today = localDay();
+  const store = state.jlptStore;
   const daily = state.store.daily || {};
   let week = 0;
   for (let i = 0; i < 7; i++) { const d = daily[shiftDay(today, -i)]; if (d) week += d.tot || 0; }
   const wkConnected = !!state.wanikaniStore.token;
   const wkLoaded = wkConnected && WK.loaded;
+  // Pacing coach inputs: the coverage gap (deck ∪ WK-guru vs the list), the gap-fill add
+  // pace (the `added` day-stamps), the grammar catalog coverage, and the user targets —
+  // all fed to the pure pacePlan. gap/plan are null until the word-list chunk lands.
+  const wkIdx = wkLoaded ? wkVocabIndex(WK.subjects, WK.assignments) : null;
+  const wkLevel = wkLoaded && WK.user ? WK.user.level : null;
+  const map = jlptMap();
+  const gap = map ? jlptGap(map, store.level, deckWordSet(state.DATA), wkIdx) : null;
+  const targets = jlptTargets(store);
+  const pace = weeklyAddPace(state.DATA, today, store.level);
+  const points = grammarPoints();
+  const gcov = points ? grammarCoverage(points, state.DATA, state.store.cards) : null;
+  const cd = examCountdown(store.examDate, Date.now());
+  const plan = gap && cd && !cd.past
+    ? pacePlan({ daysLeft: cd.days, gap, targets, grammar: gcov ? { studied: gcov.inDeck, total: gcov.total } : null })
+    : null;
   return {
     today,
+    level: store.level,
     due: dueCards().length,
     reviewedToday: (daily[today] && daily[today].tot) || 0,
     weekReviews: week,
@@ -43,11 +65,14 @@ function collectSignals() {
     speakStreak: practiceStreak(state.selftalkStore.practice, today),
     spokeToday: (state.selftalkStore.practice || {}).lastDay === today,
     lastLesson: state.minnaStore.lastLesson,
-    wkConnected, wkLoaded,
+    wkConnected, wkLoaded, wkIdx,
     wkReviewsNow: wkLoaded ? wkForecast([...WK.assignments.values()], Date.now()).availableNow : null,
     wkLessons: wkLoaded && WK.summary ? WK.summary.lessons : null,
     wkLeeches: wkLoaded ? leechList().length : null,
-    wkLevel: wkLoaded && WK.user ? WK.user.level : null,
+    wkLevel,
+    gap, targets, pace, gcov, plan,
+    grammarToday: grammarReviewedToday(state.DATA, state.store.cards, new Date(today + 'T00:00').getTime()),
+    hasGrammarCards: state.DATA.some((v) => v && v.grammar),
   };
 }
 
@@ -82,6 +107,20 @@ function buildTasks(sig, dayRec) {
       : `${sig.due} due in your deck${sig.reviewedToday ? ` · ${sig.reviewedToday} done today` : ''}`,
     act: sig.due ? 'go-due' : null, actLabel: 'Start review',
   });
+  // AUTO — the quota row's live signal is the `added` day-stamps on gap-fill cards (a real,
+  // re-readable signal, unlike listening); write-through via persistDone like the others.
+  {
+    const uncov = sig.gap ? sig.gap.uncovered.length : null;
+    const target = sig.targets.wordsPerDay;
+    t.push({
+      id: 'vocab', jp: '語', title: `Add new ${sig.level} words`, auto: true,
+      done: uncov === 0 || sig.pace.today >= target,
+      sub: uncov == null ? `loading the ${sig.level} word list…`
+        : uncov === 0 ? 'the whole list is covered — nothing left to add'
+          : `${sig.pace.today}/${target} added today · ${uncov.toLocaleString()} uncovered`,
+      act: uncov ? 'gap-add' : null, actLabel: 'Add words',
+    });
+  }
   t.push({
     id: 'leech', jp: '虫', title: 'Drill your leeches', auto: sig.appLeeches === 0,
     done: sig.appLeeches === 0 ? true : !!dayRec.leech,
@@ -105,12 +144,27 @@ function buildTasks(sig, dayRec) {
     sub: 'one song — dictate a few lines in Listen, or shadow them',
     act: 'go-songs', actLabel: 'Open 歌',
   });
-  t.push({
-    id: 'grammar', jp: '法', title: 'One grammar point', auto: false,
-    done: !!dayRec.grammar, checkable: true,
-    sub: 'pick a point in Browse → Grammar and read its example sentences aloud',
-    act: 'go-grammar', actLabel: 'Grammar',
-  });
+  // CONDITIONALLY AUTO (the leech-row precedent): once grammar cloze cards are in the deck
+  // there IS a live signal (a grammar card graded today — the `last` stamp), so the row
+  // tracks itself; before that it stays a manual tick with a nudge toward the lens.
+  if (sig.hasGrammarCards) {
+    const g = sig.gcov;
+    t.push({
+      id: 'grammar', jp: '法', title: 'One grammar point', auto: true,
+      done: sig.grammarToday,
+      sub: sig.grammarToday
+        ? 'grammar drilled today'
+        : `a cloze round keeps the ${sig.targets.grammarPerWeek}/week pace${g ? ` · ${g.inDeck}/${g.total} points in the deck` : ''}`,
+      act: 'go-grammar-drill', actLabel: 'Drill',
+    });
+  } else {
+    t.push({
+      id: 'grammar', jp: '法', title: 'One grammar point', auto: false,
+      done: !!dayRec.grammar, checkable: true,
+      sub: 'add N3 grammar points below to drill them here — this row then tracks itself',
+      act: 'gp-add-all', actLabel: 'Add grammar',
+    });
+  }
   t.push({
     id: 'text', jp: '本', title: 'Textbook time (教科書)', auto: false,
     done: !!dayRec.text, checkable: true,
@@ -134,6 +188,8 @@ function persistDone(tasks, today) {
 
 /* ---- render --------------------------------------------------------------------- */
 
+const panelActive = () => { const p = document.getElementById('panel-jlpt'); return !!(p && p.classList.contains('active')); };
+
 export function renderJlpt() {
   const head = document.getElementById('jlptHead');
   const body = document.getElementById('jlptBody');
@@ -148,7 +204,13 @@ export function renderJlpt() {
   body.innerHTML = heroHtml(store, sig, tasks)
     + checklistHtml(store, sig, tasks)
     + readinessHtml(store, sig)
+    + grammarLensHtml(store, sig)
     + sectionsHtml(store, sig);
+
+  // Kick the lazy chunks this render found missing; each resolves at most once (the loaders
+  // memoize), and the loaded-state guard means the resolve-time re-render can't loop.
+  if (jlptMap() && !jlptWords(store.level)) ensureJlptWords(store.level).then(() => { if (panelActive()) renderJlpt(); }).catch(() => {});
+  if (!grammarPoints()) ensureGrammarPoints().then(() => { if (panelActive()) renderJlpt(); }).catch(() => {});
 }
 
 function headHtml(store) {
@@ -183,6 +245,7 @@ function heroHtml(store, sig, tasks) {
         <label class="jl-dateedit" title="Change the exam date"><svg class="ic" aria-hidden="true"><use href="#i-edit"/></svg><input type="date" id="jlptDate" value="${store.examDate}" aria-label="Exam date"></label>
       </div>
       <div class="jl-hero-sub">${subline}</div>
+      ${paceHtml(store, sig)}
       <div class="jl-hero-pills">
         ${sig.streak ? `<span class="pill"><span class="dot"></span><b>Day ${sig.streak}</b>&nbsp;review streak</span>` : ''}
         ${sig.speakStreak ? `<span class="pill"><span class="dot speak"></span><b>Day ${sig.speakStreak}</b>&nbsp;speaking</span>` : ''}
@@ -198,6 +261,32 @@ function heroHtml(store, sig, tasks) {
       <div class="jl-ring-center"><b>${done}<span>/${counted.length}</span></b><em>today</em></div>
     </div>
   </section>`;
+}
+
+// The pacing strip: what closing the vocab gap by the exam date actually requires, vs the
+// user's editable daily target and their real add-pace this week. Grammar mirrors it weekly.
+// Hidden until the word-list chunk lands (plan is null) or when no exam date is set.
+function paceHtml(store, sig) {
+  const plan = sig.plan;
+  if (!plan) return '';
+  const verdict = plan.verdict === 'behind'
+    ? { cls: 'warn', label: `≈${Math.abs(plan.slackWeeks)} wk behind` }
+    : plan.verdict === 'ahead' ? { cls: 'good', label: `≈${plan.slackWeeks} wk of slack` }
+      : plan.verdict === 'done' ? { cls: 'good', label: 'vocab gap closed' }
+        : { cls: 'good', label: 'on track' };
+  const g = plan.grammar;
+  return `<div class="jl-pace">
+    <div class="jl-pace-row">
+      <span class="jl-pace-verdict ${verdict.cls}">${verdict.label}</span>
+      <span class="jl-pace-line">≈<b>${plan.neededPerDay}</b> new words/day closes the ${plan.uncovered.toLocaleString()}-word ${store.level} gap by exam day (2-week review buffer) · added <b>${sig.pace.week}</b> this week</span>
+      <label class="jl-pace-target">target <input type="number" id="jlptTargetWords" min="1" max="99" value="${sig.targets.wordsPerDay}" aria-label="New words per day target">/day</label>
+    </div>
+    ${g ? `<div class="jl-pace-row">
+      <span class="jl-pace-verdict ${g.verdict === 'behind' ? 'warn' : 'good'}">${g.verdict === 'done' ? 'grammar covered' : g.verdict === 'behind' ? 'grammar behind' : 'grammar on pace'}</span>
+      <span class="jl-pace-line">grammar: <b>${g.remaining}</b> point${g.remaining === 1 ? '' : 's'} left · ≈${g.neededPerWeek}/week needed</span>
+      <label class="jl-pace-target">target <input type="number" id="jlptTargetGrammar" min="1" max="99" value="${sig.targets.grammarPerWeek}" aria-label="Grammar points per week target">/wk</label>
+    </div>` : ''}
+  </div>`;
 }
 
 function checklistHtml(store, sig, tasks) {
@@ -253,7 +342,8 @@ function readinessHtml(store, sig) {
     vocab = bar('In your deck', deck.inDeck, deck.total, deck.solid, 'solid (box 4+)')
       + (wk
         ? bar('On WaniKani', wk.started, wk.total, wk.guru, 'at Guru or beyond')
-        : `<div class="jl-covsub">${sig.wkConnected ? 'loading WaniKani data…' : `<button class="jl-link" data-jl-act="go-wanikani">Connect WaniKani</button> to see how much ${level} vocabulary your reviews already cover.`}</div>`);
+        : `<div class="jl-covsub">${sig.wkConnected ? 'loading WaniKani data…' : `<button class="jl-link" data-jl-act="go-wanikani">Connect WaniKani</button> to see how much ${level} vocabulary your reviews already cover.`}</div>`)
+      + gapFillHtml(store, sig);
   }
   const momentum = `
     <div class="jl-statgrid">
@@ -269,6 +359,68 @@ function readinessHtml(store, sig) {
     <section class="jl-card"><div class="jl-card-head"><div><h2 class="title">Momentum</h2>
       <div class="sub">volume + trouble spots — the two dials that matter weekly</div></div></div>${momentum}</section>
   </div>`;
+}
+
+// The gap-fill block inside the vocabulary-coverage card: the honest union line (a word
+// counts as covered when it's in the deck OR Guru+ on WK — the overlap shown once), a
+// 3-word preview of today's batch (tier-ordered: words WK will never teach come first),
+// and the one-tap add. "Study them now" appears once any gap-fill cards exist.
+function gapFillHtml(store, sig) {
+  const gap = sig.gap;
+  if (!gap) return '';
+  const union = `<div class="jl-covsub jl-union">covered either way: <b>${gap.covered.toLocaleString()}</b> of ${gap.total.toLocaleString()} — ${gap.inDeck.toLocaleString()} in deck · ${gap.guru.toLocaleString()} Guru+ on WK · ${gap.both.toLocaleString()} both</div>`;
+  if (!gap.uncovered.length) return `${union}<div class="jl-gapfill"><div class="jl-covsub">nothing uncovered — every ${store.level} list word is in play 🎉</div></div>`;
+  const words = jlptWords(store.level);
+  if (!words) return `${union}<div class="jl-gapfill"><div class="jl-covsub">loading the enriched ${store.level} entries…</div></div>`;
+  const remainingToday = Math.max(0, sig.targets.wordsPerDay - sig.pace.today);
+  const n = remainingToday || sig.targets.wordsPerDay;
+  const preview = selectGapBatch(words, gap.uncovered, sig.wkIdx, sig.wkLevel || 0, 3)
+    .map((e) => `<span class="jl-gap-w jp" title="${escapeHtml(e[2])}">${escapeHtml(e[0])}</span>`).join('');
+  const deckN = jlptDeckCount();
+  return `${union}<div class="jl-gapfill">
+    <div class="jl-gap-row">${preview}<span class="jl-gap-more">+${(gap.uncovered.length - 3).toLocaleString()} more, hardest-to-meet first</span></div>
+    <div class="jl-gap-row">
+      <button class="chip primary jl-go" data-jl-act="gap-add">${remainingToday ? `Add today's ${n}` : `Add ${n} more`}</button>
+      ${deckN.n ? `<button class="chip jl-go" data-jl-act="study-jlpt">Study them now${deckN.due ? ` · ${deckN.due} due` : ''}</button>` : ''}
+    </div>
+  </div>`;
+}
+
+// The grammar-readiness lens: catalog coverage bars + the per-point list (status pip ·
+// pattern · gloss · Add/Read) behind a disclosure, with Add-all + Drill CTAs. The catalog
+// is N3 content (the exam's zero-coverage paper); it renders regardless of target level.
+function grammarLensHtml(store, sig) {
+  const points = grammarPoints();
+  const head = (extra) => `<section class="jl-card jl-grammar" id="jlGrammarLens">
+    <div class="jl-card-head"><div><h2 class="title">N3 grammar</h2>
+      <div class="sub">the pattern catalog, drilled as cloze cards in your deck</div></div>${extra || ''}</div>`;
+  if (!points) return `${head()}<div class="jl-empty">loading the grammar catalog…</div></section>`;
+  const cov = sig.gcov;
+  const byId = new Map(points.map((p) => [p.id, p]));
+  const remaining = cov.total - cov.inDeck;
+  const gcount = grammarDeckCount();
+  const ctas = `<div class="jl-gp-ctas">
+    ${remaining ? `<button class="chip primary jl-go" data-jl-act="gp-add-all">Add all ${remaining}</button>` : ''}
+    ${gcount.n ? `<button class="chip jl-go" data-jl-act="go-grammar-drill">Drill grammar${gcount.due ? ` · ${gcount.due} due` : ''}</button>` : ''}
+  </div>`;
+  const pct = cov.total ? Math.round((100 * cov.inDeck) / cov.total) : 0;
+  const solidPct = cov.total ? Math.round((100 * cov.solid) / cov.total) : 0;
+  const bar = `<div class="jl-covrow"><span class="jl-cov-label">In your deck</span>
+    <span class="jl-covtrack"><span class="jl-covfill hi" style="width:${solidPct}%"></span><span class="jl-covfill" style="width:${pct}%"></span></span>
+    <b class="jl-covval">${cov.inDeck}</b></div>
+    <div class="jl-covsub">${cov.solid} solid (box 4+) · ${cov.learning} learning · of ${cov.total} points</div>`;
+  const rows = cov.points.map((p) => {
+    const pt = byId.get(p.id);
+    if (!pt) return '';
+    const act = p.rank == null
+      ? `<button class="chip jl-go sm" data-jl-act="gp-add" data-point="${escapeHtml(p.id)}">Add</button>`
+      : `<button class="chip jl-go sm" data-jl-act="gp-detail" data-rank="${p.rank}">Read</button>`;
+    return `<div class="jl-gp-row"><span class="jl-gp-pip ${p.status}" title="${p.status}"></span>
+      <span class="jl-gp-label jp">${escapeHtml(pt.label)}</span><span class="jl-gp-mean">${escapeHtml(pt.mean)}</span>${act}</div>`;
+  }).join('');
+  return `${head(ctas)}${bar}
+    <details class="jl-gp-list"><summary>All ${cov.total} points</summary><div class="jl-gp-rows">${rows}</div></details>
+  </section>`;
 }
 
 function sectionsHtml(store, sig) {
@@ -337,6 +489,42 @@ const ACTIONS = {
   'go-selftalk': () => goTab('selftalk'),
   'go-songs': () => goTab('songs'),
   'go-minna': () => goTab('minna'),
+  // ---- pacing coach + grammar lens ----
+  // Add today's gap-fill batch: recompute the gap FRESH at click time (the render's copy
+  // may be minutes old), tier-select up to the remaining quota, bulk-add, confirm.
+  'gap-add': async (el) => {
+    if (el) el.disabled = true;
+    const level = state.jlptStore.level;
+    const [words] = await Promise.all([ensureJlptWords(level), ensureJlptMap()]);
+    const map = jlptMap();
+    if (!words || !map) { renderJlpt(); return; }
+    const wkLoaded = !!state.wanikaniStore.token && WK.loaded;
+    const wkIdx = wkLoaded ? wkVocabIndex(WK.subjects, WK.assignments) : null;
+    const gap = jlptGap(map, level, deckWordSet(state.DATA), wkIdx);
+    const targets = jlptTargets(state.jlptStore);
+    const doneToday = weeklyAddPace(state.DATA, localDay(), level).today;
+    const n = Math.max(0, targets.wordsPerDay - doneToday) || targets.wordsPerDay;
+    const added = addJlptWords(selectGapBatch(words, gap.uncovered, wkIdx, (wkLoaded && WK.user && WK.user.level) || 0, n), level);
+    setSyncStatus(added ? `✚ ${added} ${level} word${added === 1 ? '' : 's'} added to the deck` : 'nothing new to add');
+    renderJlpt();
+  },
+  'study-jlpt': () => studyJlptCards(),
+  'go-grammar-drill': () => studyGrammarDeck(),
+  'gp-add': async (el) => {
+    const pts = await ensureGrammarPoints();
+    const p = pts.find((x) => x.id === el.dataset.point);
+    if (p) activateGrammarPoints([p]);
+    renderJlpt();
+  },
+  'gp-add-all': async () => {
+    const added = activateGrammarPoints(await ensureGrammarPoints());
+    setSyncStatus(added ? `✚ ${added} grammar point${added === 1 ? '' : 's'} added as cloze cards` : 'all points already in the deck');
+    renderJlpt();
+  },
+  'gp-detail': (el) => {
+    const v = state.DATA.find((x) => x.rank === Number(el.dataset.rank));
+    if (v) openVerbDetail(v);
+  },
 };
 
 export function wireJlpt() {
@@ -349,10 +537,23 @@ export function wireJlpt() {
     const fn = ACTIONS[el.dataset.jlAct];
     if (fn) fn(el, e);
   });
-  // The exam-date input commits on change (native date picker); re-render reflows the countdown.
+  // The exam-date input + the two pacing-target steppers commit on change; the re-render
+  // reflows the countdown / the pace verdicts. Out-of-range target input just re-renders
+  // back to the stored value (normalizeJlpt's 1..99 clamp is the source of truth).
   panel.addEventListener('change', (e) => {
-    if (e.target.id !== 'jlptDate') return;
-    const v = e.target.value;
-    if (/^\d{4}-\d{2}-\d{2}$/.test(v)) { state.jlptStore.examDate = v; saveJlpt(); renderJlpt(); }
+    if (e.target.id === 'jlptDate') {
+      const v = e.target.value;
+      if (/^\d{4}-\d{2}-\d{2}$/.test(v)) { state.jlptStore.examDate = v; saveJlpt(); renderJlpt(); }
+      return;
+    }
+    if (e.target.id === 'jlptTargetWords' || e.target.id === 'jlptTargetGrammar') {
+      const key = e.target.id === 'jlptTargetWords' ? 'wordsPerDay' : 'grammarPerWeek';
+      const v = Math.round(Number(e.target.value));
+      if (Number.isFinite(v) && v >= 1 && v <= 99) {
+        (state.jlptStore.targets || (state.jlptStore.targets = {}))[key] = v;
+        saveJlpt();
+      }
+      renderJlpt();
+    }
   });
 }

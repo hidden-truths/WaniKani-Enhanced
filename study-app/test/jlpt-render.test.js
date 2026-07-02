@@ -15,9 +15,11 @@ vi.mock('../src/features/synced-blob.js', () => ({
 }));
 vi.mock('../src/features/deck.js', () => ({
   startDueSession: vi.fn(), studyLeechCards: vi.fn(), updateDueBanner: vi.fn(), studyWkCards: vi.fn(),
+  studyGrammarDeck: vi.fn(), studyJlptCards: vi.fn(),
 }));
-vi.mock('../src/features/browse.js', () => ({ openBrowseGrammar: vi.fn() }));
+vi.mock('../src/features/browse.js', () => ({ openBrowseGrammar: vi.fn(), openVerbDetail: vi.fn() }));
 vi.mock('../src/features/custom-cards.js', () => ({ rebuildData: vi.fn(), refreshAfterVerbChange: () => {} }));
+vi.mock('../src/features/cloud-core.js', () => ({ api: async () => ({}), setSyncStatus: vi.fn(), account: null }));
 
 const bag = new Map();
 vi.stubGlobal('localStorage', {
@@ -31,8 +33,10 @@ import { state } from '../src/state.js';
 import { localDay } from '../src/config.js';
 import { shiftDay } from '../src/core/jlpt.js';
 import { loadJlpt } from '../src/features/jlpt/store.js';
-import { ensureJlptMap } from '../src/features/jlpt/data.js';
+import { ensureJlptMap, ensureJlptWords } from '../src/features/jlpt/data.js';
+import { ensureGrammarPoints } from '../src/features/grammar/data.js';
 import { renderJlpt, wireJlpt } from '../src/features/jlpt/view.js';
+import { loadCustom } from '../src/persistence/custom.js';
 
 const TODAY = localDay();
 
@@ -69,9 +73,9 @@ test('checklist: auto tasks track live signals and write through to the day reco
   expect(body).toContain('data-jl-act="go-wanikani"');
   // empty deck → 0 due → the SRS task is auto-done and persisted for the heatmap
   expect(state.jlptStore.days[TODAY].due).toBe(1);
-  // 7 tasks render; the unavailable WK row is excluded from the ring denominator
-  expect((body.match(/jl-task /g) || []).length + (body.match(/jl-task"/g) || []).length).toBeGreaterThanOrEqual(7);
-  expect(document.querySelector('.jl-ring-center b').textContent).toContain('/6');
+  // 8 tasks render (incl. the 語 quota row); the unavailable WK row is excluded from the ring
+  expect((body.match(/jl-task /g) || []).length + (body.match(/jl-task"/g) || []).length).toBeGreaterThanOrEqual(8);
+  expect(document.querySelector('.jl-ring-center b').textContent).toContain('/7');
 });
 
 test('due cards + spoken-today flip their tasks live', () => {
@@ -124,6 +128,64 @@ test('checklist heatmap renders 14 day cells from the record', () => {
   renderJlpt();
   expect(document.querySelectorAll('.jl-heatcell').length).toBe(14);
   expect(document.querySelectorAll('.jl-heatcell.l1, .jl-heatcell.l2, .jl-heatcell.l3, .jl-heatcell.l4').length).toBeGreaterThanOrEqual(1);
+});
+
+test('pacing strip: verdict + needed-per-day math from the real list, target stepper persists', async () => {
+  await ensureJlptMap();
+  wireJlpt();
+  state.jlptStore.examDate = shiftDay(TODAY, 158);             // ~2,069 uncovered / 144 eff days
+  renderJlpt();
+  const pace = document.querySelector('.jl-pace');
+  expect(pace).toBeTruthy();
+  expect(pace.innerHTML).toContain('new words/day');
+  expect(document.getElementById('jlptTargetWords').value).toBe('12');   // DEFAULT_TARGETS, never in the blob
+  expect(state.jlptStore.targets).toBeUndefined();
+  // 2069/144 ≈ 15/day needed vs the 12/day target → behind
+  expect(pace.querySelector('.jl-pace-verdict').className).toContain('warn');
+  // stepper commits through normalize's 1..99 clamp and persists as the ONLY targets key
+  const input = document.getElementById('jlptTargetWords');
+  input.value = '20';
+  input.dispatchEvent(new Event('change', { bubbles: true }));
+  expect(state.jlptStore.targets).toEqual({ wordsPerDay: 20 });
+  expect(document.querySelector('.jl-pace-verdict').className).toContain('good');   // 20/day → ahead
+});
+
+test('gap-fill: quota row + one-tap add writes tagged cards into the custom blob', async () => {
+  await ensureJlptMap();
+  await ensureJlptWords('N3');
+  wireJlpt();
+  state.jlptStore.examDate = shiftDay(TODAY, 158);
+  renderJlpt();
+  const body = () => document.getElementById('jlptBody').innerHTML;
+  expect(body()).toContain('0/12 added today');
+  expect(body()).toContain('covered either way');
+  document.querySelector('[data-jl-act="gap-add"]').click();
+  await new Promise((r) => setTimeout(r, 0));                  // the async ACTION resolves
+  const cs = loadCustom();
+  expect(cs.verbs.length).toBe(12);                            // today's full quota
+  expect(cs.verbs[0]).toMatchObject({ jlptfill: true, jlpt: 'N3', added: TODAY, custom: true });
+  expect(cs.verbs[0].tags).toContain('jlpt-n3');
+  expect(cs.verbs[0].mean).toBeTruthy();                       // JMdict gloss made it through
+});
+
+test('grammar lens: real catalog renders coverage + per-point rows; 法 row flips auto with grammar cards', async () => {
+  const pts = await ensureGrammarPoints();                     // the real generated chunk
+  renderJlpt();
+  const body = () => document.getElementById('jlptBody').innerHTML;
+  expect(body()).toContain('N3 grammar');
+  expect(body()).toContain(`Add all ${pts.length}`);
+  expect(body()).toContain(`All ${pts.length} points`);
+  expect(body()).toContain('data-jl-act="gp-add"');
+  // no grammar cards yet → the 法 row is MANUAL with the lens nudge
+  expect(document.querySelector('[data-jl-act="task"][data-task="grammar"]')).toBeTruthy();
+  // seed one drilled-today grammar card → the row turns AUTO + done and writes through
+  state.DATA = [{ rank: 200, jp: '〜ようになる', read: 'ようになる', mean: 'come to', cat: 'grammar', tags: ['文法'], grammar: true, grammarId: pts[0].id }];
+  state.store.cards = { 200: { attempts: [1], right: 1, wrong: 0, box: 1, due: 0, last: Date.now() } };
+  renderJlpt();
+  expect(document.querySelector('[data-jl-act="task"][data-task="grammar"]')).toBeFalsy();   // no manual checkbox
+  expect(body()).toContain('grammar drilled today');
+  expect(state.jlptStore.days[TODAY].grammar).toBe(1);         // written through to the record
+  expect(body()).toContain('data-jl-act="go-grammar-drill"');
 });
 
 test('the four papers render with deep-link actions', () => {

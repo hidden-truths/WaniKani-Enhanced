@@ -105,6 +105,42 @@
 .jl-stat span{font-family:var(--mono);font-size:10.5px;color:var(--muted);text-transform:uppercase;letter-spacing:.6px}
 .jl-stat.warn b{color:var(--leech)}
 
+/* ---- pacing coach (hero strip) -------------------------------------------------------------
+   The verdict pill + the plain-language pace math + the inline target steppers. Functional
+   colors only: good=jade, warn=leech-plum (the same tones the stats use). */
+.jl-pace{margin-top:12px;display:flex;flex-direction:column;gap:6px}
+.jl-pace-row{display:flex;align-items:center;gap:10px;flex-wrap:wrap}
+.jl-pace-verdict{flex:none;font-family:var(--mono);font-size:10.5px;letter-spacing:.08em;text-transform:uppercase;font-weight:600;padding:4px 10px;border-radius:999px}
+.jl-pace-verdict.good{color:var(--good);background:var(--good-soft);border:1px solid color-mix(in srgb,var(--good) 35%,transparent)}
+.jl-pace-verdict.warn{color:var(--leech);background:var(--leech-soft);border:1px solid color-mix(in srgb,var(--leech) 40%,transparent)}
+.jl-pace-line{font-size:12.5px;color:var(--ink-2);line-height:1.5}
+.jl-pace-line b{font-family:var(--display);font-weight:800}
+.jl-pace-target{flex:none;display:inline-flex;align-items:center;gap:5px;font-family:var(--mono);font-size:10.5px;letter-spacing:.06em;text-transform:uppercase;color:var(--muted)}
+.jl-pace-target input{width:52px;padding:4px 6px;border:1px solid var(--line);border-radius:8px;background:var(--chip-bg);color:var(--ink);font:600 13px var(--display);text-align:center}
+
+/* ---- gap-fill (vocabulary-coverage card) ---------------------------------------------------- */
+.jl-union b{color:var(--ink)}
+.jl-gapfill{margin-top:10px;padding-top:10px;border-top:1px dashed var(--line);display:flex;flex-direction:column;gap:8px}
+.jl-gap-row{display:flex;align-items:center;gap:8px;flex-wrap:wrap}
+.jl-gap-w{font-size:15px;font-weight:600;padding:3px 10px;border:1px solid color-mix(in srgb,var(--reading) 30%,transparent);border-radius:9px;background:var(--reading-soft)}
+.jl-gap-more{font-family:var(--mono);font-size:10.5px;color:var(--muted);letter-spacing:.04em}
+
+/* ---- N3 grammar lens ------------------------------------------------------------------------ */
+.jl-grammar .jl-covfill{background:color-mix(in srgb,var(--grammar) 45%,transparent)}
+.jl-grammar .jl-covfill.hi{background:var(--grammar)}
+.jl-gp-ctas{display:flex;gap:8px;flex-wrap:wrap;align-items:flex-start}
+.jl-gp-list{margin-top:10px}
+.jl-gp-list summary{cursor:pointer;font-family:var(--mono);font-size:11px;letter-spacing:.08em;text-transform:uppercase;color:var(--muted)}
+.jl-gp-rows{margin-top:8px;max-height:420px;overflow-y:auto;display:flex;flex-direction:column}
+.jl-gp-row{display:flex;align-items:center;gap:10px;padding:7px 4px;border-top:1px solid var(--line-2)}
+.jl-gp-pip{flex:none;width:9px;height:9px;border-radius:50%;background:var(--surf-inset);border:1px solid var(--line)}
+.jl-gp-pip.added{background:color-mix(in srgb,var(--grammar) 30%,transparent);border-color:var(--grammar)}
+.jl-gp-pip.learning{background:color-mix(in srgb,var(--grammar) 65%,transparent);border-color:var(--grammar)}
+.jl-gp-pip.solid{background:var(--good);border-color:var(--good)}
+.jl-gp-label{flex:none;font-size:14.5px;font-weight:600;min-width:132px}
+.jl-gp-mean{flex:1;min-width:0;font-size:12px;color:var(--muted);overflow:hidden;text-overflow:ellipsis;white-space:nowrap}
+.jl-gp-row .chip{flex:none;padding:3px 10px;font-size:11px}
+
 /* ---- the four papers --------------------------------------------------------------------- */
 .jl-sections{display:grid;grid-template-columns:repeat(auto-fill,minmax(300px,1fr));gap:14px}
 .jl-section{border:1px solid var(--line);border-radius:14px;background:var(--surf-inset);padding:15px 16px 13px;display:flex;flex-direction:column;gap:8px}
