@@ -331,6 +331,22 @@ footer b{color:var(--ink-2)}
 
 <script type="application/json" id="roadmap-data">
 [
+{"id":"wk-tab-v1","surface":"wanikani","type":"feature","status":"completed","prio":"high","when":"2026-07-01",
+"title":"✓ 鰐蟹 WaniKani tab v1 — dashboard · leeches · confusion groups · browser","summary":"SHIPPED: a 7th tab consuming the user's WK API token (read-only, verified via /user before persisting; synced under the new 'wanikani' progress app key). Full dataset (9.4k subjects + assignments + review stats + level progressions) syncs client-side from api.wanikani.com (CORS) into an IndexedDB cache — ~30 requests first sync, then incremental via updated_after cursors (verified: 6 requests). Dashboard (metric heroes, SRS stage pipeline, 24h/7d review forecast, level pace, lifetime accuracy, worst-leech preview), 苦手 Leeches view with SAME-KANJI CONFUSION GROUPS (each leech beside every started word sharing its kanji — the 'same kanji, slightly different meaning' pain point), a level/type/stage/search browser over the whole corpus, and a subject detail modal (mnemonics with WK semantic-tag styling, context sentences, audio, your record, component/amalgamation/visually-similar strips with in-modal navigation). Verified live in both themes against the real account (331 leeches, 303 confusion groups).",
+"detail":"Architecture: core/wanikani.js is the pure DOM-free analytics layer (leech score = misses ÷ current-streak^1.5 on the worse of meaning/reading; confusion clustering; band counts; forecast; level pace; slimmers; the WK-mnemonic-markup renderer — 14 tests), features/wanikani/ the package (api.js WK client with 429 Retry-After handling + pagination; idb.js — the app's ONE IndexedDB store, deliberately outside the localStorage/createReadThroughResource convention because 9.4k slimmed subjects ≈ 10-15MB; sync.js cursors; store.js token blob; view/dashboard/leeches/browse/detail split with a songs-style ACTIONS table — 5 render tests). WK line-colours + SRS station ramp are tokens.css additions (burned = bronze by day, maki-e gold at night). Server side is the documented one-line enum widen ('wanikani' app key) + a pinned route test. The WK dataset itself is never on our server — device-local, re-syncable.",
+"example":"api.wanikani.com/v2/{subjects,assignments,review_statistics,level_progressions} → IndexedDB 'jpverbs_wanikani'",
+"src":["study-app/src/features/wanikani/","study-app/src/core/wanikani.js","wk-enhanced-api/src/routes/progress.ts"]},
+
+{"id":"wk-leech-to-deck","surface":"wanikani","type":"feature","status":"todo","prio":"high",
+"title":"Study WK leeches as flashcards (activation into the deck)","summary":"One tap turns a leech (or a whole confusion group) into tagged custom cards in the main deck — the Minna/Songs vocab-activation path pointed at WK data — so leeches get drilled with the app's SRS, examples and record-compare.",
+"detail":"The v1 tab diagnoses; this makes it treat. Reuse buildSongCard/minna-style activation: a WK vocab leech becomes a dictionary-form tagged custom card (tags ['鰐蟹','wk-l<level>'] + a wanikani:true provenance flag routed to the Source facet like minna/song). Dedup against built-ins via BUILTIN_RANK_BY_JP overlays, same as Minna. A 'study this group' button on a confusion cluster activates the whole family in one go — the side-by-side drill is exactly what untangles them. Open question: keep WK SRS state authoritative (read-only mirror) vs. let the app's Leitner take over for activated cards (probably the latter — they're separate systems; the tag keeps provenance).",
+"src":["study-app/src/features/wanikani/leeches.js","study-app/src/features/minna/activate.js","study-app/src/core/songs.js"]},
+
+{"id":"infra-prod-deploy-wanikani","surface":"infra","type":"infra","status":"todo","prio":"med",
+"title":"Deploy the 鰐蟹 tab (both containers)","summary":"Push main + rebuild BOTH containers: the study-app image for the new tab, the API image for the widened 'wanikani' progress enum (without it, prod token sync 400s while the tab itself still works device-locally).",
+"detail":"No seed step and no DB migration — the enum widen is code-only and the WK dataset never touches our server. Piggybacks on the standard two-container rebuild; fold into the next deploy batch with the NLP/songs re-seeds.",
+"src":["wk-enhanced-api/src/routes/progress.ts","wk-enhanced-api/deploy/README.md"]},
+
 {"id":"infra-prod-reseed-nlp","surface":"infra","type":"infra","status":"partial","prio":"high",
 "title":"Deploy NLP annotations + templates to prod (seed steps)","summary":"Run seed-annotations.ts after seed-sentences.ts on the droplet so prod actually serves tap-to-lookup tokens + grammar tags + template combos.",
 "detail":"Phase 4 (NLP enrichment) + slot-swap templates are merged to main but the prod deploy is the residual: a both-container rebuild plus seed-sentences.ts (incl. templates Pass 3) THEN seed-annotations.ts run against the prod sqlite. Skip it and the tap UI silently shows plain ruby in prod. The committed annotations.json ships in the image; annotations resolve by content hash, so an offline-parsed artifact seeds prod correctly with no Python on the droplet. Same docker-compose-run pattern as the rest of the seed step.",
@@ -749,6 +765,7 @@ const SURFACES={
   songs:{label:"Study-app · 歌 Songs",jp:"歌",color:"var(--adjective)"},
   minna:{label:"Study-app · 教科書 Minna",jp:"課",color:"var(--noun)"},
   selftalk:{label:"Study-app · 独り言 Self-talk",jp:"独",color:"var(--adverb)"},
+  wanikani:{label:"Study-app · 鰐蟹 WaniKani",jp:"蟹",color:"#B23A66"},
   cards:{label:"Study-app · Cards & study",jp:"札",color:"var(--good)"},
   core:{label:"Study-app · Core / audio",jp:"核",color:"var(--phrase)"},
   design:{label:"Design & polish",jp:"意",color:"var(--brand-deep)"},
@@ -756,7 +773,7 @@ const SURFACES={
   refactor:{label:"Refactor / test debt",jp:"整",color:"var(--ink-2)"},
   tooling:{label:"Tooling / pipelines",jp:"具",color:"var(--muted)"}
 };
-const SURFACE_ORDER=["store","api","userscript","songs","minna","selftalk","cards","core","design","infra","refactor","tooling"];
+const SURFACE_ORDER=["store","api","userscript","songs","minna","selftalk","wanikani","cards","core","design","infra","refactor","tooling"];
 const TYPES={
   feature:{label:"Feature"},bug:{label:"Bug"},polish:{label:"Polish"},
   content:{label:"Content"},infra:{label:"Infra"},techdebt:{label:"Tech debt"},idea:{label:"Idea"}

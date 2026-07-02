@@ -27,6 +27,7 @@ export function initTabs(handlers = {}) {
     if (next === 'minna') handlers.minna && handlers.minna();
     if (next === 'selftalk') handlers.selftalk && handlers.selftalk();
     if (next === 'songs') handlers.songs && handlers.songs();
+    if (next === 'wanikani') handlers.wanikani && handlers.wanikani();
   }));
 }
 

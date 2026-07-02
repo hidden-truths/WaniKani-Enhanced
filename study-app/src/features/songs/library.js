@@ -68,7 +68,7 @@ export function libraryHtml() {
   const cards = shown.map((s) => songCardHtml(s, k)).join('');
   return `
     <div class="sg-intro">
-      <div class="marker"><div class="idx">06<span class="slash"> / 06</span></div><div class="ttl jp-min">歌</div><div class="en">Songs</div><div class="rule"></div></div>
+      <div class="marker"><div class="idx">06<span class="slash"> / 07</span></div><div class="ttl jp-min">歌</div><div class="en">Songs</div><div class="rule"></div></div>
       <p class="st-lede">Study real songs as listening, reading, and speaking practice. Add your own (paste the lyrics, link the video) or start from the bundled set.</p>
     </div>
     <div class="toolbar sg-toolbar">

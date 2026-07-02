@@ -26,6 +26,7 @@ import { registerSessionHooks } from './flashcard.js';
 import { migrateMinnaDupes, renderMinna, minnaBlob } from './minna.js';
 import { renderSettings } from './settings-page.js';
 import { renderSongs } from './songs.js';
+import { wanikaniBlob } from './wanikani.js';
 
 const APP_KEY = 'verbs';            // progress namespace on the server
 const CUSTOM_APP_KEY = 'custom-verbs'; // custom-card-definitions namespace
@@ -152,6 +153,7 @@ function blobRegistry() {
     { blob: minnaBlob,    busKey: null },        // off-bus: saveMinna schedules minnaBlob directly
     { blob: selftalkBlob, busKey: 'selftalk' },
     { blob: songsBlob,    busKey: 'songs' },
+    { blob: wanikaniBlob, busKey: null },        // off-bus: saveWanikani schedules wanikaniBlob directly
   ];
 }
 

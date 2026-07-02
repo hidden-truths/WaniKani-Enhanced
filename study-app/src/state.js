@@ -22,6 +22,10 @@ export const state = {
   // 歌 Songs: per-song progress (starred/shadowed line ordinals + last view cursor); replaced at boot.
   // PROGRESS ONLY — song content is server-authoritative (the sentence store). Synced as app 'songs'.
   songsStore: { progress: {} },
+  // 鰐蟹 WaniKani: the user's WK API token (+ future prefs); replaced at boot. TOKEN ONLY —
+  // the WK dataset itself is a device-local IndexedDB cache (features/wanikani/idb.js),
+  // re-syncable from api.wanikani.com. Synced as app 'wanikani'.
+  wanikaniStore: { token: null },
   // Built-in headword (jp) → rank, for Minna activation's dedup-onto-a-built-in path.
   BUILTIN_RANK_BY_JP: {},
   // Leveled vocab example sentences ({ [rank]: { N5:[jp,en], … } }), fetched from the server

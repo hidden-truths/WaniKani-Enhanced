@@ -32,7 +32,16 @@ order. The actual DOM/render/feature glue is split into **`src/features/*`** mod
   `showLibrary`/`refreshLibrary` re-imported by add/progress/edit), like record-compare. Transient
   status pills go through cloud-core's `setSyncStatus` (the one `#syncStatus` writer — the old local
   `flash()` copy is gone). Render/navigation glue tested in `test/songs-render.test.js`. See
-  [SONGS.md](SONGS.md)),
+  [SONGS.md](SONGS.md)), `wanikani` (the 鰐蟹 WaniKani companion tab — a **directory**
+  `wanikani/{state,store,api,idb,sync,view,dashboard,leeches,browse,detail,bits}.js` behind
+  `wanikani/index.js` (lifecycle: `initWanikani`/`showWanikani` + the connect/sync orchestration),
+  with `wanikani.js` a thin `export *` re-export. Token gate → dashboard / 苦手 leeches +
+  same-kanji confusion groups / corpus browser + a subject detail modal; `view.js` owns the
+  render dispatch + a songs-style declarative `ACTIONS` click table on the panel. `api.js` talks
+  to **api.wanikani.com DIRECTLY** (CORS; deliberately NOT net/transport's `api()` — no cookies,
+  no API_BASE) and `idb.js` is the app's ONE IndexedDB cache (see the dead-end below). Pure
+  derivations (leech scoring, clustering, forecasts, slimmers) live in `core/wanikani.js`;
+  render glue tested in `test/wanikani-render.test.js`),
   `record-compare` (the generic
   record-and-compare engine — fed by Minna AND Self-Talk; now a **directory**
   `record-compare/{state,capture,takes,playback,waveform,view}.js` behind a 13-export barrel
@@ -146,8 +155,9 @@ Backend (auth, progress, cookie, the cross-origin CORS) is the server's:
 Markup: `#panel-study` (flashcard setup → card stage → done), `#panel-browse`
 (filter grid), `#panel-stats` (charts + leeches), `#panel-minna` (the みんなの日本語
 lesson dashboard — near-empty in markup, filled at runtime by `renderMinna`),
-`#panel-selftalk` (独り言), `#panel-songs` (歌 — `#sgBody` filled by `renderSongs`), plus
-the header/toolbar, tabs, and the auth modal + sign-up banner.
+`#panel-selftalk` (独り言), `#panel-songs` (歌 — `#sgBody` filled by `renderSongs`),
+`#panel-wanikani` (鰐蟹 — `#wkHead`/`#wkBody` filled by `renderWanikani`; `#wkModal` is its
+subject-detail overlay), plus the header/toolbar, tabs, and the auth modal + sign-up banner.
 
 `data/verbs.js` holds the `VERBS` dataset. The old single-file `app.js` sections are now
 one module each under `src/features/*` (the section names map 1:1 to filenames): persistence
@@ -248,14 +258,16 @@ one module each under `src/features/*` (the section names map 1:1 to filenames):
   playback itself is the TTS bullet above.)
 - **Cloud:** `api`, `bootAuth`, `updateAccountChip`, `openAuth`. **Cross-origin**
   (`api()` rebases every path onto `API_BASE` + sends `credentials:'include'`), the
-  session lives in a `.wkenhanced.dev` httpOnly cookie. **SIX debounced synced blobs** —
+  session lives in a `.wkenhanced.dev` httpOnly cookie. **SEVEN debounced synced blobs** —
   progress (`verbs`), custom verbs (`custom-verbs`), settings (`settings`), Minna (`minna`),
-  Self-Talk (`selftalk`), Songs (`songs`) — all built from ONE `createSyncedBlob` abstraction
+  Self-Talk (`selftalk`), Songs (`songs`), WaniKani (`wanikani`, the WK API token only) — all
+  built from ONE `createSyncedBlob` abstraction
   ([features/synced-blob.js](src/features/synced-blob.js)): debounced `schedule` →
   `push` (PUT `/v1/progress/{appKey}`) → `pull` (server-wins-on-login, fresh-account
   seed). Each blob supplies only its `read`/`apply` + unique side-effects (custom→`rebuildData`,
   settings→`applyFurigana`+`paintPrefChips`+`renderSettings`, selftalk→phrase-migration+repaint,
-  minna→overlay merge, songs→library re-render). All six are declared ONCE in `cloud.js`'s ordered
+  minna→overlay merge, songs→library re-render, wanikani→connect-through-the-gate on a pulled
+  token). All seven are declared ONCE in `cloud.js`'s ordered
   **blob registry** (`[{blob,busKey}]`); `pullCloud`/`flushQueue`/`initCloud` delegate to the DI'd
   **sync-orchestrator** ([net/sync-orchestrator.js](src/net/sync-orchestrator.js)) so the pull / flush /
   bus-wire sets can never drift. `pullCloud` runs `orchestrator.pullAll()` (each blob isolated — one
@@ -317,6 +329,12 @@ the `{[rank]:{N5:[jp,en],…}}` model in `state.exampleLevels`, fetched from
 (`EXAMPLES[rank]={N5:[jp,en],…}`) is the **seed source** only — not read at runtime.
 Pitch accents (`verbs.js`, static): `ACCENTS[rank] = <Tokyo accent number>` — backfilled
 onto built-in cards' `v.accent` by `attachLevels` (Minna cards carry their own).
+鰐蟹 WaniKani token (`localStorage["jpverbs_wanikani"]`, synced as app `wanikani`):
+`{ token }` — the user's WK personal access token, nothing else. **The WK DATASET is NOT
+in this blob** — 9.4k slimmed subjects + assignments + review stats live in the
+device-local IndexedDB DB `jpverbs_wanikani` (features/wanikani/idb.js), re-syncable
+from api.wanikani.com at any time (full first sync ≈ 30 requests, then incremental via
+per-collection `updated_after` cursors kept in the IDB `meta` store).
 
 ## Design system
 
@@ -338,9 +356,9 @@ onto built-in cards' `v.accent` by `attachLevels` (Minna cards carry their own).
 > motion keyframes), with two shared kits peeled to their own files — **`styles/modals.css`** (the
 > overlay/sheet/× + form primitives + Settings rows + voice editor + in-modal `<details>`) and
 > **`styles/record-compare.css`** (the record/play/compare + speaking-bar engine UI + the `#navExtra`
-> dock trims); then the per-surface `flashcards/browse/stats/minna/selftalk/songs.css`. `src/main.js`
+> dock trims); then the per-surface `flashcards/browse/stats/minna/selftalk/songs/wanikani.css`. `src/main.js`
 > imports them in cascade order: **tokens → base → chrome → styles → modals → record-compare →
-> flashcards → browse → stats → minna → selftalk → songs** (modals + record-compare sit in the
+> flashcards → browse → stats → minna → selftalk → songs → wanikani** (modals + record-compare sit in the
 > shared-core slot, after styles.css + chrome.css so Rule A holds; the modal entrance keyframes
 > overlayIn/modalPop stay in styles.css since modalPop is shared with the tap-a-word `.word-pop`). The
 > mocks stay in [mockups/redesign/](mockups/redesign/) as the visual reference; the full Phase-by-phase
@@ -443,6 +461,20 @@ Component contracts you must preserve:
   hyphen is a word boundary), making every `api()` fetch throw an invalid-`RequestCache`
   TypeError that surfaced only signed-in. Server side of all this: the credentialed-CORS
   branch + cookie `Domain` in [../wk-enhanced-api/CLAUDE.md](../wk-enhanced-api/CLAUDE.md).
+- **The 鰐蟹 WaniKani tab bypasses BOTH the `api()` transport AND the localStorage cache
+  convention — deliberately, don't "fix" either.** (1) `features/wanikani/api.js` fetches
+  `api.wanikani.com` with a plain `fetch` + `Authorization: Bearer <user's WK token>`:
+  the WK API is CORS-enabled for client-side apps, wants no cookies, and must not be
+  rebased onto `API_BASE` — routing it through `net/transport.js` would send
+  `credentials:'include'` to a third party and break under the API_BASE rebase. It has
+  its own 429/Retry-After handling. Our server NEVER sees WK data; only the token blob
+  (`jpverbs_wanikani` localStorage + the `wanikani` progress app key) syncs. (2) The WK
+  dataset caches in **IndexedDB** (`features/wanikani/idb.js`, DB `jpverbs_wanikani`) —
+  the one exception to "server-backed lists go through `createReadThroughResource`":
+  9.4k slimmed subjects ≈ 10-15 MB, which localStorage's ~5 MB quota can't hold, and the
+  incremental `updated_after` cursor model doesn't fit the fetch-all read-through shape.
+  It's a device-local cache, never the source of truth — "Disconnect" wipes it and a
+  reconnect rebuilds it from WK in ~30 requests.
 - **Category / Type / Transitivity / Topic / Status / Source chips are SIX AND'd
   facets, not one OR'd pool** (this changed — older docs/commits describing a shared
   pool, or four/five facets, are stale). A chip's facet is derived from its token via

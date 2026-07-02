@@ -34,6 +34,7 @@ import './styles/stats.css';      // stats metric cards + chart panels + leech l
 import './styles/minna.css';      // みんなの日本語 dashboard (peeled)
 import './styles/selftalk.css';   // 独り言 Self-Talk (peeled)
 import './styles/songs.css';      // 歌 Songs (peeled)
+import './styles/wanikani.css';   // 鰐蟹 WaniKani companion (peeled)
 import { VERBS } from './data/verbs.js';
 import { state, attachLevels } from './state.js';
 import { loadCustom } from './persistence/custom.js';
@@ -52,6 +53,7 @@ import { initSettingsPage } from './features/settings-page.js';
 import { initMinna, migrateMinnaDupes, renderMinna, onMinnaHidden } from './features/minna.js';
 import { initSelftalk, showSelftalk, onSelftalkHidden } from './features/selftalk.js';
 import { initSongs, renderSongs, onSongsHidden } from './features/songs.js';
+import { initWanikani, showWanikani } from './features/wanikani.js';
 import { initExamples } from './features/examples.js';
 import { initCloud, bootAuth } from './features/cloud.js';
 
@@ -66,7 +68,7 @@ loadStore();
 applyFurigana();
 
 // Chrome: tabs (per-tab render passed as handlers so chrome stays a leaf), font, theme, I/O.
-initTabs({ stats: () => renderStats(), browse: () => renderBrowse(), minna: () => renderMinna(), leaveMinna: () => onMinnaHidden(), selftalk: () => showSelftalk(), leaveSelftalk: () => onSelftalkHidden(), songs: () => renderSongs(), leaveSongs: () => onSongsHidden() });
+initTabs({ stats: () => renderStats(), browse: () => renderBrowse(), minna: () => renderMinna(), leaveMinna: () => onMinnaHidden(), selftalk: () => showSelftalk(), leaveSelftalk: () => onSelftalkHidden(), songs: () => renderSongs(), leaveSongs: () => onSongsHidden(), wanikani: () => showWanikani() });
 initFontSwitch();
 initTheme();
 initFuriToggle();
@@ -110,6 +112,8 @@ initMinna();
 initSelftalk();
 // 歌 / Songs tab (anon-readable starters; fetches the song library lazily on tab-open).
 initSongs();
+// 鰐蟹 WaniKani tab (token gate → IndexedDB-cached WK dataset; loads lazily on tab-open).
+initWanikani();
 
 // ---- Initial paint ---- Flashcard is the default-active panel; Stats renders lazily on
 // tab-open; Browse needs one render now so it's ready on switch.

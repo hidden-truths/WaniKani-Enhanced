@@ -327,4 +327,12 @@ describe('PUT /v1/progress/{app} — optimistic concurrency (B4)', () => {
         });
         expect(res.status).toBe(200);
     });
+
+    test('the wanikani app namespace is accepted (enum widen)', async () => {
+        signIn('cc4@b.com', 'cc4tok');
+        const res = await putProgress('cc4tok', 'wanikani', {
+            data: { token: '00000000-0000-0000-0000-000000000000' },
+        });
+        expect(res.status).toBe(200);
+    });
 });

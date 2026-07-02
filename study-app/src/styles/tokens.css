@@ -39,6 +39,10 @@
   --leech:#7C3A95; --leech-soft:rgba(124,58,149,.10);
   /* non-verb category accents (spine + line-bullet) — viridian · ochre · wine-rose · taupe */
   --adjective:#2C7D6B; --noun:#A06A1E; --adverb:#A14258; --phrase:#736353;
+  /* 鰐蟹 WaniKani line-colours (subject types) + SRS station ramp, washi-tuned takes on
+     WK's blue/pink/purple. Burned is bronze by day, maki-e gold at night. */
+  --wk-radical:#2E7BA0; --wk-kanji:#B23A66; --wk-vocab:#6C4BA0;
+  --wk-appr:#C25577; --wk-guru:#8A57A5; --wk-master:#4A6FB0; --wk-enl:#38809B; --wk-burn:#8A6B26;
   /* derived surfaces */
   --spine:linear-gradient(to bottom, var(--brand), var(--brand-deep));
   --chip-bg:var(--raised); --surf-card:var(--raised); --surf-inset:#ECE7D9; --surf-nav:rgba(244,241,232,.82);
@@ -80,6 +84,8 @@
   --gold:#E7BC6B; --gold-soft:rgba(231,188,107,.10);
   --leech:#C792EA; --leech-soft:rgba(199,146,234,.12);
   --adjective:#5CC0A6; --noun:#D8A24E; --adverb:#D6818F; --phrase:#AB9A85;
+  --wk-radical:#64B7E0; --wk-kanji:#F27AA5; --wk-vocab:#B18FF0;
+  --wk-appr:#E884A6; --wk-guru:#BA8BDD; --wk-master:#90A6F0; --wk-enl:#6FC0DC; --wk-burn:#E7BC6B;
   --spine:linear-gradient(to bottom, var(--brand), var(--brand-deep));
   --chip-bg:rgba(255,240,216,.035);
   --surf-card:linear-gradient(168deg, #221B14, #1B1610);
@@ -109,6 +115,8 @@
     --gold:#E7BC6B; --gold-soft:rgba(231,188,107,.10);
     --leech:#C792EA; --leech-soft:rgba(199,146,234,.12);
     --adjective:#5CC0A6; --noun:#D8A24E; --adverb:#D6818F; --phrase:#AB9A85;
+    --wk-radical:#64B7E0; --wk-kanji:#F27AA5; --wk-vocab:#B18FF0;
+    --wk-appr:#E884A6; --wk-guru:#BA8BDD; --wk-master:#90A6F0; --wk-enl:#6FC0DC; --wk-burn:#E7BC6B;
     --spine:linear-gradient(to bottom, var(--brand), var(--brand-deep));
     --chip-bg:rgba(255,240,216,.035);
     --surf-card:linear-gradient(168deg, #221B14, #1B1610);
