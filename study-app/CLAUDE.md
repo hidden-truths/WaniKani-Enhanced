@@ -45,6 +45,20 @@ order. The actual DOM/render/feature glue is split into **`src/features/*`** mod
   no API_BASE) and `idb.js` is the app's ONE IndexedDB cache (see the dead-end below). Pure
   derivations (leech scoring, clustering, forecasts, slimmers) live in `core/wanikani.js`;
   render glue tested in `test/wanikani-render.test.js`),
+  `jlpt` (the 合格 JLPT tab — exam MISSION CONTROL: countdown hero + the daily-training
+  checklist + the vocabulary-readiness lens + the four-papers guidance; a **directory**
+  `jlpt/{data,store,view}.js` behind `jlpt/index.js` (lifecycle: `initJlpt`/`showJlpt`),
+  with `jlpt.js` a thin `export *` re-export. `data.js` owns the LAZY word-list singleton —
+  `ensureJlptMap()` dynamic-imports the generated `data/jlpt.js` (7.6k JLPT words N5–N1,
+  its own Vite chunk, kicked at boot) and exposes the sync fail-soft `jlptOf(jp, read)`
+  every surface shares (wanikani badges/activation stamping), plus the one-time
+  `backfillWkJlpt` patch for pre-lens 鰐蟹 cards; `store.js` = the `jlpt` synced blob
+  (level + examDate + rolling per-day checklist record, 409-MERGED via `mergeJlpt`);
+  `view.js` renders + the ACTIONS click table (auto tasks track live app signals —
+  deck due / leeches / selftalk practice / WK reviews via `ensureWkData`/`onWkData` —
+  and write THROUGH to the day record; manual tasks toggle it). Pure derivations
+  (map/lookup/countdown/coverage/heat/merge) live in `core/jlpt.js`; tests in
+  `test/jlpt-core.test.js` + `test/jlpt-render.test.js`),
   `record-compare` (the generic
   record-and-compare engine — fed by Minna AND Self-Talk; now a **directory**
   `record-compare/{state,capture,takes,playback,waveform,view}.js` behind a 13-export barrel
@@ -160,7 +174,10 @@ Markup: `#panel-study` (flashcard setup → card stage → done), `#panel-browse
 lesson dashboard — near-empty in markup, filled at runtime by `renderMinna`),
 `#panel-selftalk` (独り言), `#panel-songs` (歌 — `#sgBody` filled by `renderSongs`),
 `#panel-wanikani` (鰐蟹 — `#wkHead`/`#wkBody` filled by `renderWanikani`; `#wkModal` is its
-subject-detail overlay), plus the header/toolbar, tabs, and the auth modal + sign-up banner.
+subject-detail overlay), `#panel-jlpt` (合格 JLPT — `#jlptHead`/`#jlptBody` filled by
+`renderJlpt`), plus the header/toolbar, tabs, and the auth modal + sign-up banner. The
+per-tab `.marker` indices run 01–08 / 08 (study/browse/stats in the markup; jlpt/minna/
+selftalk/songs/wanikani rendered at runtime) — renumber ALL of them when adding a tab.
 
 `data/verbs.js` holds the `VERBS` dataset. The old single-file `app.js` sections are now
 one module each under `src/features/*` (the section names map 1:1 to filenames): persistence
@@ -261,16 +278,17 @@ one module each under `src/features/*` (the section names map 1:1 to filenames):
   playback itself is the TTS bullet above.)
 - **Cloud:** `api`, `bootAuth`, `updateAccountChip`, `openAuth`. **Cross-origin**
   (`api()` rebases every path onto `API_BASE` + sends `credentials:'include'`), the
-  session lives in a `.wkenhanced.dev` httpOnly cookie. **SEVEN debounced synced blobs** —
+  session lives in a `.wkenhanced.dev` httpOnly cookie. **EIGHT debounced synced blobs** —
   progress (`verbs`), custom verbs (`custom-verbs`), settings (`settings`), Minna (`minna`),
-  Self-Talk (`selftalk`), Songs (`songs`), WaniKani (`wanikani`, the WK API token only) — all
+  Self-Talk (`selftalk`), Songs (`songs`), WaniKani (`wanikani`, the WK API token only),
+  JLPT (`jlpt`, level + exam date + the daily-checklist record) — all
   built from ONE `createSyncedBlob` abstraction
   ([features/synced-blob.js](src/features/synced-blob.js)): debounced `schedule` →
   `push` (PUT `/v1/progress/{appKey}`) → `pull` (server-wins-on-login, fresh-account
   seed). Each blob supplies only its `read`/`apply` + unique side-effects (custom→`rebuildData`,
   settings→`applyFurigana`+`paintPrefChips`+`renderSettings`, selftalk→phrase-migration+repaint,
   minna→overlay merge, songs→library re-render, wanikani→connect-through-the-gate on a pulled
-  token). All seven are declared ONCE in `cloud.js`'s ordered
+  token). All eight are declared ONCE in `cloud.js`'s ordered
   **blob registry** (`[{blob,busKey}]`); `pullCloud`/`flushQueue`/`initCloud` delegate to the DI'd
   **sync-orchestrator** ([net/sync-orchestrator.js](src/net/sync-orchestrator.js)) so the pull / flush /
   bus-wire sets can never drift. `pullCloud` runs `orchestrator.pullAll()` (each blob isolated — one
@@ -338,6 +356,13 @@ in this blob** — 9.4k slimmed subjects + assignments + review stats live in th
 device-local IndexedDB DB `jpverbs_wanikani` (features/wanikani/idb.js), re-syncable
 from api.wanikani.com at any time (full first sync ≈ 30 requests, then incremental via
 per-collection `updated_after` cursors kept in the IDB `meta` store).
+合格 JLPT state (`localStorage["jpverbs_jlpt"]`, synced as app `jlpt`):
+`{ level:'N5'..'N1', examDate:'YYYY-MM-DD', days:{'YYYY-MM-DD':{<taskId>:1}} }` — the
+target level, the exam date (default 2026-12-06), and the rolling daily-checklist record
+(pruned to the last 60 days by `normalizeJlpt`; auto tasks write through when a live
+signal flips done, manual tasks toggle). 409s MERGE via `mergeJlpt` (day-record union,
+local scalars win). The JLPT WORD LIST is NOT in this blob or localStorage — it's the
+generated `src/data/jlpt.js` module, dynamic-imported once per session (its own chunk).
 
 ## Design system
 
@@ -361,7 +386,7 @@ per-collection `updated_after` cursors kept in the IDB `meta` store).
 > **`styles/record-compare.css`** (the record/play/compare + speaking-bar engine UI + the `#navExtra`
 > dock trims); then the per-surface `flashcards/browse/stats/minna/selftalk/songs/wanikani.css`. `src/main.js`
 > imports them in cascade order: **tokens → base → chrome → styles → modals → record-compare →
-> flashcards → browse → stats → minna → selftalk → songs → wanikani** (modals + record-compare sit in the
+> flashcards → browse → stats → minna → selftalk → songs → wanikani → jlpt** (modals + record-compare sit in the
 > shared-core slot, after styles.css + chrome.css so Rule A holds; the modal entrance keyframes
 > overlayIn/modalPop stay in styles.css since modalPop is shared with the tap-a-word `.word-pop`). The
 > mocks stay in [mockups/redesign/](mockups/redesign/) as the visual reference; the full Phase-by-phase
@@ -464,6 +489,18 @@ Component contracts you must preserve:
   hyphen is a word boundary), making every `api()` fetch throw an invalid-`RequestCache`
   TypeError that surfaced only signed-in. Server side of all this: the credentialed-CORS
   branch + cookie `Domain` in [../wk-enhanced-api/CLAUDE.md](../wk-enhanced-api/CLAUDE.md).
+- **The 合格 JLPT tab's daily checklist mixes AUTO and MANUAL tasks on purpose — don't
+  "unify" them.** Auto rows (WK reviews / deck due / speak) read a live signal each render
+  and can't be un-ticked (the signal owns the truth); when one flips done it's written
+  THROUGH to `days[today]` (persistDone) so the 14-day heatmap is plain recorded data, not
+  a re-derivation (yesterday's live signals are gone). Manual rows (listen/grammar/
+  textbook) have no reliable in-app signal — Songs progress has no per-day timestamps, and
+  a Shadow take marks the SHARED selftalk practice signal, so "listening done" can't be
+  auto-derived without new plumbing. The WK row renders a Connect affordance (excluded
+  from the ring denominator) when no token; WK signals arrive via `ensureWkData()` +
+  `onWkData` (wanikani/index.js) so the tab never blocks paint on the WK cache read.
+  There is deliberately NO separate "JLPT streak" — the tab surfaces the existing review +
+  speaking streaks; a third streak semantic over 7 heterogeneous tasks was judged mush.
 - **The 鰐蟹 WaniKani tab bypasses BOTH the `api()` transport AND the localStorage cache
   convention — deliberately, don't "fix" either.** (1) `features/wanikani/api.js` fetches
   `api.wanikani.com` with a plain `fetch` + `Authorization: Bearer <user's WK token>`:
