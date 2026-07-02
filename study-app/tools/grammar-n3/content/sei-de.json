@@ -1,0 +1,22 @@
+{
+  "id": "sei-de",
+  "explanation": "Attributes a bad result to its cause: \"because of …\" with blame. It contrasts with おかげで, which credits a good result. せいか softens the claim to \"perhaps because\", and 〜のせいにする means to pin the blame on someone or something.",
+  "formation": "N の / な-adj な / V・い-adj (plain) + せいで",
+  "examples": [
+    {
+      "jp": "<ruby>雨<rt>あめ</rt></ruby>のせいで、<ruby>試合<rt>しあい</rt></ruby>が<ruby>中止<rt>ちゅうし</rt></ruby>になった。",
+      "en": "Because of the rain, the match was called off.",
+      "blank": "せいで"
+    },
+    {
+      "jp": "<ruby>夜遅<rt>よるおそ</rt></ruby>くまでゲームをしたせいで、<ruby>今朝<rt>けさ</rt></ruby>は<ruby>起<rt>お</rt></ruby>きられなかった。",
+      "en": "Because I played games late into the night, I couldn't get up this morning.",
+      "blank": "せいで"
+    },
+    {
+      "jp": "<ruby>事故<rt>じこ</rt></ruby>のせいで、<ruby>電車<rt>でんしゃ</rt></ruby>が<ruby>一時間<rt>いちじかん</rt></ruby>も<ruby>遅<rt>おく</rt></ruby>れた。",
+      "en": "Because of the accident, the train was delayed a whole hour.",
+      "blank": "せいで"
+    }
+  ]
+}

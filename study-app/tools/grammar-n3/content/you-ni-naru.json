@@ -1,0 +1,27 @@
+{
+  "id": "you-ni-naru",
+  "explanation": "Describes a change of state or ability: something that wasn't the case before has come about, often gradually. With potential verbs it means \"became able to\"; with ordinary verbs it marks a new habit or situation (\"came to …\"). The negative 〜なくなる expresses that something stopped being the case.",
+  "formation": "V-dict / V-ない / V-potential + ようになる",
+  "examples": [
+    {
+      "jp": "<ruby>毎日<rt>まいにち</rt></ruby><ruby>練習<rt>れんしゅう</rt></ruby>して、<ruby>泳<rt>およ</rt></ruby>げるようになった。",
+      "en": "After practicing every day, I became able to swim.",
+      "blank": "ようになった"
+    },
+    {
+      "jp": "<ruby>日本<rt>にほん</rt></ruby>に<ruby>来<rt>き</rt></ruby>てから、<ruby>納豆<rt>なっとう</rt></ruby>が<ruby>食<rt>た</rt></ruby>べられるようになりました。",
+      "en": "Since coming to Japan, I've become able to eat natto.",
+      "blank": "ようになりました"
+    },
+    {
+      "jp": "<ruby>弟<rt>おとうと</rt></ruby>は<ruby>最近<rt>さいきん</rt></ruby>、<ruby>朝<rt>あさ</rt></ruby><ruby>早<rt>はや</rt></ruby>く<ruby>起<rt>お</rt></ruby>きるようになった。",
+      "en": "My little brother has recently started getting up early.",
+      "blank": "ようになった"
+    },
+    {
+      "jp": "<ruby>眼鏡<rt>めがね</rt></ruby>をかけたら、<ruby>黒板<rt>こくばん</rt></ruby>の<ruby>字<rt>じ</rt></ruby>がよく<ruby>見<rt>み</rt></ruby>えるようになりました。",
+      "en": "Once I put on glasses, I could see the writing on the blackboard clearly.",
+      "blank": "ようになりました"
+    }
+  ]
+}

@@ -1,0 +1,22 @@
+{
+  "id": "wake-ni-wa-ikanai",
+  "explanation": "Expresses that something can't be done for social, moral, or circumstantial reasons — not physical impossibility, but \"I can't very well …\". The double-negative form 〜ないわけにはいかない flips it into an obligation: \"can't get away with not doing\", i.e. have no choice but to do.",
+  "formation": "V-dict + わけにはいかない ／ V-ない + わけにはいかない (obligation)",
+  "examples": [
+    {
+      "jp": "<ruby>明日<rt>あした</rt></ruby>は<ruby>大事<rt>だいじ</rt></ruby>な<ruby>試験<rt>しけん</rt></ruby>があるので、<ruby>今夜<rt>こんや</rt></ruby>は<ruby>遊<rt>あそ</rt></ruby>ぶわけにはいかない。",
+      "en": "I have an important exam tomorrow, so I can't very well go out and have fun tonight.",
+      "blank": "わけにはいかない"
+    },
+    {
+      "jp": "<ruby>約束<rt>やくそく</rt></ruby>したから、<ruby>行<rt>い</rt></ruby>かないわけにはいかない。",
+      "en": "I promised, so I have no choice but to go.",
+      "blank": "わけにはいかない"
+    },
+    {
+      "jp": "<ruby>借<rt>か</rt></ruby>りた<ruby>本<rt>ほん</rt></ruby>を<ruby>返<rt>かえ</rt></ruby>さないわけにはいきません。",
+      "en": "I can't very well not return the book I borrowed.",
+      "blank": "わけにはいきません"
+    }
+  ]
+}
