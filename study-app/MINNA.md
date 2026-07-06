@@ -1,7 +1,8 @@
 # みんなの日本語 — lesson dashboard
 
-The **source of truth for the みんなの日本語 (Minna no Nihongo) surface** — a 4th tab
-in the study app that turns the textbook into an interactive, account-gated workbook:
+The **source of truth for the みんなの日本語 (Minna no Nihongo) surface** — the
+教科書/Textbook tab (5th of the 8 tabs, after 合格 JLPT) that turns the textbook into an
+interactive, account-gated workbook:
 vocabulary with native-speaker audio, grammar points, example sentences, a model
 conversation, and a per-lesson notes scratchpad. Chapter 23 shipped first (the
 maintainer's iTalki lesson); the design generalizes to all 50 lessons.
@@ -13,8 +14,8 @@ back here:
 - **Frontend** (the tab itself): [index.html](index.html) `#panel-minna` + the
   [src/features/minna/](src/features/minna/) package (`state`/`store`/`activate`/`clips`/`speaking`/
   `view` behind `index.js`; [src/features/minna.js](src/features/minna.js) is a thin re-export) +
-  Minna styles in [src/styles.css](src/styles.css). Per-function references below that say
-  `minna.js` now live in the package (render/sections → `view.js`, the SyncedBlob + clip ranges →
+  Minna styles in [src/styles/minna.css](src/styles/minna.css). Per-function references below that
+  say `minna.js` now live in the package (render/sections → `view.js`, the SyncedBlob + clip ranges →
   `store.js`, vocab activation → `activate.js`, the clip marker → `clips.js`). Contributor notes:
   the みんなの日本語 dead-end in [CLAUDE.md](CLAUDE.md).
 - **Server** (content + audio + gating): [../wk-enhanced-api/src/routes/minna.ts](../wk-enhanced-api/src/routes/minna.ts),
@@ -46,7 +47,7 @@ words flowing straight into the SRS deck so they're never studied just once.
 ## How it works (end to end)
 
 ```
- Tab click ─► renderMinna()                         [features/minna.js]
+ Tab click ─► renderMinna()                         [features/minna/view.js]
               │  no account?  → renderMinnaGate()  (sign-in wall)
               │  GET /v1/minna/lessons              → chapter chips  L23 …
               ▼
@@ -79,9 +80,14 @@ so a credentialed `fetch` from the page authorizes the `/v1/minna/*` calls.
 
 ## Server endpoints
 
-All three are **signed-in only**, optionally narrowed to an owner allowlist
+All of these are **signed-in only**, optionally narrowed to an owner allowlist
 (`MINNA_OWNER_EMAILS`). The gate returns a single `401` for *both* "not signed in" and
-"not on the allowlist" so a non-owner can't even probe which lessons exist.
+"not on the allowlist" so a non-owner can't even probe which lessons exist. Since
+audio-unify, the audio + recordings routes live under **`/v1/audio/*`** (one unified audio
+surface shared with TTS, defined in [../wk-enhanced-api/src/routes/audio.ts](../wk-enhanced-api/src/routes/audio.ts))
+but keep the **same Minna owner gate**; the old `/v1/minna/{audio,recordings}` alias mounts
+were **removed** once the last client migrated — only lesson content + practice history are
+served from `/v1/minna/*` now.
 
 | Method | Path | Cache | Description |
 |---|---|---|---|
@@ -94,8 +100,10 @@ All three are **signed-in only**, optionally narrowed to an owner allowlist
 | DELETE | `/v1/audio/recordings/{id}` | — | **(Phase 2)** Delete one of the owner's recordings + its storage object (idempotent). |
 | GET | `/v1/minna/practice` | `no-store` | **(Phase 2)** The user's per-lesson practice history — one row per lesson recorded in, with distinct-item + take counts and the last-practiced time. Own path (not under `/recordings/`) so the `/recordings/{id}` param route can't shadow it. |
 
-Defined in [../wk-enhanced-api/src/routes/minna.ts](../wk-enhanced-api/src/routes/minna.ts); mounted at `/v1/minna` in
-[../wk-enhanced-api/src/index.ts](../wk-enhanced-api/src/index.ts). Schemas in [../wk-enhanced-api/src/schemas.ts](../wk-enhanced-api/src/schemas.ts)
+Lessons + practice are defined in [../wk-enhanced-api/src/routes/minna.ts](../wk-enhanced-api/src/routes/minna.ts)
+(mounted at `/v1/minna`); the audio + recordings routes in
+[../wk-enhanced-api/src/routes/audio.ts](../wk-enhanced-api/src/routes/audio.ts) (mounted at `/v1/audio`).
+Schemas in [../wk-enhanced-api/src/schemas.ts](../wk-enhanced-api/src/schemas.ts)
 (`MinnaLessons…`, `MinnaLesson`, `MinnaAudioQuery`).
 
 ### The audio proxy (and its SSRF guard)
@@ -195,9 +203,9 @@ only `accent`.
 
 ## Frontend
 
-`#panel-minna` is near-empty in [index.html](index.html);
-[src/features/minna.js](src/features/minna.js) fills it on tab activation (`renderMinna()`,
-lazy — same pattern as Stats). Key pieces:
+`#panel-minna` is near-empty in [index.html](index.html); the
+[src/features/minna/](src/features/minna/) package fills it on tab activation (`renderMinna()`
+in `view.js`, lazy — same pattern as Stats). Key pieces:
 
 - **`renderMinna()` / `renderMinnaLesson(n)`** — gate wall when `!account`, else chapter
   chips + the active lesson. Sections are collapsible `<details>` (`mnSection`):
@@ -209,6 +217,16 @@ lazy — same pattern as Stats). Key pieces:
   audio uses the same button.
 - **Notes** — a per-lesson `<textarea>`; debounced (500 ms) `input` → `saveMinna()` →
   localStorage + a synced PUT, with a "saved · synced" / "saved on this device" tell.
+- **Tap-a-word on the sentences (Phase 3)** — the grammar/example/conversation sentences are
+  ALSO gated rows in the server **sentence store** (`source='minna'`, private), GiNZA-parsed
+  offline; `/v1/minna/lessons/{n}` attaches each one's `tokens` + structured `furigana`
+  (matched by plainText hash), and `view.js`'s `mnSentenceJp` renders `overlayTokens`
+  (tappable words, `wireWordTaps` delegated once on `#mnBody`) when they're present, else
+  plain `rubyHtml`. The lesson JSON stays the CONTENT source; the store supplies only the
+  NLP layer. Same merge-quality tap-a-word as the flashcards.
+- **Vocab list is a `.vrow` CSS grid** ([src/styles/minna.css](src/styles/minna.css)) — the
+  old `.mn-vocab` `<table>` (and its WebKit border-collapse trap) is gone; the one remaining
+  `border-collapse` table is the practice-history `.mn-ph`.
 
 ### Vocab activation reuses the custom-card system
 
@@ -265,7 +283,7 @@ The **only new synced blob** is the per-lesson notes (below).
 
 | Where | Key | Shape |
 |---|---|---|
-| localStorage + synced app `minna` | `jpverbs_minna` | `{ notes:{ "<lesson>": "<text>" }, lastLesson:<n>, overlays:{…}, clips:{ "<lesson>": { "<lineIdx>": [startSec,endSec] } } }` — the notes scratchpad + last-open chapter + dedup overlays + **per-line conversation clip ranges** (record-and-compare). The **4th** sync trio (`scheduleMinnaSync`/`pushMinnaCloud`/`pullMinnaCloud`), mirroring custom-verbs/settings; chained into `pullCloud` on sign-in. |
+| localStorage + synced app `minna` | `jpverbs_minna` | `{ notes:{ "<lesson>": "<text>" }, lastLesson:<n>, overlays:{…}, clips:{ "<lesson>": { "<lineIdx>": [startSec,endSec] } } }` — the notes scratchpad + last-open chapter + dedup overlays + **per-line conversation clip ranges** (record-and-compare). Synced as the `minnaBlob` (`createSyncedBlob` in [src/features/minna/store.js](src/features/minna/store.js)), one of the EIGHT blobs in cloud.js's registry; `saveMinna()` schedules the push directly (no sync-bus key), the orchestrator pulls it with the rest on sign-in, and 409s **merge** via `mergeMinna` (core/merge.js). |
 | localStorage + synced app `custom-verbs` | `jpverbs_custom` | Activated vocab lives **here** as tagged cards — *not* in `jpverbs_minna`. |
 | server `data/minna/lesson-<n>.json` | — | Lesson content — server-owned, git-tracked, never in localStorage. |
 
@@ -329,9 +347,11 @@ points here). Roughly priority-ordered.
 
 Record your own voice and compare it to the cached native audio — the marquee feature, and
 the headline reason the audio is proxied + cached on our own storage in Phase 1. Frontend lives in
-[src/features/record-compare.js](src/features/record-compare.js) (capture/upload/compare/playback)
-+ the conversation-line clip glue in [src/features/minna.js](src/features/minna.js); pure
-helpers in [src/core/recordings.js](src/core/recordings.js).
+the [src/features/record-compare/](src/features/record-compare/) package
+(`state`/`capture`/`takes`/`playback`/`waveform`/`view` behind `index.js`;
+[src/features/record-compare.js](src/features/record-compare.js) is a thin re-export) + the
+conversation-line clip glue in [src/features/minna/clips.js](src/features/minna/clips.js); pure
+helpers in [src/core/recordings.js](src/core/recordings.js) + [src/core/refs.js](src/core/refs.js).
 
 - **Capture** — `MediaRecorder`(`getUserMedia` audio) → opus/webm (mp4 fallback on Safari),
   with a preview / Save / Re-record / Cancel review step. A record control sits under each
@@ -362,9 +382,10 @@ helpers in [src/core/recordings.js](src/core/recordings.js).
   `AudioBuffer`; clips are short so size stays under the 2 MB cap; server accepts `audio/wav`.)
 - **Store** — per-user takes on the server: the `minna_recordings` table + **PRIVATE**
   storage objects (`acl:'private'`), served only through the owner-scoped
-  `GET /v1/minna/recordings/{id}`. `POST` prunes per item to the user's **keep-N** (Settings
+  `GET /v1/audio/recordings/{id}`. `POST` prunes per item to the user's **keep-N** (Settings
   → "Recordings to keep per word", default 3, 1–20). Routes:
-  `POST`/`GET`(list)/`GET`(bytes)/`DELETE /v1/minna/recordings`.
+  `POST`/`GET`(list)/`GET`(bytes)/`DELETE` under `/v1/audio/recordings` (the unified audio
+  surface — the legacy `/v1/minna/recordings` aliases are gone).
 - **Compare player** — per item: **▶ you · ▶ reference · ▶ →you** (sequential) **· ▶ both**
   (reference + take overlaid, one-shot via a 2-count barrier) **+ loop** (seq only). Take playback
   is gated (one reused `<audio crossOrigin='use-credentials'>`). **The "reference" is any voice**
@@ -479,9 +500,9 @@ helpers in [src/core/recordings.js](src/core/recordings.js).
 ## Verifying Minna changes
 
 - **Gating** (most important): a signed-in **non-owner** must get `401` from *all* of
-  `/v1/minna/lessons`, `/lessons/{n}`, and `/audio` — while `/v1/auth/me` still returns
-  `200` (proves it's the allowlist gating, not a broken session). With a **blank**
-  allowlist, any signed-in account gets `200` and the audio response carries
+  `/v1/minna/lessons`, `/v1/minna/lessons/{n}`, and `/v1/audio/native` — while `/v1/auth/me`
+  still returns `200` (proves it's the allowlist gating, not a broken session). With a
+  **blank** allowlist, any signed-in account gets `200` and the audio response carries
   `Cache-Control: private, …`. (Both verified during the allowlist commit.)
 - **Audio cache** — first `/v1/audio/native?src=…` for a path logs `cached:false` and
   writes `minna/audio/…`; the next logs `cached:true` and never touches vnjpclub.

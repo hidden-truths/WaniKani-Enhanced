@@ -1,18 +1,20 @@
 # 独り言 Self-Talk — output/speaking-practice tab
 
-The **source of truth for the Self-Talk surface** — the 5th tab in the study app. Where the rest
+The **source of truth for the Self-Talk surface** — the 独り言 tab (6th of the 8 tabs). Where the rest
 of the app trains *recognition* (flashcards, Browse, Minna), Self-Talk is **output reps**: a running
 daily monologue you read aloud, hear, record, and compare to a reference voice. Built for N3-bound
 speaking practice — the grammar reading-only drills miss (〜ている, 〜なきゃ/〜ないと, 〜たい,
 volitional 〜よう, 〜ておく, 〜そう…).
 
 Layer docs: module map + dead-ends in [CLAUDE.md](CLAUDE.md); card/furigana model in
-[CARDS.md](CARDS.md); the shared record-and-compare engine in [src/features/record-compare.js](src/features/record-compare.js) (contract in [CLAUDE.md](CLAUDE.md)).
+[CARDS.md](CARDS.md); the shared record-and-compare engine in
+[src/features/record-compare/](src/features/record-compare/) (contract in [CLAUDE.md](CLAUDE.md)).
 
 ## What it is (and how it differs from Minna)
 
 - **Anon-readable, account-gated authoring** (as of the unified sentence store, Phase 1). Phrases
-  live in the server **sentence store** and are fetched from `GET /v1/sentences?ownerType=selftalk`
+  live in the server **sentence store** and are fetched from
+  `GET /v1/sentences?ownerType=selftalk&annotate=1`
   (with a localStorage read-through cache) — built-in phrases are **public** rows everyone (incl.
   anon) can read; a signed-in user also gets their own **private** rows. Unlike みんなの日本語
   (copyright-gated), Self-Talk built-ins are original + model-authored, so anon read is fine.
@@ -26,15 +28,15 @@ Layer docs: module map + dead-ends in [CLAUDE.md](CLAUDE.md); card/furigana mode
 
 | Concern | File |
 |---|---|
-| Tab glue (render/playback/record/authoring/lifecycle) | [src/features/selftalk.js](src/features/selftalk.js) |
+| Tab glue — the `features/selftalk/` package: `index.js` (lifecycle + the delegated-events orchestrator) · `state.js` (the shared mutable `S` view-state + `SELFTALK_SCOPE`) · `store.js` (phrase/template read-through resources + the synced blob) · `view.js` (grid/topic render) · `practice.js` (streak/✓) · `authoring.js` (#stPhraseModal CRUD) · `speaking.js` (speaking-bar glue). [src/features/selftalk.js](src/features/selftalk.js) is a thin `export *` re-export. | [src/features/selftalk/](src/features/selftalk/) |
 | Pure logic (rotation, grouping, streak, template realization) | [src/core/selftalk.js](src/core/selftalk.js) |
 | Built-in starter content (SEED SOURCE for the store, not read at runtime) | [src/data/selftalk.js](src/data/selftalk.js) |
-| Slot-swap TEMPLATES — SEED SOURCE for `sentence_template` (served via `GET /v1/templates`; combos lazily materialize via `POST /v1/templates/{id}/realize`) | [src/data/selftalk-templates.js](src/data/selftalk-templates.js) |
+| Slot-swap TEMPLATES — SEED SOURCE for `sentence_template` (served via `GET /v1/templates?source=selftalk`; combos lazily materialize via `POST /v1/templates/{id}/realize`) | [src/data/selftalk-templates.js](src/data/selftalk-templates.js) |
 | Phrase store: server sentence rows + repo (`getSentences`/`createSentence`/…) | [../wk-enhanced-api/src/db/client.ts](../wk-enhanced-api/src/db/client.ts), [routes/sentences.ts](../wk-enhanced-api/src/routes/sentences.ts) |
 | Seed built-ins → public rows | [../wk-enhanced-api/scripts/seed-sentences.ts](../wk-enhanced-api/scripts/seed-sentences.ts) |
 | Synced storage (practice/streak signal ONLY — phrases moved to the store) | [src/persistence/selftalk.js](src/persistence/selftalk.js) |
 | Markup (nav tab, `#panel-selftalk`, `#stPhraseModal`) | [index.html](index.html) |
-| Record-and-compare ENGINE (shared with Minna) | [src/features/record-compare.js](src/features/record-compare.js) |
+| Record-and-compare ENGINE (shared with Minna + Songs) | [src/features/record-compare/](src/features/record-compare/) (thin re-export at [src/features/record-compare.js](src/features/record-compare.js)) |
 
 ## Data model
 
@@ -68,11 +70,14 @@ A **phrase** is `{ id, jp, read, mean, topic, thought?, grammar:[…], custom? }
   `ext_id` (`st-<slug>` / `usr-<uuid>`), preserved verbatim — it's the record-compare itemKey +
   practice key.
 
-**Synced blob** (`localStorage["jpverbs_selftalk"]`, app key `selftalk` — the 5th sync trio):
+**Synced blob** (`localStorage["jpverbs_selftalk"]`, app key `selftalk` — one of the EIGHT
+`createSyncedBlob`s in cloud.js's registry; 409s merge via `mergeSelftalkPractice`):
 `{ practice:{ lastDay:'YYYY-MM-DD'|null, streak, doneToday:[id…] } }` — the practice/streak signal
 ONLY (per "blobs = per-user signals; store = sentence text"). Pre-store phrases in an old blob are
-migrated into the store once on sign-in, then dropped from the blob. Server enum already includes
-`selftalk` ([../wk-enhanced-api/src/routes/progress.ts](../wk-enhanced-api/src/routes/progress.ts)).
+migrated into the store once on sign-in (`migrateSelftalkPhrases`,
+[src/features/cloud-migrations.js](src/features/cloud-migrations.js)), then dropped from the blob.
+Server enum already includes `selftalk`
+([../wk-enhanced-api/src/routes/progress.ts](../wk-enhanced-api/src/routes/progress.ts)).
 
 ## Structure (a grid + drill-in)
 

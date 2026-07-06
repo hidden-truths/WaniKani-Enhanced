@@ -1,6 +1,6 @@
 # 歌 / Songs — song & lyric analysis surface
 
-The **source of truth for the 歌 / Songs surface** — the 6th tab in the study app. Where the rest
+The **source of truth for the 歌 / Songs surface** — the 歌 tab (7th of the 8 tabs). Where the rest
 of the app trains recognition (flashcards, Browse, みんなの日本語) and output (独り言 Self-Talk),
 Songs adds the **authentic-input** surface those miss: turn a real song into **listening, reading,
 and speaking** practice. You bring a song (paste its lyrics + link the video), one analysis pass
@@ -13,7 +13,7 @@ the layer-specific docs point back here.
 - **Frontend** (the tab): [index.html](index.html) `#panel-songs` + the
   [src/features/songs/](src/features/songs/) package (per-mode modules behind `index.js`; thin
   re-export at [src/features/songs.js](src/features/songs.js)) + [src/features/songs-youtube.js](src/features/songs-youtube.js)
-  + pure logic in [src/core/songs.js](src/core/songs.js) + Songs styles in [src/styles.css](src/styles.css).
+  + pure logic in [src/core/songs.js](src/core/songs.js) + Songs styles in [src/styles/songs.css](src/styles/songs.css).
 - **Server** (song store + analysis): [../wk-enhanced-api/src/routes/songs.ts](../wk-enhanced-api/src/routes/songs.ts),
   [../wk-enhanced-api/src/services/songAnalyze.ts](../wk-enhanced-api/src/services/songAnalyze.ts),
   [../wk-enhanced-api/src/db/repos/songs.ts](../wk-enhanced-api/src/db/repos/songs.ts).
@@ -22,17 +22,20 @@ the layer-specific docs point back here.
   reserved record-compare scope + the day-streak) and みんなの日本語 [MINNA.md](MINNA.md)
   (content tab + the clip-marker timing pattern + vocab activation + the Source facet).
 
-> **Status (2026-06-16): All four modes shipped — Library + Add + Read + Mine + Listen + Shadow;
-> a 12-song curated library + offline line-timing (synced highlight + per-line replay); and the
-> `songs` synced progress blob — shadowed-line tracking → library progress ring, per-line stars, and
-> last-mode resume — shipped (completes Shadow).**
-> Remaining follow-ups: the in-app tap-to-sync editor (private BYO timing) + the inline Add-review
-> editor. The
-> current state, the shipped commits, the new mechanisms, the open gotchas, and the prioritized
-> what's-left live in **[SONGS_HANDOFF.md](SONGS_HANDOFF.md)** — read it first for a cold start. The
-> [Phase checklist](#phase-checklist--cross-session-tracker) at the bottom is the live tracker. The
-> UX is locked by the mockups in [mockups/songs/](mockups/songs/) (open `index.html`) and the memory
-> note `song-lyric-tab-design`; this doc is the **technical** source of truth.
+> **Status (2026-07): the surface is feature-complete for v1.** All four modes shipped —
+> Library + Add + Read + Mine + Listen + Shadow; a 12-song curated library, ALL timed offline
+> (synced highlight + per-line replay); the `songs` synced progress blob (shadowed-line
+> tracking → library progress ring, per-line stars, last-mode resume); song **edit/delete** +
+> manual Add **title/artist** (2026-06-22); the Songs→Browse grammar deep-link now applies the
+> filter (`openBrowseGrammar`); and a 2026-07 SOLID pass split the glue into the
+> `features/songs/` package + added `test/songs-render.test.js`.
+> Remaining follow-ups (tracked in [ROADMAP.html](../ROADMAP.html) "歌 / Songs"): the in-app
+> tap-to-sync editor (private BYO timing), the inline Add-review editor, the analyze-120 /
+> persist-400 line-cap mismatch, and the prod re-seed/redeploy. The
+> [Phase checklist](#phase-checklist--cross-session-tracker) at the bottom is the shipped
+> record. The UX is locked by the mockups in [mockups/songs/](mockups/songs/) (open
+> `index.html`) and the memory note `song-lyric-tab-design`; this doc is the **technical**
+> source of truth.
 
 ---
 
@@ -51,7 +54,7 @@ cross-linking into Self-Talk and the example corpus.
 ## How it works (end to end)
 
 ```
- Tab click ─► renderSongs()                              [features/songs.js]
+ Tab click ─► renderSongs()                              [features/songs/index.js]
               │  GET /v1/songs            → library: your private songs + public starters
               ▼
         Library grid (song cards: coverage %, progress ring, source badge)
@@ -218,9 +221,12 @@ upload, keep-N) with `lesson=SONGS_SCOPE`. Line synth playback reuses **`/v1/aud
 
 ## The four modes
 
-The mode switch (Read / Listen / Shadow) is a segmented control in the song header (`.mode-switch`);
-Mine is reached from a "what's in this song" affordance. Each mode renders into the stable
-`#songsBody` container.
+The mode switch is a row of four `.mtab` tab buttons in the song header — Read · Listen ·
+Shadow · **Mine** (Mine is a full peer mode, not a side affordance; the grammar reference
+panel is a sub-view within it, opened by a grammar chip/row). Every mode renders into the
+stable **`#sgContent`** wrapper inside the panel's `#sgBody` host; Listen/Shadow step
+re-renders rewrite `#sgContent` only (`renderListen`/`renderShadow`), so the YouTube player —
+mounted outside it — never reloads mid-session.
 
 ### Read — the lyric viewer (foundation)
 The base surface every other mode builds on. Renders the song's lines from the store:
@@ -347,8 +353,8 @@ JLPT + explanation from the generated catalog (`grammarLabel`/`grammarJlpt`, [da
   source, scrape, or reproduce lyrics itself.** The curation toolchain is a **single command** —
   [`wk-enhanced-api/scripts/curate-song.ts`](../wk-enhanced-api/scripts/curate-song.ts) chains
   analyze → write `data/songs/<slug>.json` → `song-align/` timing → `seed-songs.ts` (docs:
-  [data/songs/README.md](../wk-enhanced-api/data/songs/README.md) "Adding a song — one command"). Full
-  state + provenance: [SONGS_HANDOFF.md](SONGS_HANDOFF.md).
+  [data/songs/README.md](../wk-enhanced-api/data/songs/README.md) "Adding a song — one command";
+  the yt-dlp cookie/JS-runtime setup lives in [../song-align/README.md](../song-align/README.md)).
 - **BYO songs = PRIVATE rows; authoring requires an account.** Paste/analyze/save gate on `account`
   (anon sees a sign-in nudge); your lyrics are private store rows (`created_by`, `visibility=private`),
   never public. This is the same posture as Self-Talk authoring + custom-card examples.
@@ -407,13 +413,22 @@ JLPT + explanation from the generated catalog (`grammarLabel`/`grammarJlpt`, [da
   flags + the review screen are for). Same status caveat as `examples.js` / Self-Talk content.
 - **The `features/songs/` modules share view-state via `state.js`'s `S`, mutated IN PLACE** (never
   reassigned — ES `import`s are read-only, so a module-`let` can't be cross-module-mutated; the
-  record-compare pattern). The modules form **runtime-only import cycles** (`render`/`flash` are
-  imported back from `index.js` by add/progress/mine) — fine because every cross-call fires at
-  event/render time, like cloud⇄minna. Listen/Shadow re-render into the **stable `#sgContent`
+  record-compare pattern). The modules form **runtime-only import cycles** (`render`/`showLibrary`/
+  `refreshLibrary` are imported back from `index.js`/`library.js` by add/progress/edit) — fine
+  because every cross-call fires at event/render time, like cloud⇄minna. Transient status pills go
+  through cloud-core's `setSyncStatus` (the ONE `#syncStatus` writer — the old local `flash()` copy
+  is gone). Listen/Shadow re-render into the **stable `#sgContent`
   wrapper** (NOT via `render()`), so the YouTube iframe isn't remounted per step; the delegated
   click/keydown + `wireWordTaps` + `setOnTakeSaved` are **attach-once** on `#sgBody` (`_sgWired`).
   Don't "tidy" any of these into eager calls or per-render re-wiring. Full decomposition record +
   the remaining-peel-free as-built map: [../ROADMAP.html](../ROADMAP.html) (refactor: Workstream S — shipped).
+- **A single song open has NO offline cache** — deliberate asymmetry. The library list reads
+  through `createReadThroughResource` (`jpverbs_songs_cache`, degrades offline), but
+  `loadSong(id)` (`songs/library.js`) is a bare fetch: offline, `openById` fails quietly and
+  you stay on the (cached) library. Line payloads are big and per-song; caching every opened
+  song in localStorage would bloat the quota for marginal value. `normalizeLine` — the
+  AssembledSentence → flat `{text,furigana,en,grammar,tokens,clipStartMs,section,ordinal}`
+  adapter (ordinal = array index) — also lives in `songs/library.js`, on the fetch path.
 
 ---
 
@@ -426,7 +441,7 @@ JLPT + explanation from the generated catalog (`grammarLabel`/`grammarJlpt`, [da
 | Pure logic — DOM-free + unit-tested: `parseYouTubeId`, `coverage`, `bucketByJlpt`, known/new split, `clozeBlanks`/`clozeLineParts`, `songLevel`/`songProgress`/`songGrammar`, `lineTimingState`, `songLineKey`/`parseSongLineKey`, the Listen grade `readingMatch`/`lineReading`, the activation `buildSongCard`/`songCardKey` | [src/core/songs.js](src/core/songs.js) (tests in [test/core.test.ts](test/core.test.ts)) |
 | Synced progress blob (signal only) | [src/persistence/songs.js](src/persistence/songs.js) + [src/features/cloud.js](src/features/cloud.js) |
 | Markup (nav tab, `#panel-songs`, sprite glyphs) | [index.html](index.html) |
-| Styles (ported from mockups/songs/mock.css) | [src/styles.css](src/styles.css) |
+| Styles (ported from mockups/songs/mock.css, peeled to its own surface file in the Day/Night CSS split) | [src/styles/songs.css](src/styles/songs.css) |
 | Song store + repo — `saveSong` (the single transactional create-or-replace entry) + the shared sentenceCore helpers (`insertPrivateSentenceRow` / `deleteOwnedLines` / the `VIEWER_VISIBLE` privacy gate) | [../wk-enhanced-api/src/db/repos/songs.ts](../wk-enhanced-api/src/db/repos/songs.ts), [../wk-enhanced-api/src/db/repos/sentenceCore.ts](../wk-enhanced-api/src/db/repos/sentenceCore.ts), [../wk-enhanced-api/src/db/schema.sql](../wk-enhanced-api/src/db/schema.sql) |
 | Routes + schemas | [../wk-enhanced-api/src/routes/songs.ts](../wk-enhanced-api/src/routes/songs.ts), [../wk-enhanced-api/src/schemas/songs.ts](../wk-enhanced-api/src/schemas/songs.ts) |
 | The LLM analysis pass | [../wk-enhanced-api/src/services/songAnalyze.ts](../wk-enhanced-api/src/services/songAnalyze.ts) |
@@ -472,10 +487,10 @@ as work lands. `[ ]` = todo, `[x]` = done, `[~]` = in progress.
 - [x] `main.js` boot + `chrome.js`/`initTabs` `songs`/`leaveSongs` wiring.
 - [x] 204 core tests + `bun run build` green; **verified live in the preview** (Library, Read furigana+reveal+tap-word, Mine word-rows+activation→ADDED, Source `歌` chip, Add→Analyze→503 graceful). Screenshots captured.
 - DEVIATION: the **`songs` synced blob is deferred to the Shadow phase** (Phase 5), where stars + shadowed-lines actually accrue. The foundation needs none — song content is server-authoritative and coverage is computed live; mined vocab syncs under `custom-verbs`. Library/Read/Mine all work without it.
-- DEFERRED to follow-ups: inline edit in the Add-review screen (flags guide a re-analyze for now); per-song `song-<id>` chips in the picker (the master `歌` chip + the per-song tags ship; dynamic chip injection is later); the grammar-reference cross-link COUNTS (save-line-as-phrase + a Browse deep-link ship).
+- DEFERRED to follow-ups: inline edit in the Add-review screen (flags guide a re-analyze for now); per-song `song-<id>` chips in the picker (the master `歌` chip + the per-song tags ship; dynamic chip injection is later); the grammar-reference cross-link COUNTS (save-line-as-phrase + a Browse deep-link ship — and since the ux-daily-loop batch the deep-link **applies the grammar filter**: `goBrowseGrammar` → `openBrowseGrammar(id)` in browse.js sets the `bGrammar` selection + opens the disclosure before rendering, so the cross-link lands on the FILTERED grid).
 - [x] **Song edit/delete + manual Add title/artist** (2026-06-22): the Add paste step now has optional `#sgTitle`/`#sgArtist` inputs (oEmbed only fills blanks → a typed value wins over the YouTube channel name); the song view's ctx-row shows owner-only **Edit** (inline title/artist rename form via `S.editing`) + **Delete** over the existing owner-scoped `PUT`/`DELETE /v1/songs/{id}` (`library.js` `updateSong`/`removeSong`; since the 2026-07 glue refactor the flows live in `songs/edit.js` — `S.editing` holds the DRAFT, so a failed save keeps the typed values + shows an inline error instead of discarding them). Verified in-browser end-to-end (edit persisted to the DB, delete cascaded the line rows) + covered by `test/songs-render.test.js`. The **inline Add-review editor** (the first DEFERRED item above) is still the open follow-up — `songs-inline-add-review` in ROADMAP.html.
 
-### Phase 3.5 — Curated library + offline line-timing ✅ (2026-06-16) — see [SONGS_HANDOFF.md](SONGS_HANDOFF.md)
+### Phase 3.5 — Curated library + offline line-timing ✅ (2026-06-16)
 - [x] **12-song curated J-pop library** (public starters; the 故郷 placeholder dropped). Full per-line
   analysis (furigana/EN/grammar/JLPT) authored from maintainer-supplied lyrics, validated (furigana concat
   + token offsets) + seeded. Pilot ドライフラワー (`80d3074`); the other 11 via parallel subagents (`e168565`).
@@ -535,8 +550,12 @@ as work lands. `[ ]` = todo, `[x]` = done, `[~]` = in progress.
 - [ ] **In-app tap-to-sync** for PRIVATE BYO songs (generalize the clip-marker; `PUT /v1/songs/{id}/timing`). (The curated public set is timed offline via `song-align/`.)
 
 ### Phase 6 — Docs + memory (rolling)
-- [~] SONGS_HANDOFF.md added + `song-lyric-tab-design` memory updated (2026-06-16); this checklist current.
-  TODO: refresh `README.md` / the CLAUDE.md Songs dead-ends with the curation + timing surface (tracked in ROADMAP.html).
+- [x] `song-lyric-tab-design` memory + this checklist current; README.md + the CLAUDE.md Songs
+  dead-ends refreshed (2026-07 doc overhaul). The interim SONGS_HANDOFF.md session-handoff doc
+  was **removed** in that overhaul — its shipped items are recorded here + in ROADMAP.html, its
+  curation/timing ops live in [data/songs/README.md](../wk-enhanced-api/data/songs/README.md) +
+  [../song-align/README.md](../song-align/README.md) (recover the handoff from git history if
+  ever needed).
 
 ---
 
