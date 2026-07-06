@@ -37,10 +37,11 @@ const SELFTALK_APP_KEY = 'selftalk'; // 独り言 phrases + practice/streak name
 const SONGS_APP_KEY = 'songs';      // 歌/Songs per-song progress (starred/shadowed lines) namespace
 let authMode = 'login';             // 'login' | 'register' — current modal mode
 
-// The six synced "progress blobs" share one abstraction (createSyncedBlob): debounced push,
+// The eight synced "progress blobs" share one abstraction (createSyncedBlob): debounced push,
 // saving/synced/offline status, the durable offline-queue fallback, server-wins-on-pull,
 // fresh-account seeding, and 409 optimistic concurrency. Each registers only its read/apply +
-// the side-effects unique to it. (Minna's blob lives in minna.js, beside its state.)
+// the side-effects unique to it. (The minna/wanikani/jlpt blobs live beside their state —
+// minna/store.js, wanikani/store.js, jlpt/store.js — and enter via blobRegistry below.)
 
 // Progress (the `verbs` blob = state.store).
 const progressBlob = createSyncedBlob({

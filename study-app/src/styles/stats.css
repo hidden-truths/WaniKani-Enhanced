@@ -1,6 +1,7 @@
 /* =========================================================================
    STATS (Day/Night Phase 4) — hero metric cards + chart panels + the leech list.
-   The hand-rolled SVG charts (lineChart/barChart) reskin for free via the token
+   The hand-rolled SVG charts (core/charts.js — dailyAccuracySvg/pipelineHtml) reskin
+   for free via the token
    aliases (var(--godan)/--ichidan/--good/--muted/--line). Peeled from styles.css;
    imported after styles.css. (The global svg{} chart rule + .svg circle.pt hover
    + the stat entrance animations stay in styles.css.)

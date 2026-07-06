@@ -1,7 +1,7 @@
 // Pure-core tests for the N3 grammar system (src/core/grammar.js): card building, example
 // rotation, cloze blank/render (composed with the REAL core/songs.js clozeLineParts), coverage
 // statuses, and the reviewed-today signal. Plus catalog invariants over the real generated
-// data/grammar-n3.js (the verbs-core built-ins precedent) so a bad content regen fails loudly.
+// data/grammar-n3.js (the core.test.ts built-ins precedent) so a bad content regen fails loudly.
 import { test, expect } from 'vitest';
 import {
   buildGrammarCard, pickGrammarExample, grammarBlank, clozePartsToHtml,

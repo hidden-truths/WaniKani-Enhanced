@@ -13,7 +13,7 @@
 
 // The contexts a play button can belong to. 'reviews' = the flashcard deck; 'browse' = the
 // Browse grid/modal; 'minna' = the みんなの日本語 textbook view; 'selftalk' = the 独り言 Self-Talk
-// speaking-practice tab.
+// speaking-practice tab; 'songs' = the 歌 song viewer/shadow modes.
 export const AUDIO_CONTEXTS = ['reviews', 'browse', 'minna', 'selftalk', 'songs'];
 
 // The KIND axis users can prioritize without naming a specific voice.
