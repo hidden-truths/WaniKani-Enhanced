@@ -5,16 +5,21 @@ Cards are the atom of the study app: the flashcard deck, Browse grid, SRS schedu
 Stats all operate on the unified `DATA` array. This doc is the source of truth for the
 card schema; the layer docs ([CLAUDE.md](CLAUDE.md), [MINNA.md](MINNA.md)) point here.
 
-## Where cards come from (three sources, one shape)
+## Where cards come from (seven sources, one shape)
 
-All three produce the **same card object**; they differ only in where the data lives and
-how much of it is filled in.
+Every source produces the **same card object**; they differ only in where the data lives,
+which activation path builds it, and how much of it is filled in. Everything except the
+built-ins lives in `localStorage["jpverbs_custom"]` (synced as `custom-verbs`).
 
-| Source | Lives in | Authored via | Completeness |
+| Source | Built by | Authored via | Completeness |
 |---|---|---|---|
-| **Built-in** (the 100 frequent verbs) | `verbs.js` (`VERBS` + `ACCENTS`) + `examples.js` (`EXAMPLES`) | edit the static data files | **complete** |
-| **みんなの日本語** lesson vocab | `../data/minna/lesson-<n>.json` (server) → `minnaCard()` | scrape → curate → content workflow | **complete** |
-| **User custom** | `localStorage["jpverbs_custom"]` (synced) | the "Add card" modal | **complete** — the modal authors `levels`+`accent` too ([Recipe C](#c-a-user-custom-card-the-add-card-modal)) |
+| **Built-in** (the 100 frequent verbs) | `verbs.js` (`VERBS` + `ACCENTS`) + `examples.js` (`EXAMPLES` seed) | edit the static data files | **complete** |
+| **みんなの日本語** lesson vocab | `minnaCard()` from `../data/minna/lesson-<n>.json` (server) | scrape → curate → content workflow | **complete** |
+| **User custom** | the "Add card" modal | UI ([Recipe C](#c-a-user-custom-card-the-add-card-modal) — authors `levels`+`accent` too) | **complete** |
+| **歌 / Songs** mined vocab | `buildSongCard` (core/songs.js) | Mine mode's per-word / bulk add | headword-level (jp/read/mean/JLPT + provenance) |
+| **鰐蟹 / WaniKani** activation | `buildWkCard` (core/wanikani.js) | leech / confusion-family / subject add | headword-level + WK meanings; JLPT stamped from the bundled list |
+| **合格 / JLPT** gap-fill | `buildJlptCard` (core/jlpt.js) | "Add today's N" on the JLPT tab | headword-level, JMdict-glossed |
+| **Grammar** (N3 catalog) | `buildGrammarCard` (core/grammar.js) | JLPT-tab grammar lens "add as cloze" | **display snapshot** — content renders live BY `grammarId` lookup, so catalog fixes reach existing cards |
 
 `DATA = VERBS (minus skip) ⊕ overlays ⊕ loadCustom().verbs`, rebuilt by `rebuildData()`;
 `attachLevels()` then backfills `levels` (from `EXAMPLES[rank]`) and `accent` (from
@@ -31,7 +36,7 @@ A card is a plain object. `✓` = required for the card to function; the rest ma
 | `jp` | string | ✓ | Headword / dictionary form (kanji). The flashcard prompt, the Jisho link, and **what's sent to TTS** (`ttsText` sends the kanji for correct pitch). |
 | `read` | string | ✓ | Kana reading. The answer being tested; pitch marks render on it. |
 | `mean` | string | ✓ | English meaning. |
-| `cat` | string | ✓ | Part of speech: `verb` / `adjective` / `noun` / `adverb` / `phrase`. Paints the spine + hanko stamp; the **Category** facet. Defaults to `verb` if absent. |
+| `cat` | string | ✓ | Category: `verb` / `adjective` / `noun` / `adverb` / `phrase` / `grammar` (the sixth, for cloze-drilled grammar-point cards). Paints the spine + hanko stamp; the **Category** facet. Defaults to `verb` if absent. |
 | `type` | string | — | Sub-class: verbs `godan`/`ichidan`/`irregular`; adjectives `i-adj`/`na-adj`; else `''`. The **Type** facet + stamp label. |
 | `trans` | string | — | Transitivity (verbs only): `t` (transitive) / `i` (intransitive) / `''`. The **Transitivity** facet. |
 | `jlpt` | string | — | `N5`…`N1`. The **JLPT** facet. Minna default `N4`. |
@@ -45,7 +50,14 @@ A card is a plain object. `✓` = required for the card to function; the rest ma
 | `custom` | bool | — | Marks a user/Minna card (CUSTOM badge, Edit/Delete). |
 | `minna`, `italki`, `minnaKey`, `minnaLesson` | — | Minna provenance (see [MINNA.md](MINNA.md)). |
 | `wanikani`, `wkId` | — | 鰐蟹/WaniKani provenance (leech→deck activation): `wanikani:true` feeds the **Source** facet, `wkId` is the WK subject id (the dedup key against re-adds). Built by `buildWkCard` (core/wanikani.js). |
+| `song`, `songKey`, `songId` | — | 歌/Songs provenance (Mine-mode activation): `song:true` feeds the **Source** facet (with the per-song `song-<extId>` tag); `songKey` is the idempotency key. Built by `buildSongCard` (core/songs.js). |
+| `jlptfill`, `added` | — | JLPT gap-fill provenance: `jlptfill:true` feeds the **Source** facet; `added:'YYYY-MM-DD'` is the day-stamp the JLPT checklist's quota signal reads. Built by `buildJlptCard` (core/jlpt.js). |
+| `grammar`, `grammarId` | — | Grammar-card provenance: `grammar:true` + the durable `grammarId` into the N3 catalog. The card is a display snapshot — the flashcard cloze + Browse detail render the point's content by `grammarId` lookup (`grammarPointOf`). Built by `buildGrammarCard` (core/grammar.js). |
 | `skip` | bool | — | Built-in only: exclude from the deck. |
+
+All the machine-set provenance fields above survive a modal edit via `saveVerb`'s explicit
+carry-through list (see the dead-end in [CLAUDE.md](CLAUDE.md)) — add any NEW machine-set
+field to that list or editing orphans the card from its source.
 
 ## Format conventions (get these right)
 
@@ -80,8 +92,10 @@ mnemonic the reader can't trust is anti-useful.
 
 ### Categories, type, transitivity, tags
 
-- `cat` ∈ `verb/adjective/noun/adverb/phrase`. `type` only for verbs (`godan`/`ichidan`/
-  `irregular`) + adjectives (`i-adj`/`na-adj`); `trans` only for verbs (`t`/`i`).
+- `cat` ∈ `verb/adjective/noun/adverb/phrase/grammar`. `type` only for verbs (`godan`/
+  `ichidan`/`irregular`) + adjectives (`i-adj`/`na-adj`); `trans` only for verbs (`t`/`i`).
+  `grammar` cards are machine-built only (`buildGrammarCard` — tags `['文法']`, drilled as
+  cloze, always self-graded); don't author one by hand in the modal.
 - `tags` are lowercase; topics come from the known set wired in the markup (motion, transit,
   wearing, speaking, communication, giving, emotion, cognition, perception, existence,
   change, ability, onoff, daily, body, work, study, food, money). `suru`/`fake` are special
@@ -125,7 +139,7 @@ Edit the static data files (no UI):
 2. `examples.js` — add `EXAMPLES[rank] = { N5:[…], …, N1:[…] }` (the 5 tiers).
 3. `verbs.js` — add `ACCENTS[rank] = <pitch number>`.
 
-`attachLevels` wires `levels`/`accent` onto the card by `rank`. Keep `verbs-core.test.ts`
+`attachLevels` wires `levels`/`accent` onto the card by `rank`. Keep `test/core.test.ts`
 green (it asserts every built-in has 5 well-formed tiers + a numeric accent).
 
 > **Ranking source note.** Built-in ranks are BCCWJ corpus frequency. する vs 言う for #1 is

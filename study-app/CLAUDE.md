@@ -88,7 +88,9 @@ order. The actual DOM/render/feature glue is split into **`src/features/*`** mod
   `audioCtx()`; the modules form runtime-only import cycles, like cloud⇄minna), `a11y` (roving tabindex + chip
   annotations), `tts`, `audio` (the shared `playItem(item,context)` player — resolves an item to a
   tagged voice variant + routes public-vs-credentialed `<audio>` by `gated`), `render-helpers`
-  (shared `jishoUrl`/`provenanceBadge`), and the cloud
+  (shared `jishoUrl`/`provenanceBadge`/`speakBtnHtml`, plus `copyBtnHtml`/`copyText` — the
+  copy-sentence button beside each example's ▶ play on the flashcard answer, Browse detail,
+  and Minna example rows), and the cloud
   pair `cloud-core` (`account`/`setSyncStatus`; re-exports `api`) + `cloud` (the SyncedBlob registry + auth + bootAuth).
 - **`src/net/`** — the network layer: `transport` owns `api()`, the resilient fetch choke-point
   (timeout via `AbortController` + idempotency-aware retry/backoff + `Retry-After`); GET/PUT/DELETE
@@ -99,8 +101,6 @@ order. The actual DOM/render/feature glue is split into **`src/features/*`** mod
   delegates, so adding a synced blob no longer means editing pullCloud + flushQueue + initCloud in
   lockstep (Open/Closed). `pullAll` isolates each blob (one failure can't abort the rest). DOM-free →
   unit-tested in `test/sync-orchestrator.test.js`. `cloud-core` re-exports `api` so callers are unchanged.
-  `render-helpers` also owns `copyBtnHtml`/`copyText` — the "copy sentence to clipboard" button
-  beside each example's ▶ play (flashcard answer, Browse detail, Minna example rows).
 - **`src/core/`** — the PURE, unit-tested core (DOM-free): `srs`, `forecast`, `facets`,
   `examples`, `kana`, `pitch`, `text`, `minna`, `audio` (the per-context voice-priority
   `resolveVariant`), `recordings` (record-and-compare math — `findTrimBounds`/`waveformPeaks`/
@@ -110,7 +110,16 @@ order. The actual DOM/render/feature glue is split into **`src/features/*`** mod
   `songs` (the 歌/Songs pure helpers — coverage / JLPT bucketing / known-vs-new vocab split /
   `parseYouTubeId` / `clozeBlanks`+`clozeLineParts` / the Listen grade `readingMatch`+`lineReading` /
   the activation `buildSongCard`+`songCardKey` / `songLineKey`+`parseSongLineKey`),
-  behind a barrel `core/index.js`.
+  `selftalk` (rotation / topic-grid grouping / streak / `realizeTemplate` /
+  `sentenceToPhrase`), `wanikani` (leech scoring / same-kanji confusion clustering /
+  forecasts / `slimSubject` / `buildWkCard`), `jlpt` (map/lookup / countdown / coverage /
+  gap / batch-tiering / pace / plan / heat), `grammar` (`buildGrammarCard` /
+  `pickGrammarExample` / `grammarBlank` / `clozePartsToHtml` / coverage), `merge` (the
+  per-blob 409 reconcilers — `mergeProgress`/`mergeCustomVerbs`/`mergeMinna`/
+  `mergeSelftalkPractice`/`mergeSongs`/`mergeJlpt`), `sentence` (shared sentence-store
+  wire decoders — `sentenceGrammar`/`sentenceTokens`/`sentenceEn`), `annotate`
+  (`overlayTokens` — the ruby⇄token reconciler), and `charts` (the Stats SVG/HTML
+  builders), behind a barrel `core/index.js`.
 - **`src/state.js`** — the ONE shared mutable hub: `state.store` (progress), `state.DATA`
   (the live deck), `state.minnaStore`, `state.MAXRANK`, `state.BUILTIN_RANK_BY_JP`, plus
   `attachLevels()`. An object whose **properties are mutated** (not `export let` — importers
@@ -170,15 +179,20 @@ Backend (auth, progress, cookie, the cross-origin CORS) is the server's:
 2. **Verify visually.** This is a UI; screenshot the change. Drive it with the
    browser-preview tooling (`.claude/launch.json` has both `study-app` and
    `wk-enhanced-api` configs). See the preview caveat in the dead-ends below. **Run
-   `bun run test` too** — `test/core.test.ts` (Vitest + happy-dom) imports the real
-   `src/core/*` modules, so a broken export/import fails it loudly.
+   `bun run test` too** — a ~21-file Vitest + happy-dom suite (layout + conventions:
+   [test/CLAUDE.md](test/CLAUDE.md)). Three tiers: `core.test.ts` + the per-subsystem
+   `*-core` tests import the real `src/core/*` modules (a broken export/import fails
+   loudly); the `*-render` tests drive each tab's REAL feature glue over a happy-dom DOM
+   with the side-effecting collaborators (network/persistence/audio) mocked; and the infra
+   tests pin transport / sync-queue / synced-blob / orchestrator / resource behavior.
 3. **Commit conventions** (same as the rest of the repo): one logical change → one
    commit; commit at the end of a feature without being asked; fix stale nearby
    comments in the same commit.
 4. **The no-framework / offline-friendly ethos still holds — but modules + a bundler
    are now IN** (that's the whole point of the extraction). Do **not** add a framework,
    a CDN icon font, or a chart library: icons stay an inline SVG `<symbol>` sprite, charts
-   stay hand-rolled SVG (`lineChart`/`barChart`). Keep `src/core/*` **DOM-free** (the test
+   stay hand-rolled SVG (the pure `core/charts.js` builders — `dailyAccuracySvg`,
+   `pipelineHtml`). Keep `src/core/*` **DOM-free** (the test
    imports them under happy-dom) and **parameterize** anything that reads app state via the
    `state` object — don't make core import DOM. The old `file://` double-click is gone by
    decision (server-only); runtime offline-degradation against localStorage stays.
@@ -188,17 +202,18 @@ Backend (auth, progress, cookie, the cross-origin CORS) is the server's:
    (defaults to `http://localhost:5173`). #1 thing to check if local login won't stick.
    See the cross-origin dead-end below + [../wk-enhanced-api/CLAUDE.md](../wk-enhanced-api/CLAUDE.md).
 
-## Architecture (map to the in-file section banners)
+## Architecture (module map)
 
-Markup: `#panel-study` (flashcard setup → card stage → done), `#panel-browse`
-(filter grid), `#panel-stats` (charts + leeches), `#panel-minna` (the みんなの日本語
-lesson dashboard — near-empty in markup, filled at runtime by `renderMinna`),
-`#panel-selftalk` (独り言), `#panel-songs` (歌 — `#sgBody` filled by `renderSongs`),
-`#panel-wanikani` (鰐蟹 — `#wkHead`/`#wkBody` filled by `renderWanikani`; `#wkModal` is its
-subject-detail overlay), `#panel-jlpt` (合格 JLPT — `#jlptHead`/`#jlptBody` filled by
-`renderJlpt`), plus the header/toolbar, tabs, and the auth modal + sign-up banner. The
-per-tab `.marker` indices run 01–08 / 08 (study/browse/stats in the markup; jlpt/minna/
-selftalk/songs/wanikani rendered at runtime) — renumber ALL of them when adding a tab.
+Markup — the eight `#panel-*` shells, in TAB ORDER: `#panel-study` (flashcard setup → card
+stage → done), `#panel-browse` (filter grid), `#panel-stats` (charts + leeches),
+`#panel-jlpt` (合格 JLPT — `#jlptHead`/`#jlptBody` filled by `renderJlpt`), `#panel-minna`
+(the みんなの日本語 lesson dashboard, tab-labeled **教科書** — near-empty in markup, filled
+at runtime by `renderMinna`), `#panel-selftalk` (独り言), `#panel-songs` (歌 — `#sgBody`
+filled by `renderSongs`), `#panel-wanikani` (鰐蟹 — `#wkHead`/`#wkBody` filled by
+`renderWanikani`; `#wkModal` is its subject-detail overlay), plus the header/toolbar, tabs,
+and the auth modal + sign-up banner. The per-tab `.marker` indices run 01–08 / 08
+(study/browse/stats markers sit in the markup; the jlpt/minna/selftalk/songs/wanikani
+panels render theirs at runtime) — renumber ALL of them when adding a tab.
 
 `data/verbs.js` holds the `VERBS` dataset. The old single-file `app.js` sections are now
 one module each under `src/features/*` (the section names map 1:1 to filenames): persistence
@@ -281,13 +296,15 @@ one module each under `src/features/*` (the section names map 1:1 to filenames):
 - **Render:** `showCard`/`reveal`/`grade`/`endSession` (session, `endSession` also
   POSTs to the durable session log), `renderBrowse` (summary cards) +
   `openVerbDetail`/`renderDetailExample` (the detail modal), `renderStats` +
-  `renderCardBars`, `lineChart`/`barChart` (SVG strings).
+  `renderCardBars`; the chart builders are the pure `core/charts.js`
+  (`accuracyMix`/`weekOverWeekDelta`/`boxCounts`/`dailyAccuracySvg`/`pipelineHtml` —
+  SVG/HTML strings, no chart library).
 - **SRS forecast (study panel):** `reviewForecast(h)` (pure) buckets every
   scheduled card (`box>0`) into time slots for the chosen window (`forecastHorizon`
   ∈ `24h`/`week`/`month`/`year`); overdue folds into slot 0, beyond-window drops.
   `renderForecast` draws the hand-rolled vertical-bar SVG into `#forecastChart` and
   is called from `updateDueBanner` (so it tracks the schedule). The `#fcHorizons`
-  toggle is view-only state, not synced. Tests in `verbs-core.test.ts`.
+  toggle is view-only state, not synced. Tests in `test/core.test.ts`.
 - **Per-card SRS indicator:** `detailMemoryLine(v)` (Browse detail modal) renders a
   5-segment Leitner track (filled up to the card's box, each lit pip in its
   `BOX_COLORS` tone) + box number + a "next review" chip that flips red ("due now")
@@ -310,7 +327,10 @@ one module each under `src/features/*` (the section names map 1:1 to filenames):
   settings→`applyFurigana`+`paintPrefChips`+`renderSettings`, selftalk→phrase-migration+repaint,
   minna→overlay merge, songs→library re-render, wanikani→connect-through-the-gate on a pulled
   token). All eight are declared ONCE in `cloud.js`'s ordered
-  **blob registry** (`[{blob,busKey}]`); `pullCloud`/`flushQueue`/`initCloud` delegate to the DI'd
+  **blob registry** (`[{blob,busKey}]` — `busKey:null` for minna/wanikani/jlpt, whose owner
+  modules schedule pushes directly via their own save fns instead of the sync-bus; the
+  registry is a FUNCTION so the cloud⇄minna import cycle resolves by call time);
+  `pullCloud`/`flushQueue`/`initCloud` delegate to the DI'd
   **sync-orchestrator** ([net/sync-orchestrator.js](src/net/sync-orchestrator.js)) so the pull / flush /
   bus-wire sets can never drift. `pullCloud` runs `orchestrator.pullAll()` (each blob isolated — one
   failure can't abort the rest) then the cross-blob finalizers
@@ -347,7 +367,8 @@ Settings (`localStorage["jpverbs_settings"]`, synced as app `settings`):
 `{ exampleLevel, furigana, input, audio, freeReviewDue, recordingsKeep, trimSilence, compareSpeed,
 audioPrefs:{<context>:[<token>…]} }` (the Settings page; migrated from the old
 jpverbs_exlevel/input/audio keys; `freeReviewDue` defaults on). `audioPrefs` is the audio-unify
-per-context voice priority — keyed by `reviews`/`browse`/`minna`, each an ordered list of tokens
+per-context voice priority — keyed by the five `AUDIO_CONTEXTS`
+(`reviews`/`browse`/`minna`/`selftalk`/`songs`), each an ordered list of tokens
 (a specific voice `siri:female` or a kind `kind:native`/`kind:tts`/`kind:user`); a missing/empty
 context falls back to `core/audio.js` `DEFAULT_AUDIO_PREFS`. Unknown tokens are pruned on load +
 cloud-pull (`settings-store.js` `normalizeSettings` → `core/audio.js` `pruneAudioPrefs`) so a stale
@@ -395,6 +416,14 @@ grade (stamped in `grade()`, merged with MAX — the 法 row's auto-signal; merg
 field list is explicit, so a new stat field MUST be added there or 409s silently drop it);
 gap-fill cards carry `jlptfill:true` + `added:'YYYY-MM-DD'`; grammar cards carry
 `grammar:true` + the durable `grammarId`.
+Two auxiliary keys round out the localStorage inventory: `jpverbs_sync_queue` (the durable
+offline write-queue — per-account entries, dropped on logout) and `jpverbs_cardex_migrated`
+(the one-time card-examples→store migration flag). Device-local UI prefs (`jpverbs_font`,
+`jpverbs_theme`, `jpverbs_topic_<panel>`, `jpverbs_signup_dismissed`, `jpverbs_micDevice`)
+and the read-through caches (`jpverbs_examples_cache`, `jpverbs_selftalk_cache`,
+`jpverbs_selftalk_templates_cache`, `jpverbs_songs_cache`, `jpverbs_grammar_cache`) never
+sync; `loadSettings` still migrates the legacy `jpverbs_exlevel`/`jpverbs_input`/
+`jpverbs_audio` keys on first load.
 
 ## Design system
 
@@ -709,15 +738,15 @@ Component contracts you must preserve:
   table (including already-kana) passes through `romajiToKana` untouched, so a kana
   IME and a romaji typist share one code path. It feeds only the advisory grade,
   never the SRS schedule, so over-permissiveness is harmless. Tests in
-  `verbs-core.test.ts`.
+  `test/core.test.ts`.
 - **Audio is unified behind one player + a per-context voice picker (audio-unify Phase 2).**
   `speak(text, context)`/`speakWord(v, context)` are thin wrappers over `playItem(item, context, btn)`
   ([features/audio.js](src/features/audio.js)): it builds the item's available variants (synth from
   the text; `native` from a vnjpclub path; `user` from the newest take), resolves which to play via
   `resolveVariant(context, available, settings.audioPrefs)` ([core/audio.js](src/core/audio.js)), and
   plays synth on a PUBLIC `<audio>` (`/v1/audio/tts?voice=`) but native/take on a CREDENTIALED
-  `<audio crossOrigin='use-credentials'>` (`/v1/audio/native`, `/v1/audio/recordings`). Contexts:
-  `reviews` (flashcards), `browse`, `minna`. The user orders voices per context in Settings → Voice
+  `<audio crossOrigin='use-credentials'>` (`/v1/audio/native`, `/v1/audio/recordings`). Contexts (`AUDIO_CONTEXTS`, core/audio.js):
+  `reviews` (flashcards), `browse`, `minna`, `selftalk`, `songs`. The user orders voices per context in Settings → Voice
   priority (specific voices or kinds); the server falls through to the default clip when a chosen
   voice isn't pre-generated, so naming `siri:female` is always safe. Errors cascade (gated → synth →
   speechSynthesis). In Minna the vocab word button offers the full native/synth/your-take catalog;
@@ -1161,185 +1190,13 @@ Component contracts you must preserve:
   threshold / <150 ms result all return the ORIGINAL blob. The server's recording
   content-type allowlist includes `audio/wav` (+ a `.wav` ext mapping).
 
-## Change log — UX/design pass (this is the conversation record)
 
-Commits, newest first (all on `main`; touch the split web/ files + `src/` where noted):
+## Change log
 
-1. **`app.js` → `features/*` + a thin `main.js` (10 commits).** Peeled the 1934-line
-   single-module `src/app.js` into one feature module per section (`chrome`/`io`/`deck`/
-   `flashcard`/`browse`/`stats`/`custom-cards`/`settings-page`/`minna`/`a11y`/`tts`/
-   `cloud-core`+`cloud`/`render-helpers`), plus `config.js`, `persistence/*`,
-   `settings-store.js`, and `sync-bus.js`. `main.js` is now the entry and owns no feature
-   logic — it builds the initial deck and calls each module's `initX()` in boot order;
-   `index.html` points at it. The old `typeof X==='function'` forward-ref guards became real
-   imports; the few would-be eval-time cycles are broken by callback seams
-   (`registerStartSession`/`registerCardActions`/`registerSessionHooks`) and by the
-   `sync-bus` (persistence schedules pushes; `cloud` registers the real ones). Mutable
-   singletons stay single-writer `export let` in their owner (`cfg`/`bcfg`/`session`/
-   `account`), except `settings` (two writers → `setSettings`). Behavior unchanged; the
-   33-test core suite + `bun run build` gate each step, and the full flow (sessions, browse,
-   stats, custom CRUD, cross-origin sign-in + all four sync blobs + session log) was
-   preview-verified against the dev API. No new features — pure structure.
-1. **みんなの日本語: content parity + dedup + pitch accent (4 commits).** Fixes for
-   second-class activated cards. (1) **TTS** sends the kanji headword (`ttsText`/
-   `speakWord`) so Google applies the right pitch for homographs (橋≠箸). (2) **Dedup**:
-   words that already exist as built-in verbs reuse them via a provenance overlay
-   (`minnaStore.overlays`/`applyMinnaOverlays`/`migrateMinnaDupes`) instead of a bare
-   duplicate — they inherit the built-in's examples/mnemonic. (3) **Content plumbing +
-   visual pitch**: `minnaCard` carries `levels`/`mnem`/`tip`/`accent`; `attachLevels`
-   keeps embedded levels; `pitchHtml`/`splitMora` draw overline+drop notation on the
-   reading. (4) **Generated content**: N5–N1 examples + mnemonic + tip + accent for the 47
-   new words (workflow, validated). Tests: ttsText/pitchHtml/splitMora/minnaBuiltinRank/
-   applyMinnaOverlays. Full doc: [MINNA.md](MINNA.md).
-1. **みんなの日本語: iTalki tag + Source facet + lessons 22/24 (4 commits).** (1) An
-   `italki:true` flag in the lesson JSON → activated cards gain an `iTalki` tag/flag +
-   a vocab-table badge; `activateMinnaVocab` now patches metadata onto already-added
-   cards (`minnaActivationStatus` drives an "Update N tags" button) so the tag applies
-   retroactively without losing rank. (2) A sixth AND'd **`source`** facet
-   (みんなの日本語 / iTalki / per-lesson `mnn-l<n>` via a `tokenFacet` regex) in both
-   pickers, with `annotateSourceChips` (hide-until-Minna + dim-empty) and `deckLabel`
-   recap support. (3) Curated `data/minna/lesson-22.json` + `lesson-24.json` from the
-   scraper. (4) Polish: Source chips tinted to the badge colours, Browse cards drop the
-   redundant みんなの日本語/lesson tag chips (the provenance badge covers them). Tests in
-   `verbs-core.test.ts` (tokenFacet/oneGroup/passes/deckLabel for `source`). Full doc:
-   [MINNA.md](MINNA.md).
-1. **ARIA radiogroup semantics for single-select chip rows.** The five mutually-
-   exclusive `.chips` rows (Study type, Test direction, Input, Audio, Order) now
-   declare `role="radiogroup"` in the markup; `setupRoving` branches on that flag to
-   make each chip `role="radio"` with `aria-checked` mirrored from `.active`, the
-   checked chip the lone tab stop, and ←/→/↑/↓/Home/End MOVE THE SELECTION (calling
-   the chip's own click handler) the way a native radio group does. Multi-select
-   facet rows (Category/Type/Transitivity/Topic/Status/JLPT, topics) keep
-   `role=group` toolbar semantics. `aria-checked` syncs synchronously via a `click`
-   listener on the container (+ a class observer for programmatic selection). Markup-
-   only opt-in: add `role="radiogroup"` to a row's `.chips` to make it a radio group.
-1. **Multi-category content (finish the de-verb-ify transition).** Added a `cat`
-   filter facet (`verb/adjective/noun/adverb/phrase`, `CATS`) as a fifth AND'd facet
-   in `passes`/`TOKEN_FACET`/`DECK_FACETS`; a Category chip row leads both filter
-   panels (the master "All" reset moved there). The Type + Transitivity rows are now
-   `.verb-only` and hide via `syncVerbRows` when the category excludes verbs (clearing
-   stranded tokens). The add-card modal gained a Category select; `syncVerbFields`
-   shows Type for verbs+adjectives (い/な via `i-adj`/`na-adj`) and Transitivity for
-   verbs only, repopulating `#vfType` from `VF_TYPE_OPTS`; `saveVerb` stores `''` for
-   hidden fields. New `cardStamp`/`colorClass` drive the spine + hanko stamp (subtype
-   label, else category) with `--adjective/--noun/--adverb/--phrase` accent tokens.
-   `annotateCatChips` dims empty categories. Copy genericized verb→card. Tests for the
-   cat facet + cardStamp/colorClass in `verbs-core.test.ts`.
-1. **Design-polish pass — motion (4/4).** Short easing-out entrance animations:
-   the card reveal (`answerIn`), card-to-card advance (`cardIn`, re-applied in
-   `showCard`), modal+overlay (`modalPop`/`overlayIn`), tab switch (`panelIn`),
-   staggered Stats cards (`riseIn`) + bar grows (`growX` box histogram, `growY`
-   forecast bars), and button/chip press feedback. **The `prefers-reduced-motion`
-   rule now kills `animation` too (not just `transition`)** — so all of these are
-   ENTRANCES only; content must be fully visible/usable with animations disabled.
-   Don't add an animation that hides content in its resting/`from` state.
-1. **Design-polish pass — chip + picker refresh (3/4).** Active chips are now a
-   quiet tinted wash + colored border + bold (`color-mix`), not a solid-ink block —
-   a picker full of defaults no longer reads as a wall of black rectangles; class
-   chips (g/i) tint with their functional color. The secondary picker rows (Input,
-   Audio, Type, Transitivity, Topic, Level&rank, Presets, Order) now live behind a
-   `<details class="more-filters">` disclosure, so the study setup leads with
-   Study-type + Test-direction + Start; the `#deckSummary` recap stays visible so
-   collapsed filters are legible. Chip wiring/roving/topic-region are blind to the
-   wrapper (verified: Godan filter 100→58, topic toggle, recap all work collapsed).
-1. **Design-polish pass — readability/contrast (2/4).** `--muted` darkened
-   (#7a7164 → #675f52, ≈4.0:1 → ≈5.3:1 on paper) so the many small labels pass AA.
-   `.chart-title` is no longer force-uppercased (long descriptive sentences read
-   poorly in spaced caps) — short labels stay uppercase. `.filter-label` /
-   `.statbox .l` bumped 10→11px. Design contract: uppercase-mono for SHORT labels
-   only; sentence case for longer titles/helper text.
-1. **Design-polish pass — responsive + bug fixes (1/4).** Mobile toolbar now
-   wraps (`flex-wrap`) instead of overflowing 390px; `.modal-x` is pinned absolute
-   (was `float:right`, overlapped the detail-modal stamp) with the detail card-top
-   reserving right padding; ending a session with zero grades returns to the picker
-   instead of showing an empty "SESSION COMPLETE" card; mobile tap targets ≥40px.
-1. **Free-study-advances-due setting + headline + header-overlay fix.** New
-   `freeReviewDue` setting (default on): in free study, grading an already-due card
-   advances its SRS schedule (not-due cards still never move). Headline → "Everyday
-   Japanese that sticks" / 日常の日本語. Fixed the inline SVG sprite hiding (inline
-   style, not attributes) so the global chart `svg{width:100%}` rule can't turn it
-   into a header-blocking overlay in Firefox/Safari.
-1. **De-verb-ify groundwork.** Renamed to 日常日本語 / "Japanese Trainer" (kicker,
-   title, headline, README), neutralized "verb"→"word/card" copy, and defaulted
-   `cat:'verb'` onto every card (`attachLevels` + `saveVerb`) as the model-level
-   start of broadening past verbs. Verb-conjugation UI stays verb-shaped for now.
-1. **SRS vs free study + stats split + forecast slot rework.** New "Study type"
-   picker toggle (`cfg.kind`): free study never changes review dates, SRS review
-   serves due cards only and reschedules; `grade` gates `scheduleCard` on
-   `kind==='srs' && isDue`. Sessions are tagged with `kind` (local + durable
-   `details.kind`); Stats gained SRS-reviews / Free-study-reviews boxes. Forecast
-   now draws every time slot (24/7/28–31/12) with date-aware labels.
-1. **Romaji typed input + visual SRS box indicator + upcoming-review forecast.**
-   Typed-reading mode now accepts romaji (`romajiToKana` greedy Hepburn/wāpuro
-   converter feeds the `normKana` compare; kana/IME still works unchanged). The
-   Browse detail modal's "Box N · next review" text became a visual 5-segment
-   Leitner track + due chip (`detailMemoryLine`, shared `BOX_COLORS`). New study-panel
-   "Upcoming reviews" card (`reviewForecast`/`renderForecast`, `#forecast`) with a
-   24h/Week/Month/Year horizon toggle. Tests for `romajiToKana` + `reviewForecast`.
-1. **Browse detail modal + DB-backed settings + grading keys + durable session log.**
-   Browse cards open a modal (collapsible sections; level-filtered examples) instead of
-   expanding. New Settings page (toolbar gear → `#settingsModal`): default example
-   level, furigana, default input/audio — synced as app `settings`; furigana flips a
-   `<html>` attribute. Reveal grading: Space/Enter/2 = correct, X/1 = wrong. Every
-   finished session is appended to a new server `study_sessions` table via
-   `POST /v1/sessions` so history is never lost (server: schema + `insertSession`/
-   `countSessions` + route + tests).
-1. **leveled example sentences.** New `examples.js` (`EXAMPLES`, 5 JLPT tiers/verb,
-   model-generated + validated); answer-side N5–N1 selector (`renderExample`,
-   `exampleForLevel`/`availableTiers`, pref `jpverbs_exlevel`) + Browse leveled list
-   (`exampleListHtml`). Served as a new static asset; tests in `verbs-core.test.ts`.
-1. **split into index.html + styles.css + verbs.js + app.js.** Classic scripts (not
-   modules) so `file://` still works; server serves the three new assets statically.
-   `verbs-core.test.ts` now concatenates verbs.js + app.js.
-1. **Google TTS (server + web).** `GET /v1/tts` proxies `googleTts` (cached); the app
-   plays it via `<audio>` when served over http, falling back to Web Speech otherwise.
-1. **cloud-sync custom verbs.** Second synced blob under app `custom-verbs`
-   (`scheduleCustomSync`/`pushCustomCloud`/`pullCustomCloud`); add/edit/delete all
-   propagate. Server enum widened to `['verbs','custom-verbs']`.
-1. **rate-limit auth (server — touches `src/`, not `index.html`).** Per-IP in-memory
-   limiter on `/v1/auth/{login,register}`; see [../src/lib/rateLimit.ts](../wk-enhanced-api/src/lib/rateLimit.ts).
-1. **pure-core test suite (`web/verbs-core.test.ts`).** Extracts the inline script,
-   runs it under a DOM stub, tests passes/scheduleCard/isDue/rollingAcc/isLeech/
-   normKana/filterSummary/facets. Guards the core through a future file split.
-1. **add/edit/delete custom verbs.** "Add verb" modal in Browse; `jpverbs_custom`
-   merged into `DATA` via `rebuildData()`; CUSTOM badge + Edit/Delete; MAXRANK
-   extends the rank filter past 100. (Cloud sync added later — see above.)
-1. **disable empty JLPT levels.** `annotateJlptChips` dims/disables zero-count
-   levels (N2/N1) with count tooltips; roving nav skips disabled chips.
-1. **defer sign-up nudge.** `maybeShowSignup` (from `endSession`) replaces the
-   first-paint banner — shows after the first completed session.
-1. **richer Stats line charts.** Axis caption, dashed average line, value labels,
-   area fill, `<title>` hover readouts, theme-aware gridlines; session line indigo.
-1. **AND'd filter facets.** Split the shared OR'd `.deck`/`.bf` pool into four AND'd
-   facets (type/trans/topic/status) via `wireFacets` + `TOKEN_FACET`; `passes()`
-   intersects. "Godan + Motion" now = the intersection.
-1. **typed-reading mode + TTS.** Input toggle auto-grades typed kana
-   (`normKana`/`submitTyped`); Audio toggle + speaker buttons via `speechSynthesis`.
-1. **roving tabindex for chip groups.** `setupRoving` over every `.chips` +
-   `.topic-inner`: one tab stop per group, ←/→/↑/↓ + Home/End to move (wrapping),
-   the stop follows focus, `role=group` + aria-label per row. Collapsed topic chips
-   leave the tab order (MutationObserver on the region's `open` class). Font select
-   + rank inputs excluded. Closes in-file OUTSTANDING #4.
-2. **typed-reading mode + TTS.** Flashcard "Input" toggle (Self-graded / Type the
-   reading): typed kana is `normKana`-compared to `v.read`, with an advisory verdict
-   + a `.suggested` ring (1/2 still override). "Audio" toggle + `.speak-btn`
-   (flashcard answer panel + every Browse card) play the reading via the Web Speech
-   API (`speak`/`playReading`, ja-JP voice, `TTS_OK`-gated). New `i-volume` icon;
-   prefs persist (`jpverbs_input`/`jpverbs_audio`). Closes in-file OUTSTANDING #1.
-3. **`0712d65` align filter rows + site-wide icons + polish.** Filter rows →
-   `.frow`/`.chips` fixed-label-column layout (fixes the misaligned chip
-   start-x). Inline SVG icon sprite applied to tabs, toolbar, action buttons,
-   topic chevron, Leeches chip, leech list, search field, account chip.
-   Replaced the blocking first-visit "Create account" modal with a dismissible
-   inline banner (`#signupBanner`, remembered in localStorage). Added the
-   active-filter recap line (`filterSummary`/`paintSummary` → `#deckSummary`,
-   `#bSummary`). Carded the leech list (`.leech-row`).
-4. **`5021b84` cap per-card accuracy bars.** Worst-20 default + show-all toggle
-   (`renderCardBars`).
-5. **`23e627d` regroup verb filters into legible tiers.** Split the 29-chip
-   "Category" wall into Type / Transitivity / Topic(collapsible) / Level & rank;
-   moved Leeches out of the category pool; segmented JLPT control.
-
-Earlier history (the integration itself) is in `7fea5e3`/`f2bb4d8` and the server
-docs. Each change preserved the chip wiring; verification was live (preview +
-DOM eval), not a test suite — see ROADMAP.html for the testing debt.
+The blow-by-blow per-commit change log that used to end this file was **cut in the 2026-07
+doc overhaul** — it had drifted (pre-split filenames like `web/verbs-core.test.ts`, "no test
+suite yet" claims) and duplicated two better sources. For the shipped record, read
+[ROADMAP.html](../ROADMAP.html) (completed items, filterable, per surface); for the raw
+history, `git log --oneline -- study-app/`. The pre-extraction single-file era lives in
+`7fea5e3`/`f2bb4d8` and the server docs; the removed log itself is in git history at tag-time
+`2f0da20` if you ever need the narrative version.

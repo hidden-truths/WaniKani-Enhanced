@@ -18,8 +18,9 @@ A **Vite** app (ES modules, no framework). [index.html](index.html) loads one en
 ([src/main.js](src/main.js) — a thin boot file that wires the feature modules) on top of the
 DOM/feature glue in [src/features/](src/features), the pure, unit-tested core
 ([src/core/](src/core)), the shared mutable state hub ([src/state.js](src/state.js)), and
-the data modules ([src/data/](src/data) — the `VERBS` dataset + `EXAMPLES` leveled
-sentences). It's a **standalone project** served by its own static (nginx) container at the
+the data modules ([src/data/](src/data) — the `VERBS` dataset, the `EXAMPLES` seed
+sentences, and the generated JLPT word-list + N3 grammar-catalog lazy chunks). It's a
+**standalone project** served by its own static (nginx) container at the
 apex `https://wkenhanced.dev`, talking over HTTP to the API at `https://api.wkenhanced.dev`
 (cross-origin, same-site). Originally one self-contained HTML file (the since-removed
 `japanese-study/japanese-verbs.html`); grew into
@@ -39,8 +40,8 @@ it outgrew "a few static files on the API droplet."
 | **Browse** | A filterable grid of all verbs with the same facets plus free-text search and a font picker. Each card has a speaker button to hear the reading. Click a card to open a **detail view** — mnemonic, trap/tip, memory status, and example sentences are collapsible, with the examples **filtered by JLPT level**. **Add your own cards** ("Add card") in any category — verbs, adjectives (い/な), nouns, adverbs, phrases; they join the deck, filters, and stats; custom cards can be edited or deleted. |
 | **Settings** | A gear (icon) in the navbar opens preferences (saved on the device, and synced to your account): default example level, show/hide furigana, default answer mode, audio, free-study-advances-due, and the みんなの日本語 record-and-compare options (recordings to keep per word, silence trim). It also holds **Backup** — JSON export/import of your progress. |
 | **Stats & Leeches** | Overall accuracy, the SRS memory pipeline (Leitner box histogram), daily + per-session accuracy line charts, the leech list, and per-card rolling accuracy (worst-first, capped). All charts are hand-rolled SVG — no chart library. |
-| **みんなの日本語** | A private, **account-gated** Minna no Nihongo lesson workbook (a 4th tab): pick a chapter and study its vocabulary with **native-speaker audio**, grammar points, example sentences, and the model conversation, keeping **per-lesson notes** synced to your account. "Add all vocab to deck" sends a chapter's words into the SRS deck as tagged cards. **Record-and-compare** (Phase 2): turn on speaking mode (controls dock in the navbar) to record your own voice per word / conversation line and **compare it to the native audio** — dual waveforms, 0.5–1× speed, you / native / both playback, and a per-lesson practice history. Owner-gated, so the copyrighted textbook material isn't public. Full doc: [MINNA.md](MINNA.md). |
-| **歌 / Songs** | Turn real songs into reading, listening, and speaking practice (a 6th tab). Paste a song's lyrics + a YouTube link and one **full-auto analysis pass** adds furigana, a per-line English translation, grammar tags, and a JLPT profile (with a proofread step). Then **Read** the lyric viewer (furigana toggle, reveal-on-tap translation, tap-a-word lookup, grammar chips) and **Mine** it — vocabulary by JLPT (known vs new) bulk-adds to the SRS deck under `Source: 歌`, and grammar points cross-link to practice. A small CC/public-domain starter set is readable without an account; your own pasted lyrics stay private. **Listen** + **Shadow** (record-and-compare) + tap-to-sync line timing are coming. Full doc: [SONGS.md](SONGS.md). |
+| **みんなの日本語** | A private, **account-gated** Minna no Nihongo lesson workbook (the 教科書/Textbook tab): pick a chapter and study its vocabulary with **native-speaker audio**, grammar points, example sentences, and the model conversation, keeping **per-lesson notes** synced to your account. "Add all vocab to deck" sends a chapter's words into the SRS deck as tagged cards. **Record-and-compare** (Phase 2): turn on speaking mode (controls dock in the navbar) to record your own voice per word / conversation line and **compare it to the native audio** — dual waveforms, 0.5–1× speed, you / native / both playback, and a per-lesson practice history. Owner-gated, so the copyrighted textbook material isn't public. Full doc: [MINNA.md](MINNA.md). |
+| **歌 / Songs** | Turn real songs into reading, listening, and speaking practice (the 歌 tab). Paste a song's lyrics + a YouTube link and one **full-auto analysis pass** adds furigana, a per-line English translation, grammar tags, and a JLPT profile (with a proofread step). Then **Read** the lyric viewer (furigana toggle, reveal-on-tap translation, tap-a-word lookup, grammar chips) and **Mine** it — vocabulary by JLPT (known vs new) bulk-adds to the SRS deck under `Source: 歌`, and grammar points cross-link to practice. A small CC/public-domain starter set is readable without an account; your own pasted lyrics stay private. **Listen** + **Shadow** (record-and-compare) + tap-to-sync line timing are coming. Full doc: [SONGS.md](SONGS.md). |
 | **鰐蟹 / WaniKani** | A read-only **WaniKani companion** (connect with a personal access token): dashboard (reviews/lessons now, SRS pipeline, forecast, level pace, lifetime accuracy), a ranked **leech list with same-kanji confusion groups**, a full-corpus browser, and subject detail with mnemonics. Leeches / whole confusion families / any vocab **activate into the SRS deck** as tagged `Source: 鰐蟹` cards (with JLPT levels stamped from the bundled word list); WaniKani itself is never written to. |
 | **JLPT** | **Exam mission control**: a countdown to your test date (default: N3, December 2026) with a **pacing coach** — "≈N new words/day closes the gap by exam day" with a behind/on-track verdict and editable daily targets; a **daily training checklist** that auto-ticks from real app signals (WaniKani reviews cleared, deck reviews done, today's words added, grammar drilled, speaking practiced) with manual ticks for the rest; a 14-day heatmap; an **N-level vocabulary-coverage lens** with a one-tap **gap-fill** ("Add today's 12" — uncovered list words become JMdict-glossed cards, words WaniKani will never teach you first); an **N3 grammar lens** (81 points with explanations + examples, added as **cloze cards** and tracked new → learning → solid); and the four exam papers mapped to the surfaces that train them. Level selectable N5–N1; the plan syncs to your account. |
 | **Accounts** | Optional. Sign in to mirror **progress + your custom verbs** to the server and sync across devices. Fully usable signed-out (localStorage). |
@@ -71,8 +72,11 @@ the prod value is baked by the Dockerfile build arg.
   is dropped over `http://localhost`, and the app's origin must be on the CORS allowlist.
   See the server [deploy notes](../wk-enhanced-api/deploy/README.md).
 - **Build / preview the production bundle:** `bun run build` (→ `dist/`) + `bun run preview`.
-- **Tests:** `bun run test` runs the pure-core suite (Vitest + happy-dom) against the real
-  module graph — a broken export/import fails it loudly.
+- **Tests:** `bun run test` — a ~21-file Vitest + happy-dom suite ([test/CLAUDE.md](test/CLAUDE.md)):
+  pure-core tests import the real `src/core/*` module graph (a broken export/import fails
+  loudly), per-tab render tests drive the real feature glue over a happy-dom DOM (network/
+  persistence/audio mocked), and infra tests pin the transport / offline queue / synced-blob /
+  orchestrator contracts.
 - Runtime **offline degradation** still works (no account / API unreachable → localStorage
   mode + Web Speech instead of Google TTS); the old `file://` double-click is gone by
   decision (server-only). Google Fonts remains the one always-on dep and degrades to system
@@ -87,12 +91,13 @@ session (`credentials:'include'`), set by the backing server:
 |---|---|---|
 | POST | `/v1/auth/register` · `/login` · `/logout` | `{email,password}` (login/register rate-limited) |
 | GET | `/v1/auth/me` | `{user:{id,email}\|null}` |
-| GET/PUT | `/v1/progress/verbs` | `{data:<store>}` — progress blob (debounced push) |
-| GET/PUT | `/v1/progress/custom-verbs` | `{data:{seq,verbs}}` — custom-verb definitions |
-| GET/PUT | `/v1/progress/settings` | `{data:{exampleLevel,furigana,input,audio}}` — preferences |
+| GET/PUT | `/v1/progress/{app}` | The EIGHT debounced synced blobs — `verbs` (progress) · `custom-verbs` · `settings` · `minna` · `selftalk` · `songs` · `wanikani` (token only) · `jlpt` |
 | POST | `/v1/sessions` | `{right,total,mode}` — append to the durable session-history log |
-| GET | `/v1/tts?text=<jp>` | Google TTS audio (`audio/mpeg`) for the reading |
-| `/v1/minna/*` | (account/owner-gated) | みんなの日本語 lessons, native audio, record-and-compare recordings + `/v1/minna/practice` history — see [MINNA.md](MINNA.md) |
+| GET/POST/PUT/DELETE | `/v1/sentences` (+ `PUT /v1/sentences/card/{rank}`) | The unified sentence store: leveled card examples, Self-Talk phrases, custom-card example dual-writes, grammar-point examples (`?ownerType=…&annotate=1`) |
+| GET/POST | `/v1/templates` (+ `/{id}/realize`) | Self-Talk slot-swap template structure + lazy combo materialization |
+| GET | `/v1/audio/tts?text=&voice=` · `/v1/audio/variants` | Unified synth audio (Siri/Google, storage-cached; `/v1/tts` is the legacy default-voice alias) |
+| GET/POST/DELETE | `/v1/audio/native` · `/v1/audio/recordings` | (owner-gated) Minna native MP3s + record-and-compare takes — shared by the Minna/Self-Talk/Songs speaking surfaces |
+| `/v1/minna/*` | (account/owner-gated) | みんなの日本語 lessons + `/v1/minna/practice` history — see [MINNA.md](MINNA.md) |
 | `/v1/songs/*` | (anon-readable; writes account-gated) | 歌/Songs library + CRUD + the `analyze` LLM pass (+ `oembed`) — see [SONGS.md](SONGS.md) |
 
 Server-side details (auth model, cookie, tables) live in
@@ -120,6 +125,11 @@ Server-side details (auth model, cookie, tables) live in
 - **Custom verbs** live in `jpverbs_custom` (`{seq, verbs:[…]}`), merged into the
   deck at load. Signed in, they sync too (server `app` key `custom-verbs`, separate
   from the progress blob; server wins on login, removals propagate).
+- **Five more synced blobs** follow the same localStorage + debounced-server-blob
+  pattern: みんなの日本語 notes/overlays/clips (`jpverbs_minna`), the Self-Talk practice
+  streak (`jpverbs_selftalk`), Songs progress (`jpverbs_songs`), the WaniKani token
+  (`jpverbs_wanikani`), and the JLPT plan (`jpverbs_jlpt`). Full key inventory, blob
+  shapes, and per-blob conflict strategy: [CLAUDE.md](CLAUDE.md).
 
 ## Tech notes
 
@@ -128,8 +138,9 @@ Server-side details (auth model, cookie, tables) live in
   (`src/state.js`), and the data modules (`src/data/*`,
   `export const VERBS`/`EXAMPLES`). Built + content-hashed by Vite, served by an nginx
   container. See [CLAUDE.md](CLAUDE.md) for the full module map.
-- **Functional color**: vermilion = godan, indigo = ichidan, stone = irregular,
-  purple = leech. Conjugation class is what learners confuse, so it's encoded as
+- **Functional color**: vermilion/coral = godan, indigo = ichidan, gold = irregular,
+  plum = leech, plus per-category accents (adjective/noun/adverb/phrase/grammar).
+  Conjugation class is what learners confuse, so it's encoded as
   a colored spine + a hanko-style stamp.
 - **Icons** are an inline SVG sprite (no CDN/icon-font) so they work offline.
 - **SRS** is Leitner boxes (transparent: box N → N-ish days), not SM-2.

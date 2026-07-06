@@ -1,5 +1,14 @@
 # grammar-n3 content contract
 
+[points.json](points.json) is the **id registry** — the vetted 81-point manifest, one entry
+per N3 point: `{ "id", "label", "read", "mean" }` (`id` = durable kebab-case slug, validated
+`^[a-z0-9]+(-[a-z0-9]+)*$`; `label` = the display pattern e.g. `〜ようになる`; `read` = kana;
+`mean` = short English gloss). **Never rename a shipped id** — grammar cards store it as
+`grammarId`, and wave-2 MCQ banks will key on it. The build cross-checks every id against
+the GiNZA tagger catalog (`src/data/grammar.json`): an exact collision is an ERROR unless
+the point genuinely is the same pattern (then sharing the id is deliberate); near-collisions
+just warn.
+
 Each point in [points.json](points.json) gets one `content/<id>.json`:
 
 ```json
@@ -24,5 +33,7 @@ Example rules (enforced by [build.mjs](build.mjs) — run it to check):
 - Vocabulary stays ≤N3 where possible; polite/plain register may vary across examples.
 
 Workflow: draft/fix the per-point JSON (NEVER `src/data/grammar-n3.js` — it's generated), then
-`node tools/grammar-n3/build.mjs` from `study-app/` to validate + regenerate. Content is
-model-drafted → validated → human-proofread before it ships (the examples.js status bar).
+`node tools/grammar-n3/build.mjs` from `study-app/` to validate + regenerate (run
+`bun run test` after — `test/grammar-core.test.js` pins catalog invariants over the real
+generated module). Content is model-drafted → validated → human-proofread before it ships —
+the same generated-content status as `examples.js` / the Minna lesson fields.
