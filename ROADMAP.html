@@ -793,7 +793,10 @@ footer b{color:var(--ink-2)}
 {"id":"done-blend-port","surface":"design","type":"polish","status":"completed","prio":"med","when":"Phases 0-10",
 "title":"Blend / sleek port + glow cut","summary":"Ported the locked blend system (GENKŌ + KAISATSU + YORU) surface-by-surface (station nameplate, subway SRS pipeline, line-bullet cards, glossy histogram, NN/06 markers) with a signed-in data-rich audit, then a ~90% decorative-glow cut (orbs, per-card halos, no-op backdrop-filters) for performance. 290/290 tests."},
 {"id":"done-dev-roadmap-link","surface":"core","type":"infra","status":"completed","prio":"low","when":"dev only",
-"title":"Dev-account-only Roadmap navbar link","summary":"A 'Roadmap' icon-button (the #i-list glyph) in the study-app topbar opens this ROADMAP.html in a new tab — injected from updateAccountChip(), gated on import.meta.env.DEV + the signed-in email ∈ VITE_DEV_EMAILS (default: the dev account), removed on sign-out. ROADMAP.html + the mockups galleries are served on :5173 by a configureServer middleware in vite.config.js. Fully stripped from the prod bundle — the internal backlog is never served publicly (that would need a real owner-gated route)."}
+"title":"Dev-account-only Roadmap navbar link","summary":"A 'Roadmap' icon-button (the #i-list glyph) in the study-app topbar opens this ROADMAP.html in a new tab — injected from updateAccountChip(), gated on import.meta.env.DEV + the signed-in email ∈ VITE_DEV_EMAILS (default: the dev account), removed on sign-out. ROADMAP.html + the mockups galleries are served on :5173 by a configureServer middleware in vite.config.js. Fully stripped from the prod bundle — the internal backlog is never served publicly (that would need a real owner-gated route)."},
+
+{"id":"done-skill-library","surface":"tooling","type":"infra","status":"completed","prio":"high","when":"2026-07-06",
+"title":"✓ Project skill library — 16 skills under .claude/skills for cold-session handoff","summary":"SHIPPED: a complete agent-skill library so junior engineers / smaller models can carry the project without the maintainer-era context. Entry point is the orient skill (surface routing, tab decoder, iron rules, mission); per-surface dev skills (userscript-dev, api-dev, study-app-dev, design-system); recurring patterns (add-study-tab, add-synced-blob); content pipelines for the exam mission (add-grammar-point, add-song, add-minna-lesson, jlpt-data); stewardship (content-gap-audit with the learner profile, troubleshoot with 4 per-area playbooks, deploy-prod with the seed table, land-a-change with the definition-of-done, roadmap for this file's mechanics). Authored + adversarially verified multi-agent against the repo (every path/command/symbol checked; memory-only facts marked as such).","detail":"Maintenance contract: when a change alters something a skill asserts (path, command, enum, procedure), update the skill in the same commit — codified in land-a-change ('Keep the skill library honest') and .claude/skills/README.md. Skills end with a Ground-truth section naming their sources + as-of date; sources win on conflict. Authoring artifacts (master spec, per-skill scenarios) were session scratchpad, deliberately not committed — the skills are self-describing.","src":[".claude/skills/"]}
 ]
 </script>
 
@@ -814,7 +817,7 @@ const SURFACES={
   refactor:{label:"Refactor / test debt",jp:"整",color:"var(--ink-2)"},
   tooling:{label:"Tooling / pipelines",jp:"具",color:"var(--muted)"}
 };
-const SURFACE_ORDER=["store","api","userscript","songs","minna","selftalk","wanikani","cards","core","design","infra","refactor","tooling"];
+const SURFACE_ORDER=["store","api","userscript","songs","minna","selftalk","wanikani","jlpt","cards","core","design","infra","refactor","tooling"];
 const TYPES={
   feature:{label:"Feature"},bug:{label:"Bug"},polish:{label:"Polish"},
   content:{label:"Content"},infra:{label:"Infra"},techdebt:{label:"Tech debt"},idea:{label:"Idea"}
