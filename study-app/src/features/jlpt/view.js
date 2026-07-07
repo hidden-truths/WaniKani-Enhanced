@@ -376,9 +376,14 @@ function gapFillHtml(store, sig) {
   const n = remainingToday || sig.targets.wordsPerDay;
   const preview = selectGapBatch(words, gap.uncovered, sig.wkIdx, sig.wkLevel || 0, 3)
     .map((e) => `<span class="jl-gap-w jp" title="${escapeHtml(e[2])}">${escapeHtml(e[0])}</span>`).join('');
+  // Only show "+N more" when there ARE more than the 3 previewed — near a level's tail (1–2 left)
+  // the old unconditional `length - 3` rendered "+-2 more".
+  const more = gap.uncovered.length > 3
+    ? `<span class="jl-gap-more">+${(gap.uncovered.length - 3).toLocaleString()} more, hardest-to-meet first</span>`
+    : '';
   const deckN = jlptDeckCount();
   return `${union}<div class="jl-gapfill">
-    <div class="jl-gap-row">${preview}<span class="jl-gap-more">+${(gap.uncovered.length - 3).toLocaleString()} more, hardest-to-meet first</span></div>
+    <div class="jl-gap-row">${preview}${more}</div>
     <div class="jl-gap-row">
       <button class="chip primary jl-go" data-jl-act="gap-add">${remainingToday ? `Add today's ${n}` : `Add ${n} more`}</button>
       ${deckN.n ? `<button class="chip jl-go" data-jl-act="study-jlpt">Study them now${deckN.due ? ` · ${deckN.due} due` : ''}</button>` : ''}
