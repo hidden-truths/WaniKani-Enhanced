@@ -8,7 +8,7 @@
 import { state } from '../state.js';
 import { mergeProgress, mergeCustomVerbs, mergeSelftalkPractice, mergeSongs } from '../core/index.js';
 import { sync } from '../sync-bus.js';
-import { account, setAccount, api, setSyncStatus, serverReachable, setServerReachable } from './cloud-core.js';
+import { account, setAccount, api, setSyncStatus, serverReachable, setServerReachable, setAuthExpiredHandler } from './cloud-core.js';
 import { createSyncedBlob } from './synced-blob.js';
 import * as queue from '../net/sync-queue.js';
 import { createSyncOrchestrator } from '../net/sync-orchestrator.js';
@@ -190,12 +190,17 @@ async function flushQueue() {
   await orchestrator().flushAll();
 }
 
-// Re-render every state.store-derived view. Mirrors the import handler's refresh set.
+// Re-render every state.store-derived view. Mirrors the import handler's refresh set. Songs +
+// Self-Talk are here too so a gated view (its Add/authoring flow shows a sign-in wall while anon)
+// flips to its signed-in state the moment sign-in completes, instead of stranding the user on the
+// gate until they switch tabs.
 function refreshAllViews() {
   updateDeckCount(); updateDueBanner(); renderBrowse(); renderCustomCount();
   if (document.getElementById('panel-stats').classList.contains('active')) renderStats();
   if (document.getElementById('panel-minna').classList.contains('active')) renderMinna();
   if (document.getElementById('panel-jlpt').classList.contains('active')) renderJlpt();
+  if (document.getElementById('panel-songs').classList.contains('active')) renderSongs();
+  if (document.getElementById('panel-selftalk').classList.contains('active')) renderSelftalk();
 }
 
 // The account avatar (#accountBtn — the round .avatar in the topbar): signed in → the user's
@@ -314,6 +319,15 @@ function logSession(right, tot, kind) {
 export function initCloud() {
   orchestrator().wireBus();   // wire each bus-keyed blob's debounced scheduler onto the persistence sync-bus
   registerSessionHooks({ logSession, maybeShowSignup });
+  // A background sync 401'd → the session expired while we still thought we were signed in. Flip to
+  // signed-out (so saves stop silently stranding), post a sticky notice, and prompt re-auth. The
+  // just-failed write was already re-queued (synced-blob) so it replays when the user signs back in.
+  setAuthExpiredHandler(() => {
+    setAccount(null);
+    updateAccountChip();   // avatar → signed-out (also clears the transient pill; set the sticky notice AFTER)
+    setSyncStatus('Session expired — sign in again to keep syncing.', { sticky: true });
+    openAuth('login');
+  });
   // Flush queued offline writes when connectivity returns. Flush only — no forced pull, which
   // would revert in-progress local edits not yet pushed.
   window.addEventListener('online', () => { flushQueue(); });

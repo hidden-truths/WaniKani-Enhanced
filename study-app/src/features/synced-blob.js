@@ -21,7 +21,7 @@
 //                          server-wins MVP. Pure; the per-blob strategies live in core/merge.js.
 //   debounceMs          -> coalesce window (default 1200, matching the old schedulers)
 
-import { account, api, setSyncStatus } from './cloud-core.js';
+import { account, api, setSyncStatus, handleAuthExpired } from './cloud-core.js';
 import * as queue from '../net/sync-queue.js';
 
 export function createSyncedBlob({ appKey, read, apply, afterPull, shouldSeed, onOffline, merge, debounceMs = 1200 }) {
@@ -52,6 +52,14 @@ export function createSyncedBlob({ appKey, read, apply, afterPull, shouldSeed, o
       setSyncStatus('✓ synced');
     } catch (err) {
       if (err && err.status === 409) { await reconcile(err); return; }   // B4
+      // Session died server-side (cookie expired/revoked): a 401 is NOT "offline". Preserve the
+      // write in the durable queue (replays on re-login as the same account) THEN surface the
+      // expiry — enqueue first, while `account` is still set, before handleAuthExpired clears it.
+      if (err && err.status === 401) {
+        queue.enqueue({ key: queueKey, path, method: 'PUT', body: { data }, accountId: account.id });
+        handleAuthExpired();
+        return;
+      }
       // Offline / persistent failure: enqueue an UNCONDITIONAL replay (no baseUpdatedAt) so the
       // offline change is delivered on reconnect rather than dropped — durability over concurrency
       // for the offline path. Dedup by key keeps the newest local state.
@@ -100,6 +108,7 @@ export function createSyncedBlob({ appKey, read, apply, afterPull, shouldSeed, o
       data = r ? r.data : null;
       if (r && typeof r.updatedAt === 'number') lastUpdatedAt = r.updatedAt;
     } catch (err) {
+      if (err && err.status === 401) { handleAuthExpired(); return; }   // expired session — not offline
       if (onOffline) onOffline();
       return;
     }

@@ -10,12 +10,13 @@ vi.mock('../src/features/cloud-core.js', () => ({
   get account() { return ctx.account; },   // getter so a test can flip signed-out
   api: vi.fn(),
   setSyncStatus: vi.fn(),
+  handleAuthExpired: vi.fn(),
 }));
 vi.mock('../src/net/sync-queue.js', () => ({
   enqueue: vi.fn(), remove: vi.fn(), flush: vi.fn(), clear: vi.fn(),
 }));
 
-import { api, setSyncStatus } from '../src/features/cloud-core.js';
+import { api, setSyncStatus, handleAuthExpired } from '../src/features/cloud-core.js';
 import * as queue from '../src/net/sync-queue.js';
 import { createSyncedBlob } from '../src/features/synced-blob.js';
 
@@ -120,6 +121,26 @@ test('merge re-push that 409s AGAIN falls back to server-wins — single round, 
   expect(blob.lastUpdatedAt).toBe(99);
   expect(api).toHaveBeenCalledTimes(2);                            // live push + one merge re-push (no third)
   expect(queue.enqueue).not.toHaveBeenCalled();
+});
+
+test('push 401 → re-queues the write + fires handleAuthExpired, NOT ⚠ offline (expired session)', async () => {
+  const err = new Error('unauthorized'); err.status = 401;
+  api.mockRejectedValue(err);
+  const { blob } = makeBlob();
+  await blob.push();
+  expect(queue.enqueue).toHaveBeenCalledWith(expect.objectContaining({ key: 'progress:verbs', accountId: 1 }));   // write preserved for replay on re-login
+  expect(handleAuthExpired).toHaveBeenCalled();
+  expect(setSyncStatus).not.toHaveBeenCalledWith('⚠ offline');   // a 401 is expiry, not a network blip
+});
+
+test('pull 401 → fires handleAuthExpired, does NOT call onOffline', async () => {
+  const err = new Error('unauthorized'); err.status = 401;
+  api.mockRejectedValue(err);
+  const onOffline = vi.fn();
+  const { blob } = makeBlob({ onOffline });
+  await blob.pull();
+  expect(handleAuthExpired).toHaveBeenCalled();
+  expect(onOffline).not.toHaveBeenCalled();
 });
 
 test('push is a no-op when signed out', async () => {
