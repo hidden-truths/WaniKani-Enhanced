@@ -12,6 +12,7 @@ export const S = {
   openSong: null, // the assembled song {id,title,…,lines} when viewing one
   mode: 'read', // 'read' | 'listen' | 'shadow' | 'mine' | 'grammar'
   videoOn: false, // Read mode: the video bay is hidden until "Play with video" (mock) — Listen/Shadow mount it regardless
+  videoFailed: false, // the YouTube IFrame API failed to load/mount → swap the play button for a note + hide the bay (per-song, reset on open)
   grammarRef: null, // the grammar id currently open in the reference panel
   editing: null, // song view: the inline edit form's DRAFT {title, artist, error} while open (owner-only), else null — the draft (not the song) backs the inputs so a failed save keeps the typed values
   nav: 0, // navigation epoch — bumped on every view change (bumpNav); in-flight async opens compare it on resolve and drop stale results

@@ -8,6 +8,7 @@ import { playItem, cycleMod } from '../audio.js';
 import { mountPlayer, playSlice } from '../songs-youtube.js';
 import { S } from './state.js';
 import { progressFor } from './progress.js';
+import { render } from './index.js';
 
 // Render the Read viewer (the mock's lyric STAGE): a stage label + one .ll row per line — line
 // number, tap-a-word ruby, tap-to-reveal translation, grammar pills, and the per-line tool cluster
@@ -58,12 +59,17 @@ export function toggleFurigana(btn) {
 }
 
 // ---- the YouTube player mount + synced highlight ----
-export function mountSongPlayer() {
+export async function mountSongPlayer() {
   if (!S.openSong || !S.openSong.youtubeId) return;
   const el = document.getElementById('sgPlayer'); if (!el) return;
   // Read mounts the player only after "Play with video" (S.videoOn) → autoplay from that user gesture;
   // Listen/Shadow mount it to drive masked-audio / slices, without autoplay.
-  mountPlayer(el, S.openSong.youtubeId, { onTime: highlightAt, autoplay: S.mode === 'read' && S.videoOn });
+  const player = await mountPlayer(el, S.openSong.youtubeId, { onTime: highlightAt, autoplay: S.mode === 'read' && S.videoOn });
+  // API failed to load / mount (offline, blocked, CSP): don't leave a dead "Play with video" button
+  // over an empty iframe. Flag it + re-render so the hero shows a "Video unavailable" note and the
+  // bay is hidden (per-line replay already falls back to synth). Sticky for this song; the re-render
+  // hides #sgPlayer so this can't loop.
+  if (!player && !S.videoFailed) { S.videoFailed = true; render(); }
 }
 function highlightAt(sec) {
   if (!S.openSong || S.mode !== 'read') return;

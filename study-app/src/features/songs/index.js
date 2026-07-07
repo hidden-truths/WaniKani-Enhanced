@@ -91,9 +91,11 @@ function songHtml() {
 
   // hero utility row: on-demand "Play with video" (mock — the video isn't shown until asked) + furigana.
   const actions = `<div class="hero-actions">
-    ${s.youtubeId
-      ? `<button class="btn btn-primary play-video" data-act="playvideo"><span class="tri"><svg class="ic" aria-hidden="true"><use href="#i-play"/></svg></span> ${S.videoOn ? 'Video on' : 'Play with video'}</button>`
-      : `<span class="add-note"><svg class="ic" aria-hidden="true"><use href="#i-music"/></svg> No video linked — per-line audio is synthesized.</span>`}
+    ${!s.youtubeId
+      ? `<span class="add-note"><svg class="ic" aria-hidden="true"><use href="#i-music"/></svg> No video linked — per-line audio is synthesized.</span>`
+      : S.videoFailed
+        ? `<span class="add-note"><svg class="ic" aria-hidden="true"><use href="#i-music"/></svg> Video unavailable — per-line audio is synthesized.</span>`
+        : `<button class="btn btn-primary play-video" data-act="playvideo"><span class="tri"><svg class="ic" aria-hidden="true"><use href="#i-play"/></svg></span> ${S.videoOn ? 'Video on' : 'Play with video'}</button>`}
     <button class="chip fg-toggle on" data-act="furigana" aria-pressed="true"><span class="sw"></span><span class="jp">ふりがな</span></button>
   </div>`;
 
@@ -128,7 +130,7 @@ function songHtml() {
 
   // On-demand video bay (outside #sgContent so a Listen step re-render never reloads the iframe).
   // Read shows it only after "Play with video"; Listen masks it (audio only); Shadow needs it for slices.
-  const showBay = s.youtubeId && (S.videoOn || S.mode === 'listen' || S.mode === 'shadow');
+  const showBay = s.youtubeId && !S.videoFailed && (S.videoOn || S.mode === 'listen' || S.mode === 'shadow');
   const masked = S.mode === 'listen';
   const bay = showBay
     ? `<div class="song-player-bay"><div class="sg-yt${masked ? ' masked' : ''}"><div id="sgPlayer"></div>${masked ? '<div class="sg-yt-mask"><svg class="ic" aria-hidden="true"><use href="#i-headphones"/></svg> audio only — listen and type</div>' : ''}</div></div>`
@@ -159,7 +161,7 @@ export function bumpNav() { return ++S.nav; }
 
 // Reset to the library view (Back + a successful delete) and refresh the grid from the server.
 export function showLibrary() {
-  S.view = 'library'; S.openSong = null; S.mode = 'read'; S.videoOn = false; S.editing = null;
+  S.view = 'library'; S.openSong = null; S.mode = 'read'; S.videoOn = false; S.videoFailed = false; S.editing = null;
   bumpNav();
   refreshLibrary();
 }
@@ -173,7 +175,7 @@ async function openById(id) {
   try {
     const s = await loadSong(id);
     if (!s || nav !== S.nav) return;   // gone/unauthorized, or the user navigated on mid-flight
-    S.openSong = s; S.view = 'song'; S.mode = restoreMode(s.id); S.grammarRef = null; S.videoOn = false; S.editing = null;
+    S.openSong = s; S.view = 'song'; S.mode = restoreMode(s.id); S.grammarRef = null; S.videoOn = false; S.videoFailed = false; S.editing = null;
     render();
   } catch (e) { /* offline / gone — stay on library */ }
 }
