@@ -21,6 +21,8 @@ This file covers the userscript. For server work, jump to [wk-enhanced-api/CLAUD
 3. [SERVER_DESIGN.md](SERVER_DESIGN.md) — design rationale for the server (with implementation deviations noted at the top).
 4. [wk-enhanced-api/CLAUDE.md](wk-enhanced-api/CLAUDE.md) — server architecture + dead-ends.
 
+**Skill library:** `.claude/skills/` holds 16 task-scoped skills (Claude sessions pick them up automatically; added 2026-07-06). `orient` routes any task to the right surface, doc, and sibling skill; the content pipelines (grammar/songs/Minna/JLPT data), troubleshooting playbooks, prod-deploy runbook, and the definition-of-done (`land-a-change`) live there too. Keep them honest: when a change alters something a skill asserts (a path, command, enum, procedure), update that skill in the same commit — see [.claude/skills/README.md](.claude/skills/README.md).
+
 **The userscript is a single file.** No build step, no tests, no package manager — read the whole file to see everything. The server is a separate codebase that happens to live in the same git repo (`package.json`, test suite, type-check, the works).
 
 ## Why it exists
