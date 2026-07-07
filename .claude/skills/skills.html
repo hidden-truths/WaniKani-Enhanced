@@ -1,0 +1,397 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>WKEnhanced skill library</title>
+<style>
+  :root {
+    --bg: #f6f2e9;
+    --bg-soft: #efe9dc;
+    --card: #fffdf8;
+    --card-hover: #fffef9;
+    --ink: #2a2823;
+    --ink-soft: #6b665c;
+    --ink-faint: #96908295;
+    --line: #e3dccb;
+    --line-strong: #d3cab4;
+    --accent: #b4472e;
+    --accent-soft: #f2e3dd;
+    --shadow: 0 1px 2px rgba(58,50,35,.05), 0 8px 24px rgba(58,50,35,.06);
+    --shadow-lift: 0 2px 6px rgba(58,50,35,.08), 0 14px 40px rgba(58,50,35,.12);
+    --serif: "Hiragino Mincho ProN", "Yu Mincho", Georgia, "Times New Roman", serif;
+    --sans: -apple-system, BlinkMacSystemFont, "Segoe UI", "Hiragino Sans", "Helvetica Neue", Arial, sans-serif;
+    --c-orient: #6b5bd4;
+    --c-orient-bg: #ece9fb;
+    --c-surface: #1f8f74;
+    --c-surface-bg: #dcf1ea;
+    --c-pattern: #b9791a;
+    --c-pattern-bg: #f6ecd6;
+    --c-content: #c14d72;
+    --c-content-bg: #f8e3ea;
+  }
+  html[data-theme="night"] {
+    --bg: #16161c;
+    --bg-soft: #1c1c24;
+    --card: #21212b;
+    --card-hover: #262632;
+    --ink: #ece9e2;
+    --ink-soft: #a7a196;
+    --ink-faint: #6f695d;
+    --line: #30303c;
+    --line-strong: #3d3d4b;
+    --accent: #e9836a;
+    --accent-soft: #34241f;
+    --shadow: 0 1px 2px rgba(0,0,0,.3), 0 8px 24px rgba(0,0,0,.35);
+    --shadow-lift: 0 2px 6px rgba(0,0,0,.4), 0 16px 44px rgba(0,0,0,.5);
+    --line: #2f2f3a;
+    --c-orient: #9d90ef; --c-orient-bg: #26243a;
+    --c-surface: #4fcaa8; --c-surface-bg: #17322b;
+    --c-pattern: #e0a94b; --c-pattern-bg: #362a17;
+    --c-content: #ea8bab; --c-content-bg: #37202a;
+  }
+  * { box-sizing: border-box; }
+  html { -webkit-text-size-adjust: 100%; }
+  body {
+    margin: 0; background: var(--bg); color: var(--ink);
+    font-family: var(--sans); line-height: 1.6;
+    transition: background .3s ease, color .3s ease;
+  }
+  .wrap { max-width: 1080px; margin: 0 auto; padding: 0 24px 96px; }
+
+  header.hero { padding: 56px 0 28px; position: relative; }
+  .kicker {
+    font-family: var(--serif); font-size: 15px; letter-spacing: .18em;
+    color: var(--accent); text-transform: none; margin: 0 0 10px;
+  }
+  h1 { margin: 0; font-family: var(--serif); font-weight: 500; font-size: clamp(30px, 5vw, 46px); letter-spacing: -.01em; line-height: 1.1; }
+  .lede { margin: 16px 0 0; max-width: 640px; color: var(--ink-soft); font-size: 17px; }
+  .lede b { color: var(--ink); font-weight: 600; }
+
+  .theme-toggle {
+    position: absolute; top: 56px; right: 0;
+    display: inline-flex; align-items: center; gap: 8px;
+    background: var(--card); border: 1px solid var(--line-strong); color: var(--ink-soft);
+    border-radius: 999px; padding: 8px 14px; font-size: 13px; cursor: pointer;
+    font-family: var(--sans); box-shadow: var(--shadow); transition: all .2s ease;
+  }
+  .theme-toggle:hover { color: var(--ink); border-color: var(--accent); }
+
+  .stats { display: flex; gap: 28px; flex-wrap: wrap; margin-top: 28px; padding-top: 24px; border-top: 1px solid var(--line); }
+  .stat b { display: block; font-family: var(--serif); font-size: 30px; font-weight: 500; line-height: 1; }
+  .stat span { font-size: 13px; color: var(--ink-soft); }
+
+  .controls { position: sticky; top: 0; z-index: 20; background: color-mix(in srgb, var(--bg) 90%, transparent); backdrop-filter: blur(10px); padding: 16px 0 14px; margin-top: 8px; border-bottom: 1px solid var(--line); }
+  .search-row { display: flex; gap: 12px; align-items: center; flex-wrap: wrap; }
+  .search {
+    flex: 1 1 260px; display: flex; align-items: center; gap: 10px;
+    background: var(--card); border: 1px solid var(--line-strong); border-radius: 12px;
+    padding: 10px 14px; box-shadow: var(--shadow);
+  }
+  .search input { border: 0; outline: 0; background: transparent; color: var(--ink); font-size: 15px; font-family: var(--sans); width: 100%; }
+  .search svg { flex: none; color: var(--ink-faint); }
+  .filters { display: flex; gap: 8px; flex-wrap: wrap; margin-top: 12px; }
+  .chip {
+    border: 1px solid var(--line-strong); background: var(--card); color: var(--ink-soft);
+    border-radius: 999px; padding: 6px 14px; font-size: 13px; cursor: pointer;
+    font-family: var(--sans); transition: all .15s ease; display: inline-flex; align-items: center; gap: 7px;
+  }
+  .chip .dot { width: 8px; height: 8px; border-radius: 50%; }
+  .chip:hover { border-color: var(--ink-soft); color: var(--ink); }
+  .chip[aria-pressed="true"] { background: var(--ink); color: var(--bg); border-color: var(--ink); }
+  .chip[aria-pressed="true"] .dot { outline: 2px solid var(--bg); }
+
+  .group { margin-top: 40px; }
+  .group-head { display: flex; align-items: baseline; gap: 12px; margin: 0 0 4px; }
+  .group-head h2 { margin: 0; font-family: var(--serif); font-weight: 500; font-size: 22px; }
+  .group-head .accent-bar { width: 30px; height: 3px; border-radius: 2px; align-self: center; }
+  .group-head .count { color: var(--ink-faint); font-size: 13px; }
+  .group-sub { margin: 2px 0 18px; color: var(--ink-soft); font-size: 14px; }
+
+  .grid { display: grid; grid-template-columns: repeat(auto-fill, minmax(320px, 1fr)); gap: 16px; }
+
+  .card {
+    background: var(--card); border: 1px solid var(--line); border-radius: 16px;
+    padding: 18px 20px; box-shadow: var(--shadow); cursor: pointer;
+    transition: transform .18s ease, box-shadow .18s ease, border-color .18s ease, background .18s ease;
+    position: relative; overflow: hidden;
+  }
+  .card::before { content: ""; position: absolute; left: 0; top: 0; bottom: 0; width: 3px; background: var(--cat, var(--accent)); opacity: .85; }
+  .card:hover { transform: translateY(-3px); box-shadow: var(--shadow-lift); border-color: var(--line-strong); background: var(--card-hover); }
+  .card.flash { animation: flash 1.1s ease; }
+  @keyframes flash { 0%,100% { box-shadow: var(--shadow); } 30% { box-shadow: 0 0 0 3px var(--cat), var(--shadow-lift); border-color: var(--cat); } }
+
+  .card-top { display: flex; align-items: center; gap: 11px; }
+  .glyph { flex: none; width: 34px; height: 34px; border-radius: 10px; display: grid; place-items: center; font-family: var(--serif); font-size: 18px; font-weight: 500; color: var(--cat); background: var(--cat-bg); }
+  .card h3 { margin: 0; font-size: 15.5px; font-weight: 600; font-family: var(--sans); letter-spacing: -.005em; }
+  .card h3 code { font-family: var(--sans); }
+  .tag { margin-left: auto; font-size: 11px; letter-spacing: .03em; color: var(--ink-soft); border: 1px solid var(--line-strong); border-radius: 6px; padding: 2px 7px; white-space: nowrap; }
+  .summary { margin: 11px 0 0; color: var(--ink-soft); font-size: 14px; }
+  .more { margin: 12px 0 0; display: inline-flex; align-items: center; gap: 5px; font-size: 12.5px; color: var(--cat); font-weight: 500; }
+  .more svg { transition: transform .2s ease; }
+  .card[aria-expanded="true"] .more svg { transform: rotate(180deg); }
+
+  .detail { display: grid; grid-template-rows: 0fr; transition: grid-template-rows .28s ease; }
+  .detail > div { overflow: hidden; }
+  .card[aria-expanded="true"] .detail { grid-template-rows: 1fr; }
+  .detail-inner { padding-top: 15px; margin-top: 15px; border-top: 1px solid var(--line); }
+  .detail-inner .label { font-size: 11px; letter-spacing: .1em; text-transform: uppercase; color: var(--ink-faint); margin: 0 0 6px; }
+  .detail-inner p.usewhen { margin: 0 0 14px; font-size: 13.5px; color: var(--ink); line-height: 1.65; }
+  .rel { display: flex; flex-wrap: wrap; gap: 7px; }
+  .rel button { border: 1px solid var(--line-strong); background: var(--bg-soft); color: var(--ink-soft); border-radius: 999px; padding: 4px 11px; font-size: 12px; cursor: pointer; font-family: var(--sans); transition: all .15s ease; }
+  .rel button:hover { color: var(--ink); border-color: var(--accent); }
+
+  .empty { text-align: center; color: var(--ink-soft); padding: 60px 0; font-size: 15px; display: none; }
+
+  footer { margin-top: 64px; padding-top: 24px; border-top: 1px solid var(--line); color: var(--ink-faint); font-size: 13px; }
+  footer code { background: var(--bg-soft); padding: 1px 6px; border-radius: 5px; font-size: 12px; }
+  a { color: var(--accent); }
+
+  @media (max-width: 560px) {
+    .theme-toggle { position: static; margin-bottom: 20px; }
+    header.hero { padding-top: 32px; }
+    .grid { grid-template-columns: 1fr; }
+  }
+</style>
+</head>
+<body>
+<div class="wrap">
+  <header class="hero">
+    <button class="theme-toggle" id="themeBtn" aria-label="Toggle day/night theme">
+      <span id="themeIcon">☾</span><span id="themeLabel">Night</span>
+    </button>
+    <p class="kicker">技能 · project skill library</p>
+    <h1>Sixteen skills for a cold session</h1>
+    <p class="lede">Task-scoped playbooks that let a fresh session — a new engineer or a smaller model — debug, extend, validate, and advance <b>WKEnhanced / 日常日本語</b> at the standard it was built to. Tap any card to see when it fires.</p>
+    <div class="stats">
+      <div class="stat"><b>16</b><span>skills</span></div>
+      <div class="stat"><b>4</b><span>categories</span></div>
+      <div class="stat"><b>3</b><span>surfaces + prod</span></div>
+      <div class="stat"><b id="statVerified">2026-07</b><span>verified against repo</span></div>
+    </div>
+  </header>
+
+  <div class="controls">
+    <div class="search-row">
+      <label class="search">
+        <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"><circle cx="11" cy="11" r="7"/><path d="m21 21-4.3-4.3"/></svg>
+        <input id="q" type="search" placeholder="Search skills — “deploy”, “sync”, “grammar”, “empty card”…" autocomplete="off">
+      </label>
+    </div>
+    <div class="filters" id="filters"></div>
+  </div>
+
+  <div id="groups"></div>
+  <p class="empty" id="empty">No skills match that search.</p>
+
+  <footer>
+    Rendered from <code>.claude/skills/</code>. Sessions pick these up automatically from each skill’s frontmatter; this page is the human-facing index — the prose companion lives in <code>.claude/skills/README.md</code>. When a change alters something a skill asserts (a path, command, enum, procedure), update that skill in the same commit.
+  </footer>
+</div>
+
+<script>
+const CATS = {
+  orient:  { label: "Orientation & stewardship", color: "var(--c-orient)",  bg: "var(--c-orient-bg)",  sub: "Where to start, what to build, how to finish, how to ship, how to unbreak." },
+  surface: { label: "Per-surface development",    color: "var(--c-surface)", bg: "var(--c-surface-bg)", sub: "One skill per codebase surface — read it before touching that surface." },
+  pattern: { label: "Recurring patterns",         color: "var(--c-pattern)", bg: "var(--c-pattern-bg)", sub: "Multi-file recipes you repeat — do every step, skip none." },
+  content: { label: "Content pipelines",          color: "var(--c-content)", bg: "var(--c-content-bg)", sub: "Author and seed the study material — grammar, songs, textbook, JLPT data." },
+};
+
+const SKILLS = [
+  { id:"orient", cat:"orient", glyph:"羅", name:"orient", surface:"all surfaces",
+    summary:"The map. Routes any task or symptom to the right surface, the authoritative doc, and the right sibling skill — and states the iron rules.",
+    use:"Use FIRST for anything non-trivial or cross-surface: when you’re unsure where code lives, what 合格 / 教科書 / 独り言 / 歌 / 鰐蟹 refer to, “where do I start”, or before planning work that spans surfaces.",
+    rel:["roadmap","troubleshoot","land-a-change"] },
+
+  { id:"roadmap", cat:"orient", glyph:"路", name:"roadmap", surface:"repo-wide",
+    summary:"Read / add / update / complete records in ROADMAP.html — the single source of truth for backlog + shipped work (inline JSON, filterable board).",
+    use:"Use when picking what to work on next, recording a new idea / bug / feature / techdebt, marking work shipped after it lands — and any time you’re tempted to write a TODO / NEXT_STEPS / handoff .md. That content goes here instead, never in a new file.",
+    rel:["orient","content-gap-audit","land-a-change"] },
+
+  { id:"content-gap-audit", cat:"orient", glyph:"審", name:"content-gap-audit", surface:"exam mission",
+    summary:"Prioritize content & feature work against the learner profile and the 2026-12-06 exam — find the holes, then turn the plan into ROADMAP records.",
+    use:"Use for “what should we work on / what matters most / what’s next”, exam-prep planning, content-fill sprints, or any prioritization of study-app content against the exam timeline.",
+    rel:["roadmap","add-grammar-point","jlpt-data"] },
+
+  { id:"land-a-change", cat:"orient", glyph:"締", name:"land-a-change", surface:"definition of done",
+    summary:"The finish line: per-surface validation commands, the stale-comment sweep, doc-ownership table, ROADMAP records, house commit style, the prose change-summary.",
+    use:"Use the moment a feature / fix is code-complete, before ANY commit, or when asked to “wrap up”, “ship it”, “land this”, “clean up and commit”. Run it even when the change looks trivial — this is the standard.",
+    rel:["roadmap","deploy-prod","orient"] },
+
+  { id:"deploy-prod", cat:"orient", glyph:"船", name:"deploy-prod", surface:"production",
+    summary:"Production runbook: DO droplet, two Docker containers (api :3000 + web :8080), Cloudflare Tunnel, the ordered seed steps, verify-prod, rollback, warm/backup timers.",
+    use:"Use for any “ship to prod”, “deploy the server”, droplet operation, seed run, prod-config change, or when a shipped change still isn’t live on prod. Every command is lifted from the runbook — trust it over memory.",
+    rel:["land-a-change","troubleshoot","api-dev"] },
+
+  { id:"troubleshoot", cat:"orient", glyph:"診", name:"troubleshoot", surface:"all + prod",
+    summary:"Symptom-indexed debugging across all three surfaces + prod — empty cards, login won’t stick, 401 audio, blank tabs, sync loss, 502s, CORS-null-ETag, tunnel / container / seed incidents.",
+    use:"Use WHENEVER something is broken — renders empty, won’t play, won’t save, errors, or diverges between local and prod — before diving into code. It routes each symptom to the exact log surface, command, and fix, and steers you past the known dead-ends.",
+    rel:["orient","deploy-prod","api-dev"] },
+
+  { id:"userscript-dev", cat:"surface", glyph:"鰐", name:"userscript-dev", surface:"userscript",
+    summary:"Edit / extend / debug the Tampermonkey userscript: version pairing, @grant / @connect metadata, WKOF sandbox rules, reveal logic, fetch / cache semantics, console diagnostics.",
+    use:"Use for ANY change to wkenhanced.user.js, any WaniKani review-page feature (example sentences, audio autoplay, images, furigana reveal, sentence picker, prefetch), or when a review card misbehaves or renders empty. Read it before touching the file — its invariants are cheap to violate.",
+    rel:["api-dev","troubleshoot"] },
+
+  { id:"api-dev", cat:"surface", glyph:"蟹", name:"api-dev", surface:"wk-enhanced-api",
+    summary:"Develop on the Bun + Hono + SQLite server: endpoints, Zod schemas, DB repos, the warm pipeline, tests, structured-log debugging.",
+    use:"Use for ANY change under wk-enhanced-api/ — vocab payloads, auth / login, progress sync, sentences, templates, songs, TTS / audio, admin warm — and for investigating server behavior, test failures, or logs. Read it BEFORE writing server code; the route / repo / test pattern saves hours.",
+    rel:["study-app-dev","add-synced-blob","deploy-prod"] },
+
+  { id:"study-app-dev", cat:"surface", glyph:"常", name:"study-app-dev", surface:"study-app",
+    summary:"Develop on the 日常日本語 study app (Vite, no framework): dev loop, module map (features / core / net / state), sync & persistence rules, Vitest suite, browser verification.",
+    use:"Use for ANY change under study-app/src or study-app/test, any study-app bug or feature, or when a tab (Study, Browse, Stats, 合格, 教科書, 独り言, 歌, 鰐蟹) misbehaves. Consult it before writing study-app code — it routes to the design, sync, and dead-end docs.",
+    rel:["design-system","add-study-tab","add-synced-blob"] },
+
+  { id:"design-system", cat:"surface", glyph:"粧", name:"design-system", surface:"study-app UI",
+    summary:"Style the study app to the Day / Night design system: role tokens, cascade order, component contracts, both-themes + mobile verification, frame-first mock-matching.",
+    use:"Use for ANY visual / CSS / layout change under study-app/ — restyles, dark-mode fixes, new panels or components, matching the mockups/sleek or mockups/redesign galleries — before writing or editing any CSS there.",
+    rel:["study-app-dev","add-study-tab"] },
+
+  { id:"add-study-tab", cat:"pattern", glyph:"欄", name:"add-study-tab", surface:"study-app",
+    summary:"Add a new top-level tab / panel via the established 8-tab pattern: shell + button, .marker renumbering, feature module, main.js / chrome.js wiring, styles, state field, optional synced blob, tests, docs.",
+    use:"Use for ANY new study surface (reading, listening, kanji, drill tab) or when promoting a feature to its own panel. The JLPT tab is the worked reference the skill walks you through.",
+    rel:["add-synced-blob","study-app-dev","design-system"] },
+
+  { id:"add-synced-blob", cat:"pattern", glyph:"雲", name:"add-synced-blob", surface:"study-app + api",
+    summary:"Add a cloud-synced per-user data blob: createSyncedBlob + the cloud.js registry + PUT /v1/progress/{app} — client store, registry entry, 409 merge reconciler, server enum widen, rollout ordering.",
+    use:"Use whenever a feature needs per-user state that survives across devices / sign-ins (progress, prefs, tokens, day records, plans), when changing sync / merge / progress-blob code, or when a progress PUT unexpectedly 400s or 409s.",
+    rel:["study-app-dev","api-dev","add-study-tab"] },
+
+  { id:"add-grammar-point", cat:"content", glyph:"文", name:"add-grammar-point", surface:"study-app",
+    summary:"Author / edit N3 grammar content in the tools/grammar-n3 catalog (points.json id registry + content/<id>.json + build.mjs) that generates the grammar-n3.js cloze cards.",
+    use:"Use for ANY grammar-content work — adding a point, fixing an explanation / formation / cloze example, regenerating the catalog, seeding grammar sentences, TTS coverage, wave-2 MCQ planning, N4 / N2 extensions, or a grammar card showing wrong content.",
+    rel:["content-gap-audit","jlpt-data","deploy-prod"] },
+
+  { id:"add-song", cat:"content", glyph:"歌", name:"add-song", surface:"study-app",
+    summary:"Add / curate songs in the 歌 library: the curate → analyze → seed → song-align timing → seed-songs pipeline, the in-app Add flow, per-line timing, per-song progress, prod seeding, copyright rails.",
+    use:"Use for ANY song or lyric work — adding a song, fixing a song’s furigana / translation / tokens / timing, a song missing on prod, Songs-tab content bugs, or “add 〜 to the song library”.",
+    rel:["study-app-dev","deploy-prod"] },
+
+  { id:"add-minna-lesson", cat:"content", glyph:"科", name:"add-minna-lesson", surface:"study-app",
+    summary:"Import / extend みんなの日本語 (教科書 tab) lessons: scrape → hand curation → generated levels/mnem/accent → apply-furigana → prefetch-audio → sentence-store seed, plus deck activation and iTalki tutor vocab tagging.",
+    use:"Use for ANY Minna / 教科書 content work — adding a lesson, fixing lesson vocab / grammar / audio / furigana, tagging tutored words (italki:true), or seeding Minna content to prod.",
+    rel:["study-app-dev","deploy-prod","content-gap-audit"] },
+
+  { id:"jlpt-data", cat:"content", glyph:"級", name:"jlpt-data", surface:"study-app",
+    summary:"Regenerate / extend the JLPT word-list data: the generated jlpt.js N5–N1 map (jlptOf badges + coverage) and the per-level gap-fill chunks (generate-jlpt-words.ts + a local JMdict).",
+    use:"Use when JLPT vocab data is wrong or missing, when adding / refreshing a level (N2, N4…), when the vocab-coverage lens or the N3 gap-fill flow needs new data, or on “regenerate the JLPT word list”. NOT for grammar — that’s add-grammar-point.",
+    rel:["add-grammar-point","content-gap-audit","study-app-dev"] },
+];
+
+const byId = Object.fromEntries(SKILLS.map(s => [s.id, s]));
+let activeCat = "all";
+let query = "";
+
+const filtersEl = document.getElementById("filters");
+const groupsEl = document.getElementById("groups");
+const emptyEl = document.getElementById("empty");
+const qEl = document.getElementById("q");
+
+function makeChip(key, label, color) {
+  const b = document.createElement("button");
+  b.className = "chip"; b.setAttribute("aria-pressed", key === activeCat);
+  b.dataset.cat = key;
+  if (color) { const d = document.createElement("span"); d.className = "dot"; d.style.background = color; b.appendChild(d); }
+  b.appendChild(document.createTextNode(label));
+  b.onclick = () => { activeCat = key; render(); };
+  return b;
+}
+function buildFilters() {
+  filtersEl.innerHTML = "";
+  filtersEl.appendChild(makeChip("all", "All 16", null));
+  for (const [k, c] of Object.entries(CATS)) filtersEl.appendChild(makeChip(k, c.label, c.color));
+}
+
+function matches(s) {
+  if (activeCat !== "all" && s.cat !== activeCat) return false;
+  if (!query) return true;
+  const hay = (s.name + " " + s.summary + " " + s.use + " " + s.surface).toLowerCase();
+  return query.toLowerCase().split(/\s+/).every(t => hay.includes(t));
+}
+
+function card(s) {
+  const cat = CATS[s.cat];
+  const el = document.createElement("div");
+  el.className = "card"; el.id = "card-" + s.id; el.setAttribute("aria-expanded", "false");
+  el.style.setProperty("--cat", cat.color); el.style.setProperty("--cat-bg", cat.bg);
+  const rel = s.rel.map(r => `<button data-goto="${r}">${byId[r] ? byId[r].name : r}</button>`).join("");
+  el.innerHTML = `
+    <div class="card-top">
+      <span class="glyph">${s.glyph}</span>
+      <h3><code>${s.name}</code></h3>
+      <span class="tag">${s.surface}</span>
+    </div>
+    <p class="summary">${s.summary}</p>
+    <span class="more">When to reach for it
+      <svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round"><path d="m6 9 6 6 6-6"/></svg>
+    </span>
+    <div class="detail"><div><div class="detail-inner">
+      <p class="label">Use it when</p>
+      <p class="usewhen">${s.use}</p>
+      <p class="label">Related</p>
+      <div class="rel">${rel}</div>
+    </div></div></div>`;
+  el.addEventListener("click", e => {
+    if (e.target.closest("[data-goto]")) return;
+    const open = el.getAttribute("aria-expanded") === "true";
+    el.setAttribute("aria-expanded", String(!open));
+  });
+  el.querySelectorAll("[data-goto]").forEach(b => b.addEventListener("click", e => {
+    e.stopPropagation();
+    goTo(b.dataset.goto);
+  }));
+  return el;
+}
+
+function goTo(id) {
+  activeCat = "all"; query = ""; qEl.value = ""; render();
+  const el = document.getElementById("card-" + id);
+  if (!el) return;
+  el.setAttribute("aria-expanded", "true");
+  el.scrollIntoView({ behavior: "smooth", block: "center" });
+  el.classList.remove("flash"); void el.offsetWidth; el.classList.add("flash");
+}
+
+function render() {
+  buildFilters();
+  groupsEl.innerHTML = "";
+  let shown = 0;
+  for (const [key, cat] of Object.entries(CATS)) {
+    const list = SKILLS.filter(s => s.cat === key && matches(s));
+    if (!list.length) continue;
+    shown += list.length;
+    const g = document.createElement("section"); g.className = "group";
+    const head = document.createElement("div"); head.className = "group-head";
+    head.innerHTML = `<span class="accent-bar" style="background:${cat.color}"></span><h2>${cat.label}</h2><span class="count">${list.length}</span>`;
+    const sub = document.createElement("p"); sub.className = "group-sub"; sub.textContent = cat.sub;
+    const grid = document.createElement("div"); grid.className = "grid";
+    list.forEach(s => grid.appendChild(card(s)));
+    g.appendChild(head); g.appendChild(sub); g.appendChild(grid);
+    groupsEl.appendChild(g);
+  }
+  emptyEl.style.display = shown ? "none" : "block";
+}
+
+qEl.addEventListener("input", () => { query = qEl.value.trim(); render(); });
+
+const themeBtn = document.getElementById("themeBtn");
+const themeIcon = document.getElementById("themeIcon");
+const themeLabel = document.getElementById("themeLabel");
+function applyTheme(t) {
+  document.documentElement.setAttribute("data-theme", t);
+  themeIcon.textContent = t === "night" ? "☀" : "☾";
+  themeLabel.textContent = t === "night" ? "Day" : "Night";
+  try { localStorage.setItem("wk-skills-theme", t); } catch {}
+}
+themeBtn.addEventListener("click", () => {
+  applyTheme(document.documentElement.getAttribute("data-theme") === "night" ? "day" : "night");
+});
+let saved = "day";
+try { saved = localStorage.getItem("wk-skills-theme") || (matchMedia("(prefers-color-scheme: dark)").matches ? "night" : "day"); } catch {}
+applyTheme(saved);
+
+render();
+</script>
+</body>
+</html>
