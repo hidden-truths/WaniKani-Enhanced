@@ -851,11 +851,15 @@
       </span></div>
     <div class="set-row set-row-block"><label>Voice priority<span class="set-hint">For each place audio plays, order the voices to try — specific voices (Siri male/female, Google) or kinds (native recording, synthesized, your own takes). The first available one plays; drag-free ▲▼ reorder.</span></label>
       <div id="setVoices" class="voice-prefs"></div></div>
-    <div class="set-row"><label>Backup<span class="set-hint">Export your progress to a JSON file, or import a previous backup. Signing in syncs automatically.</span></label>
+    <div class="set-row"><label>Backup<span class="set-hint">Export or import your review progress (SRS boxes + stats) as a JSON file — not custom cards or other tabs, which sync via your account. Signing in syncs automatically.</span></label>
       <span class="set-actions">
-        <button class="chip" id="exportBtn" type="button" aria-label="Export progress as JSON" title="Download your progress"><svg class="ic" aria-hidden="true"><use href="#i-download"/></svg>Export</button>
+        <button class="chip" id="exportBtn" type="button" aria-label="Export progress as JSON" title="Download your review progress"><svg class="ic" aria-hidden="true"><use href="#i-download"/></svg>Export</button>
         <button class="chip" id="importBtn" type="button" aria-label="Import progress from JSON" title="Load progress from a file"><svg class="ic" aria-hidden="true"><use href="#i-upload"/></svg>Import</button>
         <input type="file" id="importFile" accept="application/json,.json" hidden>
+      </span></div>
+    <div class="set-row"><label>Cached content<span class="set-hint">Clears locally-cached example sentences, songs, self-talk phrases and grammar, then reloads to re-fetch them. Use if something looks stale or empty. Your progress and account are untouched.</span></label>
+      <span class="set-actions">
+        <button class="chip" id="clearCacheBtn" type="button" aria-label="Clear cached content"><svg class="ic" aria-hidden="true"><use href="#i-refresh"/></svg>Clear cache</button>
       </span></div>
     <div class="modal-foot" id="settingsFoot"></div>
   </div>

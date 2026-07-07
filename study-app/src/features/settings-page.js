@@ -138,5 +138,15 @@ export function initSettingsPage() {
   const keep = document.getElementById('setRecKeep');
   if (keep) keep.addEventListener('change', () => { settings.recordingsKeep = clampKeep(keep.value); saveSettings(); renderSettings(); });
   document.getElementById('setTrim').addEventListener('click', e => { const b = e.target.closest('.settr'); if (!b) return; settings.trimSilence = b.dataset.settr === 'on'; saveSettings(); renderSettings(); });
+  // Self-service recovery for a stale/empty read-through cache: drop the server-content caches
+  // (examples/songs/self-talk/grammar — all wiped-safe) and reload to re-fetch. Progress, custom
+  // cards, settings and the account cookie live in other keys and are left alone.
+  const clearBtn = document.getElementById('clearCacheBtn');
+  if (clearBtn) clearBtn.addEventListener('click', () => {
+    if (!confirm('Clear cached content and reload? Your progress and account are untouched — this only re-fetches example sentences, songs, self-talk and grammar from the server.')) return;
+    ['jpverbs_examples_cache', 'jpverbs_selftalk_cache', 'jpverbs_selftalk_templates_cache', 'jpverbs_songs_cache', 'jpverbs_grammar_cache']
+      .forEach(k => { try { localStorage.removeItem(k); } catch (e) {} });
+    location.reload();
+  });
   wireVoicePrefs();
 }
