@@ -41,7 +41,22 @@ function playReading(e) { if (session) speakWord(session.deck[session.i], 'revie
 
 export function startSession() {
   const deck = buildDeck();
-  if (!deck.length) { alert(cfg.kind === 'srs' ? 'Nothing is due in that deck right now — switch to Free study to practice anyway.' : 'No cards in that deck yet.'); return; }
+  if (!deck.length) {
+    // An empty SRS deck named the fix ("switch to Free study") but made the user do it by hand.
+    // Offer it inline: flip the Study-type toggle (chips + cfg + labels, like the deck deep-links)
+    // and re-run as free study. A still-empty free deck falls through to the plain "no cards" alert.
+    if (cfg.kind === 'srs') {
+      if (confirm('Nothing is due in that deck right now. Switch to Free study and practice these cards anyway?')) {
+        cfg.kind = 'free';
+        document.querySelectorAll('.chip.skind').forEach(x => x.classList.toggle('active', x.dataset.skind === 'free'));
+        updateDeckCount(); updateStartLabel();
+        startSession();
+      }
+      return;
+    }
+    alert('No cards in that deck yet.');
+    return;
+  }
   session = { deck, i: 0, revealed: false, results: [], kind: cfg.kind };
   document.getElementById('fcSetup').style.display = 'none';
   document.getElementById('fcDone').classList.remove('active');

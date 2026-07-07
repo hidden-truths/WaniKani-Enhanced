@@ -98,11 +98,25 @@ beforeEach(() => {
   el('fcSetup').style.display = '';
 });
 
-test('an empty SRS deck alerts and never enters the stage', () => {
+test('an empty SRS deck offers to switch to Free study; declining stays on the picker', () => {
+  const confirm = vi.fn(() => false);   // user declines the switch
   const alert = vi.fn();
-  vi.stubGlobal('alert', alert);
+  vi.stubGlobal('confirm', confirm); vi.stubGlobal('alert', alert);
   startSession();
-  expect(alert).toHaveBeenCalledOnce();
+  expect(confirm).toHaveBeenCalledOnce();
+  expect(alert).not.toHaveBeenCalled();
+  expect(ctx.cfg.kind).toBe('srs');                              // unchanged
+  expect(el('fcStage').classList.contains('active')).toBe(false);
+  vi.unstubAllGlobals();
+});
+
+test('an empty SRS deck: accepting flips to Free study (still-empty deck then plainly alerts)', () => {
+  const confirm = vi.fn(() => true);    // user accepts the switch
+  const alert = vi.fn();
+  vi.stubGlobal('confirm', confirm); vi.stubGlobal('alert', alert);
+  startSession();
+  expect(ctx.cfg.kind).toBe('free');                             // flipped
+  expect(alert).toHaveBeenCalledOnce();                          // re-run as free, still empty → the plain alert
   expect(el('fcStage').classList.contains('active')).toBe(false);
   vi.unstubAllGlobals();
 });
