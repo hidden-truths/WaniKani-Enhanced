@@ -198,6 +198,7 @@ function renderGrid(body) {
   if (daily.length) {
     // featured = the chosen prompt, else the first not-yet-said, else the first (so you land on what's next).
     const featured = daily.find((p) => p.id === S.stFeatured) || daily.find((p) => !doneSet.has(p.id)) || daily[0];
+    const allDone = daily.every((p) => doneSet.has(p.id));   // every daily prompt said → closure state
     const railCard = (p, i) => {
       const done = doneSet.has(p.id);
       return `<button class="st-rail-card${p.id === featured.id ? ' current' : ''}${done ? ' done' : ''}" type="button" data-st-feature="${escapeHtml(p.id)}">
@@ -207,7 +208,9 @@ function renderGrid(body) {
     };
     dailyHtml = `<section class="st-daily">
       <div class="st-now">
-        <div class="st-now-head"><span class="st-eq" aria-hidden="true"><i></i><i></i><i></i></span> Now speaking</div>
+        <div class="st-now-head">${allDone
+          ? `<svg class="ic" aria-hidden="true"><use href="#i-check"/></svg> Today's ${daily.length} are done — practice more below or come back tomorrow`
+          : `<span class="st-eq" aria-hidden="true"><i></i><i></i><i></i></span> Now speaking`}</div>
         ${phraseCardHtml(featured, speaking, doneSet.has(featured.id))}
       </div>
       <aside class="st-rail">

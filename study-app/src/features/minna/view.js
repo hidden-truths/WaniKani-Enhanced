@@ -57,6 +57,11 @@ function mnSection(title, count, bodyHtml, open, opts = {}) {
 // Two gate states: signed-OUT shows a sign-in invite; signed-in-but-DENIED (a 401 from the owner
 // allowlist) shows a "not on your account" note WITHOUT a Sign-in button — telling an already-
 // signed-in user to "Sign in" was a misleading dead-end.
+// A recoverable error line for the TRANSIENT Minna fetch failures (server blip / lesson load) — the
+// message plus a Retry that re-runs the failed fetch. The "no lessons" state is an honest empty, not
+// an error, so it has no retry.
+const mnErrorHtml = (msg) => `<div class="mn-error">${msg} <button class="chip sm" id="mnRetry" type="button"><svg class="ic" aria-hidden="true"><use href="#i-refresh"/></svg>Retry</button></div>`;
+
 function renderMinnaGate(noAccess = false) {
   clearSpeakingBar();   // no speaking controls on the gate
   document.getElementById('mnHead').innerHTML = '';
@@ -80,7 +85,13 @@ export async function renderMinna() {
   const head = document.getElementById('mnHead'), body = document.getElementById('mnBody');
   let lessons = [];
   try { const r = await api('/v1/minna/lessons'); lessons = (r && r.lessons) || []; }
-  catch (e) { if (e.status === 401) { renderMinnaGate(true); return; } body.innerHTML = '<div class="mn-error">Could not reach the server.</div>'; return; }
+  catch (e) {
+    if (e.status === 401) { renderMinnaGate(true); return; }
+    // Transient blip (renderMinna only re-runs on tab activation, so give a way back without a tab hop).
+    body.innerHTML = mnErrorHtml('Could not reach the server.');
+    const rb = document.getElementById('mnRetry'); if (rb) rb.addEventListener('click', () => renderMinna());
+    return;
+  }
   if (!lessons.length) { head.innerHTML = ''; body.innerHTML = '<div class="mn-error">No lessons have been added yet.</div>'; return; }
   const cur = lessons.includes(state.minnaStore.lastLesson) ? state.minnaStore.lastLesson : lessons[0];
   state.minnaStore.lastLesson = cur;
@@ -121,7 +132,11 @@ export async function renderMinnaLesson(n, body) {
   body.innerHTML = '<div class="mn-loading">Loading lesson ' + n + '…</div>';
   let L;
   try { L = await fetchMinnaLesson(n); }
-  catch (e) { body.innerHTML = '<div class="mn-error">Could not load lesson ' + n + (e && e.status ? (' (' + e.status + ')') : '') + '.</div>'; return; }
+  catch (e) {
+    body.innerHTML = mnErrorHtml('Could not load lesson ' + n + (e && e.status ? (' (' + e.status + ')') : '') + '.');
+    const rb = document.getElementById('mnRetry'); if (rb) rb.addEventListener('click', () => renderMinnaLesson(n, body));
+    return;
+  }
   await loadRecordings(n);   // populate the record-and-compare take cache before render
   // Cross-lesson practice history (recording counts). Fails open: offline / error → no section.
   let practice = null;
