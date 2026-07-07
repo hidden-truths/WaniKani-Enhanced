@@ -13,7 +13,7 @@ import { playItem, cycleMod } from '../audio.js';
 import { copyBtnHtml, copyText, speakBtnHtml } from '../render-helpers.js';
 import { account, api, setSyncStatus } from '../cloud-core.js';
 import { openAuth } from '../cloud.js';
-import { loadRecordings, recordControlHtml, wireRecordCompare, paintCompareWaveforms, isSpeakingMode, enterSpeakingMode, exitSpeakingMode, newestTakeIdForItem } from '../record-compare.js';
+import { RECORD_SUPPORTED, loadRecordings, recordControlHtml, wireRecordCompare, paintCompareWaveforms, isSpeakingMode, enterSpeakingMode, exitSpeakingMode, newestTakeIdForItem } from '../record-compare.js';
 import { clearSpeakingBar } from '../speaking-bar.js';
 import { S } from './state.js';
 import { saveMinna, getLineClip } from './store.js';
@@ -104,10 +104,17 @@ function chapterStripHtml(n) {
   }
   const chips = shown.map(m => `<button class="chip mnch${m === n ? ' active' : ''}" type="button" data-lesson="${m}">${m}</button>`).join('');
   const speaking = isSpeakingMode();
+  // Only offer speaking practice where recording actually works — otherwise the button was a dead
+  // no-op (enterSpeakingMode returns false silently on an unsupported browser). Mirrors Self-Talk's
+  // RECORD_SUPPORTED gate. With no entry button, speaking mode never turns on, so the per-vocab
+  // rec-dots (rendered only in speaking mode) stay hidden too.
+  const speakBtn = RECORD_SUPPORTED
+    ? `<button class="speaking-hint${speaking ? ' is-active' : ''}" type="button" data-mn-speak><svg class="ic" aria-hidden="true"><use href="#i-mic"/></svg>${speaking ? 'Stop speaking' : 'Speaking practice'}</button>`
+    : '';
   return `<div class="chapter-strip">
     <span class="lbl">Lesson</span>
     ${lead ? '<span class="gap">…</span>' : ''}${chips}${trail ? '<span class="gap">…</span>' : ''}
-    <button class="speaking-hint${speaking ? ' is-active' : ''}" type="button" data-mn-speak><svg class="ic" aria-hidden="true"><use href="#i-mic"/></svg>${speaking ? 'Stop speaking' : 'Speaking practice'}</button>
+    ${speakBtn}
   </div>`;
 }
 export async function renderMinnaLesson(n, body) {

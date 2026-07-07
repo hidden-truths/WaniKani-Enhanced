@@ -21,6 +21,7 @@ const ctx = vi.hoisted(() => ({
 
 // --- mock the side-effecting collaborators (engine, audio, tts, network, persistence, cloud) ---
 vi.mock('../src/features/record-compare.js', () => ({
+  RECORD_SUPPORTED: true,   // the chapter-strip "Speaking practice" button gates on this
   loadRecordings: vi.fn(async () => {}),
   recordControlHtml: (lesson, key, audio) => `<div class="rec-control" data-lesson="${lesson}" data-native="${audio || ''}"></div>`,
   wireRecordCompare: () => {},
