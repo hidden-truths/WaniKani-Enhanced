@@ -19,8 +19,9 @@ tutoring workflow that feeds it.
    lesson)", "Visibility & copyright", "Verifying Minna changes".
 2. Read [study-app/CARDS.md](../../../study-app/CARDS.md) "Recipe A" + "Validation" — the
    per-word content contract (a Minna vocab entry becomes a full study card).
-3. Check what exists: `ls wk-enhanced-api/data/minna/` — as of 2026-07 lessons **22, 23, 24**
-   are curated (`lesson-<n>.json`) with their `.draft.json` siblings still present.
+3. Check what exists: `ls wk-enhanced-api/data/minna/` — as of 2026-07 lessons **1–5, 22, 23, 24**
+   are curated (`lesson-<n>.json`); L1–5 are the early-lesson backfill (generated JP flagged for
+   maintainer proofread). Drafts L6–L10 are staged as `.draft.json`; L11–21 remain to scrape.
 4. Ask the user which lesson they're on and whether a tutor vocab list exists in
    `~/Downloads/` (see the iTalki section). The lesson number moves — don't assume.
 5. For live verification you need both dev servers (`./dev.sh` from repo root) and a signed-in
@@ -250,7 +251,7 @@ Dev, after steps 1–6 (this compresses MINNA.md "Verifying Minna changes"):
   Browse with the `みんなの日本語 · L<n>` badge and in the Source facet (`L<n>` chip);
   re-clicking is a no-op ("All vocab in your deck").
 - Wrap up per the `land-a-change` skill, and update the ROADMAP record `minna-more-lessons`
-  (its summary lists "Shipped so far: L22, L23, L24" — extend it; see the `roadmap` skill).
+  (its summary lists the shipped lessons — extend it; see the `roadmap` skill).
 
 ## Traps
 

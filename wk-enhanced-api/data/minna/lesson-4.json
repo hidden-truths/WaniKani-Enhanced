@@ -1,0 +1,1892 @@
+{
+  "lesson": 4,
+  "title": "Lesson 4",
+  "theme": "Telling time (〜時〜分) & schedules — 〜から〜まで (from/to), the polite verb forms 〜ます/〜ません/〜ました/〜ませんでした, days of the week (〜曜日), and the confirming 〜ね; introduces daily-routine verbs 起きる・寝る・働く・休む・勉強する・終わる・始まる",
+  "source": {
+    "name": "vnjpclub.com",
+    "vocabUrl": "https://www.vnjpclub.com/en/minna-no-nihongo/lesson-4-vocabulary.html",
+    "grammarUrl": "https://www.vnjpclub.com/en/minna-no-nihongo/lesson-4-grammar.html",
+    "note": "Vocabulary, native-speaker audio, and example sentences aggregated from vnjpclub.com (Minna no Nihongo 第2版). For personal study."
+  },
+  "vocab": [
+    {
+      "key": "mnn:4:0",
+      "kana": "おきます",
+      "kanji": "起きます",
+      "context": "",
+      "mean": "to get up, wake up",
+      "cat": "verb",
+      "type": "ichidan",
+      "trans": "i",
+      "dict": "起きる",
+      "dictRead": "おきる",
+      "audio": "/Audio/minnamoi/bai4/00010011110011010.mp3",
+      "accent": 2
+    },
+    {
+      "key": "mnn:4:1",
+      "kana": "ねます",
+      "kanji": "寝ます",
+      "context": "",
+      "mean": "to sleep, go to bed",
+      "cat": "verb",
+      "type": "ichidan",
+      "trans": "i",
+      "dict": "寝る",
+      "dictRead": "ねる",
+      "audio": "/Audio/minnamoi/bai4/00010011110011011.mp3",
+      "accent": 0
+    },
+    {
+      "key": "mnn:4:2",
+      "kana": "はたらきます",
+      "kanji": "働きます",
+      "context": "",
+      "mean": "to work",
+      "cat": "verb",
+      "type": "godan",
+      "trans": "i",
+      "dict": "働く",
+      "dictRead": "はたらく",
+      "audio": "/Audio/minnamoi/bai4/00010011110011100.mp3",
+      "accent": 0
+    },
+    {
+      "key": "mnn:4:3",
+      "kana": "やすみます",
+      "kanji": "休みます",
+      "context": "会社を〜",
+      "mean": "to rest; to take (time) off, be absent",
+      "cat": "verb",
+      "type": "godan",
+      "trans": "t",
+      "dict": "休む",
+      "dictRead": "やすむ",
+      "audio": "/Audio/minnamoi/bai4/00010011110011101.mp3",
+      "levels": {
+        "N5": [
+          "<ruby>今日<rt>きょう</rt></ruby><ruby>会社<rt>かいしゃ</rt></ruby>を<ruby>休<rt>やす</rt></ruby>みます。",
+          "I'm taking the day off work today."
+        ],
+        "N4": [
+          "<ruby>風邪<rt>かぜ</rt></ruby>をひいたので、<ruby>学校<rt>がっこう</rt></ruby>を<ruby>休<rt>やす</rt></ruby>みました。",
+          "I caught a cold, so I was absent from school."
+        ],
+        "N3": [
+          "<ruby>疲<rt>つか</rt></ruby>れたときは、<ruby>無理<rt>むり</rt></ruby>をせずにしっかり<ruby>休<rt>やす</rt></ruby>むようにしています。",
+          "When I'm tired, I make a point of resting properly instead of overdoing it."
+        ],
+        "N2": [
+          "<ruby>体調<rt>たいちょう</rt></ruby>が<ruby>悪<rt>わる</rt></ruby>いものの、<ruby>大切<rt>たいせつ</rt></ruby>な<ruby>会議<rt>かいぎ</rt></ruby>があるので<ruby>休<rt>やす</rt></ruby>むわけにはいかない。",
+          "Even though I'm not feeling well, there's an important meeting, so I can't very well take the day off."
+        ],
+        "N1": [
+          "<ruby>周<rt>まわ</rt></ruby>りに<ruby>迷惑<rt>めいわく</rt></ruby>をかけまいと、<ruby>体<rt>からだ</rt></ruby>を<ruby>壊<rt>こわ</rt></ruby>すまで<ruby>休<rt>やす</rt></ruby>もうとしなかった<ruby>彼<rt>かれ</rt></ruby>の<ruby>姿勢<rt>しせい</rt></ruby>には、<ruby>頭<rt>あたま</rt></ruby>が<ruby>下<rt>さ</rt></ruby>がる<ruby>反面<rt>はんめん</rt></ruby>、<ruby>心配<rt>しんぱい</rt></ruby>もした。",
+          "So as not to burden those around him, he refused to rest until he wore himself out — an attitude I admired, though it also worried me."
+        ]
+      },
+      "mnem": "\"Yah, sue me!\" — you take a day off and rest: やすむ.",
+      "tip": "休む covers both \"rest\" and \"be absent from (school/work)\"; the thing you're absent FROM takes を (会社を休む). Godan, so the て-form is 休んで, not 休みて. Don't confuse it with 休み (やすみ, the noun \"a rest/holiday\").",
+      "accent": 2
+    },
+    {
+      "key": "mnn:4:4",
+      "kana": "べんきょうします",
+      "kanji": "勉強します",
+      "context": "",
+      "mean": "to study",
+      "cat": "verb",
+      "type": "irregular",
+      "trans": "t",
+      "dict": "勉強する",
+      "dictRead": "べんきょうする",
+      "audio": "/Audio/minnamoi/bai4/00010011110011110.mp3",
+      "accent": 5
+    },
+    {
+      "key": "mnn:4:5",
+      "kana": "おわります",
+      "kanji": "終わります",
+      "context": "",
+      "mean": "to finish, end",
+      "cat": "verb",
+      "type": "godan",
+      "trans": "i",
+      "dict": "終わる",
+      "dictRead": "おわる",
+      "audio": "/Audio/minnamoi/bai4/00010011110011111.mp3",
+      "accent": 0
+    },
+    {
+      "key": "mnn:4:6",
+      "kana": "デパート",
+      "kanji": "",
+      "context": "",
+      "mean": "department store",
+      "cat": "noun",
+      "type": "",
+      "trans": "",
+      "dict": "デパート",
+      "dictRead": "デパート",
+      "audio": "/Audio/minnamoi/bai4/00010011110100000.mp3",
+      "levels": {
+        "N5": [
+          "デパートで<ruby>買<rt>か</rt></ruby>い<ruby>物<rt>もの</rt></ruby>をします。",
+          "I go shopping at the department store."
+        ],
+        "N4": [
+          "このデパートは<ruby>午前<rt>ごぜん</rt></ruby><ruby>十時<rt>じゅうじ</rt></ruby>から<ruby>午後<rt>ごご</rt></ruby><ruby>八時<rt>はちじ</rt></ruby>までです。",
+          "This department store is open from 10 a.m. to 8 p.m."
+        ],
+        "N3": [
+          "<ruby>駅前<rt>えきまえ</rt></ruby>のデパートは、いつも<ruby>週末<rt>しゅうまつ</rt></ruby>に<ruby>混<rt>こ</rt></ruby>むようです。",
+          "The department store in front of the station always seems to get crowded on weekends."
+        ],
+        "N2": [
+          "そのデパートは<ruby>品<rt>しな</rt></ruby>ぞろえがいいものの、<ruby>値段<rt>ねだん</rt></ruby>が<ruby>少<rt>すこ</rt></ruby>し<ruby>高<rt>たか</rt></ruby>めだ。",
+          "That department store has a good selection, but the prices are a little on the high side."
+        ],
+        "N1": [
+          "<ruby>老舗<rt>しにせ</rt></ruby>のデパートといえども、ネット<ruby>通販<rt>つうはん</rt></ruby>の<ruby>普及<rt>ふきゅう</rt></ruby>には<ruby>抗<rt>あらが</rt></ruby>いきれず、<ruby>閉店<rt>へいてん</rt></ruby>を<ruby>余儀<rt>よぎ</rt></ruby>なくされる<ruby>店<rt>みせ</rt></ruby>も<ruby>少<rt>すく</rt></ruby>なくない。",
+          "Even long-established department stores cannot fully resist the spread of online shopping, and not a few are forced to close."
+        ]
+      },
+      "mnem": "From English \"depart(ment)\" → デパート — the katakana clips the English word off after \"depart.\"",
+      "tip": "Japanese shortens \"department store\" to just デパート (never デパートメント); a modern shopping-mall complex is a separate loanword, ショッピングモール.",
+      "accent": 2
+    },
+    {
+      "key": "mnn:4:7",
+      "kana": "ぎんこう",
+      "kanji": "銀行",
+      "context": "",
+      "mean": "bank",
+      "cat": "noun",
+      "type": "",
+      "trans": "",
+      "dict": "銀行",
+      "dictRead": "ぎんこう",
+      "audio": "/Audio/minnamoi/bai4/00010011110100001.mp3",
+      "levels": {
+        "N5": [
+          "<ruby>銀行<rt>ぎんこう</rt></ruby>は<ruby>九時<rt>くじ</rt></ruby>からです。",
+          "The bank opens at nine o'clock."
+        ],
+        "N4": [
+          "<ruby>銀行<rt>ぎんこう</rt></ruby>へ<ruby>行<rt>い</rt></ruby>って、お<ruby>金<rt>かね</rt></ruby>をおろします。",
+          "I'll go to the bank and withdraw some money."
+        ],
+        "N3": [
+          "<ruby>銀行<rt>ぎんこう</rt></ruby>は<ruby>午後<rt>ごご</rt></ruby><ruby>三時<rt>さんじ</rt></ruby>までなので、<ruby>早<rt>はや</rt></ruby>めに<ruby>行<rt>い</rt></ruby>くようにしています。",
+          "The bank is only open until 3 p.m., so I make a point of going early."
+        ],
+        "N2": [
+          "<ruby>手続<rt>てつづ</rt></ruby>きが<ruby>面倒<rt>めんどう</rt></ruby>なものの、<ruby>口座<rt>こうざ</rt></ruby>を<ruby>作<rt>つく</rt></ruby>るには<ruby>銀行<rt>ぎんこう</rt></ruby>へ<ruby>行<rt>い</rt></ruby>かざるを<ruby>得<rt>え</rt></ruby>ない。",
+          "The procedure is a hassle, but to open an account I have no choice but to go to the bank."
+        ],
+        "N1": [
+          "<ruby>低金利<rt>ていきんり</rt></ruby>が<ruby>続<rt>つづ</rt></ruby>く<ruby>中<rt>なか</rt></ruby>、<ruby>銀行<rt>ぎんこう</rt></ruby>は<ruby>従来<rt>じゅうらい</rt></ruby>の<ruby>収益<rt>しゅうえき</rt></ruby>モデルの<ruby>見直<rt>みなお</rt></ruby>しを<ruby>迫<rt>せま</rt></ruby>られている。",
+          "With low interest rates persisting, banks are being pressed to rethink their conventional revenue model."
+        ]
+      },
+      "mnem": "銀 (silver) + 行 (go/shop) — the place where silver (money) goes: a bank, ぎんこう.",
+      "tip": "銀行 is the institution; a single branch is 支店 (してん), and an ATM is エーティーエム. Note 行 here reads こう, not the いく/ぎょう you meet elsewhere.",
+      "accent": 0
+    },
+    {
+      "key": "mnn:4:8",
+      "kana": "ゆうびんきょく",
+      "kanji": "郵便局",
+      "context": "",
+      "mean": "post office",
+      "cat": "noun",
+      "type": "",
+      "trans": "",
+      "dict": "郵便局",
+      "dictRead": "ゆうびんきょく",
+      "audio": "/Audio/minnamoi/bai4/00010011110100010.mp3",
+      "levels": {
+        "N5": [
+          "<ruby>郵便局<rt>ゆうびんきょく</rt></ruby>で<ruby>切手<rt>きって</rt></ruby>を<ruby>買<rt>か</rt></ruby>います。",
+          "I buy stamps at the post office."
+        ],
+        "N4": [
+          "<ruby>郵便局<rt>ゆうびんきょく</rt></ruby>は<ruby>九時<rt>くじ</rt></ruby>から<ruby>五時<rt>ごじ</rt></ruby>までです。",
+          "The post office is open from nine to five."
+        ],
+        "N3": [
+          "<ruby>手紙<rt>てがみ</rt></ruby>を<ruby>出<rt>だ</rt></ruby>すために、<ruby>仕事<rt>しごと</rt></ruby>の<ruby>帰<rt>かえ</rt></ruby>りに<ruby>郵便局<rt>ゆうびんきょく</rt></ruby>へ<ruby>寄<rt>よ</rt></ruby>りました。",
+          "I stopped by the post office on the way home from work to mail a letter."
+        ],
+        "N2": [
+          "<ruby>荷物<rt>にもつ</rt></ruby>を<ruby>送<rt>おく</rt></ruby>りたいものの、<ruby>近<rt>ちか</rt></ruby>くの<ruby>郵便局<rt>ゆうびんきょく</rt></ruby>はもう<ruby>閉<rt>し</rt></ruby>まっているらしい。",
+          "I'd like to send a parcel, but it seems the nearby post office is already closed."
+        ],
+        "N1": [
+          "<ruby>民営化<rt>みんえいか</rt></ruby>を<ruby>経<rt>へ</rt></ruby>た<ruby>今<rt>いま</rt></ruby>もなお、<ruby>郵便局<rt>ゆうびんきょく</rt></ruby>は<ruby>地方<rt>ちほう</rt></ruby>の<ruby>暮<rt>く</rt></ruby>らしを<ruby>支<rt>ささ</rt></ruby>える<ruby>不可欠<rt>ふかけつ</rt></ruby>な<ruby>存在<rt>そんざい</rt></ruby>であり<ruby>続<rt>つづ</rt></ruby>けている。",
+          "Even now, after privatization, the post office remains an indispensable presence supporting life in rural areas."
+        ]
+      },
+      "mnem": "郵便 (ゆうびん, mail) + 局 (きょく, bureau/office) = the mail bureau — the post office.",
+      "tip": "郵便 alone means \"mail/postal service\"; add 局 for the physical branch. Don't confuse 局 (きょく, office/bureau — also 放送局 broadcasting station) with 曲 (きょく, a musical piece), which look and sound alike.",
+      "accent": 3
+    },
+    {
+      "key": "mnn:4:9",
+      "kana": "としょかん",
+      "kanji": "図書館",
+      "context": "",
+      "mean": "library",
+      "cat": "noun",
+      "type": "",
+      "trans": "",
+      "dict": "図書館",
+      "dictRead": "としょかん",
+      "audio": "/Audio/minnamoi/bai4/00010011110100011.mp3",
+      "levels": {
+        "N5": [
+          "<ruby>図書館<rt>としょかん</rt></ruby>で<ruby>本<rt>ほん</rt></ruby>を<ruby>読<rt>よ</rt></ruby>みます。",
+          "I read books at the library."
+        ],
+        "N4": [
+          "<ruby>図書館<rt>としょかん</rt></ruby>は<ruby>何時<rt>なんじ</rt></ruby>から<ruby>何時<rt>なんじ</rt></ruby>までですか。",
+          "From what time to what time is the library open?"
+        ],
+        "N3": [
+          "<ruby>試験<rt>しけん</rt></ruby>が<ruby>近<rt>ちか</rt></ruby>いので、<ruby>毎日<rt>まいにち</rt></ruby><ruby>図書館<rt>としょかん</rt></ruby>で<ruby>勉強<rt>べんきょう</rt></ruby>するようにしています。",
+          "The exam is close, so I make a point of studying at the library every day."
+        ],
+        "N2": [
+          "<ruby>図書館<rt>としょかん</rt></ruby>は<ruby>静<rt>しず</rt></ruby>かで<ruby>集中<rt>しゅうちゅう</rt></ruby>できるものの、<ruby>飲食<rt>いんしょく</rt></ruby>ができないのが<ruby>難点<rt>なんてん</rt></ruby>だ。",
+          "The library is quiet and lets me concentrate, but the drawback is that eating and drinking aren't allowed."
+        ],
+        "N1": [
+          "<ruby>蔵書<rt>ぞうしょ</rt></ruby>の<ruby>電子化<rt>でんしか</rt></ruby>が<ruby>進<rt>すす</rt></ruby>むにつれ、<ruby>図書館<rt>としょかん</rt></ruby>の<ruby>役割<rt>やくわり</rt></ruby>そのものが<ruby>問<rt>と</rt></ruby>い<ruby>直<rt>なお</rt></ruby>されつつある。",
+          "As the digitization of collections advances, the very role of the library itself is coming to be reexamined."
+        ]
+      },
+      "mnem": "図書 (としょ, books/documents) + 館 (かん, hall/building) = a hall of books — the library.",
+      "tip": "図書館 is where you borrow books free; a 本屋 (ほんや) is a bookshop where you buy them. The 館 (かん, building/hall) suffix also appears in 美術館 (art museum) and 映画館 (cinema).",
+      "accent": 2
+    },
+    {
+      "key": "mnn:4:10",
+      "kana": "びじゅつかん",
+      "kanji": "美術館",
+      "context": "",
+      "mean": "art museum",
+      "cat": "noun",
+      "type": "",
+      "trans": "",
+      "dict": "美術館",
+      "dictRead": "びじゅつかん",
+      "audio": "/Audio/minnamoi/bai4/00010011110100100.mp3",
+      "levels": {
+        "N5": [
+          "<ruby>日曜日<rt>にちようび</rt></ruby>に<ruby>美術館<rt>びじゅつかん</rt></ruby>へ<ruby>行<rt>い</rt></ruby>きます。",
+          "I'll go to the art museum on Sunday."
+        ],
+        "N4": [
+          "この<ruby>美術館<rt>びじゅつかん</rt></ruby>の<ruby>休<rt>やす</rt></ruby>みは<ruby>月曜日<rt>げつようび</rt></ruby>です。",
+          "This art museum is closed on Mondays."
+        ],
+        "N3": [
+          "<ruby>有名<rt>ゆうめい</rt></ruby>な<ruby>絵<rt>え</rt></ruby>を<ruby>見<rt>み</rt></ruby>るために、<ruby>朝<rt>あさ</rt></ruby><ruby>早<rt>はや</rt></ruby>くから<ruby>美術館<rt>びじゅつかん</rt></ruby>に<ruby>並<rt>なら</rt></ruby>びました。",
+          "I lined up at the art museum from early morning to see a famous painting."
+        ],
+        "N2": [
+          "その<ruby>美術館<rt>びじゅつかん</rt></ruby>は<ruby>入場料<rt>にゅうじょうりょう</rt></ruby>が<ruby>高<rt>たか</rt></ruby>いものの、<ruby>一見<rt>いっけん</rt></ruby>の<ruby>価値<rt>かち</rt></ruby>はある。",
+          "That art museum has a steep admission fee, but it's worth a look."
+        ],
+        "N1": [
+          "この<ruby>美術館<rt>びじゅつかん</rt></ruby>は<ruby>建築<rt>けんちく</rt></ruby>そのものが<ruby>芸術作品<rt>げいじゅつさくひん</rt></ruby>であり、<ruby>展示<rt>てんじ</rt></ruby>される<ruby>作品<rt>さくひん</rt></ruby>に<ruby>勝<rt>おと</rt></ruby>るとも<ruby>劣<rt>おと</rt></ruby>らない。",
+          "This art museum's very architecture is a work of art, no less impressive than the works displayed inside it."
+        ]
+      },
+      "mnem": "美術 (びじゅつ, fine art) + 館 (かん, hall) = a hall of fine art — the art museum.",
+      "tip": "美術館 is for fine art (paintings/sculpture); a museum of history or science is 博物館 (はくぶつかん). Both share the 館 (building/hall) suffix — pick by what's inside.",
+      "accent": 3
+    },
+    {
+      "key": "mnn:4:11",
+      "kana": "いま",
+      "kanji": "今",
+      "context": "",
+      "mean": "now",
+      "cat": "noun",
+      "type": "",
+      "trans": "",
+      "dict": "今",
+      "dictRead": "いま",
+      "audio": "/Audio/minnamoi/bai4/00010011110100101.mp3",
+      "levels": {
+        "N5": [
+          "<ruby>今<rt>いま</rt></ruby><ruby>何時<rt>なんじ</rt></ruby>ですか。",
+          "What time is it now?"
+        ],
+        "N4": [
+          "<ruby>今<rt>いま</rt></ruby>から<ruby>友<rt>とも</rt></ruby>だちに<ruby>会<rt>あ</rt></ruby>いに<ruby>行<rt>い</rt></ruby>きます。",
+          "I'm going to meet a friend now."
+        ],
+        "N3": [
+          "<ruby>今<rt>いま</rt></ruby>やっている<ruby>仕事<rt>しごと</rt></ruby>が<ruby>終<rt>お</rt></ruby>わったら、<ruby>少<rt>すこ</rt></ruby>し<ruby>休<rt>やす</rt></ruby>むつもりです。",
+          "Once the work I'm doing now is finished, I plan to take a short rest."
+        ],
+        "N2": [
+          "<ruby>今<rt>いま</rt></ruby>さら<ruby>後悔<rt>こうかい</rt></ruby>したところで、<ruby>過<rt>す</rt></ruby>ぎたことはどうにもならない。",
+          "There's no point regretting it now — what's done is done."
+        ],
+        "N1": [
+          "<ruby>今<rt>いま</rt></ruby>を<ruby>生<rt>い</rt></ruby>きることに<ruby>専念<rt>せんねん</rt></ruby>してこそ、<ruby>過去<rt>かこ</rt></ruby>の<ruby>悔<rt>く</rt></ruby>いや<ruby>未来<rt>みらい</rt></ruby>への<ruby>不安<rt>ふあん</rt></ruby>から<ruby>解<rt>と</rt></ruby>き<ruby>放<rt>はな</rt></ruby>たれるのだ。",
+          "Only by devoting yourself to living in the present can you be freed from regret over the past and anxiety about the future."
+        ]
+      },
+      "mnem": "\"ee-MA\" — right now, this very moment: 今.",
+      "tip": "今 = \"now\"; don't confuse the reading いま with 居間 (いま, \"living room\") — same sound, different kanji. 今 also builds 今日 (きょう today), 今晩 (こんばん tonight), 今朝 (けさ this morning).",
+      "accent": 1
+    },
+    {
+      "key": "mnn:4:12",
+      "kana": "―じ",
+      "kanji": "―時",
+      "context": "",
+      "mean": "-o'clock (counter for the hour)",
+      "cat": "noun",
+      "type": "",
+      "trans": "",
+      "dict": "時",
+      "dictRead": "じ",
+      "audio": "/Audio/minnamoi/bai4/00010011110100110.mp3",
+      "levels": {
+        "N5": [
+          "<ruby>今<rt>いま</rt></ruby><ruby>三時<rt>さんじ</rt></ruby>です。",
+          "It's three o'clock now."
+        ],
+        "N4": [
+          "<ruby>毎朝<rt>まいあさ</rt></ruby><ruby>七時<rt>しちじ</rt></ruby>に<ruby>起<rt>お</rt></ruby>きます。",
+          "I get up at seven o'clock every morning."
+        ],
+        "N3": [
+          "<ruby>約束<rt>やくそく</rt></ruby>は<ruby>四時<rt>よじ</rt></ruby>なので、それまでに<ruby>着<rt>つ</rt></ruby>くようにしています。",
+          "The appointment is at four o'clock, so I make sure to arrive by then."
+        ],
+        "N2": [
+          "<ruby>会議<rt>かいぎ</rt></ruby>は<ruby>九時<rt>くじ</rt></ruby>から<ruby>始<rt>はじ</rt></ruby>まるものの、<ruby>準備<rt>じゅんび</rt></ruby>のため<ruby>八時<rt>はちじ</rt></ruby>には<ruby>来<rt>き</rt></ruby>てほしい。",
+          "The meeting starts at nine, but I'd like people here by eight to prepare."
+        ],
+        "N1": [
+          "<ruby>締<rt>し</rt></ruby>め<ruby>切<rt>き</rt></ruby>りが<ruby>午前<rt>ごぜん</rt></ruby><ruby>零時<rt>れいじ</rt></ruby>である<ruby>以上<rt>いじょう</rt></ruby>、それを<ruby>一分<rt>いっぷん</rt></ruby>でも<ruby>過<rt>す</rt></ruby>ぎれば<ruby>受<rt>う</rt></ruby>け<ruby>付<rt>つ</rt></ruby>けてもらえない。",
+          "Since the deadline is midnight, it won't be accepted if you're even one minute past it."
+        ]
+      },
+      "mnem": "―時 (じ) is the hour counter — a \"G\"-sound stuck after a number tells the time: 三時 (san-JI), 四時 (yo-JI).",
+      "tip": "―時 is the counter for o'clock (hours), read じ. Watch the irregular readings: 四時 = よじ (not しじ), 七時 = しちじ, 九時 = くじ. Don't confuse it with 時 read とき (\"a time/occasion,\" Lesson 23's 〜とき) or 時間 (じかん, a duration).",
+      "accent": 0
+    },
+    {
+      "key": "mnn:4:13",
+      "kana": "―ふん（－ぷん）",
+      "kanji": "―分",
+      "context": "",
+      "mean": "-minute (counter for minutes)",
+      "cat": "noun",
+      "type": "",
+      "trans": "",
+      "dict": "分",
+      "dictRead": "ふん",
+      "audio": "/Audio/minnamoi/bai4/00010011110100111.mp3",
+      "levels": {
+        "N5": [
+          "<ruby>今<rt>いま</rt></ruby><ruby>四時<rt>よじ</rt></ruby><ruby>五分<rt>ごふん</rt></ruby>です。",
+          "It's four oh-five now."
+        ],
+        "N4": [
+          "<ruby>駅<rt>えき</rt></ruby>まで<ruby>十分<rt>じゅっぷん</rt></ruby>かかります。",
+          "It takes ten minutes to the station."
+        ],
+        "N3": [
+          "<ruby>電車<rt>でんしゃ</rt></ruby>は<ruby>三分<rt>さんぷん</rt></ruby><ruby>遅<rt>おく</rt></ruby>れているようです。",
+          "The train seems to be running three minutes late."
+        ],
+        "N2": [
+          "たった<ruby>五分<rt>ごふん</rt></ruby>の<ruby>差<rt>さ</rt></ruby>で<ruby>終電<rt>しゅうでん</rt></ruby>に<ruby>乗<rt>の</rt></ruby>り<ruby>遅<rt>おく</rt></ruby>れ、タクシーで<ruby>帰<rt>かえ</rt></ruby>らざるを<ruby>得<rt>え</rt></ruby>なかった。",
+          "By a mere five minutes I missed the last train, and had no choice but to take a taxi home."
+        ],
+        "N1": [
+          "<ruby>一分<rt>いっぷん</rt></ruby><ruby>一秒<rt>いちびょう</rt></ruby>を<ruby>争<rt>あらそ</rt></ruby>う<ruby>救急<rt>きゅうきゅう</rt></ruby>の<ruby>現場<rt>げんば</rt></ruby>では、<ruby>一瞬<rt>いっしゅん</rt></ruby>の<ruby>判断<rt>はんだん</rt></ruby>の<ruby>遅<rt>おく</rt></ruby>れが<ruby>命取<rt>いのちと</rt></ruby>りになりかねない。",
+          "In emergency situations where every minute and second counts, a moment's delay in judgment can prove fatal."
+        ]
+      },
+      "mnem": "―分 flips between ふん and ぷん after a number — say 五分 (go-FUN) but 十分 (jup-PUN), the little sound bounce telling the minutes.",
+      "tip": "The minute counter reads ふん after 2/5/7/9 (にふん・ごふん) but ぷん after 1/3/4/6/8/10 (いっぷん・さんぷん・じゅっぷん). Same kanji 分 also reads ぶん (\"portion/part\") and わ(ける) (\"to divide\") — here it's the time counter.",
+      "accent": 1
+    },
+    {
+      "key": "mnn:4:14",
+      "kana": "はん",
+      "kanji": "半",
+      "context": "―時〜",
+      "mean": "half (past the hour); half",
+      "cat": "noun",
+      "type": "",
+      "trans": "",
+      "dict": "半",
+      "dictRead": "はん",
+      "audio": "/Audio/minnamoi/bai4/00010011110101000.mp3",
+      "levels": {
+        "N5": [
+          "<ruby>今<rt>いま</rt></ruby><ruby>七時<rt>しちじ</rt></ruby><ruby>半<rt>はん</rt></ruby>です。",
+          "It's half past seven now."
+        ],
+        "N4": [
+          "<ruby>毎晩<rt>まいばん</rt></ruby><ruby>十一時<rt>じゅういちじ</rt></ruby><ruby>半<rt>はん</rt></ruby>に<ruby>寝<rt>ね</rt></ruby>ます。",
+          "I go to bed at half past eleven every night."
+        ],
+        "N3": [
+          "<ruby>映画<rt>えいが</rt></ruby>は<ruby>六時<rt>ろくじ</rt></ruby><ruby>半<rt>はん</rt></ruby>から<ruby>始<rt>はじ</rt></ruby>まるので、<ruby>早<rt>はや</rt></ruby>めに<ruby>出<rt>で</rt></ruby>ましょう。",
+          "The movie starts at half past six, so let's leave a bit early."
+        ],
+        "N2": [
+          "<ruby>待<rt>ま</rt></ruby>ち<ruby>合<rt>あ</rt></ruby>わせは<ruby>七<rt>しち</rt></ruby><ruby>時<rt>じ</rt></ruby><ruby>半<rt>はん</rt></ruby>だったのに、<ruby>彼<rt>かれ</rt></ruby>は<ruby>八<rt>はち</rt></ruby><ruby>時<rt>じ</rt></ruby>を<ruby>過<rt>す</rt></ruby>ぎても<ruby>来<rt>こ</rt></ruby>なかった。",
+          "We were supposed to meet at seven thirty, but even past eight he still had not shown up."
+        ],
+        "N1": [
+          "<ruby>会議<rt>かいぎ</rt></ruby>は<ruby>二時間半<rt>にじかんはん</rt></ruby>にも<ruby>及<rt>およ</rt></ruby>んだが、<ruby>結局<rt>けっきょく</rt></ruby><ruby>何<rt>なに</rt></ruby>ひとつ<ruby>決<rt>き</rt></ruby>まらずじまいだった。",
+          "The meeting dragged on for a full two and a half hours, yet in the end not a single thing was decided."
+        ]
+      },
+      "mnem": "半 (はん) = \"half\" — 七時半 (shichi-ji-HAN) is \"seven-and-a-half o'clock,\" i.e. half past seven.",
+      "tip": "半 after a time means \"half past\" (七時半 = 7:30) and stacks onto durations too (二時間半 = two and a half hours). It's the same 半 in 半分 (はんぶん, a half portion). It replaces 三十分 in casual clock-telling.",
+      "accent": 1
+    },
+    {
+      "key": "mnn:4:15",
+      "kana": "なんじ",
+      "kanji": "何時",
+      "context": "",
+      "mean": "what time",
+      "cat": "noun",
+      "type": "",
+      "trans": "",
+      "dict": "何時",
+      "dictRead": "なんじ",
+      "audio": "/Audio/minnamoi/bai4/00010011110101001.mp3",
+      "levels": {
+        "N5": [
+          "<ruby>今<rt>いま</rt></ruby><ruby>何時<rt>なんじ</rt></ruby>ですか。",
+          "What time is it now?"
+        ],
+        "N4": [
+          "<ruby>毎朝<rt>まいあさ</rt></ruby><ruby>何時<rt>なんじ</rt></ruby>に<ruby>起<rt>お</rt></ruby>きますか。",
+          "What time do you get up every morning?"
+        ],
+        "N3": [
+          "<ruby>会議<rt>かいぎ</rt></ruby>が<ruby>何時<rt>なんじ</rt></ruby>に<ruby>終<rt>お</rt></ruby>わるのか、まだ<ruby>分<rt>わ</rt></ruby>かりません。",
+          "I still don't know what time the meeting will finish."
+        ],
+        "N2": [
+          "<ruby>何時<rt>なんじ</rt></ruby>に<ruby>着<rt>つ</rt></ruby>くか<ruby>連絡<rt>れんらく</rt></ruby>してくれないと、<ruby>迎<rt>むか</rt></ruby>えに<ruby>行<rt>い</rt></ruby>きようがない。",
+          "If you don't let me know what time you'll arrive, there's no way I can come to pick you up."
+        ],
+        "N1": [
+          "<ruby>締<rt>し</rt></ruby>め<ruby>切<rt>き</rt></ruby>りが<ruby>何時<rt>なんじ</rt></ruby>であれ、それまでに<ruby>仕上<rt>しあ</rt></ruby>げるのがプロというものだ。",
+          "Whatever time the deadline may be, finishing by then is what it means to be a professional."
+        ]
+      },
+      "mnem": "何 (なん, what) + 時 (じ, o'clock) = \"what o'clock\" — 何時 asks the time.",
+      "tip": "何時 (なんじ) asks the hour; 何分 (なんぷん) asks the minute; 何曜日 (なんようび) asks the day. Don't confuse 何時 (なんじ, \"what time\") with the archaic-flavored いつ (\"when,\" a broader question) — for a clock time, use なんじ.",
+      "accent": 1
+    },
+    {
+      "key": "mnn:4:16",
+      "kana": "なんぷん",
+      "kanji": "何分",
+      "context": "",
+      "mean": "what minute; how many minutes",
+      "cat": "noun",
+      "type": "",
+      "trans": "",
+      "dict": "何分",
+      "dictRead": "なんぷん",
+      "audio": "/Audio/minnamoi/bai4/00010011110101010.mp3",
+      "levels": {
+        "N5": [
+          "<ruby>今<rt>いま</rt></ruby><ruby>何時<rt>なんじ</rt></ruby><ruby>何分<rt>なんぷん</rt></ruby>ですか。",
+          "What time is it now, exactly?"
+        ],
+        "N4": [
+          "<ruby>駅<rt>えき</rt></ruby>まで<ruby>何分<rt>なんぷん</rt></ruby>かかりますか。",
+          "How many minutes does it take to the station?"
+        ],
+        "N3": [
+          "<ruby>次<rt>つぎ</rt></ruby>のバスまであと<ruby>何分<rt>なんぷん</rt></ruby>あるか、<ruby>調<rt>しら</rt></ruby>べておきます。",
+          "I'll check in advance how many minutes are left until the next bus."
+        ],
+        "N2": [
+          "あと<ruby>何分<rt>なんぷん</rt></ruby>で<ruby>着<rt>つ</rt></ruby>くのか<ruby>分<rt>わ</rt></ruby>からないまま、ただ<ruby>待<rt>ま</rt></ruby>ち<ruby>続<rt>つづ</rt></ruby>けるしかなかった。",
+          "Not knowing how many more minutes until we'd arrive, all I could do was keep waiting."
+        ],
+        "N1": [
+          "<ruby>手術<rt>しゅじゅつ</rt></ruby>が<ruby>始<rt>はじ</rt></ruby>まって<ruby>何分<rt>なんぷん</rt></ruby>が<ruby>経過<rt>けいか</rt></ruby>したかも<ruby>意識<rt>いしき</rt></ruby>できないほど、<ruby>家族<rt>かぞく</rt></ruby>は<ruby>緊張<rt>きんちょう</rt></ruby>の<ruby>中<rt>なか</rt></ruby>にいた。",
+          "The family was so tense they couldn't even register how many minutes had passed since the surgery began."
+        ]
+      },
+      "mnem": "何 (なん, how many/what) + 分 (ぷん, minute) = \"how many minutes / what minute\" — 何分.",
+      "tip": "何分 takes the ぷん reading (like いっぷん・さんぷん). It asks both \"what minute (of the hour)\" and \"how many minutes (a duration).\" Pair 何時何分 to ask the exact clock time.",
+      "accent": 1
+    },
+    {
+      "key": "mnn:4:17",
+      "kana": "ごぜん",
+      "kanji": "午前",
+      "context": "",
+      "mean": "a.m., morning (before noon)",
+      "cat": "noun",
+      "type": "",
+      "trans": "",
+      "dict": "午前",
+      "dictRead": "ごぜん",
+      "audio": "/Audio/minnamoi/bai4/00010011110101011.mp3",
+      "levels": {
+        "N5": [
+          "<ruby>午前<rt>ごぜん</rt></ruby><ruby>九時<rt>くじ</rt></ruby>です。",
+          "It's nine a.m."
+        ],
+        "N4": [
+          "<ruby>会議<rt>かいぎ</rt></ruby>は<ruby>午前<rt>ごぜん</rt></ruby><ruby>十時<rt>じゅうじ</rt></ruby>からです。",
+          "The meeting is from ten a.m."
+        ],
+        "N3": [
+          "<ruby>午前中<rt>ごぜんちゅう</rt></ruby>に<ruby>仕事<rt>しごと</rt></ruby>を<ruby>終<rt>お</rt></ruby>わらせるようにしています。",
+          "I make a point of finishing my work by the end of the morning."
+        ],
+        "N2": [
+          "<ruby>午前<rt>ごぜん</rt></ruby>のうちに<ruby>片付<rt>かたづ</rt></ruby>けておかないと、<ruby>午後<rt>ごご</rt></ruby>は<ruby>手<rt>て</rt></ruby>が<ruby>回<rt>まわ</rt></ruby>らなくなる。",
+          "If I don't get it sorted during the morning, I won't be able to manage it in the afternoon."
+        ],
+        "N1": [
+          "<ruby>連日<rt>れんじつ</rt></ruby>の<ruby>徹夜<rt>てつや</rt></ruby>がたたり、<ruby>午前<rt>ごぜん</rt></ruby>の<ruby>会議<rt>かいぎ</rt></ruby>ではまともに<ruby>頭<rt>あたま</rt></ruby>が<ruby>働<rt>はたら</rt></ruby>かなかった。",
+          "The toll of pulling all-nighters day after day meant my mind simply wouldn't function properly in the morning meeting."
+        ]
+      },
+      "mnem": "午 (noon) + 前 (before) = before noon — 午前 is a.m.",
+      "tip": "午前 = before noon (a.m.), 午後 = after noon (p.m.) — the shared 午 (noon) hinges on 前 (before) vs 後 (after). Put it BEFORE the time: 午前九時 (\"9 a.m.\"). 午前中 (ごぜんちゅう) means \"during the morning.\"",
+      "accent": 1
+    },
+    {
+      "key": "mnn:4:18",
+      "kana": "ごご",
+      "kanji": "午後",
+      "context": "",
+      "mean": "p.m., afternoon (after noon)",
+      "cat": "noun",
+      "type": "",
+      "trans": "",
+      "dict": "午後",
+      "dictRead": "ごご",
+      "audio": "/Audio/minnamoi/bai4/00010011110101100.mp3",
+      "levels": {
+        "N5": [
+          "<ruby>午後<rt>ごご</rt></ruby><ruby>三時<rt>さんじ</rt></ruby>です。",
+          "It's three p.m."
+        ],
+        "N4": [
+          "<ruby>午後<rt>ごご</rt></ruby>から<ruby>雨<rt>あめ</rt></ruby>が<ruby>降<rt>ふ</rt></ruby>るそうです。",
+          "They say it'll rain from the afternoon."
+        ],
+        "N3": [
+          "<ruby>午後<rt>ごご</rt></ruby>は<ruby>眠<rt>ねむ</rt></ruby>くなるので、<ruby>大切<rt>たいせつ</rt></ruby>な<ruby>仕事<rt>しごと</rt></ruby>は<ruby>午前中<rt>ごぜんちゅう</rt></ruby>にするようにしています。",
+          "I get sleepy in the afternoon, so I make a point of doing important work in the morning."
+        ],
+        "N2": [
+          "<ruby>午後<rt>ごご</rt></ruby>の<ruby>予定<rt>よてい</rt></ruby>が<ruby>詰<rt>つ</rt></ruby>まっているものの、<ruby>昼食<rt>ちゅうしょく</rt></ruby>くらいはきちんと<ruby>取<rt>と</rt></ruby>りたい。",
+          "My afternoon is packed, but I'd at least like to take a proper lunch."
+        ],
+        "N1": [
+          "<ruby>穏<rt>おだ</rt></ruby>やかな<ruby>午後<rt>ごご</rt></ruby>の<ruby>陽<rt>ひ</rt></ruby>ざしの<ruby>中<rt>なか</rt></ruby>で<ruby>本<rt>ほん</rt></ruby>を<ruby>読<rt>よ</rt></ruby>むひとときこそ、<ruby>私<rt>わたし</rt></ruby>にとって<ruby>何<rt>なに</rt></ruby>ものにも<ruby>代<rt>か</rt></ruby>え<ruby>難<rt>がた</rt></ruby>い<ruby>贅沢<rt>ぜいたく</rt></ruby>だ。",
+          "For me, nothing can replace the luxury of reading a book in the gentle afternoon sunlight."
+        ]
+      },
+      "mnem": "午 (noon) + 後 (after) = after noon — 午後 is p.m.",
+      "tip": "午後 = after noon (p.m.), the mirror of 午前 (a.m.). Read ごご (both 午 and 後 as ご). Place it before the time: 午後三時 (\"3 p.m.\"). 12-hour clock uses 午前/午後; 24-hour uses just the number (十五時 = 15:00).",
+      "accent": 1
+    },
+    {
+      "key": "mnn:4:19",
+      "kana": "あさ",
+      "kanji": "朝",
+      "context": "",
+      "mean": "morning",
+      "cat": "noun",
+      "type": "",
+      "trans": "",
+      "dict": "朝",
+      "dictRead": "あさ",
+      "audio": "/Audio/minnamoi/bai4/00010011110101101.mp3",
+      "levels": {
+        "N5": [
+          "<ruby>朝<rt>あさ</rt></ruby><ruby>六時<rt>ろくじ</rt></ruby>に<ruby>起<rt>お</rt></ruby>きます。",
+          "I get up at six in the morning."
+        ],
+        "N4": [
+          "<ruby>朝<rt>あさ</rt></ruby>ごはんを<ruby>食<rt>た</rt></ruby>べてから、<ruby>学校<rt>がっこう</rt></ruby>へ<ruby>行<rt>い</rt></ruby>きます。",
+          "After eating breakfast, I go to school."
+        ],
+        "N3": [
+          "<ruby>朝<rt>あさ</rt></ruby><ruby>早<rt>はや</rt></ruby>く<ruby>起<rt>お</rt></ruby>きて<ruby>散歩<rt>さんぽ</rt></ruby>するようにしています。",
+          "I make a point of getting up early in the morning and going for a walk."
+        ],
+        "N2": [
+          "<ruby>朝<rt>あさ</rt></ruby>は<ruby>苦手<rt>にがて</rt></ruby>なものの、<ruby>早番<rt>はやばん</rt></ruby>の<ruby>日<rt>ひ</rt></ruby>は<ruby>起<rt>お</rt></ruby>きざるを<ruby>得<rt>え</rt></ruby>ない。",
+          "I'm not a morning person, but on early-shift days I have no choice but to get up."
+        ],
+        "N1": [
+          "<ruby>都会<rt>とかい</rt></ruby>の<ruby>喧騒<rt>けんそう</rt></ruby>を<ruby>離<rt>はな</rt></ruby>れ、<ruby>鳥<rt>とり</rt></ruby>のさえずりで<ruby>目覚<rt>めざ</rt></ruby>める<ruby>山里<rt>やまざと</rt></ruby>の<ruby>朝<rt>あさ</rt></ruby>ほど、<ruby>心<rt>こころ</rt></ruby>が<ruby>洗<rt>あら</rt></ruby>われるものはない。",
+          "Nothing is more soul-cleansing than a mountain-village morning, far from the city's clamor, waking to the song of birds."
+        ]
+      },
+      "mnem": "\"AH-sa\" — you say \"ah\" and stretch as you wake in the morning: 朝.",
+      "tip": "朝 = morning (as a period); 今朝 (けさ) = \"this morning\" and 毎朝 (まいあさ) = \"every morning\" both build on it. Don't confuse 朝 (あさ) with 明日 (あした/あす, tomorrow), which shares the 朝-ish look but not the meaning.",
+      "accent": 1
+    },
+    {
+      "key": "mnn:4:20",
+      "kana": "ひる",
+      "kanji": "昼",
+      "context": "",
+      "mean": "daytime, noon; lunch",
+      "cat": "noun",
+      "type": "",
+      "trans": "",
+      "dict": "昼",
+      "dictRead": "ひる",
+      "audio": "/Audio/minnamoi/bai4/00010011110101110.mp3",
+      "levels": {
+        "N5": [
+          "<ruby>昼<rt>ひる</rt></ruby>ごはんを<ruby>食<rt>た</rt></ruby>べます。",
+          "I eat lunch."
+        ],
+        "N4": [
+          "<ruby>昼<rt>ひる</rt></ruby><ruby>十二時<rt>じゅうにじ</rt></ruby>から<ruby>一時<rt>いちじ</rt></ruby>まで<ruby>休<rt>やす</rt></ruby>みます。",
+          "I take a break from twelve noon to one o'clock."
+        ],
+        "N3": [
+          "<ruby>昼<rt>ひる</rt></ruby>は<ruby>忙<rt>いそが</rt></ruby>しいので、<ruby>夜<rt>よる</rt></ruby>に<ruby>電話<rt>でんわ</rt></ruby>するようにしています。",
+          "The daytime is busy, so I make a point of calling at night."
+        ],
+        "N2": [
+          "<ruby>昼<rt>ひる</rt></ruby>のうちに<ruby>買<rt>か</rt></ruby>い<ruby>物<rt>もの</rt></ruby>を<ruby>済<rt>す</rt></ruby>ませておかないと、<ruby>夜<rt>よる</rt></ruby>は<ruby>店<rt>みせ</rt></ruby>が<ruby>閉<rt>し</rt></ruby>まってしまう。",
+          "If I don't finish the shopping during the day, the shops will be closed at night."
+        ],
+        "N1": [
+          "<ruby>昼<rt>ひる</rt></ruby>と<ruby>夜<rt>よる</rt></ruby>の<ruby>寒暖<rt>かんだん</rt></ruby>の<ruby>差<rt>さ</rt></ruby>が<ruby>激<rt>はげ</rt></ruby>しい<ruby>季節<rt>きせつ</rt></ruby>は、<ruby>体調<rt>たいちょう</rt></ruby>を<ruby>崩<rt>くず</rt></ruby>しやすいので<ruby>注意<rt>ちゅうい</rt></ruby>が<ruby>必要<rt>ひつよう</rt></ruby>だ。",
+          "In seasons with a wide gap between daytime and nighttime temperatures, one falls ill easily, so care is needed."
+        ]
+      },
+      "mnem": "\"HEE-roo\" — the sun is high (hee) in the sky at midday: 昼.",
+      "tip": "昼 spans \"daytime / noon\" and, by extension, \"lunch\" (昼ごはん / お昼). Its pair is 夜 (よる, night); 朝昼晩 (あさ・ひる・ばん) is the morning-noon-evening trio for meals. Don't confuse it with 尽 (a rare kanji) that looks similar.",
+      "accent": 2
+    },
+    {
+      "key": "mnn:4:21",
+      "kana": "ばん",
+      "kanji": "晩",
+      "context": "",
+      "mean": "night, evening",
+      "cat": "noun",
+      "type": "",
+      "trans": "",
+      "dict": "晩",
+      "dictRead": "ばん",
+      "audio": "/Audio/minnamoi/bai4/00010011110101111.mp3",
+      "levels": {
+        "N5": [
+          "<ruby>晩<rt>ばん</rt></ruby>ごはんを<ruby>食<rt>た</rt></ruby>べます。",
+          "I eat dinner."
+        ],
+        "N4": [
+          "<ruby>毎晩<rt>まいばん</rt></ruby><ruby>十一時<rt>じゅういちじ</rt></ruby>に<ruby>寝<rt>ね</rt></ruby>ます。",
+          "I go to bed at eleven o'clock every night."
+        ],
+        "N3": [
+          "<ruby>晩<rt>ばん</rt></ruby>になると<ruby>気温<rt>きおん</rt></ruby>が<ruby>下<rt>さ</rt></ruby>がるので、<ruby>上着<rt>うわぎ</rt></ruby>を<ruby>持<rt>も</rt></ruby>っていくようにしています。",
+          "The temperature drops in the evening, so I make a point of taking a jacket."
+        ],
+        "N2": [
+          "<ruby>昨日<rt>きのう</rt></ruby>の<ruby>晩<rt>ばん</rt></ruby>は<ruby>遅<rt>おそ</rt></ruby>くまで<ruby>働<rt>はたら</rt></ruby>いたので、<ruby>今朝<rt>けさ</rt></ruby>はどうしても<ruby>起<rt>お</rt></ruby>きられなかった。",
+          "I worked late last night, so this morning I just couldn't get up."
+        ],
+        "N1": [
+          "<ruby>秋<rt>あき</rt></ruby>の<ruby>夜長<rt>よなが</rt></ruby>、<ruby>虫<rt>むし</rt></ruby>の<ruby>音<rt>ね</rt></ruby>に<ruby>耳<rt>みみ</rt></ruby>を<ruby>傾<rt>かたむ</rt></ruby>けながら<ruby>一人<rt>ひとり</rt></ruby><ruby>静<rt>しず</rt></ruby>かに<ruby>過<rt>す</rt></ruby>ごす<ruby>晩<rt>ばん</rt></ruby>もまた、<ruby>格別<rt>かくべつ</rt></ruby>の<ruby>趣<rt>おもむき</rt></ruby>がある。",
+          "A long autumn night spent quietly alone, listening to the chirping of insects, has a charm all its own."
+        ]
+      },
+      "mnem": "\"BAHN\" — the day slams shut with a \"ban\" as evening falls: 晩.",
+      "tip": "晩 and 夜 (よる) both mean \"evening/night\" and overlap; 晩 leans toward \"evening\" and appears in 晩ごはん (dinner), 今晩 (tonight), 毎晩 (every night), while 夜 is the broader \"night.\" Both share the space; Minna lists them together.",
+      "accent": 0
+    },
+    {
+      "key": "mnn:4:22",
+      "kana": "おととい",
+      "kanji": "",
+      "context": "",
+      "mean": "the day before yesterday",
+      "cat": "noun",
+      "type": "",
+      "trans": "",
+      "dict": "おととい",
+      "dictRead": "おととい",
+      "audio": "/Audio/minnamoi/bai4/00010011110110000.mp3",
+      "levels": {
+        "N5": [
+          "おとといデパートへ<ruby>行<rt>い</rt></ruby>きました。",
+          "I went to the department store the day before yesterday."
+        ],
+        "N4": [
+          "おととい<ruby>友<rt>とも</rt></ruby>だちに<ruby>会<rt>あ</rt></ruby>いました。",
+          "I met a friend the day before yesterday."
+        ],
+        "N3": [
+          "おとといから<ruby>雨<rt>あめ</rt></ruby>が<ruby>降<rt>ふ</rt></ruby>り<ruby>続<rt>つづ</rt></ruby>いているようです。",
+          "It seems to have been raining continuously since the day before yesterday."
+        ],
+        "N2": [
+          "おとといのことなのに、<ruby>何<rt>なに</rt></ruby>を<ruby>食<rt>た</rt></ruby>べたのかまるで<ruby>思<rt>おも</rt></ruby>い<ruby>出<rt>だ</rt></ruby>せない。",
+          "It was only the day before yesterday, yet I can't recall at all what I ate."
+        ],
+        "N1": [
+          "おととい<ruby>提出<rt>ていしゅつ</rt></ruby>したはずの<ruby>書類<rt>しょるい</rt></ruby>に<ruby>不備<rt>ふび</rt></ruby>が<ruby>見<rt>み</rt></ruby>つかり、<ruby>締<rt>し</rt></ruby>め<ruby>切<rt>き</rt></ruby>りを<ruby>過<rt>す</rt></ruby>ぎているにもかかわらず、<ruby>再提出<rt>さいていしゅつ</rt></ruby>を<ruby>求<rt>もと</rt></ruby>められた。",
+          "A flaw was found in the documents I'd supposedly submitted the day before yesterday, and despite the deadline having passed, I was asked to resubmit them."
+        ]
+      },
+      "mnem": "\"Oh-toe-toy\" — two days ago is so far back it feels like an old toy: おととい.",
+      "tip": "The day-word ladder is おととい (‑2) → きのう (‑1) → きょう (0) → あした (+1) → あさって (+2). おととい is also written 一昨日 in kanji and can be read おとつい in some regions.",
+      "accent": 3
+    },
+    {
+      "key": "mnn:4:23",
+      "kana": "きのう",
+      "kanji": "",
+      "context": "",
+      "mean": "yesterday",
+      "cat": "noun",
+      "type": "",
+      "trans": "",
+      "dict": "きのう",
+      "dictRead": "きのう",
+      "audio": "/Audio/minnamoi/bai4/00010011110110001.mp3",
+      "levels": {
+        "N5": [
+          "きのう<ruby>勉強<rt>べんきょう</rt></ruby>しました。",
+          "I studied yesterday."
+        ],
+        "N4": [
+          "きのうの<ruby>晩<rt>ばん</rt></ruby><ruby>十二時<rt>じゅうにじ</rt></ruby>に<ruby>寝<rt>ね</rt></ruby>ました。",
+          "I went to bed at twelve last night."
+        ],
+        "N3": [
+          "きのう<ruby>買<rt>か</rt></ruby>った<ruby>本<rt>ほん</rt></ruby>は、とても<ruby>面白<rt>おもしろ</rt></ruby>そうです。",
+          "The book I bought yesterday looks very interesting."
+        ],
+        "N2": [
+          "きのうまでは<ruby>元気<rt>げんき</rt></ruby>だったのに、<ruby>今日<rt>きょう</rt></ruby>になって<ruby>急<rt>きゅう</rt></ruby>に<ruby>熱<rt>ねつ</rt></ruby>が<ruby>出<rt>で</rt></ruby>てきた。",
+          "I was fine up until yesterday, yet today I've suddenly come down with a fever."
+        ],
+        "N1": [
+          "きのうの<ruby>敵<rt>てき</rt></ruby>は<ruby>今日<rt>きょう</rt></ruby>の<ruby>友<rt>とも</rt></ruby>とはよく<ruby>言<rt>い</rt></ruby>ったもので、<ruby>利害<rt>りがい</rt></ruby>が<ruby>絡<rt>から</rt></ruby>めば<ruby>関係<rt>かんけい</rt></ruby>は<ruby>容易<rt>ようい</rt></ruby>に<ruby>移<rt>うつ</rt></ruby>り<ruby>変<rt>か</rt></ruby>わるものだ。",
+          "\"Yesterday's enemy is today's friend,\" as the saying goes — where interests are at stake, relationships shift easily."
+        ]
+      },
+      "mnem": "\"Key-no\" — yesterday's key is already gone from the door: きのう.",
+      "tip": "きのう = yesterday (kanji 昨日; the formal reading さくじつ appears in writing). きのうの晩 = \"last night.\" Don't confuse the sound with 機能 (きのう, \"function\") — same reading, different word.",
+      "accent": 2
+    },
+    {
+      "key": "mnn:4:24",
+      "kana": "きょう",
+      "kanji": "今日",
+      "context": "",
+      "mean": "today",
+      "cat": "noun",
+      "type": "",
+      "trans": "",
+      "dict": "今日",
+      "dictRead": "きょう",
+      "audio": "/Audio/minnamoi/bai4/00010011110110010.mp3",
+      "levels": {
+        "N5": [
+          "<ruby>今日<rt>きょう</rt></ruby>は<ruby>何曜日<rt>なんようび</rt></ruby>ですか。",
+          "What day of the week is it today?"
+        ],
+        "N4": [
+          "<ruby>今日<rt>きょう</rt></ruby>は<ruby>仕事<rt>しごと</rt></ruby>を<ruby>休<rt>やす</rt></ruby>みます。",
+          "I'm taking today off work."
+        ],
+        "N3": [
+          "<ruby>今日<rt>きょう</rt></ruby>やるべきことは、<ruby>今日<rt>きょう</rt></ruby>のうちに<ruby>終<rt>お</rt></ruby>わらせるようにしています。",
+          "I make a point of finishing what needs doing today within the day."
+        ],
+        "N2": [
+          "<ruby>今日<rt>きょう</rt></ruby>という<ruby>日<rt>ひ</rt></ruby>を<ruby>大切<rt>たいせつ</rt></ruby>にしないことには、<ruby>充実<rt>じゅうじつ</rt></ruby>した<ruby>毎日<rt>まいにち</rt></ruby>など<ruby>送<rt>おく</rt></ruby>れるはずがない。",
+          "Unless you treasure this day called today, there's no way you can lead a fulfilling everyday life."
+        ],
+        "N1": [
+          "<ruby>今日<rt>きょう</rt></ruby>できることを<ruby>明日<rt>あす</rt></ruby>に<ruby>延<rt>の</rt></ruby>ばすなという<ruby>戒<rt>いまし</rt></ruby>めは、<ruby>言<rt>い</rt></ruby>うは<ruby>易<rt>やす</rt></ruby>く<ruby>行<rt>おこな</rt></ruby>うは<ruby>難<rt>かた</rt></ruby>しの<ruby>典型<rt>てんけい</rt></ruby>である。",
+          "The maxim \"never put off till tomorrow what you can do today\" is a textbook case of being easier said than done."
+        ]
+      },
+      "mnem": "\"KYOH\" — today is here right now, no time to delay: 今日 (きょう).",
+      "tip": "今日 = today (irregular reading きょう; the formal こんにち appears in 今日は→こんにちは). Its ladder-mates: きのう (yesterday), あした (tomorrow). Note 今日 is 熟字訓 — the reading きょう isn't split across the two kanji.",
+      "accent": 1
+    },
+    {
+      "key": "mnn:4:25",
+      "kana": "あした",
+      "kanji": "",
+      "context": "",
+      "mean": "tomorrow",
+      "cat": "noun",
+      "type": "",
+      "trans": "",
+      "dict": "あした",
+      "dictRead": "あした",
+      "audio": "/Audio/minnamoi/bai4/00010011110110011.mp3",
+      "levels": {
+        "N5": [
+          "あした<ruby>働<rt>はたら</rt></ruby>きます。",
+          "I'll work tomorrow."
+        ],
+        "N4": [
+          "あした<ruby>何時<rt>なんじ</rt></ruby>に<ruby>起<rt>お</rt></ruby>きますか。",
+          "What time will you get up tomorrow?"
+        ],
+        "N3": [
+          "あしたは<ruby>雨<rt>あめ</rt></ruby>らしいので、<ruby>傘<rt>かさ</rt></ruby>を<ruby>持<rt>も</rt></ruby>っていくようにします。",
+          "It's apparently going to rain tomorrow, so I'll make sure to take an umbrella."
+        ],
+        "N2": [
+          "あしたの<ruby>会議<rt>かいぎ</rt></ruby>までに<ruby>資料<rt>しりょう</rt></ruby>を<ruby>仕上<rt>しあ</rt></ruby>げなければならないのに、まだ<ruby>手<rt>て</rt></ruby>もつけていない。",
+          "I have to finish the materials by tomorrow's meeting, yet I haven't even started."
+        ],
+        "N1": [
+          "あしたのことは<ruby>誰<rt>だれ</rt></ruby>にも<ruby>分<rt>わ</rt></ruby>からないからこそ、<ruby>今<rt>いま</rt></ruby>この<ruby>瞬間<rt>しゅんかん</rt></ruby>を<ruby>精一杯<rt>せいいっぱい</rt></ruby><ruby>生<rt>い</rt></ruby>きるほかない。",
+          "Precisely because no one knows what tomorrow holds, there's nothing to do but live this present moment to the fullest."
+        ]
+      },
+      "mnem": "\"Ah, sh'ta\" — tomorrow it starts (\"ah, start-a\"): あした.",
+      "tip": "あした = tomorrow (kanji 明日; also read あす in more formal speech, or みょうにち in very formal contexts). The ladder: きょう → あした → あさって. The 明 (bright) in 明日 hints at the \"next dawn.\"",
+      "accent": 0
+    },
+    {
+      "key": "mnn:4:26",
+      "kana": "あさって",
+      "kanji": "",
+      "context": "",
+      "mean": "the day after tomorrow",
+      "cat": "noun",
+      "type": "",
+      "trans": "",
+      "dict": "あさって",
+      "dictRead": "あさって",
+      "audio": "/Audio/minnamoi/bai4/00010011110110100.mp3",
+      "levels": {
+        "N5": [
+          "あさって<ruby>勉強<rt>べんきょう</rt></ruby>します。",
+          "I'll study the day after tomorrow."
+        ],
+        "N4": [
+          "あさっては<ruby>日曜日<rt>にちようび</rt></ruby>なので、<ruby>休<rt>やす</rt></ruby>みます。",
+          "The day after tomorrow is Sunday, so I'll take a rest."
+        ],
+        "N3": [
+          "あさってまでにレポートを<ruby>出<rt>だ</rt></ruby>すようにと<ruby>言<rt>い</rt></ruby>われました。",
+          "I was told to hand in the report by the day after tomorrow."
+        ],
+        "N2": [
+          "あさってのことなど、<ruby>今<rt>いま</rt></ruby>から<ruby>心配<rt>しんぱい</rt></ruby>してもきりがない。",
+          "There's no end to it if I start worrying now about something as far off as the day after tomorrow."
+        ],
+        "N1": [
+          "<ruby>議論<rt>ぎろん</rt></ruby>があさっての<ruby>方向<rt>ほうこう</rt></ruby>へそれてしまい、<ruby>肝心<rt>かんじん</rt></ruby>の<ruby>論点<rt>ろんてん</rt></ruby>が<ruby>一向<rt>いっこう</rt></ruby>に<ruby>深<rt>ふか</rt></ruby>まらなかった。",
+          "The discussion veered off in a completely wrong direction, and the crucial point never got any deeper at all."
+        ]
+      },
+      "mnem": "\"Ah-saht-tay\" — even further than あした (tomorrow): あさって, two days out.",
+      "tip": "あさって = the day after tomorrow (‑ the +2 rung; kanji 明後日, formal reading みょうごにち). The idiom あさっての方向 means \"a totally wrong direction.\" Its mirror on the past side is おととい.",
+      "accent": 3
+    },
+    {
+      "key": "mnn:4:27",
+      "kana": "けさ",
+      "kanji": "",
+      "context": "",
+      "mean": "this morning",
+      "cat": "noun",
+      "type": "",
+      "trans": "",
+      "dict": "けさ",
+      "dictRead": "けさ",
+      "audio": "/Audio/minnamoi/bai4/00010011110110101.mp3",
+      "levels": {
+        "N5": [
+          "けさ<ruby>七時<rt>しちじ</rt></ruby>に<ruby>起<rt>お</rt></ruby>きました。",
+          "I got up at seven this morning."
+        ],
+        "N4": [
+          "けさは<ruby>時間<rt>じかん</rt></ruby>がなかったので、<ruby>朝<rt>あさ</rt></ruby>ごはんを<ruby>食<rt>た</rt></ruby>べませんでした。",
+          "I didn't have time this morning, so I didn't eat breakfast."
+        ],
+        "N3": [
+          "けさは<ruby>寒<rt>さむ</rt></ruby>かったので、なかなか<ruby>布団<rt>ふとん</rt></ruby>から<ruby>出<rt>で</rt></ruby>られませんでした。",
+          "It was cold this morning, so I could hardly get out from under the covers."
+        ],
+        "N2": [
+          "けさの<ruby>新聞<rt>しんぶん</rt></ruby>に<ruby>載<rt>の</rt></ruby>っていた<ruby>記事<rt>きじ</rt></ruby>を<ruby>読<rt>よ</rt></ruby>んで、<ruby>思<rt>おも</rt></ruby>わず<ruby>考<rt>かんが</rt></ruby>え<ruby>込<rt>こ</rt></ruby>んでしまった。",
+          "Reading the article in this morning's paper, I found myself lost in thought despite myself."
+        ],
+        "N1": [
+          "けさ<ruby>未明<rt>みめい</rt></ruby>に<ruby>発生<rt>はっせい</rt></ruby>した<ruby>地震<rt>じしん</rt></ruby>により、<ruby>各地<rt>かくち</rt></ruby>の<ruby>交通機関<rt>こうつうきかん</rt></ruby>に<ruby>大<rt>おお</rt></ruby>きな<ruby>乱<rt>みだ</rt></ruby>れが<ruby>生<rt>しょう</rt></ruby>じている。",
+          "Owing to the earthquake that struck in the small hours of this morning, transport across the region is severely disrupted."
+        ]
+      },
+      "mnem": "\"KEH-sah\" — this morning (けさ) is today's 朝 (あさ) — hear the さ of あさ inside けさ.",
+      "tip": "けさ = this morning (kanji 今朝, a special 熟字訓 reading — not こんちょう). It's the あさ-specific member of the きょう family: 今日 (today) → 今朝 (this morning), 今晩 (tonight). Contrast 毎朝 (every morning).",
+      "accent": 1
+    },
+    {
+      "key": "mnn:4:28",
+      "kana": "こんばん",
+      "kanji": "今晩",
+      "context": "",
+      "mean": "this evening, tonight",
+      "cat": "noun",
+      "type": "",
+      "trans": "",
+      "dict": "今晩",
+      "dictRead": "こんばん",
+      "audio": "/Audio/minnamoi/bai4/00010011110110110.mp3",
+      "levels": {
+        "N5": [
+          "<ruby>今晩<rt>こんばん</rt></ruby><ruby>勉強<rt>べんきょう</rt></ruby>します。",
+          "I'll study tonight."
+        ],
+        "N4": [
+          "<ruby>今晩<rt>こんばん</rt></ruby><ruby>何時<rt>なんじ</rt></ruby>に<ruby>寝<rt>ね</rt></ruby>ますか。",
+          "What time will you go to bed tonight?"
+        ],
+        "N3": [
+          "<ruby>今晩<rt>こんばん</rt></ruby>は<ruby>友<rt>とも</rt></ruby>だちと<ruby>食事<rt>しょくじ</rt></ruby>する<ruby>約束<rt>やくそく</rt></ruby>があります。",
+          "Tonight I have plans to have dinner with a friend."
+        ],
+        "N2": [
+          "<ruby>今晩<rt>こんばん</rt></ruby>は<ruby>疲<rt>つか</rt></ruby>れているので、<ruby>早<rt>はや</rt></ruby>めに<ruby>休<rt>やす</rt></ruby>もうと<ruby>思<rt>おも</rt></ruby>っている。",
+          "I'm tired tonight, so I'm thinking of turning in early."
+        ],
+        "N1": [
+          "<ruby>今晩<rt>こんばん</rt></ruby>を<ruby>山場<rt>やまば</rt></ruby>とする<ruby>台風<rt>たいふう</rt></ruby>の<ruby>接近<rt>せっきん</rt></ruby>に<ruby>備<rt>そな</rt></ruby>え、<ruby>住民<rt>じゅうみん</rt></ruby>は<ruby>早<rt>はや</rt></ruby>めの<ruby>避難<rt>ひなん</rt></ruby>を<ruby>呼<rt>よ</rt></ruby>びかけられている。",
+          "Bracing for the typhoon's approach, which is expected to peak tonight, residents are being urged to evacuate early."
+        ]
+      },
+      "mnem": "今 (this) + 晩 (evening) = this evening — 今晩 is tonight.",
+      "tip": "今晩 = tonight, built from 今 (this) + 晩 (evening) — the evening sibling of 今朝 (this morning) and 今日 (today). こんばんは (\"good evening\") comes from it. Contrast 毎晩 (every night) and 昨晩 (さくばん, last night).",
+      "accent": 1
+    },
+    {
+      "key": "mnn:4:29",
+      "kana": "やすみ",
+      "kanji": "休み",
+      "context": "",
+      "mean": "rest; holiday, a day off; break",
+      "cat": "noun",
+      "type": "",
+      "trans": "",
+      "dict": "休み",
+      "dictRead": "やすみ",
+      "audio": "/Audio/minnamoi/bai4/00010011110110111.mp3",
+      "levels": {
+        "N5": [
+          "<ruby>休<rt>やす</rt></ruby>みは<ruby>何曜日<rt>なんようび</rt></ruby>ですか。",
+          "What day is your day off?"
+        ],
+        "N4": [
+          "<ruby>銀行<rt>ぎんこう</rt></ruby>の<ruby>休<rt>やす</rt></ruby>みは<ruby>土曜日<rt>どようび</rt></ruby>と<ruby>日曜日<rt>にちようび</rt></ruby>です。",
+          "The bank's days off are Saturday and Sunday."
+        ],
+        "N3": [
+          "<ruby>次<rt>つぎ</rt></ruby>の<ruby>休<rt>やす</rt></ruby>みには、<ruby>家族<rt>かぞく</rt></ruby>と<ruby>旅行<rt>りょこう</rt></ruby>するつもりです。",
+          "On my next day off, I plan to travel with my family."
+        ],
+        "N2": [
+          "<ruby>連休<rt>れんきゅう</rt></ruby>とはいえ、<ruby>仕事<rt>しごと</rt></ruby>が<ruby>気<rt>き</rt></ruby>になって<ruby>心<rt>こころ</rt></ruby>から<ruby>休<rt>やす</rt></ruby>みを<ruby>楽<rt>たの</rt></ruby>しめなかった。",
+          "It was a long weekend, but I kept worrying about work and couldn't truly enjoy the break."
+        ],
+        "N1": [
+          "<ruby>長<rt>なが</rt></ruby>い<ruby>休<rt>やす</rt></ruby>みが<ruby>取<rt>と</rt></ruby>りにくい<ruby>職<rt>しょく</rt></ruby><ruby>場<rt>ば</rt></ruby>の<ruby>風<rt>ふう</rt></ruby><ruby>潮<rt>ちょう</rt></ruby>こそ、<ruby>働<rt>はたら</rt></ruby>き<ruby>方<rt>かた</rt></ruby><ruby>改<rt>かい</rt></ruby><ruby>革<rt>かく</rt></ruby>が<ruby>真<rt>ま</rt></ruby>っ<ruby>先<rt>さき</rt></ruby>に<ruby>見<rt>み</rt></ruby><ruby>直<rt>なお</rt></ruby>すべき<ruby>点<rt>てん</rt></ruby>だ。",
+          "It is precisely a workplace culture that makes taking long holidays difficult that work-style reform ought to reexamine first of all."
+        ]
+      },
+      "mnem": "休み is the noun off the verb 休む (to rest) — the やすみ you take: a break, a holiday, a day off.",
+      "tip": "休み is the NOUN (a rest/holiday); the verb is 休む (to rest / be absent). It compounds widely: 昼休み (lunch break), 夏休み (summer holiday), 休みの日 (a day off). Don't confuse the noun with the ます-form 休みます.",
+      "accent": 3
+    },
+    {
+      "key": "mnn:4:30",
+      "kana": "ひるやすみ",
+      "kanji": "昼休み",
+      "context": "",
+      "mean": "lunch break, lunchtime",
+      "cat": "noun",
+      "type": "",
+      "trans": "",
+      "dict": "昼休み",
+      "dictRead": "ひるやすみ",
+      "audio": "/Audio/minnamoi/bai4/00010011110111000.mp3",
+      "levels": {
+        "N5": [
+          "<ruby>昼休<rt>ひるやす</rt></ruby>みは<ruby>十二時<rt>じゅうにじ</rt></ruby>からです。",
+          "The lunch break is from twelve o'clock."
+        ],
+        "N4": [
+          "<ruby>昼休<rt>ひるやす</rt></ruby>みに<ruby>友<rt>とも</rt></ruby>だちとごはんを<ruby>食<rt>た</rt></ruby>べます。",
+          "I eat with my friends during the lunch break."
+        ],
+        "N3": [
+          "<ruby>昼休<rt>ひるやす</rt></ruby>みには、<ruby>散歩<rt>さんぽ</rt></ruby>して<ruby>気分転換<rt>きぶんてんかん</rt></ruby>するようにしています。",
+          "During the lunch break, I make a point of taking a walk to refresh my mood."
+        ],
+        "N2": [
+          "<ruby>忙<rt>いそが</rt></ruby>しさのあまり、<ruby>昼休<rt>ひるやす</rt></ruby>みすらまともに<ruby>取<rt>と</rt></ruby>れない<ruby>日<rt>ひ</rt></ruby>が<ruby>続<rt>つづ</rt></ruby>いている。",
+          "I've been so busy that I've had days on end where I can't even take a proper lunch break."
+        ],
+        "N1": [
+          "<ruby>昼休<rt>ひるやす</rt></ruby>みを<ruby>削<rt>けず</rt></ruby>ってまで<ruby>働<rt>はたら</rt></ruby>くことが<ruby>美徳<rt>びとく</rt></ruby>とされる<ruby>風潮<rt>ふうちょう</rt></ruby>こそ、<ruby>見直<rt>みなお</rt></ruby>されるべきではないか。",
+          "Isn't it precisely the mindset that treats working through even your lunch break as a virtue that ought to be reconsidered?"
+        ]
+      },
+      "mnem": "昼 (noon) + 休み (a rest) = the noon rest — 昼休み, your lunch break.",
+      "tip": "昼休み = the midday break at work/school, built from 昼 (noon) + 休み (rest). Compare 夏休み (summer holiday), 冬休み (winter holiday). It's the break itself, distinct from 昼ごはん (the lunch you eat during it).",
+      "accent": 3
+    },
+    {
+      "key": "mnn:4:31",
+      "kana": "しけん",
+      "kanji": "試験",
+      "context": "",
+      "mean": "examination, test",
+      "cat": "noun",
+      "type": "",
+      "trans": "",
+      "dict": "試験",
+      "dictRead": "しけん",
+      "audio": "/Audio/minnamoi/bai4/00010011110111001.mp3",
+      "levels": {
+        "N5": [
+          "<ruby>試験<rt>しけん</rt></ruby>は<ruby>何曜日<rt>なんようび</rt></ruby>ですか。",
+          "What day is the exam?"
+        ],
+        "N4": [
+          "<ruby>試験<rt>しけん</rt></ruby>は<ruby>十時<rt>じゅうじ</rt></ruby>から<ruby>十二時<rt>じゅうにじ</rt></ruby>までです。",
+          "The exam is from ten to twelve."
+        ],
+        "N3": [
+          "<ruby>試験<rt>しけん</rt></ruby>に<ruby>合格<rt>ごうかく</rt></ruby>するために、<ruby>毎日<rt>まいにち</rt></ruby><ruby>勉強<rt>べんきょう</rt></ruby>するようにしています。",
+          "To pass the exam, I make a point of studying every day."
+        ],
+        "N2": [
+          "<ruby>試験<rt>しけん</rt></ruby>まであと<ruby>一週間<rt>いっしゅうかん</rt></ruby>しかないのに、まだ<ruby>準備<rt>じゅんび</rt></ruby>が<ruby>終<rt>お</rt></ruby>わっていない。",
+          "There's only a week left until the exam, yet my preparation still isn't finished."
+        ],
+        "N1": [
+          "<ruby>難関<rt>なんかん</rt></ruby>とされる<ruby>資格試験<rt>しかくしけん</rt></ruby>に<ruby>一発<rt>いっぱつ</rt></ruby>で<ruby>合格<rt>ごうかく</rt></ruby>したとあって、<ruby>周囲<rt>しゅうい</rt></ruby>からの<ruby>称賛<rt>しょうさん</rt></ruby>を<ruby>一身<rt>いっしん</rt></ruby>に<ruby>集<rt>あつ</rt></ruby>めた。",
+          "Having passed the notoriously tough qualifying exam on the first attempt, he drew the admiration of everyone around him."
+        ]
+      },
+      "mnem": "試 (try/test) + 験 (examine) = to try-examine — 試験, an examination.",
+      "tip": "試験 = a formal exam/test; the JLPT is 日本語能力試験. A quick classroom quiz is テスト. 試験を受ける = \"take an exam,\" 試験に合格する = \"pass an exam.\" Don't confuse 試験 (exam) with 経験 (けいけん, experience) — they share 験.",
+      "accent": 2
+    },
+    {
+      "key": "mnn:4:32",
+      "kana": "かいぎ",
+      "kanji": "会議",
+      "context": "",
+      "mean": "meeting, conference",
+      "cat": "noun",
+      "type": "",
+      "trans": "",
+      "dict": "会議",
+      "dictRead": "かいぎ",
+      "audio": "/Audio/minnamoi/bai4/00010011110111010.mp3",
+      "levels": {
+        "N5": [
+          "<ruby>会議<rt>かいぎ</rt></ruby>は<ruby>何曜日<rt>なんようび</rt></ruby>ですか。",
+          "What day is the meeting?"
+        ],
+        "N4": [
+          "<ruby>会議<rt>かいぎ</rt></ruby>は<ruby>午後<rt>ごご</rt></ruby><ruby>二時<rt>にじ</rt></ruby>から<ruby>始<rt>はじ</rt></ruby>まります。",
+          "The meeting starts at two p.m."
+        ],
+        "N3": [
+          "<ruby>会議<rt>かいぎ</rt></ruby>で<ruby>使<rt>つか</rt></ruby>う<ruby>資料<rt>しりょう</rt></ruby>を、<ruby>前<rt>まえ</rt></ruby>の<ruby>日<rt>ひ</rt></ruby>に<ruby>準備<rt>じゅんび</rt></ruby>するようにしています。",
+          "I make a point of preparing the materials for the meeting the day before."
+        ],
+        "N2": [
+          "<ruby>会議<rt>かいぎ</rt></ruby>は<ruby>予定<rt>よてい</rt></ruby><ruby>時間<rt>じかん</rt></ruby>を<ruby>大<rt>おお</rt></ruby>きく<ruby>過<rt>す</rt></ruby>ぎたものの、<ruby>結論<rt>けつろん</rt></ruby>は<ruby>出<rt>で</rt></ruby>ないままだった。",
+          "The meeting ran well over its scheduled time, yet no conclusion was reached."
+        ],
+        "N1": [
+          "<ruby>形式<rt>けいしき</rt></ruby>ばかりの<ruby>会議<rt>かいぎ</rt></ruby>を<ruby>重<rt>かさ</rt></ruby>ねたところで、<ruby>現場<rt>げんば</rt></ruby>の<ruby>課題<rt>かだい</rt></ruby>が<ruby>解決<rt>かいけつ</rt></ruby>するわけがない。",
+          "Piling up one meeting-for-meeting's-sake after another isn't going to solve the problems on the ground."
+        ]
+      },
+      "mnem": "会 (meet) + 議 (discuss) = a meeting to discuss — 会議, a conference.",
+      "tip": "会議 = a formal meeting/conference; 会議室 is the meeting room. Compare 打ち合わせ (a casual work discussion) and ミーティング (a loanword \"meeting\"). Don't confuse 会議 with 会社 (かいしゃ, company) — both start with 会.",
+      "accent": 3
+    },
+    {
+      "key": "mnn:4:33",
+      "kana": "えいが",
+      "kanji": "映画",
+      "context": "",
+      "mean": "movie, film",
+      "cat": "noun",
+      "type": "",
+      "trans": "",
+      "dict": "映画",
+      "dictRead": "えいが",
+      "audio": "/Audio/minnamoi/bai4/00010011110111011.mp3",
+      "levels": {
+        "N5": [
+          "<ruby>映画<rt>えいが</rt></ruby>は<ruby>七時<rt>しちじ</rt></ruby>からです。",
+          "The movie starts at seven."
+        ],
+        "N4": [
+          "<ruby>日曜日<rt>にちようび</rt></ruby>に<ruby>友<rt>とも</rt></ruby>だちと<ruby>映画<rt>えいが</rt></ruby>を<ruby>見<rt>み</rt></ruby>ます。",
+          "I'll watch a movie with a friend on Sunday."
+        ],
+        "N3": [
+          "<ruby>週末<rt>しゅうまつ</rt></ruby>には、<ruby>家<rt>いえ</rt></ruby>で<ruby>映画<rt>えいが</rt></ruby>を<ruby>見<rt>み</rt></ruby>ながらゆっくりするようにしています。",
+          "On weekends, I make a point of relaxing at home watching movies."
+        ],
+        "N2": [
+          "その<ruby>映画<rt>えいが</rt></ruby>は<ruby>評判<rt>ひょうばん</rt></ruby>がいいものの、<ruby>上映時間<rt>じょうえいじかん</rt></ruby>が<ruby>三時間<rt>さんじかん</rt></ruby>と<ruby>長<rt>なが</rt></ruby>すぎる。",
+          "That movie has a good reputation, but at three hours the running time is too long."
+        ],
+        "N1": [
+          "<ruby>派手<rt>はで</rt></ruby>な<ruby>演出<rt>えんしゅつ</rt></ruby>に<ruby>頼<rt>たよ</rt></ruby>らずとも、<ruby>静<rt>しず</rt></ruby>かな<ruby>映像<rt>えいぞう</rt></ruby>だけで<ruby>観客<rt>かんきゃく</rt></ruby>の<ruby>心<rt>こころ</rt></ruby>を<ruby>掴<rt>つか</rt></ruby>むところに、この<ruby>映画<rt>えいが</rt></ruby>の<ruby>真価<rt>しんか</rt></ruby>がある。",
+          "The true worth of this film lies in how it grips the audience through quiet imagery alone, without relying on flashy staging."
+        ]
+      },
+      "mnem": "映 (project/reflect) + 画 (picture) = projected pictures — 映画, a movie.",
+      "tip": "映画 = movie/film; the cinema is 映画館 (えいがかん). 映画を見る = \"watch a movie.\" Don't confuse 映画 (えいが) with 英語 (えいご, English) — the えい‑ start sounds close.",
+      "accent": 0
+    },
+    {
+      "key": "mnn:4:34",
+      "kana": "まいあさ",
+      "kanji": "毎朝",
+      "context": "",
+      "mean": "every morning",
+      "cat": "noun",
+      "type": "",
+      "trans": "",
+      "dict": "毎朝",
+      "dictRead": "まいあさ",
+      "audio": "/Audio/minnamoi/bai4/00010011110111100.mp3",
+      "levels": {
+        "N5": [
+          "<ruby>毎朝<rt>まいあさ</rt></ruby><ruby>六時<rt>ろくじ</rt></ruby>に<ruby>起<rt>お</rt></ruby>きます。",
+          "I get up at six every morning."
+        ],
+        "N4": [
+          "<ruby>毎朝<rt>まいあさ</rt></ruby><ruby>朝<rt>あさ</rt></ruby>ごはんを<ruby>食<rt>た</rt></ruby>べてから<ruby>会社<rt>かいしゃ</rt></ruby>へ<ruby>行<rt>い</rt></ruby>きます。",
+          "Every morning I go to work after eating breakfast."
+        ],
+        "N3": [
+          "<ruby>毎朝<rt>まいあさ</rt></ruby><ruby>三十分<rt>さんじゅっぷん</rt></ruby>ぐらい<ruby>運動<rt>うんどう</rt></ruby>するようにしています。",
+          "I make a point of exercising about thirty minutes every morning."
+        ],
+        "N2": [
+          "<ruby>毎朝<rt>まいあさ</rt></ruby>の<ruby>満員電車<rt>まんいんでんしゃ</rt></ruby>での<ruby>通勤<rt>つうきん</rt></ruby>は、<ruby>慣<rt>な</rt></ruby>れたとはいえやはりつらい。",
+          "Commuting every morning on the packed train is grueling after all, even though I've gotten used to it."
+        ],
+        "N1": [
+          "<ruby>毎朝<rt>まいあさ</rt></ruby><ruby>決<rt>き</rt></ruby>まった<ruby>時間<rt>じかん</rt></ruby>に<ruby>起<rt>お</rt></ruby>き、<ruby>規則正<rt>きそくただ</rt></ruby>しい<ruby>生活<rt>せいかつ</rt></ruby>を<ruby>送<rt>おく</rt></ruby>ることこそ、<ruby>健康<rt>けんこう</rt></ruby><ruby>維持<rt>いじ</rt></ruby>の<ruby>基本<rt>きほん</rt></ruby>である。",
+          "Getting up at a fixed time every morning and keeping a regular lifestyle is the very foundation of maintaining one's health."
+        ]
+      },
+      "mnem": "毎 (every) + 朝 (morning) = every morning — 毎朝.",
+      "tip": "毎朝 = every morning, from 毎 (every) + 朝 (morning). The 毎-family: 毎日 (every day), 毎晩 (every night), 毎週 (every week), 毎年 (every year). It's an adverb of frequency — no を or に needed to attach it to a verb.",
+      "accent": 1
+    },
+    {
+      "key": "mnn:4:35",
+      "kana": "まいばん",
+      "kanji": "毎晩",
+      "context": "",
+      "mean": "every night, every evening",
+      "cat": "noun",
+      "type": "",
+      "trans": "",
+      "dict": "毎晩",
+      "dictRead": "まいばん",
+      "audio": "/Audio/minnamoi/bai4/00010011110111101.mp3",
+      "levels": {
+        "N5": [
+          "<ruby>毎晩<rt>まいばん</rt></ruby><ruby>十一時<rt>じゅういちじ</rt></ruby>に<ruby>寝<rt>ね</rt></ruby>ます。",
+          "I go to bed at eleven every night."
+        ],
+        "N4": [
+          "<ruby>毎晩<rt>まいばん</rt></ruby><ruby>寝<rt>ね</rt></ruby>る<ruby>前<rt>まえ</rt></ruby>に<ruby>日本語<rt>にほんご</rt></ruby>を<ruby>勉強<rt>べんきょう</rt></ruby>します。",
+          "Every night I study Japanese before going to bed."
+        ],
+        "N3": [
+          "<ruby>毎晩<rt>まいばん</rt></ruby><ruby>日記<rt>にっき</rt></ruby>を<ruby>書<rt>か</rt></ruby>くようにしています。",
+          "I make a point of writing in my diary every night."
+        ],
+        "N2": [
+          "<ruby>毎晩<rt>まいばん</rt></ruby><ruby>遅<rt>おそ</rt></ruby>くまで<ruby>働<rt>はたら</rt></ruby>いているものの、なかなか<ruby>仕事<rt>しごと</rt></ruby>が<ruby>片付<rt>かたづ</rt></ruby>かない。",
+          "Although I work late every night, the work just doesn't get cleared away."
+        ],
+        "N1": [
+          "<ruby>毎晩<rt>まいばん</rt></ruby>のように<ruby>夜更<rt>よふ</rt></ruby>かしを<ruby>繰<rt>く</rt></ruby>り<ruby>返<rt>かえ</rt></ruby>していては、いくら<ruby>若<rt>わか</rt></ruby>くとも<ruby>体<rt>からだ</rt></ruby>を<ruby>壊<rt>こわ</rt></ruby>すのは<ruby>時間<rt>じかん</rt></ruby>の<ruby>問題<rt>もんだい</rt></ruby>だ。",
+          "If you keep staying up late almost every night, then no matter how young you are, ruining your health is only a matter of time."
+        ]
+      },
+      "mnem": "毎 (every) + 晩 (evening) = every evening — 毎晩, every night.",
+      "tip": "毎晩 = every night, from 毎 (every) + 晩 (evening). Sits in the 毎-family with 毎朝 (every morning) and 毎日 (every day). Adverb of frequency — attaches directly to the verb, no particle.",
+      "accent": 1
+    },
+    {
+      "key": "mnn:4:36",
+      "kana": "まいにち",
+      "kanji": "毎日",
+      "context": "",
+      "mean": "every day",
+      "cat": "noun",
+      "type": "",
+      "trans": "",
+      "dict": "毎日",
+      "dictRead": "まいにち",
+      "audio": "/Audio/minnamoi/bai4/00010011110111110.mp3",
+      "levels": {
+        "N5": [
+          "<ruby>毎日<rt>まいにち</rt></ruby><ruby>日本語<rt>にほんご</rt></ruby>を<ruby>勉強<rt>べんきょう</rt></ruby>します。",
+          "I study Japanese every day."
+        ],
+        "N4": [
+          "<ruby>毎日<rt>まいにち</rt></ruby><ruby>九時<rt>くじ</rt></ruby>から<ruby>五時<rt>ごじ</rt></ruby>まで<ruby>働<rt>はたら</rt></ruby>きます。",
+          "I work from nine to five every day."
+        ],
+        "N3": [
+          "<ruby>毎日<rt>まいにち</rt></ruby><ruby>少<rt>すこ</rt></ruby>しずつでも<ruby>続<rt>つづ</rt></ruby>けることが<ruby>大切<rt>たいせつ</rt></ruby>だと<ruby>思<rt>おも</rt></ruby>います。",
+          "I think it's important to keep at it every day, even just a little at a time."
+        ],
+        "N2": [
+          "<ruby>毎日<rt>まいにち</rt></ruby>のように<ruby>残業<rt>ざんぎょう</rt></ruby>が<ruby>続<rt>つづ</rt></ruby>いては、<ruby>体<rt>からだ</rt></ruby>が<ruby>持<rt>も</rt></ruby>つはずがない。",
+          "With overtime dragging on nearly every day, there's no way one's body can hold up."
+        ],
+        "N1": [
+          "<ruby>変<rt>か</rt></ruby>わり<ruby>映<rt>ば</rt></ruby>えのしない<ruby>毎日<rt>まいにち</rt></ruby>の<ruby>中<rt>なか</rt></ruby>にこそ、ささやかな<ruby>幸<rt>しあわ</rt></ruby>せを<ruby>見<rt>み</rt></ruby>いだせる<ruby>心<rt>こころ</rt></ruby>の<ruby>豊<rt>ゆた</rt></ruby>かさを<ruby>持<rt>も</rt></ruby>ちたいものだ。",
+          "It is precisely within unchanging everyday life that I wish to have the richness of heart to find small happinesses."
+        ]
+      },
+      "mnem": "毎 (every) + 日 (day) = every day — 毎日, note 日 reads にち here.",
+      "tip": "毎日 = every day, from 毎 (every) + 日 (にち, day). Heads the 毎-family with 毎朝/毎晩/毎週/毎年. Adverb of frequency, no particle needed. Don't confuse the reading にち with the 日 in 今日 (きょう) or 明日 (あした).",
+      "accent": 1
+    },
+    {
+      "key": "mnn:4:37",
+      "kana": "げつようび",
+      "kanji": "月曜日",
+      "context": "",
+      "mean": "Monday",
+      "cat": "noun",
+      "type": "",
+      "trans": "",
+      "dict": "月曜日",
+      "dictRead": "げつようび",
+      "audio": "/Audio/minnamoi/bai4/00010011110111111.mp3",
+      "levels": {
+        "N5": [
+          "<ruby>月曜日<rt>げつようび</rt></ruby>に<ruby>働<rt>はたら</rt></ruby>きます。",
+          "I work on Monday."
+        ],
+        "N4": [
+          "この<ruby>美術館<rt>びじゅつかん</rt></ruby>の<ruby>休<rt>やす</rt></ruby>みは<ruby>月曜日<rt>げつようび</rt></ruby>です。",
+          "This art museum is closed on Mondays."
+        ],
+        "N3": [
+          "<ruby>月曜日<rt>げつようび</rt></ruby>は<ruby>会議<rt>かいぎ</rt></ruby>が<ruby>多<rt>おお</rt></ruby>いので、<ruby>早<rt>はや</rt></ruby>めに<ruby>出社<rt>しゅっしゃ</rt></ruby>するようにしています。",
+          "Mondays have a lot of meetings, so I make a point of getting to the office early."
+        ],
+        "N2": [
+          "<ruby>月曜日<rt>げつようび</rt></ruby>の<ruby>朝<rt>あさ</rt></ruby>はどうしても<ruby>気<rt>き</rt></ruby>が<ruby>重<rt>おも</rt></ruby>いものの、<ruby>行<rt>い</rt></ruby>ってしまえば<ruby>案外<rt>あんがい</rt></ruby><ruby>平気<rt>へいき</rt></ruby>だ。",
+          "Monday mornings inevitably weigh on me, but once I actually get going I'm surprisingly fine."
+        ],
+        "N1": [
+          "<ruby>週明<rt>しゅうあ</rt></ruby>けの<ruby>月曜日<rt>げつようび</rt></ruby>にまとまった<ruby>案件<rt>あんけん</rt></ruby>が<ruby>集中<rt>しゅうちゅう</rt></ruby>しがちなのは、<ruby>週末<rt>しゅうまつ</rt></ruby>に<ruby>滞<rt>とどこお</rt></ruby>った<ruby>業務<rt>ぎょうむ</rt></ruby>が<ruby>一気<rt>いっき</rt></ruby>に<ruby>動<rt>うご</rt></ruby>き<ruby>出<rt>だ</rt></ruby>すためだ。",
+          "The reason substantial work tends to pile up on Monday at the start of the week is that tasks stalled over the weekend all start moving at once."
+        ]
+      },
+      "mnem": "月 (moon/Monday) + 曜日 (day of the week) — the moon's day is 月曜日, Monday.",
+      "tip": "月曜日 = Monday, from 月 (moon) + 曜日 (day of the week). The seven days pair a nature element with 曜日: 月(moon)火(fire)水(water)木(wood)金(gold)土(earth)日(sun). Note 月 reads げつ here, not つき or がつ.",
+      "accent": 3
+    },
+    {
+      "key": "mnn:4:38",
+      "kana": "かようび",
+      "kanji": "火曜日",
+      "context": "",
+      "mean": "Tuesday",
+      "cat": "noun",
+      "type": "",
+      "trans": "",
+      "dict": "火曜日",
+      "dictRead": "かようび",
+      "audio": "/Audio/minnamoi/bai4/00010011111000000.mp3",
+      "levels": {
+        "N5": [
+          "<ruby>今日<rt>きょう</rt></ruby>は<ruby>火曜日<rt>かようび</rt></ruby>です。",
+          "Today is Tuesday."
+        ],
+        "N4": [
+          "<ruby>火曜日<rt>かようび</rt></ruby>に<ruby>日本語<rt>にほんご</rt></ruby>の<ruby>試験<rt>しけん</rt></ruby>があります。",
+          "There's a Japanese exam on Tuesday."
+        ],
+        "N3": [
+          "<ruby>火曜日<rt>かようび</rt></ruby>ごとに、<ruby>近<rt>ちか</rt></ruby>くの<ruby>市場<rt>いちば</rt></ruby>で<ruby>買<rt>か</rt></ruby>い<ruby>物<rt>もの</rt></ruby>するようにしています。",
+          "Every Tuesday, I make a point of shopping at the nearby market."
+        ],
+        "N2": [
+          "<ruby>火曜日<rt>かようび</rt></ruby>までに<ruby>返事<rt>へんじ</rt></ruby>をするつもりだったものの、<ruby>忙<rt>いそが</rt></ruby>しくてつい<ruby>忘<rt>わす</rt></ruby>れてしまった。",
+          "I'd intended to reply by Tuesday, but I was busy and ended up forgetting."
+        ],
+        "N1": [
+          "<ruby>定休日<rt>ていきゅうび</rt></ruby>を<ruby>火曜日<rt>かようび</rt></ruby>に<ruby>設定<rt>せってい</rt></ruby>している<ruby>店<rt>みせ</rt></ruby>が<ruby>多<rt>おお</rt></ruby>いのは、<ruby>週末<rt>しゅうまつ</rt></ruby>と<ruby>月曜日<rt>げつようび</rt></ruby>の<ruby>繁忙<rt>はんぼう</rt></ruby>を<ruby>避<rt>さ</rt></ruby>けた<ruby>結果<rt>けっか</rt></ruby>だと<ruby>言<rt>い</rt></ruby>われている。",
+          "It is said that many shops set their regular day off on Tuesday as a way of avoiding the busy weekend and Monday."
+        ]
+      },
+      "mnem": "火 (fire) + 曜日 (day) — fire's day is 火曜日, Tuesday.",
+      "tip": "火曜日 = Tuesday, its element is 火 (fire, read か). Sits after 月曜日 in the week. Don't confuse the 火 reading か here with ひ (fire) or the counter 火 elsewhere.",
+      "accent": 2
+    },
+    {
+      "key": "mnn:4:39",
+      "kana": "すいようび",
+      "kanji": "水曜日",
+      "context": "",
+      "mean": "Wednesday",
+      "cat": "noun",
+      "type": "",
+      "trans": "",
+      "dict": "水曜日",
+      "dictRead": "すいようび",
+      "audio": "/Audio/minnamoi/bai4/00010011111000001.mp3",
+      "levels": {
+        "N5": [
+          "<ruby>水曜日<rt>すいようび</rt></ruby>に<ruby>会議<rt>かいぎ</rt></ruby>があります。",
+          "There's a meeting on Wednesday."
+        ],
+        "N4": [
+          "<ruby>明日<rt>あした</rt></ruby>は<ruby>水曜日<rt>すいようび</rt></ruby>です。",
+          "Tomorrow is Wednesday."
+        ],
+        "N3": [
+          "<ruby>水曜日<rt>すいようび</rt></ruby>は<ruby>早<rt>はや</rt></ruby>く<ruby>帰<rt>かえ</rt></ruby>れるので、<ruby>習<rt>なら</rt></ruby>い<ruby>事<rt>ごと</rt></ruby>に<ruby>行<rt>い</rt></ruby>くようにしています。",
+          "I can leave early on Wednesdays, so I make a point of going to my lessons."
+        ],
+        "N2": [
+          "<ruby>水曜日<rt>すいようび</rt></ruby>は<ruby>週<rt>しゅう</rt></ruby>のちょうど<ruby>真<rt>ま</rt></ruby>ん<ruby>中<rt>なか</rt></ruby>なので、<ruby>疲<rt>つか</rt></ruby>れが<ruby>出<rt>で</rt></ruby>やすい<ruby>日<rt>ひ</rt></ruby>でもある。",
+          "Wednesday falls right in the middle of the week, so it's also a day when fatigue tends to set in."
+        ],
+        "N1": [
+          "<ruby>週<rt>しゅう</rt></ruby>の<ruby>折<rt>お</rt></ruby>り<ruby>返<rt>かえ</rt></ruby>し<ruby>地点<rt>ちてん</rt></ruby>にあたる<ruby>水曜日<rt>すいようび</rt></ruby>をどう<ruby>乗<rt>の</rt></ruby>り<ruby>切<rt>き</rt></ruby>るかが、その<ruby>週<rt>しゅう</rt></ruby><ruby>全体<rt>ぜんたい</rt></ruby>の<ruby>調子<rt>ちょうし</rt></ruby>を<ruby>左右<rt>さゆう</rt></ruby>すると<ruby>言<rt>い</rt></ruby>っても<ruby>過言<rt>かごん</rt></ruby>ではない。",
+          "It's no exaggeration to say that how you get through Wednesday, the week's turning point, determines the whole week's rhythm."
+        ]
+      },
+      "mnem": "水 (water) + 曜日 (day) — water's day is 水曜日, Wednesday.",
+      "tip": "水曜日 = Wednesday, its element is 水 (water, read すい here — not みず). The midweek day. 水 also reads すい in 水泳 (swimming) and 水分 (moisture).",
+      "accent": 3
+    },
+    {
+      "key": "mnn:4:40",
+      "kana": "もくようび",
+      "kanji": "木曜日",
+      "context": "",
+      "mean": "Thursday",
+      "cat": "noun",
+      "type": "",
+      "trans": "",
+      "dict": "木曜日",
+      "dictRead": "もくようび",
+      "audio": "/Audio/minnamoi/bai4/00010011111000010.mp3",
+      "levels": {
+        "N5": [
+          "<ruby>試験<rt>しけん</rt></ruby>は<ruby>木曜日<rt>もくようび</rt></ruby>です。",
+          "The exam is on Thursday."
+        ],
+        "N4": [
+          "<ruby>木曜日<rt>もくようび</rt></ruby>に<ruby>図書館<rt>としょかん</rt></ruby>へ<ruby>行<rt>い</rt></ruby>きます。",
+          "I'll go to the library on Thursday."
+        ],
+        "N3": [
+          "<ruby>木曜日<rt>もくようび</rt></ruby>は<ruby>仕事<rt>しごと</rt></ruby>が<ruby>忙<rt>いそが</rt></ruby>しいので、<ruby>約束<rt>やくそく</rt></ruby>は<ruby>避<rt>さ</rt></ruby>けるようにしています。",
+          "Thursdays are busy at work, so I make a point of avoiding appointments."
+        ],
+        "N2": [
+          "<ruby>木曜日<rt>もくようび</rt></ruby>には<ruby>締<rt>し</rt></ruby>め<ruby>切<rt>き</rt></ruby>りが<ruby>重<rt>かさ</rt></ruby>なりがちなものの、なんとか<ruby>乗<rt>の</rt></ruby>り<ruby>切<rt>き</rt></ruby>っている。",
+          "Deadlines tend to pile up on Thursdays, but somehow I manage to get through them."
+        ],
+        "N1": [
+          "<ruby>週末<rt>しゅうまつ</rt></ruby>を<ruby>間近<rt>まぢか</rt></ruby>に<ruby>控<rt>ひか</rt></ruby>えた<ruby>木曜日<rt>もくようび</rt></ruby>は、あと<ruby>一息<rt>ひといき</rt></ruby>という<ruby>安堵<rt>あんど</rt></ruby>と、<ruby>残<rt>のこ</rt></ruby>る<ruby>仕事<rt>しごと</rt></ruby>への<ruby>焦<rt>あせ</rt></ruby>りが<ruby>入<rt>い</rt></ruby>り<ruby>混<rt>ま</rt></ruby>じる<ruby>日<rt>ひ</rt></ruby>だ。",
+          "Thursday, with the weekend close at hand, is a day where the relief of \"just one more push\" mingles with anxiety over the work that remains."
+        ]
+      },
+      "mnem": "木 (wood/tree) + 曜日 (day) — wood's day is 木曜日, Thursday.",
+      "tip": "木曜日 = Thursday, its element is 木 (wood/tree, read もく here — not き). 木 also reads もく in 木曜 (Thursday) and 大木 (a big tree, たいぼく). Fourth day of the Minna week.",
+      "accent": 3
+    },
+    {
+      "key": "mnn:4:41",
+      "kana": "きんようび",
+      "kanji": "金曜日",
+      "context": "",
+      "mean": "Friday",
+      "cat": "noun",
+      "type": "",
+      "trans": "",
+      "dict": "金曜日",
+      "dictRead": "きんようび",
+      "audio": "/Audio/minnamoi/bai4/00010011111000011.mp3",
+      "levels": {
+        "N5": [
+          "<ruby>金曜日<rt>きんようび</rt></ruby>まで<ruby>働<rt>はたら</rt></ruby>きます。",
+          "I work until Friday."
+        ],
+        "N4": [
+          "<ruby>月曜日<rt>げつようび</rt></ruby>から<ruby>金曜日<rt>きんようび</rt></ruby>まで<ruby>勉強<rt>べんきょう</rt></ruby>します。",
+          "I study from Monday to Friday."
+        ],
+        "N3": [
+          "<ruby>金曜日<rt>きんようび</rt></ruby>の<ruby>夜<rt>よる</rt></ruby>は、<ruby>友<rt>とも</rt></ruby>だちと<ruby>食事<rt>しょくじ</rt></ruby>に<ruby>行<rt>い</rt></ruby>くようにしています。",
+          "On Friday nights, I make a point of going out to eat with friends."
+        ],
+        "N2": [
+          "<ruby>金曜日<rt>きんようび</rt></ruby>ともなると、<ruby>仕事<rt>しごと</rt></ruby>は<ruby>山積<rt>やまづ</rt></ruby>みなものの、<ruby>気持<rt>きも</rt></ruby>ちはすでに<ruby>週末<rt>しゅうまつ</rt></ruby>に<ruby>向<rt>む</rt></ruby>いている。",
+          "Come Friday, the work is piled sky-high, but my heart is already turned toward the weekend."
+        ],
+        "N1": [
+          "<ruby>週末<rt>しゅうまつ</rt></ruby>の<ruby>解放感<rt>かいほうかん</rt></ruby>を<ruby>先取<rt>さきど</rt></ruby>りするかのように、<ruby>金曜日<rt>きんようび</rt></ruby>の<ruby>夜<rt>よる</rt></ruby>の<ruby>街<rt>まち</rt></ruby>はどこか<ruby>浮<rt>う</rt></ruby>き<ruby>立<rt>た</rt></ruby>った<ruby>空気<rt>くうき</rt></ruby>に<ruby>包<rt>つつ</rt></ruby>まれる。",
+          "As if to savor the weekend's liberation in advance, the town on a Friday night is wrapped in a somehow buoyant air."
+        ]
+      },
+      "mnem": "金 (gold/money) + 曜日 (day) — gold's day is 金曜日, Friday.",
+      "tip": "金曜日 = Friday, its element is 金 (gold/metal, read きん here — not かね or きむ). 金 also reads きん in 金曜 and 現金 (cash, げんきん) but かね in お金 (money). Last workday of the Minna week.",
+      "accent": 3
+    },
+    {
+      "key": "mnn:4:42",
+      "kana": "どようび",
+      "kanji": "土曜日",
+      "context": "",
+      "mean": "Saturday",
+      "cat": "noun",
+      "type": "",
+      "trans": "",
+      "dict": "土曜日",
+      "dictRead": "どようび",
+      "audio": "/Audio/minnamoi/bai4/00010011111000100.mp3",
+      "levels": {
+        "N5": [
+          "<ruby>休<rt>やす</rt></ruby>みは<ruby>土曜日<rt>どようび</rt></ruby>です。",
+          "My day off is Saturday."
+        ],
+        "N4": [
+          "<ruby>土曜日<rt>どようび</rt></ruby>に<ruby>映画<rt>えいが</rt></ruby>を<ruby>見<rt>み</rt></ruby>ます。",
+          "I'll watch a movie on Saturday."
+        ],
+        "N3": [
+          "<ruby>土曜日<rt>どようび</rt></ruby>は<ruby>掃除<rt>そうじ</rt></ruby>や<ruby>洗濯<rt>せんたく</rt></ruby>をするようにしています。",
+          "On Saturdays, I make a point of doing the cleaning and laundry."
+        ],
+        "N2": [
+          "<ruby>土曜日<rt>どようび</rt></ruby>は<ruby>休<rt>やす</rt></ruby>みとはいえ、<ruby>平日<rt>へいじつ</rt></ruby>にできなかった<ruby>用事<rt>ようじ</rt></ruby>で<ruby>結局<rt>けっきょく</rt></ruby><ruby>忙<rt>いそが</rt></ruby>しくなる。",
+          "Saturday is supposed to be a day off, but I end up busy with errands I couldn't do on weekdays."
+        ],
+        "N1": [
+          "<ruby>週休<rt>しゅうきゅう</rt></ruby><ruby>二日制<rt>ふつかせい</rt></ruby>が<ruby>定着<rt>ていちゃく</rt></ruby>した<ruby>今<rt>いま</rt></ruby>でこそ<ruby>土曜日<rt>どようび</rt></ruby>は<ruby>休<rt>やす</rt></ruby>みが<ruby>当<rt>あ</rt></ruby>たり<ruby>前<rt>まえ</rt></ruby>だが、かつては<ruby>半日<rt>はんにち</rt></ruby><ruby>勤務<rt>きんむ</rt></ruby>が<ruby>普通<rt>ふつう</rt></ruby>だった。",
+          "Now that the two-day weekend has become standard, having Saturday off is taken for granted, but half-day work used to be the norm."
+        ]
+      },
+      "mnem": "土 (earth/soil) + 曜日 (day) — earth's day is 土曜日, Saturday.",
+      "tip": "土曜日 = Saturday, its element is 土 (earth/soil, read ど here — not つち). Weekend day. 土 also reads ど in 土地 (land, とち) — wait, there it's と — but ど in 土曜 and 土日 (どにち, \"Sat & Sun\").",
+      "accent": 2
+    },
+    {
+      "key": "mnn:4:43",
+      "kana": "にちようび",
+      "kanji": "日曜日",
+      "context": "",
+      "mean": "Sunday",
+      "cat": "noun",
+      "type": "",
+      "trans": "",
+      "dict": "日曜日",
+      "dictRead": "にちようび",
+      "audio": "/Audio/minnamoi/bai4/00010011111000101.mp3",
+      "levels": {
+        "N5": [
+          "<ruby>日曜日<rt>にちようび</rt></ruby>に<ruby>休<rt>やす</rt></ruby>みます。",
+          "I rest on Sunday."
+        ],
+        "N4": [
+          "<ruby>日曜日<rt>にちようび</rt></ruby>に<ruby>友<rt>とも</rt></ruby>だちと<ruby>美術館<rt>びじゅつかん</rt></ruby>へ<ruby>行<rt>い</rt></ruby>きます。",
+          "I'll go to the art museum with a friend on Sunday."
+        ],
+        "N3": [
+          "<ruby>日曜日<rt>にちようび</rt></ruby>は、ゆっくり<ruby>寝<rt>ね</rt></ruby>てから<ruby>家事<rt>かじ</rt></ruby>をするようにしています。",
+          "On Sundays, I make a point of sleeping in before doing the housework."
+        ],
+        "N2": [
+          "<ruby>日曜日<rt>にちようび</rt></ruby>の<ruby>夕方<rt>ゆうがた</rt></ruby>になると、なぜか<ruby>気分<rt>きぶん</rt></ruby>が<ruby>沈<rt>しず</rt></ruby>みがちになるものだ。",
+          "Come Sunday evening, one's mood somehow tends to sink."
+        ],
+        "N1": [
+          "<ruby>週<rt>しゅう</rt></ruby>の<ruby>締<rt>し</rt></ruby>めくくりである<ruby>日曜日<rt>にちようび</rt></ruby>をいかに<ruby>過<rt>す</rt></ruby>ごすかが、<ruby>翌週<rt>よくしゅう</rt></ruby>への<ruby>英気<rt>えいき</rt></ruby>を<ruby>養<rt>やしな</rt></ruby>えるかどうかの<ruby>分<rt>わ</rt></ruby>かれ<ruby>目<rt>め</rt></ruby>となる。",
+          "How you spend Sunday, the close of the week, is the deciding factor in whether you can build up the vigor for the week ahead."
+        ]
+      },
+      "mnem": "日 (sun) + 曜日 (day) — the sun's day is 日曜日, Sunday.",
+      "tip": "日曜日 = Sunday, its element is 日 (sun, read にち here). The rest day. Note the tricky triple-日: 日曜日 — the first 日 is にち (sun), the last is び (day). 土日 (どにち) lumps Saturday+Sunday as \"the weekend.\"",
+      "accent": 3
+    },
+    {
+      "key": "mnn:4:44",
+      "kana": "なんようび",
+      "kanji": "何曜日",
+      "context": "",
+      "mean": "what day of the week",
+      "cat": "noun",
+      "type": "",
+      "trans": "",
+      "dict": "何曜日",
+      "dictRead": "なんようび",
+      "audio": "/Audio/minnamoi/bai4/00010011111000110.mp3",
+      "levels": {
+        "N5": [
+          "<ruby>今日<rt>きょう</rt></ruby>は<ruby>何曜日<rt>なんようび</rt></ruby>ですか。",
+          "What day of the week is it today?"
+        ],
+        "N4": [
+          "<ruby>試験<rt>しけん</rt></ruby>は<ruby>何曜日<rt>なんようび</rt></ruby>ですか。",
+          "What day of the week is the exam?"
+        ],
+        "N3": [
+          "<ruby>会議<rt>かいぎ</rt></ruby>が<ruby>何曜日<rt>なんようび</rt></ruby>になるか、まだ<ruby>決<rt>き</rt></ruby>まっていません。",
+          "It hasn't yet been decided what day of the week the meeting will be."
+        ],
+        "N2": [
+          "<ruby>連休<rt>れんきゅう</rt></ruby>が<ruby>続<rt>つづ</rt></ruby>くと、<ruby>今日<rt>きょう</rt></ruby>が<ruby>何曜日<rt>なんようび</rt></ruby>なのか<ruby>分<rt>わ</rt></ruby>からなくなってしまう。",
+          "When holidays run one after another, I end up not knowing what day of the week it even is."
+        ],
+        "N1": [
+          "<ruby>締<rt>し</rt></ruby>め<ruby>切<rt>き</rt></ruby>りが<ruby>何曜日<rt>なんようび</rt></ruby>であれ、それに<ruby>間<rt>ま</rt></ruby>に<ruby>合<rt>あ</rt></ruby>うよう<ruby>逆算<rt>ぎゃくさん</rt></ruby>して<ruby>計画<rt>けいかく</rt></ruby>を<ruby>立<rt>た</rt></ruby>てるのが<ruby>肝要<rt>かんよう</rt></ruby>だ。",
+          "Whatever day of the week the deadline falls on, it's essential to plan backward from it so as to make it in time."
+        ]
+      },
+      "mnem": "何 (what) + 曜日 (day of the week) = \"what day of the week\" — 何曜日.",
+      "tip": "何曜日 (なんようび) asks which weekday. Answer with a 〜曜日 (月曜日, 火曜日…). Contrast 何日 (なんにち, \"what date/how many days\") and 何時 (なんじ, \"what time\") — the 何 question-word takes a different counter for each.",
+      "accent": 3
+    },
+    {
+      "key": "mnn:4:45",
+      "kana": "～から",
+      "kanji": "",
+      "context": "",
+      "mean": "from ~ (starting point of time/place)",
+      "cat": "phrase",
+      "type": "",
+      "trans": "",
+      "dict": "～から",
+      "dictRead": "から",
+      "audio": "/Audio/minnamoi/bai4/00010011111000111.mp3",
+      "levels": {
+        "N5": [
+          "<ruby>銀行<rt>ぎんこう</rt></ruby>は<ruby>九時<rt>くじ</rt></ruby>からです。",
+          "The bank is open from nine o'clock."
+        ],
+        "N4": [
+          "<ruby>会議<rt>かいぎ</rt></ruby>は<ruby>午後<rt>ごご</rt></ruby><ruby>一時<rt>いちじ</rt></ruby>から<ruby>始<rt>はじ</rt></ruby>まります。",
+          "The meeting starts from one p.m."
+        ],
+        "N3": [
+          "<ruby>来週<rt>らいしゅう</rt></ruby>からジムに<ruby>通<rt>かよ</rt></ruby>うようにしています。",
+          "I'm making a point of going to the gym starting next week."
+        ],
+        "N2": [
+          "<ruby>都合<rt>つごう</rt></ruby>で<ruby>開始<rt>かいし</rt></ruby>が<ruby>三時<rt>さんじ</rt></ruby>からに<ruby>変<rt>か</rt></ruby>わったものの、<ruby>参加者<rt>さんかしゃ</rt></ruby>には<ruby>伝<rt>つた</rt></ruby>わっていなかった。",
+          "The start had been changed to from three o'clock for scheduling reasons, but this hadn't reached the participants."
+        ],
+        "N1": [
+          "ものごとは<ruby>結果<rt>けっか</rt></ruby>からではなく、そこに<ruby>至<rt>いた</rt></ruby>るまでの<ruby>過程<rt>かてい</rt></ruby>からこそ<ruby>学<rt>まな</rt></ruby>ぶべきものが<ruby>多<rt>おお</rt></ruby>い。",
+          "There is much to be learned not from the outcome of things, but precisely from the process of getting there."
+        ]
+      },
+      "mnem": "から = \"from\" — the starting mark; picture a runner leaving the \"kara\" (start) line.",
+      "tip": "から marks the starting point of a time or place (九時から = \"from nine,\" 東京から = \"from Tokyo\"); it pairs with まで (\"until\"). This is the TIME/PLACE から — distinct from the から that means \"because\" (a reason clause, later lessons).",
+      "accent": 1
+    },
+    {
+      "key": "mnn:4:46",
+      "kana": "～まで",
+      "kanji": "",
+      "context": "",
+      "mean": "until ~, to ~ (end point of time/place)",
+      "cat": "phrase",
+      "type": "",
+      "trans": "",
+      "dict": "～まで",
+      "dictRead": "まで",
+      "audio": "/Audio/minnamoi/bai4/00010011111001000.mp3",
+      "levels": {
+        "N5": [
+          "<ruby>銀行<rt>ぎんこう</rt></ruby>は<ruby>三時<rt>さんじ</rt></ruby>までです。",
+          "The bank is open until three o'clock."
+        ],
+        "N4": [
+          "<ruby>月曜日<rt>げつようび</rt></ruby>から<ruby>金曜日<rt>きんようび</rt></ruby>まで<ruby>働<rt>はたら</rt></ruby>きます。",
+          "I work from Monday to Friday."
+        ],
+        "N3": [
+          "<ruby>締<rt>し</rt></ruby>め<ruby>切<rt>き</rt></ruby>りまでに<ruby>終<rt>お</rt></ruby>わらせるよう、<ruby>毎日<rt>まいにち</rt></ruby><ruby>少<rt>すこ</rt></ruby>しずつ<ruby>進<rt>すす</rt></ruby>めています。",
+          "I'm making progress a little each day so as to finish by the deadline."
+        ],
+        "N2": [
+          "<ruby>終電<rt>しゅうでん</rt></ruby>まで<ruby>時間<rt>じかん</rt></ruby>があるとはいえ、そろそろ<ruby>帰<rt>かえ</rt></ruby>る<ruby>支度<rt>したく</rt></ruby>をしたほうがいい。",
+          "There's still time until the last train, but I'd better start getting ready to head home."
+        ],
+        "N1": [
+          "<ruby>最後<rt>さいご</rt></ruby>の<ruby>一人<rt>ひとり</rt></ruby>が<ruby>帰<rt>かえ</rt></ruby>るまで<ruby>会場<rt>かいじょう</rt></ruby>に<ruby>残<rt>のこ</rt></ruby>り<ruby>続<rt>つづ</rt></ruby>けた<ruby>彼<rt>かれ</rt></ruby>の<ruby>誠実<rt>せいじつ</rt></ruby>さには、<ruby>頭<rt>あたま</rt></ruby>が<ruby>下<rt>さ</rt></ruby>がる<ruby>思<rt>おも</rt></ruby>いだった。",
+          "I felt nothing but respect for his sincerity in staying at the venue until the very last person had left."
+        ]
+      },
+      "mnem": "まで = \"until / up to\" — the finish mark; picture the tape a runner breaks at the \"made\" (goal) line.",
+      "tip": "まで marks the end point of a time or place (三時まで = \"until three,\" 駅まで = \"as far as the station\"); it pairs with から (\"from\"). Don't confuse まで with までに (\"by [a deadline],\" a later point) — まで = the whole span up to; までに = no later than.",
+      "accent": 1
+    },
+    {
+      "key": "mnn:4:47",
+      "kana": "～と",
+      "kanji": "",
+      "context": "N〜N",
+      "mean": "~ and ~ (joins nouns)",
+      "cat": "phrase",
+      "type": "",
+      "trans": "",
+      "dict": "～と",
+      "dictRead": "と",
+      "audio": "/Audio/minnamoi/bai4/00010011111001001.mp3",
+      "levels": {
+        "N5": [
+          "<ruby>休<rt>やす</rt></ruby>みは<ruby>土曜日<rt>どようび</rt></ruby>と<ruby>日曜日<rt>にちようび</rt></ruby>です。",
+          "My days off are Saturday and Sunday."
+        ],
+        "N4": [
+          "<ruby>銀行<rt>ぎんこう</rt></ruby>と<ruby>郵便局<rt>ゆうびんきょく</rt></ruby>へ<ruby>行<rt>い</rt></ruby>きます。",
+          "I'll go to the bank and the post office."
+        ],
+        "N3": [
+          "<ruby>会議<rt>かいぎ</rt></ruby>には<ruby>部長<rt>ぶちょう</rt></ruby>と<ruby>課長<rt>かちょう</rt></ruby>が<ruby>出席<rt>しゅっせき</rt></ruby>するようです。",
+          "It seems the department head and the section chief will attend the meeting."
+        ],
+        "N2": [
+          "<ruby>必要<rt>ひつよう</rt></ruby>なのはパスポートと<ruby>写真<rt>しゃしん</rt></ruby>、それに<ruby>申込書<rt>もうしこみしょ</rt></ruby>くらいのものだ。",
+          "All that's needed is a passport, a photo, and the application form — about that much."
+        ],
+        "N1": [
+          "<ruby>理想<rt>りそう</rt></ruby>と<ruby>現実<rt>げんじつ</rt></ruby>の<ruby>間<rt>あいだ</rt></ruby>で<ruby>揺<rt>ゆ</rt></ruby>れ<ruby>動<rt>うご</rt></ruby>きながらも、<ruby>妥協点<rt>だきょうてん</rt></ruby>を<ruby>探<rt>さぐ</rt></ruby>り<ruby>続<rt>つづ</rt></ruby>けるほかに<ruby>道<rt>みち</rt></ruby>はない。",
+          "Wavering between the ideal and reality, there is no path but to keep searching for a point of compromise."
+        ]
+      },
+      "mnem": "と = \"and,\" linking things: think of と as tying two nouns together with a knot.",
+      "tip": "This と exhaustively joins NOUNS (A と B = \"A and B,\" a complete list) — 土曜日と日曜日. Don't confuse it with the と meaning \"with (a person)\" (友だちと会う) or the quotation と (「行く」と言う, Lesson 21); same kana, different jobs. For a non-exhaustive list use や.",
+      "accent": 1
+    }
+  ],
+  "grammar": [
+    {
+      "pattern": "Telling the time — 〜時〜分 / 〜半",
+      "structure": "[number] ＋ 時（じ） ＋ [number] ＋ 分（ふん／ぷん）／半（はん）",
+      "explain": "Time is built from the counters 時 (o'clock, hours) and 分 (minutes); 半 replaces 三十分 for \"half past.\" 「今 何時ですか」 asks the time, answered 「七時半です」 or 「十時二十分です」. Watch the irregular readings: 四時 = よじ, 七時 = しちじ, 九時 = くじ; 一分 = いっぷん, 三分 = さんぷん, 十分 = じゅっぷん. Use 午前 for a.m. and 午後 for p.m., placed before the time.",
+      "examples": [
+        {
+          "jp": "<ruby>今<rt>いま</rt></ruby> <ruby>何時<rt>なんじ</rt></ruby>ですか。…<ruby>七時半<rt>しちじはん</rt></ruby>です。",
+          "en": "What time is it now? …It's half past seven."
+        },
+        {
+          "jp": "<ruby>今<rt>いま</rt></ruby> <ruby>午後<rt>ごご</rt></ruby> <ruby>四時二十分<rt>よじにじゅっぷん</rt></ruby>です。",
+          "en": "It's four twenty p.m. now."
+        },
+        {
+          "jp": "<ruby>東京<rt>とうきょう</rt></ruby>は <ruby>今<rt>いま</rt></ruby> <ruby>何時<rt>なんじ</rt></ruby>ですか。…<ruby>午前<rt>ごぜん</rt></ruby> <ruby>九時<rt>くじ</rt></ruby>です。",
+          "en": "What time is it in Tokyo now? …It's nine a.m."
+        }
+      ]
+    },
+    {
+      "pattern": "V〜ます／〜ません／〜ました／〜ませんでした (polite verb forms)",
+      "structure": "V-stem ＋ ます（non-past affirmative）／ません（non-past negative）／ました（past affirmative）／ませんでした（past negative）",
+      "explain": "The polite verb takes four forms by tense + polarity. Non-past 〜ます covers both the present habit and the future (毎日 働きます \"I work every day\" / あした 働きます \"I'll work tomorrow\"); its negative is 〜ません. The past is 〜ました, and its negative is 〜ませんでした. Questions add か: 「勉強しますか」→「はい、します」／「いいえ、しません」. The point in time a verb happens takes に: 六時に 起きます.",
+      "examples": [
+        {
+          "jp": "<ruby>毎朝<rt>まいあさ</rt></ruby> <ruby>六時<rt>ろくじ</rt></ruby>に <ruby>起<rt>お</rt></ruby>きます。",
+          "en": "I get up at six every morning."
+        },
+        {
+          "jp": "きのう <ruby>働<rt>はたら</rt></ruby>きませんでした。",
+          "en": "I didn't work yesterday."
+        },
+        {
+          "jp": "けさ <ruby>何時<rt>なんじ</rt></ruby>に <ruby>起<rt>お</rt></ruby>きましたか。…<ruby>七時半<rt>しちじはん</rt></ruby>に <ruby>起<rt>お</rt></ruby>きました。",
+          "en": "What time did you get up this morning? …I got up at seven thirty."
+        },
+        {
+          "jp": "あした <ruby>勉強<rt>べんきょう</rt></ruby>しますか。…いいえ、<ruby>勉強<rt>べんきょう</rt></ruby>しません。",
+          "en": "Will you study tomorrow? …No, I won't."
+        }
+      ]
+    },
+    {
+      "pattern": "N1から N2まで (from ~ to ~)",
+      "structure": "[time/place]から ＋ [time/place]まで（＋ V／です）",
+      "explain": "から marks a starting point and まで an end point, for both time and place. They combine to bracket a span — 九時から 五時まで (\"from nine to five\") — and either can stand alone (銀行は 九時からです \"the bank is open from nine\"; 三時までです \"…until three\"). With days of the week: 月曜日から 金曜日まで 働きます.",
+      "examples": [
+        {
+          "jp": "<ruby>銀行<rt>ぎんこう</rt></ruby>は <ruby>九時<rt>くじ</rt></ruby>から <ruby>三時<rt>さんじ</rt></ruby>までです。",
+          "en": "The bank is open from nine to three."
+        },
+        {
+          "jp": "<ruby>月曜日<rt>げつようび</rt></ruby>から <ruby>金曜日<rt>きんようび</rt></ruby>まで <ruby>働<rt>はたら</rt></ruby>きます。",
+          "en": "I work from Monday to Friday."
+        },
+        {
+          "jp": "<ruby>毎晩<rt>まいばん</rt></ruby> <ruby>七時半<rt>しちじはん</rt></ruby>から <ruby>九時半<rt>くじはん</rt></ruby>まで <ruby>勉強<rt>べんきょう</rt></ruby>します。",
+          "en": "I study from seven thirty to nine thirty every night."
+        }
+      ]
+    },
+    {
+      "pattern": "Days of the week (〜曜日) & the confirming 〜ね",
+      "structure": "[element]曜日（げつ・か・すい・もく・きん・ど・にち）; …ね（sentence-final confirmation）",
+      "explain": "Each weekday pairs a nature element with 曜日: 月(moon)・火(fire)・水(water)・木(wood)・金(gold)・土(earth)・日(sun). 「今日は 何曜日ですか」→「火曜日です」. The sentence-final ね seeks agreement or confirmation from the listener (\"…right?\", \"isn't it?\"), as when repeating back information: 「871の 6813ですね」 (\"That's 871-6813, right?\").",
+      "examples": [
+        {
+          "jp": "<ruby>今日<rt>きょう</rt></ruby>は <ruby>何曜日<rt>なんようび</rt></ruby>ですか。…<ruby>火曜日<rt>かようび</rt></ruby>です。",
+          "en": "What day of the week is it today? …It's Tuesday."
+        },
+        {
+          "jp": "<ruby>休<rt>やす</rt></ruby>みは <ruby>土曜日<rt>どようび</rt></ruby>と <ruby>日曜日<rt>にちようび</rt></ruby>です。",
+          "en": "My days off are Saturday and Sunday."
+        },
+        {
+          "jp": "<ruby>電話番号<rt>でんわばんごう</rt></ruby>は 871の 6813ですね。",
+          "en": "Your phone number is 871-6813, right?"
+        }
+      ]
+    }
+  ],
+  "examples": [
+    {
+      "jp": "<ruby>今<rt>いま</rt></ruby> <ruby>四時五分<rt>よじごふん</rt></ruby>です。",
+      "en": "It's four oh-five now."
+    },
+    {
+      "jp": "わたしは <ruby>毎朝<rt>まいあさ</rt></ruby> <ruby>六時<rt>ろくじ</rt></ruby>に <ruby>起<rt>お</rt></ruby>きます。",
+      "en": "I get up at six every morning."
+    },
+    {
+      "jp": "わたしは きのう <ruby>勉強<rt>べんきょう</rt></ruby>しました。",
+      "en": "I studied yesterday."
+    },
+    {
+      "jp": "ニューヨークは <ruby>今<rt>いま</rt></ruby> <ruby>何時<rt>なんじ</rt></ruby>ですか。…<ruby>午前<rt>ごぜん</rt></ruby> <ruby>零時十分<rt>れいじじゅっぷん</rt></ruby>です。",
+      "en": "What time is it in New York now? …It's ten past midnight."
+    },
+    {
+      "jp": "<ruby>休<rt>やす</rt></ruby>みは <ruby>何曜日<rt>なんようび</rt></ruby>ですか。…<ruby>土曜日<rt>どようび</rt></ruby>と <ruby>日曜日<rt>にちようび</rt></ruby>です。",
+      "en": "Which days are your days off? …Saturday and Sunday."
+    },
+    {
+      "jp": "<ruby>銀行<rt>ぎんこう</rt></ruby>は <ruby>何時<rt>なんじ</rt></ruby>から <ruby>何時<rt>なんじ</rt></ruby>までですか。…<ruby>九時<rt>くじ</rt></ruby>から <ruby>三時<rt>さんじ</rt></ruby>までです。",
+      "en": "From what time to what time is the bank open? …From nine to three."
+    },
+    {
+      "jp": "<ruby>毎晩<rt>まいばん</rt></ruby> <ruby>何時<rt>なんじ</rt></ruby>に <ruby>寝<rt>ね</rt></ruby>ますか。…<ruby>十一時<rt>じゅういちじ</rt></ruby>に <ruby>寝<rt>ね</rt></ruby>ます。",
+      "en": "What time do you go to bed every night? …I go to bed at eleven."
+    },
+    {
+      "jp": "<ruby>毎日<rt>まいにち</rt></ruby> <ruby>何時<rt>なんじ</rt></ruby>から <ruby>何時<rt>なんじ</rt></ruby>まで <ruby>勉強<rt>べんきょう</rt></ruby>しますか。…<ruby>朝<rt>あさ</rt></ruby> <ruby>九時<rt>くじ</rt></ruby>から <ruby>午後<rt>ごご</rt></ruby> <ruby>三時<rt>さんじ</rt></ruby>まで <ruby>勉強<rt>べんきょう</rt></ruby>します。",
+      "en": "From what time to what time do you study each day? …I study from nine a.m. to three p.m."
+    },
+    {
+      "jp": "<ruby>土曜日<rt>どようび</rt></ruby> <ruby>働<rt>はたら</rt></ruby>きますか。…いいえ、<ruby>働<rt>はたら</rt></ruby>きません。",
+      "en": "Do you work on Saturday? …No, I don't."
+    },
+    {
+      "jp": "きのう <ruby>勉強<rt>べんきょう</rt></ruby>しましたか。…いいえ、<ruby>勉強<rt>べんきょう</rt></ruby>しませんでした。",
+      "en": "Did you study yesterday? …No, I didn't."
+    }
+  ],
+  "conversation": {
+    "title": "そちらは 何時までですか (Until what time are you open?)",
+    "audio": "/Audio/minnahonsatsu1/12.mp3",
+    "lines": [
+      {
+        "role": "カリナ",
+        "jp": "すみません。「あすか」の <ruby>電話番号<rt>でんわばんごう</rt></ruby>は <ruby>何番<rt>なんばん</rt></ruby>ですか。",
+        "en": "Excuse me. What's the phone number for \"Asuka\"?"
+      },
+      {
+        "role": "案内",
+        "jp": "「あすか」ですか。5275の 2725です。",
+        "en": "\"Asuka\"? It's 5275-2725."
+      },
+      {
+        "role": "カリナ",
+        "jp": "どうも ありがとう ございます。",
+        "en": "Thank you very much."
+      },
+      {
+        "role": "店員",
+        "jp": "「あすか」です。",
+        "en": "This is \"Asuka.\""
+      },
+      {
+        "role": "カリナ",
+        "jp": "すみません。そちらは <ruby>何時<rt>なんじ</rt></ruby>までですか。",
+        "en": "Excuse me. Until what time are you open?"
+      },
+      {
+        "role": "店員",
+        "jp": "<ruby>十時<rt>じゅうじ</rt></ruby>までです。",
+        "en": "We're open until ten o'clock."
+      },
+      {
+        "role": "カリナ",
+        "jp": "<ruby>休<rt>やす</rt></ruby>みは <ruby>何曜日<rt>なんようび</rt></ruby>ですか。",
+        "en": "What day are you closed?"
+      },
+      {
+        "role": "店員",
+        "jp": "<ruby>日曜日<rt>にちようび</rt></ruby>です。",
+        "en": "Sunday."
+      },
+      {
+        "role": "カリナ",
+        "jp": "そうですか。どうも。",
+        "en": "I see. Thank you."
+      }
+    ]
+  }
+}

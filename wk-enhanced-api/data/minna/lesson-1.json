@@ -1,0 +1,992 @@
+{
+  "lesson": 1,
+  "title": "Lesson 1",
+  "theme": "The copula — N1は N2です / じゃありません / か-questions, the linking の (possessive/apposition), も, and the 〜さん / 〜じん / 〜さい suffixes; basic identity nouns (わたし・あなた・せんせい・がくせい)",
+  "source": {
+    "name": "vnjpclub.com",
+    "vocabUrl": "https://www.vnjpclub.com/en/minna-no-nihongo/lesson-1-vocabulary.html",
+    "grammarUrl": "https://www.vnjpclub.com/en/minna-no-nihongo/lesson-1-grammar.html",
+    "note": "Vocabulary, native-speaker audio, and example sentences aggregated from vnjpclub.com (Minna no Nihongo 第2版). For personal study."
+  },
+  "vocab": [
+    {
+      "key": "mnn:1:0",
+      "kana": "わたし",
+      "kanji": "私",
+      "context": "",
+      "mean": "I, me",
+      "cat": "noun",
+      "type": "",
+      "trans": "",
+      "dict": "私",
+      "dictRead": "わたし",
+      "audio": "/Audio/minnamoi/bai1/00010011100010001.mp3",
+      "levels": {
+        "N5": [
+          "<ruby>私<rt>わたし</rt></ruby>はミラーです。",
+          "I am Miller."
+        ],
+        "N4": [
+          "<ruby>私<rt>わたし</rt></ruby>は<ruby>毎日<rt>まいにち</rt></ruby><ruby>日本語<rt>にほんご</rt></ruby>を<ruby>勉強<rt>べんきょう</rt></ruby>しています。",
+          "I study Japanese every day."
+        ],
+        "N3": [
+          "<ruby>私<rt>わたし</rt></ruby>が<ruby>昨日<rt>きのう</rt></ruby><ruby>話<rt>はな</rt></ruby>した<ruby>人<rt>ひと</rt></ruby>は、<ruby>会社<rt>かいしゃ</rt></ruby>の<ruby>先輩<rt>せんぱい</rt></ruby>です。",
+          "The person I talked to yesterday is a senior colleague from work."
+        ],
+        "N2": [
+          "<ruby>私<rt>わたし</rt></ruby>としては、この<ruby>案<rt>あん</rt></ruby>に<ruby>賛成<rt>さんせい</rt></ruby>せざるを<ruby>得<rt>え</rt></ruby>ない。",
+          "As for me, I have no choice but to agree with this proposal."
+        ],
+        "N1": [
+          "<ruby>私<rt>わたし</rt></ruby>ごときが<ruby>口<rt>くち</rt></ruby>を<ruby>挟<rt>はさ</rt></ruby>むべき<ruby>問題<rt>もんだい</rt></ruby>ではないと<ruby>承知<rt>しょうち</rt></ruby>しております。",
+          "I am well aware that this is not a matter someone as insignificant as I should be interjecting in."
+        ]
+      },
+      "mnem": "わたし — picture yourself pointing at your own chest and saying \"WAH, TAH-shi, that's me.\"",
+      "tip": "わたし is the neutral, polite default for \"I\" in any setting; the casual/masculine ぼく and rough おれ come later — stick with わたし while learning. In casual speech it often contracts to あたし (feminine).",
+      "accent": 0
+    },
+    {
+      "key": "mnn:1:1",
+      "kana": "あなた",
+      "kanji": "",
+      "context": "",
+      "mean": "you",
+      "cat": "noun",
+      "type": "",
+      "trans": "",
+      "dict": "あなた",
+      "dictRead": "あなた",
+      "audio": "/Audio/minnamoi/bai1/00010011100010010.mp3",
+      "levels": {
+        "N5": [
+          "あなたは<ruby>学生<rt>がくせい</rt></ruby>ですか。",
+          "Are you a student?"
+        ],
+        "N4": [
+          "あなたの<ruby>傘<rt>かさ</rt></ruby>はどれですか。",
+          "Which umbrella is yours?"
+        ],
+        "N3": [
+          "あなたが<ruby>言<rt>い</rt></ruby>ったとおりにしたら、うまくいきました。",
+          "When I did exactly as you said, it went well."
+        ],
+        "N2": [
+          "あなたなしでは、この<ruby>仕事<rt>しごと</rt></ruby>は<ruby>完成<rt>かんせい</rt></ruby>できなかっただろう。",
+          "Without you, this work probably could not have been completed."
+        ],
+        "N1": [
+          "あなたほど<ruby>信頼<rt>しんらい</rt></ruby>できる<ruby>人物<rt>じんぶつ</rt></ruby>を、<ruby>私<rt>わたし</rt></ruby>はほかに<ruby>知<rt>し</rt></ruby>らない。",
+          "I know of no one else as trustworthy as you."
+        ]
+      },
+      "mnem": "あなた — imagine gesturing across the table saying \"ah, NAH-tah, YOU there.\"",
+      "tip": "Japanese usually DROPS \"you\" when the referent is clear, or uses the person's name + さん instead; overusing あなた can sound blunt or distant, so lean on names once you know them. (Note: wives traditionally use あなた to address their husbands, like \"dear.\")",
+      "accent": 2
+    },
+    {
+      "key": "mnn:1:2",
+      "kana": "あのひと",
+      "kanji": "あの人",
+      "context": "",
+      "mean": "that person; he, she",
+      "cat": "noun",
+      "type": "",
+      "trans": "",
+      "dict": "あの人",
+      "dictRead": "あのひと",
+      "audio": "/Audio/minnamoi/bai1/00010011100010011.mp3",
+      "levels": {
+        "N5": [
+          "あの<ruby>人<rt>ひと</rt></ruby>は<ruby>先生<rt>せんせい</rt></ruby>です。",
+          "That person is a teacher."
+        ],
+        "N4": [
+          "あの<ruby>人<rt>ひと</rt></ruby>はいつも<ruby>親切<rt>しんせつ</rt></ruby>で、みんなに<ruby>好<rt>す</rt></ruby>かれています。",
+          "That person is always kind and is liked by everyone."
+        ],
+        "N3": [
+          "あの<ruby>人<rt>ひと</rt></ruby>が<ruby>書<rt>か</rt></ruby>いた<ruby>本<rt>ほん</rt></ruby>は、<ruby>今<rt>いま</rt></ruby>とても<ruby>人気<rt>にんき</rt></ruby>があります。",
+          "The book that person wrote is very popular right now."
+        ],
+        "N2": [
+          "あの<ruby>人<rt>ひと</rt></ruby>のことだから、きっとうまくやってくれるにちがいない。",
+          "Being who they are, that person will surely handle it well."
+        ],
+        "N1": [
+          "あの<ruby>人<rt>ひと</rt></ruby>の<ruby>言動<rt>げんどう</rt></ruby>には、どこか<ruby>人<rt>ひと</rt></ruby>を<ruby>惹<rt>ひ</rt></ruby>きつけずにはおかない<ruby>魅力<rt>みりょく</rt></ruby>がある。",
+          "There is something about that person's words and actions that cannot help but draw people in."
+        ]
+      },
+      "mnem": "あの (that, over there) + 人 (ひと, person) = \"that person over there\" — literally the far-away one you're pointing at.",
+      "tip": "The polite equivalent is あのかた (あの方); use かた when you want to show respect for the person referred to. In fast speech あの人 can sound like あのひとぉ, but the neutral form is fine while learning.",
+      "accent": 2
+    },
+    {
+      "key": "mnn:1:3",
+      "kana": "あのかた",
+      "kanji": "あの方",
+      "context": "",
+      "mean": "that person (polite); he, she",
+      "cat": "noun",
+      "type": "",
+      "trans": "",
+      "dict": "あの方",
+      "dictRead": "あのかた",
+      "audio": "/Audio/minnamoi/bai1/00010011100010100.mp3",
+      "levels": {
+        "N5": [
+          "あの<ruby>方<rt>かた</rt></ruby>はどなたですか。",
+          "Who is that person (polite)?"
+        ],
+        "N4": [
+          "あの<ruby>方<rt>かた</rt></ruby>は<ruby>山田<rt>やまだ</rt></ruby>さんのお<ruby>父<rt>とう</rt></ruby>さんです。",
+          "That gentleman is Mr. Yamada's father."
+        ],
+        "N3": [
+          "あの<ruby>方<rt>かた</rt></ruby>が、<ruby>今度<rt>こんど</rt></ruby>いらっしゃる<ruby>新<rt>あたら</rt></ruby>しい<ruby>社長<rt>しゃちょう</rt></ruby>です。",
+          "That person is the new company president who will be joining us."
+        ],
+        "N2": [
+          "あの<ruby>方<rt>かた</rt></ruby>ほどの<ruby>実力<rt>じつりょく</rt></ruby>があれば、どんな<ruby>会社<rt>かいしゃ</rt></ruby>でも<ruby>通用<rt>つうよう</rt></ruby>するだろう。",
+          "With ability like that person's, they would surely succeed at any company."
+        ],
+        "N1": [
+          "あの<ruby>方<rt>かた</rt></ruby>のご<ruby>尽力<rt>じんりょく</rt></ruby>なくして、この<ruby>事業<rt>じぎょう</rt></ruby>の<ruby>成功<rt>せいこう</rt></ruby>はあり<ruby>得<rt>え</rt></ruby>なかった。",
+          "Without that person's dedicated efforts, the success of this enterprise would not have been possible."
+        ]
+      },
+      "mnem": "方 (かた) means \"person\" in a respectful register — swap it in for 人 (ひと) whenever you'd raise your politeness, e.g. あの方 for \"that esteemed person.\"",
+      "tip": "あのかた is the polite version of あのひと; use it for people you respect (a customer, an elder, someone senior). The matching question word is どなた, the polite form of だれ (\"who\").",
+      "accent": 2
+    },
+    {
+      "key": "mnn:1:4",
+      "kana": "～さん",
+      "kanji": "",
+      "context": "",
+      "mean": "Mr., Ms. (polite suffix after a name)",
+      "cat": "phrase",
+      "type": "",
+      "trans": "",
+      "dict": "～さん",
+      "dictRead": "～さん",
+      "audio": "/Audio/minnamoi/bai1/00010011100010101.mp3",
+      "levels": {
+        "N5": [
+          "<ruby>山田<rt>やまだ</rt></ruby>さんは<ruby>先生<rt>せんせい</rt></ruby>です。",
+          "Mr. Yamada is a teacher."
+        ],
+        "N4": [
+          "<ruby>田中<rt>たなか</rt></ruby>さんはもう<ruby>帰<rt>かえ</rt></ruby>りましたか。",
+          "Has Mr. Tanaka already gone home?"
+        ],
+        "N3": [
+          "<ruby>鈴木<rt>すずき</rt></ruby>さんが<ruby>作<rt>つく</rt></ruby>ってくれた<ruby>料理<rt>りょうり</rt></ruby>は、とてもおいしかったです。",
+          "The food Mr. Suzuki made for us was really delicious."
+        ],
+        "N2": [
+          "<ruby>佐藤<rt>さとう</rt></ruby>さんのことだから、<ruby>約束<rt>やくそく</rt></ruby>の<ruby>時間<rt>じかん</rt></ruby>に<ruby>遅<rt>おく</rt></ruby>れるはずがない。",
+          "Knowing Ms. Sato, there's no way she would be late for the appointed time."
+        ],
+        "N1": [
+          "<ruby>中村<rt>なかむら</rt></ruby>さんをおいて、この<ruby>難題<rt>なんだい</rt></ruby>を<ruby>任<rt>まか</rt></ruby>せられる<ruby>人<rt>ひと</rt></ruby>はいないだろう。",
+          "There is probably no one but Mr. Nakamura to whom we could entrust this difficult task."
+        ]
+      },
+      "mnem": "さん is the polite \"Mr./Ms.\" tag — attach it to a name the way you'd add a courteous nod: 山田さん = \"Mr. Yamada.\"",
+      "tip": "NEVER attach さん to your OWN name — it's an honorific for others. It works for both men and women regardless of marital status. Children get 〜ちゃん; さん sits between the casual 〜くん and the very formal 〜さま.",
+      "accent": 0
+    },
+    {
+      "key": "mnn:1:5",
+      "kana": "～ちゃん",
+      "kanji": "",
+      "context": "",
+      "mean": "affectionate suffix for a child's name (in place of 〜さん)",
+      "cat": "phrase",
+      "type": "",
+      "trans": "",
+      "dict": "～ちゃん",
+      "dictRead": "～ちゃん",
+      "audio": "/Audio/minnamoi/bai1/00010011100010110.mp3",
+      "levels": {
+        "N5": [
+          "テレーザちゃんは<ruby>九<rt>きゅう</rt></ruby><ruby>歳<rt>さい</rt></ruby>です。",
+          "Teresa is nine years old."
+        ],
+        "N4": [
+          "<ruby>隣<rt>となり</rt></ruby>のはなちゃんは、いつも<ruby>元気<rt>げんき</rt></ruby>に<ruby>挨拶<rt>あいさつ</rt></ruby>してくれます。",
+          "Hana-chan next door always greets me cheerfully."
+        ],
+        "N3": [
+          "けんちゃんが<ruby>描<rt>か</rt></ruby>いた<ruby>絵<rt>え</rt></ruby>は、コンクールで<ruby>賞<rt>しょう</rt></ruby>を<ruby>取<rt>と</rt></ruby>りました。",
+          "The picture Ken-chan drew won a prize at the competition."
+        ],
+        "N2": [
+          "まだ<ruby>小<rt>ちい</rt></ruby>さいゆみちゃんのことだから、<ruby>一人<rt>ひとり</rt></ruby>で<ruby>行<rt>い</rt></ruby>かせるわけにはいかない。",
+          "Since Yumi-chan is still small, we can't very well let her go alone."
+        ],
+        "N1": [
+          "<ruby>幼<rt>おさな</rt></ruby>いころ、みほちゃんと<ruby>過<rt>す</rt></ruby>ごした<ruby>夏<rt>なつ</rt></ruby>の<ruby>日々<rt>ひび</rt></ruby>は、<ruby>今<rt>いま</rt></ruby>なお<ruby>色<rt>いろ</rt></ruby>あせることがない。",
+          "The summer days I spent with Miho-chan in childhood have not faded even now."
+        ]
+      },
+      "mnem": "ちゃん is a softened, baby-talk version of さん — the sound itself is cuter, so use it for cute little ones: はなちゃん.",
+      "tip": "Use ちゃん for young children, close female friends, and pets — it signals affection/familiarity, not formality; using it with a superior would be rude. The masculine casual counterpart for boys/young men is 〜くん.",
+      "accent": 0
+    },
+    {
+      "key": "mnn:1:6",
+      "kana": "～じん",
+      "kanji": "～人",
+      "context": "アメリカ〜",
+      "mean": "suffix: a national of ~ (e.g. アメリカじん = an American)",
+      "cat": "phrase",
+      "type": "",
+      "trans": "",
+      "dict": "～人",
+      "dictRead": "～じん",
+      "audio": "/Audio/minnamoi/bai1/00010011100010111.mp3",
+      "levels": {
+        "N5": [
+          "ミラーさんはアメリカ<ruby>人<rt>じん</rt></ruby>です。",
+          "Mr. Miller is American."
+        ],
+        "N4": [
+          "この<ruby>会社<rt>かいしゃ</rt></ruby>には<ruby>外国<rt>がいこく</rt></ruby><ruby>人<rt>じん</rt></ruby>の<ruby>社員<rt>しゃいん</rt></ruby>がたくさんいます。",
+          "There are many foreign employees at this company."
+        ],
+        "N3": [
+          "<ruby>日本<rt>にほん</rt></ruby><ruby>人<rt>じん</rt></ruby>でも<ruby>読<rt>よ</rt></ruby>めない<ruby>漢字<rt>かんじ</rt></ruby>が、この<ruby>本<rt>ほん</rt></ruby>にはたくさん<ruby>出<rt>で</rt></ruby>てきます。",
+          "This book has many kanji that even Japanese people can't read."
+        ],
+        "N2": [
+          "<ruby>彼<rt>かれ</rt></ruby>はフランス<ruby>人<rt>じん</rt></ruby>でありながら、<ruby>日本<rt>にほん</rt></ruby>の<ruby>文化<rt>ぶんか</rt></ruby>に<ruby>誰<rt>だれ</rt></ruby>よりも<ruby>詳<rt>くわ</rt></ruby>しい。",
+          "Although he is French, he knows more about Japanese culture than anyone."
+        ],
+        "N1": [
+          "<ruby>一<rt>いち</rt></ruby><ruby>外国<rt>がいこく</rt></ruby><ruby>人<rt>じん</rt></ruby>にすぎない<ruby>私<rt>わたし</rt></ruby>が、この<ruby>伝統<rt>でんとう</rt></ruby><ruby>行事<rt>ぎょうじ</rt></ruby>を<ruby>語<rt>かた</rt></ruby>るのはおこがましいかもしれない。",
+          "It may be presumptuous for me, a mere foreigner, to speak about this traditional event."
+        ]
+      },
+      "mnem": "人 read as じん is the \"-ese/-ian\" nationality tag — glue a country onto it: アメリカ + じん = American, 日本 + じん = Japanese.",
+      "tip": "The kanji 人 reads じん in nationality words (アメリカ人・日本人) but ひと when it stands alone meaning \"person\"; same character, two readings by context. For a person's language you switch to 〜語 (日本語 = Japanese language).",
+      "accent": 1
+    },
+    {
+      "key": "mnn:1:7",
+      "kana": "せんせい",
+      "kanji": "先生",
+      "context": "",
+      "mean": "teacher, instructor (not used of one's own occupation)",
+      "cat": "noun",
+      "type": "",
+      "trans": "",
+      "dict": "先生",
+      "dictRead": "せんせい",
+      "audio": "/Audio/minnamoi/bai1/00010011100011000.mp3",
+      "levels": {
+        "N5": [
+          "<ruby>山田<rt>やまだ</rt></ruby>さんは<ruby>先生<rt>せんせい</rt></ruby>です。",
+          "Mr. Yamada is a teacher."
+        ],
+        "N4": [
+          "わからないことがあったら、<ruby>先生<rt>せんせい</rt></ruby>に<ruby>聞<rt>き</rt></ruby>いてください。",
+          "If there's something you don't understand, please ask the teacher."
+        ],
+        "N3": [
+          "<ruby>先生<rt>せんせい</rt></ruby>が<ruby>教<rt>おし</rt></ruby>えてくださったおかげで、<ruby>試験<rt>しけん</rt></ruby>に<ruby>合格<rt>ごうかく</rt></ruby>できました。",
+          "Thanks to what the teacher taught me, I was able to pass the exam."
+        ],
+        "N2": [
+          "<ruby>先生<rt>せんせい</rt></ruby>のご<ruby>指導<rt>しどう</rt></ruby>があったからこそ、ここまで<ruby>成長<rt>せいちょう</rt></ruby>できたのだ。",
+          "It is precisely because of my teacher's guidance that I have been able to grow this much."
+        ],
+        "N1": [
+          "<ruby>恩師<rt>おんし</rt></ruby>である<ruby>先生<rt>せんせい</rt></ruby>の<ruby>言葉<rt>ことば</rt></ruby>は、<ruby>今<rt>いま</rt></ruby>もなお<ruby>私<rt>わたし</rt></ruby>の<ruby>指針<rt>ししん</rt></ruby>となっている。",
+          "The words of my old teacher still serve as my guiding principle even now."
+        ]
+      },
+      "mnem": "先 (before/ahead) + 生 (life/born) = one \"born before\" you — the elder who leads, i.e. your teacher.",
+      "tip": "先生 is also a respectful title for doctors, lawyers, and politicians — anyone with expertise. Crucially, DON'T call yourself 先生; when stating your own job say 教師 (きょうし). Address a teacher as 〜先生 (山田先生), never 山田先生さん.",
+      "accent": 3
+    },
+    {
+      "key": "mnn:1:8",
+      "kana": "きょうし",
+      "kanji": "教師",
+      "context": "",
+      "mean": "teacher, instructor (one's own occupation)",
+      "cat": "noun",
+      "type": "",
+      "trans": "",
+      "dict": "教師",
+      "dictRead": "きょうし",
+      "audio": "/Audio/minnamoi/bai1/00010011100011001.mp3",
+      "levels": {
+        "N5": [
+          "<ruby>私<rt>わたし</rt></ruby>は<ruby>教師<rt>きょうし</rt></ruby>です。",
+          "I am a teacher."
+        ],
+        "N4": [
+          "<ruby>兄<rt>あに</rt></ruby>は<ruby>高校<rt>こうこう</rt></ruby>の<ruby>教師<rt>きょうし</rt></ruby>をしています。",
+          "My older brother works as a high school teacher."
+        ],
+        "N3": [
+          "<ruby>教師<rt>きょうし</rt></ruby>になるためには、<ruby>免許<rt>めんきょ</rt></ruby>を<ruby>取<rt>と</rt></ruby>らなければなりません。",
+          "In order to become a teacher, you have to get a license."
+        ],
+        "N2": [
+          "<ruby>教師<rt>きょうし</rt></ruby>という<ruby>仕事<rt>しごと</rt></ruby>は、<ruby>大変<rt>たいへん</rt></ruby>なだけに、やりがいも<ruby>大<rt>おお</rt></ruby>きい。",
+          "The job of a teacher is demanding, but for that very reason it is also greatly rewarding."
+        ],
+        "N1": [
+          "<ruby>教師<rt>きょうし</rt></ruby>たる<ruby>者<rt>もの</rt></ruby>は、<ruby>知識<rt>ちしき</rt></ruby>を<ruby>授<rt>さず</rt></ruby>けるのみならず、<ruby>生徒<rt>せいと</rt></ruby>の<ruby>人格<rt>じんかく</rt></ruby>をも<ruby>育<rt>はぐく</rt></ruby>まねばならない。",
+          "One who is a teacher must not only impart knowledge but also nurture the character of their students."
+        ]
+      },
+      "mnem": "教 (teach) + 師 (master/expert) = a \"teaching master\" — the plain occupational word for a teacher.",
+      "tip": "教師 is the neutral job title you use for yourself (私は教師です); 先生 is the respectful term you use FOR others or as a form of address. Same profession, opposite politeness direction — this pairing is the whole point of Lesson 1's teacher vocab.",
+      "accent": 1
+    },
+    {
+      "key": "mnn:1:9",
+      "kana": "がくせい",
+      "kanji": "学生",
+      "context": "",
+      "mean": "student",
+      "cat": "noun",
+      "type": "",
+      "trans": "",
+      "dict": "学生",
+      "dictRead": "がくせい",
+      "audio": "/Audio/minnamoi/bai1/00010011100011010.mp3",
+      "levels": {
+        "N5": [
+          "<ruby>私<rt>わたし</rt></ruby>は<ruby>学生<rt>がくせい</rt></ruby>です。",
+          "I am a student."
+        ],
+        "N4": [
+          "この<ruby>図書館<rt>としょかん</rt></ruby>は<ruby>学生<rt>がくせい</rt></ruby>なら<ruby>誰<rt>だれ</rt></ruby>でも<ruby>使<rt>つか</rt></ruby>えます。",
+          "Any student can use this library."
+        ],
+        "N3": [
+          "<ruby>学生<rt>がくせい</rt></ruby>のときにもっと<ruby>勉強<rt>べんきょう</rt></ruby>しておけばよかったと<ruby>思<rt>おも</rt></ruby>います。",
+          "I think I should have studied more when I was a student."
+        ],
+        "N2": [
+          "<ruby>学生<rt>がくせい</rt></ruby>である<ruby>以上<rt>いじょう</rt></ruby>、<ruby>勉強<rt>べんきょう</rt></ruby>を<ruby>第一<rt>だいいち</rt></ruby>に<ruby>考<rt>かんが</rt></ruby>えるべきだ。",
+          "As long as you are a student, you should put your studies first."
+        ],
+        "N1": [
+          "<ruby>一<rt>いち</rt></ruby><ruby>学生<rt>がくせい</rt></ruby>にすぎない<ruby>身<rt>み</rt></ruby>でありながら、<ruby>彼<rt>かれ</rt></ruby>の<ruby>研究<rt>けんきゅう</rt></ruby>は<ruby>学界<rt>がっかい</rt></ruby>に<ruby>衝撃<rt>しょうげき</rt></ruby>を<ruby>与<rt>あた</rt></ruby>えた。",
+          "Though he was no more than a student, his research sent shockwaves through the academic world."
+        ]
+      },
+      "mnem": "学 (study/learning) + 生 (life/pupil) = a \"life of learning\" — a student.",
+      "tip": "学生 usually means a college/university student; a younger schoolchild is 生徒 (せいと) or, for elementary kids, 小学生 (しょうがくせい). Note the 生 here reads せい, and the same 生 appears in 先生 (せんせい) and 学生 (がくせい).",
+      "accent": 0
+    },
+    {
+      "key": "mnn:1:10",
+      "kana": "かいしゃいん",
+      "kanji": "会社員",
+      "context": "",
+      "mean": "company employee",
+      "cat": "noun",
+      "type": "",
+      "trans": "",
+      "dict": "会社員",
+      "dictRead": "かいしゃいん",
+      "audio": "/Audio/minnamoi/bai1/00010011100011011.mp3",
+      "levels": {
+        "N5": [
+          "ミラーさんは<ruby>会社員<rt>かいしゃいん</rt></ruby>です。",
+          "Mr. Miller is a company employee."
+        ],
+        "N4": [
+          "<ruby>父<rt>ちち</rt></ruby>は<ruby>普通<rt>ふつう</rt></ruby>の<ruby>会社員<rt>かいしゃいん</rt></ruby>で、<ruby>毎日<rt>まいにち</rt></ruby><ruby>電車<rt>でんしゃ</rt></ruby>で<ruby>通勤<rt>つうきん</rt></ruby>しています。",
+          "My father is an ordinary company employee and commutes by train every day."
+        ],
+        "N3": [
+          "<ruby>会社員<rt>かいしゃいん</rt></ruby>として<ruby>働<rt>はたら</rt></ruby>くうちに、<ruby>社会<rt>しゃかい</rt></ruby>のことが<ruby>少<rt>すこ</rt></ruby>しずつわかってきた。",
+          "As I worked as a company employee, I gradually came to understand how society works."
+        ],
+        "N2": [
+          "<ruby>安定<rt>あんてい</rt></ruby>した<ruby>会社員<rt>かいしゃいん</rt></ruby>の<ruby>職<rt>しょく</rt></ruby>を<ruby>捨<rt>す</rt></ruby>ててまで、<ruby>彼<rt>かれ</rt></ruby>は<ruby>起業<rt>きぎょう</rt></ruby>を<ruby>選<rt>えら</rt></ruby>んだ。",
+          "He chose to start his own business, even at the cost of giving up a stable job as a company employee."
+        ],
+        "N1": [
+          "<ruby>一<rt>いち</rt></ruby><ruby>会社員<rt>かいしゃいん</rt></ruby>の<ruby>立場<rt>たちば</rt></ruby>で<ruby>経営<rt>けいえい</rt></ruby><ruby>方針<rt>ほうしん</rt></ruby>に<ruby>異<rt>い</rt></ruby>を<ruby>唱<rt>とな</rt></ruby>えるのは、<ruby>並大抵<rt>なみたいてい</rt></ruby>の<ruby>勇気<rt>ゆうき</rt></ruby>ではできない。",
+          "To object to management policy from the position of a mere company employee takes no ordinary courage."
+        ]
+      },
+      "mnem": "会社 (かいしゃ, company) + 員 (いん, member/staff) = a member of a company = a company employee.",
+      "tip": "The 〜員 suffix means \"member/staff of ~\": 会社員 (company), 銀行員 (bank), 店員 (shop). To say which specific company someone works for, use the company name + の + 社員 (IMCの社員), a Lesson 1 の-of-belonging construction.",
+      "accent": 3
+    },
+    {
+      "key": "mnn:1:11",
+      "kana": "しゃいん",
+      "kanji": "社員",
+      "context": "IMCの〜",
+      "mean": "employee of ~ company (used with a company name)",
+      "cat": "noun",
+      "type": "",
+      "trans": "",
+      "dict": "社員",
+      "dictRead": "しゃいん",
+      "audio": "/Audio/minnamoi/bai1/00010011100011100.mp3",
+      "levels": {
+        "N5": [
+          "グプタさんはIMCの<ruby>社員<rt>しゃいん</rt></ruby>です。",
+          "Mr. Gupta is an employee of IMC."
+        ],
+        "N4": [
+          "<ruby>新<rt>あたら</rt></ruby>しい<ruby>社員<rt>しゃいん</rt></ruby>が<ruby>五人<rt>ごにん</rt></ruby><ruby>入<rt>はい</rt></ruby>ってきました。",
+          "Five new employees have joined."
+        ],
+        "N3": [
+          "<ruby>社員<rt>しゃいん</rt></ruby>が<ruby>安心<rt>あんしん</rt></ruby>して<ruby>働<rt>はたら</rt></ruby>けるように、<ruby>会社<rt>かいしゃ</rt></ruby>は<ruby>制度<rt>せいど</rt></ruby>を<ruby>整<rt>ととの</rt></ruby>えるべきだ。",
+          "The company should put systems in place so that employees can work with peace of mind."
+        ],
+        "N2": [
+          "<ruby>社長<rt>しゃちょう</rt></ruby>である<ruby>以上<rt>いじょう</rt></ruby>、<ruby>社員<rt>しゃいん</rt></ruby>の<ruby>生活<rt>せいかつ</rt></ruby>に<ruby>責任<rt>せきにん</rt></ruby>を<ruby>持<rt>も</rt></ruby>たなければならない。",
+          "As the company president, one must take responsibility for the employees' livelihoods."
+        ],
+        "N1": [
+          "<ruby>一<rt>いち</rt></ruby><ruby>社員<rt>しゃいん</rt></ruby>の<ruby>不祥事<rt>ふしょうじ</rt></ruby>が、<ruby>会社<rt>かいしゃ</rt></ruby><ruby>全体<rt>ぜんたい</rt></ruby>の<ruby>信用<rt>しんよう</rt></ruby>を<ruby>揺<rt>ゆ</rt></ruby>るがしかねない。",
+          "The misconduct of a single employee could shake the credibility of the entire company."
+        ]
+      },
+      "mnem": "社 (company, from 会社) + 員 (member) = a company member — an employee, named together with the firm they belong to.",
+      "tip": "社員 differs from 会社員 by usage: 会社員 stands alone as a job description (\"I'm a company employee\"), while 社員 is paired with a specific company via の (ブラジルエアーの社員 = an employee of Brazil Air). Learn them as a set.",
+      "accent": 1
+    },
+    {
+      "key": "mnn:1:12",
+      "kana": "ぎんこういん",
+      "kanji": "銀行員",
+      "context": "",
+      "mean": "bank employee, bank clerk",
+      "cat": "noun",
+      "type": "",
+      "trans": "",
+      "dict": "銀行員",
+      "dictRead": "ぎんこういん",
+      "audio": "/Audio/minnamoi/bai1/00010011100011101.mp3",
+      "levels": {
+        "N5": [
+          "<ruby>山田<rt>やまだ</rt></ruby>さんは<ruby>銀行員<rt>ぎんこういん</rt></ruby>です。",
+          "Ms. Yamada is a bank employee."
+        ],
+        "N4": [
+          "<ruby>銀行員<rt>ぎんこういん</rt></ruby>はお<ruby>金<rt>かね</rt></ruby>を<ruby>扱<rt>あつか</rt></ruby>うので、とても<ruby>慎重<rt>しんちょう</rt></ruby>です。",
+          "Bank employees handle money, so they are very careful."
+        ],
+        "N3": [
+          "<ruby>銀行員<rt>ぎんこういん</rt></ruby>になるには、<ruby>数字<rt>すうじ</rt></ruby>に<ruby>強<rt>つよ</rt></ruby>くなければなりません。",
+          "To become a bank employee, you have to be good with numbers."
+        ],
+        "N2": [
+          "<ruby>銀行員<rt>ぎんこういん</rt></ruby>の<ruby>彼女<rt>かのじょ</rt></ruby>にしては、お<ruby>金<rt>かね</rt></ruby>の<ruby>管理<rt>かんり</rt></ruby>がずいぶんいい<ruby>加減<rt>かげん</rt></ruby>だ。",
+          "For someone who is a bank employee, she is surprisingly sloppy with money."
+        ],
+        "N1": [
+          "<ruby>一<rt>いち</rt></ruby><ruby>銀行員<rt>ぎんこういん</rt></ruby>の<ruby>判断<rt>はんだん</rt></ruby>で、これほどの<ruby>大口<rt>おおぐち</rt></ruby><ruby>融資<rt>ゆうし</rt></ruby>を<ruby>決<rt>き</rt></ruby>められるはずがない。",
+          "There is no way a loan this large could be decided at the discretion of a single bank employee."
+        ]
+      },
+      "mnem": "銀行 (ぎんこう, bank) + 員 (member) = a member of the bank staff — a bank employee.",
+      "tip": "Same 〜員 \"staff of ~\" pattern as 会社員 and 社員: 銀行 (bank) + 員. Don't confuse 銀行 (ぎんこう, bank) with 銀 alone (silver) — the 行 adds \"establishment/line of business.\"",
+      "accent": 3
+    },
+    {
+      "key": "mnn:1:13",
+      "kana": "いしゃ",
+      "kanji": "医者",
+      "context": "",
+      "mean": "(medical) doctor",
+      "cat": "noun",
+      "type": "",
+      "trans": "",
+      "dict": "医者",
+      "dictRead": "いしゃ",
+      "audio": "/Audio/minnamoi/bai1/00010011100011110.mp3",
+      "levels": {
+        "N5": [
+          "ワンさんは<ruby>医者<rt>いしゃ</rt></ruby>です。",
+          "Mr. Wang is a doctor."
+        ],
+        "N4": [
+          "<ruby>熱<rt>ねつ</rt></ruby>が<ruby>下<rt>さ</rt></ruby>がらないので、<ruby>医者<rt>いしゃ</rt></ruby>に<ruby>行<rt>い</rt></ruby>ったほうがいいです。",
+          "The fever won't go down, so you'd better go to the doctor."
+        ],
+        "N3": [
+          "<ruby>医者<rt>いしゃ</rt></ruby>に<ruby>言<rt>い</rt></ruby>われたとおり、<ruby>毎日<rt>まいにち</rt></ruby><ruby>薬<rt>くすり</rt></ruby>を<ruby>飲<rt>の</rt></ruby>んでいます。",
+          "Just as the doctor told me, I take my medicine every day."
+        ],
+        "N2": [
+          "<ruby>医者<rt>いしゃ</rt></ruby>である<ruby>以上<rt>いじょう</rt></ruby>、<ruby>患者<rt>かんじゃ</rt></ruby>の<ruby>命<rt>いのち</rt></ruby>を<ruby>第一<rt>だいいち</rt></ruby>に<ruby>考<rt>かんが</rt></ruby>えなければならない。",
+          "As a doctor, one must put the patient's life first."
+        ],
+        "N1": [
+          "<ruby>名医<rt>めいい</rt></ruby>と<ruby>謳<rt>うた</rt></ruby>われた<ruby>医者<rt>いしゃ</rt></ruby>でさえ、この<ruby>難病<rt>なんびょう</rt></ruby>の<ruby>前<rt>まえ</rt></ruby>には<ruby>為<rt>な</rt></ruby>す<ruby>術<rt>すべ</rt></ruby>がなかった。",
+          "Even the doctor hailed as a master was powerless before this intractable disease."
+        ]
+      },
+      "mnem": "医 (medicine/healing) + 者 (しゃ, person) = a \"medicine person\" — a doctor.",
+      "tip": "医者 is the everyday word for a doctor; the more formal/polite term is お医者さん (おいしゃさん). The 〜者 suffix (person who does ~) also appears in 研究者 (researcher). Don't confuse 医者 (doctor) with 患者 (かんじゃ, patient).",
+      "accent": 0
+    },
+    {
+      "key": "mnn:1:14",
+      "kana": "けんきゅうしゃ",
+      "kanji": "研究者",
+      "context": "",
+      "mean": "researcher, scholar",
+      "cat": "noun",
+      "type": "",
+      "trans": "",
+      "dict": "研究者",
+      "dictRead": "けんきゅうしゃ",
+      "audio": "/Audio/minnamoi/bai1/00010011100011111.mp3",
+      "levels": {
+        "N5": [
+          "イーさんは<ruby>研究者<rt>けんきゅうしゃ</rt></ruby>です。",
+          "Ms. Lee is a researcher."
+        ],
+        "N4": [
+          "この<ruby>大学<rt>だいがく</rt></ruby>には<ruby>有名<rt>ゆうめい</rt></ruby>な<ruby>研究者<rt>けんきゅうしゃ</rt></ruby>がたくさんいます。",
+          "This university has many famous researchers."
+        ],
+        "N3": [
+          "<ruby>研究者<rt>けんきゅうしゃ</rt></ruby>として<ruby>成功<rt>せいこう</rt></ruby>するには、<ruby>長<rt>なが</rt></ruby>い<ruby>年月<rt>としつき</rt></ruby>がかかります。",
+          "It takes many long years to succeed as a researcher."
+        ],
+        "N2": [
+          "<ruby>研究者<rt>けんきゅうしゃ</rt></ruby>である<ruby>彼<rt>かれ</rt></ruby>にとって、データの<ruby>改竄<rt>かいざん</rt></ruby>など<ruby>許<rt>ゆる</rt></ruby>されるはずがない。",
+          "For him, as a researcher, falsifying data could never be permitted."
+        ],
+        "N1": [
+          "<ruby>一<rt>いち</rt></ruby><ruby>研究者<rt>けんきゅうしゃ</rt></ruby>の<ruby>執念<rt>しゅうねん</rt></ruby>が、やがて<ruby>医学<rt>いがく</rt></ruby>の<ruby>常識<rt>じょうしき</rt></ruby>を<ruby>覆<rt>くつがえ</rt></ruby>すことになろうとは、<ruby>誰<rt>だれ</rt></ruby>も<ruby>予想<rt>よそう</rt></ruby>しなかった。",
+          "No one anticipated that one researcher's obsession would eventually overturn the accepted wisdom of medicine."
+        ]
+      },
+      "mnem": "研究 (けんきゅう, research) + 者 (しゃ, person) = a \"research person\" — a researcher.",
+      "tip": "The 〜者 (person who ~) suffix mirrors 医者: 研究者 = one who does 研究 (research). In Lesson 1 you often say where they research via の (AKCの研究者 = a researcher at AKC).",
+      "accent": 3
+    },
+    {
+      "key": "mnn:1:15",
+      "kana": "だいがく",
+      "kanji": "大学",
+      "context": "",
+      "mean": "university, college",
+      "cat": "noun",
+      "type": "",
+      "trans": "",
+      "dict": "大学",
+      "dictRead": "だいがく",
+      "audio": "/Audio/minnamoi/bai1/00010011100100000.mp3",
+      "levels": {
+        "N5": [
+          "カリナさんはふじ<ruby>大学<rt>だいがく</rt></ruby>の<ruby>学生<rt>がくせい</rt></ruby>です。",
+          "Ms. Karina is a student at Fuji University."
+        ],
+        "N4": [
+          "<ruby>来年<rt>らいねん</rt></ruby>、<ruby>東京<rt>とうきょう</rt></ruby>の<ruby>大学<rt>だいがく</rt></ruby>に<ruby>入<rt>はい</rt></ruby>りたいです。",
+          "Next year I want to enter a university in Tokyo."
+        ],
+        "N3": [
+          "<ruby>大学<rt>だいがく</rt></ruby>で<ruby>学<rt>まな</rt></ruby>んだことが、<ruby>今<rt>いま</rt></ruby>の<ruby>仕事<rt>しごと</rt></ruby>にとても<ruby>役立<rt>やくだ</rt></ruby>っています。",
+          "What I learned at university is very useful in my current job."
+        ],
+        "N2": [
+          "<ruby>大学<rt>だいがく</rt></ruby>を<ruby>卒業<rt>そつぎょう</rt></ruby>したからといって、すぐに<ruby>就職<rt>しゅうしょく</rt></ruby>できるとは<ruby>限<rt>かぎ</rt></ruby>らない。",
+          "Just because you graduate from university doesn't mean you'll immediately find a job."
+        ],
+        "N1": [
+          "<ruby>大学<rt>だいがく</rt></ruby>の<ruby>使命<rt>しめい</rt></ruby>は、<ruby>単<rt>たん</rt></ruby>に<ruby>知識<rt>ちしき</rt></ruby>を<ruby>授<rt>さず</rt></ruby>けることにとどまらず、<ruby>次代<rt>じだい</rt></ruby>を<ruby>担<rt>にな</rt></ruby>う<ruby>人材<rt>じんざい</rt></ruby>を<ruby>育<rt>そだ</rt></ruby>てることにある。",
+          "The mission of a university lies not merely in imparting knowledge, but in cultivating the talent that will shoulder the next era."
+        ]
+      },
+      "mnem": "大 (big) + 学 (learning) = the \"big school\" of learning — a university.",
+      "tip": "大学 (だいがく) is university; a high school is 高校 (こうこう) and a middle school 中学 (ちゅうがく). In Lesson 1 you name someone's affiliation with の: さくら大学の先生 (a teacher at Sakura University).",
+      "accent": 0
+    },
+    {
+      "key": "mnn:1:16",
+      "kana": "びょういん",
+      "kanji": "病院",
+      "context": "",
+      "mean": "hospital",
+      "cat": "noun",
+      "type": "",
+      "trans": "",
+      "dict": "病院",
+      "dictRead": "びょういん",
+      "audio": "/Audio/minnamoi/bai1/00010011100100001.mp3",
+      "levels": {
+        "N5": [
+          "ワンさんは<ruby>神戸<rt>こうべ</rt></ruby><ruby>病院<rt>びょういん</rt></ruby>の<ruby>医者<rt>いしゃ</rt></ruby>です。",
+          "Mr. Wang is a doctor at Kobe Hospital."
+        ],
+        "N4": [
+          "<ruby>気分<rt>きぶん</rt></ruby>が<ruby>悪<rt>わる</rt></ruby>いなら、<ruby>早<rt>はや</rt></ruby>く<ruby>病院<rt>びょういん</rt></ruby>へ<ruby>行<rt>い</rt></ruby>ったほうがいいですよ。",
+          "If you feel unwell, you'd better go to the hospital soon."
+        ],
+        "N3": [
+          "<ruby>祖母<rt>そぼ</rt></ruby>が<ruby>入院<rt>にゅういん</rt></ruby>したので、<ruby>毎日<rt>まいにち</rt></ruby><ruby>病院<rt>びょういん</rt></ruby>へお<ruby>見舞<rt>みま</rt></ruby>いに<ruby>行<rt>い</rt></ruby>っています。",
+          "My grandmother was hospitalized, so I go to the hospital every day to visit her."
+        ],
+        "N2": [
+          "この<ruby>辺<rt>あた</rt></ruby>りは<ruby>病院<rt>びょういん</rt></ruby>が<ruby>少<rt>すく</rt></ruby>ないだけに、<ruby>救急<rt>きゅうきゅう</rt></ruby>のときが<ruby>心配<rt>しんぱい</rt></ruby>だ。",
+          "Precisely because there are few hospitals around here, emergencies are a worry."
+        ],
+        "N1": [
+          "<ruby>地域<rt>ちいき</rt></ruby><ruby>医療<rt>いりょう</rt></ruby>を<ruby>支<rt>ささ</rt></ruby>えてきたこの<ruby>病院<rt>びょういん</rt></ruby>が<ruby>閉鎖<rt>へいさ</rt></ruby>されれば、<ruby>住民<rt>じゅうみん</rt></ruby>への<ruby>影響<rt>えいきょう</rt></ruby>は<ruby>計<rt>はか</rt></ruby>り<ruby>知<rt>し</rt></ruby>れない。",
+          "If this hospital, which has supported the region's healthcare, were closed, the impact on residents would be immeasurable."
+        ]
+      },
+      "mnem": "病 (びょう, illness/sick) + 院 (いん, institution) = an institution for illness — a hospital.",
+      "tip": "病院 (びょういん) is a hospital; a smaller clinic/doctor's office is 医院 (いいん) or クリニック — note 病院 and 医院 differ by one character and one mora, so listen carefully. The 〜院 suffix marks a large institution (also 大学院 = graduate school).",
+      "accent": 0
+    },
+    {
+      "key": "mnn:1:17",
+      "kana": "だれ",
+      "kanji": "",
+      "context": "",
+      "mean": "who (どなた is the polite form)",
+      "cat": "noun",
+      "type": "",
+      "trans": "",
+      "dict": "だれ",
+      "dictRead": "だれ",
+      "audio": "/Audio/minnamoi/bai1/00010011100100010.mp3",
+      "levels": {
+        "N5": [
+          "あの<ruby>人<rt>ひと</rt></ruby>はだれですか。",
+          "Who is that person?"
+        ],
+        "N4": [
+          "この<ruby>傘<rt>かさ</rt></ruby>はだれのですか。",
+          "Whose umbrella is this?"
+        ],
+        "N3": [
+          "だれが<ruby>来<rt>き</rt></ruby>ても、<ruby>今日<rt>きょう</rt></ruby>は<ruby>会<rt>あ</rt></ruby>いたくありません。",
+          "No matter who comes, I don't want to see anyone today."
+        ],
+        "N2": [
+          "だれ<ruby>一人<rt>ひとり</rt></ruby>として、<ruby>彼<rt>かれ</rt></ruby>の<ruby>意見<rt>いけん</rt></ruby>に<ruby>反対<rt>はんたい</rt></ruby>する<ruby>者<rt>もの</rt></ruby>はいなかった。",
+          "Not a single person opposed his opinion."
+        ],
+        "N1": [
+          "この<ruby>惨状<rt>さんじょう</rt></ruby>を<ruby>前<rt>まえ</rt></ruby>にして、だれが<ruby>平静<rt>へいせい</rt></ruby>でいられようか。",
+          "Faced with this catastrophe, who could possibly remain calm?"
+        ]
+      },
+      "mnem": "だれ — imagine a puzzled shrug, \"DAH-reh is that?\" when you don't recognize someone.",
+      "tip": "だれ (\"who\") has a polite equivalent どなた, used when asking respectfully about someone (あの方はどなたですか). Attach の for \"whose\" (誰の傘). Don't confuse だれ (who) with どれ (which one).",
+      "accent": 1
+    },
+    {
+      "key": "mnn:1:18",
+      "kana": "―さい",
+      "kanji": "－歳",
+      "context": "",
+      "mean": "~ years old (counter suffix for age)",
+      "cat": "phrase",
+      "type": "",
+      "trans": "",
+      "dict": "－歳",
+      "dictRead": "－さい",
+      "audio": "/Audio/minnamoi/bai1/00010011100100011.mp3",
+      "levels": {
+        "N5": [
+          "<ruby>私<rt>わたし</rt></ruby>は<ruby>二十歳<rt>はたち</rt></ruby>です。",
+          "I am twenty years old."
+        ],
+        "N4": [
+          "<ruby>弟<rt>おとうと</rt></ruby>は<ruby>今年<rt>ことし</rt></ruby><ruby>十八<rt>じゅうはっ</rt></ruby><ruby>歳<rt>さい</rt></ruby>になりました。",
+          "My younger brother turned eighteen this year."
+        ],
+        "N3": [
+          "<ruby>五<rt>ご</rt></ruby><ruby>歳<rt>さい</rt></ruby>のころから、ずっとピアノを<ruby>習<rt>なら</rt></ruby>っています。",
+          "I've been learning the piano ever since I was five years old."
+        ],
+        "N2": [
+          "<ruby>六十<rt>ろくじゅっ</rt></ruby><ruby>歳<rt>さい</rt></ruby>を<ruby>過<rt>す</rt></ruby>ぎてから、<ruby>彼<rt>かれ</rt></ruby>は<ruby>絵<rt>え</rt></ruby>を<ruby>描<rt>か</rt></ruby>き<ruby>始<rt>はじ</rt></ruby>めたそうだ。",
+          "I hear that he took up painting only after he had passed sixty years of age."
+        ],
+        "N1": [
+          "<ruby>百<rt>ひゃく</rt></ruby><ruby>歳<rt>さい</rt></ruby>を<ruby>迎<rt>むか</rt></ruby>えてなお<ruby>矍鑠<rt>かくしゃく</rt></ruby>としているその<ruby>姿<rt>すがた</rt></ruby>には、<ruby>頭<rt>あたま</rt></ruby>が<ruby>下<rt>さ</rt></ruby>がる<ruby>思<rt>おも</rt></ruby>いだ。",
+          "I can only feel humbled at the sight of them, still hale and hearty even upon reaching a hundred years of age."
+        ]
+      },
+      "mnem": "歳 (さい) is the age counter — tack it onto a number to say someone's years: 十歳 = 10 years old.",
+      "tip": "20 years old is irregular: 二十歳 read はたち, not にじゅっさい. Some numbers trigger sound changes: 一歳→いっさい, 八歳→はっさい, 十歳→じゅっさい. The kanji 歳 is often simplified to 才 in casual writing.",
+      "accent": 1
+    },
+    {
+      "key": "mnn:1:19",
+      "kana": "なんさい",
+      "kanji": "何歳",
+      "context": "",
+      "mean": "how old (おいくつ is the polite form)",
+      "cat": "phrase",
+      "type": "",
+      "trans": "",
+      "dict": "何歳",
+      "dictRead": "なんさい",
+      "audio": "/Audio/minnamoi/bai1/00010011100100100.mp3",
+      "levels": {
+        "N5": [
+          "あなたは<ruby>何歳<rt>なんさい</rt></ruby>ですか。",
+          "How old are you?"
+        ],
+        "N4": [
+          "お<ruby>子<rt>こ</rt></ruby>さんは<ruby>今<rt>いま</rt></ruby><ruby>何歳<rt>なんさい</rt></ruby>ですか。",
+          "How old is your child now?"
+        ],
+        "N3": [
+          "<ruby>失礼<rt>しつれい</rt></ruby>ですが、<ruby>何歳<rt>なんさい</rt></ruby>のときに<ruby>日本<rt>にほん</rt></ruby>へ<ruby>来<rt>こ</rt></ruby>られたのですか。",
+          "Excuse me, but at what age did you come to Japan?"
+        ],
+        "N2": [
+          "<ruby>何歳<rt>なんさい</rt></ruby>になろうと、<ruby>学<rt>まな</rt></ruby>ぶ<ruby>気持<rt>きも</rt></ruby>ちさえあれば<ruby>遅<rt>おそ</rt></ruby>すぎることはない。",
+          "No matter how old you get, as long as you have the will to learn, it is never too late."
+        ],
+        "N1": [
+          "<ruby>相手<rt>あいて</rt></ruby>が<ruby>何歳<rt>なんさい</rt></ruby>であろうと、<ruby>年齢<rt>ねんれい</rt></ruby>を<ruby>直接<rt>ちょくせつ</rt></ruby><ruby>尋<rt>たず</rt></ruby>ねるのは<ruby>失礼<rt>しつれい</rt></ruby>にあたりかねない。",
+          "Regardless of the other person's age, asking their age directly can come across as rude."
+        ]
+      },
+      "mnem": "何 (なん, what/how many) + 歳 (さい, years-old counter) = \"how many years old\" = how old.",
+      "tip": "何歳 is the plain way to ask age; the polite form is おいくつ, softer and more appropriate for adults or strangers. Asking a stranger's or a woman's age directly can be impolite in Japan, so おいくつ smooths it over.",
+      "accent": 1
+    },
+    {
+      "key": "mnn:1:20",
+      "kana": "はい",
+      "kanji": "",
+      "context": "",
+      "mean": "yes",
+      "cat": "expression",
+      "type": "",
+      "trans": "",
+      "dict": "はい",
+      "dictRead": "はい",
+      "audio": "/Audio/minnamoi/bai1/00010011100100101.mp3",
+      "levels": {
+        "N5": [
+          "はい、<ruby>学生<rt>がくせい</rt></ruby>です。",
+          "Yes, I'm a student."
+        ],
+        "N4": [
+          "はい、<ruby>私<rt>わたし</rt></ruby>がミラーです。どうぞよろしく。",
+          "Yes, I'm Miller. Pleased to meet you."
+        ],
+        "N3": [
+          "はい、おっしゃるとおり、その<ruby>件<rt>けん</rt></ruby>はすでに<ruby>済<rt>す</rt></ruby>ませてあります。",
+          "Yes, just as you say, that matter has already been taken care of."
+        ],
+        "N2": [
+          "はいと<ruby>答<rt>こた</rt></ruby>えたものの、<ruby>本当<rt>ほんとう</rt></ruby>に<ruby>納得<rt>なっとく</rt></ruby>していたわけではない。",
+          "Although I answered yes, it's not as though I was truly convinced."
+        ],
+        "N1": [
+          "はいの<ruby>一言<rt>ひとこと</rt></ruby>が、これほど<ruby>重<rt>おも</rt></ruby>い<ruby>責任<rt>せきにん</rt></ruby>を<ruby>伴<rt>ともな</rt></ruby>うとは、<ruby>思<rt>おも</rt></ruby>いもよらなかった。",
+          "I never imagined that a single \"yes\" could carry such a heavy responsibility."
+        ]
+      },
+      "mnem": "はい — a crisp \"HIGH\" of agreement; picture nodding sharply and saying \"hai\" to mean yes.",
+      "tip": "はい also serves as \"here!\" (present) at roll call and \"here you go\" when handing something over — it signals attentive acknowledgment, not only \"yes.\" The casual/informal version is うん. Its opposite is いいえ (no).",
+      "accent": 1
+    },
+    {
+      "key": "mnn:1:21",
+      "kana": "いいえ",
+      "kanji": "",
+      "context": "",
+      "mean": "no",
+      "cat": "expression",
+      "type": "",
+      "trans": "",
+      "dict": "いいえ",
+      "dictRead": "いいえ",
+      "audio": "/Audio/minnamoi/bai1/00010011100100110.mp3",
+      "levels": {
+        "N5": [
+          "いいえ、<ruby>学生<rt>がくせい</rt></ruby>じゃありません。",
+          "No, I'm not a student."
+        ],
+        "N4": [
+          "いいえ、それは<ruby>私<rt>わたし</rt></ruby>の<ruby>傘<rt>かさ</rt></ruby>ではありません。",
+          "No, that is not my umbrella."
+        ],
+        "N3": [
+          "いいえ、<ruby>結構<rt>けっこう</rt></ruby>です。もう<ruby>十分<rt>じゅうぶん</rt></ruby>いただきました。",
+          "No, thank you. I've already had plenty."
+        ],
+        "N2": [
+          "いいえと<ruby>言<rt>い</rt></ruby>いたかったものの、<ruby>断<rt>ことわ</rt></ruby>る<ruby>勇気<rt>ゆうき</rt></ruby>が<ruby>出<rt>で</rt></ruby>なかった。",
+          "I wanted to say no, but I couldn't muster the courage to refuse."
+        ],
+        "N1": [
+          "<ruby>相手<rt>あいて</rt></ruby>の<ruby>好意<rt>こうい</rt></ruby>を<ruby>無下<rt>むげ</rt></ruby>にしかねないだけに、いいえの<ruby>一言<rt>ひとこと</rt></ruby>はなかなか<ruby>言<rt>い</rt></ruby>い<ruby>出<rt>だ</rt></ruby>せなかった。",
+          "Precisely because it risked spurning the other person's kindness, that one word \"no\" was very hard to bring myself to say."
+        ]
+      },
+      "mnem": "いいえ — a gentle, drawn-out \"ee-EH\" wave of the hand meaning no.",
+      "tip": "いいえ is the polite \"no\"; the casual version is ううん. It also works as a modest \"not at all / you're welcome\" in response to thanks or praise (いいえ、とんでもないです). Its opposite is はい (yes).",
+      "accent": 3
+    }
+  ],
+  "grammar": [
+    {
+      "pattern": "N1は N2です",
+      "structure": "N1（topic）＋ は ＋ N2 ＋ です",
+      "explain": "The basic \"A is B\" sentence. は (written は, pronounced wa) marks the TOPIC — what the sentence is about — and です is the polite copula, roughly \"is/am/are.\" 「わたしは ミラーです」 = \"I am Miller.\" 「ミラーさんは かいしゃいんです」 = \"Mr. Miller is a company employee.\" です attaches to a noun; it carries the politeness and (loosely) the tense.",
+      "examples": [
+        {
+          "jp": "わたしは ミラーです。",
+          "en": "I am Miller."
+        },
+        {
+          "jp": "ミラーさんは <ruby>会社員<rt>かいしゃいん</rt></ruby>です。",
+          "en": "Mr. Miller is a company employee."
+        },
+        {
+          "jp": "サントスさんは ブラジル<ruby>人<rt>じん</rt></ruby>です。",
+          "en": "Mr. Santos is Brazilian."
+        }
+      ]
+    },
+    {
+      "pattern": "N1は N2じゃありません",
+      "structure": "N1 ＋ は ＋ N2 ＋ じゃ ありません（＝では ありません）",
+      "explain": "The negative of です. To say \"A is NOT B,\" replace です with じゃありません (casual-polite) or the more formal ではありません. 「わたしは がくせいじゃありません」 = \"I am not a student.\" じゃ is a contraction of では; both are correct, じゃありません is the everyday spoken form.",
+      "examples": [
+        {
+          "jp": "わたしは <ruby>学生<rt>がくせい</rt></ruby>じゃ ありません。",
+          "en": "I am not a student."
+        },
+        {
+          "jp": "ミラーさんは <ruby>医者<rt>いしゃ</rt></ruby>じゃ ありません。",
+          "en": "Mr. Miller is not a doctor."
+        },
+        {
+          "jp": "サントスさんは ドイツ<ruby>人<rt>じん</rt></ruby>では ありません。",
+          "en": "Mr. Santos is not German."
+        }
+      ]
+    },
+    {
+      "pattern": "N1は N2ですか (question with か)",
+      "structure": "… です ＋ か 。（rising particle か at the end）",
+      "explain": "Turn any statement into a yes/no question by adding か to the end — no word-order change, no question mark needed (though we write 。). 「ミラーさんは アメリカ人ですか」 = \"Is Mr. Miller American?\" Answer with はい (yes) or いいえ (no). Question WORDS like だれ / どなた / なんさい slot into the N2 position: 「あの かたは どなたですか」 = \"Who is that person?\"",
+      "examples": [
+        {
+          "jp": "ミラーさんは アメリカ<ruby>人<rt>じん</rt></ruby>ですか。",
+          "en": "Is Mr. Miller American?"
+        },
+        {
+          "jp": "……はい、アメリカ<ruby>人<rt>じん</rt></ruby>です。",
+          "en": "……Yes, he is American."
+        },
+        {
+          "jp": "あの <ruby>方<rt>かた</rt></ruby>は どなたですか。",
+          "en": "Who is that person?"
+        }
+      ]
+    },
+    {
+      "pattern": "N1の N2 (linking の) / N1も (も = too)",
+      "structure": "N1 ＋ の ＋ N2 ｜ N1 ＋ も（in place of は）",
+      "explain": "の links two nouns: it shows belonging/affiliation or apposition — 「ふじ大学の 学生」 = \"a student OF Fuji University,\" 「IMCの 社員」 = \"an employee of IMC.\" Separately, も replaces は to mean \"also/too,\" when the new topic shares the same predicate: 「ミラーさんは 会社員です。グプタさんも 会社員です」 = \"Mr. Miller is a company employee. Mr. Gupta is a company employee too.\"",
+      "examples": [
+        {
+          "jp": "サントスさんは ブラジルエアーの <ruby>社員<rt>しゃいん</rt></ruby>です。",
+          "en": "Mr. Santos is an employee of Brazil Air."
+        },
+        {
+          "jp": "カリナさんは ふじ<ruby>大学<rt>だいがく</rt></ruby>の <ruby>学生<rt>がくせい</rt></ruby>です。",
+          "en": "Ms. Karina is a student at Fuji University."
+        },
+        {
+          "jp": "グプタさんも <ruby>会社員<rt>かいしゃいん</rt></ruby>です。",
+          "en": "Mr. Gupta is a company employee too."
+        }
+      ]
+    }
+  ],
+  "examples": [
+    {
+      "jp": "わたしは マイク・ミラーです。",
+      "en": "I am Mike Miller."
+    },
+    {
+      "jp": "ミラーさんは <ruby>会社員<rt>かいしゃいん</rt></ruby>ですか。……はい、<ruby>会社員<rt>かいしゃいん</rt></ruby>です。",
+      "en": "Is Mr. Miller a company employee? ……Yes, he is a company employee."
+    },
+    {
+      "jp": "サントスさんは <ruby>学生<rt>がくせい</rt></ruby>じゃ ありません。",
+      "en": "Mr. Santos is not a student."
+    },
+    {
+      "jp": "あの <ruby>方<rt>かた</rt></ruby>は どなたですか。……ワットさんです。さくら<ruby>大学<rt>だいがく</rt></ruby>の <ruby>先生<rt>せんせい</rt></ruby>です。",
+      "en": "Who is that person? ……That's Mr. Watt. He is a teacher at Sakura University."
+    },
+    {
+      "jp": "ワンさんは <ruby>銀行員<rt>ぎんこういん</rt></ruby>ですか。……いいえ、<ruby>銀行員<rt>ぎんこういん</rt></ruby>じゃ ありません。<ruby>医者<rt>いしゃ</rt></ruby>です。",
+      "en": "Is Mr. Wang a bank employee? ……No, he isn't a bank employee. He's a doctor."
+    },
+    {
+      "jp": "グプタさんは <ruby>会社員<rt>かいしゃいん</rt></ruby>です。ミラーさんも <ruby>会社員<rt>かいしゃいん</rt></ruby>です。",
+      "en": "Mr. Gupta is a company employee. Mr. Miller is a company employee too."
+    },
+    {
+      "jp": "シュミットさんは ドイツ<ruby>人<rt>じん</rt></ruby>です。サントスさんも ドイツ<ruby>人<rt>じん</rt></ruby>ですか。……いいえ、サントスさんは ドイツ<ruby>人<rt>じん</rt></ruby>じゃ ありません。",
+      "en": "Mr. Schmidt is German. Is Mr. Santos also German? ……No, Mr. Santos is not German."
+    },
+    {
+      "jp": "テレーザちゃんは <ruby>何歳<rt>なんさい</rt></ruby>ですか。……<ruby>九歳<rt>きゅうさい</rt></ruby>です。",
+      "en": "How old is Teresa? ……She's nine years old."
+    }
+  ],
+  "conversation": {
+    "title": "初めまして (How do you do — first meeting)",
+    "audio": "/Audio/minnahonsatsu1/1.mp3",
+    "lines": [
+      {
+        "role": "山田一郎",
+        "jp": "おはよう ございます。",
+        "en": "Good morning."
+      },
+      {
+        "role": "佐藤けい子",
+        "jp": "おはよう ございます。",
+        "en": "Good morning."
+      },
+      {
+        "role": "山田一郎",
+        "jp": "<ruby>佐藤<rt>さとう</rt></ruby>さん、こちらは マイク・ミラーさんです。",
+        "en": "Ms. Sato, this is Mr. Mike Miller."
+      },
+      {
+        "role": "ミラー",
+        "jp": "<ruby>初<rt>はじ</rt></ruby>めまして。マイク・ミラーです。アメリカから <ruby>来<rt>き</rt></ruby>ました。どうぞ よろしく。",
+        "en": "How do you do. I'm Mike Miller. I've come from America. Pleased to meet you."
+      },
+      {
+        "role": "佐藤けい子",
+        "jp": "<ruby>佐藤<rt>さとう</rt></ruby>けい<ruby>子<rt>こ</rt></ruby>です。どうぞ よろしく。",
+        "en": "I'm Keiko Sato. Pleased to meet you."
+      }
+    ]
+  }
+}

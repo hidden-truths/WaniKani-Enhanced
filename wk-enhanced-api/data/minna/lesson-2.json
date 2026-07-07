@@ -1,0 +1,1614 @@
+{
+  "lesson": 2,
+  "title": "Lesson 2",
+  "theme": "Demonstratives これ／それ／あれ (pronouns) and この／その／あの＋N (adjectives), the possessive & apposition の (これはコンピューターの本です), そうです／そうですか confirmation, and the question word なん／なに — plus everyday-object vocabulary (本・辞書・傘・かばん・テレビ・時計…)",
+  "source": {
+    "name": "vnjpclub.com",
+    "vocabUrl": "https://www.vnjpclub.com/en/minna-no-nihongo/lesson-2-vocabulary.html",
+    "grammarUrl": "https://www.vnjpclub.com/en/minna-no-nihongo/lesson-2-grammar.html",
+    "note": "Vocabulary, native-speaker audio, and example sentences aggregated from vnjpclub.com (Minna no Nihongo 第2版). For personal study."
+  },
+  "vocab": [
+    {
+      "key": "mnn:2:0",
+      "kana": "これ",
+      "kanji": "",
+      "context": "",
+      "mean": "this (thing near the speaker)",
+      "cat": "noun",
+      "type": "",
+      "trans": "",
+      "dict": "これ",
+      "dictRead": "これ",
+      "audio": "/Audio/minnamoi/bai2/00010011100111011.mp3",
+      "levels": {
+        "N5": [
+          "これは<ruby>本<rt>ほん</rt></ruby>です。",
+          "This is a book."
+        ],
+        "N4": [
+          "これは<ruby>母<rt>はは</rt></ruby>にもらったコートです。",
+          "This is the coat I got from my mother."
+        ],
+        "N3": [
+          "これは<ruby>私<rt>わたし</rt></ruby>が<ruby>京都<rt>きょうと</rt></ruby>で<ruby>撮<rt>と</rt></ruby>った<ruby>写真<rt>しゃしん</rt></ruby>です。",
+          "This is a photo I took in Kyoto."
+        ],
+        "N2": [
+          "これこそ<ruby>長年<rt>ながねん</rt></ruby><ruby>探<rt>さが</rt></ruby>していた<ruby>資料<rt>しりょう</rt></ruby>にほかならない。",
+          "This is precisely the very document I had been searching for all these years."
+        ],
+        "N1": [
+          "これは<ruby>単<rt>たん</rt></ruby>なる<ruby>偶然<rt>ぐうぜん</rt></ruby>ではなく、<ruby>周到<rt>しゅうとう</rt></ruby>に<ruby>仕組<rt>しく</rt></ruby>まれた<ruby>計画<rt>けいかく</rt></ruby>の<ruby>結果<rt>けっか</rt></ruby>だとしか<ruby>考<rt>かんが</rt></ruby>えられない。",
+          "This can only be seen not as mere coincidence but as the result of a meticulously arranged plan."
+        ]
+      },
+      "mnem": "\"これ\" = ko-re: the KO-series always points to what's right HERE by you (ここ = here) — これ is the thing here.",
+      "tip": "これ is a stand-alone pronoun (これは…), never placed before a noun — for \"this book\" you must use この本 (この＋N), not これ本.",
+      "accent": 0
+    },
+    {
+      "key": "mnn:2:1",
+      "kana": "それ",
+      "kanji": "",
+      "context": "",
+      "mean": "that (thing near the listener)",
+      "cat": "noun",
+      "type": "",
+      "trans": "",
+      "dict": "それ",
+      "dictRead": "それ",
+      "audio": "/Audio/minnamoi/bai2/00010011100111100.mp3",
+      "levels": {
+        "N5": [
+          "それは<ruby>辞書<rt>じしょ</rt></ruby>です。",
+          "That is a dictionary."
+        ],
+        "N4": [
+          "それは<ruby>誰<rt>だれ</rt></ruby>の<ruby>傘<rt>かさ</rt></ruby>ですか。",
+          "Whose umbrella is that?"
+        ],
+        "N3": [
+          "それは<ruby>私<rt>わたし</rt></ruby>が<ruby>昨日<rt>きのう</rt></ruby><ruby>買<rt>か</rt></ruby>った<ruby>雑誌<rt>ざっし</rt></ruby>です。",
+          "That is the magazine I bought yesterday."
+        ],
+        "N2": [
+          "それが<ruby>事実<rt>じじつ</rt></ruby>である<ruby>以上<rt>いじょう</rt></ruby>、<ruby>認<rt>みと</rt></ruby>めざるを<ruby>得<rt>え</rt></ruby>ない。",
+          "Given that that is the truth, I have no choice but to accept it."
+        ],
+        "N1": [
+          "それは<ruby>彼<rt>かれ</rt></ruby>なりの<ruby>優<rt>やさ</rt></ruby>しさだったのだと、<ruby>今<rt>いま</rt></ruby>になってようやく<ruby>気<rt>き</rt></ruby>づかされた。",
+          "It was, in his own way, an act of kindness — something I have only now finally come to realize."
+        ]
+      },
+      "mnem": "\"それ\" = so-re: the SO-series points to what's by the listener (そこ = there by you) — それ is that thing near you.",
+      "tip": "Which of これ／それ／あれ you use depends on distance: これ near me, それ near you, あれ far from us both. それ is a pronoun; \"that book near you\" is その本.",
+      "accent": 0
+    },
+    {
+      "key": "mnn:2:2",
+      "kana": "あれ",
+      "kanji": "",
+      "context": "",
+      "mean": "that (thing over there, away from both)",
+      "cat": "noun",
+      "type": "",
+      "trans": "",
+      "dict": "あれ",
+      "dictRead": "あれ",
+      "audio": "/Audio/minnamoi/bai2/00010011100111101.mp3",
+      "levels": {
+        "N5": [
+          "あれは<ruby>車<rt>くるま</rt></ruby>です。",
+          "That over there is a car."
+        ],
+        "N4": [
+          "あれは<ruby>田中<rt>たなか</rt></ruby>さんの<ruby>傘<rt>かさ</rt></ruby>です。",
+          "That over there is Mr. Tanaka's umbrella."
+        ],
+        "N3": [
+          "あれは<ruby>子供<rt>こども</rt></ruby>のころによく<ruby>遊<rt>あそ</rt></ruby>んだ<ruby>公園<rt>こうえん</rt></ruby>です。",
+          "That over there is the park I often played in as a child."
+        ],
+        "N2": [
+          "あれほど<ruby>努力<rt>どりょく</rt></ruby>したのだから、<ruby>結果<rt>けっか</rt></ruby>が<ruby>出<rt>で</rt></ruby>ないわけがない。",
+          "Since he worked that hard, there's no way results won't follow."
+        ],
+        "N1": [
+          "あれは<ruby>忘<rt>わす</rt></ruby>れもしない、<ruby>戦後<rt>せんご</rt></ruby>の<ruby>混乱<rt>こんらん</rt></ruby>のさなかに<ruby>祖父<rt>そふ</rt></ruby>が<ruby>築<rt>きず</rt></ruby>き<ruby>上<rt>あ</rt></ruby>げた<ruby>店<rt>みせ</rt></ruby>である。",
+          "That — I shall never forget it — is the shop my grandfather built up amid the chaos of the postwar years."
+        ]
+      },
+      "mnem": "\"あれ\" = a-re: the A-series points far off (あそこ = over there) — あれ is that thing away from us both.",
+      "tip": "あれ (far from both speaker and listener) contrasts with それ (near the listener); as an adjective it becomes あの (あの車 = that car over there). あれ! also works as an interjection of surprise.",
+      "accent": 0
+    },
+    {
+      "key": "mnn:2:3",
+      "kana": "この～",
+      "kanji": "",
+      "context": "〜ほん",
+      "mean": "this ~ (this + noun near the speaker)",
+      "cat": "adjective",
+      "type": "",
+      "trans": "",
+      "dict": "この",
+      "dictRead": "この",
+      "audio": "/Audio/minnamoi/bai2/00010011100111110.mp3",
+      "levels": {
+        "N5": [
+          "この<ruby>本<rt>ほん</rt></ruby>は<ruby>私<rt>わたし</rt></ruby>のです。",
+          "This book is mine."
+        ],
+        "N4": [
+          "この<ruby>傘<rt>かさ</rt></ruby>はあなたのですか。",
+          "Is this umbrella yours?"
+        ],
+        "N3": [
+          "この<ruby>辞書<rt>じしょ</rt></ruby>は<ruby>兄<rt>あに</rt></ruby>が<ruby>使<rt>つか</rt></ruby>っていたものです。",
+          "This dictionary is the one my older brother used to use."
+        ],
+        "N2": [
+          "この<ruby>問題<rt>もんだい</rt></ruby>は、<ruby>専門家<rt>せんもんか</rt></ruby>でさえ<ruby>解決<rt>かいけつ</rt></ruby>しかねるほど<ruby>複雑<rt>ふくざつ</rt></ruby>だ。",
+          "This problem is so complex that even experts find it hard to solve."
+        ],
+        "N1": [
+          "この<ruby>条件<rt>じょうけん</rt></ruby>をのむか<ruby>否<rt>いな</rt></ruby>かで、<ruby>今後<rt>こんご</rt></ruby>の<ruby>展開<rt>てんかい</rt></ruby>は<ruby>大<rt>おお</rt></ruby>きく<ruby>変<rt>か</rt></ruby>わってこよう。",
+          "Whether or not we accept this condition will greatly change how things unfold from here on."
+        ]
+      },
+      "mnem": "この is これ with the の of \"of\" — it hooks onto a noun: この本 = \"the book of here\" = this book.",
+      "tip": "この always attaches to a following noun (この本), whereas これ stands alone (これは本です). Never say これ本 or この single — pick by whether a noun follows.",
+      "accent": 0
+    },
+    {
+      "key": "mnn:2:4",
+      "kana": "その～",
+      "kanji": "",
+      "context": "〜ほん",
+      "mean": "that ~ (that + noun near the listener)",
+      "cat": "adjective",
+      "type": "",
+      "trans": "",
+      "dict": "その",
+      "dictRead": "その",
+      "audio": "/Audio/minnamoi/bai2/00010011100111111.mp3",
+      "levels": {
+        "N5": [
+          "その<ruby>傘<rt>かさ</rt></ruby>は<ruby>誰<rt>だれ</rt></ruby>のですか。",
+          "Whose is that umbrella (by you)?"
+        ],
+        "N4": [
+          "その<ruby>雑誌<rt>ざっし</rt></ruby>を<ruby>見<rt>み</rt></ruby>せてください。",
+          "Please show me that magazine."
+        ],
+        "N3": [
+          "その<ruby>話<rt>はなし</rt></ruby>は<ruby>前<rt>まえ</rt></ruby>に<ruby>一度<rt>いちど</rt></ruby><ruby>聞<rt>き</rt></ruby>いたことがあります。",
+          "I have heard that story once before."
+        ],
+        "N2": [
+          "その<ruby>判断<rt>はんだん</rt></ruby>が<ruby>正<rt>ただ</rt></ruby>しかったかどうかは、<ruby>時間<rt>じかん</rt></ruby>がたたなければ<ruby>分<rt>わ</rt></ruby>からない。",
+          "Whether that decision was right or not won't be known until time has passed."
+        ],
+        "N1": [
+          "その<ruby>一言<rt>ひとこと</rt></ruby>が、<ruby>張<rt>は</rt></ruby>りつめていた<ruby>場<rt>ば</rt></ruby>の<ruby>空気<rt>くうき</rt></ruby>を<ruby>一瞬<rt>いっしゅん</rt></ruby>にして<ruby>和<rt>やわ</rt></ruby>らげた。",
+          "That single remark instantly softened the tense atmosphere of the room."
+        ]
+      },
+      "mnem": "その is それ hooked onto a noun with の: その本 = that book of yours-there.",
+      "tip": "その attaches to a noun (その本); それ stands alone. その is also common in speech for \"that (thing just mentioned)\" — referring back to something in the conversation, not just physical space.",
+      "accent": 0
+    },
+    {
+      "key": "mnn:2:5",
+      "kana": "あの～",
+      "kanji": "",
+      "context": "〜ひと",
+      "mean": "that ~ (that + noun over there)",
+      "cat": "adjective",
+      "type": "",
+      "trans": "",
+      "dict": "あの",
+      "dictRead": "あの",
+      "audio": "/Audio/minnamoi/bai2/00010011101000000.mp3",
+      "levels": {
+        "N5": [
+          "あの<ruby>人<rt>ひと</rt></ruby>は<ruby>山田<rt>やまだ</rt></ruby>さんです。",
+          "That person over there is Mr. Yamada."
+        ],
+        "N4": [
+          "あの<ruby>建物<rt>たてもの</rt></ruby>は<ruby>何<rt>なん</rt></ruby>ですか。",
+          "What is that building over there?"
+        ],
+        "N3": [
+          "あの<ruby>赤<rt>あか</rt></ruby>い<ruby>帽子<rt>ぼうし</rt></ruby>をかぶっている<ruby>人<rt>ひと</rt></ruby>が<ruby>先生<rt>せんせい</rt></ruby>です。",
+          "The person wearing that red hat over there is the teacher."
+        ],
+        "N2": [
+          "あの<ruby>頃<rt>ころ</rt></ruby>の<ruby>苦労<rt>くろう</rt></ruby>があったからこそ、<ruby>今<rt>いま</rt></ruby>の<ruby>自分<rt>じぶん</rt></ruby>があるのだと<ruby>思<rt>おも</rt></ruby>う。",
+          "It's precisely because of the hardships of those days that I am who I am now."
+        ],
+        "N1": [
+          "あの<ruby>寡黙<rt>かもく</rt></ruby>な<ruby>職人<rt>しょくにん</rt></ruby>が、まさかこれほどの<ruby>名品<rt>めいひん</rt></ruby>を<ruby>生<rt>う</rt></ruby>み<ruby>出<rt>だ</rt></ruby>すとは<ruby>誰<rt>だれ</rt></ruby>も<ruby>思<rt>おも</rt></ruby>わなかった。",
+          "No one imagined that that taciturn craftsman would produce a masterpiece of this caliber."
+        ]
+      },
+      "mnem": "あの is あれ hooked onto a noun: あの人 = that person over there. (Also the filler あのう… = \"um…\".)",
+      "tip": "あの attaches to a noun (あの人 = that person over there); the pronoun form is あれ. Watch the length: filler あのう (\"er, um…\") has a long vowel, but the demonstrative あの does not.",
+      "accent": 0
+    },
+    {
+      "key": "mnn:2:6",
+      "kana": "ほん",
+      "kanji": "本",
+      "context": "",
+      "mean": "book",
+      "cat": "noun",
+      "type": "",
+      "trans": "",
+      "dict": "本",
+      "dictRead": "ほん",
+      "audio": "/Audio/minnamoi/bai2/00010011101000001.mp3",
+      "levels": {
+        "N5": [
+          "これは<ruby>日本語<rt>にほんご</rt></ruby>の<ruby>本<rt>ほん</rt></ruby>です。",
+          "This is a Japanese-language book."
+        ],
+        "N4": [
+          "<ruby>図書館<rt>としょかん</rt></ruby>で<ruby>本<rt>ほん</rt></ruby>を<ruby>借<rt>か</rt></ruby>りました。",
+          "I borrowed a book at the library."
+        ],
+        "N3": [
+          "<ruby>昨日<rt>きのう</rt></ruby><ruby>買<rt>か</rt></ruby>った<ruby>本<rt>ほん</rt></ruby>は、とても<ruby>面白<rt>おもしろ</rt></ruby>そうです。",
+          "The book I bought yesterday looks very interesting."
+        ],
+        "N2": [
+          "この<ruby>本<rt>ほん</rt></ruby>は<ruby>難<rt>むずか</rt></ruby>しいものの、<ruby>読<rt>よ</rt></ruby>む<ruby>価値<rt>かち</rt></ruby>は<ruby>十分<rt>じゅうぶん</rt></ruby>にある。",
+          "Although this book is difficult, it is well worth reading."
+        ],
+        "N1": [
+          "<ruby>一冊<rt>いっさつ</rt></ruby>の<ruby>本<rt>ほん</rt></ruby>との<ruby>出会<rt>であ</rt></ruby>いが、<ruby>彼<rt>かれ</rt></ruby>の<ruby>人生<rt>じんせい</rt></ruby>を<ruby>根底<rt>こんてい</rt></ruby>から<ruby>変<rt>か</rt></ruby>えることになろうとは、<ruby>誰<rt>だれ</rt></ruby>が<ruby>予想<rt>よそう</rt></ruby>しえただろうか。",
+          "Who could have foreseen that an encounter with a single book would end up changing the very foundations of his life?"
+        ]
+      },
+      "mnem": "本 (ほん) also means \"origin/main\"; picture the ONE main \"HONe\" source of knowledge — a book. Counted with 冊 (さつ).",
+      "tip": "本 is counted with the counter 〜冊 (いっさつ, にさつ…), not 〜つ. In compounds 本 means \"main/origin\" (日本 = origin of the sun = Japan), and as a counter it reads ほん/ぼん/ぽん for long thin objects.",
+      "accent": 1
+    },
+    {
+      "key": "mnn:2:7",
+      "kana": "じしょ",
+      "kanji": "辞書",
+      "context": "",
+      "mean": "dictionary",
+      "cat": "noun",
+      "type": "",
+      "trans": "",
+      "dict": "辞書",
+      "dictRead": "じしょ",
+      "audio": "/Audio/minnamoi/bai2/00010011101000010.mp3",
+      "levels": {
+        "N5": [
+          "それは<ruby>私<rt>わたし</rt></ruby>の<ruby>辞書<rt>じしょ</rt></ruby>です。",
+          "That is my dictionary."
+        ],
+        "N4": [
+          "<ruby>分<rt>わ</rt></ruby>からない<ruby>言葉<rt>ことば</rt></ruby>を<ruby>辞書<rt>じしょ</rt></ruby>で<ruby>調<rt>しら</rt></ruby>べます。",
+          "I look up words I don't know in the dictionary."
+        ],
+        "N3": [
+          "この<ruby>辞書<rt>じしょ</rt></ruby>は<ruby>例文<rt>れいぶん</rt></ruby>が<ruby>多<rt>おお</rt></ruby>くて、とても<ruby>使<rt>つか</rt></ruby>いやすいです。",
+          "This dictionary has many example sentences, so it's very easy to use."
+        ],
+        "N2": [
+          "<ruby>紙<rt>かみ</rt></ruby>の<ruby>辞書<rt>じしょ</rt></ruby>もいいものの、<ruby>今<rt>いま</rt></ruby>はスマホのアプリのほうが<ruby>便利<rt>べんり</rt></ruby>だ。",
+          "Paper dictionaries are nice, but these days a smartphone app is more convenient."
+        ],
+        "N1": [
+          "<ruby>言葉<rt>ことば</rt></ruby>の<ruby>意味<rt>いみ</rt></ruby>を<ruby>正確<rt>せいかく</rt></ruby>に<ruby>捉<rt>とら</rt></ruby>えるには、<ruby>複数<rt>ふくすう</rt></ruby>の<ruby>辞書<rt>じしょ</rt></ruby>を<ruby>引<rt>ひ</rt></ruby>き<ruby>比<rt>くら</rt></ruby>べるにこしたことはない。",
+          "To grasp the precise meaning of a word, there is nothing better than consulting and comparing several dictionaries."
+        ]
+      },
+      "mnem": "辞 (words) + 書 (writing) = a book of words — a dictionary. Say \"jee-show\": a show of words.",
+      "tip": "辞書 is a general dictionary; 辞典 (じてん) is a near-synonym (often for specialized dictionaries), and don't confuse it with 事典 (encyclopedia) or 字典 (kanji dictionary) — all read じてん.",
+      "accent": 1
+    },
+    {
+      "key": "mnn:2:8",
+      "kana": "ざっし",
+      "kanji": "雑誌",
+      "context": "",
+      "mean": "magazine",
+      "cat": "noun",
+      "type": "",
+      "trans": "",
+      "dict": "雑誌",
+      "dictRead": "ざっし",
+      "audio": "/Audio/minnamoi/bai2/00010011101000011.mp3",
+      "levels": {
+        "N5": [
+          "これは<ruby>車<rt>くるま</rt></ruby>の<ruby>雑誌<rt>ざっし</rt></ruby>です。",
+          "This is a car magazine."
+        ],
+        "N4": [
+          "<ruby>電車<rt>でんしゃ</rt></ruby>の<ruby>中<rt>なか</rt></ruby>で<ruby>雑誌<rt>ざっし</rt></ruby>を<ruby>読<rt>よ</rt></ruby>みました。",
+          "I read a magazine on the train."
+        ],
+        "N3": [
+          "この<ruby>雑誌<rt>ざっし</rt></ruby>は<ruby>毎月<rt>まいつき</rt></ruby><ruby>一日<rt>ついたち</rt></ruby>に<ruby>発売<rt>はつばい</rt></ruby>されます。",
+          "This magazine goes on sale on the first of every month."
+        ],
+        "N2": [
+          "<ruby>専門<rt>せんもん</rt></ruby>の<ruby>雑誌<rt>ざっし</rt></ruby>は<ruby>高<rt>たか</rt></ruby>いものの、<ruby>情報<rt>じょうほう</rt></ruby>が<ruby>詳<rt>くわ</rt></ruby>しくて<ruby>役<rt>やく</rt></ruby>に<ruby>立<rt>た</rt></ruby>つ。",
+          "Specialist magazines are expensive, but their detailed information is useful."
+        ],
+        "N1": [
+          "<ruby>紙<rt>かみ</rt></ruby><ruby>媒体<rt>ばいたい</rt></ruby>の<ruby>衰退<rt>すいたい</rt></ruby>により、<ruby>老舗<rt>しにせ</rt></ruby>の<ruby>雑誌<rt>ざっし</rt></ruby>でさえ<ruby>休刊<rt>きゅうかん</rt></ruby>を<ruby>余儀<rt>よぎ</rt></ruby>なくされている。",
+          "With the decline of print media, even long-established magazines are being forced to suspend publication."
+        ]
+      },
+      "mnem": "雑 (miscellaneous) + 誌 (a written record) = a miscellany of writing — a magazine. \"ZAT-she\" is packed with mixed articles.",
+      "tip": "雑誌 = a periodical/magazine; 本 = a book. The 雑 (miscellaneous) also appears in 複雑 (complicated) and 雑音 (noise) — think \"a mixed bundle.\"",
+      "accent": 0
+    },
+    {
+      "key": "mnn:2:9",
+      "kana": "しんぶん",
+      "kanji": "新聞",
+      "context": "",
+      "mean": "newspaper",
+      "cat": "noun",
+      "type": "",
+      "trans": "",
+      "dict": "新聞",
+      "dictRead": "しんぶん",
+      "audio": "/Audio/minnamoi/bai2/00010011101000100.mp3",
+      "levels": {
+        "N5": [
+          "これは<ruby>新聞<rt>しんぶん</rt></ruby>です。",
+          "This is a newspaper."
+        ],
+        "N4": [
+          "<ruby>毎朝<rt>まいあさ</rt></ruby><ruby>新聞<rt>しんぶん</rt></ruby>を<ruby>読<rt>よ</rt></ruby>んでから<ruby>会社<rt>かいしゃ</rt></ruby>へ<ruby>行<rt>い</rt></ruby>きます。",
+          "Every morning I read the newspaper before going to work."
+        ],
+        "N3": [
+          "<ruby>新聞<rt>しんぶん</rt></ruby>によると、<ruby>明日<rt>あした</rt></ruby>は<ruby>雨<rt>あめ</rt></ruby>が<ruby>降<rt>ふ</rt></ruby>るそうです。",
+          "According to the newspaper, it will rain tomorrow."
+        ],
+        "N2": [
+          "<ruby>新聞<rt>しんぶん</rt></ruby>を<ruby>取<rt>と</rt></ruby>っている<ruby>家庭<rt>かてい</rt></ruby>は<ruby>減<rt>へ</rt></ruby>っているものの、まだゼロにはなっていない。",
+          "The number of households that subscribe to a newspaper is falling, but it hasn't yet reached zero."
+        ],
+        "N1": [
+          "<ruby>報道<rt>ほうどう</rt></ruby>の<ruby>自由<rt>じゆう</rt></ruby>が<ruby>脅<rt>おびや</rt></ruby>かされる<ruby>今<rt>いま</rt></ruby>だからこそ、<ruby>新聞<rt>しんぶん</rt></ruby>の<ruby>果<rt>は</rt></ruby>たす<ruby>役割<rt>やくわり</rt></ruby>は<ruby>一層<rt>いっそう</rt></ruby><ruby>重<rt>おも</rt></ruby>い。",
+          "It is precisely now, when freedom of the press is under threat, that the role newspapers play is all the more weighty."
+        ]
+      },
+      "mnem": "新 (new) + 聞 (to hear/news) = the new things you hear about — the news, a newspaper. \"SHIN-boon.\"",
+      "tip": "新聞 is a newspaper; don't confuse it with 雑誌 (magazine) or ニュース (the news broadcast). The 聞 here means \"news/tidings,\" the same kanji as 聞く (to hear).",
+      "accent": 0
+    },
+    {
+      "key": "mnn:2:10",
+      "kana": "ノート",
+      "kanji": "",
+      "context": "",
+      "mean": "notebook",
+      "cat": "noun",
+      "type": "",
+      "trans": "",
+      "dict": "ノート",
+      "dictRead": "ノート",
+      "audio": "/Audio/minnamoi/bai2/00010011101000101.mp3",
+      "levels": {
+        "N5": [
+          "それは<ruby>私<rt>わたし</rt></ruby>のノートです。",
+          "That is my notebook."
+        ],
+        "N4": [
+          "<ruby>授業<rt>じゅぎょう</rt></ruby>のとき、いつもノートを<ruby>取<rt>と</rt></ruby>ります。",
+          "I always take notes during class."
+        ],
+        "N3": [
+          "<ruby>大切<rt>たいせつ</rt></ruby>なことは、ノートに<ruby>書<rt>か</rt></ruby>いておくようにしています。",
+          "I make a point of writing down important things in my notebook."
+        ],
+        "N2": [
+          "<ruby>新<rt>あたら</rt></ruby>しいノートを<ruby>買<rt>か</rt></ruby>ったものの、まだ<ruby>一<rt>いち</rt></ruby>ページも<ruby>使<rt>つか</rt></ruby>っていない。",
+          "Although I bought a new notebook, I haven't used even one page of it yet."
+        ],
+        "N1": [
+          "<ruby>祖母<rt>そぼ</rt></ruby>が<ruby>遺<rt>のこ</rt></ruby>した<ruby>一冊<rt>いっさつ</rt></ruby>のノートには、<ruby>家族<rt>かぞく</rt></ruby>への<ruby>思<rt>おも</rt></ruby>いが<ruby>綿々<rt>めんめん</rt></ruby>とつづられていた。",
+          "In the single notebook my grandmother left behind, her feelings for the family had been set down without end."
+        ]
+      },
+      "mnem": "ノート is English \"note(book)\" in katakana — say \"NO-to\" and hear the word \"note.\"",
+      "tip": "In Japanese ノート means a physical notebook, not a short written \"note\" (that's メモ). To \"take notes\" is ノートを取る. Don't confuse it with the pocket-sized 手帳.",
+      "accent": 1
+    },
+    {
+      "key": "mnn:2:11",
+      "kana": "てちょう",
+      "kanji": "手帳",
+      "context": "",
+      "mean": "pocket notebook, planner",
+      "cat": "noun",
+      "type": "",
+      "trans": "",
+      "dict": "手帳",
+      "dictRead": "てちょう",
+      "audio": "/Audio/minnamoi/bai2/00010011101000110.mp3",
+      "levels": {
+        "N5": [
+          "これは<ruby>私<rt>わたし</rt></ruby>の<ruby>手帳<rt>てちょう</rt></ruby>です。",
+          "This is my pocket notebook."
+        ],
+        "N4": [
+          "<ruby>約束<rt>やくそく</rt></ruby>の<ruby>時間<rt>じかん</rt></ruby>を<ruby>手帳<rt>てちょう</rt></ruby>に<ruby>書<rt>か</rt></ruby>きました。",
+          "I wrote the time of the appointment in my planner."
+        ],
+        "N3": [
+          "<ruby>予定<rt>よてい</rt></ruby>を<ruby>忘<rt>わす</rt></ruby>れないように、いつも<ruby>手帳<rt>てちょう</rt></ruby>を<ruby>持<rt>も</rt></ruby>ち<ruby>歩<rt>ある</rt></ruby>いています。",
+          "So as not to forget my schedule, I always carry a planner with me."
+        ],
+        "N2": [
+          "スマホで<ruby>管理<rt>かんり</rt></ruby>できるとはいうものの、<ruby>紙<rt>かみ</rt></ruby>の<ruby>手帳<rt>てちょう</rt></ruby>のほうが<ruby>落<rt>お</rt></ruby>ち<ruby>着<rt>つ</rt></ruby>く。",
+          "Although you can manage it on a smartphone, a paper planner feels more settling to me."
+        ],
+        "N1": [
+          "<ruby>年<rt>とし</rt></ruby>の<ruby>暮<rt>く</rt></ruby>れになると、<ruby>来年<rt>らいねん</rt></ruby>の<ruby>手帳<rt>てちょう</rt></ruby>を<ruby>選<rt>えら</rt></ruby>ぶのが<ruby>毎年<rt>まいとし</rt></ruby>のささやかな<ruby>楽<rt>たの</rt></ruby>しみになっている。",
+          "When the year draws to a close, choosing next year's planner has become a small yearly pleasure of mine."
+        ]
+      },
+      "mnem": "手 (hand) + 帳 (booklet) = a booklet you keep in hand — a pocket notebook/planner.",
+      "tip": "手帳 is the small planner/diary you carry for schedules; ノート is a larger writing notebook. Note 帳 (booklet) also appears in 通帳 (bankbook) and メモ帳 (memo pad).",
+      "accent": 0
+    },
+    {
+      "key": "mnn:2:12",
+      "kana": "めいし",
+      "kanji": "名刺",
+      "context": "",
+      "mean": "business card",
+      "cat": "noun",
+      "type": "",
+      "trans": "",
+      "dict": "名刺",
+      "dictRead": "めいし",
+      "audio": "/Audio/minnamoi/bai2/00010011101000111.mp3",
+      "levels": {
+        "N5": [
+          "これは<ruby>私<rt>わたし</rt></ruby>の<ruby>名刺<rt>めいし</rt></ruby>です。",
+          "This is my business card."
+        ],
+        "N4": [
+          "<ruby>初<rt>はじ</rt></ruby>めて<ruby>会<rt>あ</rt></ruby>った<ruby>人<rt>ひと</rt></ruby>に<ruby>名刺<rt>めいし</rt></ruby>を<ruby>渡<rt>わた</rt></ruby>します。",
+          "You give your business card to someone you meet for the first time."
+        ],
+        "N3": [
+          "<ruby>日本<rt>にほん</rt></ruby>では、<ruby>名刺<rt>めいし</rt></ruby>は<ruby>両手<rt>りょうて</rt></ruby>で<ruby>渡<rt>わた</rt></ruby>すようにしています。",
+          "In Japan, I make a point of handing over business cards with both hands."
+        ],
+        "N2": [
+          "<ruby>名刺<rt>めいし</rt></ruby>を<ruby>交換<rt>こうかん</rt></ruby>したものの、<ruby>相手<rt>あいて</rt></ruby>の<ruby>名前<rt>なまえ</rt></ruby>をすぐに<ruby>忘<rt>わす</rt></ruby>れてしまった。",
+          "Although we exchanged business cards, I immediately forgot the other person's name."
+        ],
+        "N1": [
+          "<ruby>名刺<rt>めいし</rt></ruby><ruby>一枚<rt>いちまい</rt></ruby>の<ruby>渡<rt>わた</rt></ruby>し<ruby>方<rt>かた</rt></ruby>にすら、その<ruby>人<rt>ひと</rt></ruby>の<ruby>教養<rt>きょうよう</rt></ruby>と<ruby>心遣<rt>こころづか</rt></ruby>いがにじみ<ruby>出<rt>で</rt></ruby>るものだ。",
+          "Even in the mere way one hands over a single business card, a person's refinement and consideration are apt to show through."
+        ]
+      },
+      "mnem": "名 (name) + 刺 (a printed slip; \"stab/pierce\") = a slip bearing your name — a business card. \"MAY-she.\"",
+      "tip": "名刺 (めいし) is a business card; don't confuse it with the homophone-ish 名詞 (めいし, \"noun\" in grammar). The counter is 〜枚 (まい) for flat sheets.",
+      "accent": 0
+    },
+    {
+      "key": "mnn:2:13",
+      "kana": "カード",
+      "kanji": "",
+      "context": "",
+      "mean": "card",
+      "cat": "noun",
+      "type": "",
+      "trans": "",
+      "dict": "カード",
+      "dictRead": "カード",
+      "audio": "/Audio/minnamoi/bai2/00010011101001000.mp3",
+      "levels": {
+        "N5": [
+          "これは<ruby>誕生日<rt>たんじょうび</rt></ruby>のカードです。",
+          "This is a birthday card."
+        ],
+        "N4": [
+          "<ruby>買<rt>か</rt></ruby>い<ruby>物<rt>もの</rt></ruby>のとき、いつもカードで<ruby>払<rt>はら</rt></ruby>います。",
+          "When I go shopping, I always pay by card."
+        ],
+        "N3": [
+          "<ruby>友<rt>とも</rt></ruby>だちの<ruby>誕生日<rt>たんじょうび</rt></ruby>に、カードを<ruby>送<rt>おく</rt></ruby>るようにしています。",
+          "I make a point of sending a card for my friends' birthdays."
+        ],
+        "N2": [
+          "クレジットカードは<ruby>便利<rt>べんり</rt></ruby>なものの、<ruby>使<rt>つか</rt></ruby>いすぎると<ruby>後<rt>あと</rt></ruby>で<ruby>困<rt>こま</rt></ruby>ることになる。",
+          "Credit cards are convenient, but if you overuse them you'll be in trouble later."
+        ],
+        "N1": [
+          "<ruby>個人<rt>こじん</rt></ruby><ruby>情報<rt>じょうほう</rt></ruby>を<ruby>一枚<rt>いちまい</rt></ruby>のカードに<ruby>集約<rt>しゅうやく</rt></ruby>することには、<ruby>利便性<rt>りべんせい</rt></ruby>と<ruby>危険性<rt>きけんせい</rt></ruby>が<ruby>表裏<rt>ひょうり</rt></ruby><ruby>一体<rt>いったい</rt></ruby>で<ruby>付<rt>つ</rt></ruby>きまとう。",
+          "Consolidating personal information onto a single card carries convenience and risk as two sides of the same coin."
+        ]
+      },
+      "mnem": "カード is English \"card\" in katakana — stretch the vowel: \"CAH-do.\"",
+      "tip": "カード covers cards broadly (greeting card, credit card, IC card). For a business card specifically use 名刺; for a playing card, トランプ is the game/deck. The counter is 〜枚 (まい).",
+      "accent": 1
+    },
+    {
+      "key": "mnn:2:14",
+      "kana": "えんぴつ",
+      "kanji": "鉛筆",
+      "context": "",
+      "mean": "pencil",
+      "cat": "noun",
+      "type": "",
+      "trans": "",
+      "dict": "鉛筆",
+      "dictRead": "えんぴつ",
+      "audio": "/Audio/minnamoi/bai2/00010011101001001.mp3",
+      "levels": {
+        "N5": [
+          "これは<ruby>鉛筆<rt>えんぴつ</rt></ruby>です。",
+          "This is a pencil."
+        ],
+        "N4": [
+          "<ruby>鉛筆<rt>えんぴつ</rt></ruby>で<ruby>名前<rt>なまえ</rt></ruby>を<ruby>書<rt>か</rt></ruby>いてください。",
+          "Please write your name with a pencil."
+        ],
+        "N3": [
+          "<ruby>試験<rt>しけん</rt></ruby>のときは、<ruby>鉛筆<rt>えんぴつ</rt></ruby>を<ruby>何本<rt>なんぼん</rt></ruby>も<ruby>用意<rt>ようい</rt></ruby>するようにしています。",
+          "For exams, I make a point of preparing several pencils."
+        ],
+        "N2": [
+          "パソコンばかり<ruby>使<rt>つか</rt></ruby>っているものの、<ruby>絵<rt>え</rt></ruby>を<ruby>描<rt>か</rt></ruby>くときはやはり<ruby>鉛筆<rt>えんぴつ</rt></ruby>がいい。",
+          "Although I use the computer for everything, when I draw, a pencil is still best after all."
+        ],
+        "N1": [
+          "<ruby>作家<rt>さっか</rt></ruby>は<ruby>削<rt>けず</rt></ruby>りたての<ruby>鉛筆<rt>えんぴつ</rt></ruby>でなければ<ruby>筆<rt>ふで</rt></ruby>が<ruby>進<rt>すす</rt></ruby>まないという、<ruby>頑<rt>かたく</rt></ruby>ななこだわりを<ruby>持<rt>も</rt></ruby>っていた。",
+          "The writer held to a stubborn insistence that his pen would not flow unless he had a freshly sharpened pencil."
+        ]
+      },
+      "mnem": "鉛 (lead) + 筆 (writing brush) = a lead writing-tool — a pencil. Say \"EN-pitsu.\"",
+      "tip": "鉛筆 is a wooden pencil; a mechanical pencil is シャープペンシル (シャーペン). The counter for pencils is 〜本 (ほん/ぽん/ぼん). The 鉛 kanji means lead (the metal), not the graphite.",
+      "accent": 0
+    },
+    {
+      "key": "mnn:2:15",
+      "kana": "ボールペン",
+      "kanji": "",
+      "context": "",
+      "mean": "ballpoint pen",
+      "cat": "noun",
+      "type": "",
+      "trans": "",
+      "dict": "ボールペン",
+      "dictRead": "ボールペン",
+      "audio": "/Audio/minnamoi/bai2/00010011101001010.mp3",
+      "levels": {
+        "N5": [
+          "これはボールペンですか。",
+          "Is this a ballpoint pen?"
+        ],
+        "N4": [
+          "<ruby>書類<rt>しょるい</rt></ruby>はボールペンで<ruby>書<rt>か</rt></ruby>いてください。",
+          "Please fill out the documents with a ballpoint pen."
+        ],
+        "N3": [
+          "<ruby>大切<rt>たいせつ</rt></ruby>な<ruby>書類<rt>しょるい</rt></ruby>は、<ruby>消<rt>き</rt></ruby>えないボールペンで<ruby>書<rt>か</rt></ruby>くようにしています。",
+          "I make a point of writing important documents with a ballpoint pen that won't erase."
+        ],
+        "N2": [
+          "<ruby>安<rt>やす</rt></ruby>いボールペンだと<ruby>思<rt>おも</rt></ruby>っていたものの、<ruby>書<rt>か</rt></ruby>き<ruby>心地<rt>ごこち</rt></ruby>は<ruby>驚<rt>おどろ</rt></ruby>くほど<ruby>良<rt>よ</rt></ruby>かった。",
+          "I had assumed it was a cheap ballpoint pen, but it wrote surprisingly well."
+        ],
+        "N1": [
+          "たかがボールペン<ruby>一本<rt>いっぽん</rt></ruby>とはいえ、<ruby>愛用<rt>あいよう</rt></ruby>の<ruby>品<rt>しな</rt></ruby>を<ruby>失<rt>な</rt></ruby>くしたときの<ruby>喪失感<rt>そうしつかん</rt></ruby>は<ruby>侮<rt>あなど</rt></ruby>れない。",
+          "It may be just a single ballpoint pen, but the sense of loss when you lose a favorite one is not to be underestimated."
+        ]
+      },
+      "mnem": "ボールペン = \"ball\" + \"pen\" — a pen with a rolling ball tip. Say \"BOH-ru-pen.\"",
+      "tip": "ボールペン is a coined Japanese-English compound (\"ball pen\"). Contrast with 鉛筆 (pencil) and シャープペンシル (mechanical pencil); the counter is 〜本 (ほん/ぽん/ぼん).",
+      "accent": 0
+    },
+    {
+      "key": "mnn:2:16",
+      "kana": "シャープペンシル",
+      "kanji": "",
+      "context": "",
+      "mean": "mechanical pencil",
+      "cat": "noun",
+      "type": "",
+      "trans": "",
+      "dict": "シャープペンシル",
+      "dictRead": "シャープペンシル",
+      "audio": "/Audio/minnamoi/bai2/00010011101001011.mp3",
+      "levels": {
+        "N5": [
+          "これはシャープペンシルですか、ボールペンですか。",
+          "Is this a mechanical pencil or a ballpoint pen?"
+        ],
+        "N4": [
+          "<ruby>細<rt>ほそ</rt></ruby>い<ruby>字<rt>じ</rt></ruby>を<ruby>書<rt>か</rt></ruby>くとき、シャープペンシルを<ruby>使<rt>つか</rt></ruby>います。",
+          "When I write fine characters, I use a mechanical pencil."
+        ],
+        "N3": [
+          "<ruby>芯<rt>しん</rt></ruby>が<ruby>折<rt>お</rt></ruby>れないように、シャープペンシルをそっと<ruby>使<rt>つか</rt></ruby>うようにしています。",
+          "So that the lead doesn't break, I make a point of using the mechanical pencil gently."
+        ],
+        "N2": [
+          "<ruby>安物<rt>やすもの</rt></ruby>のシャープペンシルだと<ruby>思<rt>おも</rt></ruby>っていたものの、<ruby>意外<rt>いがい</rt></ruby>と<ruby>長持<rt>ながも</rt></ruby>ちした。",
+          "I had thought it was a cheap mechanical pencil, but it lasted surprisingly long."
+        ],
+        "N1": [
+          "<ruby>製図<rt>せいず</rt></ruby>の<ruby>現場<rt>げんば</rt></ruby>では、<ruby>芯<rt>しん</rt></ruby>の<ruby>太<rt>ふと</rt></ruby>さを<ruby>使<rt>つか</rt></ruby>い<ruby>分<rt>わ</rt></ruby>けるべく、<ruby>複数<rt>ふくすう</rt></ruby>のシャープペンシルを<ruby>常備<rt>じょうび</rt></ruby>しておくのが<ruby>常<rt>つね</rt></ruby>だ。",
+          "In drafting work it is customary to keep several mechanical pencils on hand so as to use different lead thicknesses as needed."
+        ]
+      },
+      "mnem": "シャープペンシル = \"sharp pencil\" — the lead stays sharp without sharpening. Everyday short form: シャーペン.",
+      "tip": "Everyday speech clips this to シャーペン. Note it's a Japanese-English coinage (native English says \"mechanical pencil\"). The refill lead is 芯 (しん).",
+      "accent": 4
+    },
+    {
+      "key": "mnn:2:17",
+      "kana": "かぎ",
+      "kanji": "",
+      "context": "",
+      "mean": "key",
+      "cat": "noun",
+      "type": "",
+      "trans": "",
+      "dict": "かぎ",
+      "dictRead": "かぎ",
+      "audio": "/Audio/minnamoi/bai2/00010011101001100.mp3",
+      "levels": {
+        "N5": [
+          "これは<ruby>車<rt>くるま</rt></ruby>のかぎです。",
+          "This is a car key."
+        ],
+        "N4": [
+          "<ruby>出<rt>で</rt></ruby>かけるとき、いつもかぎをかけます。",
+          "When I go out, I always lock up."
+        ],
+        "N3": [
+          "かぎを<ruby>忘<rt>わす</rt></ruby>れないように、<ruby>玄関<rt>げんかん</rt></ruby>に<ruby>置<rt>お</rt></ruby>いておくようにしています。",
+          "So as not to forget my keys, I make a point of leaving them by the entrance."
+        ],
+        "N2": [
+          "かぎをかけたつもりだったものの、<ruby>家<rt>いえ</rt></ruby>に<ruby>戻<rt>もど</rt></ruby>ると<ruby>開<rt>あ</rt></ruby>いていた。",
+          "I thought I had locked the door, but when I got back home it was open."
+        ],
+        "N1": [
+          "<ruby>問題<rt>もんだい</rt></ruby><ruby>解決<rt>かいけつ</rt></ruby>のかぎは、<ruby>意外<rt>いがい</rt></ruby>にも<ruby>最<rt>もっと</rt></ruby>も<ruby>身近<rt>みぢか</rt></ruby>なところに<ruby>隠<rt>かく</rt></ruby>されていたのだ。",
+          "The key to solving the problem was, unexpectedly, hidden in the most familiar of places."
+        ]
+      },
+      "mnem": "\"かぎ\" (ka-gi) — picture a key that goes \"KA-gee\" as it clicks in the lock.",
+      "tip": "かぎ means both the physical key AND a lock/lock-up: かぎをかける = \"to lock.\" It's usually written in kana in Minna; the kanji 鍵 is common in the wild. Don't confuse it with かご (basket).",
+      "accent": 2
+    },
+    {
+      "key": "mnn:2:18",
+      "kana": "とけい",
+      "kanji": "時計",
+      "context": "",
+      "mean": "watch, clock",
+      "cat": "noun",
+      "type": "",
+      "trans": "",
+      "dict": "時計",
+      "dictRead": "とけい",
+      "audio": "/Audio/minnamoi/bai2/00010011101001101.mp3",
+      "levels": {
+        "N5": [
+          "これは<ruby>時計<rt>とけい</rt></ruby>です。",
+          "This is a watch."
+        ],
+        "N4": [
+          "この<ruby>時計<rt>とけい</rt></ruby>は<ruby>父<rt>ちち</rt></ruby>にもらいました。",
+          "I received this watch from my father."
+        ],
+        "N3": [
+          "<ruby>時間<rt>じかん</rt></ruby>に<ruby>遅<rt>おく</rt></ruby>れないように、<ruby>時計<rt>とけい</rt></ruby>をよく<ruby>見<rt>み</rt></ruby>るようにしています。",
+          "So as not to be late, I make a point of checking my watch often."
+        ],
+        "N2": [
+          "この<ruby>時計<rt>とけい</rt></ruby>は<ruby>古<rt>ふる</rt></ruby>いものの、いまだに<ruby>正確<rt>せいかく</rt></ruby>に<ruby>時<rt>とき</rt></ruby>を<ruby>刻<rt>きざ</rt></ruby>んでいる。",
+          "Although this clock is old, it still keeps accurate time."
+        ],
+        "N1": [
+          "<ruby>祖父<rt>そふ</rt></ruby>の<ruby>形見<rt>かたみ</rt></ruby>の<ruby>時計<rt>とけい</rt></ruby>は、<ruby>止<rt>と</rt></ruby>まったまま<ruby>動<rt>うご</rt></ruby>かないが、それでも<ruby>手放<rt>てばな</rt></ruby>す<ruby>気<rt>き</rt></ruby>にはなれない。",
+          "My grandfather's keepsake watch has stopped and no longer runs, yet I still cannot bring myself to part with it."
+        ]
+      },
+      "mnem": "時 (time) + 計 (measure) = a time-measurer — a clock or watch. Say \"toh-KAY.\"",
+      "tip": "時計 covers both a clock and a wristwatch; specify with 腕時計 (うでどけい, wristwatch) or 目覚まし時計 (めざましどけい, alarm clock). The reading とけい is irregular (ateji) — memorize it as a set.",
+      "accent": 0
+    },
+    {
+      "key": "mnn:2:19",
+      "kana": "かさ",
+      "kanji": "傘",
+      "context": "",
+      "mean": "umbrella",
+      "cat": "noun",
+      "type": "",
+      "trans": "",
+      "dict": "傘",
+      "dictRead": "かさ",
+      "audio": "/Audio/minnamoi/bai2/00010011101001110.mp3",
+      "levels": {
+        "N5": [
+          "これはあなたの<ruby>傘<rt>かさ</rt></ruby>ですか。",
+          "Is this your umbrella?"
+        ],
+        "N4": [
+          "<ruby>雨<rt>あめ</rt></ruby>が<ruby>降<rt>ふ</rt></ruby>っているから、<ruby>傘<rt>かさ</rt></ruby>を<ruby>持<rt>も</rt></ruby>って<ruby>行<rt>い</rt></ruby>きます。",
+          "Because it's raining, I'll take an umbrella with me."
+        ],
+        "N3": [
+          "<ruby>天気<rt>てんき</rt></ruby>が<ruby>怪<rt>あや</rt></ruby>しいときは、<ruby>傘<rt>かさ</rt></ruby>を<ruby>持<rt>も</rt></ruby>って<ruby>出<rt>で</rt></ruby>るようにしています。",
+          "When the weather looks doubtful, I make a point of going out with an umbrella."
+        ],
+        "N2": [
+          "<ruby>電車<rt>でんしゃ</rt></ruby>に<ruby>傘<rt>かさ</rt></ruby>を<ruby>忘<rt>わす</rt></ruby>れたものの、<ruby>駅員<rt>えきいん</rt></ruby>さんが<ruby>届<rt>とど</rt></ruby>けておいてくれた。",
+          "Although I left my umbrella on the train, a station attendant had kindly kept it for me."
+        ],
+        "N1": [
+          "<ruby>備<rt>そな</rt></ruby>えあれば<ruby>憂<rt>うれ</rt></ruby>いなしというが、<ruby>折<rt>お</rt></ruby>り<ruby>畳<rt>たた</rt></ruby>み<ruby>傘<rt>がさ</rt></ruby>を<ruby>一本<rt>いっぽん</rt></ruby>かばんに<ruby>忍<rt>しの</rt></ruby>ばせておくにこしたことはない。",
+          "As the saying goes, forewarned is forearmed — there is nothing better than tucking a single folding umbrella into your bag."
+        ]
+      },
+      "mnem": "\"かさ\" (ka-sa) — hold it over your head to keep the rain off; picture the canopy \"casa\" (house) over you.",
+      "tip": "傘 is an umbrella (or parasol, 日傘 ひがさ). Counted with 〜本 (ほん/ぽん/ぼん). Don't confuse the reading with かさ meaning \"bulk/volume\" (嵩) — same sound, different word.",
+      "accent": 1
+    },
+    {
+      "key": "mnn:2:20",
+      "kana": "かばん",
+      "kanji": "",
+      "context": "",
+      "mean": "bag, briefcase",
+      "cat": "noun",
+      "type": "",
+      "trans": "",
+      "dict": "かばん",
+      "dictRead": "かばん",
+      "audio": "/Audio/minnamoi/bai2/00010011101001111.mp3",
+      "levels": {
+        "N5": [
+          "これは<ruby>私<rt>わたし</rt></ruby>のかばんです。",
+          "This is my bag."
+        ],
+        "N4": [
+          "<ruby>新<rt>あたら</rt></ruby>しいかばんを<ruby>買<rt>か</rt></ruby>いたいです。",
+          "I want to buy a new bag."
+        ],
+        "N3": [
+          "<ruby>大切<rt>たいせつ</rt></ruby>なものは、いつもかばんに<ruby>入<rt>い</rt></ruby>れておくようにしています。",
+          "I make a point of always keeping important things in my bag."
+        ],
+        "N2": [
+          "<ruby>革<rt>かわ</rt></ruby>のかばんは<ruby>重<rt>おも</rt></ruby>いものの、<ruby>長<rt>なが</rt></ruby>く<ruby>使<rt>つか</rt></ruby>えるので<ruby>気<rt>き</rt></ruby>に<ruby>入<rt>い</rt></ruby>っている。",
+          "A leather bag is heavy, but I like it because it can be used for a long time."
+        ],
+        "N1": [
+          "<ruby>職人<rt>しょくにん</rt></ruby>が<ruby>一針<rt>ひとはり</rt></ruby><ruby>一針<rt>ひとはり</rt></ruby><ruby>手<rt>て</rt></ruby>で<ruby>縫<rt>ぬ</rt></ruby>い<ruby>上<rt>あ</rt></ruby>げたかばんには、<ruby>量産品<rt>りょうさんひん</rt></ruby>にはない<ruby>温<rt>ぬく</rt></ruby>もりがある。",
+          "A bag sewn by a craftsman stitch by stitch has a warmth that mass-produced goods lack."
+        ]
+      },
+      "mnem": "\"かばん\" (ka-ban) — you \"can\" carry your things in the bag; hear \"ka-BAN.\"",
+      "tip": "かばん is a general bag/briefcase, usually written in kana (kanji 鞄 is rare). For a handbag use ハンドバッグ, a backpack リュック; the counter is 〜個 (こ) or 〜つ.",
+      "accent": 0
+    },
+    {
+      "key": "mnn:2:21",
+      "kana": "CD",
+      "kanji": "",
+      "context": "",
+      "mean": "CD, compact disc",
+      "cat": "noun",
+      "type": "",
+      "trans": "",
+      "dict": "CD",
+      "dictRead": "シーディー",
+      "audio": "/Audio/minnamoi/bai2/00010011101010000.mp3",
+      "levels": {
+        "N5": [
+          "これは<ruby>英語<rt>えいご</rt></ruby>のCDです。",
+          "This is an English CD."
+        ],
+        "N4": [
+          "<ruby>日本語<rt>にほんご</rt></ruby>の<ruby>勉強<rt>べんきょう</rt></ruby>のために、CDを<ruby>聞<rt>き</rt></ruby>きます。",
+          "I listen to a CD in order to study Japanese."
+        ],
+        "N3": [
+          "<ruby>好<rt>す</rt></ruby>きな<ruby>歌手<rt>かしゅ</rt></ruby>の<ruby>新<rt>あたら</rt></ruby>しいCDを<ruby>買<rt>か</rt></ruby>うようにしています。",
+          "I make a point of buying my favorite singer's new CDs."
+        ],
+        "N2": [
+          "<ruby>今<rt>いま</rt></ruby>はネットで<ruby>音楽<rt>おんがく</rt></ruby>を<ruby>聞<rt>き</rt></ruby>けるものの、CDのほうが<ruby>音<rt>おと</rt></ruby>がいいと<ruby>言<rt>い</rt></ruby>う<ruby>人<rt>ひと</rt></ruby>もいる。",
+          "Although you can listen to music online now, some people say CDs sound better."
+        ],
+        "N1": [
+          "<ruby>配信<rt>はいしん</rt></ruby>が<ruby>主流<rt>しゅりゅう</rt></ruby>となった<ruby>今<rt>いま</rt></ruby>、CDはもはや<ruby>音楽<rt>おんがく</rt></ruby>を<ruby>聞<rt>き</rt></ruby>く<ruby>手段<rt>しゅだん</rt></ruby>というより、<ruby>収集<rt>しゅうしゅう</rt></ruby>の<ruby>対象<rt>たいしょう</rt></ruby>になりつつある。",
+          "Now that streaming has become the norm, CDs are becoming less a means of listening to music than an object of collecting."
+        ]
+      },
+      "mnem": "CD reads シーディー — just the English letters \"C-D\" (compact disc) said in Japanese.",
+      "tip": "Read シーディー (the English letters). Counted with 〜枚 (まい) for flat discs. In apposition, 英語のCD = \"an English CD,\" using the の of Lesson 2.",
+      "accent": 3
+    },
+    {
+      "key": "mnn:2:22",
+      "kana": "テレビ",
+      "kanji": "",
+      "context": "",
+      "mean": "television, TV",
+      "cat": "noun",
+      "type": "",
+      "trans": "",
+      "dict": "テレビ",
+      "dictRead": "テレビ",
+      "audio": "/Audio/minnamoi/bai2/00010011101010001.mp3",
+      "levels": {
+        "N5": [
+          "あれはテレビです。",
+          "That over there is a television."
+        ],
+        "N4": [
+          "<ruby>毎晩<rt>まいばん</rt></ruby><ruby>晩<rt>ばん</rt></ruby>ごはんのあとでテレビを<ruby>見<rt>み</rt></ruby>ます。",
+          "Every evening I watch TV after dinner."
+        ],
+        "N3": [
+          "<ruby>目<rt>め</rt></ruby>が<ruby>悪<rt>わる</rt></ruby>くならないように、テレビを<ruby>近<rt>ちか</rt></ruby>くで<ruby>見<rt>み</rt></ruby>ないようにしています。",
+          "So my eyes don't get worse, I make a point of not watching TV up close."
+        ],
+        "N2": [
+          "テレビは<ruby>面白<rt>おもしろ</rt></ruby>いものの、<ruby>見<rt>み</rt></ruby>すぎると<ruby>時間<rt>じかん</rt></ruby>を<ruby>無駄<rt>むだ</rt></ruby>にしてしまう。",
+          "TV is fun, but if you watch too much you end up wasting time."
+        ],
+        "N1": [
+          "<ruby>若者<rt>わかもの</rt></ruby>のテレビ<ruby>離<rt>ばな</rt></ruby>れが<ruby>進<rt>すす</rt></ruby>む<ruby>中<rt>なか</rt></ruby>、<ruby>各局<rt>かくきょく</rt></ruby>はネット<ruby>配信<rt>はいしん</rt></ruby>へと<ruby>軸足<rt>じくあし</rt></ruby>を<ruby>移<rt>うつ</rt></ruby>さざるを<ruby>得<rt>え</rt></ruby>なくなっている。",
+          "As young people drift away from television, each broadcaster is being forced to shift its focus toward online streaming."
+        ]
+      },
+      "mnem": "テレビ is clipped from English \"tele-vision\" — the Japanese keeps only the front: \"TE-re-bi.\"",
+      "tip": "テレビ is shortened from テレビジョン (television) — Japanese loves clipping long loanwords. \"To watch TV\" is テレビを見る (not 聞く). Don't confuse it with the ラジオ (radio).",
+      "accent": 1
+    },
+    {
+      "key": "mnn:2:23",
+      "kana": "ラジオ",
+      "kanji": "",
+      "context": "",
+      "mean": "radio",
+      "cat": "noun",
+      "type": "",
+      "trans": "",
+      "dict": "ラジオ",
+      "dictRead": "ラジオ",
+      "audio": "/Audio/minnamoi/bai2/00010011101010010.mp3",
+      "levels": {
+        "N5": [
+          "これはラジオですか、カメラですか。",
+          "Is this a radio or a camera?"
+        ],
+        "N4": [
+          "<ruby>毎朝<rt>まいあさ</rt></ruby>ラジオを<ruby>聞<rt>き</rt></ruby>きながら<ruby>朝<rt>あさ</rt></ruby>ごはんを<ruby>食<rt>た</rt></ruby>べます。",
+          "Every morning I eat breakfast while listening to the radio."
+        ],
+        "N3": [
+          "<ruby>運転<rt>うんてん</rt></ruby>のとき、ラジオを<ruby>聞<rt>き</rt></ruby>くようにしています。",
+          "When I drive, I make a point of listening to the radio."
+        ],
+        "N2": [
+          "ラジオは<ruby>古<rt>ふる</rt></ruby>いメディアだと<ruby>思<rt>おも</rt></ruby>われがちなものの、<ruby>災害時<rt>さいがいじ</rt></ruby>には<ruby>大<rt>おお</rt></ruby>いに<ruby>役<rt>やく</rt></ruby>に<ruby>立<rt>た</rt></ruby>つ。",
+          "Radio tends to be thought of as an old medium, but it is enormously useful in times of disaster."
+        ],
+        "N1": [
+          "<ruby>深夜<rt>しんや</rt></ruby>ラジオの<ruby>独特<rt>どくとく</rt></ruby>な<ruby>親<rt>した</rt></ruby>しみやすさは、<ruby>映像<rt>えいぞう</rt></ruby>には<ruby>決<rt>けっ</rt></ruby>して<ruby>代<rt>か</rt></ruby>えがたい<ruby>魅力<rt>みりょく</rt></ruby>を<ruby>持<rt>も</rt></ruby>っている。",
+          "The peculiar intimacy of late-night radio has a charm that visual media can never quite replace."
+        ]
+      },
+      "mnem": "ラジオ is English \"radio\" in katakana — say \"RA-ji-o.\"",
+      "tip": "\"To listen to the radio\" is ラジオを聞く (聞く, hear), parallel to テレビを見る (見る, watch). The loanword keeps three morae: ra-ji-o.",
+      "accent": 1
+    },
+    {
+      "key": "mnn:2:24",
+      "kana": "カメラ",
+      "kanji": "",
+      "context": "",
+      "mean": "camera",
+      "cat": "noun",
+      "type": "",
+      "trans": "",
+      "dict": "カメラ",
+      "dictRead": "カメラ",
+      "audio": "/Audio/minnamoi/bai2/00010011101010011.mp3",
+      "levels": {
+        "N5": [
+          "これはサントスさんのカメラです。",
+          "This is Mr. Santos's camera."
+        ],
+        "N4": [
+          "<ruby>旅行<rt>りょこう</rt></ruby>のとき、いつもカメラを<ruby>持<rt>も</rt></ruby>って<ruby>行<rt>い</rt></ruby>きます。",
+          "When I travel, I always take a camera with me."
+        ],
+        "N3": [
+          "<ruby>大切<rt>たいせつ</rt></ruby>な<ruby>思<rt>おも</rt></ruby>い<ruby>出<rt>で</rt></ruby>を<ruby>残<rt>のこ</rt></ruby>すために、カメラで<ruby>写真<rt>しゃしん</rt></ruby>を<ruby>撮<rt>と</rt></ruby>るようにしています。",
+          "To preserve precious memories, I make a point of taking photos with a camera."
+        ],
+        "N2": [
+          "スマホのカメラも<ruby>十分<rt>じゅうぶん</rt></ruby>きれいなものの、やはり<ruby>本格的<rt>ほんかくてき</rt></ruby>なカメラにはかなわない。",
+          "A smartphone camera is plenty sharp, but it still can't match a proper camera after all."
+        ],
+        "N1": [
+          "<ruby>街中<rt>まちなか</rt></ruby>に<ruby>監視<rt>かんし</rt></ruby>カメラが<ruby>張<rt>は</rt></ruby>り<ruby>巡<rt>めぐ</rt></ruby>らされた<ruby>現代<rt>げんだい</rt></ruby>において、<ruby>私<rt>わたし</rt></ruby>たちの<ruby>行動<rt>こうどう</rt></ruby>は<ruby>常<rt>つね</rt></ruby>に<ruby>記録<rt>きろく</rt></ruby>されているといっても<ruby>過言<rt>かごん</rt></ruby>ではない。",
+          "In an age where surveillance cameras are strung throughout the city, it is no exaggeration to say our every action is constantly recorded."
+        ]
+      },
+      "mnem": "カメラ is English \"camera\" in katakana — say \"KA-me-ra.\"",
+      "tip": "カメラ is a camera; a surveillance camera is 監視カメラ, a smartphone camera スマホのカメラ. \"To take a photo\" is 写真を撮る (撮る). Don't confuse it with the radio (ラジオ).",
+      "accent": 1
+    },
+    {
+      "key": "mnn:2:25",
+      "kana": "コンピューター",
+      "kanji": "",
+      "context": "",
+      "mean": "computer",
+      "cat": "noun",
+      "type": "",
+      "trans": "",
+      "dict": "コンピューター",
+      "dictRead": "コンピューター",
+      "audio": "/Audio/minnamoi/bai2/00010011101010100.mp3",
+      "levels": {
+        "N5": [
+          "これはコンピューターの<ruby>本<rt>ほん</rt></ruby>です。",
+          "This is a computer book (a book about computers)."
+        ],
+        "N4": [
+          "<ruby>会社<rt>かいしゃ</rt></ruby>で<ruby>毎日<rt>まいにち</rt></ruby>コンピューターを<ruby>使<rt>つか</rt></ruby>います。",
+          "I use a computer every day at the office."
+        ],
+        "N3": [
+          "<ruby>大切<rt>たいせつ</rt></ruby>なデータは、コンピューターに<ruby>保存<rt>ほぞん</rt></ruby>しておくようにしています。",
+          "I make a point of saving important data on the computer."
+        ],
+        "N2": [
+          "コンピューターは<ruby>便利<rt>べんり</rt></ruby>なものの、<ruby>故障<rt>こしょう</rt></ruby>すると<ruby>仕事<rt>しごと</rt></ruby>が<ruby>止<rt>と</rt></ruby>まってしまう。",
+          "Computers are convenient, but if one breaks down, work grinds to a halt."
+        ],
+        "N1": [
+          "<ruby>量子<rt>りょうし</rt></ruby>コンピューターの<ruby>実用化<rt>じつようか</rt></ruby>が<ruby>実現<rt>じつげん</rt></ruby>すれば、<ruby>従来<rt>じゅうらい</rt></ruby>の<ruby>暗号<rt>あんごう</rt></ruby><ruby>技術<rt>ぎじゅつ</rt></ruby>は<ruby>根本<rt>こんぽん</rt></ruby>から<ruby>見直<rt>みなお</rt></ruby>さざるを<ruby>得<rt>え</rt></ruby>ないだろう。",
+          "If quantum computers are put to practical use, conventional cryptography will have to be fundamentally rethought."
+        ]
+      },
+      "mnem": "コンピューター is English \"computer\" in katakana — say \"kon-PYUU-taa\" with a long final vowel.",
+      "tip": "Everyday speech often clips this to パソコン (personal computer). コンピューターの本 = \"a book about computers\" — the の here links topic to noun (apposition), a Lesson 2 point. Don't confuse with the machine パソコン vs. the abstract コンピューター.",
+      "accent": 3
+    },
+    {
+      "key": "mnn:2:26",
+      "kana": "くるま",
+      "kanji": "車",
+      "context": "",
+      "mean": "car, vehicle",
+      "cat": "noun",
+      "type": "",
+      "trans": "",
+      "dict": "車",
+      "dictRead": "くるま",
+      "audio": "/Audio/minnamoi/bai2/00010011101010101.mp3",
+      "levels": {
+        "N5": [
+          "あれは<ruby>田中<rt>たなか</rt></ruby>さんの<ruby>車<rt>くるま</rt></ruby>です。",
+          "That over there is Mr. Tanaka's car."
+        ],
+        "N4": [
+          "<ruby>週末<rt>しゅうまつ</rt></ruby>は<ruby>車<rt>くるま</rt></ruby>で<ruby>買<rt>か</rt></ruby>い<ruby>物<rt>もの</rt></ruby>に<ruby>行<rt>い</rt></ruby>きます。",
+          "On weekends I go shopping by car."
+        ],
+        "N3": [
+          "<ruby>雨<rt>あめ</rt></ruby>の<ruby>日<rt>ひ</rt></ruby>は、<ruby>車<rt>くるま</rt></ruby>で<ruby>駅<rt>えき</rt></ruby>まで<ruby>送<rt>おく</rt></ruby>ってもらうようにしています。",
+          "On rainy days I make a point of having someone drive me to the station."
+        ],
+        "N2": [
+          "<ruby>都会<rt>とかい</rt></ruby>では<ruby>車<rt>くるま</rt></ruby>がなくても<ruby>困<rt>こま</rt></ruby>らないものの、<ruby>田舎<rt>いなか</rt></ruby>では<ruby>必需品<rt>ひつじゅひん</rt></ruby>だ。",
+          "In the city you can get by without a car, but in the countryside it's a necessity."
+        ],
+        "N1": [
+          "<ruby>自動<rt>じどう</rt></ruby><ruby>運転<rt>うんてん</rt></ruby><ruby>車<rt>しゃ</rt></ruby>の<ruby>普及<rt>ふきゅう</rt></ruby>が<ruby>進<rt>すす</rt></ruby>めば、<ruby>車<rt>くるま</rt></ruby>を<ruby>所有<rt>しょゆう</rt></ruby>するという<ruby>概念<rt>がいねん</rt></ruby>そのものが<ruby>変<rt>か</rt></ruby>わっていくかもしれない。",
+          "As self-driving cars spread, the very concept of owning a car may itself change."
+        ]
+      },
+      "mnem": "車 (くるま) — a car's wheels go round and round, \"kuru-kuru\" (くるくる = spinning) — くるま rolls.",
+      "tip": "車 reads くるま on its own (a car) but しゃ in compounds (電車 train, 自動車 automobile). \"By car\" is 車で. Counted with 〜台 (だい).",
+      "accent": 0
+    },
+    {
+      "key": "mnn:2:27",
+      "kana": "つくえ",
+      "kanji": "机",
+      "context": "",
+      "mean": "desk",
+      "cat": "noun",
+      "type": "",
+      "trans": "",
+      "dict": "机",
+      "dictRead": "つくえ",
+      "audio": "/Audio/minnamoi/bai2/00010011101010110.mp3",
+      "levels": {
+        "N5": [
+          "これは<ruby>私<rt>わたし</rt></ruby>の<ruby>机<rt>つくえ</rt></ruby>です。",
+          "This is my desk."
+        ],
+        "N4": [
+          "<ruby>本<rt>ほん</rt></ruby>は<ruby>机<rt>つくえ</rt></ruby>の<ruby>上<rt>うえ</rt></ruby>にあります。",
+          "The book is on the desk."
+        ],
+        "N3": [
+          "<ruby>勉強<rt>べんきょう</rt></ruby>する<ruby>前<rt>まえ</rt></ruby>に、<ruby>机<rt>つくえ</rt></ruby>の<ruby>上<rt>うえ</rt></ruby>を<ruby>片付<rt>かたづ</rt></ruby>けるようにしています。",
+          "Before studying, I make a point of tidying the top of my desk."
+        ],
+        "N2": [
+          "<ruby>机<rt>つくえ</rt></ruby>が<ruby>散<rt>ち</rt></ruby>らかっているものの、どこに<ruby>何<rt>なに</rt></ruby>があるかは<ruby>自分<rt>じぶん</rt></ruby>では<ruby>分<rt>わ</rt></ruby>かっている。",
+          "My desk is cluttered, but I myself know where everything is."
+        ],
+        "N1": [
+          "<ruby>机上<rt>きじょう</rt></ruby>の<ruby>空論<rt>くうろん</rt></ruby>ばかりを<ruby>並<rt>なら</rt></ruby>べていても、<ruby>現場<rt>げんば</rt></ruby>の<ruby>問題<rt>もんだい</rt></ruby>は<ruby>一向<rt>いっこう</rt></ruby>に<ruby>解決<rt>かいけつ</rt></ruby>しない。",
+          "No matter how many armchair theories you line up, the problems on the ground will never get solved."
+        ]
+      },
+      "mnem": "机 (つくえ) — a desk is where you \"make\" (つくる, to make) things and study; hear \"tsuku-e.\"",
+      "tip": "机 is a study/writing desk; a dining/work table is テーブル. Counted with 〜台 (だい) or 〜つ. In the idiom 机上の空論, 机 reads き (armchair theory).",
+      "accent": 0
+    },
+    {
+      "key": "mnn:2:28",
+      "kana": "いす",
+      "kanji": "",
+      "context": "",
+      "mean": "chair",
+      "cat": "noun",
+      "type": "",
+      "trans": "",
+      "dict": "いす",
+      "dictRead": "いす",
+      "audio": "/Audio/minnamoi/bai2/00010011101010111.mp3",
+      "levels": {
+        "N5": [
+          "これはいすです。",
+          "This is a chair."
+        ],
+        "N4": [
+          "どうぞ、そのいすに<ruby>座<rt>すわ</rt></ruby>ってください。",
+          "Please, sit on that chair."
+        ],
+        "N3": [
+          "<ruby>長<rt>なが</rt></ruby>い<ruby>時間<rt>じかん</rt></ruby><ruby>座<rt>すわ</rt></ruby>るので、いいいすを<ruby>使<rt>つか</rt></ruby>うようにしています。",
+          "Since I sit for long hours, I make a point of using a good chair."
+        ],
+        "N2": [
+          "そのいすは<ruby>古<rt>ふる</rt></ruby>いものの、<ruby>座<rt>すわ</rt></ruby>り<ruby>心地<rt>ごこち</rt></ruby>は<ruby>抜群<rt>ばつぐん</rt></ruby>だ。",
+          "That chair is old, but it's exceptionally comfortable to sit in."
+        ],
+        "N1": [
+          "<ruby>大臣<rt>だいじん</rt></ruby>のいすを<ruby>巡<rt>めぐ</rt></ruby>る<ruby>激<rt>はげ</rt></ruby>しい<ruby>駆<rt>か</rt></ruby>け<ruby>引<rt>ひ</rt></ruby>きが、<ruby>水面下<rt>すいめんか</rt></ruby>で<ruby>繰<rt>く</rt></ruby>り<ruby>広<rt>ひろ</rt></ruby>げられていた。",
+          "A fierce jockeying over the minister's post was unfolding beneath the surface."
+        ]
+      },
+      "mnem": "\"いす\" (i-su) — picture yourself easing your body \"in-to a seat\": いす is a chair.",
+      "tip": "いす is usually written in kana (kanji 椅子 is common but often left in kana in Minna). Counted with 〜脚 (きゃく) formally, or 〜つ. Figuratively いす = a position/post (大臣のいす). \"To sit ON a chair\" is いすに座る (に).",
+      "accent": 0
+    },
+    {
+      "key": "mnn:2:29",
+      "kana": "チョコレート",
+      "kanji": "",
+      "context": "",
+      "mean": "chocolate",
+      "cat": "noun",
+      "type": "",
+      "trans": "",
+      "dict": "チョコレート",
+      "dictRead": "チョコレート",
+      "audio": "/Audio/minnamoi/bai2/00010011101011000.mp3",
+      "levels": {
+        "N5": [
+          "これはお<ruby>土産<rt>みやげ</rt></ruby>のチョコレートです。",
+          "This is souvenir chocolate."
+        ],
+        "N4": [
+          "<ruby>妹<rt>いもうと</rt></ruby>はチョコレートが<ruby>大好<rt>だいす</rt></ruby>きです。",
+          "My little sister loves chocolate."
+        ],
+        "N3": [
+          "<ruby>疲<rt>つか</rt></ruby>れたときは、<ruby>甘<rt>あま</rt></ruby>いチョコレートを<ruby>食<rt>た</rt></ruby>べるようにしています。",
+          "When I'm tired, I make a point of eating sweet chocolate."
+        ],
+        "N2": [
+          "チョコレートは<ruby>体<rt>からだ</rt></ruby>にいいと<ruby>言<rt>い</rt></ruby>われているものの、<ruby>食<rt>た</rt></ruby>べすぎはよくない。",
+          "Chocolate is said to be good for you, but eating too much is not good."
+        ],
+        "N1": [
+          "カカオの<ruby>含有量<rt>がんゆうりょう</rt></ruby>にこだわった<ruby>高級<rt>こうきゅう</rt></ruby>チョコレートは、もはや<ruby>菓子<rt>かし</rt></ruby>というより<ruby>嗜好品<rt>しこうひん</rt></ruby>の<ruby>域<rt>いき</rt></ruby>に<ruby>達<rt>たっ</rt></ruby>している。",
+          "Premium chocolate obsessed with cacao content has reached the realm of a connoisseur's indulgence rather than mere confectionery."
+        ]
+      },
+      "mnem": "チョコレート is English \"chocolate\" in katakana — say \"cho-ko-REE-to.\" Short form: チョコ.",
+      "tip": "Everyday speech clips this to チョコ. It's a straight loanword from English \"chocolate.\" On Valentine's Day in Japan チョコ is customarily given — 義理チョコ (obligation chocolate) is a famous term.",
+      "accent": 3
+    },
+    {
+      "key": "mnn:2:30",
+      "kana": "コーヒー",
+      "kanji": "",
+      "context": "",
+      "mean": "coffee",
+      "cat": "noun",
+      "type": "",
+      "trans": "",
+      "dict": "コーヒー",
+      "dictRead": "コーヒー",
+      "audio": "/Audio/minnamoi/bai2/00010011101011001.mp3",
+      "levels": {
+        "N5": [
+          "これ、コーヒーです。どうぞ。",
+          "Here, this is coffee. Please have some."
+        ],
+        "N4": [
+          "<ruby>朝<rt>あさ</rt></ruby><ruby>起<rt>お</rt></ruby>きてから、いつもコーヒーを<ruby>飲<rt>の</rt></ruby>みます。",
+          "After I get up in the morning, I always drink coffee."
+        ],
+        "N3": [
+          "<ruby>眠<rt>ねむ</rt></ruby>くならないように、<ruby>午後<rt>ごご</rt></ruby>はコーヒーを<ruby>飲<rt>の</rt></ruby>むようにしています。",
+          "So I don't get sleepy, I make a point of drinking coffee in the afternoon."
+        ],
+        "N2": [
+          "インスタントコーヒーも<ruby>手軽<rt>てがる</rt></ruby>でいいものの、たまには<ruby>豆<rt>まめ</rt></ruby>から<ruby>淹<rt>い</rt></ruby>れたい。",
+          "Instant coffee is nice and easy, but once in a while I want to brew it from the beans."
+        ],
+        "N1": [
+          "<ruby>一杯<rt>いっぱい</rt></ruby>のコーヒーを<ruby>丁寧<rt>ていねい</rt></ruby>に<ruby>淹<rt>い</rt></ruby>れる<ruby>時間<rt>じかん</rt></ruby>こそが、<ruby>慌<rt>あわ</rt></ruby>ただしい<ruby>日常<rt>にちじょう</rt></ruby>に<ruby>潤<rt>うるお</rt></ruby>いをもたらしてくれる。",
+          "It is precisely the time spent carefully brewing a single cup of coffee that brings a little richness to a hectic daily life."
+        ]
+      },
+      "mnem": "コーヒー is English \"coffee\" in katakana with long vowels — say \"KOH-hii.\"",
+      "tip": "Counted with 〜杯 (はい/ぱい/ばい) for cups. \"To drink coffee\" is コーヒーを飲む (飲む). The long vowels matter: コーヒー (koohii), not コヒ. Don't confuse with 濃い (こい, thick/strong).",
+      "accent": 3
+    },
+    {
+      "key": "mnn:2:31",
+      "kana": "［お］みやげ",
+      "kanji": "［お］土産",
+      "context": "",
+      "mean": "souvenir, gift (brought back from a trip)",
+      "cat": "noun",
+      "type": "",
+      "trans": "",
+      "dict": "お土産",
+      "dictRead": "おみやげ",
+      "audio": "/Audio/minnamoi/bai2/00010011101011010.mp3",
+      "levels": {
+        "N5": [
+          "これはお<ruby>土産<rt>みやげ</rt></ruby>です。",
+          "This is a souvenir."
+        ],
+        "N4": [
+          "<ruby>旅行<rt>りょこう</rt></ruby>のお<ruby>土産<rt>みやげ</rt></ruby>を<ruby>家族<rt>かぞく</rt></ruby>に<ruby>買<rt>か</rt></ruby>いました。",
+          "I bought souvenirs from my trip for my family."
+        ],
+        "N3": [
+          "<ruby>出張<rt>しゅっちょう</rt></ruby>のときは、<ruby>会社<rt>かいしゃ</rt></ruby>の<ruby>人<rt>ひと</rt></ruby>にお<ruby>土産<rt>みやげ</rt></ruby>を<ruby>買<rt>か</rt></ruby>うようにしています。",
+          "When I go on a business trip, I make a point of buying souvenirs for my coworkers."
+        ],
+        "N2": [
+          "お<ruby>土産<rt>みやげ</rt></ruby>は<ruby>気持<rt>きも</rt></ruby>ちの<ruby>問題<rt>もんだい</rt></ruby>だとはいうものの、<ruby>選<rt>えら</rt></ruby>ぶのは<ruby>意外<rt>いがい</rt></ruby>と<ruby>難<rt>むずか</rt></ruby>しい。",
+          "They say souvenirs are a matter of the thought behind them, but choosing one is unexpectedly hard."
+        ],
+        "N1": [
+          "<ruby>旅先<rt>たびさき</rt></ruby>で<ruby>誰<rt>だれ</rt></ruby>に<ruby>何<rt>なに</rt></ruby>を<ruby>贈<rt>おく</rt></ruby>るかに<ruby>頭<rt>あたま</rt></ruby>を<ruby>悩<rt>なや</rt></ruby>ませるのは、お<ruby>土産<rt>みやげ</rt></ruby><ruby>文化<rt>ぶんか</rt></ruby>が<ruby>根強<rt>ねづよ</rt></ruby>く<ruby>残<rt>のこ</rt></ruby>る<ruby>日本<rt>にほん</rt></ruby>ならではの<ruby>光景<rt>こうけい</rt></ruby>だ。",
+          "Agonizing over what to give whom while traveling is a scene peculiar to Japan, where the culture of bringing back souvenirs remains deeply rooted."
+        ]
+      },
+      "mnem": "土 (earth/local) + 産 (product) with an honorific お = a local product you bring home — a souvenir. The reading おみやげ is special (ateji).",
+      "tip": "お土産 is a gift/souvenir brought back from a trip; the polite お is near-obligatory (お土産). Don't confuse it with プレゼント (a general present) or お中元/お歳暮 (seasonal gifts). Reading おみやげ is irregular.",
+      "accent": 0
+    },
+    {
+      "key": "mnn:2:32",
+      "kana": "えいご",
+      "kanji": "英語",
+      "context": "",
+      "mean": "the English language",
+      "cat": "noun",
+      "type": "",
+      "trans": "",
+      "dict": "英語",
+      "dictRead": "えいご",
+      "audio": "/Audio/minnamoi/bai2/00010011101011011.mp3",
+      "levels": {
+        "N5": [
+          "これは<ruby>英語<rt>えいご</rt></ruby>のCDです。",
+          "This is an English CD."
+        ],
+        "N4": [
+          "<ruby>毎日<rt>まいにち</rt></ruby><ruby>少<rt>すこ</rt></ruby>しずつ<ruby>英語<rt>えいご</rt></ruby>を<ruby>勉強<rt>べんきょう</rt></ruby>しています。",
+          "I study English a little every day."
+        ],
+        "N3": [
+          "<ruby>外国<rt>がいこく</rt></ruby>の<ruby>人<rt>ひと</rt></ruby>と<ruby>話<rt>はな</rt></ruby>せるように、<ruby>英語<rt>えいご</rt></ruby>を<ruby>練習<rt>れんしゅう</rt></ruby>するようにしています。",
+          "So I can talk with people from abroad, I make a point of practicing English."
+        ],
+        "N2": [
+          "<ruby>英語<rt>えいご</rt></ruby>が<ruby>話<rt>はな</rt></ruby>せるものの、<ruby>専門的<rt>せんもんてき</rt></ruby>な<ruby>話<rt>はなし</rt></ruby>になると<ruby>途端<rt>とたん</rt></ruby>に<ruby>難<rt>むずか</rt></ruby>しくなる。",
+          "Although I can speak English, the moment the conversation turns technical it suddenly gets difficult."
+        ],
+        "N1": [
+          "<ruby>英語<rt>えいご</rt></ruby>が<ruby>事実上<rt>じじつじょう</rt></ruby>の<ruby>国際<rt>こくさい</rt></ruby><ruby>共通語<rt>きょうつうご</rt></ruby>となった<ruby>今<rt>いま</rt></ruby>、その<ruby>運用<rt>うんよう</rt></ruby><ruby>能力<rt>のうりょく</rt></ruby>は<ruby>職業<rt>しょくぎょう</rt></ruby><ruby>選択<rt>せんたく</rt></ruby>の<ruby>幅<rt>はば</rt></ruby>を<ruby>大<rt>おお</rt></ruby>きく<ruby>左右<rt>さゆう</rt></ruby>する。",
+          "Now that English has become the de facto international lingua franca, one's command of it greatly influences the range of one's career choices."
+        ]
+      },
+      "mnem": "英 (England, also \"excellent\") + 語 (language) = the English language. Say \"EH-go.\"",
+      "tip": "英語 = the English language; 英国 (えいこく) = England/UK. The suffix 〜語 (ご) makes a language name: 日本語, 中国語, フランス語. Don't confuse 英語 (the language) with アメリカ (the country/America).",
+      "accent": 0
+    },
+    {
+      "key": "mnn:2:33",
+      "kana": "にほんご",
+      "kanji": "日本語",
+      "context": "",
+      "mean": "the Japanese language",
+      "cat": "noun",
+      "type": "",
+      "trans": "",
+      "dict": "日本語",
+      "dictRead": "にほんご",
+      "audio": "/Audio/minnamoi/bai2/00010011101011100.mp3",
+      "levels": {
+        "N5": [
+          "これは<ruby>日本語<rt>にほんご</rt></ruby>の<ruby>本<rt>ほん</rt></ruby>です。",
+          "This is a Japanese-language book."
+        ],
+        "N4": [
+          "<ruby>日本語<rt>にほんご</rt></ruby>で<ruby>手紙<rt>てがみ</rt></ruby>を<ruby>書<rt>か</rt></ruby>きました。",
+          "I wrote a letter in Japanese."
+        ],
+        "N3": [
+          "<ruby>漢字<rt>かんじ</rt></ruby>を<ruby>忘<rt>わす</rt></ruby>れないように、<ruby>毎日<rt>まいにち</rt></ruby><ruby>日本語<rt>にほんご</rt></ruby>を<ruby>書<rt>か</rt></ruby>くようにしています。",
+          "So as not to forget kanji, I make a point of writing Japanese every day."
+        ],
+        "N2": [
+          "<ruby>日本語<rt>にほんご</rt></ruby>は<ruby>難<rt>むずか</rt></ruby>しいと<ruby>言<rt>い</rt></ruby>われているものの、<ruby>文法<rt>ぶんぽう</rt></ruby>は<ruby>意外<rt>いがい</rt></ruby>と<ruby>規則<rt>きそく</rt></ruby><ruby>的<rt>てき</rt></ruby>だ。",
+          "Japanese is said to be difficult, but its grammar is unexpectedly regular."
+        ],
+        "N1": [
+          "<ruby>敬語<rt>けいご</rt></ruby>の<ruby>使<rt>つか</rt></ruby>い<ruby>分<rt>わ</rt></ruby>けを<ruby>完璧<rt>かんぺき</rt></ruby>にこなせてこそ、<ruby>真<rt>しん</rt></ruby>に<ruby>日本語<rt>にほんご</rt></ruby>を<ruby>使<rt>つか</rt></ruby>いこなしているといえるだろう。",
+          "Only when you can perfectly navigate the distinctions of honorific language can you truly be said to have mastered Japanese."
+        ]
+      },
+      "mnem": "日本 (Japan) + 語 (language) = the Japanese language. Say \"ni-hon-go.\"",
+      "tip": "日本語 = the Japanese language; 日本 (にほん／にっぽん) = the country. The 〜語 (ご) suffix names a language. Note the same 語 appears in 英語, 中国語, 単語 (vocabulary word).",
+      "accent": 0
+    },
+    {
+      "key": "mnn:2:34",
+      "kana": "～ご",
+      "kanji": "～語",
+      "context": "フランス〜",
+      "mean": "~ language (suffix for language names)",
+      "cat": "noun",
+      "type": "",
+      "trans": "",
+      "dict": "〜語",
+      "dictRead": "〜ご",
+      "audio": "/Audio/minnamoi/bai2/00010011101011101.mp3",
+      "levels": {
+        "N5": [
+          "これはフランス<ruby>語<rt>ご</rt></ruby>の<ruby>本<rt>ほん</rt></ruby>です。",
+          "This is a French-language book."
+        ],
+        "N4": [
+          "<ruby>中国<rt>ちゅうごく</rt></ruby><ruby>語<rt>ご</rt></ruby>を<ruby>少<rt>すこ</rt></ruby>し<ruby>話<rt>はな</rt></ruby>すことができます。",
+          "I can speak a little Chinese."
+        ],
+        "N3": [
+          "<ruby>新<rt>あたら</rt></ruby>しい<ruby>言葉<rt>ことば</rt></ruby>を<ruby>覚<rt>おぼ</rt></ruby>えるために、<ruby>毎日<rt>まいにち</rt></ruby>ドイツ<ruby>語<rt>ご</rt></ruby>を<ruby>勉強<rt>べんきょう</rt></ruby>するようにしています。",
+          "To learn new words, I make a point of studying German every day."
+        ],
+        "N2": [
+          "スペイン<ruby>語<rt>ご</rt></ruby>は<ruby>発音<rt>はつおん</rt></ruby>が<ruby>易<rt>やさ</rt></ruby>しいものの、<ruby>動詞<rt>どうし</rt></ruby>の<ruby>活用<rt>かつよう</rt></ruby>は<ruby>複雑<rt>ふくざつ</rt></ruby>だ。",
+          "Spanish pronunciation is easy, but its verb conjugation is complex."
+        ],
+        "N1": [
+          "<ruby>少数<rt>しょうすう</rt></ruby><ruby>民族<rt>みんぞく</rt></ruby>の<ruby>言<rt>げん</rt></ruby><ruby>語<rt>ご</rt></ruby>が<ruby>次々<rt>つぎつぎ</rt></ruby>と<ruby>消滅<rt>しょうめつ</rt></ruby>していく<ruby>現状<rt>げんじょう</rt></ruby>に、<ruby>言語<rt>げんご</rt></ruby><ruby>学者<rt>がくしゃ</rt></ruby>たちは<ruby>強<rt>つよ</rt></ruby>い<ruby>危機感<rt>ききかん</rt></ruby>を<ruby>抱<rt>いだ</rt></ruby>いている。",
+          "Linguists feel a strong sense of crisis over the present situation in which minority languages are disappearing one after another."
+        ]
+      },
+      "mnem": "〜語 (ご) is the language-tag: stick a country/people name in front — 日本＋語, フランス＋語, 英＋語.",
+      "tip": "The suffix 〜語 (ご) attaches to a country/ethnicity name to form a language: 日本語, 英語, フランス語, 韓国語. As a stand-alone noun 語 also means \"word\" in 単語 (vocabulary). Draft scrape mis-glossed this as \"after ~ (duration of time)\" — WRONG; it's the language suffix.",
+      "accent": 0
+    },
+    {
+      "key": "mnn:2:35",
+      "kana": "なに",
+      "kanji": "何",
+      "context": "",
+      "mean": "what",
+      "cat": "noun",
+      "type": "",
+      "trans": "",
+      "dict": "何",
+      "dictRead": "なに",
+      "audio": "/Audio/minnamoi/bai2/00010011101011110.mp3",
+      "levels": {
+        "N5": [
+          "これは<ruby>何<rt>なん</rt></ruby>ですか。",
+          "What is this?"
+        ],
+        "N4": [
+          "<ruby>昼<rt>ひる</rt></ruby>ごはんに<ruby>何<rt>なに</rt></ruby>を<ruby>食<rt>た</rt></ruby>べますか。",
+          "What will you eat for lunch?"
+        ],
+        "N3": [
+          "<ruby>困<rt>こま</rt></ruby>ったことがあったら、<ruby>何<rt>なん</rt></ruby>でも<ruby>相談<rt>そうだん</rt></ruby>するようにしています。",
+          "If something troubles me, I make a point of consulting about anything at all."
+        ],
+        "N2": [
+          "<ruby>彼<rt>かれ</rt></ruby>が<ruby>何<rt>なに</rt></ruby>を<ruby>考<rt>かんが</rt></ruby>えているのか、<ruby>顔<rt>かお</rt></ruby>を<ruby>見<rt>み</rt></ruby>ただけではまったく<ruby>分<rt>わ</rt></ruby>からない。",
+          "What he is thinking is something I can't tell at all just by looking at his face."
+        ],
+        "N1": [
+          "<ruby>人<rt>ひと</rt></ruby>は<ruby>何<rt>なん</rt></ruby>のために<ruby>生<rt>い</rt></ruby>きるのか、という<ruby>問<rt>と</rt></ruby>いに<ruby>普遍的<rt>ふへんてき</rt></ruby>な<ruby>答<rt>こた</rt></ruby>えなど<ruby>存在<rt>そんざい</rt></ruby>しないのかもしれない。",
+          "Perhaps no universal answer exists to the question of what people live for."
+        ]
+      },
+      "mnem": "何 (なに／なん) is the question word \"what\" — hear \"NA-ni\" as \"nah, what?\"",
+      "tip": "何 reads なに in most contexts but なん before です／の／counters (何ですか, 何の本, 何時). なんですか = \"what is it?\"; なにを = \"what (object)?\" This alternation is a Lesson-2 flag — see the question-word grammar point.",
+      "accent": 1
+    },
+    {
+      "key": "mnn:2:36",
+      "kana": "そう",
+      "kanji": "",
+      "context": "〜です／〜ですか",
+      "mean": "so, that's right (in そうです／そうですか)",
+      "cat": "adverb",
+      "type": "",
+      "trans": "",
+      "dict": "そう",
+      "dictRead": "そう",
+      "audio": "/Audio/minnamoi/bai2/00010011101011111.mp3",
+      "levels": {
+        "N5": [
+          "はい、そうです。",
+          "Yes, that's right."
+        ],
+        "N4": [
+          "「これはあなたの<ruby>傘<rt>かさ</rt></ruby>ですか。」「はい、そうです。」",
+          "\"Is this your umbrella?\" \"Yes, it is.\""
+        ],
+        "N3": [
+          "そうですか。それは<ruby>知<rt>し</rt></ruby>りませんでした。",
+          "Oh, is that so? I didn't know that."
+        ],
+        "N2": [
+          "そうは<ruby>言<rt>い</rt></ruby>っても、<ruby>実際<rt>じっさい</rt></ruby>にやってみると<ruby>思<rt>おも</rt></ruby>ったより<ruby>大変<rt>たいへん</rt></ruby>だった。",
+          "That said, actually doing it turned out to be harder than I had thought."
+        ],
+        "N1": [
+          "<ruby>相手<rt>あいて</rt></ruby>の<ruby>意見<rt>いけん</rt></ruby>を<ruby>頭<rt>あたま</rt></ruby>ごなしに<ruby>否定<rt>ひてい</rt></ruby>せず、まずは「そうですね」と<ruby>受<rt>う</rt></ruby>け<ruby>止<rt>と</rt></ruby>めるのが<ruby>交渉<rt>こうしょう</rt></ruby>の<ruby>基本<rt>きほん</rt></ruby>だ。",
+          "Rather than flatly rejecting the other party's opinion, first taking it in with a \"you're right, aren't you\" is the basis of negotiation."
+        ]
+      },
+      "mnem": "そう = \"so\" — English \"that's so / is that so?\" maps almost directly onto そうです／そうですか.",
+      "tip": "そうです = \"that's right / it is so\" confirms a yes/no question; そうですか = \"oh, I see / is that so?\" acknowledges new info (falling intonation) or asks (rising). The negative is ちがいます (\"that's wrong\"), NOT そうじゃありません. Don't confuse with the そう of appearance (〜そうだ, \"looks like\") taught later.",
+      "accent": 1
+    }
+  ],
+  "grammar": [
+    {
+      "pattern": "これ／それ／あれ は N です",
+      "structure": "これ／それ／あれ（topic）＋ は ＋ N ＋ です",
+      "explain": "これ, それ, あれ are stand-alone pronouns meaning \"this one / that one / that one over there.\" They pick a thing by distance: これ is near the speaker, それ is near the listener, あれ is far from both. They take は and act as the sentence topic: 「これは本です」 = This is a book. The question word for a thing is 何 (なん): 「それは何ですか」 = What is that?",
+      "examples": [
+        {
+          "jp": "これは<ruby>辞書<rt>じしょ</rt></ruby>です。",
+          "en": "This is a dictionary."
+        },
+        {
+          "jp": "それは<ruby>何<rt>なん</rt></ruby>ですか。",
+          "en": "What is that (by you)?"
+        },
+        {
+          "jp": "あれは<ruby>田中<rt>たなか</rt></ruby>さんの<ruby>傘<rt>かさ</rt></ruby>です。",
+          "en": "That over there is Mr. Tanaka's umbrella."
+        }
+      ]
+    },
+    {
+      "pattern": "この／その／あの ＋ N",
+      "structure": "この／その／あの ＋ N（＋ は … です）",
+      "explain": "この, その, あの are ADJECTIVES: they must be followed directly by a noun. Same distance system as これ／それ／あれ (この near me, その near you, あの over there). Contrast the pronoun これ (stands alone: これは本です) with the adjective この (attaches to a noun: この本は…). You cannot say これ本 or use この on its own.",
+      "examples": [
+        {
+          "jp": "この<ruby>本<rt>ほん</rt></ruby>は<ruby>私<rt>わたし</rt></ruby>のです。",
+          "en": "This book is mine."
+        },
+        {
+          "jp": "その<ruby>傘<rt>かさ</rt></ruby>はあなたのですか。",
+          "en": "Is that umbrella (by you) yours?"
+        },
+        {
+          "jp": "あの<ruby>人<rt>ひと</rt></ruby>は<ruby>山田<rt>やまだ</rt></ruby><ruby>先生<rt>せんせい</rt></ruby>です。",
+          "en": "That person over there is Professor Yamada."
+        }
+      ]
+    },
+    {
+      "pattern": "N1 の N2 (possessive / apposition)",
+      "structure": "N1 ＋ の ＋ N2",
+      "explain": "の links two nouns. It marks possession — 私の本 (my book), 田中さんの車 (Mr. Tanaka's car) — and also apposition/attribution: 日本語の本 (a book OF Japanese = a Japanese-language book), コンピューターの本 (a book about computers), 車の雑誌 (a car magazine). When the second noun is understood from context it can be dropped, leaving の on its own as a pronoun: 「これは私のです」 = This is mine. なんの＋N asks \"what kind of N\": 「なんの本ですか」 = What (kind of) book is it?",
+      "examples": [
+        {
+          "jp": "これはコンピューターの<ruby>本<rt>ほん</rt></ruby>です。",
+          "en": "This is a book about computers."
+        },
+        {
+          "jp": "これは<ruby>誰<rt>だれ</rt></ruby>の<ruby>本<rt>ほん</rt></ruby>ですか。",
+          "en": "Whose book is this?"
+        },
+        {
+          "jp": "これはミラーさんのです。",
+          "en": "This is Mr. Miller's."
+        },
+        {
+          "jp": "それは<ruby>何<rt>なん</rt></ruby>の<ruby>雑誌<rt>ざっし</rt></ruby>ですか。",
+          "en": "What kind of magazine is that?"
+        }
+      ]
+    },
+    {
+      "pattern": "そうです／そうですか・〜か、〜か",
+      "structure": "はい、そうです。／ いいえ、ちがいます。／ N1 ですか、N2 ですか",
+      "explain": "To a yes/no noun question, answer はい、そうです (Yes, that's right) or いいえ、ちがいます (No, that's wrong — NOT そうじゃありません). そうですか with falling intonation means \"Oh, I see\"; with rising intonation it asks \"Is that so?\". An either-or question chains two clauses with か: 「これは本ですか、雑誌ですか」 = Is this a book or a magazine? — you answer by naming the correct one, not with はい／いいえ.",
+      "examples": [
+        {
+          "jp": "これは<ruby>新聞<rt>しんぶん</rt></ruby>ですか。…はい、そうです。",
+          "en": "Is this a newspaper? …Yes, it is."
+        },
+        {
+          "jp": "それはシャープペンシルですか。…いいえ、ちがいます。",
+          "en": "Is that a mechanical pencil? …No, it isn't."
+        },
+        {
+          "jp": "これは<ruby>本<rt>ほん</rt></ruby>ですか、<ruby>雑誌<rt>ざっし</rt></ruby>ですか。…<ruby>本<rt>ほん</rt></ruby>です。",
+          "en": "Is this a book or a magazine? …It's a book."
+        },
+        {
+          "jp": "<ruby>英語<rt>えいご</rt></ruby>のCDです。…そうですか。",
+          "en": "It's an English CD. …Oh, I see."
+        }
+      ]
+    }
+  ],
+  "examples": [
+    {
+      "jp": "これは<ruby>辞書<rt>じしょ</rt></ruby>です。",
+      "en": "This is a dictionary."
+    },
+    {
+      "jp": "それはわたしの<ruby>傘<rt>かさ</rt></ruby>です。",
+      "en": "That is my umbrella."
+    },
+    {
+      "jp": "この<ruby>本<rt>ほん</rt></ruby>はわたしのです。",
+      "en": "This book here is mine."
+    },
+    {
+      "jp": "それは<ruby>何<rt>なん</rt></ruby>の<ruby>雑誌<rt>ざっし</rt></ruby>ですか。…コンピューターの<ruby>雑誌<rt>ざっし</rt></ruby>です。",
+      "en": "What kind of magazine is that? …It's a computer magazine."
+    },
+    {
+      "jp": "あれは<ruby>誰<rt>だれ</rt></ruby>のかばんですか。…<ruby>佐藤<rt>さとう</rt></ruby>さんのかばんです。",
+      "en": "Whose bag is that over there? …It's Ms. Sato's bag."
+    },
+    {
+      "jp": "この<ruby>傘<rt>かさ</rt></ruby>はあなたのですか。…いいえ、わたしのじゃありません。",
+      "en": "Is this umbrella yours? …No, it isn't mine."
+    },
+    {
+      "jp": "このかぎは<ruby>誰<rt>だれ</rt></ruby>のですか。…わたしのです。",
+      "en": "Whose key is this? …It's mine."
+    },
+    {
+      "jp": "あの<ruby>人<rt>ひと</rt></ruby>は<ruby>山田<rt>やまだ</rt></ruby><ruby>先生<rt>せんせい</rt></ruby>です。",
+      "en": "That person over there is Professor Yamada."
+    },
+    {
+      "jp": "これはコンピューターの<ruby>本<rt>ほん</rt></ruby>ですか、<ruby>英語<rt>えいご</rt></ruby>の<ruby>本<rt>ほん</rt></ruby>ですか。…<ruby>英語<rt>えいご</rt></ruby>の<ruby>本<rt>ほん</rt></ruby>です。",
+      "en": "Is this a computer book or an English book? …It's an English book."
+    }
+  ],
+  "conversation": {
+    "title": "これから お世話に なります (I look forward to your kind support)",
+    "audio": "/Audio/minnahonsatsu1/5.mp3",
+    "lines": [
+      {
+        "role": "山田一郎",
+        "jp": "はい。どなたですか。",
+        "en": "Yes? Who is it?"
+      },
+      {
+        "role": "サントス",
+        "jp": "408のサントスです。",
+        "en": "It's Santos, from room 408."
+      },
+      {
+        "role": "サントス",
+        "jp": "こんにちは。サントスです。これからお<ruby>世話<rt>せわ</rt></ruby>になります。どうぞよろしくお<ruby>願<rt>ねが</rt></ruby>いします。",
+        "en": "Hello, I'm Santos. I'll be in your care from now on. It's a pleasure to meet you."
+      },
+      {
+        "role": "山田一郎",
+        "jp": "こちらこそよろしくお<ruby>願<rt>ねが</rt></ruby>いします。",
+        "en": "The pleasure is mine."
+      },
+      {
+        "role": "サントス",
+        "jp": "あのう、これ、コーヒーです。どうぞ。",
+        "en": "Um, here — this is coffee. Please take it."
+      },
+      {
+        "role": "山田一郎",
+        "jp": "どうもありがとうございます。",
+        "en": "Thank you very much."
+      },
+      {
+        "role": "サントス",
+        "jp": "それは<ruby>何<rt>なん</rt></ruby>ですか。",
+        "en": "What is that?"
+      },
+      {
+        "role": "山田一郎",
+        "jp": "これですか。<ruby>英語<rt>えいご</rt></ruby>のCDです。",
+        "en": "This? It's an English CD."
+      },
+      {
+        "role": "サントス",
+        "jp": "そうですか。",
+        "en": "Oh, I see."
+      },
+      {
+        "role": "サントス",
+        "jp": "この<ruby>傘<rt>かさ</rt></ruby>はミラーさんのですか。",
+        "en": "Is this umbrella Mr. Miller's?"
+      },
+      {
+        "role": "山田一郎",
+        "jp": "いいえ、ちがいます。",
+        "en": "No, it isn't."
+      },
+      {
+        "role": "サントス",
+        "jp": "だれのですか。",
+        "en": "Whose is it?"
+      },
+      {
+        "role": "山田一郎",
+        "jp": "あ、わたしのです。ありがとうございます。",
+        "en": "Oh, it's mine. Thank you."
+      }
+    ]
+  }
+}

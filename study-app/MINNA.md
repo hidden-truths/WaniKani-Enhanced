@@ -461,9 +461,11 @@ helpers in [src/core/recordings.js](src/core/recordings.js) + [src/core/refs.js]
 
 - **More chapters** — run [../wk-enhanced-api/scripts/scrape-minna.ts](../wk-enhanced-api/scripts/scrape-minna.ts) for
   other lessons and curate them into `data/minna/lesson-<n>.json`. The whole UI is
-  already N-lesson aware (chapter chips, `lastLesson`). **Shipped so far: L22, L23, L24.**
-  (L23 carries iTalki flags from the maintainer's lesson; L22/L24 don't yet — add
-  `italki:true` per word as those tutoring sessions happen.)
+  already N-lesson aware (chapter chips, `lastLesson`). **Shipped so far: L1–L5, L22, L23, L24.**
+  (The early-lesson L1–L5 backfill was curated from the scraped drafts for review; its generated
+  Japanese is flagged for maintainer proofread, same status as `examples.js`. L11–L21 remain to
+  scrape+curate. L23 carries iTalki flags from the maintainer's lesson; L1–L5/L22/L24 don't yet —
+  add `italki:true` per word as those tutoring sessions happen.)
 - **More section types** — exercises/drills (interactive, auto-checked), listening,
   kanji. The lesson JSON can grow new top-level arrays; `renderMinnaLesson` adds a
   section renderer per type.
@@ -474,7 +476,7 @@ helpers in [src/core/recordings.js](src/core/recordings.js) + [src/core/refs.js]
 ### Polish
 
 - ~~**Furigana** on the example/conversation sentences~~ — **shipped.** The grammar examples,
-  lesson example sentences, and conversation lines (L22–24, 79 sentences) now carry `<ruby>`
+  lesson example sentences, and conversation lines (every curated lesson) now carry `<ruby>`
   furigana, rendered via a `rubyHtml()` sanitizer (escapes everything except the ruby tag set)
   instead of `escapeHtml`, so the global `<html data-furigana>` flip toggles their readings —
   the same toggle the rest of the app uses. Readings are model-generated (validated by

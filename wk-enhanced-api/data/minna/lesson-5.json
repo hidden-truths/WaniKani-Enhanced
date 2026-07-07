@@ -1,0 +1,1975 @@
+{
+  "lesson": 5,
+  "title": "Lesson 5",
+  "theme": "Movement verbs 行く・来る・帰る with the へ (direction), で (means of transport), と (companion), and いつ / 〜月〜日 (dates) — going places, how, with whom, and when",
+  "source": {
+    "name": "vnjpclub.com",
+    "vocabUrl": "https://www.vnjpclub.com/en/minna-no-nihongo/lesson-5-vocabulary.html",
+    "grammarUrl": "https://www.vnjpclub.com/en/minna-no-nihongo/lesson-5-grammar.html",
+    "note": "Vocabulary, native-speaker audio, and example sentences aggregated from vnjpclub.com (Minna no Nihongo 第2版). For personal study."
+  },
+  "vocab": [
+    {
+      "key": "mnn:5:0",
+      "kana": "いきます",
+      "kanji": "行きます",
+      "context": "",
+      "mean": "to go",
+      "cat": "verb",
+      "type": "godan",
+      "trans": "i",
+      "dict": "行く",
+      "dictRead": "いく",
+      "audio": "/Audio/minnamoi/bai5/00010011111010110.mp3",
+      "accent": 0
+    },
+    {
+      "key": "mnn:5:1",
+      "kana": "きます",
+      "kanji": "来ます",
+      "context": "",
+      "mean": "to come",
+      "cat": "verb",
+      "type": "irregular",
+      "trans": "i",
+      "dict": "来る",
+      "dictRead": "くる",
+      "audio": "/Audio/minnamoi/bai5/00010011111010111.mp3",
+      "accent": 1
+    },
+    {
+      "key": "mnn:5:2",
+      "kana": "かえります",
+      "kanji": "帰ります",
+      "context": "うちへ〜",
+      "mean": "to go home, return",
+      "cat": "verb",
+      "type": "godan",
+      "trans": "i",
+      "dict": "帰る",
+      "dictRead": "かえる",
+      "audio": "/Audio/minnamoi/bai5/00010011111011000.mp3",
+      "accent": 1
+    },
+    {
+      "key": "mnn:5:3",
+      "kana": "がっこう",
+      "kanji": "学校",
+      "context": "",
+      "mean": "school",
+      "cat": "noun",
+      "type": "",
+      "trans": "",
+      "dict": "学校",
+      "dictRead": "がっこう",
+      "audio": "/Audio/minnamoi/bai5/00010011111011001.mp3",
+      "levels": {
+        "N5": [
+          "<ruby>毎日<rt>まいにち</rt></ruby><ruby>学校<rt>がっこう</rt></ruby>へ<ruby>行<rt>い</rt></ruby>きます。",
+          "I go to school every day."
+        ],
+        "N4": [
+          "<ruby>自転車<rt>じてんしゃ</rt></ruby>で<ruby>学校<rt>がっこう</rt></ruby>へ<ruby>行<rt>い</rt></ruby>きます。",
+          "I go to school by bicycle."
+        ],
+        "N3": [
+          "<ruby>雨<rt>あめ</rt></ruby>が<ruby>降<rt>ふ</rt></ruby>っても、<ruby>学校<rt>がっこう</rt></ruby>を<ruby>休<rt>やす</rt></ruby>まないようにしています。",
+          "Even when it rains, I make a point of not skipping school."
+        ],
+        "N2": [
+          "<ruby>体調<rt>たいちょう</rt></ruby>が<ruby>悪<rt>わる</rt></ruby>かったものの、<ruby>試験<rt>しけん</rt></ruby>があるので<ruby>学校<rt>がっこう</rt></ruby>へ<ruby>行<rt>い</rt></ruby>かざるを<ruby>得<rt>え</rt></ruby>なかった。",
+          "Although I felt unwell, since there was an exam I had no choice but to go to school."
+        ],
+        "N1": [
+          "<ruby>統廃合<rt>とうはいごう</rt></ruby>が<ruby>進<rt>すす</rt></ruby>む<ruby>今<rt>いま</rt></ruby>、<ruby>地域<rt>ちいき</rt></ruby>にとって<ruby>学校<rt>がっこう</rt></ruby>は<ruby>単<rt>たん</rt></ruby>なる<ruby>教育<rt>きょういく</rt></ruby>の<ruby>場<rt>ば</rt></ruby>にとどまらない<ruby>存在<rt>そんざい</rt></ruby>だ。",
+          "In an age of accelerating consolidation, for a community a school is something more than a mere place of education."
+        ]
+      },
+      "mnem": "学 (learning) + 校 (institution) — the institution for learning is a school; say \"gakkō.\"",
+      "tip": "Don't confuse 学校 (a school as an institution) with 教室 (きょうしつ, a classroom); movement to it takes へ／に — 学校へ行く.",
+      "accent": 0
+    },
+    {
+      "key": "mnn:5:4",
+      "kana": "スーパー",
+      "kanji": "",
+      "context": "",
+      "mean": "supermarket",
+      "cat": "noun",
+      "type": "",
+      "trans": "",
+      "dict": "スーパー",
+      "dictRead": "スーパー",
+      "audio": "/Audio/minnamoi/bai5/00010011111011010.mp3",
+      "levels": {
+        "N5": [
+          "<ruby>母<rt>はは</rt></ruby>とスーパーへ<ruby>行<rt>い</rt></ruby>きます。",
+          "I go to the supermarket with my mother."
+        ],
+        "N4": [
+          "<ruby>駅<rt>えき</rt></ruby>の<ruby>前<rt>まえ</rt></ruby>のスーパーは<ruby>安<rt>やす</rt></ruby>いから、よく<ruby>行<rt>い</rt></ruby>きます。",
+          "The supermarket in front of the station is cheap, so I often go there."
+        ],
+        "N3": [
+          "<ruby>仕事<rt>しごと</rt></ruby>の<ruby>帰<rt>かえ</rt></ruby>りに、スーパーで<ruby>晩<rt>ばん</rt></ruby>ごはんの<ruby>材料<rt>ざいりょう</rt></ruby>を<ruby>買<rt>か</rt></ruby>うようにしています。",
+          "On the way home from work, I make a point of buying the ingredients for dinner at the supermarket."
+        ],
+        "N2": [
+          "<ruby>近所<rt>きんじょ</rt></ruby>のスーパーは<ruby>便利<rt>べんり</rt></ruby>なものの、<ruby>品揃<rt>しなぞろ</rt></ruby>えがあまりよくない。",
+          "Although the neighborhood supermarket is convenient, its selection isn't very good."
+        ],
+        "N1": [
+          "<ruby>大型<rt>おおがた</rt></ruby>スーパーの<ruby>進出<rt>しんしゅつ</rt></ruby>により、<ruby>昔<rt>むかし</rt></ruby>ながらの<ruby>商店街<rt>しょうてんがい</rt></ruby>は<ruby>衰退<rt>すいたい</rt></ruby>を<ruby>余儀<rt>よぎ</rt></ruby>なくされた。",
+          "With the advance of large supermarkets, the old-fashioned shopping streets were left with no choice but to decline."
+        ]
+      },
+      "mnem": "スーパー is clipped from English \"supermarket\" — Japanese keeps just the \"super\" part; stretch it to \"sū-pā.\"",
+      "tip": "In Japanese スーパー means the STORE (supermarket); the English adjective \"super\" (great) doesn't carry over — for that, say すごい.",
+      "accent": 1
+    },
+    {
+      "key": "mnn:5:5",
+      "kana": "えき",
+      "kanji": "駅",
+      "context": "",
+      "mean": "station",
+      "cat": "noun",
+      "type": "",
+      "trans": "",
+      "dict": "駅",
+      "dictRead": "えき",
+      "audio": "/Audio/minnamoi/bai5/00010011111011011.mp3",
+      "levels": {
+        "N5": [
+          "<ruby>電車<rt>でんしゃ</rt></ruby>で<ruby>駅<rt>えき</rt></ruby>へ<ruby>行<rt>い</rt></ruby>きます。",
+          "I go to the station by train."
+        ],
+        "N4": [
+          "<ruby>駅<rt>えき</rt></ruby>まで<ruby>歩<rt>ある</rt></ruby>いて<ruby>十分<rt>じゅっぷん</rt></ruby>ぐらいかかります。",
+          "It takes about ten minutes to walk to the station."
+        ],
+        "N3": [
+          "<ruby>朝<rt>あさ</rt></ruby>は<ruby>駅<rt>えき</rt></ruby>がとても<ruby>込<rt>こ</rt></ruby>むので、<ruby>早<rt>はや</rt></ruby>めに<ruby>家<rt>いえ</rt></ruby>を<ruby>出<rt>で</rt></ruby>るようにしています。",
+          "The station gets very crowded in the morning, so I make a point of leaving home early."
+        ],
+        "N2": [
+          "<ruby>終電<rt>しゅうでん</rt></ruby>に<ruby>間<rt>ま</rt></ruby>に<ruby>合<rt>あ</rt></ruby>わなかったものの、<ruby>駅<rt>えき</rt></ruby>の<ruby>近<rt>ちか</rt></ruby>くにホテルがあって<ruby>助<rt>たす</rt></ruby>かった。",
+          "Although I missed the last train, there was a hotel near the station, which was a lifesaver."
+        ],
+        "N1": [
+          "<ruby>再開発<rt>さいかいはつ</rt></ruby>によって、かつては<ruby>寂<rt>さび</rt></ruby>れていた<ruby>駅<rt>えき</rt></ruby>の<ruby>周辺<rt>しゅうへん</rt></ruby>が<ruby>見違<rt>みちが</rt></ruby>えるほど<ruby>賑<rt>にぎ</rt></ruby>わうようになった。",
+          "Thanks to redevelopment, the area around the once-desolate station has come to bustle almost beyond recognition."
+        ]
+      },
+      "mnem": "\"駅\" reads \"eki\" — picture the announcer's \"eki, eki!\" as you pull into each station stop.",
+      "tip": "駅 is specifically a TRAIN station; a bus stop is バスてい (バス停). To \"get to the station,\" use へ／に: 駅へ行く.",
+      "accent": 1
+    },
+    {
+      "key": "mnn:5:6",
+      "kana": "ひこうき",
+      "kanji": "飛行機",
+      "context": "",
+      "mean": "airplane",
+      "cat": "noun",
+      "type": "",
+      "trans": "",
+      "dict": "飛行機",
+      "dictRead": "ひこうき",
+      "audio": "/Audio/minnamoi/bai5/00010011111011100.mp3",
+      "levels": {
+        "N5": [
+          "<ruby>飛行機<rt>ひこうき</rt></ruby>で<ruby>東京<rt>とうきょう</rt></ruby>へ<ruby>行<rt>い</rt></ruby>きます。",
+          "I go to Tokyo by airplane."
+        ],
+        "N4": [
+          "<ruby>初<rt>はじ</rt></ruby>めて<ruby>飛行機<rt>ひこうき</rt></ruby>に<ruby>乗<rt>の</rt></ruby>ったとき、とても<ruby>緊張<rt>きんちょう</rt></ruby>しました。",
+          "When I rode on an airplane for the first time, I was very nervous."
+        ],
+        "N3": [
+          "<ruby>台風<rt>たいふう</rt></ruby>のせいで、<ruby>飛行機<rt>ひこうき</rt></ruby>が<ruby>飛<rt>と</rt></ruby>ばないことがよくあります。",
+          "Because of typhoons, it often happens that airplanes don't fly."
+        ],
+        "N2": [
+          "<ruby>新幹線<rt>しんかんせん</rt></ruby>のほうが<ruby>楽<rt>らく</rt></ruby>なものの、<ruby>急<rt>いそ</rt></ruby>いでいたので<ruby>飛行機<rt>ひこうき</rt></ruby>で<ruby>行<rt>い</rt></ruby>くことにした。",
+          "Although the bullet train is more comfortable, since I was in a hurry I decided to go by airplane."
+        ],
+        "N1": [
+          "<ruby>悪天候<rt>あくてんこう</rt></ruby>が<ruby>続<rt>つづ</rt></ruby>き、<ruby>飛行機<rt>ひこうき</rt></ruby>の<ruby>欠航<rt>けっこう</rt></ruby>が<ruby>相次<rt>あいつ</rt></ruby>いだため、<ruby>予定<rt>よてい</rt></ruby>を<ruby>大幅<rt>おおはば</rt></ruby>に<ruby>変更<rt>へんこう</rt></ruby>せざるを<ruby>得<rt>え</rt></ruby>なかった。",
+          "As the bad weather persisted and flight cancellations came one after another, we had no choice but to drastically change our plans."
+        ]
+      },
+      "mnem": "飛 (fly) + 行 (go) + 機 (machine) = a flying-going machine, i.e. an airplane.",
+      "tip": "飛行機 is the vehicle; the airPORT is 空港 (くうこう). \"By plane\" uses で: 飛行機で行く.",
+      "accent": 2
+    },
+    {
+      "key": "mnn:5:7",
+      "kana": "ふね",
+      "kanji": "船",
+      "context": "",
+      "mean": "ship, boat",
+      "cat": "noun",
+      "type": "",
+      "trans": "",
+      "dict": "船",
+      "dictRead": "ふね",
+      "audio": "/Audio/minnamoi/bai5/00010011111011101.mp3",
+      "levels": {
+        "N5": [
+          "<ruby>船<rt>ふね</rt></ruby>で<ruby>島<rt>しま</rt></ruby>へ<ruby>行<rt>い</rt></ruby>きます。",
+          "I go to the island by ship."
+        ],
+        "N4": [
+          "<ruby>船<rt>ふね</rt></ruby>に<ruby>乗<rt>の</rt></ruby>ると、いつも<ruby>気分<rt>きぶん</rt></ruby>が<ruby>悪<rt>わる</rt></ruby>くなります。",
+          "Whenever I ride a boat, I always feel sick."
+        ],
+        "N3": [
+          "<ruby>海<rt>うみ</rt></ruby>が<ruby>荒<rt>あ</rt></ruby>れているときは、<ruby>船<rt>ふね</rt></ruby>を<ruby>出<rt>だ</rt></ruby>さないようにしています。",
+          "When the sea is rough, they make a point of not sending the boats out."
+        ],
+        "N2": [
+          "<ruby>飛行機<rt>ひこうき</rt></ruby>のほうが<ruby>速<rt>はや</rt></ruby>いものの、<ruby>景色<rt>けしき</rt></ruby>を<ruby>楽<rt>たの</rt></ruby>しみたくて<ruby>船<rt>ふね</rt></ruby>で<ruby>行<rt>い</rt></ruby>くことにした。",
+          "Although the plane is faster, wanting to enjoy the scenery I decided to go by ship."
+        ],
+        "N1": [
+          "<ruby>移民<rt>いみん</rt></ruby>たちは、わずかな<ruby>荷物<rt>にもつ</rt></ruby>だけを<ruby>手<rt>て</rt></ruby>に、<ruby>見知<rt>みし</rt></ruby>らぬ<ruby>土地<rt>とち</rt></ruby>へと<ruby>向<rt>む</rt></ruby>かう<ruby>船<rt>ふね</rt></ruby>に<ruby>乗<rt>の</rt></ruby>り<ruby>込<rt>こ</rt></ruby>んだ。",
+          "The emigrants, with only a few belongings in hand, boarded a ship bound for an unknown land."
+        ]
+      },
+      "mnem": "\"ふね\" — picture a \"foo-neh\" ferry chugging across the water: a ship.",
+      "tip": "船 covers boats and ships broadly; a small rowboat is ボート. \"By ship\" uses で: 船で行く, and the reading shifts to ふな- in compounds (船便 = ふなびん).",
+      "accent": 1
+    },
+    {
+      "key": "mnn:5:8",
+      "kana": "でんしゃ",
+      "kanji": "電車",
+      "context": "",
+      "mean": "train (electric)",
+      "cat": "noun",
+      "type": "",
+      "trans": "",
+      "dict": "電車",
+      "dictRead": "でんしゃ",
+      "audio": "/Audio/minnamoi/bai5/00010011111011110.mp3",
+      "levels": {
+        "N5": [
+          "<ruby>電車<rt>でんしゃ</rt></ruby>で<ruby>会社<rt>かいしゃ</rt></ruby>へ<ruby>行<rt>い</rt></ruby>きます。",
+          "I go to work by train."
+        ],
+        "N4": [
+          "<ruby>電車<rt>でんしゃ</rt></ruby>の<ruby>中<rt>なか</rt></ruby>で<ruby>本<rt>ほん</rt></ruby>を<ruby>読<rt>よ</rt></ruby>むのが<ruby>好<rt>す</rt></ruby>きです。",
+          "I like reading books on the train."
+        ],
+        "N3": [
+          "<ruby>朝<rt>あさ</rt></ruby>の<ruby>電車<rt>でんしゃ</rt></ruby>はとても<ruby>込<rt>こ</rt></ruby>むので、<ruby>一本<rt>いっぽん</rt></ruby><ruby>早<rt>はや</rt></ruby>いのに<ruby>乗<rt>の</rt></ruby>るようにしています。",
+          "The morning trains are very crowded, so I make a point of catching one an earlier."
+        ],
+        "N2": [
+          "<ruby>事故<rt>じこ</rt></ruby>で<ruby>電車<rt>でんしゃ</rt></ruby>が<ruby>止<rt>と</rt></ruby>まってしまったものの、なんとか<ruby>会議<rt>かいぎ</rt></ruby>には<ruby>間<rt>ま</rt></ruby>に<ruby>合<rt>あ</rt></ruby>った。",
+          "Although the train stopped because of an accident, I somehow made it in time for the meeting."
+        ],
+        "N1": [
+          "<ruby>通勤<rt>つうきん</rt></ruby><ruby>電車<rt>でんしゃ</rt></ruby>の<ruby>混雑<rt>こんざつ</rt></ruby>を<ruby>緩和<rt>かんわ</rt></ruby>すべく、<ruby>各社<rt>かくしゃ</rt></ruby>は<ruby>時差<rt>じさ</rt></ruby><ruby>出勤<rt>しゅっきん</rt></ruby>の<ruby>導入<rt>どうにゅう</rt></ruby>を<ruby>進<rt>すす</rt></ruby>めている。",
+          "To ease the congestion on commuter trains, companies are moving ahead with the introduction of staggered work hours."
+        ]
+      },
+      "mnem": "電 (electric) + 車 (vehicle) = an electric vehicle on rails: the (electric) train.",
+      "tip": "電車 is an electric commuter train; the long-distance bullet train is 新幹線, and a non-electric one is 汽車 (きしゃ). \"By train\" uses で: 電車で行く.",
+      "accent": 0
+    },
+    {
+      "key": "mnn:5:9",
+      "kana": "ちかてつ",
+      "kanji": "地下鉄",
+      "context": "",
+      "mean": "subway, underground",
+      "cat": "noun",
+      "type": "",
+      "trans": "",
+      "dict": "地下鉄",
+      "dictRead": "ちかてつ",
+      "audio": "/Audio/minnamoi/bai5/00010011111011111.mp3",
+      "levels": {
+        "N5": [
+          "<ruby>地下鉄<rt>ちかてつ</rt></ruby>で<ruby>行<rt>い</rt></ruby>きます。",
+          "I go by subway."
+        ],
+        "N4": [
+          "この<ruby>町<rt>まち</rt></ruby>は<ruby>地下鉄<rt>ちかてつ</rt></ruby>が<ruby>便利<rt>べんり</rt></ruby>だから、<ruby>車<rt>くるま</rt></ruby>がいりません。",
+          "This town's subway is convenient, so I don't need a car."
+        ],
+        "N3": [
+          "<ruby>道<rt>みち</rt></ruby>が<ruby>込<rt>こ</rt></ruby>んでいるときは、<ruby>地下鉄<rt>ちかてつ</rt></ruby>で<ruby>行<rt>い</rt></ruby>くようにしています。",
+          "When the roads are congested, I make a point of going by subway."
+        ],
+        "N2": [
+          "<ruby>地下鉄<rt>ちかてつ</rt></ruby>は<ruby>速<rt>はや</rt></ruby>いものの、<ruby>乗<rt>の</rt></ruby>り<ruby>換<rt>か</rt></ruby>えが<ruby>多<rt>おお</rt></ruby>くて<ruby>迷<rt>まよ</rt></ruby>いやすい。",
+          "Although the subway is fast, there are many transfers and it's easy to get lost."
+        ],
+        "N1": [
+          "<ruby>老朽化<rt>ろうきゅうか</rt></ruby>した<ruby>地下鉄<rt>ちかてつ</rt></ruby>の<ruby>設備<rt>せつび</rt></ruby>を<ruby>更新<rt>こうしん</rt></ruby>するには、<ruby>莫大<rt>ばくだい</rt></ruby>な<ruby>費用<rt>ひよう</rt></ruby>を<ruby>投<rt>とう</rt></ruby>じざるを<ruby>得<rt>え</rt></ruby>ない。",
+          "To upgrade the aging subway facilities, there is no choice but to pour in enormous funds."
+        ]
+      },
+      "mnem": "地 (ground) + 下 (under) + 鉄 (iron/railway) = the under-ground railway, i.e. the subway.",
+      "tip": "地下鉄 is the underground metro; an above-ground line is usually 電車. \"By subway\" uses で: 地下鉄で行く.",
+      "accent": 0
+    },
+    {
+      "key": "mnn:5:10",
+      "kana": "しんかんせん",
+      "kanji": "新幹線",
+      "context": "",
+      "mean": "the Shinkansen, the bullet train",
+      "cat": "noun",
+      "type": "",
+      "trans": "",
+      "dict": "新幹線",
+      "dictRead": "しんかんせん",
+      "audio": "/Audio/minnamoi/bai5/00010011111100000.mp3",
+      "levels": {
+        "N5": [
+          "<ruby>新幹線<rt>しんかんせん</rt></ruby>で<ruby>東京<rt>とうきょう</rt></ruby>へ<ruby>行<rt>い</rt></ruby>きます。",
+          "I go to Tokyo by bullet train."
+        ],
+        "N4": [
+          "<ruby>新幹線<rt>しんかんせん</rt></ruby>は<ruby>速<rt>はや</rt></ruby>いから、<ruby>大阪<rt>おおさか</rt></ruby>まですぐ<ruby>着<rt>つ</rt></ruby>きます。",
+          "The bullet train is fast, so you get to Osaka right away."
+        ],
+        "N3": [
+          "<ruby>出張<rt>しゅっちょう</rt></ruby>のときは、いつも<ruby>新幹線<rt>しんかんせん</rt></ruby>で<ruby>行<rt>い</rt></ruby>くようにしています。",
+          "When I go on business trips, I always make a point of going by bullet train."
+        ],
+        "N2": [
+          "<ruby>飛行機<rt>ひこうき</rt></ruby>より<ruby>高<rt>たか</rt></ruby>いものの、<ruby>乗<rt>の</rt></ruby>り<ruby>換<rt>か</rt></ruby>えがなくて<ruby>楽<rt>らく</rt></ruby>なので<ruby>新幹線<rt>しんかんせん</rt></ruby>を<ruby>選<rt>えら</rt></ruby>んだ。",
+          "Although it's more expensive than the plane, since there are no transfers and it's comfortable, I chose the bullet train."
+        ],
+        "N1": [
+          "<ruby>開業<rt>かいぎょう</rt></ruby>から<ruby>半世紀<rt>はんせいき</rt></ruby>を<ruby>超<rt>こ</rt></ruby>えてなお<ruby>無事故<rt>むじこ</rt></ruby>を<ruby>誇<rt>ほこ</rt></ruby>る<ruby>新幹線<rt>しんかんせん</rt></ruby>は、<ruby>日本<rt>にほん</rt></ruby>の<ruby>技術力<rt>ぎじゅつりょく</rt></ruby>の<ruby>象徴<rt>しょうちょう</rt></ruby>だといえる。",
+          "The Shinkansen, which boasts an accident-free record even over half a century since it began service, can be called a symbol of Japan's technological prowess."
+        ]
+      },
+      "mnem": "新 (new) + 幹線 (trunk line) = the \"new trunk line\" — Japan's high-speed bullet train.",
+      "tip": "新幹線 is the specific high-speed intercity network, not just any fast train (電車 is the everyday commuter one). \"By Shinkansen\" uses で: 新幹線で行く.",
+      "accent": 3
+    },
+    {
+      "key": "mnn:5:11",
+      "kana": "バス",
+      "kanji": "",
+      "context": "",
+      "mean": "bus",
+      "cat": "noun",
+      "type": "",
+      "trans": "",
+      "dict": "バス",
+      "dictRead": "バス",
+      "audio": "/Audio/minnamoi/bai5/00010011111100001.mp3",
+      "levels": {
+        "N5": [
+          "バスで<ruby>学校<rt>がっこう</rt></ruby>へ<ruby>行<rt>い</rt></ruby>きます。",
+          "I go to school by bus."
+        ],
+        "N4": [
+          "<ruby>朝<rt>あさ</rt></ruby>の バスは いつも <ruby>込<rt>こ</rt></ruby>んでいます。",
+          "The morning bus is always crowded."
+        ],
+        "N3": [
+          "<ruby>電車<rt>でんしゃ</rt></ruby>がないので、バスで<ruby>行<rt>い</rt></ruby>くしかありません。",
+          "Since there's no train, going by bus is the only option."
+        ],
+        "N2": [
+          "バスは <ruby>安<rt>やす</rt></ruby>いものの、<ruby>時間<rt>じかん</rt></ruby>どおりに<ruby>来<rt>こ</rt></ruby>ないことが<ruby>多<rt>おお</rt></ruby>い。",
+          "Although the bus is cheap, it often doesn't come on time."
+        ],
+        "N1": [
+          "<ruby>過疎地<rt>かそち</rt></ruby>では<ruby>路線<rt>ろせん</rt></ruby>バスの<ruby>廃止<rt>はいし</rt></ruby>が<ruby>相次<rt>あいつ</rt></ruby>ぎ、<ruby>高齢者<rt>こうれいしゃ</rt></ruby>の<ruby>足<rt>あし</rt></ruby>の<ruby>確保<rt>かくほ</rt></ruby>が<ruby>課題<rt>かだい</rt></ruby>となっている。",
+          "In depopulated areas, the discontinuation of route buses comes one after another, and securing transportation for the elderly has become a pressing issue."
+        ]
+      },
+      "mnem": "バス is straight from English \"bus\" — say \"basu\" with the vowel added on.",
+      "tip": "Don't confuse バス (bus) with バス meaning \"bath\" (バスルーム) — same katakana, told apart by context. \"By bus\" uses で: バスで行く.",
+      "accent": 1
+    },
+    {
+      "key": "mnn:5:12",
+      "kana": "タクシー",
+      "kanji": "",
+      "context": "",
+      "mean": "taxi",
+      "cat": "noun",
+      "type": "",
+      "trans": "",
+      "dict": "タクシー",
+      "dictRead": "タクシー",
+      "audio": "/Audio/minnamoi/bai5/00010011111100010.mp3",
+      "levels": {
+        "N5": [
+          "タクシーで うちへ <ruby>帰<rt>かえ</rt></ruby>ります。",
+          "I go home by taxi."
+        ],
+        "N4": [
+          "<ruby>雨<rt>あめ</rt></ruby>が<ruby>降<rt>ふ</rt></ruby>っていたから、タクシーで<ruby>帰<rt>かえ</rt></ruby>りました。",
+          "Because it was raining, I went home by taxi."
+        ],
+        "N3": [
+          "<ruby>終電<rt>しゅうでん</rt></ruby>を<ruby>逃<rt>のが</rt></ruby>したときは、タクシーを<ruby>使<rt>つか</rt></ruby>うようにしています。",
+          "When I miss the last train, I make a point of using a taxi."
+        ],
+        "N2": [
+          "タクシーは<ruby>高<rt>たか</rt></ruby>いものの、<ruby>荷物<rt>にもつ</rt></ruby>が<ruby>多<rt>おお</rt></ruby>いときは<ruby>乗<rt>の</rt></ruby>らざるを<ruby>得<rt>え</rt></ruby>ない。",
+          "Although taxis are expensive, when I have a lot of luggage I have no choice but to take one."
+        ],
+        "N1": [
+          "<ruby>配車<rt>はいしゃ</rt></ruby>アプリの<ruby>普及<rt>ふきゅう</rt></ruby>により、タクシー<ruby>業界<rt>ぎょうかい</rt></ruby>は<ruby>従来<rt>じゅうらい</rt></ruby>のビジネスモデルの<ruby>見直<rt>みなお</rt></ruby>しを<ruby>迫<rt>せま</rt></ruby>られている。",
+          "With the spread of ride-hailing apps, the taxi industry is being forced to rethink its conventional business model."
+        ]
+      },
+      "mnem": "タクシー is the English \"taxi\" — say \"takushī\" with a long final vowel.",
+      "tip": "\"By taxi\" uses で: タクシーで帰る. You 乗る (ride) a taxi and 呼ぶ (call) one — a taxi stand is タクシー乗り場.",
+      "accent": 1
+    },
+    {
+      "key": "mnn:5:13",
+      "kana": "じてんしゃ",
+      "kanji": "自転車",
+      "context": "",
+      "mean": "bicycle",
+      "cat": "noun",
+      "type": "",
+      "trans": "",
+      "dict": "自転車",
+      "dictRead": "じてんしゃ",
+      "audio": "/Audio/minnamoi/bai5/00010011111100011.mp3",
+      "levels": {
+        "N5": [
+          "<ruby>自転車<rt>じてんしゃ</rt></ruby>で<ruby>駅<rt>えき</rt></ruby>へ<ruby>行<rt>い</rt></ruby>きます。",
+          "I go to the station by bicycle."
+        ],
+        "N4": [
+          "<ruby>毎朝<rt>まいあさ</rt></ruby><ruby>自転車<rt>じてんしゃ</rt></ruby>で<ruby>会社<rt>かいしゃ</rt></ruby>へ<ruby>行<rt>い</rt></ruby>きます。",
+          "Every morning I go to work by bicycle."
+        ],
+        "N3": [
+          "<ruby>天気<rt>てんき</rt></ruby>がいい<ruby>日<rt>ひ</rt></ruby>は、<ruby>自転車<rt>じてんしゃ</rt></ruby>で<ruby>出<rt>で</rt></ruby>かけるようにしています。",
+          "On days with good weather, I make a point of going out by bicycle."
+        ],
+        "N2": [
+          "<ruby>自転車<rt>じてんしゃ</rt></ruby>は<ruby>便利<rt>べんり</rt></ruby>なものの、<ruby>雨<rt>あめ</rt></ruby>の<ruby>日<rt>ひ</rt></ruby>は<ruby>使<rt>つか</rt></ruby>いにくい。",
+          "Although the bicycle is convenient, it's hard to use on rainy days."
+        ],
+        "N1": [
+          "<ruby>環境<rt>かんきょう</rt></ruby><ruby>意識<rt>いしき</rt></ruby>の<ruby>高<rt>たか</rt></ruby>まりを<ruby>背景<rt>はいけい</rt></ruby>に、<ruby>都市部<rt>としぶ</rt></ruby>では<ruby>自転車<rt>じてんしゃ</rt></ruby>の<ruby>共同<rt>きょうどう</rt></ruby><ruby>利用<rt>りよう</rt></ruby>サービスが<ruby>広<rt>ひろ</rt></ruby>がりつつある。",
+          "Against a backdrop of rising environmental awareness, bicycle-sharing services are spreading in urban areas."
+        ]
+      },
+      "mnem": "自 (self) + 転 (turn/rotate) + 車 (wheel) = a self-turning-wheel vehicle you pedal — a bicycle.",
+      "tip": "自転車 is a pedal bicycle; a motorcycle is オートバイ/バイク and a car is 車 (くるま). \"By bicycle\" uses で: 自転車で行く.",
+      "accent": 0
+    },
+    {
+      "key": "mnn:5:14",
+      "kana": "あるいて",
+      "kanji": "歩いて",
+      "context": "",
+      "mean": "on foot, walking",
+      "cat": "expression",
+      "type": "",
+      "trans": "",
+      "dict": "歩いて",
+      "dictRead": "あるいて",
+      "audio": "/Audio/minnamoi/bai5/00010011111100100.mp3",
+      "levels": {
+        "N5": [
+          "<ruby>駅<rt>えき</rt></ruby>まで<ruby>歩<rt>ある</rt></ruby>いて<ruby>行<rt>い</rt></ruby>きます。",
+          "I go to the station on foot."
+        ],
+        "N4": [
+          "<ruby>家<rt>いえ</rt></ruby>から<ruby>学校<rt>がっこう</rt></ruby>まで<ruby>歩<rt>ある</rt></ruby>いて<ruby>十五分<rt>じゅうごふん</rt></ruby>ぐらいです。",
+          "From home to school it's about fifteen minutes on foot."
+        ],
+        "N3": [
+          "<ruby>健康<rt>けんこう</rt></ruby>のために、なるべく<ruby>歩<rt>ある</rt></ruby>いて<ruby>通<rt>かよ</rt></ruby>うようにしています。",
+          "For my health, I make a point of commuting on foot as much as possible."
+        ],
+        "N2": [
+          "<ruby>近<rt>ちか</rt></ruby>いといっても、<ruby>歩<rt>ある</rt></ruby>いて<ruby>行<rt>い</rt></ruby>くには<ruby>少<rt>すこ</rt></ruby>し<ruby>遠<rt>とお</rt></ruby>いものの、いい<ruby>運動<rt>うんどう</rt></ruby>になる。",
+          "Even though it's said to be close, it's a bit far to go on foot, but it makes for good exercise."
+        ],
+        "N1": [
+          "<ruby>被災地<rt>ひさいち</rt></ruby>では<ruby>交通<rt>こうつう</rt></ruby><ruby>手段<rt>しゅだん</rt></ruby>が<ruby>断<rt>た</rt></ruby>たれ、<ruby>住民<rt>じゅうみん</rt></ruby>は<ruby>何時間<rt>なんじかん</rt></ruby>も<ruby>歩<rt>ある</rt></ruby>いて<ruby>避難所<rt>ひなんじょ</rt></ruby>へ<ruby>向<rt>む</rt></ruby>かわざるを<ruby>得<rt>え</rt></ruby>なかった。",
+          "In the disaster area, transportation was cut off, and residents had no choice but to head to the shelters on foot for hours."
+        ]
+      },
+      "mnem": "歩いて is the て-form of 歩く (to walk) — \"walking-and\" doing something, so it means going \"on foot.\"",
+      "tip": "歩いて行く / 歩いて帰る means going/returning on foot — note that \"on foot\" does NOT take で (never 歩いてで); it's the one means-of-going that uses the て-form of the verb instead.",
+      "accent": 2
+    },
+    {
+      "key": "mnn:5:15",
+      "kana": "ひと",
+      "kanji": "人",
+      "context": "",
+      "mean": "person, people",
+      "cat": "noun",
+      "type": "",
+      "trans": "",
+      "dict": "人",
+      "dictRead": "ひと",
+      "audio": "/Audio/minnamoi/bai5/00010011111100101.mp3",
+      "levels": {
+        "N5": [
+          "あの<ruby>人<rt>ひと</rt></ruby>は<ruby>先生<rt>せんせい</rt></ruby>です。",
+          "That person is a teacher."
+        ],
+        "N4": [
+          "<ruby>会社<rt>かいしゃ</rt></ruby>の<ruby>人<rt>ひと</rt></ruby>と<ruby>京都<rt>きょうと</rt></ruby>へ<ruby>行<rt>い</rt></ruby>きます。",
+          "I'm going to Kyoto with people from work."
+        ],
+        "N3": [
+          "<ruby>困<rt>こま</rt></ruby>っている<ruby>人<rt>ひと</rt></ruby>がいたら、できるだけ<ruby>助<rt>たす</rt></ruby>けるようにしています。",
+          "If there's a person in trouble, I make a point of helping as much as I can."
+        ],
+        "N2": [
+          "<ruby>彼<rt>かれ</rt></ruby>は<ruby>無口<rt>むくち</rt></ruby>な<ruby>人<rt>ひと</rt></ruby>なものの、<ruby>一度<rt>いちど</rt></ruby><ruby>話<rt>はな</rt></ruby>すととても<ruby>面白<rt>おもしろ</rt></ruby>い。",
+          "Although he's a quiet person, once he starts talking he's very interesting."
+        ],
+        "N1": [
+          "<ruby>人<rt>ひと</rt></ruby>を<ruby>見<rt>み</rt></ruby>た<ruby>目<rt>め</rt></ruby>だけで<ruby>判断<rt>はんだん</rt></ruby>してはならないと、<ruby>幼<rt>おさな</rt></ruby>い<ruby>頃<rt>ころ</rt></ruby>から<ruby>言<rt>い</rt></ruby>い<ruby>聞<rt>き</rt></ruby>かされてきた。",
+          "From an early age I was told over and over that one must not judge a person by appearance alone."
+        ]
+      },
+      "mnem": "\"人\" reads \"hito\" — picture a lone person going \"hee-toh\" as they walk by.",
+      "tip": "人 read ひと means \"person\"; as a counter (〜人) it reads にん (三人) except ひとり/ふたり. The と particle here (この課) is \"with (a person)\": 友達と行く.",
+      "accent": 0
+    },
+    {
+      "key": "mnn:5:16",
+      "kana": "ともだち",
+      "kanji": "友達",
+      "context": "",
+      "mean": "friend",
+      "cat": "noun",
+      "type": "",
+      "trans": "",
+      "dict": "友達",
+      "dictRead": "ともだち",
+      "audio": "/Audio/minnamoi/bai5/00010011111100110.mp3",
+      "levels": {
+        "N5": [
+          "<ruby>友達<rt>ともだち</rt></ruby>と<ruby>京都<rt>きょうと</rt></ruby>へ<ruby>行<rt>い</rt></ruby>きます。",
+          "I'm going to Kyoto with a friend."
+        ],
+        "N4": [
+          "<ruby>週末<rt>しゅうまつ</rt></ruby>、<ruby>友達<rt>ともだち</rt></ruby>と<ruby>映画<rt>えいが</rt></ruby>を<ruby>見<rt>み</rt></ruby>に<ruby>行<rt>い</rt></ruby>きました。",
+          "On the weekend, I went to see a movie with a friend."
+        ],
+        "N3": [
+          "<ruby>寂<rt>さび</rt></ruby>しいときは、<ruby>友達<rt>ともだち</rt></ruby>に<ruby>電話<rt>でんわ</rt></ruby>をかけるようにしています。",
+          "When I'm lonely, I make a point of calling a friend."
+        ],
+        "N2": [
+          "<ruby>遠<rt>とお</rt></ruby>くに<ruby>住<rt>す</rt></ruby>んでいるものの、<ruby>友達<rt>ともだち</rt></ruby>とはずっと<ruby>連絡<rt>れんらく</rt></ruby>を<ruby>取<rt>と</rt></ruby>り<ruby>合<rt>あ</rt></ruby>っている。",
+          "Although we live far apart, my friend and I have kept in touch all along."
+        ],
+        "N1": [
+          "<ruby>本当<rt>ほんとう</rt></ruby>の<ruby>友達<rt>ともだち</rt></ruby>とは、<ruby>苦<rt>くる</rt></ruby>しいときにこそ<ruby>手<rt>て</rt></ruby>を<ruby>差<rt>さ</rt></ruby>し<ruby>伸<rt>の</rt></ruby>べてくれる<ruby>存在<rt>そんざい</rt></ruby>にほかならない。",
+          "A true friend is none other than someone who reaches out to you precisely when times are hard."
+        ]
+      },
+      "mnem": "友 (friend) + 達 (a plural/companion marker) = your companion, a friend; read \"tomodachi.\"",
+      "tip": "友達 can be one friend or many (達 doesn't force plural here). Going WITH a friend uses と: 友達と行く.",
+      "accent": 0
+    },
+    {
+      "key": "mnn:5:17",
+      "kana": "かれ",
+      "kanji": "彼",
+      "context": "",
+      "mean": "he; boyfriend",
+      "cat": "noun",
+      "type": "",
+      "trans": "",
+      "dict": "彼",
+      "dictRead": "かれ",
+      "audio": "/Audio/minnamoi/bai5/00010011111100111.mp3",
+      "levels": {
+        "N5": [
+          "<ruby>彼<rt>かれ</rt></ruby>は<ruby>学生<rt>がくせい</rt></ruby>です。",
+          "He is a student."
+        ],
+        "N4": [
+          "<ruby>彼<rt>かれ</rt></ruby>と<ruby>映画<rt>えいが</rt></ruby>を<ruby>見<rt>み</rt></ruby>に<ruby>行<rt>い</rt></ruby>きます。",
+          "I'm going to see a movie with him."
+        ],
+        "N3": [
+          "<ruby>彼<rt>かれ</rt></ruby>は<ruby>約束<rt>やくそく</rt></ruby>を<ruby>守<rt>まも</rt></ruby>るようにしている<ruby>人<rt>ひと</rt></ruby>です。",
+          "He is someone who makes a point of keeping his promises."
+        ],
+        "N2": [
+          "<ruby>彼<rt>かれ</rt></ruby>は<ruby>忙<rt>いそが</rt></ruby>しいものの、<ruby>毎日<rt>まいにち</rt></ruby><ruby>連絡<rt>れんらく</rt></ruby>をくれる。",
+          "Although he is busy, he contacts me every day."
+        ],
+        "N1": [
+          "<ruby>彼<rt>かれ</rt></ruby>ほど<ruby>誠実<rt>せいじつ</rt></ruby>な<ruby>人物<rt>じんぶつ</rt></ruby>は、そう<ruby>簡単<rt>かんたん</rt></ruby>に<ruby>見<rt>み</rt></ruby>つかるものではない。",
+          "A person as sincere as he is is not something you find so easily."
+        ]
+      },
+      "mnem": "彼 read \"kare\" — picture pointing and saying \"kah-reh, that guy\": he.",
+      "tip": "彼 means \"he\" or, in context, \"boyfriend\"; the counterpart 彼女 (かのじょ) is \"she / girlfriend.\" Going with him uses と: 彼と行く.",
+      "accent": 1
+    },
+    {
+      "key": "mnn:5:18",
+      "kana": "かのじょ",
+      "kanji": "彼女",
+      "context": "",
+      "mean": "she; girlfriend",
+      "cat": "noun",
+      "type": "",
+      "trans": "",
+      "dict": "彼女",
+      "dictRead": "かのじょ",
+      "audio": "/Audio/minnamoi/bai5/00010011111101000.mp3",
+      "levels": {
+        "N5": [
+          "<ruby>彼女<rt>かのじょ</rt></ruby>は<ruby>先生<rt>せんせい</rt></ruby>です。",
+          "She is a teacher."
+        ],
+        "N4": [
+          "<ruby>彼女<rt>かのじょ</rt></ruby>と<ruby>美術館<rt>びじゅつかん</rt></ruby>へ<ruby>行<rt>い</rt></ruby>きます。",
+          "I'm going to the art museum with my girlfriend."
+        ],
+        "N3": [
+          "<ruby>彼女<rt>かのじょ</rt></ruby>は<ruby>毎朝<rt>まいあさ</rt></ruby><ruby>運動<rt>うんどう</rt></ruby>するようにしています。",
+          "She makes a point of exercising every morning."
+        ],
+        "N2": [
+          "<ruby>彼女<rt>かのじょ</rt></ruby>は<ruby>厳<rt>きび</rt></ruby>しいものの、<ruby>生徒<rt>せいと</rt></ruby>にとても<ruby>優<rt>やさ</rt></ruby>しい。",
+          "Although she is strict, she is very kind to her students."
+        ],
+        "N1": [
+          "<ruby>幾多<rt>いくた</rt></ruby>の<ruby>困難<rt>こんなん</rt></ruby>を<ruby>乗<rt>の</rt></ruby>り<ruby>越<rt>こ</rt></ruby>えてきた<ruby>彼女<rt>かのじょ</rt></ruby>だからこそ、<ruby>今<rt>いま</rt></ruby>の<ruby>言葉<rt>ことば</rt></ruby>には<ruby>重<rt>おも</rt></ruby>みがある。",
+          "It is precisely because she has overcome countless hardships that her words now carry weight."
+        ]
+      },
+      "mnem": "彼 (he) + 女 (woman) = the \"female he,\" i.e. she; read \"kanojo.\"",
+      "tip": "彼女 means \"she\" or \"girlfriend\" depending on context; contrast 彼 (かれ, he/boyfriend). Going with her uses と: 彼女と行く.",
+      "accent": 1
+    },
+    {
+      "key": "mnn:5:19",
+      "kana": "かぞく",
+      "kanji": "家族",
+      "context": "",
+      "mean": "family",
+      "cat": "noun",
+      "type": "",
+      "trans": "",
+      "dict": "家族",
+      "dictRead": "かぞく",
+      "audio": "/Audio/minnamoi/bai5/00010011111101001.mp3",
+      "levels": {
+        "N5": [
+          "<ruby>家族<rt>かぞく</rt></ruby>と<ruby>日本<rt>にほん</rt></ruby>へ<ruby>来<rt>き</rt></ruby>ました。",
+          "I came to Japan with my family."
+        ],
+        "N4": [
+          "<ruby>日曜日<rt>にちようび</rt></ruby>、<ruby>家族<rt>かぞく</rt></ruby>と<ruby>公園<rt>こうえん</rt></ruby>へ<ruby>行<rt>い</rt></ruby>きました。",
+          "On Sunday, I went to the park with my family."
+        ],
+        "N3": [
+          "<ruby>忙<rt>いそが</rt></ruby>しくても、<ruby>週末<rt>しゅうまつ</rt></ruby>は<ruby>家族<rt>かぞく</rt></ruby>と<ruby>過<rt>す</rt></ruby>ごすようにしています。",
+          "Even when I'm busy, I make a point of spending the weekend with my family."
+        ],
+        "N2": [
+          "<ruby>遠<rt>とお</rt></ruby>くに<ruby>住<rt>す</rt></ruby>んでいるものの、<ruby>家族<rt>かぞく</rt></ruby>のことはいつも<ruby>気<rt>き</rt></ruby>にかけている。",
+          "Although I live far away, I always keep my family in mind."
+        ],
+        "N1": [
+          "<ruby>血<rt>ち</rt></ruby>のつながりだけが<ruby>家族<rt>かぞく</rt></ruby>だとは<ruby>限<rt>かぎ</rt></ruby>らず、<ruby>共<rt>とも</rt></ruby>に<ruby>時<rt>とき</rt></ruby>を<ruby>過<rt>す</rt></ruby>ごした<ruby>絆<rt>きずな</rt></ruby>こそが<ruby>大切<rt>たいせつ</rt></ruby>なのだ。",
+          "Blood ties are not the only thing that makes a family; it is the bond forged by time spent together that truly matters."
+        ]
+      },
+      "mnem": "家 (house/home) + 族 (tribe/group) = the group in your home — your family; read \"kazoku.\"",
+      "tip": "家族 is your family as a whole; humble reference to your own is うち; someone else's family is ご家族. Going WITH family uses と: 家族と行く.",
+      "accent": 1
+    },
+    {
+      "key": "mnn:5:20",
+      "kana": "ひとりで",
+      "kanji": "一人で",
+      "context": "",
+      "mean": "alone, by oneself",
+      "cat": "expression",
+      "type": "",
+      "trans": "",
+      "dict": "一人で",
+      "dictRead": "ひとりで",
+      "audio": "/Audio/minnamoi/bai5/00010011111101010.mp3",
+      "levels": {
+        "N5": [
+          "<ruby>一人<rt>ひとり</rt></ruby>で<ruby>学校<rt>がっこう</rt></ruby>へ<ruby>行<rt>い</rt></ruby>きます。",
+          "I go to school alone."
+        ],
+        "N4": [
+          "きのう<ruby>一人<rt>ひとり</rt></ruby>で<ruby>映画<rt>えいが</rt></ruby>を<ruby>見<rt>み</rt></ruby>に<ruby>行<rt>い</rt></ruby>きました。",
+          "Yesterday I went to see a movie by myself."
+        ],
+        "N3": [
+          "<ruby>週末<rt>しゅうまつ</rt></ruby>は<ruby>一人<rt>ひとり</rt></ruby>で<ruby>静<rt>しず</rt></ruby>かに<ruby>過<rt>す</rt></ruby>ごすようにしています。",
+          "I make a point of spending the weekend quietly by myself."
+        ],
+        "N2": [
+          "<ruby>心配<rt>しんぱい</rt></ruby>だったものの、<ruby>彼<rt>かれ</rt></ruby>は<ruby>一人<rt>ひとり</rt></ruby>で<ruby>問題<rt>もんだい</rt></ruby>を<ruby>解決<rt>かいけつ</rt></ruby>してしまった。",
+          "Although I was worried, he ended up solving the problem all by himself."
+        ],
+        "N1": [
+          "<ruby>誰<rt>だれ</rt></ruby>にも<ruby>頼<rt>たよ</rt></ruby>らず<ruby>一人<rt>ひとり</rt></ruby>で<ruby>抱<rt>かか</rt></ruby>え<ruby>込<rt>こ</rt></ruby>むより、<ruby>周<rt>まわ</rt></ruby>りに<ruby>相談<rt>そうだん</rt></ruby>するに<ruby>越<rt>こ</rt></ruby>したことはない。",
+          "Rather than shouldering it all alone without relying on anyone, there's nothing better than talking it over with those around you."
+        ]
+      },
+      "mnem": "一人 (ひとり, one person) + で (marking the manner) = \"in a one-person way\" = alone / by oneself.",
+      "tip": "一人で is the \"with whom?\" answer meaning \"nobody — alone\"; it parallels 友達と but uses で, not と. Don't confuse the counter 一人 (ひとり, one person) with 一人で (alone).",
+      "accent": 3
+    },
+    {
+      "key": "mnn:5:21",
+      "kana": "せんしゅう",
+      "kanji": "先週",
+      "context": "",
+      "mean": "last week",
+      "cat": "noun",
+      "type": "",
+      "trans": "",
+      "dict": "先週",
+      "dictRead": "せんしゅう",
+      "audio": "/Audio/minnamoi/bai5/00010011111101011.mp3",
+      "levels": {
+        "N5": [
+          "<ruby>先週<rt>せんしゅう</rt></ruby><ruby>東京<rt>とうきょう</rt></ruby>へ<ruby>行<rt>い</rt></ruby>きました。",
+          "Last week I went to Tokyo."
+        ],
+        "N4": [
+          "<ruby>先週<rt>せんしゅう</rt></ruby>の<ruby>日曜日<rt>にちようび</rt></ruby>、<ruby>友達<rt>ともだち</rt></ruby>と<ruby>会<rt>あ</rt></ruby>いました。",
+          "Last Sunday, I met with a friend."
+        ],
+        "N3": [
+          "<ruby>先週<rt>せんしゅう</rt></ruby><ruby>習<rt>なら</rt></ruby>ったことを<ruby>忘<rt>わす</rt></ruby>れないように、<ruby>復習<rt>ふくしゅう</rt></ruby>するようにしています。",
+          "So as not to forget what I learned last week, I make a point of reviewing it."
+        ],
+        "N2": [
+          "<ruby>先週<rt>せんしゅう</rt></ruby>は<ruby>忙<rt>いそが</rt></ruby>しかったものの、なんとか<ruby>締<rt>し</rt></ruby>め<ruby>切<rt>き</rt></ruby>りに<ruby>間<rt>ま</rt></ruby>に<ruby>合<rt>あ</rt></ruby>った。",
+          "Although last week was busy, I somehow made the deadline."
+        ],
+        "N1": [
+          "<ruby>先週<rt>せんしゅう</rt></ruby>の<ruby>会議<rt>かいぎ</rt></ruby>で<ruby>決定<rt>けってい</rt></ruby>した<ruby>方針<rt>ほうしん</rt></ruby>を<ruby>踏<rt>ふ</rt></ruby>まえ、<ruby>各部署<rt>かくぶしょ</rt></ruby>は<ruby>直<rt>ただ</rt></ruby>ちに<ruby>対応<rt>たいおう</rt></ruby>に<ruby>着手<rt>ちゃくしゅ</rt></ruby>した。",
+          "In light of the policy decided at last week's meeting, each department immediately set to work on its response."
+        ]
+      },
+      "mnem": "先 (previous/ahead-in-the-past) + 週 (week) = the previous week = last week; read \"senshū.\"",
+      "tip": "先週 = last week; this week is 今週 (こんしゅう) and next week is 来週 (らいしゅう) — the same 先／今／来 trio runs through 月 and 年 too. Past-time words like this need no に.",
+      "accent": 0
+    },
+    {
+      "key": "mnn:5:22",
+      "kana": "こんしゅう",
+      "kanji": "今週",
+      "context": "",
+      "mean": "this week",
+      "cat": "noun",
+      "type": "",
+      "trans": "",
+      "dict": "今週",
+      "dictRead": "こんしゅう",
+      "audio": "/Audio/minnamoi/bai5/00010011111101100.mp3",
+      "levels": {
+        "N5": [
+          "<ruby>今週<rt>こんしゅう</rt></ruby>の<ruby>日曜日<rt>にちようび</rt></ruby>、どこへ<ruby>行<rt>い</rt></ruby>きますか。",
+          "Where are you going this Sunday?"
+        ],
+        "N4": [
+          "<ruby>今週<rt>こんしゅう</rt></ruby>は<ruby>忙<rt>いそが</rt></ruby>しいから、<ruby>来週<rt>らいしゅう</rt></ruby><ruby>会<rt>あ</rt></ruby>いましょう。",
+          "This week is busy, so let's meet next week."
+        ],
+        "N3": [
+          "<ruby>今週<rt>こんしゅう</rt></ruby>のうちに<ruby>宿題<rt>しゅくだい</rt></ruby>を<ruby>終<rt>お</rt></ruby>わらせるようにしています。",
+          "I make a point of finishing my homework within this week."
+        ],
+        "N2": [
+          "<ruby>今週<rt>こんしゅう</rt></ruby>は<ruby>予定<rt>よてい</rt></ruby>が<ruby>詰<rt>つ</rt></ruby>まっているものの、<ruby>週末<rt>しゅうまつ</rt></ruby>は<ruby>少<rt>すこ</rt></ruby>し<ruby>休<rt>やす</rt></ruby>めそうだ。",
+          "Although this week is packed with plans, it looks like I can rest a little on the weekend."
+        ],
+        "N1": [
+          "<ruby>今週<rt>こんしゅう</rt></ruby>を<ruby>山場<rt>やまば</rt></ruby>と<ruby>捉<rt>とら</rt></ruby>え、<ruby>全員<rt>ぜんいん</rt></ruby>が<ruby>一丸<rt>いちがん</rt></ruby>となって<ruby>作業<rt>さぎょう</rt></ruby>に<ruby>取<rt>と</rt></ruby>り<ruby>組<rt>く</rt></ruby>んでいる。",
+          "Regarding this week as the crucial stretch, everyone is tackling the work as one."
+        ]
+      },
+      "mnem": "今 (now) + 週 (week) = the now-week = this week; read \"konshū.\"",
+      "tip": "今週 = this week; 先週 (last), 来週 (next) complete the set. Like other relative-time words, it takes no に.",
+      "accent": 0
+    },
+    {
+      "key": "mnn:5:23",
+      "kana": "らいしゅう",
+      "kanji": "来週",
+      "context": "",
+      "mean": "next week",
+      "cat": "noun",
+      "type": "",
+      "trans": "",
+      "dict": "来週",
+      "dictRead": "らいしゅう",
+      "audio": "/Audio/minnamoi/bai5/00010011111101101.mp3",
+      "levels": {
+        "N5": [
+          "<ruby>来週<rt>らいしゅう</rt></ruby><ruby>京都<rt>きょうと</rt></ruby>へ<ruby>行<rt>い</rt></ruby>きます。",
+          "Next week I'm going to Kyoto."
+        ],
+        "N4": [
+          "<ruby>来週<rt>らいしゅう</rt></ruby>の<ruby>月曜日<rt>げつようび</rt></ruby>、テストがあります。",
+          "Next Monday, there's a test."
+        ],
+        "N3": [
+          "<ruby>来週<rt>らいしゅう</rt></ruby>までにこの<ruby>本<rt>ほん</rt></ruby>を<ruby>読<rt>よ</rt></ruby>み<ruby>終<rt>お</rt></ruby>えるようにしています。",
+          "I'm making a point of finishing reading this book by next week."
+        ],
+        "N2": [
+          "<ruby>来週<rt>らいしゅう</rt></ruby>は<ruby>予定<rt>よてい</rt></ruby>が<ruby>空<rt>あ</rt></ruby>いているものの、<ruby>天気<rt>てんき</rt></ruby>が<ruby>心配<rt>しんぱい</rt></ruby>だ。",
+          "Although my schedule is open next week, I'm worried about the weather."
+        ],
+        "N1": [
+          "<ruby>来週<rt>らいしゅう</rt></ruby>に<ruby>控<rt>ひか</rt></ruby>えた<ruby>発表<rt>はっぴょう</rt></ruby>に<ruby>向<rt>む</rt></ruby>け、<ruby>連日<rt>れんじつ</rt></ruby><ruby>準備<rt>じゅんび</rt></ruby>に<ruby>追<rt>お</rt></ruby>われている。",
+          "With the presentation coming up next week, I've been swamped with preparation day after day."
+        ]
+      },
+      "mnem": "来 (coming) + 週 (week) = the coming week = next week; read \"raishū.\"",
+      "tip": "来週 = next week; 先週 (last), 今週 (this) round it out. The 来 here means \"coming/next\" — same as in 来月／来年. Relative-time word: no に.",
+      "accent": 0
+    },
+    {
+      "key": "mnn:5:24",
+      "kana": "せんげつ",
+      "kanji": "先月",
+      "context": "",
+      "mean": "last month",
+      "cat": "noun",
+      "type": "",
+      "trans": "",
+      "dict": "先月",
+      "dictRead": "せんげつ",
+      "audio": "/Audio/minnamoi/bai5/00010011111101110.mp3",
+      "levels": {
+        "N5": [
+          "<ruby>先月<rt>せんげつ</rt></ruby>アメリカへ<ruby>行<rt>い</rt></ruby>きました。",
+          "Last month I went to America."
+        ],
+        "N4": [
+          "<ruby>先月<rt>せんげつ</rt></ruby>から<ruby>日本語<rt>にほんご</rt></ruby>の<ruby>勉強<rt>べんきょう</rt></ruby>を<ruby>始<rt>はじ</rt></ruby>めました。",
+          "I started studying Japanese last month."
+        ],
+        "N3": [
+          "<ruby>先月<rt>せんげつ</rt></ruby>より<ruby>体<rt>からだ</rt></ruby>の<ruby>調子<rt>ちょうし</rt></ruby>がよくなったので、<ruby>運動<rt>うんどう</rt></ruby>を<ruby>続<rt>つづ</rt></ruby>けるようにしています。",
+          "My physical condition has improved since last month, so I make a point of keeping up the exercise."
+        ],
+        "N2": [
+          "<ruby>先月<rt>せんげつ</rt></ruby>は<ruby>出費<rt>しゅっぴ</rt></ruby>が<ruby>多<rt>おお</rt></ruby>かったものの、<ruby>今月<rt>こんげつ</rt></ruby>はなんとか<ruby>節約<rt>せつやく</rt></ruby>できそうだ。",
+          "Although expenses were high last month, this month I should somehow be able to economize."
+        ],
+        "N1": [
+          "<ruby>先月<rt>せんげつ</rt></ruby>の<ruby>売上<rt>うりあげ</rt></ruby>が<ruby>予想<rt>よそう</rt></ruby>を<ruby>大<rt>おお</rt></ruby>きく<ruby>下回<rt>したまわ</rt></ruby>ったことを<ruby>受<rt>う</rt></ruby>け、<ruby>経営陣<rt>けいえいじん</rt></ruby>は<ruby>戦略<rt>せんりゃく</rt></ruby>の<ruby>見直<rt>みなお</rt></ruby>しを<ruby>迫<rt>せま</rt></ruby>られた。",
+          "In response to last month's sales falling far short of expectations, management was forced to reconsider its strategy."
+        ]
+      },
+      "mnem": "先 (previous) + 月 (month) = the previous month = last month; read \"sengetsu.\"",
+      "tip": "先月 = last month; 今月 (this), 来月 (next) follow the same 先／今／来 pattern. Here 月 reads げつ (not つき/がつ). Relative-time word: no に.",
+      "accent": 1
+    },
+    {
+      "key": "mnn:5:25",
+      "kana": "こんげつ",
+      "kanji": "今月",
+      "context": "",
+      "mean": "this month",
+      "cat": "noun",
+      "type": "",
+      "trans": "",
+      "dict": "今月",
+      "dictRead": "こんげつ",
+      "audio": "/Audio/minnamoi/bai5/00010011111101111.mp3",
+      "levels": {
+        "N5": [
+          "<ruby>今月<rt>こんげつ</rt></ruby>は<ruby>忙<rt>いそが</rt></ruby>しいです。",
+          "This month is busy."
+        ],
+        "N4": [
+          "<ruby>今月<rt>こんげつ</rt></ruby>の<ruby>二十日<rt>はつか</rt></ruby>に<ruby>国<rt>くに</rt></ruby>へ<ruby>帰<rt>かえ</rt></ruby>ります。",
+          "I'm returning to my country on the twentieth of this month."
+        ],
+        "N3": [
+          "<ruby>今月<rt>こんげつ</rt></ruby>は<ruby>毎日<rt>まいにち</rt></ruby><ruby>三十分<rt>さんじゅっぷん</rt></ruby>ずつ<ruby>走<rt>はし</rt></ruby>るようにしています。",
+          "This month I'm making a point of running thirty minutes each day."
+        ],
+        "N2": [
+          "<ruby>今月<rt>こんげつ</rt></ruby>は<ruby>予定<rt>よてい</rt></ruby>が<ruby>多<rt>おお</rt></ruby>いものの、<ruby>来月<rt>らいげつ</rt></ruby>は<ruby>少<rt>すこ</rt></ruby>し<ruby>落<rt>お</rt></ruby>ち<ruby>着<rt>つ</rt></ruby>きそうだ。",
+          "Although this month has a lot going on, next month should settle down a bit."
+        ],
+        "N1": [
+          "<ruby>今月<rt>こんげつ</rt></ruby><ruby>末<rt>まつ</rt></ruby>を<ruby>期限<rt>きげん</rt></ruby>とする<ruby>案件<rt>あんけん</rt></ruby>が<ruby>重<rt>かさ</rt></ruby>なり、<ruby>各自<rt>かくじ</rt></ruby>が<ruby>優先<rt>ゆうせん</rt></ruby><ruby>順位<rt>じゅんい</rt></ruby>の<ruby>判断<rt>はんだん</rt></ruby>を<ruby>迫<rt>せま</rt></ruby>られている。",
+          "With matters due at the end of this month piling up, each person is being pressed to judge their priorities."
+        ]
+      },
+      "mnem": "今 (now) + 月 (month) = the now-month = this month; read \"kongetsu.\"",
+      "tip": "今月 = this month; pairs with 先月 (last) and 来月 (next). 月 reads げつ here, not がつ (which is for naming a month, e.g. 三月). Relative-time word: no に.",
+      "accent": 1
+    },
+    {
+      "key": "mnn:5:26",
+      "kana": "らいげつ",
+      "kanji": "来月",
+      "context": "",
+      "mean": "next month",
+      "cat": "noun",
+      "type": "",
+      "trans": "",
+      "dict": "来月",
+      "dictRead": "らいげつ",
+      "audio": "/Audio/minnamoi/bai5/00010011111110000.mp3",
+      "levels": {
+        "N5": [
+          "<ruby>来月<rt>らいげつ</rt></ruby><ruby>広島<rt>ひろしま</rt></ruby>へ<ruby>行<rt>い</rt></ruby>きます。",
+          "Next month I'm going to Hiroshima."
+        ],
+        "N4": [
+          "<ruby>来月<rt>らいげつ</rt></ruby>の<ruby>初<rt>はじ</rt></ruby>めに<ruby>友達<rt>ともだち</rt></ruby>が<ruby>日本<rt>にほん</rt></ruby>へ<ruby>来<rt>き</rt></ruby>ます。",
+          "At the beginning of next month, a friend is coming to Japan."
+        ],
+        "N3": [
+          "<ruby>来月<rt>らいげつ</rt></ruby>のテストに<ruby>向<rt>む</rt></ruby>けて、<ruby>毎日<rt>まいにち</rt></ruby><ruby>復習<rt>ふくしゅう</rt></ruby>するようにしています。",
+          "Toward next month's test, I'm making a point of reviewing every day."
+        ],
+        "N2": [
+          "<ruby>来月<rt>らいげつ</rt></ruby>は<ruby>予定<rt>よてい</rt></ruby>が<ruby>空<rt>あ</rt></ruby>いているものの、<ruby>旅行<rt>りょこう</rt></ruby>に<ruby>行<rt>い</rt></ruby>けるかどうかは<ruby>分<rt>わ</rt></ruby>からない。",
+          "Although my schedule is open next month, I don't know whether I'll be able to go traveling."
+        ],
+        "N1": [
+          "<ruby>来月<rt>らいげつ</rt></ruby>に<ruby>予定<rt>よてい</rt></ruby>されている<ruby>制度<rt>せいど</rt></ruby><ruby>改正<rt>かいせい</rt></ruby>に<ruby>備<rt>そな</rt></ruby>え、<ruby>各社<rt>かくしゃ</rt></ruby>は<ruby>対応<rt>たいおう</rt></ruby>に<ruby>追<rt>お</rt></ruby>われている。",
+          "In preparation for the system revision scheduled for next month, companies are scrambling to respond."
+        ]
+      },
+      "mnem": "来 (coming) + 月 (month) = the coming month = next month; read \"raigetsu.\"",
+      "tip": "来月 = next month; completes 先月 (last) / 今月 (this) / 来月 (next). 月 reads げつ here. Relative-time word: no に.",
+      "accent": 1
+    },
+    {
+      "key": "mnn:5:27",
+      "kana": "きょねん",
+      "kanji": "去年",
+      "context": "",
+      "mean": "last year",
+      "cat": "noun",
+      "type": "",
+      "trans": "",
+      "dict": "去年",
+      "dictRead": "きょねん",
+      "audio": "/Audio/minnamoi/bai5/00010011111110001.mp3",
+      "levels": {
+        "N5": [
+          "<ruby>去年<rt>きょねん</rt></ruby><ruby>日本<rt>にほん</rt></ruby>へ<ruby>来<rt>き</rt></ruby>ました。",
+          "I came to Japan last year."
+        ],
+        "N4": [
+          "<ruby>去年<rt>きょねん</rt></ruby>の<ruby>九月<rt>くがつ</rt></ruby>に<ruby>日本<rt>にほん</rt></ruby>へ<ruby>来<rt>き</rt></ruby>ました。",
+          "I came to Japan last September."
+        ],
+        "N3": [
+          "<ruby>去年<rt>きょねん</rt></ruby>より<ruby>寒<rt>さむ</rt></ruby>いので、<ruby>厚<rt>あつ</rt></ruby>い<ruby>服<rt>ふく</rt></ruby>を<ruby>着<rt>き</rt></ruby>るようにしています。",
+          "Since it's colder than last year, I make a point of wearing warm clothes."
+        ],
+        "N2": [
+          "<ruby>去年<rt>きょねん</rt></ruby>は<ruby>体調<rt>たいちょう</rt></ruby>を<ruby>崩<rt>くず</rt></ruby>したものの、<ruby>今年<rt>ことし</rt></ruby>は<ruby>元気<rt>げんき</rt></ruby>に<ruby>過<rt>す</rt></ruby>ごせている。",
+          "Although I fell ill last year, this year I've been able to stay healthy."
+        ],
+        "N1": [
+          "<ruby>去年<rt>きょねん</rt></ruby>の<ruby>記録的<rt>きろくてき</rt></ruby>な<ruby>猛暑<rt>もうしょ</rt></ruby>を<ruby>踏<rt>ふ</rt></ruby>まえ、<ruby>今年<rt>ことし</rt></ruby>は<ruby>早<rt>はや</rt></ruby>めの<ruby>熱中症<rt>ねっちゅうしょう</rt></ruby><ruby>対策<rt>たいさく</rt></ruby>が<ruby>呼<rt>よ</rt></ruby>びかけられている。",
+          "In light of last year's record heat, early precautions against heatstroke are being urged this year."
+        ]
+      },
+      "mnem": "去 (past/leave) + 年 (year) = the year that has gone by = last year; read \"kyonen.\"",
+      "tip": "去年 = last year (irregular — NOT 先年). This year is 今年 (ことし) and next year is 来年 (らいねん). Relative-time word: no に.",
+      "accent": 1
+    },
+    {
+      "key": "mnn:5:28",
+      "kana": "ことし",
+      "kanji": "今年",
+      "context": "",
+      "mean": "this year",
+      "cat": "noun",
+      "type": "",
+      "trans": "",
+      "dict": "今年",
+      "dictRead": "ことし",
+      "audio": "/Audio/minnamoi/bai5/00010011111110010.mp3",
+      "levels": {
+        "N5": [
+          "<ruby>今年<rt>ことし</rt></ruby>の<ruby>四月<rt>しがつ</rt></ruby>に<ruby>日本<rt>にほん</rt></ruby>へ<ruby>行<rt>い</rt></ruby>きます。",
+          "This April I'm going to Japan."
+        ],
+        "N4": [
+          "<ruby>今年<rt>ことし</rt></ruby>は<ruby>日本語<rt>にほんご</rt></ruby>の<ruby>試験<rt>しけん</rt></ruby>を<ruby>受<rt>う</rt></ruby>けます。",
+          "This year I'm taking the Japanese exam."
+        ],
+        "N3": [
+          "<ruby>今年<rt>ことし</rt></ruby>こそ<ruby>毎日<rt>まいにち</rt></ruby><ruby>日記<rt>にっき</rt></ruby>を<ruby>書<rt>か</rt></ruby>くようにしています。",
+          "This year for sure, I'm making a point of writing in a diary every day."
+        ],
+        "N2": [
+          "<ruby>今年<rt>ことし</rt></ruby>は<ruby>忙<rt>いそが</rt></ruby>しかったものの、<ruby>目標<rt>もくひょう</rt></ruby>はなんとか<ruby>達成<rt>たっせい</rt></ruby>できた。",
+          "Although this year was busy, I somehow managed to achieve my goal."
+        ],
+        "N1": [
+          "<ruby>今年<rt>ことし</rt></ruby>は<ruby>例年<rt>れいねん</rt></ruby>にない<ruby>暖冬<rt>だんとう</rt></ruby>となり、<ruby>各地<rt>かくち</rt></ruby>のスキー<ruby>場<rt>じょう</rt></ruby>は<ruby>営業<rt>えいぎょう</rt></ruby><ruby>短縮<rt>たんしゅく</rt></ruby>を<ruby>余儀<rt>よぎ</rt></ruby>なくされた。",
+          "This year brought an unusually mild winter, and ski resorts across the country were forced to shorten their operating seasons."
+        ]
+      },
+      "mnem": "今 (now) + 年 (year) = the now-year = this year; read irregularly as \"kotoshi.\"",
+      "tip": "今年 reads ことし (irregular — not こんねん). It pairs with 去年 (last) and 来年 (next). Relative-time word: no に.",
+      "accent": 0
+    },
+    {
+      "key": "mnn:5:29",
+      "kana": "らいねん",
+      "kanji": "来年",
+      "context": "",
+      "mean": "next year",
+      "cat": "noun",
+      "type": "",
+      "trans": "",
+      "dict": "来年",
+      "dictRead": "らいねん",
+      "audio": "/Audio/minnamoi/bai5/00010011111110011.mp3",
+      "levels": {
+        "N5": [
+          "<ruby>来年<rt>らいねん</rt></ruby><ruby>国<rt>くに</rt></ruby>へ<ruby>帰<rt>かえ</rt></ruby>ります。",
+          "Next year I'll return to my country."
+        ],
+        "N4": [
+          "<ruby>来年<rt>らいねん</rt></ruby>の<ruby>三月<rt>さんがつ</rt></ruby>にアメリカへ<ruby>行<rt>い</rt></ruby>きます。",
+          "Next March I'm going to America."
+        ],
+        "N3": [
+          "<ruby>来年<rt>らいねん</rt></ruby>までに<ruby>試験<rt>しけん</rt></ruby>に<ruby>合格<rt>ごうかく</rt></ruby>できるように、<ruby>頑張<rt>がんば</rt></ruby>るようにしています。",
+          "So that I can pass the exam by next year, I'm making a point of working hard."
+        ],
+        "N2": [
+          "<ruby>来年<rt>らいねん</rt></ruby>は<ruby>留学<rt>りゅうがく</rt></ruby>したいものの、<ruby>費用<rt>ひよう</rt></ruby>の<ruby>問題<rt>もんだい</rt></ruby>が<ruby>残<rt>のこ</rt></ruby>っている。",
+          "Although I want to study abroad next year, the problem of cost remains."
+        ],
+        "N1": [
+          "<ruby>来年<rt>らいねん</rt></ruby>の<ruby>制度<rt>せいど</rt></ruby><ruby>改正<rt>かいせい</rt></ruby>を<ruby>見据<rt>みす</rt></ruby>え、<ruby>今<rt>いま</rt></ruby>のうちから<ruby>準備<rt>じゅんび</rt></ruby>を<ruby>進<rt>すす</rt></ruby>めておくに<ruby>越<rt>こ</rt></ruby>したことはない。",
+          "With an eye on next year's system revision, there's nothing better than getting a head start on preparations now."
+        ]
+      },
+      "mnem": "来 (coming) + 年 (year) = the coming year = next year; read \"rainen.\"",
+      "tip": "来年 = next year; completes 去年 (last) / 今年 (this) / 来年 (next) — note year uses 去年, not 先年. Relative-time word: no に.",
+      "accent": 0
+    },
+    {
+      "key": "mnn:5:30",
+      "kana": "ーねん",
+      "kanji": "ー年",
+      "context": "何〜",
+      "mean": "-th year (counter for years)",
+      "cat": "phrase",
+      "type": "",
+      "trans": "",
+      "dict": "ー年",
+      "dictRead": "ーねん",
+      "audio": "/Audio/minnamoi/bai5/00010011111110100.mp3",
+      "accent": 0
+    },
+    {
+      "key": "mnn:5:31",
+      "kana": "なんねん",
+      "kanji": "何年",
+      "context": "",
+      "mean": "what year, how many years",
+      "cat": "noun",
+      "type": "",
+      "trans": "",
+      "dict": "何年",
+      "dictRead": "なんねん",
+      "audio": "/Audio/minnamoi/bai5/00010011111110101.mp3",
+      "levels": {
+        "N5": [
+          "<ruby>何年<rt>なんねん</rt></ruby>に<ruby>日本<rt>にほん</rt></ruby>へ<ruby>来<rt>き</rt></ruby>ましたか。",
+          "In what year did you come to Japan?"
+        ],
+        "N4": [
+          "<ruby>日本語<rt>にほんご</rt></ruby>を<ruby>何年<rt>なんねん</rt></ruby><ruby>勉強<rt>べんきょう</rt></ruby>しましたか。",
+          "How many years did you study Japanese?"
+        ],
+        "N3": [
+          "<ruby>何年<rt>なんねん</rt></ruby>かかっても、この<ruby>夢<rt>ゆめ</rt></ruby>だけは<ruby>諦<rt>あきら</rt></ruby>めないようにしています。",
+          "No matter how many years it takes, I make a point of not giving up on this dream."
+        ],
+        "N2": [
+          "<ruby>何年<rt>なんねん</rt></ruby><ruby>経<rt>た</rt></ruby>ったのか<ruby>思<rt>おも</rt></ruby>い<ruby>出<rt>だ</rt></ruby>せないものの、あの<ruby>日<rt>ひ</rt></ruby>のことは<ruby>今<rt>いま</rt></ruby>でも<ruby>鮮明<rt>せんめい</rt></ruby>に<ruby>覚<rt>おぼ</rt></ruby>えている。",
+          "Although I can't recall how many years have passed, I still vividly remember that day."
+        ],
+        "N1": [
+          "<ruby>創業<rt>そうぎょう</rt></ruby>から<ruby>何年<rt>なんねん</rt></ruby>もの<ruby>歳月<rt>さいげつ</rt></ruby>を<ruby>経<rt>へ</rt></ruby>て<ruby>培<rt>つちか</rt></ruby>われた<ruby>信頼<rt>しんらい</rt></ruby>は、そう<ruby>簡単<rt>かんたん</rt></ruby>に<ruby>揺<rt>ゆ</rt></ruby>らぐものではない。",
+          "The trust cultivated over the many years since our founding is not something that wavers so easily."
+        ]
+      },
+      "mnem": "何 (what/how-many) + 年 (year) = \"what year\" or \"how many years\"; read \"nannen.\"",
+      "tip": "何年 asks either \"which year\" (何年に来ましたか) or \"how many years\" (何年勉強しましたか) — context decides. The ー年 suffix (何年) reads ねん.",
+      "accent": 1
+    },
+    {
+      "key": "mnn:5:32",
+      "kana": "ーがつ",
+      "kanji": "ー月",
+      "context": "何〜",
+      "mean": "-th month of the year (naming a month)",
+      "cat": "phrase",
+      "type": "",
+      "trans": "",
+      "dict": "ー月",
+      "dictRead": "ーがつ",
+      "audio": "/Audio/minnamoi/bai5/00010011111110110.mp3",
+      "accent": 0
+    },
+    {
+      "key": "mnn:5:33",
+      "kana": "なんがつ",
+      "kanji": "何月",
+      "context": "",
+      "mean": "what month (of the year)",
+      "cat": "noun",
+      "type": "",
+      "trans": "",
+      "dict": "何月",
+      "dictRead": "なんがつ",
+      "audio": "/Audio/minnamoi/bai5/00010011111110111.mp3",
+      "levels": {
+        "N5": [
+          "<ruby>誕生日<rt>たんじょうび</rt></ruby>は<ruby>何月<rt>なんがつ</rt></ruby>ですか。",
+          "What month is your birthday?"
+        ],
+        "N4": [
+          "<ruby>何月<rt>なんがつ</rt></ruby>に<ruby>国<rt>くに</rt></ruby>へ<ruby>帰<rt>かえ</rt></ruby>りますか。",
+          "In what month are you going back to your country?"
+        ],
+        "N3": [
+          "<ruby>試験<rt>しけん</rt></ruby>が<ruby>何月<rt>なんがつ</rt></ruby>にあるか、<ruby>早<rt>はや</rt></ruby>めに<ruby>確認<rt>かくにん</rt></ruby>するようにしています。",
+          "I make a point of checking early on which month the exam is in."
+        ],
+        "N2": [
+          "<ruby>何月<rt>なんがつ</rt></ruby>に<ruby>出発<rt>しゅっぱつ</rt></ruby>するか<ruby>迷<rt>まよ</rt></ruby>っているものの、<ruby>早<rt>はや</rt></ruby>く<ruby>決<rt>き</rt></ruby>めたほうがいい。",
+          "Although I'm unsure which month to depart, it's better to decide soon."
+        ],
+        "N1": [
+          "<ruby>契約<rt>けいやく</rt></ruby>が<ruby>何月<rt>なんがつ</rt></ruby>に<ruby>更新<rt>こうしん</rt></ruby>されるのかを<ruby>把握<rt>はあく</rt></ruby>しておかないと、<ruby>思<rt>おも</rt></ruby>わぬ<ruby>不利益<rt>ふりえき</rt></ruby>を<ruby>被<rt>こうむ</rt></ruby>りかねない。",
+          "If you don't grasp which month the contract renews, you may end up suffering an unexpected disadvantage."
+        ]
+      },
+      "mnem": "何 (what) + 月 (month, here がつ) = \"what month of the year\"; read \"nangatsu.\"",
+      "tip": "何月 (なんがつ) names WHICH month (答え: 三月, 四月…); don't confuse it with 何ヶ月 (なんかげつ, \"how many months\"). Naming a month, 月 reads がつ, not げつ.",
+      "accent": 1
+    },
+    {
+      "key": "mnn:5:34",
+      "kana": "ついたち",
+      "kanji": "一日",
+      "context": "",
+      "mean": "the first (day of the month)",
+      "cat": "noun",
+      "type": "",
+      "trans": "",
+      "dict": "一日",
+      "dictRead": "ついたち",
+      "audio": "/Audio/minnamoi/bai5/00010011111111000.mp3",
+      "levels": {
+        "N5": [
+          "<ruby>誕生日<rt>たんじょうび</rt></ruby>は<ruby>九月<rt>くがつ</rt></ruby><ruby>一日<rt>ついたち</rt></ruby>です。",
+          "My birthday is September 1st."
+        ],
+        "N4": [
+          "<ruby>四月<rt>しがつ</rt></ruby><ruby>一日<rt>ついたち</rt></ruby>に<ruby>新<rt>あたら</rt></ruby>しい<ruby>会社<rt>かいしゃ</rt></ruby>へ<ruby>行<rt>い</rt></ruby>きます。",
+          "On April 1st I'll go to my new company."
+        ],
+        "N3": [
+          "<ruby>毎月<rt>まいつき</rt></ruby><ruby>一日<rt>ついたち</rt></ruby>に<ruby>目標<rt>もくひょう</rt></ruby>を<ruby>立<rt>た</rt></ruby>てるようにしています。",
+          "I make a point of setting a goal on the first of each month."
+        ],
+        "N2": [
+          "<ruby>一日<rt>ついたち</rt></ruby>は<ruby>祝日<rt>しゅくじつ</rt></ruby>だったものの、<ruby>店<rt>みせ</rt></ruby>はいつもどおり<ruby>開<rt>あ</rt></ruby>いていた。",
+          "Although the first was a holiday, the shops were open as usual."
+        ],
+        "N1": [
+          "<ruby>年度<rt>ねんど</rt></ruby>の<ruby>切<rt>き</rt></ruby>り<ruby>替<rt>か</rt></ruby>わる<ruby>四月<rt>しがつ</rt></ruby><ruby>一日<rt>ついたち</rt></ruby>は、<ruby>官民<rt>かんみん</rt></ruby>を<ruby>問<rt>と</rt></ruby>わず<ruby>多<rt>おお</rt></ruby>くの<ruby>制度<rt>せいど</rt></ruby>が<ruby>一斉<rt>いっせい</rt></ruby>に<ruby>変<rt>か</rt></ruby>わる<ruby>節目<rt>ふしめ</rt></ruby>だ。",
+          "April 1st, when the fiscal year rolls over, is a milestone on which many systems change all at once, in both the public and private sectors."
+        ]
+      },
+      "mnem": "一日 as a DATE reads ついたち (irregular — \"tsuitachi\"), from an old word for the moon's first appearance; NOT いちにち.",
+      "tip": "1st of the month = ついたち (irregular); but \"one day / all day\" = いちにち. The days 1–10, plus 14/20/24, are all irregular native readings — memorize them.",
+      "accent": 0
+    },
+    {
+      "key": "mnn:5:35",
+      "kana": "ふつか",
+      "kanji": "二日",
+      "context": "",
+      "mean": "the 2nd; two days",
+      "cat": "noun",
+      "type": "",
+      "trans": "",
+      "dict": "二日",
+      "dictRead": "ふつか",
+      "audio": "/Audio/minnamoi/bai5/00010011111111001.mp3",
+      "levels": {
+        "N5": [
+          "<ruby>三月<rt>さんがつ</rt></ruby><ruby>二日<rt>ふつか</rt></ruby>に<ruby>京都<rt>きょうと</rt></ruby>へ<ruby>行<rt>い</rt></ruby>きます。",
+          "On March 2nd I'll go to Kyoto."
+        ],
+        "N4": [
+          "<ruby>二日<rt>ふつか</rt></ruby><ruby>休<rt>やす</rt></ruby>んだので、<ruby>宿題<rt>しゅくだい</rt></ruby>がたまってしまいました。",
+          "Because I took two days off, my homework piled up."
+        ],
+        "N3": [
+          "<ruby>旅行<rt>りょこう</rt></ruby>は<ruby>二日<rt>ふつか</rt></ruby>にするか<ruby>三日<rt>みっか</rt></ruby>にするか、まだ<ruby>決<rt>き</rt></ruby>めていません。",
+          "Whether to make the trip two days or three, I haven't decided yet."
+        ],
+        "N2": [
+          "<ruby>二日<rt>ふつか</rt></ruby>あれば<ruby>終<rt>お</rt></ruby>わると<ruby>思<rt>おも</rt></ruby>っていたものの、<ruby>結局<rt>けっきょく</rt></ruby><ruby>一週間<rt>いっしゅうかん</rt></ruby>かかった。",
+          "Although I thought it would finish in two days, in the end it took a week."
+        ],
+        "N1": [
+          "わずか<ruby>二日<rt>ふつか</rt></ruby>という<ruby>限<rt>かぎ</rt></ruby>られた<ruby>時間<rt>じかん</rt></ruby>の<ruby>中<rt>なか</rt></ruby>で、これだけの<ruby>成果<rt>せいか</rt></ruby>を<ruby>上<rt>あ</rt></ruby>げたのは<ruby>驚嘆<rt>きょうたん</rt></ruby>に<ruby>値<rt>あたい</rt></ruby>する。",
+          "To have achieved this much within the mere two days available is worthy of astonishment."
+        ]
+      },
+      "mnem": "二日 reads ふつか — the native \"futsu\" counting with the -か day-suffix: the 2nd, or two days.",
+      "tip": "ふつか covers both \"the 2nd of the month\" and \"two days\" — context decides. Note the irregular native readings for 1st–10th, 14th, 20th, 24th.",
+      "accent": 0
+    },
+    {
+      "key": "mnn:5:36",
+      "kana": "みっか",
+      "kanji": "三日",
+      "context": "",
+      "mean": "the 3rd; three days",
+      "cat": "noun",
+      "type": "",
+      "trans": "",
+      "dict": "三日",
+      "dictRead": "みっか",
+      "audio": "/Audio/minnamoi/bai5/00010011111111010.mp3",
+      "levels": {
+        "N5": [
+          "<ruby>三月<rt>さんがつ</rt></ruby><ruby>三日<rt>みっか</rt></ruby>に<ruby>行<rt>い</rt></ruby>きます。",
+          "I'll go on March 3rd."
+        ],
+        "N4": [
+          "<ruby>三日<rt>みっか</rt></ruby><ruby>前<rt>まえ</rt></ruby>から<ruby>頭<rt>あたま</rt></ruby>が<ruby>痛<rt>いた</rt></ruby>いです。",
+          "My head has hurt since three days ago."
+        ],
+        "N3": [
+          "<ruby>三日<rt>みっか</rt></ruby>に<ruby>一度<rt>いちど</rt></ruby>は<ruby>運動<rt>うんどう</rt></ruby>するようにしています。",
+          "I make a point of exercising once every three days."
+        ],
+        "N2": [
+          "<ruby>三日<rt>みっか</rt></ruby>で<ruby>終<rt>お</rt></ruby>わる<ruby>予定<rt>よてい</rt></ruby>だったものの、<ruby>問題<rt>もんだい</rt></ruby>が<ruby>起<rt>お</rt></ruby>きて<ruby>延<rt>の</rt></ruby>びてしまった。",
+          "Although it was scheduled to finish in three days, a problem arose and it got delayed."
+        ],
+        "N1": [
+          "「<ruby>三日<rt>みっか</rt></ruby><ruby>坊主<rt>ぼうず</rt></ruby>」とはよく<ruby>言<rt>い</rt></ruby>ったもので、<ruby>何事<rt>なにごと</rt></ruby>も<ruby>続<rt>つづ</rt></ruby>けることこそが<ruby>最<rt>もっと</rt></ruby>も<ruby>難<rt>むずか</rt></ruby>しい。",
+          "The saying \"a three-day monk\" is apt: with anything, it is continuing that is hardest of all."
+        ]
+      },
+      "mnem": "三日 reads みっか — the native \"mi\" (three) with the -か day-suffix: the 3rd, or three days.",
+      "tip": "みっか is both \"the 3rd of the month\" and \"three days.\" Part of the irregular native-reading set for the early days of the month.",
+      "accent": 0
+    },
+    {
+      "key": "mnn:5:37",
+      "kana": "よっか",
+      "kanji": "四日",
+      "context": "",
+      "mean": "the 4th; four days",
+      "cat": "noun",
+      "type": "",
+      "trans": "",
+      "dict": "四日",
+      "dictRead": "よっか",
+      "audio": "/Audio/minnamoi/bai5/00010011111111011.mp3",
+      "levels": {
+        "N5": [
+          "<ruby>四月<rt>しがつ</rt></ruby><ruby>四日<rt>よっか</rt></ruby>に<ruby>会<rt>あ</rt></ruby>いましょう。",
+          "Let's meet on April 4th."
+        ],
+        "N4": [
+          "<ruby>四日<rt>よっか</rt></ruby>の<ruby>朝<rt>あさ</rt></ruby>、<ruby>友達<rt>ともだち</rt></ruby>が<ruby>来<rt>き</rt></ruby>ます。",
+          "On the morning of the 4th, a friend is coming."
+        ],
+        "N3": [
+          "<ruby>四日<rt>よっか</rt></ruby>もあれば、この<ruby>仕事<rt>しごと</rt></ruby>は<ruby>終<rt>お</rt></ruby>わらせられると<ruby>思<rt>おも</rt></ruby>います。",
+          "If I have four days, I think I can get this work finished."
+        ],
+        "N2": [
+          "<ruby>四日<rt>よっか</rt></ruby>かかると<ruby>言<rt>い</rt></ruby>われていたものの、<ruby>三日<rt>みっか</rt></ruby>で<ruby>片付<rt>かたづ</rt></ruby>いた。",
+          "Although I was told it would take four days, it was wrapped up in three."
+        ],
+        "N1": [
+          "<ruby>連休<rt>れんきゅう</rt></ruby>の<ruby>四日<rt>よっか</rt></ruby><ruby>間<rt>かん</rt></ruby>、<ruby>各地<rt>かくち</rt></ruby>の<ruby>行楽地<rt>こうらくち</rt></ruby>は<ruby>例年<rt>れいねん</rt></ruby>を<ruby>上回<rt>うわまわ</rt></ruby>る<ruby>人出<rt>ひとで</rt></ruby>で<ruby>賑<rt>にぎ</rt></ruby>わった。",
+          "Over the four days of the long holiday, tourist spots across the country bustled with crowds exceeding those of previous years."
+        ]
+      },
+      "mnem": "四日 reads よっか — the native \"yo\" (four, as in よん) with the -か day-suffix: the 4th, or four days.",
+      "tip": "よっか is both \"the 4th\" and \"four days.\" Beware the 14th (じゅうよっか) and 24th (にじゅうよっか) reuse this よっか, unlike other -日 counters.",
+      "accent": 0
+    },
+    {
+      "key": "mnn:5:38",
+      "kana": "いつか",
+      "kanji": "五日",
+      "context": "",
+      "mean": "the 5th; five days",
+      "cat": "noun",
+      "type": "",
+      "trans": "",
+      "dict": "五日",
+      "dictRead": "いつか",
+      "audio": "/Audio/minnamoi/bai5/00010011111111100.mp3",
+      "levels": {
+        "N5": [
+          "<ruby>五月<rt>ごがつ</rt></ruby><ruby>五日<rt>いつか</rt></ruby>は<ruby>休<rt>やす</rt></ruby>みです。",
+          "May 5th is a holiday."
+        ],
+        "N4": [
+          "<ruby>五日<rt>いつか</rt></ruby>から<ruby>旅行<rt>りょこう</rt></ruby>に<ruby>行<rt>い</rt></ruby>きます。",
+          "I'm going on a trip from the 5th."
+        ],
+        "N3": [
+          "<ruby>五日<rt>いつか</rt></ruby>あれば<ruby>十分<rt>じゅうぶん</rt></ruby><ruby>準備<rt>じゅんび</rt></ruby>できると<ruby>思<rt>おも</rt></ruby>います。",
+          "If I have five days, I think I can prepare well enough."
+        ],
+        "N2": [
+          "<ruby>五日<rt>いつか</rt></ruby>もあれば<ruby>治<rt>なお</rt></ruby>ると<ruby>言<rt>い</rt></ruby>われたものの、なかなかよくならない。",
+          "Although I was told it would heal in five days, it just won't get better."
+        ],
+        "N1": [
+          "たった<ruby>五日<rt>いつか</rt></ruby>の<ruby>滞在<rt>たいざい</rt></ruby>ではあったが、この<ruby>土地<rt>とち</rt></ruby>で<ruby>得<rt>え</rt></ruby>た<ruby>経験<rt>けいけん</rt></ruby>は<ruby>生涯<rt>しょうがい</rt></ruby><ruby>忘<rt>わす</rt></ruby>れられないだろう。",
+          "It was a stay of a mere five days, yet the experience I gained in this land will surely stay with me my whole life."
+        ]
+      },
+      "mnem": "五日 reads いつか — the native \"itsu\" (five) with the -か day-suffix: the 5th, or five days.",
+      "tip": "The date いつか (5th / five days) is a HOMOPHONE of いつか meaning \"someday\" — told apart by context and, in writing, by the kanji 五日 vs いつか.",
+      "accent": 0
+    },
+    {
+      "key": "mnn:5:39",
+      "kana": "むいか",
+      "kanji": "六日",
+      "context": "",
+      "mean": "the 6th; six days",
+      "cat": "noun",
+      "type": "",
+      "trans": "",
+      "dict": "六日",
+      "dictRead": "むいか",
+      "audio": "/Audio/minnamoi/bai5/00010011111111101.mp3",
+      "levels": {
+        "N5": [
+          "<ruby>六月<rt>ろくがつ</rt></ruby><ruby>六日<rt>むいか</rt></ruby>に<ruby>行<rt>い</rt></ruby>きます。",
+          "I'll go on June 6th."
+        ],
+        "N4": [
+          "<ruby>六日<rt>むいか</rt></ruby>の<ruby>午後<rt>ごご</rt></ruby>、<ruby>時間<rt>じかん</rt></ruby>がありますか。",
+          "Do you have time on the afternoon of the 6th?"
+        ],
+        "N3": [
+          "<ruby>六日<rt>むいか</rt></ruby>までにこの<ruby>本<rt>ほん</rt></ruby>を<ruby>返<rt>かえ</rt></ruby>すようにしています。",
+          "I make a point of returning this book by the 6th."
+        ],
+        "N2": [
+          "<ruby>六日<rt>むいか</rt></ruby>に<ruby>出発<rt>しゅっぱつ</rt></ruby>する<ruby>予定<rt>よてい</rt></ruby>だったものの、<ruby>都合<rt>つごう</rt></ruby>で<ruby>延<rt>の</rt></ruby>びた。",
+          "Although I was scheduled to depart on the 6th, it was pushed back for scheduling reasons."
+        ],
+        "N1": [
+          "<ruby>会期<rt>かいき</rt></ruby>は<ruby>六日<rt>むいか</rt></ruby>から<ruby>始<rt>はじ</rt></ruby>まる<ruby>予定<rt>よてい</rt></ruby>だが、<ruby>準備<rt>じゅんび</rt></ruby>の<ruby>遅<rt>おく</rt></ruby>れから<ruby>延期<rt>えんき</rt></ruby>もやむを<ruby>得<rt>え</rt></ruby>ないとの<ruby>声<rt>こえ</rt></ruby>も<ruby>上<rt>あ</rt></ruby>がっている。",
+          "The session is scheduled to begin on the 6th, but voices are being raised that a postponement may be unavoidable owing to preparation delays."
+        ]
+      },
+      "mnem": "六日 reads むいか — the native \"mu\" (six, as in むっつ) with the -か day-suffix: the 6th, or six days.",
+      "tip": "むいか is both \"the 6th\" and \"six days.\" One of the irregular native-reading days (1–10) you have to memorize.",
+      "accent": 0
+    },
+    {
+      "key": "mnn:5:40",
+      "kana": "なのか",
+      "kanji": "七日",
+      "context": "",
+      "mean": "the 7th; seven days",
+      "cat": "noun",
+      "type": "",
+      "trans": "",
+      "dict": "七日",
+      "dictRead": "なのか",
+      "audio": "/Audio/minnamoi/bai5/00010011111111110.mp3",
+      "levels": {
+        "N5": [
+          "<ruby>七月<rt>しちがつ</rt></ruby><ruby>七日<rt>なのか</rt></ruby>は<ruby>七夕<rt>たなばた</rt></ruby>です。",
+          "July 7th is the Star Festival."
+        ],
+        "N4": [
+          "<ruby>七日<rt>なのか</rt></ruby>から<ruby>一週間<rt>いっしゅうかん</rt></ruby><ruby>休<rt>やす</rt></ruby>みます。",
+          "I'll take a week off from the 7th."
+        ],
+        "N3": [
+          "<ruby>七日<rt>なのか</rt></ruby>までに<ruby>返事<rt>へんじ</rt></ruby>をするようにしています。",
+          "I make a point of replying by the 7th."
+        ],
+        "N2": [
+          "<ruby>七日<rt>なのか</rt></ruby>で<ruby>仕上<rt>しあ</rt></ruby>げると<ruby>約束<rt>やくそく</rt></ruby>したものの、<ruby>間<rt>ま</rt></ruby>に<ruby>合<rt>あ</rt></ruby>うか<ruby>心配<rt>しんぱい</rt></ruby>だ。",
+          "Although I promised to finish it in seven days, I'm worried whether I'll make it."
+        ],
+        "N1": [
+          "<ruby>亡<rt>な</rt></ruby>くなってから<ruby>七日<rt>なのか</rt></ruby><ruby>目<rt>め</rt></ruby>にあたる<ruby>初七日<rt>しょなのか</rt></ruby>は、<ruby>遺族<rt>いぞく</rt></ruby>にとって<ruby>大切<rt>たいせつ</rt></ruby>な<ruby>節目<rt>ふしめ</rt></ruby>とされている。",
+          "The seventh day after death, the shonanoka, is regarded as an important milestone for the bereaved family."
+        ]
+      },
+      "mnem": "七日 reads なのか — the native \"nana\" (seven) softened, with the -か day-suffix: the 7th, or seven days.",
+      "tip": "なのか is both \"the 7th\" and \"seven days.\" Don't read it しちにち — the native なのか is standard for both senses.",
+      "accent": 0
+    },
+    {
+      "key": "mnn:5:41",
+      "kana": "ようか",
+      "kanji": "八日",
+      "context": "",
+      "mean": "the 8th; eight days",
+      "cat": "noun",
+      "type": "",
+      "trans": "",
+      "dict": "八日",
+      "dictRead": "ようか",
+      "audio": "/Audio/minnamoi/bai5/00010011111111111.mp3",
+      "levels": {
+        "N5": [
+          "<ruby>八月<rt>はちがつ</rt></ruby><ruby>八日<rt>ようか</rt></ruby>に<ruby>帰<rt>かえ</rt></ruby>ります。",
+          "I'll return on August 8th."
+        ],
+        "N4": [
+          "<ruby>八日<rt>ようか</rt></ruby>の<ruby>夜<rt>よる</rt></ruby>、<ruby>花火<rt>はなび</rt></ruby>を<ruby>見<rt>み</rt></ruby>に<ruby>行<rt>い</rt></ruby>きます。",
+          "On the evening of the 8th, I'm going to see fireworks."
+        ],
+        "N3": [
+          "<ruby>八日<rt>ようか</rt></ruby>までに<ruby>準備<rt>じゅんび</rt></ruby>を<ruby>終<rt>お</rt></ruby>えるようにしています。",
+          "I make a point of finishing the preparations by the 8th."
+        ],
+        "N2": [
+          "<ruby>八日<rt>ようか</rt></ruby>かかると<ruby>思<rt>おも</rt></ruby>っていたものの、<ruby>手伝<rt>てつだ</rt></ruby>ってもらえて<ruby>早<rt>はや</rt></ruby>く<ruby>済<rt>す</rt></ruby>んだ。",
+          "Although I thought it would take eight days, I got help and it finished quickly."
+        ],
+        "N1": [
+          "わずか<ruby>八日<rt>ようか</rt></ruby>という<ruby>短<rt>みじか</rt></ruby>い<ruby>会期<rt>かいき</rt></ruby>ながら、<ruby>今回<rt>こんかい</rt></ruby>の<ruby>展覧会<rt>てんらんかい</rt></ruby>には<ruby>連日<rt>れんじつ</rt></ruby><ruby>大勢<rt>おおぜい</rt></ruby>の<ruby>来場者<rt>らいじょうしゃ</rt></ruby>が<ruby>詰<rt>つ</rt></ruby>めかけた。",
+          "Despite a short run of only eight days, this exhibition drew large crowds of visitors day after day."
+        ]
+      },
+      "mnem": "八日 reads ようか — easily confused with 四日 (よっか); ようか has the long \"yō\" vowel: the 8th, or eight days.",
+      "tip": "ようか (8th) vs よっか (4th) trip up learners — listen for the long ō in ようか vs the small っ in よっか. Both are irregular native readings.",
+      "accent": 0
+    },
+    {
+      "key": "mnn:5:42",
+      "kana": "ここのか",
+      "kanji": "九日",
+      "context": "",
+      "mean": "the 9th; nine days",
+      "cat": "noun",
+      "type": "",
+      "trans": "",
+      "dict": "九日",
+      "dictRead": "ここのか",
+      "audio": "/Audio/minnamoi/bai5/00010100000000000.mp3",
+      "levels": {
+        "N5": [
+          "<ruby>九月<rt>くがつ</rt></ruby><ruby>九日<rt>ここのか</rt></ruby>に<ruby>来<rt>き</rt></ruby>ます。",
+          "I'll come on September 9th."
+        ],
+        "N4": [
+          "<ruby>九日<rt>ここのか</rt></ruby>の<ruby>朝<rt>あさ</rt></ruby>、<ruby>東京<rt>とうきょう</rt></ruby>へ<ruby>出発<rt>しゅっぱつ</rt></ruby>します。",
+          "On the morning of the 9th, I'll depart for Tokyo."
+        ],
+        "N3": [
+          "<ruby>九日<rt>ここのか</rt></ruby>までにレポートを<ruby>出<rt>だ</rt></ruby>すようにしています。",
+          "I make a point of submitting the report by the 9th."
+        ],
+        "N2": [
+          "<ruby>九日<rt>ここのか</rt></ruby>に<ruby>会<rt>あ</rt></ruby>う<ruby>約束<rt>やくそく</rt></ruby>だったものの、<ruby>急<rt>きゅう</rt></ruby>な<ruby>用事<rt>ようじ</rt></ruby>で<ruby>延<rt>の</rt></ruby>ばしてもらった。",
+          "Although we had promised to meet on the 9th, I had it postponed because of urgent business."
+        ],
+        "N1": [
+          "<ruby>九日<rt>ここのか</rt></ruby>にわたる<ruby>長丁場<rt>ながちょうば</rt></ruby>の<ruby>交渉<rt>こうしょう</rt></ruby>の<ruby>末<rt>すえ</rt></ruby>、ようやく<ruby>双方<rt>そうほう</rt></ruby>が<ruby>納得<rt>なっとく</rt></ruby>する<ruby>合意<rt>ごうい</rt></ruby>に<ruby>至<rt>いた</rt></ruby>った。",
+          "After a marathon of negotiations spanning nine days, both sides finally reached an agreement they could accept."
+        ]
+      },
+      "mnem": "九日 reads ここのか — from the native \"kokono\" (nine, as in ここのつ) plus the -か day-suffix: the 9th, or nine days.",
+      "tip": "ここのか is both \"the 9th\" and \"nine days.\" Don't read it くにち — the native ここのか is standard.",
+      "accent": 0
+    },
+    {
+      "key": "mnn:5:43",
+      "kana": "とおか",
+      "kanji": "十日",
+      "context": "",
+      "mean": "the 10th; ten days",
+      "cat": "noun",
+      "type": "",
+      "trans": "",
+      "dict": "十日",
+      "dictRead": "とおか",
+      "audio": "/Audio/minnamoi/bai5/00010100000000001.mp3",
+      "levels": {
+        "N5": [
+          "<ruby>十月<rt>じゅうがつ</rt></ruby><ruby>十日<rt>とおか</rt></ruby>に<ruby>行<rt>い</rt></ruby>きます。",
+          "I'll go on October 10th."
+        ],
+        "N4": [
+          "<ruby>十日<rt>とおか</rt></ruby>から<ruby>新<rt>あたら</rt></ruby>しい<ruby>仕事<rt>しごと</rt></ruby>が<ruby>始<rt>はじ</rt></ruby>まります。",
+          "My new job starts from the 10th."
+        ],
+        "N3": [
+          "<ruby>十日<rt>とおか</rt></ruby>に<ruby>一度<rt>いちど</rt></ruby>、<ruby>部屋<rt>へや</rt></ruby>を<ruby>片付<rt>かたづ</rt></ruby>けるようにしています。",
+          "Once every ten days, I make a point of tidying my room."
+        ],
+        "N2": [
+          "<ruby>十日<rt>とおか</rt></ruby>もあれば<ruby>覚<rt>おぼ</rt></ruby>えられると<ruby>思<rt>おも</rt></ruby>っていたものの、<ruby>思<rt>おも</rt></ruby>ったより<ruby>難<rt>むずか</rt></ruby>しかった。",
+          "Although I thought I could memorize it in ten days, it was harder than I expected."
+        ],
+        "N1": [
+          "<ruby>着任<rt>ちゃくにん</rt></ruby>からわずか<ruby>十日<rt>とおか</rt></ruby>で<ruby>組織<rt>そしき</rt></ruby>の<ruby>課題<rt>かだい</rt></ruby>を<ruby>的確<rt>てきかく</rt></ruby>に<ruby>見抜<rt>みぬ</rt></ruby>いた<ruby>手腕<rt>しゅわん</rt></ruby>には、<ruby>誰<rt>だれ</rt></ruby>もが<ruby>舌<rt>した</rt></ruby>を<ruby>巻<rt>ま</rt></ruby>いた。",
+          "Everyone was astounded at the skill with which, in a mere ten days from taking office, they precisely identified the organization's problems."
+        ]
+      },
+      "mnem": "十日 reads とおか — from the native \"tō\" (ten) plus the -か day-suffix: the 10th, or ten days.",
+      "tip": "とおか is both \"the 10th\" and \"ten days.\" From the 11th on, most days switch to the regular 〜にち reading (juʼuichi-nichi), except 14, 20, 24.",
+      "accent": 0
+    },
+    {
+      "key": "mnn:5:44",
+      "kana": "じゅうよっか",
+      "kanji": "十四日",
+      "context": "",
+      "mean": "the 14th; fourteen days",
+      "cat": "noun",
+      "type": "",
+      "trans": "",
+      "dict": "十四日",
+      "dictRead": "じゅうよっか",
+      "audio": "/Audio/minnamoi/bai5/00010100000000010.mp3",
+      "levels": {
+        "N5": [
+          "<ruby>九月<rt>くがつ</rt></ruby><ruby>十四日<rt>じゅうよっか</rt></ruby>に<ruby>行<rt>い</rt></ruby>きます。",
+          "I'll go on September 14th."
+        ],
+        "N4": [
+          "<ruby>十四日<rt>じゅうよっか</rt></ruby>の<ruby>午後<rt>ごご</rt></ruby>、<ruby>会議<rt>かいぎ</rt></ruby>があります。",
+          "There's a meeting on the afternoon of the 14th."
+        ],
+        "N3": [
+          "<ruby>十四日<rt>じゅうよっか</rt></ruby>までに<ruby>申<rt>もう</rt></ruby>し<ruby>込<rt>こ</rt></ruby>むようにしています。",
+          "I make a point of applying by the 14th."
+        ],
+        "N2": [
+          "<ruby>十四日<rt>じゅうよっか</rt></ruby>に<ruby>予定<rt>よてい</rt></ruby>していたものの、<ruby>台風<rt>たいふう</rt></ruby>で<ruby>延期<rt>えんき</rt></ruby>になった。",
+          "Although it was planned for the 14th, it was postponed because of a typhoon."
+        ],
+        "N1": [
+          "<ruby>投票<rt>とうひょう</rt></ruby><ruby>日<rt>び</rt></ruby>である<ruby>十四日<rt>じゅうよっか</rt></ruby>に<ruby>向<rt>む</rt></ruby>け、<ruby>各<rt>かく</rt></ruby><ruby>候補<rt>こうほ</rt></ruby>は<ruby>最後<rt>さいご</rt></ruby>の<ruby>訴<rt>うった</rt></ruby>えに<ruby>力<rt>ちから</rt></ruby>を<ruby>注<rt>そそ</rt></ruby>いでいる。",
+          "Ahead of the 14th, election day, each candidate is pouring effort into their final appeals."
+        ]
+      },
+      "mnem": "十四日 reads じゅうよっか — 十 (じゅう, ten) plus the irregular よっか from 四日: the 14th.",
+      "tip": "14th keeps the irregular よっか (unlike 11th/12th/13th, which use the regular 〜にち). Same trap as the 24th (にじゅうよっか).",
+      "accent": 0
+    },
+    {
+      "key": "mnn:5:45",
+      "kana": "はつか",
+      "kanji": "二十日",
+      "context": "",
+      "mean": "the 20th; twenty days",
+      "cat": "noun",
+      "type": "",
+      "trans": "",
+      "dict": "二十日",
+      "dictRead": "はつか",
+      "audio": "/Audio/minnamoi/bai5/00010100000000011.mp3",
+      "levels": {
+        "N5": [
+          "<ruby>四月<rt>しがつ</rt></ruby><ruby>二十日<rt>はつか</rt></ruby>に<ruby>行<rt>い</rt></ruby>きます。",
+          "I'll go on April 20th."
+        ],
+        "N4": [
+          "<ruby>二十日<rt>はつか</rt></ruby>の<ruby>朝<rt>あさ</rt></ruby>、<ruby>国<rt>くに</rt></ruby>へ<ruby>帰<rt>かえ</rt></ruby>ります。",
+          "On the morning of the 20th, I'll return to my country."
+        ],
+        "N3": [
+          "<ruby>二十日<rt>はつか</rt></ruby>までに<ruby>家賃<rt>やちん</rt></ruby>を<ruby>払<rt>はら</rt></ruby>うようにしています。",
+          "I make a point of paying the rent by the 20th."
+        ],
+        "N2": [
+          "<ruby>二十日<rt>はつか</rt></ruby>に<ruby>締<rt>し</rt></ruby>め<ruby>切<rt>き</rt></ruby>りだったものの、<ruby>特別<rt>とくべつ</rt></ruby>に<ruby>延<rt>の</rt></ruby>ばしてもらえた。",
+          "Although the deadline was the 20th, I was specially granted an extension."
+        ],
+        "N1": [
+          "<ruby>毎月<rt>まいつき</rt></ruby><ruby>二十日<rt>はつか</rt></ruby>を<ruby>給料日<rt>きゅうりょうび</rt></ruby>とする<ruby>企業<rt>きぎょう</rt></ruby>は<ruby>多<rt>おお</rt></ruby>く、その<ruby>前後<rt>ぜんご</rt></ruby>は<ruby>街<rt>まち</rt></ruby>の<ruby>人出<rt>ひとで</rt></ruby>も<ruby>目<rt>め</rt></ruby>に<ruby>見<rt>み</rt></ruby>えて<ruby>増<rt>ふ</rt></ruby>える。",
+          "Many companies set the 20th as payday, and around then the crowds in town noticeably increase."
+        ]
+      },
+      "mnem": "二十日 reads はつか (irregular — \"hatsuka,\" NOT にじゅうにち): the 20th, or twenty days.",
+      "tip": "はつか (20th) is fully irregular — a notorious learner trap. Compare はたち (二十歳, 20 years old), another special 二十 reading.",
+      "accent": 0
+    },
+    {
+      "key": "mnn:5:46",
+      "kana": "にじゅうよっか",
+      "kanji": "二十四日",
+      "context": "",
+      "mean": "the 24th; twenty-four days",
+      "cat": "noun",
+      "type": "",
+      "trans": "",
+      "dict": "二十四日",
+      "dictRead": "にじゅうよっか",
+      "audio": "/Audio/minnamoi/bai5/00010100000000100.mp3",
+      "levels": {
+        "N5": [
+          "<ruby>十二月<rt>じゅうにがつ</rt></ruby><ruby>二十四日<rt>にじゅうよっか</rt></ruby>はクリスマスイブです。",
+          "December 24th is Christmas Eve."
+        ],
+        "N4": [
+          "<ruby>二十四日<rt>にじゅうよっか</rt></ruby>に<ruby>友達<rt>ともだち</rt></ruby>とパーティーへ<ruby>行<rt>い</rt></ruby>きます。",
+          "On the 24th I'm going to a party with friends."
+        ],
+        "N3": [
+          "<ruby>二十四日<rt>にじゅうよっか</rt></ruby>までにプレゼントを<ruby>買<rt>か</rt></ruby>うようにしています。",
+          "I make a point of buying the present by the 24th."
+        ],
+        "N2": [
+          "<ruby>二十四日<rt>にじゅうよっか</rt></ruby>に<ruby>予約<rt>よやく</rt></ruby>したかったものの、もう<ruby>満席<rt>まんせき</rt></ruby>だった。",
+          "Although I wanted to book for the 24th, it was already fully booked."
+        ],
+        "N1": [
+          "<ruby>年末<rt>ねんまつ</rt></ruby>の<ruby>二十四日<rt>にじゅうよっか</rt></ruby><ruby>前後<rt>ぜんご</rt></ruby>は、<ruby>物流<rt>ぶつりゅう</rt></ruby><ruby>各社<rt>かくしゃ</rt></ruby>が<ruby>一年<rt>いちねん</rt></ruby>で<ruby>最<rt>もっと</rt></ruby>も<ruby>多忙<rt>たぼう</rt></ruby>を<ruby>極<rt>きわ</rt></ruby>める<ruby>時期<rt>じき</rt></ruby>を<ruby>迎<rt>むか</rt></ruby>える。",
+          "Around the 24th at year's end, logistics companies enter the busiest period of the entire year."
+        ]
+      },
+      "mnem": "二十四日 reads にじゅうよっか — 二十 (にじゅう, twenty) plus the irregular よっか from 四日: the 24th.",
+      "tip": "24th keeps the irregular よっか, just like the 14th. Contrast the fully irregular 20th (はつか), which does NOT use よっか.",
+      "accent": 0
+    },
+    {
+      "key": "mnn:5:47",
+      "kana": "―にち",
+      "kanji": "―日",
+      "context": "何〜",
+      "mean": "-th day of the month; - day(s) (counter)",
+      "cat": "phrase",
+      "type": "",
+      "trans": "",
+      "dict": "―日",
+      "dictRead": "―にち",
+      "audio": "/Audio/minnamoi/bai5/00010100000000101.mp3",
+      "accent": 0
+    },
+    {
+      "key": "mnn:5:48",
+      "kana": "なんにち",
+      "kanji": "何日",
+      "context": "",
+      "mean": "which day of the month; how many days",
+      "cat": "noun",
+      "type": "",
+      "trans": "",
+      "dict": "何日",
+      "dictRead": "なんにち",
+      "audio": "/Audio/minnamoi/bai5/00010100000000110.mp3",
+      "levels": {
+        "N5": [
+          "<ruby>誕生日<rt>たんじょうび</rt></ruby>は<ruby>何日<rt>なんにち</rt></ruby>ですか。",
+          "What day is your birthday?"
+        ],
+        "N4": [
+          "<ruby>何日<rt>なんにち</rt></ruby>に<ruby>国<rt>くに</rt></ruby>へ<ruby>帰<rt>かえ</rt></ruby>りますか。",
+          "On what day are you going back to your country?"
+        ],
+        "N3": [
+          "<ruby>旅行<rt>りょこう</rt></ruby>は<ruby>何日<rt>なんにち</rt></ruby>かかるか、<ruby>先<rt>さき</rt></ruby>に<ruby>調<rt>しら</rt></ruby>べるようにしています。",
+          "I make a point of checking beforehand how many days the trip takes."
+        ],
+        "N2": [
+          "<ruby>何日<rt>なんにち</rt></ruby><ruby>待<rt>ま</rt></ruby>てばいいのか<ruby>分<rt>わ</rt></ruby>からないものの、とにかく<ruby>返事<rt>へんじ</rt></ruby>を<ruby>待<rt>ま</rt></ruby>つしかない。",
+          "Although I don't know how many days I should wait, I have no choice but to wait for a reply."
+        ],
+        "N1": [
+          "<ruby>納期<rt>のうき</rt></ruby>まであと<ruby>何日<rt>なんにち</rt></ruby><ruby>残<rt>のこ</rt></ruby>されているのかを<ruby>正確<rt>せいかく</rt></ruby>に<ruby>把握<rt>はあく</rt></ruby>しないまま<ruby>作業<rt>さぎょう</rt></ruby>を<ruby>進<rt>すす</rt></ruby>めるのは<ruby>危険<rt>きけん</rt></ruby>だ。",
+          "It is dangerous to proceed with the work without accurately grasping just how many days remain until the deadline."
+        ]
+      },
+      "mnem": "何 (what/how-many) + 日 (day, here にち) = \"which day\" or \"how many days\"; read \"nannichi.\"",
+      "tip": "何日 asks either \"which date\" (何日ですか) or \"how many days\" (何日かかりますか). Contrast 何曜日 (なんようび, which day of the WEEK).",
+      "accent": 1
+    },
+    {
+      "key": "mnn:5:49",
+      "kana": "いつ",
+      "kanji": "",
+      "context": "",
+      "mean": "when",
+      "cat": "adverb",
+      "type": "",
+      "trans": "",
+      "dict": "いつ",
+      "dictRead": "いつ",
+      "audio": "/Audio/minnamoi/bai5/00010100000000111.mp3",
+      "levels": {
+        "N5": [
+          "いつ<ruby>日本<rt>にほん</rt></ruby>へ<ruby>来<rt>き</rt></ruby>ましたか。",
+          "When did you come to Japan?"
+        ],
+        "N4": [
+          "いつ<ruby>京都<rt>きょうと</rt></ruby>へ<ruby>行<rt>い</rt></ruby>きますか。",
+          "When are you going to Kyoto?"
+        ],
+        "N3": [
+          "いつ<ruby>時間<rt>じかん</rt></ruby>ができるか<ruby>分<rt>わ</rt></ruby>からないので、<ruby>今<rt>いま</rt></ruby>やっておくようにしています。",
+          "Since I don't know when I'll have time, I make a point of getting it done now."
+        ],
+        "N2": [
+          "いつ<ruby>帰<rt>かえ</rt></ruby>るか<ruby>決<rt>き</rt></ruby>めていなかったものの、<ruby>天気<rt>てんき</rt></ruby>が<ruby>悪<rt>わる</rt></ruby>くて<ruby>早<rt>はや</rt></ruby>めに<ruby>戻<rt>もど</rt></ruby>ることにした。",
+          "Although I hadn't decided when to return, the weather was bad so I decided to head back early."
+        ],
+        "N1": [
+          "いつ<ruby>何<rt>なに</rt></ruby>が<ruby>起<rt>お</rt></ruby>こるか<ruby>予測<rt>よそく</rt></ruby>できない<ruby>時代<rt>じだい</rt></ruby>だからこそ、<ruby>日頃<rt>ひごろ</rt></ruby>からの<ruby>備<rt>そな</rt></ruby>えが<ruby>何<rt>なに</rt></ruby>よりも<ruby>重要<rt>じゅうよう</rt></ruby>となる。",
+          "Precisely because it is an age in which you can't predict when or what will happen, everyday preparedness is more important than anything."
+        ]
+      },
+      "mnem": "\"いつ\" — say \"itsu\" and picture asking \"eets-oo? when?\": when.",
+      "tip": "いつ (\"when\") takes NO に (いつ行きますか, not いつに); but a SPECIFIC date does (三月三日に). Distinct from the homophone 五日 (いつか, the 5th).",
+      "accent": 1
+    },
+    {
+      "key": "mnn:5:50",
+      "kana": "たんじょうび",
+      "kanji": "誕生日",
+      "context": "",
+      "mean": "birthday",
+      "cat": "noun",
+      "type": "",
+      "trans": "",
+      "dict": "誕生日",
+      "dictRead": "たんじょうび",
+      "audio": "/Audio/minnamoi/bai5/00010100000001000.mp3",
+      "levels": {
+        "N5": [
+          "<ruby>誕生日<rt>たんじょうび</rt></ruby>はいつですか。",
+          "When is your birthday?"
+        ],
+        "N4": [
+          "<ruby>誕生日<rt>たんじょうび</rt></ruby>に<ruby>友達<rt>ともだち</rt></ruby>とパーティーをします。",
+          "On my birthday I'll have a party with friends."
+        ],
+        "N3": [
+          "<ruby>母<rt>はは</rt></ruby>の<ruby>誕生日<rt>たんじょうび</rt></ruby>には、<ruby>毎年<rt>まいとし</rt></ruby><ruby>花<rt>はな</rt></ruby>を<ruby>贈<rt>おく</rt></ruby>るようにしています。",
+          "For my mother's birthday, I make a point of giving her flowers every year."
+        ],
+        "N2": [
+          "<ruby>誕生日<rt>たんじょうび</rt></ruby>を<ruby>忘<rt>わす</rt></ruby>れていたものの、<ruby>友達<rt>ともだち</rt></ruby>が<ruby>祝<rt>いわ</rt></ruby>ってくれて<ruby>嬉<rt>うれ</rt></ruby>しかった。",
+          "Although I had forgotten my birthday, my friends celebrated it for me and I was happy."
+        ],
+        "N1": [
+          "<ruby>還暦<rt>かんれき</rt></ruby>の<ruby>誕生日<rt>たんじょうび</rt></ruby>を<ruby>迎<rt>むか</rt></ruby>えた<ruby>祖父<rt>そふ</rt></ruby>を<ruby>囲<rt>かこ</rt></ruby>み、<ruby>親族<rt>しんぞく</rt></ruby><ruby>一同<rt>いちどう</rt></ruby>が<ruby>久<rt>ひさ</rt></ruby>しぶりに<ruby>顔<rt>かお</rt></ruby>を<ruby>合<rt>あ</rt></ruby>わせた。",
+          "Gathered around my grandfather as he reached his sixtieth birthday, all the relatives came face to face for the first time in a while."
+        ]
+      },
+      "mnem": "誕 (birth) + 生 (life/be born) + 日 (day) = the day of one's birth = birthday; read \"tanjōbi.\"",
+      "tip": "誕生日 = birthday; 日 reads び here. Someone else's, politely, is お誕生日. Ask with いつ (誕生日はいつですか) — answer with a 〜月〜日 date.",
+      "accent": 3
+    }
+  ],
+  "grammar": [
+    {
+      "pattern": "N（place）へ 行きます／来ます／帰ります",
+      "structure": "N（場所）＋ へ ＋ 行きます／来ます／帰ります",
+      "explain": "To say you go/come/return TO a place, mark the destination with the particle へ (pronounced \"e\") and use a movement verb. 「京都へ 行きます」= I go to Kyoto; 「日本へ 来ました」= I came to Japan; 「うちへ 帰ります」= I go home. Ask a destination with 「どこへ 行きますか」; answer 「どこ（へ）も 行きません」to say you go nowhere.",
+      "examples": [
+        {
+          "jp": "わたしは <ruby>京都<rt>きょうと</rt></ruby>へ <ruby>行<rt>い</rt></ruby>きます。",
+          "en": "I'm going to Kyoto."
+        },
+        {
+          "jp": "きのう どこへ <ruby>行<rt>い</rt></ruby>きましたか。 …スーパーへ <ruby>行<rt>い</rt></ruby>きました。",
+          "en": "Where did you go yesterday? …I went to the supermarket."
+        },
+        {
+          "jp": "<ruby>日曜日<rt>にちようび</rt></ruby> どこ（へ）も <ruby>行<rt>い</rt></ruby>きませんでした。",
+          "en": "On Sunday I didn't go anywhere."
+        }
+      ]
+    },
+    {
+      "pattern": "N（transport）で 行きます／来ます／帰ります",
+      "structure": "N（乗り物）＋ で ＋ 行きます … ／ あるいて 行きます",
+      "explain": "The particle で marks the MEANS by which you go — the vehicle: 「電車で 行きます」= I go by train, 「飛行機で 来ました」= I came by plane. Ask the means with 「何（なん）で 行きますか」(\"how / by what?\"). The one exception is going on foot: that uses あるいて (the て-form of 歩く), NOT で — 「あるいて 帰ります」= I go home on foot.",
+      "examples": [
+        {
+          "jp": "<ruby>何<rt>なん</rt></ruby>で <ruby>東京<rt>とうきょう</rt></ruby>へ <ruby>行<rt>い</rt></ruby>きますか。 …<ruby>新幹線<rt>しんかんせん</rt></ruby>で <ruby>行<rt>い</rt></ruby>きます。",
+          "en": "How do you get to Tokyo? …I go by Shinkansen."
+        },
+        {
+          "jp": "<ruby>自転車<rt>じてんしゃ</rt></ruby>で <ruby>学校<rt>がっこう</rt></ruby>へ <ruby>行<rt>い</rt></ruby>きます。",
+          "en": "I go to school by bicycle."
+        },
+        {
+          "jp": "<ruby>駅<rt>えき</rt></ruby>まで あるいて <ruby>帰<rt>かえ</rt></ruby>ります。",
+          "en": "I walk home to the station on foot."
+        }
+      ]
+    },
+    {
+      "pattern": "N（person）と 行きます／来ます",
+      "structure": "N（人）＋ と ＋ 行きます … ／ 一人で 行きます",
+      "explain": "The particle と marks the person you do something WITH: 「友達と 行きます」= I go with a friend, 「家族と 来ました」= I came with my family. Ask with 「だれと 行きますか」(\"with whom?\"). To say you do it alone, use 一人（ひとり）で — which takes で, not と: 「一人で 行きます」= I go by myself.",
+      "examples": [
+        {
+          "jp": "だれと <ruby>京都<rt>きょうと</rt></ruby>へ <ruby>行<rt>い</rt></ruby>きますか。 …<ruby>友達<rt>ともだち</rt></ruby>と <ruby>行<rt>い</rt></ruby>きます。",
+          "en": "Who are you going to Kyoto with? …I'm going with a friend."
+        },
+        {
+          "jp": "<ruby>家族<rt>かぞく</rt></ruby>と <ruby>日本<rt>にほん</rt></ruby>へ <ruby>来<rt>き</rt></ruby>ました。",
+          "en": "I came to Japan with my family."
+        },
+        {
+          "jp": "<ruby>一人<rt>ひとり</rt></ruby>で フランスへ <ruby>行<rt>い</rt></ruby>きます。",
+          "en": "I'm going to France alone."
+        }
+      ]
+    },
+    {
+      "pattern": "いつ／〜月〜日に 行きます",
+      "structure": "いつ ＋ V ／ 〜月〜日 ＋ に ＋ V",
+      "explain": "Ask WHEN with the question word いつ — which itself takes NO particle: 「いつ 日本へ 来ましたか」. But a SPECIFIC calendar point (a date or month) attaches the time particle に: 「三月三日に 行きます」= I'll go on March 3rd, 「九月に 来ました」= I came in September. Relative-time words (きのう, 来週, 去年…) take no に.",
+      "examples": [
+        {
+          "jp": "いつ <ruby>京都<rt>きょうと</rt></ruby>へ <ruby>行<rt>い</rt></ruby>きますか。 …<ruby>三月<rt>さんがつ</rt></ruby><ruby>三日<rt>みっか</rt></ruby>に <ruby>行<rt>い</rt></ruby>きます。",
+          "en": "When are you going to Kyoto? …I'll go on March 3rd."
+        },
+        {
+          "jp": "いつ <ruby>日本<rt>にほん</rt></ruby>へ <ruby>来<rt>き</rt></ruby>ましたか。 …<ruby>去年<rt>きょねん</rt></ruby>の <ruby>九月<rt>くがつ</rt></ruby>に <ruby>来<rt>き</rt></ruby>ました。",
+          "en": "When did you come to Japan? …I came last September."
+        },
+        {
+          "jp": "<ruby>誕生日<rt>たんじょうび</rt></ruby>は いつですか。 …<ruby>十月<rt>じゅうがつ</rt></ruby><ruby>六日<rt>むいか</rt></ruby>です。",
+          "en": "When is your birthday? …October 6th."
+        }
+      ]
+    }
+  ],
+  "examples": [
+    {
+      "jp": "わたしは タクシーで うちへ <ruby>帰<rt>かえ</rt></ruby>ります。",
+      "en": "I'm going home by taxi."
+    },
+    {
+      "jp": "あした どこへ <ruby>行<rt>い</rt></ruby>きますか。 …<ruby>奈良<rt>なら</rt></ruby>へ <ruby>行<rt>い</rt></ruby>きます。",
+      "en": "Where are you going tomorrow? …I'm going to Nara."
+    },
+    {
+      "jp": "<ruby>何<rt>なん</rt></ruby>で <ruby>京都<rt>きょうと</rt></ruby>へ <ruby>行<rt>い</rt></ruby>きますか。 …<ruby>電車<rt>でんしゃ</rt></ruby>で <ruby>行<rt>い</rt></ruby>きます。",
+      "en": "How do you get to Kyoto? …I go by train."
+    },
+    {
+      "jp": "だれと <ruby>東京<rt>とうきょう</rt></ruby>へ <ruby>行<rt>い</rt></ruby>きますか。 …<ruby>山田<rt>やまだ</rt></ruby>さんと <ruby>行<rt>い</rt></ruby>きます。",
+      "en": "Who are you going to Tokyo with? …I'm going with Mr. Yamada."
+    },
+    {
+      "jp": "<ruby>毎朝<rt>まいあさ</rt></ruby> <ruby>何時<rt>なんじ</rt></ruby>に <ruby>会社<rt>かいしゃ</rt></ruby>へ <ruby>行<rt>い</rt></ruby>きますか。 …<ruby>七時<rt>しちじ</rt></ruby><ruby>半<rt>はん</rt></ruby>に <ruby>行<rt>い</rt></ruby>きます。",
+      "en": "What time do you go to work each morning? …I go at 7:30."
+    },
+    {
+      "jp": "<ruby>先月<rt>せんげつ</rt></ruby> <ruby>韓国<rt>かんこく</rt></ruby>へ <ruby>行<rt>い</rt></ruby>きました。<ruby>船<rt>ふね</rt></ruby>で <ruby>行<rt>い</rt></ruby>きました。",
+      "en": "Last month I went to Korea. I went by ship."
+    },
+    {
+      "jp": "いつ <ruby>日本<rt>にほん</rt></ruby>へ <ruby>来<rt>き</rt></ruby>ましたか。 …<ruby>三月<rt>さんがつ</rt></ruby><ruby>二十五日<rt>にじゅうごにち</rt></ruby>に <ruby>来<rt>き</rt></ruby>ました。",
+      "en": "When did you come to Japan? …I arrived on March 25th."
+    },
+    {
+      "jp": "<ruby>来年<rt>らいねん</rt></ruby>の <ruby>十二月<rt>じゅうにがつ</rt></ruby>に <ruby>国<rt>くに</rt></ruby>へ <ruby>帰<rt>かえ</rt></ruby>ります。",
+      "en": "Next year in December I'll return to my country."
+    }
+  ],
+  "conversation": {
+    "title": "この電車は 甲子園へ 行きますか (Does this train go to Koshien?)",
+    "audio": "/Audio/minnahonsatsu1/17.mp3",
+    "lines": [
+      {
+        "role": "ミラー",
+        "jp": "すみません。<ruby>甲子園<rt>こうしえん</rt></ruby>まで いくらですか。",
+        "en": "Excuse me. How much is it to Koshien?"
+      },
+      {
+        "role": "駅員",
+        "jp": "350<ruby>円<rt>えん</rt></ruby>です。",
+        "en": "350 yen."
+      },
+      {
+        "role": "ミラー",
+        "jp": "350<ruby>円<rt>えん</rt></ruby>ですね。ありがとう ございました。",
+        "en": "350 yen. Thank you very much."
+      },
+      {
+        "role": "駅員",
+        "jp": "どう いたしまして。",
+        "en": "You're welcome."
+      },
+      {
+        "role": "ミラー",
+        "jp": "すみません。<ruby>甲子園<rt>こうしえん</rt></ruby>は <ruby>何番線<rt>なんばんせん</rt></ruby>ですか。",
+        "en": "Excuse me. Which platform is it for Koshien?"
+      },
+      {
+        "role": "駅員",
+        "jp": "5<ruby>番線<rt>ばんせん</rt></ruby>です。",
+        "en": "Platform 5."
+      },
+      {
+        "role": "ミラー",
+        "jp": "どうも。",
+        "en": "Thanks."
+      },
+      {
+        "role": "ミラー",
+        "jp": "あのう、この<ruby>電車<rt>でんしゃ</rt></ruby>は <ruby>甲子園<rt>こうしえん</rt></ruby>へ <ruby>行<rt>い</rt></ruby>きますか。",
+        "en": "Um, does this train go to Koshien?"
+      },
+      {
+        "role": "女の人",
+        "jp": "いいえ、<ruby>次<rt>つぎ</rt></ruby>の 「<ruby>普通<rt>ふつう</rt></ruby>」ですよ。",
+        "en": "No — it's the next \"local\" train."
+      },
+      {
+        "role": "ミラー",
+        "jp": "そうですか。どうも。",
+        "en": "I see. Thanks."
+      }
+    ]
+  }
+}
