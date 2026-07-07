@@ -100,6 +100,20 @@ function gateHtml() {
 }
 
 function loadingHtml() {
+  // A failed FIRST sync (no cached dataset to fall back on) must not leave a frozen "starting…"
+  // spinner: headHtml renders no sync/disconnect controls until S.loaded, so this card is the ONLY
+  // escape. Surface the error + a Try-again (re-sync) and a Disconnect (forget the token → gate).
+  if (S.syncErr && !S.syncing) {
+    return `<section class="wk-gate"><div class="wk-gate-card">
+      <div class="wk-gate-seal" aria-hidden="true"><span class="jp">鰐蟹</span></div>
+      <h2>First sync didn't finish</h2>
+      <p class="wk-gate-sub">${wkEscape(S.syncErr)}</p>
+      <div class="wk-gate-row">
+        <button class="chip primary" data-wk-act="sync"><svg class="ic" aria-hidden="true"><use href="#i-refresh"/></svg>Try again</button>
+        <button class="chip" data-wk-act="disconnect">Disconnect</button>
+      </div>
+    </div></section>`;
+  }
   return `<section class="wk-gate"><div class="wk-gate-card wk-firstsync">
     <div class="wk-gate-seal syncing" aria-hidden="true"><span class="jp">鰐蟹</span></div>
     <h2>Fetching your WaniKani data</h2>

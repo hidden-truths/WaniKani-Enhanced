@@ -64,7 +64,9 @@ export async function maybeSyncWk(force) {
   } catch (e) {
     S.syncErr = e && e.code === 'unauthorized'
       ? 'WaniKani rejected the token — reconnect with a fresh one.'
-      : 'Could not reach WaniKani — showing cached data.';
+      // On a first sync there's no cache to show, so don't claim there is one.
+      : (S.loaded ? 'Could not reach WaniKani — showing cached data.'
+                  : 'Could not reach WaniKani. Check your connection and try again.');
   }
   S.syncing = false; S.syncMsg = '';
   if (panelActive()) renderWanikani();

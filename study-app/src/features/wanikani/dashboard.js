@@ -179,8 +179,15 @@ function accuracyHtml(acc) {
     <div class="wk-accrow${cls ? ' ' + cls : ''}"><span class="wk-accrow-label">${label}</span>
       <span class="wk-acctrack"><span class="wk-accfill" style="width:${p}%"></span></span>
       <b class="wk-accval">${p}%</b></div>`;
+  // A brand-new WK account (or one that has done no reviews yet) has all-null stats — every bar()
+  // returns '', so without this the card would be a bare title over an empty grid. Give it the same
+  // "no data yet" empty state the pace/leech panels have.
+  if (acc.total.overall == null) {
+    return `<div class="wk-card-head"><div><h2 class="title">Lifetime accuracy</h2><div class="sub">every review answer you've ever given</div></div></div>
+      <div class="wk-empty">No review history yet — come back after your first WaniKani reviews.</div>`;
+  }
   return `<div class="wk-card-head"><div><h2 class="title">Lifetime accuracy</h2><div class="sub">every review answer you've ever given</div></div>
-    ${acc.total.overall != null ? `<span class="wk-card-badge">${acc.total.overall}% overall</span>` : ''}</div>
+    <span class="wk-card-badge">${acc.total.overall}% overall</span></div>
     <div class="wk-accgrid">
       ${bar('Meaning', acc.total.meaning)}
       ${bar('Reading', acc.total.reading)}
