@@ -1,6 +1,6 @@
 // 歌/Songs — Add: paste lyrics + a YouTube link → full-auto analysis (server LLM) → review → save.
 // Account-gated (pasted lyrics are stored privately). Part of the features/songs/ package; shared
-// mutable state in ./state.js (S.add holds the in-flight draft). See REFACTOR_FOLLOWUPS.md "S".
+// mutable state in ./state.js (S.add holds the in-flight draft). (Workstream S — record in ROADMAP.html.)
 
 import { api, account } from '../cloud-core.js';
 import { escapeHtml, segmentsToRuby, parseYouTubeId, songWords } from '../../core/index.js';

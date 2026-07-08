@@ -7,7 +7,7 @@
 // the record-compare pattern). features/songs.js is a thin re-export of this file, so main.js +
 // cloud.js import { initSongs, renderSongs, onSongsHidden } byte-for-byte unchanged. The modules +
 // this file form runtime-only import cycles (render/showLibrary/refreshLibrary are imported back by
-// add/progress/edit), fine like cloud⇄minna. See REFACTOR_FOLLOWUPS.md "Workstream S".
+// add/progress/edit), fine like cloud⇄minna. (Workstream S — the refactor record is in ROADMAP.html.)
 
 import { escapeHtml, songWords, songLevel } from '../../core/index.js';
 import { state } from '../../state.js';

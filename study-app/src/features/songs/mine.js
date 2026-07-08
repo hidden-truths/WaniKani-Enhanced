@@ -1,6 +1,6 @@
 // 歌/Songs — Mine: the vocab (known/added/new vs the deck, JLPT-bucketed) + grammar panels, the
 // grammar reference sub-view, save-a-line-as-a-Self-Talk-phrase, and the deep-link into Browse. Part
-// of the features/songs/ package; shared mutable state in ./state.js. See REFACTOR_FOLLOWUPS.md "S".
+// of the features/songs/ package; shared mutable state in ./state.js. (Workstream S — record in ROADMAP.html.)
 
 import { api, account, setSyncStatus } from '../cloud-core.js';
 import { state } from '../../state.js';

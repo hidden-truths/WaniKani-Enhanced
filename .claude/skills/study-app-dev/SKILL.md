@@ -52,7 +52,7 @@ First run auto-installs deps (`bun install` if `node_modules` is missing).
   root; the email is the `VITE_DEV_EMAILS` default in `study-app/src/features/cloud.js`
   (`dylan_j_kelly@icloud.com` as of 2026-07). Don't paste the password into code or
   docs, and never invent new secret files.
-- **Tests**: `bun run test` from `study-app/` — Vitest + happy-dom (22 files / 464
+- **Tests**: `bun run test` from `study-app/` — Vitest + happy-dom (23 files / 496
   tests, ~2s, as of 2026-07-08). Must be green before commit.
 - **Preview tooling**: `.claude/launch.json` has configs — `study-app` (:5173),
   `wk-enhanced-api` (:3000, note it runs `bun start`, not hot-reload `bun dev`),
@@ -180,8 +180,8 @@ user rather than guessing.
 
 ## Verify
 
-1. `cd study-app && bun run test` — expect `Test Files 21 passed` / all tests green
-   (counts grow over time; zero failures is the bar).
+1. `cd study-app && bun run test` — all tests green (23 files / 496 as of 2026-07-08;
+   counts only grow, so a HIGHER number is not a failure — zero failures is the bar).
 2. Look at the change in the running app — **both themes** (flip via the theme toggle
    or `document.documentElement.dataset.theme`). The `design-system` skill defines the
    fidelity bar for anything visual.

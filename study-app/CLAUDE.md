@@ -191,7 +191,7 @@ Backend (auth, progress, cookie, the cross-origin CORS) is the server's:
 2. **Verify visually.** This is a UI; screenshot the change. Drive it with the
    browser-preview tooling (`.claude/launch.json` has both `study-app` and
    `wk-enhanced-api` configs). See the preview caveat in the dead-ends below. **Run
-   `bun run test` too** — a ~21-file Vitest + happy-dom suite (layout + conventions:
+   `bun run test` too** — a ~23-file Vitest + happy-dom suite (layout + conventions:
    [test/CLAUDE.md](test/CLAUDE.md)). Three tiers: `core.test.ts` + the per-subsystem
    `*-core` tests import the real `src/core/*` modules (a broken export/import fails
    loudly); the `*-render` tests drive each tab's REAL feature glue over a happy-dom DOM

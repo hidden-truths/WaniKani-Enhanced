@@ -1,6 +1,6 @@
 // 歌/Songs — Library: the read-through cache + server fetch + the library grid (public starters +
 // the viewer's own private songs, with coverage / level / shadow-progress badges per card). Part of
-// the features/songs/ package; shared mutable state in ./state.js. See REFACTOR_FOLLOWUPS.md "S".
+// the features/songs/ package; shared mutable state in ./state.js. (Workstream S — record in ROADMAP.html.)
 
 import { api } from '../cloud-core.js';
 import { state } from '../../state.js';

@@ -1,6 +1,6 @@
 // 歌/Songs — Read mode: the lyric viewer (tap-a-word ruby, per-line star + replay, stanza headings),
 // the YouTube player mount + synced-line highlight, and per-line replay. Part of the features/songs/
-// package; shared mutable state in ./state.js. See REFACTOR_FOLLOWUPS.md "Workstream S".
+// package; shared mutable state in ./state.js. (Workstream S — the refactor record is in ROADMAP.html).
 
 import { escapeHtml, plainText, segmentsToRuby, overlayTokens } from '../../core/index.js';
 import { grammarLabel } from '../../data/grammar.js';

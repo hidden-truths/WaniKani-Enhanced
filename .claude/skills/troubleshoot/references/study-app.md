@@ -93,7 +93,7 @@ transient empty server response doesn't overwrite a good local cache. If a list 
 
 ## Reading a Vitest failure
 
-`bun run test` (Vitest + happy-dom, ~21 files as of 2026-07). Three tiers — knowing which failed
+`bun run test` (Vitest + happy-dom, ~23 files as of 2026-07). Three tiers — knowing which failed
 tells you what broke:
 
 - **core** (`test/core.test.ts` + `*-core` files) — import the real `src/core/*` pure modules. A

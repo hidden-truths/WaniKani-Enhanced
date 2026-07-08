@@ -72,7 +72,7 @@ the prod value is baked by the Dockerfile build arg.
   is dropped over `http://localhost`, and the app's origin must be on the CORS allowlist.
   See the server [deploy notes](../wk-enhanced-api/deploy/README.md).
 - **Build / preview the production bundle:** `bun run build` (→ `dist/`) + `bun run preview`.
-- **Tests:** `bun run test` — a ~21-file Vitest + happy-dom suite ([test/CLAUDE.md](test/CLAUDE.md)):
+- **Tests:** `bun run test` — a ~23-file Vitest + happy-dom suite ([test/CLAUDE.md](test/CLAUDE.md)):
   pure-core tests import the real `src/core/*` module graph (a broken export/import fails
   loudly), per-tab render tests drive the real feature glue over a happy-dom DOM (network/
   persistence/audio mocked), and infra tests pin the transport / offline queue / synced-blob /

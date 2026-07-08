@@ -39,8 +39,8 @@ assume a clean tree.
 | Surface | Commands (exact) | Green means |
 |---|---|---|
 | userscript | `node --check wkenhanced.user.js` &nbsp;·&nbsp; `grep -n '@version\|SCRIPT_VERSION' wkenhanced.user.js` | syntax OK **and** the two version strings match (see §2) |
-| API server | `cd wk-enhanced-api && bun test && bun run typecheck` | ~237 tests pass (<1s) and `tsc --noEmit` is clean |
-| study app | `cd study-app && bun run test` | the Vitest + happy-dom suite (~21 files, three tiers) passes |
+| API server | `cd wk-enhanced-api && bun test && bun run typecheck` | ~376 tests pass (<1s) and `tsc --noEmit` is clean |
+| study app | `cd study-app && bun run test` | the Vitest + happy-dom suite (~23 files, three tiers) passes |
 | study-app UI | the above **plus** visual verify in **both themes** | renders faithfully day AND night (see §1a) |
 | cross-surface | run the gates of **both** surfaces | both green — a contract change that only passes one side is not done |
 
