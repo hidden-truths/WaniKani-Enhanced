@@ -61,7 +61,7 @@ Scoring is computed server-side and arrives with every example payload. Conjugat
 3. In Tampermonkey → Dashboard → Utilities → Create a new script. Paste the contents of [wkenhanced.user.js](wkenhanced.user.js), save (⌘S / Ctrl+S).
 4. Make sure WKOF is listed **above** this script in the Tampermonkey dashboard (drag to reorder; first-listed runs first).
 5. When prompted, approve the cross-origin connection to `api.wkenhanced.dev` (and `localhost` if you're running the server locally for dev).
-6. Reload any open WaniKani tab. Sanity check: DevTools console should show `[wkenhanced] booting v2.0.0 on /...`.
+6. Reload any open WaniKani tab. Sanity check: DevTools console should show a `[wkenhanced] booting v… on /...` line (the version you just installed).
 
 ## Settings
 
