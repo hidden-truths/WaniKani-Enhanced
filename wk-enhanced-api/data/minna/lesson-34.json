@@ -1,0 +1,1166 @@
+{
+  "lesson": 34,
+  "title": "Lesson 34",
+  "theme": "Doing things a certain way — 〜とおりに (as / just as), V(た)/Nの あとで (after ~), and 〜ないで (without / instead of doing ~)",
+  "source": {
+    "name": "vnjpclub.com",
+    "vocabUrl": "https://www.vnjpclub.com/en/minna-no-nihongo/lesson-34-vocabulary.html",
+    "grammarUrl": "https://www.vnjpclub.com/en/minna-no-nihongo/lesson-34-grammar.html",
+    "note": "Vocabulary, native-speaker audio, and example sentences aggregated from vnjpclub.com (Minna no Nihongo 第2版). For personal study."
+  },
+  "vocab": [
+    {
+      "key": "mnn:34:0",
+      "kana": "みがきます",
+      "kanji": "磨きます",
+      "context": "歯を〜",
+      "mean": "to brush (one's teeth), polish",
+      "cat": "verb",
+      "type": "godan",
+      "trans": "t",
+      "dict": "磨く",
+      "dictRead": "みがく",
+      "audio": "/Audio/minnamoi/bai34/00010110010110101.mp3",
+      "levels": {
+        "N5": [
+          "<ruby>毎日<rt>まいにち</rt></ruby><ruby>歯<rt>は</rt></ruby>を<ruby>磨<rt>みが</rt></ruby>きます。",
+          "I brush my teeth every day."
+        ],
+        "N4": [
+          "<ruby>寝<rt>ね</rt></ruby>る<ruby>前<rt>まえ</rt></ruby>に、<ruby>歯<rt>は</rt></ruby>を<ruby>磨<rt>みが</rt></ruby>いてください。",
+          "Please brush your teeth before going to bed."
+        ],
+        "N3": [
+          "<ruby>歯医者<rt>はいしゃ</rt></ruby>に<ruby>教<rt>おそ</rt></ruby>わったとおりに、<ruby>毎日<rt>まいにち</rt></ruby><ruby>丁寧<rt>ていねい</rt></ruby>に<ruby>歯<rt>は</rt></ruby>を<ruby>磨<rt>みが</rt></ruby>くようにしています。",
+          "Just as the dentist taught me, I make a point of brushing my teeth carefully every day."
+        ],
+        "N2": [
+          "<ruby>靴<rt>くつ</rt></ruby>をぴかぴかに<ruby>磨<rt>みが</rt></ruby>いたものの、<ruby>雨<rt>あめ</rt></ruby>ですぐに<ruby>汚<rt>よご</rt></ruby>れてしまった。",
+          "Although I polished my shoes until they shone, they got dirty again right away in the rain."
+        ],
+        "N1": [
+          "<ruby>長年<rt>ながねん</rt></ruby><ruby>腕<rt>うで</rt></ruby>を<ruby>磨<rt>みが</rt></ruby>き<ruby>続<rt>つづ</rt></ruby>けた<ruby>職人<rt>しょくにん</rt></ruby>だけが、この<ruby>繊細<rt>せんさい</rt></ruby>な<ruby>技<rt>わざ</rt></ruby>を<ruby>生<rt>う</rt></ruby>み<ruby>出<rt>だ</rt></ruby>すことができる。",
+          "Only a craftsman who has honed his skills for many years can produce this delicate technique."
+        ]
+      },
+      "mnem": "\"mi-ga-ku\" — you make it <b>gleam</b>: 歯を磨く, polish your teeth till they shine.",
+      "tip": "磨く (godan, transitive) covers both literal polishing (歯を磨く, 靴を磨く) and metaphorical honing (腕を磨く, \"improve one's skills\"). The object takes を.",
+      "accent": 0
+    },
+    {
+      "key": "mnn:34:1",
+      "kana": "くみたてます",
+      "kanji": "組み立てます",
+      "context": "",
+      "mean": "to assemble, put together",
+      "cat": "verb",
+      "type": "ichidan",
+      "trans": "t",
+      "dict": "組み立てる",
+      "dictRead": "くみたてる",
+      "audio": "/Audio/minnamoi/bai34/00010110010110110.mp3",
+      "levels": {
+        "N5": [
+          "<ruby>机<rt>つくえ</rt></ruby>を<ruby>組<rt>く</rt></ruby>み<ruby>立<rt>た</rt></ruby>てます。",
+          "I assemble the desk."
+        ],
+        "N4": [
+          "<ruby>説明書<rt>せつめいしょ</rt></ruby>を<ruby>見<rt>み</rt></ruby>ながら、<ruby>本棚<rt>ほんだな</rt></ruby>を<ruby>組<rt>く</rt></ruby>み<ruby>立<rt>た</rt></ruby>てました。",
+          "I assembled the bookshelf while looking at the manual."
+        ],
+        "N3": [
+          "<ruby>説明書<rt>せつめいしょ</rt></ruby>のとおりに<ruby>組<rt>く</rt></ruby>み<ruby>立<rt>た</rt></ruby>てたら、<ruby>簡単<rt>かんたん</rt></ruby>に<ruby>棚<rt>たな</rt></ruby>が<ruby>完成<rt>かんせい</rt></ruby>しました。",
+          "When I assembled it exactly as the manual said, the shelf came together easily."
+        ],
+        "N2": [
+          "<ruby>部品<rt>ぶひん</rt></ruby>さえそろえば、このロボットは<ruby>自分<rt>じぶん</rt></ruby>で<ruby>組<rt>く</rt></ruby>み<ruby>立<rt>た</rt></ruby>てられるようになっている。",
+          "As long as you have the parts, this robot is designed so that you can assemble it yourself."
+        ],
+        "N1": [
+          "<ruby>複雑<rt>ふくざつ</rt></ruby>な<ruby>機械<rt>きかい</rt></ruby>を<ruby>一<rt>いち</rt></ruby>から<ruby>組<rt>く</rt></ruby>み<ruby>立<rt>た</rt></ruby>てる<ruby>作業<rt>さぎょう</rt></ruby>には、<ruby>細心<rt>さいしん</rt></ruby>の<ruby>注意<rt>ちゅうい</rt></ruby>と<ruby>熟練<rt>じゅくれん</rt></ruby>した<ruby>技術<rt>ぎじゅつ</rt></ruby>が<ruby>要求<rt>ようきゅう</rt></ruby>される。",
+          "Assembling a complex machine from scratch demands the utmost care and skilled technique."
+        ]
+      },
+      "mnem": "組む (put together) + 立てる (stand up) — you 組み立てる furniture by standing the parts up together.",
+      "tip": "組み立てる (ichidan, transitive) = assemble from parts. It is a compound of 組む + 立てる, and the whole verb conjugates on 立てる (組み立てて, 組み立てた).",
+      "accent": 4
+    },
+    {
+      "key": "mnn:34:2",
+      "kana": "おります",
+      "kanji": "折ります",
+      "context": "",
+      "mean": "to fold, break, snap",
+      "cat": "verb",
+      "type": "godan",
+      "trans": "t",
+      "dict": "折る",
+      "dictRead": "おる",
+      "audio": "/Audio/minnamoi/bai34/00010110010110111.mp3",
+      "levels": {
+        "N5": [
+          "<ruby>紙<rt>かみ</rt></ruby>を<ruby>折<rt>お</rt></ruby>ります。",
+          "I fold the paper."
+        ],
+        "N4": [
+          "<ruby>線<rt>せん</rt></ruby>のとおりに、<ruby>紙<rt>かみ</rt></ruby>を<ruby>折<rt>お</rt></ruby>ってください。",
+          "Please fold the paper along the line."
+        ],
+        "N3": [
+          "<ruby>転<rt>ころ</rt></ruby>んだとき、<ruby>腕<rt>うで</rt></ruby>の<ruby>骨<rt>ほね</rt></ruby>を<ruby>折<rt>お</rt></ruby>ってしまいました。",
+          "When I fell, I broke a bone in my arm."
+        ],
+        "N2": [
+          "<ruby>枝<rt>えだ</rt></ruby>を<ruby>折<rt>お</rt></ruby>らないように、そっと<ruby>花<rt>はな</rt></ruby>を<ruby>摘<rt>つ</rt></ruby>みました。",
+          "I picked the flowers gently so as not to break the branches."
+        ],
+        "N1": [
+          "<ruby>千羽鶴<rt>せんばづる</rt></ruby>を<ruby>折<rt>お</rt></ruby>り<ruby>続<rt>つづ</rt></ruby>けた<ruby>少女<rt>しょうじょ</rt></ruby>の<ruby>願<rt>ねが</rt></ruby>いは、<ruby>今<rt>いま</rt></ruby>も<ruby>多<rt>おお</rt></ruby>くの<ruby>人<rt>ひと</rt></ruby>の<ruby>胸<rt>むね</rt></ruby>に<ruby>刻<rt>きざ</rt></ruby>まれている。",
+          "The wish of the girl who kept folding paper cranes is still etched in the hearts of many people."
+        ]
+      },
+      "mnem": "\"o-ru\" — snap it or fold it: 紙を折る (fold paper), 骨を折る (break a bone).",
+      "tip": "折る (godan, transitive) is the transitive \"fold/break\"; its intransitive pair is 折れる (おれる, \"snaps by itself\"). 骨を折る also idiomatically means \"to take great pains.\"",
+      "accent": 1
+    },
+    {
+      "key": "mnn:34:3",
+      "kana": "きがつきます",
+      "kanji": "気がつきます",
+      "context": "忘れ物に〜",
+      "mean": "to notice, become aware of",
+      "cat": "verb",
+      "type": "godan",
+      "trans": "i",
+      "dict": "気がつく",
+      "dictRead": "きがつく",
+      "audio": "/Audio/minnamoi/bai34/00010110010111000.mp3",
+      "levels": {
+        "N5": [
+          "<ruby>間違<rt>まちが</rt></ruby>いに<ruby>気<rt>き</rt></ruby>がつきました。",
+          "I noticed my mistake."
+        ],
+        "N4": [
+          "バスを<ruby>降<rt>お</rt></ruby>りたあとで、<ruby>忘<rt>わす</rt></ruby>れ<ruby>物<rt>もの</rt></ruby>に<ruby>気<rt>き</rt></ruby>がつきました。",
+          "It was after I got off the bus that I noticed I had left something behind."
+        ],
+        "N3": [
+          "<ruby>誰<rt>だれ</rt></ruby>も<ruby>私<rt>わたし</rt></ruby>の<ruby>髪型<rt>かみがた</rt></ruby>が<ruby>変<rt>か</rt></ruby>わったことに<ruby>気<rt>き</rt></ruby>がつかなかった。",
+          "No one noticed that my hairstyle had changed."
+        ],
+        "N2": [
+          "<ruby>言<rt>い</rt></ruby>われて<ruby>初<rt>はじ</rt></ruby>めて、<ruby>自分<rt>じぶん</rt></ruby>の<ruby>態度<rt>たいど</rt></ruby>が<ruby>冷<rt>つめ</rt></ruby>たかったことに<ruby>気<rt>き</rt></ruby>がついた。",
+          "It was only when I was told that I realized my attitude had been cold."
+        ],
+        "N1": [
+          "<ruby>危険<rt>きけん</rt></ruby>な<ruby>兆候<rt>ちょうこう</rt></ruby>にもっと<ruby>早<rt>はや</rt></ruby>く<ruby>気<rt>き</rt></ruby>がついていれば、これほどの<ruby>事故<rt>じこ</rt></ruby>にはならなかっただろう。",
+          "Had I noticed the dangerous signs sooner, it would never have become such a serious accident."
+        ]
+      },
+      "mnem": "your 気 (attention) つく (attaches) to something — 気がつく, and you notice it.",
+      "tip": "Fixed phrase 気がつく (the が is part of it): 〜に気がつく = \"notice / become aware of ~.\" Intransitive — the thing noticed takes に. Its transitive counterpart is 気をつける (\"be careful\").",
+      "accent": 3
+    },
+    {
+      "key": "mnn:34:4",
+      "kana": "つけます",
+      "kanji": "",
+      "context": "しょうゆを〜",
+      "mean": "to dip in, apply (soy sauce)",
+      "cat": "verb",
+      "type": "ichidan",
+      "trans": "t",
+      "dict": "つける",
+      "dictRead": "つける",
+      "audio": "/Audio/minnamoi/bai34/00010110010111001.mp3",
+      "accent": 2
+    },
+    {
+      "key": "mnn:34:5",
+      "kana": "みつかります",
+      "kanji": "見つかります",
+      "context": "かぎが〜",
+      "mean": "(a key, etc.) is found, turns up",
+      "cat": "verb",
+      "type": "godan",
+      "trans": "i",
+      "dict": "見つかる",
+      "dictRead": "みつかる",
+      "audio": "/Audio/minnamoi/bai34/00010110010111010.mp3",
+      "levels": {
+        "N5": [
+          "かぎが<ruby>見<rt>み</rt></ruby>つかりました。",
+          "The key was found."
+        ],
+        "N4": [
+          "なくした<ruby>財布<rt>さいふ</rt></ruby>が<ruby>見<rt>み</rt></ruby>つかって、<ruby>安心<rt>あんしん</rt></ruby>しました。",
+          "I felt relieved when my lost wallet turned up."
+        ],
+        "N3": [
+          "いくら<ruby>探<rt>さが</rt></ruby>しても、<ruby>答<rt>こた</rt></ruby>えはなかなか<ruby>見<rt>み</rt></ruby>つからなかった。",
+          "No matter how much I searched, the answer just would not come to me."
+        ],
+        "N2": [
+          "<ruby>条件<rt>じょうけん</rt></ruby>に<ruby>合<rt>あ</rt></ruby>う<ruby>部屋<rt>へや</rt></ruby>が<ruby>見<rt>み</rt></ruby>つかりしだい、すぐに<ruby>引<rt>ひ</rt></ruby>っ<ruby>越<rt>こ</rt></ruby>すつもりだ。",
+          "As soon as a room that meets my conditions is found, I intend to move right away."
+        ],
+        "N1": [
+          "<ruby>長年<rt>ながねん</rt></ruby><ruby>行方<rt>ゆくえ</rt></ruby>のわからなかった<ruby>資料<rt>しりょう</rt></ruby>が、<ruby>思<rt>おも</rt></ruby>いがけない<ruby>場所<rt>ばしょ</rt></ruby>から<ruby>見<rt>み</rt></ruby>つかった。",
+          "Materials whose whereabouts had been unknown for years were found in an unexpected place."
+        ]
+      },
+      "mnem": "見る (see) + つかる — the lost thing gets <b>seen</b> again: 見つかる, it turns up.",
+      "tip": "見つかる (godan, intransitive) = \"(something) is found\" — the found thing takes が (かぎが見つかる). Its transitive pair is 見つける (みつける, \"to find\"). It can also mean \"get caught\" (先生に見つかる).",
+      "accent": 0
+    },
+    {
+      "key": "mnn:34:6",
+      "kana": "しつもんします",
+      "kanji": "質問します",
+      "context": "",
+      "mean": "to ask a question",
+      "cat": "verb",
+      "type": "irregular",
+      "trans": "t",
+      "dict": "質問する",
+      "dictRead": "しつもんする",
+      "audio": "/Audio/minnamoi/bai34/00010110010111011.mp3",
+      "levels": {
+        "N5": [
+          "<ruby>先生<rt>せんせい</rt></ruby>に<ruby>質問<rt>しつもん</rt></ruby>します。",
+          "I ask the teacher a question."
+        ],
+        "N4": [
+          "<ruby>説明<rt>せつめい</rt></ruby>が<ruby>終<rt>お</rt></ruby>わったあとで、<ruby>質問<rt>しつもん</rt></ruby>してください。",
+          "Please ask questions after the explanation is over."
+        ],
+        "N3": [
+          "わからないことがあったら、<ruby>遠慮<rt>えんりょ</rt></ruby>しないで<ruby>質問<rt>しつもん</rt></ruby>するようにしてください。",
+          "If there is something you don't understand, make a point of asking without hesitation."
+        ],
+        "N2": [
+          "<ruby>会議中<rt>かいぎちゅう</rt></ruby>に<ruby>鋭<rt>するど</rt></ruby>い<ruby>点<rt>てん</rt></ruby>を<ruby>質問<rt>しつもん</rt></ruby>されたものの、<ruby>彼<rt>かれ</rt></ruby>は<ruby>落<rt>お</rt></ruby>ち<ruby>着<rt>つ</rt></ruby>いて<ruby>答<rt>こた</rt></ruby>えた。",
+          "Although he was asked a sharp question during the meeting, he answered calmly."
+        ],
+        "N1": [
+          "<ruby>記者<rt>きしゃ</rt></ruby>に<ruby>矢継<rt>やつ</rt></ruby>ぎ<ruby>早<rt>ばや</rt></ruby>に<ruby>質問<rt>しつもん</rt></ruby>されても、<ruby>大臣<rt>だいじん</rt></ruby>は<ruby>一切<rt>いっさい</rt></ruby><ruby>言質<rt>げんち</rt></ruby>を<ruby>与<rt>あた</rt></ruby>えなかった。",
+          "Even when peppered with questions by reporters, the minister gave nothing away."
+        ]
+      },
+      "mnem": "質問 (a question) + する — 質問する, to pose a question.",
+      "tip": "質問する (irregular する-verb) = ask a question; 〜に質問する (\"ask someone\"). The noun 質問 stands alone (質問があります = \"I have a question\"). Contrast 聞く, which also means \"ask\" but more casually.",
+      "accent": 0
+    },
+    {
+      "key": "mnn:34:7",
+      "kana": "さします",
+      "kanji": "",
+      "context": "傘を〜",
+      "mean": "to put up (an umbrella)",
+      "cat": "verb",
+      "type": "godan",
+      "trans": "t",
+      "dict": "さす",
+      "dictRead": "さす",
+      "audio": "/Audio/minnamoi/bai34/00010110010111100.mp3",
+      "levels": {
+        "N5": [
+          "<ruby>雨<rt>あめ</rt></ruby>ですから、<ruby>傘<rt>かさ</rt></ruby>をさします。",
+          "It's raining, so I'll put up my umbrella."
+        ],
+        "N4": [
+          "<ruby>傘<rt>かさ</rt></ruby>をささないで、<ruby>走<rt>はし</rt></ruby>って<ruby>帰<rt>かえ</rt></ruby>りました。",
+          "I ran home without putting up my umbrella."
+        ],
+        "N3": [
+          "<ruby>小雨<rt>こさめ</rt></ruby>だったので、<ruby>傘<rt>かさ</rt></ruby>をさすかどうか<ruby>迷<rt>まよ</rt></ruby>いました。",
+          "It was only drizzling, so I couldn't decide whether to put up my umbrella."
+        ],
+        "N2": [
+          "<ruby>日傘<rt>ひがさ</rt></ruby>をさして<ruby>歩<rt>ある</rt></ruby>いている<ruby>人<rt>ひと</rt></ruby>が、<ruby>夏<rt>なつ</rt></ruby>の<ruby>街<rt>まち</rt></ruby>には<ruby>目立<rt>めだ</rt></ruby>つようになった。",
+          "People walking with parasols up have become a conspicuous sight on the streets in summer."
+        ],
+        "N1": [
+          "<ruby>傘<rt>かさ</rt></ruby>もささずに<ruby>雨<rt>あめ</rt></ruby>の<ruby>中<rt>なか</rt></ruby>を<ruby>歩<rt>ある</rt></ruby>く<ruby>彼<rt>かれ</rt></ruby>の<ruby>姿<rt>すがた</rt></ruby>には、どこか<ruby>思<rt>おも</rt></ruby>い<ruby>詰<rt>つ</rt></ruby>めた<ruby>様子<rt>ようす</rt></ruby>があった。",
+          "There was something troubled in the sight of him walking through the rain without even putting up an umbrella."
+        ]
+      },
+      "mnem": "\"sa-su\" — you thrust the umbrella <b>up</b> into the rain: 傘をさす.",
+      "tip": "傘をさす = put up / hold up an umbrella (godan, transitive). Written 差す but usually left in kana. Beware the many homophone さす verbs (刺す \"stab,\" 指す \"point at\") — here the object 傘 fixes the meaning.",
+      "accent": 1
+    },
+    {
+      "key": "mnn:34:8",
+      "kana": "スポーツクラブ",
+      "kanji": "",
+      "context": "",
+      "mean": "sports club, gym",
+      "cat": "noun",
+      "type": "",
+      "trans": "",
+      "dict": "スポーツクラブ",
+      "dictRead": "スポーツクラブ",
+      "audio": "/Audio/minnamoi/bai34/00010110010111101.mp3",
+      "levels": {
+        "N5": [
+          "スポーツクラブに<ruby>行<rt>い</rt></ruby>きます。",
+          "I go to the sports club."
+        ],
+        "N4": [
+          "<ruby>週<rt>しゅう</rt></ruby>に<ruby>三回<rt>さんかい</rt></ruby>スポーツクラブで<ruby>泳<rt>およ</rt></ruby>いでいます。",
+          "I swim at the sports club three times a week."
+        ],
+        "N3": [
+          "<ruby>運動不足<rt>うんどうぶそく</rt></ruby>を<ruby>感<rt>かん</rt></ruby>じたので、<ruby>近<rt>ちか</rt></ruby>くのスポーツクラブに<ruby>入<rt>はい</rt></ruby>ることにしました。",
+          "Feeling out of shape, I decided to join a nearby sports club."
+        ],
+        "N2": [
+          "スポーツクラブに<ruby>通<rt>かよ</rt></ruby>い<ruby>始<rt>はじ</rt></ruby>めたものの、<ruby>忙<rt>いそが</rt></ruby>しくてなかなか<ruby>続<rt>つづ</rt></ruby>かない。",
+          "Although I started going to a sports club, I'm so busy that it's hard to keep it up."
+        ],
+        "N1": [
+          "<ruby>会員数<rt>かいいんすう</rt></ruby>の<ruby>伸<rt>の</rt></ruby>び<ruby>悩<rt>なや</rt></ruby>むスポーツクラブが、<ruby>地域<rt>ちいき</rt></ruby>の<ruby>高齢者<rt>こうれいしゃ</rt></ruby><ruby>向<rt>む</rt></ruby>けに<ruby>新<rt>あたら</rt></ruby>たな<ruby>講座<rt>こうざ</rt></ruby>を<ruby>設<rt>もう</rt></ruby>けた。",
+          "A sports club struggling with stagnant membership set up new courses aimed at local seniors."
+        ]
+      },
+      "mnem": "English \"sports club\" in katakana — su-po-o-tsu ku-ra-bu.",
+      "tip": "スポーツクラブ = a gym / fitness club you join, NOT a school sports team (that's 部活 / クラブ活動). A loanword compound — the pitch is worth double-checking.",
+      "accent": 5
+    },
+    {
+      "key": "mnn:34:9",
+      "kana": "しろ",
+      "kanji": "城",
+      "context": "",
+      "mean": "castle",
+      "cat": "noun",
+      "type": "",
+      "trans": "",
+      "dict": "城",
+      "dictRead": "しろ",
+      "audio": "/Audio/minnamoi/bai34/00010110010111110.mp3",
+      "levels": {
+        "N5": [
+          "あの<ruby>城<rt>しろ</rt></ruby>は<ruby>古<rt>ふる</rt></ruby>いです。",
+          "That castle is old."
+        ],
+        "N4": [
+          "<ruby>日曜日<rt>にちようび</rt></ruby>に<ruby>有名<rt>ゆうめい</rt></ruby>なお<ruby>城<rt>しろ</rt></ruby>を<ruby>見<rt>み</rt></ruby>に<ruby>行<rt>い</rt></ruby>きました。",
+          "On Sunday I went to see a famous castle."
+        ],
+        "N3": [
+          "この<ruby>城<rt>しろ</rt></ruby>は<ruby>四百年<rt>よんひゃくねん</rt></ruby><ruby>前<rt>まえ</rt></ruby>に<ruby>建<rt>た</rt></ruby>てられたそうです。",
+          "They say this castle was built four hundred years ago."
+        ],
+        "N2": [
+          "<ruby>城<rt>しろ</rt></ruby>を<ruby>見学<rt>けんがく</rt></ruby>したあとで、<ruby>周<rt>まわ</rt></ruby>りの<ruby>庭園<rt>ていえん</rt></ruby>をゆっくり<ruby>散歩<rt>さんぽ</rt></ruby>した。",
+          "After touring the castle, I took a leisurely walk through the surrounding gardens."
+        ],
+        "N1": [
+          "<ruby>幾多<rt>いくた</rt></ruby>の<ruby>戦火<rt>せんか</rt></ruby>をくぐり<ruby>抜<rt>ぬ</rt></ruby>けてきたこの<ruby>城<rt>しろ</rt></ruby>は、<ruby>今<rt>いま</rt></ruby>もなお<ruby>往時<rt>おうじ</rt></ruby>の<ruby>威容<rt>いよう</rt></ruby>を<ruby>保<rt>たも</rt></ruby>っている。",
+          "This castle, having survived the flames of countless wars, still retains its imposing appearance of former days."
+        ]
+      },
+      "mnem": "土 (earth) + 成 (become) — a mound of earth built up into a 城, a castle.",
+      "tip": "城 (しろ) = castle; politely お城. The same kanji reads じょう in compounds (大阪城 = おおさかじょう). Don't confuse the reading しろ with 白 (しろ, \"white\").",
+      "accent": 0
+    },
+    {
+      "key": "mnn:34:10",
+      "kana": "せつめいしょ",
+      "kanji": "説明書",
+      "context": "",
+      "mean": "instruction manual, explanatory booklet",
+      "cat": "noun",
+      "type": "",
+      "trans": "",
+      "dict": "説明書",
+      "dictRead": "せつめいしょ",
+      "audio": "/Audio/minnamoi/bai34/00010110010111111.mp3",
+      "levels": {
+        "N5": [
+          "これはテレビの<ruby>説明書<rt>せつめいしょ</rt></ruby>です。",
+          "This is the TV's manual."
+        ],
+        "N4": [
+          "<ruby>説明書<rt>せつめいしょ</rt></ruby>を<ruby>読<rt>よ</rt></ruby>んでから、<ruby>使<rt>つか</rt></ruby>ってください。",
+          "Please read the manual before using it."
+        ],
+        "N3": [
+          "<ruby>説明書<rt>せつめいしょ</rt></ruby>のとおりに<ruby>操作<rt>そうさ</rt></ruby>したのに、<ruby>機械<rt>きかい</rt></ruby>が<ruby>動<rt>うご</rt></ruby>かなかった。",
+          "Even though I operated it exactly as the manual said, the machine wouldn't work."
+        ],
+        "N2": [
+          "<ruby>説明書<rt>せつめいしょ</rt></ruby>が<ruby>分厚<rt>ぶあつ</rt></ruby>くて、どこを<ruby>読<rt>よ</rt></ruby>めばいいのかわからないほどだった。",
+          "The manual was so thick I hardly knew where to start reading."
+        ],
+        "N1": [
+          "<ruby>専門用語<rt>せんもんようご</rt></ruby>ばかりの<ruby>説明書<rt>せつめいしょ</rt></ruby>では、<ruby>初<rt>はじ</rt></ruby>めて<ruby>使<rt>つか</rt></ruby>う<ruby>人<rt>ひと</rt></ruby>にはかえってわかりにくい。",
+          "A manual full of nothing but technical jargon is, if anything, harder for a first-time user to understand."
+        ]
+      },
+      "mnem": "説明 (explanation) + 書 (document) — the 説明書 explains how to use it: the manual.",
+      "tip": "説明書 = instruction manual / explanatory booklet. It pairs naturally with this lesson's 〜のとおりに: 説明書のとおりに組み立てる. The suffix 書 (\"document\") also appears in 報告書, 契約書.",
+      "accent": 0
+    },
+    {
+      "key": "mnn:34:11",
+      "kana": "ず",
+      "kanji": "図",
+      "context": "",
+      "mean": "figure, diagram, drawing",
+      "cat": "noun",
+      "type": "",
+      "trans": "",
+      "dict": "図",
+      "dictRead": "ず",
+      "audio": "/Audio/minnamoi/bai34/00010110011000000.mp3",
+      "levels": {
+        "N5": [
+          "この<ruby>図<rt>ず</rt></ruby>を<ruby>見<rt>み</rt></ruby>てください。",
+          "Please look at this diagram."
+        ],
+        "N4": [
+          "<ruby>先生<rt>せんせい</rt></ruby>は<ruby>黒板<rt>こくばん</rt></ruby>に<ruby>図<rt>ず</rt></ruby>を<ruby>描<rt>か</rt></ruby>きました。",
+          "The teacher drew a diagram on the blackboard."
+        ],
+        "N3": [
+          "<ruby>言葉<rt>ことば</rt></ruby>で<ruby>説明<rt>せつめい</rt></ruby>するより、<ruby>図<rt>ず</rt></ruby>を<ruby>使<rt>つか</rt></ruby>ったほうがわかりやすい。",
+          "Rather than explaining in words, it's easier to understand if you use a diagram."
+        ],
+        "N2": [
+          "<ruby>複雑<rt>ふくざつ</rt></ruby>な<ruby>仕組<rt>しく</rt></ruby>みも、<ruby>一枚<rt>いちまい</rt></ruby>の<ruby>図<rt>ず</rt></ruby>にまとめればひと<ruby>目<rt>め</rt></ruby>で<ruby>理解<rt>りかい</rt></ruby>できる。",
+          "Even a complex mechanism can be grasped at a glance if you sum it up in a single diagram."
+        ],
+        "N1": [
+          "この<ruby>図<rt>ず</rt></ruby>が<ruby>示<rt>しめ</rt></ruby>すとおり、<ruby>両者<rt>りょうしゃ</rt></ruby>の<ruby>関係<rt>かんけい</rt></ruby>は<ruby>単純<rt>たんじゅん</rt></ruby>な<ruby>因果<rt>いんが</rt></ruby>では<ruby>説明<rt>せつめい</rt></ruby>しきれない。",
+          "As this figure shows, the relationship between the two cannot be fully explained by simple cause and effect."
+        ]
+      },
+      "mnem": "a 図 sits framed in its box — a diagram or figure drawn to be looked at.",
+      "tip": "図 (ず) = diagram / figure / chart. It reads と in 意図 (いと, \"intention\") but ず in 地図 (ちず, \"map\"). 図のとおりに = \"as shown in the diagram.\"",
+      "accent": 0
+    },
+    {
+      "key": "mnn:34:12",
+      "kana": "せん",
+      "kanji": "線",
+      "context": "",
+      "mean": "line",
+      "cat": "noun",
+      "type": "",
+      "trans": "",
+      "dict": "線",
+      "dictRead": "せん",
+      "audio": "/Audio/minnamoi/bai34/00010110011000001.mp3",
+      "levels": {
+        "N5": [
+          "ここに<ruby>線<rt>せん</rt></ruby>を<ruby>引<rt>ひ</rt></ruby>きます。",
+          "I draw a line here."
+        ],
+        "N4": [
+          "<ruby>線<rt>せん</rt></ruby>のとおりに、<ruby>紙<rt>かみ</rt></ruby>を<ruby>切<rt>き</rt></ruby>ってください。",
+          "Please cut the paper along the line."
+        ],
+        "N3": [
+          "<ruby>白<rt>しろ</rt></ruby>い<ruby>線<rt>せん</rt></ruby>の<ruby>内側<rt>うちがわ</rt></ruby>でお<ruby>待<rt>ま</rt></ruby>ちください。",
+          "Please wait behind the white line."
+        ],
+        "N2": [
+          "<ruby>地図<rt>ちず</rt></ruby>に<ruby>引<rt>ひ</rt></ruby>かれたこの<ruby>線<rt>せん</rt></ruby>は、かつての<ruby>国境<rt>こっきょう</rt></ruby>を<ruby>表<rt>あらわ</rt></ruby>している。",
+          "This line drawn on the map represents a former national border."
+        ],
+        "N1": [
+          "<ruby>公私<rt>こうし</rt></ruby>の<ruby>線<rt>せん</rt></ruby>をきちんと<ruby>引<rt>ひ</rt></ruby>ける<ruby>人<rt>ひと</rt></ruby>でなければ、<ruby>責任<rt>せきにん</rt></ruby>ある<ruby>立場<rt>たちば</rt></ruby>は<ruby>務<rt>つと</rt></ruby>まらない。",
+          "Someone who cannot draw a clear line between public and private matters is not fit for a position of responsibility."
+        ]
+      },
+      "mnem": "糸 (thread) stretched out straight — a taut thread is a 線, a line.",
+      "tip": "線 (せん) = line (a drawn line, or a rail line: 山手線). 線のとおりに切る = \"cut along the line.\" The counter for lines/routes is 〜本 (ほん).",
+      "accent": 1
+    },
+    {
+      "key": "mnn:34:13",
+      "kana": "やじるし",
+      "kanji": "矢印",
+      "context": "",
+      "mean": "arrow (sign, symbol)",
+      "cat": "noun",
+      "type": "",
+      "trans": "",
+      "dict": "矢印",
+      "dictRead": "やじるし",
+      "audio": "/Audio/minnamoi/bai34/00010110011000010.mp3",
+      "levels": {
+        "N5": [
+          "<ruby>矢印<rt>やじるし</rt></ruby>を<ruby>見<rt>み</rt></ruby>てください。",
+          "Please look at the arrow."
+        ],
+        "N4": [
+          "<ruby>矢印<rt>やじるし</rt></ruby>のとおりに<ruby>歩<rt>ある</rt></ruby>いて<ruby>行<rt>い</rt></ruby>ってください。",
+          "Please walk in the direction of the arrow."
+        ],
+        "N3": [
+          "<ruby>赤<rt>あか</rt></ruby>い<ruby>矢印<rt>やじるし</rt></ruby>が<ruby>指<rt>さ</rt></ruby>しているほうへ<ruby>進<rt>すす</rt></ruby>んでください。",
+          "Please proceed in the direction the red arrow is pointing."
+        ],
+        "N2": [
+          "<ruby>案内板<rt>あんないばん</rt></ruby>の<ruby>矢印<rt>やじるし</rt></ruby>がわかりにくくて、<ruby>危<rt>あや</rt></ruby>うく<ruby>道<rt>みち</rt></ruby>を<ruby>間違<rt>まちが</rt></ruby>えるところだった。",
+          "The arrows on the signboard were so confusing that I nearly went the wrong way."
+        ],
+        "N1": [
+          "グラフの<ruby>矢印<rt>やじるし</rt></ruby>は、<ruby>景気<rt>けいき</rt></ruby>が<ruby>回復<rt>かいふく</rt></ruby>に<ruby>向<rt>む</rt></ruby>かっていることを<ruby>明確<rt>めいかく</rt></ruby>に<ruby>示<rt>しめ</rt></ruby>している。",
+          "The arrows on the graph clearly indicate that the economy is heading toward recovery."
+        ]
+      },
+      "mnem": "矢 (arrow) + 印 (mark) — an arrow-shaped mark: 矢印, the arrow symbol.",
+      "tip": "矢印 (やじるし) = an arrow symbol (→), not an actual arrow (that's 矢, や). 矢印のとおりに進む = \"go in the direction of the arrow.\"",
+      "accent": 0
+    },
+    {
+      "key": "mnn:34:14",
+      "kana": "くろ",
+      "kanji": "黒",
+      "context": "",
+      "mean": "black (noun)",
+      "cat": "noun",
+      "type": "",
+      "trans": "",
+      "dict": "黒",
+      "dictRead": "くろ",
+      "audio": "/Audio/minnamoi/bai34/00010110011000011.mp3",
+      "levels": {
+        "N5": [
+          "<ruby>黒<rt>くろ</rt></ruby>のペンで<ruby>書<rt>か</rt></ruby>いてください。",
+          "Please write with a black pen."
+        ],
+        "N4": [
+          "<ruby>父<rt>ちち</rt></ruby>はいつも<ruby>黒<rt>くろ</rt></ruby>のスーツを<ruby>着<rt>き</rt></ruby>て<ruby>会社<rt>かいしゃ</rt></ruby>へ<ruby>行<rt>い</rt></ruby>きます。",
+          "My father always wears a black suit to work."
+        ],
+        "N3": [
+          "<ruby>日本<rt>にほん</rt></ruby>ではお<ruby>葬式<rt>そうしき</rt></ruby>のとき、<ruby>黒<rt>くろ</rt></ruby>の<ruby>服<rt>ふく</rt></ruby>を<ruby>着<rt>き</rt></ruby>ることになっている。",
+          "In Japan, it is customary to wear black clothes at funerals."
+        ],
+        "N2": [
+          "<ruby>契約書<rt>けいやくしょ</rt></ruby>にサインするからには、<ruby>黒<rt>くろ</rt></ruby>か<ruby>白<rt>しろ</rt></ruby>かはっきりさせておきたい。",
+          "Since I'm going to sign the contract, I want to make it clear-cut, black or white."
+        ],
+        "N1": [
+          "この<ruby>問題<rt>もんだい</rt></ruby>は、<ruby>単純<rt>たんじゅん</rt></ruby>に<ruby>黒<rt>くろ</rt></ruby>と<ruby>白<rt>しろ</rt></ruby>に<ruby>割<rt>わ</rt></ruby>り<ruby>切<rt>き</rt></ruby>れるほど<ruby>単純<rt>たんじゅん</rt></ruby>ではない。",
+          "This issue is not so simple that it can be neatly divided into black and white."
+        ]
+      },
+      "mnem": "\"ku-ro\" — the <b>crow</b> is 黒, jet black.",
+      "tip": "黒 (くろ) is the noun \"black\"; the adjective is 黒い (くろい). The idiom 黒か白か = \"black or white / guilty or innocent.\" Don't confuse くろ with しろ (白, white).",
+      "accent": 1
+    },
+    {
+      "key": "mnn:34:15",
+      "kana": "しろ",
+      "kanji": "白",
+      "context": "",
+      "mean": "white (noun)",
+      "cat": "noun",
+      "type": "",
+      "trans": "",
+      "dict": "白",
+      "dictRead": "しろ",
+      "audio": "/Audio/minnamoi/bai34/00010110011000100.mp3",
+      "levels": {
+        "N5": [
+          "<ruby>白<rt>しろ</rt></ruby>のシャツを<ruby>買<rt>か</rt></ruby>いました。",
+          "I bought a white shirt."
+        ],
+        "N4": [
+          "<ruby>結婚式<rt>けっこんしき</rt></ruby>で<ruby>花嫁<rt>はなよめ</rt></ruby>は<ruby>白<rt>しろ</rt></ruby>のドレスを<ruby>着<rt>き</rt></ruby>ます。",
+          "At a wedding the bride wears a white dress."
+        ],
+        "N3": [
+          "<ruby>白<rt>しろ</rt></ruby>い<ruby>壁<rt>かべ</rt></ruby>の<ruby>家<rt>いえ</rt></ruby>に<ruby>住<rt>す</rt></ruby>むのが、<ruby>子<rt>こ</rt></ruby>どものころからの<ruby>夢<rt>ゆめ</rt></ruby>でした。",
+          "Living in a house with white walls had been my dream since childhood."
+        ],
+        "N2": [
+          "<ruby>白<rt>しろ</rt></ruby>か<ruby>黒<rt>くろ</rt></ruby>か、<ruby>今<rt>いま</rt></ruby>この<ruby>場<rt>ば</rt></ruby>で<ruby>態度<rt>たいど</rt></ruby>をはっきりさせるべきだ。",
+          "White or black — you should make your position clear right here and now."
+        ],
+        "N1": [
+          "<ruby>裁判<rt>さいばん</rt></ruby>で<ruby>白<rt>しろ</rt></ruby>と<ruby>証明<rt>しょうめい</rt></ruby>されるまで、<ruby>彼<rt>かれ</rt></ruby>を<ruby>犯人<rt>はんにん</rt></ruby><ruby>扱<rt>あつか</rt></ruby>いするべきではない。",
+          "Until he is proven innocent in court, he should not be treated as the culprit."
+        ]
+      },
+      "mnem": "\"shi-ro\" — a <b>sheet</b> of snow is 白, pure white.",
+      "tip": "白 (しろ) is the noun \"white\"; the adjective is 白い (しろい). It also means \"innocent\" (白 = not guilty). Same reading しろ as 城 (castle) — tell them apart by kanji and context.",
+      "accent": 1
+    },
+    {
+      "key": "mnn:34:16",
+      "kana": "あか",
+      "kanji": "赤",
+      "context": "",
+      "mean": "red (noun)",
+      "cat": "noun",
+      "type": "",
+      "trans": "",
+      "dict": "赤",
+      "dictRead": "あか",
+      "audio": "/Audio/minnamoi/bai34/00010110011000101.mp3",
+      "levels": {
+        "N5": [
+          "<ruby>赤<rt>あか</rt></ruby>の<ruby>帽子<rt>ぼうし</rt></ruby>が<ruby>好<rt>す</rt></ruby>きです。",
+          "I like the red hat."
+        ],
+        "N4": [
+          "<ruby>信号<rt>しんごう</rt></ruby>が<ruby>赤<rt>あか</rt></ruby>になったら、<ruby>止<rt>と</rt></ruby>まってください。",
+          "When the light turns red, please stop."
+        ],
+        "N3": [
+          "<ruby>先生<rt>せんせい</rt></ruby>は<ruby>間違<rt>まちが</rt></ruby>いのところを<ruby>赤<rt>あか</rt></ruby>のペンで<ruby>直<rt>なお</rt></ruby>してくれた。",
+          "The teacher corrected my mistakes with a red pen."
+        ],
+        "N2": [
+          "<ruby>今月<rt>こんげつ</rt></ruby>も<ruby>家計<rt>かけい</rt></ruby>が<ruby>赤字<rt>あかじ</rt></ruby>になりそうで、<ruby>頭<rt>あたま</rt></ruby>が<ruby>痛<rt>いた</rt></ruby>い。",
+          "It looks like our household budget will be in the red again this month, which is a real headache."
+        ],
+        "N1": [
+          "<ruby>恥<rt>は</rt></ruby>ずかしさのあまり、<ruby>彼女<rt>かのじょ</rt></ruby>の<ruby>顔<rt>かお</rt></ruby>は<ruby>見<rt>み</rt></ruby>る<ruby>間<rt>ま</rt></ruby>に<ruby>赤<rt>あか</rt></ruby>く<ruby>染<rt>そ</rt></ruby>まっていった。",
+          "Out of sheer embarrassment, her face flushed red before my eyes."
+        ]
+      },
+      "mnem": "\"a-ka\" — the setting sun glows 赤, bright red.",
+      "tip": "赤 (あか) is the noun \"red\"; the adjective is 赤い (あかい). It appears in 赤字 (\"deficit, red ink\") and 赤ちゃん (\"baby\"). Reads せき/しゃく in compounds (赤道 = せきどう, equator).",
+      "accent": 1
+    },
+    {
+      "key": "mnn:34:17",
+      "kana": "あお",
+      "kanji": "青",
+      "context": "",
+      "mean": "blue (noun)",
+      "cat": "noun",
+      "type": "",
+      "trans": "",
+      "dict": "青",
+      "dictRead": "あお",
+      "audio": "/Audio/minnamoi/bai34/00010110011000110.mp3",
+      "levels": {
+        "N5": [
+          "<ruby>青<rt>あお</rt></ruby>のセーターを<ruby>着<rt>き</rt></ruby>ています。",
+          "I'm wearing a blue sweater."
+        ],
+        "N4": [
+          "<ruby>空<rt>そら</rt></ruby>が<ruby>青<rt>あお</rt></ruby>くて、とてもきれいです。",
+          "The sky is blue and very beautiful."
+        ],
+        "N3": [
+          "<ruby>信号<rt>しんごう</rt></ruby>が<ruby>青<rt>あお</rt></ruby>になったとたん、<ruby>車<rt>くるま</rt></ruby>が<ruby>一斉<rt>いっせい</rt></ruby>に<ruby>動<rt>うご</rt></ruby>き<ruby>出<rt>だ</rt></ruby>した。",
+          "The moment the light turned green, the cars all started moving at once."
+        ],
+        "N2": [
+          "<ruby>知<rt>し</rt></ruby>らせを<ruby>聞<rt>き</rt></ruby>いた<ruby>彼<rt>かれ</rt></ruby>は、<ruby>顔<rt>かお</rt></ruby>を<ruby>青<rt>あお</rt></ruby>くして<ruby>立<rt>た</rt></ruby>ち<ruby>尽<rt>つ</rt></ruby>くしていた。",
+          "On hearing the news, he stood frozen, his face pale."
+        ],
+        "N1": [
+          "<ruby>深<rt>ふか</rt></ruby>い<ruby>青<rt>あお</rt></ruby>をたたえた<ruby>湖面<rt>こめん</rt></ruby>は、<ruby>見<rt>み</rt></ruby>る<ruby>者<rt>もの</rt></ruby>の<ruby>心<rt>こころ</rt></ruby>を<ruby>静<rt>しず</rt></ruby>かに<ruby>落<rt>お</rt></ruby>ち<ruby>着<rt>つ</rt></ruby>かせてくれる。",
+          "The lake's surface, brimming with deep blue, quietly soothes the heart of anyone who gazes upon it."
+        ]
+      },
+      "mnem": "\"a-o\" — the wide-open clear sky is 青, blue.",
+      "tip": "青 (あお) covers both \"blue\" and, for traffic lights and fresh greenery, \"green\" (青信号 = a green light). Noun 青 / adjective 青い. 顔が青い = \"pale (with fear/illness).\"",
+      "accent": 1
+    },
+    {
+      "key": "mnn:34:18",
+      "kana": "こん",
+      "kanji": "紺",
+      "context": "",
+      "mean": "navy blue, dark blue (noun)",
+      "cat": "noun",
+      "type": "",
+      "trans": "",
+      "dict": "紺",
+      "dictRead": "こん",
+      "audio": "/Audio/minnamoi/bai34/00010110011000111.mp3",
+      "levels": {
+        "N5": [
+          "<ruby>紺<rt>こん</rt></ruby>のかばんを<ruby>買<rt>か</rt></ruby>いました。",
+          "I bought a navy bag."
+        ],
+        "N4": [
+          "<ruby>息子<rt>むすこ</rt></ruby>は<ruby>紺<rt>こん</rt></ruby>の<ruby>制服<rt>せいふく</rt></ruby>を<ruby>着<rt>き</rt></ruby>て<ruby>学校<rt>がっこう</rt></ruby>へ<ruby>行<rt>い</rt></ruby>きます。",
+          "My son wears a navy uniform to school."
+        ],
+        "N3": [
+          "<ruby>面接<rt>めんせつ</rt></ruby>には<ruby>紺<rt>こん</rt></ruby>か<ruby>黒<rt>くろ</rt></ruby>のスーツを<ruby>着<rt>き</rt></ruby>て<ruby>行<rt>い</rt></ruby>くほうがいい。",
+          "For a job interview, it's better to wear a navy or black suit."
+        ],
+        "N2": [
+          "<ruby>紺<rt>こん</rt></ruby>のスーツは、どんな<ruby>場面<rt>ばめん</rt></ruby>でも<ruby>落<rt>お</rt></ruby>ち<ruby>着<rt>つ</rt></ruby>いた<ruby>印象<rt>いんしょう</rt></ruby>を<ruby>与<rt>あた</rt></ruby>える。",
+          "A navy suit gives a composed impression in any situation."
+        ],
+        "N1": [
+          "<ruby>深<rt>ふか</rt></ruby>い<ruby>紺<rt>こん</rt></ruby>に<ruby>染<rt>そ</rt></ruby>められた<ruby>着物<rt>きもの</rt></ruby>は、<ruby>老舗<rt>しにせ</rt></ruby>の<ruby>職人<rt>しょくにん</rt></ruby>が<ruby>手作業<rt>てさぎょう</rt></ruby>で<ruby>仕上<rt>しあ</rt></ruby>げたものだ。",
+          "The kimono, dyed a deep navy, was finished by hand by an artisan of a long-established shop."
+        ]
+      },
+      "mnem": "糸 (thread) + 甘 — deeply dyed thread comes out 紺, dark navy.",
+      "tip": "紺 (こん) = navy / dark blue, darker than 青. Common for suits and uniforms (紺のスーツ). It's a noun only — there is no い-adjective form.",
+      "accent": 1
+    },
+    {
+      "key": "mnn:34:19",
+      "kana": "きいろ",
+      "kanji": "黄色",
+      "context": "",
+      "mean": "yellow (noun)",
+      "cat": "noun",
+      "type": "",
+      "trans": "",
+      "dict": "黄色",
+      "dictRead": "きいろ",
+      "audio": "/Audio/minnamoi/bai34/00010110011001000.mp3",
+      "levels": {
+        "N5": [
+          "<ruby>黄色<rt>きいろ</rt></ruby>の<ruby>花<rt>はな</rt></ruby>が<ruby>咲<rt>さ</rt></ruby>きました。",
+          "Yellow flowers bloomed."
+        ],
+        "N4": [
+          "<ruby>子<rt>こ</rt></ruby>どもは<ruby>黄色<rt>きいろ</rt></ruby>い<ruby>帽子<rt>ぼうし</rt></ruby>をかぶっています。",
+          "The child is wearing a yellow hat."
+        ],
+        "N3": [
+          "<ruby>秋<rt>あき</rt></ruby>になると、<ruby>公園<rt>こうえん</rt></ruby>の<ruby>木<rt>き</rt></ruby>が<ruby>黄色<rt>きいろ</rt></ruby>く<ruby>色<rt>いろ</rt></ruby>づき<ruby>始<rt>はじ</rt></ruby>める。",
+          "When autumn comes, the trees in the park begin to turn yellow."
+        ],
+        "N2": [
+          "<ruby>黄色<rt>きいろ</rt></ruby>は<ruby>遠<rt>とお</rt></ruby>くからでもよく<ruby>目立<rt>めだ</rt></ruby>つので、<ruby>標識<rt>ひょうしき</rt></ruby>によく<ruby>使<rt>つか</rt></ruby>われる。",
+          "Yellow stands out well even from a distance, so it's often used on signs."
+        ],
+        "N1": [
+          "<ruby>一面<rt>いちめん</rt></ruby>に<ruby>広<rt>ひろ</rt></ruby>がる<ruby>菜<rt>な</rt></ruby>の<ruby>花<rt>はな</rt></ruby>の<ruby>黄色<rt>きいろ</rt></ruby>が、<ruby>春<rt>はる</rt></ruby>の<ruby>訪<rt>おとず</rt></ruby>れを<ruby>静<rt>しず</rt></ruby>かに<ruby>告<rt>つ</rt></ruby>げていた。",
+          "The yellow of the rape blossoms spreading across the whole field quietly announced the arrival of spring."
+        ]
+      },
+      "mnem": "黄 (yellow) + 色 (color) — 黄色, the color yellow.",
+      "tip": "黄色 (きいろ) = yellow; the い-adjective is 黄色い (きいろい). Unlike 赤/青/黒/白, the plain 黄 rarely stands alone — the everyday color word keeps 色.",
+      "accent": 0
+    },
+    {
+      "key": "mnn:34:20",
+      "kana": "ちゃいろ",
+      "kanji": "茶色",
+      "context": "",
+      "mean": "brown (noun)",
+      "cat": "noun",
+      "type": "",
+      "trans": "",
+      "dict": "茶色",
+      "dictRead": "ちゃいろ",
+      "audio": "/Audio/minnamoi/bai34/00010110011001001.mp3",
+      "levels": {
+        "N5": [
+          "<ruby>茶色<rt>ちゃいろ</rt></ruby>のくつをはいています。",
+          "I'm wearing brown shoes."
+        ],
+        "N4": [
+          "<ruby>彼女<rt>かのじょ</rt></ruby>は<ruby>茶色<rt>ちゃいろ</rt></ruby>のコートを<ruby>着<rt>き</rt></ruby>ていました。",
+          "She was wearing a brown coat."
+        ],
+        "N3": [
+          "<ruby>秋<rt>あき</rt></ruby>になると、<ruby>山<rt>やま</rt></ruby>の<ruby>葉<rt>は</rt></ruby>が<ruby>赤<rt>あか</rt></ruby>や<ruby>茶色<rt>ちゃいろ</rt></ruby>に<ruby>変<rt>か</rt></ruby>わっていく。",
+          "As autumn comes, the leaves on the mountains turn red and brown."
+        ],
+        "N2": [
+          "パンを<ruby>焼<rt>や</rt></ruby>きすぎて、<ruby>表面<rt>ひょうめん</rt></ruby>が<ruby>茶色<rt>ちゃいろ</rt></ruby>になってしまった。",
+          "I toasted the bread too long and the surface turned brown."
+        ],
+        "N1": [
+          "<ruby>長<rt>なが</rt></ruby>い<ruby>年月<rt>ねんげつ</rt></ruby>を<ruby>経<rt>へ</rt></ruby>て、<ruby>写真<rt>しゃしん</rt></ruby>はすっかり<ruby>茶色<rt>ちゃいろ</rt></ruby>に<ruby>変色<rt>へんしょく</rt></ruby>していた。",
+          "After many long years, the photograph had turned completely brown."
+        ]
+      },
+      "mnem": "茶 (tea) + 色 (color) — the color of tea: 茶色, brown.",
+      "tip": "茶色 (ちゃいろ) = brown (\"tea color\"); the adjective is 茶色い (ちゃいろい). Like 黄色, it keeps 色 in everyday use. 茶 alone means \"tea\" (お茶).",
+      "accent": 0
+    },
+    {
+      "key": "mnn:34:21",
+      "kana": "しょうゆ",
+      "kanji": "",
+      "context": "",
+      "mean": "soy sauce",
+      "cat": "noun",
+      "type": "",
+      "trans": "",
+      "dict": "しょうゆ",
+      "dictRead": "しょうゆ",
+      "audio": "/Audio/minnamoi/bai34/00010110011001010.mp3",
+      "levels": {
+        "N5": [
+          "<ruby>刺身<rt>さしみ</rt></ruby>にしょうゆをつけます。",
+          "I dip the sashimi in soy sauce."
+        ],
+        "N4": [
+          "しょうゆを<ruby>入<rt>い</rt></ruby>れすぎたので、<ruby>少<rt>すこ</rt></ruby>し<ruby>辛<rt>から</rt></ruby>くなりました。",
+          "I added too much soy sauce, so it turned out a bit salty."
+        ],
+        "N3": [
+          "<ruby>日本<rt>にほん</rt></ruby><ruby>料理<rt>りょうり</rt></ruby>にはしょうゆが<ruby>欠<rt>か</rt></ruby>かせない<ruby>調味料<rt>ちょうみりょう</rt></ruby>です。",
+          "Soy sauce is an indispensable seasoning in Japanese cooking."
+        ],
+        "N2": [
+          "しょうゆをつけずに<ruby>食<rt>た</rt></ruby>べたほうが、<ruby>素材<rt>そざい</rt></ruby>の<ruby>味<rt>あじ</rt></ruby>がよくわかる。",
+          "You can taste the flavor of the ingredients better if you eat it without soy sauce."
+        ],
+        "N1": [
+          "このしょうゆは、<ruby>蔵<rt>くら</rt></ruby>で<ruby>一年<rt>いちねん</rt></ruby><ruby>以上<rt>いじょう</rt></ruby>じっくりと<ruby>熟成<rt>じゅくせい</rt></ruby>させて<ruby>造<rt>つく</rt></ruby>られたものだ。",
+          "This soy sauce was made by aging it slowly for over a year in a brewery."
+        ]
+      },
+      "mnem": "\"shoh-yu\" — the dark, salty soy you pour: しょうゆ, soy sauce.",
+      "tip": "しょうゆ (醤油) = soy sauce, usually written in kana. This lesson pairs it with つける (\"dip\"): しょうゆをつけて食べる. Don't confuse it with ソース (thick Worcestershire-style sauce).",
+      "accent": 0
+    },
+    {
+      "key": "mnn:34:22",
+      "kana": "ソース",
+      "kanji": "",
+      "context": "",
+      "mean": "sauce (Worcestershire-style)",
+      "cat": "noun",
+      "type": "",
+      "trans": "",
+      "dict": "ソース",
+      "dictRead": "ソース",
+      "audio": "/Audio/minnamoi/bai34/00010110011001011.mp3",
+      "levels": {
+        "N5": [
+          "ソースをかけてください。",
+          "Please put some sauce on it."
+        ],
+        "N4": [
+          "このフライにはソースをつけて<ruby>食<rt>た</rt></ruby>べます。",
+          "I eat this fried food with sauce on it."
+        ],
+        "N3": [
+          "ソースをつけないで<ruby>食<rt>た</rt></ruby>べるほうが、<ruby>私<rt>わたし</rt></ruby>は<ruby>好<rt>す</rt></ruby>きです。",
+          "I prefer to eat it without any sauce."
+        ],
+        "N2": [
+          "この<ruby>店<rt>みせ</rt></ruby>のソースは、<ruby>何十年<rt>なんじゅうねん</rt></ruby>も<ruby>変<rt>か</rt></ruby>わらない<ruby>秘伝<rt>ひでん</rt></ruby>の<ruby>味<rt>あじ</rt></ruby>だそうだ。",
+          "They say this restaurant's sauce is a secret recipe unchanged for decades."
+        ],
+        "N1": [
+          "<ruby>隠<rt>かく</rt></ruby>し<ruby>味<rt>あじ</rt></ruby>のスパイスが<ruby>効<rt>き</rt></ruby>いたこのソースは、<ruby>料理<rt>りょうり</rt></ruby>の<ruby>味<rt>あじ</rt></ruby>を<ruby>一段<rt>いちだん</rt></ruby>と<ruby>引<rt>ひ</rt></ruby>き<ruby>立<rt>た</rt></ruby>てる。",
+          "This sauce, with its effective hint of a secret spice, brings out the flavor of the dish all the more."
+        ]
+      },
+      "mnem": "English \"sauce\" in katakana — but in Japan ソース usually means the thick, dark Worcestershire kind.",
+      "tip": "ソース = sauce, specifically the dark tonkatsu / Worcestershire type, NOT soy sauce (しょうゆ) or pasta sauce. The same katakana also means \"source\" in computing contexts.",
+      "accent": 1
+    },
+    {
+      "key": "mnn:34:23",
+      "kana": "おきゃくさん",
+      "kanji": "お客さん",
+      "context": "",
+      "mean": "visitor, guest, customer, client",
+      "cat": "noun",
+      "type": "",
+      "trans": "",
+      "dict": "お客さん",
+      "dictRead": "おきゃくさん",
+      "audio": "/Audio/minnamoi/bai34/00010110011001100.mp3",
+      "levels": {
+        "N5": [
+          "<ruby>今日<rt>きょう</rt></ruby>はお<ruby>客<rt>きゃく</rt></ruby>さんが<ruby>来<rt>き</rt></ruby>ます。",
+          "A guest is coming today."
+        ],
+        "N4": [
+          "お<ruby>客<rt>きゃく</rt></ruby>さんが<ruby>来<rt>く</rt></ruby>る<ruby>前<rt>まえ</rt></ruby>に、<ruby>部屋<rt>へや</rt></ruby>を<ruby>掃除<rt>そうじ</rt></ruby>しました。",
+          "I cleaned the room before the guests came."
+        ],
+        "N3": [
+          "お<ruby>客<rt>きゃく</rt></ruby>さんに<ruby>失礼<rt>しつれい</rt></ruby>のないように、<ruby>丁寧<rt>ていねい</rt></ruby>な<ruby>言葉<rt>ことば</rt></ruby>を<ruby>使<rt>つか</rt></ruby>うようにしています。",
+          "I make a point of using polite language so as not to be rude to customers."
+        ],
+        "N2": [
+          "<ruby>開店<rt>かいてん</rt></ruby><ruby>直後<rt>ちょくご</rt></ruby>はお<ruby>客<rt>きゃく</rt></ruby>さんが<ruby>少<rt>すく</rt></ruby>なかったものの、<ruby>今<rt>いま</rt></ruby>では<ruby>行列<rt>ぎょうれつ</rt></ruby>ができるほどだ。",
+          "Although there were few customers right after opening, now there are even lines out front."
+        ],
+        "N1": [
+          "どんなに<ruby>忙<rt>いそが</rt></ruby>しくても、<ruby>一人<rt>ひとり</rt></ruby><ruby>一人<rt>ひとり</rt></ruby>のお<ruby>客<rt>きゃく</rt></ruby>さんに<ruby>心<rt>こころ</rt></ruby>を<ruby>込<rt>こ</rt></ruby>めて<ruby>接<rt>せっ</rt></ruby>するのが<ruby>信条<rt>しんじょう</rt></ruby>だ。",
+          "No matter how busy it gets, serving each and every customer wholeheartedly is my creed."
+        ]
+      },
+      "mnem": "お + 客 (guest) + さん — the honored 客: お客さん, the guest or customer.",
+      "tip": "お客さん = guest / customer / client (the polite everyday form). More formal is お客様 (おきゃくさま); bare 客 (きゃく) is blunt. The prefix お and the suffix さん both add politeness.",
+      "accent": 0
+    },
+    {
+      "key": "mnn:34:24",
+      "kana": "〜か〜",
+      "kanji": "",
+      "context": "",
+      "mean": "~ or ~ (either A or B)",
+      "cat": "conjunction",
+      "type": "",
+      "trans": "",
+      "dict": "〜か〜",
+      "dictRead": "〜か〜",
+      "audio": "/Audio/minnamoi/bai34/00010110011001101.mp3"
+    },
+    {
+      "key": "mnn:34:25",
+      "kana": "ゆうべ",
+      "kanji": "",
+      "context": "",
+      "mean": "last night",
+      "cat": "adverb",
+      "type": "",
+      "trans": "",
+      "dict": "ゆうべ",
+      "dictRead": "ゆうべ",
+      "audio": "/Audio/minnamoi/bai34/00010110011001110.mp3",
+      "levels": {
+        "N5": [
+          "ゆうべよく<ruby>寝<rt>ね</rt></ruby>ました。",
+          "I slept well last night."
+        ],
+        "N4": [
+          "ゆうべ<ruby>遅<rt>おそ</rt></ruby>くまでテレビを<ruby>見<rt>み</rt></ruby>ていました。",
+          "I was watching TV until late last night."
+        ],
+        "N3": [
+          "ゆうべ<ruby>寝<rt>ね</rt></ruby>ないで<ruby>勉強<rt>べんきょう</rt></ruby>したので、<ruby>今日<rt>きょう</rt></ruby>はとても<ruby>眠<rt>ねむ</rt></ruby>い。",
+          "I studied all last night without sleeping, so I'm very sleepy today."
+        ],
+        "N2": [
+          "ゆうべ<ruby>降<rt>ふ</rt></ruby>った<ruby>雨<rt>あめ</rt></ruby>のせいで、<ruby>道<rt>みち</rt></ruby>がぬかるんで<ruby>歩<rt>ある</rt></ruby>きにくい。",
+          "Because of the rain that fell last night, the road is muddy and hard to walk on."
+        ],
+        "N1": [
+          "ゆうべ<ruby>交<rt>か</rt></ruby>わした<ruby>何気<rt>なにげ</rt></ruby>ない<ruby>一言<rt>ひとこと</rt></ruby>が、<ruby>今<rt>いま</rt></ruby>も<ruby>妙<rt>みょう</rt></ruby>に<ruby>心<rt>こころ</rt></ruby>に<ruby>引<rt>ひ</rt></ruby>っかかっている。",
+          "A casual remark exchanged last night still oddly lingers in my mind."
+        ]
+      },
+      "mnem": "夕 (evening) + べ — 夕べ, the evening just gone by: last night.",
+      "tip": "ゆうべ (夕べ) = last night, used as an adverb with no を/に (ゆうべ寝なかった). A more formal synonym is 昨夜 (さくや). Distinct from 夕方 (ゆうがた, \"early evening, dusk\").",
+      "accent": 3
+    },
+    {
+      "key": "mnn:34:26",
+      "kana": "さっき",
+      "kanji": "",
+      "context": "",
+      "mean": "a short while ago, just now",
+      "cat": "adverb",
+      "type": "",
+      "trans": "",
+      "dict": "さっき",
+      "dictRead": "さっき",
+      "audio": "/Audio/minnamoi/bai34/00010110011001111.mp3",
+      "levels": {
+        "N5": [
+          "さっきごはんを<ruby>食<rt>た</rt></ruby>べました。",
+          "I ate a little while ago."
+        ],
+        "N4": [
+          "さっき<ruby>先生<rt>せんせい</rt></ruby>が<ruby>来<rt>き</rt></ruby>て、あなたを<ruby>探<rt>さが</rt></ruby>していましたよ。",
+          "The teacher came by a little while ago and was looking for you."
+        ],
+        "N3": [
+          "さっき<ruby>言<rt>い</rt></ruby>ったことをもう<ruby>忘<rt>わす</rt></ruby>れてしまったんですか。",
+          "Have you already forgotten what I said a moment ago?"
+        ],
+        "N2": [
+          "さっきから<ruby>何度<rt>なんど</rt></ruby>も<ruby>電話<rt>でんわ</rt></ruby>しているのに、<ruby>彼<rt>かれ</rt></ruby>は<ruby>一向<rt>いっこう</rt></ruby>に<ruby>出<rt>で</rt></ruby>ない。",
+          "Even though I've been calling him over and over since a while ago, he just won't pick up."
+        ],
+        "N1": [
+          "さっきまでの<ruby>険<rt>けわ</rt></ruby>しい<ruby>表情<rt>ひょうじょう</rt></ruby>はどこへやら、<ruby>彼女<rt>かのじょ</rt></ruby>は<ruby>急<rt>きゅう</rt></ruby>に<ruby>笑顔<rt>えがお</rt></ruby>を<ruby>見<rt>み</rt></ruby>せた。",
+          "Her stern expression of just moments ago vanished without a trace as she suddenly broke into a smile."
+        ]
+      },
+      "mnem": "\"sakki\" — a <b>sec</b> ago: さっき, a short while back.",
+      "tip": "さっき = \"a little while ago\" (casual); the more formal form is さきほど. It's an adverb but can take の (さっきの話 = \"what we were talking about earlier\"). Refers to the recent past.",
+      "accent": 1
+    }
+  ],
+  "grammar": [
+    {
+      "pattern": "〜とおりに (as ~, just the way ~)",
+      "structure": "V(た形／辞書形)＋とおりに、… ／ N＋の＋とおりに、…",
+      "explain": "とおり(に) means \"in the same way as.\" Attach it to a verb — the past た-form for a completed model action (見たとおりに, \"as you saw\"), or the dictionary form for a general or simultaneous one (わたしがするとおりに, \"the way I do\") — or to a noun with の (線のとおりに, \"along the line\"). The second clause is then done exactly according to that model.",
+      "examples": [
+        {
+          "jp": "<ruby>先生<rt>せんせい</rt></ruby>が<ruby>言<rt>い</rt></ruby>ったとおりに、<ruby>机<rt>つくえ</rt></ruby>を<ruby>並<rt>なら</rt></ruby>べました。",
+          "en": "I arranged the desks just as the teacher said."
+        },
+        {
+          "jp": "<ruby>図<rt>ず</rt></ruby>のとおりに、<ruby>紙<rt>かみ</rt></ruby>を<ruby>折<rt>お</rt></ruby>ってください。",
+          "en": "Please fold the paper as shown in the diagram."
+        },
+        {
+          "jp": "わたしがするとおりに、してください。",
+          "en": "Please do it the way I do."
+        },
+        {
+          "jp": "<ruby>説明書<rt>せつめいしょ</rt></ruby>のとおりに、<ruby>家具<rt>かぐ</rt></ruby>を<ruby>組<rt>く</rt></ruby>み<ruby>立<rt>た</rt></ruby>てました。",
+          "en": "I assembled the furniture according to the manual."
+        }
+      ]
+    },
+    {
+      "pattern": "〜たあとで／〜のあとで (after ~)",
+      "structure": "V(た形)＋あとで、… ／ N＋の＋あとで、…",
+      "explain": "あとで = \"after.\" Use a verb in the plain past た-form for an action (ごはんを食べたあとで, \"after eating\"), or a noun + の for an event (食事のあとで, \"after the meal\"). It stresses that the second action follows the first's completion. Unlike て-form sequencing, あとで makes the \"one finishes, then the next\" order explicit.",
+      "examples": [
+        {
+          "jp": "<ruby>友達<rt>ともだち</rt></ruby>が<ruby>帰<rt>かえ</rt></ruby>ったあとで、<ruby>部屋<rt>へや</rt></ruby>を<ruby>片付<rt>かたづ</rt></ruby>けました。",
+          "en": "After my friends left, I tidied up the room."
+        },
+        {
+          "jp": "<ruby>食事<rt>しょくじ</rt></ruby>のあとで、<ruby>何<rt>なに</rt></ruby>をしますか。",
+          "en": "What shall we do after the meal?"
+        },
+        {
+          "jp": "お<ruby>城<rt>しろ</rt></ruby>を<ruby>見学<rt>けんがく</rt></ruby>したあとで、みんなで<ruby>写真<rt>しゃしん</rt></ruby>を<ruby>撮<rt>と</rt></ruby>りました。",
+          "en": "After touring the castle, we all took a photo together."
+        },
+        {
+          "jp": "バスを<ruby>降<rt>お</rt></ruby>りたあとで、<ruby>忘<rt>わす</rt></ruby>れ<ruby>物<rt>もの</rt></ruby>に<ruby>気<rt>き</rt></ruby>がつきました。",
+          "en": "It was after getting off the bus that I noticed I'd left something behind."
+        }
+      ]
+    },
+    {
+      "pattern": "〜ないで、… (without doing ~ / instead of doing ~)",
+      "structure": "V(ない形)＋で、…",
+      "explain": "Add で to a verb's ない-form to say the main action is done WITHOUT the first, or INSTEAD of it. Contrast it with the て-form, which links \"do X and then Y\": 傘を持って出かけます (take an umbrella and go) versus 傘を持たないで出かけます (go without taking one). The \"instead\" sense is common too: ゆうべ寝ないで勉強しました (studied instead of sleeping).",
+      "examples": [
+        {
+          "jp": "コーヒーは<ruby>砂糖<rt>さとう</rt></ruby>を<ruby>入<rt>い</rt></ruby>れないで<ruby>飲<rt>の</rt></ruby>みます。",
+          "en": "I drink my coffee without adding sugar."
+        },
+        {
+          "jp": "<ruby>傘<rt>かさ</rt></ruby>をささないで<ruby>出<rt>で</rt></ruby>かけました。",
+          "en": "I went out without putting up an umbrella."
+        },
+        {
+          "jp": "ゆうべ<ruby>寝<rt>ね</rt></ruby>ないで、<ruby>勉強<rt>べんきょう</rt></ruby>しました。",
+          "en": "Last night I studied instead of sleeping."
+        },
+        {
+          "jp": "<ruby>日曜日<rt>にちようび</rt></ruby>はどこも<ruby>行<rt>い</rt></ruby>かないで、うちでゆっくり<ruby>休<rt>やす</rt></ruby>みます。",
+          "en": "On Sundays I don't go anywhere; I just relax at home."
+        }
+      ]
+    }
+  ],
+  "examples": [
+    {
+      "jp": "<ruby>先生<rt>せんせい</rt></ruby>が<ruby>言<rt>い</rt></ruby>ったとおりに、<ruby>書<rt>か</rt></ruby>いてください。",
+      "en": "Please write it just as the teacher said."
+    },
+    {
+      "jp": "ごはんを<ruby>食<rt>た</rt></ruby>べたあとで、<ruby>歯<rt>は</rt></ruby>を<ruby>磨<rt>みが</rt></ruby>きます。",
+      "en": "After eating, I brush my teeth."
+    },
+    {
+      "jp": "このテーブルは<ruby>説明書<rt>せつめいしょ</rt></ruby>のとおりに<ruby>組<rt>く</rt></ruby>み<ruby>立<rt>た</rt></ruby>てました。",
+      "en": "I assembled this table according to the manual."
+    },
+    {
+      "jp": "<ruby>矢印<rt>やじるし</rt></ruby>のとおりに<ruby>行<rt>い</rt></ruby>くと、<ruby>駅<rt>えき</rt></ruby>に<ruby>着<rt>つ</rt></ruby>きます。",
+      "en": "If you go the way the arrow points, you'll reach the station."
+    },
+    {
+      "jp": "<ruby>仕事<rt>しごと</rt></ruby>のあとで、<ruby>飲<rt>の</rt></ruby>みに<ruby>行<rt>い</rt></ruby>きませんか。",
+      "en": "Would you like to go for a drink after work?"
+    },
+    {
+      "jp": "<ruby>友達<rt>ともだち</rt></ruby>の<ruby>結婚式<rt>けっこんしき</rt></ruby>に、<ruby>黒<rt>くろ</rt></ruby>か<ruby>紺<rt>こん</rt></ruby>のスーツを<ruby>着<rt>き</rt></ruby>て<ruby>行<rt>い</rt></ruby>きます。",
+      "en": "I'll wear a black or navy suit to my friend's wedding."
+    },
+    {
+      "jp": "これはソースをつけないで、<ruby>何<rt>なに</rt></ruby>もつけないで<ruby>食<rt>た</rt></ruby>べてください。",
+      "en": "Please eat this plain, without any sauce on it."
+    },
+    {
+      "jp": "<ruby>最近<rt>さいきん</rt></ruby>エレベーターに<ruby>乗<rt>の</rt></ruby>らないで、<ruby>階段<rt>かいだん</rt></ruby>を<ruby>使<rt>つか</rt></ruby>っています。",
+      "en": "Lately I've been taking the stairs instead of the elevator."
+    }
+  ],
+  "conversation": {
+    "title": "わたしがしたとおりに、してください (Please do it just the way I did)",
+    "audio": "/Audio/minnahonsatsu2/25.mp3",
+    "lines": [
+      {
+        "role": "クララ",
+        "jp": "<ruby>一度<rt>いちど</rt></ruby><ruby>茶道<rt>さどう</rt></ruby>が<ruby>見<rt>み</rt></ruby>たいんですが……。",
+        "en": "I'd love to see a tea ceremony sometime."
+      },
+      {
+        "role": "木村",
+        "jp": "じゃ、<ruby>来週<rt>らいしゅう</rt></ruby>の<ruby>土曜日<rt>どようび</rt></ruby>、いっしょに<ruby>行<rt>い</rt></ruby>きませんか。",
+        "en": "Then how about we go together next Saturday?"
+      },
+      {
+        "role": "先生",
+        "jp": "<ruby>渡辺<rt>わたなべ</rt></ruby>さん、お<ruby>茶<rt>ちゃ</rt></ruby>をたててください。",
+        "en": "Ms. Watanabe, please make the tea."
+      },
+      {
+        "role": "渡辺",
+        "jp": "クララさん、お<ruby>菓子<rt>かし</rt></ruby>をどうぞ。",
+        "en": "Klara, please have a sweet."
+      },
+      {
+        "role": "クララ",
+        "jp": "えっ、<ruby>先<rt>さき</rt></ruby>にお<ruby>菓子<rt>かし</rt></ruby>を<ruby>食<rt>た</rt></ruby>べるんですか。",
+        "en": "Oh, do we eat the sweet first?"
+      },
+      {
+        "role": "渡辺",
+        "jp": "ええ。<ruby>甘<rt>あま</rt></ruby>いお<ruby>菓子<rt>かし</rt></ruby>を<ruby>食<rt>た</rt></ruby>べたあとで、お<ruby>茶<rt>ちゃ</rt></ruby>を<ruby>飲<rt>の</rt></ruby>むと、おいしいんですよ。",
+        "en": "Yes. The tea tastes especially good after you've had a sweet one first."
+      },
+      {
+        "role": "クララ",
+        "jp": "そうですか。",
+        "en": "I see."
+      },
+      {
+        "role": "渡辺",
+        "jp": "では、お<ruby>茶<rt>ちゃ</rt></ruby>を<ruby>飲<rt>の</rt></ruby>みましょう。まず<ruby>右手<rt>みぎて</rt></ruby>でおちゃわんを<ruby>取<rt>と</rt></ruby>って、<ruby>左手<rt>ひだりて</rt></ruby>に<ruby>載<rt>の</rt></ruby>せます。<ruby>次<rt>つぎ</rt></ruby>におちゃわんを<ruby>二回<rt>にかい</rt></ruby><ruby>回<rt>まわ</rt></ruby>して、それから<ruby>飲<rt>の</rt></ruby>みます。",
+        "en": "Now, let's drink the tea. First, take the bowl with your right hand and rest it on your left hand. Next, turn the bowl twice, and then drink."
+      },
+      {
+        "role": "クララ",
+        "jp": "はい。",
+        "en": "All right."
+      },
+      {
+        "role": "渡辺",
+        "jp": "じゃ、わたしがするとおりに、してくださいね。",
+        "en": "So, please do it just the way I do."
+      },
+      {
+        "role": "クララ",
+        "jp": "これでいいですか。",
+        "en": "Is this all right?"
+      },
+      {
+        "role": "渡辺",
+        "jp": "はい。いかがですか。",
+        "en": "Yes. How is it?"
+      },
+      {
+        "role": "クララ",
+        "jp": "<ruby>少<rt>すこ</rt></ruby>し<ruby>苦<rt>にが</rt></ruby>いですが、おいしいです。",
+        "en": "It's a little bitter, but delicious."
+      }
+    ]
+  }
+}

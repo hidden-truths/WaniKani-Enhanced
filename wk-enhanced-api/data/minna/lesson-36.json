@@ -1,0 +1,990 @@
+{
+  "lesson": 36,
+  "title": "Lesson 36",
+  "theme": "Expressing purpose, change, and effort with 〜ように: 〜ように、〜 (so that / in order to), 〜ようになる (come to be able to / a gradual change), and 〜ようにする (make an effort / try to habitually)",
+  "source": {
+    "name": "vnjpclub.com",
+    "vocabUrl": "https://www.vnjpclub.com/en/minna-no-nihongo/lesson-36-vocabulary.html",
+    "grammarUrl": "https://www.vnjpclub.com/en/minna-no-nihongo/lesson-36-grammar.html",
+    "note": "Vocabulary, native-speaker audio, and example sentences aggregated from vnjpclub.com (Minna no Nihongo 第2版). For personal study."
+  },
+  "vocab": [
+    {
+      "key": "mnn:36:0",
+      "kana": "あいます",
+      "kanji": "遭います",
+      "context": "事故に〜",
+      "mean": "to meet with, encounter (an accident)",
+      "cat": "verb",
+      "type": "godan",
+      "trans": "i",
+      "dict": "遭う",
+      "dictRead": "あう",
+      "audio": "/Audio/minnamoi/bai36/00010110100011110.mp3",
+      "levels": {
+        "N5": [
+          "<ruby>事故<rt>じこ</rt></ruby>に<ruby>遭<rt>あ</rt></ruby>いました。",
+          "I was in an accident."
+        ],
+        "N4": [
+          "<ruby>交通<rt>こうつう</rt></ruby><ruby>事故<rt>じこ</rt></ruby>に<ruby>遭<rt>あ</rt></ruby>って、<ruby>入院<rt>にゅういん</rt></ruby>しました。",
+          "I was in a traffic accident and was hospitalized."
+        ],
+        "N3": [
+          "<ruby>旅行<rt>りょこう</rt></ruby><ruby>中<rt>ちゅう</rt></ruby>に<ruby>事故<rt>じこ</rt></ruby>に<ruby>遭<rt>あ</rt></ruby>わないように、<ruby>気<rt>き</rt></ruby>をつけています。",
+          "I'm being careful so that I don't get in an accident during the trip."
+        ],
+        "N2": [
+          "<ruby>思<rt>おも</rt></ruby>いがけない<ruby>災難<rt>さいなん</rt></ruby>に<ruby>遭<rt>あ</rt></ruby>ったものの、<ruby>家族<rt>かぞく</rt></ruby>は<ruby>皆<rt>みな</rt></ruby><ruby>無事<rt>ぶじ</rt></ruby>だった。",
+          "Although we met with an unexpected calamity, the whole family was safe."
+        ],
+        "N1": [
+          "どんなに<ruby>用心<rt>ようじん</rt></ruby>していても、<ruby>不慮<rt>ふりょ</rt></ruby>の<ruby>事故<rt>じこ</rt></ruby>に<ruby>遭<rt>あ</rt></ruby>う<ruby>可能性<rt>かのうせい</rt></ruby>を<ruby>完全<rt>かんぜん</rt></ruby>に<ruby>排除<rt>はいじょ</rt></ruby>することはできない。",
+          "No matter how careful one is, it is impossible to completely eliminate the possibility of meeting with an unforeseen accident."
+        ]
+      },
+      "mnem": "<b>あう</b> sounds like 'ow!' — you meet with an accident and cry 'ow.' 事故に<b>遭う</b>.",
+      "tip": "遭う (godan, intransitive) is for meeting with something BAD (事故・災難に遭う); the event takes に. Don't confuse it with 会う (to meet a person) — same reading あう, different kanji.",
+      "accent": 1
+    },
+    {
+      "key": "mnn:36:1",
+      "kana": "ちょきんします",
+      "kanji": "貯金します",
+      "context": "",
+      "mean": "to save money, deposit money",
+      "cat": "verb",
+      "type": "irregular",
+      "trans": "t",
+      "dict": "貯金する",
+      "dictRead": "ちょきんする",
+      "audio": "/Audio/minnamoi/bai36/00010110100011111.mp3",
+      "levels": {
+        "N5": [
+          "<ruby>毎月<rt>まいつき</rt></ruby>お<ruby>金<rt>かね</rt></ruby>を<ruby>貯金<rt>ちょきん</rt></ruby>します。",
+          "I save money every month."
+        ],
+        "N4": [
+          "<ruby>車<rt>くるま</rt></ruby>を<ruby>買<rt>か</rt></ruby>いたいから、<ruby>貯金<rt>ちょきん</rt></ruby>しています。",
+          "I'm saving money because I want to buy a car."
+        ],
+        "N3": [
+          "<ruby>年<rt>とし</rt></ruby>を<ruby>取<rt>と</rt></ruby>ってから<ruby>困<rt>こま</rt></ruby>らないように、<ruby>少<rt>すこ</rt></ruby>しずつ<ruby>貯金<rt>ちょきん</rt></ruby>するようにしています。",
+          "I make a point of saving a little at a time so I won't have trouble when I get old."
+        ],
+        "N2": [
+          "<ruby>収入<rt>しゅうにゅう</rt></ruby>が<ruby>少<rt>すく</rt></ruby>ないものの、<ruby>将来<rt>しょうらい</rt></ruby>のために<ruby>貯金<rt>ちょきん</rt></ruby>せざるを<ruby>得<rt>え</rt></ruby>ない。",
+          "Although my income is small, I have no choice but to save for the future."
+        ],
+        "N1": [
+          "<ruby>老後<rt>ろうご</rt></ruby>の<ruby>不安<rt>ふあん</rt></ruby>から、<ruby>若<rt>わか</rt></ruby>いうちに<ruby>貯金<rt>ちょきん</rt></ruby>しておくに<ruby>越<rt>こ</rt></ruby>したことはないと、<ruby>誰<rt>だれ</rt></ruby>もが<ruby>口<rt>くち</rt></ruby>をそろえて<ruby>言<rt>い</rt></ruby>う。",
+          "Out of anxiety about old age, everyone says in unison that there is nothing better than saving money while you are young."
+        ]
+      },
+      "mnem": "貯 (store up) + 金 (money) — to store up money is <b>貯金する</b>, to save.",
+      "tip": "貯金する is a する-verb; お金を貯金する (transitive). As a noun 貯金 = 'savings.' The plain-verb equivalent is 貯める (ためる, 'to accumulate').",
+      "accent": 0
+    },
+    {
+      "key": "mnn:36:2",
+      "kana": "すぎます",
+      "kanji": "過ぎます",
+      "context": "7時を〜",
+      "mean": "to pass, go past (a point / a time)",
+      "cat": "verb",
+      "type": "ichidan",
+      "trans": "i",
+      "dict": "過ぎる",
+      "dictRead": "すぎる",
+      "audio": "/Audio/minnamoi/bai36/00010110100100000.mp3",
+      "levels": {
+        "N5": [
+          "もう7<ruby>時<rt>じ</rt></ruby>を<ruby>過<rt>す</rt></ruby>ぎました。",
+          "It's already past 7 o'clock."
+        ],
+        "N4": [
+          "<ruby>電車<rt>でんしゃ</rt></ruby>が<ruby>駅<rt>えき</rt></ruby>を<ruby>過<rt>す</rt></ruby>ぎてから、<ruby>寝<rt>ね</rt></ruby>てしまいました。",
+          "After the train passed the station, I fell asleep."
+        ],
+        "N3": [
+          "<ruby>約束<rt>やくそく</rt></ruby>の<ruby>時間<rt>じかん</rt></ruby>を<ruby>過<rt>す</rt></ruby>ぎても<ruby>彼<rt>かれ</rt></ruby>が<ruby>来<rt>こ</rt></ruby>ないので、<ruby>心配<rt>しんぱい</rt></ruby>になった。",
+          "He didn't come even after the appointed time had passed, so I got worried."
+        ],
+        "N2": [
+          "<ruby>締<rt>し</rt></ruby>め<ruby>切<rt>き</rt></ruby>りを<ruby>過<rt>す</rt></ruby>ぎたからには、<ruby>今更<rt>いまさら</rt></ruby><ruby>言<rt>い</rt></ruby>い<ruby>訳<rt>わけ</rt></ruby>をしても<ruby>始<rt>はじ</rt></ruby>まらない。",
+          "Now that the deadline has passed, there's no point making excuses at this late stage."
+        ],
+        "N1": [
+          "<ruby>全盛期<rt>ぜんせいき</rt></ruby>を<ruby>過<rt>す</rt></ruby>ぎたとはいえ、<ruby>彼<rt>かれ</rt></ruby>の<ruby>技術<rt>ぎじゅつ</rt></ruby>は<ruby>依然<rt>いぜん</rt></ruby>として<ruby>他<rt>た</rt></ruby>の<ruby>追随<rt>ついずい</rt></ruby>を<ruby>許<rt>ゆる</rt></ruby>さない。",
+          "Though he is past his prime, his skill still remains beyond the reach of any rival."
+        ]
+      },
+      "mnem": "過 carries the road radical (辶) — a time or a point on the road goes PAST you: <b>過ぎる</b> = to pass.",
+      "tip": "In 〜を過ぎる (7時を過ぎる, 駅を過ぎる) 過ぎる is intransitive but marks the point passed with を; 時間が過ぎる (が) = time elapses. As a suffix 〜すぎる means 'too much' (食べすぎる).",
+      "accent": 2
+    },
+    {
+      "key": "mnn:36:3",
+      "kana": "なれます",
+      "kanji": "慣れます",
+      "context": "習慣に〜",
+      "mean": "to get used to, become accustomed to (a custom / habit)",
+      "cat": "verb",
+      "type": "ichidan",
+      "trans": "i",
+      "dict": "慣れる",
+      "dictRead": "なれる",
+      "audio": "/Audio/minnamoi/bai36/00010110100100001.mp3",
+      "levels": {
+        "N5": [
+          "<ruby>新<rt>あたら</rt></ruby>しい<ruby>仕事<rt>しごと</rt></ruby>に<ruby>慣<rt>な</rt></ruby>れました。",
+          "I've gotten used to my new job."
+        ],
+        "N4": [
+          "<ruby>日本<rt>にほん</rt></ruby>の<ruby>生活<rt>せいかつ</rt></ruby>に<ruby>慣<rt>な</rt></ruby>れて、<ruby>毎日<rt>まいにち</rt></ruby>が<ruby>楽<rt>たの</rt></ruby>しくなりました。",
+          "I've gotten used to life in Japan, and every day has become fun."
+        ],
+        "N3": [
+          "<ruby>早<rt>はや</rt></ruby>く<ruby>環境<rt>かんきょう</rt></ruby>に<ruby>慣<rt>な</rt></ruby>れるように、できるだけ<ruby>人<rt>ひと</rt></ruby>と<ruby>話<rt>はな</rt></ruby>すようにしています。",
+          "So that I can get used to my surroundings quickly, I try to talk with people as much as possible."
+        ],
+        "N2": [
+          "<ruby>都会<rt>とかい</rt></ruby>の<ruby>暮<rt>く</rt></ruby>らしに<ruby>慣<rt>な</rt></ruby>れたものの、<ruby>故郷<rt>こきょう</rt></ruby>の<ruby>静<rt>しず</rt></ruby>けさが<ruby>恋<rt>こい</rt></ruby>しくなることもある。",
+          "Although I've gotten used to city life, there are times I long for the quiet of my hometown."
+        ],
+        "N1": [
+          "どんな<ruby>過酷<rt>かこく</rt></ruby>な<ruby>労働<rt>ろうどう</rt></ruby><ruby>環境<rt>かんきょう</rt></ruby>であれ、<ruby>人<rt>ひと</rt></ruby>は<ruby>次第<rt>しだい</rt></ruby>にそれに<ruby>慣<rt>な</rt></ruby>れてしまうものだが、それが<ruby>必<rt>かなら</rt></ruby>ずしも<ruby>良<rt>よ</rt></ruby>いこととは<ruby>限<rt>かぎ</rt></ruby>らない。",
+          "However harsh the working conditions, people gradually grow accustomed to them — but that is not necessarily a good thing."
+        ]
+      },
+      "mnem": "'nareru' — a NARrow groove gets worn in, so you get used to it: <b>慣れる</b>.",
+      "tip": "慣れる (ichidan, intransitive) — the thing you get used to takes に (仕事に慣れる). Don't confuse it with 慣らす (transitive, 'to accustom') or the potential なれる of なる.",
+      "accent": 2
+    },
+    {
+      "key": "mnn:36:4",
+      "kana": "くさります",
+      "kanji": "腐ります",
+      "context": "食べ物が〜",
+      "mean": "to rot, go bad, spoil (of food)",
+      "cat": "verb",
+      "type": "godan",
+      "trans": "i",
+      "dict": "腐る",
+      "dictRead": "くさる",
+      "audio": "/Audio/minnamoi/bai36/00010110100100010.mp3",
+      "levels": {
+        "N5": [
+          "この<ruby>魚<rt>さかな</rt></ruby>は<ruby>腐<rt>くさ</rt></ruby>っています。",
+          "This fish is rotten."
+        ],
+        "N4": [
+          "<ruby>暑<rt>あつ</rt></ruby>いので、<ruby>食<rt>た</rt></ruby>べ<ruby>物<rt>もの</rt></ruby>がすぐ<ruby>腐<rt>くさ</rt></ruby>ってしまいます。",
+          "Because it's hot, food goes bad right away."
+        ],
+        "N3": [
+          "<ruby>食<rt>た</rt></ruby>べ<ruby>物<rt>もの</rt></ruby>が<ruby>腐<rt>くさ</rt></ruby>らないように、<ruby>冷蔵庫<rt>れいぞうこ</rt></ruby>に<ruby>入<rt>い</rt></ruby>れておいてください。",
+          "Please put the food in the fridge so it doesn't spoil."
+        ],
+        "N2": [
+          "<ruby>牛乳<rt>ぎゅうにゅう</rt></ruby>が<ruby>腐<rt>くさ</rt></ruby>っていたにもかかわらず、<ruby>彼<rt>かれ</rt></ruby>は<ruby>気<rt>き</rt></ruby>づかずに<ruby>飲<rt>の</rt></ruby>んでしまった。",
+          "Despite the milk being spoiled, he drank it without noticing."
+        ],
+        "N1": [
+          "どんなに<ruby>新鮮<rt>しんせん</rt></ruby>な<ruby>食材<rt>しょくざい</rt></ruby>でも、<ruby>放置<rt>ほうち</rt></ruby>すれば<ruby>腐<rt>くさ</rt></ruby>るのは<ruby>道理<rt>どうり</rt></ruby>であり、<ruby>鮮度<rt>せんど</rt></ruby>の<ruby>管理<rt>かんり</rt></ruby>こそが<ruby>料理<rt>りょうり</rt></ruby>の<ruby>要<rt>かなめ</rt></ruby>だ。",
+          "However fresh the ingredients, it stands to reason that they rot if left alone; managing freshness is the very heart of cooking."
+        ]
+      },
+      "mnem": "'kusaru' — rotten food gives off a <b>くさ</b>い (臭い, smelly) reek: <b>腐る</b> = to rot.",
+      "tip": "腐る (godan, intransitive) — the food that rots takes が (食べ物が腐る). Figuratively 腐る can also mean 'to feel demoralized.' The related noun 腐敗 (ふはい) = 'decay / corruption.'",
+      "accent": 2
+    },
+    {
+      "key": "mnn:36:5",
+      "kana": "けんどう",
+      "kanji": "剣道",
+      "context": "",
+      "mean": "kendo (Japanese fencing)",
+      "cat": "noun",
+      "type": "",
+      "trans": "",
+      "dict": "剣道",
+      "dictRead": "けんどう",
+      "audio": "/Audio/minnamoi/bai36/00010110100100011.mp3",
+      "levels": {
+        "N5": [
+          "<ruby>剣道<rt>けんどう</rt></ruby>を<ruby>習<rt>なら</rt></ruby>っています。",
+          "I'm learning kendo."
+        ],
+        "N4": [
+          "<ruby>子<rt>こ</rt></ruby>どものとき、<ruby>剣道<rt>けんどう</rt></ruby>を<ruby>練習<rt>れんしゅう</rt></ruby>していました。",
+          "When I was a child, I used to practice kendo."
+        ],
+        "N3": [
+          "<ruby>試合<rt>しあい</rt></ruby>に<ruby>出<rt>で</rt></ruby>られるように、<ruby>毎日<rt>まいにち</rt></ruby><ruby>剣道<rt>けんどう</rt></ruby>の<ruby>稽古<rt>けいこ</rt></ruby>をしています。",
+          "I practice kendo every day so that I can take part in the matches."
+        ],
+        "N2": [
+          "<ruby>剣道<rt>けんどう</rt></ruby>は<ruby>単<rt>たん</rt></ruby>なるスポーツというより、<ruby>心<rt>こころ</rt></ruby>を<ruby>鍛<rt>きた</rt></ruby>える<ruby>修行<rt>しゅぎょう</rt></ruby>にほかならない。",
+          "Kendo is nothing less than a discipline for training the mind, rather than a mere sport."
+        ],
+        "N1": [
+          "<ruby>剣道<rt>けんどう</rt></ruby>の<ruby>神髄<rt>しんずい</rt></ruby>は、<ruby>技<rt>わざ</rt></ruby>の<ruby>巧<rt>たく</rt></ruby>みさもさることながら、<ruby>相手<rt>あいて</rt></ruby>への<ruby>礼<rt>れい</rt></ruby>を<ruby>重<rt>おも</rt></ruby>んじる<ruby>精神<rt>せいしん</rt></ruby>にこそあると<ruby>言<rt>い</rt></ruby>われる。",
+          "The essence of kendo is said to lie not so much in the skill of technique as in the spirit of valuing respect toward one's opponent."
+        ]
+      },
+      "mnem": "剣 (sword) + 道 (way) — 'the way of the sword' is <b>剣道</b>, Japanese fencing.",
+      "tip": "剣道 is fencing with bamboo swords (竹刀); part of the 〜道 family (柔道・書道・茶道) meaning a disciplined 'way.' Don't misread 剣 as つるぎ here.",
+      "accent": 1
+    },
+    {
+      "key": "mnn:36:6",
+      "kana": "じゅうどう",
+      "kanji": "柔道",
+      "context": "",
+      "mean": "judo",
+      "cat": "noun",
+      "type": "",
+      "trans": "",
+      "dict": "柔道",
+      "dictRead": "じゅうどう",
+      "audio": "/Audio/minnamoi/bai36/00010110100100100.mp3",
+      "levels": {
+        "N5": [
+          "<ruby>柔道<rt>じゅうどう</rt></ruby>が<ruby>好<rt>す</rt></ruby>きです。",
+          "I like judo."
+        ],
+        "N4": [
+          "<ruby>兄<rt>あに</rt></ruby>は<ruby>柔道<rt>じゅうどう</rt></ruby>が<ruby>強<rt>つよ</rt></ruby>いです。",
+          "My older brother is strong at judo."
+        ],
+        "N3": [
+          "<ruby>黒帯<rt>くろおび</rt></ruby>を<ruby>取<rt>と</rt></ruby>れるように、<ruby>柔道<rt>じゅうどう</rt></ruby>を<ruby>頑張<rt>がんば</rt></ruby>っています。",
+          "I'm working hard at judo so that I can get a black belt."
+        ],
+        "N2": [
+          "<ruby>柔道<rt>じゅうどう</rt></ruby>は<ruby>今<rt>いま</rt></ruby>や<ruby>世界中<rt>せかいじゅう</rt></ruby>で<ruby>親<rt>した</rt></ruby>しまれており、オリンピック<ruby>種目<rt>しゅもく</rt></ruby>にもなっている。",
+          "Judo is now beloved all over the world and has even become an Olympic event."
+        ],
+        "N1": [
+          "<ruby>柔道<rt>じゅうどう</rt></ruby>における「<ruby>柔<rt>じゅう</rt></ruby>よく<ruby>剛<rt>ごう</rt></ruby>を<ruby>制<rt>せい</rt></ruby>す」という<ruby>理念<rt>りねん</rt></ruby>は、<ruby>力<rt>ちから</rt></ruby>に<ruby>頼<rt>たよ</rt></ruby>らぬ<ruby>知<rt>ち</rt></ruby>と<ruby>技<rt>わざ</rt></ruby>の<ruby>奥深<rt>おくぶか</rt></ruby>さを<ruby>物語<rt>ものがた</rt></ruby>っている。",
+          "The judo principle that 'the soft controls the hard' testifies to the profundity of wit and technique that does not rely on brute force."
+        ]
+      },
+      "mnem": "柔 (soft / gentle) + 道 (way) — 'the gentle way' is <b>柔道</b>, judo.",
+      "tip": "柔道: the 柔 here reads じゅう ('soft'); another 〜道 discipline. It is the same 柔 as in 柔らかい (やわらかい, 'soft').",
+      "accent": 1
+    },
+    {
+      "key": "mnn:36:7",
+      "kana": "ラッシュ",
+      "kanji": "",
+      "context": "",
+      "mean": "rush hour",
+      "cat": "noun",
+      "type": "",
+      "trans": "",
+      "dict": "ラッシュ",
+      "dictRead": "ラッシュ",
+      "audio": "/Audio/minnamoi/bai36/00010110100100101.mp3",
+      "levels": {
+        "N5": [
+          "<ruby>朝<rt>あさ</rt></ruby>のラッシュは<ruby>大変<rt>たいへん</rt></ruby>です。",
+          "The morning rush is tough."
+        ],
+        "N4": [
+          "ラッシュのとき、<ruby>電車<rt>でんしゃ</rt></ruby>はとても<ruby>込<rt>こ</rt></ruby>みます。",
+          "During rush hour, the trains get very crowded."
+        ],
+        "N3": [
+          "ラッシュに<ruby>遭<rt>あ</rt></ruby>わないように、<ruby>早<rt>はや</rt></ruby>めに<ruby>家<rt>いえ</rt></ruby>を<ruby>出<rt>で</rt></ruby>るようにしています。",
+          "So that I don't hit the rush, I make a point of leaving home early."
+        ],
+        "N2": [
+          "<ruby>都心<rt>としん</rt></ruby>のラッシュは<ruby>想像<rt>そうぞう</rt></ruby>を<ruby>絶<rt>ぜっ</rt></ruby>する<ruby>混<rt>こ</rt></ruby>み<ruby>具合<rt>ぐあい</rt></ruby>で、<ruby>慣<rt>な</rt></ruby>れない<ruby>人<rt>ひと</rt></ruby>には<ruby>耐<rt>た</rt></ruby>え<ruby>難<rt>がた</rt></ruby>い。",
+          "The rush hour in the city center is crowded beyond imagination, unbearable for those not used to it."
+        ],
+        "N1": [
+          "<ruby>通勤<rt>つうきん</rt></ruby>ラッシュの<ruby>緩和<rt>かんわ</rt></ruby>は、<ruby>長年<rt>ながねん</rt></ruby><ruby>都市<rt>とし</rt></ruby><ruby>行政<rt>ぎょうせい</rt></ruby>が<ruby>取<rt>と</rt></ruby>り<ruby>組<rt>く</rt></ruby>んできたにもかかわらず、<ruby>抜本的<rt>ばっぽんてき</rt></ruby>な<ruby>解決<rt>かいけつ</rt></ruby>には<ruby>至<rt>いた</rt></ruby>っていない。",
+          "Easing the commuter rush is something urban administration has tackled for years, yet it has not reached a fundamental solution."
+        ]
+      },
+      "mnem": "ラッシュ is English 'rush' in katakana — the rush-hour crush.",
+      "tip": "ラッシュ (from 'rush') means 'rush hour'; often ラッシュアワー in full, and 通勤ラッシュ = 'commuter rush.'",
+      "accent": 1
+    },
+    {
+      "key": "mnn:36:8",
+      "kana": "うちゅう",
+      "kanji": "宇宙",
+      "context": "",
+      "mean": "space, the universe, the cosmos",
+      "cat": "noun",
+      "type": "",
+      "trans": "",
+      "dict": "宇宙",
+      "dictRead": "うちゅう",
+      "audio": "/Audio/minnamoi/bai36/00010110100100110.mp3",
+      "levels": {
+        "N5": [
+          "<ruby>宇宙<rt>うちゅう</rt></ruby>は<ruby>広<rt>ひろ</rt></ruby>いです。",
+          "The universe is vast."
+        ],
+        "N4": [
+          "<ruby>子<rt>こ</rt></ruby>どものとき、<ruby>宇宙<rt>うちゅう</rt></ruby>へ<ruby>行<rt>い</rt></ruby>きたいと<ruby>思<rt>おも</rt></ruby>っていました。",
+          "When I was a child, I wanted to go to space."
+        ],
+        "N3": [
+          "<ruby>昔<rt>むかし</rt></ruby>はだれも<ruby>宇宙<rt>うちゅう</rt></ruby>へ<ruby>行<rt>い</rt></ruby>けませんでしたが、<ruby>今<rt>いま</rt></ruby>は<ruby>行<rt>い</rt></ruby>けるようになりました。",
+          "In the past no one could go into space, but now it has become possible."
+        ],
+        "N2": [
+          "<ruby>宇宙<rt>うちゅう</rt></ruby>の<ruby>謎<rt>なぞ</rt></ruby>を<ruby>解<rt>と</rt></ruby>き<ruby>明<rt>あ</rt></ruby>かそうと、<ruby>各国<rt>かっこく</rt></ruby>が<ruby>巨額<rt>きょがく</rt></ruby>の<ruby>費用<rt>ひよう</rt></ruby>を<ruby>投<rt>とう</rt></ruby>じている。",
+          "Seeking to unravel the mysteries of the universe, countries are pouring huge sums of money into it."
+        ],
+        "N1": [
+          "<ruby>宇宙<rt>うちゅう</rt></ruby>の<ruby>果<rt>は</rt></ruby>てがどうなっているのかという<ruby>問<rt>と</rt></ruby>いは、<ruby>人類<rt>じんるい</rt></ruby>の<ruby>知性<rt>ちせい</rt></ruby>をもってしても、いまだ<ruby>答<rt>こた</rt></ruby>えの<ruby>出<rt>で</rt></ruby>ない<ruby>難問<rt>なんもん</rt></ruby>である。",
+          "The question of what lies at the edge of the universe remains, even with all of humanity's intellect, an unanswered conundrum."
+        ]
+      },
+      "mnem": "宇 and 宙 both point to the vast expanse of the heavens — together <b>宇宙</b>, the universe / outer space.",
+      "tip": "宇宙 (うちゅう) covers both 'outer space' and 'the universe / cosmos.' 宇宙人 = alien; 宇宙飛行士 = astronaut.",
+      "accent": 1
+    },
+    {
+      "key": "mnn:36:9",
+      "kana": "きょく",
+      "kanji": "曲",
+      "context": "",
+      "mean": "a piece of music, a tune",
+      "cat": "noun",
+      "type": "",
+      "trans": "",
+      "dict": "曲",
+      "dictRead": "きょく",
+      "audio": "/Audio/minnamoi/bai36/00010110100100111.mp3",
+      "levels": {
+        "N5": [
+          "この<ruby>曲<rt>きょく</rt></ruby>が<ruby>好<rt>す</rt></ruby>きです。",
+          "I like this song."
+        ],
+        "N4": [
+          "<ruby>友<rt>とも</rt></ruby>だちにこの<ruby>曲<rt>きょく</rt></ruby>を<ruby>教<rt>おし</rt></ruby>えてもらいました。",
+          "A friend introduced me to this piece."
+        ],
+        "N3": [
+          "ショパンの<ruby>曲<rt>きょく</rt></ruby>が<ruby>弾<rt>ひ</rt></ruby>けるように、<ruby>毎日<rt>まいにち</rt></ruby>ピアノを<ruby>練習<rt>れんしゅう</rt></ruby>しています。",
+          "I practice the piano every day so that I can play Chopin's pieces."
+        ],
+        "N2": [
+          "この<ruby>曲<rt>きょく</rt></ruby>を<ruby>聞<rt>き</rt></ruby>くたびに、<ruby>学生<rt>がくせい</rt></ruby><ruby>時代<rt>じだい</rt></ruby>の<ruby>思<rt>おも</rt></ruby>い<ruby>出<rt>で</rt></ruby>がよみがえってくる。",
+          "Every time I hear this piece, memories of my student days come flooding back."
+        ],
+        "N1": [
+          "<ruby>名曲<rt>めいきょく</rt></ruby>と<ruby>呼<rt>よ</rt></ruby>ばれる<ruby>曲<rt>きょく</rt></ruby>には、<ruby>時代<rt>じだい</rt></ruby>や<ruby>国境<rt>こっきょう</rt></ruby>を<ruby>越<rt>こ</rt></ruby>えて<ruby>人<rt>ひと</rt></ruby>の<ruby>心<rt>こころ</rt></ruby>を<ruby>打<rt>う</rt></ruby>つ<ruby>普遍的<rt>ふへんてき</rt></ruby>な<ruby>力<rt>ちから</rt></ruby>が<ruby>宿<rt>やど</rt></ruby>っている。",
+          "In pieces called masterpieces there dwells a universal power that moves the human heart across eras and borders."
+        ]
+      },
+      "mnem": "曲 pictures a bent, curving shape — a melody's curving line; a <b>曲</b> is a musical piece.",
+      "tip": "曲 (きょく) names and counts pieces of music; the counter is 〜曲 (いっきょく). Read まがる/まげる the same kanji means 'to bend.' 作曲 (さっきょく) = to compose.",
+      "accent": 0
+    },
+    {
+      "key": "mnn:36:10",
+      "kana": "まいしゅう",
+      "kanji": "毎週",
+      "context": "",
+      "mean": "every week",
+      "cat": "noun",
+      "type": "",
+      "trans": "",
+      "dict": "毎週",
+      "dictRead": "まいしゅう",
+      "audio": "/Audio/minnamoi/bai36/00010110100101000.mp3",
+      "levels": {
+        "N5": [
+          "<ruby>毎週<rt>まいしゅう</rt></ruby><ruby>日曜日<rt>にちようび</rt></ruby>にテニスをします。",
+          "I play tennis every Sunday."
+        ],
+        "N4": [
+          "<ruby>家族<rt>かぞく</rt></ruby>に<ruby>毎週<rt>まいしゅう</rt></ruby><ruby>電話<rt>でんわ</rt></ruby>をかけています。",
+          "I call my family every week."
+        ],
+        "N3": [
+          "<ruby>家族<rt>かぞく</rt></ruby>が<ruby>心配<rt>しんぱい</rt></ruby>しないように、<ruby>毎週<rt>まいしゅう</rt></ruby><ruby>連絡<rt>れんらく</rt></ruby>するようにしています。",
+          "So my family won't worry, I make a point of getting in touch every week."
+        ],
+        "N2": [
+          "<ruby>毎週<rt>まいしゅう</rt></ruby>のように<ruby>残業<rt>ざんぎょう</rt></ruby>が<ruby>続<rt>つづ</rt></ruby>いたものの、どうにか<ruby>体調<rt>たいちょう</rt></ruby>を<ruby>崩<rt>くず</rt></ruby>さずに<ruby>済<rt>す</rt></ruby>んだ。",
+          "Although overtime continued almost every week, I somehow managed not to fall ill."
+        ],
+        "N1": [
+          "<ruby>毎週<rt>まいしゅう</rt></ruby><ruby>欠<rt>か</rt></ruby>かさず<ruby>通<rt>かよ</rt></ruby>い<ruby>続<rt>つづ</rt></ruby>けたその<ruby>努力<rt>どりょく</rt></ruby>があってこそ、<ruby>彼女<rt>かのじょ</rt></ruby>は<ruby>見事<rt>みごと</rt></ruby>な<ruby>成果<rt>せいか</rt></ruby>を<ruby>収<rt>おさ</rt></ruby>めることができた。",
+          "It was precisely because of that effort of attending every week without fail that she was able to achieve such splendid results."
+        ]
+      },
+      "mnem": "毎 (every) + 週 (week) — <b>毎週</b>, every week.",
+      "tip": "毎週 (まいしゅう) = 'every week'; part of the 毎〜 family (毎日・毎月・毎年). Adverbial — used without に (毎週行きます).",
+      "accent": 0
+    },
+    {
+      "key": "mnn:36:11",
+      "kana": "まいつき",
+      "kanji": "毎月",
+      "context": "",
+      "mean": "every month",
+      "cat": "noun",
+      "type": "",
+      "trans": "",
+      "dict": "毎月",
+      "dictRead": "まいつき",
+      "audio": "/Audio/minnamoi/bai36/00010110100101001.mp3",
+      "levels": {
+        "N5": [
+          "<ruby>毎月<rt>まいつき</rt></ruby>お<ruby>金<rt>かね</rt></ruby>を<ruby>貯金<rt>ちょきん</rt></ruby>します。",
+          "I save money every month."
+        ],
+        "N4": [
+          "<ruby>毎月<rt>まいつき</rt></ruby><ruby>一回<rt>いっかい</rt></ruby>、<ruby>母<rt>はは</rt></ruby>に<ruby>会<rt>あ</rt></ruby>いに<ruby>行<rt>い</rt></ruby>きます。",
+          "Once every month, I go to see my mother."
+        ],
+        "N3": [
+          "<ruby>毎月<rt>まいつき</rt></ruby>ちゃんと<ruby>貯金<rt>ちょきん</rt></ruby>できるように、<ruby>家計簿<rt>かけいぼ</rt></ruby>をつけるようにしています。",
+          "So that I can save properly every month, I make a point of keeping a household budget."
+        ],
+        "N2": [
+          "<ruby>毎月<rt>まいつき</rt></ruby>の<ruby>支払<rt>しはら</rt></ruby>いに<ruby>追<rt>お</rt></ruby>われるものの、<ruby>生活<rt>せいかつ</rt></ruby>の<ruby>質<rt>しつ</rt></ruby>だけは<ruby>落<rt>お</rt></ruby>としたくない。",
+          "Although I'm chased by monthly payments, the one thing I don't want to lower is my quality of life."
+        ],
+        "N1": [
+          "<ruby>毎月<rt>まいつき</rt></ruby>わずかな<ruby>額<rt>がく</rt></ruby>であっても<ruby>積<rt>つ</rt></ruby>み<ruby>立<rt>た</rt></ruby>てていけば、やがて<ruby>無視<rt>むし</rt></ruby>できない<ruby>資産<rt>しさん</rt></ruby>へと<ruby>育<rt>そだ</rt></ruby>っていくものだ。",
+          "Even a small sum each month, if set aside steadily, eventually grows into assets that cannot be ignored."
+        ]
+      },
+      "mnem": "毎 (every) + 月 (month) — <b>毎月</b>, every month.",
+      "tip": "毎月 (まいつき; also read まいげつ) = 'every month.' Adverbial, no に. Here 月 is つき ('month'), not がつ.",
+      "accent": 0
+    },
+    {
+      "key": "mnn:36:12",
+      "kana": "まいとし",
+      "kanji": "毎年",
+      "context": "",
+      "mean": "every year (also read まいねん)",
+      "cat": "noun",
+      "type": "",
+      "trans": "",
+      "dict": "毎年",
+      "dictRead": "まいとし",
+      "audio": "/Audio/minnamoi/bai36/00010110100101010.mp3",
+      "levels": {
+        "N5": [
+          "<ruby>毎年<rt>まいとし</rt></ruby><ruby>夏<rt>なつ</rt></ruby>に<ruby>海<rt>うみ</rt></ruby>へ<ruby>行<rt>い</rt></ruby>きます。",
+          "Every year I go to the beach in summer."
+        ],
+        "N4": [
+          "<ruby>毎年<rt>まいとし</rt></ruby><ruby>誕生日<rt>たんじょうび</rt></ruby>に<ruby>写真<rt>しゃしん</rt></ruby>を<ruby>撮<rt>と</rt></ruby>っています。",
+          "Every year I take a photo on my birthday."
+        ],
+        "N3": [
+          "<ruby>毎年<rt>まいとし</rt></ruby><ruby>健康<rt>けんこう</rt></ruby>でいられるように、<ruby>検査<rt>けんさ</rt></ruby>を<ruby>受<rt>う</rt></ruby>けるようにしています。",
+          "So that I can stay healthy every year, I make a point of getting checkups."
+        ],
+        "N2": [
+          "<ruby>毎年<rt>まいとし</rt></ruby>のように<ruby>異常<rt>いじょう</rt></ruby><ruby>気象<rt>きしょう</rt></ruby>が<ruby>報<rt>ほう</rt></ruby>じられるにつけ、<ruby>環境<rt>かんきょう</rt></ruby><ruby>問題<rt>もんだい</rt></ruby>の<ruby>深刻<rt>しんこく</rt></ruby>さを<ruby>痛感<rt>つうかん</rt></ruby>する。",
+          "Whenever abnormal weather is reported, as it is almost every year, I keenly feel the gravity of environmental problems."
+        ],
+        "N1": [
+          "<ruby>毎年<rt>まいとし</rt></ruby><ruby>数<rt>すう</rt></ruby><ruby>万<rt>まん</rt></ruby>もの<ruby>人々<rt>ひとびと</rt></ruby>がこの<ruby>祭<rt>まつ</rt></ruby>りのために<ruby>各地<rt>かくち</rt></ruby>から<ruby>訪<rt>おとず</rt></ruby>れ、<ruby>町<rt>まち</rt></ruby>は<ruby>活気<rt>かっき</rt></ruby>に<ruby>満<rt>み</rt></ruby>ちあふれる。",
+          "Every year tens of thousands of people visit from all over for this festival, and the town brims with life."
+        ]
+      },
+      "mnem": "毎 (every) + 年 (year) — <b>毎年</b>, every year.",
+      "tip": "毎年 has two readings: まいとし (native) and まいねん (on-reading) — interchangeable. Adverbial, no に.",
+      "accent": 0
+    },
+    {
+      "key": "mnn:36:13",
+      "kana": "このごろ",
+      "kanji": "",
+      "context": "",
+      "mean": "these days, recently, nowadays",
+      "cat": "adverb",
+      "type": "",
+      "trans": "",
+      "dict": "このごろ",
+      "dictRead": "このごろ",
+      "audio": "/Audio/minnamoi/bai36/00010110100101011.mp3",
+      "levels": {
+        "N5": [
+          "このごろ<ruby>寒<rt>さむ</rt></ruby>くなりました。",
+          "It's gotten cold these days."
+        ],
+        "N4": [
+          "このごろ<ruby>忙<rt>いそが</rt></ruby>しくて、<ruby>友<rt>とも</rt></ruby>だちに<ruby>会<rt>あ</rt></ruby>えません。",
+          "These days I'm busy and can't see my friends."
+        ],
+        "N3": [
+          "このごろやっと<ruby>日本語<rt>にほんご</rt></ruby>で<ruby>電話<rt>でんわ</rt></ruby>がかけられるようになりました。",
+          "These days I've finally become able to make phone calls in Japanese."
+        ],
+        "N2": [
+          "このごろの<ruby>若者<rt>わかもの</rt></ruby>は<ruby>本<rt>ほん</rt></ruby>を<ruby>読<rt>よ</rt></ruby>まないと<ruby>言<rt>い</rt></ruby>われるものの、<ruby>実際<rt>じっさい</rt></ruby>はそう<ruby>単純<rt>たんじゅん</rt></ruby>な<ruby>話<rt>はなし</rt></ruby>ではない。",
+          "Although young people these days are said not to read books, in reality it's not such a simple matter."
+        ],
+        "N1": [
+          "このごろ<ruby>物忘<rt>ものわす</rt></ruby>れがひどくなり、<ruby>年<rt>とし</rt></ruby>には<ruby>勝<rt>か</rt></ruby>てないものだと、つくづく<ruby>感<rt>かん</rt></ruby>じるようになった。",
+          "Lately my forgetfulness has grown terrible, and I've come to feel keenly that one simply cannot beat the years."
+        ]
+      },
+      "mnem": "'kono-goro' = この (this) + ごろ (around this time) — <b>このごろ</b>, around now = these days.",
+      "tip": "このごろ = 'these days / recently,' describing an ongoing recent trend; 最近 is a near-synonym. Contrast 今ごろ ('about now / at this late hour').",
+      "accent": 0
+    },
+    {
+      "key": "mnn:36:14",
+      "kana": "やっと",
+      "kanji": "",
+      "context": "",
+      "mean": "finally, at last (after effort or waiting)",
+      "cat": "adverb",
+      "type": "",
+      "trans": "",
+      "dict": "やっと",
+      "dictRead": "やっと",
+      "audio": "/Audio/minnamoi/bai36/00010110100101100.mp3",
+      "levels": {
+        "N5": [
+          "バスがやっと<ruby>来<rt>き</rt></ruby>ました。",
+          "The bus finally came."
+        ],
+        "N4": [
+          "<ruby>宿題<rt>しゅくだい</rt></ruby>がやっと<ruby>終<rt>お</rt></ruby>わりました。",
+          "I've finally finished my homework."
+        ],
+        "N3": [
+          "このごろやっと<ruby>自転車<rt>じてんしゃ</rt></ruby>に<ruby>乗<rt>の</rt></ruby>れるようになりました。",
+          "These days I've finally become able to ride a bicycle."
+        ],
+        "N2": [
+          "<ruby>長<rt>なが</rt></ruby>い<ruby>交渉<rt>こうしょう</rt></ruby>の<ruby>末<rt>すえ</rt></ruby>、やっと<ruby>合意<rt>ごうい</rt></ruby>に<ruby>達<rt>たっ</rt></ruby>することができた。",
+          "After long negotiations, we were finally able to reach an agreement."
+        ],
+        "N1": [
+          "<ruby>幾度<rt>いくど</rt></ruby>となく<ruby>挫折<rt>ざせつ</rt></ruby>を<ruby>繰<rt>く</rt></ruby>り<ruby>返<rt>かえ</rt></ruby>した<ruby>末<rt>すえ</rt></ruby>に、<ruby>彼<rt>かれ</rt></ruby>はやっとのことで<ruby>長年<rt>ながねん</rt></ruby>の<ruby>夢<rt>ゆめ</rt></ruby>を<ruby>実現<rt>じつげん</rt></ruby>させた。",
+          "After repeated setbacks time and again, he finally, with great difficulty, realized his long-cherished dream."
+        ]
+      },
+      "mnem": "'yatto' — you're TAUT with effort and at last it gives: <b>やっと</b>, finally.",
+      "tip": "やっと marks reaching something desired after effort or waiting (positive relief). Contrast とうとう/ついに (which can be positive OR negative). やっとのことで = 'just barely, with great effort.'",
+      "accent": 0
+    },
+    {
+      "key": "mnn:36:15",
+      "kana": "かなり",
+      "kanji": "",
+      "context": "",
+      "mean": "fairly, quite, considerably",
+      "cat": "adverb",
+      "type": "",
+      "trans": "",
+      "dict": "かなり",
+      "dictRead": "かなり",
+      "audio": "/Audio/minnamoi/bai36/00010110100101101.mp3",
+      "levels": {
+        "N5": [
+          "きょうはかなり<ruby>暑<rt>あつ</rt></ruby>いです。",
+          "It's quite hot today."
+        ],
+        "N4": [
+          "<ruby>日本語<rt>にほんご</rt></ruby>がかなり<ruby>上手<rt>じょうず</rt></ruby>になりました。",
+          "My Japanese has gotten fairly good."
+        ],
+        "N3": [
+          "このごろかなり<ruby>日本語<rt>にほんご</rt></ruby>で<ruby>意見<rt>いけん</rt></ruby>が<ruby>言<rt>い</rt></ruby>えるようになりました。",
+          "These days I've become able to express my opinions in Japanese quite well."
+        ],
+        "N2": [
+          "<ruby>準備<rt>じゅんび</rt></ruby>にはかなりの<ruby>時間<rt>じかん</rt></ruby>がかかったものの、その<ruby>甲斐<rt>かい</rt></ruby>あって<ruby>発表<rt>はっぴょう</rt></ruby>は<ruby>成功<rt>せいこう</rt></ruby>した。",
+          "Although the preparation took considerable time, thanks to it the presentation was a success."
+        ],
+        "N1": [
+          "<ruby>専門家<rt>せんもんか</rt></ruby>の<ruby>間<rt>あいだ</rt></ruby>でもかなり<ruby>意見<rt>いけん</rt></ruby>が<ruby>分<rt>わ</rt></ruby>かれており、<ruby>結論<rt>けつろん</rt></ruby>を<ruby>下<rt>くだ</rt></ruby>すのは<ruby>時期尚早<rt>じきしょうそう</rt></ruby>と<ruby>言<rt>い</rt></ruby>わざるを<ruby>得<rt>え</rt></ruby>ない。",
+          "Opinions are considerably divided even among experts, so it must be said that it is premature to draw a conclusion."
+        ]
+      },
+      "mnem": "'kanari' — quite a bit; think 'can-a-lot,' a fair amount: <b>かなり</b>.",
+      "tip": "かなり = 'fairly / considerably,' a mid-high degree (more than 少し, less than 非常に). It modifies adjectives (かなり暑い) and takes の before a noun (かなりの時間).",
+      "accent": 1
+    },
+    {
+      "key": "mnn:36:16",
+      "kana": "かならず",
+      "kanji": "必ず",
+      "context": "",
+      "mean": "without fail, certainly, always",
+      "cat": "adverb",
+      "type": "",
+      "trans": "",
+      "dict": "必ず",
+      "dictRead": "かならず",
+      "audio": "/Audio/minnamoi/bai36/00010110100101110.mp3",
+      "levels": {
+        "N5": [
+          "<ruby>明日<rt>あした</rt></ruby>は<ruby>必<rt>かなら</rt></ruby>ず<ruby>来<rt>き</rt></ruby>てください。",
+          "Please be sure to come tomorrow."
+        ],
+        "N4": [
+          "<ruby>友<rt>とも</rt></ruby>だちのうちに<ruby>泊<rt>と</rt></ruby>まるときは、<ruby>必<rt>かなら</rt></ruby>ず<ruby>家<rt>いえ</rt></ruby>に<ruby>連絡<rt>れんらく</rt></ruby>します。",
+          "When I stay at a friend's place, I always contact home."
+        ],
+        "N3": [
+          "<ruby>約束<rt>やくそく</rt></ruby>を<ruby>忘<rt>わす</rt></ruby>れないように、<ruby>必<rt>かなら</rt></ruby>ずメモするようにしています。",
+          "So I won't forget appointments, I make a point of always writing them down."
+        ],
+        "N2": [
+          "どんなに<ruby>困難<rt>こんなん</rt></ruby>でも、<ruby>努力<rt>どりょく</rt></ruby>すれば<ruby>必<rt>かなら</rt></ruby>ず<ruby>報<rt>むく</rt></ruby>われるとは<ruby>限<rt>かぎ</rt></ruby>らない。",
+          "However difficult, it is not necessarily the case that effort will always be rewarded."
+        ],
+        "N1": [
+          "<ruby>規則<rt>きそく</rt></ruby>は<ruby>必<rt>かなら</rt></ruby>ずしも<ruby>合理的<rt>ごうりてき</rt></ruby>とは<ruby>言<rt>い</rt></ruby>えないが、<ruby>秩序<rt>ちつじょ</rt></ruby>を<ruby>保<rt>たも</rt></ruby>つ<ruby>上<rt>うえ</rt></ruby>で<ruby>欠<rt>か</rt></ruby>かせない<ruby>役割<rt>やくわり</rt></ruby>を<ruby>果<rt>は</rt></ruby>たしている。",
+          "Rules are not necessarily rational, but they play an indispensable role in maintaining order."
+        ]
+      },
+      "mnem": "必 looks like a heart (心) with a stroke driven through it — set your heart on it and it 必ず (certainly) happens.",
+      "tip": "必ず = 'without fail, certainly' (100%). 必ずしも〜ない = 'not necessarily.' Contrast きっと (a confident guess, not a guarantee) and ぜひ (an eager wish, used with requests).",
+      "accent": 0
+    },
+    {
+      "key": "mnn:36:17",
+      "kana": "ぜったいに",
+      "kanji": "絶対に",
+      "context": "",
+      "mean": "absolutely, definitely, (with negative) never",
+      "cat": "adverb",
+      "type": "",
+      "trans": "",
+      "dict": "絶対に",
+      "dictRead": "ぜったいに",
+      "audio": "/Audio/minnamoi/bai36/00010110100101111.mp3",
+      "levels": {
+        "N5": [
+          "<ruby>絶対<rt>ぜったい</rt></ruby>に<ruby>遅<rt>おく</rt></ruby>れないでください。",
+          "Please absolutely don't be late."
+        ],
+        "N4": [
+          "パスポートを<ruby>絶対<rt>ぜったい</rt></ruby>になくさないでください。",
+          "Please make sure you absolutely don't lose your passport."
+        ],
+        "N3": [
+          "<ruby>試験<rt>しけん</rt></ruby>に<ruby>絶対<rt>ぜったい</rt></ruby>に<ruby>遅<rt>おく</rt></ruby>れないように、<ruby>早<rt>はや</rt></ruby>めに<ruby>家<rt>いえ</rt></ruby>を<ruby>出<rt>で</rt></ruby>るようにしています。",
+          "So that I'm absolutely never late for the exam, I make a point of leaving home early."
+        ],
+        "N2": [
+          "<ruby>絶対<rt>ぜったい</rt></ruby>に<ruby>成功<rt>せいこう</rt></ruby>するという<ruby>保証<rt>ほしょう</rt></ruby>はないものの、やってみる<ruby>価値<rt>かち</rt></ruby>はある。",
+          "Although there's no guarantee of absolute success, it's worth a try."
+        ],
+        "N1": [
+          "<ruby>絶対<rt>ぜったい</rt></ruby>に<ruby>間違<rt>まちが</rt></ruby>いないと<ruby>言<rt>い</rt></ruby>い<ruby>切<rt>き</rt></ruby>れる<ruby>者<rt>もの</rt></ruby>など、この<ruby>複雑<rt>ふくざつ</rt></ruby>な<ruby>問題<rt>もんだい</rt></ruby>においては<ruby>一人<rt>ひとり</rt></ruby>もいないだろう。",
+          "There is probably not a single person who can assert with absolute certainty that there is no mistake in this complex problem."
+        ]
+      },
+      "mnem": "絶 (cut off) + 対 (opposition) — cut off all opposition, no exceptions: <b>絶対に</b>, absolutely.",
+      "tip": "絶対に = 'absolutely / definitely,' strongest with negatives and prohibitions (絶対に〜ない = 'never'). As a noun 絶対 = 'the absolute.' Slightly more emphatic/emotional than 必ず.",
+      "accent": 0
+    },
+    {
+      "key": "mnn:36:18",
+      "kana": "じょうずに",
+      "kanji": "上手に",
+      "context": "",
+      "mean": "well, skillfully",
+      "cat": "adverb",
+      "type": "",
+      "trans": "",
+      "dict": "上手に",
+      "dictRead": "じょうずに",
+      "audio": "/Audio/minnamoi/bai36/00010110100110000.mp3",
+      "levels": {
+        "N5": [
+          "<ruby>姉<rt>あね</rt></ruby>は<ruby>上手<rt>じょうず</rt></ruby>に<ruby>歌<rt>うた</rt></ruby>います。",
+          "My older sister sings well."
+        ],
+        "N4": [
+          "<ruby>日本語<rt>にほんご</rt></ruby>が<ruby>上手<rt>じょうず</rt></ruby>に<ruby>話<rt>はな</rt></ruby>せるようになりたいです。",
+          "I want to become able to speak Japanese well."
+        ],
+        "N3": [
+          "<ruby>上手<rt>じょうず</rt></ruby>にお<ruby>茶<rt>ちゃ</rt></ruby>がたてられるように、<ruby>毎週<rt>まいしゅう</rt></ruby><ruby>練習<rt>れんしゅう</rt></ruby>しています。",
+          "So that I can whisk tea skillfully, I practice every week."
+        ],
+        "N2": [
+          "<ruby>彼<rt>かれ</rt></ruby>は<ruby>感情<rt>かんじょう</rt></ruby>を<ruby>上手<rt>じょうず</rt></ruby>に<ruby>隠<rt>かく</rt></ruby>していたものの、<ruby>声<rt>こえ</rt></ruby>の<ruby>震<rt>ふる</rt></ruby>えまでは<ruby>抑<rt>おさ</rt></ruby>えきれなかった。",
+          "Although he skillfully hid his emotions, he couldn't quite suppress the tremor in his voice."
+        ],
+        "N1": [
+          "<ruby>物事<rt>ものごと</rt></ruby>を<ruby>上手<rt>じょうず</rt></ruby>に<ruby>運<rt>はこ</rt></ruby>ぶには、<ruby>能力<rt>のうりょく</rt></ruby>もさることながら、<ruby>周囲<rt>しゅうい</rt></ruby>との<ruby>信頼<rt>しんらい</rt></ruby><ruby>関係<rt>かんけい</rt></ruby>を<ruby>築<rt>きず</rt></ruby>くことが<ruby>何<rt>なに</rt></ruby>より<ruby>肝要<rt>かんよう</rt></ruby>だ。",
+          "To carry things off skillfully, ability matters of course, but building relationships of trust with those around you is above all essential."
+        ]
+      },
+      "mnem": "上 (above) + 手 (hand) — having the 'upper hand' at something is 上手, skilled; <b>上手に</b> = skillfully.",
+      "tip": "上手に is the adverbial (に-)form of the na-adjective 上手(な), 'skilled.' 〜が上手 = 'good at 〜.' Read じょうず here; the same 上手 reads うわて ('upper hand') or かみて ('stage left') elsewhere.",
+      "accent": 3
+    },
+    {
+      "key": "mnn:36:19",
+      "kana": "できるだけ",
+      "kanji": "",
+      "context": "",
+      "mean": "as much as possible, if possible",
+      "cat": "adverb",
+      "type": "",
+      "trans": "",
+      "dict": "できるだけ",
+      "dictRead": "できるだけ",
+      "audio": "/Audio/minnamoi/bai36/00010110100110001.mp3",
+      "levels": {
+        "N5": [
+          "できるだけ<ruby>早<rt>はや</rt></ruby>く<ruby>来<rt>き</rt></ruby>てください。",
+          "Please come as early as possible."
+        ],
+        "N4": [
+          "できるだけ<ruby>毎日<rt>まいにち</rt></ruby><ruby>歩<rt>ある</rt></ruby>くようにしています。",
+          "I try to walk every day as much as I can."
+        ],
+        "N3": [
+          "<ruby>体<rt>からだ</rt></ruby>にいいので、できるだけ<ruby>野菜<rt>やさい</rt></ruby>を<ruby>食<rt>た</rt></ruby>べるようにしています。",
+          "Because it's good for my health, I make a point of eating vegetables as much as possible."
+        ],
+        "N2": [
+          "できるだけ<ruby>本人<rt>ほんにん</rt></ruby>の<ruby>意思<rt>いし</rt></ruby>を<ruby>尊重<rt>そんちょう</rt></ruby>したいものの、<ruby>安全<rt>あんぜん</rt></ruby>を<ruby>優先<rt>ゆうせん</rt></ruby>せざるを<ruby>得<rt>え</rt></ruby>ない<ruby>場合<rt>ばあい</rt></ruby>もある。",
+          "Although we'd like to respect the person's wishes as much as possible, there are cases where safety must take priority."
+        ],
+        "N1": [
+          "できるだけ<ruby>多<rt>おお</rt></ruby>くの<ruby>声<rt>こえ</rt></ruby>に<ruby>耳<rt>みみ</rt></ruby>を<ruby>傾<rt>かたむ</rt></ruby>けたうえで<ruby>決断<rt>けつだん</rt></ruby>を<ruby>下<rt>くだ</rt></ruby>すのが、<ruby>指導者<rt>しどうしゃ</rt></ruby>に<ruby>求<rt>もと</rt></ruby>められる<ruby>姿勢<rt>しせい</rt></ruby>である。",
+          "Making a decision after listening to as many voices as possible is the attitude demanded of a leader."
+        ]
+      },
+      "mnem": "できる (can) + だけ (as much as) — as much as one can do: <b>できるだけ</b>, as much as possible.",
+      "tip": "できるだけ = 'as much as possible / if possible,' modifying a verb or adjective (できるだけ早く). Here 〜だけ means 'to the extent.' A more formal synonym is なるべく.",
+      "accent": 0
+    },
+    {
+      "key": "mnn:36:20",
+      "kana": "ほとんど",
+      "kanji": "",
+      "context": "",
+      "mean": "almost all (affirmative); hardly, scarcely (with negative)",
+      "cat": "adverb",
+      "type": "",
+      "trans": "",
+      "dict": "ほとんど",
+      "dictRead": "ほとんど",
+      "audio": "/Audio/minnamoi/bai36/00010110100110010.mp3",
+      "levels": {
+        "N5": [
+          "<ruby>宿題<rt>しゅくだい</rt></ruby>はほとんど<ruby>終<rt>お</rt></ruby>わりました。",
+          "My homework is almost finished."
+        ],
+        "N4": [
+          "かたかなはほとんど<ruby>書<rt>か</rt></ruby>けるようになりました。",
+          "I've become able to write almost all the katakana."
+        ],
+        "N3": [
+          "<ruby>初<rt>はじ</rt></ruby>めはほとんど<ruby>食<rt>た</rt></ruby>べられませんでしたが、<ruby>今<rt>いま</rt></ruby>は<ruby>何<rt>なん</rt></ruby>でも<ruby>食<rt>た</rt></ruby>べられるようになりました。",
+          "At first I could hardly eat it, but now I've become able to eat anything."
+        ],
+        "N2": [
+          "<ruby>説明<rt>せつめい</rt></ruby>を<ruby>聞<rt>き</rt></ruby>いたものの、<ruby>内容<rt>ないよう</rt></ruby>はほとんど<ruby>理解<rt>りかい</rt></ruby>できなかった。",
+          "Although I listened to the explanation, I could hardly understand the content."
+        ],
+        "N1": [
+          "その<ruby>分野<rt>ぶんや</rt></ruby>においては、<ruby>彼<rt>かれ</rt></ruby>の<ruby>右<rt>みぎ</rt></ruby>に<ruby>出<rt>で</rt></ruby>る<ruby>者<rt>もの</rt></ruby>はほとんど<ruby>皆無<rt>かいむ</rt></ruby>と<ruby>言<rt>い</rt></ruby>っても<ruby>過言<rt>かごん</rt></ruby>ではない。",
+          "In that field, it is no exaggeration to say there is almost no one who can surpass him."
+        ]
+      },
+      "mnem": "'hotondo' — nearly the whole pot is done; <b>ほとんど</b>, almost all of it.",
+      "tip": "ほとんど = 'almost all / mostly' in affirmatives; with a negative it means 'hardly / scarcely' (ほとんど〜ない). ほとんどの + noun = 'most of the 〜.'",
+      "accent": 2
+    },
+    {
+      "key": "mnn:36:21",
+      "kana": "ショパン",
+      "kanji": "",
+      "context": "",
+      "mean": "Chopin (Polish composer, 1810–49)",
+      "cat": "noun",
+      "type": "",
+      "trans": "",
+      "dict": "ショパン",
+      "dictRead": "ショパン",
+      "audio": "/Audio/minnamoi/bai36/00010110100110011.mp3"
+    }
+  ],
+  "grammar": [
+    {
+      "pattern": "〜ように、… (so that / in order to — purpose)",
+      "structure": "V(可能形／ない形・plain non-volitional)＋ように、… ／ 例: 見えるように・忘れないように・読めるように",
+      "explain": "Attach ように to a plain-form verb that is NON-volitional — a potential (見える, 読める, 行ける), a change-of-state, or a negative (忘れない, 遅れない) — to state the purpose a deliberate action serves: 'so that ~.' The main clause is something you do on purpose; the ように clause is the state you are aiming for but cannot directly will. Contrast 〜ために, which takes a volitional, controllable goal (日本へ行くために). The two clauses often share a subject, but ように also allows different ones (子供が分かるように, 'so the child understands').",
+      "examples": [
+        {
+          "jp": "<ruby>日本語<rt>にほんご</rt></ruby>の<ruby>新聞<rt>しんぶん</rt></ruby>が<ruby>読<rt>よ</rt></ruby>めるように、<ruby>漢字<rt>かんじ</rt></ruby>を<ruby>勉強<rt>べんきょう</rt></ruby>します。",
+          "en": "I study kanji so that I can read Japanese newspapers."
+        },
+        {
+          "jp": "よく<ruby>見<rt>み</rt></ruby>えるように、<ruby>前<rt>まえ</rt></ruby>の<ruby>方<rt>ほう</rt></ruby>に<ruby>座<rt>すわ</rt></ruby>りましょう。",
+          "en": "Let's sit near the front so that we can see well."
+        },
+        {
+          "jp": "<ruby>約束<rt>やくそく</rt></ruby>の<ruby>時間<rt>じかん</rt></ruby>を<ruby>忘<rt>わす</rt></ruby>れないように、メモしておきます。",
+          "en": "I'll make a note so that I don't forget the appointed time."
+        },
+        {
+          "jp": "<ruby>食<rt>た</rt></ruby>べ<ruby>物<rt>もの</rt></ruby>が<ruby>腐<rt>くさ</rt></ruby>らないように、<ruby>冷蔵庫<rt>れいぞうこ</rt></ruby>に<ruby>入<rt>い</rt></ruby>れておいてください。",
+          "en": "Please put the food in the fridge so that it won't spoil."
+        }
+      ]
+    },
+    {
+      "pattern": "〜ようになる (come to ~ / become able to ~)",
+      "structure": "V(辞書形／可能形)＋ようになる ／ 否定は多く 〜なくなる ／ 例: 読めるようになる・食べるようになる・食べられなくなる",
+      "explain": "Attach ようになる to a plain-form verb to express a GRADUAL CHANGE that reaches a new state or ability: 'came to ~ / became able to ~.' It is most common with the potential form (読める→読めるようになりました, 'became able to read'). With a dictionary form it marks a new habit (野菜を食べるようになった, 'came to eat vegetables'). The negative is usually 〜なくなる rather than 〜ないようになる (食べられなくなりました, 'became unable to eat'). It describes change over time, not an instant switch.",
+      "examples": [
+        {
+          "jp": "<ruby>日本語<rt>にほんご</rt></ruby>の<ruby>新聞<rt>しんぶん</rt></ruby>が<ruby>読<rt>よ</rt></ruby>めるようになりました。",
+          "en": "I've become able to read Japanese newspapers."
+        },
+        {
+          "jp": "<ruby>練習<rt>れんしゅう</rt></ruby>して、やっと<ruby>自転車<rt>じてんしゃ</rt></ruby>に<ruby>乗<rt>の</rt></ruby>れるようになりました。",
+          "en": "After practicing, I've finally become able to ride a bicycle."
+        },
+        {
+          "jp": "<ruby>昔<rt>むかし</rt></ruby>はだれも<ruby>宇宙<rt>うちゅう</rt></ruby>へ<ruby>行<rt>い</rt></ruby>けませんでしたが、<ruby>今<rt>いま</rt></ruby>は<ruby>行<rt>い</rt></ruby>けるようになりました。",
+          "en": "In the past no one could go to space, but now it has become possible."
+        },
+        {
+          "jp": "<ruby>太<rt>ふと</rt></ruby>って、その<ruby>服<rt>ふく</rt></ruby>が<ruby>着<rt>き</rt></ruby>られなくなりました。",
+          "en": "I've gained weight, so I can no longer wear those clothes."
+        }
+      ]
+    },
+    {
+      "pattern": "〜ようにする (make an effort to ~ / try to ~ regularly)",
+      "structure": "V(辞書形／ない形)＋ようにする ／ 〜ようにしています（習慣）・〜ようにしてください（依頼）",
+      "explain": "Attach ようにする to a plain-form verb to express making a CONSCIOUS EFFORT to do (or not do) something, usually as an ongoing habit: 'try to ~ / make a point of ~.' 〜ようにしています = 'I make it a habit to ~' (できるだけ歩くようにしています). 〜ようにしてください = a polite request to make an effort (遅れないようにしてください). Contrast 〜ようになる (a change that happens TO you) with 〜ようにする (an effort YOU make). With the negative: 甘い物を食べないようにする, 'try not to eat sweets.'",
+      "examples": [
+        {
+          "jp": "できるだけ<ruby>毎日<rt>まいにち</rt></ruby><ruby>歩<rt>ある</rt></ruby>くようにしています。",
+          "en": "I try to walk every day as much as I can."
+        },
+        {
+          "jp": "<ruby>体<rt>からだ</rt></ruby>にいいので、<ruby>野菜<rt>やさい</rt></ruby>を<ruby>食<rt>た</rt></ruby>べるようにしています。",
+          "en": "Because it's good for me, I make a point of eating vegetables."
+        },
+        {
+          "jp": "<ruby>絶対<rt>ぜったい</rt></ruby>に<ruby>時間<rt>じかん</rt></ruby>に<ruby>遅<rt>おく</rt></ruby>れないようにしてください。",
+          "en": "Please make sure you're absolutely never late."
+        },
+        {
+          "jp": "できるだけ<ruby>甘<rt>あま</rt></ruby>い<ruby>物<rt>もの</rt></ruby>を<ruby>食<rt>た</rt></ruby>べないようにしています。",
+          "en": "I try not to eat sweets as much as possible."
+        }
+      ]
+    }
+  ],
+  "examples": [
+    {
+      "jp": "<ruby>速<rt>はや</rt></ruby>く<ruby>泳<rt>およ</rt></ruby>げるように、<ruby>毎日<rt>まいにち</rt></ruby><ruby>練習<rt>れんしゅう</rt></ruby>しています。",
+      "en": "I practice every day so that I can swim faster."
+    },
+    {
+      "jp": "やっと<ruby>自転車<rt>じてんしゃ</rt></ruby>に<ruby>乗<rt>の</rt></ruby>れるようになりました。",
+      "en": "I can finally ride a bicycle."
+    },
+    {
+      "jp": "<ruby>毎日<rt>まいにち</rt></ruby><ruby>日記<rt>にっき</rt></ruby>を<ruby>書<rt>か</rt></ruby>くようにしています。",
+      "en": "I make a point of writing in my diary every day."
+    },
+    {
+      "jp": "<ruby>知<rt>し</rt></ruby>らないことばがあったら、すぐ<ruby>調<rt>しら</rt></ruby>べられるように、<ruby>電子<rt>でんし</rt></ruby><ruby>辞書<rt>じしょ</rt></ruby>を<ruby>持<rt>も</rt></ruby>っています。",
+      "en": "I carry an electronic dictionary so that I can look things up right away when there's a word I don't know."
+    },
+    {
+      "jp": "<ruby>忘<rt>わす</rt></ruby>れないように、カレンダーに<ruby>赤<rt>あか</rt></ruby>い<ruby>丸<rt>まる</rt></ruby>をつけてあります。",
+      "en": "I've marked a red circle on the calendar so that I won't forget."
+    },
+    {
+      "jp": "<ruby>初<rt>はじ</rt></ruby>めは<ruby>食<rt>た</rt></ruby>べられませんでしたが、<ruby>今<rt>いま</rt></ruby>は<ruby>何<rt>なん</rt></ruby>でも<ruby>食<rt>た</rt></ruby>べられるようになりました。",
+      "en": "At first I couldn't eat it, but now I can eat anything."
+    },
+    {
+      "jp": "<ruby>新<rt>あたら</rt></ruby>しい<ruby>道<rt>みち</rt></ruby>ができて、<ruby>田舎<rt>いなか</rt></ruby>まで4<ruby>時間<rt>じかん</rt></ruby>で<ruby>帰<rt>かえ</rt></ruby>れるようになりました。",
+      "en": "A new road was built, so we can now get to the countryside in four hours."
+    },
+    {
+      "jp": "できるだけ<ruby>甘<rt>あま</rt></ruby>い<ruby>物<rt>もの</rt></ruby>を<ruby>食<rt>た</rt></ruby>べないようにしています。",
+      "en": "I try to avoid sweets as much as possible."
+    }
+  ],
+  "conversation": {
+    "title": "<ruby>毎日<rt>まいにち</rt></ruby><ruby>運動<rt>うんどう</rt></ruby>するようにしています (I make a point of exercising every day)",
+    "audio": "/Audio/minnahonsatsu2/31.mp3",
+    "lines": [
+      {
+        "role": "アナウンサー",
+        "jp": "<ruby>皆<rt>みな</rt></ruby>さん、こんにちは。きょうのお<ruby>客様<rt>きゃくさま</rt></ruby>は、ことし80<ruby>歳<rt>さい</rt></ruby>の<ruby>小川<rt>おがわ</rt></ruby>よねさんです。",
+        "en": "Hello, everyone. Today's guest is Ms. Yone Ogawa, who is 80 years old this year."
+      },
+      {
+        "role": "小川",
+        "jp": "こんにちは。",
+        "en": "Hello."
+      },
+      {
+        "role": "アナウンサー",
+        "jp": "お<ruby>元気<rt>げんき</rt></ruby>ですね。<ruby>何<rt>なに</rt></ruby>か<ruby>特別<rt>とくべつ</rt></ruby>なことをしていらっしゃいますか。",
+        "en": "You look very well. Are you doing anything special?"
+      },
+      {
+        "role": "小川",
+        "jp": "<ruby>毎日<rt>まいにち</rt></ruby><ruby>運動<rt>うんどう</rt></ruby>するようにしています。",
+        "en": "I make a point of exercising every day."
+      },
+      {
+        "role": "アナウンサー",
+        "jp": "どんな<ruby>運動<rt>うんどう</rt></ruby>ですか。",
+        "en": "What kind of exercise?"
+      },
+      {
+        "role": "小川",
+        "jp": "ダンスとか、<ruby>水泳<rt>すいえい</rt></ruby>とか…。<ruby>最近<rt>さいきん</rt></ruby>、500メートル<ruby>泳<rt>およ</rt></ruby>げるようになりました。",
+        "en": "Dancing, swimming, and so on. Recently I've become able to swim 500 meters."
+      },
+      {
+        "role": "アナウンサー",
+        "jp": "すごいですね。<ruby>食<rt>た</rt></ruby>べ<ruby>物<rt>もの</rt></ruby>は？",
+        "en": "Amazing. What about your food?"
+      },
+      {
+        "role": "小川",
+        "jp": "<ruby>何<rt>なん</rt></ruby>でも<ruby>食<rt>た</rt></ruby>べますが、<ruby>特<rt>とく</rt></ruby>に<ruby>魚<rt>さかな</rt></ruby>が<ruby>好<rt>す</rt></ruby>きです。<ruby>毎日<rt>まいにち</rt></ruby><ruby>違<rt>ちが</rt></ruby>う<ruby>料理<rt>りょうり</rt></ruby>を<ruby>作<rt>つく</rt></ruby>るようにしています。",
+        "en": "I eat anything, but I especially like fish. I try to make a different dish every day."
+      },
+      {
+        "role": "アナウンサー",
+        "jp": "<ruby>頭<rt>あたま</rt></ruby>と<ruby>体<rt>からだ</rt></ruby>をよく<ruby>使<rt>つか</rt></ruby>っていらっしゃるんですね。",
+        "en": "You really use both your mind and your body, don't you?"
+      },
+      {
+        "role": "小川",
+        "jp": "ええ。<ruby>来年<rt>らいねん</rt></ruby>フランスへ<ruby>行<rt>い</rt></ruby>きたいと<ruby>思<rt>おも</rt></ruby>っています。それでフランス<ruby>語<rt>ご</rt></ruby>の<ruby>勉強<rt>べんきょう</rt></ruby>も<ruby>始<rt>はじ</rt></ruby>めました。",
+        "en": "Yes. I want to go to France next year, so I've also started studying French."
+      },
+      {
+        "role": "アナウンサー",
+        "jp": "<ruby>何<rt>なん</rt></ruby>でもチャレンジする<ruby>気持<rt>きも</rt></ruby>ちが<ruby>大切<rt>たいせつ</rt></ruby>ですね。<ruby>楽<rt>たの</rt></ruby>しいお<ruby>話<rt>はなし</rt></ruby>、どうもありがとうございました。",
+        "en": "The spirit to take on anything is important, isn't it? Thank you very much for the enjoyable talk."
+      }
+    ]
+  }
+}

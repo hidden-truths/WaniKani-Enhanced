@@ -1,0 +1,1361 @@
+{
+  "lesson": 37,
+  "title": "Lesson 37",
+  "theme": "The passive voice (受身) — forming passive verbs 〜(ら)れる, the direct passive (私は先生に褒められた), the possessor / suffering passive (足を踏まれた), and the impersonal passive for facts, products and history (〜によって・〜から/〜で作られる)",
+  "source": {
+    "name": "vnjpclub.com",
+    "vocabUrl": "https://www.vnjpclub.com/en/minna-no-nihongo/lesson-37-vocabulary.html",
+    "grammarUrl": "https://www.vnjpclub.com/en/minna-no-nihongo/lesson-37-grammar.html",
+    "note": "Vocabulary, native-speaker audio, and example sentences aggregated from vnjpclub.com (Minna no Nihongo 第2版). For personal study."
+  },
+  "vocab": [
+    {
+      "key": "mnn:37:0",
+      "kana": "ほめます",
+      "kanji": "褒めます",
+      "context": "",
+      "mean": "to praise, compliment",
+      "cat": "verb",
+      "type": "ichidan",
+      "trans": "t",
+      "dict": "褒める",
+      "dictRead": "ほめる",
+      "audio": "/Audio/minnamoi/bai37/00010110101000110.mp3",
+      "levels": {
+        "N5": [
+          "<ruby>先生<rt>せんせい</rt></ruby>は<ruby>学生<rt>がくせい</rt></ruby>を<ruby>褒<rt>ほ</rt></ruby>めました。",
+          "The teacher praised the student."
+        ],
+        "N4": [
+          "<ruby>子<rt>こ</rt></ruby>どもは<ruby>褒<rt>ほ</rt></ruby>めて<ruby>育<rt>そだ</rt></ruby>てたいです。",
+          "I want to raise my children by praising them."
+        ],
+        "N3": [
+          "<ruby>人<rt>ひと</rt></ruby>は<ruby>褒<rt>ほ</rt></ruby>められると、もっと<ruby>頑張<rt>がんば</rt></ruby>るようになります。",
+          "When people are praised, they come to try even harder."
+        ],
+        "N2": [
+          "<ruby>部下<rt>ぶか</rt></ruby>を<ruby>褒<rt>ほ</rt></ruby>めるにしても、<ruby>大<rt>おお</rt></ruby>げさすぎては、かえって<ruby>逆効果<rt>ぎゃくこうか</rt></ruby>だ。",
+          "Even if you praise a subordinate, overdoing it is counterproductive instead."
+        ],
+        "N1": [
+          "<ruby>彼<rt>かれ</rt></ruby>の<ruby>業績<rt>ぎょうせき</rt></ruby>は、どんなに<ruby>褒<rt>ほ</rt></ruby>めても<ruby>褒<rt>ほ</rt></ruby>めすぎることはない。",
+          "His achievements cannot be over-praised, no matter how much you praise them."
+        ]
+      },
+      "mnem": "<b>ほ</b>める — cry <b>\"ho!\"</b> in admiration when you HOld someone up with praise.",
+      "tip": "褒める is ichidan and transitive — praise takes を (人を褒める). Its passive 褒められる ('be praised') is a core Lesson 37 form; the opposite is 叱る (scold).",
+      "accent": 2
+    },
+    {
+      "key": "mnn:37:1",
+      "kana": "しかります",
+      "kanji": "",
+      "context": "",
+      "mean": "to scold, tell off",
+      "cat": "verb",
+      "type": "godan",
+      "trans": "t",
+      "dict": "しかる",
+      "dictRead": "しかる",
+      "audio": "/Audio/minnamoi/bai37/00010110101000111.mp3",
+      "levels": {
+        "N5": [
+          "<ruby>母<rt>はは</rt></ruby>は<ruby>弟<rt>おとうと</rt></ruby>をしかりました。",
+          "My mother scolded my younger brother."
+        ],
+        "N4": [
+          "<ruby>悪<rt>わる</rt></ruby>いことをしたら、しかられます。",
+          "If you do something bad, you'll get scolded."
+        ],
+        "N3": [
+          "<ruby>子<rt>こ</rt></ruby>どもをしかるときは、<ruby>感情的<rt>かんじょうてき</rt></ruby>にならないようにしています。",
+          "When I scold my children, I try not to get emotional."
+        ],
+        "N2": [
+          "<ruby>部下<rt>ぶか</rt></ruby>を<ruby>人前<rt>ひとまえ</rt></ruby>でしかるものではない。",
+          "One shouldn't scold a subordinate in front of other people."
+        ],
+        "N1": [
+          "<ruby>頭<rt>あたま</rt></ruby>ごなしにしかられては、<ruby>子<rt>こ</rt></ruby>どもは<ruby>反発<rt>はんぱつ</rt></ruby>せざるを<ruby>得<rt>え</rt></ruby>ない。",
+          "Scolded without being heard out, a child can't help but rebel."
+        ]
+      },
+      "mnem": "<b>しか</b>る — a sharp <b>\"SHIKA!\"</b> bark from a parent about to scold you.",
+      "tip": "しかる (godan, transitive) scolds someone → を (子どもをしかる); its passive しかられる ('be scolded') pairs with 褒められる in Lesson 37. Usually written in kana in the textbook (kanji 叱る).",
+      "accent": 0
+    },
+    {
+      "key": "mnn:37:2",
+      "kana": "さそいます",
+      "kanji": "誘います",
+      "context": "",
+      "mean": "to invite, ask (someone) to come along",
+      "cat": "verb",
+      "type": "godan",
+      "trans": "t",
+      "dict": "誘う",
+      "dictRead": "さそう",
+      "audio": "/Audio/minnamoi/bai37/00010110101001000.mp3",
+      "levels": {
+        "N5": [
+          "<ruby>友達<rt>ともだち</rt></ruby>を<ruby>映画<rt>えいが</rt></ruby>に<ruby>誘<rt>さそ</rt></ruby>いました。",
+          "I invited my friend to a movie."
+        ],
+        "N4": [
+          "<ruby>今度<rt>こんど</rt></ruby>みんなをパーティーに<ruby>誘<rt>さそ</rt></ruby>いたいです。",
+          "Next time I want to invite everyone to a party."
+        ],
+        "N3": [
+          "<ruby>彼女<rt>かのじょ</rt></ruby>に<ruby>誘<rt>さそ</rt></ruby>われたら、きっと<ruby>断<rt>ことわ</rt></ruby>れないと<ruby>思<rt>おも</rt></ruby>う。",
+          "If she asks me along, I probably won't be able to refuse."
+        ],
+        "N2": [
+          "<ruby>一度<rt>いちど</rt></ruby><ruby>食事<rt>しょくじ</rt></ruby>に<ruby>誘<rt>さそ</rt></ruby>ったものの、<ruby>返事<rt>へんじ</rt></ruby>はもらえないままだ。",
+          "Although I asked her out to a meal once, I still haven't gotten a reply."
+        ],
+        "N1": [
+          "<ruby>気<rt>き</rt></ruby>が<ruby>進<rt>すす</rt></ruby>まないながらも、<ruby>先輩<rt>せんぱい</rt></ruby>に<ruby>誘<rt>さそ</rt></ruby>われれば<ruby>断<rt>ことわ</rt></ruby>るわけにもいかない。",
+          "Reluctant as I am, if a senior colleague invites me I can hardly turn it down."
+        ]
+      },
+      "mnem": "<b>さそ</b>う — say <b>\"sa, sō\"</b> (\"well, so...\") as you coax a friend to come along.",
+      "tip": "誘う (godan, transitive) — 〜を〜に誘う ('invite someone to something'); passive 誘われる ('be asked along'). More casual than 招待する, which is a formal invitation.",
+      "accent": 0
+    },
+    {
+      "key": "mnn:37:3",
+      "kana": "しょうたいします",
+      "kanji": "招待します",
+      "context": "",
+      "mean": "to invite (formally, e.g. to an event)",
+      "cat": "verb",
+      "type": "irregular",
+      "trans": "t",
+      "dict": "招待する",
+      "dictRead": "しょうたいする",
+      "audio": "/Audio/minnamoi/bai37/00010110101001001.mp3",
+      "levels": {
+        "N5": [
+          "<ruby>友達<rt>ともだち</rt></ruby>を<ruby>誕生日<rt>たんじょうび</rt></ruby>に<ruby>招待<rt>しょうたい</rt></ruby>します。",
+          "I'll invite my friends to my birthday."
+        ],
+        "N4": [
+          "<ruby>結婚式<rt>けっこんしき</rt></ruby>に<ruby>招待<rt>しょうたい</rt></ruby>されて、うれしかったです。",
+          "I was invited to the wedding, and I was happy."
+        ],
+        "N3": [
+          "パーティーに<ruby>招待<rt>しょうたい</rt></ruby>されたら、<ruby>必<rt>かなら</rt></ruby>ず<ruby>出席<rt>しゅっせき</rt></ruby>するようにしています。",
+          "Whenever I'm invited to a party, I make sure to attend."
+        ],
+        "N2": [
+          "せっかく<ruby>招待<rt>しょうたい</rt></ruby>していただいたものの、<ruby>都合<rt>つごう</rt></ruby>がつかず<ruby>欠席<rt>けっせき</rt></ruby>した。",
+          "Although I was kindly invited, I couldn't make it and had to decline."
+        ],
+        "N1": [
+          "<ruby>各国<rt>かっこく</rt></ruby>の<ruby>要人<rt>ようじん</rt></ruby>が<ruby>招待<rt>しょうたい</rt></ruby>されたその<ruby>式典<rt>しきてん</rt></ruby>は、<ruby>厳重<rt>げんじゅう</rt></ruby>な<ruby>警備<rt>けいび</rt></ruby>の<ruby>下<rt>もと</rt></ruby>で<ruby>行<rt>おこな</rt></ruby>われた。",
+          "That ceremony, to which dignitaries from various nations were invited, was held under tight security."
+        ]
+      },
+      "mnem": "<b>招</b> (beckon) + <b>待</b> (await) — you beckon guests and await them: 招待する, to invite.",
+      "tip": "招待する is a formal invitation to an event (wedding, party); passive 招待される ('be invited') is a signature Lesson 37 example. A casual 'ask along' is 誘う.",
+      "accent": 1
+    },
+    {
+      "key": "mnn:37:4",
+      "kana": "たのみます",
+      "kanji": "頼みます",
+      "context": "",
+      "mean": "to ask, request; to order (food)",
+      "cat": "verb",
+      "type": "godan",
+      "trans": "t",
+      "dict": "頼む",
+      "dictRead": "たのむ",
+      "audio": "/Audio/minnamoi/bai37/00010110101001010.mp3",
+      "levels": {
+        "N5": [
+          "<ruby>母<rt>はは</rt></ruby>に<ruby>買<rt>か</rt></ruby>い<ruby>物<rt>もの</rt></ruby>を<ruby>頼<rt>たの</rt></ruby>みました。",
+          "I asked my mother to do the shopping."
+        ],
+        "N4": [
+          "<ruby>友達<rt>ともだち</rt></ruby>に<ruby>手伝<rt>てつだ</rt></ruby>いを<ruby>頼<rt>たの</rt></ruby>みたいです。",
+          "I want to ask my friend for help."
+        ],
+        "N3": [
+          "<ruby>急<rt>きゅう</rt></ruby>な<ruby>仕事<rt>しごと</rt></ruby>を<ruby>頼<rt>たの</rt></ruby>まれて、<ruby>困<rt>こま</rt></ruby>っています。",
+          "I was asked to do an urgent job, and I'm at a loss."
+        ],
+        "N2": [
+          "<ruby>上司<rt>じょうし</rt></ruby>に<ruby>頼<rt>たの</rt></ruby>まれた<ruby>以上<rt>いじょう</rt></ruby>、<ruby>断<rt>ことわ</rt></ruby>るわけにはいかない。",
+          "Now that my boss has asked me, I can hardly refuse."
+        ],
+        "N1": [
+          "<ruby>人<rt>ひと</rt></ruby>に<ruby>頼<rt>たの</rt></ruby>むのが<ruby>苦手<rt>にがて</rt></ruby>でも、<ruby>時<rt>とき</rt></ruby>には<ruby>助<rt>たす</rt></ruby>けを<ruby>頼<rt>たの</rt></ruby>む<ruby>勇気<rt>ゆうき</rt></ruby>も<ruby>必要<rt>ひつよう</rt></ruby>だ。",
+          "Even if you're bad at asking others, sometimes you need the courage to ask for help."
+        ]
+      },
+      "mnem": "<b>たの</b>む — you're hoping for a 'yes', so it's <b>ta-NO</b> the answer you fear when you ask a favor.",
+      "tip": "頼む (godan, transitive) — 〜に〜を頼む ('ask someone for'); passive 頼まれる ('be asked to'). Also means 'order' (food). Don't confuse with 頼る (たよる, 'rely on').",
+      "accent": 2
+    },
+    {
+      "key": "mnn:37:5",
+      "kana": "ちゅういします",
+      "kanji": "注意します",
+      "context": "",
+      "mean": "to warn, caution (someone); to pay attention",
+      "cat": "verb",
+      "type": "irregular",
+      "trans": "t",
+      "dict": "注意する",
+      "dictRead": "ちゅういする",
+      "audio": "/Audio/minnamoi/bai37/00010110101001011.mp3",
+      "levels": {
+        "N5": [
+          "<ruby>車<rt>くるま</rt></ruby>に<ruby>注意<rt>ちゅうい</rt></ruby>してください。",
+          "Please watch out for cars."
+        ],
+        "N4": [
+          "<ruby>先生<rt>せんせい</rt></ruby>に<ruby>注意<rt>ちゅうい</rt></ruby>されて、<ruby>恥<rt>は</rt></ruby>ずかしかったです。",
+          "I was told off by the teacher, and it was embarrassing."
+        ],
+        "N3": [
+          "<ruby>同<rt>おな</rt></ruby>じミスをしないように、いつも<ruby>注意<rt>ちゅうい</rt></ruby>するようにしています。",
+          "I always try to be careful not to make the same mistake."
+        ],
+        "N2": [
+          "<ruby>何度<rt>なんど</rt></ruby>も<ruby>注意<rt>ちゅうい</rt></ruby>したにもかかわらず、<ruby>彼<rt>かれ</rt></ruby>は<ruby>態度<rt>たいど</rt></ruby>を<ruby>改<rt>あらた</rt></ruby>めなかった。",
+          "Despite my warning him again and again, he didn't change his attitude."
+        ],
+        "N1": [
+          "<ruby>上司<rt>じょうし</rt></ruby>から<ruby>厳<rt>きび</rt></ruby>しく<ruby>注意<rt>ちゅうい</rt></ruby>されたことを、いつまでも<ruby>根<rt>ね</rt></ruby>に<ruby>持<rt>も</rt></ruby>つべきではない。",
+          "You shouldn't hold a lasting grudge over having been sternly reprimanded by your boss."
+        ]
+      },
+      "mnem": "<b>注</b> (pour) + <b>意</b> (attention) — pour your attention onto it: 注意する, to be careful / to warn.",
+      "tip": "注意する means 'warn/tell off' (人を注意する → passive 注意される) or 'be careful' (〜に注意する). The passive 注意される ('be cautioned') is the Lesson 37 use.",
+      "accent": 1
+    },
+    {
+      "key": "mnn:37:6",
+      "kana": "とります",
+      "kanji": "",
+      "context": "",
+      "mean": "to steal, take (from someone)",
+      "cat": "verb",
+      "type": "godan",
+      "trans": "t",
+      "dict": "取る",
+      "dictRead": "とる",
+      "audio": "/Audio/minnamoi/bai37/00010110101001100.mp3",
+      "accent": 1
+    },
+    {
+      "key": "mnn:37:7",
+      "kana": "ふみます",
+      "kanji": "踏みます",
+      "context": "",
+      "mean": "to step on, tread on",
+      "cat": "verb",
+      "type": "godan",
+      "trans": "t",
+      "dict": "踏む",
+      "dictRead": "ふむ",
+      "audio": "/Audio/minnamoi/bai37/00010110101001101.mp3",
+      "levels": {
+        "N5": [
+          "<ruby>犬<rt>いぬ</rt></ruby>の<ruby>足<rt>あし</rt></ruby>を<ruby>踏<rt>ふ</rt></ruby>みました。",
+          "I stepped on the dog's paw."
+        ],
+        "N4": [
+          "<ruby>電車<rt>でんしゃ</rt></ruby>で<ruby>足<rt>あし</rt></ruby>を<ruby>踏<rt>ふ</rt></ruby>まれて、<ruby>痛<rt>いた</rt></ruby>かったです。",
+          "My foot got stepped on in the train, and it hurt."
+        ],
+        "N3": [
+          "<ruby>満員<rt>まんいん</rt></ruby><ruby>電車<rt>でんしゃ</rt></ruby>では、<ruby>足<rt>あし</rt></ruby>を<ruby>踏<rt>ふ</rt></ruby>まれても<ruby>我慢<rt>がまん</rt></ruby>するしかない。",
+          "On a packed train, even if your foot gets stepped on you just have to put up with it."
+        ],
+        "N2": [
+          "<ruby>人<rt>ひと</rt></ruby>の<ruby>気持<rt>きも</rt></ruby>ちを<ruby>踏<rt>ふ</rt></ruby>みにじるような<ruby>言<rt>い</rt></ruby>い<ruby>方<rt>かた</rt></ruby>は<ruby>慎<rt>つつし</rt></ruby>むべきだ。",
+          "You should refrain from a way of speaking that tramples on people's feelings."
+        ],
+        "N1": [
+          "<ruby>幾多<rt>いくた</rt></ruby>の<ruby>困難<rt>こんなん</rt></ruby>を<ruby>踏<rt>ふ</rt></ruby>み<ruby>越<rt>こ</rt></ruby>えてこそ、<ruby>人<rt>ひと</rt></ruby>は<ruby>一人前<rt>いちにんまえ</rt></ruby>になるものだ。",
+          "It is precisely by overcoming countless hardships that a person becomes fully grown."
+        ]
+      },
+      "mnem": "<b>ふ</b>む — <b>\"foom\"</b>, the muffled thud of a <b>foo</b>t coming down as you step on something.",
+      "tip": "踏む (godan, transitive) — step on takes を (足を踏む). The possessor passive 足を踏まれる ('have one's foot stepped on') is a signature Lesson 37 pattern.",
+      "accent": 0
+    },
+    {
+      "key": "mnn:37:8",
+      "kana": "こわします",
+      "kanji": "壊します",
+      "context": "",
+      "mean": "to break, destroy (something)",
+      "cat": "verb",
+      "type": "godan",
+      "trans": "t",
+      "dict": "壊す",
+      "dictRead": "こわす",
+      "audio": "/Audio/minnamoi/bai37/00010110101001110.mp3",
+      "levels": {
+        "N5": [
+          "<ruby>弟<rt>おとうと</rt></ruby>がおもちゃを<ruby>壊<rt>こわ</rt></ruby>しました。",
+          "My younger brother broke the toy."
+        ],
+        "N4": [
+          "<ruby>弟<rt>おとうと</rt></ruby>にパソコンを<ruby>壊<rt>こわ</rt></ruby>されて、<ruby>困<rt>こま</rt></ruby>りました。",
+          "My younger brother broke my computer, and I was in trouble."
+        ],
+        "N3": [
+          "<ruby>大切<rt>たいせつ</rt></ruby>な<ruby>物<rt>もの</rt></ruby>を<ruby>壊<rt>こわ</rt></ruby>されたら、<ruby>誰<rt>だれ</rt></ruby>でも<ruby>腹<rt>はら</rt></ruby>が<ruby>立<rt>た</rt></ruby>つだろう。",
+          "If something precious of yours gets broken, anyone would get angry."
+        ],
+        "N2": [
+          "<ruby>信頼<rt>しんらい</rt></ruby>は<ruby>一度<rt>いちど</rt></ruby><ruby>壊<rt>こわ</rt></ruby>してしまうと、<ruby>簡単<rt>かんたん</rt></ruby>には<ruby>元<rt>もと</rt></ruby>に<ruby>戻<rt>もど</rt></ruby>らない。",
+          "Once you break trust, it won't easily return to what it was."
+        ],
+        "N1": [
+          "<ruby>長年<rt>ながねん</rt></ruby><ruby>築<rt>きず</rt></ruby>いた<ruby>関係<rt>かんけい</rt></ruby>を<ruby>一瞬<rt>いっしゅん</rt></ruby>で<ruby>壊<rt>こわ</rt></ruby>すような<ruby>言動<rt>げんどう</rt></ruby>は<ruby>避<rt>さ</rt></ruby>けるべきだ。",
+          "You should avoid words and deeds that would destroy in an instant a relationship built over many years."
+        ]
+      },
+      "mnem": "<b>こわ</b>す — sounds like <b>怖い (kowai)</b>; something scary happens when you break it.",
+      "tip": "壊す (godan, transitive) breaks something; its intransitive pair is 壊れる (こわれる, 'break / get broken'). Possessor passive 壊される ('have something of yours broken') is a key Lesson 37 form.",
+      "accent": 2
+    },
+    {
+      "key": "mnn:37:9",
+      "kana": "よごします",
+      "kanji": "汚します",
+      "context": "",
+      "mean": "to make dirty, stain, soil",
+      "cat": "verb",
+      "type": "godan",
+      "trans": "t",
+      "dict": "汚す",
+      "dictRead": "よごす",
+      "audio": "/Audio/minnamoi/bai37/00010110101001111.mp3",
+      "levels": {
+        "N5": [
+          "<ruby>子<rt>こ</rt></ruby>どもが<ruby>服<rt>ふく</rt></ruby>を<ruby>汚<rt>よご</rt></ruby>しました。",
+          "The child got the clothes dirty."
+        ],
+        "N4": [
+          "<ruby>子<rt>こ</rt></ruby>どもに<ruby>服<rt>ふく</rt></ruby>を<ruby>汚<rt>よご</rt></ruby>されて、<ruby>洗濯<rt>せんたく</rt></ruby>が<ruby>大変<rt>たいへん</rt></ruby>でした。",
+          "My child got my clothes dirty, and the laundry was a chore."
+        ],
+        "N3": [
+          "<ruby>川<rt>かわ</rt></ruby>を<ruby>汚<rt>よご</rt></ruby>さないように、ごみは<ruby>持<rt>も</rt></ruby>ち<ruby>帰<rt>かえ</rt></ruby>るようにしましょう。",
+          "So as not to pollute the river, let's make a habit of taking our trash home."
+        ],
+        "N2": [
+          "<ruby>一度<rt>いちど</rt></ruby><ruby>名誉<rt>めいよ</rt></ruby>を<ruby>汚<rt>よご</rt></ruby>したら、<ruby>信用<rt>しんよう</rt></ruby>を<ruby>取<rt>と</rt></ruby>り<ruby>戻<rt>もど</rt></ruby>すのは<ruby>容易<rt>ようい</rt></ruby>ではない。",
+          "Once you have tarnished your honor, restoring your reputation is not easy."
+        ],
+        "N1": [
+          "<ruby>組織<rt>そしき</rt></ruby><ruby>全体<rt>ぜんたい</rt></ruby>の<ruby>名<rt>な</rt></ruby>を<ruby>汚<rt>よご</rt></ruby>しかねない<ruby>不祥事<rt>ふしょうじ</rt></ruby>は、<ruby>断<rt>だん</rt></ruby>じて<ruby>許<rt>ゆる</rt></ruby>されない。",
+          "A scandal liable to sully the name of the entire organization is by no means permissible."
+        ]
+      },
+      "mnem": "<b>よご</b>す — <b>\"YO-go\"</b>: yucky mud gets on it and makes it dirty.",
+      "tip": "汚す (よごす, godan, transitive) 'make dirty'; intransitive pair 汚れる (よごれる, 'get dirty'). The same kanji 汚 also reads きたない ('dirty', い-adj). Possessor passive 汚される is a Lesson 37 form.",
+      "accent": 0
+    },
+    {
+      "key": "mnn:37:10",
+      "kana": "おこないます",
+      "kanji": "行います",
+      "context": "",
+      "mean": "to hold, carry out, conduct (an event)",
+      "cat": "verb",
+      "type": "godan",
+      "trans": "t",
+      "dict": "行う",
+      "dictRead": "おこなう",
+      "audio": "/Audio/minnamoi/bai37/00010110101010000.mp3",
+      "levels": {
+        "N5": [
+          "<ruby>来週<rt>らいしゅう</rt></ruby><ruby>試験<rt>しけん</rt></ruby>を<ruby>行<rt>おこな</rt></ruby>います。",
+          "We'll hold an exam next week."
+        ],
+        "N4": [
+          "<ruby>会議<rt>かいぎ</rt></ruby>は3<ruby>階<rt>がい</rt></ruby>で<ruby>行<rt>おこな</rt></ruby>われます。",
+          "The meeting will be held on the third floor."
+        ],
+        "N3": [
+          "オリンピックは4<ruby>年<rt>ねん</rt></ruby>に<ruby>一度<rt>いちど</rt></ruby><ruby>行<rt>おこな</rt></ruby>われることになっている。",
+          "The Olympics are set to be held once every four years."
+        ],
+        "N2": [
+          "<ruby>十分<rt>じゅうぶん</rt></ruby>な<ruby>準備<rt>じゅんび</rt></ruby>の<ruby>下<rt>もと</rt></ruby>で<ruby>行<rt>おこな</rt></ruby>われた<ruby>実験<rt>じっけん</rt></ruby>は、<ruby>期待<rt>きたい</rt></ruby>どおりの<ruby>結果<rt>けっか</rt></ruby>を<ruby>出<rt>だ</rt></ruby>した。",
+          "The experiment, carried out with thorough preparation, produced the expected results."
+        ],
+        "N1": [
+          "<ruby>首脳<rt>しゅのう</rt></ruby><ruby>会談<rt>かいだん</rt></ruby>は、<ruby>報道陣<rt>ほうどうじん</rt></ruby>を<ruby>一切<rt>いっさい</rt></ruby><ruby>入<rt>い</rt></ruby>れず<ruby>非公開<rt>ひこうかい</rt></ruby>で<ruby>行<rt>おこな</rt></ruby>われた。",
+          "The summit was held behind closed doors, with the press admitted at all."
+        ]
+      },
+      "mnem": "<b>行</b> (act / go through) + う — you carry an act through to completion: 行う, to conduct.",
+      "tip": "行う (おこなう) = 'conduct / hold (an event)'; it shares the kanji 行 with 行く (いく, 'go'), so read by context. Passive 行われる ('be held') is very common for events in Lesson 37.",
+      "accent": 0
+    },
+    {
+      "key": "mnn:37:11",
+      "kana": "ゆしゅつします",
+      "kanji": "輸出します",
+      "context": "",
+      "mean": "to export",
+      "cat": "verb",
+      "type": "irregular",
+      "trans": "t",
+      "dict": "輸出する",
+      "dictRead": "ゆしゅつする",
+      "audio": "/Audio/minnamoi/bai37/00010110101010001.mp3",
+      "levels": {
+        "N5": [
+          "<ruby>日本<rt>にほん</rt></ruby>は<ruby>車<rt>くるま</rt></ruby>を<ruby>輸出<rt>ゆしゅつ</rt></ruby>します。",
+          "Japan exports cars."
+        ],
+        "N4": [
+          "この<ruby>車<rt>くるま</rt></ruby>は<ruby>世界中<rt>せかいじゅう</rt></ruby>に<ruby>輸出<rt>ゆしゅつ</rt></ruby>されています。",
+          "This car is exported all over the world."
+        ],
+        "N3": [
+          "<ruby>品質<rt>ひんしつ</rt></ruby>が<ruby>高<rt>たか</rt></ruby>いので、<ruby>多<rt>おお</rt></ruby>くの<ruby>国<rt>くに</rt></ruby>へ<ruby>輸出<rt>ゆしゅつ</rt></ruby>されるようになった。",
+          "Because the quality is high, it has come to be exported to many countries."
+        ],
+        "N2": [
+          "<ruby>円安<rt>えんやす</rt></ruby>が<ruby>進<rt>すす</rt></ruby>むにつれて、<ruby>輸出<rt>ゆしゅつ</rt></ruby>される<ruby>製品<rt>せいひん</rt></ruby>の<ruby>量<rt>りょう</rt></ruby>も<ruby>増<rt>ふ</rt></ruby>えていった。",
+          "As the yen weakened, the volume of exported products increased as well."
+        ],
+        "N1": [
+          "<ruby>資源<rt>しげん</rt></ruby>に<ruby>乏<rt>とぼ</rt></ruby>しい<ruby>国<rt>くに</rt></ruby>が<ruby>加工品<rt>かこうひん</rt></ruby>を<ruby>輸出<rt>ゆしゅつ</rt></ruby>して<ruby>外貨<rt>がいか</rt></ruby>を<ruby>稼<rt>かせ</rt></ruby>ぐのは<ruby>理<rt>り</rt></ruby>にかなっている。",
+          "It makes perfect sense for a resource-poor country to export processed goods and earn foreign currency."
+        ]
+      },
+      "mnem": "<b>輸</b> (transport) + <b>出</b> (out) — transport goods OUT of the country: 輸出, export.",
+      "tip": "輸出する = 'export' (goods go 出て out); opposite 輸入する ('import'). Passive 輸出される ('be exported') describes trade in Lesson 37.",
+      "accent": 0
+    },
+    {
+      "key": "mnn:37:12",
+      "kana": "ゆにゅうします",
+      "kanji": "輸入します",
+      "context": "",
+      "mean": "to import",
+      "cat": "verb",
+      "type": "irregular",
+      "trans": "t",
+      "dict": "輸入する",
+      "dictRead": "ゆにゅうする",
+      "audio": "/Audio/minnamoi/bai37/00010110101010010.mp3",
+      "levels": {
+        "N5": [
+          "<ruby>日本<rt>にほん</rt></ruby>は<ruby>石油<rt>せきゆ</rt></ruby>を<ruby>輸入<rt>ゆにゅう</rt></ruby>します。",
+          "Japan imports oil."
+        ],
+        "N4": [
+          "<ruby>石油<rt>せきゆ</rt></ruby>はサウジアラビアから<ruby>輸入<rt>ゆにゅう</rt></ruby>されています。",
+          "Oil is imported from Saudi Arabia."
+        ],
+        "N3": [
+          "<ruby>安<rt>やす</rt></ruby>い<ruby>果物<rt>くだもの</rt></ruby>が<ruby>外国<rt>がいこく</rt></ruby>から<ruby>輸入<rt>ゆにゅう</rt></ruby>されるようになりました。",
+          "Cheap fruit has come to be imported from abroad."
+        ],
+        "N2": [
+          "<ruby>輸入<rt>ゆにゅう</rt></ruby>された<ruby>食品<rt>しょくひん</rt></ruby>が<ruby>増<rt>ふ</rt></ruby>えた<ruby>一方<rt>いっぽう</rt></ruby>で、<ruby>国産品<rt>こくさんひん</rt></ruby>の<ruby>消費<rt>しょうひ</rt></ruby>は<ruby>減<rt>へ</rt></ruby>っている。",
+          "While imported foods have increased, consumption of domestic products is declining."
+        ],
+        "N1": [
+          "<ruby>食料<rt>しょくりょう</rt></ruby>の<ruby>多<rt>おお</rt></ruby>くを<ruby>輸入<rt>ゆにゅう</rt></ruby>に<ruby>頼<rt>たよ</rt></ruby>る<ruby>現状<rt>げんじょう</rt></ruby>は、<ruby>決<rt>けっ</rt></ruby>して<ruby>楽観視<rt>らっかんし</rt></ruby>できるものではない。",
+          "The current state of depending on imports for much of our food is by no means something to view with optimism."
+        ]
+      },
+      "mnem": "<b>輸</b> (transport) + <b>入</b> (in) — transport goods INTO the country: 輸入, import.",
+      "tip": "輸入する = 'import' (goods come 入って in); opposite 輸出する. Passive 輸入される ('be imported').",
+      "accent": 0
+    },
+    {
+      "key": "mnn:37:13",
+      "kana": "ほんやくします",
+      "kanji": "翻訳します",
+      "context": "",
+      "mean": "to translate (written text)",
+      "cat": "verb",
+      "type": "irregular",
+      "trans": "t",
+      "dict": "翻訳する",
+      "dictRead": "ほんやくする",
+      "audio": "/Audio/minnamoi/bai37/00010110101010011.mp3",
+      "levels": {
+        "N5": [
+          "この<ruby>本<rt>ほん</rt></ruby>を<ruby>日本語<rt>にほんご</rt></ruby>に<ruby>翻訳<rt>ほんやく</rt></ruby>します。",
+          "I'll translate this book into Japanese."
+        ],
+        "N4": [
+          "この<ruby>小説<rt>しょうせつ</rt></ruby>はいろいろな<ruby>言語<rt>げんご</rt></ruby>に<ruby>翻訳<rt>ほんやく</rt></ruby>されています。",
+          "This novel has been translated into various languages."
+        ],
+        "N3": [
+          "<ruby>名作<rt>めいさく</rt></ruby>は、<ruby>時代<rt>じだい</rt></ruby>を<ruby>超<rt>こ</rt></ruby>えて<ruby>何度<rt>なんど</rt></ruby>も<ruby>翻訳<rt>ほんやく</rt></ruby>されてきた。",
+          "Great works have been translated again and again across the ages."
+        ],
+        "N2": [
+          "<ruby>直訳<rt>ちょくやく</rt></ruby>しただけでは、<ruby>原文<rt>げんぶん</rt></ruby>の<ruby>味<rt>あじ</rt></ruby>わいが<ruby>翻訳<rt>ほんやく</rt></ruby>しきれないことも<ruby>多<rt>おお</rt></ruby>い。",
+          "With a mere literal rendering, the flavor of the original often can't be fully translated."
+        ],
+        "N1": [
+          "<ruby>詩<rt>し</rt></ruby>を<ruby>翻訳<rt>ほんやく</rt></ruby>する<ruby>作業<rt>さぎょう</rt></ruby>は、<ruby>創作<rt>そうさく</rt></ruby>にも<ruby>等<rt>ひと</rt></ruby>しい<ruby>繊細<rt>せんさい</rt></ruby>さを<ruby>要<rt>よう</rt></ruby>する。",
+          "The work of translating poetry demands a delicacy no less than that of original creation."
+        ]
+      },
+      "mnem": "<b>翻</b> (flip over) + <b>訳</b> (rendering) — flip the words over into another language: 翻訳, translation.",
+      "tip": "翻訳する = translate WRITTEN text; interpreting SPOKEN language is 通訳する (つうやく). Passive 翻訳される ('be translated').",
+      "accent": 0
+    },
+    {
+      "key": "mnn:37:14",
+      "kana": "はつめいします",
+      "kanji": "発明します",
+      "context": "",
+      "mean": "to invent",
+      "cat": "verb",
+      "type": "irregular",
+      "trans": "t",
+      "dict": "発明する",
+      "dictRead": "はつめいする",
+      "audio": "/Audio/minnamoi/bai37/00010110101010100.mp3",
+      "levels": {
+        "N5": [
+          "エジソンは<ruby>電球<rt>でんきゅう</rt></ruby>を<ruby>発明<rt>はつめい</rt></ruby>しました。",
+          "Edison invented the light bulb."
+        ],
+        "N4": [
+          "<ruby>電話<rt>でんわ</rt></ruby>は<ruby>誰<rt>だれ</rt></ruby>に<ruby>発明<rt>はつめい</rt></ruby>されましたか。",
+          "By whom was the telephone invented?"
+        ],
+        "N3": [
+          "<ruby>便利<rt>べんり</rt></ruby>な<ruby>道具<rt>どうぐ</rt></ruby>が<ruby>次々<rt>つぎつぎ</rt></ruby>に<ruby>発明<rt>はつめい</rt></ruby>されるようになった。",
+          "Convenient tools came to be invented one after another."
+        ],
+        "N2": [
+          "この<ruby>技術<rt>ぎじゅつ</rt></ruby>が<ruby>発明<rt>はつめい</rt></ruby>されて<ruby>以来<rt>いらい</rt></ruby>、<ruby>人々<rt>ひとびと</rt></ruby>の<ruby>生活<rt>せいかつ</rt></ruby>は<ruby>大<rt>おお</rt></ruby>きく<ruby>変<rt>か</rt></ruby>わった。",
+          "Ever since this technology was invented, people's lives have changed greatly."
+        ],
+        "N1": [
+          "<ruby>必要<rt>ひつよう</rt></ruby>に<ruby>迫<rt>せま</rt></ruby>られてこそ、<ruby>人<rt>ひと</rt></ruby>は<ruby>新<rt>あら</rt></ruby>たな<ruby>道具<rt>どうぐ</rt></ruby>を<ruby>発明<rt>はつめい</rt></ruby>してきたのだ。",
+          "It is precisely when driven by necessity that humans have invented new tools."
+        ]
+      },
+      "mnem": "<b>発</b> (bring forth) + <b>明</b> (bright) — bring a bright new idea into being: 発明, invention.",
+      "tip": "発明する = invent something NEW (機械を発明する); finding something that already existed is 発見する ('discover'). Passive 発明される.",
+      "accent": 0
+    },
+    {
+      "key": "mnn:37:15",
+      "kana": "はっけんします",
+      "kanji": "発見します",
+      "context": "",
+      "mean": "to discover, find",
+      "cat": "verb",
+      "type": "irregular",
+      "trans": "t",
+      "dict": "発見する",
+      "dictRead": "はっけんする",
+      "audio": "/Audio/minnamoi/bai37/00010110101010101.mp3",
+      "levels": {
+        "N5": [
+          "<ruby>医者<rt>いしゃ</rt></ruby>が<ruby>新<rt>あたら</rt></ruby>しい<ruby>薬<rt>くすり</rt></ruby>を<ruby>発見<rt>はっけん</rt></ruby>しました。",
+          "A doctor discovered a new medicine."
+        ],
+        "N4": [
+          "フランスで<ruby>昔<rt>むかし</rt></ruby>の<ruby>絵<rt>え</rt></ruby>が<ruby>発見<rt>はっけん</rt></ruby>されました。",
+          "An old painting was discovered in France."
+        ],
+        "N3": [
+          "<ruby>遺跡<rt>いせき</rt></ruby>が<ruby>発見<rt>はっけん</rt></ruby>されたら、すぐに<ruby>調査<rt>ちょうさ</rt></ruby>が<ruby>始<rt>はじ</rt></ruby>まるそうだ。",
+          "I hear that once ruins are discovered, an investigation begins right away."
+        ],
+        "N2": [
+          "<ruby>新種<rt>しんしゅ</rt></ruby>の<ruby>生物<rt>せいぶつ</rt></ruby>が<ruby>発見<rt>はっけん</rt></ruby>されるにつれ、<ruby>生命<rt>せいめい</rt></ruby>の<ruby>常識<rt>じょうしき</rt></ruby>も<ruby>覆<rt>くつがえ</rt></ruby>されていく。",
+          "As new species of organisms are discovered, our common assumptions about life are overturned as well."
+        ],
+        "N1": [
+          "その<ruby>遺物<rt>いぶつ</rt></ruby>が<ruby>発見<rt>はっけん</rt></ruby>されたことで、<ruby>定説<rt>ていせつ</rt></ruby>は<ruby>根底<rt>こんてい</rt></ruby>から<ruby>見直<rt>みなお</rt></ruby>しを<ruby>迫<rt>せま</rt></ruby>られた。",
+          "The discovery of that relic forced the accepted theory to be fundamentally reconsidered."
+        ]
+      },
+      "mnem": "<b>発</b> (bring forth) + <b>見</b> (see) — suddenly SEE what was hidden: 発見, discovery.",
+      "tip": "発見する = discover something that ALREADY existed (星・遺跡を発見); creating something new is 発明する ('invent'). Passive 発見される is a signature Lesson 37 fact-reporting form.",
+      "accent": 0
+    },
+    {
+      "key": "mnn:37:16",
+      "kana": "こめ",
+      "kanji": "米",
+      "context": "",
+      "mean": "rice (as a grain / crop)",
+      "cat": "noun",
+      "type": "",
+      "trans": "",
+      "dict": "米",
+      "dictRead": "こめ",
+      "audio": "/Audio/minnamoi/bai37/00010110101010110.mp3",
+      "levels": {
+        "N5": [
+          "<ruby>日本人<rt>にほんじん</rt></ruby>は<ruby>米<rt>こめ</rt></ruby>を<ruby>食<rt>た</rt></ruby>べます。",
+          "Japanese people eat rice."
+        ],
+        "N4": [
+          "この<ruby>米<rt>こめ</rt></ruby>は<ruby>新潟<rt>にいがた</rt></ruby>で<ruby>作<rt>つく</rt></ruby>られました。",
+          "This rice was grown in Niigata."
+        ],
+        "N3": [
+          "<ruby>米<rt>こめ</rt></ruby>が<ruby>足<rt>た</rt></ruby>りなくなったら、<ruby>輸入<rt>ゆにゅう</rt></ruby>するしかない。",
+          "If rice runs short, there's no choice but to import it."
+        ],
+        "N2": [
+          "<ruby>米<rt>こめ</rt></ruby>は<ruby>日本人<rt>にほんじん</rt></ruby>にとって、<ruby>単<rt>たん</rt></ruby>なる<ruby>主食<rt>しゅしょく</rt></ruby><ruby>以上<rt>いじょう</rt></ruby>の<ruby>意味<rt>いみ</rt></ruby>を<ruby>持<rt>も</rt></ruby>つ。",
+          "For Japanese people, rice carries a meaning that goes beyond a mere staple food."
+        ],
+        "N1": [
+          "<ruby>米作<rt>こめづく</rt></ruby>りに<ruby>生涯<rt>しょうがい</rt></ruby>を<ruby>捧<rt>ささ</rt></ruby>げてきた<ruby>農家<rt>のうか</rt></ruby>の<ruby>苦労<rt>くろう</rt></ruby>は、<ruby>計<rt>はか</rt></ruby>り<ruby>知<rt>し</rt></ruby>れない。",
+          "The hardships of farmers who have devoted their whole lives to rice-growing are beyond measure."
+        ]
+      },
+      "mnem": "米 sketches grains scattered on a stalk — こめ, the rice grain. It also reads べい (as in 米国, the USA).",
+      "tip": "米 (こめ) = uncooked rice grain / crop; cooked rice served in a bowl is ご飯 (ごはん). The same kanji reads べい / マイ in compounds (米国 = USA).",
+      "accent": 2
+    },
+    {
+      "key": "mnn:37:17",
+      "kana": "むぎ",
+      "kanji": "麦",
+      "context": "",
+      "mean": "wheat, barley",
+      "cat": "noun",
+      "type": "",
+      "trans": "",
+      "dict": "麦",
+      "dictRead": "むぎ",
+      "audio": "/Audio/minnamoi/bai37/00010110101010111.mp3",
+      "levels": {
+        "N5": [
+          "パンは<ruby>麦<rt>むぎ</rt></ruby>から<ruby>作<rt>つく</rt></ruby>ります。",
+          "Bread is made from wheat."
+        ],
+        "N4": [
+          "ビールは<ruby>麦<rt>むぎ</rt></ruby>から<ruby>作<rt>つく</rt></ruby>られます。",
+          "Beer is made from barley."
+        ],
+        "N3": [
+          "<ruby>麦<rt>むぎ</rt></ruby>は、<ruby>寒<rt>さむ</rt></ruby>い<ruby>地方<rt>ちほう</rt></ruby>でも<ruby>育<rt>そだ</rt></ruby>つように<ruby>品種改良<rt>ひんしゅかいりょう</rt></ruby>されてきた。",
+          "Wheat has been selectively bred so that it grows even in cold regions."
+        ],
+        "N2": [
+          "<ruby>麦<rt>むぎ</rt></ruby>から<ruby>作<rt>つく</rt></ruby>られる<ruby>食品<rt>しょくひん</rt></ruby>は、パンやビールなど<ruby>実<rt>じつ</rt></ruby>に<ruby>多岐<rt>たき</rt></ruby>にわたる。",
+          "The foods made from wheat and barley — bread, beer, and so on — are really wide-ranging."
+        ],
+        "N1": [
+          "<ruby>麦<rt>むぎ</rt></ruby>の<ruby>穂<rt>ほ</rt></ruby>が<ruby>黄金色<rt>こがねいろ</rt></ruby>に<ruby>波打<rt>なみう</rt></ruby>つ<ruby>風景<rt>ふうけい</rt></ruby>は、<ruby>豊<rt>ゆた</rt></ruby>かな<ruby>実<rt>みの</rt></ruby>りの<ruby>象徴<rt>しょうちょう</rt></ruby>だ。",
+          "The sight of ears of wheat rippling golden is a symbol of a bountiful harvest."
+        ]
+      },
+      "mnem": "麦 (むぎ) — the grain behind <b>むぎ</b>茶 (barley tea) and, through malt, beer.",
+      "tip": "麦 (むぎ) covers both wheat AND barley; specify with 小麦 (こむぎ, wheat) or 大麦 (おおむぎ, barley). Beer and 麦茶 come from 麦.",
+      "accent": 1
+    },
+    {
+      "key": "mnn:37:18",
+      "kana": "せきゆ",
+      "kanji": "石油",
+      "context": "",
+      "mean": "oil, petroleum",
+      "cat": "noun",
+      "type": "",
+      "trans": "",
+      "dict": "石油",
+      "dictRead": "せきゆ",
+      "audio": "/Audio/minnamoi/bai37/00010110101011000.mp3",
+      "levels": {
+        "N5": [
+          "<ruby>日本<rt>にほん</rt></ruby>は<ruby>石油<rt>せきゆ</rt></ruby>が<ruby>少<rt>すく</rt></ruby>ないです。",
+          "Japan has little oil."
+        ],
+        "N4": [
+          "<ruby>石油<rt>せきゆ</rt></ruby>は<ruby>外国<rt>がいこく</rt></ruby>から<ruby>輸入<rt>ゆにゅう</rt></ruby>されています。",
+          "Oil is imported from abroad."
+        ],
+        "N3": [
+          "<ruby>石油<rt>せきゆ</rt></ruby>の<ruby>値段<rt>ねだん</rt></ruby>が<ruby>上<rt>あ</rt></ruby>がると、いろいろな<ruby>物<rt>もの</rt></ruby>が<ruby>高<rt>たか</rt></ruby>くなる。",
+          "When the price of oil rises, all sorts of things become expensive."
+        ],
+        "N2": [
+          "<ruby>石油<rt>せきゆ</rt></ruby>に<ruby>依存<rt>いぞん</rt></ruby>する<ruby>経済<rt>けいざい</rt></ruby><ruby>構造<rt>こうぞう</rt></ruby>は、<ruby>見直<rt>みなお</rt></ruby>さざるを<ruby>得<rt>え</rt></ruby>ない<ruby>時期<rt>じき</rt></ruby>に<ruby>来<rt>き</rt></ruby>ている。",
+          "We have reached a point where an economic structure dependent on oil must be rethought."
+        ],
+        "N1": [
+          "<ruby>石油<rt>せきゆ</rt></ruby>という<ruby>有限<rt>ゆうげん</rt></ruby>の<ruby>資源<rt>しげん</rt></ruby>を<ruby>巡<rt>めぐ</rt></ruby>って、<ruby>幾度<rt>いくど</rt></ruby>となく<ruby>紛争<rt>ふんそう</rt></ruby>が<ruby>繰<rt>く</rt></ruby>り<ruby>返<rt>かえ</rt></ruby>されてきた。",
+          "Over the finite resource that is oil, conflicts have been repeated time and again."
+        ]
+      },
+      "mnem": "<b>石</b> (stone) + <b>油</b> (oil) — oil that seeps from rock: 石油, petroleum.",
+      "tip": "石油 (せきゆ) = crude oil / petroleum; 'gasoline' is ガソリン and 'kerosene' is 灯油 (とうゆ). A key import in Lesson 37's trade examples.",
+      "accent": 0
+    },
+    {
+      "key": "mnn:37:19",
+      "kana": "げんりょう",
+      "kanji": "原料",
+      "context": "",
+      "mean": "raw material, ingredient",
+      "cat": "noun",
+      "type": "",
+      "trans": "",
+      "dict": "原料",
+      "dictRead": "げんりょう",
+      "audio": "/Audio/minnamoi/bai37/00010110101011001.mp3",
+      "levels": {
+        "N5": [
+          "ビールの<ruby>原料<rt>げんりょう</rt></ruby>は<ruby>麦<rt>むぎ</rt></ruby>です。",
+          "The raw material of beer is barley."
+        ],
+        "N4": [
+          "このお<ruby>菓子<rt>かし</rt></ruby>は<ruby>自然<rt>しぜん</rt></ruby>の<ruby>原料<rt>げんりょう</rt></ruby>で<ruby>作<rt>つく</rt></ruby>られています。",
+          "These sweets are made from natural ingredients."
+        ],
+        "N3": [
+          "<ruby>原料<rt>げんりょう</rt></ruby>が<ruby>手<rt>て</rt></ruby>に<ruby>入<rt>はい</rt></ruby>らなかったら、<ruby>生産<rt>せいさん</rt></ruby>を<ruby>止<rt>と</rt></ruby>めるしかない。",
+          "If the raw materials can't be obtained, there's no choice but to halt production."
+        ],
+        "N2": [
+          "<ruby>原料<rt>げんりょう</rt></ruby>の<ruby>質<rt>しつ</rt></ruby>が<ruby>悪<rt>わる</rt></ruby>いものの、<ruby>加工<rt>かこう</rt></ruby>の<ruby>技術<rt>ぎじゅつ</rt></ruby>でそれを<ruby>補<rt>おぎな</rt></ruby>っている。",
+          "The quality of the raw material is poor, but they make up for it with processing technique."
+        ],
+        "N1": [
+          "<ruby>原料<rt>げんりょう</rt></ruby>の<ruby>調達<rt>ちょうたつ</rt></ruby>から<ruby>販売<rt>はんばい</rt></ruby>に<ruby>至<rt>いた</rt></ruby>るまで、<ruby>一貫<rt>いっかん</rt></ruby>した<ruby>管理<rt>かんり</rt></ruby><ruby>体制<rt>たいせい</rt></ruby>が<ruby>求<rt>もと</rt></ruby>められる。",
+          "From procuring raw materials to selling the product, an integrated management system is required."
+        ]
+      },
+      "mnem": "<b>原</b> (origin) + <b>料</b> (material) — the original material before processing: 原料, raw material.",
+      "tip": "原料 (げんりょう) = raw material transformed beyond recognition (麦→ビール, marked with から); 材料 (ざいりょう) is material still visible in the product (marked with で). Lesson 37 pairs it with 〜から作られる.",
+      "accent": 3
+    },
+    {
+      "key": "mnn:37:20",
+      "kana": "インスタントラーメン",
+      "kanji": "",
+      "context": "",
+      "mean": "instant noodles, instant ramen",
+      "cat": "noun",
+      "type": "",
+      "trans": "",
+      "dict": "インスタントラーメン",
+      "dictRead": "インスタントラーメン",
+      "audio": "/Audio/minnamoi/bai37/00010110101011010.mp3",
+      "levels": {
+        "N5": [
+          "<ruby>私<rt>わたし</rt></ruby>はインスタントラーメンが<ruby>好<rt>す</rt></ruby>きです。",
+          "I like instant noodles."
+        ],
+        "N4": [
+          "インスタントラーメンは1958<ruby>年<rt>ねん</rt></ruby>に<ruby>発明<rt>はつめい</rt></ruby>されました。",
+          "Instant noodles were invented in 1958."
+        ],
+        "N3": [
+          "<ruby>忙<rt>いそが</rt></ruby>しいときは、ついインスタントラーメンを<ruby>食<rt>た</rt></ruby>べてしまう。",
+          "When I'm busy, I end up eating instant noodles despite myself."
+        ],
+        "N2": [
+          "インスタントラーメンは、<ruby>手軽<rt>てがる</rt></ruby>な<ruby>反面<rt>はんめん</rt></ruby>、<ruby>栄養<rt>えいよう</rt></ruby>が<ruby>偏<rt>かたよ</rt></ruby>りがちだ。",
+          "Instant noodles are convenient, but on the flip side they tend to be nutritionally unbalanced."
+        ],
+        "N1": [
+          "インスタントラーメンの<ruby>発明<rt>はつめい</rt></ruby>は、<ruby>戦後<rt>せんご</rt></ruby>の<ruby>食文化<rt>しょくぶんか</rt></ruby>を<ruby>一変<rt>いっぺん</rt></ruby>させたと<ruby>言<rt>い</rt></ruby>っても<ruby>過言<rt>かごん</rt></ruby>ではない。",
+          "It's no exaggeration to say that the invention of instant noodles transformed postwar food culture."
+        ]
+      },
+      "mnem": "Just the English in katakana: インスタント (instant) + ラーメン (ramen).",
+      "tip": "A loanword compound, インスタント + ラーメン. A famous Lesson 37 fact: instant ramen was invented in Japan in 1958.",
+      "accent": 6
+    },
+    {
+      "key": "mnn:37:21",
+      "kana": "デート",
+      "kanji": "",
+      "context": "",
+      "mean": "a date (romantic outing)",
+      "cat": "noun",
+      "type": "",
+      "trans": "",
+      "dict": "デート",
+      "dictRead": "デート",
+      "audio": "/Audio/minnamoi/bai37/00010110101011011.mp3",
+      "levels": {
+        "N5": [
+          "<ruby>日曜日<rt>にちようび</rt></ruby>にデートがあります。",
+          "I have a date on Sunday."
+        ],
+        "N4": [
+          "<ruby>彼女<rt>かのじょ</rt></ruby>に<ruby>映画<rt>えいが</rt></ruby>のデートに<ruby>誘<rt>さそ</rt></ruby>われました。",
+          "She asked me out on a movie date."
+        ],
+        "N3": [
+          "<ruby>初<rt>はじ</rt></ruby>めてのデートなので、<ruby>緊張<rt>きんちょう</rt></ruby>しないように<ruby>深呼吸<rt>しんこきゅう</rt></ruby>した。",
+          "Since it was my first date, I took a deep breath so as not to get nervous."
+        ],
+        "N2": [
+          "デートに<ruby>誘<rt>さそ</rt></ruby>われたものの、<ruby>仕事<rt>しごと</rt></ruby>が<ruby>忙<rt>いそが</rt></ruby>しくて<ruby>断<rt>ことわ</rt></ruby>ってしまった。",
+          "Although I was asked out on a date, I was so busy with work that I ended up declining."
+        ],
+        "N1": [
+          "<ruby>何度<rt>なんど</rt></ruby>デートを<ruby>重<rt>かさ</rt></ruby>ねても、<ruby>彼<rt>かれ</rt></ruby>の<ruby>本心<rt>ほんしん</rt></ruby>はいまだにつかめないままだ。",
+          "No matter how many dates we go on, I still can't grasp his true feelings."
+        ]
+      },
+      "mnem": "English 'date' in katakana → デート (dēto), a romantic outing.",
+      "tip": "デート = a romantic date; it can take する (デートする). A business 'appointment' is アポ / 約束, and a calendar 'date' is 日付 (ひづけ).",
+      "accent": 1
+    },
+    {
+      "key": "mnn:37:22",
+      "kana": "どろぼう",
+      "kanji": "泥棒",
+      "context": "",
+      "mean": "thief, burglar, robber",
+      "cat": "noun",
+      "type": "",
+      "trans": "",
+      "dict": "泥棒",
+      "dictRead": "どろぼう",
+      "audio": "/Audio/minnamoi/bai37/00010110101011100.mp3",
+      "levels": {
+        "N5": [
+          "<ruby>泥棒<rt>どろぼう</rt></ruby>に<ruby>財布<rt>さいふ</rt></ruby>を<ruby>取<rt>と</rt></ruby>られました。",
+          "I had my wallet stolen by a thief."
+        ],
+        "N4": [
+          "<ruby>泥棒<rt>どろぼう</rt></ruby>に<ruby>入<rt>はい</rt></ruby>られて、パソコンを<ruby>盗<rt>ぬす</rt></ruby>まれました。",
+          "A burglar broke in, and my computer was stolen."
+        ],
+        "N3": [
+          "<ruby>泥棒<rt>どろぼう</rt></ruby>に<ruby>入<rt>はい</rt></ruby>られないように、<ruby>鍵<rt>かぎ</rt></ruby>を<ruby>二<rt>ふた</rt></ruby>つつけている。",
+          "I have two locks fitted so that burglars can't break in."
+        ],
+        "N2": [
+          "<ruby>泥棒<rt>どろぼう</rt></ruby>に<ruby>貴重品<rt>きちょうひん</rt></ruby>を<ruby>盗<rt>ぬす</rt></ruby>まれた<ruby>上<rt>うえ</rt></ruby>に、<ruby>部屋<rt>へや</rt></ruby>まで<ruby>荒<rt>あ</rt></ruby>らされた。",
+          "Not only were my valuables stolen by a burglar, but my room was ransacked as well."
+        ],
+        "N1": [
+          "<ruby>泥棒<rt>どろぼう</rt></ruby>に<ruby>入<rt>はい</rt></ruby>られてからでは<ruby>遅<rt>おそ</rt></ruby>く、<ruby>防犯<rt>ぼうはん</rt></ruby><ruby>対策<rt>たいさく</rt></ruby>は<ruby>講<rt>こう</rt></ruby>じておくに<ruby>越<rt>こ</rt></ruby>したことはない。",
+          "It's too late once a burglar has broken in; there's nothing better than taking crime-prevention measures in advance."
+        ]
+      },
+      "mnem": "<b>泥</b> (mud) + <b>棒</b> (stick) — the sneak who leaves muddy tracks: 泥棒, thief.",
+      "tip": "泥棒 (どろぼう) = thief / burglar; the crime is expressed with the possessor passive 泥棒に〜を盗まれる/取られる (core Lesson 37). A policeman is 警官.",
+      "accent": 0
+    },
+    {
+      "key": "mnn:37:23",
+      "kana": "けいかん",
+      "kanji": "警官",
+      "context": "",
+      "mean": "police officer, policeman",
+      "cat": "noun",
+      "type": "",
+      "trans": "",
+      "dict": "警官",
+      "dictRead": "けいかん",
+      "audio": "/Audio/minnamoi/bai37/00010110101011101.mp3",
+      "levels": {
+        "N5": [
+          "<ruby>警官<rt>けいかん</rt></ruby>に<ruby>道<rt>みち</rt></ruby>を<ruby>聞<rt>き</rt></ruby>きました。",
+          "I asked a police officer the way."
+        ],
+        "N4": [
+          "<ruby>警官<rt>けいかん</rt></ruby>にここに<ruby>車<rt>くるま</rt></ruby>を<ruby>止<rt>と</rt></ruby>めるなと<ruby>言<rt>い</rt></ruby>われました。",
+          "I was told by a police officer not to park here."
+        ],
+        "N3": [
+          "<ruby>事故<rt>じこ</rt></ruby>が<ruby>起<rt>お</rt></ruby>きたら、すぐに<ruby>警官<rt>けいかん</rt></ruby>を<ruby>呼<rt>よ</rt></ruby>ぶようにしてください。",
+          "If an accident happens, please make sure to call a police officer right away."
+        ],
+        "N2": [
+          "<ruby>警官<rt>けいかん</rt></ruby>に<ruby>職務質問<rt>しょくむしつもん</rt></ruby>されたものの、<ruby>身分<rt>みぶん</rt></ruby>を<ruby>証明<rt>しょうめい</rt></ruby>するものがなかった。",
+          "Although I was questioned by a police officer, I had nothing to prove my identity."
+        ],
+        "N1": [
+          "<ruby>警官<rt>けいかん</rt></ruby>として<ruby>市民<rt>しみん</rt></ruby>の<ruby>安全<rt>あんぜん</rt></ruby>を<ruby>守<rt>まも</rt></ruby>る<ruby>職責<rt>しょくせき</rt></ruby>は、<ruby>片時<rt>かたとき</rt></ruby>も<ruby>忘<rt>わす</rt></ruby>れてはならない。",
+          "The duty of protecting citizens' safety as a police officer must not be forgotten for even a moment."
+        ]
+      },
+      "mnem": "<b>警</b> (guard / warn) + <b>官</b> (official) — the official who guards the peace: 警官, police officer.",
+      "tip": "警官 (けいかん) = police officer; the fuller form is 警察官 (けいさつかん), and a casual term is お巡りさん. The police force / station is 警察 (けいさつ).",
+      "accent": 0
+    },
+    {
+      "key": "mnn:37:24",
+      "kana": "せかいじゅう",
+      "kanji": "世界中",
+      "context": "",
+      "mean": "all over the world, the whole world",
+      "cat": "noun",
+      "type": "",
+      "trans": "",
+      "dict": "世界中",
+      "dictRead": "せかいじゅう",
+      "audio": "/Audio/minnamoi/bai37/00010110101011110.mp3",
+      "levels": {
+        "N5": [
+          "この<ruby>歌<rt>うた</rt></ruby>は<ruby>世界中<rt>せかいじゅう</rt></ruby>で<ruby>有名<rt>ゆうめい</rt></ruby>です。",
+          "This song is famous all over the world."
+        ],
+        "N4": [
+          "この<ruby>製品<rt>せいひん</rt></ruby>は<ruby>世界中<rt>せかいじゅう</rt></ruby>に<ruby>輸出<rt>ゆしゅつ</rt></ruby>されています。",
+          "This product is exported all over the world."
+        ],
+        "N3": [
+          "この<ruby>技術<rt>ぎじゅつ</rt></ruby>は<ruby>世界中<rt>せかいじゅう</rt></ruby>に<ruby>広<rt>ひろ</rt></ruby>まったらしい。",
+          "This technology seems to have spread all over the world."
+        ],
+        "N2": [
+          "<ruby>世界中<rt>せかいじゅう</rt></ruby>で<ruby>愛<rt>あい</rt></ruby>されている<ruby>作品<rt>さくひん</rt></ruby>には、<ruby>国境<rt>こっきょう</rt></ruby>を<ruby>越<rt>こ</rt></ruby>えた<ruby>普遍性<rt>ふへんせい</rt></ruby>がある。",
+          "Works loved the world over have a universality that transcends borders."
+        ],
+        "N1": [
+          "<ruby>一<rt>ひと</rt></ruby>つの<ruby>発見<rt>はっけん</rt></ruby>が、<ruby>瞬<rt>またた</rt></ruby>く<ruby>間<rt>ま</rt></ruby>に<ruby>世界中<rt>せかいじゅう</rt></ruby>へと<ruby>伝<rt>つた</rt></ruby>わっていく<ruby>時代<rt>じだい</rt></ruby>になった。",
+          "We have entered an age in which a single discovery spreads across the whole world in the blink of an eye."
+        ]
+      },
+      "mnem": "<b>世界</b> (world) + <b>中</b> (じゅう, throughout) — throughout the whole world: 世界中.",
+      "tip": "The suffix 〜中 read じゅう means 'all through / all over' a whole space or span (世界中, 一日中); read ちゅう it means 'in the middle of / during' (勉強中). Here it's じゅう.",
+      "accent": 1
+    },
+    {
+      "key": "mnn:37:25",
+      "kana": "～じゅう",
+      "kanji": "～中",
+      "context": "",
+      "mean": "all over ~, throughout ~ (suffix)",
+      "cat": "noun",
+      "type": "",
+      "trans": "",
+      "dict": "～中",
+      "dictRead": "～じゅう",
+      "audio": "/Audio/minnamoi/bai37/00010110101011111.mp3"
+    },
+    {
+      "key": "mnn:37:26",
+      "kana": "せいき",
+      "kanji": "世紀",
+      "context": "",
+      "mean": "century; ~th century (counter)",
+      "cat": "noun",
+      "type": "",
+      "trans": "",
+      "dict": "世紀",
+      "dictRead": "せいき",
+      "audio": "/Audio/minnamoi/bai37/00010110101100000.mp3",
+      "accent": 1
+    },
+    {
+      "key": "mnn:37:27",
+      "kana": "なにご",
+      "kanji": "何語",
+      "context": "",
+      "mean": "what language",
+      "cat": "noun",
+      "type": "",
+      "trans": "",
+      "dict": "何語",
+      "dictRead": "なにご",
+      "audio": "/Audio/minnamoi/bai37/00010110101100001.mp3",
+      "levels": {
+        "N5": [
+          "これは<ruby>何語<rt>なにご</rt></ruby>ですか。",
+          "What language is this?"
+        ],
+        "N4": [
+          "ブラジルでは<ruby>何語<rt>なにご</rt></ruby>が<ruby>話<rt>はな</rt></ruby>されていますか。",
+          "What language is spoken in Brazil?"
+        ],
+        "N3": [
+          "この<ruby>本<rt>ほん</rt></ruby>が<ruby>何語<rt>なにご</rt></ruby>で<ruby>書<rt>か</rt></ruby>かれているか、わからない。",
+          "I don't know what language this book is written in."
+        ],
+        "N2": [
+          "<ruby>会議<rt>かいぎ</rt></ruby>を<ruby>何語<rt>なにご</rt></ruby>で<ruby>行<rt>おこな</rt></ruby>うかによって、<ruby>通訳<rt>つうやく</rt></ruby>の<ruby>手配<rt>てはい</rt></ruby>も<ruby>変<rt>か</rt></ruby>わってくる。",
+          "Depending on what language the meeting is held in, the interpreter arrangements change too."
+        ],
+        "N1": [
+          "<ruby>何語<rt>なにご</rt></ruby>で<ruby>思考<rt>しこう</rt></ruby>するかは、その<ruby>人<rt>ひと</rt></ruby>の<ruby>世界<rt>せかい</rt></ruby>の<ruby>捉<rt>とら</rt></ruby>え<ruby>方<rt>かた</rt></ruby>をも<ruby>左右<rt>さゆう</rt></ruby>しかねない。",
+          "What language one thinks in can even shape the way one grasps the world."
+        ]
+      },
+      "mnem": "<b>何</b> (what) + <b>語</b> (language) — 'what language?': 何語.",
+      "tip": "何語 (なにご) = 'what / which language' — here 何 reads なに (not なん). Answer with a specific language (日本語, ポルトガル語). In Lesson 37 it pairs with the passive 話される / 使われる.",
+      "accent": 1
+    },
+    {
+      "key": "mnn:37:28",
+      "kana": "だれか",
+      "kanji": "",
+      "context": "",
+      "mean": "someone, somebody",
+      "cat": "noun",
+      "type": "",
+      "trans": "",
+      "dict": "だれか",
+      "dictRead": "だれか",
+      "audio": "/Audio/minnamoi/bai37/00010110101100010.mp3",
+      "levels": {
+        "N5": [
+          "<ruby>部屋<rt>へや</rt></ruby>にだれかいますか。",
+          "Is someone in the room?"
+        ],
+        "N4": [
+          "だれかにかばんを<ruby>持<rt>も</rt></ruby>っていかれました。",
+          "Someone made off with my bag."
+        ],
+        "N3": [
+          "だれかに<ruby>助<rt>たす</rt></ruby>けを<ruby>求<rt>もと</rt></ruby>めたら、きっと<ruby>手<rt>て</rt></ruby>を<ruby>貸<rt>か</rt></ruby>してくれるはずだ。",
+          "If you ask someone for help, surely they'll lend you a hand."
+        ],
+        "N2": [
+          "だれかに<ruby>見<rt>み</rt></ruby>られているようで、<ruby>落<rt>お</rt></ruby>ち<ruby>着<rt>つ</rt></ruby>かないことこの<ruby>上<rt>うえ</rt></ruby>ない。",
+          "It feels as if someone is watching me, and I couldn't be more on edge."
+        ],
+        "N1": [
+          "だれかの<ruby>犠牲<rt>ぎせい</rt></ruby>の<ruby>上<rt>うえ</rt></ruby>に<ruby>成<rt>な</rt></ruby>り<ruby>立<rt>た</rt></ruby>つ<ruby>幸福<rt>こうふく</rt></ruby>など、<ruby>手放<rt>てばな</rt></ruby>しでは<ruby>喜<rt>よろこ</rt></ruby>べない。",
+          "Happiness that rests on someone else's sacrifice is not something one can rejoice in unreservedly."
+        ]
+      },
+      "mnem": "だれ (who) + か (the indefinite / question particle) — 'who-ish' = someone: だれか.",
+      "tip": "だれか = 'someone' (unknown person); だれも + negative = 'no one', だれでも = 'anyone'. In Lesson 37 the indirect passive だれかに〜を持っていかれる expresses being victimized by an unknown person.",
+      "accent": 1
+    },
+    {
+      "key": "mnn:37:29",
+      "kana": "よかったですね。",
+      "kanji": "",
+      "context": "",
+      "mean": "That's good, isn't it?; I'm glad to hear it.",
+      "cat": "expression",
+      "type": "",
+      "trans": "",
+      "dict": "よかったですね",
+      "dictRead": "よかったですね",
+      "audio": "/Audio/minnamoi/bai37/00010110101100011.mp3",
+      "tip": "よかったですね = a warm 'that's great / I'm glad for you', reacting to good news. Past-tense よかった ('it was good') is used even about a present situation, as a settled, relieved judgment."
+    },
+    {
+      "key": "mnn:37:30",
+      "kana": "オリンピック",
+      "kanji": "",
+      "context": "",
+      "mean": "the Olympic Games, the Olympics",
+      "cat": "noun",
+      "type": "",
+      "trans": "",
+      "dict": "オリンピック",
+      "dictRead": "オリンピック",
+      "audio": "/Audio/minnamoi/bai37/00010110101100100.mp3",
+      "levels": {
+        "N5": [
+          "<ruby>来年<rt>らいねん</rt></ruby>オリンピックがあります。",
+          "There will be an Olympics next year."
+        ],
+        "N4": [
+          "1964<ruby>年<rt>ねん</rt></ruby>に<ruby>東京<rt>とうきょう</rt></ruby>でオリンピックが<ruby>行<rt>おこな</rt></ruby>われました。",
+          "The Olympics were held in Tokyo in 1964."
+        ],
+        "N3": [
+          "オリンピックが<ruby>開<rt>ひら</rt></ruby>かれたら、<ruby>多<rt>おお</rt></ruby>くの<ruby>観光客<rt>かんこうきゃく</rt></ruby>が<ruby>来<rt>く</rt></ruby>るだろう。",
+          "When the Olympics are held, many tourists will probably come."
+        ],
+        "N2": [
+          "オリンピックは、<ruby>単<rt>たん</rt></ruby>なるスポーツの<ruby>祭典<rt>さいてん</rt></ruby>にとどまらない<ruby>意義<rt>いぎ</rt></ruby>を<ruby>持<rt>も</rt></ruby>つ。",
+          "The Olympics carry a significance that goes beyond a mere sporting festival."
+        ],
+        "N1": [
+          "オリンピックの<ruby>開催<rt>かいさい</rt></ruby>を<ruby>巡<rt>めぐ</rt></ruby>っては、<ruby>経済<rt>けいざい</rt></ruby><ruby>効果<rt>こうか</rt></ruby>と<ruby>負担<rt>ふたん</rt></ruby>とが<ruby>常<rt>つね</rt></ruby>に<ruby>天秤<rt>てんびん</rt></ruby>にかけられる。",
+          "When it comes to hosting the Olympics, the economic benefits and the burden are always weighed against each other."
+        ]
+      },
+      "mnem": "English 'Olympic' in katakana → オリンピック.",
+      "tip": "オリンピック = the Olympic Games; held (行われる / 開かれる) every four years — a stock Lesson 37 passive-with-a-date example.",
+      "accent": 4
+    },
+    {
+      "key": "mnn:37:31",
+      "kana": "ワールドカップ",
+      "kanji": "",
+      "context": "",
+      "mean": "the World Cup",
+      "cat": "noun",
+      "type": "",
+      "trans": "",
+      "dict": "ワールドカップ",
+      "dictRead": "ワールドカップ",
+      "audio": "/Audio/minnamoi/bai37/00010110101100101.mp3"
+    },
+    {
+      "key": "mnn:37:32",
+      "kana": "とうだいじ",
+      "kanji": "東大寺",
+      "context": "",
+      "mean": "Todai-ji (a temple in Nara)",
+      "cat": "noun",
+      "type": "",
+      "trans": "",
+      "dict": "東大寺",
+      "dictRead": "とうだいじ",
+      "audio": "/Audio/minnamoi/bai37/00010110101100110.mp3"
+    },
+    {
+      "key": "mnn:37:33",
+      "kana": "だいぶつ",
+      "kanji": "大仏",
+      "context": "",
+      "mean": "great statue of Buddha",
+      "cat": "noun",
+      "type": "",
+      "trans": "",
+      "dict": "大仏",
+      "dictRead": "だいぶつ",
+      "audio": "/Audio/minnamoi/bai37/00010110101100111.mp3",
+      "accent": 0
+    },
+    {
+      "key": "mnn:37:34",
+      "kana": "えどじだい",
+      "kanji": "江戸時代",
+      "context": "",
+      "mean": "the Edo period (1603–1868)",
+      "cat": "noun",
+      "type": "",
+      "trans": "",
+      "dict": "江戸時代",
+      "dictRead": "えどじだい",
+      "audio": "/Audio/minnamoi/bai37/00010110101101000.mp3"
+    },
+    {
+      "key": "mnn:37:35",
+      "kana": "ポルトガル",
+      "kanji": "",
+      "context": "",
+      "mean": "Portugal",
+      "cat": "noun",
+      "type": "",
+      "trans": "",
+      "dict": "ポルトガル",
+      "dictRead": "ポルトガル",
+      "audio": "/Audio/minnamoi/bai37/00010110101101001.mp3"
+    },
+    {
+      "key": "mnn:37:36",
+      "kana": "サウジアラビア",
+      "kanji": "",
+      "context": "",
+      "mean": "Saudi Arabia",
+      "cat": "noun",
+      "type": "",
+      "trans": "",
+      "dict": "サウジアラビア",
+      "dictRead": "サウジアラビア",
+      "audio": "/Audio/minnamoi/bai37/00010110101101010.mp3"
+    },
+    {
+      "key": "mnn:37:37",
+      "kana": "ロシア",
+      "kanji": "",
+      "context": "",
+      "mean": "Russia",
+      "cat": "noun",
+      "type": "",
+      "trans": "",
+      "dict": "ロシア",
+      "dictRead": "ロシア",
+      "audio": "/Audio/minnamoi/bai37/00010110101101011.mp3",
+      "accent": 1
+    }
+  ],
+  "grammar": [
+    {
+      "pattern": "Passive verbs 〜(ら)れる — how to form them",
+      "structure": "Group I (godan) 〜u → 〜areru (書く→書かれる)・Group II (ichidan) 〜る → 〜られる (見る→見られる)・Group III する→される・来る→来られる。All passives conjugate as Group II verbs.",
+      "explain": "The passive verb is built from the plain form. For Group I (godan) verbs, change the final -u to -areru (かく→かかれる, よむ→よまれる, とる→とられる). For Group II (ichidan) verbs, drop る and add られる (ほめる→ほめられる, たべる→たべられる). The irregulars are する→される and 来る→来られる. Whatever the group, every passive verb then conjugates like a Group II verb: 〜られます、〜られない、〜られて.",
+      "examples": [
+        {
+          "jp": "みんなに<ruby>笑<rt>わら</rt></ruby>われました。",
+          "en": "I was laughed at by everyone."
+        },
+        {
+          "jp": "<ruby>母<rt>はは</rt></ruby>に<ruby>名前<rt>なまえ</rt></ruby>を<ruby>呼<rt>よ</rt></ruby>ばれました。",
+          "en": "I was called by my mother."
+        },
+        {
+          "jp": "<ruby>先生<rt>せんせい</rt></ruby>に<ruby>褒<rt>ほ</rt></ruby>められました。",
+          "en": "I was praised by the teacher."
+        },
+        {
+          "jp": "この<ruby>本<rt>ほん</rt></ruby>は<ruby>百年前<rt>ひゃくねんまえ</rt></ruby>に<ruby>書<rt>か</rt></ruby>かれました。",
+          "en": "This book was written a hundred years ago."
+        }
+      ]
+    },
+    {
+      "pattern": "N1 は N2 に V-passive — the direct passive (N1 receives N2's action)",
+      "structure": "N1 (receiver) は N2 (doer) に V(受身)。  (active form: N2 は N1 を V)",
+      "explain": "The passive lets you tell the event from the receiver's side. The person on the receiving end becomes the topic (は), and the one who does the action is marked with に. So the active 先生はわたしをほめた ('the teacher praised me') becomes わたしは先生にほめられた ('I was praised by the teacher'), foregrounding the affected person. The doer always takes に.",
+      "examples": [
+        {
+          "jp": "<ruby>私<rt>わたし</rt></ruby>は<ruby>先生<rt>せんせい</rt></ruby>に<ruby>褒<rt>ほ</rt></ruby>められました。",
+          "en": "I was praised by the teacher."
+        },
+        {
+          "jp": "<ruby>私<rt>わたし</rt></ruby>は<ruby>課長<rt>かちょう</rt></ruby>に<ruby>呼<rt>よ</rt></ruby>ばれました。",
+          "en": "I was called in by the section chief."
+        },
+        {
+          "jp": "<ruby>私<rt>わたし</rt></ruby>はイーさんに<ruby>映画<rt>えいが</rt></ruby>に<ruby>誘<rt>さそ</rt></ruby>われました。",
+          "en": "I was invited to a movie by Ms. Lee."
+        },
+        {
+          "jp": "<ruby>私<rt>わたし</rt></ruby>は<ruby>女<rt>おんな</rt></ruby>の<ruby>人<rt>ひと</rt></ruby>に<ruby>道<rt>みち</rt></ruby>を<ruby>聞<rt>き</rt></ruby>かれました。",
+          "en": "I was asked the way by a woman."
+        }
+      ]
+    },
+    {
+      "pattern": "N1 は N2 に N3 を V-passive — the possessor / suffering passive",
+      "structure": "N1 (owner) は N2 (doer) に N3 (N1's thing or body part) を V(受身)。",
+      "explain": "When the action lands on something that belongs to the receiver — a possession or a body part — the owner N1 becomes the topic (は), the doer N2 takes に, and the affected thing N3 keeps を. This often carries a nuance of nuisance or damage (迷惑の受身): 弟にパソコンを壊された ('my brother broke my computer, to my dismay'), 足を踏まれた ('had my foot stepped on').",
+      "examples": [
+        {
+          "jp": "<ruby>私<rt>わたし</rt></ruby>は<ruby>弟<rt>おとうと</rt></ruby>にパソコンを<ruby>壊<rt>こわ</rt></ruby>されました。",
+          "en": "My younger brother broke my computer."
+        },
+        {
+          "jp": "<ruby>私<rt>わたし</rt></ruby>は<ruby>泥棒<rt>どろぼう</rt></ruby>にカメラを<ruby>取<rt>と</rt></ruby>られました。",
+          "en": "My camera was stolen by a thief."
+        },
+        {
+          "jp": "<ruby>私<rt>わたし</rt></ruby>は<ruby>電車<rt>でんしゃ</rt></ruby>で<ruby>隣<rt>となり</rt></ruby>の<ruby>人<rt>ひと</rt></ruby>に<ruby>足<rt>あし</rt></ruby>を<ruby>踏<rt>ふ</rt></ruby>まれました。",
+          "en": "On the train, the person next to me stepped on my foot."
+        },
+        {
+          "jp": "<ruby>私<rt>わたし</rt></ruby>は<ruby>子<rt>こ</rt></ruby>どもに<ruby>服<rt>ふく</rt></ruby>を<ruby>汚<rt>よご</rt></ruby>されました。",
+          "en": "My child got my clothes dirty."
+        }
+      ]
+    },
+    {
+      "pattern": "N が／は V-passive — the impersonal passive (facts, products, history)",
+      "structure": "N は/が （〜によって／〜から／〜で） V(受身)。  the doer is usually omitted, or marked with によって",
+      "explain": "When the subject is a thing rather than a person, the passive states a general fact without naming (or caring about) who did it — the standard way to talk about history, products and world facts. When a creator IS named, they take によって (電話はベルによって発明された). For materials, から shows the material is transformed beyond recognition (ビールは麦から作られる), while で shows it is still visibly there (机は木で作られる).",
+      "examples": [
+        {
+          "jp": "<ruby>東大寺<rt>とうだいじ</rt></ruby>の<ruby>大仏<rt>だいぶつ</rt></ruby>は752<ruby>年<rt>ねん</rt></ruby>に<ruby>造<rt>つく</rt></ruby>られました。",
+          "en": "The Great Buddha of Todai-ji was made in 752."
+        },
+        {
+          "jp": "インスタントラーメンは1958<ruby>年<rt>ねん</rt></ruby>に<ruby>発明<rt>はつめい</rt></ruby>されました。",
+          "en": "Instant noodles were invented in 1958."
+        },
+        {
+          "jp": "ビールは<ruby>麦<rt>むぎ</rt></ruby>から<ruby>作<rt>つく</rt></ruby>られます。",
+          "en": "Beer is made from barley."
+        },
+        {
+          "jp": "この<ruby>小説<rt>しょうせつ</rt></ruby>はいろいろな<ruby>国<rt>くに</rt></ruby>の<ruby>言葉<rt>ことば</rt></ruby>に<ruby>翻訳<rt>ほんやく</rt></ruby>されています。",
+          "en": "This novel has been translated into many languages."
+        }
+      ]
+    }
+  ],
+  "examples": [
+    {
+      "jp": "<ruby>子<rt>こ</rt></ruby>どものとき、よく<ruby>母<rt>はは</rt></ruby>にしかられました。",
+      "en": "When I was little, I was often scolded by my mother."
+    },
+    {
+      "jp": "ラッシュの<ruby>電車<rt>でんしゃ</rt></ruby>で<ruby>足<rt>あし</rt></ruby>を<ruby>踏<rt>ふ</rt></ruby>まれました。",
+      "en": "I had my foot stepped on in a rush-hour train."
+    },
+    {
+      "jp": "<ruby>法隆寺<rt>ほうりゅうじ</rt></ruby>は607<ruby>年<rt>ねん</rt></ruby>に<ruby>建<rt>た</rt></ruby>てられました。",
+      "en": "Horyu-ji was built in 607."
+    },
+    {
+      "jp": "けさ<ruby>部長<rt>ぶちょう</rt></ruby>に<ruby>呼<rt>よ</rt></ruby>ばれました。…<ruby>何<rt>なに</rt></ruby>かあったんですか。",
+      "en": "This morning I was called in by the department manager. …Did something happen?"
+    },
+    {
+      "jp": "<ruby>出張<rt>しゅっちょう</rt></ruby>のレポートの<ruby>書<rt>か</rt></ruby>き<ruby>方<rt>かた</rt></ruby>について<ruby>注意<rt>ちゅうい</rt></ruby>されました。",
+      "en": "I was cautioned about the way I write my business-trip reports."
+    },
+    {
+      "jp": "また<ruby>新<rt>あたら</rt></ruby>しい<ruby>星<rt>ほし</rt></ruby>が<ruby>発見<rt>はっけん</rt></ruby>されましたよ。…そうですか。",
+      "en": "Another new star has been discovered. …Oh, really?"
+    },
+    {
+      "jp": "ブラジルでは<ruby>何語<rt>なにご</rt></ruby>が<ruby>使<rt>つか</rt></ruby>われていますか。…ポルトガル<ruby>語<rt>ご</rt></ruby>が<ruby>使<rt>つか</rt></ruby>われています。",
+      "en": "What language is used in Brazil? …Portuguese is used."
+    },
+    {
+      "jp": "ビールは<ruby>麦<rt>むぎ</rt></ruby>から<ruby>造<rt>つく</rt></ruby>られます。これが<ruby>原料<rt>げんりょう</rt></ruby>の<ruby>麦<rt>むぎ</rt></ruby>です。",
+      "en": "Beer is made from barley. This is the barley it's made from."
+    }
+  ],
+  "conversation": {
+    "title": "金閣寺は14世紀に建てられました (Kinkaku-ji was built in the 14th century)",
+    "audio": "/Audio/minnahonsatsu2/34.mp3",
+    "lines": [
+      {
+        "role": "ガイド",
+        "jp": "<ruby>皆様<rt>みなさま</rt></ruby>、あちらが<ruby>有名<rt>ゆうめい</rt></ruby>な<ruby>金閣寺<rt>きんかくじ</rt></ruby>です。<ruby>金閣寺<rt>きんかくじ</rt></ruby>は14<ruby>世紀<rt>せいき</rt></ruby>に<ruby>建<rt>た</rt></ruby>てられました。",
+        "en": "Everyone, that over there is the famous Kinkaku-ji. It was built in the 14th century."
+      },
+      {
+        "role": "ガイド",
+        "jp": "1950<ruby>年<rt>ねん</rt></ruby>に<ruby>一度<rt>いちど</rt></ruby><ruby>焼<rt>や</rt></ruby>けてしまいましたが、その<ruby>後<rt>あと</rt></ruby><ruby>新<rt>あたら</rt></ruby>しい<ruby>建物<rt>たてもの</rt></ruby>が<ruby>建<rt>た</rt></ruby>てられて、1994<ruby>年<rt>ねん</rt></ruby>に<ruby>世界遺産<rt>せかいいさん</rt></ruby>になりました。<ruby>京都<rt>きょうと</rt></ruby>で<ruby>人気<rt>にんき</rt></ruby>があるお<ruby>寺<rt>てら</rt></ruby>の<ruby>一<rt>ひと</rt></ruby>つです。",
+        "en": "It burned down once in 1950, but afterward a new building was constructed, and in 1994 it became a World Heritage Site. It's one of the most popular temples in Kyoto."
+      },
+      {
+        "role": "ミラー",
+        "jp": "きれいですね。<ruby>壁<rt>かべ</rt></ruby>が<ruby>金色<rt>きんいろ</rt></ruby>ですが、<ruby>本物<rt>ほんもの</rt></ruby>の<ruby>金<rt>きん</rt></ruby>ですか。",
+        "en": "It's beautiful. The walls are gold-colored — is it real gold?"
+      },
+      {
+        "role": "ガイド",
+        "jp": "はい。<ruby>金<rt>きん</rt></ruby>が20キロぐらい<ruby>使<rt>つか</rt></ruby>われました。",
+        "en": "Yes. About 20 kilograms of gold were used."
+      },
+      {
+        "role": "ミラー",
+        "jp": "そうですか。あの<ruby>中<rt>なか</rt></ruby>に<ruby>入<rt>はい</rt></ruby>れますか。",
+        "en": "Really? Can we go inside?"
+      },
+      {
+        "role": "ガイド",
+        "jp": "<ruby>中<rt>なか</rt></ruby>には<ruby>入<rt>はい</rt></ruby>れないんです。<ruby>池<rt>いけ</rt></ruby>の<ruby>周<rt>まわ</rt></ruby>りを<ruby>歩<rt>ある</rt></ruby>きながら<ruby>見<rt>み</rt></ruby>てください。",
+        "en": "No, you can't go inside. Please look at it as you walk around the pond."
+      },
+      {
+        "role": "ミラー",
+        "jp": "<ruby>紅葉<rt>こうよう</rt></ruby>がきれいですね。",
+        "en": "The autumn leaves are beautiful."
+      },
+      {
+        "role": "ガイド",
+        "jp": "ええ。<ruby>金閣寺<rt>きんかくじ</rt></ruby>は<ruby>紅葉<rt>こうよう</rt></ruby>や<ruby>雪<rt>ゆき</rt></ruby>の<ruby>季節<rt>きせつ</rt></ruby>が<ruby>特<rt>とく</rt></ruby>に<ruby>美<rt>うつく</rt></ruby>しいと<ruby>言<rt>い</rt></ruby>われています。",
+        "en": "Yes. Kinkaku-ji is said to be especially beautiful in the autumn-leaf and snow seasons."
+      }
+    ]
+  }
+}

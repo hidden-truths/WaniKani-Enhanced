@@ -1,0 +1,895 @@
+{
+  "lesson": 50,
+  "title": "Lesson 50",
+  "theme": "Humble language (謙譲語) — the culmination of けいご and the final chapter of Minna II: the special humble verbs (参る・おる・いただく・申す・いたす・拝見する・存じる・伺う・お目にかかる), the general お〜します／ご〜します humble pattern, and the courteous ございます／〜でございます",
+  "source": {
+    "name": "vnjpclub.com",
+    "vocabUrl": "https://www.vnjpclub.com/en/minna-no-nihongo/lesson-50-vocabulary.html",
+    "grammarUrl": "https://www.vnjpclub.com/en/minna-no-nihongo/lesson-50-grammar.html",
+    "note": "Vocabulary, native-speaker audio, and example sentences aggregated from vnjpclub.com (Minna no Nihongo 第2版). For personal study."
+  },
+  "vocab": [
+    {
+      "key": "mnn:50:0",
+      "kana": "まいります",
+      "kanji": "参ります",
+      "context": "",
+      "mean": "to go, to come (humble equivalent of 行きます / 来ます)",
+      "cat": "verb",
+      "type": "godan",
+      "trans": "i",
+      "dict": "参る",
+      "dictRead": "まいる",
+      "audio": "/Audio/minnamoi/bai50/00010111101111101.mp3",
+      "levels": {
+        "N5": [
+          "<ruby>私<rt>わたし</rt></ruby>はアメリカから<ruby>参<rt>まい</rt></ruby>りました。",
+          "I have come from America."
+        ],
+        "N4": [
+          "あした３<ruby>時<rt>じ</rt></ruby>ごろ、そちらへ<ruby>参<rt>まい</rt></ruby>ります。",
+          "I'll come over there around 3 o'clock tomorrow."
+        ],
+        "N3": [
+          "<ruby>係<rt>かかり</rt></ruby>の<ruby>者<rt>もの</rt></ruby>がすぐに<ruby>参<rt>まい</rt></ruby>りますので、こちらで<ruby>少々<rt>しょうしょう</rt></ruby>お<ruby>待<rt>ま</rt></ruby>ちください。",
+          "The person in charge will come right away, so please wait here for a moment."
+        ],
+        "N2": [
+          "ご<ruby>都合<rt>つごう</rt></ruby>のよろしい<ruby>日<rt>ひ</rt></ruby>をお<ruby>知<rt>し</rt></ruby>らせいただければ、いつでも<ruby>御社<rt>おんしゃ</rt></ruby>まで<ruby>参<rt>まい</rt></ruby>ります。",
+          "If you let me know a day that suits you, I'll come to your company anytime."
+        ],
+        "N1": [
+          "<ruby>本日<rt>ほんじつ</rt></ruby>は、<ruby>亡<rt>な</rt></ruby>き<ruby>父<rt>ちち</rt></ruby>が<ruby>生前<rt>せいぜん</rt></ruby>お<ruby>世話<rt>せわ</rt></ruby>になった<ruby>皆様<rt>みなさま</rt></ruby>にご<ruby>挨拶<rt>あいさつ</rt></ruby>いたしたく、<ruby>遠路<rt>えんろ</rt></ruby>はるばる<ruby>参<rt>まい</rt></ruby>りました。",
+          "I have traveled this long way today, wishing to pay my respects to all of you who cared for my late father during his life."
+        ]
+      },
+      "mnem": "'my-ru' — I humbly MY-self go and come: 参る is the humble equivalent of 行く and 来る.",
+      "tip": "参る lowers YOU — use it only for your own (or your group's) going/coming, never the listener's (that is the honorific いらっしゃる). It also appears in polite station announcements (まもなく電車が参ります).",
+      "accent": 1
+    },
+    {
+      "key": "mnn:50:1",
+      "kana": "おります",
+      "kanji": "",
+      "context": "",
+      "mean": "to be, to exist (humble equivalent of います)",
+      "cat": "verb",
+      "type": "godan",
+      "trans": "i",
+      "dict": "おる",
+      "dictRead": "おる",
+      "audio": "/Audio/minnamoi/bai50/00010111101111110.mp3",
+      "levels": {
+        "N5": [
+          "<ruby>父<rt>ちち</rt></ruby>は<ruby>今<rt>いま</rt></ruby><ruby>家<rt>いえ</rt></ruby>におります。",
+          "My father is at home now."
+        ],
+        "N4": [
+          "あした１<ruby>日中<rt>にちじゅう</rt></ruby><ruby>会社<rt>かいしゃ</rt></ruby>におりますので、いつでもお<ruby>電話<rt>でんわ</rt></ruby>ください。",
+          "I'll be at the office all day tomorrow, so please call anytime."
+        ],
+        "N3": [
+          "<ruby>家族<rt>かぞく</rt></ruby>はみな<ruby>元気<rt>げんき</rt></ruby>にしておりますので、どうぞご<ruby>安心<rt>あんしん</rt></ruby>ください。",
+          "My whole family is doing well, so please don't worry."
+        ],
+        "N2": [
+          "その<ruby>件<rt>けん</rt></ruby>については、<ruby>私<rt>わたし</rt></ruby>どもも<ruby>以前<rt>いぜん</rt></ruby>から<ruby>気<rt>き</rt></ruby>にかけておりました。",
+          "As for that matter, we too have been concerned about it for some time."
+        ],
+        "N1": [
+          "<ruby>至<rt>いた</rt></ruby>らぬ<ruby>点<rt>てん</rt></ruby>も<ruby>多々<rt>たた</rt></ruby>あったかと<ruby>存<rt>ぞん</rt></ruby>じますが、<ruby>社員<rt>しゃいん</rt></ruby><ruby>一同<rt>いちどう</rt></ruby>、<ruby>皆様<rt>みなさま</rt></ruby>のご<ruby>期待<rt>きたい</rt></ruby>に<ruby>応<rt>こた</rt></ruby>えるべく<ruby>日々<rt>ひび</rt></ruby><ruby>努力<rt>どりょく</rt></ruby>を<ruby>重<rt>かさ</rt></ruby>ねておる<ruby>次第<rt>しだい</rt></ruby>でございます。",
+          "There may well have been many shortcomings, but all of us employees are working hard day by day to live up to your expectations."
+        ]
+      },
+      "mnem": "'oh-ru' — humbly 'to be there': you keep low and merely OR-e (are) present: おる = the humble います.",
+      "tip": "おる is the humble equivalent of いる — おります says where YOU or your in-group are, never the listener (that is いらっしゃる). 〜ておる is the humble 〜ている (勉強しております).",
+      "accent": 1
+    },
+    {
+      "key": "mnn:50:2",
+      "kana": "いただきます",
+      "kanji": "",
+      "context": "",
+      "mean": "to receive, to eat, to drink (humble equivalent of もらいます / 食べます / 飲みます)",
+      "cat": "verb",
+      "type": "godan",
+      "trans": "t",
+      "dict": "いただく",
+      "dictRead": "いただく",
+      "audio": "/Audio/minnamoi/bai50/00010111101111111.mp3",
+      "levels": {
+        "N5": [
+          "<ruby>先生<rt>せんせい</rt></ruby>にきれいな<ruby>本<rt>ほん</rt></ruby>をいただきました。",
+          "I received a beautiful book from my teacher."
+        ],
+        "N4": [
+          "では、<ruby>遠慮<rt>えんりょ</rt></ruby>なくいただきます。",
+          "Well then, I'll gratefully help myself."
+        ],
+        "N3": [
+          "お<ruby>忙<rt>いそが</rt></ruby>しいところ、お<ruby>時間<rt>じかん</rt></ruby>をいただき、ありがとうございます。",
+          "Thank you for giving me your time even though you're busy."
+        ],
+        "N2": [
+          "<ruby>先輩<rt>せんぱい</rt></ruby>に<ruby>丁寧<rt>ていねい</rt></ruby>に<ruby>教<rt>おし</rt></ruby>えていただいたおかげで、<ruby>無事<rt>ぶじ</rt></ruby><ruby>試験<rt>しけん</rt></ruby>に<ruby>合格<rt>ごうかく</rt></ruby>できました。",
+          "Thanks to my senior kindly teaching me, I managed to pass the exam."
+        ],
+        "N1": [
+          "<ruby>本日<rt>ほんじつ</rt></ruby>はご<ruby>多忙<rt>たぼう</rt></ruby>の<ruby>中<rt>なか</rt></ruby>、<ruby>貴重<rt>きちょう</rt></ruby>なご<ruby>意見<rt>いけん</rt></ruby>を<ruby>数多<rt>かずおお</rt></ruby>くいただき、<ruby>心<rt>こころ</rt></ruby>より<ruby>御礼<rt>おんれい</rt></ruby><ruby>申<rt>もう</rt></ruby>し<ruby>上<rt>あ</rt></ruby>げます。",
+          "I sincerely thank you for giving us so many valuable opinions today despite your busy schedule."
+        ]
+      },
+      "mnem": "'ee-ta-da-ku' — you humbly TAKE what is handed DOWN and raise it above your head (頂): いただく = to receive / eat / drink.",
+      "tip": "いただく is the humble equivalent of もらう, 食べる, and 飲む. 〜ていただく = to humbly have someone do something for you (contrast くださる, which honors the giver). Written 頂く but usually kana.",
+      "accent": 0
+    },
+    {
+      "key": "mnn:50:3",
+      "kana": "もうします",
+      "kanji": "申します",
+      "context": "",
+      "mean": "to say, to be called (humble equivalent of 言います)",
+      "cat": "verb",
+      "type": "godan",
+      "trans": "t",
+      "dict": "申す",
+      "dictRead": "もうす",
+      "audio": "/Audio/minnamoi/bai50/00010111110000000.mp3",
+      "levels": {
+        "N5": [
+          "はじめまして。ミラーと<ruby>申<rt>もう</rt></ruby>します。",
+          "How do you do. My name is Miller."
+        ],
+        "N4": [
+          "<ruby>父<rt>ちち</rt></ruby>がよろしくと<ruby>申<rt>もう</rt></ruby>しておりました。",
+          "My father said to give you his regards."
+        ],
+        "N3": [
+          "<ruby>失礼<rt>しつれい</rt></ruby>とは<ruby>存<rt>ぞん</rt></ruby>じますが、<ruby>一言<rt>ひとこと</rt></ruby><ruby>申<rt>もう</rt></ruby>し<ruby>上<rt>あ</rt></ruby>げてもよろしいでしょうか。",
+          "I know it may be rude, but may I say one word?"
+        ],
+        "N2": [
+          "<ruby>先<rt>さき</rt></ruby>ほど<ruby>申<rt>もう</rt></ruby>し<ruby>上<rt>あ</rt></ruby>げたとおり、<ruby>会議<rt>かいぎ</rt></ruby>の<ruby>日程<rt>にってい</rt></ruby>は<ruby>変更<rt>へんこう</rt></ruby>になりました。",
+          "As I mentioned a moment ago, the date of the meeting has changed."
+        ],
+        "N1": [
+          "<ruby>誠<rt>まこと</rt></ruby>に<ruby>勝手<rt>かって</rt></ruby>なお<ruby>願<rt>ねが</rt></ruby>いを<ruby>申<rt>もう</rt></ruby>し<ruby>上<rt>あ</rt></ruby>げる<ruby>次第<rt>しだい</rt></ruby>で<ruby>恐縮<rt>きょうしゅく</rt></ruby>ではございますが、<ruby>何卒<rt>なにとぞ</rt></ruby>ご<ruby>検討<rt>けんとう</rt></ruby>くださいますようお<ruby>願<rt>ねが</rt></ruby>い<ruby>申<rt>もう</rt></ruby>し<ruby>上<rt>あ</rt></ruby>げます。",
+          "It is entirely a self-serving request and I am truly sorry to trouble you, but I humbly ask that you kindly give it your consideration."
+        ]
+      },
+      "mnem": "'moh-su' — you humbly MOUTH your own words: 申す = to say (humble). 〜と申します is how you humbly give your name.",
+      "tip": "申す is the humble equivalent of 言う (申し上げる is humbler still). Contrast おっしゃる, the HONORIFIC 'say' for the listener — don't use 申す for what your boss said.",
+      "accent": 1
+    },
+    {
+      "key": "mnn:50:4",
+      "kana": "いたします",
+      "kanji": "",
+      "context": "",
+      "mean": "to do (humble equivalent of します)",
+      "cat": "verb",
+      "type": "godan",
+      "trans": "t",
+      "dict": "いたす",
+      "dictRead": "いたす",
+      "audio": "/Audio/minnamoi/bai50/00010111110000001.mp3",
+      "levels": {
+        "N5": [
+          "<ruby>準備<rt>じゅんび</rt></ruby>は<ruby>私<rt>わたし</rt></ruby>がいたします。",
+          "I'll do the preparations."
+        ],
+        "N4": [
+          "お<ruby>荷物<rt>にもつ</rt></ruby>はこちらでお<ruby>預<rt>あず</rt></ruby>かりいたします。",
+          "We'll look after your luggage here."
+        ],
+        "N3": [
+          "<ruby>後<rt>のち</rt></ruby>ほど、こちらからお<ruby>電話<rt>でんわ</rt></ruby>いたします。",
+          "I'll call you back later."
+        ],
+        "N2": [
+          "<ruby>詳<rt>くわ</rt></ruby>しい<ruby>資料<rt>しりょう</rt></ruby>は、<ruby>明日<rt>あす</rt></ruby>までにご<ruby>用意<rt>ようい</rt></ruby>いたします。",
+          "I'll have the detailed materials ready by tomorrow."
+        ],
+        "N1": [
+          "<ruby>皆様<rt>みなさま</rt></ruby>のご<ruby>期待<rt>きたい</rt></ruby>に<ruby>沿<rt>そ</rt></ruby>えるよう、<ruby>誠心<rt>せいしん</rt></ruby><ruby>誠意<rt>せいい</rt></ruby><ruby>努力<rt>どりょく</rt></ruby>いたす<ruby>所存<rt>しょぞん</rt></ruby>でございます。",
+          "I intend to do my utmost, in all sincerity, to live up to everyone's expectations."
+        ]
+      },
+      "mnem": "'ee-ta-su' — you humbly do the deed yourself: いたす = the humble する. お〜いたします adds even more deference.",
+      "tip": "いたす is the humble equivalent of する. It's most common in お〜いたします／ご〜いたします (お願いいたします, ご案内いたします). Contrast なさる, the HONORIFIC 'do' for the listener.",
+      "accent": 0
+    },
+    {
+      "key": "mnn:50:5",
+      "kana": "はいけんします",
+      "kanji": "拝見します",
+      "context": "",
+      "mean": "to see, to look at (humble equivalent of 見ます)",
+      "cat": "verb",
+      "type": "irregular",
+      "trans": "t",
+      "dict": "拝見する",
+      "dictRead": "はいけんする",
+      "audio": "/Audio/minnamoi/bai50/00010111110000010.mp3",
+      "levels": {
+        "N5": [
+          "お<ruby>手紙<rt>てがみ</rt></ruby>を<ruby>拝見<rt>はいけん</rt></ruby>しました。",
+          "I read your letter."
+        ],
+        "N4": [
+          "ちょっと<ruby>切符<rt>きっぷ</rt></ruby>を<ruby>拝見<rt>はいけん</rt></ruby>します。",
+          "Let me take a look at your ticket."
+        ],
+        "N3": [
+          "ご<ruby>家族<rt>かぞく</rt></ruby>の<ruby>写真<rt>しゃしん</rt></ruby>を<ruby>拝見<rt>はいけん</rt></ruby>しましたが、<ruby>皆<rt>みな</rt></ruby>さん<ruby>優<rt>やさ</rt></ruby>しそうですね。",
+          "I saw your family photos — everyone looks so kind."
+        ],
+        "N2": [
+          "<ruby>先生<rt>せんせい</rt></ruby>の<ruby>論文<rt>ろんぶん</rt></ruby>を<ruby>拝見<rt>はいけん</rt></ruby>して、<ruby>大<rt>おお</rt></ruby>いに<ruby>勉強<rt>べんきょう</rt></ruby>させていただきました。",
+          "Reading your paper, I learned a great deal."
+        ],
+        "N1": [
+          "<ruby>貴殿<rt>きでん</rt></ruby>の<ruby>作品<rt>さくひん</rt></ruby>を<ruby>拝見<rt>はいけん</rt></ruby>し、その<ruby>緻密<rt>ちみつ</rt></ruby>な<ruby>筆致<rt>ひっち</rt></ruby>に<ruby>深<rt>ふか</rt></ruby>く<ruby>感銘<rt>かんめい</rt></ruby>を<ruby>受<rt>う</rt></ruby>けた<ruby>次第<rt>しだい</rt></ruby>でございます。",
+          "Having viewed your work, I was deeply moved by its meticulous brushwork."
+        ]
+      },
+      "mnem": "拝 (to bow in worship) + 見 (to see) — you bow your head and look: 拝見する = to (humbly) see / look at.",
+      "tip": "拝見する is the humble equivalent of 見る, for looking at a superior's things (letter, photo, ticket). Contrast ご覧になる, the HONORIFIC 'see' for the listener. Never say 拝見される.",
+      "accent": 0
+    },
+    {
+      "key": "mnn:50:6",
+      "kana": "ぞんじます",
+      "kanji": "存じます",
+      "context": "",
+      "mean": "to know, to think (humble equivalent of 知っています / 思います)",
+      "cat": "verb",
+      "type": "ichidan",
+      "trans": "t",
+      "dict": "存じる",
+      "dictRead": "ぞんじる",
+      "audio": "/Audio/minnamoi/bai50/00010111110000011.mp3",
+      "levels": {
+        "N5": [
+          "その<ruby>店<rt>みせ</rt></ruby>なら、よく<ruby>存<rt>ぞん</rt></ruby>じております。",
+          "I know that shop well."
+        ],
+        "N4": [
+          "すみません、<ruby>電話番号<rt>でんわばんごう</rt></ruby>は<ruby>存<rt>ぞん</rt></ruby>じません。",
+          "I'm sorry, I don't know the phone number."
+        ],
+        "N3": [
+          "<ruby>失礼<rt>しつれい</rt></ruby>とは<ruby>存<rt>ぞん</rt></ruby>じますが、お<ruby>名前<rt>なまえ</rt></ruby>をもう<ruby>一度<rt>いちど</rt></ruby><ruby>伺<rt>うかが</rt></ruby>ってもよろしいですか。",
+          "I know it's rude, but may I ask your name once more?"
+        ],
+        "N2": [
+          "その<ruby>方<rt>かた</rt></ruby>のお<ruby>名前<rt>なまえ</rt></ruby>は、かねてより<ruby>存<rt>ぞん</rt></ruby>じ<ruby>上<rt>あ</rt></ruby>げておりました。",
+          "I have known that person's name for quite some time."
+        ],
+        "N1": [
+          "<ruby>浅学<rt>せんがく</rt></ruby><ruby>非才<rt>ひさい</rt></ruby>の<ruby>身<rt>み</rt></ruby>ではございますが、<ruby>及<rt>およ</rt></ruby>ばずながら<ruby>力<rt>ちから</rt></ruby>になりたいと<ruby>存<rt>ぞん</rt></ruby>じております。",
+          "Though I am a person of shallow learning and little talent, I would like, inadequate as I am, to be of help."
+        ]
+      },
+      "mnem": "存 (to exist / be aware of) — you humbly hold the knowledge in mind: 存じる = to know / think (humble).",
+      "tip": "存じる is the humble equivalent of 知る／思う for THINGS (存じております); for KNOWING A PERSON use 存じ上げる. Contrast ご存じ, the HONORIFIC 'know' for the listener.",
+      "accent": 0
+    },
+    {
+      "key": "mnn:50:7",
+      "kana": "うかがいます",
+      "kanji": "伺います",
+      "context": "",
+      "mean": "to ask, to hear, to visit (humble equivalent of 聞きます / 行きます)",
+      "cat": "verb",
+      "type": "godan",
+      "trans": "t",
+      "dict": "伺う",
+      "dictRead": "うかがう",
+      "audio": "/Audio/minnamoi/bai50/00010111110000100.mp3",
+      "levels": {
+        "N5": [
+          "あした３<ruby>時<rt>じ</rt></ruby>にお<ruby>宅<rt>たく</rt></ruby>へ<ruby>伺<rt>うかが</rt></ruby>います。",
+          "I'll visit your home at 3 o'clock tomorrow."
+        ],
+        "N4": [
+          "ちょっと<ruby>道<rt>みち</rt></ruby>を<ruby>伺<rt>うかが</rt></ruby>ってもよろしいですか。",
+          "May I ask the way?"
+        ],
+        "N3": [
+          "<ruby>先生<rt>せんせい</rt></ruby>から、その<ruby>件<rt>けん</rt></ruby>についてくわしく<ruby>伺<rt>うかが</rt></ruby>いました。",
+          "I heard about that matter in detail from the teacher."
+        ],
+        "N2": [
+          "ぜひ<ruby>一度<rt>いちど</rt></ruby>、<ruby>皆様<rt>みなさま</rt></ruby>のご<ruby>意見<rt>いけん</rt></ruby>を<ruby>伺<rt>うかが</rt></ruby>いたいと<ruby>存<rt>ぞん</rt></ruby>じます。",
+          "I would very much like to hear everyone's opinions at least once."
+        ],
+        "N1": [
+          "<ruby>本日<rt>ほんじつ</rt></ruby>は、<ruby>業界<rt>ぎょうかい</rt></ruby>の<ruby>第一人者<rt>だいいちにんしゃ</rt></ruby>でいらっしゃる<ruby>先生<rt>せんせい</rt></ruby>に<ruby>貴重<rt>きちょう</rt></ruby>なお<ruby>話<rt>はなし</rt></ruby>を<ruby>伺<rt>うかが</rt></ruby>える<ruby>機会<rt>きかい</rt></ruby>を<ruby>賜<rt>たまわ</rt></ruby>り、<ruby>光栄<rt>こうえい</rt></ruby>に<ruby>存<rt>ぞん</rt></ruby>じます。",
+          "It is an honor today to be granted the chance to hear valuable words from you, a leading authority in the industry."
+        ]
+      },
+      "mnem": "'oo-ka-gau' — you humbly go up to inquire: 伺う = to ask / hear / visit (humble). 伺 = to inquire.",
+      "tip": "伺う is the humble equivalent of 聞く (ask/hear), 行く and 訪ねる (visit). お宅へ伺う = to (humbly) visit; お話を伺う = to (humbly) hear. Only for YOUR actions.",
+      "accent": 0
+    },
+    {
+      "key": "mnn:50:8",
+      "kana": "おめにかかります",
+      "kanji": "お目にかかります",
+      "context": "",
+      "mean": "to meet (humble equivalent of 会います)",
+      "cat": "verb",
+      "type": "godan",
+      "trans": "i",
+      "dict": "お目にかかる",
+      "dictRead": "おめにかかる",
+      "audio": "/Audio/minnamoi/bai50/00010111110000101.mp3",
+      "levels": {
+        "N5": [
+          "はじめてお<ruby>目<rt>め</rt></ruby>にかかります。",
+          "This is the first time I've met you."
+        ],
+        "N4": [
+          "<ruby>社長<rt>しゃちょう</rt></ruby>に<ruby>先月<rt>せんげつ</rt></ruby>お<ruby>目<rt>め</rt></ruby>にかかりました。",
+          "I met the company president last month."
+        ],
+        "N3": [
+          "お<ruby>目<rt>め</rt></ruby>にかかれて、<ruby>本当<rt>ほんとう</rt></ruby>にうれしく<ruby>思<rt>おも</rt></ruby>います。",
+          "I'm truly glad to have been able to meet you."
+        ],
+        "N2": [
+          "<ruby>一度<rt>いちど</rt></ruby>ゆっくりお<ruby>目<rt>め</rt></ruby>にかかって、お<ruby>礼<rt>れい</rt></ruby>を<ruby>申<rt>もう</rt></ruby>し<ruby>上<rt>あ</rt></ruby>げたいと<ruby>存<rt>ぞん</rt></ruby>じます。",
+          "I'd like to meet you at leisure sometime and express my thanks."
+        ],
+        "N1": [
+          "かねてより<ruby>著書<rt>ちょしょ</rt></ruby>を<ruby>通<rt>つう</rt></ruby>じて<ruby>敬愛<rt>けいあい</rt></ruby>しておりました<ruby>先生<rt>せんせい</rt></ruby>に、こうしてお<ruby>目<rt>め</rt></ruby>にかかれますとは、<ruby>望外<rt>ぼうがい</rt></ruby>の<ruby>喜<rt>よろこ</rt></ruby>びでございます。",
+          "To be able to meet you like this — a teacher I have long admired through your books — is a joy beyond my hopes."
+        ]
+      },
+      "mnem": "literally 'to place myself before your honored 目 (eyes)': お目にかかる = to (humbly) meet.",
+      "tip": "お目にかかる is the humble equivalent of 会う; the person met takes に (社長にお目にかかる). Contrast お会いになる, the HONORIFIC 'meet' for the listener. A set first-meeting phrase.",
+      "accent": 0
+    },
+    {
+      "key": "mnn:50:9",
+      "kana": "いれます",
+      "kanji": "入れます",
+      "context": "コーヒーを〜",
+      "mean": "to make [coffee], to pour [coffee]",
+      "cat": "verb",
+      "type": "ichidan",
+      "trans": "t",
+      "dict": "入れる",
+      "dictRead": "いれる",
+      "audio": "/Audio/minnamoi/bai50/00010111110000110.mp3",
+      "accent": 0
+    },
+    {
+      "key": "mnn:50:10",
+      "kana": "よういします",
+      "kanji": "用意します",
+      "context": "",
+      "mean": "to prepare, to get ready",
+      "cat": "verb",
+      "type": "irregular",
+      "trans": "t",
+      "dict": "用意する",
+      "dictRead": "よういする",
+      "audio": "/Audio/minnamoi/bai50/00010111110000111.mp3",
+      "levels": {
+        "N5": [
+          "<ruby>飲<rt>の</rt></ruby>み<ruby>物<rt>もの</rt></ruby>を<ruby>用意<rt>ようい</rt></ruby>しました。",
+          "I prepared some drinks."
+        ],
+        "N4": [
+          "<ruby>会議<rt>かいぎ</rt></ruby>の<ruby>資料<rt>しりょう</rt></ruby>を<ruby>用意<rt>ようい</rt></ruby>しておいてください。",
+          "Please have the meeting materials ready in advance."
+        ],
+        "N3": [
+          "お<ruby>客<rt>きゃく</rt></ruby>さんが<ruby>来<rt>く</rt></ruby>る<ruby>前<rt>まえ</rt></ruby>に、お<ruby>茶<rt>ちゃ</rt></ruby>を<ruby>用意<rt>ようい</rt></ruby>しておいたほうがいいですよ。",
+          "You'd better prepare some tea before the guests arrive."
+        ],
+        "N2": [
+          "<ruby>万一<rt>まんいち</rt></ruby>に<ruby>備<rt>そな</rt></ruby>えて、<ruby>非常<rt>ひじょう</rt></ruby><ruby>食<rt>しょく</rt></ruby>を<ruby>用意<rt>ようい</rt></ruby>しておくにこしたことはない。",
+          "It never hurts to keep emergency food prepared, just in case."
+        ],
+        "N1": [
+          "<ruby>交渉<rt>こうしょう</rt></ruby>が<ruby>決裂<rt>けつれつ</rt></ruby>した<ruby>場合<rt>ばあい</rt></ruby>に<ruby>備<rt>そな</rt></ruby>え、<ruby>代替案<rt>だいたいあん</rt></ruby>をいくつも<ruby>用意<rt>ようい</rt></ruby>しておいたからこそ、<ruby>最悪<rt>さいあく</rt></ruby>の<ruby>事態<rt>じたい</rt></ruby>を<ruby>免<rt>まぬが</rt></ruby>れることができた。",
+          "It was precisely because we had prepared several alternative plans in case the negotiations broke down that we were able to avoid the worst outcome."
+        ]
+      },
+      "mnem": "用 (use) + 意 (mind / intention) — you set your mind to have things ready to USE: 用意する = to prepare.",
+      "tip": "用意 and 準備 both mean 'prepare'; 用意 leans toward getting concrete things ready (お茶を用意する), 準備 covers broader arrangements. 支度 (したく) is a third near-synonym (getting oneself ready).",
+      "accent": 1
+    },
+    {
+      "key": "mnn:50:11",
+      "kana": "わたくし",
+      "kanji": "私",
+      "context": "",
+      "mean": "I (humble/formal equivalent of わたし)",
+      "cat": "noun",
+      "type": "",
+      "trans": "",
+      "dict": "私",
+      "dictRead": "わたくし",
+      "audio": "/Audio/minnamoi/bai50/00010111110001000.mp3",
+      "levels": {
+        "N5": [
+          "<ruby>私<rt>わたくし</rt></ruby>はミラーと<ruby>申<rt>もう</rt></ruby>します。",
+          "I am called Miller."
+        ],
+        "N4": [
+          "その<ruby>仕事<rt>しごと</rt></ruby>は<ruby>私<rt>わたくし</rt></ruby>がいたします。",
+          "I'll do that job."
+        ],
+        "N3": [
+          "<ruby>私<rt>わたくし</rt></ruby>どもの<ruby>店<rt>みせ</rt></ruby>をご<ruby>利用<rt>りよう</rt></ruby>いただき、ありがとうございます。",
+          "Thank you for using our shop."
+        ],
+        "N2": [
+          "その<ruby>件<rt>けん</rt></ruby>に<ruby>関<rt>かん</rt></ruby>しましては、<ruby>私<rt>わたくし</rt></ruby>の<ruby>一存<rt>いちぞん</rt></ruby>では<ruby>決<rt>き</rt></ruby>めかねます。",
+          "As for that matter, I cannot decide on my own authority."
+        ],
+        "N1": [
+          "<ruby>本件<rt>ほんけん</rt></ruby>につきましては、<ruby>私<rt>わたくし</rt></ruby>が<ruby>全<rt>ぜん</rt></ruby><ruby>責任<rt>せきにん</rt></ruby>を<ruby>負<rt>お</rt></ruby>う<ruby>所存<rt>しょぞん</rt></ruby>でございますので、どうかご<ruby>安心<rt>あんしん</rt></ruby>くださいませ。",
+          "As for this matter, I intend to bear full responsibility, so please rest assured."
+        ]
+      },
+      "mnem": "'wa-ta-KU-shi' — the same 私 as わたし, stretched into a formal shape with an extra 'ku': わたくし = the humble, ceremonial 'I'.",
+      "tip": "私 is read わたくし (not わたし) in formal/humble speech — same kanji, higher register. 私ども = the humble 'we / our company'. Casual わたし and blunt 僕／俺 share the slot but not the register.",
+      "accent": 0
+    },
+    {
+      "key": "mnn:50:12",
+      "kana": "ガイド",
+      "kanji": "",
+      "context": "",
+      "mean": "guide (tour guide, guidebook)",
+      "cat": "noun",
+      "type": "",
+      "trans": "",
+      "dict": "ガイド",
+      "dictRead": "ガイド",
+      "audio": "/Audio/minnamoi/bai50/00010111110001001.mp3",
+      "levels": {
+        "N5": [
+          "あの<ruby>人<rt>ひと</rt></ruby>はツアーのガイドです。",
+          "That person is the tour guide."
+        ],
+        "N4": [
+          "<ruby>旅行<rt>りょこう</rt></ruby>のとき、ガイドさんが<ruby>町<rt>まち</rt></ruby>を<ruby>案内<rt>あんない</rt></ruby>してくれました。",
+          "On the trip, the guide showed us around the town."
+        ],
+        "N3": [
+          "はじめての<ruby>土地<rt>とち</rt></ruby>では、ガイドブックがあると<ruby>安心<rt>あんしん</rt></ruby>して<ruby>歩<rt>ある</rt></ruby>けます。",
+          "In an unfamiliar place, having a guidebook lets you walk around with peace of mind."
+        ],
+        "N2": [
+          "<ruby>経験<rt>けいけん</rt></ruby><ruby>豊富<rt>ほうふ</rt></ruby>なガイドの<ruby>説明<rt>せつめい</rt></ruby>のおかげで、<ruby>遺跡<rt>いせき</rt></ruby>の<ruby>歴史<rt>れきし</rt></ruby>がよく<ruby>理解<rt>りかい</rt></ruby>できた。",
+          "Thanks to the explanation of the experienced guide, I understood the ruins' history well."
+        ],
+        "N1": [
+          "<ruby>単<rt>たん</rt></ruby>なる<ruby>観光<rt>かんこう</rt></ruby>ガイドにとどまらず、<ruby>地元<rt>じもと</rt></ruby>の<ruby>歴史<rt>れきし</rt></ruby>や<ruby>文化<rt>ぶんか</rt></ruby>を<ruby>深<rt>ふか</rt></ruby>く<ruby>語<rt>かた</rt></ruby>る<ruby>彼<rt>かれ</rt></ruby>の<ruby>案内<rt>あんない</rt></ruby>は、<ruby>旅<rt>たび</rt></ruby>を<ruby>忘<rt>わす</rt></ruby>れがたいものにしてくれた。",
+          "More than a mere tourist guide, his guiding — speaking deeply of local history and culture — made the trip unforgettable."
+        ]
+      },
+      "mnem": "the English 'guide' in katakana: ガイド. A ガイドさん leads you; a ガイドブック guides you.",
+      "tip": "ガイド = a (tour) guide, a guidebook, or 'to guide' (ガイドする). Don't confuse with ガード (guard). The person is often ガイドさん.",
+      "accent": 1
+    },
+    {
+      "key": "mnn:50:13",
+      "kana": "メールアドレス",
+      "kanji": "",
+      "context": "",
+      "mean": "e-mail address",
+      "cat": "noun",
+      "type": "",
+      "trans": "",
+      "dict": "メールアドレス",
+      "dictRead": "メールアドレス",
+      "audio": "/Audio/minnamoi/bai50/00010111110001010.mp3",
+      "levels": {
+        "N5": [
+          "メールアドレスを<ruby>教<rt>おし</rt></ruby>えてください。",
+          "Please tell me your e-mail address."
+        ],
+        "N4": [
+          "メールアドレスが<ruby>変<rt>か</rt></ruby>わったので、<ruby>友<rt>とも</rt></ruby>だちに<ruby>知<rt>し</rt></ruby>らせました。",
+          "My e-mail address changed, so I let my friends know."
+        ],
+        "N3": [
+          "<ruby>登録<rt>とうろく</rt></ruby>のときに、メールアドレスを<ruby>間違<rt>まちが</rt></ruby>えて<ruby>入力<rt>にゅうりょく</rt></ruby>してしまいました。",
+          "I mistyped my e-mail address when registering."
+        ],
+        "N2": [
+          "<ruby>迷惑<rt>めいわく</rt></ruby>メールが<ruby>増<rt>ふ</rt></ruby>えたので、メールアドレスを<ruby>変更<rt>へんこう</rt></ruby>せざるを<ruby>得<rt>え</rt></ruby>なくなった。",
+          "Spam increased, so I had no choice but to change my e-mail address."
+        ],
+        "N1": [
+          "<ruby>個人<rt>こじん</rt></ruby><ruby>情報<rt>じょうほう</rt></ruby>の<ruby>流出<rt>りゅうしゅつ</rt></ruby>により、<ruby>数万件<rt>すうまんけん</rt></ruby>ものメールアドレスが<ruby>外部<rt>がいぶ</rt></ruby>に<ruby>漏<rt>も</rt></ruby>れた<ruby>可能性<rt>かのうせい</rt></ruby>があると<ruby>発表<rt>はっぴょう</rt></ruby>された。",
+          "It was announced that, due to a personal-data leak, tens of thousands of e-mail addresses may have been exposed."
+        ]
+      },
+      "mnem": "the English 'mail address': メールアドレス. Casually clipped to just アドレス.",
+      "tip": "メールアドレス = e-mail address; often shortened to アドレス. Don't confuse with 住所 (じゅうしょ, a physical/postal address).",
+      "accent": 4
+    },
+    {
+      "key": "mnn:50:14",
+      "kana": "スケジュール",
+      "kanji": "",
+      "context": "",
+      "mean": "schedule, timetable",
+      "cat": "noun",
+      "type": "",
+      "trans": "",
+      "dict": "スケジュール",
+      "dictRead": "スケジュール",
+      "audio": "/Audio/minnamoi/bai50/00010111110001011.mp3",
+      "levels": {
+        "N5": [
+          "あしたのスケジュールを<ruby>教<rt>おし</rt></ruby>えてください。",
+          "Please tell me tomorrow's schedule."
+        ],
+        "N4": [
+          "<ruby>雨<rt>あめ</rt></ruby>のため、スケジュールが<ruby>変<rt>か</rt></ruby>わりました。",
+          "The schedule changed because of the rain."
+        ],
+        "N3": [
+          "<ruby>出張<rt>しゅっちょう</rt></ruby>のスケジュールが<ruby>厳<rt>きび</rt></ruby>しくて、<ruby>観光<rt>かんこう</rt></ruby>する<ruby>時間<rt>じかん</rt></ruby>がなさそうです。",
+          "The business-trip schedule is tight, so it looks like there won't be time to sightsee."
+        ],
+        "N2": [
+          "<ruby>予定<rt>よてい</rt></ruby>どおりにスケジュールを<ruby>進<rt>すす</rt></ruby>めるためには、<ruby>早<rt>はや</rt></ruby>めの<ruby>準備<rt>じゅんび</rt></ruby>が<ruby>欠<rt>か</rt></ruby>かせない。",
+          "To keep the schedule on track as planned, early preparation is essential."
+        ],
+        "N1": [
+          "<ruby>過密<rt>かみつ</rt></ruby>なスケジュールを<ruby>無理<rt>むり</rt></ruby>にこなそうとした<ruby>結果<rt>けっか</rt></ruby>、かえって<ruby>全体<rt>ぜんたい</rt></ruby>の<ruby>効率<rt>こうりつ</rt></ruby>を<ruby>落<rt>お</rt></ruby>とすことになりかねない。",
+          "Forcing yourself through an overpacked schedule can, if anything, end up lowering overall efficiency."
+        ]
+      },
+      "mnem": "the English 'schedule' in katakana: スケジュール. A timetable full of スケ・ジュール slots.",
+      "tip": "スケジュール ≈ 予定 (よてい), but スケジュール is the timetable/plan itself (the list/document); 予定 is more 'a plan / appointment'. スケジュールを立てる = to draw up a schedule.",
+      "accent": 2
+    },
+    {
+      "key": "mnn:50:15",
+      "kana": "さらいしゅう",
+      "kanji": "再来週",
+      "context": "",
+      "mean": "the week after next",
+      "cat": "noun",
+      "type": "",
+      "trans": "",
+      "dict": "再来週",
+      "dictRead": "さらいしゅう",
+      "audio": "/Audio/minnamoi/bai50/00010111110001100.mp3",
+      "levels": {
+        "N5": [
+          "<ruby>再来週<rt>さらいしゅう</rt></ruby><ruby>日本<rt>にほん</rt></ruby>へ<ruby>帰<rt>かえ</rt></ruby>ります。",
+          "I'll return to Japan the week after next."
+        ],
+        "N4": [
+          "<ruby>再来週<rt>さらいしゅう</rt></ruby>のパーティーに<ruby>行<rt>い</rt></ruby>くつもりです。",
+          "I plan to go to the party the week after next."
+        ],
+        "N3": [
+          "<ruby>試験<rt>しけん</rt></ruby>は<ruby>再来週<rt>さらいしゅう</rt></ruby>だから、そろそろ<ruby>準備<rt>じゅんび</rt></ruby>を<ruby>始<rt>はじ</rt></ruby>めたほうがいい。",
+          "The exam is the week after next, so I'd better start preparing soon."
+        ],
+        "N2": [
+          "<ruby>再来週<rt>さらいしゅう</rt></ruby>までに<ruby>企画書<rt>きかくしょ</rt></ruby>を<ruby>仕上<rt>しあ</rt></ruby>げなければ、<ruby>間<rt>ま</rt></ruby>に<ruby>合<rt>あ</rt></ruby>わない。",
+          "Unless I finish the proposal by the week after next, it won't be in time."
+        ],
+        "N1": [
+          "<ruby>再来週<rt>さらいしゅう</rt></ruby>に<ruby>予定<rt>よてい</rt></ruby>されていた<ruby>式典<rt>しきてん</rt></ruby>は、<ruby>諸般<rt>しょはん</rt></ruby>の<ruby>事情<rt>じじょう</rt></ruby>により<ruby>延期<rt>えんき</rt></ruby>を<ruby>余儀<rt>よぎ</rt></ruby>なくされた。",
+          "The ceremony scheduled for the week after next was, owing to various circumstances, unavoidably postponed."
+        ]
+      },
+      "mnem": "再 (again) added to 来週 (next week): 再来週 = the week AFTER next. Note 再 is read さ here.",
+      "tip": "In 再来週／再来月／再来年 the kanji 再 is read さ (not さい). Ladder: 来週 (next week) → 再来週 (the week after next); its mirror is 先々週 (せんせんしゅう).",
+      "accent": 0
+    },
+    {
+      "key": "mnn:50:16",
+      "kana": "さらいげつ",
+      "kanji": "再来月",
+      "context": "",
+      "mean": "the month after next",
+      "cat": "noun",
+      "type": "",
+      "trans": "",
+      "dict": "再来月",
+      "dictRead": "さらいげつ",
+      "audio": "/Audio/minnamoi/bai50/00010111110001101.mp3",
+      "levels": {
+        "N5": [
+          "<ruby>再来月<rt>さらいげつ</rt></ruby><ruby>国<rt>くに</rt></ruby>へ<ruby>帰<rt>かえ</rt></ruby>ります。",
+          "I'll go back to my country the month after next."
+        ],
+        "N4": [
+          "<ruby>再来月<rt>さらいげつ</rt></ruby>、<ruby>妹<rt>いもうと</rt></ruby>が<ruby>結婚<rt>けっこん</rt></ruby>します。",
+          "My younger sister is getting married the month after next."
+        ],
+        "N3": [
+          "<ruby>再来月<rt>さらいげつ</rt></ruby>から<ruby>新<rt>あたら</rt></ruby>しい<ruby>仕事<rt>しごと</rt></ruby>を<ruby>始<rt>はじ</rt></ruby>めることになりました。",
+          "It's been decided that I'll start a new job from the month after next."
+        ],
+        "N2": [
+          "<ruby>再来月<rt>さらいげつ</rt></ruby>の<ruby>展示会<rt>てんじかい</rt></ruby>に<ruby>向<rt>む</rt></ruby>けて、<ruby>今<rt>いま</rt></ruby>のうちに<ruby>作品<rt>さくひん</rt></ruby>を<ruby>仕上<rt>しあ</rt></ruby>げておきたい。",
+          "I want to finish my pieces now, ahead of the exhibition the month after next."
+        ],
+        "N1": [
+          "<ruby>再来月<rt>さらいげつ</rt></ruby>に<ruby>控<rt>ひか</rt></ruby>えた<ruby>海外<rt>かいがい</rt></ruby><ruby>赴任<rt>ふにん</rt></ruby>を<ruby>前<rt>まえ</rt></ruby>に、<ruby>身辺<rt>しんぺん</rt></ruby>の<ruby>整理<rt>せいり</rt></ruby>に<ruby>追<rt>お</rt></ruby>われる<ruby>日々<rt>ひび</rt></ruby>が<ruby>続<rt>つづ</rt></ruby>いている。",
+          "With an overseas posting looming the month after next, my days keep being taken up with putting my affairs in order."
+        ]
+      },
+      "mnem": "再 (again) + 来月 (next month): 再来月 = the month after next.",
+      "tip": "再来月 = the month after next (再 read さ). Ladder: 来月 → 再来月. Contrast 先月 (last month) → 先々月 (せんせんげつ, the month before last).",
+      "accent": 0
+    },
+    {
+      "key": "mnn:50:17",
+      "kana": "さらいねん",
+      "kanji": "再来年",
+      "context": "",
+      "mean": "the year after next",
+      "cat": "noun",
+      "type": "",
+      "trans": "",
+      "dict": "再来年",
+      "dictRead": "さらいねん",
+      "audio": "/Audio/minnamoi/bai50/00010111110001110.mp3",
+      "levels": {
+        "N5": [
+          "<ruby>再来年<rt>さらいねん</rt></ruby><ruby>大学<rt>だいがく</rt></ruby>に<ruby>入<rt>はい</rt></ruby>ります。",
+          "I'll enter university the year after next."
+        ],
+        "N4": [
+          "<ruby>再来年<rt>さらいねん</rt></ruby>、オリンピックが<ruby>開<rt>ひら</rt></ruby>かれるそうです。",
+          "I hear the Olympics will be held the year after next."
+        ],
+        "N3": [
+          "<ruby>再来年<rt>さらいねん</rt></ruby>までに<ruby>日本語<rt>にほんご</rt></ruby>の<ruby>試験<rt>しけん</rt></ruby>に<ruby>合格<rt>ごうかく</rt></ruby>できるようにがんばります。",
+          "I'll do my best to be able to pass the Japanese exam by the year after next."
+        ],
+        "N2": [
+          "<ruby>再来年<rt>さらいねん</rt></ruby>の<ruby>春<rt>はる</rt></ruby>には、<ruby>長年<rt>ながねん</rt></ruby>の<ruby>夢<rt>ゆめ</rt></ruby>だった<ruby>店<rt>みせ</rt></ruby>をようやく<ruby>開<rt>ひら</rt></ruby>けそうだ。",
+          "By the spring of the year after next, it looks like I'll finally be able to open the shop that was my long-held dream."
+        ],
+        "N1": [
+          "<ruby>再来年<rt>さらいねん</rt></ruby>に<ruby>予定<rt>よてい</rt></ruby>される<ruby>制度<rt>せいど</rt></ruby><ruby>改正<rt>かいせい</rt></ruby>を<ruby>見据<rt>みす</rt></ruby>え、<ruby>各社<rt>かくしゃ</rt></ruby>は<ruby>今<rt>いま</rt></ruby>から<ruby>対応<rt>たいおう</rt></ruby>に<ruby>乗<rt>の</rt></ruby>り<ruby>出<rt>だ</rt></ruby>している。",
+          "With an eye on the system reform planned for the year after next, companies are already moving to respond."
+        ]
+      },
+      "mnem": "再 (again) + 来年 (next year): 再来年 = the year AFTER next.",
+      "tip": "再来年 = the year after next (再 read さ). Ladder: 来年 → 再来年. Its mirror image is 一昨年 (おととし, the year before last).",
+      "accent": 0
+    },
+    {
+      "key": "mnn:50:18",
+      "kana": "はじめに",
+      "kanji": "初めに",
+      "context": "",
+      "mean": "first, at the beginning, to begin with",
+      "cat": "adverb",
+      "type": "",
+      "trans": "",
+      "dict": "初めに",
+      "dictRead": "はじめに",
+      "audio": "/Audio/minnamoi/bai50/00010111110001111.mp3",
+      "levels": {
+        "N5": [
+          "<ruby>初<rt>はじ</rt></ruby>めに<ruby>名前<rt>なまえ</rt></ruby>を<ruby>書<rt>か</rt></ruby>いてください。",
+          "First, please write your name."
+        ],
+        "N4": [
+          "<ruby>初<rt>はじ</rt></ruby>めにこの<ruby>町<rt>まち</rt></ruby>の<ruby>歴史<rt>れきし</rt></ruby>について<ruby>説明<rt>せつめい</rt></ruby>します。",
+          "First, I'll explain about this town's history."
+        ],
+        "N3": [
+          "<ruby>初<rt>はじ</rt></ruby>めに<ruby>全体<rt>ぜんたい</rt></ruby>の<ruby>流<rt>なが</rt></ruby>れを<ruby>確認<rt>かくにん</rt></ruby>してから、<ruby>作業<rt>さぎょう</rt></ruby>を<ruby>始<rt>はじ</rt></ruby>めましょう。",
+          "Let's start the work after first checking the overall flow."
+        ],
+        "N2": [
+          "<ruby>初<rt>はじ</rt></ruby>めに<ruby>結論<rt>けつろん</rt></ruby>を<ruby>述<rt>の</rt></ruby>べたうえで、<ruby>順<rt>じゅん</rt></ruby>を<ruby>追<rt>お</rt></ruby>って<ruby>理由<rt>りゆう</rt></ruby>を<ruby>説明<rt>せつめい</rt></ruby>させていただきます。",
+          "I'll first state the conclusion, and then explain the reasons in order."
+        ],
+        "N1": [
+          "<ruby>初<rt>はじ</rt></ruby>めに<ruby>全体<rt>ぜんたい</rt></ruby><ruby>像<rt>ぞう</rt></ruby>を<ruby>示<rt>しめ</rt></ruby>しておくことが、<ruby>聞<rt>き</rt></ruby>き<ruby>手<rt>て</rt></ruby>の<ruby>理解<rt>りかい</rt></ruby>を<ruby>助<rt>たす</rt></ruby>けるうえで<ruby>肝要<rt>かんよう</rt></ruby>である。",
+          "Presenting the whole picture at the outset is essential to aiding the listener's comprehension."
+        ]
+      },
+      "mnem": "初め (the beginning) + に → 'at the beginning, first of all': 初めに opens a sequence.",
+      "tip": "初めに = 'first / to begin with' (opens a sequence), pairs with 次に／最後に. Note 初め (beginning, in time) vs 始め (the start of an action) — here the 初 kanji is used. Don't confuse with はじめまして.",
+      "accent": 0
+    },
+    {
+      "key": "mnn:50:19",
+      "kana": "えどとうきょうはくぶつかん",
+      "kanji": "江戸東京博物館",
+      "context": "",
+      "mean": "Edo-Tokyo Museum (proper noun)",
+      "cat": "noun",
+      "type": "",
+      "trans": "",
+      "dict": "江戸東京博物館",
+      "dictRead": "えどとうきょうはくぶつかん",
+      "audio": "/Audio/minnamoi/bai50/00010111110010000.mp3"
+    }
+  ],
+  "grammar": [
+    {
+      "pattern": "Special humble verbs (謙譲語) — talking about your own actions to a superior",
+      "structure": "行きます・来ます → 参ります／います → おります／食べます・飲みます・もらいます → いただきます／言います → 申します／します → いたします／見ます → 拝見します／知っています・思います → 存じて おります・存じます／聞きます・訪ねます → 伺います／会います → お目に かかります",
+      "explain": "When you describe your OWN actions (or those of your in-group) to a superior, you humble yourself by lowering your side. A set of everyday verbs has special humble forms — 参る, おる, いただく, 申す, いたす, 拝見する, 存じる, 伺う, お目にかかる. These describe only the speaker's side, never the listener's action (for the listener you use 尊敬語 such as いらっしゃる, おっしゃる, なさる, ご覧になる, ご存じです).",
+      "examples": [
+        {
+          "jp": "<ruby>私<rt>わたし</rt></ruby>はアメリカから<ruby>参<rt>まい</rt></ruby>りました。",
+          "en": "I have come from America."
+        },
+        {
+          "jp": "カリナと<ruby>申<rt>もう</rt></ruby>します。<ruby>家族<rt>かぞく</rt></ruby>はジャカルタにおります。",
+          "en": "My name is Karina. My family is in Jakarta."
+        },
+        {
+          "jp": "きのう<ruby>先生<rt>せんせい</rt></ruby>のお<ruby>宅<rt>たく</rt></ruby>へ<ruby>伺<rt>うかが</rt></ruby>いました。",
+          "en": "Yesterday I visited the teacher's house."
+        },
+        {
+          "jp": "ご<ruby>家族<rt>かぞく</rt></ruby>の<ruby>写真<rt>しゃしん</rt></ruby>を<ruby>拝見<rt>はいけん</rt></ruby>しました。",
+          "en": "I saw your family photos."
+        }
+      ]
+    },
+    {
+      "pattern": "お＋Vます＋します / ご＋N＋します (the general humble pattern 謙譲語II)",
+      "structure": "お ＋ V(ますstem) ＋ します／ご ＋ [漢語]N ＋ します　（例：持ちます→お持ちします・案内します→ご案内します・送ります→お送りします）／さらに丁寧に：お〜いたします・ご〜いたします",
+      "explain": "For verbs with no special humble form, make a humble expression with お＋Vます-stem＋します (native wago verbs) or ご＋する-noun＋します (Sino-Japanese kango verbs). You use it when your action is directed at or benefits a superior: お持ちします 'I'll carry it (for you)', ご案内します 'I'll show you around'. Replace します with いたします for extra deference. Most kanji-compound verbs take ご (ご説明します), though a few native ones take お (お電話します).",
+      "examples": [
+        {
+          "jp": "<ruby>重<rt>おも</rt></ruby>そうですね。お<ruby>持<rt>も</rt></ruby>ちしましょうか。",
+          "en": "That looks heavy. Shall I carry it for you?"
+        },
+        {
+          "jp": "<ruby>駅<rt>えき</rt></ruby>まで<ruby>車<rt>くるま</rt></ruby>でお<ruby>送<rt>おく</rt></ruby>りします。",
+          "en": "I'll drive you to the station."
+        },
+        {
+          "jp": "<ruby>工場<rt>こうじょう</rt></ruby>の<ruby>中<rt>なか</rt></ruby>をご<ruby>案内<rt>あんない</rt></ruby>します。",
+          "en": "I'll show you around the factory."
+        },
+        {
+          "jp": "きょうのスケジュールをご<ruby>説明<rt>せつめい</rt></ruby>いたします。",
+          "en": "I will explain today's schedule."
+        }
+      ]
+    },
+    {
+      "pattern": "ございます / 〜でございます / 〜てもよろしいでしょうか (courteous words 丁寧語)",
+      "structure": "あります → ございます／N＋です → N＋でございます／〜てもいいですか → 〜てもよろしいでしょうか",
+      "explain": "ございます is the extra-polite form of あります, and Nでございます of Nです — heard in shops, hotels, and formal announcements (電話は階段の横にございます; こちらはミラーでございます). To ask permission politely, 〜てもいいですか becomes 〜てもよろしいでしょうか. These are 丁寧語 (courteous words): they raise the politeness of the whole utterance without exalting the subject the way 尊敬語 does.",
+      "examples": [
+        {
+          "jp": "<ruby>電話<rt>でんわ</rt></ruby>は<ruby>階段<rt>かいだん</rt></ruby>の<ruby>横<rt>よこ</rt></ruby>にございます。",
+          "en": "The telephone is next to the stairs."
+        },
+        {
+          "jp": "フロントは２<ruby>階<rt>かい</rt></ruby>でございます。",
+          "en": "The front desk is on the second floor."
+        },
+        {
+          "jp": "このパンフレットをいただいてもよろしいでしょうか。",
+          "en": "May I take this pamphlet?"
+        },
+        {
+          "jp": "はい、<ruby>富士<rt>ふじ</rt></ruby>ホテルでございます。",
+          "en": "Hello, this is the Fuji Hotel."
+        }
+      ]
+    }
+  ],
+  "examples": [
+    {
+      "jp": "<ruby>今月<rt>こんげつ</rt></ruby>のスケジュールをお<ruby>送<rt>おく</rt></ruby>りします。",
+      "en": "I'll send you this month's schedule."
+    },
+    {
+      "jp": "あした３<ruby>時<rt>じ</rt></ruby>に<ruby>伺<rt>うかが</rt></ruby>います。",
+      "en": "I'll come by at 3 o'clock tomorrow."
+    },
+    {
+      "jp": "<ruby>重<rt>おも</rt></ruby>そうですね。お<ruby>持<rt>も</rt></ruby>ちしましょうか。 …すみません。お<ruby>願<rt>ねが</rt></ruby>いします。",
+      "en": "That looks heavy. Shall I carry it for you? …Sorry to trouble you. I'd appreciate it."
+    },
+    {
+      "jp": "ガイドさん、ここを<ruby>見<rt>み</rt></ruby>たあとで、どこへ<ruby>行<rt>い</rt></ruby>くんですか。 …<ruby>江戸東京博物館<rt>えどとうきょうはくぶつかん</rt></ruby>へご<ruby>案内<rt>あんない</rt></ruby>します。",
+      "en": "Excuse me, guide, where do we go after we finish seeing this? …We'll take you to the Edo-Tokyo Museum."
+    },
+    {
+      "jp": "グプタさんの<ruby>到着<rt>とうちゃく</rt></ruby>は２<ruby>時<rt>じ</rt></ruby>ですね。だれか<ruby>迎<rt>むか</rt></ruby>えに<ruby>行<rt>い</rt></ruby>くんですか。 …はい、<ruby>私<rt>わたし</rt></ruby>が<ruby>参<rt>まい</rt></ruby>ります。",
+      "en": "Mr. Gupta arrives at 2 o'clock, right? Is anyone going to pick him up? …Yes, I'll go."
+    },
+    {
+      "jp": "ちょっと<ruby>切符<rt>きっぷ</rt></ruby>を<ruby>拝見<rt>はいけん</rt></ruby>します。 …はい。",
+      "en": "May I see your ticket, please. …Yes."
+    },
+    {
+      "jp": "はじめまして。ミラーと<ruby>申<rt>もう</rt></ruby>します。どうぞよろしくお<ruby>願<rt>ねが</rt></ruby>いいたします。",
+      "en": "How do you do. My name is Miller. It's a pleasure to meet you."
+    },
+    {
+      "jp": "ご<ruby>家族<rt>かぞく</rt></ruby>はどちらにいらっしゃいますか。 …ニューヨークにおります。",
+      "en": "Where does your family live? …They live in New York."
+    }
+  ],
+  "conversation": {
+    "title": "<ruby>心<rt>こころ</rt></ruby>から<ruby>感謝<rt>かんしゃ</rt></ruby>いたします (I thank you from the bottom of my heart)",
+    "audio": "/Audio/minnahonsatsu2/73.mp3",
+    "lines": [
+      {
+        "role": "司会",
+        "jp": "<ruby>優勝<rt>ゆうしょう</rt></ruby>おめでとうございます。すばらしいスピーチでした。",
+        "en": "Congratulations on winning. That was a wonderful speech."
+      },
+      {
+        "role": "タワポン",
+        "jp": "ありがとうございます。",
+        "en": "Thank you."
+      },
+      {
+        "role": "司会",
+        "jp": "<ruby>緊張<rt>きんちょう</rt></ruby>なさいましたか。",
+        "en": "Were you nervous?"
+      },
+      {
+        "role": "タワポン",
+        "jp": "はい、とても<ruby>緊張<rt>きんちょう</rt></ruby>いたしました。",
+        "en": "Yes, I was very nervous."
+      },
+      {
+        "role": "司会",
+        "jp": "<ruby>練習<rt>れんしゅう</rt></ruby>は<ruby>大変<rt>たいへん</rt></ruby>でしたか。",
+        "en": "Was the practice tough?"
+      },
+      {
+        "role": "タワポン",
+        "jp": "ええ。<ruby>忙<rt>いそが</rt></ruby>しくて、なかなか<ruby>練習<rt>れんしゅう</rt></ruby>の<ruby>時間<rt>じかん</rt></ruby>がありませんでした。",
+        "en": "Yes. I was so busy I could hardly find time to practice."
+      },
+      {
+        "role": "司会",
+        "jp": "<ruby>賞金<rt>しょうきん</rt></ruby>は<ruby>何<rt>なに</rt></ruby>にお<ruby>使<rt>つか</rt></ruby>いになりますか。",
+        "en": "How do you plan to use the prize money?"
+      },
+      {
+        "role": "タワポン",
+        "jp": "そうですね。<ruby>私<rt>わたし</rt></ruby>は<ruby>動物<rt>どうぶつ</rt></ruby>が<ruby>好<rt>す</rt></ruby>きで、<ruby>子<rt>こ</rt></ruby>どものときからアフリカへ<ruby>行<rt>い</rt></ruby>くのが<ruby>夢<rt>ゆめ</rt></ruby>でした。",
+        "en": "Let me see. I love animals, and ever since I was a child my dream has been to go to Africa."
+      },
+      {
+        "role": "司会",
+        "jp": "じゃ、アフリカへ<ruby>行<rt>い</rt></ruby>かれますか。",
+        "en": "So you'll go to Africa?"
+      },
+      {
+        "role": "タワポン",
+        "jp": "はい。アフリカの<ruby>自然<rt>しぜん</rt></ruby>の<ruby>中<rt>なか</rt></ruby>できりんや<ruby>象<rt>ぞう</rt></ruby>を<ruby>見<rt>み</rt></ruby>たいと<ruby>思<rt>おも</rt></ruby>います。",
+        "en": "Yes. I want to see giraffes and elephants out in the wild in Africa."
+      },
+      {
+        "role": "司会",
+        "jp": "<ruby>子<rt>こ</rt></ruby>どものころの<ruby>夢<rt>ゆめ</rt></ruby>がかなうんですね。",
+        "en": "So your childhood dream is coming true."
+      },
+      {
+        "role": "タワポン",
+        "jp": "はい。うれしいです。<ruby>応援<rt>おうえん</rt></ruby>してくださった<ruby>皆様<rt>みなさま</rt></ruby>に<ruby>心<rt>こころ</rt></ruby>から<ruby>感謝<rt>かんしゃ</rt></ruby>いたします。どうもありがとうございました。",
+        "en": "Yes. I'm thrilled. I thank from the bottom of my heart everyone who cheered me on. Thank you very much."
+      }
+    ]
+  }
+}

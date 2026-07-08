@@ -1,0 +1,1220 @@
+{
+  "lesson": 38,
+  "title": "Lesson 38",
+  "theme": "Nominalizing verbs with の — 〜のは…です (doing X is …), 〜のが 好き/上手/速い, 〜のを 忘れる/知っている, and the cleft 〜のは〜です (emphasis)",
+  "source": {
+    "name": "vnjpclub.com",
+    "vocabUrl": "https://www.vnjpclub.com/en/minna-no-nihongo/lesson-38-vocabulary.html",
+    "grammarUrl": "https://www.vnjpclub.com/en/minna-no-nihongo/lesson-38-grammar.html",
+    "note": "Vocabulary, native-speaker audio, and example sentences aggregated from vnjpclub.com (Minna no Nihongo 第2版). For personal study."
+  },
+  "vocab": [
+    {
+      "key": "mnn:38:0",
+      "kana": "さんかします",
+      "kanji": "参加します",
+      "context": "旅行に～",
+      "mean": "to participate (in), join, attend",
+      "cat": "verb",
+      "type": "irregular",
+      "trans": "i",
+      "dict": "参加する",
+      "dictRead": "さんかする",
+      "audio": "/Audio/minnamoi/bai38/00010110110000100.mp3",
+      "levels": {
+        "N5": [
+          "<ruby>私<rt>わたし</rt></ruby>は パーティーに <ruby>参加<rt>さんか</rt></ruby>します。",
+          "I'll take part in the party."
+        ],
+        "N4": [
+          "<ruby>来週<rt>らいしゅう</rt></ruby>の <ruby>旅行<rt>りょこう</rt></ruby>に <ruby>参加<rt>さんか</rt></ruby>したいです。",
+          "I want to join next week's trip."
+        ],
+        "N3": [
+          "<ruby>都合<rt>つごう</rt></ruby>が よかったら、<ruby>会議<rt>かいぎ</rt></ruby>に <ruby>参加<rt>さんか</rt></ruby>するようにしています。",
+          "If it's convenient, I make a point of attending the meetings."
+        ],
+        "N2": [
+          "<ruby>一度<rt>いちど</rt></ruby> <ruby>参加<rt>さんか</rt></ruby>を <ruby>決<rt>き</rt></ruby>めた <ruby>以上<rt>いじょう</rt></ruby>、<ruby>最後<rt>さいご</rt></ruby>まで やり<ruby>通<rt>とお</rt></ruby>すべきだ。",
+          "Once you've decided to take part, you should see it through to the end."
+        ],
+        "N1": [
+          "<ruby>主催者<rt>しゅさいしゃ</rt></ruby><ruby>側<rt>がわ</rt></ruby>の <ruby>都合<rt>つごう</rt></ruby>で、<ruby>当日<rt>とうじつ</rt></ruby>に なって <ruby>参加<rt>さんか</rt></ruby>を <ruby>見合<rt>みあ</rt></ruby>わせざるを <ruby>得<rt>え</rt></ruby>なかった。",
+          "Due to the organizers' circumstances, on the day itself we had no choice but to refrain from participating."
+        ]
+      },
+      "mnem": "参加 = 参 (take part) + 加 (add): you 'add' yourself and take part — 参加する, to participate.",
+      "tip": "参加する (irregular する-verb, intransitive) — what you join takes に (旅行に参加する), not を. The noun 参加 alone means 'participation'; a participant is a 参加者 (さんかしゃ).",
+      "accent": 0
+    },
+    {
+      "key": "mnn:38:1",
+      "kana": "そだてます",
+      "kanji": "育てます",
+      "context": "",
+      "mean": "to raise, bring up, breed",
+      "cat": "verb",
+      "type": "ichidan",
+      "trans": "t",
+      "dict": "育てる",
+      "dictRead": "そだてる",
+      "audio": "/Audio/minnamoi/bai38/00010110110000101.mp3",
+      "levels": {
+        "N5": [
+          "<ruby>花<rt>はな</rt></ruby>を <ruby>育<rt>そだ</rt></ruby>てます。",
+          "I grow flowers."
+        ],
+        "N4": [
+          "<ruby>子<rt>こ</rt></ruby>どもを <ruby>育<rt>そだ</rt></ruby>てるのは <ruby>大変<rt>たいへん</rt></ruby>です。",
+          "Raising children is hard."
+        ],
+        "N3": [
+          "<ruby>花<rt>はな</rt></ruby>を <ruby>育<rt>そだ</rt></ruby>てたら、<ruby>毎日<rt>まいにち</rt></ruby> <ruby>水<rt>みず</rt></ruby>を やらなければなりません。",
+          "If you grow flowers, you have to water them every day."
+        ],
+        "N2": [
+          "<ruby>子<rt>こ</rt></ruby>どもを <ruby>育<rt>そだ</rt></ruby>てるというのは、<ruby>親<rt>おや</rt></ruby> <ruby>自身<rt>じしん</rt></ruby>が <ruby>育<rt>そだ</rt></ruby>てられることでもある。",
+          "Raising a child is, in a sense, also the parent themselves being raised."
+        ],
+        "N1": [
+          "<ruby>一人<rt>ひとり</rt></ruby>の <ruby>職人<rt>しょくにん</rt></ruby>を <ruby>育<rt>そだ</rt></ruby>て<ruby>上<rt>あ</rt></ruby>げるには、<ruby>長<rt>なが</rt></ruby>い <ruby>年月<rt>ねんげつ</rt></ruby>と <ruby>惜<rt>お</rt></ruby>しみない <ruby>手間<rt>てま</rt></ruby>が かかる。",
+          "To bring up a single craftsman takes long years and unstinting effort."
+        ]
+      },
+      "mnem": "育てる — 'so-DA-te-ru': you give a seedling the water and care it needs to 育てる, raise it up.",
+      "tip": "育てる (ichidan, transitive) = actively raise / bring up / breed. Its intransitive pair is 育つ (そだつ, 'to grow up' on its own): 子どもを育てる vs 子どもが育つ — mind the particle.",
+      "accent": 3
+    },
+    {
+      "key": "mnn:38:2",
+      "kana": "はこびます",
+      "kanji": "運びます",
+      "context": "",
+      "mean": "to carry, transport",
+      "cat": "verb",
+      "type": "godan",
+      "trans": "t",
+      "dict": "運ぶ",
+      "dictRead": "はこぶ",
+      "audio": "/Audio/minnamoi/bai38/00010110110000110.mp3",
+      "levels": {
+        "N5": [
+          "<ruby>荷物<rt>にもつ</rt></ruby>を <ruby>運<rt>はこ</rt></ruby>びます。",
+          "I carry the luggage."
+        ],
+        "N4": [
+          "この <ruby>箱<rt>はこ</rt></ruby>を <ruby>隣<rt>となり</rt></ruby>の <ruby>部屋<rt>へや</rt></ruby>へ <ruby>運<rt>はこ</rt></ruby>んでください。",
+          "Please carry this box to the next room."
+        ],
+        "N3": [
+          "<ruby>重<rt>おも</rt></ruby>い <ruby>荷物<rt>にもつ</rt></ruby>を <ruby>運<rt>はこ</rt></ruby>ぶのは <ruby>大変<rt>たいへん</rt></ruby>だから、<ruby>台車<rt>だいしゃ</rt></ruby>を <ruby>使<rt>つか</rt></ruby>うようにしています。",
+          "Carrying heavy loads is tough, so I make a point of using a cart."
+        ],
+        "N2": [
+          "けが<ruby>人<rt>にん</rt></ruby>を <ruby>病院<rt>びょういん</rt></ruby>へ <ruby>運<rt>はこ</rt></ruby>ぶには、<ruby>一刻<rt>いっこく</rt></ruby>を <ruby>争<rt>あらそ</rt></ruby>う。",
+          "In carrying an injured person to the hospital, every second counts."
+        ],
+        "N1": [
+          "<ruby>交渉<rt>こうしょう</rt></ruby>が <ruby>順調<rt>じゅんちょう</rt></ruby>に <ruby>運<rt>はこ</rt></ruby>んだ おかげで、<ruby>契約<rt>けいやく</rt></ruby>は <ruby>予定<rt>よてい</rt></ruby>より <ruby>早<rt>はや</rt></ruby>く <ruby>結<rt>むす</rt></ruby>ばれた。",
+          "Thanks to the negotiations proceeding smoothly, the contract was concluded earlier than planned."
+        ]
+      },
+      "mnem": "運ぶ shares 運 with 運転 (unten, driving) and 運動 (undou, motion) — it's all about 'moving' things: 運ぶ, to carry.",
+      "tip": "運ぶ (godan, transitive) = carry / transport (荷物を運ぶ). Idiomatically 事が運ぶ = 'things progress.' Same 運 as 運 (うん, luck) and 運転 (driving).",
+      "accent": 0
+    },
+    {
+      "key": "mnn:38:3",
+      "kana": "にゅういんします",
+      "kanji": "入院します",
+      "context": "",
+      "mean": "to be hospitalized, go into hospital",
+      "cat": "verb",
+      "type": "irregular",
+      "trans": "i",
+      "dict": "入院する",
+      "dictRead": "にゅういんする",
+      "audio": "/Audio/minnamoi/bai38/00010110110000111.mp3",
+      "levels": {
+        "N5": [
+          "<ruby>父<rt>ちち</rt></ruby>は <ruby>病院<rt>びょういん</rt></ruby>に <ruby>入院<rt>にゅういん</rt></ruby>しました。",
+          "My father went into the hospital."
+        ],
+        "N4": [
+          "<ruby>祖母<rt>そぼ</rt></ruby>が <ruby>入院<rt>にゅういん</rt></ruby>したから、お<ruby>見舞<rt>みま</rt></ruby>いに <ruby>行<rt>い</rt></ruby>きます。",
+          "My grandmother was hospitalized, so I'm going to visit."
+        ],
+        "N3": [
+          "<ruby>手術<rt>しゅじゅつ</rt></ruby>の ため、<ruby>来週<rt>らいしゅう</rt></ruby>から <ruby>一週間<rt>いっしゅうかん</rt></ruby> <ruby>入院<rt>にゅういん</rt></ruby>することになりました。",
+          "It's been decided that I'll be hospitalized for a week from next week for surgery."
+        ],
+        "N2": [
+          "<ruby>検査<rt>けんさ</rt></ruby>の <ruby>結果<rt>けっか</rt></ruby> しだいでは、そのまま <ruby>入院<rt>にゅういん</rt></ruby>することもあり<ruby>得<rt>え</rt></ruby>る。",
+          "Depending on the test results, it's even possible to be hospitalized right away."
+        ],
+        "N1": [
+          "<ruby>長期<rt>ちょうき</rt></ruby>の <ruby>入院<rt>にゅういん</rt></ruby>を <ruby>余儀<rt>よぎ</rt></ruby>なくされ、<ruby>彼<rt>かれ</rt></ruby>は <ruby>仕事<rt>しごと</rt></ruby>の <ruby>一線<rt>いっせん</rt></ruby>から <ruby>退<rt>しりぞ</rt></ruby>かざるを <ruby>得<rt>え</rt></ruby>なかった。",
+          "Forced into a long hospital stay, he had no choice but to step back from the front line of his work."
+        ]
+      },
+      "mnem": "入院 = 入 (enter) + 院 (institution): you 'enter the institution,' 入院する, go into hospital.",
+      "tip": "入院する (irregular, intransitive) = to be admitted to hospital; its opposite is 退院する (leave hospital). 〜院 is the 'institution' element also in 美容院, 大学院.",
+      "accent": 0
+    },
+    {
+      "key": "mnn:38:4",
+      "kana": "たいいんします",
+      "kanji": "退院します",
+      "context": "",
+      "mean": "to leave hospital, be discharged",
+      "cat": "verb",
+      "type": "irregular",
+      "trans": "i",
+      "dict": "退院する",
+      "dictRead": "たいいんする",
+      "audio": "/Audio/minnamoi/bai38/00010110110001000.mp3",
+      "levels": {
+        "N5": [
+          "<ruby>兄<rt>あに</rt></ruby>は もう <ruby>退院<rt>たいいん</rt></ruby>しました。",
+          "My older brother has already left the hospital."
+        ],
+        "N4": [
+          "<ruby>元気<rt>げんき</rt></ruby>に なったので、あした <ruby>退院<rt>たいいん</rt></ruby>します。",
+          "I've gotten better, so I'll be discharged tomorrow."
+        ],
+        "N3": [
+          "<ruby>傷<rt>きず</rt></ruby>が <ruby>治<rt>なお</rt></ruby>ったら、すぐに <ruby>退院<rt>たいいん</rt></ruby>できるそうです。",
+          "I hear that once the wound heals, I'll be able to leave the hospital right away."
+        ],
+        "N2": [
+          "<ruby>医者<rt>いしゃ</rt></ruby>の <ruby>許可<rt>きょか</rt></ruby>が <ruby>出<rt>で</rt></ruby>ない かぎり、<ruby>退院<rt>たいいん</rt></ruby>することはできない。",
+          "Unless the doctor gives permission, you cannot be discharged."
+        ],
+        "N1": [
+          "<ruby>退院<rt>たいいん</rt></ruby>した とはいえ、<ruby>以前<rt>いぜん</rt></ruby>のように <ruby>働<rt>はたら</rt></ruby>けるまでには なお <ruby>時間<rt>じかん</rt></ruby>を <ruby>要<rt>よう</rt></ruby>する。",
+          "Although he has left the hospital, it will still take time before he can work as he used to."
+        ]
+      },
+      "mnem": "退院 = 退 (withdraw) + 院 (institution): you 'withdraw from the institution,' 退院する, leave hospital.",
+      "tip": "退院する (irregular, intransitive) is the exact opposite of 入院する. The 退 (retreat / withdraw) also appears in 退屈 (たいくつ, boredom) and 引退 (いんたい, retirement).",
+      "accent": 0
+    },
+    {
+      "key": "mnn:38:5",
+      "kana": "いれます",
+      "kanji": "入れます",
+      "context": "電源を～",
+      "mean": "to turn on (a switch); to put in",
+      "cat": "verb",
+      "type": "ichidan",
+      "trans": "t",
+      "dict": "入れる",
+      "dictRead": "いれる",
+      "audio": "/Audio/minnamoi/bai38/00010110110001001.mp3",
+      "accent": 0
+    },
+    {
+      "key": "mnn:38:6",
+      "kana": "きります",
+      "kanji": "切ります",
+      "context": "電源を～",
+      "mean": "to turn off (a switch); to cut",
+      "cat": "verb",
+      "type": "godan",
+      "trans": "t",
+      "dict": "切る",
+      "dictRead": "きる",
+      "audio": "/Audio/minnamoi/bai38/00010110110001010.mp3",
+      "accent": 1
+    },
+    {
+      "key": "mnn:38:7",
+      "kana": "かけます",
+      "kanji": "掛けます",
+      "context": "かぎを～",
+      "mean": "to lock; to hang",
+      "cat": "verb",
+      "type": "ichidan",
+      "trans": "t",
+      "dict": "掛ける",
+      "dictRead": "かける",
+      "audio": "/Audio/minnamoi/bai38/00010110110001011.mp3",
+      "accent": 2
+    },
+    {
+      "key": "mnn:38:8",
+      "kana": "つきます",
+      "kanji": "",
+      "context": "うそを～",
+      "mean": "to tell (a lie)",
+      "cat": "verb",
+      "type": "godan",
+      "trans": "t",
+      "dict": "つく",
+      "dictRead": "つく",
+      "audio": "/Audio/minnamoi/bai38/00010110110001100.mp3",
+      "levels": {
+        "N5": [
+          "<ruby>弟<rt>おとうと</rt></ruby>は うそを つきました。",
+          "My little brother told a lie."
+        ],
+        "N4": [
+          "<ruby>子<rt>こ</rt></ruby>どもは ときどき うそを つきます。",
+          "Children sometimes tell lies."
+        ],
+        "N3": [
+          "<ruby>彼<rt>かれ</rt></ruby>は <ruby>平気<rt>へいき</rt></ruby>で うそを つくから、あまり <ruby>信用<rt>しんよう</rt></ruby>しないほうがいいです。",
+          "He tells lies without a second thought, so you'd better not trust him too much."
+        ],
+        "N2": [
+          "うそを ついた ばかりに、みんなの <ruby>信頼<rt>しんらい</rt></ruby>を <ruby>失<rt>うしな</rt></ruby>ってしまった。",
+          "Simply because I told a lie, I lost everyone's trust."
+        ],
+        "N1": [
+          "<ruby>一度<rt>いちど</rt></ruby> うそを つけば、それを <ruby>隠<rt>かく</rt></ruby>すために さらなる うそを <ruby>重<rt>かさ</rt></ruby>ねざるを <ruby>得<rt>え</rt></ruby>なくなる。",
+          "Once you tell a lie, you're forced to pile on further lies to conceal it."
+        ]
+      },
+      "mnem": "うそを つく — the つく of 'attach': a lie 'sticks to' your mouth. Say 'tsuku' and picture a lie stuck on.",
+      "tip": "This つく means 'tell (a lie),' takes を (うそをつく), and is usually written in kana (kanji 吐く). It is a different word from the つく meaning 'to be attached / arrive.' Opposite: 本当のことを言う.",
+      "accent": 1
+    },
+    {
+      "key": "mnn:38:9",
+      "kana": "きもちがいい",
+      "kanji": "気持ちがいい",
+      "context": "",
+      "mean": "to feel good; pleasant, refreshing",
+      "cat": "expression",
+      "type": "",
+      "trans": "",
+      "dict": "気持ちがいい",
+      "dictRead": "きもちがいい",
+      "audio": "/Audio/minnamoi/bai38/00010110110001101.mp3",
+      "levels": {
+        "N5": [
+          "<ruby>朝<rt>あさ</rt></ruby>の <ruby>散歩<rt>さんぽ</rt></ruby>は <ruby>気持<rt>きも</rt></ruby>ちが いいです。",
+          "A morning walk feels good."
+        ],
+        "N4": [
+          "<ruby>窓<rt>まど</rt></ruby>を <ruby>開<rt>あ</rt></ruby>けると、<ruby>風<rt>かぜ</rt></ruby>が <ruby>入<rt>はい</rt></ruby>って <ruby>気持<rt>きも</rt></ruby>ちが よくなりました。",
+          "When I opened the window, a breeze came in and it felt nice."
+        ],
+        "N3": [
+          "<ruby>早<rt>はや</rt></ruby>く <ruby>起<rt>お</rt></ruby>きて <ruby>運動<rt>うんどう</rt></ruby>すると、<ruby>一日中<rt>いちにちじゅう</rt></ruby> <ruby>気持<rt>きも</rt></ruby>ちが いいものです。",
+          "When you get up early and exercise, you feel good all day."
+        ],
+        "N2": [
+          "<ruby>温泉<rt>おんせん</rt></ruby>に つかっている ときほど、<ruby>気持<rt>きも</rt></ruby>ちが いい ことはない。",
+          "There's nothing that feels as good as soaking in a hot spring."
+        ],
+        "N1": [
+          "<ruby>汗<rt>あせ</rt></ruby>を <ruby>流<rt>なが</rt></ruby>した あとの <ruby>一杯<rt>いっぱい</rt></ruby>は、<ruby>何<rt>なに</rt></ruby>ものにも <ruby>代<rt>か</rt></ruby>えがたい <ruby>気持<rt>きも</rt></ruby>ちの よさだ。",
+          "A drink after working up a sweat is a pleasant feeling that nothing else can replace."
+        ]
+      },
+      "mnem": "気持ち (feeling) + が + いい (good): when your 'feeling is good,' 気持ちがいい — it's pleasant.",
+      "tip": "気持ちがいい = physically or emotionally pleasant (a breeze, a bath). Its opposite is 気持ちが悪い. Don't confuse 気持ち (feeling / mood) with 気分 (きぶん) — 気分がいい is also common."
+    },
+    {
+      "key": "mnn:38:10",
+      "kana": "きもちがわるい",
+      "kanji": "気持ちが悪い",
+      "context": "",
+      "mean": "to feel sick; unpleasant, disgusting",
+      "cat": "expression",
+      "type": "",
+      "trans": "",
+      "dict": "気持ちが悪い",
+      "dictRead": "きもちがわるい",
+      "audio": "/Audio/minnamoi/bai38/00010110110001110.mp3",
+      "levels": {
+        "N5": [
+          "<ruby>電車<rt>でんしゃ</rt></ruby>で <ruby>気持<rt>きも</rt></ruby>ちが <ruby>悪<rt>わる</rt></ruby>く なりました。",
+          "I felt sick on the train."
+        ],
+        "N4": [
+          "<ruby>食<rt>た</rt></ruby>べすぎて、<ruby>気持<rt>きも</rt></ruby>ちが <ruby>悪<rt>わる</rt></ruby>いです。",
+          "I ate too much and feel sick."
+        ],
+        "N3": [
+          "<ruby>船<rt>ふね</rt></ruby>に <ruby>乗<rt>の</rt></ruby>ると、いつも <ruby>気持<rt>きも</rt></ruby>ちが <ruby>悪<rt>わる</rt></ruby>く なってしまいます。",
+          "Whenever I ride a boat, I always end up feeling sick."
+        ],
+        "N2": [
+          "<ruby>虫<rt>むし</rt></ruby>を <ruby>見<rt>み</rt></ruby>た だけで <ruby>気持<rt>きも</rt></ruby>ちが <ruby>悪<rt>わる</rt></ruby>く なる <ruby>人<rt>ひと</rt></ruby>も <ruby>少<rt>すく</rt></ruby>なくない。",
+          "There are quite a few people who feel sick just from seeing a bug."
+        ],
+        "N1": [
+          "<ruby>油<rt>あぶら</rt></ruby>っこい ものを <ruby>食<rt>た</rt></ruby>べ<ruby>過<rt>す</rt></ruby>ぎた せいか、<ruby>朝<rt>あさ</rt></ruby>から <ruby>気持<rt>きも</rt></ruby>ちが <ruby>悪<rt>わる</rt></ruby>くて たまらない。",
+          "Perhaps because I ate too much greasy food, I've felt unbearably queasy since morning."
+        ]
+      },
+      "mnem": "気持ち (feeling) + が + 悪い (bad): when your 'feeling is bad,' 気持ちが悪い — you feel sick, or it's gross.",
+      "tip": "気持ちが悪い covers both 'feel nauseous' (physical) and 'creepy / disgusting' (a bug, slime). Casual clip: 気持ち悪い / キモい. Opposite: 気持ちがいい."
+    },
+    {
+      "key": "mnn:38:11",
+      "kana": "おおきな",
+      "kanji": "大きな",
+      "context": "",
+      "mean": "big, large (used before a noun)",
+      "cat": "adjective",
+      "type": "",
+      "trans": "",
+      "dict": "大きな",
+      "dictRead": "おおきな",
+      "audio": "/Audio/minnamoi/bai38/00010110110001111.mp3",
+      "levels": {
+        "N5": [
+          "<ruby>大<rt>おお</rt></ruby>きな <ruby>犬<rt>いぬ</rt></ruby>が います。",
+          "There's a big dog."
+        ],
+        "N4": [
+          "<ruby>公園<rt>こうえん</rt></ruby>に <ruby>大<rt>おお</rt></ruby>きな <ruby>木<rt>き</rt></ruby>が あります。",
+          "There's a big tree in the park."
+        ],
+        "N3": [
+          "<ruby>子<rt>こ</rt></ruby>どもの ころ、<ruby>大<rt>おお</rt></ruby>きな <ruby>家<rt>いえ</rt></ruby>に <ruby>住<rt>す</rt></ruby>んでいました。",
+          "When I was a child, I lived in a big house."
+        ],
+        "N2": [
+          "<ruby>彼<rt>かれ</rt></ruby>の <ruby>一言<rt>ひとこと</rt></ruby>が、<ruby>会社<rt>かいしゃ</rt></ruby>に <ruby>大<rt>おお</rt></ruby>きな <ruby>影響<rt>えいきょう</rt></ruby>を <ruby>与<rt>あた</rt></ruby>えた。",
+          "His single remark had a big impact on the company."
+        ],
+        "N1": [
+          "<ruby>大<rt>おお</rt></ruby>きな <ruby>志<rt>こころざし</rt></ruby>を <ruby>抱<rt>いだ</rt></ruby>く <ruby>者<rt>もの</rt></ruby>ほど、<ruby>目先<rt>めさき</rt></ruby>の <ruby>損得<rt>そんとく</rt></ruby>に とらわれない ものだ。",
+          "The greater the ambition one holds, the less one is bound by immediate gains and losses."
+        ]
+      },
+      "mnem": "大きな is the prenominal twin of 大きい — 'big' locked right in front of a noun: 大きな家.",
+      "tip": "大きな is a 連体詞 (prenominal) — it ONLY sits before a noun (大きな家) and never conjugates or ends a sentence. For 'the house is big,' use the い-adjective 大きい (家が大きい). Same for 小さな/小さい.",
+      "accent": 1
+    },
+    {
+      "key": "mnn:38:12",
+      "kana": "ちいさな",
+      "kanji": "小さな",
+      "context": "",
+      "mean": "small, little (used before a noun)",
+      "cat": "adjective",
+      "type": "",
+      "trans": "",
+      "dict": "小さな",
+      "dictRead": "ちいさな",
+      "audio": "/Audio/minnamoi/bai38/00010110110010000.mp3",
+      "levels": {
+        "N5": [
+          "<ruby>小<rt>ちい</rt></ruby>さな <ruby>部屋<rt>へや</rt></ruby>が あります。",
+          "There's a small room."
+        ],
+        "N4": [
+          "<ruby>妹<rt>いもうと</rt></ruby>は <ruby>小<rt>ちい</rt></ruby>さな <ruby>人形<rt>にんぎょう</rt></ruby>が <ruby>好<rt>す</rt></ruby>きです。",
+          "My little sister likes small dolls."
+        ],
+        "N3": [
+          "<ruby>小<rt>ちい</rt></ruby>さな <ruby>村<rt>むら</rt></ruby>で <ruby>生<rt>う</rt></ruby>まれ、<ruby>静<rt>しず</rt></ruby>かに <ruby>育<rt>そだ</rt></ruby>ちました。",
+          "I was born in a small village and grew up quietly."
+        ],
+        "N2": [
+          "<ruby>小<rt>ちい</rt></ruby>さな ミスの <ruby>積<rt>つ</rt></ruby>み<ruby>重<rt>かさ</rt></ruby>ねが、<ruby>大<rt>おお</rt></ruby>きな <ruby>事故<rt>じこ</rt></ruby>に つながることもある。",
+          "An accumulation of small mistakes can sometimes lead to a big accident."
+        ],
+        "N1": [
+          "<ruby>小<rt>ちい</rt></ruby>さな <ruby>命<rt>いのち</rt></ruby>の <ruby>尊<rt>とうと</rt></ruby>さに <ruby>気<rt>き</rt></ruby>づかされる とき、<ruby>人<rt>ひと</rt></ruby>は <ruby>初<rt>はじ</rt></ruby>めて <ruby>謙虚<rt>けんきょ</rt></ruby>に なれる。",
+          "When we are made to realize the preciousness of a small life, only then can we become humble."
+        ]
+      },
+      "mnem": "小さな is the prenominal twin of 小さい — 'little' clipped right before a noun: 小さな村.",
+      "tip": "小さな is a 連体詞 — only before a noun (小さな村), never at a sentence end. For 'it's small,' use 小さい (村が小さい). Pairs with 大きな.",
+      "accent": 1
+    },
+    {
+      "key": "mnn:38:13",
+      "kana": "あかちゃん",
+      "kanji": "赤ちゃん",
+      "context": "",
+      "mean": "baby",
+      "cat": "noun",
+      "type": "",
+      "trans": "",
+      "dict": "赤ちゃん",
+      "dictRead": "あかちゃん",
+      "audio": "/Audio/minnamoi/bai38/00010110110010001.mp3",
+      "levels": {
+        "N5": [
+          "<ruby>赤<rt>あか</rt></ruby>ちゃんが <ruby>寝<rt>ね</rt></ruby>ています。",
+          "The baby is sleeping."
+        ],
+        "N4": [
+          "<ruby>隣<rt>となり</rt></ruby>の <ruby>家<rt>いえ</rt></ruby>に <ruby>赤<rt>あか</rt></ruby>ちゃんが <ruby>生<rt>う</rt></ruby>まれました。",
+          "A baby was born in the house next door."
+        ],
+        "N3": [
+          "<ruby>赤<rt>あか</rt></ruby>ちゃんが <ruby>泣<rt>な</rt></ruby>いても、<ruby>慌<rt>あわ</rt></ruby>てないようにしています。",
+          "Even when the baby cries, I try not to panic."
+        ],
+        "N2": [
+          "<ruby>赤<rt>あか</rt></ruby>ちゃんは <ruby>泣<rt>な</rt></ruby>くことでしか、<ruby>自分<rt>じぶん</rt></ruby>の <ruby>気持<rt>きも</rt></ruby>ちを <ruby>伝<rt>つた</rt></ruby>えられない。",
+          "A baby can convey its feelings only by crying."
+        ],
+        "N1": [
+          "<ruby>生<rt>う</rt></ruby>まれたばかりの <ruby>赤<rt>あか</rt></ruby>ちゃんの <ruby>寝顔<rt>ねがお</rt></ruby>を <ruby>見<rt>み</rt></ruby>ていると、<ruby>日頃<rt>ひごろ</rt></ruby>の <ruby>疲<rt>つか</rt></ruby>れも どこかへ <ruby>消<rt>き</rt></ruby>えていく。",
+          "Watching the sleeping face of a newborn baby, even my everyday exhaustion fades away somewhere."
+        ]
+      },
+      "mnem": "赤 (red) + ちゃん (affectionate suffix): newborns look red-faced, so an 'aka-chan,' 赤ちゃん, is a baby.",
+      "tip": "赤ちゃん = baby (affectionate). More formal: 赤ん坊 (あかんぼう) or 乳児 (にゅうじ). The 赤 (red) refers to a newborn's ruddy skin.",
+      "accent": 1
+    },
+    {
+      "key": "mnn:38:14",
+      "kana": "しょうがっこう",
+      "kanji": "小学校",
+      "context": "",
+      "mean": "elementary school",
+      "cat": "noun",
+      "type": "",
+      "trans": "",
+      "dict": "小学校",
+      "dictRead": "しょうがっこう",
+      "audio": "/Audio/minnamoi/bai38/00010110110010010.mp3",
+      "levels": {
+        "N5": [
+          "これは <ruby>小学校<rt>しょうがっこう</rt></ruby>です。",
+          "This is an elementary school."
+        ],
+        "N4": [
+          "<ruby>私<rt>わたし</rt></ruby>は この <ruby>小学校<rt>しょうがっこう</rt></ruby>を <ruby>卒業<rt>そつぎょう</rt></ruby>しました。",
+          "I graduated from this elementary school."
+        ],
+        "N3": [
+          "<ruby>小学校<rt>しょうがっこう</rt></ruby>の ときの <ruby>友達<rt>ともだち</rt></ruby>に、<ruby>駅前<rt>えきまえ</rt></ruby>で ばったり <ruby>会<rt>あ</rt></ruby>いました。",
+          "I ran into a friend from elementary school in front of the station."
+        ],
+        "N2": [
+          "<ruby>小学校<rt>しょうがっこう</rt></ruby>の <ruby>六年間<rt>ろくねんかん</rt></ruby>で <ruby>学<rt>まな</rt></ruby>ぶことは、その<ruby>後<rt>ご</rt></ruby>の <ruby>人生<rt>じんせい</rt></ruby>の <ruby>土台<rt>どだい</rt></ruby>となる。",
+          "What one learns during the six years of elementary school becomes the foundation of the rest of one's life."
+        ],
+        "N1": [
+          "<ruby>過疎化<rt>かそか</rt></ruby>に より、その <ruby>小学校<rt>しょうがっこう</rt></ruby>は <ruby>惜<rt>お</rt></ruby>しまれつつ <ruby>廃校<rt>はいこう</rt></ruby>と なった。",
+          "Due to depopulation, that elementary school was closed down, to everyone's regret."
+        ]
+      },
+      "mnem": "小 (small / little) + 学校 (school): the 'little school' for the youngest pupils is 小学校, elementary school.",
+      "tip": "小学校 (elementary, ages ~6–12). The ladder: 小学校 → 中学校 → 高校 (こうこう) → 大学. A pupil there is a 小学生 (しょうがくせい).",
+      "accent": 3
+    },
+    {
+      "key": "mnn:38:15",
+      "kana": "ちゅうがっこう",
+      "kanji": "中学校",
+      "context": "",
+      "mean": "junior high school, middle school",
+      "cat": "noun",
+      "type": "",
+      "trans": "",
+      "dict": "中学校",
+      "dictRead": "ちゅうがっこう",
+      "audio": "/Audio/minnamoi/bai38/00010110110010011.mp3",
+      "levels": {
+        "N5": [
+          "<ruby>姉<rt>あね</rt></ruby>は <ruby>中学校<rt>ちゅうがっこう</rt></ruby>の <ruby>先生<rt>せんせい</rt></ruby>です。",
+          "My older sister is a junior high school teacher."
+        ],
+        "N4": [
+          "<ruby>中学校<rt>ちゅうがっこう</rt></ruby>で <ruby>英語<rt>えいご</rt></ruby>を <ruby>習<rt>なら</rt></ruby>い<ruby>始<rt>はじ</rt></ruby>めました。",
+          "I started learning English in junior high."
+        ],
+        "N3": [
+          "<ruby>中学校<rt>ちゅうがっこう</rt></ruby>を <ruby>出<rt>で</rt></ruby>たら、<ruby>都会<rt>とかい</rt></ruby>の <ruby>高校<rt>こうこう</rt></ruby>に <ruby>進<rt>すす</rt></ruby>みたいと <ruby>思<rt>おも</rt></ruby>っています。",
+          "After I finish junior high, I want to go on to a high school in the city."
+        ],
+        "N2": [
+          "<ruby>中学校<rt>ちゅうがっこう</rt></ruby>の <ruby>三年間<rt>さんねんかん</rt></ruby>は、<ruby>心<rt>こころ</rt></ruby>も <ruby>体<rt>からだ</rt></ruby>も <ruby>大<rt>おお</rt></ruby>きく <ruby>変<rt>か</rt></ruby>わる <ruby>時期<rt>じき</rt></ruby>だ。",
+          "The three years of junior high are a time when both mind and body change greatly."
+        ],
+        "N1": [
+          "<ruby>中学校<rt>ちゅうがっこう</rt></ruby>の <ruby>恩師<rt>おんし</rt></ruby>の <ruby>一言<rt>ひとこと</rt></ruby>が、<ruby>今<rt>いま</rt></ruby>なお <ruby>私<rt>わたし</rt></ruby>の <ruby>人生<rt>じんせい</rt></ruby>の <ruby>指針<rt>ししん</rt></ruby>と なっている。",
+          "A single word from my junior-high mentor still serves as a compass for my life."
+        ]
+      },
+      "mnem": "中 (middle) + 学校 (school): the 'middle school' between 小学校 and 高校 is 中学校, junior high.",
+      "tip": "中学校 (junior high, ages ~12–15). A student there is a 中学生 (ちゅうがくせい). Comes after 小学校 and before 高校 (こうこう, high school).",
+      "accent": 3
+    },
+    {
+      "key": "mnn:38:16",
+      "kana": "えきまえ",
+      "kanji": "駅前",
+      "context": "",
+      "mean": "the area in front of the station",
+      "cat": "noun",
+      "type": "",
+      "trans": "",
+      "dict": "駅前",
+      "dictRead": "えきまえ",
+      "audio": "/Audio/minnamoi/bai38/00010110110010100.mp3",
+      "levels": {
+        "N5": [
+          "<ruby>駅前<rt>えきまえ</rt></ruby>に <ruby>銀行<rt>ぎんこう</rt></ruby>が あります。",
+          "There's a bank in front of the station."
+        ],
+        "N4": [
+          "<ruby>駅前<rt>えきまえ</rt></ruby>の <ruby>店<rt>みせ</rt></ruby>で <ruby>友達<rt>ともだち</rt></ruby>と <ruby>会<rt>あ</rt></ruby>いました。",
+          "I met a friend at a shop in front of the station."
+        ],
+        "N3": [
+          "<ruby>駅前<rt>えきまえ</rt></ruby>は <ruby>人<rt>ひと</rt></ruby>が <ruby>多<rt>おお</rt></ruby>いし、<ruby>店<rt>みせ</rt></ruby>も <ruby>多<rt>おお</rt></ruby>いし、とても にぎやかです。",
+          "In front of the station there are lots of people and shops, so it's very lively."
+        ],
+        "N2": [
+          "<ruby>再開発<rt>さいかいはつ</rt></ruby>に よって、<ruby>駅前<rt>えきまえ</rt></ruby>の <ruby>風景<rt>ふうけい</rt></ruby>は すっかり <ruby>変<rt>か</rt></ruby>わってしまった。",
+          "Due to redevelopment, the scenery in front of the station has completely changed."
+        ],
+        "N1": [
+          "<ruby>駅前<rt>えきまえ</rt></ruby>の <ruby>一等地<rt>いっとうち</rt></ruby>を めぐって、<ruby>業者間<rt>ぎょうしゃかん</rt></ruby>の <ruby>激<rt>はげ</rt></ruby>しい <ruby>争<rt>あらそ</rt></ruby>いが <ruby>繰<rt>く</rt></ruby>り<ruby>広<rt>ひろ</rt></ruby>げられた。",
+          "A fierce struggle unfolded among developers over the prime land in front of the station."
+        ]
+      },
+      "mnem": "駅 (station) + 前 (front): the 'front of the station,' 駅前, is the station-front area.",
+      "tip": "駅前 = the plaza / area right in front of a train station (shops, buses). 〜前 (まえ) glues to other nouns too. It compresses 駅の前 into one word.",
+      "accent": 3
+    },
+    {
+      "key": "mnn:38:17",
+      "kana": "かいがん",
+      "kanji": "海岸",
+      "context": "",
+      "mean": "coast, seashore, beach",
+      "cat": "noun",
+      "type": "",
+      "trans": "",
+      "dict": "海岸",
+      "dictRead": "かいがん",
+      "audio": "/Audio/minnamoi/bai38/00010110110010101.mp3",
+      "levels": {
+        "N5": [
+          "<ruby>海岸<rt>かいがん</rt></ruby>を <ruby>散歩<rt>さんぽ</rt></ruby>します。",
+          "I take a walk along the coast."
+        ],
+        "N4": [
+          "<ruby>夏休<rt>なつやす</rt></ruby>みに <ruby>家族<rt>かぞく</rt></ruby>と <ruby>海岸<rt>かいがん</rt></ruby>へ <ruby>行<rt>い</rt></ruby>きました。",
+          "I went to the seaside with my family over summer break."
+        ],
+        "N3": [
+          "<ruby>朝<rt>あさ</rt></ruby> <ruby>早<rt>はや</rt></ruby>く <ruby>海岸<rt>かいがん</rt></ruby>を <ruby>散歩<rt>さんぽ</rt></ruby>するのは <ruby>気持<rt>きも</rt></ruby>ちが いいです。",
+          "Walking along the coast early in the morning feels great."
+        ],
+        "N2": [
+          "<ruby>台風<rt>たいふう</rt></ruby>の あとの <ruby>海岸<rt>かいがん</rt></ruby>には、<ruby>大量<rt>たいりょう</rt></ruby>の ごみが <ruby>打<rt>う</rt></ruby>ち<ruby>上<rt>あ</rt></ruby>げられていた。",
+          "After the typhoon, a huge amount of trash had washed up on the coast."
+        ],
+        "N1": [
+          "<ruby>開発<rt>かいはつ</rt></ruby>の <ruby>波<rt>なみ</rt></ruby>が <ruby>押<rt>お</rt></ruby>し<ruby>寄<rt>よ</rt></ruby>せる <ruby>中<rt>なか</rt></ruby>、この <ruby>海岸<rt>かいがん</rt></ruby>の <ruby>自然<rt>しぜん</rt></ruby>を <ruby>守<rt>まも</rt></ruby>ろうと する <ruby>声<rt>こえ</rt></ruby>が <ruby>高<rt>たか</rt></ruby>まっている。",
+          "As the wave of development surges in, voices calling to protect this coast's nature are growing louder."
+        ]
+      },
+      "mnem": "海 (sea) + 岸 (shore / bank): the 'sea's shore,' 海岸, is the coast.",
+      "tip": "海岸 (かいがん) = coast / seashore (the geographical edge). 岸 (きし) alone = bank / shore. Compare 海辺 (うみべ, seaside) and 砂浜 (すなはま, sandy beach).",
+      "accent": 0
+    },
+    {
+      "key": "mnn:38:18",
+      "kana": "こうじょう",
+      "kanji": "工場",
+      "context": "",
+      "mean": "factory, plant",
+      "cat": "noun",
+      "type": "",
+      "trans": "",
+      "dict": "工場",
+      "dictRead": "こうじょう",
+      "audio": "/Audio/minnamoi/bai38/00010110110010110.mp3",
+      "levels": {
+        "N5": [
+          "<ruby>父<rt>ちち</rt></ruby>は <ruby>工場<rt>こうじょう</rt></ruby>で <ruby>働<rt>はたら</rt></ruby>いています。",
+          "My father works at a factory."
+        ],
+        "N4": [
+          "この <ruby>工場<rt>こうじょう</rt></ruby>では <ruby>車<rt>くるま</rt></ruby>を <ruby>作<rt>つく</rt></ruby>っています。",
+          "They make cars at this factory."
+        ],
+        "N3": [
+          "<ruby>工場<rt>こうじょう</rt></ruby>を <ruby>見学<rt>けんがく</rt></ruby>できるように、<ruby>前<rt>まえ</rt></ruby>もって <ruby>予約<rt>よやく</rt></ruby>しておきました。",
+          "I made a reservation in advance so that we could tour the factory."
+        ],
+        "N2": [
+          "<ruby>人件費<rt>じんけんひ</rt></ruby>の <ruby>安<rt>やす</rt></ruby>さゆえに、<ruby>多<rt>おお</rt></ruby>くの <ruby>工場<rt>こうじょう</rt></ruby>が <ruby>海外<rt>かいがい</rt></ruby>へ <ruby>移<rt>うつ</rt></ruby>された。",
+          "Because of cheap labor costs, many factories were moved overseas."
+        ],
+        "N1": [
+          "<ruby>二十四時間<rt>にじゅうよじかん</rt></ruby> <ruby>稼働<rt>かどう</rt></ruby>する <ruby>工場<rt>こうじょう</rt></ruby>では、わずかな <ruby>停止<rt>ていし</rt></ruby>でさえ <ruby>莫大<rt>ばくだい</rt></ruby>な <ruby>損失<rt>そんしつ</rt></ruby>を <ruby>招<rt>まね</rt></ruby>きかねない。",
+          "In a factory running 24 hours, even a slight stoppage could invite enormous losses."
+        ]
+      },
+      "mnem": "工 (craft / work) + 場 (place): the 'place of manufacturing work,' 工場, is a factory.",
+      "tip": "工場 = factory / plant. Read こうじょう for a large plant; a small workshop can be read こうば. The 工 (industry / craft) also appears in 工業 (こうぎょう), 工事 (こうじ).",
+      "accent": 3
+    },
+    {
+      "key": "mnn:38:19",
+      "kana": "むら",
+      "kanji": "村",
+      "context": "",
+      "mean": "village",
+      "cat": "noun",
+      "type": "",
+      "trans": "",
+      "dict": "村",
+      "dictRead": "むら",
+      "audio": "/Audio/minnamoi/bai38/00010110110010111.mp3",
+      "levels": {
+        "N5": [
+          "<ruby>小<rt>ちい</rt></ruby>さな <ruby>村<rt>むら</rt></ruby>に <ruby>住<rt>す</rt></ruby>んでいます。",
+          "I live in a small village."
+        ],
+        "N4": [
+          "この <ruby>村<rt>むら</rt></ruby>には <ruby>店<rt>みせ</rt></ruby>が <ruby>一<rt>ひと</rt></ruby>つしか ありません。",
+          "There's only one shop in this village."
+        ],
+        "N3": [
+          "<ruby>年<rt>とし</rt></ruby>を <ruby>取<rt>と</rt></ruby>ったら、<ruby>静<rt>しず</rt></ruby>かな <ruby>村<rt>むら</rt></ruby>で <ruby>暮<rt>く</rt></ruby>らしたいと <ruby>思<rt>おも</rt></ruby>っています。",
+          "When I get old, I want to live in a quiet village."
+        ],
+        "N2": [
+          "<ruby>若者<rt>わかもの</rt></ruby>が <ruby>都会<rt>とかい</rt></ruby>へ <ruby>出<rt>で</rt></ruby>ていく <ruby>一方<rt>いっぽう</rt></ruby>で、<ruby>村<rt>むら</rt></ruby>は <ruby>年々<rt>ねんねん</rt></ruby> <ruby>寂<rt>さび</rt></ruby>れていく。",
+          "While young people leave for the city, the village grows more desolate year by year."
+        ],
+        "N1": [
+          "<ruby>古<rt>ふる</rt></ruby>い しきたりが <ruby>今<rt>いま</rt></ruby>も <ruby>息<rt>いき</rt></ruby>づく その <ruby>村<rt>むら</rt></ruby>では、<ruby>時間<rt>じかん</rt></ruby>が ゆっくりと <ruby>流<rt>なが</rt></ruby>れている かのようだ。",
+          "In that village where old customs still live on, it is as if time flows slowly."
+        ]
+      },
+      "mnem": "村 — 'mura': picture a cluster of huts in a green field, a 'mura,' a 村, village.",
+      "tip": "村 (むら) = village (also an administrative unit). On'yomi そん appears in 村長 (そんちょう, village head), 農村 (のうそん, farm village). Contrast 町 (まち, town) and 市 (し, city).",
+      "accent": 2
+    },
+    {
+      "key": "mnn:38:20",
+      "kana": "かな",
+      "kanji": "",
+      "context": "",
+      "mean": "kana (the hiragana and katakana syllabaries)",
+      "cat": "noun",
+      "type": "",
+      "trans": "",
+      "dict": "かな",
+      "dictRead": "かな",
+      "audio": "/Audio/minnamoi/bai38/00010110110011000.mp3",
+      "levels": {
+        "N5": [
+          "<ruby>名前<rt>なまえ</rt></ruby>を かなで <ruby>書<rt>か</rt></ruby>きます。",
+          "I write my name in kana."
+        ],
+        "N4": [
+          "<ruby>漢字<rt>かんじ</rt></ruby>が <ruby>分<rt>わ</rt></ruby>からないときは、かなで <ruby>書<rt>か</rt></ruby>いてもいいです。",
+          "When you don't know the kanji, you may write it in kana."
+        ],
+        "N3": [
+          "<ruby>小<rt>ちい</rt></ruby>さな <ruby>子<rt>こ</rt></ruby>どもでも <ruby>読<rt>よ</rt></ruby>めるように、かなで <ruby>書<rt>か</rt></ruby>くようにしています。",
+          "I make a point of writing in kana so that even small children can read it."
+        ],
+        "N2": [
+          "かなは <ruby>漢字<rt>かんじ</rt></ruby>を くずして <ruby>作<rt>つく</rt></ruby>られたものだ ということを <ruby>知<rt>し</rt></ruby>っていますか。",
+          "Did you know that kana were created by simplifying kanji?"
+        ],
+        "N1": [
+          "<ruby>漢字<rt>かんじ</rt></ruby>と かなを どう <ruby>交<rt>ま</rt></ruby>ぜて <ruby>書<rt>か</rt></ruby>くかに、その <ruby>人<rt>ひと</rt></ruby>の <ruby>文章<rt>ぶんしょう</rt></ruby>の <ruby>呼吸<rt>こきゅう</rt></ruby>が にじみ <ruby>出<rt>で</rt></ruby>る。",
+          "How one mixes kanji and kana reveals the very rhythm of that person's writing."
+        ]
+      },
+      "mnem": "かな (仮名) = 仮 'provisional' + 名 'characters' — the phonetic 'provisional characters' beside kanji: かな.",
+      "tip": "かな = the two phonetic syllabaries, ひらがな (cursive, native words / grammar) + カタカナ (angular, loanwords). Historically derived from simplified kanji. Often written 仮名 in kanji.",
+      "accent": 0
+    },
+    {
+      "key": "mnn:38:21",
+      "kana": "ゆびわ",
+      "kanji": "指輪",
+      "context": "",
+      "mean": "ring (finger ring)",
+      "cat": "noun",
+      "type": "",
+      "trans": "",
+      "dict": "指輪",
+      "dictRead": "ゆびわ",
+      "audio": "/Audio/minnamoi/bai38/00010110110011001.mp3",
+      "levels": {
+        "N5": [
+          "きれいな <ruby>指輪<rt>ゆびわ</rt></ruby>ですね。",
+          "What a pretty ring."
+        ],
+        "N4": [
+          "<ruby>誕生日<rt>たんじょうび</rt></ruby>に <ruby>母<rt>はは</rt></ruby>から <ruby>指輪<rt>ゆびわ</rt></ruby>を もらいました。",
+          "I got a ring from my mother for my birthday."
+        ],
+        "N3": [
+          "<ruby>結婚<rt>けっこん</rt></ruby>するとき、<ruby>二人<rt>ふたり</rt></ruby>で <ruby>選<rt>えら</rt></ruby>んだ <ruby>指輪<rt>ゆびわ</rt></ruby>を <ruby>今<rt>いま</rt></ruby>も <ruby>大切<rt>たいせつ</rt></ruby>に しています。",
+          "I still cherish the ring the two of us chose when we got married."
+        ],
+        "N2": [
+          "<ruby>指輪<rt>ゆびわ</rt></ruby> <ruby>一<rt>ひと</rt></ruby>つに <ruby>込<rt>こ</rt></ruby>められた <ruby>思<rt>おも</rt></ruby>いは、<ruby>値段<rt>ねだん</rt></ruby>では <ruby>計<rt>はか</rt></ruby>れない。",
+          "The feelings put into a single ring cannot be measured by price."
+        ],
+        "N1": [
+          "<ruby>亡<rt>な</rt></ruby>き <ruby>祖母<rt>そぼ</rt></ruby>の <ruby>形見<rt>かたみ</rt></ruby>の <ruby>指輪<rt>ゆびわ</rt></ruby>は、<ruby>母<rt>はは</rt></ruby>から <ruby>私<rt>わたし</rt></ruby>へと <ruby>静<rt>しず</rt></ruby>かに <ruby>受<rt>う</rt></ruby>け<ruby>継<rt>つ</rt></ruby>がれた。",
+          "My late grandmother's keepsake ring was quietly passed down from my mother to me."
+        ]
+      },
+      "mnem": "指 (finger) + 輪 (ring / loop): the 'loop for your finger,' 指輪, is a ring.",
+      "tip": "指輪 (ゆびわ) = finger ring. Built from 指 (ゆび, finger) + 輪 (わ, ring / hoop). A wedding ring is 結婚指輪 (けっこんゆびわ). Note わ voices from 輪.",
+      "accent": 0
+    },
+    {
+      "key": "mnn:38:22",
+      "kana": "でんげん",
+      "kanji": "電源",
+      "context": "",
+      "mean": "power (source), power switch",
+      "cat": "noun",
+      "type": "",
+      "trans": "",
+      "dict": "電源",
+      "dictRead": "でんげん",
+      "audio": "/Audio/minnamoi/bai38/00010110110011010.mp3",
+      "levels": {
+        "N5": [
+          "<ruby>電源<rt>でんげん</rt></ruby>を <ruby>入<rt>い</rt></ruby>れます。",
+          "I turn on the power."
+        ],
+        "N4": [
+          "パソコンの <ruby>電源<rt>でんげん</rt></ruby>を <ruby>切<rt>き</rt></ruby>ってから、<ruby>出<rt>で</rt></ruby>かけました。",
+          "I turned off the computer's power and then went out."
+        ],
+        "N3": [
+          "<ruby>電池<rt>でんち</rt></ruby>が なくなったら、すぐに <ruby>電源<rt>でんげん</rt></ruby>が <ruby>切<rt>き</rt></ruby>れてしまいます。",
+          "When the battery runs out, the power immediately goes off."
+        ],
+        "N2": [
+          "<ruby>停電<rt>ていでん</rt></ruby>に <ruby>備<rt>そな</rt></ruby>えて、<ruby>非常用<rt>ひじょうよう</rt></ruby>の <ruby>電源<rt>でんげん</rt></ruby>を <ruby>用意<rt>ようい</rt></ruby>しておくべきだ。",
+          "You should prepare an emergency power source in case of a blackout."
+        ],
+        "N1": [
+          "<ruby>電源<rt>でんげん</rt></ruby>を <ruby>確保<rt>かくほ</rt></ruby>できるか どうかが、<ruby>被災地<rt>ひさいち</rt></ruby>での <ruby>活動<rt>かつどう</rt></ruby>の <ruby>生命線<rt>せいめいせん</rt></ruby>と なる。",
+          "Whether or not a power supply can be secured becomes the lifeline of operations in a disaster area."
+        ]
+      },
+      "mnem": "電 (electricity) + 源 (source): the 'source of electricity,' 電源, is the power source / switch.",
+      "tip": "電源 (でんげん) = electrical power source or the on/off switch. 電源を入れる = turn on; 電源を切る = turn off. The 源 (みなもと, source) also appears in 資源 (しげん, resources).",
+      "accent": 0
+    },
+    {
+      "key": "mnn:38:23",
+      "kana": "しゅうかん",
+      "kanji": "習慣",
+      "context": "",
+      "mean": "habit, custom",
+      "cat": "noun",
+      "type": "",
+      "trans": "",
+      "dict": "習慣",
+      "dictRead": "しゅうかん",
+      "audio": "/Audio/minnamoi/bai38/00010110110011011.mp3",
+      "levels": {
+        "N5": [
+          "いい <ruby>習慣<rt>しゅうかん</rt></ruby>を <ruby>作<rt>つく</rt></ruby>ります。",
+          "I'll build good habits."
+        ],
+        "N4": [
+          "<ruby>毎朝<rt>まいあさ</rt></ruby> <ruby>散歩<rt>さんぽ</rt></ruby>するのが <ruby>私<rt>わたし</rt></ruby>の <ruby>習慣<rt>しゅうかん</rt></ruby>です。",
+          "Taking a walk every morning is my habit."
+        ],
+        "N3": [
+          "<ruby>悪<rt>わる</rt></ruby>い <ruby>習慣<rt>しゅうかん</rt></ruby>を <ruby>変<rt>か</rt></ruby>えるのは <ruby>難<rt>むずか</rt></ruby>しいですが、<ruby>少<rt>すこ</rt></ruby>しずつ <ruby>直<rt>なお</rt></ruby>すようにしています。",
+          "Changing a bad habit is hard, but I try to fix it little by little."
+        ],
+        "N2": [
+          "<ruby>国<rt>くに</rt></ruby>が <ruby>違<rt>ちが</rt></ruby>えば、<ruby>食事<rt>しょくじ</rt></ruby>の <ruby>習慣<rt>しゅうかん</rt></ruby>も <ruby>大<rt>おお</rt></ruby>きく <ruby>異<rt>こと</rt></ruby>なるものだ。",
+          "When the country differs, dietary customs also differ greatly."
+        ],
+        "N1": [
+          "<ruby>長年<rt>ながねん</rt></ruby> <ruby>身<rt>み</rt></ruby>に ついた <ruby>習慣<rt>しゅうかん</rt></ruby>を <ruby>改<rt>あらた</rt></ruby>めるには、<ruby>相当<rt>そうとう</rt></ruby>な <ruby>覚悟<rt>かくご</rt></ruby>が <ruby>要<rt>い</rt></ruby>る。",
+          "Reforming a habit ingrained over many years requires considerable resolve."
+        ]
+      },
+      "mnem": "習 (learn / practice) + 慣 (get used to): what you 'learn until you're used to it,' 習慣, is a habit.",
+      "tip": "習慣 (しゅうかん) = habit / custom. Don't confuse with 週間 (しゅうかん, the 'week' counter, 一週間) — same reading, different kanji. 習 also = 習う (to learn).",
+      "accent": 0
+    },
+    {
+      "key": "mnn:38:24",
+      "kana": "けんこう",
+      "kanji": "健康",
+      "context": "",
+      "mean": "health; healthy",
+      "cat": "noun",
+      "type": "",
+      "trans": "",
+      "dict": "健康",
+      "dictRead": "けんこう",
+      "audio": "/Audio/minnamoi/bai38/00010110110011100.mp3",
+      "levels": {
+        "N5": [
+          "<ruby>健康<rt>けんこう</rt></ruby>が <ruby>一番<rt>いちばん</rt></ruby> <ruby>大切<rt>たいせつ</rt></ruby>です。",
+          "Health is the most important thing."
+        ],
+        "N4": [
+          "<ruby>毎日<rt>まいにち</rt></ruby> <ruby>運動<rt>うんどう</rt></ruby>して、<ruby>健康<rt>けんこう</rt></ruby>に <ruby>気<rt>き</rt></ruby>を つけています。",
+          "I exercise every day and take care of my health."
+        ],
+        "N3": [
+          "<ruby>健康<rt>けんこう</rt></ruby>の ために、たばこを やめるようにしました。",
+          "For the sake of my health, I decided to quit smoking."
+        ],
+        "N2": [
+          "お<ruby>金<rt>かね</rt></ruby>が いくら あっても、<ruby>健康<rt>けんこう</rt></ruby>を <ruby>失<rt>うしな</rt></ruby>っては <ruby>意味<rt>いみ</rt></ruby>が ない。",
+          "No matter how much money you have, it's meaningless if you lose your health."
+        ],
+        "N1": [
+          "<ruby>健康<rt>けんこう</rt></ruby>であることの ありがたさは、それを <ruby>損<rt>そこ</rt></ruby>なって <ruby>初<rt>はじ</rt></ruby>めて <ruby>身<rt>み</rt></ruby>に しみて <ruby>分<rt>わ</rt></ruby>かる。",
+          "The blessing of being healthy is truly understood only once you have lost it."
+        ]
+      },
+      "mnem": "健 (healthy / robust) + 康 (at ease / well): 'robust and well,' 健康, is health.",
+      "tip": "健康 (けんこう) works as a noun (健康が大切) and a な-adjective (健康な体). 健康に気をつける = 'take care of one's health.' Compare 元気 (げんき, energetic / well); 健康 is the more clinical 'health.'",
+      "accent": 0
+    },
+    {
+      "key": "mnn:38:25",
+      "kana": "～せい",
+      "kanji": "～製",
+      "context": "",
+      "mean": "made in ~, ~-made",
+      "cat": "noun",
+      "type": "",
+      "trans": "",
+      "dict": "～製",
+      "dictRead": "～せい",
+      "audio": "/Audio/minnamoi/bai38/00010110110011101.mp3",
+      "tip": "～製 attaches to a country or material to mean 'made of / made in ~': 日本製 (Japanese-made), 木製 (もくせい, wooden), 金属製 (metal)."
+    },
+    {
+      "key": "mnn:38:26",
+      "kana": "おととし",
+      "kanji": "",
+      "context": "",
+      "mean": "the year before last",
+      "cat": "noun",
+      "type": "",
+      "trans": "",
+      "dict": "おととし",
+      "dictRead": "おととし",
+      "audio": "/Audio/minnamoi/bai38/00010110110011110.mp3",
+      "levels": {
+        "N5": [
+          "おととし <ruby>日本<rt>にほん</rt></ruby>へ <ruby>来<rt>き</rt></ruby>ました。",
+          "I came to Japan the year before last."
+        ],
+        "N4": [
+          "おととしの <ruby>夏<rt>なつ</rt></ruby>は とても <ruby>暑<rt>あつ</rt></ruby>かったです。",
+          "The summer of the year before last was very hot."
+        ],
+        "N3": [
+          "<ruby>妹<rt>いもうと</rt></ruby>が <ruby>結婚<rt>けっこん</rt></ruby>したのは、<ruby>去年<rt>きょねん</rt></ruby>ではなく おととしです。",
+          "It was the year before last, not last year, that my sister got married."
+        ],
+        "N2": [
+          "おととし <ruby>建<rt>た</rt></ruby>てた ばかりの <ruby>家<rt>いえ</rt></ruby>なのに、もう あちこち <ruby>傷<rt>いた</rt></ruby>んできた。",
+          "Even though it's a house built only the year before last, it's already deteriorating here and there."
+        ],
+        "N1": [
+          "おととしの あの <ruby>出来事<rt>できごと</rt></ruby>を きっかけに、<ruby>私<rt>わたし</rt></ruby>の <ruby>価値観<rt>かちかん</rt></ruby>は <ruby>大<rt>おお</rt></ruby>きく <ruby>変<rt>か</rt></ruby>わった。",
+          "Triggered by that event the year before last, my values changed greatly."
+        ]
+      },
+      "mnem": "おととし — the year 'before last': line them up 今年 → 去年 → おととし (two years back).",
+      "tip": "おととし = the year before last (2 years ago). The ladder: おととし ← 去年 ← 今年 → 来年 → 再来年 (さらいねん). Its day-analog is おととい (the day before yesterday). Also written 一昨年.",
+      "accent": 3
+    },
+    {
+      "key": "mnn:38:27",
+      "kana": "いけない",
+      "kanji": "",
+      "context": "あ、～",
+      "mean": "Oops! / Oh no! (on realizing a mistake); must not, no good",
+      "cat": "expression",
+      "type": "",
+      "trans": "",
+      "dict": "いけない",
+      "dictRead": "いけない",
+      "audio": "/Audio/minnamoi/bai38/00010110110011111.mp3",
+      "levels": {
+        "N5": [
+          "あ、いけない。かぎを <ruby>忘<rt>わす</rt></ruby>れました。",
+          "Oh no! I forgot my key."
+        ],
+        "N4": [
+          "ここで <ruby>遊<rt>あそ</rt></ruby>んでは いけないよ。",
+          "You mustn't play here."
+        ],
+        "N3": [
+          "<ruby>約束<rt>やくそく</rt></ruby>を <ruby>忘<rt>わす</rt></ruby>れるなんて、いけないことをしてしまった。",
+          "Forgetting a promise — I've done something I shouldn't have."
+        ],
+        "N2": [
+          "<ruby>人<rt>ひと</rt></ruby>の <ruby>話<rt>はなし</rt></ruby>を <ruby>最後<rt>さいご</rt></ruby>まで <ruby>聞<rt>き</rt></ruby>かないうちに <ruby>判断<rt>はんだん</rt></ruby>しては いけない。",
+          "You must not judge before hearing someone out to the end."
+        ],
+        "N1": [
+          "<ruby>目先<rt>めさき</rt></ruby>の <ruby>利益<rt>りえき</rt></ruby>に <ruby>目<rt>め</rt></ruby>を <ruby>奪<rt>うば</rt></ruby>われて、<ruby>大切<rt>たいせつ</rt></ruby>なものを <ruby>見失<rt>みうしな</rt></ruby>っては いけない。",
+          "You must not be so dazzled by immediate profit that you lose sight of what matters."
+        ]
+      },
+      "mnem": "いけない — literally 'cannot go' (行けない): the road's blocked, so it's 'no good' — 'oh no!' or 'you mustn't.'",
+      "tip": "あ、いけない = 'Oops! / Oh no!' — said the instant you realize a mistake. The same いけない is the 'must not' of 〜てはいけない. It's the negative potential of 行く frozen into 'no good.'"
+    },
+    {
+      "key": "mnn:38:28",
+      "kana": "おさきにしつれいします",
+      "kanji": "お先に失礼します",
+      "context": "",
+      "mean": "Excuse me for leaving before you (said when leaving work first)",
+      "cat": "expression",
+      "type": "",
+      "trans": "",
+      "dict": "お先に失礼します",
+      "dictRead": "おさきにしつれいします",
+      "audio": "/Audio/minnamoi/bai38/00010110110100000.mp3",
+      "tip": "お先に失礼します is the set phrase you say when leaving the office before your colleagues; they typically reply お疲れさまでした. The casual clip is just お先に."
+    },
+    {
+      "key": "mnn:38:29",
+      "kana": "げんばくドーム",
+      "kanji": "原爆ドーム",
+      "context": "",
+      "mean": "the Atomic Bomb Dome (Hiroshima Peace Memorial)",
+      "cat": "noun",
+      "type": "",
+      "trans": "",
+      "dict": "原爆ドーム",
+      "dictRead": "げんばくドーム",
+      "audio": "/Audio/minnamoi/bai38/00010110110100001.mp3"
+    },
+    {
+      "key": "mnn:38:30",
+      "kana": "いずもたいしゃ",
+      "kanji": "出雲大社",
+      "context": "",
+      "mean": "Izumo Taisha (a grand shrine in Izumo, Shimane Prefecture)",
+      "cat": "noun",
+      "type": "",
+      "trans": "",
+      "dict": "出雲大社",
+      "dictRead": "いずもたいしゃ",
+      "audio": "/Audio/minnamoi/bai38/00010110110100010.mp3"
+    },
+    {
+      "key": "mnn:38:31",
+      "kana": "チェンマイ",
+      "kanji": "",
+      "context": "",
+      "mean": "Chiang Mai (a city in northern Thailand)",
+      "cat": "noun",
+      "type": "",
+      "trans": "",
+      "dict": "チェンマイ",
+      "dictRead": "チェンマイ",
+      "audio": "/Audio/minnamoi/bai38/00010110110100011.mp3"
+    }
+  ],
+  "grammar": [
+    {
+      "pattern": "〜のは… (nominalizer の — 'doing X is …')",
+      "structure": "V(辞書形)＋のは ＋ い形／な形／N です",
+      "explain": "The nominalizer の turns a verb (dictionary form) into a noun phrase so it can be the topic marked with は. 「〜のは〜です」comments on an activity: 'the act of doing X is [adjective].' Used to evaluate an action — 漢字を覚えるのは大変です ('memorizing kanji is tough'). It follows plain forms. In casual speech の often contracts to ん.",
+      "examples": [
+        {
+          "jp": "テニスを <ruby>見<rt>み</rt></ruby>るのは おもしろいです。",
+          "en": "Watching tennis is interesting."
+        },
+        {
+          "jp": "<ruby>漢字<rt>かんじ</rt></ruby>を <ruby>覚<rt>おぼ</rt></ruby>えるのは <ruby>大変<rt>たいへん</rt></ruby>です。",
+          "en": "Memorizing kanji is tough."
+        },
+        {
+          "jp": "<ruby>子<rt>こ</rt></ruby>どもを <ruby>育<rt>そだ</rt></ruby>てるのは <ruby>大変<rt>たいへん</rt></ruby>です。",
+          "en": "Raising children is hard."
+        },
+        {
+          "jp": "<ruby>習慣<rt>しゅうかん</rt></ruby>を <ruby>変<rt>か</rt></ruby>えるのは <ruby>難<rt>むずか</rt></ruby>しいです。",
+          "en": "Changing a habit is difficult."
+        }
+      ]
+    },
+    {
+      "pattern": "〜のが 好き／上手／速い (nominalizer の as the object of preference or skill)",
+      "structure": "V(辞書形)＋のが ＋ 好き・嫌い・上手・下手・速い・遅い です",
+      "explain": "With adjectives that take a が-marked object (好き, 上手, 速い…), の nominalizes a verb so an activity can fill that slot: 私は海岸を散歩するのが好きです. Compare のは (which sets the action up as a topic to comment on): のが marks the nominalized clause as the thing liked, done skillfully, or done fast/slow.",
+      "examples": [
+        {
+          "jp": "<ruby>私<rt>わたし</rt></ruby>は <ruby>海岸<rt>かいがん</rt></ruby>を <ruby>散歩<rt>さんぽ</rt></ruby>するのが <ruby>好<rt>す</rt></ruby>きです。",
+          "en": "I like walking along the beach."
+        },
+        {
+          "jp": "<ruby>彼<rt>かれ</rt></ruby>は うそを つくのが <ruby>上手<rt>じょうず</rt></ruby>です。",
+          "en": "He's good at lying."
+        },
+        {
+          "jp": "<ruby>息子<rt>むすこ</rt></ruby>は <ruby>走<rt>はし</rt></ruby>るのが <ruby>速<rt>はや</rt></ruby>いです。",
+          "en": "My son runs fast."
+        },
+        {
+          "jp": "<ruby>娘<rt>むすめ</rt></ruby>は <ruby>食<rt>た</rt></ruby>べるのが <ruby>遅<rt>おそ</rt></ruby>いです。",
+          "en": "My daughter eats slowly."
+        }
+      ]
+    },
+    {
+      "pattern": "〜のを 忘れる／知っている (nominalizer の as a direct object)",
+      "structure": "V(辞書形)＋のを 忘れました ／ 普通形＋のを 知っていますか",
+      "explain": "の nominalizes a clause so it can be the を-object of verbs like 忘れる ('forget to do') and 知っている ('know that'). 卵を買うのを忘れました = 'I forgot to buy eggs.' With 知っている the inner clause takes plain form: 田中さんが会社をやめたのを知っていますか. Note the answer: 'I don't know' is 知りません (never 知っていません).",
+      "examples": [
+        {
+          "jp": "<ruby>買<rt>か</rt></ruby>い<ruby>物<rt>もの</rt></ruby>に <ruby>行<rt>い</rt></ruby>きましたが、<ruby>卵<rt>たまご</rt></ruby>を <ruby>買<rt>か</rt></ruby>うのを <ruby>忘<rt>わす</rt></ruby>れました。",
+          "en": "I went shopping but forgot to buy eggs."
+        },
+        {
+          "jp": "<ruby>車<rt>くるま</rt></ruby>の <ruby>窓<rt>まど</rt></ruby>を <ruby>閉<rt>し</rt></ruby>めるのを <ruby>忘<rt>わす</rt></ruby>れました。",
+          "en": "I forgot to close the car window."
+        },
+        {
+          "jp": "<ruby>田中<rt>たなか</rt></ruby>さんが <ruby>会社<rt>かいしゃ</rt></ruby>を やめたのを <ruby>知<rt>し</rt></ruby>っていますか。",
+          "en": "Did you know that Mr. Tanaka quit the company?"
+        },
+        {
+          "jp": "<ruby>富士山<rt>ふじさん</rt></ruby>は <ruby>七月<rt>しちがつ</rt></ruby>と <ruby>八月<rt>はちがつ</rt></ruby>しか <ruby>登<rt>のぼ</rt></ruby>れないのを <ruby>知<rt>し</rt></ruby>っていますか。",
+          "en": "Did you know Mt. Fuji can only be climbed in July and August?"
+        }
+      ]
+    },
+    {
+      "pattern": "…のは …です (cleft — 'the one that / where / when … is …')",
+      "structure": "（従属節・普通形）＋のは ＋ [強調したい語] です",
+      "explain": "の nominalizes a whole clause, then 「〜のは Xです」singles X out as the emphasized element — like an English it-cleft. 私が生まれたのはチェンマイです = 'It was in Chiang Mai that I was born.' It is common with question words: 一番忙しいのは12月です. The nominalized clause uses plain form.",
+      "examples": [
+        {
+          "jp": "<ruby>私<rt>わたし</rt></ruby>が <ruby>生<rt>う</rt></ruby>まれたのは チェンマイです。",
+          "en": "The place I was born is Chiang Mai."
+        },
+        {
+          "jp": "<ruby>一年<rt>いちねん</rt></ruby>で <ruby>一番<rt>いちばん</rt></ruby> <ruby>忙<rt>いそが</rt></ruby>しいのは <ruby>十二月<rt>じゅうにがつ</rt></ruby>です。",
+          "en": "The busiest time of the year is December."
+        },
+        {
+          "jp": "<ruby>日本<rt>にほん</rt></ruby>へ <ruby>来<rt>き</rt></ruby>たのは おととしです。",
+          "en": "It was the year before last that I came to Japan."
+        },
+        {
+          "jp": "<ruby>初<rt>はじ</rt></ruby>めて <ruby>彼女<rt>かのじょ</rt></ruby>に <ruby>会<rt>あ</rt></ruby>ったのは <ruby>小学校<rt>しょうがっこう</rt></ruby>の <ruby>教室<rt>きょうしつ</rt></ruby>です。",
+          "en": "The place I first met her was an elementary-school classroom."
+        }
+      ]
+    }
+  ],
+  "examples": [
+    {
+      "jp": "<ruby>絵<rt>え</rt></ruby>を かくのは <ruby>楽<rt>たの</rt></ruby>しいです。",
+      "en": "Drawing pictures is fun."
+    },
+    {
+      "jp": "<ruby>私<rt>わたし</rt></ruby>は <ruby>星<rt>ほし</rt></ruby>を <ruby>見<rt>み</rt></ruby>るのが <ruby>好<rt>す</rt></ruby>きです。",
+      "en": "I like looking at the stars."
+    },
+    {
+      "jp": "<ruby>財布<rt>さいふ</rt></ruby>を <ruby>持<rt>も</rt></ruby>って <ruby>来<rt>く</rt></ruby>るのを <ruby>忘<rt>わす</rt></ruby>れました。",
+      "en": "I forgot to bring my wallet."
+    },
+    {
+      "jp": "<ruby>私<rt>わたし</rt></ruby>が <ruby>日本<rt>にほん</rt></ruby>へ <ruby>来<rt>き</rt></ruby>たのは <ruby>去年<rt>きょねん</rt></ruby>の <ruby>三月<rt>さんがつ</rt></ruby>です。",
+      "en": "It was in March last year that I came to Japan."
+    },
+    {
+      "jp": "<ruby>始<rt>はじ</rt></ruby>めるのは <ruby>簡単<rt>かんたん</rt></ruby>ですが、<ruby>続<rt>つづ</rt></ruby>けるのは <ruby>難<rt>むずか</rt></ruby>しいですね。",
+      "en": "Starting is easy, but keeping it up is hard, isn't it?"
+    },
+    {
+      "jp": "<ruby>夫<rt>おっと</rt></ruby>は <ruby>花<rt>はな</rt></ruby>を <ruby>育<rt>そだ</rt></ruby>てるのが <ruby>上手<rt>じょうず</rt></ruby>なんです。",
+      "en": "My husband is good at growing flowers."
+    },
+    {
+      "jp": "<ruby>東京<rt>とうきょう</rt></ruby>は <ruby>人<rt>ひと</rt></ruby>が <ruby>多<rt>おお</rt></ruby>いし、みんな <ruby>歩<rt>ある</rt></ruby>くのが <ruby>速<rt>はや</rt></ruby>いですね。",
+      "en": "Tokyo has lots of people, and everyone walks fast."
+    },
+    {
+      "jp": "<ruby>宮崎<rt>みやざき</rt></ruby>さんに <ruby>赤<rt>あか</rt></ruby>ちゃんが <ruby>生<rt>う</rt></ruby>まれたのを <ruby>知<rt>し</rt></ruby>っていますか。",
+      "en": "Do you know that Ms. Miyazaki had a baby?"
+    }
+  ],
+  "conversation": {
+    "title": "片づけるのが 好きなんです (Because I like tidying up)",
+    "audio": "/Audio/minnahonsatsu2/37.mp3",
+    "lines": [
+      {
+        "role": "カリナ",
+        "jp": "ワット<ruby>先生<rt>せんせい</rt></ruby>、<ruby>回覧<rt>かいらん</rt></ruby>です。",
+        "en": "Professor Watt, here's the circular notice."
+      },
+      {
+        "role": "ワット",
+        "jp": "あ、すみません。そこに <ruby>置<rt>お</rt></ruby>いといて ください。",
+        "en": "Ah, thank you. Please just leave it there."
+      },
+      {
+        "role": "カリナ",
+        "jp": "<ruby>先生<rt>せんせい</rt></ruby>の <ruby>研究室<rt>けんきゅうしつ</rt></ruby>は いつも きれいですね。",
+        "en": "Your office is always so tidy, isn't it?"
+      },
+      {
+        "role": "ワット",
+        "jp": "<ruby>私<rt>わたし</rt></ruby>は <ruby>片<rt>かた</rt></ruby>づけるのが <ruby>好<rt>す</rt></ruby>きなんです。",
+        "en": "It's because I like tidying up."
+      },
+      {
+        "role": "カリナ",
+        "jp": "<ruby>本<rt>ほん</rt></ruby>も きちんと <ruby>並<rt>なら</rt></ruby>べて ありますね。<ruby>整理<rt>せいり</rt></ruby>するのが <ruby>上手<rt>じょうず</rt></ruby>なんですね。",
+        "en": "The books are neatly arranged, too. You're really good at organizing."
+      },
+      {
+        "role": "ワット",
+        "jp": "<ruby>昔<rt>むかし</rt></ruby>、「<ruby>上手<rt>じょうず</rt></ruby>な <ruby>整理<rt>せいり</rt></ruby>の <ruby>方法<rt>ほうほう</rt></ruby>」という <ruby>本<rt>ほん</rt></ruby>を <ruby>書<rt>か</rt></ruby>いた ことが あるんですよ。",
+        "en": "Actually, I once wrote a book called 'Good Ways to Organize.'"
+      },
+      {
+        "role": "カリナ",
+        "jp": "へえ、すごいですね。",
+        "en": "Wow, that's impressive."
+      },
+      {
+        "role": "ワット",
+        "jp": "でも、あまり <ruby>売<rt>う</rt></ruby>れませんでしたけどね。よかったら、<ruby>一冊<rt>いっさつ</rt></ruby> <ruby>持<rt>も</rt></ruby>って <ruby>来<rt>き</rt></ruby>ましょうか。",
+        "en": "But it didn't sell very well. If you'd like, shall I bring you a copy?"
+      },
+      {
+        "role": "カリナ",
+        "jp": "ありがとう ございます。",
+        "en": "Thank you very much."
+      },
+      {
+        "role": "ワット",
+        "jp": "あ、<ruby>本<rt>ほん</rt></ruby>を <ruby>持<rt>も</rt></ruby>って <ruby>来<rt>く</rt></ruby>るのを <ruby>忘<rt>わす</rt></ruby>れました。すみません。",
+        "en": "Ah — I forgot to bring the book. I'm sorry."
+      },
+      {
+        "role": "カリナ",
+        "jp": "いいですよ。でも、<ruby>回覧<rt>かいらん</rt></ruby>に はんこを <ruby>押<rt>お</rt></ruby>すのを <ruby>忘<rt>わす</rt></ruby>れないで くださいね。<ruby>先月<rt>せんげつ</rt></ruby>も <ruby>押<rt>お</rt></ruby>して ありませんでしたよ。",
+        "en": "That's fine. But please don't forget to stamp the circular. You didn't stamp it last month, either."
+      }
+    ]
+  }
+}

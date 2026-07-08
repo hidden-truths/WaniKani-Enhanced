@@ -1,0 +1,1192 @@
+{
+  "lesson": 29,
+  "title": "Lesson 29",
+  "theme": "〜ています for a resulting state (with intransitive change-of-state verbs) and 〜てしまいます／〜てしまいました for completion and for regret/unintended actions; lost-and-found vocabulary",
+  "source": {
+    "name": "vnjpclub.com",
+    "vocabUrl": "https://www.vnjpclub.com/en/minna-no-nihongo/lesson-29-vocabulary.html",
+    "grammarUrl": "https://www.vnjpclub.com/en/minna-no-nihongo/lesson-29-grammar.html",
+    "note": "Vocabulary, native-speaker audio, and example sentences aggregated from vnjpclub.com (Minna no Nihongo 第2版). For personal study."
+  },
+  "vocab": [
+    {
+      "key": "mnn:29:0",
+      "kana": "あきます",
+      "kanji": "開きます",
+      "context": "ドアが〜",
+      "mean": "[a door, etc.] opens",
+      "cat": "verb",
+      "type": "godan",
+      "trans": "i",
+      "dict": "開く",
+      "dictRead": "あく",
+      "audio": "/Audio/minnamoi/bai29/00010101110111110.mp3",
+      "accent": 0
+    },
+    {
+      "key": "mnn:29:1",
+      "kana": "しまります",
+      "kanji": "閉まります",
+      "context": "ドアが〜",
+      "mean": "[a door, etc.] closes",
+      "cat": "verb",
+      "type": "godan",
+      "trans": "i",
+      "dict": "閉まる",
+      "dictRead": "しまる",
+      "audio": "/Audio/minnamoi/bai29/00010101110111111.mp3",
+      "accent": 2
+    },
+    {
+      "key": "mnn:29:2",
+      "kana": "つきます",
+      "kanji": "",
+      "context": "電気が〜",
+      "mean": "[a light, etc.] comes on, is turned on",
+      "cat": "verb",
+      "type": "godan",
+      "trans": "i",
+      "dict": "つく",
+      "dictRead": "つく",
+      "audio": "/Audio/minnamoi/bai29/00010101111000000.mp3",
+      "accent": 1
+    },
+    {
+      "key": "mnn:29:3",
+      "kana": "きえます",
+      "kanji": "消えます",
+      "context": "電気が〜",
+      "mean": "[a light, etc.] goes off",
+      "cat": "verb",
+      "type": "ichidan",
+      "trans": "i",
+      "dict": "消える",
+      "dictRead": "きえる",
+      "audio": "/Audio/minnamoi/bai29/00010101111000001.mp3",
+      "accent": 0
+    },
+    {
+      "key": "mnn:29:4",
+      "kana": "こわれます",
+      "kanji": "壊れます",
+      "context": "いすが〜",
+      "mean": "[a chair, etc.] breaks, breaks down",
+      "cat": "verb",
+      "type": "ichidan",
+      "trans": "i",
+      "dict": "壊れる",
+      "dictRead": "こわれる",
+      "audio": "/Audio/minnamoi/bai29/00010101111000010.mp3",
+      "accent": 3,
+      "levels": {
+        "N5": [
+          "<ruby>椅子<rt>いす</rt></ruby>が<ruby>壊<rt>こわ</rt></ruby>れました。",
+          "The chair broke."
+        ],
+        "N4": [
+          "この<ruby>時計<rt>とけい</rt></ruby>は<ruby>壊<rt>こわ</rt></ruby>れているから、<ruby>使<rt>つか</rt></ruby>えません。",
+          "This clock is broken, so I can’t use it."
+        ],
+        "N3": [
+          "<ruby>洗濯機<rt>せんたくき</rt></ruby>が<ruby>壊<rt>こわ</rt></ruby>れてしまって、<ruby>手<rt>て</rt></ruby>で<ruby>洗<rt>あら</rt></ruby>わなければなりません。",
+          "The washing machine broke, so I have to wash by hand."
+        ],
+        "N2": [
+          "<ruby>安<rt>やす</rt></ruby>い<ruby>製品<rt>せいひん</rt></ruby>は、<ruby>買<rt>か</rt></ruby>って<ruby>間<rt>ま</rt></ruby>もなく<ruby>壊<rt>こわ</rt></ruby>れることが<ruby>多<rt>おお</rt></ruby>い。",
+          "Cheap products often break down soon after you buy them."
+        ],
+        "N1": [
+          "<ruby>長年<rt>ながねん</rt></ruby><ruby>使<rt>つか</rt></ruby>ってきた<ruby>機械<rt>きかい</rt></ruby>がついに<ruby>壊<rt>こわ</rt></ruby>れ、<ruby>修理<rt>しゅうり</rt></ruby>するか<ruby>買<rt>か</rt></ruby>い<ruby>替<rt>か</rt></ruby>えるか<ruby>迷<rt>まよ</rt></ruby>っている。",
+          "The machine I’ve used for many years has finally broken down, and I’m torn between repairing it and replacing it."
+        ]
+      },
+      "mnem": "<b>kowa</b>reru echoes こわい (scary) — something scary happens and it 壊れる, it breaks down.",
+      "tip": "壊れる (ichidan, intransitive) = something breaks on its own — machines/devices (機械が壊れる). Transitive counterpart is 壊す (こわす). For glass use 割れる, for long thin things use 折れる."
+    },
+    {
+      "key": "mnn:29:5",
+      "kana": "われます",
+      "kanji": "割れます",
+      "context": "コップが〜",
+      "mean": "[a glass, etc.] breaks, smashes, cracks",
+      "cat": "verb",
+      "type": "ichidan",
+      "trans": "i",
+      "dict": "割れる",
+      "dictRead": "われる",
+      "audio": "/Audio/minnamoi/bai29/00010101111000011.mp3",
+      "accent": 0,
+      "levels": {
+        "N5": [
+          "コップが<ruby>割<rt>わ</rt></ruby>れました。",
+          "The glass broke."
+        ],
+        "N4": [
+          "<ruby>地震<rt>じしん</rt></ruby>で<ruby>窓<rt>まど</rt></ruby>ガラスが<ruby>割<rt>わ</rt></ruby>れてしまいました。",
+          "The window glass broke in the earthquake."
+        ],
+        "N3": [
+          "この<ruby>皿<rt>さら</rt></ruby>はすぐ<ruby>割<rt>わ</rt></ruby>れますから、<ruby>落<rt>お</rt></ruby>とさないように<ruby>気<rt>き</rt></ruby>をつけてください。",
+          "This plate breaks easily, so be careful not to drop it."
+        ],
+        "N2": [
+          "<ruby>意見<rt>いけん</rt></ruby>が<ruby>真<rt>ま</rt></ruby>っ<ruby>二<rt>ふた</rt></ruby>つに<ruby>割<rt>わ</rt></ruby>れて、<ruby>会議<rt>かいぎ</rt></ruby>はなかなかまとまらなかった。",
+          "Opinions split right down the middle, and the meeting wouldn’t come together."
+        ],
+        "N1": [
+          "<ruby>薄<rt>うす</rt></ruby>いガラスは<ruby>衝撃<rt>しょうげき</rt></ruby>を<ruby>受<rt>う</rt></ruby>けると<ruby>粉々<rt>こなごな</rt></ruby>に<ruby>割<rt>わ</rt></ruby>れ、<ruby>破片<rt>はへん</rt></ruby>が<ruby>飛<rt>と</rt></ruby>び<ruby>散<rt>ち</rt></ruby>ることがある。",
+          "Thin glass can shatter into pieces when struck, and the fragments may scatter."
+        ]
+      },
+      "mnem": "<b>wa</b>reru — a glass goes “wah!” and 割れる, it cracks apart.",
+      "tip": "割れる (ichidan, intransitive) = hard/brittle things break, crack, or shatter (コップ・皿・ガラス). Transitive is 割る (わる). Idiom: 意見が割れる = opinions split."
+    },
+    {
+      "key": "mnn:29:6",
+      "kana": "おれます",
+      "kanji": "折れます",
+      "context": "木が〜",
+      "mean": "[a tree branch, etc.] breaks, snaps",
+      "cat": "verb",
+      "type": "ichidan",
+      "trans": "i",
+      "dict": "折れる",
+      "dictRead": "おれる",
+      "audio": "/Audio/minnamoi/bai29/00010101111000100.mp3",
+      "accent": 2,
+      "levels": {
+        "N5": [
+          "<ruby>枝<rt>えだ</rt></ruby>が<ruby>折<rt>お</rt></ruby>れました。",
+          "The branch broke."
+        ],
+        "N4": [
+          "<ruby>強<rt>つよ</rt></ruby>い<ruby>風<rt>かぜ</rt></ruby>で<ruby>木<rt>き</rt></ruby>の<ruby>枝<rt>えだ</rt></ruby>が<ruby>折<rt>お</rt></ruby>れてしまいました。",
+          "A tree branch broke in the strong wind."
+        ],
+        "N3": [
+          "<ruby>転<rt>ころ</rt></ruby>んで<ruby>足<rt>あし</rt></ruby>の<ruby>骨<rt>ほね</rt></ruby>が<ruby>折<rt>お</rt></ruby>れて、<ruby>一<rt>いっ</rt></ruby>か<ruby>月<rt>げつ</rt></ruby><ruby>入院<rt>にゅういん</rt></ruby>しました。",
+          "I fell and broke a bone in my leg, so I was hospitalized for a month."
+        ],
+        "N2": [
+          "<ruby>何度<rt>なんど</rt></ruby><ruby>断<rt>ことわ</rt></ruby>られても、<ruby>彼<rt>かれ</rt></ruby>は<ruby>心<rt>こころ</rt></ruby>が<ruby>折<rt>お</rt></ruby>れることなく<ruby>挑戦<rt>ちょうせん</rt></ruby>し<ruby>続<rt>つづ</rt></ruby>けた。",
+          "No matter how many times he was turned down, he kept trying without losing heart."
+        ],
+        "N1": [
+          "<ruby>交渉<rt>こうしょう</rt></ruby>の<ruby>末<rt>すえ</rt></ruby>、<ruby>相手<rt>あいて</rt></ruby>がついに<ruby>折<rt>お</rt></ruby>れ、<ruby>双方<rt>そうほう</rt></ruby>が<ruby>納得<rt>なっとく</rt></ruby>できる<ruby>条件<rt>じょうけん</rt></ruby>で<ruby>合意<rt>ごうい</rt></ruby>に<ruby>至<rt>いた</rt></ruby>った。",
+          "After long negotiations the other side finally gave in, and both parties reached an agreement on acceptable terms."
+        ]
+      },
+      "mnem": "<b>o</b>reru — a long thing goes “oh!” and 折れる, it snaps.",
+      "tip": "折れる (ichidan, intransitive) = long/thin things snap (枝・骨・鉛筆). Transitive is 折る (おる). Idioms: 心が折れる (lose heart), 相手が折れる (give in)."
+    },
+    {
+      "key": "mnn:29:7",
+      "kana": "やぶれます",
+      "kanji": "破れます",
+      "context": "紙が〜",
+      "mean": "[paper, cloth, etc.] tears, rips",
+      "cat": "verb",
+      "type": "ichidan",
+      "trans": "i",
+      "dict": "破れる",
+      "dictRead": "やぶれる",
+      "audio": "/Audio/minnamoi/bai29/00010101111000101.mp3",
+      "accent": 3,
+      "levels": {
+        "N5": [
+          "<ruby>紙<rt>かみ</rt></ruby>が<ruby>破<rt>やぶ</rt></ruby>れました。",
+          "The paper tore."
+        ],
+        "N4": [
+          "ポケットに<ruby>入<rt>い</rt></ruby>れておいたら、<ruby>手紙<rt>てがみ</rt></ruby>が<ruby>破<rt>やぶ</rt></ruby>れてしまいました。",
+          "I kept the letter in my pocket and it ended up torn."
+        ],
+        "N3": [
+          "この<ruby>服<rt>ふく</rt></ruby>は<ruby>破<rt>やぶ</rt></ruby>れているので、<ruby>捨<rt>す</rt></ruby>てようと<ruby>思<rt>おも</rt></ruby>います。",
+          "These clothes are torn, so I think I’ll throw them away."
+        ],
+        "N2": [
+          "<ruby>古<rt>ふる</rt></ruby>い<ruby>本<rt>ほん</rt></ruby>のページは、<ruby>少<rt>すこ</rt></ruby>し<ruby>触<rt>さわ</rt></ruby>っただけでも<ruby>破<rt>やぶ</rt></ruby>れかねない。",
+          "The pages of an old book might tear at even the slightest touch."
+        ],
+        "N1": [
+          "<ruby>封筒<rt>ふうとう</rt></ruby>は<ruby>丁寧<rt>ていねい</rt></ruby>に<ruby>開<rt>あ</rt></ruby>けたつもりだったが、<ruby>中<rt>なか</rt></ruby>の<ruby>書類<rt>しょるい</rt></ruby>まで<ruby>破<rt>やぶ</rt></ruby>れてしまい、<ruby>読<rt>よ</rt></ruby>めなくなった。",
+          "I thought I’d opened the envelope carefully, but even the documents inside got torn and became unreadable."
+        ]
+      },
+      "mnem": "<b>yabu</b>reru — a “ya!” rip and 破れる, it tears.",
+      "tip": "破れる (ichidan, intransitive) = flat things tear (紙・服・袋). Transitive is 破る (やぶる). Beware the homophone 敗れる (やぶれる) = be defeated — same reading, different kanji."
+    },
+    {
+      "key": "mnn:29:8",
+      "kana": "よごれます",
+      "kanji": "汚れます",
+      "context": "服が〜",
+      "mean": "[clothes, etc.] get dirty, get soiled",
+      "cat": "verb",
+      "type": "ichidan",
+      "trans": "i",
+      "dict": "汚れる",
+      "dictRead": "よごれる",
+      "audio": "/Audio/minnamoi/bai29/00010101111000110.mp3",
+      "accent": 0,
+      "levels": {
+        "N5": [
+          "<ruby>服<rt>ふく</rt></ruby>が<ruby>汚<rt>よご</rt></ruby>れました。",
+          "My clothes got dirty."
+        ],
+        "N4": [
+          "<ruby>雨<rt>あめ</rt></ruby>の<ruby>日<rt>ひ</rt></ruby>に<ruby>歩<rt>ある</rt></ruby>いたので、<ruby>靴<rt>くつ</rt></ruby>が<ruby>汚<rt>よご</rt></ruby>れてしまいました。",
+          "I walked on a rainy day, so my shoes got dirty."
+        ],
+        "N3": [
+          "この<ruby>白<rt>しろ</rt></ruby>いシャツは<ruby>汚<rt>よご</rt></ruby>れやすいので、<ruby>気<rt>き</rt></ruby>をつけて<ruby>着<rt>き</rt></ruby>ています。",
+          "This white shirt gets dirty easily, so I’m careful when I wear it."
+        ],
+        "N2": [
+          "<ruby>空気<rt>くうき</rt></ruby>が<ruby>汚<rt>よご</rt></ruby>れるにつれて、この<ruby>町<rt>まち</rt></ruby>の<ruby>景色<rt>けしき</rt></ruby>も<ruby>昔<rt>むかし</rt></ruby>のようではなくなった。",
+          "As the air has grown polluted, the town’s scenery is no longer what it once was."
+        ],
+        "N1": [
+          "<ruby>長年<rt>ながねん</rt></ruby><ruby>放置<rt>ほうち</rt></ruby>された<ruby>川<rt>かわ</rt></ruby>は<ruby>生活<rt>せいかつ</rt></ruby><ruby>排水<rt>はいすい</rt></ruby>でひどく<ruby>汚<rt>よご</rt></ruby>れ、<ruby>魚<rt>さかな</rt></ruby>の<ruby>姿<rt>すがた</rt></ruby>もほとんど<ruby>見<rt>み</rt></ruby>られなくなった。",
+          "Neglected for years, the river became badly polluted by household wastewater, and scarcely any fish could be seen."
+        ]
+      },
+      "mnem": "<b>yogo</b>reru — “yuck!” it 汚れる, it’s gotten dirty.",
+      "tip": "汚れる (ichidan, intransitive) = get dirty/soiled/polluted (服・手・空気). Transitive is 汚す (よごす). The same kanji is the adjective 汚い (きたない, dirty)."
+    },
+    {
+      "key": "mnn:29:9",
+      "kana": "つきます",
+      "kanji": "付きます",
+      "context": "ポケットが〜",
+      "mean": "[a pocket, etc.] is attached, is on, comes with",
+      "cat": "verb",
+      "type": "godan",
+      "trans": "i",
+      "dict": "付く",
+      "dictRead": "つく",
+      "audio": "/Audio/minnamoi/bai29/00010101111000111.mp3",
+      "accent": 1,
+      "levels": {
+        "N5": [
+          "このかばんには<ruby>大<rt>おお</rt></ruby>きいポケットが<ruby>付<rt>つ</rt></ruby>いています。",
+          "This bag has a big pocket on it."
+        ],
+        "N4": [
+          "<ruby>服<rt>ふく</rt></ruby>にインクが<ruby>付<rt>つ</rt></ruby>いてしまって、なかなか<ruby>取<rt>と</rt></ruby>れません。",
+          "Ink got on my clothes and won’t come off easily."
+        ],
+        "N3": [
+          "この<ruby>店<rt>みせ</rt></ruby>で<ruby>買<rt>か</rt></ruby>うと、おまけが<ruby>付<rt>つ</rt></ruby>いてくることがあります。",
+          "When you buy at this shop, a free extra sometimes comes with it."
+        ],
+        "N2": [
+          "<ruby>実力<rt>じつりょく</rt></ruby>が<ruby>付<rt>つ</rt></ruby>いてくるにつれて、<ruby>難<rt>むずか</rt></ruby>しい<ruby>仕事<rt>しごと</rt></ruby>も<ruby>任<rt>まか</rt></ruby>されるようになった。",
+          "As my abilities grew, I came to be entrusted with difficult work too."
+        ],
+        "N1": [
+          "<ruby>長年<rt>ながねん</rt></ruby>の<ruby>習慣<rt>しゅうかん</rt></ruby>が<ruby>身<rt>み</rt></ruby>に<ruby>付<rt>つ</rt></ruby>いていると、いざ<ruby>変<rt>か</rt></ruby>えようとしてもそう<ruby>簡単<rt>かんたん</rt></ruby>にはいかないものだ。",
+          "When a habit of many years has become ingrained, it’s not so easy to change even when you try."
+        ]
+      },
+      "mnem": "<b>tsu</b>ku — it sticks/attaches: 付く. The kanji is 亻(person) + 寸(hand) attaching something.",
+      "tip": "付く (godan, intransitive) = be attached / come with (ポケットが付く、力が付く、身に付く). Transitive is 付ける (つける). Homophones つく: 点く (a light comes on) and 着く (arrive)."
+    },
+    {
+      "key": "mnn:29:10",
+      "kana": "はずれます",
+      "kanji": "外れます",
+      "context": "ボタンが〜",
+      "mean": "[a button, etc.] comes undone, comes off; is off-target",
+      "cat": "verb",
+      "type": "ichidan",
+      "trans": "i",
+      "dict": "外れる",
+      "dictRead": "はずれる",
+      "audio": "/Audio/minnamoi/bai29/00010101111001000.mp3",
+      "accent": 0,
+      "levels": {
+        "N5": [
+          "ボタンが<ruby>外<rt>はず</rt></ruby>れました。",
+          "A button came undone."
+        ],
+        "N4": [
+          "シャツのボタンが<ruby>外<rt>はず</rt></ruby>れているので、<ruby>直<rt>なお</rt></ruby>したほうがいいですよ。",
+          "Your shirt button is undone, so you’d better fix it."
+        ],
+        "N3": [
+          "<ruby>予想<rt>よそう</rt></ruby>が<ruby>外<rt>はず</rt></ruby>れて、<ruby>試合<rt>しあい</rt></ruby>は<ruby>弱<rt>よわ</rt></ruby>いチームが<ruby>勝<rt>か</rt></ruby>ってしまいました。",
+          "My prediction was off, and the weaker team ended up winning the match."
+        ],
+        "N2": [
+          "<ruby>会員<rt>かいいん</rt></ruby>リストから<ruby>名前<rt>なまえ</rt></ruby>が<ruby>外<rt>はず</rt></ruby>れているとしたら、<ruby>手続<rt>てつづ</rt></ruby>きに<ruby>何<rt>なに</rt></ruby>か<ruby>問題<rt>もんだい</rt></ruby>があったに<ruby>違<rt>ちが</rt></ruby>いない。",
+          "If my name has been dropped from the member list, there must have been some problem with the procedure."
+        ],
+        "N1": [
+          "<ruby>大方<rt>おおかた</rt></ruby>の<ruby>予測<rt>よそく</rt></ruby>が<ruby>大<rt>おお</rt></ruby>きく<ruby>外<rt>はず</rt></ruby>れ、<ruby>市場<rt>しじょう</rt></ruby>は<ruby>誰<rt>だれ</rt></ruby>も<ruby>予期<rt>よき</rt></ruby>しなかった<ruby>方向<rt>ほうこう</rt></ruby>へと<ruby>動<rt>うご</rt></ruby>いた。",
+          "Most forecasts were wildly off, and the market moved in a direction no one had anticipated."
+        ]
+      },
+      "mnem": "<b>hazu</b>reru — it pops off its fastening: 外れる, comes undone. 外 = outside; it slips out of place.",
+      "tip": "外れる (ichidan, intransitive) = come off / be off-target (ボタン・予想が外れる). Transitive is 外す (はずす). Antonym for the “off-target” sense: 当たる (hit the mark)."
+    },
+    {
+      "key": "mnn:29:11",
+      "kana": "とまります",
+      "kanji": "止まります",
+      "context": "車が〜",
+      "mean": "[a car, etc.] stops, comes to a halt; is parked",
+      "cat": "verb",
+      "type": "godan",
+      "trans": "i",
+      "dict": "止まる",
+      "dictRead": "とまる",
+      "audio": "/Audio/minnamoi/bai29/00010101111001001.mp3",
+      "accent": 0
+    },
+    {
+      "key": "mnn:29:12",
+      "kana": "まちがえます",
+      "kanji": "間違えます",
+      "context": "",
+      "mean": "to make a mistake, get (something) wrong",
+      "cat": "verb",
+      "type": "ichidan",
+      "trans": "t",
+      "dict": "間違える",
+      "dictRead": "まちがえる",
+      "audio": "/Audio/minnamoi/bai29/00010101111001010.mp3",
+      "accent": 4,
+      "levels": {
+        "N5": [
+          "<ruby>時々<rt>ときどき</rt></ruby><ruby>漢字<rt>かんじ</rt></ruby>を<ruby>間違<rt>まちが</rt></ruby>えます。",
+          "I sometimes make mistakes with kanji."
+        ],
+        "N4": [
+          "<ruby>道<rt>みち</rt></ruby>を<ruby>間違<rt>まちが</rt></ruby>えて、<ruby>約束<rt>やくそく</rt></ruby>の<ruby>時間<rt>じかん</rt></ruby>に<ruby>遅<rt>おく</rt></ruby>れてしまいました。",
+          "I took the wrong road and was late for the appointment."
+        ],
+        "N3": [
+          "<ruby>数字<rt>すうじ</rt></ruby>を<ruby>間違<rt>まちが</rt></ruby>えないように、もう<ruby>一度<rt>いちど</rt></ruby><ruby>確<rt>たし</rt></ruby>かめてください。",
+          "Please check once more so you don’t get the numbers wrong."
+        ],
+        "N2": [
+          "<ruby>誰<rt>だれ</rt></ruby>にでも<ruby>間違<rt>まちが</rt></ruby>えることはあるのだから、<ruby>一度<rt>いちど</rt></ruby>の<ruby>失敗<rt>しっぱい</rt></ruby>をそう<ruby>気<rt>き</rt></ruby>にする<ruby>必要<rt>ひつよう</rt></ruby>はない。",
+          "Anyone can make a mistake, so there’s no need to fret so much over a single slip."
+        ],
+        "N1": [
+          "<ruby>要点<rt>ようてん</rt></ruby>を<ruby>間違<rt>まちが</rt></ruby>えて<ruby>理解<rt>りかい</rt></ruby>したまま<ruby>議論<rt>ぎろん</rt></ruby>を<ruby>進<rt>すす</rt></ruby>めれば、<ruby>結論<rt>けつろん</rt></ruby>もまた<ruby>見当<rt>けんとう</rt></ruby><ruby>違<rt>ちが</rt></ruby>いなものになりかねない。",
+          "If you push the discussion forward having misunderstood the key point, the conclusion too may well end up wide of the mark."
+        ]
+      },
+      "mnem": "<b>machiga</b>eru — 間 (interval) + 違う (differ): you pick the wrong one from the lineup and 間違える, make a mistake.",
+      "tip": "間違える (ichidan, transitive) = get wrong / mistake (道を間違える). Related: 間違う (まちがう, similar), noun 間違い (mistake). Don’t confuse the plain verb 違う (ちがう, to differ)."
+    },
+    {
+      "key": "mnn:29:13",
+      "kana": "おとします",
+      "kanji": "落とします",
+      "context": "",
+      "mean": "to drop; to lose; to lower",
+      "cat": "verb",
+      "type": "godan",
+      "trans": "t",
+      "dict": "落とす",
+      "dictRead": "おとす",
+      "audio": "/Audio/minnamoi/bai29/00010101111001011.mp3",
+      "accent": 2,
+      "levels": {
+        "N5": [
+          "<ruby>財布<rt>さいふ</rt></ruby>を<ruby>落<rt>お</rt></ruby>としました。",
+          "I dropped my wallet."
+        ],
+        "N4": [
+          "どこかで<ruby>鍵<rt>かぎ</rt></ruby>を<ruby>落<rt>お</rt></ruby>としてしまいました。",
+          "I dropped my keys somewhere."
+        ],
+        "N3": [
+          "<ruby>大切<rt>たいせつ</rt></ruby>な<ruby>書類<rt>しょるい</rt></ruby>を<ruby>落<rt>お</rt></ruby>とさないように、かばんにしまってください。",
+          "Put the important documents in your bag so you don’t lose them."
+        ],
+        "N2": [
+          "スピードを<ruby>落<rt>お</rt></ruby>とさずにカーブに<ruby>入<rt>はい</rt></ruby>ると、<ruby>事故<rt>じこ</rt></ruby>につながりかねない。",
+          "Entering a curve without slowing down could lead to an accident."
+        ],
+        "N1": [
+          "<ruby>試験<rt>しけん</rt></ruby>でわずか<ruby>一<rt>いっ</rt></ruby><ruby>点<rt>てん</rt></ruby>を<ruby>落<rt>お</rt></ruby>としたことが、<ruby>合否<rt>ごうひ</rt></ruby>を<ruby>分<rt>わ</rt></ruby>ける<ruby>結果<rt>けっか</rt></ruby>となってしまった。",
+          "Losing just a single point on the exam ended up being what decided pass or fail."
+        ]
+      },
+      "mnem": "<b>o</b>tosu — you let it drop: 落とす. It is the transitive of 落ちる (おちる, to fall): you make it fall.",
+      "tip": "落とす (godan, transitive) = drop / lose / lower (財布を落とす、スピードを落とす). Intransitive counterpart is 落ちる (おちる, to fall). Also “to fail someone”: 試験で落とす."
+    },
+    {
+      "key": "mnn:29:14",
+      "kana": "かかります",
+      "kanji": "掛かります",
+      "context": "かぎが〜",
+      "mean": "[a key] be locked (かぎが掛かる = to be locked)",
+      "cat": "verb",
+      "type": "godan",
+      "trans": "i",
+      "dict": "掛かる",
+      "dictRead": "かかる",
+      "audio": "/Audio/minnamoi/bai29/00010101111001100.mp3",
+      "accent": 2,
+      "levels": {
+        "N5": [
+          "ドアに<ruby>鍵<rt>かぎ</rt></ruby>が<ruby>掛<rt>か</rt></ruby>かっています。",
+          "The door is locked."
+        ],
+        "N4": [
+          "<ruby>会議室<rt>かいぎしつ</rt></ruby>に<ruby>鍵<rt>かぎ</rt></ruby>が<ruby>掛<rt>か</rt></ruby>かっているので、<ruby>入<rt>はい</rt></ruby>れません。",
+          "The meeting room is locked, so I can’t get in."
+        ],
+        "N3": [
+          "きちんと<ruby>鍵<rt>かぎ</rt></ruby>が<ruby>掛<rt>か</rt></ruby>かっているかどうか、<ruby>出<rt>で</rt></ruby>かける<ruby>前<rt>まえ</rt></ruby>に<ruby>必<rt>かなら</rt></ruby>ず<ruby>確認<rt>かくにん</rt></ruby>します。",
+          "I always check whether the lock is properly on before I go out."
+        ],
+        "N2": [
+          "<ruby>金庫<rt>きんこ</rt></ruby>に<ruby>鍵<rt>かぎ</rt></ruby>が<ruby>掛<rt>か</rt></ruby>かっている<ruby>以上<rt>いじょう</rt></ruby>、<ruby>中身<rt>なかみ</rt></ruby>を<ruby>確<rt>たし</rt></ruby>かめるには<ruby>合<rt>あ</rt></ruby>い<ruby>鍵<rt>かぎ</rt></ruby>を<ruby>探<rt>さが</rt></ruby>すしかない。",
+          "Since the safe is locked, the only way to check the contents is to find a spare key."
+        ],
+        "N1": [
+          "<ruby>厳重<rt>げんじゅう</rt></ruby>に<ruby>鍵<rt>かぎ</rt></ruby>の<ruby>掛<rt>か</rt></ruby>かった<ruby>扉<rt>とびら</rt></ruby>の<ruby>向<rt>む</rt></ruby>こうに<ruby>何<rt>なに</rt></ruby>が<ruby>隠<rt>かく</rt></ruby>されているのか、<ruby>誰<rt>だれ</rt></ruby>も<ruby>知<rt>し</rt></ruby>らなかった。",
+          "No one knew what was hidden beyond the securely locked door."
+        ]
+      },
+      "mnem": "<b>ka</b>karu — the lock “catches” and hangs on: 鍵が掛かる, it’s locked.",
+      "tip": "In this lesson 掛かる (godan, intransitive) means “a lock is engaged” (鍵が掛かる). Transitive is 掛ける (鍵を掛ける, to lock). The same verb has many other senses (time/money 掛かる)."
+    },
+    {
+      "key": "mnn:29:15",
+      "kana": "ふきます",
+      "kanji": "拭きます",
+      "context": "",
+      "mean": "to wipe, wipe off",
+      "cat": "verb",
+      "type": "godan",
+      "trans": "t",
+      "dict": "拭く",
+      "dictRead": "ふく",
+      "audio": "/Audio/minnamoi/bai29/00010101111001101.mp3",
+      "accent": 0,
+      "levels": {
+        "N5": [
+          "テーブルを<ruby>拭<rt>ふ</rt></ruby>きます。",
+          "I wipe the table."
+        ],
+        "N4": [
+          "<ruby>汚<rt>よご</rt></ruby>れていますから、この<ruby>布<rt>ぬの</rt></ruby>で<ruby>拭<rt>ふ</rt></ruby>いてください。",
+          "It’s dirty, so please wipe it with this cloth."
+        ],
+        "N3": [
+          "<ruby>汗<rt>あせ</rt></ruby>を<ruby>拭<rt>ふ</rt></ruby>きながら、<ruby>彼<rt>かれ</rt></ruby>は<ruby>暑<rt>あつ</rt></ruby>い<ruby>中<rt>なか</rt></ruby>を<ruby>歩<rt>ある</rt></ruby>き<ruby>続<rt>つづ</rt></ruby>けた。",
+          "Wiping away his sweat, he kept walking through the heat."
+        ],
+        "N2": [
+          "せっかく<ruby>窓<rt>まど</rt></ruby>を<ruby>拭<rt>ふ</rt></ruby>いたところで、この<ruby>砂<rt>すな</rt></ruby>ぼこりではすぐにまた<ruby>汚<rt>よご</rt></ruby>れてしまう。",
+          "Even if I go to the trouble of wiping the windows, with all this dust they’ll just get dirty again right away."
+        ],
+        "N1": [
+          "<ruby>丹念<rt>たんねん</rt></ruby>に<ruby>床<rt>ゆか</rt></ruby>を<ruby>拭<rt>ふ</rt></ruby>き<ruby>上<rt>あ</rt></ruby>げると、<ruby>古<rt>ふる</rt></ruby>い<ruby>木目<rt>もくめ</rt></ruby>が<ruby>美<rt>うつく</rt></ruby>しく<ruby>浮<rt>う</rt></ruby>かび<ruby>上<rt>あ</rt></ruby>がってきた。",
+          "When I wiped the floor carefully, the old wood grain emerged beautifully."
+        ]
+      },
+      "mnem": "<b>fu</b>ku — you go “foo” and wipe it clean: 拭く.",
+      "tip": "拭く (godan, transitive) = wipe (テーブル・汗を拭く). Watch the homophones ふく: 吹く (to blow) and 噴く (to spout). Related noun: 布巾 (ふきん, dishcloth)."
+    },
+    {
+      "key": "mnn:29:16",
+      "kana": "とりかえます",
+      "kanji": "取り替えます",
+      "context": "",
+      "mean": "to change, replace, exchange",
+      "cat": "verb",
+      "type": "ichidan",
+      "trans": "t",
+      "dict": "取り替える",
+      "dictRead": "とりかえる",
+      "audio": "/Audio/minnamoi/bai29/00010101111001110.mp3",
+      "accent": 0,
+      "levels": {
+        "N5": [
+          "<ruby>電池<rt>でんち</rt></ruby>を<ruby>取<rt>と</rt></ruby>り<ruby>替<rt>か</rt></ruby>えます。",
+          "I’ll change the battery."
+        ],
+        "N4": [
+          "この<ruby>時計<rt>とけい</rt></ruby>は<ruby>止<rt>と</rt></ruby>まっているので、<ruby>電池<rt>でんち</rt></ruby>を<ruby>取<rt>と</rt></ruby>り<ruby>替<rt>か</rt></ruby>えてください。",
+          "This clock has stopped, so please replace the battery."
+        ],
+        "N3": [
+          "<ruby>汚<rt>よご</rt></ruby>れたシーツを<ruby>新<rt>あたら</rt></ruby>しいものと<ruby>取<rt>と</rt></ruby>り<ruby>替<rt>か</rt></ruby>えておきました。",
+          "I’ve gone ahead and changed the dirty sheets for new ones."
+        ],
+        "N2": [
+          "<ruby>部品<rt>ぶひん</rt></ruby>を<ruby>一<rt>ひと</rt></ruby>つ<ruby>取<rt>と</rt></ruby>り<ruby>替<rt>か</rt></ruby>えるだけで、<ruby>機械<rt>きかい</rt></ruby>は<ruby>再<rt>ふたた</rt></ruby>び<ruby>動<rt>うご</rt></ruby>き<ruby>出<rt>だ</rt></ruby>すはずだ。",
+          "Just replacing one part should get the machine running again."
+        ],
+        "N1": [
+          "<ruby>不良品<rt>ふりょうひん</rt></ruby>であれば、<ruby>無料<rt>むりょう</rt></ruby>で<ruby>新品<rt>しんぴん</rt></ruby>と<ruby>取<rt>と</rt></ruby>り<ruby>替<rt>か</rt></ruby>えていただけるとのことだった。",
+          "I was told that if it’s defective, they’ll replace it with a new one free of charge."
+        ]
+      },
+      "mnem": "<b>torikae</b>ru — 取る (take) + 替える (swap): take one out and swap another in, 取り替える, replace.",
+      "tip": "取り替える (ichidan, transitive) = replace/exchange one thing for another (電池を取り替える). Near-synonym: 交換する (こうかん). The verb combines 取る + 替える."
+    },
+    {
+      "key": "mnn:29:17",
+      "kana": "かたづけます",
+      "kanji": "片づけます",
+      "context": "",
+      "mean": "to tidy up, put (things) in order, clear away",
+      "cat": "verb",
+      "type": "ichidan",
+      "trans": "t",
+      "dict": "片づける",
+      "dictRead": "かたづける",
+      "audio": "/Audio/minnamoi/bai29/00010101111001111.mp3",
+      "accent": 4,
+      "levels": {
+        "N5": [
+          "<ruby>部屋<rt>へや</rt></ruby>を<ruby>片<rt>かた</rt></ruby>づけます。",
+          "I tidy up my room."
+        ],
+        "N4": [
+          "<ruby>使<rt>つか</rt></ruby>ったものは、ちゃんと<ruby>片<rt>かた</rt></ruby>づけてください。",
+          "Please tidy away the things you’ve used."
+        ],
+        "N3": [
+          "この<ruby>仕事<rt>しごと</rt></ruby>を<ruby>片<rt>かた</rt></ruby>づけてしまってから、<ruby>帰<rt>かえ</rt></ruby>るつもりです。",
+          "I plan to head home after I finish getting this work out of the way."
+        ],
+        "N2": [
+          "<ruby>問題<rt>もんだい</rt></ruby>を<ruby>一<rt>ひと</rt></ruby>つずつ<ruby>片<rt>かた</rt></ruby>づけていけば、<ruby>山<rt>やま</rt></ruby>のような<ruby>課題<rt>かだい</rt></ruby>もいつかは<ruby>終<rt>お</rt></ruby>わる。",
+          "If you deal with the problems one by one, even a mountain of tasks will eventually be done."
+        ],
+        "N1": [
+          "<ruby>面倒<rt>めんどう</rt></ruby>な<ruby>案件<rt>あんけん</rt></ruby>ほど<ruby>早<rt>はや</rt></ruby>めに<ruby>片<rt>かた</rt></ruby>づけておかないと、<ruby>後<rt>あと</rt></ruby>で<ruby>取<rt>と</rt></ruby>り<ruby>返<rt>かえ</rt></ruby>しのつかないことになりかねない。",
+          "The more troublesome the matter, the sooner you’d better dispose of it, or it may become irreparable later."
+        ]
+      },
+      "mnem": "<b>katazu</b>keru — put things back into their 片 (place/side): 片づける, tidy up.",
+      "tip": "片づける (ichidan, transitive) = tidy up / put away / settle (部屋・仕事を片づける). Intransitive counterpart is 片づく (かたづく). Figurative: settle/dispose of a matter."
+    },
+    {
+      "key": "mnn:29:18",
+      "kana": "さら",
+      "kanji": "皿",
+      "context": "",
+      "mean": "plate, dish (polite お皿)",
+      "cat": "noun",
+      "type": "",
+      "trans": "",
+      "dict": "皿",
+      "dictRead": "さら",
+      "audio": "/Audio/minnamoi/bai29/00010101111010000.mp3",
+      "accent": 0,
+      "levels": {
+        "N5": [
+          "テーブルに<ruby>皿<rt>さら</rt></ruby>を<ruby>並<rt>なら</rt></ruby>べます。",
+          "I set the plates on the table."
+        ],
+        "N4": [
+          "<ruby>食事<rt>しょくじ</rt></ruby>のあとで、<ruby>皿<rt>さら</rt></ruby>を<ruby>洗<rt>あら</rt></ruby>いました。",
+          "After the meal I washed the dishes."
+        ],
+        "N3": [
+          "<ruby>落<rt>お</rt></ruby>とさないように、<ruby>皿<rt>さら</rt></ruby>を<ruby>一枚<rt>いちまい</rt></ruby>ずつ<ruby>丁寧<rt>ていねい</rt></ruby>に<ruby>洗<rt>あら</rt></ruby>っています。",
+          "I wash the plates one by one carefully so as not to drop them."
+        ],
+        "N2": [
+          "<ruby>大<rt>おお</rt></ruby>きな<ruby>皿<rt>さら</rt></ruby>に<ruby>料理<rt>りょうり</rt></ruby>を<ruby>盛<rt>も</rt></ruby>りつけると、<ruby>見<rt>み</rt></ruby>た<ruby>目<rt>め</rt></ruby>まで<ruby>豪華<rt>ごうか</rt></ruby>になるものだ。",
+          "Arranging the food on a large plate makes even its appearance luxurious."
+        ],
+        "N1": [
+          "<ruby>一枚<rt>いちまい</rt></ruby>の<ruby>皿<rt>さら</rt></ruby>に<ruby>盛<rt>も</rt></ruby>られた<ruby>料理<rt>りょうり</rt></ruby>には、<ruby>料理人<rt>りょうりにん</rt></ruby>の<ruby>美学<rt>びがく</rt></ruby>と<ruby>季節<rt>きせつ</rt></ruby>への<ruby>心遣<rt>こころづか</rt></ruby>いが<ruby>凝縮<rt>ぎょうしゅく</rt></ruby>されている。",
+          "In a dish served on a single plate, the chef’s aesthetic and attentiveness to the season are distilled."
+        ]
+      },
+      "mnem": "<b>sara</b> — a flat 皿, a plate; the kanji itself pictures a dish sitting on a stand.",
+      "tip": "皿 (さら) = plate/dish; the counter is 〜枚 (まい). Polite form お皿. As a counter for servings, 〜皿 (ひとさら = one dish)."
+    },
+    {
+      "key": "mnn:29:19",
+      "kana": "ちゃわん",
+      "kanji": "茶碗",
+      "context": "",
+      "mean": "(rice or tea) bowl (polite お茶碗)",
+      "cat": "noun",
+      "type": "",
+      "trans": "",
+      "dict": "茶碗",
+      "dictRead": "ちゃわん",
+      "audio": "/Audio/minnamoi/bai29/00010101111010001.mp3",
+      "accent": 0,
+      "levels": {
+        "N5": [
+          "ご<ruby>飯<rt>はん</rt></ruby>を<ruby>茶碗<rt>ちゃわん</rt></ruby>に<ruby>入<rt>い</rt></ruby>れます。",
+          "I put the rice into the bowl."
+        ],
+        "N4": [
+          "この<ruby>茶碗<rt>ちゃわん</rt></ruby>は<ruby>母<rt>はは</rt></ruby>にもらった<ruby>大切<rt>たいせつ</rt></ruby>なものです。",
+          "This rice bowl is something precious my mother gave me."
+        ],
+        "N3": [
+          "<ruby>茶碗<rt>ちゃわん</rt></ruby>を<ruby>割<rt>わ</rt></ruby>らないように、<ruby>棚<rt>たな</rt></ruby>の<ruby>奥<rt>おく</rt></ruby>にしまっておきました。",
+          "I put the bowl at the back of the shelf so it wouldn’t get broken."
+        ],
+        "N2": [
+          "<ruby>古<rt>ふる</rt></ruby>い<ruby>茶碗<rt>ちゃわん</rt></ruby>ほど<ruby>味<rt>あじ</rt></ruby>わいがあると、<ruby>祖父<rt>そふ</rt></ruby>はいつも<ruby>言<rt>い</rt></ruby>っていた。",
+          "My grandfather always used to say that the older the tea bowl, the more character it has."
+        ],
+        "N1": [
+          "<ruby>茶道<rt>さどう</rt></ruby>の<ruby>世界<rt>せかい</rt></ruby>では、<ruby>一<rt>ひと</rt></ruby>つの<ruby>茶碗<rt>ちゃわん</rt></ruby>に<ruby>何百万<rt>なんびゃくまん</rt></ruby><ruby>円<rt>えん</rt></ruby>もの<ruby>値<rt>ね</rt></ruby>が<ruby>付<rt>つ</rt></ruby>くことも<ruby>珍<rt>めずら</rt></ruby>しくない。",
+          "In the world of tea ceremony, it’s not unusual for a single tea bowl to be worth millions of yen."
+        ]
+      },
+      "mnem": "<b>chawan</b> — 茶 (tea) + 碗 (bowl): a 茶碗 is a bowl for rice or tea.",
+      "tip": "茶碗 (ちゃわん) = rice bowl or tea bowl; often written in kana. ご飯茶碗 (rice) vs 湯呑み茶碗 (tea). Polite form お茶碗."
+    },
+    {
+      "key": "mnn:29:20",
+      "kana": "コップ",
+      "kanji": "",
+      "context": "",
+      "mean": "glass, tumbler (drinking vessel)",
+      "cat": "noun",
+      "type": "",
+      "trans": "",
+      "dict": "コップ",
+      "dictRead": "コップ",
+      "audio": "/Audio/minnamoi/bai29/00010101111010010.mp3",
+      "accent": 0,
+      "levels": {
+        "N5": [
+          "<ruby>水<rt>みず</rt></ruby>をコップに<ruby>入<rt>い</rt></ruby>れます。",
+          "I pour water into the glass."
+        ],
+        "N4": [
+          "コップが<ruby>割<rt>わ</rt></ruby>れてしまったので、<ruby>新<rt>あたら</rt></ruby>しいのを<ruby>買<rt>か</rt></ruby>いました。",
+          "My glass broke, so I bought a new one."
+        ],
+        "N3": [
+          "<ruby>冷<rt>つめ</rt></ruby>たい<ruby>飲<rt>の</rt></ruby>み<ruby>物<rt>もの</rt></ruby>を<ruby>入<rt>い</rt></ruby>れると、コップの<ruby>外側<rt>そとがわ</rt></ruby>に<ruby>水滴<rt>すいてき</rt></ruby>がつきます。",
+          "When you put a cold drink in it, droplets form on the outside of the glass."
+        ],
+        "N2": [
+          "<ruby>紙<rt>かみ</rt></ruby>コップは<ruby>便利<rt>べんり</rt></ruby>な<ruby>反面<rt>はんめん</rt></ruby>、<ruby>大量<rt>たいりょう</rt></ruby>のごみを<ruby>生<rt>う</rt></ruby>み<ruby>出<rt>だ</rt></ruby>すという<ruby>問題<rt>もんだい</rt></ruby>もある。",
+          "Paper cups are convenient, but on the other hand they create the problem of large amounts of waste."
+        ],
+        "N1": [
+          "たった<ruby>一杯<rt>いっぱい</rt></ruby>の<ruby>水<rt>みず</rt></ruby>の<ruby>入<rt>はい</rt></ruby>ったコップさえ、<ruby>喉<rt>のど</rt></ruby>の<ruby>渇<rt>かわ</rt></ruby>いた<ruby>者<rt>もの</rt></ruby>にとっては<ruby>何<rt>なに</rt></ruby>より<ruby>有<rt>あ</rt></ruby>り<ruby>難<rt>がた</rt></ruby>い。",
+          "Even a single cup filled with water is more precious than anything to someone dying of thirst."
+        ]
+      },
+      "mnem": "<b>koppu</b> — from Dutch “kop”; a コップ is a drinking glass (not a coffee cup — that’s カップ).",
+      "tip": "コップ (from Dutch kop) = a drinking glass/tumbler. Don’t confuse it with カップ (a cup, from English, e.g. コーヒーカップ). Counter 〜杯 (はい)."
+    },
+    {
+      "key": "mnn:29:21",
+      "kana": "ガラス",
+      "kanji": "",
+      "context": "",
+      "mean": "glass (the material)",
+      "cat": "noun",
+      "type": "",
+      "trans": "",
+      "dict": "ガラス",
+      "dictRead": "ガラス",
+      "audio": "/Audio/minnamoi/bai29/00010101111010011.mp3",
+      "accent": 0,
+      "levels": {
+        "N5": [
+          "<ruby>窓<rt>まど</rt></ruby>のガラスを<ruby>拭<rt>ふ</rt></ruby>きます。",
+          "I wipe the window glass."
+        ],
+        "N4": [
+          "<ruby>子供<rt>こども</rt></ruby>がボールで<ruby>窓<rt>まど</rt></ruby>ガラスを<ruby>割<rt>わ</rt></ruby>ってしまいました。",
+          "A child broke the window glass with a ball."
+        ],
+        "N3": [
+          "ガラスは<ruby>割<rt>わ</rt></ruby>れると<ruby>危<rt>あぶ</rt></ruby>ないので、<ruby>素手<rt>すで</rt></ruby>で<ruby>触<rt>さわ</rt></ruby>らないでください。",
+          "Glass is dangerous when it breaks, so please don’t touch it with bare hands."
+        ],
+        "N2": [
+          "この<ruby>建物<rt>たてもの</rt></ruby>は<ruby>壁<rt>かべ</rt></ruby>の<ruby>大半<rt>たいはん</rt></ruby>がガラスでできていて、<ruby>昼間<rt>ひるま</rt></ruby>は<ruby>照明<rt>しょうめい</rt></ruby>がいらないほど<ruby>明<rt>あか</rt></ruby>るい。",
+          "Most of this building’s walls are made of glass, so bright in the daytime that no lighting is needed."
+        ],
+        "N1": [
+          "<ruby>強化<rt>きょうか</rt></ruby>ガラスは<ruby>普通<rt>ふつう</rt></ruby>のものより<ruby>割<rt>わ</rt></ruby>れにくく、<ruby>割<rt>わ</rt></ruby>れても<ruby>破片<rt>はへん</rt></ruby>が<ruby>細<rt>こま</rt></ruby>かくなるよう<ruby>設計<rt>せっけい</rt></ruby>されている。",
+          "Tempered glass is harder to break than ordinary glass and is designed so that even when it does break, the fragments are small."
+        ]
+      },
+      "mnem": "<b>garasu</b> — from Dutch “glas”; ガラス is glass as a material (the stuff), while コップ is an object made from it.",
+      "tip": "ガラス (from Dutch glas) = glass the material. Distinguish コップ (a glass you drink from) and グラス (a stemmed/wine glass)."
+    },
+    {
+      "key": "mnn:29:22",
+      "kana": "ふくろ",
+      "kanji": "袋",
+      "context": "",
+      "mean": "bag, sack",
+      "cat": "noun",
+      "type": "",
+      "trans": "",
+      "dict": "袋",
+      "dictRead": "ふくろ",
+      "audio": "/Audio/minnamoi/bai29/00010101111010100.mp3",
+      "accent": 3,
+      "levels": {
+        "N5": [
+          "この<ruby>袋<rt>ふくろ</rt></ruby>は<ruby>大<rt>おお</rt></ruby>きいです。",
+          "This bag is big."
+        ],
+        "N4": [
+          "<ruby>買<rt>か</rt></ruby>った<ruby>物<rt>もの</rt></ruby>を<ruby>袋<rt>ふくろ</rt></ruby>に<ruby>入<rt>い</rt></ruby>れてもらいました。",
+          "I had the things I bought put in a bag."
+        ],
+        "N3": [
+          "この<ruby>袋<rt>ふくろ</rt></ruby>は<ruby>破<rt>やぶ</rt></ruby>れているので、<ruby>別<rt>べつ</rt></ruby>のに<ruby>入<rt>い</rt></ruby>れ<ruby>替<rt>か</rt></ruby>えたほうがいいです。",
+          "This bag is torn, so you’d better move things into a different one."
+        ],
+        "N2": [
+          "レジ<ruby>袋<rt>ぶくろ</rt></ruby>が<ruby>有料<rt>ゆうりょう</rt></ruby>になって<ruby>以来<rt>いらい</rt></ruby>、<ruby>買<rt>か</rt></ruby>い<ruby>物袋<rt>ものぶくろ</rt></ruby>を<ruby>持<rt>も</rt></ruby>ち<ruby>歩<rt>ある</rt></ruby>く<ruby>人<rt>ひと</rt></ruby>が<ruby>増<rt>ふ</rt></ruby>えた。",
+          "Since plastic bags started costing money, more people carry a shopping bag around."
+        ],
+        "N1": [
+          "<ruby>中身<rt>なかみ</rt></ruby>の<ruby>見<rt>み</rt></ruby>えない<ruby>袋<rt>ふくろ</rt></ruby>を<ruby>渡<rt>わた</rt></ruby>されたところで、<ruby>開<rt>あ</rt></ruby>けてみるまでは<ruby>吉凶<rt>きっきょう</rt></ruby>のほどは<ruby>分<rt>わ</rt></ruby>からない。",
+          "Even if you’re handed a bag whose contents can’t be seen, you can’t tell whether it bodes well or ill until you open it."
+        ]
+      },
+      "mnem": "<b>fukuro</b> — a soft 袋, a bag or sack; picture it puffing (fuku) out as it fills.",
+      "tip": "袋 (ふくろ) = bag/sack (紙袋、ビニール袋). In compounds it often voices to 〜ぶくろ (レジ袋 → レジぶくろ). Related: 手袋 (てぶくろ, gloves)."
+    },
+    {
+      "key": "mnn:29:23",
+      "kana": "しょるい",
+      "kanji": "書類",
+      "context": "",
+      "mean": "document, papers",
+      "cat": "noun",
+      "type": "",
+      "trans": "",
+      "dict": "書類",
+      "dictRead": "しょるい",
+      "audio": "/Audio/minnamoi/bai29/00010101111010101.mp3",
+      "accent": 1,
+      "levels": {
+        "N5": [
+          "<ruby>机<rt>つくえ</rt></ruby>の<ruby>上<rt>うえ</rt></ruby>に<ruby>書類<rt>しょるい</rt></ruby>があります。",
+          "There are documents on the desk."
+        ],
+        "N4": [
+          "<ruby>大切<rt>たいせつ</rt></ruby>な<ruby>書類<rt>しょるい</rt></ruby>ですから、なくさないでください。",
+          "These are important documents, so please don’t lose them."
+        ],
+        "N3": [
+          "<ruby>必要<rt>ひつよう</rt></ruby>な<ruby>書類<rt>しょるい</rt></ruby>がそろったら、<ruby>受付<rt>うけつけ</rt></ruby>に<ruby>出<rt>だ</rt></ruby>してください。",
+          "Once you have all the necessary documents, please submit them at the reception."
+        ],
+        "N2": [
+          "<ruby>書類<rt>しょるい</rt></ruby>に<ruby>不備<rt>ふび</rt></ruby>があると、<ruby>手続<rt>てつづ</rt></ruby>きが<ruby>大<rt>おお</rt></ruby>きく<ruby>遅<rt>おく</rt></ruby>れることになりかねない。",
+          "If there’s any deficiency in the documents, the procedure could be greatly delayed."
+        ],
+        "N1": [
+          "<ruby>膨大<rt>ぼうだい</rt></ruby>な<ruby>書類<rt>しょるい</rt></ruby>に<ruby>目<rt>め</rt></ruby>を<ruby>通<rt>とお</rt></ruby>し、<ruby>一<rt>いち</rt></ruby><ruby>枚<rt>まい</rt></ruby>ずつ<ruby>署名<rt>しょめい</rt></ruby>を<ruby>確認<rt>かくにん</rt></ruby>していく<ruby>作業<rt>さぎょう</rt></ruby>は、<ruby>根気<rt>こんき</rt></ruby>を<ruby>要<rt>よう</rt></ruby>する。",
+          "Going through an enormous pile of documents and checking each signature one by one is work that demands patience."
+        ]
+      },
+      "mnem": "<b>shorui</b> — 書 (write) + 類 (kind): written things of a kind, 書類 = documents.",
+      "tip": "書類 (しょるい) = documents/papers (official or business). More formal than 紙 (paper). 書類を出す = to submit documents."
+    },
+    {
+      "key": "mnn:29:24",
+      "kana": "えだ",
+      "kanji": "枝",
+      "context": "",
+      "mean": "branch, twig",
+      "cat": "noun",
+      "type": "",
+      "trans": "",
+      "dict": "枝",
+      "dictRead": "えだ",
+      "audio": "/Audio/minnamoi/bai29/00010101111010110.mp3",
+      "accent": 0,
+      "levels": {
+        "N5": [
+          "<ruby>木<rt>き</rt></ruby>の<ruby>枝<rt>えだ</rt></ruby>に<ruby>鳥<rt>とり</rt></ruby>がいます。",
+          "There’s a bird on the tree branch."
+        ],
+        "N4": [
+          "<ruby>台風<rt>たいふう</rt></ruby>で<ruby>枝<rt>えだ</rt></ruby>がたくさん<ruby>折<rt>お</rt></ruby>れてしまいました。",
+          "Many branches broke in the typhoon."
+        ],
+        "N3": [
+          "<ruby>邪魔<rt>じゃま</rt></ruby>な<ruby>枝<rt>えだ</rt></ruby>を<ruby>切<rt>き</rt></ruby>ったら、<ruby>庭<rt>にわ</rt></ruby>が<ruby>明<rt>あか</rt></ruby>るくなりました。",
+          "When I cut off the branches that were in the way, the garden got brighter."
+        ],
+        "N2": [
+          "<ruby>枝<rt>えだ</rt></ruby>が<ruby>伸<rt>の</rt></ruby>びすぎると<ruby>隣<rt>となり</rt></ruby>の<ruby>家<rt>いえ</rt></ruby>に<ruby>入<rt>はい</rt></ruby>ってしまうので、<ruby>時々<rt>ときどき</rt></ruby><ruby>手入<rt>てい</rt></ruby>れが<ruby>必要<rt>ひつよう</rt></ruby>だ。",
+          "If the branches grow too long they stretch into the neighbor’s yard, so they need trimming from time to time."
+        ],
+        "N1": [
+          "<ruby>大樹<rt>たいじゅ</rt></ruby>の<ruby>枝<rt>えだ</rt></ruby>のように、<ruby>組織<rt>そしき</rt></ruby>は<ruby>中心<rt>ちゅうしん</rt></ruby>から<ruby>幾<rt>いく</rt></ruby>つもの<ruby>部門<rt>ぶもん</rt></ruby>へと<ruby>枝分<rt>えだわ</rt></ruby>かれしていった。",
+          "Like the branches of a great tree, the organization branched out from its center into numerous divisions."
+        ]
+      },
+      "mnem": "<b>eda</b> — a branch, 枝; the kanji is 木 (tree) + 支 (limb) — the limb a tree puts out.",
+      "tip": "枝 (えだ) = branch/twig. Related: 枝分かれ (branch off). A branch snaps → 折れる. Counter 〜本."
+    },
+    {
+      "key": "mnn:29:25",
+      "kana": "えきいん",
+      "kanji": "駅員",
+      "context": "",
+      "mean": "station attendant, station staff",
+      "cat": "noun",
+      "type": "",
+      "trans": "",
+      "dict": "駅員",
+      "dictRead": "えきいん",
+      "audio": "/Audio/minnamoi/bai29/00010101111010111.mp3",
+      "accent": 2,
+      "levels": {
+        "N5": [
+          "<ruby>駅員<rt>えきいん</rt></ruby>に<ruby>道<rt>みち</rt></ruby>を<ruby>聞<rt>き</rt></ruby>きました。",
+          "I asked the station attendant the way."
+        ],
+        "N4": [
+          "<ruby>切符<rt>きっぷ</rt></ruby>をなくしたので、<ruby>駅員<rt>えきいん</rt></ruby>に<ruby>相談<rt>そうだん</rt></ruby>しました。",
+          "I lost my ticket, so I consulted a station attendant."
+        ],
+        "N3": [
+          "<ruby>忘<rt>わす</rt></ruby>れ<ruby>物<rt>もの</rt></ruby>をしたら、まず<ruby>駅員<rt>えきいん</rt></ruby>に<ruby>言<rt>い</rt></ruby>うようにしています。",
+          "If I leave something behind, I make a point of telling a station attendant first."
+        ],
+        "N2": [
+          "<ruby>混<rt>こ</rt></ruby>み<ruby>合<rt>あ</rt></ruby>う<ruby>時間帯<rt>じかんたい</rt></ruby>には、<ruby>駅員<rt>えきいん</rt></ruby>が<ruby>乗客<rt>じょうきゃく</rt></ruby>を<ruby>誘導<rt>ゆうどう</rt></ruby>するために<ruby>忙<rt>いそが</rt></ruby>しく<ruby>動<rt>うご</rt></ruby>き<ruby>回<rt>まわ</rt></ruby>っている。",
+          "During crowded hours, station staff rush about guiding passengers."
+        ],
+        "N1": [
+          "<ruby>事故<rt>じこ</rt></ruby>で<ruby>電車<rt>でんしゃ</rt></ruby>が<ruby>止<rt>と</rt></ruby>まると、<ruby>駅員<rt>えきいん</rt></ruby>は<ruby>苛立<rt>いらだ</rt></ruby>つ<ruby>乗客<rt>じょうきゃく</rt></ruby>への<ruby>対応<rt>たいおう</rt></ruby>に<ruby>追<rt>お</rt></ruby>われることになる。",
+          "When trains stop due to an accident, station staff end up swamped dealing with irritated passengers."
+        ]
+      },
+      "mnem": "<b>ekiin</b> — 駅 (station) + 員 (staff member): a 駅員 is station staff.",
+      "tip": "駅員 (えきいん) = station attendant/staff. The suffix 〜員 = staff of ~ (店員 shop clerk, 会社員 office worker)."
+    },
+    {
+      "key": "mnn:29:26",
+      "kana": "こうばん",
+      "kanji": "交番",
+      "context": "",
+      "mean": "police box (koban)",
+      "cat": "noun",
+      "type": "",
+      "trans": "",
+      "dict": "交番",
+      "dictRead": "こうばん",
+      "audio": "/Audio/minnamoi/bai29/00010101111011000.mp3",
+      "accent": 0,
+      "levels": {
+        "N5": [
+          "<ruby>交番<rt>こうばん</rt></ruby>はどこですか。",
+          "Where is the police box?"
+        ],
+        "N4": [
+          "<ruby>財布<rt>さいふ</rt></ruby>を<ruby>拾<rt>ひろ</rt></ruby>ったので、<ruby>交番<rt>こうばん</rt></ruby>に<ruby>届<rt>とど</rt></ruby>けました。",
+          "I found a wallet, so I took it to the police box."
+        ],
+        "N3": [
+          "<ruby>道<rt>みち</rt></ruby>に<ruby>迷<rt>まよ</rt></ruby>ったら、<ruby>近<rt>ちか</rt></ruby>くの<ruby>交番<rt>こうばん</rt></ruby>で<ruby>聞<rt>き</rt></ruby>くといいですよ。",
+          "If you get lost, it’s a good idea to ask at a nearby police box."
+        ],
+        "N2": [
+          "<ruby>日本<rt>にほん</rt></ruby>の<ruby>交番<rt>こうばん</rt></ruby><ruby>制度<rt>せいど</rt></ruby>は、<ruby>地域<rt>ちいき</rt></ruby>の<ruby>安全<rt>あんぜん</rt></ruby>を<ruby>支<rt>ささ</rt></ruby>える<ruby>仕組<rt>しく</rt></ruby>みとして<ruby>海外<rt>かいがい</rt></ruby>からも<ruby>注目<rt>ちゅうもく</rt></ruby>されている。",
+          "Japan’s koban system draws attention even from abroad as a mechanism that supports local safety."
+        ],
+        "N1": [
+          "<ruby>交番<rt>こうばん</rt></ruby>の<ruby>存在<rt>そんざい</rt></ruby>そのものが<ruby>犯罪<rt>はんざい</rt></ruby>を<ruby>抑<rt>おさ</rt></ruby>える<ruby>効果<rt>こうか</rt></ruby>を<ruby>持<rt>も</rt></ruby>つと<ruby>言<rt>い</rt></ruby>われ、<ruby>街角<rt>まちかど</rt></ruby>の<ruby>安心<rt>あんしん</rt></ruby>を<ruby>静<rt>しず</rt></ruby>かに<ruby>支<rt>ささ</rt></ruby>えている。",
+          "The very presence of a police box is said to have a crime-deterrent effect, quietly underpinning a sense of safety on the street corner."
+        ]
+      },
+      "mnem": "<b>kouban</b> — 交 (alternate) + 番 (watch/turn): officers stand watch in shifts at the 交番, the police box.",
+      "tip": "交番 (こうばん) = a neighborhood police box (a small local police post). A full station is 警察署 (けいさつしょ). Report lost or found items here."
+    },
+    {
+      "key": "mnn:29:27",
+      "kana": "スピーチ",
+      "kanji": "",
+      "context": "〜をします",
+      "mean": "speech (〜をします: to give a speech)",
+      "cat": "noun",
+      "type": "",
+      "trans": "",
+      "dict": "スピーチ",
+      "dictRead": "スピーチ",
+      "audio": "/Audio/minnamoi/bai29/00010101111011001.mp3",
+      "accent": 2,
+      "levels": {
+        "N5": [
+          "<ruby>友達<rt>ともだち</rt></ruby>の<ruby>結婚式<rt>けっこんしき</rt></ruby>でスピーチをします。",
+          "I’ll give a speech at my friend’s wedding."
+        ],
+        "N4": [
+          "<ruby>日本語<rt>にほんご</rt></ruby>でスピーチをするのは<ruby>初<rt>はじ</rt></ruby>めてなので、<ruby>緊張<rt>きんちょう</rt></ruby>しています。",
+          "It’s my first time giving a speech in Japanese, so I’m nervous."
+        ],
+        "N3": [
+          "いいスピーチをするために、<ruby>何度<rt>なんど</rt></ruby>も<ruby>練習<rt>れんしゅう</rt></ruby>するようにしています。",
+          "To give a good speech, I make a point of practicing many times."
+        ],
+        "N2": [
+          "<ruby>原稿<rt>げんこう</rt></ruby>を<ruby>読<rt>よ</rt></ruby>み<ruby>上<rt>あ</rt></ruby>げるだけのスピーチほど、<ruby>聞<rt>き</rt></ruby>き<ruby>手<rt>て</rt></ruby>の<ruby>心<rt>こころ</rt></ruby>に<ruby>残<rt>のこ</rt></ruby>らないものはない。",
+          "Nothing stays in the listener’s heart less than a speech that merely reads off a script."
+        ],
+        "N1": [
+          "<ruby>聴衆<rt>ちょうしゅう</rt></ruby>を<ruby>引<rt>ひ</rt></ruby>き<ruby>込<rt>こ</rt></ruby>むスピーチには、<ruby>論理<rt>ろんり</rt></ruby>だけでなく、<ruby>間<rt>ま</rt></ruby>の<ruby>取<rt>と</rt></ruby>り<ruby>方<rt>かた</rt></ruby>や<ruby>声<rt>こえ</rt></ruby>の<ruby>抑揚<rt>よくよう</rt></ruby>といった<ruby>技術<rt>ぎじゅつ</rt></ruby>が<ruby>欠<rt>か</rt></ruby>かせない。",
+          "A speech that draws in the audience requires not only logic but also skills like pacing and vocal intonation."
+        ]
+      },
+      "mnem": "<b>supīchi</b> — English “speech” in katakana; スピーチをする = to give a speech.",
+      "tip": "スピーチ = a speech/address. Verb: スピーチをする. Distinguish 演説 (えんぜつ, a political speech) and 講演 (こうえん, a lecture)."
+    },
+    {
+      "key": "mnn:29:28",
+      "kana": "へんじ",
+      "kanji": "返事",
+      "context": "〜をします",
+      "mean": "reply, answer, response (〜をします: to reply)",
+      "cat": "noun",
+      "type": "",
+      "trans": "",
+      "dict": "返事",
+      "dictRead": "へんじ",
+      "audio": "/Audio/minnamoi/bai29/00010101111011010.mp3",
+      "accent": 3,
+      "levels": {
+        "N5": [
+          "<ruby>名前<rt>なまえ</rt></ruby>を<ruby>呼<rt>よ</rt></ruby>ばれたら、<ruby>返事<rt>へんじ</rt></ruby>をしてください。",
+          "When your name is called, please answer."
+        ],
+        "N4": [
+          "メールを<ruby>送<rt>おく</rt></ruby>りましたが、まだ<ruby>返事<rt>へんじ</rt></ruby>が<ruby>来<rt>き</rt></ruby>ません。",
+          "I sent an email, but there’s still no reply."
+        ],
+        "N3": [
+          "<ruby>忙<rt>いそが</rt></ruby>しくても、その<ruby>日<rt>ひ</rt></ruby>のうちに<ruby>返事<rt>へんじ</rt></ruby>をするようにしています。",
+          "Even when I’m busy, I make a point of replying the same day."
+        ],
+        "N2": [
+          "<ruby>返事<rt>へんじ</rt></ruby>を<ruby>先延<rt>さきの</rt></ruby>ばしにすればするほど、いっそう<ruby>書<rt>か</rt></ruby>きにくくなるものだ。",
+          "The more you put off replying, the harder it becomes to write."
+        ],
+        "N1": [
+          "<ruby>色<rt>いろ</rt></ruby>よい<ruby>返事<rt>へんじ</rt></ruby>を<ruby>期待<rt>きたい</rt></ruby>していたが、<ruby>返<rt>かえ</rt></ruby>ってきたのは<ruby>木<rt>き</rt></ruby>で<ruby>鼻<rt>はな</rt></ruby>をくくったような<ruby>冷<rt>つめ</rt></ruby>たい<ruby>一言<rt>ひとこと</rt></ruby>だった。",
+          "I’d been hoping for a favorable answer, but what came back was a cold, curt one-liner."
+        ]
+      },
+      "mnem": "<b>henji</b> — 返 (return) + 事 (matter): you return a matter with an answer, 返事 = reply.",
+      "tip": "返事 (へんじ) = reply/answer/response. 返事をする = to reply. More everyday than 返信 (へんしん, a written reply). Also the verbal “yes” when someone calls you."
+    },
+    {
+      "key": "mnn:29:29",
+      "kana": "おさきにどうぞ",
+      "kanji": "お先にどうぞ",
+      "context": "",
+      "mean": "After you. / Go ahead, please.",
+      "cat": "expression",
+      "type": "",
+      "trans": "",
+      "dict": "お先にどうぞ",
+      "dictRead": "おさきにどうぞ",
+      "audio": "/Audio/minnamoi/bai29/00010101111011011.mp3"
+    },
+    {
+      "key": "mnn:29:30",
+      "kana": "げんじものがたり",
+      "kanji": "源氏物語",
+      "context": "",
+      "mean": "The Tale of Genji (a novel by Murasaki Shikibu, Heian era)",
+      "cat": "noun",
+      "type": "",
+      "trans": "",
+      "dict": "源氏物語",
+      "dictRead": "げんじものがたり",
+      "audio": "/Audio/minnamoi/bai29/00010101111011100.mp3"
+    }
+  ],
+  "grammar": [
+    {
+      "pattern": "〜ています (a state resulting from a change — intransitive verbs)",
+      "structure": "V(て形)＋います　（自動詞：窓が割れる → 窓が割れています）",
+      "explain": "With verbs that express an instantaneous change of state — mostly the intransitive pairs of this lesson (開く・閉まる・つく・消える・割れる・壊れる・止まる・付く・外れる…) — V＋ています does NOT mean an action in progress; it names the STATE that remains after the change has already happened. 窓が割れています = “the window is (in a) broken (state),” not “is breaking.” Contrast Lesson 14’s 〜ています for an ongoing action (食べています = is eating). Use it to describe how something currently is — often a problem you’ve just noticed.",
+      "examples": [
+        {
+          "jp": "<ruby>窓<rt>まど</rt></ruby>が<ruby>割<rt>わ</rt></ruby>れています。",
+          "en": "The window is broken."
+        },
+        {
+          "jp": "<ruby>電気<rt>でんき</rt></ruby>がついています。",
+          "en": "The light is on."
+        },
+        {
+          "jp": "<ruby>車<rt>くるま</rt></ruby>が<ruby>止<rt>と</rt></ruby>まっています。",
+          "en": "A car is parked (stopped) over there."
+        },
+        {
+          "jp": "シャツのボタンが<ruby>外<rt>はず</rt></ruby>れていますよ。",
+          "en": "Your shirt button has come undone."
+        }
+      ]
+    },
+    {
+      "pattern": "〜てしまいます／〜てしまいました (do completely / finish off)",
+      "structure": "V(て形)＋しまいます・しまいました　（casual: 〜ちゃう／〜じゃう）",
+      "explain": "Add しまう to the て-form to stress that an action is (or will be) carried through to COMPLETION — done entirely, finished off. 宿題をしてしまいました = “I finished (all) the homework.” Often paired with もう (“already”) or 全部 (“all”). In casual speech しまう contracts: 〜てしまう → 〜ちゃう, and 〜でしまう → 〜じゃう (読んでしまう → 読んじゃう).",
+      "examples": [
+        {
+          "jp": "この<ruby>本<rt>ほん</rt></ruby>はもう<ruby>読<rt>よ</rt></ruby>んでしまいました。",
+          "en": "I’ve already finished reading this book."
+        },
+        {
+          "jp": "これをコピーしてしまいますから、お<ruby>先<rt>さき</rt></ruby>にどうぞ。",
+          "en": "I’ll finish copying this, so please go on ahead."
+        },
+        {
+          "jp": "<ruby>昼<rt>ひる</rt></ruby>ご<ruby>飯<rt>はん</rt></ruby>を<ruby>食<rt>た</rt></ruby>べてしまってから、<ruby>出<rt>で</rt></ruby>かけます。",
+          "en": "I’ll go out after I finish eating lunch."
+        },
+        {
+          "jp": "ワインはみんなで<ruby>飲<rt>の</rt></ruby>んでしまいました。",
+          "en": "Everyone drank up all the wine."
+        }
+      ]
+    },
+    {
+      "pattern": "〜てしまいました (do something unintentionally / to one’s regret)",
+      "structure": "V(て形)＋しまいました　（残念・後悔の気持ち）",
+      "explain": "The same 〜てしまう also conveys that something happened which the speaker regrets or didn’t intend — an unfortunate, irreversible result. 財布をなくしてしまいました = “I’ve (gone and) lost my wallet.” Context and tone tell this apart from the completion sense; the regret nuance is common with mishaps (なくす・忘れる・落とす・遅れる・間違える・壊す).",
+      "examples": [
+        {
+          "jp": "どこかで<ruby>財布<rt>さいふ</rt></ruby>を<ruby>落<rt>お</rt></ruby>としてしまいました。",
+          "en": "I’ve gone and dropped my wallet somewhere."
+        },
+        {
+          "jp": "<ruby>電車<rt>でんしゃ</rt></ruby>に<ruby>傘<rt>かさ</rt></ruby>を<ruby>忘<rt>わす</rt></ruby>れてしまいました。",
+          "en": "I left my umbrella on the train (darn it)."
+        },
+        {
+          "jp": "<ruby>道<rt>みち</rt></ruby>を<ruby>間違<rt>まちが</rt></ruby>えてしまって、<ruby>約束<rt>やくそく</rt></ruby>の<ruby>時間<rt>じかん</rt></ruby>に<ruby>遅<rt>おく</rt></ruby>れました。",
+          "en": "I took the wrong way and was late for my appointment."
+        },
+        {
+          "jp": "<ruby>大切<rt>たいせつ</rt></ruby>なコップを<ruby>割<rt>わ</rt></ruby>ってしまいました。",
+          "en": "I broke a treasured glass (I didn’t mean to)."
+        }
+      ]
+    }
+  ],
+  "examples": [
+    {
+      "jp": "<ruby>窓<rt>まど</rt></ruby>が<ruby>閉<rt>し</rt></ruby>まっています。",
+      "en": "The window is closed."
+    },
+    {
+      "jp": "<ruby>会議室<rt>かいぎしつ</rt></ruby>のかぎが<ruby>掛<rt>か</rt></ruby>かっていますね。 …じゃ、<ruby>渡辺<rt>わたなべ</rt></ruby>さんに<ruby>言<rt>い</rt></ruby>って、<ruby>開<rt>あ</rt></ruby>けてもらいましょう。",
+      "en": "The meeting room is locked, isn’t it? …Then let’s ask Ms. Watanabe to open it."
+    },
+    {
+      "jp": "このパソコン、<ruby>使<rt>つか</rt></ruby>ってもいいですか。 …それは<ruby>故障<rt>こしょう</rt></ruby>していますから、あちらのを<ruby>使<rt>つか</rt></ruby>ってください。",
+      "en": "May I use this computer? …That one’s broken, so please use the other one."
+    },
+    {
+      "jp": "シュミットさんが<ruby>持<rt>も</rt></ruby>って<ruby>来<rt>き</rt></ruby>たワインはどこですか。 …みんなで<ruby>飲<rt>の</rt></ruby>んでしまいました。",
+      "en": "Where’s the wine Mr. Schmidt brought? …Everyone drank it all."
+    },
+    {
+      "jp": "いっしょに<ruby>帰<rt>かえ</rt></ruby>りませんか。 …すみません。このメールを<ruby>書<rt>か</rt></ruby>いてしまいますから、お<ruby>先<rt>さき</rt></ruby>にどうぞ。",
+      "en": "Won’t you head home together? …Sorry, I’ll finish writing this email, so please go on ahead."
+    },
+    {
+      "jp": "<ruby>約束<rt>やくそく</rt></ruby>の<ruby>時間<rt>じかん</rt></ruby>に<ruby>間<rt>ま</rt></ruby>に<ruby>合<rt>あ</rt></ruby>いましたか。 …いいえ、<ruby>遅<rt>おく</rt></ruby>れてしまいました。<ruby>道<rt>みち</rt></ruby>を<ruby>間違<rt>まちが</rt></ruby>えたんです。",
+      "en": "Did you make it in time for the appointment? …No, I ended up late. I took the wrong way."
+    },
+    {
+      "jp": "どうしたんですか。 …タクシーに<ruby>荷物<rt>にもつ</rt></ruby>を<ruby>忘<rt>わす</rt></ruby>れてしまったんです。",
+      "en": "What’s wrong? …I left my things in the taxi."
+    },
+    {
+      "jp": "<ruby>電池<rt>でんち</rt></ruby>が<ruby>切<rt>き</rt></ruby>れて、<ruby>時計<rt>とけい</rt></ruby>が<ruby>止<rt>と</rt></ruby>まっていますよ。",
+      "en": "The battery has died and the clock has stopped."
+    }
+  ],
+  "conversation": {
+    "title": "<ruby>忘<rt>わす</rt></ruby>れ<ruby>物<rt>もの</rt></ruby>をしてしまったんです (I’ve left something behind)",
+    "audio": "/Audio/minnahonsatsu2/10.mp3",
+    "lines": [
+      {
+        "role": "ミラー",
+        "jp": "すみません。<ruby>今<rt>いま</rt></ruby>の<ruby>電車<rt>でんしゃ</rt></ruby>に<ruby>忘<rt>わす</rt></ruby>れ<ruby>物<rt>もの</rt></ruby>をしてしまったんですが……。",
+        "en": "Excuse me, I’ve left something on the train I was just on…"
+      },
+      {
+        "role": "駅員",
+        "jp": "<ruby>何<rt>なに</rt></ruby>を<ruby>忘<rt>わす</rt></ruby>れたんですか。",
+        "en": "What did you leave behind?"
+      },
+      {
+        "role": "ミラー",
+        "jp": "<ruby>青<rt>あお</rt></ruby>いかばんです。このくらいの……。<ruby>外側<rt>そとがわ</rt></ruby>に<ruby>大<rt>おお</rt></ruby>きいポケットが<ruby>付<rt>つ</rt></ruby>いています。",
+        "en": "A blue bag, about this big. It has a big pocket on the outside."
+      },
+      {
+        "role": "駅員",
+        "jp": "どの<ruby>辺<rt>へん</rt></ruby>に<ruby>置<rt>お</rt></ruby>きましたか。",
+        "en": "Where did you put it?"
+      },
+      {
+        "role": "ミラー",
+        "jp": "よく<ruby>覚<rt>おぼ</rt></ruby>えていません。でも、<ruby>網棚<rt>あみだな</rt></ruby>の<ruby>上<rt>うえ</rt></ruby>に<ruby>置<rt>お</rt></ruby>きました。",
+        "en": "I don’t quite remember. But I put it up on the luggage rack."
+      },
+      {
+        "role": "駅員",
+        "jp": "<ruby>中<rt>なか</rt></ruby>に<ruby>何<rt>なに</rt></ruby>が<ruby>入<rt>はい</rt></ruby>っていますか。",
+        "en": "What’s inside?"
+      },
+      {
+        "role": "ミラー",
+        "jp": "えーと、<ruby>確<rt>たし</rt></ruby>か<ruby>本<rt>ほん</rt></ruby>と<ruby>傘<rt>かさ</rt></ruby>が<ruby>入<rt>はい</rt></ruby>っています。",
+        "en": "Um, I’m fairly sure there are books and an umbrella inside."
+      },
+      {
+        "role": "駅員",
+        "jp": "じゃ、<ruby>調<rt>しら</rt></ruby>べますから、ちょっと<ruby>待<rt>ま</rt></ruby>っていてください。",
+        "en": "All right, I’ll look into it, so please wait a moment."
+      },
+      {
+        "role": "駅員",
+        "jp": "ありましたよ。<ruby>今<rt>いま</rt></ruby><ruby>新宿駅<rt>しんじゅくえき</rt></ruby>にありますが、どうしますか。",
+        "en": "We’ve found it. It’s at Shinjuku Station now; what would you like to do?"
+      },
+      {
+        "role": "ミラー",
+        "jp": "ああ、よかった。すぐ<ruby>取<rt>と</rt></ruby>りに<ruby>行<rt>い</rt></ruby>きます。",
+        "en": "Oh, thank goodness. I’ll go pick it up right away."
+      },
+      {
+        "role": "駅員",
+        "jp": "じゃ、<ruby>新宿駅<rt>しんじゅくえき</rt></ruby>の<ruby>事務所<rt>じむしょ</rt></ruby>へ<ruby>行<rt>い</rt></ruby>ってください。",
+        "en": "Then please go to the office at Shinjuku Station."
+      },
+      {
+        "role": "ミラー",
+        "jp": "はい。どうもありがとうございました。",
+        "en": "Yes. Thank you very much."
+      }
+    ]
+  }
+}

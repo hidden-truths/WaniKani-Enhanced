@@ -1,0 +1,746 @@
+{
+  "lesson": 46,
+  "title": "Lesson 46",
+  "theme": "Locating an action on its timeline — 〜ところです (about to / in the middle of / just did), 〜たばかりです (have just ~ed), and 〜はずです (should / must be, a grounded expectation)",
+  "source": {
+    "name": "vnjpclub.com",
+    "vocabUrl": "https://www.vnjpclub.com/en/minna-no-nihongo/lesson-46-vocabulary.html",
+    "grammarUrl": "https://www.vnjpclub.com/en/minna-no-nihongo/lesson-46-grammar.html",
+    "note": "Vocabulary, native-speaker audio, and example sentences aggregated from vnjpclub.com (Minna no Nihongo 第2版). For personal study."
+  },
+  "vocab": [
+    {
+      "key": "mnn:46:0",
+      "kana": "わたします",
+      "kanji": "渡します",
+      "context": "",
+      "mean": "to hand over, pass, give",
+      "cat": "verb",
+      "type": "godan",
+      "trans": "t",
+      "dict": "渡す",
+      "dictRead": "わたす",
+      "audio": "/Audio/minnamoi/bai46/00010111100000010.mp3",
+      "levels": {
+        "N5": [
+          "<ruby>手紙<rt>てがみ</rt></ruby>を<ruby>渡<rt>わた</rt></ruby>します。",
+          "I hand over the letter."
+        ],
+        "N4": [
+          "この<ruby>本<rt>ほん</rt></ruby>を<ruby>田中<rt>たなか</rt></ruby>さんに<ruby>渡<rt>わた</rt></ruby>してください。",
+          "Please hand this book to Mr. Tanaka."
+        ],
+        "N3": [
+          "<ruby>帰<rt>かえ</rt></ruby>るまえに、かぎを<ruby>管理人<rt>かんりにん</rt></ruby>に<ruby>渡<rt>わた</rt></ruby>しておきました。",
+          "Before leaving, I handed the key to the caretaker in advance."
+        ],
+        "N2": [
+          "<ruby>書類<rt>しょるい</rt></ruby>は<ruby>本人<rt>ほんにん</rt></ruby>に<ruby>直接<rt>ちょくせつ</rt></ruby><ruby>渡<rt>わた</rt></ruby>さなければならないことになっている。",
+          "The rule is that the documents must be handed to the person directly."
+        ],
+        "N1": [
+          "<ruby>長年<rt>ながねん</rt></ruby><ruby>温<rt>あたた</rt></ruby>めてきた<ruby>計画<rt>けいかく</rt></ruby>を<ruby>後任<rt>こうにん</rt></ruby>に<ruby>渡<rt>わた</rt></ruby>すにあたり、<ruby>彼<rt>かれ</rt></ruby>は<ruby>万感<rt>ばんかん</rt></ruby>の<ruby>思<rt>おも</rt></ruby>いを<ruby>込<rt>こ</rt></ruby>めた。",
+          "As he handed over to his successor the plan he had nurtured for many years, he poured all his feelings into it."
+        ]
+      },
+      "mnem": "渡す (わたす) — picture handing someone a glass of <b>wat</b>er across the table: 渡す, hand it over.",
+      "tip": "渡す (godan, transitive) = hand/pass something TO someone (人に物を渡す). Its intransitive partner 渡る (わたる) means 'to cross' (道を渡る) — don't mix them up.",
+      "accent": 0
+    },
+    {
+      "key": "mnn:46:1",
+      "kana": "かえってきます",
+      "kanji": "帰って来ます",
+      "context": "",
+      "mean": "to come back, return (here)",
+      "cat": "verb",
+      "type": "irregular",
+      "trans": "i",
+      "dict": "帰って来る",
+      "dictRead": "かえってくる",
+      "audio": "/Audio/minnamoi/bai46/00010111100000011.mp3",
+      "levels": {
+        "N5": [
+          "<ruby>父<rt>ちち</rt></ruby>はもう<ruby>帰<rt>かえ</rt></ruby>って<ruby>来<rt>き</rt></ruby>ました。",
+          "My father has already come back."
+        ],
+        "N4": [
+          "<ruby>兄<rt>あに</rt></ruby>は<ruby>来月<rt>らいげつ</rt></ruby>アメリカから<ruby>帰<rt>かえ</rt></ruby>って<ruby>来<rt>き</rt></ruby>ます。",
+          "My older brother is coming back from America next month."
+        ],
+        "N3": [
+          "<ruby>主人<rt>しゅじん</rt></ruby>が<ruby>帰<rt>かえ</rt></ruby>って<ruby>来<rt>き</rt></ruby>たら、いっしょに<ruby>晩<rt>ばん</rt></ruby>ごはんを<ruby>食<rt>た</rt></ruby>べるつもりです。",
+          "When my husband comes home, I plan to have dinner together."
+        ],
+        "N2": [
+          "<ruby>一度<rt>いちど</rt></ruby><ruby>国<rt>くに</rt></ruby>を<ruby>出<rt>で</rt></ruby>た<ruby>若者<rt>わかもの</rt></ruby>が、<ruby>故郷<rt>こきょう</rt></ruby>に<ruby>帰<rt>かえ</rt></ruby>って<ruby>来<rt>く</rt></ruby>ることはめったにない。",
+          "It is rare for young people who have once left the country to come back to their hometown."
+        ],
+        "N1": [
+          "どんなに<ruby>遠<rt>とお</rt></ruby>く<ruby>離<rt>はな</rt></ruby>れても、いつか<ruby>必<rt>かなら</rt></ruby>ず<ruby>帰<rt>かえ</rt></ruby>って<ruby>来<rt>く</rt></ruby>る<ruby>場所<rt>ばしょ</rt></ruby>があるという<ruby>思<rt>おも</rt></ruby>いが、<ruby>彼<rt>かれ</rt></ruby>を<ruby>支<rt>ささ</rt></ruby>えていた。",
+          "The thought that there was a place he could always return to someday, no matter how far away he went, sustained him."
+        ]
+      },
+      "mnem": "帰る (go back) + 来る (come) = 帰って来る: you go back AND arrive here — come back.",
+      "tip": "帰って来る = return TO where the speaker is (motion toward 'here'); 帰って行く = return away from here. Plain 帰る doesn't specify direction relative to the speaker. Note the 来 reading shifts: 帰って来ます=き, 帰って来る=く.",
+      "accent": 1
+    },
+    {
+      "key": "mnn:46:2",
+      "kana": "でます",
+      "kanji": "出ます",
+      "context": "バスが〜",
+      "mean": "(a bus/train) to leave, depart",
+      "cat": "verb",
+      "type": "ichidan",
+      "trans": "i",
+      "dict": "出る",
+      "dictRead": "でる",
+      "audio": "/Audio/minnamoi/bai46/00010111100000100.mp3",
+      "accent": 1
+    },
+    {
+      "key": "mnn:46:3",
+      "kana": "とどきます",
+      "kanji": "届きます",
+      "context": "荷物が〜",
+      "mean": "(a parcel) to be delivered, arrive, reach",
+      "cat": "verb",
+      "type": "godan",
+      "trans": "i",
+      "dict": "届く",
+      "dictRead": "とどく",
+      "audio": "/Audio/minnamoi/bai46/00010111100000101.mp3",
+      "levels": {
+        "N5": [
+          "<ruby>荷物<rt>にもつ</rt></ruby>が<ruby>届<rt>とど</rt></ruby>きました。",
+          "The parcel has arrived."
+        ],
+        "N4": [
+          "<ruby>手紙<rt>てがみ</rt></ruby>はあした<ruby>届<rt>とど</rt></ruby>くと<ruby>思<rt>おも</rt></ruby>います。",
+          "I think the letter will arrive tomorrow."
+        ],
+        "N3": [
+          "<ruby>注文<rt>ちゅうもん</rt></ruby>した<ruby>品物<rt>しなもの</rt></ruby>がなかなか<ruby>届<rt>とど</rt></ruby>かないので、<ruby>店<rt>みせ</rt></ruby>に<ruby>問<rt>と</rt></ruby>い<ruby>合<rt>あ</rt></ruby>わせました。",
+          "The item I ordered wouldn't arrive, so I inquired at the shop."
+        ],
+        "N2": [
+          "<ruby>心<rt>こころ</rt></ruby>を<ruby>込<rt>こ</rt></ruby>めたプレゼントなら、<ruby>多少<rt>たしょう</rt></ruby><ruby>遅<rt>おく</rt></ruby>れて<ruby>届<rt>とど</rt></ruby>いても<ruby>相手<rt>あいて</rt></ruby>は<ruby>喜<rt>よろこ</rt></ruby>ぶはずだ。",
+          "If it's a heartfelt gift, the recipient should be pleased even if it arrives a little late."
+        ],
+        "N1": [
+          "<ruby>現場<rt>げんば</rt></ruby>の<ruby>切実<rt>せつじつ</rt></ruby>な<ruby>声<rt>こえ</rt></ruby>が<ruby>上層部<rt>じょうそうぶ</rt></ruby>にまで<ruby>届<rt>とど</rt></ruby>いていれば、この<ruby>事故<rt>じこ</rt></ruby>は<ruby>防<rt>ふせ</rt></ruby>げたに<ruby>違<rt>ちが</rt></ruby>いない。",
+          "Had the earnest voices from the front lines reached even upper management, this accident could surely have been prevented."
+        ]
+      },
+      "mnem": "届く — 'toe-DOH-ku': the package finally reaches your 'toe-door' — 届く, gets delivered.",
+      "tip": "届く (godan, intransitive) — the thing that arrives takes が (荷物が届く). Its transitive partner is 届ける (とどける, 'to deliver/report,' 荷物を届ける). 届く also means 'to reach' (手が届く).",
+      "accent": 2
+    },
+    {
+      "key": "mnn:46:4",
+      "kana": "にゅうがくします",
+      "kanji": "入学します",
+      "context": "大学に〜",
+      "mean": "to enter (a school/university), enroll",
+      "cat": "verb",
+      "type": "irregular",
+      "trans": "i",
+      "dict": "入学する",
+      "dictRead": "にゅうがくする",
+      "audio": "/Audio/minnamoi/bai46/00010111100000110.mp3",
+      "levels": {
+        "N5": [
+          "<ruby>兄<rt>あに</rt></ruby>は<ruby>大学<rt>だいがく</rt></ruby>に<ruby>入学<rt>にゅうがく</rt></ruby>しました。",
+          "My older brother entered university."
+        ],
+        "N4": [
+          "<ruby>娘<rt>むすめ</rt></ruby>は<ruby>来年<rt>らいねん</rt></ruby><ruby>小学校<rt>しょうがっこう</rt></ruby>に<ruby>入学<rt>にゅうがく</rt></ruby>します。",
+          "My daughter will enter elementary school next year."
+        ],
+        "N3": [
+          "<ruby>希望<rt>きぼう</rt></ruby>の<ruby>大学<rt>だいがく</rt></ruby>に<ruby>入学<rt>にゅうがく</rt></ruby>できるように、<ruby>毎日<rt>まいにち</rt></ruby><ruby>一生懸命<rt>いっしょうけんめい</rt></ruby><ruby>勉強<rt>べんきょう</rt></ruby>しています。",
+          "I study hard every day so that I can get into the university I want."
+        ],
+        "N2": [
+          "<ruby>大学<rt>だいがく</rt></ruby>に<ruby>入学<rt>にゅうがく</rt></ruby>したからには、<ruby>遊<rt>あそ</rt></ruby>んでばかりいるわけにはいかない。",
+          "Now that I've entered university, I can't just spend all my time playing around."
+        ],
+        "N1": [
+          "<ruby>難関<rt>なんかん</rt></ruby>とされる<ruby>大学<rt>だいがく</rt></ruby>に<ruby>入学<rt>にゅうがく</rt></ruby>したところで、<ruby>努力<rt>どりょく</rt></ruby>を<ruby>怠<rt>おこた</rt></ruby>ればあっという<ruby>間<rt>ま</rt></ruby>に<ruby>落<rt>お</rt></ruby>ちこぼれてしまう。",
+          "Even if you get into a university said to be highly competitive, if you neglect your efforts you'll fall behind in no time."
+        ]
+      },
+      "mnem": "入学 = 入 (enter) + 学 (learning): you 'enter learning,' 入学する, enroll in school.",
+      "tip": "入学する (irregular する-verb) — the school takes に (大学に入学する). Its opposite is 卒業する (graduate), which takes を (大学を卒業する). Don't swap the particles.",
+      "accent": 0
+    },
+    {
+      "key": "mnn:46:5",
+      "kana": "そつぎょうします",
+      "kanji": "卒業します",
+      "context": "大学を〜",
+      "mean": "to graduate (from a school/university)",
+      "cat": "verb",
+      "type": "irregular",
+      "trans": "i",
+      "dict": "卒業する",
+      "dictRead": "そつぎょうする",
+      "audio": "/Audio/minnamoi/bai46/00010111100000111.mp3",
+      "levels": {
+        "N5": [
+          "<ruby>姉<rt>あね</rt></ruby>は<ruby>去年<rt>きょねん</rt></ruby><ruby>大学<rt>だいがく</rt></ruby>を<ruby>卒業<rt>そつぎょう</rt></ruby>しました。",
+          "My older sister graduated from university last year."
+        ],
+        "N4": [
+          "<ruby>大学<rt>だいがく</rt></ruby>を<ruby>卒業<rt>そつぎょう</rt></ruby>したら、<ruby>国<rt>くに</rt></ruby>へ<ruby>帰<rt>かえ</rt></ruby>るつもりです。",
+          "After I graduate from university, I plan to go back to my country."
+        ],
+        "N3": [
+          "<ruby>高校<rt>こうこう</rt></ruby>を<ruby>卒業<rt>そつぎょう</rt></ruby>してから、ずっとこの<ruby>町<rt>まち</rt></ruby>で<ruby>働<rt>はたら</rt></ruby>いています。",
+          "Ever since I graduated from high school, I've been working in this town."
+        ],
+        "N2": [
+          "<ruby>無事<rt>ぶじ</rt></ruby>に<ruby>大学<rt>だいがく</rt></ruby>を<ruby>卒業<rt>そつぎょう</rt></ruby>できたのは、<ruby>支<rt>ささ</rt></ruby>えてくれた<ruby>家族<rt>かぞく</rt></ruby>のおかげにほかならない。",
+          "That I was able to graduate from university without a hitch is due to nothing other than the family who supported me."
+        ],
+        "N1": [
+          "<ruby>大学<rt>だいがく</rt></ruby>を<ruby>卒業<rt>そつぎょう</rt></ruby>するやいなや、<ruby>彼<rt>かれ</rt></ruby>は<ruby>誰<rt>だれ</rt></ruby>も<ruby>予想<rt>よそう</rt></ruby>しなかった<ruby>道<rt>みち</rt></ruby>へと<ruby>進<rt>すす</rt></ruby>んでいった。",
+          "The moment he graduated from university, he set off down a path no one had anticipated."
+        ]
+      },
+      "mnem": "卒業 = 卒 (finish) + 業 (studies): you 'finish your studies,' 卒業する, graduate.",
+      "tip": "卒業する (irregular する-verb) — the school takes を (大学を卒業する), the を of leaving. Opposite of 入学する (enter, takes に). Figuratively 〜を卒業する = 'to grow out of ~.'",
+      "accent": 0
+    },
+    {
+      "key": "mnn:46:6",
+      "kana": "やきます",
+      "kanji": "焼きます",
+      "context": "",
+      "mean": "to bake, grill, roast, burn",
+      "cat": "verb",
+      "type": "godan",
+      "trans": "t",
+      "dict": "焼く",
+      "dictRead": "やく",
+      "audio": "/Audio/minnamoi/bai46/00010111100001000.mp3",
+      "levels": {
+        "N5": [
+          "<ruby>母<rt>はは</rt></ruby>はパンを<ruby>焼<rt>や</rt></ruby>きます。",
+          "My mother bakes bread."
+        ],
+        "N4": [
+          "<ruby>週末<rt>しゅうまつ</rt></ruby>にみんなで<ruby>肉<rt>にく</rt></ruby>を<ruby>焼<rt>や</rt></ruby>いて<ruby>食<rt>た</rt></ruby>べましょう。",
+          "Let's all grill and eat some meat this weekend."
+        ],
+        "N3": [
+          "<ruby>誕生日<rt>たんじょうび</rt></ruby>には、いつも<ruby>自分<rt>じぶん</rt></ruby>でケーキを<ruby>焼<rt>や</rt></ruby>くことにしています。",
+          "On birthdays, I make it a rule to always bake the cake myself."
+        ],
+        "N2": [
+          "<ruby>炭火<rt>すみび</rt></ruby>でじっくり<ruby>焼<rt>や</rt></ruby>いた<ruby>魚<rt>さかな</rt></ruby>は、<ruby>香<rt>こう</rt></ruby>ばしくて<ruby>何<rt>なん</rt></ruby>とも<ruby>言<rt>い</rt></ruby>えないおいしさだ。",
+          "Fish grilled slowly over charcoal is fragrant and indescribably delicious."
+        ],
+        "N1": [
+          "<ruby>古<rt>ふる</rt></ruby>い<ruby>写真<rt>しゃしん</rt></ruby>を<ruby>一枚<rt>いちまい</rt></ruby>ずつ<ruby>焼<rt>や</rt></ruby>く<ruby>職人<rt>しょくにん</rt></ruby>の<ruby>手<rt>て</rt></ruby>つきには、<ruby>機械<rt>きかい</rt></ruby>には<ruby>出<rt>だ</rt></ruby>せない<ruby>味<rt>あじ</rt></ruby>わいがあった。",
+          "In the way the craftsman printed the old photographs one by one, there was a flavor that no machine could produce."
+        ]
+      },
+      "mnem": "焼く — 'YA-ku': you 'yank' the hot tray from the oven where you 焼く, bake it.",
+      "tip": "焼く (godan, transitive) — you 焼く something (肉を焼く); its intransitive pair is 焼ける (やける, 'gets grilled/burns,' パンが焼ける). Also 'to be jealous' in 世話を焼く / やきもちを焼く.",
+      "accent": 0
+    },
+    {
+      "key": "mnn:46:7",
+      "kana": "やけます",
+      "kanji": "焼けます",
+      "context": "パン・肉が〜",
+      "mean": "(bread/meat) to be baked, be grilled, be done",
+      "cat": "verb",
+      "type": "ichidan",
+      "trans": "i",
+      "dict": "焼ける",
+      "dictRead": "やける",
+      "audio": "/Audio/minnamoi/bai46/00010111100001001.mp3",
+      "levels": {
+        "N5": [
+          "パンが<ruby>焼<rt>や</rt></ruby>けました。",
+          "The bread is baked."
+        ],
+        "N4": [
+          "もうすぐ<ruby>肉<rt>にく</rt></ruby>が<ruby>焼<rt>や</rt></ruby>けるから、お<ruby>皿<rt>さら</rt></ruby>を<ruby>持<rt>も</rt></ruby>ってきてください。",
+          "The meat will be done soon, so please bring the plates."
+        ],
+        "N3": [
+          "いいにおいがしてきたところをみると、そろそろクッキーが<ruby>焼<rt>や</rt></ruby>けたらしい。",
+          "Judging from the nice smell that's started coming, it seems the cookies are about done."
+        ],
+        "N2": [
+          "<ruby>表面<rt>ひょうめん</rt></ruby>がこんがり<ruby>焼<rt>や</rt></ruby>けるまで、ふたを<ruby>開<rt>あ</rt></ruby>けずに<ruby>待<rt>ま</rt></ruby>ったほうがいい。",
+          "You'd better wait without opening the lid until the surface is nicely browned."
+        ],
+        "N1": [
+          "<ruby>夕日<rt>ゆうひ</rt></ruby>に<ruby>空<rt>そら</rt></ruby>が<ruby>赤<rt>あか</rt></ruby>く<ruby>焼<rt>や</rt></ruby>けるさまは、まるで<ruby>大地<rt>だいち</rt></ruby>が<ruby>静<rt>しず</rt></ruby>かに<ruby>燃<rt>も</rt></ruby>えているかのようだった。",
+          "The way the sky burned red in the setting sun was as if the earth itself were quietly ablaze."
+        ]
+      },
+      "mnem": "焼ける is the 'it happens by itself' partner of 焼く — the bread やける, gets baked, with no one holding it.",
+      "tip": "焼ける (ichidan, intransitive) — the thing done takes が (パンが焼ける); the transitive pair is 焼く (やく, パンを焼く). Also: 日に焼ける ('get sunburned/tanned'), 家が焼ける ('a house burns down').",
+      "accent": 0
+    },
+    {
+      "key": "mnn:46:8",
+      "kana": "るす",
+      "kanji": "留守",
+      "context": "",
+      "mean": "absence, being away from home",
+      "cat": "noun",
+      "type": "",
+      "trans": "",
+      "dict": "留守",
+      "dictRead": "るす",
+      "audio": "/Audio/minnamoi/bai46/00010111100001010.mp3",
+      "levels": {
+        "N5": [
+          "<ruby>父<rt>ちち</rt></ruby>は<ruby>今<rt>いま</rt></ruby><ruby>留守<rt>るす</rt></ruby>です。",
+          "My father is out right now."
+        ],
+        "N4": [
+          "<ruby>田中<rt>たなか</rt></ruby>さんのうちへ<ruby>行<rt>い</rt></ruby>きましたが、<ruby>留守<rt>るす</rt></ruby>でした。",
+          "I went to Mr. Tanaka's house, but he wasn't home."
+        ],
+        "N3": [
+          "<ruby>留守<rt>るす</rt></ruby>の<ruby>間<rt>あいだ</rt></ruby>に<ruby>荷物<rt>にもつ</rt></ruby>が<ruby>届<rt>とど</rt></ruby>いたようで、<ruby>不在票<rt>ふざいひょう</rt></ruby>が<ruby>入<rt>はい</rt></ruby>っていた。",
+          "It seems a parcel came while I was out — there was a delivery-attempt slip inside."
+        ],
+        "N2": [
+          "<ruby>隣<rt>となり</rt></ruby>の<ruby>家<rt>いえ</rt></ruby>は<ruby>一<rt>いっ</rt></ruby>か<ruby>月<rt>げつ</rt></ruby>も<ruby>留守<rt>るす</rt></ruby>にしているようだから、<ruby>旅行<rt>りょこう</rt></ruby>にでも<ruby>行<rt>い</rt></ruby>っているのだろう。",
+          "The house next door seems to have been empty for a whole month, so they must be off on a trip or something."
+        ],
+        "N1": [
+          "<ruby>親<rt>おや</rt></ruby>の<ruby>留守<rt>るす</rt></ruby>を<ruby>預<rt>あず</rt></ruby>かる<ruby>長男<rt>ちょうなん</rt></ruby>としての<ruby>責任<rt>せきにん</rt></ruby>が、まだ<ruby>幼<rt>おさな</rt></ruby>い<ruby>彼<rt>かれ</rt></ruby>の<ruby>肩<rt>かた</rt></ruby>にずしりとのしかかっていた。",
+          "The responsibility of minding the house in his parents' absence, as the eldest son, weighed heavily on his still-young shoulders."
+        ]
+      },
+      "mnem": "留守 = 留 (stay) + 守 (guard) — but it names the OWNER being AWAY: the house is left for someone to 'stay and guard,' i.e. 留守, an absence.",
+      "tip": "留守 (るす) = a home being empty because its resident is away. 留守にする = 'to be out'; 留守番 (るすばん) = house-sitting; 留守番電話 = answering machine. It's YOUR home being empty, not you visiting elsewhere.",
+      "accent": 1
+    },
+    {
+      "key": "mnn:46:9",
+      "kana": "たくはいびん",
+      "kanji": "宅配便",
+      "context": "",
+      "mean": "home delivery service, courier (parcel delivery)",
+      "cat": "noun",
+      "type": "",
+      "trans": "",
+      "dict": "宅配便",
+      "dictRead": "たくはいびん",
+      "audio": "/Audio/minnamoi/bai46/00010111100001011.mp3",
+      "levels": {
+        "N5": [
+          "<ruby>宅配便<rt>たくはいびん</rt></ruby>で<ruby>荷物<rt>にもつ</rt></ruby>を<ruby>送<rt>おく</rt></ruby>ります。",
+          "I'll send the parcel by courier."
+        ],
+        "N4": [
+          "あした<ruby>宅配便<rt>たくはいびん</rt></ruby>が<ruby>来<rt>く</rt></ruby>るから、<ruby>家<rt>いえ</rt></ruby>にいなければなりません。",
+          "The courier is coming tomorrow, so I have to be at home."
+        ],
+        "N3": [
+          "<ruby>重<rt>おも</rt></ruby>い<ruby>物<rt>もの</rt></ruby>は<ruby>自分<rt>じぶん</rt></ruby>で<ruby>運<rt>はこ</rt></ruby>ばずに、<ruby>宅配便<rt>たくはいびん</rt></ruby>で<ruby>送<rt>おく</rt></ruby>ったほうが<ruby>楽<rt>らく</rt></ruby>です。",
+          "For heavy things, it's easier to send them by courier than to carry them yourself."
+        ],
+        "N2": [
+          "<ruby>宅配便<rt>たくはいびん</rt></ruby>のおかげで、<ruby>地方<rt>ちほう</rt></ruby>にいながら<ruby>都会<rt>とかい</rt></ruby>の<ruby>品物<rt>しなもの</rt></ruby>が<ruby>翌日<rt>よくじつ</rt></ruby>には<ruby>手<rt>て</rt></ruby>に<ruby>入<rt>はい</rt></ruby>る。",
+          "Thanks to courier services, you can get city goods the very next day even while living out in the provinces."
+        ],
+        "N1": [
+          "<ruby>宅配便<rt>たくはいびん</rt></ruby>が<ruby>生活<rt>せいかつ</rt></ruby>に<ruby>欠<rt>か</rt></ruby>かせない<ruby>存在<rt>そんざい</rt></ruby>となった<ruby>一方<rt>いっぽう</rt></ruby>で、<ruby>再配達<rt>さいはいたつ</rt></ruby>の<ruby>増加<rt>ぞうか</rt></ruby>が<ruby>深刻<rt>しんこく</rt></ruby>な<ruby>社会問題<rt>しゃかいもんだい</rt></ruby>となっている。",
+          "While courier delivery has become indispensable to daily life, the rise in redeliveries has become a serious social problem."
+        ]
+      },
+      "mnem": "宅配便 = 宅 (home) + 配 (deliver) + 便 (service): a 'home-delivery service,' 宅配便.",
+      "tip": "宅配便 (たくはいびん) = door-to-door parcel delivery service (Yamato's 宅急便 is a brand name). 宅 = residence (自宅), 配 = distribute (配達), 便 = a service/flight (便利 shares it).",
+      "accent": 0
+    },
+    {
+      "key": "mnn:46:10",
+      "kana": "げんいん",
+      "kanji": "原因",
+      "context": "",
+      "mean": "cause (of a problem/event)",
+      "cat": "noun",
+      "type": "",
+      "trans": "",
+      "dict": "原因",
+      "dictRead": "げんいん",
+      "audio": "/Audio/minnamoi/bai46/00010111100001100.mp3",
+      "levels": {
+        "N5": [
+          "<ruby>火事<rt>かじ</rt></ruby>の<ruby>原因<rt>げんいん</rt></ruby>は<ruby>何<rt>なん</rt></ruby>ですか。",
+          "What is the cause of the fire?"
+        ],
+        "N4": [
+          "<ruby>事故<rt>じこ</rt></ruby>の<ruby>原因<rt>げんいん</rt></ruby>はまだわかりません。",
+          "The cause of the accident is not yet known."
+        ],
+        "N3": [
+          "<ruby>故障<rt>こしょう</rt></ruby>の<ruby>原因<rt>げんいん</rt></ruby>を<ruby>調<rt>しら</rt></ruby>べているところですから、もう<ruby>少<rt>すこ</rt></ruby>し<ruby>待<rt>ま</rt></ruby>ってください。",
+          "I'm in the middle of investigating the cause of the breakdown, so please wait a little longer."
+        ],
+        "N2": [
+          "<ruby>失敗<rt>しっぱい</rt></ruby>の<ruby>原因<rt>げんいん</rt></ruby>をきちんと<ruby>分析<rt>ぶんせき</rt></ruby>しないかぎり、<ruby>同<rt>おな</rt></ruby>じことを<ruby>繰<rt>く</rt></ruby>り<ruby>返<rt>かえ</rt></ruby>すだけだ。",
+          "Unless you properly analyze the cause of the failure, you'll just repeat the same thing."
+        ],
+        "N1": [
+          "<ruby>事態<rt>じたい</rt></ruby>の<ruby>原因<rt>げんいん</rt></ruby>を<ruby>一<rt>ひと</rt></ruby>つに<ruby>決<rt>き</rt></ruby>めつけることは、かえって<ruby>問題<rt>もんだい</rt></ruby>の<ruby>本質<rt>ほんしつ</rt></ruby>を<ruby>見<rt>み</rt></ruby>えなくさせかねない。",
+          "Pinning the cause of a situation on a single factor may, on the contrary, risk obscuring the essence of the problem."
+        ]
+      },
+      "mnem": "原因 = 原 (origin) + 因 (a factor): the 'originating factor,' 原因, is the cause.",
+      "tip": "原因 (げんいん) = cause; its pair is 結果 (けっか, result/effect) — 原因と結果. Distinguish 理由 (りゆう, a 'reason/justification' for a choice) from 原因 (what physically brought an event about).",
+      "accent": 0
+    },
+    {
+      "key": "mnn:46:11",
+      "kana": "こちら",
+      "kanji": "",
+      "context": "",
+      "mean": "this side; this way; me/us (my side)",
+      "cat": "noun",
+      "type": "",
+      "trans": "",
+      "dict": "こちら",
+      "dictRead": "こちら",
+      "audio": "/Audio/minnamoi/bai46/00010111100001101.mp3",
+      "levels": {
+        "N5": [
+          "こちらは<ruby>田中<rt>たなか</rt></ruby>さんです。",
+          "This is Mr. Tanaka."
+        ],
+        "N4": [
+          "<ruby>出口<rt>でぐち</rt></ruby>はこちらですから、こちらへどうぞ。",
+          "The exit is this way, so please come this way."
+        ],
+        "N3": [
+          "あとでこちらから<ruby>電話<rt>でんわ</rt></ruby>しますので、<ruby>番号<rt>ばんごう</rt></ruby>を<ruby>教<rt>おし</rt></ruby>えていただけますか。",
+          "I'll call you from my end later, so could you tell me your number?"
+        ],
+        "N2": [
+          "<ruby>問題<rt>もんだい</rt></ruby>が<ruby>起<rt>お</rt></ruby>きた<ruby>以上<rt>いじょう</rt></ruby>、こちらにも<ruby>責任<rt>せきにん</rt></ruby>がないとは<ruby>言<rt>い</rt></ruby>い<ruby>切<rt>き</rt></ruby>れない。",
+          "Now that a problem has arisen, we can't flatly say that our side bears no responsibility."
+        ],
+        "N1": [
+          "<ruby>何<rt>なに</rt></ruby>かとご<ruby>不便<rt>ふべん</rt></ruby>をおかけしますが、こちらといたしましても<ruby>誠心誠意<rt>せいしんせいい</rt></ruby><ruby>対応<rt>たいおう</rt></ruby>する<ruby>所存<rt>しょぞん</rt></ruby>でございます。",
+          "We apologize for the various inconveniences, but we too, for our part, intend to respond with all sincerity."
+        ]
+      },
+      "mnem": "こちら — the polite 'ko-' (this, near me) + ちら (direction): 'this way / my side,' こちら.",
+      "tip": "こちら = a polite 'this way / here / my side' (formal こっち). On the phone こちらは〜 = 'this is 〜 (speaking)'; こちらから電話します = 'I'll call you.' Set: こちら／そちら／あちら／どちら.",
+      "accent": 0
+    },
+    {
+      "key": "mnn:46:12",
+      "kana": "〜のところ",
+      "kanji": "〜の所",
+      "context": "",
+      "mean": "at/by where ~ is, over to the ~ ('s place)",
+      "cat": "expression",
+      "type": "",
+      "trans": "",
+      "dict": "〜のところ",
+      "dictRead": "〜のところ",
+      "audio": "/Audio/minnamoi/bai46/00010111100001110.mp3"
+    },
+    {
+      "key": "mnn:46:13",
+      "kana": "はんとし",
+      "kanji": "半年",
+      "context": "",
+      "mean": "half a year, six months",
+      "cat": "noun",
+      "type": "",
+      "trans": "",
+      "dict": "半年",
+      "dictRead": "はんとし",
+      "audio": "/Audio/minnamoi/bai46/00010111100001111.mp3",
+      "levels": {
+        "N5": [
+          "<ruby>日本<rt>にほん</rt></ruby>に<ruby>来<rt>き</rt></ruby>て、<ruby>半年<rt>はんとし</rt></ruby>になりました。",
+          "It's been half a year since I came to Japan."
+        ],
+        "N4": [
+          "<ruby>半年<rt>はんとし</rt></ruby><ruby>前<rt>まえ</rt></ruby>に、この<ruby>町<rt>まち</rt></ruby>へ<ruby>引<rt>ひ</rt></ruby>っ<ruby>越<rt>こ</rt></ruby>してきました。",
+          "I moved to this town half a year ago."
+        ],
+        "N3": [
+          "あと<ruby>半年<rt>はんとし</rt></ruby><ruby>頑張<rt>がんば</rt></ruby>れば<ruby>卒業<rt>そつぎょう</rt></ruby>できるので、もう<ruby>少<rt>すこ</rt></ruby>しの<ruby>辛抱<rt>しんぼう</rt></ruby>です。",
+          "If I hang on for another half a year I can graduate, so it's just a little more patience."
+        ],
+        "N2": [
+          "わずか<ruby>半年<rt>はんとし</rt></ruby>の<ruby>間<rt>あいだ</rt></ruby>に、<ruby>彼<rt>かれ</rt></ruby>の<ruby>日本語<rt>にほんご</rt></ruby>は<ruby>見違<rt>みちが</rt></ruby>えるほど<ruby>上達<rt>じょうたつ</rt></ruby>した。",
+          "In a mere half a year, his Japanese improved beyond recognition."
+        ],
+        "N1": [
+          "<ruby>単身赴任<rt>たんしんふにん</rt></ruby>の<ruby>半年<rt>はんとし</rt></ruby>は、<ruby>家族<rt>かぞく</rt></ruby>のありがたさを<ruby>改<rt>あらた</rt></ruby>めて<ruby>噛<rt>か</rt></ruby>みしめる<ruby>日々<rt>ひび</rt></ruby>であった。",
+          "The half a year working away from home was a time of freshly appreciating how precious family is."
+        ]
+      },
+      "mnem": "半 (half) + 年 (year) = 半年: half a year. Watch the reading — 年 is とし here, so it's はんとし, not はんねん.",
+      "tip": "半年 (はんとし) = half a year. The reading trap: 年 is read とし, giving はんとし. Compare 半月 (はんつき, half a month) and 半日 (はんにち, half a day).",
+      "accent": 0
+    },
+    {
+      "key": "mnn:46:14",
+      "kana": "ちょうど",
+      "kanji": "",
+      "context": "",
+      "mean": "just, exactly, precisely",
+      "cat": "adverb",
+      "type": "",
+      "trans": "",
+      "dict": "ちょうど",
+      "dictRead": "ちょうど",
+      "audio": "/Audio/minnamoi/bai46/00010111100010000.mp3",
+      "levels": {
+        "N5": [
+          "<ruby>今<rt>いま</rt></ruby>ちょうど3<ruby>時<rt>じ</rt></ruby>です。",
+          "It's exactly 3 o'clock now."
+        ],
+        "N4": [
+          "<ruby>駅<rt>えき</rt></ruby>に<ruby>着<rt>つ</rt></ruby>いたとき、ちょうど<ruby>電車<rt>でんしゃ</rt></ruby>が<ruby>来<rt>き</rt></ruby>ました。",
+          "Just as I arrived at the station, the train came."
+        ],
+        "N3": [
+          "<ruby>出<rt>で</rt></ruby>かけようとしたところに、ちょうど<ruby>友達<rt>ともだち</rt></ruby>がたずねて<ruby>来<rt>き</rt></ruby>た。",
+          "Just as I was about to go out, a friend happened to drop by."
+        ],
+        "N2": [
+          "この<ruby>服<rt>ふく</rt></ruby>はサイズもちょうどだし、<ruby>値段<rt>ねだん</rt></ruby>も<ruby>手<rt>て</rt></ruby>ごろで、まさに<ruby>探<rt>さが</rt></ruby>していたものだ。",
+          "These clothes are just the right size and reasonably priced too — exactly what I was looking for."
+        ],
+        "N1": [
+          "<ruby>彼<rt>かれ</rt></ruby>の<ruby>一言<rt>ひとこと</rt></ruby>は、<ruby>迷<rt>まよ</rt></ruby>っていた<ruby>私<rt>わたし</rt></ruby>の<ruby>背中<rt>せなか</rt></ruby>をちょうどよく<ruby>押<rt>お</rt></ruby>してくれたかのようだった。",
+          "His single word felt as if it had given the hesitating me a push at just the right moment."
+        ]
+      },
+      "mnem": "ちょうど — say 'CHO-do': it lands right 'on the dot' — exactly, precisely.",
+      "tip": "ちょうど (adverb) = exactly/just (ちょうど3時 = exactly 3:00; ちょうどいい = just right). Don't confuse ちょうど (just/exactly) with ちょっと (a little) — one mora apart.",
+      "accent": 0
+    },
+    {
+      "key": "mnn:46:15",
+      "kana": "たったいま",
+      "kanji": "たった今",
+      "context": "",
+      "mean": "just now, a moment ago (with past tense: just did)",
+      "cat": "adverb",
+      "type": "",
+      "trans": "",
+      "dict": "たった今",
+      "dictRead": "たったいま",
+      "audio": "/Audio/minnamoi/bai46/00010111100010001.mp3",
+      "levels": {
+        "N5": [
+          "<ruby>父<rt>ちち</rt></ruby>はたった<ruby>今<rt>いま</rt></ruby><ruby>帰<rt>かえ</rt></ruby>りました。",
+          "My father came home just now."
+        ],
+        "N4": [
+          "バスはたった<ruby>今<rt>いま</rt></ruby><ruby>出<rt>で</rt></ruby>たところです。",
+          "The bus left just a moment ago."
+        ],
+        "N3": [
+          "たった<ruby>今<rt>いま</rt></ruby><ruby>聞<rt>き</rt></ruby>いた<ruby>話<rt>はなし</rt></ruby>なので、まだ<ruby>詳<rt>くわ</rt></ruby>しいことはわかりません。",
+          "I only heard about it just now, so I don't know the details yet."
+        ],
+        "N2": [
+          "たった<ruby>今<rt>いま</rt></ruby>までここにいたはずなのに、<ruby>彼<rt>かれ</rt></ruby>の<ruby>姿<rt>すがた</rt></ruby>はどこにも<ruby>見<rt>み</rt></ruby><ruby>当<rt>あ</rt></ruby>たらなかった。",
+          "He should have been here until just a moment ago, yet he was nowhere to be found."
+        ],
+        "N1": [
+          "たった<ruby>今<rt>いま</rt></ruby><ruby>交<rt>か</rt></ruby>わしたはずの<ruby>約束<rt>やくそく</rt></ruby>さえ、<ruby>彼<rt>かれ</rt></ruby>はもう<ruby>忘<rt>わす</rt></ruby>れてしまったかのように<ruby>振<rt>ふ</rt></ruby>る<ruby>舞<rt>ま</rt></ruby>った。",
+          "He acted as if he had already forgotten even the promise he must have made just now."
+        ]
+      },
+      "mnem": "たった (only/just) + 今 (now) = たった今: 'only just now,' a moment ago.",
+      "tip": "たった今 = 'just now / a moment ago.' Pairs with the PAST tense for 'just did' (たった今出た), often with 〜たところ. The たった is an emphatic 'just/only' (also たった一人 = 'all alone').",
+      "accent": 4
+    },
+    {
+      "key": "mnn:46:16",
+      "kana": "いまいいですか",
+      "kanji": "今いいですか",
+      "context": "",
+      "mean": "Is now a good time? / Have you got a moment?",
+      "cat": "expression",
+      "type": "",
+      "trans": "",
+      "dict": "今いいですか",
+      "dictRead": "いまいいですか",
+      "audio": "/Audio/minnamoi/bai46/00010111100010010.mp3"
+    }
+  ],
+  "grammar": [
+    {
+      "pattern": "〜ところです (about to ~ / in the middle of ~ / just ~ed)",
+      "structure": "V(辞書形)＋ところです（これから）・V(て形)＋いるところです（今）・V(た形)＋ところです（たった今）",
+      "explain": "〜ところ pins an action to a point on its own timeline relative to right now. Dictionary form ＋ ところ = 'just about to do' (pairs with これから／今から). 〜ている ＋ ところ = 'in the middle of doing' (pairs with 今). 〜た ＋ ところ = 'have just finished doing' (pairs with たった今). Add 〜んです → 〜ところなんです when you're explaining your situation, e.g. declining an invitation.",
+      "examples": [
+        {
+          "jp": "<ruby>今<rt>いま</rt></ruby>から<ruby>昼<rt>ひる</rt></ruby>ごはんを<ruby>食<rt>た</rt></ruby>べるところです。",
+          "en": "I'm just about to eat lunch."
+        },
+        {
+          "jp": "<ruby>今<rt>いま</rt></ruby>レポートを<ruby>書<rt>か</rt></ruby>いているところです。",
+          "en": "I'm in the middle of writing the report right now."
+        },
+        {
+          "jp": "たった<ruby>今<rt>いま</rt></ruby>バスが<ruby>出<rt>で</rt></ruby>たところです。",
+          "en": "The bus has just left."
+        },
+        {
+          "jp": "すみません、<ruby>今<rt>いま</rt></ruby><ruby>出<rt>で</rt></ruby>かけるところなんです。",
+          "en": "Sorry, I'm just about to head out."
+        }
+      ]
+    },
+    {
+      "pattern": "〜たばかりです (have just ~ed)",
+      "structure": "V(た形)＋ばかりです／V(た形)＋ばかりの＋N／V(た形)＋ばかりなのに",
+      "explain": "た-form ＋ ばかり says that, in the speaker's FEELING, little time has passed since the action finished. Unlike 〜たところ (an objective point on the timeline), ばかり is subjective — so 去年結婚したばかり ('only just got married last year') works even though a year is objectively long. Modifies a noun as 〜たばかりのN; 〜たばかりなのに = 'even though (I) just ~ed.'",
+      "examples": [
+        {
+          "jp": "<ruby>日本<rt>にほん</rt></ruby>へ<ruby>来<rt>き</rt></ruby>たばかりで、まだ<ruby>漢字<rt>かんじ</rt></ruby>がわかりません。",
+          "en": "I've only just come to Japan, so I can't read kanji yet."
+        },
+        {
+          "jp": "この カメラは<ruby>先週<rt>せんしゅう</rt></ruby><ruby>買<rt>か</rt></ruby>ったばかりです。",
+          "en": "I only bought this camera last week."
+        },
+        {
+          "jp": "<ruby>息子<rt>むすこ</rt></ruby>は<ruby>大学<rt>だいがく</rt></ruby>に<ruby>入学<rt>にゅうがく</rt></ruby>したばかりです。",
+          "en": "My son has just entered university."
+        },
+        {
+          "jp": "<ruby>給料<rt>きゅうりょう</rt></ruby>を もらったばかりなのに、もう ありません。",
+          "en": "Even though I just got paid, it's already gone."
+        }
+      ]
+    },
+    {
+      "pattern": "〜はずです (should / ought to / must be — a grounded expectation)",
+      "structure": "V・いA(普通形)＋はず・なA〔〜な〕＋はず・N〔〜の〕＋はず ＋です",
+      "explain": "Plain form ＋ はず states a conclusion the speaker holds with confidence on the basis of some grounds or reasoning — 'it should/ought to be so.' It attaches directly to verbs and い-adjectives, to な-adjectives with 〜な, and to nouns with 〜の. Negatives: 〜ないはず ('shouldn't ~') vs. 〜はずがない ('there's no way ~'). Unlike つもり (intention) or a bare でしょう (a weaker guess), はず is a reasoned expectation.",
+      "examples": [
+        {
+          "jp": "<ruby>速達<rt>そくたつ</rt></ruby>で<ruby>出<rt>だ</rt></ruby>しましたから、あした<ruby>着<rt>つ</rt></ruby>くはずです。",
+          "en": "I sent it by express mail, so it should arrive tomorrow."
+        },
+        {
+          "jp": "<ruby>彼女<rt>かのじょ</rt></ruby>は<ruby>美術<rt>びじゅつ</rt></ruby>を<ruby>勉強<rt>べんきょう</rt></ruby>していますから、<ruby>絵<rt>え</rt></ruby>が<ruby>上手<rt>じょうず</rt></ruby>なはずです。",
+          "en": "She studies fine art, so she should be good at drawing."
+        },
+        {
+          "jp": "<ruby>隣<rt>となり</rt></ruby>の<ruby>人<rt>ひと</rt></ruby>は<ruby>旅行中<rt>りょこうちゅう</rt></ruby>だから、<ruby>留守<rt>るす</rt></ruby>のはずです。",
+          "en": "The neighbor is away traveling, so they should be out."
+        },
+        {
+          "jp": "<ruby>電話<rt>でんわ</rt></ruby>がありましたから、ミラーさんはもうすぐ<ruby>来<rt>く</rt></ruby>るはずです。",
+          "en": "There was a call, so Mr. Miller should be here soon."
+        }
+      ]
+    }
+  ],
+  "examples": [
+    {
+      "jp": "<ruby>会議<rt>かいぎ</rt></ruby>は<ruby>今<rt>いま</rt></ruby>から<ruby>始<rt>はじ</rt></ruby>まるところです。",
+      "en": "The meeting is just about to start."
+    },
+    {
+      "jp": "<ruby>今<rt>いま</rt></ruby>かみを<ruby>切<rt>き</rt></ruby>っているところです。",
+      "en": "I'm in the middle of getting a haircut right now."
+    },
+    {
+      "jp": "たった<ruby>今<rt>いま</rt></ruby>かみを<ruby>切<rt>き</rt></ruby>ったところです。",
+      "en": "I've just had a haircut."
+    },
+    {
+      "jp": "<ruby>彼<rt>かれ</rt></ruby>は3<ruby>月<rt>がつ</rt></ruby>に<ruby>大学<rt>だいがく</rt></ruby>を<ruby>卒業<rt>そつぎょう</rt></ruby>したばかりです。",
+      "en": "He just graduated from university in March."
+    },
+    {
+      "jp": "<ruby>先週<rt>せんしゅう</rt></ruby><ruby>給料<rt>きゅうりょう</rt></ruby>を もらったばかりなのに、もう<ruby>使<rt>つか</rt></ruby>ってしまいました。",
+      "en": "Even though I just got paid last week, I've already spent it all."
+    },
+    {
+      "jp": "<ruby>書類<rt>しょるい</rt></ruby>は<ruby>速達<rt>そくたつ</rt></ruby>で<ruby>出<rt>だ</rt></ruby>しましたから、あした<ruby>着<rt>つ</rt></ruby>くはずです。",
+      "en": "I sent the documents by express mail, so they should arrive tomorrow."
+    },
+    {
+      "jp": "ミラーさんは<ruby>会議室<rt>かいぎしつ</rt></ruby>にいるはずです。",
+      "en": "Mr. Miller should be in the meeting room."
+    },
+    {
+      "jp": "<ruby>荷物<rt>にもつ</rt></ruby>はけさ<ruby>宅配便<rt>たくはいびん</rt></ruby>で<ruby>送<rt>おく</rt></ruby>りましたから、<ruby>着<rt>つ</rt></ruby>くはずです。",
+      "en": "I sent the parcel by courier this morning, so it should arrive."
+    }
+  ],
+  "conversation": {
+    "title": "<ruby>先週<rt>せんしゅう</rt></ruby><ruby>直<rt>なお</rt></ruby>してもらったばかりなのに (But I only just had it fixed last week…)",
+    "audio": "/Audio/minnahonsatsu2/61.mp3",
+    "lines": [
+      {
+        "role": "センター",
+        "jp": "はい、ガスサービスセンターでございます。",
+        "en": "Yes, this is the Gas Service Center."
+      },
+      {
+        "role": "タワポン",
+        "jp": "あのう、ガスレンジの<ruby>調子<rt>ちょうし</rt></ruby>がおかしいんですが……。",
+        "en": "Um, there's something wrong with my gas stove…"
+      },
+      {
+        "role": "センター",
+        "jp": "どんな<ruby>具合<rt>ぐあい</rt></ruby>ですか。",
+        "en": "What seems to be the matter?"
+      },
+      {
+        "role": "タワポン",
+        "jp": "<ruby>先週<rt>せんしゅう</rt></ruby><ruby>直<rt>なお</rt></ruby>してもらったばかりなのに、また<ruby>火<rt>ひ</rt></ruby>が<ruby>消<rt>き</rt></ruby>えてしまうんです。<ruby>危<rt>あぶ</rt></ruby>ないので、すぐ<ruby>見<rt>み</rt></ruby>に<ruby>来<rt>き</rt></ruby>てくれませんか。",
+        "en": "Even though I just had it repaired last week, the flame keeps going out again. It's dangerous, so could you come and take a look right away?"
+      },
+      {
+        "role": "センター",
+        "jp": "わかりました。5<ruby>時<rt>じ</rt></ruby>ごろには<ruby>行<rt>い</rt></ruby>けると<ruby>思<rt>おも</rt></ruby>います。ご<ruby>住所<rt>じゅうしょ</rt></ruby>とお<ruby>名前<rt>なまえ</rt></ruby>をお<ruby>願<rt>ねが</rt></ruby>いします。",
+        "en": "Understood. I think we can be there around 5 o'clock. May I have your address and name, please?"
+      },
+      {
+        "role": "タワポン",
+        "jp": "もしもし、5<ruby>時<rt>じ</rt></ruby>ごろにガスレンジを<ruby>見<rt>み</rt></ruby>に<ruby>来<rt>き</rt></ruby>てくれるはずなんですが、まだですか。",
+        "en": "Hello — someone was supposed to come around 5 to look at the gas stove, but they still haven't arrived?"
+      },
+      {
+        "role": "センター",
+        "jp": "<ruby>申<rt>もう</rt></ruby>し<ruby>訳<rt>わけ</rt></ruby>ありません。どちら<ruby>様<rt>さま</rt></ruby>でしょうか。",
+        "en": "I'm very sorry. May I ask who's calling?"
+      },
+      {
+        "role": "タワポン",
+        "jp": "タワポンです。",
+        "en": "This is Thawapon."
+      },
+      {
+        "role": "センター",
+        "jp": "<ruby>少々<rt>しょうしょう</rt></ruby>お<ruby>待<rt>ま</rt></ruby>ちください。<ruby>係<rt>かかり</rt></ruby>の<ruby>者<rt>もの</rt></ruby>に<ruby>連絡<rt>れんらく</rt></ruby>しますから。",
+        "en": "One moment, please. I'll contact the person in charge."
+      },
+      {
+        "role": "センター",
+        "jp": "お<ruby>待<rt>ま</rt></ruby>たせしました。<ruby>今<rt>いま</rt></ruby>そちらに<ruby>向<rt>む</rt></ruby>かっているところです。あと10<ruby>分<rt>ぷん</rt></ruby>ほどお<ruby>待<rt>ま</rt></ruby>ちください。",
+        "en": "Thank you for waiting. They're on their way to you now. Please wait about 10 more minutes."
+      }
+    ]
+  }
+}

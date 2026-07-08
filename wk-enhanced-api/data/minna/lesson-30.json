@@ -1,0 +1,1504 @@
+{
+  "lesson": 30,
+  "title": "Lesson 30",
+  "theme": "Resultant states and preparation — 〜てあります (has been done, on purpose), 〜ておきます (do in advance / leave as is, incl. そのままにしておく), and まだ〜ています (still ~ing)",
+  "source": {
+    "name": "vnjpclub.com",
+    "vocabUrl": "https://www.vnjpclub.com/en/minna-no-nihongo/lesson-30-vocabulary.html",
+    "grammarUrl": "https://www.vnjpclub.com/en/minna-no-nihongo/lesson-30-grammar.html",
+    "note": "Vocabulary, native-speaker audio, and example sentences aggregated from vnjpclub.com (Minna no Nihongo 第2版). For personal study."
+  },
+  "vocab": [
+    {
+      "key": "mnn:30:0",
+      "kana": "はります",
+      "kanji": "",
+      "context": "",
+      "mean": "to put up, post, paste, stick (on)",
+      "cat": "verb",
+      "type": "godan",
+      "trans": "t",
+      "dict": "はる",
+      "dictRead": "はる",
+      "audio": "/Audio/minnamoi/bai30/00010101111110010.mp3",
+      "levels": {
+        "N5": [
+          "ふうとうに <ruby>切手<rt>きって</rt></ruby>を はります。",
+          "I put a stamp on the envelope."
+        ],
+        "N4": [
+          "<ruby>壁<rt>かべ</rt></ruby>に ポスターを はってもいいですか。",
+          "May I put a poster up on the wall?"
+        ],
+        "N3": [
+          "<ruby>忘<rt>わす</rt></ruby>れないように、メモを <ruby>机<rt>つくえ</rt></ruby>に はっておきました。",
+          "I stuck a memo on the desk so that I wouldn't forget."
+        ],
+        "N2": [
+          "<ruby>掲示板<rt>けいじばん</rt></ruby>に はられた お<ruby>知<rt>し</rt></ruby>らせによると、<ruby>会議<rt>かいぎ</rt></ruby>は <ruby>延期<rt>えんき</rt></ruby>されたそうだ。",
+          "According to the notice posted on the board, the meeting has apparently been postponed."
+        ],
+        "N1": [
+          "そこら<ruby>中<rt>じゅう</rt></ruby>に ビラを はって<ruby>回<rt>まわ</rt></ruby>ったところで、もはや <ruby>宣伝<rt>せんでん</rt></ruby><ruby>効果<rt>こうか</rt></ruby>など <ruby>望<rt>のぞ</rt></ruby>むべくもない。",
+          "However much you go around plastering flyers everywhere, there's no longer any hope of an advertising effect."
+        ]
+      },
+      "mnem": "\"haru\" — you press and it <b>HAR</b>dens onto the surface: はる = to stick / post up.",
+      "tip": "はる (godan, transitive, 〜に〜を) = stick/paste/post something onto a surface. Written 貼る; don't confuse with 張る (\"stretch/spread,\" e.g. テントを張る), also read はる.",
+      "accent": 0
+    },
+    {
+      "key": "mnn:30:1",
+      "kana": "かけます",
+      "kanji": "掛けます",
+      "context": "",
+      "mean": "to hang (up)",
+      "cat": "verb",
+      "type": "ichidan",
+      "trans": "t",
+      "dict": "掛ける",
+      "dictRead": "かける",
+      "audio": "/Audio/minnamoi/bai30/00010101111110011.mp3",
+      "accent": 2
+    },
+    {
+      "key": "mnn:30:2",
+      "kana": "かざります",
+      "kanji": "飾ります",
+      "context": "",
+      "mean": "to display, decorate",
+      "cat": "verb",
+      "type": "godan",
+      "trans": "t",
+      "dict": "飾る",
+      "dictRead": "かざる",
+      "audio": "/Audio/minnamoi/bai30/00010101111110100.mp3",
+      "levels": {
+        "N5": [
+          "<ruby>部屋<rt>へや</rt></ruby>に <ruby>花<rt>はな</rt></ruby>を <ruby>飾<rt>かざ</rt></ruby>ります。",
+          "I decorate the room with flowers."
+        ],
+        "N4": [
+          "<ruby>棚<rt>たな</rt></ruby>に <ruby>写真<rt>しゃしん</rt></ruby>を <ruby>飾<rt>かざ</rt></ruby>りたいです。",
+          "I want to display a photo on the shelf."
+        ],
+        "N3": [
+          "お<ruby>正月<rt>しょうがつ</rt></ruby>には、<ruby>玄関<rt>げんかん</rt></ruby>に <ruby>花<rt>はな</rt></ruby>を <ruby>飾<rt>かざ</rt></ruby>るようにしています。",
+          "At New Year's I make a point of displaying flowers at the entrance."
+        ],
+        "N2": [
+          "<ruby>壁<rt>かべ</rt></ruby>に <ruby>飾<rt>かざ</rt></ruby>られた <ruby>絵<rt>え</rt></ruby>は、どれも <ruby>有名<rt>ゆうめい</rt></ruby>な <ruby>画家<rt>がか</rt></ruby>の <ruby>作品<rt>さくひん</rt></ruby>だそうだ。",
+          "The paintings displayed on the wall are all said to be works by famous artists."
+        ],
+        "N1": [
+          "<ruby>言葉<rt>ことば</rt></ruby>を <ruby>飾<rt>かざ</rt></ruby>って <ruby>体裁<rt>ていさい</rt></ruby>を <ruby>繕<rt>つくろ</rt></ruby>うより、<ruby>率直<rt>そっちょく</rt></ruby>に <ruby>本音<rt>ほんね</rt></ruby>を <ruby>語<rt>かた</rt></ruby>るほうが よほど <ruby>心<rt>こころ</rt></ruby>に <ruby>響<rt>ひび</rt></ruby>く。",
+          "Rather than dressing up your words to keep up appearances, speaking your true feelings frankly resonates far more."
+        ]
+      },
+      "mnem": "\"kazaru\" — you fill a <b>CASA</b> (house) with pretty things: 飾る = to decorate / display.",
+      "tip": "飾る (godan, transitive, 〜を) = decorate / display something. The noun 飾り = \"ornament, decoration.\" Common frames: 花を飾る, 人形を飾る.",
+      "accent": 0
+    },
+    {
+      "key": "mnn:30:3",
+      "kana": "ならべます",
+      "kanji": "並べます",
+      "context": "",
+      "mean": "to arrange, line up (things)",
+      "cat": "verb",
+      "type": "ichidan",
+      "trans": "t",
+      "dict": "並べる",
+      "dictRead": "ならべる",
+      "audio": "/Audio/minnamoi/bai30/00010101111110101.mp3",
+      "levels": {
+        "N5": [
+          "<ruby>本<rt>ほん</rt></ruby>を <ruby>棚<rt>たな</rt></ruby>に <ruby>並<rt>なら</rt></ruby>べます。",
+          "I line up the books on the shelf."
+        ],
+        "N4": [
+          "お<ruby>皿<rt>さら</rt></ruby>を テーブルに <ruby>並<rt>なら</rt></ruby>べてください。",
+          "Please set the plates out on the table."
+        ],
+        "N3": [
+          "<ruby>店<rt>みせ</rt></ruby>の <ruby>人<rt>ひと</rt></ruby>は、<ruby>商品<rt>しょうひん</rt></ruby>を きれいに <ruby>並<rt>なら</rt></ruby>べるようにしています。",
+          "The shop staff make a point of arranging the goods neatly."
+        ],
+        "N2": [
+          "<ruby>店先<rt>みせさき</rt></ruby>に <ruby>並<rt>なら</rt></ruby>べられた <ruby>果物<rt>くだもの</rt></ruby>は、どれも <ruby>新鮮<rt>しんせん</rt></ruby>で おいしそうだった。",
+          "The fruit laid out at the storefront all looked fresh and delicious."
+        ],
+        "N1": [
+          "いくら <ruby>立派<rt>りっぱ</rt></ruby>な <ruby>理屈<rt>りくつ</rt></ruby>を <ruby>並<rt>なら</rt></ruby>べたところで、<ruby>行動<rt>こうどう</rt></ruby>が <ruby>伴<rt>ともな</rt></ruby>わなければ <ruby>信用<rt>しんよう</rt></ruby>は <ruby>得<rt>え</rt></ruby>られない。",
+          "No matter how fine the arguments you line up, without action to back them you won't earn any trust."
+        ]
+      },
+      "mnem": "\"naraberu\" — you set them out in a <b>NAR</b>row row: 並べる = to line up / arrange.",
+      "tip": "並べる (ichidan, transitive, 〜を) = line things up. Its intransitive pair is 並ぶ (ならぶ, \"to line up / be lined up,\" 〜が) — 人が並ぶ vs 物を並べる.",
+      "accent": 0
+    },
+    {
+      "key": "mnn:30:4",
+      "kana": "うえます",
+      "kanji": "植えます",
+      "context": "",
+      "mean": "to plant",
+      "cat": "verb",
+      "type": "ichidan",
+      "trans": "t",
+      "dict": "植える",
+      "dictRead": "うえる",
+      "audio": "/Audio/minnamoi/bai30/00010101111110110.mp3",
+      "levels": {
+        "N5": [
+          "<ruby>庭<rt>にわ</rt></ruby>に <ruby>木<rt>き</rt></ruby>を <ruby>植<rt>う</rt></ruby>えます。",
+          "I plant a tree in the garden."
+        ],
+        "N4": [
+          "<ruby>春<rt>はる</rt></ruby>に なったら、<ruby>花<rt>はな</rt></ruby>の <ruby>種<rt>たね</rt></ruby>を <ruby>植<rt>う</rt></ruby>えたいです。",
+          "When spring comes, I want to plant flower seeds."
+        ],
+        "N3": [
+          "<ruby>池<rt>いけ</rt></ruby>の <ruby>周<rt>まわ</rt></ruby>りに <ruby>桜<rt>さくら</rt></ruby>を <ruby>植<rt>う</rt></ruby>えたら、きれいになるでしょう。",
+          "If we plant cherry trees around the pond, it'll turn out beautiful."
+        ],
+        "N2": [
+          "<ruby>公園<rt>こうえん</rt></ruby>に <ruby>植<rt>う</rt></ruby>えられた <ruby>木々<rt>きぎ</rt></ruby>は、<ruby>市民<rt>しみん</rt></ruby>の <ruby>手<rt>て</rt></ruby>によって <ruby>大切<rt>たいせつ</rt></ruby>に <ruby>育<rt>そだ</rt></ruby>てられている。",
+          "The trees planted in the park are carefully tended by the hands of the citizens."
+        ],
+        "N1": [
+          "<ruby>幼<rt>おさな</rt></ruby>い <ruby>頃<rt>ころ</rt></ruby>に <ruby>心<rt>こころ</rt></ruby>に <ruby>植<rt>う</rt></ruby>えつけられた <ruby>価値観<rt>かちかん</rt></ruby>は、<ruby>大人<rt>おとな</rt></ruby>になっても <ruby>容易<rt>ようい</rt></ruby>には <ruby>変<rt>か</rt></ruby>わらない。",
+          "The values instilled in one's heart in early childhood do not easily change even in adulthood."
+        ]
+      },
+      "mnem": "\"ueru\" — you dig a hole and set the roots <b>U</b>p in the soil: 植える = to plant.",
+      "tip": "植える (ichidan, transitive, 〜を) = plant. Don't confuse the homophone 飢える (うえる, \"to starve\") — same reading, different kanji.",
+      "accent": 0
+    },
+    {
+      "key": "mnn:30:5",
+      "kana": "もどします",
+      "kanji": "戻します",
+      "context": "",
+      "mean": "to return, put ~ back",
+      "cat": "verb",
+      "type": "godan",
+      "trans": "t",
+      "dict": "戻す",
+      "dictRead": "もどす",
+      "audio": "/Audio/minnamoi/bai30/00010101111110111.mp3",
+      "levels": {
+        "N5": [
+          "<ruby>本<rt>ほん</rt></ruby>を <ruby>棚<rt>たな</rt></ruby>に <ruby>戻<rt>もど</rt></ruby>します。",
+          "I put the book back on the shelf."
+        ],
+        "N4": [
+          "<ruby>使<rt>つか</rt></ruby>ったら、<ruby>元<rt>もと</rt></ruby>の <ruby>所<rt>ところ</rt></ruby>に <ruby>戻<rt>もど</rt></ruby>してください。",
+          "When you've used it, please put it back where it was."
+        ],
+        "N3": [
+          "<ruby>借<rt>か</rt></ruby>りた <ruby>物<rt>もの</rt></ruby>は、すぐに <ruby>戻<rt>もど</rt></ruby>すようにしています。",
+          "I make a point of returning borrowed things right away."
+        ],
+        "N2": [
+          "<ruby>話<rt>はなし</rt></ruby>が それてしまったので、そろそろ <ruby>本題<rt>ほんだい</rt></ruby>に <ruby>戻<rt>もど</rt></ruby>したほうがよさそうだ。",
+          "The conversation has strayed, so we'd better get back to the main topic soon."
+        ],
+        "N1": [
+          "<ruby>一度<rt>いちど</rt></ruby> <ruby>失<rt>うしな</rt></ruby>った <ruby>信頼<rt>しんらい</rt></ruby>を <ruby>元<rt>もと</rt></ruby>に <ruby>戻<rt>もど</rt></ruby>すには、<ruby>長<rt>なが</rt></ruby>い <ruby>年月<rt>ねんげつ</rt></ruby>と たゆまぬ <ruby>努力<rt>どりょく</rt></ruby>を <ruby>要<rt>よう</rt></ruby>する。",
+          "Restoring trust once lost requires long years and unremitting effort."
+        ]
+      },
+      "mnem": "\"modosu\" — you put it back into the <b>MODE</b> it was in before: 戻す = to return / put back.",
+      "tip": "戻す (godan, transitive, 〜を) = put something back. Intransitive pair 戻る (もどる, \"to return, go back,\" 〜が) — 元の所に戻す vs 元の所に戻る.",
+      "accent": 2
+    },
+    {
+      "key": "mnn:30:6",
+      "kana": "まとめます",
+      "kanji": "",
+      "context": "",
+      "mean": "to put ~ together, gather up, sum up",
+      "cat": "verb",
+      "type": "ichidan",
+      "trans": "t",
+      "dict": "まとめる",
+      "dictRead": "まとめる",
+      "audio": "/Audio/minnamoi/bai30/00010101111111000.mp3",
+      "levels": {
+        "N5": [
+          "レポートを <ruby>一<rt>ひと</rt></ruby>つに まとめます。",
+          "I put the reports together into one."
+        ],
+        "N4": [
+          "<ruby>月曜日<rt>げつようび</rt></ruby>までに <ruby>資料<rt>しりょう</rt></ruby>を まとめてください。",
+          "Please compile the materials by Monday."
+        ],
+        "N3": [
+          "<ruby>会議<rt>かいぎ</rt></ruby>の <ruby>前<rt>まえ</rt></ruby>に、みんなの <ruby>意見<rt>いけん</rt></ruby>を まとめておきます。",
+          "I'll pull everyone's opinions together in advance before the meeting."
+        ],
+        "N2": [
+          "<ruby>調査<rt>ちょうさ</rt></ruby>の <ruby>結果<rt>けっか</rt></ruby>を <ruby>一枚<rt>いちまい</rt></ruby>の <ruby>紙<rt>かみ</rt></ruby>に まとめるよう <ruby>指示<rt>しじ</rt></ruby>された。",
+          "I was instructed to sum up the survey results on a single sheet."
+        ],
+        "N1": [
+          "<ruby>多様<rt>たよう</rt></ruby>な <ruby>意見<rt>いけん</rt></ruby>を <ruby>一<rt>ひと</rt></ruby>つに まとめあげるには、<ruby>粘<rt>ねば</rt></ruby>り<ruby>強<rt>づよ</rt></ruby>い <ruby>調整<rt>ちょうせい</rt></ruby>と <ruby>妥協<rt>だきょう</rt></ruby>が <ruby>欠<rt>か</rt></ruby>かせない。",
+          "Bringing diverse opinions together into one requires tenacious coordination and compromise."
+        ]
+      },
+      "mnem": "\"matomeru\" — you gather scattered <b>MATTER</b> and mold it into one: まとめる = to gather up / sum up.",
+      "tip": "まとめる (ichidan, transitive) = gather scattered things into one / summarize (意見をまとめる, 荷物をまとめる). Intransitive pair まとまる (\"come together, be settled\"). Written 纏める but almost always kana.",
+      "accent": 0
+    },
+    {
+      "key": "mnn:30:7",
+      "kana": "しまいます",
+      "kanji": "",
+      "context": "",
+      "mean": "to put (things) away, stow",
+      "cat": "verb",
+      "type": "godan",
+      "trans": "t",
+      "dict": "しまう",
+      "dictRead": "しまう",
+      "audio": "/Audio/minnamoi/bai30/00010101111111001.mp3",
+      "levels": {
+        "N5": [
+          "<ruby>服<rt>ふく</rt></ruby>を <ruby>引<rt>ひ</rt></ruby>き<ruby>出<rt>だ</rt></ruby>しに しまいます。",
+          "I put the clothes away in the drawer."
+        ],
+        "N4": [
+          "<ruby>使<rt>つか</rt></ruby>ったら、はさみを <ruby>箱<rt>はこ</rt></ruby>に しまってください。",
+          "When you're done, please put the scissors away in the box."
+        ],
+        "N3": [
+          "<ruby>大切<rt>たいせつ</rt></ruby>な <ruby>書類<rt>しょるい</rt></ruby>は、<ruby>金庫<rt>きんこ</rt></ruby>に しまっておいたほうがいいです。",
+          "Important documents are best kept put away in a safe."
+        ],
+        "N2": [
+          "<ruby>思<rt>おも</rt></ruby>い<ruby>出<rt>で</rt></ruby>の <ruby>品<rt>しな</rt></ruby>を <ruby>箱<rt>はこ</rt></ruby>に しまったまま、もう <ruby>何年<rt>なんねん</rt></ruby>も <ruby>開<rt>あ</rt></ruby>けていない。",
+          "I've kept the mementos put away in a box and haven't opened it for years now."
+        ],
+        "N1": [
+          "<ruby>怒<rt>いか</rt></ruby>りを <ruby>胸<rt>むね</rt></ruby>の <ruby>奥<rt>おく</rt></ruby>に しまい<ruby>込<rt>こ</rt></ruby>んだまま、<ruby>彼<rt>かれ</rt></ruby>は <ruby>終始<rt>しゅうし</rt></ruby> <ruby>穏<rt>おだ</rt></ruby>やかな <ruby>表情<rt>ひょうじょう</rt></ruby>を <ruby>崩<rt>くず</rt></ruby>さなかった。",
+          "Keeping his anger shut away deep in his chest, he never let his calm expression slip the whole time."
+        ]
+      },
+      "mnem": "\"shimau\" — you <b>SHE</b>lve it away out of sight: しまう = to put away / stow.",
+      "tip": "Main-verb しまう (godan, transitive, 〜を) = put away / stow. Distinct from the auxiliary 〜てしまう (\"do completely / regrettably\"); here it means \"to store.\" Frame: 引き出しにしまう.",
+      "accent": 0
+    },
+    {
+      "key": "mnn:30:8",
+      "kana": "きめます",
+      "kanji": "決めます",
+      "context": "",
+      "mean": "to decide, fix (on)",
+      "cat": "verb",
+      "type": "ichidan",
+      "trans": "t",
+      "dict": "決める",
+      "dictRead": "きめる",
+      "audio": "/Audio/minnamoi/bai30/00010101111111010.mp3",
+      "levels": {
+        "N5": [
+          "<ruby>旅行<rt>りょこう</rt></ruby>の <ruby>日<rt>ひ</rt></ruby>を <ruby>決<rt>き</rt></ruby>めます。",
+          "I decide the day of the trip."
+        ],
+        "N4": [
+          "どこで <ruby>会<rt>あ</rt></ruby>うか、<ruby>早<rt>はや</rt></ruby>く <ruby>決<rt>き</rt></ruby>めたいです。",
+          "I want to decide soon where to meet."
+        ],
+        "N3": [
+          "<ruby>迷<rt>まよ</rt></ruby>ったときは、<ruby>自分<rt>じぶん</rt></ruby>で <ruby>決<rt>き</rt></ruby>めるようにしています。",
+          "When I'm unsure, I make a point of deciding for myself."
+        ],
+        "N2": [
+          "<ruby>進路<rt>しんろ</rt></ruby>は <ruby>親<rt>おや</rt></ruby>に <ruby>決<rt>き</rt></ruby>められるものではなく、<ruby>自分<rt>じぶん</rt></ruby>で <ruby>選<rt>えら</rt></ruby>ぶべきだ。",
+          "Your career path isn't something to be decided by your parents; you should choose it yourself."
+        ],
+        "N1": [
+          "<ruby>成否<rt>せいひ</rt></ruby>を <ruby>決<rt>き</rt></ruby>めるのは <ruby>才能<rt>さいのう</rt></ruby>よりも、むしろ <ruby>最後<rt>さいご</rt></ruby>まで <ruby>諦<rt>あきら</rt></ruby>めない <ruby>粘<rt>ねば</rt></ruby>り<ruby>強<rt>づよ</rt></ruby>さである。",
+          "What decides success or failure is not so much talent as the tenacity to never give up until the very end."
+        ]
+      },
+      "mnem": "\"kimeru\" — you <b>KEY</b> in your choice and lock it: 決める = to decide.",
+      "tip": "決める (ichidan, transitive, 〜を) = decide something. Intransitive pair 決まる (きまる, \"be decided,\" 〜が) — 日を決める vs 日が決まる.",
+      "accent": 0
+    },
+    {
+      "key": "mnn:30:9",
+      "kana": "よしゅうします",
+      "kanji": "予習します",
+      "context": "",
+      "mean": "to prepare one's lesson (in advance)",
+      "cat": "verb",
+      "type": "irregular",
+      "trans": "t",
+      "dict": "予習する",
+      "dictRead": "よしゅうする",
+      "audio": "/Audio/minnamoi/bai30/00010101111111011.mp3",
+      "levels": {
+        "N5": [
+          "<ruby>明日<rt>あした</rt></ruby>の <ruby>授業<rt>じゅぎょう</rt></ruby>を <ruby>予習<rt>よしゅう</rt></ruby>します。",
+          "I prepare for tomorrow's class."
+        ],
+        "N4": [
+          "<ruby>授業<rt>じゅぎょう</rt></ruby>の <ruby>前<rt>まえ</rt></ruby>に、<ruby>予習<rt>よしゅう</rt></ruby>したほうがいいです。",
+          "It's better to prep before class."
+        ],
+        "N3": [
+          "<ruby>新<rt>あたら</rt></ruby>しい <ruby>漢字<rt>かんじ</rt></ruby>は、<ruby>家<rt>いえ</rt></ruby>で <ruby>予習<rt>よしゅう</rt></ruby>しておくようにしています。",
+          "I make a point of previewing new kanji at home ahead of time."
+        ],
+        "N2": [
+          "<ruby>予習<rt>よしゅう</rt></ruby>してこそ、<ruby>授業<rt>じゅぎょう</rt></ruby>の <ruby>内容<rt>ないよう</rt></ruby>が <ruby>頭<rt>あたま</rt></ruby>に <ruby>入<rt>はい</rt></ruby>るというものだ。",
+          "It's precisely by previewing that the lesson content actually sinks in."
+        ],
+        "N1": [
+          "<ruby>語学<rt>ごがく</rt></ruby>の <ruby>上達<rt>じょうたつ</rt></ruby>は、<ruby>地道<rt>じみち</rt></ruby>な <ruby>予習<rt>よしゅう</rt></ruby>と <ruby>復習<rt>ふくしゅう</rt></ruby>の <ruby>積<rt>つ</rt></ruby>み<ruby>重<rt>かさ</rt></ruby>ねなくして <ruby>語<rt>かた</rt></ruby>ることはできない。",
+          "Progress in a language cannot be spoken of without the steady accumulation of preview and review."
+        ]
+      },
+      "mnem": "予 (beforehand) + 習 (study) — studying <b>ahead of time</b> = 予習, preparing your lesson.",
+      "tip": "予習する (suru-verb, transitive) = study a lesson IN ADVANCE. Opposite is 復習する (review AFTER). This lesson deliberately pairs the two.",
+      "accent": 0
+    },
+    {
+      "key": "mnn:30:10",
+      "kana": "ふくしゅうします",
+      "kanji": "復習します",
+      "context": "",
+      "mean": "to review one's lesson",
+      "cat": "verb",
+      "type": "irregular",
+      "trans": "t",
+      "dict": "復習する",
+      "dictRead": "ふくしゅうする",
+      "audio": "/Audio/minnamoi/bai30/00010101111111100.mp3",
+      "levels": {
+        "N5": [
+          "<ruby>家<rt>いえ</rt></ruby>で <ruby>漢字<rt>かんじ</rt></ruby>を <ruby>復習<rt>ふくしゅう</rt></ruby>します。",
+          "I review kanji at home."
+        ],
+        "N4": [
+          "<ruby>試験<rt>しけん</rt></ruby>の <ruby>前<rt>まえ</rt></ruby>に、<ruby>復習<rt>ふくしゅう</rt></ruby>したいです。",
+          "I want to review before the exam."
+        ],
+        "N3": [
+          "<ruby>習<rt>なら</rt></ruby>ったことは、その <ruby>日<rt>ひ</rt></ruby>のうちに <ruby>復習<rt>ふくしゅう</rt></ruby>するようにしています。",
+          "I make a point of reviewing what I've learned that same day."
+        ],
+        "N2": [
+          "<ruby>一度<rt>いちど</rt></ruby> <ruby>復習<rt>ふくしゅう</rt></ruby>したくらいでは、なかなか <ruby>記憶<rt>きおく</rt></ruby>には <ruby>定着<rt>ていちゃく</rt></ruby>しないものだ。",
+          "Reviewing just once isn't enough for it to really stick in memory."
+        ],
+        "N1": [
+          "<ruby>学<rt>まな</rt></ruby>んだ <ruby>知識<rt>ちしき</rt></ruby>は、<ruby>繰<rt>く</rt></ruby>り<ruby>返<rt>かえ</rt></ruby>し <ruby>復習<rt>ふくしゅう</rt></ruby>することによって <ruby>初<rt>はじ</rt></ruby>めて <ruby>血肉<rt>けつにく</rt></ruby>となる。",
+          "Knowledge you've learned becomes truly your own only through repeated review."
+        ]
+      },
+      "mnem": "復 (again) + 習 (study) — studying it <b>again</b> = 復習, reviewing your lesson.",
+      "tip": "復習する (suru-verb, transitive) = review what you've ALREADY learned. Pairs with 予習する (prepare in advance). Don't confuse 復習 with 練習 (れんしゅう, \"practice\") or 複雑 (ふくざつ, \"complex\").",
+      "accent": 0
+    },
+    {
+      "key": "mnn:30:11",
+      "kana": "そのままにします",
+      "kanji": "",
+      "context": "",
+      "mean": "to leave (things) as they are",
+      "cat": "phrase",
+      "type": "",
+      "trans": "",
+      "dict": "そのままにする",
+      "dictRead": "そのままにする",
+      "audio": "/Audio/minnamoi/bai30/00010101111111101.mp3",
+      "levels": {
+        "N5": [
+          "<ruby>窓<rt>まど</rt></ruby>を そのままに してください。",
+          "Please leave the window as it is."
+        ],
+        "N4": [
+          "<ruby>暑<rt>あつ</rt></ruby>いですから、ドアを そのままに しておいてください。",
+          "It's hot, so please leave the door as it is."
+        ],
+        "N3": [
+          "まだ <ruby>使<rt>つか</rt></ruby>っていますから、<ruby>机<rt>つくえ</rt></ruby>の <ruby>上<rt>うえ</rt></ruby>は そのままに しておいてください。",
+          "I'm still using it, so please leave the desktop as it is."
+        ],
+        "N2": [
+          "<ruby>問題<rt>もんだい</rt></ruby>を そのままに しておくと、あとで <ruby>取<rt>と</rt></ruby>り<ruby>返<rt>かえ</rt></ruby>しがつかなくなる。",
+          "If you leave the problem as it is, it'll become irreparable later."
+        ],
+        "N1": [
+          "<ruby>不満<rt>ふまん</rt></ruby>を そのままに <ruby>放置<rt>ほうち</rt></ruby>すれば、やがて <ruby>組織<rt>そしき</rt></ruby>の <ruby>士気<rt>しき</rt></ruby>そのものを <ruby>蝕<rt>むしば</rt></ruby>みかねない。",
+          "If discontent is left unaddressed, it can eventually eat away at the very morale of the organization."
+        ]
+      },
+      "mnem": "そのまま (\"as it is\") + にする (\"make it so\") — keep it exactly the way it is now.",
+      "tip": "そのままにする = leave something as it is / don't touch it, very often 〜にしておく (deliberately keep that state). そのまま alone = \"as is, unchanged.\"",
+      "accent": 0
+    },
+    {
+      "key": "mnn:30:12",
+      "kana": "じゅぎょう",
+      "kanji": "授業",
+      "context": "",
+      "mean": "class, lesson (teaching session)",
+      "cat": "noun",
+      "type": "",
+      "trans": "",
+      "dict": "授業",
+      "dictRead": "じゅぎょう",
+      "audio": "/Audio/minnamoi/bai30/00010101111111110.mp3",
+      "levels": {
+        "N5": [
+          "<ruby>今<rt>いま</rt></ruby>から <ruby>授業<rt>じゅぎょう</rt></ruby>が <ruby>始<rt>はじ</rt></ruby>まります。",
+          "Class starts now."
+        ],
+        "N4": [
+          "<ruby>頭<rt>あたま</rt></ruby>が <ruby>痛<rt>いた</rt></ruby>かったので、<ruby>授業<rt>じゅぎょう</rt></ruby>を <ruby>休<rt>やす</rt></ruby>みました。",
+          "I had a headache, so I missed class."
+        ],
+        "N3": [
+          "<ruby>授業<rt>じゅぎょう</rt></ruby>に <ruby>遅<rt>おく</rt></ruby>れないように、<ruby>早<rt>はや</rt></ruby>めに <ruby>家<rt>いえ</rt></ruby>を <ruby>出<rt>で</rt></ruby>ています。",
+          "I leave home early so as not to be late for class."
+        ],
+        "N2": [
+          "どんなに <ruby>眠<rt>ねむ</rt></ruby>くても、<ruby>先生<rt>せんせい</rt></ruby>の <ruby>授業<rt>じゅぎょう</rt></ruby>だけは <ruby>聞<rt>き</rt></ruby>き<ruby>逃<rt>のが</rt></ruby>すまいと <ruby>集中<rt>しゅうちゅう</rt></ruby>した。",
+          "No matter how sleepy I was, I concentrated so as not to miss a single word of the teacher's class."
+        ],
+        "N1": [
+          "<ruby>一方的<rt>いっぽうてき</rt></ruby>に <ruby>知識<rt>ちしき</rt></ruby>を <ruby>詰<rt>つ</rt></ruby>め<ruby>込<rt>こ</rt></ruby>むだけの <ruby>授業<rt>じゅぎょう</rt></ruby>では、<ruby>学<rt>まな</rt></ruby>ぶ <ruby>楽<rt>たの</rt></ruby>しさは <ruby>到底<rt>とうてい</rt></ruby> <ruby>育<rt>そだ</rt></ruby>たない。",
+          "A class that just crams in knowledge one-sidedly can never foster the joy of learning."
+        ]
+      },
+      "mnem": "授 (grant / teach) + 業 (work / studies) — the teacher grants learning: 授業, a class.",
+      "tip": "授業 = a class/lesson (the teaching session). 授業を受ける (take a class), 授業に出る (attend). Compare 講義 (こうぎ, a university lecture) and クラス (a class group).",
+      "accent": 1
+    },
+    {
+      "key": "mnn:30:13",
+      "kana": "こうぎ",
+      "kanji": "講義",
+      "context": "",
+      "mean": "lecture (esp. university)",
+      "cat": "noun",
+      "type": "",
+      "trans": "",
+      "dict": "講義",
+      "dictRead": "こうぎ",
+      "audio": "/Audio/minnamoi/bai30/00010101111111111.mp3",
+      "levels": {
+        "N5": [
+          "<ruby>大学<rt>だいがく</rt></ruby>で <ruby>講義<rt>こうぎ</rt></ruby>を <ruby>聞<rt>き</rt></ruby>きます。",
+          "I listen to a lecture at the university."
+        ],
+        "N4": [
+          "<ruby>来週<rt>らいしゅう</rt></ruby>の <ruby>講義<rt>こうぎ</rt></ruby>までに、この <ruby>本<rt>ほん</rt></ruby>を <ruby>読<rt>よ</rt></ruby>んでおきます。",
+          "I'll read this book before next week's lecture."
+        ],
+        "N3": [
+          "<ruby>専門<rt>せんもん</rt></ruby>の <ruby>講義<rt>こうぎ</rt></ruby>は <ruby>難<rt>むずか</rt></ruby>しいので、<ruby>予習<rt>よしゅう</rt></ruby>してから <ruby>出<rt>で</rt></ruby>るようにしています。",
+          "The specialized lectures are hard, so I make a point of previewing before attending."
+        ],
+        "N2": [
+          "<ruby>教授<rt>きょうじゅ</rt></ruby>の <ruby>講義<rt>こうぎ</rt></ruby>は <ruby>難解<rt>なんかい</rt></ruby>なものの、<ruby>聞<rt>き</rt></ruby>けば <ruby>聞<rt>き</rt></ruby>くほど <ruby>引<rt>ひ</rt></ruby>き<ruby>込<rt>こ</rt></ruby>まれる <ruby>魅力<rt>みりょく</rt></ruby>がある。",
+          "The professor's lectures are abstruse, but the more you listen the more they draw you in."
+        ],
+        "N1": [
+          "<ruby>単<rt>たん</rt></ruby>に <ruby>教科書<rt>きょうかしょ</rt></ruby>を なぞるだけの <ruby>講義<rt>こうぎ</rt></ruby>など、<ruby>録画<rt>ろくが</rt></ruby>で <ruby>事足<rt>ことた</rt></ruby>りると <ruby>言<rt>い</rt></ruby>っても <ruby>過言<rt>かごん</rt></ruby>ではない。",
+          "It's no exaggeration to say a lecture that merely traces the textbook could just as well be a recording."
+        ]
+      },
+      "mnem": "講 (discourse / lecture) + 義 (meaning) — expounding the meaning aloud = 講義, a lecture.",
+      "tip": "講義 = a (usually university) lecture. 講義を受ける / 講義に出る. Narrower and more academic than 授業 (a general class). 講義する = to lecture.",
+      "accent": 1
+    },
+    {
+      "key": "mnn:30:14",
+      "kana": "ミーティング",
+      "kanji": "",
+      "context": "",
+      "mean": "meeting",
+      "cat": "noun",
+      "type": "",
+      "trans": "",
+      "dict": "ミーティング",
+      "dictRead": "ミーティング",
+      "audio": "/Audio/minnamoi/bai30/00010110000000000.mp3",
+      "levels": {
+        "N5": [
+          "<ruby>今日<rt>きょう</rt></ruby>は ミーティングが あります。",
+          "There's a meeting today."
+        ],
+        "N4": [
+          "ミーティングの <ruby>前<rt>まえ</rt></ruby>に、<ruby>資料<rt>しりょう</rt></ruby>を コピーしておきます。",
+          "I'll copy the materials before the meeting."
+        ],
+        "N3": [
+          "<ruby>来週<rt>らいしゅう</rt></ruby>の ミーティングまでに、<ruby>意見<rt>いけん</rt></ruby>を まとめておくようにしています。",
+          "I make a point of pulling my ideas together before next week's meeting."
+        ],
+        "N2": [
+          "ミーティングを <ruby>開<rt>ひら</rt></ruby>いたところで、<ruby>結論<rt>けつろん</rt></ruby>が <ruby>出<rt>で</rt></ruby>なければ <ruby>時間<rt>じかん</rt></ruby>の <ruby>無駄<rt>むだ</rt></ruby>になりかねない。",
+          "Even if you hold a meeting, it risks being a waste of time if no conclusion comes out of it."
+        ],
+        "N1": [
+          "<ruby>形式<rt>けいしき</rt></ruby>ばかりの ミーティングを <ruby>重<rt>かさ</rt></ruby>ねるより、<ruby>各自<rt>かくじ</rt></ruby>が <ruby>責任<rt>せきにん</rt></ruby>を <ruby>持<rt>も</rt></ruby>って <ruby>動<rt>うご</rt></ruby>くほうが よほど <ruby>生産的<rt>せいさんてき</rt></ruby>だ。",
+          "Rather than piling up meetings that are all form, it's far more productive for each person to act with responsibility."
+        ]
+      },
+      "mnem": "\"ミーティング\" is English \"meeting\" in katakana — mii-tin-gu.",
+      "tip": "ミーティング = a (usually small, informal work) meeting. Larger/more formal is 会議 (かいぎ); 打ち合わせ (うちあわせ) = a planning briefing.",
+      "accent": 1
+    },
+    {
+      "key": "mnn:30:15",
+      "kana": "よてい",
+      "kanji": "予定",
+      "context": "",
+      "mean": "plan, schedule, arrangement",
+      "cat": "noun",
+      "type": "",
+      "trans": "",
+      "dict": "予定",
+      "dictRead": "よてい",
+      "audio": "/Audio/minnamoi/bai30/00010110000000001.mp3",
+      "levels": {
+        "N5": [
+          "<ruby>明日<rt>あした</rt></ruby>の <ruby>予定<rt>よてい</rt></ruby>は <ruby>何<rt>なん</rt></ruby>ですか。",
+          "What are your plans for tomorrow?"
+        ],
+        "N4": [
+          "<ruby>予定<rt>よてい</rt></ruby>が <ruby>変<rt>か</rt></ruby>わったら、<ruby>連絡<rt>れんらく</rt></ruby>してください。",
+          "If your plans change, please let me know."
+        ],
+        "N3": [
+          "<ruby>予定<rt>よてい</rt></ruby>どおりに <ruby>進<rt>すす</rt></ruby>むように、<ruby>準備<rt>じゅんび</rt></ruby>を <ruby>早<rt>はや</rt></ruby>めにしています。",
+          "I prepare early so that things go according to schedule."
+        ],
+        "N2": [
+          "<ruby>予定<rt>よてい</rt></ruby>を <ruby>詰<rt>つ</rt></ruby>め<ruby>込<rt>こ</rt></ruby>みすぎたせいで、どれも <ruby>中途半端<rt>ちゅうとはんぱ</rt></ruby>に <ruby>終<rt>お</rt></ruby>わってしまった。",
+          "Because I packed my schedule too tightly, everything ended up half-finished."
+        ],
+        "N1": [
+          "<ruby>綿密<rt>めんみつ</rt></ruby>な <ruby>予定<rt>よてい</rt></ruby>を <ruby>立<rt>た</rt></ruby>てたところで、<ruby>不測<rt>ふそく</rt></ruby>の <ruby>事態<rt>じたい</rt></ruby>に <ruby>備<rt>そな</rt></ruby>える <ruby>柔軟<rt>じゅうなん</rt></ruby>さがなければ <ruby>意味<rt>いみ</rt></ruby>がない。",
+          "However meticulous a plan you draw up, it's meaningless without the flexibility to cope with the unexpected."
+        ]
+      },
+      "mnem": "予 (beforehand) + 定 (fix / settle) — settled in advance = 予定, a plan / schedule.",
+      "tip": "予定 = a plan/schedule (what's arranged for the future). 予定表 (よていひょう) = a schedule chart. Compare つもり (personal intention) — 予定 is more fixed/arranged.",
+      "accent": 0
+    },
+    {
+      "key": "mnn:30:16",
+      "kana": "おしらせ",
+      "kanji": "お知らせ",
+      "context": "",
+      "mean": "notice, announcement",
+      "cat": "noun",
+      "type": "",
+      "trans": "",
+      "dict": "お知らせ",
+      "dictRead": "おしらせ",
+      "audio": "/Audio/minnamoi/bai30/00010110000000010.mp3",
+      "levels": {
+        "N5": [
+          "これは <ruby>学校<rt>がっこう</rt></ruby>からの お<ruby>知<rt>し</rt></ruby>らせです。",
+          "This is a notice from the school."
+        ],
+        "N4": [
+          "お<ruby>知<rt>し</rt></ruby>らせを <ruby>読<rt>よ</rt></ruby>んでから、<ruby>返事<rt>へんじ</rt></ruby>をします。",
+          "I'll reply after reading the notice."
+        ],
+        "N3": [
+          "<ruby>大切<rt>たいせつ</rt></ruby>な お<ruby>知<rt>し</rt></ruby>らせは、<ruby>壁<rt>かべ</rt></ruby>に <ruby>貼<rt>は</rt></ruby>っておくようにしています。",
+          "I make a point of posting important notices on the wall."
+        ],
+        "N2": [
+          "お<ruby>知<rt>し</rt></ruby>らせを <ruby>見落<rt>みお</rt></ruby>としたばかりに、<ruby>締<rt>し</rt></ruby>め<ruby>切<rt>き</rt></ruby>りに <ruby>間<rt>ま</rt></ruby>に<ruby>合<rt>あ</rt></ruby>わなかった。",
+          "Just because I overlooked the notice, I missed the deadline."
+        ],
+        "N1": [
+          "<ruby>合格<rt>ごうかく</rt></ruby>の お<ruby>知<rt>し</rt></ruby>らせを <ruby>受<rt>う</rt></ruby>け<ruby>取<rt>と</rt></ruby>った <ruby>瞬間<rt>しゅんかん</rt></ruby>、これまでの <ruby>苦労<rt>くろう</rt></ruby>が <ruby>一気<rt>いっき</rt></ruby>に <ruby>報<rt>むく</rt></ruby>われた <ruby>気<rt>き</rt></ruby>がした。",
+          "The moment I received the notice of my acceptance, all my past hardships felt rewarded at once."
+        ]
+      },
+      "mnem": "お + 知らせ (from 知らせる, \"to inform\") — a polite \"letting-you-know\" = お知らせ, a notice.",
+      "tip": "お知らせ = a notice/announcement (noun from 知らせる, \"to inform\"). Bare 知らせ = news/word. Often seen on boards as 〜のお知らせ.",
+      "accent": 0
+    },
+    {
+      "key": "mnn:30:17",
+      "kana": "ガイドブック",
+      "kanji": "",
+      "context": "",
+      "mean": "guidebook",
+      "cat": "noun",
+      "type": "",
+      "trans": "",
+      "dict": "ガイドブック",
+      "dictRead": "ガイドブック",
+      "audio": "/Audio/minnamoi/bai30/00010110000000011.mp3",
+      "levels": {
+        "N5": [
+          "<ruby>旅行<rt>りょこう</rt></ruby>の ガイドブックを <ruby>買<rt>か</rt></ruby>いました。",
+          "I bought a travel guidebook."
+        ],
+        "N4": [
+          "<ruby>旅行<rt>りょこう</rt></ruby>の <ruby>前<rt>まえ</rt></ruby>に、ガイドブックを <ruby>読<rt>よ</rt></ruby>んでおきます。",
+          "I'll read the guidebook before the trip."
+        ],
+        "N3": [
+          "<ruby>初<rt>はじ</rt></ruby>めての <ruby>町<rt>まち</rt></ruby>では、ガイドブックを <ruby>持<rt>も</rt></ruby>って <ruby>歩<rt>ある</rt></ruby>くようにしています。",
+          "In a town I'm visiting for the first time, I make a point of walking around with a guidebook."
+        ],
+        "N2": [
+          "ガイドブックに <ruby>載<rt>の</rt></ruby>っている <ruby>店<rt>みせ</rt></ruby>より、<ruby>地元<rt>じもと</rt></ruby>の <ruby>人<rt>ひと</rt></ruby>に <ruby>教<rt>おそ</rt></ruby>わった <ruby>店<rt>みせ</rt></ruby>のほうが おいしかった。",
+          "The restaurant a local told me about was tastier than the ones listed in the guidebook."
+        ],
+        "N1": [
+          "ガイドブックに <ruby>頼<rt>たよ</rt></ruby>りきった <ruby>旅<rt>たび</rt></ruby>では、<ruby>予期<rt>よき</rt></ruby>せぬ <ruby>出会<rt>であ</rt></ruby>いという <ruby>旅<rt>たび</rt></ruby>の <ruby>醍醐味<rt>だいごみ</rt></ruby>を <ruby>味<rt>あじ</rt></ruby>わえない。",
+          "On a trip that relies entirely on a guidebook, you can't savor the real charm of travel — unexpected encounters."
+        ]
+      },
+      "mnem": "\"ガイドブック\" = English \"guidebook\" — gaido-bukku.",
+      "tip": "ガイドブック = a guidebook (for travel/sightseeing). ガイド alone = a guide (the person or the act). Frame: 旅行のガイドブック.",
+      "accent": 4
+    },
+    {
+      "key": "mnn:30:18",
+      "kana": "カレンダー",
+      "kanji": "",
+      "context": "",
+      "mean": "calendar",
+      "cat": "noun",
+      "type": "",
+      "trans": "",
+      "dict": "カレンダー",
+      "dictRead": "カレンダー",
+      "audio": "/Audio/minnamoi/bai30/00010110000000100.mp3",
+      "levels": {
+        "N5": [
+          "<ruby>壁<rt>かべ</rt></ruby>に カレンダーが あります。",
+          "There's a calendar on the wall."
+        ],
+        "N4": [
+          "<ruby>新<rt>あたら</rt></ruby>しい カレンダーを <ruby>壁<rt>かべ</rt></ruby>に <ruby>掛<rt>か</rt></ruby>けたいです。",
+          "I want to hang a new calendar on the wall."
+        ],
+        "N3": [
+          "<ruby>予定<rt>よてい</rt></ruby>を <ruby>忘<rt>わす</rt></ruby>れないように、カレンダーに <ruby>書<rt>か</rt></ruby>いておくようにしています。",
+          "I make a point of writing plans on the calendar so I don't forget."
+        ],
+        "N2": [
+          "カレンダーを めくるたびに、<ruby>今年<rt>ことし</rt></ruby>も もう <ruby>半分<rt>はんぶん</rt></ruby>が <ruby>過<rt>す</rt></ruby>ぎたのかと <ruby>驚<rt>おどろ</rt></ruby>かされる。",
+          "Each time I turn the calendar page, I'm startled that half the year has already gone by."
+        ],
+        "N1": [
+          "<ruby>壁<rt>かべ</rt></ruby>の カレンダーに <ruby>刻<rt>きざ</rt></ruby>まれた <ruby>予定<rt>よてい</rt></ruby>の <ruby>数<rt>かず</rt></ruby>ほど、<ruby>心<rt>こころ</rt></ruby>の <ruby>余裕<rt>よゆう</rt></ruby>は <ruby>失<rt>うしな</rt></ruby>われていくのかもしれない。",
+          "Perhaps peace of mind is lost in proportion to the number of appointments etched into the wall calendar."
+        ]
+      },
+      "mnem": "\"カレンダー\" = English \"calendar\" — karendaa.",
+      "tip": "カレンダー = a calendar (the physical/wall kind). For a personal schedule use 予定表 (よていひょう) or スケジュール.",
+      "accent": 2
+    },
+    {
+      "key": "mnn:30:19",
+      "kana": "ポスター",
+      "kanji": "",
+      "context": "",
+      "mean": "poster",
+      "cat": "noun",
+      "type": "",
+      "trans": "",
+      "dict": "ポスター",
+      "dictRead": "ポスター",
+      "audio": "/Audio/minnamoi/bai30/00010110000000101.mp3",
+      "levels": {
+        "N5": [
+          "<ruby>壁<rt>かべ</rt></ruby>に ポスターを <ruby>貼<rt>は</rt></ruby>ります。",
+          "I put a poster on the wall."
+        ],
+        "N4": [
+          "あそこに ポスターが <ruby>貼<rt>は</rt></ruby>ってありますね。",
+          "There's a poster put up over there, isn't there?"
+        ],
+        "N3": [
+          "<ruby>映画<rt>えいが</rt></ruby>の ポスターを <ruby>集<rt>あつ</rt></ruby>めるのが <ruby>好<rt>す</rt></ruby>きで、<ruby>部屋<rt>へや</rt></ruby>に <ruby>飾<rt>かざ</rt></ruby>るようにしています。",
+          "I like collecting movie posters and make a point of displaying them in my room."
+        ],
+        "N2": [
+          "<ruby>駅<rt>えき</rt></ruby>に <ruby>貼<rt>は</rt></ruby>られた <ruby>一枚<rt>いちまい</rt></ruby>の ポスターが きっかけで、その <ruby>展覧会<rt>てんらんかい</rt></ruby>に <ruby>行<rt>い</rt></ruby>くことにした。",
+          "A single poster put up at the station was what prompted me to decide to go to that exhibition."
+        ],
+        "N1": [
+          "<ruby>街中<rt>まちじゅう</rt></ruby>に <ruby>貼<rt>は</rt></ruby>り<ruby>出<rt>だ</rt></ruby>された ポスターは、<ruby>人々<rt>ひとびと</rt></ruby>の <ruby>関心<rt>かんしん</rt></ruby>を <ruby>否<rt>いや</rt></ruby><ruby>応<rt>おう</rt></ruby>なしに かき<ruby>立<rt>た</rt></ruby>てた。",
+          "The posters plastered all over town stirred up people's interest whether they liked it or not."
+        ]
+      },
+      "mnem": "\"ポスター\" = English \"poster\" — posutaa.",
+      "tip": "ポスター = a poster. Collocates with 貼る (put up): ポスターを貼る / ポスターが貼ってある.",
+      "accent": 1
+    },
+    {
+      "key": "mnn:30:20",
+      "kana": "よていひょう",
+      "kanji": "予定表",
+      "context": "",
+      "mean": "schedule (chart), timetable",
+      "cat": "noun",
+      "type": "",
+      "trans": "",
+      "dict": "予定表",
+      "dictRead": "よていひょう",
+      "audio": "/Audio/minnamoi/bai30/00010110000000110.mp3",
+      "levels": {
+        "N5": [
+          "これは <ruby>今週<rt>こんしゅう</rt></ruby>の <ruby>予定表<rt>よていひょう</rt></ruby>です。",
+          "This is this week's schedule."
+        ],
+        "N4": [
+          "<ruby>予定表<rt>よていひょう</rt></ruby>を <ruby>見<rt>み</rt></ruby>てから、<ruby>返事<rt>へんじ</rt></ruby>をします。",
+          "I'll answer after checking the schedule."
+        ],
+        "N3": [
+          "<ruby>予定表<rt>よていひょう</rt></ruby>を <ruby>壁<rt>かべ</rt></ruby>に <ruby>貼<rt>は</rt></ruby>って、いつでも <ruby>見<rt>み</rt></ruby>られるようにしています。",
+          "I post the schedule on the wall so I can check it anytime."
+        ],
+        "N2": [
+          "<ruby>予定表<rt>よていひょう</rt></ruby>どおりに <ruby>事<rt>こと</rt></ruby>が <ruby>運<rt>はこ</rt></ruby>ぶことなど、<ruby>現場<rt>げんば</rt></ruby>では めったにないと <ruby>言<rt>い</rt></ruby>っていい。",
+          "You could say things almost never go exactly as the schedule says out in the field."
+        ],
+        "N1": [
+          "<ruby>分刻<rt>ふんきざ</rt></ruby>みの <ruby>予定表<rt>よていひょう</rt></ruby>に <ruby>縛<rt>しば</rt></ruby>られた <ruby>毎日<rt>まいにち</rt></ruby>では、ふと <ruby>立<rt>た</rt></ruby>ち<ruby>止<rt>ど</rt></ruby>まって <ruby>考<rt>かんが</rt></ruby>える <ruby>暇<rt>ひま</rt></ruby>さえない。",
+          "In days bound by a minute-by-minute schedule, there isn't even time to pause and think."
+        ]
+      },
+      "mnem": "予定 (schedule) + 表 (chart / table) — the schedule laid out as a chart = 予定表.",
+      "tip": "予定表 = a schedule chart/timetable (予定 + 表 \"table\"). It's the written-out form of your 予定. Compare 時間割 (じかんわり, a class timetable).",
+      "accent": 0
+    },
+    {
+      "key": "mnn:30:21",
+      "kana": "ごみばこ",
+      "kanji": "ごみ箱",
+      "context": "",
+      "mean": "trash can, wastebasket, dustbin",
+      "cat": "noun",
+      "type": "",
+      "trans": "",
+      "dict": "ごみ箱",
+      "dictRead": "ごみばこ",
+      "audio": "/Audio/minnamoi/bai30/00010110000000111.mp3",
+      "levels": {
+        "N5": [
+          "ごみを ごみ<ruby>箱<rt>ばこ</rt></ruby>に <ruby>捨<rt>す</rt></ruby>てます。",
+          "I throw the trash in the trash can."
+        ],
+        "N4": [
+          "ごみ<ruby>箱<rt>ばこ</rt></ruby>は <ruby>部屋<rt>へや</rt></ruby>の <ruby>隅<rt>すみ</rt></ruby>に <ruby>置<rt>お</rt></ruby>いてあります。",
+          "The trash can is placed in the corner of the room."
+        ],
+        "N3": [
+          "いっぱいに ならないうちに、ごみ<ruby>箱<rt>ばこ</rt></ruby>を <ruby>空<rt>から</rt></ruby>にするようにしています。",
+          "I make a point of emptying the trash can before it gets full."
+        ],
+        "N2": [
+          "<ruby>大事<rt>だいじ</rt></ruby>な <ruby>書類<rt>しょるい</rt></ruby>を <ruby>間違<rt>まちが</rt></ruby>えて ごみ<ruby>箱<rt>ばこ</rt></ruby>に <ruby>捨<rt>す</rt></ruby>ててしまい、<ruby>慌<rt>あわ</rt></ruby>てて <ruby>拾<rt>ひろ</rt></ruby>い<ruby>上<rt>あ</rt></ruby>げた。",
+          "I mistakenly threw an important document into the trash can and hurriedly picked it back up."
+        ],
+        "N1": [
+          "<ruby>苦労<rt>くろう</rt></ruby>して <ruby>書<rt>か</rt></ruby>いた <ruby>原稿<rt>げんこう</rt></ruby>を、<ruby>納得<rt>なっとく</rt></ruby>がいかないからと ためらいなく ごみ<ruby>箱<rt>ばこ</rt></ruby>に <ruby>放<rt>ほう</rt></ruby>り<ruby>込<rt>こ</rt></ruby>んだ。",
+          "He tossed a manuscript he'd labored over into the trash can without hesitation, just because he wasn't satisfied with it."
+        ]
+      },
+      "mnem": "ごみ (trash) + 箱 (box) — a box for trash = ごみ箱, the trash can.",
+      "tip": "ごみ箱 = trash can / wastebasket (ごみ \"rubbish\" + 箱 \"box,\" which voices to ばこ). ごみを捨てる = throw away trash; 燃えるごみ / 燃えないごみ = burnable / non-burnable.",
+      "accent": 0
+    },
+    {
+      "key": "mnn:30:22",
+      "kana": "にんぎょう",
+      "kanji": "人形",
+      "context": "",
+      "mean": "doll, figure",
+      "cat": "noun",
+      "type": "",
+      "trans": "",
+      "dict": "人形",
+      "dictRead": "にんぎょう",
+      "audio": "/Audio/minnamoi/bai30/00010110000001000.mp3",
+      "levels": {
+        "N5": [
+          "<ruby>棚<rt>たな</rt></ruby>に <ruby>人形<rt>にんぎょう</rt></ruby>が あります。",
+          "There's a doll on the shelf."
+        ],
+        "N4": [
+          "かわいい <ruby>人形<rt>にんぎょう</rt></ruby>を <ruby>棚<rt>たな</rt></ruby>に <ruby>飾<rt>かざ</rt></ruby>りたいです。",
+          "I want to display a cute doll on the shelf."
+        ],
+        "N3": [
+          "この <ruby>人形<rt>にんぎょう</rt></ruby>は <ruby>祖母<rt>そぼ</rt></ruby>からもらったので、<ruby>大切<rt>たいせつ</rt></ruby>にするようにしています。",
+          "This doll was given to me by my grandmother, so I make a point of treasuring it."
+        ],
+        "N2": [
+          "<ruby>職人<rt>しょくにん</rt></ruby>が <ruby>丹精<rt>たんせい</rt></ruby>を <ruby>込<rt>こ</rt></ruby>めて <ruby>作<rt>つく</rt></ruby>った <ruby>人形<rt>にんぎょう</rt></ruby>は、まるで <ruby>生<rt>い</rt></ruby>きているかのようだった。",
+          "The doll the craftsman made with painstaking care looked as though it were alive."
+        ],
+        "N1": [
+          "<ruby>糸<rt>いと</rt></ruby>で <ruby>操<rt>あやつ</rt></ruby>られる <ruby>人形<rt>にんぎょう</rt></ruby>のように、<ruby>他人<rt>たにん</rt></ruby>の <ruby>思惑<rt>おもわく</rt></ruby>のままに <ruby>動<rt>うご</rt></ruby>かされるのは まっぴらだ。",
+          "I absolutely refuse to be moved about at others' whims like a puppet manipulated by strings."
+        ]
+      },
+      "mnem": "人 (person) + 形 (shape / form) — a thing in human shape = 人形, a doll.",
+      "tip": "人形 = a doll/figure (人 \"person\" + 形 \"shape,\" read にんぎょう). 雛人形 (ひなにんぎょう) = Hina dolls. Note the ぎょう reading of 形 here.",
+      "accent": 0
+    },
+    {
+      "key": "mnn:30:23",
+      "kana": "かびん",
+      "kanji": "花瓶",
+      "context": "",
+      "mean": "vase (for flowers)",
+      "cat": "noun",
+      "type": "",
+      "trans": "",
+      "dict": "花瓶",
+      "dictRead": "かびん",
+      "audio": "/Audio/minnamoi/bai30/00010110000001001.mp3",
+      "levels": {
+        "N5": [
+          "<ruby>花瓶<rt>かびん</rt></ruby>に <ruby>花<rt>はな</rt></ruby>を <ruby>入<rt>い</rt></ruby>れます。",
+          "I put flowers in the vase."
+        ],
+        "N4": [
+          "テーブルの <ruby>上<rt>うえ</rt></ruby>に <ruby>花瓶<rt>かびん</rt></ruby>が <ruby>飾<rt>かざ</rt></ruby>ってあります。",
+          "A vase is displayed on the table."
+        ],
+        "N3": [
+          "<ruby>花<rt>はな</rt></ruby>が <ruby>長持<rt>ながも</rt></ruby>ちするように、<ruby>花瓶<rt>かびん</rt></ruby>の <ruby>水<rt>みず</rt></ruby>を <ruby>毎日<rt>まいにち</rt></ruby> <ruby>変<rt>か</rt></ruby>えるようにしています。",
+          "I change the water in the vase every day so the flowers last longer."
+        ],
+        "N2": [
+          "<ruby>子供<rt>こども</rt></ruby>が ボールを <ruby>投<rt>な</rt></ruby>げたはずみに、<ruby>大切<rt>たいせつ</rt></ruby>な <ruby>花瓶<rt>かびん</rt></ruby>を <ruby>割<rt>わ</rt></ruby>ってしまった。",
+          "In the moment a child threw a ball, my precious vase got broken."
+        ],
+        "N1": [
+          "<ruby>名工<rt>めいこう</rt></ruby>の <ruby>手<rt>て</rt></ruby>による その <ruby>花瓶<rt>かびん</rt></ruby>は、<ruby>美術品<rt>びじゅつひん</rt></ruby>としての <ruby>価値<rt>かち</rt></ruby>すら <ruby>認<rt>みと</rt></ruby>められている。",
+          "That vase, made by the hand of a master craftsman, is even recognized as having value as a work of art."
+        ]
+      },
+      "mnem": "花 (flower) + 瓶 (bottle / jar) — a jar for flowers = 花瓶, a vase.",
+      "tip": "花瓶 = a flower vase (花 \"flower\" + 瓶 \"bottle/jar,\" びん→かびん). 花を生ける = to arrange flowers (in it).",
+      "accent": 0
+    },
+    {
+      "key": "mnn:30:24",
+      "kana": "かがみ",
+      "kanji": "鏡",
+      "context": "",
+      "mean": "mirror",
+      "cat": "noun",
+      "type": "",
+      "trans": "",
+      "dict": "鏡",
+      "dictRead": "かがみ",
+      "audio": "/Audio/minnamoi/bai30/00010110000001010.mp3",
+      "levels": {
+        "N5": [
+          "<ruby>鏡<rt>かがみ</rt></ruby>を <ruby>見<rt>み</rt></ruby>ます。",
+          "I look in the mirror."
+        ],
+        "N4": [
+          "<ruby>壁<rt>かべ</rt></ruby>に <ruby>鏡<rt>かがみ</rt></ruby>が <ruby>掛<rt>か</rt></ruby>けてあります。",
+          "A mirror is hung on the wall."
+        ],
+        "N3": [
+          "<ruby>出<rt>で</rt></ruby>かける <ruby>前<rt>まえ</rt></ruby>に、<ruby>鏡<rt>かがみ</rt></ruby>で <ruby>身<rt>み</rt></ruby>だしなみを <ruby>確<rt>たし</rt></ruby>かめるようにしています。",
+          "I make a point of checking my appearance in the mirror before going out."
+        ],
+        "N2": [
+          "<ruby>鏡<rt>かがみ</rt></ruby>に <ruby>映<rt>うつ</rt></ruby>った <ruby>自分<rt>じぶん</rt></ruby>の <ruby>顔<rt>かお</rt></ruby>を <ruby>見<rt>み</rt></ruby>て、<ruby>思<rt>おも</rt></ruby>いのほか <ruby>疲<rt>つか</rt></ruby>れているのに <ruby>気<rt>き</rt></ruby>づいた。",
+          "Seeing my own face reflected in the mirror, I realized I was more tired than I'd thought."
+        ],
+        "N1": [
+          "<ruby>他人<rt>たにん</rt></ruby>の <ruby>振<rt>ふ</rt></ruby>る<ruby>舞<rt>ま</rt></ruby>いは <ruby>自<rt>みずか</rt></ruby>らを <ruby>映<rt>うつ</rt></ruby>す <ruby>鏡<rt>かがみ</rt></ruby>だと <ruby>思<rt>おも</rt></ruby>って、<ruby>常<rt>つね</rt></ruby>に <ruby>省<rt>かえり</rt></ruby>みるべきだ。",
+          "You should always reflect on others' behavior as a mirror that reflects your own self."
+        ]
+      },
+      "mnem": "\"kagami\" — you <b>CA</b>tch your image and <b>GA</b>ze back: 鏡 = a mirror.",
+      "tip": "鏡 = a mirror. Distinct from 鑑 (かがみ, \"a model/example\") — same reading. Also appears in 眼鏡 (めがね, glasses).",
+      "accent": 3
+    },
+    {
+      "key": "mnn:30:25",
+      "kana": "ひきだし",
+      "kanji": "引き出し",
+      "context": "",
+      "mean": "drawer",
+      "cat": "noun",
+      "type": "",
+      "trans": "",
+      "dict": "引き出し",
+      "dictRead": "ひきだし",
+      "audio": "/Audio/minnamoi/bai30/00010110000001011.mp3",
+      "levels": {
+        "N5": [
+          "<ruby>引<rt>ひ</rt></ruby>き<ruby>出<rt>だ</rt></ruby>しに ペンが あります。",
+          "There's a pen in the drawer."
+        ],
+        "N4": [
+          "はさみを <ruby>引<rt>ひ</rt></ruby>き<ruby>出<rt>だ</rt></ruby>しに しまってください。",
+          "Please put the scissors away in the drawer."
+        ],
+        "N3": [
+          "<ruby>大切<rt>たいせつ</rt></ruby>な <ruby>書類<rt>しょるい</rt></ruby>は、<ruby>鍵<rt>かぎ</rt></ruby>のかかる <ruby>引<rt>ひ</rt></ruby>き<ruby>出<rt>だ</rt></ruby>しに <ruby>入<rt>い</rt></ruby>れておくようにしています。",
+          "I make a point of keeping important documents in a drawer that locks."
+        ],
+        "N2": [
+          "<ruby>何年<rt>なんねん</rt></ruby>も <ruby>開<rt>あ</rt></ruby>けていない <ruby>引<rt>ひ</rt></ruby>き<ruby>出<rt>だ</rt></ruby>しから、<ruby>懐<rt>なつ</rt></ruby>かしい <ruby>手紙<rt>てがみ</rt></ruby>が <ruby>出<rt>で</rt></ruby>てきた。",
+          "A nostalgic letter turned up from a drawer I hadn't opened in years."
+        ],
+        "N1": [
+          "<ruby>彼<rt>かれ</rt></ruby>は <ruby>知識<rt>ちしき</rt></ruby>の <ruby>引<rt>ひ</rt></ruby>き<ruby>出<rt>だ</rt></ruby>しが <ruby>多<rt>おお</rt></ruby>く、どんな <ruby>話題<rt>わだい</rt></ruby>を <ruby>振<rt>ふ</rt></ruby>っても <ruby>的確<rt>てきかく</rt></ruby>に <ruby>応<rt>おう</rt></ruby>じてみせる。",
+          "He has many 'drawers' of knowledge and responds aptly no matter what topic you bring up."
+        ]
+      },
+      "mnem": "引く (pull) + 出す (take out) — the part you pull out to take things out = 引き出し, a drawer.",
+      "tip": "引き出し = a drawer (引く \"pull\" + 出す \"take out\"). The same word also = a bank withdrawal (お金の引き出し); the verb 引き出す = draw out / withdraw.",
+      "accent": 0
+    },
+    {
+      "key": "mnn:30:26",
+      "kana": "げんかん",
+      "kanji": "玄関",
+      "context": "",
+      "mean": "front door, entrance hall (of a house)",
+      "cat": "noun",
+      "type": "",
+      "trans": "",
+      "dict": "玄関",
+      "dictRead": "げんかん",
+      "audio": "/Audio/minnamoi/bai30/00010110000001100.mp3",
+      "levels": {
+        "N5": [
+          "<ruby>玄関<rt>げんかん</rt></ruby>で <ruby>靴<rt>くつ</rt></ruby>を <ruby>脱<rt>ぬ</rt></ruby>ぎます。",
+          "I take off my shoes at the entrance."
+        ],
+        "N4": [
+          "<ruby>玄関<rt>げんかん</rt></ruby>に <ruby>花<rt>はな</rt></ruby>を <ruby>飾<rt>かざ</rt></ruby>りたいです。",
+          "I want to display flowers at the entrance."
+        ],
+        "N3": [
+          "<ruby>客<rt>きゃく</rt></ruby>が <ruby>来<rt>く</rt></ruby>る <ruby>前<rt>まえ</rt></ruby>に、<ruby>玄関<rt>げんかん</rt></ruby>を きれいに <ruby>掃除<rt>そうじ</rt></ruby>しておくようにしています。",
+          "I make a point of cleaning the entrance before guests come."
+        ],
+        "N2": [
+          "<ruby>玄関<rt>げんかん</rt></ruby>を <ruby>入<rt>はい</rt></ruby>ったとたん、<ruby>懐<rt>なつ</rt></ruby>かしい <ruby>料理<rt>りょうり</rt></ruby>の <ruby>匂<rt>にお</rt></ruby>いが <ruby>漂<rt>ただよ</rt></ruby>ってきた。",
+          "The instant I stepped through the entrance, the nostalgic smell of cooking drifted over."
+        ],
+        "N1": [
+          "<ruby>玄関<rt>げんかん</rt></ruby>は その <ruby>家<rt>いえ</rt></ruby>の <ruby>顔<rt>かお</rt></ruby>とも <ruby>言<rt>い</rt></ruby>われ、<ruby>住<rt>す</rt></ruby>む <ruby>人<rt>ひと</rt></ruby>の <ruby>心遣<rt>こころづか</rt></ruby>いが おのずと <ruby>表<rt>あらわ</rt></ruby>れる。",
+          "The entrance is said to be the face of a house, and the care of those who live there shows in it of its own accord."
+        ]
+      },
+      "mnem": "玄 (profound / dark) + 関 (gate / barrier) — the formal gateway into a home = 玄関, the entrance.",
+      "tip": "玄関 = the entrance/foyer of a house (where you take off your shoes). Not 入り口 (いりぐち, any way in) — 玄関 is specifically the formal doorway area.",
+      "accent": 1
+    },
+    {
+      "key": "mnn:30:27",
+      "kana": "ろうか",
+      "kanji": "廊下",
+      "context": "",
+      "mean": "corridor, hallway",
+      "cat": "noun",
+      "type": "",
+      "trans": "",
+      "dict": "廊下",
+      "dictRead": "ろうか",
+      "audio": "/Audio/minnamoi/bai30/00010110000001101.mp3",
+      "levels": {
+        "N5": [
+          "<ruby>廊下<rt>ろうか</rt></ruby>を <ruby>歩<rt>ある</rt></ruby>きます。",
+          "I walk down the corridor."
+        ],
+        "N4": [
+          "<ruby>廊下<rt>ろうか</rt></ruby>で <ruby>走<rt>はし</rt></ruby>らないでください。",
+          "Please don't run in the corridor."
+        ],
+        "N3": [
+          "<ruby>廊下<rt>ろうか</rt></ruby>が <ruby>暗<rt>くら</rt></ruby>いので、<ruby>電気<rt>でんき</rt></ruby>を つけておくようにしています。",
+          "The corridor is dark, so I make a point of leaving the light on."
+        ],
+        "N2": [
+          "<ruby>夜中<rt>よなか</rt></ruby>に <ruby>廊下<rt>ろうか</rt></ruby>を <ruby>歩<rt>ある</rt></ruby>く <ruby>足音<rt>あしおと</rt></ruby>が <ruby>聞<rt>き</rt></ruby>こえて、<ruby>思<rt>おも</rt></ruby>わず <ruby>身<rt>み</rt></ruby>を こわばらせた。",
+          "I heard footsteps walking down the corridor in the middle of the night and instinctively stiffened."
+        ],
+        "N1": [
+          "<ruby>長<rt>なが</rt></ruby>い <ruby>廊下<rt>ろうか</rt></ruby>の <ruby>先<rt>さき</rt></ruby>に かすかな <ruby>明<rt>あ</rt></ruby>かりが <ruby>見<rt>み</rt></ruby>え、その <ruby>静寂<rt>せいじゃく</rt></ruby>が かえって <ruby>不安<rt>ふあん</rt></ruby>をかき<ruby>立<rt>た</rt></ruby>てた。",
+          "A faint light was visible at the end of the long corridor, and its silence only stirred up unease."
+        ]
+      },
+      "mnem": "廊 (corridor) + 下 (below / along) — the covered walkway = 廊下, a hallway.",
+      "tip": "廊下 = a corridor / hallway (inside a building). Compare 通路 (つうろ, a passage / aisle). 廊下を走るな is the classic school warning.",
+      "accent": 0
+    },
+    {
+      "key": "mnn:30:28",
+      "kana": "かべ",
+      "kanji": "壁",
+      "context": "",
+      "mean": "wall",
+      "cat": "noun",
+      "type": "",
+      "trans": "",
+      "dict": "壁",
+      "dictRead": "かべ",
+      "audio": "/Audio/minnamoi/bai30/00010110000001110.mp3",
+      "levels": {
+        "N5": [
+          "<ruby>壁<rt>かべ</rt></ruby>に <ruby>絵<rt>え</rt></ruby>が あります。",
+          "There's a picture on the wall."
+        ],
+        "N4": [
+          "<ruby>壁<rt>かべ</rt></ruby>に ポスターを <ruby>貼<rt>は</rt></ruby>ってもいいですか。",
+          "May I put a poster on the wall?"
+        ],
+        "N3": [
+          "<ruby>音<rt>おと</rt></ruby>が うるさいので、<ruby>壁<rt>かべ</rt></ruby>に <ruby>厚<rt>あつ</rt></ruby>い <ruby>布<rt>ぬの</rt></ruby>を <ruby>掛<rt>か</rt></ruby>けるようにしています。",
+          "The noise is loud, so I make a point of hanging thick cloth on the wall."
+        ],
+        "N2": [
+          "<ruby>言葉<rt>ことば</rt></ruby>の <ruby>壁<rt>かべ</rt></ruby>に <ruby>突<rt>つ</rt></ruby>き<ruby>当<rt>あ</rt></ruby>たりながらも、<ruby>身振<rt>みぶ</rt></ruby>り<ruby>手振<rt>てぶ</rt></ruby>りで なんとか <ruby>意思<rt>いし</rt></ruby>を <ruby>伝<rt>つた</rt></ruby>えた。",
+          "Even as I ran into the language barrier, I somehow got my meaning across with gestures."
+        ],
+        "N1": [
+          "<ruby>幾多<rt>いくた</rt></ruby>の <ruby>壁<rt>かべ</rt></ruby>を <ruby>乗<rt>の</rt></ruby>り<ruby>越<rt>こ</rt></ruby>えてきた <ruby>者<rt>もの</rt></ruby>だけが <ruby>知<rt>し</rt></ruby>る、<ruby>静<rt>しず</rt></ruby>かな <ruby>自信<rt>じしん</rt></ruby>というものがある。",
+          "There is a quiet confidence known only to those who have overcome countless walls."
+        ]
+      },
+      "mnem": "\"kabe\" — a flat slab that boxes you in, like a <b>CAB</b>in wall: 壁 = a wall.",
+      "tip": "壁 = a wall (of a room / building), also figurative \"barrier / obstacle\" (言葉の壁, 壁にぶつかる). Compare 塀 (へい, an outdoor fence/wall).",
+      "accent": 0
+    },
+    {
+      "key": "mnn:30:29",
+      "kana": "いけ",
+      "kanji": "池",
+      "context": "",
+      "mean": "pond",
+      "cat": "noun",
+      "type": "",
+      "trans": "",
+      "dict": "池",
+      "dictRead": "いけ",
+      "audio": "/Audio/minnamoi/bai30/00010110000001111.mp3",
+      "levels": {
+        "N5": [
+          "<ruby>公園<rt>こうえん</rt></ruby>に <ruby>池<rt>いけ</rt></ruby>が あります。",
+          "There's a pond in the park."
+        ],
+        "N4": [
+          "<ruby>池<rt>いけ</rt></ruby>の <ruby>周<rt>まわ</rt></ruby>りを <ruby>散歩<rt>さんぽ</rt></ruby>したいです。",
+          "I want to take a walk around the pond."
+        ],
+        "N3": [
+          "<ruby>池<rt>いけ</rt></ruby>の <ruby>周<rt>まわ</rt></ruby>りに <ruby>木<rt>き</rt></ruby>を <ruby>植<rt>う</rt></ruby>えて、きれいにするようにしています。",
+          "We make a point of planting trees around the pond to make it beautiful."
+        ],
+        "N2": [
+          "<ruby>池<rt>いけ</rt></ruby>の <ruby>水<rt>みず</rt></ruby>が <ruby>澄<rt>す</rt></ruby>んでいるおかげで、<ruby>底<rt>そこ</rt></ruby>を <ruby>泳<rt>およ</rt></ruby>ぐ <ruby>魚<rt>さかな</rt></ruby>まで はっきり <ruby>見<rt>み</rt></ruby>える。",
+          "Thanks to the clarity of the pond's water, you can clearly see even the fish swimming at the bottom."
+        ],
+        "N1": [
+          "<ruby>静<rt>しず</rt></ruby>かな <ruby>池<rt>いけ</rt></ruby>に <ruby>投<rt>な</rt></ruby>げた <ruby>一石<rt>いっせき</rt></ruby>が <ruby>波紋<rt>はもん</rt></ruby>を <ruby>広<rt>ひろ</rt></ruby>げるように、<ruby>彼<rt>かれ</rt></ruby>の <ruby>一言<rt>ひとこと</rt></ruby>は <ruby>社会<rt>しゃかい</rt></ruby>に <ruby>大<rt>おお</rt></ruby>きな <ruby>反響<rt>はんきょう</rt></ruby>を <ruby>呼<rt>よ</rt></ruby>んだ。",
+          "Like a single stone thrown into a still pond spreading ripples, his one remark drew a great response from society."
+        ]
+      },
+      "mnem": "\"ike\" — a small <b>IKE</b> (a little lake) held in place: 池 = a pond.",
+      "tip": "池 = a pond (small, often man-made). A bigger natural body of water is 湖 (みずうみ, lake). 池 = the 氵 water radical + 也.",
+      "accent": 2
+    },
+    {
+      "key": "mnn:30:30",
+      "kana": "もとのところ",
+      "kanji": "元の所",
+      "context": "",
+      "mean": "the original place, where it was before",
+      "cat": "expression",
+      "type": "",
+      "trans": "",
+      "dict": "元の所",
+      "dictRead": "もとのところ",
+      "audio": "/Audio/minnamoi/bai30/00010110000010000.mp3",
+      "levels": {
+        "N5": [
+          "<ruby>本<rt>ほん</rt></ruby>を <ruby>元<rt>もと</rt></ruby>の <ruby>所<rt>ところ</rt></ruby>に <ruby>置<rt>お</rt></ruby>きます。",
+          "I put the book back in its original place."
+        ],
+        "N4": [
+          "<ruby>使<rt>つか</rt></ruby>ったら、<ruby>元<rt>もと</rt></ruby>の <ruby>所<rt>ところ</rt></ruby>に <ruby>戻<rt>もど</rt></ruby>してください。",
+          "When you've used it, please return it to where it was."
+        ],
+        "N3": [
+          "<ruby>道具<rt>どうぐ</rt></ruby>は <ruby>使<rt>つか</rt></ruby>ったあと、<ruby>元<rt>もと</rt></ruby>の <ruby>所<rt>ところ</rt></ruby>に <ruby>片<rt>かた</rt></ruby>づけるようにしています。",
+          "I make a point of putting tools back in their original place after using them."
+        ],
+        "N2": [
+          "<ruby>誰<rt>だれ</rt></ruby>もが <ruby>元<rt>もと</rt></ruby>の <ruby>所<rt>ところ</rt></ruby>に <ruby>戻<rt>もど</rt></ruby>してさえいれば、こんなに <ruby>探<rt>さが</rt></ruby>し<ruby>回<rt>まわ</rt></ruby>らずに <ruby>済<rt>す</rt></ruby>んだはずだ。",
+          "If everyone had just put things back in their original place, we wouldn't have had to search around like this."
+        ],
+        "N1": [
+          "<ruby>混乱<rt>こんらん</rt></ruby>した <ruby>末<rt>すえ</rt></ruby>、<ruby>結局<rt>けっきょく</rt></ruby> <ruby>物事<rt>ものごと</rt></ruby>は <ruby>元<rt>もと</rt></ruby>の <ruby>所<rt>ところ</rt></ruby>に <ruby>落<rt>お</rt></ruby>ち<ruby>着<rt>つ</rt></ruby>くというのは、<ruby>皮肉<rt>ひにく</rt></ruby>な <ruby>話<rt>はなし</rt></ruby>だ。",
+          "It's ironic that, after all the confusion, things in the end settle right back where they started."
+        ]
+      },
+      "mnem": "元 (origin) + の + 所 (place) — the place it originally was = 元の所.",
+      "tip": "元の所 = the original place / where it was before. Pairs with 戻す (元の所に戻す = put back where it was). 元 (もと) = origin / former state.",
+      "accent": 0
+    },
+    {
+      "key": "mnn:30:31",
+      "kana": "まわり",
+      "kanji": "周り",
+      "context": "",
+      "mean": "surroundings, the area around; those around one",
+      "cat": "noun",
+      "type": "",
+      "trans": "",
+      "dict": "周り",
+      "dictRead": "まわり",
+      "audio": "/Audio/minnamoi/bai30/00010110000010001.mp3",
+      "levels": {
+        "N5": [
+          "<ruby>池<rt>いけ</rt></ruby>の <ruby>周<rt>まわ</rt></ruby>りを <ruby>歩<rt>ある</rt></ruby>きます。",
+          "I walk around the pond."
+        ],
+        "N4": [
+          "<ruby>家<rt>いえ</rt></ruby>の <ruby>周<rt>まわ</rt></ruby>りに <ruby>木<rt>き</rt></ruby>を <ruby>植<rt>う</rt></ruby>えたいです。",
+          "I want to plant trees around the house."
+        ],
+        "N3": [
+          "<ruby>周<rt>まわ</rt></ruby>りの <ruby>人<rt>ひと</rt></ruby>に <ruby>迷惑<rt>めいわく</rt></ruby>をかけないように <ruby>気<rt>き</rt></ruby>をつけるようにしています。",
+          "I make a point of being careful not to bother the people around me."
+        ],
+        "N2": [
+          "<ruby>周<rt>まわ</rt></ruby>りの <ruby>目<rt>め</rt></ruby>を <ruby>気<rt>き</rt></ruby>にするあまり、<ruby>本当<rt>ほんとう</rt></ruby>にやりたいことを <ruby>言<rt>い</rt></ruby>い<ruby>出<rt>だ</rt></ruby>せずにいる。",
+          "Worrying too much about the eyes of those around me, I can't bring myself to say what I really want to do."
+        ],
+        "N1": [
+          "<ruby>周<rt>まわ</rt></ruby>りの <ruby>評価<rt>ひょうか</rt></ruby>に <ruby>振<rt>ふ</rt></ruby>り<ruby>回<rt>まわ</rt></ruby>されているうちは、<ruby>真<rt>しん</rt></ruby>の <ruby>意味<rt>いみ</rt></ruby>で <ruby>自立<rt>じりつ</rt></ruby>したとは <ruby>言<rt>い</rt></ruby>えない。",
+          "As long as you're tossed about by the judgments of those around you, you can't be said to be truly independent."
+        ]
+      },
+      "mnem": "周 (circumference) — 周り = what goes round something, its surroundings.",
+      "tip": "周り = the area around / surroundings, also \"the people around one.\" Note まわり can also be written 回り (a turn/rotation, as in 遠回り). Frame: 〜の周り.",
+      "accent": 0
+    },
+    {
+      "key": "mnn:30:32",
+      "kana": "まんなか",
+      "kanji": "真ん中",
+      "context": "",
+      "mean": "the middle, the centre",
+      "cat": "noun",
+      "type": "",
+      "trans": "",
+      "dict": "真ん中",
+      "dictRead": "まんなか",
+      "audio": "/Audio/minnamoi/bai30/00010110000010010.mp3",
+      "levels": {
+        "N5": [
+          "<ruby>部屋<rt>へや</rt></ruby>の <ruby>真<rt>ま</rt></ruby>ん<ruby>中<rt>なか</rt></ruby>に テーブルが あります。",
+          "There's a table in the middle of the room."
+        ],
+        "N4": [
+          "<ruby>真<rt>ま</rt></ruby>ん<ruby>中<rt>なか</rt></ruby>に <ruby>花<rt>はな</rt></ruby>を <ruby>飾<rt>かざ</rt></ruby>りたいです。",
+          "I want to display flowers in the center."
+        ],
+        "N3": [
+          "<ruby>写真<rt>しゃしん</rt></ruby>を <ruby>撮<rt>と</rt></ruby>るときは、<ruby>真<rt>ま</rt></ruby>ん<ruby>中<rt>なか</rt></ruby>に <ruby>立<rt>た</rt></ruby>つようにしています。",
+          "When taking photos, I make a point of standing in the middle."
+        ],
+        "N2": [
+          "<ruby>議論<rt>ぎろん</rt></ruby>の <ruby>真<rt>ま</rt></ruby>ん<ruby>中<rt>なか</rt></ruby>に <ruby>置<rt>お</rt></ruby>かれても、<ruby>彼<rt>かれ</rt></ruby>は <ruby>少<rt>すこ</rt></ruby>しも <ruby>動揺<rt>どうよう</rt></ruby>しなかった。",
+          "Even placed at the very center of the debate, he wasn't the least bit shaken."
+        ],
+        "N1": [
+          "<ruby>対立<rt>たいりつ</rt></ruby>する <ruby>両者<rt>りょうしゃ</rt></ruby>の <ruby>真<rt>ま</rt></ruby>ん<ruby>中<rt>なか</rt></ruby>に <ruby>立<rt>た</rt></ruby>って <ruby>仲裁<rt>ちゅうさい</rt></ruby>するのは、<ruby>並大抵<rt>なみたいてい</rt></ruby>のことではない。",
+          "Standing right in the middle of two opposing sides to mediate is no ordinary feat."
+        ]
+      },
+      "mnem": "真 (true / exact) + ん + 中 (middle) — the exact middle = 真ん中.",
+      "tip": "真ん中 = the exact center / middle (真 \"true\" + 中 \"middle\"). More colloquial and emphatic than 中央 (ちゅうおう, central). Part of the 真っ〜 intensifier family (真っ赤, 真っ白).",
+      "accent": 0
+    },
+    {
+      "key": "mnn:30:33",
+      "kana": "すみ",
+      "kanji": "隅",
+      "context": "",
+      "mean": "corner (inside a room or space)",
+      "cat": "noun",
+      "type": "",
+      "trans": "",
+      "dict": "隅",
+      "dictRead": "すみ",
+      "audio": "/Audio/minnamoi/bai30/00010110000010011.mp3",
+      "levels": {
+        "N5": [
+          "<ruby>部屋<rt>へや</rt></ruby>の <ruby>隅<rt>すみ</rt></ruby>に <ruby>箱<rt>はこ</rt></ruby>が あります。",
+          "There's a box in the corner of the room."
+        ],
+        "N4": [
+          "ごみ<ruby>箱<rt>ばこ</rt></ruby>を <ruby>隅<rt>すみ</rt></ruby>に <ruby>置<rt>お</rt></ruby>いてください。",
+          "Please put the trash can in the corner."
+        ],
+        "N3": [
+          "<ruby>掃除<rt>そうじ</rt></ruby>のときは、<ruby>部屋<rt>へや</rt></ruby>の <ruby>隅<rt>すみ</rt></ruby>まで きれいにするようにしています。",
+          "When cleaning, I make a point of getting even the corners of the room clean."
+        ],
+        "N2": [
+          "<ruby>会場<rt>かいじょう</rt></ruby>の <ruby>隅<rt>すみ</rt></ruby>に <ruby>立<rt>た</rt></ruby>っていた <ruby>彼女<rt>かのじょ</rt></ruby>に、<ruby>誰<rt>だれ</rt></ruby>ひとり <ruby>気<rt>き</rt></ruby>づかなかった。",
+          "Not a single person noticed her standing in the corner of the venue."
+        ],
+        "N1": [
+          "<ruby>資料<rt>しりょう</rt></ruby>を <ruby>隅<rt>すみ</rt></ruby>から <ruby>隅<rt>すみ</rt></ruby>まで <ruby>読<rt>よ</rt></ruby>み<ruby>込<rt>こ</rt></ruby>んだうえで <ruby>臨<rt>のぞ</rt></ruby>まなければ、<ruby>鋭<rt>するど</rt></ruby>い <ruby>質問<rt>しつもん</rt></ruby>には <ruby>太刀打<rt>たちう</rt></ruby>ちできない。",
+          "Unless you go in having read the materials from corner to corner, you can't hold your own against sharp questions."
+        ]
+      },
+      "mnem": "\"sumi\" — you <b>SQUEE</b>ze into the corner: 隅 = an inside corner.",
+      "tip": "隅 = an inside corner (of a room / space). 角 (かど) = an outside corner / street corner. 隅から隅まで = \"from corner to corner, thoroughly.\"",
+      "accent": 1
+    },
+    {
+      "key": "mnn:30:34",
+      "kana": "まだ",
+      "kanji": "",
+      "context": "",
+      "mean": "still; (with negative) not yet",
+      "cat": "adverb",
+      "type": "",
+      "trans": "",
+      "dict": "まだ",
+      "dictRead": "まだ",
+      "audio": "/Audio/minnamoi/bai30/00010110000010100.mp3",
+      "levels": {
+        "N5": [
+          "<ruby>雨<rt>あめ</rt></ruby>は まだ <ruby>降<rt>ふ</rt></ruby>っています。",
+          "It's still raining."
+        ],
+        "N4": [
+          "まだ <ruby>使<rt>つか</rt></ruby>っていますから、そのままにしておいてください。",
+          "I'm still using it, so please leave it as it is."
+        ],
+        "N3": [
+          "<ruby>宿題<rt>しゅくだい</rt></ruby>が まだ <ruby>終<rt>お</rt></ruby>わらないので、<ruby>今夜<rt>こんや</rt></ruby>は <ruby>頑張<rt>がんば</rt></ruby>るようにしています。",
+          "My homework still isn't done, so I'm making myself work hard tonight."
+        ],
+        "N2": [
+          "もう <ruby>十分<rt>じゅうぶん</rt></ruby>だと <ruby>思<rt>おも</rt></ruby>っていたのに、やるべきことは まだ <ruby>山<rt>やま</rt></ruby>ほど <ruby>残<rt>のこ</rt></ruby>っていた。",
+          "I'd thought that was plenty, yet there was still a mountain of things left to do."
+        ],
+        "N1": [
+          "<ruby>成功<rt>せいこう</rt></ruby>を <ruby>収<rt>おさ</rt></ruby>めてなお、<ruby>彼<rt>かれ</rt></ruby>は まだ <ruby>満<rt>み</rt></ruby>ち<ruby>足<rt>た</rt></ruby>りることを <ruby>知<rt>し</rt></ruby>らず、さらなる <ruby>高<rt>たか</rt></ruby>みを <ruby>目指<rt>めざ</rt></ruby>し<ruby>続<rt>つづ</rt></ruby>けた。",
+          "Even having achieved success, he still knew no contentment and kept aiming for ever greater heights."
+        ]
+      },
+      "mnem": "\"mada\" — there's <b>MO</b>re to come, not done yet: まだ = still / not yet.",
+      "tip": "まだ = \"still\" (with affirmative: まだ〜ている \"still ~ing\") or \"not yet\" (with negative: まだ〜ていない). Opposite もう (\"already / no longer\"). L30's まだ〜ています = still in progress.",
+      "accent": 1
+    }
+  ],
+  "grammar": [
+    {
+      "pattern": "〜てあります (has been done — a deliberate, lasting state)",
+      "structure": "N が V(他動詞・て形)＋あります",
+      "explain": "Attach あります to the て-form of a TRANSITIVE verb to describe a state that someone deliberately created and that still remains: 壁に絵が掛けてあります (\"a picture has been hung on the wall [and is still there]\"). The thing acted on is marked with が. Unlike 〜ています with an intransitive verb (窓が閉まっています, which just reports a state), 〜てあります implies an agent did it ON PURPOSE, usually for a reason. Use it to say what has been set up or prepared and is still in place.",
+      "examples": [
+        {
+          "jp": "ふうとうに <ruby>切手<rt>きって</rt></ruby>が <ruby>貼<rt>は</rt></ruby>ってあります。",
+          "en": "A stamp has been stuck on the envelope."
+        },
+        {
+          "jp": "<ruby>壁<rt>かべ</rt></ruby>に <ruby>鏡<rt>かがみ</rt></ruby>が <ruby>掛<rt>か</rt></ruby>けてあります。",
+          "en": "A mirror has been hung on the wall."
+        },
+        {
+          "jp": "<ruby>棚<rt>たな</rt></ruby>の <ruby>上<rt>うえ</rt></ruby>に <ruby>人形<rt>にんぎょう</rt></ruby>が <ruby>飾<rt>かざ</rt></ruby>ってあります。",
+          "en": "A doll has been displayed on the shelf."
+        },
+        {
+          "jp": "<ruby>池<rt>いけ</rt></ruby>の <ruby>周<rt>まわ</rt></ruby>りに <ruby>木<rt>き</rt></ruby>が <ruby>植<rt>う</rt></ruby>えてあります。",
+          "en": "Trees have been planted around the pond."
+        }
+      ]
+    },
+    {
+      "pattern": "〜ておきます (do in advance / do ahead of time)",
+      "structure": "V(て形)＋おきます　（casual: 〜とく）",
+      "explain": "Attach おきます to the て-form to mean doing something IN ADVANCE, as preparation for a later purpose: 旅行の前に、切符を買っておきます (\"I'll buy the tickets ahead of the trip\"). Very common with 〜前に and 〜までに clauses. In casual speech 〜ておく contracts to 〜とく (買っとく, やっとく). The nuance is \"get it done now so it's ready later.\"",
+      "examples": [
+        {
+          "jp": "<ruby>旅行<rt>りょこう</rt></ruby>の <ruby>前<rt>まえ</rt></ruby>に、ホテルを <ruby>予約<rt>よやく</rt></ruby>しておきます。",
+          "en": "I'll reserve a hotel before the trip."
+        },
+        {
+          "jp": "<ruby>会議<rt>かいぎ</rt></ruby>の <ruby>前<rt>まえ</rt></ruby>に、<ruby>資料<rt>しりょう</rt></ruby>を コピーしておきます。",
+          "en": "I'll copy the materials before the meeting."
+        },
+        {
+          "jp": "<ruby>来週<rt>らいしゅう</rt></ruby>の <ruby>講義<rt>こうぎ</rt></ruby>までに、この <ruby>本<rt>ほん</rt></ruby>を <ruby>読<rt>よ</rt></ruby>んでおいてください。",
+          "en": "Please read this book before next week's lecture."
+        },
+        {
+          "jp": "<ruby>授業<rt>じゅぎょう</rt></ruby>の <ruby>前<rt>まえ</rt></ruby>に、<ruby>予習<rt>よしゅう</rt></ruby>しておきます。",
+          "en": "I'll prepare the lesson in advance before class."
+        }
+      ]
+    },
+    {
+      "pattern": "〜ておきます (leave a state as it is) ／ そのままにしておく",
+      "structure": "V(て形)＋おきます（現状維持）・そのまま＋にしておく",
+      "explain": "The same 〜ておく also means deliberately leaving something in its present state instead of undoing it: 暑いですから、窓を開けておいてください (\"it's hot, so please leave the window open\"). そのままにしておく = \"leave it exactly as it is.\" Here おく isn't preparation for later but a conscious choice to keep the current state — often answering an offer to tidy/close/turn off something with \"no, leave it.\"",
+      "examples": [
+        {
+          "jp": "<ruby>暑<rt>あつ</rt></ruby>いですから、<ruby>窓<rt>まど</rt></ruby>を <ruby>開<rt>あ</rt></ruby>けておいてください。",
+          "en": "It's hot, so please leave the window open."
+        },
+        {
+          "jp": "まだ <ruby>使<rt>つか</rt></ruby>っていますから、そのままにしておいてください。",
+          "en": "I'm still using it, so please leave it as it is."
+        },
+        {
+          "jp": "ニュースを <ruby>見<rt>み</rt></ruby>ますから、テレビを つけておいてください。",
+          "en": "I'm going to watch the news, so please leave the TV on."
+        },
+        {
+          "jp": "あとで <ruby>使<rt>つか</rt></ruby>いますから、その <ruby>箱<rt>はこ</rt></ruby>は <ruby>置<rt>お</rt></ruby>いておいてください。",
+          "en": "I'll use it later, so please leave that box where it is."
+        }
+      ]
+    },
+    {
+      "pattern": "まだ〜ています (still ~ing / not yet finished)",
+      "structure": "まだ ＋ V(て形)＋います　⇔　もう ＋ V(た形)",
+      "explain": "まだ with 〜ています says an action or state is STILL ongoing: 雨がまだ降っています (\"it's still raining\"). It's the natural answer to もう〜ましたか (\"have you already ~?\") — you reply いいえ、まだ〜ています (\"no, I'm still ~ing\"), NOT まだ〜ていません. Contrast with もう (\"already\"): もう食べました ↔ まだ食べています.",
+      "examples": [
+        {
+          "jp": "<ruby>雨<rt>あめ</rt></ruby>は もう やみましたか。…いいえ、まだ <ruby>降<rt>ふ</rt></ruby>っています。",
+          "en": "Has the rain stopped? …No, it's still raining."
+        },
+        {
+          "jp": "この はさみを しまいましょうか。…いいえ、まだ <ruby>使<rt>つか</rt></ruby>っていますから、そのままにしておいてください。",
+          "en": "Shall I put these scissors away? …No, I'm still using them, so please leave them there."
+        },
+        {
+          "jp": "<ruby>宿題<rt>しゅくだい</rt></ruby>は もう <ruby>終<rt>お</rt></ruby>わりましたか。…いいえ、まだ やっています。",
+          "en": "Is your homework done yet? …No, I'm still doing it."
+        }
+      ]
+    }
+  ],
+  "examples": [
+    {
+      "jp": "<ruby>交番<rt>こうばん</rt></ruby>に <ruby>町<rt>まち</rt></ruby>の <ruby>地図<rt>ちず</rt></ruby>が <ruby>貼<rt>は</rt></ruby>ってあります。",
+      "en": "A town map is posted at the police box."
+    },
+    {
+      "jp": "<ruby>旅行<rt>りょこう</rt></ruby>の <ruby>前<rt>まえ</rt></ruby>に、インターネットで いろいろ <ruby>調<rt>しら</rt></ruby>べておきます。",
+      "en": "Before the trip, I look various things up online in advance."
+    },
+    {
+      "jp": "<ruby>棚<rt>たな</rt></ruby>の <ruby>上<rt>うえ</rt></ruby>に <ruby>人形<rt>にんぎょう</rt></ruby>が <ruby>飾<rt>かざ</rt></ruby>ってあります。",
+      "en": "A doll is displayed on the shelf."
+    },
+    {
+      "jp": "セロテープは どこですか。…あの <ruby>引<rt>ひ</rt></ruby>き<ruby>出<rt>だ</rt></ruby>しに しまってありますよ。",
+      "en": "Where's the tape? …It's put away in that drawer."
+    },
+    {
+      "jp": "<ruby>来月<rt>らいげつ</rt></ruby>の <ruby>出張<rt>しゅっちょう</rt></ruby>ですが、ホテルを <ruby>予約<rt>よやく</rt></ruby>しておきましょうか。…ええ、お<ruby>願<rt>ねが</rt></ruby>いします。",
+      "en": "About next month's business trip — shall I book the hotel in advance? …Yes, please."
+    },
+    {
+      "jp": "はさみを <ruby>使<rt>つか</rt></ruby>ったら、<ruby>元<rt>もと</rt></ruby>の <ruby>所<rt>ところ</rt></ruby>に <ruby>戻<rt>もど</rt></ruby>しておいてください。",
+      "en": "After you use the scissors, please put them back where they were."
+    },
+    {
+      "jp": "<ruby>資料<rt>しりょう</rt></ruby>を <ruby>片<rt>かた</rt></ruby>づけても いいですか。…いいえ、まだ <ruby>使<rt>つか</rt></ruby>っていますから、そのままにしておいてください。",
+      "en": "May I clear away the documents? …No, I'm still using them, so please leave them as they are."
+    },
+    {
+      "jp": "<ruby>壁<rt>かべ</rt></ruby>に <ruby>花<rt>はな</rt></ruby>や <ruby>動物<rt>どうぶつ</rt></ruby>の <ruby>絵<rt>え</rt></ruby>が かいてあるんです。",
+      "en": "There are pictures of flowers and animals painted on the wall."
+    }
+  ],
+  "conversation": {
+    "title": "<ruby>非常袋<rt>ひじょうぶくろ</rt></ruby>を <ruby>準備<rt>じゅんび</rt></ruby>しておきます (I'll get an emergency bag ready)",
+    "audio": "/Audio/minnahonsatsu2/13.mp3",
+    "lines": [
+      {
+        "role": "客",
+        "jp": "こんにちは。",
+        "en": "Hello."
+      },
+      {
+        "role": "家の人",
+        "jp": "いらっしゃい。さあ、どうぞ。",
+        "en": "Welcome. Come on in."
+      },
+      {
+        "role": "客",
+        "jp": "<ruby>大<rt>おお</rt></ruby>きい リュックが <ruby>置<rt>お</rt></ruby>いてありますね。<ruby>山<rt>やま</rt></ruby>へ <ruby>行<rt>い</rt></ruby>くんですか。",
+        "en": "There's a big backpack sitting there. Are you going to the mountains?"
+      },
+      {
+        "role": "家の人",
+        "jp": "いいえ。<ruby>非常袋<rt>ひじょうぶくろ</rt></ruby>ですよ。",
+        "en": "No. It's an emergency bag."
+      },
+      {
+        "role": "客",
+        "jp": "<ruby>非常袋<rt>ひじょうぶくろ</rt></ruby>？<ruby>何<rt>なん</rt></ruby>ですか。",
+        "en": "An emergency bag? What's that?"
+      },
+      {
+        "role": "家の人",
+        "jp": "<ruby>非常時<rt>ひじょうじ</rt></ruby>に <ruby>使<rt>つか</rt></ruby>う <ruby>物<rt>もの</rt></ruby>を <ruby>入<rt>い</rt></ruby>れておく <ruby>袋<rt>ふくろ</rt></ruby>です。<ruby>電気<rt>でんき</rt></ruby>や ガスが <ruby>止<rt>と</rt></ruby>まっても、<ruby>三日<rt>みっか</rt></ruby>ぐらい <ruby>生活<rt>せいかつ</rt></ruby>できる <ruby>物<rt>もの</rt></ruby>が <ruby>入<rt>い</rt></ruby>れてあるんです。",
+        "en": "It's a bag you keep things for an emergency in. It has supplies to get by for about three days even if the electricity or gas goes out."
+      },
+      {
+        "role": "客",
+        "jp": "<ruby>水<rt>みず</rt></ruby>や <ruby>食<rt>た</rt></ruby>べ<ruby>物<rt>もの</rt></ruby>ですか。",
+        "en": "Water and food, you mean?"
+      },
+      {
+        "role": "家の人",
+        "jp": "ええ、ほかにも いろいろ ありますよ。<ruby>懐中電灯<rt>かいちゅうでんとう</rt></ruby>とか、ラジオとか…。",
+        "en": "Yes, and lots of other things too — a flashlight, a radio, and so on."
+      },
+      {
+        "role": "客",
+        "jp": "わたしも <ruby>準備<rt>じゅんび</rt></ruby>しておかないと。",
+        "en": "I'd better get one ready too."
+      },
+      {
+        "role": "家の人",
+        "jp": "<ruby>非常袋<rt>ひじょうぶくろ</rt></ruby>は スーパーでも <ruby>売<rt>う</rt></ruby>っていますよ。",
+        "en": "They sell emergency bags at the supermarket, you know."
+      },
+      {
+        "role": "客",
+        "jp": "そうですか。じゃ、<ruby>買<rt>か</rt></ruby>っておきます。",
+        "en": "Really? Then I'll go buy one."
+      }
+    ]
+  }
+}

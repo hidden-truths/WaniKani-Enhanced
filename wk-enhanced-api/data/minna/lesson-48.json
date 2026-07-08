@@ -1,0 +1,572 @@
+{
+  "lesson": 48,
+  "title": "Lesson 48",
+  "theme": "The causative form 〜（さ）せる — making and letting someone do something (person marked with を for intransitive verbs, に for transitive), and the humble 〜（さ）せて いただけませんか for asking permission",
+  "source": {
+    "name": "vnjpclub.com",
+    "vocabUrl": "https://www.vnjpclub.com/en/minna-no-nihongo/lesson-48-vocabulary.html",
+    "grammarUrl": "https://www.vnjpclub.com/en/minna-no-nihongo/lesson-48-grammar.html",
+    "note": "Vocabulary, native-speaker audio, and example sentences aggregated from vnjpclub.com (Minna no Nihongo 第2版). For personal study."
+  },
+  "vocab": [
+    {
+      "key": "mnn:48:0",
+      "kana": "おろします",
+      "kanji": "降ろします",
+      "context": "",
+      "mean": "to lower, unload, drop (someone) off",
+      "cat": "verb",
+      "type": "godan",
+      "trans": "t",
+      "dict": "降ろす",
+      "dictRead": "おろす",
+      "audio": "/Audio/minnamoi/bai48/00010111101000100.mp3",
+      "levels": {
+        "N5": [
+          "<ruby>荷物<rt>にもつ</rt></ruby>を<ruby>車<rt>くるま</rt></ruby>から<ruby>降<rt>お</rt></ruby>ろします。",
+          "I unload the luggage from the car."
+        ],
+        "N4": [
+          "<ruby>重<rt>おも</rt></ruby>いから、ここで<ruby>荷物<rt>にもつ</rt></ruby>を<ruby>降<rt>お</rt></ruby>ろしましょう。",
+          "It's heavy, so let's put the luggage down here."
+        ],
+        "N3": [
+          "<ruby>子<rt>こ</rt></ruby>どもを<ruby>学校<rt>がっこう</rt></ruby>の<ruby>前<rt>まえ</rt></ruby>で<ruby>降<rt>お</rt></ruby>ろすようにしています。",
+          "I make a point of dropping my child off in front of the school."
+        ],
+        "N2": [
+          "<ruby>客<rt>きゃく</rt></ruby>を<ruby>降<rt>お</rt></ruby>ろしたとたん、タクシーはまた<ruby>走<rt>はし</rt></ruby>り<ruby>出<rt>だ</rt></ruby>した。",
+          "The moment it let the passenger off, the taxi took off again."
+        ],
+        "N1": [
+          "<ruby>長年<rt>ながねん</rt></ruby>の<ruby>重荷<rt>おもに</rt></ruby>をようやく<ruby>肩<rt>かた</rt></ruby>から<ruby>降<rt>お</rt></ruby>ろすことができ、<ruby>彼<rt>かれ</rt></ruby>は<ruby>深<rt>ふか</rt></ruby>く<ruby>息<rt>いき</rt></ruby>をついた。",
+          "Finally able to lower the heavy burden from his shoulders, he breathed a deep sigh."
+        ]
+      },
+      "mnem": "おろす — say \"oh, rows\": you set down rows of boxes as you 降ろす, unload them.",
+      "tip": "降ろす (godan, transitive) — the thing lowered/unloaded takes を. It's the transitive partner of 降りる (おりる, intransitive \"to get off/descend\"). Written 下ろす for \"lower\" or \"withdraw money\" (お金を下ろす).",
+      "accent": 2
+    },
+    {
+      "key": "mnn:48:1",
+      "kana": "とどけます",
+      "kanji": "届けます",
+      "context": "",
+      "mean": "to deliver, report (to the authorities)",
+      "cat": "verb",
+      "type": "ichidan",
+      "trans": "t",
+      "dict": "届ける",
+      "dictRead": "とどける",
+      "audio": "/Audio/minnamoi/bai48/00010111101000101.mp3",
+      "levels": {
+        "N5": [
+          "<ruby>手紙<rt>てがみ</rt></ruby>を<ruby>届<rt>とど</rt></ruby>けます。",
+          "I deliver the letter."
+        ],
+        "N4": [
+          "<ruby>荷物<rt>にもつ</rt></ruby>を<ruby>家<rt>いえ</rt></ruby>まで<ruby>届<rt>とど</rt></ruby>けてください。",
+          "Please deliver the package to my house."
+        ],
+        "N3": [
+          "<ruby>忘<rt>わす</rt></ruby>れ<ruby>物<rt>もの</rt></ruby>を<ruby>交番<rt>こうばん</rt></ruby>に<ruby>届<rt>とど</rt></ruby>けたら、お<ruby>礼<rt>れい</rt></ruby>を<ruby>言<rt>い</rt></ruby>われました。",
+          "When I turned the lost item in at the police box, I was thanked."
+        ],
+        "N2": [
+          "<ruby>被災地<rt>ひさいち</rt></ruby>に<ruby>支援<rt>しえん</rt></ruby><ruby>物資<rt>ぶっし</rt></ruby>を<ruby>届<rt>とど</rt></ruby>けようと、<ruby>多<rt>おお</rt></ruby>くのボランティアが<ruby>集<rt>あつ</rt></ruby>まった。",
+          "Many volunteers gathered, determined to deliver relief supplies to the disaster area."
+        ],
+        "N1": [
+          "<ruby>作<rt>つく</rt></ruby>り<ruby>手<rt>て</rt></ruby>の<ruby>思<rt>おも</rt></ruby>いを<ruby>一人<rt>ひとり</rt></ruby>ひとりの<ruby>心<rt>こころ</rt></ruby>に<ruby>届<rt>とど</rt></ruby>けてこそ、この<ruby>仕事<rt>しごと</rt></ruby>の<ruby>意味<rt>いみ</rt></ruby>がある。",
+          "It is precisely by delivering the maker's feelings to each individual's heart that this work has meaning."
+        ]
+      },
+      "mnem": "とどく (to reach) → とどける (make it reach): you carry the parcel until it 届ける, is delivered.",
+      "tip": "届ける (ichidan, transitive) is the partner of 届く (とどく, intransitive \"to reach/arrive\"): 手紙が届く vs 手紙を届ける. It also means to report/notify officially (役所に届ける = file a notification).",
+      "accent": 3
+    },
+    {
+      "key": "mnn:48:2",
+      "kana": "せわをします",
+      "kanji": "世話をします",
+      "context": "",
+      "mean": "to take care of, look after",
+      "cat": "verb",
+      "type": "irregular",
+      "trans": "t",
+      "dict": "世話をする",
+      "dictRead": "せわをする",
+      "audio": "/Audio/minnamoi/bai48/00010111101000110.mp3",
+      "levels": {
+        "N5": [
+          "<ruby>犬<rt>いぬ</rt></ruby>の<ruby>世話<rt>せわ</rt></ruby>をします。",
+          "I take care of the dog."
+        ],
+        "N4": [
+          "<ruby>妹<rt>いもうと</rt></ruby>が<ruby>病気<rt>びょうき</rt></ruby>なので、<ruby>私<rt>わたし</rt></ruby>が<ruby>世話<rt>せわ</rt></ruby>をしています。",
+          "My little sister is ill, so I'm looking after her."
+        ],
+        "N3": [
+          "<ruby>留守<rt>るす</rt></ruby>の<ruby>間<rt>あいだ</rt></ruby>、<ruby>隣<rt>となり</rt></ruby>の<ruby>人<rt>ひと</rt></ruby>に<ruby>猫<rt>ねこ</rt></ruby>の<ruby>世話<rt>せわ</rt></ruby>をしてもらうことにしました。",
+          "I decided to have my neighbor look after the cat while I'm away."
+        ],
+        "N2": [
+          "<ruby>親<rt>おや</rt></ruby>の<ruby>世話<rt>せわ</rt></ruby>をするために、<ruby>彼女<rt>かのじょ</rt></ruby>は<ruby>仕事<rt>しごと</rt></ruby>を<ruby>辞<rt>や</rt></ruby>めざるを<ruby>得<rt>え</rt></ruby>なかった。",
+          "In order to care for her parents, she had no choice but to quit her job."
+        ],
+        "N1": [
+          "どんなに<ruby>手<rt>て</rt></ruby>がかかろうとも、<ruby>最後<rt>さいご</rt></ruby>まで<ruby>責任<rt>せきにん</rt></ruby>を<ruby>持<rt>も</rt></ruby>って<ruby>世話<rt>せわ</rt></ruby>をするのが<ruby>飼<rt>か</rt></ruby>い<ruby>主<rt>ぬし</rt></ruby>の<ruby>務<rt>つと</rt></ruby>めだ。",
+          "No matter how much trouble it is, caring for it responsibly to the very end is the owner's duty."
+        ]
+      },
+      "mnem": "世話 (せわ) — \"say-wah\": to 'sew' someone into your care is to 世話をする, look after them.",
+      "tip": "世話をする = to actively look after someone/something (子どもの世話をする). Distinguish from 世話になる (せわになる, \"to be in someone's care / be indebted to them\") — the receiving side; お世話になりました is the set phrase of thanks.",
+      "accent": 2
+    },
+    {
+      "key": "mnn:48:3",
+      "kana": "ろくおんします",
+      "kanji": "録音します",
+      "context": "",
+      "mean": "to record (sound/audio)",
+      "cat": "verb",
+      "type": "irregular",
+      "trans": "t",
+      "dict": "録音する",
+      "dictRead": "ろくおんする",
+      "audio": "/Audio/minnamoi/bai48/00010111101000111.mp3",
+      "levels": {
+        "N5": [
+          "<ruby>音楽<rt>おんがく</rt></ruby>を<ruby>録音<rt>ろくおん</rt></ruby>します。",
+          "I record the music."
+        ],
+        "N4": [
+          "<ruby>授業<rt>じゅぎょう</rt></ruby>を<ruby>録音<rt>ろくおん</rt></ruby>してもいいですか。",
+          "May I record the class?"
+        ],
+        "N3": [
+          "<ruby>大事<rt>だいじ</rt></ruby>な<ruby>会議<rt>かいぎ</rt></ruby>なので、<ruby>内容<rt>ないよう</rt></ruby>を<ruby>全部<rt>ぜんぶ</rt></ruby><ruby>録音<rt>ろくおん</rt></ruby>しておきました。",
+          "Since it was an important meeting, I recorded all of it in advance."
+        ],
+        "N2": [
+          "<ruby>本人<rt>ほんにん</rt></ruby>に<ruby>断<rt>ことわ</rt></ruby>りなく<ruby>会話<rt>かいわ</rt></ruby>を<ruby>録音<rt>ろくおん</rt></ruby>するのは、<ruby>法律<rt>ほうりつ</rt></ruby>に<ruby>触<rt>ふ</rt></ruby>れかねない。",
+          "Recording a conversation without the person's consent could well run afoul of the law."
+        ],
+        "N1": [
+          "<ruby>名<rt>めい</rt></ruby><ruby>演奏<rt>えんそう</rt></ruby>を<ruby>録音<rt>ろくおん</rt></ruby>したその<ruby>一枚<rt>いちまい</rt></ruby>は、<ruby>今<rt>いま</rt></ruby>なお<ruby>多<rt>おお</rt></ruby>くの<ruby>音楽家<rt>おんがくか</rt></ruby>に<ruby>語<rt>かた</rt></ruby>り<ruby>継<rt>つ</rt></ruby>がれている。",
+          "That single record, which captured a masterful performance, is still spoken of by many musicians to this day."
+        ]
+      },
+      "mnem": "録音 = 録 (record) + 音 (sound): to 'record the sound,' 録音する.",
+      "tip": "録音する (irregular する-verb, transitive) = to record audio; the thing recorded takes を. For video, use 録画する (ろくがする) — both share 録 (record). The recording itself is a 録音.",
+      "accent": 0
+    },
+    {
+      "key": "mnn:48:4",
+      "kana": "いや",
+      "kanji": "嫌",
+      "context": "",
+      "mean": "disagreeable, unwilling, reluctant",
+      "cat": "adjective",
+      "type": "na-adj",
+      "trans": "",
+      "dict": "嫌",
+      "dictRead": "いや",
+      "audio": "/Audio/minnamoi/bai48/00010111101001000.mp3",
+      "levels": {
+        "N5": [
+          "<ruby>私<rt>わたし</rt></ruby>は<ruby>納豆<rt>なっとう</rt></ruby>が<ruby>嫌<rt>いや</rt></ruby>です。",
+          "I don't like natto."
+        ],
+        "N4": [
+          "<ruby>嫌<rt>いや</rt></ruby>だったら、<ruby>行<rt>い</rt></ruby>かなくてもいいですよ。",
+          "If you don't want to, you don't have to go."
+        ],
+        "N3": [
+          "<ruby>子<rt>こ</rt></ruby>どもは<ruby>野菜<rt>やさい</rt></ruby>が<ruby>嫌<rt>いや</rt></ruby>で、なかなか<ruby>食<rt>た</rt></ruby>べようとしません。",
+          "My child dislikes vegetables and won't try to eat them."
+        ],
+        "N2": [
+          "どんなに<ruby>嫌<rt>いや</rt></ruby>でも、やらなければならない<ruby>仕事<rt>しごと</rt></ruby>はある。",
+          "No matter how much you hate it, there is work that simply has to be done."
+        ],
+        "N1": [
+          "<ruby>嫌<rt>いや</rt></ruby>な<ruby>顔<rt>かお</rt></ruby><ruby>一<rt>ひと</rt></ruby>つせず、<ruby>彼<rt>かれ</rt></ruby>は<ruby>面倒<rt>めんどう</rt></ruby>な<ruby>頼<rt>たの</rt></ruby>みごとを<ruby>引<rt>ひ</rt></ruby>き<ruby>受<rt>う</rt></ruby>けてくれた。",
+          "Without so much as a look of displeasure, he took on the troublesome request."
+        ]
+      },
+      "mnem": "いや — a sharp \"iya!\" is exactly the cry you let out when something is 嫌, disagreeable.",
+      "tip": "嫌 (な-adjective) = distasteful/unwilling; 〜が嫌 marks what you dislike. Casual いや／いやだ = \"no / I don't want to.\" Related but distinct: 嫌い (きらい, \"to dislike/hate\") — 嫌 leans toward \"unpleasant/reluctant.\"",
+      "accent": 2
+    },
+    {
+      "key": "mnn:48:5",
+      "kana": "じゅく",
+      "kanji": "塾",
+      "context": "",
+      "mean": "cram school, private tutoring school",
+      "cat": "noun",
+      "type": "",
+      "trans": "",
+      "dict": "塾",
+      "dictRead": "じゅく",
+      "audio": "/Audio/minnamoi/bai48/00010111101001001.mp3",
+      "levels": {
+        "N5": [
+          "<ruby>弟<rt>おとうと</rt></ruby>は<ruby>塾<rt>じゅく</rt></ruby>へ<ruby>行<rt>い</rt></ruby>きます。",
+          "My little brother goes to cram school."
+        ],
+        "N4": [
+          "<ruby>息子<rt>むすこ</rt></ruby>は<ruby>毎日<rt>まいにち</rt></ruby><ruby>塾<rt>じゅく</rt></ruby>で<ruby>勉強<rt>べんきょう</rt></ruby>しています。",
+          "My son studies at cram school every day."
+        ],
+        "N3": [
+          "<ruby>成績<rt>せいせき</rt></ruby>を<ruby>上<rt>あ</rt></ruby>げるために、<ruby>子<rt>こ</rt></ruby>どもを<ruby>塾<rt>じゅく</rt></ruby>に<ruby>通<rt>かよ</rt></ruby>わせています。",
+          "To raise their grades, I have my child attend cram school."
+        ],
+        "N2": [
+          "<ruby>塾<rt>じゅく</rt></ruby>に<ruby>通<rt>かよ</rt></ruby>えば<ruby>通<rt>かよ</rt></ruby>うほど、かえって<ruby>遊<rt>あそ</rt></ruby>ぶ<ruby>時間<rt>じかん</rt></ruby>がなくなってしまう。",
+          "Ironically, the more one attends cram school, the less free time one has to play."
+        ],
+        "N1": [
+          "<ruby>受験<rt>じゅけん</rt></ruby><ruby>競争<rt>きょうそう</rt></ruby>の<ruby>激化<rt>げきか</rt></ruby>を<ruby>背景<rt>はいけい</rt></ruby>に、<ruby>塾<rt>じゅく</rt></ruby>はもはや<ruby>教育<rt>きょういく</rt></ruby>に<ruby>欠<rt>か</rt></ruby>かせない<ruby>存在<rt>そんざい</rt></ruby>となっている。",
+          "Against the backdrop of intensifying exam competition, cram schools have become an indispensable part of education."
+        ]
+      },
+      "mnem": "塾 (じゅく) — \"juku\": picture kids 'juke'-ing in for extra study after school at 塾, cram school.",
+      "tip": "塾 (じゅく) = a private after-school cram school for exam study (受験勉強). A student there is a 塾生 (じゅくせい); contrast the regular 学校 (がっこう).",
+      "accent": 1
+    },
+    {
+      "key": "mnn:48:6",
+      "kana": "せいと",
+      "kanji": "生徒",
+      "context": "",
+      "mean": "pupil (elementary–high-school student)",
+      "cat": "noun",
+      "type": "",
+      "trans": "",
+      "dict": "生徒",
+      "dictRead": "せいと",
+      "audio": "/Audio/minnamoi/bai48/00010111101001010.mp3",
+      "levels": {
+        "N5": [
+          "<ruby>私<rt>わたし</rt></ruby>はこの<ruby>学校<rt>がっこう</rt></ruby>の<ruby>生徒<rt>せいと</rt></ruby>です。",
+          "I am a pupil at this school."
+        ],
+        "N4": [
+          "このクラスには<ruby>生徒<rt>せいと</rt></ruby>が30<ruby>人<rt>にん</rt></ruby>います。",
+          "There are 30 pupils in this class."
+        ],
+        "N3": [
+          "いい<ruby>先生<rt>せんせい</rt></ruby>は、<ruby>生徒<rt>せいと</rt></ruby>に<ruby>自由<rt>じゆう</rt></ruby>に<ruby>意見<rt>いけん</rt></ruby>を<ruby>言<rt>い</rt></ruby>わせるものです。",
+          "A good teacher lets the pupils express their opinions freely."
+        ],
+        "N2": [
+          "<ruby>生徒<rt>せいと</rt></ruby><ruby>一人<rt>ひとり</rt></ruby>ひとりの<ruby>個性<rt>こせい</rt></ruby>を<ruby>伸<rt>の</rt></ruby>ばしてこそ、<ruby>教育<rt>きょういく</rt></ruby>と<ruby>言<rt>い</rt></ruby>える。",
+          "Only by drawing out the individuality of each pupil can it truly be called education."
+        ],
+        "N1": [
+          "<ruby>恩師<rt>おんし</rt></ruby>が<ruby>生徒<rt>せいと</rt></ruby>に<ruby>注<rt>そそ</rt></ruby>いだ<ruby>情熱<rt>じょうねつ</rt></ruby>は、<ruby>卒業<rt>そつぎょう</rt></ruby>して<ruby>何年<rt>なんねん</rt></ruby><ruby>経<rt>た</rt></ruby>とうとも<ruby>色<rt>いろ</rt></ruby>あせることがない。",
+          "The passion a beloved teacher poured into the pupils never fades, no matter how many years pass after graduation."
+        ]
+      },
+      "mnem": "生徒 = 生 (student) + 徒 (follower): a 'student-follower,' 生徒, is a pupil.",
+      "tip": "生徒 (せいと) = a pupil at 小・中・高 (elementary–high school). A university student is a 学生 (がくせい); an elementary child specifically is a 児童 (じどう). Their teacher is a 先生.",
+      "accent": 1
+    },
+    {
+      "key": "mnn:48:7",
+      "kana": "ファイル",
+      "kanji": "",
+      "context": "",
+      "mean": "file, folder (documents or computer file)",
+      "cat": "noun",
+      "type": "",
+      "trans": "",
+      "dict": "ファイル",
+      "dictRead": "ファイル",
+      "audio": "/Audio/minnamoi/bai48/00010111101001011.mp3",
+      "levels": {
+        "N5": [
+          "これは<ruby>大切<rt>たいせつ</rt></ruby>なファイルです。",
+          "This is an important file."
+        ],
+        "N4": [
+          "<ruby>書類<rt>しょるい</rt></ruby>をこのファイルに<ruby>入<rt>い</rt></ruby>れてください。",
+          "Please put the documents in this folder."
+        ],
+        "N3": [
+          "<ruby>部長<rt>ぶちょう</rt></ruby>は<ruby>私<rt>わたし</rt></ruby>に<ruby>会議<rt>かいぎ</rt></ruby>のファイルを<ruby>持<rt>も</rt></ruby>って<ruby>来<rt>こ</rt></ruby>させました。",
+          "The manager had me bring the file for the meeting."
+        ],
+        "N2": [
+          "ファイルを<ruby>整理<rt>せいり</rt></ruby>しておかないと、<ruby>必要<rt>ひつよう</rt></ruby>なときに<ruby>限<rt>かぎ</rt></ruby>って<ruby>見<rt>み</rt></ruby>つからないものだ。",
+          "If you don't keep your files organized, they're never to be found precisely when you need them."
+        ],
+        "N1": [
+          "<ruby>膨大<rt>ぼうだい</rt></ruby>なファイルの<ruby>中<rt>なか</rt></ruby>から<ruby>一<rt>ひと</rt></ruby>つの<ruby>証拠<rt>しょうこ</rt></ruby>を<ruby>探<rt>さが</rt></ruby>し<ruby>出<rt>だ</rt></ruby>すのは、<ruby>砂<rt>すな</rt></ruby>の<ruby>中<rt>なか</rt></ruby>から<ruby>針<rt>はり</rt></ruby>を<ruby>探<rt>さが</rt></ruby>すに<ruby>等<rt>ひと</rt></ruby>しい。",
+          "Finding a single piece of evidence among a vast number of files is like searching for a needle buried in sand."
+        ]
+      },
+      "mnem": "ファイル is the English \"file\" in katakana — a ファイル holds your papers (or your data).",
+      "tip": "ファイル = a document folder OR a computer file (both senses, from English). The verb ファイルする = to file. Don't confuse it with ファイト (\"fight! / go for it!\").",
+      "accent": 1
+    },
+    {
+      "key": "mnn:48:8",
+      "kana": "じゆうに",
+      "kanji": "自由に",
+      "context": "",
+      "mean": "freely",
+      "cat": "adverb",
+      "type": "",
+      "trans": "",
+      "dict": "自由に",
+      "dictRead": "じゆうに",
+      "audio": "/Audio/minnamoi/bai48/00010111101001100.mp3",
+      "levels": {
+        "N5": [
+          "<ruby>自由<rt>じゆう</rt></ruby>に<ruby>使<rt>つか</rt></ruby>ってください。",
+          "Please use it freely."
+        ],
+        "N4": [
+          "この<ruby>部屋<rt>へや</rt></ruby>は<ruby>自由<rt>じゆう</rt></ruby>に<ruby>入<rt>はい</rt></ruby>ってもいいです。",
+          "You may enter this room freely."
+        ],
+        "N3": [
+          "<ruby>先生<rt>せんせい</rt></ruby>は<ruby>生徒<rt>せいと</rt></ruby>に<ruby>好<rt>す</rt></ruby>きな<ruby>本<rt>ほん</rt></ruby>を<ruby>自由<rt>じゆう</rt></ruby>に<ruby>読<rt>よ</rt></ruby>ませています。",
+          "The teacher lets the pupils read the books they like freely."
+        ],
+        "N2": [
+          "<ruby>意見<rt>いけん</rt></ruby>を<ruby>自由<rt>じゆう</rt></ruby>に<ruby>言<rt>い</rt></ruby>える<ruby>雰囲気<rt>ふんいき</rt></ruby>があってこそ、いいアイデアが<ruby>生<rt>う</rt></ruby>まれる。",
+          "Only when there is an atmosphere in which opinions can be voiced freely do good ideas arise."
+        ],
+        "N1": [
+          "<ruby>規則<rt>きそく</rt></ruby>に<ruby>縛<rt>しば</rt></ruby>られることなく<ruby>自由<rt>じゆう</rt></ruby>に<ruby>発想<rt>はっそう</rt></ruby>できる<ruby>者<rt>もの</rt></ruby>だけが、<ruby>真<rt>しん</rt></ruby>に<ruby>新<rt>あたら</rt></ruby>しいものを<ruby>生<rt>う</rt></ruby>み<ruby>出<rt>だ</rt></ruby>せる。",
+          "Only those who can think freely, unbound by rules, can create something truly new."
+        ]
+      },
+      "mnem": "自由 = 自 (self) + 由 (cause): acting from your own self is 自由, freedom; add に and 自由に means \"freely.\"",
+      "tip": "自由 (じゆう) is a な-adjective (\"free\"); adding に makes the adverb 自由に (\"freely\"). 自由な時間 = free time. The opposite state is 不自由 (ふじゆう, \"restricted/inconvenient\").",
+      "accent": 2
+    },
+    {
+      "key": "mnn:48:9",
+      "kana": "～かん",
+      "kanji": "～間",
+      "context": "",
+      "mean": "for ~ (a span/duration of time)",
+      "cat": "noun",
+      "type": "",
+      "trans": "",
+      "dict": "～間",
+      "dictRead": "～かん",
+      "audio": "/Audio/minnamoi/bai48/00010111101001101.mp3",
+      "tip": "～間 (かん) is a suffix attached to a length of time to mean \"for that duration\": 三日間 (for three days), 一週間 (for a week), 二時間 (for two hours). Distinct from ～間 read あいだ (\"during / the interval\"), e.g. 留守の間."
+    },
+    {
+      "key": "mnn:48:10",
+      "kana": "いいことですね。",
+      "kanji": "",
+      "context": "",
+      "mean": "That's good; that's a nice thing (to hear)",
+      "cat": "expression",
+      "type": "",
+      "trans": "",
+      "dict": "いいことですね",
+      "dictRead": "いいことですね",
+      "audio": "/Audio/minnamoi/bai48/00010111101001110.mp3",
+      "tip": "いいことですね = a warm \"that's good / how nice\" said in response to someone's news or plan. いいこと = \"a good thing\"; the final ですね softens it into shared, agreeable acknowledgement."
+    }
+  ],
+  "grammar": [
+    {
+      "pattern": "Causative form 〜（さ）せる (make / let someone do)",
+      "structure": "Ⅰ(godan): 〜u → 〜a＋せる（書く→書かせる・行く→行かせる）／Ⅱ(ichidan): 〜る → 〜させる（食べる→食べさせる）／Ⅲ: する→させる・来る→来させる（こさせる）",
+      "explain": "To express making or letting someone do something, put the verb into its causative form. Group I verbs change the final -u sound to -a and add せる (書く→書かせる; あう→あわせる). Group II verbs drop る and add させる (食べる→食べさせる). The two irregulars are する→させる and 来る(くる)→来させる(こさせる). Whatever the group, the causative then conjugates like an ichidan verb (〜せます／〜せない／〜せて).",
+      "examples": [
+        {
+          "jp": "<ruby>先生<rt>せんせい</rt></ruby>は<ruby>学生<rt>がくせい</rt></ruby>に<ruby>漢字<rt>かんじ</rt></ruby>を<ruby>書<rt>か</rt></ruby>かせます。",
+          "en": "The teacher makes the students write kanji."
+        },
+        {
+          "jp": "<ruby>母<rt>はは</rt></ruby>は<ruby>子<rt>こ</rt></ruby>どもに<ruby>野菜<rt>やさい</rt></ruby>を<ruby>食<rt>た</rt></ruby>べさせます。",
+          "en": "The mother makes her child eat vegetables."
+        },
+        {
+          "jp": "<ruby>部長<rt>ぶちょう</rt></ruby>は<ruby>私<rt>わたし</rt></ruby>に<ruby>資料<rt>しりょう</rt></ruby>をコピーさせました。",
+          "en": "The manager had me copy the documents."
+        },
+        {
+          "jp": "<ruby>父<rt>ちち</rt></ruby>は<ruby>妹<rt>いもうと</rt></ruby>を<ruby>買<rt>か</rt></ruby>い<ruby>物<rt>もの</rt></ruby>に<ruby>行<rt>い</rt></ruby>かせました。",
+          "en": "My father sent my little sister shopping."
+        }
+      ]
+    },
+    {
+      "pattern": "Causative with intransitive verbs — N1は N2を V〔使役〕",
+      "structure": "N1〔causer〕は　N2〔person〕を　V(causative)。",
+      "explain": "With an INTRANSITIVE verb (行く, 立つ, 泣く, 通う, 歩く…), the person who is made or allowed to do the action is marked with を. Since an intransitive verb has no other を-object, the causee itself takes を: 部長は ミラーさんを 出張させます. Whether it reads as coercion (\"make\") or permission (\"let\") depends on context.",
+      "examples": [
+        {
+          "jp": "<ruby>母<rt>はは</rt></ruby>は<ruby>娘<rt>むすめ</rt></ruby>を<ruby>塾<rt>じゅく</rt></ruby>に<ruby>通<rt>かよ</rt></ruby>わせています。",
+          "en": "The mother has her daughter attend cram school."
+        },
+        {
+          "jp": "<ruby>私<rt>わたし</rt></ruby>は<ruby>子<rt>こ</rt></ruby>どもを<ruby>駅<rt>えき</rt></ruby>まで<ruby>歩<rt>ある</rt></ruby>かせます。",
+          "en": "I make my child walk to the station."
+        },
+        {
+          "jp": "<ruby>赤<rt>あか</rt></ruby>ちゃんを<ruby>泣<rt>な</rt></ruby>かせてしまいました。",
+          "en": "I ended up making the baby cry."
+        },
+        {
+          "jp": "コーチは<ruby>選手<rt>せんしゅ</rt></ruby>たちを<ruby>毎日<rt>まいにち</rt></ruby><ruby>走<rt>はし</rt></ruby>らせます。",
+          "en": "The coach makes the players run every day."
+        }
+      ]
+    },
+    {
+      "pattern": "Causative with transitive verbs — N1は N2に N3を V〔使役〕",
+      "structure": "N1〔causer〕は　N2〔person〕に　N3〔object〕を　V(causative)。",
+      "explain": "With a TRANSITIVE verb (飲む, 読む, 手伝う, 掃除する…), the object keeps を, so the person made or allowed to act is marked with に instead. 私は 子どもに 牛乳を 飲ませます. As before, context decides between \"make\" and \"let.\"",
+      "examples": [
+        {
+          "jp": "<ruby>母<rt>はは</rt></ruby>は<ruby>子<rt>こ</rt></ruby>どもに<ruby>牛乳<rt>ぎゅうにゅう</rt></ruby>を<ruby>飲<rt>の</rt></ruby>ませています。",
+          "en": "The mother has her child drink milk."
+        },
+        {
+          "jp": "<ruby>先生<rt>せんせい</rt></ruby>は<ruby>生徒<rt>せいと</rt></ruby>に<ruby>本<rt>ほん</rt></ruby>を<ruby>読<rt>よ</rt></ruby>ませます。",
+          "en": "The teacher has the pupils read books."
+        },
+        {
+          "jp": "<ruby>父<rt>ちち</rt></ruby>は<ruby>私<rt>わたし</rt></ruby>に<ruby>部屋<rt>へや</rt></ruby>を<ruby>掃除<rt>そうじ</rt></ruby>させました。",
+          "en": "My father made me clean the room."
+        },
+        {
+          "jp": "<ruby>娘<rt>むすめ</rt></ruby>に<ruby>朝<rt>あさ</rt></ruby>ごはんの<ruby>準備<rt>じゅんび</rt></ruby>を<ruby>手伝<rt>てつだ</rt></ruby>わせています。",
+          "en": "I have my daughter help prepare breakfast."
+        }
+      ]
+    },
+    {
+      "pattern": "〜（さ）せて いただけませんか (May I …? — humbly asking permission)",
+      "structure": "V(causative て形) ＋ いただけませんか／いただけますか。（理由＋ので、…）",
+      "explain": "The causative て-form plus いただけませんか is a very polite way to ask permission to do something yourself — literally \"won't you let me (do)?\" 早く 帰らせて いただけませんか. The reason is usually given first with 〜ので. Less formal variants are 〜させてください (\"please let me\") and 〜させてもらえますか.",
+      "examples": [
+        {
+          "jp": "すみません、ここに<ruby>車<rt>くるま</rt></ruby>を<ruby>止<rt>と</rt></ruby>めさせていただけませんか。",
+          "en": "Excuse me, may I park my car here?"
+        },
+        {
+          "jp": "<ruby>資料<rt>しりょう</rt></ruby>をコピーさせていただけませんか。",
+          "en": "May I make a copy of the materials?"
+        },
+        {
+          "jp": "<ruby>気分<rt>きぶん</rt></ruby>が<ruby>悪<rt>わる</rt></ruby>いので、<ruby>早<rt>はや</rt></ruby>く<ruby>帰<rt>かえ</rt></ruby>らせていただけませんか。",
+          "en": "I feel unwell, so could you let me go home early?"
+        },
+        {
+          "jp": "ぜひこの<ruby>仕事<rt>しごと</rt></ruby>をやらせていただけませんか。",
+          "en": "Would you please let me do this job?"
+        }
+      ]
+    }
+  ],
+  "examples": [
+    {
+      "jp": "<ruby>息子<rt>むすこ</rt></ruby>をイギリスへ<ruby>留学<rt>りゅうがく</rt></ruby>させます。",
+      "en": "I'm sending my son to study abroad in England."
+    },
+    {
+      "jp": "<ruby>娘<rt>むすめ</rt></ruby>にピアノを<ruby>習<rt>なら</rt></ruby>わせています。",
+      "en": "I have my daughter take piano lessons."
+    },
+    {
+      "jp": "このサッカー<ruby>教室<rt>きょうしつ</rt></ruby>は<ruby>練習<rt>れんしゅう</rt></ruby>が<ruby>厳<rt>きび</rt></ruby>しくて、<ruby>毎日<rt>まいにち</rt></ruby><ruby>子<rt>こ</rt></ruby>どもたちを1キロ<ruby>走<rt>はし</rt></ruby>らせています。",
+      "en": "This soccer class has tough training; they make the kids run a kilometer every day."
+    },
+    {
+      "jp": "そろそろ<ruby>失礼<rt>しつれい</rt></ruby>します。…あ、<ruby>息子<rt>むすこ</rt></ruby>に<ruby>駅<rt>えき</rt></ruby>まで<ruby>送<rt>おく</rt></ruby>らせますから、<ruby>待<rt>ま</rt></ruby>ってください。",
+      "en": "I should get going soon. …Ah, wait — I'll have my son see you to the station."
+    },
+    {
+      "jp": "<ruby>息子<rt>むすこ</rt></ruby>が<ruby>柔道<rt>じゅうどう</rt></ruby>をしたいと<ruby>言<rt>い</rt></ruby>ったので、<ruby>柔道<rt>じゅうどう</rt></ruby><ruby>教室<rt>きょうしつ</rt></ruby>に<ruby>行<rt>い</rt></ruby>かせています。",
+      "en": "Since my son said he wants to do judo, I let him go to a judo class."
+    },
+    {
+      "jp": "<ruby>伊藤<rt>いとう</rt></ruby><ruby>先生<rt>せんせい</rt></ruby>は<ruby>生徒<rt>せいと</rt></ruby>に<ruby>好<rt>す</rt></ruby>きな<ruby>本<rt>ほん</rt></ruby>を<ruby>読<rt>よ</rt></ruby>ませて、<ruby>自由<rt>じゆう</rt></ruby>に<ruby>意見<rt>いけん</rt></ruby>を<ruby>言<rt>い</rt></ruby>わせます。",
+      "en": "Mr. Ito lets the pupils read books they like and express their opinions freely."
+    },
+    {
+      "jp": "お<ruby>子<rt>こ</rt></ruby>さんにうちの<ruby>仕事<rt>しごと</rt></ruby>をさせていますか。…ええ、<ruby>食事<rt>しょくじ</rt></ruby>の<ruby>準備<rt>じゅんび</rt></ruby>を<ruby>手伝<rt>てつだ</rt></ruby>わせています。",
+      "en": "Do you have your child do chores at home? …Yes, I have them help prepare meals."
+    },
+    {
+      "jp": "ほんとうに<ruby>勉強<rt>べんきょう</rt></ruby>が<ruby>嫌<rt>いや</rt></ruby>だったら、やめさせます。",
+      "en": "If they really hate studying, I'll let them quit."
+    }
+  ],
+  "conversation": {
+    "title": "休ませて いただけませんか (May I take some time off?)",
+    "audio": "/Audio/minnahonsatsu2/67.mp3",
+    "lines": [
+      {
+        "role": "ミラー",
+        "jp": "<ruby>課長<rt>かちょう</rt></ruby>、<ruby>今<rt>いま</rt></ruby>お<ruby>忙<rt>いそが</rt></ruby>しいですか。",
+        "en": "Section chief, are you busy right now?"
+      },
+      {
+        "role": "課長",
+        "jp": "いいえ。どうぞ。",
+        "en": "No. Go ahead."
+      },
+      {
+        "role": "ミラー",
+        "jp": "ちょっとお<ruby>願<rt>ねが</rt></ruby>いがあるんですが…。",
+        "en": "I have a small favor to ask…"
+      },
+      {
+        "role": "課長",
+        "jp": "<ruby>何<rt>なん</rt></ruby>ですか。",
+        "en": "What is it?"
+      },
+      {
+        "role": "ミラー",
+        "jp": "あのう、<ruby>来月<rt>らいげつ</rt></ruby><ruby>7日<rt>なのか</rt></ruby>から<ruby>10日<rt>とおか</rt></ruby>ほど<ruby>休<rt>やす</rt></ruby>みを<ruby>取<rt>と</rt></ruby>らせていただけますか。",
+        "en": "Um, starting the 7th of next month, could I take about ten days off?"
+      },
+      {
+        "role": "課長",
+        "jp": "<ruby>10日間<rt>とおかかん</rt></ruby>ですか。",
+        "en": "Ten days?"
+      },
+      {
+        "role": "ミラー",
+        "jp": "<ruby>実<rt>じつ</rt></ruby>はアメリカの<ruby>友達<rt>ともだち</rt></ruby>が<ruby>結婚<rt>けっこん</rt></ruby>するんです。",
+        "en": "Actually, a friend of mine in America is getting married."
+      },
+      {
+        "role": "課長",
+        "jp": "そうですか。えーと、<ruby>来月<rt>らいげつ</rt></ruby>は<ruby>20日<rt>はつか</rt></ruby>に<ruby>営業<rt>えいぎょう</rt></ruby><ruby>会議<rt>かいぎ</rt></ruby>がありますが、それまでに<ruby>帰<rt>かえ</rt></ruby>れますね。",
+        "en": "I see. Um, next month there's a sales meeting on the 20th — you'll be back by then, right?"
+      },
+      {
+        "role": "ミラー",
+        "jp": "はい。",
+        "en": "Yes."
+      },
+      {
+        "role": "課長",
+        "jp": "じゃ、かまいませんよ。<ruby>楽<rt>たの</rt></ruby>しんで<ruby>来<rt>き</rt></ruby>てください。",
+        "en": "Then it's fine. Enjoy your trip."
+      },
+      {
+        "role": "ミラー",
+        "jp": "ありがとうございます。",
+        "en": "Thank you very much."
+      }
+    ]
+  }
+}

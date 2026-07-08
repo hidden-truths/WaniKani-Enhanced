@@ -1,0 +1,939 @@
+{
+  "lesson": 43,
+  "title": "Lesson 43",
+  "theme": "Conjecture from appearance — 〜そうです (looks / seems; looks about to happen) with adjectives and verbs, plus 〜ていきます／〜てきます (go / come and do, e.g. 買ってきます)",
+  "source": {
+    "name": "vnjpclub.com",
+    "vocabUrl": "https://www.vnjpclub.com/en/minna-no-nihongo/lesson-43-vocabulary.html",
+    "grammarUrl": "https://www.vnjpclub.com/en/minna-no-nihongo/lesson-43-grammar.html",
+    "note": "Vocabulary, native-speaker audio, and example sentences aggregated from vnjpclub.com (Minna no Nihongo 第2版). For personal study."
+  },
+  "vocab": [
+    {
+      "key": "mnn:43:0",
+      "kana": "ふえます",
+      "kanji": "増えます",
+      "context": "輸出が〜",
+      "mean": "to increase (e.g. exports)",
+      "cat": "verb",
+      "type": "ichidan",
+      "trans": "i",
+      "dict": "増える",
+      "dictRead": "ふえる",
+      "audio": "/Audio/minnamoi/bai43/00010111010100000.mp3",
+      "levels": {
+        "N5": [
+          "<ruby>人<rt>ひと</rt></ruby>が<ruby>増<rt>ふ</rt></ruby>えました。",
+          "The number of people increased."
+        ],
+        "N4": [
+          "<ruby>最近<rt>さいきん</rt></ruby>、<ruby>外国人<rt>がいこくじん</rt></ruby>の<ruby>観光客<rt>かんこうきゃく</rt></ruby>が<ruby>増<rt>ふ</rt></ruby>えています。",
+          "Lately the number of foreign tourists has been increasing."
+        ],
+        "N3": [
+          "<ruby>輸出<rt>ゆしゅつ</rt></ruby>が<ruby>増<rt>ふ</rt></ruby>えたら、<ruby>国<rt>くに</rt></ruby>の<ruby>経済<rt>けいざい</rt></ruby>は<ruby>良<rt>よ</rt></ruby>くなるだろう。",
+          "If exports increase, the country's economy will probably improve."
+        ],
+        "N2": [
+          "<ruby>人口<rt>じんこう</rt></ruby>が<ruby>増<rt>ふ</rt></ruby>える<ruby>一方<rt>いっぽう</rt></ruby>で、<ruby>働<rt>はたら</rt></ruby>く<ruby>若者<rt>わかもの</rt></ruby>は<ruby>減<rt>へ</rt></ruby>り<ruby>続<rt>つづ</rt></ruby>けている。",
+          "While the population increases, the number of young people working keeps declining."
+        ],
+        "N1": [
+          "<ruby>情報<rt>じょうほう</rt></ruby>が<ruby>爆発的<rt>ばくはつてき</rt></ruby>に<ruby>増<rt>ふ</rt></ruby>える<ruby>現代<rt>げんだい</rt></ruby>においては、<ruby>取捨<rt>しゅしゃ</rt></ruby><ruby>選択<rt>せんたく</rt></ruby>する<ruby>力<rt>ちから</rt></ruby>こそが<ruby>問<rt>と</rt></ruby>われる。",
+          "In a modern age where information increases explosively, it is precisely the ability to select what matters that is put to the test."
+        ]
+      },
+      "mnem": "増える — \"fu-e-ru\": blow air (fuu~) into a balloon and it swells; 増える = to increase.",
+      "tip": "増える (ichidan, intransitive) — the thing that grows takes が (人が増える). Its transitive partner is 増やす (ふやす, \"to increase [something]\"). Opposite: 減る.",
+      "accent": 2
+    },
+    {
+      "key": "mnn:43:1",
+      "kana": "へります",
+      "kanji": "減ります",
+      "context": "輸出が〜",
+      "mean": "to decrease (e.g. exports)",
+      "cat": "verb",
+      "type": "godan",
+      "trans": "i",
+      "dict": "減る",
+      "dictRead": "へる",
+      "audio": "/Audio/minnamoi/bai43/00010111010100001.mp3",
+      "levels": {
+        "N5": [
+          "<ruby>人<rt>ひと</rt></ruby>が<ruby>減<rt>へ</rt></ruby>りました。",
+          "The number of people decreased."
+        ],
+        "N4": [
+          "この<ruby>町<rt>まち</rt></ruby>の<ruby>子<rt>こ</rt></ruby>どもは、だんだん<ruby>減<rt>へ</rt></ruby>っています。",
+          "The number of children in this town is gradually decreasing."
+        ],
+        "N3": [
+          "<ruby>輸出<rt>ゆしゅつ</rt></ruby>が<ruby>減<rt>へ</rt></ruby>ったので、<ruby>工場<rt>こうじょう</rt></ruby>の<ruby>仕事<rt>しごと</rt></ruby>も<ruby>少<rt>すく</rt></ruby>なくなった。",
+          "Since exports decreased, work at the factory also dwindled."
+        ],
+        "N2": [
+          "<ruby>収入<rt>しゅうにゅう</rt></ruby>が<ruby>減<rt>へ</rt></ruby>る<ruby>一方<rt>いっぽう</rt></ruby>なのに、<ruby>支出<rt>ししゅつ</rt></ruby>はなかなか<ruby>減<rt>へ</rt></ruby>らせない。",
+          "Even though income keeps decreasing, I just can't cut down my spending."
+        ],
+        "N1": [
+          "<ruby>貯金<rt>ちょきん</rt></ruby>が<ruby>目<rt>め</rt></ruby>に<ruby>見<rt>み</rt></ruby>えて<ruby>減<rt>へ</rt></ruby>るのを<ruby>前<rt>まえ</rt></ruby>にして、<ruby>彼<rt>かれ</rt></ruby>はようやく<ruby>生活<rt>せいかつ</rt></ruby>を<ruby>見直<rt>みなお</rt></ruby>さざるを<ruby>得<rt>え</rt></ruby>なかった。",
+          "Faced with his savings visibly shrinking, he was finally forced to rethink his lifestyle."
+        ]
+      },
+      "mnem": "減る — \"heru\": your wallet goes through HELL as the money dwindles; 減る = to decrease.",
+      "tip": "減る (godan, intransitive) — the thing that shrinks takes が (お金が減る). Transitive partner: 減らす (へらす, \"to reduce [something]\"). Opposite: 増える.",
+      "accent": 0
+    },
+    {
+      "key": "mnn:43:2",
+      "kana": "あがります",
+      "kanji": "上がります",
+      "context": "値段が〜",
+      "mean": "to rise, go up (e.g. the price)",
+      "cat": "verb",
+      "type": "godan",
+      "trans": "i",
+      "dict": "上がる",
+      "dictRead": "あがる",
+      "audio": "/Audio/minnamoi/bai43/00010111010100010.mp3",
+      "levels": {
+        "N5": [
+          "<ruby>値段<rt>ねだん</rt></ruby>が<ruby>上<rt>あ</rt></ruby>がりました。",
+          "The price went up."
+        ],
+        "N4": [
+          "<ruby>来月<rt>らいげつ</rt></ruby>から<ruby>電車<rt>でんしゃ</rt></ruby>の<ruby>料金<rt>りょうきん</rt></ruby>が<ruby>上<rt>あ</rt></ruby>がるそうです。",
+          "I hear the train fares will go up from next month."
+        ],
+        "N3": [
+          "<ruby>気温<rt>きおん</rt></ruby>が<ruby>上<rt>あ</rt></ruby>がると、アイスクリームがよく<ruby>売<rt>う</rt></ruby>れるようになる。",
+          "When the temperature rises, ice cream starts selling well."
+        ],
+        "N2": [
+          "<ruby>物価<rt>ぶっか</rt></ruby>が<ruby>上<rt>あ</rt></ruby>がる<ruby>一方<rt>いっぽう</rt></ruby>で、<ruby>給料<rt>きゅうりょう</rt></ruby>はほとんど<ruby>変<rt>か</rt></ruby>わらないままだ。",
+          "While prices keep rising, salaries remain almost unchanged."
+        ],
+        "N1": [
+          "<ruby>一度<rt>いちど</rt></ruby><ruby>上<rt>あ</rt></ruby>がってしまった<ruby>生活<rt>せいかつ</rt></ruby><ruby>水準<rt>すいじゅん</rt></ruby>を<ruby>下<rt>さ</rt></ruby>げることは、<ruby>口<rt>くち</rt></ruby>で<ruby>言<rt>い</rt></ruby>うほど<ruby>容易<rt>ようい</rt></ruby>ではない。",
+          "Lowering a standard of living that has once risen is not as easy as it sounds."
+        ]
+      },
+      "mnem": "上がる — \"agaru\": say \"AH, up we go!\" as the price climbs; 上がる = to go up / rise.",
+      "tip": "上がる (godan, intransitive) — the thing that rises takes が (値段が上がる). Transitive partner: 上げる (あげる, \"to raise\"). Opposite: 下がる.",
+      "accent": 0
+    },
+    {
+      "key": "mnn:43:3",
+      "kana": "さがります",
+      "kanji": "下がります",
+      "context": "値段が〜",
+      "mean": "to fall, drop (e.g. the price)",
+      "cat": "verb",
+      "type": "godan",
+      "trans": "i",
+      "dict": "下がる",
+      "dictRead": "さがる",
+      "audio": "/Audio/minnamoi/bai43/00010111010100011.mp3",
+      "levels": {
+        "N5": [
+          "<ruby>値段<rt>ねだん</rt></ruby>が<ruby>下<rt>さ</rt></ruby>がりました。",
+          "The price went down."
+        ],
+        "N4": [
+          "<ruby>夜<rt>よる</rt></ruby>になって、<ruby>気温<rt>きおん</rt></ruby>がだいぶ<ruby>下<rt>さ</rt></ruby>がりました。",
+          "It became night and the temperature dropped considerably."
+        ],
+        "N3": [
+          "<ruby>値段<rt>ねだん</rt></ruby>が<ruby>下<rt>さ</rt></ruby>がったら、あのパソコンを<ruby>買<rt>か</rt></ruby>おうと<ruby>思<rt>おも</rt></ruby>っています。",
+          "If the price drops, I'm thinking of buying that computer."
+        ],
+        "N2": [
+          "<ruby>人気<rt>にんき</rt></ruby>が<ruby>下<rt>さ</rt></ruby>がるにつれて、テレビに<ruby>出<rt>で</rt></ruby>る<ruby>回数<rt>かいすう</rt></ruby>も<ruby>減<rt>へ</rt></ruby>っていった。",
+          "As his popularity fell, the number of his TV appearances also dwindled."
+        ],
+        "N1": [
+          "<ruby>熱<rt>ねつ</rt></ruby>が<ruby>下<rt>さ</rt></ruby>がるどころか、<ruby>薬<rt>くすり</rt></ruby>を<ruby>飲<rt>の</rt></ruby>んでもいっこうに<ruby>良<rt>よ</rt></ruby>くなる<ruby>気配<rt>けはい</rt></ruby>がなかった。",
+          "Far from the fever coming down, there was no sign of improvement at all even after taking medicine."
+        ]
+      },
+      "mnem": "下がる — \"sagaru\": something SAGS and drops down; 下がる = to fall / go down.",
+      "tip": "下がる (godan, intransitive) — the thing that drops takes が (値段が下がる). Transitive partner: 下げる (さげる, \"to lower\"). Opposite: 上がる.",
+      "accent": 2
+    },
+    {
+      "key": "mnn:43:4",
+      "kana": "きれます",
+      "kanji": "切れます",
+      "context": "ひもが〜",
+      "mean": "to break, snap (e.g. a string)",
+      "cat": "verb",
+      "type": "ichidan",
+      "trans": "i",
+      "dict": "切れる",
+      "dictRead": "きれる",
+      "audio": "/Audio/minnamoi/bai43/00010111010100100.mp3",
+      "levels": {
+        "N5": [
+          "ひもが<ruby>切<rt>き</rt></ruby>れました。",
+          "The string snapped."
+        ],
+        "N4": [
+          "この<ruby>糸<rt>いと</rt></ruby>は<ruby>細<rt>ほそ</rt></ruby>いので、すぐ<ruby>切<rt>き</rt></ruby>れてしまいます。",
+          "This thread is thin, so it snaps right away."
+        ],
+        "N3": [
+          "<ruby>話<rt>はな</rt></ruby>している<ruby>途中<rt>とちゅう</rt></ruby>で、<ruby>電話<rt>でんわ</rt></ruby>が<ruby>切<rt>き</rt></ruby>れてしまった。",
+          "The phone call got cut off in the middle of our conversation."
+        ],
+        "N2": [
+          "ロープが<ruby>切<rt>き</rt></ruby>れそうになっていたのに、<ruby>誰<rt>だれ</rt></ruby>も<ruby>気<rt>き</rt></ruby>づかなかった。",
+          "The rope was on the verge of snapping, yet no one noticed."
+        ],
+        "N1": [
+          "<ruby>張<rt>は</rt></ruby>り<ruby>詰<rt>つ</rt></ruby>めていた<ruby>緊張<rt>きんちょう</rt></ruby>の<ruby>糸<rt>いと</rt></ruby>がふっと<ruby>切<rt>き</rt></ruby>れた<ruby>瞬間<rt>しゅんかん</rt></ruby>、<ruby>彼<rt>かれ</rt></ruby>は<ruby>崩<rt>くず</rt></ruby>れるように<ruby>眠<rt>ねむ</rt></ruby>りに<ruby>落<rt>お</rt></ruby>ちた。",
+          "The instant the taut thread of tension suddenly snapped, he collapsed into sleep."
+        ]
+      },
+      "mnem": "切れる — \"ki-re-ru\": from 切る (to cut); once cut through, a thing snaps: 切れる = to break/snap on its own.",
+      "tip": "切れる (ichidan, intransitive) is the self-moving partner of 切る (きる, transitive \"to cut\") — the string snaps by itself (ひもが切れる). It also means \"run out\" (電池が切れる) and \"be sharp/skilled.\"",
+      "accent": 2
+    },
+    {
+      "key": "mnn:43:5",
+      "kana": "とれます",
+      "kanji": "",
+      "context": "ボタンが〜",
+      "mean": "to come off (e.g. a button)",
+      "cat": "verb",
+      "type": "ichidan",
+      "trans": "i",
+      "dict": "とれる",
+      "dictRead": "とれる",
+      "audio": "/Audio/minnamoi/bai43/00010111010100101.mp3",
+      "levels": {
+        "N5": [
+          "ボタンがとれました。",
+          "A button came off."
+        ],
+        "N4": [
+          "かばんの<ruby>取<rt>と</rt></ruby>っ<ruby>手<rt>て</rt></ruby>がとれそうです。",
+          "The bag's handle looks like it's about to come off."
+        ],
+        "N3": [
+          "シャツのボタンがとれたので、<ruby>自分<rt>じぶん</rt></ruby>でつけました。",
+          "A button came off my shirt, so I sewed it back on myself."
+        ],
+        "N2": [
+          "<ruby>長年<rt>ながねん</rt></ruby><ruby>使<rt>つか</rt></ruby>ううちに、あちこちの<ruby>部品<rt>ぶひん</rt></ruby>がとれてしまった。",
+          "Over years of use, parts came off here and there."
+        ],
+        "N1": [
+          "<ruby>表面<rt>ひょうめん</rt></ruby>の<ruby>飾<rt>かざ</rt></ruby>りがとれかけているものの、その<ruby>古<rt>ふる</rt></ruby>い<ruby>時計<rt>とけい</rt></ruby>にはかえって<ruby>味<rt>あじ</rt></ruby>わいがある。",
+          "Although the decoration on its surface is coming off, that old clock has all the more charm for it."
+        ]
+      },
+      "mnem": "とれる — \"to-re-ru\": from 取る (to take); a button that gets \"taken off\" by itself とれる = comes off. Also 疲れがとれる = fatigue is removed.",
+      "tip": "とれる (ichidan, intransitive) is the self-moving partner of 取る (とる, \"to take/remove\"): the button comes off on its own (ボタンがとれる). Written in kana in Minna; also = \"be obtainable,\" e.g. 予約がとれる.",
+      "accent": 2
+    },
+    {
+      "key": "mnn:43:6",
+      "kana": "おちます",
+      "kanji": "落ちます",
+      "context": "荷物が〜",
+      "mean": "to fall, drop down (e.g. baggage)",
+      "cat": "verb",
+      "type": "ichidan",
+      "trans": "i",
+      "dict": "落ちる",
+      "dictRead": "おちる",
+      "audio": "/Audio/minnamoi/bai43/00010111010100110.mp3",
+      "levels": {
+        "N5": [
+          "<ruby>荷物<rt>にもつ</rt></ruby>が<ruby>落<rt>お</rt></ruby>ちました。",
+          "The luggage fell."
+        ],
+        "N4": [
+          "テーブルからコップが<ruby>落<rt>お</rt></ruby>ちて、<ruby>割<rt>わ</rt></ruby>れました。",
+          "A glass fell off the table and broke."
+        ],
+        "N3": [
+          "<ruby>棚<rt>たな</rt></ruby>の<ruby>荷物<rt>にもつ</rt></ruby>が<ruby>落<rt>お</rt></ruby>ちそうだから、<ruby>下<rt>した</rt></ruby>に<ruby>置<rt>お</rt></ruby>いておいたほうがいい。",
+          "The luggage on the shelf looks about to fall, so you'd better set it down below."
+        ],
+        "N2": [
+          "<ruby>成績<rt>せいせき</rt></ruby>が<ruby>落<rt>お</rt></ruby>ちたからといって、そう<ruby>簡単<rt>かんたん</rt></ruby>にあきらめるわけにはいかない。",
+          "Just because my grades dropped doesn't mean I can give up so easily."
+        ],
+        "N1": [
+          "<ruby>一度<rt>いちど</rt></ruby><ruby>地<rt>ち</rt></ruby>に<ruby>落<rt>お</rt></ruby>ちた<ruby>信頼<rt>しんらい</rt></ruby>を<ruby>取<rt>と</rt></ruby>り<ruby>戻<rt>もど</rt></ruby>すには、<ruby>気<rt>き</rt></ruby>の<ruby>遠<rt>とお</rt></ruby>くなるような<ruby>努力<rt>どりょく</rt></ruby>が<ruby>必要<rt>ひつよう</rt></ruby>だ。",
+          "To win back trust that has once fallen to the ground takes a mind-numbing amount of effort."
+        ]
+      },
+      "mnem": "落ちる — \"o-chi-ru\": something drops with an \"oh!\" and hits the ground; 落ちる = to fall.",
+      "tip": "落ちる (ichidan, intransitive) — the thing that falls takes が (荷物が落ちる). Transitive partner: 落とす (おとす, \"to drop\"). Also = \"fail\" an exam (試験に落ちる).",
+      "accent": 2
+    },
+    {
+      "key": "mnn:43:7",
+      "kana": "なくなります",
+      "kanji": "",
+      "context": "ガソリンが〜",
+      "mean": "to run out, be used up (e.g. petrol)",
+      "cat": "verb",
+      "type": "godan",
+      "trans": "i",
+      "dict": "なくなる",
+      "dictRead": "なくなる",
+      "audio": "/Audio/minnamoi/bai43/00010111010100111.mp3",
+      "levels": {
+        "N5": [
+          "お<ruby>金<rt>かね</rt></ruby>がなくなりました。",
+          "The money ran out."
+        ],
+        "N4": [
+          "<ruby>冷蔵庫<rt>れいぞうこ</rt></ruby>の<ruby>牛乳<rt>ぎゅうにゅう</rt></ruby>がなくなったので、<ruby>買<rt>か</rt></ruby>いに<ruby>行<rt>い</rt></ruby>きます。",
+          "The milk in the fridge is gone, so I'll go buy some."
+        ],
+        "N3": [
+          "ガソリンがなくなりそうだから、<ruby>次<rt>つぎ</rt></ruby>のスタンドで<ruby>入<rt>い</rt></ruby>れよう。",
+          "We're about to run out of gas, so let's fill up at the next station."
+        ],
+        "N2": [
+          "<ruby>不安<rt>ふあん</rt></ruby>がなくなったわけではないが、<ruby>少<rt>すこ</rt></ruby>しずつ<ruby>前<rt>まえ</rt></ruby>を<ruby>向<rt>む</rt></ruby>けるようになった。",
+          "It's not that the anxiety has disappeared, but little by little I've become able to face forward."
+        ],
+        "N1": [
+          "<ruby>逃<rt>に</rt></ruby>げ<ruby>場<rt>ば</rt></ruby>がなくなって<ruby>初<rt>はじ</rt></ruby>めて、<ruby>人<rt>ひと</rt></ruby>は<ruby>本当<rt>ほんとう</rt></ruby>の<ruby>意味<rt>いみ</rt></ruby>で<ruby>覚悟<rt>かくご</rt></ruby>を<ruby>決<rt>き</rt></ruby>めるものだ。",
+          "It is only when there is no escape left that a person truly makes up their mind."
+        ]
+      },
+      "mnem": "なくなる — from ない (not exist) + なる (become): \"become not there\" = to run out / disappear.",
+      "tip": "なくなる (godan, intransitive) — a thing runs out or is gone (ガソリンがなくなる). Don't confuse with 亡くなる (also なくなる, \"to pass away,\" of people). Written in kana here for the \"run out\" sense.",
+      "accent": 0
+    },
+    {
+      "key": "mnn:43:8",
+      "kana": "へん",
+      "kanji": "変",
+      "context": "",
+      "mean": "strange, peculiar, odd",
+      "cat": "adjective",
+      "type": "na-adj",
+      "trans": "",
+      "dict": "変",
+      "dictRead": "へん",
+      "audio": "/Audio/minnamoi/bai43/00010111010101000.mp3",
+      "levels": {
+        "N5": [
+          "<ruby>変<rt>へん</rt></ruby>な<ruby>音<rt>おと</rt></ruby>がします。",
+          "There's a strange sound."
+        ],
+        "N4": [
+          "この<ruby>料理<rt>りょうり</rt></ruby>は、<ruby>味<rt>あじ</rt></ruby>が<ruby>少<rt>すこ</rt></ruby>し<ruby>変<rt>へん</rt></ruby>です。",
+          "This dish tastes a little strange."
+        ],
+        "N3": [
+          "<ruby>彼<rt>かれ</rt></ruby>の<ruby>様子<rt>ようす</rt></ruby>が<ruby>変<rt>へん</rt></ruby>だったので、<ruby>何<rt>なに</rt></ruby>かあったのかと<ruby>心配<rt>しんぱい</rt></ruby>になった。",
+          "His manner was odd, so I got worried that something had happened."
+        ],
+        "N2": [
+          "<ruby>変<rt>へん</rt></ruby>なうわさが<ruby>広<rt>ひろ</rt></ruby>まらないうちに、きちんと<ruby>説明<rt>せつめい</rt></ruby>しておくべきだ。",
+          "You should explain things properly before a strange rumor spreads."
+        ],
+        "N1": [
+          "<ruby>一見<rt>いっけん</rt></ruby><ruby>変<rt>へん</rt></ruby>に<ruby>思<rt>おも</rt></ruby>える<ruby>彼<rt>かれ</rt></ruby>の<ruby>発想<rt>はっそう</rt></ruby>も、よく<ruby>聞<rt>き</rt></ruby>けば<ruby>筋<rt>すじ</rt></ruby>が<ruby>通<rt>とお</rt></ruby>っていることが<ruby>多<rt>おお</rt></ruby>い。",
+          "His ideas, which seem odd at first glance, often turn out to make sense once you actually hear them out."
+        ]
+      },
+      "mnem": "変 — \"hen\": a barnyard \"HEN\" that suddenly talks is strange; 変（な）= strange/odd. Same 変 as in 大変.",
+      "tip": "変 (な-adjective) = strange/odd (変な音). The same kanji 変 also carries \"change\" (変わる/変える). Modifies nouns with な: 変な人.",
+      "accent": 1
+    },
+    {
+      "key": "mnn:43:9",
+      "kana": "しあわせ",
+      "kanji": "幸せ",
+      "context": "",
+      "mean": "happy, fortunate",
+      "cat": "adjective",
+      "type": "na-adj",
+      "trans": "",
+      "dict": "幸せ",
+      "dictRead": "しあわせ",
+      "audio": "/Audio/minnamoi/bai43/00010111010101001.mp3",
+      "levels": {
+        "N5": [
+          "<ruby>私<rt>わたし</rt></ruby>は<ruby>今<rt>いま</rt></ruby>、<ruby>幸<rt>しあわ</rt></ruby>せです。",
+          "I am happy now."
+        ],
+        "N4": [
+          "<ruby>家族<rt>かぞく</rt></ruby>といっしょにいると、とても<ruby>幸<rt>しあわ</rt></ruby>せな<ruby>気持<rt>きも</rt></ruby>ちになります。",
+          "When I'm with my family, I feel very happy."
+        ],
+        "N3": [
+          "お<ruby>金<rt>かね</rt></ruby>があれば<ruby>幸<rt>しあわ</rt></ruby>せだとは、<ruby>必<rt>かなら</rt></ruby>ずしも<ruby>言<rt>い</rt></ruby>えないと<ruby>思<rt>おも</rt></ruby>う。",
+          "I don't think you can necessarily say that having money makes you happy."
+        ],
+        "N2": [
+          "<ruby>幸<rt>しあわ</rt></ruby>せかどうかは、<ruby>他人<rt>たにん</rt></ruby>ではなく<ruby>自分<rt>じぶん</rt></ruby><ruby>自身<rt>じしん</rt></ruby>が<ruby>決<rt>き</rt></ruby>めることだ。",
+          "Whether or not you are happy is something you yourself, not others, decide."
+        ],
+        "N1": [
+          "ささやかな<ruby>日常<rt>にちじょう</rt></ruby>の<ruby>中<rt>なか</rt></ruby>にこそ、<ruby>真<rt>しん</rt></ruby>の<ruby>幸<rt>しあわ</rt></ruby>せは<ruby>宿<rt>やど</rt></ruby>っているのかもしれない。",
+          "Perhaps it is precisely in the small moments of everyday life that true happiness resides."
+        ]
+      },
+      "mnem": "幸せ — \"shi-a-wa-se\": picture a contented \"she~ ah, wa-se\" sigh; 幸せ = happy. The kanji 幸 also = fortune/luck.",
+      "tip": "幸せ (な-adjective, also a noun) = happy/fortunate (幸せな家庭). Compare 嬉しい (うれしい, a passing \"glad\" feeling) with 幸せ (a deeper state of well-being).",
+      "accent": 0
+    },
+    {
+      "key": "mnn:43:10",
+      "kana": "らく",
+      "kanji": "楽",
+      "context": "",
+      "mean": "easy, comfortable, at ease",
+      "cat": "adjective",
+      "type": "na-adj",
+      "trans": "",
+      "dict": "楽",
+      "dictRead": "らく",
+      "audio": "/Audio/minnamoi/bai43/00010111010101010.mp3",
+      "levels": {
+        "N5": [
+          "この<ruby>仕事<rt>しごと</rt></ruby>は<ruby>楽<rt>らく</rt></ruby>です。",
+          "This job is easy."
+        ],
+        "N4": [
+          "<ruby>新<rt>あたら</rt></ruby>しい<ruby>靴<rt>くつ</rt></ruby>は、<ruby>歩<rt>ある</rt></ruby>くのがとても<ruby>楽<rt>らく</rt></ruby>です。",
+          "The new shoes are very comfortable to walk in."
+        ],
+        "N3": [
+          "<ruby>機械<rt>きかい</rt></ruby>を<ruby>使<rt>つか</rt></ruby>えば、<ruby>掃除<rt>そうじ</rt></ruby>がずっと<ruby>楽<rt>らく</rt></ruby>になりますよ。",
+          "If you use a machine, cleaning becomes much easier."
+        ],
+        "N2": [
+          "<ruby>楽<rt>らく</rt></ruby>な<ruby>道<rt>みち</rt></ruby>を<ruby>選<rt>えら</rt></ruby>んだつもりが、かえって<ruby>遠回<rt>とおまわ</rt></ruby>りになってしまった。",
+          "I thought I'd chosen the easy path, but it ended up being a detour instead."
+        ],
+        "N1": [
+          "<ruby>楽<rt>らく</rt></ruby>をして<ruby>得<rt>え</rt></ruby>たものは、<ruby>往々<rt>おうおう</rt></ruby>にして<ruby>楽<rt>らく</rt></ruby>に<ruby>失<rt>うしな</rt></ruby>われていくものだ。",
+          "What is gained the easy way is, more often than not, lost just as easily."
+        ]
+      },
+      "mnem": "楽 — \"raku\": kick back on a \"rock\" and take it easy; 楽 = easy/comfortable. Same kanji as 楽しい (fun) and 音楽 (music).",
+      "tip": "楽 (な-adjective / noun) = easy, comfortable, at ease (楽な仕事). Note the kanji 楽 is also read がく in 音楽 and たの(しい) in 楽しい. 楽 ≠ 簡単: 楽 stresses low effort/comfort, 簡単 stresses simplicity.",
+      "accent": 2
+    },
+    {
+      "key": "mnn:43:11",
+      "kana": "うまい",
+      "kanji": "",
+      "context": "",
+      "mean": "tasty; skillful, good at",
+      "cat": "adjective",
+      "type": "i-adj",
+      "trans": "",
+      "dict": "うまい",
+      "dictRead": "うまい",
+      "audio": "/Audio/minnamoi/bai43/00010111010101011.mp3",
+      "levels": {
+        "N5": [
+          "このケーキはうまいです。",
+          "This cake is tasty."
+        ],
+        "N4": [
+          "<ruby>彼<rt>かれ</rt></ruby>は<ruby>歌<rt>うた</rt></ruby>がうまいので、みんなにほめられます。",
+          "He's good at singing, so everyone praises him."
+        ],
+        "N3": [
+          "<ruby>練習<rt>れんしゅう</rt></ruby>すれば、<ruby>誰<rt>だれ</rt></ruby>でも<ruby>少<rt>すこ</rt></ruby>しずつ<ruby>料理<rt>りょうり</rt></ruby>がうまくなるものだ。",
+          "If you practice, anyone gradually gets better at cooking."
+        ],
+        "N2": [
+          "<ruby>話<rt>はなし</rt></ruby>がうますぎるときほど、かえって<ruby>用心<rt>ようじん</rt></ruby>したほうがいい。",
+          "The more too-good-to-be-true a deal sounds, the more you should be on your guard."
+        ],
+        "N1": [
+          "<ruby>口<rt>くち</rt></ruby>ではうまいことを<ruby>言<rt>い</rt></ruby>うが、いざとなると<ruby>彼<rt>かれ</rt></ruby>は<ruby>決<rt>けっ</rt></ruby>して<ruby>動<rt>うご</rt></ruby>こうとしない。",
+          "He talks a smooth game, but when it comes down to it he never actually moves."
+        ]
+      },
+      "mnem": "うまい — \"u-mai\": say \"oo, my!\" at the first bite; うまい = tasty (and also \"skillful\").",
+      "tip": "うまい (い-adjective) has two senses: \"tasty\" (= おいしい, but casual/masculine) and \"skillful, good at\" (= 上手, 歌がうまい). Its opposite for taste is まずい. Usually written in kana; kanji 旨い (tasty) / 上手い (skilled).",
+      "accent": 2
+    },
+    {
+      "key": "mnn:43:12",
+      "kana": "まずい",
+      "kanji": "",
+      "context": "",
+      "mean": "not tasty, bad-tasting; awkward, unfavorable",
+      "cat": "adjective",
+      "type": "i-adj",
+      "trans": "",
+      "dict": "まずい",
+      "dictRead": "まずい",
+      "audio": "/Audio/minnamoi/bai43/00010111010101100.mp3",
+      "levels": {
+        "N5": [
+          "この<ruby>料理<rt>りょうり</rt></ruby>はまずいです。",
+          "This dish tastes bad."
+        ],
+        "N4": [
+          "<ruby>冷<rt>さ</rt></ruby>めると、このスープはまずくなります。",
+          "When it gets cold, this soup tastes bad."
+        ],
+        "N3": [
+          "<ruby>自分<rt>じぶん</rt></ruby>で<ruby>作<rt>つく</rt></ruby>ったカレーは、<ruby>正直<rt>しょうじき</rt></ruby>に<ruby>言<rt>い</rt></ruby>うとちょっとまずかった。",
+          "To be honest, the curry I made myself tasted a bit bad."
+        ],
+        "N2": [
+          "ここで<ruby>黙<rt>だま</rt></ruby>っていては、かえって<ruby>立場<rt>たちば</rt></ruby>がまずくなりかねない。",
+          "If I stay silent here, my position could actually get worse."
+        ],
+        "N1": [
+          "まずいと<ruby>知<rt>し</rt></ruby>りつつ<ruby>嘘<rt>うそ</rt></ruby>を<ruby>重<rt>かさ</rt></ruby>ねた<ruby>結果<rt>けっか</rt></ruby>、<ruby>事態<rt>じたい</rt></ruby>は<ruby>取<rt>と</rt></ruby>り<ruby>返<rt>かえ</rt></ruby>しのつかないところまで<ruby>来<rt>き</rt></ruby>てしまった。",
+          "As a result of piling up lies while knowing it was a bad idea, the situation reached a point of no return."
+        ]
+      },
+      "mnem": "まずい — \"ma-zu-i\": one taste and you mutter \"ma... zooey, no!\" and spit it out; まずい = not tasty / bad.",
+      "tip": "まずい (い-adjective) = \"tastes bad\" (opposite of うまい/おいしい) AND, figuratively, \"awkward/unfavorable\" (立場がまずい, \"this is bad\"). Usually written in kana.",
+      "accent": 2
+    },
+    {
+      "key": "mnn:43:13",
+      "kana": "つまらない",
+      "kanji": "",
+      "context": "",
+      "mean": "boring, uninteresting, trivial",
+      "cat": "adjective",
+      "type": "i-adj",
+      "trans": "",
+      "dict": "つまらない",
+      "dictRead": "つまらない",
+      "audio": "/Audio/minnamoi/bai43/00010111010101101.mp3",
+      "levels": {
+        "N5": [
+          "この<ruby>映画<rt>えいが</rt></ruby>はつまらないです。",
+          "This movie is boring."
+        ],
+        "N4": [
+          "<ruby>一人<rt>ひとり</rt></ruby>で<ruby>家<rt>いえ</rt></ruby>にいると、つまらなくて<ruby>眠<rt>ねむ</rt></ruby>くなります。",
+          "When I'm home alone, it's boring and I get sleepy."
+        ],
+        "N3": [
+          "つまらない<ruby>失敗<rt>しっぱい</rt></ruby>を<ruby>繰<rt>く</rt></ruby>り<ruby>返<rt>かえ</rt></ruby>さないように、メモを<ruby>取<rt>と</rt></ruby>るようにしている。",
+          "So as not to repeat trivial mistakes, I make a point of taking notes."
+        ],
+        "N2": [
+          "つまらないことでけんかするものの、<ruby>彼<rt>かれ</rt></ruby>らは<ruby>根<rt>ね</rt></ruby>っからの<ruby>親友<rt>しんゆう</rt></ruby>だ。",
+          "They quarrel over trivial things, but they are the best of friends at heart."
+        ],
+        "N1": [
+          "「つまらないものですが」と<ruby>言<rt>い</rt></ruby>って<ruby>贈<rt>おく</rt></ruby>り<ruby>物<rt>もの</rt></ruby>を<ruby>差<rt>さ</rt></ruby>し<ruby>出<rt>だ</rt></ruby>すのが、<ruby>日本流<rt>にほんりゅう</rt></ruby>の<ruby>謙遜<rt>けんそん</rt></ruby>である。",
+          "Offering a gift while saying \"it's just a trifling thing\" is the Japanese style of modesty."
+        ]
+      },
+      "mnem": "つまらない — from 詰まる (to be clogged) + ない: nothing \"clicks,\" so it's dull; つまらない = boring/trivial.",
+      "tip": "つまらない (い-adjective) = boring (opposite of おもしろい) AND \"trivial/worthless\" (つまらないこと). The set phrase つまらないものですが humbly presents a gift. Kana-only in practice.",
+      "accent": 3
+    },
+    {
+      "key": "mnn:43:14",
+      "kana": "やさしい",
+      "kanji": "優しい",
+      "context": "",
+      "mean": "kind, gentle, tender-hearted",
+      "cat": "adjective",
+      "type": "i-adj",
+      "trans": "",
+      "dict": "優しい",
+      "dictRead": "やさしい",
+      "audio": "/Audio/minnamoi/bai43/00010111010101110.mp3",
+      "levels": {
+        "N5": [
+          "<ruby>私<rt>わたし</rt></ruby>の<ruby>母<rt>はは</rt></ruby>は<ruby>優<rt>やさ</rt></ruby>しいです。",
+          "My mother is kind."
+        ],
+        "N4": [
+          "<ruby>田中<rt>たなか</rt></ruby>さんは、<ruby>誰<rt>だれ</rt></ruby>にでも<ruby>優<rt>やさ</rt></ruby>しく<ruby>話<rt>はな</rt></ruby>します。",
+          "Mr. Tanaka speaks kindly to everyone."
+        ],
+        "N3": [
+          "<ruby>優<rt>やさ</rt></ruby>しい<ruby>人<rt>ひと</rt></ruby>ほど、<ruby>自分<rt>じぶん</rt></ruby>の<ruby>悩<rt>なや</rt></ruby>みを<ruby>一人<rt>ひとり</rt></ruby>で<ruby>抱<rt>かか</rt></ruby>え<ruby>込<rt>こ</rt></ruby>みがちだ。",
+          "The kinder a person is, the more they tend to bottle up their worries alone."
+        ],
+        "N2": [
+          "<ruby>本当<rt>ほんとう</rt></ruby>の<ruby>優<rt>やさ</rt></ruby>しさとは、<ruby>時<rt>とき</rt></ruby>に<ruby>厳<rt>きび</rt></ruby>しさを<ruby>伴<rt>ともな</rt></ruby>うものではないだろうか。",
+          "Isn't true kindness something that is sometimes accompanied by sternness?"
+        ],
+        "N1": [
+          "<ruby>環境<rt>かんきょう</rt></ruby>に<ruby>優<rt>やさ</rt></ruby>しいと<ruby>謳<rt>うた</rt></ruby>う<ruby>製品<rt>せいひん</rt></ruby>が、<ruby>必<rt>かなら</rt></ruby>ずしも<ruby>環境<rt>かんきょう</rt></ruby>に<ruby>優<rt>やさ</rt></ruby>しいとは<ruby>限<rt>かぎ</rt></ruby>らない。",
+          "Products that claim to be kind to the environment are not necessarily kind to it."
+        ]
+      },
+      "mnem": "優しい — \"ya-sa-shii\": a soft \"ya~ sa~\" whispered gently; 優しい = kind/gentle. The kanji 優 also = superior/excellent (優勝).",
+      "tip": "優しい (い-adjective) = kind/gentle/tender-hearted (優しい人). Careful: やさしい also = 易しい (\"easy,\" opposite of 難しい) — same reading, different kanji. 環境に優しい = \"eco-friendly.\"",
+      "accent": 0
+    },
+    {
+      "key": "mnn:43:15",
+      "kana": "ガソリン",
+      "kanji": "",
+      "context": "",
+      "mean": "petrol, gasoline",
+      "cat": "noun",
+      "type": "",
+      "trans": "",
+      "dict": "ガソリン",
+      "dictRead": "ガソリン",
+      "audio": "/Audio/minnamoi/bai43/00010111010101111.mp3",
+      "levels": {
+        "N5": [
+          "<ruby>車<rt>くるま</rt></ruby>にガソリンを<ruby>入<rt>い</rt></ruby>れます。",
+          "I put gas in the car."
+        ],
+        "N4": [
+          "ガソリンの<ruby>値段<rt>ねだん</rt></ruby>が、また<ruby>上<rt>あ</rt></ruby>がりました。",
+          "The price of gasoline has gone up again."
+        ],
+        "N3": [
+          "ガソリンがなくなりそうなので、<ruby>早<rt>はや</rt></ruby>めにスタンドに<ruby>寄<rt>よ</rt></ruby>ろう。",
+          "We're about to run out of gas, so let's stop by a station soon."
+        ],
+        "N2": [
+          "ガソリン<ruby>価格<rt>かかく</rt></ruby>の<ruby>高騰<rt>こうとう</rt></ruby>は、あらゆる<ruby>物<rt>もの</rt></ruby>の<ruby>値段<rt>ねだん</rt></ruby>に<ruby>影響<rt>えいきょう</rt></ruby>を<ruby>及<rt>およ</rt></ruby>ぼす。",
+          "Soaring gasoline prices affect the price of everything."
+        ],
+        "N1": [
+          "ガソリンに<ruby>頼<rt>たよ</rt></ruby>りきった<ruby>社会<rt>しゃかい</rt></ruby>から<ruby>脱却<rt>だっきゃく</rt></ruby>しない<ruby>限<rt>かぎ</rt></ruby>り、<ruby>根本的<rt>こんぽんてき</rt></ruby>な<ruby>解決<rt>かいけつ</rt></ruby>には<ruby>至<rt>いた</rt></ruby>らない。",
+          "Unless we break free from a society wholly dependent on gasoline, we will never reach a fundamental solution."
+        ]
+      },
+      "mnem": "ガソリン — the English \"gasoline\" in katakana; ga-so-ri-n.",
+      "tip": "ガソリン = petrol/gasoline. A gas station is ガソリンスタンド (a Japanese-made English compound). To fill up: ガソリンを入れる.",
+      "accent": 0
+    },
+    {
+      "key": "mnn:43:16",
+      "kana": "ひ",
+      "kanji": "火",
+      "context": "",
+      "mean": "fire, flame",
+      "cat": "noun",
+      "type": "",
+      "trans": "",
+      "dict": "火",
+      "dictRead": "ひ",
+      "audio": "/Audio/minnamoi/bai43/00010111010110000.mp3",
+      "levels": {
+        "N5": [
+          "<ruby>火<rt>ひ</rt></ruby>に<ruby>気<rt>き</rt></ruby>をつけてください。",
+          "Please be careful with the fire."
+        ],
+        "N4": [
+          "マッチで、ろうそくに<ruby>火<rt>ひ</rt></ruby>をつけました。",
+          "I lit the candle with a match."
+        ],
+        "N3": [
+          "ガスの<ruby>火<rt>ひ</rt></ruby>が<ruby>消<rt>き</rt></ruby>えそうだったので、<ruby>窓<rt>まど</rt></ruby>を<ruby>閉<rt>し</rt></ruby>めた。",
+          "The gas flame looked about to go out, so I closed the window."
+        ],
+        "N2": [
+          "<ruby>火<rt>ひ</rt></ruby>の<ruby>消<rt>け</rt></ruby>し<ruby>忘<rt>わす</rt></ruby>れが、<ruby>大<rt>おお</rt></ruby>きな<ruby>火事<rt>かじ</rt></ruby>につながることも<ruby>少<rt>すく</rt></ruby>なくない。",
+          "Forgetting to put out a fire not infrequently leads to a large blaze."
+        ],
+        "N1": [
+          "<ruby>彼<rt>かれ</rt></ruby>の<ruby>一言<rt>ひとこと</rt></ruby>が、くすぶっていた<ruby>対立<rt>たいりつ</rt></ruby>に<ruby>火<rt>ひ</rt></ruby>をつける<ruby>結果<rt>けっか</rt></ruby>となった。",
+          "His single remark ended up igniting the smoldering conflict."
+        ]
+      },
+      "mnem": "火 — a pictograph of leaping flames; \"hi\" like the hot \"hee!\" you yelp when you touch it; 火 = fire.",
+      "tip": "火 (ひ) = fire/flame. 火をつける = \"to light,\" 火が消える = \"the fire goes out.\" The same kanji is か in 火曜日 (Tuesday) and 火事 (blaze). Don't confuse with 日 (ひ, \"day/sun\").",
+      "accent": 1
+    },
+    {
+      "key": "mnn:43:17",
+      "kana": "パンフレット",
+      "kanji": "",
+      "context": "",
+      "mean": "pamphlet, brochure",
+      "cat": "noun",
+      "type": "",
+      "trans": "",
+      "dict": "パンフレット",
+      "dictRead": "パンフレット",
+      "audio": "/Audio/minnamoi/bai43/00010111010110001.mp3",
+      "levels": {
+        "N5": [
+          "<ruby>旅行<rt>りょこう</rt></ruby>のパンフレットをもらいました。",
+          "I got a travel pamphlet."
+        ],
+        "N4": [
+          "<ruby>受付<rt>うけつけ</rt></ruby>で、<ruby>店<rt>みせ</rt></ruby>のパンフレットをたくさん<ruby>配<rt>くば</rt></ruby>っていました。",
+          "At the reception they were handing out lots of the shop's pamphlets."
+        ],
+        "N3": [
+          "このパンフレットを<ruby>見<rt>み</rt></ruby>れば、<ruby>行事<rt>ぎょうじ</rt></ruby>の<ruby>内容<rt>ないよう</rt></ruby>がだいたい<ruby>分<rt>わ</rt></ruby>かります。",
+          "If you look at this pamphlet, you'll get a general idea of the event."
+        ],
+        "N2": [
+          "<ruby>立派<rt>りっぱ</rt></ruby>なパンフレットを<ruby>作<rt>つく</rt></ruby>ったところで、<ruby>中身<rt>なかみ</rt></ruby>が<ruby>伴<rt>ともな</rt></ruby>わなければ<ruby>意味<rt>いみ</rt></ruby>がない。",
+          "Even if you make a fine pamphlet, it's meaningless if the substance doesn't match."
+        ],
+        "N1": [
+          "パンフレットに<ruby>並<rt>なら</rt></ruby>ぶ<ruby>美辞<rt>びじ</rt></ruby><ruby>麗句<rt>れいく</rt></ruby>とは<ruby>裏腹<rt>うらはら</rt></ruby>に、<ruby>実際<rt>じっさい</rt></ruby>のサービスは<ruby>期待<rt>きたい</rt></ruby><ruby>外<rt>はず</rt></ruby>れだった。",
+          "Contrary to the flowery phrases lined up in the pamphlet, the actual service was disappointing."
+        ]
+      },
+      "mnem": "パンフレット — English \"pamphlet\" in katakana: pan-fu-re-tto.",
+      "tip": "パンフレット = a pamphlet/brochure. A single flyer is チラシ; a thicker booklet is 冊子 (さっし). From English \"pamphlet\" — note the ン, not \"panflet.\"",
+      "accent": 1
+    },
+    {
+      "key": "mnn:43:18",
+      "kana": "いまにも",
+      "kanji": "今にも",
+      "context": "",
+      "mean": "at any moment, any minute now (about to happen)",
+      "cat": "adverb",
+      "type": "",
+      "trans": "",
+      "dict": "今にも",
+      "dictRead": "いまにも",
+      "audio": "/Audio/minnamoi/bai43/00010111010110010.mp3",
+      "levels": {
+        "N5": [
+          "<ruby>空<rt>そら</rt></ruby>が<ruby>暗<rt>くら</rt></ruby>くて、<ruby>今<rt>いま</rt></ruby>にも<ruby>雨<rt>あめ</rt></ruby>が<ruby>降<rt>ふ</rt></ruby>りそうです。",
+          "The sky is dark, and it looks like it'll rain any moment."
+        ],
+        "N4": [
+          "<ruby>赤<rt>あか</rt></ruby>ちゃんは<ruby>今<rt>いま</rt></ruby>にも<ruby>泣<rt>な</rt></ruby>きそうな<ruby>顔<rt>かお</rt></ruby>をしています。",
+          "The baby has a face that looks about to cry any second."
+        ],
+        "N3": [
+          "<ruby>今<rt>いま</rt></ruby>にも<ruby>倒<rt>たお</rt></ruby>れそうなほど<ruby>疲<rt>つか</rt></ruby>れていたが、<ruby>彼<rt>かれ</rt></ruby>は<ruby>歩<rt>ある</rt></ruby>き<ruby>続<rt>つづ</rt></ruby>けた。",
+          "He was so tired he looked about to collapse at any moment, yet he kept walking."
+        ],
+        "N2": [
+          "<ruby>今<rt>いま</rt></ruby>にも<ruby>泣<rt>な</rt></ruby>き<ruby>出<rt>だ</rt></ruby>しそうな<ruby>空模様<rt>そらもよう</rt></ruby>の<ruby>中<rt>なか</rt></ruby>、<ruby>試合<rt>しあい</rt></ruby>は<ruby>強行<rt>きょうこう</rt></ruby>された。",
+          "Under a sky that looked ready to burst into rain at any moment, the match was forced to go ahead."
+        ],
+        "N1": [
+          "<ruby>今<rt>いま</rt></ruby>にも<ruby>消<rt>き</rt></ruby>え<ruby>入<rt>い</rt></ruby>りそうな<ruby>声<rt>こえ</rt></ruby>で、<ruby>彼女<rt>かのじょ</rt></ruby>は<ruby>長年<rt>ながねん</rt></ruby>の<ruby>秘密<rt>ひみつ</rt></ruby>を<ruby>打<rt>う</rt></ruby>ち<ruby>明<rt>あ</rt></ruby>けた。",
+          "In a voice that seemed about to fade away at any moment, she confided a secret she had kept for years."
+        ]
+      },
+      "mnem": "今にも — 今 (now) + にも: \"even right now\" it could happen; 今にも = at any moment.",
+      "tip": "今にも (adverb) pairs with そう / そうな to mean \"on the verge of ~-ing,\" about to happen at any second (今にも雨が降りそう). Stresses imminence more strongly than plain そう.",
+      "accent": 1
+    },
+    {
+      "key": "mnn:43:19",
+      "kana": "わあ",
+      "kanji": "",
+      "context": "",
+      "mean": "Oh! / Wow! (surprise or delight)",
+      "cat": "expression",
+      "type": "",
+      "trans": "",
+      "dict": "わあ",
+      "dictRead": "わあ",
+      "audio": "/Audio/minnamoi/bai43/00010111010110011.mp3",
+      "levels": {
+        "N5": [
+          "わあ、きれいな<ruby>花<rt>はな</rt></ruby>ですね。",
+          "Wow, what pretty flowers!"
+        ],
+        "N4": [
+          "わあ、この<ruby>料理<rt>りょうり</rt></ruby>、おいしそうですね。",
+          "Wow, this dish looks delicious!"
+        ],
+        "N3": [
+          "プレゼントを<ruby>開<rt>あ</rt></ruby>けた<ruby>子<rt>こ</rt></ruby>どもは、わあと<ruby>声<rt>こえ</rt></ruby>を<ruby>上<rt>あ</rt></ruby>げて<ruby>喜<rt>よろこ</rt></ruby>んだ。",
+          "The child who opened the present cried out \"wow!\" with delight."
+        ],
+        "N2": [
+          "<ruby>会場<rt>かいじょう</rt></ruby>に<ruby>姿<rt>すがた</rt></ruby>を<ruby>現<rt>あらわ</rt></ruby>したとたん、わあという<ruby>歓声<rt>かんせい</rt></ruby>が<ruby>沸<rt>わ</rt></ruby>き<ruby>起<rt>お</rt></ruby>こった。",
+          "The moment he appeared in the hall, a \"wow!\" of cheering erupted."
+        ],
+        "N1": [
+          "<ruby>名画<rt>めいが</rt></ruby>を<ruby>前<rt>まえ</rt></ruby>にして、<ruby>観客<rt>かんきゃく</rt></ruby>は<ruby>皆<rt>みな</rt></ruby>わあとも<ruby>言<rt>い</rt></ruby>えず、ただ<ruby>言葉<rt>ことば</rt></ruby>を<ruby>失<rt>うしな</rt></ruby>って<ruby>立<rt>た</rt></ruby>ち<ruby>尽<rt>つ</rt></ruby>くした。",
+          "Before the masterpiece, the audience could not even manage a \"wow\"; they simply stood there, lost for words."
+        ]
+      },
+      "mnem": "わあ — the Japanese spelling of a spontaneous \"waah!\" of surprise or delight.",
+      "tip": "わあ (interjection) expresses surprise, delight, or awe (\"wow!/oh!\"). Casual and spontaneous; also written わー. Different from the crying sound わあわあ (to bawl).",
+      "accent": 1
+    }
+  ],
+  "grammar": [
+    {
+      "pattern": "い/な-adjective + そうです (looks / seems — from appearance)",
+      "structure": "いA(〜い)＋そうです・なA/N(〜)＋そうです ／ 例外: いい→よさそう・ない→なさそう",
+      "explain": "Attach そう(です) to the STEM of an adjective to say something \"looks / seems ~\" judged from its appearance — a guess based on what you see, not hearsay. い-adjectives drop the final い (高い→高そう, おいしい→おいしそう); な-adjectives drop な (元気(な)→元気そう, 暇→暇そう). Two irregulars insert さ: いい→よさそう and ない→なさそう. This そう itself inflects like a な-adjective (おいしそうなケーキ, 元気そうに). Don't confuse it with the hearsay 〜そうです (\"I hear that ~\"), which attaches to the plain form.",
+      "examples": [
+        {
+          "jp": "この<ruby>料理<rt>りょうり</rt></ruby>は<ruby>辛<rt>から</rt></ruby>そうです。",
+          "en": "This dish looks spicy."
+        },
+        {
+          "jp": "あの<ruby>二人<rt>ふたり</rt></ruby>は<ruby>幸<rt>しあわ</rt></ruby>せそうですね。",
+          "en": "Those two look happy, don't they?"
+        },
+        {
+          "jp": "このアルバイトはよさそうです。",
+          "en": "This part-time job seems good. (irregular: いい→よさ)"
+        },
+        {
+          "jp": "<ruby>元気<rt>げんき</rt></ruby>そうですね。",
+          "en": "You look well."
+        }
+      ]
+    },
+    {
+      "pattern": "Verb (ますstem) + そうです (looks about to happen)",
+      "structure": "V(ますstem)＋そうです （しばしば 今にも〜そう）",
+      "explain": "Attach そう(です) to a verb's ます-stem to say something \"looks like it's about to happen\" or \"seems likely to happen,\" judged from the current situation. 降ります→降りそうです (\"looks like it'll rain\"); とれます→とれそうです (\"looks about to come off\"). It is often paired with 今にも for imminence. The negative is 降りそうにない / 降りそうもない (\"doesn't look like it'll ~\").",
+      "examples": [
+        {
+          "jp": "<ruby>今<rt>いま</rt></ruby>にも<ruby>雨<rt>あめ</rt></ruby>が<ruby>降<rt>ふ</rt></ruby>りそうです。",
+          "en": "It looks like it's about to rain any minute."
+        },
+        {
+          "jp": "<ruby>荷物<rt>にもつ</rt></ruby>が<ruby>落<rt>お</rt></ruby>ちそうですよ。",
+          "en": "Your luggage looks like it's about to fall."
+        },
+        {
+          "jp": "ボタンがとれそうです。",
+          "en": "A button looks about to come off."
+        },
+        {
+          "jp": "<ruby>今年<rt>ことし</rt></ruby>は<ruby>米<rt>こめ</rt></ruby>の<ruby>値段<rt>ねだん</rt></ruby>が<ruby>上<rt>あ</rt></ruby>がりそうです。",
+          "en": "The price of rice looks like it'll rise this year."
+        }
+      ]
+    },
+    {
+      "pattern": "〜ていきます／〜てきます (go / come and do)",
+      "structure": "V(て形)＋いきます・V(て形)＋きます",
+      "explain": "A て-form verb plus 行きます/来ます expresses doing an action in the course of going or coming. 〜てきます is especially common: do something and come back (買ってきます = \"go buy it and return\"; 取ってきます = \"go get it and come back\"). It also frames a quick errand — トイレに行ってきます. (The same forms can express change over time — 増えてきた, \"has been increasing\" — but this lesson focuses on the motion sense.)",
+      "examples": [
+        {
+          "jp": "ちょっと<ruby>切符<rt>きっぷ</rt></ruby>を<ruby>買<rt>か</rt></ruby>ってきます。",
+          "en": "I'll go buy a ticket real quick (be right back)."
+        },
+        {
+          "jp": "<ruby>教室<rt>きょうしつ</rt></ruby>に<ruby>忘<rt>わす</rt></ruby>れ<ruby>物<rt>もの</rt></ruby>をしたので、<ruby>取<rt>と</rt></ruby>ってきます。",
+          "en": "I left something in the classroom, so I'll go get it and come back."
+        },
+        {
+          "jp": "ちょっと<ruby>出<rt>で</rt></ruby>かけてきます。",
+          "en": "I'm stepping out for a bit (and coming back)."
+        },
+        {
+          "jp": "<ruby>傘<rt>かさ</rt></ruby>を<ruby>持<rt>も</rt></ruby>っていきます。",
+          "en": "I'll take an umbrella with me."
+        }
+      ]
+    }
+  ],
+  "examples": [
+    {
+      "jp": "<ruby>空<rt>そら</rt></ruby>が<ruby>曇<rt>くも</rt></ruby>っています。<ruby>今<rt>いま</rt></ruby>にも<ruby>雨<rt>あめ</rt></ruby>が<ruby>降<rt>ふ</rt></ruby>りそうです。",
+      "en": "The sky is clouded over. It looks like it's about to rain any minute."
+    },
+    {
+      "jp": "もうすぐ<ruby>桜<rt>さくら</rt></ruby>が<ruby>咲<rt>さ</rt></ruby>きそうです。",
+      "en": "The cherry blossoms look like they'll bloom soon."
+    },
+    {
+      "jp": "<ruby>上着<rt>うわぎ</rt></ruby>のボタンがとれそうですよ。 …あっ、ほんとうですね。どうもありがとうございます。",
+      "en": "The button on your jacket looks about to come off. …Oh, you're right. Thank you very much."
+    },
+    {
+      "jp": "わあ、おいしそうですね。いただきます。",
+      "en": "Wow, it looks delicious. Thank you (I'll dig in)."
+    },
+    {
+      "jp": "このアルバイトはよさそうですね。<ruby>給料<rt>きゅうりょう</rt></ruby>もいいし、<ruby>仕事<rt>しごと</rt></ruby>も<ruby>楽<rt>らく</rt></ruby>そうだし。",
+      "en": "This part-time job seems good — the pay is good and the work looks easy, too."
+    },
+    {
+      "jp": "<ruby>資料<rt>しりょう</rt></ruby>が<ruby>足<rt>た</rt></ruby>りませんね。 …すぐコピーして<ruby>来<rt>き</rt></ruby>ます。",
+      "en": "We're short on handouts. …I'll go make copies right away."
+    },
+    {
+      "jp": "ガソリンがなくなりそうですから、あの<ruby>店<rt>みせ</rt></ruby>で<ruby>入<rt>い</rt></ruby>れましょう。",
+      "en": "It looks like we're about to run out of gas, so let's fill up at that station."
+    },
+    {
+      "jp": "<ruby>台風<rt>たいふう</rt></ruby>が<ruby>来<rt>き</rt></ruby>そうですから、<ruby>旅行<rt>りょこう</rt></ruby>はやめましょう。",
+      "en": "It looks like a typhoon is coming, so let's call off the trip."
+    }
+  ],
+  "conversation": {
+    "title": "毎日 楽しそうです (You look cheerful every day)",
+    "audio": "/Audio/minnahonsatsu2/52.mp3",
+    "lines": [
+      {
+        "role": "ミラー",
+        "jp": "これ、どなたの<ruby>写真<rt>しゃしん</rt></ruby>ですか。",
+        "en": "Whose photo is this?"
+      },
+      {
+        "role": "シュミット",
+        "jp": "<ruby>息子<rt>むすこ</rt></ruby>のハンスです。<ruby>運動会<rt>うんどうかい</rt></ruby>のとき、<ruby>撮<rt>と</rt></ruby>った<ruby>写真<rt>しゃしん</rt></ruby>です。",
+        "en": "It's my son, Hans. It's a photo taken at the sports day."
+      },
+      {
+        "role": "ミラー",
+        "jp": "<ruby>元気<rt>げんき</rt></ruby>そうですね。",
+        "en": "He looks full of energy."
+      },
+      {
+        "role": "シュミット",
+        "jp": "ええ。ハンスは<ruby>走<rt>はし</rt></ruby>るのが<ruby>速<rt>はや</rt></ruby>いんですよ。",
+        "en": "Yes. Hans is a fast runner."
+      },
+      {
+        "role": "シュミット",
+        "jp": "<ruby>日本<rt>にほん</rt></ruby>の<ruby>小学校<rt>しょうがっこう</rt></ruby>にも<ruby>慣<rt>な</rt></ruby>れて、<ruby>友達<rt>ともだち</rt></ruby>もできて、<ruby>毎日<rt>まいにち</rt></ruby><ruby>楽<rt>たの</rt></ruby>しそうです。",
+        "en": "He's gotten used to Japanese elementary school and made friends, and he looks like he's enjoying himself every day."
+      },
+      {
+        "role": "ミラー",
+        "jp": "よかったですね。",
+        "en": "That's great."
+      },
+      {
+        "role": "ミラー",
+        "jp": "こちらの<ruby>方<rt>かた</rt></ruby>は<ruby>奥<rt>おく</rt></ruby>さんですか。きれいな<ruby>方<rt>かた</rt></ruby>ですね。",
+        "en": "Is this your wife? She's a beautiful person."
+      },
+      {
+        "role": "シュミット",
+        "jp": "ありがとうございます。",
+        "en": "Thank you."
+      },
+      {
+        "role": "シュミット",
+        "jp": "<ruby>妻<rt>つま</rt></ruby>はいろいろなことに<ruby>興味<rt>きょうみ</rt></ruby>があって、いっしょにいると、おもしろいですよ。",
+        "en": "My wife is interested in all sorts of things; it's really fun to be around her."
+      },
+      {
+        "role": "ミラー",
+        "jp": "そうですか。",
+        "en": "I see."
+      },
+      {
+        "role": "シュミット",
+        "jp": "<ruby>特<rt>とく</rt></ruby>に<ruby>歴史<rt>れきし</rt></ruby>が<ruby>好<rt>す</rt></ruby>きで、<ruby>時間<rt>じかん</rt></ruby>があれば、<ruby>古<rt>ふる</rt></ruby>い<ruby>町<rt>まち</rt></ruby>を<ruby>歩<rt>ある</rt></ruby>いています。",
+        "en": "She especially loves history, and whenever she has time she's out walking around old towns."
+      }
+    ]
+  }
+}

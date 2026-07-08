@@ -1,0 +1,1088 @@
+{
+  "lesson": 31,
+  "title": "Lesson 31",
+  "theme": "Volitional form (意向形) and expressing plans/intentions — V(よ)う (\"let's\"), 〜（よ）うと思っています, 〜つもりです, 〜予定です, and まだ〜ていません (\"not yet\"). Minna II Lesson 6.",
+  "source": {
+    "name": "vnjpclub.com",
+    "vocabUrl": "https://www.vnjpclub.com/en/minna-no-nihongo/lesson-31-vocabulary.html",
+    "grammarUrl": "https://www.vnjpclub.com/en/minna-no-nihongo/lesson-31-grammar.html",
+    "note": "Vocabulary, native-speaker audio, and example sentences aggregated from vnjpclub.com (Minna no Nihongo 第2版). For personal study."
+  },
+  "vocab": [
+    {
+      "key": "mnn:31:0",
+      "kana": "つづけます",
+      "kanji": "続けます",
+      "context": "",
+      "mean": "to continue, keep on",
+      "cat": "verb",
+      "type": "ichidan",
+      "trans": "t",
+      "dict": "続ける",
+      "dictRead": "つづける",
+      "audio": "/Audio/minnamoi/bai31/00010110000100010.mp3",
+      "levels": {
+        "N5": [
+          "<ruby>日本語<rt>にほんご</rt></ruby>の<ruby>勉強<rt>べんきょう</rt></ruby>を<ruby>続<rt>つづ</rt></ruby>けます。",
+          "I continue studying Japanese."
+        ],
+        "N4": [
+          "<ruby>国<rt>くに</rt></ruby>へ<ruby>帰<rt>かえ</rt></ruby>っても、<ruby>日本語<rt>にほんご</rt></ruby>の<ruby>勉強<rt>べんきょう</rt></ruby>を<ruby>続<rt>つづ</rt></ruby>けたいです。",
+          "Even after I go back home, I want to keep studying Japanese."
+        ],
+        "N3": [
+          "<ruby>毎朝<rt>まいあさ</rt></ruby><ruby>走<rt>はし</rt></ruby>るようにして、<ruby>三年間<rt>さんねんかん</rt></ruby><ruby>続<rt>つづ</rt></ruby>けています。",
+          "I make a point of running every morning, and I've kept it up for three years."
+        ],
+        "N2": [
+          "<ruby>苦<rt>くる</rt></ruby>しくても<ruby>練習<rt>れんしゅう</rt></ruby>を<ruby>続<rt>つづ</rt></ruby>けたからこそ、<ruby>今<rt>いま</rt></ruby>の<ruby>結果<rt>けっか</rt></ruby>がある。",
+          "It is precisely because I kept up the training even when it was hard that I have the results I have today."
+        ],
+        "N1": [
+          "<ruby>誰<rt>だれ</rt></ruby>に<ruby>認<rt>みと</rt></ruby>められなくても<ruby>研究<rt>けんきゅう</rt></ruby>を<ruby>続<rt>つづ</rt></ruby>けざるを<ruby>得<rt>え</rt></ruby>ないほど、<ruby>彼<rt>かれ</rt></ruby>はこのテーマに<ruby>取<rt>と</rt></ruby>りつかれていた。",
+          "He was so obsessed with this subject that he had no choice but to keep on with his research, even with no one to recognize it."
+        ]
+      },
+      "mnem": "\"tsuzukeru\" — you keep <b>t</b>ying each day to the next; 続ける = to continue.",
+      "tip": "続ける (ichidan, transitive) takes を — 勉強を続ける. Its intransitive pair is 続く (つづく, \"to continue / last\" on its own): 雨が続く. Don't mix the two.",
+      "accent": 0
+    },
+    {
+      "key": "mnn:31:1",
+      "kana": "みつけます",
+      "kanji": "見つけます",
+      "context": "",
+      "mean": "to find, discover",
+      "cat": "verb",
+      "type": "ichidan",
+      "trans": "t",
+      "dict": "見つける",
+      "dictRead": "みつける",
+      "audio": "/Audio/minnamoi/bai31/00010110000100011.mp3",
+      "accent": 0
+    },
+    {
+      "key": "mnn:31:2",
+      "kana": "とります",
+      "kanji": "取ります",
+      "context": "休みを〜",
+      "mean": "to take (a holiday, time off)",
+      "cat": "verb",
+      "type": "godan",
+      "trans": "t",
+      "dict": "取る",
+      "dictRead": "とる",
+      "audio": "/Audio/minnamoi/bai31/00010110000100100.mp3",
+      "accent": 1
+    },
+    {
+      "key": "mnn:31:3",
+      "kana": "うけます",
+      "kanji": "受けます",
+      "context": "試験を〜",
+      "mean": "to take (an examination), receive",
+      "cat": "verb",
+      "type": "ichidan",
+      "trans": "t",
+      "dict": "受ける",
+      "dictRead": "うける",
+      "audio": "/Audio/minnamoi/bai31/00010110000100101.mp3",
+      "levels": {
+        "N5": [
+          "あした<ruby>試験<rt>しけん</rt></ruby>を<ruby>受<rt>う</rt></ruby>けます。",
+          "I'll take an exam tomorrow."
+        ],
+        "N4": [
+          "<ruby>大学院<rt>だいがくいん</rt></ruby>の<ruby>試験<rt>しけん</rt></ruby>を<ruby>受<rt>う</rt></ruby>けたいから、<ruby>毎日<rt>まいにち</rt></ruby><ruby>勉強<rt>べんきょう</rt></ruby>しています。",
+          "I want to take the graduate-school exam, so I study every day."
+        ],
+        "N3": [
+          "<ruby>日本語<rt>にほんご</rt></ruby>の<ruby>試験<rt>しけん</rt></ruby>を<ruby>受<rt>う</rt></ruby>けるために、<ruby>申<rt>もう</rt></ruby>し<ruby>込<rt>こ</rt></ruby>もうと<ruby>思<rt>おも</rt></ruby>っています。",
+          "I'm thinking of applying so that I can take the Japanese exam."
+        ],
+        "N2": [
+          "<ruby>試験<rt>しけん</rt></ruby>を<ruby>受<rt>う</rt></ruby>けるからには、<ruby>合格<rt>ごうかく</rt></ruby>できるよう<ruby>全力<rt>ぜんりょく</rt></ruby>を<ruby>尽<rt>つ</rt></ruby>くすつもりだ。",
+          "Since I'm going to sit the exam, I intend to do my utmost to pass."
+        ],
+        "N1": [
+          "どの<ruby>大学<rt>だいがく</rt></ruby>を<ruby>受<rt>う</rt></ruby>けるにせよ、<ruby>基礎<rt>きそ</rt></ruby>を<ruby>怠<rt>おこた</rt></ruby>っていては<ruby>合格<rt>ごうかく</rt></ruby>など<ruby>望<rt>のぞ</rt></ruby>むべくもない。",
+          "Whichever university one sits for, if one neglects the fundamentals, passing is out of the question."
+        ]
+      },
+      "mnem": "\"ukeru\" — you <b>u</b>ndertake and receive the exam paper; 受ける = to take / receive.",
+      "tip": "受ける (ichidan, transitive) covers \"take (an exam / test / interview)\" — 試験を受ける — and \"receive\" broadly (授業を受ける, 電話を受ける). For a test you SIT, use 受ける, not 取る (which is 休みを取る, \"take time off\").",
+      "accent": 2
+    },
+    {
+      "key": "mnn:31:4",
+      "kana": "もうしこみます",
+      "kanji": "申し込みます",
+      "context": "",
+      "mean": "to apply for, sign up for",
+      "cat": "verb",
+      "type": "godan",
+      "trans": "t",
+      "dict": "申し込む",
+      "dictRead": "もうしこむ",
+      "audio": "/Audio/minnamoi/bai31/00010110000100110.mp3",
+      "levels": {
+        "N5": [
+          "ツアーに<ruby>申<rt>もう</rt></ruby>し<ruby>込<rt>こ</rt></ruby>みます。",
+          "I'll sign up for the tour."
+        ],
+        "N4": [
+          "<ruby>旅行<rt>りょこう</rt></ruby>に<ruby>申<rt>もう</rt></ruby>し<ruby>込<rt>こ</rt></ruby>みたいですが、まだ<ruby>時間<rt>じかん</rt></ruby>があります。",
+          "I want to sign up for the trip, but there's still time."
+        ],
+        "N3": [
+          "<ruby>締<rt>し</rt></ruby>め<ruby>切<rt>き</rt></ruby>りまでに<ruby>申<rt>もう</rt></ruby>し<ruby>込<rt>こ</rt></ruby>まないと、<ruby>参加<rt>さんか</rt></ruby>できなくなります。",
+          "If you don't apply by the deadline, you won't be able to take part."
+        ],
+        "N2": [
+          "<ruby>先着順<rt>せんちゃくじゅん</rt></ruby>だから、<ruby>迷<rt>まよ</rt></ruby>っている<ruby>間<rt>ま</rt></ruby>もなく<ruby>申<rt>もう</rt></ruby>し<ruby>込<rt>こ</rt></ruby>むべきだ。",
+          "It's first-come-first-served, so you should apply without a moment's hesitation."
+        ],
+        "N1": [
+          "いったん<ruby>申<rt>もう</rt></ruby>し<ruby>込<rt>こ</rt></ruby>んだ<ruby>以上<rt>いじょう</rt></ruby>、<ruby>途中<rt>とちゅう</rt></ruby>で<ruby>投<rt>な</rt></ruby>げ<ruby>出<rt>だ</rt></ruby>すわけにはいかない。",
+          "Now that I've gone and applied, I can't very well throw in the towel partway through."
+        ]
+      },
+      "mnem": "申す (to say, humble) + 込む (to put in) — you put in your request: 申し込む = to apply for.",
+      "tip": "申し込む (godan, transitive) = \"apply for / sign up for / propose\": ツアーに申し込む, 結婚を申し込む. The noun is 申し込み (もうしこみ, \"application\"). The exam-taking verb is 受ける, not this.",
+      "accent": 0
+    },
+    {
+      "key": "mnn:31:5",
+      "kana": "きゅうけいします",
+      "kanji": "休憩します",
+      "context": "",
+      "mean": "to take a break, take a rest",
+      "cat": "verb",
+      "type": "irregular",
+      "trans": "i",
+      "dict": "休憩する",
+      "dictRead": "きゅうけいする",
+      "audio": "/Audio/minnamoi/bai31/00010110000100111.mp3",
+      "levels": {
+        "N5": [
+          "ちょっと<ruby>休憩<rt>きゅうけい</rt></ruby>します。",
+          "I'll take a short break."
+        ],
+        "N4": [
+          "<ruby>疲<rt>つか</rt></ruby>れたから、ここで<ruby>休憩<rt>きゅうけい</rt></ruby>しましょう。",
+          "I'm tired, so let's take a break here."
+        ],
+        "N3": [
+          "<ruby>会議<rt>かいぎ</rt></ruby>が<ruby>長<rt>なが</rt></ruby>くなったら、<ruby>一度<rt>いちど</rt></ruby><ruby>休憩<rt>きゅうけい</rt></ruby>するようにしています。",
+          "If a meeting runs long, I make a point of taking a break once."
+        ],
+        "N2": [
+          "<ruby>集中<rt>しゅうちゅう</rt></ruby>が<ruby>切<rt>き</rt></ruby>れたまま<ruby>続<rt>つづ</rt></ruby>けるより、<ruby>休憩<rt>きゅうけい</rt></ruby>したほうがかえって<ruby>効率<rt>こうりつ</rt></ruby>がいい。",
+          "Rather than pushing on once your concentration has gone, taking a break is actually more efficient."
+        ],
+        "N1": [
+          "いくら<ruby>締<rt>し</rt></ruby>め<ruby>切<rt>き</rt></ruby>りが<ruby>近<rt>ちか</rt></ruby>くても、<ruby>適度<rt>てきど</rt></ruby>に<ruby>休憩<rt>きゅうけい</rt></ruby>しないことには<ruby>体<rt>からだ</rt></ruby>が<ruby>持<rt>も</rt></ruby>たない。",
+          "No matter how close the deadline, unless you rest at reasonable intervals your body won't hold up."
+        ]
+      },
+      "mnem": "休 (rest) + 憩 (relax) — a quick \"Q\" (kyuu) break: 休憩する = to take a rest.",
+      "tip": "休憩する (irregular / する-verb) is intransitive — you just 休憩する. To make it a noun object, say 休憩を取る. Don't confuse 休憩 (a short break) with 休み (やすみ, a day off / holiday).",
+      "accent": 0
+    },
+    {
+      "key": "mnn:31:6",
+      "kana": "れんきゅう",
+      "kanji": "連休",
+      "context": "",
+      "mean": "consecutive holidays, a long weekend",
+      "cat": "noun",
+      "type": "",
+      "trans": "",
+      "dict": "連休",
+      "dictRead": "れんきゅう",
+      "audio": "/Audio/minnamoi/bai31/00010110000101000.mp3",
+      "levels": {
+        "N5": [
+          "<ruby>来週<rt>らいしゅう</rt></ruby>は<ruby>連休<rt>れんきゅう</rt></ruby>です。",
+          "Next week is a long weekend."
+        ],
+        "N4": [
+          "<ruby>連休<rt>れんきゅう</rt></ruby>に<ruby>家族<rt>かぞく</rt></ruby>と<ruby>温泉<rt>おんせん</rt></ruby>へ<ruby>行<rt>い</rt></ruby>きたいです。",
+          "I'd like to go to a hot spring with my family over the long weekend."
+        ],
+        "N3": [
+          "<ruby>連休<rt>れんきゅう</rt></ruby>はどこも<ruby>込<rt>こ</rt></ruby>むから、<ruby>早<rt>はや</rt></ruby>めに<ruby>予約<rt>よやく</rt></ruby>するようにしています。",
+          "Everywhere gets crowded over the holidays, so I make a point of booking early."
+        ],
+        "N2": [
+          "せっかくの<ruby>連休<rt>れんきゅう</rt></ruby>なのに、<ruby>仕事<rt>しごと</rt></ruby>に<ruby>追<rt>お</rt></ruby>われて<ruby>休<rt>やす</rt></ruby>むどころではなかった。",
+          "Although it was a precious long weekend, I was so chased by work that resting was out of the question."
+        ],
+        "N1": [
+          "<ruby>大型<rt>おおがた</rt></ruby><ruby>連休<rt>れんきゅう</rt></ruby>ともなると、<ruby>各地<rt>かくち</rt></ruby>の<ruby>観光地<rt>かんこうち</rt></ruby>は<ruby>身動<rt>みうご</rt></ruby>きが<ruby>取<rt>と</rt></ruby>れないほどの<ruby>人出<rt>ひとで</rt></ruby>となる。",
+          "Come a big holiday stretch, tourist spots everywhere are packed to the point that you can barely move."
+        ]
+      },
+      "mnem": "連 (linked / consecutive) + 休 (rest) — a row of linked days off is a 連休.",
+      "tip": "連休 = several holidays in a row (a long weekend); ゴールデンウィーク is the famous 大型連休. Compare 週末 (しゅうまつ, weekend) and 休み (a single day off).",
+      "accent": 0
+    },
+    {
+      "key": "mnn:31:7",
+      "kana": "さくぶん",
+      "kanji": "作文",
+      "context": "",
+      "mean": "essay, composition",
+      "cat": "noun",
+      "type": "",
+      "trans": "",
+      "dict": "作文",
+      "dictRead": "さくぶん",
+      "audio": "/Audio/minnamoi/bai31/00010110000101001.mp3",
+      "levels": {
+        "N5": [
+          "<ruby>作文<rt>さくぶん</rt></ruby>を<ruby>書<rt>か</rt></ruby>きます。",
+          "I'll write a composition."
+        ],
+        "N4": [
+          "あしたまでに<ruby>作文<rt>さくぶん</rt></ruby>を<ruby>出<rt>だ</rt></ruby>さなければなりません。",
+          "I have to hand in the essay by tomorrow."
+        ],
+        "N3": [
+          "<ruby>日本語<rt>にほんご</rt></ruby>の<ruby>作文<rt>さくぶん</rt></ruby>がうまくなるように、<ruby>毎日<rt>まいにち</rt></ruby><ruby>日記<rt>にっき</rt></ruby>を<ruby>書<rt>か</rt></ruby>いています。",
+          "So that I get better at writing Japanese compositions, I keep a diary every day."
+        ],
+        "N2": [
+          "<ruby>作文<rt>さくぶん</rt></ruby>は<ruby>上手<rt>じょうず</rt></ruby>に<ruby>書<rt>か</rt></ruby>こうとするより、<ruby>言<rt>い</rt></ruby>いたいことを<ruby>正確<rt>せいかく</rt></ruby>に<ruby>伝<rt>つた</rt></ruby>えることが<ruby>大切<rt>たいせつ</rt></ruby>だ。",
+          "With a composition, conveying what you want to say accurately matters more than trying to write it beautifully."
+        ],
+        "N1": [
+          "<ruby>子供<rt>こども</rt></ruby>の<ruby>作文<rt>さくぶん</rt></ruby>には、<ruby>大人<rt>おとな</rt></ruby>が<ruby>忘<rt>わす</rt></ruby>れがちな<ruby>素直<rt>すなお</rt></ruby>な<ruby>感性<rt>かんせい</rt></ruby>がにじみ<ruby>出<rt>で</rt></ruby>ている。",
+          "A child's composition brims with an honest sensitivity that adults tend to forget."
+        ]
+      },
+      "mnem": "作 (make) + 文 (sentence / text) — the sentences you make up into a piece: 作文 = a composition.",
+      "tip": "作文 = a short written composition / essay (school-style). A longer academic paper is レポート or 論文 (ろんぶん); a general \"sentence\" is 文 (ぶん).",
+      "accent": 0
+    },
+    {
+      "key": "mnn:31:8",
+      "kana": "はっぴょう",
+      "kanji": "発表",
+      "context": "",
+      "mean": "announcement, presentation (〜します: to announce)",
+      "cat": "noun",
+      "type": "",
+      "trans": "",
+      "dict": "発表",
+      "dictRead": "はっぴょう",
+      "audio": "/Audio/minnamoi/bai31/00010110000101010.mp3",
+      "levels": {
+        "N5": [
+          "あした<ruby>発表<rt>はっぴょう</rt></ruby>があります。",
+          "There's a presentation tomorrow."
+        ],
+        "N4": [
+          "クラスで<ruby>研究<rt>けんきゅう</rt></ruby>の<ruby>発表<rt>はっぴょう</rt></ruby>をしたいです。",
+          "I want to give a presentation on my research in class."
+        ],
+        "N3": [
+          "<ruby>大勢<rt>おおぜい</rt></ruby>の<ruby>前<rt>まえ</rt></ruby>で<ruby>発表<rt>はっぴょう</rt></ruby>できるように、<ruby>何度<rt>なんど</rt></ruby>も<ruby>練習<rt>れんしゅう</rt></ruby>しました。",
+          "I practiced over and over so that I could present in front of a big audience."
+        ],
+        "N2": [
+          "<ruby>結果<rt>けっか</rt></ruby>の<ruby>発表<rt>はっぴょう</rt></ruby>を<ruby>待<rt>ま</rt></ruby>つ<ruby>間<rt>あいだ</rt></ruby>は、<ruby>不安<rt>ふあん</rt></ruby>で<ruby>落<rt>お</rt></ruby>ち<ruby>着<rt>つ</rt></ruby>かないものだ。",
+          "While waiting for the results to be announced, one just can't settle down for the anxiety."
+        ],
+        "N1": [
+          "<ruby>新製品<rt>しんせいひん</rt></ruby>の<ruby>発表<rt>はっぴょう</rt></ruby>を<ruby>機<rt>き</rt></ruby>に、<ruby>会社<rt>かいしゃ</rt></ruby>の<ruby>株価<rt>かぶか</rt></ruby>は<ruby>一気<rt>いっき</rt></ruby>に<ruby>跳<rt>は</rt></ruby>ね<ruby>上<rt>あ</rt></ruby>がった。",
+          "Prompted by the unveiling of the new product, the company's stock price shot up all at once."
+        ]
+      },
+      "mnem": "発 (emit / issue) + 表 (show / surface) — bringing something out into the open: 発表 = an announcement / presentation.",
+      "tip": "発表 covers both \"announcement\" (結果の発表) and \"presentation\" (研究の発表); 発表する = \"to announce / present.\" Compare スピーチ (a speech) and 説明 (せつめい, an explanation).",
+      "accent": 0
+    },
+    {
+      "key": "mnn:31:9",
+      "kana": "てんらんかい",
+      "kanji": "展覧会",
+      "context": "",
+      "mean": "exhibition",
+      "cat": "noun",
+      "type": "",
+      "trans": "",
+      "dict": "展覧会",
+      "dictRead": "てんらんかい",
+      "audio": "/Audio/minnamoi/bai31/00010110000101011.mp3",
+      "levels": {
+        "N5": [
+          "あした<ruby>展覧会<rt>てんらんかい</rt></ruby>へ<ruby>行<rt>い</rt></ruby>きます。",
+          "I'm going to an exhibition tomorrow."
+        ],
+        "N4": [
+          "ピカソの<ruby>展覧会<rt>てんらんかい</rt></ruby>を<ruby>見<rt>み</rt></ruby>に<ruby>行<rt>い</rt></ruby>きたいです。",
+          "I want to go see the Picasso exhibition."
+        ],
+        "N3": [
+          "<ruby>展覧会<rt>てんらんかい</rt></ruby>は<ruby>今度<rt>こんど</rt></ruby>の<ruby>日曜日<rt>にちようび</rt></ruby>に<ruby>見<rt>み</rt></ruby>に<ruby>行<rt>い</rt></ruby>こうと<ruby>思<rt>おも</rt></ruby>っています。",
+          "I'm thinking of going to see the exhibition this Sunday."
+        ],
+        "N2": [
+          "<ruby>話題<rt>わだい</rt></ruby>の<ruby>展覧会<rt>てんらんかい</rt></ruby>だけあって、<ruby>会場<rt>かいじょう</rt></ruby>は<ruby>朝<rt>あさ</rt></ruby>から<ruby>長蛇<rt>ちょうだ</rt></ruby>の<ruby>列<rt>れつ</rt></ruby>だった。",
+          "Being the much-talked-about exhibition it was, the venue had a long queue from morning."
+        ],
+        "N1": [
+          "この<ruby>展覧会<rt>てんらんかい</rt></ruby>は、<ruby>画家<rt>がか</rt></ruby>の<ruby>生涯<rt>しょうがい</rt></ruby>を<ruby>年代順<rt>ねんだいじゅん</rt></ruby>にたどれる、<ruby>類<rt>たぐい</rt></ruby>まれな<ruby>構成<rt>こうせい</rt></ruby>になっている。",
+          "This exhibition is exceptionally structured so that one can trace the painter's whole life in chronological order."
+        ]
+      },
+      "mnem": "展 (spread out / display) + 覧 (look) + 会 (gathering) — a gathering to look at displayed works: 展覧会.",
+      "tip": "展覧会 = an art / works exhibition. A trade or expo-style show is 展示会 (てんじかい); a single museum is 美術館 (びじゅつかん).",
+      "accent": 3
+    },
+    {
+      "key": "mnn:31:10",
+      "kana": "けっこんしき",
+      "kanji": "結婚式",
+      "context": "",
+      "mean": "wedding ceremony",
+      "cat": "noun",
+      "type": "",
+      "trans": "",
+      "dict": "結婚式",
+      "dictRead": "けっこんしき",
+      "audio": "/Audio/minnamoi/bai31/00010110000101100.mp3",
+      "levels": {
+        "N5": [
+          "<ruby>来月<rt>らいげつ</rt></ruby><ruby>結婚式<rt>けっこんしき</rt></ruby>があります。",
+          "There's a wedding next month."
+        ],
+        "N4": [
+          "<ruby>友達<rt>ともだち</rt></ruby>の<ruby>結婚式<rt>けっこんしき</rt></ruby>で<ruby>着物<rt>きもの</rt></ruby>を<ruby>着<rt>き</rt></ruby>たいです。",
+          "I want to wear a kimono to my friend's wedding."
+        ],
+        "N3": [
+          "<ruby>結婚式<rt>けっこんしき</rt></ruby>は<ruby>教会<rt>きょうかい</rt></ruby>でしようと<ruby>思<rt>おも</rt></ruby>っています。",
+          "We're thinking of holding the wedding at a church."
+        ],
+        "N2": [
+          "<ruby>盛大<rt>せいだい</rt></ruby>な<ruby>結婚式<rt>けっこんしき</rt></ruby>を<ruby>挙<rt>あ</rt></ruby>げるかわりに、<ruby>二人<rt>ふたり</rt></ruby>は<ruby>旅行<rt>りょこう</rt></ruby>に<ruby>費用<rt>ひよう</rt></ruby>を<ruby>回<rt>まわ</rt></ruby>すことにした。",
+          "Instead of holding a lavish wedding, the two decided to put the money toward a trip."
+        ],
+        "N1": [
+          "<ruby>結婚式<rt>けっこんしき</rt></ruby>という<ruby>晴<rt>は</rt></ruby>れの<ruby>舞台<rt>ぶたい</rt></ruby>を<ruby>前<rt>まえ</rt></ruby>に、<ruby>父<rt>ちち</rt></ruby>は<ruby>込<rt>こ</rt></ruby>み<ruby>上<rt>あ</rt></ruby>げる<ruby>感情<rt>かんじょう</rt></ruby>を<ruby>抑<rt>おさ</rt></ruby>えきれずにいた。",
+          "Faced with the grand occasion of the wedding, my father could not hold back his welling emotions."
+        ]
+      },
+      "mnem": "結婚 (marriage) + 式 (ceremony) — the ceremony of marriage: 結婚式.",
+      "tip": "結婚式 = the wedding ceremony itself; 式を挙げる = \"to hold a ceremony.\" The reception party is 披露宴 (ひろうえん). The verb \"to marry\" is 結婚する.",
+      "accent": 3
+    },
+    {
+      "key": "mnn:31:11",
+      "kana": "そうしき",
+      "kanji": "葬式",
+      "context": "",
+      "mean": "funeral (politely お葬式)",
+      "cat": "noun",
+      "type": "",
+      "trans": "",
+      "dict": "葬式",
+      "dictRead": "そうしき",
+      "audio": "/Audio/minnamoi/bai31/00010110000101101.mp3",
+      "levels": {
+        "N5": [
+          "あした お<ruby>葬式<rt>そうしき</rt></ruby>に<ruby>行<rt>い</rt></ruby>きます。",
+          "I'm going to a funeral tomorrow."
+        ],
+        "N4": [
+          "<ruby>黒<rt>くろ</rt></ruby>い<ruby>服<rt>ふく</rt></ruby>がないので、お<ruby>葬式<rt>そうしき</rt></ruby>に<ruby>着<rt>き</rt></ruby>ていく<ruby>服<rt>ふく</rt></ruby>を<ruby>買<rt>か</rt></ruby>いました。",
+          "I don't have black clothes, so I bought something to wear to the funeral."
+        ],
+        "N3": [
+          "お<ruby>葬式<rt>そうしき</rt></ruby>では<ruby>失礼<rt>しつれい</rt></ruby>のないように、<ruby>作法<rt>さほう</rt></ruby>を<ruby>調<rt>しら</rt></ruby>べておきました。",
+          "So as not to be rude at the funeral, I looked up the etiquette in advance."
+        ],
+        "N2": [
+          "<ruby>葬式<rt>そうしき</rt></ruby>のあり<ruby>方<rt>かた</rt></ruby>は<ruby>地域<rt>ちいき</rt></ruby>によってさまざまで、<ruby>一概<rt>いちがい</rt></ruby>に<ruby>言<rt>い</rt></ruby>えるものではない。",
+          "The way funerals are conducted varies from region to region and can't be spoken of in blanket terms."
+        ],
+        "N1": [
+          "<ruby>近年<rt>きんねん</rt></ruby>は<ruby>形式<rt>けいしき</rt></ruby>にとらわれない、こぢんまりとした<ruby>葬式<rt>そうしき</rt></ruby>を<ruby>望<rt>のぞ</rt></ruby>む<ruby>人<rt>ひと</rt></ruby>が<ruby>増<rt>ふ</rt></ruby>えている。",
+          "In recent years, more people are wishing for small, informal funerals unbound by convention."
+        ]
+      },
+      "mnem": "葬 (bury / entomb) + 式 (ceremony) — the ceremony of laying someone to rest: 葬式.",
+      "tip": "Politely お葬式. 葬式 = a funeral; the more formal word is 葬儀 (そうぎ). Its happy opposite ceremony is 結婚式. Other 式 compounds: 卒業式・入学式.",
+      "accent": 0
+    },
+    {
+      "key": "mnn:31:12",
+      "kana": "しき",
+      "kanji": "式",
+      "context": "",
+      "mean": "ceremony",
+      "cat": "noun",
+      "type": "",
+      "trans": "",
+      "dict": "式",
+      "dictRead": "しき",
+      "audio": "/Audio/minnamoi/bai31/00010110000101110.mp3",
+      "levels": {
+        "N5": [
+          "あした<ruby>式<rt>しき</rt></ruby>があります。",
+          "There's a ceremony tomorrow."
+        ],
+        "N4": [
+          "<ruby>卒業<rt>そつぎょう</rt></ruby>の<ruby>式<rt>しき</rt></ruby>で<ruby>写真<rt>しゃしん</rt></ruby>をたくさん<ruby>撮<rt>と</rt></ruby>りました。",
+          "I took lots of photos at the graduation ceremony."
+        ],
+        "N3": [
+          "<ruby>式<rt>しき</rt></ruby>が<ruby>始<rt>はじ</rt></ruby>まる<ruby>前<rt>まえ</rt></ruby>に<ruby>席<rt>せき</rt></ruby>に<ruby>着<rt>つ</rt></ruby>くようにしてください。",
+          "Please make sure to be in your seat before the ceremony begins."
+        ],
+        "N2": [
+          "<ruby>式<rt>しき</rt></ruby>を<ruby>簡素<rt>かんそ</rt></ruby>にするか<ruby>盛大<rt>せいだい</rt></ruby>にするかは、<ruby>家族<rt>かぞく</rt></ruby>の<ruby>考<rt>かんが</rt></ruby>え<ruby>方<rt>かた</rt></ruby>しだいだ。",
+          "Whether to keep the ceremony simple or make it grand depends entirely on the family's way of thinking."
+        ],
+        "N1": [
+          "<ruby>厳<rt>おごそ</rt></ruby>かな<ruby>式<rt>しき</rt></ruby>が<ruby>執<rt>と</rt></ruby>り<ruby>行<rt>おこな</rt></ruby>われる<ruby>中<rt>なか</rt></ruby>、<ruby>参列者<rt>さんれつしゃ</rt></ruby>は<ruby>皆<rt>みな</rt></ruby><ruby>頭<rt>こうべ</rt></ruby>を<ruby>垂<rt>た</rt></ruby>れた。",
+          "As the solemn ceremony was conducted, all those in attendance bowed their heads."
+        ]
+      },
+      "mnem": "式 is the \"ceremony / rite\" kanji — it caps 結婚式・卒業式・入学式; on its own, 式 = a ceremony.",
+      "tip": "式 = a formal ceremony, and as a suffix names them: 結婚式 (wedding), 卒業式 (graduation), 入学式 (entrance). 式 can also mean \"formula / style\" in other compounds (数式, 洋式).",
+      "accent": 2
+    },
+    {
+      "key": "mnn:31:13",
+      "kana": "ほんしゃ",
+      "kanji": "本社",
+      "context": "",
+      "mean": "head office, main office",
+      "cat": "noun",
+      "type": "",
+      "trans": "",
+      "dict": "本社",
+      "dictRead": "ほんしゃ",
+      "audio": "/Audio/minnamoi/bai31/00010110000101111.mp3",
+      "levels": {
+        "N5": [
+          "ここは<ruby>本社<rt>ほんしゃ</rt></ruby>です。",
+          "This is the head office."
+        ],
+        "N4": [
+          "<ruby>来月<rt>らいげつ</rt></ruby><ruby>大阪<rt>おおさか</rt></ruby>の<ruby>本社<rt>ほんしゃ</rt></ruby>へ<ruby>行<rt>い</rt></ruby>きます。",
+          "Next month I'm going to the head office in Osaka."
+        ],
+        "N3": [
+          "<ruby>本社<rt>ほんしゃ</rt></ruby>に<ruby>転勤<rt>てんきん</rt></ruby>することになったので、<ruby>引<rt>ひ</rt></ruby>っ<ruby>越<rt>こ</rt></ruby>さなければなりません。",
+          "I've ended up being transferred to head office, so I have to move."
+        ],
+        "N2": [
+          "<ruby>本社<rt>ほんしゃ</rt></ruby>の<ruby>方針<rt>ほうしん</rt></ruby>が<ruby>変<rt>か</rt></ruby>わったとたん、<ruby>各<rt>かく</rt></ruby><ruby>支店<rt>してん</rt></ruby>も<ruby>対応<rt>たいおう</rt></ruby>に<ruby>追<rt>お</rt></ruby>われた。",
+          "The moment head office changed its policy, every branch too was scrambling to keep up."
+        ],
+        "N1": [
+          "<ruby>本社<rt>ほんしゃ</rt></ruby>と<ruby>現場<rt>げんば</rt></ruby>の<ruby>認識<rt>にんしき</rt></ruby>の<ruby>隔<rt>へだ</rt></ruby>たりこそが、この<ruby>問題<rt>もんだい</rt></ruby>の<ruby>根深<rt>ねぶか</rt></ruby>さを<ruby>物語<rt>ものがた</rt></ruby>っている。",
+          "It is the very gap in perception between head office and the front line that tells of how deep-rooted this problem is."
+        ]
+      },
+      "mnem": "本 (main / origin) + 社 (company) — the main company site: 本社 = head office.",
+      "tip": "本社 = a company's head / main office; a 支店 (してん) is a branch. 支社 (ししゃ) is a branch OFFICE (larger unit), 支店 a branch STORE / outlet.",
+      "accent": 1
+    },
+    {
+      "key": "mnn:31:14",
+      "kana": "してん",
+      "kanji": "支店",
+      "context": "",
+      "mean": "branch (store, office)",
+      "cat": "noun",
+      "type": "",
+      "trans": "",
+      "dict": "支店",
+      "dictRead": "してん",
+      "audio": "/Audio/minnamoi/bai31/00010110000110000.mp3",
+      "levels": {
+        "N5": [
+          "あそこに<ruby>支店<rt>してん</rt></ruby>があります。",
+          "There's a branch over there."
+        ],
+        "N4": [
+          "<ruby>大阪<rt>おおさか</rt></ruby>の<ruby>支店<rt>してん</rt></ruby>で<ruby>働<rt>はたら</rt></ruby>きたいです。",
+          "I want to work at the Osaka branch."
+        ],
+        "N3": [
+          "<ruby>駅前<rt>えきまえ</rt></ruby>に<ruby>新<rt>あたら</rt></ruby>しい<ruby>支店<rt>してん</rt></ruby>ができたら、<ruby>便利<rt>べんり</rt></ruby>になります。",
+          "When a new branch opens in front of the station, it'll be convenient."
+        ],
+        "N2": [
+          "この<ruby>支店<rt>してん</rt></ruby>は<ruby>売<rt>う</rt></ruby>り<ruby>上<rt>あ</rt></ruby>げが<ruby>伸<rt>の</rt></ruby>びないどころか、<ruby>年々<rt>ねんねん</rt></ruby><ruby>客<rt>きゃく</rt></ruby>が<ruby>減<rt>へ</rt></ruby>っている。",
+          "Far from its sales growing, this branch is losing customers year by year."
+        ],
+        "N1": [
+          "<ruby>採算<rt>さいさん</rt></ruby>の<ruby>取<rt>と</rt></ruby>れない<ruby>支店<rt>してん</rt></ruby>を<ruby>閉<rt>と</rt></ruby>じるほかない<ruby>状況<rt>じょうきょう</rt></ruby>に、<ruby>経営陣<rt>けいえいじん</rt></ruby>は<ruby>頭<rt>あたま</rt></ruby>を<ruby>抱<rt>かか</rt></ruby>えた。",
+          "Faced with a situation where they had no choice but to close the unprofitable branch, management was at their wits' end."
+        ]
+      },
+      "mnem": "支 (branch off) + 店 (store) — a store that branches off from the main one: 支店.",
+      "tip": "支店 = a branch store / office; its counterpart is 本社 (head office). Don't confuse 支店 (branch) with 支度 (したく, \"preparations\") — different second kanji.",
+      "accent": 0
+    },
+    {
+      "key": "mnn:31:15",
+      "kana": "きょうかい",
+      "kanji": "教会",
+      "context": "",
+      "mean": "church",
+      "cat": "noun",
+      "type": "",
+      "trans": "",
+      "dict": "教会",
+      "dictRead": "きょうかい",
+      "audio": "/Audio/minnamoi/bai31/00010110000110001.mp3",
+      "levels": {
+        "N5": [
+          "あそこに<ruby>教会<rt>きょうかい</rt></ruby>があります。",
+          "There's a church over there."
+        ],
+        "N4": [
+          "<ruby>日曜日<rt>にちようび</rt></ruby>に<ruby>家族<rt>かぞく</rt></ruby>と<ruby>教会<rt>きょうかい</rt></ruby>へ<ruby>行<rt>い</rt></ruby>きます。",
+          "On Sundays I go to church with my family."
+        ],
+        "N3": [
+          "<ruby>結婚式<rt>けっこんしき</rt></ruby>は<ruby>教会<rt>きょうかい</rt></ruby>で<ruby>挙<rt>あ</rt></ruby>げようと<ruby>思<rt>おも</rt></ruby>っています。",
+          "We're thinking of holding the wedding at a church."
+        ],
+        "N2": [
+          "<ruby>古<rt>ふる</rt></ruby>い<ruby>教会<rt>きょうかい</rt></ruby>のステンドグラスは、<ruby>見<rt>み</rt></ruby>る<ruby>者<rt>もの</rt></ruby>を<ruby>思<rt>おも</rt></ruby>わず<ruby>立<rt>た</rt></ruby>ち<ruby>止<rt>ど</rt></ruby>まらせるほど<ruby>美<rt>うつく</rt></ruby>しい。",
+          "The stained glass of the old church is so beautiful it makes onlookers stop in their tracks."
+        ],
+        "N1": [
+          "<ruby>戦火<rt>せんか</rt></ruby>で<ruby>焼<rt>や</rt></ruby>け<ruby>落<rt>お</rt></ruby>ちた<ruby>教会<rt>きょうかい</rt></ruby>は、<ruby>市民<rt>しみん</rt></ruby>の<ruby>手<rt>て</rt></ruby>によって<ruby>再<rt>ふたた</rt></ruby>び<ruby>建<rt>た</rt></ruby>て<ruby>直<rt>なお</rt></ruby>された。",
+          "The church that had burned down in the war was rebuilt by the hands of the citizens."
+        ]
+      },
+      "mnem": "教 (teach / religion) + 会 (gathering) — where the faithful gather to be taught: 教会 = church.",
+      "tip": "教会 = a (Christian) church; a Shinto shrine is 神社 (じんじゃ), a Buddhist temple お寺 (おてら). Don't confuse 教会 with 協会 (きょうかい, \"association\") — same reading, different kanji.",
+      "accent": 0
+    },
+    {
+      "key": "mnn:31:16",
+      "kana": "だいがくいん",
+      "kanji": "大学院",
+      "context": "",
+      "mean": "graduate school",
+      "cat": "noun",
+      "type": "",
+      "trans": "",
+      "dict": "大学院",
+      "dictRead": "だいがくいん",
+      "audio": "/Audio/minnamoi/bai31/00010110000110010.mp3",
+      "levels": {
+        "N5": [
+          "<ruby>兄<rt>あに</rt></ruby>は<ruby>大学院<rt>だいがくいん</rt></ruby>の<ruby>学生<rt>がくせい</rt></ruby>です。",
+          "My older brother is a graduate student."
+        ],
+        "N4": [
+          "<ruby>大学院<rt>だいがくいん</rt></ruby>で<ruby>日本語<rt>にほんご</rt></ruby>を<ruby>研究<rt>けんきゅう</rt></ruby>したいです。",
+          "I want to research Japanese at graduate school."
+        ],
+        "N3": [
+          "<ruby>大学院<rt>だいがくいん</rt></ruby>の<ruby>試験<rt>しけん</rt></ruby>を<ruby>受<rt>う</rt></ruby>けるので、ことしは<ruby>国<rt>くに</rt></ruby>へ<ruby>帰<rt>かえ</rt></ruby>らないつもりです。",
+          "I'm taking the graduate-school exam, so I don't plan to go home this year."
+        ],
+        "N2": [
+          "<ruby>大学院<rt>だいがくいん</rt></ruby>に<ruby>進<rt>すす</rt></ruby>むにしろ<ruby>就職<rt>しゅうしょく</rt></ruby>するにしろ、<ruby>早<rt>はや</rt></ruby>めに<ruby>準備<rt>じゅんび</rt></ruby>を<ruby>始<rt>はじ</rt></ruby>めたほうがいい。",
+          "Whether you go on to graduate school or take a job, you'd do well to start preparing early."
+        ],
+        "N1": [
+          "<ruby>大学院<rt>だいがくいん</rt></ruby>で<ruby>培<rt>つちか</rt></ruby>った<ruby>研究<rt>けんきゅう</rt></ruby><ruby>手法<rt>しゅほう</rt></ruby>は、<ruby>分野<rt>ぶんや</rt></ruby>を<ruby>問<rt>と</rt></ruby>わず<ruby>一生<rt>いっしょう</rt></ruby>の<ruby>財産<rt>ざいさん</rt></ruby>となる。",
+          "The research methods cultivated in graduate school become a lifelong asset, whatever one's field."
+        ]
+      },
+      "mnem": "大学 (university) + 院 (institution) — the institution beyond the university: 大学院 = graduate school.",
+      "tip": "大学院 = graduate school; a grad student is 大学院生 (だいがくいんせい), often 院生 for short. 大学 alone is undergraduate — don't drop the 大.",
+      "accent": 4
+    },
+    {
+      "key": "mnn:31:17",
+      "kana": "どうぶつえん",
+      "kanji": "動物園",
+      "context": "",
+      "mean": "zoo",
+      "cat": "noun",
+      "type": "",
+      "trans": "",
+      "dict": "動物園",
+      "dictRead": "どうぶつえん",
+      "audio": "/Audio/minnamoi/bai31/00010110000110011.mp3",
+      "levels": {
+        "N5": [
+          "あした<ruby>動物園<rt>どうぶつえん</rt></ruby>へ<ruby>行<rt>い</rt></ruby>きます。",
+          "I'm going to the zoo tomorrow."
+        ],
+        "N4": [
+          "<ruby>子供<rt>こども</rt></ruby>と<ruby>動物園<rt>どうぶつえん</rt></ruby>でパンダを<ruby>見<rt>み</rt></ruby>たいです。",
+          "I want to see the pandas at the zoo with my kids."
+        ],
+        "N3": [
+          "あしたは<ruby>休<rt>やす</rt></ruby>みだから、<ruby>動物園<rt>どうぶつえん</rt></ruby>へ<ruby>行<rt>い</rt></ruby>こうと<ruby>思<rt>おも</rt></ruby>っています。",
+          "Tomorrow's a day off, so I'm thinking of going to the zoo."
+        ],
+        "N2": [
+          "<ruby>動物園<rt>どうぶつえん</rt></ruby>は<ruby>子供<rt>こども</rt></ruby>のためだけでなく、<ruby>絶滅<rt>ぜつめつ</rt></ruby><ruby>危惧種<rt>きぐしゅ</rt></ruby>を<ruby>守<rt>まも</rt></ruby>る<ruby>役割<rt>やくわり</rt></ruby>も<ruby>担<rt>にな</rt></ruby>っている。",
+          "A zoo serves not only children but also the role of protecting endangered species."
+        ],
+        "N1": [
+          "<ruby>檻<rt>おり</rt></ruby>の<ruby>中<rt>なか</rt></ruby>の<ruby>動物<rt>どうぶつ</rt></ruby>を<ruby>眺<rt>なが</rt></ruby>めるうちに、<ruby>私<rt>わたし</rt></ruby>は<ruby>動物園<rt>どうぶつえん</rt></ruby>の<ruby>是非<rt>ぜひ</rt></ruby>そのものを<ruby>考<rt>かんが</rt></ruby>えずにはいられなかった。",
+          "As I watched the animals in their cages, I couldn't help but ponder the very rights and wrongs of zoos themselves."
+        ]
+      },
+      "mnem": "動物 (animal) + 園 (garden) — a garden of animals: 動物園 = zoo.",
+      "tip": "動物園 = zoo; a botanical garden is 植物園 (しょくぶつえん), an aquarium 水族館 (すいぞくかん). 園 (えん) caps such places: 遊園地, 公園.",
+      "accent": 4
+    },
+    {
+      "key": "mnn:31:18",
+      "kana": "おんせん",
+      "kanji": "温泉",
+      "context": "",
+      "mean": "hot spring, spa",
+      "cat": "noun",
+      "type": "",
+      "trans": "",
+      "dict": "温泉",
+      "dictRead": "おんせん",
+      "audio": "/Audio/minnamoi/bai31/00010110000110100.mp3",
+      "levels": {
+        "N5": [
+          "<ruby>温泉<rt>おんせん</rt></ruby>に<ruby>入<rt>はい</rt></ruby>りたいです。",
+          "I want to get into a hot spring."
+        ],
+        "N4": [
+          "<ruby>連休<rt>れんきゅう</rt></ruby>に<ruby>家族<rt>かぞく</rt></ruby>と<ruby>温泉<rt>おんせん</rt></ruby>へ<ruby>行<rt>い</rt></ruby>きます。",
+          "I'm going to a hot spring with my family over the long weekend."
+        ],
+        "N3": [
+          "<ruby>疲<rt>つか</rt></ruby>れたときは、<ruby>温泉<rt>おんせん</rt></ruby>でゆっくりするようにしています。",
+          "When I'm tired, I make a point of relaxing at a hot spring."
+        ],
+        "N2": [
+          "<ruby>山奥<rt>やまおく</rt></ruby>の<ruby>温泉<rt>おんせん</rt></ruby>は<ruby>不便<rt>ふべん</rt></ruby>なものの、<ruby>都会<rt>とかい</rt></ruby>では<ruby>味<rt>あじ</rt></ruby>わえない<ruby>静<rt>しず</rt></ruby>けさがある。",
+          "A hot spring deep in the mountains is inconvenient, but it has a quiet you can't taste in the city."
+        ],
+        "N1": [
+          "<ruby>湯煙<rt>ゆけむり</rt></ruby>の<ruby>立<rt>た</rt></ruby>ちのぼる<ruby>温泉<rt>おんせん</rt></ruby>に<ruby>身<rt>み</rt></ruby>を<ruby>沈<rt>しず</rt></ruby>めると、<ruby>日<rt>ひ</rt></ruby>ごろの<ruby>疲<rt>つか</rt></ruby>れが<ruby>溶<rt>と</rt></ruby>けていくようだった。",
+          "As I sank into the steaming hot spring, the everyday fatigue seemed to melt away."
+        ]
+      },
+      "mnem": "温 (warm) + 泉 (spring) — a warm spring welling from the earth: 温泉 = hot spring.",
+      "tip": "温泉 = a natural hot spring (and the resort around it); a public bath not spring-fed is 銭湯 (せんとう). お風呂 (おふろ) is a bath in general.",
+      "accent": 0
+    },
+    {
+      "key": "mnn:31:19",
+      "kana": "かえり",
+      "kanji": "帰り",
+      "context": "",
+      "mean": "the way back, one's return",
+      "cat": "noun",
+      "type": "",
+      "trans": "",
+      "dict": "帰り",
+      "dictRead": "かえり",
+      "audio": "/Audio/minnamoi/bai31/00010110000110101.mp3",
+      "levels": {
+        "N5": [
+          "<ruby>帰<rt>かえ</rt></ruby>りに<ruby>買<rt>か</rt></ruby>い<ruby>物<rt>もの</rt></ruby>をします。",
+          "On the way back I'll do some shopping."
+        ],
+        "N4": [
+          "<ruby>仕事<rt>しごと</rt></ruby>の<ruby>帰<rt>かえ</rt></ruby>りに<ruby>友達<rt>ともだち</rt></ruby>と<ruby>食事<rt>しょくじ</rt></ruby>をしました。",
+          "On the way home from work I had a meal with a friend."
+        ],
+        "N3": [
+          "<ruby>帰<rt>かえ</rt></ruby>りの<ruby>新幹線<rt>しんかんせん</rt></ruby>は<ruby>新神戸<rt>しんこうべ</rt></ruby>から<ruby>乗<rt>の</rt></ruby>る<ruby>予定<rt>よてい</rt></ruby>です。",
+          "I'm scheduled to board the return Shinkansen at Shin-Kobe."
+        ],
+        "N2": [
+          "<ruby>行<rt>い</rt></ruby>きはよかったものの、<ruby>帰<rt>かえ</rt></ruby>りは<ruby>渋滞<rt>じゅうたい</rt></ruby>にはまって<ruby>三時間<rt>さんじかん</rt></ruby>もかかった。",
+          "The trip out was fine, but on the way back we got stuck in traffic and it took a good three hours."
+        ],
+        "N1": [
+          "<ruby>祭<rt>まつ</rt></ruby>りの<ruby>帰<rt>かえ</rt></ruby>り、<ruby>夜道<rt>よみち</rt></ruby>に<ruby>響<rt>ひび</rt></ruby>く<ruby>下駄<rt>げた</rt></ruby>の<ruby>音<rt>おと</rt></ruby>が、なぜだか<ruby>今<rt>いま</rt></ruby>も<ruby>耳<rt>みみ</rt></ruby>に<ruby>残<rt>のこ</rt></ruby>っている。",
+          "On the way home from the festival, the clack of geta echoing down the night road somehow lingers in my ears even now."
+        ]
+      },
+      "mnem": "from 帰る (to go home) → 帰り, the \"going-home\" itself: the way back / one's return.",
+      "tip": "帰り = the return trip / one's way back (the noun of 帰る); 帰りに = \"on the way back.\" Its opposite is 行き (いき/ゆき, the outbound trip).",
+      "accent": 3
+    },
+    {
+      "key": "mnn:31:20",
+      "kana": "おこさん",
+      "kanji": "お子さん",
+      "context": "",
+      "mean": "(someone else's) child",
+      "cat": "noun",
+      "type": "",
+      "trans": "",
+      "dict": "お子さん",
+      "dictRead": "おこさん",
+      "audio": "/Audio/minnamoi/bai31/00010110000110110.mp3",
+      "levels": {
+        "N5": [
+          "お<ruby>子<rt>こ</rt></ruby>さんは<ruby>何歳<rt>なんさい</rt></ruby>ですか。",
+          "How old is your child?"
+        ],
+        "N4": [
+          "お<ruby>子<rt>こ</rt></ruby>さんの<ruby>名前<rt>なまえ</rt></ruby>はもう<ruby>決<rt>き</rt></ruby>めましたか。",
+          "Have you decided on your child's name yet?"
+        ],
+        "N3": [
+          "お<ruby>子<rt>こ</rt></ruby>さんが<ruby>生<rt>う</rt></ruby>まれたら、ぜひ<ruby>写真<rt>しゃしん</rt></ruby>を<ruby>見<rt>み</rt></ruby>せてください。",
+          "When your child is born, please do show me a photo."
+        ],
+        "N2": [
+          "お<ruby>子<rt>こ</rt></ruby>さんのことを<ruby>心配<rt>しんぱい</rt></ruby>なさる<ruby>気持<rt>きも</rt></ruby>ちは、<ruby>親<rt>おや</rt></ruby>である<ruby>以上<rt>いじょう</rt></ruby>もっともなことです。",
+          "Your worrying about your child is only natural, given that you're a parent."
+        ],
+        "N1": [
+          "お<ruby>子<rt>こ</rt></ruby>さんの<ruby>将来<rt>しょうらい</rt></ruby>を<ruby>案<rt>あん</rt></ruby>じるあまり、つい<ruby>口<rt>くち</rt></ruby>を<ruby>出<rt>だ</rt></ruby>しすぎてしまうご<ruby>両親<rt>りょうしん</rt></ruby>も<ruby>少<rt>すく</rt></ruby>なくない。",
+          "Out of excessive concern for their child's future, quite a few parents end up meddling too much."
+        ]
+      },
+      "mnem": "お + 子 (child) + さん — the polite \"your child\": お子さん.",
+      "tip": "お子さん is the POLITE word for someone else's child; for your own, say 子供 (こども) or うちの子. Other people's family likewise take 〜さん honorifics (お母さん, お兄さん).",
+      "accent": 0
+    },
+    {
+      "key": "mnn:31:21",
+      "kana": "〜ごう",
+      "kanji": "〜号",
+      "context": "",
+      "mean": "No. ~ (counter for trains, typhoons, magazine issues, etc.)",
+      "cat": "noun",
+      "type": "",
+      "trans": "",
+      "dict": "号",
+      "dictRead": "ごう",
+      "audio": "/Audio/minnamoi/bai31/00010110000110111.mp3"
+    },
+    {
+      "key": "mnn:31:22",
+      "kana": "〜のほう",
+      "kanji": "〜の方",
+      "context": "",
+      "mean": "toward ~, the direction of ~, ~ way",
+      "cat": "expression",
+      "type": "",
+      "trans": "",
+      "dict": "〜の方",
+      "dictRead": "〜のほう",
+      "audio": "/Audio/minnamoi/bai31/00010110000111000.mp3"
+    },
+    {
+      "key": "mnn:31:23",
+      "kana": "ずっと",
+      "kanji": "",
+      "context": "",
+      "mean": "the whole time, all along; by far",
+      "cat": "adverb",
+      "type": "",
+      "trans": "",
+      "dict": "ずっと",
+      "dictRead": "ずっと",
+      "audio": "/Audio/minnamoi/bai31/00010110000111001.mp3",
+      "levels": {
+        "N5": [
+          "<ruby>今日<rt>きょう</rt></ruby>はずっと<ruby>家<rt>いえ</rt></ruby>にいました。",
+          "I was home the whole day today."
+        ],
+        "N4": [
+          "<ruby>朝<rt>あさ</rt></ruby>からずっと<ruby>雨<rt>あめ</rt></ruby>が<ruby>降<rt>ふ</rt></ruby>っています。",
+          "It's been raining the whole time since morning."
+        ],
+        "N3": [
+          "<ruby>新<rt>あたら</rt></ruby>しい<ruby>店<rt>みせ</rt></ruby>のほうが<ruby>前<rt>まえ</rt></ruby>の<ruby>店<rt>みせ</rt></ruby>よりずっと<ruby>安<rt>やす</rt></ruby>いです。",
+          "The new shop is far cheaper than the old one."
+        ],
+        "N2": [
+          "<ruby>子供<rt>こども</rt></ruby>のころからずっと<ruby>夢<rt>ゆめ</rt></ruby>を<ruby>追<rt>お</rt></ruby>い<ruby>続<rt>つづ</rt></ruby>けてきたからこそ、<ruby>今<rt>いま</rt></ruby>の<ruby>私<rt>わたし</rt></ruby>がある。",
+          "It's precisely because I've kept chasing this dream ever since I was a child that I am who I am now."
+        ],
+        "N1": [
+          "<ruby>口<rt>くち</rt></ruby>には<ruby>出<rt>だ</rt></ruby>さなかったが、<ruby>彼<rt>かれ</rt></ruby>はずっと<ruby>以前<rt>いぜん</rt></ruby>から、この<ruby>日<rt>ひ</rt></ruby>が<ruby>来<rt>く</rt></ruby>ることを<ruby>覚悟<rt>かくご</rt></ruby>していたにちがいない。",
+          "He never said so, but he must have been resigned, from long before, to this day coming."
+        ]
+      },
+      "mnem": "\"zutto\" — a long stretch pulled taut all the way through: ずっと = the whole time / by far.",
+      "tip": "ずっと has two senses: (1) \"the whole time / all along\" over a span (ずっと待っていた); (2) \"by far / much more\" intensifying a comparison (ずっと安い). Context tells them apart.",
+      "accent": 0
+    },
+    {
+      "key": "mnn:31:24",
+      "kana": "バリ",
+      "kanji": "",
+      "context": "",
+      "mean": "Bali (Indonesian island)",
+      "cat": "noun",
+      "type": "",
+      "trans": "",
+      "dict": "バリ",
+      "dictRead": "バリ",
+      "audio": "/Audio/minnamoi/bai31/00010110000111010.mp3"
+    },
+    {
+      "key": "mnn:31:25",
+      "kana": "ピカソ",
+      "kanji": "",
+      "context": "",
+      "mean": "Pablo Picasso (Spanish painter, 1881–1973)",
+      "cat": "noun",
+      "type": "",
+      "trans": "",
+      "dict": "ピカソ",
+      "dictRead": "ピカソ",
+      "audio": "/Audio/minnamoi/bai31/00010110000111011.mp3"
+    },
+    {
+      "key": "mnn:31:26",
+      "kana": "のぞみ",
+      "kanji": "",
+      "context": "",
+      "mean": "Nozomi (name of a Shinkansen service, e.g. 〜42号 = Nozomi Superexpress No. 42)",
+      "cat": "noun",
+      "type": "",
+      "trans": "",
+      "dict": "のぞみ",
+      "dictRead": "のぞみ",
+      "audio": "/Audio/minnamoi/bai31/00010110000111100.mp3"
+    },
+    {
+      "key": "mnn:31:27",
+      "kana": "しんこうべ",
+      "kanji": "新神戸",
+      "context": "",
+      "mean": "Shin-Kobe (a station in Hyōgo Prefecture)",
+      "cat": "noun",
+      "type": "",
+      "trans": "",
+      "dict": "新神戸",
+      "dictRead": "しんこうべ",
+      "audio": "/Audio/minnamoi/bai31/00010110000111101.mp3"
+    }
+  ],
+  "grammar": [
+    {
+      "pattern": "Volitional form (意向形) — V(よ)う (\"let's ~\", casual)",
+      "structure": "Ⅰ(godan): 〜u → 〜o ＋う (行く→行こう) ・ Ⅱ(ichidan): 〜る → 〜よう (食べる→食べよう) ・ Ⅲ: する→しよう, 来る→こよう",
+      "explain": "The volitional (意向) form is the casual equivalent of 〜ましょう — \"let's ~\" or \"shall we ~\" among friends. Godan verbs shift the final -u to -o and add う (行く→行こう, 飲む→飲もう, 休む→休もう); ichidan verbs drop る and add よう (食べる→食べよう, 見る→見よう); the two irregulars are しよう and 来(こ)よう. On its own it proposes or invites; そうしよう (\"let's do that\") is a set reply.",
+      "examples": [
+        {
+          "jp": "いっしょに<ruby>行<rt>い</rt></ruby>こう。",
+          "en": "Let's go together."
+        },
+        {
+          "jp": "バスがなかなか<ruby>来<rt>こ</rt></ruby>ないから、タクシーで<ruby>行<rt>い</rt></ruby>こう。",
+          "en": "The bus just isn't coming, so let's take a taxi."
+        },
+        {
+          "jp": "<ruby>疲<rt>つか</rt></ruby>れたから、ちょっと<ruby>休憩<rt>きゅうけい</rt></ruby>しよう。",
+          "en": "I'm tired, so let's take a little break."
+        },
+        {
+          "jp": "うん、そうしよう。",
+          "en": "Yeah, let's do that."
+        }
+      ]
+    },
+    {
+      "pattern": "〜（よ）うと思っています (I'm planning / thinking of ~ing)",
+      "structure": "V(意向形) ＋ と<ruby>思<rt>おも</rt></ruby>っています ／ と<ruby>思<rt>おも</rt></ruby>います",
+      "explain": "Volitional form + と思っています expresses an intention the speaker has been holding: \"I'm planning to / thinking of ~ing.\" The progressive と思っています implies the intention was decided earlier and still stands; the plain と思います sounds more like a decision made on the spot. It states the speaker's own plan, which need not be a fixed schedule.",
+      "examples": [
+        {
+          "jp": "<ruby>映画<rt>えいが</rt></ruby>を<ruby>見<rt>み</rt></ruby>ようと<ruby>思<rt>おも</rt></ruby>っています。",
+          "en": "I'm planning to see a movie."
+        },
+        {
+          "jp": "<ruby>将来<rt>しょうらい</rt></ruby><ruby>自分<rt>じぶん</rt></ruby>の<ruby>会社<rt>かいしゃ</rt></ruby>を<ruby>作<rt>つく</rt></ruby>ろうと<ruby>思<rt>おも</rt></ruby>っています。",
+          "en": "In the future I'm planning to start my own company."
+        },
+        {
+          "jp": "お<ruby>正月<rt>しょうがつ</rt></ruby>は<ruby>家族<rt>かぞく</rt></ruby>と<ruby>温泉<rt>おんせん</rt></ruby>に<ruby>行<rt>い</rt></ruby>こうと<ruby>思<rt>おも</rt></ruby>っています。",
+          "en": "For New Year's I'm planning to go to a hot spring with my family."
+        },
+        {
+          "jp": "<ruby>北海道<rt>ほっかいどう</rt></ruby><ruby>旅行<rt>りょこう</rt></ruby>はあした<ruby>申<rt>もう</rt></ruby>し<ruby>込<rt>こ</rt></ruby>もうと<ruby>思<rt>おも</rt></ruby>っています。",
+          "en": "I'm planning to sign up for the Hokkaido trip tomorrow."
+        }
+      ]
+    },
+    {
+      "pattern": "〜つもりです (intend to / plan to)",
+      "structure": "V(<ruby>辞書<rt>じしょ</rt></ruby>form) ＋ つもりです ／ V(ないform) ＋ つもりです",
+      "explain": "つもり states a firm intention or resolve — \"intend to / plan to.\" Dictionary form + つもり for what you WILL do; ない-form + つもり for what you intend NOT to do (帰らないつもり, \"I don't intend to go back\"). It's more settled than 〜ようと思う but still concerns the speaker's own will — don't use it for a third party's fixed schedule (that's 予定).",
+      "examples": [
+        {
+          "jp": "<ruby>結婚式<rt>けっこんしき</rt></ruby>は<ruby>神社<rt>じんじゃ</rt></ruby>でするつもりです。",
+          "en": "We intend to hold the wedding at a shrine."
+        },
+        {
+          "jp": "お<ruby>正月<rt>しょうがつ</rt></ruby>は<ruby>国<rt>くに</rt></ruby>へ<ruby>帰<rt>かえ</rt></ruby>らないつもりです。<ruby>飛行機<rt>ひこうき</rt></ruby>のチケットが<ruby>高<rt>たか</rt></ruby>いんです。",
+          "en": "I don't intend to go home for New Year's. The plane tickets are expensive."
+        },
+        {
+          "jp": "<ruby>国<rt>くに</rt></ruby>へ<ruby>帰<rt>かえ</rt></ruby>っても、<ruby>日本語<rt>にほんご</rt></ruby>の<ruby>勉強<rt>べんきょう</rt></ruby>を<ruby>続<rt>つづ</rt></ruby>けるつもりです。",
+          "en": "Even after I go home, I intend to keep studying Japanese."
+        }
+      ]
+    },
+    {
+      "pattern": "〜予定です (be scheduled / due to ~)",
+      "structure": "V(<ruby>辞書<rt>じしょ</rt></ruby>form) ＋ <ruby>予定<rt>よてい</rt></ruby>です ／ N ＋ の ＋ <ruby>予定<rt>よてい</rt></ruby>です",
+      "explain": "予定 presents a fixed, arranged schedule — \"be scheduled / due to ~.\" Attach the dictionary form of a verb, or の after a noun (来年の三月の予定, 九時の予定). Unlike つもり (personal intention), 予定 frames the plan as already set on a calendar, so it's natural for timetables, business trips, and other people's arrangements.",
+      "examples": [
+        {
+          "jp": "<ruby>来週<rt>らいしゅう</rt></ruby>の<ruby>金曜日<rt>きんようび</rt></ruby>に<ruby>帰<rt>かえ</rt></ruby>る<ruby>予定<rt>よてい</rt></ruby>です。",
+          "en": "I'm scheduled to come back next Friday."
+        },
+        {
+          "jp": "<ruby>七時<rt>しちじ</rt></ruby>の<ruby>新幹線<rt>しんかんせん</rt></ruby>に<ruby>乗<rt>の</rt></ruby>る<ruby>予定<rt>よてい</rt></ruby>です。",
+          "en": "I'm scheduled to take the seven-o'clock Shinkansen."
+        },
+        {
+          "jp": "<ruby>荷物<rt>にもつ</rt></ruby>はあしたの<ruby>朝<rt>あさ</rt></ruby><ruby>九時<rt>くじ</rt></ruby>の<ruby>予定<rt>よてい</rt></ruby>です。",
+          "en": "The luggage is scheduled for nine o'clock tomorrow morning."
+        },
+        {
+          "jp": "<ruby>新<rt>あたら</rt></ruby>しい<ruby>駅<rt>えき</rt></ruby>は<ruby>来年<rt>らいねん</rt></ruby>の<ruby>三月<rt>さんがつ</rt></ruby>の<ruby>予定<rt>よてい</rt></ruby>です。",
+          "en": "The new station is scheduled for March next year."
+        }
+      ]
+    },
+    {
+      "pattern": "まだ〜ていません (haven't ~ yet)",
+      "structure": "まだ ＋ V(てform) ＋ いません",
+      "explain": "To answer \"have you done X yet?\" in the negative, use まだ + て-form + いません — \"I haven't ~ yet,\" implying you still intend or expect to. It contrasts with もう〜ました (\"already did\"). Note the form is ていません, NOT でした — the action simply hasn't happened as of now; it's often followed by 〜ようと思っています to say when you plan to.",
+      "examples": [
+        {
+          "jp": "<ruby>作文<rt>さくぶん</rt></ruby>はもう<ruby>書<rt>か</rt></ruby>きましたか。…いいえ、まだ<ruby>書<rt>か</rt></ruby>いていません。",
+          "en": "Have you written the composition yet? …No, I haven't written it yet."
+        },
+        {
+          "jp": "<ruby>北海道<rt>ほっかいどう</rt></ruby><ruby>旅行<rt>りょこう</rt></ruby>はもう<ruby>申<rt>もう</rt></ruby>し<ruby>込<rt>こ</rt></ruby>みましたか。…いいえ、まだ<ruby>申<rt>もう</rt></ruby>し<ruby>込<rt>こ</rt></ruby>んでいません。",
+          "en": "Have you signed up for the Hokkaido trip yet? …No, I haven't signed up yet."
+        },
+        {
+          "jp": "ピカソの<ruby>展覧会<rt>てんらんかい</rt></ruby>はもう<ruby>見<rt>み</rt></ruby>に<ruby>行<rt>い</rt></ruby>きましたか。…いいえ、まだ<ruby>行<rt>い</rt></ruby>っていません。<ruby>今度<rt>こんど</rt></ruby>の<ruby>日曜日<rt>にちようび</rt></ruby>に<ruby>行<rt>い</rt></ruby>こうと<ruby>思<rt>おも</rt></ruby>っています。",
+          "en": "Have you gone to see the Picasso exhibition yet? …No, not yet. I'm planning to go this Sunday."
+        }
+      ]
+    }
+  ],
+  "examples": [
+    {
+      "jp": "<ruby>疲<rt>つか</rt></ruby>れたね。ちょっと<ruby>休<rt>やす</rt></ruby>まない？…うん、そうしよう。",
+      "en": "I'm tired. Shall we take a short break? …Yeah, let's."
+    },
+    {
+      "jp": "お<ruby>正月<rt>しょうがつ</rt></ruby>は<ruby>何<rt>なに</rt></ruby>をしますか。…<ruby>家族<rt>かぞく</rt></ruby>と<ruby>温泉<rt>おんせん</rt></ruby>に<ruby>行<rt>い</rt></ruby>こうと<ruby>思<rt>おも</rt></ruby>っています。",
+      "en": "What will you do for New Year's? …I'm planning to go to a hot spring with my family."
+    },
+    {
+      "jp": "<ruby>将来<rt>しょうらい</rt></ruby><ruby>自分<rt>じぶん</rt></ruby>の<ruby>会社<rt>かいしゃ</rt></ruby>を<ruby>作<rt>つく</rt></ruby>ろうと<ruby>思<rt>おも</rt></ruby>っています。",
+      "en": "In the future I plan to start my own company."
+    },
+    {
+      "jp": "<ruby>来月<rt>らいげつ</rt></ruby><ruby>車<rt>くるま</rt></ruby>を<ruby>買<rt>か</rt></ruby>うつもりです。",
+      "en": "I plan to buy a car next month."
+    },
+    {
+      "jp": "<ruby>国<rt>くに</rt></ruby>へ<ruby>帰<rt>かえ</rt></ruby>っても、<ruby>日本語<rt>にほんご</rt></ruby>の<ruby>勉強<rt>べんきょう</rt></ruby>を<ruby>続<rt>つづ</rt></ruby>けますか。…はい、<ruby>続<rt>つづ</rt></ruby>けるつもりです。",
+      "en": "Even after you go home, will you keep studying Japanese? …Yes, I intend to continue."
+    },
+    {
+      "jp": "<ruby>夏休<rt>なつやす</rt></ruby>みは<ruby>国<rt>くに</rt></ruby>へ<ruby>帰<rt>かえ</rt></ruby>らないんですか。…ええ。<ruby>大学院<rt>だいがくいん</rt></ruby>の<ruby>試験<rt>しけん</rt></ruby>を<ruby>受<rt>う</rt></ruby>けますから、ことしは<ruby>帰<rt>かえ</rt></ruby>らないつもりです。",
+      "en": "Aren't you going home for summer vacation? …No. I'm taking the graduate-school exam, so I don't plan to go home this year."
+    },
+    {
+      "jp": "レポートはもうできましたか。…いいえ、まだ<ruby>書<rt>か</rt></ruby>いていません。<ruby>金曜日<rt>きんようび</rt></ruby>までにまとめようと<ruby>思<rt>おも</rt></ruby>っています。",
+      "en": "Is the report done yet? …No, not yet. I'm planning to pull it together by Friday."
+    },
+    {
+      "jp": "あしたからニューヨークへ<ruby>出張<rt>しゅっちょう</rt></ruby>します。…そうですか。いつ<ruby>帰<rt>かえ</rt></ruby>りますか。…<ruby>来週<rt>らいしゅう</rt></ruby>の<ruby>金曜日<rt>きんようび</rt></ruby>に<ruby>帰<rt>かえ</rt></ruby>る<ruby>予定<rt>よてい</rt></ruby>です。",
+      "en": "Starting tomorrow I'll be on a business trip to New York. …Oh really? When will you be back? …I'm scheduled to be back next Friday."
+    }
+  ],
+  "conversation": {
+    "title": "料理を習おうと思っています (I'm planning to learn to cook)",
+    "audio": "/Audio/minnahonsatsu2/16.mp3",
+    "lines": [
+      {
+        "role": "グプタ",
+        "jp": "<ruby>来月<rt>らいげつ</rt></ruby>から<ruby>独身<rt>どくしん</rt></ruby>です。",
+        "en": "Starting next month, I'll be a bachelor."
+      },
+      {
+        "role": "同僚",
+        "jp": "えっ？",
+        "en": "Huh?"
+      },
+      {
+        "role": "グプタ",
+        "jp": "<ruby>実<rt>じつ</rt></ruby>は<ruby>大阪<rt>おおさか</rt></ruby>の<ruby>本社<rt>ほんしゃ</rt></ruby>に<ruby>転勤<rt>てんきん</rt></ruby>なんです。",
+        "en": "Actually, I'm being transferred to the head office in Osaka."
+      },
+      {
+        "role": "同僚",
+        "jp": "<ruby>本社<rt>ほんしゃ</rt></ruby>ですか。それはおめでとうございます。でも、どうして<ruby>独身<rt>どくしん</rt></ruby>になるんですか。",
+        "en": "The head office? Congratulations, then. But why will you be a bachelor?"
+      },
+      {
+        "role": "グプタ",
+        "jp": "<ruby>妻<rt>つま</rt></ruby>と<ruby>子<rt>こ</rt></ruby>どもは<ruby>東京<rt>とうきょう</rt></ruby>に<ruby>残<rt>のこ</rt></ruby>るんです。",
+        "en": "My wife and child will stay in Tokyo."
+      },
+      {
+        "role": "同僚",
+        "jp": "えっ、いっしょに<ruby>行<rt>い</rt></ruby>かないんですか。",
+        "en": "Oh, they won't go with you?"
+      },
+      {
+        "role": "グプタ",
+        "jp": "ええ。<ruby>息子<rt>むすこ</rt></ruby>は<ruby>来年<rt>らいねん</rt></ruby><ruby>大学<rt>だいがく</rt></ruby>の<ruby>入学<rt>にゅうがく</rt></ruby><ruby>試験<rt>しけん</rt></ruby>があるから<ruby>東京<rt>とうきょう</rt></ruby>に<ruby>残<rt>のこ</rt></ruby>るというし、<ruby>妻<rt>つま</rt></ruby>も<ruby>今<rt>いま</rt></ruby>の<ruby>会社<rt>かいしゃ</rt></ruby>をやめたくないと<ruby>言<rt>い</rt></ruby>うんです。",
+        "en": "Yes. My son says he has university entrance exams next year so he'll stay in Tokyo, and my wife says she doesn't want to quit her current job."
+      },
+      {
+        "role": "同僚",
+        "jp": "それで、<ruby>別々<rt>べつべつ</rt></ruby>に<ruby>住<rt>す</rt></ruby>むんですか。",
+        "en": "So you'll live separately?"
+      },
+      {
+        "role": "グプタ",
+        "jp": "ええ、でも、<ruby>月<rt>つき</rt></ruby>に<ruby>二<rt>に</rt></ruby>、<ruby>三回<rt>さんかい</rt></ruby><ruby>週末<rt>しゅうまつ</rt></ruby>に<ruby>帰<rt>かえ</rt></ruby>るつもりです。",
+        "en": "Yes, but I plan to come home on weekends two or three times a month."
+      },
+      {
+        "role": "同僚",
+        "jp": "<ruby>大変<rt>たいへん</rt></ruby>ですね。",
+        "en": "That sounds tough."
+      },
+      {
+        "role": "グプタ",
+        "jp": "でも、いいチャンスですから、<ruby>料理<rt>りょうり</rt></ruby>を<ruby>習<rt>なら</rt></ruby>おうと<ruby>思<rt>おも</rt></ruby>っています。",
+        "en": "But it's a good opportunity, so I'm planning to learn to cook."
+      },
+      {
+        "role": "同僚",
+        "jp": "それはいいですね。",
+        "en": "That's good."
+      }
+    ]
+  }
+}

@@ -1,0 +1,994 @@
+{
+  "lesson": 47,
+  "title": "Lesson 47",
+  "theme": "Reporting and inferring — 普通形＋そうです (hearsay: I hear that ~), 〜によると (according to ~), 〜ようです (it seems / it looks like, from one's own senses), and 音・におい・味がします (perceiving a sensation)",
+  "source": {
+    "name": "vnjpclub.com",
+    "vocabUrl": "https://www.vnjpclub.com/en/minna-no-nihongo/lesson-47-vocabulary.html",
+    "grammarUrl": "https://www.vnjpclub.com/en/minna-no-nihongo/lesson-47-grammar.html",
+    "note": "Vocabulary, native-speaker audio, and example sentences aggregated from vnjpclub.com (Minna no Nihongo 第2版). For personal study."
+  },
+  "vocab": [
+    {
+      "key": "mnn:47:0",
+      "kana": "ふきます",
+      "kanji": "吹きます",
+      "context": "風が〜",
+      "mean": "(the wind) to blow",
+      "cat": "verb",
+      "type": "godan",
+      "trans": "i",
+      "dict": "吹く",
+      "dictRead": "ふく",
+      "audio": "/Audio/minnamoi/bai47/00010111100100010.mp3",
+      "levels": {
+        "N5": [
+          "<ruby>風<rt>かぜ</rt></ruby>が<ruby>吹<rt>ふ</rt></ruby>きます。",
+          "The wind blows."
+        ],
+        "N4": [
+          "<ruby>今日<rt>きょう</rt></ruby>は<ruby>強<rt>つよ</rt></ruby>い<ruby>風<rt>かぜ</rt></ruby>が<ruby>吹<rt>ふ</rt></ruby>いています。",
+          "A strong wind is blowing today."
+        ],
+        "N3": [
+          "<ruby>台風<rt>たいふう</rt></ruby>が<ruby>近<rt>ちか</rt></ruby>づいてきたら、きっと<ruby>強<rt>つよ</rt></ruby>い<ruby>風<rt>かぜ</rt></ruby>が<ruby>吹<rt>ふ</rt></ruby>くだろう。",
+          "When the typhoon draws near, a strong wind will surely blow."
+        ],
+        "N2": [
+          "<ruby>冷<rt>つめ</rt></ruby>たい<ruby>風<rt>かぜ</rt></ruby>が<ruby>吹<rt>ふ</rt></ruby>くにつれて、<ruby>木<rt>き</rt></ruby>の<ruby>葉<rt>は</rt></ruby>が<ruby>次々<rt>つぎつぎ</rt></ruby>と<ruby>散<rt>ち</rt></ruby>っていった。",
+          "As the cold wind blew, the leaves scattered one after another."
+        ],
+        "N1": [
+          "たとえ<ruby>逆風<rt>ぎゃくふう</rt></ruby>が<ruby>吹<rt>ふ</rt></ruby>こうとも、<ruby>信念<rt>しんねん</rt></ruby>を<ruby>曲<rt>ま</rt></ruby>げずに<ruby>前<rt>まえ</rt></ruby>へ<ruby>進<rt>すす</rt></ruby>み<ruby>続<rt>つづ</rt></ruby>ける<ruby>覚悟<rt>かくご</rt></ruby>だ。",
+          "No matter what headwinds may blow, I am resolved to keep pressing forward without bending my convictions."
+        ]
+      },
+      "mnem": "吹く — say \"foo-ku\": you go \"phew, foo!\" and 吹く, blow the air out.",
+      "tip": "吹く (godan) — the wind takes が (風が吹く), so it's intransitive here; it's also used transitively for 'to blow (a whistle/instrument)': 笛を吹く. Don't confuse it with 拭く (ふく, 'to wipe').",
+      "accent": 1
+    },
+    {
+      "key": "mnn:47:1",
+      "kana": "もえます",
+      "kanji": "燃えます",
+      "context": "ごみが〜",
+      "mean": "(rubbish) to burn",
+      "cat": "verb",
+      "type": "ichidan",
+      "trans": "i",
+      "dict": "燃える",
+      "dictRead": "もえる",
+      "audio": "/Audio/minnamoi/bai47/00010111100100011.mp3",
+      "levels": {
+        "N5": [
+          "ごみが<ruby>燃<rt>も</rt></ruby>えています。",
+          "The rubbish is burning."
+        ],
+        "N4": [
+          "この<ruby>紙<rt>かみ</rt></ruby>はよく<ruby>燃<rt>も</rt></ruby>えるから、<ruby>気<rt>き</rt></ruby>をつけてください。",
+          "This paper burns easily, so please be careful."
+        ],
+        "N3": [
+          "<ruby>火事<rt>かじ</rt></ruby>で<ruby>家<rt>いえ</rt></ruby>が<ruby>燃<rt>も</rt></ruby>えてしまったら、どうしますか。",
+          "What would you do if your house burned down in a fire?"
+        ],
+        "N2": [
+          "<ruby>乾燥<rt>かんそう</rt></ruby>した<ruby>森<rt>もり</rt></ruby>は、わずかな<ruby>火<rt>ひ</rt></ruby>でも<ruby>激<rt>はげ</rt></ruby>しく<ruby>燃<rt>も</rt></ruby>えかねない。",
+          "A dry forest could well burn fiercely even from the smallest flame."
+        ],
+        "N1": [
+          "<ruby>夢<rt>ゆめ</rt></ruby>に<ruby>向<rt>む</rt></ruby>かって<ruby>燃<rt>も</rt></ruby>える<ruby>若者<rt>わかもの</rt></ruby>の<ruby>情熱<rt>じょうねつ</rt></ruby>は、<ruby>周<rt>まわ</rt></ruby>りの<ruby>者<rt>もの</rt></ruby>をも<ruby>動<rt>うご</rt></ruby>かさずにはおかない。",
+          "The passion of young people burning toward their dreams cannot but move even those around them."
+        ]
+      },
+      "mnem": "燃える — \"mo-eru\": pile on \"more, more\" fuel and it 燃える, catches fire and burns.",
+      "tip": "燃える (ichidan, intransitive) — the thing burning takes が (ごみが燃える). Its transitive pair is 燃やす (もやす, 'to burn something,' ごみを燃やす). 燃えるごみ = 'burnable trash.'",
+      "accent": 0
+    },
+    {
+      "key": "mnn:47:2",
+      "kana": "なくなります",
+      "kanji": "亡くなります",
+      "context": "",
+      "mean": "to pass away, die (euphemistic equivalent of 死にます)",
+      "cat": "verb",
+      "type": "godan",
+      "trans": "i",
+      "dict": "亡くなる",
+      "dictRead": "なくなる",
+      "audio": "/Audio/minnamoi/bai47/00010111100100100.mp3",
+      "levels": {
+        "N5": [
+          "おじいさんが<ruby>亡<rt>な</rt></ruby>くなりました。",
+          "My grandfather passed away."
+        ],
+        "N4": [
+          "<ruby>有名<rt>ゆうめい</rt></ruby>な<ruby>歌手<rt>かしゅ</rt></ruby>が<ruby>亡<rt>な</rt></ruby>くなったと<ruby>聞<rt>き</rt></ruby>いて、とても<ruby>驚<rt>おどろ</rt></ruby>きました。",
+          "I was very surprised to hear that a famous singer had passed away."
+        ],
+        "N3": [
+          "<ruby>祖母<rt>そぼ</rt></ruby>が<ruby>亡<rt>な</rt></ruby>くなってから、もう<ruby>十年<rt>じゅうねん</rt></ruby>になります。",
+          "It's already been ten years since my grandmother passed away."
+        ],
+        "N2": [
+          "<ruby>恩師<rt>おんし</rt></ruby>が<ruby>亡<rt>な</rt></ruby>くなったという<ruby>知<rt>し</rt></ruby>らせを<ruby>受<rt>う</rt></ruby>け、しばらくは<ruby>言葉<rt>ことば</rt></ruby>を<ruby>失<rt>うしな</rt></ruby>わずにはいられなかった。",
+          "On receiving the news that my mentor had passed away, I couldn't help being at a loss for words for a while."
+        ],
+        "N1": [
+          "<ruby>戦争<rt>せんそう</rt></ruby>で<ruby>亡<rt>な</rt></ruby>くなった<ruby>人々<rt>ひとびと</rt></ruby>の<ruby>無念<rt>むねん</rt></ruby>を<ruby>思<rt>おも</rt></ruby>うと、<ruby>平和<rt>へいわ</rt></ruby>の<ruby>尊<rt>とうと</rt></ruby>さを<ruby>改<rt>あらた</rt></ruby>めて<ruby>噛<rt>か</rt></ruby>みしめずにはいられない。",
+          "When I think of the bitterness of those who died in the war, I cannot but reflect anew on the preciousness of peace."
+        ]
+      },
+      "mnem": "亡くなる — the honored cousin of 無くなる ('cease to be'): a person's presence 亡くなる, is gone — a gentle way to say they died.",
+      "tip": "亡くなる (godan, intransitive) is the polite, euphemistic way to say 死ぬ (しぬ), used only of PEOPLE (死ぬ works for anything). Homophone 無くなる = '(a thing) runs out / is lost.'",
+      "accent": 0
+    },
+    {
+      "key": "mnn:47:3",
+      "kana": "あつまります",
+      "kanji": "集まります",
+      "context": "人が〜",
+      "mean": "(people) to gather, come together",
+      "cat": "verb",
+      "type": "godan",
+      "trans": "i",
+      "dict": "集まる",
+      "dictRead": "あつまる",
+      "audio": "/Audio/minnamoi/bai47/00010111100100101.mp3",
+      "levels": {
+        "N5": [
+          "<ruby>公園<rt>こうえん</rt></ruby>に<ruby>人<rt>ひと</rt></ruby>が<ruby>集<rt>あつ</rt></ruby>まりました。",
+          "People gathered in the park."
+        ],
+        "N4": [
+          "<ruby>駅前<rt>えきまえ</rt></ruby>に<ruby>大勢<rt>おおぜい</rt></ruby>の<ruby>人<rt>ひと</rt></ruby>が<ruby>集<rt>あつ</rt></ruby>まっています。",
+          "A lot of people are gathering in front of the station."
+        ],
+        "N3": [
+          "<ruby>会議<rt>かいぎ</rt></ruby>が<ruby>始<rt>はじ</rt></ruby>まる<ruby>前<rt>まえ</rt></ruby>に、みんなが<ruby>集<rt>あつ</rt></ruby>まるように<ruby>連絡<rt>れんらく</rt></ruby>しておきました。",
+          "I contacted everyone beforehand so that they would gather before the meeting starts."
+        ],
+        "N2": [
+          "<ruby>有名人<rt>ゆうめいじん</rt></ruby>が<ruby>来<rt>く</rt></ruby>るとあって、<ruby>会場<rt>かいじょう</rt></ruby>には<ruby>朝<rt>あさ</rt></ruby>から<ruby>人<rt>ひと</rt></ruby>が<ruby>集<rt>あつ</rt></ruby>まっていた。",
+          "Since a celebrity was coming, people had been gathering at the venue since morning."
+        ],
+        "N1": [
+          "<ruby>被災地<rt>ひさいち</rt></ruby>を<ruby>支援<rt>しえん</rt></ruby>しようと、<ruby>全国<rt>ぜんこく</rt></ruby>から<ruby>寄付<rt>きふ</rt></ruby>や<ruby>物資<rt>ぶっし</rt></ruby>が<ruby>続々<rt>ぞくぞく</rt></ruby>と<ruby>集<rt>あつ</rt></ruby>まった。",
+          "In a bid to support the disaster area, donations and supplies poured in one after another from all over the country."
+        ]
+      },
+      "mnem": "集まる — \"atsu-maru\": everyone gathers \"at-su-mall,\" 集まる — they gather at the mall.",
+      "tip": "集まる (godan, intransitive) — the people/things that gather take が (人が集まる). Its transitive pair is 集める (あつめる, 'to collect,' 切手を集める). 集まり = 'a gathering.'",
+      "accent": 3
+    },
+    {
+      "key": "mnn:47:4",
+      "kana": "わかれます",
+      "kanji": "別れます",
+      "context": "人が〜",
+      "mean": "(people) to part, separate, break up",
+      "cat": "verb",
+      "type": "ichidan",
+      "trans": "i",
+      "dict": "別れる",
+      "dictRead": "わかれる",
+      "audio": "/Audio/minnamoi/bai47/00010111100100110.mp3",
+      "levels": {
+        "N5": [
+          "<ruby>駅<rt>えき</rt></ruby>で<ruby>友<rt>とも</rt></ruby>だちと<ruby>別<rt>わか</rt></ruby>れました。",
+          "I parted from my friend at the station."
+        ],
+        "N4": [
+          "<ruby>彼<rt>かれ</rt></ruby>は<ruby>彼女<rt>かのじょ</rt></ruby>と<ruby>別<rt>わか</rt></ruby>れたそうです。",
+          "I hear he broke up with his girlfriend."
+        ],
+        "N3": [
+          "<ruby>喧嘩<rt>けんか</rt></ruby>をして<ruby>恋人<rt>こいびと</rt></ruby>と<ruby>別<rt>わか</rt></ruby>れてしまいました。",
+          "I had a fight and ended up breaking up with my partner."
+        ],
+        "N2": [
+          "<ruby>価値観<rt>かちかん</rt></ruby>の<ruby>違<rt>ちが</rt></ruby>いから、<ruby>二人<rt>ふたり</rt></ruby>は<ruby>別<rt>わか</rt></ruby>れざるを<ruby>得<rt>え</rt></ruby>なかった。",
+          "Owing to their differing values, the two had no choice but to part."
+        ],
+        "N1": [
+          "<ruby>長年<rt>ながねん</rt></ruby><ruby>連<rt>つ</rt></ruby>れ<ruby>添<rt>そ</rt></ruby>った<ruby>相手<rt>あいて</rt></ruby>と<ruby>別<rt>わか</rt></ruby>れるとなれば、<ruby>相当<rt>そうとう</rt></ruby>の<ruby>覚悟<rt>かくご</rt></ruby>が<ruby>要<rt>い</rt></ruby>るに<ruby>違<rt>ちが</rt></ruby>いない。",
+          "If it comes to parting from a partner of many years, it must surely require considerable resolve."
+        ]
+      },
+      "mnem": "別れる — \"wa-ka-reru\": the two paths \"walk-a-real\" way apart, and the people 別れる, part ways.",
+      "tip": "別れる (ichidan, intransitive) — you part FROM someone with と (人と別れる); especially 'to break up (romantically).' Homophone 分かれる = '(a road/opinion) divides.' Don't mix it up with 分かる.",
+      "accent": 3
+    },
+    {
+      "key": "mnn:47:5",
+      "kana": "します",
+      "kanji": "",
+      "context": "音／声が〜、味が〜、においが〜",
+      "mean": "(a sound/voice, taste, smell) to be perceived; there is (a sensation)",
+      "cat": "verb",
+      "type": "irregular",
+      "trans": "i",
+      "dict": "する",
+      "dictRead": "する",
+      "audio": "/Audio/minnamoi/bai47/00010111100100111.mp3",
+      "accent": 0
+    },
+    {
+      "key": "mnn:47:6",
+      "kana": "きびしい",
+      "kanji": "厳しい",
+      "context": "",
+      "mean": "strict; severe, harsh",
+      "cat": "adjective",
+      "type": "i-adj",
+      "trans": "",
+      "dict": "厳しい",
+      "dictRead": "きびしい",
+      "audio": "/Audio/minnamoi/bai47/00010111100101000.mp3",
+      "levels": {
+        "N5": [
+          "この<ruby>先生<rt>せんせい</rt></ruby>は<ruby>厳<rt>きび</rt></ruby>しいです。",
+          "This teacher is strict."
+        ],
+        "N4": [
+          "<ruby>父<rt>ちち</rt></ruby>は<ruby>厳<rt>きび</rt></ruby>しいですが、とても<ruby>優<rt>やさ</rt></ruby>しいです。",
+          "My father is strict, but very kind."
+        ],
+        "N3": [
+          "<ruby>練習<rt>れんしゅう</rt></ruby>が<ruby>厳<rt>きび</rt></ruby>しくても、<ruby>試合<rt>しあい</rt></ruby>に<ruby>勝<rt>か</rt></ruby>つために<ruby>頑張<rt>がんば</rt></ruby>ります。",
+          "Even if the training is tough, I'll do my best in order to win the match."
+        ],
+        "N2": [
+          "<ruby>経済<rt>けいざい</rt></ruby>が<ruby>厳<rt>きび</rt></ruby>しい<ruby>状況<rt>じょうきょう</rt></ruby>にあるにもかかわらず、<ruby>会社<rt>かいしゃ</rt></ruby>は<ruby>採用<rt>さいよう</rt></ruby>を<ruby>増<rt>ふ</rt></ruby>やした。",
+          "Despite being in a severe economic situation, the company increased its hiring."
+        ],
+        "N1": [
+          "どんなに<ruby>厳<rt>きび</rt></ruby>しい<ruby>批判<rt>ひはん</rt></ruby>にさらされようとも、<ruby>彼<rt>かれ</rt></ruby>は<ruby>自<rt>みずか</rt></ruby>らの<ruby>信念<rt>しんねん</rt></ruby>を<ruby>貫<rt>つらぬ</rt></ruby>き<ruby>通<rt>とお</rt></ruby>した。",
+          "However severe the criticism he was exposed to, he saw his convictions through to the very end."
+        ]
+      },
+      "mnem": "厳しい — \"kibishii\": a \"key-bee-she\" of a teacher, sharp as a bee's sting — 厳しい, strict.",
+      "tip": "厳しい (i-adjective) = strict (of people/rules) OR severe/harsh (of conditions: 厳しい寒さ, 厳しい状況). For 'strict,' its opposite is 甘い (あまい, 'lenient').",
+      "accent": 3
+    },
+    {
+      "key": "mnn:47:7",
+      "kana": "ひどい",
+      "kanji": "",
+      "context": "",
+      "mean": "terrible, awful; severe; cruel",
+      "cat": "adjective",
+      "type": "i-adj",
+      "trans": "",
+      "dict": "ひどい",
+      "dictRead": "ひどい",
+      "audio": "/Audio/minnamoi/bai47/00010111100101001.mp3",
+      "levels": {
+        "N5": [
+          "<ruby>今日<rt>きょう</rt></ruby>はひどい<ruby>天気<rt>てんき</rt></ruby>です。",
+          "The weather is terrible today."
+        ],
+        "N4": [
+          "ひどい<ruby>雨<rt>あめ</rt></ruby>だったから、<ruby>試合<rt>しあい</rt></ruby>は<ruby>中止<rt>ちゅうし</rt></ruby>になりました。",
+          "Because the rain was terrible, the match was called off."
+        ],
+        "N3": [
+          "そんなひどいことを<ruby>言<rt>い</rt></ruby>うなんて、<ruby>信<rt>しん</rt></ruby>じられません。",
+          "I can't believe you'd say such a terrible thing."
+        ],
+        "N2": [
+          "<ruby>頭痛<rt>ずつう</rt></ruby>がひどくて、<ruby>仕事<rt>しごと</rt></ruby>どころではなかった。",
+          "My headache was so bad that work was out of the question."
+        ],
+        "N1": [
+          "あれほどひどい<ruby>仕打<rt>しう</rt></ruby>ちを<ruby>受<rt>う</rt></ruby>けておきながら、<ruby>彼女<rt>かのじょ</rt></ruby>は<ruby>一言<rt>ひとこと</rt></ruby>の<ruby>不平<rt>ふへい</rt></ruby>も<ruby>漏<rt>も</rt></ruby>らさなかった。",
+          "Even after suffering such terrible treatment, she didn't let slip a single word of complaint."
+        ]
+      },
+      "mnem": "ひどい — \"hi-doi\": that's a \"hee-doy!\" ouch of a situation — ひどい, terrible.",
+      "tip": "ひどい (i-adjective) = terrible/awful (ひどい雨/頭痛) or cruel (ひどい人). The adverb ひどく = 'terribly, severely.' Usually written in kana (酷い is rare).",
+      "accent": 2
+    },
+    {
+      "key": "mnn:47:8",
+      "kana": "こわい",
+      "kanji": "怖い",
+      "context": "",
+      "mean": "frightening, scary; afraid",
+      "cat": "adjective",
+      "type": "i-adj",
+      "trans": "",
+      "dict": "怖い",
+      "dictRead": "こわい",
+      "audio": "/Audio/minnamoi/bai47/00010111100101010.mp3",
+      "levels": {
+        "N5": [
+          "この<ruby>犬<rt>いぬ</rt></ruby>は<ruby>怖<rt>こわ</rt></ruby>いです。",
+          "This dog is scary."
+        ],
+        "N4": [
+          "<ruby>子<rt>こ</rt></ruby>どものとき、<ruby>暗<rt>くら</rt></ruby>い<ruby>所<rt>ところ</rt></ruby>が<ruby>怖<rt>こわ</rt></ruby>かったです。",
+          "When I was a child, I was afraid of dark places."
+        ],
+        "N3": [
+          "<ruby>怖<rt>こわ</rt></ruby>い<ruby>映画<rt>えいが</rt></ruby>を<ruby>見<rt>み</rt></ruby>たら、<ruby>夜<rt>よる</rt></ruby><ruby>眠<rt>ねむ</rt></ruby>れなくなりました。",
+          "After I watched a scary movie, I became unable to sleep at night."
+        ],
+        "N2": [
+          "<ruby>失敗<rt>しっぱい</rt></ruby>を<ruby>怖<rt>こわ</rt></ruby>がるあまり、<ruby>何<rt>なに</rt></ruby>も<ruby>挑戦<rt>ちょうせん</rt></ruby>できないでいる。",
+          "Out of too much fear of failure, I've been unable to take on any challenge at all."
+        ],
+        "N1": [
+          "<ruby>何<rt>なに</rt></ruby>より<ruby>怖<rt>こわ</rt></ruby>いのは、<ruby>危険<rt>きけん</rt></ruby>に<ruby>気<rt>き</rt></ruby>づかぬまま<ruby>日常<rt>にちじょう</rt></ruby>を<ruby>過<rt>す</rt></ruby>ごしてしまうことにほかならない。",
+          "What is most frightening is nothing other than passing one's days without ever noticing the danger."
+        ]
+      },
+      "mnem": "怖い — \"kowai\": say \"ko-WAI!\" — the yelp you give when something is 怖い, scary.",
+      "tip": "怖い (i-adjective) = scary/frightening, or 'afraid' — the feared thing takes が (へびが怖い = afraid of snakes). The verb 怖がる = 'to be scared of.' Compare 恐ろしい (おそろしい, more formal/dreadful).",
+      "accent": 2
+    },
+    {
+      "key": "mnn:47:9",
+      "kana": "じっけん",
+      "kanji": "実験",
+      "context": "",
+      "mean": "experiment",
+      "cat": "noun",
+      "type": "",
+      "trans": "",
+      "dict": "実験",
+      "dictRead": "じっけん",
+      "audio": "/Audio/minnamoi/bai47/00010111100101011.mp3",
+      "levels": {
+        "N5": [
+          "<ruby>今日<rt>きょう</rt></ruby><ruby>理科<rt>りか</rt></ruby>の<ruby>実験<rt>じっけん</rt></ruby>をしました。",
+          "We did a science experiment today."
+        ],
+        "N4": [
+          "この<ruby>実験<rt>じっけん</rt></ruby>は<ruby>危<rt>あぶ</rt></ruby>ないから、<ruby>気<rt>き</rt></ruby>をつけてください。",
+          "This experiment is dangerous, so please be careful."
+        ],
+        "N3": [
+          "<ruby>何回<rt>なんかい</rt></ruby><ruby>実験<rt>じっけん</rt></ruby>をしても、<ruby>同<rt>おな</rt></ruby>じ<ruby>結果<rt>けっか</rt></ruby>にならなかった。",
+          "No matter how many times I ran the experiment, I didn't get the same result."
+        ],
+        "N2": [
+          "<ruby>長年<rt>ながねん</rt></ruby>の<ruby>実験<rt>じっけん</rt></ruby>の<ruby>末<rt>すえ</rt></ruby>に、ようやく<ruby>新<rt>あたら</rt></ruby>しい<ruby>薬<rt>くすり</rt></ruby>が<ruby>完成<rt>かんせい</rt></ruby>した。",
+          "After years of experiments, a new drug was finally completed."
+        ],
+        "N1": [
+          "<ruby>倫理<rt>りんり</rt></ruby>を<ruby>無視<rt>むし</rt></ruby>した<ruby>実験<rt>じっけん</rt></ruby>は、たとえ<ruby>科学<rt>かがく</rt></ruby>の<ruby>進歩<rt>しんぽ</rt></ruby>のためであれ、<ruby>許<rt>ゆる</rt></ruby>されるものではない。",
+          "An experiment that ignores ethics is not to be permitted, even if it be for the sake of scientific progress."
+        ]
+      },
+      "mnem": "実験 = 実 (actual) + 験 (test): an 'actual test' of reality, 実験, is an experiment.",
+      "tip": "実験 (じっけん) = a scientific experiment; 実験する = 'to experiment.' Distinguish 経験 (けいけん, 'experience') and 試験 (しけん, 'an exam') — all three share 験.",
+      "accent": 0
+    },
+    {
+      "key": "mnn:47:10",
+      "kana": "データ",
+      "kanji": "",
+      "context": "",
+      "mean": "data",
+      "cat": "noun",
+      "type": "",
+      "trans": "",
+      "dict": "データ",
+      "dictRead": "データ",
+      "audio": "/Audio/minnamoi/bai47/00010111100101100.mp3",
+      "levels": {
+        "N5": [
+          "このデータは<ruby>新<rt>あたら</rt></ruby>しいです。",
+          "This data is new."
+        ],
+        "N4": [
+          "データを<ruby>集<rt>あつ</rt></ruby>めてから、レポートを<ruby>書<rt>か</rt></ruby>きます。",
+          "I'll write the report after gathering the data."
+        ],
+        "N3": [
+          "<ruby>最近<rt>さいきん</rt></ruby>のデータによると、<ruby>人口<rt>じんこう</rt></ruby>が<ruby>増<rt>ふ</rt></ruby>えているそうです。",
+          "According to recent data, the population is said to be increasing."
+        ],
+        "N2": [
+          "<ruby>十分<rt>じゅうぶん</rt></ruby>なデータがないことには、<ruby>正<rt>ただ</rt></ruby>しい<ruby>結論<rt>けつろん</rt></ruby>は<ruby>出<rt>だ</rt></ruby>せない。",
+          "Without sufficient data, we can't reach a correct conclusion."
+        ],
+        "N1": [
+          "<ruby>膨大<rt>ぼうだい</rt></ruby>なデータを<ruby>分析<rt>ぶんせき</rt></ruby>してはじめて、<ruby>見<rt>み</rt></ruby>えてくる<ruby>傾向<rt>けいこう</rt></ruby>というものがある。",
+          "There are trends that become visible only once you have analyzed a vast amount of data."
+        ]
+      },
+      "mnem": "データ is the English \"data\" in katakana — say it with a Japanese beat, \"DEE-ta.\"",
+      "tip": "データ = data (information/statistics), from English. Usually uncountable; データを取る／集める = 'to gather data.' Mind the long ー: デ<b>ー</b>タ, not デタ.",
+      "accent": 1
+    },
+    {
+      "key": "mnn:47:11",
+      "kana": "じんこう",
+      "kanji": "人口",
+      "context": "",
+      "mean": "population",
+      "cat": "noun",
+      "type": "",
+      "trans": "",
+      "dict": "人口",
+      "dictRead": "じんこう",
+      "audio": "/Audio/minnamoi/bai47/00010111100101101.mp3",
+      "levels": {
+        "N5": [
+          "この<ruby>町<rt>まち</rt></ruby>の<ruby>人口<rt>じんこう</rt></ruby>は<ruby>少<rt>すく</rt></ruby>ないです。",
+          "This town's population is small."
+        ],
+        "N4": [
+          "<ruby>東京<rt>とうきょう</rt></ruby>の<ruby>人口<rt>じんこう</rt></ruby>はどのくらいですか。",
+          "About how large is Tokyo's population?"
+        ],
+        "N3": [
+          "<ruby>新聞<rt>しんぶん</rt></ruby>で<ruby>読<rt>よ</rt></ruby>んだんですが、<ruby>世界<rt>せかい</rt></ruby>の<ruby>人口<rt>じんこう</rt></ruby>は<ruby>増<rt>ふ</rt></ruby>え<ruby>続<rt>つづ</rt></ruby>けているそうです。",
+          "I read in the paper that the world's population is said to keep on increasing."
+        ],
+        "N2": [
+          "<ruby>少子化<rt>しょうしか</rt></ruby>が<ruby>進<rt>すす</rt></ruby>むにつれて、この<ruby>国<rt>くに</rt></ruby>の<ruby>人口<rt>じんこう</rt></ruby>は<ruby>減<rt>へ</rt></ruby>る<ruby>一方<rt>いっぽう</rt></ruby>だ。",
+          "As the declining birthrate advances, this country's population just keeps on falling."
+        ],
+        "N1": [
+          "<ruby>人口<rt>じんこう</rt></ruby>の<ruby>減少<rt>げんしょう</rt></ruby>は、<ruby>労働力<rt>ろうどうりょく</rt></ruby>のみならず<ruby>社会<rt>しゃかい</rt></ruby><ruby>保障<rt>ほしょう</rt></ruby><ruby>制度<rt>せいど</rt></ruby>の<ruby>根幹<rt>こんかん</rt></ruby>をも<ruby>揺<rt>ゆ</rt></ruby>るがしかねない。",
+          "A decline in population threatens to shake not only the labor force but the very foundations of the social security system."
+        ]
+      },
+      "mnem": "人口 = 人 (people) + 口 (mouths): the number of 'mouths to feed,' 人口, the population.",
+      "tip": "人口 (じんこう) = population — 人口が多い／少ない, 人口が増える／減る. Note 口 is read こう here. Don't confuse it with 人工 (じんこう, 'artificial,' 人工知能 = AI) — same reading!",
+      "accent": 0
+    },
+    {
+      "key": "mnn:47:12",
+      "kana": "におい",
+      "kanji": "",
+      "context": "",
+      "mean": "smell, odor, scent",
+      "cat": "noun",
+      "type": "",
+      "trans": "",
+      "dict": "におい",
+      "dictRead": "におい",
+      "audio": "/Audio/minnamoi/bai47/00010111100101110.mp3",
+      "levels": {
+        "N5": [
+          "いいにおいがします。",
+          "It smells good."
+        ],
+        "N4": [
+          "この<ruby>花<rt>はな</rt></ruby>はとてもいいにおいがします。",
+          "This flower smells very nice."
+        ],
+        "N3": [
+          "<ruby>台所<rt>だいどころ</rt></ruby>から<ruby>変<rt>へん</rt></ruby>なにおいがしたら、すぐに<ruby>知<rt>し</rt></ruby>らせてください。",
+          "If a strange smell comes from the kitchen, please let me know right away."
+        ],
+        "N2": [
+          "<ruby>魚<rt>さかな</rt></ruby>が<ruby>腐<rt>くさ</rt></ruby>っているのか、<ruby>部屋中<rt>へやじゅう</rt></ruby>にひどいにおいが<ruby>漂<rt>ただよ</rt></ruby>っている。",
+          "Perhaps the fish has gone off — a terrible smell is drifting all through the room."
+        ],
+        "N1": [
+          "<ruby>懐<rt>なつ</rt></ruby>かしいにおいをかいだ<ruby>途端<rt>とたん</rt></ruby>、<ruby>幼<rt>おさな</rt></ruby>い<ruby>頃<rt>ころ</rt></ruby>の<ruby>記憶<rt>きおく</rt></ruby>が<ruby>鮮<rt>あざ</rt></ruby>やかによみがえってきた。",
+          "The instant I caught that nostalgic smell, memories of my childhood came vividly flooding back."
+        ]
+      },
+      "mnem": "におい — \"ni-oi\": you sniff and go \"knee-oy, what's that?\" — におい, a smell.",
+      "tip": "におい = a smell/odor, good OR bad (匂い for pleasant, 臭い for foul). It's perceived with する: においがする. The verb かぐ (嗅ぐ) = 'to sniff.' Usually written in kana.",
+      "accent": 2
+    },
+    {
+      "key": "mnn:47:13",
+      "kana": "かがく",
+      "kanji": "科学",
+      "context": "",
+      "mean": "science",
+      "cat": "noun",
+      "type": "",
+      "trans": "",
+      "dict": "科学",
+      "dictRead": "かがく",
+      "audio": "/Audio/minnamoi/bai47/00010111100101111.mp3",
+      "levels": {
+        "N5": [
+          "<ruby>科学<rt>かがく</rt></ruby>の<ruby>本<rt>ほん</rt></ruby>が<ruby>好<rt>す</rt></ruby>きです。",
+          "I like science books."
+        ],
+        "N4": [
+          "<ruby>子<rt>こ</rt></ruby>どものとき、<ruby>科学<rt>かがく</rt></ruby>の<ruby>番組<rt>ばんぐみ</rt></ruby>をよく<ruby>見<rt>み</rt></ruby>ました。",
+          "When I was a child, I often watched science programs."
+        ],
+        "N3": [
+          "アメリカの<ruby>科学<rt>かがく</rt></ruby><ruby>雑誌<rt>ざっし</rt></ruby>で<ruby>読<rt>よ</rt></ruby>んだんですが、<ruby>新<rt>あたら</rt></ruby>しい<ruby>星<rt>ほし</rt></ruby>が<ruby>発見<rt>はっけん</rt></ruby>されたそうです。",
+          "I read in an American science magazine that a new star has been discovered."
+        ],
+        "N2": [
+          "<ruby>科学<rt>かがく</rt></ruby>の<ruby>進歩<rt>しんぽ</rt></ruby>は、<ruby>人々<rt>ひとびと</rt></ruby>の<ruby>暮<rt>く</rt></ruby>らしを<ruby>便利<rt>べんり</rt></ruby>にした<ruby>反面<rt>はんめん</rt></ruby>、<ruby>新<rt>あたら</rt></ruby>たな<ruby>問題<rt>もんだい</rt></ruby>も<ruby>生<rt>う</rt></ruby>んだ。",
+          "While the progress of science has made people's lives convenient, it has also given rise to new problems."
+        ],
+        "N1": [
+          "<ruby>科学<rt>かがく</rt></ruby>とは、<ruby>疑<rt>うたが</rt></ruby>うことをやめない<ruby>姿勢<rt>しせい</rt></ruby>そのものにほかならないと、<ruby>彼<rt>かれ</rt></ruby>は<ruby>説<rt>と</rt></ruby>いた。",
+          "Science, he argued, is nothing other than the very attitude of never ceasing to question."
+        ]
+      },
+      "mnem": "科学 = 科 (branch/field) + 学 (study): the systematic 'study of fields,' 科学, is science.",
+      "tip": "科学 (かがく) = science. Homophone trap: 化学 (かがく, 'chemistry') sounds identical, so chemistry is often called ばけがく to disambiguate. 科学者 = scientist.",
+      "accent": 1
+    },
+    {
+      "key": "mnn:47:14",
+      "kana": "いがく",
+      "kanji": "医学",
+      "context": "",
+      "mean": "medicine, medical science",
+      "cat": "noun",
+      "type": "",
+      "trans": "",
+      "dict": "医学",
+      "dictRead": "いがく",
+      "audio": "/Audio/minnamoi/bai47/00010111100110000.mp3",
+      "levels": {
+        "N5": [
+          "<ruby>兄<rt>あに</rt></ruby>は<ruby>医学<rt>いがく</rt></ruby>を<ruby>勉強<rt>べんきょう</rt></ruby>しています。",
+          "My older brother is studying medicine."
+        ],
+        "N4": [
+          "<ruby>医学<rt>いがく</rt></ruby>の<ruby>勉強<rt>べんきょう</rt></ruby>はとても<ruby>難<rt>むずか</rt></ruby>しいと<ruby>思<rt>おも</rt></ruby>います。",
+          "I think studying medicine is very difficult."
+        ],
+        "N3": [
+          "<ruby>医学<rt>いがく</rt></ruby>が<ruby>進歩<rt>しんぽ</rt></ruby>したおかげで、<ruby>多<rt>おお</rt></ruby>くの<ruby>命<rt>いのち</rt></ruby>が<ruby>救<rt>すく</rt></ruby>えるようになった。",
+          "Thanks to the advance of medicine, many lives have come to be savable."
+        ],
+        "N2": [
+          "<ruby>医学<rt>いがく</rt></ruby>の<ruby>発展<rt>はってん</rt></ruby>なくして、<ruby>今日<rt>こんにち</rt></ruby>の<ruby>長寿<rt>ちょうじゅ</rt></ruby><ruby>社会<rt>しゃかい</rt></ruby>はあり<ruby>得<rt>え</rt></ruby>なかっただろう。",
+          "Without the development of medicine, today's long-lived society would not have been possible."
+        ],
+        "N1": [
+          "<ruby>最先端<rt>さいせんたん</rt></ruby>の<ruby>医学<rt>いがく</rt></ruby>をもってしても、<ruby>治<rt>なお</rt></ruby>せない<ruby>病<rt>やまい</rt></ruby>はいまだ<ruby>数多<rt>かずおお</rt></ruby>く<ruby>残<rt>のこ</rt></ruby>されている。",
+          "Even with the most advanced medicine, there still remain a great many diseases that cannot be cured."
+        ]
+      },
+      "mnem": "医学 = 医 (medical/healing) + 学 (study): the 'study of healing,' 医学, is medicine.",
+      "tip": "医学 (いがく) = medical science (the academic field). Related: 医者 (いしゃ, a doctor), 医院 (いいん, a clinic). Distinguish from 薬学 (やくがく, pharmacology).",
+      "accent": 1
+    },
+    {
+      "key": "mnn:47:15",
+      "kana": "ぶんがく",
+      "kanji": "文学",
+      "context": "",
+      "mean": "literature",
+      "cat": "noun",
+      "type": "",
+      "trans": "",
+      "dict": "文学",
+      "dictRead": "ぶんがく",
+      "audio": "/Audio/minnamoi/bai47/00010111100110001.mp3",
+      "levels": {
+        "N5": [
+          "<ruby>日本<rt>にほん</rt></ruby>の<ruby>文学<rt>ぶんがく</rt></ruby>が<ruby>好<rt>す</rt></ruby>きです。",
+          "I like Japanese literature."
+        ],
+        "N4": [
+          "<ruby>大学<rt>だいがく</rt></ruby>で<ruby>文学<rt>ぶんがく</rt></ruby>を<ruby>勉強<rt>べんきょう</rt></ruby>したいです。",
+          "I want to study literature at university."
+        ],
+        "N3": [
+          "<ruby>彼<rt>かれ</rt></ruby>は<ruby>日本<rt>にほん</rt></ruby><ruby>文化<rt>ぶんか</rt></ruby>に<ruby>興味<rt>きょうみ</rt></ruby>があって、<ruby>文学<rt>ぶんがく</rt></ruby>もよく<ruby>読<rt>よ</rt></ruby>むそうです。",
+          "He's interested in Japanese culture, and I hear he reads a lot of literature too."
+        ],
+        "N2": [
+          "<ruby>文学<rt>ぶんがく</rt></ruby>は、その<ruby>時代<rt>じだい</rt></ruby>を<ruby>生<rt>い</rt></ruby>きた<ruby>人々<rt>ひとびと</rt></ruby>の<ruby>心<rt>こころ</rt></ruby>を<ruby>映<rt>うつ</rt></ruby>す<ruby>鏡<rt>かがみ</rt></ruby>ともいえる。",
+          "Literature can be called a mirror reflecting the hearts of the people who lived in that era."
+        ],
+        "N1": [
+          "<ruby>優<rt>すぐ</rt></ruby>れた<ruby>文学<rt>ぶんがく</rt></ruby>は、<ruby>時代<rt>じだい</rt></ruby>や<ruby>国境<rt>こっきょう</rt></ruby>を<ruby>越<rt>こ</rt></ruby>えて<ruby>読<rt>よ</rt></ruby>む<ruby>者<rt>もの</rt></ruby>の<ruby>心<rt>こころ</rt></ruby>を<ruby>打<rt>う</rt></ruby>たずにはおかない。",
+          "Great literature cannot fail to move the hearts of its readers, transcending eras and borders alike."
+        ]
+      },
+      "mnem": "文学 = 文 (writing) + 学 (study): the 'study of writing,' 文学, is literature.",
+      "tip": "文学 (ぶんがく) = literature, as an art and field of study. 文学者 = a literary scholar; 文学部 = the literature faculty. 文 also appears in 文化 (culture) and 文章 (prose).",
+      "accent": 1
+    },
+    {
+      "key": "mnn:47:16",
+      "kana": "パトカー",
+      "kanji": "",
+      "context": "",
+      "mean": "police car, patrol car",
+      "cat": "noun",
+      "type": "",
+      "trans": "",
+      "dict": "パトカー",
+      "dictRead": "パトカー",
+      "audio": "/Audio/minnamoi/bai47/00010111100110010.mp3",
+      "levels": {
+        "N5": [
+          "パトカーが<ruby>来<rt>き</rt></ruby>ました。",
+          "A police car came."
+        ],
+        "N4": [
+          "<ruby>事故<rt>じこ</rt></ruby>のとき、パトカーがすぐに<ruby>来<rt>き</rt></ruby>ました。",
+          "When the accident happened, a police car came right away."
+        ],
+        "N3": [
+          "パトカーのサイレンが<ruby>聞<rt>き</rt></ruby>こえたら、<ruby>道<rt>みち</rt></ruby>の<ruby>端<rt>はし</rt></ruby>に<ruby>寄<rt>よ</rt></ruby>ってください。",
+          "If you hear a police car's siren, please pull over to the side of the road."
+        ],
+        "N2": [
+          "パトカーが<ruby>何台<rt>なんだい</rt></ruby>も<ruby>集<rt>あつ</rt></ruby>まっているところをみると、<ruby>大<rt>おお</rt></ruby>きな<ruby>事件<rt>じけん</rt></ruby>があったに<ruby>違<rt>ちが</rt></ruby>いない。",
+          "Judging from the many police cars gathered there, there must have been a major incident."
+        ],
+        "N1": [
+          "パトカーのサイレンが<ruby>鳴<rt>な</rt></ruby>り<ruby>響<rt>ひび</rt></ruby>くやいなや、<ruby>群衆<rt>ぐんしゅう</rt></ruby>はいっせいに<ruby>振<rt>ふ</rt></ruby>り<ruby>返<rt>かえ</rt></ruby>った。",
+          "The moment the police car's siren rang out, the crowd all turned around at once."
+        ]
+      },
+      "mnem": "パトカー is \"patrol car\" clipped in Japanese: パト(ロール)＋カー → パトカー.",
+      "tip": "パトカー = police car (和製英語 from 'patrol car'). Fellow emergency vehicles: 救急車 (ambulance), 消防車 (しょうぼうしゃ, fire engine). Mind the long ー: パト<b>カー</b>.",
+      "accent": 2
+    },
+    {
+      "key": "mnn:47:17",
+      "kana": "きゅうきゅうしゃ",
+      "kanji": "救急車",
+      "context": "",
+      "mean": "ambulance",
+      "cat": "noun",
+      "type": "",
+      "trans": "",
+      "dict": "救急車",
+      "dictRead": "きゅうきゅうしゃ",
+      "audio": "/Audio/minnamoi/bai47/00010111100110011.mp3",
+      "levels": {
+        "N5": [
+          "<ruby>救急車<rt>きゅうきゅうしゃ</rt></ruby>を<ruby>呼<rt>よ</rt></ruby>んでください。",
+          "Please call an ambulance."
+        ],
+        "N4": [
+          "<ruby>祖父<rt>そふ</rt></ruby>が<ruby>倒<rt>たお</rt></ruby>れたので、<ruby>救急車<rt>きゅうきゅうしゃ</rt></ruby>を<ruby>呼<rt>よ</rt></ruby>びました。",
+          "My grandfather collapsed, so I called an ambulance."
+        ],
+        "N3": [
+          "<ruby>具合<rt>ぐあい</rt></ruby>が<ruby>悪<rt>わる</rt></ruby>くなったら、すぐに<ruby>救急車<rt>きゅうきゅうしゃ</rt></ruby>を<ruby>呼<rt>よ</rt></ruby>ぶようにしてください。",
+          "If you start feeling unwell, please make a point of calling an ambulance right away."
+        ],
+        "N2": [
+          "<ruby>救急車<rt>きゅうきゅうしゃ</rt></ruby>が<ruby>到着<rt>とうちゃく</rt></ruby>するまでの<ruby>数分<rt>すうふん</rt></ruby>が、<ruby>命<rt>いのち</rt></ruby>を<ruby>左右<rt>さゆう</rt></ruby>することもある。",
+          "The few minutes until the ambulance arrives can sometimes determine whether a life is saved."
+        ],
+        "N1": [
+          "<ruby>安易<rt>あんい</rt></ruby>に<ruby>救急車<rt>きゅうきゅうしゃ</rt></ruby>を<ruby>呼<rt>よ</rt></ruby>ぶ<ruby>人<rt>ひと</rt></ruby>が<ruby>増<rt>ふ</rt></ruby>えたことが、<ruby>救急<rt>きゅうきゅう</rt></ruby><ruby>医療<rt>いりょう</rt></ruby>の<ruby>現場<rt>げんば</rt></ruby>を<ruby>圧迫<rt>あっぱく</rt></ruby>しているという。",
+          "The rise in people who call an ambulance so casually is said to be straining the front lines of emergency medicine."
+        ]
+      },
+      "mnem": "救急車 = 救 (rescue) + 急 (urgent) + 車 (vehicle): the 'urgent-rescue vehicle,' 救急車, an ambulance.",
+      "tip": "救急車 (きゅうきゅうしゃ) = ambulance; 救急車を呼ぶ = 'to call an ambulance.' 救急 = 'emergency (medical).' Compare 消防車 (fire engine), パトカー (police car). In Japan you dial 119.",
+      "accent": 3
+    },
+    {
+      "key": "mnn:47:18",
+      "kana": "さんせい",
+      "kanji": "賛成",
+      "context": "",
+      "mean": "approval, agreement (being in favor)",
+      "cat": "noun",
+      "type": "",
+      "trans": "",
+      "dict": "賛成",
+      "dictRead": "さんせい",
+      "audio": "/Audio/minnamoi/bai47/00010111100110100.mp3",
+      "levels": {
+        "N5": [
+          "わたしはその<ruby>意見<rt>いけん</rt></ruby>に<ruby>賛成<rt>さんせい</rt></ruby>です。",
+          "I'm in favor of that opinion."
+        ],
+        "N4": [
+          "あなたの<ruby>考<rt>かんが</rt></ruby>えに<ruby>賛成<rt>さんせい</rt></ruby>しますが、<ruby>一<rt>ひと</rt></ruby>つだけ<ruby>心配<rt>しんぱい</rt></ruby>があります。",
+          "I agree with your idea, but I have just one concern."
+        ],
+        "N3": [
+          "みんなが<ruby>賛成<rt>さんせい</rt></ruby>してくれるなら、この<ruby>計画<rt>けいかく</rt></ruby>を<ruby>進<rt>すす</rt></ruby>めようと<ruby>思<rt>おも</rt></ruby>います。",
+          "If everyone will give their approval, I think I'll go ahead with this plan."
+        ],
+        "N2": [
+          "<ruby>環境<rt>かんきょう</rt></ruby>を<ruby>守<rt>まも</rt></ruby>るためとあれば、<ruby>多少<rt>たしょう</rt></ruby>の<ruby>不便<rt>ふべん</rt></ruby>には<ruby>賛成<rt>さんせい</rt></ruby>せざるを<ruby>得<rt>え</rt></ruby>ない。",
+          "If it's for the sake of protecting the environment, one can't help but approve of a little inconvenience."
+        ],
+        "N1": [
+          "<ruby>提案<rt>ていあん</rt></ruby>そのものには<ruby>賛成<rt>さんせい</rt></ruby>するものの、<ruby>実現<rt>じつげん</rt></ruby>までの<ruby>道<rt>みち</rt></ruby>のりは<ruby>決<rt>けっ</rt></ruby>して<ruby>平坦<rt>へいたん</rt></ruby>ではない。",
+          "Although I approve of the proposal itself, the road to realizing it is by no means smooth."
+        ]
+      },
+      "mnem": "賛成 = 賛 (approve/praise) + 成 (settle): to 'approve so it's settled,' 賛成 — agreement.",
+      "tip": "賛成 (さんせい) = approval; 〜に賛成する = 'to agree WITH ~' (takes に). Its opposite is 反対 (はんたい, opposition). It's a noun that also works as a する-verb.",
+      "accent": 0
+    },
+    {
+      "key": "mnn:47:19",
+      "kana": "はんたい",
+      "kanji": "反対",
+      "context": "",
+      "mean": "objection, opposition; the opposite",
+      "cat": "noun",
+      "type": "",
+      "trans": "",
+      "dict": "反対",
+      "dictRead": "はんたい",
+      "audio": "/Audio/minnamoi/bai47/00010111100110101.mp3",
+      "levels": {
+        "N5": [
+          "<ruby>父<rt>ちち</rt></ruby>はわたしの<ruby>結婚<rt>けっこん</rt></ruby>に<ruby>反対<rt>はんたい</rt></ruby>です。",
+          "My father is against my marriage."
+        ],
+        "N4": [
+          "みんなが<ruby>反対<rt>はんたい</rt></ruby>したので、<ruby>計画<rt>けいかく</rt></ruby>は<ruby>中止<rt>ちゅうし</rt></ruby>になりました。",
+          "Because everyone opposed it, the plan was called off."
+        ],
+        "N3": [
+          "たとえ<ruby>家族<rt>かぞく</rt></ruby>が<ruby>反対<rt>はんたい</rt></ruby>しても、わたしはこの<ruby>道<rt>みち</rt></ruby>を<ruby>選<rt>えら</rt></ruby>びます。",
+          "Even if my family opposes it, I'll choose this path."
+        ],
+        "N2": [
+          "<ruby>住民<rt>じゅうみん</rt></ruby>の<ruby>反対<rt>はんたい</rt></ruby>を<ruby>押<rt>お</rt></ruby>し<ruby>切<rt>き</rt></ruby>って<ruby>工事<rt>こうじ</rt></ruby>を<ruby>進<rt>すす</rt></ruby>めるわけにはいかない。",
+          "We can't just push ahead with the construction over the residents' opposition."
+        ],
+        "N1": [
+          "<ruby>反対<rt>はんたい</rt></ruby>の<ruby>声<rt>こえ</rt></ruby>が<ruby>根強<rt>ねづよ</rt></ruby>いにもかかわらず、<ruby>政府<rt>せいふ</rt></ruby>は<ruby>法案<rt>ほうあん</rt></ruby>の<ruby>成立<rt>せいりつ</rt></ruby>を<ruby>強行<rt>きょうこう</rt></ruby>した。",
+          "Despite the deep-rooted voices of opposition, the government forced the bill through."
+        ]
+      },
+      "mnem": "反対 = 反 (anti/reverse) + 対 (facing): standing 'against, facing the other way,' 反対 — opposition.",
+      "tip": "反対 (はんたい) = opposition, OR 'the opposite/reverse' (反対の方向 = the opposite direction). 〜に反対する = 'to oppose ~' (takes に). It's the opposite of 賛成 (approval).",
+      "accent": 0
+    },
+    {
+      "key": "mnn:47:20",
+      "kana": "だいとうりょう",
+      "kanji": "大統領",
+      "context": "",
+      "mean": "president (of a country)",
+      "cat": "noun",
+      "type": "",
+      "trans": "",
+      "dict": "大統領",
+      "dictRead": "だいとうりょう",
+      "audio": "/Audio/minnamoi/bai47/00010111100110110.mp3",
+      "levels": {
+        "N5": [
+          "アメリカの<ruby>大統領<rt>だいとうりょう</rt></ruby>はだれですか。",
+          "Who is the president of America?"
+        ],
+        "N4": [
+          "<ruby>大統領<rt>だいとうりょう</rt></ruby>のスピーチを<ruby>聞<rt>き</rt></ruby>くために、<ruby>大勢<rt>おおぜい</rt></ruby>の<ruby>人<rt>ひと</rt></ruby>が<ruby>集<rt>あつ</rt></ruby>まりました。",
+          "A large crowd gathered to hear the president's speech."
+        ],
+        "N3": [
+          "ニュースによると、<ruby>大統領<rt>だいとうりょう</rt></ruby>が<ruby>来月<rt>らいげつ</rt></ruby><ruby>日本<rt>にほん</rt></ruby>を<ruby>訪問<rt>ほうもん</rt></ruby>するそうです。",
+          "According to the news, the president is said to be visiting Japan next month."
+        ],
+        "N2": [
+          "<ruby>大統領<rt>だいとうりょう</rt></ruby>ともなれば、<ruby>一言<rt>ひとこと</rt></ruby>の<ruby>発言<rt>はつげん</rt></ruby>が<ruby>世界中<rt>せかいじゅう</rt></ruby>に<ruby>影響<rt>えいきょう</rt></ruby>を<ruby>及<rt>およ</rt></ruby>ぼす。",
+          "When it comes to being president, a single remark has an impact on the whole world."
+        ],
+        "N1": [
+          "<ruby>大統領<rt>だいとうりょう</rt></ruby>の<ruby>座<rt>ざ</rt></ruby>をめぐって、<ruby>各<rt>かく</rt></ruby><ruby>候補<rt>こうほ</rt></ruby>が<ruby>熾烈<rt>しれつ</rt></ruby>な<ruby>選挙戦<rt>せんきょせん</rt></ruby>を<ruby>繰<rt>く</rt></ruby>り<ruby>広<rt>ひろ</rt></ruby>げている。",
+          "The candidates are waging a fierce election battle over the office of president."
+        ]
+      },
+      "mnem": "大統領 = 大 (great) + 統 (govern/unify) + 領 (domain): the 'great governor of the domain,' 大統領 — the president.",
+      "tip": "大統領 (だいとうりょう) = president (of a republic). Distinguish 首相 (しゅしょう) / 総理大臣 = prime minister. 統 ('preside/unify') also appears in 統一 (unification).",
+      "accent": 3
+    },
+    {
+      "key": "mnn:47:21",
+      "kana": "〜によると",
+      "kanji": "",
+      "context": "",
+      "mean": "according to ~ (marks the source of information)",
+      "cat": "expression",
+      "type": "",
+      "trans": "",
+      "dict": "〜によると",
+      "dictRead": "〜によると",
+      "audio": "/Audio/minnamoi/bai47/00010111100110111.mp3"
+    }
+  ],
+  "grammar": [
+    {
+      "pattern": "普通形 ＋ そうです〈伝聞〉(I hear that ~ / They say ~)",
+      "structure": "V・いA（普通形）＋そうです・なA〔〜だ〕＋そうです・N〔〜だ〕＋そうです",
+      "explain": "Attach そうです to the PLAIN form of any predicate to report information you got secondhand — from the news, someone's words, or something you read — without vouching for it yourself: 'I hear ~ / They say ~.' Unlike the 〜そう of appearance (雨が降りそう, L43), this hearsay そう attaches to the full plain form, so な-adjectives and nouns keep their だ (元気だそうです, 学生だそうです). It never conjugates — always 普通形 ＋ そうです. The source is often named with 〜によると or a 〜で聞いた／読んだ clause.",
+      "examples": [
+        {
+          "jp": "<ruby>天気<rt>てんき</rt></ruby><ruby>予報<rt>よほう</rt></ruby>によると、あしたは<ruby>雨<rt>あめ</rt></ruby>が<ruby>降<rt>ふ</rt></ruby>るそうです。",
+          "en": "According to the weather forecast, it's going to rain tomorrow."
+        },
+        {
+          "jp": "ミラーさんに<ruby>聞<rt>き</rt></ruby>いたんですが、ニューヨークの<ruby>冬<rt>ふゆ</rt></ruby>はとても<ruby>寒<rt>さむ</rt></ruby>いそうです。",
+          "en": "I heard from Mr. Miller that winters in New York are very cold."
+        },
+        {
+          "jp": "<ruby>新聞<rt>しんぶん</rt></ruby>で<ruby>読<rt>よ</rt></ruby>んだんですが、<ruby>世界<rt>せかい</rt></ruby>の<ruby>人口<rt>じんこう</rt></ruby>は２１００<ruby>年<rt>ねん</rt></ruby>に１００<ruby>億<rt>おく</rt></ruby><ruby>人<rt>にん</rt></ruby>になるそうです。",
+          "en": "I read in the paper that the world's population will reach 10 billion in 2100."
+        },
+        {
+          "jp": "ワット<ruby>先生<rt>せんせい</rt></ruby>は<ruby>厳<rt>きび</rt></ruby>しい<ruby>先生<rt>せんせい</rt></ruby>だそうです。",
+          "en": "I hear that Mr. Watt is a strict teacher."
+        }
+      ]
+    },
+    {
+      "pattern": "〜によると、〜そうです (according to ~ — naming the source)",
+      "structure": "N ＋ によると（＋ 文末の伝聞「〜そうです」）",
+      "explain": "〜によると marks the SOURCE of reported information and normally pairs with a sentence-final 〜そうです (hearsay): 'according to (source), I hear ~.' The source is a noun — the news, a newspaper, a person, some data, an announcement. 〜によれば is a near-synonym. Use によると to make explicit where your secondhand information came from, then close the sentence with そうです.",
+      "examples": [
+        {
+          "jp": "けさの<ruby>新聞<rt>しんぶん</rt></ruby>によると、イタリアが<ruby>勝<rt>か</rt></ruby>ったそうです。",
+          "en": "According to this morning's paper, Italy won."
+        },
+        {
+          "jp": "<ruby>天気<rt>てんき</rt></ruby><ruby>予報<rt>よほう</rt></ruby>によると、あしたは<ruby>寒<rt>さむ</rt></ruby>くなるそうです。",
+          "en": "According to the weather forecast, it will turn cold tomorrow."
+        },
+        {
+          "jp": "<ruby>警察<rt>けいさつ</rt></ruby>の<ruby>発表<rt>はっぴょう</rt></ruby>によると、<ruby>交通<rt>こうつう</rt></ruby><ruby>事故<rt>じこ</rt></ruby>がいちばん<ruby>多<rt>おお</rt></ruby>いのは１２<ruby>月<rt>がつ</rt></ruby>だそうです。",
+          "en": "According to the police announcement, the month with the most traffic accidents is December."
+        },
+        {
+          "jp": "<ruby>最近<rt>さいきん</rt></ruby>のデータによると、<ruby>東京<rt>とうきょう</rt></ruby>の<ruby>人口<rt>じんこう</rt></ruby>は<ruby>増<rt>ふ</rt></ruby>えているそうです。",
+          "en": "According to recent data, Tokyo's population is increasing."
+        }
+      ]
+    },
+    {
+      "pattern": "〜ようです〈推量〉(it seems / it looks like — inferred from what you observe)",
+      "structure": "V・いA（普通形）＋ようです・なA〔〜な〕＋ようです・N〔〜の〕＋ようです",
+      "explain": "Attach ようです to a plain-form predicate to state a subjective conjecture you draw from your OWN senses or observation: 'it seems / it looks like ~.' な-adjectives connect with 〜な (好きなようです), nouns with 〜の (事故のようです). It differs from hearsay そうです: ようです is YOUR inference from evidence you can see/hear/smell, not a report of someone else's words. It's often triggered by a sensory cue — 変な音がする → 何か壊れたようです.",
+      "examples": [
+        {
+          "jp": "<ruby>人<rt>ひと</rt></ruby>が<ruby>大勢<rt>おおぜい</rt></ruby><ruby>集<rt>あつ</rt></ruby>まっていますね。<ruby>事故<rt>じこ</rt></ruby>のようです。",
+          "en": "A lot of people are gathered. It looks like there's been an accident."
+        },
+        {
+          "jp": "<ruby>返事<rt>へんじ</rt></ruby>がありません。だれもいないようです。",
+          "en": "There's no answer. It seems there's no one here."
+        },
+        {
+          "jp": "<ruby>変<rt>へん</rt></ruby>なにおいがしますね。<ruby>何<rt>なに</rt></ruby>か<ruby>燃<rt>も</rt></ruby>えているようです。",
+          "en": "There's a strange smell. It seems something is burning."
+        },
+        {
+          "jp": "タワポンさんはカラオケが<ruby>好<rt>す</rt></ruby>きなようですから、<ruby>今度<rt>こんど</rt></ruby><ruby>誘<rt>さそ</rt></ruby>いましょう。",
+          "en": "Mr. Thawapon seems to like karaoke, so let's invite him next time."
+        }
+      ]
+    },
+    {
+      "pattern": "音・声・におい・味 ＋ が します (a sound/smell/taste is perceived)",
+      "structure": "N（音・声・におい・味・気）＋ が ＋ します",
+      "explain": "With a small set of sense nouns — 音 (sound), 声 (voice), におい (smell), 味 (taste), 気 (feeling) — します means 'there is / one perceives' that sensation, not 'to do.' The perceived thing takes が: 変な音がします ('there's a strange noise'), いいにおいがします ('it smells good'). This sensory observation is very often what leads into a 〜ようです conjecture about its cause.",
+      "examples": [
+        {
+          "jp": "<ruby>台所<rt>だいどころ</rt></ruby>からいいにおいがします。",
+          "en": "A good smell is coming from the kitchen."
+        },
+        {
+          "jp": "<ruby>子<rt>こ</rt></ruby>どもの<ruby>声<rt>こえ</rt></ruby>がしますね。",
+          "en": "I can hear children's voices."
+        },
+        {
+          "jp": "このミルクは<ruby>変<rt>へん</rt></ruby>な<ruby>味<rt>あじ</rt></ruby>がします。<ruby>古<rt>ふる</rt></ruby>いようです。",
+          "en": "This milk tastes strange. It seems it's old."
+        },
+        {
+          "jp": "<ruby>外<rt>そと</rt></ruby>で<ruby>大<rt>おお</rt></ruby>きな<ruby>音<rt>おと</rt></ruby>がしました。",
+          "en": "There was a loud sound outside."
+        }
+      ]
+    }
+  ],
+  "examples": [
+    {
+      "jp": "<ruby>天気<rt>てんき</rt></ruby><ruby>予報<rt>よほう</rt></ruby>によると、あしたは<ruby>雨<rt>あめ</rt></ruby>が<ruby>降<rt>ふ</rt></ruby>るそうです。",
+      "en": "According to the weather forecast, it will rain tomorrow."
+    },
+    {
+      "jp": "ワンさんに<ruby>聞<rt>き</rt></ruby>いたんですが、<ruby>弟<rt>おとうと</rt></ruby>さんは<ruby>弁護士<rt>べんごし</rt></ruby>だそうです。",
+      "en": "I heard from Mr. Wang that his younger brother is a lawyer."
+    },
+    {
+      "jp": "<ruby>高橋<rt>たかはし</rt></ruby>さんはアメリカに<ruby>転勤<rt>てんきん</rt></ruby>するそうです。…それで<ruby>英語<rt>えいご</rt></ruby>を<ruby>勉強<rt>べんきょう</rt></ruby>しているんですね。",
+      "en": "I hear Mr. Takahashi is being transferred to America. …So that's why he's studying English."
+    },
+    {
+      "jp": "あの<ruby>二人<rt>ふたり</rt></ruby>は<ruby>別<rt>わか</rt></ruby>れたそうですよ。…それで<ruby>最近<rt>さいきん</rt></ruby><ruby>彼<rt>かれ</rt></ruby>は<ruby>元気<rt>げんき</rt></ruby>がないんですね。",
+      "en": "I hear those two have broken up. …So that's why he's been down lately."
+    },
+    {
+      "jp": "<ruby>変<rt>へん</rt></ruby>な<ruby>音<rt>おと</rt></ruby>がしますね。どこか<ruby>壊<rt>こわ</rt></ruby>れたようです。",
+      "en": "There's a strange noise. It seems something's broken somewhere."
+    },
+    {
+      "jp": "<ruby>電気<rt>でんき</rt></ruby>が<ruby>消<rt>き</rt></ruby>えていますね。…ええ、だれもいないようですね。",
+      "en": "The lights are off. …Yeah, it looks like there's no one home."
+    },
+    {
+      "jp": "<ruby>木<rt>き</rt></ruby>の<ruby>葉<rt>は</rt></ruby>がたくさん<ruby>落<rt>お</rt></ruby>ちていますね。…<ruby>強<rt>つよ</rt></ruby>い<ruby>風<rt>かぜ</rt></ruby>が<ruby>吹<rt>ふ</rt></ruby>いたようですね。",
+      "en": "There are a lot of fallen leaves. …Looks like a strong wind blew."
+    },
+    {
+      "jp": "<ruby>外<rt>そと</rt></ruby>は<ruby>寒<rt>さむ</rt></ruby>いようですから、コートを<ruby>着<rt>き</rt></ruby>て<ruby>行<rt>い</rt></ruby>ったほうがいいです。",
+      "en": "It seems cold outside, so you'd better wear a coat when you go."
+    }
+  ],
+  "conversation": {
+    "title": "<ruby>婚約<rt>こんやく</rt></ruby>したそうです (I hear she got engaged)",
+    "audio": "/Audio/minnahonsatsu2/64.mp3",
+    "lines": [
+      {
+        "role": "渡辺",
+        "jp": "お<ruby>先<rt>さき</rt></ruby>に<ruby>失礼<rt>しつれい</rt></ruby>します。",
+        "en": "Excuse me, I'll be heading out first."
+      },
+      {
+        "role": "高橋",
+        "jp": "あっ、<ruby>渡辺<rt>わたなべ</rt></ruby>さん、ちょっと<ruby>待<rt>ま</rt></ruby>って。<ruby>僕<rt>ぼく</rt></ruby>も<ruby>帰<rt>かえ</rt></ruby>ります。",
+        "en": "Ah, Ms. Watanabe, wait a second. I'm heading home too."
+      },
+      {
+        "role": "渡辺",
+        "jp": "すみません。ちょっと<ruby>急<rt>いそ</rt></ruby>ぎますから。",
+        "en": "Sorry — I'm in a bit of a hurry."
+      },
+      {
+        "role": "高橋",
+        "jp": "<ruby>渡辺<rt>わたなべ</rt></ruby>さん、このごろ<ruby>早<rt>はや</rt></ruby>く<ruby>帰<rt>かえ</rt></ruby>りますね。どうも<ruby>恋人<rt>こいびと</rt></ruby>ができたようですね。",
+        "en": "Ms. Watanabe's been leaving early lately. It really seems she's got a boyfriend now."
+      },
+      {
+        "role": "同僚",
+        "jp": "あ、<ruby>知<rt>し</rt></ruby>らないんですか。この<ruby>間<rt>あいだ</rt></ruby><ruby>婚約<rt>こんやく</rt></ruby>したそうですよ。",
+        "en": "Oh, you didn't know? I hear she got engaged recently."
+      },
+      {
+        "role": "高橋",
+        "jp": "えっ、だれですか、<ruby>相手<rt>あいて</rt></ruby>は。",
+        "en": "Huh? Who's the other person?"
+      },
+      {
+        "role": "同僚",
+        "jp": "ＩＭＣの<ruby>鈴木<rt>すずき</rt></ruby>さんですよ。",
+        "en": "It's Mr. Suzuki from IMC."
+      },
+      {
+        "role": "高橋",
+        "jp": "えっ、<ruby>鈴木<rt>すずき</rt></ruby>さん？",
+        "en": "What? Suzuki?"
+      },
+      {
+        "role": "同僚",
+        "jp": "ワットさんの<ruby>結婚式<rt>けっこんしき</rt></ruby>で<ruby>知<rt>し</rt></ruby>り<ruby>合<rt>あ</rt></ruby>ったそうですよ。",
+        "en": "I hear they met at Mr. Watt's wedding."
+      },
+      {
+        "role": "高橋",
+        "jp": "そうですか。",
+        "en": "Is that so."
+      },
+      {
+        "role": "同僚",
+        "jp": "ところで、<ruby>高橋<rt>たかはし</rt></ruby>さんは？",
+        "en": "By the way, what about you, Mr. Takahashi?"
+      },
+      {
+        "role": "高橋",
+        "jp": "<ruby>僕<rt>ぼく</rt></ruby>ですか。<ruby>僕<rt>ぼく</rt></ruby>は<ruby>仕事<rt>しごと</rt></ruby>が<ruby>恋人<rt>こいびと</rt></ruby>です。",
+        "en": "Me? Work is my sweetheart."
+      }
+    ]
+  }
+}

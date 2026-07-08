@@ -1,0 +1,1089 @@
+{
+  "lesson": 27,
+  "title": "Lesson 27",
+  "theme": "The potential form (可能動詞) — Nが 読めます／食べられます (can do); 見えます・聞こえます (spontaneously can see/hear); できます (be built/completed); 〜しか〜ません (only); and contrastive 〜は〜が、〜は〜",
+  "source": {
+    "name": "vnjpclub.com",
+    "vocabUrl": "https://www.vnjpclub.com/en/minna-no-nihongo/lesson-27-vocabulary.html",
+    "grammarUrl": "https://www.vnjpclub.com/en/minna-no-nihongo/lesson-27-grammar.html",
+    "note": "Vocabulary, native-speaker audio, and example sentences aggregated from vnjpclub.com (Minna no Nihongo 第2版). For personal study."
+  },
+  "vocab": [
+    {
+      "key": "mnn:27:0",
+      "kana": "かいます",
+      "kanji": "飼います",
+      "context": "",
+      "mean": "to keep (a pet), to raise (an animal)",
+      "cat": "verb",
+      "type": "godan",
+      "trans": "t",
+      "dict": "飼う",
+      "dictRead": "かう",
+      "audio": "/Audio/minnamoi/bai27/00010101101011100.mp3",
+      "levels": {
+        "N5": [
+          "<ruby>犬<rt>いぬ</rt></ruby>を<ruby>飼<rt>か</rt></ruby>っています。",
+          "I keep a dog."
+        ],
+        "N4": [
+          "このマンションでは<ruby>猫<rt>ねこ</rt></ruby>が<ruby>飼<rt>か</rt></ruby>えません。",
+          "You can't keep cats in this apartment."
+        ],
+        "N3": [
+          "<ruby>子<rt>こ</rt></ruby>どもに<ruby>頼<rt>たの</rt></ruby>まれて、うさぎを<ruby>飼<rt>か</rt></ruby>うことにしました。",
+          "My child asked me to, so I decided to keep a rabbit."
+        ],
+        "N2": [
+          "ペットを<ruby>飼<rt>か</rt></ruby>う<ruby>以上<rt>いじょう</rt></ruby>、<ruby>最後<rt>さいご</rt></ruby>まで<ruby>責任<rt>せきにん</rt></ruby>を<ruby>持<rt>も</rt></ruby>って<ruby>世話<rt>せわ</rt></ruby>をするべきだ。",
+          "If you're going to keep a pet, you should take responsibility and care for it to the very end."
+        ],
+        "N1": [
+          "<ruby>安易<rt>あんい</rt></ruby>な<ruby>気持<rt>きも</rt></ruby>ちで<ruby>動物<rt>どうぶつ</rt></ruby>を<ruby>飼<rt>か</rt></ruby>い<ruby>始<rt>はじ</rt></ruby>め、<ruby>飼<rt>か</rt></ruby>いきれずに<ruby>捨<rt>す</rt></ruby>てる<ruby>人<rt>ひと</rt></ruby>が<ruby>後<rt>あと</rt></ruby>を<ruby>絶<rt>た</rt></ruby>たない。",
+          "People who start keeping animals on a whim and then abandon them when they can't cope never cease to appear."
+        ]
+      },
+      "mnem": "飼う sounds exactly like 買う (かう, to buy) — but you don't just BUY an animal, you 飼う it: keep it and feed it.",
+      "tip": "飼う (godan, transitive) = to keep/raise an animal — a homophone of 買う (to buy). The pet takes を (犬を飼う); the potential is 飼える (can keep).",
+      "accent": 0
+    },
+    {
+      "key": "mnn:27:1",
+      "kana": "はしります",
+      "kanji": "走ります",
+      "context": "道を〜",
+      "mean": "to run; to drive (along a road)",
+      "cat": "verb",
+      "type": "godan",
+      "trans": "i",
+      "dict": "走る",
+      "dictRead": "はしる",
+      "audio": "/Audio/minnamoi/bai27/00010101101011101.mp3",
+      "accent": 2
+    },
+    {
+      "key": "mnn:27:2",
+      "kana": "みえます",
+      "kanji": "見えます",
+      "context": "山が〜",
+      "mean": "to be visible, can be seen",
+      "cat": "verb",
+      "type": "ichidan",
+      "trans": "i",
+      "dict": "見える",
+      "dictRead": "みえる",
+      "audio": "/Audio/minnamoi/bai27/00010101101011110.mp3",
+      "levels": {
+        "N5": [
+          "<ruby>山<rt>やま</rt></ruby>が<ruby>見<rt>み</rt></ruby>えます。",
+          "I can see a mountain."
+        ],
+        "N4": [
+          "ここから<ruby>海<rt>うみ</rt></ruby>が<ruby>見<rt>み</rt></ruby>えて、とてもきれいです。",
+          "You can see the sea from here, and it's very beautiful."
+        ],
+        "N3": [
+          "<ruby>天気<rt>てんき</rt></ruby>がいい<ruby>日<rt>ひ</rt></ruby>には、<ruby>遠<rt>とお</rt></ruby>くに<ruby>富士山<rt>ふじさん</rt></ruby>が<ruby>見<rt>み</rt></ruby>えることもあります。",
+          "On clear days, you can sometimes even see Mt. Fuji in the distance."
+        ],
+        "N2": [
+          "<ruby>木<rt>き</rt></ruby>が<ruby>邪魔<rt>じゃま</rt></ruby>で、ステージが<ruby>全<rt>まった</rt></ruby>く<ruby>見<rt>み</rt></ruby>えないわけではないが、やはり<ruby>見<rt>み</rt></ruby>にくい。",
+          "It's not that the tree blocks the stage entirely, but it's still hard to see."
+        ],
+        "N1": [
+          "<ruby>目<rt>め</rt></ruby>に<ruby>見<rt>み</rt></ruby>える<ruby>成果<rt>せいか</rt></ruby>ばかりを<ruby>求<rt>もと</rt></ruby>めていては、<ruby>本当<rt>ほんとう</rt></ruby>に<ruby>大切<rt>たいせつ</rt></ruby>なものを<ruby>見失<rt>みうしな</rt></ruby>いかねない。",
+          "If you seek only visible results, you risk losing sight of what truly matters."
+        ]
+      },
+      "mnem": "見える = 見る (to look) with the spontaneous 'える' — something drifts into view on its own, no effort needed: it 'can be seen'.",
+      "tip": "見える is spontaneous 'be visible' (the thing takes が: 山が見える) — distinct from 見られる 'can see' (by effort or opportunity, e.g. a movie). Ichidan, intransitive.",
+      "accent": 2
+    },
+    {
+      "key": "mnn:27:3",
+      "kana": "きこえます",
+      "kanji": "聞こえます",
+      "context": "音が〜",
+      "mean": "to be audible, can be heard",
+      "cat": "verb",
+      "type": "ichidan",
+      "trans": "i",
+      "dict": "聞こえる",
+      "dictRead": "きこえる",
+      "audio": "/Audio/minnamoi/bai27/00010101101011111.mp3",
+      "levels": {
+        "N5": [
+          "<ruby>音<rt>おと</rt></ruby>が<ruby>聞<rt>き</rt></ruby>こえます。",
+          "I can hear a sound."
+        ],
+        "N4": [
+          "<ruby>鳥<rt>とり</rt></ruby>の<ruby>声<rt>こえ</rt></ruby>が<ruby>聞<rt>き</rt></ruby>こえて、もう<ruby>春<rt>はる</rt></ruby>だと<ruby>感<rt>かん</rt></ruby>じました。",
+          "I could hear birds singing and felt that spring had come."
+        ],
+        "N3": [
+          "<ruby>後<rt>うし</rt></ruby>ろの<ruby>席<rt>せき</rt></ruby>まで<ruby>声<rt>こえ</rt></ruby>が<ruby>聞<rt>き</rt></ruby>こえるように、マイクを<ruby>使<rt>つか</rt></ruby>ってください。",
+          "Please use a microphone so your voice can be heard even in the back seats."
+        ],
+        "N2": [
+          "<ruby>波<rt>なみ</rt></ruby>の<ruby>音<rt>おと</rt></ruby>しか<ruby>聞<rt>き</rt></ruby>こえない<ruby>静<rt>しず</rt></ruby>かな<ruby>浜辺<rt>はまべ</rt></ruby>で、しばらくぼんやりしていた。",
+          "On a quiet beach where nothing but the sound of the waves could be heard, I spaced out for a while."
+        ],
+        "N1": [
+          "<ruby>批判<rt>ひはん</rt></ruby>のように<ruby>聞<rt>き</rt></ruby>こえるかもしれないが、これはあくまで<ruby>君<rt>きみ</rt></ruby>のためを<ruby>思<rt>おも</rt></ruby>っての<ruby>助言<rt>じょげん</rt></ruby>だ。",
+          "It may sound like criticism, but this is advice given entirely for your own good."
+        ]
+      },
+      "mnem": "聞こえる = 聞く (to hear) + spontaneous 'こえる' — the sound reaches your ears on its own; you can hear it.",
+      "tip": "聞こえる is spontaneous 'be audible' (音が聞こえる, が-marked) — distinct from 聞ける 'can hear/listen' by choice. Ichidan, intransitive. Also 〜のように聞こえる = 'sounds like ~'.",
+      "accent": 0
+    },
+    {
+      "key": "mnn:27:4",
+      "kana": "できます",
+      "kanji": "できます",
+      "context": "道が〜",
+      "mean": "to be made, be completed, come into existence",
+      "cat": "verb",
+      "type": "ichidan",
+      "trans": "i",
+      "dict": "できる",
+      "dictRead": "できる",
+      "audio": "/Audio/minnamoi/bai27/00010101101100000.mp3",
+      "accent": 2
+    },
+    {
+      "key": "mnn:27:5",
+      "kana": "ひらきます",
+      "kanji": "開きます",
+      "context": "教室を〜",
+      "mean": "to open, hold, set up (a class)",
+      "cat": "verb",
+      "type": "godan",
+      "trans": "t",
+      "dict": "開く",
+      "dictRead": "ひらく",
+      "audio": "/Audio/minnamoi/bai27/00010101101100001.mp3",
+      "levels": {
+        "N5": [
+          "<ruby>本<rt>ほん</rt></ruby>を<ruby>開<rt>ひら</rt></ruby>いてください。",
+          "Please open your book."
+        ],
+        "N4": [
+          "<ruby>来月<rt>らいげつ</rt></ruby>、<ruby>料理<rt>りょうり</rt></ruby><ruby>教室<rt>きょうしつ</rt></ruby>を<ruby>開<rt>ひら</rt></ruby>きます。",
+          "Next month I'll open a cooking class."
+        ],
+        "N3": [
+          "<ruby>駅前<rt>えきまえ</rt></ruby>に<ruby>自分<rt>じぶん</rt></ruby>の<ruby>店<rt>みせ</rt></ruby>を<ruby>開<rt>ひら</rt></ruby>くために、お<ruby>金<rt>かね</rt></ruby>をためています。",
+          "I'm saving money in order to open my own shop in front of the station."
+        ],
+        "N2": [
+          "<ruby>反対<rt>はんたい</rt></ruby>の<ruby>声<rt>こえ</rt></ruby>もあったものの、<ruby>市<rt>し</rt></ruby>は<ruby>説明会<rt>せつめいかい</rt></ruby>を<ruby>開<rt>ひら</rt></ruby>くことにした。",
+          "Although there were voices of opposition, the city decided to hold an information session."
+        ],
+        "N1": [
+          "<ruby>両国<rt>りょうこく</rt></ruby>の<ruby>間<rt>あいだ</rt></ruby>で<ruby>対話<rt>たいわ</rt></ruby>の<ruby>場<rt>ば</rt></ruby>が<ruby>開<rt>ひら</rt></ruby>かれたことは、<ruby>和平<rt>わへい</rt></ruby>への<ruby>大<rt>おお</rt></ruby>きな<ruby>一歩<rt>いっぽ</rt></ruby>と<ruby>言<rt>い</rt></ruby>える。",
+          "The fact that a venue for dialogue was opened between the two countries can be called a major step toward peace."
+        ]
+      },
+      "mnem": "開く (ひらく) — picture your hands 'peeling' something open; ひらく = to spread/open out, hence to 'open' or 'hold' a class or shop.",
+      "tip": "同じ kanji 開く has two readings: ひらく (transitive: open a book / hold a class — 教室を開く) vs あく (intransitive: a door opens by itself). Here it's ひらく, godan, transitive.",
+      "accent": 2
+    },
+    {
+      "key": "mnn:27:6",
+      "kana": "しんぱい",
+      "kanji": "心配",
+      "context": "〜[な]",
+      "mean": "worried, anxious",
+      "cat": "adjective",
+      "type": "na-adj",
+      "trans": "",
+      "dict": "心配",
+      "dictRead": "しんぱい",
+      "audio": "/Audio/minnamoi/bai27/00010101101100010.mp3",
+      "levels": {
+        "N5": [
+          "<ruby>母<rt>はは</rt></ruby>のことが<ruby>心配<rt>しんぱい</rt></ruby>です。",
+          "I'm worried about my mother."
+        ],
+        "N4": [
+          "<ruby>試験<rt>しけん</rt></ruby>の<ruby>結果<rt>けっか</rt></ruby>が<ruby>心配<rt>しんぱい</rt></ruby>で、よく<ruby>寝<rt>ね</rt></ruby>られませんでした。",
+          "I was worried about the exam results and couldn't sleep well."
+        ],
+        "N3": [
+          "<ruby>家族<rt>かぞく</rt></ruby>のことが<ruby>心配<rt>しんぱい</rt></ruby>なら、<ruby>一度<rt>いちど</rt></ruby><ruby>電話<rt>でんわ</rt></ruby>してみたらどうですか。",
+          "If you're worried about your family, why don't you try calling them once?"
+        ],
+        "N2": [
+          "<ruby>本人<rt>ほんにん</rt></ruby>は<ruby>大丈夫<rt>だいじょうぶ</rt></ruby>だと<ruby>言<rt>い</rt></ruby>うものの、<ruby>顔色<rt>かおいろ</rt></ruby>を<ruby>見<rt>み</rt></ruby>ると<ruby>心配<rt>しんぱい</rt></ruby>にならざるを<ruby>得<rt>え</rt></ruby>ない。",
+          "Although he himself says he's fine, seeing his complexion I can't help but worry."
+        ],
+        "N1": [
+          "<ruby>親<rt>おや</rt></ruby>というものは、<ruby>子<rt>こ</rt></ruby>がいくつになろうとも、その<ruby>身<rt>み</rt></ruby>を<ruby>案<rt>あん</rt></ruby>じて<ruby>心配<rt>しんぱい</rt></ruby>し<ruby>続<rt>つづ</rt></ruby>けるものだ。",
+          "Parents, no matter how old their children grow, go on worrying about their well-being."
+        ]
+      },
+      "mnem": "心 (heart) + 配 (distribute/allot) — your heart is 'passed around' with unease: 心配 = worry.",
+      "tip": "心配 is a な-adjective AND a noun (心配する = to worry): 心配な人 / 〜が心配だ. The opposite is 安心 (あんしん, relief/peace of mind).",
+      "accent": 0
+    },
+    {
+      "key": "mnn:27:7",
+      "kana": "ペット",
+      "kanji": "",
+      "context": "",
+      "mean": "pet",
+      "cat": "noun",
+      "type": "",
+      "trans": "",
+      "dict": "ペット",
+      "dictRead": "ペット",
+      "audio": "/Audio/minnamoi/bai27/00010101101100011.mp3",
+      "levels": {
+        "N5": [
+          "<ruby>私<rt>わたし</rt></ruby>のペットは<ruby>猫<rt>ねこ</rt></ruby>です。",
+          "My pet is a cat."
+        ],
+        "N4": [
+          "このマンションではペットが<ruby>飼<rt>か</rt></ruby>えません。",
+          "You can't keep pets in this apartment."
+        ],
+        "N3": [
+          "<ruby>最近<rt>さいきん</rt></ruby>はペットを<ruby>家族<rt>かぞく</rt></ruby>の<ruby>一員<rt>いちいん</rt></ruby>のように<ruby>考<rt>かんが</rt></ruby>える<ruby>人<rt>ひと</rt></ruby>が<ruby>増<rt>ふ</rt></ruby>えています。",
+          "Lately, more and more people think of their pets as members of the family."
+        ],
+        "N2": [
+          "ペットを<ruby>飼<rt>か</rt></ruby>うなら、<ruby>最後<rt>さいご</rt></ruby>まで<ruby>面倒<rt>めんどう</rt></ruby>を<ruby>見<rt>み</rt></ruby>る<ruby>覚悟<rt>かくご</rt></ruby>が<ruby>必要<rt>ひつよう</rt></ruby>だ。",
+          "If you're going to have a pet, you need the resolve to look after it to the end."
+        ],
+        "N1": [
+          "ペットとの<ruby>暮<rt>く</rt></ruby>らしは<ruby>癒<rt>いや</rt></ruby>しをもたらす<ruby>一方<rt>いっぽう</rt></ruby>で、<ruby>別<rt>わか</rt></ruby>れの<ruby>悲<rt>かな</rt></ruby>しみという<ruby>代償<rt>だいしょう</rt></ruby>を<ruby>伴<rt>ともな</rt></ruby>う。",
+          "Life with a pet brings comfort, but at the cost of the sorrow of parting."
+        ]
+      },
+      "mnem": "ペット is the English 'pet' in katakana — pe-t-to. The small ッ gives it a crisp double stop.",
+      "tip": "ペット is a loanword (pet). 'To keep a pet' = ペットを飼う (かう). Don't confuse it with ベッド (bed) — different first sound and a voiced ド.",
+      "accent": 1
+    },
+    {
+      "key": "mnn:27:8",
+      "kana": "とり",
+      "kanji": "鳥",
+      "context": "",
+      "mean": "bird",
+      "cat": "noun",
+      "type": "",
+      "trans": "",
+      "dict": "鳥",
+      "dictRead": "とり",
+      "audio": "/Audio/minnamoi/bai27/00010101101100100.mp3",
+      "levels": {
+        "N5": [
+          "<ruby>鳥<rt>とり</rt></ruby>が<ruby>好<rt>す</rt></ruby>きです。",
+          "I like birds."
+        ],
+        "N4": [
+          "<ruby>朝<rt>あさ</rt></ruby>、<ruby>鳥<rt>とり</rt></ruby>の<ruby>声<rt>こえ</rt></ruby>が<ruby>聞<rt>き</rt></ruby>こえました。",
+          "In the morning I could hear birds singing."
+        ],
+        "N3": [
+          "この<ruby>公園<rt>こうえん</rt></ruby>では、<ruby>珍<rt>めずら</rt></ruby>しい<ruby>鳥<rt>とり</rt></ruby>を<ruby>見<rt>み</rt></ruby>ることができます。",
+          "In this park you can see rare birds."
+        ],
+        "N2": [
+          "<ruby>鳥<rt>とり</rt></ruby>のように<ruby>自由<rt>じゆう</rt></ruby>に<ruby>空<rt>そら</rt></ruby>を<ruby>飛<rt>と</rt></ruby>べたら、どんなにいいだろう。",
+          "How wonderful it would be to fly through the sky freely like a bird."
+        ],
+        "N1": [
+          "<ruby>渡<rt>わた</rt></ruby>り<ruby>鳥<rt>どり</rt></ruby>が<ruby>季節<rt>きせつ</rt></ruby>の<ruby>変<rt>か</rt></ruby>わり<ruby>目<rt>め</rt></ruby>を<ruby>告<rt>つ</rt></ruby>げるように、<ruby>自然<rt>しぜん</rt></ruby>は<ruby>静<rt>しず</rt></ruby>かに<ruby>時<rt>とき</rt></ruby>の<ruby>流<rt>なが</rt></ruby>れを<ruby>教<rt>おし</rt></ruby>えてくれる。",
+          "Just as migratory birds herald the change of seasons, nature quietly tells us of the passage of time."
+        ]
+      },
+      "mnem": "鳥 (とり) — picture a 'torii' gate where birds like to perch; とり = bird.",
+      "tip": "鳥 (とり) = bird; 小鳥 (ことり) = small bird. Homophone of 取る/撮る (とる, take/photograph). The kanji 鳥 differs from 島 (しま, island) by only its lower element.",
+      "accent": 0
+    },
+    {
+      "key": "mnn:27:9",
+      "kana": "こえ",
+      "kanji": "声",
+      "context": "",
+      "mean": "voice",
+      "cat": "noun",
+      "type": "",
+      "trans": "",
+      "dict": "声",
+      "dictRead": "こえ",
+      "audio": "/Audio/minnamoi/bai27/00010101101100101.mp3",
+      "levels": {
+        "N5": [
+          "<ruby>先生<rt>せんせい</rt></ruby>の<ruby>声<rt>こえ</rt></ruby>が<ruby>聞<rt>き</rt></ruby>こえません。",
+          "I can't hear the teacher's voice."
+        ],
+        "N4": [
+          "<ruby>大<rt>おお</rt></ruby>きい<ruby>声<rt>こえ</rt></ruby>で<ruby>話<rt>はな</rt></ruby>してください。",
+          "Please speak in a loud voice."
+        ],
+        "N3": [
+          "<ruby>後<rt>うし</rt></ruby>ろの<ruby>人<rt>ひと</rt></ruby>にも<ruby>聞<rt>き</rt></ruby>こえるように、もう<ruby>少<rt>すこ</rt></ruby>し<ruby>声<rt>こえ</rt></ruby>を<ruby>大<rt>おお</rt></ruby>きくしてください。",
+          "Please raise your voice a little so the people in back can hear too."
+        ],
+        "N2": [
+          "<ruby>緊張<rt>きんちょう</rt></ruby>のあまり、<ruby>名前<rt>なまえ</rt></ruby>を<ruby>呼<rt>よ</rt></ruby>ばれても<ruby>声<rt>こえ</rt></ruby>が<ruby>出<rt>で</rt></ruby>なかった。",
+          "I was so nervous that even when my name was called, no voice would come out."
+        ],
+        "N1": [
+          "<ruby>現場<rt>げんば</rt></ruby>で<ruby>働<rt>はたら</rt></ruby>く<ruby>人々<rt>ひとびと</rt></ruby>の<ruby>声<rt>こえ</rt></ruby>にこそ、<ruby>改革<rt>かいかく</rt></ruby>の<ruby>本当<rt>ほんとう</rt></ruby>のヒントが<ruby>隠<rt>かく</rt></ruby>されている。",
+          "It is precisely in the voices of those working on the ground that the real hints for reform lie hidden."
+        ]
+      },
+      "mnem": "声 (こえ) — 'koe' comes OUT of the mouth; raise your こえ to be heard.",
+      "tip": "声 (こえ) = voice / vocal sound (of people, animals): 鳥の声 = birdsong. 音 (おと) is a non-vocal sound: 波の音 = the sound of waves. Don't use 音 for a voice.",
+      "accent": 1
+    },
+    {
+      "key": "mnn:27:10",
+      "kana": "なみ",
+      "kanji": "波",
+      "context": "",
+      "mean": "wave",
+      "cat": "noun",
+      "type": "",
+      "trans": "",
+      "dict": "波",
+      "dictRead": "なみ",
+      "audio": "/Audio/minnamoi/bai27/00010101101100110.mp3",
+      "levels": {
+        "N5": [
+          "<ruby>波<rt>なみ</rt></ruby>が<ruby>高<rt>たか</rt></ruby>いです。",
+          "The waves are high."
+        ],
+        "N4": [
+          "<ruby>海<rt>うみ</rt></ruby>へ<ruby>行<rt>い</rt></ruby>って、<ruby>波<rt>なみ</rt></ruby>の<ruby>音<rt>おと</rt></ruby>を<ruby>聞<rt>き</rt></ruby>きたいです。",
+          "I want to go to the sea and listen to the sound of the waves."
+        ],
+        "N3": [
+          "<ruby>台風<rt>たいふう</rt></ruby>が<ruby>近<rt>ちか</rt></ruby>づいているので、<ruby>波<rt>なみ</rt></ruby>がだんだん<ruby>高<rt>たか</rt></ruby>くなってきた。",
+          "A typhoon is approaching, so the waves have gradually gotten higher."
+        ],
+        "N2": [
+          "<ruby>波<rt>なみ</rt></ruby>が<ruby>荒<rt>あら</rt></ruby>い<ruby>日<rt>ひ</rt></ruby>は、いくら<ruby>泳<rt>およ</rt></ruby>ぎが<ruby>得意<rt>とくい</rt></ruby>でも<ruby>海<rt>うみ</rt></ruby>に<ruby>入<rt>はい</rt></ruby>るべきではない。",
+          "On days when the waves are rough, no matter how good a swimmer you are, you shouldn't go into the sea."
+        ],
+        "N1": [
+          "<ruby>時代<rt>じだい</rt></ruby>の<ruby>波<rt>なみ</rt></ruby>に<ruby>乗<rt>の</rt></ruby>れるかどうかが、<ruby>企業<rt>きぎょう</rt></ruby>の<ruby>存続<rt>そんぞく</rt></ruby>を<ruby>左右<rt>さゆう</rt></ruby>すると<ruby>言<rt>い</rt></ruby>っても<ruby>過言<rt>かごん</rt></ruby>ではない。",
+          "It's no exaggeration to say that whether a company can ride the waves of the times determines its survival."
+        ]
+      },
+      "mnem": "波 (なみ) — the 氵 water radical + 皮 (skin): the 'skin of the water' ripples into waves. Sound: 'nami'.",
+      "tip": "波 (なみ) = a wave of water: 波の音 = the sound of waves. Also figurative: 時代の波 (the waves of the times). Note the 皮 (かわ, skin) element on the right.",
+      "accent": 2
+    },
+    {
+      "key": "mnn:27:11",
+      "kana": "はなび",
+      "kanji": "花火",
+      "context": "",
+      "mean": "fireworks",
+      "cat": "noun",
+      "type": "",
+      "trans": "",
+      "dict": "花火",
+      "dictRead": "はなび",
+      "audio": "/Audio/minnamoi/bai27/00010101101100111.mp3",
+      "levels": {
+        "N5": [
+          "<ruby>夏<rt>なつ</rt></ruby>に<ruby>花火<rt>はなび</rt></ruby>を<ruby>見<rt>み</rt></ruby>ます。",
+          "I watch fireworks in summer."
+        ],
+        "N4": [
+          "<ruby>川<rt>かわ</rt></ruby>の<ruby>近<rt>ちか</rt></ruby>くで<ruby>花火<rt>はなび</rt></ruby>が<ruby>見<rt>み</rt></ruby>えました。",
+          "We could see the fireworks near the river."
+        ],
+        "N3": [
+          "<ruby>今夜<rt>こんや</rt></ruby>は<ruby>花火<rt>はなび</rt></ruby><ruby>大会<rt>たいかい</rt></ruby>があるので、<ruby>浴衣<rt>ゆかた</rt></ruby>を<ruby>着<rt>き</rt></ruby>て<ruby>出<rt>で</rt></ruby>かけようと<ruby>思<rt>おも</rt></ruby>います。",
+          "There's a fireworks festival tonight, so I think I'll wear a yukata and go out."
+        ],
+        "N2": [
+          "<ruby>花火<rt>はなび</rt></ruby>が<ruby>打<rt>う</rt></ruby>ち<ruby>上<rt>あ</rt></ruby>げられるたびに、<ruby>子<rt>こ</rt></ruby>どもたちの<ruby>歓声<rt>かんせい</rt></ruby>が<ruby>夜空<rt>よぞら</rt></ruby>に<ruby>響<rt>ひび</rt></ruby>いた。",
+          "Each time the fireworks were launched, the children's cheers rang out into the night sky."
+        ],
+        "N1": [
+          "<ruby>一瞬<rt>いっしゅん</rt></ruby>で<ruby>散<rt>ち</rt></ruby>る<ruby>花火<rt>はなび</rt></ruby>のはかなさにこそ、<ruby>日本人<rt>にほんじん</rt></ruby>は<ruby>美<rt>うつく</rt></ruby>しさを<ruby>見<rt>み</rt></ruby>いだしてきたのだろう。",
+          "It is perhaps in the fleetingness of fireworks that scatter in an instant that the Japanese have found beauty."
+        ]
+      },
+      "mnem": "花 (flower) + 火 (fire) — 'fire-flowers' blooming in the night sky: 花火 = fireworks (はなび).",
+      "tip": "花火 (はなび) = fireworks; 花火大会 (はなびたいかい) = a fireworks festival. Note that 火 here is voiced to び (rendaku), not ひ.",
+      "accent": 1
+    },
+    {
+      "key": "mnn:27:12",
+      "kana": "どうぐ",
+      "kanji": "道具",
+      "context": "",
+      "mean": "tool, instrument, equipment",
+      "cat": "noun",
+      "type": "",
+      "trans": "",
+      "dict": "道具",
+      "dictRead": "どうぐ",
+      "audio": "/Audio/minnamoi/bai27/00010101101101000.mp3",
+      "levels": {
+        "N5": [
+          "これは<ruby>料理<rt>りょうり</rt></ruby>の<ruby>道具<rt>どうぐ</rt></ruby>です。",
+          "This is a cooking tool."
+        ],
+        "N4": [
+          "<ruby>道具<rt>どうぐ</rt></ruby>を<ruby>借<rt>か</rt></ruby>りることができますか。",
+          "Can I borrow the tools?"
+        ],
+        "N3": [
+          "この<ruby>教室<rt>きょうしつ</rt></ruby>では、<ruby>道具<rt>どうぐ</rt></ruby>を<ruby>持<rt>も</rt></ruby>ってこなくても<ruby>大丈夫<rt>だいじょうぶ</rt></ruby>です。",
+          "In this class it's fine even if you don't bring your own tools."
+        ],
+        "N2": [
+          "いい<ruby>道具<rt>どうぐ</rt></ruby>をそろえたからといって、<ruby>必<rt>かなら</rt></ruby>ずしも<ruby>腕<rt>うで</rt></ruby>が<ruby>上<rt>あ</rt></ruby>がるわけではない。",
+          "Just because you've gathered good tools doesn't necessarily mean your skill will improve."
+        ],
+        "N1": [
+          "<ruby>言葉<rt>ことば</rt></ruby>は<ruby>単<rt>たん</rt></ruby>なる<ruby>伝達<rt>でんたつ</rt></ruby>の<ruby>道具<rt>どうぐ</rt></ruby>ではなく、<ruby>思考<rt>しこう</rt></ruby>そのものを<ruby>形作<rt>かたちづく</rt></ruby>るものである。",
+          "Language is not merely a tool of communication; it shapes thought itself."
+        ]
+      },
+      "mnem": "道 (way/path) + 具 (implement) — the 'implements of the trade': 道具 = tools.",
+      "tip": "道具 (どうぐ) = a physical tool / implement / equipment. Compare 家具 (かぐ, furniture) — same 具. Usually counted with 〜つ / 〜個.",
+      "accent": 3
+    },
+    {
+      "key": "mnn:27:13",
+      "kana": "クリーニング",
+      "kanji": "",
+      "context": "",
+      "mean": "(dry) cleaning, laundry",
+      "cat": "noun",
+      "type": "",
+      "trans": "",
+      "dict": "クリーニング",
+      "dictRead": "クリーニング",
+      "audio": "/Audio/minnamoi/bai27/00010101101101001.mp3",
+      "levels": {
+        "N5": [
+          "これ、クリーニングをお<ruby>願<rt>ねが</rt></ruby>いします。",
+          "Please dry-clean this."
+        ],
+        "N4": [
+          "このシャツはクリーニングに<ruby>出<rt>だ</rt></ruby>しました。",
+          "I sent this shirt to the cleaner's."
+        ],
+        "N3": [
+          "クリーニングは<ruby>水曜日<rt>すいようび</rt></ruby>にできますから、<ruby>取<rt>と</rt></ruby>りに<ruby>来<rt>き</rt></ruby>てください。",
+          "The cleaning will be done on Wednesday, so please come to pick it up."
+        ],
+        "N2": [
+          "クリーニングに<ruby>出<rt>だ</rt></ruby>したはずのコートが、<ruby>店<rt>みせ</rt></ruby>の<ruby>手違<rt>てちが</rt></ruby>いで<ruby>行方<rt>ゆくえ</rt></ruby>が<ruby>分<rt>わ</rt></ruby>からなくなった。",
+          "The coat I was sure I'd sent to the cleaner's went missing due to a mix-up at the shop."
+        ],
+        "N1": [
+          "<ruby>宅配<rt>たくはい</rt></ruby>クリーニングの<ruby>普及<rt>ふきゅう</rt></ruby>により、<ruby>店<rt>みせ</rt></ruby>まで<ruby>足<rt>あし</rt></ruby>を<ruby>運<rt>はこ</rt></ruby>ぶ<ruby>必要<rt>ひつよう</rt></ruby>すらなくなりつつある。",
+          "With the spread of home-delivery dry cleaning, there is less and less need even to make the trip to the shop."
+        ]
+      },
+      "mnem": "クリーニング is English 'cleaning' — ku-ri-i-nin-gu, stretched over five beats.",
+      "tip": "クリーニング means (dry) cleaning / a laundry service: クリーニングに出す = to send to the cleaner's; クリーニング屋 = the cleaner's shop. NOT general cleaning of a room — that's 掃除 (そうじ).",
+      "accent": 4
+    },
+    {
+      "key": "mnn:27:14",
+      "kana": "いえ",
+      "kanji": "家",
+      "context": "",
+      "mean": "house, home",
+      "cat": "noun",
+      "type": "",
+      "trans": "",
+      "dict": "家",
+      "dictRead": "いえ",
+      "audio": "/Audio/minnamoi/bai27/00010101101101010.mp3",
+      "levels": {
+        "N5": [
+          "<ruby>私<rt>わたし</rt></ruby>の<ruby>家<rt>いえ</rt></ruby>は<ruby>駅<rt>えき</rt></ruby>の<ruby>近<rt>ちか</rt></ruby>くです。",
+          "My house is near the station."
+        ],
+        "N4": [
+          "いつか<ruby>自分<rt>じぶん</rt></ruby>で<ruby>家<rt>いえ</rt></ruby>を<ruby>建<rt>た</rt></ruby>てたいです。",
+          "Someday I want to build my own house."
+        ],
+        "N3": [
+          "<ruby>年<rt>とし</rt></ruby>を<ruby>取<rt>と</rt></ruby>ったら、<ruby>田舎<rt>いなか</rt></ruby>に<ruby>小<rt>ちい</rt></ruby>さな<ruby>家<rt>いえ</rt></ruby>を<ruby>買<rt>か</rt></ruby>いたいと<ruby>思<rt>おも</rt></ruby>っています。",
+          "When I grow old, I'd like to buy a small house in the countryside."
+        ],
+        "N2": [
+          "<ruby>家<rt>いえ</rt></ruby>を<ruby>買<rt>か</rt></ruby>うか<ruby>借<rt>か</rt></ruby>りるかは、<ruby>人<rt>ひと</rt></ruby>それぞれの<ruby>価値観<rt>かちかん</rt></ruby>によるとしか<ruby>言<rt>い</rt></ruby>えない。",
+          "Whether to buy or rent a house can only be said to depend on each person's values."
+        ],
+        "N1": [
+          "<ruby>家<rt>いえ</rt></ruby>とは<ruby>単<rt>たん</rt></ruby>なる<ruby>建物<rt>たてもの</rt></ruby>ではなく、そこで<ruby>過<rt>す</rt></ruby>ごした<ruby>時間<rt>じかん</rt></ruby>や<ruby>記憶<rt>きおく</rt></ruby>が<ruby>宿<rt>やど</rt></ruby>る<ruby>場所<rt>ばしょ</rt></ruby>である。",
+          "A home is not merely a building but a place where the time and memories spent there dwell."
+        ]
+      },
+      "mnem": "家 (いえ) — a roof (宀) sheltering a household; いえ = 'ee-eh', your house/home.",
+      "tip": "家 has two native readings: いえ (the house/household as a building) and うち (my home/place, more colloquial). In compounds it reads か/や (作家 さっか, 大家 おおや). Here it's いえ.",
+      "accent": 2
+    },
+    {
+      "key": "mnn:27:15",
+      "kana": "マンション",
+      "kanji": "",
+      "context": "",
+      "mean": "condominium, apartment building",
+      "cat": "noun",
+      "type": "",
+      "trans": "",
+      "dict": "マンション",
+      "dictRead": "マンション",
+      "audio": "/Audio/minnamoi/bai27/00010101101101011.mp3",
+      "levels": {
+        "N5": [
+          "<ruby>私<rt>わたし</rt></ruby>はマンションに<ruby>住<rt>す</rt></ruby>んでいます。",
+          "I live in an apartment."
+        ],
+        "N4": [
+          "このマンションでは<ruby>犬<rt>いぬ</rt></ruby>が<ruby>飼<rt>か</rt></ruby>えますか。",
+          "Can you keep dogs in this apartment building?"
+        ],
+        "N3": [
+          "<ruby>駅<rt>えき</rt></ruby>の<ruby>近<rt>ちか</rt></ruby>くに<ruby>新<rt>あたら</rt></ruby>しいマンションができたので、<ruby>見<rt>み</rt></ruby>に<ruby>行<rt>い</rt></ruby>ってみようと<ruby>思<rt>おも</rt></ruby>います。",
+          "A new apartment building has gone up near the station, so I think I'll go take a look."
+        ],
+        "N2": [
+          "<ruby>都心<rt>としん</rt></ruby>のマンションは<ruby>便利<rt>べんり</rt></ruby>な<ruby>反面<rt>はんめん</rt></ruby>、<ruby>価格<rt>かかく</rt></ruby>が<ruby>高<rt>たか</rt></ruby>すぎて<ruby>手<rt>て</rt></ruby>が<ruby>出<rt>で</rt></ruby>ない。",
+          "City-center condos are convenient, but on the other hand the prices are too high to reach."
+        ],
+        "N1": [
+          "<ruby>老朽化<rt>ろうきゅうか</rt></ruby>したマンションの<ruby>建<rt>た</rt></ruby>て<ruby>替<rt>か</rt></ruby>えは、<ruby>住民<rt>じゅうみん</rt></ruby>の<ruby>合意<rt>ごうい</rt></ruby>を<ruby>得<rt>え</rt></ruby>ることが<ruby>何<rt>なに</rt></ruby>より<ruby>難<rt>むずか</rt></ruby>しい。",
+          "Rebuilding an aging condominium is, above all, difficult in obtaining the residents' consent."
+        ]
+      },
+      "mnem": "マンション LOOKS like English 'mansion' but means a concrete apartment/condo block — a false friend!",
+      "tip": "False-friend alert: マンション is a modern concrete APARTMENT / condominium building, NOT an English 'mansion'. An older wooden apartment is アパート.",
+      "accent": 1
+    },
+    {
+      "key": "mnn:27:16",
+      "kana": "キッチン",
+      "kanji": "",
+      "context": "",
+      "mean": "kitchen",
+      "cat": "noun",
+      "type": "",
+      "trans": "",
+      "dict": "キッチン",
+      "dictRead": "キッチン",
+      "audio": "/Audio/minnamoi/bai27/00010101101101100.mp3",
+      "levels": {
+        "N5": [
+          "キッチンは<ruby>広<rt>ひろ</rt></ruby>いです。",
+          "The kitchen is spacious."
+        ],
+        "N4": [
+          "この<ruby>教室<rt>きょうしつ</rt></ruby>には<ruby>新<rt>あたら</rt></ruby>しいキッチンがあります。",
+          "This class has a new kitchen."
+        ],
+        "N3": [
+          "<ruby>三階<rt>さんがい</rt></ruby>のキッチンなら、<ruby>料理<rt>りょうり</rt></ruby><ruby>教室<rt>きょうしつ</rt></ruby>を<ruby>開<rt>ひら</rt></ruby>くことができます。",
+          "If it's the third-floor kitchen, you can hold a cooking class there."
+        ],
+        "N2": [
+          "<ruby>油<rt>あぶら</rt></ruby>を<ruby>使<rt>つか</rt></ruby>った<ruby>後<rt>あと</rt></ruby>のキッチンは、その<ruby>日<rt>ひ</rt></ruby>のうちに<ruby>掃除<rt>そうじ</rt></ruby>しておくに<ruby>越<rt>こ</rt></ruby>したことはない。",
+          "There's nothing better than cleaning the kitchen the same day after using oil."
+        ],
+        "N1": [
+          "<ruby>最新<rt>さいしん</rt></ruby>の<ruby>設備<rt>せつび</rt></ruby>をそろえたキッチンであっても、<ruby>使<rt>つか</rt></ruby>う<ruby>人<rt>ひと</rt></ruby>の<ruby>腕<rt>うで</rt></ruby>がなければ<ruby>宝<rt>たから</rt></ruby>の<ruby>持<rt>も</rt></ruby>ち<ruby>腐<rt>ぐさ</rt></ruby>れだ。",
+          "Even a kitchen equipped with the latest facilities is wasted without the skill of the person using it."
+        ]
+      },
+      "mnem": "キッチン is English 'kitchen' — kit-chin, with a crisp double ッ.",
+      "tip": "キッチン (loanword, kitchen) is the modern term; 台所 (だいどころ) is the traditional Japanese word for the same room.",
+      "accent": 1
+    },
+    {
+      "key": "mnn:27:17",
+      "kana": "〜きょうしつ",
+      "kanji": "〜教室",
+      "context": "",
+      "mean": "~ class, ~ lesson (e.g. 料理教室)",
+      "cat": "noun",
+      "type": "",
+      "trans": "",
+      "dict": "教室",
+      "dictRead": "きょうしつ",
+      "audio": "/Audio/minnamoi/bai27/00010101101101101.mp3",
+      "levels": {
+        "N5": [
+          "<ruby>教室<rt>きょうしつ</rt></ruby>で<ruby>日本語<rt>にほんご</rt></ruby>を<ruby>勉強<rt>べんきょう</rt></ruby>します。",
+          "I study Japanese in the classroom."
+        ],
+        "N4": [
+          "<ruby>料理<rt>りょうり</rt></ruby><ruby>教室<rt>きょうしつ</rt></ruby>に<ruby>通<rt>かよ</rt></ruby>いたいです。",
+          "I want to attend a cooking class."
+        ],
+        "N3": [
+          "<ruby>近<rt>ちか</rt></ruby>くにいい<ruby>英会話<rt>えいかいわ</rt></ruby><ruby>教室<rt>きょうしつ</rt></ruby>があったら、<ruby>通<rt>かよ</rt></ruby>ってみたいです。",
+          "If there were a good English-conversation class nearby, I'd like to attend it."
+        ],
+        "N2": [
+          "<ruby>生徒<rt>せいと</rt></ruby>が<ruby>集<rt>あつ</rt></ruby>まらないことには、<ruby>教室<rt>きょうしつ</rt></ruby>を<ruby>開<rt>ひら</rt></ruby>いても<ruby>続<rt>つづ</rt></ruby>けられない。",
+          "Unless students gather, even if you open a class you can't keep it going."
+        ],
+        "N1": [
+          "オンライン<ruby>教室<rt>きょうしつ</rt></ruby>の<ruby>普及<rt>ふきゅう</rt></ruby>は、<ruby>地方<rt>ちほう</rt></ruby>に<ruby>住<rt>す</rt></ruby>む<ruby>人<rt>ひと</rt></ruby>にも<ruby>学<rt>まな</rt></ruby>びの<ruby>機会<rt>きかい</rt></ruby>を<ruby>大<rt>おお</rt></ruby>きく<ruby>広<rt>ひろ</rt></ruby>げた。",
+          "The spread of online classes has greatly expanded learning opportunities even for people living in rural areas."
+        ]
+      },
+      "mnem": "教 (teach) + 室 (room) — the 'teaching room': 教室 is a classroom, or (as 〜教室) a lesson/class series you attend.",
+      "tip": "教室 (きょうしつ) = a classroom, and as a suffix (料理教室, ピアノ教室) a lesson/class series. You 'hold' one with ひらく: 教室を開く.",
+      "accent": 0
+    },
+    {
+      "key": "mnn:27:18",
+      "kana": "パーティールーム",
+      "kanji": "",
+      "context": "",
+      "mean": "party room (shared event room in a building)",
+      "cat": "noun",
+      "type": "",
+      "trans": "",
+      "dict": "パーティールーム",
+      "dictRead": "パーティールーム",
+      "audio": "/Audio/minnamoi/bai27/00010101101101110.mp3",
+      "levels": {
+        "N5": [
+          "マンションにパーティールームがあります。",
+          "The apartment building has a party room."
+        ],
+        "N4": [
+          "パーティールームは<ruby>予約<rt>よやく</rt></ruby>しなければなりません。",
+          "You have to reserve the party room."
+        ],
+        "N3": [
+          "<ruby>誕生日<rt>たんじょうび</rt></ruby>のときは、マンションのパーティールームが<ruby>借<rt>か</rt></ruby>りられて<ruby>便利<rt>べんり</rt></ruby>です。",
+          "On birthdays it's convenient that you can borrow the apartment's party room."
+        ],
+        "N2": [
+          "パーティールームがあるとはいえ、<ruby>夜遅<rt>よるおそ</rt></ruby>くまで<ruby>騒<rt>さわ</rt></ruby>げば<ruby>近所<rt>きんじょ</rt></ruby>の<ruby>迷惑<rt>めいわく</rt></ruby>になる。",
+          "Even though there's a party room, if you make noise late into the night it becomes a nuisance to the neighbors."
+        ],
+        "N1": [
+          "<ruby>共用<rt>きょうよう</rt></ruby>のパーティールームは、<ruby>住民<rt>じゅうみん</rt></ruby><ruby>同士<rt>どうし</rt></ruby>の<ruby>交流<rt>こうりゅう</rt></ruby>を<ruby>生<rt>う</rt></ruby>む<ruby>一方<rt>いっぽう</rt></ruby>、<ruby>管理<rt>かんり</rt></ruby>の<ruby>手間<rt>てま</rt></ruby>という<ruby>課題<rt>かだい</rt></ruby>も<ruby>抱<rt>かか</rt></ruby>える。",
+          "A shared party room fosters interaction among residents, but at the same time carries the challenge of management effort."
+        ]
+      },
+      "mnem": "パーティールーム = English 'party room' — a shared room in a マンション for gatherings.",
+      "tip": "パーティールーム is a shared amenity room in a condo/building for events — a Japanese-made compound of 'party' + 'room'.",
+      "accent": 5
+    },
+    {
+      "key": "mnn:27:19",
+      "kana": "かた",
+      "kanji": "方",
+      "context": "",
+      "mean": "person (polite equivalent of ひと)",
+      "cat": "noun",
+      "type": "",
+      "trans": "",
+      "dict": "方",
+      "dictRead": "かた",
+      "audio": "/Audio/minnamoi/bai27/00010101101101111.mp3",
+      "levels": {
+        "N5": [
+          "あの<ruby>方<rt>かた</rt></ruby>は<ruby>先生<rt>せんせい</rt></ruby>です。",
+          "That person is a teacher."
+        ],
+        "N4": [
+          "<ruby>受付<rt>うけつけ</rt></ruby>の<ruby>方<rt>かた</rt></ruby>に<ruby>聞<rt>き</rt></ruby>いてください。",
+          "Please ask the person at the reception."
+        ],
+        "N3": [
+          "<ruby>前<rt>まえ</rt></ruby>の<ruby>方<rt>かた</rt></ruby>、もう<ruby>少<rt>すこ</rt></ruby>し<ruby>前<rt>まえ</rt></ruby>へ<ruby>来<rt>き</rt></ruby>ていただけますか。",
+          "Could the people in front please come a little closer?"
+        ],
+        "N2": [
+          "どの<ruby>方<rt>かた</rt></ruby>がご<ruby>担当<rt>たんとう</rt></ruby>か<ruby>分<rt>わ</rt></ruby>からなかったので、<ruby>受付<rt>うけつけ</rt></ruby>で<ruby>尋<rt>たず</rt></ruby>ねるほかなかった。",
+          "I didn't know which person was in charge, so I had no choice but to ask at the reception."
+        ],
+        "N1": [
+          "ご<ruby>来場<rt>らいじょう</rt></ruby>の<ruby>方<rt>かた</rt></ruby>におかれましては、<ruby>係員<rt>かかりいん</rt></ruby>の<ruby>指示<rt>しじ</rt></ruby>に<ruby>従<rt>したが</rt></ruby>っていただきますようお<ruby>願<rt>ねが</rt></ruby>い<ruby>申<rt>もう</rt></ruby>し<ruby>上<rt>あ</rt></ruby>げます。",
+          "We kindly ask that those attending follow the instructions of the staff."
+        ]
+      },
+      "mnem": "方 (かた) — the polite 'direction/side' word turned respectful for a person: あの方 = 'that (esteemed) person', politer than あの人.",
+      "tip": "方 (かた) is a polite word for 'person' (あの方 > あの人). The same kanji reads ほう (direction/side: こっちの方) and がた (honorific plural: 先生方). Watch context: 前の方 can mean 'the person in front' OR 'the front side'.",
+      "accent": 2
+    },
+    {
+      "key": "mnn:27:20",
+      "kana": "〜ご",
+      "kanji": "〜後",
+      "context": "",
+      "mean": "after ~ (a span of time)",
+      "cat": "noun",
+      "type": "",
+      "trans": "",
+      "dict": "後",
+      "dictRead": "ご",
+      "audio": "/Audio/minnamoi/bai27/00010101101110000.mp3",
+      "levels": {
+        "N5": [
+          "<ruby>五分後<rt>ごふんご</rt></ruby>に<ruby>始<rt>はじ</rt></ruby>まります。",
+          "It will start in five minutes."
+        ],
+        "N4": [
+          "<ruby>一時間後<rt>いちじかんご</rt></ruby>にもう<ruby>一度<rt>いちど</rt></ruby><ruby>電話<rt>でんわ</rt></ruby>します。",
+          "I'll call again in an hour."
+        ],
+        "N3": [
+          "<ruby>卒業<rt>そつぎょう</rt></ruby>の<ruby>十年後<rt>じゅうねんご</rt></ruby>に、みんなでまた<ruby>集<rt>あつ</rt></ruby>まろうと<ruby>約束<rt>やくそく</rt></ruby>しました。",
+          "We promised to gather again ten years after graduation."
+        ],
+        "N2": [
+          "<ruby>数年後<rt>すうねんご</rt></ruby>にどうなっているかなど、<ruby>誰<rt>だれ</rt></ruby>にも<ruby>予測<rt>よそく</rt></ruby>できるものではない。",
+          "No one can predict what things will be like several years from now."
+        ],
+        "N1": [
+          "<ruby>震災<rt>しんさい</rt></ruby>から<ruby>十年後<rt>じゅうねんご</rt></ruby>の<ruby>今<rt>いま</rt></ruby>もなお、<ruby>復興<rt>ふっこう</rt></ruby>の<ruby>道<rt>みち</rt></ruby>のりは<ruby>半<rt>なか</rt></ruby>ばである。",
+          "Even now, ten years after the earthquake disaster, the road to recovery is only halfway."
+        ]
+      },
+      "mnem": "後 read ご as a time suffix means 'after': 三日後 = three days after. (The same kanji is あと 'later' and うし-ろ 'behind'.)",
+      "tip": "〜後 (ご) attaches to a time span for 'after ~': 一時間後 (an hour later), 三年後 (three years later). Distinguish the suffix reading ご from あと (後で, 'afterwards') and うしろ (後ろ, 'behind').",
+      "accent": 1
+    },
+    {
+      "key": "mnn:27:21",
+      "kana": "〜しか",
+      "kanji": "",
+      "context": "〜ません",
+      "mean": "only ~ (used with a negative)",
+      "cat": "expression",
+      "type": "",
+      "trans": "",
+      "dict": "しか",
+      "dictRead": "しか",
+      "audio": "/Audio/minnamoi/bai27/00010101101110001.mp3",
+      "levels": {
+        "N5": [
+          "<ruby>百円<rt>ひゃくえん</rt></ruby>しかありません。",
+          "I only have 100 yen."
+        ],
+        "N4": [
+          "<ruby>日曜日<rt>にちようび</rt></ruby>しか<ruby>休<rt>やす</rt></ruby>めません。",
+          "I only get Sundays off."
+        ],
+        "N3": [
+          "<ruby>簡単<rt>かんたん</rt></ruby>な<ruby>料理<rt>りょうり</rt></ruby>しか<ruby>作<rt>つく</rt></ruby>れないので、<ruby>教室<rt>きょうしつ</rt></ruby>に<ruby>通<rt>かよ</rt></ruby>うことにしました。",
+          "Since I can only make simple dishes, I decided to attend a class."
+        ],
+        "N2": [
+          "<ruby>本人<rt>ほんにん</rt></ruby>にしか<ruby>分<rt>わ</rt></ruby>からない<ruby>苦<rt>くる</rt></ruby>しみというものが、<ruby>誰<rt>だれ</rt></ruby>にでもあるものだ。",
+          "Everyone has a kind of suffering that only they themselves can understand."
+        ],
+        "N1": [
+          "<ruby>今<rt>いま</rt></ruby>この<ruby>瞬間<rt>しゅんかん</rt></ruby>は<ruby>二度<rt>にど</rt></ruby>と<ruby>戻<rt>もど</rt></ruby>らず、<ruby>今<rt>いま</rt></ruby>しかできないことがあるのだと<ruby>気<rt>き</rt></ruby>づかされる。",
+          "This present moment will never return, and I'm made to realize there are things that can only be done now."
+        ]
+      },
+      "mnem": "しか always drags a negative behind it — 'しか … ない' brackets 'nothing but ~'. Hear しか, brace for a ません/ない.",
+      "tip": "しか is a particle meaning 'only', and it ALWAYS pairs with a negative predicate (百円しかない = 'only 100 yen'). It replaces を/が. Compare だけ, which takes a positive verb: 百円だけあります vs 百円しかありません.",
+      "accent": 0
+    },
+    {
+      "key": "mnn:27:22",
+      "kana": "ほかの",
+      "kanji": "",
+      "context": "",
+      "mean": "other, another",
+      "cat": "expression",
+      "type": "",
+      "trans": "",
+      "dict": "ほかの",
+      "dictRead": "ほかの",
+      "audio": "/Audio/minnamoi/bai27/00010101101110010.mp3",
+      "levels": {
+        "N5": [
+          "ほかの<ruby>色<rt>いろ</rt></ruby>はありますか。",
+          "Do you have other colors?"
+        ],
+        "N4": [
+          "<ruby>英語<rt>えいご</rt></ruby>は<ruby>話<rt>はな</rt></ruby>せますが、ほかの<ruby>言葉<rt>ことば</rt></ruby>は<ruby>話<rt>はな</rt></ruby>せません。",
+          "I can speak English, but I can't speak any other languages."
+        ],
+        "N3": [
+          "この<ruby>店<rt>みせ</rt></ruby>になければ、ほかの<ruby>店<rt>みせ</rt></ruby>で<ruby>探<rt>さが</rt></ruby>してみるしかありません。",
+          "If it's not in this shop, I have no choice but to look in another shop."
+        ],
+        "N2": [
+          "<ruby>自分<rt>じぶん</rt></ruby>の<ruby>意見<rt>いけん</rt></ruby>を<ruby>言<rt>い</rt></ruby>う<ruby>前<rt>まえ</rt></ruby>に、まずほかの<ruby>人<rt>ひと</rt></ruby>の<ruby>話<rt>はなし</rt></ruby>に<ruby>耳<rt>みみ</rt></ruby>を<ruby>傾<rt>かたむ</rt></ruby>けるべきだ。",
+          "Before stating your own opinion, you should first lend an ear to what other people say."
+        ],
+        "N1": [
+          "この<ruby>問題<rt>もんだい</rt></ruby>は、ほかの<ruby>誰<rt>だれ</rt></ruby>でもない<ruby>私<rt>わたし</rt></ruby><ruby>自身<rt>じしん</rt></ruby>が<ruby>向<rt>む</rt></ruby>き<ruby>合<rt>あ</rt></ruby>わなければならない<ruby>課題<rt>かだい</rt></ruby>だ。",
+          "This problem is a challenge that I myself, and no one else, must confront."
+        ]
+      },
+      "mnem": "ほかの = ほか (他, 'other / else') + の — 'other ~'. ほかの人 = other people.",
+      "tip": "ほかの ('other') comes before a noun: ほかの人 / ほかの店. It's ほか (他, 'else/besides') + の — don't drop the の before the noun. そのほか = 'besides that'.",
+      "accent": 0
+    },
+    {
+      "key": "mnn:27:23",
+      "kana": "はっきり",
+      "kanji": "",
+      "context": "",
+      "mean": "clearly, distinctly",
+      "cat": "adverb",
+      "type": "",
+      "trans": "",
+      "dict": "はっきり",
+      "dictRead": "はっきり",
+      "audio": "/Audio/minnamoi/bai27/00010101101110011.mp3",
+      "levels": {
+        "N5": [
+          "もっとはっきり<ruby>言<rt>い</rt></ruby>ってください。",
+          "Please say it more clearly."
+        ],
+        "N4": [
+          "<ruby>今日<rt>きょう</rt></ruby>は<ruby>山<rt>やま</rt></ruby>がはっきり<ruby>見<rt>み</rt></ruby>えます。",
+          "Today you can see the mountains clearly."
+        ],
+        "N3": [
+          "<ruby>自分<rt>じぶん</rt></ruby>の<ruby>気持<rt>きも</rt></ruby>ちをはっきり<ruby>伝<rt>つた</rt></ruby>えられるように<ruby>練習<rt>れんしゅう</rt></ruby>しています。",
+          "I'm practicing so that I can convey my feelings clearly."
+        ],
+        "N2": [
+          "いやなら、はっきり<ruby>断<rt>ことわ</rt></ruby>ったほうが、かえってお<ruby>互<rt>たが</rt></ruby>いのためになる。",
+          "If you don't want to, refusing clearly is, on the contrary, better for both of you."
+        ],
+        "N1": [
+          "<ruby>証拠<rt>しょうこ</rt></ruby>がない<ruby>以上<rt>いじょう</rt></ruby>、はっきりしたことは<ruby>何<rt>なに</rt></ruby>も<ruby>言<rt>い</rt></ruby>えないというのが<ruby>正直<rt>しょうじき</rt></ruby>なところだ。",
+          "As long as there's no evidence, the honest truth is that nothing definite can be said."
+        ]
+      },
+      "mnem": "はっきり — the small っ makes a crisp 'snap'; say it and everything becomes clear and distinct.",
+      "tip": "はっきり (adverb, often はっきりと) = clearly / distinctly — for seeing, hearing, or stating. はっきりする = 'become clear/definite'. It's a mimetic word (擬態語).",
+      "accent": 3
+    }
+  ],
+  "grammar": [
+    {
+      "pattern": "Potential form (可能動詞) — Nが 〜えます／〜られます (can do)",
+      "structure": "I-verb (godan): final -u → -e + ます（読む→読めます）・II-verb (ichidan): 〜る → 〜られます（食べる→食べられます）・する→できます・来ます→来られます。 Object 〜を → 〜が",
+      "explain": "Japanese expresses 'can do' by conjugating the verb into a potential form, not by adding a word. Group I (godan) shifts the final -u sound to -e and adds る/ます (読む→読める・読めます; 話す→話せます). Group II (ichidan) replaces る with られる (食べる→食べられる). The irregulars are する→できる and 来る→来られる. The object that took を now takes が: 日本語を話す → 日本語が話せる. All potential verbs conjugate as Group II. They state ability or possibility.",
+      "examples": [
+        {
+          "jp": "ミラーさんは<ruby>漢字<rt>かんじ</rt></ruby>が<ruby>読<rt>よ</rt></ruby>めます。",
+          "en": "Mr. Miller can read kanji."
+        },
+        {
+          "jp": "ここでカードが<ruby>使<rt>つか</rt></ruby>えますか。",
+          "en": "Can I use a card here?"
+        },
+        {
+          "jp": "<ruby>一人<rt>ひとり</rt></ruby>で<ruby>着物<rt>きもの</rt></ruby>が<ruby>着<rt>き</rt></ruby>られます。",
+          "en": "I can put on a kimono by myself."
+        },
+        {
+          "jp": "<ruby>足<rt>あし</rt></ruby>が<ruby>痛<rt>いた</rt></ruby>いので、<ruby>走<rt>はし</rt></ruby>れません。",
+          "en": "My leg hurts, so I can't run."
+        }
+      ]
+    },
+    {
+      "pattern": "見えます / 聞こえます (spontaneously can see / can hear)",
+      "structure": "Nが 見えます ・ Nが 聞こえます",
+      "explain": "見えます ('be visible') and 聞こえます ('be audible') describe something that comes into view or reaches the ear naturally, without the observer's intention. The thing seen or heard takes が. Contrast them with the plain potential 見られます ('can see', because the opportunity exists — e.g. a film) and 聞けます ('can listen', by choice). 山が見えます = the mountain is simply there to be seen; 映画が見られます = you have the chance to watch a film.",
+      "examples": [
+        {
+          "jp": "ここから<ruby>海<rt>うみ</rt></ruby>が<ruby>見<rt>み</rt></ruby>えます。",
+          "en": "You can see the sea from here."
+        },
+        {
+          "jp": "<ruby>部屋<rt>へや</rt></ruby>から<ruby>鳥<rt>とり</rt></ruby>の<ruby>声<rt>こえ</rt></ruby>が<ruby>聞<rt>き</rt></ruby>こえます。",
+          "en": "I can hear birds from my room."
+        },
+        {
+          "jp": "<ruby>後<rt>うし</rt></ruby>ろの<ruby>席<rt>せき</rt></ruby>まで<ruby>聞<rt>き</rt></ruby>こえますか。",
+          "en": "Can you hear all the way in the back seats?"
+        },
+        {
+          "jp": "<ruby>天気<rt>てんき</rt></ruby>がいい<ruby>日<rt>ひ</rt></ruby>には<ruby>富士山<rt>ふじさん</rt></ruby>が<ruby>見<rt>み</rt></ruby>えます。",
+          "en": "On clear days you can see Mt. Fuji."
+        }
+      ]
+    },
+    {
+      "pattern": "できます (be completed, be built, come into existence)",
+      "structure": "Nが できます",
+      "explain": "Besides 'can do', できます means that something is finished, built, or newly comes into being. 食事ができました = the meal is ready; 駅の前に大きいスーパーができました = a big supermarket has been built in front of the station; 友達ができました = I made a friend. The new thing takes が. When asking when something will be ready, できます pairs naturally with a time expression (水曜日にできます).",
+      "examples": [
+        {
+          "jp": "<ruby>晩<rt>ばん</rt></ruby>ご<ruby>飯<rt>はん</rt></ruby>がもうできました。",
+          "en": "Dinner is already ready."
+        },
+        {
+          "jp": "<ruby>駅<rt>えき</rt></ruby>の<ruby>前<rt>まえ</rt></ruby>に<ruby>大<rt>おお</rt></ruby>きいスーパーができました。",
+          "en": "A big supermarket has been built in front of the station."
+        },
+        {
+          "jp": "クリーニングは<ruby>水曜日<rt>すいようび</rt></ruby>にできます。",
+          "en": "The cleaning will be done on Wednesday."
+        },
+        {
+          "jp": "<ruby>法隆寺<rt>ほうりゅうじ</rt></ruby>は607<ruby>年<rt>ねん</rt></ruby>にできました。",
+          "en": "Horyu-ji Temple was completed in the year 607."
+        }
+      ]
+    },
+    {
+      "pattern": "〜しか … ません／ない (only ~)",
+      "structure": "N（＋助詞）＋しか ＋ 〜ません／〜ない",
+      "explain": "しか means 'only / nothing but', and it MUST be followed by a negative predicate. Although the sentence is grammatically negative, the meaning is a limited affirmative: りんごしかありません = 'there is nothing but apples' = 'there are only apples'. しか replaces が and を (and attaches after other particles). Compare だけ, which takes a positive verb and is neutral: 一時間だけ勉強しました (neutral 'just an hour') vs 一時間しか勉強しませんでした ('only an hour', implying it wasn't enough).",
+      "examples": [
+        {
+          "jp": "<ruby>冷蔵庫<rt>れいぞうこ</rt></ruby>にりんごしかありません。",
+          "en": "There are only apples in the fridge."
+        },
+        {
+          "jp": "<ruby>百円<rt>ひゃくえん</rt></ruby>しかないので、コーヒーが<ruby>買<rt>か</rt></ruby>えません。",
+          "en": "I only have 100 yen, so I can't buy coffee."
+        },
+        {
+          "jp": "<ruby>日曜日<rt>にちようび</rt></ruby>しか<ruby>休<rt>やす</rt></ruby>めません。",
+          "en": "I only get Sundays off."
+        },
+        {
+          "jp": "<ruby>四時間<rt>よじかん</rt></ruby>しか<ruby>寝<rt>ね</rt></ruby>ませんでしたから、<ruby>眠<rt>ねむ</rt></ruby>いです。",
+          "en": "I only slept four hours, so I'm sleepy."
+        }
+      ]
+    },
+    {
+      "pattern": "〜は〜が、〜は〜 (contrast: as for A … but as for B …)",
+      "structure": "N1は … が、N2は …（対比の は）",
+      "explain": "Marking two items with は sets them in explicit contrast: one is affirmed, the other denied. 肉は食べますが、魚は食べません = 'I eat meat, but I don't eat fish'. This is the contrastive は (not the plain topic は); it commonly replaces が or を on the contrasted items and joins the clauses with が ('but'). It often combines with this lesson's potential form: 英語は話せますが、ほかの言葉は話せません.",
+      "examples": [
+        {
+          "jp": "<ruby>肉<rt>にく</rt></ruby>は<ruby>食<rt>た</rt></ruby>べますが、<ruby>魚<rt>さかな</rt></ruby>は<ruby>食<rt>た</rt></ruby>べません。",
+          "en": "I eat meat, but I don't eat fish."
+        },
+        {
+          "jp": "ビールは<ruby>飲<rt>の</rt></ruby>みますが、ワインは<ruby>飲<rt>の</rt></ruby>みません。",
+          "en": "I drink beer, but I don't drink wine."
+        },
+        {
+          "jp": "<ruby>英語<rt>えいご</rt></ruby>は<ruby>話<rt>はな</rt></ruby>せますが、ほかの<ruby>言葉<rt>ことば</rt></ruby>は<ruby>話<rt>はな</rt></ruby>せません。",
+          "en": "I can speak English, but not any other languages."
+        },
+        {
+          "jp": "<ruby>平仮名<rt>ひらがな</rt></ruby>は<ruby>読<rt>よ</rt></ruby>めますが、<ruby>漢字<rt>かんじ</rt></ruby>は<ruby>読<rt>よ</rt></ruby>めません。",
+          "en": "I can read hiragana, but not kanji."
+        }
+      ]
+    }
+  ],
+  "examples": [
+    {
+      "jp": "<ruby>新幹線<rt>しんかんせん</rt></ruby>から<ruby>富士山<rt>ふじさん</rt></ruby>が<ruby>見<rt>み</rt></ruby>えます。",
+      "en": "You can see Mt. Fuji from the shinkansen."
+    },
+    {
+      "jp": "<ruby>波<rt>なみ</rt></ruby>の<ruby>音<rt>おと</rt></ruby>が<ruby>聞<rt>き</rt></ruby>こえます。",
+      "en": "You can hear the sound of the waves."
+    },
+    {
+      "jp": "<ruby>日本語<rt>にほんご</rt></ruby>の<ruby>新聞<rt>しんぶん</rt></ruby>が<ruby>読<rt>よ</rt></ruby>めますか。 …いいえ、<ruby>読<rt>よ</rt></ruby>めません。",
+      "en": "Can you read a Japanese newspaper? …No, I can't."
+    },
+    {
+      "jp": "<ruby>駅<rt>えき</rt></ruby>の<ruby>前<rt>まえ</rt></ruby>に<ruby>大<rt>おお</rt></ruby>きいスーパーができました。",
+      "en": "A big supermarket has been built in front of the station."
+    },
+    {
+      "jp": "このマンションでペットが<ruby>飼<rt>か</rt></ruby>えますか。 …<ruby>小<rt>ちい</rt></ruby>さい<ruby>鳥<rt>とり</rt></ruby>や<ruby>魚<rt>さかな</rt></ruby>は<ruby>飼<rt>か</rt></ruby>えますが、<ruby>犬<rt>いぬ</rt></ruby>や<ruby>猫<rt>ねこ</rt></ruby>は<ruby>飼<rt>か</rt></ruby>えません。",
+      "en": "Can you keep pets in this apartment? …You can keep small birds and fish, but not dogs or cats."
+    },
+    {
+      "jp": "わたしの<ruby>会社<rt>かいしゃ</rt></ruby>は<ruby>一週間<rt>いっしゅうかん</rt></ruby>しか<ruby>休<rt>やす</rt></ruby>めません。",
+      "en": "At my company we can only take one week off."
+    },
+    {
+      "jp": "<ruby>今日<rt>きょう</rt></ruby>は<ruby>山<rt>やま</rt></ruby>がはっきり<ruby>見<rt>み</rt></ruby>えます。",
+      "en": "Today the mountains are clearly visible."
+    },
+    {
+      "jp": "<ruby>肉<rt>にく</rt></ruby>は<ruby>食<rt>た</rt></ruby>べますが、<ruby>魚<rt>さかな</rt></ruby>は<ruby>食<rt>た</rt></ruby>べません。",
+      "en": "I eat meat, but I don't eat fish."
+    }
+  ],
+  "conversation": {
+    "title": "何でも作れるんですね (You can make anything!)",
+    "audio": "/Audio/minnahonsatsu2/4.mp3",
+    "lines": [
+      {
+        "role": "マリア",
+        "jp": "<ruby>明<rt>あか</rt></ruby>るくて、いい<ruby>部屋<rt>へや</rt></ruby>ですね。",
+        "en": "It's bright — what a nice room."
+      },
+      {
+        "role": "鈴木",
+        "jp": "ええ。<ruby>天気<rt>てんき</rt></ruby>がいい<ruby>日<rt>ひ</rt></ruby>には<ruby>海<rt>うみ</rt></ruby>が<ruby>見<rt>み</rt></ruby>えるんです。",
+        "en": "Yes. On clear days you can see the sea."
+      },
+      {
+        "role": "マリア",
+        "jp": "このテーブルはおもしろいデザインですね。どこで<ruby>買<rt>か</rt></ruby>ったんですか。",
+        "en": "This table has an interesting design. Where did you buy it?"
+      },
+      {
+        "role": "鈴木",
+        "jp": "これはわたしが<ruby>作<rt>つく</rt></ruby>ったんですよ。",
+        "en": "I made this one myself."
+      },
+      {
+        "role": "マリア",
+        "jp": "えっ、ほんとうですか。",
+        "en": "Oh, really?"
+      },
+      {
+        "role": "鈴木",
+        "jp": "ええ。<ruby>趣味<rt>しゅみ</rt></ruby>は<ruby>自分<rt>じぶん</rt></ruby>で<ruby>家具<rt>かぐ</rt></ruby>を<ruby>作<rt>つく</rt></ruby>ることなんです。",
+        "en": "Yes. My hobby is making furniture myself."
+      },
+      {
+        "role": "マリア",
+        "jp": "へえ。じゃ、あの<ruby>本棚<rt>ほんだな</rt></ruby>も<ruby>作<rt>つく</rt></ruby>ったんですか。",
+        "en": "Wow. So did you make that bookshelf too?"
+      },
+      {
+        "role": "鈴木",
+        "jp": "ええ。",
+        "en": "Yes."
+      },
+      {
+        "role": "マリア",
+        "jp": "すごいですね。<ruby>鈴木<rt>すずき</rt></ruby>さん、<ruby>何<rt>なん</rt></ruby>でも<ruby>作<rt>つく</rt></ruby>れるんですね。",
+        "en": "That's amazing. Mr. Suzuki, you can make anything, can't you?"
+      },
+      {
+        "role": "鈴木",
+        "jp": "わたしの<ruby>夢<rt>ゆめ</rt></ruby>はいつか<ruby>自分<rt>じぶん</rt></ruby>で<ruby>家<rt>いえ</rt></ruby>を<ruby>建<rt>た</rt></ruby>てることなんです。",
+        "en": "My dream is to build a house myself someday."
+      },
+      {
+        "role": "マリア",
+        "jp": "すばらしい<ruby>夢<rt>ゆめ</rt></ruby>ですね。",
+        "en": "What a wonderful dream."
+      }
+    ]
+  }
+}

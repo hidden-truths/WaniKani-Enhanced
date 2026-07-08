@@ -1,0 +1,1100 @@
+{
+  "lesson": 44,
+  "title": "Lesson 44",
+  "theme": "Excess and degree with 〜すぎます, ease/difficulty with 〜やすい／〜にくい, deliberately changing a state with 〜く／〜にします, and choosing/deciding with 〜にします",
+  "source": {
+    "name": "vnjpclub.com",
+    "vocabUrl": "https://www.vnjpclub.com/en/minna-no-nihongo/lesson-44-vocabulary.html",
+    "grammarUrl": "https://www.vnjpclub.com/en/minna-no-nihongo/lesson-44-grammar.html",
+    "note": "Vocabulary, native-speaker audio, and example sentences aggregated from vnjpclub.com (Minna no Nihongo 第2版). For personal study."
+  },
+  "vocab": [
+    {
+      "key": "mnn:44:0",
+      "kana": "なきます",
+      "kanji": "泣きます",
+      "context": "",
+      "mean": "to cry",
+      "cat": "verb",
+      "type": "godan",
+      "trans": "i",
+      "dict": "泣く",
+      "dictRead": "なく",
+      "audio": "/Audio/minnamoi/bai44/00010111010111001.mp3",
+      "accent": 0
+    },
+    {
+      "key": "mnn:44:1",
+      "kana": "わらいます",
+      "kanji": "笑います",
+      "context": "",
+      "mean": "to laugh, smile",
+      "cat": "verb",
+      "type": "godan",
+      "trans": "i",
+      "dict": "笑う",
+      "dictRead": "わらう",
+      "audio": "/Audio/minnamoi/bai44/00010111010111010.mp3",
+      "accent": 0
+    },
+    {
+      "key": "mnn:44:2",
+      "kana": "ねむります",
+      "kanji": "眠ります",
+      "context": "",
+      "mean": "to sleep, fall asleep",
+      "cat": "verb",
+      "type": "godan",
+      "trans": "i",
+      "dict": "眠る",
+      "dictRead": "ねむる",
+      "audio": "/Audio/minnamoi/bai44/00010111010111011.mp3",
+      "levels": {
+        "N5": [
+          "<ruby>赤<rt>あか</rt></ruby>ちゃんが<ruby>眠<rt>ねむ</rt></ruby>っています。",
+          "The baby is sleeping."
+        ],
+        "N4": [
+          "<ruby>昨日<rt>きのう</rt></ruby>は<ruby>暑<rt>あつ</rt></ruby>くて、よく<ruby>眠<rt>ねむ</rt></ruby>れませんでした。",
+          "Yesterday it was hot and I couldn't sleep well."
+        ],
+        "N3": [
+          "<ruby>疲<rt>つか</rt></ruby>れすぎると、かえって<ruby>眠<rt>ねむ</rt></ruby>れないことがあります。",
+          "When you get too tired, sometimes you can't sleep at all instead."
+        ],
+        "N2": [
+          "<ruby>悩<rt>なや</rt></ruby>み<ruby>事<rt>ごと</rt></ruby>があると、<ruby>夜<rt>よる</rt></ruby>なかなか<ruby>眠<rt>ねむ</rt></ruby>れないものだ。",
+          "When you have worries, you just can't fall asleep easily at night."
+        ],
+        "N1": [
+          "<ruby>都会<rt>とかい</rt></ruby>の<ruby>喧騒<rt>けんそう</rt></ruby>を<ruby>離<rt>はな</rt></ruby>れて<ruby>初<rt>はじ</rt></ruby>めて、<ruby>彼<rt>かれ</rt></ruby>は<ruby>泥<rt>どろ</rt></ruby>のように<ruby>眠<rt>ねむ</rt></ruby>ることができた。",
+          "Only after leaving the din of the city could he sleep like a log."
+        ]
+      },
+      "mnem": "眠る — \"ne-MU-ru\": at night you murmur \"n-mmm\" and 眠る, drift off to sleep.",
+      "tip": "眠る (godan, intransitive) = to be asleep / fall asleep — the physiological state; 寝る (ねる, ichidan) leans more toward \"go to bed / lie down.\" The adjective 眠い (ねむい) = \"sleepy.\"",
+      "accent": 0
+    },
+    {
+      "key": "mnn:44:3",
+      "kana": "かわきます",
+      "kanji": "乾きます",
+      "context": "シャツが〜",
+      "mean": "(a shirt, laundry) to dry, become dry",
+      "cat": "verb",
+      "type": "godan",
+      "trans": "i",
+      "dict": "乾く",
+      "dictRead": "かわく",
+      "audio": "/Audio/minnamoi/bai44/00010111010111100.mp3",
+      "levels": {
+        "N5": [
+          "<ruby>洗濯物<rt>せんたくもの</rt></ruby>がもう<ruby>乾<rt>かわ</rt></ruby>きました。",
+          "The laundry has already dried."
+        ],
+        "N4": [
+          "<ruby>天気<rt>てんき</rt></ruby>がいいから、シャツはすぐ<ruby>乾<rt>かわ</rt></ruby>くでしょう。",
+          "The weather's good, so the shirt will probably dry quickly."
+        ],
+        "N3": [
+          "<ruby>雨<rt>あめ</rt></ruby>の<ruby>日<rt>ひ</rt></ruby>は<ruby>洗濯物<rt>せんたくもの</rt></ruby>が<ruby>乾<rt>かわ</rt></ruby>きにくくて<ruby>困<rt>こま</rt></ruby>ります。",
+          "On rainy days the laundry doesn't dry easily, which is a pain."
+        ],
+        "N2": [
+          "<ruby>空気<rt>くうき</rt></ruby>が<ruby>乾<rt>かわ</rt></ruby>いているので、<ruby>肌<rt>はだ</rt></ruby>が<ruby>荒<rt>あ</rt></ruby>れやすい。",
+          "The air is dry, so my skin tends to get rough."
+        ],
+        "N1": [
+          "<ruby>塗<rt>ぬ</rt></ruby>った<ruby>絵<rt>え</rt></ruby>の<ruby>具<rt>ぐ</rt></ruby>が<ruby>完全<rt>かんぜん</rt></ruby>に<ruby>乾<rt>かわ</rt></ruby>いてからでないと、<ruby>上<rt>うえ</rt></ruby>から<ruby>色<rt>いろ</rt></ruby>を<ruby>重<rt>かさ</rt></ruby>ねることはできない。",
+          "You cannot layer more color on top until the applied paint has completely dried."
+        ]
+      },
+      "mnem": "乾く — \"ka-WA-ku\": the hot sun makes the water \"walk\" away until things 乾く, dry out.",
+      "tip": "乾く (かわく, godan, intransitive) = (things) become dry — シャツが乾く. Its transitive partner is 乾かす (かわかす, \"to dry something\"). Homophone 渇く is \"(throat) get thirsty\" (喉が渇く).",
+      "accent": 2
+    },
+    {
+      "key": "mnn:44:4",
+      "kana": "ぬれます",
+      "kanji": "",
+      "context": "シャツが〜",
+      "mean": "(a shirt, clothes) to get wet",
+      "cat": "verb",
+      "type": "ichidan",
+      "trans": "i",
+      "dict": "ぬれる",
+      "dictRead": "ぬれる",
+      "audio": "/Audio/minnamoi/bai44/00010111010111101.mp3",
+      "levels": {
+        "N5": [
+          "<ruby>雨<rt>あめ</rt></ruby>でシャツがぬれました。",
+          "My shirt got wet from the rain."
+        ],
+        "N4": [
+          "<ruby>傘<rt>かさ</rt></ruby>がなかったので、ぬれて<ruby>帰<rt>かえ</rt></ruby>りました。",
+          "I didn't have an umbrella, so I came home wet."
+        ],
+        "N3": [
+          "<ruby>床<rt>ゆか</rt></ruby>がぬれていると<ruby>滑<rt>すべ</rt></ruby>りやすいので、<ruby>気<rt>き</rt></ruby>をつけてください。",
+          "When the floor is wet it's easy to slip, so please be careful."
+        ],
+        "N2": [
+          "<ruby>急<rt>きゅう</rt></ruby>な<ruby>雨<rt>あめ</rt></ruby>に<ruby>降<rt>ふ</rt></ruby>られ、<ruby>服<rt>ふく</rt></ruby>がぬれたまま<ruby>会議<rt>かいぎ</rt></ruby>に<ruby>出<rt>で</rt></ruby>るはめになった。",
+          "Caught in a sudden downpour, I ended up attending the meeting with my clothes still wet."
+        ],
+        "N1": [
+          "<ruby>涙<rt>なみだ</rt></ruby>でぬれた<ruby>頬<rt>ほお</rt></ruby>を<ruby>拭<rt>ぬぐ</rt></ruby>おうともせず、<ruby>彼女<rt>かのじょ</rt></ruby>はただ<ruby>黙<rt>だま</rt></ruby>って<ruby>窓<rt>まど</rt></ruby>の<ruby>外<rt>そと</rt></ruby>を<ruby>見<rt>み</rt></ruby>つめていた。",
+          "Not even trying to wipe her tear-wet cheeks, she just stared silently out the window."
+        ]
+      },
+      "mnem": "ぬれる — a slippery \"nu-reru\" sound: get caught in the rain and you ぬれる, get soaked.",
+      "tip": "ぬれる (濡れる, ichidan, intransitive) = to get wet — シャツがぬれる. Usually written in kana in Minna. Its transitive partner is ぬらす (濡らす, \"to wet / dampen something\").",
+      "accent": 0
+    },
+    {
+      "key": "mnn:44:5",
+      "kana": "すべります",
+      "kanji": "滑ります",
+      "context": "",
+      "mean": "to slip, slide",
+      "cat": "verb",
+      "type": "godan",
+      "trans": "i",
+      "dict": "滑る",
+      "dictRead": "すべる",
+      "audio": "/Audio/minnamoi/bai44/00010111010111110.mp3",
+      "levels": {
+        "N5": [
+          "<ruby>雪<rt>ゆき</rt></ruby>で<ruby>道<rt>みち</rt></ruby>が<ruby>滑<rt>すべ</rt></ruby>ります。",
+          "The road is slippery because of the snow."
+        ],
+        "N4": [
+          "<ruby>階段<rt>かいだん</rt></ruby>で<ruby>滑<rt>すべ</rt></ruby>って、<ruby>転<rt>ころ</rt></ruby>んでしまいました。",
+          "I slipped on the stairs and fell over."
+        ],
+        "N3": [
+          "<ruby>雨<rt>あめ</rt></ruby>の<ruby>日<rt>ひ</rt></ruby>は<ruby>床<rt>ゆか</rt></ruby>が<ruby>滑<rt>すべ</rt></ruby>りやすいので、<ruby>走<rt>はし</rt></ruby>らないようにしてください。",
+          "On rainy days the floor gets slippery, so try not to run."
+        ],
+        "N2": [
+          "<ruby>凍<rt>こお</rt></ruby>った<ruby>路面<rt>ろめん</rt></ruby>で<ruby>滑<rt>すべ</rt></ruby>って<ruby>転<rt>ころ</rt></ruby>びそうになり、<ruby>冷<rt>ひ</rt></ruby>や<ruby>汗<rt>あせ</rt></ruby>をかいた。",
+          "I nearly slipped and fell on the frozen road surface and broke into a cold sweat."
+        ],
+        "N1": [
+          "<ruby>実力<rt>じつりょく</rt></ruby>を<ruby>出<rt>だ</rt></ruby>し<ruby>切<rt>き</rt></ruby>れず、<ruby>第<rt>だい</rt></ruby>一<ruby>志望<rt>しぼう</rt></ruby>の<ruby>大学<rt>だいがく</rt></ruby>を<ruby>滑<rt>すべ</rt></ruby>ってしまった。",
+          "Unable to show my true ability, I flunked out of my first-choice university."
+        ]
+      },
+      "mnem": "滑る — \"su-BE-ru\": your foot goes \"sube-\" and slides right out from under you — 滑る, slip.",
+      "tip": "滑る (godan, intransitive) = to slip / slide; the surface takes で or が (道で滑る / 道が滑る). Colloquially 滑る also means \"to fail an exam.\" Related noun: 滑り台 (すべりだい, a slide).",
+      "accent": 2
+    },
+    {
+      "key": "mnn:44:6",
+      "kana": "おきます",
+      "kanji": "起きます",
+      "context": "事故が〜",
+      "mean": "(an accident) to happen, occur",
+      "cat": "verb",
+      "type": "ichidan",
+      "trans": "i",
+      "dict": "起きる",
+      "dictRead": "おきる",
+      "audio": "/Audio/minnamoi/bai44/00010111010111111.mp3",
+      "accent": 2
+    },
+    {
+      "key": "mnn:44:7",
+      "kana": "ちょうせつします",
+      "kanji": "調節します",
+      "context": "",
+      "mean": "to adjust, regulate",
+      "cat": "verb",
+      "type": "irregular",
+      "trans": "t",
+      "dict": "調節する",
+      "dictRead": "ちょうせつする",
+      "audio": "/Audio/minnamoi/bai44/00010111011000000.mp3",
+      "levels": {
+        "N5": [
+          "エアコンの<ruby>温度<rt>おんど</rt></ruby>を<ruby>調節<rt>ちょうせつ</rt></ruby>します。",
+          "I'll adjust the air-conditioner temperature."
+        ],
+        "N4": [
+          "<ruby>音<rt>おと</rt></ruby>が<ruby>大<rt>おお</rt></ruby>きすぎるので、<ruby>調節<rt>ちょうせつ</rt></ruby>してください。",
+          "The sound is too loud, so please adjust it."
+        ],
+        "N3": [
+          "この<ruby>椅子<rt>いす</rt></ruby>は<ruby>高<rt>たか</rt></ruby>さを<ruby>調節<rt>ちょうせつ</rt></ruby>できるので、<ruby>誰<rt>だれ</rt></ruby>でも<ruby>使<rt>つか</rt></ruby>いやすいです。",
+          "This chair's height can be adjusted, so it's easy for anyone to use."
+        ],
+        "N2": [
+          "<ruby>体調<rt>たいちょう</rt></ruby>を<ruby>崩<rt>くず</rt></ruby>さないよう、<ruby>仕事<rt>しごと</rt></ruby>の<ruby>量<rt>りょう</rt></ruby>をうまく<ruby>調節<rt>ちょうせつ</rt></ruby>する<ruby>必要<rt>ひつよう</rt></ruby>がある。",
+          "You need to adjust your workload well so as not to ruin your health."
+        ],
+        "N1": [
+          "<ruby>室温<rt>しつおん</rt></ruby>や<ruby>湿度<rt>しつど</rt></ruby>を<ruby>細<rt>こま</rt></ruby>かく<ruby>調節<rt>ちょうせつ</rt></ruby>することで、<ruby>作品<rt>さくひん</rt></ruby>の<ruby>劣化<rt>れっか</rt></ruby>を<ruby>最小限<rt>さいしょうげん</rt></ruby>に<ruby>抑<rt>おさ</rt></ruby>えている。",
+          "By finely regulating temperature and humidity, they keep the deterioration of the artworks to a minimum."
+        ]
+      },
+      "mnem": "調節 = 調 (tune) + 節 (measure / joint): \"tuning the measure\" of something is 調節, adjustment.",
+      "tip": "調節する (irregular する-verb, transitive) = to adjust / regulate a level (温度・音・高さを調節する). Compare 調整 (ちょうせい, adjusting toward a target / coordination), which shares 調.",
+      "accent": 0
+    },
+    {
+      "key": "mnn:44:8",
+      "kana": "あんぜん",
+      "kanji": "安全",
+      "context": "",
+      "mean": "safe, safety",
+      "cat": "adjective",
+      "type": "na-adj",
+      "trans": "",
+      "dict": "安全",
+      "dictRead": "あんぜん",
+      "audio": "/Audio/minnamoi/bai44/00010111011000001.mp3",
+      "levels": {
+        "N5": [
+          "ここは<ruby>安全<rt>あんぜん</rt></ruby>な<ruby>場所<rt>ばしょ</rt></ruby>です。",
+          "This is a safe place."
+        ],
+        "N4": [
+          "<ruby>子<rt>こ</rt></ruby>どもが<ruby>使<rt>つか</rt></ruby>うので、<ruby>安全<rt>あんぜん</rt></ruby>な<ruby>物<rt>もの</rt></ruby>を<ruby>選<rt>えら</rt></ruby>びたいです。",
+          "Children will use it, so I want to choose something safe."
+        ],
+        "N3": [
+          "この<ruby>車<rt>くるま</rt></ruby>は<ruby>安全<rt>あんぜん</rt></ruby>だし、<ruby>燃費<rt>ねんぴ</rt></ruby>もいいので<ruby>人気<rt>にんき</rt></ruby>があります。",
+          "This car is safe and fuel-efficient, so it's popular."
+        ],
+        "N2": [
+          "どんなに<ruby>急<rt>いそ</rt></ruby>いでいても、<ruby>安全<rt>あんぜん</rt></ruby>を<ruby>確認<rt>かくにん</rt></ruby>してから<ruby>道<rt>みち</rt></ruby>を<ruby>渡<rt>わた</rt></ruby>るべきだ。",
+          "No matter how much of a hurry you're in, you should check that it's safe before crossing the road."
+        ],
+        "N1": [
+          "<ruby>絶対<rt>ぜったい</rt></ruby>に<ruby>安全<rt>あんぜん</rt></ruby>だと<ruby>言<rt>い</rt></ruby>い<ruby>切<rt>き</rt></ruby>れる<ruby>技術<rt>ぎじゅつ</rt></ruby>など<ruby>存在<rt>そんざい</rt></ruby>せず、<ruby>常<rt>つね</rt></ruby>に<ruby>危険<rt>きけん</rt></ruby>と<ruby>隣<rt>とな</rt></ruby>り<ruby>合<rt>あ</rt></ruby>わせであることを<ruby>忘<rt>わす</rt></ruby>れてはならない。",
+          "No technology can be declared absolutely safe, and we must never forget that it always sits side by side with danger."
+        ]
+      },
+      "mnem": "安全 = 安 (at ease) + 全 (whole / complete): \"wholly at ease,\" 安全, is safe.",
+      "tip": "安全 (な-adjective / noun) = safe / safety, the opposite of 危険 (きけん, dangerous). 安全な＋noun, 安全に＋verb; the noun appears in 安全第一 (\"safety first\").",
+      "accent": 0
+    },
+    {
+      "key": "mnn:44:9",
+      "kana": "きけん",
+      "kanji": "危険",
+      "context": "",
+      "mean": "dangerous, danger",
+      "cat": "adjective",
+      "type": "na-adj",
+      "trans": "",
+      "dict": "危険",
+      "dictRead": "きけん",
+      "audio": "/Audio/minnamoi/bai44/00010111011000010.mp3",
+      "levels": {
+        "N5": [
+          "ここは<ruby>危険<rt>きけん</rt></ruby>です。<ruby>入<rt>はい</rt></ruby>らないでください。",
+          "This place is dangerous. Please don't enter."
+        ],
+        "N4": [
+          "<ruby>雨<rt>あめ</rt></ruby>の<ruby>日<rt>ひ</rt></ruby>に<ruby>山<rt>やま</rt></ruby>に<ruby>登<rt>のぼ</rt></ruby>るのは<ruby>危険<rt>きけん</rt></ruby>です。",
+          "Climbing the mountain on a rainy day is dangerous."
+        ],
+        "N3": [
+          "スピードを<ruby>出<rt>だ</rt></ruby>しすぎると<ruby>危険<rt>きけん</rt></ruby>なので、<ruby>気<rt>き</rt></ruby>をつけて<ruby>運転<rt>うんてん</rt></ruby>してください。",
+          "Going too fast is dangerous, so please drive carefully."
+        ],
+        "N2": [
+          "<ruby>危険<rt>きけん</rt></ruby>を<ruby>承知<rt>しょうち</rt></ruby>のうえで、<ruby>彼<rt>かれ</rt></ruby>は<ruby>燃<rt>も</rt></ruby>える<ruby>建物<rt>たてもの</rt></ruby>に<ruby>飛<rt>と</rt></ruby>び<ruby>込<rt>こ</rt></ruby>んでいった。",
+          "Fully aware of the danger, he dashed into the burning building."
+        ],
+        "N1": [
+          "<ruby>目先<rt>めさき</rt></ruby>の<ruby>利益<rt>りえき</rt></ruby>にとらわれるあまり、<ruby>会社<rt>かいしゃ</rt></ruby>を<ruby>存続<rt>そんぞく</rt></ruby>の<ruby>危険<rt>きけん</rt></ruby>にさらすことになりかねない。",
+          "Becoming too fixated on immediate profit may well expose the company to the danger of its very survival."
+        ]
+      },
+      "mnem": "危険 = 危 (precarious) + 険 (steep / harsh): a \"steep, precarious\" spot is 危険, dangerous.",
+      "tip": "危険 (な-adjective / noun) = dangerous / danger, the opposite of 安全 (あんぜん). 危険な＋noun; the noun means \"hazard\" (危険がある). Compare the everyday adjective 危ない (あぶない).",
+      "accent": 0
+    },
+    {
+      "key": "mnn:44:10",
+      "kana": "こい",
+      "kanji": "濃い",
+      "context": "",
+      "mean": "strong (taste), dark (colour), thick (liquid)",
+      "cat": "adjective",
+      "type": "i-adj",
+      "trans": "",
+      "dict": "濃い",
+      "dictRead": "こい",
+      "audio": "/Audio/minnamoi/bai44/00010111011000011.mp3",
+      "levels": {
+        "N5": [
+          "このコーヒーは<ruby>濃<rt>こ</rt></ruby>いです。",
+          "This coffee is strong."
+        ],
+        "N4": [
+          "<ruby>味<rt>あじ</rt></ruby>が<ruby>濃<rt>こ</rt></ruby>すぎるので、<ruby>水<rt>みず</rt></ruby>を<ruby>入<rt>い</rt></ruby>れます。",
+          "The flavor is too strong, so I'll add water."
+        ],
+        "N3": [
+          "この<ruby>青<rt>あお</rt></ruby>は<ruby>濃<rt>こ</rt></ruby>すぎるから、もう<ruby>少<rt>すこ</rt></ruby>し<ruby>薄<rt>うす</rt></ruby>い<ruby>色<rt>いろ</rt></ruby>にしてください。",
+          "This blue is too dark, so please make it a bit lighter."
+        ],
+        "N2": [
+          "<ruby>霧<rt>きり</rt></ruby>が<ruby>濃<rt>こ</rt></ruby>くて<ruby>前<rt>まえ</rt></ruby>がほとんど<ruby>見<rt>み</rt></ruby>えず、<ruby>運転<rt>うんてん</rt></ruby>を<ruby>続<rt>つづ</rt></ruby>けるのは<ruby>危険<rt>きけん</rt></ruby>だった。",
+          "The fog was so thick that I could barely see ahead; continuing to drive was dangerous."
+        ],
+        "N1": [
+          "<ruby>血<rt>ち</rt></ruby>は<ruby>水<rt>みず</rt></ruby>よりも<ruby>濃<rt>こ</rt></ruby>いと<ruby>言<rt>い</rt></ruby>うが、<ruby>時<rt>とき</rt></ruby>に<ruby>他人<rt>たにん</rt></ruby>との<ruby>絆<rt>きずな</rt></ruby>のほうが<ruby>深<rt>ふか</rt></ruby>いこともある。",
+          "They say blood is thicker than water, yet at times the bonds with others run deeper."
+        ]
+      },
+      "mnem": "濃い — \"koi\": a deep, dark carp-red (鯉, koi) color is 濃い, strong / dark.",
+      "tip": "濃い (い-adjective) covers strong taste (味が濃い), dark color (濃い青), and thick / dense fluid or fog (霧が濃い). Its opposite across all these senses is 薄い (うすい).",
+      "accent": 1
+    },
+    {
+      "key": "mnn:44:11",
+      "kana": "うすい",
+      "kanji": "薄い",
+      "context": "",
+      "mean": "weak (taste), light (colour), thin (flat)",
+      "cat": "adjective",
+      "type": "i-adj",
+      "trans": "",
+      "dict": "薄い",
+      "dictRead": "うすい",
+      "audio": "/Audio/minnamoi/bai44/00010111011000100.mp3",
+      "levels": {
+        "N5": [
+          "このお<ruby>茶<rt>ちゃ</rt></ruby>は<ruby>薄<rt>うす</rt></ruby>いです。",
+          "This tea is weak."
+        ],
+        "N4": [
+          "この<ruby>紙<rt>かみ</rt></ruby>は<ruby>薄<rt>うす</rt></ruby>くて、すぐ<ruby>破<rt>やぶ</rt></ruby>れます。",
+          "This paper is thin and tears easily."
+        ],
+        "N3": [
+          "<ruby>字<rt>じ</rt></ruby>が<ruby>薄<rt>うす</rt></ruby>くて<ruby>読<rt>よ</rt></ruby>みにくいので、<ruby>濃<rt>こ</rt></ruby>くしてもらえますか。",
+          "The text is faint and hard to read; could you make it darker?"
+        ],
+        "N2": [
+          "この<ruby>本<rt>ほん</rt></ruby>は<ruby>薄<rt>うす</rt></ruby>いわりに、<ruby>内容<rt>ないよう</rt></ruby>がとても<ruby>濃<rt>こ</rt></ruby>くて<ruby>読<rt>よ</rt></ruby>みごたえがある。",
+          "For all its thinness, this book is very dense in content and a rewarding read."
+        ],
+        "N1": [
+          "<ruby>両者<rt>りょうしゃ</rt></ruby>の<ruby>実力<rt>じつりょく</rt></ruby>の<ruby>差<rt>さ</rt></ruby>は<ruby>紙<rt>かみ</rt></ruby><ruby>一重<rt>ひとえ</rt></ruby>ほどに<ruby>薄<rt>うす</rt></ruby>く、どちらが<ruby>勝<rt>か</rt></ruby>ってもおかしくなかった。",
+          "The gap between the two in ability was paper-thin; it would have been no surprise whichever had won."
+        ]
+      },
+      "mnem": "薄い — \"u-SU-i\": watered-down soup gives an \"oo-sooey\" weak taste — 薄い.",
+      "tip": "薄い (い-adjective) = weak (taste), light / pale (color), or thin (flat things like paper). Opposite 濃い (こい). For thin diameter use 細い (ほそい); for a flat thin sheet, 薄い.",
+      "accent": 0
+    },
+    {
+      "key": "mnn:44:12",
+      "kana": "あつい",
+      "kanji": "厚い",
+      "context": "",
+      "mean": "thick (of flat objects)",
+      "cat": "adjective",
+      "type": "i-adj",
+      "trans": "",
+      "dict": "厚い",
+      "dictRead": "あつい",
+      "audio": "/Audio/minnamoi/bai44/00010111011000101.mp3",
+      "levels": {
+        "N5": [
+          "この<ruby>本<rt>ほん</rt></ruby>は<ruby>厚<rt>あつ</rt></ruby>いです。",
+          "This book is thick."
+        ],
+        "N4": [
+          "<ruby>冬<rt>ふゆ</rt></ruby>は<ruby>厚<rt>あつ</rt></ruby>いコートが<ruby>必要<rt>ひつよう</rt></ruby>です。",
+          "In winter you need a thick coat."
+        ],
+        "N3": [
+          "この<ruby>布団<rt>ふとん</rt></ruby>は<ruby>厚<rt>あつ</rt></ruby>すぎて、<ruby>暑<rt>あつ</rt></ruby>くて<ruby>眠<rt>ねむ</rt></ruby>れません。",
+          "This futon is too thick, and I'm too hot to sleep."
+        ],
+        "N2": [
+          "<ruby>厚<rt>あつ</rt></ruby>い<ruby>雲<rt>くも</rt></ruby>に<ruby>覆<rt>おお</rt></ruby>われ、<ruby>昼<rt>ひる</rt></ruby>なのにあたりは<ruby>夕方<rt>ゆうがた</rt></ruby>のように<ruby>暗<rt>くら</rt></ruby>かった。",
+          "Covered by thick clouds, the area was as dark as evening though it was midday."
+        ],
+        "N1": [
+          "<ruby>長年<rt>ながねん</rt></ruby>にわたる<ruby>信頼<rt>しんらい</rt></ruby>に<ruby>裏<rt>うら</rt></ruby><ruby>打<rt>う</rt></ruby>ちされた<ruby>厚<rt>あつ</rt></ruby>い<ruby>友情<rt>ゆうじょう</rt></ruby>は、<ruby>些細<rt>ささい</rt></ruby>な<ruby>誤解<rt>ごかい</rt></ruby>で<ruby>揺<rt>ゆ</rt></ruby>らぐものではない。",
+          "A deep friendship backed by many years of trust is not shaken by a trivial misunderstanding."
+        ]
+      },
+      "mnem": "厚い — \"a-TSU-i\": a fat, \"atsui\" stack — a thick book or blanket is 厚い.",
+      "tip": "厚い (い-adjective) = thick (of flat things: books, blankets, walls); opposite 薄い (うすい). Homophones: 暑い (hot weather), 熱い (hot to the touch) — same あつい, different kanji. 厚い also means \"warm / deep\" of feelings (厚い友情).",
+      "accent": 0
+    },
+    {
+      "key": "mnn:44:13",
+      "kana": "ふとい",
+      "kanji": "太い",
+      "context": "",
+      "mean": "thick (of large diameter)",
+      "cat": "adjective",
+      "type": "i-adj",
+      "trans": "",
+      "dict": "太い",
+      "dictRead": "ふとい",
+      "audio": "/Audio/minnamoi/bai44/00010111011000110.mp3",
+      "levels": {
+        "N5": [
+          "この<ruby>木<rt>き</rt></ruby>は<ruby>太<rt>ふと</rt></ruby>いです。",
+          "This tree is thick."
+        ],
+        "N4": [
+          "もっと<ruby>太<rt>ふと</rt></ruby>いペンで<ruby>書<rt>か</rt></ruby>いてください。",
+          "Please write with a thicker pen."
+        ],
+        "N3": [
+          "この<ruby>道<rt>みち</rt></ruby>は<ruby>木<rt>き</rt></ruby>の<ruby>根<rt>ね</rt></ruby>が<ruby>太<rt>ふと</rt></ruby>くて、つまずきやすいです。",
+          "On this path the tree roots are thick, so it's easy to trip."
+        ],
+        "N2": [
+          "<ruby>彼<rt>かれ</rt></ruby>は<ruby>太<rt>ふと</rt></ruby>い<ruby>声<rt>こえ</rt></ruby>で<ruby>堂々<rt>どうどう</rt></ruby>と<ruby>話<rt>はな</rt></ruby>すので、<ruby>自然<rt>しぜん</rt></ruby>と<ruby>人<rt>ひと</rt></ruby>が<ruby>耳<rt>みみ</rt></ruby>を<ruby>傾<rt>かたむ</rt></ruby>ける。",
+          "He speaks boldly in a deep, thick voice, so people naturally lend an ear."
+        ],
+        "N1": [
+          "<ruby>神経<rt>しんけい</rt></ruby>が<ruby>太<rt>ふと</rt></ruby>いのか、<ruby>彼<rt>かれ</rt></ruby>はどんな<ruby>大<rt>おお</rt></ruby><ruby>舞台<rt>ぶたい</rt></ruby>でも<ruby>物<rt>もの</rt></ruby>おじ<ruby>一<rt>ひと</rt></ruby>つせず<ruby>力<rt>ちから</rt></ruby>を<ruby>発揮<rt>はっき</rt></ruby>する。",
+          "Whether because he's thick-skinned, he shows no timidity on any grand stage and delivers his full ability."
+        ]
+      },
+      "mnem": "太い — \"fu-TO-i\": a \"photo-ee\" fat marker line is 太い, thick in girth.",
+      "tip": "太い (い-adjective) = thick in diameter / girth (pens, ropes, tree trunks, legs); opposite 細い (ほそい). For flat thickness use 厚い (あつい). The verb 太る (ふとる) = \"to gain weight.\"",
+      "accent": 2
+    },
+    {
+      "key": "mnn:44:14",
+      "kana": "ほそい",
+      "kanji": "細い",
+      "context": "",
+      "mean": "thin, narrow (of small diameter)",
+      "cat": "adjective",
+      "type": "i-adj",
+      "trans": "",
+      "dict": "細い",
+      "dictRead": "ほそい",
+      "audio": "/Audio/minnamoi/bai44/00010111011000111.mp3",
+      "levels": {
+        "N5": [
+          "この<ruby>道<rt>みち</rt></ruby>は<ruby>細<rt>ほそ</rt></ruby>いです。",
+          "This road is narrow."
+        ],
+        "N4": [
+          "<ruby>細<rt>ほそ</rt></ruby>いペンのほうが<ruby>書<rt>か</rt></ruby>きやすいです。",
+          "A thin pen is easier to write with."
+        ],
+        "N3": [
+          "この<ruby>道<rt>みち</rt></ruby>は<ruby>細<rt>ほそ</rt></ruby>くて<ruby>運転<rt>うんてん</rt></ruby>しにくいので、<ruby>気<rt>き</rt></ruby>をつけてください。",
+          "This road is narrow and hard to drive on, so please be careful."
+        ],
+        "N2": [
+          "<ruby>糸<rt>いと</rt></ruby>のように<ruby>細<rt>ほそ</rt></ruby>い<ruby>望<rt>のぞ</rt></ruby>みではあったが、<ruby>彼<rt>かれ</rt></ruby>はそれに<ruby>賭<rt>か</rt></ruby>けるほかなかった。",
+          "It was a hope as thin as a thread, but he had no choice but to bet on it."
+        ],
+        "N1": [
+          "<ruby>彼女<rt>かのじょ</rt></ruby>は<ruby>細<rt>ほそ</rt></ruby>く<ruby>長<rt>なが</rt></ruby>く<ruby>続<rt>つづ</rt></ruby>けることこそが<ruby>大切<rt>たいせつ</rt></ruby>だと<ruby>信<rt>しん</rt></ruby>じ、<ruby>決<rt>けっ</rt></ruby>して<ruby>無理<rt>むり</rt></ruby>をしなかった。",
+          "She believed that keeping at it slowly but surely — \"thin and long\" — was what mattered, and never overexerted herself."
+        ]
+      },
+      "mnem": "細い — \"ho-SO-i\": a \"hoso\" hair-thin strand is 細い, slender.",
+      "tip": "細い (い-adjective) = thin / narrow / slender (small diameter or width: roads, threads, legs); opposite 太い (ふとい). The same kanji read こま- gives 細かい (こまかい, \"fine / detailed\").",
+      "accent": 2
+    },
+    {
+      "key": "mnn:44:15",
+      "kana": "くうき",
+      "kanji": "空気",
+      "context": "",
+      "mean": "air; atmosphere, mood",
+      "cat": "noun",
+      "type": "",
+      "trans": "",
+      "dict": "空気",
+      "dictRead": "くうき",
+      "audio": "/Audio/minnamoi/bai44/00010111011001000.mp3",
+      "levels": {
+        "N5": [
+          "<ruby>山<rt>やま</rt></ruby>の<ruby>空気<rt>くうき</rt></ruby>はきれいです。",
+          "The mountain air is clean."
+        ],
+        "N4": [
+          "<ruby>部屋<rt>へや</rt></ruby>の<ruby>空気<rt>くうき</rt></ruby>が<ruby>悪<rt>わる</rt></ruby>いから、<ruby>窓<rt>まど</rt></ruby>を<ruby>開<rt>あ</rt></ruby>けましょう。",
+          "The air in the room is bad, so let's open the window."
+        ],
+        "N3": [
+          "<ruby>田舎<rt>いなか</rt></ruby>は<ruby>空気<rt>くうき</rt></ruby>もきれいだし<ruby>静<rt>しず</rt></ruby>かだし、<ruby>住<rt>す</rt></ruby>みやすいと<ruby>思<rt>おも</rt></ruby>います。",
+          "The countryside has clean air and is quiet, so I think it's easy to live in."
+        ],
+        "N2": [
+          "<ruby>会議<rt>かいぎ</rt></ruby>が<ruby>始<rt>はじ</rt></ruby>まると、<ruby>部屋<rt>へや</rt></ruby>の<ruby>空気<rt>くうき</rt></ruby>が<ruby>急<rt>きゅう</rt></ruby>に<ruby>張<rt>は</rt></ruby>りつめたものになった。",
+          "Once the meeting began, the atmosphere in the room suddenly grew tense."
+        ],
+        "N1": [
+          "その<ruby>場<rt>ば</rt></ruby>の<ruby>空気<rt>くうき</rt></ruby>を<ruby>読<rt>よ</rt></ruby>んで<ruby>発言<rt>はつげん</rt></ruby>を<ruby>控<rt>ひか</rt></ruby>えるか、あえて<ruby>本音<rt>ほんね</rt></ruby>をぶつけるかは、<ruby>難<rt>むずか</rt></ruby>しい<ruby>判断<rt>はんだん</rt></ruby>だ。",
+          "Whether to read the mood of the room and hold your tongue, or dare to voice your true feelings, is a difficult call."
+        ]
+      },
+      "mnem": "空気 = 空 (sky / empty) + 気 (spirit / vapor): the \"vapor of the sky,\" 空気, is air.",
+      "tip": "空気 (くうき) = air, but also figuratively \"the mood / atmosphere\" of a place — 空気を読む (\"read the room\"). Built from 空 (くう / そら, sky) + 気 (き, spirit).",
+      "accent": 1
+    },
+    {
+      "key": "mnn:44:16",
+      "kana": "なみだ",
+      "kanji": "涙",
+      "context": "",
+      "mean": "tear(s)",
+      "cat": "noun",
+      "type": "",
+      "trans": "",
+      "dict": "涙",
+      "dictRead": "なみだ",
+      "audio": "/Audio/minnamoi/bai44/00010111011001001.mp3",
+      "levels": {
+        "N5": [
+          "<ruby>目<rt>め</rt></ruby>から<ruby>涙<rt>なみだ</rt></ruby>が<ruby>出<rt>で</rt></ruby>ました。",
+          "Tears came from my eyes."
+        ],
+        "N4": [
+          "<ruby>映画<rt>えいが</rt></ruby>を<ruby>見<rt>み</rt></ruby>て、<ruby>涙<rt>なみだ</rt></ruby>が<ruby>止<rt>と</rt></ruby>まりませんでした。",
+          "I watched the movie and couldn't stop my tears."
+        ],
+        "N3": [
+          "<ruby>笑<rt>わら</rt></ruby>いすぎて、<ruby>涙<rt>なみだ</rt></ruby>が<ruby>出<rt>で</rt></ruby>てきました。",
+          "I laughed so hard that tears came out."
+        ],
+        "N2": [
+          "<ruby>彼女<rt>かのじょ</rt></ruby>は<ruby>涙<rt>なみだ</rt></ruby>をこらえながら、<ruby>最後<rt>さいご</rt></ruby>まで<ruby>気丈<rt>きじょう</rt></ruby>に<ruby>挨拶<rt>あいさつ</rt></ruby>をやり<ruby>遂<rt>と</rt></ruby>げた。",
+          "Holding back her tears, she bravely got through the farewell speech to the very end."
+        ],
+        "N1": [
+          "<ruby>努力<rt>どりょく</rt></ruby>が<ruby>報<rt>むく</rt></ruby>われた<ruby>瞬間<rt>しゅんかん</rt></ruby>、<ruby>彼<rt>かれ</rt></ruby>の<ruby>頬<rt>ほお</rt></ruby>を<ruby>伝<rt>つた</rt></ruby>った<ruby>涙<rt>なみだ</rt></ruby>には、<ruby>言葉<rt>ことば</rt></ruby>にできない<ruby>万感<rt>ばんかん</rt></ruby>の<ruby>思<rt>おも</rt></ruby>いがこもっていた。",
+          "The moment his efforts were rewarded, the tears running down his cheeks held a flood of emotion words could not capture."
+        ]
+      },
+      "mnem": "涙 — \"na-mi-DA\": tears roll down in a little wave (波, nami) — 涙.",
+      "tip": "涙 (なみだ) = tear(s). 涙が出る / 涙が止まらない (\"tears well up / won't stop\"); 涙を流す (\"shed tears\"). On'yomi るい appears in 感涙 (かんるい, tears of deep emotion).",
+      "accent": 1
+    },
+    {
+      "key": "mnn:44:17",
+      "kana": "わしょく",
+      "kanji": "和食",
+      "context": "",
+      "mean": "Japanese food, Japanese cuisine",
+      "cat": "noun",
+      "type": "",
+      "trans": "",
+      "dict": "和食",
+      "dictRead": "わしょく",
+      "audio": "/Audio/minnamoi/bai44/00010111011001010.mp3",
+      "levels": {
+        "N5": [
+          "<ruby>私<rt>わたし</rt></ruby>は<ruby>和食<rt>わしょく</rt></ruby>が<ruby>好<rt>す</rt></ruby>きです。",
+          "I like Japanese food."
+        ],
+        "N4": [
+          "<ruby>昼<rt>ひる</rt></ruby>ごはんは<ruby>和食<rt>わしょく</rt></ruby>にします。",
+          "I'll have Japanese food for lunch."
+        ],
+        "N3": [
+          "<ruby>和食<rt>わしょく</rt></ruby>は<ruby>体<rt>からだ</rt></ruby>にいいし、<ruby>見<rt>み</rt></ruby>た<ruby>目<rt>め</rt></ruby>も<ruby>美<rt>うつく</rt></ruby>しいので<ruby>世界中<rt>せかいじゅう</rt></ruby>で<ruby>人気<rt>にんき</rt></ruby>があります。",
+          "Japanese cuisine is healthy and looks beautiful, so it's popular around the world."
+        ],
+        "N2": [
+          "<ruby>和食<rt>わしょく</rt></ruby>が<ruby>無形<rt>むけい</rt></ruby><ruby>文化<rt>ぶんか</rt></ruby><ruby>遺産<rt>いさん</rt></ruby>に<ruby>登録<rt>とうろく</rt></ruby>されて<ruby>以来<rt>いらい</rt></ruby>、<ruby>海外<rt>かいがい</rt></ruby>からの<ruby>関心<rt>かんしん</rt></ruby>はいっそう<ruby>高<rt>たか</rt></ruby>まっている。",
+          "Since washoku was registered as intangible cultural heritage, interest from abroad has grown all the more."
+        ],
+        "N1": [
+          "<ruby>旬<rt>しゅん</rt></ruby>の<ruby>素材<rt>そざい</rt></ruby>を<ruby>生<rt>い</rt></ruby>かし、<ruby>余計<rt>よけい</rt></ruby>な<ruby>手<rt>て</rt></ruby>を<ruby>加<rt>くわ</rt></ruby>えないところにこそ、<ruby>和食<rt>わしょく</rt></ruby>の<ruby>神髄<rt>しんずい</rt></ruby>があると<ruby>言<rt>い</rt></ruby>われる。",
+          "It is said that the very essence of Japanese cuisine lies in making the most of seasonal ingredients without adding needless embellishment."
+        ]
+      },
+      "mnem": "和食 = 和 (Japanese / harmony) + 食 (food): 和 stands for Japan, so 和食 is Japanese food.",
+      "tip": "和食 (わしょく) = Japanese-style food; its counterpart is 洋食 (ようしょく, Western food). The prefix 和 = \"Japanese\" (和室 Japanese room, 和服 kimono).",
+      "accent": 0
+    },
+    {
+      "key": "mnn:44:18",
+      "kana": "ようしょく",
+      "kanji": "洋食",
+      "context": "",
+      "mean": "Western food, Western cuisine",
+      "cat": "noun",
+      "type": "",
+      "trans": "",
+      "dict": "洋食",
+      "dictRead": "ようしょく",
+      "audio": "/Audio/minnamoi/bai44/00010111011001011.mp3",
+      "levels": {
+        "N5": [
+          "<ruby>今日<rt>きょう</rt></ruby>は<ruby>洋食<rt>ようしょく</rt></ruby>を<ruby>食<rt>た</rt></ruby>べたいです。",
+          "Today I want to eat Western food."
+        ],
+        "N4": [
+          "<ruby>和食<rt>わしょく</rt></ruby>と<ruby>洋食<rt>ようしょく</rt></ruby>と、どちらにしますか。",
+          "Which would you like, Japanese or Western food?"
+        ],
+        "N3": [
+          "この<ruby>店<rt>みせ</rt></ruby>は<ruby>洋食<rt>ようしょく</rt></ruby>も<ruby>和食<rt>わしょく</rt></ruby>もあるので、<ruby>誰<rt>だれ</rt></ruby>と<ruby>来<rt>き</rt></ruby>ても<ruby>選<rt>えら</rt></ruby>びやすいです。",
+          "This place has both Western and Japanese food, so it's easy to choose no matter who you come with."
+        ],
+        "N2": [
+          "<ruby>明治<rt>めいじ</rt></ruby><ruby>時代<rt>じだい</rt></ruby>に<ruby>入<rt>はい</rt></ruby>ってきた<ruby>洋食<rt>ようしょく</rt></ruby>は、<ruby>日本人<rt>にほんじん</rt></ruby>の<ruby>好<rt>この</rt></ruby>みに<ruby>合<rt>あ</rt></ruby>わせて<ruby>独自<rt>どくじ</rt></ruby>の<ruby>進化<rt>しんか</rt></ruby>を<ruby>遂<rt>と</rt></ruby>げた。",
+          "The Western food that came in during the Meiji era evolved in its own way to suit Japanese tastes."
+        ],
+        "N1": [
+          "オムライスやカレーライスのように、もはや<ruby>洋食<rt>ようしょく</rt></ruby>とも<ruby>和食<rt>わしょく</rt></ruby>とも<ruby>言<rt>い</rt></ruby>い<ruby>難<rt>がた</rt></ruby>い<ruby>料理<rt>りょうり</rt></ruby>が、<ruby>家庭<rt>かてい</rt></ruby>の<ruby>食卓<rt>しょくたく</rt></ruby>には<ruby>数多<rt>かずおお</rt></ruby>く<ruby>並<rt>なら</rt></ruby>んでいる。",
+          "Dishes like omurice and curry rice, now hard to call either Western or Japanese, line the home dinner table in great number."
+        ]
+      },
+      "mnem": "洋食 = 洋 (ocean / Western) + 食 (food): food from \"across the ocean,\" 洋食, is Western food.",
+      "tip": "洋食 (ようしょく) = Western-style food, paired with 和食 (わしょく, Japanese food). The prefix 洋 = \"Western / ocean\" (洋服 Western clothes, 西洋 the West).",
+      "accent": 0
+    },
+    {
+      "key": "mnn:44:19",
+      "kana": "おかず",
+      "kanji": "",
+      "context": "",
+      "mean": "side dish (eaten with rice)",
+      "cat": "noun",
+      "type": "",
+      "trans": "",
+      "dict": "おかず",
+      "dictRead": "おかず",
+      "audio": "/Audio/minnamoi/bai44/00010111011001100.mp3",
+      "levels": {
+        "N5": [
+          "<ruby>今日<rt>きょう</rt></ruby>のおかずは<ruby>魚<rt>さかな</rt></ruby>です。",
+          "Today's side dish is fish."
+        ],
+        "N4": [
+          "ごはんに<ruby>合<rt>あ</rt></ruby>うおかずを<ruby>作<rt>つく</rt></ruby>りました。",
+          "I made a side dish that goes with rice."
+        ],
+        "N3": [
+          "<ruby>冷蔵庫<rt>れいぞうこ</rt></ruby>に<ruby>残<rt>のこ</rt></ruby>っている<ruby>野菜<rt>やさい</rt></ruby>で、おかずをもう<ruby>一品<rt>いっぴん</rt></ruby><ruby>作<rt>つく</rt></ruby>ろうと<ruby>思<rt>おも</rt></ruby>います。",
+          "With the vegetables left in the fridge, I think I'll make one more side dish."
+        ],
+        "N2": [
+          "<ruby>品数<rt>しなかず</rt></ruby>は<ruby>少<rt>すく</rt></ruby>なくても、<ruby>栄養<rt>えいよう</rt></ruby>のバランスが<ruby>取<rt>と</rt></ruby>れたおかずを<ruby>心<rt>こころ</rt></ruby>がけている。",
+          "Even if the number of dishes is small, I make a point of preparing side dishes with a good nutritional balance."
+        ],
+        "N1": [
+          "<ruby>母<rt>はは</rt></ruby>が<ruby>毎朝<rt>まいあさ</rt></ruby>そっと<ruby>弁当<rt>べんとう</rt></ruby>に<ruby>詰<rt>つ</rt></ruby>めてくれたおかずには、<ruby>言葉<rt>ことば</rt></ruby>にされない<ruby>愛情<rt>あいじょう</rt></ruby>がにじんでいた。",
+          "The side dishes my mother quietly packed into my lunch each morning brimmed with an unspoken love."
+        ]
+      },
+      "mnem": "おかず — the little count (数, kazu) of extra dishes you add to plain rice: the おかず, side dishes.",
+      "tip": "おかず = the side dish(es) eaten alongside rice, as opposed to ごはん (the rice / staple itself). Usually written in kana. A single dish is counted 一品 (いっぴん).",
+      "accent": 0
+    },
+    {
+      "key": "mnn:44:20",
+      "kana": "りょう",
+      "kanji": "量",
+      "context": "",
+      "mean": "quantity, amount",
+      "cat": "noun",
+      "type": "",
+      "trans": "",
+      "dict": "量",
+      "dictRead": "りょう",
+      "audio": "/Audio/minnamoi/bai44/00010111011001101.mp3",
+      "levels": {
+        "N5": [
+          "ごはんの<ruby>量<rt>りょう</rt></ruby>が<ruby>多<rt>おお</rt></ruby>いです。",
+          "The amount of rice is large."
+        ],
+        "N4": [
+          "この<ruby>店<rt>みせ</rt></ruby>は<ruby>量<rt>りょう</rt></ruby>が<ruby>多<rt>おお</rt></ruby>くて<ruby>安<rt>やす</rt></ruby>いです。",
+          "This restaurant has big portions and is cheap."
+        ],
+        "N3": [
+          "<ruby>薬<rt>くすり</rt></ruby>は<ruby>決<rt>き</rt></ruby>められた<ruby>量<rt>りょう</rt></ruby>を<ruby>守<rt>まも</rt></ruby>って<ruby>飲<rt>の</rt></ruby>むようにしてください。",
+          "Please be sure to take the medicine in the prescribed amount."
+        ],
+        "N2": [
+          "<ruby>仕事<rt>しごと</rt></ruby>の<ruby>量<rt>りょう</rt></ruby>が<ruby>増<rt>ふ</rt></ruby>える<ruby>一方<rt>いっぽう</rt></ruby>で、<ruby>人手<rt>ひとで</rt></ruby>はいっこうに<ruby>足<rt>た</rt></ruby>りない。",
+          "While the amount of work keeps increasing, we're nowhere near having enough hands."
+        ],
+        "N1": [
+          "<ruby>情報<rt>じょうほう</rt></ruby>の<ruby>量<rt>りょう</rt></ruby>ばかりを<ruby>追<rt>お</rt></ruby>い<ruby>求<rt>もと</rt></ruby>めるうちに、<ruby>肝心<rt>かんじん</rt></ruby>の<ruby>質<rt>しつ</rt></ruby>がおろそかになってはいないだろうか。",
+          "In our pursuit of the sheer quantity of information, aren't we neglecting the quality that truly matters?"
+        ]
+      },
+      "mnem": "量 — \"ryō\": picture a \"ryo\"-sized heap you weigh out — 量 is quantity / amount.",
+      "tip": "量 (りょう) = quantity / amount, paired against 質 (しつ, quality). As a suffix it forms 数量 (すうりょう), 分量 (ぶんりょう). The verb 量る (はかる) = \"to measure (weight / volume).\"",
+      "accent": 1
+    },
+    {
+      "key": "mnn:44:21",
+      "kana": "ばい",
+      "kanji": "倍",
+      "context": "",
+      "mean": "-fold, times (multiplier suffix)",
+      "cat": "noun",
+      "type": "",
+      "trans": "",
+      "dict": "倍",
+      "dictRead": "ばい",
+      "audio": "/Audio/minnamoi/bai44/00010111011001110.mp3"
+    },
+    {
+      "key": "mnn:44:22",
+      "kana": "シングル",
+      "kanji": "",
+      "context": "",
+      "mean": "single room",
+      "cat": "noun",
+      "type": "",
+      "trans": "",
+      "dict": "シングル",
+      "dictRead": "シングル",
+      "audio": "/Audio/minnamoi/bai44/00010111011001111.mp3",
+      "levels": {
+        "N5": [
+          "<ruby>部屋<rt>へや</rt></ruby>はシングルをお<ruby>願<rt>ねが</rt></ruby>いします。",
+          "I'd like a single room, please."
+        ],
+        "N4": [
+          "<ruby>一人<rt>ひとり</rt></ruby>で<ruby>泊<rt>と</rt></ruby>まるので、シングルにします。",
+          "I'm staying alone, so I'll take a single."
+        ],
+        "N3": [
+          "シングルは<ruby>料金<rt>りょうきん</rt></ruby>も<ruby>安<rt>やす</rt></ruby>いし<ruby>静<rt>しず</rt></ruby>かだし、<ruby>出張<rt>しゅっちょう</rt></ruby>にはちょうどいいです。",
+          "A single is cheap and quiet, just right for a business trip."
+        ],
+        "N2": [
+          "<ruby>連休中<rt>れんきゅうちゅう</rt></ruby>とあって、シングルはおろかツインの<ruby>空<rt>あ</rt></ruby>きさえ<ruby>見<rt>み</rt></ruby>つからなかった。",
+          "With it being a long weekend, we couldn't find so much as a twin free, let alone a single."
+        ],
+        "N1": [
+          "<ruby>予算<rt>よさん</rt></ruby>の<ruby>都合<rt>つごう</rt></ruby>でシングルしか<ruby>取<rt>と</rt></ruby>れなかったものの、<ruby>窓<rt>まど</rt></ruby>からの<ruby>眺<rt>なが</rt></ruby>めは<ruby>望外<rt>ぼうがい</rt></ruby>の<ruby>素晴<rt>すば</rt></ruby>らしさだった。",
+          "Owing to budget constraints we could only get a single, yet the view from the window was splendid beyond all expectation."
+        ]
+      },
+      "mnem": "シングル is English \"single\" — one bed for one guest: a シングル room.",
+      "tip": "シングル (single room, one bed) contrasts with ツイン (twin, two beds). Don't confuse it with ダブル (a single large bed for two).",
+      "accent": 1
+    },
+    {
+      "key": "mnn:44:23",
+      "kana": "ツイン",
+      "kanji": "",
+      "context": "",
+      "mean": "twin room (two beds)",
+      "cat": "noun",
+      "type": "",
+      "trans": "",
+      "dict": "ツイン",
+      "dictRead": "ツイン",
+      "audio": "/Audio/minnamoi/bai44/00010111011010000.mp3",
+      "levels": {
+        "N5": [
+          "<ruby>部屋<rt>へや</rt></ruby>はツインですか。",
+          "Is the room a twin?"
+        ],
+        "N4": [
+          "<ruby>二人<rt>ふたり</rt></ruby>で<ruby>泊<rt>と</rt></ruby>まるので、ツインにします。",
+          "Two of us are staying, so we'll take a twin."
+        ],
+        "N3": [
+          "ツインのほうが<ruby>広<rt>ひろ</rt></ruby>いし<ruby>友達<rt>ともだち</rt></ruby>と<ruby>話<rt>はな</rt></ruby>しやすいので、こちらにしました。",
+          "A twin is roomier and easier to chat with a friend in, so we chose this one."
+        ],
+        "N2": [
+          "<ruby>予約<rt>よやく</rt></ruby>の<ruby>際<rt>さい</rt></ruby>にツインを<ruby>頼<rt>たの</rt></ruby>んだはずが、<ruby>着<rt>つ</rt></ruby>いてみるとシングルしか<ruby>用意<rt>ようい</rt></ruby>されていなかった。",
+          "I was sure I'd asked for a twin when booking, but on arrival only a single had been prepared."
+        ],
+        "N1": [
+          "<ruby>同<rt>おな</rt></ruby>じツインでも、ベッドを<ruby>離<rt>はな</rt></ruby>すか<ruby>付<rt>つ</rt></ruby>けるかで<ruby>部屋<rt>へや</rt></ruby>の<ruby>印象<rt>いんしょう</rt></ruby>はがらりと<ruby>変<rt>か</rt></ruby>わるものだ。",
+          "Even the same twin room takes on a completely different impression depending on whether the beds are separated or pushed together."
+        ]
+      },
+      "mnem": "ツイン is English \"twin\" — two matching beds: a ツイン room.",
+      "tip": "ツイン (twin room, two separate beds) is the pair to シングル (single). Distinct from ダブル (one double bed).",
+      "accent": 1
+    },
+    {
+      "key": "mnn:44:24",
+      "kana": "せんたくもの",
+      "kanji": "洗濯物",
+      "context": "",
+      "mean": "laundry, washing",
+      "cat": "noun",
+      "type": "",
+      "trans": "",
+      "dict": "洗濯物",
+      "dictRead": "せんたくもの",
+      "audio": "/Audio/minnamoi/bai44/00010111011010001.mp3",
+      "levels": {
+        "N5": [
+          "<ruby>洗濯物<rt>せんたくもの</rt></ruby>を<ruby>干<rt>ほ</rt></ruby>します。",
+          "I hang out the laundry."
+        ],
+        "N4": [
+          "<ruby>天気<rt>てんき</rt></ruby>がいいので、<ruby>洗濯物<rt>せんたくもの</rt></ruby>がよく<ruby>乾<rt>かわ</rt></ruby>きます。",
+          "The weather's good, so the laundry dries well."
+        ],
+        "N3": [
+          "<ruby>雨<rt>あめ</rt></ruby>の<ruby>日<rt>ひ</rt></ruby>は<ruby>洗濯物<rt>せんたくもの</rt></ruby>が<ruby>乾<rt>かわ</rt></ruby>きにくいので、<ruby>部屋<rt>へや</rt></ruby>の<ruby>中<rt>なか</rt></ruby>に<ruby>干<rt>ほ</rt></ruby>します。",
+          "On rainy days the laundry doesn't dry easily, so I hang it indoors."
+        ],
+        "N2": [
+          "<ruby>急<rt>きゅう</rt></ruby>に<ruby>雨<rt>あめ</rt></ruby>が<ruby>降<rt>ふ</rt></ruby>り<ruby>出<rt>だ</rt></ruby>し、<ruby>干<rt>ほ</rt></ruby>していた<ruby>洗濯物<rt>せんたくもの</rt></ruby>が<ruby>台<rt>だい</rt></ruby><ruby>無<rt>な</rt></ruby>しになってしまった。",
+          "It suddenly began to rain, and the laundry I'd hung out was ruined."
+        ],
+        "N1": [
+          "<ruby>一人<rt>ひとり</rt></ruby><ruby>暮<rt>ぐ</rt></ruby>らしを<ruby>始<rt>はじ</rt></ruby>めて<ruby>初<rt>はじ</rt></ruby>めて、たまった<ruby>洗濯物<rt>せんたくもの</rt></ruby>を<ruby>前<rt>まえ</rt></ruby>に<ruby>親<rt>おや</rt></ruby>のありがたみを<ruby>痛感<rt>つうかん</rt></ruby>した。",
+          "Only after starting to live alone, faced with a pile of accumulated laundry, did I keenly feel my gratitude to my parents."
+        ]
+      },
+      "mnem": "洗濯物 = 洗濯 (washing) + 物 (thing): the \"things for washing,\" 洗濯物, are the laundry.",
+      "tip": "洗濯物 (せんたくもの) = laundry (clothes to be, or just, washed). 洗濯する = \"do the wash,\" 洗濯機 (せんたくき) = washing machine, 干す (ほす) = \"hang out to dry.\"",
+      "accent": 0
+    },
+    {
+      "key": "mnn:44:25",
+      "kana": "DVD",
+      "kanji": "",
+      "context": "",
+      "mean": "DVD",
+      "cat": "noun",
+      "type": "",
+      "trans": "",
+      "dict": "DVD",
+      "dictRead": "ディーブイディー",
+      "audio": "/Audio/minnamoi/bai44/00010111011010010.mp3",
+      "levels": {
+        "N5": [
+          "<ruby>映画<rt>えいが</rt></ruby>のDVDを<ruby>買<rt>か</rt></ruby>いました。",
+          "I bought a DVD of the movie."
+        ],
+        "N4": [
+          "このDVDは<ruby>友達<rt>ともだち</rt></ruby>に<ruby>借<rt>か</rt></ruby>りました。",
+          "I borrowed this DVD from a friend."
+        ],
+        "N3": [
+          "<ruby>目<rt>め</rt></ruby>が<ruby>痛<rt>いた</rt></ruby>いんです。<ruby>昨日<rt>きのう</rt></ruby>DVDを<ruby>見<rt>み</rt></ruby>すぎたんです。",
+          "My eyes hurt. I watched DVDs too much yesterday."
+        ],
+        "N2": [
+          "<ruby>配信<rt>はいしん</rt></ruby>サービスが<ruby>普及<rt>ふきゅう</rt></ruby>するにつれ、DVDを<ruby>買<rt>か</rt></ruby>う<ruby>人<rt>ひと</rt></ruby>はめっきり<ruby>減<rt>へ</rt></ruby>ってしまった。",
+          "As streaming services have spread, the number of people who buy DVDs has dropped markedly."
+        ],
+        "N1": [
+          "かつて<ruby>棚<rt>たな</rt></ruby>を<ruby>埋<rt>う</rt></ruby>めていた<ruby>大量<rt>たいりょう</rt></ruby>のDVDも、<ruby>今<rt>いま</rt></ruby>や<ruby>時代<rt>じだい</rt></ruby>の<ruby>流<rt>なが</rt></ruby>れとともに<ruby>押<rt>お</rt></ruby>し<ruby>入<rt>い</rt></ruby>れの<ruby>奥<rt>おく</rt></ruby>で<ruby>眠<rt>ねむ</rt></ruby>っている。",
+          "The mass of DVDs that once filled the shelves now sleeps deep in the closet along with the flow of the times."
+        ]
+      },
+      "mnem": "DVD is the English initialism, said \"dii-bui-dii\" in Japanese — a DVD disc.",
+      "tip": "DVD is read ディーブイディー and, like many acronyms, written in Latin letters even inside Japanese text. Particles and counters stay Japanese: DVDを見る, DVDが3枚."
+    },
+    {
+      "key": "mnn:44:26",
+      "kana": "ホテルひろしま",
+      "kanji": "",
+      "context": "",
+      "mean": "Hotel Hiroshima (a fictitious hotel)",
+      "cat": "noun",
+      "type": "",
+      "trans": "",
+      "dict": "ホテルひろしま",
+      "dictRead": "ホテルひろしま",
+      "audio": "/Audio/minnamoi/bai44/00010111011010011.mp3"
+    }
+  ],
+  "grammar": [
+    {
+      "pattern": "〜すぎます (too much / excessively)",
+      "structure": "V(ます形)＋すぎます・いA(〜い→)＋すぎます・なA＋すぎます",
+      "explain": "Drop ます from a verb stem, the final い of an い-adjective, or the な of a な-adjective and add すぎます to say something is done to excess or is excessively so — beyond what is proper or desirable. 飲む→飲みすぎる, 高い→高すぎる, 簡単だ→簡単すぎる. It carries a negative nuance (\"too much, more than is good\") and conjugates as an ichidan verb (すぎて, すぎた).",
+      "examples": [
+        {
+          "jp": "お<ruby>酒<rt>さけ</rt></ruby>を<ruby>飲<rt>の</rt></ruby>みすぎました。",
+          "en": "I drank too much."
+        },
+        {
+          "jp": "この<ruby>問題<rt>もんだい</rt></ruby>は<ruby>簡単<rt>かんたん</rt></ruby>すぎます。",
+          "en": "This problem is too easy."
+        },
+        {
+          "jp": "<ruby>食<rt>た</rt></ruby>べすぎて、<ruby>動<rt>うご</rt></ruby>けません。",
+          "en": "I ate too much and can't move."
+        },
+        {
+          "jp": "<ruby>値段<rt>ねだん</rt></ruby>が<ruby>高<rt>たか</rt></ruby>すぎるので、<ruby>買<rt>か</rt></ruby>えません。",
+          "en": "The price is too high, so I can't buy it."
+        }
+      ]
+    },
+    {
+      "pattern": "V-stem ＋ やすい／にくい (easy / hard to do)",
+      "structure": "V(ます形)＋やすいです（easy to）／＋にくいです（hard to）",
+      "explain": "Attach やすい (\"easy to ~\") or にくい (\"hard to ~\") to a verb stem to describe how easy or difficult the action is. The compound behaves like an い-adjective (使いやすい→使いやすくて, 割れにくかった). It covers both the ease of doing something oneself (使いやすい, easy to use) and a tendency for something to happen (壊れやすい, breaks easily / 乾きにくい, doesn't dry easily).",
+      "examples": [
+        {
+          "jp": "このパソコンは<ruby>使<rt>つか</rt></ruby>いやすいです。",
+          "en": "This computer is easy to use."
+        },
+        {
+          "jp": "この<ruby>薬<rt>くすり</rt></ruby>は<ruby>苦<rt>にが</rt></ruby>くて、<ruby>飲<rt>の</rt></ruby>みにくいです。",
+          "en": "This medicine is bitter and hard to take."
+        },
+        {
+          "jp": "<ruby>安<rt>やす</rt></ruby>い<ruby>傘<rt>かさ</rt></ruby>は<ruby>壊<rt>こわ</rt></ruby>れやすいです。",
+          "en": "Cheap umbrellas break easily."
+        },
+        {
+          "jp": "<ruby>雨<rt>あめ</rt></ruby>の<ruby>日<rt>ひ</rt></ruby>は<ruby>洗濯物<rt>せんたくもの</rt></ruby>が<ruby>乾<rt>かわ</rt></ruby>きにくいです。",
+          "en": "On rainy days the laundry doesn't dry easily."
+        }
+      ]
+    },
+    {
+      "pattern": "いA(〜く)／なA・N(〜に) ＋ します (make / change into a state)",
+      "structure": "いA(〜い→く)＋します・なA/N＋に＋します",
+      "explain": "To say you deliberately CHANGE something into a certain state, turn the adjective adverbial and add します: い-adjectives take く (短い→短くします), while な-adjectives and nouns take に (きれい→きれいにします, 半分→半分にします). This is the \"make / render it ~\" pattern — the speaker acts to bring the state about, in contrast to 〜くなる/〜になる, where the state changes on its own.",
+      "examples": [
+        {
+          "jp": "<ruby>音<rt>おと</rt></ruby>を<ruby>大<rt>おお</rt></ruby>きくします。",
+          "en": "I'll turn the volume up (make the sound bigger)."
+        },
+        {
+          "jp": "<ruby>字<rt>じ</rt></ruby>が<ruby>薄<rt>うす</rt></ruby>いので、<ruby>濃<rt>こ</rt></ruby>くしてください。",
+          "en": "The text is faint, so please make it darker."
+        },
+        {
+          "jp": "<ruby>部屋<rt>へや</rt></ruby>をきれいにします。",
+          "en": "I'll make the room clean."
+        },
+        {
+          "jp": "うるさいので、<ruby>静<rt>しず</rt></ruby>かにしてください。",
+          "en": "It's noisy, so please be quiet."
+        }
+      ]
+    },
+    {
+      "pattern": "N ＋ にします (decide on / choose)",
+      "structure": "N＋にします（選択・決定）",
+      "explain": "N＋にします expresses a decision or choice — \"I'll have / go with N.\" It's used when picking from options: ordering food, choosing a room, settling on a date. 食事は和食にします (\"I'll have Japanese for the meal\"); 部屋はツインにします. The question form is 何にしますか／どちらにしますか (\"what / which will you have?\").",
+      "examples": [
+        {
+          "jp": "<ruby>飲<rt>の</rt></ruby>み<ruby>物<rt>もの</rt></ruby>は<ruby>何<rt>なに</rt></ruby>にしますか。…コーヒーにします。",
+          "en": "What will you have to drink? …I'll have coffee."
+        },
+        {
+          "jp": "<ruby>食事<rt>しょくじ</rt></ruby>は<ruby>和食<rt>わしょく</rt></ruby>と<ruby>洋食<rt>ようしょく</rt></ruby>と、どちらにしますか。",
+          "en": "For the meal, will you have Japanese or Western?"
+        },
+        {
+          "jp": "<ruby>部屋<rt>へや</rt></ruby>はシングルにしますか、ツインにしますか。",
+          "en": "Will you have a single room or a twin?"
+        },
+        {
+          "jp": "<ruby>出発<rt>しゅっぱつ</rt></ruby>は<ruby>十八日<rt>じゅうはちにち</rt></ruby>にします。",
+          "en": "I'll set the departure for the 18th."
+        }
+      ]
+    }
+  ],
+  "examples": [
+    {
+      "jp": "ゆうべお<ruby>酒<rt>さけ</rt></ruby>を<ruby>飲<rt>の</rt></ruby>みすぎました。",
+      "en": "I drank too much last night."
+    },
+    {
+      "jp": "このパソコンは<ruby>使<rt>つか</rt></ruby>いやすいです。",
+      "en": "This computer is easy to use."
+    },
+    {
+      "jp": "ズボンを<ruby>短<rt>みじか</rt></ruby>くしてください。",
+      "en": "Please shorten these pants."
+    },
+    {
+      "jp": "<ruby>泣<rt>な</rt></ruby>いているんですか。…いいえ、<ruby>笑<rt>わら</rt></ruby>いすぎて、<ruby>涙<rt>なみだ</rt></ruby>が<ruby>出<rt>で</rt></ruby>たんです。",
+      "en": "Are you crying? …No, I laughed so hard that tears came out."
+    },
+    {
+      "jp": "<ruby>最近<rt>さいきん</rt></ruby>の<ruby>車<rt>くるま</rt></ruby>は<ruby>操作<rt>そうさ</rt></ruby>が<ruby>簡単<rt>かんたん</rt></ruby>ですね。…ええ。でも、<ruby>簡単<rt>かんたん</rt></ruby>すぎて、<ruby>運転<rt>うんてん</rt></ruby>がおもしろくないです。",
+      "en": "Cars these days are simple to operate, aren't they? …Yes, but they're so simple that driving isn't fun."
+    },
+    {
+      "jp": "<ruby>田舎<rt>いなか</rt></ruby>と<ruby>町<rt>まち</rt></ruby>と、どちらが<ruby>住<rt>す</rt></ruby>みやすいですか。…<ruby>田舎<rt>いなか</rt></ruby>のほうが<ruby>住<rt>す</rt></ruby>みやすいと<ruby>思<rt>おも</rt></ruby>います。<ruby>物価<rt>ぶっか</rt></ruby>も<ruby>安<rt>やす</rt></ruby>いし、<ruby>空気<rt>くうき</rt></ruby>もきれいですから。",
+      "en": "Which is easier to live in, the countryside or the town? …I think the countryside is easier. The cost of living is cheap and the air is clean, too."
+    },
+    {
+      "jp": "このコップは<ruby>丈夫<rt>じょうぶ</rt></ruby>で<ruby>割<rt>わ</rt></ruby>れにくいですよ。…<ruby>子<rt>こ</rt></ruby>どもが<ruby>使<rt>つか</rt></ruby>うのに<ruby>安全<rt>あんぜん</rt></ruby>で、いいですね。",
+      "en": "This cup is sturdy and hard to break. …It's safe for children to use — that's nice."
+    },
+    {
+      "jp": "<ruby>飲<rt>の</rt></ruby>み<ruby>物<rt>もの</rt></ruby>は<ruby>何<rt>なに</rt></ruby>にしますか。…ビールにします。",
+      "en": "What will you have to drink? …I'll have a beer."
+    }
+  ],
+  "conversation": {
+    "title": "この<ruby>写真<rt>しゃしん</rt></ruby>みたいにしてください (Please make it like this photo)",
+    "audio": "/Audio/minnahonsatsu2/55.mp3",
+    "lines": [
+      {
+        "role": "美容師",
+        "jp": "いらっしゃいませ。<ruby>今日<rt>きょう</rt></ruby>はどうなさいますか。",
+        "en": "Welcome. What would you like to do today?"
+      },
+      {
+        "role": "カリナ",
+        "jp": "カット、お<ruby>願<rt>ねが</rt></ruby>いします。",
+        "en": "A haircut, please."
+      },
+      {
+        "role": "美容師",
+        "jp": "じゃ、シャンプーをしますから、こちらへどうぞ。",
+        "en": "All right, we'll shampoo your hair, so please come this way."
+      },
+      {
+        "role": "美容師",
+        "jp": "カットはどういうふうになさいますか。",
+        "en": "How would you like it cut?"
+      },
+      {
+        "role": "カリナ",
+        "jp": "ショートにしたいんですけど……。この<ruby>写真<rt>しゃしん</rt></ruby>みたいにしてください。",
+        "en": "I'd like it short… Please make it like this photo."
+      },
+      {
+        "role": "美容師",
+        "jp": "あ、すてきですね。",
+        "en": "Oh, that's lovely."
+      },
+      {
+        "role": "美容師",
+        "jp": "<ruby>前<rt>まえ</rt></ruby>の<ruby>長<rt>なが</rt></ruby>さはこれでよろしいでしょうか。",
+        "en": "Is the length in the front all right like this?"
+      },
+      {
+        "role": "カリナ",
+        "jp": "そうですね。もう<ruby>少<rt>すこ</rt></ruby>し<ruby>短<rt>みじか</rt></ruby>くしてください。",
+        "en": "Hmm, let me see. Please make it a little shorter."
+      },
+      {
+        "role": "美容師",
+        "jp": "どうもお<ruby>疲<rt>つか</rt></ruby>れさまでした。",
+        "en": "Thank you very much for your patience."
+      },
+      {
+        "role": "カリナ",
+        "jp": "ありがとう。",
+        "en": "Thank you."
+      }
+    ]
+  }
+}

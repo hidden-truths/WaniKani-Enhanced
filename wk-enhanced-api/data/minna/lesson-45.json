@@ -1,0 +1,723 @@
+{
+  "lesson": 45,
+  "title": "Lesson 45",
+  "theme": "〜場合は (in the case that / in the event of ~) and 〜のに (even though / and yet — contrary to expectation)",
+  "source": {
+    "name": "vnjpclub.com",
+    "vocabUrl": "https://www.vnjpclub.com/en/minna-no-nihongo/lesson-45-vocabulary.html",
+    "grammarUrl": "https://www.vnjpclub.com/en/minna-no-nihongo/lesson-45-grammar.html",
+    "note": "Vocabulary, native-speaker audio, and example sentences aggregated from vnjpclub.com (Minna no Nihongo 第2版). For personal study."
+  },
+  "vocab": [
+    {
+      "key": "mnn:45:0",
+      "kana": "しんじます",
+      "kanji": "信じます",
+      "context": "",
+      "mean": "to believe, trust",
+      "cat": "verb",
+      "type": "ichidan",
+      "trans": "t",
+      "dict": "信じる",
+      "dictRead": "しんじる",
+      "audio": "/Audio/minnamoi/bai45/00010111011100110.mp3",
+      "levels": {
+        "N5": [
+          "<ruby>神<rt>かみ</rt></ruby>を<ruby>信<rt>しん</rt></ruby>じます。",
+          "I believe in God."
+        ],
+        "N4": [
+          "<ruby>友<rt>とも</rt></ruby>だちの<ruby>話<rt>はなし</rt></ruby>を<ruby>信<rt>しん</rt></ruby>じたいです。",
+          "I want to believe my friend's story."
+        ],
+        "N3": [
+          "<ruby>彼<rt>かれ</rt></ruby>の<ruby>言<rt>い</rt></ruby>うことを<ruby>信<rt>しん</rt></ruby>じたら、だまされてしまいました。",
+          "When I believed what he said, I ended up being deceived."
+        ],
+        "N2": [
+          "<ruby>証拠<rt>しょうこ</rt></ruby>もないのに、その<ruby>噂<rt>うわさ</rt></ruby>を<ruby>信<rt>しん</rt></ruby>じるわけにはいかない。",
+          "I can't very well believe that rumor when there's no evidence."
+        ],
+        "N1": [
+          "<ruby>彼<rt>かれ</rt></ruby>の<ruby>誠実<rt>せいじつ</rt></ruby>さを<ruby>信<rt>しん</rt></ruby>じればこそ、あえて<ruby>厳<rt>きび</rt></ruby>しい<ruby>言葉<rt>ことば</rt></ruby>をかけたのだ。",
+          "It is precisely because I believe in his sincerity that I dared to speak harshly to him."
+        ]
+      },
+      "mnem": "\"shin-jiru\" — you <b>SHINE</b> your trust on someone: 信じる = to believe.",
+      "tip": "信じる is ichidan and transitive — the thing believed takes を (神を信じる, 話を信じる). Related nouns: 信用 (しんよう) / 信頼 (しんらい) = trust. Don't confuse it with 感じる (かんじる, to feel).",
+      "accent": 3
+    },
+    {
+      "key": "mnn:45:1",
+      "kana": "キャンセルします",
+      "kanji": "",
+      "context": "",
+      "mean": "to cancel",
+      "cat": "verb",
+      "type": "irregular",
+      "trans": "t",
+      "dict": "キャンセルする",
+      "dictRead": "キャンセルする",
+      "audio": "/Audio/minnamoi/bai45/00010111011100111.mp3",
+      "levels": {
+        "N5": [
+          "<ruby>予約<rt>よやく</rt></ruby>をキャンセルします。",
+          "I'll cancel the reservation."
+        ],
+        "N4": [
+          "<ruby>都合<rt>つごう</rt></ruby>が<ruby>悪<rt>わる</rt></ruby>くなったので、<ruby>予約<rt>よやく</rt></ruby>をキャンセルしたいです。",
+          "Since it became inconvenient, I want to cancel the reservation."
+        ],
+        "N3": [
+          "<ruby>台風<rt>たいふう</rt></ruby>が<ruby>来<rt>き</rt></ruby>たら、<ruby>旅行<rt>りょこう</rt></ruby>をキャンセルするつもりです。",
+          "If a typhoon comes, I plan to cancel the trip."
+        ],
+        "N2": [
+          "<ruby>直前<rt>ちょくぜん</rt></ruby>になってキャンセルされたものの、<ruby>料金<rt>りょうきん</rt></ruby>は<ruby>返<rt>かえ</rt></ruby>ってこなかった。",
+          "Although it was canceled at the last minute, the fee wasn't refunded."
+        ],
+        "N1": [
+          "<ruby>先方<rt>せんぽう</rt></ruby>の<ruby>都合<rt>つごう</rt></ruby>で、<ruby>会議<rt>かいぎ</rt></ruby>をキャンセルせざるを<ruby>得<rt>え</rt></ruby>なくなった。",
+          "We were forced to cancel the meeting because of the other party's circumstances."
+        ]
+      },
+      "mnem": "キャンセル is English \"cancel\" in katakana — キャ・ン・セ・ル.",
+      "tip": "キャンセルする is an irregular する-verb, transitive; the thing canceled takes を. Native equivalents: 取り消す (とりけす) for records, 中止する (ちゅうし) for events/plans.",
+      "accent": 1
+    },
+    {
+      "key": "mnn:45:2",
+      "kana": "しらせます",
+      "kanji": "知らせます",
+      "context": "",
+      "mean": "to inform, notify, let know",
+      "cat": "verb",
+      "type": "ichidan",
+      "trans": "t",
+      "dict": "知らせる",
+      "dictRead": "しらせる",
+      "audio": "/Audio/minnamoi/bai45/00010111011101000.mp3",
+      "levels": {
+        "N5": [
+          "<ruby>母<rt>はは</rt></ruby>に<ruby>知<rt>し</rt></ruby>らせます。",
+          "I'll let my mother know."
+        ],
+        "N4": [
+          "<ruby>結果<rt>けっか</rt></ruby>がわかったら、すぐ<ruby>知<rt>し</rt></ruby>らせてください。",
+          "When you know the result, please let me know right away."
+        ],
+        "N3": [
+          "<ruby>予定<rt>よてい</rt></ruby>が<ruby>変<rt>か</rt></ruby>わった<ruby>場合<rt>ばあい</rt></ruby>は、<ruby>電話<rt>でんわ</rt></ruby>で<ruby>知<rt>し</rt></ruby>らせるようにしています。",
+          "If the schedule changes, I make a point of informing people by phone."
+        ],
+        "N2": [
+          "<ruby>本人<rt>ほんにん</rt></ruby>に<ruby>知<rt>し</rt></ruby>らせないわけにはいかず、<ruby>結局<rt>けっきょく</rt></ruby><ruby>真実<rt>しんじつ</rt></ruby>を<ruby>伝<rt>つた</rt></ruby>えた。",
+          "We couldn't just not inform the person, so in the end we told the truth."
+        ],
+        "N1": [
+          "<ruby>関係<rt>かんけい</rt></ruby><ruby>各所<rt>かくしょ</rt></ruby>に<ruby>速<rt>すみ</rt></ruby>やかに<ruby>知<rt>し</rt></ruby>らせるべく、<ruby>担当<rt>たんとう</rt></ruby><ruby>者<rt>しゃ</rt></ruby>は<ruby>夜通<rt>よどお</rt></ruby>し<ruby>対応<rt>たいおう</rt></ruby>に<ruby>追<rt>お</rt></ruby>われた。",
+          "In order to promptly notify all the relevant offices, the person in charge was kept busy responding all night long."
+        ]
+      },
+      "mnem": "\"shiraseru\" — you make someone <b>KNOW</b> (知る): 知らせる = to let know, to inform.",
+      "tip": "知らせる (ichidan, transitive) is the 'let-know' partner of 知る (to know): the person notified takes に, the news takes を. Noun お知らせ (おしらせ) = a notice / announcement.",
+      "accent": 0
+    },
+    {
+      "key": "mnn:45:3",
+      "kana": "ほしょうしょ",
+      "kanji": "保証書",
+      "context": "",
+      "mean": "warranty, written guarantee",
+      "cat": "noun",
+      "type": "",
+      "trans": "",
+      "dict": "保証書",
+      "dictRead": "ほしょうしょ",
+      "audio": "/Audio/minnamoi/bai45/00010111011101001.mp3",
+      "levels": {
+        "N5": [
+          "これは<ruby>保証書<rt>ほしょうしょ</rt></ruby>です。",
+          "This is the warranty."
+        ],
+        "N4": [
+          "<ruby>保証書<rt>ほしょうしょ</rt></ruby>があったら、<ruby>無料<rt>むりょう</rt></ruby>で<ruby>直<rt>なお</rt></ruby>せます。",
+          "If you have the warranty, you can get it repaired for free."
+        ],
+        "N3": [
+          "こわれた<ruby>場合<rt>ばあい</rt></ruby>は、<ruby>保証書<rt>ほしょうしょ</rt></ruby>を<ruby>持<rt>も</rt></ruby>って<ruby>店<rt>みせ</rt></ruby>に<ruby>行<rt>い</rt></ruby>くようにしてください。",
+          "If it breaks, please make sure to take the warranty to the store."
+        ],
+        "N2": [
+          "<ruby>保証書<rt>ほしょうしょ</rt></ruby>をなくしたものの、レシートがあったので<ruby>修理<rt>しゅうり</rt></ruby>してもらえた。",
+          "Although I lost the warranty, I was able to get it repaired because I still had the receipt."
+        ],
+        "N1": [
+          "<ruby>保証書<rt>ほしょうしょ</rt></ruby>に<ruby>記載<rt>きさい</rt></ruby>された<ruby>期間<rt>きかん</rt></ruby>を<ruby>過<rt>す</rt></ruby>ぎている<ruby>以上<rt>いじょう</rt></ruby>、<ruby>無償<rt>むしょう</rt></ruby><ruby>修理<rt>しゅうり</rt></ruby>には<ruby>応<rt>おう</rt></ruby>じかねます。",
+          "Given that the period stated on the warranty has passed, we are unable to provide free repair."
+        ]
+      },
+      "mnem": "保 (protect) + 証 (proof) + 書 (document) — a 'document that proves protection' is the 保証書, a warranty.",
+      "tip": "保証書 = the written warranty card; 保証 (ほしょう) alone = a guarantee (保証する = to guarantee). Don't confuse 保証 with 保険 (ほけん, insurance) or the homophone 補償 (ほしょう, compensation).",
+      "accent": 0
+    },
+    {
+      "key": "mnn:45:4",
+      "kana": "りょうしゅうしょ",
+      "kanji": "領収書",
+      "context": "",
+      "mean": "receipt (formal/official)",
+      "cat": "noun",
+      "type": "",
+      "trans": "",
+      "dict": "領収書",
+      "dictRead": "りょうしゅうしょ",
+      "audio": "/Audio/minnamoi/bai45/00010111011101010.mp3",
+      "levels": {
+        "N5": [
+          "<ruby>領収書<rt>りょうしゅうしょ</rt></ruby>をください。",
+          "Please give me a receipt."
+        ],
+        "N4": [
+          "<ruby>領収書<rt>りょうしゅうしょ</rt></ruby>がほしかったら、<ruby>店<rt>みせ</rt></ruby>の<ruby>人<rt>ひと</rt></ruby>に<ruby>言<rt>い</rt></ruby>ってください。",
+          "If you want a receipt, tell a store clerk."
+        ],
+        "N3": [
+          "<ruby>会社<rt>かいしゃ</rt></ruby>に<ruby>出<rt>だ</rt></ruby>すので、いつも<ruby>領収書<rt>りょうしゅうしょ</rt></ruby>をもらうようにしています。",
+          "Since I submit it to my company, I always make a point of getting a receipt."
+        ],
+        "N2": [
+          "<ruby>領収書<rt>りょうしゅうしょ</rt></ruby>がない<ruby>場合<rt>ばあい</rt></ruby>は、<ruby>経費<rt>けいひ</rt></ruby>として<ruby>認<rt>みと</rt></ruby>められないことになっている。",
+          "In cases where there is no receipt, it is not recognized as a business expense."
+        ],
+        "N1": [
+          "<ruby>領収書<rt>りょうしゅうしょ</rt></ruby>の<ruby>宛名<rt>あてな</rt></ruby>は<ruby>空欄<rt>くうらん</rt></ruby>のままにせず、<ruby>必<rt>かなら</rt></ruby>ず<ruby>会社名<rt>かいしゃめい</rt></ruby>をご<ruby>記入<rt>きにゅう</rt></ruby>ください。",
+          "Please do not leave the addressee on the receipt blank; be sure to fill in the company name."
+        ]
+      },
+      "mnem": "領 (receive) + 収 (collect) + 書 (document) — the paper acknowledging money 'received and collected' is the 領収書, a receipt.",
+      "tip": "領収書 is the formal/official receipt used for expenses and reimbursement; レシート is the everyday register slip. Don't confuse 領収書 with 請求書 (せいきゅうしょ, an invoice/bill).",
+      "accent": 0
+    },
+    {
+      "key": "mnn:45:5",
+      "kana": "キャンプ",
+      "kanji": "",
+      "context": "",
+      "mean": "camp, camping",
+      "cat": "noun",
+      "type": "",
+      "trans": "",
+      "dict": "キャンプ",
+      "dictRead": "キャンプ",
+      "audio": "/Audio/minnamoi/bai45/00010111011101011.mp3",
+      "levels": {
+        "N5": [
+          "<ruby>夏<rt>なつ</rt></ruby>にキャンプをします。",
+          "I go camping in summer."
+        ],
+        "N4": [
+          "<ruby>天気<rt>てんき</rt></ruby>がよかったら、<ruby>山<rt>やま</rt></ruby>でキャンプをしたいです。",
+          "If the weather is good, I'd like to camp in the mountains."
+        ],
+        "N3": [
+          "<ruby>雨<rt>あめ</rt></ruby>が<ruby>降<rt>ふ</rt></ruby>った<ruby>場合<rt>ばあい</rt></ruby>は、キャンプは<ruby>中止<rt>ちゅうし</rt></ruby>にします。",
+          "In case it rains, we'll call off the camp."
+        ],
+        "N2": [
+          "<ruby>準備<rt>じゅんび</rt></ruby>が<ruby>大変<rt>たいへん</rt></ruby>なものの、キャンプでしか<ruby>味<rt>あじ</rt></ruby>わえない<ruby>楽<rt>たの</rt></ruby>しさがある。",
+          "Although the preparation is a hassle, there's a kind of fun you can only experience by camping."
+        ],
+        "N1": [
+          "<ruby>大自然<rt>だいしぜん</rt></ruby>の<ruby>中<rt>なか</rt></ruby>でのキャンプは、<ruby>日<rt>ひ</rt></ruby>ごろの<ruby>喧騒<rt>けんそう</rt></ruby>を<ruby>忘<rt>わす</rt></ruby>れさせてくれる。",
+          "Camping out in the great outdoors makes you forget the everyday hustle and bustle."
+        ]
+      },
+      "mnem": "キャンプ is English \"camp\" in katakana — キャ・ン・プ.",
+      "tip": "キャンプ = camping / a camp; use キャンプをする or キャンプする to camp. Don't confuse it with キャンパス (campus) or キャンセル (cancel) from this same lesson.",
+      "accent": 1
+    },
+    {
+      "key": "mnn:45:6",
+      "kana": "ちゅうし",
+      "kanji": "中止",
+      "context": "",
+      "mean": "cancellation, calling off, suspension",
+      "cat": "noun",
+      "type": "",
+      "trans": "",
+      "dict": "中止",
+      "dictRead": "ちゅうし",
+      "audio": "/Audio/minnamoi/bai45/00010111011101100.mp3",
+      "levels": {
+        "N5": [
+          "<ruby>試合<rt>しあい</rt></ruby>は<ruby>中止<rt>ちゅうし</rt></ruby>です。",
+          "The match is canceled."
+        ],
+        "N4": [
+          "<ruby>雨<rt>あめ</rt></ruby>が<ruby>降<rt>ふ</rt></ruby>ったら、<ruby>運動会<rt>うんどうかい</rt></ruby>は<ruby>中止<rt>ちゅうし</rt></ruby>になります。",
+          "If it rains, the sports day will be canceled."
+        ],
+        "N3": [
+          "<ruby>台風<rt>たいふう</rt></ruby>のため、コンサートは<ruby>中止<rt>ちゅうし</rt></ruby>されることになりました。",
+          "Due to the typhoon, it was decided that the concert would be canceled."
+        ],
+        "N2": [
+          "<ruby>楽<rt>たの</rt></ruby>しみにしていたのに、イベントが<ruby>中止<rt>ちゅうし</rt></ruby>になってしまった。",
+          "Even though I'd been looking forward to it, the event ended up being canceled."
+        ],
+        "N1": [
+          "<ruby>安全<rt>あんぜん</rt></ruby>が<ruby>確保<rt>かくほ</rt></ruby>できない<ruby>以上<rt>いじょう</rt></ruby>、<ruby>開催<rt>かいさい</rt></ruby>を<ruby>中止<rt>ちゅうし</rt></ruby>せざるを<ruby>得<rt>え</rt></ruby>ない。",
+          "As long as safety cannot be ensured, we have no choice but to cancel the event."
+        ]
+      },
+      "mnem": "中 (middle) + 止 (stop) — to 'stop in the middle' of something planned is 中止, to call it off.",
+      "tip": "中止 = calling off / suspending a planned event (中止する / 中止になる). Contrast 停止 (ていし, halting a machine or service) and キャンセル (canceling a personal reservation).",
+      "accent": 0
+    },
+    {
+      "key": "mnn:45:7",
+      "kana": "てん",
+      "kanji": "点",
+      "context": "",
+      "mean": "point, score, mark",
+      "cat": "noun",
+      "type": "",
+      "trans": "",
+      "dict": "点",
+      "dictRead": "てん",
+      "audio": "/Audio/minnamoi/bai45/00010111011101101.mp3",
+      "levels": {
+        "N5": [
+          "テストで100<ruby>点<rt>てん</rt></ruby>を<ruby>取<rt>と</rt></ruby>りました。",
+          "I got 100 points on the test."
+        ],
+        "N4": [
+          "もっといい<ruby>点<rt>てん</rt></ruby>が<ruby>取<rt>と</rt></ruby>りたかったです。",
+          "I wanted to get a better score."
+        ],
+        "N3": [
+          "いい<ruby>点<rt>てん</rt></ruby>が<ruby>取<rt>と</rt></ruby>れるように、<ruby>毎日<rt>まいにち</rt></ruby><ruby>勉強<rt>べんきょう</rt></ruby>しています。",
+          "I study every day so that I can get good marks."
+        ],
+        "N2": [
+          "テストの<ruby>点<rt>てん</rt></ruby>がよかったからといって、<ruby>実力<rt>じつりょく</rt></ruby>があるとは<ruby>限<rt>かぎ</rt></ruby>らない。",
+          "Just because your test score was good doesn't necessarily mean you have real ability."
+        ],
+        "N1": [
+          "<ruby>審査員<rt>しんさいん</rt></ruby>によって<ruby>採点<rt>さいてん</rt></ruby>の<ruby>基準<rt>きじゅん</rt></ruby>が<ruby>異<rt>こと</rt></ruby>なるため、<ruby>点<rt>てん</rt></ruby>のばらつきは<ruby>避<rt>さ</rt></ruby>けられない。",
+          "Because the grading criteria differ from judge to judge, variation in the scores is unavoidable."
+        ]
+      },
+      "mnem": "点 is a 'dot / point' — a dot on the paper is a mark, and marks add up to your 点, your score.",
+      "tip": "点 = a point / score / mark (テストの点); it also means a 'dot/spot' and works as a counter for items (3点 = three items). 点を取る = to score points.",
+      "accent": 0
+    },
+    {
+      "key": "mnn:45:8",
+      "kana": "うめ",
+      "kanji": "梅",
+      "context": "",
+      "mean": "plum (tree / blossom)",
+      "cat": "noun",
+      "type": "",
+      "trans": "",
+      "dict": "梅",
+      "dictRead": "うめ",
+      "audio": "/Audio/minnamoi/bai45/00010111011101110.mp3",
+      "levels": {
+        "N5": [
+          "<ruby>庭<rt>にわ</rt></ruby>に<ruby>梅<rt>うめ</rt></ruby>の<ruby>木<rt>き</rt></ruby>があります。",
+          "There is a plum tree in the garden."
+        ],
+        "N4": [
+          "<ruby>春<rt>はる</rt></ruby>になったら、<ruby>梅<rt>うめ</rt></ruby>の<ruby>花<rt>はな</rt></ruby>が<ruby>咲<rt>さ</rt></ruby>きます。",
+          "When spring comes, the plum blossoms bloom."
+        ],
+        "N3": [
+          "<ruby>冬<rt>ふゆ</rt></ruby>なのに、もう<ruby>梅<rt>うめ</rt></ruby>が<ruby>咲<rt>さ</rt></ruby>き<ruby>始<rt>はじ</rt></ruby>めています。",
+          "Even though it's winter, the plum blossoms have already started to bloom."
+        ],
+        "N2": [
+          "<ruby>梅<rt>うめ</rt></ruby>は<ruby>桜<rt>さくら</rt></ruby>ほど<ruby>派手<rt>はで</rt></ruby>ではないものの、<ruby>凛<rt>りん</rt></ruby>とした<ruby>美<rt>うつく</rt></ruby>しさがある。",
+          "Plum blossoms aren't as showy as cherry blossoms, but they have a dignified beauty."
+        ],
+        "N1": [
+          "<ruby>寒空<rt>さむぞら</rt></ruby>の<ruby>下<rt>もと</rt></ruby>、いち<ruby>早<rt>はや</rt></ruby>く<ruby>咲<rt>さ</rt></ruby>く<ruby>梅<rt>うめ</rt></ruby>は、<ruby>古<rt>ふる</rt></ruby>くから<ruby>春<rt>はる</rt></ruby>の<ruby>訪<rt>おとず</rt></ruby>れを<ruby>告<rt>つ</rt></ruby>げる<ruby>花<rt>はな</rt></ruby>とされてきた。",
+          "Blooming ahead of the rest under the cold sky, the plum has long been regarded as the flower that heralds the arrival of spring."
+        ]
+      },
+      "mnem": "\"u-me\" — say 'OO-meh'; the 梅 (plum) blooms in late winter, before the 桜 cherry blossom.",
+      "tip": "梅 = the plum tree/blossom (blooms Feb–Mar, ahead of 桜 sakura); see also 梅干し (うめぼし, pickled plum) and 梅雨 (つゆ, the rainy season). At a glance it's easily mistaken for 桜 (cherry blossom).",
+      "accent": 0
+    },
+    {
+      "key": "mnn:45:9",
+      "kana": "ひゃくとおばん",
+      "kanji": "110番",
+      "context": "",
+      "mean": "110 (the emergency police telephone number)",
+      "cat": "noun",
+      "type": "",
+      "trans": "",
+      "dict": "110番",
+      "dictRead": "ひゃくとおばん",
+      "audio": "/Audio/minnamoi/bai45/00010111011101111.mp3",
+      "levels": {
+        "N5": [
+          "<ruby>警察<rt>けいさつ</rt></ruby>は110<ruby>番<rt>ばん</rt></ruby>です。",
+          "The police number is 110."
+        ],
+        "N4": [
+          "<ruby>泥棒<rt>どろぼう</rt></ruby>を<ruby>見<rt>み</rt></ruby>たら、110<ruby>番<rt>ばん</rt></ruby>に<ruby>電話<rt>でんわ</rt></ruby>してください。",
+          "If you see a burglar, call 110."
+        ],
+        "N3": [
+          "<ruby>交通<rt>こうつう</rt></ruby><ruby>事故<rt>じこ</rt></ruby>にあった<ruby>場合<rt>ばあい</rt></ruby>は、すぐ110<ruby>番<rt>ばん</rt></ruby>に<ruby>連絡<rt>れんらく</rt></ruby>してください。",
+          "In case you're in a traffic accident, contact 110 immediately."
+        ],
+        "N2": [
+          "<ruby>緊急<rt>きんきゅう</rt></ruby>でもないのに110<ruby>番<rt>ばん</rt></ruby>に<ruby>電話<rt>でんわ</rt></ruby>するのは、<ruby>控<rt>ひか</rt></ruby>えるべきだ。",
+          "You should refrain from calling 110 when it isn't even an emergency."
+        ],
+        "N1": [
+          "いたずらで110<ruby>番<rt>ばん</rt></ruby>に<ruby>通報<rt>つうほう</rt></ruby>すれば、<ruby>本当<rt>ほんとう</rt></ruby>に<ruby>助<rt>たす</rt></ruby>けを<ruby>必要<rt>ひつよう</rt></ruby>とする<ruby>人<rt>ひと</rt></ruby>の<ruby>妨<rt>さまた</rt></ruby>げになりかねない。",
+          "Making a prank call to 110 could well get in the way of people who genuinely need help."
+        ]
+      },
+      "mnem": "In Japan you dial 1-1-0 for the police — 110番, 'number one-one-zero'.",
+      "tip": "110番 (ひゃくとおばん) = the police emergency line; 119番 (ひゃくじゅうきゅうばん) is fire/ambulance. 〜番 here means 'phone number', and 110番する can even be used as a verb ('to call the police')."
+    },
+    {
+      "key": "mnn:45:10",
+      "kana": "ひゃくじゅうきゅうばん",
+      "kanji": "119番",
+      "context": "",
+      "mean": "119 (the emergency fire/ambulance telephone number)",
+      "cat": "noun",
+      "type": "",
+      "trans": "",
+      "dict": "119番",
+      "dictRead": "ひゃくじゅうきゅうばん",
+      "audio": "/Audio/minnamoi/bai45/00010111011110000.mp3",
+      "levels": {
+        "N5": [
+          "<ruby>火事<rt>かじ</rt></ruby>のときは119<ruby>番<rt>ばん</rt></ruby>です。",
+          "In a fire, it's 119."
+        ],
+        "N4": [
+          "<ruby>火事<rt>かじ</rt></ruby>を<ruby>見<rt>み</rt></ruby>つけたら、119<ruby>番<rt>ばん</rt></ruby>に<ruby>電話<rt>でんわ</rt></ruby>してください。",
+          "If you spot a fire, call 119."
+        ],
+        "N3": [
+          "<ruby>急<rt>きゅう</rt></ruby>に<ruby>気分<rt>きぶん</rt></ruby>が<ruby>悪<rt>わる</rt></ruby>くなった<ruby>場合<rt>ばあい</rt></ruby>は、119<ruby>番<rt>ばん</rt></ruby>で<ruby>救急車<rt>きゅうきゅうしゃ</rt></ruby>を<ruby>呼<rt>よ</rt></ruby>んでください。",
+          "If you suddenly feel ill, call an ambulance at 119."
+        ],
+        "N2": [
+          "<ruby>火<rt>ひ</rt></ruby>が<ruby>小<rt>ちい</rt></ruby>さいうちに119<ruby>番<rt>ばん</rt></ruby>していれば、ここまで<ruby>燃<rt>も</rt></ruby>え<ruby>広<rt>ひろ</rt></ruby>がらずにすんだはずだ。",
+          "If they had called 119 while the fire was still small, it wouldn't have spread this far."
+        ],
+        "N1": [
+          "<ruby>一刻<rt>いっこく</rt></ruby>を<ruby>争<rt>あらそ</rt></ruby>う<ruby>事態<rt>じたい</rt></ruby>だからこそ、ためらわずに119<ruby>番<rt>ばん</rt></ruby>すべきだ。",
+          "It is precisely because it's a situation where every second counts that you should call 119 without hesitation."
+        ]
+      },
+      "mnem": "In Japan you dial 1-1-9 for fire and ambulance — 119番.",
+      "tip": "119番 (ひゃくじゅうきゅうばん) = the fire department + ambulance (救急車); 110番 is the police. Remember the pair: 1-1-0 police, 1-1-9 fire/medical."
+    },
+    {
+      "key": "mnn:45:11",
+      "kana": "きゅうに",
+      "kanji": "急に",
+      "context": "",
+      "mean": "suddenly, abruptly",
+      "cat": "adverb",
+      "type": "",
+      "trans": "",
+      "dict": "急に",
+      "dictRead": "きゅうに",
+      "audio": "/Audio/minnamoi/bai45/00010111011110001.mp3",
+      "levels": {
+        "N5": [
+          "<ruby>急<rt>きゅう</rt></ruby>に<ruby>雨<rt>あめ</rt></ruby>が<ruby>降<rt>ふ</rt></ruby>りました。",
+          "It suddenly started to rain."
+        ],
+        "N4": [
+          "<ruby>急<rt>きゅう</rt></ruby>に<ruby>用事<rt>ようじ</rt></ruby>ができたので、<ruby>帰<rt>かえ</rt></ruby>らなければなりません。",
+          "Something suddenly came up, so I have to go home."
+        ],
+        "N3": [
+          "<ruby>子<rt>こ</rt></ruby>どもが<ruby>急<rt>きゅう</rt></ruby>に<ruby>飛<rt>と</rt></ruby>び<ruby>出<rt>だ</rt></ruby>してきて、<ruby>危<rt>あぶ</rt></ruby>うくぶつかるところでした。",
+          "A child suddenly darted out and I nearly hit them."
+        ],
+        "N2": [
+          "<ruby>彼<rt>かれ</rt></ruby>は<ruby>急<rt>きゅう</rt></ruby>に<ruby>怒<rt>おこ</rt></ruby>りだしたかと<ruby>思<rt>おも</rt></ruby>うと、<ruby>急<rt>きゅう</rt></ruby>に<ruby>笑<rt>わら</rt></ruby>い<ruby>始<rt>はじ</rt></ruby>めた。",
+          "No sooner had he suddenly started getting angry than he suddenly began to laugh."
+        ],
+        "N1": [
+          "<ruby>景気<rt>けいき</rt></ruby>が<ruby>急<rt>きゅう</rt></ruby>に<ruby>冷<rt>ひ</rt></ruby>え<ruby>込<rt>こ</rt></ruby>んだのを<ruby>受<rt>う</rt></ruby>けて、<ruby>各社<rt>かくしゃ</rt></ruby>は<ruby>投資<rt>とうし</rt></ruby>を<ruby>見合<rt>みあ</rt></ruby>わせざるを<ruby>得<rt>え</rt></ruby>なかった。",
+          "In response to the economy cooling abruptly, each company had no choice but to hold off on investing."
+        ]
+      },
+      "mnem": "急 (hurry / sudden) + に (adverb marker) — 急に = 'all at once, in a rush', i.e. suddenly.",
+      "tip": "急に = suddenly / abruptly, the adverb form of the na-adjective 急な. Near-synonym: 突然 (とつぜん). Don't confuse it with the noun 急ぎ (いそぎ, haste) or the verb 急ぐ (いそぐ, to hurry).",
+      "accent": 0
+    },
+    {
+      "key": "mnn:45:12",
+      "kana": "むりに",
+      "kanji": "無理に",
+      "context": "",
+      "mean": "forcibly, unreasonably, against one's will",
+      "cat": "adverb",
+      "type": "",
+      "trans": "",
+      "dict": "無理に",
+      "dictRead": "むりに",
+      "audio": "/Audio/minnamoi/bai45/00010111011110010.mp3",
+      "levels": {
+        "N5": [
+          "<ruby>無理<rt>むり</rt></ruby>に<ruby>食<rt>た</rt></ruby>べないでください。",
+          "Please don't force yourself to eat."
+        ],
+        "N4": [
+          "<ruby>体<rt>からだ</rt></ruby>に<ruby>悪<rt>わる</rt></ruby>いので、<ruby>無理<rt>むり</rt></ruby>に<ruby>飲<rt>の</rt></ruby>まないほうがいいです。",
+          "It's bad for you, so you'd better not force yourself to drink."
+        ],
+        "N3": [
+          "<ruby>電車<rt>でんしゃ</rt></ruby>が<ruby>止<rt>と</rt></ruby>まった<ruby>場合<rt>ばあい</rt></ruby>は、<ruby>無理<rt>むり</rt></ruby>に<ruby>帰<rt>かえ</rt></ruby>らないで、<ruby>会社<rt>かいしゃ</rt></ruby>に<ruby>泊<rt>と</rt></ruby>まってください。",
+          "If the trains stop, don't force your way home—stay at the office."
+        ],
+        "N2": [
+          "いやがる<ruby>子<rt>こ</rt></ruby>どもに<ruby>無理<rt>むり</rt></ruby>に<ruby>習<rt>なら</rt></ruby>い<ruby>事<rt>ごと</rt></ruby>をさせたところで、<ruby>身<rt>み</rt></ruby>につくものではない。",
+          "Even if you force a reluctant child to take lessons, it won't really stick."
+        ],
+        "N1": [
+          "<ruby>本人<rt>ほんにん</rt></ruby>の<ruby>意思<rt>いし</rt></ruby>を<ruby>無視<rt>むし</rt></ruby>して<ruby>無理<rt>むり</rt></ruby>に<ruby>事<rt>こと</rt></ruby>を<ruby>進<rt>すす</rt></ruby>めれば、のちのち<ruby>禍根<rt>かこん</rt></ruby>を<ruby>残<rt>のこ</rt></ruby>しかねない。",
+          "If you ignore the person's wishes and force matters ahead, it could well sow the seeds of trouble later on."
+        ]
+      },
+      "mnem": "無 (without) + 理 (reason) + に — to do something 'without reason / against the grain' is 無理に, forcibly.",
+      "tip": "無理に = forcibly / against resistance, the adverb form of 無理な. Note 無理をする = to overexert oneself, and 無理 as a na-adj/noun = 'impossible, unreasonable'.",
+      "accent": 1
+    },
+    {
+      "key": "mnn:45:13",
+      "kana": "たのしみにしています",
+      "kanji": "楽しみにしています",
+      "context": "",
+      "mean": "to be looking forward to, be expecting (eagerly)",
+      "cat": "expression",
+      "type": "",
+      "trans": "",
+      "dict": "楽しみにする",
+      "dictRead": "たのしみにする",
+      "audio": "/Audio/minnamoi/bai45/00010111011110011.mp3",
+      "levels": {
+        "N5": [
+          "<ruby>旅行<rt>りょこう</rt></ruby>を<ruby>楽<rt>たの</rt></ruby>しみにしています。",
+          "I'm looking forward to the trip."
+        ],
+        "N4": [
+          "<ruby>夏休<rt>なつやす</rt></ruby>みにみんなと<ruby>会<rt>あ</rt></ruby>えるのを<ruby>楽<rt>たの</rt></ruby>しみにしています。",
+          "I'm looking forward to being able to see everyone during summer vacation."
+        ],
+        "N3": [
+          "<ruby>子<rt>こ</rt></ruby>どもたちは<ruby>遠足<rt>えんそく</rt></ruby>を<ruby>楽<rt>たの</rt></ruby>しみにしていたのに、<ruby>雨<rt>あめ</rt></ruby>で<ruby>中止<rt>ちゅうし</rt></ruby>になってしまった。",
+          "The children had been looking forward to the excursion, but it was canceled because of rain."
+        ],
+        "N2": [
+          "お<ruby>目<rt>め</rt></ruby>にかかれるのを、<ruby>心<rt>こころ</rt></ruby>より<ruby>楽<rt>たの</rt></ruby>しみにしております。",
+          "I sincerely look forward to the pleasure of meeting you."
+        ],
+        "N1": [
+          "<ruby>再会<rt>さいかい</rt></ruby>の<ruby>日<rt>ひ</rt></ruby>を<ruby>指折<rt>ゆびお</rt></ruby>り<ruby>数<rt>かぞ</rt></ruby>えるようにして<ruby>楽<rt>たの</rt></ruby>しみにしていた。",
+          "I had been looking forward to the day of our reunion, all but counting down the days on my fingers."
+        ]
+      },
+      "mnem": "楽しみ (たのしみ, 'a pleasure / fun') + に + する → 楽しみにする: to hold something as a pleasure = to look forward to it.",
+      "tip": "〜を楽しみにしています = to be looking forward to a set future event; the thing awaited takes を. The humble 楽しみにしております is standard in letters/email. Don't confuse the adjective 楽しい (fun) with the noun 楽しみ."
+    },
+    {
+      "key": "mnn:45:14",
+      "kana": "いじょうです",
+      "kanji": "以上です",
+      "context": "",
+      "mean": "That's all; that concludes it",
+      "cat": "expression",
+      "type": "",
+      "trans": "",
+      "dict": "以上です",
+      "dictRead": "いじょうです",
+      "audio": "/Audio/minnamoi/bai45/00010111011110100.mp3",
+      "levels": {
+        "N5": [
+          "<ruby>説明<rt>せつめい</rt></ruby>は<ruby>以上<rt>いじょう</rt></ruby>です。",
+          "That's all for the explanation."
+        ],
+        "N4": [
+          "<ruby>質問<rt>しつもん</rt></ruby>がなければ、<ruby>以上<rt>いじょう</rt></ruby>で<ruby>終<rt>お</rt></ruby>わりです。",
+          "If there are no questions, that's the end."
+        ],
+        "N3": [
+          "<ruby>連絡<rt>れんらく</rt></ruby><ruby>事項<rt>じこう</rt></ruby>は<ruby>以上<rt>いじょう</rt></ruby>ですが、<ruby>質問<rt>しつもん</rt></ruby>がある<ruby>場合<rt>ばあい</rt></ruby>は<ruby>係<rt>かかり</rt></ruby>まで<ruby>聞<rt>き</rt></ruby>いてください。",
+          "That's all for the announcements, but if you have any questions, please ask the person in charge."
+        ],
+        "N2": [
+          "<ruby>報告<rt>ほうこく</rt></ruby>は<ruby>以上<rt>いじょう</rt></ruby>ですが、<ruby>詳細<rt>しょうさい</rt></ruby>については<ruby>後<rt>のち</rt></ruby>ほど<ruby>資料<rt>しりょう</rt></ruby>をお<ruby>配<rt>くば</rt></ruby>りします。",
+          "That concludes my report, but I'll hand out materials with the details later."
+        ],
+        "N1": [
+          "プレゼンテーションは<ruby>以上<rt>いじょう</rt></ruby>をもちまして、<ruby>締<rt>し</rt></ruby>めくくりとさせていただきます。",
+          "With that, I would like to bring my presentation to a close."
+        ]
+      },
+      "mnem": "以上 (いじょう) literally 'that and above' — spoken to close a report, it means 'that's everything above', i.e. 'that's all'.",
+      "tip": "以上です = a set phrase to close a speech, report, or order ('that is all'). 以上 also means 'or more / above' (18歳以上 = 18 and older) and 'now that / since' (〜以上は).",
+      "accent": 1
+    }
+  ],
+  "grammar": [
+    {
+      "pattern": "〜場合は (in the case that / in the event of ~)",
+      "structure": "V(plain: 辞書形／た形／ない形)・いA(〜い)・なA(〜な)・N(〜の) ＋ 場合は、…",
+      "explain": "場合 literally means 'case / occasion'. Attach the plain form of a predicate to 場合は to say 'in the case/event that ~; if ~ (should happen)'. It presents a possible or hypothetical situation and then states what to do about it, so it is the standard pattern of notices, rules, and instructions. Verbs and い-adjectives connect directly (来る場合, 忘れた場合, 高い場合); な-adjectives take な and nouns take の (必要な場合, 火事の場合). It is more formal than 〜たら/〜と and attaches freely to negative and past forms.",
+      "examples": [
+        {
+          "jp": "<ruby>火事<rt>かじ</rt></ruby>の<ruby>場合<rt>ばあい</rt></ruby>は、エレベーターを<ruby>使<rt>つか</rt></ruby>わないでください。",
+          "en": "In the event of a fire, do not use the elevator."
+        },
+        {
+          "jp": "<ruby>時間<rt>じかん</rt></ruby>に<ruby>間<rt>ま</rt></ruby>に<ruby>合<rt>あ</rt></ruby>わない<ruby>場合<rt>ばあい</rt></ruby>は、どうしたらいいですか。",
+          "en": "What should I do if I can't make it in time?"
+        },
+        {
+          "jp": "<ruby>領収書<rt>りょうしゅうしょ</rt></ruby>が<ruby>必要<rt>ひつよう</rt></ruby>な<ruby>場合<rt>ばあい</rt></ruby>は、<ruby>店<rt>みせ</rt></ruby>の<ruby>人<rt>ひと</rt></ruby>に<ruby>言<rt>い</rt></ruby>ってください。",
+          "en": "If you need a receipt, please tell a store clerk."
+        },
+        {
+          "jp": "<ruby>友<rt>とも</rt></ruby>だちを<ruby>連<rt>つ</rt></ruby>れて<ruby>来<rt>く</rt></ruby>る<ruby>場合<rt>ばあい</rt></ruby>は、<ruby>知<rt>し</rt></ruby>らせてください。",
+          "en": "If you're going to bring a friend, please let us know."
+        }
+      ]
+    },
+    {
+      "pattern": "〜のに (even though / and yet — contrary to expectation)",
+      "structure": "V(plain)・いA(〜い)・なA(〜な)・N(〜な) ＋ のに、…",
+      "explain": "Attach のに to the plain form to link two clauses that clash: 'even though A, B', where B is the opposite of what A would lead you to expect. な-adjectives and nouns take な before のに (元気なのに, 日曜日なのに). Unlike the neutral 〜が/〜けど, のに carries the speaker's surprise, dissatisfaction, or reproach (薬を飲んだのに、熱が下がらない — 'I took medicine, and yet the fever won't go down'). It can also trail off at the end of a sentence (…のに。) to leave that feeling of regret or complaint hanging.",
+      "examples": [
+        {
+          "jp": "<ruby>薬<rt>くすり</rt></ruby>を<ruby>飲<rt>の</rt></ruby>んだのに、<ruby>熱<rt>ねつ</rt></ruby>が<ruby>下<rt>さ</rt></ruby>がりません。",
+          "en": "Even though I took medicine, my fever won't go down."
+        },
+        {
+          "jp": "この<ruby>店<rt>みせ</rt></ruby>は<ruby>有名<rt>ゆうめい</rt></ruby>なのに、あまりおいしくありません。",
+          "en": "Even though this restaurant is famous, it isn't very good."
+        },
+        {
+          "jp": "<ruby>約束<rt>やくそく</rt></ruby>をしたのに、<ruby>彼女<rt>かのじょ</rt></ruby>は<ruby>来<rt>き</rt></ruby>ませんでした。",
+          "en": "Even though we'd made a promise, she didn't come."
+        },
+        {
+          "jp": "もう４<ruby>月<rt>がつ</rt></ruby>なのに、まだ<ruby>寒<rt>さむ</rt></ruby>いです。",
+          "en": "Even though it's already April, it's still cold."
+        }
+      ]
+    }
+  ],
+  "examples": [
+    {
+      "jp": "<ruby>交通<rt>こうつう</rt></ruby><ruby>事故<rt>じこ</rt></ruby>にあった<ruby>場合<rt>ばあい</rt></ruby>は、すぐ110<ruby>番<rt>ばん</rt></ruby>に<ruby>連絡<rt>れんらく</rt></ruby>してください。",
+      "en": "In case you're in a traffic accident, contact 110 immediately."
+    },
+    {
+      "jp": "<ruby>火事<rt>かじ</rt></ruby>が<ruby>起<rt>お</rt></ruby>きた<ruby>場合<rt>ばあい</rt></ruby>は、すぐ119<ruby>番<rt>ばん</rt></ruby>に<ruby>電話<rt>でんわ</rt></ruby>してください。",
+      "en": "In case a fire breaks out, call 119 immediately."
+    },
+    {
+      "jp": "<ruby>受付<rt>うけつけ</rt></ruby>に<ruby>誰<rt>だれ</rt></ruby>もいない<ruby>場合<rt>ばあい</rt></ruby>は、このボタンを<ruby>押<rt>お</rt></ruby>してください。",
+      "en": "If there is no one at the reception desk, please press this button."
+    },
+    {
+      "jp": "スイッチを<ruby>入<rt>い</rt></ruby>れたのに、パソコンが<ruby>動<rt>うご</rt></ruby>かないんです。",
+      "en": "Even though I turned on the switch, the computer won't start."
+    },
+    {
+      "jp": "<ruby>一生懸命<rt>いっしょうけんめい</rt></ruby><ruby>練習<rt>れんしゅう</rt></ruby>して<ruby>覚<rt>おぼ</rt></ruby>えたのに、<ruby>途中<rt>とちゅう</rt></ruby>で<ruby>忘<rt>わす</rt></ruby>れてしまいました。",
+      "en": "Even though I practiced hard and memorized it, I forgot halfway through."
+    },
+    {
+      "jp": "<ruby>冬<rt>ふゆ</rt></ruby>なのに<ruby>桜<rt>さくら</rt></ruby>が<ruby>咲<rt>さ</rt></ruby>いていますね。…いえ、あれは<ruby>桜<rt>さくら</rt></ruby>じゃありません。<ruby>梅<rt>うめ</rt></ruby>ですよ。",
+      "en": "Even though it's winter, the cherry blossoms are blooming, aren't they? …No, those aren't cherry — they're plum blossoms."
+    },
+    {
+      "jp": "カードをなくした<ruby>場合<rt>ばあい</rt></ruby>は、すぐカード<ruby>会社<rt>がいしゃ</rt></ruby>に<ruby>連絡<rt>れんらく</rt></ruby>してください。",
+      "en": "If you lose your card, contact the card company immediately."
+    },
+    {
+      "jp": "２<ruby>時間<rt>じかん</rt></ruby><ruby>並<rt>なら</rt></ruby>んだのに、チケットが<ruby>買<rt>か</rt></ruby>えませんでした。",
+      "en": "Even though I lined up for two hours, I couldn't buy a ticket."
+    }
+  ],
+  "conversation": {
+    "title": "コースを<ruby>間違<rt>まちが</rt></ruby>えた<ruby>場合<rt>ばあい</rt></ruby>は、どうしたらいいですか (What should I do if I take the wrong route?)",
+    "audio": "/Audio/minnahonsatsu2/58.mp3",
+    "lines": [
+      {
+        "role": "係員",
+        "jp": "<ruby>皆<rt>みな</rt></ruby>さん、このマラソンは<ruby>健康<rt>けんこう</rt></ruby>マラソンですから、<ruby>無理<rt>むり</rt></ruby>をしないでください。もし<ruby>気分<rt>きぶん</rt></ruby>が<ruby>悪<rt>わる</rt></ruby>くなったら、<ruby>係員<rt>かかりいん</rt></ruby>に<ruby>言<rt>い</rt></ruby>ってください。",
+        "en": "Everyone, since this is a health marathon, please don't overdo it. If you feel unwell, tell a staff member."
+      },
+      {
+        "role": "参加者",
+        "jp": "はい。",
+        "en": "Okay."
+      },
+      {
+        "role": "ミラー",
+        "jp": "すみません。コースを<ruby>間違<rt>まちが</rt></ruby>えた<ruby>場合<rt>ばあい</rt></ruby>は、どうしたらいいですか。",
+        "en": "Excuse me. What should I do if I take the wrong route?"
+      },
+      {
+        "role": "係員",
+        "jp": "<ruby>元<rt>もと</rt></ruby>の<ruby>所<rt>ところ</rt></ruby>に<ruby>戻<rt>もど</rt></ruby>って、<ruby>続<rt>つづ</rt></ruby>けてください。",
+        "en": "Go back to where you were and keep going."
+      },
+      {
+        "role": "参加者",
+        "jp": "あのう、<ruby>途中<rt>とちゅう</rt></ruby>でやめたい<ruby>場合<rt>ばあい</rt></ruby>は。",
+        "en": "Um, what if I want to quit partway through?"
+      },
+      {
+        "role": "係員",
+        "jp": "その<ruby>場合<rt>ばあい</rt></ruby>は、<ruby>近<rt>ちか</rt></ruby>くの<ruby>係員<rt>かかりいん</rt></ruby>に<ruby>名前<rt>なまえ</rt></ruby>を<ruby>言<rt>い</rt></ruby>って、<ruby>帰<rt>かえ</rt></ruby>ってください。では、スタートの<ruby>時間<rt>じかん</rt></ruby>です。",
+        "en": "In that case, give your name to a nearby staff member and head home. Now, it's time to start."
+      },
+      {
+        "role": "友だち",
+        "jp": "ミラーさん、マラソンはどうでしたか。",
+        "en": "Miller, how was the marathon?"
+      },
+      {
+        "role": "ミラー",
+        "jp": "２<ruby>位<rt>い</rt></ruby>でした。",
+        "en": "I came in second."
+      },
+      {
+        "role": "友だち",
+        "jp": "２<ruby>位<rt>い</rt></ruby>だったんですか。すごいですね。",
+        "en": "Second place? That's amazing."
+      },
+      {
+        "role": "ミラー",
+        "jp": "いいえ、<ruby>一生懸命<rt>いっしょうけんめい</rt></ruby><ruby>練習<rt>れんしゅう</rt></ruby>したのに、<ruby>優勝<rt>ゆうしょう</rt></ruby>できなくて、<ruby>残念<rt>ざんねん</rt></ruby>です。",
+        "en": "No — even though I trained as hard as I could, I couldn't win, so it's a shame."
+      },
+      {
+        "role": "友だち",
+        "jp": "また<ruby>来年<rt>らいねん</rt></ruby>がありますよ。",
+        "en": "There's always next year."
+      }
+    ]
+  }
+}

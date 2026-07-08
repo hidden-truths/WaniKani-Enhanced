@@ -1,0 +1,1180 @@
+{
+  "lesson": 26,
+  "title": "Lesson 26",
+  "theme": "Explanatory 〜んです — giving and asking for reasons/explanations; softened requests (〜んですが、〜ていただけませんか) and asking for instructions (疑問詞＋たらいいですか)",
+  "source": {
+    "name": "vnjpclub.com",
+    "vocabUrl": "https://www.vnjpclub.com/en/minna-no-nihongo/lesson-26-vocabulary.html",
+    "grammarUrl": "https://www.vnjpclub.com/en/minna-no-nihongo/lesson-26-grammar.html",
+    "note": "Vocabulary, native-speaker audio, and example sentences aggregated from vnjpclub.com (Minna no Nihongo 第2版). For personal study."
+  },
+  "vocab": [
+    {
+      "key": "mnn:26:0",
+      "kana": "みます",
+      "kanji": "見ます",
+      "context": "",
+      "mean": "to see, look at; to examine (診ます)",
+      "cat": "verb",
+      "type": "ichidan",
+      "trans": "t",
+      "dict": "見る",
+      "dictRead": "みる",
+      "audio": "/Audio/minnamoi/bai26/00010101100101101.mp3",
+      "accent": 1
+    },
+    {
+      "key": "mnn:26:1",
+      "kana": "さがします",
+      "kanji": "探します",
+      "context": "",
+      "mean": "to look for, search for",
+      "cat": "verb",
+      "type": "godan",
+      "trans": "t",
+      "dict": "探す",
+      "dictRead": "さがす",
+      "audio": "/Audio/minnamoi/bai26/00010101100101110.mp3",
+      "accent": 0
+    },
+    {
+      "key": "mnn:26:2",
+      "kana": "おくれます",
+      "kanji": "遅れます",
+      "context": "時間に〜",
+      "mean": "to be late (for an appointment, etc.)",
+      "cat": "verb",
+      "type": "ichidan",
+      "trans": "i",
+      "dict": "遅れる",
+      "dictRead": "おくれる",
+      "audio": "/Audio/minnamoi/bai26/00010101100101111.mp3",
+      "levels": {
+        "N5": [
+          "<ruby>学校<rt>がっこう</rt></ruby>に<ruby>遅<rt>おく</rt></ruby>れました。",
+          "I was late for school."
+        ],
+        "N4": [
+          "バスが<ruby>来<rt>こ</rt></ruby>なかったから、<ruby>会議<rt>かいぎ</rt></ruby>に<ruby>遅<rt>おく</rt></ruby>れました。",
+          "The bus didn't come, so I was late for the meeting."
+        ],
+        "N3": [
+          "<ruby>電車<rt>でんしゃ</rt></ruby>が<ruby>遅<rt>おく</rt></ruby>れたら、すぐ<ruby>会社<rt>かいしゃ</rt></ruby>に<ruby>連絡<rt>れんらく</rt></ruby>するようにしています。",
+          "If the train is delayed, I make a point of contacting the office right away."
+        ],
+        "N2": [
+          "<ruby>約束<rt>やくそく</rt></ruby>の<ruby>時間<rt>じかん</rt></ruby>に<ruby>遅<rt>おく</rt></ruby>れたものの、<ruby>相手<rt>あいて</rt></ruby>は<ruby>怒<rt>おこ</rt></ruby>らずに<ruby>待<rt>ま</rt></ruby>っていてくれた。",
+          "Although I was late for the appointed time, the other person waited for me without getting angry."
+        ],
+        "N1": [
+          "わずか<ruby>数分<rt>すうふん</rt></ruby><ruby>遅<rt>おく</rt></ruby>れただけで<ruby>信用<rt>しんよう</rt></ruby>を<ruby>失<rt>うしな</rt></ruby>いかねないのが、この<ruby>業界<rt>ぎょうかい</rt></ruby>の<ruby>厳<rt>きび</rt></ruby>しさだ。",
+          "The fact that being just a few minutes late can cost you your credibility is the harshness of this industry."
+        ]
+      },
+      "mnem": "\"o-ku-re-ru\" — you're OK, you're LATE, so you owe an apology: 遅れる = to fall behind time.",
+      "tip": "遅れる (ichidan, intransitive) is \"be/run late\"; the time or event you're late for takes に (時間に遅れる). Don't confuse it with 遅い (おそい, the adjective \"slow/late\") or the transitive 遅らせる (\"to delay something\").",
+      "accent": 0
+    },
+    {
+      "key": "mnn:26:3",
+      "kana": "まにあいます",
+      "kanji": "間に合います",
+      "context": "時間に〜",
+      "mean": "to be in time (for an appointment, etc.)",
+      "cat": "verb",
+      "type": "godan",
+      "trans": "i",
+      "dict": "間に合う",
+      "dictRead": "まにあう",
+      "audio": "/Audio/minnamoi/bai26/00010101100110000.mp3",
+      "levels": {
+        "N5": [
+          "<ruby>電車<rt>でんしゃ</rt></ruby>に<ruby>間<rt>ま</rt></ruby>に<ruby>合<rt>あ</rt></ruby>いました。",
+          "I made it in time for the train."
+        ],
+        "N4": [
+          "<ruby>急<rt>いそ</rt></ruby>いだら、<ruby>会議<rt>かいぎ</rt></ruby>に<ruby>間<rt>ま</rt></ruby>に<ruby>合<rt>あ</rt></ruby>いますよ。",
+          "If you hurry, you'll be in time for the meeting."
+        ],
+        "N3": [
+          "<ruby>今<rt>いま</rt></ruby><ruby>出<rt>で</rt></ruby>れば、<ruby>始発<rt>しはつ</rt></ruby>の<ruby>電車<rt>でんしゃ</rt></ruby>に<ruby>間<rt>ま</rt></ruby>に<ruby>合<rt>あ</rt></ruby>うはずです。",
+          "If you leave now, you should make it in time for the first train."
+        ],
+        "N2": [
+          "どんなに<ruby>急<rt>いそ</rt></ruby>いでも、<ruby>締<rt>し</rt></ruby>め<ruby>切<rt>き</rt></ruby>りに<ruby>間<rt>ま</rt></ruby>に<ruby>合<rt>あ</rt></ruby>いそうにない。",
+          "No matter how much I hurry, it doesn't look like I'll make the deadline."
+        ],
+        "N1": [
+          "<ruby>徹夜<rt>てつや</rt></ruby>してでも<ruby>納期<rt>のうき</rt></ruby>に<ruby>間<rt>ま</rt></ruby>に<ruby>合<rt>あ</rt></ruby>わせざるを<ruby>得<rt>え</rt></ruby>ない<ruby>状況<rt>じょうきょう</rt></ruby>に<ruby>追<rt>お</rt></ruby>い<ruby>込<rt>こ</rt></ruby>まれた。",
+          "We were driven into a situation where we had no choice but to meet the delivery deadline even if it meant pulling an all-nighter."
+        ]
+      },
+      "mnem": "\"ma ni au\" — the gap (間, ma) still fits (合う, au): you slip in before the door closes. 間に合う = to be in time.",
+      "tip": "間に合う (godan, intransitive) has two senses: \"be in time\" (時間に間に合う) and \"be enough / make do\" (これで間に合います = this will do). The thing you're in time for takes に. It's a fixed compound — don't split 間 and 合う.",
+      "accent": 3
+    },
+    {
+      "key": "mnn:26:4",
+      "kana": "やります",
+      "kanji": "",
+      "context": "",
+      "mean": "to do (casual equivalent of します)",
+      "cat": "verb",
+      "type": "godan",
+      "trans": "t",
+      "dict": "やる",
+      "dictRead": "やる",
+      "audio": "/Audio/minnamoi/bai26/00010101100110001.mp3",
+      "accent": 0
+    },
+    {
+      "key": "mnn:26:5",
+      "kana": "ひろいます",
+      "kanji": "拾います",
+      "context": "",
+      "mean": "to pick up (something dropped)",
+      "cat": "verb",
+      "type": "godan",
+      "trans": "t",
+      "dict": "拾う",
+      "dictRead": "ひろう",
+      "audio": "/Audio/minnamoi/bai26/00010101100110010.mp3",
+      "levels": {
+        "N5": [
+          "<ruby>道<rt>みち</rt></ruby>で<ruby>財布<rt>さいふ</rt></ruby>を<ruby>拾<rt>ひろ</rt></ruby>いました。",
+          "I picked up a wallet on the street."
+        ],
+        "N4": [
+          "<ruby>猫<rt>ねこ</rt></ruby>を<ruby>拾<rt>ひろ</rt></ruby>って、<ruby>家<rt>いえ</rt></ruby>で<ruby>飼<rt>か</rt></ruby>っています。",
+          "I picked up a cat and I'm keeping it at home."
+        ],
+        "N3": [
+          "<ruby>週末<rt>しゅうまつ</rt></ruby>は<ruby>公園<rt>こうえん</rt></ruby>のごみを<ruby>拾<rt>ひろ</rt></ruby>うボランティアに<ruby>参加<rt>さんか</rt></ruby>することにしました。",
+          "I decided to join a volunteer activity to pick up trash in the park on weekends."
+        ],
+        "N2": [
+          "<ruby>道端<rt>みちばた</rt></ruby>で<ruby>拾<rt>ひろ</rt></ruby>った<ruby>財布<rt>さいふ</rt></ruby>を、<ruby>交番<rt>こうばん</rt></ruby>に<ruby>届<rt>とど</rt></ruby>けないわけにはいかない。",
+          "I can hardly fail to hand in a wallet I picked up on the roadside to the police box."
+        ],
+        "N1": [
+          "<ruby>命<rt>いのち</rt></ruby>を<ruby>拾<rt>ひろ</rt></ruby>ったとしか<ruby>言<rt>い</rt></ruby>いようのない、<ruby>奇跡<rt>きせき</rt></ruby>のような<ruby>生還<rt>せいかん</rt></ruby>であった。",
+          "It was a miraculous survival that could only be described as having had my life spared."
+        ]
+      },
+      "mnem": "\"hi-ro-u\" — you bend to the FLOOR and scoop it up: 拾う = to pick up off the ground.",
+      "tip": "拾う (godan, transitive) is picking up something that's fallen/dropped; its antonym is 捨てる (すてる, \"throw away\"). Note タクシーを拾う = \"to catch/hail a taxi.\" Don't confuse the kanji 拾 with 捨 — they look alike.",
+      "accent": 0
+    },
+    {
+      "key": "mnn:26:6",
+      "kana": "れんらくします",
+      "kanji": "連絡します",
+      "context": "",
+      "mean": "to contact, get in touch with",
+      "cat": "verb",
+      "type": "irregular",
+      "trans": "i",
+      "dict": "連絡する",
+      "dictRead": "れんらくする",
+      "audio": "/Audio/minnamoi/bai26/00010101100110011.mp3",
+      "levels": {
+        "N5": [
+          "<ruby>友<rt>とも</rt></ruby>だちに<ruby>連絡<rt>れんらく</rt></ruby>します。",
+          "I'll contact my friend."
+        ],
+        "N4": [
+          "<ruby>駅<rt>えき</rt></ruby>に<ruby>着<rt>つ</rt></ruby>いたら、すぐ<ruby>連絡<rt>れんらく</rt></ruby>してください。",
+          "When you arrive at the station, please contact me right away."
+        ],
+        "N3": [
+          "お<ruby>湯<rt>ゆ</rt></ruby>が<ruby>出<rt>で</rt></ruby>ないんですが、ガス<ruby>会社<rt>がいしゃ</rt></ruby>に<ruby>連絡<rt>れんらく</rt></ruby>したらいいですか。",
+          "The hot water isn't coming out; should I contact the gas company?"
+        ],
+        "N2": [
+          "<ruby>担当<rt>たんとう</rt></ruby><ruby>者<rt>しゃ</rt></ruby>に<ruby>連絡<rt>れんらく</rt></ruby>を<ruby>取<rt>と</rt></ruby>ろうとしたものの、<ruby>誰<rt>だれ</rt></ruby>も<ruby>電話<rt>でんわ</rt></ruby>に<ruby>出<rt>で</rt></ruby>なかった。",
+          "Although I tried to get in touch with the person in charge, no one answered the phone."
+        ],
+        "N1": [
+          "<ruby>緊急<rt>きんきゅう</rt></ruby>の<ruby>際<rt>さい</rt></ruby>は、<ruby>速<rt>すみ</rt></ruby>やかに<ruby>関係<rt>かんけい</rt></ruby><ruby>各所<rt>かくしょ</rt></ruby>に<ruby>連絡<rt>れんらく</rt></ruby>を<ruby>入<rt>い</rt></ruby>れねばならない。",
+          "In an emergency, one must promptly notify all the relevant parties."
+        ]
+      },
+      "mnem": "連 (link) + 絡 (entwine) — you LINK up and stay entangled: 連絡する = to get in touch.",
+      "tip": "連絡する — the person/place you contact takes に (会社に連絡する). 連絡 is also a noun: 連絡がある (\"there's word/contact\"), 連絡先 (\"contact details\"). Suru-verb; conjugate the する part.",
+      "accent": 0
+    },
+    {
+      "key": "mnn:26:7",
+      "kana": "きぶんがいい",
+      "kanji": "気分がいい",
+      "context": "",
+      "mean": "to feel good, be in a good mood",
+      "cat": "phrase",
+      "type": "",
+      "trans": "",
+      "dict": "気分がいい",
+      "dictRead": "きぶんがいい",
+      "audio": "/Audio/minnamoi/bai26/00010101100110100.mp3",
+      "levels": {
+        "N5": [
+          "<ruby>今日<rt>きょう</rt></ruby>は<ruby>気分<rt>きぶん</rt></ruby>がいいです。",
+          "I feel good today."
+        ],
+        "N4": [
+          "<ruby>天気<rt>てんき</rt></ruby>がいいと、<ruby>気分<rt>きぶん</rt></ruby>がいいです。",
+          "When the weather is nice, I feel good."
+        ],
+        "N3": [
+          "<ruby>朝<rt>あさ</rt></ruby><ruby>早<rt>はや</rt></ruby>く<ruby>起<rt>お</rt></ruby>きて<ruby>運動<rt>うんどう</rt></ruby>すると、<ruby>一日<rt>いちにち</rt></ruby><ruby>気分<rt>きぶん</rt></ruby>がいいものだ。",
+          "When you get up early and exercise, you feel good all day."
+        ],
+        "N2": [
+          "<ruby>温泉<rt>おんせん</rt></ruby>に<ruby>入<rt>はい</rt></ruby>った<ruby>後<rt>あと</rt></ruby>の<ruby>気分<rt>きぶん</rt></ruby>のよさといったら、<ruby>言葉<rt>ことば</rt></ruby>にできないほどだ。",
+          "The good feeling after getting into a hot spring is almost beyond words."
+        ],
+        "N1": [
+          "<ruby>汗<rt>あせ</rt></ruby>を<ruby>流<rt>なが</rt></ruby>した<ruby>後<rt>あと</rt></ruby>の<ruby>爽快<rt>そうかい</rt></ruby>な<ruby>気分<rt>きぶん</rt></ruby>のよさは、<ruby>何物<rt>なにもの</rt></ruby>にも<ruby>代<rt>か</rt></ruby>えがたい。",
+          "The refreshing good feeling after breaking a sweat is irreplaceable."
+        ]
+      },
+      "mnem": "気分 (きぶん, mood) + がいい (is good) — your inner weather is fine: 気分がいい = feeling good.",
+      "tip": "気分 is your passing mood/how you feel; conjugate the いい part (気分がよくない, 気分がよかった). Contrast 気分がいい (feel well) with the physical 元気 (げんき, energetic/healthy) — 気分 is more moment-to-moment. Antonym: 気分が悪い.",
+      "accent": 1
+    },
+    {
+      "key": "mnn:26:8",
+      "kana": "きぶんがわるい",
+      "kanji": "気分が悪い",
+      "context": "",
+      "mean": "to feel ill, feel sick",
+      "cat": "phrase",
+      "type": "",
+      "trans": "",
+      "dict": "気分が悪い",
+      "dictRead": "きぶんがわるい",
+      "audio": "/Audio/minnamoi/bai26/00010101100110101.mp3",
+      "levels": {
+        "N5": [
+          "<ruby>頭<rt>あたま</rt></ruby>が<ruby>痛<rt>いた</rt></ruby>くて、<ruby>気分<rt>きぶん</rt></ruby>が<ruby>悪<rt>わる</rt></ruby>いです。",
+          "My head hurts and I feel ill."
+        ],
+        "N4": [
+          "<ruby>電車<rt>でんしゃ</rt></ruby>の<ruby>中<rt>なか</rt></ruby>で<ruby>気分<rt>きぶん</rt></ruby>が<ruby>悪<rt>わる</rt></ruby>くなりました。",
+          "I started to feel sick on the train."
+        ],
+        "N3": [
+          "<ruby>気分<rt>きぶん</rt></ruby>が<ruby>悪<rt>わる</rt></ruby>かったら、<ruby>無理<rt>むり</rt></ruby>をしないで<ruby>休<rt>やす</rt></ruby>んでください。",
+          "If you feel unwell, please don't push yourself and rest."
+        ],
+        "N2": [
+          "<ruby>気分<rt>きぶん</rt></ruby>が<ruby>悪<rt>わる</rt></ruby>いと<ruby>言<rt>い</rt></ruby>いながらも、<ruby>彼<rt>かれ</rt></ruby>は<ruby>最後<rt>さいご</rt></ruby>まで<ruby>仕事<rt>しごと</rt></ruby>を<ruby>続<rt>つづ</rt></ruby>けた。",
+          "Even while saying he felt ill, he kept working until the very end."
+        ],
+        "N1": [
+          "<ruby>満員<rt>まんいん</rt></ruby><ruby>電車<rt>でんしゃ</rt></ruby>で<ruby>気分<rt>きぶん</rt></ruby>が<ruby>悪<rt>わる</rt></ruby>くなり、<ruby>途中<rt>とちゅう</rt></ruby>の<ruby>駅<rt>えき</rt></ruby>で<ruby>降<rt>お</rt></ruby>りざるを<ruby>得<rt>え</rt></ruby>なかった。",
+          "I felt sick on the packed train and had no choice but to get off at a station along the way."
+        ]
+      },
+      "mnem": "気分 (mood) + が悪い (is bad) — the opposite of 気分がいい: 気分が悪い = feeling unwell or offended.",
+      "tip": "気分が悪い has two senses: physically \"feel sick/queasy\" AND emotionally \"feel offended / in a bad mood.\" Context decides. For a genuine illness you can also say 具合が悪い (ぐあいがわるい). Conjugate the 悪い part.",
+      "accent": 1
+    },
+    {
+      "key": "mnn:26:9",
+      "kana": "うんどうかい",
+      "kanji": "運動会",
+      "context": "",
+      "mean": "athletic meet, sports day",
+      "cat": "noun",
+      "type": "",
+      "trans": "",
+      "dict": "運動会",
+      "dictRead": "うんどうかい",
+      "audio": "/Audio/minnamoi/bai26/00010101100110110.mp3",
+      "levels": {
+        "N5": [
+          "<ruby>明日<rt>あした</rt></ruby>は<ruby>運動会<rt>うんどうかい</rt></ruby>です。",
+          "Tomorrow is the sports day."
+        ],
+        "N4": [
+          "<ruby>子供<rt>こども</rt></ruby>の<ruby>運動会<rt>うんどうかい</rt></ruby>を<ruby>見<rt>み</rt></ruby>に<ruby>行<rt>い</rt></ruby>きました。",
+          "I went to watch my child's sports day."
+        ],
+        "N3": [
+          "<ruby>雨<rt>あめ</rt></ruby>が<ruby>降<rt>ふ</rt></ruby>ったら、<ruby>運動会<rt>うんどうかい</rt></ruby>は<ruby>来週<rt>らいしゅう</rt></ruby>に<ruby>延<rt>の</rt></ruby>びます。",
+          "If it rains, the sports day will be postponed to next week."
+        ],
+        "N2": [
+          "<ruby>運動会<rt>うんどうかい</rt></ruby>の<ruby>準備<rt>じゅんび</rt></ruby>は<ruby>大変<rt>たいへん</rt></ruby>なものの、<ruby>子供<rt>こども</rt></ruby>たちの<ruby>笑顔<rt>えがお</rt></ruby>を<ruby>見<rt>み</rt></ruby>ると<ruby>報<rt>むく</rt></ruby>われる。",
+          "The preparations for the sports day are hard, but seeing the children's smiles makes it worthwhile."
+        ],
+        "N1": [
+          "<ruby>秋<rt>あき</rt></ruby>の<ruby>運動会<rt>うんどうかい</rt></ruby>は、<ruby>地域<rt>ちいき</rt></ruby><ruby>住民<rt>じゅうみん</rt></ruby>の<ruby>交流<rt>こうりゅう</rt></ruby>を<ruby>深<rt>ふか</rt></ruby>める<ruby>貴重<rt>きちょう</rt></ruby>な<ruby>場<rt>ば</rt></ruby>となっている。",
+          "The autumn sports day has become a precious occasion for deepening exchange among local residents."
+        ]
+      },
+      "mnem": "運動 (うんどう, exercise) + 会 (かい, gathering) — a gathering for exercise is the 運動会, a sports day.",
+      "tip": "運動会 is the school/community field-day event (races, relays, tug-of-war). Built from 運動 (exercise/movement) + 会 (meeting/gathering) — the same 会 as 忘年会, 二次会.",
+      "accent": 0
+    },
+    {
+      "key": "mnn:26:10",
+      "kana": "ぼんおどり",
+      "kanji": "盆踊り",
+      "context": "",
+      "mean": "Bon Festival dance",
+      "cat": "noun",
+      "type": "",
+      "trans": "",
+      "dict": "盆踊り",
+      "dictRead": "ぼんおどり",
+      "audio": "/Audio/minnamoi/bai26/00010101100110111.mp3",
+      "levels": {
+        "N5": [
+          "<ruby>夏<rt>なつ</rt></ruby>に<ruby>盆踊<rt>ぼんおど</rt></ruby>りを<ruby>見<rt>み</rt></ruby>ました。",
+          "I watched the Bon dance in summer."
+        ],
+        "N4": [
+          "<ruby>浴衣<rt>ゆかた</rt></ruby>を<ruby>着<rt>き</rt></ruby>て、<ruby>盆踊<rt>ぼんおど</rt></ruby>りに<ruby>行<rt>い</rt></ruby>きました。",
+          "I put on a yukata and went to the Bon dance."
+        ],
+        "N3": [
+          "<ruby>広場<rt>ひろば</rt></ruby>で<ruby>盆踊<rt>ぼんおど</rt></ruby>りの<ruby>練習<rt>れんしゅう</rt></ruby>をやっているんです。",
+          "They're practicing the Bon dance in the plaza."
+        ],
+        "N2": [
+          "<ruby>盆踊<rt>ぼんおど</rt></ruby>りは<ruby>地方<rt>ちほう</rt></ruby>によって<ruby>踊<rt>おど</rt></ruby>り<ruby>方<rt>かた</rt></ruby>が<ruby>違<rt>ちが</rt></ruby>うものの、<ruby>先祖<rt>せんぞ</rt></ruby>を<ruby>敬<rt>うやま</rt></ruby>う<ruby>心<rt>こころ</rt></ruby>は<ruby>同<rt>おな</rt></ruby>じだ。",
+          "Although the way of dancing the Bon dance differs by region, the spirit of honoring one's ancestors is the same."
+        ],
+        "N1": [
+          "<ruby>盆踊<rt>ぼんおど</rt></ruby>りの<ruby>起源<rt>きげん</rt></ruby>は、<ruby>死者<rt>ししゃ</rt></ruby>の<ruby>霊<rt>れい</rt></ruby>を<ruby>慰<rt>なぐさ</rt></ruby>める<ruby>仏教<rt>ぶっきょう</rt></ruby><ruby>行事<rt>ぎょうじ</rt></ruby>にさかのぼるとされる。",
+          "The origin of the Bon dance is said to trace back to a Buddhist rite for consoling the spirits of the dead."
+        ]
+      },
+      "mnem": "盆 (Bon, the ancestors' festival) + 踊り (おどり, dance) — the summer dance held during Obon: 盆踊り.",
+      "tip": "盆踊り is the communal summer dance during お盆 (mid-August), danced in a circle around a やぐら tower. 踊り comes from 踊る (おどる, to dance). A staple of the summer 祭り (festival) vocabulary.",
+      "accent": 3
+    },
+    {
+      "key": "mnn:26:11",
+      "kana": "フリーマーケット",
+      "kanji": "",
+      "context": "",
+      "mean": "flea market",
+      "cat": "noun",
+      "type": "",
+      "trans": "",
+      "dict": "フリーマーケット",
+      "dictRead": "フリーマーケット",
+      "audio": "/Audio/minnamoi/bai26/00010101100111000.mp3",
+      "levels": {
+        "N5": [
+          "<ruby>日曜日<rt>にちようび</rt></ruby>にフリーマーケットへ<ruby>行<rt>い</rt></ruby>きます。",
+          "I'm going to the flea market on Sunday."
+        ],
+        "N4": [
+          "フリーマーケットで<ruby>安<rt>やす</rt></ruby>い<ruby>靴<rt>くつ</rt></ruby>を<ruby>買<rt>か</rt></ruby>いました。",
+          "I bought some cheap shoes at the flea market."
+        ],
+        "N3": [
+          "いらない<ruby>物<rt>もの</rt></ruby>があったら、フリーマーケットで<ruby>売<rt>う</rt></ruby>るようにしています。",
+          "If I have things I don't need, I make a point of selling them at the flea market."
+        ],
+        "N2": [
+          "フリーマーケットは<ruby>掘<rt>ほ</rt></ruby>り<ruby>出<rt>だ</rt></ruby>し<ruby>物<rt>もの</rt></ruby>が<ruby>見<rt>み</rt></ruby>つかる<ruby>反面<rt>はんめん</rt></ruby>、<ruby>粗悪<rt>そあく</rt></ruby>な<ruby>品<rt>しな</rt></ruby>も<ruby>混<rt>ま</rt></ruby>じっている。",
+          "Although you can find bargains at a flea market, shoddy goods are mixed in too."
+        ],
+        "N1": [
+          "<ruby>不用品<rt>ふようひん</rt></ruby>をフリーマーケットで<ruby>循環<rt>じゅんかん</rt></ruby>させることは、<ruby>資源<rt>しげん</rt></ruby>の<ruby>無駄<rt>むだ</rt></ruby>を<ruby>減<rt>へ</rt></ruby>らす<ruby>取<rt>と</rt></ruby>り<ruby>組<rt>く</rt></ruby>みとして<ruby>注目<rt>ちゅうもく</rt></ruby>されている。",
+          "Circulating unused goods at flea markets is drawing attention as an effort to reduce the waste of resources."
+        ]
+      },
+      "mnem": "English \"flea market\" in katakana — フリー sounds like \"free,\" but it's really \"flea.\" Say フリーマーケット for the secondhand-goods market.",
+      "tip": "フリーマーケット is from English \"flea market\" (not \"free\"); often shortened to フリマ in casual speech, and now also フリマアプリ for apps like メルカリ. A katakana loanword — no kanji.",
+      "accent": 5
+    },
+    {
+      "key": "mnn:26:12",
+      "kana": "ばしょ",
+      "kanji": "場所",
+      "context": "",
+      "mean": "place, location",
+      "cat": "noun",
+      "type": "",
+      "trans": "",
+      "dict": "場所",
+      "dictRead": "ばしょ",
+      "audio": "/Audio/minnamoi/bai26/00010101100111001.mp3",
+      "levels": {
+        "N5": [
+          "この<ruby>場所<rt>ばしょ</rt></ruby>は<ruby>静<rt>しず</rt></ruby>かです。",
+          "This place is quiet."
+        ],
+        "N4": [
+          "<ruby>会<rt>あ</rt></ruby>う<ruby>場所<rt>ばしょ</rt></ruby>を<ruby>決<rt>き</rt></ruby>めましょう。",
+          "Let's decide on a place to meet."
+        ],
+        "N3": [
+          "<ruby>店<rt>みせ</rt></ruby>の<ruby>場所<rt>ばしょ</rt></ruby>がわからなかったら、<ruby>地図<rt>ちず</rt></ruby>を<ruby>見<rt>み</rt></ruby>るようにしています。",
+          "If I don't know the location of a shop, I make a point of looking at a map."
+        ],
+        "N2": [
+          "<ruby>会場<rt>かいじょう</rt></ruby>の<ruby>場所<rt>ばしょ</rt></ruby>は<ruby>駅<rt>えき</rt></ruby>から<ruby>近<rt>ちか</rt></ruby>いものの、<ruby>案内<rt>あんない</rt></ruby>が<ruby>少<rt>すく</rt></ruby>なくてわかりにくい。",
+          "Although the venue's location is close to the station, there are few signs and it's hard to find."
+        ],
+        "N1": [
+          "<ruby>災害<rt>さいがい</rt></ruby><ruby>時<rt>じ</rt></ruby>の<ruby>避難<rt>ひなん</rt></ruby><ruby>場所<rt>ばしょ</rt></ruby>を、<ruby>日頃<rt>ひごろ</rt></ruby>から<ruby>家族<rt>かぞく</rt></ruby>で<ruby>確認<rt>かくにん</rt></ruby>しておくことが<ruby>肝心<rt>かんじん</rt></ruby>だ。",
+          "It is essential for families to confirm the evacuation site for disasters in advance."
+        ]
+      },
+      "mnem": "場 (ば, place/scene) + 所 (しょ, place) — two \"place\" kanji doubled up: 場所, a spot or location.",
+      "tip": "場所 = a physical place/spot/location; 場 (ば) alone is more \"scene/situation\" (その場, 場をつくる). In sumo, 場所 also means a tournament (春場所). Read ばしょ, not じょうしょ.",
+      "accent": 0
+    },
+    {
+      "key": "mnn:26:13",
+      "kana": "ボランティア",
+      "kanji": "",
+      "context": "",
+      "mean": "volunteer, volunteer work",
+      "cat": "noun",
+      "type": "",
+      "trans": "",
+      "dict": "ボランティア",
+      "dictRead": "ボランティア",
+      "audio": "/Audio/minnamoi/bai26/00010101100111010.mp3",
+      "levels": {
+        "N5": [
+          "<ruby>週末<rt>しゅうまつ</rt></ruby>にボランティアをします。",
+          "I do volunteer work on weekends."
+        ],
+        "N4": [
+          "ごみを<ruby>拾<rt>ひろ</rt></ruby>うボランティアに<ruby>参加<rt>さんか</rt></ruby>しました。",
+          "I took part in a volunteer activity to pick up trash."
+        ],
+        "N3": [
+          "<ruby>時間<rt>じかん</rt></ruby>があったら、<ruby>被災地<rt>ひさいち</rt></ruby>でボランティアをしたいと<ruby>思<rt>おも</rt></ruby>っています。",
+          "If I have time, I'd like to volunteer in the disaster-stricken area."
+        ],
+        "N2": [
+          "ボランティアは<ruby>無償<rt>むしょう</rt></ruby>の<ruby>活動<rt>かつどう</rt></ruby>であるものの、<ruby>得<rt>え</rt></ruby>られる<ruby>経験<rt>けいけん</rt></ruby>は<ruby>金<rt>かね</rt></ruby>には<ruby>代<rt>か</rt></ruby>えがたい。",
+          "Volunteering is unpaid activity, but the experience gained is hard to trade for money."
+        ],
+        "N1": [
+          "<ruby>災害<rt>さいがい</rt></ruby><ruby>復興<rt>ふっこう</rt></ruby>におけるボランティアの<ruby>役割<rt>やくわり</rt></ruby>は、もはや<ruby>行政<rt>ぎょうせい</rt></ruby>だけでは<ruby>担<rt>にな</rt></ruby>いきれないほど<ruby>大<rt>おお</rt></ruby>きい。",
+          "The role of volunteers in disaster recovery is now so large that the government alone can no longer shoulder it."
+        ]
+      },
+      "mnem": "English \"volunteer\" in katakana — ボランティア. Note the ラン where English has \"lun\": bo-RAN-tia.",
+      "tip": "ボランティア is both the person and the activity (ボランティアをする = to do volunteer work). Watch the spelling: ボラ-ン-ティア, and the pitch drop is early. A katakana loanword — no kanji.",
+      "accent": 2
+    },
+    {
+      "key": "mnn:26:14",
+      "kana": "さいふ",
+      "kanji": "財布",
+      "context": "",
+      "mean": "wallet, purse",
+      "cat": "noun",
+      "type": "",
+      "trans": "",
+      "dict": "財布",
+      "dictRead": "さいふ",
+      "audio": "/Audio/minnamoi/bai26/00010101100111011.mp3",
+      "levels": {
+        "N5": [
+          "<ruby>新<rt>あたら</rt></ruby>しい<ruby>財布<rt>さいふ</rt></ruby>を<ruby>買<rt>か</rt></ruby>いました。",
+          "I bought a new wallet."
+        ],
+        "N4": [
+          "<ruby>財布<rt>さいふ</rt></ruby>を<ruby>忘<rt>わす</rt></ruby>れたから、<ruby>何<rt>なに</rt></ruby>も<ruby>買<rt>か</rt></ruby>えませんでした。",
+          "I forgot my wallet, so I couldn't buy anything."
+        ],
+        "N3": [
+          "<ruby>財布<rt>さいふ</rt></ruby>を<ruby>拾<rt>ひろ</rt></ruby>ったら、<ruby>交番<rt>こうばん</rt></ruby>に<ruby>届<rt>とど</rt></ruby>けるようにしています。",
+          "If I find a wallet, I make a point of taking it to the police box."
+        ],
+        "N2": [
+          "<ruby>財布<rt>さいふ</rt></ruby>を<ruby>落<rt>お</rt></ruby>としたものの、<ruby>親切<rt>しんせつ</rt></ruby>な<ruby>人<rt>ひと</rt></ruby>が<ruby>届<rt>とど</rt></ruby>けてくれた。",
+          "Although I dropped my wallet, a kind person turned it in for me."
+        ],
+        "N1": [
+          "<ruby>財布<rt>さいふ</rt></ruby>の<ruby>紐<rt>ひも</rt></ruby>を<ruby>固<rt>かた</rt></ruby>く<ruby>締<rt>し</rt></ruby>めざるを<ruby>得<rt>え</rt></ruby>ないほど、<ruby>家計<rt>かけい</rt></ruby>は<ruby>逼迫<rt>ひっぱく</rt></ruby>している。",
+          "The household finances are so tight that we have no choice but to tighten the purse strings."
+        ]
+      },
+      "mnem": "財 (wealth/riches) + 布 (cloth) — the cloth that holds your wealth is your 財布, your wallet.",
+      "tip": "財布 (さいふ) is a wallet/purse for cash. The 財 is the \"wealth\" of 財産 (property); 布 is \"cloth.\" Idiom: 財布の紐が固い = \"tight with money.\" Don't read 財 as ざい here — it's さい in this compound.",
+      "accent": 0
+    },
+    {
+      "key": "mnn:26:15",
+      "kana": "ごみ",
+      "kanji": "",
+      "context": "",
+      "mean": "garbage, rubbish, trash",
+      "cat": "noun",
+      "type": "",
+      "trans": "",
+      "dict": "ごみ",
+      "dictRead": "ごみ",
+      "audio": "/Audio/minnamoi/bai26/00010101100111100.mp3",
+      "levels": {
+        "N5": [
+          "ここにごみを<ruby>捨<rt>す</rt></ruby>てないでください。",
+          "Please don't throw trash here."
+        ],
+        "N4": [
+          "ごみは<ruby>月曜日<rt>げつようび</rt></ruby>の<ruby>朝<rt>あさ</rt></ruby>に<ruby>出<rt>だ</rt></ruby>してください。",
+          "Please put out the trash on Monday morning."
+        ],
+        "N3": [
+          "ごみを<ruby>捨<rt>す</rt></ruby>てたいんですが、どこに<ruby>出<rt>だ</rt></ruby>したらいいですか。",
+          "I want to throw out the trash; where should I put it?"
+        ],
+        "N2": [
+          "ごみの<ruby>分別<rt>ぶんべつ</rt></ruby>は<ruby>面倒<rt>めんどう</rt></ruby>なものの、<ruby>環境<rt>かんきょう</rt></ruby>のためには<ruby>欠<rt>か</rt></ruby>かせない。",
+          "Although sorting the garbage is a hassle, it's indispensable for the environment."
+        ],
+        "N1": [
+          "<ruby>大量<rt>たいりょう</rt></ruby>のごみを<ruby>生<rt>う</rt></ruby>み<ruby>出<rt>だ</rt></ruby>す<ruby>使<rt>つか</rt></ruby>い<ruby>捨<rt>す</rt></ruby>ての<ruby>文化<rt>ぶんか</rt></ruby>そのものを、<ruby>今<rt>いま</rt></ruby>こそ<ruby>見<rt>み</rt></ruby><ruby>直<rt>なお</rt></ruby>すべきだ。",
+          "The very throwaway culture that generates huge amounts of garbage is exactly what we should reconsider now."
+        ]
+      },
+      "mnem": "\"go-mi\" — GO, it's MY trash, toss it: ごみ is garbage. (Usually written in kana.)",
+      "tip": "ごみ is everyday household garbage — usually kana (rarely 塵). Key compounds: 燃えるごみ (burnable), 燃えないごみ (non-burnable), ごみ置き場 (collection point). Contrast the verbs 捨てる (throw away) vs 拾う (pick up).",
+      "accent": 2
+    },
+    {
+      "key": "mnn:26:16",
+      "kana": "こっかいぎじどう",
+      "kanji": "国会議事堂",
+      "context": "",
+      "mean": "the National Diet Building",
+      "cat": "noun",
+      "type": "",
+      "trans": "",
+      "dict": "国会議事堂",
+      "dictRead": "こっかいぎじどう",
+      "audio": "/Audio/minnamoi/bai26/00010101100111101.mp3",
+      "levels": {
+        "N5": [
+          "これは<ruby>国会<rt>こっかい</rt></ruby><ruby>議事堂<rt>ぎじどう</rt></ruby>です。",
+          "This is the Diet Building."
+        ],
+        "N4": [
+          "<ruby>東京<rt>とうきょう</rt></ruby>で<ruby>国会<rt>こっかい</rt></ruby><ruby>議事堂<rt>ぎじどう</rt></ruby>を<ruby>見<rt>み</rt></ruby>ました。",
+          "I saw the Diet Building in Tokyo."
+        ],
+        "N3": [
+          "<ruby>国会<rt>こっかい</rt></ruby><ruby>議事堂<rt>ぎじどう</rt></ruby>を<ruby>見学<rt>けんがく</rt></ruby>したいんですが、どうしたらいいですか。",
+          "I want to tour the Diet Building; what should I do?"
+        ],
+        "N2": [
+          "<ruby>国会<rt>こっかい</rt></ruby><ruby>議事堂<rt>ぎじどう</rt></ruby>は<ruby>平日<rt>へいじつ</rt></ruby>なら<ruby>予約<rt>よやく</rt></ruby>なしでも<ruby>見学<rt>けんがく</rt></ruby>できるものの、<ruby>週末<rt>しゅうまつ</rt></ruby>は<ruby>事前<rt>じぜん</rt></ruby>の<ruby>申<rt>もう</rt></ruby>し<ruby>込<rt>こ</rt></ruby>みが<ruby>必要<rt>ひつよう</rt></ruby>だ。",
+          "The Diet Building can be toured on weekdays without a reservation, but on weekends prior application is required."
+        ],
+        "N1": [
+          "<ruby>国会<rt>こっかい</rt></ruby><ruby>議事堂<rt>ぎじどう</rt></ruby>は、<ruby>日本<rt>にほん</rt></ruby>の<ruby>議会<rt>ぎかい</rt></ruby><ruby>制<rt>せい</rt></ruby><ruby>民主<rt>みんしゅ</rt></ruby><ruby>主義<rt>しゅぎ</rt></ruby>を<ruby>象徴<rt>しょうちょう</rt></ruby>する<ruby>建造物<rt>けんぞうぶつ</rt></ruby>にほかならない。",
+          "The Diet Building is nothing other than an edifice symbolizing Japan's parliamentary democracy."
+        ]
+      },
+      "mnem": "国会 (こっかい, the Diet/parliament) + 議事堂 (ぎじどう, deliberation hall) — the hall where the Diet debates: 国会議事堂.",
+      "tip": "国会議事堂 = 国会 (National Diet) + 議事 (proceedings/deliberation) + 堂 (hall). The 国会 is Japan's legislature; the building sits in 永田町, Tokyo. Note the small っ in こっかい (gemination).",
+      "accent": 7
+    },
+    {
+      "key": "mnn:26:17",
+      "kana": "へいじつ",
+      "kanji": "平日",
+      "context": "",
+      "mean": "weekday",
+      "cat": "noun",
+      "type": "",
+      "trans": "",
+      "dict": "平日",
+      "dictRead": "へいじつ",
+      "audio": "/Audio/minnamoi/bai26/00010101100111110.mp3",
+      "levels": {
+        "N5": [
+          "<ruby>平日<rt>へいじつ</rt></ruby>は<ruby>忙<rt>いそが</rt></ruby>しいです。",
+          "Weekdays are busy."
+        ],
+        "N4": [
+          "<ruby>平日<rt>へいじつ</rt></ruby>は<ruby>会社<rt>かいしゃ</rt></ruby>へ<ruby>行<rt>い</rt></ruby>きますが、<ruby>週末<rt>しゅうまつ</rt></ruby>は<ruby>休<rt>やす</rt></ruby>みます。",
+          "On weekdays I go to work, but on weekends I take a rest."
+        ],
+        "N3": [
+          "<ruby>平日<rt>へいじつ</rt></ruby>なら、いつでも<ruby>見学<rt>けんがく</rt></ruby>することができます。",
+          "On weekdays, you can tour it anytime."
+        ],
+        "N2": [
+          "<ruby>平日<rt>へいじつ</rt></ruby>は<ruby>混<rt>こ</rt></ruby>まないものの、<ruby>週末<rt>しゅうまつ</rt></ruby>になると<ruby>観光客<rt>かんこうきゃく</rt></ruby>で<ruby>込<rt>こ</rt></ruby>み<ruby>合<rt>あ</rt></ruby>う。",
+          "It isn't crowded on weekdays, but on weekends it fills up with tourists."
+        ],
+        "N1": [
+          "<ruby>平日<rt>へいじつ</rt></ruby>の<ruby>昼間<rt>ひるま</rt></ruby>に<ruby>休<rt>やす</rt></ruby>みを<ruby>取<rt>と</rt></ruby>れるかどうかは、<ruby>職種<rt>しょくしゅ</rt></ruby>によって<ruby>大<rt>おお</rt></ruby>きく<ruby>異<rt>こと</rt></ruby>なる。",
+          "Whether one can take time off during weekday daytime hours varies greatly by occupation."
+        ]
+      },
+      "mnem": "平 (ordinary/level) + 日 (day) — an ordinary, non-holiday day is a 平日, a weekday.",
+      "tip": "平日 = a weekday (Mon–Fri, ordinary business days); its opposites are 週末 (weekend) and 休日 (holiday/day off). The 平 (\"ordinary/flat,\" as in 平ら) is read へい here, not たいら.",
+      "accent": 0
+    },
+    {
+      "key": "mnn:26:18",
+      "kana": "～べん",
+      "kanji": "～弁",
+      "context": "",
+      "mean": "~ dialect (as in 大阪弁, Osaka dialect)",
+      "cat": "noun",
+      "type": "",
+      "trans": "",
+      "dict": "～弁",
+      "dictRead": "～べん",
+      "audio": "/Audio/minnamoi/bai26/00010101100111111.mp3",
+      "accent": 1
+    },
+    {
+      "key": "mnn:26:19",
+      "kana": "こんど",
+      "kanji": "今度",
+      "context": "",
+      "mean": "next time, this coming ~; now, this time",
+      "cat": "noun",
+      "type": "",
+      "trans": "",
+      "dict": "今度",
+      "dictRead": "こんど",
+      "audio": "/Audio/minnamoi/bai26/00010101101000000.mp3",
+      "levels": {
+        "N5": [
+          "<ruby>今度<rt>こんど</rt></ruby>、<ruby>一緒<rt>いっしょ</rt></ruby>に<ruby>行<rt>い</rt></ruby>きましょう。",
+          "Let's go together next time."
+        ],
+        "N4": [
+          "<ruby>今度<rt>こんど</rt></ruby>の<ruby>日曜日<rt>にちようび</rt></ruby>にパーティーをします。",
+          "I'm having a party this coming Sunday."
+        ],
+        "N3": [
+          "<ruby>今度<rt>こんど</rt></ruby><ruby>京都<rt>きょうと</rt></ruby>へ<ruby>行<rt>い</rt></ruby>ったら、<ruby>金閣寺<rt>きんかくじ</rt></ruby>を<ruby>見<rt>み</rt></ruby>たいです。",
+          "Next time I go to Kyoto, I want to see Kinkaku-ji."
+        ],
+        "N2": [
+          "<ruby>今度<rt>こんど</rt></ruby>こそ<ruby>成功<rt>せいこう</rt></ruby>させると<ruby>心<rt>こころ</rt></ruby>に<ruby>誓<rt>ちか</rt></ruby>ったものの、<ruby>不安<rt>ふあん</rt></ruby>は<ruby>拭<rt>ぬぐ</rt></ruby>えなかった。",
+          "Although I vowed to my heart to make it succeed this time for sure, I couldn't wipe away my anxiety."
+        ],
+        "N1": [
+          "「<ruby>今度<rt>こんど</rt></ruby>」という<ruby>言葉<rt>ことば</rt></ruby>は、<ruby>次回<rt>じかい</rt></ruby>とも<ruby>近<rt>ちか</rt></ruby>い<ruby>将来<rt>しょうらい</rt></ruby>とも<ruby>取<rt>と</rt></ruby>れる、なんとも<ruby>曖昧<rt>あいまい</rt></ruby>な<ruby>表現<rt>ひょうげん</rt></ruby>だ。",
+          "The word 'kondo' can be taken to mean either the next occasion or the near future — a rather ambiguous expression."
+        ]
+      },
+      "mnem": "今 (now) + 度 (occasion/time) — \"this occasion\" points either to now or the next time around: 今度.",
+      "tip": "今度 is slippery: it means \"next time / this coming ~\" (今度の日曜日) but also \"this time / now\" depending on context. 度 (ど) is the counter for occasions (一度, 二度). Don't confuse with 今回 (こんかい, strictly \"this time\").",
+      "accent": 1
+    },
+    {
+      "key": "mnn:26:20",
+      "kana": "ずいぶん",
+      "kanji": "",
+      "context": "",
+      "mean": "very, quite, considerably",
+      "cat": "adverb",
+      "type": "",
+      "trans": "",
+      "dict": "ずいぶん",
+      "dictRead": "ずいぶん",
+      "audio": "/Audio/minnamoi/bai26/00010101101000001.mp3",
+      "levels": {
+        "N5": [
+          "<ruby>今日<rt>きょう</rt></ruby>はずいぶん<ruby>寒<rt>さむ</rt></ruby>いです。",
+          "It's very cold today."
+        ],
+        "N4": [
+          "<ruby>日本語<rt>にほんご</rt></ruby>がずいぶん<ruby>上手<rt>じょうず</rt></ruby>になりましたね。",
+          "Your Japanese has gotten quite good."
+        ],
+        "N3": [
+          "<ruby>久<rt>ひさ</rt></ruby>しぶりに<ruby>会<rt>あ</rt></ruby>ったら、<ruby>子供<rt>こども</rt></ruby>がずいぶん<ruby>大<rt>おお</rt></ruby>きくなっていた。",
+          "When I met them after a long time, the child had grown quite a lot."
+        ],
+        "N2": [
+          "ずいぶん<ruby>探<rt>さが</rt></ruby>したものの、<ruby>結局<rt>けっきょく</rt></ruby><ruby>財布<rt>さいふ</rt></ruby>は<ruby>見<rt>み</rt></ruby>つからなかった。",
+          "Although I searched quite a lot, in the end I couldn't find my wallet."
+        ],
+        "N1": [
+          "ずいぶんと<ruby>思<rt>おも</rt></ruby>い<ruby>切<rt>き</rt></ruby>った<ruby>決断<rt>けつだん</rt></ruby>だが、それが<ruby>会社<rt>かいしゃ</rt></ruby>の<ruby>命運<rt>めいうん</rt></ruby>を<ruby>分<rt>わ</rt></ruby>けることになった。",
+          "It was quite a bold decision, but it ended up determining the company's fate."
+        ]
+      },
+      "mnem": "\"zui-bun\" — a SWEET BUN this big? That's a LOT: ずいぶん = considerably, quite a bit.",
+      "tip": "ずいぶん stresses that something is more than expected, often with mild surprise (ずいぶん高い!). It's stronger and more colloquial than とても; can carry a nuance of \"more than it should be.\" Adverb — modifies adjectives/verbs.",
+      "accent": 1
+    },
+    {
+      "key": "mnn:26:21",
+      "kana": "ちょくせつ",
+      "kanji": "直接",
+      "context": "",
+      "mean": "directly, in person",
+      "cat": "adverb",
+      "type": "",
+      "trans": "",
+      "dict": "直接",
+      "dictRead": "ちょくせつ",
+      "audio": "/Audio/minnamoi/bai26/00010101101000010.mp3",
+      "levels": {
+        "N5": [
+          "<ruby>先生<rt>せんせい</rt></ruby>に<ruby>直接<rt>ちょくせつ</rt></ruby><ruby>聞<rt>き</rt></ruby>きます。",
+          "I'll ask the teacher directly."
+        ],
+        "N4": [
+          "メールではなく、<ruby>直接<rt>ちょくせつ</rt></ruby><ruby>話<rt>はな</rt></ruby>したほうがいいです。",
+          "Rather than by email, it's better to talk directly."
+        ],
+        "N3": [
+          "<ruby>本人<rt>ほんにん</rt></ruby>に<ruby>直接<rt>ちょくせつ</rt></ruby><ruby>確認<rt>かくにん</rt></ruby>するようにしています。",
+          "I make a point of confirming directly with the person themselves."
+        ],
+        "N2": [
+          "<ruby>担当<rt>たんとう</rt></ruby><ruby>者<rt>しゃ</rt></ruby>に<ruby>直接<rt>ちょくせつ</rt></ruby><ruby>会<rt>あ</rt></ruby>って<ruby>話<rt>はな</rt></ruby>したものの、<ruby>問題<rt>もんだい</rt></ruby>は<ruby>解決<rt>かいけつ</rt></ruby>しなかった。",
+          "Although I met and spoke with the person in charge directly, the problem wasn't resolved."
+        ],
+        "N1": [
+          "<ruby>結果<rt>けっか</rt></ruby>に<ruby>直接<rt>ちょくせつ</rt></ruby><ruby>結<rt>むす</rt></ruby>びつく<ruby>要因<rt>よういん</rt></ruby>を<ruby>特定<rt>とくてい</rt></ruby>するのは、そう<ruby>容易<rt>ようい</rt></ruby>なことではない。",
+          "Identifying the factors directly linked to the result is no easy matter."
+        ]
+      },
+      "mnem": "直 (direct/straight) + 接 (contact/touch) — straight contact, no middleman: 直接 = directly.",
+      "tip": "直接 = directly / firsthand (直接聞く, 直接会う); its opposite is 間接 (かんせつ, indirectly). Often used adverbially without に, though 直接的 (な) is the adjective form. The 直 is read ちょく here (cf. 正直 しょうじき).",
+      "accent": 0
+    },
+    {
+      "key": "mnn:26:22",
+      "kana": "いつでも",
+      "kanji": "",
+      "context": "",
+      "mean": "any time, always",
+      "cat": "adverb",
+      "type": "",
+      "trans": "",
+      "dict": "いつでも",
+      "dictRead": "いつでも",
+      "audio": "/Audio/minnamoi/bai26/00010101101000011.mp3",
+      "levels": {
+        "N5": [
+          "いつでも<ruby>来<rt>き</rt></ruby>てください。",
+          "Please come any time."
+        ],
+        "N4": [
+          "この<ruby>店<rt>みせ</rt></ruby>はいつでも<ruby>開<rt>あ</rt></ruby>いています。",
+          "This shop is open any time."
+        ],
+        "N3": [
+          "<ruby>平日<rt>へいじつ</rt></ruby>なら、いつでも<ruby>見学<rt>けんがく</rt></ruby>することができます。",
+          "On weekdays, you can tour it any time."
+        ],
+        "N2": [
+          "いつでも<ruby>相談<rt>そうだん</rt></ruby>に<ruby>乗<rt>の</rt></ruby>ると<ruby>言<rt>い</rt></ruby>ってくれたものの、<ruby>実際<rt>じっさい</rt></ruby>にはなかなか<ruby>時間<rt>じかん</rt></ruby>が<ruby>取<rt>と</rt></ruby>れない。",
+          "Although they said they'd be there to talk any time, in practice it's hard to find the time."
+        ],
+        "N1": [
+          "いつでも<ruby>連絡<rt>れんらく</rt></ruby>が<ruby>取<rt>と</rt></ruby>れるという<ruby>安心感<rt>あんしんかん</rt></ruby>こそが、<ruby>顧客<rt>こきゃく</rt></ruby>の<ruby>信頼<rt>しんらい</rt></ruby>を<ruby>支<rt>ささ</rt></ruby>えている。",
+          "It is precisely the sense of security that one can reach them any time that sustains customer trust."
+        ]
+      },
+      "mnem": "いつ (when) + でも (even/-ever) — \"whenever\" = any time at all: いつでも.",
+      "tip": "いつでも = \"any time / whenever.\" It's the question word いつ + でも. This lesson's set: いつでも (time), どこでも (place), だれでも (person), なんでも (thing) — question word + でも = \"any-.\" With a negative it flips to \"never\" (いつも…ない).",
+      "accent": 1
+    },
+    {
+      "key": "mnn:26:23",
+      "kana": "どこでも",
+      "kanji": "",
+      "context": "",
+      "mean": "anywhere, everywhere",
+      "cat": "adverb",
+      "type": "",
+      "trans": "",
+      "dict": "どこでも",
+      "dictRead": "どこでも",
+      "audio": "/Audio/minnamoi/bai26/00010101101000100.mp3",
+      "levels": {
+        "N5": [
+          "どこでも<ruby>座<rt>すわ</rt></ruby>ってください。",
+          "Please sit anywhere."
+        ],
+        "N4": [
+          "このカードはどこでも<ruby>使<rt>つか</rt></ruby>えます。",
+          "You can use this card anywhere."
+        ],
+        "N3": [
+          "スマホがあれば、どこでも<ruby>仕事<rt>しごと</rt></ruby>ができるようになりました。",
+          "With a smartphone, it has become possible to work anywhere."
+        ],
+        "N2": [
+          "どこでも<ruby>働<rt>はたら</rt></ruby>けるといっても、<ruby>集中<rt>しゅうちゅう</rt></ruby>できる<ruby>環境<rt>かんきょう</rt></ruby>がなければ<ruby>意味<rt>いみ</rt></ruby>がない。",
+          "Even if you can work anywhere, it's meaningless without an environment where you can concentrate."
+        ],
+        "N1": [
+          "どこでも<ruby>手<rt>て</rt></ruby>に<ruby>入<rt>はい</rt></ruby>る<ruby>大量<rt>たいりょう</rt></ruby><ruby>生産<rt>せいさん</rt></ruby>の<ruby>品<rt>しな</rt></ruby>には、<ruby>職人<rt>しょくにん</rt></ruby>の<ruby>技<rt>わざ</rt></ruby>に<ruby>宿<rt>やど</rt></ruby>る<ruby>味<rt>あじ</rt></ruby>わいはない。",
+          "Mass-produced goods that can be obtained anywhere lack the flavor that dwells in a craftsman's skill."
+        ]
+      },
+      "mnem": "どこ (where) + でも (-ever) — \"wherever\" = anywhere at all: どこでも.",
+      "tip": "どこでも = \"anywhere / everywhere,\" the place member of the いつでも/どこでも/だれでも/なんでも set (question word + でも). With a negative predicate it means \"nowhere\" (どこにも…ない, dropping the で).",
+      "accent": 1
+    },
+    {
+      "key": "mnn:26:24",
+      "kana": "だれでも",
+      "kanji": "",
+      "context": "",
+      "mean": "anybody, everybody",
+      "cat": "expression",
+      "type": "",
+      "trans": "",
+      "dict": "だれでも",
+      "dictRead": "だれでも",
+      "audio": "/Audio/minnamoi/bai26/00010101101000101.mp3",
+      "levels": {
+        "N5": [
+          "だれでも<ruby>入<rt>はい</rt></ruby>ることができます。",
+          "Anybody can enter."
+        ],
+        "N4": [
+          "このゲームはだれでも<ruby>楽<rt>たの</rt></ruby>しめます。",
+          "Anybody can enjoy this game."
+        ],
+        "N3": [
+          "<ruby>練習<rt>れんしゅう</rt></ruby>すれば、だれでも<ruby>上手<rt>じょうず</rt></ruby>になれるはずです。",
+          "If you practice, anybody should be able to get good at it."
+        ],
+        "N2": [
+          "だれでも<ruby>参加<rt>さんか</rt></ruby>できるといっても、<ruby>最低限<rt>さいていげん</rt></ruby>の<ruby>知識<rt>ちしき</rt></ruby>は<ruby>必要<rt>ひつよう</rt></ruby>だ。",
+          "Even though anybody can join, a minimum of knowledge is necessary."
+        ],
+        "N1": [
+          "だれでも<ruby>発言<rt>はつげん</rt></ruby>できる<ruby>社会<rt>しゃかい</rt></ruby>であればこそ、<ruby>一人<rt>ひとり</rt></ruby>ひとりの<ruby>言葉<rt>ことば</rt></ruby>の<ruby>責任<rt>せきにん</rt></ruby>が<ruby>問<rt>と</rt></ruby>われる。",
+          "Precisely because it is a society where anyone can speak, the responsibility of each person's words is called into question."
+        ]
+      },
+      "mnem": "だれ (who) + でも (-ever) — \"whoever\" = anybody at all: だれでも.",
+      "tip": "だれでも = \"anybody / everybody,\" the person member of the でも set. With a negative it becomes \"nobody\" (だれも…ない, dropping the で). More formal 誰でも can be written in kanji.",
+      "accent": 1
+    },
+    {
+      "key": "mnn:26:25",
+      "kana": "なんでも",
+      "kanji": "何でも",
+      "context": "",
+      "mean": "anything, everything",
+      "cat": "expression",
+      "type": "",
+      "trans": "",
+      "dict": "何でも",
+      "dictRead": "なんでも",
+      "audio": "/Audio/minnamoi/bai26/00010101101000110.mp3",
+      "levels": {
+        "N5": [
+          "<ruby>私<rt>わたし</rt></ruby>はなんでも<ruby>食<rt>た</rt></ruby>べます。",
+          "I eat anything."
+        ],
+        "N4": [
+          "わからないことがあったら、なんでも<ruby>聞<rt>き</rt></ruby>いてください。",
+          "If there's anything you don't understand, please ask (anything)."
+        ],
+        "N3": [
+          "<ruby>彼<rt>かれ</rt></ruby>はなんでも<ruby>知<rt>し</rt></ruby>っているので、みんなに<ruby>頼<rt>たよ</rt></ruby>られている。",
+          "He knows everything, so everyone relies on him."
+        ],
+        "N2": [
+          "なんでも<ruby>自分<rt>じぶん</rt></ruby>でやろうとするものの、<ruby>結局<rt>けっきょく</rt></ruby><ruby>手<rt>て</rt></ruby>が<ruby>回<rt>まわ</rt></ruby>らなくなる。",
+          "Although he tries to do everything himself, in the end he can't keep up with it all."
+        ],
+        "N1": [
+          "なんでも<ruby>金<rt>かね</rt></ruby>で<ruby>解決<rt>かいけつ</rt></ruby>できると<ruby>考<rt>かんが</rt></ruby>える<ruby>風潮<rt>ふうちょう</rt></ruby>こそ、<ruby>現代<rt>げんだい</rt></ruby><ruby>社会<rt>しゃかい</rt></ruby>の<ruby>病<rt>やまい</rt></ruby>だと<ruby>言<rt>い</rt></ruby>える。",
+          "The very tendency to think anything can be solved with money can be called a disease of modern society."
+        ]
+      },
+      "mnem": "何 (なん, what) + でも (-ever) — \"whatever\" = anything at all: 何でも.",
+      "tip": "なんでも = \"anything / everything,\" the thing member of the でも set (何 read なん before でも). With a negative it flips to \"nothing\" (何も…ない, dropping the で). Don't confuse なんでも with なんて/なんか.",
+      "accent": 1
+    },
+    {
+      "key": "mnn:26:26",
+      "kana": "こんな～",
+      "kanji": "",
+      "context": "",
+      "mean": "this kind of ~, ~ like this",
+      "cat": "expression",
+      "type": "",
+      "trans": "",
+      "dict": "こんな",
+      "dictRead": "こんな",
+      "audio": "/Audio/minnamoi/bai26/00010101101000111.mp3",
+      "levels": {
+        "N5": [
+          "こんな<ruby>本<rt>ほん</rt></ruby>がほしいです。",
+          "I want a book like this."
+        ],
+        "N4": [
+          "こんな<ruby>大<rt>おお</rt></ruby>きい<ruby>魚<rt>さかな</rt></ruby>を<ruby>初<rt>はじ</rt></ruby>めて<ruby>見<rt>み</rt></ruby>ました。",
+          "I saw a fish this big for the first time."
+        ],
+        "N3": [
+          "こんなにおいしい<ruby>料理<rt>りょうり</rt></ruby>を<ruby>作<rt>つく</rt></ruby>れるようになりたいです。",
+          "I want to become able to make food this delicious."
+        ],
+        "N2": [
+          "こんな<ruby>簡単<rt>かんたん</rt></ruby>な<ruby>問題<rt>もんだい</rt></ruby>を<ruby>間違<rt>まちが</rt></ruby>えるとは、<ruby>油断<rt>ゆだん</rt></ruby>していたとしか<ruby>言<rt>い</rt></ruby>いようがない。",
+          "To get such an easy problem wrong — I can only say I let my guard down."
+        ],
+        "N1": [
+          "こんな<ruby>理不尽<rt>りふじん</rt></ruby>な<ruby>要求<rt>ようきゅう</rt></ruby>を、<ruby>黙<rt>だま</rt></ruby>って<ruby>受<rt>う</rt></ruby>け<ruby>入<rt>い</rt></ruby>れるわけにはいかない。",
+          "There is no way I can silently accept such an unreasonable demand."
+        ]
+      },
+      "mnem": "こ- is the \"near me\" root (これ/この); こんな = \"this kind of,\" pointing at what's right here.",
+      "tip": "こんな is a prenominal (連体詞) — it attaches straight to a noun (こんな本), never こんなの本. こんなに + adjective/verb = \"this much/so.\" The こ/そ/あ trio: こんな (near me), そんな (near you), あんな (away from both).",
+      "accent": 0
+    },
+    {
+      "key": "mnn:26:27",
+      "kana": "そんな～",
+      "kanji": "",
+      "context": "",
+      "mean": "that kind of ~ (near the listener), ~ like that",
+      "cat": "expression",
+      "type": "",
+      "trans": "",
+      "dict": "そんな",
+      "dictRead": "そんな",
+      "audio": "/Audio/minnamoi/bai26/00010101101001000.mp3",
+      "levels": {
+        "N5": [
+          "そんな<ruby>物<rt>もの</rt></ruby>はいりません。",
+          "I don't need a thing like that."
+        ],
+        "N4": [
+          "そんな<ruby>帽子<rt>ぼうし</rt></ruby>を<ruby>探<rt>さが</rt></ruby>しているんです。",
+          "I'm looking for a hat like that."
+        ],
+        "N3": [
+          "そんなに<ruby>急<rt>いそ</rt></ruby>がなくても、<ruby>時間<rt>じかん</rt></ruby>に<ruby>間<rt>ま</rt></ruby>に<ruby>合<rt>あ</rt></ruby>いますよ。",
+          "Even if you don't hurry that much, you'll be in time."
+        ],
+        "N2": [
+          "そんな<ruby>無責任<rt>むせきにん</rt></ruby>なことを<ruby>言<rt>い</rt></ruby>ったものの、<ruby>後<rt>あと</rt></ruby>で<ruby>後悔<rt>こうかい</rt></ruby>することになった。",
+          "Although I said such an irresponsible thing, I ended up regretting it later."
+        ],
+        "N1": [
+          "そんな<ruby>甘<rt>あま</rt></ruby>い<ruby>考<rt>かんが</rt></ruby>えで<ruby>通用<rt>つうよう</rt></ruby>するほど、この<ruby>世界<rt>せかい</rt></ruby>は<ruby>甘<rt>あま</rt></ruby>くはない。",
+          "This world is not so soft that such a naive attitude will get you by."
+        ]
+      },
+      "mnem": "そ- is the \"near you\" root (それ/その); そんな = \"that kind of,\" pointing at what's by the listener.",
+      "tip": "そんな is the そ member of こんな/そんな/あんな — refers to something near or just mentioned by the listener. そんなに + negative = \"not that much\" (そんなに高くない). Prenominal: そんな人, never そんなの人.",
+      "accent": 0
+    },
+    {
+      "key": "mnn:26:28",
+      "kana": "あんな～",
+      "kanji": "",
+      "context": "",
+      "mean": "that kind of ~ (away from both), ~ like that",
+      "cat": "expression",
+      "type": "",
+      "trans": "",
+      "dict": "あんな",
+      "dictRead": "あんな",
+      "audio": "/Audio/minnamoi/bai26/00010101101001001.mp3",
+      "levels": {
+        "N5": [
+          "あんな<ruby>家<rt>いえ</rt></ruby>に<ruby>住<rt>す</rt></ruby>みたいです。",
+          "I want to live in a house like that."
+        ],
+        "N4": [
+          "あんなに<ruby>親切<rt>しんせつ</rt></ruby>な<ruby>人<rt>ひと</rt></ruby>は<ruby>初<rt>はじ</rt></ruby>めてです。",
+          "I've never met such a kind person."
+        ],
+        "N3": [
+          "あんな<ruby>失敗<rt>しっぱい</rt></ruby>は、<ruby>二度<rt>にど</rt></ruby>と<ruby>繰<rt>く</rt></ruby>り<ruby>返<rt>かえ</rt></ruby>さないようにしたいです。",
+          "I want to make sure I never repeat a failure like that again."
+        ],
+        "N2": [
+          "あんなに<ruby>努力<rt>どりょく</rt></ruby>したにもかかわらず、<ruby>結果<rt>けっか</rt></ruby>が<ruby>出<rt>で</rt></ruby>ないとは<ruby>残念<rt>ざんねん</rt></ruby>でならない。",
+          "Despite having made that much effort, it's terribly disappointing that no results came."
+        ],
+        "N1": [
+          "あんな<ruby>凄惨<rt>せいさん</rt></ruby>な<ruby>光景<rt>こうけい</rt></ruby>は、<ruby>二度<rt>にど</rt></ruby>と<ruby>目<rt>め</rt></ruby>にしたくないというのが<ruby>本音<rt>ほんね</rt></ruby>だ。",
+          "My honest feeling is that I never want to witness such a ghastly scene again."
+        ]
+      },
+      "mnem": "あ- is the \"over there\" root (あれ/あの); あんな = \"that kind of,\" pointing at what's far from both of us.",
+      "tip": "あんな is the あ member of the trio — something distant from both speaker and listener, or a shared memory (あんな時代). あんなに + adjective/verb = \"that much/so.\" Prenominal: あんな店, never あんなの店.",
+      "accent": 0
+    },
+    {
+      "key": "mnn:26:29",
+      "kana": "エドヤストア",
+      "kanji": "",
+      "context": "",
+      "mean": "Edoya Store (fictitious shop name)",
+      "cat": "noun",
+      "type": "",
+      "trans": "",
+      "dict": "エドヤストア",
+      "dictRead": "エドヤストア",
+      "audio": "/Audio/minnamoi/bai26/00010101101001010.mp3"
+    }
+  ],
+  "grammar": [
+    {
+      "pattern": "〜んです — explanatory / reason-giving (plain form ＋ んです)",
+      "structure": "V(普通形)・いA(普通形)＋んです／なA〜な＋んです・N〜な＋んです （casual: 〜んだ／〜の）",
+      "explain": "Attach んです to the PLAIN form of a predicate to add an explanatory nuance — you're giving or asking for the reason/background behind a situation, not just stating a bare fact. な-adjectives and nouns take な before んです (元気なんです, 病気なんです). As a question, 〜んですか asks \"(I see that…) so why/what is it?\"; as an answer, 〜んです supplies the explanation. It signals the speaker and listener are looking at the same situation. Plain 〜のだ in writing; casual speech drops to 〜んだ / 〜の.",
+      "examples": [
+        {
+          "jp": "どうして<ruby>遅<rt>おく</rt></ruby>れたんですか。 …バスが<ruby>来<rt>こ</rt></ruby>なかったんです。",
+          "en": "Why were you late? …Because the bus didn't come."
+        },
+        {
+          "jp": "どうしたんですか。 …おなかが<ruby>痛<rt>いた</rt></ruby>いんです。",
+          "en": "What's the matter? …I have a stomachache."
+        },
+        {
+          "jp": "<ruby>雨<rt>あめ</rt></ruby>が<ruby>降<rt>ふ</rt></ruby>っているんですか。",
+          "en": "(I see you have an umbrella —) is it raining?"
+        },
+        {
+          "jp": "<ruby>早<rt>はや</rt></ruby>く<ruby>帰<rt>かえ</rt></ruby>ります。<ruby>今日<rt>きょう</rt></ruby>は<ruby>妻<rt>つま</rt></ruby>の<ruby>誕生日<rt>たんじょうび</rt></ruby>なんです。",
+          "en": "I'm going home early. It's my wife's birthday today (you see)."
+        }
+      ]
+    },
+    {
+      "pattern": "〜んですが、〜ていただけませんか — softened request/lead-in (background ＋ が、＋ request)",
+      "structure": "〜んですが、＋（〜ていただけませんか／〜てください／…）",
+      "explain": "Open with 〜んですが to lay out your situation, then follow with a request or question. The が here isn't \"but\" — it's a soft connective that eases into what you really want, making the request more polite and less abrupt. Very common with 〜ていただけませんか (\"could you please…?\", the humble request pattern from Lesson 26). The listener hears the background first, then the ask.",
+      "examples": [
+        {
+          "jp": "<ruby>生<rt>い</rt></ruby>け<ruby>花<rt>ばな</rt></ruby>を<ruby>習<rt>なら</rt></ruby>いたいんですが、<ruby>先生<rt>せんせい</rt></ruby>を<ruby>紹介<rt>しょうかい</rt></ruby>していただけませんか。",
+          "en": "I'd like to learn flower arranging; could you introduce me to a teacher?"
+        },
+        {
+          "jp": "<ruby>日本語<rt>にほんご</rt></ruby>でレポートを<ruby>書<rt>か</rt></ruby>いたんですが、ちょっと<ruby>見<rt>み</rt></ruby>ていただけませんか。",
+          "en": "I wrote a report in Japanese; could you take a quick look at it?"
+        },
+        {
+          "jp": "<ruby>市役所<rt>しやくしょ</rt></ruby>へ<ruby>行<rt>い</rt></ruby>きたいんですが、<ruby>地図<rt>ちず</rt></ruby>をかいていただけませんか。",
+          "en": "I want to go to city hall; could you draw me a map?"
+        }
+      ]
+    },
+    {
+      "pattern": "疑問詞 ＋ 〜たらいいですか — asking for instructions/advice",
+      "structure": "（〜んですが、）＋ 疑問詞（どこ・どう・どの…）＋ V(た形)＋らいいですか",
+      "explain": "Combine a question word (どこ, どう, どの, なに…) with the 〜たら conditional from Lesson 25 plus いいですか to ask \"where / how / which should I…?\" — you're asking the listener what the good/right course of action is. It usually follows a 〜んですが lead-in that states what you want to do. The answer comes back as 〜たらいいですよ (\"you should just…\").",
+      "examples": [
+        {
+          "jp": "ごみを<ruby>捨<rt>す</rt></ruby>てたいんですが、どこに<ruby>出<rt>だ</rt></ruby>したらいいですか。",
+          "en": "I want to throw out the trash; where should I put it out?"
+        },
+        {
+          "jp": "<ruby>金閣寺<rt>きんかくじ</rt></ruby>へ<ruby>行<rt>い</rt></ruby>きたいんですが、どのバスに<ruby>乗<rt>の</rt></ruby>ったらいいですか。",
+          "en": "I want to go to Kinkaku-ji; which bus should I take?"
+        },
+        {
+          "jp": "<ruby>国会<rt>こっかい</rt></ruby><ruby>議事堂<rt>ぎじどう</rt></ruby>を<ruby>見学<rt>けんがく</rt></ruby>したいんですが、どうしたらいいですか。 …<ruby>直接<rt>ちょくせつ</rt></ruby><ruby>行<rt>い</rt></ruby>ったらいいですよ。",
+          "en": "I want to tour the Diet Building; what should I do? …You should just go directly."
+        }
+      ]
+    }
+  ],
+  "examples": [
+    {
+      "jp": "すてきな<ruby>帽子<rt>ぼうし</rt></ruby>ですね。どこで<ruby>買<rt>か</rt></ruby>ったんですか。 …エドヤストアで<ruby>買<rt>か</rt></ruby>いました。",
+      "en": "That's a lovely hat. Where did you buy it? …I bought it at the Edoya Store."
+    },
+    {
+      "jp": "どうして<ruby>会社<rt>かいしゃ</rt></ruby>を<ruby>休<rt>やす</rt></ruby>んだんですか。 …<ruby>気分<rt>きぶん</rt></ruby>が<ruby>悪<rt>わる</rt></ruby>かったんです。",
+      "en": "Why did you take the day off work? …Because I felt ill."
+    },
+    {
+      "jp": "ずいぶんにぎやかですね。<ruby>何<rt>なに</rt></ruby>をやっているんですか。 …<ruby>盆踊<rt>ぼんおど</rt></ruby>りの<ruby>練習<rt>れんしゅう</rt></ruby>をやっているんです。",
+      "en": "It's really lively. What are they doing? …They're practicing the Bon dance."
+    },
+    {
+      "jp": "<ruby>財布<rt>さいふ</rt></ruby>を<ruby>拾<rt>ひろ</rt></ruby>ったんですが、どうしたらいいですか。 …<ruby>交番<rt>こうばん</rt></ruby>に<ruby>届<rt>とど</rt></ruby>けたらいいですよ。",
+      "en": "I found a wallet; what should I do? …You should take it to the police box."
+    },
+    {
+      "jp": "<ruby>時間<rt>じかん</rt></ruby>に<ruby>間<rt>ま</rt></ruby>に<ruby>合<rt>あ</rt></ruby>いましたか。 …いいえ、<ruby>電車<rt>でんしゃ</rt></ruby>が<ruby>遅<rt>おく</rt></ruby>れて、<ruby>間<rt>ま</rt></ruby>に<ruby>合<rt>あ</rt></ruby>わなかったんです。",
+      "en": "Did you make it in time? …No, the train was delayed, so I didn't make it."
+    },
+    {
+      "jp": "<ruby>国会<rt>こっかい</rt></ruby><ruby>議事堂<rt>ぎじどう</rt></ruby>は<ruby>見学<rt>けんがく</rt></ruby>できますか。 …はい、<ruby>平日<rt>へいじつ</rt></ruby>はいつでも<ruby>見<rt>み</rt></ruby>ることができます。",
+      "en": "Can you tour the Diet Building? …Yes, on weekdays you can see it any time."
+    },
+    {
+      "jp": "<ruby>大阪弁<rt>おおさかべん</rt></ruby>を<ruby>使<rt>つか</rt></ruby>いますね。<ruby>大阪<rt>おおさか</rt></ruby>に<ruby>住<rt>す</rt></ruby>んでいたんですか。 …ええ、15<ruby>歳<rt>さい</rt></ruby>まで<ruby>大阪<rt>おおさか</rt></ruby>に<ruby>住<rt>す</rt></ruby>んでいました。",
+      "en": "You use the Osaka dialect, don't you. Did you live in Osaka? …Yes, I lived in Osaka until I was 15."
+    },
+    {
+      "jp": "お<ruby>湯<rt>ゆ</rt></ruby>が<ruby>出<rt>で</rt></ruby>ないんですが…。 …ガス<ruby>会社<rt>かいしゃ</rt></ruby>に<ruby>連絡<rt>れんらく</rt></ruby>したら、すぐ<ruby>来<rt>き</rt></ruby>てくれますよ。",
+      "en": "The hot water isn't coming out… …If you contact the gas company, they'll come right away."
+    }
+  ],
+  "conversation": {
+    "title": "ごみは どこに 出したら いいですか (Where should I put the garbage out?)",
+    "audio": "/Audio/minnahonsatsu2/1.mp3",
+    "lines": [
+      {
+        "role": "管理人",
+        "jp": "ミラーさん、<ruby>引<rt>ひ</rt></ruby>っ<ruby>越<rt>こ</rt></ruby>しの<ruby>荷物<rt>にもつ</rt></ruby>は<ruby>片付<rt>かたづ</rt></ruby>きましたか。",
+        "en": "Mr. Miller, have you finished sorting out your moving boxes?"
+      },
+      {
+        "role": "ミラー",
+        "jp": "ええ、だいたい<ruby>片付<rt>かたづ</rt></ruby>きました。あのう、ごみを<ruby>捨<rt>す</rt></ruby>てたいんですが、どこに<ruby>出<rt>だ</rt></ruby>したらいいですか。",
+        "en": "Yes, mostly. Um, I'd like to throw out some garbage — where should I put it out?"
+      },
+      {
+        "role": "管理人",
+        "jp": "<ruby>燃<rt>も</rt></ruby>えるごみは<ruby>月曜日<rt>げつようび</rt></ruby>と<ruby>木曜日<rt>もくようび</rt></ruby>の<ruby>朝<rt>あさ</rt></ruby>、<ruby>出<rt>だ</rt></ruby>してください。ごみ<ruby>置<rt>お</rt></ruby>き<ruby>場<rt>ば</rt></ruby>は<ruby>駐車場<rt>ちゅうしゃじょう</rt></ruby>の<ruby>横<rt>よこ</rt></ruby>です。",
+        "en": "Please put out burnable garbage on Monday and Thursday mornings. The garbage collection point is next to the parking lot."
+      },
+      {
+        "role": "ミラー",
+        "jp": "<ruby>瓶<rt>びん</rt></ruby>や<ruby>缶<rt>かん</rt></ruby>はいつですか。",
+        "en": "And what about bottles and cans?"
+      },
+      {
+        "role": "管理人",
+        "jp": "<ruby>土曜日<rt>どようび</rt></ruby>です。",
+        "en": "On Saturday."
+      },
+      {
+        "role": "ミラー",
+        "jp": "わかりました。それから、お<ruby>湯<rt>ゆ</rt></ruby>が<ruby>出<rt>で</rt></ruby>ないんですが…。",
+        "en": "I see. Also, the hot water isn't coming out…"
+      },
+      {
+        "role": "管理人",
+        "jp": "ガス<ruby>会社<rt>かいしゃ</rt></ruby>に<ruby>連絡<rt>れんらく</rt></ruby>したら、すぐ<ruby>来<rt>き</rt></ruby>てくれますよ。",
+        "en": "If you contact the gas company, they'll come right away."
+      },
+      {
+        "role": "ミラー",
+        "jp": "すみませんが、<ruby>電話<rt>でんわ</rt></ruby><ruby>番号<rt>ばんごう</rt></ruby>を<ruby>教<rt>おし</rt></ruby>えていただけませんか。",
+        "en": "Sorry, but could you tell me their phone number?"
+      },
+      {
+        "role": "管理人",
+        "jp": "ええ、いいですよ。",
+        "en": "Yes, of course."
+      }
+    ]
+  }
+}
