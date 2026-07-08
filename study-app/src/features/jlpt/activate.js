@@ -7,28 +7,20 @@
 // Minna builders stamp it too, so the row counts every deck add, not only gap-fill ones.
 import { state } from '../../state.js';
 import { buildJlptCard, deckWordSet, deckSourceCount } from '../../core/index.js';
-import { localDay } from '../../config.js';
-import { loadCustom, saveCustom } from '../../persistence/custom.js';
-import { rebuildData, refreshAfterVerbChange } from '../custom-cards.js';
+import { appendCustomCards } from '../append-cards.js';
 
-// Activate: append tagged minimal cards on monotonic seq ranks, save + rebuild once.
-// Entries are the generated [jp, read, mean, cat, type, trans] tuples (selectGapBatch
-// output — already uncovered, but the headword skip makes a re-click harmless anyway).
-// Returns how many were actually added.
+// Activate: append tagged minimal cards on monotonic seq ranks, save + rebuild once (via the
+// shared appendCustomCards protocol). Entries are the generated [jp, read, mean, cat, type,
+// trans] tuples (selectGapBatch output — already uncovered, but the headword skip makes a
+// re-click harmless anyway). Dedup tests BOTH the entry's jp AND its read against deckWordSet
+// (built-in / みんなの日本語 / 歌 / 鰐蟹). Returns how many were actually added.
 export function addJlptWords(entries, level) {
   const have = deckWordSet(state.DATA);
-  const adds = (entries || []).filter((e) => e && e[0] && !have.has(e[0]) && !(e[1] && have.has(e[1])));
-  if (!adds.length) return 0;
-  const cs = loadCustom();
-  const today = localDay();
-  for (const e of adds) {
-    cs.seq = (cs.seq || 100) + 1;
-    cs.verbs.push(buildJlptCard(e, cs.seq, level, today));
-  }
-  saveCustom(cs);
-  rebuildData();
-  refreshAfterVerbChange();
-  return adds.length;
+  return appendCustomCards(
+    entries,
+    (e) => !e || !e[0] || have.has(e[0]) || (!!e[1] && have.has(e[1])),
+    (e, rank, today) => buildJlptCard(e, rank, level, today),
+  );
 }
 
 // How many gap-fill cards the deck holds + the due slice (the "Study them now" CTA copy).

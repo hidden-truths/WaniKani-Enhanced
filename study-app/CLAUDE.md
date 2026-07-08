@@ -11,6 +11,9 @@ order. The actual DOM/render/feature glue is split into **`src/features/*`** mod
   (export/import), `deck` (filter model + picker + forecast + due banner; owns `cfg`),
   `flashcard` (session lifecycle; owns `session`), `browse` (grid + detail modal + topic
   groups; owns `bcfg`), `stats` (charts), `custom-cards` (rebuildData + #verbModal CRUD),
+  `append-cards` (the one shared `appendCustomCards(items, dedupe, build)` — the loadCustom →
+  bump seq → push → saveCustom → rebuildData → refreshAfterVerbChange protocol behind the four
+  vocab→deck activation paths: jlpt/wanikani/grammar/songs; NOT minna, which is a planner/replayer),
   `settings-page`, `minna` (the みんなの日本語 dashboard — now a **directory**
   `minna/{state,store,activate,clips,speaking,view}.js` behind `minna/index.js` (the lifecycle +
   public-API barrel), with `minna.js` a thin `export *` re-export so main.js + cloud.js import

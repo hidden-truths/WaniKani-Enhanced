@@ -6,10 +6,10 @@
 import { state } from '../../state.js';
 import { localDay } from '../../config.js';
 import { parseSongLineKey, songWords, songCardKey, buildSongCard, applyPractice } from '../../core/index.js';
-import { loadCustom, saveCustom } from '../../persistence/custom.js';
+import { loadCustom } from '../../persistence/custom.js';
 import { saveSelftalk } from '../../persistence/selftalk.js';
 import { saveSongs } from '../../persistence/songs.js';
-import { rebuildData, refreshAfterVerbChange } from '../custom-cards.js';
+import { appendCustomCards } from '../append-cards.js';
 import { S } from './state.js';
 import { known } from './library.js';
 import { render } from './index.js';
@@ -19,20 +19,23 @@ import { render } from './index.js';
 // idempotent by a stable songKey, joining the deck/SRS/Browse/Stats + syncing under `custom-verbs`.
 // Only adds words NOT already in the deck (built-in or custom) — known/existing words aren't re-added.
 function activateSongWords(songExtId, songTitle, words) {
-  const cs = loadCustom();
+  // Two dedup sets, deliberately distinct: existingJp (state.DATA headwords) skips a lemma
+  // already in the deck from ANY source; existingKeys (the persisted cards' songKeys) catches
+  // the same (song,lemma) even when state.DATA hasn't been rebuilt yet — read from loadCustom()
+  // here rather than the helper's copy since the closure must stay a single-arg predicate. Both
+  // grow in-loop so a repeated lemma within one batch skips too.
   const existingJp = new Set(state.DATA.map((v) => v.jp));
-  const existingKeys = new Set(cs.verbs.map((v) => v.songKey).filter(Boolean));
-  let added = 0;
-  for (const w of words) {
-    const songKey = songCardKey(songExtId, w.lemma);
-    if (existingKeys.has(songKey)) continue;
-    if (existingJp.has(w.lemma)) continue; // already in the deck — don't duplicate
-    cs.seq = (cs.seq || 100) + 1;
-    cs.verbs.push(buildSongCard({ songExtId, songTitle, word: w, rank: cs.seq, todayKey: localDay() }));
-    existingKeys.add(songKey); existingJp.add(w.lemma); added++;
-  }
-  if (added) { saveCustom(cs); rebuildData(); refreshAfterVerbChange(); }
-  return added;
+  const existingKeys = new Set(loadCustom().verbs.map((v) => v.songKey).filter(Boolean));
+  return appendCustomCards(
+    words,
+    (w) => {
+      const songKey = songCardKey(songExtId, w.lemma);
+      if (existingKeys.has(songKey) || existingJp.has(w.lemma)) return true;
+      existingKeys.add(songKey); existingJp.add(w.lemma);
+      return false;
+    },
+    (w, rank, today) => buildSongCard({ songExtId, songTitle, word: w, rank, todayKey: today }),
+  );
 }
 
 // Activate one mined word into the deck (a Source:歌 custom card) + re-render Mine so its row flips.

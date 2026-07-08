@@ -8,10 +8,8 @@
 // Minna's overlay path (see the ROADMAP wk-leech-to-deck record). The deck's Leitner
 // takes over; the read-only WK SRS is never written back.
 import { state } from '../../state.js';
-import { localDay } from '../../config.js';
 import { buildWkCard, primaryReading, deckSourceCount } from '../../core/index.js';
-import { loadCustom, saveCustom } from '../../persistence/custom.js';
-import { rebuildData, refreshAfterVerbChange } from '../custom-cards.js';
+import { appendCustomCards } from '../append-cards.js';
 import { jlptOf } from '../jlpt/data.js';
 
 // One pass over the live deck → the dedup index the views and the apply share
@@ -27,36 +25,35 @@ export const wkInDeck = (s, idx) => {
   return d.ids.has(s.id) || (!!s.chars && d.jp.has(s.chars));
 };
 
-// The subjects an activation would actually add: vocabulary (kanji/radicals aren't
-// cards — a kanji leech is treated by drilling its vocab family), not already in the deck.
+// Is one subject addable as a card: vocabulary (kanji/radicals aren't cards — a kanji leech is
+// treated by drilling its vocab family), not hidden, has chars, not already in the deck. Shared
+// by the enumeration (activatableWk) and the activation dedup so the two can't drift.
+const wkAddable = (s, d) => !!(s && s.type === 'vocabulary' && !s.hidden && s.chars && !wkInDeck(s, d));
+
+// The subjects an activation would actually add.
 export function activatableWk(subjects, idx) {
   const d = idx || wkDeckIndex();
-  return subjects.filter((s) => s && s.type === 'vocabulary' && !s.hidden && s.chars && !wkInDeck(s, d));
+  return subjects.filter((s) => wkAddable(s, d));
 }
 
 // Activate: append tagged custom cards on monotonic seq ranks (never reused — SRS
-// progress can't collide), save + rebuild once. Each card is stamped with its JLPT
-// level (jlptOf — the lazily-loaded list is kicked at boot by initJlpt, so it's
-// loaded by any human-speed activation; '' when unknown, backfilled later by
-// backfillWkJlpt if the chunk somehow wasn't). Returns how many were actually added.
+// progress can't collide), save + rebuild once (via the shared appendCustomCards protocol).
+// Each card is stamped with its JLPT level (jlptOf — the lazily-loaded list is kicked at boot
+// by initJlpt, so it's loaded by any human-speed activation; '' when unknown, backfilled later
+// by backfillWkJlpt if the chunk somehow wasn't). Returns how many were actually added.
 //
-// `today` is read ONCE for the batch (as the 合格 gap-fill path does), not per card: a bulk
-// activation — a whole confusion family, or every focus leech — that straddles local midnight
-// would otherwise stamp one batch with two different `added` days, splitting it across two rows
-// of the 語 quota. The day-stamp is the checklist row's live signal, so it has to agree with itself.
+// The helper reads `today` ONCE for the batch (this is where the wk-activation-day-stamp fix
+// now lives, shared by all four paths): a bulk activation — a whole confusion family, or every
+// focus leech — that straddles local midnight would otherwise stamp one batch with two different
+// `added` days, splitting it across two rows of the 語 quota. The day-stamp is the checklist
+// row's live signal, so it has to agree with itself.
 export function activateWkVocab(subjects) {
-  const adds = activatableWk(subjects);
-  if (!adds.length) return 0;
-  const cs = loadCustom();
-  const today = localDay();
-  for (const s of adds) {
-    cs.seq = (cs.seq || 100) + 1;
-    cs.verbs.push(buildWkCard(s, cs.seq, jlptOf(s.chars, primaryReading(s)), today));
-  }
-  saveCustom(cs);
-  rebuildData();
-  refreshAfterVerbChange();
-  return adds.length;
+  const d = wkDeckIndex();
+  return appendCustomCards(
+    subjects,
+    (s) => !wkAddable(s, d),
+    (s, rank, today) => buildWkCard(s, rank, jlptOf(s.chars, primaryReading(s)), today),
+  );
 }
 
 // How many Source:鰐蟹 cards the deck currently holds (the "Study N now" CTA count),
