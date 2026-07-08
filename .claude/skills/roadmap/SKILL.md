@@ -103,7 +103,7 @@ reader trusts the status. `idea` ≠ `todo`; `blocked` names a real blocker in t
   query across id/title/summary/detail/src/example; `groupBy` regroups by surface/status/type/prio.
 - Within a group the sort is **open-first → priority (high < med < low) → starred-first**
   (`isOpen`, `prioRank`, `star`). So high-prio open work floats to the top of each surface.
-- Inventory as of 2026-07-08: **103 open / 62 shipped** (165 records total). Derive current counts
+- Inventory as of 2026-07-08: **104 open / 62 shipped** (166 records total). Derive current counts
   instead of trusting that number:
 
 ```bash
@@ -172,6 +172,12 @@ A good record survives that.
 - **`src[]` points at the owning module(s)** so the code is findable (e.g.
   `study-app/src/features/jlpt/view.js`). Prefer directories/files over line ranges — some
   legacy records carry `path:line` in `src`; line numbers rot, so don't add new ones.
+  **Beware: 73 legacy records instead carry the DOC each was extracted from during the
+  2026-06-19 consolidation (`NEW_FEATURES.md`, `NEXT_STEPS.md`, `SONGS_HANDOFF.md`, …), and
+  those files no longer exist.** So a dangling `src[]` on an old record means "provenance", not
+  "the code was deleted" — don't panic, and don't chase the path. Repoint it at the real owning
+  module when you next touch that record. New records always get real module paths. Tracked as
+  `tooling-roadmap-src-provenance`.
 - **Honest status/prio.** Don't file speculation as `todo` (use `idea`); name the blocker on a
   `blocked` record; reserve `high` for exam-impacting or actively-breaking work.
 - **One record per coherent unit of work.** Split unrelated ideas into separate records.

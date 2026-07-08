@@ -168,7 +168,7 @@ copyright gate working as designed, not a bug.
 
 ## What to work on next
 
-Open work lives ONLY in `ROADMAP.html` — 103 open / 62 completed records as of 2026-07-08.
+Open work lives ONLY in `ROADMAP.html` — 104 open / 62 completed records as of 2026-07-08.
 Do NOT plan from memory or from this skill: counts, priorities, and pending items move. Use the
 `roadmap` skill for record mechanics and `content-gap-audit` for mission-level planning.
 
@@ -194,7 +194,7 @@ Before assuming prod matches the code you're reading, check ROADMAP and probe pr
 - **Only root `CLAUDE.md` is auto-loaded.** The server and app CLAUDE.mds must be read
   explicitly, and they are the authority for their trees.
 - **A blank 教科書/Minna tab on prod may be the owner gate** (`MINNA_OWNER_EMAILS`), not a bug.
-- **Counts in docs are as-of snapshots** ("eight tabs", "81 grammar points", "103 open
+- **Counts in docs are as-of snapshots** ("eight tabs", "81 grammar points", "104 open
   records" — as of 2026-07). Re-derive live where it matters (`grep`/`ls`/the ROADMAP filters).
 
 ## Ground truth (re-verify here; all "as of 2026-07-06")

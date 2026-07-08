@@ -31,7 +31,7 @@ content beats architectural polish. See [references/learner-profile.md](referenc
    exam date moved, what's frustrating them right now. Their *felt* need is a first-class input;
    the lenses only measure what the app can see.
 3. **Refuse to plan from stale memory.** The backlog lives in `ROADMAP.html` (the single source of
-   truth — ~103 open records as of 2026-07). Read it, don't recall it. See the `roadmap` skill.
+   truth — ~104 open records as of 2026-07). Read it, don't recall it. See the `roadmap` skill.
 
 ## The measurable lenses — read the learner's real state
 
