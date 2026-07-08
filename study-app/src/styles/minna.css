@@ -12,9 +12,9 @@
 .mn-gate .gate-ic{font-size:34px;color:var(--reading)}
 .mn-gate h2{font-family:var(--display);font-size:24px;font-weight:900;margin:12px 0 6px}
 .mn-gate p{color:var(--muted);max-width:46ch;margin:0 auto 18px}
-.mn-theme{color:var(--muted);margin-top:6px;font-size:15px}
-/* The page kicker (みんなの日本語 · Textbook) reuses the shared .page-kicker (gold + lead-dash,
-   styles.css) so it matches Browse/Stats and the mock — no bespoke .mn-kicker. */
+/* The lesson header is the shared numbered `.marker` (chrome.css), like every other surface.
+   There is no kicker here and no `.mn-kicker` — the global `.page-kicker` it used to point at
+   was itself dead and has been removed. */
 
 /* ---- Lesson-seal HERO (mock): hanko number tile + lesson info + progress + Add CTA ---- */
 .lesson-head{display:grid;grid-template-columns:auto 1fr auto;gap:34px;align-items:center;padding:34px 38px;background:var(--surf-card);border:1px solid var(--line);border-radius:18px;box-shadow:var(--lift-md),var(--inner-hi)}
@@ -174,8 +174,8 @@
 [data-theme="dark"] .turn .turn-play{color:#FF8A6E}
 [data-theme="dark"] .turn.is-b .turn-play{color:var(--reading)}
 @media (max-width:640px){.turn,.turn.is-b{max-width:100%;grid-template-columns:auto 1fr;text-align:left}.turn.is-b .spk{order:1}.turn.is-b .turn-body{order:2}.turn .turn-play,.turn.is-b .turn-play{order:3;grid-column:2;justify-self:start;margin-top:6px}}
-/* Add-to-deck action. */
-.mn-actions{display:flex;align-items:center;gap:12px;flex-wrap:wrap;margin:6px 0 2px}
+/* Add-to-deck action. (The old `.mn-actions` row wrapper is gone — the CTA moved into the
+   lesson-seal hero; only the in-deck marker below is still emitted.) */
 .v-in{color:var(--good);font-family:var(--mono);font-size:11px;white-space:nowrap}
 /* Notes — the "augment as I study" area (synced under the minna app key). */
 /* Notes — the editable textarea wears the mock's ruled note-paper; the save status is now the green

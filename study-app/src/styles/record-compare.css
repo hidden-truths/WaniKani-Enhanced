@@ -74,8 +74,8 @@
 canvas.rec-wave{display:block;width:140px;height:30px;border-radius:8px}
 .rec-wave-cursor{position:absolute;top:0;bottom:0;left:0;width:2px;background:var(--ink);opacity:0;pointer-events:none;transition:opacity .12s}
 .rec-wave-cap{position:absolute;top:-2px;right:1px;font-family:var(--mono);font-size:9px;letter-spacing:.1em;text-transform:uppercase;color:var(--muted);opacity:.7;pointer-events:none}
-/* Conversation-line layout + clip marker (みんなの日本語 conversation). */
-.mn-line-body{flex:1;min-width:0}
+/* Conversation-line clip marker (みんなの日本語 conversation). The line's own `.mn-line-body`
+   wrapper is no longer emitted — the turn layout moved to the `.turn` grid in minna.css. */
 .mn-line-rec{display:flex;flex-wrap:wrap;align-items:center;gap:8px;margin-top:7px}
 .clip-zone{display:inline-flex;align-items:center;gap:7px}
 .clip-current{font-family:var(--mono);font-size:10px;color:var(--good);border:1px solid color-mix(in srgb,var(--good) 45%,var(--line));border-radius:10px;padding:1px 7px}

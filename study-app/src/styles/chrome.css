@@ -159,8 +159,9 @@
 
 /* Numbered section markers — the mock's NN / 06 page/section headers. Defined here
    (page-structure chrome); each surface applies .marker in its own phase. The .wrap
-   top gap provides the first marker's top space, so the default marker has no top pad;
-   mid-page sub-markers (.submarker) keep theirs. */
+   top gap provides the first marker's top space, so the marker carries no top pad.
+   (The mock's mid-page `.submarker` variant was never built — its rules were removed
+   once nothing emitted the class; it survives only in mockups/sleek/.) */
 .marker{ display:flex; align-items:baseline; gap:16px; padding:0 0 12px; }
 .marker .idx{ font-family:var(--display); font-weight:800; font-size:34px; line-height:1; letter-spacing:-.02em; color:var(--ink); }
 [data-theme="dark"] .marker .idx{ color:var(--gold); }
@@ -168,9 +169,6 @@
 .marker .ttl{ font-family:var(--jp-min); font-weight:600; font-size:17px; letter-spacing:.14em; color:var(--ink); }
 .marker .en{ font-family:var(--mono); font-size:11px; letter-spacing:.26em; text-transform:uppercase; color:var(--muted); }
 .marker .rule{ flex:1; height:1px; background:var(--line); align-self:center; }
-.marker.submarker{ padding:30px 0 18px; }
-.marker.submarker .ttl{ font-size:15px; color:var(--ink-2); }
-.marker.submarker::before{ content:""; width:24px; height:2px; background:var(--brand); align-self:center; border-radius:2px; }
 
 /* Tab panels — one visible at a time (JS toggles .active; entrance anim in styles.css). */
 .panel{ display:none; }

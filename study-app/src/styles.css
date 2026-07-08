@@ -13,12 +13,11 @@
      speaking-bar dock trims → styles/record-compare.css (Phase 9). The navbar/tab
      mobile overrides STAY here in the @media block further down (cascade Rule A). ---- */
 
-  /* Per-surface editorial header (kicker + title + optional count cluster) — Browse / Stats /
-     Self-Talk / Songs. The global headline was removed (navbar) but each surface keeps its own. */
+  /* Per-surface editorial header (title + optional count cluster) — Browse / Stats /
+     Self-Talk / Songs. The global headline was removed (navbar) but each surface keeps its own.
+     (The mock's gold `.page-kicker` eyebrow above the title was never emitted by any surface —
+     the numbered `.marker` in chrome.css plays that role — so its rules were removed.) */
   .page-head{display:flex;align-items:flex-end;justify-content:space-between;gap:24px;flex-wrap:wrap;margin:0 0 22px}
-  .page-kicker{font-family:var(--mono);font-size:11px;letter-spacing:.3em;text-transform:uppercase;color:var(--gold);font-weight:500;display:inline-flex;align-items:center;gap:10px;margin-bottom:13px}
-  .page-kicker::before{content:"";width:22px;height:1px;background:var(--gold);display:inline-block}
-  .page-kicker .jp{font-family:var(--jp);letter-spacing:.06em;text-transform:none}
   .page-title{font-family:var(--display);font-weight:800;font-size:40px;letter-spacing:-.018em;line-height:1.04;color:var(--ink);margin:0}
   .page-counts{display:flex;gap:10px;flex-wrap:wrap}
   .page-counts .pill .dot.leech{background:var(--leech);box-shadow:0 0 0 4px var(--leech-soft)}
@@ -286,8 +285,10 @@
   .metrics .metric:nth-child(4){animation-delay:.09s} .metrics .metric:nth-child(5){animation-delay:.12s}
   .metrics .metric:nth-child(6){animation-delay:.15s} .metrics .metric:nth-child(7){animation-delay:.18s}
   .metrics .metric:nth-child(8){animation-delay:.21s}
+  /* growX is still used by stats.css (.leech-mid .accbar i, .cbar .cb-fill) — keep it. Its old
+     `#boxDist .barx` consumer is gone: #boxDist now renders pipelineHtml's VERTICAL bars
+     (.pipeline/.pcol/.pbar), which grow on growY, so the .barx rule matched nothing. */
   @keyframes growX{from{transform:scaleX(0)}to{transform:scaleX(1)}}
-  #boxDist .barx{transform-origin:left;animation:growX .5s cubic-bezier(.2,.7,.3,1) both}
   @keyframes growY{from{transform:scaleY(0)}to{transform:scaleY(1)}}
   .fcast-chart svg rect.fbar{transform-box:fill-box;transform-origin:bottom;animation:growY .45s cubic-bezier(.2,.7,.3,1) both}
   /* CTA breathe REMOVED (2026-06) — the night-time pulsing warm-glow animation on primary

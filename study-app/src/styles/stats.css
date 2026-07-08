@@ -10,7 +10,6 @@
 /* editorial page head — stats-scoped (the global .page-title is 40px; the Stats mock
    wants the big 64px display title + a 17.5px lead capped to 580px, mock lines 36-42). */
 #panel-stats .page-head{margin-bottom:0}
-#panel-stats .page-kicker{margin-bottom:16px}
 #panel-stats .page-title{font-size:64px;line-height:1.02}
 .stats-sub{font-family:var(--body);font-size:17.5px;color:var(--muted);max-width:580px;margin:15px 0 0;line-height:1.5}
 .stats-sub b{color:var(--ink);font-weight:600}
