@@ -228,7 +228,7 @@ test('mock log: empty state names the N3 pass criteria, and the form round-trips
   renderJlpt(); wireJlpt();
   let body = el('jlptBody').innerHTML;
   expect(body).toContain('Mock tests');
-  expect(body).toContain('No mock sat yet');
+  expect(body).toContain('No N3 mock sat yet');
   expect(body).toContain('95');    // the N3 total mark
   expect(body).toContain('19');    // …and the sectional minimum
 
@@ -297,6 +297,21 @@ test('mock log: editing and RE-DATING a mock moves it instead of forking a secon
   expect(state.jlptStore.mocks[0]).toMatchObject({ id: `${D2}-N3`, date: D2, total: 105 });
 });
 
+// The verdict card is driven by mockTrend (filtered to the target level); the history lists EVERY
+// level. So "no sitting at this level" must not claim "no sitting at all" while the history below
+// it lists one.
+test('mock log: the empty state names the target level when other-level sittings exist', () => {
+  renderJlpt(); wireJlpt();
+  state.jlptStore.mocks = [{ id: `${D1}-N2`, date: D1, level: 'N2', scores: { vocab: 44, grammarReading: 44, listening: 40 }, total: 128 }];
+  state.jlptStore.level = 'N3';
+  renderJlpt();
+
+  const body = el('jlptBody').innerHTML;
+  expect(body).toContain('All 1 sitting');       // the N2 paper is still history worth keeping…
+  expect(body).toContain('No N3 mock sat yet');  // …but no N3 paper has been sat
+  expect(body).not.toContain('No mock sat yet'); // the old copy contradicted the history below it
+});
+
 // The history renders an Edit button on EVERY sitting, including other-level ones (an N4 paper on
 // the way to N3 is history worth keeping, judged against its own marks). The form has no level
 // field, so a save must re-use the EDITED MOCK's level — not the current target level, which would
@@ -333,7 +348,7 @@ test('mock log: delete drops the row and removes the `mocks` key entirely when t
   // NB: no vi.unstubAllGlobals() here — it would also tear down the file-level localStorage stub
   // (installed at import time, never reinstalled), silently disabling persistence for every test
   // that runs after this one. `confirm` staying stubbed is harmless; no later test calls it.
-  expect(el('jlptBody').innerHTML).toContain('No mock sat yet');
+  expect(el('jlptBody').innerHTML).toContain('No N3 mock sat yet');   // back to the empty state
 });
 
 test('mock log: an unusable date is refused rather than silently stored', () => {

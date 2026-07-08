@@ -623,9 +623,13 @@ function mockLogHtml(store) {
   return `${head}${unsupported}${body}</section>`;
 }
 
+// Shown when there's no sitting AT THE TARGET LEVEL — which is not the same as no sitting at all
+// (the verdict card is driven by mockTrend, which filters to the level, while the history below
+// lists every level). Hence "No <level> mock", not "No mock": with two N2 papers logged and the
+// target switched to N3, a bare "No mock sat yet" sat directly above "All 2 sittings".
 function mockEmptyHtml(level) {
   const marks = MOCK_PASS[level] || MOCK_PASS.N3;
-  return `<div class="jl-empty jl-mock-empty">No mock sat yet. Sit an official ${level} practice paper (the JLPT site publishes past/sample papers), then log the three section scores here.
+  return `<div class="jl-empty jl-mock-empty">No ${level} mock sat yet. Sit an official ${level} practice paper (the JLPT site publishes past/sample papers), then log the three section scores here.
     <span class="jl-covsub">${level} passes at <b>${marks.total}</b>/${MOCK_MAX_TOTAL} overall <em>and</em> at least <b>${marks.section}</b>/60 in every section — the total alone isn't enough.</span></div>`;
 }
 
