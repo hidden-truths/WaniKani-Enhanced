@@ -1,6 +1,6 @@
 // Schema barrel — the stable import surface for the Zod schemas.
 //
-// The 66 schemas (request validation + OpenAPI generation, via @hono/zod-openapi) used to
+// The 80+ schemas (request validation + OpenAPI generation, via @hono/zod-openapi) used to
 // live in one 733-line module; they're now split into cohesive per-domain files under
 // schemas/*. This re-exports them all so callers keep `import { XSchema } from
 // '../schemas.ts'` working unchanged. Add a schema to the relevant domain file (or a new
