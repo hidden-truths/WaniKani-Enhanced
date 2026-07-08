@@ -9,7 +9,7 @@ import { session, renderExample } from './flashcard.js';
 import { account } from './cloud-core.js';
 
 // ---------- per-context voice-priority editor (audio-unify Phase 2) ----------
-// For each context (Reviews / Browsing / Textbook) the user orders the voices to try; the shared
+// For each context (Reviews / Browsing / Textbook study / Self-talk / Songs) the user orders the voices to try; the shared
 // player (features/audio.js) picks the first one available per item. Tokens are specific voices
 // or kinds (see core/audio.js). Stored in settings.audioPrefs[context]; a context with no saved
 // list shows (and edits from) its DEFAULT_AUDIO_PREFS.
