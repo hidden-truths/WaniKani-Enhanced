@@ -81,9 +81,9 @@ python3 -c "import json,re; d=json.loads(re.search(r'id=\"roadmap-data\">(.*?)</
 `surface` groups the record. The full set defined in the `SURFACES` meta (with a Japanese
 group glyph + accent each) is: `store` · `api` · `userscript` · `songs` · `minna` ·
 `selftalk` · `wanikani` · `jlpt` · `cards` · `core` · `design` · `infra` · `refactor` ·
-`tooling`. Beware: the surface-grouped view iterates a SEPARATE `SURFACE_ORDER` array that (as
-of 2026-07) **omits `jlpt`**, so `surface:"jlpt"` records are silently dropped from the default
-board — see Traps. The `id` prefix mirrors the area: `us-*` (userscript), `api-*`, `songs-*`,
+`tooling`. Note the surface-grouped view iterates a SEPARATE `SURFACE_ORDER` array; it currently
+lists all fourteen, but if you add a surface to `SURFACES` you must add it to `SURFACE_ORDER`
+too or its records vanish from the default board. The `id` prefix mirrors the area: `us-*` (userscript), `api-*`, `songs-*`,
 `minna-*`, `selftalk-*`, `jlpt-*` / `grammar-*` (JLPT tab + grammar), `wk-*` (wanikani tab),
 `cards-*`, `store-*` (sentence store), `core-*`, `design-*`, `infra-*`, `refactor-*`,
 `tooling-*`; big shipped milestones use `done-*` (each still carries a real `surface` from the
@@ -103,7 +103,7 @@ reader trusts the status. `idea` ≠ `todo`; `blocked` names a real blocker in t
   query across id/title/summary/detail/src/example; `groupBy` regroups by surface/status/type/prio.
 - Within a group the sort is **open-first → priority (high < med < low) → starred-first**
   (`isOpen`, `prioRank`, `star`). So high-prio open work floats to the top of each surface.
-- Inventory as of 2026-07: **102 open / 51 shipped** (153 records total). Derive current counts
+- Inventory as of 2026-07-08: **103 open / 62 shipped** (165 records total). Derive current counts
   instead of trusting that number:
 
 ```bash
@@ -196,13 +196,13 @@ A good record survives that.
   `HANDOFF.md` — the 2026-06-19 consolidation deliberately removed those. New backlog thoughts
   → a record here. (Bugs you spot mid-task but won't fix now: a record, or the harness's
   session-task chip if offered.)
-- **Cite live counts, not the frozen "102/51".** Those move as work lands; use the count
+- **Cite live counts, not a frozen snapshot.** Those move as work lands; use the count
   one-liner above.
-- **`surface:"jlpt"` records don't show in the default (group-by-surface) board** — as of
-  2026-07 `SURFACE_ORDER` omits `jlpt` even though `SURFACES` defines it, so the group-by loop
-  skips them. They DO appear when grouped by status/type/prio, or via search. If you file a
-  `jlpt` record and it seems to vanish, this is why. (Fixing it = adding `"jlpt"` to
-  `SURFACE_ORDER` in ROADMAP.html — outside this skill's scope, but worth a record.)
+- **A surface in `SURFACES` but missing from `SURFACE_ORDER` vanishes from the default board.**
+  The group-by-surface loop iterates `SURFACE_ORDER`, so a record whose surface is only in the
+  `SURFACES` meta renders nowhere (it still appears when grouped by status/type/prio, or via
+  search). This bit `jlpt` once; both arrays list all fourteen surfaces today (verified
+  2026-07-08 — the 合格 JLPT group renders). Check both arrays when adding a surface.
 - **Google Fonts degrade offline** (cosmetic only); the board still renders and parses without
   network — don't "fix" a missing webfont.
 
