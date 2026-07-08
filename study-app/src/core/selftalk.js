@@ -136,7 +136,7 @@ export function groupByThought(phrases, thoughtsOrder) {
 // seed source is data/selftalk-templates.js) — a template has no single fixed text, so it's not a
 // `sentence` row. These PURE helpers realize a set of picks CLIENT-SIDE, reusing the SAME furigana
 // helpers a phrase does, so a realized template is shaped exactly like one. (Server-side
-// materialization of realizations into `sentence` rows is Slice 2 — see SENTENCE_STORE_TEMPLATES.md.)
+// materialization of realizations into `sentence` rows is Slice 2 — see the repo-root ROADMAP.html.)
 
 // The (clamped, default-0) filler index chosen for a slot.
 export function templatePickIndex(slot, picks) {

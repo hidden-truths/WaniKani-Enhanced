@@ -59,7 +59,7 @@ Six tables (all `CREATE TABLE IF NOT EXISTS`, applied at boot — no migration s
 **The load-bearing privacy choke-point:** every read goes through `db.getSentences({ownerType,
 ownerId?, viewer})`, which ALWAYS ANDs `(public=1 OR created_by=:viewer)`, fail-closed (null viewer →
 public only), returning one entry per LINK. Pinned breach-prevention tests in
-`wk-enhanced-api/src/db/client.test.ts` must stay green. **Any Phase-4 read path that joins
+`wk-enhanced-api/src/db/repos/sentences.test.ts` (and its sibling `annotations.test.ts`) must stay green. **Any Phase-4 read path that joins
 annotations MUST go through this choke-point** — never read `sentence` directly.
 
 Served by `routes/sentences.ts`: `GET /v1/sentences?ownerType=selftalk|card[&ownerId=]` (anon-readable

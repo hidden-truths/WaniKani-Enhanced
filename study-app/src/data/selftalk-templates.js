@@ -8,7 +8,7 @@
 // PLANNED (Slice 2, not yet built): realizations get lazily materialized as `sentence` rows on first
 // request so the store tooling (NLP/TTS/grammar/export) covers the combos people use. Until then a
 // realization is still derived client-side (below) + renders plain ruby. Design + plan + status:
-// ../../../SENTENCE_STORE_TEMPLATES.md.
+// the repo-root ROADMAP.html (store: slot-swap templates).
 //
 // A template is a JP skeleton string with `{slot}` markers + a `slots` array of fillers. Picking a
 // filler per slot REALIZES a concrete sentence (core/selftalk.js `realizeTemplate`) whose reading /

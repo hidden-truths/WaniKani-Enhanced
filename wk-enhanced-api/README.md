@@ -209,7 +209,7 @@ Test files live next to the source as `*.test.ts`. Current coverage:
 - `src/lib/ikTitles.test.ts` — `ikTitleToFolder` / `prettifyTitle` / `resolveCategory`, including the dead-end cases from CLAUDE.md pinned as executable assertions
 - `src/services/ik.test.ts` — `buildDownloadMediaUrl` URL shape + segment-wise encoding
 - `src/services/storage.test.ts` — object-key conventions
-- `src/db/client.test.ts` — repo CRUD against an in-memory SQLite (use `openDb(':memory:')` + `_useDbForTesting()` for isolated test DBs)
+- `src/db/repos/*.test.ts` — one suite per repo (13 files), each doing CRUD against an in-memory SQLite (use `openDb(':memory:')` + `_useDbForTesting()` for isolated test DBs)
 
 Live external calls (IK / DDG / Google TTS) are deliberately not tested — they're flaky, slow, and rate-limited. Integration verification is via manual curl against a running server.
 

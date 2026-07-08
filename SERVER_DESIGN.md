@@ -25,6 +25,8 @@ A handful of decisions changed during the build (logged here so the rest of the 
   - **`MIN_GAP_MS` in `services/ik.ts`** raised back from 50ms → 500ms after a 429 lockout. The rc2 push to 50ms was a userscript-lazy-fill optimization that didn't survive contact with bulk-warm traffic patterns.
   - **Warm pipeline** now throws on `ikSearch` failure (was silently caching empty rows). Without this, the 429 storm poisoned the entire DB.
   - **Cloudflare Tunnel** chosen over A-record + Caddy for "least manual setup" — no firewall ports opened, no origin cert, automatic end-to-end TLS.
+- **Docker IS used in prod** — reversing step 5 of the deploy plan below ("No Docker in prod"). Prod now runs **two containers** (`api` on :3000 + an nginx `web` container on :8080 serving the study app) from [wk-enhanced-api/compose.yaml](wk-enhanced-api/compose.yaml), brought up by a thin systemd wrapper. Dev still needs no Docker (`bun dev`). The step-5 prose below is preserved as a record of the original thinking; the live recipe is [wk-enhanced-api/deploy/README.md](wk-enhanced-api/deploy/README.md). (Note `wk-enhanced-api` has no `build` script — that part of step 5 never existed.)
+- **The study app was born here and moved out.** Not in the original design at all: a standalone Vite study app ([study-app/](study-app/)) now serves the apex `wkenhanced.dev` cross-origin, backed by accounts + per-user progress sync on this server. See [wk-enhanced-api/CLAUDE.md](wk-enhanced-api/CLAUDE.md) "Accounts + study app".
 
 The rest of this doc — endpoints, schemas, storage layout, deploy story — is still accurate in shape, with the database/dev-storage swap above being the main delta.
 
