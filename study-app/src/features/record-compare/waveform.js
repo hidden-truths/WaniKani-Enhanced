@@ -70,6 +70,16 @@ export function windowFor(url, clip) {
   if (buf) windowCache.set(key, w);   // only memoize once a real buffer backed it
   return w;
 }
+// The mono samples of a decoded buffer cropped to its spoken window (the region windowFor
+// returns) — shared by levelFor (RMS for volume-matching) and paintWave (the drawn peaks) so
+// the loudness measured and the waveform drawn cover the EXACT same samples.
+function monoInWindow(buf, url, clip) {
+  const sr = buf.sampleRate;
+  const w = windowFor(url, clip) || { start: 0, end: buf.length / sr };
+  const mono = bufferToMono(buf);
+  const s = Math.max(0, Math.floor(w.start * sr)), e = Math.min(mono.length, Math.floor(w.end * sr));
+  return e > s ? mono.subarray(s, e) : mono;
+}
 // RMS loudness of a source over its spoken window — the level used to normalize reference vs take
 // to ~equal volume. null until the buffer decodes (caller treats that as "don't normalize yet").
 const levelCache = new Map();
@@ -79,11 +89,7 @@ export function levelFor(url, clip) {
   if (levelCache.has(key)) return levelCache.get(key);
   const buf = resolvedBuffers.get(url) || null;
   if (!buf) return null;   // not decoded yet
-  const sr = buf.sampleRate;
-  const w = windowFor(url, clip) || { start: 0, end: buf.length / sr };
-  const mono = bufferToMono(buf);
-  const s = Math.max(0, Math.floor(w.start * sr)), e = Math.min(mono.length, Math.floor(w.end * sr));
-  const lvl = rmsLevel(e > s ? mono.subarray(s, e) : mono);
+  const lvl = rmsLevel(monoInWindow(buf, url, clip));
   levelCache.set(key, lvl);
   return lvl;
 }
@@ -108,12 +114,7 @@ function drawWave(canvas, mono, colorVar) {
 async function paintWave(canvas, url, clip, colorVar) {
   const buf = await fetchAudioBuffer(url);
   if (!buf || !canvas.isConnected) return;
-  const sr = buf.sampleRate;
-  const w = windowFor(url, clip) || { start: 0, end: buf.length / sr };
-  let mono = bufferToMono(buf);
-  const s = Math.max(0, Math.floor(w.start * sr)), e = Math.min(mono.length, Math.floor(w.end * sr));
-  if (e > s) mono = mono.subarray(s, e);
-  drawWave(canvas, mono, colorVar);
+  drawWave(canvas, monoInWindow(buf, url, clip), colorVar);
 }
 // Paint both waveforms for one control (you = newest take in --godan; reference = native clip or
 // synth voice in --ichidan), each cropped to its spoken window. Reads context off the control.
