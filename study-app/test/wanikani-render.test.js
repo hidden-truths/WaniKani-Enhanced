@@ -16,6 +16,10 @@ vi.mock('../src/features/synced-blob.js', () => ({
 vi.mock('../src/features/deck.js', () => ({ studyWkCards: vi.fn() }));
 vi.mock('../src/features/cloud-core.js', () => ({ setSyncStatus: () => {}, api: async () => ({}), account: null }));
 vi.mock('../src/features/custom-cards.js', () => ({ rebuildData: vi.fn(), refreshAfterVerbChange: () => {} }));
+// index.js (imported for disconnectWanikani) drags in the IndexedDB cache + the WK network sync.
+// Neither exists under happy-dom and neither is what the disconnect test is about.
+vi.mock('../src/features/wanikani/idb.js', () => ({ idbClearAll: async () => {}, idbLoadAll: async () => null, idbSaveAll: async () => {} }));
+vi.mock('../src/features/wanikani/sync.js', () => ({ loadWkCache: async () => null, syncWk: async () => {}, verifyToken: async () => ({}) }));
 
 // persistence/custom.js reads localStorage at call time — give it a working Map-backed fake.
 const bag = new Map();
@@ -31,6 +35,8 @@ import { S, adoptWkData, resetWkData } from '../src/features/wanikani/state.js';
 import { renderWanikani } from '../src/features/wanikani/view.js';
 import { detailHtml } from '../src/features/wanikani/detail.js';
 import { activateWkVocab, wkInDeck, activatableWk } from '../src/features/wanikani/activate.js';
+import { expandLeeches } from '../src/features/wanikani/leeches.js';
+import { disconnectWanikani } from '../src/features/wanikani/index.js';
 import { loadCustom } from '../src/persistence/custom.js';
 
 const NOW = Date.now();
@@ -218,4 +224,35 @@ test('dashboard leech metric jumps to the Leeches view', () => {
   renderWanikani();
   const body = document.getElementById('wkBody').innerHTML;
   expect(body).toMatch(/<button class="wk-metric leech act" data-wk-act="view" data-view="leeches">/);
+});
+
+// The leech/cluster "show all" flags are module-level in leeches.js (render state, not dataset
+// state), so resetWkData() — which clears every S-borne view cursor — cannot reach them.
+// Disconnect must call resetLeechExpand() explicitly, or a reconnect renders the list
+// pre-expanded with no "Show all" chip to collapse it.
+test('disconnect resets the leech list expansion, which resetWkData() cannot reach', async () => {
+  // LIST_CAP is 60, so 61 leeches is the smallest deck that shows the "Show all" chip.
+  const many = { ...bundle(), subjects: [], assignments: [], stats: [] };
+  for (let i = 1; i <= 61; i++) {
+    many.subjects.push(subj(100 + i, 'vocabulary', '語' + i));
+    many.assignments.push(asg(100 + i, 2));
+    many.stats.push(stat(100 + i, 6));       // 6 meaning-incorrect → a leech
+  }
+  state.wanikaniStore = { token: 't' };
+  adoptWkData(many);
+  S.view = 'leeches';
+
+  renderWanikani();
+  expect(document.getElementById('wkBody').innerHTML).toContain('wk-morebtn');   // collapsed
+
+  expandLeeches();
+  renderWanikani();
+  expect(document.getElementById('wkBody').innerHTML).not.toContain('wk-morebtn');
+
+  await disconnectWanikani();                 // clears the token + S; must clear the expand flags too
+  state.wanikaniStore = { token: 't' };       // reconnect: token pasted back…
+  adoptWkData(many);                          // …and the dataset re-synced into memory
+  S.view = 'leeches';
+  renderWanikani();
+  expect(document.getElementById('wkBody').innerHTML).toContain('wk-morebtn');   // collapsed again
 });

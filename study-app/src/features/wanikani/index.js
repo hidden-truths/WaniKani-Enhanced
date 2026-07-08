@@ -11,6 +11,7 @@ import { S, adoptWkData, resetWkData } from './state.js';
 import { loadWanikani, saveWanikani } from './store.js';
 import { loadWkCache, syncWk, verifyToken } from './sync.js';
 import { idbClearAll } from './idb.js';
+import { resetLeechExpand } from './leeches.js';
 import { renderWanikani, renderWkStatus, wireWanikani, panelActive } from './view.js';
 
 export { wanikaniBlob } from './store.js';
@@ -94,10 +95,15 @@ export async function connectWanikani(token) {
 }
 
 // Disconnect: forget the token (locally + cloud blob) and wipe the device cache.
+// `resetWkData()` clears every view cursor that lives on S, but the leech/cluster "show all"
+// flags are module-level in leeches.js (they're render state, not dataset state) and so are
+// out of its reach — hence the explicit `resetLeechExpand()`. Without it a reconnect renders
+// the leech list and cluster grid pre-expanded, with no "Show all" chip to collapse them.
 export async function disconnectWanikani() {
   state.wanikaniStore.token = null;
   saveWanikani();
   resetWkData();
+  resetLeechExpand();
   try { await idbClearAll(); } catch (e) {}
   renderWanikani();
 }

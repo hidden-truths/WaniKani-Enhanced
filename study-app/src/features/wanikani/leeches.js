@@ -101,6 +101,9 @@ function clustersHtml(clusters, idx) {
 
 /* ---- full ranked list ------------------------------------------------------------ */
 
+// "Show all" is RENDER state, not dataset state, so it lives here rather than on S — which
+// puts it out of resetWkData()'s reach. Disconnect calls resetLeechExpand() explicitly
+// (index.js) so a reconnect doesn't render both lists pre-expanded with no way to collapse.
 let expanded = false;
 let clustersExpanded = false;
 export function resetLeechExpand() { expanded = false; clustersExpanded = false; }
