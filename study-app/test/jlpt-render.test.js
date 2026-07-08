@@ -297,6 +297,26 @@ test('mock log: editing and RE-DATING a mock moves it instead of forking a secon
   expect(state.jlptStore.mocks[0]).toMatchObject({ id: `${D2}-N3`, date: D2, total: 105 });
 });
 
+// The history renders an Edit button on EVERY sitting, including other-level ones (an N4 paper on
+// the way to N3 is history worth keeping, judged against its own marks). The form has no level
+// field, so a save must re-use the EDITED MOCK's level — not the current target level, which would
+// silently re-badge the sitting and re-judge it against the wrong pass marks.
+test('mock log: editing an other-level sitting keeps ITS level, not the current target level', () => {
+  renderJlpt(); wireJlpt();
+  // An N2 paper sat on the way to N3: 128/180 clears N2's 90 total with every section over 19.
+  state.jlptStore.mocks = [{ id: `${D1}-N2`, date: D1, level: 'N2', scores: { vocab: 44, grammarReading: 44, listening: 40 }, total: 128 }];
+  state.jlptStore.level = 'N3';
+  renderJlpt();
+
+  act('mock-edit');                                        // only one row → only one Edit button
+  expect(el('jlMock_listening').value).toBe('40');         // prefilled from the stored N2 mock
+  fillMock({ l: 42 });                                     // fix a typo'd listening score
+  act('mock-save');
+
+  expect(state.jlptStore.mocks).toHaveLength(1);           // edited in place, not forked
+  expect(state.jlptStore.mocks[0]).toMatchObject({ id: `${D1}-N2`, level: 'N2', total: 130 });
+});
+
 test('mock log: delete drops the row and removes the `mocks` key entirely when the last one goes', () => {
   renderJlpt(); wireJlpt();
   act('mock-open');

@@ -678,6 +678,9 @@ function mockVerdictHtml(store, trend) {
 function mockFormHtml(store) {
   const editing = S.mockEdit ? mocksOf(store).find((m) => m.id === S.mockEdit) : null;
   const today = localDay();
+  // The level the save will write: an edit keeps the sitting's own (see `mock-save`), a new mock
+  // takes the target. The marks copy below must name the SAME level the verdict will be judged on.
+  const level = editing ? editing.level : store.level;
   // Precedence: the live draft (survives a re-render) → the mock being edited → blank/today.
   const d = S.mockDraft || {};
   const date = d.date != null ? d.date : (editing ? editing.date : today);
@@ -697,9 +700,9 @@ function mockFormHtml(store) {
     <label class="jl-mock-field wide"><span>Notes <em>optional</em></span>
       <input type="text" id="jlMockNotes" maxlength="500" value="${escapeHtml(notes)}" placeholder="ran out of time on 読解; listening section 2 was rough" aria-label="Notes"></label>
     <div class="jl-mock-fctas">
-      <button class="chip primary jl-go" data-jl-act="mock-save">${editing ? 'Save changes' : `Save ${store.level} mock`}</button>
+      <button class="chip primary jl-go" data-jl-act="mock-save">${editing ? `Save ${level} changes` : `Save ${level} mock`}</button>
       <button class="chip jl-go" data-jl-act="mock-cancel">Cancel</button>
-      <span class="jl-covsub">scored against the ${store.level} marks: ${(MOCK_PASS[store.level] || MOCK_PASS.N3).total}/${MOCK_MAX_TOTAL} overall, ${(MOCK_PASS[store.level] || MOCK_PASS.N3).section}/60 per section</span>
+      <span class="jl-covsub">scored against the ${level} marks: ${(MOCK_PASS[level] || MOCK_PASS.N3).total}/${MOCK_MAX_TOTAL} overall, ${(MOCK_PASS[level] || MOCK_PASS.N3).section}/60 per section</span>
     </div>
   </div>`;
 }
@@ -726,8 +729,10 @@ function mockHistoryHtml(mocks) {
   return `<details class="jl-gp-list jl-mock-history"><summary>All ${mocks.length} sitting${mocks.length === 1 ? '' : 's'}</summary><div class="jl-mock-rows">${rows}</div></details>`;
 }
 
-// Read the open form into a normalized mock (or null when the date/level is unusable).
-// Blank score fields read as 0 — a partially-scored paper is still a real data point.
+// Read the open form into a normalized mock (or null when the date/level is unusable). The form has
+// no level field, so `level` is supplied by the caller: the edited sitting's own level, or the
+// target level for a new mock (`mock-save`). Blank score fields read as 0 — a partially-scored
+// paper is still a real data point.
 function readMockForm(level) {
   const val = (id) => { const el = document.getElementById(id); return el ? el.value : ''; };
   const scores = {};
@@ -886,7 +891,12 @@ const ACTIONS = {
   'mock-edit': (el) => { closeMockForm(); S.mockEdit = el.dataset.mock; S.mockForm = true; renderJlpt(); },
   'mock-save': () => {
     const store = state.jlptStore;
-    const m = readMockForm(store.level);
+    // An EDIT keeps the sitting's OWN level — the form has no level field, and the history offers
+    // Edit on other-level papers too (an N2 sat on the way to N3). Reading the current target level
+    // here would re-badge that paper AND drop the original row via the id-collision filter below.
+    // Only a NEW mock takes the target level (and `mock-open` is gated to MOCK_LEVELS).
+    const editing = S.mockEdit ? mocksOf(store).find((x) => x.id === S.mockEdit) : null;
+    const m = readMockForm(editing ? editing.level : store.level);
     if (!m) { setSyncStatus('a mock needs a valid date'); return; }
     // The id is date+level, so re-dating an edited mock MOVES it — drop the old row first,
     // or the edit silently forks into two sittings.
