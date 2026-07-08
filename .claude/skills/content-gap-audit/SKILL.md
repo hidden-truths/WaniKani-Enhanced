@@ -64,9 +64,10 @@ the core function against fixture data, but the app is the honest view.
    in the record's `detail`; do NOT redesign it**), `minna-more-lessons`, `minna-section-types`
    (exercises/listening/kanji), `minna-per-line-audio`, `minna-italki-flags`,
    `songs-byo-timing-editor`, `songs-inline-add-review`, `cards-builtin-nonverb`,
-   `cards-conjugation-drills`, `cards-custom-pitch`, `content-proofread`, `selftalk-larger-set`,
-   `store-tier2-grammar`. Confirm any id is still open with
-   `grep '"<id>"' ROADMAP.html` before you cite it.
+   `cards-custom-pitch`, `content-proofread`, `selftalk-larger-set`,
+   `store-tier2-grammar`. (`minna-more-lessons` and `cards-conjugation-drills` shipped
+   2026-07-08 — kept here only so a stale citation is caught.) Confirm any id is still open
+   with `grep '"<id>"' ROADMAP.html` before you cite it.
 3. **Hunt UN-tracked gaps** the backlog hasn't captured:
    - **Dead-end UI states** — empty states, flows that need a Connect step the user hasn't done,
      surfaces that render blank when their data is dry (walk the 8 tabs in the app).

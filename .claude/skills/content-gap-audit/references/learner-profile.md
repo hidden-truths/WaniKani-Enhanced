@@ -22,8 +22,8 @@ work, plan it for *them*, not for a hypothetical cohort.
 - **Tutor:** works with an **iTalki tutor** on those same lessons. Vocab the tutor covers arrives
   as a plain-text list at `~/Downloads/lessonNN_vocab.txt` (NN = lesson number) and gets tagged
   **`italki:true`** when imported into the deck. Which lesson they're currently on **moves week to
-  week — ASK, never assume** (as of 2026-07 the lessons present in the repo are 22/23/24; run
-  `ls wk-enhanced-api/data/minna/` for the live set).
+  week — ASK, never assume** (as of 2026-07-08 they were in Minna II, L26–35; the full L1–50
+  backfill is imported and seeded — run `ls wk-enhanced-api/data/minna/` for the live set).
 - **Explicit wants beyond WK:** **listening, writing, and speaking** practice. WK gives them none
   of these; the study app's 独り言 (Self-Talk), 歌 (Songs), and audio surfaces exist for this.
 
@@ -58,6 +58,6 @@ work, plan it for *them*, not for a hypothetical cohort.
 - Source of these facts: the maintainer's own memory notes (not discoverable by reading the repo)
   plus repo-verified defaults. Volatile items (leech count, current lesson, WK level, exam date)
   drift — always prefer the live app value or an `ls`/blob read over the numbers frozen here.
-- Repo-verified as of 2026-07: `DEFAULT_EXAM_DATE = '2026-12-06'` and
+- Repo-verified as of 2026-07-08: `DEFAULT_EXAM_DATE = '2026-12-06'` and
   `DEFAULT_TARGETS = { wordsPerDay: 12, grammarPerWeek: 5 }` (both in the files named above);
-  Minna lessons 22–24 present under `wk-enhanced-api/data/minna/`.
+  Minna lessons 1–50 present under `wk-enhanced-api/data/minna/`.

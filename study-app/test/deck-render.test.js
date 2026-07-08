@@ -18,6 +18,7 @@ vi.mock('../src/settings-store.js', () => ({ settings: ctx.settings, saveSetting
 
 import { state } from '../src/state.js';
 import { cfg, buildDeck, initDeckUI, startDueSession, registerStartSession, updateDeckCount, updateDueBanner } from '../src/features/deck.js';
+import { CONJ_FORM_IDS } from '../src/core/conjugation.js';
 
 document.body.innerHTML = `
   <div id="panel-study">
@@ -27,6 +28,7 @@ document.body.innerHTML = `
     <div id="forecastChart"></div><div id="pipeViz"></div>
     <div class="chips">
       <button class="chip mode" data-mode="meaning"></button>
+      <button class="chip mode" data-mode="conjugation"></button>
       <button class="chip skind" data-skind="free"></button><button class="chip skind" data-skind="srs"></button>
       <button class="chip imode" data-imode="self"></button>
       <button class="chip amode" data-amode="off"></button>
@@ -38,6 +40,7 @@ document.body.innerHTML = `
       <button class="chip ord" data-ord="shuffle"></button><button class="chip ord" data-ord="worst"></button>
       <div class="frow verb-only"></div>
     </div>
+    <div class="frow" id="conjFormsRow" hidden><div class="chips" id="conjForms"></div></div>
     <input id="rmin"><input id="rmax">
     <div id="deckCount"></div><div id="deckSummary"></div>
   </div>`;
@@ -65,8 +68,20 @@ const CFG_DEFAULTS = { mode: 'meaning', kind: 'free', ord: 'shuffle', rmin: 1, r
 beforeEach(() => {
   state.store = { cards: {}, sessions: [], daily: {} };
   seedData();
-  Object.assign(cfg, CFG_DEFAULTS, { cat: [], type: [], trans: [], topic: [], status: [], source: [] });
+  Object.assign(cfg, CFG_DEFAULTS, { cat: [], type: [], trans: [], topic: [], status: [], source: [], forms: [...CONJ_FORM_IDS] });
+  document.querySelectorAll('.chip.conjf').forEach(b => b.classList.add('active'));
 });
+
+// A corpus with REAL readings — the default CARD fixture's `r1`/`r2` readings can't inflect
+// (they don't end in a dictionary-form kana), which is itself the point of the first test below.
+function seedConjugable() {
+  state.DATA = [
+    { rank: 1, jp: '食べる', read: 'たべる', mean: 'eat', jlpt: 'N5', cat: 'verb', type: 'ichidan', trans: 't', tags: [] },
+    { rank: 2, jp: 'ある', read: 'ある', mean: 'exist', jlpt: 'N5', cat: 'verb', type: 'godan', trans: 'i', tags: [] },
+    { rank: 3, jp: '猫', read: 'ねこ', mean: 'cat', jlpt: 'N5', cat: 'noun', type: '', trans: '', tags: [] },
+  ];
+  state.MAXRANK = 105;
+}
 
 test('buildDeck honors the AND’d facets, and the "all" chip is a master reset across facets', () => {
   expect(buildDeck().map(v => v.rank).sort((a, b) => a - b)).toEqual([1, 2, 105]);
@@ -140,4 +155,68 @@ test('updateDeckCount reflects the kind: cards-in-deck vs due-in-deck', () => {
   cfg.kind = 'srs';                                               // all three unseen → all due
   updateDeckCount();
   expect(el('deckCount').textContent).toContain('due in this deck');
+});
+
+/* ---- Conjugation mode (cfg.mode='conjugation' + cfg.forms) ----
+   The picker's Forms row is NOT a deck facet: it filters which QUESTION a card is asked, and
+   only indirectly which cards survive (a card with no answerable form drops out). These pin the
+   narrowing, the ≥1-form floor, and the row's visibility toggle. */
+
+test('conjugation mode narrows the deck to cards core/conjugation.js can actually inflect', () => {
+  seedConjugable();
+  cfg.mode = 'meaning';
+  expect(buildDeck().map(v => v.rank).sort()).toEqual([1, 2, 3]);   // the noun rides along normally
+  cfg.mode = 'conjugation';
+  expect(buildDeck().map(v => v.rank).sort()).toEqual([1, 2]);      // …and drops out here
+  // ある has no potential form, so a potential-only session drops it too — leaving 食べる alone.
+  cfg.forms = ['potential'];
+  expect(buildDeck().map(v => v.rank)).toEqual([1]);
+});
+
+test('the deck COUNT applies the same conjugation narrowing as buildDeck (no phantom cards)', () => {
+  seedConjugable();
+  cfg.mode = 'conjugation';
+  cfg.forms = ['potential'];
+  updateDeckCount();
+  expect(el('deckCount').textContent).toContain('1');
+  expect(el('deckSummary').textContent).toContain('可能形');   // the mode is named in the recap
+});
+
+test('a deck of non-inflectable cards is legitimately empty in conjugation mode', () => {
+  // The default corpus: readings like `r1` that end in no dictionary-form kana.
+  cfg.mode = 'conjugation';
+  expect(buildDeck()).toEqual([]);
+});
+
+test('the Forms row appears only in conjugation mode', () => {
+  chip('mode', 'meaning').click();
+  expect(el('conjFormsRow').hidden).toBe(true);
+  chip('mode', 'conjugation').click();
+  expect(el('conjFormsRow').hidden).toBe(false);
+  expect(document.querySelectorAll('.chip.conjf').length).toBe(CONJ_FORM_IDS.length);
+  chip('mode', 'meaning').click();                  // …and hides again on the way out
+  expect(el('conjFormsRow').hidden).toBe(true);
+});
+
+test('form chips toggle, but the LAST active form cannot be deselected (deck can never be emptied)', () => {
+  seedConjugable();
+  chip('mode', 'conjugation').click();
+  const teChip = document.querySelector('.chip.conjf[data-conjf="te"]');
+  const pastChip = document.querySelector('.chip.conjf[data-conjf="past"]');
+  expect(cfg.forms).toEqual(CONJ_FORM_IDS);
+
+  teChip.click();
+  expect(cfg.forms).not.toContain('te');
+  expect(teChip.classList.contains('active')).toBe(false);
+
+  teChip.click();                                   // toggles back on
+  expect(cfg.forms).toContain('te');
+  expect(teChip.classList.contains('active')).toBe(true);
+
+  // Strip down to one form, then try to remove it.
+  cfg.forms.splice(0, cfg.forms.length, 'past');
+  document.querySelectorAll('.chip.conjf').forEach(b => b.classList.toggle('active', b.dataset.conjf === 'past'));
+  pastChip.click();
+  expect(cfg.forms).toEqual(['past']);              // no-op — the floor held
+  expect(pastChip.classList.contains('active')).toBe(true);
 });

@@ -11,6 +11,7 @@ import {
   availableTiers, exampleForLevel, JLPT_TIERS, colorClass, cardStamp, pitchHtml,
   normKana, romajiToKana, escapeHtml, plainText, cardStat, scheduleCard, isDue, overlayTokens,
   rubyToSegments, clozeLineParts, grammarBlank, clozePartsToHtml, pickGrammarExample,
+  conjugate, pickConjForm, CONJ_FORMS,
 } from '../core/index.js';
 import { grammarPointOf, grammarTokensFor, ensureGrammarPoints } from './grammar/data.js';
 import { settings, saveSettings } from '../settings-store.js';
@@ -37,7 +38,14 @@ export function registerSessionHooks(h) {
 
 // playReading reads the current card's reading aloud (server TTS via speakWord). `e` is the click
 // event when triggered by the speaker button — Alt/Shift-click cycles voices (③); auto-play passes none.
-function playReading(e) { if (session) speakWord(session.deck[session.i], 'reviews', document.getElementById('speakBtn'), { cycle: cycleMod(e) }); }
+// In conjugation mode the ANSWER is the inflected form, so speak that (its kanji display, which is
+// what /v1/tts keys on) rather than the dictionary headword speakWord would send.
+function playReading(e) {
+  if (!session) return;
+  const btn = document.getElementById('speakBtn'), opts = { cycle: cycleMod(e) };
+  if (session.conj) speak(session.conj.display, 'reviews', btn, opts);
+  else speakWord(session.deck[session.i], 'reviews', btn, opts);
+}
 
 export function startSession() {
   const deck = buildDeck();
@@ -54,7 +62,11 @@ export function startSession() {
       }
       return;
     }
-    alert('No cards in that deck yet.');
+    // Conjugation mode narrows the deck to inflectable cards, so "empty" here usually means the
+    // facets selected nouns/phrases — say so, rather than the generic (and misleading) "no cards".
+    alert(cfg.mode === 'conjugation'
+      ? 'Nothing in that deck can be conjugated. Conjugation drills need verbs or adjectives with a word class set (godan / ichidan / irregular · い-adj / な-adj).'
+      : 'No cards in that deck yet.');
     return;
   }
   session = { deck, i: 0, revealed: false, results: [], kind: cfg.kind };
@@ -156,7 +168,26 @@ function showCard() {
   document.getElementById('cardClsJp').textContent = CLASS_JP[cls] || '';
   document.getElementById('cardClsEn').textContent = cardStamp(v).label || '';
   const pw = document.getElementById('promptWord'), aw = document.getElementById('answerWord');
-  if (v.cat === 'grammar') {               // grammar cloze: sentence with the pattern blanked
+  // Which conjugated form (if any) THIS card is being asked for. Rotates off the attempt count,
+  // so a card revisited across sessions cycles its forms. buildDeck already guaranteed the card
+  // can answer at least one of cfg.forms, so `conj` is only null if cfg changed under us.
+  const attempts = (((state.store.cards || {})[v.rank] || {}).attempts || []).length;
+  const conjForm = cfg.mode === 'conjugation' ? pickConjForm(v, cfg.forms, attempts) : null;
+  const conj = conjForm ? conjugate(v, conjForm) : null;
+  session.conj = conj ? { ...conj, form: conjForm } : null;
+  if (session.conj) {                      // conjugation: dictionary form → an inflected form
+    const meta = CONJ_FORMS.find(f => f.id === conjForm);
+    document.getElementById('promptLabel').textContent = `Conjugate · ${meta.label}`;
+    // The dictionary READING rides along on the prompt: it isn't the answer here (the ending is),
+    // and without it a card whose kanji you can't yet read is unanswerable in typed mode.
+    pw.className = 'prompt-word jp';
+    pw.innerHTML = `${escapeHtml(v.jp)}<span class="conj-dict">${escapeHtml(v.read)}</span>`;
+    aw.className = 'answer-word jp'; aw.textContent = conj.display;
+    document.getElementById('hankoGlyph').textContent = CLASS_SEAL[colorClass(v)] || '語';
+    document.getElementById('aMean').textContent = `${meta.label} of ${v.jp} — ${v.mean}`;
+    document.getElementById('veilLabelA').textContent = 'Reading';
+    document.getElementById('veilLabelB').textContent = 'Form';
+  } else if (v.cat === 'grammar') {         // grammar cloze: sentence with the pattern blanked
     // Both test directions render the cloze — the pattern IS the recall target either way.
     // Example rotation is deterministic from the attempt count (renderGrammarExample agrees).
     const gp = grammarPointOf(v.grammarId);
@@ -180,7 +211,8 @@ function showCard() {
     document.getElementById('aMean').textContent = v.mean;
     document.getElementById('veilLabelA').textContent = 'Pattern';
     document.getElementById('veilLabelB').textContent = 'Meaning';
-  } else if (cfg.mode === 'meaning') {     // JP shown → recall meaning + reading
+  } else if (cfg.mode !== 'reading') {     // JP shown → recall meaning + reading (the DEFAULT face:
+                                           // also where a conjugation card that can't inflect lands)
     document.getElementById('promptLabel').textContent = 'Read & recall · meaning + reading';
     pw.className = 'prompt-word jp'; pw.innerHTML = v.jp;
     aw.className = 'answer-word jp'; aw.innerHTML = v.jp;
@@ -197,13 +229,22 @@ function showCard() {
     document.getElementById('veilLabelA').textContent = 'Reading';
     document.getElementById('veilLabelB').textContent = 'Japanese';
   }
-  document.getElementById('aRead').innerHTML = pitchHtml(v.read, v.accent);
-  const acc = document.getElementById('aAccent');
-  if (v.accent != null && v.accent !== '') { acc.hidden = false; acc.textContent = 'accent ［' + v.accent + '］'; }
-  else acc.hidden = true;
+  // The reading shown under the answer word. In conjugation mode that's the INFLECTED reading —
+  // and it carries NO pitch marks: `v.accent` describes the dictionary form, and inflection moves
+  // the drop (たべる[2] → たべて[1]). Painting the dict accent on a conjugated reading would teach
+  // a wrong pitch, so both the overline and the accent chip are suppressed.
+  const aRead = document.getElementById('aRead'), acc = document.getElementById('aAccent');
+  if (session.conj) { aRead.textContent = session.conj.kana; acc.hidden = true; }
+  else {
+    aRead.innerHTML = pitchHtml(v.read, v.accent);
+    if (v.accent != null && v.accent !== '') { acc.hidden = false; acc.textContent = 'accent ［' + v.accent + '］'; }
+    else acc.hidden = true;
+  }
   // tags: prompt side = class + level (no Jisho — it would spoil); answer side adds Jisho.
+  // Conjugation mode names the asked form as a chip so the ask survives a scroll past the kicker.
   const lvl = v.jlpt ? `<span class="tag level">${v.jlpt}</span>` : '';
-  document.getElementById('promptTags').innerHTML = classPill(v) + lvl;
+  const conjTag = session.conj ? `<span class="tag conj">${(CONJ_FORMS.find(f => f.id === session.conj.form) || {}).jp || ''}</span>` : '';
+  document.getElementById('promptTags').innerHTML = classPill(v) + lvl + conjTag;
   document.getElementById('aTags').innerHTML = classPill(v) + lvl
     + `<a class="tag link" href="${jishoUrl(v.jp)}" target="_blank" rel="noopener noreferrer">View on Jisho <svg class="ic" aria-hidden="true"><use href="#i-external"/></svg></a>`;
   // mnemonic + trap as two note-cards (the mock's 2-up grid); a grammar card fills them with
@@ -245,14 +286,16 @@ function revealAnswer() {
 }
 // Self-graded path: flip to the answer + grade buttons.
 function reveal() { revealAnswer(); }
-// Typed path: grade the typed kana against v.read, reveal + a verdict, then surface the
+// Typed path: grade the typed kana against the expected reading — v.read normally, the INFLECTED
+// reading in conjugation mode (the whole point of the drill). Reveal + a verdict, then surface the
 // grade buttons with the auto-judged one emphasized. The verdict is ADVISORY — 1/2 or a
 // click still overrides (typo forgiveness); session.suggested drives the Enter-accepts path.
 function submitTyped() {
   const inp = document.getElementById('answerInput');
   if (inp.disabled) return;                          // guard double-submit
   const v = session.deck[session.i];
-  const correct = normKana(romajiToKana(inp.value)) === normKana(v.read);
+  const target = session.conj ? session.conj.kana : v.read;
+  const correct = normKana(romajiToKana(inp.value)) === normKana(target);
   session.suggested = correct;
   inp.disabled = true;
   revealAnswer();

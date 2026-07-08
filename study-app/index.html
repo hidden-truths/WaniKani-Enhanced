@@ -206,11 +206,18 @@
         <button class="chip skind active" data-skind="free" title="Practice any cards — does not change review dates">Free study</button>
         <button class="chip skind" data-skind="srs" title="Review only cards that are currently due, and reschedule them"><svg class="ic" aria-hidden="true"><use href="#i-refresh"/></svg>SRS review</button>
       </div></div>
-      <!-- Test direction: which side of the card is the PROMPT vs the ANSWER. -->
+      <!-- Test direction: which side of the card is the PROMPT vs the ANSWER. `conjugation` is
+           the third direction — a PRODUCTION drill (dictionary form → an inflected form), not a
+           recognition one; it restricts the deck to cards core/conjugation.js can inflect. -->
       <div class="frow"><span class="filter-label">Test direction</span><div class="chips" role="radiogroup">
         <button class="chip mode active" data-mode="meaning">JP → meaning + reading</button>
         <button class="chip mode" data-mode="reading">Meaning → reading + JP</button>
+        <button class="chip mode" data-mode="conjugation" title="Produce an inflected form from the dictionary form — verbs and adjectives only">JP → conjugated form</button>
       </div></div>
+      <!-- Conjugation forms: which inflections the drill asks for (cfg.forms; multi-select, ≥1
+           enforced). Shown only in conjugation mode — initDeckUI toggles the row. A card is
+           dealt only the forms it can actually answer (isConjugable / pickConjForm). -->
+      <div class="frow" id="conjFormsRow" hidden><span class="filter-label">Forms</span><div class="chips" id="conjForms"></div></div>
       <!-- Input mode: self-graded reveal (default) or type-the-reading auto-grading.
            Persisted to localStorage (jpverbs_input); see FLASHCARD SESSION. -->
       <div class="frow"><span class="filter-label">Input</span><div class="chips" role="radiogroup">

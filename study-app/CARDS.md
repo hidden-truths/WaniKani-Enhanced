@@ -37,7 +37,7 @@ A card is a plain object. `✓` = required for the card to function; the rest ma
 | `read` | string | ✓ | Kana reading. The answer being tested; pitch marks render on it. |
 | `mean` | string | ✓ | English meaning. |
 | `cat` | string | ✓ | Category: `verb` / `adjective` / `noun` / `adverb` / `phrase` / `grammar` (the sixth, for cloze-drilled grammar-point cards). Paints the spine + hanko stamp; the **Category** facet. Defaults to `verb` if absent. |
-| `type` | string | — | Sub-class: verbs `godan`/`ichidan`/`irregular`; adjectives `i-adj`/`na-adj`; else `''`. The **Type** facet + stamp label. |
+| `type` | string | — | Sub-class: verbs `godan`/`ichidan`/`irregular`; adjectives `i-adj`/`na-adj`; else `''`. The **Type** facet + stamp label — and the input the **conjugation drill** derives its paradigms from (`core/conjugation.js`), so a wrong `type` teaches a wrong 活用; a card with none is simply not drilled. |
 | `trans` | string | — | Transitivity (verbs only): `t` (transitive) / `i` (intransitive) / `''`. The **Transitivity** facet. |
 | `jlpt` | string | — | `N5`…`N1`. The **JLPT** facet. Minna default `N4`. |
 | `tags` | string[] | — | Semantic/topic tokens (`motion`, `daily`, …) + specials (`suru`, `fake`) + provenance (`custom`, `みんなの日本語`, `mnn-l<n>`, `iTalki`, `歌`/`song-<id>`, `鰐蟹`/`wk-l<n>`). Drive the **Topic** + **Source** facets and the Browse tag chips. |

@@ -12,7 +12,9 @@ or module cycle fails loudly at collect time. Three tiers:
    [jlpt-core.test.js](jlpt-core.test.js), [grammar-core.test.js](grammar-core.test.js)
    (includes catalog invariants over the REAL generated `data/grammar-n3.js`, so a bad
    content regen fails here), [wanikani-core.test.js](wanikani-core.test.js),
-   [record-compare-core.test.js](record-compare-core.test.js).
+   [record-compare-core.test.js](record-compare-core.test.js),
+   [conjugation-core.test.js](conjugation-core.test.js) (the drill paradigms + their encoded
+   exceptions, swept over the REAL 100-verb dataset — a mistyped `type` fails here).
 2. **Render/glue tests** (`*-render.test.js` for each tab + [custom-cards.test.js](custom-cards.test.js),
    [speaking-bar.test.js](speaking-bar.test.js)) — the layer pure tests can't reach and
    `bun run build` can't catch: render dispatch, delegated ACTIONS tables, store round-trips,

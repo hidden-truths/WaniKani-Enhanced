@@ -114,7 +114,9 @@ order. The actual DOM/render/feature glue is split into **`src/features/*`** mod
   `sentenceToPhrase`), `wanikani` (leech scoring / same-kanji confusion clustering /
   forecasts / `slimSubject` / `buildWkCard`), `jlpt` (map/lookup / countdown / coverage /
   gap / batch-tiering / pace / plan / heat), `grammar` (`buildGrammarCard` /
-  `pickGrammarExample` / `grammarBlank` / `clozePartsToHtml` / coverage), `merge` (the
+  `pickGrammarExample` / `grammarBlank` / `clozePartsToHtml` / coverage), `conjugation`
+  (the drill paradigms — `conjugate` → `{kana,display}`-or-null / `conjugableForms` /
+  `isConjugable` / `pickConjForm` / `CONJ_FORMS`), `merge` (the
   per-blob 409 reconcilers — `mergeProgress`/`mergeCustomVerbs`/`mergeMinna`/
   `mergeSelftalkPractice`/`mergeSongs`/`mergeJlpt`), `sentence` (shared sentence-store
   wire decoders — `sentenceGrammar`/`sentenceTokens`/`sentenceEn`), `annotate`
@@ -231,6 +233,13 @@ one module each under `src/features/*` (the section names map 1:1 to filenames):
   but NEVER touches the box/due. Session kind is captured at `startSession` into
   `session.kind`, tagged onto `store.sessions[*].kind` + the durable log's
   `details.kind`, and split out in `renderStats` (the SRS vs Free-study boxes).
+- **Test direction (`cfg.mode` ∈ `meaning`/`reading`/`conjugation`):** the picker's "Test
+  direction" toggle — which side of the card is the prompt. `conjugation` is the odd one out:
+  a PRODUCTION drill (dictionary form → an inflected form) whose paradigms come from the pure
+  `core/conjugation.js`, gated by its own `cfg.forms` chip row and narrowing the deck to
+  inflectable cards (`isConjugable`, applied in BOTH `buildDeck` and `updateDeckCount`).
+  Grading/SRS are unchanged — a conjugation miss records against the same card. See the
+  fail-closed dead-end below.
 - **Filtering (AND'd facets):** `passes(v,c)` intersects six token facets
   (`cat`/`type`/`trans`/`topic`/`status`/`source`) + JLPT + rank. `facetMatch` =
   OR-within-one, `facetAll` = no-constraint test, `oneGroup` = does a card match one
@@ -724,12 +733,14 @@ Component contracts you must preserve:
   Collapsed `.topic-inner` chips are forced to tabindex -1 via a MutationObserver on
   the region's `open` class; if you change how the topic disclosure toggles (e.g. to
   `display:none`), re-check that observer still fires.
-- **Typed grading is advisory, and only grades the READING.** `submitTyped`
-  compares the typed input against `v.read` and *suggests* a grade (green/red
+- **Typed grading is advisory, and only grades a READING.** `submitTyped`
+  compares the typed input against `v.read` — or, in conjugation mode, against the INFLECTED
+  reading (`session.conj.kana`), which is the answer being tested there — and *suggests* a
+  grade (green/red
   verdict + a `.suggested` ring on the matching button), but the user still records
   it via 1/2 or a click — so a typo or an unjudged-meaning recall can be overridden.
   Don't make it auto-advance on match. The compare is
-  `normKana(romajiToKana(input)) === normKana(v.read)`: `romajiToKana` first folds
+  `normKana(romajiToKana(input)) === normKana(target)`: `romajiToKana` first folds
   any romaji to hiragana (greedy longest-match Hepburn + wāpuro variants:
   si/shi, tu/tsu, hu/fu, zi/ji, sya/sha, double-consonant→っ, n'/nn/trailing-n→ん),
   then `normKana` folds katakana→hiragana, strips spaces/separators, and unifies
@@ -894,10 +905,32 @@ Component contracts you must preserve:
   Transitivity fields show only for the categories that have them (`syncVerbFields`).
   Adjectives reuse the `type` field for the い/な split (`i-adj`/`na-adj`); nouns/
   adverbs/phrases have no subtype. Don't reintroduce verb-only framing in headers/
-  empty-states, and don't make Type/Transitivity unconditional again. **Still not
-  done** (tracked in ROADMAP.html): conjugation drills, and proofed built-in non-verb
+  empty-states, and don't make Type/Transitivity unconditional again. **Conjugation
+  drills SHIPPED** (the third test direction — see the dead-end below). **Still not
+  done** (tracked in ROADMAP.html): proofed built-in non-verb
   content (the dataset is still 100 verbs — categories are a model/UI capability that
   users populate).
+- **Conjugation mode is a THIRD `cfg.mode`, and it FAILS CLOSED.** `cfg.mode` ∈
+  `meaning`/`reading`/`conjugation`; the third is a PRODUCTION drill (dictionary form → an
+  inflected form) over the same session machinery, with its own `cfg.forms` chip row
+  (session-local, floor of one — deselecting the last form is a no-op, or the deck would
+  empty with no way back). The paradigms live in the pure `core/conjugation.js`, which
+  returns `{kana, display}` or **null**: an unknown `type`, a headword that isn't a
+  dictionary form, or a form that would be grammatical nonsense is simply NOT DRILLED.
+  Don't "fix" a null by guessing — teaching an exam learner a wrong 活用 is the failure
+  mode the module exists to prevent. Both `buildDeck` AND `updateDeckCount` apply the
+  `isConjugable` narrowing (the count must never promise cards the session won't deal),
+  and a card with no answerable form falls back to the default meaning face. Encoded
+  exceptions, all pinned by `test/conjugation-core.test.js` against the real dataset:
+  行く takes って (never いて) and its compounds inherit it; ある's negative is the suppletive
+  ない and it has no potential; 来る's display re-attaches 来 (the 2-char drop would eat the
+  stem kanji); いい swaps its stem to よ **by suffix**, so かっこいい→かっこよかった; and
+  `POTENTIAL_SKIP` drops the potential of verbs that are already potential forms (できる/
+  使える/買える/待てる) or whose potential is a different verb (分かる→分かれる "to part").
+  **The answer face suppresses pitch marks**: `v.accent` describes the DICTIONARY form and
+  inflection moves the drop (たべる[2]→たべて[1]), so painting it on a conjugated reading
+  would teach a wrong pitch. Typed mode grades the INFLECTED reading (`session.conj.kana`),
+  not `v.read`.
 - **Reviewing a card early never promotes it; free study reschedules only ALREADY-DUE
   cards, and only when the setting allows.** Two study kinds (`cfg.kind`): *SRS review*
   serves only due cards (`buildDeck` intersects `isDue`) and reschedules them; *free

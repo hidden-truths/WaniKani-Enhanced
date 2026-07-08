@@ -12,7 +12,7 @@
 import { test, expect, beforeEach, vi } from 'vitest';
 
 const ctx = vi.hoisted(() => ({
-  cfg: { mode: 'meaning', input: 'reveal', kind: 'srs', jlpt: [], status: [] },
+  cfg: { mode: 'meaning', forms: ['te', 'past', 'negative', 'potential'], input: 'reveal', kind: 'srs', jlpt: [], status: [] },
   deck: [],
   settings: { exampleLevel: 'N5', furigana: true, input: 'reveal', audio: 'off', freeReviewDue: true },
 }));
@@ -90,7 +90,7 @@ registerSessionHooks(hooks);
 beforeEach(() => {
   state.store = { cards: {}, sessions: [], daily: {} };
   state.exampleLevels = {};
-  Object.assign(ctx.cfg, { mode: 'meaning', input: 'reveal', kind: 'srs' });
+  Object.assign(ctx.cfg, { mode: 'meaning', forms: ['te', 'past', 'negative', 'potential'], input: 'reveal', kind: 'srs' });
   ctx.settings.freeReviewDue = true;
   ctx.deck = [];
   hooks.logSession.mockClear(); hooks.maybeShowSignup.mockClear();
@@ -271,4 +271,93 @@ test('the local sessions record is capped at 1000 (charts only — the durable l
   expect(state.store.sessions).toHaveLength(1000);             // capped, oldest dropped
   expect(state.store.sessions[999]).toMatchObject({ right: 1, tot: 1, kind: 'srs' });
   expect(state.store.sessions[0].t).toBe(1);                   // slice(-1000) dropped t:0
+});
+
+/* ---- Conjugation mode (cfg.mode='conjugation') ----
+   A PRODUCTION drill over the same session machinery: the prompt shows the dictionary form, the
+   answer is an inflected form derived by the pure core/conjugation.js, and typed mode grades
+   against the INFLECTED reading. Deck narrowing is deck.js's job (deck-render.test.js) — these
+   pin the card faces, the typed target, the form rotation, and the pitch-mark suppression. */
+
+const CONJ_CARD = (extra = {}) => CARD(1, '食べる', 'たべる', { type: 'ichidan', ...extra });
+
+test('conjugation prompt: dictionary form + its reading + the asked form; answer is the inflection', () => {
+  ctx.cfg.mode = 'conjugation';
+  ctx.cfg.forms = ['te'];
+  ctx.deck = [CONJ_CARD()];
+  startSession();
+  expect(el('promptLabel').textContent).toBe('Conjugate · て-form');
+  expect(el('promptWord').textContent).toContain('食べる');
+  expect(el('promptWord').querySelector('.conj-dict').textContent).toBe('たべる');   // reading rides along
+  expect(el('promptTags').querySelector('.tag.conj').textContent).toBe('て形');
+  expect(el('answerWord').textContent).toBe('食べて');
+  expect(el('aRead').textContent).toBe('たべて');
+  expect(el('aMean').textContent).toBe('て-form of 食べる — meaning-1');
+  expect(el('veilLabelB').textContent).toBe('Form');
+});
+
+test('conjugation answer suppresses pitch marks — the accent describes the DICTIONARY form', () => {
+  ctx.cfg.mode = 'conjugation';
+  ctx.cfg.forms = ['past'];
+  ctx.deck = [CONJ_CARD({ accent: 2 })];
+  startSession();
+  expect(el('aRead').innerHTML).toBe('たべた');            // plain text — no pitchHtml spans
+  expect(el('aRead').querySelector('span')).toBe(null);
+  expect(el('aAccent').hidden).toBe(true);                 // …and no "accent ［2］" chip
+  // A normal card with the same accent still paints both.
+  ctx.cfg.mode = 'meaning';
+  ctx.deck = [CONJ_CARD({ accent: 2 })];
+  startSession();
+  expect(el('aAccent').hidden).toBe(false);
+  expect(el('aRead').querySelector('span')).not.toBe(null);
+});
+
+test('conjugation typed mode grades the INFLECTED reading, not the dictionary reading', () => {
+  ctx.cfg.mode = 'conjugation';
+  ctx.cfg.forms = ['negative'];
+  ctx.cfg.input = 'type';
+  ctx.deck = [CONJ_CARD()];
+  startSession();
+  el('answerInput').value = 'たべる';                       // the dictionary reading — wrong here
+  el('checkBtn').click();
+  expect(el('typedVerdict').className).toContain('bad');
+
+  ctx.deck = [CONJ_CARD()];
+  startSession();
+  el('answerInput').value = 'tabenai';                     // romaji folds to kana, then matches
+  el('checkBtn').click();
+  expect(el('typedVerdict').className).toContain('ok');
+  expect(el('rightBtn').classList.contains('suggested')).toBe(true);
+});
+
+test('the asked form rotates with the attempt count, over the SELECTED forms only', () => {
+  ctx.cfg.mode = 'conjugation';
+  ctx.cfg.forms = ['te', 'past'];
+  const ask = () => { ctx.deck = [CONJ_CARD()]; startSession(); return el('promptLabel').textContent; };
+  state.store.cards[1] = { attempts: [], right: 0, wrong: 0, box: 0, due: 0 };
+  expect(ask()).toContain('て-form');
+  state.store.cards[1].attempts = [1];
+  expect(ask()).toContain('Past');
+  state.store.cards[1].attempts = [1, 1];
+  expect(ask()).toContain('て-form');                       // wraps — never leaves the selection
+});
+
+test('a card that cannot inflect falls back to the normal face (defensive: cfg changed under us)', () => {
+  ctx.cfg.mode = 'conjugation';
+  ctx.deck = [CARD(9, '猫', 'ねこ', { cat: 'noun', type: '' })];
+  startSession();
+  expect(el('promptLabel').textContent).toBe('Read & recall · meaning + reading');
+  expect(el('promptWord').querySelector('.conj-dict')).toBe(null);
+  expect(el('promptTags').querySelector('.tag.conj')).toBe(null);
+  expect(el('answerWord').textContent).toBe('猫');
+});
+
+test('an empty conjugation deck explains WHY it is empty, not the generic "no cards"', () => {
+  const alert = vi.fn();
+  vi.stubGlobal('alert', alert);
+  ctx.cfg.mode = 'conjugation'; ctx.cfg.kind = 'free';
+  ctx.deck = [];
+  startSession();
+  expect(alert.mock.calls[0][0]).toContain('can be conjugated');
+  vi.unstubAllGlobals();
 });

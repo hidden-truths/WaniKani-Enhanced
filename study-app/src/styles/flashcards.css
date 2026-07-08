@@ -203,7 +203,13 @@ button.pill.hero-jump:hover{border-color:var(--ink-2);transform:translateY(-1px)
 .cloze-gap{display:inline-block;white-space:nowrap;color:transparent;background:color-mix(in srgb,var(--grammar) 14%,var(--deeper));border:1px dashed color-mix(in srgb,var(--grammar) 45%,transparent);border-radius:10px;padding:0 .12em;margin:0 .06em;user-select:none}
 /* …and the reveal face marks the returned pattern span. */
 .gp-hit{background:color-mix(in srgb,var(--grammar) 18%,transparent);color:var(--ink);border-radius:6px;padding:0 .1em;box-decoration-break:clone}
+/* Conjugation prompt: the dictionary READING under the headword. It isn't the answer (the
+   inflected ending is), so it doesn't spoil — it's there so a card whose kanji you can't yet
+   read is still answerable in typed mode. Muted + small so it never competes with the headword. */
+.conj-dict{display:block;font-family:var(--jp);font-size:22px;font-weight:500;line-height:1;letter-spacing:.06em;color:var(--muted);margin-top:16px}
 [data-theme="dark"] .prompt-word{text-shadow:0 2px 8px rgba(0,0,0,.45)}
+/* text-shadow INHERITS — the headword's dark-mode lift would smear this 22px line. */
+[data-theme="dark"] .conj-dict{text-shadow:none}
 .prompt-tags{display:flex;align-items:center;justify-content:center;gap:10px;margin-top:18px;flex-wrap:wrap}
 
 /* tags (used in prompt-tags + the answer tag-row) */
@@ -220,6 +226,10 @@ button.pill.hero-jump:hover{border-color:var(--ink-2);transform:translateY(-1px)
 [data-theme="dark"] .tag-row .tag.cls.grammar{background:color-mix(in srgb,var(--grammar) 16%,transparent);color:var(--grammar);border:1px solid color-mix(in srgb,var(--grammar) 40%,transparent)}
 .tag.level{background:var(--deeper);color:var(--ink);border:1px solid var(--line)}
 [data-theme="dark"] .tag.level{background:var(--chip-bg);color:var(--muted)}
+/* The conjugation ask (て形/た形/…). Deliberately NEUTRAL, not a functional accent: brand/reading/
+   gold already mean godan/ichidan/irregular, and a colored ask beside the class pill reads as a
+   second word-class claim. The kicker ("Conjugate · て-form") carries the prominence. */
+.tag.conj{background:var(--surf-inset);color:var(--muted);border:1px dashed var(--line)}
 /* answer-side class pill is the SOLID stamp (mock) */
 .tag-row .tag.cls{background:var(--brand);color:var(--brand-on);border:none;box-shadow:0 8px 16px -8px rgba(205,67,39,.6)}
 [data-theme="dark"] .tag-row .tag.cls{background:var(--brand-soft);color:#FF8A6E;border:1px solid rgba(255,107,74,.26)}
@@ -364,6 +374,7 @@ button.pill.hero-jump:hover{border-color:var(--ink-2);transform:translateY(-1px)
   .hanko .glyph{font-size:26px}
   .prompt-word{font-size:84px}
   .prompt-word:not(.jp){font-size:44px}
+  .conj-dict{font-size:19px;margin-top:12px}
   .answer-word{font-size:74px}
   .word-block{gap:20px}
   .meaning{font-size:38px}

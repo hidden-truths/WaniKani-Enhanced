@@ -52,8 +52,8 @@ First run auto-installs deps (`bun install` if `node_modules` is missing).
   root; the email is the `VITE_DEV_EMAILS` default in `study-app/src/features/cloud.js`
   (`dylan_j_kelly@icloud.com` as of 2026-07). Don't paste the password into code or
   docs, and never invent new secret files.
-- **Tests**: `bun run test` from `study-app/` — Vitest + happy-dom (21 files / 417
-  tests, ~2s, as of 2026-07). Must be green before commit.
+- **Tests**: `bun run test` from `study-app/` — Vitest + happy-dom (22 files / 449
+  tests, ~2s, as of 2026-07-08). Must be green before commit.
 - **Preview tooling**: `.claude/launch.json` has configs — `study-app` (:5173),
   `wk-enhanced-api` (:3000, note it runs `bun start`, not hot-reload `bun dev`),
   `study-app-design` (:5191), mock galleries `redesign-mocks` (:5190) /
