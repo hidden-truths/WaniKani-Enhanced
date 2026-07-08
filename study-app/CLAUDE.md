@@ -51,7 +51,8 @@ order. The actual DOM/render/feature glue is split into **`src/features/*`** mod
   `jlpt` (the 合格 JLPT tab — exam MISSION CONTROL: countdown hero + the PACING-COACH strip +
   the daily-training checklist + the vocabulary-readiness lens with the N3 GAP-FILL flow +
   the GRAMMAR lens + the four-papers guidance; a **directory**
-  `jlpt/{data,store,view,activate}.js` behind `jlpt/index.js` (lifecycle: `initJlpt`/`showJlpt`),
+  `jlpt/{data,store,activate,view,state,signals,checklist,hero,coverage,grammar-lens,mocks,sections,mcq}.js`
+  behind `jlpt/index.js` (lifecycle: `initJlpt`/`showJlpt`),
   with `jlpt.js` a thin `export *` re-export. `data.js` owns the LAZY word-list singleton —
   `ensureJlptMap()` dynamic-imports the generated `data/jlpt.js` (7.6k JLPT words N5–N1,
   its own Vite chunk, kicked at boot) and exposes the sync fail-soft `jlptOf(jp, read)`
@@ -65,10 +66,15 @@ order. The actual DOM/render/feature glue is split into **`src/features/*`** mod
   mirror); `store.js` = the `jlpt` synced blob (level + examDate + optional pacing `targets` +
   rolling per-day checklist record + the optional mock-test log `mocks[]` + the optional
   文法形式判断 score trail `mcq`, 409-MERGED via
-  `mergeJlpt`); `view.js` renders + the
-  ACTIONS click table (auto tasks track live app signals — deck due / deck adds /
+  `mergeJlpt`); `view.js` is the 153-line ORCHESTRATOR — `renderJlpt` composes the section
+  builders, and it owns the spread-composed ACTIONS click table (`{...NAV/DECK, ...MCQ_ACTIONS,
+  ...MOCK_ACTIONS}`) + `wireJlpt`. The sections live in siblings (refactor-jlpt-view-split):
+  `signals.js` (`collectSignals` + the shared `deriveGapContext`), `checklist.js`, `hero.js`,
+  `coverage.js` (readiness lens), `grammar-lens.js`, `mocks.js` (模試 log + `MOCK_ACTIONS`),
+  `mcq.js` (文法形式判断 drill + `MCQ_ACTIONS`), `sections.js`, and `state.js` (view-only `S` +
+  `panelActive`/`goTab`). Auto checklist tasks track live app signals — deck due / deck adds /
   leeches / grammar-card grades / selftalk practice / WK reviews via `ensureWkData`/`onWkData`
-  — and write THROUGH to the day record; manual tasks toggle it). Pure derivations (map/
+  — and write THROUGH to the day record; manual tasks toggle it. Pure derivations (map/
   lookup/countdown/coverage/gap/batch-tiering/pace/plan/heat/merge) live in `core/jlpt.js`;
   tests in `test/jlpt-core.test.js` + `test/jlpt-render.test.js`),
   `grammar` (the N3 GRAMMAR SYSTEM — no tab of its own: it surfaces through the JLPT tab's
