@@ -16,8 +16,6 @@ const KEY = 'jpverbs_jlpt';
 export const DEFAULT_EXAM_DATE = '2026-12-06';
 const DEFAULTS = { level: 'N3', examDate: DEFAULT_EXAM_DATE };
 
-export function emptyJlpt() { return normalizeJlpt(null, localDay(), DEFAULTS); }
-
 // Hydrate state.jlptStore from localStorage. Call once at boot, before any reader.
 export function loadJlpt() {
   let o = null;

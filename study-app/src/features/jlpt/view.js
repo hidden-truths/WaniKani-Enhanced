@@ -15,7 +15,7 @@ import {
   grammarCoverage, grammarReviewedToday,
   MOCK_SECTIONS, MOCK_LEVELS, MOCK_PASS, MOCK_MAX_TOTAL, normalizeMock, normalizeMocks,
   mockVerdict, mockTrend,
-  buildMcqQuiz, splitStem, fillGap, scoreMcq, weakPoints, mcqQuestionCount,
+  buildMcqQuiz, splitStem, scoreMcq, weakPoints, mcqQuestionCount,
   mcqPointIds, applyMcqResult, mcqStat, weakestMcqPoints,
 } from '../../core/index.js';
 import { jlptMap, ensureJlptMap, jlptWords, ensureJlptWords, cardJlptLevel } from './data.js';

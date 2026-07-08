@@ -54,8 +54,6 @@ function startPoll(onTime) {
 function stopTimer() { if (endTimer) { clearInterval(endTimer); endTimer = null; } }
 function stopSlice() { if (sliceTimer) { clearInterval(sliceTimer); sliceTimer = null; } }
 
-export function getPlayer() { return player; }
-
 export function destroyPlayer() {
   stopTimer();
   stopSlice();

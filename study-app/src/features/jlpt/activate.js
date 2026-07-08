@@ -6,9 +6,8 @@
 // The `added` day-stamp each card carries is the quota checklist row's live signal — the WK / song /
 // Minna builders stamp it too, so the row counts every deck add, not only gap-fill ones.
 import { state } from '../../state.js';
-import { buildJlptCard, deckWordSet, weeklyAddPace, isDue } from '../../core/index.js';
+import { buildJlptCard, deckWordSet, isDue } from '../../core/index.js';
 import { localDay } from '../../config.js';
-import { cardJlptLevel } from './data.js';
 import { loadCustom, saveCustom } from '../../persistence/custom.js';
 import { rebuildData, refreshAfterVerbChange } from '../custom-cards.js';
 
@@ -30,12 +29,6 @@ export function addJlptWords(entries, level) {
   rebuildData();
   refreshAfterVerbChange();
   return adds.length;
-}
-
-// Today's deck adds AT the level (the 語 checklist row + "Add today's N" count). Counts every source
-// — gap-fill, 鰐蟹, 歌, みんなの日本語 — since each closes the same vocabulary gap.
-export function jlptAddedToday(level) {
-  return weeklyAddPace(state.DATA, localDay(), level, { levelOf: cardJlptLevel }).today;
 }
 
 // How many gap-fill cards the deck holds + the due slice (the "Study them now" CTA copy).
