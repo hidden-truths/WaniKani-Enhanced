@@ -3,6 +3,10 @@
 // plain data in (the map, `nowMs`/`dayKey` injected — never Date.now()) so the whole
 // module is unit-testable (test/jlpt-core.test.js). The lazy-loading singleton around
 // the word data lives in features/jlpt/data.js; this module never imports the data.
+//
+// The one core→core import: the `jlpt` blob carries the MCQ drill's per-point score trail, whose
+// shape + reconcile rules belong to the drill's own module (core/grammar-mcq.js), not here.
+import { normalizeMcqTrail, mergeMcqTrail } from './grammar-mcq.js';
 
 export const JLPT_LEVEL_ORDER = ['N5', 'N4', 'N3', 'N2', 'N1'];   // easy → hard
 
@@ -267,6 +271,10 @@ export function normalizeJlpt(o, todayKey, defaults = {}) {
   // below — an old sitting is the most informative data point the readiness view has.
   const mocks = normalizeMocks(o.mocks);
   if (mocks.length) base.mocks = mocks;
+  // The 文法形式判断 per-point score trail. Same omit-when-empty rule, and likewise EXEMPT from the
+  // days{} cutoff — it's a lifetime record of which patterns you miss, not a daily tick.
+  const mcq = normalizeMcqTrail(o.mcq);
+  if (Object.keys(mcq).length) base.mcq = mcq;
   const cutoff = todayKey ? shiftDay(todayKey, -JLPT_DAYS_KEEP) : null;
   for (const [day, rec] of Object.entries(o.days || {})) {
     if (!/^\d{4}-\d{2}-\d{2}$/.test(day) || !rec || typeof rec !== 'object') continue;
@@ -300,6 +308,10 @@ export function mergeJlpt(local, server) {
   // Server-first so the local entry overwrites it in the Map.
   const mocks = normalizeMocks([...(b.mocks || []), ...(a.mocks || [])]);
   if (mocks.length) out.mocks = mocks;
+  // MCQ trail: field-wise max per point (monotonic counters — see mergeMcqTrail), key omitted when
+  // neither side has drilled. NOT a union-of-sums: both sides already contain the shared history.
+  const mcq = mergeMcqTrail(a.mcq, b.mcq);
+  if (Object.keys(mcq).length) out.mcq = mcq;
   return out;
 }
 

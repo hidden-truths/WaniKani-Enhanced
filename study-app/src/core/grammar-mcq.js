@@ -84,8 +84,8 @@ export function buildMcqQuiz(bank, { ids, n = 10, rand = Math.random } = {}) {
     });
 }
 
-// Tally a finished (or partial) run. `results` = [{ pointId, correct }]. `byPoint` is what a future
-// per-point lens reads: which patterns you actually miss under time pressure.
+// Tally a finished (or partial) run. `results` = [{ pointId, correct }]. `byPoint` is the run's own
+// tally; the DURABLE cross-run record is the trail below.
 export function scoreMcq(results) {
   const list = results || [];
   const byPoint = {};
@@ -99,10 +99,112 @@ export function scoreMcq(results) {
   return { right, total, pct: total ? Math.round((100 * right) / total) : 0, byPoint };
 }
 
-// The points you got wrong at least once — the drill's "study these next" list, ordered worst-first.
+// The points you got wrong at least once IN THIS RUN — the score card's "you missed these" list,
+// ordered worst-first. For the cross-run picture use weakestMcqPoints over the trail.
 export function weakPoints(byPoint) {
   return Object.entries(byPoint || {})
     .filter(([, b]) => b.wrong > 0)
     .sort((a, b) => b[1].wrong - a[1].wrong || a[0].localeCompare(b[0]))
     .map(([id]) => id);
+}
+
+/* ---- the per-point score trail ------------------------------------------------------
+   A run is ephemeral; the trail is the durable answer to "which patterns do I keep missing
+   under time pressure". It rides the existing `jlpt` synced blob as an optional `mcq` field
+   ({ <pointId>: { right, wrong, last } }, `last` = a local day key), so it needs no new blob
+   and no server change.
+
+   The counters are MONOTONIC, which is what makes the 409 reconciler trivially correct:
+   field-wise MAX, never a sum. Each device's local count already includes everything it has
+   pulled from the server, so summing two devices would double-count the shared history. Max
+   loses at most the answers one device made while the other was also answering — the honest
+   floor, and it can never inflate.
+
+   The trail is written at PICK time (features/jlpt/view.js), not at run end: ending a drill
+   early should keep the answers you actually gave. */
+
+// Same shape the point registry validates (tools/grammar-n3/points.json) — a foreign key from a
+// stale/hand-edited blob must not land in the trail and then render as a phantom lens row.
+const POINT_ID = /^[a-z0-9]+(-[a-z0-9]+)*$/;
+const DAY_KEY = /^\d{4}-\d{2}-\d{2}$/;
+const counter = (v) => {
+  const n = Math.round(Number(v));
+  return Number.isFinite(n) && n > 0 ? n : 0;
+};
+
+// Sanitize a trail off the wire/localStorage. Entries with no answers at all are DROPPED, so an
+// empty trail normalizes to `{}` and the blob can omit the key entirely (the targets/mocks rule).
+export function normalizeMcqTrail(o) {
+  const out = {};
+  if (!o || typeof o !== 'object') return out;
+  for (const [id, rec] of Object.entries(o)) {
+    if (!POINT_ID.test(id) || !rec || typeof rec !== 'object') continue;
+    const right = counter(rec.right);
+    const wrong = counter(rec.wrong);
+    if (!right && !wrong) continue;
+    const e = { right, wrong };
+    if (typeof rec.last === 'string' && DAY_KEY.test(rec.last)) e.last = rec.last;
+    out[id] = e;
+  }
+  return out;
+}
+
+// Record ONE answer. Pure: returns a new trail, leaving `trail` untouched (the caller assigns it
+// back onto the store and saves). `day` is injected — core never reads the clock.
+export function applyMcqResult(trail, pointId, correct, day) {
+  const out = { ...(trail || {}) };
+  if (!POINT_ID.test(String(pointId || ''))) return out;
+  const prev = out[pointId] || { right: 0, wrong: 0 };
+  const next = {
+    right: prev.right + (correct ? 1 : 0),
+    wrong: prev.wrong + (correct ? 0 : 1),
+  };
+  const last = typeof day === 'string' && DAY_KEY.test(day) ? day : prev.last;
+  if (last) next.last = last;
+  out[pointId] = next;
+  return out;
+}
+
+// 409 reconcile: field-wise MAX per point (see the monotonic-counter note above), latest `last`.
+export function mergeMcqTrail(local, server) {
+  const a = normalizeMcqTrail(local);
+  const b = normalizeMcqTrail(server);
+  const out = {};
+  for (const id of new Set([...Object.keys(a), ...Object.keys(b)])) {
+    const x = a[id] || { right: 0, wrong: 0 };
+    const y = b[id] || { right: 0, wrong: 0 };
+    const e = { right: Math.max(x.right, y.right), wrong: Math.max(x.wrong, y.wrong) };
+    const last = [x.last, y.last].filter(Boolean).sort().pop();   // day keys sort lexicographically
+    if (last) e.last = last;
+    out[id] = e;
+  }
+  return out;
+}
+
+// One point's lifetime record, or null when it has never been drilled (the lens renders no badge).
+export function mcqStat(trail, pointId) {
+  const e = (trail || {})[pointId];
+  if (!e) return null;
+  const seen = e.right + e.wrong;
+  if (!seen) return null;
+  return { right: e.right, wrong: e.wrong, seen, pct: Math.round((100 * e.right) / seen), last: e.last };
+}
+
+// The points you keep getting wrong, worst-first — what the 苦手 drill draws from. Restricted to
+// `ids` (the points that actually HAVE a bank; a weak point with no questions can't be drilled).
+//
+// Weakness is an ACCURACY threshold, not `wrong > 0`. The counters are lifetime, so "has ever been
+// missed" would pin a point to the weak list forever — a 9/10 point would keep crowding out one you
+// genuinely can't do, and the list would only ever grow. Judging on `pct < maxPct` instead lets a
+// point DRAIN off the list as you answer it right, which is the whole behaviour we want.
+// `minSeen` keeps a single unlucky tap from branding a point you've barely met.
+export function weakestMcqPoints(trail, ids, { n = 0, minSeen = 1, maxPct = 100 } = {}) {
+  const allowed = ids && ids.length ? new Set(ids) : null;
+  const out = Object.keys(trail || {})
+    .filter((id) => !allowed || allowed.has(id))
+    .map((id) => ({ id, s: mcqStat(trail, id) }))
+    .filter(({ s }) => s && s.seen >= minSeen && s.wrong > 0 && s.pct < maxPct)
+    .sort((a, b) => a.s.pct - b.s.pct || b.s.wrong - a.s.wrong || a.id.localeCompare(b.id))
+    .map(({ id }) => id);
+  return n > 0 ? out.slice(0, n) : out;
 }

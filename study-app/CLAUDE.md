@@ -60,7 +60,8 @@ order. The actual DOM/render/feature glue is split into **`src/features/*`** mod
   locally-downloaded JMdict_e); `activate.js` = the gap-fill glue (`addJlptWords` —
   headword-skip dedup, `jlptfill` source flag + `added` day-stamp; the wanikani/activate.js
   mirror); `store.js` = the `jlpt` synced blob (level + examDate + optional pacing `targets` +
-  rolling per-day checklist record + the optional mock-test log `mocks[]`, 409-MERGED via
+  rolling per-day checklist record + the optional mock-test log `mocks[]` + the optional
+  文法形式判断 score trail `mcq`, 409-MERGED via
   `mergeJlpt`); `view.js` renders + the
   ACTIONS click table (auto tasks track live app signals — deck due / gap-fill adds /
   leeches / grammar-card grades / selftalk practice / WK reviews via `ensureWkData`/`onWkData`
@@ -119,7 +120,9 @@ order. The actual DOM/render/feature glue is split into **`src/features/*`** mod
   forecasts / `slimSubject` / `buildWkCard`), `jlpt` (map/lookup / countdown / coverage /
   gap / batch-tiering / pace / plan / heat / the mock-log math — `normalizeMocks` /
   `mockVerdict` / `mockTrend` / `MOCK_PASS`), `grammar-mcq` (the 文法形式判断 drill —
-  `buildMcqQuiz` / `splitStem` / `fillGap` / `scoreMcq` / `weakPoints`, RNG injected),
+  `buildMcqQuiz` / `splitStem` / `fillGap` / `scoreMcq` / `weakPoints`, RNG injected; plus the
+  durable per-point score trail — `normalizeMcqTrail` / `applyMcqResult` / `mergeMcqTrail` /
+  `mcqStat` / `weakestMcqPoints`, the one core→core import `core/jlpt.js` makes),
   `grammar` (`buildGrammarCard` /
   `pickGrammarExample` / `grammarBlank` / `clozePartsToHtml` / coverage), `conjugation`
   (the drill paradigms — `conjugate` → `{kana,display}`-or-null / `conjugableForms` /
@@ -335,7 +338,7 @@ one module each under `src/features/*` (the section names map 1:1 to filenames):
   session lives in a `.wkenhanced.dev` httpOnly cookie. **EIGHT debounced synced blobs** —
   progress (`verbs`), custom verbs (`custom-verbs`), settings (`settings`), Minna (`minna`),
   Self-Talk (`selftalk`), Songs (`songs`), WaniKani (`wanikani`, the WK API token only),
-  JLPT (`jlpt`, level + exam date + the daily-checklist record) — all
+  JLPT (`jlpt`, level + exam date + the daily-checklist record + the MCQ score trail) — all
   built from ONE `createSyncedBlob` abstraction
   ([features/synced-blob.js](src/features/synced-blob.js)): debounced `schedule` →
   `push` (PUT `/v1/progress/{appKey}`) → `pull` (server-wins-on-login, fresh-account
@@ -416,7 +419,8 @@ from api.wanikani.com at any time (full first sync ≈ 30 requests, then increme
 per-collection `updated_after` cursors kept in the IDB `meta` store).
 合格 JLPT state (`localStorage["jpverbs_jlpt"]`, synced as app `jlpt`):
 `{ level:'N5'..'N1', examDate:'YYYY-MM-DD', targets?:{wordsPerDay?,grammarPerWeek?},
-days:{'YYYY-MM-DD':{<taskId>:1}}, mocks?:[{id,date,level,scores:{vocab,grammarReading,listening},total,notes?}] }`
+days:{'YYYY-MM-DD':{<taskId>:1}}, mocks?:[{id,date,level,scores:{vocab,grammarReading,listening},total,notes?}],
+mcq?:{<grammarPointId>:{right,wrong,last?}} }`
 — the target level, the exam date (default 2026-12-06),
 the OPTIONAL pacing targets (defaults `DEFAULT_TARGETS` = 12 words/day + 5 grammar/week
 applied at READ via `jlptTargets`, never materialized into the blob so `shouldSeed` stays
@@ -427,8 +431,12 @@ signal is the `added` day-stamp on the cards instead), and the OPTIONAL **mock-t
 (`mocks[]`, id = `<date>-<level>`, capped at `JLPT_MOCKS_KEEP` = 50, newest first, `total`
 always recomputed from the sections — a stored total is a cache. Like `targets` the key is
 omitted when empty, and it is **EXEMPT from the 60-day `days{}` pruning**: an old sitting is
-the most informative point the readiness view has). 409s MERGE via `mergeJlpt`
-(day-record union, mocks union by id with local winning, local scalars win). The JLPT WORD LIST is NOT in this blob or
+the most informative point the readiness view has), and the OPTIONAL **文法形式判断 score trail**
+(`mcq`, keyed by durable grammar-point id — lifetime right/wrong counters + the day last drilled,
+written through on every answer; same omit-when-empty and same exemption from the `days{}` pruning,
+for the same reason). 409s MERGE via `mergeJlpt`
+(day-record union, mocks union by id with local winning, the mcq trail by per-point MAX of its
+monotonic counters, local scalars win). The JLPT WORD LIST is NOT in this blob or
 localStorage — it's the generated `src/data/jlpt.js` module, dynamic-imported once per
 session (its own chunk); the JMdict-enriched per-level entries (`data/jlpt-words/<level>.js`)
 and the N3 grammar catalog (`data/grammar-n3.js`) are further lazy chunks of the same
@@ -596,8 +604,15 @@ Component contracts you must preserve:
   a quiz is reproducible from a seed. The drill is deliberately NOT part of the flashcard session: it
   has no SRS schedule, no leech math, and touches no deck cards — it's a recognition sitting inside
   the grammar lens, and while it runs the lens card withholds its own CTAs (Add-all / cloze Drill)
-  because those re-render the deck out from under a live question. Nothing about a run is persisted;
-  the per-point score trail is the `grammar-mcq-drills` record's remaining scope.
+  because those re-render the deck out from under a live question. The RUN is ephemeral, but each
+  ANSWER is written THROUGH to the per-point **score trail** (`mcq` on the `jlpt` blob) at pick time,
+  not at run end — abandoning a drill must not discard the questions you answered. The trail's
+  counters are MONOTONIC, which is why `mergeMcqTrail` reconciles a 409 by per-point **max** and not
+  by sum: both devices' counts already contain the shared history, so summing would double-count it.
+  Weakness (the 苦手 drill's draw, and the `.weak` lens badge) is an ACCURACY threshold, never
+  `wrong > 0` — lifetime counters mean "ever missed" would pin a point to the weak list forever
+  instead of letting it drain as you learn it. 並べ替え + banks for the unbanked points remain
+  (`grammar-mcq-drills`).
 - **The mock-test log's three sections are the N1–N3 answer sheet, and a mock PASSES only by
   clearing the total AND every sectional minimum.** `MOCK_SECTIONS` (文字・語彙 / 文法・読解 / 聴解,
   60 each, 180 total) is the score report N1/N2/N3 actually issue; **N4/N5 report only TWO sections**

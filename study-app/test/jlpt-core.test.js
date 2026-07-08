@@ -147,6 +147,24 @@ test('mergeJlpt unions targets per field, local wins', () => {
   expect('targets' in mergeJlpt({ days: {} }, { days: {} })).toBe(false);
 });
 
+test('normalizeJlpt carries the mcq trail, omits it when empty, and EXEMPTS it from the day pruning', () => {
+  const today = '2026-07-08';
+  const o = normalizeJlpt({
+    mcq: { 'sei-de': { right: 2, wrong: 1, last: '2020-01-01' }, 'kuse-ni': { right: 0, wrong: 0 } },
+    days: { '2020-01-01': { deck: 1 } },   // way past the 60-day cutoff
+  }, today);
+  expect(o.days).toEqual({});                               // pruned…
+  expect(o.mcq).toEqual({ 'sei-de': { right: 2, wrong: 1, last: '2020-01-01' } });  // …the trail is not
+  expect('mcq' in normalizeJlpt({ level: 'N3' }, today)).toBe(false);  // pre-trail blob round-trips
+  expect('mcq' in normalizeJlpt({ mcq: {} }, today)).toBe(false);
+});
+
+test('mergeJlpt reconciles the mcq trail by per-point max, and omits the key when neither side drilled', () => {
+  const m = mergeJlpt({ mcq: { 'sei-de': { right: 5, wrong: 1 } } }, { mcq: { 'sei-de': { right: 3, wrong: 4 } } });
+  expect(m.mcq).toEqual({ 'sei-de': { right: 5, wrong: 4 } });   // max per field, NOT 8/5
+  expect('mcq' in mergeJlpt({ days: {} }, { days: {} })).toBe(false);
+});
+
 test('deckWordSet collects headwords AND readings', () => {
   const s = deckWordSet([{ jp: '一方', read: 'いっぽう' }, { jp: 'ある' }]);
   expect(s.has('一方') && s.has('いっぽう') && s.has('ある')).toBe(true);

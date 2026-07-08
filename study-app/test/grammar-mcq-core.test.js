@@ -1,11 +1,13 @@
 // Pure-core tests for the wave-2 文法形式判断 drill (src/core/grammar-mcq.js): stem gap handling,
-// deterministic quiz assembly (question order AND choice order shuffled), scoring, and the weak-point
-// list. Plus bank invariants over the REAL generated data/grammar-n3-mcq.js — the grammar-core
+// deterministic quiz assembly (question order AND choice order shuffled), scoring, the per-run
+// weak-point list, and the DURABLE per-point score trail (normalize / apply / merge / stat /
+// weakest). Plus bank invariants over the REAL generated data/grammar-n3-mcq.js — the grammar-core
 // catalog-invariant precedent — so a bad regen or a hand-edit of the generated file fails loudly.
 import { test, expect } from 'vitest';
 import {
   MCQ_GAP, MCQ_CHOICES, splitStem, fillGap, shuffle, seededRand,
   buildMcqQuiz, scoreMcq, weakPoints, mcqPointIds, mcqQuestionCount,
+  normalizeMcqTrail, applyMcqResult, mergeMcqTrail, mcqStat, weakestMcqPoints,
 } from '../src/core/grammar-mcq.js';
 import { GRAMMAR_N3_MCQ } from '../src/data/grammar-n3-mcq.js';
 import { GRAMMAR_N3 } from '../src/data/grammar-n3.js';
@@ -145,4 +147,73 @@ test('a real quiz over the shipped bank never mislabels its answer', () => {
     expect(q.choices[q.answer]).toBe(original.choices[original.answer]);
     expect([...q.choices].sort()).toEqual([...original.choices].sort());
   }
+});
+
+/* ---- the per-point score trail ------------------------------------------------------------- */
+
+test('normalizeMcqTrail drops junk ids, coerces counters, and omits empty entries', () => {
+  expect(normalizeMcqTrail(null)).toEqual({});
+  expect(normalizeMcqTrail({
+    'ta-bakari': { right: 3, wrong: '1', last: '2026-07-08' },
+    'Bad Id': { right: 5, wrong: 0 },                  // not a kebab-case point id
+    'kuse-ni': { right: 0, wrong: 0 },                 // never actually answered → dropped
+    'sei-de': { right: -2, wrong: 1.6, last: 'nope' }, // negatives floor to 0, junk day dropped
+    'okage-de': 'not an object',
+  })).toEqual({
+    'ta-bakari': { right: 3, wrong: 1, last: '2026-07-08' },
+    'sei-de': { right: 0, wrong: 2 },
+  });
+});
+
+test('applyMcqResult is pure and bumps exactly one counter', () => {
+  const before = { 'sei-de': { right: 1, wrong: 1, last: '2026-07-01' } };
+  const after = applyMcqResult(before, 'sei-de', true, '2026-07-08');
+  expect(before['sei-de']).toEqual({ right: 1, wrong: 1, last: '2026-07-01' });  // untouched
+  expect(after['sei-de']).toEqual({ right: 2, wrong: 1, last: '2026-07-08' });
+  expect(applyMcqResult({}, 'kuse-ni', false, '2026-07-08')['kuse-ni']).toEqual({ right: 0, wrong: 1, last: '2026-07-08' });
+  expect(applyMcqResult({}, 'Bad Id', true, '2026-07-08')).toEqual({});          // junk id never lands
+  // No/invalid day → the previous `last` survives rather than being clobbered with junk.
+  expect(applyMcqResult(before, 'sei-de', true)['sei-de']).toEqual({ right: 2, wrong: 1, last: '2026-07-01' });
+});
+
+test('mergeMcqTrail takes the per-point MAX, never the sum (counters are monotonic)', () => {
+  const local = { 'sei-de': { right: 5, wrong: 2, last: '2026-07-08' }, 'kuse-ni': { right: 1, wrong: 0 } };
+  const server = { 'sei-de': { right: 4, wrong: 3, last: '2026-07-09' }, 'tabi-ni': { right: 0, wrong: 2 } };
+  expect(mergeMcqTrail(local, server)).toEqual({
+    // Both sides already contain the shared history — summing would double-count it.
+    'sei-de': { right: 5, wrong: 3, last: '2026-07-09' },   // field-wise max; latest day wins
+    'kuse-ni': { right: 1, wrong: 0 },
+    'tabi-ni': { right: 0, wrong: 2 },
+  });
+  expect(mergeMcqTrail(null, null)).toEqual({});
+  // Idempotent: merging a trail with itself can't inflate it.
+  expect(mergeMcqTrail(local, local)).toEqual(normalizeMcqTrail(local));
+});
+
+test('mcqStat returns null for an undrilled point, else the lifetime record', () => {
+  const trail = { 'sei-de': { right: 3, wrong: 1 } };
+  expect(mcqStat(trail, 'kuse-ni')).toBe(null);
+  expect(mcqStat(trail, 'sei-de')).toEqual({ right: 3, wrong: 1, seen: 4, pct: 75, last: undefined });
+});
+
+test('weakestMcqPoints is worst-first, bank-restricted, and DRAINS as accuracy recovers', () => {
+  const trail = {
+    'sei-de': { right: 1, wrong: 3 },      // 25%
+    'kuse-ni': { right: 2, wrong: 2 },     // 50%
+    'tabi-ni': { right: 9, wrong: 1 },     // 90% — above the threshold, not weak
+    'okage-de': { right: 0, wrong: 1 },    // only 1 sighting
+    'ni-yoru-to': { right: 0, wrong: 4 },  // 0% but NOT in the bank below
+  };
+  const banked = ['sei-de', 'kuse-ni', 'tabi-ni', 'okage-de'];
+  expect(weakestMcqPoints(trail, banked, { minSeen: 2, maxPct: 75 })).toEqual(['sei-de', 'kuse-ni']);
+  // minSeen guards the one-unlucky-tap case; lowering it lets the single miss through.
+  expect(weakestMcqPoints(trail, banked, { minSeen: 1, maxPct: 75 })).toEqual(['okage-de', 'sei-de', 'kuse-ni']);
+  expect(weakestMcqPoints(trail, banked, { minSeen: 2, maxPct: 75, n: 1 })).toEqual(['sei-de']);
+  // THE point of the accuracy threshold: answer 'sei-de' right enough times and it leaves the list,
+  // where a `wrong > 0` rule would pin it there forever.
+  let t = trail;
+  for (let i = 0; i < 8; i++) t = applyMcqResult(t, 'sei-de', true, '2026-07-08');
+  expect(mcqStat(t, 'sei-de').pct).toBe(75);
+  expect(weakestMcqPoints(t, banked, { minSeen: 2, maxPct: 75 })).toEqual(['kuse-ni']);
+  expect(weakestMcqPoints({}, banked, { minSeen: 2, maxPct: 75 })).toEqual([]);
 });

@@ -140,6 +140,17 @@
 .jl-gp-label{flex:none;font-size:14.5px;font-weight:600;min-width:132px}
 .jl-gp-mean{flex:1;min-width:0;font-size:12px;color:var(--muted);overflow:hidden;text-overflow:ellipsis;white-space:nowrap}
 .jl-gp-row .chip{flex:none;padding:3px 10px;font-size:11px}
+/* The 文法形式判断 lifetime record on a point row — recognition, beside the pip's cloze/SRS status.
+   Rendered only for points actually drilled, so most rows carry nothing. `.weak` = what 苦手 draws. */
+.jl-gp-mcq{flex:none;font-family:var(--mono);font-size:10.5px;letter-spacing:.02em;color:var(--muted);
+  padding:2px 7px;border-radius:999px;background:var(--surf-inset);border:1px solid var(--line-2)}
+.jl-gp-mcq i{font-style:normal;opacity:.6}
+.jl-gp-mcq.weak{color:var(--leech);border-color:color-mix(in srgb,var(--leech) 40%,transparent);
+  background:color-mix(in srgb,var(--leech) 12%,transparent)}
+/* The score card's per-pattern lifetime tally, trailing each missed label. */
+.jl-mcq-life{font-family:var(--mono);font-style:normal;font-size:10.5px;color:var(--muted);margin-left:4px}
+.chip.jl-weak{color:var(--leech);border-color:color-mix(in srgb,var(--leech) 45%,transparent)}
+.chip.jl-weak:hover{background:color-mix(in srgb,var(--leech) 12%,transparent)}
 
 /* ---- the four papers --------------------------------------------------------------------- */
 .jl-sections{display:grid;grid-template-columns:repeat(auto-fill,minmax(300px,1fr));gap:14px}
@@ -279,6 +290,14 @@
 @media (max-width:640px){
   .jl-mcq-choices{grid-template-columns:1fr}
   .jl-mcq-stem{font-size:20px;line-height:2}
+  /* A point row can't hold pattern + gloss + MCQ badge + Add on one 375px line — the gloss was
+     ellipsizing to "be…". Wrap the gloss onto its own line under the pattern (indented past the
+     pip) and keep badge-then-Add on the first. */
+  .jl-gp-row{flex-wrap:wrap;gap:6px 8px}
+  .jl-gp-label{min-width:0;flex:1}
+  .jl-gp-mcq{order:1}
+  .jl-gp-row .chip{order:2}
+  .jl-gp-mean{flex-basis:100%;order:3;white-space:normal;overflow:visible;text-overflow:clip;padding-left:19px}
   /* The 4-up head still fits at 375px once the bar is allowed to collapse. */
   .jl-mcq-head{gap:8px}
   .jl-mcq-track{min-width:24px}

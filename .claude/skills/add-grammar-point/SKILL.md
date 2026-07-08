@@ -228,8 +228,10 @@ without any server seed; only tap-tokens need the store.
   + generated chunk + lens wiring. The shape is level-agnostic, but scope it as a
   `ROADMAP.html` record first (the `roadmap` skill), and check `content-gap-audit` for
   whether it beats other exam work. `grammar-mcq-drills` PARTIALLY shipped (2026-07-08: the
-  文法形式判断 pipeline + drill + a 10-point seed bank; 並べ替え sentence-ordering, the per-point score
-  trail, and 71 unbanked points remain — CONTENT_GUIDE.md's MCQ section is the authoring contract).
+  文法形式判断 pipeline + drill + a 10-point seed bank, and the per-point SCORE TRAIL — `mcq` on the
+  `jlpt` synced blob, written through on every answer, surfaced as lens badges + a 苦手 drill;
+  並べ替え sentence-ordering and 71 unbanked points remain — CONTENT_GUIDE.md's MCQ section is the
+  authoring contract).
   `jlpt-vocab-drills` is still an open record; reading/listening practice
   deliberately stays external to the app (the hybrid decision) — don't propose tabs for them.
 

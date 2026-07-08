@@ -310,7 +310,9 @@ test('mock log: delete drops the row and removes the `mocks` key entirely when t
   vi.stubGlobal('confirm', () => true);
   act('mock-del');
   expect('mocks' in state.jlptStore).toBe(false);          // key omitted, not left as []
-  vi.unstubAllGlobals();
+  // NB: no vi.unstubAllGlobals() here — it would also tear down the file-level localStorage stub
+  // (installed at import time, never reinstalled), silently disabling persistence for every test
+  // that runs after this one. `confirm` staying stubbed is harmless; no later test calls it.
   expect(el('jlptBody').innerHTML).toContain('No mock sat yet');
 });
 
@@ -421,4 +423,60 @@ test('mcq drill: Next is inert until answered; the run walks to a score card', a
   document.querySelector('[data-jl-act="mcq-close"]').click();
   expect(el('jlptBody').querySelector('.jl-mcq')).toBe(null);
   expect(el('jlptBody').querySelector('.jl-gp-list')).not.toBe(null);   // the lens is back
+});
+
+/* ---- the per-point score trail ---- */
+
+test('mcq drill: every ANSWER writes through to the synced trail, even if the run is abandoned', async () => {
+  await ensureGrammarPoints(); await ensureGrammarMcq();
+  renderJlpt(); wireJlpt();
+  document.querySelector('[data-jl-act="mcq-start"]').click();
+  await flush();
+  expect(state.jlptStore.mcq).toBe(undefined);            // nothing drilled yet → key absent
+
+  document.querySelector('.jl-mcq-choice').click();
+  document.querySelector('[data-jl-act="mcq-next"]').click();
+  document.querySelector('.jl-mcq-choice').click();
+  // Abandon mid-run: the two answered questions must survive.
+  document.querySelector('[data-jl-act="mcq-close"]').click();
+
+  const trail = { ...state.jlptStore.mcq };
+  const answered = Object.values(trail).reduce((n, e) => n + e.right + e.wrong, 0);
+  expect(answered).toBe(2);
+  for (const e of Object.values(trail)) expect(e.last).toBe(TODAY);
+  // …and it round-trips through the store (saveJlpt → saveJlptLocal → loadJlpt; the cloud push is
+  // the inert stubbed blob). Asserted via loadJlpt rather than by reading localStorage directly:
+  // that pins the store CONTRACT, not which Storage object this file's stub happens to install.
+  state.jlptStore = null;
+  loadJlpt();
+  expect(state.jlptStore.mcq).toEqual(trail);
+});
+
+test('mcq drill: the lens badges drilled points and the 苦手 CTA drills only the weak ones', async () => {
+  await ensureGrammarPoints();
+  const bank = await ensureGrammarMcq();
+  const [weakId, strongId] = Object.keys(bank);
+  // A weak point (1/4 = 25%) and a strong one (4/4) — only the former is 苦手.
+  state.jlptStore.mcq = { [weakId]: { right: 1, wrong: 3 }, [strongId]: { right: 4, wrong: 0 } };
+  renderJlpt(); wireJlpt();
+
+  const badges = [...el('jlptBody').querySelectorAll('.jl-gp-mcq')];
+  expect(badges).toHaveLength(2);                              // only the two drilled points, not all 81
+  expect(badges.filter((b) => b.classList.contains('weak'))).toHaveLength(1);
+
+  const cta = document.querySelector('[data-jl-act="mcq-weak"]');
+  expect(cta.textContent).toContain('1');                      // one weak point
+  cta.click();
+  await flush();
+  expect(el('jlptBody').innerHTML).toContain('patterns you keep getting wrong');
+  // The run is drawn ONLY from the weak point's bank — walk it and check nothing else got recorded.
+  const total = bank[weakId].length;
+  for (let i = 0; i < total; i++) {
+    document.querySelector('.jl-mcq-choice').click();
+    document.querySelector('[data-jl-act="mcq-next"]').click();
+  }
+  expect(el('jlptBody').querySelector('.jl-mcq-done')).not.toBe(null);
+  expect(state.jlptStore.mcq[strongId]).toEqual({ right: 4, wrong: 0 });   // untouched
+  const w = state.jlptStore.mcq[weakId];
+  expect(w.right + w.wrong).toBe(4 + total);                               // all `total` answers landed here
 });

@@ -16,6 +16,7 @@ import {
   MOCK_SECTIONS, MOCK_LEVELS, MOCK_PASS, MOCK_MAX_TOTAL, normalizeMock, normalizeMocks,
   mockVerdict, mockTrend,
   buildMcqQuiz, splitStem, fillGap, scoreMcq, weakPoints, mcqQuestionCount,
+  mcqPointIds, applyMcqResult, mcqStat, weakestMcqPoints,
 } from '../../core/index.js';
 import { jlptMap, ensureJlptMap, jlptWords, ensureJlptWords } from './data.js';
 import { addJlptWords, jlptDeckCount } from './activate.js';
@@ -35,13 +36,18 @@ const goTab = (tab) => { const t = document.querySelector(`.tab[data-tab="${tab}
 // the fields on every keystroke so an async re-render (the WK dataset landing, a lazy chunk
 // resolving) can't silently eat what the user typed.
 // `mcq` holds an in-flight 文法形式判断 run: the assembled questions, the cursor, the picked choice
-// for the current question (null until answered), and the per-question results. Ephemeral by
-// design — a half-finished quiz is not data, and nothing about it is synced.
+// for the current question (null until answered), and the per-question results. The RUN is
+// ephemeral by design — a half-finished quiz is not data. What IS durable is each ANSWER, written
+// through to the synced per-point score trail (store.mcq) at pick time.
 const S = { mockForm: false, mockEdit: null, mockDraft: null, mcq: null };
 const closeMockForm = () => { S.mockForm = false; S.mockEdit = null; S.mockDraft = null; };
 const closeMcq = () => { S.mcq = null; };
 
 const MCQ_QUIZ_LEN = 10;   // one sitting; the seed bank holds 30 questions across 10 points
+// What counts as 苦手: below this lifetime accuracy, over at least this many sightings. The floor
+// keeps one unlucky tap from branding a pattern; the percentage (rather than "ever missed") is what
+// lets a point drain off the list once you can actually do it.
+const MCQ_WEAK = { minSeen: 2, maxPct: 75 };
 
 /* ---- live signals ------------------------------------------------------------ */
 
@@ -440,10 +446,14 @@ function grammarLensHtml(store, sig) {
   // needs no deck cards, unlike the cloze "Drill grammar" path which needs activated cards.
   const bank = grammarMcq();
   const nq = bank ? mcqQuestionCount(bank) : 0;
+  // The 苦手 CTA only appears once the trail actually knows something — it draws from the points
+  // you've drilled and keep missing, not from the whole bank.
+  const weakIds = mcqWeakIds();
   const ctas = `<div class="jl-gp-ctas">
     ${remaining ? `<button class="chip primary jl-go" data-jl-act="gp-add-all">Add all ${remaining}</button>` : ''}
     ${gcount.n ? `<button class="chip jl-go" data-jl-act="go-grammar-drill">Drill grammar${gcount.due ? ` · ${gcount.due} due` : ''}</button>` : ''}
     ${nq && !S.mcq ? `<button class="chip jl-go" data-jl-act="mcq-start" title="Fill-the-blank, four choices — the exam's grammar question">文法形式判断 · ${Math.min(nq, MCQ_QUIZ_LEN)} Q</button>` : ''}
+    ${weakIds.length && !S.mcq ? `<button class="chip jl-go jl-weak" data-jl-act="mcq-weak" title="Only the patterns you keep getting wrong">苦手 · ${weakIds.length}</button>` : ''}
   </div>`;
   const pct = cov.total ? Math.round((100 * cov.inDeck) / cov.total) : 0;
   const solidPct = cov.total ? Math.round((100 * cov.solid) / cov.total) : 0;
@@ -451,18 +461,23 @@ function grammarLensHtml(store, sig) {
     <span class="jl-covtrack"><span class="jl-covfill hi" style="width:${solidPct}%"></span><span class="jl-covfill" style="width:${pct}%"></span></span>
     <b class="jl-covval">${cov.inDeck}</b></div>
     <div class="jl-covsub">${cov.solid} solid (box 4+) · ${cov.learning} learning · of ${cov.total} points</div>`;
+  const trail = (state.jlptStore || {}).mcq || {};
   const rows = cov.points.map((p) => {
     const pt = byId.get(p.id);
     if (!pt) return '';
     const act = p.rank == null
       ? `<button class="chip jl-go sm" data-jl-act="gp-add" data-point="${escapeHtml(p.id)}">Add</button>`
       : `<button class="chip jl-go sm" data-jl-act="gp-detail" data-rank="${p.rank}">Read</button>`;
+    // The pip is the CLOZE-card status (deck/SRS); the badge is the MCQ trail (recognition). Two
+    // different skills over one point — deliberately shown side by side, never merged.
     return `<div class="jl-gp-row"><span class="jl-gp-pip ${p.status}" title="${p.status}"></span>
-      <span class="jl-gp-label jp">${escapeHtml(pt.label)}</span><span class="jl-gp-mean">${escapeHtml(pt.mean)}</span>${act}</div>`;
+      <span class="jl-gp-label jp">${escapeHtml(pt.label)}</span><span class="jl-gp-mean">${escapeHtml(pt.mean)}</span>${mcqBadge(trail, p.id)}${act}</div>`;
   }).join('');
   if (S.mcq) {                                               // a live drill owns the card
     return `${head('', '<span class="jp-min">文法形式判断</span> · Grammar MCQ',
-      "fill the blank — four patterns you almost know, the shape the exam actually asks")}${mcqHtml()}</section>`;
+      S.mcq.weak
+        ? 'drawn from the patterns you keep getting wrong'
+        : "fill the blank — four patterns you almost know, the shape the exam actually asks")}${mcqHtml()}</section>`;
   }
   return `${head(ctas)}${bar}
     <details class="jl-gp-list"><summary>All ${cov.total} points</summary><div class="jl-gp-rows">${rows}</div></details>
@@ -476,8 +491,39 @@ function grammarLensHtml(store, sig) {
    and its MCQ questions always refer to one thing.
 
    The drill lives INSIDE the grammar lens rather than in the flashcard session: it isn't SRS (no
-   scheduling, no leech math), it's a recognition sitting you take on demand. Nothing is persisted —
-   the per-point score trail feeding the lens is the record's remaining scope. */
+   scheduling, no leech math), it's a recognition sitting you take on demand. The RUN isn't
+   persisted, but each ANSWER is: `mcq-pick` writes through to the per-point score trail on the
+   synced `jlpt` blob (store.mcq), which is what the lens badges and the 苦手 drill read. */
+
+// The points the 苦手 drill would draw from: weak by the trail AND actually banked (a pattern with no
+// questions can't be drilled, however badly you know it).
+function mcqWeakIds() {
+  const bank = grammarMcq();
+  if (!bank) return [];
+  return weakestMcqPoints((state.jlptStore || {}).mcq, mcqPointIds(bank), MCQ_WEAK);
+}
+
+// A point's lifetime MCQ record as a compact badge — omitted entirely for a point never drilled, so
+// the lens doesn't sprout 81 "0/0"s. `.weak` tints the ones the 苦手 drill would pick up.
+function mcqBadge(trail, id) {
+  const s = mcqStat(trail, id);
+  if (!s) return '';
+  const weak = s.seen >= MCQ_WEAK.minSeen && s.wrong > 0 && s.pct < MCQ_WEAK.maxPct;
+  return `<span class="jl-gp-mcq${weak ? ' weak' : ''}" title="文法形式判断: ${s.right} of ${s.seen} correct${s.last ? ` · last ${s.last}` : ''}">${s.right}<i>/${s.seen}</i></span>`;
+}
+
+// Assemble + open a run. `ids` empty/absent = draw from every banked point; pass weak ids for the
+// 苦手 drill. Awaits the lazy bank chunk, so the first click after a cold boot still works.
+async function startMcq(ids) {
+  const bank = await ensureGrammarMcq().catch(() => null);
+  if (!bank) return;
+  const questions = buildMcqQuiz(bank, { ids, n: MCQ_QUIZ_LEN });
+  if (!questions.length) return;
+  S.mcq = { questions, i: 0, picked: null, results: [], weak: !!(ids && ids.length) };
+  renderJlpt();
+  const lens = document.getElementById('jlGrammarLens');
+  if (lens) lens.scrollIntoView({ block: 'start', behavior: 'smooth' });
+}
 
 function mcqHtml() {
   const run = S.mcq;
@@ -488,14 +534,22 @@ function mcqHtml() {
     const sc = scoreMcq(run.results);
     const weak = weakPoints(sc.byPoint);
     const byId = new Map((grammarPoints() || []).map((p) => [p.id, p]));
+    const trail = (state.jlptStore || {}).mcq || {};
+    const label = (id) => escapeHtml((byId.get(id) || {}).label || id);
+    // Each missed pattern carries its LIFETIME record, so a one-off slip reads differently from a
+    // pattern you've now missed four times running.
     const weakList = weak.length
-      ? `<div class="jl-covsub">missed at least once: ${weak.map((id) => `<span class="jp">${escapeHtml((byId.get(id) || {}).label || id)}</span>`).join(' · ')}</div>`
+      ? `<div class="jl-covsub">missed this round: ${weak.map((id) => {
+        const s = mcqStat(trail, id);
+        return `<span class="jp">${label(id)}</span>${s ? `<i class="jl-mcq-life">${s.right}/${s.seen}</i>` : ''}`;
+      }).join(' · ')}</div>`
       : '<div class="jl-covsub">nothing missed — take another round, or drill the cloze cards.</div>';
     return `<div class="jl-mcq jl-mcq-done">
       <div class="jl-mcq-score"><b>${sc.right}<em>/${sc.total}</em></b><span>${sc.pct}%</span></div>
       ${weakList}
       <div class="jl-gp-ctas">
         <button class="chip primary jl-go" data-jl-act="mcq-start">Another round</button>
+        ${mcqWeakIds().length ? '<button class="chip jl-go" data-jl-act="mcq-weak">Drill my 苦手</button>' : ''}
         <button class="chip jl-go" data-jl-act="mcq-close">Done</button>
       </div>
     </div>`;
@@ -798,22 +852,23 @@ const ACTIONS = {
   // The quiz is assembled ONCE per run; Math.random is fine here (the feature layer, not core) and
   // buildMcqQuiz shuffles both the question order and each question's choices — the bank always
   // stores the answer at a fixed index, so an unshuffled drill would teach position, not grammar.
-  'mcq-start': async () => {
-    const bank = await ensureGrammarMcq().catch(() => null);
-    if (!bank) return;
-    const questions = buildMcqQuiz(bank, { n: MCQ_QUIZ_LEN });
-    if (!questions.length) return;
-    S.mcq = { questions, i: 0, picked: null, results: [] };
-    renderJlpt();
-    const lens = document.getElementById('jlGrammarLens');
-    if (lens) lens.scrollIntoView({ block: 'start', behavior: 'smooth' });
-  },
+  'mcq-start': () => startMcq(),
+  // Same drill, drawn only from the points the trail says you keep missing.
+  'mcq-weak': () => startMcq(mcqWeakIds()),
   'mcq-pick': (el) => {
     const run = S.mcq;
     if (!run || run.picked != null) return;                 // guard a double-tap
     const q = run.questions[run.i];
     run.picked = Number(el.dataset.pick);
-    run.results.push({ pointId: q.pointId, correct: run.picked === q.answer });
+    const correct = run.picked === q.answer;
+    run.results.push({ pointId: q.pointId, correct });
+    // Write THROUGH to the durable trail on every answer, not at run end — ending a drill early
+    // (or closing the tab mid-run) must not throw away the questions you actually answered.
+    const store = state.jlptStore;
+    if (store) {
+      store.mcq = applyMcqResult(store.mcq, q.pointId, correct, localDay());
+      saveJlpt();
+    }
     renderJlpt();
   },
   'mcq-next': () => {
