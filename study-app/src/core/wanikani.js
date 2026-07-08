@@ -336,7 +336,11 @@ export function wkPosTraits(pos) {
 // flashcard/Browse notes, so everything is escaped here — the WK mnemonics via
 // renderWkMarkup (escape-then-style, keeping the coloured <kanji>/<reading>/…
 // highlights the user already learned from).
-export function buildWkCard(s, rank, jlpt = '') {
+//
+// `todayKey` (the local day) stamps `added`, the pacing strip's deck-add signal (core/jlpt.js
+// weeklyAddPace). Omitting it leaves the card unstamped — it just never counts toward a day's
+// quota, which is the right default for a test fixture or a backfill of already-owned cards.
+export function buildWkCard(s, rank, jlpt = '', todayKey = '') {
   const { cat, type, trans } = wkPosTraits(s.pos);
   const alts = (s.meanings || []).filter((m) => !m.primary).map((m) => m.m);
   const from = `WaniKani level ${s.level}` + (s.docUrl
@@ -351,6 +355,7 @@ export function buildWkCard(s, rank, jlpt = '') {
     tags: ['鰐蟹', 'wk-l' + s.level],
     wanikani: true,
     wkId: s.id,
+    ...(todayKey ? { added: todayKey } : {}),
     mnem: s.meaningMnemonic ? renderWkMarkup(s.meaningMnemonic) : '',
     tip: (s.readingMnemonic ? '<b>Reading:</b> ' + renderWkMarkup(s.readingMnemonic) + '<br><br>' : '') + from,
     ex: (s.contextSentences || []).map((cs) => [wkEscape(cs.ja), cs.en]),

@@ -1,6 +1,7 @@
 // 歌/Songs — the `songs` progress blob (PROGRESS ONLY; song content is server-authoritative) + the
 // Source:歌 vocab activation + the shared "spoke today" take-saved hook. Part of the features/songs/
-// package; shared mutable state in ./state.js. See REFACTOR_FOLLOWUPS.md "Workstream S".
+// package; shared mutable state in ./state.js. (Workstream S — the refactor record is in ROADMAP.html;
+// REFACTOR_FOLLOWUPS.md was consolidated into it on 2026-06-19.)
 
 import { state } from '../../state.js';
 import { localDay } from '../../config.js';
@@ -27,7 +28,7 @@ function activateSongWords(songExtId, songTitle, words) {
     if (existingKeys.has(songKey)) continue;
     if (existingJp.has(w.lemma)) continue; // already in the deck — don't duplicate
     cs.seq = (cs.seq || 100) + 1;
-    cs.verbs.push(buildSongCard({ songExtId, songTitle, word: w, rank: cs.seq }));
+    cs.verbs.push(buildSongCard({ songExtId, songTitle, word: w, rank: cs.seq, todayKey: localDay() }));
     existingKeys.add(songKey); existingJp.add(w.lemma); added++;
   }
   if (added) { saveCustom(cs); rebuildData(); refreshAfterVerbChange(); }

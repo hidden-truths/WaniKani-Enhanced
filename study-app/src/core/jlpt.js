@@ -171,7 +171,8 @@ export function selectGapBatch(entries, uncovered, wkIndex, userWkLevel, n) {
 
 // The tagged minimal card for one generated entry [jp, read, mean, cat, type, trans]. Pure: the
 // caller assigns the monotonic `rank`. `jlptfill` is the source-facet flag ('jlpt' is taken by
-// the LEVEL facet); `added` (the local day key) is the quota checklist row's live signal.
+// the LEVEL facet); `added` (the local day key) is the quota checklist row's live signal — the
+// WK / song / Minna builders stamp it too, so weeklyAddPace sees every deck add.
 export function buildJlptCard(entry, rank, level, todayKey) {
   const [jp, read, mean, cat, type, trans] = entry;
   return {
@@ -188,13 +189,27 @@ export function buildJlptCard(entry, rank, level, todayKey) {
   };
 }
 
-// Deck-add pace over the trailing `n` days, from the `added` day-stamps buildJlptCard writes.
-// Only gap-fill cards carry `added` in wave 1, so this is honestly "gap-fill adds", not all adds.
-export function weeklyAddPace(data, todayKey, level, n = 7) {
+// Deck-add pace over the trailing `n` days, from the `added` day-stamps the card builders write.
+// EVERY vocab builder stamps it now (gap-fill, 鰐蟹 WK, 歌 songs, みんなの日本語) — so this is all deck
+// adds, not just gap-fill.
+//
+// Which LEVEL an add counts toward is resolved by the injected `levelOf` FIRST, falling back to the
+// card's own `jlpt` field. That ordering is load-bearing: `v.jlpt` is per-source and sometimes a
+// guess (Minna cards default to 'N4' from the lesson JSON; song cards take the analyzer's label),
+// whereas `levelOf` is the authoritative generated word list — the SAME source the coverage/gap lens
+// counts with. Without it the pace could refuse to credit an add that demonstrably closed the gap.
+// `levelOf` fails soft to '' (map not loaded yet), hence the `|| v.jlpt` fallback.
+//
+// Grammar cards are excluded: they carry `jlpt:'N3'` but are not vocabulary, and the pacing strip
+// paces them separately (grammarPerWeek). They don't stamp `added` today; the guard keeps a future
+// stamp from silently inflating the words/day quota.
+export function weeklyAddPace(data, todayKey, level, { n = 7, levelOf = null } = {}) {
   const cutoff = shiftDay(todayKey, -(n - 1));
   let today = 0, week = 0;
   for (const v of data || []) {
-    if (!v || !v.added || v.jlpt !== level) continue;
+    if (!v || !v.added || v.grammar) continue;
+    const lvl = (levelOf && levelOf(v)) || v.jlpt;
+    if (lvl !== level) continue;
     if (v.added === todayKey) today++;
     if (v.added >= cutoff && v.added <= todayKey) week++;
   }

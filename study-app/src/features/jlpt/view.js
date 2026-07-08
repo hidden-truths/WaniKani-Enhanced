@@ -18,7 +18,7 @@ import {
   buildMcqQuiz, splitStem, fillGap, scoreMcq, weakPoints, mcqQuestionCount,
   mcqPointIds, applyMcqResult, mcqStat, weakestMcqPoints,
 } from '../../core/index.js';
-import { jlptMap, ensureJlptMap, jlptWords, ensureJlptWords } from './data.js';
+import { jlptMap, ensureJlptMap, jlptWords, ensureJlptWords, cardJlptLevel } from './data.js';
 import { addJlptWords, jlptDeckCount } from './activate.js';
 import { grammarPoints, ensureGrammarPoints, activateGrammarPoints, grammarDeckCount, grammarMcq, ensureGrammarMcq } from '../grammar/index.js';
 import { saveJlpt } from './store.js';
@@ -62,15 +62,16 @@ function collectSignals() {
   for (let i = 0; i < 7; i++) { const d = daily[shiftDay(today, -i)]; if (d) week += d.tot || 0; }
   const wkConnected = !!state.wanikaniStore.token;
   const wkLoaded = wkConnected && WK.loaded;
-  // Pacing coach inputs: the coverage gap (deck ∪ WK-guru vs the list), the gap-fill add
-  // pace (the `added` day-stamps), the grammar catalog coverage, and the user targets —
-  // all fed to the pure pacePlan. gap/plan are null until the word-list chunk lands.
+  // Pacing coach inputs: the coverage gap (deck ∪ WK-guru vs the list), the deck-add pace (the
+  // `added` day-stamps, from EVERY vocab source — gap-fill / 鰐蟹 / 歌 / みんなの日本語 — levelled by the
+  // authoritative word list, not the card's own guessed `jlpt`), the grammar catalog coverage, and
+  // the user targets — all fed to the pure pacePlan. gap/plan are null until the word-list chunk lands.
   const wkIdx = wkLoaded ? wkVocabIndex(WK.subjects, WK.assignments) : null;
   const wkLevel = wkLoaded && WK.user ? WK.user.level : null;
   const map = jlptMap();
   const gap = map ? jlptGap(map, store.level, deckWordSet(state.DATA), wkIdx) : null;
   const targets = jlptTargets(store);
-  const pace = weeklyAddPace(state.DATA, today, store.level);
+  const pace = weeklyAddPace(state.DATA, today, store.level, { levelOf: cardJlptLevel });
   const points = grammarPoints();
   const gcov = points ? grammarCoverage(points, state.DATA, state.store.cards) : null;
   const cd = examCountdown(store.examDate, Date.now());
@@ -130,8 +131,9 @@ function buildTasks(sig, dayRec) {
       : `${sig.due} due in your deck${sig.reviewedToday ? ` · ${sig.reviewedToday} done today` : ''}`,
     act: sig.due ? 'go-due' : null, actLabel: 'Start review',
   });
-  // AUTO — the quota row's live signal is the `added` day-stamps on gap-fill cards (a real,
-  // re-readable signal, unlike listening); write-through via persistDone like the others.
+  // AUTO — the quota row's live signal is the `added` day-stamps on the cards (a real, re-readable
+  // signal, unlike listening); write-through via persistDone like the others. Every vocab source
+  // stamps it, so adding N3 words from 鰐蟹 / 歌 / みんなの日本語 fills the quota just as gap-fill does.
   {
     const uncov = sig.gap ? sig.gap.uncovered.length : null;
     const target = sig.targets.wordsPerDay;
@@ -825,7 +827,7 @@ const ACTIONS = {
     const wkIdx = wkLoaded ? wkVocabIndex(WK.subjects, WK.assignments) : null;
     const gap = jlptGap(map, level, deckWordSet(state.DATA), wkIdx);
     const targets = jlptTargets(state.jlptStore);
-    const doneToday = weeklyAddPace(state.DATA, localDay(), level).today;
+    const doneToday = weeklyAddPace(state.DATA, localDay(), level, { levelOf: cardJlptLevel }).today;
     const n = Math.max(0, targets.wordsPerDay - doneToday) || targets.wordsPerDay;
     const added = addJlptWords(selectGapBatch(words, gap.uncovered, wkIdx, (wkLoaded && WK.user && WK.user.level) || 0, n), level);
     setSyncStatus(added ? `✚ ${added} ${level} word${added === 1 ? '' : 's'} added to the deck` : 'nothing new to add');

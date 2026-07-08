@@ -8,6 +8,7 @@
 // Minna's overlay path (see the ROADMAP wk-leech-to-deck record). The deck's Leitner
 // takes over; the read-only WK SRS is never written back.
 import { state } from '../../state.js';
+import { localDay } from '../../config.js';
 import { buildWkCard, primaryReading, isDue } from '../../core/index.js';
 import { loadCustom, saveCustom } from '../../persistence/custom.js';
 import { rebuildData, refreshAfterVerbChange } from '../custom-cards.js';
@@ -44,7 +45,7 @@ export function activateWkVocab(subjects) {
   const cs = loadCustom();
   for (const s of adds) {
     cs.seq = (cs.seq || 100) + 1;
-    cs.verbs.push(buildWkCard(s, cs.seq, jlptOf(s.chars, primaryReading(s))));
+    cs.verbs.push(buildWkCard(s, cs.seq, jlptOf(s.chars, primaryReading(s)), localDay()));
   }
   saveCustom(cs);
   rebuildData();

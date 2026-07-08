@@ -63,7 +63,7 @@ order. The actual DOM/render/feature glue is split into **`src/features/*`** mod
   rolling per-day checklist record + the optional mock-test log `mocks[]` + the optional
   文法形式判断 score trail `mcq`, 409-MERGED via
   `mergeJlpt`); `view.js` renders + the
-  ACTIONS click table (auto tasks track live app signals — deck due / gap-fill adds /
+  ACTIONS click table (auto tasks track live app signals — deck due / deck adds /
   leeches / grammar-card grades / selftalk practice / WK reviews via `ensureWkData`/`onWkData`
   — and write THROUGH to the day record; manual tasks toggle it). Pure derivations (map/
   lookup/countdown/coverage/gap/batch-tiering/pace/plan/heat/merge) live in `core/jlpt.js`;
@@ -426,7 +426,7 @@ the OPTIONAL pacing targets (defaults `DEFAULT_TARGETS` = 12 words/day + 5 gramm
 applied at READ via `jlptTargets`, never materialized into the blob so `shouldSeed` stays
 honest; clamped 1..99 by `normalizeJlpt`; per-field union with local wins on 409), the
 rolling daily-checklist record (pruned to the last 60 days by `normalizeJlpt` — note it
-FOLDS day values to 1, so per-day COUNTS can never live in `days{}`; the gap-fill quota
+FOLDS day values to 1, so per-day COUNTS can never live in `days{}`; the word-quota
 signal is the `added` day-stamp on the cards instead), and the OPTIONAL **mock-test log**
 (`mocks[]`, id = `<date>-<level>`, capped at `JLPT_MOCKS_KEEP` = 50, newest first, `total`
 always recomputed from the sections — a stored total is a cache. Like `targets` the key is
@@ -443,8 +443,13 @@ and the N3 grammar catalog (`data/grammar-n3.js`) are further lazy chunks of the
 pattern. Related card/stat fields: `store.cards[rank].last` = epoch ms of the most recent
 grade (stamped in `grade()`, merged with MAX — the 法 row's auto-signal; mergeProgress's
 field list is explicit, so a new stat field MUST be added there or 409s silently drop it);
-gap-fill cards carry `jlptfill:true` + `added:'YYYY-MM-DD'`; grammar cards carry
-`grammar:true` + the durable `grammarId`.
+gap-fill cards carry `jlptfill:true`; EVERY vocab card builder (gap-fill / 鰐蟹 / 歌 /
+みんなの日本語) stamps `added:'YYYY-MM-DD'` on a genuinely-new card, which is the pacing strip's
+deck-add signal (`weeklyAddPace`); grammar cards carry `grammar:true` + the durable `grammarId`
+and are deliberately NOT stamped (they're paced separately, by `grammarPerWeek`).
+**`added` must stay OUT of `MINNA_MUTABLE_FIELDS`** — inside it, `minnaSig` would read every card
+as stale once the day rolled over and `minnaMutablePatch` would re-date a re-activated card,
+silently inflating the quota.
 Two auxiliary keys round out the localStorage inventory: `jpverbs_sync_queue` (the durable
 offline write-queue — per-account entries, dropped on logout) and `jpverbs_cardex_migrated`
 (the one-time card-examples→store migration flag). Device-local UI prefs (`jpverbs_font`,
@@ -580,14 +585,14 @@ Component contracts you must preserve:
   TypeError that surfaced only signed-in. Server side of all this: the credentialed-CORS
   branch + cookie `Domain` in [../wk-enhanced-api/CLAUDE.md](../wk-enhanced-api/CLAUDE.md).
 - **The 合格 JLPT tab's daily checklist mixes AUTO and MANUAL tasks on purpose — don't
-  "unify" them.** Auto rows (WK reviews / deck due / gap-fill adds / speak) read a live
+  "unify" them.** Auto rows (WK reviews / deck due / deck adds / speak) read a live
   signal each render and can't be un-ticked (the signal owns the truth); when one flips
   done it's written THROUGH to `days[today]` (persistDone) so the 14-day heatmap is plain
   recorded data, not a re-derivation (yesterday's live signals are gone). Manual rows
   (listen/textbook) have no reliable in-app signal — Songs progress has no per-day
   timestamps, and a Shadow take marks the SHARED selftalk practice signal, so "listening
   done" can't be auto-derived without new plumbing. Two wave-1 additions follow the same
-  contract: the 語 gap-fill row is AUTO off the `added` day-stamps on the cards (a real,
+  contract: the 語 row is AUTO off the `added` day-stamps on the cards (a real,
   re-readable signal), and the 法 grammar row is **CONDITIONALLY auto** (the leech-row
   precedent) — manual with an add-grammar nudge until grammar cards exist, then auto off
   `grammarReviewedToday` (the per-card `last` grade-stamp vs local midnight). The WK row
@@ -596,6 +601,18 @@ Component contracts you must preserve:
   blocks paint on the WK cache read. There is deliberately NO separate "JLPT streak" —
   the tab surfaces the existing review + speaking streaks; a third streak semantic over 8
   heterogeneous tasks was judged mush.
+- **`weeklyAddPace` levels a deck add by the WORD LIST (`cardJlptLevel` → `jlptOf`), not by the
+  card's own `jlpt` field — and it excludes grammar cards.** Every vocab builder stamps `added`
+  (gap-fill / 鰐蟹 / 歌 / みんなの日本語), so the 語 quota row and the pacing strip count all deck adds.
+  But `v.jlpt` is per-source and sometimes a GUESS: Minna cards default to `'N4'` from the lesson
+  JSON, song cards take the analyzer's label. Trusting it both under- AND over-counts — verified
+  live: a みんなの日本語 card for いずれ (a real N3 word) carried `jlpt:'N4'` and went uncredited, while a
+  歌 card for 猫 (N5) carried `jlpt:'N3'` and was credited. The injected `levelOf` resolves against the
+  same generated list the coverage/gap lens uses, so "words added today" and "gap remaining" answer to
+  one source; the `|| v.jlpt` fallback only covers the window before the lazy chunk lands. Grammar
+  cards carry `jlpt:'N3'` but aren't vocabulary and are paced by `grammarPerWeek`, so `v.grammar` is
+  skipped outright — they don't stamp `added` today, and the guard stops a future stamp from silently
+  inflating the word quota. Don't "simplify" this back to `v.jlpt === level`.
 - **The MCQ drill shuffles the CHOICES, not just the question order — and that is load-bearing.**
   Every bank question stores its answer at a fixed index (0 throughout the seed content, because
   authoring is clearer that way). `buildMcqQuiz` shuffles each question's choices and recomputes the

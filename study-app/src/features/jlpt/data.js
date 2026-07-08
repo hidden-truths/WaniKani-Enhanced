@@ -58,6 +58,14 @@ export const jlptMap = () => map;
 // Sync level lookup: 'N5'..'N1' or '' (unknown word OR map not loaded yet).
 export const jlptOf = (jp, read) => (map ? jlptLookup(map, jp, read) : '');
 
+// A CARD's authoritative JLPT level — weeklyAddPace's injected `levelOf`. Deliberately this lookup
+// rather than the card's own `jlpt` field: that field is per-source and sometimes a guess (Minna
+// cards default to 'N4' from the lesson JSON, song cards take the analyzer's label), whereas the
+// coverage/gap lens counts with THIS list. Using it keeps "words added today" and "gap remaining"
+// answering to one source. Fails soft to '' before the chunk lands, where weeklyAddPace falls back
+// to the card's own field.
+export const cardJlptLevel = (v) => (v ? jlptOf(v.jp, v.read) : '');
+
 // One-time backfill: machine-made activation cards written before the JLPT lens
 // existed (鰐蟹 activations stamped jlpt:'') get their level patched in place once the
 // map is up. Only touches wanikani:true cards with an EMPTY jlpt — user-authored cards

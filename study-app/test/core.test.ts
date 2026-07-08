@@ -30,6 +30,7 @@ import {
   mergeProgress, mergeCustomVerbs, mergeMinna, mergeSelftalkPractice, mergeSongs,
   parseYouTubeId, songWords, knownHeadwords, coverage, bucketByJlpt, wordStatus, songLevel, lineTimingState, songLineKey, songProgress, songGrammar, JLPT_ORDER,
   clozeBlanks, clozeLineParts, parseSongLineKey, readingMatch, lineReading, buildSongCard, songCardKey,
+  buildWkCard,
   accuracyMix, weekOverWeekDelta, boxCounts, dailyAccuracySvg, pipelineHtml,
 } from '../src/core/index.js';
 import { SELFTALK, SELFTALK_TAXONOMY, SELFTALK_TOPICS, SELFTALK_TOPIC_IDS, SELFTALK_GRAMMAR } from '../src/data/selftalk.js';
@@ -1901,4 +1902,42 @@ test('pipelineHtml: six bars, box-5 flagged best, counts + swatches present, hei
   expect(html).toContain('best learned');
   expect(html).toContain('height:88%'); // the tallest box (5, the max) → ~88%
   expect(html).toContain('height:3%'); // the 0-count box → a stub
+});
+
+/* ---- the `added` deck-add stamp (grammar-n3-residue) ---------------------------------------
+   Every vocab builder stamps `added` so the JLPT pacing strip counts ALL deck adds, not just
+   gap-fill. The stamp is opt-in per call: omit todayKey and the card is unstamped, which is what
+   a fixture or a backfill of already-owned cards wants. */
+
+test('the vocab card builders stamp `added` only when given a day key', () => {
+  const wkSubject = { id: 7, chars: '経験', level: 12, pos: ['noun'], meanings: [{ m: 'experience', primary: true }], readings: [{ r: 'けいけん', primary: true }] };
+  expect(buildWkCard(wkSubject, 5, 'N3', '2026-07-08').added).toBe('2026-07-08');
+  expect('added' in buildWkCard(wkSubject, 5, 'N3')).toBe(false);
+
+  const songArgs = { songExtId: 's1', songTitle: 'T', word: { lemma: '猫', pos: 'NOUN' }, rank: 6 };
+  expect(buildSongCard({ ...songArgs, todayKey: '2026-07-08' }).added).toBe('2026-07-08');
+  expect('added' in buildSongCard(songArgs)).toBe(false);
+
+  const item = { key: 'l1-1', kana: 'ねこ', dict: '猫', mean: 'cat', cat: 'noun' };
+  expect(buildMinnaCard(item, 1, '2026-07-08').added).toBe('2026-07-08');
+  expect('added' in buildMinnaCard(item, 1)).toBe(false);
+});
+
+test('a Minna card`s `added` stamp is invisible to minnaSig, so a re-activation can never re-date it', () => {
+  const item = { key: 'l1-1', kana: 'ねこ', dict: '猫', mean: 'cat', cat: 'noun' };
+  const old = buildMinnaCard(item, 1, '2026-06-01');
+  const fresh = buildMinnaCard(item, 1, '2026-07-08');
+  // Same content, different day → the "N words changed" detector must NOT see a difference…
+  expect(minnaSig(old)).toBe(minnaSig(fresh));
+  // …and the patch applied on re-activation must not carry `added` through.
+  expect('added' in minnaMutablePatch(fresh)).toBe(false);
+
+  // End to end through the planner: an existing card is left alone, so its old stamp survives.
+  const { ops, counts } = planMinnaActivation(1, [item], [{ ...old, rank: 101, minnaKey: 'l1-1' }], {}, '2026-07-08');
+  expect(counts).toMatchObject({ toAdd: 0, toUpdate: 0, inDeck: 1 });
+  expect(ops).toEqual([]);
+  // A genuinely-new word DOES get today's stamp.
+  const plan2 = planMinnaActivation(1, [item], [], {}, '2026-07-08');
+  expect(plan2.ops[0]).toMatchObject({ kind: 'card-add' });
+  expect(plan2.ops[0].card.added).toBe('2026-07-08');
 });

@@ -7,6 +7,7 @@
 // it matches a built-in, a provenance OVERLAY), so it joins the deck/SRS/Browse/Stats and syncs
 // under the existing 'custom-verbs' blob; only the overlays + per-lesson notes are the 'minna' blob.
 import { state } from '../../state.js';
+import { localDay } from '../../config.js';
 import { planMinnaActivation, minnaMutablePatch } from '../../core/index.js';
 import { loadCustom, saveCustom } from '../../persistence/custom.js';
 import { rebuildData, refreshAfterVerbChange } from '../custom-cards.js';
@@ -29,9 +30,13 @@ export function minnaActivationStatus(lesson, vocab) {
 // (rank assigned here, monotonically, so SRS progress can't collide); a stale custom card that now
 // matches a built-in is dropped (dedup). Re-activation patches mutable content in place via
 // minnaMutablePatch (preserving rank → progress). Saves + rebuilds only what actually changed.
+// Newly-added cards carry today's `added` stamp (the pacing signal); a re-activated card keeps its
+// original stamp — minnaMutablePatch doesn't carry `added`, so re-running a lesson can't re-date the
+// words you added weeks ago. Built-in matches become OVERLAYS, not cards, so they carry no stamp and
+// don't count as adds — a known word rejoining under a Minna tag isn't new vocabulary.
 export function activateMinnaVocab(lesson, vocab) {
   const cs = loadCustom(); const ov = state.minnaStore.overlays = state.minnaStore.overlays || {};
-  const { ops, counts } = planMinnaActivation(lesson, vocab, cs.verbs, ov);
+  const { ops, counts } = planMinnaActivation(lesson, vocab, cs.verbs, ov, localDay());
   let custChanged = false, ovChanged = false;
   for (const op of ops) {
     switch (op.kind) {

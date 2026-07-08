@@ -233,7 +233,9 @@ export function songCardKey(songExtId, lemma) { return 'song-' + songExtId + '-'
 
 // Build the tagged custom-card object for a mined song word (Source:歌), mirroring the みんなの日本語
 // activation shape. Pure: the caller assigns the monotonic `rank` and owns dedup + persistence.
-export function buildSongCard({ songExtId, songTitle, word, rank }) {
+// `todayKey` (the local day) stamps `added` — the pacing strip's deck-add signal (core/jlpt.js
+// weeklyAddPace). Omit it and the card is unstamped, so it never counts toward a day's quota.
+export function buildSongCard({ songExtId, songTitle, word, rank, todayKey = '' }) {
   return {
     rank,
     jp: word.lemma,
@@ -248,6 +250,7 @@ export function buildSongCard({ songExtId, songTitle, word, rank }) {
     songId: songExtId,
     songTitle,
     songKey: songCardKey(songExtId, word.lemma),
+    ...(todayKey ? { added: todayKey } : {}),
     mnem: '',
     tip: '',
     ex: [],

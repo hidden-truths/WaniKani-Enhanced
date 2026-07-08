@@ -3,10 +3,12 @@
 // builder is pure core (buildJlptCard); this module owns dedup + persistence, mirroring
 // wanikani/activate.js. Dedup = the songs-style headword skip: a word already in the deck
 // under the same jp OR read (built-in / みんなの日本語 / 歌 / 鰐蟹) is skipped, not duplicated.
-// The `added` day-stamp each card carries is the quota checklist row's live signal.
+// The `added` day-stamp each card carries is the quota checklist row's live signal — the WK / song /
+// Minna builders stamp it too, so the row counts every deck add, not only gap-fill ones.
 import { state } from '../../state.js';
 import { buildJlptCard, deckWordSet, weeklyAddPace, isDue } from '../../core/index.js';
 import { localDay } from '../../config.js';
+import { cardJlptLevel } from './data.js';
 import { loadCustom, saveCustom } from '../../persistence/custom.js';
 import { rebuildData, refreshAfterVerbChange } from '../custom-cards.js';
 
@@ -30,9 +32,10 @@ export function addJlptWords(entries, level) {
   return adds.length;
 }
 
-// Today's gap-fill adds for the level (the 語 checklist row + "Add today's N" count).
+// Today's deck adds AT the level (the 語 checklist row + "Add today's N" count). Counts every source
+// — gap-fill, 鰐蟹, 歌, みんなの日本語 — since each closes the same vocabulary gap.
 export function jlptAddedToday(level) {
-  return weeklyAddPace(state.DATA, localDay(), level).today;
+  return weeklyAddPace(state.DATA, localDay(), level, { levelOf: cardJlptLevel }).today;
 }
 
 // How many gap-fill cards the deck holds + the due slice (the "Study them now" CTA copy).

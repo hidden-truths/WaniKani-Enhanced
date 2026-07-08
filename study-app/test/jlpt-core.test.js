@@ -230,9 +230,31 @@ test('weeklyAddPace counts added-stamps in the trailing window, per level', () =
     { jlpt: 'N3', added: '2026-06-28' },
     { jlpt: 'N3', added: '2026-06-20' },   // outside the 7-day window
     { jlpt: 'N4', added: '2026-07-01' },   // other level
-    { jlpt: 'N3' },                        // no stamp (non-gap-fill card)
+    { jlpt: 'N3' },                        // no stamp (an older, pre-stamp card)
   ];
   expect(weeklyAddPace(data, '2026-07-01', 'N3')).toEqual({ today: 1, week: 2, avgPerDay: 2 / 7 });
+});
+
+test('weeklyAddPace: injected levelOf OVERRIDES the card`s own jlpt field, which may be a guess', () => {
+  const data = [
+    { jp: '経験', jlpt: 'N4', added: '2026-07-01' },   // Minna default says N4; the list says N3
+    { jp: '猫', jlpt: 'N3', added: '2026-07-01' },     // card claims N3; the list says N5
+  ];
+  const levelOf = (v) => ({ 経験: 'N3', 猫: 'N5' })[v.jp] || '';
+  // With the lookup: only 経験 counts. Without it, the card fields would give exactly the opposite.
+  expect(weeklyAddPace(data, '2026-07-01', 'N3', { levelOf })).toMatchObject({ today: 1, week: 1 });
+  expect(weeklyAddPace(data, '2026-07-01', 'N3')).toMatchObject({ today: 1, week: 1 });
+  expect(weeklyAddPace(data, '2026-07-01', 'N5', { levelOf })).toMatchObject({ today: 1 });
+  // levelOf fails soft ('' before the word-list chunk lands) → fall back to the card's own field.
+  expect(weeklyAddPace(data, '2026-07-01', 'N3', { levelOf: () => '' })).toMatchObject({ today: 1 });
+});
+
+test('weeklyAddPace excludes grammar cards even though they carry jlpt:N3', () => {
+  const data = [
+    { jlpt: 'N3', added: '2026-07-01' },
+    { jlpt: 'N3', added: '2026-07-01', grammar: true, grammarId: 'sei-de' },   // paced separately
+  ];
+  expect(weeklyAddPace(data, '2026-07-01', 'N3')).toMatchObject({ today: 1, week: 1 });
 });
 
 test('pacePlan verdicts: behind / on-track / ahead / done; null-safe on missing or past exam', () => {

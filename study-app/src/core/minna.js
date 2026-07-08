@@ -80,8 +80,16 @@ export const minnaSig = v => JSON.stringify(MINNA_MUTABLE_FIELDS.map(k => (v == 
 // A genuinely-new Minna word becomes a tagged custom card: lesson-derived content (the shared
 // minnaCardContent) + the structural flags. The `rank` is assigned by the apply step, not here, so
 // the build stays pure and a re-activation can preserve the existing card's rank → SRS progress.
-export function buildMinnaCard(item, lesson) {
-  return { ...minnaCardContent(item, lesson), custom: true, minna: true };
+//
+// `todayKey` stamps `added`, the pacing strip's deck-add signal (core/jlpt.js weeklyAddPace). It is
+// set HERE and deliberately NOT inside minnaCardContent: MINNA_MUTABLE_FIELDS is the content's field
+// list, and an `added` inside it would (a) make minnaSig read every existing card as stale the moment
+// the day rolls over, and (b) let minnaMutablePatch re-stamp a re-activated card with today's date —
+// silently inflating the daily quota. Keep it out of the content, and out of MINNA_MUTABLE_FIELDS.
+export function buildMinnaCard(item, lesson, todayKey = '') {
+  const card = { ...minnaCardContent(item, lesson), custom: true, minna: true };
+  if (todayKey) card.added = todayKey;
+  return card;
 }
 
 // The overlay payload for a Minna word that maps onto a BUILT-IN verb: provenance only (tags,
@@ -136,7 +144,12 @@ export function kanjiNum(n) {
 //   { kind: 'card-remove',    minnaKey }                      — a stale custom card now matches a built-in (dedup)
 //   { kind: 'card-add',       card }                          — a genuinely-new word (caller assigns rank)
 //   { kind: 'card-update',    minnaKey, card }                — an existing custom card's lesson content changed
-export function planMinnaActivation(lesson, vocab, customVerbs, overlays) {
+//
+// `todayKey` only reaches the freshly-built cards' `added` stamp. It cannot affect the plan itself:
+// `added` is outside MINNA_MUTABLE_FIELDS, so minnaSig ignores it and a card-update never carries it.
+// That's why the non-mutating preview (minnaActivationStatus) can pass today's key and still return
+// the same counts the apply will produce.
+export function planMinnaActivation(lesson, vocab, customVerbs, overlays, todayKey = '') {
   const ops = [];
   let inDeck = 0, toAdd = 0, toUpdate = 0;
   for (const item of vocab) {
@@ -150,7 +163,7 @@ export function planMinnaActivation(lesson, vocab, customVerbs, overlays) {
       if (customVerbs.some(v => v.minnaKey === item.key)) ops.push({ kind: 'card-remove', minnaKey: item.key });
       continue;
     }
-    const fresh = buildMinnaCard(item, lesson);
+    const fresh = buildMinnaCard(item, lesson, todayKey);
     const existing = customVerbs.find(v => v.minnaKey === item.key);
     if (!existing) { ops.push({ kind: 'card-add', card: fresh }); toAdd++; }
     else { inDeck++; if (minnaSig(existing) !== minnaSig(fresh)) { ops.push({ kind: 'card-update', minnaKey: item.key, card: fresh }); toUpdate++; } }
