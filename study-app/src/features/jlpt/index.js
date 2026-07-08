@@ -9,17 +9,13 @@
 import { loadJlpt } from './store.js';
 import { ensureJlptReady, jlptMap } from './data.js';
 import { renderJlpt, wireJlpt } from './view.js';
+import { panelActive } from './state.js';
 import { ensureWkData, onWkData } from '../wanikani/index.js';
 import { updateDueBanner } from '../deck.js';
 
 export { jlptBlob, saveJlpt, loadJlpt } from './store.js';
 export { renderJlpt } from './view.js';
 export { ensureJlptReady, jlptOf, jlptMap } from './data.js';
-
-const panelActive = () => {
-  const p = document.getElementById('panel-jlpt');
-  return !!(p && p.classList.contains('active'));
-};
 
 export function initJlpt() {
   loadJlpt();

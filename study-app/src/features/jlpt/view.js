@@ -27,27 +27,8 @@ import { startDueSession, studyLeechCards, studyGrammarDeck, studyJlptCards } fr
 import { openBrowseGrammar, openVerbDetail } from '../browse.js';
 import { S as WK } from '../wanikani/state.js';
 import { leechList } from '../wanikani/leeches.js';
-
-const goTab = (tab) => { const t = document.querySelector(`.tab[data-tab="${tab}"]`); if (t) t.click(); };
-
-// View-only state for the mock-log form (open / which mock is being edited / the live draft).
-// Deliberately NOT in the synced blob — a half-typed form is not data. renderJlpt() rebuilds the
-// panel's innerHTML, so this must live outside the DOM to survive a re-render: `mockDraft` mirrors
-// the fields on every keystroke so an async re-render (the WK dataset landing, a lazy chunk
-// resolving) can't silently eat what the user typed.
-// `mcq` holds an in-flight 文法形式判断 run: the assembled questions, the cursor, the picked choice
-// for the current question (null until answered), and the per-question results. The RUN is
-// ephemeral by design — a half-finished quiz is not data. What IS durable is each ANSWER, written
-// through to the synced per-point score trail (store.mcq) at pick time.
-const S = { mockForm: false, mockEdit: null, mockDraft: null, mcq: null };
-const closeMockForm = () => { S.mockForm = false; S.mockEdit = null; S.mockDraft = null; };
-const closeMcq = () => { S.mcq = null; };
-
-const MCQ_QUIZ_LEN = 10;   // one sitting; the seed bank holds 30 questions across 10 points
-// What counts as 苦手: below this lifetime accuracy, over at least this many sightings. The floor
-// keeps one unlucky tap from branding a pattern; the percentage (rather than "ever missed") is what
-// lets a point drain off the list once you can actually do it.
-const MCQ_WEAK = { minSeen: 2, maxPct: 75 };
+// View-only state + the panel-active / tab-jump helpers (jlpt/state.js — refactor step 1).
+import { S, closeMockForm, closeMcq, MCQ_QUIZ_LEN, MCQ_WEAK, panelActive, goTab } from './state.js';
 
 /* ---- live signals ------------------------------------------------------------ */
 
@@ -212,8 +193,6 @@ function persistDone(tasks, today) {
 }
 
 /* ---- render --------------------------------------------------------------------- */
-
-const panelActive = () => { const p = document.getElementById('panel-jlpt'); return !!(p && p.classList.contains('active')); };
 
 export function renderJlpt() {
   const head = document.getElementById('jlptHead');
