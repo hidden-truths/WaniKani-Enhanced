@@ -255,79 +255,61 @@ export function updateDueBanner() {
   renderForecast();
   renderPipeline();
 }
-// "Review due cards": force the deck to due-only, worst-first, full range, and reflect that
-// in the chip UI before starting. Overrides the picker on purpose — a dedicated review flow.
-// Resets ALL six DECK_FACETS (cat included — it arrived after this function and was missed,
-// silently narrowing "review everything due" to the stale category) and ranges to the REAL
-// top rank (state.MAXRANK — a hardcoded 100 excluded every due custom/Minna/song card).
-export function startDueSession() {
-  cfg.kind = 'srs'; cfg.cat = []; cfg.type = []; cfg.trans = []; cfg.topic = []; cfg.status = ['due']; cfg.source = []; cfg.jlpt = ['all']; cfg.rmin = 1; cfg.rmax = state.MAXRANK; cfg.ord = 'worst';
+// Shared "override the picker, scope the deck, sync the chip UI, and start a run" jump — used
+// by the review-due flow and the four cross-tab "study these now" CTAs below. Resets ALL six
+// DECK_FACETS + kind/range/order to a clean baseline, applies the caller's `overrides`, mirrors
+// the resulting cfg back onto the picker chips + range inputs, then starts. ONE reset path so a
+// newly-added facet can't be applied to some copies and missed in others (cfg.cat once was —
+// see the startDueSession regression pinned in deck-render.test.js). rmax resets to the REAL top
+// rank (state.MAXRANK; a hardcoded 100 excluded every due/leech custom/Minna/song/鰐蟹 card).
+// Callers that jump from another tab click the study tab themselves first — startDueSession is
+// already on the study tab, so it doesn't.
+function launchDeck(overrides) {
+  cfg.kind = 'free'; cfg.cat = []; cfg.type = []; cfg.trans = []; cfg.topic = [];
+  cfg.status = []; cfg.source = []; cfg.jlpt = ['all']; cfg.rmin = 1; cfg.rmax = state.MAXRANK; cfg.ord = 'worst';
+  Object.assign(cfg, overrides);
   repaintDeck();
-  document.querySelectorAll('.chip.skind').forEach(x => x.classList.toggle('active', x.dataset.skind === 'srs'));
-  document.querySelectorAll('.chip.jlpt').forEach(x => x.classList.toggle('active', x.dataset.jlpt === 'all'));
-  document.getElementById('rmin').value = 1; document.getElementById('rmax').value = state.MAXRANK;
-  document.querySelectorAll('.chip.ord').forEach(x => x.classList.toggle('active', x.dataset.ord === 'worst'));
+  document.querySelectorAll('.chip.skind').forEach(x => x.classList.toggle('active', x.dataset.skind === cfg.kind));
+  document.querySelectorAll('.chip.jlpt').forEach(x => x.classList.toggle('active', cfg.jlpt.includes(x.dataset.jlpt)));
+  document.getElementById('rmin').value = cfg.rmin; document.getElementById('rmax').value = cfg.rmax;
+  document.querySelectorAll('.chip.ord').forEach(x => x.classList.toggle('active', x.dataset.ord === cfg.ord));
   updateStartLabel();
   onStartSession();
 }
 
-// "Study the 鰐蟹 deck now": jump to the flashcard tab scoped to WK-activated cards in
-// FREE study (fresh activations aren't due yet — free mode makes them reviewable
-// immediately) and start. The wanikani tab's post-activation CTA; mirrors the
-// studyLeeches jump (stats.js) — overrides the picker and syncs the chip UI to match.
+// "Review due cards": force the deck to due-only, worst-first, full range (a dedicated review
+// flow that overrides the picker). Already on the study tab, so no tab jump.
+export function startDueSession() {
+  launchDeck({ kind: 'srs', status: ['due'] });
+}
+
+// "Study the 鰐蟹 deck now": jump to the flashcard tab scoped to WK-activated cards in FREE
+// study (fresh activations aren't due yet — free mode makes them reviewable immediately) and
+// start. The wanikani tab's post-activation CTA.
 export function studyWkCards() {
   document.querySelector('.tab[data-tab="study"]').click();
-  cfg.kind = 'free'; cfg.cat = []; cfg.type = []; cfg.trans = []; cfg.topic = []; cfg.status = []; cfg.source = ['wanikani']; cfg.jlpt = ['all']; cfg.rmin = 1; cfg.rmax = state.MAXRANK; cfg.ord = 'worst';
-  repaintDeck();
-  document.querySelectorAll('.chip.skind').forEach(x => x.classList.toggle('active', x.dataset.skind === 'free'));
-  document.querySelectorAll('.chip.jlpt').forEach(x => x.classList.toggle('active', x.dataset.jlpt === 'all'));
-  document.getElementById('rmin').value = 1; document.getElementById('rmax').value = state.MAXRANK;
-  document.querySelectorAll('.chip.ord').forEach(x => x.classList.toggle('active', x.dataset.ord === 'worst'));
-  updateStartLabel();
-  onStartSession();
+  launchDeck({ source: ['wanikani'] });
 }
 
-// "Drill grammar": the same jump scoped to the grammar CATEGORY (cloze cards) — the JLPT
-// tab's grammar-lens CTA. Free study: fresh activations aren't due yet.
+// "Drill grammar": the same jump scoped to the grammar CATEGORY (cloze cards) — the JLPT tab's
+// grammar-lens CTA. Free study: fresh activations aren't due yet.
 export function studyGrammarDeck() {
   document.querySelector('.tab[data-tab="study"]').click();
-  cfg.kind = 'free'; cfg.cat = ['grammar']; cfg.type = []; cfg.trans = []; cfg.topic = []; cfg.status = []; cfg.source = []; cfg.jlpt = ['all']; cfg.rmin = 1; cfg.rmax = state.MAXRANK; cfg.ord = 'worst';
-  repaintDeck();
-  document.querySelectorAll('.chip.skind').forEach(x => x.classList.toggle('active', x.dataset.skind === 'free'));
-  document.querySelectorAll('.chip.jlpt').forEach(x => x.classList.toggle('active', x.dataset.jlpt === 'all'));
-  document.getElementById('rmin').value = 1; document.getElementById('rmax').value = state.MAXRANK;
-  document.querySelectorAll('.chip.ord').forEach(x => x.classList.toggle('active', x.dataset.ord === 'worst'));
-  updateStartLabel();
-  onStartSession();
+  launchDeck({ cat: ['grammar'] });
 }
 
 // "Study them now" (合格 gap-fill): the same jump scoped to Source: JLPT cards.
 export function studyJlptCards() {
   document.querySelector('.tab[data-tab="study"]').click();
-  cfg.kind = 'free'; cfg.cat = []; cfg.type = []; cfg.trans = []; cfg.topic = []; cfg.status = []; cfg.source = ['jlptfill']; cfg.jlpt = ['all']; cfg.rmin = 1; cfg.rmax = state.MAXRANK; cfg.ord = 'worst';
-  repaintDeck();
-  document.querySelectorAll('.chip.skind').forEach(x => x.classList.toggle('active', x.dataset.skind === 'free'));
-  document.querySelectorAll('.chip.jlpt').forEach(x => x.classList.toggle('active', x.dataset.jlpt === 'all'));
-  document.getElementById('rmin').value = 1; document.getElementById('rmax').value = state.MAXRANK;
-  document.querySelectorAll('.chip.ord').forEach(x => x.classList.toggle('active', x.dataset.ord === 'worst'));
-  updateStartLabel();
-  onStartSession();
+  launchDeck({ source: ['jlptfill'] });
 }
 
-// "Study all leeches": jump to the flashcard tab scoped to leech cards in FREE study
-// (leeches aren't necessarily due — free mode makes them reviewable now) and start.
-// Extracted from stats.js so Stats + the JLPT tab share ONE jump (and because the old
+// "Study all leeches": the same jump scoped to leech cards (leeches aren't necessarily due —
+// free mode makes them reviewable now). Shared by Stats + the JLPT tab's checklist (the old
 // stats copy hardcoded rmax=100, silently excluding every custom/Minna/song/鰐蟹 leech).
 export function studyLeechCards() {
   document.querySelector('.tab[data-tab="study"]').click();
-  cfg.kind = 'free'; cfg.cat = []; cfg.type = []; cfg.trans = []; cfg.topic = []; cfg.status = ['leech']; cfg.source = []; cfg.jlpt = ['all']; cfg.rmin = 1; cfg.rmax = state.MAXRANK; cfg.ord = 'worst';
-  repaintDeck();
-  document.querySelectorAll('.chip.skind').forEach(x => x.classList.toggle('active', x.dataset.skind === 'free'));
-  document.querySelectorAll('.chip.jlpt').forEach(x => x.classList.toggle('active', x.dataset.jlpt === 'all'));
-  document.getElementById('rmin').value = 1; document.getElementById('rmax').value = state.MAXRANK;
-  document.querySelectorAll('.chip.ord').forEach(x => x.classList.toggle('active', x.dataset.ord === 'worst'));
-  updateStartLabel();
-  onStartSession();
+  launchDeck({ status: ['leech'] });
 }
 
 // Wire the deck picker chips + range inputs + forecast horizon toggle. Runs after the data
