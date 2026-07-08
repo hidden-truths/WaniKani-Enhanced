@@ -1,7 +1,8 @@
 // Songs (歌 / Songs tab) — the song library + BYO-song CRUD. A song's METADATA lives in the `song`
 // table; its lyric LINES are sentence-store rows (owner_type='song'), so reads reuse the
-// getSentences privacy gate. The runtime LLM analysis endpoint (POST /v1/songs/analyze) +
-// the oEmbed proxy live in ./songsAnalyze.ts (mounted on this same router).
+// getSentences privacy gate. The runtime LLM analysis endpoint (POST /v1/songs/analyze,
+// backed by ../services/songAnalyze.ts) + the keyless oEmbed proxy are defined below in
+// this file.
 //
 //   GET    /v1/songs            — library: public starters + own private songs (anon-readable)
 //   GET    /v1/songs/{id}       — one song: metadata + ordered lines (gated)
@@ -9,6 +10,8 @@
 //   PUT    /v1/songs/{id}       — edit metadata (cookie, owner)
 //   PUT    /v1/songs/{id}/timing— save per-line clip starts from tap-to-sync (cookie, owner)
 //   DELETE /v1/songs/{id}       — delete own song + its line rows (cookie, owner)
+//   POST   /v1/songs/analyze    — one-shot LLM lyric analysis (cookie; 503 until ANTHROPIC_API_KEY is set)
+//   GET    /v1/songs/oembed     — keyless YouTube title/artist proxy (cookie)
 //
 // READ is anon-friendly (starters are public); WRITES require an account (BYO songs are private).
 // This router is in index.ts's STUDY_ROUTE CORS allowlist — every call is credentialed.

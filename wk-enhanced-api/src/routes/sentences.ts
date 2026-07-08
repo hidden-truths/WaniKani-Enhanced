@@ -1,9 +1,10 @@
 // Unified sentence store API (Phase 1: 独り言 Self-Talk; Phase 2: built-in card examples).
 //
-//   GET    /v1/sentences?ownerType=selftalk|card[&ownerId=]  — public (anon) + own private rows
+//   GET    /v1/sentences?ownerType=selftalk|card|grammar_point[&ownerId=]  — public (anon) + own private rows
 //   POST   /v1/sentences                       — create a private user sentence (cookie)
 //   PUT    /v1/sentences/{id}                   — replace own sentence (cookie)
 //   DELETE /v1/sentences/{id}                   — delete own sentence (cookie)
+//   PUT    /v1/sentences/card/{rank}            — replace own custom-card example rows (cookie, Phase 2.5)
 //
 // READ is anonymous-friendly: anon gets public rows, a signed-in user gets public + their
 // own private rows — both through the ONE privacy choke-point (db.getSentences). WRITES
