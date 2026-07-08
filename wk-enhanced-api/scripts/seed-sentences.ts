@@ -9,7 +9,7 @@
 //   3. 独り言 Self-Talk slot-swap TEMPLATES — the generator STRUCTURE into the separate
 //      `sentence_template` table (db.upsertPublicTemplate, idempotent by ext_id). A template has
 //      no single fixed text/hash, so it isn't a `sentence` row; its realizations become sentence
-//      rows lazily in a later slice. See ../../SENTENCE_STORE_TEMPLATES.md.
+//      rows lazily in a later slice. See the repo-root ROADMAP.html (store: slot-swap templates).
 //   4. みんなの日本語 sentences — GATED rows (public=0; copyright), see the pass comment below.
 //   5. N3 grammar-catalog example sentences — PUBLIC rows linked owner_type='grammar_point'
 //      (db.upsertPublicSentence, idempotent by ext_id `gp-<pointId>-<ordinal>`).

@@ -6,8 +6,8 @@
 // This is the only home for IK title decoding now — the v1.x userscript had
 // a parallel implementation; the v2 userscript trusts the server's resolved
 // title and no longer carries this logic. The frozen v1.1.1-legacy snapshot
-// at legacy/wk-vocab-review-ik-direct.user.js still has its own copy if
-// you need a reference.
+// that carried that parallel copy (legacy/wk-vocab-review-ik-direct.user.js)
+// was REMOVED in the 2026-06 cleanup — recover it from git history if needed.
 
 function decodeIkTitle(title: string): string[] {
     let s = String(title);

@@ -234,7 +234,7 @@ CREATE VIEW IF NOT EXISTS public_sentence AS
 -- those realizations become PUBLIC `sentence` rows (source='template', linked via sentence_link
 -- owner_type='template'), lazily materialized on first play/record (Slice 2 — SHIPPED) by
 -- db.materializeTemplateRealization (reuse-by-hash, idempotent), so de-dup/export/grammar/NLP/TTS
--- cover the combos people use. Full design + phasing: ../../SENTENCE_STORE_TEMPLATES.md.
+-- cover the combos people use. Full design + phasing: the repo-root ROADMAP.html (store: slot-swap templates).
 --
 -- Privacy MIRRORS the sentence store: ALL reads go through db.getTemplates, which always ANDs
 -- (public=1 OR created_by=:viewer), fail-closed; anon/export read the public_template VIEW. This

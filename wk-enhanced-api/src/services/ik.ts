@@ -34,10 +34,6 @@ export interface IkExample {
     [k: string]: unknown;
 }
 
-export interface IkSearchResponse {
-    examples: IkExample[];
-}
-
 export interface IkIndexMetaEntry {
     title: string;
     category: string;

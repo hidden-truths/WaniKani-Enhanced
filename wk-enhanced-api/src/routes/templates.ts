@@ -15,7 +15,7 @@
 // a PUBLIC `sentence` row (source='template', idempotent by hash) linked via owner_type='template',
 // copying the template's curated grammar. So NLP/TTS/grammar/export cover the combos people use.
 // Account-gated (it writes the public corpus); anon keeps playing via the lazy TTS path. Full
-// design + phasing: ../../SENTENCE_STORE_TEMPLATES.md.
+// design + phasing: the repo-root ROADMAP.html (store: slot-swap templates).
 //
 // NOTE: this router is in index.ts's STUDY_ROUTE CORS allowlist — even the anon GET is a
 // credentialed (cookie-bearing) request from the study app, so it must get the echoed origin.

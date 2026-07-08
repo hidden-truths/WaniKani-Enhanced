@@ -16,7 +16,7 @@ Total steady-state spend: **≈$11/mo**.
 
 **We do not use Kubernetes.** Specifically: we do not run on DOKS, GKE, EKS, or any self-managed k8s; we don't write Helm charts; we don't produce manifests. The unit of deploy is the droplet + the systemd unit, full stop.
 
-We *do* leave the door open to Docker-ize the server later (tracked in `NEW_FEATURES.md` under "Dockerize the server") for operational hygiene — but the target remains `docker compose up` on a single droplet, not orchestration across many.
+We *do* leave the door open to Docker-ize the server later for operational hygiene — but the target remains `docker compose up` on a single droplet, not orchestration across many. **(Since shipped: prod now runs two containers — `api` + `web` — via `compose.yaml` behind a thin systemd wrapper. The decision above still holds: compose on one droplet, no orchestrator.)**
 
 ## Why — the analysis
 
@@ -95,6 +95,6 @@ Until then, **single Bun process on a single droplet** is the right shape.
 
 ## See also
 
-- `NEW_FEATURES.md` → "Dockerize the server" — the next architectural step that *is* worth doing, scoped to operational hygiene rather than platform migration.
+- `ROADMAP.html` (repo root) — the single backlog + shipped record. "Dockerize the server" was the next architectural step this ADR anticipated; it has since shipped. (This bullet used to point at `NEW_FEATURES.md`, one of the ~22 status docs consolidated into ROADMAP.html on 2026-06-19.)
 - `wk-enhanced-api/CLAUDE.md` "Things that look like bugs but aren't" → "SQLite is the DB even in production" — companion decision; the K8s and Postgres questions are entangled, both rejected for the same reason.
-- `wk-enhanced-api/deploy/README.md` — the bare-metal-systemd deploy walkthrough this ADR is implicitly defending.
+- `wk-enhanced-api/deploy/README.md` — the deploy walkthrough this ADR is implicitly defending (now Compose-on-systemd rather than bare-metal systemd; the ADR's argument is unchanged).

@@ -37,8 +37,11 @@ const AppParamSchema = z.object({
         //                  never stored here — it lives in the client's IndexedDB, re-syncable
         //                  from api.wanikani.com at any time)
         // 'jlpt'         = 合格/JLPT tab: target level + exam date + optional pacing targets + the
-        //                  rolling daily-checklist record + the mock-test log (scored practice
-        //                  papers; capped client-side at 50 entries)
+        //                  rolling daily-checklist record + the mock-test log + the 文法形式判断
+        //                  per-point MCQ score trail. NOTE: the blob is OPAQUE to this server, so
+        //                  this list is a courtesy and has gone stale twice as the tab grew (once
+        //                  for `mocks`, once for `mcq`). The authoritative shape is the client's
+        //                  normalizeJlpt() in study-app/src/core/jlpt.js — check there, not here.
         .enum(['verbs', 'custom-verbs', 'settings', 'minna', 'selftalk', 'songs', 'wanikani', 'jlpt'])
         .openapi({ param: { name: 'app', in: 'path' }, example: 'verbs' }),
 });
