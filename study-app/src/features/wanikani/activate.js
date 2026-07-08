@@ -39,13 +39,19 @@ export function activatableWk(subjects, idx) {
 // level (jlptOf — the lazily-loaded list is kicked at boot by initJlpt, so it's
 // loaded by any human-speed activation; '' when unknown, backfilled later by
 // backfillWkJlpt if the chunk somehow wasn't). Returns how many were actually added.
+//
+// `today` is read ONCE for the batch (as the 合格 gap-fill path does), not per card: a bulk
+// activation — a whole confusion family, or every focus leech — that straddles local midnight
+// would otherwise stamp one batch with two different `added` days, splitting it across two rows
+// of the 語 quota. The day-stamp is the checklist row's live signal, so it has to agree with itself.
 export function activateWkVocab(subjects) {
   const adds = activatableWk(subjects);
   if (!adds.length) return 0;
   const cs = loadCustom();
+  const today = localDay();
   for (const s of adds) {
     cs.seq = (cs.seq || 100) + 1;
-    cs.verbs.push(buildWkCard(s, cs.seq, jlptOf(s.chars, primaryReading(s)), localDay()));
+    cs.verbs.push(buildWkCard(s, cs.seq, jlptOf(s.chars, primaryReading(s)), today));
   }
   saveCustom(cs);
   rebuildData();

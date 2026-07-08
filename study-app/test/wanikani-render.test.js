@@ -21,6 +21,18 @@ vi.mock('../src/features/custom-cards.js', () => ({ rebuildData: vi.fn(), refres
 vi.mock('../src/features/wanikani/idb.js', () => ({ idbClearAll: async () => {}, idbLoadAll: async () => null, idbSaveAll: async () => {} }));
 vi.mock('../src/features/wanikani/sync.js', () => ({ loadWkCache: async () => null, syncWk: async () => {}, verifyToken: async () => ({}) }));
 
+// A clock seam for the midnight-straddle test: localDay() answers from `clock.queue` when one is
+// set (a scripted day-rollover), else delegates to the real implementation. `vi.hoisted` because
+// vi.mock factories are hoisted above module-scope `const`s.
+const clock = vi.hoisted(() => ({ calls: 0, queue: null }));
+vi.mock('../src/config.js', async (importOriginal) => {
+  const actual = await importOriginal();
+  return {
+    ...actual,
+    localDay: (d) => { clock.calls++; return clock.queue && clock.queue.length ? clock.queue.shift() : actual.localDay(d); },
+  };
+});
+
 // persistence/custom.js reads localStorage at call time — give it a working Map-backed fake.
 const bag = new Map();
 vi.stubGlobal('localStorage', {
@@ -179,6 +191,23 @@ test('activateWkVocab adds tagged cards once and skips words already in the deck
   state.DATA = [...state.DATA, ...added];
   expect(wkInDeck(v1)).toBe(true);
   expect(activateWkVocab([v1, v2])).toBe(0);                // wkId match + headword match both skip
+});
+
+// `added` is the 語 quota row's live signal, so one bulk activation (a confusion family, or every
+// focus leech) must stamp ONE day even if it straddles local midnight. Reading localDay() per card
+// split the batch across two rows of the quota.
+test('a bulk activation reads the day once, so a midnight straddle cannot split the batch', () => {
+  adoptWkData(bundle());
+  state.DATA = [];
+  clock.calls = 0;
+  clock.queue = ['2026-07-08', '2026-07-09', '2026-07-09'];   // the day rolls over mid-loop
+
+  expect(activateWkVocab([S.subjects.get(21), S.subjects.get(22)])).toBe(2);
+  const added = loadCustom().verbs;
+  expect(added.map((v) => v.added)).toEqual(['2026-07-08', '2026-07-08']);   // one day for the batch
+  expect(clock.calls).toBe(1);                                              // read once, not per card
+
+  clock.queue = null;
 });
 
 test('detail modal offers Add to deck for vocab and shows in-deck state after activation', () => {
