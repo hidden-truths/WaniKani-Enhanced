@@ -9,7 +9,7 @@
 // takes over; the read-only WK SRS is never written back.
 import { state } from '../../state.js';
 import { localDay } from '../../config.js';
-import { buildWkCard, primaryReading, isDue } from '../../core/index.js';
+import { buildWkCard, primaryReading, deckSourceCount } from '../../core/index.js';
 import { loadCustom, saveCustom } from '../../persistence/custom.js';
 import { rebuildData, refreshAfterVerbChange } from '../custom-cards.js';
 import { jlptOf } from '../jlpt/data.js';
@@ -55,8 +55,4 @@ export function activateWkVocab(subjects) {
 
 // How many Source:鰐蟹 cards the deck currently holds (the "Study N now" CTA count),
 // with the DUE slice broken out so the CTA can say what actually needs attention.
-export function wkDeckCount() {
-  let n = 0, due = 0;
-  for (const v of state.DATA) if (v.wanikani) { n++; if (isDue(v.rank)) due++; }
-  return { n, due };
-}
+export const wkDeckCount = () => deckSourceCount('wanikani');

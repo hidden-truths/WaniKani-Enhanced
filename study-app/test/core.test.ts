@@ -10,7 +10,7 @@ import { test, expect, beforeEach } from 'vitest';
 import { state, attachLevels } from '../src/state.js';
 import { VERBS } from '../src/data/verbs.js';
 import {
-  passes, oneGroup, facetAll, facetMatch, scheduleCard, cardStat, isDue, dueCards,
+  passes, oneGroup, facetAll, facetMatch, scheduleCard, cardStat, isDue, dueCards, deckSourceCount,
   rollingAcc, isLeech, leeches, normKana, romajiToKana, reviewForecast, studyStreak, filterSummary,
   tokenFacet, deckLabel, ttsText, HAS_KANJI, rubyHtml, plainText, isCleanRuby, rubyToSegments, segmentsToRuby, segmentsToReading, foldFurigana,
   overlayTokens,
@@ -867,6 +867,27 @@ test('filterSummary: one part per non-empty facet (the AND\'d recap)', () => {
 test('dueCards / leeches derive from store over the live DATA', () => {
   expect(dueCards().length).toBe(state.DATA.length);
   expect(leeches().length).toBe(0);
+});
+
+// The one counter behind jlptDeckCount / wkDeckCount / grammarDeckCount — three identical
+// copies before. The DUE slice is what the "Study N now · M due" CTAs read.
+test('deckSourceCount counts one provenance flag, with the due slice broken out', () => {
+  const prev = state.DATA;
+  state.DATA = [
+    { rank: 9001, jlptfill: true }, { rank: 9002, jlptfill: true },
+    { rank: 9003, wanikani: true }, { rank: 9004, grammar: true },
+    { rank: 9005 },                                     // no provenance → counted by none
+  ] as any;
+  state.store.cards[9001] = { box: 3, due: Date.now() + 864e5, attempts: [] } as any;   // scheduled, not due
+  state.store.cards[9002] = { box: 2, due: Date.now() - 1000, attempts: [] } as any;    // overdue
+
+  expect(deckSourceCount('jlptfill')).toEqual({ n: 2, due: 1 });
+  expect(deckSourceCount('wanikani')).toEqual({ n: 1, due: 1 });   // unseen card → due
+  expect(deckSourceCount('grammar')).toEqual({ n: 1, due: 1 });
+  expect(deckSourceCount('song')).toEqual({ n: 0, due: 0 });
+
+  delete state.store.cards[9001]; delete state.store.cards[9002];
+  state.DATA = prev;
 });
 
 test('clampKeep clamps to [1,20] and defaults on garbage', () => {

@@ -6,7 +6,7 @@
 // The `added` day-stamp each card carries is the quota checklist row's live signal — the WK / song /
 // Minna builders stamp it too, so the row counts every deck add, not only gap-fill ones.
 import { state } from '../../state.js';
-import { buildJlptCard, deckWordSet, isDue } from '../../core/index.js';
+import { buildJlptCard, deckWordSet, deckSourceCount } from '../../core/index.js';
 import { localDay } from '../../config.js';
 import { loadCustom, saveCustom } from '../../persistence/custom.js';
 import { rebuildData, refreshAfterVerbChange } from '../custom-cards.js';
@@ -32,8 +32,4 @@ export function addJlptWords(entries, level) {
 }
 
 // How many gap-fill cards the deck holds + the due slice (the "Study them now" CTA copy).
-export function jlptDeckCount() {
-  let n = 0, due = 0;
-  for (const v of state.DATA) if (v.jlptfill) { n++; if (isDue(v.rank)) due++; }
-  return { n, due };
-}
+export const jlptDeckCount = () => deckSourceCount('jlptfill');

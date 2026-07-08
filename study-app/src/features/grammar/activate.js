@@ -5,7 +5,7 @@
 // The card is a display snapshot — explanation/formation/examples always render by
 // grammarId lookup into the loaded catalog, so content fixes reach existing cards.
 import { state } from '../../state.js';
-import { buildGrammarCard, grammarDeckIndex, isDue } from '../../core/index.js';
+import { buildGrammarCard, grammarDeckIndex, deckSourceCount } from '../../core/index.js';
 import { loadCustom, saveCustom } from '../../persistence/custom.js';
 import { rebuildData, refreshAfterVerbChange } from '../custom-cards.js';
 
@@ -28,8 +28,4 @@ export function activateGrammarPoints(pointsToAdd) {
 }
 
 // How many grammar cards the deck holds + the due slice (the "Drill grammar" CTA copy).
-export function grammarDeckCount() {
-  let n = 0, due = 0;
-  for (const v of state.DATA) if (v.grammar) { n++; if (isDue(v.rank)) due++; }
-  return { n, due };
-}
+export const grammarDeckCount = () => deckSourceCount('grammar');
