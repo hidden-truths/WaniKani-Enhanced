@@ -1,0 +1,865 @@
+{
+  "lesson": 19,
+  "title": "Lesson 19",
+  "theme": "Experience (〜たことがあります), listing activities (〜たり〜たりします), and becoming (〜くなります／〜になります) — plus verbs 登る・泊まる・掃除する・洗濯する and adjectives 眠い・強い・弱い",
+  "source": {
+    "name": "vnjpclub.com",
+    "vocabUrl": "https://www.vnjpclub.com/en/minna-no-nihongo/lesson-19-vocabulary.html",
+    "grammarUrl": "https://www.vnjpclub.com/en/minna-no-nihongo/lesson-19-grammar.html",
+    "note": "Vocabulary, native-speaker audio, and example sentences aggregated from vnjpclub.com (Minna no Nihongo 第2版). For personal study."
+  },
+  "vocab": [
+    {
+      "key": "mnn:19:0",
+      "kana": "のぼります",
+      "kanji": "登ります",
+      "context": "山に〜",
+      "mean": "to climb, go up (a mountain)",
+      "cat": "verb",
+      "type": "godan",
+      "trans": "i",
+      "dict": "登る",
+      "dictRead": "のぼる",
+      "audio": "/Audio/minnamoi/bai19/00010101001101101.mp3",
+      "levels": {
+        "N5": [
+          "<ruby>山<rt>やま</rt></ruby>に<ruby>登<rt>のぼ</rt></ruby>ります。",
+          "I climb a mountain."
+        ],
+        "N4": [
+          "<ruby>友<rt>とも</rt></ruby>だちと<ruby>富士山<rt>ふじさん</rt></ruby>に<ruby>登<rt>のぼ</rt></ruby>ったことがあります。",
+          "I have climbed Mt. Fuji with a friend before."
+        ],
+        "N3": [
+          "<ruby>体<rt>からだ</rt></ruby>のために、<ruby>毎週<rt>まいしゅう</rt></ruby><ruby>山<rt>やま</rt></ruby>に<ruby>登<rt>のぼ</rt></ruby>るようにしています。",
+          "For my health, I make a point of climbing a mountain every week."
+        ],
+        "N2": [
+          "この<ruby>山<rt>やま</rt></ruby>は<ruby>低<rt>ひく</rt></ruby>いものの、<ruby>頂上<rt>ちょうじょう</rt></ruby>まで<ruby>登<rt>のぼ</rt></ruby>るとかなり<ruby>疲<rt>つか</rt></ruby>れる。",
+          "Although this mountain is low, if you climb all the way to the summit you get quite tired."
+        ],
+        "N1": [
+          "<ruby>装備<rt>そうび</rt></ruby>も<ruby>整<rt>ととの</rt></ruby>えずに<ruby>厳冬期<rt>げんとうき</rt></ruby>の<ruby>山<rt>やま</rt></ruby>に<ruby>登<rt>のぼ</rt></ruby>るなど、<ruby>無謀<rt>むぼう</rt></ruby>としか<ruby>言<rt>い</rt></ruby>いようがない。",
+          "Climbing a mountain in the dead of winter without even proper equipment can only be called reckless."
+        ]
+      },
+      "mnem": "\"No-boat\" — you can't take a boat up a mountain, so you have to climb: のぼる.",
+      "tip": "Godan (登って/登らない); the mountain climbed takes に (山に登る). Same reading のぼる also writes 上る (go up stairs/a slope) and 昇る (the sun rises); Minna's L19 sense is 登る (climb a mountain).",
+      "accent": 0
+    },
+    {
+      "key": "mnn:19:1",
+      "kana": "とまります",
+      "kanji": "泊まります",
+      "context": "ホテルに〜",
+      "mean": "to stay overnight (at a hotel)",
+      "cat": "verb",
+      "type": "godan",
+      "trans": "i",
+      "dict": "泊まる",
+      "dictRead": "とまる",
+      "audio": "/Audio/minnamoi/bai19/00010101001101110.mp3",
+      "levels": {
+        "N5": [
+          "ホテルに<ruby>泊<rt>と</rt></ruby>まります。",
+          "I stay at a hotel."
+        ],
+        "N4": [
+          "<ruby>京都<rt>きょうと</rt></ruby>へ<ruby>行<rt>い</rt></ruby>ったとき、<ruby>友<rt>とも</rt></ruby>だちのうちに<ruby>泊<rt>と</rt></ruby>まりました。",
+          "When I went to Kyoto, I stayed at my friend's house."
+        ],
+        "N3": [
+          "<ruby>旅行<rt>りょこう</rt></ruby>のときは、<ruby>安<rt>やす</rt></ruby>いホテルに<ruby>泊<rt>と</rt></ruby>まるようにしています。",
+          "When I travel, I make a point of staying at cheap hotels."
+        ],
+        "N2": [
+          "その<ruby>旅館<rt>りょかん</rt></ruby>は<ruby>古<rt>ふる</rt></ruby>いものの、<ruby>一度<rt>いちど</rt></ruby><ruby>泊<rt>と</rt></ruby>まる<ruby>価値<rt>かち</rt></ruby>は<ruby>十分<rt>じゅうぶん</rt></ruby>にある。",
+          "Although that inn is old, it is well worth staying at once."
+        ],
+        "N1": [
+          "<ruby>終電<rt>しゅうでん</rt></ruby>を<ruby>逃<rt>のが</rt></ruby>してしまった<ruby>以上<rt>いじょう</rt></ruby>、<ruby>駅前<rt>えきまえ</rt></ruby>のホテルに<ruby>泊<rt>と</rt></ruby>まらざるを<ruby>得<rt>え</rt></ruby>なかった。",
+          "Given that I had missed the last train, I had no choice but to stay at a hotel in front of the station."
+        ]
+      },
+      "mnem": "You \"toe-maru\" — drag your tired toes into a hotel room to stay the night: とまる.",
+      "tip": "Godan and intransitive; the place stayed takes に (ホテルに泊まる). Don't confuse it with the homophone 止まる (とまる, \"to stop\") — 泊まる is spending the night, 止まる is halting.",
+      "accent": 0
+    },
+    {
+      "key": "mnn:19:2",
+      "kana": "そうじします",
+      "kanji": "掃除します",
+      "context": "へやを〜",
+      "mean": "to clean (a room)",
+      "cat": "verb",
+      "type": "irregular",
+      "trans": "t",
+      "dict": "掃除する",
+      "dictRead": "そうじする",
+      "audio": "/Audio/minnamoi/bai19/00010101001101111.mp3",
+      "levels": {
+        "N5": [
+          "<ruby>部屋<rt>へや</rt></ruby>を<ruby>掃除<rt>そうじ</rt></ruby>します。",
+          "I clean the room."
+        ],
+        "N4": [
+          "<ruby>週末<rt>しゅうまつ</rt></ruby>は<ruby>部屋<rt>へや</rt></ruby>を<ruby>掃除<rt>そうじ</rt></ruby>したり、<ruby>洗濯<rt>せんたく</rt></ruby>したりします。",
+          "On weekends I do things like clean my room and do the laundry."
+        ],
+        "N3": [
+          "<ruby>気持<rt>きも</rt></ruby>ちよく<ruby>過<rt>す</rt></ruby>ごせるように、<ruby>毎朝<rt>まいあさ</rt></ruby><ruby>部屋<rt>へや</rt></ruby>を<ruby>掃除<rt>そうじ</rt></ruby>するようにしています。",
+          "So that I can spend the day pleasantly, I make a point of cleaning my room every morning."
+        ],
+        "N2": [
+          "<ruby>忙<rt>いそが</rt></ruby>しいものの、<ruby>客<rt>きゃく</rt></ruby>が<ruby>来<rt>く</rt></ruby>る<ruby>前<rt>まえ</rt></ruby>に<ruby>部屋<rt>へや</rt></ruby>を<ruby>掃除<rt>そうじ</rt></ruby>しないわけにはいかない。",
+          "Although I'm busy, there's no way I can get out of cleaning the room before the guests arrive."
+        ],
+        "N1": [
+          "<ruby>大掃除<rt>おおそうじ</rt></ruby>の<ruby>際<rt>さい</rt></ruby>には、<ruby>普段<rt>ふだん</rt></ruby><ruby>手<rt>て</rt></ruby>の<ruby>届<rt>とど</rt></ruby>かない<ruby>隅<rt>すみ</rt></ruby>まで<ruby>掃除<rt>そうじ</rt></ruby>せざるを<ruby>得<rt>え</rt></ruby>ない。",
+          "During a big year-end cleaning, one has no choice but to clean even the corners that usually can't be reached."
+        ]
+      },
+      "mnem": "\"So-o-ji\" — you SWEEP and SCRUB (both start with an 's') to clean the room: 掃除する.",
+      "tip": "する-verb (irregular): 掃除して/掃除しない. The thing cleaned takes を (部屋を掃除する). Don't confuse 掃除 (cleaning) with 洗濯 (せんたく, laundry) — 掃除 is tidying a place, 洗濯 is washing clothes.",
+      "accent": 0
+    },
+    {
+      "key": "mnn:19:3",
+      "kana": "せんたくします",
+      "kanji": "洗濯します",
+      "context": "",
+      "mean": "to do the laundry, wash (clothes)",
+      "cat": "verb",
+      "type": "irregular",
+      "trans": "t",
+      "dict": "洗濯する",
+      "dictRead": "せんたくする",
+      "audio": "/Audio/minnamoi/bai19/00010101001110000.mp3",
+      "levels": {
+        "N5": [
+          "<ruby>今日<rt>きょう</rt></ruby><ruby>洗濯<rt>せんたく</rt></ruby>します。",
+          "I do the laundry today."
+        ],
+        "N4": [
+          "<ruby>天気<rt>てんき</rt></ruby>がいいから、シャツを<ruby>洗濯<rt>せんたく</rt></ruby>したいです。",
+          "Because the weather is good, I want to wash my shirts."
+        ],
+        "N3": [
+          "<ruby>晴<rt>は</rt></ruby>れた<ruby>日<rt>ひ</rt></ruby>には、まとめて<ruby>洗濯<rt>せんたく</rt></ruby>するようにしています。",
+          "On sunny days, I make a point of doing all the laundry at once."
+        ],
+        "N2": [
+          "<ruby>雨<rt>あめ</rt></ruby>が<ruby>降<rt>ふ</rt></ruby>りそうなものの、たまった<ruby>服<rt>ふく</rt></ruby>を<ruby>洗濯<rt>せんたく</rt></ruby>しないわけにはいかない。",
+          "Although it looks like it might rain, there's no way I can avoid washing the clothes that have piled up."
+        ],
+        "N1": [
+          "<ruby>梅雨<rt>つゆ</rt></ruby>の<ruby>時期<rt>じき</rt></ruby>は<ruby>洗濯<rt>せんたく</rt></ruby>した<ruby>物<rt>もの</rt></ruby>がなかなか<ruby>乾<rt>かわ</rt></ruby>かず、<ruby>部屋干<rt>へやぼ</rt></ruby>しに<ruby>頼<rt>たよ</rt></ruby>らざるを<ruby>得<rt>え</rt></ruby>ない。",
+          "During the rainy season the laundry just won't dry, so one has no choice but to rely on drying it indoors."
+        ]
+      },
+      "mnem": "\"Sen-taku\" — you take a stack ('taku') of dirty clothes and wash them: 洗濯する.",
+      "tip": "する-verb (irregular): 洗濯して/洗濯しない. 洗濯 is specifically washing CLOTHES; for washing dishes/hands use 洗う (あらう). Don't confuse the kanji 洗濯 with 選択 (せんたく, \"choice/selection\") — same reading, different word.",
+      "accent": 0
+    },
+    {
+      "key": "mnn:19:4",
+      "kana": "なります",
+      "kanji": "",
+      "context": "",
+      "mean": "to become",
+      "cat": "verb",
+      "type": "godan",
+      "trans": "i",
+      "dict": "なる",
+      "dictRead": "なる",
+      "audio": "/Audio/minnamoi/bai19/00010101001110001.mp3",
+      "accent": 1
+    },
+    {
+      "key": "mnn:19:5",
+      "kana": "ねむい",
+      "kanji": "眠い",
+      "context": "",
+      "mean": "sleepy",
+      "cat": "adjective",
+      "type": "i-adj",
+      "trans": "",
+      "dict": "眠い",
+      "dictRead": "ねむい",
+      "audio": "/Audio/minnamoi/bai19/00010101001110010.mp3",
+      "levels": {
+        "N5": [
+          "<ruby>今<rt>いま</rt></ruby><ruby>眠<rt>ねむ</rt></ruby>いです。",
+          "I'm sleepy now."
+        ],
+        "N4": [
+          "<ruby>昨日<rt>きのう</rt></ruby>あまり<ruby>寝<rt>ね</rt></ruby>なかったから、とても<ruby>眠<rt>ねむ</rt></ruby>いです。",
+          "Because I didn't sleep much yesterday, I'm very sleepy."
+        ],
+        "N3": [
+          "<ruby>会議<rt>かいぎ</rt></ruby><ruby>中<rt>ちゅう</rt></ruby>に<ruby>眠<rt>ねむ</rt></ruby>くならないように、コーヒーを<ruby>飲<rt>の</rt></ruby>むようにしています。",
+          "So that I don't get sleepy during meetings, I make a point of drinking coffee."
+        ],
+        "N2": [
+          "<ruby>薬<rt>くすり</rt></ruby>を<ruby>飲<rt>の</rt></ruby>んだせいか、<ruby>運転中<rt>うんてんちゅう</rt></ruby>なのにたまらなく<ruby>眠<rt>ねむ</rt></ruby>い。",
+          "Perhaps because of the medicine I took, I'm unbearably sleepy even though I'm driving."
+        ],
+        "N1": [
+          "<ruby>徹夜<rt>てつや</rt></ruby><ruby>明<rt>あ</rt></ruby>けで<ruby>眠<rt>ねむ</rt></ruby>くてたまらないとはいえ、<ruby>締<rt>し</rt></ruby>め<ruby>切<rt>き</rt></ruby>りが<ruby>迫<rt>せま</rt></ruby>っている<ruby>以上<rt>いじょう</rt></ruby>、<ruby>休<rt>やす</rt></ruby>むわけにはいかない。",
+          "Even though I'm dead sleepy after pulling an all-nighter, with the deadline looming I can't afford to rest."
+        ]
+      },
+      "mnem": "\"Neh-mui\" — you go \"nemu... nemu...\" nodding off; 眠い is that heavy-eyed, sleepy feeling.",
+      "tip": "い-adjective (眠くない/眠かった). Don't confuse the adjective 眠い (feeling sleepy) with the verb 眠る (ねむる, \"to sleep\"); also 眠い ≠ 疲れた (つかれた, \"tired\") — you can be tired without being sleepy.",
+      "accent": 2
+    },
+    {
+      "key": "mnn:19:6",
+      "kana": "つよい",
+      "kanji": "強い",
+      "context": "",
+      "mean": "strong",
+      "cat": "adjective",
+      "type": "i-adj",
+      "trans": "",
+      "dict": "強い",
+      "dictRead": "つよい",
+      "audio": "/Audio/minnamoi/bai19/00010101001110011.mp3",
+      "levels": {
+        "N5": [
+          "<ruby>兄<rt>あに</rt></ruby>はとても<ruby>強<rt>つよ</rt></ruby>いです。",
+          "My older brother is very strong."
+        ],
+        "N4": [
+          "<ruby>練習<rt>れんしゅう</rt></ruby>したら、だんだん<ruby>強<rt>つよ</rt></ruby>くなりました。",
+          "After I practiced, I gradually got stronger."
+        ],
+        "N3": [
+          "<ruby>試合<rt>しあい</rt></ruby>に<ruby>勝<rt>か</rt></ruby>てるように、もっと<ruby>強<rt>つよ</rt></ruby>くなろうと<ruby>思<rt>おも</rt></ruby>っています。",
+          "So that I can win the match, I'm thinking of becoming even stronger."
+        ],
+        "N2": [
+          "<ruby>相手<rt>あいて</rt></ruby>は<ruby>強<rt>つよ</rt></ruby>いものの、あきらめずに<ruby>最後<rt>さいご</rt></ruby>まで<ruby>戦<rt>たたか</rt></ruby>うつもりだ。",
+          "Although my opponent is strong, I intend to fight to the end without giving up."
+        ],
+        "N1": [
+          "<ruby>逆境<rt>ぎゃっきょう</rt></ruby>にあってこそ、<ruby>人<rt>ひと</rt></ruby>は<ruby>本当<rt>ほんとう</rt></ruby>に<ruby>強<rt>つよ</rt></ruby>くなれるのだと、<ruby>彼<rt>かれ</rt></ruby>の<ruby>生<rt>い</rt></ruby>き<ruby>方<rt>かた</rt></ruby>が<ruby>教<rt>おし</rt></ruby>えてくれた。",
+          "It is precisely in the face of adversity that a person can become truly strong — that is what his way of living taught me."
+        ]
+      },
+      "mnem": "\"Tsu-yoi\" — say it with force, like flexing: 強い is strong, powerful.",
+      "tip": "い-adjective (強くない/強かった); its antonym is 弱い (よわい, weak). 強い covers physical strength, ability, and also intensity (強い風 = strong wind, お酒に強い = holds liquor well).",
+      "accent": 2
+    },
+    {
+      "key": "mnn:19:7",
+      "kana": "よわい",
+      "kanji": "弱い",
+      "context": "",
+      "mean": "weak",
+      "cat": "adjective",
+      "type": "i-adj",
+      "trans": "",
+      "dict": "弱い",
+      "dictRead": "よわい",
+      "audio": "/Audio/minnamoi/bai19/00010101001110100.mp3",
+      "levels": {
+        "N5": [
+          "<ruby>私<rt>わたし</rt></ruby>は<ruby>体<rt>からだ</rt></ruby>が<ruby>弱<rt>よわ</rt></ruby>いです。",
+          "I have a weak body."
+        ],
+        "N4": [
+          "<ruby>病気<rt>びょうき</rt></ruby>のあと、<ruby>体<rt>からだ</rt></ruby>が<ruby>弱<rt>よわ</rt></ruby>くなりました。",
+          "After my illness, my body got weaker."
+        ],
+        "N3": [
+          "<ruby>足<rt>あし</rt></ruby>が<ruby>弱<rt>よわ</rt></ruby>くならないように、<ruby>毎日<rt>まいにち</rt></ruby><ruby>歩<rt>ある</rt></ruby>くようにしています。",
+          "So that my legs don't get weak, I make a point of walking every day."
+        ],
+        "N2": [
+          "<ruby>彼<rt>かれ</rt></ruby>はお<ruby>酒<rt>さけ</rt></ruby>に<ruby>弱<rt>よわ</rt></ruby>いものの、<ruby>付<rt>つ</rt></ruby>き<ruby>合<rt>あ</rt></ruby>いで<ruby>飲<rt>の</rt></ruby>まざるを<ruby>得<rt>え</rt></ruby>ないこともある。",
+          "Although he can't hold his liquor, there are times when he has no choice but to drink to be sociable."
+        ],
+        "N1": [
+          "<ruby>立場<rt>たちば</rt></ruby>の<ruby>弱<rt>よわ</rt></ruby>い<ruby>者<rt>もの</rt></ruby>ほど<ruby>声<rt>こえ</rt></ruby>を<ruby>上<rt>あ</rt></ruby>げにくいのだから、<ruby>周<rt>まわ</rt></ruby>りが<ruby>耳<rt>みみ</rt></ruby>を<ruby>傾<rt>かたむ</rt></ruby>けざるを<ruby>得<rt>え</rt></ruby>ない。",
+          "The weaker a person's position, the harder it is for them to speak up, so those around them cannot but lend an ear."
+        ]
+      },
+      "mnem": "\"Yo-wai\" — a weak person gives a feeble \"yoo... waaa...\" cry; 弱い is weak, frail.",
+      "tip": "い-adjective (弱くない/弱かった); antonym 強い (つよい). Like 強い, 弱い extends beyond physical weakness: お酒に弱い (can't hold liquor), 数字に弱い (bad with numbers).",
+      "accent": 2
+    },
+    {
+      "key": "mnn:19:8",
+      "kana": "ゴルフ",
+      "kanji": "",
+      "context": "〜を します",
+      "mean": "golf",
+      "cat": "noun",
+      "type": "",
+      "trans": "",
+      "dict": "ゴルフ",
+      "dictRead": "ゴルフ",
+      "audio": "/Audio/minnamoi/bai19/00010101001110101.mp3",
+      "levels": {
+        "N5": [
+          "<ruby>父<rt>ちち</rt></ruby>はゴルフが<ruby>好<rt>す</rt></ruby>きです。",
+          "My father likes golf."
+        ],
+        "N4": [
+          "<ruby>日曜日<rt>にちようび</rt></ruby>によく<ruby>友<rt>とも</rt></ruby>だちとゴルフをします。",
+          "On Sundays I often play golf with my friends."
+        ],
+        "N3": [
+          "<ruby>上手<rt>じょうず</rt></ruby>になるように、<ruby>毎週<rt>まいしゅう</rt></ruby>ゴルフの<ruby>練習<rt>れんしゅう</rt></ruby>をするようにしています。",
+          "So that I get better, I make a point of practicing golf every week."
+        ],
+        "N2": [
+          "ゴルフは<ruby>難<rt>むずか</rt></ruby>しいものの、<ruby>始<rt>はじ</rt></ruby>めると<ruby>夢中<rt>むちゅう</rt></ruby>になってしまう。",
+          "Although golf is difficult, once you start you get completely absorbed in it."
+        ],
+        "N1": [
+          "<ruby>接待<rt>せったい</rt></ruby>ゴルフに<ruby>付<rt>つ</rt></ruby>き<ruby>合<rt>あ</rt></ruby>わされるうちに、いつのまにか<ruby>本気<rt>ほんき</rt></ruby>で<ruby>上達<rt>じょうたつ</rt></ruby>せざるを<ruby>得<rt>え</rt></ruby>なくなっていた。",
+          "As I kept getting dragged into business-entertainment golf, before I knew it I had no choice but to improve for real."
+        ]
+      },
+      "mnem": "\"Golf\" → ゴルフ (go-ru-fu) — the English word borrowed straight into katakana.",
+      "tip": "Takes する to make the verb (ゴルフをする = to play golf), like スポーツをする. Don't confuse ゴルフ (golf) with ゴール (goal) — similar sound, different word.",
+      "accent": 1
+    },
+    {
+      "key": "mnn:19:9",
+      "kana": "すもう",
+      "kanji": "相撲",
+      "context": "〜を します",
+      "mean": "sumo (wrestling)",
+      "cat": "noun",
+      "type": "",
+      "trans": "",
+      "dict": "相撲",
+      "dictRead": "すもう",
+      "audio": "/Audio/minnamoi/bai19/00010101001110110.mp3",
+      "levels": {
+        "N5": [
+          "<ruby>相撲<rt>すもう</rt></ruby>を<ruby>見<rt>み</rt></ruby>ます。",
+          "I watch sumo."
+        ],
+        "N4": [
+          "<ruby>日本<rt>にほん</rt></ruby>で<ruby>相撲<rt>すもう</rt></ruby>を<ruby>見<rt>み</rt></ruby>たことがあります。",
+          "I have watched sumo in Japan before."
+        ],
+        "N3": [
+          "<ruby>相撲<rt>すもう</rt></ruby>のことがもっと<ruby>分<rt>わ</rt></ruby>かるように、ルールを<ruby>調<rt>しら</rt></ruby>べるようにしています。",
+          "So that I understand sumo better, I make a point of looking up the rules."
+        ],
+        "N2": [
+          "<ruby>相撲<rt>すもう</rt></ruby>は<ruby>単<rt>たん</rt></ruby>なるスポーツではなく、<ruby>長<rt>なが</rt></ruby>い<ruby>歴史<rt>れきし</rt></ruby>を<ruby>持<rt>も</rt></ruby>つ<ruby>伝統<rt>でんとう</rt></ruby><ruby>文化<rt>ぶんか</rt></ruby>でもある。",
+          "Sumo is not merely a sport; it is also a traditional culture with a long history."
+        ],
+        "N1": [
+          "<ruby>相撲<rt>すもう</rt></ruby>の<ruby>世界<rt>せかい</rt></ruby>に<ruby>入<rt>はい</rt></ruby>った<ruby>以上<rt>いじょう</rt></ruby>、<ruby>厳<rt>きび</rt></ruby>しい<ruby>稽古<rt>けいこ</rt></ruby>と<ruby>伝統<rt>でんとう</rt></ruby>の<ruby>掟<rt>おきて</rt></ruby>に<ruby>従<rt>したが</rt></ruby>わざるを<ruby>得<rt>え</rt></ruby>ない。",
+          "Once you enter the world of sumo, you have no choice but to follow its grueling training and the rules of tradition."
+        ]
+      },
+      "mnem": "\"Su-mo-u\" — think of the huge wrestlers needing \"so much\" space in the ring: 相撲.",
+      "tip": "Watch sumo with 見る (相撲を見る); do sumo with する (相撲をする). The kanji 相撲 is rarely written by hand — you'll usually see it in kana すもう. 力士 (りきし) is a sumo wrestler.",
+      "accent": 0
+    },
+    {
+      "key": "mnn:19:10",
+      "kana": "おちゃ",
+      "kanji": "お茶",
+      "context": "〜を します",
+      "mean": "tea, green tea; tea ceremony",
+      "cat": "noun",
+      "type": "",
+      "trans": "",
+      "dict": "お茶",
+      "dictRead": "おちゃ",
+      "audio": "/Audio/minnamoi/bai19/00010101001110111.mp3",
+      "levels": {
+        "N5": [
+          "<ruby>毎朝<rt>まいあさ</rt></ruby>お<ruby>茶<rt>ちゃ</rt></ruby>を<ruby>飲<rt>の</rt></ruby>みます。",
+          "I drink tea every morning."
+        ],
+        "N4": [
+          "<ruby>日本<rt>にほん</rt></ruby>で、お<ruby>茶<rt>ちゃ</rt></ruby>を<ruby>習<rt>なら</rt></ruby>ったことがあります。",
+          "I have studied the tea ceremony in Japan before."
+        ],
+        "N3": [
+          "<ruby>体<rt>からだ</rt></ruby>にいいので、<ruby>食後<rt>しょくご</rt></ruby>にお<ruby>茶<rt>ちゃ</rt></ruby>を<ruby>飲<rt>の</rt></ruby>むようにしています。",
+          "Because it's good for the body, I make a point of drinking tea after meals."
+        ],
+        "N2": [
+          "コーヒーもいいものの、<ruby>疲<rt>つか</rt></ruby>れたときはやはり<ruby>温<rt>あたた</rt></ruby>かいお<ruby>茶<rt>ちゃ</rt></ruby>がいちばんだ。",
+          "Coffee is fine too, but when I'm tired, a warm cup of tea is the best after all."
+        ],
+        "N1": [
+          "お<ruby>茶<rt>ちゃ</rt></ruby>の<ruby>作法<rt>さほう</rt></ruby>には<ruby>細<rt>こま</rt></ruby>かな<ruby>決<rt>き</rt></ruby>まりが<ruby>多<rt>おお</rt></ruby>く、<ruby>一<rt>ひと</rt></ruby>つ<ruby>一<rt>ひと</rt></ruby>つの<ruby>所作<rt>しょさ</rt></ruby>に<ruby>心<rt>こころ</rt></ruby>を<ruby>込<rt>こ</rt></ruby>めざるを<ruby>得<rt>え</rt></ruby>ない。",
+          "The etiquette of tea has many fine rules, and one cannot but put one's heart into every single movement."
+        ]
+      },
+      "mnem": "お茶 = the polite お + 茶 (cha, tea) — literally \"honorable tea,\" the everyday word for green tea.",
+      "tip": "お茶 usually means green tea; it also names the tea ceremony (お茶を習う = study the tea ceremony) and the coffee-break sense (お茶をする = go for a drink). The polite お is standard here, like お水/お金.",
+      "accent": 0
+    },
+    {
+      "key": "mnn:19:11",
+      "kana": "ひ",
+      "kanji": "日",
+      "context": "",
+      "mean": "day",
+      "cat": "noun",
+      "type": "",
+      "trans": "",
+      "dict": "日",
+      "dictRead": "ひ",
+      "audio": "/Audio/minnamoi/bai19/00010101001111000.mp3",
+      "levels": {
+        "N5": [
+          "<ruby>暑<rt>あつ</rt></ruby>い<ruby>日<rt>ひ</rt></ruby>です。",
+          "It's a hot day."
+        ],
+        "N4": [
+          "<ruby>休<rt>やす</rt></ruby>みの<ruby>日<rt>ひ</rt></ruby>は、うちで<ruby>本<rt>ほん</rt></ruby>を<ruby>読<rt>よ</rt></ruby>んだりします。",
+          "On my days off, I do things like read books at home."
+        ],
+        "N3": [
+          "<ruby>寒<rt>さむ</rt></ruby>い<ruby>日<rt>ひ</rt></ruby>が<ruby>続<rt>つづ</rt></ruby>いているので、<ruby>暖<rt>あたた</rt></ruby>かくして<ruby>過<rt>す</rt></ruby>ごすようにしています。",
+          "Because cold days have been continuing, I make a point of keeping warm."
+        ],
+        "N2": [
+          "<ruby>予定<rt>よてい</rt></ruby>が<ruby>合<rt>あ</rt></ruby>わないものの、みんなが<ruby>集<rt>あつ</rt></ruby>まれる<ruby>日<rt>ひ</rt></ruby>をなんとか<ruby>見<rt>み</rt></ruby>つけたい。",
+          "Although our schedules don't line up, I somehow want to find a day when everyone can gather."
+        ],
+        "N1": [
+          "<ruby>別<rt>わか</rt></ruby>れの<ruby>日<rt>ひ</rt></ruby>が<ruby>近<rt>ちか</rt></ruby>づくにつれ、<ruby>共<rt>とも</rt></ruby>に<ruby>過<rt>す</rt></ruby>ごした<ruby>日々<rt>ひび</rt></ruby>の<ruby>記憶<rt>きおく</rt></ruby>が<ruby>次々<rt>つぎつぎ</rt></ruby>とよみがえってきた。",
+          "As the day of parting drew near, memories of the days we had spent together came flooding back one after another."
+        ]
+      },
+      "mnem": "日 read ひ is a single \"day\" — the same kanji as 太陽 (sun); a day is one turn of the sun.",
+      "tip": "日 here means \"a day\" (寒い日 = a cold day); the same kanji reads にち in 日曜日 (Sunday), か in ３日 (the 3rd), and can also mean \"sun\" (ひ). Context and okurigana pick the reading.",
+      "accent": 1
+    },
+    {
+      "key": "mnn:19:12",
+      "kana": "ちょうし",
+      "kanji": "調子",
+      "context": "〜が いい／わるい",
+      "mean": "condition, state (of health or a machine)",
+      "cat": "noun",
+      "type": "",
+      "trans": "",
+      "dict": "調子",
+      "dictRead": "ちょうし",
+      "audio": "/Audio/minnamoi/bai19/00010101001111001.mp3",
+      "levels": {
+        "N5": [
+          "<ruby>今日<rt>きょう</rt></ruby>は<ruby>調子<rt>ちょうし</rt></ruby>がいいです。",
+          "I'm in good condition today."
+        ],
+        "N4": [
+          "<ruby>体<rt>からだ</rt></ruby>の<ruby>調子<rt>ちょうし</rt></ruby>がだんだんよくなりました。",
+          "My physical condition gradually got better."
+        ],
+        "N3": [
+          "<ruby>調子<rt>ちょうし</rt></ruby>が<ruby>悪<rt>わる</rt></ruby>くならないように、<ruby>無理<rt>むり</rt></ruby>をしないようにしています。",
+          "So that my condition doesn't worsen, I make a point of not overdoing it."
+        ],
+        "N2": [
+          "<ruby>車<rt>くるま</rt></ruby>の<ruby>調子<rt>ちょうし</rt></ruby>が<ruby>悪<rt>わる</rt></ruby>いものの、<ruby>修理<rt>しゅうり</rt></ruby>に<ruby>出<rt>だ</rt></ruby>す<ruby>時間<rt>じかん</rt></ruby>がなかなか<ruby>取<rt>と</rt></ruby>れない。",
+          "Although the car isn't running well, I just can't find the time to take it in for repairs."
+        ],
+        "N1": [
+          "<ruby>本番<rt>ほんばん</rt></ruby>で<ruby>調子<rt>ちょうし</rt></ruby>を<ruby>崩<rt>くず</rt></ruby>してしまった<ruby>以上<rt>いじょう</rt></ruby>、<ruby>結果<rt>けっか</rt></ruby>を<ruby>潔<rt>いさぎよ</rt></ruby>く<ruby>受<rt>う</rt></ruby>け<ruby>入<rt>い</rt></ruby>れざるを<ruby>得<rt>え</rt></ruby>ない。",
+          "Given that I fell out of form during the actual performance, I have no choice but to accept the result gracefully."
+        ]
+      },
+      "mnem": "調子 (\"cho-shi\") — the \"tune/tuning\" of your body or a machine; when it's well-tuned, 調子がいい.",
+      "tip": "The frame is 調子がいい／わるい (\"in good/bad condition\"). 調子 covers health, machines, and momentum (調子に乗る = get carried away). Don't confuse it with 具合 (ぐあい), a near-synonym often used for health specifically.",
+      "accent": 0
+    },
+    {
+      "key": "mnn:19:13",
+      "kana": "いちど",
+      "kanji": "一度",
+      "context": "",
+      "mean": "once, one time",
+      "cat": "adverb",
+      "type": "",
+      "trans": "",
+      "dict": "一度",
+      "dictRead": "いちど",
+      "audio": "/Audio/minnamoi/bai19/00010101001111010.mp3",
+      "levels": {
+        "N5": [
+          "<ruby>京都<rt>きょうと</rt></ruby>へ<ruby>一度<rt>いちど</rt></ruby><ruby>行<rt>い</rt></ruby>きました。",
+          "I went to Kyoto once."
+        ],
+        "N4": [
+          "<ruby>富士山<rt>ふじさん</rt></ruby>に<ruby>一度<rt>いちど</rt></ruby><ruby>登<rt>のぼ</rt></ruby>ったことがあります。",
+          "I have climbed Mt. Fuji once before."
+        ],
+        "N3": [
+          "<ruby>忘<rt>わす</rt></ruby>れないように、もう<ruby>一度<rt>いちど</rt></ruby><ruby>確認<rt>かくにん</rt></ruby>するようにしています。",
+          "So that I don't forget, I make a point of checking one more time."
+        ],
+        "N2": [
+          "<ruby>一度<rt>いちど</rt></ruby><ruby>断<rt>ことわ</rt></ruby>られたものの、あきらめずにもう<ruby>一度<rt>いちど</rt></ruby><ruby>頼<rt>たの</rt></ruby>んでみるつもりだ。",
+          "Although I was turned down once, I intend to ask one more time without giving up."
+        ],
+        "N1": [
+          "<ruby>一度<rt>いちど</rt></ruby><ruby>口<rt>くち</rt></ruby>にした<ruby>約束<rt>やくそく</rt></ruby>である<ruby>以上<rt>いじょう</rt></ruby>、どんなことがあっても<ruby>果<rt>は</rt></ruby>たさざるを<ruby>得<rt>え</rt></ruby>ない。",
+          "Given that it is a promise I once made aloud, I have no choice but to keep it no matter what happens."
+        ]
+      },
+      "mnem": "一 (one) + 度 (a count of times) = one time = once: 一度.",
+      "tip": "一度 = one time. Combine with もう for もう一度 (\"one more time\"). Add も for 一度も + negative (一度も〜ない = \"never even once\"). Contrast with 一回 (いっかい), a near-synonym for counting occurrences.",
+      "accent": 2
+    },
+    {
+      "key": "mnn:19:14",
+      "kana": "いちども",
+      "kanji": "一度も",
+      "context": "〜〜ない",
+      "mean": "never, not once (used with a negative)",
+      "cat": "adverb",
+      "type": "",
+      "trans": "",
+      "dict": "一度も",
+      "dictRead": "いちども",
+      "audio": "/Audio/minnamoi/bai19/00010101001111011.mp3",
+      "levels": {
+        "N5": [
+          "<ruby>相撲<rt>すもう</rt></ruby>を<ruby>一度<rt>いちど</rt></ruby>も<ruby>見<rt>み</rt></ruby>たことがありません。",
+          "I have never watched sumo, not even once."
+        ],
+        "N4": [
+          "<ruby>北海道<rt>ほっかいどう</rt></ruby>へは<ruby>一度<rt>いちど</rt></ruby>も<ruby>行<rt>い</rt></ruby>ったことがありません。",
+          "I have never been to Hokkaido, not even once."
+        ],
+        "N3": [
+          "<ruby>約束<rt>やくそく</rt></ruby>の<ruby>時間<rt>じかん</rt></ruby>に<ruby>遅<rt>おく</rt></ruby>れないように、これまで<ruby>一度<rt>いちど</rt></ruby>も<ruby>遅刻<rt>ちこく</rt></ruby>していません。",
+          "So as not to be late for appointments, I have not been late even once so far."
+        ],
+        "N2": [
+          "<ruby>彼<rt>かれ</rt></ruby>とは<ruby>長<rt>なが</rt></ruby>い<ruby>付<rt>つ</rt></ruby>き<ruby>合<rt>あ</rt></ruby>いだが、<ruby>怒<rt>おこ</rt></ruby>った<ruby>顔<rt>かお</rt></ruby>を<ruby>一度<rt>いちど</rt></ruby>も<ruby>見<rt>み</rt></ruby>たことがない。",
+          "I've known him a long time, but I have never once seen him with an angry face."
+        ],
+        "N1": [
+          "<ruby>長年<rt>ながねん</rt></ruby><ruby>連<rt>つ</rt></ruby>れ<ruby>添<rt>そ</rt></ruby>ってきたとはいえ、<ruby>本音<rt>ほんね</rt></ruby>を<ruby>一度<rt>いちど</rt></ruby>も<ruby>打<rt>う</rt></ruby>ち<ruby>明<rt>あ</rt></ruby>けたことがないというのは<ruby>寂<rt>さび</rt></ruby>しい<ruby>話<rt>はなし</rt></ruby>だ。",
+          "Even though we have been together for many years, it is a sad thing that I have never once opened up my true feelings."
+        ]
+      },
+      "mnem": "一度 (once) + も (even) — \"not even once\" — always paired with a negative to mean \"never.\"",
+      "tip": "Always used with a negative verb: 一度も〜ない／ありません = \"never, not once.\" It's the emphatic partner of 一度; the も is what forces the negative. It pairs naturally with the L19 experience pattern (一度も〜たことがありません).",
+      "accent": 2
+    },
+    {
+      "key": "mnn:19:15",
+      "kana": "だんだん",
+      "kanji": "",
+      "context": "",
+      "mean": "gradually, little by little",
+      "cat": "adverb",
+      "type": "",
+      "trans": "",
+      "dict": "だんだん",
+      "dictRead": "だんだん",
+      "audio": "/Audio/minnamoi/bai19/00010101001111100.mp3",
+      "levels": {
+        "N5": [
+          "だんだん<ruby>寒<rt>さむ</rt></ruby>くなりました。",
+          "It has gradually gotten cold."
+        ],
+        "N4": [
+          "<ruby>練習<rt>れんしゅう</rt></ruby>したら、だんだん<ruby>日本語<rt>にほんご</rt></ruby>が<ruby>上手<rt>じょうず</rt></ruby>になりました。",
+          "After practicing, my Japanese gradually got better."
+        ],
+        "N3": [
+          "<ruby>体<rt>からだ</rt></ruby>がだんだん<ruby>丈夫<rt>じょうぶ</rt></ruby>になるように、<ruby>毎日<rt>まいにち</rt></ruby><ruby>運動<rt>うんどう</rt></ruby>するようにしています。",
+          "So that my body gradually gets stronger, I make a point of exercising every day."
+        ],
+        "N2": [
+          "<ruby>最初<rt>さいしょ</rt></ruby>は<ruby>難<rt>むずか</rt></ruby>しかったものの、<ruby>続<rt>つづ</rt></ruby>けるうちにだんだんコツがつかめてきた。",
+          "Although it was hard at first, as I kept at it I gradually got the hang of it."
+        ],
+        "N1": [
+          "<ruby>景気<rt>けいき</rt></ruby>はだんだん<ruby>回復<rt>かいふく</rt></ruby>しつつあるとはいえ、<ruby>油断<rt>ゆだん</rt></ruby>を<ruby>許<rt>ゆる</rt></ruby>さない<ruby>状況<rt>じょうきょう</rt></ruby>が<ruby>続<rt>つづ</rt></ruby>いている。",
+          "Although the economy is gradually recovering, a situation that allows no complacency continues."
+        ]
+      },
+      "mnem": "\"Dan-dan\" — step by step, like walking down stairs (段, dan = step) one at a time: gradually.",
+      "tip": "だんだん pairs naturally with 〜くなる／〜になる (だんだん寒くなる = \"gradually get cold\"). It describes a slow, continuous change. Near-synonyms: 少しずつ (little by little) and どんどん (rapidly, more forceful).",
+      "accent": 0
+    },
+    {
+      "key": "mnn:19:16",
+      "kana": "もうすぐ",
+      "kanji": "",
+      "context": "",
+      "mean": "soon, before long",
+      "cat": "adverb",
+      "type": "",
+      "trans": "",
+      "dict": "もうすぐ",
+      "dictRead": "もうすぐ",
+      "audio": "/Audio/minnamoi/bai19/00010101001111101.mp3",
+      "levels": {
+        "N5": [
+          "もうすぐ<ruby>夏休<rt>なつやす</rt></ruby>みです。",
+          "It's almost summer vacation."
+        ],
+        "N4": [
+          "もうすぐ<ruby>電車<rt>でんしゃ</rt></ruby>が<ruby>来<rt>く</rt></ruby>るから、<ruby>急<rt>いそ</rt></ruby>ぎましょう。",
+          "The train is coming soon, so let's hurry."
+        ],
+        "N3": [
+          "もうすぐ<ruby>試験<rt>しけん</rt></ruby>なので、<ruby>毎日<rt>まいにち</rt></ruby><ruby>復習<rt>ふくしゅう</rt></ruby>するようにしています。",
+          "Because the exam is soon, I make a point of reviewing every day."
+        ],
+        "N2": [
+          "もうすぐ<ruby>完成<rt>かんせい</rt></ruby>するものの、<ruby>最後<rt>さいご</rt></ruby>の<ruby>確認<rt>かくにん</rt></ruby>だけは<ruby>気<rt>き</rt></ruby>を<ruby>抜<rt>ぬ</rt></ruby>けない。",
+          "Although it will be finished soon, I can't let my guard down on the final check."
+        ],
+        "N1": [
+          "もうすぐ<ruby>締<rt>し</rt></ruby>め<ruby>切<rt>き</rt></ruby>りだというのに、<ruby>肝心<rt>かんじん</rt></ruby>の<ruby>結論<rt>けつろん</rt></ruby>がいまだにまとまらず、<ruby>焦<rt>あせ</rt></ruby>らざるを<ruby>得<rt>え</rt></ruby>ない。",
+          "Even though the deadline is almost here, the crucial conclusion still won't come together, and I can't help but feel rushed."
+        ]
+      },
+      "mnem": "もう (already) + すぐ (right away) = \"already right away\" = very soon.",
+      "tip": "もうすぐ = soon, any moment now (a stronger \"already-almost\" than plain すぐ, \"immediately\"). Don't confuse もうすぐ (soon, about time) with もう (already/anymore). It often previews 〜になる (もうすぐ春になる).",
+      "accent": 3
+    },
+    {
+      "key": "mnn:19:17",
+      "kana": "おかげさまで",
+      "kanji": "",
+      "context": "",
+      "mean": "thank you (for asking) — I'm fine, thanks to you",
+      "cat": "expression",
+      "type": "",
+      "trans": "",
+      "dict": "おかげさまで",
+      "dictRead": "おかげさまで",
+      "audio": "/Audio/minnamoi/bai19/00010101001111110.mp3",
+      "levels": {
+        "N5": [
+          "おかげさまで<ruby>元気<rt>げんき</rt></ruby>です。",
+          "I'm well, thank you."
+        ],
+        "N4": [
+          "「<ruby>体<rt>からだ</rt></ruby>の<ruby>調子<rt>ちょうし</rt></ruby>はどうですか。」「おかげさまでよくなりました。」",
+          "\"How are you feeling?\" \"I'm better now, thank you.\""
+        ],
+        "N3": [
+          "おかげさまで<ruby>試験<rt>しけん</rt></ruby>に<ruby>合格<rt>ごうかく</rt></ruby>することができました。",
+          "Thanks to you, I was able to pass the exam."
+        ],
+        "N2": [
+          "<ruby>大変<rt>たいへん</rt></ruby>な<ruby>時期<rt>じき</rt></ruby>もあったものの、おかげさまで<ruby>無事<rt>ぶじ</rt></ruby>に<ruby>開店<rt>かいてん</rt></ruby>できました。",
+          "There were tough times too, but thanks to your support we managed to open safely."
+        ],
+        "N1": [
+          "おかげさまでと<ruby>頭<rt>あたま</rt></ruby>を<ruby>下<rt>さ</rt></ruby>げる<ruby>謙虚<rt>けんきょ</rt></ruby>さこそが、<ruby>周囲<rt>しゅうい</rt></ruby>の<ruby>信頼<rt>しんらい</rt></ruby>を<ruby>集<rt>あつ</rt></ruby>める<ruby>秘訣<rt>ひけつ</rt></ruby>なのだろう。",
+          "The very humility of bowing one's head and saying \"thanks to you\" is likely the secret to earning the trust of those around you."
+        ]
+      },
+      "mnem": "お陰 (かげ, \"shade/protection\") + さま (honorific) + で — \"thanks to your (protective) shadow\" — a humble thank-you.",
+      "tip": "A set humble phrase for replying to 「お元気ですか」/「〜はどうですか」 — \"I'm fine, thanks to you.\" It credits the other person even when they did nothing specific; a polite social lubricant, not literal thanks for a favor.",
+      "accent": 0
+    },
+    {
+      "key": "mnn:19:18",
+      "kana": "でも",
+      "kanji": "",
+      "context": "",
+      "mean": "but, however",
+      "cat": "expression",
+      "type": "",
+      "trans": "",
+      "dict": "でも",
+      "dictRead": "でも",
+      "audio": "/Audio/minnamoi/bai19/00010101001111111.mp3",
+      "levels": {
+        "N5": [
+          "<ruby>疲<rt>つか</rt></ruby>れました。でも、<ruby>楽<rt>たの</rt></ruby>しかったです。",
+          "I got tired. But it was fun."
+        ],
+        "N4": [
+          "<ruby>日本語<rt>にほんご</rt></ruby>は<ruby>難<rt>むずか</rt></ruby>しいです。でも、<ruby>面白<rt>おもしろ</rt></ruby>いです。",
+          "Japanese is difficult. But it's interesting."
+        ],
+        "N3": [
+          "<ruby>雨<rt>あめ</rt></ruby>が<ruby>降<rt>ふ</rt></ruby>っていました。でも、<ruby>予定<rt>よてい</rt></ruby><ruby>通<rt>どお</rt></ruby>り<ruby>出<rt>で</rt></ruby>かけることにしました。",
+          "It was raining. But I decided to go out as planned anyway."
+        ],
+        "N2": [
+          "<ruby>準備<rt>じゅんび</rt></ruby>は<ruby>十分<rt>じゅうぶん</rt></ruby>にしました。でも、<ruby>本番<rt>ほんばん</rt></ruby>では<ruby>緊張<rt>きんちょう</rt></ruby>してしまいました。",
+          "I prepared thoroughly. But when it came to the real thing, I ended up getting nervous."
+        ],
+        "N1": [
+          "<ruby>理屈<rt>りくつ</rt></ruby>では<ruby>分<rt>わ</rt></ruby>かっています。でも、<ruby>感情<rt>かんじょう</rt></ruby>が<ruby>簡単<rt>かんたん</rt></ruby>には<ruby>割<rt>わ</rt></ruby>り<ruby>切<rt>き</rt></ruby>れないのも<ruby>事実<rt>じじつ</rt></ruby>だ。",
+          "I understand it in theory. But it's also true that emotions can't be so easily rationalized away."
+        ]
+      },
+      "mnem": "でも starts a sentence to push back: \"...but.\" Think \"day-mo\" — \"but on the other hand.\"",
+      "tip": "Sentence-initial でも = \"but/however,\" softer and more conversational than しかし. Don't confuse this connective でも with the particle でも (\"even / or something,\" as in お茶でも飲みませんか).",
+      "accent": 1
+    }
+  ],
+  "grammar": [
+    {
+      "pattern": "V(た形) ＋ ことが あります",
+      "structure": "V(た形) ＋ ことが あります／ありません",
+      "explain": "Using the past-plain (た-form) of a verb before ことがあります expresses an EXPERIENCE — that you have done something at least once. 「富士山に登ったことがあります」= I have (the experience of having) climbed Mt. Fuji. The negative 〜たことがありません means you've never done it; add 一度も for emphasis (一度も〜たことがありません = never even once). This is different from a plain past tense: it's about life experience, not a specific past event.",
+      "examples": [
+        {
+          "jp": "わたしは <ruby>馬<rt>うま</rt></ruby>に <ruby>乗<rt>の</rt></ruby>った ことが あります。",
+          "en": "I have ridden a horse before."
+        },
+        {
+          "jp": "<ruby>北海道<rt>ほっかいどう</rt></ruby>へ <ruby>行<rt>い</rt></ruby>った ことが ありますか。 …はい、<ruby>一度<rt>いちど</rt></ruby> あります。",
+          "en": "Have you ever been to Hokkaido? …Yes, once."
+        },
+        {
+          "jp": "<ruby>相撲<rt>すもう</rt></ruby>を <ruby>一度<rt>いちど</rt></ruby>も <ruby>見<rt>み</rt></ruby>た ことが ありません。",
+          "en": "I have never watched sumo, not even once."
+        }
+      ]
+    },
+    {
+      "pattern": "V(た形)り、V(た形)り します",
+      "structure": "V₁(た形)り、V₂(た形)り します",
+      "explain": "The 〜たり〜たりします pattern lists a few representative actions out of many, without implying order or completeness — \"do things like A and B (among other things).\" Attach り to the past-plain (た) form of each verb and close with します (tense/politeness carried by します). 「日曜日は 掃除したり、洗濯したり します」= On Sundays I do things like clean and do laundry. Contrast with 〜て〜て, which lists actions in sequence; 〜たり〜たり gives examples, not a fixed order.",
+      "examples": [
+        {
+          "jp": "<ruby>日曜日<rt>にちようび</rt></ruby>は へやを <ruby>掃除<rt>そうじ</rt></ruby>したり、<ruby>洗濯<rt>せんたく</rt></ruby>したり します。",
+          "en": "On Sundays I do things like clean my room and do the laundry."
+        },
+        {
+          "jp": "<ruby>京都<rt>きょうと</rt></ruby>で お<ruby>寺<rt>てら</rt></ruby>を <ruby>見<rt>み</rt></ruby>たり、<ruby>日本<rt>にほん</rt></ruby><ruby>料理<rt>りょうり</rt></ruby>を <ruby>食<rt>た</rt></ruby>べたり しました。",
+          "en": "In Kyoto I did things like see temples and eat Japanese food."
+        },
+        {
+          "jp": "<ruby>休<rt>やす</rt></ruby>みの <ruby>日<rt>ひ</rt></ruby>は テニスを したり、<ruby>散歩<rt>さんぽ</rt></ruby>に <ruby>行<rt>い</rt></ruby>ったり します。",
+          "en": "On my days off I do things like play tennis and go for walks."
+        }
+      ]
+    },
+    {
+      "pattern": "いA(〜く)／なA・N(〜に) ＋ なります",
+      "structure": "いA(〜く) ＋ なります／ なA・N(〜に) ＋ なります",
+      "explain": "なります (\"to become\") expresses a change of state. With い-adjectives, drop the final い and add くなる (寒い→寒くなる, \"get cold\"). With な-adjectives and nouns, add になる (元気→元気になる, \"get well\"; 医者→医者になる, \"become a doctor\"). The change is natural/spontaneous — use します instead for a change YOU deliberately make. Pairs often with だんだん (gradually) or もうすぐ (soon).",
+      "examples": [
+        {
+          "jp": "だんだん <ruby>寒<rt>さむ</rt></ruby>く なりました。",
+          "en": "It has gradually gotten cold."
+        },
+        {
+          "jp": "<ruby>日本語<rt>にほんご</rt></ruby>が <ruby>上手<rt>じょうず</rt></ruby>に なりました。",
+          "en": "My Japanese has gotten better."
+        },
+        {
+          "jp": "<ruby>子<rt>こ</rt></ruby>どもの とき、<ruby>医者<rt>いしゃ</rt></ruby>に なりたかったです。",
+          "en": "When I was a child, I wanted to become a doctor."
+        }
+      ]
+    }
+  ],
+  "examples": [
+    {
+      "jp": "<ruby>相撲<rt>すもう</rt></ruby>を <ruby>見<rt>み</rt></ruby>た ことが あります。",
+      "en": "I have watched sumo before."
+    },
+    {
+      "jp": "<ruby>馬<rt>うま</rt></ruby>に <ruby>乗<rt>の</rt></ruby>った ことが ありますか。 …いいえ、<ruby>一度<rt>いちど</rt></ruby>も ありません。",
+      "en": "Have you ever ridden a horse? …No, never, not even once."
+    },
+    {
+      "jp": "<ruby>休<rt>やす</rt></ruby>みの <ruby>日<rt>ひ</rt></ruby>は テニスを したり、<ruby>散歩<rt>さんぽ</rt></ruby>に <ruby>行<rt>い</rt></ruby>ったり します。",
+      "en": "On my days off I do things like play tennis and go for a walk."
+    },
+    {
+      "jp": "<ruby>冬<rt>ふゆ</rt></ruby><ruby>休<rt>やす</rt></ruby>みは <ruby>京都<rt>きょうと</rt></ruby>の お<ruby>寺<rt>てら</rt></ruby>や <ruby>神社<rt>じんじゃ</rt></ruby>を <ruby>見<rt>み</rt></ruby>たり、<ruby>友達<rt>ともだち</rt></ruby>と パーティーを したり しました。",
+      "en": "Over the winter break I did things like see temples and shrines in Kyoto and go to parties with friends."
+    },
+    {
+      "jp": "これから だんだん <ruby>暑<rt>あつ</rt></ruby>く なります。",
+      "en": "From now on it will gradually get hotter."
+    },
+    {
+      "jp": "<ruby>体<rt>からだ</rt></ruby>の <ruby>調子<rt>ちょうし</rt></ruby>は どうですか。 …おかげさまで よく なりました。",
+      "en": "How are you feeling? …I'm better now, thank you."
+    },
+    {
+      "jp": "<ruby>日本語<rt>にほんご</rt></ruby>が <ruby>上手<rt>じょうず</rt></ruby>に なりましたね。 …ありがとう ございます。でも、まだまだです。",
+      "en": "Your Japanese has gotten good, hasn't it? …Thank you. But I still have a long way to go."
+    },
+    {
+      "jp": "テレーザちゃんは <ruby>何<rt>なに</rt></ruby>に なりたいですか。 …<ruby>医者<rt>いしゃ</rt></ruby>に なりたいです。",
+      "en": "Teresa, what do you want to become? …I want to become a doctor."
+    }
+  ],
+  "conversation": {
+    "title": "ダイエットは あしたから します (I'll start my diet tomorrow)",
+    "audio": "/Audio/minnahonsatsu1/66.mp3",
+    "lines": [
+      {
+        "role": "松本",
+        "jp": "<ruby>乾杯<rt>かんぱい</rt></ruby>。",
+        "en": "Cheers!"
+      },
+      {
+        "role": "松本",
+        "jp": "マリアさん、あまり <ruby>食<rt>た</rt></ruby>べませんね。",
+        "en": "Maria, you're not eating much, are you?"
+      },
+      {
+        "role": "マリア",
+        "jp": "ええ。きのうから ダイエットを して います。",
+        "en": "No. I've been on a diet since yesterday."
+      },
+      {
+        "role": "松本",
+        "jp": "そうですか。わたしも ダイエットを した ことが あります。",
+        "en": "Is that so? I've been on a diet before too."
+      },
+      {
+        "role": "マリア",
+        "jp": "どんな ダイエットですか。",
+        "en": "What kind of diet was it?"
+      },
+      {
+        "role": "松本",
+        "jp": "<ruby>毎日<rt>まいにち</rt></ruby> りんごだけ <ruby>食<rt>た</rt></ruby>べたり、<ruby>水<rt>みず</rt></ruby>を たくさん <ruby>飲<rt>の</rt></ruby>んだり しました。",
+        "en": "I did things like eat only apples every day and drink lots of water."
+      },
+      {
+        "role": "マリア",
+        "jp": "でも、<ruby>無理<rt>むり</rt></ruby>な ダイエットは <ruby>体<rt>からだ</rt></ruby>に よくないですよ。",
+        "en": "But an extreme diet isn't good for your body, you know."
+      },
+      {
+        "role": "松本",
+        "jp": "そうですね。",
+        "en": "That's true."
+      },
+      {
+        "role": "松本",
+        "jp": "マリアさん、この アイスクリーム、おいしいですよ。",
+        "en": "Maria, this ice cream is delicious, you know."
+      },
+      {
+        "role": "マリア",
+        "jp": "そうですか。",
+        "en": "Oh, really?"
+      },
+      {
+        "role": "マリア",
+        "jp": "…ダイエットは また あしたから します。",
+        "en": "…I'll start my diet again tomorrow."
+      }
+    ]
+  }
+}

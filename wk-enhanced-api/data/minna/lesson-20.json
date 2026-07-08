@@ -1,0 +1,930 @@
+{
+  "lesson": 20,
+  "title": "Lesson 20",
+  "theme": "Plain / casual form (普通形) — the plain style vs です・ます style: plain non-past/past of verbs, い-adj, な-adj & nouns, casual questions dropping か, and 〜けど; plus casual vocab (ぼく・きみ・〜くん・うん・ううん・こっち…)",
+  "source": {
+    "name": "vnjpclub.com",
+    "vocabUrl": "https://www.vnjpclub.com/en/minna-no-nihongo/lesson-20-vocabulary.html",
+    "grammarUrl": "https://www.vnjpclub.com/en/minna-no-nihongo/lesson-20-grammar.html",
+    "note": "Vocabulary, native-speaker audio, and example sentences aggregated from vnjpclub.com (Minna no Nihongo 第2版). For personal study."
+  },
+  "vocab": [
+    {
+      "key": "mnn:20:0",
+      "kana": "いります",
+      "kanji": "要ります",
+      "context": "ビザが〜",
+      "mean": "to need, require [a visa]",
+      "cat": "verb",
+      "type": "godan",
+      "trans": "i",
+      "dict": "要る",
+      "dictRead": "いる",
+      "audio": "/Audio/minnamoi/bai20/00010101010000110.mp3",
+      "levels": {
+        "N5": [
+          "ビザが<ruby>要<rt>い</rt></ruby>ります。",
+          "I need a visa."
+        ],
+        "N4": [
+          "アメリカへ<ruby>行<rt>い</rt></ruby>くとき、ビザが<ruby>要<rt>い</rt></ruby>りますか。",
+          "When you go to America, do you need a visa?"
+        ],
+        "N3": [
+          "この<ruby>手続<rt>てつづ</rt></ruby>きには<ruby>時間<rt>じかん</rt></ruby>もお<ruby>金<rt>かね</rt></ruby>も<ruby>要<rt>い</rt></ruby>るので、<ruby>早<rt>はや</rt></ruby>めに<ruby>準備<rt>じゅんび</rt></ruby>しています。",
+          "This procedure needs both time and money, so I'm getting ready early."
+        ],
+        "N2": [
+          "パスポートさえあればビザは<ruby>要<rt>い</rt></ruby>らないものの、<ruby>念<rt>ねん</rt></ruby>のため<ruby>大使館<rt>たいしかん</rt></ruby>で<ruby>確認<rt>かくにん</rt></ruby>しておいた。",
+          "Although you don't need a visa as long as you have a passport, just to be safe I checked at the embassy."
+        ],
+        "N1": [
+          "これほど<ruby>大<rt>おお</rt></ruby>がかりな<ruby>計画<rt>けいかく</rt></ruby>を<ruby>実現<rt>じつげん</rt></ruby>するには、<ruby>膨大<rt>ぼうだい</rt></ruby>な<ruby>資金<rt>しきん</rt></ruby>と<ruby>人手<rt>ひとで</rt></ruby>が<ruby>要<rt>い</rt></ruby>ると<ruby>言<rt>い</rt></ruby>わざるを<ruby>得<rt>え</rt></ruby>ない。",
+          "One cannot but say that realizing a project on this scale requires enormous funds and manpower."
+        ]
+      },
+      "mnem": "\"ee-ru\" — you say \"I\" need it. 要る = to require.",
+      "tip": "要る takes が for the needed thing (ビザが要る), NOT を — it behaves like 分かる/できる. It's a godan verb (要って/要らない), and the reading いる overlaps with the ichidan いる (to exist) — context and the が-marked object tell them apart. Plain-form negative is 要らない (L20's target grammar).",
+      "accent": 0
+    },
+    {
+      "key": "mnn:20:1",
+      "kana": "しらべます",
+      "kanji": "調べます",
+      "context": "",
+      "mean": "to check, investigate, look up",
+      "cat": "verb",
+      "type": "ichidan",
+      "trans": "t",
+      "dict": "調べる",
+      "dictRead": "しらべる",
+      "audio": "/Audio/minnamoi/bai20/00010101010000111.mp3",
+      "levels": {
+        "N5": [
+          "<ruby>電話番号<rt>でんわばんごう</rt></ruby>を<ruby>調<rt>しら</rt></ruby>べる。",
+          "I look up the phone number."
+        ],
+        "N4": [
+          "<ruby>分<rt>わ</rt></ruby>からない<ruby>言葉<rt>ことば</rt></ruby>は、いつも<ruby>辞書<rt>じしょ</rt></ruby>で<ruby>調<rt>しら</rt></ruby>べる。",
+          "Words I don't understand I always look up in a dictionary."
+        ],
+        "N3": [
+          "<ruby>旅行<rt>りょこう</rt></ruby>の<ruby>前<rt>まえ</rt></ruby>に、<ruby>天気<rt>てんき</rt></ruby>や<ruby>電車<rt>でんしゃ</rt></ruby>の<ruby>時間<rt>じかん</rt></ruby>を<ruby>調<rt>しら</rt></ruby>べておくようにしている。",
+          "Before a trip I make a point of checking things like the weather and the train times in advance."
+        ],
+        "N2": [
+          "<ruby>原因<rt>げんいん</rt></ruby>を<ruby>調<rt>しら</rt></ruby>べたところ、<ruby>単純<rt>たんじゅん</rt></ruby>な<ruby>設定<rt>せってい</rt></ruby>ミスだったことが<ruby>分<rt>わ</rt></ruby>かった。",
+          "When I investigated the cause, it turned out to be a simple configuration mistake."
+        ],
+        "N1": [
+          "<ruby>事件<rt>じけん</rt></ruby>の<ruby>真相<rt>しんそう</rt></ruby>を<ruby>徹底的<rt>てっていてき</rt></ruby>に<ruby>調<rt>しら</rt></ruby>べ<ruby>上<rt>あ</rt></ruby>げない<ruby>限<rt>かぎ</rt></ruby>り、<ruby>世間<rt>せけん</rt></ruby>は<ruby>納得<rt>なっとく</rt></ruby>しないだろう。",
+          "Unless they thoroughly investigate the truth of the incident, the public probably won't be satisfied."
+        ]
+      },
+      "mnem": "\"shirabe\" — a detective wants to know (知る, shiru) so they SHIRABE (investigate) it.",
+      "tip": "Ichidan verb (調べて/調べない). 調べる = actively look into / research / verify, vs 分かる = passively understand. The plain forms 調べる／調べた／調べない are core L20 practice.",
+      "accent": 3
+    },
+    {
+      "key": "mnn:20:2",
+      "kana": "しゅうりします",
+      "kanji": "修理します",
+      "context": "",
+      "mean": "to repair, fix",
+      "cat": "verb",
+      "type": "irregular",
+      "trans": "t",
+      "dict": "修理する",
+      "dictRead": "しゅうりする",
+      "audio": "/Audio/minnamoi/bai20/00010101010001000.mp3",
+      "levels": {
+        "N5": [
+          "<ruby>自転車<rt>じてんしゃ</rt></ruby>を<ruby>修理<rt>しゅうり</rt></ruby>する。",
+          "I repair the bicycle."
+        ],
+        "N4": [
+          "こわれた<ruby>時計<rt>とけい</rt></ruby>を<ruby>店<rt>みせ</rt></ruby>で<ruby>修理<rt>しゅうり</rt></ruby>してもらった。",
+          "I had the broken watch repaired at the shop."
+        ],
+        "N3": [
+          "<ruby>屋根<rt>やね</rt></ruby>が<ruby>雨<rt>あめ</rt></ruby>もりするので、<ruby>業者<rt>ぎょうしゃ</rt></ruby>に<ruby>修理<rt>しゅうり</rt></ruby>をたのむことにした。",
+          "The roof leaks when it rains, so I decided to ask a contractor to repair it."
+        ],
+        "N2": [
+          "<ruby>買<rt>か</rt></ruby>い<ruby>替<rt>か</rt></ruby>えるより<ruby>修理<rt>しゅうり</rt></ruby>したほうが<ruby>安<rt>やす</rt></ruby>いと<ruby>思<rt>おも</rt></ruby>ったが、<ruby>部品<rt>ぶひん</rt></ruby>がもう<ruby>手<rt>て</rt></ruby>に<ruby>入<rt>はい</rt></ruby>らなかった。",
+          "I thought repairing it would be cheaper than buying a new one, but the parts were no longer available."
+        ],
+        "N1": [
+          "<ruby>長年<rt>ながねん</rt></ruby><ruby>使<rt>つか</rt></ruby>ってきた<ruby>機械<rt>きかい</rt></ruby>だけに、<ruby>修理<rt>しゅうり</rt></ruby>してでも<ruby>使<rt>つか</rt></ruby>い<ruby>続<rt>つづ</rt></ruby>けたいという<ruby>思<rt>おも</rt></ruby>いは<ruby>強<rt>つよ</rt></ruby>い。",
+          "Precisely because it's a machine I've used for many years, my desire to keep using it — even if it means repairing it — is strong."
+        ]
+      },
+      "mnem": "\"shuuri\" — you SHOO the RIp (tear) away and mend it: 修理 = repair.",
+      "tip": "A する-verb (irregular): plain forms 修理する／修理した／修理しない. 修理する = fix a broken THING (watch, car, roof); for a person recovering use 治る/治す. Contrast 直す (naosu, correct/fix broadly).",
+      "accent": 1
+    },
+    {
+      "key": "mnn:20:3",
+      "kana": "ぼく",
+      "kanji": "僕",
+      "context": "",
+      "mean": "I, me (informal, used by men)",
+      "cat": "noun",
+      "type": "",
+      "trans": "",
+      "dict": "僕",
+      "dictRead": "ぼく",
+      "audio": "/Audio/minnamoi/bai20/00010101010001001.mp3",
+      "levels": {
+        "N5": [
+          "<ruby>僕<rt>ぼく</rt></ruby>は<ruby>学生<rt>がくせい</rt></ruby>だ。",
+          "I'm a student."
+        ],
+        "N4": [
+          "<ruby>僕<rt>ぼく</rt></ruby>は<ruby>毎朝<rt>まいあさ</rt></ruby>コーヒーを<ruby>飲<rt>の</rt></ruby>んでから<ruby>出<rt>で</rt></ruby>かける。",
+          "I have a coffee every morning before I head out."
+        ],
+        "N3": [
+          "<ruby>僕<rt>ぼく</rt></ruby>が<ruby>子<rt>こ</rt></ruby>どものころ、この<ruby>辺<rt>へん</rt></ruby>はまだ<ruby>田<rt>た</rt></ruby>んぼばかりだった。",
+          "When I was a child, this area was still nothing but rice fields."
+        ],
+        "N2": [
+          "みんなが<ruby>反対<rt>はんたい</rt></ruby>する<ruby>中<rt>なか</rt></ruby>、<ruby>僕<rt>ぼく</rt></ruby>だけは<ruby>彼<rt>かれ</rt></ruby>の<ruby>考<rt>かんが</rt></ruby>えに<ruby>賛成<rt>さんせい</rt></ruby>していた。",
+          "While everyone else was opposed, I alone agreed with his idea."
+        ],
+        "N1": [
+          "こんな<ruby>大役<rt>たいやく</rt></ruby>を<ruby>僕<rt>ぼく</rt></ruby>ごときに<ruby>任<rt>まか</rt></ruby>せていただけるとは、<ruby>光栄<rt>こうえい</rt></ruby>のきわみです。",
+          "That you would entrust such an important role to someone like me is the height of honor."
+        ]
+      },
+      "mnem": "僕 (ぼく) — a young man says \"BOKU\" to mean I/me, softer and more casual than わたし.",
+      "tip": "僕 is a casual first-person pronoun used mainly by men/boys (paired with きみ for \"you\"). Softer than the rough 俺 (おれ), more casual than 私 (わたし). Fits L20's casual register; women use あたし/私 casually instead.",
+      "accent": 0
+    },
+    {
+      "key": "mnn:20:4",
+      "kana": "きみ",
+      "kanji": "君",
+      "context": "",
+      "mean": "you (informal, used by men)",
+      "cat": "noun",
+      "type": "",
+      "trans": "",
+      "dict": "君",
+      "dictRead": "きみ",
+      "audio": "/Audio/minnamoi/bai20/00010101010001010.mp3",
+      "levels": {
+        "N5": [
+          "<ruby>君<rt>きみ</rt></ruby>は<ruby>元気<rt>げんき</rt></ruby>？",
+          "Are you doing okay?"
+        ],
+        "N4": [
+          "<ruby>君<rt>きみ</rt></ruby>もいっしょに<ruby>来<rt>こ</rt></ruby>ない？",
+          "Won't you come along too?"
+        ],
+        "N3": [
+          "この<ruby>仕事<rt>しごと</rt></ruby>は<ruby>君<rt>きみ</rt></ruby>にしかたのめないと<ruby>思<rt>おも</rt></ruby>っている。",
+          "I feel this is a job I can only ask of you."
+        ],
+        "N2": [
+          "<ruby>君<rt>きみ</rt></ruby>の<ruby>言<rt>い</rt></ruby>うことも<ruby>分<rt>わ</rt></ruby>からなくはないが、それでは<ruby>周<rt>まわ</rt></ruby>りが<ruby>納得<rt>なっとく</rt></ruby>しないだろう。",
+          "It's not that I don't get what you're saying, but the people around us probably won't be convinced."
+        ],
+        "N1": [
+          "<ruby>君<rt>きみ</rt></ruby>ほどの<ruby>実力<rt>じつりょく</rt></ruby>があれば、どこへ<ruby>行<rt>い</rt></ruby>っても<ruby>通用<rt>つうよう</rt></ruby>するにちがいない。",
+          "With ability like yours, you're bound to make it anywhere you go."
+        ]
+      },
+      "mnem": "君 (きみ) — \"KEY-mee\": casual \"you.\" The same kanji as 〜君 (くん), the boys'-name suffix.",
+      "tip": "君 (きみ) is a casual \"you\" used mostly by men, often to someone of equal or lower standing (paired with 僕). Can sound condescending upward, so avoid it with superiors — with peers/juniors it's fine. Same kanji as the 〜くん suffix (next entry).",
+      "accent": 0
+    },
+    {
+      "key": "mnn:20:5",
+      "kana": "〜くん",
+      "kanji": "〜君",
+      "context": "",
+      "mean": "suffix added to boys' names (informal)",
+      "cat": "phrase",
+      "type": "",
+      "trans": "",
+      "dict": "〜君",
+      "dictRead": "〜くん",
+      "audio": "/Audio/minnamoi/bai20/00010101010001011.mp3",
+      "levels": {
+        "N5": [
+          "<ruby>田中<rt>たなか</rt></ruby><ruby>君<rt>くん</rt></ruby>は<ruby>学生<rt>がくせい</rt></ruby>だ。",
+          "Tanaka is a student."
+        ],
+        "N4": [
+          "<ruby>山田<rt>やまだ</rt></ruby><ruby>君<rt>くん</rt></ruby>、いっしょに<ruby>昼<rt>ひる</rt></ruby>ごはんを<ruby>食<rt>た</rt></ruby>べない？",
+          "Yamada, want to have lunch together?"
+        ],
+        "N3": [
+          "<ruby>木村<rt>きむら</rt></ruby><ruby>君<rt>くん</rt></ruby>はまだ<ruby>若<rt>わか</rt></ruby>いのに、しっかりしていて<ruby>感心<rt>かんしん</rt></ruby>する。",
+          "Kimura is still young, yet he's so dependable that I'm impressed."
+        ],
+        "N2": [
+          "<ruby>新入社員<rt>しんにゅうしゃいん</rt></ruby>の<ruby>佐藤<rt>さとう</rt></ruby><ruby>君<rt>くん</rt></ruby>には、まず<ruby>電話<rt>でんわ</rt></ruby>の<ruby>応対<rt>おうたい</rt></ruby>から<ruby>覚<rt>おぼ</rt></ruby>えてもらうつもりだ。",
+          "For Sato, our new hire, I plan to have him learn starting from how to handle phone calls."
+        ],
+        "N1": [
+          "<ruby>先生<rt>せんせい</rt></ruby>が<ruby>教<rt>おし</rt></ruby>え<ruby>子<rt>ご</rt></ruby>を「〜<ruby>君<rt>くん</rt></ruby>」と<ruby>呼<rt>よ</rt></ruby>ぶのは、<ruby>親<rt>した</rt></ruby>しみと<ruby>期待<rt>きたい</rt></ruby>の<ruby>表<rt>あらわ</rt></ruby>れでもある。",
+          "A teacher calling a pupil \"-kun\" is also an expression of affection and of expectation."
+        ]
+      },
+      "mnem": "〜君 (くん) — the same 君 as きみ, tacked onto a boy's name: 田中君 = \"Tanaka-kun.\"",
+      "tip": "〜くん is a familiar name suffix used mainly for boys/younger men (and by teachers/superiors for junior staff of either gender). Less formal than 〜さん; contrast 〜ちゃん (affectionate, often for children/girls). Attaches to the surname or given name.",
+      "accent": 1
+    },
+    {
+      "key": "mnn:20:6",
+      "kana": "うん",
+      "kanji": "",
+      "context": "",
+      "mean": "yes, yeah (informal はい)",
+      "cat": "expression",
+      "type": "",
+      "trans": "",
+      "dict": "うん",
+      "dictRead": "うん",
+      "audio": "/Audio/minnamoi/bai20/00010101010001100.mp3",
+      "levels": {
+        "N5": [
+          "コーヒーを<ruby>飲<rt>の</rt></ruby>む？…うん、<ruby>飲<rt>の</rt></ruby>む。",
+          "Want some coffee? …Yeah, I'll have some."
+        ],
+        "N4": [
+          "あした<ruby>暇<rt>ひま</rt></ruby>？…うん、<ruby>暇<rt>ひま</rt></ruby>だよ。<ruby>何<rt>なに</rt></ruby>？",
+          "Are you free tomorrow? …Yeah, I'm free. What's up?"
+        ],
+        "N3": [
+          "「<ruby>手伝<rt>てつだ</rt></ruby>ってくれる？」「うん、いいよ。」と<ruby>気軽<rt>きがる</rt></ruby>に<ruby>引<rt>ひ</rt></ruby>き<ruby>受<rt>う</rt></ruby>けてくれた。",
+          "\"Can you help me out?\" \"Sure, no problem.\" — he took it on without any fuss."
+        ],
+        "N2": [
+          "こちらの<ruby>説明<rt>せつめい</rt></ruby>に<ruby>彼<rt>かれ</rt></ruby>はうんうんとうなずいていたが、<ruby>本当<rt>ほんとう</rt></ruby>に<ruby>理解<rt>りかい</rt></ruby>していたのかは<ruby>怪<rt>あや</rt></ruby>しい。",
+          "He kept nodding \"uh-huh\" at my explanation, but whether he really understood is doubtful."
+        ],
+        "N1": [
+          "<ruby>口<rt>くち</rt></ruby>では「うん」と<ruby>返事<rt>へんじ</rt></ruby>をしながらも、その<ruby>表情<rt>ひょうじょう</rt></ruby>には<ruby>納得<rt>なっとく</rt></ruby>しきれない<ruby>思<rt>おも</rt></ruby>いがにじんでいた。",
+          "Even as he answered \"yeah\" out loud, his expression betrayed a feeling of lingering doubt."
+        ]
+      },
+      "mnem": "\"un\" — a quick, closed-mouth grunt of agreement. The casual, spoken form of はい.",
+      "tip": "うん = casual \"yes/yeah,\" replacing はい in plain-style speech (paired with ううん = casual no). Use it only in relaxed settings; はい stays the polite default. Note うん (yes) vs ううん (no) differ only by length — listen carefully.",
+      "accent": 1
+    },
+    {
+      "key": "mnn:20:7",
+      "kana": "ううん",
+      "kanji": "",
+      "context": "",
+      "mean": "no (informal いいえ)",
+      "cat": "expression",
+      "type": "",
+      "trans": "",
+      "dict": "ううん",
+      "dictRead": "ううん",
+      "audio": "/Audio/minnamoi/bai20/00010101010001101.mp3",
+      "levels": {
+        "N5": [
+          "ビザが<ruby>要<rt>い</rt></ruby>る？…ううん、<ruby>要<rt>い</rt></ruby>らない。",
+          "Do you need a visa? …No, you don't."
+        ],
+        "N4": [
+          "その<ruby>映画<rt>えいが</rt></ruby>、もう<ruby>見<rt>み</rt></ruby>た？…ううん、まだ<ruby>見<rt>み</rt></ruby>ていない。",
+          "Have you seen that movie yet? …No, not yet."
+        ],
+        "N3": [
+          "「<ruby>疲<rt>つか</rt></ruby>れた？」「ううん、<ruby>全然<rt>ぜんぜん</rt></ruby><ruby>平気<rt>へいき</rt></ruby>だよ。」",
+          "\"Are you tired?\" \"No, I'm totally fine.\""
+        ],
+        "N2": [
+          "<ruby>迷惑<rt>めいわく</rt></ruby>だったかと<ruby>聞<rt>き</rt></ruby>くと、<ruby>彼女<rt>かのじょ</rt></ruby>は「ううん」と<ruby>首<rt>くび</rt></ruby>を<ruby>横<rt>よこ</rt></ruby>にふって<ruby>笑<rt>わら</rt></ruby>った。",
+          "When I asked if it had been a bother, she shook her head \"no\" and laughed."
+        ],
+        "N1": [
+          "「<ruby>後悔<rt>こうかい</rt></ruby>していないか」と<ruby>問<rt>と</rt></ruby>われれば、<ruby>正直<rt>しょうじき</rt></ruby>「ううん」とは<ruby>言<rt>い</rt></ruby>い<ruby>切<rt>き</rt></ruby>れない<ruby>自分<rt>じぶん</rt></ruby>がいる。",
+          "If asked whether I have no regrets, honestly there's a part of me that can't quite say \"no.\""
+        ]
+      },
+      "mnem": "\"uu-un\" — a longer, dipping hum, often with a headshake. The casual form of いいえ.",
+      "tip": "ううん = casual \"no,\" the negative partner of うん (yes). The key difference is length: うん (short, one beat) = yes; ううん (drawn out, dips in the middle) = no. Only for casual speech; いいえ is the polite form.",
+      "accent": 2
+    },
+    {
+      "key": "mnn:20:8",
+      "kana": "ことば",
+      "kanji": "言葉",
+      "context": "",
+      "mean": "word, language",
+      "cat": "noun",
+      "type": "",
+      "trans": "",
+      "dict": "言葉",
+      "dictRead": "ことば",
+      "audio": "/Audio/minnamoi/bai20/00010101010001110.mp3",
+      "levels": {
+        "N5": [
+          "あたらしい<ruby>言葉<rt>ことば</rt></ruby>を<ruby>覚<rt>おぼ</rt></ruby>えた。",
+          "I learned a new word."
+        ],
+        "N4": [
+          "きのう<ruby>習<rt>なら</rt></ruby>った<ruby>言葉<rt>ことば</rt></ruby>をもう<ruby>忘<rt>わす</rt></ruby>れてしまった。",
+          "I've already forgotten the words I learned yesterday."
+        ],
+        "N3": [
+          "<ruby>日本語<rt>にほんご</rt></ruby>には、<ruby>季節<rt>きせつ</rt></ruby>を<ruby>表<rt>あらわ</rt></ruby>す<ruby>美<rt>うつく</rt></ruby>しい<ruby>言葉<rt>ことば</rt></ruby>がたくさんある。",
+          "Japanese has many beautiful words that express the seasons."
+        ],
+        "N2": [
+          "なぐさめようとしたのだが、かえって<ruby>相手<rt>あいて</rt></ruby>を<ruby>傷<rt>きず</rt></ruby>つける<ruby>言葉<rt>ことば</rt></ruby>になってしまった。",
+          "I tried to comfort them, but it ended up being words that hurt them instead."
+        ],
+        "N1": [
+          "どんなに<ruby>感謝<rt>かんしゃ</rt></ruby>してもし<ruby>足<rt>た</rt></ruby>りず、この<ruby>気持<rt>きも</rt></ruby>ちを<ruby>言葉<rt>ことば</rt></ruby>にするのはかえって<ruby>難<rt>むずか</rt></ruby>しい。",
+          "No amount of thanks would be enough, and putting this feeling into words is, if anything, difficult."
+        ]
+      },
+      "mnem": "言 (say) + 葉 (leaf) — words are like \"leaves of speech\" (こと + は). 言葉 = word/language.",
+      "tip": "言葉 covers both a single \"word\" and \"language/speech\" in general (日本語の言葉). For a named language (Japanese, English) use 〜語 (日本語); for the abstract \"a word\" use 単語 (たんご) in study contexts. Note the kanji reads ことば, not the expected げんよう.",
+      "accent": 3
+    },
+    {
+      "key": "mnn:20:9",
+      "kana": "きもの",
+      "kanji": "着物",
+      "context": "",
+      "mean": "kimono (traditional Japanese attire)",
+      "cat": "noun",
+      "type": "",
+      "trans": "",
+      "dict": "着物",
+      "dictRead": "きもの",
+      "audio": "/Audio/minnamoi/bai20/00010101010001111.mp3",
+      "levels": {
+        "N5": [
+          "<ruby>着物<rt>きもの</rt></ruby>はきれいだ。",
+          "Kimono are beautiful."
+        ],
+        "N4": [
+          "<ruby>祭<rt>まつ</rt></ruby>りのとき、<ruby>姉<rt>あね</rt></ruby>は<ruby>着物<rt>きもの</rt></ruby>を<ruby>着<rt>き</rt></ruby>て<ruby>出<rt>で</rt></ruby>かけた。",
+          "At the festival my older sister put on a kimono and went out."
+        ],
+        "N3": [
+          "<ruby>着物<rt>きもの</rt></ruby>を<ruby>一人<rt>ひとり</rt></ruby>で<ruby>着<rt>き</rt></ruby>られるように、<ruby>母<rt>はは</rt></ruby>に<ruby>教<rt>おそ</rt></ruby>わっているところだ。",
+          "I'm in the middle of learning from my mother so I can put on a kimono by myself."
+        ],
+        "N2": [
+          "<ruby>成人式<rt>せいじんしき</rt></ruby>で<ruby>着<rt>き</rt></ruby>た<ruby>着物<rt>きもの</rt></ruby>は、<ruby>祖母<rt>そぼ</rt></ruby>が<ruby>若<rt>わか</rt></ruby>いころに<ruby>着<rt>き</rt></ruby>ていたものだそうだ。",
+          "The kimono I wore at my coming-of-age ceremony is apparently one my grandmother wore when she was young."
+        ],
+        "N1": [
+          "<ruby>職人<rt>しょくにん</rt></ruby>が<ruby>丹精<rt>たんせい</rt></ruby>を<ruby>込<rt>こ</rt></ruby>めて<ruby>織<rt>お</rt></ruby>り<ruby>上<rt>あ</rt></ruby>げた<ruby>着物<rt>きもの</rt></ruby>には、<ruby>機械<rt>きかい</rt></ruby>では<ruby>出<rt>だ</rt></ruby>せない<ruby>風合<rt>ふうあ</rt></ruby>いがある。",
+          "A kimono woven with painstaking care by an artisan has a texture that no machine can reproduce."
+        ]
+      },
+      "mnem": "着 (wear) + 物 (thing) = literally \"a thing to wear\" — 着物, the kimono.",
+      "tip": "着物 literally means \"a thing worn,\" but today points specifically to the traditional Japanese garment. Worn with 着る (着物を着る). Contrast 洋服 (ようふく, Western clothes) and 浴衣 (ゆかた, the lighter summer kimono).",
+      "accent": 0
+    },
+    {
+      "key": "mnn:20:10",
+      "kana": "ビザ",
+      "kanji": "",
+      "context": "",
+      "mean": "visa",
+      "cat": "noun",
+      "type": "",
+      "trans": "",
+      "dict": "ビザ",
+      "dictRead": "ビザ",
+      "audio": "/Audio/minnamoi/bai20/00010101010010000.mp3",
+      "levels": {
+        "N5": [
+          "ビザが<ruby>要<rt>い</rt></ruby>る。",
+          "I need a visa."
+        ],
+        "N4": [
+          "<ruby>留学<rt>りゅうがく</rt></ruby>するために、<ruby>学生<rt>がくせい</rt></ruby>ビザをとった。",
+          "To study abroad, I got a student visa."
+        ],
+        "N3": [
+          "ビザの<ruby>手続<rt>てつづ</rt></ruby>きに<ruby>思<rt>おも</rt></ruby>ったより<ruby>時間<rt>じかん</rt></ruby>がかかって<ruby>困<rt>こま</rt></ruby>っている。",
+          "The visa paperwork is taking longer than I expected, and it's causing me trouble."
+        ],
+        "N2": [
+          "ビザの<ruby>期限<rt>きげん</rt></ruby>が<ruby>切<rt>き</rt></ruby>れる<ruby>前<rt>まえ</rt></ruby>に<ruby>更新<rt>こうしん</rt></ruby>しないと、<ruby>不法滞在<rt>ふほうたいざい</rt></ruby>になってしまう。",
+          "If you don't renew before the visa expires, you end up staying illegally."
+        ],
+        "N1": [
+          "<ruby>就労<rt>しゅうろう</rt></ruby>ビザの<ruby>審査<rt>しんさ</rt></ruby>は<ruby>年々<rt>ねんねん</rt></ruby><ruby>厳<rt>きび</rt></ruby>しくなっており、<ruby>申請者<rt>しんせいしゃ</rt></ruby>にとって<ruby>大<rt>おお</rt></ruby>きな<ruby>負担<rt>ふたん</rt></ruby>となっている。",
+          "The screening for work visas gets stricter year by year, and it has become a heavy burden on applicants."
+        ]
+      },
+      "mnem": "\"ビザ\" is the English \"visa\" borrowed into katakana — say \"bee-za.\"",
+      "tip": "ビザ takes 要る (need) with が: ビザが要る. Don't confuse ビザ (visa) with ピザ (pizza) — only the dakuten/handakuten differs (ビ vs ピ). Also distinct from パスポート (passport).",
+      "accent": 1
+    },
+    {
+      "key": "mnn:20:11",
+      "kana": "はじめ",
+      "kanji": "初め",
+      "context": "",
+      "mean": "the beginning, the start",
+      "cat": "noun",
+      "type": "",
+      "trans": "",
+      "dict": "初め",
+      "dictRead": "はじめ",
+      "audio": "/Audio/minnamoi/bai20/00010101010010001.mp3",
+      "levels": {
+        "N5": [
+          "8<ruby>月<rt>がつ</rt></ruby>の<ruby>初<rt>はじ</rt></ruby>めに<ruby>会<rt>あ</rt></ruby>おう。",
+          "Let's meet at the beginning of August."
+        ],
+        "N4": [
+          "<ruby>初<rt>はじ</rt></ruby>めは<ruby>難<rt>むずか</rt></ruby>しかったが、だんだん<ruby>慣<rt>な</rt></ruby>れてきた。",
+          "It was hard at first, but I've gradually gotten used to it."
+        ],
+        "N3": [
+          "<ruby>来月<rt>らいげつ</rt></ruby>の<ruby>初<rt>はじ</rt></ruby>めごろに<ruby>引<rt>ひ</rt></ruby>っ<ruby>越<rt>こ</rt></ruby>すつもりで<ruby>準備<rt>じゅんび</rt></ruby>を<ruby>進<rt>すす</rt></ruby>めている。",
+          "I'm getting things ready with the intention of moving around the beginning of next month."
+        ],
+        "N2": [
+          "<ruby>初<rt>はじ</rt></ruby>めのうちは<ruby>順調<rt>じゅんちょう</rt></ruby>だったものの、<ruby>途中<rt>とちゅう</rt></ruby>から<ruby>問題<rt>もんだい</rt></ruby>が<ruby>次々<rt>つぎつぎ</rt></ruby>と<ruby>起<rt>お</rt></ruby>こり<ruby>始<rt>はじ</rt></ruby>めた。",
+          "It went smoothly at first, but partway through, problems started cropping up one after another."
+        ],
+        "N1": [
+          "<ruby>物事<rt>ものごと</rt></ruby>の<ruby>初<rt>はじ</rt></ruby>めが<ruby>肝心<rt>かんじん</rt></ruby>だとよく<ruby>言<rt>い</rt></ruby>われるが、それは<ruby>最初<rt>さいしょ</rt></ruby>の<ruby>心構<rt>こころがま</rt></ruby>えがその<ruby>後<rt>ご</rt></ruby>を<ruby>左右<rt>さゆう</rt></ruby>するからだ。",
+          "It's often said that the beginning of anything is crucial, and that's because one's initial mindset shapes everything that follows."
+        ]
+      },
+      "mnem": "初め (はじめ) — the same 初 as 初めて (for the first time): the START of something.",
+      "tip": "初め = the beginning/start (paired with 終わり = the end). For a point in time use this 初め (月の初め); for \"for the first time\" use 初めて (はじめて). Don't confuse the noun 初め with the verb 始める (はじめる, to begin something) — Minna writes the noun as 初め.",
+      "accent": 0
+    },
+    {
+      "key": "mnn:20:12",
+      "kana": "おわり",
+      "kanji": "終わり",
+      "context": "",
+      "mean": "the end",
+      "cat": "noun",
+      "type": "",
+      "trans": "",
+      "dict": "終わり",
+      "dictRead": "おわり",
+      "audio": "/Audio/minnamoi/bai20/00010101010010010.mp3",
+      "levels": {
+        "N5": [
+          "<ruby>今月<rt>こんげつ</rt></ruby>の<ruby>終<rt>お</rt></ruby>わりに<ruby>会<rt>あ</rt></ruby>う。",
+          "I'll meet him at the end of this month."
+        ],
+        "N4": [
+          "<ruby>映画<rt>えいが</rt></ruby>の<ruby>終<rt>お</rt></ruby>わりで、みんな<ruby>泣<rt>な</rt></ruby>いていた。",
+          "At the end of the movie, everyone was crying."
+        ],
+        "N3": [
+          "<ruby>夏休<rt>なつやす</rt></ruby>みも<ruby>終<rt>お</rt></ruby>わりに<ruby>近<rt>ちか</rt></ruby>づき、<ruby>宿題<rt>しゅくだい</rt></ruby>をあわてて<ruby>片付<rt>かたづ</rt></ruby>けている。",
+          "Summer break is drawing to an end, and I'm hurriedly getting my homework out of the way."
+        ],
+        "N2": [
+          "<ruby>会議<rt>かいぎ</rt></ruby>の<ruby>終<rt>お</rt></ruby>わりにようやく<ruby>結論<rt>けつろん</rt></ruby>が<ruby>出<rt>で</rt></ruby>たものの、みな<ruby>疲<rt>つか</rt></ruby>れきっていた。",
+          "A conclusion was finally reached at the end of the meeting, but everyone was worn out."
+        ],
+        "N1": [
+          "どんなに<ruby>華<rt>はな</rt></ruby>やかな<ruby>時代<rt>じだい</rt></ruby>にも<ruby>必<rt>かなら</rt></ruby>ず<ruby>終<rt>お</rt></ruby>わりが<ruby>来<rt>く</rt></ruby>るということを、<ruby>歴史<rt>れきし</rt></ruby>は<ruby>繰<rt>く</rt></ruby>り<ruby>返<rt>かえ</rt></ruby>し<ruby>教<rt>おし</rt></ruby>えてくれる。",
+          "History teaches us again and again that even the most brilliant era inevitably comes to an end."
+        ]
+      },
+      "mnem": "終わり (おわり) — from the verb 終わる (owaru, to end): the noun \"the end.\"",
+      "tip": "終わり = the end (paired with 初め = the beginning). It's the noun form of 終わる (to end/finish). 終わりごろ = \"around the end (of).\" Written on the last page of Japanese books/films as 終わり.",
+      "accent": 0
+    },
+    {
+      "key": "mnn:20:13",
+      "kana": "こっち",
+      "kanji": "",
+      "context": "",
+      "mean": "this way, here (informal こちら)",
+      "cat": "noun",
+      "type": "",
+      "trans": "",
+      "dict": "こっち",
+      "dictRead": "こっち",
+      "audio": "/Audio/minnamoi/bai20/00010101010010011.mp3",
+      "levels": {
+        "N5": [
+          "こっちへ<ruby>来<rt>き</rt></ruby>て。",
+          "Come over here."
+        ],
+        "N4": [
+          "そっちは<ruby>暑<rt>あつ</rt></ruby>い？こっちはすずしいよ。",
+          "Is it hot over there? It's cool here."
+        ],
+        "N3": [
+          "<ruby>道<rt>みち</rt></ruby>が<ruby>分<rt>わ</rt></ruby>かれているけど、こっちのほうが<ruby>近<rt>ちか</rt></ruby>いと<ruby>思<rt>おも</rt></ruby>う。",
+          "The road splits, but I think this way is closer."
+        ],
+        "N2": [
+          "そちらの<ruby>都合<rt>つごう</rt></ruby>もあるだろうが、こっちにもこっちの<ruby>事情<rt>じじょう</rt></ruby>があるんだ。",
+          "You have your own circumstances, I'm sure, but we have our own situation over here too."
+        ],
+        "N1": [
+          "あれこれ<ruby>気<rt>き</rt></ruby>を<ruby>回<rt>まわ</rt></ruby>してくれるのはありがたいが、こっちはこっちで<ruby>何<rt>なん</rt></ruby>とかやっていくつもりだ。",
+          "I appreciate you fussing over all sorts of things, but for our part, we intend to manage on our own somehow."
+        ]
+      },
+      "mnem": "こっち — a squashed, casual こちら. The こ- points near the speaker: \"this way / here.\"",
+      "tip": "こっち is the casual form of こちら (this way / here / my side), part of the こ・そ・あ・ど set (こっち・そっち・あっち・どっち). Also stands in for \"me/us\" or \"this one\" informally. Use こちら in polite speech.",
+      "accent": 3
+    },
+    {
+      "key": "mnn:20:14",
+      "kana": "そっち",
+      "kanji": "",
+      "context": "",
+      "mean": "that way, there (informal そちら)",
+      "cat": "noun",
+      "type": "",
+      "trans": "",
+      "dict": "そっち",
+      "dictRead": "そっち",
+      "audio": "/Audio/minnamoi/bai20/00010101010010100.mp3",
+      "levels": {
+        "N5": [
+          "そっちへ<ruby>行<rt>い</rt></ruby>ってはいけない。",
+          "Don't go that way."
+        ],
+        "N4": [
+          "そっちの<ruby>天気<rt>てんき</rt></ruby>はどう？",
+          "How's the weather over there?"
+        ],
+        "N3": [
+          "こっちの<ruby>仕事<rt>しごと</rt></ruby>は<ruby>終<rt>お</rt></ruby>わったから、あとはそっちにまかせるよ。",
+          "My part of the work is done, so I'll leave the rest to you."
+        ],
+        "N2": [
+          "そっちがその<ruby>気<rt>き</rt></ruby>なら、こっちにも<ruby>考<rt>かんが</rt></ruby>えがある。",
+          "If that's how you want to play it, then we have a plan of our own too."
+        ],
+        "N1": [
+          "そっちの<ruby>言<rt>い</rt></ruby>い<ruby>分<rt>ぶん</rt></ruby>も<ruby>一理<rt>いちり</rt></ruby>あるとはいえ、そう<ruby>簡単<rt>かんたん</rt></ruby>に<ruby>引<rt>ひ</rt></ruby>き<ruby>下<rt>さ</rt></ruby>がるわけにはいかない。",
+          "Your side of the argument has a point too, but I can't very well back down so easily."
+        ]
+      },
+      "mnem": "そっち — a squashed, casual そちら. The そ- points near the listener: \"that way / there.\"",
+      "tip": "そっち is the casual form of そちら (that way / there / your side), part of こっち・そっち・あっち・どっち. Also informally means \"you\" or \"that one.\" Use そちら in polite speech.",
+      "accent": 3
+    },
+    {
+      "key": "mnn:20:15",
+      "kana": "あっち",
+      "kanji": "",
+      "context": "",
+      "mean": "that way over there, over there (informal あちら)",
+      "cat": "noun",
+      "type": "",
+      "trans": "",
+      "dict": "あっち",
+      "dictRead": "あっち",
+      "audio": "/Audio/minnamoi/bai20/00010101010010101.mp3",
+      "levels": {
+        "N5": [
+          "トイレはあっちだよ。",
+          "The restroom is over that way."
+        ],
+        "N4": [
+          "あっちのほうが<ruby>静<rt>しず</rt></ruby>かだから、あっちで<ruby>話<rt>はな</rt></ruby>そう。",
+          "It's quieter over there, so let's talk over there."
+        ],
+        "N3": [
+          "<ruby>子<rt>こ</rt></ruby>どもたちはあっちの<ruby>公園<rt>こうえん</rt></ruby>で<ruby>遊<rt>あそ</rt></ruby>んでいるはずだ。",
+          "The children should be playing at the park over there."
+        ],
+        "N2": [
+          "あっちを<ruby>立<rt>た</rt></ruby>てればこっちが<ruby>立<rt>た</rt></ruby>たずで、なかなか<ruby>全員<rt>ぜんいん</rt></ruby>を<ruby>満足<rt>まんぞく</rt></ruby>させるのは<ruby>難<rt>むずか</rt></ruby>しい。",
+          "Please one side and you upset the other — it's quite hard to satisfy everyone."
+        ],
+        "N1": [
+          "あっちへ<ruby>行<rt>い</rt></ruby>ったりこっちへ<ruby>来<rt>き</rt></ruby>たりと、<ruby>気持<rt>きも</rt></ruby>ちが<ruby>定<rt>さだ</rt></ruby>まらないまま<ruby>時間<rt>じかん</rt></ruby>だけが<ruby>過<rt>す</rt></ruby>ぎていった。",
+          "Wavering this way and that, I couldn't settle my feelings, and time alone just kept slipping by."
+        ]
+      },
+      "mnem": "あっち — a squashed, casual あちら. The あ- points far from both: \"over there.\"",
+      "tip": "あっち is the casual form of あちら (that way over there — away from both speaker and listener), part of こっち・そっち・あっち・どっち. Can bluntly mean \"go away\" (あっち行って). Use あちら politely.",
+      "accent": 3
+    },
+    {
+      "key": "mnn:20:16",
+      "kana": "どっち",
+      "kanji": "",
+      "context": "",
+      "mean": "which one (of two), which way (informal どちら)",
+      "cat": "noun",
+      "type": "",
+      "trans": "",
+      "dict": "どっち",
+      "dictRead": "どっち",
+      "audio": "/Audio/minnamoi/bai20/00010101010010110.mp3",
+      "levels": {
+        "N5": [
+          "<ruby>犬<rt>いぬ</rt></ruby>と<ruby>猫<rt>ねこ</rt></ruby>とどっちが<ruby>好<rt>す</rt></ruby>き？",
+          "Which do you like better, dogs or cats?"
+        ],
+        "N4": [
+          "こっちとそっち、どっちのケーキがいい？",
+          "This one or that one — which cake would you like?"
+        ],
+        "N3": [
+          "どっちの<ruby>道<rt>みち</rt></ruby>を<ruby>行<rt>い</rt></ruby>っても<ruby>駅<rt>えき</rt></ruby>に<ruby>着<rt>つ</rt></ruby>くから、<ruby>好<rt>す</rt></ruby>きなほうを<ruby>選<rt>えら</rt></ruby>んでいいよ。",
+          "Either road gets you to the station, so you can pick whichever you like."
+        ],
+        "N2": [
+          "<ruby>賛成<rt>さんせい</rt></ruby>か<ruby>反対<rt>はんたい</rt></ruby>か、どっちつかずの<ruby>態度<rt>たいど</rt></ruby>ではいずれ<ruby>信用<rt>しんよう</rt></ruby>を<ruby>失<rt>うしな</rt></ruby>うだろう。",
+          "For or against — a wishy-washy, noncommittal attitude will eventually cost you people's trust."
+        ],
+        "N1": [
+          "どっちに<ruby>転<rt>ころ</rt></ruby>んでも<ruby>後悔<rt>こうかい</rt></ruby>は<ruby>残<rt>のこ</rt></ruby>るのだろうが、それでも<ruby>自分<rt>じぶん</rt></ruby>で<ruby>選<rt>えら</rt></ruby>んだ<ruby>道<rt>みち</rt></ruby>を<ruby>信<rt>しん</rt></ruby>じるほかない。",
+          "Whichever way things turn out, regret will probably linger, but even so I have no choice but to believe in the path I chose myself."
+        ]
+      },
+      "mnem": "どっち — a squashed, casual どちら. The ど- is the question one: \"which (of two)?\"",
+      "tip": "どっち is the casual form of どちら (which of two / which way), part of こっち・そっち・あっち・どっち. Use it to pick between TWO things; for three or more use どれ. Use どちら in polite speech.",
+      "accent": 1
+    },
+    {
+      "key": "mnn:20:17",
+      "kana": "みんなで",
+      "kanji": "",
+      "context": "",
+      "mean": "all together, everyone (doing something) together",
+      "cat": "adverb",
+      "type": "",
+      "trans": "",
+      "dict": "みんなで",
+      "dictRead": "みんなで",
+      "audio": "/Audio/minnamoi/bai20/00010101010010111.mp3",
+      "levels": {
+        "N5": [
+          "みんなで<ruby>京都<rt>きょうと</rt></ruby>へ<ruby>行<rt>い</rt></ruby>かない？",
+          "Shall we all go to Kyoto together?"
+        ],
+        "N4": [
+          "<ruby>日曜日<rt>にちようび</rt></ruby>にみんなで<ruby>公園<rt>こうえん</rt></ruby>でお<ruby>弁当<rt>べんとう</rt></ruby>を<ruby>食<rt>た</rt></ruby>べた。",
+          "On Sunday we all ate lunch together in the park."
+        ],
+        "N3": [
+          "<ruby>引<rt>ひ</rt></ruby>っ<ruby>越<rt>こ</rt></ruby>しの<ruby>日<rt>ひ</rt></ruby>は、みんなで<ruby>手伝<rt>てつだ</rt></ruby>えばあっという<ruby>間<rt>ま</rt></ruby>に<ruby>終<rt>お</rt></ruby>わるだろう。",
+          "On moving day, if we all help out together it'll be over in no time."
+        ],
+        "N2": [
+          "<ruby>意見<rt>いけん</rt></ruby>が<ruby>分<rt>わ</rt></ruby>かれたときこそ、みんなで<ruby>話<rt>はな</rt></ruby>し<ruby>合<rt>あ</rt></ruby>って<ruby>納得<rt>なっとく</rt></ruby>のいく<ruby>結論<rt>けつろん</rt></ruby>を<ruby>出<rt>だ</rt></ruby>すべきだ。",
+          "It's precisely when opinions are divided that we should all talk it through together and reach a conclusion everyone can accept."
+        ],
+        "N1": [
+          "<ruby>一人<rt>ひとり</rt></ruby>の<ruby>力<rt>ちから</rt></ruby>には<ruby>限<rt>かぎ</rt></ruby>りがあるが、みんなで<ruby>力<rt>ちから</rt></ruby>を<ruby>合<rt>あ</rt></ruby>わせれば<ruby>乗<rt>の</rt></ruby>り<ruby>越<rt>こ</rt></ruby>えられないことはない。",
+          "One person's strength has its limits, but if we all combine our strength together, there's nothing we can't overcome."
+        ]
+      },
+      "mnem": "みんな (everyone) + で (marking the doers as a group) = \"all together.\"",
+      "tip": "みんなで = everyone doing something together as a group (the で marks the collective agent). Contrast みんなに (to everyone) and みんなの (everyone's). みんなで + a verb of shared action (行く, 食べる) is the common pattern.",
+      "accent": 0
+    },
+    {
+      "key": "mnn:20:18",
+      "kana": "〜けど",
+      "kanji": "",
+      "context": "",
+      "mean": "~, but (informal が)",
+      "cat": "phrase",
+      "type": "",
+      "trans": "",
+      "dict": "〜けど",
+      "dictRead": "〜けど",
+      "audio": "/Audio/minnamoi/bai20/00010101010011000.mp3",
+      "levels": {
+        "N5": [
+          "このカレーは<ruby>辛<rt>から</rt></ruby>いけど、おいしい。",
+          "This curry is spicy, but it's tasty."
+        ],
+        "N4": [
+          "<ruby>国<rt>くに</rt></ruby>へ<ruby>帰<rt>かえ</rt></ruby>りたいけど、お<ruby>金<rt>かね</rt></ruby>がない。",
+          "I want to go back home, but I don't have the money."
+        ],
+        "N3": [
+          "<ruby>調<rt>しら</rt></ruby>べてみたけど、その<ruby>言葉<rt>ことば</rt></ruby>の<ruby>意味<rt>いみ</rt></ruby>はどこにも<ruby>載<rt>の</rt></ruby>っていなかった。",
+          "I looked it up, but the meaning of that word wasn't listed anywhere."
+        ],
+        "N2": [
+          "<ruby>約束<rt>やくそく</rt></ruby>の<ruby>時間<rt>じかん</rt></ruby>に<ruby>間<rt>ま</rt></ruby>に<ruby>合<rt>あ</rt></ruby>うように<ruby>家<rt>いえ</rt></ruby>を<ruby>出<rt>で</rt></ruby>たけど、<ruby>電車<rt>でんしゃ</rt></ruby>が<ruby>遅<rt>おく</rt></ruby>れて<ruby>結局<rt>けっきょく</rt></ruby><ruby>遅刻<rt>ちこく</rt></ruby>してしまった。",
+          "I left the house so I'd make the appointment on time, but the train was delayed and in the end I was late anyway."
+        ],
+        "N1": [
+          "<ruby>失礼<rt>しつれい</rt></ruby>かもしれないけど、<ruby>一言<rt>ひとこと</rt></ruby>だけ<ruby>言<rt>い</rt></ruby>わせてもらってもいいですか。",
+          "This may be rude of me, but might I be allowed to say just one thing?"
+        ]
+      },
+      "mnem": "〜けど — a casual clip of けれども. Sticks a plain-form clause to a contrasting follow-up: \"…, but…\".",
+      "tip": "〜けど is the casual/spoken form of が, meaning \"but/although\" (fuller けれど・けれども are in between). It attaches to the PLAIN form (辛いけど, 帰りたいけど) — a key L20 pattern. Also softens statements as a lead-in, like が (すみませんけど…).",
+      "accent": 1
+    },
+    {
+      "key": "mnn:20:19",
+      "kana": "おなかがいっぱいです",
+      "kanji": "",
+      "context": "",
+      "mean": "I'm full (my stomach is full)",
+      "cat": "expression",
+      "type": "",
+      "trans": "",
+      "dict": "おなかがいっぱいです",
+      "dictRead": "おなかがいっぱいです",
+      "audio": "/Audio/minnamoi/bai20/00010101010011001.mp3",
+      "levels": {
+        "N5": [
+          "もうおなかがいっぱいです。",
+          "I'm full already."
+        ],
+        "N4": [
+          "おなかがいっぱいだから、<ruby>何<rt>なに</rt></ruby>も<ruby>食<rt>た</rt></ruby>べたくない。",
+          "I'm full, so I don't want to eat anything."
+        ],
+        "N3": [
+          "たくさん<ruby>食<rt>た</rt></ruby>べておなかがいっぱいになったので、<ruby>少<rt>すこ</rt></ruby>し<ruby>散歩<rt>さんぽ</rt></ruby>することにした。",
+          "I ate a lot and got full, so I decided to take a little walk."
+        ],
+        "N2": [
+          "せっかく<ruby>作<rt>つく</rt></ruby>ってくれたのに、もうおなかがいっぱいで<ruby>食<rt>た</rt></ruby>べきれそうにない。",
+          "You went to the trouble of making it, but I'm already full and don't think I can finish it."
+        ],
+        "N1": [
+          "<ruby>目<rt>め</rt></ruby>の<ruby>前<rt>まえ</rt></ruby>のごちそうは<ruby>魅力的<rt>みりょくてき</rt></ruby>だが、いかんせんもうおなかがいっぱいで、<ruby>箸<rt>はし</rt></ruby>をつける<ruby>気<rt>き</rt></ruby>になれない。",
+          "The feast before me is tempting, but alas I'm already full and just can't bring myself to pick up my chopsticks."
+        ]
+      },
+      "mnem": "おなか (belly) が いっぱい (full) です — your stomach is at capacity: \"I'm full.\"",
+      "tip": "おなかがいっぱいです = polite \"I'm full.\" The plain/casual form (L20) is おなかがいっぱい(だ). Contrast おなかがすいた = \"I'm hungry.\" Decline more food politely with もうおなかがいっぱいです.",
+      "accent": 0
+    }
+  ],
+  "grammar": [
+    {
+      "pattern": "Plain form (普通形) vs です・ます form",
+      "structure": "V: 行きます→行く／行った／行かない／行かなかった ・ いA: 暑いです→暑い／暑かった ・ なA・N: 暇です→暇だ／暇だった、学生です→学生だ",
+      "explain": "Japanese has two speech styles: the polite です・ます style you've used so far, and the PLAIN (casual) style used with family and close friends. Every polite form has a plain counterpart. Verbs go to the dictionary/た/ない/なかった forms (飲みます→飲む, 飲んだ, 飲まない, 飲まなかった). い-adjectives drop です (暑いです→暑い, past 暑かった). な-adjectives and nouns take だ in the affirmative (暇です→暇だ, 学生です→学生だ) and じゃない／じゃなかった in the negative. Choose the style by WHO you're talking to, not by content.",
+      "examples": [
+        {
+          "jp": "あした また <ruby>来<rt>く</rt></ruby>る。",
+          "en": "I'll come again tomorrow."
+        },
+        {
+          "jp": "きょうは <ruby>何<rt>なに</rt></ruby>も <ruby>買<rt>か</rt></ruby>わない。",
+          "en": "I'm not buying anything today."
+        },
+        {
+          "jp": "けさは <ruby>頭<rt>あたま</rt></ruby>が <ruby>痛<rt>いた</rt></ruby>かった。",
+          "en": "I had a headache this morning."
+        },
+        {
+          "jp": "<ruby>先週<rt>せんしゅう</rt></ruby>の <ruby>土曜日<rt>どようび</rt></ruby>は <ruby>暇<rt>ひま</rt></ruby>じゃ なかった。",
+          "en": "I wasn't free last Saturday."
+        }
+      ]
+    },
+    {
+      "pattern": "Casual questions (dropping か; rising intonation)",
+      "structure": "[plain form] ？ ／ うん・ううん で 答える。 な-adj・N は だ を 落とす： 元気？ 学生？",
+      "explain": "In casual speech, yes/no questions drop the particle か and just rise in intonation (お茶飲む？ instead of お茶を飲みますか). With な-adjectives and nouns, the だ is also dropped in the question (元気？, 学生？), though it stays in a statement (元気だ). Answer with うん (casual yes) or ううん (casual no). Particles like を, は, が are often dropped too when the meaning is clear.",
+      "examples": [
+        {
+          "jp": "お<ruby>茶<rt>ちゃ</rt></ruby> <ruby>飲<rt>の</rt></ruby>む？…うん、<ruby>飲<rt>の</rt></ruby>む。",
+          "en": "Want some tea? …Yeah, I'll have some."
+        },
+        {
+          "jp": "<ruby>日本語<rt>にほんご</rt></ruby>の <ruby>勉強<rt>べんきょう</rt></ruby>は <ruby>大変<rt>たいへん</rt></ruby>？…ううん、<ruby>大変<rt>たいへん</rt></ruby>じゃない。",
+          "en": "Is studying Japanese tough? …No, it's not tough."
+        },
+        {
+          "jp": "<ruby>元気<rt>げんき</rt></ruby>？…うん、<ruby>元気<rt>げんき</rt></ruby>。",
+          "en": "You doing okay? …Yeah, I'm good."
+        },
+        {
+          "jp": "けさ <ruby>新聞<rt>しんぶん</rt></ruby> <ruby>読<rt>よ</rt></ruby>んだ？…うん、<ruby>読<rt>よ</rt></ruby>んだ。",
+          "en": "Did you read the paper this morning? …Yeah, I did."
+        }
+      ]
+    },
+    {
+      "pattern": "[plain form] けど （contrast / soft lead-in）",
+      "structure": "V／いA／なA＋だ／N＋だ ＋ けど、 …",
+      "explain": "けど is the casual equivalent of が, joining two clauses with a \"but/although\" contrast. It attaches to the PLAIN form of the preceding clause: 辛いけど、おいしい (it's spicy, but tasty); 帰りたいけど、お金がない (I want to go home, but I have no money). Like が, it can also just soften a statement as a lead-in rather than a strong contrast (もう遅いけど…). けれど・けれども are slightly more formal versions of the same thing.",
+      "examples": [
+        {
+          "jp": "そのカレーライスは <ruby>辛<rt>から</rt></ruby>いけど、おいしい。",
+          "en": "That curry rice is spicy, but delicious."
+        },
+        {
+          "jp": "<ruby>国<rt>くに</rt></ruby>へ <ruby>帰<rt>かえ</rt></ruby>りたいけど、お<ruby>金<rt>かね</rt></ruby>が ない。",
+          "en": "I want to go back home, but I don't have the money."
+        },
+        {
+          "jp": "きのう <ruby>木村<rt>きむら</rt></ruby>さんに <ruby>電話<rt>でんわ</rt></ruby>したけど、いなかった。",
+          "en": "I called Ms. Kimura yesterday, but she wasn't in."
+        }
+      ]
+    }
+  ],
+  "examples": [
+    {
+      "jp": "サントスさんは パーティーに <ruby>来<rt>こ</rt></ruby>なかった。",
+      "en": "Mr. Santos didn't come to the party."
+    },
+    {
+      "jp": "<ruby>東京<rt>とうきょう</rt></ruby>は <ruby>人<rt>ひと</rt></ruby>が <ruby>多<rt>おお</rt></ruby>い。",
+      "en": "Tokyo has a lot of people."
+    },
+    {
+      "jp": "<ruby>沖縄<rt>おきなわ</rt></ruby>の <ruby>海<rt>うみ</rt></ruby>は きれいだった。",
+      "en": "The sea in Okinawa was beautiful."
+    },
+    {
+      "jp": "きょうは <ruby>僕<rt>ぼく</rt></ruby>の <ruby>誕生日<rt>たんじょうび</rt></ruby>だ。",
+      "en": "Today is my birthday."
+    },
+    {
+      "jp": "アイスクリーム <ruby>食<rt>た</rt></ruby>べる？…うん、<ruby>食<rt>た</rt></ruby>べる。",
+      "en": "Do you want ice cream? …Yeah, I'll have some."
+    },
+    {
+      "jp": "きのう <ruby>木村<rt>きむら</rt></ruby>さんに <ruby>会<rt>あ</rt></ruby>った？…ううん、<ruby>会<rt>あ</rt></ruby>わなかった。",
+      "en": "Did you meet Ms. Kimura yesterday? …No, I didn't."
+    },
+    {
+      "jp": "あした みんなで <ruby>京都<rt>きょうと</rt></ruby>へ <ruby>行<rt>い</rt></ruby>かない？…うん、いいね。",
+      "en": "Shall we all go to Kyoto tomorrow? …Yeah, sounds good."
+    },
+    {
+      "jp": "<ruby>今<rt>いま</rt></ruby> おなかが いっぱいだから、<ruby>何<rt>なに</rt></ruby>も <ruby>食<rt>た</rt></ruby>べたくない。",
+      "en": "I'm full right now, so I don't want to eat anything."
+    }
+  ],
+  "conversation": {
+    "title": "いっしょに 行かない？ (Want to come along?)",
+    "audio": "/Audio/minnahonsatsu1/69.mp3",
+    "lines": [
+      {
+        "role": "ミラー",
+        "jp": "<ruby>夏休<rt>なつやす</rt></ruby>みは <ruby>国<rt>くに</rt></ruby>へ <ruby>帰<rt>かえ</rt></ruby>る？",
+        "en": "Are you going back home for summer break?"
+      },
+      {
+        "role": "タワポン",
+        "jp": "ううん。<ruby>帰<rt>かえ</rt></ruby>りたいけど、…。",
+        "en": "No. I'd like to, but…"
+      },
+      {
+        "role": "ミラー",
+        "jp": "そう。タワポン<ruby>君<rt>くん</rt></ruby>、<ruby>富士山<rt>ふじさん</rt></ruby>に <ruby>登<rt>のぼ</rt></ruby>った こと ある？",
+        "en": "I see. Thawapong, have you ever climbed Mount Fuji?"
+      },
+      {
+        "role": "タワポン",
+        "jp": "ううん、ない。",
+        "en": "No, I haven't."
+      },
+      {
+        "role": "ミラー",
+        "jp": "じゃ、よかったら、いっしょに <ruby>行<rt>い</rt></ruby>かない？",
+        "en": "Then, if you'd like, shall we go together?"
+      },
+      {
+        "role": "タワポン",
+        "jp": "うん。いつごろ？",
+        "en": "Sure. Around when?"
+      },
+      {
+        "role": "ミラー",
+        "jp": "8<ruby>月<rt>がつ</rt></ruby>の <ruby>初<rt>はじ</rt></ruby>めごろは どう？",
+        "en": "How about early August?"
+      },
+      {
+        "role": "タワポン",
+        "jp": "いいよ。",
+        "en": "Sounds good."
+      },
+      {
+        "role": "ミラー",
+        "jp": "じゃ、いろいろ <ruby>調<rt>しら</rt></ruby>べて、また <ruby>電話<rt>でんわ</rt></ruby>するよ。",
+        "en": "Then I'll look into a few things and call you again."
+      },
+      {
+        "role": "タワポン",
+        "jp": "ありがとう。<ruby>待<rt>ま</rt></ruby>ってるよ。",
+        "en": "Thanks. I'll be waiting."
+      }
+    ]
+  }
+}

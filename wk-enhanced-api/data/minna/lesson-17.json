@@ -1,0 +1,1126 @@
+{
+  "lesson": 17,
+  "title": "Lesson 17",
+  "theme": "The ない-form and its obligations — 〜ないでください (please don't), 〜なければなりません (must), 〜なくてもいいです (need not), plus the health/hospital vocabulary set",
+  "source": {
+    "name": "vnjpclub.com",
+    "vocabUrl": "https://www.vnjpclub.com/en/minna-no-nihongo/lesson-17-vocabulary.html",
+    "grammarUrl": "https://www.vnjpclub.com/en/minna-no-nihongo/lesson-17-grammar.html",
+    "note": "Vocabulary, native-speaker audio, and example sentences aggregated from vnjpclub.com (Minna no Nihongo 第2版). For personal study."
+  },
+  "vocab": [
+    {
+      "key": "mnn:17:0",
+      "kana": "おぼえます",
+      "kanji": "覚えます",
+      "context": "",
+      "mean": "to memorize, remember",
+      "cat": "verb",
+      "type": "ichidan",
+      "trans": "t",
+      "dict": "覚える",
+      "dictRead": "おぼえる",
+      "audio": "/Audio/minnamoi/bai17/00010101000101100.mp3",
+      "accent": 3
+    },
+    {
+      "key": "mnn:17:1",
+      "kana": "わすれます",
+      "kanji": "忘れます",
+      "context": "",
+      "mean": "to forget",
+      "cat": "verb",
+      "type": "ichidan",
+      "trans": "t",
+      "dict": "忘れる",
+      "dictRead": "わすれる",
+      "audio": "/Audio/minnamoi/bai17/00010101000101101.mp3",
+      "accent": 0
+    },
+    {
+      "key": "mnn:17:2",
+      "kana": "なくします",
+      "kanji": "無くします",
+      "context": "",
+      "mean": "to lose (something)",
+      "cat": "verb",
+      "type": "godan",
+      "trans": "t",
+      "dict": "無くす",
+      "dictRead": "なくす",
+      "audio": "/Audio/minnamoi/bai17/00010101000101110.mp3",
+      "levels": {
+        "N5": [
+          "かぎを<ruby>無<rt>な</rt></ruby>くしました。",
+          "I lost my key."
+        ],
+        "N4": [
+          "<ruby>大切<rt>たいせつ</rt></ruby>な<ruby>財布<rt>さいふ</rt></ruby>を<ruby>無<rt>な</rt></ruby>くして、とても<ruby>困<rt>こま</rt></ruby>っています。",
+          "I lost my precious wallet and I'm really troubled."
+        ],
+        "N3": [
+          "パスポートを<ruby>無<rt>な</rt></ruby>くさないように、いつも<ruby>気<rt>き</rt></ruby>をつけています。",
+          "I always take care not to lose my passport."
+        ],
+        "N2": [
+          "<ruby>保険証<rt>ほけんしょう</rt></ruby>を<ruby>無<rt>な</rt></ruby>くしたものの、すぐに<ruby>再発行<rt>さいはっこう</rt></ruby>してもらえた。",
+          "Although I lost my insurance card, I was able to have it reissued right away."
+        ],
+        "N1": [
+          "<ruby>信用<rt>しんよう</rt></ruby>というものは、<ruby>一度<rt>いちど</rt></ruby><ruby>無<rt>な</rt></ruby>くしてしまうと、<ruby>取<rt>と</rt></ruby>り<ruby>戻<rt>もど</rt></ruby>すのに<ruby>長<rt>なが</rt></ruby>い<ruby>年月<rt>としつき</rt></ruby>を<ruby>要<rt>よう</rt></ruby>する。",
+          "Trust, once lost, requires long years to win back."
+        ]
+      },
+      "mnem": "\"nah-koo-su\" — you \"knock\" something out of your pocket and now it's gone; 無 means \"nothing,\" so なくす = make it nothing.",
+      "tip": "Transitive 無くす (you actively lose something, takes を) pairs with intransitive 無くなる (なくなる, something disappears/runs out on its own); usually written in kana なくします.",
+      "accent": 0
+    },
+    {
+      "key": "mnn:17:3",
+      "kana": "はらいます",
+      "kanji": "払います",
+      "context": "お<ruby>金<rt>かね</rt></ruby>を〜",
+      "mean": "to pay",
+      "cat": "verb",
+      "type": "godan",
+      "trans": "t",
+      "dict": "払う",
+      "dictRead": "はらう",
+      "audio": "/Audio/minnamoi/bai17/00010101000101111.mp3",
+      "accent": 2
+    },
+    {
+      "key": "mnn:17:4",
+      "kana": "かえします",
+      "kanji": "返します",
+      "context": "",
+      "mean": "to return, give back",
+      "cat": "verb",
+      "type": "godan",
+      "trans": "t",
+      "dict": "返す",
+      "dictRead": "かえす",
+      "audio": "/Audio/minnamoi/bai17/00010101000110000.mp3",
+      "levels": {
+        "N5": [
+          "<ruby>本<rt>ほん</rt></ruby>を<ruby>返<rt>かえ</rt></ruby>します。",
+          "I return the book."
+        ],
+        "N4": [
+          "<ruby>土曜日<rt>どようび</rt></ruby>までに<ruby>図書館<rt>としょかん</rt></ruby>へ<ruby>本<rt>ほん</rt></ruby>を<ruby>返<rt>かえ</rt></ruby>さなければなりません。",
+          "I have to return the book to the library by Saturday."
+        ],
+        "N3": [
+          "<ruby>借<rt>か</rt></ruby>りたお<ruby>金<rt>かね</rt></ruby>は、<ruby>約束<rt>やくそく</rt></ruby>の<ruby>日<rt>ひ</rt></ruby>までに<ruby>返<rt>かえ</rt></ruby>すようにしています。",
+          "I make a point of returning money I've borrowed by the promised day."
+        ],
+        "N2": [
+          "<ruby>借<rt>か</rt></ruby>りた<ruby>傘<rt>かさ</rt></ruby>を<ruby>返<rt>かえ</rt></ruby>そうとしたものの、<ruby>持<rt>も</rt></ruby>ち<ruby>主<rt>ぬし</rt></ruby>が<ruby>見<rt>み</rt></ruby>つからなかった。",
+          "Although I tried to return the umbrella I'd borrowed, I couldn't find its owner."
+        ],
+        "N1": [
+          "<ruby>受<rt>う</rt></ruby>けた<ruby>恩<rt>おん</rt></ruby>は<ruby>金銭<rt>きんせん</rt></ruby>で<ruby>返<rt>かえ</rt></ruby>せるものではなく、<ruby>誠意<rt>せいい</rt></ruby>ある<ruby>行<rt>おこな</rt></ruby>いをもって<ruby>報<rt>むく</rt></ruby>いるほかない。",
+          "A kindness received is not something that can be repaid with money; one can only reciprocate through sincere deeds."
+        ]
+      },
+      "mnem": "\"kah-eh-su\" — you \"care\" enough to give it back; note 返す shares its 返 with 帰る but here means send a thing back, not go home.",
+      "tip": "Transitive 返す (return a thing, takes を) has the intransitive pair 返る (かえる, come back); don't confuse it with 帰る (かえる, go home) — same reading, different kanji.",
+      "accent": 1
+    },
+    {
+      "key": "mnn:17:5",
+      "kana": "でかけます",
+      "kanji": "出かけます",
+      "context": "",
+      "mean": "to go out",
+      "cat": "verb",
+      "type": "ichidan",
+      "trans": "i",
+      "dict": "出かける",
+      "dictRead": "でかける",
+      "audio": "/Audio/minnamoi/bai17/00010101000110001.mp3",
+      "levels": {
+        "N5": [
+          "<ruby>今<rt>いま</rt></ruby>から<ruby>出<rt>で</rt></ruby>かけます。",
+          "I'm going out now."
+        ],
+        "N4": [
+          "<ruby>寒<rt>さむ</rt></ruby>いですから、<ruby>上着<rt>うわぎ</rt></ruby>を<ruby>着<rt>き</rt></ruby>て<ruby>出<rt>で</rt></ruby>かけます。",
+          "Because it's cold, I'll put on a jacket and go out."
+        ],
+        "N3": [
+          "<ruby>雨<rt>あめ</rt></ruby>が<ruby>降<rt>ふ</rt></ruby>りそうなので、<ruby>傘<rt>かさ</rt></ruby>を<ruby>持<rt>も</rt></ruby>って<ruby>出<rt>で</rt></ruby>かけるようにしています。",
+          "It looks like it might rain, so I make a point of taking an umbrella when I go out."
+        ],
+        "N2": [
+          "<ruby>熱<rt>ねつ</rt></ruby>があるものの、どうしても<ruby>出<rt>で</rt></ruby>かけなければならない<ruby>用事<rt>ようじ</rt></ruby>がある。",
+          "Although I have a fever, there's an errand I absolutely have to go out for."
+        ],
+        "N1": [
+          "<ruby>身支度<rt>みじたく</rt></ruby>もそこそこに<ruby>出<rt>で</rt></ruby>かけたばかりに、<ruby>肝心<rt>かんじん</rt></ruby>の<ruby>書類<rt>しょるい</rt></ruby>を<ruby>忘<rt>わす</rt></ruby>れてきてしまった。",
+          "Precisely because I dashed out with barely time to get ready, I ended up leaving behind the very documents that mattered."
+        ]
+      },
+      "mnem": "出 (でる, to exit) + かける — you step OUT the door and are off; 出かける = leave the house for a while.",
+      "tip": "Ichidan and intransitive: 出かける is heading out for an outing/errand, vs. plain 出る (exit) or 帰る (go home); the て-form is 出かけて, ない-form 出かけない.",
+      "accent": 0
+    },
+    {
+      "key": "mnn:17:6",
+      "kana": "ぬぎます",
+      "kanji": "脱ぎます",
+      "context": "",
+      "mean": "to take off (clothes, shoes)",
+      "cat": "verb",
+      "type": "godan",
+      "trans": "t",
+      "dict": "脱ぐ",
+      "dictRead": "ぬぐ",
+      "audio": "/Audio/minnamoi/bai17/00010101000110010.mp3",
+      "levels": {
+        "N5": [
+          "ここで<ruby>靴<rt>くつ</rt></ruby>を<ruby>脱<rt>ぬ</rt></ruby>ぎます。",
+          "I take off my shoes here."
+        ],
+        "N4": [
+          "<ruby>家<rt>いえ</rt></ruby>に<ruby>入<rt>はい</rt></ruby>るとき、<ruby>靴<rt>くつ</rt></ruby>を<ruby>脱<rt>ぬ</rt></ruby>がなければなりません。",
+          "When you enter the house, you have to take off your shoes."
+        ],
+        "N3": [
+          "<ruby>暑<rt>あつ</rt></ruby>くなったら、<ruby>上着<rt>うわぎ</rt></ruby>を<ruby>脱<rt>ぬ</rt></ruby>ぐようにしています。",
+          "When it gets hot, I make a point of taking off my jacket."
+        ],
+        "N2": [
+          "<ruby>靴<rt>くつ</rt></ruby>を<ruby>脱<rt>ぬ</rt></ruby>いで<ruby>上<rt>あ</rt></ruby>がる<ruby>習慣<rt>しゅうかん</rt></ruby>は、<ruby>外国人<rt>がいこくじん</rt></ruby>には<ruby>珍<rt>めずら</rt></ruby>しいものらしい。",
+          "The custom of taking off your shoes before stepping up seems to be unusual to foreigners."
+        ],
+        "N1": [
+          "<ruby>帽子<rt>ぼうし</rt></ruby>を<ruby>脱<rt>ぬ</rt></ruby>いで<ruby>深<rt>ふか</rt></ruby>々と<ruby>頭<rt>あたま</rt></ruby>を<ruby>下<rt>さ</rt></ruby>げる<ruby>彼<rt>かれ</rt></ruby>の<ruby>姿<rt>すがた</rt></ruby>に、<ruby>並々<rt>なみなみ</rt></ruby>ならぬ<ruby>敬意<rt>けいい</rt></ruby>が<ruby>感<rt>かん</rt></ruby>じられた。",
+          "In the sight of him taking off his hat and bowing deeply, one could sense an extraordinary depth of respect."
+        ]
+      },
+      "mnem": "\"noo-goo\" — you \"nudge\" your shoe off with the other foot; 脱ぐ is the opposite of 着る/はく (put on).",
+      "tip": "脱ぐ covers taking off anything worn (clothes 着る, shoes/trousers はく, hats かぶる all reverse to 脱ぐ); it's godan, so て-form is 脱いで and ない-form 脱がない.",
+      "accent": 1
+    },
+    {
+      "key": "mnn:17:7",
+      "kana": "もっていきます",
+      "kanji": "持って行きます",
+      "context": "",
+      "mean": "to take (something along)",
+      "cat": "verb",
+      "type": "godan",
+      "trans": "t",
+      "dict": "持っていく",
+      "dictRead": "もっていく",
+      "audio": "/Audio/minnamoi/bai17/00010101000110011.mp3",
+      "accent": 4
+    },
+    {
+      "key": "mnn:17:8",
+      "kana": "もってきます",
+      "kanji": "持って来ます",
+      "context": "",
+      "mean": "to bring (something here)",
+      "cat": "verb",
+      "type": "irregular",
+      "trans": "t",
+      "dict": "持ってくる",
+      "dictRead": "もってくる",
+      "audio": "/Audio/minnamoi/bai17/00010101000110100.mp3",
+      "accent": 4
+    },
+    {
+      "key": "mnn:17:9",
+      "kana": "しんぱいします",
+      "kanji": "心配します",
+      "context": "",
+      "mean": "to worry, be anxious",
+      "cat": "verb",
+      "type": "irregular",
+      "trans": "i",
+      "dict": "心配する",
+      "dictRead": "しんぱいする",
+      "audio": "/Audio/minnamoi/bai17/00010101000110101.mp3",
+      "levels": {
+        "N5": [
+          "<ruby>母<rt>はは</rt></ruby>は<ruby>私<rt>わたし</rt></ruby>を<ruby>心配<rt>しんぱい</rt></ruby>します。",
+          "My mother worries about me."
+        ],
+        "N4": [
+          "<ruby>大丈夫<rt>だいじょうぶ</rt></ruby>ですから、<ruby>心配<rt>しんぱい</rt></ruby>しないでください。",
+          "It's all right, so please don't worry."
+        ],
+        "N3": [
+          "<ruby>試験<rt>しけん</rt></ruby>の<ruby>結果<rt>けっか</rt></ruby>を、<ruby>親<rt>おや</rt></ruby>が<ruby>心配<rt>しんぱい</rt></ruby>しているようです。",
+          "It seems my parents are worried about the exam results."
+        ],
+        "N2": [
+          "<ruby>連絡<rt>れんらく</rt></ruby>がないと、<ruby>無事<rt>ぶじ</rt></ruby>かどうか<ruby>心配<rt>しんぱい</rt></ruby>せずにはいられない。",
+          "When there's no word from them, I can't help worrying about whether they're safe."
+        ],
+        "N1": [
+          "<ruby>子<rt>こ</rt></ruby>の<ruby>将来<rt>しょうらい</rt></ruby>を<ruby>案<rt>あん</rt></ruby>じるあまり、<ruby>親<rt>おや</rt></ruby>はつい<ruby>過剰<rt>かじょう</rt></ruby>に<ruby>心配<rt>しんぱい</rt></ruby>してしまうものだ。",
+          "Out of anxiety over their child's future, parents inevitably end up worrying excessively."
+        ]
+      },
+      "mnem": "心 (heart) + 配 (distribute) — your heart is spread thin with anxiety; \"shin-pai\" = worry.",
+      "tip": "する-verb: 〜を心配する means \"worry about 〜\"; the plain adjective-like noun 心配 also appears as 心配な (worrisome). Its opposite reassurance is 大丈夫 or 安心する (be relieved).",
+      "accent": 0
+    },
+    {
+      "key": "mnn:17:10",
+      "kana": "ざんぎょうします",
+      "kanji": "残業します",
+      "context": "",
+      "mean": "to work overtime",
+      "cat": "verb",
+      "type": "irregular",
+      "trans": "i",
+      "dict": "残業する",
+      "dictRead": "ざんぎょうする",
+      "audio": "/Audio/minnamoi/bai17/00010101000110110.mp3",
+      "levels": {
+        "N5": [
+          "<ruby>今晩<rt>こんばん</rt></ruby><ruby>残業<rt>ざんぎょう</rt></ruby>します。",
+          "I'll work overtime tonight."
+        ],
+        "N4": [
+          "<ruby>仕事<rt>しごと</rt></ruby>が<ruby>多<rt>おお</rt></ruby>いですから、<ruby>今日<rt>きょう</rt></ruby>も<ruby>残業<rt>ざんぎょう</rt></ruby>しなければなりません。",
+          "There's a lot of work, so I have to work overtime again today."
+        ],
+        "N3": [
+          "<ruby>締<rt>し</rt></ruby>め<ruby>切<rt>き</rt></ruby>りが<ruby>近<rt>ちか</rt></ruby>いので、しばらく<ruby>毎日<rt>まいにち</rt></ruby><ruby>残業<rt>ざんぎょう</rt></ruby>することになりそうです。",
+          "The deadline is near, so it looks like I'll be working overtime every day for a while."
+        ],
+        "N2": [
+          "<ruby>残業<rt>ざんぎょう</rt></ruby>ばかりしているものの、<ruby>給料<rt>きゅうりょう</rt></ruby>はなかなか<ruby>上<rt>あ</rt></ruby>がらない。",
+          "Although I do nothing but work overtime, my salary just won't go up."
+        ],
+        "N1": [
+          "<ruby>働<rt>はたら</rt></ruby>き<ruby>方改革<rt>かたかいかく</rt></ruby>が<ruby>叫<rt>さけ</rt></ruby>ばれる<ruby>今<rt>いま</rt></ruby>なお、<ruby>常態的<rt>じょうたいてき</rt></ruby>な<ruby>残業<rt>ざんぎょう</rt></ruby>を<ruby>強<rt>し</rt></ruby>いられる<ruby>職場<rt>しょくば</rt></ruby>は<ruby>後<rt>あと</rt></ruby>を<ruby>絶<rt>た</rt></ruby>たない。",
+          "Even now, with workstyle reform being loudly called for, workplaces that force chronic overtime are endless."
+        ]
+      },
+      "mnem": "残 (remain) + 業 (work) — the work that REMAINS after hours is 残業; \"zan-gyō\" = overtime.",
+      "tip": "する-verb, intransitive: you 残業する (do overtime), no を on the work itself. Distinguish from 出張する (go on a business trip), a Lesson-17 companion word.",
+      "accent": 0
+    },
+    {
+      "key": "mnn:17:11",
+      "kana": "しゅっちょうします",
+      "kanji": "出張します",
+      "context": "",
+      "mean": "to go on a business trip",
+      "cat": "verb",
+      "type": "irregular",
+      "trans": "i",
+      "dict": "出張する",
+      "dictRead": "しゅっちょうする",
+      "audio": "/Audio/minnamoi/bai17/00010101000110111.mp3",
+      "levels": {
+        "N5": [
+          "<ruby>明日<rt>あした</rt></ruby><ruby>東京<rt>とうきょう</rt></ruby>へ<ruby>出張<rt>しゅっちょう</rt></ruby>します。",
+          "I'll go on a business trip to Tokyo tomorrow."
+        ],
+        "N4": [
+          "<ruby>来週<rt>らいしゅう</rt></ruby>から<ruby>大阪<rt>おおさか</rt></ruby>へ<ruby>出張<rt>しゅっちょう</rt></ruby>しなければなりません。",
+          "I have to go on a business trip to Osaka starting next week."
+        ],
+        "N3": [
+          "<ruby>部長<rt>ぶちょう</rt></ruby>は<ruby>今<rt>いま</rt></ruby><ruby>海外<rt>かいがい</rt></ruby>へ<ruby>出張<rt>しゅっちょう</rt></ruby>しているので、<ruby>会議<rt>かいぎ</rt></ruby>は<ruby>来週<rt>らいしゅう</rt></ruby>になります。",
+          "The department head is on a business trip abroad right now, so the meeting will be next week."
+        ],
+        "N2": [
+          "<ruby>出張<rt>しゅっちょう</rt></ruby>が<ruby>多<rt>おお</rt></ruby>いものの、<ruby>家族<rt>かぞく</rt></ruby>と<ruby>過<rt>す</rt></ruby>ごす<ruby>時間<rt>じかん</rt></ruby>はできるだけ<ruby>大切<rt>たいせつ</rt></ruby>にしている。",
+          "Although I go on a lot of business trips, I value the time I spend with my family as much as I can."
+        ],
+        "N1": [
+          "<ruby>海外<rt>かいがい</rt></ruby><ruby>出張<rt>しゅっちょう</rt></ruby>が<ruby>相次<rt>あいつ</rt></ruby>ぎ、<ruby>時差<rt>じさ</rt></ruby>ぼけと<ruby>疲労<rt>ひろう</rt></ruby>で<ruby>体調<rt>たいちょう</rt></ruby>を<ruby>崩<rt>くず</rt></ruby>しかねない<ruby>状況<rt>じょうきょう</rt></ruby>だ。",
+          "With overseas business trips coming one after another, it's a situation in which jet lag and fatigue could well ruin my health."
+        ]
+      },
+      "mnem": "出 (go out) + 張 (extend/post) — you go OUT and are posted elsewhere for work; \"shutchō\" = business trip.",
+      "tip": "する-verb, intransitive: 〜へ出張する (go on a trip to 〜). Don't confuse it with 出勤する (go in to work) or plain 旅行する (leisure travel) — 出張 is specifically for work.",
+      "accent": 0
+    },
+    {
+      "key": "mnn:17:12",
+      "kana": "のみます",
+      "kanji": "飲みます",
+      "context": "<ruby>薬<rt>くすり</rt></ruby>を〜",
+      "mean": "to take (medicine)",
+      "cat": "verb",
+      "type": "godan",
+      "trans": "t",
+      "dict": "飲む",
+      "dictRead": "のむ",
+      "audio": "/Audio/minnamoi/bai17/00010101000111000.mp3",
+      "accent": 1
+    },
+    {
+      "key": "mnn:17:13",
+      "kana": "はいります",
+      "kanji": "入ります",
+      "context": "おふろに〜",
+      "mean": "to take (a bath); to enter",
+      "cat": "verb",
+      "type": "godan",
+      "trans": "i",
+      "dict": "入る",
+      "dictRead": "はいる",
+      "audio": "/Audio/minnamoi/bai17/00010101000111001.mp3",
+      "accent": 0
+    },
+    {
+      "key": "mnn:17:14",
+      "kana": "たいせつ",
+      "kanji": "大切",
+      "context": "",
+      "mean": "important, precious",
+      "cat": "adjective",
+      "type": "na-adj",
+      "trans": "",
+      "dict": "大切",
+      "dictRead": "たいせつ",
+      "audio": "/Audio/minnamoi/bai17/00010101000111010.mp3",
+      "levels": {
+        "N5": [
+          "これは<ruby>大切<rt>たいせつ</rt></ruby>な<ruby>本<rt>ほん</rt></ruby>です。",
+          "This is an important book."
+        ],
+        "N4": [
+          "<ruby>大切<rt>たいせつ</rt></ruby>な<ruby>資料<rt>しりょう</rt></ruby>ですから、<ruby>無<rt>な</rt></ruby>くさないでください。",
+          "It's an important document, so please don't lose it."
+        ],
+        "N3": [
+          "<ruby>家族<rt>かぞく</rt></ruby>と<ruby>過<rt>す</rt></ruby>ごす<ruby>時間<rt>じかん</rt></ruby>を、<ruby>何<rt>なに</rt></ruby>よりも<ruby>大切<rt>たいせつ</rt></ruby>にしています。",
+          "I treasure the time I spend with my family more than anything."
+        ],
+        "N2": [
+          "<ruby>結果<rt>けっか</rt></ruby>も<ruby>大事<rt>だいじ</rt></ruby>だが、それ<ruby>以上<rt>いじょう</rt></ruby>に<ruby>過程<rt>かてい</rt></ruby>こそが<ruby>大切<rt>たいせつ</rt></ruby>だと<ruby>思<rt>おも</rt></ruby>う。",
+          "Results matter too, but I think the process is even more important."
+        ],
+        "N1": [
+          "<ruby>信頼<rt>しんらい</rt></ruby>という<ruby>目<rt>め</rt></ruby>に<ruby>見<rt>み</rt></ruby>えないものこそ、<ruby>何<rt>なに</rt></ruby>にも<ruby>代<rt>か</rt></ruby>えがたい<ruby>大切<rt>たいせつ</rt></ruby>な<ruby>財産<rt>ざいさん</rt></ruby>である。",
+          "It is precisely the invisible thing called trust that is a precious, irreplaceable asset."
+        ]
+      },
+      "mnem": "大 (big) + 切 (cut) — something so BIG it would CUT you to lose it, i.e. dear/important; \"tai-setsu.\"",
+      "tip": "な-adjective: 大切な本 / この本は大切です. Overlaps with 大事 (だいじ), which is more conversational; 大切にする means \"to cherish/treasure.\"",
+      "accent": 0
+    },
+    {
+      "key": "mnn:17:15",
+      "kana": "だいじょうぶ",
+      "kanji": "大丈夫",
+      "context": "",
+      "mean": "all right, okay, fine",
+      "cat": "adjective",
+      "type": "na-adj",
+      "trans": "",
+      "dict": "大丈夫",
+      "dictRead": "だいじょうぶ",
+      "audio": "/Audio/minnamoi/bai17/00010101000111011.mp3",
+      "levels": {
+        "N5": [
+          "<ruby>一人<rt>ひとり</rt></ruby>で<ruby>大丈夫<rt>だいじょうぶ</rt></ruby>ですか。",
+          "Are you okay on your own?"
+        ],
+        "N4": [
+          "<ruby>悪<rt>わる</rt></ruby>い<ruby>病気<rt>びょうき</rt></ruby>じゃありませんから、<ruby>大丈夫<rt>だいじょうぶ</rt></ruby>ですよ。",
+          "It's not a serious illness, so it's all right."
+        ],
+        "N3": [
+          "<ruby>準備<rt>じゅんび</rt></ruby>はしてありますから、<ruby>明日<rt>あした</rt></ruby>の<ruby>発表<rt>はっぴょう</rt></ruby>はきっと<ruby>大丈夫<rt>だいじょうぶ</rt></ruby>です。",
+          "I've made preparations, so tomorrow's presentation will surely be fine."
+        ],
+        "N2": [
+          "<ruby>顔色<rt>かおいろ</rt></ruby>が<ruby>悪<rt>わる</rt></ruby>いのに<ruby>大丈夫<rt>だいじょうぶ</rt></ruby>だと<ruby>言<rt>い</rt></ruby>い<ruby>張<rt>は</rt></ruby>るので、かえって<ruby>心配<rt>しんぱい</rt></ruby>になった。",
+          "He insisted he was fine even though he looked pale, which only made me more worried."
+        ],
+        "N1": [
+          "「<ruby>大丈夫<rt>だいじょうぶ</rt></ruby>」という<ruby>言葉<rt>ことば</rt></ruby>は、<ruby>時<rt>とき</rt></ruby>に<ruby>本心<rt>ほんしん</rt></ruby>を<ruby>覆<rt>おお</rt></ruby>い<ruby>隠<rt>かく</rt></ruby>す<ruby>盾<rt>たて</rt></ruby>にもなり<ruby>得<rt>う</rt></ruby>る。",
+          "The word \"I'm fine\" can, at times, become a shield that conceals one's true feelings."
+        ]
+      },
+      "mnem": "\"dai-jō-bu\" — picture a big (大) strong man standing firm: everything's all right, no problem.",
+      "tip": "な-adjective. As a reply, 大丈夫です can mean both \"I'm fine\" AND a polite \"no thank you\" (declining) — context decides. 心配しないで、大丈夫 is the reassuring pair.",
+      "accent": 3
+    },
+    {
+      "key": "mnn:17:16",
+      "kana": "あぶない",
+      "kanji": "危ない",
+      "context": "",
+      "mean": "dangerous",
+      "cat": "adjective",
+      "type": "i-adj",
+      "trans": "",
+      "dict": "危ない",
+      "dictRead": "あぶない",
+      "audio": "/Audio/minnamoi/bai17/00010101000111100.mp3",
+      "levels": {
+        "N5": [
+          "そこは<ruby>危<rt>あぶ</rt></ruby>ないです。",
+          "That place is dangerous."
+        ],
+        "N4": [
+          "<ruby>危<rt>あぶ</rt></ruby>ないですから、<ruby>押<rt>お</rt></ruby>さないでください。",
+          "It's dangerous, so please don't push."
+        ],
+        "N3": [
+          "<ruby>子供<rt>こども</rt></ruby>が<ruby>道<rt>みち</rt></ruby>に<ruby>飛<rt>と</rt></ruby>び<ruby>出<rt>だ</rt></ruby>すと<ruby>危<rt>あぶ</rt></ruby>ないので、<ruby>手<rt>て</rt></ruby>をつないでいます。",
+          "It's dangerous when a child darts into the road, so I hold their hand."
+        ],
+        "N2": [
+          "その<ruby>橋<rt>はし</rt></ruby>は<ruby>古<rt>ふる</rt></ruby>くて<ruby>危<rt>あぶ</rt></ruby>ないものの、ほかに<ruby>渡<rt>わた</rt></ruby>る<ruby>道<rt>みち</rt></ruby>がない。",
+          "That bridge is old and dangerous, but there's no other way across."
+        ],
+        "N1": [
+          "<ruby>安全<rt>あんぜん</rt></ruby>を<ruby>軽視<rt>けいし</rt></ruby>した<ruby>結果<rt>けっか</rt></ruby>、<ruby>取<rt>と</rt></ruby>り<ruby>返<rt>かえ</rt></ruby>しのつかない<ruby>危<rt>あぶ</rt></ruby>ない<ruby>事態<rt>じたい</rt></ruby>を<ruby>招<rt>まね</rt></ruby>きかねない。",
+          "Making light of safety could invite an irreversibly dangerous situation."
+        ]
+      },
+      "mnem": "\"ah-boo-nai\" — you shout \"abunai!\" (Look out!) when something's about to hurt someone; it's the go-to warning cry.",
+      "tip": "い-adjective: 危ない → negative 危なくない, past 危なかった. As an exclamation 危ない！ means \"Watch out!\"; the noun form is 危険 (きけん, more formal).",
+      "accent": 0
+    },
+    {
+      "key": "mnn:17:17",
+      "kana": "きんえん",
+      "kanji": "禁煙",
+      "context": "",
+      "mean": "no smoking; giving up smoking",
+      "cat": "noun",
+      "type": "",
+      "trans": "",
+      "dict": "禁煙",
+      "dictRead": "きんえん",
+      "audio": "/Audio/minnamoi/bai17/00010101000111101.mp3",
+      "levels": {
+        "N5": [
+          "ここは<ruby>禁煙<rt>きんえん</rt></ruby>です。",
+          "This is a no-smoking area."
+        ],
+        "N4": [
+          "<ruby>禁煙<rt>きんえん</rt></ruby>ですから、たばこを<ruby>吸<rt>す</rt></ruby>わないでください。",
+          "It's no-smoking, so please don't smoke."
+        ],
+        "N3": [
+          "<ruby>健康<rt>けんこう</rt></ruby>のために、<ruby>今年<rt>ことし</rt></ruby>から<ruby>禁煙<rt>きんえん</rt></ruby>しようと<ruby>思<rt>おも</rt></ruby>っています。",
+          "For my health, I'm thinking of quitting smoking this year."
+        ],
+        "N2": [
+          "<ruby>何度<rt>なんど</rt></ruby>も<ruby>禁煙<rt>きんえん</rt></ruby>しようとしたものの、なかなかたばこをやめられない。",
+          "Although I've tried to quit smoking many times, I just can't manage to give it up."
+        ],
+        "N1": [
+          "<ruby>公共<rt>こうきょう</rt></ruby>の<ruby>場<rt>ば</rt></ruby>における<ruby>禁煙<rt>きんえん</rt></ruby>の<ruby>徹底<rt>てってい</rt></ruby>は、<ruby>受動<rt>じゅどう</rt></ruby><ruby>喫煙<rt>きつえん</rt></ruby>から<ruby>人々<rt>ひとびと</rt></ruby>を<ruby>守<rt>まも</rt></ruby>る<ruby>上<rt>うえ</rt></ruby>で<ruby>欠<rt>か</rt></ruby>かせない。",
+          "Thoroughly enforcing no-smoking in public spaces is indispensable for protecting people from secondhand smoke."
+        ]
+      },
+      "mnem": "禁 (prohibit) + 煙 (smoke) — smoke is prohibited: \"kin-en\" = no smoking.",
+      "tip": "As a sign 禁煙 = \"no smoking\"; as a する-verb 禁煙する = \"to quit smoking.\" Contrast 喫煙 (きつえん, smoking) and the 喫煙席 (smoking seat) vs 禁煙席 (non-smoking seat) pair.",
+      "accent": 0
+    },
+    {
+      "key": "mnn:17:18",
+      "kana": "ほけんしょう",
+      "kanji": "保険証",
+      "context": "",
+      "mean": "(health) insurance card",
+      "cat": "noun",
+      "type": "",
+      "trans": "",
+      "dict": "保険証",
+      "dictRead": "ほけんしょう",
+      "audio": "/Audio/minnamoi/bai17/00010101000111110.mp3",
+      "levels": {
+        "N5": [
+          "<ruby>保険証<rt>ほけんしょう</rt></ruby>を<ruby>持<rt>も</rt></ruby>っていますか。",
+          "Do you have your insurance card?"
+        ],
+        "N4": [
+          "<ruby>病院<rt>びょういん</rt></ruby>へ<ruby>行<rt>い</rt></ruby>くとき、<ruby>保険証<rt>ほけんしょう</rt></ruby>を<ruby>持<rt>も</rt></ruby>って<ruby>行<rt>い</rt></ruby>かなければなりません。",
+          "When you go to the hospital, you have to bring your insurance card."
+        ],
+        "N3": [
+          "<ruby>初<rt>はじ</rt></ruby>めての<ruby>病院<rt>びょういん</rt></ruby>では、<ruby>受付<rt>うけつけ</rt></ruby>で<ruby>保険証<rt>ほけんしょう</rt></ruby>を<ruby>見<rt>み</rt></ruby>せるようになっています。",
+          "At a hospital you're visiting for the first time, you're supposed to show your insurance card at reception."
+        ],
+        "N2": [
+          "<ruby>保険証<rt>ほけんしょう</rt></ruby>を<ruby>忘<rt>わす</rt></ruby>れたものの、<ruby>後日<rt>ごじつ</rt></ruby><ruby>提示<rt>ていじ</rt></ruby>すれば<ruby>差額<rt>さがく</rt></ruby>が<ruby>戻<rt>もど</rt></ruby>るそうだ。",
+          "Although I forgot my insurance card, apparently the difference is refunded if I present it at a later date."
+        ],
+        "N1": [
+          "<ruby>健康<rt>けんこう</rt></ruby><ruby>保険証<rt>ほけんしょう</rt></ruby>の<ruby>電子化<rt>でんしか</rt></ruby>をめぐっては、<ruby>利便性<rt>りべんせい</rt></ruby>と<ruby>個人<rt>こじん</rt></ruby><ruby>情報<rt>じょうほう</rt></ruby>の<ruby>保護<rt>ほご</rt></ruby>との<ruby>両立<rt>りょうりつ</rt></ruby>が<ruby>問<rt>と</rt></ruby>われている。",
+          "Regarding the digitization of health insurance cards, the question is how to reconcile convenience with the protection of personal information."
+        ]
+      },
+      "mnem": "保 (protect) + 険 (risk) + 証 (certificate) — the certificate that protects you against the risk (of medical bills): \"hoken-shō.\"",
+      "tip": "保険 = insurance, 保険証 = the card proving you're covered; the full form 健康保険証 (health-insurance card) is common at hospitals in Japan. Bring it (持って行く) to get the insured rate.",
+      "accent": 0
+    },
+    {
+      "key": "mnn:17:19",
+      "kana": "ねつ",
+      "kanji": "熱",
+      "context": "",
+      "mean": "fever, temperature; heat",
+      "cat": "noun",
+      "type": "",
+      "trans": "",
+      "dict": "熱",
+      "dictRead": "ねつ",
+      "audio": "/Audio/minnamoi/bai17/00010101000111111.mp3",
+      "levels": {
+        "N5": [
+          "<ruby>少<rt>すこ</rt></ruby>し<ruby>熱<rt>ねつ</rt></ruby>があります。",
+          "I have a slight fever."
+        ],
+        "N4": [
+          "<ruby>熱<rt>ねつ</rt></ruby>がありますから、<ruby>病院<rt>びょういん</rt></ruby>へ<ruby>行<rt>い</rt></ruby>かなければなりません。",
+          "I have a fever, so I have to go to the hospital."
+        ],
+        "N3": [
+          "<ruby>薬<rt>くすり</rt></ruby>を<ruby>飲<rt>の</rt></ruby>んだら、<ruby>熱<rt>ねつ</rt></ruby>が<ruby>下<rt>さ</rt></ruby>がってきました。",
+          "After I took the medicine, my fever started to come down."
+        ],
+        "N2": [
+          "<ruby>熱<rt>ねつ</rt></ruby>があるものの、どうしても<ruby>休<rt>やす</rt></ruby>めない<ruby>仕事<rt>しごと</rt></ruby>がある。",
+          "Although I have a fever, there's work I absolutely can't take off from."
+        ],
+        "N1": [
+          "<ruby>高熱<rt>こうねつ</rt></ruby>が<ruby>続<rt>つづ</rt></ruby>くようであれば、ただの<ruby>風邪<rt>かぜ</rt></ruby>と<ruby>決<rt>き</rt></ruby>めつけず、<ruby>速<rt>すみ</rt></ruby>やかに<ruby>受診<rt>じゅしん</rt></ruby>すべきだ。",
+          "If a high fever persists, one should not dismiss it as a mere cold but see a doctor promptly."
+        ]
+      },
+      "mnem": "\"neh-tsu\" — a fever is body HEAT; the same 熱 appears in 熱い (あつい, hot).",
+      "tip": "The set phrase is 熱がある (to have a fever), 熱が出る (a fever comes on), 熱が下がる (it goes down). The kanji 熱 also reads あつ in 熱い (hot to the touch).",
+      "accent": 2
+    },
+    {
+      "key": "mnn:17:20",
+      "kana": "びょうき",
+      "kanji": "病気",
+      "context": "",
+      "mean": "illness, disease, sickness",
+      "cat": "noun",
+      "type": "",
+      "trans": "",
+      "dict": "病気",
+      "dictRead": "びょうき",
+      "audio": "/Audio/minnamoi/bai17/00010101001000000.mp3",
+      "levels": {
+        "N5": [
+          "<ruby>父<rt>ちち</rt></ruby>は<ruby>病気<rt>びょうき</rt></ruby>です。",
+          "My father is ill."
+        ],
+        "N4": [
+          "<ruby>病気<rt>びょうき</rt></ruby>ですから、<ruby>薬<rt>くすり</rt></ruby>を<ruby>飲<rt>の</rt></ruby>まなければなりません。",
+          "I'm sick, so I have to take medicine."
+        ],
+        "N3": [
+          "<ruby>悪<rt>わる</rt></ruby>い<ruby>病気<rt>びょうき</rt></ruby>ではないので、<ruby>心配<rt>しんぱい</rt></ruby>しなくてもいいです。",
+          "It's not a serious illness, so there's no need to worry."
+        ],
+        "N2": [
+          "<ruby>大<rt>おお</rt></ruby>きな<ruby>病気<rt>びょうき</rt></ruby>をしてからというもの、<ruby>健康<rt>けんこう</rt></ruby>のありがたさを<ruby>痛感<rt>つうかん</rt></ruby>している。",
+          "Ever since I had a serious illness, I've keenly felt how precious good health is."
+        ],
+        "N1": [
+          "<ruby>早期<rt>そうき</rt></ruby><ruby>発見<rt>はっけん</rt></ruby>さえできれば、<ruby>治<rt>なお</rt></ruby>らない<ruby>病気<rt>びょうき</rt></ruby>ばかりではないと、<ruby>医師<rt>いし</rt></ruby>は<ruby>語<rt>かた</rt></ruby>った。",
+          "The doctor said that, provided there is early detection, not every illness is incurable."
+        ]
+      },
+      "mnem": "病 (sickness) + 気 (spirit/energy) — your vital energy has fallen sick: \"byō-ki\" = illness.",
+      "tip": "病気になる = to fall ill, 病気です = to be ill. Contrast 元気 (げんき, healthy/energetic) — the same 気; and 病院 (びょういん) is the hospital where you treat it.",
+      "accent": 0
+    },
+    {
+      "key": "mnn:17:21",
+      "kana": "くすり",
+      "kanji": "薬",
+      "context": "〜を<ruby>飲<rt>の</rt></ruby>みます",
+      "mean": "medicine, drug",
+      "cat": "noun",
+      "type": "",
+      "trans": "",
+      "dict": "薬",
+      "dictRead": "くすり",
+      "audio": "/Audio/minnamoi/bai17/00010101001000001.mp3",
+      "levels": {
+        "N5": [
+          "<ruby>薬<rt>くすり</rt></ruby>を<ruby>飲<rt>の</rt></ruby>みます。",
+          "I take medicine."
+        ],
+        "N4": [
+          "<ruby>一日<rt>いちにち</rt></ruby>に<ruby>三回<rt>さんかい</rt></ruby>、この<ruby>薬<rt>くすり</rt></ruby>を<ruby>飲<rt>の</rt></ruby>まなければなりません。",
+          "You have to take this medicine three times a day."
+        ],
+        "N3": [
+          "<ruby>食後<rt>しょくご</rt></ruby>に<ruby>薬<rt>くすり</rt></ruby>を<ruby>飲<rt>の</rt></ruby>むようにしています。",
+          "I make a point of taking the medicine after meals."
+        ],
+        "N2": [
+          "<ruby>薬<rt>くすり</rt></ruby>を<ruby>飲<rt>の</rt></ruby>んだものの、<ruby>痛<rt>いた</rt></ruby>みはなかなか<ruby>治<rt>おさ</rt></ruby>まらなかった。",
+          "Although I took the medicine, the pain just wouldn't subside."
+        ],
+        "N1": [
+          "<ruby>薬<rt>くすり</rt></ruby>は<ruby>用法<rt>ようほう</rt></ruby>・<ruby>用量<rt>ようりょう</rt></ruby>を<ruby>守<rt>まも</rt></ruby>ってこそ<ruby>効<rt>き</rt></ruby>くのであり、<ruby>自己<rt>じこ</rt></ruby><ruby>判断<rt>はんだん</rt></ruby>での<ruby>増減<rt>ぞうげん</rt></ruby>は<ruby>危険<rt>きけん</rt></ruby>を<ruby>伴<rt>ともな</rt></ruby>う。",
+          "Medicine works only when you observe the directions and dosage; adjusting it on your own judgment carries risk."
+        ]
+      },
+      "mnem": "\"koo-soo-ree\" — you \"cure\" yourself with 薬; medicine is the thing you 飲む (drink/take), not eat.",
+      "tip": "Key collocation: 薬を飲む — you DRINK medicine in Japanese, even pills, so 飲む not 食べる. 薬が効く = the medicine works/takes effect.",
+      "accent": 0
+    },
+    {
+      "key": "mnn:17:22",
+      "kana": "［お］ふろ",
+      "kanji": "［お］風呂",
+      "context": "〜に<ruby>入<rt>はい</rt></ruby>ります",
+      "mean": "bath",
+      "cat": "noun",
+      "type": "",
+      "trans": "",
+      "dict": "お風呂",
+      "dictRead": "おふろ",
+      "audio": "/Audio/minnamoi/bai17/00010101001000010.mp3",
+      "levels": {
+        "N5": [
+          "<ruby>毎日<rt>まいにち</rt></ruby>お<ruby>風呂<rt>ふろ</rt></ruby>に<ruby>入<rt>はい</rt></ruby>ります。",
+          "I take a bath every day."
+        ],
+        "N4": [
+          "<ruby>今晩<rt>こんばん</rt></ruby>はお<ruby>風呂<rt>ふろ</rt></ruby>に<ruby>入<rt>はい</rt></ruby>らないでください。",
+          "Please don't take a bath tonight."
+        ],
+        "N3": [
+          "<ruby>寝<rt>ね</rt></ruby>る<ruby>前<rt>まえ</rt></ruby>に、ゆっくりお<ruby>風呂<rt>ふろ</rt></ruby>に<ruby>入<rt>はい</rt></ruby>るようにしています。",
+          "I make a point of taking a leisurely bath before bed."
+        ],
+        "N2": [
+          "<ruby>疲<rt>つか</rt></ruby>れているものの、お<ruby>風呂<rt>ふろ</rt></ruby>に<ruby>入<rt>はい</rt></ruby>らずに<ruby>寝<rt>ね</rt></ruby>る<ruby>気<rt>き</rt></ruby>にはなれない。",
+          "Although I'm tired, I can't bring myself to go to sleep without taking a bath."
+        ],
+        "N1": [
+          "<ruby>日本<rt>にほん</rt></ruby>の<ruby>入浴<rt>にゅうよく</rt></ruby><ruby>文化<rt>ぶんか</rt></ruby>において、お<ruby>風呂<rt>ふろ</rt></ruby>は<ruby>単<rt>たん</rt></ruby>なる<ruby>清潔<rt>せいけつ</rt></ruby>の<ruby>手段<rt>しゅだん</rt></ruby>にとどまらず、<ruby>心身<rt>しんしん</rt></ruby>を<ruby>癒<rt>いや</rt></ruby>す<ruby>場<rt>ば</rt></ruby>でもある。",
+          "In Japanese bathing culture, the bath is not merely a means of cleanliness but also a place that heals both body and mind."
+        ]
+      },
+      "mnem": "\"oh-foo-roh\" — the polite お before ふろ; picture soaking in a \"furo\" tub, the warm Japanese bath.",
+      "tip": "お風呂に入る = to take a bath (に, not を — you enter the bath). The polite お is near-standard: お風呂. Distinguish 風呂 (soaking bath) from シャワー (shower).",
+      "accent": 2
+    },
+    {
+      "key": "mnn:17:23",
+      "kana": "うわぎ",
+      "kanji": "上着",
+      "context": "",
+      "mean": "jacket, outer garment",
+      "cat": "noun",
+      "type": "",
+      "trans": "",
+      "dict": "上着",
+      "dictRead": "うわぎ",
+      "audio": "/Audio/minnamoi/bai17/00010101001000011.mp3",
+      "levels": {
+        "N5": [
+          "<ruby>上着<rt>うわぎ</rt></ruby>を<ruby>着<rt>き</rt></ruby>ます。",
+          "I put on a jacket."
+        ],
+        "N4": [
+          "<ruby>暑<rt>あつ</rt></ruby>いですから、<ruby>上着<rt>うわぎ</rt></ruby>を<ruby>脱<rt>ぬ</rt></ruby>いでもいいですか。",
+          "It's hot, so may I take off my jacket?"
+        ],
+        "N3": [
+          "<ruby>寒<rt>さむ</rt></ruby>くなってきたので、<ruby>厚<rt>あつ</rt></ruby>い<ruby>上着<rt>うわぎ</rt></ruby>を<ruby>持<rt>も</rt></ruby>って<ruby>出<rt>で</rt></ruby>かけるようにしています。",
+          "It's gotten cold, so I make a point of taking a thick jacket when I go out."
+        ],
+        "N2": [
+          "<ruby>面接<rt>めんせつ</rt></ruby>では、きちんとした<ruby>上着<rt>うわぎ</rt></ruby>を<ruby>着<rt>き</rt></ruby>ていくにこしたことはない。",
+          "For an interview, you can't go wrong wearing a proper jacket."
+        ],
+        "N1": [
+          "<ruby>会場<rt>かいじょう</rt></ruby>に<ruby>入<rt>はい</rt></ruby>るや<ruby>否<rt>いな</rt></ruby>や、<ruby>彼<rt>かれ</rt></ruby>は<ruby>上着<rt>うわぎ</rt></ruby>を<ruby>脱<rt>ぬ</rt></ruby>ぎ、<ruby>腕<rt>うで</rt></ruby>まくりをして<ruby>作業<rt>さぎょう</rt></ruby>に<ruby>取<rt>と</rt></ruby>りかかった。",
+          "No sooner had he entered the hall than he took off his jacket, rolled up his sleeves, and set to work."
+        ]
+      },
+      "mnem": "上 (upper) + 着 (wear) — the thing worn on TOP, over the rest: \"uwa-gi\" = jacket/outer garment.",
+      "tip": "上着 is the outer/upper garment (jacket, coat); its opposite is 下着 (したぎ, underwear). Worn on the torso, so it takes 着る (put on) / 脱ぐ (take off).",
+      "accent": 0
+    },
+    {
+      "key": "mnn:17:24",
+      "kana": "したぎ",
+      "kanji": "下着",
+      "context": "",
+      "mean": "underwear",
+      "cat": "noun",
+      "type": "",
+      "trans": "",
+      "dict": "下着",
+      "dictRead": "したぎ",
+      "audio": "/Audio/minnamoi/bai17/00010101001000100.mp3",
+      "levels": {
+        "N5": [
+          "<ruby>新<rt>あたら</rt></ruby>しい<ruby>下着<rt>したぎ</rt></ruby>を<ruby>買<rt>か</rt></ruby>います。",
+          "I buy new underwear."
+        ],
+        "N4": [
+          "<ruby>旅行<rt>りょこう</rt></ruby>のとき、<ruby>下着<rt>したぎ</rt></ruby>を<ruby>何枚<rt>なんまい</rt></ruby>か<ruby>持<rt>も</rt></ruby>って<ruby>行<rt>い</rt></ruby>きます。",
+          "When I travel, I take several sets of underwear."
+        ],
+        "N3": [
+          "<ruby>汗<rt>あせ</rt></ruby>をかいたら、<ruby>下着<rt>したぎ</rt></ruby>を<ruby>替<rt>か</rt></ruby>えるようにしています。",
+          "When I sweat, I make a point of changing my underwear."
+        ],
+        "N2": [
+          "<ruby>肌<rt>はだ</rt></ruby>が<ruby>弱<rt>よわ</rt></ruby>いので、<ruby>下着<rt>したぎ</rt></ruby>は<ruby>綿<rt>めん</rt></ruby>のものしか<ruby>着<rt>き</rt></ruby>られない。",
+          "My skin is sensitive, so I can only wear cotton underwear."
+        ],
+        "N1": [
+          "<ruby>登山<rt>とざん</rt></ruby>では、<ruby>汗<rt>あせ</rt></ruby>を<ruby>素早<rt>すばや</rt></ruby>く<ruby>乾<rt>かわ</rt></ruby>かす<ruby>機能性<rt>きのうせい</rt></ruby>の<ruby>下着<rt>したぎ</rt></ruby>を<ruby>選<rt>えら</rt></ruby>ぶことが、<ruby>体温<rt>たいおん</rt></ruby><ruby>維持<rt>いじ</rt></ruby>の<ruby>鍵<rt>かぎ</rt></ruby>となる。",
+          "In mountaineering, choosing functional underwear that dries sweat quickly is key to maintaining body temperature."
+        ]
+      },
+      "mnem": "下 (lower/under) + 着 (wear) — the thing worn UNDER everything else: \"shita-gi\" = underwear.",
+      "tip": "Direct opposite of 上着 (うわぎ, outer jacket): 下 (under) vs 上 (over), both with 着 (wear). Contrast the item 下着 with the verb 脱ぐ / 着る used with it.",
+      "accent": 0
+    },
+    {
+      "key": "mnn:17:25",
+      "kana": "２、３にち",
+      "kanji": "２、３日",
+      "context": "",
+      "mean": "two or three days, a few days",
+      "cat": "expression",
+      "type": "",
+      "trans": "",
+      "dict": "２、３日",
+      "dictRead": "に、さんにち",
+      "audio": "/Audio/minnamoi/bai17/00010101001000101.mp3",
+      "levels": {
+        "N5": [
+          "２、３<ruby>日<rt>にち</rt></ruby><ruby>休<rt>やす</rt></ruby>みます。",
+          "I'll rest for two or three days."
+        ],
+        "N4": [
+          "２、３<ruby>日<rt>にち</rt></ruby>お<ruby>風呂<rt>ふろ</rt></ruby>に<ruby>入<rt>はい</rt></ruby>らないでください。",
+          "Please don't take a bath for two or three days."
+        ],
+        "N3": [
+          "<ruby>薬<rt>くすり</rt></ruby>を<ruby>飲<rt>の</rt></ruby>んで、２、３<ruby>日<rt>にち</rt></ruby>ゆっくり<ruby>休<rt>やす</rt></ruby>むようにしてください。",
+          "Take the medicine and try to rest quietly for a few days."
+        ],
+        "N2": [
+          "２、３<ruby>日<rt>にち</rt></ruby>で<ruby>治<rt>なお</rt></ruby>ると<ruby>思<rt>おも</rt></ruby>っていたものの、<ruby>熱<rt>ねつ</rt></ruby>は<ruby>一週間<rt>いっしゅうかん</rt></ruby>も<ruby>続<rt>つづ</rt></ruby>いた。",
+          "Although I thought it would clear up in a few days, the fever lasted a whole week."
+        ],
+        "N1": [
+          "<ruby>返事<rt>へんじ</rt></ruby>は２、３<ruby>日<rt>にち</rt></ruby>のうちにと<ruby>言<rt>い</rt></ruby>われたものの、<ruby>先方<rt>せんぽう</rt></ruby>の<ruby>都合<rt>つごう</rt></ruby>もあり、<ruby>一概<rt>いちがい</rt></ruby>には<ruby>急<rt>せ</rt></ruby>かせない。",
+          "Although I was told the reply would come within a few days, given the other party's circumstances I can't simply press them."
+        ]
+      },
+      "mnem": "Just the numbers 2 and 3 stacked before 日 (day) — \"ni-san-nichi\" = two or three days, i.e. a small unspecified span.",
+      "tip": "The 「２，３〜」 idiom pairs two adjacent numbers to mean \"a few\": ２，３日 (a few days), ２，３回 (a few times). Read に、さんにち; used to soften an exact count.",
+      "accent": 0
+    },
+    {
+      "key": "mnn:17:26",
+      "kana": "２、３～",
+      "kanji": "",
+      "context": "",
+      "mean": "two or three ~ (with a counter suffix)",
+      "cat": "expression",
+      "type": "",
+      "trans": "",
+      "dict": "２、３～",
+      "dictRead": "に、さん",
+      "audio": "/Audio/minnamoi/bai17/00010101001000110.mp3",
+      "levels": {
+        "N5": [
+          "りんごを２、３<ruby>個<rt>こ</rt></ruby><ruby>買<rt>か</rt></ruby>います。",
+          "I'll buy two or three apples."
+        ],
+        "N4": [
+          "２、３<ruby>回<rt>かい</rt></ruby>この<ruby>薬<rt>くすり</rt></ruby>を<ruby>飲<rt>の</rt></ruby>めば、<ruby>治<rt>なお</rt></ruby>ると<ruby>思<rt>おも</rt></ruby>います。",
+          "If you take this medicine two or three times, I think you'll get better."
+        ],
+        "N3": [
+          "<ruby>質問<rt>しつもん</rt></ruby>が２、３<ruby>点<rt>てん</rt></ruby>ありますので、<ruby>後<rt>あと</rt></ruby>で<ruby>聞<rt>き</rt></ruby>いてもいいですか。",
+          "I have two or three questions, so may I ask them later?"
+        ],
+        "N2": [
+          "<ruby>候補<rt>こうほ</rt></ruby>は２、３<ruby>人<rt>にん</rt></ruby>に<ruby>絞<rt>しぼ</rt></ruby>られたものの、<ruby>最終<rt>さいしゅう</rt></ruby><ruby>決定<rt>けってい</rt></ruby>には<ruby>至<rt>いた</rt></ruby>っていない。",
+          "Although the candidates have been narrowed to two or three, we have not yet reached a final decision."
+        ],
+        "N1": [
+          "２、３<ruby>件<rt>けん</rt></ruby>の<ruby>指摘<rt>してき</rt></ruby>を<ruby>除<rt>のぞ</rt></ruby>けば、<ruby>提案<rt>ていあん</rt></ruby>そのものに<ruby>異論<rt>いろん</rt></ruby>を<ruby>唱<rt>とな</rt></ruby>える<ruby>者<rt>もの</rt></ruby>はいなかった。",
+          "Apart from two or three points raised, there was no one who objected to the proposal itself."
+        ]
+      },
+      "mnem": "The same \"a few\" idiom — 2,3 in front of any counter (個 pieces, 回 times, 人 people): \"ni-san\" + counter = two or three of them.",
+      "tip": "Slot a counter after 「２，３」 to mean \"a few\": ２，３個 (a few items), ２，３回 (a few times), ２，３人 (a few people). The written comma is just how the two numerals are shown.",
+      "accent": 0
+    },
+    {
+      "key": "mnn:17:27",
+      "kana": "～までに",
+      "kanji": "",
+      "context": "",
+      "mean": "by ~, before ~ (deadline)",
+      "cat": "expression",
+      "type": "",
+      "trans": "",
+      "dict": "までに",
+      "dictRead": "までに",
+      "audio": "/Audio/minnamoi/bai17/00010101001000111.mp3",
+      "levels": {
+        "N5": [
+          "５<ruby>時<rt>じ</rt></ruby>までに<ruby>帰<rt>かえ</rt></ruby>ります。",
+          "I'll be back by five o'clock."
+        ],
+        "N4": [
+          "<ruby>金曜日<rt>きんようび</rt></ruby>までにレポートを<ruby>出<rt>だ</rt></ruby>さなければなりません。",
+          "I have to hand in the report by Friday."
+        ],
+        "N3": [
+          "<ruby>締<rt>し</rt></ruby>め<ruby>切<rt>き</rt></ruby>りまでに<ruby>終<rt>お</rt></ruby>わるように、<ruby>毎日<rt>まいにち</rt></ruby><ruby>少<rt>すこ</rt></ruby>しずつ<ruby>進<rt>すす</rt></ruby>めています。",
+          "So that I finish by the deadline, I'm making a little progress every day."
+        ],
+        "N2": [
+          "<ruby>来週<rt>らいしゅう</rt></ruby>までに<ruby>仕上<rt>しあ</rt></ruby>げると<ruby>約束<rt>やくそく</rt></ruby>したものの、<ruby>間<rt>ま</rt></ruby>に<ruby>合<rt>あ</rt></ruby>うかどうか<ruby>自信<rt>じしん</rt></ruby>がない。",
+          "Although I promised to finish by next week, I'm not confident I'll make it in time."
+        ],
+        "N1": [
+          "<ruby>期日<rt>きじつ</rt></ruby>までに<ruby>提出<rt>ていしゅつ</rt></ruby>されない<ruby>限<rt>かぎ</rt></ruby>り、いかなる<ruby>理由<rt>りゆう</rt></ruby>があろうとも<ruby>受理<rt>じゅり</rt></ruby>はできかねます。",
+          "Unless it is submitted by the due date, we are unable to accept it for any reason whatsoever."
+        ]
+      },
+      "mnem": "まで (up to) + に (at) — the deadline point you must be done BY; \"made-ni\" marks a limit you complete an action before.",
+      "tip": "〜までに = a DEADLINE (finish the action before this point): 5時までに帰る (be back by 5). Don't confuse it with plain 〜まで (continuous \"until\"): 5時まで待つ (wait until 5, the whole span).",
+      "accent": 0
+    },
+    {
+      "key": "mnn:17:28",
+      "kana": "ですから",
+      "kanji": "",
+      "context": "",
+      "mean": "therefore, so, that's why",
+      "cat": "expression",
+      "type": "",
+      "trans": "",
+      "dict": "ですから",
+      "dictRead": "ですから",
+      "audio": "/Audio/minnamoi/bai17/00010101001001000.mp3",
+      "levels": {
+        "N5": [
+          "<ruby>熱<rt>ねつ</rt></ruby>があります。ですから、<ruby>早<rt>はや</rt></ruby>く<ruby>帰<rt>かえ</rt></ruby>ります。",
+          "I have a fever. So I'll go home early."
+        ],
+        "N4": [
+          "<ruby>明日<rt>あした</rt></ruby><ruby>出張<rt>しゅっちょう</rt></ruby>します。ですから、<ruby>今日<rt>きょう</rt></ruby>は<ruby>早<rt>はや</rt></ruby>く<ruby>寝<rt>ね</rt></ruby>なければなりません。",
+          "I'm going on a business trip tomorrow. So I have to go to bed early today."
+        ],
+        "N3": [
+          "<ruby>禁煙<rt>きんえん</rt></ruby>です。ですから、ここでたばこを<ruby>吸<rt>す</rt></ruby>わないでください。",
+          "This is a no-smoking area. Therefore, please don't smoke here."
+        ],
+        "N2": [
+          "<ruby>資料<rt>しりょう</rt></ruby>がまだ<ruby>届<rt>とど</rt></ruby>いていません。ですから、<ruby>会議<rt>かいぎ</rt></ruby>は<ruby>延期<rt>えんき</rt></ruby>せざるを<ruby>得<rt>え</rt></ruby>ません。",
+          "The materials still haven't arrived. Therefore, we have no choice but to postpone the meeting."
+        ],
+        "N1": [
+          "<ruby>前例<rt>ぜんれい</rt></ruby>のない<ruby>事態<rt>じたい</rt></ruby>です。ですから、<ruby>慎重<rt>しんちょう</rt></ruby>な<ruby>上<rt>うえ</rt></ruby>にも<ruby>慎重<rt>しんちょう</rt></ruby>を<ruby>期<rt>き</rt></ruby>して<ruby>対応<rt>たいおう</rt></ruby>する<ruby>必要<rt>ひつよう</rt></ruby>がある。",
+          "This is an unprecedented situation. Therefore, we must respond with the utmost caution."
+        ]
+      },
+      "mnem": "です (is/copula) + から (because) — \"because it IS so\" → therefore; the polite sentence-opener form of だから.",
+      "tip": "Sentence-initial connective: state a reason, then ですから + the consequence. It's the polite version of だから. Contrast in-sentence 〜から (because) which attaches to a clause: 熱がありますから、帰ります。",
+      "accent": 0
+    }
+  ],
+  "grammar": [
+    {
+      "pattern": "V(ない形) + ないでください (please don't ~)",
+      "structure": "V(ない形、〜ない) ＋ で ＋ ください",
+      "explain": "A polite request NOT to do something — the negative counterpart of 〜てください. Take the verb's ない-form and add でください: 吸う→吸わない→吸わないでください (please don't smoke). Use it for warnings, rules, or asking someone to refrain. To be gentle you can add よ/ね: 心配しないでくださいね.",
+      "examples": [
+        {
+          "jp": "ここで <ruby>写真<rt>しゃしん</rt></ruby>を <ruby>撮<rt>と</rt></ruby>らないで ください。",
+          "en": "Please don't take photos here."
+        },
+        {
+          "jp": "<ruby>危<rt>あぶ</rt></ruby>ないですから、<ruby>押<rt>お</rt></ruby>さないで ください。",
+          "en": "It's dangerous, so please don't push."
+        },
+        {
+          "jp": "<ruby>大丈夫<rt>だいじょうぶ</rt></ruby>ですから、<ruby>心配<rt>しんぱい</rt></ruby>しないで ください。",
+          "en": "It's all right, so please don't worry."
+        },
+        {
+          "jp": "<ruby>今晩<rt>こんばん</rt></ruby>は おふろに <ruby>入<rt>はい</rt></ruby>らないで くださいね。",
+          "en": "Please don't take a bath tonight, okay?"
+        }
+      ]
+    },
+    {
+      "pattern": "V(ない形) + なければなりません (must / have to ~)",
+      "structure": "V(ない形の「〜ない」→「〜なければ」) ＋ なりません",
+      "explain": "Expresses obligation — 'must' or 'have to.' From the ない-form, drop 〜ない and add 〜なければなりません: 行く→行かない→行かなければなりません (I have to go). It states a necessity there is no way around. In casual speech it shortens to 〜なきゃ(いけない). The question form asks whether something is required: 〜なければなりませんか。",
+      "examples": [
+        {
+          "jp": "あした <ruby>病院<rt>びょういん</rt></ruby>へ <ruby>行<rt>い</rt></ruby>かなければ なりません。",
+          "en": "I have to go to the hospital tomorrow."
+        },
+        {
+          "jp": "<ruby>土曜日<rt>どようび</rt></ruby>までに <ruby>本<rt>ほん</rt></ruby>を <ruby>返<rt>かえ</rt></ruby>さなければ なりません。",
+          "en": "I have to return the book by Saturday."
+        },
+        {
+          "jp": "パスポートを <ruby>見<rt>み</rt></ruby>せなければ なりませんか。",
+          "en": "Do I have to show my passport?"
+        },
+        {
+          "jp": "<ruby>毎日<rt>まいにち</rt></ruby> いくつ <ruby>漢字<rt>かんじ</rt></ruby>を <ruby>覚<rt>おぼ</rt></ruby>えなければ なりませんか。 … ６つ <ruby>覚<rt>おぼ</rt></ruby>えなければ なりません。",
+          "en": "How many kanji do I have to memorize each day? …You have to memorize six."
+        }
+      ]
+    },
+    {
+      "pattern": "V(ない形) + なくてもいいです (need not / don't have to ~)",
+      "structure": "V(ない形の「〜ない」→「〜なくても」) ＋ いいです",
+      "explain": "States that something is NOT necessary — 'you don't have to' / 'there's no need to.' From the ない-form, replace 〜ない with 〜なくてもいいです: 急ぐ→急がない→急がなくてもいいです (you don't have to hurry). It's the natural negative answer to a 〜なければなりませんか question, and the negative of 〜なければなりません.",
+      "examples": [
+        {
+          "jp": "<ruby>時間<rt>じかん</rt></ruby>が ありますから、<ruby>急<rt>いそ</rt></ruby>がなくても いいです。",
+          "en": "We have time, so there's no need to hurry."
+        },
+        {
+          "jp": "あしたは <ruby>休<rt>やす</rt></ruby>みですから、<ruby>早<rt>はや</rt></ruby>く <ruby>起<rt>お</rt></ruby>きなくても いいです。",
+          "en": "Tomorrow is a day off, so you don't have to get up early."
+        },
+        {
+          "jp": "<ruby>悪<rt>わる</rt></ruby>い <ruby>病気<rt>びょうき</rt></ruby>じゃ ありませんから、<ruby>心配<rt>しんぱい</rt></ruby>しなくても いいです。",
+          "en": "It's not a serious illness, so there's no need to worry."
+        },
+        {
+          "jp": "お<ruby>金<rt>かね</rt></ruby>は <ruby>今<rt>いま</rt></ruby> <ruby>払<rt>はら</rt></ruby>わなくても いいです。",
+          "en": "You don't have to pay the money now."
+        }
+      ]
+    },
+    {
+      "pattern": "Nまでに + V (do V by the deadline N)",
+      "structure": "N（時／期日） ＋ までに ＋ V",
+      "explain": "までに marks a DEADLINE — the point by which an action must be completed. 金曜日までに出さなければなりません = I have to submit it by Friday. Distinguish it from plain 〜まで (continuous 'until,' marking the whole span an ongoing action lasts): ５時まで待ちます (I'll wait until 5) vs ５時までに帰ります (I'll be back by 5).",
+      "examples": [
+        {
+          "jp": "レポートは <ruby>金曜日<rt>きんようび</rt></ruby>までに <ruby>出<rt>だ</rt></ruby>して ください。",
+          "en": "Please submit the report by Friday."
+        },
+        {
+          "jp": "<ruby>何時<rt>なんじ</rt></ruby>までに <ruby>寮<rt>りょう</rt></ruby>へ <ruby>帰<rt>かえ</rt></ruby>らなければ なりませんか。 … １０<ruby>時<rt>じ</rt></ruby>までに <ruby>帰<rt>かえ</rt></ruby>らなければ なりません。",
+          "en": "By what time do I have to be back at the dorm? …You have to be back by ten o'clock."
+        },
+        {
+          "jp": "<ruby>水曜日<rt>すいようび</rt></ruby>までに <ruby>本<rt>ほん</rt></ruby>を <ruby>返<rt>かえ</rt></ruby>さなければ なりません。",
+          "en": "I have to return the book by Wednesday."
+        }
+      ]
+    }
+  ],
+  "examples": [
+    {
+      "jp": "これから ビールを <ruby>飲<rt>の</rt></ruby>まないで ください。 …はい、わかりました。",
+      "en": "Please don't drink beer from now on. …Yes, understood."
+    },
+    {
+      "jp": "<ruby>大切<rt>たいせつ</rt></ruby>な <ruby>資料<rt>しりょう</rt></ruby>ですから、なくさないで ください。",
+      "en": "It's an important document, so please don't lose it."
+    },
+    {
+      "jp": "<ruby>図書館<rt>としょかん</rt></ruby>の <ruby>本<rt>ほん</rt></ruby>ですから、<ruby>何<rt>なに</rt></ruby>も <ruby>書<rt>か</rt></ruby>かないで ください。",
+      "en": "It's a library book, so please don't write anything in it."
+    },
+    {
+      "jp": "<ruby>熱<rt>ねつ</rt></ruby>が ありますから、<ruby>病院<rt>びょういん</rt></ruby>へ <ruby>行<rt>い</rt></ruby>かなければ なりません。",
+      "en": "I have a fever, so I have to go to the hospital."
+    },
+    {
+      "jp": "<ruby>会社<rt>かいしゃ</rt></ruby>の <ruby>人<rt>ひと</rt></ruby>は <ruby>英語<rt>えいご</rt></ruby>が わかりませんから、<ruby>日本語<rt>にほんご</rt></ruby>で <ruby>話<rt>はな</rt></ruby>さなければ なりません。",
+      "en": "The people at the company don't understand English, so I have to speak Japanese."
+    },
+    {
+      "jp": "あまり <ruby>暑<rt>あつ</rt></ruby>くないですから、エアコンを つけなくても いいです。",
+      "en": "It's not very hot, so we don't need to turn on the air conditioner."
+    },
+    {
+      "jp": "<ruby>子<rt>こ</rt></ruby>どもも お<ruby>金<rt>かね</rt></ruby>を <ruby>払<rt>はら</rt></ruby>わなければ なりませんか。 …いいえ、<ruby>払<rt>はら</rt></ruby>わなくても いいです。",
+      "en": "Do children have to pay too? …No, they don't have to pay."
+    },
+    {
+      "jp": "ここで <ruby>靴<rt>くつ</rt></ruby>を <ruby>脱<rt>ぬ</rt></ruby>がなければ なりませんか。 …はい、<ruby>脱<rt>ぬ</rt></ruby>がなければ なりません。",
+      "en": "Do I have to take off my shoes here? …Yes, you have to take them off."
+    },
+    {
+      "jp": "<ruby>名前<rt>なまえ</rt></ruby>を <ruby>書<rt>か</rt></ruby>いて ください。<ruby>住所<rt>じゅうしょ</rt></ruby>は <ruby>書<rt>か</rt></ruby>かなくても いいです。",
+      "en": "Please write your name. You don't have to write your address."
+    }
+  ],
+  "conversation": {
+    "title": "どう しましたか (What's the matter?)",
+    "audio": "/Audio/minnahonsatsu1/60.mp3",
+    "lines": [
+      {
+        "role": "医者",
+        "jp": "どう しましたか。",
+        "en": "What's the matter?"
+      },
+      {
+        "role": "患者",
+        "jp": "きのうから のどが <ruby>痛<rt>いた</rt></ruby>くて、<ruby>熱<rt>ねつ</rt></ruby>も <ruby>少<rt>すこ</rt></ruby>し あります。",
+        "en": "Since yesterday, my throat hurts and I have a slight fever too."
+      },
+      {
+        "role": "医者",
+        "jp": "そうですか。 ちょっと <ruby>口<rt>くち</rt></ruby>を <ruby>開<rt>あ</rt></ruby>けて ください。",
+        "en": "I see. Please open your mouth a little."
+      },
+      {
+        "role": "医者",
+        "jp": "かぜですね。２、３<ruby>日<rt>にち</rt></ruby> ゆっくり <ruby>休<rt>やす</rt></ruby>んで ください。",
+        "en": "It's a cold. Please rest quietly for a few days."
+      },
+      {
+        "role": "患者",
+        "jp": "あのう、あしたから <ruby>東京<rt>とうきょう</rt></ruby>へ <ruby>出張<rt>しゅっちょう</rt></ruby>しなければ なりません。",
+        "en": "Um, from tomorrow I have to go on a business trip to Tokyo."
+      },
+      {
+        "role": "医者",
+        "jp": "じゃ、きょうは <ruby>薬<rt>くすり</rt></ruby>を <ruby>飲<rt>の</rt></ruby>んで、 <ruby>早<rt>はや</rt></ruby>く <ruby>寝<rt>ね</rt></ruby>て ください。",
+        "en": "In that case, take some medicine today and go to bed early."
+      },
+      {
+        "role": "患者",
+        "jp": "はい。",
+        "en": "Yes."
+      },
+      {
+        "role": "医者",
+        "jp": "それから <ruby>今晩<rt>こんばん</rt></ruby>は おふろに <ruby>入<rt>はい</rt></ruby>らないで くださいね。",
+        "en": "And also, please don't take a bath tonight."
+      },
+      {
+        "role": "患者",
+        "jp": "はい。わかりました。どうも ありがとう ございました。",
+        "en": "Yes, understood. Thank you very much."
+      }
+    ]
+  }
+}

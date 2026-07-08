@@ -1,0 +1,2086 @@
+{
+  "lesson": 11,
+  "title": "Lesson 11",
+  "theme": "Counting things — the native 〜つ counter (1〜10) plus 〜人・〜台・〜枚・〜回・〜時間・〜週間・〜か月・〜年, with どのくらい, ぐらい, 全部で, and 〜だけ",
+  "source": {
+    "name": "vnjpclub.com",
+    "vocabUrl": "https://www.vnjpclub.com/en/minna-no-nihongo/lesson-11-vocabulary.html",
+    "grammarUrl": "https://www.vnjpclub.com/en/minna-no-nihongo/lesson-11-grammar.html",
+    "note": "Vocabulary, native-speaker audio, and example sentences aggregated from vnjpclub.com (Minna no Nihongo 第2版). For personal study."
+  },
+  "vocab": [
+    {
+      "key": "mnn:11:0",
+      "kana": "います",
+      "kanji": "",
+      "context": "子供が〜",
+      "mean": "to have (a child); there is (animate)",
+      "cat": "verb",
+      "type": "ichidan",
+      "trans": "i",
+      "dict": "いる",
+      "dictRead": "いる",
+      "audio": "/Audio/minnamoi/bai11/00010100100011001.mp3",
+      "accent": 0
+    },
+    {
+      "key": "mnn:11:1",
+      "kana": "います",
+      "kanji": "",
+      "context": "日本に〜",
+      "mean": "to stay, be (in Japan)",
+      "cat": "verb",
+      "type": "ichidan",
+      "trans": "i",
+      "dict": "いる",
+      "dictRead": "いる",
+      "audio": "/Audio/minnamoi/bai11/00010100100011010.mp3",
+      "accent": 0
+    },
+    {
+      "key": "mnn:11:2",
+      "kana": "かかります",
+      "kanji": "",
+      "context": "",
+      "mean": "to take (time or money)",
+      "cat": "verb",
+      "type": "godan",
+      "trans": "i",
+      "dict": "かかる",
+      "dictRead": "かかる",
+      "audio": "/Audio/minnamoi/bai11/00010100100011011.mp3",
+      "levels": {
+        "N5": [
+          "<ruby>駅<rt>えき</rt></ruby>まで<ruby>十分<rt>じゅっぷん</rt></ruby>かかります。",
+          "It takes ten minutes to the station."
+        ],
+        "N4": [
+          "<ruby>大阪<rt>おおさか</rt></ruby>から<ruby>東京<rt>とうきょう</rt></ruby>まで<ruby>新幹線<rt>しんかんせん</rt></ruby>で<ruby>二時間半<rt>にじかんはん</rt></ruby>かかりました。",
+          "It took two and a half hours from Osaka to Tokyo by Shinkansen."
+        ],
+        "N3": [
+          "<ruby>思<rt>おも</rt></ruby>ったよりお<ruby>金<rt>かね</rt></ruby>がかかったので、<ruby>今月<rt>こんげつ</rt></ruby>は<ruby>節約<rt>せつやく</rt></ruby>するようにしています。",
+          "It cost more money than I expected, so I'm making a point of economizing this month."
+        ],
+        "N2": [
+          "この<ruby>工事<rt>こうじ</rt></ruby>は<ruby>予算<rt>よさん</rt></ruby>も<ruby>時間<rt>じかん</rt></ruby>もかかるものの、<ruby>途中<rt>とちゅう</rt></ruby>でやめるわけにはいかない。",
+          "This construction takes both budget and time, but there's no way we can quit halfway."
+        ],
+        "N1": [
+          "<ruby>信頼<rt>しんらい</rt></ruby>を<ruby>築<rt>きず</rt></ruby>くには<ruby>長<rt>なが</rt></ruby>い<ruby>年月<rt>ねんげつ</rt></ruby>がかかるが、それを<ruby>失<rt>うしな</rt></ruby>うのは<ruby>一瞬<rt>いっしゅん</rt></ruby>だと<ruby>言<rt>い</rt></ruby>わざるを<ruby>得<rt>え</rt></ruby>ない。",
+          "Building trust takes long years, yet one cannot but say that losing it takes only an instant."
+        ]
+      },
+      "mnem": "\"かかる\" — a task hangs (かかる, to hang) over you and \"catches\" your time and money.",
+      "tip": "かかる takes time/money as its subject (お金がかかる, 時間がかかる) — the thing spent is が, not を; don't confuse it with the identical-sounding 掛かる (to hang) or 罹る (to catch an illness).",
+      "accent": 3
+    },
+    {
+      "key": "mnn:11:3",
+      "kana": "やすみます",
+      "kanji": "休みます",
+      "context": "会社を〜",
+      "mean": "to take (a day) off, be absent from [work]",
+      "cat": "verb",
+      "type": "godan",
+      "trans": "t",
+      "dict": "休む",
+      "dictRead": "やすむ",
+      "audio": "/Audio/minnamoi/bai11/00010100100011100.mp3",
+      "levels": {
+        "N5": [
+          "<ruby>今日<rt>きょう</rt></ruby>は<ruby>会社<rt>かいしゃ</rt></ruby>を<ruby>休<rt>やす</rt></ruby>みます。",
+          "I'm taking the day off work today."
+        ],
+        "N4": [
+          "<ruby>風邪<rt>かぜ</rt></ruby>をひいたから、<ruby>学校<rt>がっこう</rt></ruby>を<ruby>休<rt>やす</rt></ruby>みました。",
+          "Because I caught a cold, I was absent from school."
+        ],
+        "N3": [
+          "<ruby>疲<rt>つか</rt></ruby>れたときは<ruby>無理<rt>むり</rt></ruby>をせず、しっかり<ruby>休<rt>やす</rt></ruby>むようにしています。",
+          "When I'm tired, I make a point of not overdoing it and resting properly."
+        ],
+        "N2": [
+          "<ruby>大切<rt>たいせつ</rt></ruby>な<ruby>会議<rt>かいぎ</rt></ruby>がある<ruby>以上<rt>いじょう</rt></ruby>、<ruby>熱<rt>ねつ</rt></ruby>があっても<ruby>会社<rt>かいしゃ</rt></ruby>を<ruby>休<rt>やす</rt></ruby>むわけにはいかない。",
+          "Given that there's an important meeting, I can't take the day off even if I have a fever."
+        ],
+        "N1": [
+          "<ruby>働<rt>はたら</rt></ruby>きづめの<ruby>彼<rt>かれ</rt></ruby>は、たとえ<ruby>体調<rt>たいちょう</rt></ruby>を<ruby>崩<rt>くず</rt></ruby>そうとも<ruby>一日<rt>いちにち</rt></ruby>たりとも<ruby>仕事<rt>しごと</rt></ruby>を<ruby>休<rt>やす</rt></ruby>もうとはしなかった。",
+          "He worked without pause and would not take even a single day off from work, no matter how much his health broke down."
+        ]
+      },
+      "mnem": "\"やすむ\" — after work you say \"yes, moo(ve) to bed\" and rest; the same 休 as 休み (a break).",
+      "tip": "With を it means to be absent FROM something (会社を休む = take off work); intransitively it just means to rest — and note the noun 休み (a holiday/break) comes from the same stem.",
+      "accent": 3
+    },
+    {
+      "key": "mnn:11:4",
+      "kana": "ひとつ",
+      "kanji": "一つ",
+      "context": "",
+      "mean": "one (thing)",
+      "cat": "phrase",
+      "type": "",
+      "trans": "",
+      "dict": "一つ",
+      "dictRead": "ひとつ",
+      "audio": "/Audio/minnamoi/bai11/00010100100011101.mp3",
+      "levels": {
+        "N5": [
+          "りんごを<ruby>一<rt>ひと</rt></ruby>つ<ruby>買<rt>か</rt></ruby>いました。",
+          "I bought one apple."
+        ],
+        "N4": [
+          "テーブルの<ruby>上<rt>うえ</rt></ruby>に<ruby>卵<rt>たまご</rt></ruby>が<ruby>一<rt>ひと</rt></ruby>つだけ<ruby>残<rt>のこ</rt></ruby>っています。",
+          "There is only one egg left on the table."
+        ],
+        "N3": [
+          "<ruby>質問<rt>しつもん</rt></ruby>を<ruby>一<rt>ひと</rt></ruby>つずつ<ruby>丁寧<rt>ていねい</rt></ruby>に<ruby>答<rt>こた</rt></ruby>えるようにしています。",
+          "I make a point of answering the questions carefully, one at a time."
+        ],
+        "N2": [
+          "<ruby>問題<rt>もんだい</rt></ruby>を<ruby>一<rt>ひと</rt></ruby>つ<ruby>解決<rt>かいけつ</rt></ruby>したと<ruby>思<rt>おも</rt></ruby>ったら、また<ruby>次<rt>つぎ</rt></ruby>の<ruby>問題<rt>もんだい</rt></ruby>が<ruby>出<rt>で</rt></ruby>てくる。",
+          "Just when I think I've solved one problem, the next one comes up."
+        ],
+        "N1": [
+          "<ruby>選択肢<rt>せんたくし</rt></ruby>が<ruby>一<rt>ひと</rt></ruby>つしかない<ruby>以上<rt>いじょう</rt></ruby>、それに<ruby>賭<rt>か</rt></ruby>けるほかに<ruby>道<rt>みち</rt></ruby>はなかった。",
+          "Given that there was only one option, there was no path but to stake everything on it."
+        ]
+      },
+      "mnem": "一つ = ひと (a person, 人) + つ; picture one single ひと holding up one finger: \"just the one.\"",
+      "tip": "〜つ is the native (和語) counter for general objects and works only 1〜10 (一つ〜十); above ten switch to 〜個 or the Sino-Japanese numbers, and note the reading is ひと-つ, not いち.",
+      "accent": 2
+    },
+    {
+      "key": "mnn:11:5",
+      "kana": "ふたつ",
+      "kanji": "二つ",
+      "context": "",
+      "mean": "two (things)",
+      "cat": "phrase",
+      "type": "",
+      "trans": "",
+      "dict": "二つ",
+      "dictRead": "ふたつ",
+      "audio": "/Audio/minnamoi/bai11/00010100100011110.mp3",
+      "levels": {
+        "N5": [
+          "みかんを<ruby>二<rt>ふた</rt></ruby>つください。",
+          "Please give me two mandarin oranges."
+        ],
+        "N4": [
+          "サンドイッチを<ruby>二<rt>ふた</rt></ruby>つと<ruby>飲<rt>の</rt></ruby>み<ruby>物<rt>もの</rt></ruby>を<ruby>一<rt>ひと</rt></ruby>つ<ruby>注文<rt>ちゅうもん</rt></ruby>しました。",
+          "I ordered two sandwiches and one drink."
+        ],
+        "N3": [
+          "<ruby>方法<rt>ほうほう</rt></ruby>は<ruby>二<rt>ふた</rt></ruby>つあるので、どちらがいいか<ruby>考<rt>かんが</rt></ruby>えるようにしています。",
+          "There are two ways to do it, so I make a point of thinking about which one is better."
+        ],
+        "N2": [
+          "<ruby>仕事<rt>しごと</rt></ruby>と<ruby>家庭<rt>かてい</rt></ruby>という<ruby>二<rt>ふた</rt></ruby>つの<ruby>ものを両立<rt>りょうりつ</rt></ruby>させるのは、<ruby>思<rt>おも</rt></ruby>ったより<ruby>難<rt>むずか</rt></ruby>しい。",
+          "Balancing the two things of work and family is harder than I thought."
+        ],
+        "N1": [
+          "<ruby>二<rt>ふた</rt></ruby>つの<ruby>相反<rt>あいはん</rt></ruby>する<ruby>意見<rt>いけん</rt></ruby>の<ruby>間<rt>あいだ</rt></ruby>で、どちらを<ruby>取<rt>と</rt></ruby>るべきか<ruby>決<rt>き</rt></ruby>めかねている。",
+          "I am finding it hard to decide which of two conflicting opinions I ought to take."
+        ]
+      },
+      "mnem": "二つ = ふた (a lid, 蓋) + つ; two lids on a pair of pots — ふた-つ, two of something.",
+      "tip": "The native counter's stem changes shape (ひと/ふた/み…), so memorize the whole 一つ〜十 series rather than deriving it; ふたつ is not read につ.",
+      "accent": 3
+    },
+    {
+      "key": "mnn:11:6",
+      "kana": "みっつ",
+      "kanji": "三つ",
+      "context": "",
+      "mean": "three (things)",
+      "cat": "phrase",
+      "type": "",
+      "trans": "",
+      "dict": "三つ",
+      "dictRead": "みっつ",
+      "audio": "/Audio/minnamoi/bai11/00010100100011111.mp3",
+      "levels": {
+        "N5": [
+          "ケーキを<ruby>三<rt>みっ</rt></ruby>つ<ruby>買<rt>か</rt></ruby>いました。",
+          "I bought three cakes."
+        ],
+        "N4": [
+          "<ruby>子<rt>こ</rt></ruby>どもが<ruby>三<rt>みっ</rt></ruby>つのりんごを<ruby>兄弟<rt>きょうだい</rt></ruby>で<ruby>分<rt>わ</rt></ruby>けました。",
+          "The children divided the three apples among the siblings."
+        ],
+        "N3": [
+          "<ruby>大切<rt>たいせつ</rt></ruby>なことは<ruby>三<rt>みっ</rt></ruby>つあるので、<ruby>順番<rt>じゅんばん</rt></ruby>に<ruby>説明<rt>せつめい</rt></ruby>するようにしています。",
+          "There are three important points, so I make a point of explaining them in order."
+        ],
+        "N2": [
+          "<ruby>条件<rt>じょうけん</rt></ruby>は<ruby>三<rt>みっ</rt></ruby>つあるものの、そのすべてを<ruby>満<rt>み</rt></ruby>たすのは<ruby>難<rt>むずか</rt></ruby>しい。",
+          "Although there are three conditions, satisfying all of them is difficult."
+        ],
+        "N1": [
+          "<ruby>計画<rt>けいかく</rt></ruby>を<ruby>三<rt>みっ</rt></ruby>つの<ruby>段階<rt>だんかい</rt></ruby>に<ruby>分<rt>わ</rt></ruby>けて<ruby>進<rt>すす</rt></ruby>めることにした<ruby>以上<rt>いじょう</rt></ruby>、<ruby>途中<rt>とちゅう</rt></ruby>で<ruby>方針<rt>ほうしん</rt></ruby>を<ruby>変<rt>か</rt></ruby>えるわけにはいかない。",
+          "Given that we decided to proceed by dividing the plan into three stages, we cannot change the policy midway."
+        ]
+      },
+      "mnem": "三つ = み (three, from 三/みっ) + つ; hear the little pause \"mit-tsu\" as you tap out three.",
+      "tip": "Note the small っ (glottal stop): it's みっつ, not みつ; the doubling appears in 三つ・六つ・八つ within this counter series.",
+      "accent": 3
+    },
+    {
+      "key": "mnn:11:7",
+      "kana": "よっつ",
+      "kanji": "四つ",
+      "context": "",
+      "mean": "four (things)",
+      "cat": "phrase",
+      "type": "",
+      "trans": "",
+      "dict": "四つ",
+      "dictRead": "よっつ",
+      "audio": "/Audio/minnamoi/bai11/00010100100100000.mp3",
+      "levels": {
+        "N5": [
+          "いすが<ruby>四<rt>よっ</rt></ruby>つあります。",
+          "There are four chairs."
+        ],
+        "N4": [
+          "<ruby>卵<rt>たまご</rt></ruby>を<ruby>四<rt>よっ</rt></ruby>つ<ruby>使<rt>つか</rt></ruby>って、ケーキを<ruby>作<rt>つく</rt></ruby>りました。",
+          "I used four eggs and made a cake."
+        ],
+        "N3": [
+          "<ruby>季節<rt>きせつ</rt></ruby>は<ruby>四<rt>よっ</rt></ruby>つあり、それぞれに<ruby>楽<rt>たの</rt></ruby>しみ<ruby>方<rt>かた</rt></ruby>があります。",
+          "There are four seasons, and each has its own way to be enjoyed."
+        ],
+        "N2": [
+          "<ruby>部屋<rt>へや</rt></ruby>は<ruby>四<rt>よっ</rt></ruby>つあるものの、<ruby>全部<rt>ぜんぶ</rt></ruby><ruby>荷物<rt>にもつ</rt></ruby>でいっぱいだ。",
+          "Although there are four rooms, they're all full of luggage."
+        ],
+        "N1": [
+          "<ruby>提案<rt>ていあん</rt></ruby>された<ruby>案<rt>あん</rt></ruby>は<ruby>四<rt>よっ</rt></ruby>つに<ruby>及<rt>およ</rt></ruby>んだが、<ruby>結局<rt>けっきょく</rt></ruby>どれも<ruby>採用<rt>さいよう</rt></ruby>されるには<ruby>至<rt>いた</rt></ruby>らなかった。",
+          "The proposals put forward came to four in number, but in the end none of them was adopted."
+        ]
+      },
+      "mnem": "四つ = よ (four, from 四/よん) + っつ; \"yot-tsu\" — a yacht carrying four passengers.",
+      "tip": "The 四 here reads よ, not し or よん; in this native counter it's always よっつ, and don't mix it up with 四人 (よにん, four people).",
+      "accent": 3
+    },
+    {
+      "key": "mnn:11:8",
+      "kana": "いつつ",
+      "kanji": "五つ",
+      "context": "",
+      "mean": "five (things)",
+      "cat": "phrase",
+      "type": "",
+      "trans": "",
+      "dict": "五つ",
+      "dictRead": "いつつ",
+      "audio": "/Audio/minnamoi/bai11/00010100100100001.mp3",
+      "levels": {
+        "N5": [
+          "みかんを<ruby>五<rt>いつ</rt></ruby>つ<ruby>食<rt>た</rt></ruby>べました。",
+          "I ate five mandarin oranges."
+        ],
+        "N4": [
+          "<ruby>店<rt>みせ</rt></ruby>で<ruby>五<rt>いつ</rt></ruby>つのパンを<ruby>買<rt>か</rt></ruby>って<ruby>帰<rt>かえ</rt></ruby>りました。",
+          "I bought five loaves of bread at the shop and went home."
+        ],
+        "N3": [
+          "<ruby>朝<rt>あさ</rt></ruby><ruby>五<rt>いつ</rt></ruby>つの<ruby>習慣<rt>しゅうかん</rt></ruby>を<ruby>続<rt>つづ</rt></ruby>けるようにしています。",
+          "I make a point of keeping up five morning habits."
+        ],
+        "N2": [
+          "<ruby>候補<rt>こうほ</rt></ruby>は<ruby>五<rt>いつ</rt></ruby>つあるものの、<ruby>予算<rt>よさん</rt></ruby>の<ruby>都合<rt>つごう</rt></ruby>で<ruby>一<rt>ひと</rt></ruby>つしか<ruby>選<rt>えら</rt></ruby>べない。",
+          "Although there are five candidates, due to budget constraints we can only choose one."
+        ],
+        "N1": [
+          "<ruby>五<rt>いつ</rt></ruby>つの<ruby>原則<rt>げんそく</rt></ruby>を<ruby>掲<rt>かか</rt></ruby>げた<ruby>以上<rt>いじょう</rt></ruby>、<ruby>組織<rt>そしき</rt></ruby><ruby>全体<rt>ぜんたい</rt></ruby>でそれを<ruby>徹底<rt>てってい</rt></ruby>せざるを<ruby>得<rt>え</rt></ruby>ない。",
+          "Having set forth five principles, the whole organization has no choice but to enforce them thoroughly."
+        ]
+      },
+      "mnem": "五つ = い (from 五/いち-ish) + つつ; \"it-tsu-tsu,\" five things stacked up.",
+      "tip": "五つ reads いつつ (not ごつ); the 五 keeps its 訓 reading here, and it fits the 1〜10 native series alongside むっつ, ななつ.",
+      "accent": 2
+    },
+    {
+      "key": "mnn:11:9",
+      "kana": "むっつ",
+      "kanji": "六つ",
+      "context": "",
+      "mean": "six (things)",
+      "cat": "phrase",
+      "type": "",
+      "trans": "",
+      "dict": "六つ",
+      "dictRead": "むっつ",
+      "audio": "/Audio/minnamoi/bai11/00010100100100010.mp3",
+      "levels": {
+        "N5": [
+          "<ruby>部屋<rt>へや</rt></ruby>が<ruby>六<rt>むっ</rt></ruby>つあります。",
+          "There are six rooms."
+        ],
+        "N4": [
+          "<ruby>箱<rt>はこ</rt></ruby>の<ruby>中<rt>なか</rt></ruby>にりんごが<ruby>六<rt>むっ</rt></ruby>つ<ruby>入<rt>はい</rt></ruby>っていました。",
+          "There were six apples in the box."
+        ],
+        "N3": [
+          "<ruby>毎日<rt>まいにち</rt></ruby><ruby>六<rt>むっ</rt></ruby>つの<ruby>単語<rt>たんご</rt></ruby>を<ruby>覚<rt>おぼ</rt></ruby>えるようにしています。",
+          "I make a point of memorizing six words every day."
+        ],
+        "N2": [
+          "<ruby>課題<rt>かだい</rt></ruby>は<ruby>六<rt>むっ</rt></ruby>つあるものの、<ruby>締<rt>し</rt></ruby>め<ruby>切<rt>き</rt></ruby>りまでには<ruby>終<rt>お</rt></ruby>わりそうにない。",
+          "Although there are six assignments, it doesn't look like I'll finish by the deadline."
+        ],
+        "N1": [
+          "<ruby>手順<rt>てじゅん</rt></ruby>は<ruby>六<rt>むっ</rt></ruby>つに<ruby>分<rt>わ</rt></ruby>かれており、どの<ruby>一<rt>ひと</rt></ruby>つを<ruby>省<rt>はぶ</rt></ruby>いても<ruby>正<rt>ただ</rt></ruby>しい<ruby>結果<rt>けっか</rt></ruby>は<ruby>得<rt>え</rt></ruby>られない。",
+          "The procedure is divided into six steps, and omitting any single one of them yields no correct result."
+        ]
+      },
+      "mnem": "六つ = む (from 六/むい) + っつ; \"moot-tsu\" — six mutts (dogs) lined up.",
+      "tip": "Another small-っ member: むっつ, not むつ; the 六 reads む here, distinct from ろく (as in 六人 ろくにん).",
+      "accent": 3
+    },
+    {
+      "key": "mnn:11:10",
+      "kana": "ななつ",
+      "kanji": "七つ",
+      "context": "",
+      "mean": "seven (things)",
+      "cat": "phrase",
+      "type": "",
+      "trans": "",
+      "dict": "七つ",
+      "dictRead": "ななつ",
+      "audio": "/Audio/minnamoi/bai11/00010100100100011.mp3",
+      "levels": {
+        "N5": [
+          "テーブルが<ruby>七<rt>なな</rt></ruby>つあります。",
+          "There are seven tables."
+        ],
+        "N4": [
+          "かばんの<ruby>中<rt>なか</rt></ruby>に<ruby>本<rt>ほん</rt></ruby>が<ruby>七<rt>なな</rt></ruby>つ<ruby>入<rt>はい</rt></ruby>っています。",
+          "There are seven books in the bag."
+        ],
+        "N3": [
+          "<ruby>週<rt>しゅう</rt></ruby>に<ruby>七<rt>なな</rt></ruby>つの<ruby>目標<rt>もくひょう</rt></ruby>を<ruby>立<rt>た</rt></ruby>てるようにしています。",
+          "I make a point of setting seven goals per week."
+        ],
+        "N2": [
+          "<ruby>方法<rt>ほうほう</rt></ruby>は<ruby>七<rt>なな</rt></ruby>つあるものの、どれも<ruby>一長一短<rt>いっちょういったん</rt></ruby>だ。",
+          "Although there are seven methods, every one of them has its pros and cons."
+        ],
+        "N1": [
+          "<ruby>幸運<rt>こううん</rt></ruby>をもたらすとされる<ruby>七<rt>なな</rt></ruby>つの<ruby>神<rt>かみ</rt></ruby>にあやかろうと、<ruby>多<rt>おお</rt></ruby>くの<ruby>人<rt>ひと</rt></ruby>が<ruby>参拝<rt>さんぱい</rt></ruby>に<ruby>訪<rt>おとず</rt></ruby>れる。",
+          "Hoping to share in the blessings of the seven gods said to bring good fortune, many people come to worship."
+        ]
+      },
+      "mnem": "七つ = なな (seven, 七) + つ; \"nana-tsu\" — say nana twice as a bright, easy seven.",
+      "tip": "七つ reads ななつ (never しちつ); the native series uses なな, while the Sino reading しち appears in 七時 (しちじ).",
+      "accent": 2
+    },
+    {
+      "key": "mnn:11:11",
+      "kana": "やっつ",
+      "kanji": "八つ",
+      "context": "",
+      "mean": "eight (things)",
+      "cat": "phrase",
+      "type": "",
+      "trans": "",
+      "dict": "八つ",
+      "dictRead": "やっつ",
+      "audio": "/Audio/minnamoi/bai11/00010100100100100.mp3",
+      "levels": {
+        "N5": [
+          "プレゼントを<ruby>八<rt>やっ</rt></ruby>つ<ruby>送<rt>おく</rt></ruby>りました。",
+          "I sent eight presents."
+        ],
+        "N4": [
+          "お<ruby>皿<rt>さら</rt></ruby>の<ruby>上<rt>うえ</rt></ruby>にお<ruby>菓子<rt>かし</rt></ruby>が<ruby>八<rt>やっ</rt></ruby>つ<ruby>並<rt>なら</rt></ruby>んでいます。",
+          "Eight sweets are arranged on the plate."
+        ],
+        "N3": [
+          "<ruby>毎朝<rt>まいあさ</rt></ruby><ruby>八<rt>やっ</rt></ruby>つの<ruby>体操<rt>たいそう</rt></ruby>をするようにしています。",
+          "I make a point of doing eight exercises every morning."
+        ],
+        "N2": [
+          "<ruby>質問<rt>しつもん</rt></ruby>は<ruby>八<rt>やっ</rt></ruby>つあるものの、<ruby>時間<rt>じかん</rt></ruby>の<ruby>都合<rt>つごう</rt></ruby>で<ruby>半分<rt>はんぶん</rt></ruby>しか<ruby>答<rt>こた</rt></ruby>えられなかった。",
+          "Although there were eight questions, due to time constraints I could only answer half."
+        ],
+        "N1": [
+          "<ruby>八<rt>やっ</rt></ruby>つに<ruby>及<rt>およ</rt></ruby>ぶ<ruby>難関<rt>なんかん</rt></ruby>をくぐり<ruby>抜<rt>ぬ</rt></ruby>けてこそ、はじめて<ruby>一人前<rt>いちにんまえ</rt></ruby>と<ruby>認<rt>みと</rt></ruby>められる。",
+          "Only by getting through as many as eight ordeals is one finally recognized as fully fledged."
+        ]
+      },
+      "mnem": "八つ = や (from 八/やち) + っつ; \"yat-tsu\" — a yacht (again!) but now eight of them.",
+      "tip": "八つ reads やっつ with the small っ; the 八 reads や, distinct from はち (as in 八時 はちじ).",
+      "accent": 3
+    },
+    {
+      "key": "mnn:11:12",
+      "kana": "ここのつ",
+      "kanji": "九つ",
+      "context": "",
+      "mean": "nine (things)",
+      "cat": "phrase",
+      "type": "",
+      "trans": "",
+      "dict": "九つ",
+      "dictRead": "ここのつ",
+      "audio": "/Audio/minnamoi/bai11/00010100100100101.mp3",
+      "levels": {
+        "N5": [
+          "りんごが<ruby>九<rt>ここの</rt></ruby>つあります。",
+          "There are nine apples."
+        ],
+        "N4": [
+          "<ruby>妹<rt>いもうと</rt></ruby>は<ruby>飴<rt>あめ</rt></ruby>を<ruby>九<rt>ここの</rt></ruby>つも<ruby>食<rt>た</rt></ruby>べました。",
+          "My little sister ate as many as nine candies."
+        ],
+        "N3": [
+          "<ruby>一日<rt>いちにち</rt></ruby>に<ruby>九<rt>ここの</rt></ruby>つの<ruby>作業<rt>さぎょう</rt></ruby>をこなすようにしています。",
+          "I make a point of getting through nine tasks a day."
+        ],
+        "N2": [
+          "<ruby>選択肢<rt>せんたくし</rt></ruby>は<ruby>九<rt>ここの</rt></ruby>つあるものの、どれも<ruby>決<rt>けっ</rt></ruby>め<ruby>手<rt>て</rt></ruby>に<ruby>欠<rt>か</rt></ruby>ける。",
+          "Although there are nine options, none of them is decisive."
+        ],
+        "N1": [
+          "<ruby>九<rt>ここの</rt></ruby>つの<ruby>難題<rt>なんだい</rt></ruby>を<ruby>前<rt>まえ</rt></ruby>にしても、<ruby>彼<rt>かれ</rt></ruby>は<ruby>一<rt>ひと</rt></ruby>つずつ<ruby>着実<rt>ちゃくじつ</rt></ruby>に<ruby>片<rt>かた</rt></ruby>づけていった。",
+          "Even faced with nine difficult problems, he steadily cleared them away one by one."
+        ]
+      },
+      "mnem": "九つ = ここの (nine, 九) + つ; \"koko-no-tsu\" — knock-knock-no, count to nine at the door.",
+      "tip": "九つ reads ここのつ (never きゅうつ / くつ); the 九 keeps the native ここの here, versus きゅう/く elsewhere (九時 くじ).",
+      "accent": 2
+    },
+    {
+      "key": "mnn:11:13",
+      "kana": "とお",
+      "kanji": "十",
+      "context": "",
+      "mean": "ten (things)",
+      "cat": "phrase",
+      "type": "",
+      "trans": "",
+      "dict": "十",
+      "dictRead": "とお",
+      "audio": "/Audio/minnamoi/bai11/00010100100100110.mp3",
+      "levels": {
+        "N5": [
+          "みかんを<ruby>十<rt>とお</rt></ruby><ruby>買<rt>か</rt></ruby>いました。",
+          "I bought ten mandarin oranges."
+        ],
+        "N4": [
+          "<ruby>箱<rt>はこ</rt></ruby>の<ruby>中<rt>なか</rt></ruby>にお<ruby>菓子<rt>かし</rt></ruby>が<ruby>十<rt>とお</rt></ruby><ruby>入<rt>はい</rt></ruby>っています。",
+          "There are ten sweets in the box."
+        ],
+        "N3": [
+          "<ruby>毎日<rt>まいにち</rt></ruby><ruby>十<rt>とお</rt></ruby>ずつ<ruby>漢字<rt>かんじ</rt></ruby>を<ruby>覚<rt>おぼ</rt></ruby>えるようにしています。",
+          "I make a point of learning ten kanji at a time every day."
+        ],
+        "N2": [
+          "りんごは<ruby>十<rt>とお</rt></ruby>あるものの、<ruby>傷<rt>いた</rt></ruby>んでいるものも<ruby>混<rt>ま</rt></ruby>じっている。",
+          "Although there are ten apples, some spoiled ones are mixed in too."
+        ],
+        "N1": [
+          "<ruby>数<rt>かぞ</rt></ruby>えて<ruby>十<rt>とお</rt></ruby>になったところで、ようやく<ruby>全員<rt>ぜんいん</rt></ruby>そろったことに<ruby>気<rt>き</rt></ruby>づいた。",
+          "It was only when the count reached ten that I finally realized everyone had gathered."
+        ]
+      },
+      "mnem": "十 = とお; \"toe\" — count all ten toes and you reach 十.",
+      "tip": "十 as a native counter reads とお (the endpoint of the 一つ〜十 series) and takes NO 〜つ; don't read it じゅう here, and don't confuse the count とお with the date 十日 (とおか, the 10th).",
+      "accent": 1
+    },
+    {
+      "key": "mnn:11:14",
+      "kana": "いくつ",
+      "kanji": "",
+      "context": "",
+      "mean": "how many; how old",
+      "cat": "phrase",
+      "type": "",
+      "trans": "",
+      "dict": "いくつ",
+      "dictRead": "いくつ",
+      "audio": "/Audio/minnamoi/bai11/00010100100100111.mp3",
+      "levels": {
+        "N5": [
+          "りんごはいくつありますか。",
+          "How many apples are there?"
+        ],
+        "N4": [
+          "<ruby>卵<rt>たまご</rt></ruby>をいくつ<ruby>買<rt>か</rt></ruby>いましたか。",
+          "How many eggs did you buy?"
+        ],
+        "N3": [
+          "<ruby>質問<rt>しつもん</rt></ruby>がいくつあっても、<ruby>丁寧<rt>ていねい</rt></ruby>に<ruby>答<rt>こた</rt></ruby>えるようにしています。",
+          "No matter how many questions there are, I make a point of answering them politely."
+        ],
+        "N2": [
+          "<ruby>問題点<rt>もんだいてん</rt></ruby>がいくつもあるものの、まず<ruby>一<rt>ひと</rt></ruby>つずつ<ruby>片<rt>かた</rt></ruby>づけていくしかない。",
+          "Although there are any number of problems, there's nothing for it but to tackle them one at a time."
+        ],
+        "N1": [
+          "いくつもの<ruby>困難<rt>こんなん</rt></ruby>を<ruby>乗<rt>の</rt></ruby>り<ruby>越<rt>こ</rt></ruby>えてきたからこそ、<ruby>今<rt>いま</rt></ruby>の<ruby>成功<rt>せいこう</rt></ruby>があると<ruby>言<rt>い</rt></ruby>っても<ruby>過言<rt>かごん</rt></ruby>ではない。",
+          "It is no exaggeration to say that today's success exists precisely because we overcame any number of hardships."
+        ]
+      },
+      "mnem": "いくつ = the 〜つ counter with the question-word いく〜 (how many); \"how many tsu?\"",
+      "tip": "いくつ asks \"how many\" for 〜つ-countable things AND politely \"how old?\" (お幾つですか); for money use いくら, and for specific counters use 何〜 (何枚・何台).",
+      "accent": 1
+    },
+    {
+      "key": "mnn:11:15",
+      "kana": "ひとり",
+      "kanji": "一人",
+      "context": "",
+      "mean": "one person; alone",
+      "cat": "phrase",
+      "type": "",
+      "trans": "",
+      "dict": "一人",
+      "dictRead": "ひとり",
+      "audio": "/Audio/minnamoi/bai11/00010100100101000.mp3",
+      "levels": {
+        "N5": [
+          "<ruby>部屋<rt>へや</rt></ruby>に<ruby>一人<rt>ひとり</rt></ruby>います。",
+          "There is one person in the room."
+        ],
+        "N4": [
+          "<ruby>女<rt>おんな</rt></ruby>の<ruby>子<rt>こ</rt></ruby>が<ruby>一人<rt>ひとり</rt></ruby>だけ<ruby>教室<rt>きょうしつ</rt></ruby>に<ruby>残<rt>のこ</rt></ruby>っています。",
+          "Only one girl is left in the classroom."
+        ],
+        "N3": [
+          "<ruby>休<rt>やす</rt></ruby>みの<ruby>日<rt>ひ</rt></ruby>は<ruby>一人<rt>ひとり</rt></ruby>で<ruby>静<rt>しず</rt></ruby>かに<ruby>過<rt>す</rt></ruby>ごすようにしています。",
+          "On my days off, I make a point of spending time quietly by myself."
+        ],
+        "N2": [
+          "<ruby>一人<rt>ひとり</rt></ruby>で<ruby>抱<rt>かか</rt></ruby>え<ruby>込<rt>こ</rt></ruby>むものの、<ruby>本当<rt>ほんとう</rt></ruby>は<ruby>誰<rt>だれ</rt></ruby>かに<ruby>相談<rt>そうだん</rt></ruby>したいのだろう。",
+          "Although he shoulders it all alone, deep down he probably wants to talk it over with someone."
+        ],
+        "N1": [
+          "<ruby>一人<rt>ひとり</rt></ruby>の<ruby>力<rt>ちから</rt></ruby>で<ruby>成<rt>な</rt></ruby>し<ruby>遂<rt>と</rt></ruby>げたかのように<ruby>語<rt>かた</rt></ruby>るが、<ruby>陰<rt>かげ</rt></ruby>で<ruby>支<rt>ささ</rt></ruby>えた<ruby>人<rt>ひと</rt></ruby>の<ruby>存在<rt>そんざい</rt></ruby>を<ruby>忘<rt>わす</rt></ruby>れてはならない。",
+          "He talks as if he accomplished it by one person's strength alone, but we must not forget those who supported him behind the scenes."
+        ]
+      },
+      "mnem": "一人 = ひと (person, 人) + り; \"hito-ri\" — one lone hito standing by themselves.",
+      "tip": "一人 and 二人 are irregular native readings (ひとり・ふたり); from three people on it's regular Sino 〜人 (三人 さんにん) — and ひとりで means \"alone/by oneself.\"",
+      "accent": 2
+    },
+    {
+      "key": "mnn:11:16",
+      "kana": "ふたり",
+      "kanji": "二人",
+      "context": "",
+      "mean": "two people",
+      "cat": "phrase",
+      "type": "",
+      "trans": "",
+      "dict": "二人",
+      "dictRead": "ふたり",
+      "audio": "/Audio/minnamoi/bai11/00010100100101001.mp3",
+      "levels": {
+        "N5": [
+          "<ruby>兄<rt>あに</rt></ruby>が<ruby>二人<rt>ふたり</rt></ruby>います。",
+          "I have two older brothers."
+        ],
+        "N4": [
+          "<ruby>公園<rt>こうえん</rt></ruby>で<ruby>子<rt>こ</rt></ruby>どもが<ruby>二人<rt>ふたり</rt></ruby><ruby>遊<rt>あそ</rt></ruby>んでいます。",
+          "Two children are playing in the park."
+        ],
+        "N3": [
+          "<ruby>週末<rt>しゅうまつ</rt></ruby>は<ruby>二人<rt>ふたり</rt></ruby>でゆっくり<ruby>過<rt>す</rt></ruby>ごすようにしています。",
+          "On weekends, we make a point of spending time together at a relaxed pace."
+        ],
+        "N2": [
+          "<ruby>二人<rt>ふたり</rt></ruby>は<ruby>喧嘩<rt>けんか</rt></ruby>ばかりしているものの、<ruby>本当<rt>ほんとう</rt></ruby>は<ruby>仲<rt>なか</rt></ruby>がいい。",
+          "Although the two of them are always quarreling, they actually get along well."
+        ],
+        "N1": [
+          "<ruby>二人<rt>ふたり</rt></ruby>の<ruby>間<rt>あいだ</rt></ruby>に<ruby>芽生<rt>めば</rt></ruby>えた<ruby>信頼<rt>しんらい</rt></ruby>は、<ruby>幾<rt>いく</rt></ruby><ruby>年<rt>ねん</rt></ruby>の<ruby>時<rt>とき</rt></ruby>を<ruby>経<rt>へ</rt></ruby>ても<ruby>揺<rt>ゆ</rt></ruby>らぐことはなかった。",
+          "The trust that budded between the two of them did not waver even after the passing of many years."
+        ]
+      },
+      "mnem": "二人 = ふた (from 二/ふた-つ) + り; the same ふた as ふたつ, but 〜り for people: \"futa-ri.\"",
+      "tip": "二人 is the irregular native reading ふたり (not ににん); like 一人 it belongs to the special human counter, and ふたりで means \"the two of us / together.\"",
+      "accent": 3
+    },
+    {
+      "key": "mnn:11:17",
+      "kana": "〜にん",
+      "kanji": "〜人",
+      "context": "何〜",
+      "mean": "counter for people (3 and up: 三人, 四人…)",
+      "cat": "phrase",
+      "type": "",
+      "trans": "",
+      "dict": "〜人",
+      "dictRead": "〜にん",
+      "audio": "/Audio/minnamoi/bai11/00010100100101010.mp3",
+      "levels": {
+        "N5": [
+          "<ruby>学生<rt>がくせい</rt></ruby>が<ruby>四人<rt>よにん</rt></ruby>います。",
+          "There are four students."
+        ],
+        "N4": [
+          "<ruby>会議室<rt>かいぎしつ</rt></ruby>に<ruby>男<rt>おとこ</rt></ruby>の<ruby>人<rt>ひと</rt></ruby>が<ruby>九人<rt>きゅうにん</rt></ruby>います。",
+          "There are nine men in the meeting room."
+        ],
+        "N3": [
+          "パーティーには<ruby>何人<rt>なんにん</rt></ruby><ruby>来<rt>く</rt></ruby>るか、<ruby>前<rt>まえ</rt></ruby>もって<ruby>確<rt>たし</rt></ruby>かめるようにしています。",
+          "I make a point of checking in advance how many people are coming to the party."
+        ],
+        "N2": [
+          "<ruby>参加者<rt>さんかしゃ</rt></ruby>は<ruby>三十人<rt>さんじゅうにん</rt></ruby>を<ruby>超<rt>こ</rt></ruby>えたものの、<ruby>会場<rt>かいじょう</rt></ruby>にはまだ<ruby>余裕<rt>よゆう</rt></ruby>があった。",
+          "Although the participants exceeded thirty people, there was still room to spare in the venue."
+        ],
+        "N1": [
+          "<ruby>何人<rt>なんにん</rt></ruby>もの<ruby>専門家<rt>せんもんか</rt></ruby>が<ruby>検討<rt>けんとう</rt></ruby>を<ruby>重<rt>かさ</rt></ruby>ねた<ruby>末<rt>すえ</rt></ruby>に<ruby>出<rt>だ</rt></ruby>した<ruby>結論<rt>けつろん</rt></ruby>である<ruby>以上<rt>いじょう</rt></ruby>、<ruby>軽々<rt>けいけい</rt></ruby>しく<ruby>覆<rt>くつがえ</rt></ruby>すことはできない。",
+          "Given that this is a conclusion reached after many experts deliberated repeatedly, it cannot be lightly overturned."
+        ]
+      },
+      "mnem": "〜人 counts people; from three up it's the plain 〜にん (三人 さん-にん) — think \"nin\" as in a group of ninja.",
+      "tip": "〜人 reads にん from 三人 on, but 一人・二人 are irregular (ひとり・ふたり) and 四人 is よにん (not よんにん); ask the count with 何人 (なんにん).",
+      "accent": 0
+    },
+    {
+      "key": "mnn:11:18",
+      "kana": "〜だい",
+      "kanji": "〜台",
+      "context": "何〜",
+      "mean": "counter for machines and vehicles",
+      "cat": "phrase",
+      "type": "",
+      "trans": "",
+      "dict": "〜台",
+      "dictRead": "〜だい",
+      "audio": "/Audio/minnamoi/bai11/00010100100101011.mp3",
+      "levels": {
+        "N5": [
+          "テレビが<ruby>二台<rt>にだい</rt></ruby>あります。",
+          "There are two televisions."
+        ],
+        "N4": [
+          "<ruby>駐車場<rt>ちゅうしゃじょう</rt></ruby>に<ruby>車<rt>くるま</rt></ruby>が<ruby>五台<rt>ごだい</rt></ruby><ruby>止<rt>と</rt></ruby>まっています。",
+          "Five cars are parked in the parking lot."
+        ],
+        "N3": [
+          "<ruby>会社<rt>かいしゃ</rt></ruby>では<ruby>古<rt>ふる</rt></ruby>いパソコンを<ruby>新<rt>あたら</rt></ruby>しい<ruby>機種<rt>きしゅ</rt></ruby><ruby>数台<rt>すうだい</rt></ruby>に<ruby>入<rt>い</rt></ruby>れ<ruby>替<rt>か</rt></ruby>えるようにしています。",
+          "At the company, we make a point of replacing the old computers with several new models."
+        ],
+        "N2": [
+          "<ruby>自転車<rt>じてんしゃ</rt></ruby>を<ruby>三台<rt>さんだい</rt></ruby><ruby>買<rt>か</rt></ruby>ったものの、すぐに<ruby>一台<rt>いちだい</rt></ruby><ruby>盗<rt>ぬす</rt></ruby>まれてしまった。",
+          "Although I bought three bicycles, one of them was stolen right away."
+        ],
+        "N1": [
+          "<ruby>最新<rt>さいしん</rt></ruby>の<ruby>機械<rt>きかい</rt></ruby>を<ruby>何台<rt>なんだい</rt></ruby>も<ruby>導入<rt>どうにゅう</rt></ruby>したところで、<ruby>使<rt>つか</rt></ruby>いこなす<ruby>人材<rt>じんざい</rt></ruby>がいなければ<ruby>宝<rt>たから</rt></ruby>の<ruby>持<rt>も</rt></ruby>ち<ruby>腐<rt>ぐさ</rt></ruby>れだ。",
+          "No matter how many of the latest machines you bring in, without people to master them it's a waste of a treasure."
+        ]
+      },
+      "mnem": "〜台 (だい) counts machines and vehicles; picture each car sitting on a platform (台 = stand/base).",
+      "tip": "〜台 is for cars, computers, TVs, machines; don't use it for people (〜人) or flat things (〜枚), and ask the count with 何台 (なんだい).",
+      "accent": 0
+    },
+    {
+      "key": "mnn:11:19",
+      "kana": "〜まい",
+      "kanji": "〜枚",
+      "context": "何〜",
+      "mean": "counter for flat, thin objects (paper, stamps, shirts…)",
+      "cat": "phrase",
+      "type": "",
+      "trans": "",
+      "dict": "〜枚",
+      "dictRead": "〜まい",
+      "audio": "/Audio/minnamoi/bai11/00010100100101100.mp3",
+      "levels": {
+        "N5": [
+          "シャツが<ruby>一枚<rt>いちまい</rt></ruby>あります。",
+          "There is one shirt."
+        ],
+        "N4": [
+          "<ruby>八十円<rt>はちじゅうえん</rt></ruby>の<ruby>切手<rt>きって</rt></ruby>を<ruby>五枚<rt>ごまい</rt></ruby>ください。",
+          "Please give me five eighty-yen stamps."
+        ],
+        "N3": [
+          "<ruby>大切<rt>たいせつ</rt></ruby>な<ruby>書類<rt>しょるい</rt></ruby>は<ruby>必<rt>かなら</rt></ruby>ず<ruby>二枚<rt>にまい</rt></ruby>コピーを<ruby>取<rt>と</rt></ruby>っておくようにしています。",
+          "I make a point of always keeping two copies of important documents."
+        ],
+        "N2": [
+          "<ruby>写真<rt>しゃしん</rt></ruby>を<ruby>何枚<rt>なんまい</rt></ruby>も<ruby>撮<rt>と</rt></ruby>ったものの、<ruby>気<rt>き</rt></ruby>に<ruby>入<rt>い</rt></ruby>ったものは<ruby>一枚<rt>いちまい</rt></ruby>もなかった。",
+          "Although I took any number of photos, there wasn't even one I liked."
+        ],
+        "N1": [
+          "<ruby>一枚<rt>いちまい</rt></ruby>の<ruby>写真<rt>しゃしん</rt></ruby>が、<ruby>言葉<rt>ことば</rt></ruby>では<ruby>語<rt>かた</rt></ruby>り<ruby>尽<rt>つ</rt></ruby>くせない<ruby>歴史<rt>れきし</rt></ruby>の<ruby>重<rt>おも</rt></ruby>みを<ruby>雄弁<rt>ゆうべん</rt></ruby>に<ruby>物語<rt>ものがた</rt></ruby>っていた。",
+          "A single photograph eloquently told the weight of a history that words could never fully convey."
+        ]
+      },
+      "mnem": "〜枚 (まい) counts flat, thin things; picture \"my\" stack of paper, shirts, and CDs — all flat.",
+      "tip": "〜枚 is for flat, thin objects: paper, stamps, plates, shirts, CDs, tickets; use 何枚 (なんまい) to ask how many, and don't apply it to bulky items.",
+      "accent": 0
+    },
+    {
+      "key": "mnn:11:20",
+      "kana": "〜かい",
+      "kanji": "〜回",
+      "context": "何〜",
+      "mean": "counter for times, occurrences",
+      "cat": "phrase",
+      "type": "",
+      "trans": "",
+      "dict": "〜回",
+      "dictRead": "〜かい",
+      "audio": "/Audio/minnamoi/bai11/00010100100101101.mp3",
+      "levels": {
+        "N5": [
+          "<ruby>一週間<rt>いっしゅうかん</rt></ruby>に<ruby>二回<rt>にかい</rt></ruby><ruby>映画<rt>えいが</rt></ruby>を<ruby>見<rt>み</rt></ruby>ます。",
+          "I watch movies twice a week."
+        ],
+        "N4": [
+          "<ruby>道<rt>みち</rt></ruby>が<ruby>分<rt>わ</rt></ruby>からなかったので、<ruby>何回<rt>なんかい</rt></ruby>も<ruby>人<rt>ひと</rt></ruby>に<ruby>聞<rt>き</rt></ruby>きました。",
+          "Because I didn't know the way, I asked people many times."
+        ],
+        "N3": [
+          "<ruby>一日<rt>いちにち</rt></ruby>に<ruby>三回<rt>さんかい</rt></ruby><ruby>薬<rt>くすり</rt></ruby>を<ruby>飲<rt>の</rt></ruby>むようにしています。",
+          "I make a point of taking the medicine three times a day."
+        ],
+        "N2": [
+          "<ruby>何回<rt>なんかい</rt></ruby><ruby>注意<rt>ちゅうい</rt></ruby>したものの、<ruby>彼<rt>かれ</rt></ruby>は<ruby>同<rt>おな</rt></ruby>じ<ruby>失敗<rt>しっぱい</rt></ruby>を<ruby>繰<rt>く</rt></ruby>り<ruby>返<rt>かえ</rt></ruby>している。",
+          "Although I warned him many times, he keeps repeating the same mistake."
+        ],
+        "N1": [
+          "<ruby>幾<rt>いく</rt></ruby><ruby>回<rt>かい</rt></ruby>となく<ruby>挑戦<rt>ちょうせん</rt></ruby>を<ruby>重<rt>かさ</rt></ruby>ねたからこそ、ついに<ruby>栄光<rt>えいこう</rt></ruby>をつかむに<ruby>至<rt>いた</rt></ruby>ったのだ。",
+          "It was precisely because he made attempt after attempt countless times that he finally came to grasp glory."
+        ]
+      },
+      "mnem": "〜回 (かい) counts times/occurrences; picture the dial going around one \"turn\" (回 = to rotate) per time.",
+      "tip": "〜回 counts frequency (二回 = twice); pair it with に for a rate (一週間に二回 = twice a week), and ask with 何回 (なんかい). Don't confuse 回 (times) with 階 (かい, floor of a building).",
+      "accent": 0
+    },
+    {
+      "key": "mnn:11:21",
+      "kana": "りんご",
+      "kanji": "",
+      "context": "",
+      "mean": "apple",
+      "cat": "noun",
+      "type": "",
+      "trans": "",
+      "dict": "りんご",
+      "dictRead": "りんご",
+      "audio": "/Audio/minnamoi/bai11/00010100100101110.mp3",
+      "levels": {
+        "N5": [
+          "<ruby>私<rt>わたし</rt></ruby>はりんごが<ruby>好<rt>す</rt></ruby>きです。",
+          "I like apples."
+        ],
+        "N4": [
+          "<ruby>母<rt>はは</rt></ruby>がりんごを<ruby>三<rt>みっ</rt></ruby>つ<ruby>買<rt>か</rt></ruby>ってきました。",
+          "My mother bought and brought home three apples."
+        ],
+        "N3": [
+          "<ruby>朝<rt>あさ</rt></ruby><ruby>必<rt>かなら</rt></ruby>ずりんごを<ruby>一<rt>ひと</rt></ruby>つ<ruby>食<rt>た</rt></ruby>べるようにしています。",
+          "I make a point of always eating one apple in the morning."
+        ],
+        "N2": [
+          "この<ruby>地方<rt>ちほう</rt></ruby>のりんごは<ruby>甘<rt>あま</rt></ruby>いものの、<ruby>今年<rt>ことし</rt></ruby>は<ruby>不作<rt>ふさく</rt></ruby>で<ruby>値段<rt>ねだん</rt></ruby>が<ruby>高<rt>たか</rt></ruby>い。",
+          "Although the apples from this region are sweet, this year's poor harvest has made them expensive."
+        ],
+        "N1": [
+          "<ruby>青森<rt>あおもり</rt></ruby>のりんごは、<ruby>寒暖<rt>かんだん</rt></ruby>の<ruby>差<rt>さ</rt></ruby>が<ruby>大<rt>おお</rt></ruby>きい<ruby>気候<rt>きこう</rt></ruby>あってこそ、あれほどの<ruby>甘<rt>あま</rt></ruby>みを<ruby>蓄<rt>たくわ</rt></ruby>えるのだという。",
+          "Aomori's apples are said to store up such sweetness precisely because of the climate's large temperature swings."
+        ]
+      },
+      "mnem": "\"りんご\" sounds like \"ringo\" — remember Ringo Starr biting into a fresh red apple.",
+      "tip": "Usually written in kana or katakana (リンゴ); the kanji 林檎 exists but is rarely used. It's counted with 〜つ (りんごを一つ) or 〜個 (いっこ).",
+      "accent": 0
+    },
+    {
+      "key": "mnn:11:22",
+      "kana": "みかん",
+      "kanji": "",
+      "context": "",
+      "mean": "mandarin orange, tangerine",
+      "cat": "noun",
+      "type": "",
+      "trans": "",
+      "dict": "みかん",
+      "dictRead": "みかん",
+      "audio": "/Audio/minnamoi/bai11/00010100100101111.mp3",
+      "levels": {
+        "N5": [
+          "みかんを<ruby>五<rt>いつ</rt></ruby>つ<ruby>食<rt>た</rt></ruby>べました。",
+          "I ate five mandarin oranges."
+        ],
+        "N4": [
+          "<ruby>冬<rt>ふゆ</rt></ruby>は こたつで みかんを <ruby>食<rt>た</rt></ruby>べるのが <ruby>好<rt>す</rt></ruby>きです。",
+          "In winter, I like eating tangerines at the kotatsu."
+        ],
+        "N3": [
+          "<ruby>風邪<rt>かぜ</rt></ruby>をひかないように、<ruby>毎日<rt>まいにち</rt></ruby>みかんを<ruby>食<rt>た</rt></ruby>べるようにしています。",
+          "So as not to catch a cold, I make a point of eating a mandarin orange every day."
+        ],
+        "N2": [
+          "<ruby>甘<rt>あま</rt></ruby>い みかんだと <ruby>思<rt>おも</rt></ruby>って <ruby>買<rt>か</rt></ruby>ったものの、<ruby>思<rt>おも</rt></ruby>いのほか <ruby>酸<rt>す</rt></ruby>っぱかった。",
+          "Although I bought them thinking they were sweet tangerines, they were unexpectedly sour."
+        ],
+        "N1": [
+          "<ruby>温暖<rt>おんだん</rt></ruby>な<ruby>気候<rt>きこう</rt></ruby>に<ruby>恵<rt>めぐ</rt></ruby>まれた この<ruby>地域<rt>ちいき</rt></ruby>は、<ruby>古<rt>ふる</rt></ruby>くから みかんの<ruby>名産地<rt>めいさんち</rt></ruby>として<ruby>知<rt>し</rt></ruby>られている。",
+          "Blessed with a mild climate, this region has long been known as a famous producer of mandarin oranges."
+        ]
+      },
+      "mnem": "\"みかん\" — imagine peeling a tangerine and thinking \"me can\" (みかん) eat it easily, no knife needed.",
+      "tip": "みかん (the easy-to-peel Japanese mandarin) is a different fruit from オレンジ (a Western orange); it's usually written in kana, and counted with 〜つ or 〜個.",
+      "accent": 1
+    },
+    {
+      "key": "mnn:11:23",
+      "kana": "サンドイッチ",
+      "kanji": "",
+      "context": "",
+      "mean": "sandwich",
+      "cat": "noun",
+      "type": "",
+      "trans": "",
+      "dict": "サンドイッチ",
+      "dictRead": "サンドイッチ",
+      "audio": "/Audio/minnamoi/bai11/00010100100110000.mp3",
+      "levels": {
+        "N5": [
+          "サンドイッチを<ruby>二<rt>ふた</rt></ruby>つください。",
+          "Two sandwiches, please."
+        ],
+        "N4": [
+          "<ruby>昼<rt>ひる</rt></ruby>ごはんに サンドイッチを <ruby>作<rt>つく</rt></ruby>って <ruby>持<rt>も</rt></ruby>って <ruby>行<rt>い</rt></ruby>きました。",
+          "I made a sandwich and took it for lunch."
+        ],
+        "N3": [
+          "<ruby>時間<rt>じかん</rt></ruby>がない<ruby>朝<rt>あさ</rt></ruby>は、サンドイッチで<ruby>済<rt>す</rt></ruby>ませるようにしています。",
+          "On mornings when I have no time, I make a point of getting by with a sandwich."
+        ],
+        "N2": [
+          "この<ruby>店<rt>みせ</rt></ruby>のサンドイッチは<ruby>安<rt>やす</rt></ruby>いものの、<ruby>具<rt>ぐ</rt></ruby>がたっぷり<ruby>入<rt>はい</rt></ruby>っていておいしい。",
+          "Although this shop's sandwiches are cheap, they're packed with filling and delicious."
+        ],
+        "N1": [
+          "<ruby>伯爵<rt>はくしゃく</rt></ruby>が<ruby>賭<rt>か</rt></ruby>け<ruby>事<rt>ごと</rt></ruby>の<ruby>合間<rt>あいま</rt></ruby>に<ruby>片手<rt>かたて</rt></ruby>で<ruby>食<rt>た</rt></ruby>べられるよう<ruby>考<rt>かんが</rt></ruby>え<ruby>出<rt>だ</rt></ruby>したのが、サンドイッチの<ruby>始<rt>はじ</rt></ruby>まりだと<ruby>言<rt>い</rt></ruby>われている。",
+          "It is said that the sandwich began when an earl devised something he could eat with one hand between rounds of gambling."
+        ]
+      },
+      "mnem": "\"サンドイッチ\" is the English \"sandwich\" in katakana — say \"san-do-it-chi\" and hear the loanword.",
+      "tip": "Loanword from English; note the katakana has a small ッ (サンドイッチ). Counted with 〜つ or 〜個 (サンドイッチを二つ).",
+      "accent": 4
+    },
+    {
+      "key": "mnn:11:24",
+      "kana": "カレー",
+      "kanji": "",
+      "context": "",
+      "mean": "curry [with rice]",
+      "cat": "noun",
+      "type": "",
+      "trans": "",
+      "dict": "カレーライス",
+      "dictRead": "カレーライス",
+      "audio": "/Audio/minnamoi/bai11/00010100100110001.mp3",
+      "levels": {
+        "N5": [
+          "<ruby>今日<rt>きょう</rt></ruby>の<ruby>昼<rt>ひる</rt></ruby>ごはんはカレーライスです。",
+          "Today's lunch is curry rice."
+        ],
+        "N4": [
+          "<ruby>母<rt>はは</rt></ruby>が<ruby>作<rt>つく</rt></ruby>るカレーライスは とても おいしいです。",
+          "The curry rice my mother makes is very delicious."
+        ],
+        "N3": [
+          "<ruby>忙<rt>いそが</rt></ruby>しい<ruby>日<rt>ひ</rt></ruby>は、<ruby>簡単<rt>かんたん</rt></ruby>なカレーを<ruby>作<rt>つく</rt></ruby>るようにしています。",
+          "On busy days, I make a point of cooking a simple curry."
+        ],
+        "N2": [
+          "<ruby>辛<rt>から</rt></ruby>いものは<ruby>苦手<rt>にがて</rt></ruby>なものの、この<ruby>店<rt>みせ</rt></ruby>のカレーだけは<ruby>別<rt>べつ</rt></ruby>だ。",
+          "Although I'm not good with spicy food, this shop's curry is the one exception."
+        ],
+        "N1": [
+          "<ruby>各家庭<rt>かくかてい</rt></ruby>で<ruby>味<rt>あじ</rt></ruby>が<ruby>異<rt>こと</rt></ruby>なるカレーは、もはや<ruby>日本<rt>にほん</rt></ruby>の<ruby>国民食<rt>こくみんしょく</rt></ruby>と<ruby>言<rt>い</rt></ruby>っても<ruby>過言<rt>かごん</rt></ruby>ではない。",
+          "Curry, whose taste differs in every household, can by now be called a national dish of Japan without exaggeration."
+        ]
+      },
+      "mnem": "\"カレー\" is the English \"curry\" in katakana; add ライス (\"rice\") for the plate: curry-rice.",
+      "tip": "カレーライス is curry served over rice (a Japanese staple); カレー alone can mean the sauce or the dish. Loanwords: カレー (curry) + ライス (rice).",
+      "accent": 0
+    },
+    {
+      "key": "mnn:11:25",
+      "kana": "アイスクリーム",
+      "kanji": "",
+      "context": "",
+      "mean": "ice cream",
+      "cat": "noun",
+      "type": "",
+      "trans": "",
+      "dict": "アイスクリーム",
+      "dictRead": "アイスクリーム",
+      "audio": "/Audio/minnamoi/bai11/00010100100110010.mp3",
+      "levels": {
+        "N5": [
+          "<ruby>子<rt>こ</rt></ruby>どもはアイスクリームが<ruby>大好<rt>だいす</rt></ruby>きです。",
+          "Children love ice cream."
+        ],
+        "N4": [
+          "<ruby>暑<rt>あつ</rt></ruby>いから、アイスクリームを<ruby>食<rt>た</rt></ruby>べたいです。",
+          "Because it's hot, I want to eat ice cream."
+        ],
+        "N3": [
+          "<ruby>夏<rt>なつ</rt></ruby>は<ruby>週<rt>しゅう</rt></ruby>に<ruby>一回<rt>いっかい</rt></ruby>だけアイスクリームを<ruby>食<rt>た</rt></ruby>べるようにしています。",
+          "In summer, I make a point of eating ice cream only once a week."
+        ],
+        "N2": [
+          "ダイエット<ruby>中<rt>ちゅう</rt></ruby>だと<ruby>分<rt>わ</rt></ruby>かってはいるものの、つい アイスクリームに<ruby>手<rt>て</rt></ruby>が<ruby>伸<rt>の</rt></ruby>びてしまう。",
+          "Even though I know I'm on a diet, I can't help reaching for the ice cream."
+        ],
+        "N1": [
+          "<ruby>厳<rt>きび</rt></ruby>しい<ruby>暑<rt>あつ</rt></ruby>さの<ruby>中<rt>なか</rt></ruby>、ひと<ruby>口<rt>くち</rt></ruby>のアイスクリームが これほどの<ruby>幸福<rt>こうふく</rt></ruby>をもたらすとは<ruby>思<rt>おも</rt></ruby>いもしなかった。",
+          "In the harsh heat, I never imagined that a single mouthful of ice cream could bring such happiness."
+        ]
+      },
+      "mnem": "\"アイスクリーム\" is the English \"ice cream\" in katakana — アイス (ice) + クリーム (cream).",
+      "tip": "Often shortened to アイス in casual speech; full form is アイスクリーム. A loanword, so it's written in katakana.",
+      "accent": 5
+    },
+    {
+      "key": "mnn:11:26",
+      "kana": "きって",
+      "kanji": "切手",
+      "context": "",
+      "mean": "postage stamp",
+      "cat": "noun",
+      "type": "",
+      "trans": "",
+      "dict": "切手",
+      "dictRead": "きって",
+      "audio": "/Audio/minnamoi/bai11/00010100100110011.mp3",
+      "levels": {
+        "N5": [
+          "<ruby>切手<rt>きって</rt></ruby>を<ruby>三枚<rt>さんまい</rt></ruby><ruby>買<rt>か</rt></ruby>いました。",
+          "I bought three stamps."
+        ],
+        "N4": [
+          "<ruby>手紙<rt>てがみ</rt></ruby>に<ruby>切手<rt>きって</rt></ruby>を<ruby>貼<rt>は</rt></ruby>ってから、ポストに<ruby>入<rt>い</rt></ruby>れました。",
+          "I put a stamp on the letter and then dropped it in the mailbox."
+        ],
+        "N3": [
+          "<ruby>珍<rt>めずら</rt></ruby>しい<ruby>切手<rt>きって</rt></ruby>を<ruby>見<rt>み</rt></ruby>つけたら、<ruby>集<rt>あつ</rt></ruby>めるようにしています。",
+          "Whenever I find a rare stamp, I make a point of collecting it."
+        ],
+        "N2": [
+          "<ruby>古<rt>ふる</rt></ruby>い<ruby>切手<rt>きって</rt></ruby>だと<ruby>思<rt>おも</rt></ruby>っていたものの、<ruby>実<rt>じつ</rt></ruby>はかなりの<ruby>価値<rt>かち</rt></ruby>があるらしい。",
+          "Although I thought it was just an old stamp, it seems to actually be quite valuable."
+        ],
+        "N1": [
+          "<ruby>一枚<rt>いちまい</rt></ruby>の<ruby>切手<rt>きって</rt></ruby>に<ruby>込<rt>こ</rt></ruby>められた<ruby>意匠<rt>いしょう</rt></ruby>には、その<ruby>時代<rt>じだい</rt></ruby>の<ruby>文化<rt>ぶんか</rt></ruby>や<ruby>技術<rt>ぎじゅつ</rt></ruby>が<ruby>凝縮<rt>ぎょうしゅく</rt></ruby>されている。",
+          "The design embedded in a single stamp condenses the culture and technology of its era."
+        ]
+      },
+      "mnem": "切手 = 切 (cut) + 手 (hand); you \"cut\" a stamp off the sheet by hand and stick it on — kit-te.",
+      "tip": "切手 is a postage stamp (counted 〜枚); note the small っ (きって, not きて). Don't confuse it with 切符 (きっぷ, a travel ticket).",
+      "accent": 0
+    },
+    {
+      "key": "mnn:11:27",
+      "kana": "はがき",
+      "kanji": "",
+      "context": "",
+      "mean": "postcard",
+      "cat": "noun",
+      "type": "",
+      "trans": "",
+      "dict": "はがき",
+      "dictRead": "はがき",
+      "audio": "/Audio/minnamoi/bai11/00010100100110100.mp3",
+      "levels": {
+        "N5": [
+          "はがきを<ruby>二枚<rt>にまい</rt></ruby>ください。",
+          "Please give me two postcards."
+        ],
+        "N4": [
+          "<ruby>旅行先<rt>りょこうさき</rt></ruby>から<ruby>友<rt>とも</rt></ruby>だちにはがきを<ruby>送<rt>おく</rt></ruby>りました。",
+          "I sent a postcard to my friend from where I was traveling."
+        ],
+        "N3": [
+          "<ruby>年<rt>ねん</rt></ruby>の<ruby>始<rt>はじ</rt></ruby>めには、お<ruby>世話<rt>せわ</rt></ruby>になった<ruby>人<rt>ひと</rt></ruby>にはがきを<ruby>出<rt>だ</rt></ruby>すようにしています。",
+          "At the start of the year, I make a point of sending postcards to those who have helped me."
+        ],
+        "N2": [
+          "メールで<ruby>済<rt>す</rt></ruby>ませることもできるものの、やはり<ruby>手書<rt>てが</rt></ruby>きのはがきには<ruby>温<rt>あたた</rt></ruby>かみがある。",
+          "Although you could get by with email, a handwritten postcard has a warmth to it after all."
+        ],
+        "N1": [
+          "<ruby>一枚<rt>いちまい</rt></ruby>のはがきに<ruby>綴<rt>つづ</rt></ruby>られた<ruby>短<rt>みじか</rt></ruby>い<ruby>言葉<rt>ことば</rt></ruby>が、<ruby>遠<rt>とお</rt></ruby>く<ruby>離<rt>はな</rt></ruby>れた<ruby>相手<rt>あいて</rt></ruby>の<ruby>心<rt>こころ</rt></ruby>を<ruby>思<rt>おも</rt></ruby>いがけず<ruby>動<rt>うご</rt></ruby>かすことがある。",
+          "The few words penned on a single postcard can unexpectedly move the heart of someone far away."
+        ]
+      },
+      "mnem": "\"はがき\" — a postcard is like a flat \"ha! gaki\" note you scribble; usually written in kana (or 葉書).",
+      "tip": "はがき is a postcard (counted 〜枚); the kanji 葉書 exists but kana is common. Don't confuse it with 手紙 (てがみ, a letter in an envelope).",
+      "accent": 0
+    },
+    {
+      "key": "mnn:11:28",
+      "kana": "ふうとう",
+      "kanji": "封筒",
+      "context": "",
+      "mean": "envelope",
+      "cat": "noun",
+      "type": "",
+      "trans": "",
+      "dict": "封筒",
+      "dictRead": "ふうとう",
+      "audio": "/Audio/minnamoi/bai11/00010100100110101.mp3",
+      "levels": {
+        "N5": [
+          "<ruby>封筒<rt>ふうとう</rt></ruby>が<ruby>二枚<rt>にまい</rt></ruby>あります。",
+          "There are two envelopes."
+        ],
+        "N4": [
+          "<ruby>手紙<rt>てがみ</rt></ruby>を<ruby>封筒<rt>ふうとう</rt></ruby>に<ruby>入<rt>い</rt></ruby>れて、<ruby>切手<rt>きって</rt></ruby>を<ruby>貼<rt>は</rt></ruby>りました。",
+          "I put the letter in the envelope and stuck on a stamp."
+        ],
+        "N3": [
+          "<ruby>大切<rt>たいせつ</rt></ruby>な<ruby>書類<rt>しょるい</rt></ruby>は<ruby>厚<rt>あつ</rt></ruby>い<ruby>封筒<rt>ふうとう</rt></ruby>に<ruby>入<rt>い</rt></ruby>れて<ruby>送<rt>おく</rt></ruby>るようにしています。",
+          "I make a point of sending important documents in a thick envelope."
+        ],
+        "N2": [
+          "<ruby>宛先<rt>あてさき</rt></ruby>を<ruby>書<rt>か</rt></ruby>いたものの、<ruby>封筒<rt>ふうとう</rt></ruby>の<ruby>裏<rt>うら</rt></ruby>に<ruby>自分<rt>じぶん</rt></ruby>の<ruby>住所<rt>じゅうしょ</rt></ruby>を<ruby>書<rt>か</rt></ruby>き<ruby>忘<rt>わす</rt></ruby>れていた。",
+          "Although I wrote the recipient's address, I forgot to write my own address on the back of the envelope."
+        ],
+        "N1": [
+          "<ruby>厳重<rt>げんじゅう</rt></ruby>に<ruby>封<rt>ふう</rt></ruby>をされた<ruby>封筒<rt>ふうとう</rt></ruby>の<ruby>中身<rt>なかみ</rt></ruby>が<ruby>何<rt>なに</rt></ruby>であるのか、<ruby>誰<rt>だれ</rt></ruby>にも<ruby>見当<rt>けんとう</rt></ruby>がつかなかった。",
+          "No one had any idea what the contents of the tightly sealed envelope were."
+        ]
+      },
+      "mnem": "封筒 = 封 (seal) + 筒 (tube); you seal your letter inside this paper \"tube\" — fū-tō.",
+      "tip": "封筒 is an envelope (counted 〜枚 for empty ones); the 封 means \"to seal.\" Don't confuse it with 手紙 (the letter that goes inside).",
+      "accent": 0
+    },
+    {
+      "key": "mnn:11:29",
+      "kana": "りょうしん",
+      "kanji": "両親",
+      "context": "",
+      "mean": "parents (one's own)",
+      "cat": "noun",
+      "type": "",
+      "trans": "",
+      "dict": "両親",
+      "dictRead": "りょうしん",
+      "audio": "/Audio/minnamoi/bai11/00010100100110110.mp3",
+      "levels": {
+        "N5": [
+          "<ruby>私<rt>わたし</rt></ruby>の<ruby>両親<rt>りょうしん</rt></ruby>は<ruby>元気<rt>げんき</rt></ruby>です。",
+          "My parents are well."
+        ],
+        "N4": [
+          "<ruby>週末<rt>しゅうまつ</rt></ruby>に<ruby>両親<rt>りょうしん</rt></ruby>に<ruby>電話<rt>でんわ</rt></ruby>をかけました。",
+          "I called my parents on the weekend."
+        ],
+        "N3": [
+          "<ruby>月<rt>つき</rt></ruby>に<ruby>一回<rt>いっかい</rt></ruby>は<ruby>両親<rt>りょうしん</rt></ruby>に<ruby>顔<rt>かお</rt></ruby>を<ruby>見<rt>み</rt></ruby>せに<ruby>帰<rt>かえ</rt></ruby>るようにしています。",
+          "I make a point of going home to show my face to my parents once a month."
+        ],
+        "N2": [
+          "<ruby>両親<rt>りょうしん</rt></ruby>は<ruby>反対<rt>はんたい</rt></ruby>したものの、<ruby>最後<rt>さいご</rt></ruby>には<ruby>私<rt>わたし</rt></ruby>の<ruby>決断<rt>けつだん</rt></ruby>を<ruby>応援<rt>おうえん</rt></ruby>してくれた。",
+          "Although my parents were opposed, in the end they supported my decision."
+        ],
+        "N1": [
+          "<ruby>両親<rt>りょうしん</rt></ruby>が<ruby>惜<rt>お</rt></ruby>しみなく<ruby>注<rt>そそ</rt></ruby>いでくれた<ruby>愛情<rt>あいじょう</rt></ruby>があったからこそ、<ruby>今<rt>いま</rt></ruby>の<ruby>私<rt>わたし</rt></ruby>があるのだと<ruby>痛感<rt>つうかん</rt></ruby>している。",
+          "I keenly feel that I am who I am today precisely because of the love my parents lavished on me without stint."
+        ]
+      },
+      "mnem": "両親 = 両 (both) + 親 (parent); \"both parents\" together = りょうしん.",
+      "tip": "両親 refers to YOUR OWN parents (humble); for someone else's parents say ご両親. It counts both together; a single parent is 親 (おや) or 父・母.",
+      "accent": 1
+    },
+    {
+      "key": "mnn:11:30",
+      "kana": "きょうだい",
+      "kanji": "兄弟",
+      "context": "",
+      "mean": "siblings, brothers and sisters",
+      "cat": "noun",
+      "type": "",
+      "trans": "",
+      "dict": "兄弟",
+      "dictRead": "きょうだい",
+      "audio": "/Audio/minnamoi/bai11/00010100100110111.mp3",
+      "levels": {
+        "N5": [
+          "<ruby>兄弟<rt>きょうだい</rt></ruby>は<ruby>何人<rt>なんにん</rt></ruby>ですか。",
+          "How many siblings do you have?"
+        ],
+        "N4": [
+          "<ruby>私<rt>わたし</rt></ruby>は<ruby>三人<rt>さんにん</rt></ruby><ruby>兄弟<rt>きょうだい</rt></ruby>の<ruby>真<rt>ま</rt></ruby>ん<ruby>中<rt>なか</rt></ruby>です。",
+          "I'm the middle of three siblings."
+        ],
+        "N3": [
+          "<ruby>兄弟<rt>きょうだい</rt></ruby>とは、<ruby>離<rt>はな</rt></ruby>れていても<ruby>連絡<rt>れんらく</rt></ruby>を<ruby>取<rt>と</rt></ruby>り<ruby>合<rt>あ</rt></ruby>うようにしています。",
+          "Even though we live apart, I make a point of keeping in touch with my siblings."
+        ],
+        "N2": [
+          "<ruby>兄弟<rt>きょうだい</rt></ruby>とはいえ<ruby>性格<rt>せいかく</rt></ruby>はまるで<ruby>違<rt>ちが</rt></ruby>い、<ruby>兄<rt>あに</rt></ruby>は<ruby>慎重<rt>しんちょう</rt></ruby>で<ruby>弟<rt>おとうと</rt></ruby>は<ruby>大胆<rt>だいたん</rt></ruby>だ。",
+          "Although they're siblings, their personalities are completely different: the elder is cautious and the younger is bold."
+        ],
+        "N1": [
+          "<ruby>幼<rt>おさな</rt></ruby>い<ruby>頃<rt>ころ</rt></ruby>は よく<ruby>喧嘩<rt>けんか</rt></ruby>した<ruby>兄弟<rt>きょうだい</rt></ruby>も、<ruby>大人<rt>おとな</rt></ruby>になった<ruby>今<rt>いま</rt></ruby>となっては<ruby>互<rt>たが</rt></ruby>いに<ruby>支<rt>ささ</rt></ruby>え<ruby>合<rt>あ</rt></ruby>うかけがえのない<ruby>存在<rt>そんざい</rt></ruby>だ。",
+          "The siblings who often quarreled as children are now, as adults, irreplaceable presences who support one another."
+        ]
+      },
+      "mnem": "兄弟 = 兄 (elder brother) + 弟 (younger brother); together they cover all your \"brothers and sisters.\"",
+      "tip": "兄弟 covers siblings of any gender collectively (despite the 兄・弟 kanji); it's your OWN siblings — for someone else's say ご兄弟. Counted with 〜人.",
+      "accent": 1
+    },
+    {
+      "key": "mnn:11:31",
+      "kana": "あに",
+      "kanji": "兄",
+      "context": "",
+      "mean": "(my) older brother",
+      "cat": "noun",
+      "type": "",
+      "trans": "",
+      "dict": "兄",
+      "dictRead": "あに",
+      "audio": "/Audio/minnamoi/bai11/00010100100111000.mp3",
+      "levels": {
+        "N5": [
+          "<ruby>兄<rt>あに</rt></ruby>は<ruby>学生<rt>がくせい</rt></ruby>です。",
+          "My older brother is a student."
+        ],
+        "N4": [
+          "<ruby>兄<rt>あに</rt></ruby>は<ruby>毎日<rt>まいにち</rt></ruby>ピアノを<ruby>練習<rt>れんしゅう</rt></ruby>しています。",
+          "My older brother practices the piano every day."
+        ],
+        "N3": [
+          "<ruby>困<rt>こま</rt></ruby>ったときは、<ruby>兄<rt>あに</rt></ruby>に<ruby>相談<rt>そうだん</rt></ruby>するようにしています。",
+          "When I'm in trouble, I make a point of consulting my older brother."
+        ],
+        "N2": [
+          "<ruby>兄<rt>あに</rt></ruby>は<ruby>無口<rt>むくち</rt></ruby>なものの、いざというときには<ruby>必<rt>かなら</rt></ruby>ず<ruby>助<rt>たす</rt></ruby>けてくれる。",
+          "Although my older brother is a man of few words, he always helps me when it really counts."
+        ],
+        "N1": [
+          "<ruby>幼<rt>おさな</rt></ruby>い<ruby>頃<rt>ころ</rt></ruby>から<ruby>兄<rt>あに</rt></ruby>の<ruby>背中<rt>せなか</rt></ruby>を<ruby>追<rt>お</rt></ruby>い<ruby>続<rt>つづ</rt></ruby>けてきたからこそ、<ruby>今<rt>いま</rt></ruby>の<ruby>自分<rt>じぶん</rt></ruby>があるのだと<ruby>思<rt>おも</rt></ruby>う。",
+          "I think I am who I am today precisely because I kept following in my older brother's footsteps from an early age."
+        ]
+      },
+      "mnem": "兄 = あに; \"ah-nee\" — you look up to your big brother and say \"ah, Nii(-san)!\"",
+      "tip": "兄 (あに) is your OWN older brother, used humbly; to address or refer to someone else's, say お兄さん (おにいさん). Contrast 弟 (おとうと, younger brother).",
+      "accent": 1
+    },
+    {
+      "key": "mnn:11:32",
+      "kana": "おにいさん",
+      "kanji": "お兄さん",
+      "context": "",
+      "mean": "(someone else's) older brother",
+      "cat": "noun",
+      "type": "",
+      "trans": "",
+      "dict": "お兄さん",
+      "dictRead": "おにいさん",
+      "audio": "/Audio/minnamoi/bai11/00010100100111001.mp3",
+      "levels": {
+        "N5": [
+          "あなたのお<ruby>兄<rt>にい</rt></ruby>さんは<ruby>先生<rt>せんせい</rt></ruby>ですか。",
+          "Is your older brother a teacher?"
+        ],
+        "N4": [
+          "<ruby>田中<rt>たなか</rt></ruby>さんのお<ruby>兄<rt>にい</rt></ruby>さんは<ruby>大学<rt>だいがく</rt></ruby>で<ruby>英語<rt>えいご</rt></ruby>を<ruby>教<rt>おし</rt></ruby>えています。",
+          "Mr. Tanaka's older brother teaches English at a university."
+        ],
+        "N3": [
+          "<ruby>近所<rt>きんじょ</rt></ruby>のお<ruby>兄<rt>にい</rt></ruby>さんには、いつも<ruby>優<rt>やさ</rt></ruby>しくしてもらっています。",
+          "The older boy in my neighborhood is always kind to me."
+        ],
+        "N2": [
+          "<ruby>彼<rt>かれ</rt></ruby>のお<ruby>兄<rt>にい</rt></ruby>さんは<ruby>有名<rt>ゆうめい</rt></ruby>な<ruby>医者<rt>いしゃ</rt></ruby>だそうだが、<ruby>本人<rt>ほんにん</rt></ruby>はまったく<ruby>自慢<rt>じまん</rt></ruby>しない。",
+          "His older brother is apparently a famous doctor, but he himself never boasts about it at all."
+        ],
+        "N1": [
+          "お<ruby>兄<rt>にい</rt></ruby>さんがいかに<ruby>優秀<rt>ゆうしゅう</rt></ruby>であろうと、<ruby>弟<rt>おとうと</rt></ruby>には<ruby>弟<rt>おとうと</rt></ruby>なりの<ruby>歩<rt>あゆ</rt></ruby>むべき<ruby>道<rt>みち</rt></ruby>があるはずだ。",
+          "However brilliant the older brother may be, the younger brother surely has his own path to walk."
+        ]
+      },
+      "mnem": "お兄さん = the polite お + 兄 (にい) + さん; add honorifics to talk about someone else's big brother.",
+      "tip": "お兄さん is someone ELSE's older brother (or a polite way to address a young man); for your own, drop the honorifics to 兄 (あに). Note にい with a long vowel.",
+      "accent": 2
+    },
+    {
+      "key": "mnn:11:33",
+      "kana": "あね",
+      "kanji": "姉",
+      "context": "",
+      "mean": "(my) older sister",
+      "cat": "noun",
+      "type": "",
+      "trans": "",
+      "dict": "姉",
+      "dictRead": "あね",
+      "audio": "/Audio/minnamoi/bai11/00010100100111010.mp3",
+      "levels": {
+        "N5": [
+          "<ruby>姉<rt>あね</rt></ruby>は<ruby>大学生<rt>だいがくせい</rt></ruby>です。",
+          "My older sister is a university student."
+        ],
+        "N4": [
+          "<ruby>姉<rt>あね</rt></ruby>は<ruby>毎日<rt>まいにち</rt></ruby>ピアノを<ruby>弾<rt>ひ</rt></ruby>きます。",
+          "My older sister plays the piano every day."
+        ],
+        "N3": [
+          "<ruby>迷<rt>まよ</rt></ruby>ったときは、<ruby>姉<rt>あね</rt></ruby>に<ruby>意見<rt>いけん</rt></ruby>を<ruby>聞<rt>き</rt></ruby>くようにしています。",
+          "When I'm undecided, I make a point of asking my older sister's opinion."
+        ],
+        "N2": [
+          "<ruby>姉<rt>あね</rt></ruby>は<ruby>厳<rt>きび</rt></ruby>しいものの、いつも<ruby>私<rt>わたし</rt></ruby>のことを<ruby>心配<rt>しんぱい</rt></ruby>してくれている。",
+          "Although my older sister is strict, she's always worrying about me."
+        ],
+        "N1": [
+          "<ruby>姉<rt>あね</rt></ruby>が<ruby>陰<rt>かげ</rt></ruby>ながら<ruby>支<rt>ささ</rt></ruby>えてくれていたことに<ruby>気<rt>き</rt></ruby>づいたのは、<ruby>随分<rt>ずいぶん</rt></ruby>と<ruby>後<rt>あと</rt></ruby>になってからのことだった。",
+          "It was only much later that I realized my older sister had been quietly supporting me all along."
+        ]
+      },
+      "mnem": "姉 = あね; \"ah-neh\" — you call your big sister \"Nee(-san),\" so あね sticks close.",
+      "tip": "姉 (あね) is your OWN older sister, humble; for someone else's, say お姉さん (おねえさん). Contrast 妹 (いもうと, younger sister).",
+      "accent": 0
+    },
+    {
+      "key": "mnn:11:34",
+      "kana": "おねえさん",
+      "kanji": "お姉さん",
+      "context": "",
+      "mean": "(someone else's) older sister",
+      "cat": "noun",
+      "type": "",
+      "trans": "",
+      "dict": "お姉さん",
+      "dictRead": "おねえさん",
+      "audio": "/Audio/minnamoi/bai11/00010100100111011.mp3",
+      "levels": {
+        "N5": [
+          "あなたのお<ruby>姉<rt>ねえ</rt></ruby>さんは<ruby>学生<rt>がくせい</rt></ruby>ですか。",
+          "Is your older sister a student?"
+        ],
+        "N4": [
+          "<ruby>山田<rt>やまだ</rt></ruby>さんのお<ruby>姉<rt>ねえ</rt></ruby>さんはとても<ruby>親切<rt>しんせつ</rt></ruby>です。",
+          "Ms. Yamada's older sister is very kind."
+        ],
+        "N3": [
+          "<ruby>分<rt>わ</rt></ruby>からないことがあったら、お<ruby>姉<rt>ねえ</rt></ruby>さんに<ruby>聞<rt>き</rt></ruby>くようにしています。",
+          "Whenever there's something I don't understand, I make a point of asking the older girl."
+        ],
+        "N2": [
+          "<ruby>彼女<rt>かのじょ</rt></ruby>のお<ruby>姉<rt>ねえ</rt></ruby>さんは<ruby>海外<rt>かいがい</rt></ruby>で<ruby>働<rt>はたら</rt></ruby>いているものの、<ruby>盆<rt>ぼん</rt></ruby>には<ruby>必<rt>かなら</rt></ruby>ず<ruby>帰<rt>かえ</rt></ruby>ってくるそうだ。",
+          "Her older sister works overseas, but apparently she always comes back for the Obon holidays."
+        ],
+        "N1": [
+          "お<ruby>姉<rt>ねえ</rt></ruby>さんの<ruby>凛<rt>りん</rt></ruby>とした<ruby>立<rt>た</rt></ruby>ち<ruby>振<rt>ふ</rt></ruby>る<ruby>舞<rt>ま</rt></ruby>いは、<ruby>妹<rt>いもうと</rt></ruby>にとって<ruby>幼<rt>おさな</rt></ruby>い<ruby>頃<rt>ころ</rt></ruby>からの<ruby>憧<rt>あこが</rt></ruby>れであり<ruby>続<rt>つづ</rt></ruby>けている。",
+          "The older sister's dignified bearing has remained an object of admiration for her younger sister since childhood."
+        ]
+      },
+      "mnem": "お姉さん = polite お + 姉 (ねえ) + さん; the honorific version for someone else's big sister.",
+      "tip": "お姉さん is someone ELSE's older sister (or a polite way to address a young woman); for your own, use 姉 (あね). Note ねえ with a long vowel.",
+      "accent": 2
+    },
+    {
+      "key": "mnn:11:35",
+      "kana": "おとうと",
+      "kanji": "弟",
+      "context": "",
+      "mean": "(my) younger brother",
+      "cat": "noun",
+      "type": "",
+      "trans": "",
+      "dict": "弟",
+      "dictRead": "おとうと",
+      "audio": "/Audio/minnamoi/bai11/00010100100111100.mp3",
+      "levels": {
+        "N5": [
+          "<ruby>弟<rt>おとうと</rt></ruby>は<ruby>元気<rt>げんき</rt></ruby>です。",
+          "My younger brother is doing well."
+        ],
+        "N4": [
+          "<ruby>弟<rt>おとうと</rt></ruby>は サッカーが とても <ruby>上手<rt>じょうず</rt></ruby>です。",
+          "My younger brother is very good at soccer."
+        ],
+        "N3": [
+          "<ruby>弟<rt>おとうと</rt></ruby>が<ruby>寂<rt>さび</rt></ruby>しがらないように、よく<ruby>電話<rt>でんわ</rt></ruby>するようにしています。",
+          "So that my younger brother doesn't feel lonely, I make a point of calling him often."
+        ],
+        "N2": [
+          "<ruby>弟<rt>おとうと</rt></ruby>はまだ<ruby>子<rt>こ</rt></ruby>どもだと<ruby>思<rt>おも</rt></ruby>っていたものの、いつの<ruby>間<rt>ま</rt></ruby>にか<ruby>私<rt>わたし</rt></ruby>より<ruby>背<rt>せ</rt></ruby>が<ruby>高<rt>たか</rt></ruby>くなっていた。",
+          "Although I still thought of my younger brother as a child, before I knew it he had grown taller than me."
+        ],
+        "N1": [
+          "<ruby>弟<rt>おとうと</rt></ruby>が<ruby>自<rt>みずか</rt></ruby>らの<ruby>道<rt>みち</rt></ruby>を<ruby>切<rt>き</rt></ruby>り<ruby>開<rt>ひら</rt></ruby>いていく<ruby>姿<rt>すがた</rt></ruby>を<ruby>見<rt>み</rt></ruby>て、<ruby>兄<rt>あに</rt></ruby>として<ruby>誇<rt>ほこ</rt></ruby>らしく<ruby>思<rt>おも</rt></ruby>わずにはいられなかった。",
+          "Watching my younger brother carve out his own path, I couldn't help but feel proud as his older brother."
+        ]
+      },
+      "mnem": "弟 = おとうと; \"oh-toe-oh-toe\" — your little brother trips over his own toes, still growing up.",
+      "tip": "弟 (おとうと) is your OWN younger brother, humble; for someone else's, say 弟さん (おとうとさん). Contrast 兄 (あに, older brother).",
+      "accent": 4
+    },
+    {
+      "key": "mnn:11:36",
+      "kana": "おとうとさん",
+      "kanji": "弟さん",
+      "context": "",
+      "mean": "(someone else's) younger brother",
+      "cat": "noun",
+      "type": "",
+      "trans": "",
+      "dict": "弟さん",
+      "dictRead": "おとうとさん",
+      "audio": "/Audio/minnamoi/bai11/00010100100111101.mp3",
+      "levels": {
+        "N5": [
+          "<ruby>田中<rt>たなか</rt></ruby>さんの<ruby>弟<rt>おとうと</rt></ruby>さんは<ruby>学生<rt>がくせい</rt></ruby>です。",
+          "Mr. Tanaka's younger brother is a student."
+        ],
+        "N4": [
+          "あなたの<ruby>弟<rt>おとうと</rt></ruby>さんは<ruby>何歳<rt>なんさい</rt></ruby>ですか。",
+          "How old is your younger brother?"
+        ],
+        "N3": [
+          "<ruby>彼<rt>かれ</rt></ruby>の<ruby>弟<rt>おとうと</rt></ruby>さんとは、<ruby>時々<rt>ときどき</rt></ruby><ruby>一緒<rt>いっしょ</rt></ruby>に<ruby>遊<rt>あそ</rt></ruby>ぶようにしています。",
+          "I make a point of hanging out with his younger brother from time to time."
+        ],
+        "N2": [
+          "<ruby>弟<rt>おとうと</rt></ruby>さんはおとなしいものの、<ruby>絵<rt>え</rt></ruby>を<ruby>描<rt>か</rt></ruby>かせたら<ruby>誰<rt>だれ</rt></ruby>にも<ruby>負<rt>ま</rt></ruby>けないそうだ。",
+          "His younger brother is quiet, but when it comes to drawing, apparently he's second to none."
+        ],
+        "N1": [
+          "<ruby>弟<rt>おとうと</rt></ruby>さんが<ruby>幼<rt>おさな</rt></ruby>くして<ruby>才能<rt>さいのう</rt></ruby>を<ruby>開花<rt>かいか</rt></ruby>させたのも、<ruby>家族<rt>かぞく</rt></ruby>の<ruby>惜<rt>お</rt></ruby>しみない<ruby>支<rt>ささ</rt></ruby>えがあってこそだろう。",
+          "That the younger brother's talent blossomed at such a young age must be precisely thanks to his family's unstinting support."
+        ]
+      },
+      "mnem": "弟さん = 弟 (おとうと) + the polite さん; add さん to name someone else's little brother.",
+      "tip": "弟さん is someone ELSE's younger brother; for your own, drop the さん to 弟 (おとうと). The pattern mirrors 妹さん (someone else's younger sister).",
+      "accent": 0
+    },
+    {
+      "key": "mnn:11:37",
+      "kana": "いもうと",
+      "kanji": "妹",
+      "context": "",
+      "mean": "(my) younger sister",
+      "cat": "noun",
+      "type": "",
+      "trans": "",
+      "dict": "妹",
+      "dictRead": "いもうと",
+      "audio": "/Audio/minnamoi/bai11/00010100100111110.mp3",
+      "levels": {
+        "N5": [
+          "<ruby>妹<rt>いもうと</rt></ruby>は<ruby>高校生<rt>こうこうせい</rt></ruby>です。",
+          "My younger sister is a high school student."
+        ],
+        "N4": [
+          "<ruby>妹<rt>いもうと</rt></ruby>は<ruby>甘<rt>あま</rt></ruby>いものが<ruby>大好<rt>だいす</rt></ruby>きです。",
+          "My younger sister loves sweet things."
+        ],
+        "N3": [
+          "<ruby>妹<rt>いもうと</rt></ruby>の<ruby>誕生日<rt>たんじょうび</rt></ruby>には、<ruby>必<rt>かなら</rt></ruby>ずプレゼントを<ruby>買<rt>か</rt></ruby>うようにしています。",
+          "I make a point of always buying a present for my younger sister's birthday."
+        ],
+        "N2": [
+          "<ruby>妹<rt>いもうと</rt></ruby>はまだ<ruby>幼<rt>おさな</rt></ruby>いものの、<ruby>時々<rt>ときどき</rt></ruby>はっとするほど<ruby>大人<rt>おとな</rt></ruby>びたことを<ruby>言<rt>い</rt></ruby>う。",
+          "Although my younger sister is still young, she sometimes says startlingly grown-up things."
+        ],
+        "N1": [
+          "<ruby>妹<rt>いもうと</rt></ruby>が<ruby>自分<rt>じぶん</rt></ruby>の<ruby>夢<rt>ゆめ</rt></ruby>に<ruby>向<rt>む</rt></ruby>かってひたむきに<ruby>努力<rt>どりょく</rt></ruby>する<ruby>姿<rt>すがた</rt></ruby>は、<ruby>私<rt>わたし</rt></ruby>にとって<ruby>何<rt>なに</rt></ruby>よりの<ruby>励<rt>はげ</rt></ruby>ましだ。",
+          "The sight of my younger sister earnestly striving toward her dream is more of an encouragement to me than anything else."
+        ]
+      },
+      "mnem": "妹 = いもうと; \"ee-moh\" — picture your little sister as a sweet \"imo\" (potato), the baby of the family.",
+      "tip": "妹 (いもうと) is your OWN younger sister, humble; for someone else's, say 妹さん (いもうとさん). Contrast 姉 (あね, older sister).",
+      "accent": 4
+    },
+    {
+      "key": "mnn:11:38",
+      "kana": "いもうとさん",
+      "kanji": "妹さん",
+      "context": "",
+      "mean": "(someone else's) younger sister",
+      "cat": "noun",
+      "type": "",
+      "trans": "",
+      "dict": "妹さん",
+      "dictRead": "いもうとさん",
+      "audio": "/Audio/minnamoi/bai11/00010100100111111.mp3",
+      "levels": {
+        "N5": [
+          "あなたの<ruby>妹<rt>いもうと</rt></ruby>さんは<ruby>何歳<rt>なんさい</rt></ruby>ですか。",
+          "How old is your younger sister?"
+        ],
+        "N4": [
+          "<ruby>田中<rt>たなか</rt></ruby>さんの<ruby>妹<rt>いもうと</rt></ruby>さんは<ruby>看護師<rt>かんごし</rt></ruby>です。",
+          "Ms. Tanaka's younger sister is a nurse."
+        ],
+        "N3": [
+          "<ruby>彼<rt>かれ</rt></ruby>の<ruby>妹<rt>いもうと</rt></ruby>さんには、<ruby>会<rt>あ</rt></ruby>うたびに<ruby>挨拶<rt>あいさつ</rt></ruby>するようにしています。",
+          "I make a point of greeting his younger sister every time I meet her."
+        ],
+        "N2": [
+          "<ruby>妹<rt>いもうと</rt></ruby>さんは<ruby>内気<rt>うちき</rt></ruby>なものの、<ruby>音楽<rt>おんがく</rt></ruby>の<ruby>話<rt>はなし</rt></ruby>になると<ruby>目<rt>め</rt></ruby>を<ruby>輝<rt>かがや</rt></ruby>かせて<ruby>語<rt>かた</rt></ruby>り<ruby>出<rt>だ</rt></ruby>す。",
+          "His younger sister is shy, but the moment the topic turns to music, her eyes light up and she starts to talk."
+        ],
+        "N1": [
+          "<ruby>妹<rt>いもうと</rt></ruby>さんがどれほど<ruby>苦労<rt>くろう</rt></ruby>を<ruby>重<rt>かさ</rt></ruby>ねてきたかを<ruby>知<rt>し</rt></ruby>る<ruby>者<rt>もの</rt></ruby>は、<ruby>家族<rt>かぞく</rt></ruby>のほかにはほとんどいなかった。",
+          "There was almost no one besides the family who knew how much hardship the younger sister had endured."
+        ]
+      },
+      "mnem": "妹さん = 妹 (いもうと) + polite さん; add さん to name someone else's little sister.",
+      "tip": "妹さん is someone ELSE's younger sister; for your own, drop the さん to 妹 (いもうと). Same politeness pattern as 弟さん.",
+      "accent": 0
+    },
+    {
+      "key": "mnn:11:39",
+      "kana": "がいこく",
+      "kanji": "外国",
+      "context": "",
+      "mean": "foreign country",
+      "cat": "noun",
+      "type": "",
+      "trans": "",
+      "dict": "外国",
+      "dictRead": "がいこく",
+      "audio": "/Audio/minnamoi/bai11/00010100101000000.mp3",
+      "levels": {
+        "N5": [
+          "<ruby>外国<rt>がいこく</rt></ruby>へ<ruby>行<rt>い</rt></ruby>きたいです。",
+          "I want to go to a foreign country."
+        ],
+        "N4": [
+          "<ruby>兄<rt>あに</rt></ruby>は<ruby>外国<rt>がいこく</rt></ruby>で<ruby>働<rt>はたら</rt></ruby>いています。",
+          "My older brother works in a foreign country."
+        ],
+        "N3": [
+          "<ruby>外国<rt>がいこく</rt></ruby>の<ruby>文化<rt>ぶんか</rt></ruby>に<ruby>触<rt>ふ</rt></ruby>れるために、よく<ruby>旅行<rt>りょこう</rt></ruby>するようにしています。",
+          "In order to experience foreign cultures, I make a point of traveling often."
+        ],
+        "N2": [
+          "<ruby>外国<rt>がいこく</rt></ruby>で<ruby>暮<rt>く</rt></ruby>らすのは<ruby>大変<rt>たいへん</rt></ruby>なものの、<ruby>得<rt>え</rt></ruby>られるものも<ruby>大<rt>おお</rt></ruby>きい。",
+          "Although living in a foreign country is hard, what you gain from it is also great."
+        ],
+        "N1": [
+          "<ruby>外国<rt>がいこく</rt></ruby>で<ruby>暮<rt>く</rt></ruby>らして<ruby>初<rt>はじ</rt></ruby>めて、<ruby>母国<rt>ぼこく</rt></ruby>の<ruby>良<rt>よ</rt></ruby>さにも<ruby>課題<rt>かだい</rt></ruby>にも<ruby>客観的<rt>きゃっかんてき</rt></ruby>に<ruby>向<rt>む</rt></ruby>き<ruby>合<rt>あ</rt></ruby>えるようになった。",
+          "Only after living abroad did I become able to face both the merits and the problems of my homeland objectively."
+        ]
+      },
+      "mnem": "外国 = 外 (outside) + 国 (country); a country \"outside\" your own = a foreign country.",
+      "tip": "外国 is a foreign country; a foreigner is 外国人 (がいこくじん) and a foreign language 外国語 (がいこくご). Contrast 国 (くに, one's own country).",
+      "accent": 0
+    },
+    {
+      "key": "mnn:11:40",
+      "kana": "りゅうがくせい",
+      "kanji": "留学生",
+      "context": "",
+      "mean": "foreign (exchange) student",
+      "cat": "noun",
+      "type": "",
+      "trans": "",
+      "dict": "留学生",
+      "dictRead": "りゅうがくせい",
+      "audio": "/Audio/minnamoi/bai11/00010100101000001.mp3",
+      "levels": {
+        "N5": [
+          "クラスに<ruby>留学生<rt>りゅうがくせい</rt></ruby>が<ruby>二人<rt>ふたり</rt></ruby>います。",
+          "There are two exchange students in the class."
+        ],
+        "N4": [
+          "<ruby>留学生<rt>りゅうがくせい</rt></ruby>のリーさんは<ruby>中国<rt>ちゅうごく</rt></ruby>から<ruby>来<rt>き</rt></ruby>ました。",
+          "Lee, an exchange student, came from China."
+        ],
+        "N3": [
+          "<ruby>留学生<rt>りゅうがくせい</rt></ruby>とは<ruby>日本語<rt>にほんご</rt></ruby>で<ruby>話<rt>はな</rt></ruby>すようにしています。",
+          "I make a point of speaking in Japanese with the exchange students."
+        ],
+        "N2": [
+          "<ruby>留学生<rt>りゅうがくせい</rt></ruby>の<ruby>数<rt>かず</rt></ruby>は<ruby>年々<rt>ねんねん</rt></ruby><ruby>増<rt>ふ</rt></ruby>えているものの、<ruby>支援<rt>しえん</rt></ruby>の<ruby>体制<rt>たいせい</rt></ruby>はまだ<ruby>十分<rt>じゅうぶん</rt></ruby>とは<ruby>言<rt>い</rt></ruby>えない。",
+          "Although the number of foreign students is increasing year by year, the support system still cannot be called adequate."
+        ],
+        "N1": [
+          "<ruby>異国<rt>いこく</rt></ruby>の<ruby>地<rt>ち</rt></ruby>で<ruby>学<rt>まな</rt></ruby>ぶ<ruby>留学生<rt>りゅうがくせい</rt></ruby>たちが<ruby>抱<rt>かか</rt></ruby>える<ruby>孤独<rt>こどく</rt></ruby>や<ruby>不安<rt>ふあん</rt></ruby>に、もっと<ruby>目<rt>め</rt></ruby>を<ruby>向<rt>む</rt></ruby>けるべきだ。",
+          "We ought to pay more attention to the loneliness and anxiety that foreign students studying in a foreign land carry."
+        ]
+      },
+      "mnem": "留学生 = 留学 (studying abroad) + 生 (student); a student who \"stays and studies\" abroad.",
+      "tip": "留学生 is a student studying abroad (an exchange/international student); 留学する means \"to study abroad.\" Don't confuse the 留 (to stay) with 流 (to flow).",
+      "accent": 3
+    },
+    {
+      "key": "mnn:11:41",
+      "kana": "クラス",
+      "kanji": "",
+      "context": "",
+      "mean": "class",
+      "cat": "noun",
+      "type": "",
+      "trans": "",
+      "dict": "クラス",
+      "dictRead": "クラス",
+      "audio": "/Audio/minnamoi/bai11/00010100101000010.mp3",
+      "levels": {
+        "N5": [
+          "わたしのクラスに<ruby>学生<rt>がくせい</rt></ruby>が<ruby>二十人<rt>にじゅうにん</rt></ruby>います。",
+          "There are twenty students in my class."
+        ],
+        "N4": [
+          "<ruby>同<rt>おな</rt></ruby>じクラスの<ruby>友<rt>とも</rt></ruby>だちと<ruby>一緒<rt>いっしょ</rt></ruby>に<ruby>勉強<rt>べんきょう</rt></ruby>しました。",
+          "I studied together with a friend from the same class."
+        ],
+        "N3": [
+          "クラスのみんなが<ruby>楽<rt>たの</rt></ruby>しめるように、<ruby>司会<rt>しかい</rt></ruby>は<ruby>工夫<rt>くふう</rt></ruby>するようにしています。",
+          "So that everyone in the class can enjoy it, I make a point of being creative as the host."
+        ],
+        "N2": [
+          "クラスの<ruby>雰囲気<rt>ふんいき</rt></ruby>はいいものの、<ruby>発言<rt>はつげん</rt></ruby>する<ruby>人<rt>ひと</rt></ruby>がいつも<ruby>同<rt>おな</rt></ruby>じなのが<ruby>気<rt>き</rt></ruby>になる。",
+          "Although the class has a good atmosphere, it bothers me that the same people always speak up."
+        ],
+        "N1": [
+          "レベルの<ruby>異<rt>こと</rt></ruby>なる<ruby>学生<rt>がくせい</rt></ruby>が<ruby>混在<rt>こんざい</rt></ruby>するクラスをまとめ<ruby>上<rt>あ</rt></ruby>げるには、<ruby>相当<rt>そうとう</rt></ruby>な<ruby>指導力<rt>しどうりょく</rt></ruby>が<ruby>求<rt>もと</rt></ruby>められる。",
+          "Pulling together a class in which students of differing levels are mixed demands considerable leadership."
+        ]
+      },
+      "mnem": "\"クラス\" is the English \"class\" in katakana — say \"ku-ra-su\" and hear the loanword.",
+      "tip": "クラス is a class/group of students (a loanword); for a school lesson/subject use 授業 (じゅぎょう) or 課 (か). Written in katakana.",
+      "accent": 1
+    },
+    {
+      "key": "mnn:11:42",
+      "kana": "〜じかん",
+      "kanji": "〜時間",
+      "context": "何〜",
+      "mean": "counter for hours; duration in hours",
+      "cat": "phrase",
+      "type": "",
+      "trans": "",
+      "dict": "〜時間",
+      "dictRead": "〜じかん",
+      "audio": "/Audio/minnamoi/bai11/00010100101000011.mp3",
+      "levels": {
+        "N5": [
+          "<ruby>毎日<rt>まいにち</rt></ruby><ruby>八時間<rt>はちじかん</rt></ruby><ruby>働<rt>はたら</rt></ruby>きます。",
+          "I work eight hours every day."
+        ],
+        "N4": [
+          "<ruby>昨日<rt>きのう</rt></ruby>は<ruby>三時間<rt>さんじかん</rt></ruby><ruby>日本語<rt>にほんご</rt></ruby>を<ruby>勉強<rt>べんきょう</rt></ruby>しました。",
+          "Yesterday I studied Japanese for three hours."
+        ],
+        "N3": [
+          "<ruby>寝<rt>ね</rt></ruby>る<ruby>前<rt>まえ</rt></ruby>の<ruby>一時間<rt>いちじかん</rt></ruby>は、<ruby>本<rt>ほん</rt></ruby>を<ruby>読<rt>よ</rt></ruby>むようにしています。",
+          "I make a point of reading a book for the hour before I go to sleep."
+        ],
+        "N2": [
+          "<ruby>何時間<rt>なんじかん</rt></ruby>も<ruby>待<rt>ま</rt></ruby>ったものの、<ruby>結局<rt>けっきょく</rt></ruby><ruby>彼<rt>かれ</rt></ruby>は<ruby>来<rt>こ</rt></ruby>なかった。",
+          "Although I waited for hours, in the end he never came."
+        ],
+        "N1": [
+          "<ruby>限<rt>かぎ</rt></ruby>られた<ruby>数時間<rt>すうじかん</rt></ruby>のうちに<ruby>結論<rt>けつろん</rt></ruby>を<ruby>出<rt>だ</rt></ruby>さねばならず、<ruby>会議<rt>かいぎ</rt></ruby>は<ruby>緊迫<rt>きんぱく</rt></ruby>した<ruby>空気<rt>くうき</rt></ruby>に<ruby>包<rt>つつ</rt></ruby>まれた。",
+          "A conclusion had to be reached within a limited few hours, and the meeting was enveloped in a tense atmosphere."
+        ]
+      },
+      "mnem": "〜時間 = 時 (time/o'clock) + 間 (interval); the interval BETWEEN hours = a duration of hours.",
+      "tip": "〜時間 counts a DURATION (三時間 = for 3 hours), while 〜時 (じ) tells the clock TIME (三時 = 3 o'clock) — don't mix them. Ask duration with 何時間 (なんじかん).",
+      "accent": 0
+    },
+    {
+      "key": "mnn:11:43",
+      "kana": "〜しゅうかん",
+      "kanji": "〜週間",
+      "context": "何〜",
+      "mean": "counter for weeks",
+      "cat": "phrase",
+      "type": "",
+      "trans": "",
+      "dict": "〜週間",
+      "dictRead": "〜しゅうかん",
+      "audio": "/Audio/minnamoi/bai11/00010100101000100.mp3",
+      "levels": {
+        "N5": [
+          "<ruby>日本<rt>にほん</rt></ruby>に<ruby>二週間<rt>にしゅうかん</rt></ruby>います。",
+          "I'll be in Japan for two weeks."
+        ],
+        "N4": [
+          "<ruby>夏休<rt>なつやす</rt></ruby>みに<ruby>一週間<rt>いっしゅうかん</rt></ruby><ruby>旅行<rt>りょこう</rt></ruby>しました。",
+          "During summer vacation I traveled for one week."
+        ],
+        "N3": [
+          "<ruby>試験<rt>しけん</rt></ruby>まであと<ruby>三週間<rt>さんしゅうかん</rt></ruby>なので、<ruby>毎日<rt>まいにち</rt></ruby><ruby>復習<rt>ふくしゅう</rt></ruby>するようにしています。",
+          "There are three weeks left until the exam, so I make a point of reviewing every day."
+        ],
+        "N2": [
+          "<ruby>入院<rt>にゅういん</rt></ruby>は<ruby>数週間<rt>すうしゅうかん</rt></ruby>に<ruby>及<rt>およ</rt></ruby>んだものの、<ruby>幸<rt>さいわ</rt></ruby>い<ruby>大事<rt>だいじ</rt></ruby>には<ruby>至<rt>いた</rt></ruby>らなかった。",
+          "Although the hospitalization stretched to several weeks, fortunately it didn't become serious."
+        ],
+        "N1": [
+          "わずか<ruby>数週間<rt>すうしゅうかん</rt></ruby>の<ruby>短期<rt>たんき</rt></ruby><ruby>留学<rt>りゅうがく</rt></ruby>であっても、<ruby>異文化<rt>いぶんか</rt></ruby>に<ruby>身<rt>み</rt></ruby>を<ruby>置<rt>お</rt></ruby>いた<ruby>経験<rt>けいけん</rt></ruby>は<ruby>一生<rt>いっしょう</rt></ruby>の<ruby>財産<rt>ざいさん</rt></ruby>となる。",
+          "Even a short study-abroad of just a few weeks, the experience of immersing yourself in a foreign culture becomes a lifelong treasure."
+        ]
+      },
+      "mnem": "〜週間 = 週 (week) + 間 (interval); the span across weeks = a duration in weeks.",
+      "tip": "〜週間 counts a duration in weeks (二週間 = two weeks); note 一週間 is いっしゅうかん (small っ). Ask with 何週間 (なんしゅうかん). Contrast 〜週 in day-names.",
+      "accent": 0
+    },
+    {
+      "key": "mnn:11:44",
+      "kana": "〜かげつ",
+      "kanji": "〜か月",
+      "context": "何〜",
+      "mean": "counter for months (duration)",
+      "cat": "phrase",
+      "type": "",
+      "trans": "",
+      "dict": "〜か月",
+      "dictRead": "〜かげつ",
+      "audio": "/Audio/minnamoi/bai11/00010100101000101.mp3",
+      "levels": {
+        "N5": [
+          "<ruby>三<rt>さん</rt></ruby>か<ruby>月<rt>げつ</rt></ruby><ruby>日本語<rt>にほんご</rt></ruby>を<ruby>勉強<rt>べんきょう</rt></ruby>しました。",
+          "I studied Japanese for three months."
+        ],
+        "N4": [
+          "<ruby>一<rt>いっ</rt></ruby>か<ruby>月<rt>げつ</rt></ruby>に<ruby>一回<rt>いっかい</rt></ruby><ruby>田舎<rt>いなか</rt></ruby>へ<ruby>帰<rt>かえ</rt></ruby>ります。",
+          "I go back to the countryside once a month."
+        ],
+        "N3": [
+          "<ruby>目標<rt>もくひょう</rt></ruby>を<ruby>立<rt>た</rt></ruby>てて、<ruby>六<rt>ろっ</rt></ruby>か<ruby>月<rt>げつ</rt></ruby>で<ruby>合格<rt>ごうかく</rt></ruby>できるように<ruby>頑張<rt>がんば</rt></ruby>るようにしています。",
+          "I set a goal and make a point of working hard so I can pass in six months."
+        ],
+        "N2": [
+          "<ruby>準備<rt>じゅんび</rt></ruby>に<ruby>数<rt>すう</rt></ruby>か<ruby>月<rt>げつ</rt></ruby>かかったものの、その<ruby>甲斐<rt>かい</rt></ruby>あってイベントは<ruby>大成功<rt>だいせいこう</rt></ruby>だった。",
+          "Although the preparation took several months, thanks to that effort the event was a great success."
+        ],
+        "N1": [
+          "<ruby>着任<rt>ちゃくにん</rt></ruby>からわずか<ruby>数<rt>すう</rt></ruby>か<ruby>月<rt>げつ</rt></ruby>で<ruby>組織<rt>そしき</rt></ruby>を<ruby>立<rt>た</rt></ruby>て<ruby>直<rt>なお</rt></ruby>した<ruby>手腕<rt>しゅわん</rt></ruby>には、<ruby>誰<rt>だれ</rt></ruby>もが<ruby>舌<rt>した</rt></ruby>を<ruby>巻<rt>ま</rt></ruby>いた。",
+          "Everyone was astonished at the skill with which he rebuilt the organization in a mere few months after taking office."
+        ]
+      },
+      "mnem": "〜か月 = か (a counter-syllable) + 月 (month); \"how many か-months?\" for a stretch of months.",
+      "tip": "〜か月 counts a DURATION in months (三か月 = three months); it's read 〜かげつ. Contrast 〜月 (がつ), which names the month itself (三月 = March).",
+      "accent": 0
+    },
+    {
+      "key": "mnn:11:45",
+      "kana": "〜ねん",
+      "kanji": "〜年",
+      "context": "何〜",
+      "mean": "counter for years",
+      "cat": "phrase",
+      "type": "",
+      "trans": "",
+      "dict": "〜年",
+      "dictRead": "〜ねん",
+      "audio": "/Audio/minnamoi/bai11/00010100101000110.mp3",
+      "levels": {
+        "N5": [
+          "<ruby>日本<rt>にほん</rt></ruby>に<ruby>一年<rt>いちねん</rt></ruby>います。",
+          "I'll be in Japan for one year."
+        ],
+        "N4": [
+          "<ruby>大学<rt>だいがく</rt></ruby>で<ruby>四年<rt>よねん</rt></ruby><ruby>勉強<rt>べんきょう</rt></ruby>しました。",
+          "I studied at university for four years."
+        ],
+        "N3": [
+          "<ruby>一年<rt>いちねん</rt></ruby>に<ruby>一回<rt>いっかい</rt></ruby>は<ruby>国<rt>くに</rt></ruby>へ<ruby>帰<rt>かえ</rt></ruby>るようにしています。",
+          "I make a point of going back to my home country once a year."
+        ],
+        "N2": [
+          "<ruby>十年<rt>じゅうねん</rt></ruby><ruby>勤<rt>つと</rt></ruby>めた<ruby>会社<rt>かいしゃ</rt></ruby>を<ruby>辞<rt>や</rt></ruby>めるのは<ruby>寂<rt>さび</rt></ruby>しいものの、<ruby>新<rt>あたら</rt></ruby>しい<ruby>挑戦<rt>ちょうせん</rt></ruby>が<ruby>楽<rt>たの</rt></ruby>しみだ。",
+          "Although leaving the company I served for ten years is sad, I'm looking forward to a new challenge."
+        ],
+        "N1": [
+          "<ruby>長<rt>なが</rt></ruby>い<ruby>年月<rt>ねんげつ</rt></ruby>をかけて<ruby>培<rt>つちか</rt></ruby>ってきた<ruby>技術<rt>ぎじゅつ</rt></ruby>は、そう<ruby>簡単<rt>かんたん</rt></ruby>に<ruby>他者<rt>たしゃ</rt></ruby>が<ruby>真似<rt>まね</rt></ruby>できるものではない。",
+          "Skills cultivated over long years are not something others can easily imitate."
+        ]
+      },
+      "mnem": "〜年 = 年 (year); count off the years \"nen\" like turning the pages of a calendar.",
+      "tip": "〜年 counts years as a duration (三年 = three years) AND names the year (2024年); note 四年 is よねん. The same 年 reads とし as a standalone noun (\"year/age\").",
+      "accent": 1
+    },
+    {
+      "key": "mnn:11:46",
+      "kana": "〜ぐらい",
+      "kanji": "",
+      "context": "",
+      "mean": "about, approximately (a quantity)",
+      "cat": "phrase",
+      "type": "",
+      "trans": "",
+      "dict": "〜ぐらい",
+      "dictRead": "〜ぐらい",
+      "audio": "/Audio/minnamoi/bai11/00010100101000111.mp3",
+      "levels": {
+        "N5": [
+          "<ruby>教室<rt>きょうしつ</rt></ruby>に<ruby>学生<rt>がくせい</rt></ruby>が<ruby>二十人<rt>にじゅうにん</rt></ruby>ぐらいいます。",
+          "There are about twenty students in the classroom."
+        ],
+        "N4": [
+          "<ruby>昨夜<rt>ゆうべ</rt></ruby>ビールを<ruby>五本<rt>ごほん</rt></ruby>ぐらい<ruby>飲<rt>の</rt></ruby>みました。",
+          "Last night I drank about five bottles of beer."
+        ],
+        "N3": [
+          "<ruby>毎日<rt>まいにち</rt></ruby><ruby>一時間<rt>いちじかん</rt></ruby>ぐらいは<ruby>運動<rt>うんどう</rt></ruby>するようにしています。",
+          "I make a point of exercising for about an hour every day."
+        ],
+        "N2": [
+          "<ruby>半年<rt>はんとし</rt></ruby>ぐらい<ruby>頑張<rt>がんば</rt></ruby>れば<ruby>結果<rt>けっか</rt></ruby>が<ruby>出<rt>で</rt></ruby>ると<ruby>思<rt>おも</rt></ruby>っていたものの、<ruby>現実<rt>げんじつ</rt></ruby>はそう<ruby>甘<rt>あま</rt></ruby>くなかった。",
+          "Although I thought results would come if I worked hard for about half a year, reality wasn't that easy."
+        ],
+        "N1": [
+          "これぐらいの<ruby>困難<rt>こんなん</rt></ruby>で<ruby>諦<rt>あきら</rt></ruby>めるようでは、<ruby>大<rt>おお</rt></ruby>きなことを<ruby>成<rt>な</rt></ruby>し<ruby>遂<rt>と</rt></ruby>げることなどできはしない。",
+          "If you'd give up over hardship of about this level, there's no way you could ever accomplish anything great."
+        ]
+      },
+      "mnem": "〜ぐらい attaches to a quantity to soften it to \"about\"; hear \"gu-rai\" as a rough \"grey\" area around the number.",
+      "tip": "〜ぐらい (also くらい) means \"about\" for approximate amounts (五本ぐらい); it can attach to numbers or nouns. Contrast 〜ごろ (about a point in TIME, 三時ごろ).",
+      "accent": 0
+    },
+    {
+      "key": "mnn:11:47",
+      "kana": "どのくらい",
+      "kanji": "",
+      "context": "",
+      "mean": "how long, how much, to what extent",
+      "cat": "phrase",
+      "type": "",
+      "trans": "",
+      "dict": "どのくらい",
+      "dictRead": "どのくらい",
+      "audio": "/Audio/minnamoi/bai11/00010100101001000.mp3",
+      "levels": {
+        "N5": [
+          "<ruby>駅<rt>えき</rt></ruby>までどのくらいかかりますか。",
+          "How long does it take to the station?"
+        ],
+        "N4": [
+          "これからどのくらい<ruby>日本<rt>にほん</rt></ruby>にいますか。",
+          "About how long will you stay in Japan from now?"
+        ],
+        "N3": [
+          "<ruby>新<rt>あたら</rt></ruby>しい<ruby>仕事<rt>しごと</rt></ruby>にどのくらいで<ruby>慣<rt>な</rt></ruby>れるか、<ruby>自分<rt>じぶん</rt></ruby>でもよく<ruby>分<rt>わ</rt></ruby>かりません。",
+          "I don't really know myself how long it'll take to get used to the new job."
+        ],
+        "N2": [
+          "どのくらいの<ruby>予算<rt>よさん</rt></ruby>が<ruby>必要<rt>ひつよう</rt></ruby>か<ruby>見当<rt>けんとう</rt></ruby>もつかないものの、まずは<ruby>調<rt>しら</rt></ruby>べてみることにした。",
+          "Although I had no idea how much budget would be needed, I decided to start by looking into it."
+        ],
+        "N1": [
+          "この<ruby>決断<rt>けつだん</rt></ruby>が<ruby>将来<rt>しょうらい</rt></ruby>どのくらいの<ruby>影響<rt>えいきょう</rt></ruby>を<ruby>及<rt>およ</rt></ruby>ぼすのか、<ruby>今<rt>いま</rt></ruby>の<ruby>時点<rt>じてん</rt></ruby>では<ruby>誰<rt>だれ</rt></ruby>にも<ruby>計<rt>はか</rt></ruby>り<ruby>知<rt>し</rt></ruby>れない。",
+          "How much impact this decision will have on the future is, at this point, beyond anyone's ability to gauge."
+        ]
+      },
+      "mnem": "どのくらい = どの (which/what) + くらい (about); \"about which amount?\" = how much / how long.",
+      "tip": "どのくらい (also どのぐらい) asks \"how long/how much/to what extent\" for time, quantity, or degree; a common pairing is どのくらいかかりますか (how long does it take?).",
+      "accent": 0
+    },
+    {
+      "key": "mnn:11:48",
+      "kana": "ぜんぶで",
+      "kanji": "全部で",
+      "context": "",
+      "mean": "in total, all together",
+      "cat": "phrase",
+      "type": "",
+      "trans": "",
+      "dict": "全部で",
+      "dictRead": "ぜんぶで",
+      "audio": "/Audio/minnamoi/bai11/00010100101001001.mp3",
+      "levels": {
+        "N5": [
+          "<ruby>全部<rt>ぜんぶ</rt></ruby>で<ruby>五百円<rt>ごひゃくえん</rt></ruby>です。",
+          "That's five hundred yen in total."
+        ],
+        "N4": [
+          "りんごとみかんを<ruby>全部<rt>ぜんぶ</rt></ruby>で<ruby>八<rt>やっ</rt></ruby>つ<ruby>買<rt>か</rt></ruby>いました。",
+          "I bought eight apples and oranges in total."
+        ],
+        "N3": [
+          "<ruby>参加者<rt>さんかしゃ</rt></ruby>は<ruby>全部<rt>ぜんぶ</rt></ruby>で<ruby>何人<rt>なんにん</rt></ruby>か、<ruby>先<rt>さき</rt></ruby>に<ruby>数<rt>かぞ</rt></ruby>えるようにしています。",
+          "I make a point of counting first how many participants there are in total."
+        ],
+        "N2": [
+          "<ruby>費用<rt>ひよう</rt></ruby>は<ruby>全部<rt>ぜんぶ</rt></ruby>で<ruby>十万円<rt>じゅうまんえん</rt></ruby>を<ruby>超<rt>こ</rt></ruby>えたものの、<ruby>満足<rt>まんぞく</rt></ruby>のいく<ruby>旅<rt>たび</rt></ruby>になった。",
+          "Although the costs came to over one hundred thousand yen in total, it turned out to be a satisfying trip."
+        ],
+        "N1": [
+          "<ruby>被害<rt>ひがい</rt></ruby>は<ruby>全部<rt>ぜんぶ</rt></ruby>で<ruby>数億円<rt>すうおくえん</rt></ruby>に<ruby>上<rt>のぼ</rt></ruby>るとみられ、<ruby>復旧<rt>ふっきゅう</rt></ruby>には<ruby>相当<rt>そうとう</rt></ruby>な<ruby>時間<rt>じかん</rt></ruby>を<ruby>要<rt>よう</rt></ruby>するだろう。",
+          "The damage is estimated to reach several hundred million yen in total, and recovery will likely require a considerable amount of time."
+        ]
+      },
+      "mnem": "全部で = 全部 (all/everything) + で (marking the total); \"with everything (added up)\" = in total.",
+      "tip": "全部で adds things up to a grand total (全部で五百円 = 500 yen altogether); the で marks the sum. 全部 alone just means \"all/everything.\"",
+      "accent": 1
+    },
+    {
+      "key": "mnn:11:49",
+      "kana": "みんな",
+      "kanji": "",
+      "context": "",
+      "mean": "everyone; all",
+      "cat": "noun",
+      "type": "",
+      "trans": "",
+      "dict": "みんな",
+      "dictRead": "みんな",
+      "audio": "/Audio/minnamoi/bai11/00010100101001010.mp3",
+      "levels": {
+        "N5": [
+          "クラスのみんなは<ruby>元気<rt>げんき</rt></ruby>です。",
+          "Everyone in the class is well."
+        ],
+        "N4": [
+          "<ruby>先生<rt>せんせい</rt></ruby>はみんなに<ruby>優<rt>やさ</rt></ruby>しいです。",
+          "The teacher is kind to everyone."
+        ],
+        "N3": [
+          "みんなが<ruby>楽<rt>たの</rt></ruby>しめるように、<ruby>計画<rt>けいかく</rt></ruby>を<ruby>立<rt>た</rt></ruby>てるようにしています。",
+          "So that everyone can have fun, I make a point of making a plan."
+        ],
+        "N2": [
+          "みんなが<ruby>賛成<rt>さんせい</rt></ruby>したわけではないものの、<ruby>最終的<rt>さいしゅうてき</rt></ruby>には<ruby>一<rt>ひと</rt></ruby>つの<ruby>結論<rt>けつろん</rt></ruby>にまとまった。",
+          "Although not everyone agreed, in the end it came together into a single conclusion."
+        ],
+        "N1": [
+          "みんなの<ruby>期待<rt>きたい</rt></ruby>を<ruby>一身<rt>いっしん</rt></ruby>に<ruby>背負<rt>せお</rt></ruby>っていたからこそ、<ruby>彼<rt>かれ</rt></ruby>はどんな<ruby>重圧<rt>じゅうあつ</rt></ruby>にも<ruby>屈<rt>くっ</rt></ruby>することがなかった。",
+          "It was precisely because he bore the expectations of everyone on his shoulders that he never yielded to any pressure."
+        ]
+      },
+      "mnem": "\"みんな\" — picture the whole gang saying \"me-and-na (everybody)\" as they gather; the polite form is 皆さん (みなさん).",
+      "tip": "みんな means \"everyone/all\" (casual); the polite form is 皆さん (みなさん). It can refer to people (everyone) or, loosely, to \"all\" of a set of things.",
+      "accent": 3
+    },
+    {
+      "key": "mnn:11:50",
+      "kana": "〜だけ",
+      "kanji": "",
+      "context": "",
+      "mean": "only, just (that much and no more)",
+      "cat": "phrase",
+      "type": "",
+      "trans": "",
+      "dict": "〜だけ",
+      "dictRead": "〜だけ",
+      "audio": "/Audio/minnamoi/bai11/00010100101001011.mp3",
+      "levels": {
+        "N5": [
+          "<ruby>野菜<rt>やさい</rt></ruby>だけ<ruby>食<rt>た</rt></ruby>べます。",
+          "I eat only vegetables."
+        ],
+        "N4": [
+          "<ruby>休<rt>やす</rt></ruby>みは<ruby>十分<rt>じゅっぷん</rt></ruby>だけです。",
+          "The break is only ten minutes."
+        ],
+        "N3": [
+          "<ruby>必要<rt>ひつよう</rt></ruby>なものだけを<ruby>買<rt>か</rt></ruby>うようにしています。",
+          "I make a point of buying only what I need."
+        ],
+        "N2": [
+          "<ruby>口<rt>くち</rt></ruby>で<ruby>言<rt>い</rt></ruby>うだけなら<ruby>簡単<rt>かんたん</rt></ruby>なものの、<ruby>実際<rt>じっさい</rt></ruby>に<ruby>行動<rt>こうどう</rt></ruby>に<ruby>移<rt>うつ</rt></ruby>すのは<ruby>難<rt>むずか</rt></ruby>しい。",
+          "Although it's easy just to say it, actually putting it into action is difficult."
+        ],
+        "N1": [
+          "できるだけのことはやり<ruby>尽<rt>つ</rt></ruby>くした<ruby>以上<rt>いじょう</rt></ruby>、あとは<ruby>結果<rt>けっか</rt></ruby>を<ruby>静<rt>しず</rt></ruby>かに<ruby>待<rt>ま</rt></ruby>つほかない。",
+          "Given that I've done everything I possibly could, there's nothing left but to quietly await the result."
+        ]
+      },
+      "mnem": "〜だけ marks a limit — \"just that much\"; hear \"da-keh\" as \"that (and) OK, no more.\"",
+      "tip": "〜だけ means \"only/just\" and follows the noun (野菜だけ = only vegetables); it emphasizes a limit positively, unlike しか〜ない, which needs a negative verb (野菜しか食べない).",
+      "accent": 0
+    }
+  ],
+  "grammar": [
+    {
+      "pattern": "N を [counter] V (quantity with the counter after the number)",
+      "structure": "N ＋ を ＋ [数 ＋ 助数詞] ＋ V",
+      "explain": "To say how many of something, place the number-plus-counter directly BEFORE the verb, with no particle on it. Japanese picks the counter by the shape/type of the thing: 〜つ for general objects (1〜10), 〜人 for people, 〜台 for machines/vehicles, 〜枚 for flat things, 〜回 for times. So りんごを二つ買います = I'll buy two apples; 切手を五枚ください = five stamps, please.",
+      "examples": [
+        {
+          "jp": "りんごを <ruby>二<rt>ふた</rt></ruby>つ <ruby>買<rt>か</rt></ruby>います。",
+          "en": "I'll buy two apples."
+        },
+        {
+          "jp": "<ruby>教室<rt>きょうしつ</rt></ruby>に <ruby>学生<rt>がくせい</rt></ruby>が <ruby>二十人<rt>にじゅうにん</rt></ruby> います。",
+          "en": "There are twenty students in the classroom."
+        },
+        {
+          "jp": "<ruby>駐車場<rt>ちゅうしゃじょう</rt></ruby>に <ruby>車<rt>くるま</rt></ruby>が <ruby>二台<rt>にだい</rt></ruby> あります。",
+          "en": "There are two cars in the parking lot."
+        },
+        {
+          "jp": "<ruby>八十円<rt>はちじゅうえん</rt></ruby>の <ruby>切手<rt>きって</rt></ruby>を <ruby>五枚<rt>ごまい</rt></ruby> ください。",
+          "en": "Please give me five eighty-yen stamps."
+        }
+      ]
+    },
+    {
+      "pattern": "何 + counter (asking how many)",
+      "structure": "N が／を ＋ 何 ＋ 助数詞 ＋ V ＋ か",
+      "explain": "To ask \"how many,\" put 何 in front of the counter: 何人 (how many people), 何台 (how many machines), 何枚 (how many flat things), 何回 (how many times). For 〜つ-countable things the question word is いくつ. The answer supplies the same counter.",
+      "examples": [
+        {
+          "jp": "<ruby>学生<rt>がくせい</rt></ruby>が <ruby>何人<rt>なんにん</rt></ruby> いますか。",
+          "en": "How many students are there?"
+        },
+        {
+          "jp": "りんごが いくつ ありますか。",
+          "en": "How many apples are there?"
+        },
+        {
+          "jp": "<ruby>写真<rt>しゃしん</rt></ruby>を <ruby>何枚<rt>なんまい</rt></ruby> <ruby>撮<rt>と</rt></ruby>りましたか。",
+          "en": "How many photos did you take?"
+        }
+      ]
+    },
+    {
+      "pattern": "[period] に [times] (frequency per period)",
+      "structure": "[期間] ＋ に ＋ [回数] ＋ V",
+      "explain": "To say how often you do something within a span of time, mark the span with に and follow it with the frequency: 一週間に二回 = twice a week, 一か月に一回 = once a month. The particle に links the period to the count.",
+      "examples": [
+        {
+          "jp": "<ruby>私<rt>わたし</rt></ruby>は <ruby>一週間<rt>いっしゅうかん</rt></ruby>に <ruby>二回<rt>にかい</rt></ruby> <ruby>映画<rt>えいが</rt></ruby>を <ruby>見<rt>み</rt></ruby>ます。",
+          "en": "I watch a movie twice a week."
+        },
+        {
+          "jp": "ナムさんは <ruby>一<rt>いっ</rt></ruby>か<ruby>月<rt>げつ</rt></ruby>に <ruby>一回<rt>いっかい</rt></ruby> <ruby>田舎<rt>いなか</rt></ruby>へ <ruby>帰<rt>かえ</rt></ruby>ります。",
+          "en": "Nam goes back to the countryside once a month."
+        }
+      ]
+    },
+    {
+      "pattern": "どのくらい … かかります／います (how long/how much)",
+      "structure": "どのくらい ＋ V (＋ [期間・数量] ＋ かかります／います)",
+      "explain": "どのくらい asks about an amount of time, distance, money, or degree. It commonly pairs with かかる (it takes) for time/cost and with periods of stay. The answer states the amount, often softened with ぐらい (about). Contrast 全部で (in total) and 〜だけ (only), also introduced here.",
+      "examples": [
+        {
+          "jp": "<ruby>大阪<rt>おおさか</rt></ruby>から <ruby>東京<rt>とうきょう</rt></ruby>まで <ruby>新幹線<rt>しんかんせん</rt></ruby>で どのくらい かかりますか。",
+          "en": "How long does it take from Osaka to Tokyo by Shinkansen?"
+        },
+        {
+          "jp": "<ruby>二時間半<rt>にじかんはん</rt></ruby> かかります。",
+          "en": "It takes two and a half hours."
+        },
+        {
+          "jp": "<ruby>私<rt>わたし</rt></ruby>は <ruby>野菜<rt>やさい</rt></ruby>だけ <ruby>食<rt>た</rt></ruby>べます。",
+          "en": "I eat only vegetables."
+        }
+      ]
+    }
+  ],
+  "examples": [
+    {
+      "jp": "<ruby>会議室<rt>かいぎしつ</rt></ruby>に テーブルが <ruby>七<rt>なな</rt></ruby>つ あります。",
+      "en": "There are seven tables in the meeting room."
+    },
+    {
+      "jp": "<ruby>私<rt>わたし</rt></ruby>は <ruby>日本<rt>にほん</rt></ruby>に <ruby>一年<rt>いちねん</rt></ruby> います。",
+      "en": "I'll be in Japan for one year."
+    },
+    {
+      "jp": "りんごを いくつ <ruby>買<rt>か</rt></ruby>いましたか。 …<ruby>四<rt>よっ</rt></ruby>つ <ruby>買<rt>か</rt></ruby>いました。",
+      "en": "How many apples did you buy? …I bought four."
+    },
+    {
+      "jp": "<ruby>八十円<rt>はちじゅうえん</rt></ruby>の <ruby>切手<rt>きって</rt></ruby>を <ruby>五枚<rt>ごまい</rt></ruby>と はがきを <ruby>二枚<rt>にまい</rt></ruby> ください。 …はい。<ruby>全部<rt>ぜんぶ</rt></ruby>で <ruby>五百円<rt>ごひゃくえん</rt></ruby>です。",
+      "en": "Please give me five eighty-yen stamps and two postcards. …Yes, that's five hundred yen in total."
+    },
+    {
+      "jp": "<ruby>兄弟<rt>きょうだい</rt></ruby>は <ruby>何人<rt>なんにん</rt></ruby>ですか。 …<ruby>四人<rt>よにん</rt></ruby>です。<ruby>姉<rt>あね</rt></ruby>が <ruby>二人<rt>ふたり</rt></ruby>と <ruby>兄<rt>あに</rt></ruby>が <ruby>一人<rt>ひとり</rt></ruby> います。",
+      "en": "How many siblings do you have? …Four. I have two older sisters and one older brother."
+    },
+    {
+      "jp": "<ruby>一週間<rt>いっしゅうかん</rt></ruby>に <ruby>何回<rt>なんかい</rt></ruby> テニスを しますか。 …<ruby>二回<rt>にかい</rt></ruby>ぐらい します。",
+      "en": "How many times a week do you play tennis? …About twice."
+    },
+    {
+      "jp": "<ruby>田中<rt>たなか</rt></ruby>さんは どのくらい スペイン<ruby>語<rt>ご</rt></ruby>を <ruby>勉強<rt>べんきょう</rt></ruby>しましたか。 …<ruby>三<rt>さん</rt></ruby>か<ruby>月<rt>げつ</rt></ruby>だけです。",
+      "en": "How long has Tanaka been studying Spanish? …Only three months."
+    },
+    {
+      "jp": "<ruby>大阪<rt>おおさか</rt></ruby>から <ruby>東京<rt>とうきょう</rt></ruby>まで <ruby>新幹線<rt>しんかんせん</rt></ruby>で どのくらい かかりますか。 …<ruby>二時間半<rt>にじかんはん</rt></ruby> かかります。",
+      "en": "How long does it take from Osaka to Tokyo by Shinkansen? …Two and a half hours."
+    }
+  ],
+  "conversation": {
+    "title": "これ、お願いします (Could you mail this for me?)",
+    "audio": "/Audio/minnahonsatsu1/39.mp3",
+    "lines": [
+      {
+        "role": "隣の人",
+        "jp": "いい <ruby>天気<rt>てんき</rt></ruby>ですね。お<ruby>出<rt>で</rt></ruby>かけですか。",
+        "en": "The weather's nice, isn't it? Are you heading out?"
+      },
+      {
+        "role": "ミラー",
+        "jp": "ええ。ちょっと <ruby>郵便局<rt>ゆうびんきょく</rt></ruby>まで。",
+        "en": "Yes. Just to the post office."
+      },
+      {
+        "role": "隣の人",
+        "jp": "そうですか。<ruby>行<rt>い</rt></ruby>ってらっしゃい。",
+        "en": "I see. Have a good trip."
+      },
+      {
+        "role": "ミラー",
+        "jp": "<ruby>行<rt>い</rt></ruby>って きます。",
+        "en": "I'm off."
+      },
+      {
+        "role": "ミラー",
+        "jp": "これ、オーストラリアまで お<ruby>願<rt>ねが</rt></ruby>いします。",
+        "en": "Please send this to Australia."
+      },
+      {
+        "role": "局員",
+        "jp": "はい。<ruby>船便<rt>ふなびん</rt></ruby>ですか、<ruby>航空便<rt>こうくうびん</rt></ruby>ですか。",
+        "en": "Certainly. By sea or by air?"
+      },
+      {
+        "role": "ミラー",
+        "jp": "<ruby>航空便<rt>こうくうびん</rt></ruby>は いくらですか。",
+        "en": "How much is it by air?"
+      },
+      {
+        "role": "局員",
+        "jp": "<ruby>七千六百円<rt>ななせんろっぴゃくえん</rt></ruby>です。",
+        "en": "Seven thousand six hundred yen."
+      },
+      {
+        "role": "ミラー",
+        "jp": "<ruby>船便<rt>ふなびん</rt></ruby>は？",
+        "en": "And by sea?"
+      },
+      {
+        "role": "局員",
+        "jp": "<ruby>三千四百五十円<rt>さんぜんよんひゃくごじゅうえん</rt></ruby>です。",
+        "en": "Three thousand four hundred fifty yen."
+      },
+      {
+        "role": "ミラー",
+        "jp": "どのくらい かかりますか。",
+        "en": "How long does it take?"
+      },
+      {
+        "role": "局員",
+        "jp": "<ruby>航空便<rt>こうくうびん</rt></ruby>で <ruby>七日<rt>なのか</rt></ruby>で、<ruby>船便<rt>ふなびん</rt></ruby>で <ruby>二<rt>に</rt></ruby>か<ruby>月<rt>げつ</rt></ruby>ぐらいです。",
+        "en": "By air it's seven days; by sea about two months."
+      },
+      {
+        "role": "ミラー",
+        "jp": "じゃ、<ruby>船便<rt>ふなびん</rt></ruby>で お<ruby>願<rt>ねが</rt></ruby>いします。",
+        "en": "Then please send it by sea."
+      }
+    ]
+  }
+}

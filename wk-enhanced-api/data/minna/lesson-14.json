@@ -1,0 +1,1289 @@
+{
+  "lesson": 14,
+  "title": "Lesson 14",
+  "theme": "The て-form — 〜てください (please do…), 〜ています (present progressive / ongoing action), and 〜ましょうか (Shall I…? offering help); plus everyday action verbs",
+  "source": {
+    "name": "vnjpclub.com",
+    "vocabUrl": "https://www.vnjpclub.com/en/minna-no-nihongo/lesson-14-vocabulary.html",
+    "grammarUrl": "https://www.vnjpclub.com/en/minna-no-nihongo/lesson-14-grammar.html",
+    "note": "Vocabulary, native-speaker audio, and example sentences aggregated from vnjpclub.com (Minna no Nihongo 第2版). For personal study."
+  },
+  "vocab": [
+    {
+      "key": "mnn:14:0",
+      "kana": "つけます",
+      "kanji": "",
+      "context": "電気を〜",
+      "mean": "to turn on (a light, a device)",
+      "cat": "verb",
+      "type": "ichidan",
+      "trans": "t",
+      "dict": "つける",
+      "dictRead": "つける",
+      "audio": "/Audio/minnamoi/bai14/00010100110101100.mp3",
+      "accent": 2
+    },
+    {
+      "key": "mnn:14:1",
+      "kana": "けします",
+      "kanji": "消します",
+      "context": "電気を〜",
+      "mean": "to turn off, switch off; to erase",
+      "cat": "verb",
+      "type": "godan",
+      "trans": "t",
+      "dict": "消す",
+      "dictRead": "けす",
+      "audio": "/Audio/minnamoi/bai14/00010100110101101.mp3",
+      "accent": 0
+    },
+    {
+      "key": "mnn:14:2",
+      "kana": "あけます",
+      "kanji": "開けます",
+      "context": "窓を〜",
+      "mean": "to open (a window, a door)",
+      "cat": "verb",
+      "type": "ichidan",
+      "trans": "t",
+      "dict": "開ける",
+      "dictRead": "あける",
+      "audio": "/Audio/minnamoi/bai14/00010100110101110.mp3",
+      "accent": 0
+    },
+    {
+      "key": "mnn:14:3",
+      "kana": "しめます",
+      "kanji": "閉めます",
+      "context": "ドアを〜",
+      "mean": "to close, shut (a window, a door)",
+      "cat": "verb",
+      "type": "ichidan",
+      "trans": "t",
+      "dict": "閉める",
+      "dictRead": "しめる",
+      "audio": "/Audio/minnamoi/bai14/00010100110101111.mp3",
+      "accent": 0
+    },
+    {
+      "key": "mnn:14:4",
+      "kana": "いそぎます",
+      "kanji": "急ぎます",
+      "context": "",
+      "mean": "to hurry, rush",
+      "cat": "verb",
+      "type": "godan",
+      "trans": "i",
+      "dict": "急ぐ",
+      "dictRead": "いそぐ",
+      "audio": "/Audio/minnamoi/bai14/00010100110110000.mp3",
+      "levels": {
+        "N5": [
+          "<ruby>時間<rt>じかん</rt></ruby>がないので、<ruby>急<rt>いそ</rt></ruby>ぎます。",
+          "There's no time, so I'll hurry."
+        ],
+        "N4": [
+          "<ruby>電車<rt>でんしゃ</rt></ruby>に<ruby>間<rt>ま</rt></ruby>に<ruby>合<rt>あ</rt></ruby>うように、<ruby>急<rt>いそ</rt></ruby>いで<ruby>駅<rt>えき</rt></ruby>まで<ruby>走<rt>はし</rt></ruby>りました。",
+          "I ran to the station in a hurry so I would make the train."
+        ],
+        "N3": [
+          "<ruby>遅<rt>おく</rt></ruby>れそうなときは、タクシーに<ruby>乗<rt>の</rt></ruby>って<ruby>急<rt>いそ</rt></ruby>ぐようにしています。",
+          "When I'm likely to be late, I make a point of taking a taxi and hurrying."
+        ],
+        "N2": [
+          "<ruby>急<rt>いそ</rt></ruby>げば<ruby>間<rt>ま</rt></ruby>に<ruby>合<rt>あ</rt></ruby>うものの、<ruby>雨<rt>あめ</rt></ruby>の<ruby>中<rt>なか</rt></ruby>を<ruby>走<rt>はし</rt></ruby>るのは<ruby>気<rt>き</rt></ruby>が<ruby>進<rt>すす</rt></ruby>まない。",
+          "Although I'd make it if I hurried, I don't feel like running through the rain."
+        ],
+        "N1": [
+          "<ruby>締<rt>し</rt></ruby>め<ruby>切<rt>き</rt></ruby>りが<ruby>迫<rt>せま</rt></ruby>っている<ruby>以上<rt>いじょう</rt></ruby>、<ruby>多少<rt>たしょう</rt></ruby><ruby>質<rt>しつ</rt></ruby>を<ruby>犠牲<rt>ぎせい</rt></ruby>にしてでも<ruby>急<rt>いそ</rt></ruby>がざるを<ruby>得<rt>え</rt></ruby>ない。",
+          "Given that the deadline is looming, we have no choice but to hurry, even at some cost to quality."
+        ]
+      },
+      "mnem": "\"I-so-gi\" — picture yelling \"I! SO! GO!\" as you rush out the door: 急ぐ = to hurry.",
+      "tip": "Intransitive godan verb; the て-form is 急いで (\"hurriedly / in a hurry\"), a very common adverbial use — 急いで食べる = eat in a hurry. Don't confuse the noun-like 急ぎ with the adjective 忙しい (busy).",
+      "accent": 2
+    },
+    {
+      "key": "mnn:14:5",
+      "kana": "まちます",
+      "kanji": "待ちます",
+      "context": "",
+      "mean": "to wait",
+      "cat": "verb",
+      "type": "godan",
+      "trans": "t",
+      "dict": "待つ",
+      "dictRead": "まつ",
+      "audio": "/Audio/minnamoi/bai14/00010100110110001.mp3",
+      "accent": 1
+    },
+    {
+      "key": "mnn:14:6",
+      "kana": "もちます",
+      "kanji": "持ちます",
+      "context": "",
+      "mean": "to hold, carry, have",
+      "cat": "verb",
+      "type": "godan",
+      "trans": "t",
+      "dict": "持つ",
+      "dictRead": "もつ",
+      "audio": "/Audio/minnamoi/bai14/00010100110110010.mp3",
+      "accent": 1
+    },
+    {
+      "key": "mnn:14:7",
+      "kana": "とります",
+      "kanji": "取ります",
+      "context": "写真を〜",
+      "mean": "to take (a photo)",
+      "cat": "verb",
+      "type": "godan",
+      "trans": "t",
+      "dict": "取る",
+      "dictRead": "とる",
+      "audio": "/Audio/minnamoi/bai14/00010100110110011.mp3",
+      "accent": 1
+    },
+    {
+      "key": "mnn:14:8",
+      "kana": "てつだいます",
+      "kanji": "手伝います",
+      "context": "",
+      "mean": "to help, assist",
+      "cat": "verb",
+      "type": "godan",
+      "trans": "t",
+      "dict": "手伝う",
+      "dictRead": "てつだう",
+      "audio": "/Audio/minnamoi/bai14/00010100110110100.mp3",
+      "accent": 3
+    },
+    {
+      "key": "mnn:14:9",
+      "kana": "よびます",
+      "kanji": "呼びます",
+      "context": "",
+      "mean": "to call (summon), invite",
+      "cat": "verb",
+      "type": "godan",
+      "trans": "t",
+      "dict": "呼ぶ",
+      "dictRead": "よぶ",
+      "audio": "/Audio/minnamoi/bai14/00010100110110101.mp3",
+      "accent": 0
+    },
+    {
+      "key": "mnn:14:10",
+      "kana": "はなします",
+      "kanji": "話します",
+      "context": "",
+      "mean": "to speak, talk",
+      "cat": "verb",
+      "type": "godan",
+      "trans": "t",
+      "dict": "話す",
+      "dictRead": "はなす",
+      "audio": "/Audio/minnamoi/bai14/00010100110110110.mp3",
+      "accent": 2
+    },
+    {
+      "key": "mnn:14:11",
+      "kana": "つかいます",
+      "kanji": "使います",
+      "context": "",
+      "mean": "to use",
+      "cat": "verb",
+      "type": "godan",
+      "trans": "t",
+      "dict": "使う",
+      "dictRead": "つかう",
+      "audio": "/Audio/minnamoi/bai14/00010100110110111.mp3",
+      "accent": 0
+    },
+    {
+      "key": "mnn:14:12",
+      "kana": "とめます",
+      "kanji": "止めます",
+      "context": "車を〜",
+      "mean": "to stop (something), park (a car)",
+      "cat": "verb",
+      "type": "ichidan",
+      "trans": "t",
+      "dict": "止める",
+      "dictRead": "とめる",
+      "audio": "/Audio/minnamoi/bai14/00010100110111000.mp3",
+      "accent": 0
+    },
+    {
+      "key": "mnn:14:13",
+      "kana": "みせます",
+      "kanji": "見せます",
+      "context": "パスポートを〜",
+      "mean": "to show",
+      "cat": "verb",
+      "type": "ichidan",
+      "trans": "t",
+      "dict": "見せる",
+      "dictRead": "みせる",
+      "audio": "/Audio/minnamoi/bai14/00010100110111001.mp3",
+      "accent": 2
+    },
+    {
+      "key": "mnn:14:14",
+      "kana": "おしえます",
+      "kanji": "教えます",
+      "context": "住所を〜",
+      "mean": "to tell (information such as an address); to teach",
+      "cat": "verb",
+      "type": "ichidan",
+      "trans": "t",
+      "dict": "教える",
+      "dictRead": "おしえる",
+      "audio": "/Audio/minnamoi/bai14/00010100110111010.mp3",
+      "accent": 0
+    },
+    {
+      "key": "mnn:14:15",
+      "kana": "すわります",
+      "kanji": "座ります",
+      "context": "いすに〜",
+      "mean": "to sit down",
+      "cat": "verb",
+      "type": "godan",
+      "trans": "i",
+      "dict": "座る",
+      "dictRead": "すわる",
+      "audio": "/Audio/minnamoi/bai14/00010100110111011.mp3",
+      "accent": 0
+    },
+    {
+      "key": "mnn:14:16",
+      "kana": "たちます",
+      "kanji": "立ちます",
+      "context": "",
+      "mean": "to stand up",
+      "cat": "verb",
+      "type": "godan",
+      "trans": "i",
+      "dict": "立つ",
+      "dictRead": "たつ",
+      "audio": "/Audio/minnamoi/bai14/00010100110111100.mp3",
+      "accent": 1
+    },
+    {
+      "key": "mnn:14:17",
+      "kana": "はいります",
+      "kanji": "入ります",
+      "context": "喫茶店に〜",
+      "mean": "to enter, go into (a café)",
+      "cat": "verb",
+      "type": "godan",
+      "trans": "i",
+      "dict": "入る",
+      "dictRead": "はいる",
+      "audio": "/Audio/minnamoi/bai14/00010100110111101.mp3",
+      "accent": 1
+    },
+    {
+      "key": "mnn:14:18",
+      "kana": "でます",
+      "kanji": "出ます",
+      "context": "喫茶店を〜",
+      "mean": "to go out, leave (a café)",
+      "cat": "verb",
+      "type": "ichidan",
+      "trans": "i",
+      "dict": "出る",
+      "dictRead": "でる",
+      "audio": "/Audio/minnamoi/bai14/00010100110111110.mp3",
+      "accent": 1
+    },
+    {
+      "key": "mnn:14:19",
+      "kana": "ふります",
+      "kanji": "降ります",
+      "context": "雨が〜",
+      "mean": "to fall (rain, snow)",
+      "cat": "verb",
+      "type": "godan",
+      "trans": "i",
+      "dict": "降る",
+      "dictRead": "ふる",
+      "audio": "/Audio/minnamoi/bai14/00010100110111111.mp3",
+      "levels": {
+        "N5": [
+          "<ruby>雨<rt>あめ</rt></ruby>が<ruby>降<rt>ふ</rt></ruby>ります。",
+          "It rains."
+        ],
+        "N4": [
+          "<ruby>朝<rt>あさ</rt></ruby>から<ruby>雪<rt>ゆき</rt></ruby>が<ruby>降<rt>ふ</rt></ruby>っています。",
+          "It has been snowing since morning."
+        ],
+        "N3": [
+          "<ruby>雨<rt>あめ</rt></ruby>が<ruby>降<rt>ふ</rt></ruby>りそうなので、<ruby>傘<rt>かさ</rt></ruby>を<ruby>持<rt>も</rt></ruby>って<ruby>行<rt>い</rt></ruby>くようにしています。",
+          "Since it looks like it might rain, I make a point of taking an umbrella."
+        ],
+        "N2": [
+          "<ruby>天気予報<rt>てんきよほう</rt></ruby>では<ruby>晴<rt>は</rt></ruby>れると<ruby>言<rt>い</rt></ruby>っていたものの、<ruby>結局<rt>けっきょく</rt></ruby><ruby>一日中<rt>いちにちじゅう</rt></ruby><ruby>雨<rt>あめ</rt></ruby>が<ruby>降<rt>ふ</rt></ruby>っていた。",
+          "Although the forecast said it would be sunny, in the end it rained all day long."
+        ],
+        "N1": [
+          "<ruby>山<rt>やま</rt></ruby>の<ruby>天気<rt>てんき</rt></ruby>は<ruby>変<rt>か</rt></ruby>わりやすく、<ruby>晴<rt>は</rt></ruby>れていたかと<ruby>思<rt>おも</rt></ruby>えば<ruby>突然<rt>とつぜん</rt></ruby><ruby>雨<rt>あめ</rt></ruby>が<ruby>降<rt>ふ</rt></ruby>り<ruby>出<rt>だ</rt></ruby>すことも<ruby>珍<rt>めずら</rt></ruby>しくない。",
+          "Mountain weather changes easily; it's not unusual for it to suddenly start raining just when you thought it was clear."
+        ]
+      },
+      "mnem": "\"Foo-roo\" — imagine blowing \"phew, rue\" as rain 降る falls down from the sky onto you.",
+      "tip": "降る is intransitive and used for things falling from the sky (雨・雪), with the falling thing marked が. Same kanji reads おりる (to get off a train/bus) — a different verb (出ます in this lesson's café frame is unrelated); don't mix 雨が降る (rain falls) with バスを降りる (get off a bus).",
+      "accent": 1
+    },
+    {
+      "key": "mnn:14:20",
+      "kana": "コピーします",
+      "kanji": "",
+      "context": "",
+      "mean": "to copy, make a photocopy",
+      "cat": "verb",
+      "type": "irregular",
+      "trans": "t",
+      "dict": "コピーする",
+      "dictRead": "コピーする",
+      "audio": "/Audio/minnamoi/bai14/00010100111000000.mp3",
+      "levels": {
+        "N5": [
+          "この<ruby>紙<rt>かみ</rt></ruby>をコピーします。",
+          "I copy this piece of paper."
+        ],
+        "N4": [
+          "<ruby>会議<rt>かいぎ</rt></ruby>の<ruby>前<rt>まえ</rt></ruby>に、この<ruby>資料<rt>しりょう</rt></ruby>を<ruby>十枚<rt>じゅうまい</rt></ruby>コピーしてください。",
+          "Before the meeting, please make ten copies of these documents."
+        ],
+        "N3": [
+          "<ruby>大切<rt>たいせつ</rt></ruby>な<ruby>書類<rt>しょるい</rt></ruby>は、<ruby>念<rt>ねん</rt></ruby>のためコピーしておくようにしています。",
+          "I make a point of copying important documents just in case."
+        ],
+        "N2": [
+          "コピー<ruby>機<rt>き</rt></ruby>が<ruby>故障<rt>こしょう</rt></ruby>しているものの、<ruby>今日中<rt>きょうじゅう</rt></ruby>にこの<ruby>書類<rt>しょるい</rt></ruby>をコピーしなければならない。",
+          "Although the copier is broken, I have to copy these documents by the end of today."
+        ],
+        "N1": [
+          "<ruby>機密<rt>きみつ</rt></ruby><ruby>文書<rt>ぶんしょ</rt></ruby>である<ruby>以上<rt>いじょう</rt></ruby>、たとえ<ruby>一枚<rt>いちまい</rt></ruby>であれ<ruby>無断<rt>むだん</rt></ruby>でコピーすることは<ruby>厳<rt>きび</rt></ruby>しく<ruby>禁<rt>きん</rt></ruby>じられている。",
+          "Given that it is a confidential document, copying it without permission—even a single sheet—is strictly forbidden."
+        ]
+      },
+      "mnem": "\"Copy\" → コピー is the English word in katakana; add する and you have the verb コピーする (to make a copy).",
+      "tip": "A する-verb (irregular): コピーします / コピーして / コピーしない. It's specifically photocopying/duplicating; for \"copy and paste\" text digitally you'd still hear コピー, but for imitating someone's behavior use まねる (真似る) instead.",
+      "accent": 1
+    },
+    {
+      "key": "mnn:14:21",
+      "kana": "でんき",
+      "kanji": "電気",
+      "context": "〜を つけます／消します",
+      "mean": "electricity; (electric) light",
+      "cat": "noun",
+      "type": "",
+      "trans": "",
+      "dict": "電気",
+      "dictRead": "でんき",
+      "audio": "/Audio/minnamoi/bai14/00010100111000001.mp3",
+      "levels": {
+        "N5": [
+          "<ruby>電気<rt>でんき</rt></ruby>をつけます。",
+          "I turn on the light."
+        ],
+        "N4": [
+          "<ruby>部屋<rt>へや</rt></ruby>を<ruby>出<rt>で</rt></ruby>るとき、<ruby>電気<rt>でんき</rt></ruby>を<ruby>消<rt>け</rt></ruby>してください。",
+          "When you leave the room, please turn off the light."
+        ],
+        "N3": [
+          "<ruby>寝<rt>ね</rt></ruby>る<ruby>前<rt>まえ</rt></ruby>に、<ruby>必<rt>かなら</rt></ruby>ず<ruby>電気<rt>でんき</rt></ruby>を<ruby>消<rt>け</rt></ruby>すようにしています。",
+          "I make a point of always turning off the light before I go to sleep."
+        ],
+        "N2": [
+          "<ruby>節約<rt>せつやく</rt></ruby>のためとはいえ、<ruby>暗<rt>くら</rt></ruby>い<ruby>部屋<rt>へや</rt></ruby>で<ruby>電気<rt>でんき</rt></ruby>もつけずに<ruby>過<rt>す</rt></ruby>ごすのはつらい。",
+          "Even if it's for the sake of saving money, it's hard to spend time in a dark room without even turning on the light."
+        ],
+        "N1": [
+          "<ruby>災害<rt>さいがい</rt></ruby>で<ruby>電気<rt>でんき</rt></ruby>が<ruby>止<rt>と</rt></ruby>まってしまった<ruby>以上<rt>いじょう</rt></ruby>、<ruby>復旧<rt>ふっきゅう</rt></ruby>まで<ruby>不便<rt>ふべん</rt></ruby>な<ruby>生活<rt>せいかつ</rt></ruby>を<ruby>強<rt>し</rt></ruby>いられるのは<ruby>避<rt>さ</rt></ruby>けられない。",
+          "Given that the disaster cut off the electricity, being forced into an inconvenient life until power is restored is unavoidable."
+        ]
+      },
+      "mnem": "電 (electric) + 気 (energy/spirit) = electric energy — 電気, both the electricity in the wires and the light it powers.",
+      "tip": "電気 covers BOTH \"electricity\" and \"the (ceiling/room) light\": 電気をつける = turn on the light. Don't confuse with 電気屋 (electronics shop), 電車 (train), or 電話 (telephone), which share the 電 kanji.",
+      "accent": 1
+    },
+    {
+      "key": "mnn:14:22",
+      "kana": "エアコン",
+      "kanji": "",
+      "context": "",
+      "mean": "air conditioner",
+      "cat": "noun",
+      "type": "",
+      "trans": "",
+      "dict": "エアコン",
+      "dictRead": "エアコン",
+      "audio": "/Audio/minnamoi/bai14/00010100111000010.mp3",
+      "levels": {
+        "N5": [
+          "<ruby>暑<rt>あつ</rt></ruby>いですから、エアコンをつけます。",
+          "It's hot, so I'll turn on the air conditioner."
+        ],
+        "N4": [
+          "<ruby>部屋<rt>へや</rt></ruby>が<ruby>寒<rt>さむ</rt></ruby>いとき、エアコンを<ruby>消<rt>け</rt></ruby>します。",
+          "When the room is cold, I turn off the air conditioner."
+        ],
+        "N3": [
+          "<ruby>電気代<rt>でんきだい</rt></ruby>が<ruby>高<rt>たか</rt></ruby>いので、エアコンはあまり<ruby>使<rt>つか</rt></ruby>わないようにしています。",
+          "Since the electricity bill is high, I try not to use the air conditioner much."
+        ],
+        "N2": [
+          "<ruby>古<rt>ふる</rt></ruby>いエアコンなので<ruby>効<rt>き</rt></ruby>きが<ruby>悪<rt>わる</rt></ruby>いものの、<ruby>買<rt>か</rt></ruby>い<ruby>替<rt>か</rt></ruby>える<ruby>余裕<rt>よゆう</rt></ruby>がない。",
+          "The air conditioner is old, so it doesn't cool well, but I can't afford to replace it."
+        ],
+        "N1": [
+          "<ruby>猛暑<rt>もうしょ</rt></ruby>が<ruby>続<rt>つづ</rt></ruby>く<ruby>今<rt>いま</rt></ruby>、エアコンなしで<ruby>夏<rt>なつ</rt></ruby>を<ruby>乗<rt>の</rt></ruby>り<ruby>切<rt>き</rt></ruby>るのは<ruby>命<rt>いのち</rt></ruby>に<ruby>関<rt>かか</rt></ruby>わりかねない。",
+          "With the extreme heat continuing, getting through the summer without an air conditioner could even be life-threatening."
+        ]
+      },
+      "mnem": "From English \"air conditioner\" — Japanese clips it to エアコン (air-con), the standard everyday word.",
+      "tip": "エアコン is the clipped loanword (エア + コン) and is the normal word — 冷房 (れいぼう) means specifically \"cooling\" and 暖房 (だんぼう) \"heating.\" Like the light, you つける／消す it.",
+      "accent": 0
+    },
+    {
+      "key": "mnn:14:23",
+      "kana": "パスポート",
+      "kanji": "",
+      "context": "",
+      "mean": "passport",
+      "cat": "noun",
+      "type": "",
+      "trans": "",
+      "dict": "パスポート",
+      "dictRead": "パスポート",
+      "audio": "/Audio/minnamoi/bai14/00010100111000011.mp3",
+      "levels": {
+        "N5": [
+          "パスポートを<ruby>見<rt>み</rt></ruby>せてください。",
+          "Please show me your passport."
+        ],
+        "N4": [
+          "<ruby>旅行<rt>りょこう</rt></ruby>のとき、パスポートを<ruby>持<rt>も</rt></ruby>って<ruby>行<rt>い</rt></ruby>きます。",
+          "When I travel, I take my passport with me."
+        ],
+        "N3": [
+          "<ruby>海外<rt>かいがい</rt></ruby>へ<ruby>行<rt>い</rt></ruby>く<ruby>前<rt>まえ</rt></ruby>に、パスポートの<ruby>期限<rt>きげん</rt></ruby>を<ruby>確<rt>たし</rt></ruby>かめるようにしています。",
+          "Before going abroad, I make a point of checking my passport's expiration."
+        ],
+        "N2": [
+          "パスポートを<ruby>忘<rt>わす</rt></ruby>れたわけではないものの、どこにしまったか<ruby>思<rt>おも</rt></ruby>い<ruby>出<rt>だ</rt></ruby>せない。",
+          "It's not that I forgot my passport, but I can't remember where I put it away."
+        ],
+        "N1": [
+          "パスポートを<ruby>紛失<rt>ふんしつ</rt></ruby>した<ruby>以上<rt>いじょう</rt></ruby>、<ruby>大使館<rt>たいしかん</rt></ruby>で<ruby>再発行<rt>さいはっこう</rt></ruby>の<ruby>手続<rt>てつづ</rt></ruby>きをせざるを<ruby>得<rt>え</rt></ruby>ない。",
+          "Given that I've lost my passport, I have no choice but to go through the reissuance procedure at the embassy."
+        ]
+      },
+      "mnem": "\"Passport\" → パスポート — the English word in katakana; hear \"pasu-pōto\" (pass + port).",
+      "tip": "Straight loanword; note the long vowel in ポート. Don't confuse it with パスワード (password) — same パス start, very different word.",
+      "accent": 3
+    },
+    {
+      "key": "mnn:14:24",
+      "kana": "なまえ",
+      "kanji": "名前",
+      "context": "",
+      "mean": "name",
+      "cat": "noun",
+      "type": "",
+      "trans": "",
+      "dict": "名前",
+      "dictRead": "なまえ",
+      "audio": "/Audio/minnamoi/bai14/00010100111000100.mp3",
+      "levels": {
+        "N5": [
+          "ここに<ruby>名前<rt>なまえ</rt></ruby>を<ruby>書<rt>か</rt></ruby>いてください。",
+          "Please write your name here."
+        ],
+        "N4": [
+          "この<ruby>漢字<rt>かんじ</rt></ruby>は<ruby>人<rt>ひと</rt></ruby>の<ruby>名前<rt>なまえ</rt></ruby>によく<ruby>使<rt>つか</rt></ruby>われます。",
+          "This kanji is often used in people's names."
+        ],
+        "N3": [
+          "<ruby>初<rt>はじ</rt></ruby>めて<ruby>会<rt>あ</rt></ruby>った<ruby>人<rt>ひと</rt></ruby>の<ruby>名前<rt>なまえ</rt></ruby>は、すぐに<ruby>覚<rt>おぼ</rt></ruby>えるようにしています。",
+          "I make a point of memorizing the names of people I've just met right away."
+        ],
+        "N2": [
+          "<ruby>顔<rt>かお</rt></ruby>は<ruby>覚<rt>おぼ</rt></ruby>えているものの、その<ruby>人<rt>ひと</rt></ruby>の<ruby>名前<rt>なまえ</rt></ruby>がどうしても<ruby>思<rt>おも</rt></ruby>い<ruby>出<rt>だ</rt></ruby>せない。",
+          "Although I remember the face, I simply cannot recall that person's name."
+        ],
+        "N1": [
+          "<ruby>契約<rt>けいやく</rt></ruby><ruby>書<rt>しょ</rt></ruby>にひとたび<ruby>名前<rt>なまえ</rt></ruby>を<ruby>記<rt>しる</rt></ruby>した<ruby>以上<rt>いじょう</rt></ruby>、<ruby>後<rt>あと</rt></ruby>から<ruby>知<rt>し</rt></ruby>らなかったとは<ruby>言<rt>い</rt></ruby>い<ruby>逃<rt>のが</rt></ruby>れできない。",
+          "Once you have signed your name on the contract, you cannot later get away with claiming you didn't know."
+        ]
+      },
+      "mnem": "名 (name) + 前 (front) — the label out front that identifies you: your 名前.",
+      "tip": "Everyday word for \"name\"; the polite お名前 is standard when asking someone else's. 名字／苗字 (みょうじ) is family name specifically, 名前 alone can mean given name or full name depending on context.",
+      "accent": 0
+    },
+    {
+      "key": "mnn:14:25",
+      "kana": "じゅうしょ",
+      "kanji": "住所",
+      "context": "",
+      "mean": "address",
+      "cat": "noun",
+      "type": "",
+      "trans": "",
+      "dict": "住所",
+      "dictRead": "じゅうしょ",
+      "audio": "/Audio/minnamoi/bai14/00010100111000101.mp3",
+      "levels": {
+        "N5": [
+          "ここに<ruby>住所<rt>じゅうしょ</rt></ruby>を<ruby>書<rt>か</rt></ruby>いてください。",
+          "Please write your address here."
+        ],
+        "N4": [
+          "<ruby>引<rt>ひ</rt></ruby>っ<ruby>越<rt>こ</rt></ruby>したので、<ruby>住所<rt>じゅうしょ</rt></ruby>が<ruby>変<rt>か</rt></ruby>わりました。",
+          "I moved, so my address changed."
+        ],
+        "N3": [
+          "<ruby>荷物<rt>にもつ</rt></ruby>が<ruby>届<rt>とど</rt></ruby>くように、<ruby>住所<rt>じゅうしょ</rt></ruby>を<ruby>正<rt>ただ</rt></ruby>しく<ruby>書<rt>か</rt></ruby>くようにしています。",
+          "I make a point of writing the address correctly so the package arrives."
+        ],
+        "N2": [
+          "<ruby>住所<rt>じゅうしょ</rt></ruby>は<ruby>教<rt>おし</rt></ruby>えたものの、<ruby>地図<rt>ちず</rt></ruby>がないと<ruby>分<rt>わ</rt></ruby>かりにくい<ruby>場所<rt>ばしょ</rt></ruby>だ。",
+          "Although I told them the address, it's a hard place to find without a map."
+        ],
+        "N1": [
+          "<ruby>個人<rt>こじん</rt></ruby><ruby>情報<rt>じょうほう</rt></ruby>である<ruby>以上<rt>いじょう</rt></ruby>、<ruby>住所<rt>じゅうしょ</rt></ruby>を<ruby>安易<rt>あんい</rt></ruby>に<ruby>他人<rt>たにん</rt></ruby>に<ruby>教<rt>おし</rt></ruby>えるのは<ruby>控<rt>ひか</rt></ruby>えるべきだ。",
+          "Given that it is personal information, one should refrain from casually telling others one's address."
+        ]
+      },
+      "mnem": "住 (to live/reside) + 所 (place) = the place where you live — your 住所 (address).",
+      "tip": "住所 is a written/postal address. Note the reading じゅうしょ (long じゅう). Don't confuse it with 場所 (ばしょ, \"place/location\" in general), which shares the 所 kanji.",
+      "accent": 1
+    },
+    {
+      "key": "mnn:14:26",
+      "kana": "ちず",
+      "kanji": "地図",
+      "context": "",
+      "mean": "map",
+      "cat": "noun",
+      "type": "",
+      "trans": "",
+      "dict": "地図",
+      "dictRead": "ちず",
+      "audio": "/Audio/minnamoi/bai14/00010100111000110.mp3",
+      "levels": {
+        "N5": [
+          "<ruby>地図<rt>ちず</rt></ruby>を<ruby>見<rt>み</rt></ruby>ます。",
+          "I look at a map."
+        ],
+        "N4": [
+          "<ruby>道<rt>みち</rt></ruby>が<ruby>分<rt>わ</rt></ruby>からないとき、<ruby>地図<rt>ちず</rt></ruby>をかきましょうか。",
+          "When you don't know the way, shall I draw you a map?"
+        ],
+        "N3": [
+          "<ruby>知<rt>し</rt></ruby>らない<ruby>町<rt>まち</rt></ruby>を<ruby>歩<rt>ある</rt></ruby>くときは、いつも<ruby>地図<rt>ちず</rt></ruby>を<ruby>見<rt>み</rt></ruby>るようにしています。",
+          "When I walk around an unfamiliar town, I always make a point of looking at a map."
+        ],
+        "N2": [
+          "スマホの<ruby>地図<rt>ちず</rt></ruby>は<ruby>便利<rt>べんり</rt></ruby>なものの、<ruby>電池<rt>でんち</rt></ruby>が<ruby>切<rt>き</rt></ruby>れると<ruby>役<rt>やく</rt></ruby>に<ruby>立<rt>た</rt></ruby>たなくなる。",
+          "Although the map on a smartphone is convenient, it becomes useless once the battery dies."
+        ],
+        "N1": [
+          "<ruby>古地図<rt>こちず</rt></ruby>を<ruby>頼<rt>たよ</rt></ruby>りに<ruby>歩<rt>ある</rt></ruby>いてみると、<ruby>今<rt>いま</rt></ruby>の<ruby>街並<rt>まちな</rt></ruby>みからは<ruby>想像<rt>そうぞう</rt></ruby>もつかない<ruby>歴史<rt>れきし</rt></ruby>が<ruby>浮<rt>う</rt></ruby>かび<ruby>上<rt>あ</rt></ruby>がってくる。",
+          "When you walk relying on an old map, a history unimaginable from today's cityscape rises to the surface."
+        ]
+      },
+      "mnem": "地 (ground/earth) + 図 (diagram) = a diagram of the ground = a map (地図, ちず).",
+      "tip": "Note the compact reading ちず (not ちづ). The 地 kanji also reads じ, as in 地下 (basement); don't confuse 地図 (map) with 図書館 (としょかん, library), which shares 図.",
+      "accent": 1
+    },
+    {
+      "key": "mnn:14:27",
+      "kana": "しお",
+      "kanji": "塩",
+      "context": "",
+      "mean": "salt",
+      "cat": "noun",
+      "type": "",
+      "trans": "",
+      "dict": "塩",
+      "dictRead": "しお",
+      "audio": "/Audio/minnamoi/bai14/00010100111000111.mp3",
+      "levels": {
+        "N5": [
+          "<ruby>塩<rt>しお</rt></ruby>を<ruby>取<rt>と</rt></ruby>ってください。",
+          "Please pass me the salt."
+        ],
+        "N4": [
+          "<ruby>料理<rt>りょうり</rt></ruby>に<ruby>塩<rt>しお</rt></ruby>を<ruby>少<rt>すこ</rt></ruby>し<ruby>入<rt>い</rt></ruby>れます。",
+          "I add a little salt to the dish."
+        ],
+        "N3": [
+          "<ruby>健康<rt>けんこう</rt></ruby>のために、<ruby>塩<rt>しお</rt></ruby>を<ruby>取<rt>と</rt></ruby>りすぎないようにしています。",
+          "For my health, I make a point of not taking in too much salt."
+        ],
+        "N2": [
+          "<ruby>味<rt>あじ</rt></ruby>が<ruby>薄<rt>うす</rt></ruby>いものの、これ<ruby>以上<rt>いじょう</rt></ruby><ruby>塩<rt>しお</rt></ruby>を<ruby>足<rt>た</rt></ruby>すと<ruby>塩辛<rt>しおから</rt></ruby>くなりそうだ。",
+          "Although the flavor is a bit weak, if I add any more salt it's likely to turn too salty."
+        ],
+        "N1": [
+          "<ruby>健康診断<rt>けんこうしんだん</rt></ruby>で<ruby>血圧<rt>けつあつ</rt></ruby>が<ruby>高<rt>たか</rt></ruby>いと<ruby>言<rt>い</rt></ruby>われた<ruby>以上<rt>いじょう</rt></ruby>、<ruby>塩分<rt>えんぶん</rt></ruby>を<ruby>控<rt>ひか</rt></ruby>えざるを<ruby>得<rt>え</rt></ruby>ない。",
+          "Given that the health check told me my blood pressure is high, I have no choice but to cut back on salt."
+        ]
+      },
+      "mnem": "\"She-oh\" — picture a chef sighing \"shhh… oh\" as she sprinkles 塩 (salt) into the pot.",
+      "tip": "塩 (しお) is table salt; the on-reading えん appears in compounds like 塩分 (salt content). Don't confuse it with 砂糖 (sugar) — this lesson's classic dinner-table 「塩を取りましょうか」pair.",
+      "accent": 2
+    },
+    {
+      "key": "mnn:14:28",
+      "kana": "さとう",
+      "kanji": "砂糖",
+      "context": "",
+      "mean": "sugar",
+      "cat": "noun",
+      "type": "",
+      "trans": "",
+      "dict": "砂糖",
+      "dictRead": "さとう",
+      "audio": "/Audio/minnamoi/bai14/00010100111001000.mp3",
+      "levels": {
+        "N5": [
+          "コーヒーに<ruby>砂糖<rt>さとう</rt></ruby>を<ruby>入<rt>い</rt></ruby>れます。",
+          "I put sugar in my coffee."
+        ],
+        "N4": [
+          "このケーキは<ruby>砂糖<rt>さとう</rt></ruby>がたくさん<ruby>入<rt>はい</rt></ruby>っています。",
+          "This cake has a lot of sugar in it."
+        ],
+        "N3": [
+          "<ruby>太<rt>ふと</rt></ruby>らないように、<ruby>砂糖<rt>さとう</rt></ruby>をあまり<ruby>使<rt>つか</rt></ruby>わないようにしています。",
+          "So as not to gain weight, I make a point of not using much sugar."
+        ],
+        "N2": [
+          "<ruby>甘<rt>あま</rt></ruby>いものが<ruby>好<rt>す</rt></ruby>きなものの、<ruby>砂糖<rt>さとう</rt></ruby>の<ruby>取<rt>と</rt></ruby>りすぎには<ruby>気<rt>き</rt></ruby>をつけている。",
+          "Although I like sweet things, I'm careful not to take in too much sugar."
+        ],
+        "N1": [
+          "<ruby>砂糖<rt>さとう</rt></ruby>を<ruby>一切<rt>いっさい</rt></ruby><ruby>使<rt>つか</rt></ruby>わないと<ruby>決<rt>き</rt></ruby>めた<ruby>以上<rt>いじょう</rt></ruby>、<ruby>市販<rt>しはん</rt></ruby>の<ruby>菓子<rt>かし</rt></ruby>はほとんど<ruby>口<rt>くち</rt></ruby>にできなくなる。",
+          "Given that I've decided to use no sugar at all, I end up unable to eat almost any store-bought sweets."
+        ]
+      },
+      "mnem": "砂 (sand) + 糖 (sugar) — sugar that looks like fine white sand: 砂糖 (さとう).",
+      "tip": "Note the long vowel さとう (not さと). Easily confused with the common surname 佐藤 (also さとう) — the draft even mis-scraped 「砂糖さん」for 「佐藤さん」; a person is 佐藤, the sweetener is 砂糖.",
+      "accent": 2
+    },
+    {
+      "key": "mnn:14:29",
+      "kana": "もんだい",
+      "kanji": "問題",
+      "context": "",
+      "mean": "question, problem, trouble",
+      "cat": "noun",
+      "type": "",
+      "trans": "",
+      "dict": "問題",
+      "dictRead": "もんだい",
+      "audio": "/Audio/minnamoi/bai14/00010100111001001.mp3",
+      "levels": {
+        "N5": [
+          "この<ruby>問題<rt>もんだい</rt></ruby>は<ruby>難<rt>むずか</rt></ruby>しいです。",
+          "This problem is difficult."
+        ],
+        "N4": [
+          "<ruby>分<rt>わ</rt></ruby>からない<ruby>問題<rt>もんだい</rt></ruby>があったら、<ruby>先生<rt>せんせい</rt></ruby>に<ruby>聞<rt>き</rt></ruby>いてください。",
+          "If there's a problem you don't understand, please ask the teacher."
+        ],
+        "N3": [
+          "<ruby>難<rt>むずか</rt></ruby>しい<ruby>問題<rt>もんだい</rt></ruby>ほど、<ruby>落<rt>お</rt></ruby>ち<ruby>着<rt>つ</rt></ruby>いて<ruby>考<rt>かんが</rt></ruby>えるようにしています。",
+          "The harder the problem, the more I make a point of thinking it over calmly."
+        ],
+        "N2": [
+          "<ruby>答<rt>こた</rt></ruby>えは<ruby>出<rt>で</rt></ruby>たものの、この<ruby>問題<rt>もんだい</rt></ruby>には<ruby>他<rt>ほか</rt></ruby>にも<ruby>解<rt>と</rt></ruby>き<ruby>方<rt>かた</rt></ruby>があるはずだ。",
+          "Although I got an answer, there must be other ways to solve this problem as well."
+        ],
+        "N1": [
+          "<ruby>環境<rt>かんきょう</rt></ruby><ruby>問題<rt>もんだい</rt></ruby>は<ruby>一国<rt>いっこく</rt></ruby>だけで<ruby>解決<rt>かいけつ</rt></ruby>できるものではなく、<ruby>国際<rt>こくさい</rt></ruby><ruby>的<rt>てき</rt></ruby>な<ruby>協力<rt>きょうりょく</rt></ruby>が<ruby>不可欠<rt>ふかけつ</rt></ruby>だ。",
+          "Environmental problems are not something a single country can solve alone; international cooperation is indispensable."
+        ]
+      },
+      "mnem": "問 (to ask/question) + 題 (topic) = a posed question or issue — 問題 (もんだい).",
+      "tip": "問題 spans \"exam question,\" \"problem to solve,\" and \"issue/trouble\" (問題がある = there's a problem). Its lesson pair is 答え (answer). Don't confuse 問 (ask) with 間 (between, あいだ) — they look similar.",
+      "accent": 0
+    },
+    {
+      "key": "mnn:14:30",
+      "kana": "こたえ",
+      "kanji": "答え",
+      "context": "",
+      "mean": "answer",
+      "cat": "noun",
+      "type": "",
+      "trans": "",
+      "dict": "答え",
+      "dictRead": "こたえ",
+      "audio": "/Audio/minnamoi/bai14/00010100111001010.mp3",
+      "levels": {
+        "N5": [
+          "この<ruby>問題<rt>もんだい</rt></ruby>の<ruby>答<rt>こた</rt></ruby>えは<ruby>何<rt>なん</rt></ruby>ですか。",
+          "What is the answer to this problem?"
+        ],
+        "N4": [
+          "<ruby>答<rt>こた</rt></ruby>えが<ruby>分<rt>わ</rt></ruby>からないとき、<ruby>辞書<rt>じしょ</rt></ruby>で<ruby>調<rt>しら</rt></ruby>べます。",
+          "When I don't know the answer, I look it up in a dictionary."
+        ],
+        "N3": [
+          "すぐに<ruby>答<rt>こた</rt></ruby>えを<ruby>見<rt>み</rt></ruby>ないで、<ruby>自分<rt>じぶん</rt></ruby>で<ruby>考<rt>かんが</rt></ruby>えるようにしています。",
+          "Instead of looking at the answer right away, I make a point of thinking for myself."
+        ],
+        "N2": [
+          "<ruby>答<rt>こた</rt></ruby>えは<ruby>合<rt>あ</rt></ruby>っていたものの、<ruby>説明<rt>せつめい</rt></ruby>のしかたに<ruby>問題<rt>もんだい</rt></ruby>があった。",
+          "Although the answer was correct, there was a problem with the way it was explained."
+        ],
+        "N1": [
+          "<ruby>正<rt>ただ</rt></ruby>しい<ruby>答<rt>こた</rt></ruby>えが<ruby>一<rt>ひと</rt></ruby>つとは<ruby>限<rt>かぎ</rt></ruby>らない<ruby>以上<rt>いじょう</rt></ruby>、<ruby>多様<rt>たよう</rt></ruby>な<ruby>見方<rt>みかた</rt></ruby>を<ruby>認<rt>みと</rt></ruby>める<ruby>姿勢<rt>しせい</rt></ruby>が<ruby>求<rt>もと</rt></ruby>められる。",
+          "Given that the correct answer is not necessarily just one, an attitude that accepts diverse viewpoints is called for."
+        ]
+      },
+      "mnem": "From 答える (こたえる, to answer) — the noun 答え is the answer you give.",
+      "tip": "答え (こたえ) is the noun \"answer\"; 答える (こたえる) is the verb \"to answer.\" It pairs with 問題 (question). The kanji 答 also reads とう in compounds like 回答 (かいとう, formal reply).",
+      "accent": 2
+    },
+    {
+      "key": "mnn:14:31",
+      "kana": "よみかた",
+      "kanji": "読み方",
+      "context": "漢字の〜",
+      "mean": "how to read; reading (of a word)",
+      "cat": "noun",
+      "type": "",
+      "trans": "",
+      "dict": "読み方",
+      "dictRead": "よみかた",
+      "audio": "/Audio/minnamoi/bai14/00010100111001011.mp3",
+      "levels": {
+        "N5": [
+          "この<ruby>漢字<rt>かんじ</rt></ruby>の<ruby>読<rt>よ</rt></ruby>み<ruby>方<rt>かた</rt></ruby>を<ruby>教<rt>おし</rt></ruby>えてください。",
+          "Please tell me how to read this kanji."
+        ],
+        "N4": [
+          "この<ruby>名前<rt>なまえ</rt></ruby>の<ruby>読<rt>よ</rt></ruby>み<ruby>方<rt>かた</rt></ruby>が<ruby>分<rt>わ</rt></ruby>かりません。",
+          "I don't know how to read this name."
+        ],
+        "N3": [
+          "<ruby>新<rt>あたら</rt></ruby>しい<ruby>漢字<rt>かんじ</rt></ruby>は、<ruby>読<rt>よ</rt></ruby>み<ruby>方<rt>かた</rt></ruby>を<ruby>何回<rt>なんかい</rt></ruby>も<ruby>確<rt>たし</rt></ruby>かめるようにしています。",
+          "With new kanji, I make a point of checking the reading many times."
+        ],
+        "N2": [
+          "<ruby>意味<rt>いみ</rt></ruby>は<ruby>分<rt>わ</rt></ruby>かるものの、この<ruby>地名<rt>ちめい</rt></ruby>の<ruby>読<rt>よ</rt></ruby>み<ruby>方<rt>かた</rt></ruby>だけはどうしても<ruby>覚<rt>おぼ</rt></ruby>えられない。",
+          "Although I understand the meaning, this place name's reading alone is one I just can't memorize."
+        ],
+        "N1": [
+          "<ruby>同<rt>おな</rt></ruby>じ<ruby>漢字<rt>かんじ</rt></ruby>でも<ruby>文脈<rt>ぶんみゃく</rt></ruby>によって<ruby>読<rt>よ</rt></ruby>み<ruby>方<rt>かた</rt></ruby>が<ruby>変<rt>か</rt></ruby>わる<ruby>以上<rt>いじょう</rt></ruby>、<ruby>丸暗記<rt>まるあんき</rt></ruby>だけでは<ruby>限界<rt>げんかい</rt></ruby>がある。",
+          "Given that even the same kanji can be read differently depending on context, rote memorization alone has its limits."
+        ]
+      },
+      "mnem": "読み (the stem of 読む, to read) + 方 (way/method) = the way of reading = how to read (読み方).",
+      "tip": "This is the 〜方 pattern from this lesson: verb-ます stem + 方 = \"how to do / way of doing\" (作り方 = how to make, 使い方 = how to use). Here 方 reads かた; the same kanji as the respectful 〜方 (がた) person-suffix but a different function.",
+      "accent": 0
+    },
+    {
+      "key": "mnn:14:32",
+      "kana": "〜かた",
+      "kanji": "〜方",
+      "context": "作り〜",
+      "mean": "how to do ~, way of doing ~ (verb-stem + 方)",
+      "cat": "phrase",
+      "type": "",
+      "trans": "",
+      "dict": "〜方",
+      "dictRead": "〜かた",
+      "audio": "/Audio/minnamoi/bai14/00010100111001100.mp3",
+      "levels": {
+        "N5": [
+          "この<ruby>漢字<rt>かんじ</rt></ruby>の<ruby>書<rt>か</rt></ruby>き<ruby>方<rt>かた</rt></ruby>を<ruby>教<rt>おし</rt></ruby>えてください。",
+          "Please teach me how to write this kanji."
+        ],
+        "N4": [
+          "<ruby>山田<rt>やまだ</rt></ruby>さんに<ruby>日本料理<rt>にほんりょうり</rt></ruby>の<ruby>作<rt>つく</rt></ruby>り<ruby>方<rt>かた</rt></ruby>を<ruby>習<rt>なら</rt></ruby>いました。",
+          "I learned how to cook Japanese food from Ms. Yamada."
+        ],
+        "N3": [
+          "<ruby>新<rt>あたら</rt></ruby>しい<ruby>機械<rt>きかい</rt></ruby>の<ruby>使<rt>つか</rt></ruby>い<ruby>方<rt>かた</rt></ruby>は、<ruby>先輩<rt>せんぱい</rt></ruby>に<ruby>聞<rt>き</rt></ruby>くようにしています。",
+          "For how to use a new machine, I make a point of asking a senior colleague."
+        ],
+        "N2": [
+          "<ruby>説明書<rt>せつめいしょ</rt></ruby>を<ruby>読<rt>よ</rt></ruby>んだものの、<ruby>正<rt>ただ</rt></ruby>しい<ruby>組<rt>く</rt></ruby>み<ruby>立<rt>た</rt></ruby>て<ruby>方<rt>かた</rt></ruby>がよく<ruby>分<rt>わ</rt></ruby>からない。",
+          "Although I read the manual, I don't really understand the correct way to assemble it."
+        ],
+        "N1": [
+          "<ruby>物事<rt>ものごと</rt></ruby>の<ruby>考<rt>かんが</rt></ruby>え<ruby>方<rt>かた</rt></ruby>ひとつで<ruby>結果<rt>けっか</rt></ruby>が<ruby>大<rt>おお</rt></ruby>きく<ruby>変<rt>か</rt></ruby>わる<ruby>以上<rt>いじょう</rt></ruby>、<ruby>柔軟<rt>じゅうなん</rt></ruby>な<ruby>視点<rt>してん</rt></ruby>を<ruby>持<rt>も</rt></ruby>ちたい。",
+          "Given that the outcome can change greatly with just one's way of thinking, I want to keep a flexible perspective."
+        ]
+      },
+      "mnem": "〜方 (かた) attaches to a verb stem like a suffix: \"the KATA (form/way) of doing it.\"",
+      "tip": "Formation: drop ます, add 方 → 作ります→作り方, 使います→使い方, 読みます→読み方. Reads かた (with rendaku it can become がた, e.g. 話し方 stays かた). Not to be confused with the counter or 〜方 (がた) as a polite plural for people.",
+      "accent": 0
+    },
+    {
+      "key": "mnn:14:33",
+      "kana": "まっすぐ",
+      "kanji": "",
+      "context": "",
+      "mean": "straight, straight ahead",
+      "cat": "adverb",
+      "type": "",
+      "trans": "",
+      "dict": "まっすぐ",
+      "dictRead": "まっすぐ",
+      "audio": "/Audio/minnamoi/bai14/00010100111001101.mp3",
+      "levels": {
+        "N5": [
+          "この<ruby>道<rt>みち</rt></ruby>をまっすぐ<ruby>行<rt>い</rt></ruby>ってください。",
+          "Please go straight down this road."
+        ],
+        "N4": [
+          "<ruby>駅<rt>えき</rt></ruby>まで、まっすぐ<ruby>歩<rt>ある</rt></ruby>いて<ruby>十分<rt>じゅっぷん</rt></ruby>ぐらいです。",
+          "It's about ten minutes walking straight to the station."
+        ],
+        "N3": [
+          "<ruby>道<rt>みち</rt></ruby>に<ruby>迷<rt>まよ</rt></ruby>わないように、まっすぐ<ruby>進<rt>すす</rt></ruby>むようにしています。",
+          "So as not to get lost, I make a point of going straight ahead."
+        ],
+        "N2": [
+          "まっすぐ<ruby>帰<rt>かえ</rt></ruby>るつもりだったものの、<ruby>途中<rt>とちゅう</rt></ruby>で<ruby>友<rt>とも</rt></ruby>だちに<ruby>会<rt>あ</rt></ruby>ってしまった。",
+          "Although I intended to go straight home, I ran into a friend on the way."
+        ],
+        "N1": [
+          "<ruby>彼<rt>かれ</rt></ruby>のまっすぐな<ruby>性格<rt>せいかく</rt></ruby>は<ruby>時<rt>とき</rt></ruby>に<ruby>誤解<rt>ごかい</rt></ruby>を<ruby>招<rt>まね</rt></ruby>くものの、<ruby>信頼<rt>しんらい</rt></ruby>に<ruby>値<rt>あたい</rt></ruby>することは<ruby>間違<rt>まちが</rt></ruby>いない。",
+          "Although his straightforward character sometimes invites misunderstanding, there's no doubt he's worthy of trust."
+        ]
+      },
+      "mnem": "\"Ma-ssugu\" — picture a road so straight it goes \"MASS, SUE, GOO\" in one unbroken line ahead.",
+      "tip": "まっすぐ means both physically \"straight (ahead)\" (まっすぐ行く) and figuratively \"honest/straightforward\" (まっすぐな人). Written 真っ直ぐ but usually kana. The っ is a small tsu — hold the pause.",
+      "accent": 3
+    },
+    {
+      "key": "mnn:14:34",
+      "kana": "ゆっくり",
+      "kanji": "",
+      "context": "",
+      "mean": "slowly, leisurely, at ease",
+      "cat": "adverb",
+      "type": "",
+      "trans": "",
+      "dict": "ゆっくり",
+      "dictRead": "ゆっくり",
+      "audio": "/Audio/minnamoi/bai14/00010100111001110.mp3",
+      "levels": {
+        "N5": [
+          "もう<ruby>少<rt>すこ</rt></ruby>しゆっくり<ruby>話<rt>はな</rt></ruby>してください。",
+          "Please speak a little more slowly."
+        ],
+        "N4": [
+          "<ruby>日曜日<rt>にちようび</rt></ruby>は<ruby>家<rt>いえ</rt></ruby>でゆっくり<ruby>休<rt>やす</rt></ruby>みたいです。",
+          "On Sunday I want to rest at home and take it easy."
+        ],
+        "N3": [
+          "<ruby>疲<rt>つか</rt></ruby>れたときは、お<ruby>風呂<rt>ふろ</rt></ruby>にゆっくり<ruby>入<rt>はい</rt></ruby>るようにしています。",
+          "When I'm tired, I make a point of taking a long, relaxing bath."
+        ],
+        "N2": [
+          "<ruby>時間<rt>じかん</rt></ruby>はあるものの、ゆっくり<ruby>食事<rt>しょくじ</rt></ruby>する<ruby>気分<rt>きぶん</rt></ruby>にはなれなかった。",
+          "Although I had time, I wasn't in the mood to eat at a leisurely pace."
+        ],
+        "N1": [
+          "<ruby>忙<rt>いそが</rt></ruby>しい<ruby>毎日<rt>まいにち</rt></ruby>だからこそ、たまにはゆっくり<ruby>自分<rt>じぶん</rt></ruby>と<ruby>向<rt>む</rt></ruby>き<ruby>合<rt>あ</rt></ruby>う<ruby>時間<rt>じかん</rt></ruby>を<ruby>持<rt>も</rt></ruby>つべきだ。",
+          "Precisely because every day is busy, you should sometimes take unhurried time to face yourself."
+        ]
+      },
+      "mnem": "\"Yukkuri\" — say it slowly, \"you-koo-ree,\" and you're already doing it: ゆっくり = leisurely, slowly.",
+      "tip": "ゆっくり covers \"slowly\" (ゆっくり話す = speak slowly) and \"at ease / take your time\" (ゆっくりしてください = make yourself comfortable). Contrast with 遅い (おそい, slow as in late/tardy) — ゆっくり is a chosen, relaxed pace, not lateness.",
+      "accent": 3
+    },
+    {
+      "key": "mnn:14:35",
+      "kana": "すぐ",
+      "kanji": "",
+      "context": "",
+      "mean": "immediately, right away; nearby",
+      "cat": "adverb",
+      "type": "",
+      "trans": "",
+      "dict": "すぐ",
+      "dictRead": "すぐ",
+      "audio": "/Audio/minnamoi/bai14/00010100111001111.mp3",
+      "levels": {
+        "N5": [
+          "すぐ<ruby>来<rt>き</rt></ruby>てください。",
+          "Please come right away."
+        ],
+        "N4": [
+          "<ruby>宿題<rt>しゅくだい</rt></ruby>が<ruby>終<rt>お</rt></ruby>わったら、すぐ<ruby>寝<rt>ね</rt></ruby>ます。",
+          "Once my homework is done, I'll go to sleep right away."
+        ],
+        "N3": [
+          "<ruby>間違<rt>まちが</rt></ruby>いに<ruby>気<rt>き</rt></ruby>づいたら、すぐ<ruby>直<rt>なお</rt></ruby>すようにしています。",
+          "When I notice a mistake, I make a point of fixing it right away."
+        ],
+        "N2": [
+          "すぐ<ruby>返事<rt>へんじ</rt></ruby>をしたかったものの、<ruby>会議中<rt>かいぎちゅう</rt></ruby>でメールを<ruby>見<rt>み</rt></ruby>られなかった。",
+          "Although I wanted to reply right away, I couldn't check the email because I was in a meeting."
+        ],
+        "N1": [
+          "<ruby>問題<rt>もんだい</rt></ruby>が<ruby>起<rt>お</rt></ruby>きた<ruby>以上<rt>いじょう</rt></ruby>、<ruby>原因<rt>げんいん</rt></ruby>を<ruby>究明<rt>きゅうめい</rt></ruby>し、すぐに<ruby>対応<rt>たいおう</rt></ruby>せざるを<ruby>得<rt>え</rt></ruby>ない。",
+          "Given that a problem has occurred, we have no choice but to identify the cause and respond immediately."
+        ]
+      },
+      "mnem": "\"Sugu\" — snap your fingers: it's done \"su-gu,\" right away, no delay.",
+      "tip": "すぐ (often すぐに) = \"immediately.\" It also means \"very close by\" spatially: 駅はすぐそこです (the station is right there). Don't confuse it with もうすぐ (\"soon / before long\"), which points to the near future rather than \"instantly.\"",
+      "accent": 1
+    },
+    {
+      "key": "mnn:14:36",
+      "kana": "また",
+      "kanji": "",
+      "context": "",
+      "mean": "again",
+      "cat": "adverb",
+      "type": "",
+      "trans": "",
+      "dict": "また",
+      "dictRead": "また",
+      "audio": "/Audio/minnamoi/bai14/00010100111010000.mp3",
+      "levels": {
+        "N5": [
+          "また<ruby>明日<rt>あした</rt></ruby>。",
+          "See you again tomorrow."
+        ],
+        "N4": [
+          "<ruby>今日<rt>きょう</rt></ruby>は<ruby>忙<rt>いそが</rt></ruby>しいので、また<ruby>後<rt>あと</rt></ruby>で<ruby>来<rt>き</rt></ruby>ます。",
+          "I'm busy today, so I'll come again later."
+        ],
+        "N3": [
+          "<ruby>失敗<rt>しっぱい</rt></ruby>しても、また<ruby>挑戦<rt>ちょうせん</rt></ruby>するようにしています。",
+          "Even if I fail, I make a point of trying again."
+        ],
+        "N2": [
+          "<ruby>一度<rt>いちど</rt></ruby><ruby>断<rt>ことわ</rt></ruby>られたものの、また<ruby>頼<rt>たの</rt></ruby>んでみるつもりだ。",
+          "Although I was turned down once, I intend to ask again."
+        ],
+        "N1": [
+          "<ruby>同<rt>おな</rt></ruby>じ<ruby>過<rt>あやま</rt></ruby>ちをまた<ruby>繰<rt>く</rt></ruby>り<ruby>返<rt>かえ</rt></ruby>すようでは、<ruby>信用<rt>しんよう</rt></ruby>を<ruby>失<rt>うしな</rt></ruby>っても<ruby>仕方<rt>しかた</rt></ruby>がない。",
+          "If you go and repeat the same mistake again, it's only to be expected that you'd lose trust."
+        ]
+      },
+      "mnem": "\"Ma-ta\" — like \"matter\": here we go with that same matter once more — また = again.",
+      "tip": "また = \"again / once more\" (また来ます). Note the vowel length: また (again) vs まだ (still / not yet) — different word, one voiced consonant apart. Also 〜も…も…また can mean \"also/moreover\" in formal writing.",
+      "accent": 0
+    },
+    {
+      "key": "mnn:14:37",
+      "kana": "あとで",
+      "kanji": "後で",
+      "context": "",
+      "mean": "later, afterward",
+      "cat": "adverb",
+      "type": "",
+      "trans": "",
+      "dict": "後で",
+      "dictRead": "あとで",
+      "audio": "/Audio/minnamoi/bai14/00010100111010001.mp3",
+      "levels": {
+        "N5": [
+          "また<ruby>後<rt>あと</rt></ruby>で<ruby>来<rt>き</rt></ruby>ます。",
+          "I'll come again later."
+        ],
+        "N4": [
+          "<ruby>今<rt>いま</rt></ruby>は<ruby>時間<rt>じかん</rt></ruby>がないので、<ruby>後<rt>あと</rt></ruby>で<ruby>電話<rt>でんわ</rt></ruby>します。",
+          "I don't have time now, so I'll call later."
+        ],
+        "N3": [
+          "<ruby>大切<rt>たいせつ</rt></ruby>なことは、<ruby>後<rt>あと</rt></ruby>で<ruby>忘<rt>わす</rt></ruby>れないようにメモしています。",
+          "For important things, I take notes so I won't forget them later."
+        ],
+        "N2": [
+          "<ruby>後<rt>あと</rt></ruby>でやろうと<ruby>思<rt>おも</rt></ruby>っていたものの、<ruby>結局<rt>けっきょく</rt></ruby><ruby>今日<rt>きょう</rt></ruby>もできなかった。",
+          "Although I kept thinking I'd do it later, in the end I couldn't manage it today either."
+        ],
+        "N1": [
+          "<ruby>面倒<rt>めんどう</rt></ruby>なことを<ruby>後<rt>あと</rt></ruby>で<ruby>回<rt>まわ</rt></ruby>しにしていると、<ruby>気<rt>き</rt></ruby>づいたときには<ruby>手<rt>て</rt></ruby>に<ruby>負<rt>お</rt></ruby>えなくなっていることも<ruby>少<rt>すく</rt></ruby>なくない。",
+          "If you keep putting off troublesome things until later, it's not rare to find them out of hand by the time you notice."
+        ]
+      },
+      "mnem": "後 (あと, after) + で = \"at an after-time\" = later, あとで.",
+      "tip": "あとで = \"later / afterward\" (usually 後で in kanji). Contrast with 〜あと (the noun 後, \"after ~\"). Don't confuse it with まえに (before). The lesson pair line 「じゃ、またあとで来ます」= \"Well then, I'll come again later.\"",
+      "accent": 0
+    },
+    {
+      "key": "mnn:14:38",
+      "kana": "もうすこし",
+      "kanji": "もう少し",
+      "context": "",
+      "mean": "a little more; a little longer",
+      "cat": "phrase",
+      "type": "",
+      "trans": "",
+      "dict": "もう少し",
+      "dictRead": "もうすこし",
+      "audio": "/Audio/minnamoi/bai14/00010100111010010.mp3",
+      "levels": {
+        "N5": [
+          "もう<ruby>少<rt>すこ</rt></ruby>しゆっくり<ruby>話<rt>はな</rt></ruby>してください。",
+          "Please speak a little more slowly."
+        ],
+        "N4": [
+          "もう<ruby>少<rt>すこ</rt></ruby>し<ruby>待<rt>ま</rt></ruby>ってください。すぐ<ruby>終<rt>お</rt></ruby>わります。",
+          "Please wait a little longer. I'll be done soon."
+        ],
+        "N3": [
+          "<ruby>難<rt>むずか</rt></ruby>しくても、もう<ruby>少<rt>すこ</rt></ruby>し<ruby>頑張<rt>がんば</rt></ruby>るようにしています。",
+          "Even when it's hard, I make a point of pushing on a little more."
+        ],
+        "N2": [
+          "<ruby>完成<rt>かんせい</rt></ruby>まであと<ruby>少<rt>すこ</rt></ruby>しだったものの、もう<ruby>少<rt>すこ</rt></ruby>し<ruby>時間<rt>じかん</rt></ruby>があれば<ruby>質<rt>しつ</rt></ruby>を<ruby>高<rt>たか</rt></ruby>められたはずだ。",
+          "Although it was almost finished, if I'd had a little more time I could have raised the quality."
+        ],
+        "N1": [
+          "もう<ruby>少<rt>すこ</rt></ruby>し<ruby>慎重<rt>しんちょう</rt></ruby>に<ruby>検討<rt>けんとう</rt></ruby>していれば<ruby>防<rt>ふせ</rt></ruby>げた<ruby>失敗<rt>しっぱい</rt></ruby>だっただけに、<ruby>悔<rt>く</rt></ruby>やまれてならない。",
+          "Precisely because it was a failure that a little more careful review could have prevented, I can't help but regret it."
+        ]
+      },
+      "mnem": "もう (more/already) + 少し (すこし, a little) = a little more, もう少し.",
+      "tip": "もう少し = \"a little more / a little longer.\" Here もう means \"more, additionally\" (もう一つ = one more); in other contexts もう means \"already\" (もう食べた = already ate) — same word, sense set by context.",
+      "accent": 0
+    },
+    {
+      "key": "mnn:14:39",
+      "kana": "もう〜",
+      "kanji": "",
+      "context": "",
+      "mean": "already (with the affirmative)",
+      "cat": "adverb",
+      "type": "",
+      "trans": "",
+      "dict": "もう",
+      "dictRead": "もう",
+      "audio": "/Audio/minnamoi/bai14/00010100111010011.mp3",
+      "levels": {
+        "N5": [
+          "もう<ruby>昼<rt>ひる</rt></ruby>ごはんを<ruby>食<rt>た</rt></ruby>べました。",
+          "I already ate lunch."
+        ],
+        "N4": [
+          "その<ruby>映画<rt>えいが</rt></ruby>は、もう<ruby>三回<rt>さんかい</rt></ruby><ruby>見<rt>み</rt></ruby>ました。",
+          "I've already seen that movie three times."
+        ],
+        "N3": [
+          "<ruby>約束<rt>やくそく</rt></ruby>の<ruby>時間<rt>じかん</rt></ruby>を<ruby>過<rt>す</rt></ruby>ぎたら、もう<ruby>待<rt>ま</rt></ruby>たないようにしています。",
+          "Once the appointed time has passed, I make a point of not waiting any longer."
+        ],
+        "N2": [
+          "<ruby>準備<rt>じゅんび</rt></ruby>はもう<ruby>終<rt>お</rt></ruby>わったものの、<ruby>本番<rt>ほんばん</rt></ruby>が<ruby>近<rt>ちか</rt></ruby>づくと<ruby>緊張<rt>きんちょう</rt></ruby>してくる。",
+          "Although the preparations are already done, as the real event nears I start to get nervous."
+        ],
+        "N1": [
+          "もう<ruby>後<rt>あと</rt></ruby>には<ruby>引<rt>ひ</rt></ruby>けない<ruby>以上<rt>いじょう</rt></ruby>、<ruby>覚悟<rt>かくご</rt></ruby>を<ruby>決<rt>き</rt></ruby>めて<ruby>前<rt>まえ</rt></ruby>に<ruby>進<rt>すす</rt></ruby>むしかない。",
+          "Given that there's already no turning back, all I can do is steel myself and move forward."
+        ]
+      },
+      "mnem": "\"Moh\" — you've already done it: もう = already (when the verb is affirmative).",
+      "tip": "もう + affirmative past = \"already\" (もう食べました = already ate). With a negative it flips to \"(not) any more\" (もう食べません = won't eat anymore). Contrast まだ (still / not yet): もう食べましたか → いいえ、まだです.",
+      "accent": 1
+    }
+  ],
+  "grammar": [
+    {
+      "pattern": "Vて form",
+      "structure": "Verb group I: い/ち/り→って · み/び/に→んで · き→いて (行く→行って exc.) · ぎ→いで · し→して｜Group II: 〜ます→〜て｜する→して · 来ます→来て",
+      "explain": "Lesson 14 introduces the て-form, the connective verb form that powers most later grammar. You make it from the ます-form: for Group I (godan) verbs the ending changes by its sound (買います→買って, 読みます→読んで, 書きます→書いて, 急ぎます→急いで, 話します→話して); for Group II (ichidan) drop ます and add て (食べます→食べて); the two irregulars are します→して and 来ます→来て. 行きます is the one exception in Group I: 行って, not 行いて.",
+      "examples": [
+        {
+          "jp": "<ruby>書<rt>か</rt></ruby>きます → <ruby>書<rt>か</rt></ruby>いて",
+          "en": "write → (て-form) writing / and write"
+        },
+        {
+          "jp": "<ruby>急<rt>いそ</rt></ruby>ぎます → <ruby>急<rt>いそ</rt></ruby>いで",
+          "en": "hurry → (て-form) hurrying / and hurry"
+        },
+        {
+          "jp": "<ruby>待<rt>ま</rt></ruby>ちます → <ruby>待<rt>ま</rt></ruby>って、<ruby>読<rt>よ</rt></ruby>みます → <ruby>読<rt>よ</rt></ruby>んで",
+          "en": "wait → matte; read → yonde"
+        },
+        {
+          "jp": "<ruby>食<rt>た</rt></ruby>べます → <ruby>食<rt>た</rt></ruby>べて、します → して、<ruby>来<rt>き</rt></ruby>ます → <ruby>来<rt>き</rt></ruby>て",
+          "en": "eat → tabete; do → shite; come → kite"
+        }
+      ]
+    },
+    {
+      "pattern": "Vてください",
+      "structure": "V（て形）＋ ください",
+      "explain": "Attach ください to the て-form to make a polite request or instruction: 「please do ~」. 待ってください = please wait; 名前を書いてください = please write your name. Adding どうぞ softens it to an offer/invitation (どうぞ入ってください = please, do come in). It's a request, so it's used toward equals or below, or by staff to customers — not as a humble request to a superior.",
+      "examples": [
+        {
+          "jp": "ちょっと <ruby>待<rt>ま</rt></ruby>って ください。",
+          "en": "Please wait a moment."
+        },
+        {
+          "jp": "パスポートを <ruby>見<rt>み</rt></ruby>せて ください。",
+          "en": "Please show me your passport."
+        },
+        {
+          "jp": "すみませんが、もう <ruby>少<rt>すこ</rt></ruby>し ゆっくり <ruby>話<rt>はな</rt></ruby>して ください。",
+          "en": "Excuse me, please speak a little more slowly."
+        },
+        {
+          "jp": "どうぞ <ruby>入<rt>はい</rt></ruby>って ください。",
+          "en": "Please, come in."
+        }
+      ]
+    },
+    {
+      "pattern": "Vています (progressive / ongoing action)",
+      "structure": "V（て形）＋ います",
+      "explain": "て-form + います describes an action in progress right now — the present continuous, \"is doing.\" 何をしていますか (What are you doing?) …新聞を読んでいます (I'm reading the newspaper). It also covers a continuing state, like weather in progress: 雨が降っています = it's raining. The negative is 〜ていません (何もしていません = I'm not doing anything).",
+      "examples": [
+        {
+          "jp": "<ruby>何<rt>なに</rt></ruby>を していますか。 …<ruby>新聞<rt>しんぶん</rt></ruby>を <ruby>読<rt>よ</rt></ruby>んで います。",
+          "en": "What are you doing? …I'm reading the newspaper."
+        },
+        {
+          "jp": "ミラーさんは <ruby>今<rt>いま</rt></ruby> <ruby>電話<rt>でんわ</rt></ruby>を かけて います。",
+          "en": "Mr. Miller is on the phone right now."
+        },
+        {
+          "jp": "<ruby>雨<rt>あめ</rt></ruby>が <ruby>降<rt>ふ</rt></ruby>って います。",
+          "en": "It's raining."
+        },
+        {
+          "jp": "<ruby>駅<rt>えき</rt></ruby>の <ruby>前<rt>まえ</rt></ruby>で <ruby>待<rt>ま</rt></ruby>って いますよ。",
+          "en": "I'm waiting in front of the station."
+        }
+      ]
+    },
+    {
+      "pattern": "Vましょうか (Shall I …? — offering to help)",
+      "structure": "V（ます形）→ V ＋ ましょうか",
+      "explain": "ましょうか offers to do something for the listener: \"Shall I ~?\". 荷物を持ちましょうか = Shall I carry your bag? A typical reply accepts with ええ、お願いします (yes, please) or declines with いいえ、けっこうです (no, thank you). Distinguish it from plain 〜ましょう (\"let's ~\", a suggestion to do something together) — the added か turns it into an offer/checking the listener's wish.",
+      "examples": [
+        {
+          "jp": "<ruby>荷物<rt>にもつ</rt></ruby>を <ruby>持<rt>も</rt></ruby>ちましょうか。 …すみません。お<ruby>願<rt>ねが</rt></ruby>いします。",
+          "en": "Shall I carry your luggage? …Thank you, please do."
+        },
+        {
+          "jp": "<ruby>電気<rt>でんき</rt></ruby>を <ruby>消<rt>け</rt></ruby>しましょうか。 …ええ、お<ruby>願<rt>ねが</rt></ruby>いします。",
+          "en": "Shall I turn off the light? …Yes, please."
+        },
+        {
+          "jp": "<ruby>塩<rt>しお</rt></ruby>を <ruby>取<rt>と</rt></ruby>りましょうか。 …いいえ、けっこうです。",
+          "en": "Shall I pass you the salt? …No, that's all right."
+        },
+        {
+          "jp": "<ruby>暑<rt>あつ</rt></ruby>いですね。<ruby>窓<rt>まど</rt></ruby>を <ruby>開<rt>あ</rt></ruby>けましょうか。",
+          "en": "It's hot, isn't it? Shall I open the window?"
+        }
+      ]
+    }
+  ],
+  "examples": [
+    {
+      "jp": "すみません、<ruby>電気<rt>でんき</rt></ruby>を つけて ください。",
+      "en": "Excuse me, please turn on the light."
+    },
+    {
+      "jp": "ここに <ruby>名前<rt>なまえ</rt></ruby>と <ruby>住所<rt>じゅうしょ</rt></ruby>を <ruby>書<rt>か</rt></ruby>いて ください。",
+      "en": "Please write your name and address here."
+    },
+    {
+      "jp": "この <ruby>漢字<rt>かんじ</rt></ruby>の <ruby>読<rt>よ</rt></ruby>み<ruby>方<rt>かた</rt></ruby>を <ruby>教<rt>おし</rt></ruby>えて ください。",
+      "en": "Please tell me how to read this kanji."
+    },
+    {
+      "jp": "<ruby>山田<rt>やまだ</rt></ruby>さんに <ruby>日本<rt>にほん</rt></ruby><ruby>料理<rt>りょうり</rt></ruby>の <ruby>作<rt>つく</rt></ruby>り<ruby>方<rt>かた</rt></ruby>を <ruby>習<rt>なら</rt></ruby>いました。",
+      "en": "I learned how to cook Japanese food from Ms. Yamada."
+    },
+    {
+      "jp": "<ruby>何<rt>なに</rt></ruby>を して いますか。 …レポートを <ruby>書<rt>か</rt></ruby>いて います。",
+      "en": "What are you doing? …I'm writing a report."
+    },
+    {
+      "jp": "ミラーさんは どこですか。 …あちらで <ruby>写真<rt>しゃしん</rt></ruby>を <ruby>撮<rt>と</rt></ruby>って います。",
+      "en": "Where is Mr. Miller? …He's taking photos over there."
+    },
+    {
+      "jp": "<ruby>暑<rt>あつ</rt></ruby>いですね。エアコンを つけましょうか。 …ええ、お<ruby>願<rt>ねが</rt></ruby>いします。",
+      "en": "It's hot, isn't it? Shall I turn on the air conditioner? …Yes, please."
+    },
+    {
+      "jp": "<ruby>荷物<rt>にもつ</rt></ruby>が <ruby>多<rt>おお</rt></ruby>いですね。1つ <ruby>持<rt>も</rt></ruby>ちましょうか。",
+      "en": "That's a lot of luggage. Shall I carry one for you?"
+    },
+    {
+      "jp": "<ruby>今<rt>いま</rt></ruby> <ruby>雨<rt>あめ</rt></ruby>が <ruby>降<rt>ふ</rt></ruby>って いますか。 …いいえ、<ruby>降<rt>ふ</rt></ruby>って いません。",
+      "en": "Is it raining now? …No, it's not raining."
+    }
+  ],
+  "conversation": {
+    "title": "みどり町までお願いします (To Midori-chō, please)",
+    "audio": "/Audio/minnahonsatsu1/49.mp3",
+    "lines": [
+      {
+        "role": "カリナ",
+        "jp": "みどり<ruby>町<rt>まち</rt></ruby>まで お<ruby>願<rt>ねが</rt></ruby>いします。",
+        "en": "To Midori-chō, please."
+      },
+      {
+        "role": "運転手",
+        "jp": "はい。",
+        "en": "Certainly."
+      },
+      {
+        "role": "カリナ",
+        "jp": "すみません。あの <ruby>信号<rt>しんごう</rt></ruby>を <ruby>右<rt>みぎ</rt></ruby>へ <ruby>曲<rt>ま</rt></ruby>がって ください。",
+        "en": "Excuse me. Please turn right at that traffic light."
+      },
+      {
+        "role": "運転手",
+        "jp": "<ruby>右<rt>みぎ</rt></ruby>ですね。",
+        "en": "To the right, yes?"
+      },
+      {
+        "role": "カリナ",
+        "jp": "ええ。",
+        "en": "Yes."
+      },
+      {
+        "role": "運転手",
+        "jp": "まっすぐですか。",
+        "en": "Straight ahead?"
+      },
+      {
+        "role": "カリナ",
+        "jp": "ええ、まっすぐ <ruby>行<rt>い</rt></ruby>って ください。あの <ruby>花屋<rt>はなや</rt></ruby>の <ruby>前<rt>まえ</rt></ruby>で <ruby>止<rt>と</rt></ruby>めて ください。",
+        "en": "Yes, please go straight. Please stop in front of that flower shop."
+      },
+      {
+        "role": "運転手",
+        "jp": "はい。1,800<ruby>円<rt>えん</rt></ruby>です。",
+        "en": "Okay. That'll be 1,800 yen."
+      },
+      {
+        "role": "カリナ",
+        "jp": "これで お<ruby>願<rt>ねが</rt></ruby>いします。",
+        "en": "Out of this, please."
+      },
+      {
+        "role": "運転手",
+        "jp": "3,200<ruby>円<rt>えん</rt></ruby>の お<ruby>釣<rt>つ</rt></ruby>りです。ありがとう ございました。",
+        "en": "Here's 3,200 yen in change. Thank you very much."
+      }
+    ]
+  }
+}

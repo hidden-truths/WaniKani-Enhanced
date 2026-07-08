@@ -1,0 +1,511 @@
+{
+  "lesson": 25,
+  "title": "Lesson 25",
+  "theme": "Conditionals — 〜たら (if / when / after), 〜ても (even if / though), もし and いくら〜ても; the final chapter of Minna I",
+  "source": {
+    "name": "vnjpclub.com",
+    "vocabUrl": "https://www.vnjpclub.com/en/minna-no-nihongo/lesson-25-vocabulary.html",
+    "grammarUrl": "https://www.vnjpclub.com/en/minna-no-nihongo/lesson-25-grammar.html",
+    "note": "Vocabulary, native-speaker audio, and example sentences aggregated from vnjpclub.com (Minna no Nihongo 第2版). For personal study."
+  },
+  "vocab": [
+    {
+      "key": "mnn:25:0",
+      "kana": "かんがえます",
+      "kanji": "考えます",
+      "context": "",
+      "mean": "to think, consider",
+      "cat": "verb",
+      "type": "ichidan",
+      "trans": "t",
+      "dict": "考える",
+      "dictRead": "かんがえる",
+      "audio": "/Audio/minnamoi/bai25/00010101100011100.mp3",
+      "accent": 3
+    },
+    {
+      "key": "mnn:25:1",
+      "kana": "つきます",
+      "kanji": "着きます",
+      "context": "駅に〜",
+      "mean": "to arrive (at)",
+      "cat": "verb",
+      "type": "godan",
+      "trans": "i",
+      "dict": "着く",
+      "dictRead": "つく",
+      "audio": "/Audio/minnamoi/bai25/00010101100011101.mp3",
+      "levels": {
+        "N5": [
+          "<ruby>駅<rt>えき</rt></ruby>に<ruby>着<rt>つ</rt></ruby>きました。",
+          "I arrived at the station."
+        ],
+        "N4": [
+          "<ruby>東京<rt>とうきょう</rt></ruby>に<ruby>着<rt>つ</rt></ruby>いたら、<ruby>電話<rt>でんわ</rt></ruby>してください。",
+          "When you arrive in Tokyo, please give me a call."
+        ],
+        "N3": [
+          "<ruby>飛行機<rt>ひこうき</rt></ruby>が<ruby>遅<rt>おく</rt></ruby>れたので、<ruby>空港<rt>くうこう</rt></ruby>に<ruby>着<rt>つ</rt></ruby>いたのは<ruby>夜中<rt>よなか</rt></ruby>だった。",
+          "The plane was delayed, so it was the middle of the night when I arrived at the airport."
+        ],
+        "N2": [
+          "<ruby>約束<rt>やくそく</rt></ruby>の<ruby>時間<rt>じかん</rt></ruby>に<ruby>着<rt>つ</rt></ruby>けるかどうかは、<ruby>道<rt>みち</rt></ruby>の<ruby>混<rt>こ</rt></ruby>み<ruby>具合<rt>ぐあい</rt></ruby>しだいだ。",
+          "Whether or not I can arrive by the appointed time depends entirely on how congested the roads are."
+        ],
+        "N1": [
+          "<ruby>幾多<rt>いくた</rt></ruby>の<ruby>困難<rt>こんなん</rt></ruby>を<ruby>乗<rt>の</rt></ruby>り<ruby>越<rt>こ</rt></ruby>えて、ようやく<ruby>目的地<rt>もくてきち</rt></ruby>に<ruby>着<rt>つ</rt></ruby>いたときの<ruby>感慨<rt>かんがい</rt></ruby>は、<ruby>言葉<rt>ことば</rt></ruby>にし<ruby>難<rt>がた</rt></ruby>い。",
+          "The emotion I felt when I finally arrived at my destination, having overcome countless hardships, is hard to put into words."
+        ]
+      },
+      "mnem": "\"tsuku\" — you TOUCH down and reach your goal: 着く = to arrive.",
+      "tip": "着く (godan, intransitive) is \"arrive at\" — the place takes に (駅に着く); don't confuse it with 着る (きる, \"to wear,\" written 着ます too but ichidan) or 付く (つく, \"to be attached\").",
+      "accent": 1
+    },
+    {
+      "key": "mnn:25:2",
+      "kana": "とります",
+      "kanji": "取ります",
+      "context": "年を〜",
+      "mean": "to grow old (age)",
+      "cat": "verb",
+      "type": "godan",
+      "trans": "t",
+      "dict": "取る",
+      "dictRead": "とる",
+      "audio": "/Audio/minnamoi/bai25/00010101100011110.mp3",
+      "levels": {
+        "N5": [
+          "<ruby>祖父<rt>そふ</rt></ruby>は<ruby>年<rt>とし</rt></ruby>を<ruby>取<rt>と</rt></ruby>りました。",
+          "My grandfather has grown old."
+        ],
+        "N4": [
+          "<ruby>年<rt>とし</rt></ruby>を<ruby>取<rt>と</rt></ruby>ったら、<ruby>田舎<rt>いなか</rt></ruby>に<ruby>住<rt>す</rt></ruby>みたいです。",
+          "When I get old, I'd like to live in the countryside."
+        ],
+        "N3": [
+          "<ruby>年<rt>とし</rt></ruby>を<ruby>取<rt>と</rt></ruby>っても、<ruby>元気<rt>げんき</rt></ruby>で<ruby>働<rt>はたら</rt></ruby>けるように、<ruby>毎日<rt>まいにち</rt></ruby><ruby>運動<rt>うんどう</rt></ruby>するようにしています。",
+          "So that I can stay healthy and keep working even as I grow older, I make a point of exercising every day."
+        ],
+        "N2": [
+          "<ruby>年<rt>とし</rt></ruby>を<ruby>取<rt>と</rt></ruby>るにつれて、<ruby>若<rt>わか</rt></ruby>い<ruby>頃<rt>ころ</rt></ruby>には<ruby>気<rt>き</rt></ruby>づかなかったことが<ruby>見<rt>み</rt></ruby>えてくるものだ。",
+          "As one grows older, one comes to see things that went unnoticed in one's youth."
+        ],
+        "N1": [
+          "どんなに<ruby>年<rt>とし</rt></ruby>を<ruby>取<rt>と</rt></ruby>ろうとも、<ruby>学<rt>まな</rt></ruby>ぶ<ruby>意欲<rt>いよく</rt></ruby>さえ<ruby>失<rt>うしな</rt></ruby>わなければ、<ruby>人<rt>ひと</rt></ruby>は<ruby>成長<rt>せいちょう</rt></ruby>し<ruby>続<rt>つづ</rt></ruby>けられる。",
+          "No matter how old one grows, as long as one never loses the will to learn, a person can keep on growing."
+        ]
+      },
+      "mnem": "You \"take\" (取る) on years — 年を取る literally \"take years\" = to grow old.",
+      "tip": "In this lesson 取る appears only in the fixed frame 年を取る (\"grow old\"); the bare verb 取る (godan, transitive) otherwise means \"to take/grab,\" and 取る also covers 年を取る \"take (vacation),\" e.g. 休みを取る.",
+      "accent": 1
+    },
+    {
+      "key": "mnn:25:3",
+      "kana": "たります",
+      "kanji": "足ります",
+      "context": "お金が〜",
+      "mean": "to be enough, be sufficient",
+      "cat": "verb",
+      "type": "ichidan",
+      "trans": "i",
+      "dict": "足りる",
+      "dictRead": "たりる",
+      "audio": "/Audio/minnamoi/bai25/00010101100011111.mp3",
+      "levels": {
+        "N5": [
+          "お<ruby>金<rt>かね</rt></ruby>が<ruby>足<rt>た</rt></ruby>りません。",
+          "I don't have enough money."
+        ],
+        "N4": [
+          "お<ruby>金<rt>かね</rt></ruby>が<ruby>足<rt>た</rt></ruby>りなかったら、ATMで<ruby>下<rt>お</rt></ruby>ろします。",
+          "If I don't have enough money, I'll withdraw some at an ATM."
+        ],
+        "N3": [
+          "<ruby>準備<rt>じゅんび</rt></ruby>の<ruby>時間<rt>じかん</rt></ruby>が<ruby>足<rt>た</rt></ruby>りるように、<ruby>早<rt>はや</rt></ruby>めに<ruby>始<rt>はじ</rt></ruby>めるようにしています。",
+          "I make a point of starting early so that there is enough time to prepare."
+        ],
+        "N2": [
+          "<ruby>人手<rt>ひとで</rt></ruby>が<ruby>足<rt>た</rt></ruby>りないものの、<ruby>締<rt>し</rt></ruby>め<ruby>切<rt>き</rt></ruby>りまでに<ruby>仕上<rt>しあ</rt></ruby>げざるを<ruby>得<rt>え</rt></ruby>ない。",
+          "Although we're short of hands, we have no choice but to finish it by the deadline."
+        ],
+        "N1": [
+          "<ruby>努力<rt>どりょく</rt></ruby>だけでは<ruby>足<rt>た</rt></ruby>りず、<ruby>時<rt>とき</rt></ruby>には<ruby>運<rt>うん</rt></ruby>や<ruby>周囲<rt>しゅうい</rt></ruby>の<ruby>支<rt>ささ</rt></ruby>えもまた、<ruby>成功<rt>せいこう</rt></ruby>には<ruby>欠<rt>か</rt></ruby>かせない。",
+          "Effort alone is not enough; at times luck and the support of those around you are also indispensable to success."
+        ]
+      },
+      "mnem": "\"ta-ri-ru\" — when you have a TALLY that adds up, you have enough: 足りる = to suffice.",
+      "tip": "足りる is ichidan and intransitive — the thing that suffices takes が (お金が足りる); the negative 足りない (\"not enough\") is very common. Don't confuse it with 足す (たす, transitive \"to add\").",
+      "accent": 0
+    },
+    {
+      "key": "mnn:25:4",
+      "kana": "いなか",
+      "kanji": "田舎",
+      "context": "",
+      "mean": "countryside, one's hometown",
+      "cat": "noun",
+      "type": "",
+      "trans": "",
+      "dict": "田舎",
+      "dictRead": "いなか",
+      "audio": "/Audio/minnamoi/bai25/00010101100100000.mp3",
+      "levels": {
+        "N5": [
+          "<ruby>私<rt>わたし</rt></ruby>の<ruby>田舎<rt>いなか</rt></ruby>は<ruby>静<rt>しず</rt></ruby>かです。",
+          "My hometown is quiet."
+        ],
+        "N4": [
+          "<ruby>夏休<rt>なつやす</rt></ruby>みに<ruby>田舎<rt>いなか</rt></ruby>の<ruby>祖母<rt>そぼ</rt></ruby>の<ruby>家<rt>いえ</rt></ruby>へ<ruby>行<rt>い</rt></ruby>きました。",
+          "During summer vacation I went to my grandmother's house in the countryside."
+        ],
+        "N3": [
+          "<ruby>年<rt>とし</rt></ruby>を<ruby>取<rt>と</rt></ruby>ったら、<ruby>田舎<rt>いなか</rt></ruby>で<ruby>畑<rt>はたけ</rt></ruby>をしながら<ruby>暮<rt>く</rt></ruby>らすようにしたいです。",
+          "When I grow old, I'd like to live in the countryside and tend a field."
+        ],
+        "N2": [
+          "<ruby>田舎<rt>いなか</rt></ruby>は<ruby>不便<rt>ふべん</rt></ruby>なものの、<ruby>都会<rt>とかい</rt></ruby>にはない<ruby>豊<rt>ゆた</rt></ruby>かな<ruby>自然<rt>しぜん</rt></ruby>がある。",
+          "The countryside is inconvenient, but it has an abundance of nature that the city lacks."
+        ],
+        "N1": [
+          "<ruby>都会<rt>とかい</rt></ruby>の<ruby>喧騒<rt>けんそう</rt></ruby>に<ruby>疲<rt>つか</rt></ruby>れ<ruby>果<rt>は</rt></ruby>てた<ruby>末<rt>すえ</rt></ruby>、<ruby>彼<rt>かれ</rt></ruby>はついに<ruby>生<rt>う</rt></ruby>まれ<ruby>育<rt>そだ</rt></ruby>った<ruby>田舎<rt>いなか</rt></ruby>へと<ruby>帰<rt>かえ</rt></ruby>る<ruby>決心<rt>けっしん</rt></ruby>をした。",
+          "Utterly worn out by the din of the city, he finally resolved to return to the countryside where he had been born and raised."
+        ]
+      },
+      "mnem": "田 (rice field) + 舎 (dwelling) — a land of rice fields and farmhouses is the 田舎, the countryside.",
+      "tip": "田舎 is 熟字訓 (an irregular kanji reading — いなか, not read char-by-char). It means both \"the countryside\" and \"one's rural hometown\"; the opposite is 都会 (とかい, \"the city\").",
+      "accent": 0
+    },
+    {
+      "key": "mnn:25:5",
+      "kana": "チャンス",
+      "kanji": "",
+      "context": "",
+      "mean": "chance, opportunity",
+      "cat": "noun",
+      "type": "",
+      "trans": "",
+      "dict": "チャンス",
+      "dictRead": "チャンス",
+      "audio": "/Audio/minnamoi/bai25/00010101100100001.mp3",
+      "levels": {
+        "N5": [
+          "いいチャンスですね。",
+          "That's a good opportunity, isn't it?"
+        ],
+        "N4": [
+          "チャンスがあったら、<ruby>外国<rt>がいこく</rt></ruby>に<ruby>住<rt>す</rt></ruby>みたいです。",
+          "If I had the chance, I'd like to live abroad."
+        ],
+        "N3": [
+          "せっかくのチャンスだから、<ruby>思<rt>おも</rt></ruby>い<ruby>切<rt>き</rt></ruby>って<ruby>挑戦<rt>ちょうせん</rt></ruby>してみようと<ruby>思<rt>おも</rt></ruby>います。",
+          "Since it's a rare opportunity, I think I'll take the plunge and give it a try."
+        ],
+        "N2": [
+          "またとないチャンスを<ruby>逃<rt>のが</rt></ruby>したものの、<ruby>後悔<rt>こうかい</rt></ruby>してばかりもいられない。",
+          "Although I let a once-in-a-lifetime chance slip away, I can't just keep on regretting it."
+        ],
+        "N1": [
+          "<ruby>準備<rt>じゅんび</rt></ruby>を<ruby>怠<rt>おこた</rt></ruby>らなかった<ruby>者<rt>もの</rt></ruby>だけが、<ruby>目<rt>め</rt></ruby>の<ruby>前<rt>まえ</rt></ruby>に<ruby>訪<rt>おとず</rt></ruby>れたチャンスを<ruby>確実<rt>かくじつ</rt></ruby>にものにできる。",
+          "Only those who have never neglected their preparation can reliably seize the chance that presents itself before them."
+        ]
+      },
+      "mnem": "\"チャンス\" is the English \"chance\" in katakana — say it with a Japanese beat, chan-su.",
+      "tip": "チャンス is specifically a good opportunity (positive); for a neutral \"chance/probability\" use 可能性 (かのうせい), and for \"opportunity\" in a formal register 機会 (きかい).",
+      "accent": 1
+    },
+    {
+      "key": "mnn:25:6",
+      "kana": "おく",
+      "kanji": "億",
+      "context": "",
+      "mean": "hundred million (10^8)",
+      "cat": "noun",
+      "type": "",
+      "trans": "",
+      "dict": "億",
+      "dictRead": "おく",
+      "audio": "/Audio/minnamoi/bai25/00010101100100010.mp3",
+      "levels": {
+        "N5": [
+          "１<ruby>億円<rt>おくえん</rt></ruby>ほしいです。",
+          "I want one hundred million yen."
+        ],
+        "N4": [
+          "もし１<ruby>億円<rt>おくえん</rt></ruby>あったら、<ruby>何<rt>なに</rt></ruby>をしたいですか。",
+          "If you had a hundred million yen, what would you like to do?"
+        ],
+        "N3": [
+          "<ruby>世界<rt>せかい</rt></ruby>の<ruby>人口<rt>じんこう</rt></ruby>は、いまや<ruby>八十億<rt>はちじゅうおく</rt></ruby><ruby>人<rt>にん</rt></ruby>を<ruby>超<rt>こ</rt></ruby>えている。",
+          "The world's population now exceeds eight billion people."
+        ],
+        "N2": [
+          "<ruby>宝<rt>たから</rt></ruby>くじで<ruby>数億円<rt>すうおくえん</rt></ruby>が<ruby>当<rt>あ</rt></ruby>たったとしても、<ruby>生活<rt>せいかつ</rt></ruby>を<ruby>大<rt>おお</rt></ruby>きく<ruby>変<rt>か</rt></ruby>えるつもりはない。",
+          "Even if I won several hundred million yen in the lottery, I have no intention of changing my life drastically."
+        ],
+        "N1": [
+          "その<ruby>企業<rt>きぎょう</rt></ruby>は<ruby>数百億円<rt>すうひゃくおくえん</rt></ruby>という<ruby>巨額<rt>きょがく</rt></ruby>の<ruby>投資<rt>とうし</rt></ruby>を<ruby>行<rt>おこな</rt></ruby>い、<ruby>市場<rt>しじょう</rt></ruby>の<ruby>勢力<rt>せいりょく</rt></ruby><ruby>図<rt>ず</rt></ruby>を<ruby>塗<rt>ぬ</rt></ruby>り<ruby>替<rt>か</rt></ruby>えた。",
+          "That corporation made a colossal investment of tens of billions of yen and redrew the balance of power in the market."
+        ]
+      },
+      "mnem": "億 comes right after 万 (10,000): stack ten thousand 万s and you reach one 億 — a hundred million.",
+      "tip": "億 = 10^8 (a hundred million); the counting ladder is 万 (10^4) → 億 (10^8) → 兆 (10^12). So 1億 = 100 × 万. Written after the number: 1億円 = いちおくえん.",
+      "accent": 1
+    },
+    {
+      "key": "mnn:25:7",
+      "kana": "もし",
+      "kanji": "",
+      "context": "〜たら",
+      "mean": "if (used with 〜たら)",
+      "cat": "adverb",
+      "type": "",
+      "trans": "",
+      "dict": "もし",
+      "dictRead": "もし",
+      "audio": "/Audio/minnamoi/bai25/00010101100100011.mp3",
+      "levels": {
+        "N5": [
+          "もし<ruby>雨<rt>あめ</rt></ruby>だったら、<ruby>行<rt>い</rt></ruby>きません。",
+          "If it rains, I won't go."
+        ],
+        "N4": [
+          "もしお<ruby>金<rt>かね</rt></ruby>があったら、<ruby>新<rt>あたら</rt></ruby>しい<ruby>車<rt>くるま</rt></ruby>を<ruby>買<rt>か</rt></ruby>いたいです。",
+          "If I had money, I'd like to buy a new car."
+        ],
+        "N3": [
+          "もし<ruby>道<rt>みち</rt></ruby>に<ruby>迷<rt>まよ</rt></ruby>ったら、<ruby>近<rt>ちか</rt></ruby>くの<ruby>人<rt>ひと</rt></ruby>に<ruby>聞<rt>き</rt></ruby>くようにしています。",
+          "If I get lost, I make a point of asking someone nearby."
+        ],
+        "N2": [
+          "もし<ruby>私<rt>わたし</rt></ruby>があなたの<ruby>立場<rt>たちば</rt></ruby>だったとしても、<ruby>同<rt>おな</rt></ruby>じ<ruby>選択<rt>せんたく</rt></ruby>をしたに<ruby>違<rt>ちが</rt></ruby>いない。",
+          "Even if I had been in your position, I would surely have made the same choice."
+        ],
+        "N1": [
+          "もし<ruby>仮<rt>かり</rt></ruby>に<ruby>失敗<rt>しっぱい</rt></ruby>に<ruby>終<rt>お</rt></ruby>わったとしても、<ruby>挑戦<rt>ちょうせん</rt></ruby>したという<ruby>事実<rt>じじつ</rt></ruby>そのものに<ruby>価値<rt>かち</rt></ruby>があるのだ。",
+          "Even if, hypothetically, it were to end in failure, there is value in the very fact of having taken up the challenge."
+        ]
+      },
+      "mnem": "\"もし\" is the flag at the front of a hypothesis — say \"MO-shi\" and brace for a 〜たら/〜ても that follows.",
+      "tip": "もし is an adverb that just SIGNALS a hypothesis — it pairs with a conditional clause (もし〜たら / もし〜ても / もし〜なら), it doesn't replace it. Don't confuse it with もしもし (the telephone \"hello\").",
+      "accent": 1
+    },
+    {
+      "key": "mnn:25:8",
+      "kana": "いみ",
+      "kanji": "意味",
+      "context": "",
+      "mean": "meaning",
+      "cat": "noun",
+      "type": "",
+      "trans": "",
+      "dict": "意味",
+      "dictRead": "いみ",
+      "audio": "/Audio/minnamoi/bai25/00010101100100100.mp3",
+      "levels": {
+        "N5": [
+          "この<ruby>言葉<rt>ことば</rt></ruby>の<ruby>意味<rt>いみ</rt></ruby>がわかりません。",
+          "I don't understand the meaning of this word."
+        ],
+        "N4": [
+          "<ruby>辞書<rt>じしょ</rt></ruby>で<ruby>調<rt>しら</rt></ruby>べても、<ruby>意味<rt>いみ</rt></ruby>がわかりませんでした。",
+          "Even after looking it up in the dictionary, I didn't understand the meaning."
+        ],
+        "N3": [
+          "この<ruby>漢字<rt>かんじ</rt></ruby>には、<ruby>読<rt>よ</rt></ruby>み<ruby>方<rt>かた</rt></ruby>によっていくつもの<ruby>意味<rt>いみ</rt></ruby>があります。",
+          "This kanji has several meanings depending on how it is read."
+        ],
+        "N2": [
+          "<ruby>言葉<rt>ことば</rt></ruby>の<ruby>意味<rt>いみ</rt></ruby>だけでなく、その<ruby>裏<rt>うら</rt></ruby>にある<ruby>気持<rt>きも</rt></ruby>ちまで<ruby>汲<rt>く</rt></ruby>み<ruby>取<rt>と</rt></ruby>らなければならない。",
+          "You have to grasp not only the meaning of the words but even the feelings that lie behind them."
+        ],
+        "N1": [
+          "<ruby>苦労<rt>くろう</rt></ruby>して<ruby>取<rt>と</rt></ruby>り<ruby>組<rt>く</rt></ruby>んだ<ruby>経験<rt>けいけん</rt></ruby>は、たとえ<ruby>結果<rt>けっか</rt></ruby>が<ruby>伴<rt>ともな</rt></ruby>わなくても、<ruby>決<rt>けっ</rt></ruby>して<ruby>意味<rt>いみ</rt></ruby>のないものではない。",
+          "An experience one has struggled through is by no means meaningless, even if the results do not follow."
+        ]
+      },
+      "mnem": "意 (mind/intention) + 味 (taste/flavor) — the \"flavor of the mind\" behind a word is its 意味, meaning.",
+      "tip": "意味 = the meaning/sense of a word or thing; 意味がある = \"to be meaningful,\" 意味がない = \"meaningless.\" The verb 意味する means \"to signify.\" Don't confuse with 興味 (きょうみ, \"interest\").",
+      "accent": 1
+    }
+  ],
+  "grammar": [
+    {
+      "pattern": "〜たら (if / when — hypothetical conditional)",
+      "structure": "V(た形)／いA(〜かっ)＋たら・なA(〜だっ)＋たら・N(〜だっ)＋たら ＋ …（もし …）",
+      "explain": "Add ら to the plain PAST (た-form) of any predicate to make \"if / when ~.\" It sets up a hypothetical: the main clause happens once the first is realized. Verbs: 買う→買ったら, adjectives: 安い→安かったら, な-adjectives/nouns: 暇だ→暇だったら, 雨だ→雨だったら. もし at the front just flags that a hypothesis is coming. Unlike 〜と, the result clause can be a request, invitation, or wish.",
+      "examples": [
+        {
+          "jp": "もし お<ruby>金<rt>かね</rt></ruby>が あったら、<ruby>新<rt>あたら</rt></ruby>しい <ruby>車<rt>くるま</rt></ruby>を <ruby>買<rt>か</rt></ruby>いたいです。",
+          "en": "If I had money, I'd like to buy a new car."
+        },
+        {
+          "jp": "<ruby>安<rt>やす</rt></ruby>かったら、パソコンを <ruby>買<rt>か</rt></ruby>います。",
+          "en": "If it's cheap, I'll buy a computer."
+        },
+        {
+          "jp": "<ruby>雨<rt>あめ</rt></ruby>だったら、<ruby>出<rt>で</rt></ruby>かけません。",
+          "en": "If it rains, I won't go out."
+        },
+        {
+          "jp": "<ruby>駅<rt>えき</rt></ruby>まで <ruby>歩<rt>ある</rt></ruby>いたら、30<ruby>分<rt>ぷん</rt></ruby> かかります。",
+          "en": "If you walk to the station, it takes 30 minutes."
+        }
+      ]
+    },
+    {
+      "pattern": "〜たら、… (when / after — a definite future event)",
+      "structure": "V(た形)＋ら、… （動作が 実現した あとで）",
+      "explain": "The same 〜たら form also means \"when / after\" for something certain to happen — a set time or a completed action — after which the main clause follows. 12時に なったら (\"when it turns 12\"), 昼ごはんを 食べたら (\"after eating lunch\"). Here there is no doubt the first event occurs; 〜たら just says the second waits for it.",
+      "examples": [
+        {
+          "jp": "12<ruby>時<rt>じ</rt></ruby>に なったら、<ruby>昼<rt>ひる</rt></ruby>ごはんを <ruby>食<rt>た</rt></ruby>べましょう。",
+          "en": "When it turns 12 o'clock, let's have lunch."
+        },
+        {
+          "jp": "<ruby>駅<rt>えき</rt></ruby>に <ruby>着<rt>つ</rt></ruby>いたら、<ruby>電話<rt>でんわ</rt></ruby>を ください。",
+          "en": "When you arrive at the station, please call me."
+        },
+        {
+          "jp": "<ruby>大学<rt>だいがく</rt></ruby>を <ruby>出<rt>で</rt></ruby>たら、<ruby>留学<rt>りゅうがく</rt></ruby>したいと <ruby>思<rt>おも</rt></ruby>います。",
+          "en": "After I graduate from university, I want to study abroad."
+        },
+        {
+          "jp": "60<ruby>歳<rt>さい</rt></ruby>に なったら、<ruby>仕事<rt>しごと</rt></ruby>を やめます。",
+          "en": "When I turn 60, I'll retire."
+        }
+      ]
+    },
+    {
+      "pattern": "〜ても (even if / even though)",
+      "structure": "V(て形)＋も・いA(〜く)＋ても・なA/N(〜で)＋も ＋ …",
+      "explain": "Add も to the て-form to mean \"even if / even though\" — the main clause holds despite the first. Verbs: 押す→押しても, い-adjectives: 高い→高くても, な-adjectives/nouns: 便利だ→便利でも, 病気だ→病気でも. It concedes the first clause and then denies the expected result: 雨が 降っても、行きます (\"even if it rains, I'll go\").",
+      "examples": [
+        {
+          "jp": "<ruby>雨<rt>あめ</rt></ruby>が <ruby>降<rt>ふ</rt></ruby>っても、<ruby>出<rt>で</rt></ruby>かけます。",
+          "en": "Even if it rains, I'll go out."
+        },
+        {
+          "jp": "ボタンを <ruby>押<rt>お</rt></ruby>しても、<ruby>水<rt>みず</rt></ruby>が <ruby>出<rt>で</rt></ruby>ません。",
+          "en": "Even if I press the button, the water won't come out."
+        },
+        {
+          "jp": "<ruby>高<rt>たか</rt></ruby>くても、<ruby>買<rt>か</rt></ruby>います。",
+          "en": "Even if it's expensive, I'll buy it."
+        },
+        {
+          "jp": "<ruby>病気<rt>びょうき</rt></ruby>でも、<ruby>会社<rt>かいしゃ</rt></ruby>を <ruby>休<rt>やす</rt></ruby>みません。",
+          "en": "Even if I'm sick, I don't take time off work."
+        }
+      ]
+    },
+    {
+      "pattern": "いくら〜ても (no matter how much ~)",
+      "structure": "いくら ＋ V(て形)＋も／いA(〜く)＋ても ＋ …",
+      "explain": "Put いくら in front of a 〜ても clause to stress \"no matter how much / however ~\": the result stays the same however far the first goes. いくら 考えても、わかりません (\"no matter how much I think, I don't get it\"); いくら 痛くても、行きたくない (\"no matter how much it hurts, I don't want to go\"). どんなに works the same way.",
+      "examples": [
+        {
+          "jp": "いくら <ruby>考<rt>かんが</rt></ruby>えても、わかりません。",
+          "en": "No matter how much I think about it, I don't understand."
+        },
+        {
+          "jp": "いくら <ruby>痛<rt>いた</rt></ruby>くても、<ruby>歯医者<rt>はいしゃ</rt></ruby>へ <ruby>行<rt>い</rt></ruby>きたくないです。",
+          "en": "No matter how much it hurts, I don't want to go to the dentist."
+        },
+        {
+          "jp": "いくら <ruby>辞書<rt>じしょ</rt></ruby>で <ruby>調<rt>しら</rt></ruby>べても、<ruby>意味<rt>いみ</rt></ruby>が わかりません。",
+          "en": "No matter how much I look it up in the dictionary, I don't understand the meaning."
+        }
+      ]
+    }
+  ],
+  "examples": [
+    {
+      "jp": "もし 1<ruby>億円<rt>おくえん</rt></ruby> あったら、<ruby>何<rt>なに</rt></ruby>を したいですか。 …<ruby>学校<rt>がっこう</rt></ruby>を <ruby>作<rt>つく</rt></ruby>りたいです。",
+      "en": "If you had 100 million yen, what would you like to do? …I'd like to build a school."
+    },
+    {
+      "jp": "<ruby>駅<rt>えき</rt></ruby>に <ruby>着<rt>つ</rt></ruby>いたら、<ruby>電話<rt>でんわ</rt></ruby>を ください。",
+      "en": "When you arrive at the station, please give me a call."
+    },
+    {
+      "jp": "<ruby>年<rt>とし</rt></ruby>を <ruby>取<rt>と</rt></ruby>っても、<ruby>働<rt>はたら</rt></ruby>きたいですか。 …いいえ、<ruby>年<rt>とし</rt></ruby>を <ruby>取<rt>と</rt></ruby>ったら、<ruby>働<rt>はたら</rt></ruby>きたくないです。",
+      "en": "Even when you're old, will you still want to work? …No, once I'm old, I won't want to work."
+    },
+    {
+      "jp": "この <ruby>薬<rt>くすり</rt></ruby>を <ruby>飲<rt>の</rt></ruby>んだら、<ruby>元気<rt>げんき</rt></ruby>に なります。",
+      "en": "If you take this medicine, you'll feel better."
+    },
+    {
+      "jp": "<ruby>買<rt>か</rt></ruby>い<ruby>物<rt>もの</rt></ruby>の とき、お<ruby>金<rt>かね</rt></ruby>が <ruby>足<rt>た</rt></ruby>りなかったら、どう しますか。 …ATMで <ruby>下<rt>お</rt></ruby>ろします。",
+      "en": "When you're shopping and don't have enough money, what do you do? …I withdraw some at an ATM."
+    },
+    {
+      "jp": "<ruby>先生<rt>せんせい</rt></ruby>、この ことばの <ruby>意味<rt>いみ</rt></ruby>が わかりません。 <ruby>辞書<rt>じしょ</rt></ruby>で <ruby>調<rt>しら</rt></ruby>べても、わかりません。",
+      "en": "Teacher, I don't understand the meaning of this word. Even after looking it up in the dictionary, I still don't understand."
+    },
+    {
+      "jp": "<ruby>大学<rt>だいがく</rt></ruby>を <ruby>出<rt>で</rt></ruby>たら、すぐ <ruby>働<rt>はたら</rt></ruby>きますか。 …いいえ、1<ruby>年<rt>ねん</rt></ruby>ぐらい いろいろな <ruby>国<rt>くに</rt></ruby>を <ruby>旅行<rt>りょこう</rt></ruby>したいです。",
+      "en": "Are you going to start working right after you graduate? …No, I want to travel to various countries for about a year."
+    },
+    {
+      "jp": "<ruby>暑<rt>あつ</rt></ruby>くても、エアコンを つけません。<ruby>体<rt>からだ</rt></ruby>に よくないと <ruby>思<rt>おも</rt></ruby>います。",
+      "en": "Even when it's hot, I don't turn on the air conditioner. I think it's not good for my health."
+    }
+  ],
+  "conversation": {
+    "title": "いろいろ お世話に なりました (Thank you for everything)",
+    "audio": "/Audio/minnahonsatsu1/85.mp3",
+    "lines": [
+      {
+        "role": "同僚",
+        "jp": "ミラーさん、<ruby>転勤<rt>てんきん</rt></ruby>、おめでとう ございます。",
+        "en": "Mr. Miller, congratulations on your transfer."
+      },
+      {
+        "role": "ミラー",
+        "jp": "ありがとう ございます。",
+        "en": "Thank you."
+      },
+      {
+        "role": "佐藤",
+        "jp": "ミラーさんが <ruby>東京<rt>とうきょう</rt></ruby>へ <ruby>行<rt>い</rt></ruby>ったら、<ruby>寂<rt>さび</rt></ruby>しく なりますね。",
+        "en": "It'll be lonely once you go to Tokyo, Mr. Miller."
+      },
+      {
+        "role": "ミラー",
+        "jp": "そうですね。",
+        "en": "Yes, it will."
+      },
+      {
+        "role": "佐藤",
+        "jp": "<ruby>東京<rt>とうきょう</rt></ruby>へ <ruby>行<rt>い</rt></ruby>っても、<ruby>大阪<rt>おおさか</rt></ruby>の ことを <ruby>忘<rt>わす</rt></ruby>れないで くださいね。",
+        "en": "Even though you're going to Tokyo, please don't forget about Osaka."
+      },
+      {
+        "role": "ミラー",
+        "jp": "もちろん。<ruby>皆<rt>みな</rt></ruby>さん、<ruby>暇<rt>ひま</rt></ruby>が あったら、ぜひ <ruby>東京<rt>とうきょう</rt></ruby>へ <ruby>遊<rt>あそ</rt></ruby>びに <ruby>来<rt>き</rt></ruby>て ください。",
+        "en": "Of course. Everyone, if you have some free time, please be sure to come visit Tokyo."
+      },
+      {
+        "role": "同僚",
+        "jp": "ミラーさんも <ruby>大阪<rt>おおさか</rt></ruby>へ <ruby>来<rt>き</rt></ruby>たら、<ruby>電話<rt>でんわ</rt></ruby>を ください。いっしょに <ruby>飲<rt>の</rt></ruby>みましょう。",
+        "en": "Mr. Miller, when you come to Osaka, give us a call too. Let's have a drink together."
+      },
+      {
+        "role": "ミラー",
+        "jp": "ええ、ぜひ。<ruby>皆<rt>みな</rt></ruby>さん、ほんとうに いろいろ お<ruby>世話<rt>せわ</rt></ruby>に なりました。",
+        "en": "Yes, definitely. Everyone, thank you truly for all your help."
+      },
+      {
+        "role": "同僚",
+        "jp": "<ruby>頑張<rt>がんば</rt></ruby>って ください。<ruby>体<rt>からだ</rt></ruby>に <ruby>気<rt>き</rt></ruby>を つけて。",
+        "en": "Take care and do your best. Look after your health."
+      },
+      {
+        "role": "ミラー",
+        "jp": "はい。<ruby>皆<rt>みな</rt></ruby>さんも どうぞ お<ruby>元気<rt>げんき</rt></ruby>で。",
+        "en": "I will. I hope you all stay well, too."
+      }
+    ]
+  }
+}

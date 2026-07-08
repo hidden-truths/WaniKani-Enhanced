@@ -461,10 +461,10 @@ helpers in [src/core/recordings.js](src/core/recordings.js) + [src/core/refs.js]
 
 - **More chapters** — run [../wk-enhanced-api/scripts/scrape-minna.ts](../wk-enhanced-api/scripts/scrape-minna.ts) for
   other lessons and curate them into `data/minna/lesson-<n>.json`. The whole UI is
-  already N-lesson aware (chapter chips, `lastLesson`). **Shipped so far: L1–L5, L22, L23, L24.**
-  (The early-lesson L1–L5 backfill was curated from the scraped drafts for review; its generated
-  Japanese is flagged for maintainer proofread, same status as `examples.js`. L11–L21 remain to
-  scrape+curate. L23 carries iTalki flags from the maintainer's lesson; L1–L5/L22/L24 don't yet —
+  already N-lesson aware (chapter chips, `lastLesson`). **Shipped so far: L1–L25 — all of
+  みんなの日本語 I (2026-07-08).** (Curated from the scraped drafts; the generated Japanese is
+  flagged for maintainer proofread, same status as `examples.js`. **L26–50 = Minna II**, the
+  remaining future work. L23 carries iTalki flags from the maintainer's lesson; the rest don't yet —
   add `italki:true` per word as those tutoring sessions happen.)
 - **More section types** — exercises/drills (interactive, auto-checked), listening,
   kanji. The lesson JSON can grow new top-level arrays; `renderMinnaLesson` adds a

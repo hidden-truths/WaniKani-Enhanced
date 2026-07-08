@@ -1,0 +1,1435 @@
+{
+  "lesson": 7,
+  "title": "Lesson 7",
+  "theme": "Giving & receiving (あげます／もらいます) + the recipient に and the means/language で (はしで食べます、日本語で) + もう〜ました vs まだ",
+  "source": {
+    "name": "vnjpclub.com",
+    "vocabUrl": "https://www.vnjpclub.com/en/minna-no-nihongo/lesson-7-vocabulary.html",
+    "grammarUrl": "https://www.vnjpclub.com/en/minna-no-nihongo/lesson-7-grammar.html",
+    "note": "Vocabulary, native-speaker audio, and example sentences aggregated from vnjpclub.com (Minna no Nihongo 第2版). For personal study."
+  },
+  "vocab": [
+    {
+      "key": "mnn:7:0",
+      "kana": "きります",
+      "kanji": "切ります",
+      "context": "かみを〜",
+      "mean": "to cut, slice",
+      "cat": "verb",
+      "type": "godan",
+      "trans": "t",
+      "dict": "切る",
+      "dictRead": "きる",
+      "audio": "/Audio/minnamoi/bai7/00010100001001010.mp3",
+      "accent": 1
+    },
+    {
+      "key": "mnn:7:1",
+      "kana": "おくります",
+      "kanji": "送ります",
+      "context": "てがみを〜",
+      "mean": "to send",
+      "cat": "verb",
+      "type": "godan",
+      "trans": "t",
+      "dict": "送る",
+      "dictRead": "おくる",
+      "audio": "/Audio/minnamoi/bai7/00010100001001011.mp3",
+      "accent": 0
+    },
+    {
+      "key": "mnn:7:2",
+      "kana": "あげます",
+      "kanji": "",
+      "context": "",
+      "mean": "to give",
+      "cat": "verb",
+      "type": "ichidan",
+      "trans": "t",
+      "dict": "あげる",
+      "dictRead": "あげる",
+      "audio": "/Audio/minnamoi/bai7/00010100001001100.mp3",
+      "accent": 0
+    },
+    {
+      "key": "mnn:7:3",
+      "kana": "もらいます",
+      "kanji": "",
+      "context": "",
+      "mean": "to receive",
+      "cat": "verb",
+      "type": "godan",
+      "trans": "t",
+      "dict": "もらう",
+      "dictRead": "もらう",
+      "audio": "/Audio/minnamoi/bai7/00010100001001101.mp3",
+      "accent": 0
+    },
+    {
+      "key": "mnn:7:4",
+      "kana": "かします",
+      "kanji": "貸します",
+      "context": "",
+      "mean": "to lend",
+      "cat": "verb",
+      "type": "godan",
+      "trans": "t",
+      "dict": "貸す",
+      "dictRead": "かす",
+      "audio": "/Audio/minnamoi/bai7/00010100001001110.mp3",
+      "accent": 0
+    },
+    {
+      "key": "mnn:7:5",
+      "kana": "かります",
+      "kanji": "借ります",
+      "context": "",
+      "mean": "to borrow",
+      "cat": "verb",
+      "type": "ichidan",
+      "trans": "t",
+      "dict": "借りる",
+      "dictRead": "かりる",
+      "audio": "/Audio/minnamoi/bai7/00010100001001111.mp3",
+      "accent": 0
+    },
+    {
+      "key": "mnn:7:6",
+      "kana": "おしえます",
+      "kanji": "教えます",
+      "context": "じゅうしょを〜",
+      "mean": "to teach, tell",
+      "cat": "verb",
+      "type": "ichidan",
+      "trans": "t",
+      "dict": "教える",
+      "dictRead": "おしえる",
+      "audio": "/Audio/minnamoi/bai7/00010100001010000.mp3",
+      "accent": 0
+    },
+    {
+      "key": "mnn:7:7",
+      "kana": "ならいます",
+      "kanji": "習います",
+      "context": "",
+      "mean": "to learn",
+      "cat": "verb",
+      "type": "godan",
+      "trans": "t",
+      "dict": "習う",
+      "dictRead": "ならう",
+      "audio": "/Audio/minnamoi/bai7/00010100001010001.mp3",
+      "accent": 2
+    },
+    {
+      "key": "mnn:7:8",
+      "kana": "かけます",
+      "kanji": "",
+      "context": "でんわを〜",
+      "mean": "to make (a telephone call)",
+      "cat": "verb",
+      "type": "ichidan",
+      "trans": "t",
+      "dict": "かける",
+      "dictRead": "かける",
+      "audio": "/Audio/minnamoi/bai7/00010100001010010.mp3",
+      "accent": 2
+    },
+    {
+      "key": "mnn:7:9",
+      "kana": "て",
+      "kanji": "手",
+      "context": "",
+      "mean": "hand, arm",
+      "cat": "noun",
+      "type": "",
+      "trans": "",
+      "dict": "手",
+      "dictRead": "て",
+      "audio": "/Audio/minnamoi/bai7/00010100001010011.mp3",
+      "levels": {
+        "N5": [
+          "<ruby>手<rt>て</rt></ruby>を<ruby>洗<rt>あら</rt></ruby>います。",
+          "I wash my hands."
+        ],
+        "N4": [
+          "<ruby>手<rt>て</rt></ruby>で ごはんを <ruby>食<rt>た</rt></ruby>べる <ruby>国<rt>くに</rt></ruby>も あります。",
+          "There are also countries where people eat rice with their hands."
+        ],
+        "N3": [
+          "<ruby>手<rt>て</rt></ruby>が よごれないように、<ruby>手袋<rt>てぶくろ</rt></ruby>を するように しています。",
+          "I make a point of wearing gloves so my hands don't get dirty."
+        ],
+        "N2": [
+          "<ruby>疲<rt>つか</rt></ruby>れて <ruby>手<rt>て</rt></ruby>に <ruby>力<rt>ちから</rt></ruby>が <ruby>入<rt>はい</rt></ruby>らないものの、<ruby>最後<rt>さいご</rt></ruby>まで やり<ruby>遂<rt>と</rt></ruby>げた。",
+          "Although I was so tired I couldn't put any strength into my hands, I saw it through to the end."
+        ],
+        "N1": [
+          "<ruby>職人<rt>しょくにん</rt></ruby>の <ruby>手<rt>て</rt></ruby>によって <ruby>一<rt>ひと</rt></ruby>つ <ruby>一<rt>ひと</rt></ruby>つ <ruby>丁寧<rt>ていねい</rt></ruby>に <ruby>仕上<rt>しあ</rt></ruby>げられた <ruby>作品<rt>さくひん</rt></ruby>だけに、その <ruby>価値<rt>かち</rt></ruby>は <ruby>計<rt>はか</rt></ruby>り<ruby>知<rt>し</rt></ruby>れない。",
+          "Precisely because each piece was finished carefully by the craftsman's hands, its value is immeasurable."
+        ]
+      },
+      "mnem": "\"て\" (te) is your hand — think of reaching out to say \"take\" (te) something.",
+      "tip": "Also appears in compounds like 手紙 (letter, \"hand-writing\") and 上手 (じょうず, skillful); the tool-particle frame 手で〜 means \"with one's hands.\"",
+      "accent": 1
+    },
+    {
+      "key": "mnn:7:10",
+      "kana": "はし",
+      "kanji": "",
+      "context": "",
+      "mean": "chopsticks",
+      "cat": "noun",
+      "type": "",
+      "trans": "",
+      "dict": "はし",
+      "dictRead": "はし",
+      "audio": "/Audio/minnamoi/bai7/00010100001010100.mp3",
+      "levels": {
+        "N5": [
+          "はしで ごはんを <ruby>食<rt>た</rt></ruby>べます。",
+          "I eat rice with chopsticks."
+        ],
+        "N4": [
+          "はしの <ruby>持<rt>も</rt></ruby>ち<ruby>方<rt>かた</rt></ruby>を <ruby>母<rt>はは</rt></ruby>に <ruby>習<rt>なら</rt></ruby>いました。",
+          "I learned how to hold chopsticks from my mother."
+        ],
+        "N3": [
+          "<ruby>子<rt>こ</rt></ruby>どもが うまく はしを <ruby>使<rt>つか</rt></ruby>えるように、<ruby>毎日<rt>まいにち</rt></ruby> <ruby>練習<rt>れんしゅう</rt></ruby>させて います。",
+          "I have my child practice every day so they can use chopsticks well."
+        ],
+        "N2": [
+          "<ruby>外国<rt>がいこく</rt></ruby>で <ruby>暮<rt>く</rt></ruby>らして いる ものの、やはり ごはんは はしで <ruby>食<rt>た</rt></ruby>べたい。",
+          "Although I live abroad, I still want to eat rice with chopsticks after all."
+        ],
+        "N1": [
+          "はし <ruby>一<rt>いっ</rt></ruby><ruby>膳<rt>ぜん</rt></ruby>の <ruby>使<rt>つか</rt></ruby>い<ruby>方<rt>かた</rt></ruby>にも、その <ruby>国<rt>くに</rt></ruby>の <ruby>文化<rt>ぶんか</rt></ruby>や <ruby>礼儀<rt>れいぎ</rt></ruby>が にじみ<ruby>出<rt>で</rt></ruby>ると <ruby>言<rt>い</rt></ruby>っても <ruby>過言<rt>かごん</rt></ruby>では ない。",
+          "It is no exaggeration to say that even the way one handles a single pair of chopsticks reveals that country's culture and manners."
+        ]
+      },
+      "mnem": "\"HA-shi\" — two thin sticks; picture them as an \"H\" you \"push\" (hashi) the food with.",
+      "tip": "Homophones distinguished only by pitch: はし=chopsticks (accent 1), 橋=bridge (accent 2), 端=edge (accent 0). Chopsticks take the tool-particle frame はしで〜 (\"with chopsticks\").",
+      "accent": 1
+    },
+    {
+      "key": "mnn:7:11",
+      "kana": "スプーン",
+      "kanji": "",
+      "context": "",
+      "mean": "spoon",
+      "cat": "noun",
+      "type": "",
+      "trans": "",
+      "dict": "スプーン",
+      "dictRead": "スプーン",
+      "audio": "/Audio/minnamoi/bai7/00010100001010101.mp3",
+      "levels": {
+        "N5": [
+          "スプーンで スープを <ruby>飲<rt>の</rt></ruby>みます。",
+          "I drink soup with a spoon."
+        ],
+        "N4": [
+          "<ruby>小<rt>ちい</rt></ruby>さい <ruby>子<rt>こ</rt></ruby>どもは スプーンで ごはんを <ruby>食<rt>た</rt></ruby>べます。",
+          "Small children eat their rice with a spoon."
+        ],
+        "N3": [
+          "はしが <ruby>使<rt>つか</rt></ruby>えない <ruby>人<rt>ひと</rt></ruby>のために、スプーンも <ruby>用意<rt>ようい</rt></ruby>して あります。",
+          "For people who can't use chopsticks, spoons are also provided."
+        ],
+        "N2": [
+          "<ruby>銀<rt>ぎん</rt></ruby>の スプーンは <ruby>高<rt>たか</rt></ruby>かった ものの、なかなか <ruby>使<rt>つか</rt></ruby>う <ruby>機会<rt>きかい</rt></ruby>が ない。",
+          "The silver spoon was expensive, but I hardly get a chance to use it."
+        ],
+        "N1": [
+          "<ruby>祖母<rt>そぼ</rt></ruby>から <ruby>受<rt>う</rt></ruby>け<ruby>継<rt>つ</rt></ruby>いだ <ruby>年代物<rt>ねんだいもの</rt></ruby>の スプーンには、<ruby>家族<rt>かぞく</rt></ruby>の <ruby>思<rt>おも</rt></ruby>い<ruby>出<rt>で</rt></ruby>が <ruby>詰<rt>つ</rt></ruby>まって いる。",
+          "The antique spoon I inherited from my grandmother is packed with family memories."
+        ]
+      },
+      "mnem": "\"スプーン\" is the English \"spoon\" spelled in katakana — stretch it out: su-PŪ-n.",
+      "tip": "A loanword; like はし it takes the tool-particle で (スプーンで食べます). Don't confuse it with スープ (sūpu, \"soup\").",
+      "accent": 2
+    },
+    {
+      "key": "mnn:7:12",
+      "kana": "ナイフ",
+      "kanji": "",
+      "context": "",
+      "mean": "knife",
+      "cat": "noun",
+      "type": "",
+      "trans": "",
+      "dict": "ナイフ",
+      "dictRead": "ナイフ",
+      "audio": "/Audio/minnamoi/bai7/00010100001010110.mp3",
+      "levels": {
+        "N5": [
+          "ナイフで パンを <ruby>切<rt>き</rt></ruby>ります。",
+          "I cut bread with a knife."
+        ],
+        "N4": [
+          "<ruby>肉<rt>にく</rt></ruby>を <ruby>食<rt>た</rt></ruby>べる とき、ナイフと フォークを <ruby>使<rt>つか</rt></ruby>います。",
+          "When eating meat, I use a knife and fork."
+        ],
+        "N3": [
+          "<ruby>危<rt>あぶ</rt></ruby>ないので、ナイフを <ruby>子<rt>こ</rt></ruby>どもに さわらせないように して います。",
+          "Since it's dangerous, I make sure not to let children touch the knife."
+        ],
+        "N2": [
+          "よく <ruby>切<rt>き</rt></ruby>れる ナイフである ものの、<ruby>手入<rt>てい</rt></ruby>れを <ruby>怠<rt>おこた</rt></ruby>ると すぐに さびて しまう。",
+          "It's a knife that cuts well, but if you neglect its upkeep it soon rusts."
+        ],
+        "N1": [
+          "<ruby>一流<rt>いちりゅう</rt></ruby>の <ruby>料理人<rt>りょうりにん</rt></ruby>は、ナイフ <ruby>一<rt>いっ</rt></ruby><ruby>本<rt>ぽん</rt></ruby>の <ruby>扱<rt>あつか</rt></ruby>い<ruby>方<rt>かた</rt></ruby>ひとつで その <ruby>技量<rt>ぎりょう</rt></ruby>が <ruby>知<rt>し</rt></ruby>れる ものだ。",
+          "With a first-rate chef, their skill can be told from nothing more than the way they handle a single knife."
+        ]
+      },
+      "mnem": "\"ナイフ\" is the English \"knife\" (the silent k dropped): NAI-fu.",
+      "tip": "Loanword taking the tool-particle で (ナイフで切ります). Note the katakana フ is \"fu,\" not \"f\" — Japanese has no bare f sound.",
+      "accent": 1
+    },
+    {
+      "key": "mnn:7:13",
+      "kana": "フォーク",
+      "kanji": "",
+      "context": "",
+      "mean": "fork",
+      "cat": "noun",
+      "type": "",
+      "trans": "",
+      "dict": "フォーク",
+      "dictRead": "フォーク",
+      "audio": "/Audio/minnamoi/bai7/00010100001010111.mp3",
+      "levels": {
+        "N5": [
+          "フォークで <ruby>肉<rt>にく</rt></ruby>を <ruby>食<rt>た</rt></ruby>べます。",
+          "I eat meat with a fork."
+        ],
+        "N4": [
+          "<ruby>右<rt>みぎ</rt></ruby>に ナイフ、<ruby>左<rt>ひだり</rt></ruby>に フォークを <ruby>置<rt>お</rt></ruby>きます。",
+          "I place the knife on the right and the fork on the left."
+        ],
+        "N3": [
+          "<ruby>洋食<rt>ようしょく</rt></ruby>の <ruby>店<rt>みせ</rt></ruby>では、フォークで <ruby>食<rt>た</rt></ruby>べるように して います。",
+          "At Western-food restaurants, I make a point of eating with a fork."
+        ],
+        "N2": [
+          "フォークの <ruby>使<rt>つか</rt></ruby>い<ruby>方<rt>かた</rt></ruby>が <ruby>分<rt>わ</rt></ruby>からなかった ものの、<ruby>隣<rt>となり</rt></ruby>の <ruby>人<rt>ひと</rt></ruby>を <ruby>見<rt>み</rt></ruby>て まねた。",
+          "Although I didn't know how to use the fork, I watched the person next to me and copied them."
+        ],
+        "N1": [
+          "テーブルマナーに <ruby>厳<rt>きび</rt></ruby>しい <ruby>家<rt>いえ</rt></ruby>で <ruby>育<rt>そだ</rt></ruby>った だけに、フォークの <ruby>持<rt>も</rt></ruby>ち<ruby>方<rt>かた</rt></ruby>ひとつ とっても <ruby>所作<rt>しょさ</rt></ruby>が <ruby>美<rt>うつく</rt></ruby>しい。",
+          "Precisely because she was raised in a household strict about table manners, even something like the way she holds a fork is graceful."
+        ]
+      },
+      "mnem": "\"フォーク\" is the English \"fork\" — the フォ makes the \"fo\" sound: FŌ-ku.",
+      "tip": "The draft glossed this \"folk\" — it means FORK (the eating utensil), a tool taking で (フォークで食べます). フォ is a special katakana combo for \"fo.\"",
+      "accent": 1
+    },
+    {
+      "key": "mnn:7:14",
+      "kana": "はさみ",
+      "kanji": "",
+      "context": "",
+      "mean": "scissors",
+      "cat": "noun",
+      "type": "",
+      "trans": "",
+      "dict": "はさみ",
+      "dictRead": "はさみ",
+      "audio": "/Audio/minnamoi/bai7/00010100001011000.mp3",
+      "levels": {
+        "N5": [
+          "はさみで <ruby>紙<rt>かみ</rt></ruby>を <ruby>切<rt>き</rt></ruby>ります。",
+          "I cut paper with scissors."
+        ],
+        "N4": [
+          "はさみを <ruby>貸<rt>か</rt></ruby>して ください。",
+          "Please lend me the scissors."
+        ],
+        "N3": [
+          "<ruby>子<rt>こ</rt></ruby>どもが けがを しないように、はさみは <ruby>高<rt>たか</rt></ruby>い <ruby>所<rt>ところ</rt></ruby>に <ruby>置<rt>お</rt></ruby>いて あります。",
+          "So the children don't hurt themselves, the scissors are kept up high."
+        ],
+        "N2": [
+          "この はさみは <ruby>古<rt>ふる</rt></ruby>い ものの、まだ よく <ruby>切<rt>き</rt></ruby>れる。",
+          "These scissors are old, but they still cut well."
+        ],
+        "N1": [
+          "<ruby>裁縫<rt>さいほう</rt></ruby>を <ruby>生業<rt>なりわい</rt></ruby>と する <ruby>祖母<rt>そぼ</rt></ruby>は、<ruby>愛用<rt>あいよう</rt></ruby>の はさみを <ruby>誰<rt>だれ</rt></ruby>にも <ruby>触<rt>さわ</rt></ruby>らせようとは しなかった。",
+          "My grandmother, who made her living by sewing, would never let anyone touch her beloved scissors."
+        ]
+      },
+      "mnem": "はさみ comes from はさむ (to pinch/hold between) — scissors PINCH the paper between two blades.",
+      "tip": "Counted with the counter 丁 (ちょう) or informally 本; takes the tool-particle で (はさみで切ります). Related verb 挟む (はさむ) = to insert/pinch between.",
+      "accent": 3
+    },
+    {
+      "key": "mnn:7:15",
+      "kana": "パソコン",
+      "kanji": "",
+      "context": "",
+      "mean": "personal computer",
+      "cat": "noun",
+      "type": "",
+      "trans": "",
+      "dict": "パソコン",
+      "dictRead": "パソコン",
+      "audio": "/Audio/minnamoi/bai7/00010100001011001.mp3",
+      "levels": {
+        "N5": [
+          "パソコンで <ruby>映画<rt>えいが</rt></ruby>を <ruby>見<rt>み</rt></ruby>ます。",
+          "I watch movies on my computer."
+        ],
+        "N4": [
+          "<ruby>会社<rt>かいしゃ</rt></ruby>で パソコンを <ruby>使<rt>つか</rt></ruby>って レポートを <ruby>書<rt>か</rt></ruby>きます。",
+          "At work I use a computer to write reports."
+        ],
+        "N3": [
+          "<ruby>新<rt>あたら</rt></ruby>しい パソコンは <ruby>速<rt>はや</rt></ruby>くて、<ruby>仕事<rt>しごと</rt></ruby>が しやすく なりました。",
+          "My new computer is fast, and it's become easier to get work done."
+        ],
+        "N2": [
+          "パソコンが <ruby>故障<rt>こしょう</rt></ruby>して しまった ものの、<ruby>大事<rt>だいじ</rt></ruby>な データは <ruby>残<rt>のこ</rt></ruby>って いた。",
+          "My computer broke down, but the important data was still there."
+        ],
+        "N1": [
+          "<ruby>在宅<rt>ざいたく</rt></ruby><ruby>勤務<rt>きんむ</rt></ruby>が <ruby>普及<rt>ふきゅう</rt></ruby>した <ruby>今<rt>いま</rt></ruby>、<ruby>性能<rt>せいのう</rt></ruby>の よい パソコン <ruby>一<rt>いち</rt></ruby><ruby>台<rt>だい</rt></ruby>が <ruby>仕事<rt>しごと</rt></ruby>の <ruby>効率<rt>こうりつ</rt></ruby>を <ruby>大<rt>おお</rt></ruby>きく <ruby>左右<rt>さゆう</rt></ruby>する。",
+          "Now that working from home has become widespread, a single high-performance computer greatly affects one's work efficiency."
+        ]
+      },
+      "mnem": "パソコン is a clipped compound of パーソナル・コンピューター (personal computer): PA(sonal) + KON(pyuutaa).",
+      "tip": "\"How do you say this in Japanese?\" — これは日本語で何ですか。…「パソコン」です。 The means-particle で also marks a tool: パソコンで書きます (\"write on a computer\").",
+      "accent": 0
+    },
+    {
+      "key": "mnn:7:16",
+      "kana": "ケータイ",
+      "kanji": "",
+      "context": "",
+      "mean": "mobile phone, cell phone",
+      "cat": "noun",
+      "type": "",
+      "trans": "",
+      "dict": "ケータイ",
+      "dictRead": "ケータイ",
+      "audio": "/Audio/minnamoi/bai7/00010100001011010.mp3",
+      "levels": {
+        "N5": [
+          "ケータイで <ruby>写真<rt>しゃしん</rt></ruby>を <ruby>撮<rt>と</rt></ruby>ります。",
+          "I take photos with my mobile phone."
+        ],
+        "N4": [
+          "<ruby>電車<rt>でんしゃ</rt></ruby>の <ruby>中<rt>なか</rt></ruby>で ケータイを <ruby>使<rt>つか</rt></ruby>っては いけません。",
+          "You must not use your mobile phone on the train."
+        ],
+        "N3": [
+          "<ruby>道<rt>みち</rt></ruby>が <ruby>分<rt>わ</rt></ruby>からなく なったら、ケータイで <ruby>地図<rt>ちず</rt></ruby>を <ruby>見<rt>み</rt></ruby>るように して います。",
+          "Whenever I lose my way, I make a point of checking a map on my mobile phone."
+        ],
+        "N2": [
+          "ケータイを <ruby>家<rt>いえ</rt></ruby>に <ruby>忘<rt>わす</rt></ruby>れて きた ものの、<ruby>一日<rt>いちにち</rt></ruby>くらいは なんとか なった。",
+          "I left my mobile phone at home, but I managed all right for about a day."
+        ],
+        "N1": [
+          "ケータイ <ruby>一<rt>いち</rt></ruby><ruby>台<rt>だい</rt></ruby>で <ruby>買<rt>か</rt></ruby>い<ruby>物<rt>もの</rt></ruby>から <ruby>支払<rt>しはら</rt></ruby>いまで <ruby>済<rt>す</rt></ruby>ませられる <ruby>時代<rt>じだい</rt></ruby>に なり、<ruby>財布<rt>さいふ</rt></ruby>を <ruby>持<rt>も</rt></ruby>ち<ruby>歩<rt>ある</rt></ruby>かない <ruby>人<rt>ひと</rt></ruby>も <ruby>増<rt>ふ</rt></ruby>えて いる。",
+          "We've entered an age where everything from shopping to payment can be done with a single phone, and more and more people no longer carry a wallet."
+        ]
+      },
+      "mnem": "ケータイ is short for 携帯電話 (けいたいでんわ, \"portable phone\") — the 携帯 (portable) part carried on its own.",
+      "tip": "The colloquial word for a mobile; スマホ (smartphone) is now more common. The tool-particle で marks it: ケータイで電話します.",
+      "accent": 0
+    },
+    {
+      "key": "mnn:7:17",
+      "kana": "メール",
+      "kanji": "",
+      "context": "",
+      "mean": "e-mail",
+      "cat": "noun",
+      "type": "",
+      "trans": "",
+      "dict": "メール",
+      "dictRead": "メール",
+      "audio": "/Audio/minnamoi/bai7/00010100001011011.mp3",
+      "levels": {
+        "N5": [
+          "<ruby>友<rt>とも</rt></ruby>だちに メールを <ruby>送<rt>おく</rt></ruby>ります。",
+          "I send an e-mail to my friend."
+        ],
+        "N4": [
+          "レポートを メールで <ruby>送<rt>おく</rt></ruby>りました。",
+          "I sent the report by e-mail."
+        ],
+        "N3": [
+          "<ruby>忙<rt>いそが</rt></ruby>しくて、まだ メールの <ruby>返事<rt>へんじ</rt></ruby>を して いません。",
+          "I've been busy, so I haven't replied to the e-mail yet."
+        ],
+        "N2": [
+          "メールで <ruby>連絡<rt>れんらく</rt></ruby>した ものの、<ruby>一週間<rt>いっしゅうかん</rt></ruby> <ruby>返事<rt>へんじ</rt></ruby>が こない。",
+          "Although I got in touch by e-mail, I've had no reply for a week."
+        ],
+        "N1": [
+          "<ruby>取引先<rt>とりひきさき</rt></ruby>への メール <ruby>一通<rt>いっつう</rt></ruby>に いたるまで <ruby>言葉遣<rt>ことばづか</rt></ruby>いに <ruby>気<rt>き</rt></ruby>を <ruby>配<rt>くば</rt></ruby>るのが、<ruby>信頼<rt>しんらい</rt></ruby>を <ruby>築<rt>きず</rt></ruby>く <ruby>第一歩<rt>だいいっぽ</rt></ruby>だ。",
+          "Paying attention to word choice down to a single e-mail to a client is the first step in building trust."
+        ]
+      },
+      "mnem": "メール is the English \"mail\" (as in e-mail) in katakana: MĒ-ru.",
+      "tip": "Sent with 送ります (メールを送る) and marked by the means-particle で (メールで送りました, \"sent it by e-mail\"). Eメール is the fuller form.",
+      "accent": 0
+    },
+    {
+      "key": "mnn:7:18",
+      "kana": "ねんがじょう",
+      "kanji": "年賀状",
+      "context": "",
+      "mean": "New Year's greeting card",
+      "cat": "noun",
+      "type": "",
+      "trans": "",
+      "dict": "年賀状",
+      "dictRead": "ねんがじょう",
+      "audio": "/Audio/minnamoi/bai7/00010100001011100.mp3",
+      "levels": {
+        "N5": [
+          "<ruby>先生<rt>せんせい</rt></ruby>に <ruby>年賀状<rt>ねんがじょう</rt></ruby>を <ruby>書<rt>か</rt></ruby>きます。",
+          "I write a New Year's card to my teacher."
+        ],
+        "N4": [
+          "<ruby>毎年<rt>まいとし</rt></ruby>、<ruby>友<rt>とも</rt></ruby>だちに <ruby>年賀状<rt>ねんがじょう</rt></ruby>を <ruby>送<rt>おく</rt></ruby>ります。",
+          "Every year I send New Year's cards to my friends."
+        ],
+        "N3": [
+          "お<ruby>世話<rt>せわ</rt></ruby>に なった <ruby>人<rt>ひと</rt></ruby>に、<ruby>年賀状<rt>ねんがじょう</rt></ruby>を <ruby>出<rt>だ</rt></ruby>すように して います。",
+          "I make a point of sending New Year's cards to the people who have helped me."
+        ],
+        "N2": [
+          "<ruby>最近<rt>さいきん</rt></ruby>は メールで <ruby>済<rt>す</rt></ruby>ませる <ruby>人<rt>ひと</rt></ruby>が <ruby>多<rt>おお</rt></ruby>い ものの、やはり <ruby>年賀状<rt>ねんがじょう</rt></ruby>には <ruby>特別<rt>とくべつ</rt></ruby>な <ruby>味<rt>あじ</rt></ruby>わいが ある。",
+          "These days many people just use e-mail, but a New Year's card still has a special charm after all."
+        ],
+        "N1": [
+          "<ruby>一枚<rt>いちまい</rt></ruby>の <ruby>年賀状<rt>ねんがじょう</rt></ruby>に <ruby>近況<rt>きんきょう</rt></ruby>を <ruby>認<rt>したた</rt></ruby>める <ruby>習慣<rt>しゅうかん</rt></ruby>こそ、<ruby>疎遠<rt>そえん</rt></ruby>に なりがちな <ruby>縁<rt>えん</rt></ruby>を つなぎとめて きた のかも しれない。",
+          "The very custom of writing one's recent news on a single New Year's card may be what has held together ties that tend to grow distant."
+        ]
+      },
+      "mnem": "年 (year) + 賀 (celebration) + 状 (letter/document) = a \"year-celebration letter,\" the New Year's card.",
+      "tip": "Sent so it arrives on January 1st; the polite verb is 出す/送る. The counter is 枚 (まい) for flat cards.",
+      "accent": 3
+    },
+    {
+      "key": "mnn:7:19",
+      "kana": "パンチ",
+      "kanji": "",
+      "context": "",
+      "mean": "hole punch",
+      "cat": "noun",
+      "type": "",
+      "trans": "",
+      "dict": "パンチ",
+      "dictRead": "パンチ",
+      "audio": "/Audio/minnamoi/bai7/00010100001011101.mp3",
+      "levels": {
+        "N5": [
+          "パンチで <ruby>紙<rt>かみ</rt></ruby>に <ruby>穴<rt>あな</rt></ruby>を <ruby>開<rt>あ</rt></ruby>けます。",
+          "I make holes in the paper with a hole punch."
+        ],
+        "N4": [
+          "パンチを <ruby>貸<rt>か</rt></ruby>して ください。",
+          "Please lend me the hole punch."
+        ],
+        "N3": [
+          "<ruby>書類<rt>しょるい</rt></ruby>を まとめる ために、パンチで <ruby>穴<rt>あな</rt></ruby>を <ruby>開<rt>あ</rt></ruby>けるように して います。",
+          "To keep the documents together, I make a point of punching holes with the hole punch."
+        ],
+        "N2": [
+          "パンチが <ruby>見<rt>み</rt></ruby>つからなかった ものの、<ruby>隣<rt>となり</rt></ruby>の <ruby>課<rt>か</rt></ruby>から <ruby>借<rt>か</rt></ruby>りて <ruby>間<rt>ま</rt></ruby>に <ruby>合<rt>あ</rt></ruby>った。",
+          "I couldn't find the hole punch, but I borrowed one from the next section and managed in time."
+        ],
+        "N1": [
+          "たかが <ruby>穴<rt>あな</rt></ruby>あけ パンチ <ruby>一<rt>ひと</rt></ruby>つ とは いえ、<ruby>使<rt>つか</rt></ruby>いやすさ ひとつで <ruby>事務<rt>じむ</rt></ruby><ruby>作業<rt>さぎょう</rt></ruby>の <ruby>能率<rt>のうりつ</rt></ruby>は <ruby>存外<rt>ぞんがい</rt></ruby> <ruby>変<rt>か</rt></ruby>わる ものだ。",
+          "It may be just a mere hole punch, but its ease of use can affect office-work efficiency surprisingly much."
+        ]
+      },
+      "mnem": "\"パンチ\" is the English \"punch\" — here the office tool that punches holes in paper.",
+      "tip": "In Lesson 7 it appears in これは日本語で何ですか。…「パンチ」です。 It's a hole punch (穴あけパンチ), not a boxing punch (also パンチ) — context decides.",
+      "accent": 1
+    },
+    {
+      "key": "mnn:7:20",
+      "kana": "ホッチキス",
+      "kanji": "",
+      "context": "",
+      "mean": "stapler",
+      "cat": "noun",
+      "type": "",
+      "trans": "",
+      "dict": "ホッチキス",
+      "dictRead": "ホッチキス",
+      "audio": "/Audio/minnamoi/bai7/00010100001011110.mp3",
+      "levels": {
+        "N5": [
+          "ホッチキスで <ruby>紙<rt>かみ</rt></ruby>を とめます。",
+          "I fasten the paper with a stapler."
+        ],
+        "N4": [
+          "その ホッチキスを <ruby>貸<rt>か</rt></ruby>して ください。",
+          "Please lend me that stapler."
+        ],
+        "N3": [
+          "<ruby>資料<rt>しりょう</rt></ruby>が ばらばらに ならないように、ホッチキスで とめるように して います。",
+          "So the documents don't come apart, I make a point of fastening them with a stapler."
+        ],
+        "N2": [
+          "ホッチキスの <ruby>針<rt>はり</rt></ruby>が なくなった ものの、<ruby>予備<rt>よび</rt></ruby>が <ruby>引<rt>ひ</rt></ruby>き<ruby>出<rt>だ</rt></ruby>しに あった。",
+          "The stapler ran out of staples, but there were spares in the drawer."
+        ],
+        "N1": [
+          "<ruby>環境<rt>かんきょう</rt></ruby>に <ruby>配慮<rt>はいりょ</rt></ruby>して、<ruby>針<rt>はり</rt></ruby>を <ruby>使<rt>つか</rt></ruby>わない ホッチキスを <ruby>導入<rt>どうにゅう</rt></ruby>する <ruby>会社<rt>かいしゃ</rt></ruby>も <ruby>増<rt>ふ</rt></ruby>えて きた。",
+          "Out of environmental consideration, more and more companies have begun introducing staplers that use no staples."
+        ]
+      },
+      "mnem": "ホッチキス comes from the Hotchkiss brand name — Japan named the stapler after an early maker, like \"Xerox\" for copiers.",
+      "tip": "A brand-name-turned-generic word; the verb is とめる (ホッチキスで紙をとめる, \"staple paper together\"). The staples themselves are 針 (はり).",
+      "accent": 1
+    },
+    {
+      "key": "mnn:7:21",
+      "kana": "セロテープ",
+      "kanji": "",
+      "context": "",
+      "mean": "Scotch tape, clear adhesive tape",
+      "cat": "noun",
+      "type": "",
+      "trans": "",
+      "dict": "セロテープ",
+      "dictRead": "セロテープ",
+      "audio": "/Audio/minnamoi/bai7/00010100001011111.mp3",
+      "levels": {
+        "N5": [
+          "セロテープで <ruby>紙<rt>かみ</rt></ruby>を はります。",
+          "I stick the paper with tape."
+        ],
+        "N4": [
+          "<ruby>破<rt>やぶ</rt></ruby>れた <ruby>本<rt>ほん</rt></ruby>を セロテープで なおしました。",
+          "I fixed the torn book with clear tape."
+        ],
+        "N3": [
+          "<ruby>子<rt>こ</rt></ruby>どもが <ruby>使<rt>つか</rt></ruby>いやすいように、セロテープを <ruby>机<rt>つくえ</rt></ruby>の <ruby>上<rt>うえ</rt></ruby>に <ruby>置<rt>お</rt></ruby>いて あります。",
+          "So the children can use it easily, the tape is kept on the desk."
+        ],
+        "N2": [
+          "セロテープで とめた ものの、<ruby>思<rt>おも</rt></ruby>った より しっかり くっついて いる。",
+          "Although I just fastened it with clear tape, it's holding together more firmly than I expected."
+        ],
+        "N1": [
+          "<ruby>修復<rt>しゅうふく</rt></ruby>の <ruby>専門<rt>せんもん</rt></ruby><ruby>家<rt>か</rt></ruby>に <ruby>言<rt>い</rt></ruby>わせれば、<ruby>古<rt>ふる</rt></ruby>い <ruby>本<rt>ほん</rt></ruby>を セロテープで なおすのは、かえって <ruby>価値<rt>かち</rt></ruby>を <ruby>損<rt>そこ</rt></ruby>ねかねない <ruby>行為<rt>こうい</rt></ruby>だ そうだ。",
+          "According to restoration experts, fixing an old book with clear tape is, on the contrary, an act that risks harming its value."
+        ]
+      },
+      "mnem": "セロテープ = \"cello(phane) tape\" — the clear cellophane tape, from the Sellotape/Cellotape brand.",
+      "tip": "Another brand-name-turned-generic word (like ホッチキス); the verb is はる (セロテープで紙をはる, \"tape paper down\").",
+      "accent": 4
+    },
+    {
+      "key": "mnn:7:22",
+      "kana": "けしゴム",
+      "kanji": "消しゴム",
+      "context": "",
+      "mean": "eraser",
+      "cat": "noun",
+      "type": "",
+      "trans": "",
+      "dict": "消しゴム",
+      "dictRead": "けしゴム",
+      "audio": "/Audio/minnamoi/bai7/00010100001100000.mp3",
+      "levels": {
+        "N5": [
+          "<ruby>消<rt>け</rt></ruby>しゴムで <ruby>字<rt>じ</rt></ruby>を <ruby>消<rt>け</rt></ruby>します。",
+          "I erase the writing with an eraser."
+        ],
+        "N4": [
+          "<ruby>消<rt>け</rt></ruby>しゴムを <ruby>貸<rt>か</rt></ruby>して ください。",
+          "Please lend me an eraser."
+        ],
+        "N3": [
+          "<ruby>間違<rt>まちが</rt></ruby>えた ときは、<ruby>消<rt>け</rt></ruby>しゴムで きれいに <ruby>消<rt>け</rt></ruby>すように して います。",
+          "When I make a mistake, I make a point of erasing it cleanly with an eraser."
+        ],
+        "N2": [
+          "<ruby>消<rt>け</rt></ruby>しゴムで <ruby>消<rt>け</rt></ruby>した ものの、<ruby>前<rt>まえ</rt></ruby>の <ruby>字<rt>じ</rt></ruby>が うっすら <ruby>残<rt>のこ</rt></ruby>って いる。",
+          "I erased it with the eraser, but the previous writing is still faintly there."
+        ],
+        "N1": [
+          "<ruby>製図<rt>せいず</rt></ruby>の <ruby>現場<rt>げんば</rt></ruby>では、<ruby>紙<rt>かみ</rt></ruby>を <ruby>傷<rt>いた</rt></ruby>めない <ruby>柔<rt>やわ</rt></ruby>らかな <ruby>消<rt>け</rt></ruby>しゴム <ruby>一<rt>ひと</rt></ruby>つ <ruby>選<rt>えら</rt></ruby>ぶにも、<ruby>職人<rt>しょくにん</rt></ruby>なりの こだわりが ある。",
+          "On the drafting floor, even choosing a single soft eraser that won't damage the paper reflects a craftsman's particular standards."
+        ]
+      },
+      "mnem": "消し (from 消す, to erase) + ゴム (gum/rubber) = a \"rubber for erasing\" — an eraser.",
+      "tip": "ゴム (rubber) is itself a loanword (Dutch \"gom\"). The verb 消す (けす) means \"to erase/turn off\"; 消しゴムで字を消す.",
+      "accent": 0
+    },
+    {
+      "key": "mnn:7:23",
+      "kana": "かみ",
+      "kanji": "紙",
+      "context": "",
+      "mean": "paper",
+      "cat": "noun",
+      "type": "",
+      "trans": "",
+      "dict": "紙",
+      "dictRead": "かみ",
+      "audio": "/Audio/minnamoi/bai7/00010100001100001.mp3",
+      "levels": {
+        "N5": [
+          "<ruby>紙<rt>かみ</rt></ruby>に <ruby>名前<rt>なまえ</rt></ruby>を <ruby>書<rt>か</rt></ruby>きます。",
+          "I write my name on the paper."
+        ],
+        "N4": [
+          "はさみで <ruby>紙<rt>かみ</rt></ruby>を <ruby>切<rt>き</rt></ruby>ります。",
+          "I cut the paper with scissors."
+        ],
+        "N3": [
+          "<ruby>大切<rt>たいせつ</rt></ruby>な ことは <ruby>紙<rt>かみ</rt></ruby>に <ruby>書<rt>か</rt></ruby>いて <ruby>残<rt>のこ</rt></ruby>すように して います。",
+          "I make a point of writing important things down on paper to keep them."
+        ],
+        "N2": [
+          "<ruby>資料<rt>しりょう</rt></ruby>は データで <ruby>送<rt>おく</rt></ruby>れる ものの、やはり <ruby>紙<rt>かみ</rt></ruby>の ほうが <ruby>読<rt>よ</rt></ruby>みやすい。",
+          "The materials can be sent as data, but paper is still easier to read after all."
+        ],
+        "N1": [
+          "<ruby>電子化<rt>でんしか</rt></ruby>が <ruby>進<rt>すす</rt></ruby>んだ とは いえ、<ruby>紙<rt>かみ</rt></ruby>の <ruby>手触<rt>てざわ</rt></ruby>りや <ruby>質感<rt>しつかん</rt></ruby>が <ruby>持<rt>も</rt></ruby>つ <ruby>価値<rt>かち</rt></ruby>は、そう <ruby>簡単<rt>かんたん</rt></ruby>には <ruby>失<rt>うしな</rt></ruby>われない だろう。",
+          "Digitization may have advanced, but the value that the feel and texture of paper hold will not be lost so easily."
+        ]
+      },
+      "mnem": "\"KA-mi\" — think of a KA(rd) made of paper; the god 神 (kami) and hair 髪 (kami) are homophones told apart by pitch.",
+      "tip": "Homophones distinguished by pitch/context: 紙=paper (accent 2), 髪=hair (accent 2), 神=god (accent 1). \"Write ON paper\" uses に: 紙に書きます.",
+      "accent": 2
+    },
+    {
+      "key": "mnn:7:24",
+      "kana": "はな",
+      "kanji": "花",
+      "context": "",
+      "mean": "flower",
+      "cat": "noun",
+      "type": "",
+      "trans": "",
+      "dict": "花",
+      "dictRead": "はな",
+      "audio": "/Audio/minnamoi/bai7/00010100001100010.mp3",
+      "levels": {
+        "N5": [
+          "<ruby>母<rt>はは</rt></ruby>に <ruby>花<rt>はな</rt></ruby>を あげます。",
+          "I give my mother flowers."
+        ],
+        "N4": [
+          "<ruby>誕生日<rt>たんじょうび</rt></ruby>に <ruby>花<rt>はな</rt></ruby>を もらいました。",
+          "I received flowers for my birthday."
+        ],
+        "N3": [
+          "<ruby>部屋<rt>へや</rt></ruby>が <ruby>明<rt>あか</rt></ruby>るく なるように、<ruby>花<rt>はな</rt></ruby>を <ruby>飾<rt>かざ</rt></ruby>るように して います。",
+          "I make a point of putting out flowers so the room feels bright."
+        ],
+        "N2": [
+          "<ruby>庭<rt>にわ</rt></ruby>の <ruby>花<rt>はな</rt></ruby>は <ruby>枯<rt>か</rt></ruby>れかけて いる ものの、まだ よい <ruby>香<rt>かお</rt></ruby>りが する。",
+          "The flowers in the garden are starting to wither, but they still smell nice."
+        ],
+        "N1": [
+          "<ruby>桜<rt>さくら</rt></ruby>の <ruby>花<rt>はな</rt></ruby>が わずか <ruby>数日<rt>すうじつ</rt></ruby>で <ruby>散<rt>ち</rt></ruby>って しまう からこそ、<ruby>日本人<rt>にほんじん</rt></ruby>は その <ruby>美<rt>うつく</rt></ruby>しさに ひとしお <ruby>心<rt>こころ</rt></ruby>を <ruby>動<rt>うご</rt></ruby>かされるのだ。",
+          "It is precisely because cherry blossoms scatter in a mere few days that the Japanese are all the more moved by their beauty."
+        ]
+      },
+      "mnem": "\"HA-na\" — a flower; don't confuse it with 鼻 (はな, nose), a homophone told apart by pitch.",
+      "tip": "Homophones by pitch: 花=flower (accent 2), 鼻=nose (accent 0). A classic giving/receiving object in this lesson: 花をあげる／もらう.",
+      "accent": 2
+    },
+    {
+      "key": "mnn:7:25",
+      "kana": "シャツ",
+      "kanji": "",
+      "context": "",
+      "mean": "shirt",
+      "cat": "noun",
+      "type": "",
+      "trans": "",
+      "dict": "シャツ",
+      "dictRead": "シャツ",
+      "audio": "/Audio/minnamoi/bai7/00010100001100011.mp3",
+      "levels": {
+        "N5": [
+          "<ruby>父<rt>ちち</rt></ruby>に シャツを もらいました。",
+          "I received a shirt from my father."
+        ],
+        "N4": [
+          "<ruby>誕生日<rt>たんじょうび</rt></ruby>に <ruby>友<rt>とも</rt></ruby>だちに シャツを あげました。",
+          "I gave my friend a shirt for their birthday."
+        ],
+        "N3": [
+          "<ruby>汗<rt>あせ</rt></ruby>を かいたら、シャツを <ruby>着替<rt>きが</rt></ruby>えるように して います。",
+          "Whenever I sweat, I make a point of changing my shirt."
+        ],
+        "N2": [
+          "この シャツは <ruby>気<rt>き</rt></ruby>に <ruby>入<rt>い</rt></ruby>って いる ものの、すこし <ruby>大<rt>おお</rt></ruby>きすぎる。",
+          "I do like this shirt, but it's a little too big."
+        ],
+        "N1": [
+          "<ruby>一枚<rt>いちまい</rt></ruby>の <ruby>白<rt>しろ</rt></ruby>い シャツを <ruby>着<rt>き</rt></ruby>こなす だけでも、その <ruby>人<rt>ひと</rt></ruby>の <ruby>清潔<rt>せいけつ</rt></ruby><ruby>感<rt>かん</rt></ruby>や <ruby>品<rt>ひん</rt></ruby>の <ruby>良<rt>よ</rt></ruby>さは にじみ<ruby>出<rt>で</rt></ruby>る ものだ。",
+          "Even in the way one wears a single white shirt, that person's cleanliness and refinement come through."
+        ]
+      },
+      "mnem": "\"シャツ\" is the English \"shirt\" in katakana: SHA-tsu.",
+      "tip": "Worn with 着る (shirts are torso garments); Tシャツ (T-shirt) is a common compound. A frequent gift object in this lesson.",
+      "accent": 1
+    },
+    {
+      "key": "mnn:7:26",
+      "kana": "プレゼント",
+      "kanji": "",
+      "context": "",
+      "mean": "present, gift",
+      "cat": "noun",
+      "type": "",
+      "trans": "",
+      "dict": "プレゼント",
+      "dictRead": "プレゼント",
+      "audio": "/Audio/minnamoi/bai7/00010100001100100.mp3",
+      "levels": {
+        "N5": [
+          "<ruby>友<rt>とも</rt></ruby>だちに プレゼントを あげます。",
+          "I give a present to my friend."
+        ],
+        "N4": [
+          "<ruby>母<rt>はは</rt></ruby>に プレゼントを もらいました。",
+          "I received a present from my mother."
+        ],
+        "N3": [
+          "<ruby>相手<rt>あいて</rt></ruby>が <ruby>喜<rt>よろこ</rt></ruby>ぶように、プレゼントを <ruby>選<rt>えら</rt></ruby>ぶように して います。",
+          "So the other person will be pleased, I make a point of choosing the present carefully."
+        ],
+        "N2": [
+          "<ruby>高<rt>たか</rt></ruby>い プレゼントを もらった ものの、なんだか <ruby>気<rt>き</rt></ruby>が <ruby>引<rt>ひ</rt></ruby>けて しまう。",
+          "I received an expensive present, but somehow I feel a bit awkward about it."
+        ],
+        "N1": [
+          "<ruby>値段<rt>ねだん</rt></ruby>の <ruby>張<rt>は</rt></ruby>る 品 よりも、<ruby>相手<rt>あいて</rt></ruby>を <ruby>思<rt>おも</rt></ruby>う <ruby>気持<rt>きも</rt></ruby>ちの こもった プレゼント こそ、<ruby>何<rt>なに</rt></ruby>より <ruby>心<rt>こころ</rt></ruby>に <ruby>残<rt>のこ</rt></ruby>る ものだ。",
+          "More than an expensive item, it is a present filled with thoughtfulness for the recipient that stays in the heart above all."
+        ]
+      },
+      "mnem": "\"プレゼント\" is the English \"present\" in katakana: pu-RE-zen-to.",
+      "tip": "The core object of this lesson's give/receive verbs: プレゼントをあげる／もらう. The verb form プレゼントする also exists (\"to gift\").",
+      "accent": 2
+    },
+    {
+      "key": "mnn:7:27",
+      "kana": "にもつ",
+      "kanji": "荷物",
+      "context": "",
+      "mean": "baggage, parcel, luggage",
+      "cat": "noun",
+      "type": "",
+      "trans": "",
+      "dict": "荷物",
+      "dictRead": "にもつ",
+      "audio": "/Audio/minnamoi/bai7/00010100001100101.mp3",
+      "levels": {
+        "N5": [
+          "<ruby>荷物<rt>にもつ</rt></ruby>を <ruby>送<rt>おく</rt></ruby>ります。",
+          "I send the parcel."
+        ],
+        "N4": [
+          "<ruby>重<rt>おも</rt></ruby>い <ruby>荷物<rt>にもつ</rt></ruby>を <ruby>持<rt>も</rt></ruby>って、<ruby>駅<rt>えき</rt></ruby>まで <ruby>歩<rt>ある</rt></ruby>きました。",
+          "I walked to the station carrying heavy luggage."
+        ],
+        "N3": [
+          "<ruby>旅行<rt>りょこう</rt></ruby>の とき、<ruby>荷物<rt>にもつ</rt></ruby>を <ruby>少<rt>すく</rt></ruby>なく するように して います。",
+          "When I travel, I make a point of keeping my luggage light."
+        ],
+        "N2": [
+          "<ruby>荷物<rt>にもつ</rt></ruby>は <ruby>先<rt>さき</rt></ruby>に <ruby>送<rt>おく</rt></ruby>って おいた ものの、<ruby>手<rt>て</rt></ruby><ruby>元<rt>もと</rt></ruby>に <ruby>残<rt>のこ</rt></ruby>った <ruby>分<rt>ぶん</rt></ruby>だけでも かなり <ruby>重<rt>おも</rt></ruby>い。",
+          "I sent my luggage ahead, but even just what's left on hand is quite heavy."
+        ],
+        "N1": [
+          "<ruby>心<rt>こころ</rt></ruby>の <ruby>荷物<rt>にもつ</rt></ruby>を <ruby>一人<rt>ひとり</rt></ruby>で <ruby>抱<rt>かか</rt></ruby>え<ruby>込<rt>こ</rt></ruby>まず、ときには <ruby>誰<rt>だれ</rt></ruby>かに <ruby>打<rt>う</rt></ruby>ち<ruby>明<rt>あ</rt></ruby>ける ことも <ruby>必要<rt>ひつよう</rt></ruby>だ。",
+          "It's sometimes necessary not to carry your emotional burdens alone, but to confide them in someone."
+        ]
+      },
+      "mnem": "荷 (load/cargo) + 物 (thing) = \"cargo things\" — baggage; the 荷 is your \"load,\" the 物 the \"stuff.\"",
+      "tip": "Sent with 送る (荷物を送る); it also means an emotional \"burden\" figuratively (心の荷物). The 荷 kanji alone (に) also means \"load.\"",
+      "accent": 1
+    },
+    {
+      "key": "mnn:7:28",
+      "kana": "おかね",
+      "kanji": "お金",
+      "context": "",
+      "mean": "money",
+      "cat": "noun",
+      "type": "",
+      "trans": "",
+      "dict": "お金",
+      "dictRead": "おかね",
+      "audio": "/Audio/minnamoi/bai7/00010100001100110.mp3",
+      "levels": {
+        "N5": [
+          "<ruby>友<rt>とも</rt></ruby>だちに お<ruby>金<rt>かね</rt></ruby>を <ruby>貸<rt>か</rt></ruby>します。",
+          "I lend money to my friend."
+        ],
+        "N4": [
+          "<ruby>山田<rt>やまだ</rt></ruby>さんに お<ruby>金<rt>かね</rt></ruby>を <ruby>借<rt>か</rt></ruby>りました。",
+          "I borrowed money from Mr. Yamada."
+        ],
+        "N3": [
+          "むだづかいを しないように、お<ruby>金<rt>かね</rt></ruby>を <ruby>大切<rt>たいせつ</rt></ruby>に <ruby>使<rt>つか</rt></ruby>うように して います。",
+          "So as not to waste money, I make a point of using it carefully."
+        ],
+        "N2": [
+          "お<ruby>金<rt>かね</rt></ruby>は <ruby>足<rt>た</rt></ruby>りて いる ものの、<ruby>時間<rt>じかん</rt></ruby>が どうしても <ruby>足<rt>た</rt></ruby>りない。",
+          "I have enough money, but no matter what, I don't have enough time."
+        ],
+        "N1": [
+          "お<ruby>金<rt>かね</rt></ruby>で <ruby>買<rt>か</rt></ruby>える ものには <ruby>限<rt>かぎ</rt></ruby>りが あり、<ruby>本当<rt>ほんとう</rt></ruby>に <ruby>大切<rt>たいせつ</rt></ruby>な ものほど <ruby>値段<rt>ねだん</rt></ruby>では <ruby>測<rt>はか</rt></ruby>れない ものだ。",
+          "There is a limit to what money can buy; the more truly important something is, the more it cannot be measured by a price."
+        ]
+      },
+      "mnem": "お金 = the honorific お + 金 (かね, metal/money) — money \"with respect,\" as everyday politeness attaches お.",
+      "tip": "The お is near-obligatory in everyday speech (お金, like お茶); bare 金 (かね) sounds blunt or means the metal \"gold.\" Central to 貸す／借りる (lend/borrow) here.",
+      "accent": 0
+    },
+    {
+      "key": "mnn:7:29",
+      "kana": "きっぷ",
+      "kanji": "切符",
+      "context": "",
+      "mean": "ticket",
+      "cat": "noun",
+      "type": "",
+      "trans": "",
+      "dict": "切符",
+      "dictRead": "きっぷ",
+      "audio": "/Audio/minnamoi/bai7/00010100001100111.mp3",
+      "levels": {
+        "N5": [
+          "<ruby>駅<rt>えき</rt></ruby>で <ruby>切符<rt>きっぷ</rt></ruby>を <ruby>買<rt>か</rt></ruby>います。",
+          "I buy a ticket at the station."
+        ],
+        "N4": [
+          "もう <ruby>新幹線<rt>しんかんせん</rt></ruby>の <ruby>切符<rt>きっぷ</rt></ruby>を <ruby>買<rt>か</rt></ruby>いました。",
+          "I've already bought the Shinkansen ticket."
+        ],
+        "N3": [
+          "<ruby>混<rt>こ</rt></ruby>まないように、<ruby>早<rt>はや</rt></ruby>めに <ruby>切符<rt>きっぷ</rt></ruby>を <ruby>買<rt>か</rt></ruby>うように して います。",
+          "So as to avoid the crowds, I make a point of buying my ticket early."
+        ],
+        "N2": [
+          "<ruby>切符<rt>きっぷ</rt></ruby>は <ruby>買<rt>か</rt></ruby>った ものの、<ruby>電車<rt>でんしゃ</rt></ruby>に <ruby>乗<rt>の</rt></ruby>り<ruby>遅<rt>おく</rt></ruby>れて しまった。",
+          "Although I bought the ticket, I ended up missing the train."
+        ],
+        "N1": [
+          "<ruby>紙<rt>かみ</rt></ruby>の <ruby>切符<rt>きっぷ</rt></ruby>が <ruby>姿<rt>すがた</rt></ruby>を <ruby>消<rt>け</rt></ruby>し つつ ある <ruby>今<rt>いま</rt></ruby>、あの <ruby>改札<rt>かいさつ</rt></ruby>ばさみの <ruby>音<rt>おと</rt></ruby>を <ruby>懐<rt>なつ</rt></ruby>かしむ <ruby>人<rt>ひと</rt></ruby>も <ruby>少<rt>すく</rt></ruby>なく ない。",
+          "Now that paper tickets are disappearing, not a few people feel nostalgic for the sound of those ticket-punchers at the gate."
+        ]
+      },
+      "mnem": "切符 — 切 (cut) + 符 (tally/token): a \"cut token,\" historically punched at the gate; きっぷ has the small っ, a hard clip.",
+      "tip": "Note the small っ (double consonant): きっぷ, not きぷ. For events/planes チケット is used; 切符 is classic for trains/transport.",
+      "accent": 0
+    },
+    {
+      "key": "mnn:7:30",
+      "kana": "クリスマス",
+      "kanji": "",
+      "context": "",
+      "mean": "Christmas",
+      "cat": "noun",
+      "type": "",
+      "trans": "",
+      "dict": "クリスマス",
+      "dictRead": "クリスマス",
+      "audio": "/Audio/minnamoi/bai7/00010100001101000.mp3",
+      "levels": {
+        "N5": [
+          "クリスマスに プレゼントを もらいました。",
+          "I received a present at Christmas."
+        ],
+        "N4": [
+          "<ruby>去年<rt>きょねん</rt></ruby>の クリスマスに <ruby>友<rt>とも</rt></ruby>だちに <ruby>本<rt>ほん</rt></ruby>を あげました。",
+          "Last Christmas I gave my friend a book."
+        ],
+        "N3": [
+          "クリスマスが <ruby>近<rt>ちか</rt></ruby>づくと、<ruby>町<rt>まち</rt></ruby>が にぎやかに なります。",
+          "As Christmas approaches, the town grows lively."
+        ],
+        "N2": [
+          "<ruby>今年<rt>ことし</rt></ruby>の クリスマスは <ruby>仕事<rt>しごと</rt></ruby>だった ものの、<ruby>家族<rt>かぞく</rt></ruby>と <ruby>夜<rt>よる</rt></ruby>ごはんは <ruby>食<rt>た</rt></ruby>べられた。",
+          "This year I had to work on Christmas, but I was still able to have dinner with my family."
+        ],
+        "N1": [
+          "<ruby>宗教<rt>しゅうきょう</rt></ruby><ruby>的<rt>てき</rt></ruby>な <ruby>意味合<rt>いみあ</rt></ruby>いよりも、<ruby>恋人<rt>こいびと</rt></ruby>や <ruby>家族<rt>かぞく</rt></ruby>と <ruby>過<rt>す</rt></ruby>ごす <ruby>行事<rt>ぎょうじ</rt></ruby>として <ruby>定着<rt>ていちゃく</rt></ruby>して いる のが、<ruby>日本<rt>にほん</rt></ruby>の クリスマスの <ruby>特徴<rt>とくちょう</rt></ruby>だ。",
+          "Rather than a religious meaning, it has taken root as an occasion spent with a partner or family — that is the distinctive feature of Christmas in Japan."
+        ]
+      },
+      "mnem": "\"クリスマス\" is the English \"Christmas\" in katakana: ku-RI-su-ma-su.",
+      "tip": "Marked with the time-particle に (クリスマスに, \"at/on Christmas\"). Merry Christmas is メリークリスマス.",
+      "accent": 3
+    },
+    {
+      "key": "mnn:7:31",
+      "kana": "ちち",
+      "kanji": "父",
+      "context": "",
+      "mean": "(my) father",
+      "cat": "noun",
+      "type": "",
+      "trans": "",
+      "dict": "父",
+      "dictRead": "ちち",
+      "audio": "/Audio/minnamoi/bai7/00010100001101001.mp3",
+      "levels": {
+        "N5": [
+          "<ruby>父<rt>ちち</rt></ruby>は <ruby>会社員<rt>かいしゃいん</rt></ruby>です。",
+          "My father is a company employee."
+        ],
+        "N4": [
+          "<ruby>父<rt>ちち</rt></ruby>に <ruby>時計<rt>とけい</rt></ruby>を もらいました。",
+          "I received a watch from my father."
+        ],
+        "N3": [
+          "<ruby>父<rt>ちち</rt></ruby>が <ruby>心配<rt>しんぱい</rt></ruby>しないように、<ruby>毎週<rt>まいしゅう</rt></ruby> <ruby>電話<rt>でんわ</rt></ruby>を かけるように して います。",
+          "So my father won't worry, I make a point of calling every week."
+        ],
+        "N2": [
+          "<ruby>父<rt>ちち</rt></ruby>は <ruby>口数<rt>くちかず</rt></ruby>が <ruby>少<rt>すく</rt></ruby>ない ものの、いつも <ruby>家族<rt>かぞく</rt></ruby>の ことを <ruby>考<rt>かんが</rt></ruby>えて いる。",
+          "My father is a man of few words, but he is always thinking about the family."
+        ],
+        "N1": [
+          "<ruby>年<rt>とし</rt></ruby>を <ruby>重<rt>かさ</rt></ruby>ねて はじめて、<ruby>寡黙<rt>かもく</rt></ruby>だった <ruby>父<rt>ちち</rt></ruby>の <ruby>背中<rt>せなか</rt></ruby>が <ruby>語<rt>かた</rt></ruby>って いた ものの <ruby>大<rt>おお</rt></ruby>きさに <ruby>気<rt>き</rt></ruby>づかされた。",
+          "Only as I grew older did I come to realize the greatness of what my taciturn father's back had been telling me all along."
+        ]
+      },
+      "mnem": "\"CHI-chi\" — reduplicated, like a child's word; it's YOUR OWN father (humble/plain), 父.",
+      "tip": "父 (ちち) refers to ONE'S OWN father when talking to others; use お父さん (おとうさん) for someone else's father or when addressing your own. Pairs with 母 (はは) for one's own mother.",
+      "accent": 1
+    },
+    {
+      "key": "mnn:7:32",
+      "kana": "はは",
+      "kanji": "母",
+      "context": "",
+      "mean": "(my) mother",
+      "cat": "noun",
+      "type": "",
+      "trans": "",
+      "dict": "母",
+      "dictRead": "はは",
+      "audio": "/Audio/minnamoi/bai7/00010100001101010.mp3",
+      "levels": {
+        "N5": [
+          "<ruby>母<rt>はは</rt></ruby>に <ruby>手紙<rt>てがみ</rt></ruby>を <ruby>書<rt>か</rt></ruby>きます。",
+          "I write a letter to my mother."
+        ],
+        "N4": [
+          "<ruby>母<rt>はは</rt></ruby>に <ruby>電話<rt>でんわ</rt></ruby>を かけました。",
+          "I called my mother."
+        ],
+        "N3": [
+          "<ruby>母<rt>はは</rt></ruby>を <ruby>喜<rt>よろこ</rt></ruby>ばせるように、<ruby>誕生日<rt>たんじょうび</rt></ruby>に <ruby>花<rt>はな</rt></ruby>を あげるように して います。",
+          "To make my mother happy, I make a point of giving her flowers on her birthday."
+        ],
+        "N2": [
+          "<ruby>母<rt>はは</rt></ruby>は <ruby>体<rt>からだ</rt></ruby>が <ruby>弱<rt>よわ</rt></ruby>い ものの、<ruby>毎日<rt>まいにち</rt></ruby> <ruby>元気<rt>げんき</rt></ruby>に <ruby>畑<rt>はたけ</rt></ruby><ruby>仕事<rt>しごと</rt></ruby>を して いる。",
+          "My mother is frail, but she works cheerfully in the field every day."
+        ],
+        "N1": [
+          "どんなに <ruby>離<rt>はな</rt></ruby>れて <ruby>暮<rt>く</rt></ruby>らして いても、<ruby>母<rt>はは</rt></ruby>の <ruby>作<rt>つく</rt></ruby>る <ruby>味噌汁<rt>みそしる</rt></ruby>の <ruby>味<rt>あじ</rt></ruby>だけは、<ruby>今<rt>いま</rt></ruby>でも <ruby>忘<rt>わす</rt></ruby>れられない。",
+          "No matter how far apart we live, the taste of the miso soup my mother makes is the one thing I still cannot forget."
+        ]
+      },
+      "mnem": "\"HA-ha\" — reduplicated like a child's word; it's YOUR OWN mother (humble/plain), 母.",
+      "tip": "母 (はは) refers to ONE'S OWN mother when talking to others; use お母さん (おかあさん) for someone else's mother or when addressing your own. Pairs with 父 (ちち) for one's own father.",
+      "accent": 1
+    },
+    {
+      "key": "mnn:7:33",
+      "kana": "おとうさん",
+      "kanji": "お父さん",
+      "context": "",
+      "mean": "(someone else's) father; \"Dad\" (address)",
+      "cat": "noun",
+      "type": "",
+      "trans": "",
+      "dict": "お父さん",
+      "dictRead": "おとうさん",
+      "audio": "/Audio/minnamoi/bai7/00010100001101011.mp3",
+      "levels": {
+        "N5": [
+          "ミラーさんの お<ruby>父<rt>とう</rt></ruby>さんは <ruby>先生<rt>せんせい</rt></ruby>です。",
+          "Mr. Miller's father is a teacher."
+        ],
+        "N4": [
+          "お<ruby>父<rt>とう</rt></ruby>さんに <ruby>誕生日<rt>たんじょうび</rt></ruby>の プレゼントを あげました。",
+          "I gave Dad a birthday present."
+        ],
+        "N3": [
+          "お<ruby>父<rt>とう</rt></ruby>さんが <ruby>疲<rt>つか</rt></ruby>れないように、<ruby>荷物<rt>にもつ</rt></ruby>を <ruby>持<rt>も</rt></ruby>つように して います。",
+          "So Dad won't get tired, I make a point of carrying the luggage."
+        ],
+        "N2": [
+          "<ruby>田中<rt>たなか</rt></ruby>さんの お<ruby>父<rt>とう</rt></ruby>さんは きびしい ものの、とても <ruby>優<rt>やさ</rt></ruby>しい <ruby>人<rt>ひと</rt></ruby>だ そうだ。",
+          "Mr. Tanaka's father is strict, but apparently a very kind person."
+        ],
+        "N1": [
+          "<ruby>他人<rt>たにん</rt></ruby>の お<ruby>父<rt>とう</rt></ruby>さんを <ruby>話題<rt>わだい</rt></ruby>に する とき ほど、<ruby>敬語<rt>けいご</rt></ruby>の <ruby>使<rt>つか</rt></ruby>い<ruby>分<rt>わ</rt></ruby>けに <ruby>細<rt>こま</rt></ruby>やかな <ruby>心<rt>こころ</rt></ruby>づかいが <ruby>求<rt>もと</rt></ruby>められる <ruby>場面<rt>ばめん</rt></ruby>は ない。",
+          "There is no situation that demands finer care in the use of honorifics than when making someone else's father the topic of conversation."
+        ]
+      },
+      "mnem": "お + 父 (とう) + さん — the honorific お and polite さん wrap 父 into the respectful \"someone's father\" / \"Dad.\"",
+      "tip": "Used for SOMEONE ELSE'S father, OR to address/refer to your own father in the family. Contrast the humble 父 (ちち) you use about your own father to outsiders.",
+      "accent": 2
+    },
+    {
+      "key": "mnn:7:34",
+      "kana": "おかあさん",
+      "kanji": "お母さん",
+      "context": "",
+      "mean": "(someone else's) mother; \"Mom\" (address)",
+      "cat": "noun",
+      "type": "",
+      "trans": "",
+      "dict": "お母さん",
+      "dictRead": "おかあさん",
+      "audio": "/Audio/minnamoi/bai7/00010100001101100.mp3",
+      "levels": {
+        "N5": [
+          "ワンさんの お<ruby>母<rt>かあ</rt></ruby>さんは <ruby>医者<rt>いしゃ</rt></ruby>です。",
+          "Mr. Wang's mother is a doctor."
+        ],
+        "N4": [
+          "お<ruby>母<rt>かあ</rt></ruby>さんに <ruby>花<rt>はな</rt></ruby>を あげました。",
+          "I gave Mom flowers."
+        ],
+        "N3": [
+          "お<ruby>母<rt>かあ</rt></ruby>さんが <ruby>喜<rt>よろこ</rt></ruby>ぶように、<ruby>手紙<rt>てがみ</rt></ruby>を <ruby>書<rt>か</rt></ruby>くように して います。",
+          "So Mom will be happy, I make a point of writing her letters."
+        ],
+        "N2": [
+          "<ruby>山田<rt>やまだ</rt></ruby>さんの お<ruby>母<rt>かあ</rt></ruby>さんは <ruby>料理<rt>りょうり</rt></ruby>が <ruby>上手<rt>じょうず</rt></ruby>な ものの、いつも <ruby>謙遜<rt>けんそん</rt></ruby>して いる。",
+          "Ms. Yamada's mother is skilled at cooking, but she is always modest about it."
+        ],
+        "N1": [
+          "<ruby>友人<rt>ゆうじん</rt></ruby>の お<ruby>母<rt>かあ</rt></ruby>さんに <ruby>久<rt>ひさ</rt></ruby>しぶりに お<ruby>会<rt>あ</rt></ruby>いした ところ、<ruby>昔<rt>むかし</rt></ruby>と <ruby>変<rt>か</rt></ruby>わらぬ <ruby>優<rt>やさ</rt></ruby>しさで <ruby>迎<rt>むか</rt></ruby>えて くださった。",
+          "When I met my friend's mother again after a long time, she welcomed me with the same kindness as ever."
+        ]
+      },
+      "mnem": "お + 母 (かあ) + さん — the honorific お and polite さん wrap 母 into the respectful \"someone's mother\" / \"Mom.\"",
+      "tip": "Used for SOMEONE ELSE'S mother, OR to address/refer to your own mother in the family. Contrast the humble 母 (はは) you use about your own mother to outsiders.",
+      "accent": 2
+    },
+    {
+      "key": "mnn:7:35",
+      "kana": "もう",
+      "kanji": "",
+      "context": "〜V ました",
+      "mean": "already",
+      "cat": "adverb",
+      "type": "",
+      "trans": "",
+      "dict": "もう",
+      "dictRead": "もう",
+      "audio": "/Audio/minnamoi/bai7/00010100001101101.mp3",
+      "levels": {
+        "N5": [
+          "もう <ruby>昼<rt>ひる</rt></ruby>ごはんを <ruby>食<rt>た</rt></ruby>べました。",
+          "I have already eaten lunch."
+        ],
+        "N4": [
+          "もう <ruby>切符<rt>きっぷ</rt></ruby>を <ruby>買<rt>か</rt></ruby>いましたか。…はい、もう <ruby>買<rt>か</rt></ruby>いました。",
+          "Have you bought the ticket yet? …Yes, I already have."
+        ],
+        "N3": [
+          "もう <ruby>遅<rt>おそ</rt></ruby>いから、そろそろ <ruby>帰<rt>かえ</rt></ruby>るように して います。",
+          "It's already late, so I make a point of heading home around now."
+        ],
+        "N2": [
+          "もう <ruby>準備<rt>じゅんび</rt></ruby>は できて いる ものの、<ruby>相手<rt>あいて</rt></ruby>から まだ <ruby>連絡<rt>れんらく</rt></ruby>が ない。",
+          "The preparations are already done, but there's still no word from the other party."
+        ],
+        "N1": [
+          "もう <ruby>後<rt>あと</rt></ruby>には <ruby>引<rt>ひ</rt></ruby>けない ところまで <ruby>来<rt>き</rt></ruby>て いる <ruby>以上<rt>いじょう</rt></ruby>、<ruby>最後<rt>さいご</rt></ruby>まで やり<ruby>抜<rt>ぬ</rt></ruby>く <ruby>覚悟<rt>かくご</rt></ruby>を <ruby>決<rt>き</rt></ruby>める しか ない。",
+          "Given that we've already reached a point of no return, there is nothing to do but resolve to see it through to the end."
+        ]
+      },
+      "mnem": "\"もう\" — think \"MO(re) already done\": the action is already complete.",
+      "tip": "The Lesson 7 pattern is もう〜ました (\"have already done\"), answered はい、もう〜ました / いいえ、まだです. Don't confuse it with もう + negative (もう〜ない = \"no longer\").",
+      "accent": 1
+    },
+    {
+      "key": "mnn:7:36",
+      "kana": "まだ",
+      "kanji": "",
+      "context": "〜です",
+      "mean": "not yet, still",
+      "cat": "adverb",
+      "type": "",
+      "trans": "",
+      "dict": "まだ",
+      "dictRead": "まだ",
+      "audio": "/Audio/minnamoi/bai7/00010100001101110.mp3",
+      "levels": {
+        "N5": [
+          "まだ <ruby>昼<rt>ひる</rt></ruby>ごはんを <ruby>食<rt>た</rt></ruby>べて いません。",
+          "I haven't eaten lunch yet."
+        ],
+        "N4": [
+          "もう レポートを <ruby>送<rt>おく</rt></ruby>りましたか。…いいえ、まだです。",
+          "Have you sent the report yet? …No, not yet."
+        ],
+        "N3": [
+          "まだ <ruby>時間<rt>じかん</rt></ruby>が ある から、ゆっくり <ruby>準備<rt>じゅんび</rt></ruby>するように して います。",
+          "There's still time, so I make a point of preparing at an unhurried pace."
+        ],
+        "N2": [
+          "<ruby>説明書<rt>せつめいしょ</rt></ruby>は <ruby>読<rt>よ</rt></ruby>んだ ものの、<ruby>使<rt>つか</rt></ruby>い<ruby>方<rt>かた</rt></ruby>が まだ よく <ruby>分<rt>わ</rt></ruby>からない。",
+          "Although I read the manual, I still don't quite understand how to use it."
+        ],
+        "N1": [
+          "<ruby>完成<rt>かんせい</rt></ruby>まで まだ <ruby>時間<rt>じかん</rt></ruby>を <ruby>要<rt>よう</rt></ruby>する ものの、ここまで <ruby>形<rt>かたち</rt></ruby>に なった <ruby>以上<rt>いじょう</rt></ruby>、<ruby>後<rt>あと</rt></ruby>は <ruby>詰<rt>つ</rt></ruby>めの <ruby>作業<rt>さぎょう</rt></ruby>を <ruby>残<rt>のこ</rt></ruby>すのみだ。",
+          "It will still take time until completion, but now that it has taken shape this far, all that remains is the finishing work."
+        ]
+      },
+      "mnem": "\"まだ\" — \"not yet, MORE to go\": the action is still unfinished / still ongoing.",
+      "tip": "The short answer まだです means \"not yet\"; the full form is まだ〜ていません (\"haven't 〜 yet\"), NOT まだ〜ませんでした. まだ can also mean \"still\" (まだ時間がある = still have time).",
+      "accent": 1
+    },
+    {
+      "key": "mnn:7:37",
+      "kana": "これから",
+      "kanji": "",
+      "context": "",
+      "mean": "from now on, right now, after this",
+      "cat": "adverb",
+      "type": "",
+      "trans": "",
+      "dict": "これから",
+      "dictRead": "これから",
+      "audio": "/Audio/minnamoi/bai7/00010100001101111.mp3",
+      "levels": {
+        "N5": [
+          "これから <ruby>昼<rt>ひる</rt></ruby>ごはんを <ruby>食<rt>た</rt></ruby>べます。",
+          "I'm going to eat lunch now."
+        ],
+        "N4": [
+          "もう <ruby>宿題<rt>しゅくだい</rt></ruby>を しましたか。…いいえ、これから します。",
+          "Have you done your homework yet? …No, I'll do it now."
+        ],
+        "N3": [
+          "これから <ruby>毎日<rt>まいにち</rt></ruby> <ruby>日本語<rt>にほんご</rt></ruby>を <ruby>勉強<rt>べんきょう</rt></ruby>するように して います。",
+          "From now on, I make a point of studying Japanese every day."
+        ],
+        "N2": [
+          "これから どう する か まだ <ruby>決<rt>き</rt></ruby>めて いない ものの、<ruby>方向性<rt>ほうこうせい</rt></ruby>だけは <ruby>見<rt>み</rt></ruby>えて きた。",
+          "I still haven't decided what to do from here, but I've at least started to see the general direction."
+        ],
+        "N1": [
+          "これからの <ruby>時代<rt>じだい</rt></ruby>を <ruby>担<rt>にな</rt></ruby>う <ruby>若<rt>わか</rt></ruby>い <ruby>世代<rt>せだい</rt></ruby>に こそ、<ruby>失敗<rt>しっぱい</rt></ruby>を <ruby>恐<rt>おそ</rt></ruby>れず <ruby>挑戦<rt>ちょうせん</rt></ruby>する <ruby>機会<rt>きかい</rt></ruby>を <ruby>与<rt>あた</rt></ruby>えるべきだ。",
+          "It is precisely the young generation who will bear the coming age that should be given the chance to take on challenges without fearing failure."
+        ]
+      },
+      "mnem": "これ (this) + から (from) = \"from this (moment)\" — from now on / after this.",
+      "tip": "Often answers まだ: いいえ、まだです。これから 食べます (\"Not yet — I'll eat now\"). これからも means \"from now on too\" (continuing).",
+      "accent": 0
+    }
+  ],
+  "grammar": [
+    {
+      "pattern": "N（tool／means）で V",
+      "structure": "N（道具・手段・言語）＋ で ＋ V",
+      "explain": "The particle で marks the tool, means, or method used to do something — \"with / by\". はしで食べます = eat WITH chopsticks; メールで送ります = send BY email; 日本語で話します = speak IN Japanese. It also handles \"how do you say X?\": これは日本語で何ですか (\"What is this in Japanese?\"). This で is different from the で marking a place of action.",
+      "examples": [
+        {
+          "jp": "ベトナム<ruby>人<rt>じん</rt></ruby>は はしで ごはんを <ruby>食<rt>た</rt></ruby>べます。",
+          "en": "Vietnamese people eat rice with chopsticks."
+        },
+        {
+          "jp": "レポートを メールで <ruby>送<rt>おく</rt></ruby>りました。",
+          "en": "I sent the report by email."
+        },
+        {
+          "jp": "これは <ruby>日本語<rt>にほんご</rt></ruby>で <ruby>何<rt>なん</rt></ruby>ですか。…「パソコン」です。",
+          "en": "How do you say this in Japanese? …It's \"pasokon.\""
+        },
+        {
+          "jp": "「ありがとう」は <ruby>英語<rt>えいご</rt></ruby>で <ruby>何<rt>なん</rt></ruby>ですか。",
+          "en": "How do you say \"arigatou\" in English?"
+        }
+      ]
+    },
+    {
+      "pattern": "N（person）に V（あげます／かします／おしえます／でんわを かけます）",
+      "structure": "（わたしは）N（相手）＋ に ＋ N（物）＋ を ＋ あげます／貸します／教えます／かけます",
+      "explain": "The particle に marks the RECIPIENT / person the action is directed at — the person you give, lend, teach, write, or phone TO. 友達に本をあげます = give a book TO a friend; 母に電話をかけます = phone (to) my mother. The giver is the subject (は), the thing is を, the recipient is に.",
+      "examples": [
+        {
+          "jp": "わたしは <ruby>友達<rt>ともだち</rt></ruby>に <ruby>花<rt>はな</rt></ruby>を あげました。",
+          "en": "I gave flowers to my friend."
+        },
+        {
+          "jp": "イーさんに <ruby>本<rt>ほん</rt></ruby>を <ruby>貸<rt>か</rt></ruby>します。",
+          "en": "I'll lend Ms. Lee a book."
+        },
+        {
+          "jp": "<ruby>先生<rt>せんせい</rt></ruby>は <ruby>太郎<rt>たろう</rt></ruby>ちゃんに <ruby>英語<rt>えいご</rt></ruby>を <ruby>教<rt>おし</rt></ruby>えます。",
+          "en": "The teacher teaches Taro English."
+        },
+        {
+          "jp": "こんばん <ruby>母<rt>はは</rt></ruby>に <ruby>電話<rt>でんわ</rt></ruby>を かけます。",
+          "en": "I'll call my mother tonight."
+        }
+      ]
+    },
+    {
+      "pattern": "N（person）に／から V（もらいます／かります／ならいます）",
+      "structure": "（わたしは）N（相手）＋ に（／から）＋ N（物）＋ を ＋ もらいます／借ります／習います",
+      "explain": "The FLIP side of giving: に (or から) marks the SOURCE you receive, borrow, or learn FROM. 父に時計をもらいました = received a watch FROM my father; ワンさんに中国語を習います = learn Chinese FROM Mr. Wang. から stresses the origin and is required when the source is an organization (会社から). Note あげる is outward (I→other), もらう is inward (I get from other).",
+      "examples": [
+        {
+          "jp": "わたしは <ruby>父<rt>ちち</rt></ruby>に <ruby>時計<rt>とけい</rt></ruby>を もらいました。",
+          "en": "I received a watch from my father."
+        },
+        {
+          "jp": "カリナさんに CDを <ruby>借<rt>か</rt></ruby>ります。",
+          "en": "I'll borrow a CD from Ms. Karina."
+        },
+        {
+          "jp": "だれに <ruby>英語<rt>えいご</rt></ruby>を <ruby>習<rt>なら</rt></ruby>いましたか。…ワットさんに <ruby>習<rt>なら</rt></ruby>いました。",
+          "en": "Who did you learn English from? …I learned from Mr. Watt."
+        },
+        {
+          "jp": "<ruby>去年<rt>きょねん</rt></ruby>の クリスマスに <ruby>何<rt>なに</rt></ruby>を もらいましたか。…ネクタイと <ruby>本<rt>ほん</rt></ruby>を もらいました。",
+          "en": "What did you get last Christmas? …I got a tie and a book."
+        }
+      ]
+    },
+    {
+      "pattern": "もう V ました ／ まだ です",
+      "structure": "もう ＋ V ました（か）→ はい、もう V ました。／ いいえ、まだ です。",
+      "explain": "もう + past = \"already (done)\": もう昼ごはんを食べました = \"I've already eaten lunch.\" The question もう〜ましたか (\"Have you 〜 yet?\") is answered はい、もう〜ました (yes, already) or いいえ、まだです (no, not yet). \"Not yet\" is まだです or the fuller まだ〜ていません — NEVER まだ〜ませんでした. これから 〜ます (\"I'll 〜 now\") often follows まだです.",
+      "examples": [
+        {
+          "jp": "もう <ruby>荷物<rt>にもつ</rt></ruby>を <ruby>送<rt>おく</rt></ruby>りましたか。…はい、もう <ruby>送<rt>おく</rt></ruby>りました。",
+          "en": "Have you sent the parcel yet? …Yes, I already have."
+        },
+        {
+          "jp": "もう <ruby>昼<rt>ひる</rt></ruby>ごはんを <ruby>食<rt>た</rt></ruby>べましたか。…いいえ、まだです。これから <ruby>食<rt>た</rt></ruby>べます。",
+          "en": "Have you eaten lunch yet? …No, not yet. I'll eat now."
+        },
+        {
+          "jp": "テレーザちゃんは もう <ruby>寝<rt>ね</rt></ruby>ましたか。…いいえ、まだです。",
+          "en": "Has little Teresa gone to sleep yet? …No, not yet."
+        }
+      ]
+    }
+  ],
+  "examples": [
+    {
+      "jp": "はさみで <ruby>紙<rt>かみ</rt></ruby>を <ruby>切<rt>き</rt></ruby>ります。",
+      "en": "I cut paper with scissors."
+    },
+    {
+      "jp": "<ruby>手<rt>て</rt></ruby>で ごはんを <ruby>食<rt>た</rt></ruby>べる <ruby>国<rt>くに</rt></ruby>も あります。",
+      "en": "There are also countries where people eat rice with their hands."
+    },
+    {
+      "jp": "わたしは <ruby>木村<rt>きむら</rt></ruby>さんに <ruby>花<rt>はな</rt></ruby>を あげます。",
+      "en": "I give flowers to Ms. Kimura."
+    },
+    {
+      "jp": "<ruby>先生<rt>せんせい</rt></ruby>は わたしに <ruby>本<rt>ほん</rt></ruby>を くれました。",
+      "en": "The teacher gave me a book."
+    },
+    {
+      "jp": "わたしは カリナさんに チョコレートを もらいました。",
+      "en": "I received chocolate from Ms. Karina."
+    },
+    {
+      "jp": "ワンさんに <ruby>中国語<rt>ちゅうごくご</rt></ruby>を <ruby>習<rt>なら</rt></ruby>います。",
+      "en": "I learn Chinese from Mr. Wang."
+    },
+    {
+      "jp": "こんばん <ruby>母<rt>はは</rt></ruby>に <ruby>電話<rt>でんわ</rt></ruby>を かけます。",
+      "en": "I'll call my mother tonight."
+    },
+    {
+      "jp": "もう <ruby>新幹線<rt>しんかんせん</rt></ruby>の <ruby>切符<rt>きっぷ</rt></ruby>を <ruby>買<rt>か</rt></ruby>いましたか。…はい、もう <ruby>買<rt>か</rt></ruby>いました。",
+      "en": "Have you bought the Shinkansen ticket yet? …Yes, I've already bought it."
+    },
+    {
+      "jp": "「Goodbye」は <ruby>日本語<rt>にほんご</rt></ruby>で <ruby>何<rt>なん</rt></ruby>ですか。…「さようなら」です。",
+      "en": "How do you say \"Goodbye\" in Japanese? …It's \"Sayounara.\""
+    }
+  ],
+  "conversation": {
+    "title": "いらっしゃい (Come on in / Welcome)",
+    "audio": "/Audio/minnahonsatsu1/24.mp3",
+    "lines": [
+      {
+        "role": "サントス",
+        "jp": "はい。サントスです。",
+        "en": "Yes. It's Santos."
+      },
+      {
+        "role": "ホスト",
+        "jp": "いらっしゃい。どうぞ お<ruby>上<rt>あ</rt></ruby>がり ください。",
+        "en": "Welcome. Please, come in."
+      },
+      {
+        "role": "サントス",
+        "jp": "<ruby>失礼<rt>しつれい</rt></ruby>します。",
+        "en": "Thank you (excuse me for intruding)."
+      },
+      {
+        "role": "ホスト",
+        "jp": "コーヒーは いかがですか。",
+        "en": "Would you like some coffee?"
+      },
+      {
+        "role": "サントス",
+        "jp": "ありがとう ございます。",
+        "en": "Thank you."
+      },
+      {
+        "role": "ホスト",
+        "jp": "どうぞ。",
+        "en": "Please, help yourself."
+      },
+      {
+        "role": "サントス",
+        "jp": "いただきます。この スプーン、すてきですね。",
+        "en": "Thank you (for the drink). This spoon is lovely, isn't it?"
+      },
+      {
+        "role": "ホスト",
+        "jp": "ええ。<ruby>会社<rt>かいしゃ</rt></ruby>の <ruby>人<rt>ひと</rt></ruby>に もらいました。メキシコの お<ruby>土産<rt>みやげ</rt></ruby>です。",
+        "en": "Yes. I got it from a colleague at work. It's a souvenir from Mexico."
+      },
+      {
+        "role": "サントス",
+        "jp": "これは <ruby>日本語<rt>にほんご</rt></ruby>で <ruby>何<rt>なん</rt></ruby>ですか。",
+        "en": "What is this called in Japanese?"
+      },
+      {
+        "role": "ホスト",
+        "jp": "「はさみ」です。",
+        "en": "It's \"hasami\" (scissors)."
+      },
+      {
+        "role": "サントス",
+        "jp": "「は・さ・み」ですか。",
+        "en": "\"Ha-sa-mi\"?"
+      },
+      {
+        "role": "ホスト",
+        "jp": "はい、そうです。",
+        "en": "Yes, that's right."
+      }
+    ]
+  }
+}

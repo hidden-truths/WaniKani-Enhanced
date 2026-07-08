@@ -1,0 +1,909 @@
+{
+  "lesson": 18,
+  "title": "Lesson 18",
+  "theme": "Dictionary-form potential — 〜ことができます (can/able to) & 〜ことです (nominalizing a hobby), plus 〜まえに (before doing) and the adverbs なかなか・ぜひ",
+  "source": {
+    "name": "vnjpclub.com",
+    "vocabUrl": "https://www.vnjpclub.com/en/minna-no-nihongo/lesson-18-vocabulary.html",
+    "grammarUrl": "https://www.vnjpclub.com/en/minna-no-nihongo/lesson-18-grammar.html",
+    "note": "Vocabulary, native-speaker audio, and example sentences aggregated from vnjpclub.com (Minna no Nihongo 第2版). For personal study."
+  },
+  "vocab": [
+    {
+      "key": "mnn:18:0",
+      "kana": "できます",
+      "kanji": "",
+      "context": "",
+      "mean": "to be able to, can",
+      "cat": "verb",
+      "type": "ichidan",
+      "trans": "i",
+      "dict": "できる",
+      "dictRead": "できる",
+      "audio": "/Audio/minnamoi/bai18/00010101001001111.mp3",
+      "accent": 2
+    },
+    {
+      "key": "mnn:18:1",
+      "kana": "あらいます",
+      "kanji": "洗います",
+      "context": "",
+      "mean": "to wash",
+      "cat": "verb",
+      "type": "godan",
+      "trans": "t",
+      "dict": "洗う",
+      "dictRead": "あらう",
+      "audio": "/Audio/minnamoi/bai18/00010101001010000.mp3",
+      "accent": 0
+    },
+    {
+      "key": "mnn:18:2",
+      "kana": "ひきます",
+      "kanji": "弾きます",
+      "context": "ピアノを〜",
+      "mean": "to play (a stringed or keyboard instrument)",
+      "cat": "verb",
+      "type": "godan",
+      "trans": "t",
+      "dict": "弾く",
+      "dictRead": "ひく",
+      "audio": "/Audio/minnamoi/bai18/00010101001010001.mp3",
+      "levels": {
+        "N5": [
+          "<ruby>姉<rt>あね</rt></ruby>はピアノを<ruby>弾<rt>ひ</rt></ruby>きます。",
+          "My older sister plays the piano."
+        ],
+        "N4": [
+          "<ruby>子<rt>こ</rt></ruby>どものとき、ギターを<ruby>弾<rt>ひ</rt></ruby>きたかったです。",
+          "When I was a child, I wanted to play the guitar."
+        ],
+        "N3": [
+          "<ruby>毎朝<rt>まいあさ</rt></ruby>バイオリンを<ruby>弾<rt>ひ</rt></ruby>くようにしています。",
+          "I make a point of playing the violin every morning."
+        ],
+        "N2": [
+          "<ruby>練習<rt>れんしゅう</rt></ruby>もせずに、<ruby>人前<rt>ひとまえ</rt></ruby>でピアノを<ruby>弾<rt>ひ</rt></ruby>けるわけがない。",
+          "There's no way I can play the piano in front of people without even practicing."
+        ],
+        "N1": [
+          "<ruby>祖父<rt>そふ</rt></ruby>が<ruby>遺<rt>のこ</rt></ruby>したこの<ruby>古<rt>ふる</rt></ruby>いギターを、<ruby>誰<rt>だれ</rt></ruby>かが<ruby>引<rt>ひ</rt></ruby>き<ruby>継<rt>つ</rt></ruby>いで<ruby>弾<rt>ひ</rt></ruby>いてくれればと<ruby>願<rt>ねが</rt></ruby>ってやまない。",
+          "I can't help wishing that someone would take over and play this old guitar my grandfather left behind."
+        ]
+      },
+      "mnem": "弾く shares the sound ひく with 引く \"to pull\" — you draw the bow and pull the strings to play.",
+      "tip": "弾く (ひく) is for stringed/keyboard instruments (piano, guitar, violin); it's godan (弾いて/弾かない). Don't confuse it with 引く \"to pull / catch a cold\" or 吹く (ふく) \"to blow\" a wind instrument.",
+      "accent": 0
+    },
+    {
+      "key": "mnn:18:3",
+      "kana": "うたいます",
+      "kanji": "歌います",
+      "context": "",
+      "mean": "to sing",
+      "cat": "verb",
+      "type": "godan",
+      "trans": "t",
+      "dict": "歌う",
+      "dictRead": "うたう",
+      "audio": "/Audio/minnamoi/bai18/00010101001010010.mp3",
+      "levels": {
+        "N5": [
+          "<ruby>私<rt>わたし</rt></ruby>は<ruby>歌<rt>うた</rt></ruby>を<ruby>歌<rt>うた</rt></ruby>います。",
+          "I sing a song."
+        ],
+        "N4": [
+          "カラオケで<ruby>日本<rt>にほん</rt></ruby>の<ruby>歌<rt>うた</rt></ruby>を<ruby>歌<rt>うた</rt></ruby>いたいです。",
+          "I want to sing a Japanese song at karaoke."
+        ],
+        "N3": [
+          "<ruby>毎朝<rt>まいあさ</rt></ruby>シャワーを<ruby>浴<rt>あ</rt></ruby>びながら<ruby>歌<rt>うた</rt></ruby>うようにしています。",
+          "I make a habit of singing while I take a shower every morning."
+        ],
+        "N2": [
+          "<ruby>恥<rt>は</rt></ruby>ずかしがり<ruby>屋<rt>や</rt></ruby>の<ruby>彼<rt>かれ</rt></ruby>が、<ruby>人前<rt>ひとまえ</rt></ruby>で<ruby>歌<rt>うた</rt></ruby>うとは<ruby>思<rt>おも</rt></ruby>わなかった。",
+          "I never thought that he, being so shy, would sing in front of people."
+        ],
+        "N1": [
+          "<ruby>被災地<rt>ひさいち</rt></ruby>の<ruby>人々<rt>ひとびと</rt></ruby>を<ruby>励<rt>はげ</rt></ruby>まそうと、<ruby>彼女<rt>かのじょ</rt></ruby>は<ruby>心<rt>こころ</rt></ruby>を<ruby>込<rt>こ</rt></ruby>めて<ruby>歌<rt>うた</rt></ruby>い<ruby>続<rt>つづ</rt></ruby>けた。",
+          "Hoping to encourage the people of the disaster area, she went on singing with all her heart."
+        ]
+      },
+      "mnem": "歌う \"u-ta-u\" — say \"OO! TA-DA!\" as you belt out a song on stage.",
+      "tip": "歌う (godan: 歌って/歌わない) takes を for the song: 歌を歌う. The noun 歌 (うた, \"a song\") shares the kanji; don't mix the verb with 詩 (し, \"poem\").",
+      "accent": 0
+    },
+    {
+      "key": "mnn:18:4",
+      "kana": "あつめます",
+      "kanji": "集めます",
+      "context": "きってを〜",
+      "mean": "to collect, gather",
+      "cat": "verb",
+      "type": "ichidan",
+      "trans": "t",
+      "dict": "集める",
+      "dictRead": "あつめる",
+      "audio": "/Audio/minnamoi/bai18/00010101001010011.mp3",
+      "levels": {
+        "N5": [
+          "<ruby>私<rt>わたし</rt></ruby>は<ruby>切手<rt>きって</rt></ruby>を<ruby>集<rt>あつ</rt></ruby>めます。",
+          "I collect stamps."
+        ],
+        "N4": [
+          "<ruby>子<rt>こ</rt></ruby>どものとき、きれいな<ruby>石<rt>いし</rt></ruby>を<ruby>集<rt>あつ</rt></ruby>めていました。",
+          "When I was a child, I used to collect pretty stones."
+        ],
+        "N3": [
+          "レポートのために、いろいろな<ruby>資料<rt>しりょう</rt></ruby>を<ruby>集<rt>あつ</rt></ruby>めるようにしています。",
+          "For the report, I make a point of gathering all sorts of materials."
+        ],
+        "N2": [
+          "<ruby>寄付金<rt>きふきん</rt></ruby>を<ruby>集<rt>あつ</rt></ruby>めたものの、<ruby>目標<rt>もくひょう</rt></ruby>の<ruby>額<rt>がく</rt></ruby>にはまだ<ruby>届<rt>とど</rt></ruby>いていない。",
+          "Although we collected donations, we still haven't reached the target amount."
+        ],
+        "N1": [
+          "<ruby>各地<rt>かくち</rt></ruby>から<ruby>専門家<rt>せんもんか</rt></ruby>を<ruby>集<rt>あつ</rt></ruby>め、<ruby>総力<rt>そうりょく</rt></ruby>を<ruby>挙<rt>あ</rt></ruby>げて<ruby>問題<rt>もんだい</rt></ruby>の<ruby>解決<rt>かいけつ</rt></ruby>に<ruby>当<rt>あ</rt></ruby>たらざるを<ruby>得<rt>え</rt></ruby>ない。",
+          "We have no choice but to gather experts from all over and tackle the problem with all our combined strength."
+        ]
+      },
+      "mnem": "集める \"a-tsu-meru\" — \"a TSU-nami\" sweeps everything together into one pile: to gather/collect.",
+      "tip": "集める (ichidan, transitive: someone gathers things, takes を) pairs with intransitive 集まる (あつまる, \"things gather on their own\"); don't swap them.",
+      "accent": 3
+    },
+    {
+      "key": "mnn:18:5",
+      "kana": "すてます",
+      "kanji": "捨てます",
+      "context": "ごみを〜",
+      "mean": "to throw away, discard",
+      "cat": "verb",
+      "type": "ichidan",
+      "trans": "t",
+      "dict": "捨てる",
+      "dictRead": "すてる",
+      "audio": "/Audio/minnamoi/bai18/00010101001010100.mp3",
+      "levels": {
+        "N5": [
+          "ここにごみを<ruby>捨<rt>す</rt></ruby>てます。",
+          "I throw the trash away here."
+        ],
+        "N4": [
+          "<ruby>古<rt>ふる</rt></ruby>い<ruby>新聞<rt>しんぶん</rt></ruby>を<ruby>捨<rt>す</rt></ruby>てたいです。",
+          "I want to throw away the old newspapers."
+        ],
+        "N3": [
+          "いらないものは、すぐに<ruby>捨<rt>す</rt></ruby>てるようにしています。",
+          "I make a point of throwing away things I don't need right away."
+        ],
+        "N2": [
+          "まだ<ruby>使<rt>つか</rt></ruby>えるものの、<ruby>場所<rt>ばしょ</rt></ruby>を<ruby>取<rt>と</rt></ruby>るので<ruby>捨<rt>す</rt></ruby>てざるを<ruby>得<rt>え</rt></ruby>ない。",
+          "Although it can still be used, it takes up space, so I have no choice but to throw it out."
+        ],
+        "N1": [
+          "<ruby>長年<rt>ながねん</rt></ruby>の<ruby>夢<rt>ゆめ</rt></ruby>をそう<ruby>簡単<rt>かんたん</rt></ruby>に<ruby>捨<rt>す</rt></ruby>てられるものではないと、<ruby>今<rt>いま</rt></ruby>になってようやく<ruby>気<rt>き</rt></ruby>づいた。",
+          "Only now have I finally realized that a dream held for many years is not something one can throw away so easily."
+        ]
+      },
+      "mnem": "捨てる \"su-teru\" — you \"STEer\" the trash toward the bin and toss it: to throw away.",
+      "tip": "捨てる (ichidan: 捨てて/捨てない) is the opposite of 拾う (ひろう, \"to pick up\"). Note the frame ごみを捨てる; don't confuse the kanji 捨 with the look-alike 拾 (ひろう).",
+      "accent": 0
+    },
+    {
+      "key": "mnn:18:6",
+      "kana": "かえます",
+      "kanji": "換えます",
+      "context": "お金を〜",
+      "mean": "to exchange, change (money, etc.)",
+      "cat": "verb",
+      "type": "ichidan",
+      "trans": "t",
+      "dict": "換える",
+      "dictRead": "かえる",
+      "audio": "/Audio/minnamoi/bai18/00010101001010101.mp3",
+      "levels": {
+        "N5": [
+          "<ruby>銀行<rt>ぎんこう</rt></ruby>でお<ruby>金<rt>かね</rt></ruby>を<ruby>換<rt>か</rt></ruby>えます。",
+          "I exchange money at the bank."
+        ],
+        "N4": [
+          "<ruby>旅行<rt>りょこう</rt></ruby>の<ruby>前<rt>まえ</rt></ruby>に、ドルを<ruby>円<rt>えん</rt></ruby>に<ruby>換<rt>か</rt></ruby>えたいです。",
+          "Before the trip, I want to change dollars into yen."
+        ],
+        "N3": [
+          "<ruby>両替<rt>りょうがえ</rt></ruby>は、レートのいい<ruby>店<rt>みせ</rt></ruby>で<ruby>換<rt>か</rt></ruby>えるようにしています。",
+          "For currency exchange, I make a point of changing money at a shop with a good rate."
+        ],
+        "N2": [
+          "レートが<ruby>悪<rt>わる</rt></ruby>いものの、<ruby>現金<rt>げんきん</rt></ruby>がないので<ruby>空港<rt>くうこう</rt></ruby>で<ruby>換<rt>か</rt></ruby>えざるを<ruby>得<rt>え</rt></ruby>なかった。",
+          "Although the rate was bad, I had no cash, so I had no choice but to exchange it at the airport."
+        ],
+        "N1": [
+          "<ruby>為替<rt>かわせ</rt></ruby>の<ruby>変動<rt>へんどう</rt></ruby>が<ruby>激<rt>はげ</rt></ruby>しい<ruby>今<rt>いま</rt></ruby>、どの<ruby>通貨<rt>つうか</rt></ruby>に<ruby>換<rt>か</rt></ruby>えるべきか、<ruby>慎重<rt>しんちょう</rt></ruby>に<ruby>判断<rt>はんだん</rt></ruby>せざるを<ruby>得<rt>え</rt></ruby>ない。",
+          "With exchange rates fluctuating so wildly now, we have no choice but to decide carefully which currency to convert into."
+        ]
+      },
+      "mnem": "換える \"ka-eru\" — swap it out and \"CARE\" for the new one; the 換 kanji has 扌(hand) doing the swapping.",
+      "tip": "This 換える (with 扌, hand-swap) is for exchanging money/things; homophone 変える means \"change/alter (a state)\" and 替える \"replace\". Minna uses 換える for お金を換える (currency).",
+      "accent": 0
+    },
+    {
+      "key": "mnn:18:7",
+      "kana": "うんてんします",
+      "kanji": "運転します",
+      "context": "車を〜",
+      "mean": "to drive",
+      "cat": "verb",
+      "type": "irregular",
+      "trans": "t",
+      "dict": "運転する",
+      "dictRead": "うんてんする",
+      "audio": "/Audio/minnamoi/bai18/00010101001010110.mp3",
+      "accent": 0
+    },
+    {
+      "key": "mnn:18:8",
+      "kana": "よやくします",
+      "kanji": "予約します",
+      "context": "へやを〜",
+      "mean": "to reserve, book",
+      "cat": "verb",
+      "type": "irregular",
+      "trans": "t",
+      "dict": "予約する",
+      "dictRead": "よやくする",
+      "audio": "/Audio/minnamoi/bai18/00010101001010111.mp3",
+      "levels": {
+        "N5": [
+          "ホテルを<ruby>予約<rt>よやく</rt></ruby>します。",
+          "I reserve a hotel."
+        ],
+        "N4": [
+          "レストランの<ruby>席<rt>せき</rt></ruby>を<ruby>予約<rt>よやく</rt></ruby>したいです。",
+          "I want to reserve a table at the restaurant."
+        ],
+        "N3": [
+          "<ruby>連休<rt>れんきゅう</rt></ruby>は<ruby>混<rt>こ</rt></ruby>むので、<ruby>早<rt>はや</rt></ruby>めに<ruby>予約<rt>よやく</rt></ruby>するようにしています。",
+          "Long weekends get crowded, so I make a point of booking early."
+        ],
+        "N2": [
+          "インターネットで<ruby>予約<rt>よやく</rt></ruby>したものの、<ruby>確認<rt>かくにん</rt></ruby>のメールが<ruby>届<rt>とど</rt></ruby>かない。",
+          "Although I made a reservation online, the confirmation email hasn't arrived."
+        ],
+        "N1": [
+          "<ruby>人気<rt>にんき</rt></ruby>の<ruby>店<rt>みせ</rt></ruby>である<ruby>以上<rt>いじょう</rt></ruby>、<ruby>数<rt>すう</rt></ruby>ヶ<ruby>月<rt>げつ</rt></ruby><ruby>前<rt>まえ</rt></ruby>から<ruby>予約<rt>よやく</rt></ruby>しておかざるを<ruby>得<rt>え</rt></ruby>ない。",
+          "Given that it is such a popular restaurant, we have no choice but to book months in advance."
+        ]
+      },
+      "mnem": "予約 = 予 (in advance) + 約 (promise): a \"promise made ahead of time\" is a reservation.",
+      "tip": "予約する (irregular する-verb) takes を: ホテルを予約する. Distinguish from 約束 (やくそく, \"a promise/appointment with a person\") — 予約 is booking a seat, room, or slot.",
+      "accent": 0
+    },
+    {
+      "key": "mnn:18:9",
+      "kana": "ピアノ",
+      "kanji": "",
+      "context": "〜を ひきます",
+      "mean": "piano",
+      "cat": "noun",
+      "type": "",
+      "trans": "",
+      "dict": "ピアノ",
+      "dictRead": "ピアノ",
+      "audio": "/Audio/minnamoi/bai18/00010101001011000.mp3",
+      "levels": {
+        "N5": [
+          "<ruby>私<rt>わたし</rt></ruby>はピアノを<ruby>弾<rt>ひ</rt></ruby>きます。",
+          "I play the piano."
+        ],
+        "N4": [
+          "<ruby>子<rt>こ</rt></ruby>どものとき、ピアノを<ruby>習<rt>なら</rt></ruby>っていました。",
+          "When I was a child, I was learning the piano."
+        ],
+        "N3": [
+          "<ruby>妹<rt>いもうと</rt></ruby>が<ruby>弾<rt>ひ</rt></ruby>くピアノは、とても<ruby>上手<rt>じょうず</rt></ruby>そうです。",
+          "The piano my little sister plays sounds very skillful."
+        ],
+        "N2": [
+          "ピアノを<ruby>買<rt>か</rt></ruby>ったものの、<ruby>忙<rt>いそが</rt></ruby>しくてなかなか<ruby>練習<rt>れんしゅう</rt></ruby>できない。",
+          "Although I bought a piano, I'm so busy that I can hardly practice."
+        ],
+        "N1": [
+          "<ruby>祖母<rt>そぼ</rt></ruby>が<ruby>大切<rt>たいせつ</rt></ruby>にしていたこのピアノには、<ruby>家族<rt>かぞく</rt></ruby>の<ruby>思<rt>おも</rt></ruby>い<ruby>出<rt>で</rt></ruby>が<ruby>詰<rt>つ</rt></ruby>まっているとしか<ruby>言<rt>い</rt></ruby>いようがない。",
+          "I can only say that this piano my grandmother cherished is packed full of family memories."
+        ]
+      },
+      "mnem": "\"ピアノ\" is the English/Italian \"piano\" straight into katakana — pi-a-no, the same sound.",
+      "tip": "A piano is played with 弾く (ひく), the verb for stringed/keyboard instruments — ピアノを弾く, never 歌う or する.",
+      "accent": 0
+    },
+    {
+      "key": "mnn:18:10",
+      "kana": "〜メートル",
+      "kanji": "",
+      "context": "100〜",
+      "mean": "~ meter(s)",
+      "cat": "noun",
+      "type": "",
+      "trans": "",
+      "dict": "メートル",
+      "dictRead": "メートル",
+      "audio": "/Audio/minnamoi/bai18/00010101001011001.mp3",
+      "levels": {
+        "N5": [
+          "100メートル<ruby>泳<rt>およ</rt></ruby>ぐことができます。",
+          "I can swim 100 meters."
+        ],
+        "N4": [
+          "<ruby>駅<rt>えき</rt></ruby>まで500メートルぐらいあります。",
+          "It's about 500 meters to the station."
+        ],
+        "N3": [
+          "<ruby>毎日<rt>まいにち</rt></ruby>2000メートル<ruby>走<rt>はし</rt></ruby>るようにしています。",
+          "I make a point of running 2,000 meters every day."
+        ],
+        "N2": [
+          "<ruby>頂上<rt>ちょうじょう</rt></ruby>まであと100メートルというところで、<ruby>天気<rt>てんき</rt></ruby>が<ruby>崩<rt>くず</rt></ruby>れてしまった。",
+          "Just when we were 100 meters from the summit, the weather turned bad."
+        ],
+        "N1": [
+          "<ruby>標高<rt>ひょうこう</rt></ruby>3000メートルを<ruby>超<rt>こ</rt></ruby>える<ruby>山<rt>やま</rt></ruby>では、<ruby>酸素<rt>さんそ</rt></ruby><ruby>不足<rt>ぶそく</rt></ruby>に<ruby>備<rt>そな</rt></ruby>えざるを<ruby>得<rt>え</rt></ruby>ない。",
+          "On mountains that exceed 3,000 meters in elevation, one has no choice but to prepare for a lack of oxygen."
+        ]
+      },
+      "mnem": "\"メートル\" from French \"mètre\" — the metric \"meter\" of distance, spelled out in katakana.",
+      "tip": "The counter for distance/length; attaches to a number as ～メートル (100メートル). Don't confuse it with メーター (a gauge/meter device) — the length unit is メートル.",
+      "accent": 0
+    },
+    {
+      "key": "mnn:18:11",
+      "kana": "げんきん",
+      "kanji": "現金",
+      "context": "",
+      "mean": "cash",
+      "cat": "noun",
+      "type": "",
+      "trans": "",
+      "dict": "現金",
+      "dictRead": "げんきん",
+      "audio": "/Audio/minnamoi/bai18/00010101001011010.mp3",
+      "levels": {
+        "N5": [
+          "<ruby>私<rt>わたし</rt></ruby>は<ruby>現金<rt>げんきん</rt></ruby>で<ruby>払<rt>はら</rt></ruby>います。",
+          "I pay in cash."
+        ],
+        "N4": [
+          "カードがないから、<ruby>現金<rt>げんきん</rt></ruby>で<ruby>払<rt>はら</rt></ruby>いたいです。",
+          "Because I don't have a card, I want to pay in cash."
+        ],
+        "N3": [
+          "<ruby>小<rt>ちい</rt></ruby>さい<ruby>店<rt>みせ</rt></ruby>では、<ruby>現金<rt>げんきん</rt></ruby>を<ruby>用意<rt>ようい</rt></ruby>するようにしています。",
+          "At small shops, I make a point of having cash ready."
+        ],
+        "N2": [
+          "カードでも<ruby>払<rt>はら</rt></ruby>えるものの、ポイントのために<ruby>現金<rt>げんきん</rt></ruby>は<ruby>使<rt>つか</rt></ruby>わないことにしている。",
+          "Although I could pay by card, for the points I've decided not to use cash."
+        ],
+        "N1": [
+          "キャッシュレス<ruby>化<rt>か</rt></ruby>が<ruby>進<rt>すす</rt></ruby>む<ruby>今<rt>いま</rt></ruby>、<ruby>災害<rt>さいがい</rt></ruby>に<ruby>備<rt>そな</rt></ruby>えて<ruby>多少<rt>たしょう</rt></ruby>の<ruby>現金<rt>げんきん</rt></ruby>は<ruby>手元<rt>てもと</rt></ruby>に<ruby>置<rt>お</rt></ruby>いておくにこしたことはない。",
+          "With cashless payment spreading these days, you can't go wrong keeping at least some cash on hand in case of disaster."
+        ]
+      },
+      "mnem": "現 (present/actual) + 金 (money) = money that's actually present in hand — cash.",
+      "tip": "現金 is physical cash, contrasted with カード (card) or 振り込み (transfer). The frame 現金で払う (\"pay in cash\") uses で for the means.",
+      "accent": 3
+    },
+    {
+      "key": "mnn:18:12",
+      "kana": "しゅみ",
+      "kanji": "趣味",
+      "context": "",
+      "mean": "hobby",
+      "cat": "noun",
+      "type": "",
+      "trans": "",
+      "dict": "趣味",
+      "dictRead": "しゅみ",
+      "audio": "/Audio/minnamoi/bai18/00010101001011011.mp3",
+      "levels": {
+        "N5": [
+          "<ruby>私<rt>わたし</rt></ruby>の<ruby>趣味<rt>しゅみ</rt></ruby>は<ruby>音楽<rt>おんがく</rt></ruby>です。",
+          "My hobby is music."
+        ],
+        "N4": [
+          "<ruby>趣味<rt>しゅみ</rt></ruby>は<ruby>写真<rt>しゃしん</rt></ruby>を<ruby>撮<rt>と</rt></ruby>ることです。",
+          "My hobby is taking photos."
+        ],
+        "N3": [
+          "<ruby>忙<rt>いそが</rt></ruby>しくても、<ruby>趣味<rt>しゅみ</rt></ruby>の<ruby>時間<rt>じかん</rt></ruby>を<ruby>作<rt>つく</rt></ruby>るようにしています。",
+          "Even when I'm busy, I make a point of finding time for my hobbies."
+        ],
+        "N2": [
+          "<ruby>趣味<rt>しゅみ</rt></ruby>で<ruby>始<rt>はじ</rt></ruby>めたものの、<ruby>今<rt>いま</rt></ruby>では<ruby>仕事<rt>しごと</rt></ruby>のようになってしまった。",
+          "Although I started it as a hobby, it has now become almost like work."
+        ],
+        "N1": [
+          "<ruby>単<rt>たん</rt></ruby>なる<ruby>趣味<rt>しゅみ</rt></ruby>の<ruby>域<rt>いき</rt></ruby>を<ruby>超<rt>こ</rt></ruby>え、<ruby>彼<rt>かれ</rt></ruby>の<ruby>写真<rt>しゃしん</rt></ruby>は<ruby>今<rt>いま</rt></ruby>や<ruby>専門家<rt>せんもんか</rt></ruby>も<ruby>認<rt>みと</rt></ruby>めるほどだ。",
+          "Going beyond the realm of a mere hobby, his photography is now acknowledged even by professionals."
+        ]
+      },
+      "mnem": "趣 (taste/flavor) + 味 (taste) — your personal \"taste\" for how you spend free time is your hobby.",
+      "tip": "The Lesson-18 pattern nominalizes a verb as the hobby: 趣味は〜ことです (趣味は写真を撮ることです). Don't confuse 趣味 (personal hobby) with 興味 (きょうみ, \"interest in\" a topic).",
+      "accent": 1
+    },
+    {
+      "key": "mnn:18:13",
+      "kana": "にっき",
+      "kanji": "日記",
+      "context": "〜を つけます／かきます",
+      "mean": "diary, journal",
+      "cat": "noun",
+      "type": "",
+      "trans": "",
+      "dict": "日記",
+      "dictRead": "にっき",
+      "audio": "/Audio/minnamoi/bai18/00010101001011100.mp3",
+      "levels": {
+        "N5": [
+          "<ruby>寝<rt>ね</rt></ruby>る<ruby>前<rt>まえ</rt></ruby>に<ruby>日記<rt>にっき</rt></ruby>を<ruby>書<rt>か</rt></ruby>きます。",
+          "I write in my diary before I go to bed."
+        ],
+        "N4": [
+          "<ruby>毎日<rt>まいにち</rt></ruby><ruby>日本語<rt>にほんご</rt></ruby>で<ruby>日記<rt>にっき</rt></ruby>を<ruby>書<rt>か</rt></ruby>きたいです。",
+          "I want to write my diary in Japanese every day."
+        ],
+        "N3": [
+          "<ruby>忘<rt>わす</rt></ruby>れないように、<ruby>寝<rt>ね</rt></ruby>る<ruby>前<rt>まえ</rt></ruby>に<ruby>日記<rt>にっき</rt></ruby>をつけるようにしています。",
+          "So as not to forget, I make a point of keeping a diary before bed."
+        ],
+        "N2": [
+          "<ruby>三日坊主<rt>みっかぼうず</rt></ruby>で<ruby>終<rt>お</rt></ruby>わるかと<ruby>思<rt>おも</rt></ruby>ったものの、<ruby>日記<rt>にっき</rt></ruby>は<ruby>一年<rt>いちねん</rt></ruby><ruby>続<rt>つづ</rt></ruby>いた。",
+          "Although I thought it would fizzle out in three days, I kept the diary going for a whole year."
+        ],
+        "N1": [
+          "<ruby>祖父<rt>そふ</rt></ruby>が<ruby>戦時中<rt>せんじちゅう</rt></ruby>に<ruby>綴<rt>つづ</rt></ruby>った<ruby>日記<rt>にっき</rt></ruby>は、<ruby>当時<rt>とうじ</rt></ruby>の<ruby>暮<rt>く</rt></ruby>らしを<ruby>今<rt>いま</rt></ruby>に<ruby>伝<rt>つた</rt></ruby>える<ruby>貴重<rt>きちょう</rt></ruby>な<ruby>記録<rt>きろく</rt></ruby>だ。",
+          "The diary my grandfather kept during the war is a precious record that conveys the life of those days to us today."
+        ]
+      },
+      "mnem": "日 (day) + 記 (record) = a day-by-day record — a diary.",
+      "tip": "You either 日記をつける (\"keep a diary\") or 日記を書く (\"write in a diary\"). Don't confuse 日記 (personal diary) with 記事 (きじ, a news article).",
+      "accent": 0
+    },
+    {
+      "key": "mnn:18:14",
+      "kana": "［お］いのり",
+      "kanji": "［お］祈り",
+      "context": "〜を します",
+      "mean": "prayer (〜をします: to pray)",
+      "cat": "noun",
+      "type": "",
+      "trans": "",
+      "dict": "お祈り",
+      "dictRead": "おいのり",
+      "audio": "/Audio/minnamoi/bai18/00010101001011101.mp3",
+      "levels": {
+        "N5": [
+          "<ruby>寝<rt>ね</rt></ruby>る<ruby>前<rt>まえ</rt></ruby>にお<ruby>祈<rt>いの</rt></ruby>りをします。",
+          "I pray before I go to bed."
+        ],
+        "N4": [
+          "<ruby>毎朝<rt>まいあさ</rt></ruby>、<ruby>家族<rt>かぞく</rt></ruby>のためにお<ruby>祈<rt>いの</rt></ruby>りをします。",
+          "Every morning I pray for my family."
+        ],
+        "N3": [
+          "<ruby>試験<rt>しけん</rt></ruby>の<ruby>前<rt>まえ</rt></ruby>には、<ruby>神社<rt>じんじゃ</rt></ruby>でお<ruby>祈<rt>いの</rt></ruby>りをするようにしています。",
+          "Before exams, I make a point of praying at a shrine."
+        ],
+        "N2": [
+          "<ruby>信<rt>しん</rt></ruby>じているわけではないものの、<ruby>初詣<rt>はつもうで</rt></ruby>ではつい<ruby>真剣<rt>しんけん</rt></ruby>にお<ruby>祈<rt>いの</rt></ruby>りしてしまう。",
+          "It's not that I'm a believer, but at the New Year's shrine visit I end up praying earnestly in spite of myself."
+        ],
+        "N1": [
+          "<ruby>被災地<rt>ひさいち</rt></ruby>の<ruby>一日<rt>いちにち</rt></ruby>も<ruby>早<rt>はや</rt></ruby>い<ruby>復興<rt>ふっこう</rt></ruby>を、<ruby>心<rt>こころ</rt></ruby>からお<ruby>祈<rt>いの</rt></ruby>りせずにはいられない。",
+          "I cannot help but pray from the bottom of my heart for the swiftest possible recovery of the disaster-stricken area."
+        ]
+      },
+      "mnem": "祈り \"i-no-ri\" — you say \"EE-NO-REE\" with hands pressed together in prayer.",
+      "tip": "The polite お is near-standard: お祈り. It becomes a verb with する — お祈りをする (\"to pray\"). Don't confuse it with 願い (ねがい, a wish/request); 祈り is spiritual prayer.",
+      "accent": 0
+    },
+    {
+      "key": "mnn:18:15",
+      "kana": "かちょう",
+      "kanji": "課長",
+      "context": "",
+      "mean": "section chief",
+      "cat": "noun",
+      "type": "",
+      "trans": "",
+      "dict": "課長",
+      "dictRead": "かちょう",
+      "audio": "/Audio/minnamoi/bai18/00010101001011110.mp3",
+      "levels": {
+        "N5": [
+          "あの<ruby>人<rt>ひと</rt></ruby>は<ruby>課長<rt>かちょう</rt></ruby>です。",
+          "That person is the section chief."
+        ],
+        "N4": [
+          "<ruby>課長<rt>かちょう</rt></ruby>に<ruby>資料<rt>しりょう</rt></ruby>を<ruby>見<rt>み</rt></ruby>せたいです。",
+          "I want to show the documents to the section chief."
+        ],
+        "N3": [
+          "<ruby>大切<rt>たいせつ</rt></ruby>なことは、<ruby>課長<rt>かちょう</rt></ruby>に<ruby>相談<rt>そうだん</rt></ruby>するようにしています。",
+          "For important matters, I make a point of consulting the section chief."
+        ],
+        "N2": [
+          "<ruby>課長<rt>かちょう</rt></ruby>は<ruby>厳<rt>きび</rt></ruby>しいものの、<ruby>部下<rt>ぶか</rt></ruby>のことをよく<ruby>考<rt>かんが</rt></ruby>えてくれる。",
+          "Although the section chief is strict, he really thinks about his subordinates."
+        ],
+        "N1": [
+          "<ruby>今回<rt>こんかい</rt></ruby>の<ruby>件<rt>けん</rt></ruby>は、<ruby>課長<rt>かちょう</rt></ruby>の<ruby>判断<rt>はんだん</rt></ruby>を<ruby>仰<rt>あお</rt></ruby>いだ<ruby>上<rt>うえ</rt></ruby>で<ruby>進<rt>すす</rt></ruby>めざるを<ruby>得<rt>え</rt></ruby>ない。",
+          "As for this matter, we have no choice but to proceed only after seeking the section chief's judgment."
+        ]
+      },
+      "mnem": "課 (section/division) + 長 (head/chief) = the head of a section — the section chief.",
+      "tip": "Japanese company hierarchy: 課長 (section chief) < 部長 (department chief) < 社長 (company president). 課長 heads a 課 (small section) within a 部 (department).",
+      "accent": 0
+    },
+    {
+      "key": "mnn:18:16",
+      "kana": "ぶちょう",
+      "kanji": "部長",
+      "context": "",
+      "mean": "department chief, general manager",
+      "cat": "noun",
+      "type": "",
+      "trans": "",
+      "dict": "部長",
+      "dictRead": "ぶちょう",
+      "audio": "/Audio/minnamoi/bai18/00010101001011111.mp3",
+      "levels": {
+        "N5": [
+          "あの<ruby>人<rt>ひと</rt></ruby>は<ruby>部長<rt>ぶちょう</rt></ruby>です。",
+          "That person is the department chief."
+        ],
+        "N4": [
+          "コピーする<ruby>前<rt>まえ</rt></ruby>に、<ruby>部長<rt>ぶちょう</rt></ruby>に<ruby>見<rt>み</rt></ruby>せてください。",
+          "Before you copy it, please show it to the department chief."
+        ],
+        "N3": [
+          "<ruby>出張<rt>しゅっちょう</rt></ruby>の<ruby>前<rt>まえ</rt></ruby>に、<ruby>部長<rt>ぶちょう</rt></ruby>に<ruby>報告<rt>ほうこく</rt></ruby>するようにしています。",
+          "Before business trips, I make a point of reporting to the department chief."
+        ],
+        "N2": [
+          "<ruby>部長<rt>ぶちょう</rt></ruby>が<ruby>賛成<rt>さんせい</rt></ruby>してくれたものの、<ruby>社長<rt>しゃちょう</rt></ruby>の<ruby>許可<rt>きょか</rt></ruby>はまだ<ruby>下<rt>お</rt></ruby>りていない。",
+          "Although the department chief agreed, the company president's approval still hasn't come through."
+        ],
+        "N1": [
+          "<ruby>長年<rt>ながねん</rt></ruby><ruby>部長<rt>ぶちょう</rt></ruby>として<ruby>部<rt>ぶ</rt></ruby>をまとめてきた<ruby>彼<rt>かれ</rt></ruby>の<ruby>手腕<rt>しゅわん</rt></ruby>には、<ruby>誰<rt>だれ</rt></ruby>もが<ruby>一目<rt>いちもく</rt></ruby><ruby>置<rt>お</rt></ruby>かざるを<ruby>得<rt>え</rt></ruby>ない。",
+          "Everyone can't help but hold in high regard the skill with which he has led the department as its chief for so many years."
+        ]
+      },
+      "mnem": "部 (department) + 長 (head/chief) = the head of a department — the department chief.",
+      "tip": "部長 (department chief) outranks 課長 (section chief) and reports to 社長 (president). A 部 (department) contains several 課 (sections).",
+      "accent": 0
+    },
+    {
+      "key": "mnn:18:17",
+      "kana": "しゃちょう",
+      "kanji": "社長",
+      "context": "",
+      "mean": "president of a company",
+      "cat": "noun",
+      "type": "",
+      "trans": "",
+      "dict": "社長",
+      "dictRead": "しゃちょう",
+      "audio": "/Audio/minnamoi/bai18/00010101001100000.mp3",
+      "levels": {
+        "N5": [
+          "あの<ruby>人<rt>ひと</rt></ruby>は<ruby>社長<rt>しゃちょう</rt></ruby>です。",
+          "That person is the company president."
+        ],
+        "N4": [
+          "<ruby>社長<rt>しゃちょう</rt></ruby>は<ruby>英語<rt>えいご</rt></ruby>を<ruby>話<rt>はな</rt></ruby>すことができます。",
+          "The company president can speak English."
+        ],
+        "N3": [
+          "<ruby>社長<rt>しゃちょう</rt></ruby>は<ruby>毎朝<rt>まいあさ</rt></ruby><ruby>一番<rt>いちばん</rt></ruby>に<ruby>会社<rt>かいしゃ</rt></ruby>へ<ruby>来<rt>く</rt></ruby>るようにしているそうです。",
+          "They say the company president makes a point of coming to the office first every morning."
+        ],
+        "N2": [
+          "<ruby>社長<rt>しゃちょう</rt></ruby>の<ruby>決断<rt>けつだん</rt></ruby>は<ruby>早<rt>はや</rt></ruby>いものの、ときどき<ruby>周<rt>まわ</rt></ruby>りがついていけない。",
+          "Although the president makes decisions quickly, sometimes those around him can't keep up."
+        ],
+        "N1": [
+          "<ruby>創業者<rt>そうぎょうしゃ</rt></ruby>である<ruby>社長<rt>しゃちょう</rt></ruby>の<ruby>引退<rt>いんたい</rt></ruby>に<ruby>伴<rt>ともな</rt></ruby>い、<ruby>経営<rt>けいえい</rt></ruby><ruby>方針<rt>ほうしん</rt></ruby>を<ruby>全面的<rt>ぜんめんてき</rt></ruby>に<ruby>見直<rt>みなお</rt></ruby>さざるを<ruby>得<rt>え</rt></ruby>なくなった。",
+          "With the retirement of the president, who was the founder, we had no choice but to completely rethink our management policy."
+        ]
+      },
+      "mnem": "社 (company) + 長 (head/chief) = the head of a company — the president.",
+      "tip": "社長 (company president) sits at the top: 社長 > 部長 (department chief) > 課長 (section chief). Note 社長 leads the whole 会社 (company).",
+      "accent": 0
+    },
+    {
+      "key": "mnn:18:18",
+      "kana": "どうぶつ",
+      "kanji": "動物",
+      "context": "",
+      "mean": "animal",
+      "cat": "noun",
+      "type": "",
+      "trans": "",
+      "dict": "動物",
+      "dictRead": "どうぶつ",
+      "audio": "/Audio/minnamoi/bai18/00010101001100001.mp3",
+      "levels": {
+        "N5": [
+          "<ruby>私<rt>わたし</rt></ruby>は<ruby>動物<rt>どうぶつ</rt></ruby>が<ruby>好<rt>す</rt></ruby>きです。",
+          "I like animals."
+        ],
+        "N4": [
+          "<ruby>動物<rt>どうぶつ</rt></ruby>の<ruby>写真<rt>しゃしん</rt></ruby>を<ruby>撮<rt>と</rt></ruby>ることが<ruby>好<rt>す</rt></ruby>きです。",
+          "I like taking photos of animals."
+        ],
+        "N3": [
+          "<ruby>週末<rt>しゅうまつ</rt></ruby>は、<ruby>子<rt>こ</rt></ruby>どもと<ruby>動物園<rt>どうぶつえん</rt></ruby>で<ruby>動物<rt>どうぶつ</rt></ruby>を<ruby>見<rt>み</rt></ruby>るようにしています。",
+          "On weekends, I make a point of looking at the animals at the zoo with my child."
+        ],
+        "N2": [
+          "<ruby>可愛<rt>かわい</rt></ruby>いものの、<ruby>野生<rt>やせい</rt></ruby>の<ruby>動物<rt>どうぶつ</rt></ruby>にむやみに<ruby>近<rt>ちか</rt></ruby>づくべきではない。",
+          "Although they're cute, one shouldn't carelessly approach wild animals."
+        ],
+        "N1": [
+          "<ruby>絶滅<rt>ぜつめつ</rt></ruby>の<ruby>危機<rt>きき</rt></ruby>にある<ruby>動物<rt>どうぶつ</rt></ruby>を<ruby>守<rt>まも</rt></ruby>るためには、<ruby>生息地<rt>せいそくち</rt></ruby>そのものを<ruby>保全<rt>ほぜん</rt></ruby>せざるを<ruby>得<rt>え</rt></ruby>ない。",
+          "To protect animals at risk of extinction, we have no choice but to conserve their very habitats."
+        ]
+      },
+      "mnem": "動 (move) + 物 (thing) = a \"moving thing\" — an animal (as opposed to plants, 植物).",
+      "tip": "動物 is animals in general; contrast 植物 (しょくぶつ, plants) which shares the 〜物 pattern. A zoo is 動物園 (どうぶつえん).",
+      "accent": 0
+    },
+    {
+      "key": "mnn:18:19",
+      "kana": "うま",
+      "kanji": "馬",
+      "context": "",
+      "mean": "horse",
+      "cat": "noun",
+      "type": "",
+      "trans": "",
+      "dict": "馬",
+      "dictRead": "うま",
+      "audio": "/Audio/minnamoi/bai18/00010101001100010.mp3",
+      "levels": {
+        "N5": [
+          "あそこに<ruby>馬<rt>うま</rt></ruby>がいます。",
+          "There's a horse over there."
+        ],
+        "N4": [
+          "<ruby>北海道<rt>ほっかいどう</rt></ruby>で<ruby>馬<rt>うま</rt></ruby>の<ruby>写真<rt>しゃしん</rt></ruby>を<ruby>撮<rt>と</rt></ruby>りたいです。",
+          "I want to take photos of horses in Hokkaido."
+        ],
+        "N3": [
+          "<ruby>牧場<rt>ぼくじょう</rt></ruby>では、<ruby>毎朝<rt>まいあさ</rt></ruby><ruby>馬<rt>うま</rt></ruby>に<ruby>餌<rt>えさ</rt></ruby>をやるようにしています。",
+          "At the ranch, I make a point of feeding the horses every morning."
+        ],
+        "N2": [
+          "この<ruby>馬<rt>うま</rt></ruby>はおとなしいものの、<ruby>知<rt>し</rt></ruby>らない<ruby>人<rt>ひと</rt></ruby>には<ruby>気<rt>き</rt></ruby>をつけたほうがいい。",
+          "Although this horse is gentle, you'd better be careful around strangers."
+        ],
+        "N1": [
+          "<ruby>幼<rt>おさな</rt></ruby>い<ruby>頃<rt>ころ</rt></ruby>から<ruby>共<rt>とも</rt></ruby>に<ruby>育<rt>そだ</rt></ruby>った<ruby>馬<rt>うま</rt></ruby>を<ruby>手放<rt>てばな</rt></ruby>すのは、<ruby>身<rt>み</rt></ruby>を<ruby>切<rt>き</rt></ruby>られるほどつらかった。",
+          "Parting with the horse I had grown up with since childhood was as painful as having my own flesh cut."
+        ]
+      },
+      "mnem": "馬 \"u-ma\" — think of a horse's whinny \"UUU-MAA\"; the kanji 馬 even looks like a horse with a mane and four legs.",
+      "tip": "The counter for horses (and most large animals) is 〜頭 (とう): 馬一頭. Don't confuse 馬 (うま, horse) with the homophone-ish 旨い (うまい, delicious/skillful).",
+      "accent": 2
+    },
+    {
+      "key": "mnn:18:20",
+      "kana": "インターネット",
+      "kanji": "",
+      "context": "〜で",
+      "mean": "the Internet",
+      "cat": "noun",
+      "type": "",
+      "trans": "",
+      "dict": "インターネット",
+      "dictRead": "インターネット",
+      "audio": "/Audio/minnamoi/bai18/00010101001100011.mp3",
+      "levels": {
+        "N5": [
+          "インターネットで<ruby>予約<rt>よやく</rt></ruby>します。",
+          "I make a reservation on the Internet."
+        ],
+        "N4": [
+          "インターネットで<ruby>安<rt>やす</rt></ruby>いホテルを<ruby>探<rt>さが</rt></ruby>したいです。",
+          "I want to look for a cheap hotel on the Internet."
+        ],
+        "N3": [
+          "<ruby>知<rt>し</rt></ruby>らないことばは、インターネットで<ruby>調<rt>しら</rt></ruby>べるようにしています。",
+          "For words I don't know, I make a point of looking them up on the Internet."
+        ],
+        "N2": [
+          "インターネットは<ruby>便利<rt>べんり</rt></ruby>なものの、<ruby>情報<rt>じょうほう</rt></ruby>が<ruby>正<rt>ただ</rt></ruby>しいとは<ruby>限<rt>かぎ</rt></ruby>らない。",
+          "Although the Internet is convenient, its information isn't necessarily correct."
+        ],
+        "N1": [
+          "インターネットの<ruby>普及<rt>ふきゅう</rt></ruby>に<ruby>伴<rt>ともな</rt></ruby>い、<ruby>個人情報<rt>こじんじょうほう</rt></ruby>の<ruby>管理<rt>かんり</rt></ruby>には<ruby>細心<rt>さいしん</rt></ruby>の<ruby>注意<rt>ちゅうい</rt></ruby>を<ruby>払<rt>はら</rt></ruby>わざるを<ruby>得<rt>え</rt></ruby>ない。",
+          "With the spread of the Internet, we have no choice but to exercise the utmost care in managing personal information."
+        ]
+      },
+      "mnem": "\"インターネット\" is the English \"Internet\" in katakana — inta-netto.",
+      "tip": "Commonly clipped to ネット in casual speech. The frame インターネットで (\"on/via the Internet\") uses で for the means.",
+      "accent": 5
+    }
+  ],
+  "grammar": [
+    {
+      "pattern": "V(辞書形) ＋ ことが できます",
+      "structure": "V(辞書形) ＋ ことが できます（can do V）／ N ＋ が できます",
+      "explain": "To say you CAN do something, nominalize the dictionary-form verb with こと and attach ができます: 「漢字を 読む ことが できます」= (I) can read kanji. A noun that already implies an activity can drop こと and take が directly: 「ミラーさんは 運転が できます」= Mr. Miller can drive. できません is the negative.",
+      "examples": [
+        {
+          "jp": "ミラーさんは <ruby>漢字<rt>かんじ</rt></ruby>を <ruby>読<rt>よ</rt></ruby>む ことが できます。",
+          "en": "Mr. Miller can read kanji."
+        },
+        {
+          "jp": "わたしは 100メートル <ruby>泳<rt>およ</rt></ruby>ぐ ことが できます。",
+          "en": "I can swim about 100 meters."
+        },
+        {
+          "jp": "ここで カードで <ruby>払<rt>はら</rt></ruby>う ことが できますか。",
+          "en": "Can I pay by card here?"
+        },
+        {
+          "jp": "ミラーさんは <ruby>運転<rt>うんてん</rt></ruby>が できます。",
+          "en": "Mr. Miller can drive."
+        }
+      ]
+    },
+    {
+      "pattern": "しゅみは V(辞書形) ＋ ことです",
+      "structure": "N（趣味）は ＋ V(辞書形) ＋ ことです",
+      "explain": "こと turns a verb into a noun so it can follow は…です. This is the natural way to state a hobby made of an activity: 「趣味は 映画を 見る ことです」= My hobby is watching movies. If the hobby is a plain noun, no こと is needed (趣味は 音楽です).",
+      "examples": [
+        {
+          "jp": "わたしの <ruby>趣味<rt>しゅみ</rt></ruby>は <ruby>映画<rt>えいが</rt></ruby>を <ruby>見<rt>み</rt></ruby>る ことです。",
+          "en": "My hobby is watching movies."
+        },
+        {
+          "jp": "<ruby>趣味<rt>しゅみ</rt></ruby>は <ruby>古<rt>ふる</rt></ruby>い <ruby>時計<rt>とけい</rt></ruby>を <ruby>集<rt>あつ</rt></ruby>める ことです。",
+          "en": "My hobby is collecting old clocks."
+        },
+        {
+          "jp": "サントスさんの <ruby>趣味<rt>しゅみ</rt></ruby>は <ruby>写真<rt>しゃしん</rt></ruby>を <ruby>撮<rt>と</rt></ruby>る ことです。",
+          "en": "Mr. Santos's hobby is taking photographs."
+        }
+      ]
+    },
+    {
+      "pattern": "V(辞書形)／N の／[quantity]＋ まえに",
+      "structure": "V(辞書形) ＋ まえに ／ N ＋ の ＋ まえに ／ [量]＋ まえに",
+      "explain": "まえに means \"before\". Before a VERB, use the dictionary form regardless of the main clause's tense: 「寝る まえに、日記を 書きます」= Before going to bed, I write my diary. Before a NOUN, insert の: 「食事の まえに」= before a meal. With a quantity of time it means \"~ ago\": 「3年 まえに」= three years ago.",
+      "examples": [
+        {
+          "jp": "<ruby>寝<rt>ね</rt></ruby>る まえに、お<ruby>祈<rt>いの</rt></ruby>りを します。",
+          "en": "Before I go to bed, I pray."
+        },
+        {
+          "jp": "<ruby>食事<rt>しょくじ</rt></ruby>の まえに、この <ruby>薬<rt>くすり</rt></ruby>を <ruby>飲<rt>の</rt></ruby>んで ください。",
+          "en": "Please take this medicine before meals."
+        },
+        {
+          "jp": "<ruby>日本<rt>にほん</rt></ruby>へ <ruby>来<rt>く</rt></ruby>る まえに、<ruby>日本語<rt>にほんご</rt></ruby>を <ruby>勉強<rt>べんきょう</rt></ruby>しました。",
+          "en": "Before coming to Japan, I studied Japanese."
+        },
+        {
+          "jp": "3<ruby>年<rt>ねん</rt></ruby> まえに、<ruby>結婚<rt>けっこん</rt></ruby>しました。",
+          "en": "I got married three years ago."
+        }
+      ]
+    },
+    {
+      "pattern": "なかなか〜ません／ぜひ〜たいです",
+      "structure": "なかなか ＋ [negative] ／ ぜひ ＋ [volition／request]",
+      "explain": "なかなか with a negative means \"not easily / hardly ~ (however hard one tries)\": 「なかなか 家へ 帰る ことが できません」= I just can't get home. ぜひ (\"by all means / definitely\") strengthens a wish or request: 「ぜひ 行きたいです」= I really want to go.",
+      "examples": [
+        {
+          "jp": "<ruby>日本<rt>にほん</rt></ruby>では なかなか <ruby>馬<rt>うま</rt></ruby>を <ruby>見<rt>み</rt></ruby>る ことが できません。",
+          "en": "In Japan you can hardly ever see horses."
+        },
+        {
+          "jp": "<ruby>仕事<rt>しごと</rt></ruby>が <ruby>忙<rt>いそが</rt></ruby>しくて、なかなか <ruby>休<rt>やす</rt></ruby>む ことが できません。",
+          "en": "Work is so busy that I can hardly take any rest."
+        },
+        {
+          "jp": "<ruby>夏休<rt>なつやす</rt></ruby>みに ぜひ <ruby>北海道<rt>ほっかいどう</rt></ruby>へ <ruby>行<rt>い</rt></ruby>きたいです。",
+          "en": "During summer vacation I definitely want to go to Hokkaido."
+        }
+      ]
+    }
+  ],
+  "examples": [
+    {
+      "jp": "ミラーさんは <ruby>漢字<rt>かんじ</rt></ruby>を <ruby>読<rt>よ</rt></ruby>む ことが できます。",
+      "en": "Mr. Miller can read kanji."
+    },
+    {
+      "jp": "わたしの <ruby>趣味<rt>しゅみ</rt></ruby>は <ruby>映画<rt>えいが</rt></ruby>を <ruby>見<rt>み</rt></ruby>る ことです。",
+      "en": "My hobby is watching movies."
+    },
+    {
+      "jp": "<ruby>寝<rt>ね</rt></ruby>る まえに、<ruby>日記<rt>にっき</rt></ruby>を <ruby>書<rt>か</rt></ruby>きます。",
+      "en": "I write in my diary before going to bed."
+    },
+    {
+      "jp": "<ruby>車<rt>くるま</rt></ruby>の <ruby>運転<rt>うんてん</rt></ruby>が できますか。 …はい、できます。",
+      "en": "Can you drive a car? …Yes, I can."
+    },
+    {
+      "jp": "<ruby>大阪城<rt>おおさかじょう</rt></ruby>は <ruby>何時<rt>なんじ</rt></ruby>まで <ruby>見学<rt>けんがく</rt></ruby>が できますか。 …5<ruby>時<rt>じ</rt></ruby>までです。",
+      "en": "Until what time can you tour Osaka Castle? …Until five o'clock."
+    },
+    {
+      "jp": "カードで <ruby>払<rt>はら</rt></ruby>う ことが できますか。 …すみませんが、<ruby>現金<rt>げんきん</rt></ruby>で お<ruby>願<rt>ねが</rt></ruby>いします。",
+      "en": "Can I pay by card? …I'm sorry, cash please."
+    },
+    {
+      "jp": "<ruby>日本<rt>にほん</rt></ruby>の <ruby>子<rt>こ</rt></ruby>どもは <ruby>学校<rt>がっこう</rt></ruby>に <ruby>入<rt>はい</rt></ruby>る まえに、ひらがなを <ruby>覚<rt>おぼ</rt></ruby>えなければ なりませんか。 …いいえ、<ruby>覚<rt>おぼ</rt></ruby>えなくても いいです。",
+      "en": "Do Japanese children have to learn hiragana before entering school? …No, they don't have to."
+    },
+    {
+      "jp": "インターネットで ホテルの <ruby>予約<rt>よやく</rt></ruby>が できます。",
+      "en": "You can book a hotel on the Internet."
+    },
+    {
+      "jp": "いつ <ruby>日本<rt>にほん</rt></ruby>へ <ruby>来<rt>き</rt></ruby>ましたか。 …5<ruby>年<rt>ねん</rt></ruby> まえに <ruby>来<rt>き</rt></ruby>ました。",
+      "en": "When did you come to Japan? …I came five years ago."
+    }
+  ],
+  "conversation": {
+    "title": "趣味は 何ですか (What is your hobby?)",
+    "audio": "/Audio/minnahonsatsu1/63.mp3",
+    "lines": [
+      {
+        "role": "木村",
+        "jp": "サントスさんの <ruby>趣味<rt>しゅみ</rt></ruby>は <ruby>何<rt>なん</rt></ruby>ですか。",
+        "en": "Mr. Santos, what's your hobby?"
+      },
+      {
+        "role": "サントス",
+        "jp": "<ruby>写真<rt>しゃしん</rt></ruby>です。",
+        "en": "Photography."
+      },
+      {
+        "role": "木村",
+        "jp": "どんな <ruby>写真<rt>しゃしん</rt></ruby>を <ruby>撮<rt>と</rt></ruby>りますか。",
+        "en": "What kind of photos do you take?"
+      },
+      {
+        "role": "サントス",
+        "jp": "<ruby>動物<rt>どうぶつ</rt></ruby>の <ruby>写真<rt>しゃしん</rt></ruby>です。<ruby>特<rt>とく</rt></ruby>に <ruby>馬<rt>うま</rt></ruby>が <ruby>好<rt>す</rt></ruby>きです。",
+        "en": "Photos of animals. I especially like horses."
+      },
+      {
+        "role": "木村",
+        "jp": "へえ、それは おもしろいですね。<ruby>日本<rt>にほん</rt></ruby>へ <ruby>来<rt>き</rt></ruby>てから、<ruby>馬<rt>うま</rt></ruby>の <ruby>写真<rt>しゃしん</rt></ruby>を <ruby>撮<rt>と</rt></ruby>りましたか。",
+        "en": "Oh, that's interesting. Since coming to Japan, have you taken any photos of horses?"
+      },
+      {
+        "role": "サントス",
+        "jp": "いいえ。<ruby>日本<rt>にほん</rt></ruby>では なかなか <ruby>馬<rt>うま</rt></ruby>を <ruby>見<rt>み</rt></ruby>る ことが できません。",
+        "en": "No. In Japan you can hardly ever see horses."
+      },
+      {
+        "role": "木村",
+        "jp": "<ruby>北海道<rt>ほっかいどう</rt></ruby>に <ruby>馬<rt>うま</rt></ruby>が たくさん いますよ。",
+        "en": "There are lots of horses in Hokkaido."
+      },
+      {
+        "role": "サントス",
+        "jp": "ほんとうですか。じゃ、<ruby>夏休<rt>なつやす</rt></ruby>みに ぜひ <ruby>行<rt>い</rt></ruby>きたいです。",
+        "en": "Really? Then I definitely want to go there during summer vacation."
+      }
+    ]
+  }
+}

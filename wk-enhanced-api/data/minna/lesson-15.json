@@ -1,0 +1,790 @@
+{
+  "lesson": 15,
+  "title": "Lesson 15",
+  "theme": "Asking/granting permission (〜てもいいです) and prohibition (〜てはいけません), plus 〜ています for an ongoing state / habit / occupation (住んでいます・知っています・持っています・結婚しています)",
+  "source": {
+    "name": "vnjpclub.com",
+    "vocabUrl": "https://www.vnjpclub.com/en/minna-no-nihongo/lesson-15-vocabulary.html",
+    "grammarUrl": "https://www.vnjpclub.com/en/minna-no-nihongo/lesson-15-grammar.html",
+    "note": "Vocabulary, native-speaker audio, and example sentences aggregated from vnjpclub.com (Minna no Nihongo 第2版). For personal study."
+  },
+  "vocab": [
+    {
+      "key": "mnn:15:0",
+      "kana": "おきます",
+      "kanji": "置きます",
+      "context": "荷物を〜",
+      "mean": "to put, place, set down",
+      "cat": "verb",
+      "type": "godan",
+      "trans": "t",
+      "dict": "置く",
+      "dictRead": "おく",
+      "audio": "/Audio/minnamoi/bai15/00010100111011010.mp3",
+      "levels": {
+        "N5": [
+          "つくえの<ruby>上<rt>うえ</rt></ruby>に<ruby>本<rt>ほん</rt></ruby>を<ruby>置<rt>お</rt></ruby>きます。",
+          "I put the book on the desk."
+        ],
+        "N4": [
+          "<ruby>荷物<rt>にもつ</rt></ruby>はここに<ruby>置<rt>お</rt></ruby>いてもいいですか。",
+          "May I put my luggage here?"
+        ],
+        "N3": [
+          "<ruby>忘<rt>わす</rt></ruby>れないように、かぎはいつも<ruby>同<rt>おな</rt></ruby>じ<ruby>場所<rt>ばしょ</rt></ruby>に<ruby>置<rt>お</rt></ruby>くようにしています。",
+          "So I don't forget, I make a point of always putting my keys in the same place."
+        ],
+        "N2": [
+          "<ruby>机<rt>つくえ</rt></ruby>の<ruby>上<rt>うえ</rt></ruby>に<ruby>置<rt>お</rt></ruby>いたはずの<ruby>資料<rt>しりょう</rt></ruby>が、いつの<ruby>間<rt>ま</rt></ruby>にか<ruby>消<rt>き</rt></ruby>えていた。",
+          "The documents I was sure I'd left on the desk had vanished before I knew it."
+        ],
+        "N1": [
+          "<ruby>安全<rt>あんぜん</rt></ruby>を<ruby>最優先<rt>さいゆうせん</rt></ruby>に<ruby>置<rt>お</rt></ruby>いた<ruby>設計<rt>せっけい</rt></ruby>である<ruby>以上<rt>いじょう</rt></ruby>、<ruby>多少<rt>たしょう</rt></ruby>のコスト<ruby>増<rt>ぞう</rt></ruby>は<ruby>避<rt>さ</rt></ruby>けられない。",
+          "Given that this is a design that places safety above all else, some increase in cost is unavoidable."
+        ]
+      },
+      "mnem": "\"OH-koo\" — you say \"oh, OK\" and set the thing down where it belongs: 置く = to put/place.",
+      "tip": "This is 置く (put/place, godan → 置いて), NOT 起きる (get up/wake) despite the similar kana — the draft's \"wake up\" gloss was a homophone slip. 荷物を置く = set luggage down.",
+      "accent": 0
+    },
+    {
+      "key": "mnn:15:1",
+      "kana": "つくります",
+      "kanji": "作ります",
+      "context": "",
+      "mean": "to make, produce, manufacture",
+      "cat": "verb",
+      "type": "godan",
+      "trans": "t",
+      "dict": "作る",
+      "dictRead": "つくる",
+      "audio": "/Audio/minnamoi/bai15/00010100111011011.mp3",
+      "accent": 2
+    },
+    {
+      "key": "mnn:15:2",
+      "kana": "うります",
+      "kanji": "売ります",
+      "context": "",
+      "mean": "to sell",
+      "cat": "verb",
+      "type": "godan",
+      "trans": "t",
+      "dict": "売る",
+      "dictRead": "うる",
+      "audio": "/Audio/minnamoi/bai15/00010100111011100.mp3",
+      "accent": 0
+    },
+    {
+      "key": "mnn:15:3",
+      "kana": "しります",
+      "kanji": "知ります",
+      "context": "",
+      "mean": "to get to know, learn, find out",
+      "cat": "verb",
+      "type": "godan",
+      "trans": "t",
+      "dict": "知る",
+      "dictRead": "しる",
+      "audio": "/Audio/minnamoi/bai15/00010100111011101.mp3",
+      "accent": 0
+    },
+    {
+      "key": "mnn:15:4",
+      "kana": "すみます",
+      "kanji": "住みます",
+      "context": "大阪に〜",
+      "mean": "to live, reside",
+      "cat": "verb",
+      "type": "godan",
+      "trans": "i",
+      "dict": "住む",
+      "dictRead": "すむ",
+      "audio": "/Audio/minnamoi/bai15/00010100111011110.mp3",
+      "accent": 1
+    },
+    {
+      "key": "mnn:15:5",
+      "kana": "けんきゅうします",
+      "kanji": "研究します",
+      "context": "経済を〜",
+      "mean": "to do research, study (academically)",
+      "cat": "verb",
+      "type": "irregular",
+      "trans": "t",
+      "dict": "研究する",
+      "dictRead": "けんきゅうする",
+      "audio": "/Audio/minnamoi/bai15/00010100111011111.mp3",
+      "levels": {
+        "N5": [
+          "<ruby>私<rt>わたし</rt></ruby>は<ruby>経済<rt>けいざい</rt></ruby>を<ruby>研究<rt>けんきゅう</rt></ruby>します。",
+          "I research economics."
+        ],
+        "N4": [
+          "<ruby>大学<rt>だいがく</rt></ruby>で<ruby>日本<rt>にほん</rt></ruby>の<ruby>歴史<rt>れきし</rt></ruby>を<ruby>研究<rt>けんきゅう</rt></ruby>しています。",
+          "I'm researching Japanese history at university."
+        ],
+        "N3": [
+          "<ruby>新<rt>あたら</rt></ruby>しい<ruby>薬<rt>くすり</rt></ruby>を<ruby>研究<rt>けんきゅう</rt></ruby>するために、<ruby>毎日<rt>まいにち</rt></ruby><ruby>実験<rt>じっけん</rt></ruby>を<ruby>続<rt>つづ</rt></ruby>けています。",
+          "To research a new medicine, I keep running experiments every day."
+        ],
+        "N2": [
+          "<ruby>長年<rt>ながねん</rt></ruby><ruby>研究<rt>けんきゅう</rt></ruby>してきたテーマである<ruby>以上<rt>いじょう</rt></ruby>、<ruby>簡単<rt>かんたん</rt></ruby>に<ruby>諦<rt>あきら</rt></ruby>めるわけにはいかない。",
+          "Given that this is a topic I've researched for many years, I can't just give up on it easily."
+        ],
+        "N1": [
+          "<ruby>彼<rt>かれ</rt></ruby>が<ruby>生涯<rt>しょうがい</rt></ruby>をかけて<ruby>研究<rt>けんきゅう</rt></ruby>した<ruby>成果<rt>せいか</rt></ruby>は、<ruby>今<rt>いま</rt></ruby>もなお<ruby>この<rt>この</rt></ruby><ruby>分野<rt>ぶんや</rt></ruby>の<ruby>礎<rt>いしずえ</rt></ruby>となっている。",
+          "The fruits of the research he devoted his whole life to remain the foundation of this field even now."
+        ]
+      },
+      "mnem": "研 (sharpen/grind) + 究 (delve into): you grind away, digging deeper and deeper — that's 研究する, to research.",
+      "tip": "A する-verb: 経済を研究する (research economics). Ongoing academic work is naturally 研究しています (\"is researching / is a researcher\") — the Lesson 15 〜ています occupation use; don't confuse it with 勉強する (study for learning) which is broader.",
+      "accent": 0
+    },
+    {
+      "key": "mnn:15:6",
+      "kana": "しりょう",
+      "kanji": "資料",
+      "context": "",
+      "mean": "materials, data, reference documents",
+      "cat": "noun",
+      "type": "",
+      "trans": "",
+      "dict": "資料",
+      "dictRead": "しりょう",
+      "audio": "/Audio/minnamoi/bai15/00010100111100000.mp3",
+      "levels": {
+        "N5": [
+          "この<ruby>資料<rt>しりょう</rt></ruby>を<ruby>見<rt>み</rt></ruby>てもいいですか。",
+          "May I look at these materials?"
+        ],
+        "N4": [
+          "<ruby>会議<rt>かいぎ</rt></ruby>の<ruby>前<rt>まえ</rt></ruby>に、<ruby>資料<rt>しりょう</rt></ruby>をコピーしてください。",
+          "Please copy the materials before the meeting."
+        ],
+        "N3": [
+          "<ruby>発表<rt>はっぴょう</rt></ruby>のために、いろいろな<ruby>資料<rt>しりょう</rt></ruby>を<ruby>集<rt>あつ</rt></ruby>めるようにしています。",
+          "For the presentation, I make a point of gathering all sorts of reference materials."
+        ],
+        "N2": [
+          "<ruby>資料<rt>しりょう</rt></ruby>には<ruby>目<rt>め</rt></ruby>を<ruby>通<rt>とお</rt></ruby>したものの、<ruby>肝心<rt>かんじん</rt></ruby>のデータが<ruby>抜<rt>ぬ</rt></ruby>けていた。",
+          "Although I looked through the materials, the crucial data was missing."
+        ],
+        "N1": [
+          "<ruby>膨大<rt>ぼうだい</rt></ruby>な<ruby>資料<rt>しりょう</rt></ruby>を<ruby>精査<rt>せいさ</rt></ruby>した<ruby>末<rt>すえ</rt></ruby>に、ようやく<ruby>真相<rt>しんそう</rt></ruby>の<ruby>手<rt>て</rt></ruby>がかりをつかんだ。",
+          "After scrutinizing an enormous volume of materials, we finally grasped a clue to the truth."
+        ]
+      },
+      "mnem": "資 (resources) + 料 (fee/stuff): the raw \"stuff\" you draw on — the reference materials and data for your work.",
+      "tip": "資料 is documents/data you consult (research materials, handouts); don't confuse it with 材料 (ざいりょう, physical ingredients/raw materials) — same 料 but 資 = information resources.",
+      "accent": 1
+    },
+    {
+      "key": "mnn:15:7",
+      "kana": "カタログ",
+      "kanji": "",
+      "context": "",
+      "mean": "catalogue",
+      "cat": "noun",
+      "type": "",
+      "trans": "",
+      "dict": "カタログ",
+      "dictRead": "カタログ",
+      "audio": "/Audio/minnamoi/bai15/00010100111100001.mp3",
+      "levels": {
+        "N5": [
+          "この カタログを もらってもいいですか。",
+          "May I take this catalogue?"
+        ],
+        "N4": [
+          "<ruby>新<rt>あたら</rt></ruby>しい<ruby>製品<rt>せいひん</rt></ruby>のカタログを<ruby>見<rt>み</rt></ruby>せてください。",
+          "Please show me the catalogue for the new products."
+        ],
+        "N3": [
+          "ほしい<ruby>物<rt>もの</rt></ruby>があったら、まずカタログで<ruby>調<rt>しら</rt></ruby>べるようにしています。",
+          "When there's something I want, I make a point of checking the catalogue first."
+        ],
+        "N2": [
+          "カタログには<ruby>載<rt>の</rt></ruby>っているものの、その<ruby>色<rt>いろ</rt></ruby>はもう<ruby>売<rt>う</rt></ruby>っていないそうだ。",
+          "Although it's in the catalogue, apparently that color is no longer for sale."
+        ],
+        "N1": [
+          "<ruby>分厚<rt>ぶあつ</rt></ruby>いカタログを<ruby>眺<rt>なが</rt></ruby>めているうちに、かえって<ruby>何<rt>なに</rt></ruby>を<ruby>買<rt>か</rt></ruby>うべきか<ruby>分<rt>わ</rt></ruby>からなくなってしまった。",
+          "As I pored over the thick catalogue, I ended up more unsure than ever about what I should buy."
+        ]
+      },
+      "mnem": "\"Catalogue\" → カタログ (ka-ta-ro-gu); the English word is sitting right inside the katakana.",
+      "tip": "A listing of products; don't confuse it with パンフレット (pamphlet, a thin promotional booklet) — a カタログ is the full product/price list.",
+      "accent": 0
+    },
+    {
+      "key": "mnn:15:8",
+      "kana": "じこくひょう",
+      "kanji": "時刻表",
+      "context": "",
+      "mean": "timetable, schedule (trains/buses)",
+      "cat": "noun",
+      "type": "",
+      "trans": "",
+      "dict": "時刻表",
+      "dictRead": "じこくひょう",
+      "audio": "/Audio/minnamoi/bai15/00010100111100010.mp3",
+      "levels": {
+        "N5": [
+          "<ruby>電車<rt>でんしゃ</rt></ruby>の<ruby>時刻表<rt>じこくひょう</rt></ruby>を<ruby>見<rt>み</rt></ruby>ます。",
+          "I look at the train timetable."
+        ],
+        "N4": [
+          "<ruby>時刻表<rt>じこくひょう</rt></ruby>で<ruby>次<rt>つぎ</rt></ruby>のバスの<ruby>時間<rt>じかん</rt></ruby>を<ruby>調<rt>しら</rt></ruby>べてください。",
+          "Please check the time of the next bus on the timetable."
+        ],
+        "N3": [
+          "<ruby>旅行<rt>りょこう</rt></ruby>の<ruby>前<rt>まえ</rt></ruby>に、<ruby>時刻表<rt>じこくひょう</rt></ruby>を<ruby>確<rt>たし</rt></ruby>かめておくようにしています。",
+          "Before a trip, I make a point of checking the timetable in advance."
+        ],
+        "N2": [
+          "<ruby>時刻表<rt>じこくひょう</rt></ruby>どおりに<ruby>来<rt>く</rt></ruby>るはずの<ruby>電車<rt>でんしゃ</rt></ruby>が、なぜか<ruby>今日<rt>きょう</rt></ruby>は<ruby>遅<rt>おく</rt></ruby>れている。",
+          "The train that's supposed to come right on schedule is, for some reason, running late today."
+        ],
+        "N1": [
+          "<ruby>地方<rt>ちほう</rt></ruby>の<ruby>路線<rt>ろせん</rt></ruby>では、<ruby>時刻表<rt>じこくひょう</rt></ruby>が<ruby>一日<rt>いちにち</rt></ruby>に<ruby>数本<rt>すうほん</rt></ruby>しかないことも<ruby>珍<rt>めずら</rt></ruby>しくない。",
+          "On rural lines, it is not unusual for the timetable to list only a handful of departures a day."
+        ]
+      },
+      "mnem": "時刻 (precise time of day) + 表 (chart/table) = a chart of exact times, i.e. a timetable.",
+      "tip": "時刻表 is the printed schedule of departure times; 時間 (じかん) is time in general. The 刻 stresses a precise clock moment, so 時刻表 fits trains/buses, not a vague plan.",
+      "accent": 0
+    },
+    {
+      "key": "mnn:15:9",
+      "kana": "ふく",
+      "kanji": "服",
+      "context": "",
+      "mean": "clothes, clothing",
+      "cat": "noun",
+      "type": "",
+      "trans": "",
+      "dict": "服",
+      "dictRead": "ふく",
+      "audio": "/Audio/minnamoi/bai15/00010100111100011.mp3",
+      "levels": {
+        "N5": [
+          "<ruby>新<rt>あたら</rt></ruby>しい<ruby>服<rt>ふく</rt></ruby>を<ruby>買<rt>か</rt></ruby>います。",
+          "I buy new clothes."
+        ],
+        "N4": [
+          "その<ruby>店<rt>みせ</rt></ruby>では、<ruby>安<rt>やす</rt></ruby>い<ruby>服<rt>ふく</rt></ruby>を<ruby>売<rt>う</rt></ruby>っています。",
+          "That store sells cheap clothes."
+        ],
+        "N3": [
+          "<ruby>出<rt>で</rt></ruby>かける<ruby>前<rt>まえ</rt></ruby>に、<ruby>天気<rt>てんき</rt></ruby>に<ruby>合<rt>あ</rt></ruby>った<ruby>服<rt>ふく</rt></ruby>を<ruby>選<rt>えら</rt></ruby>ぶようにしています。",
+          "Before going out, I make a point of choosing clothes suited to the weather."
+        ],
+        "N2": [
+          "せっかく<ruby>買<rt>か</rt></ruby>った<ruby>服<rt>ふく</rt></ruby>だが、サイズが<ruby>合<rt>あ</rt></ruby>わず<ruby>一度<rt>いちど</rt></ruby>も<ruby>着<rt>き</rt></ruby>ていない。",
+          "Although I went to the trouble of buying the clothes, they don't fit, so I haven't worn them once."
+        ],
+        "N1": [
+          "その<ruby>土地<rt>とち</rt></ruby>の<ruby>気候<rt>きこう</rt></ruby>や<ruby>文化<rt>ぶんか</rt></ruby>は、<ruby>人々<rt>ひとびと</rt></ruby>の<ruby>着<rt>き</rt></ruby>る<ruby>服<rt>ふく</rt></ruby>にもおのずと<ruby>表<rt>あらわ</rt></ruby>れるものだ。",
+          "A region's climate and culture naturally reveal themselves even in the clothes its people wear."
+        ]
+      },
+      "mnem": "\"Foo-koo\" — you \"put a hook\" (fu-ku) through your clothes onto the hanger; 服 = clothes.",
+      "tip": "服 is clothes as a general category (worn on the body); 服を着る = wear clothes. Contrast 洋服 (ようふく, Western-style clothing) — 服 is the broader everyday word.",
+      "accent": 2
+    },
+    {
+      "key": "mnn:15:10",
+      "kana": "せいひん",
+      "kanji": "製品",
+      "context": "",
+      "mean": "product, manufactured goods",
+      "cat": "noun",
+      "type": "",
+      "trans": "",
+      "dict": "製品",
+      "dictRead": "せいひん",
+      "audio": "/Audio/minnamoi/bai15/00010100111100100.mp3",
+      "levels": {
+        "N5": [
+          "この<ruby>会社<rt>かいしゃ</rt></ruby>の<ruby>製品<rt>せいひん</rt></ruby>は<ruby>有名<rt>ゆうめい</rt></ruby>です。",
+          "This company's products are famous."
+        ],
+        "N4": [
+          "<ruby>新<rt>あたら</rt></ruby>しい<ruby>製品<rt>せいひん</rt></ruby>は<ruby>来月<rt>らいげつ</rt></ruby><ruby>売<rt>う</rt></ruby>ります。",
+          "We'll sell the new product next month."
+        ],
+        "N3": [
+          "お<ruby>客様<rt>きゃくさま</rt></ruby>に<ruby>安全<rt>あんぜん</rt></ruby>な<ruby>製品<rt>せいひん</rt></ruby>を<ruby>届<rt>とど</rt></ruby>けるようにしています。",
+          "We make a point of delivering safe products to our customers."
+        ],
+        "N2": [
+          "デザインはいいものの、この<ruby>製品<rt>せいひん</rt></ruby>は<ruby>値段<rt>ねだん</rt></ruby>が<ruby>高<rt>たか</rt></ruby>すぎて<ruby>売<rt>う</rt></ruby>れないだろう。",
+          "The design is good, but this product is too expensive, so it probably won't sell."
+        ],
+        "N1": [
+          "<ruby>自社<rt>じしゃ</rt></ruby><ruby>製品<rt>せいひん</rt></ruby>の<ruby>品質<rt>ひんしつ</rt></ruby>に<ruby>絶対<rt>ぜったい</rt></ruby>の<ruby>自信<rt>じしん</rt></ruby>があるからこそ、この<ruby>価格<rt>かかく</rt></ruby>で<ruby>勝負<rt>しょうぶ</rt></ruby>できるのだ。",
+          "It is precisely because we have absolute confidence in the quality of our own products that we can compete at this price."
+        ]
+      },
+      "mnem": "製 (manufacture) + 品 (goods) = manufactured goods — a finished product.",
+      "tip": "製品 is a finished manufactured item; contrast 商品 (しょうひん, merchandise for sale) and 作品 (さくひん, a creative work). 電気製品 = electrical appliances.",
+      "accent": 0
+    },
+    {
+      "key": "mnn:15:11",
+      "kana": "ソフト",
+      "kanji": "",
+      "context": "",
+      "mean": "software; soft",
+      "cat": "noun",
+      "type": "",
+      "trans": "",
+      "dict": "ソフト",
+      "dictRead": "ソフト",
+      "audio": "/Audio/minnamoi/bai15/00010100111100101.mp3",
+      "levels": {
+        "N5": [
+          "この<ruby>会社<rt>かいしゃ</rt></ruby>はソフトを<ruby>作<rt>つく</rt></ruby>っています。",
+          "This company makes software."
+        ],
+        "N4": [
+          "<ruby>新<rt>あたら</rt></ruby>しいソフトをパソコンに<ruby>入<rt>い</rt></ruby>れました。",
+          "I installed new software on my computer."
+        ],
+        "N3": [
+          "<ruby>仕事<rt>しごと</rt></ruby>で<ruby>使<rt>つか</rt></ruby>うソフトは、いつも<ruby>最新<rt>さいしん</rt></ruby>にしておくようにしています。",
+          "I make a point of always keeping the software I use for work up to date."
+        ],
+        "N2": [
+          "このソフトは<ruby>便利<rt>べんり</rt></ruby>なものの、<ruby>使<rt>つか</rt></ruby>い<ruby>方<rt>かた</rt></ruby>が<ruby>難<rt>むずか</rt></ruby>しくてなかなか<ruby>慣<rt>な</rt></ruby>れない。",
+          "This software is handy, but it's hard to use, so I just can't get used to it."
+        ],
+        "N1": [
+          "<ruby>優<rt>すぐ</rt></ruby>れたソフトを<ruby>開発<rt>かいはつ</rt></ruby>するには、<ruby>技術<rt>ぎじゅつ</rt></ruby>のみならず<ruby>利用者<rt>りようしゃ</rt></ruby>への<ruby>深<rt>ふか</rt></ruby>い<ruby>理解<rt>りかい</rt></ruby>が<ruby>欠<rt>か</rt></ruby>かせない。",
+          "To develop excellent software, a deep understanding of the user, not just technical skill, is indispensable."
+        ]
+      },
+      "mnem": "Short for \"software\" — ソフト (so-fu-to); the clipped English loanword. (It can also mean \"soft,\" but in Minna it's software.)",
+      "tip": "ソフト is the clipped form of ソフトウェア (software); the Minna sense is computer software. Contrast ハード (hardware). As \"soft\" it's an adjective-ish loan (ソフトクリーム = soft-serve) — context decides.",
+      "accent": 1
+    },
+    {
+      "key": "mnn:15:12",
+      "kana": "でんしじしょ",
+      "kanji": "電子辞書",
+      "context": "",
+      "mean": "electronic dictionary",
+      "cat": "noun",
+      "type": "",
+      "trans": "",
+      "dict": "電子辞書",
+      "dictRead": "でんしじしょ",
+      "audio": "/Audio/minnamoi/bai15/00010100111100110.mp3",
+      "levels": {
+        "N5": [
+          "<ruby>私<rt>わたし</rt></ruby>は<ruby>電子辞書<rt>でんしじしょ</rt></ruby>を<ruby>持<rt>も</rt></ruby>っています。",
+          "I have an electronic dictionary."
+        ],
+        "N4": [
+          "<ruby>分<rt>わ</rt></ruby>からない<ruby>言葉<rt>ことば</rt></ruby>は<ruby>電子辞書<rt>でんしじしょ</rt></ruby>で<ruby>調<rt>しら</rt></ruby>べます。",
+          "I look up words I don't know in my electronic dictionary."
+        ],
+        "N3": [
+          "<ruby>漢字<rt>かんじ</rt></ruby>を<ruby>覚<rt>おぼ</rt></ruby>えるために、<ruby>電子辞書<rt>でんしじしょ</rt></ruby>をよく<ruby>使<rt>つか</rt></ruby>うようにしています。",
+          "To memorize kanji, I make a point of using my electronic dictionary often."
+        ],
+        "N2": [
+          "スマホのアプリが<ruby>普及<rt>ふきゅう</rt></ruby>したものの、<ruby>電子辞書<rt>でんしじしょ</rt></ruby>の<ruby>使<rt>つか</rt></ruby>いやすさを<ruby>好<rt>この</rt></ruby>む<ruby>人<rt>ひと</rt></ruby>も<ruby>多<rt>おお</rt></ruby>い。",
+          "Although smartphone apps have spread, many people still prefer the ease of use of an electronic dictionary."
+        ],
+        "N1": [
+          "かつては<ruby>受験生<rt>じゅけんせい</rt></ruby>の<ruby>必需品<rt>ひつじゅひん</rt></ruby>だった<ruby>電子辞書<rt>でんしじしょ</rt></ruby>も、<ruby>今<rt>いま</rt></ruby>やその<ruby>役割<rt>やくわり</rt></ruby>をアプリに<ruby>譲<rt>ゆず</rt></ruby>りつつある。",
+          "The electronic dictionary, once a must-have for exam students, is now gradually ceding its role to apps."
+        ]
+      },
+      "mnem": "電子 (electronic) + 辞書 (dictionary) = a dictionary that runs on electronics — an electronic dictionary.",
+      "tip": "電子辞書 is the standalone dedicated device (popular with Japanese learners); 辞書 alone is any dictionary. The 電子 prefix (\"electronic\") also gives 電子メール (email), 電子レンジ (microwave).",
+      "accent": 4
+    },
+    {
+      "key": "mnn:15:13",
+      "kana": "けいざい",
+      "kanji": "経済",
+      "context": "",
+      "mean": "economy, economics",
+      "cat": "noun",
+      "type": "",
+      "trans": "",
+      "dict": "経済",
+      "dictRead": "けいざい",
+      "audio": "/Audio/minnamoi/bai15/00010100111100111.mp3",
+      "levels": {
+        "N5": [
+          "<ruby>私<rt>わたし</rt></ruby>は<ruby>経済<rt>けいざい</rt></ruby>を<ruby>勉強<rt>べんきょう</rt></ruby>しています。",
+          "I'm studying economics."
+        ],
+        "N4": [
+          "この<ruby>本<rt>ほん</rt></ruby>は<ruby>日本<rt>にほん</rt></ruby>の<ruby>経済<rt>けいざい</rt></ruby>について<ruby>書<rt>か</rt></ruby>いてあります。",
+          "This book is written about Japan's economy."
+        ],
+        "N3": [
+          "<ruby>世界<rt>せかい</rt></ruby>の<ruby>経済<rt>けいざい</rt></ruby>のニュースを<ruby>毎朝<rt>まいあさ</rt></ruby><ruby>読<rt>よ</rt></ruby>むようにしています。",
+          "I make a point of reading the world economic news every morning."
+        ],
+        "N2": [
+          "<ruby>景気<rt>けいき</rt></ruby>は<ruby>回復<rt>かいふく</rt></ruby>しつつあるものの、<ruby>地方<rt>ちほう</rt></ruby>の<ruby>経済<rt>けいざい</rt></ruby>はまだ<ruby>厳<rt>きび</rt></ruby>しい<ruby>状況<rt>じょうきょう</rt></ruby>だ。",
+          "Although the business climate is recovering, the regional economy is still in a tough situation."
+        ],
+        "N1": [
+          "<ruby>一国<rt>いっこく</rt></ruby>の<ruby>経済<rt>けいざい</rt></ruby>を<ruby>語<rt>かた</rt></ruby>る<ruby>上<rt>うえ</rt></ruby>で、<ruby>金融政策<rt>きんゆうせいさく</rt></ruby>の<ruby>影響<rt>えいきょう</rt></ruby>を<ruby>抜<rt>ぬ</rt></ruby>きに<ruby>論<rt>ろん</rt></ruby>じることはできない。",
+          "In discussing a nation's economy, one cannot leave out the impact of monetary policy."
+        ]
+      },
+      "mnem": "経済 (kei-zai) — think \"economics is about how a country KEIps ZAIn (keeps things running)\"; 経 (manage) + 済 (finish/settle) = managing resources.",
+      "tip": "経済 covers both \"economy\" (the system) and \"economics\" (the study); 経済を研究する = research economics. Don't confuse it with 経営 (けいえい, business management) — 経済 is the macro system.",
+      "accent": 1
+    },
+    {
+      "key": "mnn:15:14",
+      "kana": "しやくしょ",
+      "kanji": "市役所",
+      "context": "",
+      "mean": "city hall, municipal office",
+      "cat": "noun",
+      "type": "",
+      "trans": "",
+      "dict": "市役所",
+      "dictRead": "しやくしょ",
+      "audio": "/Audio/minnamoi/bai15/00010100111101000.mp3",
+      "levels": {
+        "N5": [
+          "<ruby>市役所<rt>しやくしょ</rt></ruby>はあそこです。",
+          "The city hall is over there."
+        ],
+        "N4": [
+          "<ruby>市役所<rt>しやくしょ</rt></ruby>で<ruby>書類<rt>しょるい</rt></ruby>をもらってください。",
+          "Please get the documents at the city hall."
+        ],
+        "N3": [
+          "<ruby>引<rt>ひ</rt></ruby>っ<ruby>越<rt>こ</rt></ruby>したら、まず<ruby>市役所<rt>しやくしょ</rt></ruby>で<ruby>住所<rt>じゅうしょ</rt></ruby>の<ruby>手続<rt>てつづ</rt></ruby>きをするようにしています。",
+          "When I move, I make a point of first doing the address paperwork at the city hall."
+        ],
+        "N2": [
+          "<ruby>市役所<rt>しやくしょ</rt></ruby>に<ruby>問<rt>と</rt></ruby>い<ruby>合<rt>あ</rt></ruby>わせたものの、<ruby>担当者<rt>たんとうしゃ</rt></ruby>が<ruby>不在<rt>ふざい</rt></ruby>で<ruby>返事<rt>へんじ</rt></ruby>がもらえなかった。",
+          "Although I inquired at the city hall, the person in charge was out, so I couldn't get an answer."
+        ],
+        "N1": [
+          "<ruby>行政<rt>ぎょうせい</rt></ruby>サービスの<ruby>電子化<rt>でんしか</rt></ruby>が<ruby>進<rt>すす</rt></ruby>み、わざわざ<ruby>市役所<rt>しやくしょ</rt></ruby>まで<ruby>足<rt>あし</rt></ruby>を<ruby>運<rt>はこ</rt></ruby>ぶ<ruby>必要<rt>ひつよう</rt></ruby>も<ruby>減<rt>へ</rt></ruby>りつつある。",
+          "As the digitization of administrative services advances, the need to make the trip to city hall is also gradually decreasing."
+        ]
+      },
+      "mnem": "市 (city) + 役所 (government office) = the city's government office — city hall.",
+      "tip": "市役所 is a CITY's office; a town uses 町役所 (まちやくば/ちょうやくば) and a ward uses 区役所 (くやくしょ). The bare 役所 (やくしょ) is any government office.",
+      "accent": 2
+    },
+    {
+      "key": "mnn:15:15",
+      "kana": "こうこう",
+      "kanji": "高校",
+      "context": "",
+      "mean": "senior high school",
+      "cat": "noun",
+      "type": "",
+      "trans": "",
+      "dict": "高校",
+      "dictRead": "こうこう",
+      "audio": "/Audio/minnamoi/bai15/00010100111101001.mp3",
+      "levels": {
+        "N5": [
+          "<ruby>姉<rt>あね</rt></ruby>は<ruby>高校<rt>こうこう</rt></ruby>で<ruby>英語<rt>えいご</rt></ruby>を<ruby>教<rt>おし</rt></ruby>えています。",
+          "My older sister teaches English at a high school."
+        ],
+        "N4": [
+          "<ruby>高校<rt>こうこう</rt></ruby>のとき、サッカーを<ruby>習<rt>なら</rt></ruby>っていました。",
+          "When I was in high school, I was learning soccer."
+        ],
+        "N3": [
+          "<ruby>高校<rt>こうこう</rt></ruby>を<ruby>卒業<rt>そつぎょう</rt></ruby>したら、<ruby>東京<rt>とうきょう</rt></ruby>の<ruby>大学<rt>だいがく</rt></ruby>へ<ruby>行<rt>い</rt></ruby>くつもりです。",
+          "After I graduate from high school, I intend to go to a university in Tokyo."
+        ],
+        "N2": [
+          "<ruby>高校<rt>こうこう</rt></ruby>の<ruby>三年間<rt>さんねんかん</rt></ruby>は、<ruby>勉強<rt>べんきょう</rt></ruby>だけでなく<ruby>部活<rt>ぶかつ</rt></ruby>にも<ruby>打<rt>う</rt></ruby>ち<ruby>込<rt>こ</rt></ruby>んだものだ。",
+          "During my three years of high school, I threw myself not only into studying but into club activities too."
+        ],
+        "N1": [
+          "<ruby>高校<rt>こうこう</rt></ruby>で<ruby>培<rt>つちか</rt></ruby>った<ruby>友情<rt>ゆうじょう</rt></ruby>は、<ruby>社会人<rt>しゃかいじん</rt></ruby>になった<ruby>今<rt>いま</rt></ruby>もなお<ruby>大切<rt>たいせつ</rt></ruby>な<ruby>支<rt>ささ</rt></ruby>えとなっている。",
+          "The friendships I cultivated in high school remain a precious support even now that I've entered the working world."
+        ]
+      },
+      "mnem": "高 (high) + 校 (school) — literally \"high school\"; 高校 is the everyday short form of 高等学校.",
+      "tip": "高校 is the common short form of 高等学校 (こうとうがっこう). The Japanese school ladder: 小学校 (elementary) → 中学校 (middle) → 高校 (high) → 大学 (university).",
+      "accent": 0
+    },
+    {
+      "key": "mnn:15:16",
+      "kana": "はいしゃ",
+      "kanji": "歯医者",
+      "context": "",
+      "mean": "dentist; dentist's office",
+      "cat": "noun",
+      "type": "",
+      "trans": "",
+      "dict": "歯医者",
+      "dictRead": "はいしゃ",
+      "audio": "/Audio/minnamoi/bai15/00010100111101010.mp3",
+      "levels": {
+        "N5": [
+          "いい<ruby>歯医者<rt>はいしゃ</rt></ruby>を<ruby>知<rt>し</rt></ruby>っていますか。",
+          "Do you know a good dentist?"
+        ],
+        "N4": [
+          "<ruby>歯<rt>は</rt></ruby>が<ruby>痛<rt>いた</rt></ruby>いから、<ruby>明日<rt>あした</rt></ruby><ruby>歯医者<rt>はいしゃ</rt></ruby>へ<ruby>行<rt>い</rt></ruby>きます。",
+          "My tooth hurts, so I'll go to the dentist tomorrow."
+        ],
+        "N3": [
+          "<ruby>虫歯<rt>むしば</rt></ruby>にならないように、<ruby>半年<rt>はんとし</rt></ruby>に<ruby>一度<rt>いちど</rt></ruby><ruby>歯医者<rt>はいしゃ</rt></ruby>に<ruby>行<rt>い</rt></ruby>くようにしています。",
+          "So I don't get cavities, I make a point of going to the dentist once every six months."
+        ],
+        "N2": [
+          "<ruby>歯医者<rt>はいしゃ</rt></ruby>が<ruby>苦手<rt>にがて</rt></ruby>なものの、これ<ruby>以上<rt>いじょう</rt></ruby><ruby>放<rt>ほう</rt></ruby>っておくわけにもいかない。",
+          "Although I'm not fond of the dentist, I can't very well leave it any longer either."
+        ],
+        "N1": [
+          "<ruby>幼<rt>おさな</rt></ruby>い<ruby>頃<rt>ころ</rt></ruby>の<ruby>恐怖<rt>きょうふ</rt></ruby>が<ruby>尾<rt>お</rt></ruby>を<ruby>引<rt>ひ</rt></ruby>き、<ruby>大人<rt>おとな</rt></ruby>になった<ruby>今<rt>いま</rt></ruby>でも<ruby>歯医者<rt>はいしゃ</rt></ruby>のドアをくぐるのには<ruby>勇気<rt>ゆうき</rt></ruby>がいる。",
+          "The fear from my childhood lingers, and even as an adult it takes courage to step through the dentist's door."
+        ]
+      },
+      "mnem": "歯 (tooth) + 医者 (doctor) = a tooth doctor — a dentist.",
+      "tip": "歯医者 is both the dentist (person) and, colloquially, the dental clinic (歯医者へ行く = go to the dentist's). The formal clinic term is 歯科 (しか) / 歯科医院. 医者 alone = a (medical) doctor.",
+      "accent": 1
+    },
+    {
+      "key": "mnn:15:17",
+      "kana": "どくしん",
+      "kanji": "独身",
+      "context": "",
+      "mean": "single, unmarried",
+      "cat": "noun",
+      "type": "",
+      "trans": "",
+      "dict": "独身",
+      "dictRead": "どくしん",
+      "audio": "/Audio/minnamoi/bai15/00010100111101011.mp3",
+      "levels": {
+        "N5": [
+          "<ruby>兄<rt>あに</rt></ruby>はまだ<ruby>独身<rt>どくしん</rt></ruby>です。",
+          "My older brother is still single."
+        ],
+        "N4": [
+          "ワンさんは<ruby>結婚<rt>けっこん</rt></ruby>していますか。…いいえ、<ruby>独身<rt>どくしん</rt></ruby>です。",
+          "Is Mr. Wang married? …No, he's single."
+        ],
+        "N3": [
+          "<ruby>今<rt>いま</rt></ruby>は<ruby>独身<rt>どくしん</rt></ruby>の<ruby>生活<rt>せいかつ</rt></ruby>を<ruby>楽<rt>たの</rt></ruby>しむようにしています。",
+          "For now, I make a point of enjoying single life."
+        ],
+        "N2": [
+          "<ruby>周<rt>まわ</rt></ruby>りは<ruby>次々<rt>つぎつぎ</rt></ruby>と<ruby>結婚<rt>けっこん</rt></ruby>していくものの、<ruby>私<rt>わたし</rt></ruby>は<ruby>独身<rt>どくしん</rt></ruby>のままでいる。",
+          "Although those around me are getting married one after another, I remain single."
+        ],
+        "N1": [
+          "<ruby>価値観<rt>かちかん</rt></ruby>の<ruby>多様化<rt>たようか</rt></ruby>が<ruby>進<rt>すす</rt></ruby>む<ruby>中<rt>なか</rt></ruby>、<ruby>生涯<rt>しょうがい</rt></ruby><ruby>独身<rt>どくしん</rt></ruby>を<ruby>選<rt>えら</rt></ruby>ぶ<ruby>生<rt>い</rt></ruby>き<ruby>方<rt>かた</rt></ruby>も<ruby>珍<rt>めずら</rt></ruby>しくなくなった。",
+          "As values grow more diverse, choosing to stay single for life has become no rarity."
+        ]
+      },
+      "mnem": "独 (alone) + 身 (body/self) = a person on their own — single, unmarried.",
+      "tip": "独身 is a noun/な-noun for being unmarried; the opposite state is 結婚している (married). In Minna, 「独身ですか」 pairs with the 〜ています answer 「結婚しています / 結婚していません」.",
+      "accent": 0
+    },
+    {
+      "key": "mnn:15:18",
+      "kana": "すみません",
+      "kanji": "",
+      "context": "",
+      "mean": "Excuse me; I'm sorry; Thank you (attention-getter / apology)",
+      "cat": "expression",
+      "type": "",
+      "trans": "",
+      "dict": "すみません",
+      "dictRead": "すみません",
+      "audio": "/Audio/minnamoi/bai15/00010100111101100.mp3",
+      "levels": {
+        "N5": [
+          "すみません、この<ruby>資料<rt>しりょう</rt></ruby>をもらってもいいですか。",
+          "Excuse me, may I take these materials?"
+        ],
+        "N4": [
+          "すみませんが、<ruby>写真<rt>しゃしん</rt></ruby>を<ruby>撮<rt>と</rt></ruby>ってもいいですか。",
+          "Excuse me, but may I take a photo?"
+        ],
+        "N3": [
+          "<ruby>道<rt>みち</rt></ruby>が<ruby>分<rt>わ</rt></ruby>からないときは、すみませんと<ruby>声<rt>こえ</rt></ruby>をかけて<ruby>人<rt>ひと</rt></ruby>に<ruby>聞<rt>き</rt></ruby>くようにしています。",
+          "When I don't know the way, I make a point of saying 'excuse me' and asking someone."
+        ],
+        "N2": [
+          "こちらのミスであるにもかかわらず、<ruby>彼<rt>かれ</rt></ruby>は「すみません」の<ruby>一言<rt>ひとこと</rt></ruby>さえ<ruby>言<rt>い</rt></ruby>わなかった。",
+          "Even though it was our mistake, he wouldn't say so much as a single 'sorry.'"
+        ],
+        "N1": [
+          "「すみません」という<ruby>一言<rt>ひとこと</rt></ruby>が、<ruby>感謝<rt>かんしゃ</rt></ruby>にも<ruby>謝罪<rt>しゃざい</rt></ruby>にもなる<ruby>点<rt>てん</rt></ruby>に、<ruby>日本語<rt>にほんご</rt></ruby>の<ruby>奥<rt>おく</rt></ruby><ruby>深<rt>ぶか</rt></ruby>さが<ruby>表<rt>あらわ</rt></ruby>れている。",
+          "The way the single word 'sumimasen' can serve as both thanks and apology reveals the depth of the Japanese language."
+        ]
+      },
+      "mnem": "\"Sue-me-ma-sen\" — you feel you owe someone, as if they might 'sue' you; すみません softens the imposition of asking, apologizing, or thanking.",
+      "tip": "すみません does triple duty: getting attention (\"excuse me\"), apologizing (\"sorry\"), and thanking for a kindness (\"thank you / you shouldn't have\"). In Lesson 15 it opens a permission request: 「すみませんが、〜てもいいですか」.",
+      "accent": 4
+    }
+  ],
+  "grammar": [
+    {
+      "pattern": "Vて + もいいです (permission: may / it's okay to ~)",
+      "structure": "V(て形) ＋ も いいです（か）／〜ても かまいません",
+      "explain": "The て-form plus もいいです grants or asks permission — \"you may ~ / is it okay to ~?\". As a question 「〜てもいいですか」 asks for permission; the reply is 「ええ、いいですよ。どうぞ」 (go ahead) or a softened refusal 「すみません、ちょっと…」. 〜てもかまいません (\"I don't mind if you ~\") is a slightly more grudging okay.",
+      "examples": [
+        {
+          "jp": "<ruby>写真<rt>しゃしん</rt></ruby>を <ruby>撮<rt>と</rt></ruby>っても いいですか。 …ええ、いいですよ。どうぞ。",
+          "en": "May I take a photo? …Yes, go ahead."
+        },
+        {
+          "jp": "この カタログを もらっても いいですか。",
+          "en": "May I take this catalogue?"
+        },
+        {
+          "jp": "ここに <ruby>座<rt>すわ</rt></ruby>っても いいですか。",
+          "en": "May I sit here?"
+        },
+        {
+          "jp": "<ruby>今晩<rt>こんばん</rt></ruby> おふろに <ruby>入<rt>はい</rt></ruby>っても かまいませんか。 …はい、<ruby>入<rt>はい</rt></ruby>っても かまいません。",
+          "en": "Is it all right if I take a bath tonight? …Yes, that's fine."
+        }
+      ]
+    },
+    {
+      "pattern": "Vて + はいけません (prohibition: must not ~)",
+      "structure": "V(て形) ＋ は いけません",
+      "explain": "The て-form plus はいけません forbids an action — \"you must not ~ / ~ is not allowed\". It's a firm rule or instruction (signs, a teacher, a person in authority). It's the negative answer to a 〜てもいいですか request: 「いいえ、〜てはいけません」.",
+      "examples": [
+        {
+          "jp": "ここで たばこを <ruby>吸<rt>す</rt></ruby>っては いけません。",
+          "en": "You must not smoke here."
+        },
+        {
+          "jp": "この <ruby>部屋<rt>へや</rt></ruby>に <ruby>入<rt>はい</rt></ruby>っては いけません。",
+          "en": "You must not enter this room."
+        },
+        {
+          "jp": "これ、さわっても いいですか。 …いいえ、さわっては いけませんよ。",
+          "en": "May I touch this? …No, you must not touch it."
+        }
+      ]
+    },
+    {
+      "pattern": "Vています (ongoing state / habit / occupation)",
+      "structure": "V(て形) ＋ います",
+      "explain": "Besides an action in progress (Lesson 14), 〜ています expresses a continuing STATE resulting from a change, a repeated habit, or one's occupation/residence. 住んでいます = live (reside), 知っています = know, 持っています = have/own, 結婚しています = be married, 〜で働いています = work at ~. Note 知る: the affirmative is 知っています, but the negative is 知りません (never 知っていません).",
+      "examples": [
+        {
+          "jp": "ミラーさんは <ruby>大阪<rt>おおさか</rt></ruby>に <ruby>住<rt>す</rt></ruby>んで います。",
+          "en": "Mr. Miller lives in Osaka."
+        },
+        {
+          "jp": "<ruby>田中<rt>たなか</rt></ruby>さんを <ruby>知<rt>し</rt></ruby>って いますか。 …はい、<ruby>知<rt>し</rt></ruby>って います。／いいえ、<ruby>知<rt>し</rt></ruby>りません。",
+          "en": "Do you know Mr. Tanaka? …Yes, I do. / No, I don't."
+        },
+        {
+          "jp": "<ruby>母<rt>はは</rt></ruby>は <ruby>高校<rt>こうこう</rt></ruby>で <ruby>英語<rt>えいご</rt></ruby>を <ruby>教<rt>おし</rt></ruby>えて います。",
+          "en": "My mother teaches English at a high school."
+        },
+        {
+          "jp": "<ruby>結婚<rt>けっこん</rt></ruby>して いますか。 …いいえ、<ruby>結婚<rt>けっこん</rt></ruby>して いません。<ruby>独身<rt>どくしん</rt></ruby>です。",
+          "en": "Are you married? …No, I'm not married. I'm single."
+        }
+      ]
+    }
+  ],
+  "examples": [
+    {
+      "jp": "<ruby>写真<rt>しゃしん</rt></ruby>を <ruby>撮<rt>と</rt></ruby>っても いいです。",
+      "en": "You may take photos."
+    },
+    {
+      "jp": "この <ruby>辞書<rt>じしょ</rt></ruby>を <ruby>借<rt>か</rt></ruby>りても いいですか。 …すみません、ちょっと…。<ruby>今<rt>いま</rt></ruby> <ruby>使<rt>つか</rt></ruby>って います。",
+      "en": "May I borrow this dictionary? …Sorry, you can't — I'm using it right now."
+    },
+    {
+      "jp": "ここで <ruby>遊<rt>あそ</rt></ruby>んでは いけません。",
+      "en": "You must not play here."
+    },
+    {
+      "jp": "サントスさんは <ruby>電子辞書<rt>でんしじしょ</rt></ruby>を <ruby>持<rt>も</rt></ruby>って います。",
+      "en": "Mr. Santos has an electronic dictionary."
+    },
+    {
+      "jp": "<ruby>市役所<rt>しやくしょ</rt></ruby>の <ruby>電話番号<rt>でんわばんごう</rt></ruby>を <ruby>知<rt>し</rt></ruby>って いますか。 …いいえ、<ruby>知<rt>し</rt></ruby>りません。",
+      "en": "Do you know the phone number of the city office? …No, I don't."
+    },
+    {
+      "jp": "マリアさんは どこに <ruby>住<rt>す</rt></ruby>んで いますか。 …<ruby>大阪<rt>おおさか</rt></ruby>に <ruby>住<rt>す</rt></ruby>んで います。",
+      "en": "Where does Maria live? …She lives in Osaka."
+    },
+    {
+      "jp": "お<ruby>仕事<rt>しごと</rt></ruby>は <ruby>何<rt>なん</rt></ruby>ですか。 …<ruby>教師<rt>きょうし</rt></ruby>です。<ruby>高校<rt>こうこう</rt></ruby>で <ruby>教<rt>おし</rt></ruby>えて います。",
+      "en": "What do you do? …I'm a teacher. I teach at a high school."
+    },
+    {
+      "jp": "IMCは コンピューターソフトを <ruby>作<rt>つく</rt></ruby>って います。",
+      "en": "IMC makes computer software."
+    },
+    {
+      "jp": "どこで <ruby>安<rt>やす</rt></ruby>い <ruby>電気製品<rt>でんきせいひん</rt></ruby>を <ruby>売<rt>う</rt></ruby>って いますか。 …<ruby>大阪<rt>おおさか</rt></ruby>の <ruby>日本橋<rt>にっぽんばし</rt></ruby>で <ruby>売<rt>う</rt></ruby>って います。",
+      "en": "Where are cheap electrical appliances sold? …They're sold in the Nipponbashi area of Osaka."
+    }
+  ],
+  "conversation": {
+    "title": "ご家族は？ (What's your family like?)",
+    "audio": "/Audio/minnahonsatsu1/53.mp3",
+    "lines": [
+      {
+        "role": "木村",
+        "jp": "いい <ruby>映画<rt>えいが</rt></ruby>でしたね。",
+        "en": "That was a good movie, wasn't it?"
+      },
+      {
+        "role": "ミラー",
+        "jp": "ええ。わたしは <ruby>家族<rt>かぞく</rt></ruby>を <ruby>思<rt>おも</rt></ruby>い<ruby>出<rt>だ</rt></ruby>しました。",
+        "en": "Yes. It made me think of my family."
+      },
+      {
+        "role": "木村",
+        "jp": "そうですか。ミラーさんの ご<ruby>家族<rt>かぞく</rt></ruby>は？",
+        "en": "Really? What's your family like, Mr. Miller?"
+      },
+      {
+        "role": "ミラー",
+        "jp": "<ruby>両親<rt>りょうしん</rt></ruby>と <ruby>姉<rt>あね</rt></ruby>が 1<ruby>人<rt>り</rt></ruby> います。",
+        "en": "I have my parents and one older sister."
+      },
+      {
+        "role": "木村",
+        "jp": "どちらに いらっしゃいますか。",
+        "en": "Where do they live?"
+      },
+      {
+        "role": "ミラー",
+        "jp": "<ruby>両親<rt>りょうしん</rt></ruby>は ニューヨークの <ruby>近<rt>ちか</rt></ruby>くに <ruby>住<rt>す</rt></ruby>んで います。<ruby>姉<rt>あね</rt></ruby>は ロンドンで <ruby>働<rt>はたら</rt></ruby>いて います。",
+        "en": "My parents live near New York. My sister works in London."
+      },
+      {
+        "role": "ミラー",
+        "jp": "<ruby>木村<rt>きむら</rt></ruby>さんの ご<ruby>家族<rt>かぞく</rt></ruby>は？",
+        "en": "What about your family, Ms. Kimura?"
+      },
+      {
+        "role": "木村",
+        "jp": "3<ruby>人<rt>にん</rt></ruby>です。<ruby>父<rt>ちち</rt></ruby>は <ruby>銀行員<rt>ぎんこういん</rt></ruby>です。<ruby>母<rt>はは</rt></ruby>は <ruby>高校<rt>こうこう</rt></ruby>で <ruby>英語<rt>えいご</rt></ruby>を <ruby>教<rt>おし</rt></ruby>えて います。",
+        "en": "There are three of us. My father is a bank employee. My mother teaches English at a high school."
+      }
+    ]
+  }
+}

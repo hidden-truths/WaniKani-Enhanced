@@ -1,0 +1,1501 @@
+{
+  "lesson": 21,
+  "title": "Lesson 21",
+  "theme": "Opinions & quotation — 〜と思います (I think that…), 〜と言いました (X said…), 〜でしょう？ (…right?), 〜について (about…), and the casual ね／よ sentence-enders",
+  "source": {
+    "name": "vnjpclub.com",
+    "vocabUrl": "https://www.vnjpclub.com/en/minna-no-nihongo/lesson-21-vocabulary.html",
+    "grammarUrl": "https://www.vnjpclub.com/en/minna-no-nihongo/lesson-21-grammar.html",
+    "note": "Vocabulary, native-speaker audio, and example sentences aggregated from vnjpclub.com (Minna no Nihongo 第2版). For personal study."
+  },
+  "vocab": [
+    {
+      "key": "mnn:21:0",
+      "kana": "おもいます",
+      "kanji": "思います",
+      "context": "",
+      "mean": "to think",
+      "cat": "verb",
+      "type": "godan",
+      "trans": "t",
+      "dict": "思う",
+      "dictRead": "おもう",
+      "audio": "/Audio/minnamoi/bai21/00010101010011100.mp3",
+      "accent": 2
+    },
+    {
+      "key": "mnn:21:1",
+      "kana": "いいます",
+      "kanji": "言います",
+      "context": "",
+      "mean": "to say",
+      "cat": "verb",
+      "type": "godan",
+      "trans": "t",
+      "dict": "言う",
+      "dictRead": "いう",
+      "audio": "/Audio/minnamoi/bai21/00010101010011101.mp3",
+      "accent": 0
+    },
+    {
+      "key": "mnn:21:2",
+      "kana": "かちます",
+      "kanji": "勝ちます",
+      "context": "",
+      "mean": "to win",
+      "cat": "verb",
+      "type": "godan",
+      "trans": "i",
+      "dict": "勝つ",
+      "dictRead": "かつ",
+      "audio": "/Audio/minnamoi/bai21/00010101010011110.mp3",
+      "levels": {
+        "N5": [
+          "<ruby>日本<rt>にほん</rt></ruby>が<ruby>勝<rt>か</rt></ruby>ちました。",
+          "Japan won."
+        ],
+        "N4": [
+          "きのうの<ruby>試合<rt>しあい</rt></ruby>で、わたしたちのチームが<ruby>勝<rt>か</rt></ruby>ちました。",
+          "Our team won in yesterday's match."
+        ],
+        "N3": [
+          "たくさん<ruby>練習<rt>れんしゅう</rt></ruby>すれば、きっと<ruby>勝<rt>か</rt></ruby>てると<ruby>思<rt>おも</rt></ruby>います。",
+          "If we practice a lot, I'm sure we can win."
+        ],
+        "N2": [
+          "<ruby>相手<rt>あいて</rt></ruby>が<ruby>強<rt>つよ</rt></ruby>かったものの、<ruby>最後<rt>さいご</rt></ruby>まであきらめずに<ruby>勝<rt>か</rt></ruby>つことができた。",
+          "Although the opponent was strong, we managed to win by not giving up until the very end."
+        ],
+        "N1": [
+          "<ruby>実力<rt>じつりょく</rt></ruby>では<ruby>劣<rt>おと</rt></ruby>っていたにもかかわらず、<ruby>巧<rt>たく</rt></ruby>みな<ruby>戦術<rt>せんじゅつ</rt></ruby>で<ruby>格上<rt>かくうえ</rt></ruby>の<ruby>相手<rt>あいて</rt></ruby>に<ruby>勝<rt>か</rt></ruby>ってみせた。",
+          "Despite being inferior in raw ability, they pulled off a win against a higher-ranked opponent through clever tactics."
+        ]
+      },
+      "mnem": "\"KAH-tsu\" — you CUT down the other team to win: 勝つ.",
+      "tip": "Godan verb (勝って/勝たない); the direct opposite is 負ける (to lose). You win AT a game with に: 試合に勝つ, not を.",
+      "accent": 2
+    },
+    {
+      "key": "mnn:21:3",
+      "kana": "まけます",
+      "kanji": "負けます",
+      "context": "",
+      "mean": "to lose, be beaten",
+      "cat": "verb",
+      "type": "ichidan",
+      "trans": "i",
+      "dict": "負ける",
+      "dictRead": "まける",
+      "audio": "/Audio/minnamoi/bai21/00010101010011111.mp3",
+      "levels": {
+        "N5": [
+          "わたしたちのチームは<ruby>負<rt>ま</rt></ruby>けました。",
+          "Our team lost."
+        ],
+        "N4": [
+          "きのうの<ruby>試合<rt>しあい</rt></ruby>で、<ruby>日本<rt>にほん</rt></ruby>はブラジルに<ruby>負<rt>ま</rt></ruby>けました。",
+          "In yesterday's match, Japan lost to Brazil."
+        ],
+        "N3": [
+          "こんなに<ruby>練習<rt>れんしゅう</rt></ruby>したのだから、かんたんに<ruby>負<rt>ま</rt></ruby>けるわけにはいかない。",
+          "We've practiced this much, so we can't just lose easily."
+        ],
+        "N2": [
+          "<ruby>相手<rt>あいて</rt></ruby>が<ruby>強<rt>つよ</rt></ruby>いとはいえ、こんなに<ruby>大差<rt>たいさ</rt></ruby>で<ruby>負<rt>ま</rt></ruby>けるとは<ruby>思<rt>おも</rt></ruby>わなかった。",
+          "Granted the opponent was strong, but I never expected us to lose by such a wide margin."
+        ],
+        "N1": [
+          "<ruby>一度<rt>いちど</rt></ruby>や<ruby>二度<rt>にど</rt></ruby><ruby>負<rt>ま</rt></ruby>けたからといって、これまで<ruby>積<rt>つ</rt></ruby>み<ruby>重<rt>かさ</rt></ruby>ねてきた<ruby>努力<rt>どりょく</rt></ruby>が<ruby>無駄<rt>むだ</rt></ruby>になるわけではない。",
+          "Losing once or twice does not mean that the effort you have built up until now goes to waste."
+        ]
+      },
+      "mnem": "\"MA-keru\" — you got MAULed and lost: 負ける.",
+      "tip": "Ichidan and intransitive (負けて/負けない); you lose TO someone with に: ブラジルに負ける. Its pair is 勝つ (to win); don't confuse it with the look-alike compound 負担 (ふたん, burden).",
+      "accent": 0
+    },
+    {
+      "key": "mnn:21:4",
+      "kana": "あります",
+      "kanji": "",
+      "context": "お祭りが〜",
+      "mean": "(a festival) is held, takes place",
+      "cat": "verb",
+      "type": "godan",
+      "trans": "i",
+      "dict": "ある",
+      "dictRead": "ある",
+      "audio": "/Audio/minnamoi/bai21/00010101010100000.mp3",
+      "levels": {
+        "N5": [
+          "あした お<ruby>祭<rt>まつ</rt></ruby>りが あります。",
+          "There's a festival tomorrow."
+        ],
+        "N4": [
+          "<ruby>京都<rt>きょうと</rt></ruby>で <ruby>有名<rt>ゆうめい</rt></ruby>な お<ruby>祭<rt>まつ</rt></ruby>りが あります。",
+          "There's a famous festival in Kyoto."
+        ],
+        "N3": [
+          "<ruby>毎年<rt>まいとし</rt></ruby><ruby>夏<rt>なつ</rt></ruby>に なると、この<ruby>町<rt>まち</rt></ruby>で<ruby>大<rt>おお</rt></ruby>きな お<ruby>祭<rt>まつ</rt></ruby>りが あります。",
+          "Every year when summer comes, there's a big festival in this town."
+        ],
+        "N2": [
+          "<ruby>今年<rt>ことし</rt></ruby>は<ruby>台風<rt>たいふう</rt></ruby>の<ruby>影響<rt>えいきょう</rt></ruby>で、お<ruby>祭<rt>まつ</rt></ruby>りが あるか どうか まだ 分からない。",
+          "Owing to the typhoon this year, it's still unclear whether the festival will be held or not."
+        ],
+        "N1": [
+          "<ruby>数百年<rt>すうひゃくねん</rt></ruby>もの<ruby>歴史<rt>れきし</rt></ruby>を<ruby>誇<rt>ほこ</rt></ruby>るこの お<ruby>祭<rt>まつ</rt></ruby>りが あるからこそ、<ruby>地域<rt>ちいき</rt></ruby>の<ruby>絆<rt>きずな</rt></ruby>は<ruby>今<rt>いま</rt></ruby>も<ruby>保<rt>たも</rt></ruby>たれている。",
+          "It is precisely because this festival, boasting several centuries of history, is held that the community's bonds are still preserved today."
+        ]
+      },
+      "mnem": "お祭りが ある — the festival \"exists,\" i.e. it is being held; the everyday existence verb ある doubles as \"an event takes place.\"",
+      "tip": "For an event, ある means \"is held / takes place,\" not literally \"exists as an object\": お祭りがある, 試合がある, パーティーがある. Godan-irregular (negative ない, past あった); for living things use いる instead.",
+      "accent": 2
+    },
+    {
+      "key": "mnn:21:5",
+      "kana": "やくにたちます",
+      "kanji": "役に立ちます",
+      "context": "",
+      "mean": "to be useful, come in handy",
+      "cat": "verb",
+      "type": "godan",
+      "trans": "i",
+      "dict": "役に立つ",
+      "dictRead": "やくにたつ",
+      "audio": "/Audio/minnamoi/bai21/00010101010100001.mp3",
+      "levels": {
+        "N5": [
+          "この<ruby>辞書<rt>じしょ</rt></ruby>は<ruby>役<rt>やく</rt></ruby>に<ruby>立<rt>た</rt></ruby>ちます。",
+          "This dictionary is useful."
+        ],
+        "N4": [
+          "<ruby>日本語<rt>にほんご</rt></ruby>が できると、<ruby>仕事<rt>しごと</rt></ruby>で<ruby>役<rt>やく</rt></ruby>に<ruby>立<rt>た</rt></ruby>ちます。",
+          "Being able to speak Japanese comes in handy at work."
+        ],
+        "N3": [
+          "<ruby>今<rt>いま</rt></ruby><ruby>習<rt>なら</rt></ruby>っていることは、きっと<ruby>将来<rt>しょうらい</rt></ruby><ruby>役<rt>やく</rt></ruby>に<ruby>立<rt>た</rt></ruby>つと<ruby>思<rt>おも</rt></ruby>います。",
+          "I'm sure what you're learning now will come in handy in the future."
+        ],
+        "N2": [
+          "<ruby>難<rt>むずか</rt></ruby>しい<ruby>資格<rt>しかく</rt></ruby>を<ruby>取<rt>と</rt></ruby>ったものの、<ruby>実際<rt>じっさい</rt></ruby>の<ruby>仕事<rt>しごと</rt></ruby>で<ruby>役<rt>やく</rt></ruby>に<ruby>立<rt>た</rt></ruby>つとは<ruby>限<rt>かぎ</rt></ruby>らない。",
+          "Although I obtained a difficult qualification, it doesn't necessarily prove useful in the actual job."
+        ],
+        "N1": [
+          "<ruby>一見<rt>いっけん</rt></ruby><ruby>無駄<rt>むだ</rt></ruby>に<ruby>思<rt>おも</rt></ruby>える<ruby>経験<rt>けいけん</rt></ruby>であっても、いつか<ruby>思<rt>おも</rt></ruby>いがけない<ruby>形<rt>かたち</rt></ruby>で<ruby>役<rt>やく</rt></ruby>に<ruby>立<rt>た</rt></ruby>つことも<ruby>少<rt>すく</rt></ruby>なくない。",
+          "Even an experience that seems useless at first glance not infrequently proves useful someday in an unexpected way."
+        ]
+      },
+      "mnem": "役 (a role/duty) + 立つ (to stand) — something that \"stands up to its role\" is useful; picture a tool that stands ready to do its job.",
+      "tip": "The whole phrase 役に立つ is the verb (立つ conjugates: 役に立った/役に立たない); the subject is marked with が: 辞書が役に立つ. Something is useful FOR a purpose with に.",
+      "accent": 0
+    },
+    {
+      "key": "mnn:21:6",
+      "kana": "うごきます",
+      "kanji": "動きます",
+      "context": "",
+      "mean": "to move, run, work (of a machine)",
+      "cat": "verb",
+      "type": "godan",
+      "trans": "i",
+      "dict": "動く",
+      "dictRead": "うごく",
+      "audio": "/Audio/minnamoi/bai21/00010101010100010.mp3",
+      "levels": {
+        "N5": [
+          "この<ruby>時計<rt>とけい</rt></ruby>は<ruby>動<rt>うご</rt></ruby>きません。",
+          "This clock doesn't work."
+        ],
+        "N4": [
+          "<ruby>電池<rt>でんち</rt></ruby>を<ruby>入<rt>い</rt></ruby>れると、おもちゃが<ruby>動<rt>うご</rt></ruby>きます。",
+          "When you put batteries in, the toy moves."
+        ],
+        "N3": [
+          "<ruby>写真<rt>しゃしん</rt></ruby>を<ruby>撮<rt>と</rt></ruby>るときは、<ruby>動<rt>うご</rt></ruby>かないでください。",
+          "When I take the photo, please don't move."
+        ],
+        "N2": [
+          "<ruby>古<rt>ふる</rt></ruby>い<ruby>機械<rt>きかい</rt></ruby>だから、いつ<ruby>動<rt>うご</rt></ruby>かなくなっても おかしくない。",
+          "It's an old machine, so it wouldn't be strange for it to stop working at any time."
+        ],
+        "N1": [
+          "<ruby>停電<rt>ていでん</rt></ruby>の<ruby>影響<rt>えいきょう</rt></ruby>で<ruby>信号<rt>しんごう</rt></ruby>が<ruby>動<rt>うご</rt></ruby>かなくなり、<ruby>市内<rt>しない</rt></ruby>の<ruby>交通<rt>こうつう</rt></ruby>は<ruby>大<rt>おお</rt></ruby>きく<ruby>混乱<rt>こんらん</rt></ruby>せざるを<ruby>得<rt>え</rt></ruby>なかった。",
+          "Owing to the power outage the traffic lights stopped working, and traffic across the city could not but fall into great disarray."
+        ]
+      },
+      "mnem": "\"OO-goku\" — you go (goku) somewhere, so you move: 動く. The kanji 動 packs 力 (power) on its right to make things move.",
+      "tip": "Intransitive godan (動いて/動かない) — a thing moves or a machine runs/works on its own. To actively move something use the transitive pair 動かす (うごかす). Note 役に立つ・動く etc. are the plain forms you'll quote with 〜と思う this lesson.",
+      "accent": 2
+    },
+    {
+      "key": "mnn:21:7",
+      "kana": "やめます",
+      "kanji": "辞めます",
+      "context": "会社を〜",
+      "mean": "to quit, resign from [a company]",
+      "cat": "verb",
+      "type": "ichidan",
+      "trans": "t",
+      "dict": "辞める",
+      "dictRead": "やめる",
+      "audio": "/Audio/minnamoi/bai21/00010101010100011.mp3",
+      "levels": {
+        "N5": [
+          "<ruby>来月<rt>らいげつ</rt></ruby><ruby>会社<rt>かいしゃ</rt></ruby>を<ruby>辞<rt>や</rt></ruby>めます。",
+          "I'll quit the company next month."
+        ],
+        "N4": [
+          "<ruby>留学<rt>りゅうがく</rt></ruby>したいので、<ruby>会社<rt>かいしゃ</rt></ruby>を<ruby>辞<rt>や</rt></ruby>めようと<ruby>思<rt>おも</rt></ruby>っています。",
+          "Because I want to study abroad, I'm thinking of quitting my company."
+        ],
+        "N3": [
+          "<ruby>体<rt>からだ</rt></ruby>の<ruby>調子<rt>ちょうし</rt></ruby>が<ruby>悪<rt>わる</rt></ruby>くなったら、<ruby>無理<rt>むり</rt></ruby>をせずに<ruby>会社<rt>かいしゃ</rt></ruby>を<ruby>辞<rt>や</rt></ruby>めるつもりです。",
+          "If my health gets worse, I intend to quit the company rather than overdo it."
+        ],
+        "N2": [
+          "せっかく<ruby>入<rt>はい</rt></ruby>った<ruby>会社<rt>かいしゃ</rt></ruby>を<ruby>辞<rt>や</rt></ruby>めるかどうか、まだ<ruby>迷<rt>まよ</rt></ruby>っている。",
+          "I'm still torn over whether or not to quit the company I went to the trouble of joining."
+        ],
+        "N1": [
+          "<ruby>将来<rt>しょうらい</rt></ruby>を<ruby>棒<rt>ぼう</rt></ruby>に<ruby>振<rt>ふ</rt></ruby>ってでも<ruby>夢<rt>ゆめ</rt></ruby>を<ruby>追<rt>お</rt></ruby>いたいと、<ruby>彼<rt>かれ</rt></ruby>は<ruby>安定<rt>あんてい</rt></ruby>した<ruby>会社<rt>かいしゃ</rt></ruby>を<ruby>辞<rt>や</rt></ruby>めてしまった。",
+          "Willing to throw away his future to chase his dream, he went and quit a stable company."
+        ]
+      },
+      "mnem": "\"YA-meru\" — you say \"yamete!\" (stop!) and give it up: you quit. 辞 is the same 辞 as in 辞書, here \"take your leave.\"",
+      "tip": "You quit a company with を: 会社を辞める. Ichidan (辞めて/辞めない). Don't confuse 辞める (resign a job) with 止める (やめる, stop an activity like smoking — たばこをやめる) — same reading, different kanji and nuance.",
+      "accent": 3
+    },
+    {
+      "key": "mnn:21:8",
+      "kana": "きをつけます",
+      "kanji": "気をつけます",
+      "context": "車に〜",
+      "mean": "to be careful, pay attention",
+      "cat": "verb",
+      "type": "ichidan",
+      "trans": "i",
+      "dict": "気をつける",
+      "dictRead": "きをつける",
+      "audio": "/Audio/minnamoi/bai21/00010101010100100.mp3",
+      "levels": {
+        "N5": [
+          "<ruby>車<rt>くるま</rt></ruby>に<ruby>気<rt>き</rt></ruby>をつけて ください。",
+          "Please be careful of cars."
+        ],
+        "N4": [
+          "<ruby>道<rt>みち</rt></ruby>を<ruby>渡<rt>わた</rt></ruby>るとき、<ruby>車<rt>くるま</rt></ruby>に<ruby>気<rt>き</rt></ruby>をつけて ください。",
+          "When you cross the road, please watch out for cars."
+        ],
+        "N3": [
+          "<ruby>使<rt>つか</rt></ruby>い<ruby>方<rt>かた</rt></ruby>に<ruby>気<rt>き</rt></ruby>をつけなければならないと<ruby>思<rt>おも</rt></ruby>います。",
+          "I think you have to be careful about how you use it."
+        ],
+        "N2": [
+          "<ruby>体<rt>からだ</rt></ruby>に<ruby>気<rt>き</rt></ruby>をつけているつもりでも、つい<ruby>無理<rt>むり</rt></ruby>をしてしまいがちだ。",
+          "Even when I mean to take care of my health, I tend to end up overdoing it."
+        ],
+        "N1": [
+          "<ruby>言葉遣<rt>ことばづか</rt></ruby>いに<ruby>気<rt>き</rt></ruby>をつけないと、<ruby>思<rt>おも</rt></ruby>わぬ<ruby>誤解<rt>ごかい</rt></ruby>を<ruby>招<rt>まね</rt></ruby>きかねない。",
+          "If you're not careful with your choice of words, you risk inviting an unexpected misunderstanding."
+        ]
+      },
+      "mnem": "気 (spirit/attention) を つける (attach) — you \"attach your attention\" to something, i.e. take care.",
+      "tip": "You pay attention TO something with に: 車に気をつける, 健康に気をつける. Also a set farewell: 気をつけて (\"take care\"). Ichidan on つける (気をつけて/気をつけない).",
+      "accent": 0
+    },
+    {
+      "key": "mnn:21:9",
+      "kana": "りゅうがくします",
+      "kanji": "留学します",
+      "context": "",
+      "mean": "to study abroad",
+      "cat": "verb",
+      "type": "irregular",
+      "trans": "i",
+      "dict": "留学する",
+      "dictRead": "りゅうがくする",
+      "audio": "/Audio/minnamoi/bai21/00010101010100101.mp3",
+      "levels": {
+        "N5": [
+          "らいねん <ruby>日本<rt>にほん</rt></ruby>へ <ruby>留学<rt>りゅうがく</rt></ruby>します。",
+          "Next year I'll study abroad in Japan."
+        ],
+        "N4": [
+          "<ruby>父<rt>ちち</rt></ruby>に <ruby>留学<rt>りゅうがく</rt></ruby>したいと <ruby>言<rt>い</rt></ruby>いました。",
+          "I told my father that I wanted to study abroad."
+        ],
+        "N3": [
+          "<ruby>英語<rt>えいご</rt></ruby>が<ruby>上手<rt>じょうず</rt></ruby>になるように、アメリカへ<ruby>留学<rt>りゅうがく</rt></ruby>しようと<ruby>思<rt>おも</rt></ruby>っています。",
+          "I'm thinking of studying abroad in America so that my English gets better."
+        ],
+        "N2": [
+          "<ruby>留学<rt>りゅうがく</rt></ruby>したからといって、<ruby>必<rt>かなら</rt></ruby>ずしも<ruby>語学力<rt>ごがくりょく</rt></ruby>が<ruby>伸<rt>の</rt></ruby>びるとは<ruby>限<rt>かぎ</rt></ruby>らない。",
+          "Just because you've studied abroad doesn't necessarily mean your language ability will improve."
+        ],
+        "N1": [
+          "<ruby>家庭<rt>かてい</rt></ruby>の<ruby>事情<rt>じじょう</rt></ruby>で<ruby>留学<rt>りゅうがく</rt></ruby>を<ruby>断念<rt>だんねん</rt></ruby>せざるを<ruby>得<rt>え</rt></ruby>なかったが、その<ruby>悔<rt>くや</rt></ruby>しさが<ruby>今<rt>いま</rt></ruby>の<ruby>努力<rt>どりょく</rt></ruby>の<ruby>原動力<rt>げんどうりょく</rt></ruby>になっている。",
+          "I had no choice but to give up on studying abroad for family reasons, but that frustration has become the driving force behind my efforts now."
+        ]
+      },
+      "mnem": "留 (stay/remain) + 学 (study) — you \"stay abroad and study\": 留学する.",
+      "tip": "する-verb, so 留学して/留学しない. You study abroad IN a country with に or へ: 日本に留学する. Distinct from just 勉強する (study) — 留学 specifically means going overseas to do it.",
+      "accent": 0
+    },
+    {
+      "key": "mnn:21:10",
+      "kana": "むだ",
+      "kanji": "無駄",
+      "context": "",
+      "mean": "wasteful, pointless, futile",
+      "cat": "adjective",
+      "type": "na-adj",
+      "trans": "",
+      "dict": "無駄",
+      "dictRead": "むだ",
+      "audio": "/Audio/minnamoi/bai21/00010101010100110.mp3",
+      "levels": {
+        "N5": [
+          "それは<ruby>無駄<rt>むだ</rt></ruby>な<ruby>お金<rt>かね</rt></ruby>です。",
+          "That's a waste of money."
+        ],
+        "N4": [
+          "<ruby>会議<rt>かいぎ</rt></ruby>で、<ruby>無駄<rt>むだ</rt></ruby>な コピーが<ruby>多<rt>おお</rt></ruby>いと<ruby>言<rt>い</rt></ruby>いました。",
+          "In the meeting I said there were a lot of wasteful copies."
+        ],
+        "N3": [
+          "<ruby>時間<rt>じかん</rt></ruby>を<ruby>無駄<rt>むだ</rt></ruby>にしないように、<ruby>計画<rt>けいかく</rt></ruby>を<ruby>立<rt>た</rt></ruby>てるようにしています。",
+          "So as not to waste time, I make a point of making a plan."
+        ],
+        "N2": [
+          "<ruby>努力<rt>どりょく</rt></ruby>が<ruby>無駄<rt>むだ</rt></ruby>だったわけではないものの、<ruby>結果<rt>けっか</rt></ruby>には<ruby>結<rt>むす</rt></ruby>びつかなかった。",
+          "It's not that the effort was wasted, but it didn't lead to results."
+        ],
+        "N1": [
+          "<ruby>一切<rt>いっさい</rt></ruby>の<ruby>無駄<rt>むだ</rt></ruby>を<ruby>省<rt>はぶ</rt></ruby>いた<ruby>洗練<rt>せんれん</rt></ruby>された<ruby>設計<rt>せっけい</rt></ruby>こそ、この<ruby>製品<rt>せいひん</rt></ruby>が<ruby>長年<rt>ながねん</rt></ruby><ruby>愛<rt>あい</rt></ruby>される<ruby>理由<rt>りゆう</rt></ruby>だ。",
+          "It is precisely the refined design, stripped of every last bit of waste, that is why this product has been loved for so many years."
+        ]
+      },
+      "mnem": "\"MOO-dah\" — like a cow going \"moo\" for no reason: pointless, a waste.",
+      "tip": "な-adjective: 無駄な時間 (wasteful time), 無駄だ (it's pointless). The set phrase 無駄にする = \"to waste (something).\" Opposite feeling to 役に立つ (useful) — this lesson's other keyword.",
+      "accent": 0
+    },
+    {
+      "key": "mnn:21:11",
+      "kana": "ふべん",
+      "kanji": "不便",
+      "context": "",
+      "mean": "inconvenient",
+      "cat": "adjective",
+      "type": "na-adj",
+      "trans": "",
+      "dict": "不便",
+      "dictRead": "ふべん",
+      "audio": "/Audio/minnamoi/bai21/00010101010100111.mp3",
+      "levels": {
+        "N5": [
+          "この<ruby>町<rt>まち</rt></ruby>は<ruby>不便<rt>ふべん</rt></ruby>です。",
+          "This town is inconvenient."
+        ],
+        "N4": [
+          "<ruby>車<rt>くるま</rt></ruby>が ないと、ここは<ruby>不便<rt>ふべん</rt></ruby>だと<ruby>思<rt>おも</rt></ruby>います。",
+          "I think this place is inconvenient without a car."
+        ],
+        "N3": [
+          "<ruby>駅<rt>えき</rt></ruby>から<ruby>遠<rt>とお</rt></ruby>くて<ruby>不便<rt>ふべん</rt></ruby>なので、<ruby>引<rt>ひ</rt></ruby>っ<ruby>越<rt>こ</rt></ruby>そうと<ruby>思<rt>おも</rt></ruby>っています。",
+          "It's far from the station and inconvenient, so I'm thinking of moving."
+        ],
+        "N2": [
+          "<ruby>田舎<rt>いなか</rt></ruby>の<ruby>暮<rt>く</rt></ruby>らしは<ruby>不便<rt>ふべん</rt></ruby>なものの、<ruby>自然<rt>しぜん</rt></ruby>が<ruby>豊<rt>ゆた</rt></ruby>かで<ruby>心<rt>こころ</rt></ruby>が<ruby>落<rt>お</rt></ruby>ち<ruby>着<rt>つ</rt></ruby>く。",
+          "Life in the countryside is inconvenient, but nature is abundant and it puts my mind at ease."
+        ],
+        "N1": [
+          "<ruby>多少<rt>たしょう</rt></ruby>の<ruby>不便<rt>ふべん</rt></ruby>は<ruby>覚悟<rt>かくご</rt></ruby>の<ruby>上<rt>うえ</rt></ruby>で<ruby>移住<rt>いじゅう</rt></ruby>したのだから、<ruby>今更<rt>いまさら</rt></ruby><ruby>文句<rt>もんく</rt></ruby>を<ruby>言<rt>い</rt></ruby>うわけにはいかない。",
+          "I relocated fully prepared for some inconvenience, so I can hardly complain about it now."
+        ]
+      },
+      "mnem": "不 (not) + 便 (the 便 of 便利 \"convenient\") — \"not convenient\" = inconvenient.",
+      "tip": "な-adjective and the exact opposite of 便利 (べんり, convenient): the 不 prefix negates it. 不便な場所 (inconvenient place), 不便だ. Don't drop the 不 — 便 alone reads びん/べん and doesn't stand as \"convenient.\"",
+      "accent": 1
+    },
+    {
+      "key": "mnn:21:12",
+      "kana": "すごい",
+      "kanji": "",
+      "context": "",
+      "mean": "amazing, terrific, terrible (expresses astonishment)",
+      "cat": "adjective",
+      "type": "i-adj",
+      "trans": "",
+      "dict": "すごい",
+      "dictRead": "すごい",
+      "audio": "/Audio/minnamoi/bai21/00010101010101000.mp3",
+      "levels": {
+        "N5": [
+          "わあ、<ruby>雪<rt>ゆき</rt></ruby>が すごいです。",
+          "Wow, the snow is incredible."
+        ],
+        "N4": [
+          "きのうの<ruby>雨<rt>あめ</rt></ruby>は ほんとうに すごかったです。",
+          "Yesterday's rain was really something."
+        ],
+        "N3": [
+          "<ruby>試合<rt>しあい</rt></ruby>で<ruby>勝<rt>か</rt></ruby>ったなんて、すごいと<ruby>思<rt>おも</rt></ruby>います。",
+          "Winning the match — I think that's amazing."
+        ],
+        "N2": [
+          "<ruby>彼<rt>かれ</rt></ruby>の<ruby>集中力<rt>しゅうちゅうりょく</rt></ruby>は すごいものの、いつも<ruby>体調<rt>たいちょう</rt></ruby>を<ruby>崩<rt>くず</rt></ruby>しがちだ。",
+          "His powers of concentration are amazing, but he tends to keep wearing himself out."
+        ],
+        "N1": [
+          "<ruby>数<rt>すう</rt></ruby><ruby>万人<rt>まんにん</rt></ruby>もの<ruby>観客<rt>かんきゃく</rt></ruby>を<ruby>前<rt>まえ</rt></ruby>に<ruby>物<rt>もの</rt></ruby>おじひとつしない その<ruby>度胸<rt>どきょう</rt></ruby>は、まさに すごいとしか<ruby>言<rt>い</rt></ruby>いようがない。",
+          "That nerve — not flinching in the slightest before tens of thousands of spectators — can only be called astonishing."
+        ]
+      },
+      "mnem": "\"su-GOI\" — a scary GHOUL (goi) is coming: it's an intense, awesome, terrifying thing.",
+      "tip": "い-adjective (すごかった/すごくない). It swings both ways — \"amazing/great\" or \"awful/dreadful\" — the emotion is intensity, and context decides which. Casually すごい also works as \"very\" before another word (すごいおいしい, colloquial for すごくおいしい).",
+      "accent": 2
+    },
+    {
+      "key": "mnn:21:13",
+      "kana": "ほんとう",
+      "kanji": "本当",
+      "context": "",
+      "mean": "truth, reality; true",
+      "cat": "noun",
+      "type": "",
+      "trans": "",
+      "dict": "本当",
+      "dictRead": "ほんとう",
+      "audio": "/Audio/minnamoi/bai21/00010101010101001.mp3",
+      "levels": {
+        "N5": [
+          "それは<ruby>本当<rt>ほんとう</rt></ruby>ですか。",
+          "Is that true?"
+        ],
+        "N4": [
+          "<ruby>彼<rt>かれ</rt></ruby>の<ruby>話<rt>はなし</rt></ruby>は<ruby>本当<rt>ほんとう</rt></ruby>だと<ruby>思<rt>おも</rt></ruby>います。",
+          "I think what he says is true."
+        ],
+        "N3": [
+          "うそか<ruby>本当<rt>ほんとう</rt></ruby>か、<ruby>自分<rt>じぶん</rt></ruby>で<ruby>確<rt>たし</rt></ruby>かめるようにしています。",
+          "I make a point of checking for myself whether something is a lie or the truth."
+        ],
+        "N2": [
+          "<ruby>本当<rt>ほんとう</rt></ruby>のことを<ruby>言<rt>い</rt></ruby>ったものの、だれも<ruby>信<rt>しん</rt></ruby>じてくれなかった。",
+          "Although I told the truth, no one would believe me."
+        ],
+        "N1": [
+          "<ruby>表向<rt>おもてむ</rt></ruby>きの<ruby>理由<rt>りゆう</rt></ruby>はともかく、<ruby>本当<rt>ほんとう</rt></ruby>のところ<ruby>彼<rt>かれ</rt></ruby>が<ruby>何<rt>なに</rt></ruby>を<ruby>考<rt>かんが</rt></ruby>えているのかは<ruby>誰<rt>だれ</rt></ruby>にも分からない。",
+          "The official reason aside, no one knows what he is really thinking deep down."
+        ]
+      },
+      "mnem": "本 (real/origin) + 当 (hit the mark) — what \"hits the mark of reality\" is the truth.",
+      "tip": "As a noun/な-noun: 本当だ (it's true), 本当の話 (a true story), 本当ですか (really?). Its opposite is うそ (a lie). The adverb form is 本当に (really / truly).",
+      "accent": 0
+    },
+    {
+      "key": "mnn:21:14",
+      "kana": "うそ",
+      "kanji": "",
+      "context": "",
+      "mean": "a lie",
+      "cat": "noun",
+      "type": "",
+      "trans": "",
+      "dict": "うそ",
+      "dictRead": "うそ",
+      "audio": "/Audio/minnamoi/bai21/00010101010101010.mp3",
+      "levels": {
+        "N5": [
+          "それは うそです。",
+          "That's a lie."
+        ],
+        "N4": [
+          "<ruby>子<rt>こ</rt></ruby>どもは ときどき うそを つきます。",
+          "Children sometimes tell lies."
+        ],
+        "N3": [
+          "うそを つくと、あとで<ruby>困<rt>こま</rt></ruby>ることに なると<ruby>思<rt>おも</rt></ruby>います。",
+          "I think that if you tell a lie, you'll end up in trouble later."
+        ],
+        "N2": [
+          "<ruby>彼<rt>かれ</rt></ruby>の<ruby>話<rt>はなし</rt></ruby>は うそだと<ruby>分<rt>わ</rt></ruby>かっていたものの、<ruby>黙<rt>だま</rt></ruby>って<ruby>聞<rt>き</rt></ruby>いていた。",
+          "Although I knew his story was a lie, I listened without saying anything."
+        ],
+        "N1": [
+          "たとえ<ruby>相手<rt>あいて</rt></ruby>を<ruby>気遣<rt>きづか</rt></ruby>っての うそであれ、<ruby>信頼<rt>しんらい</rt></ruby>を<ruby>裏切<rt>うらぎ</rt></ruby>る<ruby>行為<rt>こうい</rt></ruby>に<ruby>変<rt>か</rt></ruby>わりはない。",
+          "Even if it's a lie meant out of consideration for the other person, it is no less an act that betrays trust."
+        ]
+      },
+      "mnem": "\"OO-so\" — say \"Oh, so?\" with a doubtful frown, because it's a lie.",
+      "tip": "You \"tell\" a lie with つく: うそをつく. Casually うそ！ on its own = \"No way! / You're kidding!\" Opposite of 本当 (truth). Usually written in kana (rarely 嘘).",
+      "accent": 1
+    },
+    {
+      "key": "mnn:21:15",
+      "kana": "じどうしゃ",
+      "kanji": "自動車",
+      "context": "",
+      "mean": "automobile, car",
+      "cat": "noun",
+      "type": "",
+      "trans": "",
+      "dict": "自動車",
+      "dictRead": "じどうしゃ",
+      "audio": "/Audio/minnamoi/bai21/00010101010101011.mp3",
+      "levels": {
+        "N5": [
+          "これは<ruby>日本<rt>にほん</rt></ruby>の<ruby>自動車<rt>じどうしゃ</rt></ruby>です。",
+          "This is a Japanese car."
+        ],
+        "N4": [
+          "<ruby>日本<rt>にほん</rt></ruby>の<ruby>自動車<rt>じどうしゃ</rt></ruby>は いいと<ruby>思<rt>おも</rt></ruby>います。",
+          "I think Japanese cars are good."
+        ],
+        "N3": [
+          "<ruby>最近<rt>さいきん</rt></ruby>、<ruby>電気<rt>でんき</rt></ruby>で<ruby>動<rt>うご</rt></ruby>く<ruby>自動車<rt>じどうしゃ</rt></ruby>が<ruby>増<rt>ふ</rt></ruby>えてきました。",
+          "Recently, cars that run on electricity have been increasing."
+        ],
+        "N2": [
+          "<ruby>自動車<rt>じどうしゃ</rt></ruby>の<ruby>技術<rt>ぎじゅつ</rt></ruby>は<ruby>年々<rt>ねんねん</rt></ruby><ruby>進歩<rt>しんぽ</rt></ruby>しているものの、<ruby>事故<rt>じこ</rt></ruby>は なかなか<ruby>減<rt>へ</rt></ruby>らない。",
+          "Although automobile technology advances year by year, accidents just won't decrease."
+        ],
+        "N1": [
+          "<ruby>自動運転<rt>じどううんてん</rt></ruby><ruby>自動車<rt>じどうしゃ</rt></ruby>の<ruby>普及<rt>ふきゅう</rt></ruby>は、<ruby>交通<rt>こうつう</rt></ruby>のあり<ruby>方<rt>かた</rt></ruby>そのものを<ruby>根本<rt>こんぽん</rt></ruby>から<ruby>変<rt>か</rt></ruby>えかねない。",
+          "The spread of self-driving automobiles could fundamentally change the very nature of transportation itself."
+        ]
+      },
+      "mnem": "自 (self) + 動 (move) + 車 (vehicle) — a \"self-moving vehicle\" = automobile.",
+      "tip": "自動車 is the formal word; everyday speech usually just says 車 (くるま). Note it contains 動 (move) — this lesson's verb 動く. Don't confuse with 自転車 (じてんしゃ, bicycle), which swaps 動 for 転.",
+      "accent": 2
+    },
+    {
+      "key": "mnn:21:16",
+      "kana": "こうつう",
+      "kanji": "交通",
+      "context": "",
+      "mean": "traffic, transportation",
+      "cat": "noun",
+      "type": "",
+      "trans": "",
+      "dict": "交通",
+      "dictRead": "こうつう",
+      "audio": "/Audio/minnamoi/bai21/00010101010101100.mp3",
+      "levels": {
+        "N5": [
+          "この<ruby>町<rt>まち</rt></ruby>は<ruby>交通<rt>こうつう</rt></ruby>が<ruby>便利<rt>べんり</rt></ruby>です。",
+          "This town has convenient transportation."
+        ],
+        "N4": [
+          "<ruby>東京<rt>とうきょう</rt></ruby>は<ruby>交通<rt>こうつう</rt></ruby>が<ruby>便利<rt>べんり</rt></ruby>だと<ruby>思<rt>おも</rt></ruby>います。",
+          "I think Tokyo has convenient transportation."
+        ],
+        "N3": [
+          "<ruby>朝<rt>あさ</rt></ruby>は<ruby>交通<rt>こうつう</rt></ruby>が<ruby>込<rt>こ</rt></ruby>むので、<ruby>早<rt>はや</rt></ruby>めに<ruby>家<rt>いえ</rt></ruby>を<ruby>出<rt>で</rt></ruby>るようにしています。",
+          "Traffic is heavy in the morning, so I make a point of leaving home early."
+        ],
+        "N2": [
+          "<ruby>事故<rt>じこ</rt></ruby>の<ruby>影響<rt>えいきょう</rt></ruby>で、<ruby>市内<rt>しない</rt></ruby>の<ruby>交通<rt>こうつう</rt></ruby>が<ruby>大<rt>おお</rt></ruby>きく<ruby>乱<rt>みだ</rt></ruby>れているらしい。",
+          "Owing to the accident, the traffic in the city is apparently badly disrupted."
+        ],
+        "N1": [
+          "<ruby>交通<rt>こうつう</rt></ruby><ruby>網<rt>もう</rt></ruby>の<ruby>整備<rt>せいび</rt></ruby>なくして、<ruby>地方<rt>ちほう</rt></ruby><ruby>経済<rt>けいざい</rt></ruby>の<ruby>再生<rt>さいせい</rt></ruby>など<ruby>望<rt>のぞ</rt></ruby>むべくもない。",
+          "Without developing the transport network, there is no hope whatsoever of regional economic revival."
+        ]
+      },
+      "mnem": "交 (cross/exchange) + 通 (pass through) — things \"crossing and passing through\" is traffic.",
+      "tip": "Covers both \"traffic (flow of vehicles)\" and \"transport/transit\" as a system: 交通が便利, 交通事故 (traffic accident), 交通機関 (means of transport). Don't confuse with 通行 (つうこう, passage/pedestrian traffic).",
+      "accent": 0
+    },
+    {
+      "key": "mnn:21:17",
+      "kana": "ぶっか",
+      "kanji": "物価",
+      "context": "",
+      "mean": "prices (of goods), the cost of living",
+      "cat": "noun",
+      "type": "",
+      "trans": "",
+      "dict": "物価",
+      "dictRead": "ぶっか",
+      "audio": "/Audio/minnamoi/bai21/00010101010101101.mp3",
+      "levels": {
+        "N5": [
+          "<ruby>日本<rt>にほん</rt></ruby>は<ruby>物価<rt>ぶっか</rt></ruby>が<ruby>高<rt>たか</rt></ruby>いです。",
+          "Prices are high in Japan."
+        ],
+        "N4": [
+          "この<ruby>国<rt>くに</rt></ruby>は<ruby>物価<rt>ぶっか</rt></ruby>が<ruby>高<rt>たか</rt></ruby>いと<ruby>思<rt>おも</rt></ruby>います。",
+          "I think prices are high in this country."
+        ],
+        "N3": [
+          "<ruby>最近<rt>さいきん</rt></ruby><ruby>物価<rt>ぶっか</rt></ruby>が<ruby>上<rt>あ</rt></ruby>がってきたので、<ruby>節約<rt>せつやく</rt></ruby>するようにしています。",
+          "Prices have been rising lately, so I make a point of economizing."
+        ],
+        "N2": [
+          "<ruby>給料<rt>きゅうりょう</rt></ruby>は<ruby>変<rt>か</rt></ruby>わらないものの、<ruby>物価<rt>ぶっか</rt></ruby>ばかりが<ruby>上<rt>あ</rt></ruby>がって<ruby>生活<rt>せいかつ</rt></ruby>が<ruby>苦<rt>くる</rt></ruby>しい。",
+          "My salary doesn't change, yet only prices go up, and life is hard."
+        ],
+        "N1": [
+          "<ruby>物価<rt>ぶっか</rt></ruby>の<ruby>上昇<rt>じょうしょう</rt></ruby>に<ruby>賃金<rt>ちんぎん</rt></ruby>が<ruby>追<rt>お</rt></ruby>いつかない<ruby>限<rt>かぎ</rt></ruby>り、<ruby>景気<rt>けいき</rt></ruby>の<ruby>本格的<rt>ほんかくてき</rt></ruby>な<ruby>回復<rt>かいふく</rt></ruby>は<ruby>期待<rt>きたい</rt></ruby>できない。",
+          "As long as wages fail to keep pace with rising prices, a genuine economic recovery cannot be expected."
+        ]
+      },
+      "mnem": "物 (goods) + 価 (price/value) — the \"price of goods\" overall = 物価.",
+      "tip": "物価 is prices in the aggregate (the cost of living), always paired with 高い／安い／上がる: 物価が高い. Don't confuse it with 値段 (ねだん), the price of one specific item.",
+      "accent": 0
+    },
+    {
+      "key": "mnn:21:18",
+      "kana": "ほうそう",
+      "kanji": "放送",
+      "context": "〜します",
+      "mean": "broadcast, announcement (〜します: to broadcast)",
+      "cat": "noun",
+      "type": "",
+      "trans": "",
+      "dict": "放送",
+      "dictRead": "ほうそう",
+      "audio": "/Audio/minnamoi/bai21/00010101010101110.mp3",
+      "levels": {
+        "N5": [
+          "<ruby>今<rt>いま</rt></ruby><ruby>放送<rt>ほうそう</rt></ruby>が ありました。",
+          "There was an announcement just now."
+        ],
+        "N4": [
+          "<ruby>駅<rt>えき</rt></ruby>の<ruby>放送<rt>ほうそう</rt></ruby>で、<ruby>電車<rt>でんしゃ</rt></ruby>が<ruby>遅<rt>おく</rt></ruby>れると<ruby>言<rt>い</rt></ruby>いました。",
+          "The station announcement said the train would be late."
+        ],
+        "N3": [
+          "この<ruby>番組<rt>ばんぐみ</rt></ruby>は<ruby>毎週<rt>まいしゅう</rt></ruby><ruby>日曜日<rt>にちようび</rt></ruby>に<ruby>放送<rt>ほうそう</rt></ruby>されています。",
+          "This program is broadcast every Sunday."
+        ],
+        "N2": [
+          "<ruby>台風<rt>たいふう</rt></ruby>の<ruby>影響<rt>えいきょう</rt></ruby>で、<ruby>試合<rt>しあい</rt></ruby>の<ruby>放送<rt>ほうそう</rt></ruby>が<ruby>中止<rt>ちゅうし</rt></ruby>に なるかもしれない。",
+          "Owing to the typhoon, the broadcast of the match may be canceled."
+        ],
+        "N1": [
+          "<ruby>公共<rt>こうきょう</rt></ruby><ruby>放送<rt>ほうそう</rt></ruby>である<ruby>以上<rt>いじょう</rt></ruby>、<ruby>特定<rt>とくてい</rt></ruby>の<ruby>立場<rt>たちば</rt></ruby>に<ruby>偏<rt>かたよ</rt></ruby>らない<ruby>公平<rt>こうへい</rt></ruby>な<ruby>報道<rt>ほうどう</rt></ruby>が<ruby>求<rt>もと</rt></ruby>められる。",
+          "Given that it is public broadcasting, fair reporting that does not lean toward any particular position is required."
+        ]
+      },
+      "mnem": "放 (release/let out) + 送 (send) — you \"send it out into the air\" = a broadcast.",
+      "tip": "する-verb: 放送する (to broadcast), 放送される (to be broadcast). Covers both a public announcement (駅の放送) and a TV/radio broadcast. Don't confuse with 報道 (ほうどう, news reporting) or 番組 (a program).",
+      "accent": 0
+    },
+    {
+      "key": "mnn:21:19",
+      "kana": "ニュース",
+      "kanji": "",
+      "context": "",
+      "mean": "news",
+      "cat": "noun",
+      "type": "",
+      "trans": "",
+      "dict": "ニュース",
+      "dictRead": "ニュース",
+      "audio": "/Audio/minnamoi/bai21/00010101010101111.mp3",
+      "levels": {
+        "N5": [
+          "<ruby>毎晩<rt>まいばん</rt></ruby>ニュースを<ruby>見<rt>み</rt></ruby>ます。",
+          "I watch the news every evening."
+        ],
+        "N4": [
+          "この ニュースを<ruby>知<rt>し</rt></ruby>っていますか。",
+          "Do you know about this news?"
+        ],
+        "N3": [
+          "<ruby>朝<rt>あさ</rt></ruby>は<ruby>忙<rt>いそが</rt></ruby>しくても、ニュースだけは<ruby>見<rt>み</rt></ruby>るようにしています。",
+          "Even when the morning is busy, I make a point of at least watching the news."
+        ],
+        "N2": [
+          "その ニュースを<ruby>聞<rt>き</rt></ruby>いたときは、<ruby>本当<rt>ほんとう</rt></ruby>かどうか<ruby>信<rt>しん</rt></ruby>じられなかった。",
+          "When I heard that news, I couldn't believe whether it was true or not."
+        ],
+        "N1": [
+          "ネット<ruby>上<rt>じょう</rt></ruby>には<ruby>真偽<rt>しんぎ</rt></ruby>の<ruby>怪<rt>あや</rt></ruby>しい ニュースがあふれており、<ruby>情報<rt>じょうほう</rt></ruby>を<ruby>見極<rt>みきわ</rt></ruby>める<ruby>力<rt>ちから</rt></ruby>が これまで<ruby>以上<rt>いじょう</rt></ruby>に<ruby>求<rt>もと</rt></ruby>められている。",
+          "The internet is flooded with news of dubious veracity, and the ability to discern information is demanded more than ever before."
+        ]
+      },
+      "mnem": "\"News\" → ニュース (nyū-su), the English word borrowed straight into katakana.",
+      "tip": "You watch/hear the news with 見る／聞く: ニュースを見る. Don't confuse ニュース (the news) with 放送 (a broadcast) — the news is the content, 放送 is the act of airing it.",
+      "accent": 1
+    },
+    {
+      "key": "mnn:21:20",
+      "kana": "アニメ",
+      "kanji": "",
+      "context": "",
+      "mean": "anime, animation",
+      "cat": "noun",
+      "type": "",
+      "trans": "",
+      "dict": "アニメ",
+      "dictRead": "アニメ",
+      "audio": "/Audio/minnamoi/bai21/00010101010110000.mp3",
+      "levels": {
+        "N5": [
+          "<ruby>日本<rt>にほん</rt></ruby>の アニメが<ruby>好<rt>す</rt></ruby>きです。",
+          "I like Japanese anime."
+        ],
+        "N4": [
+          "<ruby>日本<rt>にほん</rt></ruby>の アニメは おもしろいと<ruby>思<rt>おも</rt></ruby>います。",
+          "I think Japanese anime is interesting."
+        ],
+        "N3": [
+          "この アニメは<ruby>子<rt>こ</rt></ruby>どもだけでなく、<ruby>大人<rt>おとな</rt></ruby>にも<ruby>人気<rt>にんき</rt></ruby>が あります。",
+          "This anime is popular not only with children but with adults too."
+        ],
+        "N2": [
+          "その アニメは<ruby>絵<rt>え</rt></ruby>が きれいなものの、<ruby>話<rt>はなし</rt></ruby>が<ruby>少<rt>すこ</rt></ruby>し<ruby>難<rt>むずか</rt></ruby>しすぎる。",
+          "The art of that anime is beautiful, but the story is a little too difficult."
+        ],
+        "N1": [
+          "<ruby>日本<rt>にほん</rt></ruby>の アニメは、<ruby>今<rt>いま</rt></ruby>や<ruby>一<rt>いち</rt></ruby><ruby>文化<rt>ぶんか</rt></ruby>として<ruby>世界中<rt>せかいじゅう</rt></ruby>で<ruby>評価<rt>ひょうか</rt></ruby>されるに<ruby>至<rt>いた</rt></ruby>っている。",
+          "Japanese anime has now come to be appreciated worldwide as a culture in its own right."
+        ]
+      },
+      "mnem": "Clipped from \"animation\" → アニメ; Japanese loves to shorten long loanwords to four beats.",
+      "tip": "アニメ is a shortening of アニメーション. It specifically means animated film/TV; don't confuse it with マンガ (comic books, print). Both are this lesson's pop-culture vocabulary.",
+      "accent": 1
+    },
+    {
+      "key": "mnn:21:21",
+      "kana": "マンガ",
+      "kanji": "",
+      "context": "",
+      "mean": "comic book, manga",
+      "cat": "noun",
+      "type": "",
+      "trans": "",
+      "dict": "マンガ",
+      "dictRead": "マンガ",
+      "audio": "/Audio/minnamoi/bai21/00010101010110001.mp3",
+      "levels": {
+        "N5": [
+          "わたしは マンガが<ruby>好<rt>す</rt></ruby>きです。",
+          "I like manga."
+        ],
+        "N4": [
+          "<ruby>子<rt>こ</rt></ruby>どもの とき、よく マンガを<ruby>読<rt>よ</rt></ruby>みました。",
+          "When I was a child, I often read manga."
+        ],
+        "N3": [
+          "<ruby>電車<rt>でんしゃ</rt></ruby>の<ruby>中<rt>なか</rt></ruby>で マンガを<ruby>読<rt>よ</rt></ruby>んでいる<ruby>人<rt>ひと</rt></ruby>を よく<ruby>見<rt>み</rt></ruby>ます。",
+          "I often see people reading manga on the train."
+        ],
+        "N2": [
+          "その マンガは<ruby>絵<rt>え</rt></ruby>が シンプルなものの、<ruby>物語<rt>ものがたり</rt></ruby>に<ruby>深<rt>ふか</rt></ruby>みが ある。",
+          "The art of that manga is simple, but the story has depth."
+        ],
+        "N1": [
+          "<ruby>単<rt>たん</rt></ruby>なる<ruby>娯楽<rt>ごらく</rt></ruby>と<ruby>侮<rt>あなど</rt></ruby>られがちな マンガだが、<ruby>社会<rt>しゃかい</rt></ruby><ruby>問題<rt>もんだい</rt></ruby>を<ruby>鋭<rt>するど</rt></ruby>く<ruby>描<rt>えが</rt></ruby>いた<ruby>作品<rt>さくひん</rt></ruby>も<ruby>少<rt>すく</rt></ruby>なくない。",
+          "Manga tends to be dismissed as mere entertainment, but there are more than a few works that sharply depict social issues."
+        ]
+      },
+      "mnem": "\"MAN-ga\" — a MAN drawing GAg panels: comic books.",
+      "tip": "マンガ (often written 漫画 or in katakana) is the PRINT comic; アニメ is the animated version. You read it with 読む: マンガを読む.",
+      "accent": 1
+    },
+    {
+      "key": "mnn:21:22",
+      "kana": "デザイン",
+      "kanji": "",
+      "context": "",
+      "mean": "design",
+      "cat": "noun",
+      "type": "",
+      "trans": "",
+      "dict": "デザイン",
+      "dictRead": "デザイン",
+      "audio": "/Audio/minnamoi/bai21/00010101010110010.mp3",
+      "levels": {
+        "N5": [
+          "この<ruby>車<rt>くるま</rt></ruby>の デザインは いいです。",
+          "This car's design is nice."
+        ],
+        "N4": [
+          "この<ruby>製品<rt>せいひん</rt></ruby>は デザインが いいと<ruby>思<rt>おも</rt></ruby>います。",
+          "I think this product has a nice design."
+        ],
+        "N3": [
+          "<ruby>服<rt>ふく</rt></ruby>を<ruby>買<rt>か</rt></ruby>うとき、<ruby>色<rt>いろ</rt></ruby>より デザインを<ruby>大切<rt>たいせつ</rt></ruby>にしています。",
+          "When I buy clothes, I value the design more than the color."
+        ],
+        "N2": [
+          "デザインは<ruby>気<rt>き</rt></ruby>に<ruby>入<rt>い</rt></ruby>っているものの、<ruby>値段<rt>ねだん</rt></ruby>が<ruby>少<rt>すこ</rt></ruby>し<ruby>高<rt>たか</rt></ruby>すぎる。",
+          "I do like the design, but the price is a little too high."
+        ],
+        "N1": [
+          "<ruby>優<rt>すぐ</rt></ruby>れた デザインとは、<ruby>見<rt>み</rt></ruby>た<ruby>目<rt>め</rt></ruby>の<ruby>美<rt>うつく</rt></ruby>しさのみならず、<ruby>使<rt>つか</rt></ruby>う<ruby>人<rt>ひと</rt></ruby>への<ruby>配慮<rt>はいりょ</rt></ruby>までも<ruby>兼<rt>か</rt></ruby>ね<ruby>備<rt>そな</rt></ruby>えたものを<ruby>指<rt>さ</rt></ruby>す。",
+          "Excellent design refers to that which combines not only visual beauty but also consideration for the person using it."
+        ]
+      },
+      "mnem": "\"Design\" → デザイン (de-za-in), the English word straight into katakana.",
+      "tip": "デザインがいい = \"has a good design.\" As a する-verb it also means \"to design\": デザインする. Distinct from 絵 (a drawing) — design is the styling/layout of a thing.",
+      "accent": 2
+    },
+    {
+      "key": "mnn:21:23",
+      "kana": "ゆめ",
+      "kanji": "夢",
+      "context": "",
+      "mean": "dream (aspiration; or a dream while sleeping)",
+      "cat": "noun",
+      "type": "",
+      "trans": "",
+      "dict": "夢",
+      "dictRead": "ゆめ",
+      "audio": "/Audio/minnamoi/bai21/00010101010110011.mp3",
+      "levels": {
+        "N5": [
+          "わたしの<ruby>夢<rt>ゆめ</rt></ruby>は<ruby>医者<rt>いしゃ</rt></ruby>です。",
+          "My dream is to be a doctor."
+        ],
+        "N4": [
+          "キング<ruby>牧師<rt>ぼくし</rt></ruby>は<ruby>夢<rt>ゆめ</rt></ruby>が あると<ruby>言<rt>い</rt></ruby>いました。",
+          "Dr. King said he had a dream."
+        ],
+        "N3": [
+          "<ruby>夢<rt>ゆめ</rt></ruby>を かなえるために、<ruby>毎日<rt>まいにち</rt></ruby><ruby>努力<rt>どりょく</rt></ruby>するようにしています。",
+          "To make my dream come true, I make a point of working hard every day."
+        ],
+        "N2": [
+          "<ruby>大<rt>おお</rt></ruby>きな<ruby>夢<rt>ゆめ</rt></ruby>を<ruby>持<rt>も</rt></ruby>っているものの、<ruby>何<rt>なに</rt></ruby>から<ruby>始<rt>はじ</rt></ruby>めればいいのか分からない。",
+          "Although I have a big dream, I don't know what to start with."
+        ],
+        "N1": [
+          "<ruby>幾度<rt>いくど</rt></ruby>となく<ruby>挫折<rt>ざせつ</rt></ruby>を<ruby>味<rt>あじ</rt></ruby>わいながらも、<ruby>彼<rt>かれ</rt></ruby>は<ruby>幼<rt>おさな</rt></ruby>い<ruby>頃<rt>ころ</rt></ruby>の<ruby>夢<rt>ゆめ</rt></ruby>を<ruby>諦<rt>あきら</rt></ruby>めようとは しなかった。",
+          "Even after tasting setback time and time again, he refused to give up the dream of his childhood."
+        ]
+      },
+      "mnem": "\"YU-me\" — \"You, me\" together chasing a shared dream.",
+      "tip": "夢 means both a life aspiration (夢がある = to have a dream) and a dream you see asleep (夢を見る = to have/see a dream). You \"make a dream come true\" with かなえる: 夢をかなえる.",
+      "accent": 2
+    },
+    {
+      "key": "mnn:21:24",
+      "kana": "てんさい",
+      "kanji": "天才",
+      "context": "",
+      "mean": "genius",
+      "cat": "noun",
+      "type": "",
+      "trans": "",
+      "dict": "天才",
+      "dictRead": "てんさい",
+      "audio": "/Audio/minnamoi/bai21/00010101010110100.mp3",
+      "levels": {
+        "N5": [
+          "<ruby>彼<rt>かれ</rt></ruby>は<ruby>天才<rt>てんさい</rt></ruby>です。",
+          "He is a genius."
+        ],
+        "N4": [
+          "アインシュタインは<ruby>自分<rt>じぶん</rt></ruby>は<ruby>天才<rt>てんさい</rt></ruby>じゃないと<ruby>言<rt>い</rt></ruby>いました。",
+          "Einstein said he was not a genius."
+        ],
+        "N3": [
+          "<ruby>彼女<rt>かのじょ</rt></ruby>は<ruby>本当<rt>ほんとう</rt></ruby>の<ruby>天才<rt>てんさい</rt></ruby>だと<ruby>思<rt>おも</rt></ruby>います。",
+          "I think she is a true genius."
+        ],
+        "N2": [
+          "<ruby>天才<rt>てんさい</rt></ruby>と<ruby>呼<rt>よ</rt></ruby>ばれてはいるものの、<ruby>本人<rt>ほんにん</rt></ruby>は<ruby>人一倍<rt>ひといちばい</rt></ruby><ruby>努力<rt>どりょく</rt></ruby>しているらしい。",
+          "Although he's called a genius, he apparently works twice as hard as anyone else."
+        ],
+        "N1": [
+          "<ruby>天才<rt>てんさい</rt></ruby>とは<ruby>一％<rt>いちパーセント</rt></ruby>のひらめきと<ruby>九十九％<rt>きゅうじゅうきゅうパーセント</rt></ruby>の<ruby>努力<rt>どりょく</rt></ruby>である、という<ruby>言葉<rt>ことば</rt></ruby>は<ruby>有名<rt>ゆうめい</rt></ruby>だ。",
+          "The saying that genius is one percent inspiration and ninety-nine percent perspiration is famous."
+        ]
+      },
+      "mnem": "天 (heaven) + 才 (talent) — a \"heaven-sent talent\" = a genius.",
+      "tip": "天才 is a natural-born genius. Don't confuse it with 秀才 (しゅうさい, a hard-working bright person) or the same-sounding 天災 (てんさい, a natural disaster) — same reading, different second kanji.",
+      "accent": 0
+    },
+    {
+      "key": "mnn:21:25",
+      "kana": "しあい",
+      "kanji": "試合",
+      "context": "",
+      "mean": "match, game (sports)",
+      "cat": "noun",
+      "type": "",
+      "trans": "",
+      "dict": "試合",
+      "dictRead": "しあい",
+      "audio": "/Audio/minnamoi/bai21/00010101010110101.mp3",
+      "levels": {
+        "N5": [
+          "きょう サッカーの<ruby>試合<rt>しあい</rt></ruby>が あります。",
+          "There's a soccer match today."
+        ],
+        "N4": [
+          "きのうの<ruby>試合<rt>しあい</rt></ruby>で、<ruby>日本<rt>にほん</rt></ruby>が<ruby>勝<rt>か</rt></ruby>ちました。",
+          "Japan won in yesterday's match."
+        ],
+        "N3": [
+          "あしたの<ruby>試合<rt>しあい</rt></ruby>は、きっと<ruby>日本<rt>にほん</rt></ruby>が<ruby>勝<rt>か</rt></ruby>つと<ruby>思<rt>おも</rt></ruby>います。",
+          "I think Japan will surely win tomorrow's match."
+        ],
+        "N2": [
+          "<ruby>雨<rt>あめ</rt></ruby>が<ruby>降<rt>ふ</rt></ruby>っていたものの、<ruby>試合<rt>しあい</rt></ruby>は<ruby>予定<rt>よてい</rt></ruby>どおりに<ruby>行<rt>おこな</rt></ruby>われた。",
+          "Although it was raining, the match was held as scheduled."
+        ],
+        "N1": [
+          "<ruby>実力<rt>じつりょく</rt></ruby>が<ruby>拮抗<rt>きっこう</rt></ruby>していただけに、その<ruby>試合<rt>しあい</rt></ruby>は<ruby>最後<rt>さいご</rt></ruby>まで<ruby>手<rt>て</rt></ruby>に<ruby>汗<rt>あせ</rt></ruby><ruby>握<rt>にぎ</rt></ruby>る<ruby>展開<rt>てんかい</rt></ruby>となった。",
+          "Precisely because the two sides were so evenly matched, the game became a nail-biting affair right to the end."
+        ]
+      },
+      "mnem": "試 (test/try) + 合 (come together) — two sides \"test each other by coming together\" = a match.",
+      "tip": "A 試合 is a competitive sports match; you 勝つ (win) or 負ける (lose) one, and it あります (is held). Don't confuse it with 試験 (しけん, an exam) which shares the 試 kanji.",
+      "accent": 0
+    },
+    {
+      "key": "mnn:21:26",
+      "kana": "いけん",
+      "kanji": "意見",
+      "context": "",
+      "mean": "opinion",
+      "cat": "noun",
+      "type": "",
+      "trans": "",
+      "dict": "意見",
+      "dictRead": "いけん",
+      "audio": "/Audio/minnamoi/bai21/00010101010110110.mp3",
+      "levels": {
+        "N5": [
+          "わたしの<ruby>意見<rt>いけん</rt></ruby>を<ruby>言<rt>い</rt></ruby>います。",
+          "I'll give my opinion."
+        ],
+        "N4": [
+          "<ruby>会議<rt>かいぎ</rt></ruby>で<ruby>意見<rt>いけん</rt></ruby>を<ruby>言<rt>い</rt></ruby>いましたか。",
+          "Did you give your opinion at the meeting?"
+        ],
+        "N3": [
+          "<ruby>人<rt>ひと</rt></ruby>の<ruby>意見<rt>いけん</rt></ruby>も<ruby>聞<rt>き</rt></ruby>いてから、<ruby>決<rt>き</rt></ruby>めるようにしています。",
+          "I make a point of deciding only after hearing other people's opinions too."
+        ],
+        "N2": [
+          "みんなの<ruby>意見<rt>いけん</rt></ruby>が<ruby>合<rt>あ</rt></ruby>わなかったものの、<ruby>最後<rt>さいご</rt></ruby>は<ruby>一<rt>ひと</rt></ruby>つに まとまった。",
+          "Although everyone's opinions didn't agree, in the end they came together as one."
+        ],
+        "N1": [
+          "<ruby>反対<rt>はんたい</rt></ruby><ruby>意見<rt>いけん</rt></ruby>に<ruby>耳<rt>みみ</rt></ruby>を<ruby>傾<rt>かたむ</rt></ruby>けてこそ、より<ruby>良<rt>よ</rt></ruby>い<ruby>結論<rt>けつろん</rt></ruby>に<ruby>辿<rt>たど</rt></ruby>り<ruby>着<rt>つ</rt></ruby>けるというものだ。",
+          "It is precisely by lending an ear to opposing opinions that one can arrive at a better conclusion."
+        ]
+      },
+      "mnem": "意 (thought/intent) + 見 (view/see) — your \"thought-view\" on something is your opinion.",
+      "tip": "You state an opinion with 言う: 意見を言う. Don't confuse it with 意味 (いみ, meaning) — both start with 意 but 意見 is a view, 意味 is a meaning. Distinct too from 考え (a thought/idea).",
+      "accent": 1
+    },
+    {
+      "key": "mnn:21:27",
+      "kana": "［お］はなし",
+      "kanji": "［お］話",
+      "context": "〜を します",
+      "mean": "talk, speech, story (〜をします: to talk, tell a story)",
+      "cat": "noun",
+      "type": "",
+      "trans": "",
+      "dict": "お話",
+      "dictRead": "おはなし",
+      "audio": "/Audio/minnamoi/bai21/00010101010110111.mp3",
+      "levels": {
+        "N5": [
+          "<ruby>先生<rt>せんせい</rt></ruby>の お<ruby>話<rt>はなし</rt></ruby>は おもしろいです。",
+          "The teacher's talk is interesting."
+        ],
+        "N4": [
+          "ワットさんの<ruby>話<rt>はなし</rt></ruby>は おもしろいと<ruby>思<rt>おも</rt></ruby>います。",
+          "I think Mr. Watt's talk is interesting."
+        ],
+        "N3": [
+          "<ruby>子<rt>こ</rt></ruby>どもに、<ruby>毎晩<rt>まいばん</rt></ruby>お<ruby>話<rt>はなし</rt></ruby>を してから<ruby>寝<rt>ね</rt></ruby>かせています。",
+          "Every night I tell my child a story before putting them to bed."
+        ],
+        "N2": [
+          "<ruby>彼<rt>かれ</rt></ruby>の<ruby>話<rt>はなし</rt></ruby>は<ruby>長<rt>なが</rt></ruby>いものの、<ruby>内容<rt>ないよう</rt></ruby>が おもしろいので つい<ruby>聞<rt>き</rt></ruby>き<ruby>入<rt>い</rt></ruby>ってしまう。",
+          "His talk is long, but the content is interesting, so I can't help getting drawn in."
+        ],
+        "N1": [
+          "<ruby>核心<rt>かくしん</rt></ruby>に<ruby>触<rt>ふ</rt></ruby>れぬまま<ruby>話<rt>はなし</rt></ruby>が<ruby>延々<rt>えんえん</rt></ruby>と<ruby>続<rt>つづ</rt></ruby>き、<ruby>聞<rt>き</rt></ruby>き<ruby>手<rt>て</rt></ruby>は<ruby>次第<rt>しだい</rt></ruby>に<ruby>集中力<rt>しゅうちゅうりょく</rt></ruby>を<ruby>失<rt>うしな</rt></ruby>っていった。",
+          "The talk dragged on and on without ever touching the heart of the matter, and the listeners gradually lost their concentration."
+        ]
+      },
+      "mnem": "話 (the noun form of 話す, to speak) — what is spoken: a talk or story. The polite お attaches for someone else's talk.",
+      "tip": "You give a talk / tell a story with する: 話をする. The polite お (お話) is used for another person's talk or a children's story; drop it (話) for your own. Distinct from 話す (the verb, to speak) — this is the noun.",
+      "accent": 3
+    },
+    {
+      "key": "mnn:21:28",
+      "kana": "ちきゅう",
+      "kanji": "地球",
+      "context": "",
+      "mean": "the Earth, the globe",
+      "cat": "noun",
+      "type": "",
+      "trans": "",
+      "dict": "地球",
+      "dictRead": "ちきゅう",
+      "audio": "/Audio/minnamoi/bai21/00010101010111000.mp3",
+      "levels": {
+        "N5": [
+          "<ruby>地球<rt>ちきゅう</rt></ruby>は<ruby>丸<rt>まる</rt></ruby>いです。",
+          "The Earth is round."
+        ],
+        "N4": [
+          "ガリレオは<ruby>地球<rt>ちきゅう</rt></ruby>が<ruby>動<rt>うご</rt></ruby>くと<ruby>言<rt>い</rt></ruby>いました。",
+          "Galileo said that the Earth moves."
+        ],
+        "N3": [
+          "<ruby>地球<rt>ちきゅう</rt></ruby>を<ruby>大切<rt>たいせつ</rt></ruby>にするために、ごみを<ruby>減<rt>へ</rt></ruby>らすようにしています。",
+          "To take care of the Earth, I make a point of reducing my garbage."
+        ],
+        "N2": [
+          "<ruby>地球<rt>ちきゅう</rt></ruby>は<ruby>美<rt>うつく</rt></ruby>しいものの、<ruby>環境<rt>かんきょう</rt></ruby>の<ruby>問題<rt>もんだい</rt></ruby>は<ruby>年々<rt>ねんねん</rt></ruby><ruby>深刻<rt>しんこく</rt></ruby>に なっている。",
+          "The Earth is beautiful, but environmental problems are becoming more serious year by year."
+        ],
+        "N1": [
+          "<ruby>地球<rt>ちきゅう</rt></ruby><ruby>温暖化<rt>おんだんか</rt></ruby>への<ruby>対策<rt>たいさく</rt></ruby>は、もはや<ruby>一<rt>いち</rt></ruby><ruby>国<rt>こく</rt></ruby>だけで<ruby>解決<rt>かいけつ</rt></ruby>できる<ruby>問題<rt>もんだい</rt></ruby>ではない。",
+          "Measures against global warming are no longer a problem that any single country can solve on its own."
+        ]
+      },
+      "mnem": "地 (earth/ground) + 球 (ball/sphere) — the \"earth-sphere\" = the planet Earth.",
+      "tip": "地球 is the planet Earth; the ground/soil is 地面 (じめん), and the world/society is 世界 (せかい). Note it contains 地 (as in 地図 map) + 球 (as in 野球 baseball).",
+      "accent": 0
+    },
+    {
+      "key": "mnn:21:29",
+      "kana": "つき",
+      "kanji": "月",
+      "context": "",
+      "mean": "the moon",
+      "cat": "noun",
+      "type": "",
+      "trans": "",
+      "dict": "月",
+      "dictRead": "つき",
+      "audio": "/Audio/minnamoi/bai21/00010101010111001.mp3",
+      "levels": {
+        "N5": [
+          "<ruby>今夜<rt>こんや</rt></ruby>の<ruby>月<rt>つき</rt></ruby>は きれいです。",
+          "Tonight's moon is beautiful."
+        ],
+        "N4": [
+          "かぐや<ruby>姫<rt>ひめ</rt></ruby>は<ruby>月<rt>つき</rt></ruby>へ<ruby>帰<rt>かえ</rt></ruby>らなければ ならないと<ruby>言<rt>い</rt></ruby>いました。",
+          "Princess Kaguya said she had to return to the moon."
+        ],
+        "N3": [
+          "<ruby>秋<rt>あき</rt></ruby>は<ruby>空気<rt>くうき</rt></ruby>が すんでいるので、<ruby>月<rt>つき</rt></ruby>が よく<ruby>見<rt>み</rt></ruby>えます。",
+          "The air is clear in autumn, so the moon is easy to see."
+        ],
+        "N2": [
+          "<ruby>雲<rt>くも</rt></ruby>が<ruby>多<rt>おお</rt></ruby>かったものの、<ruby>夜中<rt>よなか</rt></ruby>に なって ようやく<ruby>月<rt>つき</rt></ruby>が<ruby>顔<rt>かお</rt></ruby>を<ruby>出<rt>だ</rt></ruby>した。",
+          "There were a lot of clouds, but late at night the moon finally showed its face."
+        ],
+        "N1": [
+          "<ruby>人類<rt>じんるい</rt></ruby>が<ruby>初<rt>はじ</rt></ruby>めて<ruby>月<rt>つき</rt></ruby>に<ruby>降<rt>お</rt></ruby>り<ruby>立<rt>た</rt></ruby>った<ruby>瞬間<rt>しゅんかん</rt></ruby>は、<ruby>科学<rt>かがく</rt></ruby><ruby>史<rt>し</rt></ruby>における<ruby>金字塔<rt>きんじとう</rt></ruby>として<ruby>語<rt>かた</rt></ruby>り<ruby>継<rt>つ</rt></ruby>がれている。",
+          "The moment humankind first set foot on the moon is passed down as a monumental milestone in the history of science."
+        ]
+      },
+      "mnem": "\"TSU-ki\" — the moon pulls at the TSU-nami tide each night.",
+      "tip": "The same kanji 月 reads げつ／がつ for \"month\" (一月, 月曜日); as つき it's the moon in the sky. Don't confuse the 月 (moon) with 星 (ほし, a star).",
+      "accent": 2
+    },
+    {
+      "key": "mnn:21:30",
+      "kana": "さいきん",
+      "kanji": "最近",
+      "context": "",
+      "mean": "recently, lately, these days",
+      "cat": "noun",
+      "type": "",
+      "trans": "",
+      "dict": "最近",
+      "dictRead": "さいきん",
+      "audio": "/Audio/minnamoi/bai21/00010101010111010.mp3",
+      "levels": {
+        "N5": [
+          "<ruby>最近<rt>さいきん</rt></ruby>、<ruby>忙<rt>いそが</rt></ruby>しいです。",
+          "I've been busy recently."
+        ],
+        "N4": [
+          "<ruby>最近<rt>さいきん</rt></ruby>、<ruby>日本<rt>にほん</rt></ruby>の チームも<ruby>強<rt>つよ</rt></ruby>く なりましたよ。",
+          "Lately, the Japanese team has gotten stronger too."
+        ],
+        "N3": [
+          "<ruby>最近<rt>さいきん</rt></ruby>は<ruby>健康<rt>けんこう</rt></ruby>のために、<ruby>毎朝<rt>まいあさ</rt></ruby><ruby>歩<rt>ある</rt></ruby>くようにしています。",
+          "These days, for my health, I make a point of walking every morning."
+        ],
+        "N2": [
+          "<ruby>最近<rt>さいきん</rt></ruby>は<ruby>忙<rt>いそが</rt></ruby>しいものの、<ruby>週末<rt>しゅうまつ</rt></ruby>だけは<ruby>必<rt>かなら</rt></ruby>ず<ruby>休<rt>やす</rt></ruby>むようにしている。",
+          "I've been busy lately, but I make sure to rest at least on weekends."
+        ],
+        "N1": [
+          "<ruby>最近<rt>さいきん</rt></ruby>の<ruby>若者<rt>わかもの</rt></ruby>は<ruby>本<rt>ほん</rt></ruby>を<ruby>読<rt>よ</rt></ruby>まないと<ruby>言<rt>い</rt></ruby>われるが、<ruby>実際<rt>じっさい</rt></ruby>には<ruby>読<rt>よ</rt></ruby>む<ruby>媒体<rt>ばいたい</rt></ruby>が<ruby>変<rt>か</rt></ruby>わっただけかもしれない。",
+          "People say young people these days don't read books, but in reality the medium they read on may simply have changed."
+        ]
+      },
+      "mnem": "最 (most) + 近 (near/close) — the \"nearest\" point in time to now = recently.",
+      "tip": "最近 covers \"recently\" and \"these days,\" and pairs with both past (最近見ました) and present-habitual (最近歩いています). Don't confuse it with 今 (right now) — 最近 spans the recent stretch, not a single instant.",
+      "accent": 0
+    },
+    {
+      "key": "mnn:21:31",
+      "kana": "たぶん",
+      "kanji": "",
+      "context": "",
+      "mean": "probably, perhaps, maybe",
+      "cat": "adverb",
+      "type": "",
+      "trans": "",
+      "dict": "たぶん",
+      "dictRead": "たぶん",
+      "audio": "/Audio/minnamoi/bai21/00010101010111011.mp3",
+      "levels": {
+        "N5": [
+          "<ruby>彼<rt>かれ</rt></ruby>は たぶん<ruby>来<rt>き</rt></ruby>ます。",
+          "He'll probably come."
+        ],
+        "N4": [
+          "ミラーさんは たぶん もう<ruby>帰<rt>かえ</rt></ruby>ったと<ruby>思<rt>おも</rt></ruby>います。",
+          "I think Mr. Miller has probably already gone home."
+        ],
+        "N3": [
+          "あの<ruby>店<rt>みせ</rt></ruby>は たぶん<ruby>薬<rt>くすり</rt></ruby>を<ruby>売<rt>う</rt></ruby>っていないと<ruby>思<rt>おも</rt></ruby>います。",
+          "I think that shop probably doesn't sell medicine."
+        ],
+        "N2": [
+          "たぶん<ruby>大丈夫<rt>だいじょうぶ</rt></ruby>だと<ruby>思<rt>おも</rt></ruby>うものの、<ruby>念<rt>ねん</rt></ruby>のため もう<ruby>一度<rt>いちど</rt></ruby><ruby>確<rt>たし</rt></ruby>かめておこう。",
+          "I think it's probably fine, but just to be safe let me check once more."
+        ],
+        "N1": [
+          "たぶん そうだろうという<ruby>憶測<rt>おくそく</rt></ruby>だけで<ruby>物事<rt>ものごと</rt></ruby>を<ruby>判断<rt>はんだん</rt></ruby>するのは、<ruby>時<rt>とき</rt></ruby>に<ruby>取<rt>と</rt></ruby>り<ruby>返<rt>かえ</rt></ruby>しのつかない<ruby>過<rt>あやま</rt></ruby>ちを<ruby>招<rt>まね</rt></ruby>く。",
+          "Judging matters on nothing but the guess that it's probably so sometimes invites an irreversible mistake."
+        ]
+      },
+      "mnem": "\"TA-bun\" — \"a portion\" (分) of certainty, not all of it: probably.",
+      "tip": "たぶん pairs naturally with 〜と思います or でしょう: たぶん来ると思います. It's more confident than もしかしたら (maybe/possibly) but less than きっと (surely). Adverb — it modifies the whole clause.",
+      "accent": 1
+    },
+    {
+      "key": "mnn:21:32",
+      "kana": "きっと",
+      "kanji": "",
+      "context": "",
+      "mean": "surely, certainly, for sure",
+      "cat": "adverb",
+      "type": "",
+      "trans": "",
+      "dict": "きっと",
+      "dictRead": "きっと",
+      "audio": "/Audio/minnamoi/bai21/00010101010111100.mp3",
+      "levels": {
+        "N5": [
+          "あした きっと<ruby>晴<rt>は</rt></ruby>れます。",
+          "It'll surely be sunny tomorrow."
+        ],
+        "N4": [
+          "あしたは きっと「ヨーネン」が<ruby>勝<rt>か</rt></ruby>つと<ruby>思<rt>おも</rt></ruby>います。",
+          "I think Johnen will surely win tomorrow."
+        ],
+        "N3": [
+          "<ruby>毎日<rt>まいにち</rt></ruby><ruby>練習<rt>れんしゅう</rt></ruby>すれば、きっと<ruby>上手<rt>じょうず</rt></ruby>に なると<ruby>思<rt>おも</rt></ruby>います。",
+          "If you practice every day, you'll surely get good at it."
+        ],
+        "N2": [
+          "<ruby>約束<rt>やくそく</rt></ruby>した<ruby>以上<rt>いじょう</rt></ruby>、<ruby>彼<rt>かれ</rt></ruby>は きっと<ruby>来<rt>く</rt></ruby>るはずだ。",
+          "Since he promised, he should surely come."
+        ],
+        "N1": [
+          "どんなに<ruby>困難<rt>こんなん</rt></ruby>な<ruby>道<rt>みち</rt></ruby>のりであろうと、あきらめさえしなければ きっと<ruby>報<rt>むく</rt></ruby>われる<ruby>日<rt>ひ</rt></ruby>が<ruby>来<rt>く</rt></ruby>ると<ruby>信<rt>しん</rt></ruby>じている。",
+          "However difficult the road, I believe that as long as you don't give up, a day when you are surely rewarded will come."
+        ]
+      },
+      "mnem": "\"KIT-to\" — you'd bet your whole KIT on it: surely, for sure.",
+      "tip": "きっと expresses stronger conviction than たぶん (probably). It often carries hope/expectation and pairs with と思います or はず: きっと勝つと思います. Adverb.",
+      "accent": 0
+    },
+    {
+      "key": "mnn:21:33",
+      "kana": "ほんとうに",
+      "kanji": "本当に",
+      "context": "",
+      "mean": "really, truly",
+      "cat": "adverb",
+      "type": "",
+      "trans": "",
+      "dict": "本当に",
+      "dictRead": "ほんとうに",
+      "audio": "/Audio/minnamoi/bai21/00010101010111101.mp3",
+      "levels": {
+        "N5": [
+          "きょうは<ruby>本当<rt>ほんとう</rt></ruby>に<ruby>暑<rt>あつ</rt></ruby>いです。",
+          "It's really hot today."
+        ],
+        "N4": [
+          "その<ruby>祭<rt>まつ</rt></ruby>りは<ruby>本当<rt>ほんとう</rt></ruby>に にぎやかでした。",
+          "That festival was really lively."
+        ],
+        "N3": [
+          "<ruby>手伝<rt>てつだ</rt></ruby>ってくれて、<ruby>本当<rt>ほんとう</rt></ruby>に ありがとうございました。",
+          "Thank you really so much for helping me."
+        ],
+        "N2": [
+          "<ruby>口<rt>くち</rt></ruby>では<ruby>感謝<rt>かんしゃ</rt></ruby>していると<ruby>言<rt>い</rt></ruby>うものの、<ruby>本当<rt>ほんとう</rt></ruby>に そう<ruby>思<rt>おも</rt></ruby>っているのか<ruby>疑<rt>うたが</rt></ruby>わしい。",
+          "Although he says with his mouth that he's grateful, it's doubtful whether he really thinks so."
+        ],
+        "N1": [
+          "<ruby>形<rt>かたち</rt></ruby>だけの<ruby>謝罪<rt>しゃざい</rt></ruby>ではなく、<ruby>本当<rt>ほんとう</rt></ruby>に<ruby>心<rt>こころ</rt></ruby>から<ruby>反省<rt>はんせい</rt></ruby>しているのかどうかが<ruby>問<rt>と</rt></ruby>われている。",
+          "What is being asked is not a mere formal apology, but whether he is truly reflecting from the bottom of his heart."
+        ]
+      },
+      "mnem": "本当 (truth) + に (the adverb marker) — \"in truth,\" i.e. really/truly.",
+      "tip": "本当に is the adverb form of 本当 (truth): it intensifies like \"really/very\" (本当に暑い) and also emphasizes gratitude/apology (本当にありがとう). Casually shortened to ほんとに in speech.",
+      "accent": 0
+    },
+    {
+      "key": "mnn:21:34",
+      "kana": "そんなに",
+      "kanji": "",
+      "context": "",
+      "mean": "(not) that much, (not) so (with a negative)",
+      "cat": "adverb",
+      "type": "",
+      "trans": "",
+      "dict": "そんなに",
+      "dictRead": "そんなに",
+      "audio": "/Audio/minnamoi/bai21/00010101010111110.mp3",
+      "levels": {
+        "N5": [
+          "そんなに<ruby>高<rt>たか</rt></ruby>くないです。",
+          "It's not that expensive."
+        ],
+        "N4": [
+          "<ruby>仕事<rt>しごと</rt></ruby>は そんなに<ruby>大変<rt>たいへん</rt></ruby>じゃ ないです。",
+          "The work isn't that hard."
+        ],
+        "N3": [
+          "そんなに<ruby>心配<rt>しんぱい</rt></ruby>しなくても<ruby>大丈夫<rt>だいじょうぶ</rt></ruby>だと<ruby>思<rt>おも</rt></ruby>います。",
+          "I think it's fine even if you don't worry that much."
+        ],
+        "N2": [
+          "みんなが<ruby>絶賛<rt>ぜっさん</rt></ruby>していたものの、<ruby>私<rt>わたし</rt></ruby>には そんなに おもしろく<ruby>感<rt>かん</rt></ruby>じられなかった。",
+          "Everyone was raving about it, but to me it didn't feel that interesting."
+        ],
+        "N1": [
+          "そんなに<ruby>自分<rt>じぶん</rt></ruby>を<ruby>追<rt>お</rt></ruby>い<ruby>込<rt>こ</rt></ruby>まなくてもいいのに、と<ruby>周<rt>まわ</rt></ruby>りは<ruby>気<rt>き</rt></ruby>を もんでいた。",
+          "\"You needn't drive yourself that hard,\" those around him fretted."
+        ]
+      },
+      "mnem": "そんな (that kind of) + に — \"to that degree.\" With a negative it means \"not to that degree\" = not that much.",
+      "tip": "Almost always paired with a NEGATIVE: そんなに高くない (not that expensive). Used affirmatively (そんなに?) it expresses surprise (\"that much?!\"). Contrast with あんなに (that much, of something distant).",
+      "accent": 0
+    },
+    {
+      "key": "mnn:21:35",
+      "kana": "〜について",
+      "kanji": "",
+      "context": "",
+      "mean": "about ~, concerning ~, regarding ~",
+      "cat": "expression",
+      "type": "",
+      "trans": "",
+      "dict": "〜について",
+      "dictRead": "〜について",
+      "audio": "/Audio/minnamoi/bai21/00010101010111111.mp3",
+      "levels": {
+        "N5": [
+          "<ruby>日本<rt>にほん</rt></ruby>について<ruby>話<rt>はな</rt></ruby>します。",
+          "I'll talk about Japan."
+        ],
+        "N4": [
+          "<ruby>日本<rt>にほん</rt></ruby>の アニメについて どう<ruby>思<rt>おも</rt></ruby>いますか。",
+          "What do you think about Japanese anime?"
+        ],
+        "N3": [
+          "この<ruby>問題<rt>もんだい</rt></ruby>について、みんなで<ruby>話<rt>はな</rt></ruby>し<ruby>合<rt>あ</rt></ruby>うようにしています。",
+          "We make a point of discussing this problem together as a group."
+        ],
+        "N2": [
+          "その<ruby>件<rt>けん</rt></ruby>については<ruby>知<rt>し</rt></ruby>っているものの、<ruby>詳<rt>くわ</rt></ruby>しい ことは<ruby>言<rt>い</rt></ruby>えない。",
+          "I do know about that matter, but I can't say anything in detail."
+        ],
+        "N1": [
+          "この<ruby>研究<rt>けんきゅう</rt></ruby>について<ruby>論<rt>ろん</rt></ruby>じるにあたっては、まず<ruby>前提<rt>ぜんてい</rt></ruby>となる<ruby>条件<rt>じょうけん</rt></ruby>を<ruby>整理<rt>せいり</rt></ruby>しておく<ruby>必要<rt>ひつよう</rt></ruby>が ある。",
+          "In discussing this research, one must first organize the premised conditions."
+        ]
+      },
+      "mnem": "つく (attach) + て — you \"attach to\" a topic, i.e. talk with reference to it: about ~.",
+      "tip": "A noun + について marks the topic of talking/thinking/writing: 日本について話す, 〜についてどう思いますか. More formal than just の話. It's a set phrase — the つ stays kana, never 就いて.",
+      "accent": 0
+    }
+  ],
+  "grammar": [
+    {
+      "pattern": "普通形 ＋ と 思います",
+      "structure": "［文（普通形）］＋ と ＋ 思います",
+      "explain": "To say what you think or guess, put a plain-form sentence before と思います. The clause before と is ALWAYS plain form, even in polite speech: ミラーさんは来ると思います (I think Mr. Miller will come). For a な-adjective or noun predicate, insert だ: 便利だと思います, 休みだと思います. Negate the inner clause, not 思う: 来ないと思います (I don't think he'll come).",
+      "examples": [
+        {
+          "jp": "ミラーさんは 9<ruby>時<rt>じ</rt></ruby>に <ruby>来<rt>く</rt></ruby>ると <ruby>思<rt>おも</rt></ruby>います。",
+          "en": "I think Mr. Miller will come at 9 o'clock."
+        },
+        {
+          "jp": "マリアさんは <ruby>運転<rt>うんてん</rt></ruby>しないと <ruby>思<rt>おも</rt></ruby>います。",
+          "en": "I don't think Maria drives."
+        },
+        {
+          "jp": "この <ruby>仕事<rt>しごと</rt></ruby>は <ruby>大変<rt>たいへん</rt></ruby>だと <ruby>思<rt>おも</rt></ruby>います。",
+          "en": "I think this job is tough."
+        },
+        {
+          "jp": "あの <ruby>店<rt>みせ</rt></ruby>は あした <ruby>休<rt>やす</rt></ruby>みだと <ruby>思<rt>おも</rt></ruby>います。",
+          "en": "I think that shop is closed tomorrow."
+        }
+      ]
+    },
+    {
+      "pattern": "「〜」／普通形 ＋ と 言いました",
+      "structure": "「引用文」と 言いました ／ ［普通形］と 言いました",
+      "explain": "と言いました reports what someone said. Direct speech keeps the exact words in quotes: ミラーさんは「疲れました」と言いました. Indirect speech drops the quotes and puts the reported sentence in plain form before と: ミラーさんは疲れたと言いました. Use に to mark the person told: 父に留学したいと言いました (I told my father I wanted to study abroad).",
+      "examples": [
+        {
+          "jp": "ミラーさんは「<ruby>疲<rt>つか</rt></ruby>れました」と <ruby>言<rt>い</rt></ruby>いました。",
+          "en": "Mr. Miller said, \"I'm tired.\""
+        },
+        {
+          "jp": "ガリレオは <ruby>地球<rt>ちきゅう</rt></ruby>が <ruby>動<rt>うご</rt></ruby>くと <ruby>言<rt>い</rt></ruby>いました。",
+          "en": "Galileo said that the Earth moves."
+        },
+        {
+          "jp": "わたしは <ruby>父<rt>ちち</rt></ruby>に <ruby>留学<rt>りゅうがく</rt></ruby>したいと <ruby>言<rt>い</rt></ruby>いました。",
+          "en": "I told my father that I wanted to study abroad."
+        }
+      ]
+    },
+    {
+      "pattern": "普通形 ＋ でしょう？",
+      "structure": "［文（普通形）］＋ でしょう？（上がり調子）",
+      "explain": "でしょう？ with rising intonation asks the listener to confirm something you believe to be true — like English \"…right?\" or \"…isn't it?\" You expect agreement. 沖縄は海がきれいでしょう？ (Okinawa's sea is beautiful, right?). For な-adjectives and nouns, no だ before でしょう: 大変でしょう？. The reply is typically ええ (yes) or いいえ、そんなに… (no, not that…).",
+      "examples": [
+        {
+          "jp": "その カメラは <ruby>高<rt>たか</rt></ruby>かったでしょう？",
+          "en": "That camera was expensive, wasn't it?"
+        },
+        {
+          "jp": "<ruby>仕事<rt>しごと</rt></ruby>は <ruby>大変<rt>たいへん</rt></ruby>でしょう？ …いいえ、そんなに <ruby>大変<rt>たいへん</rt></ruby>じゃ ないです。",
+          "en": "Work is tough, right? …No, it's not that tough."
+        },
+        {
+          "jp": "<ruby>疲<rt>つか</rt></ruby>れたでしょう？",
+          "en": "You're tired, aren't you?"
+        }
+      ]
+    },
+    {
+      "pattern": "N について",
+      "structure": "N ＋ について ＋ 〜（話します／思います／書きます …）",
+      "explain": "について marks the topic of a statement, thought, or piece of writing — \"about / concerning N.\" It attaches to a noun and is commonly paired with どう思いますか to ask an opinion: 日本のアニメについてどう思いますか (What do you think about Japanese anime?). More explicit and slightly more formal than the plain の.",
+      "examples": [
+        {
+          "jp": "<ruby>日本<rt>にほん</rt></ruby>の <ruby>自動車<rt>じどうしゃ</rt></ruby>に ついて どう <ruby>思<rt>おも</rt></ruby>いますか。 …とても いいと <ruby>思<rt>おも</rt></ruby>います。",
+          "en": "What do you think about Japanese cars? …I think they're very good."
+        },
+        {
+          "jp": "<ruby>会議<rt>かいぎ</rt></ruby>で その <ruby>問題<rt>もんだい</rt></ruby>に ついて <ruby>話<rt>はな</rt></ruby>しました。",
+          "en": "At the meeting, we talked about that problem."
+        }
+      ]
+    }
+  ],
+  "examples": [
+    {
+      "jp": "わたしは あした <ruby>雨<rt>あめ</rt></ruby>が <ruby>降<rt>ふ</rt></ruby>ると <ruby>思<rt>おも</rt></ruby>います。",
+      "en": "I think it will rain tomorrow."
+    },
+    {
+      "jp": "ミラーさんは この ニュースを <ruby>知<rt>し</rt></ruby>って いますか。 …いいえ、<ruby>知<rt>し</rt></ruby>らないと <ruby>思<rt>おも</rt></ruby>います。",
+      "en": "Does Mr. Miller know this news? …No, I don't think he does."
+    },
+    {
+      "jp": "<ruby>日本<rt>にほん</rt></ruby>に ついて どう <ruby>思<rt>おも</rt></ruby>いますか。 …<ruby>物価<rt>ぶっか</rt></ruby>が <ruby>高<rt>たか</rt></ruby>いと <ruby>思<rt>おも</rt></ruby>います。",
+      "en": "What do you think about Japan? …I think prices are high."
+    },
+    {
+      "jp": "<ruby>仕事<rt>しごと</rt></ruby>と <ruby>家族<rt>かぞく</rt></ruby>と どちらが <ruby>大切<rt>たいせつ</rt></ruby>ですか。 …どちらも <ruby>大切<rt>たいせつ</rt></ruby>だと <ruby>思<rt>おも</rt></ruby>います。",
+      "en": "Which is more important, work or family? …I think both are important."
+    },
+    {
+      "jp": "かぐや<ruby>姫<rt>ひめ</rt></ruby>は 「<ruby>月<rt>つき</rt></ruby>へ <ruby>帰<rt>かえ</rt></ruby>らなければ なりません」と <ruby>言<rt>い</rt></ruby>いました。",
+      "en": "Princess Kaguya said, \"I have to return to the moon.\""
+    },
+    {
+      "jp": "<ruby>会議<rt>かいぎ</rt></ruby>で <ruby>何<rt>なに</rt></ruby>か <ruby>意見<rt>いけん</rt></ruby>を <ruby>言<rt>い</rt></ruby>いましたか。 …はい。むだな コピーが <ruby>多<rt>おお</rt></ruby>いと <ruby>言<rt>い</rt></ruby>いました。",
+      "en": "Did you say anything at the meeting? …Yes. I said there were a lot of wasteful copies."
+    },
+    {
+      "jp": "7<ruby>月<rt>がつ</rt></ruby>に <ruby>京都<rt>きょうと</rt></ruby>で お<ruby>祭<rt>まつ</rt></ruby>りが あるでしょう？ …ええ、あります。",
+      "en": "There's a festival in Kyoto in July, right? …Yes, there is."
+    },
+    {
+      "jp": "あしたは 「ヨーネン」と 「アキックス」と どちらが <ruby>勝<rt>か</rt></ruby>つと <ruby>思<rt>おも</rt></ruby>いますか。 …きっと 「ヨーネン」が <ruby>勝<rt>か</rt></ruby>つと <ruby>思<rt>おも</rt></ruby>います。",
+      "en": "Which do you think will win tomorrow, Johnen or Akix? …I think Johnen will surely win."
+    }
+  ],
+  "conversation": {
+    "title": "わたしも そう 思います (I think so too)",
+    "audio": "/Audio/minnahonsatsu1/72.mp3",
+    "lines": [
+      {
+        "role": "松本",
+        "jp": "あ、サントスさん、<ruby>久<rt>ひさ</rt></ruby>しぶりですね。",
+        "en": "Ah, Mr. Santos. Long time no see."
+      },
+      {
+        "role": "サントス",
+        "jp": "あ、<ruby>松本<rt>まつもと</rt></ruby>さん、お<ruby>元気<rt>げんき</rt></ruby>ですか。",
+        "en": "Ah, Mr. Matsumoto. How are you?"
+      },
+      {
+        "role": "松本",
+        "jp": "ええ。ちょっと ビールでも <ruby>飲<rt>の</rt></ruby>みませんか。",
+        "en": "Yes, I'm well. Shall we go have a beer or something?"
+      },
+      {
+        "role": "サントス",
+        "jp": "いいですね。",
+        "en": "That sounds good."
+      },
+      {
+        "role": "松本",
+        "jp": "<ruby>今晩<rt>こんばん</rt></ruby> 10<ruby>時<rt>じ</rt></ruby>から <ruby>日本<rt>にほん</rt></ruby>と ブラジルの サッカーの <ruby>試合<rt>しあい</rt></ruby>が ありますね。",
+        "en": "There's a Japan-Brazil soccer match from 10 tonight, isn't there?"
+      },
+      {
+        "role": "サントス",
+        "jp": "ああ、そうですね。ぜひ <ruby>見<rt>み</rt></ruby>ないと。",
+        "en": "Ah, that's right. I've definitely got to watch it."
+      },
+      {
+        "role": "松本",
+        "jp": "サントスさんは どちらが <ruby>勝<rt>か</rt></ruby>つと <ruby>思<rt>おも</rt></ruby>いますか。",
+        "en": "Which do you think will win, Mr. Santos?"
+      },
+      {
+        "role": "サントス",
+        "jp": "もちろん ブラジルですよ。",
+        "en": "Brazil, of course."
+      },
+      {
+        "role": "松本",
+        "jp": "そうですね。でも、<ruby>最近<rt>さいきん</rt></ruby> <ruby>日本<rt>にほん</rt></ruby>も <ruby>強<rt>つよ</rt></ruby>く なりましたよ。",
+        "en": "That's true. But Japan has gotten stronger lately, you know."
+      },
+      {
+        "role": "サントス",
+        "jp": "ええ、わたしも そう <ruby>思<rt>おも</rt></ruby>いますが。",
+        "en": "Yes, I think so too, but…"
+      }
+    ]
+  }
+}

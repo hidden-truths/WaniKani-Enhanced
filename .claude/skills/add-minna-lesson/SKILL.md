@@ -19,9 +19,9 @@ tutoring workflow that feeds it.
    lesson)", "Visibility & copyright", "Verifying Minna changes".
 2. Read [study-app/CARDS.md](../../../study-app/CARDS.md) "Recipe A" + "Validation" — the
    per-word content contract (a Minna vocab entry becomes a full study card).
-3. Check what exists: `ls wk-enhanced-api/data/minna/` — as of 2026-07 lessons **1–5, 22, 23, 24**
-   are curated (`lesson-<n>.json`); L1–5 are the early-lesson backfill (generated JP flagged for
-   maintainer proofread). Drafts L6–L10 are staged as `.draft.json`; L11–21 remain to scrape.
+3. Check what exists: `ls wk-enhanced-api/data/minna/` — as of 2026-07-08 lessons **1–25 (all of
+   Minna I)** are curated (`lesson-<n>.json`); the generated JP is flagged for maintainer proofread.
+   The remaining future work is **L26–50 (Minna II)**, which need scraping + curation.
 4. Ask the user which lesson they're on and whether a tutor vocab list exists in
    `~/Downloads/` (see the iTalki section). The lesson number moves — don't assume.
 5. For live verification you need both dev servers (`./dev.sh` from repo root) and a signed-in

@@ -1,0 +1,1007 @@
+{
+  "lesson": 13,
+  "title": "Lesson 13",
+  "theme": "Wanting things and doing things — 〜がほしいです (want a thing), 〜たいです (want to do), and 〜へ〜に行きます (going somewhere to do something), plus leisure verbs and place nouns",
+  "source": {
+    "name": "vnjpclub.com",
+    "vocabUrl": "https://www.vnjpclub.com/en/minna-no-nihongo/lesson-13-vocabulary.html",
+    "grammarUrl": "https://www.vnjpclub.com/en/minna-no-nihongo/lesson-13-grammar.html",
+    "note": "Vocabulary, native-speaker audio, and example sentences aggregated from vnjpclub.com (Minna no Nihongo 第2版). For personal study."
+  },
+  "vocab": [
+    {
+      "key": "mnn:13:0",
+      "kana": "あそびます",
+      "kanji": "遊びます",
+      "context": "",
+      "mean": "to play, enjoy oneself, have fun",
+      "cat": "verb",
+      "type": "godan",
+      "trans": "i",
+      "dict": "遊ぶ",
+      "dictRead": "あそぶ",
+      "audio": "/Audio/minnamoi/bai13/00010100110001011.mp3",
+      "levels": {
+        "N5": [
+          "<ruby>公園<rt>こうえん</rt></ruby>で<ruby>遊<rt>あそ</rt></ruby>びます。",
+          "I play in the park."
+        ],
+        "N4": [
+          "<ruby>子<rt>こ</rt></ruby>どものとき、よく<ruby>友<rt>とも</rt></ruby>だちと<ruby>遊<rt>あそ</rt></ruby>びました。",
+          "When I was a child, I often played with my friends."
+        ],
+        "N3": [
+          "<ruby>週末<rt>しゅうまつ</rt></ruby>は<ruby>海<rt>うみ</rt></ruby>へ<ruby>遊<rt>あそ</rt></ruby>びに<ruby>行<rt>い</rt></ruby>くようにしています。",
+          "On weekends I make a point of going to the sea to have fun."
+        ],
+        "N2": [
+          "<ruby>仕事<rt>しごと</rt></ruby>が<ruby>忙<rt>いそが</rt></ruby>しいものの、たまには<ruby>遊<rt>あそ</rt></ruby>ばないと<ruby>体<rt>からだ</rt></ruby>がもたない。",
+          "Although work is busy, if I don't play once in a while my body won't hold up."
+        ],
+        "N1": [
+          "<ruby>幼<rt>おさな</rt></ruby>い<ruby>頃<rt>ころ</rt></ruby>、<ruby>日<rt>ひ</rt></ruby>が<ruby>暮<rt>く</rt></ruby>れるのも<ruby>忘<rt>わす</rt></ruby>れて<ruby>遊<rt>あそ</rt></ruby>んだあの<ruby>川辺<rt>かわべ</rt></ruby>は、<ruby>今<rt>いま</rt></ruby>や<ruby>面影<rt>おもかげ</rt></ruby>すら<ruby>残<rt>のこ</rt></ruby>っていない。",
+          "The riverside where I played as a child, forgetting even that the sun was setting, no longer retains so much as a trace of its former self."
+        ]
+      },
+      "mnem": "\"a-SO-bu\" — you say \"ah, so!\" and relax to play and have fun.",
+      "tip": "遊ぶ is a godan verb (て-form 遊んで, not 遊びて) and is intransitive — it means \"play/have fun/hang out\" generally, not \"play\" an instrument (弾く) or a sport (する).",
+      "accent": 0
+    },
+    {
+      "key": "mnn:13:1",
+      "kana": "およぎます",
+      "kanji": "泳ぎます",
+      "context": "",
+      "mean": "to swim",
+      "cat": "verb",
+      "type": "godan",
+      "trans": "i",
+      "dict": "泳ぐ",
+      "dictRead": "およぐ",
+      "audio": "/Audio/minnamoi/bai13/00010100110001100.mp3",
+      "levels": {
+        "N5": [
+          "<ruby>海<rt>うみ</rt></ruby>で<ruby>泳<rt>およ</rt></ruby>ぎます。",
+          "I swim in the sea."
+        ],
+        "N4": [
+          "<ruby>夏休<rt>なつやす</rt></ruby>みに、プールへ<ruby>泳<rt>およ</rt></ruby>ぎに<ruby>行<rt>い</rt></ruby>きたいです。",
+          "During summer vacation, I want to go to the pool to swim."
+        ],
+        "N3": [
+          "<ruby>毎朝<rt>まいあさ</rt></ruby><ruby>川<rt>かわ</rt></ruby>で<ruby>泳<rt>およ</rt></ruby>ぐようにしたら、<ruby>体<rt>からだ</rt></ruby>が<ruby>丈夫<rt>じょうぶ</rt></ruby>になった。",
+          "After I made a point of swimming in the river every morning, my body became stronger."
+        ],
+        "N2": [
+          "<ruby>波<rt>なみ</rt></ruby>が<ruby>高<rt>たか</rt></ruby>いものの、どうしても<ruby>今日<rt>きょう</rt></ruby>のうちに<ruby>沖<rt>おき</rt></ruby>まで<ruby>泳<rt>およ</rt></ruby>ぎたい。",
+          "Although the waves are high, I really want to swim out to the open sea before the day is out."
+        ],
+        "N1": [
+          "<ruby>激流<rt>げきりゅう</rt></ruby>の<ruby>中<rt>なか</rt></ruby>を<ruby>泳<rt>およ</rt></ruby>ぎ<ruby>切<rt>き</rt></ruby>るには、<ruby>並外<rt>なみはず</rt></ruby>れた<ruby>体力<rt>たいりょく</rt></ruby>と<ruby>精神力<rt>せいしんりょく</rt></ruby>がなければならない。",
+          "To swim all the way through a raging current, one must possess extraordinary physical and mental strength."
+        ]
+      },
+      "mnem": "\"o-YO-gu\" — imagine shouting \"oh, yo!\" as you dive in and start to swim.",
+      "tip": "泳ぐ is a godan verb ending in ぐ, so the て-form is 泳いで (voiced), not 泳きて; it's intransitive and the place you swim in takes で (海で泳ぐ) or を for swimming across (川を泳ぐ).",
+      "accent": 2
+    },
+    {
+      "key": "mnn:13:2",
+      "kana": "むかえます",
+      "kanji": "迎えます",
+      "context": "[人を]〜",
+      "mean": "to go to meet, to greet, to welcome [a person]",
+      "cat": "verb",
+      "type": "ichidan",
+      "trans": "t",
+      "dict": "迎える",
+      "dictRead": "むかえる",
+      "audio": "/Audio/minnamoi/bai13/00010100110001101.mp3",
+      "levels": {
+        "N5": [
+          "<ruby>駅<rt>えき</rt></ruby>で<ruby>友<rt>とも</rt></ruby>だちを<ruby>迎<rt>むか</rt></ruby>えます。",
+          "I go to meet my friend at the station."
+        ],
+        "N4": [
+          "２<ruby>時<rt>じ</rt></ruby>ごろ<ruby>子<rt>こ</rt></ruby>どもを<ruby>迎<rt>むか</rt></ruby>えに<ruby>行<rt>い</rt></ruby>きます。",
+          "I go to pick up my child at around two o'clock."
+        ],
+        "N3": [
+          "<ruby>空港<rt>くうこう</rt></ruby>までお<ruby>客<rt>きゃく</rt></ruby>さんを<ruby>迎<rt>むか</rt></ruby>えに<ruby>行<rt>い</rt></ruby>くようにしています。",
+          "I make a point of going to the airport to meet the guests."
+        ],
+        "N2": [
+          "<ruby>台風<rt>たいふう</rt></ruby>が<ruby>近<rt>ちか</rt></ruby>づいているものの、<ruby>両親<rt>りょうしん</rt></ruby>を<ruby>迎<rt>むか</rt></ruby>えに<ruby>行<rt>い</rt></ruby>かないわけにはいかない。",
+          "Although a typhoon is approaching, I can't very well not go to meet my parents."
+        ],
+        "N1": [
+          "<ruby>新<rt>あたら</rt></ruby>しい<ruby>時代<rt>じだい</rt></ruby>を<ruby>迎<rt>むか</rt></ruby>えるにあたり、<ruby>我々<rt>われわれ</rt></ruby>は<ruby>過去<rt>かこ</rt></ruby>の<ruby>慣習<rt>かんしゅう</rt></ruby>を<ruby>見直<rt>みなお</rt></ruby>さざるを<ruby>得<rt>え</rt></ruby>ない。",
+          "As we welcome a new era, we have no choice but to reexamine the customs of the past."
+        ]
+      },
+      "mnem": "\"mu-KA-eru\" — you go out to \"muck a\" round the station and welcome your friend.",
+      "tip": "迎える is a transitive ichidan verb (te-form 迎えて); the person met takes を (人を迎える). Very common as 迎えに行く / 迎えに来る = \"go/come to pick someone up.\"",
+      "accent": 0
+    },
+    {
+      "key": "mnn:13:3",
+      "kana": "つかれます",
+      "kanji": "疲れます",
+      "context": "",
+      "mean": "to get tired",
+      "cat": "verb",
+      "type": "ichidan",
+      "trans": "i",
+      "dict": "疲れる",
+      "dictRead": "つかれる",
+      "audio": "/Audio/minnamoi/bai13/00010100110001110.mp3",
+      "levels": {
+        "N5": [
+          "<ruby>今日<rt>きょう</rt></ruby>はとても<ruby>疲<rt>つか</rt></ruby>れました。",
+          "I got very tired today."
+        ],
+        "N4": [
+          "<ruby>長<rt>なが</rt></ruby>い<ruby>会議<rt>かいぎ</rt></ruby>のあと、みんな<ruby>疲<rt>つか</rt></ruby>れた<ruby>顔<rt>かお</rt></ruby>をしていました。",
+          "After the long meeting, everyone had tired faces."
+        ],
+        "N3": [
+          "<ruby>疲<rt>つか</rt></ruby>れたときは、<ruby>無理<rt>むり</rt></ruby>をせずに<ruby>休<rt>やす</rt></ruby>むようにしています。",
+          "When I'm tired, I make a point of resting rather than overdoing it."
+        ],
+        "N2": [
+          "<ruby>体<rt>からだ</rt></ruby>は<ruby>疲<rt>つか</rt></ruby>れているものの、<ruby>気持<rt>きも</rt></ruby>ちはまだ<ruby>元気<rt>げんき</rt></ruby>だ。",
+          "Although my body is tired, my spirits are still lively."
+        ],
+        "N1": [
+          "<ruby>連日<rt>れんじつ</rt></ruby>の<ruby>残業<rt>ざんぎょう</rt></ruby>で<ruby>心身<rt>しんしん</rt></ruby>ともに<ruby>疲<rt>つか</rt></ruby>れ<ruby>果<rt>は</rt></ruby>て、もはや<ruby>休養<rt>きゅうよう</rt></ruby>を<ruby>取<rt>と</rt></ruby>らざるを<ruby>得<rt>え</rt></ruby>ない<ruby>状態<rt>じょうたい</rt></ruby>だった。",
+          "Utterly worn out in both mind and body from consecutive days of overtime, I was in a state where I had no choice but to take some rest."
+        ]
+      },
+      "mnem": "\"tsu-ka-reru\" — after work you're \"too car-ry\" any more; you get tired.",
+      "tip": "疲れる is an ichidan intransitive verb; the common state form is 疲れています (\"I'm tired\") — note Japanese often uses the past 疲れました for \"I've gotten tired\" where English says \"I am tired.\"",
+      "accent": 3
+    },
+    {
+      "key": "mnn:13:4",
+      "kana": "けっこんします",
+      "kanji": "結婚します",
+      "context": "",
+      "mean": "to get married",
+      "cat": "verb",
+      "type": "irregular",
+      "trans": "i",
+      "dict": "結婚する",
+      "dictRead": "けっこんする",
+      "audio": "/Audio/minnamoi/bai13/00010100110001111.mp3",
+      "levels": {
+        "N5": [
+          "<ruby>姉<rt>あね</rt></ruby>は<ruby>去年<rt>きょねん</rt></ruby><ruby>結婚<rt>けっこん</rt></ruby>しました。",
+          "My older sister got married last year."
+        ],
+        "N4": [
+          "<ruby>好<rt>す</rt></ruby>きな<ruby>人<rt>ひと</rt></ruby>と<ruby>結婚<rt>けっこん</rt></ruby>したいです。",
+          "I want to marry the person I love."
+        ],
+        "N3": [
+          "<ruby>両親<rt>りょうしん</rt></ruby>が<ruby>賛成<rt>さんせい</rt></ruby>してくれるなら、<ruby>来年<rt>らいねん</rt></ruby><ruby>結婚<rt>けっこん</rt></ruby>するつもりです。",
+          "If my parents agree, I intend to get married next year."
+        ],
+        "N2": [
+          "<ruby>付<rt>つ</rt></ruby>き<ruby>合<rt>あ</rt></ruby>って<ruby>長<rt>なが</rt></ruby>いものの、まだ<ruby>結婚<rt>けっこん</rt></ruby>する<ruby>気<rt>き</rt></ruby>にはなれない。",
+          "Although we've been together a long time, I still can't bring myself to feel like getting married."
+        ],
+        "N1": [
+          "<ruby>周囲<rt>しゅうい</rt></ruby>の<ruby>反対<rt>はんたい</rt></ruby>を<ruby>押<rt>お</rt></ruby>し<ruby>切<rt>き</rt></ruby>って<ruby>結婚<rt>けっこん</rt></ruby>した<ruby>以上<rt>いじょう</rt></ruby>、<ruby>二人<rt>ふたり</rt></ruby>は<ruby>何<rt>なに</rt></ruby>があっても<ruby>支<rt>ささ</rt></ruby>え<ruby>合<rt>あ</rt></ruby>っていくしかない。",
+          "Having married against the opposition of those around them, the two have no choice but to support each other no matter what happens."
+        ]
+      },
+      "mnem": "結婚 = \"kekkon\" — picture a couple saying \"let's connect\" (ke-kkon) forever: they get married.",
+      "tip": "結婚する takes と for the partner (人と結婚する = \"marry someone\"), never を; the marriage state is 結婚しています. It's a する-verb, so it conjugates like する (結婚して/結婚しない).",
+      "accent": 0
+    },
+    {
+      "key": "mnn:13:5",
+      "kana": "かいものします",
+      "kanji": "買い物します",
+      "context": "",
+      "mean": "to do shopping",
+      "cat": "verb",
+      "type": "irregular",
+      "trans": "i",
+      "dict": "買い物する",
+      "dictRead": "かいものする",
+      "audio": "/Audio/minnamoi/bai13/00010100110010000.mp3",
+      "levels": {
+        "N5": [
+          "デパートで<ruby>買<rt>か</rt></ruby>い<ruby>物<rt>もの</rt></ruby>します。",
+          "I go shopping at the department store."
+        ],
+        "N4": [
+          "<ruby>週末<rt>しゅうまつ</rt></ruby>、<ruby>友<rt>とも</rt></ruby>だちと<ruby>買<rt>か</rt></ruby>い<ruby>物<rt>もの</rt></ruby>に<ruby>行<rt>い</rt></ruby>きたいです。",
+          "On the weekend, I want to go shopping with my friend."
+        ],
+        "N3": [
+          "<ruby>安<rt>やす</rt></ruby>いときにまとめて<ruby>買<rt>か</rt></ruby>い<ruby>物<rt>もの</rt></ruby>するようにしています。",
+          "I make a point of doing my shopping all at once when things are cheap."
+        ],
+        "N2": [
+          "<ruby>時間<rt>じかん</rt></ruby>がないものの、<ruby>晩<rt>ばん</rt></ruby>ごはんの<ruby>材料<rt>ざいりょう</rt></ruby>だけは<ruby>買<rt>か</rt></ruby>い<ruby>物<rt>もの</rt></ruby>しておかなければならない。",
+          "Although I don't have time, I have to at least do the shopping for tonight's dinner ingredients."
+        ],
+        "N1": [
+          "<ruby>物価<rt>ぶっか</rt></ruby>の<ruby>上昇<rt>じょうしょう</rt></ruby>が<ruby>続<rt>つづ</rt></ruby>く<ruby>今<rt>いま</rt></ruby>、<ruby>無駄<rt>むだ</rt></ruby>な<ruby>買<rt>か</rt></ruby>い<ruby>物<rt>もの</rt></ruby>は<ruby>極力<rt>きょくりょく</rt></ruby><ruby>控<rt>ひか</rt></ruby>えざるを<ruby>得<rt>え</rt></ruby>ない。",
+          "With prices continuing to rise these days, we have no choice but to refrain from wasteful shopping as much as possible."
+        ]
+      },
+      "mnem": "買い物 = 買う (buy) + 物 (thing) = \"buying things\" — with する it becomes the act of shopping.",
+      "tip": "買い物する is a する-verb built from the noun 買い物 (かいもの, \"shopping/purchases\"); you can also say 買い物をする with を. Use 買い物に行く for \"go shopping\" — the goal-に with a motion verb (Lesson 13's pattern).",
+      "accent": 0
+    },
+    {
+      "key": "mnn:13:6",
+      "kana": "しょくじします",
+      "kanji": "食事します",
+      "context": "",
+      "mean": "to have a meal, to dine",
+      "cat": "verb",
+      "type": "irregular",
+      "trans": "i",
+      "dict": "食事する",
+      "dictRead": "しょくじする",
+      "audio": "/Audio/minnamoi/bai13/00010100110010001.mp3",
+      "levels": {
+        "N5": [
+          "レストランで<ruby>食事<rt>しょくじ</rt></ruby>します。",
+          "I have a meal at a restaurant."
+        ],
+        "N4": [
+          "<ruby>今晩<rt>こんばん</rt></ruby>、<ruby>家族<rt>かぞく</rt></ruby>と<ruby>食事<rt>しょくじ</rt></ruby>に<ruby>行<rt>い</rt></ruby>きます。",
+          "Tonight I'm going out to eat with my family."
+        ],
+        "N3": [
+          "<ruby>夜<rt>よる</rt></ruby><ruby>遅<rt>おそ</rt></ruby>く<ruby>食事<rt>しょくじ</rt></ruby>しないようにしています。",
+          "I make a point of not eating late at night."
+        ],
+        "N2": [
+          "<ruby>忙<rt>いそが</rt></ruby>しいものの、<ruby>家族<rt>かぞく</rt></ruby>そろって<ruby>食事<rt>しょくじ</rt></ruby>する<ruby>時間<rt>じかん</rt></ruby>だけは<ruby>大切<rt>たいせつ</rt></ruby>にしたい。",
+          "Although I'm busy, I want to treasure at least the time when the whole family dines together."
+        ],
+        "N1": [
+          "<ruby>取引先<rt>とりひきさき</rt></ruby>との<ruby>会食<rt>かいしょく</rt></ruby>である<ruby>以上<rt>いじょう</rt></ruby>、たとえ<ruby>気<rt>き</rt></ruby>が<ruby>進<rt>すす</rt></ruby>まなくても<ruby>食事<rt>しょくじ</rt></ruby>に<ruby>付<rt>つ</rt></ruby>き<ruby>合<rt>あ</rt></ruby>わざるを<ruby>得<rt>え</rt></ruby>ない。",
+          "Given that it is a business dinner with a client, I have no choice but to accompany them for the meal even if I'm not keen on it."
+        ]
+      },
+      "mnem": "食事 = 食 (eat) + 事 (matter/thing) = \"the matter of eating\" — with する it means to have a meal.",
+      "tip": "食事する is a formal する-verb for \"having a meal,\" more polite than plain ごはんを食べる; you can also say 食事をする. Don't confuse 食事 (しょくじ, a meal) with 食堂 (しょくどう, a dining hall/cafeteria).",
+      "accent": 0
+    },
+    {
+      "key": "mnn:13:7",
+      "kana": "さんぽします",
+      "kanji": "散歩します",
+      "context": "[公園を]〜",
+      "mean": "to take a walk [in a park]",
+      "cat": "verb",
+      "type": "irregular",
+      "trans": "i",
+      "dict": "散歩する",
+      "dictRead": "さんぽする",
+      "audio": "/Audio/minnamoi/bai13/00010100110010010.mp3",
+      "levels": {
+        "N5": [
+          "<ruby>毎朝<rt>まいあさ</rt></ruby><ruby>公園<rt>こうえん</rt></ruby>を<ruby>散歩<rt>さんぽ</rt></ruby>します。",
+          "I take a walk in the park every morning."
+        ],
+        "N4": [
+          "<ruby>天気<rt>てんき</rt></ruby>がいいから、<ruby>川<rt>かわ</rt></ruby>の<ruby>近<rt>ちか</rt></ruby>くを<ruby>散歩<rt>さんぽ</rt></ruby>したいです。",
+          "The weather is nice, so I want to take a walk near the river."
+        ],
+        "N3": [
+          "<ruby>夕方<rt>ゆうがた</rt></ruby>、<ruby>犬<rt>いぬ</rt></ruby>と<ruby>一緒<rt>いっしょ</rt></ruby>に<ruby>散歩<rt>さんぽ</rt></ruby>するようにしています。",
+          "In the evening, I make a point of taking a walk together with my dog."
+        ],
+        "N2": [
+          "<ruby>雨<rt>あめ</rt></ruby>が<ruby>降<rt>ふ</rt></ruby>っているものの、<ruby>気分転換<rt>きぶんてんかん</rt></ruby>に<ruby>少<rt>すこ</rt></ruby>し<ruby>散歩<rt>さんぽ</rt></ruby>したくなった。",
+          "Although it's raining, I felt like taking a short walk for a change of pace."
+        ],
+        "N1": [
+          "<ruby>思索<rt>しさく</rt></ruby>にふけりながら<ruby>並木道<rt>なみきみち</rt></ruby>を<ruby>散歩<rt>さんぽ</rt></ruby>する<ruby>時間<rt>じかん</rt></ruby>こそ、<ruby>彼<rt>かれ</rt></ruby>にとって<ruby>何<rt>なに</rt></ruby>ものにも<ruby>代<rt>か</rt></ruby>えがたいひとときだった。",
+          "The time spent strolling down the tree-lined avenue while lost in thought was, for him, a moment beyond anything else in value."
+        ]
+      },
+      "mnem": "散歩 = 散 (scatter) + 歩 (walk) = to \"scatter-walk\" idly, i.e. take a leisurely stroll.",
+      "tip": "散歩する uses the passing-through を for the place strolled (公園を散歩する), like Lesson 23's motion を — not で. Don't confuse it with 歩く (あるく), which is plain \"to walk (somewhere).\"",
+      "accent": 0
+    },
+    {
+      "key": "mnn:13:8",
+      "kana": "たいへん",
+      "kanji": "大変",
+      "context": "",
+      "mean": "hard, tough, awful; terrible",
+      "cat": "adjective",
+      "type": "na-adj",
+      "trans": "",
+      "dict": "大変",
+      "dictRead": "たいへん",
+      "audio": "/Audio/minnamoi/bai13/00010100110010011.mp3",
+      "levels": {
+        "N5": [
+          "<ruby>今日<rt>きょう</rt></ruby>の<ruby>仕事<rt>しごと</rt></ruby>は<ruby>大変<rt>たいへん</rt></ruby>でした。",
+          "Today's work was tough."
+        ],
+        "N4": [
+          "<ruby>一人<rt>ひとり</rt></ruby>で<ruby>引<rt>ひ</rt></ruby>っ<ruby>越<rt>こ</rt></ruby>しをするのは<ruby>大変<rt>たいへん</rt></ruby>です。",
+          "Moving house all by yourself is hard."
+        ],
+        "N3": [
+          "<ruby>大変<rt>たいへん</rt></ruby>な<ruby>仕事<rt>しごと</rt></ruby>でも、<ruby>最後<rt>さいご</rt></ruby>までやるようにしています。",
+          "Even with a tough job, I make a point of seeing it through to the end."
+        ],
+        "N2": [
+          "<ruby>準備<rt>じゅんび</rt></ruby>は<ruby>大変<rt>たいへん</rt></ruby>だったものの、パーティーは<ruby>大成功<rt>だいせいこう</rt></ruby>だった。",
+          "Although the preparations were tough, the party was a great success."
+        ],
+        "N1": [
+          "<ruby>震災<rt>しんさい</rt></ruby>で<ruby>家<rt>いえ</rt></ruby>を<ruby>失<rt>うしな</rt></ruby>った<ruby>人々<rt>ひとびと</rt></ruby>の<ruby>大変<rt>たいへん</rt></ruby>な<ruby>苦労<rt>くろう</rt></ruby>は、<ruby>言葉<rt>ことば</rt></ruby>では<ruby>言<rt>い</rt></ruby>い<ruby>尽<rt>つ</rt></ruby>くせないものがある。",
+          "The tremendous hardships of the people who lost their homes in the earthquake are more than words could ever fully express."
+        ]
+      },
+      "mnem": "大 (big) + 変 (change/strange) — a \"big change\" thrown at you is a tough, awful situation.",
+      "tip": "大変 is a な-adjective (大変な仕事) but is very often used as an adverb, 大変 = \"very\" (大変おいしい = \"very tasty\"). Context tells you which: \"a tough ~\" vs \"very ~.\"",
+      "accent": 0
+    },
+    {
+      "key": "mnn:13:9",
+      "kana": "ほしい",
+      "kanji": "欲しい",
+      "context": "［お金が］〜",
+      "mean": "to want (a thing), to desire",
+      "cat": "adjective",
+      "type": "i-adj",
+      "trans": "",
+      "dict": "欲しい",
+      "dictRead": "ほしい",
+      "audio": "/Audio/minnamoi/bai13/00010100110010100.mp3",
+      "levels": {
+        "N5": [
+          "<ruby>新<rt>あたら</rt></ruby>しいカメラが<ruby>欲<rt>ほ</rt></ruby>しいです。",
+          "I want a new camera."
+        ],
+        "N4": [
+          "<ruby>子<rt>こ</rt></ruby>どものとき、<ruby>大<rt>おお</rt></ruby>きい<ruby>犬<rt>いぬ</rt></ruby>が<ruby>欲<rt>ほ</rt></ruby>しかったです。",
+          "When I was a child, I wanted a big dog."
+        ],
+        "N3": [
+          "<ruby>本当<rt>ほんとう</rt></ruby>に<ruby>欲<rt>ほ</rt></ruby>しい<ruby>物<rt>もの</rt></ruby>だけを<ruby>買<rt>か</rt></ruby>うようにしています。",
+          "I make a point of buying only the things I really want."
+        ],
+        "N2": [
+          "お<ruby>金<rt>かね</rt></ruby>が<ruby>欲<rt>ほ</rt></ruby>しくないわけではないものの、<ruby>時間<rt>じかん</rt></ruby>のほうがもっと<ruby>大切<rt>たいせつ</rt></ruby>だ。",
+          "It's not that I don't want money, but time is more important to me."
+        ],
+        "N1": [
+          "<ruby>物<rt>もの</rt></ruby>があふれる<ruby>現代<rt>げんだい</rt></ruby>において、<ruby>本当<rt>ほんとう</rt></ruby>に<ruby>欲<rt>ほ</rt></ruby>しい<ruby>物<rt>もの</rt></ruby>が<ruby>何<rt>なに</rt></ruby>かを<ruby>見極<rt>みきわ</rt></ruby>めるのは、<ruby>案外<rt>あんがい</rt></ruby><ruby>難<rt>むずか</rt></ruby>しいものだ。",
+          "In these modern times overflowing with goods, discerning what it is you truly want is, surprisingly, quite a difficult thing."
+        ]
+      },
+      "mnem": "\"ho-SHII\" — you point and go \"whoa, she!\" at the thing you want to own.",
+      "tip": "欲しい is an い-adjective and marks the wanted THING with が (カメラが欲しい). Standard for your own desire; describing a third person's wanting needs 欲しがっている. Don't confuse 〜が欲しい (want a thing) with 〜たい (want to DO — the verb-stem form in this same lesson).",
+      "accent": 2
+    },
+    {
+      "key": "mnn:13:10",
+      "kana": "ひろい",
+      "kanji": "広い",
+      "context": "",
+      "mean": "wide, spacious, roomy",
+      "cat": "adjective",
+      "type": "i-adj",
+      "trans": "",
+      "dict": "広い",
+      "dictRead": "ひろい",
+      "audio": "/Audio/minnamoi/bai13/00010100110010101.mp3",
+      "levels": {
+        "N5": [
+          "この<ruby>部屋<rt>へや</rt></ruby>は<ruby>広<rt>ひろ</rt></ruby>いです。",
+          "This room is spacious."
+        ],
+        "N4": [
+          "<ruby>広<rt>ひろ</rt></ruby>い<ruby>庭<rt>にわ</rt></ruby>がある<ruby>家<rt>いえ</rt></ruby>に<ruby>住<rt>す</rt></ruby>みたいです。",
+          "I want to live in a house with a big garden."
+        ],
+        "N3": [
+          "できるだけ<ruby>広<rt>ひろ</rt></ruby>い<ruby>部屋<rt>へや</rt></ruby>を<ruby>探<rt>さが</rt></ruby>すようにしています。",
+          "I make a point of looking for as spacious a room as possible."
+        ],
+        "N2": [
+          "この<ruby>公園<rt>こうえん</rt></ruby>は<ruby>広<rt>ひろ</rt></ruby>いものの、<ruby>遊<rt>あそ</rt></ruby>ぶ<ruby>場所<rt>ばしょ</rt></ruby>があまりない。",
+          "Although this park is large, there aren't many places to play."
+        ],
+        "N1": [
+          "<ruby>視野<rt>しや</rt></ruby>を<ruby>広<rt>ひろ</rt></ruby>く<ruby>持<rt>も</rt></ruby>ってこそ、<ruby>複雑<rt>ふくざつ</rt></ruby>な<ruby>問題<rt>もんだい</rt></ruby>の<ruby>本質<rt>ほんしつ</rt></ruby>を<ruby>見抜<rt>みぬ</rt></ruby>くことができるのだ。",
+          "It is precisely by keeping a broad perspective that one can see through to the essence of a complex problem."
+        ]
+      },
+      "mnem": "\"hi-RO-i\" — a \"hero\" needs a wide, spacious hall to stride through: 広い.",
+      "tip": "広い is an い-adjective and the direct opposite of 狭い (せまい, narrow/cramped); it covers both physical space (広い部屋) and figurative breadth (視野が広い = broad-minded).",
+      "accent": 2
+    },
+    {
+      "key": "mnn:13:11",
+      "kana": "せまい",
+      "kanji": "狭い",
+      "context": "",
+      "mean": "narrow, cramped, small (of space)",
+      "cat": "adjective",
+      "type": "i-adj",
+      "trans": "",
+      "dict": "狭い",
+      "dictRead": "せまい",
+      "audio": "/Audio/minnamoi/bai13/00010100110010110.mp3",
+      "levels": {
+        "N5": [
+          "わたしの<ruby>部屋<rt>へや</rt></ruby>は<ruby>狭<rt>せま</rt></ruby>いです。",
+          "My room is cramped."
+        ],
+        "N4": [
+          "この<ruby>道<rt>みち</rt></ruby>は<ruby>狭<rt>せま</rt></ruby>いから、<ruby>車<rt>くるま</rt></ruby>で<ruby>通<rt>とお</rt></ruby>れません。",
+          "This road is narrow, so you can't get through by car."
+        ],
+        "N3": [
+          "<ruby>狭<rt>せま</rt></ruby>い<ruby>所<rt>ところ</rt></ruby>では、<ruby>荷物<rt>にもつ</rt></ruby>を<ruby>置<rt>お</rt></ruby>かないようにしています。",
+          "In cramped places, I make a point of not leaving my luggage lying around."
+        ],
+        "N2": [
+          "<ruby>部屋<rt>へや</rt></ruby>は<ruby>狭<rt>せま</rt></ruby>いものの、<ruby>駅<rt>えき</rt></ruby>に<ruby>近<rt>ちか</rt></ruby>くてとても<ruby>便利<rt>べんり</rt></ruby>だ。",
+          "Although the room is cramped, it's close to the station and very convenient."
+        ],
+        "N1": [
+          "<ruby>視野<rt>しや</rt></ruby>が<ruby>狭<rt>せま</rt></ruby>いままでは、<ruby>目<rt>め</rt></ruby>の<ruby>前<rt>まえ</rt></ruby>の<ruby>利益<rt>りえき</rt></ruby>にとらわれ、<ruby>大局<rt>たいきょく</rt></ruby>を<ruby>見失<rt>みうしな</rt></ruby>いかねない。",
+          "As long as one's outlook remains narrow, one is liable to be caught up in immediate gains and lose sight of the bigger picture."
+        ]
+      },
+      "mnem": "\"se-MA-i\" — a \"seam\" is a tight, narrow gap: せまい = cramped.",
+      "tip": "狭い is an い-adjective, the opposite of 広い (ひろい, wide/spacious). Use it for cramped rooms/roads (狭い道) and also a narrow outlook (視野が狭い); don't confuse it with 細い (ほそい, thin/slender).",
+      "accent": 2
+    },
+    {
+      "key": "mnn:13:12",
+      "kana": "プール",
+      "kanji": "",
+      "context": "",
+      "mean": "swimming pool",
+      "cat": "noun",
+      "type": "",
+      "trans": "",
+      "dict": "プール",
+      "dictRead": "プール",
+      "audio": "/Audio/minnamoi/bai13/00010100110010111.mp3",
+      "levels": {
+        "N5": [
+          "<ruby>夏<rt>なつ</rt></ruby>はプールで<ruby>泳<rt>およ</rt></ruby>ぎます。",
+          "In summer I swim in the pool."
+        ],
+        "N4": [
+          "<ruby>子<rt>こ</rt></ruby>どもたちとプールへ<ruby>泳<rt>およ</rt></ruby>ぎに<ruby>行<rt>い</rt></ruby>きたいです。",
+          "I want to go to the pool to swim with the kids."
+        ],
+        "N3": [
+          "<ruby>健康<rt>けんこう</rt></ruby>のために、<ruby>週<rt>しゅう</rt></ruby>に<ruby>二回<rt>にかい</rt></ruby>プールに<ruby>通<rt>かよ</rt></ruby>うようにしています。",
+          "For my health, I make a point of going to the pool twice a week."
+        ],
+        "N2": [
+          "このプールは<ruby>広<rt>ひろ</rt></ruby>いものの、<ruby>夏<rt>なつ</rt></ruby>はいつも<ruby>人<rt>ひと</rt></ruby>でいっぱいだ。",
+          "Although this pool is large, in summer it's always packed with people."
+        ],
+        "N1": [
+          "<ruby>市営<rt>しえい</rt></ruby>プールの<ruby>老朽化<rt>ろうきゅうか</rt></ruby>が<ruby>進<rt>すす</rt></ruby>み、<ruby>安全<rt>あんぜん</rt></ruby>のため<ruby>当面<rt>とうめん</rt></ruby><ruby>閉鎖<rt>へいさ</rt></ruby>せざるを<ruby>得<rt>え</rt></ruby>なくなった。",
+          "The municipal pool's deterioration has advanced to the point that, for safety's sake, it has had to be closed for the time being."
+        ]
+      },
+      "mnem": "\"プール\" is the English \"pool\" borrowed into katakana — stretch the vowel: POOL → プー・ル.",
+      "tip": "Loanword from English \"pool.\" The place you swim takes で (プールで泳ぐ); note the long ー vowel — プル (without it) would be a different word.",
+      "accent": 1
+    },
+    {
+      "key": "mnn:13:13",
+      "kana": "かわ",
+      "kanji": "川",
+      "context": "",
+      "mean": "river",
+      "cat": "noun",
+      "type": "",
+      "trans": "",
+      "dict": "川",
+      "dictRead": "かわ",
+      "audio": "/Audio/minnamoi/bai13/00010100110011000.mp3",
+      "levels": {
+        "N5": [
+          "この<ruby>川<rt>かわ</rt></ruby>はとてもきれいです。",
+          "This river is very clean."
+        ],
+        "N4": [
+          "<ruby>子<rt>こ</rt></ruby>どものとき、よく<ruby>川<rt>かわ</rt></ruby>で<ruby>泳<rt>およ</rt></ruby>ぎました。",
+          "When I was a child, I often swam in the river."
+        ],
+        "N3": [
+          "<ruby>夏<rt>なつ</rt></ruby>は<ruby>川<rt>かわ</rt></ruby>へ<ruby>釣<rt>つ</rt></ruby>りに<ruby>行<rt>い</rt></ruby>くようにしています。",
+          "In summer I make a point of going to the river to fish."
+        ],
+        "N2": [
+          "この<ruby>川<rt>かわ</rt></ruby>は<ruby>浅<rt>あさ</rt></ruby>いものの、<ruby>雨<rt>あめ</rt></ruby>のあとは<ruby>流<rt>なが</rt></ruby>れが<ruby>速<rt>はや</rt></ruby>くなる。",
+          "Although this river is shallow, after rain the current becomes fast."
+        ],
+        "N1": [
+          "<ruby>幾多<rt>いくた</rt></ruby>の<ruby>歴史<rt>れきし</rt></ruby>を<ruby>見守<rt>みまも</rt></ruby>ってきたこの<ruby>川<rt>かわ</rt></ruby>は、<ruby>今<rt>いま</rt></ruby>もなお<ruby>人々<rt>ひとびと</rt></ruby>の<ruby>暮<rt>く</rt></ruby>らしを<ruby>静<rt>しず</rt></ruby>かに<ruby>支<rt>ささ</rt></ruby>え<ruby>続<rt>つづ</rt></ruby>けている。",
+          "This river, which has watched over countless chapters of history, still quietly continues to sustain people's lives even now."
+        ]
+      },
+      "mnem": "\"ka-WA\" — picture a river going \"kawa-kawa\" as it babbles over the rocks.",
+      "tip": "The kanji 川 pictures three flowing lines of water. Don't confuse 川 (かわ, river) with the same-reading 皮/革 (かわ, skin/leather); as a place, the river takes で (川で泳ぐ) or へ〜に (川へ釣りに行く).",
+      "accent": 2
+    },
+    {
+      "key": "mnn:13:14",
+      "kana": "びじゅつ",
+      "kanji": "美術",
+      "context": "〜館",
+      "mean": "fine art, the fine arts",
+      "cat": "noun",
+      "type": "",
+      "trans": "",
+      "dict": "美術",
+      "dictRead": "びじゅつ",
+      "audio": "/Audio/minnamoi/bai13/00010100110011001.mp3",
+      "levels": {
+        "N5": [
+          "わたしは<ruby>美術<rt>びじゅつ</rt></ruby>が<ruby>好<rt>す</rt></ruby>きです。",
+          "I like fine art."
+        ],
+        "N4": [
+          "<ruby>日本<rt>にほん</rt></ruby>へ<ruby>美術<rt>びじゅつ</rt></ruby>の<ruby>勉強<rt>べんきょう</rt></ruby>に<ruby>来<rt>き</rt></ruby>ました。",
+          "I came to Japan to study fine art."
+        ],
+        "N3": [
+          "<ruby>休<rt>やす</rt></ruby>みの<ruby>日<rt>ひ</rt></ruby>は<ruby>美術館<rt>びじゅつかん</rt></ruby>へ<ruby>絵<rt>え</rt></ruby>を<ruby>見<rt>み</rt></ruby>に<ruby>行<rt>い</rt></ruby>くようにしています。",
+          "On my days off, I make a point of going to the art museum to see paintings."
+        ],
+        "N2": [
+          "<ruby>美術<rt>びじゅつ</rt></ruby>には<ruby>詳<rt>くわ</rt></ruby>しくないものの、この<ruby>作品<rt>さくひん</rt></ruby>には<ruby>心<rt>こころ</rt></ruby>を<ruby>動<rt>うご</rt></ruby>かされた。",
+          "Although I'm not knowledgeable about fine art, this work moved me."
+        ],
+        "N1": [
+          "<ruby>現代<rt>げんだい</rt></ruby><ruby>美術<rt>びじゅつ</rt></ruby>は<ruby>難解<rt>なんかい</rt></ruby>だと<ruby>言<rt>い</rt></ruby>われがちだが、<ruby>作者<rt>さくしゃ</rt></ruby>の<ruby>意図<rt>いと</rt></ruby>を<ruby>知<rt>し</rt></ruby>れば、その<ruby>奥深<rt>おくぶか</rt></ruby>さに<ruby>圧倒<rt>あっとう</rt></ruby>されるだろう。",
+          "Contemporary art is often said to be hard to grasp, but once you learn the artist's intent, you'll likely be overwhelmed by its depth."
+        ]
+      },
+      "mnem": "美 (beauty) + 術 (technique/art) = the \"art of beauty\" = the fine arts.",
+      "tip": "美術 is the abstract field of fine art; add 館 for 美術館 (びじゅつかん, art museum/gallery). Don't confuse it with 芸術 (げいじゅつ, art in the broadest sense including music/theater).",
+      "accent": 1
+    },
+    {
+      "key": "mnn:13:15",
+      "kana": "つり",
+      "kanji": "釣り",
+      "context": "〜を します",
+      "mean": "fishing, angling",
+      "cat": "noun",
+      "type": "",
+      "trans": "",
+      "dict": "釣り",
+      "dictRead": "つり",
+      "audio": "/Audio/minnamoi/bai13/00010100110011010.mp3",
+      "levels": {
+        "N5": [
+          "<ruby>父<rt>ちち</rt></ruby>は<ruby>釣<rt>つ</rt></ruby>りが<ruby>好<rt>す</rt></ruby>きです。",
+          "My father likes fishing."
+        ],
+        "N4": [
+          "<ruby>週末<rt>しゅうまつ</rt></ruby>、<ruby>海<rt>うみ</rt></ruby>へ<ruby>釣<rt>つ</rt></ruby>りに<ruby>行<rt>い</rt></ruby>きたいです。",
+          "On the weekend, I want to go to the sea to fish."
+        ],
+        "N3": [
+          "<ruby>朝<rt>あさ</rt></ruby><ruby>早<rt>はや</rt></ruby>く<ruby>起<rt>お</rt></ruby>きて、<ruby>川<rt>かわ</rt></ruby>で<ruby>釣<rt>つ</rt></ruby>りをするようにしています。",
+          "I make a point of getting up early and fishing in the river."
+        ],
+        "N2": [
+          "<ruby>釣<rt>つ</rt></ruby>りは<ruby>好<rt>す</rt></ruby>きなものの、<ruby>最近<rt>さいきん</rt></ruby>は<ruby>忙<rt>いそが</rt></ruby>しくてなかなか<ruby>行<rt>い</rt></ruby>けない。",
+          "Although I like fishing, lately I've been busy and can hardly go."
+        ],
+        "N1": [
+          "<ruby>釣<rt>つ</rt></ruby>りの<ruby>醍醐味<rt>だいごみ</rt></ruby>は<ruby>釣果<rt>ちょうか</rt></ruby>そのものより、<ruby>自然<rt>しぜん</rt></ruby>と<ruby>向<rt>む</rt></ruby>き<ruby>合<rt>あ</rt></ruby>い<ruby>静<rt>しず</rt></ruby>かに<ruby>時<rt>とき</rt></ruby>を<ruby>過<rt>す</rt></ruby>ごすことにこそあると<ruby>言<rt>い</rt></ruby>えよう。",
+          "The real charm of fishing, one might say, lies not in the catch itself but in facing nature and quietly passing the time."
+        ]
+      },
+      "mnem": "釣り comes from 釣る (つる, to fish/catch) — \"tsu-ri,\" the act of catching a fish on your line.",
+      "tip": "釣り is the noun \"fishing\" (from the verb 釣る); do it with 釣りをする or go with 釣りに行く. Note the homophone 釣り also means \"change\" (money returned), as in お釣り.",
+      "accent": 0
+    },
+    {
+      "key": "mnn:13:16",
+      "kana": "スキー",
+      "kanji": "",
+      "context": "〜を します",
+      "mean": "skiing, skis",
+      "cat": "noun",
+      "type": "",
+      "trans": "",
+      "dict": "スキー",
+      "dictRead": "スキー",
+      "audio": "/Audio/minnamoi/bai13/00010100110011011.mp3",
+      "levels": {
+        "N5": [
+          "<ruby>冬<rt>ふゆ</rt></ruby>はスキーが<ruby>好<rt>す</rt></ruby>きです。",
+          "In winter I like skiing."
+        ],
+        "N4": [
+          "<ruby>北海道<rt>ほっかいどう</rt></ruby>へスキーに<ruby>行<rt>い</rt></ruby>きたいです。",
+          "I want to go to Hokkaido to ski."
+        ],
+        "N3": [
+          "<ruby>毎年<rt>まいとし</rt></ruby><ruby>冬休<rt>ふゆやす</rt></ruby>みに、<ruby>家族<rt>かぞく</rt></ruby>とスキーをするようにしています。",
+          "Every year during winter break, I make a point of skiing with my family."
+        ],
+        "N2": [
+          "スキーは<ruby>楽<rt>たの</rt></ruby>しいものの、<ruby>道具<rt>どうぐ</rt></ruby>をそろえるのにお<ruby>金<rt>かね</rt></ruby>がかかる。",
+          "Although skiing is fun, gathering the equipment costs money."
+        ],
+        "N1": [
+          "<ruby>雪不足<rt>ゆきぶそく</rt></ruby>が<ruby>深刻<rt>しんこく</rt></ruby><ruby>化<rt>か</rt></ruby>する<ruby>昨今<rt>さっこん</rt></ruby>、<ruby>各地<rt>かくち</rt></ruby>のスキー<ruby>場<rt>じょう</rt></ruby>は<ruby>営業<rt>えいぎょう</rt></ruby><ruby>形態<rt>けいたい</rt></ruby>の<ruby>見直<rt>みなお</rt></ruby>しを<ruby>迫<rt>せま</rt></ruby>られている。",
+          "With snow shortages growing serious these days, ski resorts across the country are being pressed to rethink how they operate."
+        ]
+      },
+      "mnem": "\"スキー\" is the English \"ski\" borrowed into katakana — stretch the vowel: SKI → ス・キー.",
+      "tip": "Loanword from English \"ski.\" Ski with スキーをする, go with スキーに行く; スキー場 (スキーじょう) is a ski resort. Don't confuse it with 好き (すき, to like) — スキー has a long ー.",
+      "accent": 2
+    },
+    {
+      "key": "mnn:13:17",
+      "kana": "しゅうまつ",
+      "kanji": "週末",
+      "context": "",
+      "mean": "weekend",
+      "cat": "noun",
+      "type": "",
+      "trans": "",
+      "dict": "週末",
+      "dictRead": "しゅうまつ",
+      "audio": "/Audio/minnamoi/bai13/00010100110011100.mp3",
+      "levels": {
+        "N5": [
+          "<ruby>週末<rt>しゅうまつ</rt></ruby>は<ruby>何<rt>なに</rt></ruby>をしますか。",
+          "What do you do on the weekend?"
+        ],
+        "N4": [
+          "<ruby>今週<rt>こんしゅう</rt></ruby>の<ruby>週末<rt>しゅうまつ</rt></ruby>、<ruby>友<rt>とも</rt></ruby>だちと<ruby>映画<rt>えいが</rt></ruby>を<ruby>見<rt>み</rt></ruby>に<ruby>行<rt>い</rt></ruby>きます。",
+          "This weekend, I'm going to see a movie with my friend."
+        ],
+        "N3": [
+          "<ruby>週末<rt>しゅうまつ</rt></ruby>はゆっくり<ruby>休<rt>やす</rt></ruby>むようにしています。",
+          "On weekends I make a point of resting and taking it easy."
+        ],
+        "N2": [
+          "<ruby>週末<rt>しゅうまつ</rt></ruby>は<ruby>休<rt>やす</rt></ruby>みのはずだったものの、<ruby>急<rt>きゅう</rt></ruby>な<ruby>仕事<rt>しごと</rt></ruby>で<ruby>出勤<rt>しゅっきん</rt></ruby>することになった。",
+          "The weekend was supposed to be off, but I ended up having to go in for urgent work."
+        ],
+        "N1": [
+          "<ruby>働<rt>はたら</rt></ruby>き<ruby>方<rt>かた</rt></ruby>が<ruby>多様化<rt>たようか</rt></ruby>する<ruby>中<rt>なか</rt></ruby>、<ruby>週末<rt>しゅうまつ</rt></ruby>という<ruby>概念<rt>がいねん</rt></ruby>そのものが<ruby>揺<rt>ゆ</rt></ruby>らぎつつあるのかもしれない。",
+          "As working styles grow more diverse, perhaps the very notion of \"the weekend\" itself is beginning to waver."
+        ]
+      },
+      "mnem": "週 (week) + 末 (end) = the \"end of the week\" = the weekend.",
+      "tip": "週末 = 週 (week) + 末 (end). Compare 月末 (げつまつ, end of month) and 年末 (ねんまつ, end of year), all using 末 (まつ/すえ). Don't confuse 末 (end) with 未 (not yet), which look similar.",
+      "accent": 0
+    },
+    {
+      "key": "mnn:13:18",
+      "kana": "［お］しょうがつ",
+      "kanji": "［お］正月",
+      "context": "",
+      "mean": "New Year, the New Year holidays",
+      "cat": "noun",
+      "type": "",
+      "trans": "",
+      "dict": "お正月",
+      "dictRead": "おしょうがつ",
+      "audio": "/Audio/minnamoi/bai13/00010100110011101.mp3",
+      "levels": {
+        "N5": [
+          "お<ruby>正月<rt>しょうがつ</rt></ruby>は<ruby>国<rt>くに</rt></ruby>へ<ruby>帰<rt>かえ</rt></ruby>ります。",
+          "For New Year, I'll go back to my home country."
+        ],
+        "N4": [
+          "<ruby>日本<rt>にほん</rt></ruby>のお<ruby>正月<rt>しょうがつ</rt></ruby>に、おもちを<ruby>食<rt>た</rt></ruby>べたいです。",
+          "For the Japanese New Year, I want to eat mochi."
+        ],
+        "N3": [
+          "お<ruby>正月<rt>しょうがつ</rt></ruby>は<ruby>家族<rt>かぞく</rt></ruby>そろって<ruby>過<rt>す</rt></ruby>ごすようにしています。",
+          "For New Year, I make a point of spending it all together with my family."
+        ],
+        "N2": [
+          "お<ruby>正月<rt>しょうがつ</rt></ruby>は<ruby>休<rt>やす</rt></ruby>みたいものの、<ruby>店<rt>みせ</rt></ruby>が<ruby>忙<rt>いそが</rt></ruby>しくてそうもいかない。",
+          "Although I'd like to rest for the New Year, the shop is busy and it's just not possible."
+        ],
+        "N1": [
+          "<ruby>核家族<rt>かくかぞく</rt></ruby><ruby>化<rt>か</rt></ruby>が<ruby>進<rt>すす</rt></ruby>むにつれ、<ruby>一族<rt>いちぞく</rt></ruby>そろってお<ruby>正月<rt>しょうがつ</rt></ruby>を<ruby>祝<rt>いわ</rt></ruby>うという<ruby>光景<rt>こうけい</rt></ruby>も<ruby>次第<rt>しだい</rt></ruby>に<ruby>失<rt>うしな</rt></ruby>われつつある。",
+          "As the shift toward nuclear families advances, the scene of an entire clan gathering to celebrate the New Year is gradually being lost."
+        ]
+      },
+      "mnem": "正 (correct/proper) + 月 (month) = the \"proper first month\" — January, i.e. the New Year.",
+      "tip": "The polite お is near-standard: お正月. It refers to the New Year holiday period (roughly early January), not just 元日 (がんじつ, Jan 1). Distinct from 新年 (しんねん, \"the new year\" in a formal/abstract sense).",
+      "accent": 0
+    },
+    {
+      "key": "mnn:13:19",
+      "kana": "〜ごろ",
+      "kanji": "",
+      "context": "3時〜",
+      "mean": "about, around (a point in time)",
+      "cat": "phrase",
+      "type": "",
+      "trans": "",
+      "dict": "〜ごろ",
+      "dictRead": "〜ごろ",
+      "audio": "/Audio/minnamoi/bai13/00010100110011110.mp3",
+      "levels": {
+        "N5": [
+          "３<ruby>時<rt>じ</rt></ruby>ごろ<ruby>帰<rt>かえ</rt></ruby>ります。",
+          "I'll go home at around three o'clock."
+        ],
+        "N4": [
+          "<ruby>毎朝<rt>まいあさ</rt></ruby>７<ruby>時<rt>じ</rt></ruby>ごろ<ruby>起<rt>お</rt></ruby>きて、<ruby>会社<rt>かいしゃ</rt></ruby>へ<ruby>行<rt>い</rt></ruby>きます。",
+          "Every morning I get up at around seven and go to work."
+        ],
+        "N3": [
+          "<ruby>昼<rt>ひる</rt></ruby>ごろに<ruby>着<rt>つ</rt></ruby>くように、<ruby>早<rt>はや</rt></ruby>めに<ruby>家<rt>いえ</rt></ruby>を<ruby>出<rt>で</rt></ruby>るようにしています。",
+          "So as to arrive around noon, I make a point of leaving home a bit early."
+        ],
+        "N2": [
+          "<ruby>夕方<rt>ゆうがた</rt></ruby>ごろには<ruby>着<rt>つ</rt></ruby>くはずだったものの、<ruby>渋滞<rt>じゅうたい</rt></ruby>で<ruby>大幅<rt>おおはば</rt></ruby>に<ruby>遅<rt>おく</rt></ruby>れた。",
+          "We were supposed to arrive around evening, but we were greatly delayed by traffic."
+        ],
+        "N1": [
+          "<ruby>桜<rt>さくら</rt></ruby>が<ruby>咲<rt>さ</rt></ruby>き<ruby>始<rt>はじ</rt></ruby>める３<ruby>月<rt>がつ</rt></ruby><ruby>下旬<rt>げじゅん</rt></ruby>ごろから、この<ruby>辺<rt>あた</rt></ruby>りは<ruby>花見客<rt>はなみきゃく</rt></ruby>でにぎわい<ruby>始<rt>はじ</rt></ruby>める。",
+          "From around late March, when the cherry blossoms begin to bloom, this area starts bustling with blossom-viewing visitors."
+        ]
+      },
+      "mnem": "\"ごろ\" attaches to a clock time or date and rolls it into \"roughly around then\" — think \"go-ro, give or take.\"",
+      "tip": "ごろ marks an approximate POINT in time (3時ごろ = around 3:00) and attaches directly, with NO に. Contrast ぐらい/くらい, which marks an approximate QUANTITY or DURATION (3時間ぐらい = about 3 hours).",
+      "accent": 1
+    },
+    {
+      "key": "mnn:13:20",
+      "kana": "なにか",
+      "kanji": "何か",
+      "context": "",
+      "mean": "something, anything",
+      "cat": "phrase",
+      "type": "",
+      "trans": "",
+      "dict": "何か",
+      "dictRead": "なにか",
+      "audio": "/Audio/minnamoi/bai13/00010100110011111.mp3",
+      "levels": {
+        "N5": [
+          "<ruby>何<rt>なに</rt></ruby>か<ruby>飲<rt>の</rt></ruby>みたいです。",
+          "I want to drink something."
+        ],
+        "N4": [
+          "おなかがすいたから、<ruby>何<rt>なに</rt></ruby>か<ruby>食<rt>た</rt></ruby>べに<ruby>行<rt>い</rt></ruby>きませんか。",
+          "I'm hungry, so shall we go eat something?"
+        ],
+        "N3": [
+          "<ruby>困<rt>こま</rt></ruby>ったときは、すぐに<ruby>何<rt>なに</rt></ruby>か<ruby>相談<rt>そうだん</rt></ruby>するようにしています。",
+          "When I'm in trouble, I make a point of consulting someone about something right away."
+        ],
+        "N2": [
+          "<ruby>特<rt>とく</rt></ruby>に<ruby>予定<rt>よてい</rt></ruby>はないものの、<ruby>今日<rt>きょう</rt></ruby>は<ruby>何<rt>なに</rt></ruby>か<ruby>新<rt>あたら</rt></ruby>しいことに<ruby>挑戦<rt>ちょうせん</rt></ruby>したい。",
+          "Although I have no particular plans, today I want to take on something new."
+        ],
+        "N1": [
+          "<ruby>彼<rt>かれ</rt></ruby>の<ruby>言葉<rt>ことば</rt></ruby>の<ruby>端々<rt>はしばし</rt></ruby>に、<ruby>何<rt>なに</rt></ruby>か<ruby>言<rt>い</rt></ruby>い<ruby>知<rt>し</rt></ruby>れぬ<ruby>不安<rt>ふあん</rt></ruby>のようなものが<ruby>感<rt>かん</rt></ruby>じられてならなかった。",
+          "In every corner of his words, I couldn't help sensing something like an inexpressible unease."
+        ]
+      },
+      "mnem": "何 (what) + か (question/uncertainty particle) = an unspecified \"what\" = something.",
+      "tip": "何か = \"something/anything\"; the を after it is usually dropped (何か飲みたい, not 何かを). Contrast どこか (somewhere), だれか (someone). In a yes/no question 何か〜ますか asks \"is there anything ~?\"",
+      "accent": 1
+    },
+    {
+      "key": "mnn:13:21",
+      "kana": "どこか",
+      "kanji": "",
+      "context": "",
+      "mean": "somewhere, anywhere",
+      "cat": "phrase",
+      "type": "",
+      "trans": "",
+      "dict": "どこか",
+      "dictRead": "どこか",
+      "audio": "/Audio/minnamoi/bai13/00010100110100000.mp3",
+      "levels": {
+        "N5": [
+          "<ruby>夏休<rt>なつやす</rt></ruby>みにどこか<ruby>行<rt>い</rt></ruby>きたいです。",
+          "I want to go somewhere for summer vacation."
+        ],
+        "N4": [
+          "<ruby>週末<rt>しゅうまつ</rt></ruby>、どこか<ruby>静<rt>しず</rt></ruby>かな<ruby>所<rt>ところ</rt></ruby>へ<ruby>行<rt>い</rt></ruby>きたいです。",
+          "On the weekend, I want to go somewhere quiet."
+        ],
+        "N3": [
+          "<ruby>疲<rt>つか</rt></ruby>れたときは、どこか<ruby>温泉<rt>おんせん</rt></ruby>へ<ruby>行<rt>い</rt></ruby>くようにしています。",
+          "When I'm tired, I make a point of going somewhere with a hot spring."
+        ],
+        "N2": [
+          "<ruby>行<rt>い</rt></ruby>き<ruby>先<rt>さき</rt></ruby>は<ruby>決<rt>き</rt></ruby>めていないものの、どこか<ruby>遠<rt>とお</rt></ruby>くへ<ruby>旅<rt>たび</rt></ruby>に<ruby>出<rt>で</rt></ruby>たい。",
+          "Although I haven't decided on a destination, I want to set off on a journey somewhere far away."
+        ],
+        "N1": [
+          "<ruby>初対面<rt>しょたいめん</rt></ruby>のはずなのに、その<ruby>人<rt>ひと</rt></ruby>の<ruby>面影<rt>おもかげ</rt></ruby>にはどこか<ruby>懐<rt>なつ</rt></ruby>かしさを<ruby>覚<rt>おぼ</rt></ruby>えずにはいられなかった。",
+          "Even though it should have been our first meeting, I couldn't help feeling something nostalgic somewhere in that person's face."
+        ]
+      },
+      "mnem": "どこ (where) + か (uncertainty particle) = an unspecified \"where\" = somewhere.",
+      "tip": "どこか = \"somewhere/anywhere\"; the へ/に is often dropped (どこか行きたい). Pairs with なにか (something) and だれか (someone). In a question どこか行きましたか asks \"did you go anywhere?\"",
+      "accent": 1
+    }
+  ],
+  "grammar": [
+    {
+      "pattern": "N が ほしいです",
+      "structure": "N（もの）＋ が ＋ ほしいです",
+      "explain": "To say you WANT a thing (a noun), mark it with が and use the い-adjective ほしい: 「わたしは カメラが ほしいです」= I want a camera. The negative is ほしくないです. Since ほしい describes the speaker's own feeling, use it for yourself and で 'you?' in questions (何が ほしいですか); for a third person you'd say 〜を ほしがっています instead.",
+      "examples": [
+        {
+          "jp": "わたしは <ruby>新<rt>あたら</rt></ruby>しい カメラが ほしいです。",
+          "en": "I want a new camera."
+        },
+        {
+          "jp": "<ruby>今<rt>いま</rt></ruby> <ruby>何<rt>なに</rt></ruby>が いちばん ほしいですか。 …<ruby>広<rt>ひろ</rt></ruby>い うちが ほしいです。",
+          "en": "What do you want most right now? …I want a spacious house."
+        },
+        {
+          "jp": "<ruby>今<rt>いま</rt></ruby>は <ruby>何<rt>なに</rt></ruby>も ほしくないです。",
+          "en": "Right now I don't want anything."
+        }
+      ]
+    },
+    {
+      "pattern": "V(ますstem) たいです",
+      "structure": "Vます-stem ＋ たいです",
+      "explain": "To say you WANT TO DO something, drop ます from a verb and add たい: 食べます → 食べたい, 行きます → 行きたい. It behaves like an い-adjective: negative 〜たくないです, past 〜たかったです. The object may take either を or が (すしを／が 食べたい). Like ほしい, it expresses the speaker's own desire, so use it for yourself and in questions to the listener.",
+      "examples": [
+        {
+          "jp": "わたしは すきやきを <ruby>食<rt>た</rt></ruby>べたいです。",
+          "en": "I want to eat sukiyaki."
+        },
+        {
+          "jp": "<ruby>夏休<rt>なつやす</rt></ruby>みに どこへ <ruby>行<rt>い</rt></ruby>きたいですか。 …<ruby>沖縄<rt>おきなわ</rt></ruby>へ <ruby>行<rt>い</rt></ruby>きたいです。",
+          "en": "Where do you want to go for summer vacation? …I want to go to Okinawa."
+        },
+        {
+          "jp": "きょうは <ruby>疲<rt>つか</rt></ruby>れましたから、<ruby>何<rt>なに</rt></ruby>も したくないです。",
+          "en": "I'm tired today, so I don't want to do anything."
+        }
+      ]
+    },
+    {
+      "pattern": "[place]へ V(ますstem)／N に 行きます／来ます／帰ります",
+      "structure": "場所 ＋ へ ＋ ［Vます-stem／動作性N］＋ に ＋ 行きます／来ます／帰ります",
+      "explain": "To express going/coming somewhere FOR THE PURPOSE of doing something, put the purpose before に and follow with a motion verb (行く・来る・帰る). The purpose is a verb ます-stem (泳ぎに 行きます = go to swim) or an action noun (買い物に 行きます = go shopping, 食事に 行きます = go to eat). The destination is marked with へ (or に).",
+      "examples": [
+        {
+          "jp": "プールへ <ruby>泳<rt>およ</rt></ruby>ぎに <ruby>行<rt>い</rt></ruby>きます。",
+          "en": "I'm going to the pool to swim."
+        },
+        {
+          "jp": "デパートへ お<ruby>土産<rt>みやげ</rt></ruby>を <ruby>買<rt>か</rt></ruby>いに <ruby>行<rt>い</rt></ruby>きます。",
+          "en": "I'm going to the department store to buy souvenirs."
+        },
+        {
+          "jp": "<ruby>日本<rt>にほん</rt></ruby>へ <ruby>美術<rt>びじゅつ</rt></ruby>の <ruby>勉強<rt>べんきょう</rt></ruby>に <ruby>来<rt>き</rt></ruby>ました。",
+          "en": "I came to Japan to study fine art."
+        },
+        {
+          "jp": "<ruby>駅<rt>えき</rt></ruby>へ <ruby>友達<rt>ともだち</rt></ruby>を <ruby>迎<rt>むか</rt></ruby>えに <ruby>行<rt>い</rt></ruby>きます。",
+          "en": "I'm going to the station to meet a friend."
+        }
+      ]
+    }
+  ],
+  "examples": [
+    {
+      "jp": "わたしは <ruby>車<rt>くるま</rt></ruby>が <ruby>欲<rt>ほ</rt></ruby>しいです。",
+      "en": "I want a car."
+    },
+    {
+      "jp": "<ruby>今<rt>いま</rt></ruby> <ruby>何<rt>なに</rt></ruby>が いちばん <ruby>欲<rt>ほ</rt></ruby>しいですか。 …<ruby>新<rt>あたら</rt></ruby>しい ケータイが <ruby>欲<rt>ほ</rt></ruby>しいです。",
+      "en": "What do you want most right now? …I want a new phone."
+    },
+    {
+      "jp": "わたしは すしが <ruby>食<rt>た</rt></ruby>べたいです。",
+      "en": "I want to eat sushi."
+    },
+    {
+      "jp": "<ruby>夏休<rt>なつやす</rt></ruby>みに どこへ <ruby>行<rt>い</rt></ruby>きたいですか。 …<ruby>沖縄<rt>おきなわ</rt></ruby>へ <ruby>行<rt>い</rt></ruby>きたいです。",
+      "en": "Where do you want to go for summer vacation? …I want to go to Okinawa."
+    },
+    {
+      "jp": "きょうは <ruby>疲<rt>つか</rt></ruby>れましたから、<ruby>何<rt>なに</rt></ruby>も したくないです。",
+      "en": "I'm tired today, so I don't want to do anything."
+    },
+    {
+      "jp": "わたしは フランスへ <ruby>料理<rt>りょうり</rt></ruby>を <ruby>習<rt>なら</rt></ruby>いに <ruby>行<rt>い</rt></ruby>きます。",
+      "en": "I'm going to France to learn cooking."
+    },
+    {
+      "jp": "<ruby>週末<rt>しゅうまつ</rt></ruby>は <ruby>子<rt>こ</rt></ruby>どもと <ruby>神戸<rt>こうべ</rt></ruby>へ <ruby>船<rt>ふね</rt></ruby>を <ruby>見<rt>み</rt></ruby>に <ruby>行<rt>い</rt></ruby>きます。",
+      "en": "On the weekend I'm going to Kobe with my child to see the ships."
+    },
+    {
+      "jp": "<ruby>冬休<rt>ふゆやす</rt></ruby>みは どこか <ruby>行<rt>い</rt></ruby>きましたか。 …ええ、<ruby>北海道<rt>ほっかいどう</rt></ruby>へ スキーに <ruby>行<rt>い</rt></ruby>きました。",
+      "en": "Did you go anywhere over winter break? …Yes, I went to Hokkaido to ski."
+    }
+  ],
+  "conversation": {
+    "title": "別々に お願いします (Separate checks, please)",
+    "audio": "/Audio/minnahonsatsu1/46.mp3",
+    "lines": [
+      {
+        "role": "小林",
+        "jp": "もう 12<ruby>時<rt>じ</rt></ruby>ですよ。<ruby>昼<rt>ひる</rt></ruby>ごはんを <ruby>食<rt>た</rt></ruby>べに <ruby>行<rt>い</rt></ruby>きませんか。",
+        "en": "It's already noon. Shall we go get lunch?"
+      },
+      {
+        "role": "ミラー",
+        "jp": "ええ。どこへ <ruby>行<rt>い</rt></ruby>きますか。",
+        "en": "Sure. Where should we go?"
+      },
+      {
+        "role": "小林",
+        "jp": "そうですね。きょうは <ruby>日本<rt>にほん</rt></ruby><ruby>料理<rt>りょうり</rt></ruby>が <ruby>食<rt>た</rt></ruby>べたいですね。",
+        "en": "Let's see… I feel like Japanese food today."
+      },
+      {
+        "role": "ミラー",
+        "jp": "じゃ、「つるや」へ <ruby>行<rt>い</rt></ruby>きましょう。",
+        "en": "Then let's go to \"Tsuruya.\""
+      },
+      {
+        "role": "店員",
+        "jp": "ご<ruby>注文<rt>ちゅうもん</rt></ruby>は？",
+        "en": "What would you like to order?"
+      },
+      {
+        "role": "ミラー",
+        "jp": "わたしは <ruby>天<rt>てん</rt></ruby>ぷら<ruby>定食<rt>ていしょく</rt></ruby>。",
+        "en": "I'll have the tempura set."
+      },
+      {
+        "role": "小林",
+        "jp": "わたしは <ruby>牛<rt>ぎゅう</rt></ruby>どん。",
+        "en": "I'll have the beef bowl."
+      },
+      {
+        "role": "店員",
+        "jp": "<ruby>天<rt>てん</rt></ruby>ぷら<ruby>定食<rt>ていしょく</rt></ruby>と <ruby>牛<rt>ぎゅう</rt></ruby>どんですね。<ruby>少々<rt>しょうしょう</rt></ruby> お<ruby>待<rt>ま</rt></ruby>ち ください。",
+        "en": "One tempura set and one beef bowl, right? One moment, please."
+      },
+      {
+        "role": "店員",
+        "jp": "1,680<ruby>円<rt>えん</rt></ruby>で ございます。",
+        "en": "That comes to 1,680 yen."
+      },
+      {
+        "role": "ミラー",
+        "jp": "すみません。<ruby>別々<rt>べつべつ</rt></ruby>に お<ruby>願<rt>ねが</rt></ruby>いします。",
+        "en": "Excuse me, could you split the bill?"
+      },
+      {
+        "role": "店員",
+        "jp": "はい、<ruby>天<rt>てん</rt></ruby>ぷら<ruby>定食<rt>ていしょく</rt></ruby>は 980<ruby>円<rt>えん</rt></ruby>で、<ruby>牛<rt>ぎゅう</rt></ruby>どんは 700<ruby>円<rt>えん</rt></ruby>です。",
+        "en": "Certainly. The tempura set is 980 yen and the beef bowl is 700 yen."
+      }
+    ]
+  }
+}

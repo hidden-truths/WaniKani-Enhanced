@@ -1,0 +1,1760 @@
+{
+  "lesson": 10,
+  "title": "Lesson 10",
+  "theme": "Existence — あります (inanimate) / います (animate), 〜に〜が あります／います and 〜は〜に あります／います, position nouns (うえ・した・まえ・うしろ・なか…) and や〜など",
+  "source": {
+    "name": "vnjpclub.com",
+    "vocabUrl": "https://www.vnjpclub.com/en/minna-no-nihongo/lesson-10-vocabulary.html",
+    "grammarUrl": "https://www.vnjpclub.com/en/minna-no-nihongo/lesson-10-grammar.html",
+    "note": "Vocabulary, native-speaker audio, and example sentences aggregated from vnjpclub.com (Minna no Nihongo 第2版). For personal study."
+  },
+  "vocab": [
+    {
+      "key": "mnn:10:0",
+      "kana": "あります",
+      "kanji": "",
+      "context": "",
+      "mean": "to be, exist (inanimate things); to have",
+      "cat": "verb",
+      "type": "godan",
+      "trans": "i",
+      "dict": "ある",
+      "dictRead": "ある",
+      "audio": "/Audio/minnamoi/bai10/00010100011101000.mp3",
+      "accent": 0
+    },
+    {
+      "key": "mnn:10:1",
+      "kana": "います",
+      "kanji": "",
+      "context": "",
+      "mean": "to be, exist (animate things: people, animals)",
+      "cat": "verb",
+      "type": "ichidan",
+      "trans": "i",
+      "dict": "いる",
+      "dictRead": "いる",
+      "audio": "/Audio/minnamoi/bai10/00010100011101001.mp3",
+      "accent": 0
+    },
+    {
+      "key": "mnn:10:2",
+      "kana": "いろいろ",
+      "kanji": "",
+      "context": "",
+      "mean": "various, all sorts of",
+      "cat": "adjective",
+      "type": "na-adj",
+      "trans": "",
+      "dict": "いろいろ",
+      "dictRead": "いろいろ",
+      "audio": "/Audio/minnamoi/bai10/00010100011101010.mp3",
+      "levels": {
+        "N5": [
+          "みせに いろいろな <ruby>物<rt>もの</rt></ruby>が あります。",
+          "There are all sorts of things in the shop."
+        ],
+        "N4": [
+          "この<ruby>店<rt>みせ</rt></ruby>には いろいろな くだものが あります。",
+          "This shop has various kinds of fruit."
+        ],
+        "N3": [
+          "<ruby>日本<rt>にほん</rt></ruby>には いろいろな おいしい <ruby>料理<rt>りょうり</rt></ruby>が あるので、まいにち たのしいです。",
+          "Japan has all sorts of delicious food, so every day is fun."
+        ],
+        "N2": [
+          "いろいろな<ruby>意見<rt>いけん</rt></ruby>が <ruby>出<rt>で</rt></ruby>たものの、なかなか <ruby>結論<rt>けつろん</rt></ruby>が まとまらなかった。",
+          "Although various opinions came up, we had trouble reaching a conclusion."
+        ],
+        "N1": [
+          "いろいろな<ruby>困難<rt>こんなん</rt></ruby>を <ruby>乗<rt>の</rt></ruby>り<ruby>越<rt>こ</rt></ruby>えてきたからこそ、<ruby>今<rt>いま</rt></ruby>の <ruby>彼<rt>かれ</rt></ruby>の <ruby>強<rt>つよ</rt></ruby>さが あるのだ。",
+          "It is precisely because he has overcome all kinds of hardships that he has the strength he has today."
+        ]
+      },
+      "mnem": "いろ (色, color) doubled → \"colors and colors\" of things, i.e. all sorts / various.",
+      "tip": "It's a な-adjective before a noun: いろいろな物 (\"various things\"); as an adverb it drops the な → いろいろ考える (\"think about various things\"). Don't write いろいろの.",
+      "accent": 0
+    },
+    {
+      "key": "mnn:10:3",
+      "kana": "おとこのひと",
+      "kanji": "男の人",
+      "context": "",
+      "mean": "man",
+      "cat": "noun",
+      "type": "",
+      "trans": "",
+      "dict": "男の人",
+      "dictRead": "おとこのひと",
+      "audio": "/Audio/minnamoi/bai10/00010100011101011.mp3",
+      "levels": {
+        "N5": [
+          "あそこに <ruby>男<rt>おとこ</rt></ruby>の <ruby>人<rt>ひと</rt></ruby>が います。",
+          "There is a man over there."
+        ],
+        "N4": [
+          "<ruby>受付<rt>うけつけ</rt></ruby>に <ruby>男<rt>おとこ</rt></ruby>の <ruby>人<rt>ひと</rt></ruby>が いますが、あの <ruby>人<rt>ひと</rt></ruby>は だれですか。",
+          "There's a man at the reception desk — who is he?"
+        ],
+        "N3": [
+          "<ruby>公園<rt>こうえん</rt></ruby>で <ruby>本<rt>ほん</rt></ruby>を <ruby>読<rt>よ</rt></ruby>んでいる <ruby>男<rt>おとこ</rt></ruby>の <ruby>人<rt>ひと</rt></ruby>は、わたしの <ruby>先生<rt>せんせい</rt></ruby>です。",
+          "The man reading a book in the park is my teacher."
+        ],
+        "N2": [
+          "<ruby>写真<rt>しゃしん</rt></ruby>に <ruby>写<rt>うつ</rt></ruby>っている <ruby>男<rt>おとこ</rt></ruby>の <ruby>人<rt>ひと</rt></ruby>が <ruby>誰<rt>だれ</rt></ruby>なのか、<ruby>今<rt>いま</rt></ruby>もって <ruby>分<rt>わ</rt></ruby>からないままだ。",
+          "Even now it remains unclear just who the man captured in the photograph is."
+        ],
+        "N1": [
+          "<ruby>事件<rt>じけん</rt></ruby>の <ruby>鍵<rt>かぎ</rt></ruby>を <ruby>握<rt>にぎ</rt></ruby>っているとされる <ruby>男<rt>おとこ</rt></ruby>の <ruby>人<rt>ひと</rt></ruby>の <ruby>行方<rt>ゆくえ</rt></ruby>は、<ruby>依然<rt>いぜん</rt></ruby>として <ruby>不明<rt>ふめい</rt></ruby>である。",
+          "The whereabouts of the man said to hold the key to the case remain unknown."
+        ]
+      },
+      "mnem": "男 (おとこ, male) + の + 人 (ひと, person) = literally \"a male person\" = a man.",
+      "tip": "男の人 is the neutral, polite way to say \"a man\"; 男 alone can sound blunt. For animate existence use います (男の人がいます), never あります.",
+      "accent": 4
+    },
+    {
+      "key": "mnn:10:4",
+      "kana": "おんなのひと",
+      "kanji": "女の人",
+      "context": "",
+      "mean": "woman",
+      "cat": "noun",
+      "type": "",
+      "trans": "",
+      "dict": "女の人",
+      "dictRead": "おんなのひと",
+      "audio": "/Audio/minnamoi/bai10/00010100011101100.mp3",
+      "levels": {
+        "N5": [
+          "<ruby>部屋<rt>へや</rt></ruby>に <ruby>女<rt>おんな</rt></ruby>の <ruby>人<rt>ひと</rt></ruby>が います。",
+          "There is a woman in the room."
+        ],
+        "N4": [
+          "あの <ruby>女<rt>おんな</rt></ruby>の <ruby>人<rt>ひと</rt></ruby>は、わたしの <ruby>姉<rt>あね</rt></ruby>の <ruby>友<rt>とも</rt></ruby>だちです。",
+          "That woman is my older sister's friend."
+        ],
+        "N3": [
+          "<ruby>着物<rt>きもの</rt></ruby>を <ruby>着<rt>き</rt></ruby>ている <ruby>女<rt>おんな</rt></ruby>の <ruby>人<rt>ひと</rt></ruby>は、とても きれいですね。",
+          "The woman wearing a kimono is very beautiful, isn't she?"
+        ],
+        "N2": [
+          "さっき <ruby>店<rt>みせ</rt></ruby>で <ruby>会<rt>あ</rt></ruby>った <ruby>女<rt>おんな</rt></ruby>の <ruby>人<rt>ひと</rt></ruby>が、まさか <ruby>社長<rt>しゃちょう</rt></ruby>だったとは <ruby>思<rt>おも</rt></ruby>いもしなかった。",
+          "I never imagined that the woman I met at the shop earlier was actually the company president."
+        ],
+        "N1": [
+          "その <ruby>絵<rt>え</rt></ruby>に <ruby>描<rt>えが</rt></ruby>かれた <ruby>女<rt>おんな</rt></ruby>の <ruby>人<rt>ひと</rt></ruby>の <ruby>微笑<rt>ほほえ</rt></ruby>みには、<ruby>見<rt>み</rt></ruby>る <ruby>者<rt>もの</rt></ruby>を <ruby>惹<rt>ひ</rt></ruby>きつけてやまない <ruby>何<rt>なに</rt></ruby>かが ある。",
+          "There is something in the smile of the woman depicted in that painting that endlessly draws in those who behold it."
+        ]
+      },
+      "mnem": "女 (おんな, female) + の + 人 (ひと, person) = \"a female person\" = a woman.",
+      "tip": "女の人 is the neutral, polite \"a woman\"; 女 alone can sound blunt. Being animate, it takes います (女の人がいます), not あります.",
+      "accent": 4
+    },
+    {
+      "key": "mnn:10:5",
+      "kana": "おとこのこ",
+      "kanji": "男の子",
+      "context": "",
+      "mean": "boy",
+      "cat": "noun",
+      "type": "",
+      "trans": "",
+      "dict": "男の子",
+      "dictRead": "おとこのこ",
+      "audio": "/Audio/minnamoi/bai10/00010100011101101.mp3",
+      "levels": {
+        "N5": [
+          "<ruby>木<rt>き</rt></ruby>の <ruby>上<rt>うえ</rt></ruby>に <ruby>男<rt>おとこ</rt></ruby>の <ruby>子<rt>こ</rt></ruby>が います。",
+          "There is a boy up in the tree."
+        ],
+        "N4": [
+          "<ruby>公園<rt>こうえん</rt></ruby>で <ruby>男<rt>おとこ</rt></ruby>の <ruby>子<rt>こ</rt></ruby>が サッカーを して います。",
+          "A boy is playing soccer in the park."
+        ],
+        "N3": [
+          "となりの うちの <ruby>男<rt>おとこ</rt></ruby>の <ruby>子<rt>こ</rt></ruby>は、まだ <ruby>小<rt>ちい</rt></ruby>さいのに とても しっかりして います。",
+          "The boy from next door is still small, yet he's very dependable."
+        ],
+        "N2": [
+          "<ruby>迷子<rt>まいご</rt></ruby>に なった <ruby>男<rt>おとこ</rt></ruby>の <ruby>子<rt>こ</rt></ruby>を、<ruby>駅員<rt>えきいん</rt></ruby>が <ruby>親<rt>おや</rt></ruby>の ところまで <ruby>連<rt>つ</rt></ruby>れて <ruby>行<rt>い</rt></ruby>ってくれた。",
+          "A station attendant took the lost boy all the way to his parents."
+        ],
+        "N1": [
+          "あの <ruby>頃<rt>ころ</rt></ruby> <ruby>泣<rt>な</rt></ruby>いてばかりいた <ruby>男<rt>おとこ</rt></ruby>の <ruby>子<rt>こ</rt></ruby>が、まさか こんなに <ruby>立派<rt>りっぱ</rt></ruby>な <ruby>大人<rt>おとな</rt></ruby>に <ruby>成長<rt>せいちょう</rt></ruby>するとは <ruby>誰<rt>だれ</rt></ruby>も <ruby>想像<rt>そうぞう</rt></ruby>しなかった。",
+          "No one imagined that the boy who did nothing but cry back then would grow into such a fine adult."
+        ]
+      },
+      "mnem": "男 (おとこ, male) + の + 子 (こ, child) = \"a male child\" = a boy.",
+      "tip": "男の子 = boy (a child); 男の人 = man (an adult). Both are animate → います. Don't confuse 子 (こ, child) with the 子 in words like 椅子.",
+      "accent": 3
+    },
+    {
+      "key": "mnn:10:6",
+      "kana": "おんなのこ",
+      "kanji": "女の子",
+      "context": "",
+      "mean": "girl",
+      "cat": "noun",
+      "type": "",
+      "trans": "",
+      "dict": "女の子",
+      "dictRead": "おんなのこ",
+      "audio": "/Audio/minnamoi/bai10/00010100011101110.mp3",
+      "levels": {
+        "N5": [
+          "<ruby>部屋<rt>へや</rt></ruby>に <ruby>女<rt>おんな</rt></ruby>の <ruby>子<rt>こ</rt></ruby>が います。",
+          "There is a girl in the room."
+        ],
+        "N4": [
+          "<ruby>男<rt>おとこ</rt></ruby>の <ruby>子<rt>こ</rt></ruby>と <ruby>女<rt>おんな</rt></ruby>の <ruby>子<rt>こ</rt></ruby>の <ruby>間<rt>あいだ</rt></ruby>に <ruby>犬<rt>いぬ</rt></ruby>が います。",
+          "There is a dog between the boy and the girl."
+        ],
+        "N3": [
+          "<ruby>写真<rt>しゃしん</rt></ruby>の <ruby>中<rt>なか</rt></ruby>で <ruby>笑<rt>わら</rt></ruby>っている <ruby>女<rt>おんな</rt></ruby>の <ruby>子<rt>こ</rt></ruby>は、<ruby>子<rt>こ</rt></ruby>どもの ころの <ruby>母<rt>はは</rt></ruby>です。",
+          "The girl smiling in the photo is my mother as a child."
+        ],
+        "N2": [
+          "さっきまで そこで <ruby>遊<rt>あそ</rt></ruby>んでいた <ruby>女<rt>おんな</rt></ruby>の <ruby>子<rt>こ</rt></ruby>が、いつの <ruby>間<rt>ま</rt></ruby>にか いなくなって いた。",
+          "The girl who had been playing there until moments ago was gone before I knew it."
+        ],
+        "N1": [
+          "<ruby>震災<rt>しんさい</rt></ruby>の <ruby>中<rt>なか</rt></ruby>で <ruby>気丈<rt>きじょう</rt></ruby>に <ruby>振<rt>ふ</rt></ruby>る<ruby>舞<rt>ま</rt></ruby>う <ruby>女<rt>おんな</rt></ruby>の <ruby>子<rt>こ</rt></ruby>の <ruby>姿<rt>すがた</rt></ruby>に、<ruby>大人<rt>おとな</rt></ruby>たちの <ruby>方<rt>ほう</rt></ruby>が <ruby>励<rt>はげ</rt></ruby>まされたほどだった。",
+          "The adults were, if anything, encouraged by the sight of the girl bearing herself so bravely amid the disaster."
+        ]
+      },
+      "mnem": "女 (おんな, female) + の + 子 (こ, child) = \"a female child\" = a girl.",
+      "tip": "女の子 = girl (a child); 女の人 = woman (an adult). Animate, so use います (女の子がいます).",
+      "accent": 3
+    },
+    {
+      "key": "mnn:10:7",
+      "kana": "いぬ",
+      "kanji": "犬",
+      "context": "",
+      "mean": "dog",
+      "cat": "noun",
+      "type": "",
+      "trans": "",
+      "dict": "犬",
+      "dictRead": "いぬ",
+      "audio": "/Audio/minnamoi/bai10/00010100011101111.mp3",
+      "levels": {
+        "N5": [
+          "いすの <ruby>下<rt>した</rt></ruby>に <ruby>犬<rt>いぬ</rt></ruby>が います。",
+          "There is a dog under the chair."
+        ],
+        "N4": [
+          "わたしの うちには <ruby>犬<rt>いぬ</rt></ruby>が <ruby>二<rt>に</rt></ruby><ruby>匹<rt>ひき</rt></ruby> います。",
+          "There are two dogs at my house."
+        ],
+        "N3": [
+          "<ruby>毎朝<rt>まいあさ</rt></ruby> <ruby>犬<rt>いぬ</rt></ruby>を <ruby>散歩<rt>さんぽ</rt></ruby>に <ruby>連<rt>つ</rt></ruby>れて <ruby>行<rt>い</rt></ruby>くようにして います。",
+          "I make a point of taking the dog for a walk every morning."
+        ],
+        "N2": [
+          "<ruby>子<rt>こ</rt></ruby>どもの ころから <ruby>飼<rt>か</rt></ruby>っていた <ruby>犬<rt>いぬ</rt></ruby>が <ruby>死<rt>し</rt></ruby>んで、しばらくは <ruby>何<rt>なに</rt></ruby>も <ruby>手<rt>て</rt></ruby>に つかなかった。",
+          "After the dog I'd had since childhood died, I couldn't focus on anything for a while."
+        ],
+        "N1": [
+          "<ruby>災害救助犬<rt>さいがいきゅうじょけん</rt></ruby>として <ruby>訓練<rt>くんれん</rt></ruby>された <ruby>犬<rt>いぬ</rt></ruby>は、がれきの <ruby>下<rt>した</rt></ruby>に <ruby>埋<rt>う</rt></ruby>もれた <ruby>人<rt>ひと</rt></ruby>を <ruby>次々<rt>つぎつぎ</rt></ruby>と <ruby>見<rt>み</rt></ruby>つけ <ruby>出<rt>だ</rt></ruby>した。",
+          "The dog trained as a disaster-rescue hound found one buried person after another beneath the rubble."
+        ]
+      },
+      "mnem": "\"EE-noo\" — picture a puppy going \"you-know\" (いぬ) when it wants your attention: a dog.",
+      "tip": "Animals are animate, so a dog \"exists\" with います (犬がいます), not あります. Counter for small animals is 〜匹 (いっぴき、にひき…).",
+      "accent": 2
+    },
+    {
+      "key": "mnn:10:8",
+      "kana": "ねこ",
+      "kanji": "猫",
+      "context": "",
+      "mean": "cat",
+      "cat": "noun",
+      "type": "",
+      "trans": "",
+      "dict": "猫",
+      "dictRead": "ねこ",
+      "audio": "/Audio/minnamoi/bai10/00010100011110000.mp3",
+      "levels": {
+        "N5": [
+          "はこの <ruby>中<rt>なか</rt></ruby>に <ruby>猫<rt>ねこ</rt></ruby>が います。",
+          "There is a cat in the box."
+        ],
+        "N4": [
+          "<ruby>庭<rt>にわ</rt></ruby>に <ruby>白<rt>しろ</rt></ruby>い <ruby>猫<rt>ねこ</rt></ruby>が いますね。",
+          "There's a white cat in the garden, isn't there?"
+        ],
+        "N3": [
+          "この <ruby>猫<rt>ねこ</rt></ruby>は <ruby>人<rt>ひと</rt></ruby>に <ruby>慣<rt>な</rt></ruby>れていて、だれにでも すぐ <ruby>近<rt>ちか</rt></ruby>づいて きます。",
+          "This cat is used to people and comes right up to anyone."
+        ],
+        "N2": [
+          "<ruby>雨<rt>あめ</rt></ruby>の <ruby>日<rt>ひ</rt></ruby>は、うちの <ruby>猫<rt>ねこ</rt></ruby>は <ruby>一日中<rt>いちにちじゅう</rt></ruby> <ruby>寝<rt>ね</rt></ruby>てばかりいる。",
+          "On rainy days, our cat does nothing but sleep all day long."
+        ],
+        "N1": [
+          "<ruby>気<rt>き</rt></ruby>まぐれな <ruby>猫<rt>ねこ</rt></ruby>を <ruby>飼<rt>か</rt></ruby>うということは、<ruby>思<rt>おも</rt></ruby>い<ruby>通<rt>どお</rt></ruby>りに ならない <ruby>存在<rt>そんざい</rt></ruby>と <ruby>共<rt>とも</rt></ruby>に <ruby>暮<rt>く</rt></ruby>らす <ruby>覚悟<rt>かくご</rt></ruby>を <ruby>持<rt>も</rt></ruby>つ ことでもある。",
+          "To keep a capricious cat is also to resolve to live alongside a being that will never do quite what you wish."
+        ]
+      },
+      "mnem": "A cat's meow — \"neh-koh\" (ねこ) — is baked right into its name.",
+      "tip": "Cats are animate → います (猫がいます), never あります. Counter 〜匹 like other small animals.",
+      "accent": 1
+    },
+    {
+      "key": "mnn:10:9",
+      "kana": "パンダ",
+      "kanji": "",
+      "context": "",
+      "mean": "panda",
+      "cat": "noun",
+      "type": "",
+      "trans": "",
+      "dict": "パンダ",
+      "dictRead": "パンダ",
+      "audio": "/Audio/minnamoi/bai10/00010100011110001.mp3",
+      "levels": {
+        "N5": [
+          "<ruby>動物園<rt>どうぶつえん</rt></ruby>に パンダが います。",
+          "There is a panda at the zoo."
+        ],
+        "N4": [
+          "<ruby>大<rt>おお</rt></ruby>きい <ruby>木<rt>き</rt></ruby>の <ruby>下<rt>した</rt></ruby>に パンダが います。",
+          "There is a panda under the big tree."
+        ],
+        "N3": [
+          "パンダを <ruby>一目<rt>ひとめ</rt></ruby> <ruby>見<rt>み</rt></ruby>るために、<ruby>朝<rt>あさ</rt></ruby>から <ruby>長<rt>なが</rt></ruby>い <ruby>列<rt>れつ</rt></ruby>が できて いました。",
+          "A long line had formed since morning just to catch a glimpse of the panda."
+        ],
+        "N2": [
+          "パンダは かわいいものの、<ruby>飼育<rt>しいく</rt></ruby>には <ruby>想像<rt>そうぞう</rt></ruby>いじょうの <ruby>費用<rt>ひよう</rt></ruby>が かかるそうだ。",
+          "Pandas are cute, but raising them apparently costs far more than one would imagine."
+        ],
+        "N1": [
+          "パンダの <ruby>貸<rt>か</rt></ruby>し<ruby>出<rt>だ</rt></ruby>しは、<ruby>単<rt>たん</rt></ruby>なる <ruby>動物<rt>どうぶつ</rt></ruby>の <ruby>移動<rt>いどう</rt></ruby>にとどまらず、<ruby>国<rt>くに</rt></ruby>どうしの <ruby>外交<rt>がいこう</rt></ruby>の <ruby>象徴<rt>しょうちょう</rt></ruby>ともなっている。",
+          "The lending of pandas is not merely the relocation of an animal but has become a symbol of diplomacy between nations."
+        ]
+      },
+      "mnem": "\"Panda\" → パンダ is a straight katakana loanword; say \"pan-da\" and you already have it.",
+      "tip": "A living animal, so it exists with います (パンダがいます), not あります.",
+      "accent": 1
+    },
+    {
+      "key": "mnn:10:10",
+      "kana": "ぞう",
+      "kanji": "象",
+      "context": "",
+      "mean": "elephant",
+      "cat": "noun",
+      "type": "",
+      "trans": "",
+      "dict": "象",
+      "dictRead": "ぞう",
+      "audio": "/Audio/minnamoi/bai10/00010100011110010.mp3",
+      "levels": {
+        "N5": [
+          "あの <ruby>山<rt>やま</rt></ruby>の うしろに <ruby>象<rt>ぞう</rt></ruby>が います。",
+          "There is an elephant behind that mountain."
+        ],
+        "N4": [
+          "<ruby>象<rt>ぞう</rt></ruby>は <ruby>鼻<rt>はな</rt></ruby>が <ruby>長<rt>なが</rt></ruby>くて、とても <ruby>大<rt>おお</rt></ruby>きいです。",
+          "Elephants have long trunks and are very big."
+        ],
+        "N3": [
+          "<ruby>象<rt>ぞう</rt></ruby>は <ruby>記憶力<rt>きおくりょく</rt></ruby>が よくて、<ruby>昔<rt>むかし</rt></ruby>の ことも わすれないそうです。",
+          "Elephants are said to have good memories and not to forget even things from long ago."
+        ],
+        "N2": [
+          "<ruby>体<rt>からだ</rt></ruby>が <ruby>大<rt>おお</rt></ruby>きい <ruby>象<rt>ぞう</rt></ruby>でも、<ruby>意外<rt>いがい</rt></ruby>と <ruby>足音<rt>あしおと</rt></ruby>を <ruby>立<rt>た</rt></ruby>てずに <ruby>歩<rt>ある</rt></ruby>くというから <ruby>驚<rt>おどろ</rt></ruby>きだ。",
+          "It's astonishing that, despite their huge bodies, elephants apparently walk surprisingly quietly."
+        ],
+        "N1": [
+          "<ruby>密猟<rt>みつりょう</rt></ruby>によって <ruby>象<rt>ぞう</rt></ruby>の <ruby>数<rt>かず</rt></ruby>が <ruby>激減<rt>げきげん</rt></ruby>している <ruby>現状<rt>げんじょう</rt></ruby>を、<ruby>看過<rt>かんか</rt></ruby>するわけには いかない。",
+          "We cannot afford to overlook the present situation, in which elephant numbers are plummeting due to poaching."
+        ]
+      },
+      "mnem": "\"ZOH\" — imagine an elephant's low trumpeting groan, \"zooo\": ぞう.",
+      "tip": "Animate → います. Same reading ぞう also appears in 想像 (imagination) etc., but here 象 is the animal. Note the long vowel: ぞう, not ぞ.",
+      "accent": 1
+    },
+    {
+      "key": "mnn:10:11",
+      "kana": "き",
+      "kanji": "木",
+      "context": "",
+      "mean": "tree, wood",
+      "cat": "noun",
+      "type": "",
+      "trans": "",
+      "dict": "木",
+      "dictRead": "き",
+      "audio": "/Audio/minnamoi/bai10/00010100011110011.mp3",
+      "levels": {
+        "N5": [
+          "<ruby>公園<rt>こうえん</rt></ruby>に <ruby>木<rt>き</rt></ruby>が あります。",
+          "There are trees in the park."
+        ],
+        "N4": [
+          "<ruby>木<rt>き</rt></ruby>の <ruby>上<rt>うえ</rt></ruby>に <ruby>男<rt>おとこ</rt></ruby>の <ruby>子<rt>こ</rt></ruby>が います。",
+          "There is a boy up in the tree."
+        ],
+        "N3": [
+          "<ruby>庭<rt>にわ</rt></ruby>の <ruby>木<rt>き</rt></ruby>が <ruby>大<rt>おお</rt></ruby>きく なりすぎたので、<ruby>切<rt>き</rt></ruby>ろうと <ruby>思<rt>おも</rt></ruby>って います。",
+          "The tree in the garden has grown too big, so I'm thinking of cutting it down."
+        ],
+        "N2": [
+          "この <ruby>木<rt>き</rt></ruby>は <ruby>樹齢<rt>じゅれい</rt></ruby> <ruby>百年<rt>ひゃくねん</rt></ruby>を <ruby>超<rt>こ</rt></ruby>えているといわれ、<ruby>町<rt>まち</rt></ruby>の <ruby>人<rt>ひと</rt></ruby>に <ruby>大切<rt>たいせつ</rt></ruby>に されている。",
+          "This tree is said to be over a hundred years old and is treasured by the people of the town."
+        ],
+        "N1": [
+          "一<ruby>本<rt>ぽん</rt></ruby>の <ruby>木<rt>き</rt></ruby>を <ruby>植<rt>う</rt></ruby>えることが、やがて <ruby>森<rt>もり</rt></ruby>を <ruby>育<rt>そだ</rt></ruby>て、<ruby>未来<rt>みらい</rt></ruby>の <ruby>環境<rt>かんきょう</rt></ruby>を <ruby>守<rt>まも</rt></ruby>る ことに つながるのだ。",
+          "Planting a single tree eventually nurtures a forest and, in turn, protects the environment of the future."
+        ]
+      },
+      "mnem": "The kanji 木 is a picture of a tree with branches and roots; \"kee\" (き) is its bare reading.",
+      "tip": "A tree is inanimate, so it takes あります (木があります), not います. Same kanji 木 also reads もく (木曜日, Thursday). Counter for trees/long things is 〜本 (いっぽん、にほん…).",
+      "accent": 1
+    },
+    {
+      "key": "mnn:10:12",
+      "kana": "もの",
+      "kanji": "物",
+      "context": "",
+      "mean": "thing, object",
+      "cat": "noun",
+      "type": "",
+      "trans": "",
+      "dict": "物",
+      "dictRead": "もの",
+      "audio": "/Audio/minnamoi/bai10/00010100011110100.mp3",
+      "levels": {
+        "N5": [
+          "<ruby>冷蔵庫<rt>れいぞうこ</rt></ruby>の <ruby>中<rt>なか</rt></ruby>に いろいろな <ruby>物<rt>もの</rt></ruby>が あります。",
+          "There are all sorts of things in the refrigerator."
+        ],
+        "N4": [
+          "<ruby>机<rt>つくえ</rt></ruby>の <ruby>上<rt>うえ</rt></ruby>に たいせつな <ruby>物<rt>もの</rt></ruby>が あるので、さわらないで ください。",
+          "There's something important on the desk, so please don't touch it."
+        ],
+        "N3": [
+          "<ruby>安<rt>やす</rt></ruby>い <ruby>物<rt>もの</rt></ruby>より、<ruby>少<rt>すこ</rt></ruby>し <ruby>高<rt>たか</rt></ruby>くても いい <ruby>物<rt>もの</rt></ruby>を <ruby>買<rt>か</rt></ruby>うようにして います。",
+          "Rather than cheap things, I make a point of buying good things even if they cost a bit more."
+        ],
+        "N2": [
+          "<ruby>形<rt>かたち</rt></ruby>の ある <ruby>物<rt>もの</rt></ruby>は いつか こわれるものだと、<ruby>頭<rt>あたま</rt></ruby>では <ruby>分<rt>わ</rt></ruby>かって いる。",
+          "In my head I understand that anything with a physical form is bound to break someday."
+        ],
+        "N1": [
+          "<ruby>物<rt>もの</rt></ruby>の <ruby>豊<rt>ゆた</rt></ruby>かさばかりを <ruby>追<rt>お</rt></ruby>い<ruby>求<rt>もと</rt></ruby>めた <ruby>末<rt>すえ</rt></ruby>に、<ruby>人々<rt>ひとびと</rt></ruby>が <ruby>失<rt>うしな</rt></ruby>った ものは <ruby>決<rt>けっ</rt></ruby>して <ruby>小<rt>ちい</rt></ruby>さく ない。",
+          "What people lost in the end, having chased only material abundance, is by no means small."
+        ]
+      },
+      "mnem": "\"MOH-noh\" (もの) — a generic word for any \"thing\"; think of a \"mono\"lith, one lone object.",
+      "tip": "物 is a concrete thing/object (inanimate → あります). Contrast with こと (an abstract matter/event). Written もの for tangible items, もの/こと can shade differently in set phrases.",
+      "accent": 2
+    },
+    {
+      "key": "mnn:10:13",
+      "kana": "でんち",
+      "kanji": "電池",
+      "context": "",
+      "mean": "battery",
+      "cat": "noun",
+      "type": "",
+      "trans": "",
+      "dict": "電池",
+      "dictRead": "でんち",
+      "audio": "/Audio/minnamoi/bai10/00010100011110101.mp3",
+      "levels": {
+        "N5": [
+          "<ruby>電池<rt>でんち</rt></ruby>は <ruby>雑誌<rt>ざっし</rt></ruby>の <ruby>前<rt>まえ</rt></ruby>に あります。",
+          "The batteries are in front of the magazines."
+        ],
+        "N4": [
+          "この とけいの <ruby>電池<rt>でんち</rt></ruby>が なくなったので、あたらしいのを <ruby>買<rt>か</rt></ruby>いました。",
+          "The battery in this clock ran out, so I bought a new one."
+        ],
+        "N3": [
+          "<ruby>電池<rt>でんち</rt></ruby>を <ruby>入<rt>い</rt></ruby>れかえたら、リモコンが また <ruby>使<rt>つか</rt></ruby>えるように なりました。",
+          "After I replaced the batteries, the remote worked again."
+        ],
+        "N2": [
+          "<ruby>非常時<rt>ひじょうじ</rt></ruby>に <ruby>備<rt>そな</rt></ruby>えて、<ruby>電池<rt>でんち</rt></ruby>は いつも <ruby>多<rt>おお</rt></ruby>めに <ruby>用意<rt>ようい</rt></ruby>するようにして いる。",
+          "In case of an emergency, I always make a point of keeping plenty of batteries on hand."
+        ],
+        "N1": [
+          "スマートフォンの <ruby>電池<rt>でんち</rt></ruby>の <ruby>持<rt>も</rt></ruby>ちは <ruby>年々<rt>ねんねん</rt></ruby> <ruby>改善<rt>かいぜん</rt></ruby>されて いるとはいえ、いまだ <ruby>一日<rt>いちにち</rt></ruby> <ruby>安心<rt>あんしん</rt></ruby>とは <ruby>言<rt>い</rt></ruby>いがたい。",
+          "Although smartphone battery life improves year by year, it still can hardly be said to last a whole day with peace of mind."
+        ]
+      },
+      "mnem": "電 (electricity) + 池 (pond) = an \"electricity pond\" that stores power → a battery.",
+      "tip": "Inanimate → あります. 電池 is a battery cell (AA, etc.); don't confuse it with 電気 (でんき, electricity / a light).",
+      "accent": 1
+    },
+    {
+      "key": "mnn:10:14",
+      "kana": "はこ",
+      "kanji": "箱",
+      "context": "",
+      "mean": "box",
+      "cat": "noun",
+      "type": "",
+      "trans": "",
+      "dict": "箱",
+      "dictRead": "はこ",
+      "audio": "/Audio/minnamoi/bai10/00010100011110110.mp3",
+      "levels": {
+        "N5": [
+          "はこの <ruby>中<rt>なか</rt></ruby>に <ruby>猫<rt>ねこ</rt></ruby>が います。",
+          "There is a cat in the box."
+        ],
+        "N4": [
+          "ベッドの <ruby>下<rt>した</rt></ruby>に <ruby>箱<rt>はこ</rt></ruby>が あります。",
+          "There is a box under the bed."
+        ],
+        "N3": [
+          "この <ruby>箱<rt>はこ</rt></ruby>の <ruby>中<rt>なか</rt></ruby>には、<ruby>古<rt>ふる</rt></ruby>い <ruby>写真<rt>しゃしん</rt></ruby>や <ruby>手紙<rt>てがみ</rt></ruby>などが <ruby>入<rt>はい</rt></ruby>って います。",
+          "This box has old photos, letters, and the like inside."
+        ],
+        "N2": [
+          "<ruby>引<rt>ひ</rt></ruby>っ<ruby>越<rt>こ</rt></ruby>しの <ruby>荷物<rt>にもつ</rt></ruby>を <ruby>箱<rt>はこ</rt></ruby>に つめたものの、どれに <ruby>何<rt>なに</rt></ruby>を <ruby>入<rt>い</rt></ruby>れたか わからなく なった。",
+          "I packed the moving luggage into boxes, but I lost track of which box held what."
+        ],
+        "N1": [
+          "<ruby>祖母<rt>そぼ</rt></ruby>が <ruby>大切<rt>たいせつ</rt></ruby>に して いた <ruby>桐<rt>きり</rt></ruby>の <ruby>箱<rt>はこ</rt></ruby>には、<ruby>家族<rt>かぞく</rt></ruby>の <ruby>思<rt>おも</rt></ruby>い<ruby>出<rt>で</rt></ruby>が ぎっしりと つまって いた。",
+          "The paulownia box my grandmother cherished was packed to the brim with the family's memories."
+        ]
+      },
+      "mnem": "\"HA-koh\" — imagine saying \"ha!\" as you \"co\"ver a box with its lid: はこ.",
+      "tip": "Inanimate → あります. Counter for boxes is 〜箱 (はこ／ばこ) or the object counter 〜つ; と note the 箱 in 郵便箱 etc.",
+      "accent": 0
+    },
+    {
+      "key": "mnn:10:15",
+      "kana": "スイッチ",
+      "kanji": "",
+      "context": "",
+      "mean": "switch",
+      "cat": "noun",
+      "type": "",
+      "trans": "",
+      "dict": "スイッチ",
+      "dictRead": "スイッチ",
+      "audio": "/Audio/minnamoi/bai10/00010100011110111.mp3",
+      "levels": {
+        "N5": [
+          "ドアの <ruby>右<rt>みぎ</rt></ruby>に スイッチが あります。",
+          "There is a switch to the right of the door."
+        ],
+        "N4": [
+          "この スイッチを <ruby>押<rt>お</rt></ruby>すと、でんきが つきます。",
+          "When you press this switch, the light comes on."
+        ],
+        "N3": [
+          "<ruby>暗<rt>くら</rt></ruby>い ときは、<ruby>入<rt>はい</rt></ruby>って すぐ スイッチを <ruby>入<rt>い</rt></ruby>れるように して います。",
+          "When it's dark, I make a point of flipping the switch on as soon as I enter."
+        ],
+        "N2": [
+          "スイッチの <ruby>場所<rt>ばしょ</rt></ruby>が わからず、しばらく <ruby>暗闇<rt>くらやみ</rt></ruby>の <ruby>中<rt>なか</rt></ruby>を <ruby>手<rt>て</rt></ruby>さぐりで <ruby>歩<rt>ある</rt></ruby>いた。",
+          "Not knowing where the switch was, I groped my way through the darkness for a while."
+        ],
+        "N1": [
+          "<ruby>頭<rt>あたま</rt></ruby>の <ruby>中<rt>なか</rt></ruby>の スイッチが <ruby>切<rt>き</rt></ruby>りかわった かのように、<ruby>彼<rt>かれ</rt></ruby>は <ruby>突然<rt>とつぜん</rt></ruby> <ruby>冷静<rt>れいせい</rt></ruby>さを <ruby>取<rt>と</rt></ruby>り<ruby>戻<rt>もど</rt></ruby>した。",
+          "As if a switch had flipped inside his head, he suddenly regained his composure."
+        ]
+      },
+      "mnem": "\"Switch\" → スイッチ (su-i-cchi) is a direct katakana loanword; the small ッ gives it that clipped \"tch\" snap.",
+      "tip": "Inanimate → あります. スイッチを入れる = turn on, スイッチを切る = turn off. Note the small ッ before チ.",
+      "accent": 1
+    },
+    {
+      "key": "mnn:10:16",
+      "kana": "れいぞうこ",
+      "kanji": "冷蔵庫",
+      "context": "",
+      "mean": "refrigerator, fridge",
+      "cat": "noun",
+      "type": "",
+      "trans": "",
+      "dict": "冷蔵庫",
+      "dictRead": "れいぞうこ",
+      "audio": "/Audio/minnamoi/bai10/00010100011111000.mp3",
+      "levels": {
+        "N5": [
+          "<ruby>冷蔵庫<rt>れいぞうこ</rt></ruby>の <ruby>中<rt>なか</rt></ruby>に たまごが あります。",
+          "There are eggs in the refrigerator."
+        ],
+        "N4": [
+          "<ruby>飲<rt>の</rt></ruby>み<ruby>物<rt>もの</rt></ruby>は <ruby>冷蔵庫<rt>れいぞうこ</rt></ruby>の <ruby>中<rt>なか</rt></ruby>に <ruby>入<rt>い</rt></ruby>れて あります。",
+          "The drinks are put inside the refrigerator."
+        ],
+        "N3": [
+          "<ruby>夏<rt>なつ</rt></ruby>は <ruby>食<rt>た</rt></ruby>べ<ruby>物<rt>もの</rt></ruby>を すぐ <ruby>冷蔵庫<rt>れいぞうこ</rt></ruby>に <ruby>入<rt>い</rt></ruby>れるように して います。",
+          "In summer I make a point of putting food in the fridge right away."
+        ],
+        "N2": [
+          "<ruby>冷蔵庫<rt>れいぞうこ</rt></ruby>を <ruby>開<rt>あ</rt></ruby>けるたびに、<ruby>何<rt>なに</rt></ruby>か <ruby>食<rt>た</rt></ruby>べる ものは ないかと つい さがして しまう。",
+          "Every time I open the fridge, I can't help hunting for something to eat."
+        ],
+        "N1": [
+          "<ruby>最新<rt>さいしん</rt></ruby>の <ruby>冷蔵庫<rt>れいぞうこ</rt></ruby>は、<ruby>中身<rt>なかみ</rt></ruby>を <ruby>把握<rt>はあく</rt></ruby>して <ruby>献立<rt>こんだて</rt></ruby>まで <ruby>提案<rt>ていあん</rt></ruby>してくれるというから <ruby>驚<rt>おどろ</rt></ruby>きだ。",
+          "It's astonishing that the latest refrigerators can even grasp their contents and suggest what to cook."
+        ]
+      },
+      "mnem": "冷 (cold) + 蔵 (storehouse) + 庫 (warehouse) = a \"cold storehouse\" = a refrigerator.",
+      "tip": "Inanimate → あります. Note the reading れいぞうこ (not れいぞうご) — the final 庫 is こ here. A freezer is 冷凍庫 (れいとうこ).",
+      "accent": 3
+    },
+    {
+      "key": "mnn:10:17",
+      "kana": "テーブル",
+      "kanji": "",
+      "context": "",
+      "mean": "table",
+      "cat": "noun",
+      "type": "",
+      "trans": "",
+      "dict": "テーブル",
+      "dictRead": "テーブル",
+      "audio": "/Audio/minnamoi/bai10/00010100011111001.mp3",
+      "levels": {
+        "N5": [
+          "テーブルの <ruby>上<rt>うえ</rt></ruby>に <ruby>本<rt>ほん</rt></ruby>が あります。",
+          "There is a book on the table."
+        ],
+        "N4": [
+          "テーブルの <ruby>上<rt>うえ</rt></ruby>に <ruby>何<rt>なに</rt></ruby>が ありますか。 …かばんが あります。",
+          "What is on the table? …There's a bag."
+        ],
+        "N3": [
+          "しょくじの <ruby>前<rt>まえ</rt></ruby>に、テーブルを きれいに ふくように して います。",
+          "Before meals, I make a point of wiping the table clean."
+        ],
+        "N2": [
+          "みんなで <ruby>一<rt>ひと</rt></ruby>つの テーブルを <ruby>囲<rt>かこ</rt></ruby>んで <ruby>食事<rt>しょくじ</rt></ruby>を するのが、この <ruby>家<rt>いえ</rt></ruby>の <ruby>習慣<rt>しゅうかん</rt></ruby>だ。",
+          "Everyone gathering around one table to eat is a custom of this household."
+        ],
+        "N1": [
+          "<ruby>交渉<rt>こうしょう</rt></ruby>の テーブルに つくことすら <ruby>拒<rt>こば</rt></ruby>む <ruby>相手<rt>あいて</rt></ruby>を、どう <ruby>説得<rt>せっとく</rt></ruby>すべきか <ruby>頭<rt>あたま</rt></ruby>を <ruby>抱<rt>かか</rt></ruby>えて いる。",
+          "I'm at my wits' end over how to persuade a counterpart who refuses even to come to the negotiating table."
+        ]
+      },
+      "mnem": "\"Table\" → テーブル (tē-buru); stretch the first vowel and it's a direct loanword.",
+      "tip": "Inanimate → あります. テーブル is a (dining/coffee) table; a work/study 机 (つくえ) is a separate word.",
+      "accent": 0
+    },
+    {
+      "key": "mnn:10:18",
+      "kana": "ベッド",
+      "kanji": "",
+      "context": "",
+      "mean": "bed",
+      "cat": "noun",
+      "type": "",
+      "trans": "",
+      "dict": "ベッド",
+      "dictRead": "ベッド",
+      "audio": "/Audio/minnamoi/bai10/00010100011111010.mp3",
+      "levels": {
+        "N5": [
+          "ベッドの <ruby>下<rt>した</rt></ruby>に はこが あります。",
+          "There is a box under the bed."
+        ],
+        "N4": [
+          "ねこは いつも ベッドの <ruby>上<rt>うえ</rt></ruby>で <ruby>寝<rt>ね</rt></ruby>て います。",
+          "The cat always sleeps on the bed."
+        ],
+        "N3": [
+          "<ruby>疲<rt>つか</rt></ruby>れた <ruby>日<rt>ひ</rt></ruby>は、ベッドに <ruby>入<rt>はい</rt></ruby>ると すぐに <ruby>眠<rt>ねむ</rt></ruby>って しまいます。",
+          "On tiring days, I fall asleep the moment I get into bed."
+        ],
+        "N2": [
+          "<ruby>部屋<rt>へや</rt></ruby>が せまいので、ベッドを <ruby>置<rt>お</rt></ruby>くと ほとんど <ruby>足<rt>あし</rt></ruby>の ふみ<ruby>場<rt>ば</rt></ruby>も なく なって しまう。",
+          "The room is so small that once you put a bed in, there's barely any floor space left."
+        ],
+        "N1": [
+          "<ruby>入院<rt>にゅういん</rt></ruby>して からというもの、<ruby>窓<rt>まど</rt></ruby>ぎわの ベッドから <ruby>眺<rt>なが</rt></ruby>める <ruby>空<rt>そら</rt></ruby>だけが、<ruby>唯一<rt>ゆいいつ</rt></ruby>の <ruby>楽<rt>たの</rt></ruby>しみと なって いた。",
+          "Ever since I was hospitalized, the sky viewed from the bed by the window had become my only pleasure."
+        ]
+      },
+      "mnem": "\"Bed\" → ベッド; the small ッ doubles the d for that clipped Japanese ending.",
+      "tip": "Inanimate → あります. Note the small ッ (ベッド, not ベド); don't confuse with ペット (pet) — different first character (ベ vs ペ).",
+      "accent": 1
+    },
+    {
+      "key": "mnn:10:19",
+      "kana": "たな",
+      "kanji": "棚",
+      "context": "",
+      "mean": "shelf, rack",
+      "cat": "noun",
+      "type": "",
+      "trans": "",
+      "dict": "棚",
+      "dictRead": "たな",
+      "audio": "/Audio/minnamoi/bai10/00010100011111011.mp3",
+      "levels": {
+        "N5": [
+          "<ruby>窓<rt>まど</rt></ruby>の <ruby>右<rt>みぎ</rt></ruby>に <ruby>棚<rt>たな</rt></ruby>が あります。",
+          "There is a shelf to the right of the window."
+        ],
+        "N4": [
+          "この <ruby>棚<rt>たな</rt></ruby>の <ruby>上<rt>うえ</rt></ruby>に <ruby>本<rt>ほん</rt></ruby>を <ruby>置<rt>お</rt></ruby>いても いいですか。",
+          "May I put my books on top of this shelf?"
+        ],
+        "N3": [
+          "<ruby>使<rt>つか</rt></ruby>った <ruby>物<rt>もの</rt></ruby>は かならず もとの <ruby>棚<rt>たな</rt></ruby>に <ruby>戻<rt>もど</rt></ruby>すように して います。",
+          "I make a point of always returning what I've used to its original shelf."
+        ],
+        "N2": [
+          "<ruby>棚<rt>たな</rt></ruby>の <ruby>奥<rt>おく</rt></ruby>に しまいこんだ まま、その <ruby>存在<rt>そんざい</rt></ruby>すら <ruby>忘<rt>わす</rt></ruby>れて いた <ruby>品<rt>しな</rt></ruby>が <ruby>出<rt>で</rt></ruby>てきた。",
+          "An item I'd tucked away in the back of the shelf and even forgotten existed turned up."
+        ],
+        "N1": [
+          "<ruby>都合<rt>つごう</rt></ruby>の <ruby>悪<rt>わる</rt></ruby>い <ruby>案件<rt>あんけん</rt></ruby>は とりあえず <ruby>棚<rt>たな</rt></ruby>に <ruby>上<rt>あ</rt></ruby>げておく、という やり<ruby>方<rt>かた</rt></ruby>では、いつか <ruby>行<rt>い</rt></ruby>き<ruby>詰<rt>づ</rt></ruby>まる。",
+          "Shelving inconvenient matters for the time being is a way of doing things that will hit a dead end sooner or later."
+        ]
+      },
+      "mnem": "\"TA-na\" — picture stacking your \"tuna\" cans neatly on a shelf: たな.",
+      "tip": "Inanimate → あります. 棚 is a general shelf/rack; a 本棚 (ほんだな) is specifically a bookshelf. The idiom 棚に上げる means \"to set aside / turn a blind eye to.\"",
+      "accent": 0
+    },
+    {
+      "key": "mnn:10:20",
+      "kana": "ドア",
+      "kanji": "",
+      "context": "",
+      "mean": "door",
+      "cat": "noun",
+      "type": "",
+      "trans": "",
+      "dict": "ドア",
+      "dictRead": "ドア",
+      "audio": "/Audio/minnamoi/bai10/00010100011111100.mp3",
+      "levels": {
+        "N5": [
+          "<ruby>男<rt>おとこ</rt></ruby>の <ruby>子<rt>こ</rt></ruby>は ドアの うしろに います。",
+          "The boy is behind the door."
+        ],
+        "N4": [
+          "ドアの <ruby>右<rt>みぎ</rt></ruby>に スイッチが あります。",
+          "There is a switch to the right of the door."
+        ],
+        "N3": [
+          "<ruby>出<rt>で</rt></ruby>かける ときは、かならず ドアに かぎを かけるように して います。",
+          "When I go out, I make a point of always locking the door."
+        ],
+        "N2": [
+          "<ruby>強<rt>つよ</rt></ruby>い <ruby>風<rt>かぜ</rt></ruby>で ドアが <ruby>急<rt>きゅう</rt></ruby>に <ruby>閉<rt>し</rt></ruby>まり、<ruby>指<rt>ゆび</rt></ruby>を はさむ ところだった。",
+          "The door suddenly slammed shut in the strong wind, and I nearly caught my fingers in it."
+        ],
+        "N1": [
+          "<ruby>交渉<rt>こうしょう</rt></ruby>の ドアは <ruby>閉<rt>と</rt></ruby>ざされた かに <ruby>見<rt>み</rt></ruby>えたが、<ruby>最後<rt>さいご</rt></ruby>の <ruby>一言<rt>ひとこと</rt></ruby>が わずかな <ruby>可能性<rt>かのうせい</rt></ruby>を こじ<ruby>開<rt>あ</rt></ruby>けた。",
+          "The door to negotiation seemed shut, but a final remark pried open a slim possibility."
+        ]
+      },
+      "mnem": "\"Door\" → ドア (do-a); a short two-mora katakana loanword straight from English.",
+      "tip": "Inanimate → あります. ドア is a (Western hinged) door; a Japanese sliding door/screen is a 戸 (と) or ふすま. Counter 〜枚 for flat panels, or 〜つ.",
+      "accent": 1
+    },
+    {
+      "key": "mnn:10:21",
+      "kana": "まど",
+      "kanji": "窓",
+      "context": "",
+      "mean": "window",
+      "cat": "noun",
+      "type": "",
+      "trans": "",
+      "dict": "窓",
+      "dictRead": "まど",
+      "audio": "/Audio/minnamoi/bai10/00010100011111101.mp3",
+      "levels": {
+        "N5": [
+          "<ruby>窓<rt>まど</rt></ruby>の <ruby>右<rt>みぎ</rt></ruby>に <ruby>何<rt>なに</rt></ruby>が ありますか。",
+          "What is to the right of the window?"
+        ],
+        "N4": [
+          "<ruby>暑<rt>あつ</rt></ruby>いので、<ruby>窓<rt>まど</rt></ruby>を <ruby>開<rt>あ</rt></ruby>けても いいですか。",
+          "It's hot, so may I open the window?"
+        ],
+        "N3": [
+          "<ruby>寝<rt>ね</rt></ruby>る <ruby>前<rt>まえ</rt></ruby>に、かならず <ruby>窓<rt>まど</rt></ruby>を しめるように して います。",
+          "Before going to bed, I make a point of always closing the windows."
+        ],
+        "N2": [
+          "<ruby>窓<rt>まど</rt></ruby>から <ruby>差<rt>さ</rt></ruby>しこむ <ruby>朝<rt>あさ</rt></ruby>の <ruby>光<rt>ひかり</rt></ruby>で、<ruby>目覚<rt>めざ</rt></ruby>ましを かけなくても <ruby>自然<rt>しぜん</rt></ruby>に <ruby>目<rt>め</rt></ruby>が <ruby>覚<rt>さ</rt></ruby>める。",
+          "With the morning light streaming in through the window, I wake up naturally without setting an alarm."
+        ],
+        "N1": [
+          "<ruby>心<rt>こころ</rt></ruby>の <ruby>窓<rt>まど</rt></ruby>を とざした ままの <ruby>人<rt>ひと</rt></ruby>に、いくら <ruby>言葉<rt>ことば</rt></ruby>を <ruby>重<rt>かさ</rt></ruby>ねても <ruby>届<rt>とど</rt></ruby>かない ことも ある。",
+          "Sometimes, no matter how many words you pile on, they never reach a person whose window to the heart stays shut."
+        ]
+      },
+      "mnem": "\"MA-doh\" — imagine a \"mad\" storm outside as you peer through the window: まど.",
+      "tip": "Inanimate → あります. 窓を開ける/しめる = open/close a window. Counter 〜枚 for panes; don't confuse まど with まと (的, target).",
+      "accent": 1
+    },
+    {
+      "key": "mnn:10:22",
+      "kana": "ポスト",
+      "kanji": "",
+      "context": "",
+      "mean": "postbox, mailbox",
+      "cat": "noun",
+      "type": "",
+      "trans": "",
+      "dict": "ポスト",
+      "dictRead": "ポスト",
+      "audio": "/Audio/minnamoi/bai10/00010100011111110.mp3",
+      "levels": {
+        "N5": [
+          "あそこに ポストが あります。",
+          "There is a mailbox over there."
+        ],
+        "N4": [
+          "<ruby>手紙<rt>てがみ</rt></ruby>を <ruby>出<rt>だ</rt></ruby>したいので、ポストは どこに ありますか。",
+          "I want to mail a letter, so where is the mailbox?"
+        ],
+        "N3": [
+          "<ruby>駅<rt>えき</rt></ruby>へ <ruby>行<rt>い</rt></ruby>く とちゅうに ポストが あるので、そこで <ruby>手紙<rt>てがみ</rt></ruby>を <ruby>出<rt>だ</rt></ruby>すように して います。",
+          "There's a mailbox on the way to the station, so I make a point of posting my letters there."
+        ],
+        "N2": [
+          "<ruby>最近<rt>さいきん</rt></ruby>は メールばかりで、ポストに <ruby>手紙<rt>てがみ</rt></ruby>を <ruby>入<rt>い</rt></ruby>れる <ruby>機会<rt>きかい</rt></ruby>も めっきり <ruby>減<rt>へ</rt></ruby>って しまった。",
+          "These days it's all email, and the occasions to drop a letter into a mailbox have sharply dwindled."
+        ],
+        "N1": [
+          "<ruby>役職<rt>やくしょく</rt></ruby>としての ポストを <ruby>争<rt>あらそ</rt></ruby>う あまり、<ruby>本来<rt>ほんらい</rt></ruby>の <ruby>目的<rt>もくてき</rt></ruby>を <ruby>見失<rt>みうしな</rt></ruby>っては <ruby>本末転倒<rt>ほんまつてんとう</rt></ruby>だ。",
+          "To lose sight of the original purpose in one's eagerness to fight over a post (position) is to put the cart before the horse."
+        ]
+      },
+      "mnem": "\"Post\" → ポスト; picture a red Japanese \"post\"box on the corner. Straight loanword.",
+      "tip": "Inanimate → あります. ポスト = a public mailbox/postbox; it can also mean a job \"post\"/position. Don't confuse with 郵便局 (ゆうびんきょく, post office).",
+      "accent": 1
+    },
+    {
+      "key": "mnn:10:23",
+      "kana": "ビル",
+      "kanji": "",
+      "context": "",
+      "mean": "building (multi-story)",
+      "cat": "noun",
+      "type": "",
+      "trans": "",
+      "dict": "ビル",
+      "dictRead": "ビル",
+      "audio": "/Audio/minnamoi/bai10/00010100011111111.mp3",
+      "levels": {
+        "N5": [
+          "あそこに <ruby>白<rt>しろ</rt></ruby>い ビルが あります。",
+          "There is a white building over there."
+        ],
+        "N4": [
+          "この ビルに ATMが ありますか。 …はい、2<ruby>階<rt>かい</rt></ruby>に あります。",
+          "Is there an ATM in this building? …Yes, on the second floor."
+        ],
+        "N3": [
+          "<ruby>駅<rt>えき</rt></ruby>の <ruby>前<rt>まえ</rt></ruby>に <ruby>高<rt>たか</rt></ruby>い ビルが たくさん <ruby>建<rt>た</rt></ruby>って います。",
+          "There are many tall buildings standing in front of the station."
+        ],
+        "N2": [
+          "この あたりは <ruby>古<rt>ふる</rt></ruby>い ビルが <ruby>多<rt>おお</rt></ruby>いものの、<ruby>再開発<rt>さいかいはつ</rt></ruby>で <ruby>少<rt>すこ</rt></ruby>しずつ <ruby>姿<rt>すがた</rt></ruby>を <ruby>変<rt>か</rt></ruby>えて いる。",
+          "There are many old buildings around here, but redevelopment is gradually changing the area's face."
+        ],
+        "N1": [
+          "<ruby>超高層<rt>ちょうこうそう</rt></ruby>ビルが <ruby>林立<rt>りんりつ</rt></ruby>する <ruby>光景<rt>こうけい</rt></ruby>は、<ruby>経済<rt>けいざい</rt></ruby>の <ruby>繁栄<rt>はんえい</rt></ruby>の <ruby>象徴<rt>しょうちょう</rt></ruby>であると <ruby>同時<rt>どうじ</rt></ruby>に、<ruby>過密<rt>かみつ</rt></ruby>の <ruby>裏返<rt>うらがえ</rt></ruby>しでも ある。",
+          "The sight of skyscrapers standing in dense rows is a symbol of economic prosperity and, at the same time, the flip side of overcrowding."
+        ]
+      },
+      "mnem": "\"Building\" → ビル is clipped from English \"building\" (ビルディング) down to just ビル.",
+      "tip": "Inanimate → あります. ビル = a multi-story (office/commercial) building; a house is 建物 (たてもの) generally or 家 (いえ). Don't confuse ビル (building) with ビール (beer) — the long vowel changes the word.",
+      "accent": 1
+    },
+    {
+      "key": "mnn:10:24",
+      "kana": "ＡＴＭ",
+      "kanji": "",
+      "context": "",
+      "mean": "cash machine, ATM",
+      "cat": "noun",
+      "type": "",
+      "trans": "",
+      "dict": "ＡＴＭ",
+      "dictRead": "エーティーエム",
+      "audio": "/Audio/minnamoi/bai10/00010100100000000.mp3",
+      "levels": {
+        "N5": [
+          "この ビルに ＡＴＭが あります。",
+          "There is an ATM in this building."
+        ],
+        "N4": [
+          "ＡＴＭは どこに ありますか。 …あそこに あります。",
+          "Where is the ATM? …It's over there."
+        ],
+        "N3": [
+          "<ruby>近<rt>ちか</rt></ruby>くに ＡＴＭが ないので、いつも <ruby>駅<rt>えき</rt></ruby>まで <ruby>行<rt>い</rt></ruby>くように して います。",
+          "There's no ATM nearby, so I always make a point of going all the way to the station."
+        ],
+        "N2": [
+          "<ruby>連休<rt>れんきゅう</rt></ruby>の <ruby>前<rt>まえ</rt></ruby>は、どの ＡＴＭも <ruby>長<rt>なが</rt></ruby>い <ruby>列<rt>れつ</rt></ruby>が できて いる ものだ。",
+          "Before a long holiday, every ATM tends to have a long line."
+        ],
+        "N1": [
+          "キャッシュレス<ruby>化<rt>か</rt></ruby>が <ruby>進<rt>すす</rt></ruby>むにつれ、<ruby>街<rt>まち</rt></ruby>なかの ＡＴＭの <ruby>数<rt>かず</rt></ruby>も <ruby>徐々<rt>じょじょ</rt></ruby>に <ruby>減<rt>へ</rt></ruby>らされて いくものと <ruby>見<rt>み</rt></ruby>られて いる。",
+          "As cashless payment spreads, the number of ATMs around town is expected to be gradually reduced."
+        ]
+      },
+      "mnem": "ATM = Automatic Teller Machine; in Japanese the letters are read エーティーエム.",
+      "tip": "Inanimate → あります. Read the acronym letter by letter: エーティーエム. Found in banks, convenience stores (コンビニ), and stations.",
+      "accent": 5
+    },
+    {
+      "key": "mnn:10:25",
+      "kana": "コンビニ",
+      "kanji": "",
+      "context": "",
+      "mean": "convenience store",
+      "cat": "noun",
+      "type": "",
+      "trans": "",
+      "dict": "コンビニ",
+      "dictRead": "コンビニ",
+      "audio": "/Audio/minnamoi/bai10/00010100100000001.mp3",
+      "levels": {
+        "N5": [
+          "あそこに コンビニが あります。",
+          "There is a convenience store over there."
+        ],
+        "N4": [
+          "コンビニで おにぎりや のみものなどを <ruby>買<rt>か</rt></ruby>いました。",
+          "I bought rice balls, drinks, and so on at the convenience store."
+        ],
+        "N3": [
+          "<ruby>夜<rt>よる</rt></ruby> <ruby>遅<rt>おそ</rt></ruby>くても、<ruby>近<rt>ちか</rt></ruby>くの コンビニで <ruby>買<rt>か</rt></ruby>い<ruby>物<rt>もの</rt></ruby>できるので <ruby>便利<rt>べんり</rt></ruby>です。",
+          "Even late at night I can shop at the nearby convenience store, so it's handy."
+        ],
+        "N2": [
+          "コンビニは <ruby>便利<rt>べんり</rt></ruby>な ものの、つい <ruby>余計<rt>よけい</rt></ruby>な ものまで <ruby>買<rt>か</rt></ruby>って しまいがちだ。",
+          "Convenience stores are handy, but you tend to end up buying unnecessary things too."
+        ],
+        "N1": [
+          "<ruby>過疎地<rt>かそち</rt></ruby>の コンビニは、もはや <ruby>単<rt>たん</rt></ruby>なる <ruby>店<rt>みせ</rt></ruby>ではなく、<ruby>地域<rt>ちいき</rt></ruby>の インフラとしての <ruby>役割<rt>やくわり</rt></ruby>を <ruby>担<rt>にな</rt></ruby>い つつ ある。",
+          "In depopulated areas, convenience stores are no longer mere shops but are coming to serve as regional infrastructure."
+        ]
+      },
+      "mnem": "コンビニ is clipped from コンビニエンス・ストア (convenience store) — Japanese loves to shorten long loanwords.",
+      "tip": "Inanimate → あります. A shortened loanword (from \"convenience store\"). Common chains: セブンイレブン、ローソン、ファミマ.",
+      "accent": 0
+    },
+    {
+      "key": "mnn:10:26",
+      "kana": "こうえん",
+      "kanji": "公園",
+      "context": "",
+      "mean": "park",
+      "cat": "noun",
+      "type": "",
+      "trans": "",
+      "dict": "公園",
+      "dictRead": "こうえん",
+      "audio": "/Audio/minnamoi/bai10/00010100100000010.mp3",
+      "levels": {
+        "N5": [
+          "わたしの うちは <ruby>公園<rt>こうえん</rt></ruby>の <ruby>近<rt>ちか</rt></ruby>くに あります。",
+          "My house is near the park."
+        ],
+        "N4": [
+          "<ruby>公園<rt>こうえん</rt></ruby>に <ruby>木<rt>き</rt></ruby>や ベンチなどが あります。",
+          "There are trees, benches, and so on in the park."
+        ],
+        "N3": [
+          "<ruby>毎朝<rt>まいあさ</rt></ruby> <ruby>公園<rt>こうえん</rt></ruby>を <ruby>散歩<rt>さんぽ</rt></ruby>するように して います。",
+          "I make a point of taking a walk in the park every morning."
+        ],
+        "N2": [
+          "<ruby>桜<rt>さくら</rt></ruby>の <ruby>季節<rt>きせつ</rt></ruby>に なると、この <ruby>公園<rt>こうえん</rt></ruby>は <ruby>花見<rt>はなみ</rt></ruby>の <ruby>人<rt>ひと</rt></ruby>で いっぱいに なる。",
+          "When cherry-blossom season comes, this park fills up with people viewing the blossoms."
+        ],
+        "N1": [
+          "<ruby>都会<rt>とかい</rt></ruby>の <ruby>公園<rt>こうえん</rt></ruby>は、<ruby>人々<rt>ひとびと</rt></ruby>に <ruby>憩<rt>いこ</rt></ruby>いの <ruby>場<rt>ば</rt></ruby>を <ruby>提供<rt>ていきょう</rt></ruby>すると <ruby>同時<rt>どうじ</rt></ruby>に、<ruby>災害時<rt>さいがいじ</rt></ruby>の <ruby>避難<rt>ひなん</rt></ruby><ruby>場所<rt>ばしょ</rt></ruby>としても <ruby>重要<rt>じゅうよう</rt></ruby>な <ruby>役割<rt>やくわり</rt></ruby>を <ruby>果<rt>は</rt></ruby>たす。",
+          "Urban parks provide people a place of rest while also playing a vital role as evacuation sites in times of disaster."
+        ]
+      },
+      "mnem": "公 (public) + 園 (garden) = a \"public garden\" = a park.",
+      "tip": "Inanimate → あります. 公園 is a public park; a private garden is 庭 (にわ). A path taken through it uses を: 公園を歩く.",
+      "accent": 0
+    },
+    {
+      "key": "mnn:10:27",
+      "kana": "きっさてん",
+      "kanji": "喫茶店",
+      "context": "",
+      "mean": "coffee shop, café",
+      "cat": "noun",
+      "type": "",
+      "trans": "",
+      "dict": "喫茶店",
+      "dictRead": "きっさてん",
+      "audio": "/Audio/minnamoi/bai10/00010100100000011.mp3",
+      "levels": {
+        "N5": [
+          "<ruby>駅<rt>えき</rt></ruby>の <ruby>前<rt>まえ</rt></ruby>に <ruby>喫茶店<rt>きっさてん</rt></ruby>が あります。",
+          "There is a coffee shop in front of the station."
+        ],
+        "N4": [
+          "ともだちと <ruby>喫茶店<rt>きっさてん</rt></ruby>で コーヒーを <ruby>飲<rt>の</rt></ruby>みました。",
+          "I drank coffee with a friend at a café."
+        ],
+        "N3": [
+          "しずかに <ruby>本<rt>ほん</rt></ruby>を <ruby>読<rt>よ</rt></ruby>みたい ときは、この <ruby>喫茶店<rt>きっさてん</rt></ruby>に <ruby>来<rt>く</rt></ruby>るように して います。",
+          "When I want to read quietly, I make a point of coming to this café."
+        ],
+        "N2": [
+          "むかしながらの <ruby>喫茶店<rt>きっさてん</rt></ruby>は <ruby>減<rt>へ</rt></ruby>って いるものの、その <ruby>落<rt>お</rt></ruby>ち<ruby>着<rt>つ</rt></ruby>いた <ruby>雰囲気<rt>ふんいき</rt></ruby>を <ruby>好<rt>この</rt></ruby>む <ruby>人<rt>ひと</rt></ruby>は いまも <ruby>多<rt>おお</rt></ruby>い。",
+          "Old-fashioned coffee shops are dwindling, but many still favor their calm atmosphere."
+        ],
+        "N1": [
+          "<ruby>純<rt>じゅん</rt></ruby><ruby>喫茶<rt>きっさ</rt></ruby>とよばれる <ruby>昭和<rt>しょうわ</rt></ruby>の <ruby>喫茶店<rt>きっさてん</rt></ruby>には、コーヒー <ruby>一杯<rt>いっぱい</rt></ruby>に こだわり<ruby>抜<rt>ぬ</rt></ruby>いた <ruby>店主<rt>てんしゅ</rt></ruby>の <ruby>矜持<rt>きょうじ</rt></ruby>が <ruby>宿<rt>やど</rt></ruby>って いる。",
+          "In the Showa-era coffee shops known as 'pure cafés' dwells the pride of an owner who obsessed over a single cup of coffee."
+        ]
+      },
+      "mnem": "喫 (to consume/drink) + 茶 (tea) + 店 (shop) = a \"tea-drinking shop\" = a café/coffee shop.",
+      "tip": "Inanimate → あります. Note the small っ: きっさてん. 喫茶店 is a traditional coffee shop; a modern chain is often just カフェ.",
+      "accent": 3
+    },
+    {
+      "key": "mnn:10:28",
+      "kana": "～や",
+      "kanji": "～屋",
+      "context": "",
+      "mean": "～ shop, store (suffix)",
+      "cat": "phrase",
+      "type": "",
+      "trans": "",
+      "dict": "～屋",
+      "dictRead": "～や",
+      "audio": "/Audio/minnamoi/bai10/00010100100000100.mp3",
+      "levels": {
+        "N5": [
+          "<ruby>本屋<rt>ほんや</rt></ruby>は <ruby>駅<rt>えき</rt></ruby>の <ruby>近<rt>ちか</rt></ruby>くに あります。",
+          "The bookshop is near the station."
+        ],
+        "N4": [
+          "この <ruby>道<rt>みち</rt></ruby>を まっすぐ <ruby>行<rt>い</rt></ruby>くと、<ruby>右<rt>みぎ</rt></ruby>に <ruby>花屋<rt>はなや</rt></ruby>が あります。",
+          "If you go straight down this road, there's a florist on the right."
+        ],
+        "N3": [
+          "この あたりは <ruby>八百屋<rt>やおや</rt></ruby>や <ruby>魚屋<rt>さかなや</rt></ruby>など、<ruby>昔<rt>むかし</rt></ruby>ながらの <ruby>店<rt>みせ</rt></ruby>が <ruby>多<rt>おお</rt></ruby>いです。",
+          "This area has many old-style shops, like greengrocers and fishmongers."
+        ],
+        "N2": [
+          "<ruby>商店街<rt>しょうてんがい</rt></ruby>の <ruby>小<rt>ちい</rt></ruby>さな <ruby>八百屋<rt>やおや</rt></ruby>は、<ruby>大型<rt>おおがた</rt></ruby>スーパーに <ruby>押<rt>お</rt></ruby>されて <ruby>次々<rt>つぎつぎ</rt></ruby>と <ruby>店<rt>みせ</rt></ruby>を <ruby>閉<rt>と</rt></ruby>じて いった。",
+          "The small greengrocers in the shopping street, pushed out by big supermarkets, closed one after another."
+        ],
+        "N1": [
+          "<ruby>店<rt>みせ</rt></ruby>の <ruby>名<rt>な</rt></ruby>に つく「～<ruby>屋<rt>や</rt></ruby>」には、その <ruby>道<rt>みち</rt></ruby>ひとすじに <ruby>生<rt>い</rt></ruby>きてきた <ruby>職人<rt>しょくにん</rt></ruby>の <ruby>誇<rt>ほこ</rt></ruby>りが こめられて いる ことも <ruby>少<rt>すく</rt></ruby>なく ない。",
+          "The '～ya' attached to a shop's name is, not infrequently, imbued with the pride of an artisan who has devoted his whole life to that craft."
+        ]
+      },
+      "mnem": "～屋 (や) attaches to a product to name its shop: 本 (book) → 本屋 (bookshop), 花 → 花屋 (florist).",
+      "tip": "A suffix, not a standalone word: 本屋、パン屋、花屋、八百屋 (greengrocer). It can also name the shopkeeper. The shop itself is inanimate → あります.",
+      "accent": 0
+    },
+    {
+      "key": "mnn:10:29",
+      "kana": "のりば",
+      "kanji": "乗り場",
+      "context": "",
+      "mean": "boarding point (stop/stand for taxis, buses, trains)",
+      "cat": "noun",
+      "type": "",
+      "trans": "",
+      "dict": "乗り場",
+      "dictRead": "のりば",
+      "audio": "/Audio/minnamoi/bai10/00010100100000101.mp3",
+      "levels": {
+        "N5": [
+          "バスの <ruby>乗<rt>の</rt></ruby>り<ruby>場<rt>ば</rt></ruby>は どこに ありますか。",
+          "Where is the bus stop (boarding point)?"
+        ],
+        "N4": [
+          "タクシーの <ruby>乗<rt>の</rt></ruby>り<ruby>場<rt>ば</rt></ruby>は トイレの <ruby>前<rt>まえ</rt></ruby>に あります。",
+          "The taxi stand is in front of the restroom."
+        ],
+        "N3": [
+          "はじめての <ruby>駅<rt>えき</rt></ruby>では、まず <ruby>乗<rt>の</rt></ruby>り<ruby>場<rt>ば</rt></ruby>を たしかめるように して います。",
+          "At a station I'm visiting for the first time, I make a point of checking the platform (boarding point) first."
+        ],
+        "N2": [
+          "<ruby>雨<rt>あめ</rt></ruby>の <ruby>日<rt>ひ</rt></ruby>は、タクシー <ruby>乗<rt>の</rt></ruby>り<ruby>場<rt>ば</rt></ruby>に <ruby>長<rt>なが</rt></ruby>い <ruby>列<rt>れつ</rt></ruby>が できて いる ものだ。",
+          "On rainy days, a long line tends to form at the taxi stand."
+        ],
+        "N1": [
+          "<ruby>案内<rt>あんない</rt></ruby><ruby>表示<rt>ひょうじ</rt></ruby>が <ruby>分<rt>わ</rt></ruby>かりにくく、どの <ruby>乗<rt>の</rt></ruby>り<ruby>場<rt>ば</rt></ruby>から <ruby>乗<rt>の</rt></ruby>れば いいのか、<ruby>初<rt>はじ</rt></ruby>めての <ruby>利用<rt>りよう</rt></ruby><ruby>客<rt>きゃく</rt></ruby>には ひどく <ruby>不親切<rt>ふしんせつ</rt></ruby>な つくりだ。",
+          "The signage is confusing, and for first-time users the layout is terribly unhelpful about which boarding point to use."
+        ]
+      },
+      "mnem": "乗る (to board/ride) + 場 (place) = a \"place to board\" = a stop/stand/platform.",
+      "tip": "Inanimate → あります. バス乗り場、タクシー乗り場、〜番乗り場 (platform No. ~). Contrast 乗り場 (where you board) with 駅 (えき, the station itself).",
+      "accent": 0
+    },
+    {
+      "key": "mnn:10:30",
+      "kana": "けん",
+      "kanji": "県",
+      "context": "",
+      "mean": "prefecture",
+      "cat": "noun",
+      "type": "",
+      "trans": "",
+      "dict": "県",
+      "dictRead": "けん",
+      "audio": "/Audio/minnamoi/bai10/00010100100000110.mp3",
+      "levels": {
+        "N5": [
+          "<ruby>東京<rt>とうきょう</rt></ruby>ディズニーランドは <ruby>千葉<rt>ちば</rt></ruby><ruby>県<rt>けん</rt></ruby>に あります。",
+          "Tokyo Disneyland is in Chiba Prefecture."
+        ],
+        "N4": [
+          "わたしの <ruby>国<rt>くに</rt></ruby>の いえは、<ruby>大阪<rt>おおさか</rt></ruby>の となりの <ruby>県<rt>けん</rt></ruby>に あります。",
+          "My family home is in the prefecture next to Osaka."
+        ],
+        "N3": [
+          "この <ruby>県<rt>けん</rt></ruby>は <ruby>海<rt>うみ</rt></ruby>が <ruby>近<rt>ちか</rt></ruby>くて、<ruby>魚<rt>さかな</rt></ruby>が とても おいしい ことで <ruby>知<rt>し</rt></ruby>られて います。",
+          "This prefecture is close to the sea and is known for its very delicious fish."
+        ],
+        "N2": [
+          "<ruby>隣<rt>となり</rt></ruby>の <ruby>県<rt>けん</rt></ruby>まで <ruby>働<rt>はたら</rt></ruby>きに <ruby>行<rt>い</rt></ruby>く <ruby>人<rt>ひと</rt></ruby>も <ruby>少<rt>すく</rt></ruby>なく なく、<ruby>朝<rt>あさ</rt></ruby>の <ruby>電車<rt>でんしゃ</rt></ruby>は いつも <ruby>混<rt>こ</rt></ruby>んで いる。",
+          "Not a few people commute to the neighboring prefecture for work, so the morning trains are always crowded."
+        ],
+        "N1": [
+          "<ruby>過疎化<rt>かそか</rt></ruby>が <ruby>進<rt>すす</rt></ruby>む <ruby>地方<rt>ちほう</rt></ruby>の <ruby>県<rt>けん</rt></ruby>では、<ruby>若者<rt>わかもの</rt></ruby>の <ruby>流出<rt>りゅうしゅつ</rt></ruby>を いかに <ruby>食<rt>く</rt></ruby>い<ruby>止<rt>と</rt></ruby>めるかが、<ruby>喫緊<rt>きっきん</rt></ruby>の <ruby>課題<rt>かだい</rt></ruby>と なって いる。",
+          "In rural prefectures where depopulation is advancing, how to stem the outflow of young people has become a pressing issue."
+        ]
+      },
+      "mnem": "県 (けん) is the administrative unit below the country — like a \"county\"; the sound \"ken\" even echoes it.",
+      "tip": "県 is a prefecture (Japan has 43 of them, plus 都 Tokyo, 道 Hokkaido, 府 Osaka/Kyoto). Used as a suffix: 千葉県、大阪府. A place existing there uses に…あります (千葉県にあります).",
+      "accent": 1
+    },
+    {
+      "key": "mnn:10:31",
+      "kana": "うえ",
+      "kanji": "上",
+      "context": "～の～",
+      "mean": "on, above, on top of",
+      "cat": "noun",
+      "type": "",
+      "trans": "",
+      "dict": "上",
+      "dictRead": "うえ",
+      "audio": "/Audio/minnamoi/bai10/00010100100000111.mp3",
+      "levels": {
+        "N5": [
+          "テーブルの <ruby>上<rt>うえ</rt></ruby>に <ruby>本<rt>ほん</rt></ruby>が あります。",
+          "There is a book on the table."
+        ],
+        "N4": [
+          "<ruby>木<rt>き</rt></ruby>の <ruby>上<rt>うえ</rt></ruby>に <ruby>男<rt>おとこ</rt></ruby>の <ruby>子<rt>こ</rt></ruby>が います。",
+          "There is a boy up in the tree."
+        ],
+        "N3": [
+          "<ruby>棚<rt>たな</rt></ruby>の いちばん <ruby>上<rt>うえ</rt></ruby>に あるので、いすに <ruby>乗<rt>の</rt></ruby>らないと <ruby>取<rt>と</rt></ruby>れません。",
+          "It's on the very top of the shelf, so I can't reach it without standing on a chair."
+        ],
+        "N2": [
+          "<ruby>約束<rt>やくそく</rt></ruby>した <ruby>上<rt>うえ</rt></ruby>は、たとえ <ruby>雨<rt>あめ</rt></ruby>でも <ruby>行<rt>い</rt></ruby>かざるを <ruby>得<rt>え</rt></ruby>ない。",
+          "Now that I've promised, I have no choice but to go even if it rains."
+        ],
+        "N1": [
+          "<ruby>慎重<rt>しんちょう</rt></ruby>に <ruby>検討<rt>けんとう</rt></ruby>した <ruby>上<rt>うえ</rt></ruby>で <ruby>下<rt>くだ</rt></ruby>した <ruby>結論<rt>けつろん</rt></ruby>である <ruby>以上<rt>いじょう</rt></ruby>、<ruby>今<rt>いま</rt></ruby>さら <ruby>覆<rt>くつがえ</rt></ruby>す わけには いかない。",
+          "Since it is a conclusion reached after careful deliberation, there is no overturning it now."
+        ]
+      },
+      "mnem": "上 (うえ) — think of pointing \"up-eh\" toward the sky: above / on top.",
+      "tip": "Position noun used as Nの上に (\"on top of N\"): テーブルの上に. Also reads じょう (以上) and あ・のぼ in verbs (上がる/上る). The 〜た上で pattern (\"after ~ing\") is separate advanced usage.",
+      "accent": 0
+    },
+    {
+      "key": "mnn:10:32",
+      "kana": "した",
+      "kanji": "下",
+      "context": "～の～",
+      "mean": "under, below, beneath",
+      "cat": "noun",
+      "type": "",
+      "trans": "",
+      "dict": "下",
+      "dictRead": "した",
+      "audio": "/Audio/minnamoi/bai10/00010100100001000.mp3",
+      "levels": {
+        "N5": [
+          "いすの <ruby>下<rt>した</rt></ruby>に <ruby>猫<rt>ねこ</rt></ruby>が います。",
+          "There is a cat under the chair."
+        ],
+        "N4": [
+          "ベッドの <ruby>下<rt>した</rt></ruby>に <ruby>何<rt>なに</rt></ruby>が ありますか。 …はこが あります。",
+          "What is under the bed? …There's a box."
+        ],
+        "N3": [
+          "<ruby>大<rt>おお</rt></ruby>きい <ruby>木<rt>き</rt></ruby>の <ruby>下<rt>した</rt></ruby>で、みんなで おべんとうを <ruby>食<rt>た</rt></ruby>べました。",
+          "We all ate our boxed lunches under the big tree."
+        ],
+        "N2": [
+          "<ruby>厳<rt>きび</rt></ruby>しい <ruby>先生<rt>せんせい</rt></ruby>の <ruby>下<rt>した</rt></ruby>で <ruby>学<rt>まな</rt></ruby>んだ からこそ、いまの <ruby>実力<rt>じつりょく</rt></ruby>が ある。",
+          "It is precisely because I studied under a strict teacher that I have the ability I have now."
+        ],
+        "N1": [
+          "<ruby>厳<rt>げん</rt></ruby><ruby>格<rt>かく</rt></ruby>な <ruby>管理<rt>かんり</rt></ruby>の <ruby>下<rt>もと</rt></ruby>で <ruby>実験<rt>じっけん</rt></ruby>を <ruby>行<rt>おこな</rt></ruby>わなければ、<ruby>得<rt>え</rt></ruby>られた <ruby>結果<rt>けっか</rt></ruby>の <ruby>信頼性<rt>しんらいせい</rt></ruby>は <ruby>保証<rt>ほしょう</rt></ruby>できない。",
+          "Unless the experiment is conducted under strict controls, the reliability of the results obtained cannot be guaranteed."
+        ]
+      },
+      "mnem": "下 (した) — think of something \"shita\" (shut away) down below: under / beneath.",
+      "tip": "Position noun as Nの下に (\"under N\"): ベッドの下に. Also reads か/げ (地下、下水) and さ・くだ・お in verbs (下げる/下る/下りる). The 〜の下（もと）で pattern (\"under [supervision]\") is advanced.",
+      "accent": 0
+    },
+    {
+      "key": "mnn:10:33",
+      "kana": "まえ",
+      "kanji": "前",
+      "context": "～の～",
+      "mean": "front, in front of; before",
+      "cat": "noun",
+      "type": "",
+      "trans": "",
+      "dict": "前",
+      "dictRead": "まえ",
+      "audio": "/Audio/minnamoi/bai10/00010100100001001.mp3",
+      "levels": {
+        "N5": [
+          "<ruby>店<rt>みせ</rt></ruby>の <ruby>前<rt>まえ</rt></ruby>に <ruby>車<rt>くるま</rt></ruby>が あります。",
+          "There is a car in front of the shop."
+        ],
+        "N4": [
+          "バスの <ruby>乗<rt>の</rt></ruby>り<ruby>場<rt>ば</rt></ruby>は トイレの <ruby>前<rt>まえ</rt></ruby>に あります。",
+          "The bus stop is in front of the restroom."
+        ],
+        "N3": [
+          "<ruby>寝<rt>ね</rt></ruby>る <ruby>前<rt>まえ</rt></ruby>に、かならず <ruby>歯<rt>は</rt></ruby>を みがくように して います。",
+          "Before going to bed, I make a point of always brushing my teeth."
+        ],
+        "N2": [
+          "<ruby>大勢<rt>おおぜい</rt></ruby>の <ruby>人<rt>ひと</rt></ruby>の <ruby>前<rt>まえ</rt></ruby>で <ruby>話<rt>はな</rt></ruby>すのは、<ruby>何<rt>なん</rt></ruby><ruby>度<rt>ど</rt></ruby>やっても <ruby>緊張<rt>きんちょう</rt></ruby>する ものだ。",
+          "Speaking in front of a large crowd makes you nervous no matter how many times you do it."
+        ],
+        "N1": [
+          "<ruby>公衆<rt>こうしゅう</rt></ruby>の <ruby>面前<rt>めんぜん</rt></ruby>で <ruby>恥<rt>はじ</rt></ruby>を かかされた <ruby>以上<rt>いじょう</rt></ruby>、<ruby>黙<rt>だま</rt></ruby>って <ruby>引<rt>ひ</rt></ruby>き<ruby>下<rt>さ</rt></ruby>がる わけには いかない。",
+          "Having been humiliated in front of the public, I cannot just back down in silence."
+        ]
+      },
+      "mnem": "前 (まえ) — the space \"my eye\" (まえ) looks straight at: in front / before.",
+      "tip": "Position noun as Nの前に (\"in front of N\"): 店の前に. Also means \"before\" in time (〜前に = before doing). Opposite of うしろ (behind, spatial) and あと (after, time).",
+      "accent": 1
+    },
+    {
+      "key": "mnn:10:34",
+      "kana": "うしろ",
+      "kanji": "",
+      "context": "～の～",
+      "mean": "back, behind",
+      "cat": "noun",
+      "type": "",
+      "trans": "",
+      "dict": "うしろ",
+      "dictRead": "うしろ",
+      "audio": "/Audio/minnamoi/bai10/00010100100001010.mp3",
+      "levels": {
+        "N5": [
+          "<ruby>男<rt>おとこ</rt></ruby>の <ruby>子<rt>こ</rt></ruby>は ドアの うしろに います。",
+          "The boy is behind the door."
+        ],
+        "N4": [
+          "あの <ruby>山<rt>やま</rt></ruby>の うしろに <ruby>象<rt>ぞう</rt></ruby>が います。",
+          "There is an elephant behind that mountain."
+        ],
+        "N3": [
+          "うしろに だれか いる ような <ruby>気<rt>き</rt></ruby>がして、<ruby>思<rt>おも</rt></ruby>わず ふり<ruby>返<rt>かえ</rt></ruby>りました。",
+          "I had a feeling someone was behind me, and I reflexively turned around."
+        ],
+        "N2": [
+          "<ruby>笑顔<rt>えがお</rt></ruby>の うしろに、<ruby>彼<rt>かれ</rt></ruby>が どれほどの <ruby>苦労<rt>くろう</rt></ruby>を かかえて いたのか、<ruby>誰<rt>だれ</rt></ruby>も <ruby>知<rt>し</rt></ruby>らなかった。",
+          "No one knew how much hardship he was carrying behind his smile."
+        ],
+        "N1": [
+          "この <ruby>決定<rt>けってい</rt></ruby>の うしろには、<ruby>表<rt>おもて</rt></ruby>には <ruby>出<rt>で</rt></ruby>ない さまざまな <ruby>思惑<rt>おもわく</rt></ruby>が <ruby>複雑<rt>ふくざつ</rt></ruby>に からみ<ruby>合<rt>あ</rt></ruby>って いる。",
+          "Behind this decision, various unseen intentions are intricately intertwined."
+        ]
+      },
+      "mnem": "うしろ — imagine calling \"oo-shi-ro!\" over your shoulder to whoever is behind you.",
+      "tip": "Position noun as Nのうしろに (\"behind N\"): ドアのうしろに. Spatial \"behind\" — for \"after\" in time use あと. Opposite of まえ (front).",
+      "accent": 0
+    },
+    {
+      "key": "mnn:10:35",
+      "kana": "みぎ",
+      "kanji": "右",
+      "context": "～の～",
+      "mean": "right (side)",
+      "cat": "noun",
+      "type": "",
+      "trans": "",
+      "dict": "右",
+      "dictRead": "みぎ",
+      "audio": "/Audio/minnamoi/bai10/00010100100001011.mp3",
+      "levels": {
+        "N5": [
+          "ドアの <ruby>右<rt>みぎ</rt></ruby>に スイッチが あります。",
+          "There is a switch to the right of the door."
+        ],
+        "N4": [
+          "<ruby>窓<rt>まど</rt></ruby>の <ruby>右<rt>みぎ</rt></ruby>に <ruby>棚<rt>たな</rt></ruby>が あります。",
+          "There is a shelf to the right of the window."
+        ],
+        "N3": [
+          "この <ruby>道<rt>みち</rt></ruby>を まっすぐ <ruby>行<rt>い</rt></ruby>くと、<ruby>右<rt>みぎ</rt></ruby>に <ruby>駅<rt>えき</rt></ruby>が <ruby>見<rt>み</rt></ruby>えます。",
+          "If you go straight down this road, you'll see the station on the right."
+        ],
+        "N2": [
+          "<ruby>地図<rt>ちず</rt></ruby>を <ruby>見<rt>み</rt></ruby>ても、<ruby>右<rt>みぎ</rt></ruby>か <ruby>左<rt>ひだり</rt></ruby>か <ruby>迷<rt>まよ</rt></ruby>って しまう ことが よく ある。",
+          "Even looking at a map, I often get confused about whether to go right or left."
+        ],
+        "N1": [
+          "<ruby>彼<rt>かれ</rt></ruby>の <ruby>知識<rt>ちしき</rt></ruby>の <ruby>広<rt>ひろ</rt></ruby>さときたら、この <ruby>分野<rt>ぶんや</rt></ruby>では <ruby>右<rt>みぎ</rt></ruby>に <ruby>出<rt>で</rt></ruby>る <ruby>者<rt>もの</rt></ruby>が いない ほどだ。",
+          "As for the breadth of his knowledge, in this field there is no one who can surpass him."
+        ]
+      },
+      "mnem": "右 (みぎ) — \"me-ghee\": remember it's the hand most people write with, the right hand.",
+      "tip": "Position noun as Nの右に (\"to the right of N\"): ドアの右に. Opposite of 左 (ひだり). The idiom 右に出る者がいない = \"no one can surpass (him).\"",
+      "accent": 0
+    },
+    {
+      "key": "mnn:10:36",
+      "kana": "ひだり",
+      "kanji": "左",
+      "context": "～の～",
+      "mean": "left (side)",
+      "cat": "noun",
+      "type": "",
+      "trans": "",
+      "dict": "左",
+      "dictRead": "ひだり",
+      "audio": "/Audio/minnamoi/bai10/00010100100001100.mp3",
+      "levels": {
+        "N5": [
+          "おみやげ<ruby>屋<rt>や</rt></ruby>は <ruby>大<rt>おお</rt></ruby>きい <ruby>時計<rt>とけい</rt></ruby>の <ruby>左<rt>ひだり</rt></ruby>に あります。",
+          "The souvenir shop is to the left of the big clock."
+        ],
+        "N4": [
+          "<ruby>左<rt>ひだり</rt></ruby>から <ruby>三<rt>みっ</rt></ruby>つ<ruby>目<rt>め</rt></ruby>の ドアが わたしの <ruby>部屋<rt>へや</rt></ruby>です。",
+          "The third door from the left is my room."
+        ],
+        "N3": [
+          "<ruby>次<rt>つぎ</rt></ruby>の <ruby>角<rt>かど</rt></ruby>を <ruby>左<rt>ひだり</rt></ruby>に <ruby>曲<rt>ま</rt></ruby>がると、<ruby>右手<rt>みぎて</rt></ruby>に <ruby>銀行<rt>ぎんこう</rt></ruby>が <ruby>見<rt>み</rt></ruby>えます。",
+          "If you turn left at the next corner, you'll see a bank on your right."
+        ],
+        "N2": [
+          "<ruby>利<rt>き</rt></ruby>き<ruby>手<rt>て</rt></ruby>が <ruby>左<rt>ひだり</rt></ruby>だと、はさみや かいさつなど <ruby>不便<rt>ふべん</rt></ruby>な <ruby>場面<rt>ばめん</rt></ruby>が <ruby>意外<rt>いがい</rt></ruby>と <ruby>多<rt>おお</rt></ruby>い。",
+          "If your dominant hand is the left, there are surprisingly many inconvenient situations, like with scissors or ticket gates."
+        ],
+        "N1": [
+          "<ruby>会社<rt>かいしゃ</rt></ruby>の <ruby>方針<rt>ほうしん</rt></ruby>が <ruby>右<rt>みぎ</rt></ruby>へ <ruby>左<rt>ひだり</rt></ruby>へと <ruby>揺<rt>ゆ</rt></ruby>れる たびに、<ruby>現場<rt>げんば</rt></ruby>は <ruby>振<rt>ふ</rt></ruby>り<ruby>回<rt>まわ</rt></ruby>されて <ruby>疲弊<rt>ひへい</rt></ruby>して いく。",
+          "Each time the company's policy swings this way and that, those on the ground are jerked around and worn down."
+        ]
+      },
+      "mnem": "左 (ひだり) — a longer word than 右 (みぎ); \"he-da-ri\" for the left, the hand fewer people write with.",
+      "tip": "Position noun as Nの左に (\"to the left of N\"): 時計の左に. Opposite of 右 (みぎ). Note ひだり has three morae vs みぎ's two.",
+      "accent": 0
+    },
+    {
+      "key": "mnn:10:37",
+      "kana": "なか",
+      "kanji": "中",
+      "context": "～の～",
+      "mean": "in, inside, within",
+      "cat": "noun",
+      "type": "",
+      "trans": "",
+      "dict": "中",
+      "dictRead": "なか",
+      "audio": "/Audio/minnamoi/bai10/00010100100001101.mp3",
+      "levels": {
+        "N5": [
+          "はこの <ruby>中<rt>なか</rt></ruby>に <ruby>猫<rt>ねこ</rt></ruby>が います。",
+          "There is a cat in the box."
+        ],
+        "N4": [
+          "<ruby>冷蔵庫<rt>れいぞうこ</rt></ruby>の <ruby>中<rt>なか</rt></ruby>に いろいろな <ruby>物<rt>もの</rt></ruby>が あります。",
+          "There are all sorts of things inside the refrigerator."
+        ],
+        "N3": [
+          "かばんの <ruby>中<rt>なか</rt></ruby>を さがしたけれど、かぎが どこにも <ruby>見<rt>み</rt></ruby>つかりません。",
+          "I searched inside my bag, but I can't find the key anywhere."
+        ],
+        "N2": [
+          "<ruby>忙<rt>いそが</rt></ruby>しい <ruby>毎日<rt>まいにち</rt></ruby>の <ruby>中<rt>なか</rt></ruby>でも、<ruby>本<rt>ほん</rt></ruby>を <ruby>読<rt>よ</rt></ruby>む <ruby>時間<rt>じかん</rt></ruby>だけは <ruby>大切<rt>たいせつ</rt></ruby>に して いる。",
+          "Even amid busy daily life, I cherish my reading time above all."
+        ],
+        "N1": [
+          "<ruby>激動<rt>げきどう</rt></ruby>の <ruby>時代<rt>じだい</rt></ruby>の <ruby>中<rt>なか</rt></ruby>にあって、<ruby>信念<rt>しんねん</rt></ruby>を <ruby>貫<rt>つらぬ</rt></ruby>き <ruby>通<rt>とお</rt></ruby>した <ruby>人物<rt>じんぶつ</rt></ruby>の <ruby>生<rt>い</rt></ruby>き<ruby>様<rt>ざま</rt></ruby>には、<ruby>深<rt>ふか</rt></ruby>く <ruby>心<rt>こころ</rt></ruby>を <ruby>打<rt>う</rt></ruby>たれる。",
+          "Amid a turbulent age, one is deeply moved by the way of life of a figure who held fast to his convictions."
+        ]
+      },
+      "mnem": "中 (なか) — the kanji is a line through the middle of a box; \"na-ka\" = inside / the middle.",
+      "tip": "Position noun as Nの中に (\"inside N\"): はこの中に. Also reads ちゅう (中学、中止) and じゅう (一日中). Opposite of 外 (そと).",
+      "accent": 1
+    },
+    {
+      "key": "mnn:10:38",
+      "kana": "そと",
+      "kanji": "外",
+      "context": "～の～",
+      "mean": "outside",
+      "cat": "noun",
+      "type": "",
+      "trans": "",
+      "dict": "外",
+      "dictRead": "そと",
+      "audio": "/Audio/minnamoi/bai10/00010100100001110.mp3",
+      "levels": {
+        "N5": [
+          "<ruby>外<rt>そと</rt></ruby>に <ruby>犬<rt>いぬ</rt></ruby>が います。",
+          "There is a dog outside."
+        ],
+        "N4": [
+          "<ruby>外<rt>そと</rt></ruby>から <ruby>変<rt>へん</rt></ruby>な <ruby>音<rt>おと</rt></ruby>が <ruby>聞<rt>き</rt></ruby>こえます。",
+          "I can hear a strange sound from outside."
+        ],
+        "N3": [
+          "<ruby>天気<rt>てんき</rt></ruby>が いい <ruby>日<rt>ひ</rt></ruby>は、<ruby>外<rt>そと</rt></ruby>で ごはんを <ruby>食<rt>た</rt></ruby>べるように して います。",
+          "On days with nice weather, I make a point of eating outside."
+        ],
+        "N2": [
+          "<ruby>外<rt>そと</rt></ruby>は <ruby>寒<rt>さむ</rt></ruby>そうに <ruby>見<rt>み</rt></ruby>えた ものの、<ruby>実際<rt>じっさい</rt></ruby>に <ruby>出<rt>で</rt></ruby>てみると <ruby>思<rt>おも</rt></ruby>ったより あたたかかった。",
+          "It looked cold outside, but when I actually went out, it was warmer than I'd thought."
+        ],
+        "N1": [
+          "<ruby>内<rt>うち</rt></ruby>と <ruby>外<rt>そと</rt></ruby>を <ruby>厳<rt>きび</rt></ruby>しく <ruby>使<rt>つか</rt></ruby>い<ruby>分<rt>わ</rt></ruby>ける <ruby>日本<rt>にほん</rt></ruby>の <ruby>人間<rt>にんげん</rt></ruby><ruby>関係<rt>かんけい</rt></ruby>は、<ruby>外国人<rt>がいこくじん</rt></ruby>には <ruby>理解<rt>りかい</rt></ruby>しづらい <ruby>面<rt>めん</rt></ruby>も ある。",
+          "Japanese interpersonal relations, which sharply distinguish 'inside' and 'outside,' can have aspects hard for foreigners to grasp."
+        ]
+      },
+      "mnem": "外 (そと) — \"so-to\": picture stepping \"so\" far \"to\" the door and out into the open: outside.",
+      "tip": "Position/place noun: 外に (\"outside\"), 家の外に (\"outside the house\"). Also reads がい/げ (外国、外科). Opposite of 中 (なか) and 内 (うち).",
+      "accent": 1
+    },
+    {
+      "key": "mnn:10:39",
+      "kana": "となり",
+      "kanji": "隣",
+      "context": "～の～",
+      "mean": "next to, next door, adjacent",
+      "cat": "noun",
+      "type": "",
+      "trans": "",
+      "dict": "隣",
+      "dictRead": "となり",
+      "audio": "/Audio/minnamoi/bai10/00010100100001111.mp3",
+      "levels": {
+        "N5": [
+          "レストランは <ruby>事務所<rt>じむしょ</rt></ruby>の <ruby>隣<rt>となり</rt></ruby>に あります。",
+          "The restaurant is next to the office."
+        ],
+        "N4": [
+          "わたしの <ruby>家<rt>いえ</rt></ruby>の <ruby>隣<rt>となり</rt></ruby>に <ruby>大<rt>おお</rt></ruby>きい <ruby>木<rt>き</rt></ruby>が あります。",
+          "There is a big tree next to my house."
+        ],
+        "N3": [
+          "<ruby>電車<rt>でんしゃ</rt></ruby>で、<ruby>隣<rt>となり</rt></ruby>に <ruby>座<rt>すわ</rt></ruby>った <ruby>人<rt>ひと</rt></ruby>が しんせつに <ruby>道<rt>みち</rt></ruby>を <ruby>教<rt>おし</rt></ruby>えて くれました。",
+          "On the train, the person who sat next to me kindly gave me directions."
+        ],
+        "N2": [
+          "<ruby>隣<rt>となり</rt></ruby>の しばふは <ruby>青<rt>あお</rt></ruby>く <ruby>見<rt>み</rt></ruby>える もので、<ruby>人<rt>ひと</rt></ruby>は つい ほかと <ruby>比<rt>くら</rt></ruby>べて しまう。",
+          "The neighbor's grass looks greener, and people can't help comparing themselves with others."
+        ],
+        "N1": [
+          "<ruby>隣<rt>となり</rt></ruby><ruby>近所<rt>きんじょ</rt></ruby>との <ruby>付<rt>つ</rt></ruby>き<ruby>合<rt>あ</rt></ruby>いが <ruby>希薄<rt>きはく</rt></ruby>に なった <ruby>現代<rt>げんだい</rt></ruby>だからこそ、いざという ときの <ruby>助<rt>たす</rt></ruby>け<ruby>合<rt>あ</rt></ruby>いの <ruby>大切<rt>たいせつ</rt></ruby>さが <ruby>見直<rt>みなお</rt></ruby>されて いる。",
+          "Precisely because ties with the neighborhood have grown thin in modern times, the importance of mutual aid in a crisis is being reconsidered."
+        ]
+      },
+      "mnem": "となり — picture a \"toe\" and a \"knurly\" fence between you and the house right next door.",
+      "tip": "Position noun as Nの隣に (\"next to N\"): 事務所の隣に — used for things of the same kind side by side. Contrast そば/近く (\"nearby,\" not necessarily adjacent). 隣近所 = neighbors.",
+      "accent": 0
+    },
+    {
+      "key": "mnn:10:40",
+      "kana": "ちかく",
+      "kanji": "近く",
+      "context": "～の～",
+      "mean": "near, nearby, vicinity",
+      "cat": "noun",
+      "type": "",
+      "trans": "",
+      "dict": "近く",
+      "dictRead": "ちかく",
+      "audio": "/Audio/minnamoi/bai10/00010100100010000.mp3",
+      "levels": {
+        "N5": [
+          "わたしの うちは <ruby>公園<rt>こうえん</rt></ruby>の <ruby>近<rt>ちか</rt></ruby>くに あります。",
+          "My house is near the park."
+        ],
+        "N4": [
+          "この <ruby>近<rt>ちか</rt></ruby>くに <ruby>銀行<rt>ぎんこう</rt></ruby>が ありますか。",
+          "Is there a bank near here?"
+        ],
+        "N3": [
+          "<ruby>駅<rt>えき</rt></ruby>の <ruby>近<rt>ちか</rt></ruby>くに <ruby>住<rt>す</rt></ruby>むように してから、<ruby>通勤<rt>つうきん</rt></ruby>が とても <ruby>楽<rt>らく</rt></ruby>に なりました。",
+          "Since I made a point of living near the station, commuting has become much easier."
+        ],
+        "N2": [
+          "<ruby>締<rt>し</rt></ruby>め<ruby>切<rt>き</rt></ruby>りが <ruby>近<rt>ちか</rt></ruby>くに なるにつれ、<ruby>気持<rt>きも</rt></ruby>ちに <ruby>余裕<rt>よゆう</rt></ruby>が なくなって いく。",
+          "As the deadline draws near, my peace of mind steadily disappears."
+        ],
+        "N1": [
+          "<ruby>完成<rt>かんせい</rt></ruby>が <ruby>近<rt>ちか</rt></ruby>くに <ruby>迫<rt>せま</rt></ruby>って いる とはいえ、<ruby>最後<rt>さいご</rt></ruby>まで <ruby>気<rt>き</rt></ruby>を <ruby>抜<rt>ぬ</rt></ruby>く わけには いかない。",
+          "Although completion is drawing near, I can't afford to let my guard down until the very end."
+        ]
+      },
+      "mnem": "近 (near) + く = the nearby area; 近い (ちかい, close) with く makes the noun \"近く\" (the vicinity).",
+      "tip": "Position noun as Nの近くに (\"near N\"): 公園の近くに. Broader than 隣 (となり, immediately adjacent). From the い-adjective 近い; note 〜近く can also mean \"nearly\" (百人近く).",
+      "accent": 1
+    },
+    {
+      "key": "mnn:10:41",
+      "kana": "あいだ",
+      "kanji": "間",
+      "context": "～と～の～",
+      "mean": "between; among; interval",
+      "cat": "noun",
+      "type": "",
+      "trans": "",
+      "dict": "間",
+      "dictRead": "あいだ",
+      "audio": "/Audio/minnamoi/bai10/00010100100010001.mp3",
+      "levels": {
+        "N5": [
+          "わたしの うちは <ruby>本屋<rt>ほんや</rt></ruby>と <ruby>公園<rt>こうえん</rt></ruby>の <ruby>間<rt>あいだ</rt></ruby>に あります。",
+          "My house is between the bookstore and the park."
+        ],
+        "N4": [
+          "<ruby>男<rt>おとこ</rt></ruby>の <ruby>子<rt>こ</rt></ruby>と <ruby>女<rt>おんな</rt></ruby>の <ruby>子<rt>こ</rt></ruby>の <ruby>間<rt>あいだ</rt></ruby>に <ruby>犬<rt>いぬ</rt></ruby>が います。",
+          "There is a dog between the boy and the girl."
+        ],
+        "N3": [
+          "<ruby>夏休<rt>なつやす</rt></ruby>みの <ruby>間<rt>あいだ</rt></ruby>に、<ruby>毎日<rt>まいにち</rt></ruby> <ruby>日本語<rt>にほんご</rt></ruby>を <ruby>勉強<rt>べんきょう</rt></ruby>するように して います。",
+          "During summer vacation, I make a point of studying Japanese every day."
+        ],
+        "N2": [
+          "<ruby>二人<rt>ふたり</rt></ruby>の <ruby>間<rt>あいだ</rt></ruby>に <ruby>何<rt>なに</rt></ruby>が あったのか、まわりの <ruby>人<rt>ひと</rt></ruby>には まったく <ruby>分<rt>わ</rt></ruby>からなかった。",
+          "No one around them had any idea what had happened between the two of them."
+        ],
+        "N1": [
+          "<ruby>理想<rt>りそう</rt></ruby>と <ruby>現実<rt>げんじつ</rt></ruby>の <ruby>間<rt>あいだ</rt></ruby>で <ruby>揺<rt>ゆ</rt></ruby>れ<ruby>動<rt>うご</rt></ruby>きながらも、<ruby>彼<rt>かれ</rt></ruby>は <ruby>自分<rt>じぶん</rt></ruby>なりの <ruby>答<rt>こた</rt></ruby>えを <ruby>探<rt>さが</rt></ruby>し<ruby>続<rt>つづ</rt></ruby>けた。",
+          "Wavering between ideals and reality, he nonetheless kept searching for an answer of his own."
+        ]
+      },
+      "mnem": "間 (あいだ) — the kanji shows the sun (日) seen through a gate (門): the gap/space between.",
+      "tip": "Position noun in AとBの間に (\"between A and B\"): 本屋と公園の間に — note it takes と for the two flanking nouns. Also reads かん (時間、期間) and ま (間に合う). Can mean a span of time (〜の間, \"during\").",
+      "accent": 0
+    },
+    {
+      "key": "mnn:10:42",
+      "kana": "～や～",
+      "kanji": "",
+      "context": "",
+      "mean": "～ and ～ (and so on) — non-exhaustive listing",
+      "cat": "phrase",
+      "type": "",
+      "trans": "",
+      "dict": "～や～",
+      "dictRead": "～や～",
+      "audio": "/Audio/minnamoi/bai10/00010100100010010.mp3",
+      "levels": {
+        "N5": [
+          "<ruby>冷蔵庫<rt>れいぞうこ</rt></ruby>に たまごや やさいなどが あります。",
+          "There are eggs, vegetables, and so on in the refrigerator."
+        ],
+        "N4": [
+          "はこの <ruby>中<rt>なか</rt></ruby>に <ruby>古<rt>ふる</rt></ruby>い <ruby>手紙<rt>てがみ</rt></ruby>や <ruby>写真<rt>しゃしん</rt></ruby>などが あります。",
+          "There are old letters, photos, and so on in the box."
+        ],
+        "N3": [
+          "スーパーで <ruby>肉<rt>にく</rt></ruby>や たまごなどを <ruby>買<rt>か</rt></ruby>って きました。",
+          "I bought meat, eggs, and the like at the supermarket."
+        ],
+        "N2": [
+          "この <ruby>町<rt>まち</rt></ruby>には <ruby>美術館<rt>びじゅつかん</rt></ruby>や <ruby>劇場<rt>げきじょう</rt></ruby>などの <ruby>文化<rt>ぶんか</rt></ruby><ruby>施設<rt>しせつ</rt></ruby>が <ruby>数多<rt>かずおお</rt></ruby>く そろって いる。",
+          "This town is well equipped with cultural facilities such as art museums and theaters."
+        ],
+        "N1": [
+          "<ruby>環境<rt>かんきょう</rt></ruby><ruby>問題<rt>もんだい</rt></ruby>や <ruby>資源<rt>しげん</rt></ruby><ruby>不足<rt>ぶそく</rt></ruby>など、<ruby>人類<rt>じんるい</rt></ruby>が <ruby>直面<rt>ちょくめん</rt></ruby>する <ruby>課題<rt>かだい</rt></ruby>は、もはや <ruby>一国<rt>いっこく</rt></ruby>だけで <ruby>解決<rt>かいけつ</rt></ruby>できる ものでは ない。",
+          "Issues humanity faces, such as environmental problems and resource shortages, can no longer be solved by any single nation alone."
+        ]
+      },
+      "mnem": "や lists a few examples (\"A や B\"), and など (\"and so on\") caps it off: \"A, B, and the like.\"",
+      "tip": "や joins nouns as a NON-exhaustive list (unlike と, which is complete): 肉や卵など = \"meat, eggs, etc.\" The optional など at the end reinforces \"and so on.\" Don't mix up や (listing) with the shop suffix 屋.",
+      "accent": 0
+    }
+  ],
+  "grammar": [
+    {
+      "pattern": "N（もの・ばしょ）に N（もの・ひと）が あります／います",
+      "structure": "ばしょ ＋ に ＋ N ＋ が ＋ あります（inanimate）／います（animate）",
+      "explain": "To say something EXISTS somewhere, mark the place with に and the thing with が, then choose the verb by whether the thing is alive. あります is for inanimate things (objects, plants, buildings); います is for animate things (people, animals). 「机の上に本があります」= there is a book on the desk; 「はこの中に猫がいます」= there is a cat in the box. This pattern focuses on WHAT exists at a place.",
+      "examples": [
+        {
+          "jp": "つくえの <ruby>上<rt>うえ</rt></ruby>に <ruby>本<rt>ほん</rt></ruby>が あります。",
+          "en": "There is a book on the desk."
+        },
+        {
+          "jp": "はこの <ruby>中<rt>なか</rt></ruby>に <ruby>猫<rt>ねこ</rt></ruby>が います。",
+          "en": "There is a cat in the box."
+        },
+        {
+          "jp": "ロビーに <ruby>自動<rt>じどう</rt></ruby><ruby>販売機<rt>はんばいき</rt></ruby>が あります。",
+          "en": "There is a vending machine in the lobby."
+        },
+        {
+          "jp": "<ruby>受付<rt>うけつけ</rt></ruby>に <ruby>男<rt>おとこ</rt></ruby>の <ruby>人<rt>ひと</rt></ruby>が います。",
+          "en": "There is a man at the reception desk."
+        }
+      ]
+    },
+    {
+      "pattern": "N（もの・ひと）は ばしょに あります／います",
+      "structure": "N（topic）＋ は ＋ ばしょ ＋ に ＋ あります／います",
+      "explain": "When you already know the thing and want to say WHERE it is, make the thing the topic with は and put the place before あります／います. This is the answer shape for どこ questions. 「ミラーさんは 会議室に います」= Mr. Miller is in the meeting room; 「日本語の本は つくえの上に あります」= the Japanese book is on the desk. Same verb rule: あります for inanimate, います for animate.",
+      "examples": [
+        {
+          "jp": "ミラーさんは <ruby>会議室<rt>かいぎしつ</rt></ruby>に います。",
+          "en": "Mr. Miller is in the meeting room."
+        },
+        {
+          "jp": "わたしの うちは <ruby>公園<rt>こうえん</rt></ruby>の <ruby>近<rt>ちか</rt></ruby>くに あります。",
+          "en": "My house is near the park."
+        },
+        {
+          "jp": "<ruby>東京<rt>とうきょう</rt></ruby>ディズニーランドは <ruby>千葉<rt>ちば</rt></ruby><ruby>県<rt>けん</rt></ruby>に あります。",
+          "en": "Tokyo Disneyland is in Chiba Prefecture."
+        }
+      ]
+    },
+    {
+      "pattern": "ばしょ・もの ＋ の ＋ position noun（うえ・した・まえ…）＋ に",
+      "structure": "N ＋ の ＋ うえ／した／まえ／うしろ／なか／そと／みぎ／ひだり／となり／ちかく，AとBの間 ＋ に",
+      "explain": "Position is expressed as 「Nの＋(position word)＋に」. The position words are nouns: うえ (on), した (under), まえ (front), うしろ (behind), なか (inside), そと (outside), みぎ (right), ひだり (left), となり (next to), ちかく (near), and AとBの間 (between A and B). 「ドアの右に スイッチが あります」= there's a switch to the right of the door.",
+      "examples": [
+        {
+          "jp": "ドアの <ruby>右<rt>みぎ</rt></ruby>に スイッチが あります。",
+          "en": "There is a switch to the right of the door."
+        },
+        {
+          "jp": "<ruby>店<rt>みせ</rt></ruby>の <ruby>前<rt>まえ</rt></ruby>に <ruby>車<rt>くるま</rt></ruby>が あります。",
+          "en": "There is a car in front of the shop."
+        },
+        {
+          "jp": "わたしの うちは <ruby>本屋<rt>ほんや</rt></ruby>と <ruby>公園<rt>こうえん</rt></ruby>の <ruby>間<rt>あいだ</rt></ruby>に あります。",
+          "en": "My house is between the bookstore and the park."
+        },
+        {
+          "jp": "<ruby>男<rt>おとこ</rt></ruby>の <ruby>子<rt>こ</rt></ruby>と <ruby>女<rt>おんな</rt></ruby>の <ruby>子<rt>こ</rt></ruby>の <ruby>間<rt>あいだ</rt></ruby>に <ruby>犬<rt>いぬ</rt></ruby>が います。",
+          "en": "There is a dog between the boy and the girl."
+        }
+      ]
+    },
+    {
+      "pattern": "N や N ［など］ — non-exhaustive listing",
+      "structure": "N1 ＋ や ＋ N2 ＋ ［など］",
+      "explain": "や joins nouns to give a PARTIAL list — \"A, B, and others\" — unlike と, which lists everything exhaustively. The optional など (\"and so on\") at the end of the list makes the \"there's more\" nuance explicit. 「へやの中に テレビや 冷蔵庫などが あります」= there's a TV, a fridge, and so on in the room.",
+      "examples": [
+        {
+          "jp": "へやの <ruby>中<rt>なか</rt></ruby>に テレビや <ruby>冷蔵庫<rt>れいぞうこ</rt></ruby>などが あります。",
+          "en": "There is a TV, a refrigerator, and so on in the room."
+        },
+        {
+          "jp": "スーパーで <ruby>肉<rt>にく</rt></ruby>や たまごなどを <ruby>買<rt>か</rt></ruby>いました。",
+          "en": "At the supermarket, I bought meat, eggs, and the like."
+        },
+        {
+          "jp": "はこの <ruby>中<rt>なか</rt></ruby>に <ruby>古<rt>ふる</rt></ruby>い <ruby>手紙<rt>てがみ</rt></ruby>や <ruby>写真<rt>しゃしん</rt></ruby>などが あります。",
+          "en": "There are old letters, photos, and so on in the box."
+        }
+      ]
+    }
+  ],
+  "examples": [
+    {
+      "jp": "あそこに コンビニが あります。",
+      "en": "There's a convenience store over there."
+    },
+    {
+      "jp": "ロビーに <ruby>佐藤<rt>さとう</rt></ruby>さんが います。",
+      "en": "Ms. Sato is in the lobby."
+    },
+    {
+      "jp": "<ruby>家族<rt>かぞく</rt></ruby>は ニューヨークに います。",
+      "en": "My family is in New York."
+    },
+    {
+      "jp": "この ビルに ＡＴＭが ありますか。 …はい、2<ruby>階<rt>かい</rt></ruby>に あります。",
+      "en": "Is there an ATM in this building? …Yes, on the second floor."
+    },
+    {
+      "jp": "<ruby>庭<rt>にわ</rt></ruby>に だれが いますか。 …だれも いません。<ruby>猫<rt>ねこ</rt></ruby>が います。",
+      "en": "Is anyone in the garden? …No one. Just a cat."
+    },
+    {
+      "jp": "はさみは どこに ありますか。 …<ruby>箱<rt>はこ</rt></ruby>の <ruby>中<rt>なか</rt></ruby>に あります。",
+      "en": "Where are the scissors? …In the box."
+    },
+    {
+      "jp": "<ruby>郵便局<rt>ゆうびんきょく</rt></ruby>は どこに ありますか。 …<ruby>駅<rt>えき</rt></ruby>の <ruby>近<rt>ちか</rt></ruby>くです。<ruby>銀行<rt>ぎんこう</rt></ruby>の <ruby>前<rt>まえ</rt></ruby>に あります。",
+      "en": "Where is the post office? …Near the station, in front of the bank."
+    },
+    {
+      "jp": "パンダは どこに いますか。 …<ruby>大<rt>おお</rt></ruby>きい <ruby>木<rt>き</rt></ruby>の <ruby>下<rt>した</rt></ruby>に います。",
+      "en": "Where is the panda? …Under the big tree."
+    }
+  ],
+  "conversation": {
+    "title": "アジアストアは どこですか (Where is the Asian store?)",
+    "audio": "/Audio/minnahonsatsu1/35.mp3",
+    "lines": [
+      {
+        "role": "ワン",
+        "jp": "すみません。アジアストアは どこですか。",
+        "en": "Excuse me. Where is the Asian supermarket?"
+      },
+      {
+        "role": "通行人",
+        "jp": "アジアストアですか。あそこに <ruby>白<rt>しろ</rt></ruby>い ビルが ありますね。あの ビルの <ruby>中<rt>なか</rt></ruby>です。",
+        "en": "The Asian supermarket? There's a white building over there. It's in that building."
+      },
+      {
+        "role": "ワン",
+        "jp": "そうですか。どうも すみません。",
+        "en": "I see. Thank you very much."
+      },
+      {
+        "role": "通行人",
+        "jp": "いいえ。",
+        "en": "You're welcome."
+      },
+      {
+        "role": "ワン",
+        "jp": "あのう、ナンプラーは ありますか。",
+        "en": "Excuse me, do you have fish sauce (nam pla)?"
+      },
+      {
+        "role": "店員",
+        "jp": "はい。あちらに タイ<ruby>料理<rt>りょうり</rt></ruby>の コーナーが あります。ナンプラーは いちばん <ruby>下<rt>した</rt></ruby>です。",
+        "en": "Yes. There's a Thai food section over there. The fish sauce is on the bottom shelf."
+      },
+      {
+        "role": "ワン",
+        "jp": "わかりました。どうも。",
+        "en": "Got it. Thank you."
+      }
+    ]
+  }
+}
