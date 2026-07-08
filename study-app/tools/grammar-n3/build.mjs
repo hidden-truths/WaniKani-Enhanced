@@ -89,8 +89,13 @@ for (const f of files) {
     if (start < 0) { err(`${at}: blank "${e.blank}" not found in plain text "${plain}"`); continue; }
     if (plain.indexOf(e.blank, start + 1) >= 0) warn(`${at}: blank "${e.blank}" occurs more than once — first occurrence will be clozed`);
     const end = start + e.blank.length;
-    if (rubyRanges(e.jp).some(([a, b]) => start < b && end > a)) {
-      warn(`${at}: blank intersects a ruby segment — the cloze will swallow the furigana; prefer a kana-only span`);
+    // Only a PARTIAL overlap is a problem: it tears a reading in half, so the cloze renders a
+    // half-furigana'd fragment. A ruby segment entirely INSIDE the blank is fine and common
+    // (〜に対して blanks 対 along with the pattern) — hiding the answer's own furigana is the point.
+    // Warning on containment fired 55 times across 14 shipped points, which just taught us to
+    // ignore the warnings.
+    if (rubyRanges(e.jp).some(([a, b]) => start < b && end > a && !(a >= start && b <= end))) {
+      warn(`${at}: blank PARTIALLY overlaps a ruby segment — the cloze would tear the reading in half; move the blank to a segment boundary or use a kana-only span`);
     }
   }
   contentById.set(c.id, c);

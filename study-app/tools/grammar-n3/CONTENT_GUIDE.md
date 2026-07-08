@@ -28,8 +28,10 @@ Example rules (enforced by [build.mjs](build.mjs) — run it to check):
   (`<ruby>泳<rt>およ</rt></ruby>げる`, not `<ruby>泳げる<rt>およげる</rt></ruby>`).
 - **en**: natural English translation, not word-by-word.
 - **blank**: the EXACT pattern span to cloze, as it appears in the PLAIN text (ruby stripped).
-  Prefer the kana pattern span (e.g. `ようになった`, `わけにはいかない`); it must NOT sit inside a
-  ruby base (the cloze would swallow the furigana) and should occur once in the sentence.
+  Prefer the kana pattern span (e.g. `ようになった`, `わけにはいかない`); it should occur once in the
+  sentence, and it must not **partially** overlap a ruby base (that would tear a reading in half —
+  the build warns). A ruby segment wholly INSIDE the blank is fine: `〜に対して` blanks 対 along with
+  the pattern, and hiding the answer's own furigana is exactly what a cloze should do.
 - Vocabulary stays ≤N3 where possible; polite/plain register may vary across examples.
 
 Workflow: draft/fix the per-point JSON (NEVER `src/data/grammar-n3.js` — it's generated), then
