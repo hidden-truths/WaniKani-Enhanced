@@ -9,6 +9,7 @@ import {
   JLPT_DAYS_KEEP,
   DEFAULT_TARGETS, jlptTargets, deckWordSet, wkVocabIndex, jlptGap, selectGapBatch,
   buildJlptCard, weeklyAddPace, pacePlan, PACE_BUFFER_DAYS,
+  mockTotal, normalizeMock, normalizeMocks, mockVerdict, mockTrend, JLPT_MOCKS_KEEP,
 } from '../src/core/jlpt.js';
 import { buildWkCard } from '../src/core/wanikani.js';
 
@@ -241,4 +242,103 @@ test('pacePlan grammar line: remaining vs weekly target', () => {
   expect(p.grammar.verdict).toBe('ahead');
   expect(pacePlan({ daysLeft: 30, gap: { total: 0, covered: 0 }, targets: { grammarPerWeek: 5 }, grammar: { studied: 0, total: 81 } }).grammar.verdict).toBe('behind');
   expect(pacePlan({ daysLeft: 158, gap: { total: 0, covered: 0 }, grammar: null }).grammar).toBe(undefined);
+});
+
+/* ---- mock-test log (jlpt-followups) ----
+   The one readiness signal the tab can't derive. Pins the settled blob shape, the pruning
+   EXEMPTION (a mock from six months ago is the point), and the official pass criteria —
+   including the trap that clearing the total but flunking a sectional minimum is a FAIL. */
+
+const MOCK = (date, level, v, g, l, extra = {}) =>
+  ({ id: `${date}-${level}`, date, level, scores: { vocab: v, grammarReading: g, listening: l }, total: v + g + l, ...extra });
+
+test('mockTotal sums the three sections, clamping junk to 0 and each section to 60', () => {
+  expect(mockTotal({ vocab: 40, grammarReading: 35, listening: 30 })).toBe(105);
+  expect(mockTotal({ vocab: 40 })).toBe(40);                       // partial entry still totals
+  expect(mockTotal({ vocab: 'x', grammarReading: -5, listening: 999 })).toBe(60);
+  expect(mockTotal(null)).toBe(0);
+});
+
+test('normalizeMock drops unusable entries rather than inventing a 0/180 fail', () => {
+  expect(normalizeMock(null)).toBe(null);
+  expect(normalizeMock({ level: 'N3', scores: {} })).toBe(null);          // no date
+  expect(normalizeMock({ date: 'yesterday', level: 'N3' })).toBe(null);   // bad date
+  expect(normalizeMock({ date: '2026-08-01', level: 'N9' })).toBe(null);  // unknown level
+  // Sections clamp to 0..60; the stored total is a cache and is RECOMPUTED.
+  expect(normalizeMock({ date: '2026-08-01', level: 'N3', scores: { vocab: 70, grammarReading: -3, listening: 20 }, total: 999 }))
+    .toEqual({ id: '2026-08-01-N3', date: '2026-08-01', level: 'N3', scores: { vocab: 60, grammarReading: 0, listening: 20 }, total: 80 });
+  // Notes are trimmed + capped; blank notes drop the key entirely.
+  expect(normalizeMock({ date: '2026-08-01', level: 'N3', notes: '  ' }).notes).toBe(undefined);
+  expect(normalizeMock({ date: '2026-08-01', level: 'N3', notes: '  ran out of time  ' }).notes).toBe('ran out of time');
+  expect(normalizeMock({ date: '2026-08-01', level: 'N3', notes: 'x'.repeat(600) }).notes.length).toBe(500);
+});
+
+test('normalizeMocks dedupes by id (last wins), sorts newest-first, and caps at 50', () => {
+  const dupe = [MOCK('2026-08-01', 'N3', 10, 10, 10), MOCK('2026-08-01', 'N3', 50, 50, 50)];
+  expect(normalizeMocks(dupe)).toHaveLength(1);
+  expect(normalizeMocks(dupe)[0].total).toBe(150);                 // the LAST entry won
+  const sorted = normalizeMocks([MOCK('2026-07-01', 'N3', 1, 1, 1), MOCK('2026-09-01', 'N3', 2, 2, 2), MOCK('2026-08-01', 'N3', 3, 3, 3)]);
+  expect(sorted.map((m) => m.date)).toEqual(['2026-09-01', '2026-08-01', '2026-07-01']);
+  const many = Array.from({ length: 60 }, (_, i) => MOCK(`2026-01-${String(i + 1).padStart(2, '0')}`, 'N3', 1, 1, 1));
+  expect(normalizeMocks(many)).toHaveLength(JLPT_MOCKS_KEEP);
+  expect(normalizeMocks('nope')).toEqual([]);
+});
+
+test('mocks are EXEMPT from the 60-day days{} pruning, and the key is omitted when empty', () => {
+  const ancient = MOCK('2025-01-15', 'N3', 40, 40, 40);            // ~18 months before todayKey
+  const out = normalizeJlpt({ mocks: [ancient], days: { '2025-01-15': { due: 1 } } }, '2026-07-08');
+  expect(out.mocks).toHaveLength(1);                               // survived
+  expect(out.days).toEqual({});                                    // …while the same-day record was pruned
+  // A pre-mocks blob round-trips byte-identical (no `mocks` key materialized) — shouldSeed stays honest.
+  expect('mocks' in normalizeJlpt({ level: 'N3' }, '2026-07-08')).toBe(false);
+  expect('mocks' in normalizeJlpt({ mocks: [] }, '2026-07-08')).toBe(false);
+  expect('mocks' in normalizeJlpt({ mocks: [{ date: 'junk' }] }, '2026-07-08')).toBe(false);
+});
+
+test('mockVerdict: clearing the TOTAL but flunking a sectional minimum is still a FAIL', () => {
+  // N3 needs 95/180 overall AND ≥19 in each section.
+  const strong = mockVerdict(MOCK('2026-08-01', 'N3', 55, 60, 50));
+  expect(strong).toMatchObject({ pass: true, total: 165, totalOk: true, weakSections: [], needTotal: 95, needSection: 19 });
+
+  const lopsided = mockVerdict(MOCK('2026-08-01', 'N3', 55, 60, 15));   // 130 total, listening 15
+  expect(lopsided.total).toBe(130);
+  expect(lopsided.totalOk).toBe(true);          // cleared 95 comfortably…
+  expect(lopsided.weakSections).toEqual(['listening']);
+  expect(lopsided.pass).toBe(false);            // …and still failed
+  expect(lopsided.shortfall).toBe(0);
+
+  const short = mockVerdict(MOCK('2026-08-01', 'N3', 30, 30, 25));      // 85 total, all sections ok
+  expect(short).toMatchObject({ pass: false, totalOk: false, shortfall: 10, weakSections: [] });
+
+  // Each mock is judged against ITS OWN level: 90/180 passes N2, not N3.
+  expect(mockVerdict(MOCK('2026-08-01', 'N2', 30, 30, 30)).pass).toBe(true);
+  expect(mockVerdict(MOCK('2026-08-01', 'N3', 30, 30, 30)).pass).toBe(false);
+  expect(mockVerdict(null)).toBe(null);
+});
+
+test('mockTrend compares only same-level sittings, oldest→newest, with a delta and a best', () => {
+  const mocks = normalizeMocks([
+    MOCK('2026-07-01', 'N3', 30, 30, 30),   // 90
+    MOCK('2026-08-01', 'N3', 40, 35, 30),   // 105
+    MOCK('2026-08-15', 'N4', 55, 55, 55),   // a different paper — must not pollute the N3 trend
+  ]);
+  const t = mockTrend(mocks, 'N3');
+  expect(t.points.map((p) => p.total)).toEqual([90, 105]);   // chronological
+  expect(t.latest.date).toBe('2026-08-01');
+  expect(t.delta).toBe(15);
+  expect(t.best).toBe(105);
+  expect(mockTrend(mocks, 'N1')).toBe(null);
+  expect(mockTrend(normalizeMocks([MOCK('2026-07-01', 'N3', 30, 30, 30)]), 'N3').delta).toBe(null);  // one sitting
+});
+
+test('mergeJlpt unions mocks by id with LOCAL winning, and re-caps', () => {
+  const local = { level: 'N3', mocks: [MOCK('2026-08-01', 'N3', 50, 50, 50)] };
+  const server = { level: 'N3', mocks: [MOCK('2026-08-01', 'N3', 10, 10, 10), MOCK('2026-07-01', 'N3', 20, 20, 20)] };
+  const m = mergeJlpt(local, server);
+  expect(m.mocks).toHaveLength(2);                                  // union
+  expect(m.mocks.find((x) => x.date === '2026-08-01').total).toBe(150);   // local won the collision
+  expect(m.mocks.find((x) => x.date === '2026-07-01').total).toBe(60);    // server-only entry survived
+  expect(m.mocks.map((x) => x.date)).toEqual(['2026-08-01', '2026-07-01']);  // newest first
+  // Neither side has mocks → no key (matches normalizeJlpt).
+  expect('mocks' in mergeJlpt({ level: 'N3' }, { level: 'N3' })).toBe(false);
 });

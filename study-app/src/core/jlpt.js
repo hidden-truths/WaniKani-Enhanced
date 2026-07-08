@@ -262,6 +262,11 @@ export function normalizeJlpt(o, todayKey, defaults = {}) {
     }
     if (Object.keys(clean).length) base.targets = clean;
   }
+  // Mock-test log. Like `targets`, the key is OMITTED when empty so a pre-mocks blob round-trips
+  // byte-identical (and shouldSeed stays honest). Deliberately NOT subject to the days{} cutoff
+  // below — an old sitting is the most informative data point the readiness view has.
+  const mocks = normalizeMocks(o.mocks);
+  if (mocks.length) base.mocks = mocks;
   const cutoff = todayKey ? shiftDay(todayKey, -JLPT_DAYS_KEEP) : null;
   for (const [day, rec] of Object.entries(o.days || {})) {
     if (!/^\d{4}-\d{2}-\d{2}$/.test(day) || !rec || typeof rec !== 'object') continue;
@@ -290,7 +295,118 @@ export function mergeJlpt(local, server) {
   // key omitted when neither side has targets, matching normalizeJlpt.
   const targets = { ...(b.targets || {}), ...(a.targets || {}) };
   if (Object.keys(targets).length) out.targets = targets;
+  // Mocks union by id, LOCAL wins on a collision (the device the user is editing on — the
+  // scalars' rule). normalizeMocks re-sorts + re-caps, so a merge can't grow the blob unbounded.
+  // Server-first so the local entry overwrites it in the Map.
+  const mocks = normalizeMocks([...(b.mocks || []), ...(a.mocks || [])]);
+  if (mocks.length) out.mocks = mocks;
   return out;
+}
+
+/* ---- mock-test log ----------------------------------------------------------- */
+//
+// The one readiness signal the tab can't DERIVE: an actual scored practice paper. A mock is
+// `{ id:'<date>-<level>', date, level, scores:{vocab, grammarReading, listening}, total, notes }`
+// living in a `mocks` array on the jlpt blob — union-merged by id on a 409 and EXEMPT from the
+// 60-day `days{}` pruning (a mock from six months ago is the most interesting data point there is).
+//
+// SHAPE CAVEAT: the three-section score report is the N1/N2/N3 paper. N4/N5 report only TWO
+// sections (言語知識・読解 out of 120 + 聴解 out of 60), so their scores can't be split into this
+// shape from a real score report. Each mock stores its own `level`, so an N4/N5 shape can be added
+// later per-record; today the feature layer only offers the form for N1–N3.
+
+export const JLPT_MOCKS_KEEP = 50;   // plenty of sittings; the blob is PUT whole, so it stays bounded
+
+// The N1–N3 answer sheet: three sections, 60 points each, 180 total.
+export const MOCK_SECTIONS = [
+  { key: 'vocab', jp: '文字・語彙', en: 'Vocabulary', max: 60 },
+  { key: 'grammarReading', jp: '文法・読解', en: 'Grammar & Reading', max: 60 },
+  { key: 'listening', jp: '聴解', en: 'Listening', max: 60 },
+];
+export const MOCK_SECTION_KEYS = MOCK_SECTIONS.map((s) => s.key);
+export const MOCK_MAX_TOTAL = MOCK_SECTIONS.reduce((s, x) => s + x.max, 0);
+// Levels whose real score report matches MOCK_SECTIONS (three sections). N4/N5 don't — see above.
+export const MOCK_LEVELS = ['N3', 'N2', 'N1'];
+
+// Official JLPT pass criteria: you must clear the overall total AND every sectional minimum —
+// 55/60/50 with a 15 in listening is a FAIL. Sourced from the JLPT scoring rules, not derived;
+// worth re-checking against jlpt.jp before trusting a borderline verdict.
+export const MOCK_PASS = {
+  N1: { total: 100, section: 19 },
+  N2: { total: 90, section: 19 },
+  N3: { total: 95, section: 19 },
+  N4: { total: 90, section: 19 },
+  N5: { total: 80, section: 19 },
+};
+
+export const mockId = (date, level) => `${date}-${level}`;
+
+// Sum the three sections. Missing/junk sections count 0 — a partially-entered mock still totals.
+export function mockTotal(scores) {
+  return MOCK_SECTION_KEYS.reduce((sum, k) => {
+    const v = Math.round(Number((scores || {})[k]));
+    return sum + (Number.isFinite(v) && v > 0 ? Math.min(v, 60) : 0);
+  }, 0);
+}
+
+// Normalize one mock. Returns null for anything unusable (no date, unknown level) so a junk
+// entry is DROPPED rather than rendered as a 0/180 fail the user never sat. `total` is always
+// recomputed from the sections — a stored total is a cache, never the truth.
+export function normalizeMock(m) {
+  if (!m || typeof m !== 'object') return null;
+  if (typeof m.date !== 'string' || !/^\d{4}-\d{2}-\d{2}$/.test(m.date)) return null;
+  if (!JLPT_LEVEL_ORDER.includes(m.level)) return null;
+  const scores = {};
+  for (const k of MOCK_SECTION_KEYS) {
+    const v = Math.round(Number((m.scores || {})[k]));
+    scores[k] = Number.isFinite(v) ? Math.max(0, Math.min(v, 60)) : 0;
+  }
+  const out = { id: typeof m.id === 'string' && m.id ? m.id : mockId(m.date, m.level), date: m.date, level: m.level, scores, total: mockTotal(scores) };
+  if (typeof m.notes === 'string' && m.notes.trim()) out.notes = m.notes.trim().slice(0, 500);
+  return out;
+}
+
+// Dedupe by id (LAST wins — a re-entered sitting overwrites), newest date first, capped.
+export function normalizeMocks(list) {
+  if (!Array.isArray(list)) return [];
+  const byId = new Map();
+  for (const m of list) { const c = normalizeMock(m); if (c) byId.set(c.id, c); }
+  return [...byId.values()]
+    .sort((a, b) => (a.date < b.date ? 1 : a.date > b.date ? -1 : (a.id < b.id ? 1 : -1)))
+    .slice(0, JLPT_MOCKS_KEEP);
+}
+
+// Pass/fail for one mock, against ITS OWN level (you might sit an N4 paper on the way to N3).
+// `shortfall` is how many points short of the total mark; `weakSections` are the sections under
+// the sectional minimum — the two numbers that tell you what to study next.
+export function mockVerdict(mock) {
+  if (!mock) return null;
+  const marks = MOCK_PASS[mock.level] || MOCK_PASS.N3;
+  const weakSections = MOCK_SECTION_KEYS.filter((k) => (mock.scores[k] || 0) < marks.section);
+  const totalOk = mock.total >= marks.total;
+  return {
+    pass: totalOk && !weakSections.length,
+    total: mock.total, needTotal: marks.total, needSection: marks.section,
+    shortfall: Math.max(0, marks.total - mock.total),
+    totalOk, weakSections,
+  };
+}
+
+// The trend across sittings of ONE level (mixing levels would compare different papers).
+// `mocks` is newest-first (normalizeMocks order). Returns oldest→newest points for a sparkline
+// plus the latest mock and its delta against the previous sitting (null when there's only one).
+export function mockTrend(mocks, level) {
+  const rows = (mocks || []).filter((m) => m.level === level);
+  if (!rows.length) return null;
+  const chron = [...rows].reverse();                     // oldest → newest
+  const latest = chron[chron.length - 1];
+  const prev = chron.length > 1 ? chron[chron.length - 2] : null;
+  return {
+    points: chron.map((m) => ({ date: m.date, total: m.total })),
+    latest, prev,
+    delta: prev ? latest.total - prev.total : null,
+    best: Math.max(...chron.map((m) => m.total)),
+  };
 }
 
 // 'YYYY-MM-DD' + n days (local-date arithmetic, no TZ drift: noon anchor).

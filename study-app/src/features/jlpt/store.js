@@ -1,8 +1,8 @@
 // JLPT synced store — the small cloud-synced blob (app key 'jlpt'): the target level,
-// the exam date, and the rolling daily-checklist record. Off-bus like the Minna/WaniKani
-// blobs: saveJlpt() schedules jlptBlob directly, and cloud.js lists the blob in its
-// registry via the jlpt.js barrel. 409s MERGE (core/jlpt.js mergeJlpt — day records
-// union so a task checked on either device stays checked; scalars local-wins).
+// the exam date, the rolling daily-checklist record, and the mock-test log. Off-bus like
+// the Minna/WaniKani blobs: saveJlpt() schedules jlptBlob directly, and cloud.js lists the
+// blob in its registry via the jlpt.js barrel. 409s MERGE (core/jlpt.js mergeJlpt — day
+// records and mocks union so an entry made on either device survives; scalars local-wins).
 import { state } from '../../state.js';
 import { localDay } from '../../config.js';
 import { normalizeJlpt, mergeJlpt } from '../../core/index.js';
@@ -38,7 +38,7 @@ export const jlptBlob = createSyncedBlob({
   appKey: 'jlpt',
   read: () => state.jlptStore,
   apply: (data) => {
-    if (data && typeof data === 'object' && (data.level || data.examDate || data.days || data.targets)) {
+    if (data && typeof data === 'object' && (data.level || data.examDate || data.days || data.targets || data.mocks)) {
       state.jlptStore = normalizeJlpt(data, localDay(), DEFAULTS);
       saveJlptLocal();   // mirror WITHOUT re-pushing
       return true;
@@ -47,10 +47,11 @@ export const jlptBlob = createSyncedBlob({
   },
   merge: mergeJlpt,
   // Seed the cloud only once the user has actually touched the tab (a day record, a
-  // non-default date/level, or a pacing target — defaults are never materialized, so a
-  // targets key means the user set one) — a fresh browser shouldn't push an empty blob.
+  // non-default date/level, a pacing target, or a logged mock — defaults are never
+  // materialized, so a targets/mocks key means the user made one) — a fresh browser
+  // shouldn't push an empty blob.
   shouldSeed: () => {
     const s = state.jlptStore;
-    return !!(s && (Object.keys(s.days || {}).length || s.level !== DEFAULTS.level || s.examDate !== DEFAULTS.examDate || Object.keys(s.targets || {}).length));
+    return !!(s && (Object.keys(s.days || {}).length || s.level !== DEFAULTS.level || s.examDate !== DEFAULTS.examDate || Object.keys(s.targets || {}).length || (s.mocks || []).length));
   },
 });

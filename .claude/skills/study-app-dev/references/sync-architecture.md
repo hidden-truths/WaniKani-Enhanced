@@ -81,7 +81,7 @@ never pulls causes permanent false 409s on that device). Two properties matter:
 | `selftalk` | `jpverbs_selftalk` | `features/cloud.js` (selftalkBlob; key in `persistence/selftalk.js`) | `selftalk` | `mergeSelftalkPractice` | practice/streak signal ONLY (phrases are sentence-store rows) |
 | `songs` | `jpverbs_songs` | `features/cloud.js` (songsBlob; key in `persistence/songs.js`) | `songs` | `mergeSongs` | per-song progress: starred/shadowed lines, last mode |
 | `wanikani` | `jpverbs_wanikani` | `features/wanikani/store.js` | `null` (saveWanikani) | none (server-wins) | the WK API token ONLY — the 9.4k-subject dataset is device-local IndexedDB |
-| `jlpt` | `jpverbs_jlpt` | `features/jlpt/store.js` | `null` (saveJlpt) | `mergeJlpt` (in `core/jlpt.js`) | level + examDate + optional pacing targets + rolling day records |
+| `jlpt` | `jpverbs_jlpt` | `features/jlpt/store.js` | `null` (saveJlpt) | `mergeJlpt` (in `core/jlpt.js`) | level + examDate + optional pacing targets + rolling day records + the mock-test log (`mocks[]`, union-merged by id, EXEMPT from the 60-day day pruning) |
 
 Merge fns live in `src/core/merge.js` except `mergeJlpt` (`src/core/jlpt.js`). Verify
 the live registry with: `grep -n "busKey" study-app/src/features/cloud.js`.

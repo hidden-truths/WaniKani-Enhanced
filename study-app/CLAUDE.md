@@ -60,7 +60,8 @@ order. The actual DOM/render/feature glue is split into **`src/features/*`** mod
   locally-downloaded JMdict_e); `activate.js` = the gap-fill glue (`addJlptWords` —
   headword-skip dedup, `jlptfill` source flag + `added` day-stamp; the wanikani/activate.js
   mirror); `store.js` = the `jlpt` synced blob (level + examDate + optional pacing `targets` +
-  rolling per-day checklist record, 409-MERGED via `mergeJlpt`); `view.js` renders + the
+  rolling per-day checklist record + the optional mock-test log `mocks[]`, 409-MERGED via
+  `mergeJlpt`); `view.js` renders + the
   ACTIONS click table (auto tasks track live app signals — deck due / gap-fill adds /
   leeches / grammar-card grades / selftalk practice / WK reviews via `ensureWkData`/`onWkData`
   — and write THROUGH to the day record; manual tasks toggle it). Pure derivations (map/
@@ -113,7 +114,8 @@ order. The actual DOM/render/feature glue is split into **`src/features/*`** mod
   `selftalk` (rotation / topic-grid grouping / streak / `realizeTemplate` /
   `sentenceToPhrase`), `wanikani` (leech scoring / same-kanji confusion clustering /
   forecasts / `slimSubject` / `buildWkCard`), `jlpt` (map/lookup / countdown / coverage /
-  gap / batch-tiering / pace / plan / heat), `grammar` (`buildGrammarCard` /
+  gap / batch-tiering / pace / plan / heat / the mock-log math — `normalizeMocks` /
+  `mockVerdict` / `mockTrend` / `MOCK_PASS`), `grammar` (`buildGrammarCard` /
   `pickGrammarExample` / `grammarBlank` / `clozePartsToHtml` / coverage), `conjugation`
   (the drill paradigms — `conjugate` → `{kana,display}`-or-null / `conjugableForms` /
   `isConjugable` / `pickConjForm` / `CONJ_FORMS`), `merge` (the
@@ -409,14 +411,19 @@ from api.wanikani.com at any time (full first sync ≈ 30 requests, then increme
 per-collection `updated_after` cursors kept in the IDB `meta` store).
 合格 JLPT state (`localStorage["jpverbs_jlpt"]`, synced as app `jlpt`):
 `{ level:'N5'..'N1', examDate:'YYYY-MM-DD', targets?:{wordsPerDay?,grammarPerWeek?},
-days:{'YYYY-MM-DD':{<taskId>:1}} }` — the target level, the exam date (default 2026-12-06),
+days:{'YYYY-MM-DD':{<taskId>:1}}, mocks?:[{id,date,level,scores:{vocab,grammarReading,listening},total,notes?}] }`
+— the target level, the exam date (default 2026-12-06),
 the OPTIONAL pacing targets (defaults `DEFAULT_TARGETS` = 12 words/day + 5 grammar/week
 applied at READ via `jlptTargets`, never materialized into the blob so `shouldSeed` stays
-honest; clamped 1..99 by `normalizeJlpt`; per-field union with local wins on 409), and the
+honest; clamped 1..99 by `normalizeJlpt`; per-field union with local wins on 409), the
 rolling daily-checklist record (pruned to the last 60 days by `normalizeJlpt` — note it
 FOLDS day values to 1, so per-day COUNTS can never live in `days{}`; the gap-fill quota
-signal is the `added` day-stamp on the cards instead). 409s MERGE via `mergeJlpt`
-(day-record union, local scalars win). The JLPT WORD LIST is NOT in this blob or
+signal is the `added` day-stamp on the cards instead), and the OPTIONAL **mock-test log**
+(`mocks[]`, id = `<date>-<level>`, capped at `JLPT_MOCKS_KEEP` = 50, newest first, `total`
+always recomputed from the sections — a stored total is a cache. Like `targets` the key is
+omitted when empty, and it is **EXEMPT from the 60-day `days{}` pruning**: an old sitting is
+the most informative point the readiness view has). 409s MERGE via `mergeJlpt`
+(day-record union, mocks union by id with local winning, local scalars win). The JLPT WORD LIST is NOT in this blob or
 localStorage — it's the generated `src/data/jlpt.js` module, dynamic-imported once per
 session (its own chunk); the JMdict-enriched per-level entries (`data/jlpt-words/<level>.js`)
 and the N3 grammar catalog (`data/grammar-n3.js`) are further lazy chunks of the same
@@ -576,6 +583,27 @@ Component contracts you must preserve:
   blocks paint on the WK cache read. There is deliberately NO separate "JLPT streak" —
   the tab surfaces the existing review + speaking streaks; a third streak semantic over 8
   heterogeneous tasks was judged mush.
+- **The mock-test log's three sections are the N1–N3 answer sheet, and a mock PASSES only by
+  clearing the total AND every sectional minimum.** `MOCK_SECTIONS` (文字・語彙 / 文法・読解 / 聴解,
+  60 each, 180 total) is the score report N1/N2/N3 actually issue; **N4/N5 report only TWO sections**
+  (言語知識・読解 out of 120 + 聴解 out of 60), which this shape cannot represent — hence `MOCK_LEVELS`
+  gates the form to N1–N3 and the card says so. Each mock stores its own `level` and is judged
+  against `MOCK_PASS[level]`, so an N4 paper sat on the way to N3 keeps its own verdict in the
+  history. The load-bearing rule is the SECTIONAL minimum: 55/60/15 clears N3's 95-point total and
+  still fails outright, which is exactly the case the verdict card exists to make visible — don't
+  "simplify" `mockVerdict` into a total comparison. The pass marks are transcribed from the official
+  JLPT scoring rules, not derived; re-check them against jlpt.jp before trusting a borderline
+  verdict. `mocks[]` is EXEMPT from the `days{}` 60-day pruning (see the persisted-store block).
+- **The 模試 form's draft is mirrored into a module-global on every keystroke, on purpose.**
+  `renderJlpt()` rebuilds `#jlptBody.innerHTML`, and it fires asynchronously (the WK dataset
+  landing via `onWkData`, a lazy chunk resolving) — without `S.mockDraft` a re-render mid-entry
+  silently ate a half-typed sitting. The draft holds RAW strings (clamping mid-typing fights the
+  user; `normalizeMock` clamps once, on save) and is cleared by `closeMockForm()`, which
+  `wireJlpt()` also calls so a freshly-wired panel starts closed. Relatedly, the form is
+  deliberately absent from the panel's `change` handler — a `change`-triggered re-render would blur
+  the field the user is still in. Edit keys on the mock's id (`<date>-<level>`), so re-dating an
+  edited sitting MOVES it: `mock-save` drops both the old id and the new one before re-inserting,
+  or the edit forks into two rows.
 - **The gap-fill source token is `jlptfill`, NOT `jlpt` — the obvious name is TAKEN.**
   `jlpt` is the LEVEL facet (`.chip.jlpt`, `cfg.jlpt`, the segmented N5–N1 control); a
   source chip named `jlpt` would collide with `makeMultiSelect('.chip.jlpt')` wiring and

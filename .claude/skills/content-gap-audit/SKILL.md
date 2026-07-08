@@ -59,9 +59,9 @@ the core function against fixture data, but the app is the honest view.
    start). Compute **months-to-exam** from the live `examDate` — this reshapes priorities (below).
 2. **Inventory open content records.** From `ROADMAP.html`, the standing content-gap ids (all
    verified present as of 2026-07 — re-grep, they change): `grammar-mcq-drills` and
-   `jlpt-vocab-drills` (wave-2 MCQ/語彙 drills), `grammar-n3-residue`, `jlpt-followups` (listening
-   auto-signal · mock-test log · per-level guidance — its **mock-log blob shape is already SETTLED
-   in the record's `detail`; do NOT redesign it**), `minna-more-lessons`, `minna-section-types`
+   `jlpt-vocab-drills` (wave-2 MCQ/語彙 drills), `grammar-n3-residue`, `jlpt-followups` (now
+   PARTIAL — the mock-test log SHIPPED 2026-07-08; the listening auto-signal + per-level guidance
+   remain), `minna-more-lessons`, `minna-section-types`
    (exercises/listening/kanji), `minna-per-line-audio`, `minna-italki-flags`,
    `songs-byo-timing-editor`, `songs-inline-add-review`, `cards-builtin-nonverb`,
    `cards-custom-pitch`, `content-proofread`, `selftalk-larger-set`,
@@ -94,8 +94,9 @@ Scale the plan against months-to-exam (compute from the live `examDate`):
 - **Mid:** shift weight toward **retention and drills** — leech reduction, grammar moving from
   `learning`→`solid`, the wave-2 MCQ drills (`grammar-mcq-drills`, `jlpt-vocab-drills`) rise in
   priority inside ~3 months because recognition-under-time is what the exam tests.
-- **Late (<~1 month):** mock-test rhythm + weak-area targeting; the `jlpt-followups` mock-log
-  becomes the tracking surface (its shape is already designed — implement, don't redesign).
+- **Late (<~1 month):** mock-test rhythm + weak-area targeting; the mock-test log (SHIPPED — the
+  合格 tab's 模試 card) becomes the tracking surface. Read the latest verdict's `weakSections` to
+  aim the last weeks.
 
 ## Verify (prove the audit is grounded, not guessed)
 
@@ -112,9 +113,11 @@ Scale the plan against months-to-exam (compute from the live `examDate`):
 - **Don't propose a reading tab or a listening tab as the default answer.** Reading + listening
   practice **deliberately stay EXTERNAL** to the app (the wave-1 hybrid decision). Recommend an
   external-material cadence instead; only build in-app if the user explicitly asks to revisit.
-- **The `jlpt-followups` mock-test log design is SETTLED** — the blob shape lives in the record's
-  `detail` field (a `mocks` array in the `jlpt` blob, union-merged by id on 409, exempt from the
-  ~50-cap day pruning). Read it and implement it; re-deriving it wastes effort and risks drift.
+- **The `jlpt-followups` mock-test log SHIPPED (2026-07-08)** — a `mocks` array on the `jlpt` blob,
+  union-merged by id on 409, exempt from the 60-day day pruning, capped at 50. Pure math (pass marks,
+  verdict, trend) is in `core/jlpt.js`; the 模試 card is in `features/jlpt/view.js`. Its N1–N3 three-
+  section score sheet does NOT fit N4/N5 (which report two sections) — that extension is still open,
+  as are the record's other two items (the listening auto-signal + per-level guidance copy).
 - **Prefer finishing partial surfaces over launching new ones.** A half-built surface (BYO song
   timing editor, more Self-Talk templates, the current Minna lesson) that the user *already uses*
   beats a shiny new tab. New surfaces are expensive (see the `add-study-tab` skill's full pattern).

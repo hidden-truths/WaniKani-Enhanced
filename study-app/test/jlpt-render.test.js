@@ -50,6 +50,10 @@ beforeEach(() => {
   state.minnaStore = { notes: {}, lastLesson: null, overlays: {} };
   state.wanikaniStore = { token: null };
   loadJlpt();   // → defaults (N3, 2026-12-06) via the Map-backed localStorage
+  // Wire BEFORE the first render, exactly as boot does (jlpt/index.js: wireJlpt() → renderJlpt()).
+  // wireJlpt() also resets the view-only mock-form state, which is module-global and would
+  // otherwise leak an open form from the previous test into this one's first render.
+  wireJlpt();
 });
 
 test('hero renders the countdown, level chips, and the exam date editor', () => {
@@ -196,4 +200,151 @@ test('the four papers render with deep-link actions', () => {
   expect(body).toContain('data-jl-act="go-songs"');
   expect(body).toContain('data-jl-act="go-minna"');
   expect(body).toContain('data-jl-act="go-selftalk"');
+});
+
+/* ---- mock-test log (jlpt-followups) ----
+   The form → blob → verdict round-trip through the REAL delegated ACTIONS table, plus the two
+   traps: a re-render mid-typing must not eat the draft, and re-dating an edited mock must MOVE
+   it (its id is date+level) rather than fork a second sitting.
+
+   Dates are RELATIVE to today and always in the past: the form's `max=today` is a real constraint
+   (you can't have sat a future paper) and happy-dom enforces it by refusing an out-of-range value,
+   exactly as a browser's date picker would. A hardcoded future date silently reads back as ''. */
+
+const D1 = shiftDay(TODAY, -30);
+const D2 = shiftDay(TODAY, -7);
+const el = (id) => document.getElementById(id);
+const act = (a) => document.querySelector(`[data-jl-act="${a}"]`).click();
+const fillMock = ({ date, v, g, l, notes }) => {
+  const set = (id, val) => { const n = el(id); n.value = String(val); n.dispatchEvent(new Event('input', { bubbles: true })); };
+  if (date != null) set('jlMockDate', date);
+  if (v != null) set('jlMock_vocab', v);
+  if (g != null) set('jlMock_grammarReading', g);
+  if (l != null) set('jlMock_listening', l);
+  if (notes != null) set('jlMockNotes', notes);
+};
+
+test('mock log: empty state names the N3 pass criteria, and the form round-trips into the blob', () => {
+  renderJlpt(); wireJlpt();
+  let body = el('jlptBody').innerHTML;
+  expect(body).toContain('Mock tests');
+  expect(body).toContain('No mock sat yet');
+  expect(body).toContain('95');    // the N3 total mark
+  expect(body).toContain('19');    // …and the sectional minimum
+
+  act('mock-open');
+  fillMock({ date: D1, v: 40, g: 38, l: 30, notes: 'ran out of time' });
+  act('mock-save');
+
+  expect(state.jlptStore.mocks).toHaveLength(1);
+  expect(state.jlptStore.mocks[0]).toMatchObject({
+    id: `${D1}-N3`, date: D1, level: 'N3',
+    scores: { vocab: 40, grammarReading: 38, listening: 30 }, total: 108, notes: 'ran out of time',
+  });
+  body = el('jlptBody').innerHTML;
+  expect(body).toContain('合格');            // 108 ≥ 95 and every section ≥ 19
+  expect(body).toContain('ran out of time');
+  expect(el('jlptBody').querySelector('.jl-mock-verdict').className).toContain('pass');
+  // …and the hero pill answers "would I pass today" without scrolling.
+  const pill = el('jlptBody').querySelector('.pill.mock');
+  expect(pill.className).toContain('pass');
+  expect(pill.textContent.replace(/\s|\u00a0/g, '')).toContain('108/180');
+});
+
+test('mock log: a comfortable total with one section under 19 renders as a FAIL', () => {
+  renderJlpt(); wireJlpt();
+  act('mock-open');
+  fillMock({ date: D1, v: 55, g: 60, l: 15 });   // 130/180 — but listening is 15
+  act('mock-save');
+
+  const body = el('jlptBody').innerHTML;
+  expect(body).toContain('不合格');
+  expect(body).toContain('130');
+  expect(body).toContain('sectional minimum');
+  expect(body).toContain('Listening');                     // named as the weak section
+  expect(el('jlptBody').querySelector('.jl-mock-verdict').className).toContain('fail');
+  expect(el('jlptBody').querySelector('.pill.mock').className).toContain('fail');
+});
+
+test('mock log: a re-render mid-typing does not eat the draft', () => {
+  renderJlpt(); wireJlpt();
+  act('mock-open');
+  fillMock({ date: D2, v: 42, notes: 'half typed' });
+  renderJlpt();                                            // e.g. the WK dataset landing
+  expect(el('jlMockDate').value).toBe(D2);
+  expect(el('jlMock_vocab').value).toBe('42');
+  expect(el('jlMockNotes').value).toBe('half typed');
+  // Cancel clears the draft so the next open starts clean.
+  act('mock-cancel');
+  act('mock-open');
+  expect(el('jlMock_vocab').value).toBe('');
+  expect(el('jlMockNotes').value).toBe('');
+});
+
+test('mock log: editing and RE-DATING a mock moves it instead of forking a second sitting', () => {
+  renderJlpt(); wireJlpt();
+  act('mock-open');
+  fillMock({ date: D1, v: 30, g: 30, l: 30 });
+  act('mock-save');
+  expect(state.jlptStore.mocks).toHaveLength(1);
+
+  act('mock-edit');                                        // only one row → only one Edit button
+  expect(el('jlMock_vocab').value).toBe('30');             // prefilled from the stored mock
+  fillMock({ date: D2, v: 45 });                           // new date → new id
+  act('mock-save');
+
+  expect(state.jlptStore.mocks).toHaveLength(1);           // MOVED, not forked
+  expect(state.jlptStore.mocks[0]).toMatchObject({ id: `${D2}-N3`, date: D2, total: 105 });
+});
+
+test('mock log: delete drops the row and removes the `mocks` key entirely when the last one goes', () => {
+  renderJlpt(); wireJlpt();
+  act('mock-open');
+  fillMock({ date: D1, v: 30, g: 30, l: 30 });
+  act('mock-save');
+  expect('mocks' in state.jlptStore).toBe(true);
+
+  vi.stubGlobal('confirm', () => false);
+  act('mock-del');
+  expect(state.jlptStore.mocks).toHaveLength(1);           // declined → untouched
+  vi.stubGlobal('confirm', () => true);
+  act('mock-del');
+  expect('mocks' in state.jlptStore).toBe(false);          // key omitted, not left as []
+  vi.unstubAllGlobals();
+  expect(el('jlptBody').innerHTML).toContain('No mock sat yet');
+});
+
+test('mock log: an unusable date is refused rather than silently stored', () => {
+  renderJlpt(); wireJlpt();
+  act('mock-open');
+  fillMock({ date: '', v: 40, g: 40, l: 40 });
+  act('mock-save');
+  expect(state.jlptStore.mocks).toBe(undefined);
+  expect(el('jlMockDate')).not.toBe(null);                 // form stays open so the fix is one keystroke
+});
+
+test('mock log: N4/N5 hide the form — their real score report has two sections, not three', () => {
+  state.jlptStore.level = 'N4';
+  renderJlpt(); wireJlpt();
+  const body = el('jlptBody').innerHTML;
+  expect(body).toContain('Mock tests');
+  expect(body).toContain('two sections');
+  expect(document.querySelector('[data-jl-act="mock-open"]')).toBe(null);
+});
+
+test('mock log: history lists every sitting, each judged against ITS OWN level marks', () => {
+  // 90/180 passes N2 but not N3 — the history must not judge both against the target level.
+  state.jlptStore.mocks = [
+    { id: `${D1}-N2`, date: D1, level: 'N2', scores: { vocab: 30, grammarReading: 30, listening: 30 }, total: 90 },
+    { id: `${D2}-N3`, date: D2, level: 'N3', scores: { vocab: 30, grammarReading: 30, listening: 30 }, total: 90 },
+  ];
+  renderJlpt(); wireJlpt();
+  const rows = [...el('jlptBody').querySelectorAll('.jl-mock-row')];
+  expect(rows).toHaveLength(2);
+  expect(el('jlptBody').innerHTML).toContain('All 2 sittings');
+  const pipOf = (lvl) => rows.find((r) => r.querySelector('.jl-mock-lvl').textContent === lvl).querySelector('.jl-gp-pip');
+  expect(pipOf('N2').className).toContain('solid');   // 90 clears N2's 90
+  expect(pipOf('N3').className).toContain('fail');    // …and misses N3's 95
+  // The verdict block tracks the TARGET level only (the N3 sitting), not the newest of any level.
+  expect(el('jlptBody').querySelector('.jl-mock-verdict').className).toContain('fail');
 });
