@@ -37,7 +37,7 @@ to kill.
 | `selftalk` | `features/cloud.js` | `jpverbs_selftalk` | `selftalk` | `mergeSelftalkPractice` | practice/streak signal ONLY |
 | `songs` | `features/cloud.js` | `jpverbs_songs` | `songs` | `mergeSongs` | per-song starred/shadowed/lastMode |
 | `wanikani` | `features/wanikani/store.js` | `jpverbs_wanikani` | `null` | none → server-wins | the WK API token, nothing else |
-| `jlpt` | `features/jlpt/store.js` | `jpverbs_jlpt` | `null` | `mergeJlpt` (in `core/jlpt.js`) | level + examDate + targets + day record + mock-test log |
+| `jlpt` | `features/jlpt/store.js` | `jpverbs_jlpt` | `null` | `mergeJlpt` (in `core/jlpt.js`) | level + examDate + targets + day record + mock-test log + the 文法形式判断 score trail (`mcq`) |
 
 Paths are under `study-app/src/`. Re-derive the live list any time from the registry:
 `grep -n "busKey" study-app/src/features/cloud.js` (the `blobRegistry()` function is the
@@ -91,7 +91,8 @@ For a feature that has a directory module (the modern pattern), create
   - `shouldSeed: () => ...` — return true only when local state holds real user data. Why:
     when the server has nothing and `shouldSeed()` passes, pull() pushes local up to seed a
     fresh account; a brand-new browser must not park an empty/default blob in the cloud
-    (jlpt checks for a non-default level/date, any day record, any target, or any logged mock).
+    (jlpt checks for a non-default level/date, any day record, any target, any logged mock, or
+    any answered MCQ question).
   - `merge: merge<X>` — Step 4 (omit only for deliberate server-wins).
   - `afterPull` (optional) — side-effects after a successful apply, e.g. re-render the tab
     if it's the active panel (`songsBlob`), or kick a gate open (`wanikaniBlob`'s

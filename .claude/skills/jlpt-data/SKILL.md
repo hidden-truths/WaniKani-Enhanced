@@ -123,6 +123,14 @@ data.
   signal (the 語 auto-row), so don't drop it. Dedup is a **headword skip** (a word already in
   the deck is not re-added), the songs-style path — not a Minna-style overlay.
 
+- **`added` is stamped by EVERY vocab builder now (2026-07-08), and `weeklyAddPace` levels an add
+  by the WORD LIST, not by the card's `jlpt` field.** buildJlptCard / buildWkCard / buildSongCard /
+  buildMinnaCard all stamp it, so the 語 row + pacing strip count all deck adds. Which level an add
+  counts toward is resolved by the injected `levelOf` (`cardJlptLevel` → `jlptOf`, i.e. the very map
+  this skill regenerates), because `v.jlpt` is per-source and sometimes a guess (Minna defaults to
+  N4). So regenerating the word list MOVES the pacing numbers — that's correct, they and the coverage
+  lens must answer to one source. Grammar cards are excluded (paced by `grammarPerWeek`).
+
 - **Don't "fix" the server's fail-open JLPT scoring with suffix heuristics.**
   `scoreJlpt` (`wk-enhanced-api/src/lib/jlpt.ts`) scores IK sentence tokens against
   `jlpt-vocab.json`; it deliberately treats unknown/conjugated tokens as a skip and returns 0

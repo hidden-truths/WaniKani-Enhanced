@@ -59,7 +59,8 @@ the core function against fixture data, but the app is the honest view.
    start). Compute **months-to-exam** from the live `examDate` — this reshapes priorities (below).
 2. **Inventory open content records.** From `ROADMAP.html`, the standing content-gap ids (all
    verified present as of 2026-07 — re-grep, they change): `grammar-mcq-drills` (PARTIAL — the
-   文法形式判断 drill + a 10-point bank shipped 2026-07-08; 並べ替え + 71 unbanked points remain) and
+   文法形式判断 drill + a 10-point bank + the per-point score trail (苦手 drill) shipped 2026-07-08;
+   並べ替え + 71 unbanked points remain) and
    `jlpt-vocab-drills` (the 語彙 half of wave 2), `grammar-n3-residue`, `jlpt-followups` (now
    PARTIAL — the mock-test log SHIPPED 2026-07-08; the listening auto-signal + per-level guidance
    remain), `minna-more-lessons`, `minna-section-types`
