@@ -34,7 +34,7 @@ import { localDay } from '../src/config.js';
 import { shiftDay } from '../src/core/jlpt.js';
 import { loadJlpt } from '../src/features/jlpt/store.js';
 import { ensureJlptMap, ensureJlptWords } from '../src/features/jlpt/data.js';
-import { ensureGrammarPoints } from '../src/features/grammar/data.js';
+import { ensureGrammarPoints, ensureGrammarMcq } from '../src/features/grammar/data.js';
 import { renderJlpt, wireJlpt } from '../src/features/jlpt/view.js';
 import { loadCustom } from '../src/persistence/custom.js';
 
@@ -347,4 +347,78 @@ test('mock log: history lists every sitting, each judged against ITS OWN level m
   expect(pipOf('N3').className).toContain('fail');    // …and misses N3's 95
   // The verdict block tracks the TARGET level only (the N3 sitting), not the newest of any level.
   expect(el('jlptBody').querySelector('.jl-mock-verdict').className).toContain('fail');
+});
+
+/* ---- 文法形式判断 MCQ drill (grammar-mcq-drills) ----
+   Drives the REAL ACTIONS table over the REAL generated bank chunk (a local dynamic import, per the
+   suite's "real lazy chunks are fine" convention). Pins the guards — no double-answer, no skipping
+   an unanswered question — and that the drill takes over the grammar lens without touching the deck.
+
+   `mcq-start` is an async ACTION (it awaits the bank chunk before assembling the quiz), so a click on
+   it needs the microtask queue drained before the re-render is observable. A macrotask tick does that
+   reliably; counting `await Promise.resolve()`s does not. */
+const flush = () => new Promise((r) => setTimeout(r, 0));
+
+test('mcq drill: the CTA appears once the bank chunk lands, and a run takes over the grammar lens', async () => {
+  await ensureGrammarPoints();
+  await ensureGrammarMcq();
+  renderJlpt(); wireJlpt();
+  expect(document.querySelector('[data-jl-act="mcq-start"]')).not.toBe(null);
+  expect(el('jlptBody').innerHTML).toContain('文法形式判断');
+
+  document.querySelector('[data-jl-act="mcq-start"]').click();
+  await flush();                                             // mcq-start awaits ensureGrammarMcq
+  expect(el('jlptBody').querySelector('.jl-mcq')).not.toBe(null);
+  expect(el('jlptBody').querySelector('.jl-mcq-gap')).not.toBe(null);   // unanswered → inked gap
+  expect(document.querySelectorAll('.jl-mcq-choice')).toHaveLength(4);
+  expect(el('jlptBody').querySelector('.jl-gp-list')).toBe(null);       // the point list yielded
+  expect(state.DATA).toEqual([]);                                       // …and no cards were touched
+});
+
+test('mcq drill: answering marks right/wrong, reveals the why, and blocks a second pick', async () => {
+  await ensureGrammarPoints(); await ensureGrammarMcq();
+  renderJlpt(); wireJlpt();
+  document.querySelector('[data-jl-act="mcq-start"]').click();
+  await flush();
+
+  // Find the correct choice by rendering position: the .ok class only appears AFTER answering, so
+  // pick blind, then assert the pair (fill class ⇔ why class) is internally consistent.
+  document.querySelector('.jl-mcq-choice').click();
+  const why = el('jlptBody').querySelector('.jl-mcq-why');
+  expect(why).not.toBe(null);
+  const correct = why.className.includes('ok');
+  expect(el('jlptBody').querySelector(`.jl-mcq-fill.${correct ? 'ok' : 'bad'}`)).not.toBe(null);
+  expect(el('jlptBody').querySelector('.jl-mcq-gap')).toBe(null);       // the gap is filled now
+  expect(el('jlptBody').querySelector('.jl-mcq-choice.ok')).not.toBe(null);   // the answer is always shown
+  expect([...document.querySelectorAll('.jl-mcq-choice')].every((b) => b.disabled)).toBe(true);
+
+  // A second pick can't change the recorded result (the ACTIONS guard, not just `disabled`).
+  const before = el('jlptBody').innerHTML;
+  document.querySelectorAll('.jl-mcq-choice')[1].click();
+  expect(el('jlptBody').innerHTML).toBe(before);
+});
+
+test('mcq drill: Next is inert until answered; the run walks to a score card', async () => {
+  await ensureGrammarPoints(); await ensureGrammarMcq();
+  renderJlpt(); wireJlpt();
+  document.querySelector('[data-jl-act="mcq-start"]').click();
+  await flush();
+
+  expect(document.querySelector('[data-jl-act="mcq-next"]')).toBe(null);   // not offered yet
+  const pos = () => el('jlptBody').querySelector('.jl-mcq-pos').textContent.replace(/\s/g, '');
+  expect(pos()).toBe('1/10');
+
+  // Walk the whole run: pick the first choice each time, then Next.
+  for (let i = 0; i < 10; i++) {
+    document.querySelector('.jl-mcq-choice').click();
+    document.querySelector('[data-jl-act="mcq-next"]').click();
+  }
+  const done = el('jlptBody').querySelector('.jl-mcq-done');
+  expect(done).not.toBe(null);
+  expect(done.querySelector('.jl-mcq-score b').textContent).toMatch(/^\d+\/10$/);
+  expect(state.DATA).toEqual([]);            // still no deck side-effects
+
+  document.querySelector('[data-jl-act="mcq-close"]').click();
+  expect(el('jlptBody').querySelector('.jl-mcq')).toBe(null);
+  expect(el('jlptBody').querySelector('.jl-gp-list')).not.toBe(null);   // the lens is back
 });

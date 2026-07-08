@@ -1,0 +1,38 @@
+{
+  "id": "you-ni-naru",
+  "questions": [
+    {
+      "stem": "<ruby>毎日<rt>まいにち</rt></ruby><ruby>練習<rt>れんしゅう</rt></ruby>して、<ruby>泳<rt>およ</rt></ruby>げる＿＿＿。",
+      "choices": [
+        "ようになった",
+        "ようにした",
+        "ことにした",
+        "ことになった"
+      ],
+      "answer": 0,
+      "why": "Potential verb + ようになる marks a change that HAPPENED to you — you became able to swim. ようにした would mean you deliberately made a point of swimming; ことにした is a decision you made."
+    },
+    {
+      "stem": "<ruby>子<rt>こ</rt></ruby>どもが<ruby>一人<rt>ひとり</rt></ruby>で<ruby>服<rt>ふく</rt></ruby>を<ruby>着<rt>き</rt></ruby>られる＿＿＿。",
+      "choices": [
+        "ようになりました",
+        "ようにしました",
+        "ことになりました",
+        "ばかりです"
+      ],
+      "answer": 0,
+      "why": "A gradual change of ability, not a decision or an arrangement. ことになりました would mean it was decided (by someone) that the child dresses himself."
+    },
+    {
+      "stem": "<ruby>勉強<rt>べんきょう</rt></ruby>を<ruby>続<rt>つづ</rt></ruby>けて、<ruby>日本語<rt>にほんご</rt></ruby>のニュースが<ruby>分<rt>わ</rt></ruby>かる＿＿＿。",
+      "choices": [
+        "ようになった",
+        "わけだ",
+        "ところだ",
+        "ばかりだ"
+      ],
+      "answer": 0,
+      "why": "The change-of-state reading: understanding came about over time. わけだ draws a conclusion; ところだ is 'about to / just now'."
+    }
+  ]
+}

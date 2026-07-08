@@ -1,0 +1,38 @@
+{
+  "id": "ta-bakari",
+  "questions": [
+    {
+      "stem": "<ruby>日本<rt>にほん</rt></ruby>に<ruby>来<rt>き</rt></ruby>＿＿＿のころは、<ruby>何<rt>なに</rt></ruby>も<ruby>分<rt>わ</rt></ruby>からなかった。",
+      "choices": [
+        "たばかり",
+        "たとたん",
+        "るばかり",
+        "たまま"
+      ],
+      "answer": 0,
+      "why": "たばかり = only a short span has passed since the action ('back when I had just arrived'). たとたん marks the instant of the action and cannot take のころ."
+    },
+    {
+      "stem": "この<ruby>時計<rt>とけい</rt></ruby>は<ruby>買<rt>か</rt></ruby>っ＿＿＿なのに、もう<ruby>壊<rt>こわ</rt></ruby>れてしまった。",
+      "choices": [
+        "たばかり",
+        "たところ",
+        "たとたん",
+        "たまま"
+      ],
+      "answer": 0,
+      "why": "ばかり expresses the SPEAKER'S SENSE that little time has passed, which is exactly what なのに pushes against. たところ is the objective 'just now' moment and sits awkwardly before なのに."
+    },
+    {
+      "stem": "<ruby>彼<rt>かれ</rt></ruby>は<ruby>大学<rt>だいがく</rt></ruby>を<ruby>卒業<rt>そつぎょう</rt></ruby>し＿＿＿で、まだ<ruby>働<rt>はたら</rt></ruby>いたことがない。",
+      "choices": [
+        "たばかり",
+        "たとたん",
+        "ておく",
+        "たまま"
+      ],
+      "answer": 0,
+      "why": "He graduated only recently. たとたん would need an immediate consequence, not a description of his state."
+    }
+  ]
+}

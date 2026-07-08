@@ -221,10 +221,67 @@
 .jl-hero-pills .pill.mock.pass .dot.mock{background:var(--good)}
 .jl-hero-pills .pill.mock.fail .dot.mock{background:var(--leech)}
 
+
+/* ---- 文法形式判断 MCQ drill ---------------------------------------------------------------
+   Lives inside the grammar lens card, so it inherits --grammar (deep-water teal) as its accent.
+   Right/wrong are the app's functional pair: --good for correct, --leech for the miss. */
+.jl-mcq{margin-top:4px}
+.jl-mcq-head{display:grid;grid-template-columns:auto 1fr auto auto;align-items:center;gap:12px;margin-bottom:16px}
+.jl-mcq-pos{font-family:var(--mono);font-size:12px;color:var(--ink)}
+.jl-mcq-pos i{font-style:normal;color:var(--muted)}
+.jl-mcq-track{height:3px;border-radius:999px;background:var(--surf-inset);overflow:hidden}
+.jl-mcq-fillbar{display:block;height:100%;border-radius:999px;background:var(--grammar);transition:width .25s ease}
+.jl-mcq-acc{font-family:var(--mono);font-size:11px;color:var(--muted)}
+
+.jl-mcq-stem{font-family:var(--jp);font-size:23px;line-height:2.1;color:var(--ink);margin:6px 0 20px;font-weight:500}
+.jl-mcq-stem rt{font-size:.42em;font-weight:400;color:var(--muted)}
+/* The blank: an inked-out run, matching the flashcard cloze's .cloze-gap language. */
+.jl-mcq-gap{display:inline-block;width:5.2em;height:1.05em;vertical-align:-.15em;margin:0 .12em;border-radius:8px;
+  background:color-mix(in srgb,var(--grammar) 14%,var(--deeper));border:1px dashed color-mix(in srgb,var(--grammar) 45%,transparent)}
+.jl-mcq-fill{display:inline-block;margin:0 .1em;padding:0 .16em;border-radius:6px;box-decoration-break:clone}
+.jl-mcq-fill.ok{background:color-mix(in srgb,var(--good) 22%,transparent);color:var(--ink)}
+.jl-mcq-fill.bad{background:color-mix(in srgb,var(--leech) 22%,transparent);color:var(--ink)}
+
+.jl-mcq-choices{display:grid;grid-template-columns:1fr 1fr;gap:10px}
+.jl-mcq-choice{display:flex;align-items:center;gap:11px;text-align:left;cursor:pointer;
+  border:1px solid var(--line);background:var(--chip-bg);color:var(--ink);border-radius:12px;padding:13px 15px;
+  font-family:var(--body);font-size:15px;transition:border-color .16s ease,background .16s ease,transform .16s ease}
+.jl-mcq-choice:hover:not(:disabled){border-color:var(--grammar);transform:translateY(-1px)}
+.jl-mcq-choice:disabled{cursor:default}
+.jl-mcq-choice .jp{font-family:var(--jp);font-size:16.5px}
+.jl-mcq-num{flex:none;width:22px;height:22px;border-radius:6px;display:grid;place-items:center;
+  font-family:var(--mono);font-size:11px;color:var(--muted);background:var(--surf-inset);border:1px solid var(--line)}
+.jl-mcq-choice.ok{border-color:var(--good);background:color-mix(in srgb,var(--good) 12%,transparent)}
+.jl-mcq-choice.ok .jl-mcq-num{background:var(--good);color:var(--brand-on);border-color:var(--good)}
+.jl-mcq-choice.bad{border-color:var(--leech);background:color-mix(in srgb,var(--leech) 12%,transparent)}
+.jl-mcq-choice.bad .jl-mcq-num{background:var(--leech);color:#fff;border-color:var(--leech)}
+.jl-mcq-choice.dim{opacity:.45}
+
+.jl-mcq-why{display:flex;gap:12px;align-items:flex-start;margin-top:16px;padding:13px 15px;border-radius:12px;
+  border:1px solid var(--line);background:var(--surf-inset);font-size:13.5px;line-height:1.55;color:var(--ink-2)}
+.jl-mcq-why b{flex:none;font-family:var(--jp);font-size:15px;font-weight:700}
+.jl-mcq-why.ok{border-color:color-mix(in srgb,var(--good) 38%,transparent)}
+.jl-mcq-why.ok b{color:var(--good)}
+.jl-mcq-why.bad{border-color:color-mix(in srgb,var(--leech) 34%,transparent)}
+.jl-mcq-why.bad b{color:var(--leech)}
+
+.jl-mcq-done{text-align:center;padding:10px 0 4px}
+.jl-mcq-score{display:flex;align-items:baseline;justify-content:center;gap:12px}
+.jl-mcq-score b{font-family:var(--display);font-size:44px;font-weight:800;letter-spacing:-1px;line-height:1}
+.jl-mcq-score b em{font-style:normal;font-size:20px;font-weight:600;color:var(--muted)}
+.jl-mcq-score span{font-family:var(--mono);font-size:13px;color:var(--muted)}
+.jl-mcq-done .jl-covsub{margin:10px 0 14px}
+.jl-mcq-done .jl-gp-ctas{justify-content:center}
+
 @media (max-width:900px){
   .jl-two{grid-template-columns:1fr}
 }
 @media (max-width:640px){
+  .jl-mcq-choices{grid-template-columns:1fr}
+  .jl-mcq-stem{font-size:20px;line-height:2}
+  /* The 4-up head still fits at 375px once the bar is allowed to collapse. */
+  .jl-mcq-head{gap:8px}
+  .jl-mcq-track{min-width:24px}
   .jl-mock-frow{grid-template-columns:1fr 1fr}
   .jl-mock-verdict{grid-template-columns:auto 1fr;gap:12px}
   .jl-mock-vmeta{grid-column:1/-1;align-items:flex-start;flex-direction:row;gap:10px;flex-wrap:wrap}

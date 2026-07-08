@@ -1,0 +1,38 @@
+{
+  "id": "okage-de",
+  "questions": [
+    {
+      "stem": "<ruby>先生<rt>せんせい</rt></ruby>の<ruby>助言<rt>じょげん</rt></ruby>＿＿＿、<ruby>試験<rt>しけん</rt></ruby>に<ruby>合格<rt>ごうかく</rt></ruby>できた。",
+      "choices": [
+        "のおかげで",
+        "のせいで",
+        "のくせに",
+        "のわりに"
+      ],
+      "answer": 0,
+      "why": "A GOOD result (passing) credited to a cause → おかげで. せいで blames a cause for a bad result."
+    },
+    {
+      "stem": "みんなが<ruby>手伝<rt>てつだ</rt></ruby>ってくれた＿＿＿、<ruby>早<rt>はや</rt></ruby>く<ruby>終<rt>お</rt></ruby>わった。",
+      "choices": [
+        "おかげで",
+        "せいで",
+        "ために",
+        "くせに"
+      ],
+      "answer": 0,
+      "why": "Gratitude for a welcome outcome. ために states a neutral cause or a purpose and carries no thanks."
+    },
+    {
+      "stem": "<ruby>薬<rt>くすり</rt></ruby>を<ruby>飲<rt>の</rt></ruby>んだ＿＿＿、<ruby>熱<rt>ねつ</rt></ruby>が<ruby>下<rt>さ</rt></ruby>がった。",
+      "choices": [
+        "おかげで",
+        "せいで",
+        "とおりに",
+        "わりに"
+      ],
+      "answer": 0,
+      "why": "The fever came down — a welcome result, so おかげで."
+    }
+  ]
+}

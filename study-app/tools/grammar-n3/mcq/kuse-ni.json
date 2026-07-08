@@ -1,0 +1,38 @@
+{
+  "id": "kuse-ni",
+  "questions": [
+    {
+      "stem": "<ruby>知<rt>し</rt></ruby>っている＿＿＿、<ruby>教<rt>おし</rt></ruby>えてくれなかった。",
+      "choices": [
+        "くせに",
+        "おかげで",
+        "ために",
+        "ように"
+      ],
+      "answer": 0,
+      "why": "くせに = 'even though', with reproach: he knew and STILL didn't tell me. のに is neutral; くせに blames."
+    },
+    {
+      "stem": "<ruby>子<rt>こ</rt></ruby>ども＿＿＿、<ruby>大人<rt>おとな</rt></ruby>みたいなことを<ruby>言<rt>い</rt></ruby>う。",
+      "choices": [
+        "のくせに",
+        "のおかげで",
+        "のたびに",
+        "のわりに"
+      ],
+      "answer": 0,
+      "why": "Nのくせに. のわりに ('for a …') is a neutral comparison; のくせに carries the speaker's disapproval."
+    },
+    {
+      "stem": "<ruby>彼<rt>かれ</rt></ruby>は<ruby>下手<rt>へた</rt></ruby>な＿＿＿、いつも<ruby>自慢<rt>じまん</rt></ruby>している。",
+      "choices": [
+        "くせに",
+        "ばかりに",
+        "ように",
+        "ところに"
+      ],
+      "answer": 0,
+      "why": "な-adjective + なくせに. He is bad at it and yet boasts — the critical nuance IS the point."
+    }
+  ]
+}

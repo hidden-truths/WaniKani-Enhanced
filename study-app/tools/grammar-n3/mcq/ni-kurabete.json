@@ -1,0 +1,38 @@
+{
+  "id": "ni-kurabete",
+  "questions": [
+    {
+      "stem": "<ruby>去年<rt>きょねん</rt></ruby>＿＿＿、<ruby>今年<rt>ことし</rt></ruby>は<ruby>雪<rt>ゆき</rt></ruby>が<ruby>少<rt>すく</rt></ruby>ない。",
+      "choices": [
+        "に比べて",
+        "によって",
+        "について",
+        "に対して"
+      ],
+      "answer": 0,
+      "why": "A straight comparison of two measurable amounts. に対して would set up a contrast of stances, not quantities."
+    },
+    {
+      "stem": "<ruby>東京<rt>とうきょう</rt></ruby>＿＿＿、この<ruby>町<rt>まち</rt></ruby>は<ruby>物価<rt>ぶっか</rt></ruby>が<ruby>安<rt>やす</rt></ruby>い。",
+      "choices": [
+        "に比べて",
+        "にとって",
+        "において",
+        "によると"
+      ],
+      "answer": 0,
+      "why": "Tokyo is the yardstick the town is measured against."
+    },
+    {
+      "stem": "<ruby>以前<rt>いぜん</rt></ruby>＿＿＿、<ruby>日本語<rt>にほんご</rt></ruby>がずいぶん<ruby>上手<rt>じょうず</rt></ruby>になった。",
+      "choices": [
+        "に比べて",
+        "につれて",
+        "に対して",
+        "によって"
+      ],
+      "answer": 0,
+      "why": "Comparing your present self against your past self. につれて would need a parallel change ('as X progresses, Y does too')."
+    }
+  ]
+}

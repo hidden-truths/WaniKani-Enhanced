@@ -1,0 +1,38 @@
+{
+  "id": "tabi-ni",
+  "questions": [
+    {
+      "stem": "<ruby>彼<rt>かれ</rt></ruby>に<ruby>会<rt>あ</rt></ruby>う＿＿＿、<ruby>同<rt>おな</rt></ruby>じ<ruby>話<rt>はなし</rt></ruby>を<ruby>聞<rt>き</rt></ruby>かされる。",
+      "choices": [
+        "たびに",
+        "ついでに",
+        "うちに",
+        "とたんに"
+      ],
+      "answer": 0,
+      "why": "Every single time, without exception. ついでに means 'while you're at it'; うちに means 'while the state lasts'."
+    },
+    {
+      "stem": "この<ruby>曲<rt>きょく</rt></ruby>を<ruby>聞<rt>き</rt></ruby>く＿＿＿、<ruby>学生<rt>がくせい</rt></ruby><ruby>時代<rt>じだい</rt></ruby>を<ruby>思<rt>おも</rt></ruby>い<ruby>出<rt>だ</rt></ruby>す。",
+      "choices": [
+        "たびに",
+        "うちに",
+        "ばかりに",
+        "とおりに"
+      ],
+      "answer": 0,
+      "why": "A recurring trigger with a recurring result — the core of たびに."
+    },
+    {
+      "stem": "<ruby>旅行<rt>りょこう</rt></ruby>＿＿＿、お<ruby>土産<rt>みやげ</rt></ruby>を<ruby>買<rt>か</rt></ruby>ってきてくれる。",
+      "choices": [
+        "のたびに",
+        "のついでに",
+        "のうちに",
+        "のせいで"
+      ],
+      "answer": 0,
+      "why": "Nのたびに: every time the trip happens. ついでに would make the souvenir an afterthought to some other errand."
+    }
+  ]
+}

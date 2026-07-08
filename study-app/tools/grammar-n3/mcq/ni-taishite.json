@@ -1,0 +1,38 @@
+{
+  "id": "ni-taishite",
+  "questions": [
+    {
+      "stem": "お<ruby>客様<rt>きゃくさま</rt></ruby>＿＿＿、<ruby>失礼<rt>しつれい</rt></ruby>な<ruby>態度<rt>たいど</rt></ruby>を<ruby>取<rt>と</rt></ruby>ってはいけない。",
+      "choices": [
+        "に対して",
+        "によって",
+        "にとって",
+        "について"
+      ],
+      "answer": 0,
+      "why": "に対して marks the TARGET an attitude or action is directed at. にとって would mark whose viewpoint something is judged from."
+    },
+    {
+      "stem": "<ruby>兄<rt>あに</rt></ruby>は<ruby>静<rt>しず</rt></ruby>かなの＿＿＿、<ruby>弟<rt>おとうと</rt></ruby>はとてもにぎやかだ。",
+      "choices": [
+        "に対して",
+        "によって",
+        "につれて",
+        "にとって"
+      ],
+      "answer": 0,
+      "why": "The contrastive use: A is quiet, WHEREAS B is lively. Note the の that a preceding clause needs before に対して."
+    },
+    {
+      "stem": "その<ruby>質問<rt>しつもん</rt></ruby>＿＿＿、<ruby>彼<rt>かれ</rt></ruby>は<ruby>何<rt>なに</rt></ruby>も<ruby>答<rt>こた</rt></ruby>えなかった。",
+      "choices": [
+        "に対して",
+        "について",
+        "によると",
+        "にとって"
+      ],
+      "answer": 0,
+      "why": "The question is what his (non-)response was directed at. について would mean he said nothing ABOUT the topic."
+    }
+  ]
+}

@@ -15,10 +15,11 @@ import {
   grammarCoverage, grammarReviewedToday,
   MOCK_SECTIONS, MOCK_LEVELS, MOCK_PASS, MOCK_MAX_TOTAL, normalizeMock, normalizeMocks,
   mockVerdict, mockTrend,
+  buildMcqQuiz, splitStem, fillGap, scoreMcq, weakPoints, mcqQuestionCount,
 } from '../../core/index.js';
 import { jlptMap, ensureJlptMap, jlptWords, ensureJlptWords } from './data.js';
 import { addJlptWords, jlptDeckCount } from './activate.js';
-import { grammarPoints, ensureGrammarPoints, activateGrammarPoints, grammarDeckCount } from '../grammar/index.js';
+import { grammarPoints, ensureGrammarPoints, activateGrammarPoints, grammarDeckCount, grammarMcq, ensureGrammarMcq } from '../grammar/index.js';
 import { saveJlpt } from './store.js';
 import { setSyncStatus } from '../cloud-core.js';
 import { startDueSession, studyLeechCards, studyGrammarDeck, studyJlptCards } from '../deck.js';
@@ -33,8 +34,14 @@ const goTab = (tab) => { const t = document.querySelector(`.tab[data-tab="${tab}
 // panel's innerHTML, so this must live outside the DOM to survive a re-render: `mockDraft` mirrors
 // the fields on every keystroke so an async re-render (the WK dataset landing, a lazy chunk
 // resolving) can't silently eat what the user typed.
-const S = { mockForm: false, mockEdit: null, mockDraft: null };
+// `mcq` holds an in-flight 文法形式判断 run: the assembled questions, the cursor, the picked choice
+// for the current question (null until answered), and the per-question results. Ephemeral by
+// design — a half-finished quiz is not data, and nothing about it is synced.
+const S = { mockForm: false, mockEdit: null, mockDraft: null, mcq: null };
 const closeMockForm = () => { S.mockForm = false; S.mockEdit = null; S.mockDraft = null; };
+const closeMcq = () => { S.mcq = null; };
+
+const MCQ_QUIZ_LEN = 10;   // one sitting; the seed bank holds 30 questions across 10 points
 
 /* ---- live signals ------------------------------------------------------------ */
 
@@ -222,6 +229,8 @@ export function renderJlpt() {
   // memoize), and the loaded-state guard means the resolve-time re-render can't loop.
   if (jlptMap() && !jlptWords(store.level)) ensureJlptWords(store.level).then(() => { if (panelActive()) renderJlpt(); }).catch(() => {});
   if (!grammarPoints()) ensureGrammarPoints().then(() => { if (panelActive()) renderJlpt(); }).catch(() => {});
+  // The MCQ bank is its own chunk; kick it too so the 文法形式判断 CTA appears without a click.
+  if (!grammarMcq()) ensureGrammarMcq().then(() => { if (panelActive()) renderJlpt(); }).catch(() => {});
 }
 
 function headHtml(store) {
@@ -417,17 +426,24 @@ function gapFillHtml(store, sig) {
 // is N3 content (the exam's zero-coverage paper); it renders regardless of target level.
 function grammarLensHtml(store, sig) {
   const points = grammarPoints();
-  const head = (extra) => `<section class="jl-card jl-grammar" id="jlGrammarLens">
-    <div class="jl-card-head"><div><h2 class="title">N3 grammar</h2>
-      <div class="sub">the pattern catalog, drilled as cloze cards in your deck</div></div>${extra || ''}</div>`;
+  // While a drill runs the card BECOMES the drill: its title/sub describe the MCQ, and the lens CTAs
+  // (Add-all / cloze Drill) are withheld — they'd re-render the deck out from under a live question.
+  const head = (extra, title, sub) => `<section class="jl-card jl-grammar" id="jlGrammarLens">
+    <div class="jl-card-head"><div><h2 class="title">${title || 'N3 grammar'}</h2>
+      <div class="sub">${sub || 'the pattern catalog, drilled as cloze cards in your deck'}</div></div>${extra || ''}</div>`;
   if (!points) return `${head()}<div class="jl-empty">loading the grammar catalog…</div></section>`;
   const cov = sig.gcov;
   const byId = new Map(points.map((p) => [p.id, p]));
   const remaining = cov.total - cov.inDeck;
   const gcount = grammarDeckCount();
+  // The MCQ CTA is offered whenever a bank exists for at least one point — it drills RECOGNITION and
+  // needs no deck cards, unlike the cloze "Drill grammar" path which needs activated cards.
+  const bank = grammarMcq();
+  const nq = bank ? mcqQuestionCount(bank) : 0;
   const ctas = `<div class="jl-gp-ctas">
     ${remaining ? `<button class="chip primary jl-go" data-jl-act="gp-add-all">Add all ${remaining}</button>` : ''}
     ${gcount.n ? `<button class="chip jl-go" data-jl-act="go-grammar-drill">Drill grammar${gcount.due ? ` · ${gcount.due} due` : ''}</button>` : ''}
+    ${nq && !S.mcq ? `<button class="chip jl-go" data-jl-act="mcq-start" title="Fill-the-blank, four choices — the exam's grammar question">文法形式判断 · ${Math.min(nq, MCQ_QUIZ_LEN)} Q</button>` : ''}
   </div>`;
   const pct = cov.total ? Math.round((100 * cov.inDeck) / cov.total) : 0;
   const solidPct = cov.total ? Math.round((100 * cov.solid) / cov.total) : 0;
@@ -444,9 +460,76 @@ function grammarLensHtml(store, sig) {
     return `<div class="jl-gp-row"><span class="jl-gp-pip ${p.status}" title="${p.status}"></span>
       <span class="jl-gp-label jp">${escapeHtml(pt.label)}</span><span class="jl-gp-mean">${escapeHtml(pt.mean)}</span>${act}</div>`;
   }).join('');
+  if (S.mcq) {                                               // a live drill owns the card
+    return `${head('', '<span class="jp-min">文法形式判断</span> · Grammar MCQ',
+      "fill the blank — four patterns you almost know, the shape the exam actually asks")}${mcqHtml()}</section>`;
+  }
   return `${head(ctas)}${bar}
     <details class="jl-gp-list"><summary>All ${cov.total} points</summary><div class="jl-gp-rows">${rows}</div></details>
   </section>`;
+}
+
+/* ---- 文法形式判断: the wave-2 MCQ drill ---------------------------------------------
+   The cloze card asks you to PRODUCE a pattern; the exam asks you to RECOGNISE the right one out of
+   four you almost know. Different skill, so it gets its own bank (data/grammar-n3-mcq.js, a lazy
+   sibling chunk) and its own drill — keyed on the same durable point ids, so a point's cloze card
+   and its MCQ questions always refer to one thing.
+
+   The drill lives INSIDE the grammar lens rather than in the flashcard session: it isn't SRS (no
+   scheduling, no leech math), it's a recognition sitting you take on demand. Nothing is persisted —
+   the per-point score trail feeding the lens is the record's remaining scope. */
+
+function mcqHtml() {
+  const run = S.mcq;
+  const q = run.questions[run.i];
+  const total = run.questions.length;
+
+  if (!q) {                                   // finished → the score card
+    const sc = scoreMcq(run.results);
+    const weak = weakPoints(sc.byPoint);
+    const byId = new Map((grammarPoints() || []).map((p) => [p.id, p]));
+    const weakList = weak.length
+      ? `<div class="jl-covsub">missed at least once: ${weak.map((id) => `<span class="jp">${escapeHtml((byId.get(id) || {}).label || id)}</span>`).join(' · ')}</div>`
+      : '<div class="jl-covsub">nothing missed — take another round, or drill the cloze cards.</div>';
+    return `<div class="jl-mcq jl-mcq-done">
+      <div class="jl-mcq-score"><b>${sc.right}<em>/${sc.total}</em></b><span>${sc.pct}%</span></div>
+      ${weakList}
+      <div class="jl-gp-ctas">
+        <button class="chip primary jl-go" data-jl-act="mcq-start">Another round</button>
+        <button class="chip jl-go" data-jl-act="mcq-close">Done</button>
+      </div>
+    </div>`;
+  }
+
+  const answered = run.picked != null;
+  const [before, after] = splitStem(q.stem);
+  const gap = answered
+    ? `<span class="jl-mcq-fill ${run.picked === q.answer ? 'ok' : 'bad'}">${escapeHtml(q.choices[run.picked])}</span>`
+    : '<span class="jl-mcq-gap"></span>';
+
+  const choices = q.choices.map((c, i) => {
+    let cls = '';
+    if (answered) cls = i === q.answer ? ' ok' : (i === run.picked ? ' bad' : ' dim');
+    return `<button class="jl-mcq-choice${cls}" data-jl-act="mcq-pick" data-pick="${i}"${answered ? ' disabled' : ''}>`
+      + `<span class="jl-mcq-num">${i + 1}</span><span class="jp">${escapeHtml(c)}</span></button>`;
+  }).join('');
+
+  const right = run.results.filter((r) => r.correct).length;
+  const correct = run.picked === q.answer;
+  return `<div class="jl-mcq">
+    <div class="jl-mcq-head">
+      <span class="jl-mcq-pos">${run.i + 1} <i>/ ${total}</i></span>
+      <span class="jl-mcq-track"><span class="jl-mcq-fillbar" style="width:${Math.round((100 * run.i) / total)}%"></span></span>
+      <span class="jl-mcq-acc">${run.results.length ? `${right}/${run.results.length}` : '—'}</span>
+      <button class="chip jl-go sm" data-jl-act="mcq-close">End</button>
+    </div>
+    <div class="jl-mcq-stem jp">${before}${gap}${after}</div>
+    <div class="jl-mcq-choices">${choices}</div>
+    ${answered ? `<div class="jl-mcq-why ${correct ? 'ok' : 'bad'}">
+        <b>${correct ? '正解' : '不正解'}</b><span>${escapeHtml(q.why)}</span>
+      </div>
+      <div class="jl-gp-ctas"><button class="chip primary jl-go" data-jl-act="mcq-next">${run.i + 1 === total ? 'See score' : 'Next question'}</button></div>` : ''}
+  </div>`;
 }
 
 /* ---- mock-test log --------------------------------------------------------------- */
@@ -711,6 +794,35 @@ const ACTIONS = {
     const v = state.DATA.find((x) => x.rank === Number(el.dataset.rank));
     if (v) openVerbDetail(v);
   },
+  // ---- 文法形式判断 MCQ drill ----
+  // The quiz is assembled ONCE per run; Math.random is fine here (the feature layer, not core) and
+  // buildMcqQuiz shuffles both the question order and each question's choices — the bank always
+  // stores the answer at a fixed index, so an unshuffled drill would teach position, not grammar.
+  'mcq-start': async () => {
+    const bank = await ensureGrammarMcq().catch(() => null);
+    if (!bank) return;
+    const questions = buildMcqQuiz(bank, { n: MCQ_QUIZ_LEN });
+    if (!questions.length) return;
+    S.mcq = { questions, i: 0, picked: null, results: [] };
+    renderJlpt();
+    const lens = document.getElementById('jlGrammarLens');
+    if (lens) lens.scrollIntoView({ block: 'start', behavior: 'smooth' });
+  },
+  'mcq-pick': (el) => {
+    const run = S.mcq;
+    if (!run || run.picked != null) return;                 // guard a double-tap
+    const q = run.questions[run.i];
+    run.picked = Number(el.dataset.pick);
+    run.results.push({ pointId: q.pointId, correct: run.picked === q.answer });
+    renderJlpt();
+  },
+  'mcq-next': () => {
+    const run = S.mcq;
+    if (!run || run.picked == null) return;                 // can't skip an unanswered question
+    run.i++; run.picked = null;
+    renderJlpt();
+  },
+  'mcq-close': () => { closeMcq(); renderJlpt(); },
   // ---- mock-test log ----
   'mock-open': () => { closeMockForm(); S.mockForm = true; renderJlpt(); },
   'mock-cancel': () => { closeMockForm(); renderJlpt(); },
@@ -745,7 +857,7 @@ export function wireJlpt() {
   const panel = document.getElementById('panel-jlpt');
   if (!panel || panel.dataset.jlWired) return;
   panel.dataset.jlWired = '1';
-  closeMockForm();   // a freshly-wired panel starts closed (this runs once at boot; per-panel in tests)
+  closeMockForm(); closeMcq();   // a freshly-wired panel starts clean (once at boot; per-panel in tests)
   panel.addEventListener('click', (e) => {
     const el = e.target.closest('[data-jl-act]');
     if (!el || el.disabled) return;

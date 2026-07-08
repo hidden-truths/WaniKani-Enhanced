@@ -1,0 +1,38 @@
+{
+  "id": "ni-yoru-to",
+  "questions": [
+    {
+      "stem": "<ruby>天気<rt>てんき</rt></ruby><ruby>予報<rt>よほう</rt></ruby>＿＿＿、<ruby>明日<rt>あした</rt></ruby>は<ruby>雨<rt>あめ</rt></ruby>が<ruby>降<rt>ふ</rt></ruby>るそうだ。",
+      "choices": [
+        "によると",
+        "によって",
+        "に対して",
+        "について"
+      ],
+      "answer": 0,
+      "why": "によると names the SOURCE of hearsay and pairs with そうだ / らしい / ということだ at the end of the sentence."
+    },
+    {
+      "stem": "<ruby>新聞<rt>しんぶん</rt></ruby>＿＿＿、<ruby>来月<rt>らいげつ</rt></ruby>から<ruby>料金<rt>りょうきん</rt></ruby>が<ruby>上<rt>あ</rt></ruby>がるらしい。",
+      "choices": [
+        "によると",
+        "によって",
+        "において",
+        "にとって"
+      ],
+      "answer": 0,
+      "why": "The newspaper is the source of the report. によって would mean 'by means of' or 'depending on'."
+    },
+    {
+      "stem": "<ruby>彼<rt>かれ</rt></ruby>の<ruby>話<rt>はなし</rt></ruby>＿＿＿、その<ruby>店<rt>みせ</rt></ruby>はもう<ruby>閉<rt>し</rt></ruby>まったということだ。",
+      "choices": [
+        "によると",
+        "によって",
+        "に比べて",
+        "につれて"
+      ],
+      "answer": 0,
+      "why": "Hearsay sourced to him; the sentence ends in ということだ, the giveaway for によると."
+    }
+  ]
+}

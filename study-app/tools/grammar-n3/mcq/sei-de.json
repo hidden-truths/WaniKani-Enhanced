@@ -1,0 +1,38 @@
+{
+  "id": "sei-de",
+  "questions": [
+    {
+      "stem": "<ruby>寝坊<rt>ねぼう</rt></ruby>した＿＿＿、<ruby>電車<rt>でんしゃ</rt></ruby>に<ruby>乗<rt>の</rt></ruby>り<ruby>遅<rt>おく</rt></ruby>れた。",
+      "choices": [
+        "せいで",
+        "おかげで",
+        "ように",
+        "ばかりで"
+      ],
+      "answer": 0,
+      "why": "Missing the train is a BAD result and the sentence assigns blame → せいで. おかげで here would read as sarcasm."
+    },
+    {
+      "stem": "<ruby>大雨<rt>おおあめ</rt></ruby>＿＿＿、<ruby>試合<rt>しあい</rt></ruby>は<ruby>中止<rt>ちゅうし</rt></ruby>になった。",
+      "choices": [
+        "のせいで",
+        "のおかげで",
+        "のくせに",
+        "のたびに"
+      ],
+      "answer": 0,
+      "why": "Nのせいで blames the noun for an unwanted outcome."
+    },
+    {
+      "stem": "<ruby>彼<rt>かれ</rt></ruby>の<ruby>一言<rt>ひとこと</rt></ruby>＿＿＿、<ruby>場<rt>ば</rt></ruby>の<ruby>空気<rt>くうき</rt></ruby>が<ruby>悪<rt>わる</rt></ruby>くなった。",
+      "choices": [
+        "のせいで",
+        "のおかげで",
+        "のうちに",
+        "のとおりに"
+      ],
+      "answer": 0,
+      "why": "His one remark is blamed for spoiling the mood."
+    }
+  ]
+}

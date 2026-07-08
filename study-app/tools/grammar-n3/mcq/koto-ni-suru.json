@@ -1,0 +1,38 @@
+{
+  "id": "koto-ni-suru",
+  "questions": [
+    {
+      "stem": "よく<ruby>考<rt>かんが</rt></ruby>えて、<ruby>留学<rt>りゅうがく</rt></ruby>する＿＿＿。",
+      "choices": [
+        "ことにした",
+        "ことになった",
+        "ようになった",
+        "ようにした"
+      ],
+      "answer": 0,
+      "why": "よく考えて signals YOUR deliberation, so it's ことにする (I decided). ことになった would mean the decision came from circumstances or someone else."
+    },
+    {
+      "stem": "<ruby>体<rt>からだ</rt></ruby>に<ruby>悪<rt>わる</rt></ruby>いので、たばこをやめる＿＿＿。",
+      "choices": [
+        "ことにしました",
+        "ことになりました",
+        "ようになりました",
+        "ばかりです"
+      ],
+      "answer": 0,
+      "why": "A personal resolution. Contrast ことになりました, which reports a decision reached about you."
+    },
+    {
+      "stem": "<ruby>今日<rt>きょう</rt></ruby>から<ruby>毎朝<rt>まいあさ</rt></ruby>ジョギングをする＿＿＿。",
+      "choices": [
+        "ことにしました",
+        "ことになっています",
+        "ようになりました",
+        "わけです"
+      ],
+      "answer": 0,
+      "why": "A new resolve you are announcing. ことになっています states a standing rule or arrangement, not a fresh decision."
+    }
+  ]
+}

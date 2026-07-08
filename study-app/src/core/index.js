@@ -21,3 +21,4 @@ export * from './wanikani.js';
 export * from './jlpt.js';
 export * from './grammar.js';
 export * from './conjugation.js';
+export * from './grammar-mcq.js';

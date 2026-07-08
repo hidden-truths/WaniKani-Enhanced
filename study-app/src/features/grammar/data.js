@@ -30,6 +30,23 @@ export const grammarPoints = () => points;
 // Sync point lookup by durable id: the point object, or null (unknown id OR chunk not loaded).
 export const grammarPointOf = (id) => (byId && byId.get(id)) || null;
 
+// ---- The wave-2 MCQ bank (文法形式判断) ----
+// A SEPARATE lazy chunk from the catalog — tools/grammar-n3/build-mcq.mjs explains why: the catalog
+// is on the hot path for every grammar card, the bank is only needed once the drill opens. Same
+// sync-accessor-plus-ensure shape; grammarMcq() is null until the chunk lands.
+let mcq = null;
+let mcqLoading = null;
+
+export function ensureGrammarMcq() {
+  if (mcq) return Promise.resolve(mcq);
+  mcqLoading = mcqLoading || import('../../data/grammar-n3-mcq.js').then((m) => {
+    mcq = m.GRAMMAR_N3_MCQ;
+    return mcq;
+  });
+  return mcqLoading;
+}
+export const grammarMcq = () => mcq;
+
 // ---- GiNZA tokens for grammar example sentences (progressive enhancement) ----
 // The generated catalog is the CONTENT source (the drill works offline/anon); the sentence
 // store supplies only the NLP layer — tokens for the tap-a-word overlay on the answer face.
