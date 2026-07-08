@@ -168,18 +168,17 @@ zero server involvement. The store rows exist only for the NLP token layer and T
   `seed-annotations.ts` (resolves by content hash). New/changed examples render plain ruby
   until that batch re-runs. Fail-soft; set expectations, don't chase it as a bug.
 
-**Prod state, probed 2026-07-06:**
+**Prod state, probed 2026-07-08: wave 1 IS deployed and seeded** —
 ```bash
 curl -s "https://api.wkenhanced.dev/v1/sentences?ownerType=grammar_point"
 ```
-returned `{"code":"validation_error", … expected one of "selftalk"|"card"}` — the prod API
-predates the enum widen (commit `38586d9`), i.e. **wave 1 has NOT been deployed to prod**
-(tracked as `infra-prod-deploy-wanikani` in `ROADMAP.html`). Re-run that probe before
-reasoning about prod: a validation error naming only `selftalk|card` = API not deployed;
-`{"sentences":[]}` = API deployed but seed not run; rows = deployed + seeded. New content
-reaches prod only via the `deploy-prod` skill: rebuild the web container (new bundle chunk),
-rebuild the API container if server code changed, re-run `seed-sentences.ts` on the droplet,
-optionally TTS pre-gen, eventual NLP re-parse.
+returns 322 rows. Re-run that probe before reasoning about prod rather than trusting this
+line: a validation error naming only `selftalk|card` = API not deployed; `{"sentences":[]}` =
+API deployed but seed not run; rows = deployed + seeded. New content reaches prod only via the
+`deploy-prod` skill: rebuild the web container (new bundle chunk), rebuild the API container if
+server code changed, re-run `seed-sentences.ts` on the droplet, optionally TTS pre-gen,
+eventual NLP re-parse. (The grammar/Minna sentences still fall back to Google TTS — no Siri
+clips pre-generated; roadmap `infra-siri-voices-grammar-minna`.)
 
 ## Verify
 
