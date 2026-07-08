@@ -36,7 +36,9 @@ const AppParamSchema = z.object({
         // 'wanikani'     = 鰐蟹/WaniKani tab: the user's WK API token + small prefs (WK DATA is
         //                  never stored here — it lives in the client's IndexedDB, re-syncable
         //                  from api.wanikani.com at any time)
-        // 'jlpt'         = 合格/JLPT tab: target level + exam date + the rolling daily-checklist record
+        // 'jlpt'         = 合格/JLPT tab: target level + exam date + optional pacing targets + the
+        //                  rolling daily-checklist record + the mock-test log (scored practice
+        //                  papers; capped client-side at 50 entries)
         .enum(['verbs', 'custom-verbs', 'settings', 'minna', 'selftalk', 'songs', 'wanikani', 'jlpt'])
         .openapi({ param: { name: 'app', in: 'path' }, example: 'verbs' }),
 });
