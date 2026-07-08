@@ -5,7 +5,7 @@ import { state } from '../state.js';
 import {
   passes, isLeech, rollingAcc, colorClass, cardStamp, classKanji, pitchHtml, escapeHtml, plainText,
   availableTiers, exampleForLevel, JLPT_TIERS, BOX_COLORS, nextDueLabel, filterSummary, overlayTokens,
-  cardGrammar, cardMatchesGrammar,
+  cardGrammar, cardMatchesGrammar, clampRange,
   rubyToSegments, clozeLineParts, grammarBlank, clozePartsToHtml,
 } from '../core/index.js';
 import { grammarPointOf, ensureGrammarPoints } from './grammar/data.js';
@@ -251,9 +251,7 @@ export function initBrowseUI() {
   makeMultiSelect('.chip.bjlpt', () => bcfg.jlpt, a => bcfg.jlpt = a, 'jlpt', renderBrowse);
   const brmin = document.getElementById('brmin'), brmax = document.getElementById('brmax');
   function bSyncRange() {
-    let lo = parseInt(brmin.value) || 1, hi = parseInt(brmax.value) || state.MAXRANK;
-    lo = Math.max(1, Math.min(state.MAXRANK, lo)); hi = Math.max(1, Math.min(state.MAXRANK, hi));
-    if (lo > hi) { const t = lo; lo = hi; hi = t; }
+    const [lo, hi] = clampRange(brmin.value, brmax.value, state.MAXRANK);
     bcfg.rmin = lo; bcfg.rmax = hi; renderBrowse();
   }
   brmin.addEventListener('change', bSyncRange);

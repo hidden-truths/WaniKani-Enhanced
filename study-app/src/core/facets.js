@@ -61,6 +61,16 @@ export function passes(v, c) {
   return true;
 }
 
+// Normalize a rank-range pair from two raw input strings: default blanks (lo→1, hi→max),
+// clamp both to [1, max], and swap an inverted pair. Returns [lo, hi]. The shared logic
+// behind deck's syncRange + browse's bSyncRange (kept pure/here so both can't drift).
+export function clampRange(loRaw, hiRaw, max) {
+  let lo = parseInt(loRaw) || 1, hi = parseInt(hiRaw) || max;
+  lo = Math.max(1, Math.min(max, lo)); hi = Math.max(1, Math.min(max, hi));
+  if (lo > hi) { const t = lo; lo = hi; hi = t; }
+  return [lo, hi];
+}
+
 // Token → facet routing. topic is the default; per-lesson tokens (mnn-l23) → source.
 export const DECK_FACETS = ['cat', 'type', 'trans', 'topic', 'status', 'source'];
 export const TOKEN_FACET = {

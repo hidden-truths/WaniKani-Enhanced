@@ -10,7 +10,7 @@ import { test, expect, beforeEach } from 'vitest';
 import { state, attachLevels } from '../src/state.js';
 import { VERBS } from '../src/data/verbs.js';
 import {
-  passes, oneGroup, facetAll, facetMatch, scheduleCard, cardStat, isDue, dueCards, deckSourceCount,
+  passes, oneGroup, facetAll, facetMatch, clampRange, scheduleCard, cardStat, isDue, dueCards, deckSourceCount,
   rollingAcc, isLeech, leeches, normKana, romajiToKana, reviewForecast, studyStreak, filterSummary,
   tokenFacet, deckLabel, ttsText, HAS_KANJI, rubyHtml, plainText, isCleanRuby, rubyToSegments, segmentsToRuby, segmentsToReading, foldFurigana,
   overlayTokens,
@@ -377,6 +377,14 @@ test('facetAll: empty or ["all"] is no-constraint; specific tokens constrain', (
   expect(facetAll(['all'])).toBe(true);
   expect(facetAll(undefined)).toBe(true);
   expect(facetAll(['godan'])).toBe(false);
+});
+
+test('clampRange defaults blanks, clamps to [1,max], and swaps an inverted pair', () => {
+  expect(clampRange('10', '90', 105)).toEqual([10, 90]);       // in-range passthrough
+  expect(clampRange('90', '10', 105)).toEqual([10, 90]);       // swapped
+  expect(clampRange('-5', '999', 105)).toEqual([1, 105]);      // clamped to [1, max]
+  expect(clampRange('', '', 105)).toEqual([1, 105]);           // blanks default to 1..max
+  expect(clampRange('abc', 'xyz', 42)).toEqual([1, 42]);       // garbage defaults
 });
 
 test('tokenFacet routes tokens to the right facet', () => {

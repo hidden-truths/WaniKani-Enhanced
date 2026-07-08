@@ -13,7 +13,7 @@ import { localDay } from '../config.js';
 import { settings, saveSettings } from '../settings-store.js';
 import {
   passes, isDue, dueCards, rollingAcc, reviewForecast, studyStreak,
-  facetAll, DECK_FACETS, tokenFacet, filterSummary,
+  facetAll, DECK_FACETS, tokenFacet, filterSummary, clampRange,
   practiceStreak, examCountdown,
   isConjugable, CONJ_FORMS, CONJ_FORM_IDS,
 } from '../core/index.js';
@@ -348,8 +348,6 @@ export function initDeckUI() {
   }));
 }
 function syncRange() {
-  let lo = parseInt(rminEl.value) || 1, hi = parseInt(rmaxEl.value) || state.MAXRANK;
-  lo = Math.max(1, Math.min(state.MAXRANK, lo)); hi = Math.max(1, Math.min(state.MAXRANK, hi));
-  if (lo > hi) { const t = lo; lo = hi; hi = t; }
+  const [lo, hi] = clampRange(rminEl.value, rmaxEl.value, state.MAXRANK);
   cfg.rmin = lo; cfg.rmax = hi; updateDeckCount();
 }
