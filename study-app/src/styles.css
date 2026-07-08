@@ -15,8 +15,9 @@
 
   /* Per-surface editorial header (title + optional count cluster) — Browse / Stats /
      Self-Talk / Songs. The global headline was removed (navbar) but each surface keeps its own.
-     (The mock's gold `.page-kicker` eyebrow above the title was never emitted by any surface —
-     the numbered `.marker` in chrome.css plays that role — so its rules were removed.) */
+     (A gold `.page-kicker` eyebrow above the title was styled here but never emitted by any
+     surface — the numbered `.marker` in chrome.css plays that role — so its rules were removed.
+     The mockups' own eyebrows are `.st-kicker` / `.card-kicker`, with their own inline CSS.) */
   .page-head{display:flex;align-items:flex-end;justify-content:space-between;gap:24px;flex-wrap:wrap;margin:0 0 22px}
   .page-title{font-family:var(--display);font-weight:800;font-size:40px;letter-spacing:-.018em;line-height:1.04;color:var(--ink);margin:0}
   .page-counts{display:flex;gap:10px;flex-wrap:wrap}

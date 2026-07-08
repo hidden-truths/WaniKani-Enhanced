@@ -332,6 +332,24 @@ test('mock log: editing an other-level sitting keeps ITS level, not the current 
   expect(state.jlptStore.mocks[0]).toMatchObject({ id: `${D1}-N2`, level: 'N2', total: 130 });
 });
 
+// The edited row can vanish under an open form (a 409 mergeJlpt / cloud pull replaces jlptStore, or
+// the sitting was deleted on another device). The form's DOM is still populated, so a save must NOT
+// fall through to the new-mock branch — that would resurrect the deleted sitting at the TARGET level.
+test('mock log: saving an edit whose row vanished writes nothing, rather than re-creating it', () => {
+  renderJlpt(); wireJlpt();
+  state.jlptStore.mocks = [{ id: `${D1}-N2`, date: D1, level: 'N2', scores: { vocab: 44, grammarReading: 44, listening: 40 }, total: 128 }];
+  state.jlptStore.level = 'N3';
+  renderJlpt();
+
+  act('mock-edit');                                        // form opens on the N2 sitting
+  expect(el('jlMock_vocab').value).toBe('44');
+  state.jlptStore.mocks = [];                              // …a cloud pull lands: the row is gone
+  act('mock-save');
+
+  expect(state.jlptStore.mocks).toEqual([]);               // not resurrected as an N3 mock
+  expect(el('jlptBody').querySelector('.jl-mock-form')).toBeNull();   // stale form dismissed
+});
+
 test('mock log: delete drops the row and removes the `mocks` key entirely when the last one goes', () => {
   renderJlpt(); wireJlpt();
   act('mock-open');

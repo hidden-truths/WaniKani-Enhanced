@@ -105,7 +105,7 @@ silent corruption that only bites on rare kanji.
    and asserting it reconstructs the token surface. The artifact cannot be written if any token fails.
 2. The seed loader's `db.upsertAnnotation` **re-asserts `text.slice(start,end) === surface`** against
    the real V8 engine on every write — a malformed artifact throws and aborts the seed (and deploy).
-3. A non-BMP **pin test** in `client.test.ts` asserts that the codepoint offsets a naive parser *would*
+3. A non-BMP **pin test** in `db/repos/annotations.test.ts` asserts that the codepoint offsets a naive parser *would*
    emit are REJECTED.
 
 This is recorded as a DEAD-END in [wk-enhanced-api/CLAUDE.md](wk-enhanced-api/CLAUDE.md): *"do not
@@ -170,7 +170,7 @@ offset contract, so a bad artifact aborts. **Must run as a deploy step AFTER `se
 
 ### 2.6 Tests (commit 1)
 
-In [wk-enhanced-api/src/db/client.test.ts](wk-enhanced-api/src/db/client.test.ts), describe block
+In [wk-enhanced-api/src/db/repos/annotations.test.ts](wk-enhanced-api/src/db/repos/annotations.test.ts), describe block
 *"sentence_annotation (NLP enrichment) — offset contract + privacy"*:
 - offset-integrity (slice === surface enforced on write),
 - **non-BMP contract pin** (codepoint offsets across 𠮟 are REJECTED; UTF-16 accepted),
@@ -301,7 +301,7 @@ volitional; ような/ように ≠ you-da). All 38 detectors + 10 negatives gre
    reconstructs its surface under JS slicing. Enforced at parse time + on every DB write. Never emit
    raw codepoint `token.idx`.
 2. **Privacy choke-point.** Every annotation/sentence read shares the `VIEWER_VISIBLE` predicate
-   (`public=1 OR created_by=:viewer`, fail-closed). The pinned breach tests in `client.test.ts` must
+   (`public=1 OR created_by=:viewer`, fail-closed). The pinned breach tests in `db/repos/sentences.test.ts` + `annotations.test.ts` must
    stay green. Any commit-3 serving path must ride this gate.
 3. **Hash-keyed seeding.** Annotations resolve to rows by `hash = ttsTextHash(text)`, environment-
    independent. `text` must stay `plainText(jp)` byte-for-byte and `hash` server-computed, or audio +
@@ -380,7 +380,7 @@ open decisions settled with the user first (same collaborative pattern as commit
   (a plain optional string → `=== '1'`, so any other value is just "off", never a 400).
 - **Schema** [schemas.ts](wk-enhanced-api/src/schemas.ts): `AnnotationToken`/`AnnotationBunsetsu`/
   `SentenceAnnotation` schemas + an optional `annotation` field on `SentenceSchema`.
-- **Test** ([client.test.ts](wk-enhanced-api/src/db/client.test.ts)): a breach pin — the join never leaks
+- **Test** ([annotations.test.ts](wk-enhanced-api/src/db/repos/annotations.test.ts)): a breach pin — the join never leaks
   a private row's annotation to anon/another-user, the owner sees their own, no `annotation` field
   without the flag, and a visible-but-unparsed row carries none (no existence leak). `bun test` 186 pass,
   `typecheck` clean; curl-verified on dev (`毎日…` → 6 tokens w/ UTF-16 offsets; no flag → no field).
@@ -500,7 +500,7 @@ infra: "Deploy NLP annotations + templates to prod").
 | [study-app/src/features/word-lookup.js](study-app/src/features/word-lookup.js) | tap popover + lemma→card/Jisho (3b) |
 | [wk-enhanced-api/scripts/seed-annotations.ts](wk-enhanced-api/scripts/seed-annotations.ts) | deploy-time loader |
 | [wk-enhanced-api/src/db/client.ts](wk-enhanced-api/src/db/client.ts) | `VIEWER_VISIBLE`, `upsertAnnotation`, `getAnnotation`, `setGrammarTags` |
-| [wk-enhanced-api/src/db/client.test.ts](wk-enhanced-api/src/db/client.test.ts) | annotation + grammar tests/pins |
+| [wk-enhanced-api/src/db/repos/annotations.test.ts](wk-enhanced-api/src/db/repos/annotations.test.ts) | annotation + grammar tests/pins |
 | [wk-enhanced-api/src/db/schema.sql](wk-enhanced-api/src/db/schema.sql) | `sentence_annotation` table |
 | [wk-enhanced-api/CLAUDE.md](wk-enhanced-api/CLAUDE.md) | server docs + the offset-contract dead-end |
 | [study-app/CLAUDE.md](study-app/CLAUDE.md) | frontend module map / design system (commit 3 lands here) |

@@ -34,8 +34,9 @@ export function isDue(rank) {
 export function dueCards() { return state.DATA.filter(v => isDue(v.rank)); }
 // How many deck cards carry one provenance flag, with the DUE slice broken out — the
 // "Study N now / N due" CTA counts on the 合格, 鰐蟹 and 文法 cards. `flag` is the card's
-// source marker: 'jlptfill' | 'wanikani' | 'grammar' (note the gap-fill token is `jlptfill`,
-// not `jlpt` — the obvious name is taken by the LEVEL facet).
+// source marker, as stamped by the pure builders: 'jlptfill' | 'wanikani' | 'grammar' | 'song'
+// (みんなの日本語 cards carry `minna`, and built-ins carry none). Note the gap-fill token is
+// `jlptfill`, not `jlpt` — the obvious name is taken by the LEVEL facet.
 export function deckSourceCount(flag) {
   let n = 0, due = 0;
   for (const v of state.DATA) if (v[flag]) { n++; if (isDue(v.rank)) due++; }

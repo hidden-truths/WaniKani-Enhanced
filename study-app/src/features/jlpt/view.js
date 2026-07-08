@@ -915,6 +915,17 @@ const ACTIONS = {
     // here would re-badge that paper AND drop the original row via the id-collision filter below.
     // Only a NEW mock takes the target level (and `mock-open` is gated to MOCK_LEVELS).
     const editing = S.mockEdit ? mocksOf(store).find((x) => x.id === S.mockEdit) : null;
+    // The row we opened for edit can vanish under us — a 409 mergeJlpt or a cloud pull replaces
+    // state.jlptStore while the form sits open, or the sitting was deleted on another device. The
+    // form's DOM is still populated, so falling through to the `store.level` branch below would
+    // resurrect the deleted sitting AS A NEW MOCK at the current target level: exactly the
+    // re-badging this handler exists to prevent. Bail instead; the re-render drops the stale form.
+    if (S.mockEdit && !editing) {
+      closeMockForm();
+      setSyncStatus('that sitting is no longer in the log — nothing was saved');
+      renderJlpt();
+      return;
+    }
     const m = readMockForm(editing ? editing.level : store.level);
     if (!m) { setSyncStatus('a mock needs a valid date'); return; }
     // The id is date+level, so re-dating an edited mock MOVES it — drop the old row first,
