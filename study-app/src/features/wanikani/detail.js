@@ -8,7 +8,7 @@ import { S } from './state.js';
 import {
   wkEscape, renderWkMarkup, stageBand, WK_BANDS, timeUntil, leechScore,
 } from '../../core/index.js';
-import { charHtml, typeCss, subjectRowHtml, TYPE_JP } from './bits.js';
+import { charHtml, typeCss, subjectRowHtml, TYPE_JP, leechScoreLabel } from './bits.js';
 import { wkInDeck } from './activate.js';
 
 export function detailHtml(id) {
@@ -69,7 +69,7 @@ function recordHtml(s) {
   return `<div class="wk-d-record">
     ${stageChip}
     ${next ? `<span class="wk-d-rec-note">${next}</span>` : ''}
-    ${score >= 1 ? `<span class="wk-leech-badge big" title="Leech score ${score.toFixed(1)}"><span class="jp">虫</span> leech ${score >= 10 ? Math.round(score) : score.toFixed(1)}</span>` : ''}
+    ${score >= 1 ? `<span class="wk-leech-badge big" title="Leech score ${score.toFixed(1)}"><span class="jp">虫</span> leech ${leechScoreLabel(score)}</span>` : ''}
     ${deckActionHtml(s)}
     ${st ? `<div class="wk-d-accs">
       ${side('Meaning', st.meaningCorrect, st.meaningIncorrect, st.meaningCurrentStreak, st.meaningMaxStreak)}

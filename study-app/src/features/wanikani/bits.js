@@ -10,6 +10,10 @@ import { jlptOf } from '../jlpt/data.js';
 export const typeCss = (s) => (s.type === 'radical' ? 'radical' : s.type === 'kanji' ? 'kanji' : 'vocab');
 export const TYPE_JP = { radical: '部', kanji: '漢', vocabulary: '語' };
 
+// Leech-score display: whole number at ≥10, one decimal below. Shared by the subject-tile
+// badge here and the detail modal's leech badge so the threshold can't drift between them.
+export const leechScoreLabel = (n) => (n >= 10 ? Math.round(n) : n.toFixed(1));
+
 // The subject's characters — or the image fallback for the few image-only radicals.
 export function charHtml(s) {
   if (s.chars) return `<span class="jp">${wkEscape(s.chars)}</span>`;
@@ -68,7 +72,7 @@ export function subjectRowHtml(s, opts = {}) {
     ${opts.inDeck ? '<span class="wk-indeck" title="In your study deck"><svg class="ic" aria-hidden="true"><use href="#i-check"/></svg><em>deck</em></span>' : ''}
     ${accSplitHtml(s.id)}
     ${stageSealHtml(s.id)}
-    ${score != null ? `<span class="wk-score" title="Leech score">${score >= 10 ? Math.round(score) : score.toFixed(1)}</span>` : ''}
+    ${score != null ? `<span class="wk-score" title="Leech score">${leechScoreLabel(score)}</span>` : ''}
   </button>`;
 }
 
