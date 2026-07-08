@@ -506,7 +506,18 @@ function mcqWeakIds() {
 }
 
 // A point's lifetime MCQ record as a compact badge — omitted entirely for a point never drilled, so
-// the lens doesn't sprout 81 "0/0"s. `.weak` tints the ones the 苦手 drill would pick up.
+// the lens doesn't sprout 81 "0/0"s.
+//
+// `.weak` re-derives the threshold instead of intersecting with mcqWeakIds(), and that is deliberate:
+// a trail entry can only EXIST for a banked point (`mcq-pick` keys the trail on `q.pointId`, which
+// buildMcqQuiz takes from the bank), so "weak by the trail" already implies "banked" — and gating on
+// grammarMcq() here would blank every badge until the lazy bank chunk lands. The one case where the
+// badge and the 苦手 drill can disagree is a point DROPPED from the bank after you drilled it: it
+// keeps a stale `.weak` tint with no drill that can clear it. Acceptable while the bank only grows
+// (10/81 points today). If points ever start leaving the bank, intersect here.
+//
+// The threshold itself (an ACCURACY floor, never `wrong > 0`) is a documented dead-end — see the MCQ
+// entry in study-app/CLAUDE.md. Lifetime counters mean "ever missed" would pin a point forever.
 function mcqBadge(trail, id) {
   const s = mcqStat(trail, id);
   if (!s) return '';
@@ -558,6 +569,10 @@ function mcqHtml() {
   }
 
   const answered = run.picked != null;
+  // `before`/`after` are interpolated RAW while every sibling here escapes — the stem carries
+  // <ruby> furigana markup by design ("stem (clean ruby, one ＿＿＿ gap)", data/grammar-n3-mcq.js),
+  // so escaping it would print the tags instead of the reading. The bank is a GENERATED, in-repo
+  // artifact, never user input. Choices and `why` are plain text, hence escapeHtml on those.
   const [before, after] = splitStem(q.stem);
   const gap = answered
     ? `<span class="jl-mcq-fill ${run.picked === q.answer ? 'ok' : 'bad'}">${escapeHtml(q.choices[run.picked])}</span>`
