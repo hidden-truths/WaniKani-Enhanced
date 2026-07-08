@@ -8,14 +8,11 @@
 import { state } from '../../state.js';
 import { localDay } from '../../config.js';
 import {
-  dueCards, leeches, studyStreak, practiceStreak,
-  examCountdown, deckJlptCoverage, wkJlptCoverage, checklistHeat, shiftDay,
-  wkForecast, JLPT_LEVEL_ORDER, escapeHtml,
-  jlptTargets, deckWordSet, wkVocabIndex, jlptGap, selectGapBatch, weeklyAddPace, pacePlan,
-  grammarCoverage, grammarReviewedToday,
+  examCountdown, deckJlptCoverage, wkJlptCoverage, checklistHeat,
+  JLPT_LEVEL_ORDER, escapeHtml, selectGapBatch,
   mcqQuestionCount,
 } from '../../core/index.js';
-import { jlptMap, ensureJlptMap, jlptWords, ensureJlptWords, cardJlptLevel } from './data.js';
+import { jlptMap, ensureJlptMap, jlptWords, ensureJlptWords } from './data.js';
 import { addJlptWords, jlptDeckCount } from './activate.js';
 import { grammarPoints, ensureGrammarPoints, activateGrammarPoints, grammarDeckCount, grammarMcq, ensureGrammarMcq } from '../grammar/index.js';
 import { saveJlpt } from './store.js';
@@ -23,63 +20,12 @@ import { setSyncStatus } from '../cloud-core.js';
 import { startDueSession, studyLeechCards, studyGrammarDeck, studyJlptCards } from '../deck.js';
 import { openBrowseGrammar, openVerbDetail } from '../browse.js';
 import { S as WK } from '../wanikani/state.js';
-import { leechList } from '../wanikani/leeches.js';
 // View-only state + the panel-active / tab-jump helpers (jlpt/state.js — refactor step 1).
 import { S, closeMockForm, closeMcq, MCQ_QUIZ_LEN, panelActive, goTab } from './state.js';
 import { sectionsHtml } from './sections.js';   // the four-papers grid (refactor step 2)
 import { mockPillHtml, mockLogHtml, captureMockField, MOCK_ACTIONS } from './mocks.js';   // 模試 log (refactor step 3)
 import { mcqWeakIds, mcqBadge, mcqHtml, MCQ_ACTIONS } from './mcq.js';   // 文法形式判断 drill (refactor step 4)
-
-/* ---- live signals ------------------------------------------------------------ */
-
-// One read over the app's stores → everything the checklist + readiness cards show.
-// WK numbers are null when no token / dataset not yet in memory (ensureWkData is kicked
-// on tab open; onWkData re-renders when it lands).
-function collectSignals() {
-  const today = localDay();
-  const store = state.jlptStore;
-  const daily = state.store.daily || {};
-  let week = 0;
-  for (let i = 0; i < 7; i++) { const d = daily[shiftDay(today, -i)]; if (d) week += d.tot || 0; }
-  const wkConnected = !!state.wanikaniStore.token;
-  const wkLoaded = wkConnected && WK.loaded;
-  // Pacing coach inputs: the coverage gap (deck ∪ WK-guru vs the list), the deck-add pace (the
-  // `added` day-stamps, from EVERY vocab source — gap-fill / 鰐蟹 / 歌 / みんなの日本語 — levelled by the
-  // authoritative word list, not the card's own guessed `jlpt`), the grammar catalog coverage, and
-  // the user targets — all fed to the pure pacePlan. gap/plan are null until the word-list chunk lands.
-  const wkIdx = wkLoaded ? wkVocabIndex(WK.subjects, WK.assignments) : null;
-  const wkLevel = wkLoaded && WK.user ? WK.user.level : null;
-  const map = jlptMap();
-  const gap = map ? jlptGap(map, store.level, deckWordSet(state.DATA), wkIdx) : null;
-  const targets = jlptTargets(store);
-  const pace = weeklyAddPace(state.DATA, today, store.level, { levelOf: cardJlptLevel });
-  const points = grammarPoints();
-  const gcov = points ? grammarCoverage(points, state.DATA, state.store.cards) : null;
-  const cd = examCountdown(store.examDate, Date.now());
-  const plan = gap && cd && !cd.past
-    ? pacePlan({ daysLeft: cd.days, gap, targets, grammar: gcov ? { studied: gcov.inDeck, total: gcov.total } : null })
-    : null;
-  return {
-    today,
-    level: store.level,
-    due: dueCards().length,
-    reviewedToday: (daily[today] && daily[today].tot) || 0,
-    weekReviews: week,
-    streak: studyStreak(daily, today),
-    appLeeches: leeches().length,
-    speakStreak: practiceStreak(state.selftalkStore.practice, today),
-    spokeToday: (state.selftalkStore.practice || {}).lastDay === today,
-    lastLesson: state.minnaStore.lastLesson,
-    wkConnected, wkLoaded, wkIdx,
-    wkReviewsNow: wkLoaded ? wkForecast([...WK.assignments.values()], Date.now()).availableNow : null,
-    wkLessons: wkLoaded && WK.summary ? WK.summary.lessons : null,
-    wkLeeches: wkLoaded ? leechList().length : null,
-    wkLevel,
-    gap, targets, pace, gcov, plan,
-    grammarToday: grammarReviewedToday(state.DATA, state.store.cards, new Date(today + 'T00:00').getTime()),
-    hasGrammarCards: state.DATA.some((v) => v && v.grammar),
-  };
-}
+import { collectSignals, deriveGapContext } from './signals.js';   // the live-signal read (refactor step 5)
 
 /* ---- the daily checklist ------------------------------------------------------- */
 
@@ -484,13 +430,11 @@ const ACTIONS = {
     const [words] = await Promise.all([ensureJlptWords(level), ensureJlptMap()]);
     const map = jlptMap();
     if (!words || !map) { renderJlpt(); return; }
-    const wkLoaded = !!state.wanikaniStore.token && WK.loaded;
-    const wkIdx = wkLoaded ? wkVocabIndex(WK.subjects, WK.assignments) : null;
-    const gap = jlptGap(map, level, deckWordSet(state.DATA), wkIdx);
-    const targets = jlptTargets(state.jlptStore);
-    const doneToday = weeklyAddPace(state.DATA, localDay(), level, { levelOf: cardJlptLevel }).today;
-    const n = Math.max(0, targets.wordsPerDay - doneToday) || targets.wordsPerDay;
-    const added = addJlptWords(selectGapBatch(words, gap.uncovered, wkIdx, (wkLoaded && WK.user && WK.user.level) || 0, n), level);
+    // Re-derive the gap/pace FRESH at click time (the render's copy may be minutes old) — the
+    // shared code, not the shared result (see deriveGapContext).
+    const { wkIdx, wkLevel, gap, targets, pace } = deriveGapContext(level, map, localDay());
+    const n = Math.max(0, targets.wordsPerDay - pace.today) || targets.wordsPerDay;
+    const added = addJlptWords(selectGapBatch(words, gap.uncovered, wkIdx, wkLevel || 0, n), level);
     setSyncStatus(added ? `✚ ${added} ${level} word${added === 1 ? '' : 's'} added to the deck` : 'nothing new to add');
     renderJlpt();
   },
