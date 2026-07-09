@@ -30,8 +30,8 @@ comes second — that ordering was a deliberate decision.
 | **1** | Self-Talk phrases → store (built-ins public, user phrases private) | ✅ shipped + deployed |
 | **2** | Built-in vocab `examples.js` → store as public rows linked to cards (`owner_type='card'`) | ✅ shipped + deployed |
 | **2.5** | Custom-card `ex`+`levels` → private store rows (render-from-store) | ✅ shipped |
-| **3** | Minna sentences (grammar/conversation/lesson) → store (`public=0`) | ⏳ deferred |
-| **4 — NLP** | GiNZA enrichment: populate `sentence_annotation`; interactive spans + grammar search | ✅ shipped; ⭐ tokenization rework next |
+| **3** | Minna sentences (grammar/conversation/lesson) → store (`public=0`) | ✅ shipped (seed-sentences.ts Pass 4; in the parse corpus) |
+| **4 — NLP** | GiNZA enrichment: populate `sentence_annotation`; interactive spans + grammar search | ✅ shipped (incl. the tokenization merge pass — `splitC+merge`) |
 
 Phases are reversible + behavior-preserving (no flag day) — same discipline as the two-app split.
 2.5 and 3 are independent of NLP and can happen in any order; NLP can start now against the public
@@ -149,7 +149,7 @@ CREATE TABLE sentence_annotation (
   matched over lemma/pos/tag/dep/morph — NOT raw n-grams), aligned to the existing `te-iru`/`tai`/`sou`
   slug style. **Deferred to commit 2** (commit 1 is tokens/offsets/plumbing only); the parser already
   emits `dep`/`head`/`tag` so commit 2 needs no re-parse.
-- **Re-parse triggers → full, hash-keyed.** Re-parse the whole exported corpus (it's ~544 sentences);
+- **Re-parse triggers → full, hash-keyed.** Re-parse the whole exported corpus (a few thousand sentences);
   annotations key by `hash`, and because the parser parses the exact exported `text`, offsets are
   self-consistent with the row by construction — a re-parse only ever changes *quality*. Optional
   `--changed-only` skip later if ever needed.
@@ -172,19 +172,19 @@ CREATE TABLE sentence_annotation (
    tap-to-lookup UI (3b, pure `overlayTokens` span-wrap over the ruby + a lemma→card/Jisho popover) +
    the Browse grammar-search filter (3c, card facet + a `patterns.py`-dumped label registry). **Phase 4
    is complete** — full as-built in [SENTENCE_STORE_PHASE4.md](SENTENCE_STORE_PHASE4.md).
-5. ⭐ **NEXT REWORK — tokenization granularity.** The shipped tap units are GiNZA's raw morphemes
-   (split mode C), which fragment する-verbs (勉強 + する) and conjugations (食べ+させ+られ+た), so a
-   tapped span doesn't match "a word." The fix is a post-tokenization MERGE pass in `parse.py`
-   (content word + trailing function morphemes → one token; the unconsumed `bunsetsu` spans are a natural
-   basis), then a full re-parse + re-seed. Details in [SENTENCE_STORE_PHASE4.md](SENTENCE_STORE_PHASE4.md) §8.0
-   + [sentence-nlp/README.md](sentence-nlp/README.md).
+5. ✅ **SHIPPED — tokenization granularity.** The tap units used to be GiNZA's raw morphemes
+   (split mode C), which fragmented する-verbs (勉強 + する) and conjugations (食べ+させ+られ+た), so a
+   tapped span didn't match "a word." A post-tokenization MERGE pass in `parse.py` (`merge_groups` —
+   content word + trailing function morphemes → one unit) now coalesces them (勉強する; 食べさせられた),
+   and the parser provenance is `splitC+merge`. The only residual is the prod re-parse/re-seed.
+   Details in [SENTENCE_STORE_PHASE4.md](SENTENCE_STORE_PHASE4.md) §8.0 + [sentence-nlp/README.md](sentence-nlp/README.md).
 
 Keep each step shippable and behavior-preserving; nothing here changes existing playback or rendering
 until the tap-to-lookup UI lands.
 
 ---
 
-## The other deferred phases (not NLP, for completeness)
+## The other phases (not NLP, for completeness)
 
 - **Phase 2.5 — custom-card examples → private store rows. ✅ SHIPPED.** A custom card's whole example
   set (the single `ex` + the N5→N1 `levels` tiers) is dual-written to the store as PRIVATE rows
@@ -201,10 +201,12 @@ until the tap-to-lookup UI lands.
   public-only tooling (NLP tap-to-lookup, export, de-dup, TTS pre-gen all read `public_sentence`) does NOT
   cover these private rows. Tests: 5 server (privacy/wholesale/scoping/user-scoped-id/furigana-abort) + 1
   client builder; curl + signed-in browser E2E (dual-write → render-from-store, store-wins) verified.
-- **Phase 3 — Minna → store.** Grammar-point + conversation + lesson sentences become `sentence` rows
-  with `public=0` (copyright-gated, same as the Minna route gate). Grammar-points and conversations get
-  stable owner ids; `sentence_link.role`/`clip_*` already model speaker + per-line clip ranges. This is
-  the largest content migration and the one that most exercises the polymorphic link model.
+- **Phase 3 — Minna → store. ✅ SHIPPED.** Grammar-point + conversation + lesson sentences are now
+  `sentence` rows with `public=0` (copyright-gated, same as the Minna route gate), seeded by
+  seed-sentences.ts Pass 4 (`db.seedMinnaSentence`) and served with tokens/furigana via
+  `db.getMinnaAnnotations` — so they're also in the GiNZA parse corpus. Grammar-points and
+  conversations get stable owner ids; `sentence_link.role`/`clip_*` model speaker + per-line clip
+  ranges. This was the largest content migration and the one that most exercises the polymorphic link model.
 
 - **Templates → store (DECIDED, not yet built).** The 独り言 Self-Talk slot-swap TEMPLATES are currently a
   client-only JS bundle. A `sentence_template` table will hold the generator structure (curator-seeded +

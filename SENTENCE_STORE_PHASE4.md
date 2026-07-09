@@ -46,8 +46,9 @@ sentence and get its lemma / POS / a link to the matching card-or-Jisho, plus **
 ("find every sentence using 〜ておく").
 
 Phase map (canonical, kept current): see [SENTENCE_STORE_NLP.md](SENTENCE_STORE_NLP.md). In short:
-Phases 1, 2, 2.5 and **Phase 4 (this doc)** have shipped — including the ⭐ tokenization-granularity
-merge pass (§8.0); Phase 3 (Minna → store) is deferred. The remaining Phase-4 residual is the prod
+Phases 1, 2, 2.5, **Phase 4 (this doc)** and Phase 3 (Minna → store) have shipped — including the
+⭐ tokenization-granularity merge pass (§8.0); Minna sentences are seeded as gated store rows
+(seed-sentences.ts Pass 4) and are in the parse corpus. The remaining Phase-4 residual is the prod
 re-seed of the merged artifact (deploy step, not a parse change).
 
 The NLP target is the **public corpus** (Phase 1 + 2 rows: built-in example sentences + Self-Talk
@@ -142,7 +143,7 @@ one-line diff). Shape:
 - Whitespace tokens are dropped (`is_space`) — never a tap target. GiNZA represents inter-word spaces
   as `token.whitespace_` metadata, not separate tokens, so offsets stay gap-correct.
 
-Current artifact: **544 annotations, 8177 tokens.**
+Current artifact: **2498 annotations, 25135 tokens** (example 500 · minna 1599 · grammar 322 · selftalk 75 · template 2) — grew when Phase 3 added Minna to the corpus and the merge pass re-tokenized.
 
 ### 2.4 DB plumbing — [wk-enhanced-api/src/db/client.ts](wk-enhanced-api/src/db/client.ts)
 
@@ -253,9 +254,9 @@ volitional; ような/ように ≠ you-da). All 38 detectors + 10 negatives gre
 - Token annotations (`upsertAnnotation`) are written for **all** public rows (tap-to-lookup should work
   on Self-Talk sentences too); only the grammar *sentence_tag* write is scoped to examples.
 
-### 3.5 Corpus results (current dev DB)
+### 3.5 Corpus results (grammar-tagging snapshot at Phase-4 commit-2, example rows only)
 
-- 544 sentences parsed → **409/544 tagged** with ≥1 grammar id, **656 total tags**, 35/38 ids present
+- 544 example sentences parsed → **409/544 tagged** with ≥1 grammar id, **656 total tags**, 35/38 ids present
   in this corpus.
 - Seeded to DB: **597 grammar tags on 366 example rows** (source='example'); Self-Talk's 44 rows / 53
   hand tags untouched.
@@ -307,7 +308,7 @@ volitional; ような/ように ≠ you-da). All 38 detectors + 10 negatives gre
    independent. `text` must stay `plainText(jp)` byte-for-byte and `hash` server-computed, or audio +
    annotation linkage forks.
 4. **Re-parse = full + hash-keyed.** On any content change, re-run `parse.py` over the whole exported
-   corpus (it's ~544 sentences). Because the parser parses the exact exported text, offsets are self-
+   corpus (a few thousand sentences). Because the parser parses the exact exported text, offsets are self-
    consistent with the row by construction — a re-parse only ever changes *quality*.
 5. **No-clobber.** Grammar `sentence_tag` is written for `source='example'` rows only; Self-Talk keeps
    its hand-authored tags.
@@ -327,7 +328,7 @@ volitional; ような/ように ≠ you-da). All 38 detectors + 10 negatives gre
 - **venv:** `sentence-nlp/.venv` (already created, gitignored). Recreate from `requirements.txt` if
   missing. Note `click>=8.1` is pinned explicitly (typer 0.26.x doesn't pull it but spaCy imports it).
 - **Dev DB:** `wk-enhanced-api/dev-data/wk-vocab.sqlite` (NOT the `wk-enhanced-api.sqlite` the parity
-  table names — the actual `DATABASE_FILE` in `.env` is `wk-vocab.sqlite`). 544 public_sentence rows.
+  table names — the actual `DATABASE_FILE` in `.env` is `wk-vocab.sqlite`). A few hundred public_sentence rows.
 - **Running servers:** dev API on `:3000` and Vite on `:5173` are usually already up. **Don't kill
   them.** The seed scripts use SQLite WAL (concurrent-safe with the running server).
 - **Gotcha:** the Bash tool's cwd persists between calls — always `cd` explicitly before
@@ -494,7 +495,7 @@ infra: "Deploy NLP annotations + templates to prod").
 | [sentence-nlp/patterns.py](sentence-nlp/patterns.py) | grammar catalog + detectors (38 ids); `python3 patterns.py` dumps the label registry |
 | [sentence-nlp/test_patterns.py](sentence-nlp/test_patterns.py) | detector validation battery |
 | [sentence-nlp/README.md](sentence-nlp/README.md) | parser project docs |
-| [wk-enhanced-api/data/annotations.json](wk-enhanced-api/data/annotations.json) | committed artifact (544) |
+| [wk-enhanced-api/data/annotations.json](wk-enhanced-api/data/annotations.json) | committed artifact (2498 annotations) |
 | [study-app/src/data/grammar.json](study-app/src/data/grammar.json) | generated id→label→jlpt catalog (38) — the client grammar registry |
 | [study-app/src/core/annotate.js](study-app/src/core/annotate.js) | `overlayTokens` — tappable spans over ruby (3b) |
 | [study-app/src/features/word-lookup.js](study-app/src/features/word-lookup.js) | tap popover + lemma→card/Jisho (3b) |
